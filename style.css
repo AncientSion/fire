@@ -1,0 +1,292 @@
+body {
+	font-family: arial;
+}
+
+div {
+}
+
+table, th, tr, td {
+	text-align: center;
+}
+
+tr.selected {
+	background-color: lightblue
+}
+
+canvas {
+	border-radius: 5px;
+	border: 1px solid black;
+}
+
+#deployWrapper {
+	border: 1px solid black;
+	border-radius: 5px;
+	padding: 5 5 5 5;
+	width: 300px;
+	height: 300px;
+	background: white;
+	z-index: 10;
+}
+#deployWrapper.disabled  {
+	display: none;
+}
+
+#deployTable {
+	margin: auto;
+	width: 300px;
+	border-collapse: collapse;
+	border: 1px solid black;
+}
+
+#confirmFleet {
+	font-size: 22px;
+	background-color: blue;
+	color: white;
+}
+
+#shipsBoughtTable {
+	width: 300px;
+	display: inline-block;
+	vertical-align: top;
+	margin: 0 0 0 0;
+	border-collapse: collapse;
+	border: 1px solid black;
+}
+
+#factionDiv {
+	display: inline-block;
+	vertical-align: top;
+	margin: 0 0 0 0;
+}
+
+.factionUpperTable {
+	width: 500px;
+	border-collapse: collapse;
+	border: 1px solid black;
+	margin: 0 0 0 0;
+}
+
+.factionShipclassTable {
+	width: 80%;
+	margin: 0 auto 0 auto;
+	display: inline-block;
+	border-collapse: collapse;
+	border: 1px solid black;
+}
+
+.shipPreview {
+	display: inline-block;
+	vertical-align: top;
+	width: auto;
+	border: 1px solid black;
+	border-radius: 5px;
+}
+
+.highlight {
+	background-color: black;
+	color: white;
+}
+
+.fontHighlight {
+	background-color: red;
+	color: white;
+}
+
+.lobbyDiv {
+	text-align: center;
+	margin: auto;
+	margin-top: 20px;
+}
+
+.gui {
+	display: inline-block;
+	border: 1px solid black;
+	position: absolute;
+}
+
+#game {
+	display: flex;
+}
+#game.disabled {
+	display: none;
+}
+
+#canvasDiv {
+	width: 1200px;
+	height: 800px;
+}
+
+#canvas {
+	display: inline-block;
+	position: absolute;
+	border: 1px solid black;
+	z-index = 1;
+}
+
+#fxCanvas {
+	display: inline-block;
+	position: absolute;
+	border: 1px solid black;
+	z-index = 2;
+}
+
+#planCanvas {
+	display: inline-block;
+	position: absolute;
+	border: 1px solid black;
+	z-index = 3;
+}
+
+#moveCanvas {
+	display: inline-block;
+	position: absolute;
+	border: 1px solid black;
+	z-index = 4;
+}
+
+#mouseCanvas {
+	display: inline-block;
+	position: absolute;
+	border: 1px solid black;
+	z-index = 5;
+}
+
+.weapon {
+	background-color: green;
+	color: white;
+}
+
+.weapon.selected {
+	background-color: blue;
+}
+
+.weapon.fireOrder {
+	background-color: red;
+}
+
+.shipDiv {
+	width: 300px;
+	height: 400px;
+	border: 1px solid black;
+	border-radius: 5px;
+	z-index: 10;
+	background-color: white;
+}	
+
+.shortInfo {
+	z-index: 5;
+	display: inline-block;
+	position: absolute;
+	color: white;
+	background-color: black;
+	border: 1px solid black;
+	border-radius: 5px;
+}
+
+#phaseSwitchInnerDiv {
+	display: inline-block;
+	position: relative;
+	width: 600px;
+	height: 200px;
+	z-index: 20;
+	border: 2px solid blue;
+	background: white;
+	color: black;
+	margin-top: 300px;
+	margin-left: 300px;
+	border-radius: 5px;
+}
+
+#phaseSwitchDiv {
+	position: absolute;
+	width: 1200px;
+	height: 600px;
+	z-index: 20;
+	border: 1px solid black;
+	background: white;
+	color: black;
+}
+
+#weaponDetailsDiv {
+	z-index: 15;
+	display: inline-block;
+	border: 1px solid black;
+	position: absolute;
+	background: white;
+	color: black;
+}
+
+#combatLog {
+	border: 1px solid black;
+	background: white;
+	color: black;
+}
+
+.friendly {
+	background-color: green;
+}
+.hostile {
+	background-color: red;
+}
+
+.red {
+	color: red;
+}
+
+.disabled {
+	display: none;
+}
+
+#weaponAimTableWrapper {
+	background-color: black;
+	color: white;
+	opacity: 0.8;
+	border: 2px solid white;
+	border-radius: 5px;
+	z-index: 10;
+	padding: 5 5 5 5;
+	position: absolute;
+	text-align: center;
+}
+#weaponAimTableWrapper.disabled {
+	display: none;
+}
+
+#weaponAimTable {
+	background-color: black;
+	color: white;
+	opacity: 0.8;
+	border: 2px solid white;
+	z-index: 10;
+	margin: auto;
+}
+
+#weaponAimTable tr td {
+	border-collapse: collapse;
+	border: 1px solid white;
+}
+	
+#deployOverlay {
+	background-color: black;
+	color: white;
+	opacity: 0.8;
+	border: 2px solid white;
+	border-collapse: collapse;
+	border-radius: 5px;
+	z-index: 10;
+	position: absolute;
+	text-align: center;
+}
+
+#vectorDiv {
+	display: inline;
+	position: absolute;
+	border: 1px solid white;
+	border-radius: 5px;
+	background-color: black;
+	color: white;
+	padding: 5px;
+}
+#vectorDiv.disabled {
+	display: none;
+}
