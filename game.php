@@ -20,7 +20,7 @@ if (isset($_SESSION["userid"])){
 	$ships = $manager->gamedata["ships"];
 
 
-	//var_export(json_encode($playerstatus));
+	var_export(json_encode($manager->handleFiringPhase()));
 
 	echo "<script>";
 	echo "window.gd = ".json_encode($game, JSON_NUMERIC_CHECK).";";

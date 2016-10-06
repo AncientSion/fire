@@ -381,6 +381,42 @@ class DBManager {
 		return true;
 	}
 
+	public function issueFire($gameid, $turn, $fires){
+		//debug::log("issueFire");
+
+		$stmt = $this->connection->prepare("
+			INSERT INTO fireorders 
+				( gameid, turn, shooterid, targetid, weaponid, resolved )
+			VALUES
+				( :gameid, :turn, :shooterid, :targetid, :weaponid, :resolved )
+		");
+
+		$resolved = 0;
+
+		for ($i = 0; $i < sizeof($fires); $i++){
+
+		//	foreach ($fires[$i] as $key => $value){
+		//		debug::log("key: ".$key." val: ".$value);
+		//	}
+
+			$stmt->bindParam(":gameid", $gameid);
+			$stmt->bindParam(":turn", $turn);
+			$stmt->bindParam(":shooterid", $fires[$i]["shooterid"]);
+			$stmt->bindParam(":targetid", $fires[$i]["targetid"]);
+			$stmt->bindParam(":weaponid", $fires[$i]["weaponid"]);
+			$stmt->bindParam(":resolved", $resolved);
+
+			$stmt->execute();
+
+			if ($stmt->errorCode() == 0){
+				continue;
+			}
+			else return false;
+		}
+
+		return true;
+	}
+
 
 
 	public function getPlayerStatus($gameid){
@@ -567,6 +603,28 @@ class DBManager {
 		}
 
 		return $ships;
+	}
+
+	public function getFireOrders($gameid, $turn){
+		$stmt = $this->connection->prepare("
+			SELECT * FROM fireOrders
+			WHERE gameid = :gameid
+			AND turn = :turn
+			AND resolved = :resolved
+		");
+
+		$resolved = 0;
+
+		$stmt->bindParam(":gameid", $gameid);
+		$stmt->bindParam(":turn", $turn);
+		$stmt->bindParam(":resolved", $resolved);
+		$stmt->execute();
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		if ($result){
+			return $result;
+		}
+		else return false;
 	}
 
 	public function resolveDeployment($gameid){

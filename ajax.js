@@ -138,8 +138,21 @@ window.ajax = {
 	},
 
 	confirmFiringOrders: function(){
-		console.log(fireOrders);
-		return;
+		$.ajax({
+			type: "POST",
+			url: "postGameData.php",
+			datatype: "json",
+			data: {
+					type: "firing",
+					gameid: game.id,
+					userid: game.userid,
+					gameturn: game.turn,
+					gamephase: game.phase,
+					fire: fireOrders
+					},
+			success: refresh,
+			error: ajax.error,
+		});
 	},
 
 

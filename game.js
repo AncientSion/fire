@@ -305,7 +305,7 @@ function Game(id, name, status, userid, turn, phase){
 
 		//var s = game.ships[1]; game.ships = [s]; console.log("ding");
 		
-		var frames = 100;
+		var frames = 30;
 	
 		for (var i = 0; i < this.ships.length; i++){
 

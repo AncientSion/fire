@@ -1,66 +1,8 @@
-doAdvanceGameState for game15
-resolveDeployment
-startMovementPhase
-setGamePhase 1 success
-setPlayerstatus
-game 15,user 1 adjusting to turn/phase/status 1 1 waiting
-phase for player 0 adjusted to phase: 1
-setPlayerstatus
-game 15,user 2 adjusting to turn/phase/status 1 1 waiting
-phase for player 1 adjusted to phase: 1
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-setPlayerstatus
-game 15,user 2 adjusting to turn/phase/status 1 1 ready
-not all rdy yet
-not all rdy yet
-not all rdy yet
-setPlayerstatus
-game 15,user 1 adjusting to turn/phase/status 1 1 ready
-doAdvanceGameState for game15
-resolveMoveActions
-startFiringPhase
-setGamePhase 2 success
-setPlayerstatus
-game 15,user 1 adjusting to turn/phase/status 1 2 waiting
-setPlayerstatus
-game 15,user 2 adjusting to turn/phase/status 1 2 waiting
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-setPlayerstatus
-game 15,user 2 adjusting to turn/phase/status 1 2 ready
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
-not all rdy yet
+
+146 to 148
+facing: 150
+hitAngle:-167.76928166901
+angle: 343
+_______
+-135
+-167.31961650818

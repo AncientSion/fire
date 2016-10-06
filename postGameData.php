@@ -62,6 +62,16 @@ if (isset($_POST["type"])) {
 			echo "movement fail";
 		}
 	}
+	else if ($_POST["type"] == "firing"){
+		if ($dbManager->issueFire($_POST["gameid"], $_POST["gameturn"], $_POST["fire"])){
+			if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["gameturn"], $_POST["gamephase"], "ready")){
+				echo "firing success";
+			}
+		}
+		else {
+			echo "firing fail";
+		}
+	}
 }
 else {
 	echo "no data to be found";

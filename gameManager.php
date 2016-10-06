@@ -1,5 +1,10 @@
 <?php
 
+error_reporting(E_ALL); ini_set('display_errors', '1');
+require_once("server\baseship.php");
+require_once("server\math.php");
+
+
 
 class Manager {
 	public $userid;
@@ -8,6 +13,7 @@ class Manager {
 		$this->userid = $userid;
 		$this->gameid = $gameid;
 		$this->gamedata = false;
+		$this->ships = array();
 
 		if ($this->gameid){
 			$this->gamedata = $this->getGameData();
@@ -112,24 +118,15 @@ class Manager {
 				$this->handleMovementPhase();
 				$this->startFiringPhase();
 				break;
+			case 2; // from fire to resolve fire
+		//		$this->handleFiringPhase();
+		//		$this->startDamageControlPhase();
+				break;
 			default:
 				break;
 		}
 
 		return true;
-	}
-	//public function setPlayerstatus($userid, $gameid, $turn, $phase, $status){
-
-	public function handleDeploymentPhase(){
-		if (DBManager::app()->resolveDeployment($this->gameid)){
-			return true;
-		}
-	}
-
-	public function handleMovementPhase(){
-		if (DBManager::app()->resolveMoveActions($this->gameid)){
-			return true;
-		}
 	}
 
 	public function startDeploymentPhase(){
@@ -200,6 +197,91 @@ class Manager {
 		}
 	}
 
+	//public function setPlayerstatus($userid, $gameid, $turn, $phase, $status){
+
+	public function handleDeploymentPhase(){
+		if (DBManager::app()->resolveDeployment($this->gameid)){
+			return true;
+		}
+	}
+
+	public function handleFiringPhase(){
+		debug::log("handleFiringPhase");
+
+		$facing;
+		$x;
+		$y;
+
+		for ($i = 0; $i < sizeof($this->gamedata["ships"]); $i++){
+			$facing = 0;
+			$x = 0;
+			$y = 0;
+
+			for ($j = 0; $j < sizeof($this->gamedata["ships"][$i]["actions"]); $j++){
+
+				if ($this->gamedata["ships"][$i]["actions"][$j]["resolved"]){
+					$facing = $facing + $this->gamedata["ships"][$i]["actions"][$j]["a"];
+				}
+
+				if ($j == sizeof($this->gamedata["ships"][$i]["actions"]) -1){
+					$x = $this->gamedata["ships"][$i]["actions"][$j]["x"];
+					$y = $this->gamedata["ships"][$i]["actions"][$j]["y"];
+				}
+			}
+
+			$ship = new Ship($this->gamedata["ships"][$i]["id"], $this->gamedata["ships"][$i]["userid"], $this->gamedata["ships"][$i]["shipclass"], $x, $y, $facing);
+			$this->ships[] = $ship;
+		}
+
+
+
+		$fires = DBManager::app()->getFireOrders($this->gameid, $this->gamedata["game"]["turn"]);
+
+		//foreach ($fires[0] as $key => $val){
+		//	debug::log($key." - ".$val);
+		//}
+		//Debug::log("fireorders size: ".sizeof($fires));
+
+		//Debug::log(sizeof($ships));
+
+		//return $this->gamedata["ships"][0]["actions"];
+
+
+		foreach ($fires as $fire){
+			//foreach ($fire as $key => $value){
+			//	debug::log($key."-".$value);
+			//}
+			$shooter = $this->getShipById($fire["shooterid"]);
+			$target = $this->getShipById($fire["targetid"]);
+
+			debug::log($shooter->id." to ".$target->id);
+			//debug::log($shooter->x.", ".$shooter->y);
+			//debug::log($target->x.", ".$target->y);
+
+			//$dist = Math::getDist($shooter->x, $shooter->y, $target->x, $target->y);
+
+			//$shooterFacing = $shooter->facing;
+			//debug::log($shooterFacing);
+			$targetFacing = $target->facing;
+			debug::log("facing: ".$targetFacing);
+			$hitAngle = Math::getAngle($target->x, $target->y, $shooter->x, $shooter->y);
+			// - 180 to 180
+			debug::log("hitAngle:".$hitAngle);
+			$angle = Math::addToDirection($targetFacing, $hitAngle);
+
+			//debug::log("hitAngle: ".$hitAngle);
+			debug::log("angle: ".$angle);
+			debug::log("_______");
+		///	debug::log("final angle: ".$angle);
+
+			debug::log(Math::getAngle(200, 200, 100, 100));
+			debug::log(Math::getAngle(879, 170, 399, 62));
+		}
+
+		return;
+		
+	}
+
 	public function startDamageControlPhase(){
 		Debug::log("startDamageControlPhase");
 
@@ -210,6 +292,13 @@ class Manager {
 
 	}
 
+	public function getShipById($shipid){
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->id == $shipid){
+				return $this->ships[$i];
+			}
+		}
+	}
 
 }
 ?>
