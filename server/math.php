@@ -19,20 +19,16 @@ class Math {
 		return $rad * (180 / M_PI);
 	}
 
-
-	static function addToDirection($current, $add){
-        $add = $add % 360;
-
-		$ret = 0;
-		if ($current + $add > 360){
-			$ret =  0+($add-(360-$current));
-				
-		}else if ($current + $add < 0){
-			$ret = 360 + ($current + $add);
-		}else{	
-			$ret = $current + $add;
+	static function addAngle($facing, $hitAngle){
+		$a = $hitAngle - $facing;
+		if ($a < -180){
+			$a = $a + 360;
 		}
-		return $ret;
+		else if ($a > 180){
+			$a = $a - 360;
+		}
+
+		return $a;
 	}
 }
 

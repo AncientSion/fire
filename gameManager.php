@@ -267,15 +267,15 @@ class Manager {
 			$hitAngle = Math::getAngle($target->x, $target->y, $shooter->x, $shooter->y);
 			// - 180 to 180
 			debug::log("hitAngle:".$hitAngle);
-			$angle = Math::addToDirection($targetFacing, $hitAngle);
+			$angle = Math::addAngle($targetFacing, $hitAngle);
 
 			//debug::log("hitAngle: ".$hitAngle);
 			debug::log("angle: ".$angle);
 			debug::log("_______");
 		///	debug::log("final angle: ".$angle);
 
-			debug::log(Math::getAngle(200, 200, 100, 100));
-			debug::log(Math::getAngle(879, 170, 399, 62));
+		//	debug::log(Math::getAngle(200, 200, 100, 100));
+		//	debug::log(Math::getAngle(879, 170, 399, 62));
 		}
 
 		return;
