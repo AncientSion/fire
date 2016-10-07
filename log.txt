@@ -1,8 +1,16 @@
-
+doAdvanceGameState for game15
+handleFiringPhase
+148 to 147
+80.467712638518
 146 to 148
-facing: 150
-hitAngle:-167.76928166901
-angle: 343
-_______
--135
--167.31961650818
+77.038453055164
+147 to 146
+84.207949833893
+doAdvanceGameState for game15
+handleFiringPhase
+148 to 147
+80.467712638518
+146 to 148
+77.038453055164
+147 to 146
+84.207949833893

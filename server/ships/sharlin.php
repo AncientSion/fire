@@ -1,14 +1,14 @@
 <?php
 
-class Omega extends Ship {
+class Sharlin extends Ship {
 
-	public $mass = 15000;
-	public $profile = array(80, 85);
+	public $mass = 19000;
+	public $profile = array(70, 85);
 
 
 	function __construct($id, $userid, $shipClass, $x, $y, $facing){
-		$this->name = "Omega";
-		$this->faction = "Earth Alliance";
+		$this->name = "Sharlin";
+		$this->faction = "Minbari Federation";
 		$this->id = $id;
 		$this->shipClass = $shipClass;
 		$this->userid = $userid;
@@ -16,8 +16,9 @@ class Omega extends Ship {
 		$this->y = $y;
 		$this->facing = $facing;
 	}
-
 }
+
+
 
 
 

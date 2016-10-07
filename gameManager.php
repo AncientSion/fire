@@ -229,54 +229,49 @@ class Manager {
 				}
 			}
 
-			$ship = new Ship($this->gamedata["ships"][$i]["id"], $this->gamedata["ships"][$i]["userid"], $this->gamedata["ships"][$i]["shipclass"], $x, $y, $facing);
+			$ship = new $this->gamedata["ships"][$i]["shipclass"]($this->gamedata["ships"][$i]["id"], $this->gamedata["ships"][$i]["userid"], $this->gamedata["ships"][$i]["shipclass"], $x, $y, $facing);
 			$this->ships[] = $ship;
 		}
+
+		var_export($this->ships[0]);
 
 
 
 		$fires = DBManager::app()->getFireOrders($this->gameid, $this->gamedata["game"]["turn"]);
 
-		//foreach ($fires[0] as $key => $val){
-		//	debug::log($key." - ".$val);
-		//}
-		//Debug::log("fireorders size: ".sizeof($fires));
 
-		//Debug::log(sizeof($ships));
-
-		//return $this->gamedata["ships"][0]["actions"];
-
+		/*foreach ($this->ships as $ship){
+			debug::log(get_class($ship));
+			debug::log($ship->mass);
+			debug::log($ship->getBaseHitChance());
+			debug::log($ship->id);
+		}*/
 
 		foreach ($fires as $fire){
-			//foreach ($fire as $key => $value){
-			//	debug::log($key."-".$value);
-			//}
+
 			$shooter = $this->getShipById($fire["shooterid"]);
 			$target = $this->getShipById($fire["targetid"]);
 
 			debug::log($shooter->id." to ".$target->id);
-			//debug::log($shooter->x.", ".$shooter->y);
-			//debug::log($target->x.", ".$target->y);
 
-			//$dist = Math::getDist($shooter->x, $shooter->y, $target->x, $target->y);
 
-			//$shooterFacing = $shooter->facing;
-			//debug::log($shooterFacing);
+			$dist = Math::getDist($shooter->x, $shooter->y, $target->x, $target->y);
+
+
 			$targetFacing = $target->facing;
-			debug::log("facing: ".$targetFacing);
+			//debug::log("facing: ".$targetFacing);
 			$hitAngle = Math::getAngle($target->x, $target->y, $shooter->x, $shooter->y);
-			// - 180 to 180
-			debug::log("hitAngle:".$hitAngle);
+
+			//debug::log("hitAngle:".$hitAngle);
 			$angle = Math::addAngle($targetFacing, $hitAngle);
 
-			//debug::log("hitAngle: ".$hitAngle);
-			debug::log("angle: ".$angle);
-			debug::log("_______");
-		///	debug::log("final angle: ".$angle);
+			//debug::log("angle: ".$angle);
+			//debug::log("_______");
 
-		//	debug::log(Math::getAngle(200, 200, 100, 100));
-		//	debug::log(Math::getAngle(879, 170, 399, 62));
+			debug::log($target->getHitChanceFromAngle($angle));
+
 		}
+
 
 		return;
 		

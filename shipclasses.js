@@ -853,7 +853,8 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	}
 	
 	this.getBaseHitChance = function(){
-		return Math.ceil(Math.pow(this.mass, 0.5));
+		//return Math.ceil(Math.pow(this.mass, 0.5));
+		return this.profile[0] + "/" + this.profile[1]
 	}
 	
 	this.createDiv = function(){
@@ -1198,6 +1199,7 @@ function Sharlin(id, shipClass, x, y, facing, userid, color){
 	this.ep = 850;
 	this.size = 100;
 	this.mass = 19000;
+	this.profile = [70, 85];
 	
 	this.addWeapons = function(){
 		this.weapons.push(new NeutronLaser(this.id, 300, 60));
@@ -1220,6 +1222,7 @@ function Omega(id, shipClass, x, y, facing, userid, color){
 	this.ep = 550;
 	this.size = 80;
 	this.mass = 15000;
+	this.profile = [80, 85];
 	
 	this.addWeapons = function(){
 		this.weapons.push(new MediumLaser(this.id, 0, 180));
