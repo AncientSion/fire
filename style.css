@@ -93,6 +93,7 @@ canvas {
 }
 
 .lobbyDiv {
+	padding: 5px;
 	text-align: center;
 	margin: auto;
 	margin-top: 20px;
@@ -199,8 +200,6 @@ canvas {
 
 #phaseSwitchDiv {
 	position: absolute;
-	width: 1200px;
-	height: 600px;
 	z-index: 20;
 	border: 1px solid black;
 	background: white;

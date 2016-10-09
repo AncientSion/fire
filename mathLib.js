@@ -18,7 +18,34 @@ function radianToDegree(angle){
 }
 
 function getAngleFromTo(a, b){
-	return radianToDegree(Math.atan2(b.y-a.y, b.x-a.x));
+	var ret = Math.atan2(b.y-a.y, b.x-a.x);
+		ret = radianToDegree(ret);
+	return ret;
+}
+
+function addAngle(angle, facing){
+
+	//console.log(arguments);
+	var ret = angle + facing;
+
+	//console.log(ret);
+
+	if (ret > 360){
+		ret -= 360;
+	}
+	else if (ret < 0){
+		ret += 360;
+	}
+	//console.log(ret);
+	return ret;
+}
+                       //    150     180
+function adjustForFacing(facing, angle){
+	//console.log(arguments)
+	var ret = angle - facing;
+	//console.log(ret);
+	return angle - facing;
+
 }
 	
 function isInArc(direction, start, end){
@@ -44,7 +71,7 @@ function isInArc(direction, start, end){
 	}
 }
 
-function getCompassHeadingOfPoint(observer, target){
+function getCompassHeadingOfPoint(observer, target, facing){
 	var dX = target.x - observer.x;
 	var dY = target.y - observer.y;
 	var heading = 0.0;
@@ -77,59 +104,11 @@ function getCompassHeadingOfPoint(observer, target){
 		//console.log("h:4");
 		heading = radianToDegree(Math.atan(dY/dX)) + 270;
 	}
-	heading = addToDirection(Math.round(heading), -90);
+	heading = addAngle(Math.round(heading), -90);
 
-	return heading;
-}
-		
-			
-
-function drawArrow(x, y, a, w, d){        
-	var p1, p2, p3;
-	
-	p = getPointInDirection(d, a, x, y);
-	p1 = getPointInDirection(d/2, 0+a , p.x, p.y);
-	p2 = getPointInDirection(d/2, 120+a, p.x, p.y);
-	p3 = getPointInDirection(d/2, 240+a, p.x, p.y);
-	
-	moveCtx.lineWidth = w;
-	moveCtx.beginPath();
-	moveCtx.moveTo(p.x, p.y);
-	moveCtx.lineTo(p1.x, p1.y);
-	moveCtx.lineTo(p2.x, p2.y);
-	moveCtx.lineTo(p3.x, p3.y);
-	moveCtx.lineTo(p1.x, p1.y);
-	moveCtx.closePath();
-	moveCtx.fillStyle = "black";
-	moveCtx.fill();
-	moveCtx.stroke();
-	
-	
-	moveCtx.beginPath();
-//	moveCtx.arc(x, y, 3, 0, 2*Math.PI);
-	moveCtx.arc(p.x, p.y, 3, 0, 2*Math.PI);
-	moveCtx.closePath();
-	moveCtx.fillStyle = "red";
-	moveCtx.fill();
-	moveCtx.stroke();
+	return addAngle(heading, -facing);
 }
 
-function addToDirection(current, add){
-        add = add % 360;
-
-		var ret = 0;
-		if (current + add > 360){
-			ret =  0+(add-(360-current));
-				
-		}else if (current + add < 0){
-			ret = 360 + (current + add);
-		}else{	
-			ret = current + add;
-		}
-		return ret;
-}
-
-//		drawAndRotate(pos.x, pos.y, tleft.width, tleft.height, 40, 40, this.facing, tleft);
 		
 function drawAndRotate(posX, posY, w, h, iw, ih, angle, img){
 

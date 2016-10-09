@@ -3,22 +3,25 @@
 class Omega extends Ship {
 
 	public $mass = 15000;
-	public $profile = array(80, 85);
-
+	public $profile = array(0.85, 1.10);
 
 	function __construct($id, $userid, $shipClass, $x, $y, $facing){
 		$this->name = "Omega";
 		$this->faction = "Earth Alliance";
-		$this->id = $id;
-		$this->shipClass = $shipClass;
-		$this->userid = $userid;
-		$this->x = $x;
-		$this->y = $y;
-		$this->facing = $facing;
+		
+        parent::__construct($id, $userid, $shipClass, $x, $y, $facing);
 	}
 
+	function addSystems(){
+		$this->addSystem(new HeavyLaser(0, 0, 10, 5, 5));
+		$this->addSystem(new HeavyLaser(0, 0, 10, 5, 5));
+		$this->addSystem(new HeavyLaser(0, 0, 10, 5, 5));
+		$this->addSystem(new HeavyLaser(0, 0, 8, 4, 4));
+		$this->addSystem(new StandardParticleBeam(0, 0, 8, 4, 4));
+		$this->addSystem(new StandardParticleBeam(0, 0, 8, 4, 4));
+		$this->addSystem(new StandardParticleBeam(0, 0, 8, 4, 4));
+		$this->addSystem(new StandardParticleBeam(0, 0, 8, 4, 4));
+	}
 }
-
-
 
 ?>

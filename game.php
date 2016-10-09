@@ -19,8 +19,19 @@ if (isset($_SESSION["userid"])){
 	$playerstatus = $manager->gamedata["playerstatus"];
 	$ships = $manager->gamedata["ships"];
 
+	$w = new Sharlin(5, 2, "test", 50, 25, 90);
+//	function __construct($id, $userid, $"shipClass", $x, $y, $facing){
 
-	var_export(json_encode($manager->handleFiringPhase()));
+	for ($i = 0; $i < sizeof($w->systems); $i++){
+		echo("___");
+		foreach ($w->systems[$i] as $key => $value){
+			echo get_class($w->systems[$i]);
+			if ($value == NULL){$value = "null";}
+			echo "key: ".$key." val: ".$value."</br>";
+		}
+	}
+
+//	var_export(json_encode($manager->fireOrders));
 
 	echo "<script>";
 	echo "window.gd = ".json_encode($game, JSON_NUMERIC_CHECK).";";

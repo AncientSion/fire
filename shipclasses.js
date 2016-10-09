@@ -75,7 +75,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 			if (anim){
 			//	console.log("draw while anim");
 				ctx.save();
-				ctx.translate(this.x, this.y);
+				ctx.translate(this.x + cam.o.x, this.y + cam.o.y);
 				ctx.rotate(this.facing * (Math.PI/180));
 				ctx.drawImage(this.img, -size/2, -size/2, size, size);
 				ctx.restore();
@@ -89,7 +89,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 
 				var facing = this.getTurnStartFacing();
 				ctx.save();
-				ctx.translate(drawPos.x, drawPos.y);
+				ctx.translate(this.x + cam.o.x, this.y + cam.o.y);
 				ctx.rotate(facing * (Math.PI/180));
 				ctx.drawImage(this.img, -size/2, -size/2, size, size);
 				ctx.restore();
@@ -202,9 +202,8 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	
 	this.create = function(){
 		this.img = window.shipImages[this.shipClass];
-		this.facing = addToDirection(0, this.facing);
+		this.facing = addAngle(0, this.facing);
 		this.addWeapons();
-
 
 		if (!window.preview){
 			this.createShortInfo();
@@ -288,7 +287,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 					turn.cost = this.getTurnCost();
 					turn.delay = this.getTurnDelay();
 				
-				var p = getPointInDirection(300, addToDirection(plannedAngle, turn.a), center.x, center.y);
+				var p = getPointInDirection(300, addAngle(plannedAngle, turn.a), center.x, center.y);
 				
 				moveCtx.beginPath();
 				moveCtx.moveTo(center.x, center.y);
@@ -321,7 +320,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 				for (var i = 1; i <= 1; i++){
 				
 					var modAngle = 30 * i * j;
-					var newAngle = addToDirection(plannedAngle, modAngle);
+					var newAngle = addAngle(plannedAngle, modAngle);
 					var turnButton = getPointInDirection(80, newAngle, center.x, center.y);
 					
 					var turn = 
@@ -350,7 +349,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 					moveCtx.fillStyle = "white";
 					moveCtx.fill(); moveCtx.stroke();
 					
-				var thrustTextLoc = addToDirection(plannedAngle, 90 * j);
+				var thrustTextLoc = addAngle(plannedAngle, 90 * j);
 				
 				var p1 = getPointInDirection(80, thrustTextLoc, center.x, center.y);
 					turn.thrustTextLoc = p1;
@@ -494,8 +493,8 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		}
 		
 		var angle = this.getPlannedFacingToMove(this.actions.length-1);
-		var start = addToDirection(350, angle);
-		var end = addToDirection(10, angle);
+		var start = addAngle(350, angle);
+		var end = addAngle(10, angle);
 		
 		this.validMoveArcs = {start: start, end: end};
 		
@@ -519,10 +518,10 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		var delay = this.getRemainingDelay();
 		
 		if (delay > 0){
-			var p1 = getPointInDirection(delay, addToDirection(start, -10), center.x, center.y);
+			var p1 = getPointInDirection(delay, addAngle(start, -10), center.x, center.y);
 			var dist = getDistance( {x: center.x, y: center.y}, p1);
-			var rad1 = degreeToRadian(addToDirection(start, -10));
-			var rad2 = degreeToRadian(addToDirection(end, +10));
+			var rad1 = degreeToRadian(addAngle(start, -10));
+			var rad2 = degreeToRadian(addAngle(end, +10));
 
 			moveCtx.beginPath();			
 			moveCtx.moveTo(center.x, center.y);
@@ -851,10 +850,33 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		this.setMoveMode();
 		game.draw();
 	}
-	
+
 	this.getBaseHitChance = function(){
-		//return Math.ceil(Math.pow(this.mass, 0.5));
-		return this.profile[0] + "/" + this.profile[1]
+		return Math.ceil(Math.pow(this.mass, 0.5));
+	}
+
+	this.getHitChanceFromAngle = function(angle){
+		//console.log(angle);
+		var a, b, c, base;
+
+		if (angle < 0){
+			angle *= -1;
+		}
+
+		while (angle > 90){
+			angle /= 2;
+		}
+
+		base = this.getBaseHitChance();
+		//console.log(base);
+		a = base * this.profile[0];
+		b = base * this.profile[1];
+
+		sub = ((90 - angle) * a) + ((angle - 0) * b);
+		sub /= (90 - 0);
+
+		//console.log(sub);
+		return Math.ceil(sub);
 	}
 	
 	this.createDiv = function(){
@@ -935,8 +957,6 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		$(divs).find(".accel").html("accel / deccel cost in EP: " + this.getImpulseChangeCost());
 		$(divs).find(".ep").html("rem. engine power: " + this.getRemainingEP());
 		$(divs).find(".remDelay").html("rem. delay: " + this.getRemainingDelay() + " pixels");
-	//	$(divs).find(".cost").html(this.getTC());
-	//	$(divs).find(".delay").html(this.getTD());
 	}
 	
 
@@ -948,7 +968,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 			span.innerHTML = this.shipClass + " # " + this.id;
 			div.appendChild(span);
 		var span = document.createElement("span");
-			span.innerHTML = "</br>base hit : " + this.getBaseHitChance() + "%";
+			span.innerHTML = "</br>base hit : " + this.getBaseHitChance() + "% - " + this.profile[0] + " / "  + this.profile[1];
 			div.appendChild(span);
 		document.body.appendChild(div);
 	}
@@ -1199,7 +1219,7 @@ function Sharlin(id, shipClass, x, y, facing, userid, color){
 	this.ep = 850;
 	this.size = 100;
 	this.mass = 19000;
-	this.profile = [70, 85];
+	this.profile = [0.90, 1.15];
 	
 	this.addWeapons = function(){
 		this.weapons.push(new NeutronLaser(this.id, 300, 60));
@@ -1222,7 +1242,7 @@ function Omega(id, shipClass, x, y, facing, userid, color){
 	this.ep = 550;
 	this.size = 80;
 	this.mass = 15000;
-	this.profile = [80, 85];
+	this.profile = [0.85, 1.10];
 	
 	this.addWeapons = function(){
 		this.weapons.push(new MediumLaser(this.id, 0, 180));

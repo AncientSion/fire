@@ -25,15 +25,16 @@ if (isset($_SESSION["userid"])){
 		$welcome = "<font color='red'>Welcome, ".$playerName.", your player ID: ".$_SESSION['userid']."</font>";
 	}
 	
-	$ongoingGamesElement = "<table style='border: none; margin: auto;'>";
+	$ongoingGamesElement = "<table style='border: 1px solid black; margin: auto; border-radius: 5px'>";
 	if ($ongoingGames) {	
 		$ongoingGamesElement .= "<tr>";
-		$ongoingGamesElement .= "<th colSpan = 2>My Ongoing Games</th>";
+		$ongoingGamesElement .= "<th colSpan = 3>My Ongoing Games</th>";
 		$ongoingGamesElement .= "</tr>";
 
 		$ongoingGamesElement .= "<tr>";
-		$ongoingGamesElement .= "<th>Game Name</th>";
-		$ongoingGamesElement .= "<th>Status</th>";
+		$ongoingGamesElement .= "<th style='width: 706'>Game Name</th>";
+		$ongoingGamesElement .= "<th style='width: 10%'>Phase</th>";
+		$ongoingGamesElement .= "<th style='width: 15%'>Status</th>";
 		$ongoingGamesElement .= "</tr>";
 		
 		foreach ($ongoingGames as $game){
@@ -41,13 +42,14 @@ if (isset($_SESSION["userid"])){
 			$gameStatus = $manager->getGameStatus($game["id"], $game["turn"]);
 			
 			$ongoingGamesElement .= "<tr>";
-			$ongoingGamesElement .= "<td width=80%>";
+			$ongoingGamesElement .= "<td>";
 			$ongoingGamesElement .= "<a href=game.php?gameid=".$game['id'].">";
-			$ongoingGamesElement .= "<font color='darkcyan'>".$game["name"]." @ Turn: ".$game["turn"]."</font>";
+			$ongoingGamesElement .= "<font color='darkcyan'>".$game["name"]."</font>";
 			$ongoingGamesElement .= "</a>";
-			$ongoingGamesElement .= "</td>";			
+			$ongoingGamesElement .= "</td>";
 			
-			$ongoingGamesElement .= "<td>".$gameStatus["status"]."</td>";					
+			$ongoingGamesElement .= "<td>".$game["phase"]."</td>";
+			$ongoingGamesElement .= "<td>".$gameStatus["status"]."</td>";
 			$ongoingGamesElement .= "</tr>";
 		}
 		
@@ -57,7 +59,7 @@ if (isset($_SESSION["userid"])){
 		$ongoingGamesElement .= "<tr><td>no Active Games found</tr></td></table>";
 	}
 
-	$openGamesElement = "<table style='border: none; margin: auto;'>";
+	$openGamesElement = "<table style='border: 1px solid black; margin: auto; border-radius: 5px'>";
 	if ($openGames) {
 		$openGamesElement .= "<tr>";
 		$openGamesElement .= "<th colSpan = 2>Open Games</th>";

@@ -4,6 +4,8 @@ error_reporting(E_ALL); ini_set('display_errors', '1');
 require_once("server\ships\omega.php");
 require_once("server\ships\sharlin.php");
 
+require_once("server\systems\systems.php");
+
 class Ship {
 	public $id;
 	public $x;
@@ -20,6 +22,8 @@ class Ship {
 	public $name;
 	public $faction;
 
+	public $systems = array();
+
 	function __construct($id, $userid, $shipClass, $x, $y, $facing){
 		$this->id = $id;
 		$this->shipClass = $shipClass;
@@ -27,6 +31,8 @@ class Ship {
 		$this->x = $x;
 		$this->y = $y;
 		$this->facing = $facing;
+
+		$this->addSystems();
 	}
 
 	public function getBaseHitChance(){
@@ -34,29 +40,40 @@ class Ship {
 	}
 
 	public function getHitChanceFromAngle($angle){
+		//Debug::log("angle: ".$angle);
 
 		if ($angle < 0){
 			$angle *= -1;
 		}
 
-		if ($angle > 90){
+		while ($angle > 90){
 			$angle /= 2;
 		}
-
-
-		$a = $this->profile[0];
-		$b = $this->profile[1];
+		
+		$base = $this->getBaseHitChance();
+		//Debug::log("base: ".$base);
+		$a = $base * $this->profile[0];
+		$b = $base * $this->profile[1];
 
 		$sub = ((90 - $angle) * $a) + (($angle - 0) * $b);
 		$sub /= (90 - 0);
 
-		return $sub;
+		return ceil($sub);
 
 	}
 
 	public function getLoc(){
 		return array("x" => $this->x, "y" => $this->y);
 	}
+
+
+	function addSystem($obj){
+		$this->systems[] = $obj;
+	}
+
+
+
+
 }
 
 ?>

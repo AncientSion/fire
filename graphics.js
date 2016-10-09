@@ -1,5 +1,6 @@
 
-function drawVector(loc, pos, dist, facing){
+function drawVector(loc, pos, dist, angle){
+	//console.log(angle);
 	pos = {x: pos.x + cam.o.x, y: pos.y + cam.o.y};
 	mouseCtx.clearRect(0, 0, res.x, res.y);
 	mouseCtx.beginPath();
@@ -7,16 +8,13 @@ function drawVector(loc, pos, dist, facing){
 	mouseCtx.lineTo(pos.x, pos.y)
 	mouseCtx.closePath();	
 	mouseCtx.stroke();
-	
-	var angle = getAngleFromTo(loc, pos);
-		angle = addToDirection(angle, - facing);
 
-		if (angle > 180){
-			angle = (360-angle) *-1;
-		}
+	if (angle > 180){
+		angle = (360-angle) *-1;
+	}
 
 
-	$("#vectorDiv").html("Distance: " + dist + ", angle: " + Math.floor(angle))
+	$("#vectorDiv").html("Distance: " + dist + ", angle: " + angle)
 	.css("top", pos.y + "px")
 	.css("left", pos.x + "px")
 	.removeClass("disabled");

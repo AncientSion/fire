@@ -14,6 +14,7 @@ class Manager {
 		$this->gameid = $gameid;
 		$this->gamedata = false;
 		$this->ships = array();
+		$this->fireOrders = array();
 
 		if ($this->gameid){
 			$this->gamedata = $this->getGameData();
@@ -119,7 +120,7 @@ class Manager {
 				$this->startFiringPhase();
 				break;
 			case 2; // from fire to resolve fire
-		//		$this->handleFiringPhase();
+				$this->handleFiringPhase();
 		//		$this->startDamageControlPhase();
 				break;
 			default:
@@ -200,14 +201,14 @@ class Manager {
 	//public function setPlayerstatus($userid, $gameid, $turn, $phase, $status){
 
 	public function handleDeploymentPhase(){
+		Debug::log("handleDeploymentPhase");
 		if (DBManager::app()->resolveDeployment($this->gameid)){
 			return true;
 		}
 	}
 
-	public function handleFiringPhase(){
-		debug::log("handleFiringPhase");
-
+	public function getShips(){
+		debug::log("getShips");
 		$facing;
 		$x;
 		$y;
@@ -232,46 +233,49 @@ class Manager {
 			$ship = new $this->gamedata["ships"][$i]["shipclass"]($this->gamedata["ships"][$i]["id"], $this->gamedata["ships"][$i]["userid"], $this->gamedata["ships"][$i]["shipclass"], $x, $y, $facing);
 			$this->ships[] = $ship;
 		}
+	}
 
-		var_export($this->ships[0]);
+	public function getFireOrders(){
+		Debug::log("getFireOrders");
+		$this->fireOrders = DBManager::app()->getFireOrders($this->gameid, $this->gamedata["game"]["turn"]);
+	}
 
+	public function handleFireOrders(){
+		Debug::log("handleFireOrders");
 
-
-		$fires = DBManager::app()->getFireOrders($this->gameid, $this->gamedata["game"]["turn"]);
-
-
-		/*foreach ($this->ships as $ship){
-			debug::log(get_class($ship));
-			debug::log($ship->mass);
-			debug::log($ship->getBaseHitChance());
-			debug::log($ship->id);
-		}*/
-
-		foreach ($fires as $fire){
+		foreach ($this->fireOrders as $fire){
 
 			$shooter = $this->getShipById($fire["shooterid"]);
 			$target = $this->getShipById($fire["targetid"]);
 
-			debug::log($shooter->id." to ".$target->id);
-
-
 			$dist = Math::getDist($shooter->x, $shooter->y, $target->x, $target->y);
-
-
 			$targetFacing = $target->facing;
-			//debug::log("facing: ".$targetFacing);
 			$hitAngle = Math::getAngle($target->x, $target->y, $shooter->x, $shooter->y);
-
-			//debug::log("hitAngle:".$hitAngle);
 			$angle = Math::addAngle($targetFacing, $hitAngle);
 
-			//debug::log("angle: ".$angle);
-			//debug::log("_______");
 
-			debug::log($target->getHitChanceFromAngle($angle));
+			debug::log("______________");
+			debug::log($shooter->id." to ".$target->id);
+			//debug::log("facing: ".$targetFacing);
+			//debug::log("hitAngle:".$hitAngle);
+			debug::log("angle: ".$angle);
+			debug::log("hit val: ".$target->getHitChanceFromAngle($angle));
+		
 
 		}
 
+	}
+
+	public function handleFiringPhase(){
+		debug::log("handleFiringPhase");
+
+		$this->getShips();
+		$this->getFireOrders();
+		$this->handleFireOrders();
+
+
+	//	foreach ($fires as $fire){
+	//	}
 
 		return;
 		

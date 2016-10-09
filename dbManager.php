@@ -695,7 +695,7 @@ class DBManager {
 
 	public function getOngoingGames($id){
 		$stmt = $this->connection->prepare("
-			SELECT id, name, turn, status
+			SELECT *
 			FROM games
 			WHERE status = :status
 		");

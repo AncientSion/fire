@@ -9,13 +9,15 @@ function System(parentId, arc1, arc2){
 				];
 	this.guns = 1;
 	this.shots = 1;
+
 				
-	this.posIsOnArc = function(loc, facing, pos){
-		var targetCompassHeading = getCompassHeadingOfPoint(loc, pos);
+	this.posIsOnArc = function(loc, pos, facing){
+		//console.log(arguments);
+		var targetCompassHeading = getCompassHeadingOfPoint(loc, pos, facing);
 	
 		for (var i = 0; i < this.arc.length; i++){
-			var start = addToDirection(this.arc[i][0], facing);
-			var end = addToDirection(this.arc[i][1], facing);
+			var start = this.arc[i][0];
+			var end = this.arc[i][1];
 			var inArc = isInArc(targetCompassHeading, start, end);
 			
 			if (inArc){
