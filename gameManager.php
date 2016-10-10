@@ -244,9 +244,13 @@ class Manager {
 		Debug::log("handleFireOrders");
 
 		foreach ($this->fireOrders as $fire){
-
+			debug::log("______________");
 			$shooter = $this->getShipById($fire["shooterid"]);
 			$target = $this->getShipById($fire["targetid"]);
+			$weapon = $shooter->getWeaponById($fire["weaponid"]);
+
+			Debug::log("class: ".get_class($weapon));
+			Debug::log("id: ".$weapon->id);
 
 			$dist = Math::getDist($shooter->x, $shooter->y, $target->x, $target->y);
 			$targetFacing = $target->facing;
@@ -254,13 +258,15 @@ class Manager {
 			$angle = Math::addAngle($targetFacing, $hitAngle);
 
 
-			debug::log("______________");
+
+
+		/*	debug::log("______________");
 			debug::log($shooter->id." to ".$target->id);
 			//debug::log("facing: ".$targetFacing);
 			//debug::log("hitAngle:".$hitAngle);
 			debug::log("angle: ".$angle);
 			debug::log("hit val: ".$target->getHitChanceFromAngle($angle));
-		
+		*/
 
 		}
 

@@ -105,6 +105,8 @@ function mouseCanvasScroll(e){
 }
 
 function canvasMouseMove(e){
+	e.preventDefault();
+	e.stopPropagation();
 	var rect = this.getBoundingClientRect();		
 	var pos = new Point(e.clientX - rect.left, e.clientY - rect.top);
 	
@@ -177,7 +179,7 @@ function canvasMouseMove(e){
 					
 					var valid = false;
 					if (vessel){
-						if (ship.weapons[i].posIsOnArc(shipLoc, vessel.getOffsetPos()), facing) {
+						if (ship.weapons[i].posIsOnArc(shipLoc, vessel.getOffsetPos(), facing)) {
 							valid = true;
 							validWeapon = true;
 						}
@@ -215,9 +217,10 @@ function canvasMouseMove(e){
 					
 			var wrapper = document.getElementById("weaponAimTableWrapper");
 			if (validWeapon){
-				wrapper.style.left = pos.x - 120 + "px";
-				wrapper.style.top = pos.y + 120 + "px";
-				$(wrapper).show();
+				$(wrapper)
+				.css("left", pos.x - 140)
+				.css("top", pos.y + 70)
+				.show();
 			}
 			else {
 				$(wrapper).hide();
@@ -400,7 +403,7 @@ function canvasMouseClick(e){
 						if (ship.hasWeaponsSelected()){
 							for (var i = ship.weapons.length-1; i >= 0; i--){
 								if (ship.weapons[i].selected){
-									if (ship.weapons[i].posIsOnArc(shipLoc, facing, {x: clickShip.x, y: clickShip.y})){
+									if (ship.weapons[i].posIsOnArc(shipLoc, {x: clickShip.x, y: clickShip.y}, facing)){
 									//	fireOrders.push(new FireOrder(ship.id, clickShip.id, ship.weapons[i].id, dist));
 										fireOrders.push( {shooterid: ship.id, targetid: clickShip.id, weaponid: ship.weapons[i].id} );
 										ship.weapons[i].setFireOrder();

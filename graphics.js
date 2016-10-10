@@ -14,9 +14,9 @@ function drawVector(loc, pos, dist, angle){
 	}
 
 
-	$("#vectorDiv").html("Distance: " + dist + ", angle: " + angle)
-	.css("top", pos.y + "px")
-	.css("left", pos.x + "px")
+	$("#vectorDiv").html("Distance: " + dist + " </br>Angle: " + Math.round(angle))
+	.css("left", pos.x - 45 + "px")
+	.css("top", pos.y - 60 + "px")
 	.removeClass("disabled");
 }
 

@@ -1,5 +1,10 @@
 <?php
 
+error_reporting(E_ALL); ini_set('display_errors', '1');
+require_once("server\systems\weapons\particle.php");
+require_once("server\systems\weapons\laser.php");
+
+
 class System {
 	public $id;
 	public $parentid;
@@ -9,8 +14,7 @@ class System {
 	public $power;
 	public $output;
 
-	function __construct($id, $parentid, $structure, $armour, $power, $output){
-		$this->id = $id;
+	function __construct($parentid, $structure, $armour, $power, $output){
 		$this->parentid = $parentid;
 		$this->structure = $structure;
 		$this->armour = $armour;
@@ -29,67 +33,13 @@ class Weapon extends System {
 
 	public $damage;
 	public $accDecay;
-	public $shots;
-	public $guns;
+	public $shots = 1;
+	public $guns = 1;
 	public $reload;
 
-	function __construct($id, $parentid, $structure, $armour, $power, $output = 0){
-        parent::__construct($id, $parentid, $structure, $armour, $power, $output);
+	function __construct($parentid, $structure, $armour, $power, $output = 0){
+        parent::__construct($parentid, $structure, $armour, $power, $output);
 	}
 }
-
-class Particle extends Weapon {
-	public $type = "Particle";
-
-	function __construct($id, $parentid, $structure, $armour, $power){
-        parent::__construct($id, $parentid, $structure, $armour, $power);
-	}
-}
-
-class StandardParticleBeam extends Particle {
-
-	function __construct($id, $parentid, $structure, $armour, $power){
-        parent::__construct($id, $parentid, $structure, $armour, $power);
-	}
-}
-
-
-class FusionCannon extends Particle {
-
-	function __construct($id, $parentid, $structure, $armour, $power){
-        parent::__construct($id, $parentid, $structure, $armour, $power);
-	}
-}
-
-
-class Laser extends Weapon {
-	public $type = "Laser";
-
-	function __construct($id, $parentid, $structure, $armour, $power){
-        parent::__construct($id, $parentid, $structure, $armour, $power);
-	}
-}
-
-class HeavyLaser extends Laser {
-
-	function __construct($id, $parentid, $structure, $armour, $power){
-        parent::__construct($id, $parentid, $structure, $armour, $power);
-	}
-}
-
-class MediumLaser extends Laser {
-
-	function __construct($id, $parentid, $structure, $armour, $power){
-        parent::__construct($id, $parentid, $structure, $armour, $power);
-	}
-}
-
-class NeutronLaser extends Laser {
-
-	function __construct($id, $parentid, $structure, $armour, $power){
-        parent::__construct($id, $parentid, $structure, $armour, $power);
-	}
-}
-
 
 ?>

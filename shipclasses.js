@@ -990,8 +990,8 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		else {
 			shortInfo = this.id;
 			var opos = this.getBaseOffsetPos();
-			ele.style.left = (opos.x - 30) + "px";
-			ele.style.top = (opos.y + 10) + "px";
+			ele.style.left = (opos.x - 80) + "px";
+			ele.style.top = (opos.y + 40) + "px";
 		}
 		
 		if (this.friendly){
@@ -1222,13 +1222,13 @@ function Sharlin(id, shipClass, x, y, facing, userid, color){
 	this.profile = [0.90, 1.15];
 	
 	this.addWeapons = function(){
-		this.weapons.push(new NeutronLaser(this.id, 300, 60));
-		this.weapons.push(new NeutronLaser(this.id, 300, 60));
-		this.weapons.push(new NeutronLaser(this.id, 300, 60));
-		this.weapons.push(new FusionCannon(this.id, 0, 120));
-		this.weapons.push(new FusionCannon(this.id, 0, 120));
-		this.weapons.push(new FusionCannon(this.id, 240, 360));
-		this.weapons.push(new FusionCannon(this.id, 240, 360));
+		this.weapons.push(new NeutronLaser(this.weapons.length+1, this.id, 300, 60));
+		this.weapons.push(new NeutronLaser(this.weapons.length+1, this.id, 300, 60));
+		this.weapons.push(new NeutronLaser(this.weapons.length+1, this.id, 300, 60));
+		this.weapons.push(new FusionCannon(this.weapons.length+1, this.id, 0, 120));
+		this.weapons.push(new FusionCannon(this.weapons.length+1, this.id, 0, 120));
+		this.weapons.push(new FusionCannon(this.weapons.length+1, this.id, 240, 360));
+		this.weapons.push(new FusionCannon(this.weapons.length+1, this.id, 240, 360));
 	}
 		
 	Capital.call(this, id, shipClass, x, y, facing, userid, color);
@@ -1245,14 +1245,14 @@ function Omega(id, shipClass, x, y, facing, userid, color){
 	this.profile = [0.85, 1.10];
 	
 	this.addWeapons = function(){
-		this.weapons.push(new MediumLaser(this.id, 0, 180));
-		this.weapons.push(new MediumLaser(this.id, 0, 180));
-		this.weapons.push(new MediumLaser(this.id, 180, 360));
-		this.weapons.push(new MediumLaser(this.id, 180, 360));
-		this.weapons.push(new HeavyLaser(this.id, 300, 360));
-		this.weapons.push(new HeavyLaser(this.id, 300, 360));
-		this.weapons.push(new HeavyLaser(this.id, 0, 60));
-		this.weapons.push(new HeavyLaser(this.id, 0, 60));
+		this.weapons.push(new MediumLaser(this.weapons.length+1, this.id, 0, 180));
+		this.weapons.push(new MediumLaser(this.weapons.length+1, this.id, 0, 180));
+		this.weapons.push(new MediumLaser(this.weapons.length+1, this.id, 180, 360));
+		this.weapons.push(new MediumLaser(this.weapons.length+1, this.id, 180, 360));
+		this.weapons.push(new HeavyLaser(this.weapons.length+1, this.id, 300, 360));
+		this.weapons.push(new HeavyLaser(this.weapons.length+1, this.id, 300, 360));
+		this.weapons.push(new HeavyLaser(this.weapons.length+1, this.id, 0, 60));
+		this.weapons.push(new HeavyLaser(this.weapons.length+1, this.id, 0, 60));
 	}
 		
 	Capital.call(this, id, shipClass, x, y, facing, userid, color);
@@ -1268,11 +1268,11 @@ function Hyperion(id, shipClass, x, y, facing, userid, color){
 	this.mass = 8000;
 	
 	this.addWeapons = function(){
-		this.weapons.push(new StandardParticleBeam(this.id, 0, 360));
-		this.weapons.push(new StandardParticleBeam(this.id, 0, 360));
-		this.weapons.push(new StandardParticleBeam(this.id, 0, 360));
-		this.weapons.push(new HeavyLaser(this.id, 300, 360));
-		this.weapons.push(new HeavyLaser(this.id, 0, 60));
+		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 360));
+		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 360));
+		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 360));
+		this.weapons.push(new HeavyLaser(this.weapons.length+1, this.id, 300, 360));
+		this.weapons.push(new HeavyLaser(this.weapons.length+1, this.id, 0, 60));
 	}
 		
 	HeavyAttack.call(this, id, shipClass, x, y, facing, userid, color);
@@ -1289,13 +1289,13 @@ function Artemis(id, shipClass, x, y, facing, userid, color){
 	this.faction = "Earth Alliance";
 	
 	this.addWeapons = function(){
-		this.weapons.push(new StandardParticleBeam(this.id, 0, 180));
-		this.weapons.push(new StandardParticleBeam(this.id, 0, 180));
-		this.weapons.push(new StandardParticleBeam(this.id, 180, 360));
-		this.weapons.push(new StandardParticleBeam(this.id, 180, 360));
-		this.weapons.push(new ParticleCannon(this.id, 240, 360));
-		this.weapons.push(new ParticleCannon(this.id, 0, 120));
-		this.weapons.push(new ParticleCannon(this.id, 0, 360));
+		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 180));
+		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 180));
+		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 180, 360));
+		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 180, 360));
+		this.weapons.push(new ParticleCannon(this.weapons.length+1, this.id, 240, 360));
+		this.weapons.push(new ParticleCannon(this.weapons.length+1, this.id, 0, 120));
+		this.weapons.push(new ParticleCannon(this.weapons.length+1, this.id, 0, 360));
 	}
 		
 	Escort.call(this, id, shipClass, x, y, facing, userid, color);
@@ -1311,12 +1311,12 @@ function Primus(id, shipClass, x, y, facing, userid, color){
 	this.mass = 12500;
 	
 	this.addWeapons = function(){
-		this.weapons.push(new ParticleAccelerator(this.id, 240, 30));
-		this.weapons.push(new ParticleAccelerator(this.id, 240, 30));
-		this.weapons.push(new ParticleAccelerator(this.id, 240, 30));
-		this.weapons.push(new ParticleAccelerator(this.id, 330, 120));
-		this.weapons.push(new ParticleAccelerator(this.id, 330, 120));
-		this.weapons.push(new ParticleAccelerator(this.id, 330, 120));
+		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 240, 30));
+		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 240, 30));
+		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 240, 30));
+		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 330, 120));
+		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 330, 120));
+		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 330, 120));
 	}
 		
 	Capital.call(this, id, shipClass, x, y, facing, userid, color);
@@ -1332,9 +1332,9 @@ function Demos(id, shipClass, x, y, facing, userid, color){
 	this.mass = 2250;
 	
 	this.addWeapons = function(){
-		this.weapons.push(new ParticleAccelerator(this.id, 300, 120));
-		this.weapons.push(new LightParticleAccelerator(this.id, 240, 120));
-		this.weapons.push(new ParticleAccelerator(this.id, 240, 60));
+		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 300, 120));
+		this.weapons.push(new LightParticleAccelerator(this.weapons.length+1, this.id, 240, 120));
+		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 240, 60));
 	}
 		
 	Escort.call(this, id, shipClass, x, y, facing, userid, color);
@@ -1350,10 +1350,10 @@ function Haven(id, shipClass, x, y, facing, userid, color){
 	this.mass = 800;
 	
 	this.addWeapons = function(){
-		this.weapons.push(new LightParticleAccelerator(this.id, 0, 270))
-		this.weapons.push(new LightParticleAccelerator(this.id, 90, 360));
-		this.weapons.push(new LightParticleAccelerator(this.id, 180, 90));
-		this.weapons.push(new LightParticleAccelerator(this.id, 270, 180));
+		this.weapons.push(new LightParticleAccelerator(this.weapons.length+1, this.id, 0, 270))
+		this.weapons.push(new LightParticleAccelerator(this.weapons.length+1, this.id, 90, 360));
+		this.weapons.push(new LightParticleAccelerator(this.weapons.length+1, this.id, 180, 90));
+		this.weapons.push(new LightParticleAccelerator(this.weapons.length+1, this.id, 270, 180));
 	}
 		
 	Patrol.call(this, id, shipClass, x, y, facing, userid, color);

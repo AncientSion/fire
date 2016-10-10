@@ -1,5 +1,5 @@
-function System(parentId, arc1, arc2){
-	this.id;
+function System(id, parentId, arc1, arc2){
+	this.id = id;
 	this.parentId = parentId;
 	this.detailsTable = false;
 	this.highlight = false;
@@ -24,11 +24,6 @@ function System(parentId, arc1, arc2){
 				return true;
 			} else return false;
 		}
-	}
-	
-	this.create = function(){
-		this.id = wIndex;
-		wIndex++;
 	}
 	
 	this.getTableRow = function(){
@@ -175,12 +170,10 @@ function System(parentId, arc1, arc2){
 	this.getFillStyle = function(x, y, dist){
 		return "green";
 	}
-	
-	this.create();
 }
 				
-function Laser(parentId, arc1, arc2, arc3, arc4){
-	System.call(this, parentId, arc1, arc2, arc3, arc4);	
+function Laser(id, parentId, arc1, arc2, arc3, arc4){
+	System.call(this, id, parentId, arc1, arc2, arc3, arc4);	
 	this.animation = "laser";
 	
 	this.getFillStyle = function(x, y, dist){
@@ -222,8 +215,8 @@ function Laser(parentId, arc1, arc2, arc3, arc4){
 Laser.prototype = Object.create(System.prototype);
 
 					
-function HeavyLaser(parentId, arc1, arc2, arc3, arc4){
-	Laser.call(this, parentId, arc1, arc2, arc3, arc4);
+function HeavyLaser(id, parentId, arc1, arc2, arc3, arc4){
+	Laser.call(this, id, parentId, arc1, arc2, arc3, arc4);
 	this.name = "Heavy Laser";
 	this.structure = 8;
 	this.armour = 2;
@@ -240,8 +233,8 @@ function HeavyLaser(parentId, arc1, arc2, arc3, arc4){
 }
 HeavyLaser.prototype = Object.create(Laser.prototype);
 
-function MediumLaser(parentId, arc1, arc2, arc3, arc4){
-	Laser.call(this, parentId, arc1, arc2, arc3, arc4);
+function MediumLaser(id, parentId, arc1, arc2, arc3, arc4){
+	Laser.call(this, id, parentId, arc1, arc2, arc3, arc4);
 	this.name = "Medium Laser";
 	this.structure = 8;
 	this.armour = 2;
@@ -256,8 +249,8 @@ function MediumLaser(parentId, arc1, arc2, arc3, arc4){
 }
 MediumLaser.prototype = Object.create(Laser.prototype);
 
-function NeutronLaser(parentId, arc1, arc2, arc3, arc4){
-	HeavyLaser.call(this, parentId, arc1, arc2, arc3, arc4);
+function NeutronLaser(id, parentId, arc1, arc2, arc3, arc4){
+	HeavyLaser.call(this, id, parentId, arc1, arc2, arc3, arc4);
 	this.name = "Neutron Laser";
 	this.structure = 8;
 	this.armour = 2;
@@ -274,8 +267,8 @@ function NeutronLaser(parentId, arc1, arc2, arc3, arc4){
 }
 NeutronLaser.prototype = Object.create(HeavyLaser.prototype);
 
-function StandardParticleBeam(parentId, arc1, arc2){
-	System.call(this, parentId, arc1, arc2);
+function StandardParticleBeam(id, parentId, arc1, arc2){
+	System.call(this, id, parentId, arc1, arc2);
 	this.name = "SPB";
 	this.damage = 3;
 	this.structure = 5;
@@ -290,8 +283,8 @@ function StandardParticleBeam(parentId, arc1, arc2){
 }
 StandardParticleBeam.prototype = Object.create(System.prototype);
 
-function FusionCannon(parentId, arc1, arc2){
-	StandardParticleBeam.call(this, parentId, arc1, arc2);
+function FusionCannon(id, parentId, arc1, arc2){
+	StandardParticleBeam.call(this, id, parentId, arc1, arc2);
 	this.name = "Fusion Cannon";
 	this.damage = 3;
 	this.structure = 5;
@@ -306,8 +299,8 @@ function FusionCannon(parentId, arc1, arc2){
 }
 FusionCannon.prototype = Object.create(StandardParticleBeam.prototype);
 
-function ParticleCannon(parentId, arc1, arc2){
-	StandardParticleBeam.call(this, parentId, arc1, arc2);
+function ParticleCannon(id, parentId, arc1, arc2){
+	StandardParticleBeam.call(this, id, parentId, arc1, arc2);
 	this.name = "Particle Cannon";
 	this.damage = 3;
 	this.structure = 5;
@@ -321,8 +314,8 @@ function ParticleCannon(parentId, arc1, arc2){
 ParticleCannon.prototype = Object.create(StandardParticleBeam.prototype);
 	
 	
-function ParticleAccelerator(parentId, arc1, arc2, arc3, arc4){
-	StandardParticleBeam.call(this, parentId, arc1, arc2, arc3, arc4);	
+function ParticleAccelerator(id, parentId, arc1, arc2, arc3, arc4){
+	StandardParticleBeam.call(this, id, parentId, arc1, arc2, arc3, arc4);	
 	this.name = "Particle Accel";
 	this.damage = 8
 	this.structure = 8;
@@ -337,8 +330,8 @@ function ParticleAccelerator(parentId, arc1, arc2, arc3, arc4){
 ParticleAccelerator.prototype = Object.create(StandardParticleBeam.prototype);
 
 
-function LightParticleAccelerator(parentId, arc1, arc2, arc3, arc4){
-	ParticleAccelerator.call(this, parentId, arc1, arc2, arc3, arc4);
+function LightParticleAccelerator(id, parentId, arc1, arc2, arc3, arc4){
+	ParticleAccelerator.call(this, id, parentId, arc1, arc2, arc3, arc4);
 	this.name = "Lt. Particle Accel";
 	this.damage = 8
 	this.structure = 8;

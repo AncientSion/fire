@@ -67,11 +67,20 @@ class Ship {
 	}
 
 
-	function addSystem($obj){
+	public function addSystem($obj){
+		$obj->id = sizeof($this->systems)+1;
+
 		$this->systems[] = $obj;
 	}
 
 
+	public function getWeaponById($id){
+		for ($i = 0; $i < sizeof($this->systems); $i++){
+			if ($this->systems[$i]->id == $id){
+				return $this->systems[$i];
+			}
+		}
+	}
 
 
 }

@@ -19,19 +19,13 @@ if (isset($_SESSION["userid"])){
 	$playerstatus = $manager->gamedata["playerstatus"];
 	$ships = $manager->gamedata["ships"];
 
-	$w = new Sharlin(5, 2, "test", 50, 25, 90);
-//	function __construct($id, $userid, $"shipClass", $x, $y, $facing){
+	$w = new Omega(5, 2, "test", 50, 25, 90);
 
-	for ($i = 0; $i < sizeof($w->systems); $i++){
-		echo("___");
-		foreach ($w->systems[$i] as $key => $value){
-			echo get_class($w->systems[$i]);
-			if ($value == NULL){$value = "null";}
-			echo "key: ".$key." val: ".$value."</br>";
-		}
-	}
+	//foreach ($w->systems[0] as $key => $value){
+	//		if ($value == NULL){$value = "null";} echo "key: ".$key." val: ".$value."</br>";
+	//	}
 
-//	var_export(json_encode($manager->fireOrders));
+	//	var_export(json_encode($manager->fireOrders));
 
 	echo "<script>";
 	echo "window.gd = ".json_encode($game, JSON_NUMERIC_CHECK).";";
@@ -60,17 +54,6 @@ if (isset($_SESSION["userid"])){
 	<script src='script.js'></script>
 </head>
 	<body>
-		<div id="buttons"></div>
-		<div id="currentPos">0 / 0</div>
-		<span id="onArc">null</span>
-		<span id="curArc">0</span>
-		<span id="dist" style="color: red">0</span>
-		<input type="button" value="init" onclick="init()"></input>
-		<input type="button" value="end Phase" onclick="endPhase()"></input>
-		<input type="button" value="executeAllMoves" onclick="executeAll()"></input>
-		<input type="button" value="endTurn" onclick="endTurn()"></input>
-		<input type="button" value="resolveFire" onclick="resolveFire()"></input>
-		<input type="button" value="replay fire" onclick="refire()"></input>
 		<div id="game">
 			<div id ="phaseSwitchDiv" class="disabled">
 				<div id="phaseSwitchInnerDiv">
@@ -81,6 +64,14 @@ if (isset($_SESSION["userid"])){
 				</div>
 			</div>
 			<div id="canvasDiv">
+				<div id="upperGUI">
+					<div id="buttons"></div>
+					<div id="currentPos">0 / 0</div>
+					<span id="onArc">null</span>
+					<span id="curArc">0</span>
+					<span id="dist" style="color: red">0</span>
+					<input type="button" value="end Phase" onclick="endPhase()"></input>
+				</div>
 				<canvas id ="canvas"></canvas>
 				<canvas id ="planCanvas"></canvas>
 				<canvas id ="fxCanvas"></canvas>

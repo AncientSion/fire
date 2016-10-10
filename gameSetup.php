@@ -293,7 +293,6 @@ else {
 						subTr.addEventListener("contextmenu", function(){
 							$(".shipDiv").remove();
 							var name = this.childNodes[0].innerHTML;
-							window.wIndex = 1;
 							window.ship = new window[name](1, name, res.x/2, res.y/2, 270, 1, "blue");
 							window.ship.preview();
 							game.ships[0] = window.ship;

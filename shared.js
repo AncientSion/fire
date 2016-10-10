@@ -1,5 +1,3 @@
-window.sIndex = 1;
-window.wIndex = 1;
 window.res = {x: 1200, y: 800};
 window.ml;
 window.game;

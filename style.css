@@ -1,5 +1,6 @@
-body {
+body, table, tr, td {
 	font-family: arial;
+	font-size: 12px;
 }
 
 div {
@@ -182,6 +183,7 @@ canvas {
 	background-color: black;
 	border: 1px solid black;
 	border-radius: 5px;
+	padding: 3px;
 }
 
 #phaseSwitchInnerDiv {
@@ -288,4 +290,11 @@ canvas {
 }
 #vectorDiv.disabled {
 	display: none;
+}
+
+#upperGUI {
+	display: inline-block;
+	position: absolute;
+	z-index: 8;
+	border: 1px solid black;
 }
