@@ -10,7 +10,7 @@ table, th, tr, td {
 	text-align: center;
 }
 
-tr.selected {
+tr.selected, td.selected {
 	background-color: lightblue
 }
 

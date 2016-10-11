@@ -63,7 +63,7 @@ function Game(id, name, status, userid, turn, phase){
 			for (var i = 0; i < toDo.length; i++){
 				var tr = document.createElement("tr");				
 					$(tr).data("shipid", toDo[i].id).click(function(e){
-						console.log($(this).data());
+						//console.log($(this).data());
 						e.preventDefault();
 						e.stopPropagation();
 
@@ -83,8 +83,9 @@ function Game(id, name, status, userid, turn, phase){
 					});
 
 				var td = document.createElement("td");
-					var img = toDo[i].img; img.style.width = "50px"; img.style.height = "50px";
-				td.appendChild(img); tr.appendChild(td);
+					td.innerHTML = "<img style='width: 50px; height: 50px;' src='shipIcons/omega.png'>";
+				//	td.appendChild(img);
+				tr.appendChild(td);
 
 				var td = document.createElement("td");
 					td.innerHTML = toDo[i].shipClass;
@@ -118,9 +119,15 @@ function Game(id, name, status, userid, turn, phase){
 							ajax.confirmDeployment();
 						}
 						else console.log("nope");
+					}).mouseenter(function(){
+						$(this).addClass("selected");
+					}).mouseleave(function(){
+						$(this).removeClass("selected");
 					});
 				var th = document.createElement("th");
-					th.colSpan = 4;
+					th.colSpan = 4; 
+					$(th).css("padding", 5).css("fontSize", 15)
+
 					th.innerHTML = "Confirm Deployment";
 					tr.appendChild(th);
 				table.appendChild(tr);
@@ -184,9 +191,8 @@ function Game(id, name, status, userid, turn, phase){
 	this.create = function(){
 		for (var i = 0; i < window.ships.length; i++){
 			var shipclass = window.ships[i].shipclass;
-			var owner = window.ships[i].userid;
+			var userid = window.ships[i].userid;
 			var id = window.ships[i].id;
-			var facing = 0;
 			var x;
 			var y;
 			var deployed;
@@ -195,7 +201,7 @@ function Game(id, name, status, userid, turn, phase){
 			if (window.ships[i].status == "deployed"){deployed = true;}else {deployed = false;}
 			if (window.ships[i].userid == this.userid){friendly = true;}else {friendly = false;}
 
-			var ship = new window[shipclass](id, shipclass.toLowerCase(), x, y, facing, owner, "blue");
+			var ship = new window[shipclass](id, shipclass.toLowerCase(), x, y, 0, userid, "blue");
 				ship.deployed = deployed;
 				ship.friendly = friendly;
 				ship.actions = [];
@@ -239,6 +245,7 @@ function Game(id, name, status, userid, turn, phase){
 			}
 
 
+			ship.create();
 			this.ships.push(ship);
 		}
 
@@ -487,7 +494,7 @@ function Game(id, name, status, userid, turn, phase){
 
 	this.getShotDetails = function(){
 
-		fireOrders = [fireOrders[0]];
+	//	fireOrders = [fireOrders[0]];
 
 		for (var i = 0; i < fireOrders.length; i++){
 			fireOrders[i].shooter = game.getShipById(fireOrders[i].shooterid);
@@ -525,7 +532,7 @@ function Game(id, name, status, userid, turn, phase){
 
 	this.getAnimationDetails = function(){
 		for (var i = 0; i < fireOrders.length; i++){
-			console.log(fireOrders[i]);
+		//	console.log(fireOrders[i]);
 			for (var j = 0; j < fireOrders[i].guns; j++){
 				var ox = fireOrders[i].shooter.x + Math.random()*30-15; // GUN origin for all proj
 				var oy = fireOrders[i].shooter.y + Math.random()*30-15;
@@ -642,8 +649,8 @@ function Game(id, name, status, userid, turn, phase){
 								}
 							}
 							else if (fireOrders[i].weapon.animation == "laser"){
-								console.log("laser");
-								console.log(fireOrders[i].anim);
+							//	console.log("laser");
+							//	console.log(fireOrders[i].anim);
 								fireOrders[i].anim[j][k].t[0] += 1;
 								x = fireOrders[i].anim[j][k].tax + (fireOrders[i].anim[j][k].v.x * fireOrders[i].anim[j][k].t[0] / fireOrders[i].anim[j][k].t[1]);
 								y = fireOrders[i].anim[j][k].tay + (fireOrders[i].anim[j][k].v.y * fireOrders[i].anim[j][k].t[0] / fireOrders[i].anim[j][k].t[1]);

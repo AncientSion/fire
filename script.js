@@ -230,7 +230,7 @@ function canvasMouseMove(e){
 	else if (game.deploying){
 		$("#deployOverlay").html("Deploy craft </br> at curser position")
 		.css("left", pos.x - 30 + "px")
-		.css("top", pos.y + 120 + "px")
+		.css("top", pos.y + 40 + "px")
 		.show();
 	}
 	else if (!game.deploying){
@@ -489,7 +489,7 @@ function selectWeapon(ele){
 }
 
 function checkIfOnMovementArc(origin, target){
-	var targetCompassHeading = getCompassHeadingOfPoint(origin.getOffsetPos(), target, facing);	
+	var targetCompassHeading = getCompassHeadingOfPoint(origin.getOffsetPos(), target, origin.getPlannedFacingToMove());	
 	var start = origin.validMoveArcs.start;
 	var end = origin.validMoveArcs.end;
 		

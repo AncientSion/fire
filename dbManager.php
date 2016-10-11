@@ -713,8 +713,8 @@ class DBManager {
 		return true;
 	}
 
-	public function resolveMoveActions($gameid){
-		Debug::log("resolveMoveActions");
+	public function resolveMovement($gameid){
+		Debug::log("resolveMovement");
 		$ships = $this->getAllShipsForGame($gameid);
 		$stmt = $this->connection->prepare("
 			UPDATE shipactions

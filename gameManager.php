@@ -155,6 +155,14 @@ class Manager {
 		}
 	}
 
+	public function handleDeploymentPhase(){
+		Debug::log("handleDeploymentPhase");
+		if (DBManager::app()->resolveDeployment($this->gameid)){
+			return true;
+		}
+	}
+
+
 	public function startMovementPhase(){
 		Debug::log("startMovementPhase");
 		$dbManager = DBManager::app();
@@ -178,6 +186,13 @@ class Manager {
 		}
 	}
 
+	public function handleMovementPhase(){
+		Debug::log("handleMovementPhase");
+		if (DBManager::app()->resolveMovement($this->gameid)){
+			return true;
+		}
+	}
+	
 	public function startFiringPhase(){
 		Debug::log("startFiringPhase");
 		$dbManager = DBManager::app();
@@ -196,15 +211,6 @@ class Manager {
 				}
 			}
 
-			return true;
-		}
-	}
-
-	//public function setPlayerstatus($userid, $gameid, $turn, $phase, $status){
-
-	public function handleDeploymentPhase(){
-		Debug::log("handleDeploymentPhase");
-		if (DBManager::app()->resolveDeployment($this->gameid)){
 			return true;
 		}
 	}
@@ -237,6 +243,14 @@ class Manager {
 		}
 	}
 
+	public function handleFiringPhase(){
+		debug::log("handleFiringPhase");
+		$this->getShips();
+		$this->fireOrders = DBManager::app()->getOpenFireOrders($this->gameid, $this->gamedata["game"]["turn"]);
+		$this->handleFireOrders();
+		$this->updateFireOrders();
+	}
+
 	public function handleFireOrders(){
 		Debug::log("handleFireOrders");		
 
@@ -260,7 +274,7 @@ class Manager {
 			$rangeLoss = $weapon->getAccLoss($dist);
 			$final = $profile - $rangeLoss;
 
-		//	debug::log("shots: ".$shots);
+			//	debug::log("shots: ".$shots);
 			for ($j = 0; $j < $shots; $j++){
 					$roll = mt_rand(1, 100);
 					$notes = $notes.$roll.",";
@@ -270,8 +284,7 @@ class Manager {
 				}
 			}
 
-
-		//	debug::log("notes: ".$notes);
+			//	debug::log("notes: ".$notes);
 			$this->fireOrders[$i]["req"] = $final;
 			$this->fireOrders[$i]["notes"] = $notes;
 			$this->fireOrders[$i]["hits"] = $hits;
@@ -287,22 +300,11 @@ class Manager {
 				debug::log("end %: ".$final);
 			*/
 		}
-
 	}
 
 	public function updateFireOrders(){
 		debug::log("updateFireOrders");
 		DBManager::app()->updateFireOrders($this->fireOrders);
-	}
-
-	public function handleFiringPhase(){
-		debug::log("handleFiringPhase");
-
-		$this->getShips();
-		$this->fireOrders = DBManager::app()->getOpenFireOrders($this->gameid, $this->gamedata["game"]["turn"]);
-		$this->getOpenFireOrders();
-		$this->handleFireOrders();
-		$this->updateFireOrders();
 	}
 
 	public function startDamageControlPhase(){
