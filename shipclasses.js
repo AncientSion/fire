@@ -16,16 +16,6 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	this.maxVector = false;
 	this.undoOrderButton = false;
 	
-	this.startNewTurn = function(){
-		this.turns = [];
-		this.validMoveArcs = [];
-		this.impulseAdjust = [];
-		this.maxVector = false;
-		this.undoOrderButton = false;
-		
-		this.unsetWeapons();
-	}
-	
 	this.add = function (add){
 		var current = this.facing;
 		var ret = 0
@@ -71,7 +61,8 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	this.draw = function(){
 		var size = this.size*cam.z * 0.8;
 
-		if (this.deployed){			
+
+		if (this.deployed){
 			if (anim){
 			//	console.log("draw while anim");
 				ctx.save();
@@ -81,16 +72,20 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 				ctx.restore();
 			}
 			else {
-				var drawPos;
+				var pos;
 
 				if (game.phase == 2){
-					drawPos = this.getTurnStartPosition();
-				} else drawPos = this.getBaseOffsetPos();
+					pos = this.getTurnStartPosition();
+					this.facing = this.getTurnStartFacing();
+				} 
+				else {
+					pos = this.getRealPos();
+					this.facing = this.getFacing();
+				}
 
-				var facing = this.getTurnStartFacing();
 				ctx.save();
-				ctx.translate(this.x + cam.o.x, this.y + cam.o.y);
-				ctx.rotate(facing * (Math.PI/180));
+				ctx.translate(pos.x + cam.o.x, pos.y + cam.o.y);
+				ctx.rotate(this.facing * (Math.PI/180));
 				ctx.drawImage(this.img, -size/2, -size/2, size, size);
 				ctx.restore();
 			}
@@ -1045,9 +1040,11 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 				this.drawMovePlan();
 			}
 		}
+		else if (game.phase == 2){
+			
+		}
 
 		this.updateDiv();
-		this.drawMovePlan();
 	}	
 	
 	this.unsetMoveMode = function(){

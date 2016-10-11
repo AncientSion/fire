@@ -1,75 +1,28 @@
-doAdvanceGameState for game15
-handleFiringPhase
-getShips
-getFireOrders
-handleFireOrders
-doAdvanceGameState for game15
-handleFiringPhase
-getShips
-getFireOrders
-handleFireOrders
-______________
-______________
-148 to 146
-facing: 30
-hitAngle:12.230718330987
-fire in from: -17.769281669013
-profile val: 111
-range loss: 31
-end %: 80
-doAdvanceGameState for game15
-handleFiringPhase
-getShips
-getFireOrders
-handleFireOrders
-______________
-______________
-148 to 146
-facing: 30
-hitAngle:12.230718330987
-fire in from: -17.769281669013
-profile val: 111
-range loss: 31
-end %: 80
-doAdvanceGameState for game15
-handleFiringPhase
-getShips
-getFireOrders
-handleFireOrders
-______________
-______________
-148 to 146
-facing: 30
-hitAngle:12.230718330987
-fire in from: -17.769281669013
-profile val: 111
-range loss: 31
-end %: 80
-doAdvanceGameState for game15
-handleFiringPhase
-getShips
-getFireOrders
-handleFireOrders
-______________
-______________
-148 to 146
-facing: 30
-hitAngle:12.230718330987
-fire in from: -17.769281669013
-profile val: 111
-range loss: 31
-end %: 80
-doAdvanceGameState for game15
-handleFiringPhase
-getShips
-getFireOrders
-handleFireOrders
-______________
-______________
-148 to 146
-facing: 30
-hitAngle:12.230718330987
-fire in from: -17.769281669013
-profile val: 111
-range loss: 31
-end %: 80
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet

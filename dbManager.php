@@ -417,6 +417,39 @@ class DBManager {
 		return true;
 	}
 
+	public function updateFireOrders($fires){
+		debug::log("DB updateFireOrders");
+
+		$stmt = $this->connection->prepare("
+			UPDATE fireorders
+			SET
+				req = :req,
+				notes = :notes,
+				hits = :hits,
+				resolved = :resolved
+			WHERE
+				id = :id
+		");
+
+		$resolved = 1;
+
+		for ($i = 0; $i < sizeof($fires); $i++){
+			$stmt->bindParam(":req", $fires[$i]["req"]);
+			$stmt->bindParam(":notes", $fires[$i]["notes"]);
+			$stmt->bindParam(":hits", $fires[$i]["hits"]);
+			$stmt->bindParam(":resolved", $resolved);
+			$stmt->bindParam(":id", $fires[$i]["id"]);
+			$stmt->execute();
+
+			if ($stmt->errorCode() == 0){
+				continue;
+			}
+			else return false;
+		}
+
+		return true;
+	}
+
 
 
 	public function getPlayerStatus($gameid){
@@ -605,7 +638,32 @@ class DBManager {
 		return $ships;
 	}
 
-	public function getFireOrders($gameid, $turn){
+	public function getAllFireOrders($gameid, $turn){
+		debug::log("getAllFireOrders for turn ".$turn);
+		$stmt = $this->connection->prepare("
+			SELECT * FROM fireOrders
+			WHERE gameid = :gameid
+			AND turn = :turn
+			AND resolved = :resolved
+		");
+
+		$resolved = 1;
+
+		$stmt->bindParam(":gameid", $gameid);
+		$stmt->bindParam(":turn", $turn);
+		$stmt->bindParam(":resolved", $resolved);
+		$stmt->execute();
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		if ($result){
+			return $result;
+		}
+		else return false;
+
+	}
+
+
+	public function getOpenFireOrders($gameid, $turn){
 		$stmt = $this->connection->prepare("
 			SELECT * FROM fireOrders
 			WHERE gameid = :gameid

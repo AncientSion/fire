@@ -18,6 +18,7 @@ if (isset($_SESSION["userid"])){
 	$game = $manager->gamedata["game"];
 	$playerstatus = $manager->gamedata["playerstatus"];
 	$ships = $manager->gamedata["ships"];
+	$fireorders = $manager->gamedata["fireorders"];
 
 	/*$w = new Omega(5, 2, "test", 50, 25, 90);
 
@@ -32,6 +33,7 @@ if (isset($_SESSION["userid"])){
 	echo "window.gd = ".json_encode($game, JSON_NUMERIC_CHECK).";";
 	echo "window.ships = ".json_encode($ships, JSON_NUMERIC_CHECK).";";
 	echo "window.playerstatus = ".json_encode($playerstatus, JSON_NUMERIC_CHECK).";";
+	echo "window.fireOrders = ".json_encode($fireorders, JSON_NUMERIC_CHECK).";";
 	echo "</script>";
 }
 ?>

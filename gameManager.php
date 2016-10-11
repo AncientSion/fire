@@ -65,11 +65,13 @@ class Manager {
 		$playerstatus = $db->getPlayerStatus($this->gameid);
 		$ships = $db->getAllShipsForGame($this->gameid);
 		$ships = $db->getActionsForShips($ships, $this->userid);
+		$fireorders = $db->getAllFireOrders($this->gameid, $game["turn"]);
 
 		$gamedata = array(
 							"game" => $game,
 							"playerstatus" => $playerstatus,
-							"ships" => $ships
+							"ships" => $ships,
+							"fireorders" => $fireorders
 						);
 
 		return $gamedata;
@@ -121,7 +123,7 @@ class Manager {
 				break;
 			case 2; // from fire to resolve fire
 				$this->handleFiringPhase();
-		//		$this->startDamageControlPhase();
+				$this->startDamageControlPhase();
 				break;
 			default:
 				break;
@@ -235,70 +237,95 @@ class Manager {
 		}
 	}
 
-	public function getFireOrders(){
-		Debug::log("getFireOrders");
-		$this->fireOrders = DBManager::app()->getFireOrders($this->gameid, $this->gamedata["game"]["turn"]);
-	}
-
 	public function handleFireOrders(){
-		Debug::log("handleFireOrders");
+		Debug::log("handleFireOrders");		
 
+		for ($i = 0; $i < sizeof($this->fireOrders); $i++){			
+			//debug::log("______________");
+			$hits = 0;
+			$shots = 0;
+			$notes = "";
 
+			$fire = $this->fireOrders[$i];
 
-		foreach ($this->fireOrders as $fire){
-		
-			debug::log("______________");
 			$shooter = $this->getShipById($fire["shooterid"]);
 			$target = $this->getShipById($fire["targetid"]);
 			$weapon = $shooter->getWeaponById($fire["weaponid"]);
-
-		//	Debug::log("class: ".get_class($weapon));
-		//	Debug::log("id: ".$weapon->id);
-
+			$shots = $weapon->shots;
 			$dist = Math::getDist($shooter->x, $shooter->y, $target->x, $target->y);
 			$targetFacing = $target->facing;
 			$hitAngle = Math::getAngle($target->x, $target->y, $shooter->x, $shooter->y);
 			$angle = Math::addAngle($targetFacing, $hitAngle);
-
 			$profile = $target->getHitChanceFromAngle($angle);
-
 			$rangeLoss = $weapon->getAccLoss($dist);
-
 			$final = $profile - $rangeLoss;
 
+		//	debug::log("shots: ".$shots);
+			for ($j = 0; $j < $shots; $j++){
+					$roll = mt_rand(1, 100);
+					$notes = $notes.$roll.",";
 
-			debug::log("______________");
-			debug::log($shooter->id." to ".$target->id);
-			debug::log("facing: ".$targetFacing);
-			debug::log("hitAngle:".$hitAngle);
-			debug::log("fire in from: ".$angle);
-			debug::log("profile val: ".$profile);
-			debug::log("range loss: ".$rangeLoss);
-			debug::log("end %: ".$final);
-		
+				if ($roll <= $final){
+					$hits++;
+				}
+			}
 
+
+		//	debug::log("notes: ".$notes);
+			$this->fireOrders[$i]["req"] = $final;
+			$this->fireOrders[$i]["notes"] = $notes;
+			$this->fireOrders[$i]["hits"] = $hits;
+
+
+			/*
+				debug::log($shooter->id." to ".$target->id);
+				debug::log("facing: ".$targetFacing);
+				debug::log("hitAngle:".$hitAngle);
+				debug::log("fire in from: ".$angle);
+				debug::log("profile val: ".$profile);
+				debug::log("range loss: ".$rangeLoss);
+				debug::log("end %: ".$final);
+			*/
 		}
 
+	}
+
+	public function updateFireOrders(){
+		debug::log("updateFireOrders");
+		DBManager::app()->updateFireOrders($this->fireOrders);
 	}
 
 	public function handleFiringPhase(){
 		debug::log("handleFiringPhase");
 
 		$this->getShips();
-		$this->getFireOrders();
+		$this->fireOrders = DBManager::app()->getOpenFireOrders($this->gameid, $this->gamedata["game"]["turn"]);
+		$this->getOpenFireOrders();
 		$this->handleFireOrders();
-
-
-	//	foreach ($fires as $fire){
-	//	}
-
-		return;
-		
+		$this->updateFireOrders();
 	}
 
 	public function startDamageControlPhase(){
 		Debug::log("startDamageControlPhase");
 
+		$dbManager = DBManager::app();
+		$phase = 3;
+
+		if ($dbManager->setGamePhase($this->gameid, $phase)){
+			debug::log("setGamePhase ".$phase." success");
+			$players = $dbManager->getPlayerStatus($this->gameid);
+
+			for ($i = 0; $i < sizeof($players); $i++){
+				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->gamedata["game"]["turn"], $phase, "waiting")){
+					continue;
+				}
+				else {
+					return false;
+				}
+			}
+
+			return true;
+		}
 	}
 
 	public function finishTurn(){

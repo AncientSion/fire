@@ -23,7 +23,6 @@ window.fire = [];
 window.aShip = false;
 window.aHex = false;
 window.mode = false;
-window.fireOrders = [];
 window.icon;
 window.pickedMoves = [];
 
