@@ -13,7 +13,14 @@ class Omega extends Ship {
 	}
 
 	function addSystems(){
-		$this->addSystem(new HeavyLaser($this->id, 10, 5, 5));
+		$this->addSystem(new HeavyLaser(10, 5, 5));
+		$this->addSystem(new HeavyLaser(10, 5, 5));
+		$this->addSystem(new HeavyLaser(10, 5, 5));
+		$this->addSystem(new HeavyLaser(10, 5, 5));
+		$this->addSystem(new MediumLaser(8, 4, 4));
+		$this->addSystem(new MediumLaser(8, 4, 4));
+		$this->addSystem(new MediumLaser(8, 4, 4));
+		$this->addSystem(new MediumLaser(8, 4, 4));
 	}
 }
 

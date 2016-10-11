@@ -243,30 +243,39 @@ class Manager {
 	public function handleFireOrders(){
 		Debug::log("handleFireOrders");
 
+
+
 		foreach ($this->fireOrders as $fire){
+		
 			debug::log("______________");
 			$shooter = $this->getShipById($fire["shooterid"]);
 			$target = $this->getShipById($fire["targetid"]);
 			$weapon = $shooter->getWeaponById($fire["weaponid"]);
 
-			Debug::log("class: ".get_class($weapon));
-			Debug::log("id: ".$weapon->id);
+		//	Debug::log("class: ".get_class($weapon));
+		//	Debug::log("id: ".$weapon->id);
 
 			$dist = Math::getDist($shooter->x, $shooter->y, $target->x, $target->y);
 			$targetFacing = $target->facing;
 			$hitAngle = Math::getAngle($target->x, $target->y, $shooter->x, $shooter->y);
 			$angle = Math::addAngle($targetFacing, $hitAngle);
 
+			$profile = $target->getHitChanceFromAngle($angle);
+
+			$rangeLoss = $weapon->getAccLoss($dist);
+
+			$final = $profile - $rangeLoss;
 
 
-
-		/*	debug::log("______________");
+			debug::log("______________");
 			debug::log($shooter->id." to ".$target->id);
-			//debug::log("facing: ".$targetFacing);
-			//debug::log("hitAngle:".$hitAngle);
-			debug::log("angle: ".$angle);
-			debug::log("hit val: ".$target->getHitChanceFromAngle($angle));
-		*/
+			debug::log("facing: ".$targetFacing);
+			debug::log("hitAngle:".$hitAngle);
+			debug::log("fire in from: ".$angle);
+			debug::log("profile val: ".$profile);
+			debug::log("range loss: ".$rangeLoss);
+			debug::log("end %: ".$final);
+		
 
 		}
 

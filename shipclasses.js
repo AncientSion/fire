@@ -856,15 +856,15 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	}
 
 	this.getHitChanceFromAngle = function(angle){
-		//console.log(angle);
+		//console.log(angle);				342
 		var a, b, c, base;
 
-		if (angle < 0){
-			angle *= -1;
-		}
 
 		while (angle > 90){
-			angle /= 2;
+			angle -= 180;
+		}
+		if (angle < 0){
+			angle *= -1;
 		}
 
 		base = this.getBaseHitChance();

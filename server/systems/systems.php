@@ -7,15 +7,14 @@ require_once("server\systems\weapons\laser.php");
 
 class System {
 	public $id;
-	public $parentid;
 	public $weapon = false;
 	public $structure;
 	public $armour;
 	public $power;
 	public $output;
+	public $decayVar = 1000;
 
-	function __construct($parentid, $structure, $armour, $power, $output){
-		$this->parentid = $parentid;
+	function __construct( $structure, $armour, $power, $output){
 		$this->structure = $structure;
 		$this->armour = $armour;
 		$this->power = $power;
@@ -37,8 +36,20 @@ class Weapon extends System {
 	public $guns = 1;
 	public $reload;
 
-	function __construct($parentid, $structure, $armour, $power, $output = 0){
-        parent::__construct($parentid, $structure, $armour, $power, $output);
+	function __construct($structure, $armour, $power, $output = 0){
+        parent::__construct($structure, $armour, $power, $output);
+	}
+
+	public function getAccLoss ($dist){
+		return ceil($this->accDecay * $dist / $this->decayVar);
+	}
+
+	public function getDmgLoss($dist){
+		return 0;
+	}
+
+	public function getDamage($dist){
+		return floor($this->damage - ($this->damage / 100  * $this->getDmgLoss($dist)));
 	}
 }
 

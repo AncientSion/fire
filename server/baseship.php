@@ -69,14 +69,18 @@ class Ship {
 
 	public function addSystem($obj){
 		$obj->id = sizeof($this->systems)+1;
+		$obj->parentid = $this->id;
 
 		$this->systems[] = $obj;
 	}
 
 
 	public function getWeaponById($id){
+		//debug::log("looking: ".$id);
 		for ($i = 0; $i < sizeof($this->systems); $i++){
+			//debug::log($this->systems[$i]->id);
 			if ($this->systems[$i]->id == $id){
+				//debug::log("found!");
 				return $this->systems[$i];
 			}
 		}

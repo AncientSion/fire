@@ -14,13 +14,13 @@ class Sharlin extends Ship {
 	}
 
 	function addSystems(){
-		$this->addSystem(new NeutronLaser($this->id, 10, 5, 5));
-		$this->addSystem(new NeutronLaser($this->id, 10, 5, 5));
-		$this->addSystem(new NeutronLaser($this->id, 10, 5, 5));
-		$this->addSystem(new FusionCannon($this->id, 0, 8, 4, 4));
-		$this->addSystem(new FusionCannon($this->id, 0, 8, 4, 4));
-		$this->addSystem(new FusionCannon($this->id, 0, 8, 4, 4));
-		$this->addSystem(new FusionCannon($this->id, 0, 8, 4, 4));
+		$this->addSystem(new NeutronLaser(10, 5, 5));
+		$this->addSystem(new NeutronLaser(10, 5, 5));
+		$this->addSystem(new NeutronLaser(10, 5, 5));
+		$this->addSystem(new FusionCannon(8, 4, 4));
+		$this->addSystem(new FusionCannon(8, 4, 4));
+		$this->addSystem(new FusionCannon(8, 4, 4));
+		$this->addSystem(new FusionCannon(8, 4, 4));
 	}
 }
 

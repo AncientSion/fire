@@ -19,12 +19,13 @@ if (isset($_SESSION["userid"])){
 	$playerstatus = $manager->gamedata["playerstatus"];
 	$ships = $manager->gamedata["ships"];
 
-	$w = new Omega(5, 2, "test", 50, 25, 90);
+	/*$w = new Omega(5, 2, "test", 50, 25, 90);
 
-	//foreach ($w->systems[0] as $key => $value){
-	//		if ($value == NULL){$value = "null";} echo "key: ".$key." val: ".$value."</br>";
-	//	}
-
+	foreach ($w->systems[0] as $key => $value){
+			if ($value == NULL){$value = "null";} echo "key: ".$key." val: ".$value."</br>";
+		}
+	*/
+		
 	//	var_export(json_encode($manager->fireOrders));
 
 	echo "<script>";
