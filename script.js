@@ -12,6 +12,8 @@ function init(){
 	$("#mouseCanvas").bind('contextmenu', mouseCanvasScroll)
 	$("#mouseCanvas").bind('contextmenu', canvasMouseRightClick)
 	$("#mouseCanvas").click(canvasMouseClick);
+
+	$(document).mousedown(function(e){ e.preventDefault(); });
 	
 	var canv = document.getElementsByTagName("canvas");
 	
@@ -418,6 +420,22 @@ function canvasMouseClick(e){
 					clickShip.unselect();
 					return;
 				}
+			}
+		}
+	}
+	else if (game.phase == 3){// damage animation and damage control
+		if (aShip){
+			ship = game.getShipById(aShip);
+			if (game.getShipByClick(pos) == ship){
+				ship.unselect();
+				return;
+			}
+		}
+		else {
+			ship = game.getShipByClick(pos);
+			if (ship){
+				ship.select();
+				return;
 			}
 		}
 	}

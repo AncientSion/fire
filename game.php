@@ -43,7 +43,6 @@ if (isset($_SESSION["userid"])){
 <head>
 	<link rel='stylesheet' href='style.css'/>
 	<script src="jquery-2.1.1.min.js"></script>
-	<script src="jquery-ui.js"></script>
 	<script src='mathLib.js'></script>
 	<script src='shared.js'></script>
 	<script src='shipclasses.js'></script>

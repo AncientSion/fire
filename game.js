@@ -7,7 +7,7 @@ function Game(id, name, status, userid, turn, phase){
 	this.turn = turn;
 	this.phase = phase;
 	this.ships = [];
-	this.fireOrders;
+	this.fireOrders = [];
 	this.mode = false;
 	this.deploying = false;
 	this.canSubmit = false;
@@ -45,7 +45,19 @@ function Game(id, name, status, userid, turn, phase){
 	}
 
 	this.initDeployment = function(){
-		$("#deployWrapper").draggable();
+	//	$("#deployWrapper").draggable();
+		$("#deployWrapper").on('mousedown', $(this), function() {
+        $(this).addClass('draggable').parents().on('mousemove', function(e) {
+            $('.draggable').offset({
+                top: e.pageY - $('.draggable').outerHeight() / 2,
+                left: e.pageX - $('.draggable').outerWidth() / 2
+            }).on('mouseup', function() {
+                $(this).removeClass('draggable');
+            });
+        });
+    }).on('mouseup', function() {
+        $('.draggable').removeClass('draggable');
+    });
 
 		var toDo = [];
 		var table;

@@ -985,7 +985,19 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		}
 		
 		div.appendChild(table);
-		$(div).draggable();
+		$(div).on('mousedown', $(this), function() {
+        $(this).addClass('draggable').parents().on('mousemove', function(e) {
+            $('.draggable').offset({
+                top: e.pageY - $('.draggable').outerHeight() / 2,
+                left: e.pageX - $('.draggable').outerWidth() / 2
+            }).on('mouseup', function() {
+                $(this).removeClass('draggable');
+            });
+        });
+        //e.preventDefault();
+    }).on('mouseup', function() {
+        $('.draggable').removeClass('draggable');
+    });
 	//		div.style.left = this.x - res.x + cam.o.x + 100 + "px";
 	//		div.style.top = this.y + cam.o.y + 100 + "px";
 		
@@ -1062,8 +1074,8 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 			}
 		}
 				
-		if (div.className == "shipDiv disabled ui-draggable ui-draggable-handle"){
-			div.className = "shipDiv ui-draggable ui-draggable-handle";
+		if (div.className == "shipDiv disabled"){
+			div.className = "shipDiv";
 			
 			if (shortInfo){
 				document.getElementById(shortInfo + "shortInfo").className = "shortInfo disabled";
@@ -1071,7 +1083,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 			}
 		}
 		else {
-			div.className = "shipDiv disabled ui-draggable ui-draggable-handle";
+			div.className = "shipDiv disabled";
 		}
 	}
 	

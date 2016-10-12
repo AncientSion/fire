@@ -217,10 +217,29 @@ canvas {
 	color: black;
 }
 
-#combatLog {
+#upperGUI {
+	display: inline-block;
+	position: absolute;
+	z-index: 8;
 	border: 1px solid black;
+}
+
+#combatlogWrapper {
+	display: inline-block;
+	position: absolute;
+	top: 80px;
+	width: 300px;
+	z-index: 8;
+	padding: 5px;
+}
+
+#combatLog {
+	width: 95%;
+	border: 1px solid black;
+	border-radius: 5px;
 	background: white;
 	color: black;
+	margin: auto;
 }
 
 .friendly {
@@ -290,20 +309,4 @@ canvas {
 }
 #vectorDiv.disabled {
 	display: none;
-}
-
-#upperGUI {
-	display: inline-block;
-	position: absolute;
-	z-index: 8;
-	border: 1px solid black;
-}
-
-#combatlogWrapper {
-	display: inline-block;
-	position: absolute;
-	top: 80px;
-	z-index: 8;
-	border: 1px solid black;
-	border-radius: 5px;
 }
