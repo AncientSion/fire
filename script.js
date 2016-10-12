@@ -405,7 +405,7 @@ function canvasMouseClick(e){
 								if (ship.weapons[i].selected){
 									if (ship.weapons[i].posIsOnArc(shipLoc, clickShip.getOffsetPos(), facing)){
 									//	fireOrders.push(new FireOrder(ship.id, clickShip.id, ship.weapons[i].id, dist));
-										fireOrders.push( {shooterid: ship.id, targetid: clickShip.id, weaponid: ship.weapons[i].id} );
+										game.fireOrders.push( {shooterid: ship.id, targetid: clickShip.id, weaponid: ship.weapons[i].id} );
 										ship.weapons[i].setFireOrder();
 									}
 								}
@@ -451,9 +451,9 @@ function selectWeapon(ele){
 				break;
 			}
 		}
-		for (var i = fireOrders.length-1; i >= 0; i--){
-			if (fireOrders[i].weaponid == id){
-				fireOrders.splice(i, 1);
+		for (var i = game.fireOrders.length-1; i >= 0; i--){
+			if (game.fireOrders[i].weaponid == id){
+				game.fireOrders.splice(i, 1);
 				break;
 			}
 		}

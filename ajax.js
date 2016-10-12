@@ -148,7 +148,7 @@ window.ajax = {
 					userid: game.userid,
 					gameturn: game.turn,
 					gamephase: game.phase,
-					fire: fireOrders
+					fire: game.fireOrders
 					},
 			success: refresh,
 			error: ajax.error,

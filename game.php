@@ -75,6 +75,30 @@ if (isset($_SESSION["userid"])){
 					<span id="dist" style="color: red">0</span>
 					<input type="button" value="end Phase" onclick="endPhase()"></input>
 				</div>
+				<div id="combatlogWrapper">
+					<table id="combatLog" class="disabled">
+						<tr>
+							<th>
+								Type
+							</th>
+							<th>
+								Shooter
+							</th>
+							<th>
+								Target
+							</th>
+							<th>
+								Weapon
+							</th>
+							<th>
+								Shots
+							</th>
+							<th>
+								Hits
+							</th>
+						</tr>
+					</table>
+				</div>
 				<canvas id ="canvas"></canvas>
 				<canvas id ="planCanvas"></canvas>
 				<canvas id ="fxCanvas"></canvas>
@@ -107,7 +131,6 @@ if (isset($_SESSION["userid"])){
 				</th>
 			</tr>
 		</table>
-		<table id="combatLog" class="disabled"></table>
 		<div id="weaponAimTableWrapper" class="disabled">
 			<table id="weaponAimTable"></table>
 		</div>

@@ -183,7 +183,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 
 	this.setPosition = function(){
 
-		console.log("ding");
+//		console.log("ding");
 
 		if (this.actions.length == 1){
 			this.x = this.actions[0].x;
@@ -1294,14 +1294,12 @@ function Omega(id, shipClass, x, y, facing, userid, color){
 	this.profile = [0.85, 1.10];
 	
 	this.addWeapons = function(){
-		this.weapons.push(new MediumLaser(this.weapons.length+1, this.id, 0, 180));
-		this.weapons.push(new MediumLaser(this.weapons.length+1, this.id, 0, 180));
-		this.weapons.push(new MediumLaser(this.weapons.length+1, this.id, 180, 360));
-		this.weapons.push(new MediumLaser(this.weapons.length+1, this.id, 180, 360));
-		this.weapons.push(new HeavyLaser(this.weapons.length+1, this.id, 300, 360));
 		this.weapons.push(new HeavyLaser(this.weapons.length+1, this.id, 300, 360));
 		this.weapons.push(new HeavyLaser(this.weapons.length+1, this.id, 0, 60));
-		this.weapons.push(new HeavyLaser(this.weapons.length+1, this.id, 0, 60));
+		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 180));
+		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 180));
+		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 180, 360));
+		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 180, 360));
 	}
 		
 	Capital.call(this, id, shipClass, x, y, facing, userid, color);

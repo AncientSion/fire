@@ -12,6 +12,76 @@ getAllFireOrders for turn 1
 not all rdy yet
 getAllFireOrders for turn 1
 not all rdy yet
+setPlayerstatus
+game 15,user 1 adjusting to turn/phase/status 1 2 ready
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+setPlayerstatus
+game 15,user 2 adjusting to turn/phase/status 1 2 ready
+getAllFireOrders for turn 1
+doAdvanceGameState for game15
+handleFiringPhase
+getShips
+handleFireOrders
+updateFireOrders
+DB updateFireOrders
+startDamageControlPhase
+setGamePhase 3 success
+setPlayerstatus
+game 15,user 1 adjusting to turn/phase/status 1 3 waiting
+setPlayerstatus
+game 15,user 2 adjusting to turn/phase/status 1 3 waiting
+getAllFireOrders for turn 1
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
 getAllFireOrders for turn 1
 not all rdy yet
 getAllFireOrders for turn 1
