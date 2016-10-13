@@ -219,17 +219,6 @@ function Game(id, name, status, userid, turn, phase){
 				ship.friendly = friendly;
 				ship.actions = [];
 
-			//turn 1 - deploy move
-			//turn 2 - all moves incl turn 1
-			//turn 3 - all moves incl turn 2
-
-			// deploy - move - move - move
-			//	 1        1      1     2 
-
-
-			// turn 1
-			// phase 0 - MOVE
-
 			if (! friendly){
 				if (deployed){
 					ship.actions.push(window.ships[i].actions[0]);
@@ -259,6 +248,17 @@ function Game(id, name, status, userid, turn, phase){
 
 
 			ship.create();
+
+			for (var j = 0; j < window.fireOrders.length; j++){
+				if (window.fireOrders[j]["shooterid"] == id){
+					for (var k = 0; k < ship.weapons.length; k++){
+						if (ship.weapons[k].id == window.fireOrders[j]["weaponid"]){
+							ship.weapons[k].fireOrders.push(window.fireOrders[j]);
+						}
+					}
+				}
+			}
+
 			this.ships.push(ship);
 		}
 
@@ -502,6 +502,7 @@ function Game(id, name, status, userid, turn, phase){
 
 
 	this.resolveFire = function(){
+			return;
 			this.getShotDetails();
 			this.getAnimationDetails();
 			this.animate();

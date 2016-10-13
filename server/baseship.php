@@ -23,6 +23,7 @@ class Ship {
 	public $faction;
 
 	public $systems = array();
+	public $structures = array();
 
 	function __construct($id, $userid, $shipClass, $x, $y, $facing){
 		$this->id = $id;
@@ -33,6 +34,7 @@ class Ship {
 		$this->facing = $facing;
 
 		$this->addSystems();
+		$this->addStructures();
 	}
 
 	public function getBaseHitChance(){

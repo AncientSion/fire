@@ -13,7 +13,7 @@ class Sharlin extends Ship {
         parent::__construct($id, $userid, $shipClass, $x, $y, $facing);
 	}
 
-	function addSystems(){
+	public function addSystems(){
 		$this->addSystem(new NeutronLaser(10, 5, 5));
 		$this->addSystem(new NeutronLaser(10, 5, 5));
 		$this->addSystem(new NeutronLaser(10, 5, 5));
@@ -21,6 +21,12 @@ class Sharlin extends Ship {
 		$this->addSystem(new FusionCannon(8, 4, 4));
 		$this->addSystem(new FusionCannon(8, 4, 4));
 		$this->addSystem(new FusionCannon(8, 4, 4));
+	}
+
+	public function addStructures(){
+		$this->addStructures(new Structure(sizeof($this->structures)+1, 300, 60, 7, 150));
+		$this->addStructures(new Structure(sizeof($this->structures)+1, 60, 180, 6, 120));
+		$this->addStructures(new Structure(sizeof($this->structures)+1, 180, 300, 6, 120));
 	}
 }
 

@@ -172,8 +172,16 @@ function System(id, parentId, arc1, arc2){
 	}
 }
 				
+function Weapon(id, parentId, arc1, arc2, arc3, arc4){
+	System.call(this, id, parentId, arc1, arc2, arc3, arc4);
+	this.fireOrders = [];
+	this.reload = 1;
+
+}
+Weapon.prototype = Object.create(System.prototype);
+
 function Laser(id, parentId, arc1, arc2, arc3, arc4){
-	System.call(this, id, parentId, arc1, arc2, arc3, arc4);	
+	Weapon.call(this, id, parentId, arc1, arc2, arc3, arc4);	
 	this.animation = "laser";
 	
 	this.getFillStyle = function(x, y, dist){
@@ -212,7 +220,7 @@ function Laser(id, parentId, arc1, arc2, arc3, arc4){
 		return Math.ceil(decay * dist/100);
 	}
 }
-Laser.prototype = Object.create(System.prototype);
+Laser.prototype = Object.create(Weapon.prototype);
 
 					
 function HeavyLaser(id, parentId, arc1, arc2, arc3, arc4){
@@ -267,21 +275,33 @@ function NeutronLaser(id, parentId, arc1, arc2, arc3, arc4){
 }
 NeutronLaser.prototype = Object.create(HeavyLaser.prototype);
 
+
+
+				
+function Particle(id, parentId, arc1, arc2, arc3, arc4){
+	Weapon.call(this, id, parentId, arc1, arc2, arc3, arc4);
+	this.animation = "projectile";
+	this.fireOrders = [];
+
+}
+Weapon.prototype = Object.create(Weapon.prototype);
+
+
+
+
 function StandardParticleBeam(id, parentId, arc1, arc2){
-	System.call(this, id, parentId, arc1, arc2);
+	Particle.call(this, id, parentId, arc1, arc2);
 	this.name = "SPB";
 	this.damage = 3;
 	this.structure = 5;
 	this.armour = 1;
 	this.accDecay = 100;
 	this.shots = 3;
-	this.reload = 1;
-	this.animation = "projectile";
 	this.projSize = 2;
 	this.projColor = "black";
 	
 }
-StandardParticleBeam.prototype = Object.create(System.prototype);
+StandardParticleBeam.prototype = Object.create(Particle.prototype);
 
 function FusionCannon(id, parentId, arc1, arc2){
 	StandardParticleBeam.call(this, id, parentId, arc1, arc2);
@@ -291,8 +311,6 @@ function FusionCannon(id, parentId, arc1, arc2){
 	this.armour = 1;
 	this.accDecay = 70;
 	this.shots = 2;
-	this.reload = 1;
-	this.animation = "projectile";
 	this.projSize = 3;
 	this.projColor = "red";
 	
@@ -307,8 +325,6 @@ function ParticleCannon(id, parentId, arc1, arc2){
 	this.armour = 1;
 	this.accDecay = 55;
 	this.shots = 1;
-	this.reload = 1;
-	this.animation = "projectile";
 	
 }
 ParticleCannon.prototype = Object.create(StandardParticleBeam.prototype);
@@ -322,7 +338,7 @@ function ParticleAccelerator(id, parentId, arc1, arc2, arc3, arc4){
 	this.armour = 2;
 	this.accDecay = 65;
 	this.shots = 4;
-	this.reload = 1;
+	
 	this.getFillStyle = function(x, y, dist){
 		return "green";
 	}
@@ -339,7 +355,7 @@ function LightParticleAccelerator(id, parentId, arc1, arc2, arc3, arc4){
 	this.accDecay = 90;
 	this.guns = 2;
 	this.shots = 2;
-	this.reload = 1;
+
 	this.getFillStyle = function(x, y, dist){
 		return "green";
 	}

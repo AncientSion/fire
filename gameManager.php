@@ -76,6 +76,7 @@ class Manager {
 
 		return $gamedata;
 	}
+	
 		
 	public function createGame($name){
 		if (DBManager::app()->createGame($this->userid, $name)){

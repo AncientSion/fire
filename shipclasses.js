@@ -15,23 +15,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	this.impulseAdjust = [];
 	this.maxVector = false;
 	this.undoOrderButton = false;
-	
-	this.add = function (add){
-		var current = this.facing;
-		var ret = 0
-        add = add % 360;
-		
-		if (current + add > 360){
-			ret = 0 + (add-(360-current));
-		}
-		else if (current + add < 0){
-			ret = 360 + (current + add);
-		}
-		else {	
-			ret = current + add;
-		}
-		this.facing = ret;
-	}
+	this.structures = [];
 
 	this.preview = function(){
 		this.createDiv();
@@ -250,7 +234,8 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	
 	this.create = function(){
 		this.img = window.shipImages[this.shipClass];
-		this.addWeapons();
+		this.addSystems();
+		this.addStructures();
 		this.setPosition();
 		this.setFacing()
 
@@ -603,14 +588,15 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		var ep = this.ep;
 		
 		for (var i = 1; i < this.actions.length; i++){
-			if (this.actions[i].turn == game.turn){
+			if (this.actions[i].turn == window.gd.turn){
 				if (this.actions[i].cost != 0){
 					ep -= this.actions[i].cost * this.actions[i].costmod;
+					//console.log(ep);
 				}
 			}
 		}
 		
-		return Math.ceil(ep);
+		return ep;
 	}
 	
 	this.getRemainingDelay = function(){
@@ -638,14 +624,18 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		}
 		
 		var angle = this.getPlannedFacingToMove(this.actions.length-1)
-		var p1 = getPointInDirection(this.getRemainingImpulse() + 30, angle, center.x, center.y);
+		var p1 = getPointInDirection(this.getRemainingImpulse() + 60, angle, center.x, center.y);
 		
 		moveCtx.beginPath();			
 		moveCtx.moveTo(center.x, center.y);
 		moveCtx.lineTo(p1.x, p1.y); 
 		moveCtx.closePath();
+		moveCtx.strokeStyle = "red";
+		moveCtx.lineWidth = 3;
 		moveCtx.stroke();
-		
+		moveCtx.strokeStyle = "black";
+		moveCtx.lineWidth = 1;
+
 		if (this.getRemainingImpulse() > 0){		
 			var p2 = getPointInDirection(this.getRemainingImpulse(), angle, center.x, center.y);
 			var p3 = getPointInDirection(this.getRemainingImpulse() + 40, angle, center.x, center.y);
@@ -935,36 +925,50 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 			$(div).data("shipId", this.id);
 		
 		var table = document.createElement("table");
+
+			
+		var tr = document.createElement("tr");
+		var th = document.createElement("th");
+			th.innerHTML = this.shipClass.toUpperCase() + " #" + this.id;
+			th.colSpan = 2; th.style.textAlign = "center";
+			tr.appendChild(th); table.appendChild(tr);
+
+		var tr = document.createElement("tr");
+		var td = document.createElement("td");
+			td.innerHTML = "Position: "; tr.appendChild(td);
+		var td = document.createElement("td");
+			td.innerHTML = this.x + " / " + this.y; tr.appendChild(td); table.appendChild(tr);
 			
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
-			td.innerHTML = "pos: " + this.x + " / " + this.y;
-			td.className = "pos"; tr.appendChild(td);
-		var td = document.createElement("td"); tr.appendChild(td); table.appendChild(tr);
+			td.innerHTML = "Mass: "; tr.appendChild(td);
+		var td = document.createElement("td");
+			td.innerHTML = this.mass; tr.appendChild(td); table.appendChild(tr);
+
+		var tr = document.createElement("tr");
+		var td = document.createElement("td");
+			td.innerHTML = "Engine Power: "; tr.appendChild(td);
+		var td = document.createElement("td");
+			td.innerHTML = this.getRemainingEP() + " / " + this.ep; tr.appendChild(td); table.appendChild(tr);
+
+		var tr = document.createElement("tr");
+		var td = document.createElement("td");
+			td.innerHTML = "Impulse: "; tr.appendChild(td);
+		var td = document.createElement("td");
+			td.innerHTML = this.getRemainingImpulse() + " / " + this.getTotalImpulse(); tr.appendChild(td); table.appendChild(tr);
 			
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
-			td.innerHTML = "rem. impulse: " + this.getRemainingImpulse() + " / " + this.getTotalImpulse();
-			td.className = "impulse"; tr.appendChild(td); table.appendChild(tr);
-			
+			td.innerHTML = "Turn Delay: "; tr.appendChild(td);
+		var td = document.createElement("td");
+			td.innerHTML = this.getRemainingDelay(); tr.appendChild(td); table.appendChild(tr);
+
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
-			td.innerHTML = "accel / deccel cost in EP: " + this.getImpulseChangeCost(); tr.appendChild(td);  table.appendChild(tr);
-			td.className = "accel"; tr.appendChild(td); table.appendChild(tr);
-			
-		var tr = document.createElement("tr");
+			td.innerHTML = "Impulse Change: "; tr.appendChild(td);
 		var td = document.createElement("td");
-			td.innerHTML = "ship mass : " + this.mass; tr.appendChild(td); table.appendChild(tr);
-			
-		var tr = document.createElement("tr");
-		var td = document.createElement("td");
-			td.innerHTML = "rem. enginepower : " + this.ep;
-			td.className = "ep"; tr.appendChild(td); table.appendChild(tr);
-			
-		var tr = document.createElement("tr");
-		var td = document.createElement("td");
-			td.innerHTML = "rem. delay: " + this.getRemainingDelay() + " pixels";
-			td.className = "remDelay"; tr.appendChild(td); table.appendChild(tr);	
+			td.innerHTML = this.getImpulseChangeCost(); tr.appendChild(td); table.appendChild(tr);
+				
 			
 		div.appendChild(table);
 		
@@ -1109,6 +1113,10 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		}
 		else if (game.phase == 2){
 			
+		}
+		else if (game.phase == 3){
+			this.drawMoveRange();
+			this.drawImpulseIndicator();
 		}
 
 		this.updateDiv();
@@ -1282,7 +1290,7 @@ function Sharlin(id, shipClass, x, y, facing, userid, color){
 	this.mass = 19000;
 	this.profile = [0.90, 1.15];
 	
-	this.addWeapons = function(){
+	this.addSystems = function(){
 		this.weapons.push(new NeutronLaser(this.weapons.length+1, this.id, 300, 60));
 		this.weapons.push(new NeutronLaser(this.weapons.length+1, this.id, 300, 60));
 		this.weapons.push(new NeutronLaser(this.weapons.length+1, this.id, 300, 60));
@@ -1290,6 +1298,12 @@ function Sharlin(id, shipClass, x, y, facing, userid, color){
 		this.weapons.push(new FusionCannon(this.weapons.length+1, this.id, 0, 120));
 		this.weapons.push(new FusionCannon(this.weapons.length+1, this.id, 240, 360));
 		this.weapons.push(new FusionCannon(this.weapons.length+1, this.id, 240, 360));
+	}
+
+	this.addStructures = function(){
+		this.structures.push( new Structure(this.structures.length+1, 300, 60, 7, 150));
+		this.structures.push( new Structure(this.structures.length+1, 60, 180, 6, 120));
+		this.structures.push( new Structure(this.structures.length+1, 180, 300, 6, 120));
 	}
 		
 	Capital.call(this, id, shipClass, x, y, facing, userid, color);
@@ -1305,7 +1319,7 @@ function Omega(id, shipClass, x, y, facing, userid, color){
 	this.mass = 15000;
 	this.profile = [0.85, 1.10];
 	
-	this.addWeapons = function(){
+	this.addSystems = function(){
 		this.weapons.push(new HeavyLaser(this.weapons.length+1, this.id, 300, 360));
 		this.weapons.push(new HeavyLaser(this.weapons.length+1, this.id, 0, 60));
 		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 180));
@@ -1313,9 +1327,15 @@ function Omega(id, shipClass, x, y, facing, userid, color){
 		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 180, 360));
 		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 180, 360));
 	}
+
+	this.addStructures = function(){
+		this.structures.push( new Structure(this.structures.length+1, 0, 180, 5, 100));
+		this.structures.push( new Structure(this.structures.length+1, 180, 360, 5, 100));
+	}
 		
 	Capital.call(this, id, shipClass, x, y, facing, userid, color);
 }
+
 Omega.prototype = Object.create(Capital.prototype);
 
 function Hyperion(id, shipClass, x, y, facing, userid, color){
@@ -1326,7 +1346,7 @@ function Hyperion(id, shipClass, x, y, facing, userid, color){
 	this.size = 60;
 	this.mass = 8000;
 	
-	this.addWeapons = function(){
+	this.addSystems = function(){
 		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 360));
 		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 360));
 		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 360));
@@ -1347,7 +1367,7 @@ function Artemis(id, shipClass, x, y, facing, userid, color){
 	this.mass = 3000;
 	this.faction = "Earth Alliance";
 	
-	this.addWeapons = function(){
+	this.addSystems = function(){
 		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 180));
 		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 180));
 		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 180, 360));
@@ -1369,7 +1389,7 @@ function Primus(id, shipClass, x, y, facing, userid, color){
 	this.size = 70;
 	this.mass = 12500;
 	
-	this.addWeapons = function(){
+	this.addSystems = function(){
 		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 240, 30));
 		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 240, 30));
 		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 240, 30));
@@ -1390,7 +1410,7 @@ function Demos(id, shipClass, x, y, facing, userid, color){
 	this.size = 45;
 	this.mass = 2250;
 	
-	this.addWeapons = function(){
+	this.addSystems = function(){
 		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 300, 120));
 		this.weapons.push(new LightParticleAccelerator(this.weapons.length+1, this.id, 240, 120));
 		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 240, 60));
@@ -1408,7 +1428,7 @@ function Haven(id, shipClass, x, y, facing, userid, color){
 	this.size = 45;
 	this.mass = 800;
 	
-	this.addWeapons = function(){
+	this.addSystems = function(){
 		this.weapons.push(new LightParticleAccelerator(this.weapons.length+1, this.id, 0, 270))
 		this.weapons.push(new LightParticleAccelerator(this.weapons.length+1, this.id, 90, 360));
 		this.weapons.push(new LightParticleAccelerator(this.weapons.length+1, this.id, 180, 90));

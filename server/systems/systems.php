@@ -34,7 +34,7 @@ class Weapon extends System {
 	public $accDecay;
 	public $shots = 1;
 	public $guns = 1;
-	public $reload;
+	public $reload = 1;
 
 	function __construct($structure, $armour, $power, $output = 0){
         parent::__construct($structure, $armour, $power, $output);

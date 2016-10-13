@@ -1,4 +1,56 @@
 getAllFireOrders for turn 1
+ship: 
+ship: 
+ship: 
+shooter: 
+fire: 
+shooter: 
+fire: 
+shooter: 
+fire: 
+shooter: 
+fire: 
+shooter: 
+fire: 
+shooter: 
+fire: 
+shooter: 
+fire: 
+shooter: 
+fire: 
+shooter: 
+fire: 
+shooter: 
+fire: 
+shooter: 
+fire: 
+not all rdy yet
+getAllFireOrders for turn 1
+ship: 146
+ship: 147
+ship: 148
+shooter: 146
+fire: 26
+shooter: 146
+fire: 27
+shooter: 146
+fire: 28
+shooter: 147
+fire: 29
+shooter: 147
+fire: 30
+shooter: 147
+fire: 31
+shooter: 148
+fire: 32
+shooter: 148
+fire: 33
+shooter: 148
+fire: 34
+shooter: 148
+fire: 35
+shooter: 148
+fire: 36
 not all rdy yet
 getAllFireOrders for turn 1
 not all rdy yet
@@ -12,30 +64,42 @@ getAllFireOrders for turn 1
 not all rdy yet
 getAllFireOrders for turn 1
 not all rdy yet
-setPlayerstatus
-game 15,user 1 adjusting to turn/phase/status 1 2 ready
 getAllFireOrders for turn 1
 not all rdy yet
 getAllFireOrders for turn 1
 not all rdy yet
 getAllFireOrders for turn 1
 not all rdy yet
-setPlayerstatus
-game 15,user 2 adjusting to turn/phase/status 1 2 ready
 getAllFireOrders for turn 1
-doAdvanceGameState for game15
-handleFiringPhase
-getShips
-handleFireOrders
-updateFireOrders
-DB updateFireOrders
-startDamageControlPhase
-setGamePhase 3 success
-setPlayerstatus
-game 15,user 1 adjusting to turn/phase/status 1 3 waiting
-setPlayerstatus
-game 15,user 2 adjusting to turn/phase/status 1 3 waiting
+not all rdy yet
 getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
+getAllFireOrders for turn 1
+not all rdy yet
 getAllFireOrders for turn 1
 not all rdy yet
 getAllFireOrders for turn 1

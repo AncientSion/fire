@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"getRe",
+				"getRemainingEP"
+			],
+			[
 				"atan",
 				"atan2"
 			],
@@ -367,7 +371,7 @@
 			"file": "/C/xampp/htdocs/fire/classes.js",
 			"settings":
 			{
-				"buffer_size": 1485,
+				"buffer_size": 1648,
 				"line_ending": "Windows"
 			}
 		},
@@ -407,15 +411,25 @@
 			"file": "/C/xampp/htdocs/fire/shipclasses.js",
 			"settings":
 			{
-				"buffer_size": 38666,
+				"buffer_size": 40010,
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Searching 29 files for \"drawmoveplan\"\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 1100  			this.drawImpulseIndicator();\n 1101  			this.drawImpulseUI();\n 1102: 			this.drawMovePlan();\n 1103  \n 1104  			if (this.canTurn()){\n ....\n 1121  	}\n 1122  	\n 1123: 	this.drawMovePlan = function(){\n 1124  \n 1125  		var p = this.getBaseOffsetPos();\n\n2 matches in 1 file\n\n\nSearching 29 files for \"\"red\"\"\n\nC:\\xampp\\htdocs\\fire\\graphics.js:\n   73  function drawExplosion(x, y, s){\n   74  	var s = [s, s*0.7, s*0.25];\n   75: 	var c = [\"yellow\", \"orange\", \"red\"];\n   76  	\n   77  	for (var i = 0; i <= s.length-1; i++){\n   ..\n   92  function getRadialGradient(x, y, s){\n   93  	var grad = fxCtx.createRadialGradient(x, y, 0, x, y, s);\n   94: 		grad.addColorStop(0, \"red\");\n   95  		grad.addColorStop(0.5, \"orange\");\n   96  		grad.addColorStop(1, \"yellow\");\n\nC:\\xampp\\htdocs\\fire\\script.js:\n  159  \n  160  				var tr = document.createElement(\"tr\");\n  161: 				var th = document.createElement(\"th\"); th.colSpan = 5; th.style.color = \"red\";\n  162  					th.innerHTML = \"<b>Targeting: \" + vessel.shipClass + \", #\" + vessel.id; tr.appendChild(th); table.appendChild(tr);\n  163  			}\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  512  			moveCtx.strokeStyle = \"green\";\n  513  		}\n  514: 		else moveCtx.strokeStyle = \"red\";\n  515  	\n  516  		moveCtx.stroke();\n  ...\n  564  			moveCtx.lineTo(center.x, center.y); \n  565  			moveCtx.closePath();\n  566: 			moveCtx.strokeStyle = \"red\";\n  567  			moveCtx.stroke();\n  568  			moveCtx.strokeStyle = \"black\";	\n  ...\n  811  			moveCtx.arc(p.x, p.y+55, 8, 0, 2*Math.PI);\n  812  			moveCtx.closePath();\n  813: 			moveCtx.strokeStyle = \"red\";\n  814  			moveCtx.stroke();\n  815  			moveCtx.strokeStyle = \"black\";			\n  ...\n 1129  		var p = this.getBaseOffsetPos();\n 1130  \n 1131: 		planCtx.strokeStyle = \"red\";\n 1132  		\n 1133  		for (var i = 0; i < this.actions.length; i++){\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  191  		if (opt > 1){opt = 1;}\n  192  	\n  193: 			grad.addColorStop(0, \"red\");\n  194  			grad.addColorStop(opt/2, \"yellow\");\n  195  			grad.addColorStop(opt, \"green\");\n  ...\n  202  				grad.addColorStop(opt*1.5, \"yellow\");\n  203  				if (opt*2 < 1){	\n  204: 					grad.addColorStop(opt*2, \"red\");\n  205  				}\n  206  			}\n  ...\n  270  	this.reload = 2;\n  271  	this.beamColorA = \"#FFF700\";\n  272: 	this.beamColorB = \"red\";\n  273  	this.beamWidth = 3;\n  274  	this.rakeTime = 80;\n  ...\n  313  	this.shots = 2;\n  314  	this.projSize = 3;\n  315: 	this.projColor = \"red\";\n  316  	\n  317  }\n\n11 matches across 4 files\n\n\nSearching 29 files for \"game.phase == 3\"\n\nC:\\xampp\\htdocs\\fire\\script.js:\n  424  		}\n  425  	}\n  426: 	else if (game.phase == 3){// damage animation and damage control\n  427  		if (aShip){\n  428  			ship = game.getShipById(aShip);\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 1110  			\n 1111  		}\n 1112: 		else if (game.phase == 3){\n 1113  			this.drawMoveRange();\n 1114  			this.drawImpulseIndicator();\n\n2 matches across 2 files\n\n\nSearching 29 files for \"this.createDiv\"\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n   19  \n   20  	this.preview = function(){\n   21: 		this.createDiv();\n   22  		\n   23  		if (! this.img){\n   ..\n  242  		if (!window.preview){\n  243  			this.createShortInfo();\n  244: 			this.createDiv();\n  245  		}\n  246  \n  ...\n  919  	}\n  920  	\n  921: 	this.createDiv = function(){\n  922  		var div = document.createElement(\"div\");\n  923  			div.className = \"shipDiv disabled\";\n\n3 matches in 1 file\n\n\nSearching 29 files for \"this.createDiv\"\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n   19  \n   20  	this.preview = function(){\n   21: 		this.createDiv();\n   22  		\n   23  		if (! this.img){\n   ..\n  242  		if (!window.preview){\n  243  			this.createShortInfo();\n  244: 			this.createDiv();\n  245  		}\n  246  \n  ...\n  919  	}\n  920  	\n  921: 	this.createDiv = function(){\n  922  		var div = document.createElement(\"div\");\n  923  			div.className = \"shipDiv disabled\";\n\n3 matches in 1 file\n\n\nSearching 29 files for \"createDiv\"\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n   19  \n   20  	this.preview = function(){\n   21: 		this.createDiv();\n   22  		\n   23  		if (! this.img){\n   ..\n  242  		if (!window.preview){\n  243  			this.createShortInfo();\n  244: 			this.createDiv();\n  245  		}\n  246  \n  ...\n  919  	}\n  920  	\n  921: 	this.createDiv = function(){\n  922  		var div = document.createElement(\"div\");\n  923  			div.className = \"shipDiv disabled\";\n\n3 matches in 1 file\n\n\nSearching 29 files for \"new window\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  215  			if (window.ships[i].userid == this.userid){friendly = true;}else {friendly = false;}\n  216  \n  217: 			var ship = new window[shipclass](id, shipclass.toLowerCase(), x, y, 0, userid, \"blue\");\n  218  				ship.deployed = deployed;\n  219  				ship.friendly = friendly;\n\nC:\\xampp\\htdocs\\fire\\gameSetup.php:\n  294  							$(\".shipDiv\").remove();\n  295  							var name = this.childNodes[0].innerHTML;\n  296: 							window.ship = new window[name](1, name, res.x/2, res.y/2, 270, 1, \"blue\");\n  297  							window.ship.preview();\n  298  							game.ships[0] = window.ship;\n  ...\n  301  						})\n  302  \n  303: 						var ship = new window[ships[i][j]](1, ships[i][j]);\n  304  \n  305  						var subTd = document.createElement(\"td\");\n\n3 matches across 2 files\n\n\n\nSearching 29 files for \"getRemainingEP\"\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  585  	}\n  586  	\n  587: 	this.getRemainingEP = function(){\n  588  		var ep = this.ep;\n  589  		\n  ...\n  667  		\n  668  	this.canIncreaseImpulse = function(){\n  669: 		if (this.getRemainingEP() >= this.getImpulseChangeCost()){\n  670  			if (this.actions.length == 1){\n  671  				return true;\n  ...\n  687  	\n  688  	this.canDecreaseImpulse = function(){\n  689: 		if (this.getRemainingEP() >= this.getImpulseChangeCost()){\n  690  			if (this.actions.length == 1){\n  691  				return true;\n  ...\n  778  		//console.log(tp);\n  779  \n  780: 		drawText(moveCtx, \"blue\", \"Engine Power: \" + this.getRemainingEP() + \" / \" + this.ep, 10, tp);\n  781  		drawText(moveCtx, \"blue\", \"Impulse: \" + this.getRemainingImpulse() + \" / \" + this.getTotalImpulse(), 10,  {x: tp.x, y: tp.y+18});\n  782  		drawText(moveCtx, \"blue\", \"Change Impulse: \" + this.getImpulseChangeCost() + \" EP\", 10,  {x: tp.x, y: tp.y+36});\n  ...\n  865  	this.canTurn = function(){\n  866  		if (this.getRemainingDelay() == 0){\n  867: 			if (this.getRemainingEP() >= this.getTurnCost()){\n  868  				return true;\n  869  			}\n  ...\n  949  			td.innerHTML = \"Engine Power: \"; tr.appendChild(td);\n  950  		var td = document.createElement(\"td\");\n  951: 			td.innerHTML = this.getRemainingEP() + \" / \" + this.ep; tr.appendChild(td); table.appendChild(tr);\n  952  \n  953  		var tr = document.createElement(\"tr\");\n  ...\n 1021  		$(divs).find(\".impulse\").html(\"rem. impulse: \" + this.getRemainingImpulse() + \" / \" + this.getTotalImpulse());\n 1022  		$(divs).find(\".accel\").html(\"accel / deccel cost in EP: \" + this.getImpulseChangeCost());\n 1023: 		$(divs).find(\".ep\").html(\"rem. engine power: \" + this.getRemainingEP());\n 1024  		$(divs).find(\".remDelay\").html(\"rem. delay: \" + this.getRemainingDelay() + \" pixels\");\n 1025  	}\n\n7 matches in 1 file\n",
+			"settings":
+			{
+				"buffer_size": 7095,
+				"line_ending": "Windows",
+				"name": "Find Results",
+				"scratch": true
 			}
 		},
 		{
 			"file": "/C/xampp/htdocs/fire/style.css",
 			"settings":
 			{
-				"buffer_size": 4402,
+				"buffer_size": 4600,
 				"line_ending": "Windows"
 			}
 		},
@@ -423,7 +437,7 @@
 			"file": "/C/xampp/htdocs/fire/systems.js",
 			"settings":
 			{
-				"buffer_size": 9936,
+				"buffer_size": 10203,
 				"line_ending": "Windows"
 			}
 		},
@@ -431,7 +445,7 @@
 			"file": "/C/xampp/htdocs/fire/script.js",
 			"settings":
 			{
-				"buffer_size": 12808,
+				"buffer_size": 13170,
 				"line_ending": "Windows"
 			}
 		},
@@ -439,7 +453,7 @@
 			"file": "/C/xampp/htdocs/fire/game.php",
 			"settings":
 			{
-				"buffer_size": 3883,
+				"buffer_size": 3845,
 				"line_ending": "Windows"
 			}
 		},
@@ -447,25 +461,15 @@
 			"file": "/C/xampp/htdocs/fire/game.js",
 			"settings":
 			{
-				"buffer_size": 21484,
+				"buffer_size": 22132,
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"contents": "Searching 1 file for \"combatLog\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  611  		animation = setInterval(function(){\n  612  		\n  613: 			$(\"#combatLog\").show();\n  614  			//console.log(\"ding\");\n  615  			fxCtx.clearRect(0, 0, res.x, res.y);\n  ...\n  728  			span.innerHTML = string;\n  729  		\n  730: 		var combatLog = $(\"#combatLog\");\n  731: 			combatLog.append(span);\n  732: 			combatLog.append(\"</br>\");\n  733  	}\n  734  \n\n5 matches in 1 file\n\n\nSearching 1 file for \"createlogentry\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  684  					if (allAnimated){\n  685  						fireOrders[i].animated = allAnimated;\n  686: 						createLogEntry(fireOrders[i]);\n  687  					}\n  688  				\n  ...\n  709  	}\n  710  \n  711: 	this.createLogEntry = function(fire){\n  712  		\n  713  		for (var i = 0; i < fire.guns; i++){\n\n2 matches in 1 file\n\n\nSearching 1 file for \"time\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  392  		}\n  393  \n  394: 		setTimeout(function(callback){\n  395  			game.animateMovement(callback);\n  396  		}, 500);\n  ...\n  541  \n  542  	this.getAnimationDetails = function(){\n  543: 		console.time(\"start\");\n  544  		for (var i = 0; i < fireOrders.length; i++){\n  545  			//	console.log(fireOrders[i]);\n  ...\n  596  								tbx: tbx,\n  597  								tby: tby,\n  598: 								t: [0, fireOrders[i].weapon.rakeTime],\n  599  								hit: hit,\n  600  								v: new Vector({x: tx, y: ty}, {x: tbx, y: tby}),\n  ...\n  614  			}\n  615  		}\n  616: 		console.timeEnd(\"start\");\n  617  		return;\n  618  	}\n\n4 matches in 1 file\n\n\nSearching 1 file for \"fireorders\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  495  	this.getShotDetails = function(){\n  496  \n  497: 	//	fireOrders = [fireOrders[0]];\n  498  \n  499: 		for (var i = 0; i < fireOrders.length; i++){\n  500: 			fireOrders[i].shooter = game.getShipById(fireOrders[i].shooterid);\n  501: 			fireOrders[i].weapon = fireOrders[i].shooter.getWeaponById(fireOrders[i].weaponid);\n  502: 			fireOrders[i].guns = fireOrders[i].weapon.guns;\n  503: 			fireOrders[i].anim = [];\n  504: 			fireOrders[i].hits = [fireOrders[i].hits];\n  505  		}\n  506  		\n  507: 		for (var i = 0; i < fireOrders.length; i++){\n  508: 			var a = fireOrders[i];\n  509  			\n  510: 			if (fireOrders[i].guns){\n  511: 				fireOrders[i].target = game.getShipById(a.targetid);\n  512  				\n  513: 				for (var j = 0; j < fireOrders.length; j++){\n  514: 					var b = fireOrders[j];\n  515  					\n  516  					if (a.id != b.id){\n  517: 						if (fireOrders[j].guns){\n  518  							if (a.shooterid == b.shooterid){\n  519  								if (a.targetid == b.targetid){\n  520  									if (a.weapon.name == b.weapon.name){\n  521: 										fireOrders[i].guns += fireOrders[j].guns;\n  522: 										fireOrders[i].hits.push(fireOrders[j].hits[0]);\n  523: 										fireOrders[j].guns = 0;\n  524  									}\n  525  								}\n  ...\n  531  		}\n  532  \n  533: 		for (var i = fireOrders.length-1; i >= 0; i--){\n  534: 			if (! fireOrders[i].guns){\n  535: 				fireOrders.splice(i, 1);\n  536  			}\n  537  		}\n  ...\n  540  	this.getAnimationDetails = function(){\n  541  		//	console.time(\"start\");\n  542: 		for (var i = 0; i < fireOrders.length; i++){\n  543: 			//	console.log(fireOrders[i]);\n  544: 			for (var j = 0; j < fireOrders[i].guns; j++){\n  545: 				var ox = fireOrders[i].shooter.x + Math.random()*30-15; // GUN origin for all proj\n  546: 				var oy = fireOrders[i].shooter.y + Math.random()*30-15;\n  547  				\n  548  				var anims = [];\n  549  				\n  550: 				for (var k = 0; k < fireOrders[i].weapon.shots; k++){\n  551: 					var tx = fireOrders[i].target.x + Math.random()*fireOrders[i].target.size/3 - fireOrders[i].target.size/6; // proj destination on HIT\n  552: 					var ty = fireOrders[i].target.y + Math.random()*fireOrders[i].target.size/3 - fireOrders[i].target.size/3;\n  553  					var hit = true;\n  554  					var subAbim = {};\n  555  					\n  556: 					if (fireOrders[i].weapon.animation == \"projectile\"){\n  557: 						if (k > fireOrders[i].hits){\n  558  							hit = false;\n  559: 							tx = tx + Math.random()*fireOrders[i].target.size / 1 - fireOrders[i].target.size / 2;\n  560: 							ty = ty + Math.random()*fireOrders[i].target.size / 1 - fireOrders[i].target.size / 2;\n  561  						}\n  562  							subAnim = {\n  ...\n  572  							}\n  573  					}\n  574: 					else if (fireOrders[i].weapon.animation == \"laser\"){\n  575: 						if (k > fireOrders[i].hits){\n  576  							hit = false;\n  577: 							//console.log(fireOrders[i].target.size);\n  578: 							var stepX = Math.random()*fireOrders[i].target.size * 1.5 - fireOrders[i].target.size * .75;\n  579: 							var stepY = Math.random()*fireOrders[i].target.size * 1.5 - fireOrders[i].target.size * .75;\n  580  							tx += stepX;\n  581  							ty += stepY;\n  ...\n  584  						}\n  585  						\n  586: 							var tbx = tx + Math.random()*fireOrders[i].target.size / 2 - fireOrders[i].target.size / 4;\n  587: 							var tby = ty + Math.random()*fireOrders[i].target.size / 2 - fireOrders[i].target.size / 4;\n  588  							\n  589  							subAnim = {\n  ...\n  594  								tbx: tbx,\n  595  								tby: tby,\n  596: 								t: [0, fireOrders[i].weapon.rakeTime],\n  597  								hit: hit,\n  598  								v: new Vector({x: tx, y: ty}, {x: tbx, y: tby}),\n  ...\n  609  				anims.push(subAnim);\n  610  				}\n  611: 			fireOrders[i].anim.push(anims);\n  612  			}\n  613  		}\n  ...\n  624  			//console.log(\"ding\");\n  625  			fxCtx.clearRect(0, 0, res.x, res.y);\n  626: 			for (var i = 0; i  < fireOrders.length; i++){\n  627: 				if (! fireOrders[i].animated){\n  628: 					//console.log(\"animating fire[\" + i + \"] for shots: \" + fireOrders[i].shots);\n  629  					var x, y;\n  630  					\n  631: 					//console.log(\"animating \" + fireOrders[i].anim.length + \" guns with \" + fireOrders[i].anim[0].length + \" shots each.\");\n  632: 					for (var j = 0; j < fireOrders[i].anim.length; j++){\n  633: 						//console.log(fireOrders[i].anim[j]);\n  634: 						for (var k = 0; k < fireOrders[i].anim[j].length; k++){\n  635: 							if (fireOrders[i].weapon.animation == \"projectile\"){\n  636: 								if (fireOrders[i].anim[j][k].t[0] < fireOrders[i].anim[j][k].t[1]){ // still to animate\n  637: 									fireOrders[i].anim[j][k].t[0] += 1;\n  638: 									if (fireOrders[i].anim[j][k].t[0] > 0){ // t valid, now animate\n  639: 										x = fireOrders[i].anim[j][k].ox + (fireOrders[i].anim[j][k].v.x * fireOrders[i].anim[j][k].t[0] / fireOrders[i].anim[j][k].t[1]);\n  640: 										y = fireOrders[i].anim[j][k].oy + (fireOrders[i].anim[j][k].v.y * fireOrders[i].anim[j][k].t[0] / fireOrders[i].anim[j][k].t[1]);\n  641: 										drawProjectile(fireOrders[i].weapon, x, y);  // PROJ\n  642  									}\n  643  								}\n  644  								else {// animate EXPLO\n  645: 									if (fireOrders[i].anim[j][k].explo){\n  646: 										if (fireOrders[i].anim[j][k].explo.t[0] < fireOrders[i].anim[j][k].explo.t[1]){\n  647: 											fireOrders[i].anim[j][k].explo.t[0] += 10;\n  648: 											x = fireOrders[i].anim[j][k].ox + fireOrders[i].anim[j][k].v.x;\n  649: 											y = fireOrders[i].anim[j][k].oy + fireOrders[i].anim[j][k].v.y;	\n  650: 											drawExplosion(x, y, fireOrders[i].anim[j][k].explo.s * fireOrders[i].anim[j][k].explo.t[0] / fireOrders[i].anim[j][k].explo.t[1]); // EXPLO\n  651  										}\n  652  										else {\n  653: 											fireOrders[i].anim[j][k].animated = true;\n  654  										}\n  655  									}\n  656  									else {\n  657: 										fireOrders[i].anim[j][k].animated = true;\n  658  									}\n  659  								}\n  660  							}\n  661: 							else if (fireOrders[i].weapon.animation == \"laser\"){\n  662  							//	console.log(\"laser\");\n  663: 							//	console.log(fireOrders[i].anim);\n  664: 								fireOrders[i].anim[j][k].t[0] += 1;\n  665: 								x = fireOrders[i].anim[j][k].tax + (fireOrders[i].anim[j][k].v.x * fireOrders[i].anim[j][k].t[0] / fireOrders[i].anim[j][k].t[1]);\n  666: 								y = fireOrders[i].anim[j][k].tay + (fireOrders[i].anim[j][k].v.y * fireOrders[i].anim[j][k].t[0] / fireOrders[i].anim[j][k].t[1]);\n  667: 								drawBeam(fireOrders[i].weapon, fireOrders[i].anim[j][k].ox, fireOrders[i].anim[j][k].oy, x, y); // BEAM\n  668: 								if (fireOrders[i].anim[j][k].explo){\n  669: 									fireOrders[i].anim[j][k].explo.t[0] = fireOrders[i].anim[j][k].explo.t[1];		\n  670  									var size = Math.random() * 3 +4;\n  671: 								//	drawExplosion(x, y, fireOrders[i].anim[j][k].explo.s); // EXPLO\n  672  									drawExplosion(x, y, size) // EXPL\n  673  								}\n  674: 								if (fireOrders[i].anim[j][k].t[0] == fireOrders[i].anim[j][k].t[1]){\n  675: 									fireOrders[i].anim[j][k].animated = true;\n  676  								}\n  677  							}\n  ...\n  680  					\n  681  					var allAnimated = true;\n  682: 					for (var j = 0; j < fireOrders[i].anim.length; j++){\n  683: 						for (var k = 0; k < fireOrders[i].anim[j].length; k++){\n  684: 							if (! fireOrders[i].anim[j][k].animated){\n  685  								allAnimated = false;\n  686  								break;\n  ...\n  693  					\n  694  					if (allAnimated){\n  695: 						fireOrders[i].animated = allAnimated;\n  696: 						game.createLogEntry(fireOrders[i]);\n  697  					}\n  698  				\n  ...\n  704  			var done = true\n  705  			\n  706: 			for (var i = 0; i  < fireOrders.length; i++){\n  707: 				if (! fireOrders[i].animated){\n  708  					done = false;\n  709  				}\n\n122 matches in 1 file\n\n\nSearching 1 file for \"fireorders\" (case sensitive)\n\n0 matches\n\nSearching 1 file for \"fireorders\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  495  	this.getShotDetails = function(){\n  496  \n  497: 	//	this.fireOrders = [this.fireOrders[0]];\n  498  \n  499: 		for (var i = 0; i < this.fireOrders.length; i++){\n  500: 			this.fireOrders[i].shooter = game.getShipById(this.fireOrders[i].shooterid);\n  501: 			this.fireOrders[i].weapon = this.fireOrders[i].shooter.getWeaponById(this.fireOrders[i].weaponid);\n  502: 			this.fireOrders[i].guns = this.fireOrders[i].weapon.guns;\n  503: 			this.fireOrders[i].anim = [];\n  504: 			this.fireOrders[i].hits = [this.fireOrders[i].hits];\n  505  		}\n  506  		\n  507: 		for (var i = 0; i < this.fireOrders.length; i++){\n  508: 			var a = this.fireOrders[i];\n  509  			\n  510: 			if (this.fireOrders[i].guns){\n  511: 				this.fireOrders[i].target = game.getShipById(a.targetid);\n  512  				\n  513: 				for (var j = 0; j < this.fireOrders.length; j++){\n  514: 					var b = this.fireOrders[j];\n  515  					\n  516  					if (a.id != b.id){\n  517: 						if (this.fireOrders[j].guns){\n  518  							if (a.shooterid == b.shooterid){\n  519  								if (a.targetid == b.targetid){\n  520  									if (a.weapon.name == b.weapon.name){\n  521: 										this.fireOrders[i].guns += this.fireOrders[j].guns;\n  522: 										this.fireOrders[i].hits.push(this.fireOrders[j].hits[0]);\n  523: 										this.fireOrders[j].guns = 0;\n  524  									}\n  525  								}\n  ...\n  531  		}\n  532  \n  533: 		for (var i = this.fireOrders.length-1; i >= 0; i--){\n  534: 			if (! this.fireOrders[i].guns){\n  535: 				this.fireOrders.splice(i, 1);\n  536  			}\n  537  		}\n  ...\n  540  	this.getAnimationDetails = function(){\n  541  		//	console.time(\"start\");\n  542: 		for (var i = 0; i < this.fireOrders.length; i++){\n  543: 			//	console.log(this.fireOrders[i]);\n  544: 			for (var j = 0; j < this.fireOrders[i].guns; j++){\n  545: 				var ox = this.fireOrders[i].shooter.x + Math.random()*30-15; // GUN origin for all proj\n  546: 				var oy = this.fireOrders[i].shooter.y + Math.random()*30-15;\n  547  				\n  548  				var anims = [];\n  549  				\n  550: 				for (var k = 0; k < this.fireOrders[i].weapon.shots; k++){\n  551: 					var tx = this.fireOrders[i].target.x + Math.random()*this.fireOrders[i].target.size/3 - this.fireOrders[i].target.size/6; // proj destination on HIT\n  552: 					var ty = this.fireOrders[i].target.y + Math.random()*this.fireOrders[i].target.size/3 - this.fireOrders[i].target.size/3;\n  553  					var hit = true;\n  554  					var subAbim = {};\n  555  					\n  556: 					if (this.fireOrders[i].weapon.animation == \"projectile\"){\n  557: 						if (k > this.fireOrders[i].hits){\n  558  							hit = false;\n  559: 							tx = tx + Math.random()*this.fireOrders[i].target.size / 1 - this.fireOrders[i].target.size / 2;\n  560: 							ty = ty + Math.random()*this.fireOrders[i].target.size / 1 - this.fireOrders[i].target.size / 2;\n  561  						}\n  562  							subAnim = {\n  ...\n  572  							}\n  573  					}\n  574: 					else if (this.fireOrders[i].weapon.animation == \"laser\"){\n  575: 						if (k > this.fireOrders[i].hits){\n  576  							hit = false;\n  577: 							//console.log(this.fireOrders[i].target.size);\n  578: 							var stepX = Math.random()*this.fireOrders[i].target.size * 1.5 - this.fireOrders[i].target.size * .75;\n  579: 							var stepY = Math.random()*this.fireOrders[i].target.size * 1.5 - this.fireOrders[i].target.size * .75;\n  580  							tx += stepX;\n  581  							ty += stepY;\n  ...\n  584  						}\n  585  						\n  586: 							var tbx = tx + Math.random()*this.fireOrders[i].target.size / 2 - this.fireOrders[i].target.size / 4;\n  587: 							var tby = ty + Math.random()*this.fireOrders[i].target.size / 2 - this.fireOrders[i].target.size / 4;\n  588  							\n  589  							subAnim = {\n  ...\n  594  								tbx: tbx,\n  595  								tby: tby,\n  596: 								t: [0, this.fireOrders[i].weapon.rakeTime],\n  597  								hit: hit,\n  598  								v: new Vector({x: tx, y: ty}, {x: tbx, y: tby}),\n  ...\n  609  				anims.push(subAnim);\n  610  				}\n  611: 			this.fireOrders[i].anim.push(anims);\n  612  			}\n  613  		}\n  ...\n  624  			//console.log(\"ding\");\n  625  			fxCtx.clearRect(0, 0, res.x, res.y);\n  626: 			for (var i = 0; i  < this.fireOrders.length; i++){\n  627: 				if (! this.fireOrders[i].animated){\n  628: 					//console.log(\"animating fire[\" + i + \"] for shots: \" + this.fireOrders[i].shots);\n  629  					var x, y;\n  630  					\n  631: 					//console.log(\"animating \" + this.fireOrders[i].anim.length + \" guns with \" + this.fireOrders[i].anim[0].length + \" shots each.\");\n  632: 					for (var j = 0; j < this.fireOrders[i].anim.length; j++){\n  633: 						//console.log(this.fireOrders[i].anim[j]);\n  634: 						for (var k = 0; k < this.fireOrders[i].anim[j].length; k++){\n  635: 							if (this.fireOrders[i].weapon.animation == \"projectile\"){\n  636: 								if (this.fireOrders[i].anim[j][k].t[0] < this.fireOrders[i].anim[j][k].t[1]){ // still to animate\n  637: 									this.fireOrders[i].anim[j][k].t[0] += 1;\n  638: 									if (this.fireOrders[i].anim[j][k].t[0] > 0){ // t valid, now animate\n  639: 										x = this.fireOrders[i].anim[j][k].ox + (this.fireOrders[i].anim[j][k].v.x * this.fireOrders[i].anim[j][k].t[0] / this.fireOrders[i].anim[j][k].t[1]);\n  640: 										y = this.fireOrders[i].anim[j][k].oy + (this.fireOrders[i].anim[j][k].v.y * this.fireOrders[i].anim[j][k].t[0] / this.fireOrders[i].anim[j][k].t[1]);\n  641: 										drawProjectile(this.fireOrders[i].weapon, x, y);  // PROJ\n  642  									}\n  643  								}\n  644  								else {// animate EXPLO\n  645: 									if (this.fireOrders[i].anim[j][k].explo){\n  646: 										if (this.fireOrders[i].anim[j][k].explo.t[0] < this.fireOrders[i].anim[j][k].explo.t[1]){\n  647: 											this.fireOrders[i].anim[j][k].explo.t[0] += 10;\n  648: 											x = this.fireOrders[i].anim[j][k].ox + this.fireOrders[i].anim[j][k].v.x;\n  649: 											y = this.fireOrders[i].anim[j][k].oy + this.fireOrders[i].anim[j][k].v.y;	\n  650: 											drawExplosion(x, y, this.fireOrders[i].anim[j][k].explo.s * this.fireOrders[i].anim[j][k].explo.t[0] / this.fireOrders[i].anim[j][k].explo.t[1]); // EXPLO\n  651  										}\n  652  										else {\n  653: 											this.fireOrders[i].anim[j][k].animated = true;\n  654  										}\n  655  									}\n  656  									else {\n  657: 										this.fireOrders[i].anim[j][k].animated = true;\n  658  									}\n  659  								}\n  660  							}\n  661: 							else if (this.fireOrders[i].weapon.animation == \"laser\"){\n  662  							//	console.log(\"laser\");\n  663: 							//	console.log(this.fireOrders[i].anim);\n  664: 								this.fireOrders[i].anim[j][k].t[0] += 1;\n  665: 								x = this.fireOrders[i].anim[j][k].tax + (this.fireOrders[i].anim[j][k].v.x * this.fireOrders[i].anim[j][k].t[0] / this.fireOrders[i].anim[j][k].t[1]);\n  666: 								y = this.fireOrders[i].anim[j][k].tay + (this.fireOrders[i].anim[j][k].v.y * this.fireOrders[i].anim[j][k].t[0] / this.fireOrders[i].anim[j][k].t[1]);\n  667: 								drawBeam(this.fireOrders[i].weapon, this.fireOrders[i].anim[j][k].ox, this.fireOrders[i].anim[j][k].oy, x, y); // BEAM\n  668: 								if (this.fireOrders[i].anim[j][k].explo){\n  669: 									this.fireOrders[i].anim[j][k].explo.t[0] = this.fireOrders[i].anim[j][k].explo.t[1];		\n  670  									var size = Math.random() * 3 +4;\n  671: 								//	drawExplosion(x, y, this.fireOrders[i].anim[j][k].explo.s); // EXPLO\n  672  									drawExplosion(x, y, size) // EXPL\n  673  								}\n  674: 								if (this.fireOrders[i].anim[j][k].t[0] == this.fireOrders[i].anim[j][k].t[1]){\n  675: 									this.fireOrders[i].anim[j][k].animated = true;\n  676  								}\n  677  							}\n  ...\n  680  					\n  681  					var allAnimated = true;\n  682: 					for (var j = 0; j < this.fireOrders[i].anim.length; j++){\n  683: 						for (var k = 0; k < this.fireOrders[i].anim[j].length; k++){\n  684: 							if (! this.fireOrders[i].anim[j][k].animated){\n  685  								allAnimated = false;\n  686  								break;\n  ...\n  693  					\n  694  					if (allAnimated){\n  695: 						this.fireOrders[i].animated = allAnimated;\n  696: 						game.createLogEntry(this.fireOrders[i]);\n  697  					}\n  698  				\n  ...\n  704  			var done = true\n  705  			\n  706: 			for (var i = 0; i  < this.fireOrders.length; i++){\n  707: 				if (! this.fireOrders[i].animated){\n  708  					done = false;\n  709  				}\n\n122 matches in 1 file\n\n\nSearching 29 files for \"fireorders\"\n\nC:\\xampp\\htdocs\\fire\\ajax.js:\n  149  					gameturn: game.turn,\n  150  					gamephase: game.phase,\n  151: 					fire: fireOrders\n  152  					},\n  153  			success: refresh,\n\nC:\\xampp\\htdocs\\fire\\dbManager.php:\n  386  \n  387  		$stmt = $this->connection->prepare(\"\n  388: 			INSERT INTO fireorders \n  389  				( gameid, turn, shooterid, targetid, weaponid, resolved )\n  390  			VALUES\n  ...\n  418  	}\n  419  \n  420: 	public function updateFireOrders($fires){\n  421: 		debug::log(\"DB updateFireOrders\");\n  422  \n  423  		$stmt = $this->connection->prepare(\"\n  424: 			UPDATE fireorders\n  425  			SET\n  426  				req = :req,\n  ...\n  639  	}\n  640  \n  641: 	public function getAllFireOrders($gameid, $turn){\n  642: 		debug::log(\"getAllFireOrders for turn \".$turn);\n  643  		$stmt = $this->connection->prepare(\"\n  644: 			SELECT * FROM fireOrders\n  645  			WHERE gameid = :gameid\n  646  			AND turn = :turn\n  ...\n  664  \n  665  \n  666: 	public function getOpenFireOrders($gameid, $turn){\n  667  		$stmt = $this->connection->prepare(\"\n  668: 			SELECT * FROM fireOrders\n  669  			WHERE gameid = :gameid\n  670  			AND turn = :turn\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  495  	this.getShotDetails = function(){\n  496  \n  497: 	//	this.fireOrders = [this.fireOrders[0]];\n  498  \n  499: 		for (var i = 0; i < this.fireOrders.length; i++){\n  500: 			this.fireOrders[i].shooter = game.getShipById(this.fireOrders[i].shooterid);\n  501: 			this.fireOrders[i].weapon = this.fireOrders[i].shooter.getWeaponById(this.fireOrders[i].weaponid);\n  502: 			this.fireOrders[i].guns = this.fireOrders[i].weapon.guns;\n  503: 			this.fireOrders[i].anim = [];\n  504: 			this.fireOrders[i].hits = [this.fireOrders[i].hits];\n  505  		}\n  506  		\n  507: 		for (var i = 0; i < this.fireOrders.length; i++){\n  508: 			var a = this.fireOrders[i];\n  509  			\n  510: 			if (this.fireOrders[i].guns){\n  511: 				this.fireOrders[i].target = game.getShipById(a.targetid);\n  512  				\n  513: 				for (var j = 0; j < this.fireOrders.length; j++){\n  514: 					var b = this.fireOrders[j];\n  515  					\n  516  					if (a.id != b.id){\n  517: 						if (this.fireOrders[j].guns){\n  518  							if (a.shooterid == b.shooterid){\n  519  								if (a.targetid == b.targetid){\n  520  									if (a.weapon.name == b.weapon.name){\n  521: 										this.fireOrders[i].guns += this.fireOrders[j].guns;\n  522: 										this.fireOrders[i].hits.push(this.fireOrders[j].hits[0]);\n  523: 										this.fireOrders[j].guns = 0;\n  524  									}\n  525  								}\n  ...\n  531  		}\n  532  \n  533: 		for (var i = this.fireOrders.length-1; i >= 0; i--){\n  534: 			if (! this.fireOrders[i].guns){\n  535: 				this.fireOrders.splice(i, 1);\n  536  			}\n  537  		}\n  ...\n  540  	this.getAnimationDetails = function(){\n  541  		//	console.time(\"start\");\n  542: 		for (var i = 0; i < this.fireOrders.length; i++){\n  543: 			//	console.log(this.fireOrders[i]);\n  544: 			for (var j = 0; j < this.fireOrders[i].guns; j++){\n  545: 				var ox = this.fireOrders[i].shooter.x + Math.random()*30-15; // GUN origin for all proj\n  546: 				var oy = this.fireOrders[i].shooter.y + Math.random()*30-15;\n  547  				\n  548  				var anims = [];\n  549  				\n  550: 				for (var k = 0; k < this.fireOrders[i].weapon.shots; k++){\n  551: 					var tx = this.fireOrders[i].target.x + Math.random()*this.fireOrders[i].target.size/3 - this.fireOrders[i].target.size/6; // proj destination on HIT\n  552: 					var ty = this.fireOrders[i].target.y + Math.random()*this.fireOrders[i].target.size/3 - this.fireOrders[i].target.size/3;\n  553  					var hit = true;\n  554  					var subAbim = {};\n  555  					\n  556: 					if (this.fireOrders[i].weapon.animation == \"projectile\"){\n  557: 						if (k > this.fireOrders[i].hits){\n  558  							hit = false;\n  559: 							tx = tx + Math.random()*this.fireOrders[i].target.size / 1 - this.fireOrders[i].target.size / 2;\n  560: 							ty = ty + Math.random()*this.fireOrders[i].target.size / 1 - this.fireOrders[i].target.size / 2;\n  561  						}\n  562  							subAnim = {\n  ...\n  572  							}\n  573  					}\n  574: 					else if (this.fireOrders[i].weapon.animation == \"laser\"){\n  575: 						if (k > this.fireOrders[i].hits){\n  576  							hit = false;\n  577: 							//console.log(this.fireOrders[i].target.size);\n  578: 							var stepX = Math.random()*this.fireOrders[i].target.size * 1.5 - this.fireOrders[i].target.size * .75;\n  579: 							var stepY = Math.random()*this.fireOrders[i].target.size * 1.5 - this.fireOrders[i].target.size * .75;\n  580  							tx += stepX;\n  581  							ty += stepY;\n  ...\n  584  						}\n  585  						\n  586: 							var tbx = tx + Math.random()*this.fireOrders[i].target.size / 2 - this.fireOrders[i].target.size / 4;\n  587: 							var tby = ty + Math.random()*this.fireOrders[i].target.size / 2 - this.fireOrders[i].target.size / 4;\n  588  							\n  589  							subAnim = {\n  ...\n  594  								tbx: tbx,\n  595  								tby: tby,\n  596: 								t: [0, this.fireOrders[i].weapon.rakeTime],\n  597  								hit: hit,\n  598  								v: new Vector({x: tx, y: ty}, {x: tbx, y: tby}),\n  ...\n  609  				anims.push(subAnim);\n  610  				}\n  611: 			this.fireOrders[i].anim.push(anims);\n  612  			}\n  613  		}\n  ...\n  624  			//console.log(\"ding\");\n  625  			fxCtx.clearRect(0, 0, res.x, res.y);\n  626: 			for (var i = 0; i  < this.fireOrders.length; i++){\n  627: 				if (! this.fireOrders[i].animated){\n  628: 					//console.log(\"animating fire[\" + i + \"] for shots: \" + this.fireOrders[i].shots);\n  629  					var x, y;\n  630  					\n  631: 					//console.log(\"animating \" + this.fireOrders[i].anim.length + \" guns with \" + this.fireOrders[i].anim[0].length + \" shots each.\");\n  632: 					for (var j = 0; j < this.fireOrders[i].anim.length; j++){\n  633: 						//console.log(this.fireOrders[i].anim[j]);\n  634: 						for (var k = 0; k < this.fireOrders[i].anim[j].length; k++){\n  635: 							if (this.fireOrders[i].weapon.animation == \"projectile\"){\n  636: 								if (this.fireOrders[i].anim[j][k].t[0] < this.fireOrders[i].anim[j][k].t[1]){ // still to animate\n  637: 									this.fireOrders[i].anim[j][k].t[0] += 1;\n  638: 									if (this.fireOrders[i].anim[j][k].t[0] > 0){ // t valid, now animate\n  639: 										x = this.fireOrders[i].anim[j][k].ox + (this.fireOrders[i].anim[j][k].v.x * this.fireOrders[i].anim[j][k].t[0] / this.fireOrders[i].anim[j][k].t[1]);\n  640: 										y = this.fireOrders[i].anim[j][k].oy + (this.fireOrders[i].anim[j][k].v.y * this.fireOrders[i].anim[j][k].t[0] / this.fireOrders[i].anim[j][k].t[1]);\n  641: 										drawProjectile(this.fireOrders[i].weapon, x, y);  // PROJ\n  642  									}\n  643  								}\n  644  								else {// animate EXPLO\n  645: 									if (this.fireOrders[i].anim[j][k].explo){\n  646: 										if (this.fireOrders[i].anim[j][k].explo.t[0] < this.fireOrders[i].anim[j][k].explo.t[1]){\n  647: 											this.fireOrders[i].anim[j][k].explo.t[0] += 10;\n  648: 											x = this.fireOrders[i].anim[j][k].ox + this.fireOrders[i].anim[j][k].v.x;\n  649: 											y = this.fireOrders[i].anim[j][k].oy + this.fireOrders[i].anim[j][k].v.y;	\n  650: 											drawExplosion(x, y, this.fireOrders[i].anim[j][k].explo.s * this.fireOrders[i].anim[j][k].explo.t[0] / this.fireOrders[i].anim[j][k].explo.t[1]); // EXPLO\n  651  										}\n  652  										else {\n  653: 											this.fireOrders[i].anim[j][k].animated = true;\n  654  										}\n  655  									}\n  656  									else {\n  657: 										this.fireOrders[i].anim[j][k].animated = true;\n  658  									}\n  659  								}\n  660  							}\n  661: 							else if (this.fireOrders[i].weapon.animation == \"laser\"){\n  662  							//	console.log(\"laser\");\n  663: 							//	console.log(this.fireOrders[i].anim);\n  664: 								this.fireOrders[i].anim[j][k].t[0] += 1;\n  665: 								x = this.fireOrders[i].anim[j][k].tax + (this.fireOrders[i].anim[j][k].v.x * this.fireOrders[i].anim[j][k].t[0] / this.fireOrders[i].anim[j][k].t[1]);\n  666: 								y = this.fireOrders[i].anim[j][k].tay + (this.fireOrders[i].anim[j][k].v.y * this.fireOrders[i].anim[j][k].t[0] / this.fireOrders[i].anim[j][k].t[1]);\n  667: 								drawBeam(this.fireOrders[i].weapon, this.fireOrders[i].anim[j][k].ox, this.fireOrders[i].anim[j][k].oy, x, y); // BEAM\n  668: 								if (this.fireOrders[i].anim[j][k].explo){\n  669: 									this.fireOrders[i].anim[j][k].explo.t[0] = this.fireOrders[i].anim[j][k].explo.t[1];		\n  670  									var size = Math.random() * 3 +4;\n  671: 								//	drawExplosion(x, y, this.fireOrders[i].anim[j][k].explo.s); // EXPLO\n  672  									drawExplosion(x, y, size) // EXPL\n  673  								}\n  674: 								if (this.fireOrders[i].anim[j][k].t[0] == this.fireOrders[i].anim[j][k].t[1]){\n  675: 									this.fireOrders[i].anim[j][k].animated = true;\n  676  								}\n  677  							}\n  ...\n  680  					\n  681  					var allAnimated = true;\n  682: 					for (var j = 0; j < this.fireOrders[i].anim.length; j++){\n  683: 						for (var k = 0; k < this.fireOrders[i].anim[j].length; k++){\n  684: 							if (! this.fireOrders[i].anim[j][k].animated){\n  685  								allAnimated = false;\n  686  								break;\n  ...\n  693  					\n  694  					if (allAnimated){\n  695: 						this.fireOrders[i].animated = allAnimated;\n  696: 						game.createLogEntry(this.fireOrders[i]);\n  697  					}\n  698  				\n  ...\n  704  			var done = true\n  705  			\n  706: 			for (var i = 0; i  < this.fireOrders.length; i++){\n  707: 				if (! this.fireOrders[i].animated){\n  708  					done = false;\n  709  				}\n\nC:\\xampp\\htdocs\\fire\\game.php:\n   19  	$playerstatus = $manager->gamedata[\"playerstatus\"];\n   20  	$ships = $manager->gamedata[\"ships\"];\n   21: 	$fireorders = $manager->gamedata[\"fireorders\"];\n   22  \n   23  	/*$w = new Omega(5, 2, \"test\", 50, 25, 90);\n   ..\n   28  	*/\n   29  		\n   30: 	//	var_export(json_encode($manager->fireOrders));\n   31  \n   32  	echo \"<script>\";\n   ..\n   34  	echo \"window.ships = \".json_encode($ships, JSON_NUMERIC_CHECK).\";\";\n   35  	echo \"window.playerstatus = \".json_encode($playerstatus, JSON_NUMERIC_CHECK).\";\";\n   36: 	echo \"window.fireOrders = \".json_encode($fireorders, JSON_NUMERIC_CHECK).\";\";\n   37  	echo \"</script>\";\n   38  }\n\nC:\\xampp\\htdocs\\fire\\gameManager.php:\n   15  		$this->gamedata = false;\n   16  		$this->ships = array();\n   17: 		$this->fireOrders = array();\n   18  \n   19  		if ($this->gameid){\n   ..\n   66  		$ships = $db->getAllShipsForGame($this->gameid);\n   67  		$ships = $db->getActionsForShips($ships, $this->userid);\n   68: 		$fireorders = $db->getAllFireOrders($this->gameid, $game[\"turn\"]);\n   69  \n   70  		$gamedata = array(\n   ..\n   72  							\"playerstatus\" => $playerstatus,\n   73  							\"ships\" => $ships,\n   74: 							\"fireorders\" => $fireorders\n   75  						);\n   76  \n   ..\n  247  		debug::log(\"handleFiringPhase\");\n  248  		$this->getShips();\n  249: 		$this->fireOrders = DBManager::app()->getOpenFireOrders($this->gameid, $this->gamedata[\"game\"][\"turn\"]);\n  250: 		$this->handleFireOrders();\n  251: 		$this->updateFireOrders();\n  252  	}\n  253  \n  254: 	public function handleFireOrders(){\n  255: 		Debug::log(\"handleFireOrders\");		\n  256  \n  257: 		for ($i = 0; $i < sizeof($this->fireOrders); $i++){			\n  258  			//debug::log(\"______________\");\n  259  			$hits = 0;\n  ...\n  261  			$notes = \"\";\n  262  \n  263: 			$fire = $this->fireOrders[$i];\n  264  \n  265  			$shooter = $this->getShipById($fire[\"shooterid\"]);\n  ...\n  286  \n  287  			//	debug::log(\"notes: \".$notes);\n  288: 			$this->fireOrders[$i][\"req\"] = $final;\n  289: 			$this->fireOrders[$i][\"notes\"] = $notes;\n  290: 			$this->fireOrders[$i][\"hits\"] = $hits;\n  291  \n  292  \n  ...\n  303  	}\n  304  \n  305: 	public function updateFireOrders(){\n  306: 		debug::log(\"updateFireOrders\");\n  307: 		DBManager::app()->updateFireOrders($this->fireOrders);\n  308  	}\n  309  \n\nC:\\xampp\\htdocs\\fire\\log.txt:\n    1: getAllFireOrders for turn 1\n    2  not all rdy yet\n    3  \n\nC:\\xampp\\htdocs\\fire\\script.js:\n   64  \n   65  function getFireOrderId(){\n   66: 	return fireOrders.length+1;\n   67  }\n   68  \n   ..\n  405  								if (ship.weapons[i].selected){\n  406  									if (ship.weapons[i].posIsOnArc(shipLoc, clickShip.getOffsetPos(), facing)){\n  407: 									//	fireOrders.push(new FireOrder(ship.id, clickShip.id, ship.weapons[i].id, dist));\n  408: 										game.fireOrders.push( {shooterid: ship.id, targetid: clickShip.id, weaponid: ship.weapons[i].id} );\n  409  										ship.weapons[i].setFireOrder();\n  410  									}\n  ...\n  452  			}\n  453  		}\n  454: 		for (var i = fireOrders.length-1; i >= 0; i--){\n  455: 			if (fireOrders[i].weaponid == id){\n  456: 				fireOrders.splice(i, 1);\n  457  				break;\n  458  			}\n\n164 matches across 7 files\n\n\nSearching 29 files for \"splice\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  533  		for (var i = this.fireOrders.length-1; i >= 0; i--){\n  534  			if (! this.fireOrders[i].guns){\n  535: 				this.fireOrders.splice(i, 1);\n  536  			}\n  537  		}\n\nC:\\xampp\\htdocs\\fire\\gameSetup.php:\n  364  					for (var i = window.game.shipsBought.length; i--; i > 0){\n  365  						if (window.game.shipsBought[i].purchaseId == $(this).data(\"purchaseId\")){\n  366: 							window.game.shipsBought.splice(i, 1);\n  367  							break;\n  368  						}\n\nC:\\xampp\\htdocs\\fire\\script.js:\n  454  		for (var i = fireOrders.length-1; i >= 0; i--){\n  455  			if (fireOrders[i].weaponid == id){\n  456: 				fireOrders.splice(i, 1);\n  457  				break;\n  458  			}\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  744  		if (obj.type == \"+\"){\n  745  			if (this.actions.length && this.actions[this.actions.length-1].type == \"speedChange\" && this.actions[this.actions.length-1].dist == -1){\n  746: 				this.actions.splice(this.actions.length-1, 1);\n  747  			}\n  748  			else {\n  ...\n  753  		else if (obj.type == \"-\"){\n  754  			if (this.actions.length && this.actions[this.actions.length-1].type == \"speedChange\" && this.actions[this.actions.length-1].dist == 1){\n  755: 				this.actions.splice(this.actions.length-1, 1);\n  756  			}\n  757  			else {\n  ...\n  858  	\n  859  	this.undoLastOrder = function(pos){		\n  860: 		this.actions.splice(this.actions.length-1, 1);\n  861  		this.turns = [];\n  862  		this.unsetMoveMode();\n\n6 matches across 4 files\n",
-			"settings":
-			{
-				"buffer_size": 31881,
-				"line_ending": "Windows",
-				"name": "Find Results",
-				"scratch": true
 			}
 		},
 		{
 			"file": "/C/xampp/htdocs/fire/server/baseship.php",
 			"settings":
 			{
-				"buffer_size": 1673,
+				"buffer_size": 1730,
 				"line_ending": "Windows"
 			}
 		},
@@ -473,7 +477,7 @@
 			"file": "/C/xampp/htdocs/fire/server/ships/omega.php",
 			"settings":
 			{
-				"buffer_size": 648,
+				"buffer_size": 863,
 				"line_ending": "Windows"
 			}
 		},
@@ -481,7 +485,7 @@
 			"file": "/C/xampp/htdocs/fire/server/ships/sharlin.php",
 			"settings":
 			{
-				"buffer_size": 676,
+				"buffer_size": 977,
 				"line_ending": "Windows"
 			}
 		},
@@ -497,7 +501,7 @@
 			"file": "/C/xampp/htdocs/fire/gameManager.php",
 			"settings":
 			{
-				"buffer_size": 8556,
+				"buffer_size": 8558,
 				"line_ending": "Windows"
 			}
 		},
@@ -505,7 +509,7 @@
 			"file": "/C/xampp/htdocs/fire/log.txt",
 			"settings":
 			{
-				"buffer_size": 2266,
+				"buffer_size": 2944,
 				"line_ending": "Unix"
 			}
 		},
@@ -513,7 +517,7 @@
 			"file": "/C/xampp/htdocs/fire/server/systems/systems.php",
 			"settings":
 			{
-				"buffer_size": 1129,
+				"buffer_size": 1133,
 				"line_ending": "Windows"
 			}
 		},
@@ -529,7 +533,7 @@
 			"file": "/C/xampp/htdocs/fire/server/systems/weapons/particle.php",
 			"settings":
 			{
-				"buffer_size": 734,
+				"buffer_size": 692,
 				"line_ending": "Windows"
 			}
 		},
@@ -778,6 +782,8 @@
 		"where_history":
 		[
 			"",
+			"*.js",
+			"",
 			"game.js",
 			"",
 			"game.js",
@@ -812,6 +818,43 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"getRemainingEP",
+			"new window",
+			"createDiv",
+			"createDiv\n",
+			"this.createDiv",
+			"drawImpulseIndicator",
+			"game.phase == 3",
+			"\"red\"",
+			"drawMovePlan",
+			"drawmoveplan",
+			"creatediv",
+			"animate",
+			"creatediv",
+			"function omega",
+			"addsystems",
+			"addwe",
+			"addWeapons",
+			"addsystems",
+			"this.addsystems",
+			"add",
+			"addSystems",
+			"addsystem",
+			"addStructure",
+			"addWeapons",
+			"this.weapons.p",
+			"this.weapons",
+			"new window",
+			"new",
+			"getAllShipsForGame",
+			"getActionsForShips",
+			"getAllShipsForGame",
+			"getGameData",
+			"canAdvanceGameState",
+			"getgamedata",
+			"reload = 1",
+			"reload",
+			"weapon",
 			"fireOrders",
 			"this.create",
 			"splice",
@@ -902,44 +945,7 @@
 			"vectordiv",
 			"shortinfo",
 			"getBaseHitChance",
-			"shortinfo",
-			"getCompassHeadingOfPoint",
-			"addToDirection",
-			"getAngleFromTo",
-			"addToDirection",
-			"fireord",
-			"fire",
-			"180",
-			"addtodirection",
-			"addtodrection",
-			"handle",
-			"doAdvanceGameState",
-			"handleFiringPhase",
-			"doAdvanceGameState",
-			"handleFiringPhase",
-			"$gdShips",
-			"handlef",
-			"canAdvanceGameState",
-			"doAdvanceGameState",
-			"frames",
-			"doAdvanceGameState",
-			"canad",
-			"moement",
-			"weaponAimTable",
-			"frames",
-			"weaponaim",
-			"weaponAimTable",
-			"setFireOrder",
-			"weaponAimTable",
-			"fireorders",
-			"fireOrders",
-			"fireorders",
-			"getPlannedFacingToMove",
-			"drawVector",
-			"drawve",
-			"getTurnStartPosition",
-			"getBaseOffsetPos",
-			"turnstart"
+			"shortinfo"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -947,6 +953,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"addSystems",
 			"this.fireOrders",
 			"fireOrders[i]",
 			"weaponid",
@@ -980,7 +987,7 @@
 	"groups":
 	[
 		{
-			"selected": 12,
+			"selected": 7,
 			"sheets":
 			[
 				{
@@ -1009,7 +1016,7 @@
 						"translation.y": 1815.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
@@ -1038,7 +1045,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
@@ -1047,15 +1054,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1485,
+						"buffer_size": 1648,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1294,
-								1294
+								1487,
+								1542
 							]
 						],
 						"settings":
@@ -1064,10 +1071,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 421.0,
+						"translation.y": 780.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -1096,7 +1103,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 23,
 					"type": "text"
 				},
 				{
@@ -1125,7 +1132,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -1154,7 +1161,7 @@
 						"translation.y": 372.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
@@ -1183,7 +1190,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
@@ -1192,15 +1199,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 38666,
+						"buffer_size": 40010,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								10030,
-								10030
+								15043,
+								15043
 							]
 						],
 						"settings":
@@ -1209,27 +1216,205 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5731.0,
+						"translation.y": 8725.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
 					"buffer": 8,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7095,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										162,
+										174
+									],
+									[
+										255,
+										267
+									],
+									[
+										534,
+										539
+									],
+									[
+										743,
+										748
+									],
+									[
+										1009,
+										1014
+									],
+									[
+										1281,
+										1286
+									],
+									[
+										1440,
+										1445
+									],
+									[
+										1639,
+										1644
+									],
+									[
+										1805,
+										1810
+									],
+									[
+										1984,
+										1989
+									],
+									[
+										2201,
+										2206
+									],
+									[
+										2328,
+										2333
+									],
+									[
+										2473,
+										2478
+									],
+									[
+										2639,
+										2654
+									],
+									[
+										2836,
+										2851
+									],
+									[
+										3083,
+										3097
+									],
+									[
+										3218,
+										3232
+									],
+									[
+										3288,
+										3302
+									],
+									[
+										3566,
+										3580
+									],
+									[
+										3701,
+										3715
+									],
+									[
+										3771,
+										3785
+									],
+									[
+										4049,
+										4058
+									],
+									[
+										4184,
+										4193
+									],
+									[
+										4254,
+										4263
+									],
+									[
+										4588,
+										4598
+									],
+									[
+										4897,
+										4907
+									],
+									[
+										5092,
+										5102
+									],
+									[
+										5335,
+										5349
+									],
+									[
+										5481,
+										5495
+									],
+									[
+										5675,
+										5689
+									],
+									[
+										5891,
+										5905
+									],
+									[
+										6302,
+										6316
+									],
+									[
+										6526,
+										6540
+									],
+									[
+										6949,
+										6963
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								5342,
+								5342
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 8,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ 	].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 3135.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
 					"file": "/C/xampp/htdocs/fire/style.css",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4402,
+						"buffer_size": 4600,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4399,
-								4399
+								2547,
+								2547
 							]
 						],
 						"settings":
@@ -1238,56 +1423,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4000.0,
+						"translation.y": 2464.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "/C/xampp/htdocs/fire/systems.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 9936,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								7007,
-								7007
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 2979.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 9,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
 					"buffer": 10,
-					"file": "/C/xampp/htdocs/fire/script.js",
+					"file": "/C/xampp/htdocs/fire/systems.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 12808,
+						"buffer_size": 10203,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								10329,
-								10329
+								9617,
+								9617
 							]
 						],
 						"settings":
@@ -1296,27 +1452,56 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5701.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
 					"buffer": 11,
-					"file": "/C/xampp/htdocs/fire/game.php",
+					"file": "/C/xampp/htdocs/fire/script.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3883,
+						"buffer_size": 13170,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1180,
-								1180
+								9910,
+								9910
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 44.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "/C/xampp/htdocs/fire/game.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3845,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1097,
+								1107
 							]
 						],
 						"settings":
@@ -1332,20 +1517,20 @@
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 13,
 					"file": "/C/xampp/htdocs/fire/game.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 21484,
+						"buffer_size": 22132,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								15248,
-								15248
+								6118,
+								6118
 							]
 						],
 						"settings":
@@ -1354,1752 +1539,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 8147.0,
+						"translation.y": 3400.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 13,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 31881,
-						"regions":
-						{
-							"match":
-							{
-								"flags": 112,
-								"regions":
-								[
-									[
-										133,
-										142
-									],
-									[
-										297,
-										306
-									],
-									[
-										313,
-										322
-									],
-									[
-										336,
-										345
-									],
-									[
-										370,
-										379
-									],
-									[
-										601,
-										615
-									],
-									[
-										695,
-										709
-									],
-									[
-										897,
-										901
-									],
-									[
-										1063,
-										1067
-									],
-									[
-										1276,
-										1280
-									],
-									[
-										1418,
-										1422
-									],
-									[
-										1612,
-										1622
-									],
-									[
-										1626,
-										1636
-									],
-									[
-										1679,
-										1689
-									],
-									[
-										1714,
-										1724
-									],
-									[
-										1755,
-										1765
-									],
-									[
-										1791,
-										1801
-									],
-									[
-										1814,
-										1824
-									],
-									[
-										1850,
-										1860
-									],
-									[
-										1885,
-										1895
-									],
-									[
-										1906,
-										1916
-									],
-									[
-										1943,
-										1953
-									],
-									[
-										1978,
-										1988
-									],
-									[
-										2000,
-										2010
-									],
-									[
-										2071,
-										2081
-									],
-									[
-										2114,
-										2124
-									],
-									[
-										2154,
-										2164
-									],
-									[
-										2186,
-										2196
-									],
-									[
-										2282,
-										2292
-									],
-									[
-										2327,
-										2337
-									],
-									[
-										2403,
-										2413
-									],
-									[
-										2587,
-										2597
-									],
-									[
-										2609,
-										2619
-									],
-									[
-										2646,
-										2656
-									],
-									[
-										2670,
-										2680
-									],
-									[
-										2711,
-										2721
-									],
-									[
-										2817,
-										2827
-									],
-									[
-										2868,
-										2878
-									],
-									[
-										2900,
-										2910
-									],
-									[
-										3065,
-										3075
-									],
-									[
-										3115,
-										3125
-									],
-									[
-										3161,
-										3171
-									],
-									[
-										3207,
-										3217
-									],
-									[
-										3301,
-										3311
-									],
-									[
-										3430,
-										3440
-									],
-									[
-										3485,
-										3495
-									],
-									[
-										3524,
-										3534
-									],
-									[
-										3554,
-										3564
-									],
-									[
-										3631,
-										3641
-									],
-									[
-										3670,
-										3680
-									],
-									[
-										3700,
-										3710
-									],
-									[
-										3816,
-										3826
-									],
-									[
-										3886,
-										3896
-									],
-									[
-										3972,
-										3982
-									],
-									[
-										4004,
-										4014
-									],
-									[
-										4073,
-										4083
-									],
-									[
-										4105,
-										4115
-									],
-									[
-										4234,
-										4244
-									],
-									[
-										4299,
-										4309
-									],
-									[
-										4375,
-										4385
-									],
-									[
-										4443,
-										4453
-									],
-									[
-										4477,
-										4487
-									],
-									[
-										4550,
-										4560
-									],
-									[
-										4584,
-										4594
-									],
-									[
-										4749,
-										4759
-									],
-									[
-										4781,
-										4791
-									],
-									[
-										4855,
-										4865
-									],
-									[
-										4887,
-										4897
-									],
-									[
-										5037,
-										5047
-									],
-									[
-										5219,
-										5229
-									],
-									[
-										5391,
-										5401
-									],
-									[
-										5433,
-										5443
-									],
-									[
-										5526,
-										5536
-									],
-									[
-										5624,
-										5634
-									],
-									[
-										5668,
-										5678
-									],
-									[
-										5748,
-										5758
-									],
-									[
-										5808,
-										5818
-									],
-									[
-										5865,
-										5875
-									],
-									[
-										5919,
-										5929
-									],
-									[
-										5987,
-										5997
-									],
-									[
-										6019,
-										6029
-									],
-									[
-										6087,
-										6097
-									],
-									[
-										6143,
-										6153
-									],
-									[
-										6224,
-										6234
-									],
-									[
-										6255,
-										6265
-									],
-									[
-										6286,
-										6296
-									],
-									[
-										6318,
-										6328
-									],
-									[
-										6371,
-										6381
-									],
-									[
-										6402,
-										6412
-									],
-									[
-										6433,
-										6443
-									],
-									[
-										6465,
-										6475
-									],
-									[
-										6529,
-										6539
-									],
-									[
-										6660,
-										6670
-									],
-									[
-										6714,
-										6724
-									],
-									[
-										6752,
-										6762
-									],
-									[
-										6808,
-										6818
-									],
-									[
-										6873,
-										6883
-									],
-									[
-										6903,
-										6913
-									],
-									[
-										6955,
-										6965
-									],
-									[
-										6985,
-										6995
-									],
-									[
-										7054,
-										7064
-									],
-									[
-										7089,
-										7099
-									],
-									[
-										7127,
-										7137
-									],
-									[
-										7235,
-										7245
-									],
-									[
-										7354,
-										7364
-									],
-									[
-										7470,
-										7480
-									],
-									[
-										7582,
-										7592
-									],
-									[
-										7618,
-										7628
-									],
-									[
-										7673,
-										7683
-									],
-									[
-										7705,
-										7715
-									],
-									[
-										7736,
-										7746
-									],
-									[
-										7768,
-										7778
-									],
-									[
-										7819,
-										7829
-									],
-									[
-										7851,
-										7861
-									],
-									[
-										7882,
-										7892
-									],
-									[
-										7914,
-										7924
-									],
-									[
-										7970,
-										7980
-									],
-									[
-										7992,
-										8002
-									],
-									[
-										8021,
-										8031
-									],
-									[
-										8084,
-										8094
-									],
-									[
-										8133,
-										8143
-									],
-									[
-										8171,
-										8181
-									],
-									[
-										8297,
-										8307
-									],
-									[
-										8427,
-										8437
-									],
-									[
-										8460,
-										8470
-									],
-									[
-										8508,
-										8518
-									],
-									[
-										8670,
-										8680
-									],
-									[
-										8736,
-										8746
-									],
-									[
-										8792,
-										8802
-									],
-									[
-										8948,
-										8958
-									],
-									[
-										9019,
-										9029
-									],
-									[
-										9135,
-										9145
-									],
-									[
-										9177,
-										9187
-									],
-									[
-										9460,
-										9470
-									],
-									[
-										9479,
-										9489
-									],
-									[
-										9537,
-										9547
-									],
-									[
-										9577,
-										9587
-									],
-									[
-										9623,
-										9633
-									],
-									[
-										9664,
-										9674
-									],
-									[
-										9692,
-										9702
-									],
-									[
-										9733,
-										9743
-									],
-									[
-										9773,
-										9783
-									],
-									[
-										9799,
-										9809
-									],
-									[
-										9841,
-										9851
-									],
-									[
-										9881,
-										9891
-									],
-									[
-										9908,
-										9918
-									],
-									[
-										9984,
-										9994
-									],
-									[
-										10032,
-										10042
-									],
-									[
-										10077,
-										10087
-									],
-									[
-										10114,
-										10124
-									],
-									[
-										10215,
-										10225
-									],
-									[
-										10265,
-										10275
-									],
-									[
-										10346,
-										10356
-									],
-									[
-										10535,
-										10545
-									],
-									[
-										10562,
-										10572
-									],
-									[
-										10604,
-										10614
-									],
-									[
-										10633,
-										10643
-									],
-									[
-										10679,
-										10689
-									],
-									[
-										10790,
-										10800
-									],
-									[
-										10846,
-										10856
-									],
-									[
-										10883,
-										10893
-									],
-									[
-										11053,
-										11063
-									],
-									[
-										11108,
-										11118
-									],
-									[
-										11159,
-										11169
-									],
-									[
-										11210,
-										11220
-									],
-									[
-										11309,
-										11319
-									],
-									[
-										11443,
-										11453
-									],
-									[
-										11503,
-										11513
-									],
-									[
-										11547,
-										11557
-									],
-									[
-										11582,
-										11592
-									],
-									[
-										11664,
-										11674
-									],
-									[
-										11708,
-										11718
-									],
-									[
-										11743,
-										11753
-									],
-									[
-										11864,
-										11874
-									],
-									[
-										11939,
-										11949
-									],
-									[
-										12030,
-										12040
-									],
-									[
-										12067,
-										12077
-									],
-									[
-										12141,
-										12151
-									],
-									[
-										12178,
-										12188
-									],
-									[
-										12312,
-										12322
-									],
-									[
-										12382,
-										12392
-									],
-									[
-										12463,
-										12473
-									],
-									[
-										12536,
-										12546
-									],
-									[
-										12575,
-										12585
-									],
-									[
-										12653,
-										12663
-									],
-									[
-										12692,
-										12702
-									],
-									[
-										12862,
-										12872
-									],
-									[
-										12899,
-										12909
-									],
-									[
-										12978,
-										12988
-									],
-									[
-										13015,
-										13025
-									],
-									[
-										13170,
-										13180
-									],
-									[
-										13357,
-										13367
-									],
-									[
-										13534,
-										13544
-									],
-									[
-										13581,
-										13591
-									],
-									[
-										13679,
-										13689
-									],
-									[
-										13782,
-										13792
-									],
-									[
-										13831,
-										13841
-									],
-									[
-										13916,
-										13926
-									],
-									[
-										13981,
-										13991
-									],
-									[
-										14043,
-										14053
-									],
-									[
-										14102,
-										14112
-									],
-									[
-										14175,
-										14185
-									],
-									[
-										14212,
-										14222
-									],
-									[
-										14285,
-										14295
-									],
-									[
-										14346,
-										14356
-									],
-									[
-										14432,
-										14442
-									],
-									[
-										14468,
-										14478
-									],
-									[
-										14504,
-										14514
-									],
-									[
-										14541,
-										14551
-									],
-									[
-										14599,
-										14609
-									],
-									[
-										14635,
-										14645
-									],
-									[
-										14671,
-										14681
-									],
-									[
-										14708,
-										14718
-									],
-									[
-										14777,
-										14787
-									],
-									[
-										14913,
-										14923
-									],
-									[
-										14972,
-										14982
-									],
-									[
-										15015,
-										15025
-									],
-									[
-										15076,
-										15086
-									],
-									[
-										15146,
-										15156
-									],
-									[
-										15181,
-										15191
-									],
-									[
-										15238,
-										15248
-									],
-									[
-										15273,
-										15283
-									],
-									[
-										15347,
-										15357
-									],
-									[
-										15387,
-										15397
-									],
-									[
-										15430,
-										15440
-									],
-									[
-										15543,
-										15553
-									],
-									[
-										15667,
-										15677
-									],
-									[
-										15788,
-										15798
-									],
-									[
-										15905,
-										15915
-									],
-									[
-										15946,
-										15956
-									],
-									[
-										16006,
-										16016
-									],
-									[
-										16043,
-										16053
-									],
-									[
-										16079,
-										16089
-									],
-									[
-										16116,
-										16126
-									],
-									[
-										16172,
-										16182
-									],
-									[
-										16209,
-										16219
-									],
-									[
-										16245,
-										16255
-									],
-									[
-										16282,
-										16292
-									],
-									[
-										16343,
-										16353
-									],
-									[
-										16370,
-										16380
-									],
-									[
-										16404,
-										16414
-									],
-									[
-										16472,
-										16482
-									],
-									[
-										16526,
-										16536
-									],
-									[
-										16569,
-										16579
-									],
-									[
-										16700,
-										16710
-									],
-									[
-										16835,
-										16845
-									],
-									[
-										16873,
-										16883
-									],
-									[
-										16926,
-										16936
-									],
-									[
-										17093,
-										17103
-									],
-									[
-										17164,
-										17174
-									],
-									[
-										17225,
-										17235
-									],
-									[
-										17386,
-										17396
-									],
-									[
-										17462,
-										17472
-									],
-									[
-										17583,
-										17593
-									],
-									[
-										17630,
-										17640
-									],
-									[
-										17872,
-										17882
-									],
-									[
-										18039,
-										18049
-									],
-									[
-										18191,
-										18201
-									],
-									[
-										18241,
-										18251
-									],
-									[
-										18326,
-										18336
-									],
-									[
-										18428,
-										18438
-									],
-									[
-										18483,
-										18493
-									],
-									[
-										18583,
-										18593
-									],
-									[
-										18707,
-										18717
-									],
-									[
-										18805,
-										18815
-									],
-									[
-										18973,
-										18983
-									],
-									[
-										18992,
-										19002
-									],
-									[
-										19050,
-										19060
-									],
-									[
-										19090,
-										19100
-									],
-									[
-										19136,
-										19146
-									],
-									[
-										19177,
-										19187
-									],
-									[
-										19205,
-										19215
-									],
-									[
-										19246,
-										19256
-									],
-									[
-										19286,
-										19296
-									],
-									[
-										19312,
-										19322
-									],
-									[
-										19354,
-										19364
-									],
-									[
-										19394,
-										19404
-									],
-									[
-										19421,
-										19431
-									],
-									[
-										19497,
-										19507
-									],
-									[
-										19545,
-										19555
-									],
-									[
-										19590,
-										19600
-									],
-									[
-										19627,
-										19637
-									],
-									[
-										19728,
-										19738
-									],
-									[
-										19778,
-										19788
-									],
-									[
-										19859,
-										19869
-									],
-									[
-										20048,
-										20058
-									],
-									[
-										20075,
-										20085
-									],
-									[
-										20117,
-										20127
-									],
-									[
-										20146,
-										20156
-									],
-									[
-										20192,
-										20202
-									],
-									[
-										20303,
-										20313
-									],
-									[
-										20359,
-										20369
-									],
-									[
-										20396,
-										20406
-									],
-									[
-										20566,
-										20576
-									],
-									[
-										20621,
-										20631
-									],
-									[
-										20672,
-										20682
-									],
-									[
-										20723,
-										20733
-									],
-									[
-										20822,
-										20832
-									],
-									[
-										20956,
-										20966
-									],
-									[
-										21016,
-										21026
-									],
-									[
-										21060,
-										21070
-									],
-									[
-										21095,
-										21105
-									],
-									[
-										21177,
-										21187
-									],
-									[
-										21221,
-										21231
-									],
-									[
-										21256,
-										21266
-									],
-									[
-										21377,
-										21387
-									],
-									[
-										21452,
-										21462
-									],
-									[
-										21543,
-										21553
-									],
-									[
-										21580,
-										21590
-									],
-									[
-										21654,
-										21664
-									],
-									[
-										21691,
-										21701
-									],
-									[
-										21825,
-										21835
-									],
-									[
-										21895,
-										21905
-									],
-									[
-										21976,
-										21986
-									],
-									[
-										22049,
-										22059
-									],
-									[
-										22088,
-										22098
-									],
-									[
-										22166,
-										22176
-									],
-									[
-										22205,
-										22215
-									],
-									[
-										22375,
-										22385
-									],
-									[
-										22412,
-										22422
-									],
-									[
-										22491,
-										22501
-									],
-									[
-										22528,
-										22538
-									],
-									[
-										22683,
-										22693
-									],
-									[
-										22870,
-										22880
-									],
-									[
-										23047,
-										23057
-									],
-									[
-										23094,
-										23104
-									],
-									[
-										23192,
-										23202
-									],
-									[
-										23295,
-										23305
-									],
-									[
-										23344,
-										23354
-									],
-									[
-										23429,
-										23439
-									],
-									[
-										23494,
-										23504
-									],
-									[
-										23556,
-										23566
-									],
-									[
-										23615,
-										23625
-									],
-									[
-										23688,
-										23698
-									],
-									[
-										23725,
-										23735
-									],
-									[
-										23798,
-										23808
-									],
-									[
-										23859,
-										23869
-									],
-									[
-										23945,
-										23955
-									],
-									[
-										23981,
-										23991
-									],
-									[
-										24017,
-										24027
-									],
-									[
-										24054,
-										24064
-									],
-									[
-										24112,
-										24122
-									],
-									[
-										24148,
-										24158
-									],
-									[
-										24184,
-										24194
-									],
-									[
-										24221,
-										24231
-									],
-									[
-										24290,
-										24300
-									],
-									[
-										24426,
-										24436
-									],
-									[
-										24485,
-										24495
-									],
-									[
-										24528,
-										24538
-									],
-									[
-										24589,
-										24599
-									],
-									[
-										24659,
-										24669
-									],
-									[
-										24694,
-										24704
-									],
-									[
-										24751,
-										24761
-									],
-									[
-										24786,
-										24796
-									],
-									[
-										24860,
-										24870
-									],
-									[
-										24900,
-										24910
-									],
-									[
-										24943,
-										24953
-									],
-									[
-										25056,
-										25066
-									],
-									[
-										25180,
-										25190
-									],
-									[
-										25301,
-										25311
-									],
-									[
-										25418,
-										25428
-									],
-									[
-										25459,
-										25469
-									],
-									[
-										25519,
-										25529
-									],
-									[
-										25556,
-										25566
-									],
-									[
-										25592,
-										25602
-									],
-									[
-										25629,
-										25639
-									],
-									[
-										25685,
-										25695
-									],
-									[
-										25722,
-										25732
-									],
-									[
-										25758,
-										25768
-									],
-									[
-										25795,
-										25805
-									],
-									[
-										25856,
-										25866
-									],
-									[
-										25883,
-										25893
-									],
-									[
-										25917,
-										25927
-									],
-									[
-										25985,
-										25995
-									],
-									[
-										26039,
-										26049
-									],
-									[
-										26082,
-										26092
-									],
-									[
-										26213,
-										26223
-									],
-									[
-										26348,
-										26358
-									],
-									[
-										26386,
-										26396
-									],
-									[
-										26439,
-										26449
-									],
-									[
-										26606,
-										26616
-									],
-									[
-										26677,
-										26687
-									],
-									[
-										26738,
-										26748
-									],
-									[
-										26899,
-										26909
-									],
-									[
-										26975,
-										26985
-									],
-									[
-										27096,
-										27106
-									],
-									[
-										27143,
-										27153
-									],
-									[
-										27354,
-										27364
-									],
-									[
-										27387,
-										27397
-									],
-									[
-										27532,
-										27542
-									],
-									[
-										27772,
-										27782
-									],
-									[
-										27800,
-										27810
-									],
-									[
-										27994,
-										28004
-									],
-									[
-										28193,
-										28203
-									],
-									[
-										28217,
-										28227
-									],
-									[
-										28396,
-										28406
-									],
-									[
-										28412,
-										28422
-									],
-									[
-										28539,
-										28549
-									],
-									[
-										28577,
-										28587
-									],
-									[
-										28659,
-										28669
-									],
-									[
-										28695,
-										28705
-									],
-									[
-										28757,
-										28767
-									],
-									[
-										28798,
-										28808
-									],
-									[
-										28863,
-										28873
-									],
-									[
-										29011,
-										29021
-									],
-									[
-										29170,
-										29180
-									],
-									[
-										29219,
-										29229
-									],
-									[
-										29270,
-										29280
-									],
-									[
-										29372,
-										29382
-									],
-									[
-										29413,
-										29423
-									],
-									[
-										29460,
-										29470
-									],
-									[
-										29478,
-										29488
-									],
-									[
-										29553,
-										29563
-									],
-									[
-										29696,
-										29706
-									],
-									[
-										29897,
-										29907
-									],
-									[
-										30000,
-										30010
-									],
-									[
-										30213,
-										30223
-									],
-									[
-										30262,
-										30272
-									],
-									[
-										30304,
-										30314
-									],
-									[
-										30583,
-										30589
-									],
-									[
-										30852,
-										30858
-									],
-									[
-										31059,
-										31065
-									],
-									[
-										31343,
-										31349
-									],
-									[
-										31618,
-										31624
-									],
-									[
-										31764,
-										31770
-									]
-								],
-								"scope": ""
-							}
-						},
-						"selection":
-						[
-							[
-								31060,
-								31060
-							]
-						],
-						"settings":
-						{
-							"detect_indentation": false,
-							"line_numbers": false,
-							"output_tag": 8,
-							"result_base_dir": "",
-							"result_file_regex": "^([^ 	].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 11550.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -3108,15 +1551,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1673,
+						"buffer_size": 1730,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								784,
-								805
+								462,
+								472
 							]
 						],
 						"settings":
@@ -3125,10 +1568,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 364.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -3137,15 +1580,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 648,
+						"buffer_size": 863,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								639,
-								639
+								853,
+								853
 							]
 						],
 						"settings":
@@ -3157,7 +1600,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -3166,15 +1609,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 676,
+						"buffer_size": 977,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								439,
-								439
+								967,
+								967
 							]
 						],
 						"settings":
@@ -3186,7 +1629,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -3215,7 +1658,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
@@ -3224,15 +1667,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8556,
+						"buffer_size": 8558,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4338,
-								4338
+								1590,
+								1590
 							]
 						],
 						"settings":
@@ -3241,16 +1684,16 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2485.0,
+						"translation.y": 750.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 14,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 0,
+			"selected": 7,
 			"sheets":
 			[
 				{
@@ -3259,15 +1702,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2266,
+						"buffer_size": 2944,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								437,
-								437
+								344,
+								344
 							]
 						],
 						"settings":
@@ -3275,10 +1718,10 @@
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 682.0,
+						"translation.y": 292.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
@@ -3287,15 +1730,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1129,
+						"buffer_size": 1133,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								718,
+								718
 							]
 						],
 						"settings":
@@ -3304,10 +1747,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2.0,
+						"translation.y": 227.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
@@ -3323,8 +1766,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								598,
+								598
 							]
 						],
 						"settings":
@@ -3333,10 +1776,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 675.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
@@ -3345,15 +1788,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 734,
+						"buffer_size": 692,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								319,
+								319
 							]
 						],
 						"settings":
@@ -3365,7 +1808,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
@@ -3381,8 +1824,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								12875,
+								12875
 							]
 						],
 						"settings":
@@ -3391,10 +1834,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 10804.0,
+						"translation.y": 14569.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
@@ -3423,7 +1866,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
@@ -3452,7 +1895,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
@@ -3478,10 +1921,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5828.0,
+						"translation.y": 16427.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -3510,7 +1953,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 27,
 					"type": "text"
 				},
 				{
@@ -3539,7 +1982,7 @@
 						"translation.y": 630.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 25,
 					"type": "text"
 				},
 				{
@@ -3568,7 +2011,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 23,
+					"stack_index": 24,
 					"type": "text"
 				}
 			]
@@ -3602,7 +2045,7 @@
 		"cols":
 		[
 			0.0,
-			0.80072396137,
+			0.757917749827,
 			1.0
 		],
 		"rows":
@@ -3698,7 +2141,7 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 135.0,
+	"side_bar_width": 214.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

@@ -79,3 +79,11 @@ function FireOrder(shooterId, targetId, weaponId, dist){
 	this.anim = [];
 	this.gunRolls = [];
 }
+
+function Structure(id, start, end, armour, structure){
+	this.id = id;
+	this.start = start;
+	this.end = end;
+	this.armour = armour;
+	this.structure = structure;
+}
