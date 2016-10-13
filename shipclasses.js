@@ -429,7 +429,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		
 	this.getRemainingImpulse = function(){	
 		var base = this.getBaseImpulse();		
-		for (var i = 1; i < this.actions.length; i++){
+		for (var i = 0; i < this.actions.length; i++){
 			if (this.actions[i].turn == game.turn){
 				if (this.actions[i].type == "speedChange"){
 					if (this.actions[i].dist == 1){
@@ -925,7 +925,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 			$(div).data("shipId", this.id);
 		
 		var table = document.createElement("table");
-
+			table.className = "general";
 			
 		var tr = document.createElement("tr");
 		var th = document.createElement("th");
@@ -936,7 +936,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
 			td.innerHTML = "Position: "; tr.appendChild(td);
-		var td = document.createElement("td");
+		var td = document.createElement("td"); td.className = "pos";
 			td.innerHTML = this.x + " / " + this.y; tr.appendChild(td); table.appendChild(tr);
 			
 		var tr = document.createElement("tr");
@@ -948,31 +948,32 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
 			td.innerHTML = "Engine Power: "; tr.appendChild(td);
-		var td = document.createElement("td");
+		var td = document.createElement("td"); td.className = "ep";
 			td.innerHTML = this.getRemainingEP() + " / " + this.ep; tr.appendChild(td); table.appendChild(tr);
 
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
 			td.innerHTML = "Impulse: "; tr.appendChild(td);
-		var td = document.createElement("td");
+		var td = document.createElement("td"); td.className = "impulse";
 			td.innerHTML = this.getRemainingImpulse() + " / " + this.getTotalImpulse(); tr.appendChild(td); table.appendChild(tr);
 			
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
 			td.innerHTML = "Turn Delay: "; tr.appendChild(td);
-		var td = document.createElement("td");
+		var td = document.createElement("td"); td.className = "delay";
 			td.innerHTML = this.getRemainingDelay(); tr.appendChild(td); table.appendChild(tr);
 
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
 			td.innerHTML = "Impulse Change: "; tr.appendChild(td);
-		var td = document.createElement("td");
+		var td = document.createElement("td"); td.className = "change";
 			td.innerHTML = this.getImpulseChangeCost(); tr.appendChild(td); table.appendChild(tr);
 				
 			
 		div.appendChild(table);
 		
 		var table = document.createElement("table");
+			table.className = "weapons";
 		
 		this.weapons.sort(function(a, b){
 			if (a.name == b.name){
@@ -1018,11 +1019,11 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 			}
 		}
 		
-		$(divs).find(".pos").html("pos: " + this.x + " / " + this.y);
-		$(divs).find(".impulse").html("rem. impulse: " + this.getRemainingImpulse() + " / " + this.getTotalImpulse());
-		$(divs).find(".accel").html("accel / deccel cost in EP: " + this.getImpulseChangeCost());
-		$(divs).find(".ep").html("rem. engine power: " + this.getRemainingEP());
-		$(divs).find(".remDelay").html("rem. delay: " + this.getRemainingDelay() + " pixels");
+		$(divs).find(".pos").html(this.x + " / " + this.y);
+		$(divs).find(".ep").html(this.getRemainingEP() + " / " + this.ep);
+		$(divs).find(".impulse").html(this.getRemainingImpulse() + " / " + this.getTotalImpulse());
+		$(divs).find(".delay").html( this.getRemainingDelay());
+		$(divs).find(".change").html(this.getImpulseChangeCost());
 	}
 	
 
@@ -1080,7 +1081,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 				
 		if (div.className == "shipDiv disabled"){
 			div.className = "shipDiv";
-			
+			$(div).css("left", this.x - 100).css("top", this.y + 100);
 			if (shortInfo){
 				document.getElementById(shortInfo + "shortInfo").className = "shortInfo disabled";
 				shortInfo = false;

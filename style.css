@@ -167,18 +167,23 @@ canvas {
 }
 
 .shipDiv {
-	width: 300px;
-	height: 200px;
+	position: absolute;
 	border: 1px solid black;
 	border-radius: 5px;
 	z-index: 10;
 	background-color: white;
-	padding: 5px;
+	padding: 10px;
 }
 
-.shipDiv table {
+.shipDiv .general {
 	margin: auto;
 	width: 220px;
+	border: 1px solid black;
+	border-radius: 3px;
+}
+
+.shipDiv .weapons {
+	width: 140px;
 	border: 1px solid black;
 	border-radius: 3px;
 }
