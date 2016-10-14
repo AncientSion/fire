@@ -11,6 +11,7 @@ function Game(id, name, status, userid, turn, phase){
 	this.mode = false;
 	this.deploying = false;
 	this.canSubmit = false;
+	this.index = 1;
 
 	this.confirmDeployment = function(){
 		if (! this.canSubmit){

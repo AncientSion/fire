@@ -32,8 +32,12 @@ window.animation;
 
 window.decayVar = 1000;
 
+window.index = 0;
 
-
+function getId(){
+	window.index++;
+	return window.index;
+}
 
 function refresh(data){
 	console.log("refresh");

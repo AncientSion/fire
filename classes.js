@@ -80,10 +80,30 @@ function FireOrder(shooterId, targetId, weaponId, dist){
 	this.gunRolls = [];
 }
 
-function Structure(id, start, end, armour, structure){
-	this.id = id;
+function Structure(parentId, start, end, armour, health){
+	this.name = "Structure";
+	this.id = window.getId();
+	this.parentId = parentId;
 	this.start = start;
 	this.end = end;
 	this.armour = armour;
-	this.structure = structure;
+	this.health = health;
+	this.destroyed = false;
+	this.systems = [];
+
+	this.getTableRow = function(){
+		var tr = document.createElement("tr");
+		var td = document.createElement("td");
+			td.className = "structure";
+			td.innerHTML = this.name + " #" + (this.id);
+			$(td).data("shipId", this.parentId);
+			$(td).data("structId", this.id);
+//			td.addEventListener("mouseenter", function(e){var shipId = $(this).data("shipId"); var structId = $(this).data("structId"); game.getShipById(shipId).weaponHoverIn(structId, e)});
+//			td.addEventListener("mouseleave", function(){var shipId = $(this).data("shipId"); var structId = $(this).data("structId"); game.getShipById(shipId).weaponHoverOut(structId)});
+//			td.addEventListener("click", function(){selectWeapon(this)});
+			tr.appendChild(td);
+			
+		return tr;
+	}
+
 }

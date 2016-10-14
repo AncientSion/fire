@@ -1,5 +1,5 @@
-function System(id, parentId, arc1, arc2){
-	this.id = id;
+function System(parentId, arc1, arc2){
+	this.id = getId();
 	this.parentId = parentId;
 	this.detailsTable = false;
 	this.highlight = false;
@@ -9,7 +9,6 @@ function System(id, parentId, arc1, arc2){
 				];
 	this.guns = 1;
 	this.shots = 1;
-
 				
 	this.posIsOnArc = function(loc, pos, facing){
 		//console.log(arguments);
@@ -33,12 +32,65 @@ function System(id, parentId, arc1, arc2){
 			td.innerHTML = this.name + " #" + (this.id);
 			$(td).data("shipId", this.parentId);
 			$(td).data("weaponId", this.id);
-			td.addEventListener("mouseenter", function(e){var shipId = $(this).data("shipId"); var weaponId = $(this).data("weaponId"); game.getShipById(shipId).weaponHoverIn(weaponId, e)});
-			td.addEventListener("mouseleave", function(){var shipId = $(this).data("shipId"); var weaponId = $(this).data("weaponId"); game.getShipById(shipId).weaponHoverOut(weaponId)});
-			td.addEventListener("click", function(){selectWeapon(this)});
+		//	td.addEventListener("mouseenter", function(e){var shipId = $(this).data("shipId"); var weaponId = $(this).data("weaponId"); game.getShipById(shipId).weaponHoverIn(weaponId, e)});
+		//	td.addEventListener("mouseleave", function(){var shipId = $(this).data("shipId"); var weaponId = $(this).data("weaponId"); game.getShipById(shipId).weaponHoverOut(weaponId)});
+		//	td.addEventListener("click", function(){selectWeapon(this)});
+
+
+			$(td).hover(
+				function(e){
+					var shipId = $(this).data("shipId");
+					var weaponId = $(this).data("weaponId");
+					game.getShipById(shipId).getWeaponById(weaponId).hover();
+					game.getShipById(shipId).highlightAllSelectedWeapons();
+				},
+				function(e){
+					var shipId = $(this).data("shipId");
+					var weaponId = $(this).data("weaponId");
+					game.getShipById(shipId).getWeaponById(weaponId).hover();
+					game.getShipById(shipId).highlightAllSelectedWeapons();
+				}
+			).click(
+				function(){
+					var shipId = $(this).data("shipId");
+					var weaponId = $(this).data("weaponId");
+					game.getShipById(shipId).getWeaponById(weaponId).select();
+				});
+
 			tr.appendChild(td);
 			
 		return tr;
+	}
+
+	this.select = function(){
+		var id = this.id;
+		var parentId = this.parentId;
+
+		var ele = $(".shipDiv").each(function(){
+			if ($(this).data("shipId") == parentId){
+				$(this).find(".weapon").each(function(){
+					if ($(this).data("weaponId") == id){
+						if ($(this).hasClass("fireOrder")){
+							for (var i = game.fireOrders.length-1; i >= 0; i--){
+								if (game.fireOrders[i].weaponid == this.id){
+									game.fireOrders.splice(i, 1);
+									break;
+								}
+							}
+							$(this).removeClass("fireOrder").addClass("selected");
+						}
+						else if ($(this).hasClass("selected")){
+							$(this).removeClass("selected");
+						}
+						else {
+							$(this).addClass("selected");
+						}
+					}
+				})
+			}
+		})
+
+		game.getShipById(parentId).highlightAllSelectedWeapons();
 	}
 	
 	this.getWeaponDetailsDiv = function(){
@@ -87,8 +139,19 @@ function System(id, parentId, arc1, arc2){
 			
 		return div;
 	}
-	
-	this.showInfoDiv = function(e){
+
+	this.hover = function(){
+		if (this.highlight){
+			this.highlight = false;
+			this.hideInfoDiv();
+		}
+		else {
+			this.highlight = true;
+			this.showInfoDiv();
+		}
+	}
+
+	this.showInfoDiv = function(){
 		var div = this.getWeaponDetailsDiv();
 		var parentId = this.parentId;
 		var id = this.id;
@@ -172,16 +235,16 @@ function System(id, parentId, arc1, arc2){
 	}
 }
 				
-function Weapon(id, parentId, arc1, arc2, arc3, arc4){
-	System.call(this, id, parentId, arc1, arc2, arc3, arc4);
+function Weapon(parentId, arc1, arc2, arc3, arc4){
+	System.call(this, parentId, arc1, arc2, arc3, arc4);
 	this.fireOrders = [];
 	this.reload = 1;
 
 }
 Weapon.prototype = Object.create(System.prototype);
 
-function Laser(id, parentId, arc1, arc2, arc3, arc4){
-	Weapon.call(this, id, parentId, arc1, arc2, arc3, arc4);	
+function Laser(parentId, arc1, arc2, arc3, arc4){
+	Weapon.call(this, parentId, arc1, arc2, arc3, arc4);	
 	this.animation = "laser";
 	
 	this.getFillStyle = function(x, y, dist){
@@ -223,8 +286,8 @@ function Laser(id, parentId, arc1, arc2, arc3, arc4){
 Laser.prototype = Object.create(Weapon.prototype);
 
 					
-function HeavyLaser(id, parentId, arc1, arc2, arc3, arc4){
-	Laser.call(this, id, parentId, arc1, arc2, arc3, arc4);
+function HeavyLaser(parentId, arc1, arc2, arc3, arc4){
+	Laser.call(this, parentId, arc1, arc2, arc3, arc4);
 	this.name = "Heavy Laser";
 	this.structure = 8;
 	this.armour = 2;
@@ -241,8 +304,8 @@ function HeavyLaser(id, parentId, arc1, arc2, arc3, arc4){
 }
 HeavyLaser.prototype = Object.create(Laser.prototype);
 
-function MediumLaser(id, parentId, arc1, arc2, arc3, arc4){
-	Laser.call(this, id, parentId, arc1, arc2, arc3, arc4);
+function MediumLaser(parentId, arc1, arc2, arc3, arc4){
+	Laser.call(this, parentId, arc1, arc2, arc3, arc4);
 	this.name = "Medium Laser";
 	this.structure = 8;
 	this.armour = 2;
@@ -257,8 +320,8 @@ function MediumLaser(id, parentId, arc1, arc2, arc3, arc4){
 }
 MediumLaser.prototype = Object.create(Laser.prototype);
 
-function NeutronLaser(id, parentId, arc1, arc2, arc3, arc4){
-	HeavyLaser.call(this, id, parentId, arc1, arc2, arc3, arc4);
+function NeutronLaser(parentId, arc1, arc2, arc3, arc4){
+	HeavyLaser.call(this, parentId, arc1, arc2, arc3, arc4);
 	this.name = "Neutron Laser";
 	this.structure = 8;
 	this.armour = 2;
@@ -278,8 +341,8 @@ NeutronLaser.prototype = Object.create(HeavyLaser.prototype);
 
 
 				
-function Particle(id, parentId, arc1, arc2, arc3, arc4){
-	Weapon.call(this, id, parentId, arc1, arc2, arc3, arc4);
+function Particle(parentId, arc1, arc2, arc3, arc4){
+	Weapon.call(this, parentId, arc1, arc2, arc3, arc4);
 	this.animation = "projectile";
 	this.fireOrders = [];
 
@@ -289,8 +352,8 @@ Weapon.prototype = Object.create(Weapon.prototype);
 
 
 
-function StandardParticleBeam(id, parentId, arc1, arc2){
-	Particle.call(this, id, parentId, arc1, arc2);
+function StandardParticleBeam(parentId, arc1, arc2){
+	Particle.call(this, parentId, arc1, arc2);
 	this.name = "SPB";
 	this.damage = 3;
 	this.structure = 5;
@@ -303,8 +366,8 @@ function StandardParticleBeam(id, parentId, arc1, arc2){
 }
 StandardParticleBeam.prototype = Object.create(Particle.prototype);
 
-function FusionCannon(id, parentId, arc1, arc2){
-	StandardParticleBeam.call(this, id, parentId, arc1, arc2);
+function FusionCannon(parentId, arc1, arc2){
+	StandardParticleBeam.call(this, parentId, arc1, arc2);
 	this.name = "Fusion Cannon";
 	this.damage = 3;
 	this.structure = 5;
@@ -317,8 +380,8 @@ function FusionCannon(id, parentId, arc1, arc2){
 }
 FusionCannon.prototype = Object.create(StandardParticleBeam.prototype);
 
-function ParticleCannon(id, parentId, arc1, arc2){
-	StandardParticleBeam.call(this, id, parentId, arc1, arc2);
+function ParticleCannon(parentId, arc1, arc2){
+	StandardParticleBeam.call(this, parentId, arc1, arc2);
 	this.name = "Particle Cannon";
 	this.damage = 3;
 	this.structure = 5;
@@ -330,8 +393,8 @@ function ParticleCannon(id, parentId, arc1, arc2){
 ParticleCannon.prototype = Object.create(StandardParticleBeam.prototype);
 	
 	
-function ParticleAccelerator(id, parentId, arc1, arc2, arc3, arc4){
-	StandardParticleBeam.call(this, id, parentId, arc1, arc2, arc3, arc4);	
+function ParticleAccelerator(parentId, arc1, arc2, arc3, arc4){
+	StandardParticleBeam.call(this, parentId, arc1, arc2, arc3, arc4);	
 	this.name = "Particle Accel";
 	this.damage = 8
 	this.structure = 8;
@@ -346,8 +409,8 @@ function ParticleAccelerator(id, parentId, arc1, arc2, arc3, arc4){
 ParticleAccelerator.prototype = Object.create(StandardParticleBeam.prototype);
 
 
-function LightParticleAccelerator(id, parentId, arc1, arc2, arc3, arc4){
-	ParticleAccelerator.call(this, id, parentId, arc1, arc2, arc3, arc4);
+function LightParticleAccelerator(parentId, arc1, arc2, arc3, arc4){
+	ParticleAccelerator.call(this, parentId, arc1, arc2, arc3, arc4);
 	this.name = "Lt. Particle Accel";
 	this.damage = 8
 	this.structure = 8;

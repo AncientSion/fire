@@ -458,12 +458,13 @@ function selectWeapon(ele){
 	var ship = game.getShipById(aShip);
 	var id = $(ele).data("weaponId");
 
-	console.log(ship);
-	console.log(id);
+	//console.log(ship);
+	//console.log(id);
 	
 	if (ele.className == "weapon fireOrder"){
 		for (var i = 0; i < ship.weapons.length; i++){
 			if (ship.weapons[i].id == id){
+				console.log(ship.weapons[i]);
 				ship.weapons[i].selected = true;
 				ele.className = "weapon selected";
 				break;
@@ -479,6 +480,7 @@ function selectWeapon(ele){
 	else if (ele.className == "weapon"){
 		for (var i = 0; i < ship.weapons.length; i++){
 			if (ship.weapons[i].id == id){
+				console.log(ship.weapons[i]);
 				ship.weapons[i].selected = true;
 				ele.className = "weapon selected";
 				break;

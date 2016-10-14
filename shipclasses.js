@@ -1,5 +1,5 @@
 function Ship(id, shipClass, x, y, facing, userid, color){
-	this.id = id;
+	this.id = window.getId();
 	this.shipClass = shipClass;
 	this.x = x || false;
 	this.y = y || false;
@@ -137,16 +137,6 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		this.setFacing();
 		game.draw();
 	}
-
-	this.getRealPos = function(){
-		if (this.actions.length){
-			var last = this.actions[this.actions.length-1];
-			return {x: last.x, y: last.y};
-		}
-		else {
-			return {x: this.x, y: this.y};
-		}
-	}
 	
 	this.getBaseOffsetPos = function(){
 		if (this.actions.length == 1){
@@ -166,9 +156,6 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	}
 
 	this.setPosition = function(){
-
-//		console.log("ding");
-
 		if (this.actions.length == 1){
 			this.x = this.actions[0].x;
 			this.y = this.actions[0].y;
@@ -204,8 +191,6 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 					}
 				}
 			}
-		}
-		else {
 		}
 	}
 
@@ -243,47 +228,40 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 			this.createShortInfo();
 			this.createDiv();
 		}
-
 	}
 
 	this.hasWeaponsSelected = function(){		
-		for (var i = 0; i < this.weapons.length; i++){
-			if (this.weapons[i].selected){
-				return true;
-			}
-		}
-	}
-	
-	this.weaponHoverIn = function(weaponId, ele){
-		for (var i = 0; i < this.weapons.length; i++){
-			if (this.weapons[i].id == weaponId){
-				this.weapons[i].highlight = true;
-				this.weapons[i].showInfoDiv(ele);
-			}
-		}
-		this.highlightAllSelectedWeapons();
-	}
-	
-	this.weaponHoverOut = function(weaponId){
-		for (var i = 0; i < this.weapons.length; i++){
-			if (this.weapons[i].id == weaponId){
-				if (this.weapons[i].highlight){
-					this.weapons[i].highlight = false;
-					this.weapons[i].hideInfoDiv();
+		for (var i = 0; i < this.structures.length; i++){
+			for (var j = 0; j < this.structures[i].systems.length; j++){
+				if (this.structures[i].systems[j].selected){
+					return true;
 				}
 			}
-		}		
-		this.highlightAllSelectedWeapons();
-	}	
+		}
+
+		return false;
+	}
+
+	this.getWeaponById = function(id){
+		for (var i = 0; i < this.structures.length; i++){
+			for (var j = 0; j < this.structures[i].systems.length; j++){
+				if (this.structures[i].systems[j].id == id){
+					return this.structures[i].systems[j];
+				}
+			}
+		}
+	}
 	
 	this.highlightAllSelectedWeapons = function(){
 		fxCtx.clearRect(0, 0, res.x, res.y);
 		
-		for (var i = 0; i < this.weapons.length; i++){
-			if (this.weapons[i].highlight || this.weapons[i].selected){
-				var angle = this.getPlannedFacingToMove(this.actions.length-1);
-				var shipPos = this.getOffsetPos();
-				this.weapons[i].drawArc(angle, shipPos);
+		for (var i = 0; i < this.structures.length; i++){
+			for (var j = 0; j < this.structures[i].systems.length; j++){
+				if (this.structures[i].systems[j].highlight || this.structures[i].systems[j].selected){
+					console.log("ding");
+					var angle = this.getPlannedFacingToMove(this.actions.length-1);
+					this.structures[i].systems[j].drawArc(angle, this.getOffsetPos());
+				}
 			}
 		}
 	}
@@ -418,14 +396,6 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 			}
 		}
 	}
-	
-	this.getWeaponById = function(id){
-		for (var i = 0; i < this.weapons.length; i++){
-			if (this.weapons[i].id == id){
-				return this.weapons[i];
-			}
-		}
-	}
 		
 	this.getRemainingImpulse = function(){	
 		var base = this.getBaseImpulse();		
@@ -460,8 +430,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	}
 	
 	this.getImpulseChangeCost = function(){
-		var cost = Math.ceil((Math.pow(this.mass, 1.25))*this.getImpulseMod() / 500);
-	
+		var cost = Math.ceil((Math.pow(this.mass, 1.25))*this.getImpulseMod() / 500);	
 		return cost;
 	}
 	
@@ -624,16 +593,16 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		}
 		
 		var angle = this.getPlannedFacingToMove(this.actions.length-1)
-		var p1 = getPointInDirection(this.getRemainingImpulse() + 60, angle, center.x, center.y);
+		//var p1 = getPointInDirection(this.getRemainingImpulse() + 60, angle, center.x, center.y);
+		var p = getPointInDirection(20, angle, center.x, center.y);
+		var p1 = getPointInDirection(300, angle, center.x, center.y);
 		
 		moveCtx.beginPath();			
-		moveCtx.moveTo(center.x, center.y);
+		moveCtx.moveTo(p.x, p.y);
 		moveCtx.lineTo(p1.x, p1.y); 
 		moveCtx.closePath();
-		moveCtx.strokeStyle = "red";
-		moveCtx.lineWidth = 3;
+		moveCtx.lineWidth = 1;
 		moveCtx.stroke();
-		moveCtx.strokeStyle = "black";
 		moveCtx.lineWidth = 1;
 
 		if (this.getRemainingImpulse() > 0){		
@@ -684,7 +653,6 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	
 		return false;
 	}
-
 	
 	this.canDecreaseImpulse = function(){
 		if (this.getRemainingEP() >= this.getImpulseChangeCost()){
@@ -728,9 +696,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	}
 	
 	this.doAdjustImpulse = function(obj){
-
 		var shipPos = this.getOffsetPos();
-
 		if (obj.type == "+"){
 			if (this.actions.length && this.actions[this.actions.length-1].type == "speedChange" && this.actions[this.actions.length-1].dist == -1){
 				this.actions.splice(this.actions.length-1, 1);
@@ -752,7 +718,6 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		
 		this.unsetMoveMode();
 		this.setMoveMode();
-		
 	}
 	
 	this.drawImpulseUI = function(){
@@ -920,6 +885,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	}
 	
 	this.createDiv = function(){
+
 		var div = document.createElement("div");
 			div.className = "shipDiv disabled";
 			$(div).data("shipId", this.id);
@@ -969,27 +935,33 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		var td = document.createElement("td"); td.className = "change";
 			td.innerHTML = this.getImpulseChangeCost(); tr.appendChild(td); table.appendChild(tr);
 				
-			
 		div.appendChild(table);
-		
-		var table = document.createElement("table");
-			table.className = "weapons";
-		
-		this.weapons.sort(function(a, b){
-			if (a.name == b.name){
-				if (a.id > b.id){
-					return 1;
-				}
-			} else return -1;
-		})
-		
-		for (var i = 0; i < this.weapons.length; i++){
-			var tr = this.weapons[i].getTableRow();
+
+
+		for (var i = 0; i < this.structures.length; i++){
 			
-			table.appendChild(tr);
+			var table = document.createElement("table");
+				table.className = "weapons";
+			
+			/*this.weapons.sort(function(a, b){
+				if (a.name == b.name){
+					if (a.id > b.id){
+						return 1;
+					}
+				} else return -1;
+			})*/
+
+			table.appendChild(this.structures[i].getTableRow());
+
+			
+			for (var j = 0; j < this.structures[i].systems.length; j++){
+				var tr = this.structures[i].systems[j].getTableRow();
+				
+				table.appendChild(tr);
+			}
+			div.appendChild(table);
 		}
-		
-		div.appendChild(table);
+
 		$(div).on('mousedown', $(this), function() {
         $(this).addClass('draggable').parents().on('mousemove', function(e) {
             $('.draggable').offset({
@@ -1000,12 +972,10 @@ function Ship(id, shipClass, x, y, facing, userid, color){
             });
         });
         //e.preventDefault();
-    }).on('mouseup', function() {
-        $('.draggable').removeClass('draggable');
-    });
-	//		div.style.left = this.x - res.x + cam.o.x + 100 + "px";
-	//		div.style.top = this.y + cam.o.y + 100 + "px";
-		
+	    }).on('mouseup', function() {
+	        $('.draggable').removeClass('draggable');
+	    });
+			
 		document.getElementById("game").appendChild(div);
 	}
 	
@@ -1216,9 +1186,8 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		}
 	}
 	
-	
 	this.unsetWeapons = function(){
-	var divs = document.getElementsByClassName("shipDiv");
+		var divs = document.getElementsByClassName("shipDiv");
 		for (var i = 0; i < divs.length; i++){
 			if ($(divs[i]).data("shipId") == this.id){
 				divs = divs[i];
@@ -1292,20 +1261,36 @@ function Sharlin(id, shipClass, x, y, facing, userid, color){
 	this.profile = [0.90, 1.15];
 	
 	this.addSystems = function(){
-		this.weapons.push(new NeutronLaser(this.weapons.length+1, this.id, 300, 60));
-		this.weapons.push(new NeutronLaser(this.weapons.length+1, this.id, 300, 60));
-		this.weapons.push(new NeutronLaser(this.weapons.length+1, this.id, 300, 60));
-		this.weapons.push(new FusionCannon(this.weapons.length+1, this.id, 0, 120));
-		this.weapons.push(new FusionCannon(this.weapons.length+1, this.id, 0, 120));
-		this.weapons.push(new FusionCannon(this.weapons.length+1, this.id, 240, 360));
-		this.weapons.push(new FusionCannon(this.weapons.length+1, this.id, 240, 360));
 	}
 
 	this.addStructures = function(){
-		this.structures.push( new Structure(this.structures.length+1, 300, 60, 7, 150));
-		this.structures.push( new Structure(this.structures.length+1, 60, 180, 6, 120));
-		this.structures.push( new Structure(this.structures.length+1, 180, 300, 6, 120));
+		var structs = [];
+
+		var left = new Structure(this.id, 240, 360, 7, 150);
+			left.systems.push(new NeutronLaser(this.id, 300, 60));
+			left.systems.push(new NeutronLaser(this.id, 300, 60));
+			left.systems.push(new FusionCannon(this.id, 240, 360));
+			left.systems.push(new FusionCannon(this.id, 240, 360));
+			structs.push(left);
+
+		var right = new Structure(this.id, 0, 120, 7, 150);
+			right.systems.push(new NeutronLaser(this.id, 300, 60));
+			right.systems.push(new NeutronLaser(this.id, 300, 60));
+			right.systems.push(new FusionCannon(this.id, 0, 120));
+			right.systems.push(new FusionCannon(this.id, 0, 120));
+			structs.push(right);
+
+		var aft = new Structure(this.id, 120, 240, 5, 120);
+			aft.systems.push(new NeutronLaser(this.id, 300, 60));
+			aft.systems.push(new NeutronLaser(this.id, 300, 60));
+			structs.push(aft);
+
+
+		for (var i = 0; i < structs.length; i++){
+			this.structures.push(structs[i]);
+		}
 	}
+
 		
 	Capital.call(this, id, shipClass, x, y, facing, userid, color);
 }
@@ -1321,17 +1306,34 @@ function Omega(id, shipClass, x, y, facing, userid, color){
 	this.profile = [0.85, 1.10];
 	
 	this.addSystems = function(){
-		this.weapons.push(new HeavyLaser(this.weapons.length+1, this.id, 300, 360));
-		this.weapons.push(new HeavyLaser(this.weapons.length+1, this.id, 0, 60));
-		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 180));
-		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 180));
-		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 180, 360));
-		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 180, 360));
 	}
 
 	this.addStructures = function(){
-		this.structures.push( new Structure(this.structures.length+1, 0, 180, 5, 100));
-		this.structures.push( new Structure(this.structures.length+1, 180, 360, 5, 100));
+		var structs = [];
+
+		var left = new Structure(this.id, 240, 360, 7, 150);
+			left.systems.push(new NeutronLaser(this.id, 300, 60));
+			left.systems.push(new NeutronLaser(this.id, 300, 60));
+			left.systems.push(new FusionCannon(this.id, 240, 360));
+			left.systems.push(new FusionCannon(this.id, 240, 360));
+			structs.push(left);
+
+		var right = new Structure(this.id, 0, 120, 7, 150);
+			right.systems.push(new NeutronLaser(this.id, 300, 60));
+			right.systems.push(new NeutronLaser(this.id, 300, 60));
+			right.systems.push(new FusionCannon(this.id, 0, 120));
+			right.systems.push(new FusionCannon(this.id, 0, 120));
+			structs.push(right);
+
+		var aft = new Structure(this.id, 120, 240, 5, 120);
+			aft.systems.push(new NeutronLaser(this.id, 300, 60));
+			aft.systems.push(new NeutronLaser(this.id, 300, 60));
+			structs.push(aft);
+
+
+		for (var i = 0; i < structs.length; i++){
+			this.structures.push(structs[i]);
+		}
 	}
 		
 	Capital.call(this, id, shipClass, x, y, facing, userid, color);
