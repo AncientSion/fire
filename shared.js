@@ -34,6 +34,14 @@ window.decayVar = 1000;
 
 window.index = 0;
 
+function getShipId(){
+	return (game.ships.length+1);
+}
+
+function resetIndex(){
+	window.index = 0;
+}
+
 function getId(){
 	window.index++;
 	return window.index;

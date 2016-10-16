@@ -1,5 +1,5 @@
 function Ship(id, shipClass, x, y, facing, userid, color){
-	this.id = window.getId();
+	this.id = id;
 	this.shipClass = shipClass;
 	this.x = x || false;
 	this.y = y || false;
@@ -16,6 +16,9 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	this.maxVector = false;
 	this.undoOrderButton = false;
 	this.structures = [];
+
+	this.profile = [];
+	this.mass = 0;
 
 	this.preview = function(){
 		this.createDiv();
@@ -218,9 +221,10 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	}
 	
 	this.create = function(){
-		this.img = window.shipImages[this.shipClass];
-		this.addSystems();
-		this.addStructures();
+		this.img = window.shipImages[this.shipClass.toLowerCase()];
+		//this.addSystems();
+		//resetIndex();
+		//this.addStructures();
 		this.setPosition();
 		this.setFacing()
 
@@ -258,7 +262,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		for (var i = 0; i < this.structures.length; i++){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
 				if (this.structures[i].systems[j].highlight || this.structures[i].systems[j].selected){
-					console.log("ding");
+					//console.log("ding");
 					var angle = this.getPlannedFacingToMove(this.actions.length-1);
 					this.structures[i].systems[j].drawArc(angle, this.getOffsetPos());
 				}
@@ -1177,35 +1181,15 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 				buttons[i].className = "weapon";
 			}
 			
-			for (var i = 0; i < this.weapons.length; i++){
-				this.weapons[i].highlight = false;
-				this.weapons[i].selected = false;
+			for (var i = 0; i < this.structures.length; i++){
+				for (var j = 0; j < this.structures[i].systems.length; j++){
+					this.structures[i].systems[j].highlight = false;
+					this.structures[i].systems[j].selected = false;
+				}
 			}
 			
 			$("#weaponAimTableWrapper").hide();
 		}
-	}
-	
-	this.unsetWeapons = function(){
-		var divs = document.getElementsByClassName("shipDiv");
-		for (var i = 0; i < divs.length; i++){
-			if ($(divs[i]).data("shipId") == this.id){
-				divs = divs[i];
-				break;
-			}				
-		}
-	
-		var buttons = $(divs).find(".weapon");			
-		for (var i = 0; i < buttons.length; i++){
-			buttons[i].className = "weapon";
-		}
-		
-		for (var i = 0; i < this.weapons.length; i++){
-			this.weapons[i].highlight = false;
-			this.weapons[i].selected = false;
-		}
-		
-		$("#weaponAimTableWrapper").hide();
 	}
 }
 

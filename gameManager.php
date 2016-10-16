@@ -15,18 +15,16 @@ class Manager {
 		$this->gamedata = false;
 		$this->ships = array();
 		$this->fireOrders = array();
+		$this->index = 0;
 
 		if ($this->gameid){
-			$this->gamedata = $this->getGameData();
+			$this->getGameAndPlayerStatus();
 
 			if ($this->canAdvanceGameState()){
-				if ($this->doAdvanceGameState()){
-					$this->gamedata = $this->getGameData();
-				}
+				$this->doAdvanceGameState();
 			}
-			else {
-				debug::log("not all rdy yet");
-			}
+
+			$this->gamedata = $this->getGameData();
 		}
 	}
 	
@@ -58,6 +56,11 @@ class Manager {
 		}
 	}
 
+	public function getGameAndPlayerStatus(){
+		$game = DBManager::app()->getGameDetails($this->gameid);
+		$playerstatus = DBManager::app()->getPlayerStatus($this->gameid);
+	}
+
 	public function getGameData(){
 		$db = DBManager::app();
 
@@ -65,6 +68,7 @@ class Manager {
 		$playerstatus = $db->getPlayerStatus($this->gameid);
 		$ships = $db->getAllShipsForGame($this->gameid);
 		$ships = $db->getActionsForShips($ships, $this->userid);
+		$ships = $this->createShips($ships);
 		$fireorders = $db->getAllFireOrders($this->gameid, $game["turn"]);
 
 		$gamedata = array(
@@ -76,8 +80,28 @@ class Manager {
 
 		return $gamedata;
 	}
+
+	public function createShips($ships){
+		$ship;
+
+		for ($i = 0; $i < sizeof($ships); $i++){
+			$ship = new $ships[$i]["shipclass"](
+												$ships[$i]["id"],
+												$ships[$i]["userid"],
+												0,
+												0, 
+												0
+												);
+
+			$ship->actions = $ships[$i]["actions"];
+
+			$ships[$i] = $ship;
+		}
 	
-		
+		return $ships;
+	}
+
+
 	public function createGame($name){
 		if (DBManager::app()->createGame($this->userid, $name)){
 			return true;
@@ -342,6 +366,32 @@ class Manager {
 				return $this->ships[$i];
 			}
 		}
+	}
+
+	public function getFactions(){
+		return ["Earth Alliance", "Centauri Republic", "Minbari Federation"];
+	}
+
+	public function getShipsForFaction($faction){
+		$ships = [];
+		$pv = [];
+
+		switch ($faction){
+			case "Earth Alliance";
+				$ships = ["Omega", "Hyperion"];
+				$pv = [1200, 850];
+				break;
+			case "Centauri Republic";
+				break;
+			case "Minbari Federation";
+				$ships = ["Sharlin"];
+				$pv = [2000];
+				break;
+			default:
+				break;
+		}
+
+		return array($ships, $pv);
 	}
 
 }

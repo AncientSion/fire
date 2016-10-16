@@ -75,6 +75,10 @@ canvas {
 	border: 1px solid black;
 }
 
+.factionShipclassTable td {
+	text-align: center;
+}
+
 .shipPreview {
 	display: inline-block;
 	vertical-align: top;

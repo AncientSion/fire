@@ -203,22 +203,74 @@ function Game(id, name, status, userid, turn, phase){
 	}
 	
 	this.create = function(){
+
+		//window.ships = [window.ships[0]];
+
 		for (var i = 0; i < window.ships.length; i++){
-			var shipclass = window.ships[i].shipclass;
+			console.log(window.ships[i]);
+			var shipClass = window.ships[i].shipclass;
 			var userid = window.ships[i].userid;
 			var id = window.ships[i].id;
 			var x;
 			var y;
 			var deployed;
-			var friendly;
+			var friendly = false;
 
-			if (window.ships[i].status == "deployed"){deployed = true;}else {deployed = false;}
-			if (window.ships[i].userid == this.userid){friendly = true;}else {friendly = false;}
+			if (window.ships[i].userid == this.userid){
+				friendly = true;
+			}
+			for (var j = 0; j < window.ships[i].actions.length; j++){
+				if (window.ships[i].actions[j].type == "deploy"){
+					deployed = true;
+					break;
+				}
+			}
 
-			var ship = new window[shipclass](id, shipclass.toLowerCase(), x, y, 0, userid, "blue");
-				ship.deployed = deployed;
-				ship.friendly = friendly;
-				ship.actions = [];
+			//function Ship(id, shipClass, x, y, facing, userid, color){
+
+			var ship = new Ship(
+								window.ships[i].id,
+								window.ships[i].shipClass,
+								0,
+								0,
+								0,
+								window.ships[i].userid,
+								"blue"
+							)
+			
+			ship.faction = window.ships[i].faction;
+			ship.mass = window.ships[i].mass;
+			ship.value = window.ships[i].value;
+			ship.ep = window.ships[i].ep;
+			ship.profile = window.ships[i].profile;
+			ship.size = window.ships[i].size;
+			ship.friendly = friendly;
+			ship.deployed = deployed;
+
+
+			//function Structure(parentId, start, end, armour, health){
+			for (var j = 0; j < window.ships[i].structures.length; j++){
+				var struct = new Structure(
+											window.ships[i].id,
+											window.ships[i].structures[j].start,
+											window.ships[i].structures[j].end,
+											window.ships[i].structures[j].armour,
+											window.ships[i].structures[j].health,
+											window.ships[i].structures[j].destroyed
+										);
+
+				//function StandardParticleBeam(parentId, arc1, arc2){
+				for (var k = 0; k < window.ships[i].structures[j].systems.length; k++){
+					var system = new window[window.ships[i].structures[j].systems[k].name](
+																						window.ships[i].id, 
+																						window.ships[i].structures[j].systems[k].start,
+																						window.ships[i].structures[j].systems[k].end
+																						)
+					struct.systems.push(system);
+
+				}
+				ship.structures.push(struct);
+			}
 
 			if (! friendly){
 				if (deployed){
@@ -435,11 +487,11 @@ function Game(id, name, status, userid, turn, phase){
 						else if (action.type == "turn"){
 							//	console.log("turn");
 								if (action.a > 0){
-									game.ships[i].add(5);
+									game.ships[i].facing = addAngle(game.ships[i].facing, 5);
 									game.ships[i].actions[j].angle -= 5;
 								}
 								else {
-									game.ships[i].add(-5);
+									game.ships[i].facing = addAngle(game.ships[i].facing, -5);
 									game.ships[i].actions[j].angle += 5;
 								}
 								
@@ -770,8 +822,5 @@ function Game(id, name, status, userid, turn, phase){
 		
 			log.appendChild(tr);
 	}
-
-	
-	this.create();
 }
 

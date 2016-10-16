@@ -4,40 +4,57 @@ error_reporting(E_ALL); ini_set('display_errors', '1');
 require_once("server\systems\weapons\particle.php");
 require_once("server\systems\weapons\laser.php");
 
+include_once('include.php');
+
+class Structure {
+	public $id;
+	public $parentId;
+	public $health;
+	public $armour;
+	public $systems = array();
+	public $destroyed = false;
+
+	function __construct($id, $parentId, $start, $end, $armour, $health){
+		$this->id = $id;
+		$this->parentId = $parentId;
+		$this->start = $start;
+		$this->end = $end;
+		$this->armour = $armour;
+		$this->health = $health;
+
+		//$this->id = $manager->getId();
+	}
+}
 
 class System {
 	public $id;
+	public $parentId;
 	public $weapon = false;
-	public $structure;
-	public $armour;
-	public $power;
-	public $output;
+	public $destroyed = false;
 	public $decayVar = 1000;
+	public $powerUsage; 
+	public $output;
 
-	function __construct( $structure, $armour, $power, $output){
-		$this->structure = $structure;
-		$this->armour = $armour;
-		$this->power = $power;
+	function __construct($id, $parentId, $output){
+		$this->id = $id;
 		$this->output = $output;
 	}
 }
 
 class Weapon extends System {
-	public $id;
-	public $parentid;
 	public $weapon = true;
-
-	public $structure;
-	public $armour;
-
 	public $damage;
 	public $accDecay;
 	public $shots = 1;
 	public $guns = 1;
 	public $reload = 1;
+	public $powerUsage = 2; 
 
-	function __construct($structure, $armour, $power, $output = 0){
-        parent::__construct($structure, $armour, $power, $output);
+	function __construct($id, $parentId, $start, $end, $output = 0){
+		$this->id = $id;
+		$this->start = $start;
+		$this->end = $end;
+        parent::__construct($id, $parentId, $output);
 	}
 
 	public function getAccLoss ($dist){

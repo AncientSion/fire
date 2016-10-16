@@ -80,7 +80,7 @@ function FireOrder(shooterId, targetId, weaponId, dist){
 	this.gunRolls = [];
 }
 
-function Structure(parentId, start, end, armour, health){
+function Structure(parentId, start, end, armour, health, destroyed){
 	this.name = "Structure";
 	this.id = window.getId();
 	this.parentId = parentId;
@@ -88,7 +88,7 @@ function Structure(parentId, start, end, armour, health){
 	this.end = end;
 	this.armour = armour;
 	this.health = health;
-	this.destroyed = false;
+	this.destroyed = destroyed || false;
 	this.systems = [];
 
 	this.getTableRow = function(){

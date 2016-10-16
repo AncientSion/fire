@@ -61,6 +61,7 @@ function init(){
 	mouseCtx = mouseCanvas.getContext("2d");
 	
 	game = new Game(gd.id, gd.name, gd.status, userid, gd.turn, gd.phase);
+	game.create();
 	game.draw();
 }
 
@@ -173,46 +174,48 @@ function canvasMouseMove(e){
 			
 			var validWeapon = false;
 				
-			for (var i = 0; i < ship.weapons.length; i++){
-				if (ship.weapons[i].selected){
-					var tr = document.createElement("tr");
-					var td = document.createElement("td");
-						td.innerHTML = ship.weapons[i].name + " #" + ship.weapons[i].id; tr.appendChild(td);
-					
-					var valid = false;
-					if (vessel){
-						if (ship.weapons[i].posIsOnArc(shipLoc, vessel.getOffsetPos(), facing)) {
-							valid = true;
-							validWeapon = true;
-						}
-					}
-					else if (!vessel){
-						if (ship.weapons[i].posIsOnArc(shipLoc, pos, facing)){
-							valid = true;
-							validWeapon = true;
-						}
-					}
-					
-					if (valid){
+			for (var i = 0; i < ship.structures.length; i++){
+				for (var j = 0; j < ship.structures[i].systems.length; j++){
+					if (ship.structures[i].systems[j].selected){
+						var tr = document.createElement("tr");
 						var td = document.createElement("td");
-							td.innerHTML = ship.weapons[i].getAccurayDecay(dist) + "%"; tr.appendChild(td);
-						var td = document.createElement("td");
-							td.innerHTML = ship.weapons[i].getDamageDecay(dist) + "%"; tr.appendChild(td);
+							td.innerHTML = ship.structures[i].systems[j].name + " #" + ship.structures[i].systems[j].id; tr.appendChild(td);
+						
+						var valid = false;
 						if (vessel){
-								//	console.log(vessel.getHitChanceFromAngle(angle));
-								//	console.log(ship.weapons[i].getAccurayDecay(dist));
-
-							var td = document.createElement("td");
-								td.innerHTML = vessel.getHitChanceFromAngle(angle) /* - ship.weapons[i].getAccurayDecay(dist) */ + "%"; tr.appendChild(td);
-							var td = document.createElement("td");
-								td.innerHTML = ship.weapons[i].getExpectedDamage(dist); tr.appendChild(td);
+							if (ship.structures[i].systems[j].posIsOnArc(shipLoc, vessel.getOffsetPos(), facing)) {
+								valid = true;
+								validWeapon = true;
+							}
 						}
-						table.appendChild(tr);
-					}
-					else {
-						var td = document.createElement("td");
-							if (vessel){td.colSpan = 5;} else {td.colSpan = 3;}
-							td.innerHTML = "Not in weapon arc";  tr.appendChild(td); table.appendChild(tr);
+						else if (!vessel){
+							if (ship.structures[i].systems[j].posIsOnArc(shipLoc, pos, facing)){
+								valid = true;
+								validWeapon = true;
+							}
+						}
+						
+						if (valid){
+							var td = document.createElement("td");
+								td.innerHTML = ship.structures[i].systems[j].getAccurayDecay(dist) + "%"; tr.appendChild(td);
+							var td = document.createElement("td");
+								td.innerHTML = ship.structures[i].systems[j].getDamageDecay(dist) + "%"; tr.appendChild(td);
+							if (vessel){
+									//	console.log(vessel.getHitChanceFromAngle(angle));
+									//	console.log(ship.weapons[i].getAccurayDecay(dist));
+
+								var td = document.createElement("td");
+									td.innerHTML = vessel.getHitChanceFromAngle(angle) /* - ship.weapons[i].getAccurayDecay(dist) */ + "%"; tr.appendChild(td);
+								var td = document.createElement("td");
+									td.innerHTML = ship.structures[i].systems[j].getExpectedDamage(dist); tr.appendChild(td);
+							}
+							table.appendChild(tr);
+						}
+						else {
+							var td = document.createElement("td");
+								if (vessel){td.colSpan = 5;} else {td.colSpan = 3;}
+								td.innerHTML = "Not in weapon arc";  tr.appendChild(td); table.appendChild(tr);
+						}
 					}
 				}
 			}
@@ -403,12 +406,14 @@ function canvasMouseClick(e){
 					
 					if (clickShip){
 						if (ship.hasWeaponsSelected()){
-							for (var i = ship.weapons.length-1; i >= 0; i--){
-								if (ship.weapons[i].selected){
-									if (ship.weapons[i].posIsOnArc(shipLoc, clickShip.getOffsetPos(), facing)){
-									//	fireOrders.push(new FireOrder(ship.id, clickShip.id, ship.weapons[i].id, dist));
-										game.fireOrders.push( {shooterid: ship.id, targetid: clickShip.id, weaponid: ship.weapons[i].id} );
-										ship.weapons[i].setFireOrder();
+							for (var i = 0; i < ship.structures.length; i++){
+								for (var j = ship.structures[i].systems.length-1; j >= 0; j--){
+									if (ship.structures[i].systems[j].selected){
+										if (ship.structures[i].systems[j].posIsOnArc(shipLoc, clickShip.getOffsetPos(), facing)){
+										//	fireOrders.push(new FireOrder(ship.id, clickShip.id, ship.weapons[i].id, dist));
+											game.fireOrders.push( {shooterid: ship.id, targetid: clickShip.id, weaponid: ship.structures[i].systems[j].id} );
+											ship.structures[i].systems[j].setFireOrder();
+										}
 									}
 								}
 							}
@@ -451,60 +456,6 @@ function checkWeaponHighlight(ele, weaponId){
 				}
 			}
 		}
-	}
-}
-
-function selectWeapon(ele){
-	var ship = game.getShipById(aShip);
-	var id = $(ele).data("weaponId");
-
-	//console.log(ship);
-	//console.log(id);
-	
-	if (ele.className == "weapon fireOrder"){
-		for (var i = 0; i < ship.weapons.length; i++){
-			if (ship.weapons[i].id == id){
-				console.log(ship.weapons[i]);
-				ship.weapons[i].selected = true;
-				ele.className = "weapon selected";
-				break;
-			}
-		}
-		for (var i = game.fireOrders.length-1; i >= 0; i--){
-			if (game.fireOrders[i].weaponid == id){
-				game.fireOrders.splice(i, 1);
-				break;
-			}
-		}
-	}
-	else if (ele.className == "weapon"){
-		for (var i = 0; i < ship.weapons.length; i++){
-			if (ship.weapons[i].id == id){
-				console.log(ship.weapons[i]);
-				ship.weapons[i].selected = true;
-				ele.className = "weapon selected";
-				break;
-			}
-		}
-	}
-	else {
-		for (var i = 0; i < ship.weapons.length; i++){
-			if (ship.weapons[i].id == id){
-				ship.weapons[i].selected = false;
-				ele.className = "weapon";
-				break;
-			}
-		}
-	}
-	
-	if (ship.hasWeaponsSelected()){
-		game.mode = 2;
-		ship.highlightAllSelectedWeapons();
-	}
-	else {
-		$("#weaponAimTableWrapper").hide();
-		game.mode = 1;
-		fxCtx.clearRect(0, 0, res.x, res.y);
 	}
 }
 

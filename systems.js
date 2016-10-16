@@ -4,6 +4,7 @@ function System(parentId, arc1, arc2){
 	this.detailsTable = false;
 	this.highlight = false;
 	this.selected = false;
+	this.destroyed = false;
 	this.arc = [
 				[arc1, arc2]
 				];
@@ -65,6 +66,7 @@ function System(parentId, arc1, arc2){
 	this.select = function(){
 		var id = this.id;
 		var parentId = this.parentId;
+		var selected = false;
 
 		var ele = $(".shipDiv").each(function(){
 			if ($(this).data("shipId") == parentId){
@@ -78,19 +80,34 @@ function System(parentId, arc1, arc2){
 								}
 							}
 							$(this).removeClass("fireOrder").addClass("selected");
+							selected = true;
 						}
 						else if ($(this).hasClass("selected")){
 							$(this).removeClass("selected");
+							selected = false;
 						}
 						else {
 							$(this).addClass("selected");
+							selected = true;
 						}
 					}
 				})
 			}
 		})
 
-		game.getShipById(parentId).highlightAllSelectedWeapons();
+		this.selected = selected;
+
+		var ship = game.getShipById(parentId);
+	
+		if (ship.hasWeaponsSelected()){
+			game.mode = 2;
+			ship.highlightAllSelectedWeapons();
+		}
+		else {
+			$("#weaponAimTableWrapper").hide();
+			game.mode = 1;
+			fxCtx.clearRect(0, 0, res.x, res.y);
+		}
 	}
 	
 	this.getWeaponDetailsDiv = function(){
@@ -288,7 +305,7 @@ Laser.prototype = Object.create(Weapon.prototype);
 					
 function HeavyLaser(parentId, arc1, arc2, arc3, arc4){
 	Laser.call(this, parentId, arc1, arc2, arc3, arc4);
-	this.name = "Heavy Laser";
+	this.name = "HeavyLaser";
 	this.structure = 8;
 	this.armour = 2;
 	this.damage = 100;
@@ -306,7 +323,7 @@ HeavyLaser.prototype = Object.create(Laser.prototype);
 
 function MediumLaser(parentId, arc1, arc2, arc3, arc4){
 	Laser.call(this, parentId, arc1, arc2, arc3, arc4);
-	this.name = "Medium Laser";
+	this.name = "MediumLaser";
 	this.structure = 8;
 	this.armour = 2;
 	this.damage = 100;
@@ -322,7 +339,7 @@ MediumLaser.prototype = Object.create(Laser.prototype);
 
 function NeutronLaser(parentId, arc1, arc2, arc3, arc4){
 	HeavyLaser.call(this, parentId, arc1, arc2, arc3, arc4);
-	this.name = "Neutron Laser";
+	this.name = "NeutronLaser";
 	this.structure = 8;
 	this.armour = 2;
 	this.damage = 100;
@@ -354,7 +371,7 @@ Weapon.prototype = Object.create(Weapon.prototype);
 
 function StandardParticleBeam(parentId, arc1, arc2){
 	Particle.call(this, parentId, arc1, arc2);
-	this.name = "SPB";
+	this.name = "StandardParticleBeam";
 	this.damage = 3;
 	this.structure = 5;
 	this.armour = 1;
@@ -368,7 +385,7 @@ StandardParticleBeam.prototype = Object.create(Particle.prototype);
 
 function FusionCannon(parentId, arc1, arc2){
 	StandardParticleBeam.call(this, parentId, arc1, arc2);
-	this.name = "Fusion Cannon";
+	this.name = "FusionCannon";
 	this.damage = 3;
 	this.structure = 5;
 	this.armour = 1;

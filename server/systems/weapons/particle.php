@@ -4,30 +4,19 @@
 class Particle extends Weapon {
 	public $type = "Particle";
 
-	function __construct($structure, $armour, $power){
-        parent::__construct($structure, $armour, $power);
-	}
-}
-
-class StandardParticleBeam extends Particle {
-	public $name = "SPB";
-	public $damage = 3;
-	public $accDecay = 100;
-	public $shots = 3;
-
-	function __construct($structure, $armour, $power){
-        parent::__construct($structure, $armour, $power);
+	function __construct($id, $parentId, $start, $end, $output = 0){
+        parent::__construct($id, $parentId, $start, $end, $output);
 	}
 }
 
 class FusionCannon extends Particle {
-	public $name = "Fusion Cannon";
+	public $name = "FusionCannon";
 	public $damage = 3;
 	public $accDecay = 70;
 	public $shots = 2;
 
-	function __construct($structure, $armour, $power){
-        parent::__construct($structure, $armour, $power);
+	function __construct($id, $parentId, $start, $end, $output = 0){
+        parent::__construct($id, $parentId, $start, $end, $output);
 	}
 }
 

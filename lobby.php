@@ -15,6 +15,12 @@ if (isset($_SESSION["userid"])){
 	$_SESSION["username"] = $playerName;
 	
 	$adminElement = false;
+
+	//function __construct($id, $userid, $shipClass, $x, $y, $facing){
+	//$ship = new Omega(1, 1, 5, 5, 100);
+	//echo "<script> var omega = ".json_encode($ship, JSON_NUMERIC_CHECK).";</script>";
+
+//	json_encode($ship, JSON_NUMERIC_CHECK);
 	
 	$ongoingGames = $manager->getOngoingGames();
 	$openGames = $manager->getOpenGames();
