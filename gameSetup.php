@@ -219,8 +219,6 @@ else {
 			window.fxCtx = fxCanvas.getContext("2d");
 
 			var icons = [factionImages.earthFaction, factionImages.centauriFaction, factionImages.minbariFaction];
-			var rows = ["Name", "Class", "PV", "Crew", ""];
-			var rowsWidth = ["30%", "30%", "10%", "10%", "30%"];
 
 			var table = document.createElement("table"); 
 				table.className = "factionUpperTable";
@@ -246,11 +244,14 @@ else {
 					});
 
 				var td = document.createElement("td");
+					td.style.textAlign = "center";
 					td.appendChild(icons[i]); tr.appendChild(td);
 				var td = document.createElement("td");
+					td.style.textAlign = "center";
 					td.innerHTML = factions[i];
 					td.style.width = "40%"; tr.appendChild(td);
 				var td = document.createElement("td");
+					td.style.textAlign = "center";
 					td.innerHTML = '<img src="' + icons[i].src + '"></img>' ; tr.appendChild(td);
 
 					table.appendChild(tr);
@@ -263,18 +264,23 @@ else {
 				var subTable = document.createElement("table");
 					subTable.className = "factionShipclassTable";
 
-
 				var subTr = document.createElement("tr");
-				for (var k = 0; k < rows.length; k++){
-					var subTd = document.createElement("th");
-						subTd.style.width = rowsWidth[k];
-						subTd.innerHTML = rows[k];
-					subTr.appendChild(subTd);
-				}
+						subTh = document.createElement("th");
+						subTh.style.width = "250px";
+						subTh.innerHTML = "Shipclass";
+					subTr.appendChild(subTh);
+						subTh = document.createElement("th");
+						subTh.style.width = "100px";
+						subTh.innerHTML = "PV";
+					subTr.appendChild(subTh);
+						subTh = document.createElement("th");
+						subTh.style.width = "150px";
+					subTr.appendChild(subTh);						
 
-				subTable.appendChild(subTr);
 
-				td.appendChild(subTable); 
+				subTable.appendChild(subTr)
+
+	;			td.appendChild(subTable); 
 				tr.appendChild(td);
 
 				table.appendChild(tr);
@@ -399,12 +405,10 @@ else {
 			return;
 		}
 
-		//console.log(shiplist);
 		var row = $(ele).data("row");
 
 		if (!$(ele).data("avail")){
 			for (var i = 0; i < shiplist[0].length; i++){
-
 				var subTr = document.createElement("tr")
 					$(subTr).mouseenter(function(){
 						$(this).addClass("highlight");
@@ -412,7 +416,7 @@ else {
 						$(this).removeClass("highlight");
 					});
 
-					subTr.addEventListener("contextmenu", function(){
+					/*subTr.addEventListener("contextmenu", function(){
 						$(".shipDiv").remove();
 						var name = this.childNodes[0].innerHTML;
 					//	window.ship = new window[name](1, name, res.x/2, res.y/2, 270, 1, "blue");
@@ -427,28 +431,21 @@ else {
 					subTr.addEventListener("contextmenu", function(){
 						requestShipData(this.childNodes[0].innerHTML, showShipData);
 					})
+					*/
 
-					var ship = new Ship();
+					console.log(shiplist[0][i]);
 
 					var subTd = document.createElement("td");
-						subTd.innerHTML = ship.shipClass;
+						subTd.innerHTML = shiplist[0][i];
 						subTr.appendChild(subTd); 
 
 					var subTd = document.createElement("td");
-						subTd.innerHTML = ship.shipType;
-						subTr.appendChild(subTd); 
-
-					var subTd = document.createElement("td");
-						subTd.innerHTML = ship.pv; 
-						subTr.appendChild(subTd); 
-
-					var subTd = document.createElement("td");
-						subTd.innerHTML = ship.crew; 
+						subTd.innerHTML = shiplist[1][i];
 						subTr.appendChild(subTd); 
 
 					var subTd = document.createElement("td");							
 						subTd.innerHTML = "Add to fleet";
-						$(subTd).data("shipClass", ship.shipClass).data("pv", ship.pv).mouseenter(function(){
+						$(subTd).data("shipClass", shiplist[0][i]).data("pv", shiplist[1][i]).mouseenter(function(){
 							$(this).addClass("fontHighlight");
 						}).mouseleave(function(){
 							$(this).removeClass("fontHighlight");

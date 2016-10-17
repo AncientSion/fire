@@ -68,11 +68,12 @@ canvas {
 }
 
 .factionShipclassTable {
-	width: 80%;
-	margin: 0 auto 0 auto;
+	width: 500px;
 	display: inline-block;
 	border-collapse: collapse;
 	border: 1px solid black;
+}
+.factionShipclassTable tr {
 }
 
 .factionShipclassTable td {
