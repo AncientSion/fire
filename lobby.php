@@ -223,15 +223,6 @@ function createGame(){
 	}
 }
 
-function refresh(data){
-//	console.log("refresh");
-//	console.log(data);
-	setTimeout(function(){
-		window.location.reload(true);
-	}, 500);
-}
-
-
 function initTurnProcession(data){
 	var data = data.split(".");
 	console.log(data);

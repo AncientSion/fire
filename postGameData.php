@@ -39,6 +39,9 @@ if (isset($_POST["type"])) {
 						echo "gameStart";
 					}
 				}
+				else {
+					echo "player ready, game not";
+				}
 			}
 		}
 	}

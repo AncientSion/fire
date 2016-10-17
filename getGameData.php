@@ -25,12 +25,12 @@ if (isset($_SESSION["userid"]) && isset($_SESSION["gameid"])){
 			echo JSON_encode($status);
 		}
 		else if ($_GET["type"] == "shiplist"){
-			$ret = $manager->getShipsForFaction($_GET["faction"]);
-			echo json_encode($ret);
+			$ships = $manager->getShipsForFaction($_GET["faction"]);
+			echo json_encode($ships);
 		}
 		else if ($_GET["type"] == "shipdata"){
-			$status = "shipdata";
-			echo JSON_encode($status);
+			$ship = $manager->getShipClass($_GET["shipclass"]);
+			echo json_encode($ship);
 		}
 	}
 }

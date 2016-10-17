@@ -46,7 +46,8 @@ function Game(id, name, status, userid, turn, phase){
 	}
 
 	this.initDeployment = function(){
-	//	$("#deployWrapper").draggable();
+		//console.log("ding");
+		//	$("#deployWrapper").draggable();
 		$("#deployWrapper").on('mousedown', $(this), function() {
         $(this).addClass('draggable').parents().on('mousemove', function(e) {
             $('.draggable').offset({
@@ -97,7 +98,7 @@ function Game(id, name, status, userid, turn, phase){
 					});
 
 				var td = document.createElement("td");
-					td.innerHTML = "<img style='width: 50px; height: 50px;' src='shipIcons/omega.png'>";
+					td.innerHTML = "<img style='width: 50px; height: 50px;' src='shipIcons/"+toDo[i].shipClass.toLowerCase() + ".png'>";
 				//	td.appendChild(img);
 				tr.appendChild(td);
 
@@ -207,13 +208,13 @@ function Game(id, name, status, userid, turn, phase){
 		//window.ships = [window.ships[0]];
 
 		for (var i = 0; i < window.ships.length; i++){
-			console.log(window.ships[i]);
+			//console.log(window.ships[i]);
 			var shipClass = window.ships[i].shipclass;
 			var userid = window.ships[i].userid;
 			var id = window.ships[i].id;
 			var x;
 			var y;
-			var deployed;
+			var deployed = false;
 			var friendly = false;
 
 			if (window.ships[i].userid == this.userid){

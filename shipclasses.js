@@ -7,7 +7,6 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	this.userid = userid;
 	this.id = id;
 	this.color = color;
-	this.weapons = [];
 	this.img;
 	this.turns = [];
 	this.actions = [];
@@ -25,7 +24,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		
 		if (! this.img){
 			window.img = new Image();
-			window.img.src = this.shipClass.toLowerCase() + ".png";
+			window.img.src = "shipIcons/" + this.shipClass.toLowerCase() + ".png";
 			window.img.onload = function(){
 				game.ships[0].img = window.img;
 				game.ships[0].drawShipForPreview();
@@ -40,7 +39,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		shipCtx.clearRect(0, 0, res.x, res.y);
 		shipCtx.save();
 		shipCtx.translate(this.x, this.y);
-		shipCtx.rotate(this.facing*(Math.PI/180));
+		shipCtx.rotate(this.actions[0].a*(Math.PI/180));
 		shipCtx.drawImage(this.img, -30, -30, 60, 60);
 		shipCtx.restore();
 	}
@@ -207,6 +206,18 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 						facing = addAngle(facing, this.actions[i].a);
 					}
 				}	
+			}
+			else if (game.phase == -1){
+				if (this.actions.length == 1){
+					facing = addAngle(facing, this.actions[0].a);
+				}
+				else {
+					for (var i = 0; i < this.actions.length; i++){
+						if (this.actions[i].resolved){
+							facing = addAngle(facing, this.actions[i].a);
+						}
+					}
+				}
 			}
 			else {
 				for (var i = 0; i < this.actions.length; i++){
@@ -687,14 +698,14 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	
 	this.issueShortenTurnDelay = function(i){
 		//console.log("issueShortenTurnDelay")
-		this.turns[i].mod = (this.turns[i].mod * 10 + 2) / 10;
+		this.turns[i].costmod = (this.turns[i].costmod * 10 + 2) / 10;
 		this.unsetMoveMode();
 		this.setMoveMode();
 	}
 	
 	this.cancelShortenTurnDelay = function(i){
 		//console.log("cancelShortenTurnDelay")
-		this.turns[i].mod = (this.turns[i].mod * 10 - 2) / 10;
+		this.turns[i].costmod = (this.turns[i].costmod * 10 - 2) / 10;
 		this.unsetMoveMode();
 		this.setMoveMode();
 	}
@@ -965,6 +976,10 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 			}
 			div.appendChild(table);
 		}
+
+		$(div).contextmenu(function(e){
+			e.preventDefault();
+		});
 
 		$(div).on('mousedown', $(this), function() {
         $(this).addClass('draggable').parents().on('mousemove', function(e) {

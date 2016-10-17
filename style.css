@@ -55,6 +55,7 @@ canvas {
 }
 
 #factionDiv {
+	width: 700px;
 	display: inline-block;
 	vertical-align: top;
 	margin: 0 0 0 0;
@@ -62,9 +63,9 @@ canvas {
 
 .factionUpperTable {
 	width: 500px;
+	margin: auto;
 	border-collapse: collapse;
 	border: 1px solid black;
-	margin: 0 0 0 0;
 }
 
 .factionShipclassTable {
@@ -84,7 +85,6 @@ canvas {
 	display: inline-block;
 	vertical-align: top;
 	width: auto;
-	border: 1px solid black;
 	border-radius: 5px;
 }
 

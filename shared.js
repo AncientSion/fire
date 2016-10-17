@@ -49,10 +49,10 @@ function getId(){
 
 function refresh(data){
 	console.log("refresh");
+	console.log(data);
 	setTimeout(function(){
 		window.location.reload(true);
-		},
-	500);
+	}, 500);
 }
 
 function processEcho(echo){
