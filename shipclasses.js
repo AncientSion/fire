@@ -204,7 +204,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		if (this.deployed){
 			if (game.phase == 2){
 				for (var i = 0; i < this.actions.length; i++){
-					if (this.actions[i].turn < game.turn){
+					if (this.actions[i].turn <= game.turn){
 						facing = addAngle(facing, this.actions[i].a);
 					}
 				}	
@@ -629,7 +629,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 			}
 		}
 		
-		return ep;
+		return Math.floor(ep);
 	}
 	
 	this.getRemainingDelay = function(){
@@ -643,7 +643,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 				if (delay < 0){ delay = 0;}
 			}
 		}
-		return delay;
+		return Math.floor(delay);
 	}
 		
 	this.drawImpulseIndicator = function(){

@@ -253,6 +253,12 @@ canvas {
 	border-radius: 5px;
 }
 
+#phaseSwitchInnerDiv div {
+	width: 200px;
+	font-size: 30px;
+	text-align: center;
+	margin: auto;
+}
 #phaseSwitchDiv {
 	position: absolute;
 	z-index: 20;

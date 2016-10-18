@@ -165,7 +165,7 @@ else {
 			<tr>
 				<td>
 		<canvas id="fxCanvas" style="z-index: 1; width: 400px; height: 400px; position: relative;"></canvas>
-		<canvas id="shipCanvas" style="z-index: 2; width: 400px; height: 400px; position: relative; margin-left: -405px"></canvas>
+		<canvas id="shipCanvas" style="z-index: 2; width: 400px; height: 400px; position: relative; margin-top: -402px"></canvas>
 				</td>
 				<td style="vertical-align: top;">
 						<table>
@@ -408,31 +408,65 @@ else {
 
 		for (var j = 0; j < data.structures.length; j++){
 			var struct = new Structure(
-										data.id,
-										data.structures[j].start,
-										data.structures[j].end,
-										data.structures[j].armour,
-										data.structures[j].health,
-										data.structures[j].destroyed
-									);
+				data.structures[j].id,
+				data.structures[j].parentId,
+				data.structures[j].start,
+				data.structures[j].end,
+				data.structures[j].armour,
+				data.structures[j].health,
+				data.structures[j].destroyed
+			);
 
 			for (var k = 0; k < data.structures[j].systems.length; k++){
-				var system = new window[data.structures[j].systems[k].name](
-																			data.id, 
-																			data.structures[j].systems[k].start,
-																			data.structures[j].systems[k].end
-																			)
-				struct.systems.push(system);
+				if (data.structures[j].systems[k].weapon){
+					if (data.structures[j].systems[k].type == "Laser"){
+						//console.log(data.structures[j].systems[k]);
+						var system = new Laser(
+							data.structures[j].systems[k].id,
+							data.structures[j].systems[k].parentId,
+							data.structures[j].systems[k].name,
+							data.structures[j].systems[k].display,
+							data.structures[j].systems[k].output,
+							data.structures[j].systems[k].damage,
+							data.structures[j].systems[k].optRange,
+							data.structures[j].systems[k].dmgDecay,
+							data.structures[j].systems[k].accDecay,
+							data.structures[j].systems[k].shots,
+							data.structures[j].systems[k].reload,
+							data.structures[j].systems[k].start,
+							data.structures[j].systems[k].end
+						)
+						//console.log(system);
+					}
+					else if (data.structures[j].systems[k].type == "Particle"){
+						//console.log(data.structures[j].systems[k]);
+						var system = new Particle(
+							data.structures[j].systems[k].id,
+							data.structures[j].systems[k].parentId,
+							data.structures[j].systems[k].name,
+							data.structures[j].systems[k].display,
+							data.structures[j].systems[k].output,
+							data.structures[j].systems[k].damage,
+							data.structures[j].systems[k].accDecay,
+							data.structures[j].systems[k].shots,
+							data.structures[j].systems[k].reload,
+							data.structures[j].systems[k].start,
+							data.structures[j].systems[k].end
+						)
+						//console.log(system);
+					}
 
+					struct.systems.push(system);
 				}
-				ship.structures.push(struct);
 			}
+			ship.structures.push(struct);
+		}
 
 
 		game.ships[0] = ship;
 		ship.create(); ship.preview();
 
-		$(".shipDiv").css("position", "relative").css("left", "0px").css("top", "0px").removeClass("disabled");
+		$(".shipDiv").css("position", "relative").css("left", "50px").css("top", "0px").removeClass("disabled");
 		$("#shipPreview").removeClass("disabled");
 
 	}

@@ -180,7 +180,6 @@ function Game(id, name, status, userid, turn, phase){
 				$("#phaseDiv").html("Movement")
 				$("#phaseSwitchDiv").fadeIn(200);
 				$("#phaseSwitchDiv").click(function(){
-					//game.initDeployment();
 					$(this).fadeOut(200);
 				});
 		}
@@ -206,7 +205,9 @@ function Game(id, name, status, userid, turn, phase){
 	
 	this.create = function(){
 
-		window.ships = [window.ships[2]];
+		$("#phaseSwitchDiv").show();
+
+		// window.ships = [window.ships[2]];
 
 		for (var i = 0; i < window.ships.length; i++){
 			//console.log(window.ships[i]);
