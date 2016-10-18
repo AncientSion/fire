@@ -34,9 +34,12 @@ class System {
 	public $decayVar = 1000;
 	public $powerUsage; 
 	public $output;
+	public $name;
+	public $display;
 
 	function __construct($id, $parentId, $output){
 		$this->id = $id;
+		$this->parentId = $parentId;
 		$this->output = $output;
 	}
 }
@@ -51,7 +54,6 @@ class Weapon extends System {
 	public $powerUsage = 2; 
 
 	function __construct($id, $parentId, $start, $end, $output = 0){
-		$this->id = $id;
 		$this->start = $start;
 		$this->end = $end;
         parent::__construct($id, $parentId, $output);

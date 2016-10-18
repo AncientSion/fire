@@ -127,35 +127,64 @@ canvas {
 	display: inline-block;
 	position: absolute;
 	border: 1px solid black;
-	z-index = 1;
+	z-index: 1;
 }
 
 #fxCanvas {
 	display: inline-block;
 	position: absolute;
 	border: 1px solid black;
-	z-index = 2;
+	z-index: 2;
 }
 
 #planCanvas {
 	display: inline-block;
 	position: absolute;
 	border: 1px solid black;
-	z-index = 3;
+	z-index: 3;
 }
 
 #moveCanvas {
 	display: inline-block;
 	position: absolute;
 	border: 1px solid black;
-	z-index = 4;
+	z-index: 4;
 }
 
 #mouseCanvas {
 	display: inline-block;
 	position: absolute;
 	border: 1px solid black;
-	z-index = 5;
+	z-index: 5;
+}
+
+.struct {
+	background-color: darkgreen;
+	color: white;
+	height: 20px;
+	font-size: 16px;
+
+}
+
+.structContainer {
+	display: inline-block;
+	width: 300px;
+	height: 400px;
+	position: relative;
+	color: white;
+	margin: auto;
+	border: 1px solid black;
+}
+
+.structDiv {
+	display: inline-block;
+	background-color: red;
+	position: absolute;
+	color: white;
+}
+
+.structTable {
+	width: 160px;
 }
 
 .weapon {
@@ -172,6 +201,7 @@ canvas {
 }
 
 .shipDiv {
+	width: 300px;
 	position: absolute;
 	border: 1px solid black;
 	border-radius: 5px;
@@ -187,7 +217,7 @@ canvas {
 	border-radius: 3px;
 }
 
-.shipDiv .weapons {
+.shipDiv .structure {
 	width: 140px;
 	border: 1px solid black;
 	border-radius: 3px;
@@ -195,7 +225,7 @@ canvas {
 
 .shipDiv th, td {
 	margin: auto;
-	text-align: left;
+	text-align: center;
 }
 
 .shortInfo {

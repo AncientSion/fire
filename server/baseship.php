@@ -12,7 +12,7 @@ class Ship {
 	public $y;
 	public $facing;
 	public $shipClass;
-	public $shipType;
+	public $shipType = "type";
 	public $userid;
 
 	public $name;

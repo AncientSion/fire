@@ -45,13 +45,15 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	}
 
 	this.draw = function(){
-		var size = this.size*cam.z * 0.8;
+		if (this.deployed){
+			var size = this.size*cam.z * 0.8;
 
-		ctx.save();
-		ctx.translate(this.x + cam.o.x, this.y + cam.o.y);
-		ctx.rotate(this.facing * (Math.PI/180));
-		ctx.drawImage(this.img, -size/2, -size/2, size, size);
-		ctx.restore();
+			ctx.save();
+			ctx.translate(this.x + cam.o.x, this.y + cam.o.y);
+			ctx.rotate(this.facing * (Math.PI/180));
+			ctx.drawImage(this.img, -size/2, -size/2, size, size);
+			ctx.restore();
+		}
 	}
 
 	this.animationSetup = function(){
@@ -257,8 +259,12 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		return false;
 	}
 
-	this.getWeaponById = function(id){
+	this.getSystemById = function(id){
 		for (var i = 0; i < this.structures.length; i++){
+			if (this.structures[i].id == id){
+				return this.structures[i];
+			}
+
 			for (var j = 0; j < this.structures[i].systems.length; j++){
 				if (this.structures[i].systems[j].id == id){
 					return this.structures[i].systems[j];
@@ -279,6 +285,29 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 				}
 			}
 		}
+	}
+
+	this.drawStructureAxis = function(struct){
+		fxCtx.clearRect(0, 0, res.x, res.y);
+
+		var angle = this.getPlannedFacingToMove(this.actions.length-1);
+		var pos = this.getOffsetPos();
+		var p1 = getPointInDirection(res.x, struct.start + angle, pos.x, pos.y);
+		var p2 = getPointInDirection(res.y, struct.end + angle, pos.x, pos.y)
+		var dist = getDistance( {x: pos.x, y: pos.y}, p1);
+		var rad1 = degreeToRadian(struct.start + angle);
+		var rad2 = degreeToRadian(struct.end + angle);
+		
+		fxCtx.beginPath();			
+		fxCtx.moveTo(pos.x, pos.y);
+		fxCtx.arc(pos.x, pos.y, dist, rad1, rad2, false);
+		fxCtx.closePath();
+		fxCtx.globalAlpha = 0.1;			
+		fxCtx.fillStyle = "red";
+		fxCtx.fill();
+		fxCtx.globalAlpha = 1;
+		fxCtx.strokeStyle = "black";
+		fxCtx.stroke();
 	}
 	
 	this.weaponHighlight = function(weapon){
@@ -335,11 +364,31 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 				moveCtx.arc(turn.clickX +20, turn.clickY, 7, 0, 2*Math.PI);
 				moveCtx.closePath(); moveCtx.fillStyle = "white"; moveCtx.fill(); moveCtx.stroke();
 				
-				drawText(moveCtx, "black", "+", 12, {x: turn.clickX-20, y: turn.clickY});
-				drawText(moveCtx, "black", "-", 12, {x: turn.clickX+20, y: turn.clickY});
+				drawText(moveCtx, "blue", "cost: " + Math.ceil(turn.cost*turn.costmod), 10, {x: p1.x, y: p1.y});
+				drawText(moveCtx, "blue", "delay; " + Math.ceil(turn.delay/turn.costmod), 10, {x: p1.x, y: p1.y+15});
 				
-				drawText(moveCtx, "blue", "cost: " + Math.ceil(turn.cost*turn.costmod), 10, turn.thrustTextLoc);
-				drawText(moveCtx, "blue", "delay; " + Math.ceil(turn.delay/turn.costmod), 10, {x: turn.thrustTextLoc.x, y: turn.thrustTextLoc.y+15});
+				if (this.canShortenTurn()){
+					moveCtx.beginPath();
+					moveCtx.arc(turnButton.x -20, turnButton.y, 7, 0, 2*Math.PI);
+					moveCtx.closePath(); moveCtx.fillStyle = "white"; moveCtx.fill(); moveCtx.stroke();
+					drawText(moveCtx, "black", "+", 12, {x: turnButton.x-20, y: turnButton.y});
+					
+					turn.thrustUp = {
+									clickX: turnButton.x-20, 
+									clickY: turnButton.y,
+									};
+				}
+				if (this.canUndoShortenTurn()){
+					moveCtx.beginPath();
+					moveCtx.arc(turnButton.x +20, turnButton.y, 7, 0, 2*Math.PI);
+					moveCtx.closePath(); moveCtx.fillStyle = "white"; moveCtx.fill(); moveCtx.stroke();
+					drawText(moveCtx, "black", "-", 12, {x: turnButton.x+20, y: turnButton.y});	
+					
+					turn.thrustDown = {
+								clickX: turnButton.x+20, 
+								clickY: turnButton.y,
+								}
+				}
 			}
 		}
 		else {
@@ -689,10 +738,18 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	}
 	
 	this.canShortenTurn = function(){
+		if (game.phase == -1){
+			return false;
+		}
+
 		return true;
 	}
 	
 	this.canUndoShortenTurn = function(){
+		if (game.phase == -1){
+			return false;
+		}
+		
 		return true;
 	}
 	
@@ -953,32 +1010,8 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		div.appendChild(table);
 
 
-		for (var i = 0; i < this.structures.length; i++){
-			
-			var table = document.createElement("table");
-				table.className = "weapons";
-			
-			/*this.weapons.sort(function(a, b){
-				if (a.name == b.name){
-					if (a.id > b.id){
-						return 1;
-					}
-				} else return -1;
-			})*/
-
-			table.appendChild(this.structures[i].getTableRow());
-
-			
-			for (var j = 0; j < this.structures[i].systems.length; j++){
-				var tr = this.structures[i].systems[j].getTableRow();
-				
-				table.appendChild(tr);
-			}
-			div.appendChild(table);
-		}
-
 		$(div).contextmenu(function(e){
-			e.preventDefault();
+			//e.preventDefault();
 		});
 
 		$(div).on('mousedown', $(this), function() {
@@ -996,6 +1029,53 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	    });
 			
 		document.getElementById("game").appendChild(div);
+
+		structContainer = document.createElement("div");
+		structContainer.className = "structContainer";	
+		div.appendChild(structContainer);
+
+		for (var i = 0; i < this.structures.length; i++){
+
+			var structDiv = document.createElement("div");
+				structDiv.className = "structDiv";
+				
+			var structTable = document.createElement("table");
+				structTable.className = "structTable";
+				$(structDiv).data("structureId", i);
+			
+			/*this.weapons.sort(function(a, b){
+				if (a.name == b.name){
+					if (a.id > b.id){
+						return 1;
+					}
+				} else return -1;
+			})*/
+
+			structTable.appendChild(this.structures[i].getTableRow());
+
+			for (var j = 0; j < this.structures[i].systems.length; j++){
+				var ele = this.structures[i].systems[j].getTableRow();
+				structTable.appendChild(ele);
+			}
+
+			structDiv.appendChild(structTable);
+			structContainer.appendChild(structDiv);
+			pWidth = $(structContainer).width();
+			pHeight = $(structContainer).height();
+
+			var a = this.structures[i].getDirection();
+			console.log(a);
+			var pos = getPointInDirection(120, addAngle(a, -90), pWidth/2, pHeight/2);
+			console.log(pos);
+			var w = $(structTable).width(); 
+			var h = $(structTable).height();
+
+			$(structDiv)
+				.data("id", this.structures[i].id)
+				.data("structureId", i)
+				.css("left", pos.x - w/2)
+				.css("top", pos.y - h/2)
+		}
 	}
 	
 	this.updateDiv = function(){
@@ -1070,7 +1150,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 				
 		if (div.className == "shipDiv disabled"){
 			div.className = "shipDiv";
-			$(div).css("left", this.x - 100).css("top", this.y + 100);
+			$(div).css("left", this.x + cam.o.x - 100).css("top", this.y + cam.o.y + 100);
 			if (shortInfo){
 				document.getElementById(shortInfo + "shortInfo").className = "shortInfo disabled";
 				shortInfo = false;
@@ -1249,195 +1329,4 @@ function Patrol(id, shipClass, x, y, facing, userid, color){
 	}
 }
 Patrol.prototype = Object.create(Ship.prototype);
-
-function Sharlin(id, shipClass, x, y, facing, userid, color){
-	this.faction = "Minbari Federation";
-	this.crew = 245;
-	this.pv = 2000;
-	this.ep = 850;
-	this.size = 100;
-	this.mass = 19000;
-	this.profile = [0.90, 1.15];
-	
-	this.addSystems = function(){
-	}
-
-	this.addStructures = function(){
-		var structs = [];
-
-		var left = new Structure(this.id, 240, 360, 7, 150);
-			left.systems.push(new NeutronLaser(this.id, 300, 60));
-			left.systems.push(new NeutronLaser(this.id, 300, 60));
-			left.systems.push(new FusionCannon(this.id, 240, 360));
-			left.systems.push(new FusionCannon(this.id, 240, 360));
-			structs.push(left);
-
-		var right = new Structure(this.id, 0, 120, 7, 150);
-			right.systems.push(new NeutronLaser(this.id, 300, 60));
-			right.systems.push(new NeutronLaser(this.id, 300, 60));
-			right.systems.push(new FusionCannon(this.id, 0, 120));
-			right.systems.push(new FusionCannon(this.id, 0, 120));
-			structs.push(right);
-
-		var aft = new Structure(this.id, 120, 240, 5, 120);
-			aft.systems.push(new NeutronLaser(this.id, 300, 60));
-			aft.systems.push(new NeutronLaser(this.id, 300, 60));
-			structs.push(aft);
-
-
-		for (var i = 0; i < structs.length; i++){
-			this.structures.push(structs[i]);
-		}
-	}
-
-		
-	Capital.call(this, id, shipClass, x, y, facing, userid, color);
-}
-Sharlin.prototype = Object.create(Capital.prototype);
-
-function Omega(id, shipClass, x, y, facing, userid, color){
-	this.faction = "Earth Alliance";
-	this.crew = 640;
-	this.pv = 1200;
-	this.ep = 550;
-	this.size = 80;
-	this.mass = 15000;
-	this.profile = [0.85, 1.10];
-	
-	this.addSystems = function(){
-	}
-
-	this.addStructures = function(){
-		var structs = [];
-
-		var left = new Structure(this.id, 240, 360, 7, 150);
-			left.systems.push(new NeutronLaser(this.id, 300, 60));
-			left.systems.push(new NeutronLaser(this.id, 300, 60));
-			left.systems.push(new FusionCannon(this.id, 240, 360));
-			left.systems.push(new FusionCannon(this.id, 240, 360));
-			structs.push(left);
-
-		var right = new Structure(this.id, 0, 120, 7, 150);
-			right.systems.push(new NeutronLaser(this.id, 300, 60));
-			right.systems.push(new NeutronLaser(this.id, 300, 60));
-			right.systems.push(new FusionCannon(this.id, 0, 120));
-			right.systems.push(new FusionCannon(this.id, 0, 120));
-			structs.push(right);
-
-		var aft = new Structure(this.id, 120, 240, 5, 120);
-			aft.systems.push(new NeutronLaser(this.id, 300, 60));
-			aft.systems.push(new NeutronLaser(this.id, 300, 60));
-			structs.push(aft);
-
-
-		for (var i = 0; i < structs.length; i++){
-			this.structures.push(structs[i]);
-		}
-	}
-		
-	Capital.call(this, id, shipClass, x, y, facing, userid, color);
-}
-
-Omega.prototype = Object.create(Capital.prototype);
-
-function Hyperion(id, shipClass, x, y, facing, userid, color){
-	this.faction = "Earth Alliance";
-	this.crew = 356;
-	this.pv = 900;
-	this.ep = 220;
-	this.size = 60;
-	this.mass = 8000;
-	
-	this.addSystems = function(){
-		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 360));
-		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 360));
-		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 360));
-		this.weapons.push(new HeavyLaser(this.weapons.length+1, this.id, 300, 360));
-		this.weapons.push(new HeavyLaser(this.weapons.length+1, this.id, 0, 60));
-	}
-		
-	HeavyAttack.call(this, id, shipClass, x, y, facing, userid, color);
-}
-Hyperion.prototype = Object.create(HeavyAttack.prototype);
-
-function Artemis(id, shipClass, x, y, facing, userid, color){
-	this.faction = "Earth Alliance";
-	this.crew = 120;
-	this.pv = 500;
-	this.ep = 90;
-	this.size = 50;
-	this.mass = 3000;
-	this.faction = "Earth Alliance";
-	
-	this.addSystems = function(){
-		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 180));
-		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 0, 180));
-		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 180, 360));
-		this.weapons.push(new StandardParticleBeam(this.weapons.length+1, this.id, 180, 360));
-		this.weapons.push(new ParticleCannon(this.weapons.length+1, this.id, 240, 360));
-		this.weapons.push(new ParticleCannon(this.weapons.length+1, this.id, 0, 120));
-		this.weapons.push(new ParticleCannon(this.weapons.length+1, this.id, 0, 360));
-	}
-		
-	Escort.call(this, id, shipClass, x, y, facing, userid, color);
-}
-Artemis.prototype = Object.create(Escort.prototype);
-
-function Primus(id, shipClass, x, y, facing, userid, color){
-	this.faction = "Centauri Republic";
-	this.crew = 550;
-	this.pv = 1300;
-	this.ep = 550;
-	this.size = 70;
-	this.mass = 12500;
-	
-	this.addSystems = function(){
-		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 240, 30));
-		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 240, 30));
-		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 240, 30));
-		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 330, 120));
-		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 330, 120));
-		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 330, 120));
-	}
-		
-	Capital.call(this, id, shipClass, x, y, facing, userid, color);
-}
-Primus.prototype = Object.create(Capital.prototype);
-
-function Demos(id, shipClass, x, y, facing, userid, color){
-	this.faction = "Centauri Republic";
-	this.crew = 84;
-	this.pv = 600;
-	this.ep = 70;
-	this.size = 45;
-	this.mass = 2250;
-	
-	this.addSystems = function(){
-		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 300, 120));
-		this.weapons.push(new LightParticleAccelerator(this.weapons.length+1, this.id, 240, 120));
-		this.weapons.push(new ParticleAccelerator(this.weapons.length+1, this.id, 240, 60));
-	}
-		
-	Escort.call(this, id, shipClass, x, y, facing, userid, color);
-}
-Demos.prototype = Object.create(Escort.prototype);
-
-function Haven(id, shipClass, x, y, facing, userid, color){
-	this.faction = "Centauri Republic";
-	this.crew = 40;
-	this.pv = 300;
-	this.ep = 25;
-	this.size = 45;
-	this.mass = 800;
-	
-	this.addSystems = function(){
-		this.weapons.push(new LightParticleAccelerator(this.weapons.length+1, this.id, 0, 270))
-		this.weapons.push(new LightParticleAccelerator(this.weapons.length+1, this.id, 90, 360));
-		this.weapons.push(new LightParticleAccelerator(this.weapons.length+1, this.id, 180, 90));
-		this.weapons.push(new LightParticleAccelerator(this.weapons.length+1, this.id, 270, 180));
-	}
-		
-	Patrol.call(this, id, shipClass, x, y, facing, userid, color);
-}
-Haven.prototype = Object.create(Patrol.prototype);
 

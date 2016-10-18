@@ -80,9 +80,10 @@ function FireOrder(shooterId, targetId, weaponId, dist){
 	this.gunRolls = [];
 }
 
-function Structure(parentId, start, end, armour, health, destroyed){
+function Structure(id, parentId, start, end, armour, health, destroyed){
 	this.name = "Structure";
-	this.id = window.getId();
+	this.display = "Structure";
+	this.id = id;
 	this.parentId = parentId;
 	this.start = start;
 	this.end = end;
@@ -90,20 +91,93 @@ function Structure(parentId, start, end, armour, health, destroyed){
 	this.health = health;
 	this.destroyed = destroyed || false;
 	this.systems = [];
+	this.highlight = false;
 
 	this.getTableRow = function(){
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
-			td.className = "structure";
+			td.className = "struct";
 			td.innerHTML = this.name + " #" + (this.id);
-			$(td).data("shipId", this.parentId);
-			$(td).data("structId", this.id);
-//			td.addEventListener("mouseenter", function(e){var shipId = $(this).data("shipId"); var structId = $(this).data("structId"); game.getShipById(shipId).weaponHoverIn(structId, e)});
-//			td.addEventListener("mouseleave", function(){var shipId = $(this).data("shipId"); var structId = $(this).data("structId"); game.getShipById(shipId).weaponHoverOut(structId)});
-//			td.addEventListener("click", function(){selectWeapon(this)});
+		$(td).data("shipId", this.parentId);
+		$(td).data("systemId", this.id);
+		$(td).hover(
+			function(e){
+				var shipId = $(this).data("shipId");
+				var systemId = $(this).data("systemId");
+				game.getShipById(shipId).getSystemById(systemId).hover();
+			},
+			function(e){
+				var shipId = $(this).data("shipId");
+				var systemId = $(this).data("systemId");
+				game.getShipById(shipId).getSystemById(systemId).hover();
+			}
+		)
+
 			tr.appendChild(td);
 			
 		return tr;
+	}
+
+	this.getDirection = function(){
+		var a = this.start;
+		var b = this.end;
+		var a;
+
+
+		if (a > b){
+		   c = a + b;
+		}
+		else {
+		   c = (a + b) / 2;
+		}
+
+		if (c == 360){
+			c = 0;
+		}
+
+		return c;
+	}
+
+
+	this.hover = function(){
+		if (this.highlight){
+			this.highlight = false;
+			game.getShipById(this.parentId).highlightAllSelectedWeapons();
+		}
+		else {
+			this.highlight = true;
+			this.showHitAxis();
+			//this.showInfoDiv();
+		}
+	}
+
+	this.showHitAxis = function(){
+		game.getShipById(this.parentId).drawStructureAxis(this);
+	}
+
+	this.showInfoDiv = function(){
+		var div = this.getWeaponDetailsDiv();
+		var parentId = this.parentId;
+		var id = this.id;
+		
+		var div = $(".shipDiv").each(function(i){
+			if ($(this).data("shipId") == parentId){
+				$(this).find(".weapon").each(function(j){
+					if ($(this).data("weaponId") == id){
+						var offset = $(this).offset();
+						div.style.top = offset.top + 0 + "px";
+						div.style.left = offset.left + 125 + "px";
+						$("#game").append(div);
+						return;
+					}
+				})
+			}
+		})
+	}
+	
+	this.hideInfoDiv = function(){
+		var div = document.getElementById("weaponDetailsDiv");
+			$(div).remove();
 	}
 
 }

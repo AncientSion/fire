@@ -107,6 +107,11 @@ if (isset($_SESSION["userid"])){
 			<div id ="deployWrapper" class="disabled">
 				<table id="deployTable">
 					<tr>
+						<th style="font-size: 18px;" colSpan=4>
+							Available Vessels
+						</th>
+					</tr>
+					<tr>
 						<th  width="50%" colSpan="2">
 							Class
 						</th>

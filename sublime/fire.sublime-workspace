@@ -4,20 +4,24 @@
 		"selected_items":
 		[
 			[
-				"jso",
-				"JSON"
+				"hight",
+				"highlightAllSelectedWeapons"
 			],
 			[
-				"gets",
-				"getShipsForFaction"
+				"getRe",
+				"getRemainingEP"
 			],
 			[
-				"showSHi",
-				"showShipList"
+				"atan",
+				"atan2"
 			],
 			[
-				"JSON",
-				"json_encode"
+				"getBa",
+				"getBaseOffsetPos"
+			],
+			[
+				"getTurn",
+				"getTurnStartFacing"
 			],
 			[
 				"spee",
@@ -30,6 +34,10 @@
 			[
 				"JS",
 				"json_decode"
+			],
+			[
+				"JSON",
+				"json_encode"
 			],
 			[
 				"drawSh",
@@ -352,7 +360,6 @@
 			"settings":
 			{
 				"buffer_size": 6266,
-				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
@@ -368,8 +375,7 @@
 			"file": "/C/xampp/htdocs/fire/classes.js",
 			"settings":
 			{
-				"buffer_size": 2525,
-				"encoding": "UTF-8",
+				"buffer_size": 3650,
 				"line_ending": "Windows"
 			}
 		},
@@ -378,70 +384,14 @@
 			"settings":
 			{
 				"buffer_size": 2139,
-				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/C/xampp/htdocs/fire/shared.js",
+			"file": "/C/xampp/htdocs/fire/imageloader.js",
 			"settings":
 			{
-				"buffer_size": 1186,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/xampp/htdocs/fire/shipclasses.js",
-			"settings":
-			{
-				"buffer_size": 40166,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/xampp/htdocs/fire/style.css",
-			"settings":
-			{
-				"buffer_size": 4725,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/xampp/htdocs/fire/systems.js",
-			"settings":
-			{
-				"buffer_size": 12112,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/xampp/htdocs/fire/game.php",
-			"settings":
-			{
-				"buffer_size": 3845,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/xampp/htdocs/fire/game.js",
-			"settings":
-			{
-				"buffer_size": 23715,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/xampp/htdocs/fire/gameManager.php",
-			"settings":
-			{
-				"buffer_size": 10234,
-				"encoding": "UTF-8",
+				"buffer_size": 1181,
 				"line_ending": "Windows"
 			}
 		},
@@ -450,16 +400,88 @@
 			"settings":
 			{
 				"buffer_size": 3235,
-				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/C/xampp/htdocs/fire/script.js",
+			"file": "/C/xampp/htdocs/fire/shared.js",
 			"settings":
 			{
-				"buffer_size": 12436,
-				"encoding": "UTF-8",
+				"buffer_size": 1186,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/fire/shipclasses.js",
+			"settings":
+			{
+				"buffer_size": 35996,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Searching 29 files for \"new sh\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  231  			//function Ship(id, shipClass, x, y, facing, userid, color){\n  232  \n  233: 			var ship = new Ship(\n  234  								window.ships[i].id,\n  235  								window.ships[i].shipClass,\n\nC:\\xampp\\htdocs\\fire\\gameSetup.php:\n  387  		document.getElementById(\"game\").innerHTML = \"\";\n  388  \n  389: 		var ship = new Ship(\n  390  							data.id,\n  391  							data.shipClass,\n\n2 matches across 2 files\n\n\nSearching 29 files for \"canIncreaseImpulse\"\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  671  	}\n  672  		\n  673: 	this.canIncreaseImpulse = function(){\n  674  		if (this.getRemainingEP() >= this.getImpulseChangeCost()){\n  675  			if (this.actions.length == 1){\n  ...\n  801  			*/\n  802  						\n  803: 		if (this.canIncreaseImpulse()){\n  804  			var plus = {x: p.x-25, y: p.y+54};			\n  805  			this.impulseAdjust.push({clickX: plus.x, clickY: plus.y, type: \"+\", cost: this.getImpulseChangeCost()});\n\n2 matches in 1 file\n\n\nSearching 29 files for \"canincreasei\"\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  673  	}\n  674  		\n  675: 	this.canIncreaseImpulse = function(){\n  676  		if (this.getRemainingEP() >= this.getImpulseChangeCost()){\n  677  			if (this.actions.length == 1){\n  ...\n  803  			*/\n  804  						\n  805: 		if (this.canIncreaseImpulse()){\n  806  			var plus = {x: p.x-25, y: p.y+54};			\n  807  			this.impulseAdjust.push({clickX: plus.x, clickY: plus.y, type: \"+\", cost: this.getImpulseChangeCost()});\n\n2 matches in 1 file\n\n\nSearching 29 files for \"drawImpulseUI\"\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  766  	}\n  767  	\n  768: 	this.drawImpulseUI = function(){\n  769  	\n  770  		this.impulseAdjust = [];\n  ...\n 1124  			this.drawMoveRange();\n 1125  			this.drawImpulseIndicator();\n 1126: 			this.drawImpulseUI();\n 1127  			this.drawMovePlan();\n 1128  \n\n2 matches in 1 file\n\n\nSearching 29 files for \"nope\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  135  							ajax.confirmDeployment();\n  136  						}\n  137: 						else console.log(\"nope\");\n  138  					}).mouseenter(function(){\n  139  						$(this).addClass(\"selected\");\n\n1 match in 1 file\n\n\nSearching 29 files for \"dragg\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n   48  	this.initDeployment = function(){\n   49  		//console.log(\"ding\");\n   50: 		//	$(\"#deployWrapper\").draggable();\n   51  		$(\"#deployWrapper\").on('mousedown', $(this), function() {\n   52:         $(this).addClass('draggable').parents().on('mousemove', function(e) {\n   53:             $('.draggable').offset({\n   54:                 top: e.pageY - $('.draggable').outerHeight() / 2,\n   55:                 left: e.pageX - $('.draggable').outerWidth() / 2\n   56              }).on('mouseup', function() {\n   57:                 $(this).removeClass('draggable');\n   58              });\n   59          });\n   60      }).on('mouseup', function() {\n   61:         $('.draggable').removeClass('draggable');\n   62      });\n   63  \n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 1013  \n 1014  		$(div).on('mousedown', $(this), function() {\n 1015:         $(this).addClass('draggable').parents().on('mousemove', function(e) {\n 1016:             $('.draggable').offset({\n 1017:                 top: e.pageY - $('.draggable').outerHeight() / 2,\n 1018:                 left: e.pageX - $('.draggable').outerWidth() / 2\n 1019              }).on('mouseup', function() {\n 1020:                 $(this).removeClass('draggable');\n 1021              });\n 1022          });\n 1023          //e.preventDefault();\n 1024  	    }).on('mouseup', function() {\n 1025: 	        $('.draggable').removeClass('draggable');\n 1026  	    });\n 1027  			\n\n15 matches across 2 files\n\n\nSearching 29 files for \"function s\"\n\nC:\\xampp\\htdocs\\fire\\classes.js:\n   81  }\n   82  \n   83: function Structure(parentId, start, end, armour, health, destroyed){\n   84  	this.name = \"Structure\";\n   85  	this.id = window.getId();\n\nC:\\xampp\\htdocs\\fire\\dbManager.php:\n  269  	}\n  270  \n  271: 	public function startGame($gameid){\n  272  \n  273  		$players = $this->getPlayersInGame($gameid);\n  ...\n  319  	}\n  320  \n  321: 	public function setShipStatus($shipid, $status){\n  322  		$stmt = $this->connection->prepare(\"\n  323  			UPDATE ships \n  ...\n  471  	}\n  472  \n  473: 	public function setPlayerstatus($userid, $gameid, $turn, $phase, $status){\n  474  		debug::log(\"setPlayerstatus\");\n  475  \n  ...\n  903  \n  904  \n  905: 	public function setGameTurn($turn){\n  906  \n  907  		$stmt = $this->connection->prepare(\"\n  ...\n  921  	}\n  922  \n  923: 	public function setGamePhase($gameid, $phase){\n  924  \n  925  		$stmt = $this->connection->prepare(\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  229  			}\n  230  \n  231: 			//function Ship(id, shipClass, x, y, facing, userid, color){\n  232  \n  233  			var ship = new Ship(\n  ...\n  252  \n  253  \n  254: 			//function Structure(parentId, start, end, armour, health){\n  255  			for (var j = 0; j < window.ships[i].structures.length; j++){\n  256  				var struct = new Structure(\n  ...\n  263  										);\n  264  \n  265: 				//function StandardParticleBeam(parentId, arc1, arc2){\n  266  				for (var k = 0; k < window.ships[i].structures[j].systems.length; k++){\n  267  					var system = new window[window.ships[i].structures[j].systems[k].name](\n\nC:\\xampp\\htdocs\\fire\\gameManager.php:\n  166  	}\n  167  \n  168: 	public function startDeploymentPhase(){\n  169  		Debug::log(\"startDeploymentPhase\");\n  170  		$dbManager = DBManager::app();\n  ...\n  197  \n  198  \n  199: 	public function startMovementPhase(){\n  200  		Debug::log(\"startMovementPhase\");\n  201  		$dbManager = DBManager::app();\n  ...\n  227  	}\n  228  	\n  229: 	public function startFiringPhase(){\n  230  		Debug::log(\"startFiringPhase\");\n  231  		$dbManager = DBManager::app();\n  ...\n  357  	}\n  358  \n  359: 	public function startDamageControlPhase(){\n  360  		Debug::log(\"startDamageControlPhase\");\n  361  \n\nC:\\xampp\\htdocs\\fire\\gameSetup.php:\n  383  	}\n  384  \n  385: 	function showShipPreview(data){\n  386  		data  = JSON.parse(data);\n  387  		document.getElementById(\"game\").innerHTML = \"\";\n  ...\n  461  	}\n  462  \n  463: 	function showShipList(shiplist, ele){\n  464  		shiplist = JSON.parse(shiplist);\n  465  		if (!shiplist[0].length){\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n    1: function Ship(id, shipClass, x, y, facing, userid, color){\n    2  	this.id = id;\n    3  	this.shipClass = shipClass;\n    .\n 1281  Patrol.prototype = Object.create(Ship.prototype);\n 1282  \n 1283: function Sharlin(id, shipClass, x, y, facing, userid, color){\n 1284  	this.faction = \"Minbari Federation\";\n 1285  	this.crew = 245;\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n    1: function System(parentId, arc1, arc2){\n    2  	this.id = getId();\n    3  	this.parentId = parentId;\n    .\n  370  \n  371  \n  372: function StandardParticleBeam(parentId, arc1, arc2){\n  373  	Particle.call(this, parentId, arc1, arc2);\n  374  	this.name = \"StandardParticleBeam\";\n\n19 matches across 7 files\n\n\nSearching 29 files for \"getTableRow\"\n\nC:\\xampp\\htdocs\\fire\\classes.js:\n   92  	this.systems = [];\n   93  \n   94: 	this.getTableRow = function(){\n   95  		var tr = document.createElement(\"tr\");\n   96  		var td = document.createElement(\"td\");\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  997  			})*/\n  998  \n  999: 			table.appendChild(this.structures[i].getTableRow());\n 1000  \n 1001  			\n 1002  			for (var j = 0; j < this.structures[i].systems.length; j++){\n 1003: 				var tr = this.structures[i].systems[j].getTableRow();\n 1004  				\n 1005  				table.appendChild(tr);\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n   27  	}\n   28  	\n   29: 	this.getTableRow = function(){\n   30  		var tr = document.createElement(\"tr\");\n   31  		var td = document.createElement(\"td\");\n\n4 matches across 3 files\n\n\nSearching 11 files for \"new sys\"\n\n0 matches\n\nSearching 11 files for \"new win\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  265  				//function StandardParticleBeam(parentId, arc1, arc2){\n  266  				for (var k = 0; k < window.ships[i].structures[j].systems.length; k++){\n  267: 					var system = new window[window.ships[i].structures[j].systems[k].name](\n  268  																						window.ships[i].id, \n  269  																						window.ships[i].structures[j].systems[k].start,\n\n1 match in 1 file\n\n\nSearching 11 files for \"shipId\"\n\nC:\\xampp\\htdocs\\fire\\classes.js:\n   99  			td.className = \"weapon\";\n  100  			td.innerHTML = this.name + \" #\" + (this.id);\n  101: 		$(td).data(\"shipId\", this.parentId);\n  102  		$(td).data(\"systemId\", this.id);\n  103  		$(td).hover(\n  104  			function(e){\n  105: 				var shipId = $(this).data(\"shipId\");\n  106  				var systemId = $(this).data(\"systemId\");\n  107: 				game.getShipById(shipId).getSystemById(systemId).hover();\n  108  			},\n  109  			function(e){\n  110: 				var shipId = $(this).data(\"shipId\");\n  111  				var systemId = $(this).data(\"systemId\");\n  112: 				game.getShipById(shipId).getSystemById(systemId).hover();\n  113  			}\n  114  		)\n  ...\n  142  		\n  143  		var div = $(\".shipDiv\").each(function(i){\n  144: 			if ($(this).data(\"shipId\") == parentId){\n  145  				$(this).find(\".weapon\").each(function(j){\n  146  					if ($(this).data(\"weaponId\") == id){\n\nC:\\xampp\\htdocs\\fire\\game.js:\n   78  			for (var i = 0; i < toDo.length; i++){\n   79  				var tr = document.createElement(\"tr\");				\n   80: 					$(tr).data(\"shipid\", toDo[i].id).click(function(e){\n   81  						//console.log($(this).data());\n   82  						e.preventDefault();\n   83  						e.stopPropagation();\n   84  \n   85: 						if (game.deploying == $(this).data(\"shipid\")){\n   86  							$(this).toggleClass(\"selected\");\n   87  							//game.mode = false;\n   ..\n   91  							$(this).toggleClass(\"selected\");\n   92  							//game.mode = -1;\n   93: 							game.deploying = $(this).data(\"shipid\");\n   94  						}\n   95  						else {\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n   35  window.index = 0;\n   36  \n   37: function getShipId(){\n   38  	return (game.ships.length+1);\n   39  }\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  128  			this.deployed = true;\n  129  \n  130: 			var shipId = this.id;\n  131  			var table = $(\"#deployTable\").find(\"tr\").each(function(i){\n  132: 				if ($(this).data(\"shipid\") == shipId){\n  133  					$(this).remove();\n  134  					return;\n  ...\n  961  		var div = document.createElement(\"div\");\n  962  			div.className = \"shipDiv disabled\";\n  963: 			$(div).data(\"shipId\", this.id);\n  964  		\n  965  		var table = document.createElement(\"table\");\n  ...\n 1060  		\n 1061  		for (var i = 0; i < divs.length; i++){\n 1062: 			if ($(divs[i]).data(\"shipId\") == this.id){\n 1063  				var divs = divs[i];\n 1064  				break;\n ....\n 1120  		\n 1121  		for (var i = 0; i < div.length; i++){\n 1122: 			if (this.id == $(div[i]).data(\"shipId\")){\n 1123  				div = div[i];\n 1124  				break;\n ....\n 1243  			\n 1244  			for (var i = 0; i < divs.length; i++){\n 1245: 				if ($(divs[i]).data(\"shipId\") == this.id){\n 1246  					divs = divs[i];\n 1247  					break;\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n   29  			td.className = \"weapon\";\n   30  			td.innerHTML = this.name + \" #\" + (this.id);\n   31: 			$(td).data(\"shipId\", this.parentId);\n   32  			$(td).data(\"systemId\", this.id);\n   33  			$(td).hover(\n   34  				function(e){\n   35: 					var shipId = $(this).data(\"shipId\");\n   36  					var systemId = $(this).data(\"systemId\");\n   37: 					game.getShipById(shipId).getSystemById(systemId).hover();\n   38: 					game.getShipById(shipId).highlightAllSelectedWeapons();\n   39  				},\n   40  				function(e){\n   41: 					var shipId = $(this).data(\"shipId\");\n   42  					var systemId = $(this).data(\"systemId\");\n   43: 					game.getShipById(shipId).getSystemById(systemId).hover();\n   44: 					game.getShipById(shipId).highlightAllSelectedWeapons();\n   45  				}\n   46  			).click(\n   47  				function(){\n   48: 					var shipId = $(this).data(\"shipId\");\n   49  					var systemId = $(this).data(\"systemId\");\n   50: 					game.getShipById(shipId).getSystemById(systemId).select();\n   51  				}\n   52  			);\n   ..\n   63  \n   64  		var ele = $(\".shipDiv\").each(function(){\n   65: 			if ($(this).data(\"shipId\") == parentId){\n   66  				$(this).find(\".weapon\").each(function(){\n   67  					if ($(this).data(\"systemId\") == id){\n   ..\n  168  		\n  169  		var div = $(\".shipDiv\").each(function(i){\n  170: 			if ($(this).data(\"shipId\") == parentId){\n  171  				$(this).find(\".weapon\").each(function(j){\n  172  					if ($(this).data(\"weaponId\") == id){\n  ...\n  194  		\n  195  		var div = $(\".shipDiv\").each(function(i){\n  196: 			if ($(this).data(\"shipId\") == parentId){\n  197  				$(this).find(\".weapon.selected\").each(function(j){\n  198  					if ($(this).data(\"weaponId\") == weaponId){\n\n34 matches across 5 files\n\n\nSearching 11 files for \".css\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  143  				var th = document.createElement(\"th\");\n  144  					th.colSpan = 4; \n  145: 					$(th).css(\"padding\", 5).css(\"fontSize\", 15)\n  146  \n  147  					th.innerHTML = \"Confirm Deployment\";\n\nC:\\xampp\\htdocs\\fire\\graphics.js:\n   16  \n   17  	$(\"#vectorDiv\").html(\"Distance: \" + dist + \" </br>Angle: \" + Math.round(angle))\n   18: 	.css(\"left\", pos.x - 45 + \"px\")\n   19: 	.css(\"top\", pos.y - 60 + \"px\")\n   20  	.removeClass(\"disabled\");\n   21  }\n\nC:\\xampp\\htdocs\\fire\\script.js:\n   43  \n   44  \n   45: 	$(\"#phaseSwitchDiv\").css(\"width\", res.x).css(\"height\", res.y);\n   46  	\n   47  	canvas = canv[0];\n   ..\n  224  			if (validWeapon){\n  225  				$(wrapper)\n  226: 				.css(\"left\", pos.x - 140)\n  227: 				.css(\"top\", pos.y + 70)\n  228  				.show();\n  229  			}\n  ...\n  235  	else if (game.deploying){\n  236  		$(\"#deployOverlay\").html(\"Deploy craft </br> at curser position\")\n  237: 		.css(\"left\", pos.x - 30 + \"px\")\n  238: 		.css(\"top\", pos.y + 40 + \"px\")\n  239  		.show();\n  240  	}\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 1129  		if (div.className == \"shipDiv disabled\"){\n 1130  			div.className = \"shipDiv\";\n 1131: 			$(div).css(\"left\", this.x + cam.o.x - 100).css(\"top\", this.y + cam.o.y + 100);\n 1132  			if (shortInfo){\n 1133  				document.getElementById(shortInfo + \"shortInfo\").className = \"shortInfo disabled\";\n\n12 matches across 4 files\n",
+			"settings":
+			{
+				"buffer_size": 13932,
+				"line_ending": "Windows",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/fire/systems.js",
+			"settings":
+			{
+				"buffer_size": 8951,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/fire/style.css",
+			"settings":
+			{
+				"buffer_size": 5118,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/fire/game.php",
+			"settings":
+			{
+				"buffer_size": 3949,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/fire/game.js",
+			"settings":
+			{
+				"buffer_size": 25354,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/fire/server/baseship.php",
+			"settings":
+			{
+				"buffer_size": 1834,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/fire/server/ships/omega.php",
+			"settings":
+			{
+				"buffer_size": 2191,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/fire/server/ships/sharlin.php",
+			"settings":
+			{
+				"buffer_size": 1780,
 				"line_ending": "Windows"
 			}
 		},
@@ -468,7 +490,22 @@
 			"settings":
 			{
 				"buffer_size": 512,
-				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/fire/gameManager.php",
+			"settings":
+			{
+				"buffer_size": 10234,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/fire/script.js",
+			"settings":
+			{
+				"buffer_size": 12436,
 				"line_ending": "Windows"
 			}
 		},
@@ -476,9 +513,32 @@
 			"file": "/C/xampp/htdocs/fire/log.txt",
 			"settings":
 			{
-				"buffer_size": 0,
-				"encoding": "UTF-8",
+				"buffer_size": 6290,
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/fire/server/systems/systems.php",
+			"settings":
+			{
+				"buffer_size": 1555,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/fire/server/systems/weapons/laser.php",
+			"settings":
+			{
+				"buffer_size": 1164,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/fire/server/systems/weapons/particle.php",
+			"settings":
+			{
+				"buffer_size": 842,
+				"line_ending": "Windows"
 			}
 		},
 		{
@@ -486,7 +546,6 @@
 			"settings":
 			{
 				"buffer_size": 19175,
-				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
@@ -503,7 +562,14 @@
 			"settings":
 			{
 				"buffer_size": 6321,
-				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/xampp/htdocs/fire/gameSetup.php",
+			"settings":
+			{
+				"buffer_size": 13707,
 				"line_ending": "Windows"
 			}
 		},
@@ -516,20 +582,10 @@
 			}
 		},
 		{
-			"file": "/C/xampp/htdocs/fire/gameSetup.php",
-			"settings":
-			{
-				"buffer_size": 13707,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "/C/xampp/htdocs/fire/postGameData.php",
 			"settings":
 			{
 				"buffer_size": 2145,
-				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
@@ -538,61 +594,6 @@
 			"settings":
 			{
 				"buffer_size": 893,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/xampp/htdocs/fire/server/baseship.php",
-			"settings":
-			{
-				"buffer_size": 1825,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/xampp/htdocs/fire/server/ships/sharlin.php",
-			"settings":
-			{
-				"buffer_size": 1782,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/xampp/htdocs/fire/server/ships/omega.php",
-			"settings":
-			{
-				"buffer_size": 1705,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/xampp/htdocs/fire/server/systems/systems.php",
-			"settings":
-			{
-				"buffer_size": 1510,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/xampp/htdocs/fire/server/systems/weapons/laser.php",
-			"settings":
-			{
-				"buffer_size": 752,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/xampp/htdocs/fire/server/systems/weapons/particle.php",
-			"settings":
-			{
-				"buffer_size": 487,
-				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		}
@@ -646,13 +647,11 @@
 	},
 	"file_history":
 	[
-		"/C/xampp/htdocs/fire/imageloader.js",
-		"/C/xampp/htdocs/fire/include.php",
-		"/C/xampp/htdocs/fire/server/systems/weapons/laser.php",
 		"/C/xampp/htdocs/fire/server/systems/laser.php",
 		"/C/xampp/htdocs/fire/server/systems/particle.php",
-		"/C/xampp/htdocs/fire/server/systems/systems",
+		"/C/xampp/htdocs/fire/server/ships/omega.php",
 		"/C/xampp/htdocs/fire/logout.php",
+		"/C/xampp/htdocs/fire/log.txt",
 		"/C/xampp/htdocs/fire/debug.php",
 		"/C/xampp/htdocs/fire/jquery-2.1.1.min.js",
 		"/C/xampp/htdocs/fire/jquery-ui.js",
@@ -773,7 +772,9 @@
 		"/H/ajax/index.html",
 		"/H/ajax/script.js",
 		"/C/Users/Chris/AppData/Roaming/Sublime Text 3/Packages/Emmet/Emmet.sublime-settings",
-		"/D/MoO3/Autobuild.txt"
+		"/D/MoO3/Autobuild.txt",
+		"/H/SpaceSim/script.js",
+		"/H/SpaceSim/style.css"
 	],
 	"find":
 	{
@@ -784,30 +785,26 @@
 		"height": 90.0,
 		"where_history":
 		[
+			"*.js",
 			"",
-			"*.php",
-			".php",
-			"php",
-			"",
-			"sharlin.php",
-			"sharlin",
-			"omega.php",
-			"",
-			"*.php",
+			"systems.js",
 			"",
 			"*.js",
 			"",
-			"laser.php",
-			"particle.php",
-			"particle.js",
+			"game.js",
+			"",
+			"game.js",
+			"*.js",
+			"",
+			"shipclasses.js",
 			"",
 			"*.php",
+			"",
+			"shipclasses.js",
+			"shipclass.js",
 			"*.js",
-			".js",
 			"",
-			"addAngle",
-			"",
-			"dbmanager.php",
+			"$this->gamedata[\"ships\"];",
 			"",
 			"style.css",
 			"",
@@ -828,134 +825,134 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"handleFiringPhase",
-			"createShips",
-			"getAllShipsForGame",
-			"getGameData",
-			"doAdvanceGameState",
-			"getShips",
-			"this->ships",
-			"getships",
-			"getGameData",
-			"getShips",
-			"getships",
-			"handleFiringPhase",
-			"shippre",
-			"contextmenu",
-			"requestsh",
-			"draggable",
-			"305",
-			"canvas",
-			"400",
-			"\"game\"",
-			"game",
-			"drawShipForPreview",
-			"new omega",
-			"src",
-			"preview",
-			"Structure",
-			"window.ships[i].",
-			"createShips",
-			"getGameData",
-			"new",
-			"*",
-			"new",
-			"new ",
-			"requestShipData",
-			"new ship",
-			"requestsh",
-			"requestShipData",
-			"showship",
-			"showShipData",
-			"requestShipData",
-			"shippreview",
-			"creategame",
-			"refresh",
-			"creategame",
-			"this.turns.p",
-			"turns",
-			"deploy",
-			"deploy su",
-			"deploy succ",
-			"setFacing",
-			"issue",
-			"this.facing",
-			"this.draw = ",
-			"new ship",
-			"initDeployment",
-			"initDeployment\ninitDeployment",
-			"initDeployment",
-			"initDeployment#",
-			"getPlayersInGame",
-			"refresh",
-			"join game",
-			"getGameAndPlayerStatus",
-			"leavegame",
-			"buyFleet",
-			"redirect",
-			"processEcho",
-			"start",
-			"getGameAndPlayerStatus",
-			"shipClass",
-			"shipclass",
-			"requestShipsForFaction",
-			"requestShipsForFaction\n",
-			"requestsh",
-			"subTable",
-			"new window",
-			"json_encode",
-			"requestShipsForFaction",
-			"showShipList",
-			"requestShipsForFaction",
-			"showShipList",
-			"showship",
-			"preloadFactions",
-			"preload",
-			"factions(",
-			"requestShipsForFaction",
-			"earth",
-			"requestShipData",
-			"requestShipData\n",
-			"(function",
-			"\"name",
-			"click",
-			"src",
+			"200",
+			"shipdiv",
+			"createDiv",
+			"creatediv\ncreateDiv",
+			"creatediv",
+			"hover",
+			".css",
+			"shipdiv",
+			"weapon",
+			"shipId",
+			"new win",
+			"new sys",
+			"drawArc",
+			"var",
+			"highlightAllSelectedWeapons\nhighlightAllSelectedWeapons",
+			"highlightAllSelectedWeapons",
+			"hover",
+			"getWeaponById",
+			"getTableRow",
+			"function s",
+			"dragg",
+			"nope",
+			"drawImpulseUI",
+			"canincreasei",
+			"this.draw",
+			"canIncreaseImpulse",
+			"canIncreaseImpulse++",
+			"canIncreaseImpulse",
+			"adjust",
+			"canShortenTurn",
+			"new sh",
 			"img",
-			"draggable",
-			"jquery",
-			"ui",
-			"draggable",
-			"struct",
-			"img =",
-			"img ?=",
-			"this.getbasehitchance",
+			"request",
+			"highlightAllSelectedWeapons",
+			"highlightAllSelectedWeapons\n",
+			"selectw",
+			"select",
+			"seelct",
+			"highlightAllSelectedWeapons",
+			"hover",
+			"getWeaponDetailsDiv",
+			"showInfoDiv",
+			"weaponhover",
+			"weaponHighlight",
+			"getRealPos",
+			"hover",
+			"gettabler",
+			"getTableRow",
+			"creatediv",
+			"structures.p",
+			"(this, id, ",
+			"(id, ",
+			"getRemainingEP",
+			"new window",
+			"createDiv",
+			"createDiv\n",
+			"this.createDiv",
+			"drawImpulseIndicator",
+			"game.phase == 3",
+			"\"red\"",
+			"drawMovePlan",
+			"drawmoveplan",
+			"creatediv",
+			"animate",
+			"creatediv",
+			"function omega",
+			"addsystems",
+			"addwe",
+			"addWeapons",
+			"addsystems",
+			"this.addsystems",
+			"add",
 			"addSystems",
-			"222",
-			"getAllShipsForGame",
+			"addsystem",
+			"addStructure",
+			"addWeapons",
+			"this.weapons.p",
+			"this.weapons",
 			"new window",
+			"new",
 			"getAllShipsForGame",
-			"getId",
-			"include",
-			"($this->id, ",
-			"new window",
-			"getGameStatus",
-			"getgamestatus",
-			"getAllFireOrders",
-			"canAdvanceGameState",
-			"getGameDetails",
-			"join",
-			"inner",
-			"getGameStatus",
+			"getActionsForShips",
+			"getAllShipsForGame",
 			"getGameData",
-			"weapons[i",
-			"select()",
-			"selectWeapon",
-			"weapons[i]",
-			"selectW",
-			"hasWeaponsSelected",
-			"unsetWeapons",
-			"this.select",
-			"canvasMouseMove"
+			"canAdvanceGameState",
+			"getgamedata",
+			"reload = 1",
+			"reload",
+			"weapon",
+			"fireOrders",
+			"this.create",
+			"splice",
+			"fireorders",
+			"fireOrders",
+			"fireorders",
+			"time",
+			"timened",
+			"createlogentry",
+			"combatLog",
+			"log",
+			"handlemove",
+			"gui",
+			"fire[i]",
+			"fire.push",
+			"fire",
+			"\"done\"",
+			"getshot",
+			"weaponId",
+			"initDamageC",
+			"fireOrders",
+			"startnewturn",
+			"fireOrders",
+			"new window",
+			"\"ships\"",
+			"getTurnStartPosition",
+			"this.draw =",
+			"this.draw",
+			"getOffsetPos",
+			"getOffsetPos\n",
+			"getbase",
+			"new wind",
+			"new",
+			"this.draw",
+			"game.phase == 2",
+			"new window",
+			"if (this.dep",
+			", color);",
+			", color){"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -963,13 +960,20 @@
 		"regex": false,
 		"replace_history":
 		[
-			"data.",
-			"($this->getId(), $this->id, ",
-			"public $",
+			"getSystemById",
+			"(this, ",
 			"(",
-			"",
-			"addAngle",
-			"",
+			"addSystems",
+			"this.fireOrders",
+			"fireOrders[i]",
+			"weaponid",
+			", color, deployed);",
+			", color, deployed){",
+			"($parentid, ",
+			"($userid, ",
+			" ",
+			"(this.weapons.length+1, this.id, ",
+			"$this->gamedata[\"ships\"];",
 			"z-index",
 			"pos.x\npos.x",
 			"pos.x\npos.y",
@@ -1009,8 +1013,8 @@
 						"selection":
 						[
 							[
-								6260,
-								6260
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1019,10 +1023,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4976.0,
+						"translation.y": 1815.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
@@ -1038,8 +1042,8 @@
 						"selection":
 						[
 							[
-								851,
-								851
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1048,10 +1052,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 324.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
@@ -1060,15 +1064,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2525,
+						"buffer_size": 3650,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1756,
-								1756
+								2690,
+								2690
 							]
 						],
 						"settings":
@@ -1077,7 +1081,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 36.0,
+						"translation.y": 1658.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 8,
@@ -1096,6 +1100,35 @@
 						"selection":
 						[
 							[
+								476,
+								476
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 23,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/C/xampp/htdocs/fire/imageloader.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1181,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
 								0,
 								0
 							]
@@ -1109,509 +1142,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "/C/xampp/htdocs/fire/shared.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1186,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								26,
-								29
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
 					"buffer": 5,
-					"file": "/C/xampp/htdocs/fire/shipclasses.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 40166,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								27023,
-								27056
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 17280.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "/C/xampp/htdocs/fire/style.css",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4725,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1247,
-								1247
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
-							],
-							"syntax": "Packages/CSS/CSS.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1030.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "/C/xampp/htdocs/fire/systems.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 12112,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								10265,
-								10318
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 6138.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 24,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "/C/xampp/htdocs/fire/game.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3845,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								887,
-								925
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
-							],
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 171.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "/C/xampp/htdocs/fire/game.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 23715,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5666,
-								5666
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 3817.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "/C/xampp/htdocs/fire/gameManager.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 10234,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								6329,
-								6329
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
-							],
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 4665.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 11,
 					"file": "/C/xampp/htdocs/fire/mathLib.js",
 					"semi_transient": false,
 					"settings":
@@ -1623,152 +1158,29 @@
 						"selection":
 						[
 							[
-								1614,
-								1614
+								226,
+								0
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1181.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 25,
-					"type": "text"
-				},
-				{
-					"buffer": 12,
-					"file": "/C/xampp/htdocs/fire/script.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 12436,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								7490,
-								7490
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 4500.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 15,
-					"type": "text"
-				}
-			]
-		},
-		{
-			"selected": 1,
-			"sheets":
-			[
-				{
-					"buffer": 13,
-					"file": "/C/xampp/htdocs/fire/server/math.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 512,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								488,
-								488
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 14,
-					"file": "/C/xampp/htdocs/fire/log.txt",
+					"buffer": 6,
+					"file": "/C/xampp/htdocs/fire/shared.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 0,
+						"buffer_size": 1186,
 						"regions":
 						{
 						},
@@ -1781,18 +1193,876 @@
 						],
 						"settings":
 						{
-							"BracketHighlighterBusy": false,
-							"syntax": "Packages/Text/Plain text.tmLanguage"
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 315.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "/C/xampp/htdocs/fire/shipclasses.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 35996,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								29684,
+								29684
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 15737.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 13932,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										163,
+										169
+									],
+									[
+										372,
+										378
+									],
+									[
+										578,
+										596
+									],
+									[
+										771,
+										789
+									],
+									[
+										1089,
+										1101
+									],
+									[
+										1282,
+										1294
+									],
+									[
+										1600,
+										1613
+									],
+									[
+										1763,
+										1776
+									],
+									[
+										1989,
+										1993
+									],
+									[
+										2267,
+										2272
+									],
+									[
+										2380,
+										2385
+									],
+									[
+										2455,
+										2460
+									],
+									[
+										2518,
+										2523
+									],
+									[
+										2592,
+										2597
+									],
+									[
+										2714,
+										2719
+									],
+									[
+										2829,
+										2834
+									],
+									[
+										2854,
+										2859
+									],
+									[
+										3023,
+										3028
+									],
+									[
+										3098,
+										3103
+									],
+									[
+										3161,
+										3166
+									],
+									[
+										3235,
+										3240
+									],
+									[
+										3357,
+										3362
+									],
+									[
+										3511,
+										3516
+									],
+									[
+										3536,
+										3541
+									],
+									[
+										3699,
+										3709
+									],
+									[
+										3905,
+										3915
+									],
+									[
+										4035,
+										4045
+									],
+									[
+										4186,
+										4196
+									],
+									[
+										4339,
+										4349
+									],
+									[
+										4461,
+										4471
+									],
+									[
+										4618,
+										4628
+									],
+									[
+										4750,
+										4760
+									],
+									[
+										4965,
+										4975
+									],
+									[
+										5257,
+										5267
+									],
+									[
+										5412,
+										5422
+									],
+									[
+										5566,
+										5576
+									],
+									[
+										5715,
+										5725
+									],
+									[
+										5870,
+										5880
+									],
+									[
+										6026,
+										6036
+									],
+									[
+										6186,
+										6196
+									],
+									[
+										6381,
+										6391
+									],
+									[
+										6554,
+										6564
+									],
+									[
+										6683,
+										6693
+									],
+									[
+										6979,
+										6990
+									],
+									[
+										7209,
+										7220
+									],
+									[
+										7365,
+										7376
+									],
+									[
+										7492,
+										7503
+									],
+									[
+										7925,
+										7932
+									],
+									[
+										8309,
+										8315
+									],
+									[
+										8436,
+										8442
+									],
+									[
+										8459,
+										8465
+									],
+									[
+										8549,
+										8555
+									],
+									[
+										8641,
+										8647
+									],
+									[
+										8664,
+										8670
+									],
+									[
+										8754,
+										8760
+									],
+									[
+										8913,
+										8919
+									],
+									[
+										9196,
+										9202
+									],
+									[
+										9404,
+										9410
+									],
+									[
+										9627,
+										9633
+									],
+									[
+										9757,
+										9763
+									],
+									[
+										9906,
+										9912
+									],
+									[
+										10022,
+										10028
+									],
+									[
+										10034,
+										10040
+									],
+									[
+										10218,
+										10224
+									],
+									[
+										10396,
+										10402
+									],
+									[
+										10571,
+										10577
+									],
+									[
+										10723,
+										10729
+									],
+									[
+										10938,
+										10944
+									],
+									[
+										11069,
+										11075
+									],
+									[
+										11092,
+										11098
+									],
+									[
+										11184,
+										11190
+									],
+									[
+										11254,
+										11260
+									],
+									[
+										11347,
+										11353
+									],
+									[
+										11370,
+										11376
+									],
+									[
+										11462,
+										11468
+									],
+									[
+										11532,
+										11538
+									],
+									[
+										11642,
+										11648
+									],
+									[
+										11665,
+										11671
+									],
+									[
+										11757,
+										11763
+									],
+									[
+										11917,
+										11923
+									],
+									[
+										12136,
+										12142
+									],
+									[
+										12356,
+										12362
+									],
+									[
+										12682,
+										12686
+									],
+									[
+										12700,
+										12704
+									],
+									[
+										12917,
+										12921
+									],
+									[
+										12957,
+										12961
+									],
+									[
+										13108,
+										13112
+									],
+									[
+										13128,
+										13132
+									],
+									[
+										13253,
+										13257
+									],
+									[
+										13290,
+										13294
+									],
+									[
+										13470,
+										13474
+									],
+									[
+										13511,
+										13515
+									],
+									[
+										13712,
+										13716
+									],
+									[
+										13748,
+										13752
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								12525,
+								12525
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 12,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ 	].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 6570.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "/C/xampp/htdocs/fire/systems.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8951,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5196,
+								5196
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2238.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "/C/xampp/htdocs/fire/style.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5118,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2535,
+								2535
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2470.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
 					"type": "text"
 				},
 				{
+					"buffer": 11,
+					"file": "/C/xampp/htdocs/fire/game.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3949,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2914,
+								2914
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1425.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "/C/xampp/htdocs/fire/game.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 25354,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5050,
+								5050
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3077.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "/C/xampp/htdocs/fire/server/baseship.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1834,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								331,
+								331
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 104.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 15,
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "/C/xampp/htdocs/fire/server/ships/omega.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2191,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1311,
+								1311
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 135.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
 					"buffer": 15,
+					"file": "/C/xampp/htdocs/fire/server/ships/sharlin.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1780,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								565,
+								565
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 135.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "/C/xampp/htdocs/fire/server/math.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 512,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								512,
+								512
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 21,
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"file": "/C/xampp/htdocs/fire/gameManager.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10234,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 750.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 19,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 18,
+					"file": "/C/xampp/htdocs/fire/script.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 12436,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 6860.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 17,
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "/C/xampp/htdocs/fire/log.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6290,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 13,
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"file": "/C/xampp/htdocs/fire/server/systems/systems.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1555,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								884,
+								884
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 675.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				},
+				{
+					"buffer": 21,
+					"file": "/C/xampp/htdocs/fire/server/systems/weapons/laser.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1164,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								543,
+								543
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 150.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 11,
+					"type": "text"
+				},
+				{
+					"buffer": 22,
+					"file": "/C/xampp/htdocs/fire/server/systems/weapons/particle.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 842,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								49,
+								53
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 14,
+					"type": "text"
+				},
+				{
+					"buffer": 23,
 					"file": "/C/xampp/htdocs/fire/dbManager.php",
 					"semi_transient": false,
 					"settings":
@@ -1804,83 +2074,24 @@
 						"selection":
 						[
 							[
-								5706,
-								5722
+								12875,
+								12875
 							]
 						],
 						"settings":
 						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content"
-							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4438.0,
+						"translation.y": 14569.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
-					"buffer": 16,
+					"buffer": 24,
 					"file": "/C/xampp/htdocs/fire/index.php",
 					"semi_transient": false,
 					"settings":
@@ -1905,45 +2116,16 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
-					"buffer": 17,
+					"buffer": 25,
 					"file": "/C/xampp/htdocs/fire/lobby.php",
 					"semi_transient": false,
 					"settings":
 					{
 						"buffer_size": 6321,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								6147,
-								6147
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 3665.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 14,
-					"type": "text"
-				},
-				{
-					"buffer": 18,
-					"file": "/C/xampp/htdocs/fire/createGame.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1310,
 						"regions":
 						{
 						},
@@ -1963,11 +2145,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
-					"buffer": 19,
+					"buffer": 26,
 					"file": "/C/xampp/htdocs/fire/gameSetup.php",
 					"semi_transient": false,
 					"settings":
@@ -1979,8 +2161,8 @@
 						"selection":
 						[
 							[
-								4442,
-								4442
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1989,14 +2171,43 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2711.0,
+						"translation.y": 6962.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
-					"buffer": 20,
+					"buffer": 27,
+					"file": "/C/xampp/htdocs/fire/createGame.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1310,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								153,
+								153
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 27,
+					"type": "text"
+				},
+				{
+					"buffer": 28,
 					"file": "/C/xampp/htdocs/fire/postGameData.php",
 					"semi_transient": false,
 					"settings":
@@ -2008,8 +2219,8 @@
 						"selection":
 						[
 							[
-								1415,
-								1415
+								0,
+								0
 							]
 						],
 						"settings":
@@ -2018,14 +2229,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 407.0,
+						"translation.y": 630.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 25,
 					"type": "text"
 				},
 				{
-					"buffer": 21,
+					"buffer": 29,
 					"file": "/C/xampp/htdocs/fire/getGameData.php",
 					"semi_transient": false,
 					"settings":
@@ -2037,96 +2248,8 @@
 						"selection":
 						[
 							[
-								814,
-								826
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content"
-							],
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 22,
-					"file": "/C/xampp/htdocs/fire/server/baseship.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1825,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								574,
-								628
+								0,
+								0
 							]
 						],
 						"settings":
@@ -2138,149 +2261,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
-					"type": "text"
-				},
-				{
-					"buffer": 23,
-					"file": "/C/xampp/htdocs/fire/server/ships/sharlin.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1782,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								252,
-								252
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 11,
-					"type": "text"
-				},
-				{
-					"buffer": 24,
-					"file": "/C/xampp/htdocs/fire/server/ships/omega.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1705,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								253,
-								253
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 20,
-					"type": "text"
-				},
-				{
-					"buffer": 25,
-					"file": "/C/xampp/htdocs/fire/server/systems/systems.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1510,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1040,
-								1040
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 306.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 21,
-					"type": "text"
-				},
-				{
-					"buffer": 26,
-					"file": "/C/xampp/htdocs/fire/server/systems/weapons/laser.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 752,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								461,
-								461
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 22,
-					"type": "text"
-				},
-				{
-					"buffer": 27,
-					"file": "/C/xampp/htdocs/fire/server/systems/weapons/particle.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 487,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								270,
-								270
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 23,
+					"stack_index": 24,
 					"type": "text"
 				}
 			]
@@ -2314,7 +2295,7 @@
 		"cols":
 		[
 			0.0,
-			0.553362255966,
+			0.710747938507,
 			1.0
 		],
 		"rows":
@@ -2402,7 +2383,7 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 1,
+	"selected_group": 0,
 	"settings":
 	{
 	},
@@ -2410,7 +2391,7 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 185.0,
+	"side_bar_width": 214.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

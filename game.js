@@ -102,6 +102,7 @@ function Game(id, name, status, userid, turn, phase){
 				//	td.appendChild(img);
 				tr.appendChild(td);
 
+				console.log(toDo[i]);
 				var td = document.createElement("td");
 					td.innerHTML = toDo[i].shipClass;
 				tr.appendChild(td);
@@ -133,7 +134,7 @@ function Game(id, name, status, userid, turn, phase){
 						if (valid){
 							ajax.confirmDeployment();
 						}
-						else console.log("nope");
+						else alert("You need to deploy all available ships first");
 					}).mouseenter(function(){
 						$(this).addClass("selected");
 					}).mouseleave(function(){
@@ -205,7 +206,7 @@ function Game(id, name, status, userid, turn, phase){
 	
 	this.create = function(){
 
-		//window.ships = [window.ships[0]];
+		window.ships = [window.ships[2]];
 
 		for (var i = 0; i < window.ships.length; i++){
 			//console.log(window.ships[i]);
@@ -245,6 +246,7 @@ function Game(id, name, status, userid, turn, phase){
 			ship.ep = window.ships[i].ep;
 			ship.profile = window.ships[i].profile;
 			ship.size = window.ships[i].size;
+			ship.shipType = window.ships[i].shipType;
 			ship.friendly = friendly;
 			ship.deployed = deployed;
 
@@ -252,22 +254,56 @@ function Game(id, name, status, userid, turn, phase){
 			//function Structure(parentId, start, end, armour, health){
 			for (var j = 0; j < window.ships[i].structures.length; j++){
 				var struct = new Structure(
-											window.ships[i].id,
-											window.ships[i].structures[j].start,
-											window.ships[i].structures[j].end,
-											window.ships[i].structures[j].armour,
-											window.ships[i].structures[j].health,
-											window.ships[i].structures[j].destroyed
-										);
+					window.ships[i].structures[j].id,
+					window.ships[i].structures[j].parentId,
+					window.ships[i].structures[j].start,
+					window.ships[i].structures[j].end,
+					window.ships[i].structures[j].armour,
+					window.ships[i].structures[j].health,
+					window.ships[i].structures[j].destroyed
+				);
 
-				//function StandardParticleBeam(parentId, arc1, arc2){
 				for (var k = 0; k < window.ships[i].structures[j].systems.length; k++){
-					var system = new window[window.ships[i].structures[j].systems[k].name](
-																						window.ships[i].id, 
-																						window.ships[i].structures[j].systems[k].start,
-																						window.ships[i].structures[j].systems[k].end
-																						)
-					struct.systems.push(system);
+					if (window.ships[i].structures[j].systems[k].weapon){
+						if (window.ships[i].structures[j].systems[k].type == "Laser"){
+							//console.log(window.ships[i].structures[j].systems[k]);
+							var system = new Laser(
+								window.ships[i].structures[j].systems[k].id,
+								window.ships[i].structures[j].systems[k].parentId,
+								window.ships[i].structures[j].systems[k].name,
+								window.ships[i].structures[j].systems[k].display,
+								window.ships[i].structures[j].systems[k].output,
+								window.ships[i].structures[j].systems[k].damage,
+								window.ships[i].structures[j].systems[k].optRange,
+								window.ships[i].structures[j].systems[k].dmgDecay,
+								window.ships[i].structures[j].systems[k].accDecay,
+								window.ships[i].structures[j].systems[k].shots,
+								window.ships[i].structures[j].systems[k].reload,
+								window.ships[i].structures[j].systems[k].start,
+								window.ships[i].structures[j].systems[k].end
+							)
+							//console.log(system);
+						}
+						else if (window.ships[i].structures[j].systems[k].type == "Particle"){
+							//console.log(window.ships[i].structures[j].systems[k]);
+							var system = new Particle(
+								window.ships[i].structures[j].systems[k].id,
+								window.ships[i].structures[j].systems[k].parentId,
+								window.ships[i].structures[j].systems[k].name,
+								window.ships[i].structures[j].systems[k].display,
+								window.ships[i].structures[j].systems[k].output,
+								window.ships[i].structures[j].systems[k].damage,
+								window.ships[i].structures[j].systems[k].accDecay,
+								window.ships[i].structures[j].systems[k].shots,
+								window.ships[i].structures[j].systems[k].reload,
+								window.ships[i].structures[j].systems[k].start,
+								window.ships[i].structures[j].systems[k].end
+							)
+							//console.log(system);
+						}
+
+						struct.systems.push(system);
+					}
 
 				}
 				ship.structures.push(struct);
@@ -569,7 +605,7 @@ function Game(id, name, status, userid, turn, phase){
 
 		for (var i = 0; i < this.fireOrders.length; i++){
 			this.fireOrders[i].shooter = game.getShipById(this.fireOrders[i].shooterid);
-			this.fireOrders[i].weapon = this.fireOrders[i].shooter.getWeaponById(this.fireOrders[i].weaponid);
+			this.fireOrders[i].weapon = this.fireOrders[i].shooter.getSystemById(this.fireOrders[i].weaponid);
 			this.fireOrders[i].guns = this.fireOrders[i].weapon.guns;
 			this.fireOrders[i].anim = [];
 			this.fireOrders[i].hits = [this.fireOrders[i].hits];
