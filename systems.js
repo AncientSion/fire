@@ -190,14 +190,14 @@ function System(id, parentId, name, display){
 	
 	this.setFireOrder = function(){
 		var parentId = this.parentId;
-		var weaponId = this.id;
+		var systemId = this.id;
 		this.selected = false;
 		this.highlight = false;
 		
 		var div = $(".shipDiv").each(function(i){
 			if ($(this).data("shipId") == parentId){
 				$(this).find(".weapon.selected").each(function(j){
-					if ($(this).data("weaponId") == weaponId){
+					if ($(this).data("systemId") == systemId){
 						$(this).removeClass("selected").addClass("fireOrder");
 					}
 				})

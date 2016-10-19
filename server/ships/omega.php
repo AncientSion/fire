@@ -27,24 +27,24 @@ class Omega extends Ship {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 0, 180, 5, 150);
-		$right->systems[] = new StandardParticleBeam($this->getId(), $this->id, 180, 360);
-		$right->systems[] = new StandardParticleBeam($this->getId(), $this->id, 180, 360);
-		$right->systems[] = new StandardParticleBeam($this->getId(), $this->id, 180, 360);
-		$right->systems[] = new StandardParticleBeam($this->getId(), $this->id, 180, 360);
+		$right->systems[] = new StandardParticleBeam($this->getId(), $this->id, 0, 180);
+		$right->systems[] = new StandardParticleBeam($this->getId(), $this->id, 0, 180);
+		$right->systems[] = new StandardParticleBeam($this->getId(), $this->id, 0, 180);
+		$right->systems[] = new StandardParticleBeam($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 180, 360, 4, 80);
-		$aft->systems[] = new StandardParticleBeam($this->getId(), $this->id, 90, 270);
+		$aft = new Structure($this->getId(), $this->id, 90, 270, 4, 80);
+		$aft->systems[] = new StandardParticleBeam($this->getId(), $this->id, 180, 270);
 		$aft->systems[] = new StandardParticleBeam($this->getId(), $this->id, 90, 270);
 		$aft->systems[] = new StandardParticleBeam($this->getId(), $this->id, 90, 270);
 		$aft->systems[] = new StandardParticleBeam($this->getId(), $this->id, 90, 270);
 		$structs[] = $aft;
 
-		$left = new Structure($this->getId(), $this->id, 90, 270, 5, 150);
-		$left->systems[] = new StandardParticleBeam($this->getId(), $this->id, 0, 180);
-		$left->systems[] = new StandardParticleBeam($this->getId(), $this->id, 0, 180);
-		$left->systems[] = new StandardParticleBeam($this->getId(), $this->id, 0, 180);
-		$left->systems[] = new StandardParticleBeam($this->getId(), $this->id, 0, 180);
+		$left = new Structure($this->getId(), $this->id, 180, 360, 5, 150);
+		$left->systems[] = new StandardParticleBeam($this->getId(), $this->id, 180, 360);
+		$left->systems[] = new StandardParticleBeam($this->getId(), $this->id, 180, 360);
+		$left->systems[] = new StandardParticleBeam($this->getId(), $this->id, 180, 360);
+		$left->systems[] = new StandardParticleBeam($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
 
 

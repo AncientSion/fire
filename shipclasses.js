@@ -1039,6 +1039,9 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		structContainer.className = "structContainer";	
 		div.appendChild(structContainer);
 
+		var pWidth = $(structContainer).width();
+		var pHeight = $(structContainer).height();
+
 		for (var i = 0; i < this.structures.length; i++){
 
 			var structDiv = document.createElement("div");
@@ -1065,8 +1068,6 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 
 			structDiv.appendChild(structTable);
 			structContainer.appendChild(structDiv);
-			var pWidth = $(structContainer).width();
-			var pHeight = $(structContainer).height();
 
 			var a = this.structures[i].getDirection();
 			var pos = getPointInDirection(130, addAngle(a, -90), pWidth/2, pHeight/2);
@@ -1077,9 +1078,26 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 			$(structDiv)
 				.data("id", this.structures[i].id)
 				.data("structureId", i)
-				.css("left", pos.x - w)
-				.css("top", pos.y - h)
+				.css("left", pos.x - w -2)
+				.css("top", pos.y - h);
+
+
+			var div = document.createElement("div");
+				div.className = "iconDiv";
+
+			var img = new Image();
+				img.src = "shipIcons/" + this.shipClass.toLowerCase() + ".png";
+				$(img)
+					.addClass("rotate270")
+					.css("width", 100)
+					.css("height", 100)
+				div.appendChild(img);
 		}
+
+		structContainer.appendChild(div);
+		$(div)
+			.css("left", pWidth/2-50)
+			.css("top", pHeight/2-50)
 	}
 	
 	this.updateDiv = function(){

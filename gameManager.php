@@ -252,15 +252,15 @@ class Manager {
 		debug::log("handleFiringPhase");
 		$this->gamedata = $this->getGameData();
 		$this->getShips();
-			debug::log("ships: ".sizeof($this->ships));
+		//	debug::log("ships: ".sizeof($this->ships));
 		$this->fireOrders = DBManager::app()->getOpenFireOrders($this->gameid, $this->gamedata["game"]["turn"]);
-			debug::log("fireOrders: ".sizeof($this->fireOrders));
+		//	debug::log("fireOrders: ".sizeof($this->fireOrders));
 		$this->handleFireOrders();
 		$this->updateFireOrders();
 	}
 
 	public function getShips(){
-		debug::log("getShips");
+		//debug::log("getShips");
 		$facing;
 		$x;
 		$y;
