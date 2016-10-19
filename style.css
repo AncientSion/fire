@@ -168,7 +168,7 @@ canvas {
 
 .structContainer {
 	display: inline-block;
-	width: 300px;
+	width: 400px;
 	height: 400px;
 	position: relative;
 	color: white;
@@ -178,13 +178,14 @@ canvas {
 
 .structDiv {
 	display: inline-block;
-	background-color: red;
+	padding: 3px;
 	position: absolute;
 	color: white;
+	border: 1px solid black;
 }
 
 .structTable {
-	width: 160px;
+	width: 120px;
 }
 
 .weapon {
@@ -201,7 +202,6 @@ canvas {
 }
 
 .shipDiv {
-	width: 300px;
 	position: absolute;
 	border: 1px solid black;
 	border-radius: 5px;

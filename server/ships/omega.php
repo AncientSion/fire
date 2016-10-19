@@ -19,28 +19,28 @@ class Omega extends Ship {
 	public function addStructures(){
 		$structs = [];
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 6, 110);
+		$front = new Structure($this->getId(), $this->id, 270, 90, 6, 110);
 		$front->systems[] = new HeavyLaser($this->getId(), $this->id, 300, 360);
 		$front->systems[] = new HeavyLaser($this->getId(), $this->id, 300, 360);
 		$front->systems[] = new HeavyLaser($this->getId(), $this->id, 0, 60);
 		$front->systems[] = new HeavyLaser($this->getId(), $this->id, 0, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 150, 5, 150);
+		$right = new Structure($this->getId(), $this->id, 0, 180, 5, 150);
 		$right->systems[] = new StandardParticleBeam($this->getId(), $this->id, 180, 360);
 		$right->systems[] = new StandardParticleBeam($this->getId(), $this->id, 180, 360);
 		$right->systems[] = new StandardParticleBeam($this->getId(), $this->id, 180, 360);
 		$right->systems[] = new StandardParticleBeam($this->getId(), $this->id, 180, 360);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 150, 210, 4, 80);
+		$aft = new Structure($this->getId(), $this->id, 180, 360, 4, 80);
 		$aft->systems[] = new StandardParticleBeam($this->getId(), $this->id, 90, 270);
 		$aft->systems[] = new StandardParticleBeam($this->getId(), $this->id, 90, 270);
 		$aft->systems[] = new StandardParticleBeam($this->getId(), $this->id, 90, 270);
 		$aft->systems[] = new StandardParticleBeam($this->getId(), $this->id, 90, 270);
 		$structs[] = $aft;
 
-		$left = new Structure($this->getId(), $this->id, 210, 300, 5, 150);
+		$left = new Structure($this->getId(), $this->id, 90, 270, 5, 150);
 		$left->systems[] = new StandardParticleBeam($this->getId(), $this->id, 0, 180);
 		$left->systems[] = new StandardParticleBeam($this->getId(), $this->id, 0, 180);
 		$left->systems[] = new StandardParticleBeam($this->getId(), $this->id, 0, 180);

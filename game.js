@@ -207,7 +207,7 @@ function Game(id, name, status, userid, turn, phase){
 
 		$("#phaseSwitchDiv").show();
 
-		// window.ships = [window.ships[2]];
+		//window.ships = [window.ships[0]];
 
 		for (var i = 0; i < window.ships.length; i++){
 			//console.log(window.ships[i]);

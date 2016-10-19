@@ -364,6 +364,9 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 				moveCtx.arc(turn.clickX +20, turn.clickY, 7, 0, 2*Math.PI);
 				moveCtx.closePath(); moveCtx.fillStyle = "white"; moveCtx.fill(); moveCtx.stroke();
 				
+				var p1 = getPointInDirection(80, thrustTextLoc, center.x, center.y);
+					turn.thrustTextLoc = p1;
+				
 				drawText(moveCtx, "blue", "cost: " + Math.ceil(turn.cost*turn.costmod), 10, {x: p1.x, y: p1.y});
 				drawText(moveCtx, "blue", "delay; " + Math.ceil(turn.delay/turn.costmod), 10, {x: p1.x, y: p1.y+15});
 				
@@ -902,7 +905,9 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	
 	this.canTurn = function(){
 		if (this.getRemainingDelay() == 0){
-			if (this.getRemainingEP() >= this.getTurnCost()){
+			var have = this.getRemainingEP();
+			var need = this.getTurnCost();
+			if (have >= need){
 				return true;
 			}
 		}
@@ -1060,21 +1065,20 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 
 			structDiv.appendChild(structTable);
 			structContainer.appendChild(structDiv);
-			pWidth = $(structContainer).width();
-			pHeight = $(structContainer).height();
+			var pWidth = $(structContainer).width();
+			var pHeight = $(structContainer).height();
 
 			var a = this.structures[i].getDirection();
-			console.log(a);
-			var pos = getPointInDirection(120, addAngle(a, -90), pWidth/2, pHeight/2);
-			console.log(pos);
-			var w = $(structTable).width(); 
-			var h = $(structTable).height();
-
+			var pos = getPointInDirection(130, addAngle(a, -90), pWidth/2, pHeight/2);
+			var w = $(structTable).width() / 2; 
+			var h = $(structTable).height() /2 +45;
+			//console.log("id: " + this.structures[i].id + ", a: " + a);
+			//console.log(w, h);
 			$(structDiv)
 				.data("id", this.structures[i].id)
 				.data("structureId", i)
-				.css("left", pos.x - w/2)
-				.css("top", pos.y - h/2)
+				.css("left", pos.x - w)
+				.css("top", pos.y - h)
 		}
 	}
 	
