@@ -680,6 +680,7 @@ class DBManager {
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 		if ($result){
+			debug::log("fires :".sizeof($result));
 			return $result;
 		}
 		else return false;

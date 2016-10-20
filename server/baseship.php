@@ -84,17 +84,16 @@ class Ship {
 
 
 	public function getWeaponById($id){
-		//debug::log("looking: ".$id);
-		for ($i = 0; $i < sizeof($this->systems); $i++){
-			//debug::log($this->systems[$i]->id);
-			if ($this->systems[$i]->id == $id){
-				//debug::log("found!");
-				return $this->systems[$i];
+		//debug::log("looking for :".$id);
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				//debug::log("now :".$this->structures[$i]->systems[$j]->id);
+				if ($this->structures[$i]->systems[$j]->id == $id){
+					return $this->structures[$i]->systems[$j];
+				}
 			}
 		}
 	}
-
-
 }
 
 ?>

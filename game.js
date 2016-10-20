@@ -373,6 +373,7 @@ function Game(id, name, status, userid, turn, phase){
 	}
 	
 	this.posIsOccupied = function(ship, pos){
+		return false;
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].x < pos.x + this.ships[i].size/2 && this.ships[i].x > pos.x - this.ships[i].size/2){
 				if (this.ships[i].y > pos.y - this.ships[i].size/2 && this.ships[i].y < pos.y + this.ships[i].size/2){

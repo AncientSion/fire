@@ -357,12 +357,16 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 				moveCtx.fillStyle = "white";
 				moveCtx.fill(); moveCtx.stroke();
 				
+				/*
 				moveCtx.beginPath();
 				moveCtx.arc(turn.clickX -20, turn.clickY, 7, 0, 2*Math.PI);
 				moveCtx.closePath(); moveCtx.fillStyle = "white"; moveCtx.fill(); moveCtx.stroke();
 				moveCtx.beginPath();
 				moveCtx.arc(turn.clickX +20, turn.clickY, 7, 0, 2*Math.PI);
 				moveCtx.closePath(); moveCtx.fillStyle = "white"; moveCtx.fill(); moveCtx.stroke();
+				*/
+
+				var thrustTextLoc = addAngle(plannedAngle, turn.a*3);
 				
 				var p1 = getPointInDirection(80, thrustTextLoc, center.x, center.y);
 					turn.thrustTextLoc = p1;
@@ -372,25 +376,32 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 				
 				if (this.canShortenTurn()){
 					moveCtx.beginPath();
-					moveCtx.arc(turnButton.x -20, turnButton.y, 7, 0, 2*Math.PI);
+					moveCtx.arc(turn.clickX -20, turn.clickY, 7, 0, 2*Math.PI);
 					moveCtx.closePath(); moveCtx.fillStyle = "white"; moveCtx.fill(); moveCtx.stroke();
-					drawText(moveCtx, "black", "+", 12, {x: turnButton.x-20, y: turnButton.y});
+					drawText(moveCtx, "black", "+", 12, {x: turn.clickX-20, y: turn.clickY});
 					
 					turn.thrustUp = {
-									clickX: turnButton.x-20, 
-									clickY: turnButton.y,
+									clickX: turn.clickX-20, 
+									clickY: turn.clickY,
 									};
 				}
+				else {
+					turn.thrustUp = false;
+				}
+
 				if (this.canUndoShortenTurn()){
 					moveCtx.beginPath();
-					moveCtx.arc(turnButton.x +20, turnButton.y, 7, 0, 2*Math.PI);
+					moveCtx.arc(turn.clickX +20, turn.clickY, 7, 0, 2*Math.PI);
 					moveCtx.closePath(); moveCtx.fillStyle = "white"; moveCtx.fill(); moveCtx.stroke();
-					drawText(moveCtx, "black", "-", 12, {x: turnButton.x+20, y: turnButton.y});	
+					drawText(moveCtx, "black", "-", 12, {x: turn.clickX+20, y: turn.clickY});	
 					
 					turn.thrustDown = {
-								clickX: turnButton.x+20, 
-								clickY: turnButton.y,
+								clickX: turn.clickX+20, 
+								clickY: turn.clickY,
 								}
+				}
+				else {
+					turn.thrustDown = false;
 				}
 			}
 		}
@@ -648,16 +659,18 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		}
 		return Math.floor(delay);
 	}
-		
-	this.drawImpulseIndicator = function(){
-		var center;
-		
+
+	this.getPlannedPosition = function(){
 		if (this.actions.length){
-			center = new Point(this.actions[this.actions.length-1].x + cam.o.x, this.actions[this.actions.length-1].y + cam.o.y);
+			return new Point(this.actions[this.actions.length-1].x + cam.o.x, this.actions[this.actions.length-1].y + cam.o.y);
 		}
 		else {
-			center = new Point(this.x + cam.o.x, this.y + cam.o.y);
+			return new Point(this.x + cam.o.x, this.y + cam.o.y);
 		}
+	}
+		
+	this.drawImpulseIndicator = function(){
+		var center = this.getPlannedPosition();
 		
 		var angle = this.getPlannedFacingToMove(this.actions.length-1)
 		//var p1 = getPointInDirection(this.getRemainingImpulse() + 60, angle, center.x, center.y);
@@ -739,45 +752,62 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	
 		return false;
 	}
+
+	this.getShortenTurnCost = function(){
+		if (this.turns.length){
+			return this.turns[0].cost * (this.turns[0].costmod + 0.2);
+		}
+		else {
+			return this.getTurnCost() * 1.2;
+		}
+	}
 	
 	this.canShortenTurn = function(){
-		if (game.phase == -1){
-			return false;
+		if (game.phase == 1){
+			if (this.getRemainingEP() >= this.getShortenTurnCost()){
+				return true;
+			}
 		}
 
-		return true;
+		return false;
 	}
 	
 	this.canUndoShortenTurn = function(){
-		if (game.phase == -1){
-			return false;
+		if (game.phase == 1){
+			if (this.turns.length){
+				if (this.turns[0].costmod > 1){
+					return true;
+				}
+			}
 		}
-		
-		return true;
 	}
 	
 	this.issueShortenTurnDelay = function(i){
 		//console.log("issueShortenTurnDelay")
-		this.turns[i].costmod = (this.turns[i].costmod * 10 + 2) / 10;
+		for (var j = 0; j < this.turns.length; j++){
+			this.turns[j].costmod = (this.turns[j].costmod * 10 + 2) / 10;
+		}
 		this.unsetMoveMode();
 		this.setMoveMode();
 	}
 	
 	this.cancelShortenTurnDelay = function(i){
 		//console.log("cancelShortenTurnDelay")
-		this.turns[i].costmod = (this.turns[i].costmod * 10 - 2) / 10;
+		for (var j = 0; j < this.turns.length; j++){
+			this.turns[j].costmod = (this.turns[j].costmod * 10 - 2) / 10;
+		}
 		this.unsetMoveMode();
 		this.setMoveMode();
 	}
-	
+
 	this.doAdjustImpulse = function(obj){
-		var shipPos = this.getOffsetPos();
+		var shipPos = this.getPlannedPosition();
 		if (obj.type == "+"){
 			if (this.actions.length && this.actions[this.actions.length-1].type == "speedChange" && this.actions[this.actions.length-1].dist == -1){
 				this.actions.splice(this.actions.length-1, 1);
 			}
 			else {
-				var action = new Move("speedChange", 1, shipPos.x, shipPos.y, false, 0, obj.cost)
+				var action = new Move("speedChange", 1, shipPos.x - cam.o.x, shipPos.y - cam.o.y, false, 0, obj.cost)
 				this.actions.push(action);
 			}
 		}
@@ -786,7 +816,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 				this.actions.splice(this.actions.length-1, 1);
 			}
 			else {
-				var action = new Move("speedChange", -1, shipPos.x, shipPos.y, false, 0, obj.cost)
+				var action = new Move("speedChange", -1, shipPos.x - cam.o.x, shipPos.y - cam.o.y, false, 0, obj.cost)
 				this.actions.push(action);
 			}
 		}
@@ -880,10 +910,9 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 				}
 			}
 		}
-		else {
-			this.undoOrderButton = false;
-			return false;
-		}
+
+		this.undoOrderButton = false;
+		return false;
 	}
 	
 	this.undoLastOrder = function(pos){		
