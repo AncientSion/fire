@@ -333,6 +333,9 @@ class Manager {
 			$target = $this->getShipById($fire["targetid"]);
 			//echo get_class($target);
 			$weapon = $shooter->getWeaponById($fire["weaponid"]);
+			echo json_encode($fire);
+			echo json_encode($weapon);
+			echo "</br></br>";
 			$shots = $weapon->shots;
 			$dist = Math::getDist($shooter->x, $shooter->y, $target->x, $target->y);
 			$targetFacing = $target->facing;
@@ -352,9 +355,10 @@ class Manager {
 				}
 			}
 
-			debug::log("-----");
-			debug::log($shooter->shipClass." vs ".$target->shipClass." firing: ".$weapon->name);
-			debug::log("dist: ".$dist.", incoming from: ".$angle." °");
+			echo $shooter->shipClass." vs ".$target->shipClass." firing: ".$weapon->name;
+			echo "</br>";
+			echo "dist: ".$dist.", incoming from: ".$angle." °";
+			echo "</br></br>";;
 			$this->fireOrders[$i]["req"] = $final;
 			$this->fireOrders[$i]["notes"] = $notes;
 			$this->fireOrders[$i]["hits"] = $hits;
@@ -406,9 +410,9 @@ class Manager {
 	}
 
 	public function getShipById($shipid){
-		debug::log("looking for ship :".$shipid);
+		//debug::log("looking for ship :".$shipid);
 		for ($i = 0; $i < sizeof($this->gamedata["ships"]); $i++){
-			debug::log("now :".$this->gamedata["ships"][$i]->id);
+			//debug::log("now :".$this->gamedata["ships"][$i]->id);
 			if ($this->gamedata["ships"][$i]->id == $shipid){
 				return $this->gamedata["ships"][$i];
 			}
