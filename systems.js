@@ -7,6 +7,7 @@ function System(id, parentId, name, display){
 	this.highlight = false;
 	this.selected = false;
 	this.destroyed = false;
+	this.tr = false;
 				
 	this.posIsOnArc = function(loc, pos, facing){
 		//console.log(arguments);
@@ -28,6 +29,17 @@ function System(id, parentId, name, display){
 		var td = document.createElement("td");
 			td.className = "weapon";
 			td.innerHTML = this.name + " #" + (this.id);
+
+			if (this.hasActiveFireOrder()){
+				td.className = "weapon fireOrder";
+			}
+
+		var div = document.createElement("div");
+			div.className = "loadLevel";
+			var load = this.getLoadLevel();
+			div.style.width = load * 100 + "%";
+			td.appendChild(div);
+
 			$(td).data("shipId", this.parentId);
 			$(td).data("systemId", this.id);
 			$(td).hover(
@@ -52,8 +64,21 @@ function System(id, parentId, name, display){
 			);
 
 			tr.appendChild(td);
+
+			this.tr = tr;
 			
 		return tr;
+	}
+
+	this.hasActiveFireOrder = function(){
+		for (var i = 0; i < this.fireOrders.length; i++){
+			if (this.fireOrders[i].turn == game.turn){
+				return true;
+				break;
+			}
+		}
+
+		return false;
 	}
 
 	this.select = function(){
@@ -61,34 +86,19 @@ function System(id, parentId, name, display){
 		var parentId = this.parentId;
 		var selected = false;
 
-		var ele = $(".shipDiv").each(function(){
-			if ($(this).data("shipId") == parentId){
-				$(this).find(".weapon").each(function(){
-					if ($(this).data("systemId") == id){
-						if ($(this).hasClass("fireOrder")){
-							for (var i = game.fireOrders.length-1; i >= 0; i--){
-								if (game.fireOrders[i].weaponid == this.id){
-									game.fireOrders.splice(i, 1);
-									break;
-								}
-							}
-							$(this).removeClass("fireOrder").addClass("selected");
-							selected = true;
-						}
-						else if ($(this).hasClass("selected")){
-							$(this).removeClass("selected");
-							selected = false;
-						}
-						else {
-							$(this).addClass("selected");
-							selected = true;
-						}
-					}
-				})
-			}
-		})
+		if (this.hasActiveFireOrder()){
+			this.unsetFireOrder();
+		}
 
-		this.selected = selected;
+		if (this.selected){
+			this.selected = false;
+		}
+		else {
+			this.selected = true;
+		}
+
+
+		this.setTableRow();
 
 		var ship = game.getShipById(parentId);
 	
@@ -103,47 +113,54 @@ function System(id, parentId, name, display){
 		}
 	}
 	
-	this.getWeaponDetailsDiv = function(){
+	this.getSystemDetailsDiv = function(){
 		var div = document.createElement("div");
-			div.id = "weaponDetailsDiv";
+			div.id = "systemDetailsDiv";
 		var table = document.createElement("table");
-		var tr = document.createElement("tr");
-		var td = document.createElement("td");
-			td.innerHTML = "structure / armour"; tr.appendChild(td);
-		var td = document.createElement("td");
-			td.innerHTML = this.structure + " / " + this.armour; tr.appendChild(td); table.appendChild(tr);
 			
 		var tr = document.createElement("tr");
+		var td = document.createElement("td"); td.style.width = "40%";
+			td.innerHTML = "Type"; tr.appendChild(td);
 		var td = document.createElement("td");
-			td.innerHTML = "fire angle"; tr.appendChild(td);
+			td.innerHTML = this.animation.toUpperCase(0, 1); tr.appendChild(td); table.appendChild(tr);
+
+		var tr = document.createElement("tr");
+		var td = document.createElement("td"); td.style.width = "40%";
+			td.innerHTML = "Loading"; tr.appendChild(td);
 		var td = document.createElement("td");
-			td.innerHTML = this.arc[0][0] + " - " + this.arc[0][1]; tr.appendChild(td); table.appendChild(tr);
-			
-		if (this.optRange){
-			var tr = document.createElement("tr");
-			var td = document.createElement("td");
-				td.innerHTML = "opt. range / dmg loss per 100 px"; tr.appendChild(td);
-			var td = document.createElement("td");
-				td.innerHTML = this.optRange + " / " + this.dmgDecay; tr.appendChild(td); table.appendChild(tr);
-		}
+			td.innerHTML = this.getTimeLoaded() + " / " + this.reload; tr.appendChild(td); table.appendChild(tr);
 			
 		var tr = document.createElement("tr");
-		var td = document.createElement("td");
-			td.innerHTML = "Accurady loss per " + decayVar + "px"; tr.appendChild(td);
+		var td = document.createElement("td"); td.style.width = "60%";
+			td.innerHTML = "Accuracy loss"; tr.appendChild(td);
 		var td = document.createElement("td");
 			td.innerHTML = this.accDecay; tr.appendChild(td); table.appendChild(tr);
 			
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
-			td.innerHTML = "Guns / Shots"; tr.appendChild(td);
+			td.innerHTML = "Shots"; tr.appendChild(td);
 		var td = document.createElement("td");
-			td.innerHTML = this.guns + " / " + this.shots; tr.appendChild(td); table.appendChild(tr);
+			td.innerHTML = this.shots; tr.appendChild(td); table.appendChild(tr);
 			
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
-			td.innerHTML = "damage"; tr.appendChild(td);
+			td.innerHTML = "Damage"; tr.appendChild(td);
 		var td = document.createElement("td");
-			td.innerHTML = this.damage; tr.appendChild(td); table.appendChild(tr);
+			td.innerHTML = this.getDamage(); tr.appendChild(td); table.appendChild(tr);
+
+		if (this.animation == "laser"){
+			var tr = document.createElement("tr");
+			var td = document.createElement("td");
+				td.innerHTML = "Focus point"; tr.appendChild(td);
+			var td = document.createElement("td");
+				td.innerHTML = this.optRange; tr.appendChild(td); table.appendChild(tr);
+
+			var tr = document.createElement("tr");
+			var td = document.createElement("td");
+				td.innerHTML = "Damage loss"; tr.appendChild(td);
+			var td = document.createElement("td");
+				td.innerHTML = this.dmgDecay; tr.appendChild(td); table.appendChild(tr);
+		}
 			
 		div.appendChild(table);
 			
@@ -162,7 +179,7 @@ function System(id, parentId, name, display){
 	}
 
 	this.showInfoDiv = function(){
-		var div = this.getWeaponDetailsDiv();
+		var div = this.getSystemDetailsDiv();
 		var parentId = this.parentId;
 		var id = this.id;
 		
@@ -184,26 +201,61 @@ function System(id, parentId, name, display){
 	}
 	
 	this.hideInfoDiv = function(){
-		var div = document.getElementById("weaponDetailsDiv");
+		var div = document.getElementById("systemDetailsDiv");
 			$(div).remove();
 	}
 	
-	this.setFireOrder = function(){
+	this.setFireOrder = function(fire){
 		var parentId = this.parentId;
 		var systemId = this.id;
 		this.selected = false;
 		this.highlight = false;
-		
-		var div = $(".shipDiv").each(function(i){
+
+		this.fireOrders.push(fire);
+		this.setTableRow();
+
+	}
+
+	this.unsetFireOrder = function(){
+		for (var i = this.fireOrders.length-1; i >= 0; i--){
+			if (this.fireOrders[i].turn == game.turn){
+				this.fireOrders.splice(i, 1);
+			}
+		}
+
+		this.setTableRow();
+	}
+
+	this.setTableRow = function(){
+		var id = this.id;
+		var parentId = this.parentId;
+		var fire = this.hasActiveFireOrder();
+		var selected = this.selected;
+
+
+		var ele = $(".shipDiv").each(function(){
 			if ($(this).data("shipId") == parentId){
-				$(this).find(".weapon.selected").each(function(j){
-					if ($(this).data("systemId") == systemId){
-						$(this).removeClass("selected").addClass("fireOrder");
+				$(this).find(".weapon").each(function(){
+					if ($(this).data("systemId") == id){
+						if (selected){
+							$(this).addClass("selected");
+						}
+						else {
+							$(this).removeClass("selected");
+						}
+
+						if (fire){
+							$(this).addClass("fireOrder");
+						}
+						else {
+							$(this).removeClass("fireOrder");
+						}
+						return;
 					}
 				})
 			}
-		});
-	};
+		})
+	}
 
 	this.drawArc = function(angle, pos){
 		for (var i = 0; i < this.arc.length; i++){
@@ -247,34 +299,87 @@ function System(id, parentId, name, display){
 	}
 }
 				
-function Weapon(id, parentId, name, display, output, damage, accDecay, shots, reload, arc1, arc2, arc3, arc4){
-	this.damage = damage;
+function Weapon(id, parentId, name, display, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4){
+	this.minDmg = minDmg;
+	this.maxDmg = maxDmg;
 	this.shots = shots;
 	this.reload = reload;
+	this.loaded;
 	this.accDecay = accDecay;
 	this.fireOrders = [];
 	this.arc = [
 				[arc1, arc2]
 				];
 
+	this.canFire = function(){
+		if (this.getLoadLevel() >= 1){
+			return true;
+		}
+	}
+
+	this.getLoadLevel = function(){
+		var need = this.reload;
+		var has = this.getTimeLoaded();
+
+		if (has / need > 1){
+			return 1;
+		}
+		else return has/need;
+	}
+
+	this.getTimeLoaded = function(){
+
+		var load = this.reload;
+		var limit;
+
+		if (game.phase == 2){
+			limit = game.turn-1;
+		}
+		else if (game.phase == 3){
+			limit = game.turn;
+		}
+
+
+		if (this.fireOrders.length){
+			for (var i = 0; i <= limit; i++){
+				if (load < this.reload){
+					load++;
+				}
+
+				for (var j = 0; j < this.fireOrders.length; j++){
+					if (this.fireOrders[j].turn == i){
+						load = 0;
+					}
+				}
+			}
+		}
+
+		return load;
+	}
+
+	this.getDamage = function(){
+		return this.minDmg + " - " + this.maxDmg;
+	}
+
+
 	System.call(this, id, parentId, name, display, parentId, arc1, arc2, arc3, arc4);
 
 }
 
 
-function Particle(id, parentId, name, display, output, damage, accDecay, shots, reload, arc1, arc2, arc3, arc4){
+function Particle(id, parentId, name, display, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4){
 
-	Weapon.call(this, id, parentId, name, display, output, damage, accDecay, shots, reload, arc1, arc2, arc3, arc4);	
+	Weapon.call(this, id, parentId, name, display, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4);	
 	this.animation = "particle";
 	
 }
 
 
-function Laser(id, parentId, name, display, output, damage, optRange, dmgDecay, accDecay, shots, reload, arc1, arc2, arc3, arc4){
+function Laser(id, parentId, name, display, output, minDmg, maxDmg, optRange, dmgDecay, accDecay, shots, reload, arc1, arc2, arc3, arc4){
 	this.optRange = optRange;
 	this.dmgDecay = dmgDecay;
 
-	Weapon.call(this, id, parentId, name, display, output, damage, accDecay, shots, reload, arc1, arc2, arc3, arc4);	
+	Weapon.call(this, id, parentId, name, display, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4);	
 	this.animation = "laser";
 	
 	this.getFillStyle = function(x, y, dist){

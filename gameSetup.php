@@ -413,7 +413,7 @@ else {
 				data.structures[j].start,
 				data.structures[j].end,
 				data.structures[j].armour,
-				data.structures[j].health,
+				data.structures[j].integrity,
 				data.structures[j].destroyed
 			);
 
@@ -427,7 +427,8 @@ else {
 							data.structures[j].systems[k].name,
 							data.structures[j].systems[k].display,
 							data.structures[j].systems[k].output,
-							data.structures[j].systems[k].damage,
+							data.structures[j].systems[k].minDmg,
+							data.structures[j].systems[k].maxDmg,
 							data.structures[j].systems[k].optRange,
 							data.structures[j].systems[k].dmgDecay,
 							data.structures[j].systems[k].accDecay,
@@ -446,7 +447,8 @@ else {
 							data.structures[j].systems[k].name,
 							data.structures[j].systems[k].display,
 							data.structures[j].systems[k].output,
-							data.structures[j].systems[k].damage,
+							data.structures[j].systems[k].minDmg,
+							data.structures[j].systems[k].maxDmg,
 							data.structures[j].systems[k].accDecay,
 							data.structures[j].systems[k].shots,
 							data.structures[j].systems[k].reload,

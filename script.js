@@ -65,10 +65,6 @@ function init(){
 	game.draw();
 }
 
-function getFireOrderId(){
-	return fireOrders.length+1;
-}
-
 function executeAll(){
 	if (game){
 		game.executeAll();
@@ -158,18 +154,23 @@ function canvasMouseMove(e){
 				angle = addAngle(angle, -vessel.getPlannedFacingToMove());
 				//console.log(angle);
 
+				var baseHit = vessel.getHitChanceFromAngle(angle);
+
 				var tr = document.createElement("tr");
-				var th = document.createElement("th"); th.colSpan = 5; th.style.color = "red";
-					th.innerHTML = "<b>Targeting: " + vessel.shipClass + ", #" + vessel.id; tr.appendChild(th); table.appendChild(tr);
+				var th = document.createElement("th"); th.colSpan = 5; th.className ="weaponAimHeader";
+					th.innerHTML = "ACTIVE TARGET"; tr.appendChild(th); table.appendChild(tr);
+				var tr = document.createElement("tr");
+				var th = document.createElement("th"); th.colSpan = 5; th.className ="weaponAimHeader";
+					th.innerHTML = vessel.shipClass + " " + vessel.id + " ----- " + baseHit + "%"; tr.appendChild(th); table.appendChild(tr);
 			}
 				var tr = document.createElement("tr");
 				var th = document.createElement("th"); th.innerHTML = "Weapon"; tr.appendChild(th);
 				var th = document.createElement("th"); th.innerHTML = "Acc loss"; tr.appendChild(th);
 				var th = document.createElement("th"); th.innerHTML = "Dmg loss"; tr.appendChild(th);
-			if (vessel){
+			/*if (vessel){
 				var th = document.createElement("th"); th.innerHTML = "End Acc"; tr.appendChild(th);
 				var th = document.createElement("th"); th.innerHTML = "End Dmg"; tr.appendChild(th);
-			}
+			}*/
 			table.appendChild(tr);
 			
 			var validWeapon = false;
@@ -196,19 +197,18 @@ function canvasMouseMove(e){
 						}
 						
 						if (valid){
+							var decay = ship.structures[i].systems[j].getAccurayDecay(dist)
+
 							var td = document.createElement("td");
-								td.innerHTML = ship.structures[i].systems[j].getAccurayDecay(dist) + "%"; tr.appendChild(td);
+								td.innerHTML = decay + "%"; tr.appendChild(td);
 							var td = document.createElement("td");
 								td.innerHTML = ship.structures[i].systems[j].getDamageDecay(dist) + "%"; tr.appendChild(td);
-							if (vessel){
-									//	console.log(vessel.getHitChanceFromAngle(angle));
-									//	console.log(ship.weapons[i].getAccurayDecay(dist));
-
+							/*if (vessel){
 								var td = document.createElement("td");
-									td.innerHTML = vessel.getHitChanceFromAngle(angle) /* - ship.weapons[i].getAccurayDecay(dist) */ + "%"; tr.appendChild(td);
+									td.innerHTML = baseHit - decay + "%"; tr.appendChild(td);
 								var td = document.createElement("td");
 									td.innerHTML = ship.structures[i].systems[j].getExpectedDamage(dist); tr.appendChild(td);
-							}
+							}*/
 							table.appendChild(tr);
 						}
 						else {
@@ -410,9 +410,7 @@ function canvasMouseClick(e){
 								for (var j = ship.structures[i].systems.length-1; j >= 0; j--){
 									if (ship.structures[i].systems[j].selected){
 										if (ship.structures[i].systems[j].posIsOnArc(shipLoc, clickShip.getOffsetPos(), facing)){
-										//	fireOrders.push(new FireOrder(ship.id, clickShip.id, ship.weapons[i].id, dist));
-											game.fireOrders.push( {shooterid: ship.id, targetid: clickShip.id, weaponid: ship.structures[i].systems[j].id} );
-											ship.structures[i].systems[j].setFireOrder();
+											ship.structures[i].systems[j].setFireOrder(new FireOrder(0, ship.id, clickShip.id, ship.structures[i].systems[j].id, game.turn));
 										}
 									}
 								}

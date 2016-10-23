@@ -4,31 +4,33 @@
 class Particle extends Weapon {
 	public $type = "Particle";
 
-	function __construct($id, $parentId, $start, $end, $output = 0){
-        parent::__construct($id, $parentId, $start, $end, $output);
+	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
+        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
 	}
 }
 
 class StandardParticleBeam extends Particle {
 	public $name = "ParticleBeam";
 	public $display = "Particle Beam";
-	public $damage = 3;
+	public $minDmg = 5;
+	public $maxDmg = 6;
 	public $accDecay = 80;
 	public $shots = 3;
 
-	function __construct($id, $parentId, $start, $end, $output = 0){
-        parent::__construct($id, $parentId, $start, $end, $output);
+	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
+        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
 	}
 }
 class FusionCannon extends Particle {
 	public $name = "FusionCannon";
 	public $display = "Fusion Cannon";
-	public $damage = 4;
+	public $minDmg = 6;
+	public $maxDmg = 8;
 	public $accDecay = 65;
 	public $shots = 2;
 
-	function __construct($id, $parentId, $start, $end, $output = 0){
-        parent::__construct($id, $parentId, $start, $end, $output);
+	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
+        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
 	}
 }
 

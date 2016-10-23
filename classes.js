@@ -67,20 +67,20 @@ function Path (a, b){
 	this.setup();
 };
 
-function FireOrder(shooterId, targetId, weaponId, dist){
-	this.id = getFireOrderId();
+function FireOrder(id, shooterId, targetId, weaponId, turn){
+	this.id = id;
 	this.weaponId = weaponId;
 	this.targetId = targetId;
 	this.shooterId = shooterId;
-	this.dist = dist;
+	this.dist;
 	this.shots;
 	this.guns;
 	this.animated = false;
 	this.anim = [];
-	this.gunRolls = [];
+	this.turn = turn;
 }
 
-function Structure(id, parentId, start, end, armour, health, destroyed){
+function Structure(id, parentId, start, end, armour, integrity, destroyed){
 	this.name = "Structure";
 	this.display = "Structure";
 	this.id = id;
@@ -88,16 +88,22 @@ function Structure(id, parentId, start, end, armour, health, destroyed){
 	this.start = start;
 	this.end = end;
 	this.armour = armour;
-	this.health = health;
+	this.integrity = integrity;
 	this.destroyed = destroyed || false;
 	this.systems = [];
 	this.highlight = false;
+	this.damages = [];
 
 	this.getTableRow = function(){
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
 			td.className = "struct";
 			td.innerHTML = this.name + " #" + (this.id);
+
+		var div = document.createElement("div");
+			div.className = "integrity";
+			td.appendChild(div);
+
 		$(td).data("shipId", this.parentId);
 		$(td).data("systemId", this.id);
 		$(td).hover(
@@ -143,11 +149,12 @@ function Structure(id, parentId, start, end, armour, health, destroyed){
 		if (this.highlight){
 			this.highlight = false;
 			game.getShipById(this.parentId).highlightAllSelectedWeapons();
+			this.hideInfoDiv();
 		}
 		else {
 			this.highlight = true;
 			this.showHitAxis();
-			//this.showInfoDiv();
+			this.showInfoDiv();
 		}
 	}
 
@@ -156,14 +163,14 @@ function Structure(id, parentId, start, end, armour, health, destroyed){
 	}
 
 	this.showInfoDiv = function(){
-		var div = this.getWeaponDetailsDiv();
+		var div = this.getSystemDetailsDiv();
 		var parentId = this.parentId;
 		var id = this.id;
 		
 		var div = $(".shipDiv").each(function(i){
 			if ($(this).data("shipId") == parentId){
-				$(this).find(".weapon").each(function(j){
-					if ($(this).data("weaponId") == id){
+				$(this).find(".struct").each(function(j){
+					if ($(this).data("systemId") == id){
 						var offset = $(this).offset();
 						div.style.top = offset.top + 0 + "px";
 						div.style.left = offset.left + 125 + "px";
@@ -176,8 +183,39 @@ function Structure(id, parentId, start, end, armour, health, destroyed){
 	}
 	
 	this.hideInfoDiv = function(){
-		var div = document.getElementById("weaponDetailsDiv");
+		var div = document.getElementById("systemDetailsDiv");
 			$(div).remove();
+	}
+
+	
+	this.getSystemDetailsDiv = function(){
+		var div = document.createElement("div");
+			div.id = "systemDetailsDiv";
+		var table = document.createElement("table");
+			
+		var tr = document.createElement("tr");
+		var td = document.createElement("td"); td.style.width = "60%";
+			td.innerHTML = "Integrity"; tr.appendChild(td);
+		var td = document.createElement("td");
+			td.innerHTML = this.getRemainingIntegrity(); tr.appendChild(td); table.appendChild(tr);
+			
+		var tr = document.createElement("tr");
+		var td = document.createElement("td"); td.style.width = "40%";
+			td.innerHTML = "Armour"; tr.appendChild(td);
+		var td = document.createElement("td");
+			td.innerHTML = this.armour; tr.appendChild(td); table.appendChild(tr);
+			
+		div.appendChild(table);
+			
+		return div;
+	}
+
+	this.getRemainingIntegrity = function(){
+		var integrity = this.integrity;
+		for (var i = 0; i < this.damages.length; i++){
+			integrity -= this.damages[i].amount;
+		}
+		return integrity;
 	}
 
 }

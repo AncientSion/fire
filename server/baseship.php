@@ -8,9 +8,9 @@ require_once("debug.php");
 
 class Ship {
 	public $id;
-	public $x;
-	public $y;
-	public $facing;
+	public $x = 0;
+	public $y = 0;
+	public $facing = 0;
 	public $shipClass;
 	public $shipType = "type";
 	public $userid;

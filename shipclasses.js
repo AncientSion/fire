@@ -303,7 +303,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		fxCtx.arc(pos.x, pos.y, dist, rad1, rad2, false);
 		fxCtx.closePath();
 		fxCtx.globalAlpha = 0.1;			
-		fxCtx.fillStyle = "red";
+		fxCtx.fillStyle = "blue";
 		fxCtx.fill();
 		fxCtx.globalAlpha = 1;
 		fxCtx.strokeStyle = "black";
@@ -1044,23 +1044,9 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		div.appendChild(table);
 
 
-		$(div).contextmenu(function(e){
-			//e.preventDefault();
-		});
+		
 
-		$(div).on('mousedown', $(this), function() {
-        $(this).addClass('draggable').parents().on('mousemove', function(e) {
-            $('.draggable').offset({
-                top: e.pageY - $('.draggable').outerHeight() / 2,
-                left: e.pageX - $('.draggable').outerWidth() / 2
-            }).on('mouseup', function() {
-                $(this).removeClass('draggable');
-            });
-        });
-        //e.preventDefault();
-	    }).on('mouseup', function() {
-	        $('.draggable').removeClass('draggable');
-	    });
+		$(div).drag();
 			
 		document.getElementById("game").appendChild(div);
 
@@ -1336,6 +1322,26 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 			
 			$("#weaponAimTableWrapper").hide();
 		}
+	}
+
+	this.getFireOrders = function(){
+
+		var fires = [];
+
+		for (var i = 0; i < this.structures.length; i++){
+			for (var j = 0; j < this.structures[i].systems.length; j++){
+				if (this.structures[i].systems[j].fireOrders.length){
+					for (var k = this.structures[i].systems[j].fireOrders.length-1; k >= 0; k--){
+						if (this.structures[i].systems[j].fireOrders[k].turn == game.turn){
+							fires.push(this.structures[i].systems[j].fireOrders[k]);
+						}
+						else return fires;
+					}
+				}
+			}
+		}
+
+		return fires;
 	}
 }
 

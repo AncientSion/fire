@@ -1,5 +1,9 @@
 <?php
 
+
+require_once("server\classes.php");
+
+
 class DBManager {
 
 	private $connection = null;
@@ -207,6 +211,10 @@ class DBManager {
 	}
 
 	public function buyFleet($userid, $gameid, $ships){
+		debug::log("buyFleet");
+		debug::log($userid);
+		debug::log($gameid);
+		debug::log($ships);
 
 		$stmt = $this->connection->prepare("
 			INSERT INTO ships 
@@ -220,6 +228,7 @@ class DBManager {
 		$destroyed = 0;
 
 		for ($i = 0; $i < sizeof($ships); $i++){
+		debug::log($ships[$i]["shipClass"]);
 			$stmt->bindParam(":gameid", $gameid);
 			$stmt->bindParam(":userid", $userid);
 			$stmt->bindParam(":shipclass", $ships[$i]["shipClass"]);
@@ -401,9 +410,9 @@ class DBManager {
 
 			$stmt->bindParam(":gameid", $gameid);
 			$stmt->bindParam(":turn", $turn);
-			$stmt->bindParam(":shooterid", $fires[$i]["shooterid"]);
-			$stmt->bindParam(":targetid", $fires[$i]["targetid"]);
-			$stmt->bindParam(":weaponid", $fires[$i]["weaponid"]);
+			$stmt->bindParam(":shooterid", $fires[$i]["shooterId"]);
+			$stmt->bindParam(":targetid", $fires[$i]["targetId"]);
+			$stmt->bindParam(":weaponid", $fires[$i]["weaponId"]);
 			$stmt->bindParam(":resolved", $resolved);
 
 			$stmt->execute();
@@ -641,21 +650,38 @@ class DBManager {
 	public function getAllFireOrders($gameid, $turn){
 		debug::log("getAllFireOrders for turn ".$turn);
 		$stmt = $this->connection->prepare("
-			SELECT * FROM fireOrders
+			SELECT * FROM fireorders
 			WHERE gameid = :gameid
 			AND turn = :turn
-			AND resolved = :resolved
 		");
 
 		$resolved = 1;
 
 		$stmt->bindParam(":gameid", $gameid);
 		$stmt->bindParam(":turn", $turn);
-		$stmt->bindParam(":resolved", $resolved);
 		$stmt->execute();
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
 		if ($result){
+			for ($i = 0; $i < (sizeof($result)); $i++){
+				//echo json_encode($fires[$i]);
+				$fire = new FireOrder(
+					$result[$i]["id"],
+					$result[$i]["gameid"],
+					$result[$i]["turn"],
+					$result[$i]["shooterid"],
+					$result[$i]["targetid"],
+					$result[$i]["weaponid"],
+					$result[$i]["req"],
+					$result[$i]["notes"],
+					$result[$i]["hits"],
+					$result[$i]["resolved"]
+				);
+
+				$result[$i] = $fire;
+			}
+
 			return $result;
 		}
 		else return false;

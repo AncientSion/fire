@@ -38,7 +38,7 @@ if (isset($_SESSION["userid"])){
 		$ongoingGamesElement .= "</tr>";
 
 		$ongoingGamesElement .= "<tr>";
-		$ongoingGamesElement .= "<th style='width: 706'>Game Name</th>";
+		$ongoingGamesElement .= "<th style='width: 70%'>Game Name</th>";
 		$ongoingGamesElement .= "<th style='width: 10%'>Phase</th>";
 		$ongoingGamesElement .= "<th style='width: 15%'>Status</th>";
 		$ongoingGamesElement .= "</tr>";

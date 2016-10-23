@@ -144,6 +144,17 @@ window.ajax = {
 	},
 
 	confirmFiringOrders: function(){
+		var fires = [];
+		for (var i = 0; i < game.ships.length; i++){
+			if (game.ships[i].userid == game.userid){
+				var fire = game.ships[i].getFireOrders();
+				for (var j = 0; j < fire.length; j++){
+					fires.push(fire[j]);
+				}
+			}
+		}
+		//console.log(fires);
+		//return;
 		$.ajax({
 			type: "POST",
 			url: "postGameData.php",
@@ -154,7 +165,7 @@ window.ajax = {
 					userid: game.userid,
 					gameturn: game.turn,
 					gamephase: game.phase,
-					fire: game.fireOrders
+					fire: fires
 					},
 			success: refresh,
 			error: ajax.error,

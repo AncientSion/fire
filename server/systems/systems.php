@@ -9,18 +9,19 @@ include_once('include.php');
 class Structure {
 	public $id;
 	public $parentId;
-	public $health;
+	public $integrity;
 	public $armour;
 	public $systems = array();
 	public $destroyed = false;
 
-	function __construct($id, $parentId, $start, $end, $armour, $health){
+	function __construct($id, $parentId, $start, $end, $armour, $integrity, $destroyed = false){
 		$this->id = $id;
 		$this->parentId = $parentId;
 		$this->start = $start;
 		$this->end = $end;
 		$this->armour = $armour;
-		$this->health = $health;
+		$this->integrity = $integrity;
+		$this->destroyed = $destroyed;
 
 		//$this->id = $manager->getId();
 	}
@@ -37,38 +38,41 @@ class System {
 	public $name;
 	public $display;
 
-	function __construct($id, $parentId, $output){
+	function __construct($id, $parentId, $output, $destroyed = false){
 		$this->id = $id;
 		$this->parentId = $parentId;
 		$this->output = $output;
+		$this->destroyed = $destroyed;
 	}
 }
 
 class Weapon extends System {
 	public $weapon = true;
-	public $damage;
+	public $minDmg;
+	public $maxDmg;
 	public $accDecay;
 	public $shots = 1;
 	public $guns = 1;
 	public $reload = 1;
-	public $powerUsage = 2; 
+	public $powerUsage = 2;
+	public $fireOrders = [];
 
-	function __construct($id, $parentId, $start, $end, $output = 0){
+	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
 		$this->start = $start;
 		$this->end = $end;
-        parent::__construct($id, $parentId, $output);
+        parent::__construct($id, $parentId, $output, $destroyed);
 	}
 
 	public function getAccLoss ($dist){
 		return ceil($this->accDecay * $dist / $this->decayVar);
 	}
 
-	public function getDmgLoss($dist){
+	public function getDmgLoss($fire){
 		return 0;
 	}
 
-	public function getDamage($dist){
-		return floor($this->damage - ($this->damage / 100  * $this->getDmgLoss($dist)));
+	public function getDamage($fire){
+		return floor(mt_rand($this->mindDmg, $this->maxDmg));
 	}
 }
 

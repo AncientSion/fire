@@ -1,0 +1,17 @@
+body, table, tr, td {
+	font-family: arial;
+	font-size: 12px;
+}
+
+table, th, tr, td {
+	text-align: center;
+}
+
+
+
+.lobbyDiv {
+	padding: 5px;
+	text-align: center;
+	margin: auto;
+	margin-top: 20px;
+}

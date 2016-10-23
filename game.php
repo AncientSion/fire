@@ -15,10 +15,10 @@ if (isset($_SESSION["userid"])){
 
 	//debug::log("phase: ".$game["phase"]);
 
-	$game = $manager->gamedata["game"];
-	$playerstatus = $manager->gamedata["playerstatus"];
-	$ships = $manager->gamedata["ships"];
-	$fireorders = $manager->gamedata["fireorders"];
+	$game = $manager->game;
+	$playerstatus = $manager->playerstatus;
+	$ships = $manager->ships;
+	$fireorders = $manager->fires;
 
 	/*$w = new Omega(5, 2, "test", 50, 25, 90);
 

@@ -32,7 +32,9 @@ if (isset($_POST["type"])) {
 		}
 	}
 	else if ($_POST["type"] == "buyFleet") {
+			debug::log("type");
 		if ($dbManager->buyFleet($_POST["userid"], $_POST["gameid"], $_POST["ships"])) {
+			debug::log("byu");
 			if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], -1, -1, "ready")) {
 				if ($dbManager->gameIsReady($_POST["gameid"])) {
 					if ($dbManager->startGame($_POST["gameid"])) {

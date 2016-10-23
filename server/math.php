@@ -7,7 +7,7 @@ class Math {
 	}
 
 	static function getDist($ax, $ay, $bx, $by){
-		return sqrt( pow($bx - $ax, 2) + pow($by - $ay, 2) );
+		return ceil(sqrt ( pow($bx - $ax, 2) + pow($by - $ay, 2) ) );
 	}
 
 	static function getAngle($ax, $ay, $bx, $by){

@@ -75,3 +75,45 @@ function redirect(url){
 		window.location = "lobby.php"
 	}, 500);
 }
+
+// Draggable plugin
+(function($) {
+    $.fn.drag = function(options) {
+        options = $.extend({
+            handle: null,
+            draggingClass: 'dragging'
+        }, options);
+
+        var $handle = this,
+            $drag = this;
+
+        if( options.handle ) {
+            $handle = $(options.handle);
+        }
+
+        $handle
+            .css('cursor', options.cursor)
+            .on("mousedown", function(e) {
+                var x = $drag.offset().left - e.pageX,
+                    y = $drag.offset().top - e.pageY,
+                    z = $drag.css('z-index');
+
+                //$drag.css('z-index', 100000);
+
+                $(document.documentElement)
+                    .on('mousemove.drag', function(e) {
+                        $drag.offset({
+                            left: x + e.pageX,
+                            top: y + e.pageY
+                        });
+                    })
+                    .one('mouseup', function() {
+                        $(this).off('mousemove.drag');
+                        $drag.css('z-index', z);
+                    });
+
+                // disable selection
+                e.preventDefault();
+            });
+    };
+})(jQuery);

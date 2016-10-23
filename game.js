@@ -210,12 +210,6 @@ function Game(id, name, status, userid, turn, phase){
 		//window.ships = [window.ships[0]];
 
 		for (var i = 0; i < window.ships.length; i++){
-			//console.log(window.ships[i]);
-			var shipClass = window.ships[i].shipclass;
-			var userid = window.ships[i].userid;
-			var id = window.ships[i].id;
-			var x;
-			var y;
 			var deployed = false;
 			var friendly = false;
 
@@ -252,7 +246,7 @@ function Game(id, name, status, userid, turn, phase){
 			ship.deployed = deployed;
 
 
-			//function Structure(parentId, start, end, armour, health){
+			//function Structure(parentId, start, end, armour, integrity){
 			for (var j = 0; j < window.ships[i].structures.length; j++){
 				var struct = new Structure(
 					window.ships[i].structures[j].id,
@@ -260,7 +254,7 @@ function Game(id, name, status, userid, turn, phase){
 					window.ships[i].structures[j].start,
 					window.ships[i].structures[j].end,
 					window.ships[i].structures[j].armour,
-					window.ships[i].structures[j].health,
+					window.ships[i].structures[j].integrity,
 					window.ships[i].structures[j].destroyed
 				);
 
@@ -274,7 +268,8 @@ function Game(id, name, status, userid, turn, phase){
 								window.ships[i].structures[j].systems[k].name,
 								window.ships[i].structures[j].systems[k].display,
 								window.ships[i].structures[j].systems[k].output,
-								window.ships[i].structures[j].systems[k].damage,
+								window.ships[i].structures[j].systems[k].minDmg,
+								window.ships[i].structures[j].systems[k].maxDmg,
 								window.ships[i].structures[j].systems[k].optRange,
 								window.ships[i].structures[j].systems[k].dmgDecay,
 								window.ships[i].structures[j].systems[k].accDecay,
@@ -293,7 +288,8 @@ function Game(id, name, status, userid, turn, phase){
 								window.ships[i].structures[j].systems[k].name,
 								window.ships[i].structures[j].systems[k].display,
 								window.ships[i].structures[j].systems[k].output,
-								window.ships[i].structures[j].systems[k].damage,
+								window.ships[i].structures[j].systems[k].minDmg,
+								window.ships[i].structures[j].systems[k].maxDmg,
 								window.ships[i].structures[j].systems[k].accDecay,
 								window.ships[i].structures[j].systems[k].shots,
 								window.ships[i].structures[j].systems[k].reload,
@@ -303,9 +299,23 @@ function Game(id, name, status, userid, turn, phase){
 							//console.log(system);
 						}
 
-						struct.systems.push(system);
+						if (system){
+							if (window.ships[i].structures[j].systems[k].fireOrders.length){
+								for (var l = 0; l < window.ships[i].structures[j].systems[k].fireOrders.length; l++){
+									system.fireOrders.push(
+										new FireOrder(
+											window.ships[i].structures[j].systems[k].fireOrders[l].id,
+											window.ships[i].structures[j].systems[k].fireOrders[l].shooterid,
+											window.ships[i].structures[j].systems[k].fireOrders[l].targetid,
+											window.ships[i].structures[j].systems[k].fireOrders[l].weaponid,
+											window.ships[i].structures[j].systems[k].fireOrders[l].turn
+										)
+									)	
+								}
+							}
+							struct.systems.push(system);
+						}		
 					}
-
 				}
 				ship.structures.push(struct);
 			}
@@ -338,22 +348,23 @@ function Game(id, name, status, userid, turn, phase){
 			}
 
 
-			ship.create();
-
-			for (var j = 0; j < window.fireOrders.length; j++){
+			/*for (var j = 0; j < window.fireOrders.length; j++){
 				if (window.fireOrders[j]["shooterid"] == id){
-					for (var k = 0; k < ship.weapons.length; k++){
-						if (ship.weapons[k].id == window.fireOrders[j]["weaponid"]){
-							ship.weapons[k].fireOrders.push(window.fireOrders[j]);
+					for (var l = 0; l < ship.structures.length; l++){
+						for (var k = 0; k < ship.structures[l].systems.length; k++){
+							if (ship.structures[l].systems[k].id == window.fireOrders[j]["weaponid"]){
+								ship.structures[l].systems[k].fireOrders.push(window.fireOrders[j]);
+							}
 						}
 					}
 				}
-			}
+			}*/
 
+			ship.create();
 			this.ships.push(ship);
 		}
 
-		if (window.fireOrders.length){console.log("ding");this.fireOrders = window.fireOrders;}
+		//if (window.fireOrders.length){console.log("ding");this.fireOrders = window.fireOrders;}
 
 		this.initPhase(this.phase);
 	}

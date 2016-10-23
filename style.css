@@ -1,17 +1,11 @@
-body, table, tr, td {
+body, table, tr, td, div, span {
 	font-family: arial;
 	font-size: 12px;
-}
-
-div {
+	cursor: default;
 }
 
 table, th, tr, td {
 	text-align: center;
-}
-
-tr.selected, td.selected {
-	background-color: lightblue
 }
 
 canvas {
@@ -37,6 +31,14 @@ canvas {
 	width: 300px;
 	border-collapse: collapse;
 	border: 1px solid black;
+}
+
+#deployTable th, #deployTable td {
+	border: 1px solid black
+}
+
+#deployTable .selected {
+	background-color: lightBlue;
 }
 
 #confirmFleet {
@@ -158,31 +160,6 @@ canvas {
 	z-index: 5;
 }
 
-.struct {
-	background-color: darkgreen;
-	color: white;
-	height: 20px;
-	font-size: 16px;
-}
-
-.structContainer {
-	display: inline-block;
-	width: 400px;
-	height: 400px;
-	position: relative;
-	color: white;
-	margin: auto;
-	border: 1px solid black;
-}
-
-.structDiv {
-	display: inline-block;
-	padding: 3px;
-	position: absolute;
-	color: white;
-	border: 1px solid black;
-}
-
 .iconDiv {
 	position: absolute;
 }
@@ -193,21 +170,70 @@ canvas {
   -ms-transform: rotate(270deg);
 }
 
+.structDiv {
+	display: inline-block;
+	padding: 3px;
+	position: absolute;
+	color: white;
+	border: 1px solid black;
+}
+
+.structContainer {
+	display: inline-block;
+	width: 400px;
+	height: 400px;
+	position: relative;
+	color: white;
+	margin: auto;
+}
+
 .structTable {
 	width: 120px;
 }
 
-.weapon {
-	background-color: green;
+.structTable td {
+	position: relative;
+}
+
+.structTable td, .structTable th {
+	border: 1px solid black;
+}
+
+.struct {
 	color: white;
+	height: 20px;
+	font-size: 16px;
+}
+
+.integrity {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	background-color: green;
+	z-index: -1;
+	width: 80%;
+}
+
+.loadLevel {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	background-color: lightBlue;
+	z-index: -1;
+}
+
+.weapon {
+	color: black;
 }
 
 .weapon.selected {
-	background-color: blue;
+	box-shadow: inset 0 0 6px blue;
 }
 
 .weapon.fireOrder {
-	background-color: red;
+	box-shadow: inset 0 0 6px red;
 }
 
 .shipDiv {
@@ -224,6 +250,7 @@ canvas {
 	width: 220px;
 	border: 1px solid black;
 	border-radius: 3px;
+	border-collapse: collapse;
 }
 
 .shipDiv .structure {
@@ -276,13 +303,20 @@ canvas {
 	color: black;
 }
 
-#weaponDetailsDiv {
+#systemDetailsDiv {
 	z-index: 15;
 	display: inline-block;
-	border: 1px solid black;
 	position: absolute;
 	background: white;
 	color: black;
+}
+#systemDetailsDiv table {
+	width: 180px;
+	border-collapse: collapse;
+}
+
+#systemDetailsDiv td {
+	border: 1px solid black;
 }
 
 #upperGUI {
@@ -347,6 +381,11 @@ canvas {
 	border: 2px solid white;
 	z-index: 10;
 	margin: auto;
+}
+
+.weaponAimHeader {
+	color: red;
+	font-size: 18px;
 }
 
 #weaponAimTable tr td {
