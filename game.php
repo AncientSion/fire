@@ -13,12 +13,16 @@ if (isset($_SESSION["userid"])){
 	echo "<script> var gameid = ".$gameid."; var userid = ".$userid.";</script>";
 	$manager = new Manager($userid, $gameid);
 
+	//echo json_encode($manager->ships);
 	//debug::log("phase: ".$game["phase"]);
 
 	$game = $manager->game;
 	$playerstatus = $manager->playerstatus;
 	$ships = $manager->ships;
-	$fireorders = $manager->fires;
+
+	//echo sizeof($ships);
+	//echo var_export($ships[0]);
+	//$fireorders = $manager->fires;
 
 	/*$w = new Omega(5, 2, "test", 50, 25, 90);
 
@@ -33,7 +37,7 @@ if (isset($_SESSION["userid"])){
 	echo "window.gd = ".json_encode($game, JSON_NUMERIC_CHECK).";";
 	echo "window.ships = ".json_encode($ships, JSON_NUMERIC_CHECK).";";
 	echo "window.playerstatus = ".json_encode($playerstatus, JSON_NUMERIC_CHECK).";";
-	echo "window.fireOrders = ".json_encode($fireorders, JSON_NUMERIC_CHECK).";";
+	//echo "window.fireOrders = ".json_encode($fireorders, JSON_NUMERIC_CHECK).";";
 	echo "</script>";
 }
 ?>

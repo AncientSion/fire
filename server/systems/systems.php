@@ -63,6 +63,25 @@ class Weapon extends System {
         parent::__construct($id, $parentId, $output, $destroyed);
 	}
 
+	public function rollForHit($fire){
+		$hits = 0;
+		$notes = "";
+
+		for ($j = 0; $j < $this->shots; $j++){
+				$roll = mt_rand(1, 100);
+				$notes = $notes.$roll.",";
+
+			if ($roll <= $fire->req){
+				$hits++;
+			}
+		}
+
+		$fire->hits = $hits;
+		$fire->notes = $notes;
+
+		return $fire;
+	}
+
 	public function getAccLoss ($dist){
 		return ceil($this->accDecay * $dist / $this->decayVar);
 	}
@@ -72,7 +91,10 @@ class Weapon extends System {
 	}
 
 	public function getDamage($fire){
-		return floor(mt_rand($this->mindDmg, $this->maxDmg));
+		$fire->dmgRoll = mt_rand($this->minDmg, $this->maxDmg);
+		$fire->loss = $this->getDmgLoss($fire);
+
+		return $fire;
 	}
 }
 

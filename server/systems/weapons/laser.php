@@ -9,20 +9,15 @@ class Laser extends Weapon {
 	
 	public function getDmgLoss($fire){
 
-		$ret = $fire["dist"];
+		$dist = $fire->dist;
 
-		if ($ret < $this->optRange){
-			$ret = $this->optRange - $ret;
+		if ($dist < $this->optRange){
+			$dist = $this->optRange - $dist;
 		}
-		else $ret = $ret - $this->optRange;
+		else $dist = $dist - $this->optRange;
 
-		return ceil($this->dmgDecay * $ret / 100);
+		return ceil($this->dmgDecay * $dist / 100);
 	}
-
-	public function getDamage($fire){
-		return floor(mt_rand($this->minDmg, $this->maxDmg) / 100 * (100 - $this->getDmgLoss($fire)));
-	}
-
 }
 
 class HeavyLaser extends Laser {

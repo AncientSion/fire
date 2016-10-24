@@ -14,9 +14,13 @@ class Manager {
 		$before = round(microtime(true)*1000);
 		$this->userid = $userid;
 		$this->gameid = $gameid;
-		$this->ships = array();
-		$this->fireOrders = array();
+
 		$this->index = 0;
+
+		$this->gd = array();
+
+
+		$this->ships = array();
 		$this->gd = array();
 		$this->fires = array();
 
@@ -296,66 +300,65 @@ class Manager {
 	}
 
 	public function handleFireOrders(){
-		Debug::log("handleFireOrders -> ".sizeof($this->fires));
+		echo sizeof($this->fires); echo "</br></br>";
+		for ($i = 0; $i < sizeof($this->fires); $i++){
+			$this->fires[$i]->shooter = $this->getShipById($this->fires[$i]->shooterid);
+			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getWeaponById($this->fires[$i]->weaponid);
+			$this->fires[$i]->target = $this->getShipById($this->fires[$i]->targetid);
+			$this->fires[$i] = $this->calculateHitChance($this->fires[$i]);
+			$this->fires[$i] = $this->rollForHit($this->fires[$i]);
+			$this->fires[$i] = $this->rollForDamage($this->fires[$i]);
 
-			for ($i = 0; $i < sizeof($this->fires); $i++){
-				$shooter = $this->getShipById($this->fires[$i]->shooterid);
-				$target = $this->getShipById($this->fires[$i]->targetid);
-				$weapon = $shooter->getWeaponById($this->fires[$i]->weaponid);
+			$this->fires[$i]->shooter = false;
+			$this->fires[$i]->weapon = false;
+			$this->fires[$i]->target = false;
 
-				$this->fires[$i] = $this->calculateHitChance($this->fires[$i], $shooter, $target, $weapon);
-				$this->fires[$i] = $this->rollForHit($this->fires[$i], $shooter, $weapon);
-				$this->fires[$i] = $this->rollForDamage($this->fires[$i], $weapon);
-				echo json_encode($this->fires[$i]);
-			}
+			//echo $this->fires[$i]->dmgRoll." - ".$this->fires[$i]->loss."%";
+			//echo "</br></br>";
+		}
+
+		return true;
 	}
 
-	public function calculateHitChance($fire, $shooter, $target, $weapon){
+	public function calculateHitChance($fire){
+		//echo json_encode($fire); echo "</br></br>";
 		Debug::log("calculateHitChance for fire ID ".$fire->id);	
 
-		$hitAngle = Math::getAngle($target->x, $target->y, $shooter->x, $shooter->y);
-		$angle = Math::addAngle($target->facing, $hitAngle);			
-		$profile = $target->getHitChanceFromAngle($angle);
+		$hitAngle = Math::getAngle($fire->target->x, $fire->target->y, $fire->shooter->x, $fire->shooter->y);
+		$angle = round(Math::addAngle($fire->target->facing, $hitAngle));			
+		$profile = $fire->target->getHitChanceFromAngle($angle);
 
-		$fire->dist = Math::getDist($shooter->x, $shooter->y, $target->x, $target->y);
+		$fire->dist = Math::getDist($fire->shooter->x, $fire->shooter->y, $fire->target->x, $fire->target->y);
 		$fire->angleIn = $angle;
 
-		$rangeLoss = $weapon->getAccLoss($fire->dist);
+		$rangeLoss = $fire->weapon->getAccLoss($fire->dist);
 
 		$fire->req = $profile - $rangeLoss;
 
 		return $fire;
-
 	}
 
-	public function rollForHit($fire, $shooter, $weapon){
+	public function rollForHit($fire){
 		Debug::log("rollForHit for fire ID ".$fire->id);
+
 		$hits = 0;
-		$shooter = $this->getShipById($fire->shooterid);
-		$weapon = $shooter->getWeaponById($fire->weaponid);
 		$notes = "";
 
-		for ($j = 0; $j < $weapon->shots; $j++){
-				$roll = mt_rand(1, 100);
-				$notes = $notes.$roll.",";
-
-			if ($roll <= $fire->req){
-				$hits++;
-			}
-		}
-
-		$fire->hits = $hits;
-		$fire->notes = $notes;
+		$fire = $fire->weapon->rollForHit($fire);
 		return $fire;
 	}
 
-	public function rollForDamage($fire, $weapon){
-		debug::log("rollForDamage");
+	public function rollForDamage($fire){
+		Debug::log("rollForDamage for fire ID ".$fire->id);	
+
+		$fire = $fire->weapon->getDamage($fire);
+		return $fire;
 	}
 
 	public function updateFireOrders(){
 		debug::log("updateFireOrders");
-		DBManager::app()->updateFireOrders($this->fireOrders);
+
+		DBManager::app()->updateFireOrders($this->fires);
 	}
 
 	public function startDamageControlPhase(){
@@ -387,13 +390,13 @@ class Manager {
 	}
 
 	public function getShipById($shipid){
-		//debug::log("looking for ship :".$shipid);
+		debug::log("looking for ship :".$shipid);
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			//echo json_encode($this->gd["ships"][$i]);
 			//debug::log("class: ".get_class($this->gd["ships"][$i]));
-			//debug::log("now : ".$this->gd["ships"][$i]->id);
+			//debug::log("now : ".$this->ships[$i]->id);
 			if ($this->ships[$i]->id == $shipid){
-				//debug::log("found!");
+				debug::log("found!");
 				return $this->ships[$i];
 			}
 		}

@@ -15,11 +15,14 @@ class FireOrder {
 	public $hits;
 	public $resolved;
 
-	public $shooter;
-	public $target;
-	public $weapon;
-	public $dist;
-	public $angleIn;
+	public $shooter = false;
+	public $target = false;
+	public $weapon = false;
+	public $dist = false;
+	public $angleIn = false;
+	public $accRol = false;
+	public $loss = false;
+	public $dmgRoll = false;
 
 	function __construct($id, $gameid, $turn, $shooterid, $targetid, $weaponid, $req, $notes, $hits, $resolved){
 		$this->id = $id;
