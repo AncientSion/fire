@@ -20,7 +20,6 @@ class FireOrder {
 	public $weapon = false;
 	public $dist = false;
 	public $angleIn = false;
-	public $accRol = false;
 	public $loss = false;
 	public $dmgRoll = false;
 

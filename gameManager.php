@@ -41,6 +41,13 @@ class Manager {
 		$after = round(microtime(true)*1000);
 		debug::log("time: ".($after-$before)." millisec/serialize\n");
 	}
+
+
+	public function convert($size){
+	    $unit = array('b','kb','mb','gb','tb','pb');
+	    return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
+	}
+
 	
 	public function getUsername(){
 		$name = DBManager::app()->getUsername($this->userid);
@@ -300,6 +307,7 @@ class Manager {
 	}
 
 	public function handleFireOrders(){
+		Debug::log("BEGIN: ".$this->convert(memory_get_usage()));
 		echo sizeof($this->fires); echo "</br></br>";
 		for ($i = 0; $i < sizeof($this->fires); $i++){
 			$this->fires[$i]->shooter = $this->getShipById($this->fires[$i]->shooterid);
@@ -309,13 +317,16 @@ class Manager {
 			$this->fires[$i] = $this->rollForHit($this->fires[$i]);
 			$this->fires[$i] = $this->rollForDamage($this->fires[$i]);
 
-			$this->fires[$i]->shooter = false;
-			$this->fires[$i]->weapon = false;
-			$this->fires[$i]->target = false;
+			unset($this->fires[$i]->shooter);
+			unset($this->fires[$i]->weapon);
+			unset($this->fires[$i]->target);
+
+			echo json_encode($this->fires[$i]); echo "</br></br>";
 
 			//echo $this->fires[$i]->dmgRoll." - ".$this->fires[$i]->loss."%";
 			//echo "</br></br>";
 		}
+		Debug::log("END: ".$this->convert(memory_get_usage()));
 
 		return true;
 	}
@@ -390,13 +401,13 @@ class Manager {
 	}
 
 	public function getShipById($shipid){
-		debug::log("looking for ship :".$shipid);
+		//debug::log("looking for ship :".$shipid);
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			//echo json_encode($this->gd["ships"][$i]);
 			//debug::log("class: ".get_class($this->gd["ships"][$i]));
 			//debug::log("now : ".$this->ships[$i]->id);
 			if ($this->ships[$i]->id == $shipid){
-				debug::log("found!");
+				//debug::log("found!");
 				return $this->ships[$i];
 			}
 		}
