@@ -137,8 +137,8 @@ function Structure(id, parentId, start, end, armour, integrity, destroyed){
 		   c = (a + b) / 2;
 		}
 
-		if (c == 360){
-			c = 0;
+		if (a > 90 && b < -90 && a+b == 0){
+			c = 180;
 		}
 
 		return c;

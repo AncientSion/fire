@@ -67,7 +67,27 @@ class Ship {
 		$sub /= (90 - 0);
 
 		return ceil($sub);
+	}
 
+	public function getHitSection($fire){
+		//$left = new Structure($this->getId(), $this->id, -60, 60, 7, 150);
+		//$right = new Structure($this->getId(), $this->id, 60, 180, 7, 150);
+		//$aft = new Structure($this->getId(), $this->id, -180, -60, 7, 150);
+
+
+		$angle = $fire->angleIn;
+
+		$valid = array();
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if (Math::isInArc($angle, $this->structures[$i]->start, $this->structures[$i]->end)){
+				$valid[] = $this->structures[$i]->id;
+			}
+		}
+
+		$fire->hitLocs = $valid;
+
+		return $fire;
 	}
 
 	public function getLoc(){

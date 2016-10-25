@@ -300,22 +300,22 @@ class Manager {
 	public function handleFiringPhase(){
 		debug::log("handleFiringPhase");
 
-
-
 		$this->handleFireOrders();
 		//$this->updateFireOrders();
 	}
 
 	public function handleFireOrders(){
-		Debug::log("BEGIN: ".$this->convert(memory_get_usage()));
-		echo sizeof($this->fires); echo "</br></br>";
+		//echo sizeof($this->fires); echo "</br></br>";
 		for ($i = 0; $i < sizeof($this->fires); $i++){
+			//debug::log("fire ".$this->fires[$i]->id);
+			//debug::log("shooter: ".$this->fires[$i]->shooterid." vs target".$this->fires[$i]->targetid);
 			$this->fires[$i]->shooter = $this->getShipById($this->fires[$i]->shooterid);
 			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getWeaponById($this->fires[$i]->weaponid);
 			$this->fires[$i]->target = $this->getShipById($this->fires[$i]->targetid);
 			$this->fires[$i] = $this->calculateHitChance($this->fires[$i]);
 			$this->fires[$i] = $this->rollForHit($this->fires[$i]);
 			$this->fires[$i] = $this->rollForDamage($this->fires[$i]);
+			$this->fires[$i] = $this->getHitSection($this->fires[$i]);
 
 			unset($this->fires[$i]->shooter);
 			unset($this->fires[$i]->weapon);
@@ -326,14 +326,12 @@ class Manager {
 			//echo $this->fires[$i]->dmgRoll." - ".$this->fires[$i]->loss."%";
 			//echo "</br></br>";
 		}
-		Debug::log("END: ".$this->convert(memory_get_usage()));
 
 		return true;
 	}
 
 	public function calculateHitChance($fire){
-		//echo json_encode($fire); echo "</br></br>";
-		Debug::log("calculateHitChance for fire ID ".$fire->id);	
+		//Debug::log("calculateHitChance for fire ID ".$fire->id);	
 
 		$hitAngle = Math::getAngle($fire->target->x, $fire->target->y, $fire->shooter->x, $fire->shooter->y);
 		$angle = round(Math::addAngle($fire->target->facing, $hitAngle));			
@@ -350,7 +348,7 @@ class Manager {
 	}
 
 	public function rollForHit($fire){
-		Debug::log("rollForHit for fire ID ".$fire->id);
+		//Debug::log("rollForHit for fire ID ".$fire->id);
 
 		$hits = 0;
 		$notes = "";
@@ -360,9 +358,16 @@ class Manager {
 	}
 
 	public function rollForDamage($fire){
-		Debug::log("rollForDamage for fire ID ".$fire->id);	
+		//Debug::log("rollForDamage for fire ID ".$fire->id);	
 
 		$fire = $fire->weapon->getDamage($fire);
+		return $fire;
+	}
+
+	public function getHitSection($fire){
+		//Debug::log("getHitSection for fire ID ".$fire->id);	
+
+		$fire = $fire->target->getHitSection($fire);
 		return $fire;
 	}
 
