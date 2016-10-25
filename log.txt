@@ -1,162 +1,194 @@
+time: 0 millisec/serialize
+
+getGameData
 getAllFireOrders for turn 1
-ship: 
-ship: 
-ship: 
-shooter: 
-fire: 
-shooter: 
-fire: 
-shooter: 
-fire: 
-shooter: 
-fire: 
-shooter: 
-fire: 
-shooter: 
-fire: 
-shooter: 
-fire: 
-shooter: 
-fire: 
-shooter: 
-fire: 
-shooter: 
-fire: 
-shooter: 
-fire: 
-not all rdy yet
+createShips
+canAdvanceGameState
+doAdvanceGameState for game19
+handleFiringPhase
+testing 314 versus 300 - 60
+BBBBBB
+testing 314 versus 60 - 180
+testing 314 versus 180 - 300
+testing 314 versus 300 - 60
+BBBBBB
+testing 314 versus 60 - 180
+testing 314 versus 180 - 300
+testing 356 versus 300 - 60
+BBBBBB
+testing 356 versus 60 - 180
+testing 356 versus 180 - 300
+testing 356 versus 300 - 60
+BBBBBB
+testing 356 versus 60 - 180
+testing 356 versus 180 - 300
+testing 26 versus 270 - 90
+CCCCCC
+testing 26 versus 0 - 180
+AAAAAA
+testing 26 versus 90 - 270
+testing 26 versus 180 - 360
+testing 26 versus 270 - 90
+CCCCCC
+testing 26 versus 0 - 180
+AAAAAA
+testing 26 versus 90 - 270
+testing 26 versus 180 - 360
+testing 344 versus 270 - 90
+BBBBBB
+testing 344 versus 0 - 180
+testing 344 versus 90 - 270
+testing 344 versus 180 - 360
+AAAAAA
+testing 344 versus 270 - 90
+BBBBBB
+testing 344 versus 0 - 180
+testing 344 versus 90 - 270
+testing 344 versus 180 - 360
+AAAAAA
+time: 25 millisec/serialize
+
+getGameData
 getAllFireOrders for turn 1
-ship: 146
-ship: 147
-ship: 148
-shooter: 146
-fire: 26
-shooter: 146
-fire: 27
-shooter: 146
-fire: 28
-shooter: 147
-fire: 29
-shooter: 147
-fire: 30
-shooter: 147
-fire: 31
-shooter: 148
-fire: 32
-shooter: 148
-fire: 33
-shooter: 148
-fire: 34
-shooter: 148
-fire: 35
-shooter: 148
-fire: 36
-not all rdy yet
+createShips
+canAdvanceGameState
+doAdvanceGameState for game19
+handleFiringPhase
+testing 314 versus 300 - 60
+BBBBBB
+testing 314 versus 60 - 180
+testing 314 versus 180 - 300
+testing 314 versus 300 - 60
+BBBBBB
+testing 314 versus 60 - 180
+testing 314 versus 180 - 300
+testing 356 versus 300 - 60
+BBBBBB
+testing 356 versus 60 - 180
+testing 356 versus 180 - 300
+testing 356 versus 300 - 60
+BBBBBB
+testing 356 versus 60 - 180
+testing 356 versus 180 - 300
+testing 26 versus 270 - 90
+CCCCCC
+testing 26 versus 0 - 180
+AAAAAA
+testing 26 versus 90 - 270
+testing 26 versus 180 - 360
+testing 26 versus 270 - 90
+CCCCCC
+testing 26 versus 0 - 180
+AAAAAA
+testing 26 versus 90 - 270
+testing 26 versus 180 - 360
+testing 344 versus 270 - 90
+BBBBBB
+testing 344 versus 0 - 180
+testing 344 versus 90 - 270
+testing 344 versus 180 - 360
+AAAAAA
+testing 344 versus 270 - 90
+BBBBBB
+testing 344 versus 0 - 180
+testing 344 versus 90 - 270
+testing 344 versus 180 - 360
+AAAAAA
+time: 24 millisec/serialize
+
+getGameData
 getAllFireOrders for turn 1
-not all rdy yet
+createShips
+canAdvanceGameState
+doAdvanceGameState for game19
+handleFiringPhase
+testing 314 versus 300 - 60
+BBBBBB
+testing 314 versus 60 - 180
+testing 314 versus 180 - 300
+testing 314 versus 300 - 60
+BBBBBB
+testing 314 versus 60 - 180
+testing 314 versus 180 - 300
+testing 356 versus 300 - 60
+BBBBBB
+testing 356 versus 60 - 180
+testing 356 versus 180 - 300
+testing 356 versus 300 - 60
+BBBBBB
+testing 356 versus 60 - 180
+testing 356 versus 180 - 300
+testing 26 versus 270 - 90
+CCCCCC
+testing 26 versus 0 - 180
+AAAAAA
+testing 26 versus 90 - 270
+testing 26 versus 180 - 360
+testing 26 versus 270 - 90
+CCCCCC
+testing 26 versus 0 - 180
+AAAAAA
+testing 26 versus 90 - 270
+testing 26 versus 180 - 360
+testing 344 versus 270 - 90
+BBBBBB
+testing 344 versus 0 - 180
+testing 344 versus 90 - 270
+testing 344 versus 180 - 360
+AAAAAA
+testing 344 versus 270 - 90
+BBBBBB
+testing 344 versus 0 - 180
+testing 344 versus 90 - 270
+testing 344 versus 180 - 360
+AAAAAA
+time: 31 millisec/serialize
+
+getGameData
 getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
-getAllFireOrders for turn 1
-not all rdy yet
+createShips
+canAdvanceGameState
+doAdvanceGameState for game19
+handleFiringPhase
+testing 314 versus 300 - 60
+BBBBBB
+testing 314 versus 60 - 180
+testing 314 versus 180 - 300
+testing 314 versus 300 - 60
+BBBBBB
+testing 314 versus 60 - 180
+testing 314 versus 180 - 300
+testing 356 versus 300 - 60
+BBBBBB
+testing 356 versus 60 - 180
+testing 356 versus 180 - 300
+testing 356 versus 300 - 60
+BBBBBB
+testing 356 versus 60 - 180
+testing 356 versus 180 - 300
+testing 26 versus 270 - 90
+CCCCCC
+testing 26 versus 0 - 180
+AAAAAA
+testing 26 versus 90 - 270
+testing 26 versus 180 - 360
+testing 26 versus 270 - 90
+CCCCCC
+testing 26 versus 0 - 180
+AAAAAA
+testing 26 versus 90 - 270
+testing 26 versus 180 - 360
+testing 344 versus 270 - 90
+BBBBBB
+testing 344 versus 0 - 180
+testing 344 versus 90 - 270
+testing 344 versus 180 - 360
+AAAAAA
+testing 344 versus 270 - 90
+BBBBBB
+testing 344 versus 0 - 180
+testing 344 versus 90 - 270
+testing 344 versus 180 - 360
+AAAAAA
+time: 13 millisec/serialize
+

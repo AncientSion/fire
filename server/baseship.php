@@ -86,6 +86,8 @@ class Ship {
 		}
 
 		$fire->hitLocs = $valid;
+		$roll = mt_rand(1, sizeof($fire->hitLocs));
+		$fire->pick = $fire->hitLocs[$roll-1];
 
 		return $fire;
 	}

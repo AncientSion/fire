@@ -305,7 +305,6 @@ class Manager {
 	}
 
 	public function handleFireOrders(){
-		//echo sizeof($this->fires); echo "</br></br>";
 		for ($i = 0; $i < sizeof($this->fires); $i++){
 			//debug::log("fire ".$this->fires[$i]->id);
 			//debug::log("shooter: ".$this->fires[$i]->shooterid." vs target".$this->fires[$i]->targetid);
@@ -321,20 +320,27 @@ class Manager {
 			unset($this->fires[$i]->weapon);
 			unset($this->fires[$i]->target);
 
-			echo json_encode($this->fires[$i]); echo "</br></br>";
-
-			//echo $this->fires[$i]->dmgRoll." - ".$this->fires[$i]->loss."%";
-			//echo "</br></br>";
+			//echo json_encode($this->fires[$i]); echo "</br></br>";
 		}
 
+
+			for ($i = 0; $i < sizeof($this->fires); $i++){
+
 		return true;
+	}
+
+	public function doDamage(){
+		for ($i = 0; $i < sizeof($this->fires); $i++){
+
+			function __construct($id, $gameid, $shipid, $systemid, $turn, $damage, $armour, $weaponid){
+
 	}
 
 	public function calculateHitChance($fire){
 		//Debug::log("calculateHitChance for fire ID ".$fire->id);	
 
 		$hitAngle = Math::getAngle($fire->target->x, $fire->target->y, $fire->shooter->x, $fire->shooter->y);
-		$angle = round(Math::addAngle($fire->target->facing, $hitAngle));			
+		$angle = round(Math::addAngle($fire->target->facing, $hitAngle));
 		$profile = $fire->target->getHitChanceFromAngle($angle);
 
 		$fire->dist = Math::getDist($fire->shooter->x, $fire->shooter->y, $fire->target->x, $fire->target->y);

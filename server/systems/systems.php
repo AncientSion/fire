@@ -12,6 +12,7 @@ class Structure {
 	public $integrity;
 	public $armour;
 	public $systems = array();
+	public $damages = array();
 	public $destroyed = false;
 
 	function __construct($id, $parentId, $start, $end, $armour, $integrity, $destroyed = false){
@@ -24,6 +25,14 @@ class Structure {
 		$this->destroyed = $destroyed;
 
 		//$this->id = $manager->getId();
+	}
+
+	public function doDamage($fire){
+		//function __construct($id, $gameid, $shipid, $systemid, $turn, $damage, $armour, $weaponid)
+
+		$damage = new DamageEntry()
+
+		$this->damages[] = $damage;
 	}
 }
 
