@@ -440,14 +440,14 @@ class DBManager {
 				id = :id
 		");
 
-		$resolved = 1;
+		$resolved = 0;
 
 		for ($i = 0; $i < sizeof($fires); $i++){
-			$stmt->bindParam(":req", $fires[$i]["req"]);
-			$stmt->bindParam(":notes", $fires[$i]["notes"]);
-			$stmt->bindParam(":hits", $fires[$i]["hits"]);
+			$stmt->bindParam(":req", $fires[$i]->req);
+			$stmt->bindParam(":notes", $fires[$i]->notes);
+			$stmt->bindParam(":hits", $fires[$i]->hits);
 			$stmt->bindParam(":resolved", $resolved);
-			$stmt->bindParam(":id", $fires[$i]["id"]);
+			$stmt->bindParam(":id", $fires[$i]->id);
 			$stmt->execute();
 
 			if ($stmt->errorCode() == 0){
@@ -459,7 +459,41 @@ class DBManager {
 		return true;
 	}
 
+	public function insertDamages($damages){
+		debug::log("DB insertDamages");
 
+		$stmt = $this->connection->prepare("
+			INSERT INTO damages 
+				( shipid, structureid, turn, damage, armour, resolved)
+			VALUES
+				( :shipid, :structureid, :turn, :damage, :armour, resolved)
+		");
+
+		$resolved = 0;
+
+		for ($i = 0; $i < sizeof($damages); $i++){
+
+		//	foreach ($fires[$i] as $key => $value){
+		//		debug::log("key: ".$key." val: ".$value);
+		//	}
+
+			$stmt->bindParam(":shipid", $damage[$i]->shipid);
+			$stmt->bindParam(":structureid", $damage[$i]->structureid);
+			$stmt->bindParam(":turn", $damage[$i]->turn);
+			$stmt->bindParam(":damage", $damage[$i]->damage);
+			$stmt->bindParam(":armour", $damage[$i]->armour);
+			$stmt->bindParam(":resolved", $damage[$i]->resolved);
+
+			$stmt->execute();
+
+			if ($stmt->errorCode() == 0){
+				continue;
+			}
+			else return false;
+		}
+
+		return true;
+	}
 
 	public function getPlayerStatus($gameid){
 		$stmt = $this->connection->prepare("

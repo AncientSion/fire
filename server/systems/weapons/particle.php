@@ -14,7 +14,7 @@ class StandardParticleBeam extends Particle {
 	public $display = "Particle Beam";
 	public $minDmg = 5;
 	public $maxDmg = 6;
-	public $accDecay = 80;
+	public $accDecay = 150;
 	public $shots = 3;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
@@ -26,7 +26,7 @@ class FusionCannon extends Particle {
 	public $display = "Fusion Cannon";
 	public $minDmg = 6;
 	public $maxDmg = 8;
-	public $accDecay = 65;
+	public $accDecay = 130;
 	public $shots = 2;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
