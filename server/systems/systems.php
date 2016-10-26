@@ -12,6 +12,7 @@ class Structure {
 	public $integrity;
 	public $armour;
 	public $systems = array();
+	public $damages = array();
 	public $destroyed = false;
 
 	function __construct($id, $parentId, $start, $end, $armour, $integrity, $destroyed = false){
@@ -22,8 +23,20 @@ class Structure {
 		$this->armour = $armour;
 		$this->integrity = $integrity;
 		$this->destroyed = $destroyed;
+	}
 
-		//$this->id = $manager->getId();
+
+	public function getRemainingIntegrity(){
+		echo json_encode($this->damages);
+		echo "<br><br>";
+		$dmg = 0;
+		if (sizeof($this->damages)){
+			for ($i = 0; $i < sizeof($this->damages); $i++){
+				$dmg = $dmg + $this->damages[$i]->damage;
+			}
+		}
+
+		return $this->integrity - $dmg;
 	}
 }
 

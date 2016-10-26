@@ -38,4 +38,25 @@ class FireOrder {
 }
 
 
+class Damage {
+	public $id;
+	public $shipid;
+	public $structureid;
+	public $turn;
+	public $damage;
+	public $armour;
+	public $resolved;
+
+
+	function __construct($id, $shipid, $structureid, $turn, $damage, $armour){
+		$this->id = $id;
+		$this->shipid = $shipid;
+		$this->structureid = $structureid;
+		$this->turn = $turn;
+		$this->damage = $damage;
+		$this->armour = $armour;
+	}
+}
+
+
 ?>

@@ -70,13 +70,7 @@ class Ship {
 	}
 
 	public function getHitSection($fire){
-		//$left = new Structure($this->getId(), $this->id, -60, 60, 7, 150);
-		//$right = new Structure($this->getId(), $this->id, 60, 180, 7, 150);
-		//$aft = new Structure($this->getId(), $this->id, -180, -60, 7, 150);
-
-
 		$angle = $fire->angleIn;
-
 		$valid = array();
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
@@ -86,8 +80,32 @@ class Ship {
 		}
 
 		$fire->hitLocs = $valid;
+		$fire->pick = $valid[mt_rand(0, sizeof($fire->hitLocs)-1)];
 
 		return $fire;
+	}
+
+	public function createDamageEntry($fire){
+
+		$structure = $this->getStructureById($fire->pick);
+		$integrity = $structure->getRemainingIntegrity();
+
+		$dmg = new Damage(sizeof($structure->damages)+1, $this->id, $structure->id, $fire->turn, $fire->dmgRoll, $structure->armour);
+		echo json_encode($dmg);
+
+	}
+
+
+	public function applyDamage($id, $dmg){
+		//function __construct($id, $shipid, $structureid, $turn){
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($this->structures[$i]->id == $id){
+				$this->structures[$i]->damages[] = $dmg;
+				//unset($this->structures[$i]->systems);
+				//echo json_encode($this->structures[$i]);
+				break;
+			}
+		}
 	}
 
 	public function getLoc(){
@@ -102,8 +120,16 @@ class Ship {
 		$this->systems[] = $obj;
 	}
 
+	public function getStructureById($id){
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($this->structures[$i]->id == $id){
+				return $this->structures[$i];
+			}
+		}
+	}
 
-	public function getWeaponById($id){
+
+	public function getSystemById($id){
 		//debug::log("looking for :".$id);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){

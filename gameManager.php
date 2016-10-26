@@ -17,12 +17,10 @@ class Manager {
 
 		$this->index = 0;
 
-		$this->gd = array();
-
-
 		$this->ships = array();
 		$this->gd = array();
 		$this->fires = array();
+		$this->damages = array();
 
 		if ($this->gameid){
 			$this->getGameAndPlayerStatus();
@@ -143,8 +141,8 @@ class Manager {
 						for ($k = 0; $k < sizeof($ships[$j]->structures); $k++){
 							for ($l = 0; $l < sizeof($ships[$j]->structures[$k]->systems); $l++){
 								if ($this->fires[$i]->weaponid == $ships[$j]->structures[$k]->systems[$l]->id){
-									//debug::log("found!");
 									$ships[$j]->structures[$k]->systems[$l]->fireOrders[] = $this->fires[$i];
+									break 3;
 								}
 							}
 						}
@@ -301,7 +299,7 @@ class Manager {
 		debug::log("handleFiringPhase");
 
 		$this->handleFireOrders();
-		//$this->updateFireOrders();
+		$this->updateFireOrders();
 	}
 
 	public function handleFireOrders(){
@@ -310,12 +308,13 @@ class Manager {
 			//debug::log("fire ".$this->fires[$i]->id);
 			//debug::log("shooter: ".$this->fires[$i]->shooterid." vs target".$this->fires[$i]->targetid);
 			$this->fires[$i]->shooter = $this->getShipById($this->fires[$i]->shooterid);
-			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getWeaponById($this->fires[$i]->weaponid);
+			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystemById($this->fires[$i]->weaponid);
 			$this->fires[$i]->target = $this->getShipById($this->fires[$i]->targetid);
 			$this->fires[$i] = $this->calculateHitChance($this->fires[$i]);
 			$this->fires[$i] = $this->rollForHit($this->fires[$i]);
 			$this->fires[$i] = $this->rollForDamage($this->fires[$i]);
 			$this->fires[$i] = $this->getHitSection($this->fires[$i]);
+			$this->fires[$i] = $this->doDamage($this->fires[$i]);
 
 			unset($this->fires[$i]->shooter);
 			unset($this->fires[$i]->weapon);
@@ -326,6 +325,9 @@ class Manager {
 			//echo $this->fires[$i]->dmgRoll." - ".$this->fires[$i]->loss."%";
 			//echo "</br></br>";
 		}
+
+		//echo json_encode($this->damages);
+
 
 		return true;
 	}
@@ -371,10 +373,27 @@ class Manager {
 		return $fire;
 	}
 
+	public function doDamage($fire){
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->id == $fire->targetid){
+				$dmg = $this->ships[$i]->createDamageEntry($fire);
+				$this->ships[$i]->applyDamage($fire->pick, $dmg);
+				$this->damages[] = $dmg;
+				break;
+			}
+		}
+		return $fire;
+	}
+
 	public function updateFireOrders(){
 		debug::log("updateFireOrders");
-
 		DBManager::app()->updateFireOrders($this->fires);
+	}
+
+	public function updateDamageEntries(){
+		return;
+		debug::log("updateDamageEntries");
+		DBManager::app()->updateDamageEntries($this->fires);
 	}
 
 	public function startDamageControlPhase(){
