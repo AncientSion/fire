@@ -14,7 +14,6 @@ class Structure {
 	public $systems = array();
 	public $damages = array();
 	public $destroyed = false;
-
 	function __construct($id, $parentId, $start, $end, $armour, $integrity, $destroyed = false){
 		$this->id = $id;
 		$this->parentId = $parentId;
@@ -23,17 +22,16 @@ class Structure {
 		$this->armour = $armour;
 		$this->integrity = $integrity;
 		$this->destroyed = $destroyed;
-
-		//$this->id = $manager->getId();
 	}
 
-	public function doDamage($fire){
-		//function __construct($id, $gameid, $shipid, $systemid, $turn, $damage, $armour, $weaponid)
-
-		$damage = new DamageEntry()
-
-		$this->damages[] = $damage;
+	public function getRemainingIntegrity(){
+		$dmg = 0;
+		for ($i = 0; $i < sizeof($this->damages); $i++){
+			$dmg += $this->damages[$i]->damage;
+		}
+		return $this->integrity - $dmg;
 	}
+	
 }
 
 class System {

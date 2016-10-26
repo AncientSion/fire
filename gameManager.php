@@ -17,9 +17,6 @@ class Manager {
 
 		$this->index = 0;
 
-		$this->gd = array();
-
-
 		$this->ships = array();
 		$this->gd = array();
 		$this->fires = array();
@@ -94,7 +91,11 @@ class Manager {
 		$ships = $db->getAllShipsForGame($this->gameid);
 		$ships = $db->getActionsForShips($ships, $this->userid);
 
-		$this->fires = $db->getAllFireOrders($this->gameid, $this->game["turn"]);
+		$this->fires = $db->getAllFireOrders($this->gameid);
+		//echo json_encode($this->fires);
+
+		$this->damages = $db->getAllDamages($this->gameid);
+		//echo json_encode($this->damages);
 
 		$this->ships = $this->createShips($ships);
 	}
@@ -204,7 +205,6 @@ class Manager {
 				break;
 			case 2; // from fire to resolve fire
 				$this->handleFiringPhase();
-				return;
 				$this->startDamageControlPhase();
 				break;
 			default:
@@ -301,39 +301,50 @@ class Manager {
 		debug::log("handleFiringPhase");
 
 		$this->handleFireOrders();
-		//$this->updateFireOrders();
+		$this->updateFireOrders();
+		$this->writeDamageEntries();
 	}
 
 	public function handleFireOrders(){
+		//echo "\nHANDLING\n";
 		for ($i = 0; $i < sizeof($this->fires); $i++){
-			//debug::log("fire ".$this->fires[$i]->id);
-			//debug::log("shooter: ".$this->fires[$i]->shooterid." vs target".$this->fires[$i]->targetid);
-			$this->fires[$i]->shooter = $this->getShipById($this->fires[$i]->shooterid);
-			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getWeaponById($this->fires[$i]->weaponid);
-			$this->fires[$i]->target = $this->getShipById($this->fires[$i]->targetid);
-			$this->fires[$i] = $this->calculateHitChance($this->fires[$i]);
-			$this->fires[$i] = $this->rollForHit($this->fires[$i]);
-			$this->fires[$i] = $this->rollForDamage($this->fires[$i]);
-			$this->fires[$i] = $this->getHitSection($this->fires[$i]);
+			if ($this->fires[$i]->resolved == 0){
+				//debug::log("fire ".$this->fires[$i]->id);
+				//debug::log("shooter: ".$this->fires[$i]->shooterid." vs target".$this->fires[$i]->targetid);
+				$this->fires[$i]->shooter = $this->getShipById($this->fires[$i]->shooterid);
+				$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystemById($this->fires[$i]->weaponid);
+				$this->fires[$i]->target = $this->getShipById($this->fires[$i]->targetid);
+				$this->fires[$i] = $this->calculateHitChance($this->fires[$i]);
+				$this->fires[$i] = $this->rollForHit($this->fires[$i]);
+				$this->fires[$i] = $this->rollForDamage($this->fires[$i]);
+				$this->fires[$i] = $this->getHitSection($this->fires[$i]);
+				$this->doDamage($this->fires[$i]);
 
-			unset($this->fires[$i]->shooter);
-			unset($this->fires[$i]->weapon);
-			unset($this->fires[$i]->target);
+				unset($this->fires[$i]->shooter);
+				unset($this->fires[$i]->weapon);
+				unset($this->fires[$i]->target);
+			}
 
 			//echo json_encode($this->fires[$i]); echo "</br></br>";
 		}
 
 
-			for ($i = 0; $i < sizeof($this->fires); $i++){
+		$this->log();
 
 		return true;
 	}
 
-	public function doDamage(){
-		for ($i = 0; $i < sizeof($this->fires); $i++){
-
-			function __construct($id, $gameid, $shipid, $systemid, $turn, $damage, $armour, $weaponid){
-
+	public function log(){
+		//echo "SHIPS_________"; echo "</br></br>";
+		foreach ($this->ships as $ship){
+			//echo "</br>";
+			foreach ($ship->structures as $struct){
+				for ($i = 0; $i < sizeof($struct->damages); $i++){
+					//echo json_encode($struct->damages[$i]);
+					//echo "</br>";
+				}
+			}	
+		}
 	}
 
 	public function calculateHitChance($fire){
@@ -377,11 +388,27 @@ class Manager {
 		return $fire;
 	}
 
+	public function doDamage($fire){
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->id == $fire->targetid){
+				$dmg = $this->ships[$i]->createDamageEntry($fire);
+				$this->ships[$i]->applyDamage($fire->pick, $dmg);
+				$this->damages[] = $dmg;
+				return $fire;
+			}
+		}
+	}
+
 	public function updateFireOrders(){
 		debug::log("updateFireOrders");
-
 		DBManager::app()->updateFireOrders($this->fires);
 	}
+
+	public function writeDamageEntries(){
+		debug::log("writeDamageEntries");
+		DBManager::app()->insertDamageEntires($this->damages);
+	}
+
 
 	public function startDamageControlPhase(){
 		Debug::log("startDamageControlPhase");

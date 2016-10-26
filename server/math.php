@@ -54,10 +54,10 @@ class Math {
 
 	static function isInArc($angle, $start, $end){
 
-		debug::log("testing ".$angle." versus ".$start." - ".$end);
+		//debug::log("testing ".$angle." versus ".$start." - ".$end);
 
 		if ($angle >= $start && $angle <= $end){
-			Debug::log("AAAAAA");
+			//Debug::log("AAAAAA");
 			return true;
 		}
 		//  
@@ -65,11 +65,11 @@ class Math {
 		//	testing 55 versus. 270 to 90
 		elseif ($start > $end){
 			if ($angle > $start){
-				Debug::log("BBBBBB");
+				//Debug::log("BBBBBB");
 				return true;
 			}
 			elseif ($angle < $end){
-				Debug::log("CCCCCC");
+				//Debug::log("CCCCCC");
 				return true;
 			}
 		}

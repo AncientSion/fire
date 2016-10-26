@@ -37,25 +37,24 @@ class FireOrder {
 	}
 }
 
-class DamageEntry {
+class Damage {
 	public $id;
-	public $gameid;
 	public $shipid;
-	public $systemid;
+	public $gameid;
+	public $structureid;
 	public $turn;
 	public $damage;
 	public $armour;
-	public $weaponid;
-
-	function __construct($id, $gameid, $shipid, $systemid, $turn, $damage, $armour, $weaponid){
+	public $resolved;
+	
+	function __construct($id, $gameid, $shipid, $structureid, $turn, $damage, $armour){
 		$this->id = $id;
 		$this->gameid = $gameid;
 		$this->shipid = $shipid;
-		$this->systemid = $systemid;
+		$this->structureid = $structureid;
 		$this->turn = $turn;
 		$this->damage = $damage;
 		$this->armour = $armour;
-		$this->weaponid = $weaponid;
 	}
 }
 

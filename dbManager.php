@@ -427,7 +427,7 @@ class DBManager {
 	}
 
 	public function updateFireOrders($fires){
-		debug::log("DB updateFireOrders");
+		debug::log("DB updateFireOrders: ".sizeof($fires));
 
 		$stmt = $this->connection->prepare("
 			UPDATE fireorders
@@ -440,9 +440,10 @@ class DBManager {
 				id = :id
 		");
 
-		$resolved = 0;
+		$resolved = 1;
 
 		for ($i = 0; $i < sizeof($fires); $i++){
+			//ebug::log("fire id: ".$fires[$i]->id);
 			$stmt->bindParam(":req", $fires[$i]->req);
 			$stmt->bindParam(":notes", $fires[$i]->notes);
 			$stmt->bindParam(":hits", $fires[$i]->hits);
@@ -459,30 +460,26 @@ class DBManager {
 		return true;
 	}
 
-	public function insertDamages($damages){
-		debug::log("DB insertDamages");
+	public function insertDamageEntires($damages){
+		debug::log("DB insertDamageEntires");
 
 		$stmt = $this->connection->prepare("
 			INSERT INTO damages 
-				( shipid, structureid, turn, damage, armour, resolved)
+				( shipid, gameid, structureid, turn, damage, armour)
 			VALUES
-				( :shipid, :structureid, :turn, :damage, :armour, resolved)
+				( :shipid, :gameid, :structureid, :turn, :damage, :armour)
 		");
 
-		$resolved = 0;
+		$resolved = 1;
 
 		for ($i = 0; $i < sizeof($damages); $i++){
-
-		//	foreach ($fires[$i] as $key => $value){
-		//		debug::log("key: ".$key." val: ".$value);
-		//	}
-
-			$stmt->bindParam(":shipid", $damage[$i]->shipid);
-			$stmt->bindParam(":structureid", $damage[$i]->structureid);
-			$stmt->bindParam(":turn", $damage[$i]->turn);
-			$stmt->bindParam(":damage", $damage[$i]->damage);
-			$stmt->bindParam(":armour", $damage[$i]->armour);
-			$stmt->bindParam(":resolved", $damage[$i]->resolved);
+			//echo json_encode($damages[$i]);
+			$stmt->bindParam(":shipid", $damages[$i]->shipid);
+			$stmt->bindParam(":gameid", $damages[$i]->gameid);
+			$stmt->bindParam(":structureid", $damages[$i]->structureid);
+			$stmt->bindParam(":turn", $damages[$i]->turn);
+			$stmt->bindParam(":damage", $damages[$i]->damage);
+			$stmt->bindParam(":armour", $damages[$i]->armour);
 
 			$stmt->execute();
 
@@ -681,21 +678,16 @@ class DBManager {
 		return $ships;
 	}
 
-	public function getAllFireOrders($gameid, $turn){
-		debug::log("getAllFireOrders for turn ".$turn);
+	public function getAllFireOrders($gameid){
+		debug::log("getAllFireOrders for turn");
 		$stmt = $this->connection->prepare("
 			SELECT * FROM fireorders
 			WHERE gameid = :gameid
-			AND turn = :turn
 		");
 
-		$resolved = 1;
-
 		$stmt->bindParam(":gameid", $gameid);
-		$stmt->bindParam(":turn", $turn);
 		$stmt->execute();
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 
 		if ($result){
 			for ($i = 0; $i < (sizeof($result)); $i++){
@@ -722,28 +714,45 @@ class DBManager {
 
 	}
 
-
-	public function getOpenFireOrders($gameid, $turn){
+	public function getAllDamages($gameid){
+		debug::log("getAllDamages");
 		$stmt = $this->connection->prepare("
-			SELECT * FROM fireOrders
-			WHERE gameid = :gameid
-			AND turn = :turn
-			AND resolved = :resolved
+			SELECT * FROM damages
+			INNER JOIN ships
+				ON ships.gameid = :gameid
 		");
 
-		$resolved = 0;
-
 		$stmt->bindParam(":gameid", $gameid);
-		$stmt->bindParam(":turn", $turn);
-		$stmt->bindParam(":resolved", $resolved);
 		$stmt->execute();
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
 		if ($result){
-			debug::log("fires :".sizeof($result));
+			/*for ($i = 0; $i < (sizeof($result)); $i++){
+				//echo json_encode($fires[$i]);
+				$fire = new FireOrder(
+					$result[$i]["id"],
+					$result[$i]["gameid"],
+					$result[$i]["turn"],
+					$result[$i]["shooterid"],
+					$result[$i]["targetid"],
+					$result[$i]["weaponid"],
+					$result[$i]["req"],
+					$result[$i]["notes"],
+					$result[$i]["hits"],
+					$result[$i]["resolved"]
+				);
+
+				$result[$i] = $fire;
+
+		
+			}
+			*/
+
 			return $result;
 		}
 		else return false;
+
 	}
 
 	public function resolveDeployment($gameid){
