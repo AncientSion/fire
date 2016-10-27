@@ -108,14 +108,23 @@ function Structure(id, parentId, start, end, armour, integrity, destroyed){
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
 			td.className = "struct";
-			td.innerHTML = this.name + " #" + (this.id);
 
-		var div = document.createElement("div");
-			div.className = "integrity";
+		var rem = this.getRemainingIntegrity();
 
-			var level = this.getRemainingIntegrity();
-			div.style.width = level/this.integrity * 100 + "%";
-			td.appendChild(div);
+		var span = document.createElement("div");
+			span.className = "integrityAmount";
+			span.innerHTML = rem + " / " + this.integrity;
+			td.appendChild(span);
+
+		var lowerDiv = document.createElement("div");
+			lowerDiv.className = "integrityNow";
+			lowerDiv.style.width =  rem/this.integrity * 100 + "%";
+			td.appendChild(lowerDiv);
+			
+		var upperDiv = document.createElement("div");
+			upperDiv.className = "integrityFull";
+			td.appendChild(upperDiv);
+
 
 		$(td).data("shipId", this.parentId);
 		$(td).data("systemId", this.id);

@@ -200,19 +200,38 @@ canvas {
 }
 
 .struct {
-	color: white;
 	height: 20px;
 	font-size: 16px;
 }
 
-.integrity {
+.integrityAmount {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 1;
+	width: 100%;
+	font-size: 16px;
+	color: white;
+	margin: auto;
+}
+
+.integrityFull {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	background-color: red;
+	z-index: -1;
+	width: 100%;
+}
+
+.integrityNow {
 	position: absolute;
 	left: 0;
 	top: 0;
 	bottom: 0;
 	background-color: green;
-	z-index: -1;
-	width: 100%;
 }
 
 .loadLevel {
