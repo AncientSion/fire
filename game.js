@@ -258,6 +258,22 @@ function Game(id, name, status, userid, turn, phase){
 					window.ships[i].structures[j].destroyed
 				);
 
+				if (window.ships[i].structures[j].damages.length){
+					for (var k = 0; k < window.ships[i].structures[j].damages.length; k++){
+						var dmg = new Damage(
+							window.ships[i].structures[j].damages[k].id,
+							window.ships[i].structures[j].damages[k].gameid,
+							window.ships[i].structures[j].damages[k].shipid,
+							window.ships[i].structures[j].damages[k].structureid,
+							window.ships[i].structures[j].damages[k].turn,
+							window.ships[i].structures[j].damages[k].damage,
+							window.ships[i].structures[j].damages[k].armour
+						)
+
+						struct.damages.push(dmg);
+					}
+				}
+
 				for (var k = 0; k < window.ships[i].structures[j].systems.length; k++){
 					if (window.ships[i].structures[j].systems[k].weapon){
 						if (window.ships[i].structures[j].systems[k].type == "Laser"){
@@ -314,7 +330,7 @@ function Game(id, name, status, userid, turn, phase){
 								}
 							}
 							struct.systems.push(system);
-						}		
+						}	
 					}
 				}
 				ship.structures.push(struct);

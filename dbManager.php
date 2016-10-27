@@ -460,6 +460,43 @@ class DBManager {
 		return true;
 	}
 
+
+
+	public function getAllDamageEntries($gameid){
+		debug::log("DB getAllDamageEntries");
+
+		$stmt = $this->connection->prepare("
+			SELECT * FROM damages
+			WHERE gameid = :gameid
+		");
+
+		$stmt->bindParam(":gameid", $gameid);
+		$stmt->execute();
+
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		if ($result){
+			for ($i = 0; $i < (sizeof($result)); $i++){
+				//echo json_encode($fires[$i]);
+				$dmg = new Damage(
+					$result[$i]["id"],
+					$result[$i]["gameid"],
+					$result[$i]["shipid"],
+					$result[$i]["structureid"],
+					$result[$i]["turn"],
+					$result[$i]["damage"],
+					$result[$i]["armour"]
+				);
+
+				$result[$i] = $dmg;
+			}
+
+			return $result;
+		}
+		else return false;
+	}
+
+
 	public function insertDamageEntires($damages){
 		debug::log("DB insertDamageEntires");
 
@@ -707,47 +744,6 @@ class DBManager {
 
 				$result[$i] = $fire;
 			}
-
-			return $result;
-		}
-		else return false;
-
-	}
-
-	public function getAllDamages($gameid){
-		debug::log("getAllDamages");
-		$stmt = $this->connection->prepare("
-			SELECT * FROM damages
-			INNER JOIN ships
-				ON ships.gameid = :gameid
-		");
-
-		$stmt->bindParam(":gameid", $gameid);
-		$stmt->execute();
-		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
-		if ($result){
-			/*for ($i = 0; $i < (sizeof($result)); $i++){
-				//echo json_encode($fires[$i]);
-				$fire = new FireOrder(
-					$result[$i]["id"],
-					$result[$i]["gameid"],
-					$result[$i]["turn"],
-					$result[$i]["shooterid"],
-					$result[$i]["targetid"],
-					$result[$i]["weaponid"],
-					$result[$i]["req"],
-					$result[$i]["notes"],
-					$result[$i]["hits"],
-					$result[$i]["resolved"]
-				);
-
-				$result[$i] = $fire;
-
-		
-			}
-			*/
 
 			return $result;
 		}

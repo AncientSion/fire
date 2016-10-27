@@ -39,6 +39,18 @@ class Manager {
 		debug::log("time: ".($after-$before)." millisec/serialize\n");
 	}
 
+	public function log(){
+		//echo "SHIPS_________"; echo "</br></br>";
+		foreach ($this->ships as $ship){
+			//echo "</br>";
+			foreach ($ship->structures as $struct){
+				for ($i = 0; $i < sizeof($struct->damages); $i++){
+					//echo json_encode($struct->damages[$i]);
+					//echo "</br>";
+				}
+			}	
+		}
+	}
 
 	public function convert($size){
 	    $unit = array('b','kb','mb','gb','tb','pb');
@@ -92,17 +104,16 @@ class Manager {
 		$ships = $db->getActionsForShips($ships, $this->userid);
 
 		$this->fires = $db->getAllFireOrders($this->gameid);
+		$this->damages = $db->getAllDamageEntries($this->gameid);
+
 		//echo json_encode($this->fires);
+		//$this->log();
 
-		$this->damages = $db->getAllDamages($this->gameid);
-		//echo json_encode($this->damages);
-
-		$this->ships = $this->createShips($ships);
+		$this->ships = $this->assembleShips($ships);
 	}
 
-	public function createShips($ships){
-		Debug::log("createShips");
-		$ship;
+	public function assembleShips($ships){
+		Debug::log("assembleShips");
 
 		for ($i = 0; $i < sizeof($ships); $i++){
 
@@ -136,7 +147,13 @@ class Manager {
 			$ships[$i] = $ship;
 		}
 
-		
+		$ships = $this->addFireOrders($ships);
+		$ships = $this->addDamages($ships);
+
+		return $ships;
+	}
+
+	public function addFireOrders($ships){
 		if ($this->fires){
 			for ($i = 0; $i < sizeof($this->fires); $i++){
 				for ($j = 0; $j < sizeof($ships); $j++){
@@ -157,6 +174,25 @@ class Manager {
 		return $ships;
 	}
 
+	public function addDamages($ships){
+		//echo "dmg size: ".sizeof($this->damages)."\n";
+		//echo "ship size: ".sizeof($ships)."\n";
+		for ($i = 0; $i < sizeof($ships); $i++){
+			for ($j = 0; $j < sizeof($this->damages); $j++){
+				if ($ships[$i]->id == $this->damages[$j]->shipid){
+					for ($k = 0; $k < sizeof($ships[$i]->structures); $k++){
+						if ($ships[$i]->structures[$k]->id == $this->damages[$j]->structureid){
+							$ships[$i]->structures[$k]->damages[] = $this->damages[$j];
+						}
+					}
+
+				}
+			}
+		}
+		//echo json_encode($this->damages);
+		return $ships;
+
+	}
 
 	public function createGame($name){
 		if (DBManager::app()->createGame($this->userid, $name)){
@@ -328,23 +364,7 @@ class Manager {
 			//echo json_encode($this->fires[$i]); echo "</br></br>";
 		}
 
-
-		$this->log();
-
 		return true;
-	}
-
-	public function log(){
-		//echo "SHIPS_________"; echo "</br></br>";
-		foreach ($this->ships as $ship){
-			//echo "</br>";
-			foreach ($ship->structures as $struct){
-				for ($i = 0; $i < sizeof($struct->damages); $i++){
-					//echo json_encode($struct->damages[$i]);
-					//echo "</br>";
-				}
-			}	
-		}
 	}
 
 	public function calculateHitChance($fire){

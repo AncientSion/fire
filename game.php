@@ -19,6 +19,7 @@ if (isset($_SESSION["userid"])){
 	$game = $manager->game;
 	$playerstatus = $manager->playerstatus;
 	$ships = $manager->ships;
+	$damages = $manager->damages;
 
 	//echo sizeof($ships);
 	//echo var_export($ships[0]);
