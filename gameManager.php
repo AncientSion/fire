@@ -106,7 +106,7 @@ class Manager {
 		$this->fires = $db->getAllFireOrders($this->gameid);
 		$this->damages = $db->getAllDamageEntries($this->gameid);
 
-		//echo json_encode($this->fires);
+		//echo json_encode($this->damages);
 		//$this->log();
 
 		$this->ships = $this->assembleShips($ships);
@@ -209,7 +209,7 @@ class Manager {
 	}
 
 	public function canAdvanceGameState(){
-		Debug::log("canAdvanceGameState");
+		//Debug::log("canAdvanceGameState");
 		if ($this->gd["game"]["status"] == "open"){
 			return false;
 		}
@@ -225,10 +225,10 @@ class Manager {
 	}
 
 	public function doAdvanceGameState(){
-		Debug::log("doAdvanceGameState for game".$this->gameid);
-	//	debug::log("turn: ".$this->gd["game"]["turn"]);
-	//	debug::log("phase: ".$this->gd["game"]["phase"]);
-	//	Debug::log("NEW PHASE");
+		//  Debug::log("doAdvanceGameState for game".$this->gameid);
+		//	debug::log("turn: ".$this->gd["game"]["turn"]);
+		//	debug::log("phase: ".$this->gd["game"]["phase"]);
+		//	Debug::log("NEW PHASE");
 
 		switch ($this->gd["game"]["phase"]){
 			case -1; // from deploy to move
@@ -241,6 +241,7 @@ class Manager {
 				break;
 			case 2; // from fire to resolve fire
 				$this->handleFiringPhase();
+				//return;
 				$this->startDamageControlPhase();
 				break;
 			default:
@@ -409,6 +410,7 @@ class Manager {
 	}
 
 	public function doDamage($fire){
+		//Debug::log("doDamage");	
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->id == $fire->targetid){
 				$dmg = $this->ships[$i]->createDamageEntry($fire);

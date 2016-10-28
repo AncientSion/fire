@@ -90,15 +90,16 @@ function Damage (id, gameid, shipid, structureid, turn, damage, armour){
 	this.armour = armour;
 }
 
-function Structure(id, parentId, start, end, armour, integrity, destroyed){
+function Structure(id, parentId, start, end, integrity, armour, mitigation, destroyed){
 	this.name = "Structure";
 	this.display = "Structure";
 	this.id = id;
 	this.parentId = parentId;
 	this.start = start;
 	this.end = end;
-	this.armour = armour;
 	this.integrity = integrity;
+	this.armour = armour;
+	this.mitigation = mitigation;
 	this.destroyed = destroyed || false;
 	this.systems = [];
 	this.highlight = false;
@@ -226,6 +227,12 @@ function Structure(id, parentId, start, end, armour, integrity, destroyed){
 			td.innerHTML = "Armour"; tr.appendChild(td);
 		var td = document.createElement("td");
 			td.innerHTML = this.armour; tr.appendChild(td); table.appendChild(tr);
+
+		var tr = document.createElement("tr");
+		var td = document.createElement("td"); td.style.width = "40%";
+			td.innerHTML = "Mitigation"; tr.appendChild(td);
+		var td = document.createElement("td");
+			td.innerHTML = this.mitigation + "%"; tr.appendChild(td); table.appendChild(tr);
 			
 		div.appendChild(table);
 			

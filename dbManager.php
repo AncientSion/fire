@@ -477,7 +477,6 @@ class DBManager {
 
 		if ($result){
 			for ($i = 0; $i < (sizeof($result)); $i++){
-				//echo json_encode($fires[$i]);
 				$dmg = new Damage(
 					$result[$i]["id"],
 					$result[$i]["gameid"],
@@ -493,7 +492,7 @@ class DBManager {
 
 			return $result;
 		}
-		else return false;
+		else null;
 	}
 
 
@@ -502,9 +501,9 @@ class DBManager {
 
 		$stmt = $this->connection->prepare("
 			INSERT INTO damages 
-				( shipid, gameid, structureid, turn, damage, armour)
+				( shipid, gameid, structureid, turn, totalDmg, structDmg, armourDmg, mitigation)
 			VALUES
-				( :shipid, :gameid, :structureid, :turn, :damage, :armour)
+				( :shipid, :gameid, :structureid, :turn, :totalDmg, :structDmg, :armourDmg, :mitigation)
 		");
 
 		$resolved = 1;
@@ -515,8 +514,10 @@ class DBManager {
 			$stmt->bindParam(":gameid", $damages[$i]->gameid);
 			$stmt->bindParam(":structureid", $damages[$i]->structureid);
 			$stmt->bindParam(":turn", $damages[$i]->turn);
-			$stmt->bindParam(":damage", $damages[$i]->damage);
-			$stmt->bindParam(":armour", $damages[$i]->armour);
+			$stmt->bindParam(":totalDmg", $damages[$i]->totalDmg);
+			$stmt->bindParam(":structDmg", $damages[$i]->structDmg);
+			$stmt->bindParam(":armourDmg", $damages[$i]->armourDmg);
+			$stmt->bindParam(":mitigation", $damages[$i]->mitigation);
 
 			$stmt->execute();
 

@@ -83,9 +83,34 @@ class Ship {
 	}
 
 	public function createDamageEntry($fire){
+		Debug::log("createDamageEntry");	
 		$structure = $this->getStructureById($fire->pick);
-		$integrity = $structure->getRemainingIntegrity();
-		$dmg = new Damage(sizeof($structure->damages)+1, $fire->gameid, $this->id, $structure->id, $fire->turn, $fire->dmgRoll, $structure->armour);
+
+		$remIntegrity = $structure->getRemainingIntegrity();
+		$remArmour = $structure->getRemainingArmour();
+
+		$armourMod = $remArmour / $structure->armour;
+		$mitigation = $structure->mitigation * $armourMod;
+
+		$dmg = $fire->dmgRoll;
+
+		$armourDmg = $dmg / 100 * $mitigation;
+		$structDmg = $dmg - $armourDmg;
+
+
+		$dmg = new Damage(
+			sizeof($structure->damages)+1,
+			$fire->gameid,
+			$this->id, 
+			$structure->id, 
+			$fire->turn,
+			$fire->dmgRoll,
+			$structDmg, 
+			$armourDmg,
+			$mitigation
+		);
+
+		echo json_encode($dmg);
 		return $dmg;
 	}
 

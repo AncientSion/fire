@@ -253,8 +253,9 @@ function Game(id, name, status, userid, turn, phase){
 					window.ships[i].structures[j].parentId,
 					window.ships[i].structures[j].start,
 					window.ships[i].structures[j].end,
-					window.ships[i].structures[j].armour,
 					window.ships[i].structures[j].integrity,
+					window.ships[i].structures[j].armour,
+					window.ships[i].structures[j].mitigation,
 					window.ships[i].structures[j].destroyed
 				);
 

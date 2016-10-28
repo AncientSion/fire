@@ -43,17 +43,21 @@ class Damage {
 	public $shipid;
 	public $structureid;
 	public $turn;
-	public $damage;
-	public $armour;
+	public $totalDmg;
+	public $structDmg;
+	public $armourDmg;
+	public $mitigation;
 	
-	function __construct($id, $gameid, $shipid, $structureid, $turn, $damage, $armour){
+	function __construct($id, $gameid, $shipid, $structureid, $turn, $totalDmg, $structDmg, $armourDmg, $mitigation){
 		$this->id = $id;
 		$this->gameid = $gameid;
 		$this->shipid = $shipid;
 		$this->structureid = $structureid;
 		$this->turn = $turn;
-		$this->damage = $damage;
-		$this->armour = $armour;
+		$this->totalDmg = $totalDmg;
+		$this->structDmg = $structDmg;
+		$this->armourDmg = $armourDmg;
+		$this->mitigation = $mitigation;
 	}
 }
 

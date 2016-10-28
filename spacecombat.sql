@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 26. Okt 2016 um 22:16
+-- Erstellungszeit: 28. Okt 2016 um 17:44
 -- Server-Version: 10.1.16-MariaDB
 -- PHP-Version: 7.0.9
 
@@ -32,21 +32,19 @@ CREATE TABLE `damages` (
   `shipid` int(5) DEFAULT NULL,
   `structureid` int(5) DEFAULT NULL,
   `turn` int(3) DEFAULT NULL,
-  `damage` int(5) DEFAULT NULL,
-  `armour` int(5) DEFAULT NULL
+  `totalDmg` int(5) DEFAULT NULL,
+  `structDmg` int(5) DEFAULT NULL,
+  `armourDmg` int(3) DEFAULT NULL,
+  `mitigation` decimal(10,0) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Daten für Tabelle `damages`
 --
 
-INSERT INTO `damages` (`id`, `gameid`, `shipid`, `structureid`, `turn`, `damage`, `armour`) VALUES
-(265, 19, 162, 1, 1, 38, 7),
-(266, 19, 162, 1, 1, 5, 7),
-(267, 19, 162, 1, 1, 33, 7),
-(268, 19, 162, 1, 1, 6, 7),
-(269, 19, 160, 1, 1, 25, 6),
-(270, 19, 161, 1, 1, 6, 6);
+INSERT INTO `damages` (`id`, `gameid`, `shipid`, `structureid`, `turn`, `totalDmg`, `structDmg`, `armourDmg`, `mitigation`) VALUES
+(3, 19, 162, 1, 1, 39, 6, 33, '85'),
+(4, 19, 161, 1, 1, 28, 6, 22, '80');
 
 -- --------------------------------------------------------
 
@@ -72,12 +70,8 @@ CREATE TABLE `fireorders` (
 --
 
 INSERT INTO `fireorders` (`id`, `gameid`, `turn`, `shooterid`, `targetid`, `weaponid`, `req`, `notes`, `hits`, `resolved`) VALUES
-(70, 19, 1, 160, 162, 2, 128, '16,', 1, 1),
-(72, 19, 1, 160, 162, 18, 97, '32,20,27,', 3, 1),
-(74, 19, 1, 161, 162, 5, 133, '30,', 1, 1),
-(75, 19, 1, 161, 162, 7, 104, '16,63,7,', 3, 1),
-(76, 19, 1, 162, 160, 2, 110, '5,', 1, 1),
-(79, 19, 1, 162, 161, 15, 66, '96,18,', 1, 1);
+(80, 19, 1, 161, 162, 5, 133, '32,', 1, 1),
+(81, 19, 1, 162, 161, 2, 92, '27,', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -296,12 +290,12 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT für Tabelle `damages`
 --
 ALTER TABLE `damages`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=271;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT für Tabelle `fireorders`
 --
 ALTER TABLE `fireorders`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 --
 -- AUTO_INCREMENT für Tabelle `games`
 --

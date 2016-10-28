@@ -14,23 +14,34 @@ class Structure {
 	public $systems = array();
 	public $damages = array();
 	public $destroyed = false;
-	function __construct($id, $parentId, $start, $end, $armour, $integrity, $destroyed = false){
+	function __construct($id, $parentId, $start, $end, $integrity, $armour, $mitigation, $destroyed = false){
 		$this->id = $id;
 		$this->parentId = $parentId;
 		$this->start = $start;
 		$this->end = $end;
-		$this->armour = $armour;
 		$this->integrity = $integrity;
+		$this->armour = $armour;
+		$this->mitigation = $mitigation;
 		$this->destroyed = $destroyed;
 	}
 
 	public function getRemainingIntegrity(){
-		$dmg = 0;
+		$remIntegrity = $this->integrity;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
-			$dmg += $this->damages[$i]->damage;
+			$remIntegrity -= $this->damages[$i]->structDamage;
 		}
-		return $this->integrity - $dmg;
+		return $remIntegrity;
 	}
+
+	public function getRemainingArmour(){
+		$remArmour = $this->armour;
+		for ($i = 0; $i < sizeof($this->damages); $i++){
+			$remArmour -= $this->damages[$i]->armourDmg;
+		}
+		
+		return $remArmour;
+	}
+
 	
 }
 
