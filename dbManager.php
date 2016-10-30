@@ -161,6 +161,28 @@ class DBManager {
 			return true;
 		} else return false;
 	}
+
+	public function createReinforcementsEntry($userid, $gameid, $points){
+		debug::log("createReinforcementsEntry");
+
+		$stmt = $this->connection->prepare("
+			INSERT INTO reinforcements
+				(gameid, userid, points)
+			VALUES
+				(:gameid, :userid, :points)
+		");
+
+		$stmt->bindParam(":gameid", $gameid);
+		$stmt->bindParam(":userid", $userid);
+		$stmt->bindParam(":points", $points);
+
+		$stmt->execute();
+
+		if ($stmt->errorCode() == 0){
+			debug::log("Reinforcement CREATED");
+			return true;
+		} else return false;
+	}
 	
 	public function createNewGame($name, $pv){
 		$stmt = $this->connection->prepare("
@@ -210,17 +232,15 @@ class DBManager {
 		}
 	}
 
-	public function buyFleet($userid, $gameid, $ships){
-		debug::log("buyFleet");
-		debug::log($userid);
-		debug::log($gameid);
-		debug::log($ships);
+	public function buyShips($userid, $gameid, $ships){
+		debug::log("buyShips");
+		//debug::log($userid); debug::log($gameid); debug::log($ships);
 
 		$stmt = $this->connection->prepare("
 			INSERT INTO ships 
-				(gameid, userid, shipclass, status, destroyed)
+				(gameid, userid, shipclass, status, available, destroyed)
 			VALUES
-				(:gameid, :userid, :shipclass, :status, :destroyed)
+				(:gameid, :userid, :shipclass, :status, :available, :destroyed)
 		");
 
 
@@ -233,6 +253,7 @@ class DBManager {
 			$stmt->bindParam(":userid", $userid);
 			$stmt->bindParam(":shipclass", $ships[$i]["shipClass"]);
 			$stmt->bindParam(":status", $status);
+			$stmt->bindParam(":available", $ships[$i]["turn"]);
 			$stmt->bindParam(":destroyed", $destroyed);
 			$stmt->execute();
 			
@@ -278,14 +299,9 @@ class DBManager {
 	}
 
 	public function startGame($gameid){
-
 		$players = $this->getPlayersInGame($gameid);
-
 		for ($i = 0; $i < sizeof($players); $i++){
-			if ($this->setPlayerstatus($players[$i]["userid"], $gameid, 1, -1, "waiting")){
-				continue;
-			}
-			else return false;
+			$this->setPlayerstatus($players[$i]["userid"], $gameid, 1, -1, "waiting");
 		}
 
 		$stmt = $this->connection->prepare("
@@ -463,7 +479,7 @@ class DBManager {
 
 
 	public function getAllDamageEntries($gameid){
-		debug::log("DB getAllDamageEntries");
+		//debug::log("DB getAllDamageEntries");
 
 		$stmt = $this->connection->prepare("
 			SELECT * FROM damages
@@ -479,12 +495,20 @@ class DBManager {
 			for ($i = 0; $i < (sizeof($result)); $i++){
 				$dmg = new Damage(
 					$result[$i]["id"],
+					$result[$i]["fireid"],
 					$result[$i]["gameid"],
 					$result[$i]["shipid"],
 					$result[$i]["structureid"],
 					$result[$i]["turn"],
-					$result[$i]["damage"],
-					$result[$i]["armour"]
+					$result[$i]["type"],
+					$result[$i]["totalDmg"],
+					$result[$i]["shieldDmg"],
+					$result[$i]["structDmg"],
+					$result[$i]["armourDmg"],
+					$result[$i]["mitigation"],
+					$result[$i]["destroyed"],
+					$result[$i]["notes"],
+					$result[$i]["new"]
 				);
 
 				$result[$i] = $dmg;
@@ -501,30 +525,39 @@ class DBManager {
 
 		$stmt = $this->connection->prepare("
 			INSERT INTO damages 
-				( shipid, gameid, structureid, turn, totalDmg, structDmg, armourDmg, mitigation)
+				( fireid, shipid, gameid, structureid, turn, type, totalDmg, shieldDmg, structDmg, armourDmg, mitigation, destroyed, notes, new)
 			VALUES
-				( :shipid, :gameid, :structureid, :turn, :totalDmg, :structDmg, :armourDmg, :mitigation)
+				( :fireid, :shipid, :gameid, :structureid, :turn, :type, :totalDmg, :shieldDmg, :structDmg, :armourDmg, :mitigation, :destroyed, :notes, :new)
 		");
 
-		$resolved = 1;
+		$new = 0;
 
+		//echo json_encode($damages[0]);
 		for ($i = 0; $i < sizeof($damages); $i++){
-			//echo json_encode($damages[$i]);
-			$stmt->bindParam(":shipid", $damages[$i]->shipid);
-			$stmt->bindParam(":gameid", $damages[$i]->gameid);
-			$stmt->bindParam(":structureid", $damages[$i]->structureid);
-			$stmt->bindParam(":turn", $damages[$i]->turn);
-			$stmt->bindParam(":totalDmg", $damages[$i]->totalDmg);
-			$stmt->bindParam(":structDmg", $damages[$i]->structDmg);
-			$stmt->bindParam(":armourDmg", $damages[$i]->armourDmg);
-			$stmt->bindParam(":mitigation", $damages[$i]->mitigation);
+			if ($damages[$i]->new == 1){
+				//echo json_encode($damages[$i]);
+				$stmt->bindParam(":fireid", $damages[$i]->fireid);
+				$stmt->bindParam(":shipid", $damages[$i]->shipid);
+				$stmt->bindParam(":gameid", $damages[$i]->gameid);
+				$stmt->bindParam(":structureid", $damages[$i]->structureid);
+				$stmt->bindParam(":turn", $damages[$i]->turn);
+				$stmt->bindParam(":type", $damages[$i]->type);
+				$stmt->bindParam(":totalDmg", $damages[$i]->totalDmg);
+				$stmt->bindParam(":shieldDmg", $damages[$i]->shieldDmg);
+				$stmt->bindParam(":structDmg", $damages[$i]->structDmg);
+				$stmt->bindParam(":armourDmg", $damages[$i]->armourDmg);
+				$stmt->bindParam(":mitigation", $damages[$i]->mitigation);
+				$stmt->bindParam(":destroyed", $damages[$i]->destroyed);
+				$stmt->bindParam(":notes", $damages[$i]->notes);
+				$stmt->bindParam(":new", $new);
 
-			$stmt->execute();
+				$stmt->execute();
 
-			if ($stmt->errorCode() == 0){
-				continue;
+				if ($stmt->errorCode() == 0){
+					continue;
+				}
+				else return false;
 			}
-			else return false;
 		}
 
 		return true;
@@ -541,6 +574,28 @@ class DBManager {
 		$stmt->execute();
 
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		if ($result){
+			return $result;
+		}
+		else return false;
+	}
+
+	public function getShipBuyValue($gameid, $userid){
+		debug::log("getShipBuyValue");
+
+		$stmt = $this->connection->prepare("
+			SELECT * FROM reinforcements
+			WHERE gameid = :gameid
+			AND userid = :userid
+		");
+
+		$stmt->bindParam(":gameid", $gameid);
+		$stmt->bindParam(":userid", $userid);
+
+		$stmt->execute();
+
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 
 		if ($result){
 			return $result;
@@ -987,14 +1042,19 @@ class DBManager {
 		else return false;
 	}
 
-	public function setGamePhase($gameid, $phase){
+	public function setGameTurnPhase($gameid, $turn, $phase){
+
+		debug::log("setGameTurnPhase: ".$turn."/".$phase);
 
 		$stmt = $this->connection->prepare("
 			UPDATE games
-			SET	phase = :phase
+			SET
+				phase = :phase,
+				turn = :turn
 			WHERE id = :id
 		");
 
+		$stmt->bindParam(":turn", $turn);
 		$stmt->bindParam(":phase", $phase);
 		$stmt->bindParam(":id", $gameid);
 

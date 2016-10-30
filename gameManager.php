@@ -11,7 +11,7 @@ class Manager {
 	public $userid;
 	
 	function __construct($userid, $gameid = false){
-		$before = round(microtime(true)*1000);
+		//$before = round(microtime(true)*1000);
 		$this->userid = $userid;
 		$this->gameid = $gameid;
 
@@ -22,6 +22,7 @@ class Manager {
 		$this->fires = array();
 
 		if ($this->gameid){
+			//$this->getMemory(memory_get_usage(true));
 			$this->getGameAndPlayerStatus();
 
 			if ($this->gd["game"]["turn"] == -1){
@@ -35,8 +36,15 @@ class Manager {
 				}
 			}
 		}
-		$after = round(microtime(true)*1000);
-		debug::log("time: ".($after-$before)." millisec/serialize\n");
+
+		//$after = round(microtime(true)*1000);
+		//debug::log("time: ".($after-$before)." millisec/serialize\n");
+		//$this->getMemory(memory_get_usage(true));
+	}
+
+	public function getMemory($size){
+	    $unit=array('b','kb','mb','gb','tb','pb');
+	    debug::log(@round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i]);
 	}
 
 	public function log(){
@@ -55,6 +63,32 @@ class Manager {
 	public function convert($size){
 	    $unit = array('b','kb','mb','gb','tb','pb');
 	    return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
+	}
+
+	public function validateFleetCost($gameid, $ships){
+		Debug::log("validateFleetCost");
+
+		$max = DBManager::app()->getGameDetails($gameid)["pv"];
+		$pv = 0;
+		$remain = 0;
+
+		foreach ($ships as $ship){
+			$name = $ship["shipClass"];
+			$value = "value";
+			$pv += $name::$$value;
+		}
+
+		if ($pv <= $max){
+			$remain = $max - $pv;
+
+			if ($remain == 0){
+				return 1;
+			}
+			else return $remain;
+		}
+		else {
+			return false;
+		}
 	}
 
 	
@@ -99,6 +133,7 @@ class Manager {
 
 		$this->game = $db->getGameDetails($this->gameid);
 		$this->playerstatus = $db->getPlayerStatus($this->gameid);
+		$this->reinforcements = $db->getShipBuyValue($this->gameid, $this->userid);
 
 		$ships = $db->getAllShipsForGame($this->gameid);
 		$ships = $db->getActionsForShips($ships, $this->userid);
@@ -113,7 +148,7 @@ class Manager {
 	}
 
 	public function assembleShips($ships){
-		Debug::log("assembleShips");
+		//Debug::log("assembleShips");
 
 		for ($i = 0; $i < sizeof($ships); $i++){
 
@@ -134,7 +169,8 @@ class Manager {
 				$ships[$i]["userid"],
 				$x, 
 				$y,
-				0
+				0,
+				$ships[$i]["available"]
 			);
 
 			$ship->actions = $ships[$i]["actions"];
@@ -225,8 +261,8 @@ class Manager {
 	}
 
 	public function doAdvanceGameState(){
-		//  Debug::log("doAdvanceGameState for game".$this->gameid);
-		//	debug::log("turn: ".$this->gd["game"]["turn"]);
+		Debug::log("doAdvanceGameState for game".$this->gameid);
+		debug::log("turn: ".$this->gd["game"]["turn"].", phase: ".$this->gd["game"]["phase"]);
 		//	debug::log("phase: ".$this->gd["game"]["phase"]);
 		//	Debug::log("NEW PHASE");
 
@@ -241,8 +277,11 @@ class Manager {
 				break;
 			case 2; // from fire to resolve fire
 				$this->handleFiringPhase();
-				//return;
 				$this->startDamageControlPhase();
+				break;
+			case 3; // from damage control to NEW TURN - deploymnt
+				$this->handleDamageControlPhase();
+				$this->startNewTurn();
 				break;
 			default:
 				break;
@@ -254,14 +293,14 @@ class Manager {
 	public function startDeploymentPhase(){
 		Debug::log("startDeploymentPhase");
 		$dbManager = DBManager::app();
+		$turn = $this->gd["game"]["turn"];
 		$phase = -1;
 
-		if ($dbManager->setGamePhase($this->gameid, $phase)){
-			debug::log("setGamePhase ".$phase." success");
+		if ($dbManager->setGameTurnPhase($this->gameid, $turn, $phase)){
 			$players = $dbManager->getPlayerStatus($this->gameid);
 
 			for ($i = 0; $i < sizeof($players); $i++){
-				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->gd["game"]["turn"], $phase, "waiting")){
+				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $turn, $phase, "waiting")){
 					debug::log("phase for player ".$i. " adjusted to phase: ".$phase);
 					continue;
 				}
@@ -281,18 +320,17 @@ class Manager {
 		}
 	}
 
-
 	public function startMovementPhase(){
 		Debug::log("startMovementPhase");
 		$dbManager = DBManager::app();
+		$turn = $this->gd["game"]["turn"];
 		$phase = 1;
 
-		if ($dbManager->setGamePhase($this->gameid, $phase)){
-			debug::log("setGamePhase ".$phase." success");
+		if ($dbManager->setGameTurnPhase($this->gameid, $turn, $phase)){
 			$players = $dbManager->getPlayerStatus($this->gameid);
 
 			for ($i = 0; $i < sizeof($players); $i++){
-				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->gd["game"]["turn"], $phase, "waiting")){
+				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $turn, $phase, "waiting")){
 					debug::log("phase for player ".$i. " adjusted to phase: ".$phase);
 					continue;
 				}
@@ -315,14 +353,14 @@ class Manager {
 	public function startFiringPhase(){
 		Debug::log("startFiringPhase");
 		$dbManager = DBManager::app();
+		$turn = $this->gd["game"]["turn"];
 		$phase = 2;
 
-		if ($dbManager->setGamePhase($this->gameid, $phase)){
-			debug::log("setGamePhase ".$phase." success");
+		if ($dbManager->setGameTurnPhase($this->gameid, $turn, $phase)){
 			$players = $dbManager->getPlayerStatus($this->gameid);
 
 			for ($i = 0; $i < sizeof($players); $i++){
-				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->gd["game"]["turn"], $phase, "waiting")){
+				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $turn, $phase, "waiting")){
 					continue;
 				}
 				else {
@@ -337,32 +375,65 @@ class Manager {
 	public function handleFiringPhase(){
 		debug::log("handleFiringPhase");
 
-		$this->handleFireOrders();
-		$this->updateFireOrders();
-		$this->writeDamageEntries();
+		if ($this->handleFireOrders()){
+			$this->updateFireOrders();
+			$this->writeDamageEntries();
+		}
+		return true;
+	}
+
+	public function handleDamageControlPhase(){
+		Debug::log("handleDamageControlPhase");
+		return true;
+	}
+
+	public function startNewTurn(){
+		Debug::log("startNewTurn");
+		$dbManager = DBManager::app();
+		$turn = $this->gd["game"]["turn"];
+		$phase = -1;
+
+		if ($dbManager->setGameTurnPhase($this->gameid, $turn+1, $phase)){
+			$players = $dbManager->getPlayerStatus($this->gameid);
+
+			for ($i = 0; $i < sizeof($players); $i++){
+				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $turn+1, $phase, "waiting")){
+					debug::log("phase for player ".$i. " adjusted to phase: ".$phase);
+					continue;
+				}
+				else {
+					return false;
+				}
+			}
+
+			return true;
+		}
 	}
 
 	public function handleFireOrders(){
 		//echo "\nHANDLING\n";
-		for ($i = 0; $i < sizeof($this->fires); $i++){
-			if ($this->fires[$i]->resolved == 0){
-				//debug::log("fire ".$this->fires[$i]->id);
-				//debug::log("shooter: ".$this->fires[$i]->shooterid." vs target".$this->fires[$i]->targetid);
-				$this->fires[$i]->shooter = $this->getShipById($this->fires[$i]->shooterid);
-				$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystemById($this->fires[$i]->weaponid);
-				$this->fires[$i]->target = $this->getShipById($this->fires[$i]->targetid);
-				$this->fires[$i] = $this->calculateHitChance($this->fires[$i]);
-				$this->fires[$i] = $this->rollForHit($this->fires[$i]);
-				$this->fires[$i] = $this->rollForDamage($this->fires[$i]);
-				$this->fires[$i] = $this->getHitSection($this->fires[$i]);
-				$this->doDamage($this->fires[$i]);
+		if ($this->fires){
+			for ($i = 0; $i < sizeof($this->fires); $i++){
+				//echo json_encode($this->fires[$i]);
+				if ($this->fires[$i]->resolved == 0){
+					//debug::log("fire ".$this->fires[$i]->id);
+					//debug::log("shooter: ".$this->fires[$i]->shooterid." vs target".$this->fires[$i]->targetid);
+					$this->fires[$i]->shooter = $this->getShipById($this->fires[$i]->shooterid);
+					$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystemById($this->fires[$i]->weaponid);
+					$this->fires[$i]->target = $this->getShipById($this->fires[$i]->targetid);
+					$this->fires[$i] = $this->calculateHitChance($this->fires[$i]);
+					$this->fires[$i] = $this->rollForHit($this->fires[$i]);
+					$this->fires[$i] = $this->rollForDamage($this->fires[$i]);
+					$this->fires[$i] = $this->getHitSection($this->fires[$i]);
+					$this->doDamage($this->fires[$i]);
 
-				unset($this->fires[$i]->shooter);
-				unset($this->fires[$i]->weapon);
-				unset($this->fires[$i]->target);
+					unset($this->fires[$i]->shooter);
+					unset($this->fires[$i]->weapon);
+					unset($this->fires[$i]->target);
+				}
+
+				//echo json_encode($this->fires[$i]); echo "</br></br>";
 			}
-
-			//echo json_encode($this->fires[$i]); echo "</br></br>";
 		}
 
 		return true;
@@ -413,9 +484,11 @@ class Manager {
 		//Debug::log("doDamage");	
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->id == $fire->targetid){
-				$dmg = $this->ships[$i]->createDamageEntry($fire);
-				$this->ships[$i]->applyDamage($fire->pick, $dmg);
-				$this->damages[] = $dmg;
+				for ($j = 0; $j < $fire->hits; $j++){
+					$dmg = $this->ships[$i]->createDamageObject($fire);
+					$this->ships[$i]->applyDamage($fire->pick, $dmg);
+					$this->damages[] = $dmg;
+				}
 				return $fire;
 			}
 		}
@@ -436,10 +509,10 @@ class Manager {
 		Debug::log("startDamageControlPhase");
 
 		$dbManager = DBManager::app();
+		$turn = $this->gd["game"]["turn"];
 		$phase = 3;
 
-		if ($dbManager->setGamePhase($this->gameid, $phase)){
-			debug::log("setGamePhase ".$phase." success");
+		if ($dbManager->setGameTurnPhase($this->gameid, $turn, $phase)){
 			$players = $dbManager->getPlayerStatus($this->gameid);
 
 			for ($i = 0; $i < sizeof($players); $i++){
@@ -501,7 +574,7 @@ class Manager {
 
 	public function getShipClass($name){
 		debug::log("asking for preview of: ".$name);
-		$ship = new $name(1, 1, 0, 0, 0);
+		$ship = new $name(1, 1, 0, 0, 0, 0);
 		return $ship;
 
 	}

@@ -47,7 +47,7 @@ window.ajax = {
 			url: "postGameData.php",
 			datatype: "json",
 			data: {
-					type: "buyFleet",
+					type: "buyInitialFleet",
 					gameid: gameid,
 					userid: userid,
 					gameturn: game.turn,
@@ -172,6 +172,23 @@ window.ajax = {
 		});
 	},
 
+	confirmDamageControl: function(){
+		$.ajax({
+			type: "POST",
+			url: "postGameData.php",
+			datatype: "json",
+			data: {
+					type: "damageControl",
+					gameid: game.id,
+					userid: game.userid,
+					gameturn: game.turn,
+					gamephase: game.phase,
+					orders: false
+					},
+			success: refresh,
+			error: ajax.error,
+		});
+	},
 
 	checkGameState: function(callback){
 

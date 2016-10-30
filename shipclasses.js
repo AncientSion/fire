@@ -1,4 +1,4 @@
-function Ship(id, shipClass, x, y, facing, userid, color){
+function Ship(id, shipClass, x, y, facing, userid){
 	this.id = id;
 	this.shipClass = shipClass;
 	this.x = x || false;
@@ -6,7 +6,6 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	this.facing = facing;
 	this.userid = userid;
 	this.id = id;
-	this.color = color;
 	this.img;
 	this.turns = [];
 	this.actions = [];
@@ -19,7 +18,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 	this.profile = [];
 	this.mass = 0;
 
-	this.preview = function(){
+/*	this.preview = function(){
 		this.createDiv();
 		
 		if (! this.img){
@@ -33,7 +32,7 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 		else {
 			this.drawShipForPreview();
 		}
-	}
+	}*/
 
 	this.drawShipForPreview = function(){
 		shipCtx.clearRect(0, 0, res.x, res.y);
@@ -1204,8 +1203,13 @@ function Ship(id, shipClass, x, y, facing, userid, color){
 
 
 		if (game.phase == -1){ // DEPLOYMENT
-			this.drawTurnControl();
-			this.updateDiv();
+			if (this.actions[0].type == "deploy"  && this.actions[0].turn == game.turn){
+				this.drawTurnControl();
+				this.updateDiv();
+			}
+			else {
+				console.log("deployed earlier!");
+			}
 		}
 		else if (game.phase == 1){
 			this.drawMoveRange();

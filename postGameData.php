@@ -31,18 +31,23 @@ if (isset($_POST["type"])) {
 			echo "leaveGame fail";
 		}
 	}
-	else if ($_POST["type"] == "buyFleet") {
-			debug::log("type");
-		if ($dbManager->buyFleet($_POST["userid"], $_POST["gameid"], $_POST["ships"])) {
-			debug::log("byu");
-			if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], -1, -1, "ready")) {
-				if ($dbManager->gameIsReady($_POST["gameid"])) {
-					if ($dbManager->startGame($_POST["gameid"])) {
-						echo "gameStart";
+	else if ($_POST["type"] == "buyInitialFleet") {
+		Debug::log("buyInitialFleet");
+
+		$valid = $manager->validateFleetCost($_POST["gameid"], $_POST["ships"]);
+		if ($valid){
+			debug::log("valid: ".$valid);
+			if ($dbManager->buyShips($_POST["userid"], $_POST["gameid"], $_POST["ships"])) {
+				if ($dbManager->createReinforcementsEntry($_POST["userid"], $_POST["gameid"], $valid)) {
+					if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], -1, -1, "ready")) {
+						if ($dbManager->gameIsReady($_POST["gameid"])) {
+							if ($dbManager->startGame($_POST["gameid"])) {
+							}
+						}
+						else {
+							echo "player ready, game not";
+						}
 					}
-				}
-				else {
-					echo "player ready, game not";
 				}
 			}
 		}
@@ -75,6 +80,11 @@ if (isset($_POST["type"])) {
 		}
 		else {
 			echo "firing fail";
+		}
+	}
+	else if ($_POST["type"] == "damageControl"){
+		if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["gameturn"], $_POST["gamephase"], "ready")){
+			echo "damageControl success";
 		}
 	}
 }

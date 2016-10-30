@@ -39,25 +39,37 @@ class FireOrder {
 
 class Damage {
 	public $id;
+	public $fireid;
 	public $gameid;
 	public $shipid;
 	public $structureid;
 	public $turn;
+	public $type;
 	public $totalDmg;
+	public $shieldDmg;
 	public $structDmg;
 	public $armourDmg;
 	public $mitigation;
+	public $destroyed;
+	public $notes;
+	public $new;
 	
-	function __construct($id, $gameid, $shipid, $structureid, $turn, $totalDmg, $structDmg, $armourDmg, $mitigation){
+	function __construct($id, $fireid, $gameid, $shipid, $structureid, $turn, $type, $totalDmg, $shieldDmg, $structDmg, $armourDmg, $mitigation, $destroyed, $notes, $new){
 		$this->id = $id;
+		$this->fireid = $fireid;
 		$this->gameid = $gameid;
 		$this->shipid = $shipid;
 		$this->structureid = $structureid;
 		$this->turn = $turn;
+		$this->type = $type;
 		$this->totalDmg = $totalDmg;
+		$this->shieldDmg = $shieldDmg;
 		$this->structDmg = $structDmg;
 		$this->armourDmg = $armourDmg;
 		$this->mitigation = $mitigation;
+		$this->destroyed = $destroyed;
+		$this->notes = $notes;
+		$this->new = $new;
 	}
 }
 

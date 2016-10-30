@@ -21,6 +21,25 @@ if (isset($_SESSION["userid"])){
 	$ships = $manager->ships;
 	$damages = $manager->damages;
 
+	$phase;
+
+	switch ($game["phase"]){
+		case -1;
+			$phase = "Deployment / Initial";
+			break;
+		case 1;
+			$phase = "Movement";
+			break;
+		case 2;
+			$phase = "Firing";
+			break;
+		case 3;
+			$phase = "Damage Control";
+			break;
+		default:
+			break;
+	}
+
 	//echo sizeof($ships);
 	//echo var_export($ships[0]);
 	//$fireorders = $manager->fires;
@@ -72,12 +91,37 @@ if (isset($_SESSION["userid"])){
 			</div>
 			<div id="canvasDiv">
 				<div id="upperGUI">
-					<div id="buttons"></div>
+				<!--	<div id="buttons"></div>
 					<div id="currentPos">0 / 0</div>
 					<span id="onArc">null</span>
 					<span id="curArc">0</span>
 					<span id="dist" style="color: red">0</span>
-					<input type="button" value="end Phase" onclick="endPhase()"></input>
+				-->
+					<table id="overview">
+						<tr>
+							<th width="10%">
+								Turn
+							</th>
+							<th width="55%">
+								Phase
+							</th>
+							<th width="35%">
+								Reinforce
+							</th>
+						</tr>
+						<tr>
+							<td>
+								<?php echo $game["turn"]; ?>
+							</td>
+							<td>
+								<?php echo $phase; ?>
+							</td>
+							<td id="reinforce">
+								<?php echo $manager->reinforcements["points"]." Points"; ?>
+							</td>
+						</tr>
+					</table>
+					<input type="button" value="Confirm Orders" onclick="endPhase()"></input>
 				</div>
 				<div id="combatlogWrapper">
 					<table id="combatLog" class="disabled">
@@ -124,22 +168,12 @@ if (isset($_SESSION["userid"])){
 							Type
 						</th>
 						<th  width="20%" >
-							Deploy in
+							Arrival in
 						</th>
 					</tr>
 				</table>
 			</div>
 		</div>
-		<table>
-			<tr>
-				<th>
-					<?php echo "turn: ".$game["turn"]; ?>
-				</th>
-				<th>
-					<?php echo "phase: ".$game["phase"]; ?>
-				</th>
-			</tr>
-		</table>
 		<div id="weaponAimTableWrapper" class="disabled">
 			<table id="weaponAimTable"></table>
 		</div>
@@ -164,4 +198,16 @@ if (isset($_SESSION["userid"])){
 
 		window.game.canSubmit = canSubmit;
 	})
+
+	$("#reinforce").hover(
+		function(e){
+			$(this).addClass("selected");
+		},
+		function(e){
+			$(this).removeClass("selected");
+		}
+	).
+	click(function(e){
+		$("#deployWrapper").show();
+})
 </script>

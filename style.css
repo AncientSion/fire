@@ -343,6 +343,21 @@ canvas {
 	position: absolute;
 	z-index: 8;
 	border: 1px solid black;
+	width: 300px;
+}
+
+#overview {
+	border-collapse: collapse;
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+#overview th {
+	border: 1px solid black;
+}
+
+#overview td {
+	border: 1px solid black;
 }
 
 #combatlogWrapper {
@@ -411,6 +426,10 @@ canvas {
 	border-collapse: collapse;
 	border: 1px solid white;
 }
+
+#reinforce.selected {
+	background-color: lightBlue;
+}
 	
 #deployOverlay {
 	background-color: black;
@@ -422,6 +441,14 @@ canvas {
 	z-index: 10;
 	position: absolute;
 	text-align: center;
+}
+
+.shipAvailable {
+	background-color: lightGreen;
+}
+
+.shipUnavailable {
+	background-color: Red;
 }
 
 #vectorDiv {

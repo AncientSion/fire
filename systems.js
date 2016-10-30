@@ -8,6 +8,7 @@ function System(id, parentId, name, display){
 	this.selected = false;
 	this.destroyed = false;
 	this.tr = false;
+	this.weapon = false;
 				
 	this.posIsOnArc = function(loc, pos, facing){
 		//console.log(arguments);
@@ -361,23 +362,23 @@ function Weapon(id, parentId, name, display, output, minDmg, maxDmg, accDecay, s
 		return this.minDmg + " - " + this.maxDmg;
 	}
 
-
 	System.call(this, id, parentId, name, display, parentId, arc1, arc2, arc3, arc4);
-
+	this.weapon = true;
 }
+Weapon.prototype = Object.create(System.prototype);
 
 
 function Particle(id, parentId, name, display, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4){
-
 	Weapon.call(this, id, parentId, name, display, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4);	
 	this.animation = "particle";
-	
 }
+Particle.prototype = Object.create(Weapon.prototype);
 
 
-function Laser(id, parentId, name, display, output, minDmg, maxDmg, optRange, dmgDecay, accDecay, shots, reload, arc1, arc2, arc3, arc4){
+function Laser(id, parentId, name, display, rakeTime, output, minDmg, maxDmg, optRange, dmgDecay, accDecay, shots, reload, arc1, arc2, arc3, arc4){
 	this.optRange = optRange;
 	this.dmgDecay = dmgDecay;
+	this.rakeTime = rakeTime;
 
 	Weapon.call(this, id, parentId, name, display, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4);	
 	this.animation = "laser";

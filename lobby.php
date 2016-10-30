@@ -34,16 +34,35 @@ if (isset($_SESSION["userid"])){
 	$ongoingGamesElement = "<table style='border: 1px solid black; margin: auto; border-radius: 5px'>";
 	if ($ongoingGames) {	
 		$ongoingGamesElement .= "<tr>";
-		$ongoingGamesElement .= "<th colSpan = 3>My Ongoing Games</th>";
+		$ongoingGamesElement .= "<th colSpan = 4>My Ongoing Games</th>";
 		$ongoingGamesElement .= "</tr>";
 
 		$ongoingGamesElement .= "<tr>";
-		$ongoingGamesElement .= "<th style='width: 70%'>Game Name</th>";
+		$ongoingGamesElement .= "<th style='width: 60%'>Game Name</th>";
+		$ongoingGamesElement .= "<th style='width: 10%'>Turn</th>";
 		$ongoingGamesElement .= "<th style='width: 10%'>Phase</th>";
 		$ongoingGamesElement .= "<th style='width: 15%'>Status</th>";
 		$ongoingGamesElement .= "</tr>";
 		
 		foreach ($ongoingGames as $game){
+			$phase;
+
+			switch ($game["phase"]){
+				case -1;
+					$phase = "Deployment/Initial";
+					break;
+				case 1;
+					$phase = "Movement";
+					break;
+				case 2;
+					$phase = "Firing";
+					break;
+				case 3;
+					$phase = "Damage Control";
+					break;
+				default:
+					break;
+			}
 
 			$gameStatus = $manager->getGameStatus($game["id"], $game["turn"]);
 			
@@ -54,7 +73,8 @@ if (isset($_SESSION["userid"])){
 			$ongoingGamesElement .= "</a>";
 			$ongoingGamesElement .= "</td>";
 			
-			$ongoingGamesElement .= "<td>".$game["phase"]."</td>";
+			$ongoingGamesElement .= "<td>".$game["turn"]."</td>";
+			$ongoingGamesElement .= "<td>".$phase."</td>";
 			$ongoingGamesElement .= "<td>".$gameStatus["status"]."</td>";
 			$ongoingGamesElement .= "</tr>";
 		}

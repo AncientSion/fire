@@ -14,11 +14,12 @@ class Ship {
 	public $shipClass;
 	public $shipType = "type";
 	public $userid;
+	public $availabe;
 
 	public $name;
 	public $faction;
 	public $size;
-	public $value;
+	public static $value;
 	public $ep;
 
 	public $mass = 0;
@@ -28,12 +29,13 @@ class Ship {
 	public $actions = array();
 	public $structures = array();
 
-	function __construct($id, $userid, $x, $y, $facing){
+	function __construct($id, $userid, $x, $y, $facing, $available){
 		$this->id = $id;
 		$this->userid = $userid;
 		$this->x = $x;
 		$this->y = $y;
 		$this->facing = $facing;
+		$this->available = $available;
 		
 		$this->addStructures();
 	}
@@ -82,35 +84,44 @@ class Ship {
 		return $fire;
 	}
 
-	public function createDamageEntry($fire){
-		Debug::log("createDamageEntry");	
+	public function createDamageObject($fire){
+		//Debug::log("createDamageObject");	
 		$structure = $this->getStructureById($fire->pick);
 
 		$remIntegrity = $structure->getRemainingIntegrity();
 		$remArmour = $structure->getRemainingArmour();
 
-		$armourMod = $remArmour / $structure->armour;
-		$mitigation = $structure->mitigation * $armourMod;
+		$armourMod = pow($remArmour, 0.5) / pow($structure->armour, 0.5);
+		$mitigation = round($structure->mitigation * $armourMod);
 
 		$dmg = $fire->dmgRoll;
 
-		$armourDmg = $dmg / 100 * $mitigation;
-		$structDmg = $dmg - $armourDmg;
+		$shielDmg = 0;
+		$armourDmg = round($dmg / 100 * $mitigation);
+		$structDmg = round($dmg - $armourDmg);
+
+		$notes = "";
+		$destroyed = false;
+		$type = $fire->weapon->type;
 
 
 		$dmg = new Damage(
 			sizeof($structure->damages)+1,
+			$fire->id,
 			$fire->gameid,
 			$this->id, 
 			$structure->id, 
 			$fire->turn,
+			$type,
 			$fire->dmgRoll,
+			$shielDmg,
 			$structDmg, 
 			$armourDmg,
-			$mitigation
+			$mitigation,
+			$destroyed,
+			$notes,
+			1
 		);
-
-		echo json_encode($dmg);
 		return $dmg;
 	}
 

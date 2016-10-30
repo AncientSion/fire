@@ -80,14 +80,21 @@ function FireOrder(id, shooterId, targetId, weaponId, turn){
 	this.turn = turn;
 }
 
-function Damage (id, gameid, shipid, structureid, turn, damage, armour){
+function Damage (id, fireid, gameid, shipid, structureid, turn, type, totalDmg, shieldDmg, structDmg, armourDmg, mitigation, destroyed, notes){
 	this.id = id;
+	this.fireid = fireid;
 	this.gameid = gameid;
 	this.shipid = shipid;
 	this.structureid = structureid;
 	this.turn = turn;
-	this.damage = damage;
-	this.armour = armour;
+	this.type = type;
+	this.totalDmg = totalDmg;
+	this.shieldDmg = shieldDmg;
+	this.structDmg = structDmg;
+	this.armourDmg = armourDmg;
+	this.mitigation = mitigation;
+	this.destroyed = destroyed;
+	this.notes = notes;
 }
 
 function Structure(id, parentId, start, end, integrity, armour, mitigation, destroyed){
@@ -126,7 +133,6 @@ function Structure(id, parentId, start, end, integrity, armour, mitigation, dest
 			upperDiv.className = "integrityFull";
 			td.appendChild(upperDiv);
 
-
 		$(td).data("shipId", this.parentId);
 		$(td).data("systemId", this.id);
 		$(td).hover(
@@ -141,6 +147,11 @@ function Structure(id, parentId, start, end, integrity, armour, mitigation, dest
 				game.getShipById(shipId).getSystemById(systemId).hover();
 			}
 		)
+		$(td).click(function(e){
+			var shipId = $(this).data("shipId");
+			var systemId = $(this).data("systemId");
+			console.log(game.getShipById(shipId).getSystemById(systemId).damages);
+		})
 
 			tr.appendChild(td);
 			
@@ -226,13 +237,13 @@ function Structure(id, parentId, start, end, integrity, armour, mitigation, dest
 		var td = document.createElement("td"); td.style.width = "40%";
 			td.innerHTML = "Armour"; tr.appendChild(td);
 		var td = document.createElement("td");
-			td.innerHTML = this.armour; tr.appendChild(td); table.appendChild(tr);
+			td.innerHTML = this.getRemainingArmour() + " / " + this.armour; tr.appendChild(td); table.appendChild(tr);
 
 		var tr = document.createElement("tr");
 		var td = document.createElement("td"); td.style.width = "40%";
 			td.innerHTML = "Mitigation"; tr.appendChild(td);
 		var td = document.createElement("td");
-			td.innerHTML = this.mitigation + "%"; tr.appendChild(td); table.appendChild(tr);
+			td.innerHTML = this.getRemainingMitigation() + "%" + " / " + this.mitigation + "%"; tr.appendChild(td); table.appendChild(tr);
 			
 		div.appendChild(table);
 			
@@ -242,9 +253,21 @@ function Structure(id, parentId, start, end, integrity, armour, mitigation, dest
 	this.getRemainingIntegrity = function(){
 		var integrity = this.integrity;
 		for (var i = 0; i < this.damages.length; i++){
-			integrity -= this.damages[i].damage;
+			integrity -= this.damages[i].structDmg;
 		}
 		return integrity;
+	}
+
+	this.getRemainingArmour = function(){
+		var armour = this.armour;
+		for (var i = 0; i < this.damages.length; i++){
+			armour -= this.damages[i].armourDmg;
+		}
+		return armour;
+	}
+
+	this.getRemainingMitigation = function(){
+		return Math.round((Math.pow(this.getRemainingArmour(), 0.5) / Math.pow(this.armour, 0.5)) * this.mitigation);
 	}
 
 }

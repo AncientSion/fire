@@ -28,7 +28,7 @@ class Structure {
 	public function getRemainingIntegrity(){
 		$remIntegrity = $this->integrity;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
-			$remIntegrity -= $this->damages[$i]->structDamage;
+			$remIntegrity -= $this->damages[$i]->structDmg;
 		}
 		return $remIntegrity;
 	}

@@ -163,10 +163,6 @@ else {
 		</table>
 		<table id="shipPreview" class="shipPreview disabled" style="width: 700px;">
 			<tr>
-				<td>
-		<canvas id="fxCanvas" style="z-index: 1; width: 400px; height: 400px; position: relative;"></canvas>
-		<canvas id="shipCanvas" style="z-index: 2; width: 400px; height: 400px; position: relative; margin-top: -402px"></canvas>
-				</td>
 				<td style="vertical-align: top;">
 						<table>
 							<tr>
@@ -193,10 +189,6 @@ else {
 
 
 	$(document).ready(function(){
-
-	//	$(this).contextmenu(function(e){
-	//		e.preventDefault();
-	//	});
 		if (window.ready){
 			$("#shipsBoughtTable").hide();
 		}
@@ -210,17 +202,8 @@ else {
 				shipsBought: [],
 			}
 
+
 			window.res = {x:400, y: 400};
-
-			window.shipCanvas = document.getElementById("shipCanvas");
-			window.shipCanvas.width = res.x;
-			window.shipCanvas.height = res.y;
-			window.shipCtx = shipCanvas.getContext("2d");
-
-			window.fxCanvas = document.getElementById("fxCanvas");
-			window.fxCanvas.width = res.x;
-			window.fxCanvas.height = res.y;
-			window.fxCtx = fxCanvas.getContext("2d");
 
 			var icons = [factionImages.earthFaction, factionImages.centauriFaction, factionImages.minbariFaction];
 
@@ -303,6 +286,7 @@ else {
 			shipClass: $(ele).data("shipClass"),
 			pv: $(ele).data("pv"),
 			purchaseId: window.window.game.shipsBought.length,
+			turn: 1
 		}
 
 		var cur = Math.floor($("#totalFleetCost").html());
@@ -412,8 +396,9 @@ else {
 				data.structures[j].parentId,
 				data.structures[j].start,
 				data.structures[j].end,
-				data.structures[j].armour,
 				data.structures[j].integrity,
+				data.structures[j].armour,
+				data.structures[j].mitigation,
 				data.structures[j].destroyed
 			);
 
@@ -466,11 +451,35 @@ else {
 
 
 		game.ships[0] = ship;
-		ship.create(); ship.preview();
+		ship.create();
+		ship.createDiv();
+		setupPreviewCanvas();
+
+
+
 
 		$(".shipDiv").css("position", "relative").css("left", "50px").css("top", "0px").removeClass("disabled");
 		$("#shipPreview").removeClass("disabled");
 
+	}
+
+	function setupPreviewCanvas(){
+		window.fxCanvas = document.createElement("canvas");
+		window.fxCanvas.id = "fxCanvas";
+		window.fxCanvas.className = "previewCanvas";
+		window.fxCanvas.style.border = "none";
+		window.fxCanvas.style.zIndex = -5;
+		window.fxCanvas.style.width = "100%";
+		window.fxCanvas.style.top = 0;
+		window.fxCanvas.style.left = 0;
+		window.fxCanvas.width = res.x;
+		window.fxCanvas.height = res.y;
+	
+		window.fxCtx = fxCanvas.getContext("2d");
+
+
+		var shipDiv = document.getElementsByClassName("structContainer")[0];
+			shipDiv.appendChild(fxCanvas);
 	}
 
 	function requestShipsForFaction(faction, ele, callback){

@@ -426,7 +426,7 @@ function canvasMouseClick(e){
 			}
 		}
 	}
-	else if (game.phase == 3){// damage animation and damage control
+	else if (game.phase == 3){// FIRE ANIM AND DAMAGE CONTROL
 		if (aShip){
 			ship = game.getShipById(aShip);
 			if (game.getShipByClick(pos) == ship){
