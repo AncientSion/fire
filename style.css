@@ -41,6 +41,22 @@ canvas {
 	background-color: lightBlue;
 }
 
+#reinforceTable {
+	margin: auto;
+	margin-top: 80px;
+	width: 300px;
+	border-collapse: collapse;
+	border: 1px solid black;
+}
+
+#reinforceTable th, #reinforceTable td {
+	border: 1px solid black
+}
+
+#reinforceTable .selected {
+	background-color: lightBlue;
+}
+
 #confirmFleet {
 	font-size: 22px;
 	background-color: blue;
@@ -56,6 +72,10 @@ canvas {
 	border: 1px solid black;
 }
 
+#shipsBoughtTable tr.selected {
+	background-color: lightBlue;
+}
+
 #factionDiv {
 	width: 700px;
 	display: inline-block;
@@ -68,6 +88,10 @@ canvas {
 	margin: auto;
 	border-collapse: collapse;
 	border: 1px solid black;
+}
+
+.factionUpperTable td.selected {
+	background-color: lightBlue;
 }
 
 .factionShipclassTable {

@@ -1046,6 +1046,11 @@ function Ship(id, shipClass, x, y, facing, userid){
 		
 
 		$(div).drag();
+		$(div).contextmenu(function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			$(this).hide();
+		})
 			
 		document.getElementById("game").appendChild(div);
 

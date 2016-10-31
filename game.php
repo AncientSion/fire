@@ -6,60 +6,64 @@ require_once("gameManager.php");
 require_once("debug.php");
 
 session_start();
+$gameid = $_GET["gameid"];
+$userid;
 
-if (isset($_SESSION["userid"])){
-	$gameid = $_GET["gameid"];
+if (isset($_SESSION["userid"])) {
 	$userid = $_SESSION["userid"];
-	echo "<script> var gameid = ".$gameid."; var userid = ".$userid.";</script>";
-	$manager = new Manager($userid, $gameid);
-
-	//echo json_encode($manager->ships);
-	//debug::log("phase: ".$game["phase"]);
-
-	$game = $manager->game;
-	$playerstatus = $manager->playerstatus;
-	$ships = $manager->ships;
-	$damages = $manager->damages;
-
-	$phase;
-
-	switch ($game["phase"]){
-		case -1;
-			$phase = "Deployment / Initial";
-			break;
-		case 1;
-			$phase = "Movement";
-			break;
-		case 2;
-			$phase = "Firing";
-			break;
-		case 3;
-			$phase = "Damage Control";
-			break;
-		default:
-			break;
-	}
-
-	//echo sizeof($ships);
-	//echo var_export($ships[0]);
-	//$fireorders = $manager->fires;
-
-	/*$w = new Omega(5, 2, "test", 50, 25, 90);
-
-	foreach ($w->systems[0] as $key => $value){
-			if ($value == NULL){$value = "null";} echo "key: ".$key." val: ".$value."</br>";
-		}
-	*/
-		
-	//	var_export(json_encode($manager->fireOrders));
-
-	echo "<script>";
-	echo "window.gd = ".json_encode($game, JSON_NUMERIC_CHECK).";";
-	echo "window.ships = ".json_encode($ships, JSON_NUMERIC_CHECK).";";
-	echo "window.playerstatus = ".json_encode($playerstatus, JSON_NUMERIC_CHECK).";";
-	//echo "window.fireOrders = ".json_encode($fireorders, JSON_NUMERIC_CHECK).";";
-	echo "</script>";
 }
+else $userid = 0;
+
+$manager = new Manager($userid, $gameid);
+
+echo "<script> window.gameid = ".$gameid."; window.userid = ".$userid.";</script>";
+
+echo json_encode($manager->pickReinforcements());
+
+$game = $manager->game;
+$playerstatus = $manager->playerstatus;
+$ships = $manager->ships;
+$damages = $manager->damages;
+
+$phase;
+
+switch ($game["phase"]){
+	case -1;
+		$phase = "Deployment / Initial";
+		break;
+	case 1;
+		$phase = "Movement";
+		break;
+	case 2;
+		$phase = "Firing";
+		break;
+	case 3;
+		$phase = "Damage Control";
+		break;
+	default:
+		break;
+}
+
+//echo sizeof($ships);
+//echo var_export($ships[0]);
+//$fireorders = $manager->fires;
+
+/*$w = new Omega(5, 2, "test", 50, 25, 90);
+
+foreach ($w->systems[0] as $key => $value){
+		if ($value == NULL){$value = "null";} echo "key: ".$key." val: ".$value."</br>";
+	}
+*/
+	
+//	var_export(json_encode($manager->fireOrders));
+
+echo "<script>";
+echo "window.gd = ".json_encode($game, JSON_NUMERIC_CHECK).";";
+echo "window.ships = ".json_encode($ships, JSON_NUMERIC_CHECK).";";
+echo "window.playerstatus = ".json_encode($playerstatus, JSON_NUMERIC_CHECK).";";
+//echo "window.fireOrders = ".json_encode($fireorders, JSON_NUMERIC_CHECK).";";
+echo "</script>";
+
 ?>
 
 <!DOCTYPE html>
@@ -139,10 +143,13 @@ if (isset($_SESSION["userid"])){
 								Weapon
 							</th>
 							<th>
-								Shots
+								Guns
 							</th>
 							<th>
 								Hits
+							</th>
+							<th>
+								Shots
 							</th>
 						</tr>
 					</table>
@@ -156,8 +163,8 @@ if (isset($_SESSION["userid"])){
 			<div id ="deployWrapper" class="disabled">
 				<table id="deployTable">
 					<tr>
-						<th style="font-size: 18px;" colSpan=4>
-							Available Vessels
+						<th style="font-size: 18px;" colSpan=3>
+							Incoming Reinforcements
 						</th>
 					</tr>
 					<tr>
@@ -172,6 +179,24 @@ if (isset($_SESSION["userid"])){
 						</th>
 					</tr>
 				</table>
+				<table id="reinforceTable" class="disabled">
+					<tr>
+						<th style="font-size: 18px;" colSpan=3>
+							Requestable Reinforcements
+						</th>
+					</tr>
+					<tr>
+						<th  width="50%" colSpan="2">
+							Class
+						</th>
+						<th  width="30%" >
+							Type
+						</th>
+						<th  width="20%" >
+							Estimated Arrival
+						</th>
+					</tr>
+				</table>
 			</div>
 		</div>
 		<div id="weaponAimTableWrapper" class="disabled">
@@ -183,21 +208,6 @@ if (isset($_SESSION["userid"])){
 </html>
 
 <script>
-	$(document).ready(function(){
-		var canSubmit = true;
-		for (var i = 0; i < playerstatus.length; i++){
-			if (playerstatus[i].userid == userid && playerstatus[i].status != "waiting"){
-				canSubmit = false;
-				break;
-			}
-		}
-
-		if (!canSubmit){
-			console.log("You did already submit your gamedata for the current phase");
-		}
-
-		window.game.canSubmit = canSubmit;
-	})
 
 	$("#reinforce").hover(
 		function(e){

@@ -67,7 +67,7 @@ function Path (a, b){
 	this.setup();
 };
 
-function FireOrder(id, shooterId, targetId, weaponId, turn){
+function FireOrder(id, shooterId, targetId, weaponId, turn, hits){
 	this.id = id;
 	this.weaponId = weaponId;
 	this.targetId = targetId;
@@ -78,6 +78,7 @@ function FireOrder(id, shooterId, targetId, weaponId, turn){
 	this.animated = false;
 	this.anim = [];
 	this.turn = turn;
+	this.hits = hits;
 }
 
 function Damage (id, fireid, gameid, shipid, structureid, turn, type, totalDmg, shieldDmg, structDmg, armourDmg, mitigation, destroyed, notes){

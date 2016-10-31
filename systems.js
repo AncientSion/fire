@@ -368,20 +368,25 @@ function Weapon(id, parentId, name, display, output, minDmg, maxDmg, accDecay, s
 Weapon.prototype = Object.create(System.prototype);
 
 
-function Particle(id, parentId, name, display, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4){
+function Particle(id, parentId, name, display, animColor, projSize, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4){
 	Weapon.call(this, id, parentId, name, display, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4);	
-	this.animation = "particle";
+	this.type = "particle";
+	this.animation = "projectile";
+	this.animColor = animColor;
+	this.projSize = projSize;
 }
 Particle.prototype = Object.create(Weapon.prototype);
 
 
-function Laser(id, parentId, name, display, rakeTime, output, minDmg, maxDmg, optRange, dmgDecay, accDecay, shots, reload, arc1, arc2, arc3, arc4){
+function Laser(id, parentId, name, display, rakeTime, animColor, width, output, minDmg, maxDmg, optRange, dmgDecay, accDecay, shots, reload, arc1, arc2, arc3, arc4){
+	Weapon.call(this, id, parentId, name, display, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4);	
 	this.optRange = optRange;
 	this.dmgDecay = dmgDecay;
 	this.rakeTime = rakeTime;
-
-	Weapon.call(this, id, parentId, name, display, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4);	
-	this.animation = "laser";
+	this.type = "laser";
+	this.animation = "beam";
+	this.animColor = animColor;
+	this.width = width;
 	
 	this.getFillStyle = function(x, y, dist){
 		var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);

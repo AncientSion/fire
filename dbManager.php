@@ -162,37 +162,58 @@ class DBManager {
 		} else return false;
 	}
 
-	public function createReinforcementsEntry($userid, $gameid, $points){
-		debug::log("createReinforcementsEntry");
+	public function createReinforcementsEntry($userid, $gameid, $points, $faction){
+		debug::log("createReinforcementsEntry for ".$points);
 
 		$stmt = $this->connection->prepare("
 			INSERT INTO reinforcements
-				(gameid, userid, points)
+				(gameid, userid, points, faction)
 			VALUES
-				(:gameid, :userid, :points)
+				(:gameid, :userid, :points, :faction)
 		");
 
 		$stmt->bindParam(":gameid", $gameid);
 		$stmt->bindParam(":userid", $userid);
 		$stmt->bindParam(":points", $points);
+		$stmt->bindParam(":faction", $faction[0]);
 
 		$stmt->execute();
 
 		if ($stmt->errorCode() == 0){
-			debug::log("Reinforcement CREATED");
+			debug::log("Reinforcement entry CREATED");
 			return true;
+		} else return false;
+	}
+
+	public function getReinforceStatus($gameid, $userid){
+		$stmt = $this->connection->prepare("
+			SELECT * FROM reinforcements 
+			WHERE gameid = :gameid
+			AND userid = :userid
+		");
+
+		$stmt->bindParam(":gameid", $gameid);
+		$stmt->bindParam(":userid", $userid);
+
+		$stmt->execute();
+
+		$result = $stmt->fetchAlL(PDO::FETCH_ASSOC);
+
+		if ($result){
+			return $result;
 		} else return false;
 	}
 	
 	public function createNewGame($name, $pv){
 		$stmt = $this->connection->prepare("
 			INSERT INTO games
-				(name, status, turn, phase, pv)
+				(name, status, turn, phase, pv, reinforce)
 			VALUES
-				(:name, :status, :turn, :phase, :pv)
+				(:name, :status, :turn, :phase, :pv, :reinforce)
 		");
 		
 		$status = "open";
+		$reinforce = floor($pv / 10);
 		$turn = -1;
 		$phase = -1;
 		
@@ -201,6 +222,8 @@ class DBManager {
 		$stmt->bindParam(":turn", $turn);
 		$stmt->bindParam(":phase", $phase);
 		$stmt->bindParam(":pv", $pv);
+		$stmt->bindParam(":pv", $pv);
+		$stmt->bindParam(":reinforce", $reinforce);
 		
 		$stmt->execute();
 		
@@ -581,8 +604,11 @@ class DBManager {
 		else return false;
 	}
 
-	public function getShipBuyValue($gameid, $userid){
+	public function getShipBuyValue($gameid, $userid = 0){
 		debug::log("getShipBuyValue");
+		if (! $userid){
+			return false;
+		}
 
 		$stmt = $this->connection->prepare("
 			SELECT * FROM reinforcements
@@ -599,6 +625,29 @@ class DBManager {
 
 		if ($result){
 			return $result;
+		}
+		else return false;
+	}
+
+	public function addReinforcementPoints($userid, $gameid, $points){
+		$stmt = $this->connection->prepare("
+			UPDATE reinforcements 
+			SET 
+				points = points + :points
+			WHERE
+				gameid = :gameid
+			AND
+				userid = :userid
+		");
+
+		$stmt->bindParam(":userid", $userid);
+		$stmt->bindParam(":gameid", $gameid);
+		$stmt->bindParam(":points", $points);
+
+		$stmt->execute();
+
+		if ($stmt->errorCode() == 0){
+			return true;
 		}
 		else return false;
 	}

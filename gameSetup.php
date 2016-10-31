@@ -176,16 +176,12 @@ else {
 				</td>
 			</tr>
 		</table>
-		
-
-
-
-
 	</body>
 </html>
 
 <script>
 	preloadFactions();
+	var reinforceFaction = [];
 
 
 	$(document).ready(function(){
@@ -225,7 +221,6 @@ else {
 					}).mouseleave(function(){
 						$(this).removeClass("highlight");
 					});
-						
 					$(tr).click(function(){
 						requestShipsForFaction($(this).data("faction"), this, showShipList);
 					});
@@ -234,6 +229,23 @@ else {
 					td.style.textAlign = "center";
 					td.appendChild(icons[i]); tr.appendChild(td);
 				var td = document.createElement("td");
+
+					$(td).contextmenu(function(e){
+						e.preventDefault();
+						e.stopPropagation();
+						var fact = $(this).html();
+						if ($(this).hasClass("selected")){
+							$(this).removeClass("selected");
+							unselectReinforcementFaction(fact);
+						}
+						else {
+							$(this).addClass("selected");
+							selectReinforcementFaction(fact);
+						}
+
+						//console.log(reinforceFaction);
+					});
+
 					td.style.textAlign = "center";
 					td.style.fontSize = "20px";
 					td.innerHTML = factions[i];
@@ -299,8 +311,8 @@ else {
 			window.game.shipsBought.push(ship);
 
 			var tr = document.createElement("tr");
-				$(tr).data("purchaseId", ship.purchaseId);
-				tr.addEventListener("contextmenu", function(e){
+				$(tr).data("purchaseId", ship.purchaseId)
+				.contextmenu(function(e){
 					e.preventDefault();
 					for (var i = window.game.shipsBought.length; i--; i > 0){
 						if (window.game.shipsBought[i].purchaseId == $(this).data("purchaseId")){
@@ -308,9 +320,16 @@ else {
 							break;
 						}
 					}
-					$(tr).remove();
-					adjustFleetCost();
-				})
+					$(this).remove();
+					$("#totalFleetCost").html(getFleetCost());
+				}).hover(
+					function(e){
+						$(this).addClass("selected");
+					},
+					function(e){
+						$(this).removeClass("selected");
+					}
+				);
 
 			for (var i in ship){
 				if (i != "purchaseId"){
@@ -323,23 +342,27 @@ else {
 
 			var target = document.getElementById("totalFleetCost");
 				target.parentNode.parentNode.insertBefore(tr, target.parentNode);
+				$(target).html(getFleetCost());
 
-			adjustFleetCost();
+				canSubmit()
 		}
 		else {
 			alert ("you have insufficient point value left");
 		}
 	}
 
-	function adjustFleetCost(){
-		var target = document.getElementById("totalFleetCost");
+	function getFleetCost(){
 		var cost = 0;
 		for (var i = 0; i < window.game.shipsBought.length; i++){
 			cost += window.game.shipsBought[i].pv;
-			}
-		$(target).html(cost);
+		}
+		return cost;
+	}
 
-		if (cost > 0){
+	function canSubmit(){
+		var fleetCost = getFleetCost();
+
+		if (reinforceFaction.length && fleetCost){
 			$("#confirmFleet").removeClass("disabled");
 		}
 		else {
@@ -348,7 +371,7 @@ else {
 	}
 
 	function confirmFleetPurchase(){
-		ajax.confirmFleetPurchase(playerid, gameid, window.game.shipsBought, redirect);
+		ajax.confirmFleetPurchase(playerid, gameid, window.game.shipsBought, window.reinforceFaction, redirect);
 	}
 
 	function requestShipData(shipclass){
@@ -376,8 +399,7 @@ else {
 							0,
 							0,
 							0,
-							data.userid,
-							"blue"
+							data.userid
 						)
 
 		ship.actions.push(new Move("deploy", 0, 200, 200, -90, 0, 0, 0));
@@ -411,6 +433,9 @@ else {
 							data.structures[j].systems[k].parentId,
 							data.structures[j].systems[k].name,
 							data.structures[j].systems[k].display,
+							data.structures[j].systems[k].rakeTime,
+							data.structures[j].systems[k].animColor,
+							data.structures[j].systems[k].width,
 							data.structures[j].systems[k].output,
 							data.structures[j].systems[k].minDmg,
 							data.structures[j].systems[k].maxDmg,
@@ -431,6 +456,8 @@ else {
 							data.structures[j].systems[k].parentId,
 							data.structures[j].systems[k].name,
 							data.structures[j].systems[k].display,
+							data.structures[j].systems[k].animColor,
+							data.structures[j].systems[k].projSize,
 							data.structures[j].systems[k].output,
 							data.structures[j].systems[k].minDmg,
 							data.structures[j].systems[k].maxDmg,
@@ -560,6 +587,22 @@ else {
 
 		$(ele.parentNode.childNodes[(row*2)+2]).slideToggle(0);
 
+	}
+
+	function selectReinforcementFaction(faction){
+		reinforceFaction.push(faction);
+		canSubmit();
+		return;
+	}
+
+	function unselectReinforcementFaction(faction){
+		for (var i = reinforceFaction.length; i >= 0; i--){
+			if (reinforceFaction[i] == faction){
+				reinforceFaction.splice(i, 1);
+				canSubmit();
+				return;
+			}
+		}
 	}
 
 	function joinGame(){

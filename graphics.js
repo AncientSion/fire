@@ -24,7 +24,7 @@ function drawProjectile(weapon, x, y){
 	fxCtx.beginPath();
 	fxCtx.arc(x, y, weapon.projSize, 0, 2*Math.PI);
 	fxCtx.closePath();
-	fxCtx.fillStyle = weapon.projColor;
+	fxCtx.fillStyle = weapon.animColor;
 	fxCtx.fill();
 }
 
@@ -36,18 +36,18 @@ function drawBeam(weapon, ox, oy, x, y){
 	fxCtx.moveTo(ox, oy);
 	fxCtx.lineTo(x, y);
 	fxCtx.closePath();
-	fxCtx.strokeStyle = weapon.beamColorA;
-	fxCtx.lineWidth = weapon.beamWidth;
+	fxCtx.strokeStyle = weapon.animColor;
+	fxCtx.lineWidth = weapon.width;
 	fxCtx.stroke();
 	
-	fxCtx.globalAlpha = 0.6;
+	/*fxCtx.globalAlpha = 0.6;
 	fxCtx.beginPath();
 	fxCtx.moveTo(ox, oy);
 	fxCtx.lineTo(x, y);
 	fxCtx.closePath();
-	fxCtx.strokeStyle = weapon.beamColorB;
-	fxCtx.lineWidth = weapon.beamWidth*0.3;
-	fxCtx.stroke();
+	fxCtx.strokeStyle = "white";
+	fxCtx.lineWidth = weapon.width*0.3;
+	fxCtx.stroke();*/
 	
 	fxCtx.lineWidth = 1
 	fxCtx.globalCompositeOperation = "source-over";

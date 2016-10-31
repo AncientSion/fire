@@ -41,7 +41,7 @@ window.ajax = {
 		});
 	},
 
-	confirmFleetPurchase: function(userid, gameid, ships, callback){
+	confirmFleetPurchase: function(userid, gameid, ships, factions, callback){
 		$.ajax({
 			type: "POST",
 			url: "postGameData.php",
@@ -52,7 +52,8 @@ window.ajax = {
 					userid: userid,
 					gameturn: game.turn,
 					gamephase: game.phase,
-					ships: ships
+					ships: ships,
+					faction: factions
 					},
 			success: callback,
 			error: ajax.error,

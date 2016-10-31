@@ -16,6 +16,7 @@ if (isset($_POST["type"])) {
 
 
 	if ($_POST["type"] == "joinGame") {
+		debug::log("join");
 		if ($dbManager->createPlayerStatus($_POST["userid"], $_POST["gameid"], 0, -1, "joined")) {
 			echo "joinGame success";
 		}
@@ -38,7 +39,7 @@ if (isset($_POST["type"])) {
 		if ($valid){
 			debug::log("valid: ".$valid);
 			if ($dbManager->buyShips($_POST["userid"], $_POST["gameid"], $_POST["ships"])) {
-				if ($dbManager->createReinforcementsEntry($_POST["userid"], $_POST["gameid"], $valid)) {
+				if ($dbManager->createReinforcementsEntry($_POST["userid"], $_POST["gameid"], $valid, $_POST["faction"])) {
 					if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], -1, -1, "ready")) {
 						if ($dbManager->gameIsReady($_POST["gameid"])) {
 							if ($dbManager->startGame($_POST["gameid"])) {

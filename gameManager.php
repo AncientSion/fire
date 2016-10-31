@@ -10,7 +10,7 @@ require_once("server\classes.php");
 class Manager {
 	public $userid;
 	
-	function __construct($userid, $gameid = false){
+	function __construct($userid = 0, $gameid = 0){
 		//$before = round(microtime(true)*1000);
 		$this->userid = $userid;
 		$this->gameid = $gameid;
@@ -21,7 +21,11 @@ class Manager {
 		$this->gd = array();
 		$this->fires = array();
 
-		if ($this->gameid){
+		if (! $this->userid){
+			$this->getGameAndPlayerStatus();
+			$this->getGameData();
+		}
+		else if ($this->gameid){
 			//$this->getMemory(memory_get_usage(true));
 			$this->getGameAndPlayerStatus();
 
@@ -136,7 +140,7 @@ class Manager {
 		$this->reinforcements = $db->getShipBuyValue($this->gameid, $this->userid);
 
 		$ships = $db->getAllShipsForGame($this->gameid);
-		$ships = $db->getActionsForShips($ships, $this->userid);
+		$ships = $db->getActionsForShips($ships);
 
 		$this->fires = $db->getAllFireOrders($this->gameid);
 		$this->damages = $db->getAllDamageEntries($this->gameid);
@@ -299,6 +303,13 @@ class Manager {
 		if ($dbManager->setGameTurnPhase($this->gameid, $turn, $phase)){
 			$players = $dbManager->getPlayerStatus($this->gameid);
 
+			if ($turn > 1){
+				for ($i = 0; $i < sizeof($players); $i++){
+					$reinforcements = $this->pickReinforcements();
+				}
+			}
+
+
 			for ($i = 0; $i < sizeof($players); $i++){
 				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $turn, $phase, "waiting")){
 					debug::log("phase for player ".$i. " adjusted to phase: ".$phase);
@@ -309,8 +320,16 @@ class Manager {
 				}
 			}
 
+
 			return true;
 		}
+	}
+
+
+	public function pickReinforcements(){
+		$reinforce = DBManager::app()->getReinforceStatus($this->gameid, $this->userid);
+		return $reinforce;
+
 	}
 
 	public function handleDeploymentPhase(){
@@ -393,7 +412,7 @@ class Manager {
 		$turn = $this->gd["game"]["turn"];
 		$phase = -1;
 
-		if ($dbManager->setGameTurnPhase($this->gameid, $turn+1, $phase)){
+		if ($dbManager->setGameTurnPhase($this->gameid, $turn+1, $phase)){			
 			$players = $dbManager->getPlayerStatus($this->gameid);
 
 			for ($i = 0; $i < sizeof($players); $i++){
@@ -405,6 +424,15 @@ class Manager {
 					return false;
 				}
 			}
+
+			for ($i = 0; $i < sizeof($players); $i++){
+				$dbManager->addReinforcementPoints(
+					$players[$i]["userid"],
+					$this->gameid,
+					$this->gd["game"]["reinforce"]
+				);
+			}
+
 
 			return true;
 		}

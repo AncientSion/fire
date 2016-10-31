@@ -410,7 +410,15 @@ function canvasMouseClick(e){
 								for (var j = ship.structures[i].systems.length-1; j >= 0; j--){
 									if (ship.structures[i].systems[j].selected){
 										if (ship.structures[i].systems[j].posIsOnArc(shipLoc, clickShip.getOffsetPos(), facing)){
-											ship.structures[i].systems[j].setFireOrder(new FireOrder(0, ship.id, clickShip.id, ship.structures[i].systems[j].id, game.turn));
+											ship.structures[i].systems[j].setFireOrder(
+												new FireOrder(
+													0,
+													ship.id,
+													clickShip.id,
+													ship.structures[i].systems[j].id,
+													game.turn,
+													-1)
+												);
 										}
 									}
 								}

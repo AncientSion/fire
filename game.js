@@ -14,13 +14,13 @@ function Game(id, name, status, userid, turn, phase){
 	this.index = 1;
 
 	this.confirmDeployment = function(){
-		if (! this.canSubmit){
+		if (this.canSubmit){
 			ajax.confirmDeployment();
 		}
 	}
 	
 	this.endPhase = function(){
-		if (! this.canSubmit){
+		if (this.canSubmit){
 			if (this.phase == 1){
 				var valid = true;
 				for (var i = 0; i < this.ships.length; i++){
@@ -164,6 +164,10 @@ function Game(id, name, status, userid, turn, phase){
 				th.innerHTML = "Confirm Deployment";
 				tr.appendChild(th);
 			table.appendChild(tr);
+		}
+
+		if (game.phase == -1){
+			$("#reinforceTable").show();
 		}
 	}
 
@@ -310,6 +314,8 @@ function Game(id, name, status, userid, turn, phase){
 								window.ships[i].structures[j].systems[k].name,
 								window.ships[i].structures[j].systems[k].display,
 								window.ships[i].structures[j].systems[k].rakeTime,
+								window.ships[i].structures[j].systems[k].animColor,
+								window.ships[i].structures[j].systems[k].width,
 								window.ships[i].structures[j].systems[k].output,
 								window.ships[i].structures[j].systems[k].minDmg,
 								window.ships[i].structures[j].systems[k].maxDmg,
@@ -330,6 +336,8 @@ function Game(id, name, status, userid, turn, phase){
 								window.ships[i].structures[j].systems[k].parentId,
 								window.ships[i].structures[j].systems[k].name,
 								window.ships[i].structures[j].systems[k].display,
+								window.ships[i].structures[j].systems[k].animColor,
+								window.ships[i].structures[j].systems[k].projSize,
 								window.ships[i].structures[j].systems[k].output,
 								window.ships[i].structures[j].systems[k].minDmg,
 								window.ships[i].structures[j].systems[k].maxDmg,
@@ -351,7 +359,8 @@ function Game(id, name, status, userid, turn, phase){
 											window.ships[i].structures[j].systems[k].fireOrders[l].shooterid,
 											window.ships[i].structures[j].systems[k].fireOrders[l].targetid,
 											window.ships[i].structures[j].systems[k].fireOrders[l].weaponid,
-											window.ships[i].structures[j].systems[k].fireOrders[l].turn
+											window.ships[i].structures[j].systems[k].fireOrders[l].turn,
+											window.ships[i].structures[j].systems[k].fireOrders[l].hits
 										)
 									)	
 								}
@@ -408,6 +417,20 @@ function Game(id, name, status, userid, turn, phase){
 		}
 
 		//if (window.fireOrders.length){console.log("ding");this.fireOrders = window.fireOrders;}
+
+		var canSubmit = false;
+		var isPlaying = false;
+		for (var i = 0; i < playerstatus.length; i++){
+			if (playerstatus[i].userid == userid){
+				isPlaying = true;
+				if (playerstatus[i].status == "waiting"){
+					canSubmit = true;
+					break;
+				}
+			}
+		}
+
+		this.canSubmit = canSubmit;
 
 		this.initPhase(this.phase);
 	}
@@ -674,7 +697,7 @@ function Game(id, name, status, userid, turn, phase){
 	this.getShotDetails = function(){
 		//	console.log("getShotDetails");
 		//	this.fireOrders = [this.fireOrders[0]];
-		  console.log(this.fireOrders);
+		//  console.log(this.fireOrders);
 
 		for (var i = 0; i < this.fireOrders.length; i++){
 			this.fireOrders[i].shooter = game.getShipById(this.fireOrders[i].shooterId);
@@ -754,7 +777,7 @@ function Game(id, name, status, userid, turn, phase){
 								animated: false
 							}
 					}
-					else if (this.fireOrders[i].weapon.animation == "laser"){
+					else if (this.fireOrders[i].weapon.animation == "beam"){
 						if (k >= this.fireOrders[i].hits[j]){
 							hit = false;
 							//console.log(this.fireOrders[i].target.size);
@@ -843,11 +866,12 @@ function Game(id, name, status, userid, turn, phase){
 									}
 								}
 							}
-							else if (game.fireOrders[i].weapon.animation == "laser"){
+							else if (game.fireOrders[i].weapon.animation == "beam"){
 							//	console.log("laser");
 							//	console.log(game.fireOrders[i].anim);
 								game.fireOrders[i].anim[j][k].t[0] += 1;
 
+							/*
 								var a, b, c, d;
 
 								a = game.fireOrders[i].anim[j][k].tax;
@@ -859,6 +883,7 @@ function Game(id, name, status, userid, turn, phase){
 								console.log(b)
 								console.log(c)
 								console.log(d)
+							*/
 
 								x = game.fireOrders[i].anim[j][k].tax + (game.fireOrders[i].anim[j][k].v.x * game.fireOrders[i].anim[j][k].t[0] / game.fireOrders[i].anim[j][k].t[1]);
 								y = game.fireOrders[i].anim[j][k].tay + (game.fireOrders[i].anim[j][k].v.y * game.fireOrders[i].anim[j][k].t[0] / game.fireOrders[i].anim[j][k].t[1]);
@@ -917,7 +942,7 @@ function Game(id, name, status, userid, turn, phase){
 	}
 
 	this.createLogEntry = function(fire){
-		 //console.log(fire);
+		 console.log(fire);
 
 		 var shots = 0;
 		 var hits = 0;
@@ -940,9 +965,11 @@ function Game(id, name, status, userid, turn, phase){
 		var td = document.createElement("td");
 			td.innerHTML = fire.weapon.name; tr.appendChild(td);
 		var td = document.createElement("td");
-			td.innerHTML = shots; tr.appendChild(td);
+			td.innerHTML = fire.guns; tr.appendChild(td);
 		var td = document.createElement("td");
 			td.innerHTML = hits; tr.appendChild(td);
+		var td = document.createElement("td");
+			td.innerHTML = shots; tr.appendChild(td);
 		
 			log.appendChild(tr);
 	}
