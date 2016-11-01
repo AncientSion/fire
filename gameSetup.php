@@ -25,11 +25,11 @@ if (isset($_SESSION["userid"])){
 	$joined = false;
 	$ready = false;
 
-	$element = "<table style='margin: 0 0 0 0; width: 300px'>";
+	$element = "<table class='gameSetupStatus'";
 	$element .= "<tr>";
-	$element .= "<th colSpan=2>".$game["name"]."</th>";
+	$element .= "<th colSpan=2 style='font-size: 20px; border: 2px solid black'>".$game["name"]."</th>";
 	$element .= "</tr>";
-	$element .= "<tr>";
+	$element .= "<tr style='border:1px solid black'>";
 	$element .= "<th>Point Value: </th><th id='maxPointValue'>".$game["pv"]."</th>";
 	$element .= "</tr>";
 
@@ -58,11 +58,11 @@ if (isset($_SESSION["userid"])){
 
 			$status = $player["status"];
 			if ($status == "ready"){
-				$element .= "<td style='color: green; border-bottom: 1px solid white; text-align: center'>".$status."</td>";
+				$element .= "<td style='background-color: lightGreen; border-bottom: 1px solid white; text-align: center'>".$status."</td>";
 
 			}
 			else if ($status == "joined"){
-				$element .= "<td style='color: yellow; border-bottom: 1px solid white; text-align: center'>".$status."</td>";
+				$element .= "<td style='background-color: yellow; border-bottom: 1px solid white; text-align: center'>".$status."</td>";
 			}
 
 			$element .= "</tr>";
@@ -273,7 +273,7 @@ else {
 						subTh = document.createElement("th");
 						subTh.style.width = "100px";
 						subTh.style.fontSize = "16px";
-						subTh.innerHTML = "PV";
+						subTh.innerHTML = "Cost";
 					subTr.appendChild(subTh);
 						subTh = document.createElement("th");
 						subTh.style.width = "150px";
@@ -296,13 +296,13 @@ else {
 	function addToFleet(ele){
 		var ship = {
 			shipClass: $(ele).data("shipClass"),
-			pv: $(ele).data("pv"),
+			cost: $(ele).data("cost"),
 			purchaseId: window.window.game.shipsBought.length,
 			turn: 1
 		}
 
 		var cur = Math.floor($("#totalFleetCost").html());
-		var add = ship.pv;
+		var add = ship.cost;
 		var max = Math.floor($("#maxPointValue").html());
 
 
@@ -354,7 +354,7 @@ else {
 	function getFleetCost(){
 		var cost = 0;
 		for (var i = 0; i < window.game.shipsBought.length; i++){
-			cost += window.game.shipsBought[i].pv;
+			cost += window.game.shipsBought[i].cost;
 		}
 		return cost;
 	}
@@ -375,7 +375,7 @@ else {
 	}
 
 	function requestShipData(shipclass){
-		console.log("requestShipData");
+		//		console.log("requestShipData");
 		$.ajax({
 			type: "GET",
 			url: "getGameData.php",
@@ -510,9 +510,9 @@ else {
 	}
 
 	function requestShipsForFaction(faction, ele, callback){
-		console.log("requestShipsForFaction");
+		//console.log("requestShipsForFaction");
 		if (!$(ele).data("avail")){
-			console.log("requestin");
+			//console.log("requestin");
 			$.ajax({
 				type: "GET",
 				url: "getGameData.php",
@@ -533,15 +533,17 @@ else {
 	}
 
 	function showShipList(shiplist, ele){
-		shiplist = JSON.parse(shiplist);
-		if (!shiplist[0].length){
+		if (shiplist){
+			shiplist = JSON.parse(shiplist);
+		}
+		else {
 			return;
 		}
 
 		var row = $(ele).data("row");
 
 		if (!$(ele).data("avail")){
-			for (var i = 0; i < shiplist[0].length; i++){
+			for (var i = 0; i < shiplist.length; i++){
 				var subTr = document.createElement("tr")
 					$(subTr).mouseenter(function(){
 						$(this).addClass("highlight");
@@ -553,21 +555,18 @@ else {
 						e.preventDefault();
 						requestShipData(this.childNodes[0].innerHTML);
 					})
-					
-
-					console.log(shiplist[0][i]);
 
 					var subTd = document.createElement("td");
-						subTd.innerHTML = shiplist[0][i];
+						subTd.innerHTML = shiplist[i]["shipClass"];
 						subTr.appendChild(subTd); 
 
 					var subTd = document.createElement("td");
-						subTd.innerHTML = shiplist[1][i];
+						subTd.innerHTML = shiplist[i]["cost"];
 						subTr.appendChild(subTd); 
 
 					var subTd = document.createElement("td");							
 						subTd.innerHTML = "Add to fleet";
-						$(subTd).data("shipClass", shiplist[0][i]).data("pv", shiplist[1][i]).mouseenter(function(){
+						$(subTd).data("shipClass", shiplist[i]["shipClass"]).data("cost", shiplist[i]["cost"]).mouseenter(function(){
 							$(this).addClass("fontHighlight");
 						}).mouseleave(function(){
 							$(this).removeClass("fontHighlight");

@@ -18,21 +18,34 @@ function Ship(id, shipClass, x, y, facing, userid){
 	this.profile = [];
 	this.mass = 0;
 
-/*	this.preview = function(){
-		this.createDiv();
-		
-		if (! this.img){
-			window.img = new Image();
-			window.img.src = "shipIcons/" + this.shipClass.toLowerCase() + ".png";
-			window.img.onload = function(){
-				game.ships[0].img = window.img;
-				game.ships[0].drawShipForPreview();
-			}
+	this.log = function(){
+		var struct = 0;
+		var armour = 0;
+		var mit = [];
+		var amount = 0;
+
+		for (var i in this.structures){
+			struct += this.structures[i].integrity;
+			armour += this.structures[i].armour;
+			mit.push(this.structures[i].mitigation);
+			amount++;
 		}
-		else {
-			this.drawShipForPreview();
-		}
-	}*/
+
+		var s =  Math.floor( (struct/armour*100)) /100;
+		var a =  Math.floor((armour+struct)/this.mass*10000) / 100;
+
+		console.log("-----"+this.shipClass+": " + this.mass);
+		console.log("struct: " + struct);
+		console.log("armour: " + armour);
+		console.log("total: " + (armour + struct));
+		console.log("struct/armour ratio: " + s)
+		console.log("mass hp ratio: " + a)
+		console.log("mit: " + mit.reduce(
+			function(a, b){
+				return a+b;
+			}, 0
+		)/amount);
+	}
 
 	this.drawShipForPreview = function(){
 		shipCtx.clearRect(0, 0, res.x, res.y);

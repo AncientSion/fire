@@ -697,7 +697,6 @@ function Game(id, name, status, userid, turn, phase){
 	this.getShotDetails = function(){
 		//	console.log("getShotDetails");
 		//	this.fireOrders = [this.fireOrders[0]];
-		//  console.log(this.fireOrders);
 
 		for (var i = 0; i < this.fireOrders.length; i++){
 			this.fireOrders[i].shooter = game.getShipById(this.fireOrders[i].shooterId);
@@ -719,8 +718,8 @@ function Game(id, name, status, userid, turn, phase){
 					
 					if (a.id != b.id){
 						if (this.fireOrders[j].guns){
-							if (a.shooterid == b.shooterid){
-								if (a.targetid == b.targetid){
+							if (a.shooterId == b.shooterId){
+								if (a.targetId == b.targetId){
 									if (a.weapon.name == b.weapon.name){
 										this.fireOrders[i].guns += this.fireOrders[j].guns;
 										this.fireOrders[i].hits.push(this.fireOrders[j].hits[0]);
@@ -748,22 +747,22 @@ function Game(id, name, status, userid, turn, phase){
 		for (var i = 0; i < this.fireOrders.length; i++){
 			//	console.log(this.fireOrders[i]);
 			for (var j = 0; j < this.fireOrders[i].guns; j++){
-				var ox = this.fireOrders[i].shooter.x + Math.random()*30-15; // GUN origin for all proj
-				var oy = this.fireOrders[i].shooter.y + Math.random()*30-15;
+				var ox = this.fireOrders[i].shooter.x + range(this.fireOrders[i].target.size * 0.15 * -1, this.fireOrders[i].target.size * 0.15); // WEAPON origin
+				var oy = this.fireOrders[i].shooter.y + range(this.fireOrders[i].target.size * 0.15 * -1, this.fireOrders[i].target.size * 0.15); // WEAPON origin
 				
 				var anims = [];
 				
 				for (var k = 0; k < this.fireOrders[i].weapon.shots; k++){
 					var hit = true;
-					var tx = this.fireOrders[i].target.x + Math.random()*this.fireOrders[i].target.size/3 - this.fireOrders[i].target.size/6; // proj destination on HIT
-					var ty = this.fireOrders[i].target.y + Math.random()*this.fireOrders[i].target.size/3 - this.fireOrders[i].target.size/3;
+					var tx = this.fireOrders[i].target.x + range(this.fireOrders[i].target.size * 0.25 * -1, this.fireOrders[i].target.size * 0.25); // WEAPON dest on HIT
+					var ty = this.fireOrders[i].target.y + range(this.fireOrders[i].target.size * 0.25 * -1, this.fireOrders[i].target.size * 0.25);
 					var subAbim = {};
 					
 					if (this.fireOrders[i].weapon.animation == "projectile"){
 						if (k >= this.fireOrders[i].hits[j]){
 							hit = false;
-							tx = tx + Math.random()*this.fireOrders[i].target.size / 1 - this.fireOrders[i].target.size / 2;
-							ty = ty + Math.random()*this.fireOrders[i].target.size / 1 - this.fireOrders[i].target.size / 2;
+							tx = tx + range(this.fireOrders[i].target.size * 1 * -1, this.fireOrders[i].target.size * 1); // proj dest on MISS
+							ty = ty + range(this.fireOrders[i].target.size * 1 * -1, this.fireOrders[i].target.size * 1);
 						}
 							subAnim = {
 								ox: ox,
@@ -780,17 +779,16 @@ function Game(id, name, status, userid, turn, phase){
 					else if (this.fireOrders[i].weapon.animation == "beam"){
 						if (k >= this.fireOrders[i].hits[j]){
 							hit = false;
-							//console.log(this.fireOrders[i].target.size);
-							var stepX = Math.random()*this.fireOrders[i].target.size * 1.5 - this.fireOrders[i].target.size * .75;
-							var stepY = Math.random()*this.fireOrders[i].target.size * 1.5 - this.fireOrders[i].target.size * .75;
-							tx += stepX;
-							ty += stepY;
-							
+							tx = this.fireOrders[i].target.x + range(this.fireOrders[i].target.size * 1 * -1, this.fireOrders[i].target.size * 1); // BEAM init on MISS
+							ty = this.fireOrders[i].target.y + range(this.fireOrders[i].target.size * 1 * -1, this.fireOrders[i].target.size * 1);
+
+							tbx = tx +range(this.fireOrders[i].target.size * 0.3 * -1, this.fireOrders[i].target.size * 0.3); // beam swipe end on MISS
+							tby = ty +range(this.fireOrders[i].target.size * 0.3 * -1, this.fireOrders[i].target.size * 0.3);						
 							//console.log(stepX, stepY);
 						}
 						
-							var tbx = tx + Math.random()*this.fireOrders[i].target.size / 2 - this.fireOrders[i].target.size / 4;
-							var tby = ty + Math.random()*this.fireOrders[i].target.size / 2 - this.fireOrders[i].target.size / 4;
+							var tbx = tx + range(this.fireOrders[i].target.size * 0.3 * -1, this.fireOrders[i].target.size * 0.3); // beam swipe end on HIT
+							var tby = ty + range(this.fireOrders[i].target.size * 0.3 * -1, this.fireOrders[i].target.size * 0.3);
 							
 							subAnim = {
 								ox: ox,
@@ -824,7 +822,7 @@ function Game(id, name, status, userid, turn, phase){
 	this.animate = function(){
 		//return;
 		//console.log("animate");
-		console.log(game.fireOrders);
+		//console.log(game.fireOrders);
 	
 		animation = setInterval(function(){
 
@@ -959,9 +957,9 @@ function Game(id, name, status, userid, turn, phase){
 			td.innerHTML = "FIRE:"; tr.appendChild(td);
 
 		var td = document.createElement("td");
-			td.innerHTML = fire.shooter.shipClass; tr.appendChild(td);
+			td.innerHTML = fire.shooter.shipClass + " #" + fire.shooter.id; tr.appendChild(td);
 		var td = document.createElement("td");
-			td.innerHTML = fire.target.shipClass; tr.appendChild(td);
+			td.innerHTML = fire.target.shipClass + " #" + fire.target.id; tr.appendChild(td);
 		var td = document.createElement("td");
 			td.innerHTML = fire.weapon.name; tr.appendChild(td);
 		var td = document.createElement("td");

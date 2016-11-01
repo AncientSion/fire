@@ -129,6 +129,9 @@ function drawAndRotate(posX, posY, w, h, iw, ih, angle, img){
 		fxCtx.restore();
 }
 
+function range(min, max){
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 function drawText(ctx, color, text, size, p){
 	ctx.beginPath();

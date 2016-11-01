@@ -106,7 +106,7 @@ function mouseCanvasScroll(e){
 function canvasMouseMove(e){
 	e.preventDefault();
 	e.stopPropagation();
-	var rect = this.getBoundingClientRect();		
+	var rect = this.getBoundingClientRect();
 	var pos = new Point(e.clientX - rect.left, e.clientY - rect.top);
 	
 //	console.log(pos);

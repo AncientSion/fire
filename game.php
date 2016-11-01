@@ -18,7 +18,7 @@ $manager = new Manager($userid, $gameid);
 
 echo "<script> window.gameid = ".$gameid."; window.userid = ".$userid.";</script>";
 
-echo json_encode($manager->pickReinforcements());
+//echo json_encode($manager->pickReinforcements());
 
 $game = $manager->game;
 $playerstatus = $manager->playerstatus;

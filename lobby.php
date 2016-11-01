@@ -38,9 +38,9 @@ if (isset($_SESSION["userid"])){
 		$ongoingGamesElement .= "</tr>";
 
 		$ongoingGamesElement .= "<tr>";
-		$ongoingGamesElement .= "<th style='width: 60%'>Game Name</th>";
+		$ongoingGamesElement .= "<th style='width: 50%'>Game Name</th>";
 		$ongoingGamesElement .= "<th style='width: 10%'>Turn</th>";
-		$ongoingGamesElement .= "<th style='width: 10%'>Phase</th>";
+		$ongoingGamesElement .= "<th style='width: 20%'>Phase</th>";
 		$ongoingGamesElement .= "<th style='width: 15%'>Status</th>";
 		$ongoingGamesElement .= "</tr>";
 		
@@ -75,7 +75,16 @@ if (isset($_SESSION["userid"])){
 			
 			$ongoingGamesElement .= "<td>".$game["turn"]."</td>";
 			$ongoingGamesElement .= "<td>".$phase."</td>";
-			$ongoingGamesElement .= "<td>".$gameStatus["status"]."</td>";
+
+			$status = $gameStatus["status"];
+			$td;
+			if ($status == "waiting"){
+				$td = "<td style='background-color: red'>".$status."</td>";
+			}
+			else {
+				$td = "<td style='background-color: lightGreen'>".$status."</td>";
+			}
+			$ongoingGamesElement .= $td;
 			$ongoingGamesElement .= "</tr>";
 		}
 		
@@ -95,9 +104,6 @@ if (isset($_SESSION["userid"])){
 		foreach ($openGames as $game){
 		$players = 0;
 		$players = $dbManager->getAmountOfPlayersInGame($game["id"]);
-	//	$players = "null";
-	//	var_export($players);
-	//	echo "</br>";
 
 			$openGamesElement .= "<tr>";
 			$openGamesElement .= "<td width='80%'>";
@@ -114,77 +120,6 @@ if (isset($_SESSION["userid"])){
 	}
 	else {
 		$openGamesElement .= "<tr><td>no Open Games found</tr></td></table>";
-	}
-	
-	/*
-	if ($waitingForOpponentGames) {
-		$waitingGamesElement = "<table>";
-		
-		foreach ($waitingForOpponentGames as $game){		
-			$waitingGamesElement .= "<tr style='text-align: center'>";
-			$waitingGamesElement .= "<td>";
-			$waitingGamesElement .= "<a href=game.php?gameid=".$game['id'].">";
-			$waitingGamesElement .= $game["name"];
-			$waitingGamesElement .= "</a>";
-			$waitingGamesElement .= "</td>";
-			$waitingGamesElement .= "</tr>";
-		}
-		
-		$waitingGamesElement .= "</table>";
-	}
-	else {
-		$waitingGamesElement = "<table>no games found</table>";
-	}
-	*/
-
-
-	if (isset($_SESSION["access"]) && $_SESSION["access"] == 1){
-
-		$gameData = $dbManager->getAllUnfinishedGames();
-
-	//	var_export($gameData);
-
-		if ($gameData){
-			$adminElement = "<table style='border: none; margin: auto;'>";
-			$adminElement .= "<tr style='background-color:red'><th colSpan='3'>Admin Access Granted";
-			$adminElement .= "</th></tr>";
-		}
-
-		foreach ($gameData as $game){
-
-			$canProcess = true;
-
-			$adminElement .= "<tr>";
-			$adminElement .= "<th width='50%'>".$game["name"]." @ Turn: ".$game["turn"]."</th>";
-			$adminElement .= "<th>Playername</th>";
-			$adminElement .= "<th>Status</th>";
-			$adminElement .= "</tr>";
-			
-
-			foreach ($game["playerdata"] as $playerdata){
-
-				if ($playerdata["status"] != "ready"){
-					$canProcess = false;
-				}
-
-				$adminElement .= "<tr>";
-				$adminElement .= "<td></td>";
-				$adminElement .= "<td>".$playerdata["username"]."</td>";
-				$adminElement .= "<td>".$playerdata["status"]."</td>";
-				$adminElement .= "</tr>";
-			}
-
-			if ($canProcess){
-				$adminElement .= "<tr><td style='border: 2px solid white' colSpan = 3>";
-				$adminElement .= "<input type='button' id='".$game["id"].".".$game["turn"]."'value='PROCESS TURN' onclick='initTurnProcession(this.id)'></input>";
-				$adminElement .= "</td></tr>";
-			}
-			else {
-				$adminElement .= "<tr><td style='border: 2px solid white' colSpan = 3>UNABLE TO PROCESS YET</td></tr>";
-			}
-		}
-		
-		$adminElement .= "</table>";
 	}
 }
 else {
@@ -215,13 +150,6 @@ else {
 			</div>
 			<div class="lobbyDiv">
 				<a href="createGame.php">Create Game</a>
-			</div>
-			<div class="lobbyDiv">
-				<?php
-					if ($adminElement){
-						echo $adminElement;
-					}
-				?>
 			</div>
 			<div class="lobbyDiv">
 				<a href="logout.php">LOGOUT</a>

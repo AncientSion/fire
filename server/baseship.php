@@ -1,8 +1,9 @@
 <?php
 
 error_reporting(E_ALL); ini_set('display_errors', '1');
-require_once("server\ships\omega.php");
 require_once("server\ships\sharlin.php");
+require_once("server\ships\omega.php");
+require_once("server\ships\hyperion.php");
 require_once("server\systems\systems.php");
 require_once("debug.php");
 
@@ -166,6 +167,24 @@ class Ship {
 				}
 			}
 		}
+	}
+
+	public function getStructure(){
+		$total = 0;
+
+		foreach ($this->structures as $struct){
+			$total += $struct->integrity;
+		}
+		return $total;
+	}
+
+	public function getArmour(){
+		$total = 0;
+
+		foreach ($this->structures as $struct){
+			$total += $struct->armour;
+		}
+		return $total;
 	}
 }
 

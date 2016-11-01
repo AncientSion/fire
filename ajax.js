@@ -154,8 +154,7 @@ window.ajax = {
 				}
 			}
 		}
-		//console.log(fires);
-		//return;
+		
 		$.ajax({
 			type: "POST",
 			url: "postGameData.php",

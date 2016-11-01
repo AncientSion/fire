@@ -162,11 +162,11 @@ class DBManager {
 		} else return false;
 	}
 
-	public function createReinforcementsEntry($userid, $gameid, $points, $faction){
-		debug::log("createReinforcementsEntry for ".$points);
+	public function createReinforceEntry($userid, $gameid, $points, $faction){
+		debug::log("createReinforceEntry for ".$points);
 
 		$stmt = $this->connection->prepare("
-			INSERT INTO reinforcements
+			INSERT INTO reinforce
 				(gameid, userid, points, faction)
 			VALUES
 				(:gameid, :userid, :points, :faction)
@@ -187,6 +187,25 @@ class DBManager {
 
 	public function getReinforceStatus($gameid, $userid){
 		$stmt = $this->connection->prepare("
+			SELECT * FROM reinforce 
+			WHERE gameid = :gameid
+			AND userid = :userid
+		");
+
+		$stmt->bindParam(":gameid", $gameid);
+		$stmt->bindParam(":userid", $userid);
+
+		$stmt->execute();
+
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		if ($result){
+			return $result;
+		} else return false;
+	}
+
+	public function getReinforcements($gameid, $userid){
+		$stmt = $this->connection->prepare("
 			SELECT * FROM reinforcements 
 			WHERE gameid = :gameid
 			AND userid = :userid
@@ -197,11 +216,42 @@ class DBManager {
 
 		$stmt->execute();
 
-		$result = $stmt->fetchAlL(PDO::FETCH_ASSOC);
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 		if ($result){
 			return $result;
 		} else return false;
+	}
+
+	public function insertReinforcements($gameid, $userid, $turn, $ships){
+		debug::log($gameid);
+		debug::log($userid);
+		debug::log($turn);
+		$stmt = $this->connection->prepare("
+			INSERT INTO reinforcements
+				(gameid, userid, shipclass, turn, arrival, cost)
+			VALUES
+				(:gameid, :userid, :shipclass, :turn, :arrival, :cost)
+		");
+
+		for ($i = 0; $i < sizeof($ships); $i++){
+			$stmt->bindParam(":gameid", $gameid);
+			$stmt->bindParam(":userid", $userid);
+			$stmt->bindParam(":shipclass", $ships[$i]["shipClass"]);
+			$stmt->bindParam(":turn", $turn);
+			$stmt->bindParam(":arrival", $ships[$i]["arrival"]);
+			$stmt->bindParam(":cost", $ships[$i]["cost"]);
+			$stmt->execute();
+			
+			if ($stmt->errorCode() == 0){
+				continue;
+			}
+			else {
+				return $stmt->errorCode();
+			}
+		}
+
+		return true;
 	}
 	
 	public function createNewGame($name, $pv){
@@ -611,7 +661,7 @@ class DBManager {
 		}
 
 		$stmt = $this->connection->prepare("
-			SELECT * FROM reinforcements
+			SELECT * FROM reinforce
 			WHERE gameid = :gameid
 			AND userid = :userid
 		");
@@ -631,7 +681,7 @@ class DBManager {
 
 	public function addReinforcementPoints($userid, $gameid, $points){
 		$stmt = $this->connection->prepare("
-			UPDATE reinforcements 
+			UPDATE reinforce 
 			SET 
 				points = points + :points
 			WHERE
@@ -821,7 +871,7 @@ class DBManager {
 	}
 
 	public function getAllFireOrders($gameid){
-		debug::log("getAllFireOrders for turn");
+		debug::log("getAllFireOrders for game: ".$gameid);
 		$stmt = $this->connection->prepare("
 			SELECT * FROM fireorders
 			WHERE gameid = :gameid
