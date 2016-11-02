@@ -55,6 +55,13 @@ function refresh(data){
 	}, 500);
 }
 
+function goToLobby(){
+    console.log("redirect");
+    setTimeout(function(){
+        window.location = "lobby.php"
+    }, 1000);
+}
+
 function processEcho(echo){
 	console.log("echo");
 	console.log(echo);

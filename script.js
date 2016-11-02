@@ -486,3 +486,8 @@ function clickedOn(click, btn){
 	
 	return false;
 }
+
+function popup(text){
+	$("#popupText").html(text).show();
+	$("#popupWrapper").show();
+}

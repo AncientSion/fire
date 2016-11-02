@@ -13,8 +13,8 @@ class Particle extends Weapon {
 class StandardParticleBeam extends Particle {
 	public $name = "ParticleBeam";
 	public $display = "Particle Beam";
-	public $minDmg = 6;
-	public $maxDmg = 8;
+	public $minDmg = 60;
+	public $maxDmg = 80;
 	public $accDecay = 150;
 	public $shots = 3;
 	public $animColor = "black";
@@ -27,8 +27,8 @@ class StandardParticleBeam extends Particle {
 class FusionCannon extends Particle {
 	public $name = "FusionCannon";
 	public $display = "Fusion Cannon";
-	public $minDmg = 9;
-	public $maxDmg = 12;
+	public $minDmg = 90;
+	public $maxDmg = 120;
 	public $accDecay = 130;
 	public $shots = 2;
 	public $animColor = "blue";

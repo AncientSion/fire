@@ -1,3 +1,34 @@
+#popupWrapper {
+	display: none;
+	position: absolute;
+	left: 500px;
+	top: 300px;
+	background-color: black;
+	border-radius: 5px;
+	border: 5px solid red;
+	padding: 20px;
+	width: 400px;
+	height: 70px;
+	z-index: 10;
+}
+
+#popupText {
+	margin: auto;
+	text-align: center;
+	width: 80%;
+	left: 500px;
+	top: 500px;
+	background-color: black;
+	border-radius: 5px;
+	color: white;
+	font-size: 20px;
+}
+
+.img50 {
+	width: 50px;
+	height: 50px;
+}
+
 .borderTable {
 	border-collapse: collapse;
 	border: 1px solid black;
@@ -35,15 +66,17 @@ canvas {
 }
 
 #deployWrapper {
+	position: absolute;
+	display: inline-block;
 	border: 1px solid black;
 	border-radius: 5px;
 	padding: 5 5 5 5;
-	width: 300px;
-	height: 300px;
-	background: white;
 	z-index: 10;
+	background-color: black;
+	top: 100px;
 }
-#deployWrapper.disabled  {
+
+#deployWrapper .disabled  {
 	display: none;
 }
 
@@ -52,6 +85,10 @@ canvas {
 	width: 300px;
 	border-collapse: collapse;
 	border: 1px solid black;
+}
+
+#deployTable tr {	
+	background-color: white;
 }
 
 #deployTable th, #deployTable td {
@@ -64,10 +101,14 @@ canvas {
 
 #reinforceTable {
 	margin: auto;
-	margin-top: 80px;
+	margin-top: 40px;
 	width: 300px;
 	border-collapse: collapse;
 	border: 1px solid black;
+}
+
+#reinforceTable tr {	
+	background-color: white;
 }
 
 #reinforceTable th, #reinforceTable td {
@@ -179,8 +220,8 @@ canvas {
 }
 
 #game {
-	display: flex;
 }
+
 #game.disabled {
 	display: none;
 }
@@ -429,14 +470,15 @@ canvas {
 	display: inline-block;
 	position: absolute;
 	top: 80px;
-	width: 300px;
+	width: 350px;
 	z-index: 8;
 	padding: 5px;
 }
 
 #combatLog {
-	width: 95%;
+	width: 100%;
 	border: 1px solid black;
+	border-collapse: collapse;
 	border-radius: 5px;
 	background: white;
 	color: black;

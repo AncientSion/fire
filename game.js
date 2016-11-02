@@ -12,16 +12,32 @@ function Game(id, name, status, userid, turn, phase){
 	this.deploying = false;
 	this.canSubmit = false;
 	this.index = 1;
-
-	this.confirmDeployment = function(){
-		if (this.canSubmit){
-			ajax.confirmDeployment();
-		}
-	}
+	this.reinforcePoints = 0;
+	this.reinforcements = [];
+	this.confirmedReinforcments = false;
 	
 	this.endPhase = function(){
 		if (this.canSubmit){
-			if (this.phase == 1){
+			if (this.phase == -1){
+				var valid = true;
+				for (var i = 0; i < this.ships.length; i++){
+					if (this.ships[i].userid == this.userid){
+						if (! this.ships[i].deployed){
+							if (this.ships[i].available <= this.turn){
+								valid = false;
+								break;
+							}
+						}
+					}
+				}
+				if (valid){
+					ajax.confirmDeployment();
+				}
+				else {
+					popup("You need to deploy all incoming vessels!");
+				}
+			}
+			if (this.phase == 1){ // MOVEMENT
 				var valid = true;
 				for (var i = 0; i < this.ships.length; i++){
 					if (this.ships[i].userid == this.userid){
@@ -33,23 +49,20 @@ function Game(id, name, status, userid, turn, phase){
 				}
 
 				if (valid){
-					ajax.confirmMovement();
-				}
-				else {
-					console.log("not all ships rdy yet");
+					ajax.confirmMovement(goToLobby);
 				}
 			}
-			else if (this.phase == 2){
-				ajax.confirmFiringOrders();
+			else if (this.phase == 2){ // 
+				ajax.confirmFiringOrders(goToLobby);
 			}
 			else if (this.phase == 3){
-				ajax.confirmDamageControl();
+				ajax.confirmDamageControl(goToLobby);
 			}
 		}
 	}
 
 	this.createDeploymentTable = function(){
-		$("#deployWrapper").on('mousedown', $(this), function() {
+		/*$("#deployWrapper").on('mousedown', $(this), function() {
         $(this).addClass('draggable').parents().on('mousemove', function(e) {
             $('.draggable').offset({
                 top: e.pageY - $('.draggable').outerHeight() / 2,
@@ -65,7 +78,7 @@ function Game(id, name, status, userid, turn, phase){
 	    	e.preventDefault();
 	    	e.stopPropagation();
 	    	$(this).hide();
-	    });
+	    });*/
 
 		var toDo = [];
 		var table;
@@ -112,7 +125,7 @@ function Game(id, name, status, userid, turn, phase){
 				}
 
 				var td = document.createElement("td");
-					td.innerHTML = "<img style='width: 50px; height: 50px;' src='shipIcons/"+toDo[i].shipClass.toLowerCase() + ".png'>";
+					td.innerHTML = "<img class='img50' src='shipIcons/"+toDo[i].shipClass.toLowerCase() + ".png'>";
 				//	td.appendChild(img);
 				tr.appendChild(td);
 
@@ -134,7 +147,7 @@ function Game(id, name, status, userid, turn, phase){
 			}
 
 
-			var tr = document.createElement("tr");
+		/*	var tr = document.createElement("tr");
 				$(tr).click(function(){
 					var valid = true;
 					for (var i = 0; i < game.ships.length; i++){
@@ -163,7 +176,7 @@ function Game(id, name, status, userid, turn, phase){
 
 				th.innerHTML = "Confirm Deployment";
 				tr.appendChild(th);
-			table.appendChild(tr);
+			table.appendChild(tr);*/
 		}
 
 		if (game.phase == -1){
@@ -172,7 +185,7 @@ function Game(id, name, status, userid, turn, phase){
 	}
 
 	this.initDeployment = function(){
-		$("#deployWrapper").show();
+		$("#deployWrapper").removeClass("disabled");
 	}
 
 	this.initFiring = function(){
@@ -423,6 +436,7 @@ function Game(id, name, status, userid, turn, phase){
 		for (var i = 0; i < playerstatus.length; i++){
 			if (playerstatus[i].userid == userid){
 				isPlaying = true;
+				this.reinforcePoints = $("#reinforce").html();
 				if (playerstatus[i].status == "waiting"){
 					canSubmit = true;
 					break;
@@ -513,7 +527,41 @@ function Game(id, name, status, userid, turn, phase){
 		}
 	}
 
+	this.selectReinforcements = function(id){
+		var found = false;
+		var cost = 0; 
 
+		if (this.reinforcements.length){
+			if (this.reinforcements.length > 1){
+				cost = this.reinforcements.reduce(function(a, b){return a.cost + b.cost});
+			}
+			else {
+				cost = this.reinforcements[0].cost;
+			}
+		}
+
+
+		for (var i = this.reinforcements.length-1; i >= 0; i--){
+			if (this.reinforcements[i].id == id){
+				found = true;
+				cost -= this.reinforcements[i].cost;
+				this.reinforcements.splice(i, 1);
+			}
+		}
+		if (! found){
+			for (var i = 0; i < window.reinforcements.length; i++){
+				if (window.reinforcements[i].id == id){
+					if (cost + window.reinforcements[i].cost <= this.reinforcePoints){
+						this.reinforcements.push(window.reinforcements[i]);
+						cost += this.reinforcements[this.reinforcements.length-1].cost;
+						break;	
+					}
+				}
+			}
+		}
+
+		$("#totalRequestCost").html(cost);
+	}
 	
 	this.executeMovement = function(callback){
 	//	return;
@@ -959,7 +1007,7 @@ function Game(id, name, status, userid, turn, phase){
 		var td = document.createElement("td");
 			td.innerHTML = fire.shooter.shipClass + " #" + fire.shooter.id; tr.appendChild(td);
 		var td = document.createElement("td");
-			td.innerHTML = fire.target.shipClass + " #" + fire.target.id; tr.appendChild(td);
+			td.innerHTML = fire.target.shipclass + " #" + fire.target.id; tr.appendChild(td);
 		var td = document.createElement("td");
 			td.innerHTML = fire.weapon.name; tr.appendChild(td);
 		var td = document.createElement("td");

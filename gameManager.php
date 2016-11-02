@@ -144,13 +144,15 @@ class Manager {
 		$this->phase = $this->game["phase"];
 
 		$this->playerstatus = $db->getPlayerStatus($this->gameid);
-		$this->reinforcements = $db->getShipBuyValue($this->gameid, $this->userid);
+		$this->reinforce = $db->getShipBuyValue($this->gameid, $this->userid);
 
 		$ships = $db->getAllShipsForGame($this->gameid);
 		$ships = $db->getActionsForShips($ships);
 
 		$this->fires = $db->getAllFireOrders($this->gameid);
 		$this->damages = $db->getAllDamageEntries($this->gameid);
+
+		$this->reinforcements = $db->getAvailableReinforcements($this->gameid, $this->userid);
 
 		//echo json_encode($this->damages);
 		//$this->log();
@@ -255,6 +257,42 @@ class Manager {
 		}
 	}
 
+	public function canAdvanceFromLobby($gameid){
+		$this->purge();
+		$status = DBManager::app()->getPlayerStatus($gameid);
+
+		for ($i = 0; $i < sizeof($status); $i++){
+			if ($status[$i]["status"] == "waiting"){
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public function purge(){
+		$this->userid;
+		$this->gameid;
+		$this->game;
+		$this->turn;
+		$this->userid;
+		$this->phase;
+		$this->index;
+
+		$this->ships = array();
+		$this->gd = array();
+		$this->fires = array();
+		$this->damages = array();
+		$this->playerstatus = array();
+		return true;
+	}
+
+	public function doAdvanceFromLobby($gameid){
+		$this->gameid = $gameid;
+		$this->getGameData();
+		$this->doAdvanceGameState();
+	}
+
 	public function canAdvanceGameState(){
 		Debug::log("canAdvanceGameState");
 
@@ -291,7 +329,9 @@ class Manager {
 				break;
 			case 3; // from damage control to NEW TURN - deploymnt
 				$this->handleDamageControlPhase();
+				$this->endTurn();
 				$this->startNewTurn();
+				$this->startDeploymentPhase();
 				break;
 			default:
 				break;
@@ -300,39 +340,11 @@ class Manager {
 		return true;
 	}
 
-	public function startDeploymentPhase(){
-		Debug::log("startDeploymentPhase");
-		$dbManager = DBManager::app();
-		$phase = -1;
 
-		if ($dbManager->setGameTurnPhase($this->gameid, $this->$turn, $phase)){
-			$players = $dbManager->getPlayerStatus($this->gameid);
-
-			if ($this->$turn > 1){
-				for ($i = 0; $i < sizeof($players); $i++){
-					$reinforcements = $this->pickReinforcements();
-				}
-			}
-
-			for ($i = 0; $i < sizeof($players); $i++){
-				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->$turn, $phase, "waiting")){
-					debug::log("phase for player ".$i. " adjusted to phase: ".$phase);
-					continue;
-				}
-				else {
-					return false;
-				}
-			}
-
-
-			return true;
-		}
-	}
-
-
-	public function pickReinforcements(){
-		$status = DBManager::app()->getReinforceStatus($this->gameid, $this->userid);
-		$available = DBManager::app()->getReinforcements($this->gameid, $this->userid);
+	public function pickReinforcements($userid){
+		Debug::log("pickReinforcements");
+		$status = DBManager::app()->getReinforceStatus($this->gameid, $userid);
+		$available = DBManager::app()->getAvailableReinforcements($this->gameid, $userid);
 		$validShips = $this->getShipsForFaction($status["faction"]);
 		$req = 8;
 
@@ -341,11 +353,11 @@ class Manager {
 				array_splice($validShips, $i, 1);
 			}
 			else {
-				$validShips[$i]["arrival"] = ($this->turn + mt_rand(2, 4));
+				$validShips[$i]["arrival"] = (mt_rand(2, 4));
 			}
 		}
 
-		DBManager::app()->insertReinforcements($this->gameid, $this->userid, $this->turn, $validShips);
+		DBManager::app()->insertReinforcements($this->gameid, $userid, $this->turn, $validShips);
 	}
 
 	public function handleDeploymentPhase(){
@@ -360,12 +372,11 @@ class Manager {
 		$dbManager = DBManager::app();
 		$phase = 1;
 
-		if ($dbManager->setGameTurnPhase($this->gameid, $this->$turn, $phase)){
+		if ($dbManager->setGameTurnPhase($this->gameid, $this->turn, $phase)){
 			$players = $dbManager->getPlayerStatus($this->gameid);
 
 			for ($i = 0; $i < sizeof($players); $i++){
-				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->$turn, $phase, "waiting")){
-					debug::log("phase for player ".$i. " adjusted to phase: ".$phase);
+				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->turn, $phase, "waiting")){
 					continue;
 				}
 				else {
@@ -389,11 +400,11 @@ class Manager {
 		$dbManager = DBManager::app();
 		$phase = 2;
 
-		if ($dbManager->setGameTurnPhase($this->gameid, $this->$turn, $phase)){
+		if ($dbManager->setGameTurnPhase($this->gameid, $this->turn, $phase)){
 			$players = $dbManager->getPlayerStatus($this->gameid);
 
 			for ($i = 0; $i < sizeof($players); $i++){
-				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->$turn, $phase, "waiting")){
+				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->turn, $phase, "waiting")){
 					continue;
 				}
 				else {
@@ -420,35 +431,39 @@ class Manager {
 		return true;
 	}
 
+	public function endTurn(){
+		Debug::log("endTurn");
+		$players = DBManager::app()->getPlayerStatus($this->gameid);
+		for ($i = 0; $i < sizeof($players); $i++){
+			DBManager::app()->alterReinforcementPoints(
+				$players[$i]["userid"],
+				$this->gameid,
+				$this->game["reinforce"]
+			);
+		}
+
+	}
+
 	public function startNewTurn(){
 		Debug::log("startNewTurn");
+		$this->turn = $this->turn+1;
+		$this->phase = -1;
+		DBManager::app()->setGameTurnPhase($this->gameid, $this->turn, $this->phase);
+	}
+
+	public function startDeploymentPhase(){
+		Debug::log("startDeploymentPhase");
 		$dbManager = DBManager::app();
-		$phase = -1;
+		$players = $dbManager->getPlayerStatus($this->gameid);
 
-		if ($dbManager->setGameTurnPhase($this->gameid, $this->$turn+1, $phase)){			
-			$players = $dbManager->getPlayerStatus($this->gameid);
-
-			for ($i = 0; $i < sizeof($players); $i++){
-				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->$turn+1, $phase, "waiting")){
-					debug::log("phase for player ".$i. " adjusted to phase: ".$phase);
-					continue;
-				}
-				else {
-					return false;
-				}
+		for ($i = 0; $i < sizeof($players); $i++){
+			$dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->turn, $this->phase, "waiting");
+			if ($this->turn > 1){
+				$this->pickReinforcements($players[$i]["userid"]);
 			}
-
-			for ($i = 0; $i < sizeof($players); $i++){
-				$dbManager->addReinforcementPoints(
-					$players[$i]["userid"],
-					$this->gameid,
-					$this->game["reinforce"]
-				);
-			}
-
-
-			return true;
 		}
+
+		return true;
 	}
 
 	public function handleFireOrders(){

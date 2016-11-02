@@ -295,7 +295,7 @@ else {
 
 	function addToFleet(ele){
 		var ship = {
-			shipClass: $(ele).data("shipClass"),
+			shipclass: $(ele).data("shipclass"),
 			cost: $(ele).data("cost"),
 			purchaseId: window.window.game.shipsBought.length,
 			turn: 1
@@ -395,7 +395,7 @@ else {
 
 		var ship = new Ship(
 							data.id,
-							data.shipClass,
+							data.shipclass,
 							0,
 							0,
 							0,
@@ -557,7 +557,7 @@ else {
 					})
 
 					var subTd = document.createElement("td");
-						subTd.innerHTML = shiplist[i]["shipClass"];
+						subTd.innerHTML = shiplist[i]["shipclass"];
 						subTr.appendChild(subTd); 
 
 					var subTd = document.createElement("td");
@@ -566,7 +566,7 @@ else {
 
 					var subTd = document.createElement("td");							
 						subTd.innerHTML = "Add to fleet";
-						$(subTd).data("shipClass", shiplist[i]["shipClass"]).data("cost", shiplist[i]["cost"]).mouseenter(function(){
+						$(subTd).data("shipclass", shiplist[i]["shipclass"]).data("cost", shiplist[i]["cost"]).mouseenter(function(){
 							$(this).addClass("fontHighlight");
 						}).mouseleave(function(){
 							$(this).removeClass("fontHighlight");

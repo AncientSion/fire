@@ -18,16 +18,11 @@ $manager = new Manager($userid, $gameid);
 
 echo "<script> window.gameid = ".$gameid."; window.userid = ".$userid.";</script>";
 
-//echo json_encode($manager->pickReinforcements());
-
-$game = $manager->game;
-$playerstatus = $manager->playerstatus;
-$ships = $manager->ships;
-$damages = $manager->damages;
+//$manager->pickReinforcements();
 
 $phase;
 
-switch ($game["phase"]){
+switch ($manager->game["phase"]){
 	case -1;
 		$phase = "Deployment / Initial";
 		break;
@@ -58,9 +53,10 @@ foreach ($w->systems[0] as $key => $value){
 //	var_export(json_encode($manager->fireOrders));
 
 echo "<script>";
-echo "window.gd = ".json_encode($game, JSON_NUMERIC_CHECK).";";
-echo "window.ships = ".json_encode($ships, JSON_NUMERIC_CHECK).";";
-echo "window.playerstatus = ".json_encode($playerstatus, JSON_NUMERIC_CHECK).";";
+echo "window.gd = ".json_encode($manager->game, JSON_NUMERIC_CHECK).";";
+echo "window.ships = ".json_encode($manager->ships, JSON_NUMERIC_CHECK).";";
+echo "window.playerstatus = ".json_encode($manager->playerstatus, JSON_NUMERIC_CHECK).";";
+echo "window.reinforcements = ".json_encode($manager->reinforcements, JSON_NUMERIC_CHECK).";";
 //echo "window.fireOrders = ".json_encode($fireorders, JSON_NUMERIC_CHECK).";";
 echo "</script>";
 
@@ -84,6 +80,10 @@ echo "</script>";
 	<script src='script.js'></script>
 </head>
 	<body>
+		<div id ="popupWrapper">
+			<div id="popupText">
+			</div>
+		</div>
 		<div id="game">
 			<div id ="phaseSwitchDiv" class="disabled">
 				<div id="phaseSwitchInnerDiv">
@@ -115,13 +115,13 @@ echo "</script>";
 						</tr>
 						<tr>
 							<td>
-								<?php echo $game["turn"]; ?>
+								<?php echo $manager->game["turn"]; ?>
 							</td>
 							<td>
 								<?php echo $phase; ?>
 							</td>
 							<td id="reinforce">
-								<?php echo $manager->reinforcements["points"]." Points"; ?>
+								<?php echo $manager->reinforce["points"]; ?>
 							</td>
 						</tr>
 					</table>
@@ -130,73 +130,94 @@ echo "</script>";
 				<div id="combatlogWrapper">
 					<table id="combatLog" class="disabled">
 						<tr>
-							<th>
+							<th style="width: 10%">
 								Type
 							</th>
-							<th>
+							<th style="width: 20%">
 								Shooter
 							</th>
-							<th>
+							<th style="width: 20%">
 								Target
 							</th>
-							<th>
+							<th style="width: 20%">
 								Weapon
 							</th>
-							<th>
+							<th style="width: 10%">
 								Guns
 							</th>
-							<th>
+							<th style="width: 10%">
 								Hits
 							</th>
-							<th>
+							<th style="width: 10%">
 								Shots
 							</th>
 						</tr>
 					</table>
 				</div>
+				<div id ="deployWrapper" class="disabled">
+					<table id="deployTable">
+						<tr>
+							<th style="font-size: 18px; background-color: lightGreen;" colSpan=4>
+								Incoming Reinforcements
+							</th>
+						</tr>
+						<tr>
+							<th  width="50%" colSpan="2">
+								Class
+							</th>
+							<th  width="30%" >
+								Type
+							</th>
+							<th  width="20%" >
+								Arrival in
+							</th>
+						</tr>
+					</table>
+					<table id="reinforceTable" class="disabled">
+						<tr>
+							<th style="font-size: 18px; background-color: lightGreen;" colSpan=4>
+								Requestable Reinforcements
+							</th>
+						</tr>
+						<tr>
+							<th  width="50%" colSpan="2">
+								Class
+							</th>
+							<th  width="30%" >
+								Arrival
+							</th>
+							<th  width="20%" >
+								Cost
+							</th>
+						</tr>
+						<?php
+							if (sizeof($manager->reinforcements)){
+								foreach ($manager->reinforcements as $entry){
+									echo "<tr class='requestReinforcements'>";
+									echo "<td><img class='img50' src=shipIcons/".strtolower($entry["shipClass"]).".png></td>";
+									echo "<td>".$entry["shipClass"]."</td>";
+									echo "<td>".$entry["arrival"]." turn/s</td>";
+									echo "<td>".$entry["cost"]."</td>";
+									echo "</tr>";
+								}
+
+								echo "<tr>";
+								echo "<th style='border: none; background-color: black;'></th>";
+								echo "<th style='border: none; background-color: black;'></th>";
+								echo "<th style='padding: 5px; font-size: 12px'> Total Cost</th>";
+								echo "<th style='padding: 5px; font-size: 15px' id='totalRequestCost'>0</th>";
+								echo "</tr>";
+
+							}
+						?>
+					</table>
+				</div>
+
 				<canvas id ="canvas"></canvas>
 				<canvas id ="planCanvas"></canvas>
 				<canvas id ="fxCanvas"></canvas>
 				<canvas id ="moveCanvas"></canvas>
 				<canvas id ="mouseCanvas"></canvas>
-			</div>
-			<div id ="deployWrapper" class="disabled">
-				<table id="deployTable">
-					<tr>
-						<th style="font-size: 18px;" colSpan=3>
-							Incoming Reinforcements
-						</th>
-					</tr>
-					<tr>
-						<th  width="50%" colSpan="2">
-							Class
-						</th>
-						<th  width="30%" >
-							Type
-						</th>
-						<th  width="20%" >
-							Arrival in
-						</th>
-					</tr>
-				</table>
-				<table id="reinforceTable" class="disabled">
-					<tr>
-						<th style="font-size: 18px;" colSpan=3>
-							Requestable Reinforcements
-						</th>
-					</tr>
-					<tr>
-						<th  width="50%" colSpan="2">
-							Class
-						</th>
-						<th  width="30%" >
-							Type
-						</th>
-						<th  width="20%" >
-							Estimated Arrival
-						</th>
-					</tr>
-				</table>
 			</div>
 		</div>
 		<div id="weaponAimTableWrapper" class="disabled">
@@ -209,15 +230,57 @@ echo "</script>";
 
 <script>
 
-	$("#reinforce").hover(
-		function(e){
-			$(this).addClass("selected");
-		},
-		function(e){
-			$(this).removeClass("selected");
-		}
-	).
-	click(function(e){
-		$("#deployWrapper").show();
-})
+	$(document).ready(function(){
+		$("#reinforce").hover(
+			function(e){
+				$(this).addClass("selected");
+			},
+			function(e){
+				$(this).removeClass("selected");
+			}
+		).
+		click(function(e){
+			$("#deployWrapper").show();
+		});
+
+		var i = 0;
+
+		$(".requestReinforcements").each(function(i){
+			$(this)
+			.data("id", window.reinforcements[i]["id"])
+			.data("cost", window.reinforcements[i]["cost "])
+			.click(function(e){
+				e.stopPropagation();
+				if (! game.deploying){
+					if ($(this).hasClass("selected")){
+						$(this).removeClass("selected");
+					}
+					else {
+						$(this).addClass("selected");
+					}
+				}
+
+				game.selectReinforcements($(this).data("id"));
+			})
+		})
+
+		$("#confirmReinforcements").hover(
+			function(e){
+				$(this).addClass("selected");
+			},
+			function(e){
+				$(this).removeClass("selected");
+			}
+		).
+		click(function(e){
+			$(game.confirmReinforcements);
+		});
+
+		$("#popupWrapper").contextmenu(function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			$(this).hide();
+		});
+
+	})
 </script>

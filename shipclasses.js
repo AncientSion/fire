@@ -1,6 +1,6 @@
-function Ship(id, shipClass, x, y, facing, userid){
+function Ship(id, shipclass, x, y, facing, userid){
 	this.id = id;
-	this.shipClass = shipClass;
+	this.shipClass = shipclass;
 	this.x = x || false;
 	this.y = y || false;
 	this.facing = facing;
@@ -17,35 +17,6 @@ function Ship(id, shipClass, x, y, facing, userid){
 
 	this.profile = [];
 	this.mass = 0;
-
-	this.log = function(){
-		var struct = 0;
-		var armour = 0;
-		var mit = [];
-		var amount = 0;
-
-		for (var i in this.structures){
-			struct += this.structures[i].integrity;
-			armour += this.structures[i].armour;
-			mit.push(this.structures[i].mitigation);
-			amount++;
-		}
-
-		var s =  Math.floor( (struct/armour*100)) /100;
-		var a =  Math.floor((armour+struct)/this.mass*10000) / 100;
-
-		console.log("-----"+this.shipClass+": " + this.mass);
-		console.log("struct: " + struct);
-		console.log("armour: " + armour);
-		console.log("total: " + (armour + struct));
-		console.log("struct/armour ratio: " + s)
-		console.log("mass hp ratio: " + a)
-		console.log("mit: " + mit.reduce(
-			function(a, b){
-				return a+b;
-			}, 0
-		)/amount);
-	}
 
 	this.drawShipForPreview = function(){
 		shipCtx.clearRect(0, 0, res.x, res.y);
@@ -136,7 +107,7 @@ function Ship(id, shipClass, x, y, facing, userid){
 
 			var facing = 0;
 			if (this.userid == 1){facing = 0;}else {facing = 180};
-			this.actions.push(new Move("deploy", 0, pos.x, pos.y, facing, 0, 0));
+			this.actions.push(new Move("deploy", 0, pos.x - cam.o.x, pos.y - cam.o.y, facing, 0, 0));
 			this.deployed = true;
 
 			var shipId = this.id;

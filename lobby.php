@@ -13,8 +13,6 @@ if (isset($_SESSION["userid"])){
 	$manager = new Manager($_SESSION["userid"]);
 	$playerName = $manager->getUsername();
 	$_SESSION["username"] = $playerName;
-	
-	$adminElement = false;
 
 	//function __construct($id, $userid, $shipClass, $x, $y, $facing){
 	//$ship = new Omega(1, 1, 5, 5, 100);
@@ -23,8 +21,13 @@ if (isset($_SESSION["userid"])){
 //	json_encode($ship, JSON_NUMERIC_CHECK);
 	
 	$ongoingGames = $manager->getOngoingGames();
+	for ($i = 0; $i < sizeof($ongoingGames); $i++){
+		if ($manager->canAdvanceFromLobby($ongoingGames[$i]["id"])){
+			$manager->doAdvanceFromLobby($ongoingGames[$i]["id"]);
+		}
+	}
+
 	$openGames = $manager->getOpenGames();
-	//	$waitingForOpponentGames = $manager->getWaitingForOpponentGames();
 	
 	
 	if ($playerName){

@@ -52,6 +52,15 @@ class DBManager {
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
 
+	public function delete($sql){
+		
+		$stmt = $this->connection->prepare($sql);
+		$stmt->execute();
+		if ($stmt->errorCode() == 0){
+			return true;
+		}
+	}
+
 	public function update($sql){
 		
 		debug::log("upd");
@@ -180,7 +189,6 @@ class DBManager {
 		$stmt->execute();
 
 		if ($stmt->errorCode() == 0){
-			debug::log("Reinforcement entry CREATED");
 			return true;
 		} else return false;
 	}
@@ -204,7 +212,7 @@ class DBManager {
 		} else return false;
 	}
 
-	public function getReinforcements($gameid, $userid){
+	public function getAvailableReinforcements($gameid, $userid){
 		$stmt = $this->connection->prepare("
 			SELECT * FROM reinforcements 
 			WHERE gameid = :gameid
@@ -220,24 +228,22 @@ class DBManager {
 
 		if ($result){
 			return $result;
-		} else return false;
+		} else return null;
 	}
 
 	public function insertReinforcements($gameid, $userid, $turn, $ships){
-		debug::log($gameid);
-		debug::log($userid);
-		debug::log($turn);
+			debug::log("insertReinforcements");
 		$stmt = $this->connection->prepare("
 			INSERT INTO reinforcements
-				(gameid, userid, shipclass, turn, arrival, cost)
+				(gameid, userid, shipClass, turn, arrival, cost)
 			VALUES
-				(:gameid, :userid, :shipclass, :turn, :arrival, :cost)
+				(:gameid, :userid, :shipClass, :turn, :arrival, :cost)
 		");
 
 		for ($i = 0; $i < sizeof($ships); $i++){
 			$stmt->bindParam(":gameid", $gameid);
 			$stmt->bindParam(":userid", $userid);
-			$stmt->bindParam(":shipclass", $ships[$i]["shipClass"]);
+			$stmt->bindParam(":shipClass", $ships[$i]["shipClass"]);
 			$stmt->bindParam(":turn", $turn);
 			$stmt->bindParam(":arrival", $ships[$i]["arrival"]);
 			$stmt->bindParam(":cost", $ships[$i]["cost"]);
@@ -303,6 +309,22 @@ class DBManager {
 		else {
 			return $stmt->errorCode();
 		}
+	}
+
+	public function requestReinforcements($userid, $gameid, $ships){
+		$cost = 0;
+		for ($i = 0; $i < sizeof($ships); $i++){
+			$ships[$i]["turn"] = $ships[$i]["turn"] + $ships[$i]["arrival"];
+			$cost = $cost - $ships[$i]["cost"];
+			$sql = "DELETE FROM reinforcements WHERE id = ".$ships[$i]["id"];
+			$this->delete($sql);
+		}
+		debug::log("cost: ".$cost);
+
+		$this->alterReinforcementPoints($userid, $gameid, $cost);
+		$this->buyShips($userid, $gameid, $ships);
+		return true;
+
 	}
 
 	public function buyShips($userid, $gameid, $ships){
@@ -679,7 +701,7 @@ class DBManager {
 		else return false;
 	}
 
-	public function addReinforcementPoints($userid, $gameid, $points){
+	public function alterReinforcementPoints($userid, $gameid, $points){
 		$stmt = $this->connection->prepare("
 			UPDATE reinforce 
 			SET 
@@ -703,7 +725,7 @@ class DBManager {
 	}
 
 	public function setPlayerstatus($userid, $gameid, $turn, $phase, $status){
-		debug::log("setPlayerstatus");
+		debug::log("setPlayerstatus for player ".$userid. " adjusted to turn/phase: ".$turn."/".$phase);
 
 		$stmt = $this->connection->prepare("
 			UPDATE playerstatus 

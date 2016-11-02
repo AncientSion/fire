@@ -78,8 +78,6 @@ window.ajax = {
 			}
 		}
 
-		//	console.log(deployedShips); return;
-
 		$.ajax({
 			type: "POST",
 			url: "postGameData.php",
@@ -90,24 +88,17 @@ window.ajax = {
 					userid: game.userid,
 					gameturn: game.turn,
 					gamephase: game.phase,
-					deployedShips: deployedShips
+					deployedShips: deployedShips,
+					reinforcements: game.reinforcements
 					},
-			success: ajax.finishDeploy,
+			//success: goToLobby,
+			success: goToLobby,
 			error: ajax.error,
 		});
 	},
 
-	finishDeploy: function(data){
-		console.log(data);
-		console.log("deploy finished");
-
-		$("#deployWrapper").hide();		
-	},
-
-	confirmMovement: function(){
-
+	confirmMovement: function(callback){
 		var myShips = [];
-
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid == game.userid){
 				var ship = {
@@ -139,7 +130,7 @@ window.ajax = {
 					gamephase: game.phase,
 					ships: myShips
 					},
-			success: refresh,
+			success: callback,
 			error: ajax.error,
 		});
 	},
@@ -167,7 +158,7 @@ window.ajax = {
 					gamephase: game.phase,
 					fire: fires
 					},
-			success: refresh,
+			success: callback,
 			error: ajax.error,
 		});
 	},
@@ -185,7 +176,7 @@ window.ajax = {
 					gamephase: game.phase,
 					orders: false
 					},
-			success: refresh,
+			success: callback,
 			error: ajax.error,
 		});
 	},
@@ -195,25 +186,6 @@ window.ajax = {
 		console.log("ding");
 		callback();
 	},
-
-
-/*
-	getValidLanes: function(fleets, ships, moves){
-		$.ajax({
-			type: "GET",
-			url: "getGameData.php",
-			datatype: "json",
-			data: {
-				type: "validLanes",
-				turn: currentTurn
-				},		
-			error: ajax.error,
-			success: function(lanes){
-					ajax.createFleets(fleets, ships, moves, lanes);
-			}
-		});
-*/
-
 
 	startGame: function(gameid, callback){
 		$.ajax({
@@ -264,94 +236,8 @@ window.ajax = {
 		else {
 			console.log("no data");
 		}
-	},
+	}
 	
-	getGameData: function(userid, gameid){
-		ajax.getGameStatus(userid, gameid);
-		ajax.getSectors();
-		ajax.getPlanets();
-		ajax.getMarkers(userid, gameid);
-	},
-
-	getMarkers: function(userid, gameid){
-		$.ajax({
-			type: "GET",
-			url: "getGameData.php",
-			datatype: "json",
-			data: {
-				userid: userid,
-				gameid: gameid,
-				type: "markers"
-				},		
-			error: ajax.error,
-			success: ajax.parseMarkers,
-		});
-	},
-
-	parseMarkers: function(markers){
-		list = JSON.parse(markers);
-
-		if (list){		
-			for (var i = 0; i < list.length; i++){
-				var data = list[i];
-				
-				for (var j = 0; j < grid.hexes.length; j++){
-					if (data.x == grid.hexes[j].x && data.y == grid.hexes[j].y){
-						grid.hexes[j].markers.push(data);
-					//	console.log(grid.hexes[j].id);
-					//	console.log(grid.hexes[j].markers);
-						break;
-					}
-				}
-			}
-		}
-	},
-
-	getGameStatus: function(userid, gameid){
-
-		$.ajax({
-			type: "GET",
-			url: "getGameData.php",
-			datatype: "json",
-			data: {
-				userid: userid,
-				gameid: gameid,
-				currentTurn: currentTurn,
-				type: "status"
-				},		
-			error: ajax.error,
-			success: function(ret){
-				if (ret){
-					ret = JSON.parse(ret);
-					console.log(ret);
-
-					if (ret.status == "ready"){
-						gamedata.canCommit = false;
-
-						var div = document.createElement("div");
-							div.shipClass = "popup";
-							div.addEventListener("click", function(){
-								this.parentNode.removeChild(this);
-							})
-
-						var span = document.createElement("span");
-							span.innerHTML = "You have already commited your turn.</br></br>";
-							div.appendChild(span);
-
-						var span = document.createElement("span");
-							span.innerHTML = "You can look at the gamedata, but cant commit anew.";
-							div.appendChild(span);
-
-							document.body.appendChild(div);
-					}
-					else {
-						gamedata.canCommit = true;
-					}
-				}
-			}
-		});
-	},
-
 
 
 	

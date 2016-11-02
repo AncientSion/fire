@@ -54,14 +54,16 @@ if (isset($_POST["type"])) {
 		}
 	}
 	else if ($_POST["type"] == "deployment"){
-		if ($dbManager->deployShips($_POST["gameid"], $_POST["deployedShips"])){
-			if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["gameturn"], $_POST["gamephase"], "ready")){
-				echo "deploy success";
-			}
+
+		if (isset($_POST["deployedShips"])){
+
 		}
-		else {
-			echo "deployShips fail";
+		if (isset($_POST["reinforcements"])){
+			$dbManager->requestReinforcements($_POST["userid"], $_POST["gameid"], $_POST["reinforcements"]);
 		}
+
+		//$dbManager->deployShips($_POST["gameid"], $_POST["deployedShips"]);
+		//$dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["gameturn"], $_POST["gamephase"], "ready");
 	}
 	else if ($_POST["type"] == "movement"){
 		if ($dbManager->issueMovement($_POST["gameid"], $_POST["ships"])){
