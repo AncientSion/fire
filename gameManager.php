@@ -15,6 +15,7 @@ class Manager {
 	public $index = 0;
 
 	public $ships = array();
+	public $incoming = array();
 	public $gd = array();
 	public $fires = array();
 	public $damages = array();
@@ -41,7 +42,6 @@ class Manager {
 				if ($this->canAdvanceGameState()){
 					$this->doAdvanceGameState();
 				}
-				else debug::log("cant advance gamestate");
 			}
 		}
 		else {
@@ -144,30 +144,23 @@ class Manager {
 		$this->phase = $this->game["phase"];
 
 		$this->playerstatus = $db->getPlayerStatus($this->gameid);
-		$this->reinforce = $db->getShipBuyValue($this->gameid, $this->userid);
+		$this->reinforce = $db->getReinforcePoints($this->gameid, $this->userid);
 
-		$ships = $db->getAllShipsForGame($this->gameid);
+		$ships = $db->getActiveShips($this->gameid, $this->turn);
 		$ships = $db->getActionsForShips($ships);
 
 		$this->fires = $db->getAllFireOrders($this->gameid);
 		$this->damages = $db->getAllDamageEntries($this->gameid);
+		$this->ships = $this->assembleShips($ships);
 
 		$this->reinforcements = $db->getAvailableReinforcements($this->gameid, $this->userid);
-
-		//echo json_encode($this->damages);
-		//$this->log();
-
-		$this->ships = $this->assembleShips($ships);
+		$this->incoming = $db->getIncomingShips($this->gameid, $this->turn);
 	}
 
 	public function assembleShips($ships){
-		//Debug::log("assembleShips");
-
 		for ($i = 0; $i < sizeof($ships); $i++){
-
 			$x;
 			$y;
-
 			if (sizeof($ships[$i]["actions"])) {
 				$x = $ships[$i]["actions"][sizeof($ships[$i]["actions"])-1]["x"];
 				$y = $ships[$i]["actions"][sizeof($ships[$i]["actions"])-1]["y"];
@@ -177,7 +170,7 @@ class Manager {
 				$y = false;
 			}
 
-			$ship = new $ships[$i]["shipclass"](
+			$ship = new $ships[$i]["shipClass"](
 				$ships[$i]["id"],
 				$ships[$i]["userid"],
 				$x, 
@@ -193,26 +186,23 @@ class Manager {
 				$ship->facing = $ship->facing + $ship->actions[$j]["a"];
 			}
 
+			$ship = $this->addFireOrders($ship);
+			$ship = $this->addDamages($ship);
 			$ships[$i] = $ship;
 		}
-
-		$ships = $this->addFireOrders($ships);
-		$ships = $this->addDamages($ships);
 
 		return $ships;
 	}
 
-	public function addFireOrders($ships){
+	public function addFireOrders($ship){
 		if ($this->fires){
 			for ($i = 0; $i < sizeof($this->fires); $i++){
-				for ($j = 0; $j < sizeof($ships); $j++){
-					if ($this->fires[$i]->shooterid == $ships[$j]->id){
-						for ($k = 0; $k < sizeof($ships[$j]->structures); $k++){
-							for ($l = 0; $l < sizeof($ships[$j]->structures[$k]->systems); $l++){
-								if ($this->fires[$i]->weaponid == $ships[$j]->structures[$k]->systems[$l]->id){
-									//debug::log("found!");
-									$ships[$j]->structures[$k]->systems[$l]->fireOrders[] = $this->fires[$i];
-								}
+				if ($this->fires[$i]->shooterid == $ship->id){
+					for ($k = 0; $k < sizeof($ship->structures); $k++){
+						for ($l = 0; $l < sizeof($ship->structures[$k]->systems); $l++){
+							if ($this->fires[$i]->weaponid == $ship->structures[$k]->systems[$l]->id){
+								//debug::log("found!");
+								$ship->structures[$k]->systems[$l]->fireOrders[] = $this->fires[$i];
 							}
 						}
 					}
@@ -220,26 +210,24 @@ class Manager {
 			}
 		}
 		
-		return $ships;
+		return $ship;
 	}
 
-	public function addDamages($ships){
+	public function addDamages($ship){
 		//echo "dmg size: ".sizeof($this->damages)."\n";
 		//echo "ship size: ".sizeof($ships)."\n";
-		for ($i = 0; $i < sizeof($ships); $i++){
-			for ($j = 0; $j < sizeof($this->damages); $j++){
-				if ($ships[$i]->id == $this->damages[$j]->shipid){
-					for ($k = 0; $k < sizeof($ships[$i]->structures); $k++){
-						if ($ships[$i]->structures[$k]->id == $this->damages[$j]->structureid){
-							$ships[$i]->structures[$k]->damages[] = $this->damages[$j];
-						}
+		for ($j = 0; $j < sizeof($this->damages); $j++){
+			if ($ship->id == $this->damages[$j]->shipid){
+				for ($k = 0; $k < sizeof($ship->structures); $k++){
+					if ($ship->structures[$k]->id == $this->damages[$j]->structureid){
+						$ship->structures[$k]->damages[] = $this->damages[$j];
 					}
-
 				}
+
 			}
 		}
 		//echo json_encode($this->damages);
-		return $ships;
+		return $ship;
 
 	}
 
@@ -294,20 +282,23 @@ class Manager {
 	}
 
 	public function canAdvanceGameState(){
-		Debug::log("canAdvanceGameState");
+		Debug::log("canAdvanceGameState?");
 
 		if ($this->game["status"] == "open"){
+			Debug::log("FALSE");
 			return false;
 		}
 		else if (sizeof($this->playerstatus) >= 2){
 			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 				//echo json_encode($this->playerstatus[$i]);
 				if ($this->playerstatus[$i]["status"] == "waiting"){
+					Debug::log("FALSE");
 					return false;
 				}
 			}
 		}
 
+		Debug::log("TRUE");
 		return true;
 	}
 

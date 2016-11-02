@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 02. Nov 2016 um 17:30
+-- Erstellungszeit: 02. Nov 2016 um 21:32
 -- Server-Version: 10.1.16-MariaDB
 -- PHP-Version: 7.0.9
 
@@ -146,7 +146,7 @@ CREATE TABLE `games` (
 --
 
 INSERT INTO `games` (`id`, `name`, `status`, `turn`, `phase`, `pv`, `reinforce`) VALUES
-(2, 'zest2', 'active', 2, -1, 4000, 400);
+(2, 'zest2', 'active', 3, -1, 4000, 400);
 
 -- --------------------------------------------------------
 
@@ -168,8 +168,8 @@ CREATE TABLE `playerstatus` (
 --
 
 INSERT INTO `playerstatus` (`id`, `userid`, `gameid`, `turn`, `phase`, `status`) VALUES
-(3, 2, 2, 2, -1, 'waiting'),
-(4, 1, 2, 2, -1, 'waiting');
+(3, 2, 2, 3, -1, 'waiting'),
+(4, 1, 2, 3, -1, 'waiting');
 
 -- --------------------------------------------------------
 
@@ -190,8 +190,8 @@ CREATE TABLE `reinforce` (
 --
 
 INSERT INTO `reinforce` (`id`, `gameid`, `userid`, `points`, `faction`) VALUES
-(2, 2, 1, 400, 'Earth Alliance'),
-(3, 2, 2, 2801, 'Minbari Federation'),
+(2, 2, 1, 3550, 'Earth Alliance'),
+(3, 2, 2, 1201, 'Minbari Federation'),
 (7, 3, 1, 600, 'Earth Alliance'),
 (8, 4, 1, 1600, 'Earth Alliance');
 
@@ -216,8 +216,11 @@ CREATE TABLE `reinforcements` (
 --
 
 INSERT INTO `reinforcements` (`id`, `gameid`, `userid`, `shipClass`, `turn`, `arrival`, `cost`) VALUES
-(5, 2, 2, 'Sharlin', 2, 4, 2000),
-(10, 2, 2, 'Sharlin', 2, 4, 2000);
+(10, 2, 2, 'Sharlin', 2, 4, 2000),
+(13, 2, 1, 'Sharlin', 2, 5, 2000),
+(14, 2, 2, 'Sharlin', 3, 4, 2000),
+(15, 2, 1, 'Omega', 3, 4, 1200),
+(16, 2, 1, 'Hyperion', 3, 3, 850);
 
 -- --------------------------------------------------------
 
@@ -259,7 +262,21 @@ INSERT INTO `shipactions` (`id`, `shipid`, `turn`, `type`, `dist`, `x`, `y`, `a`
 (13, 8, 1, 'move', 200, 773, 91, 0, 0, 0, 1, 1),
 (14, 8, 1, 'turn', 0, 773, 91, -30, 429, 138, 1.8, 1),
 (15, 9, 1, 'turn', 0, 1038, 295, -30, 429, 138, 1, 1),
-(16, 9, 1, 'move', 200, 865, 395, 0, 0, 0, 1, 1);
+(16, 9, 1, 'move', 200, 865, 395, 0, 0, 0, 1, 1),
+(17, 10, 2, 'deploy', 0, 158, 44, 0, 0, 0, 1, 1),
+(18, 4, 2, 'move', 200, 577, 453, 0, 0, 0, 1, 0),
+(19, 5, 2, 'move', 190, 289, 289, 0, 0, 0, 1, 0),
+(20, 5, 2, 'turn', 0, 289, 289, 30, 298, 123, 1.8, 0),
+(21, 5, 2, 'move', 11, 298, 284, 0, 0, 0, 1, 0),
+(22, 10, 2, 'move', 172, 329, 67, 0, 0, 0, 1, 0),
+(23, 10, 2, 'turn', 0, 329, 67, -30, 298, 123, 1.8, 0),
+(24, 10, 2, 'move', 28, 353, 53, 0, 0, 0, 1, 0),
+(25, 8, 2, 'move', 78, 706, 130, 0, 0, 0, 1, 0),
+(26, 8, 2, 'turn', 0, 706, 130, 30, 429, 138, 1, 0),
+(27, 8, 2, 'move', 122, 584, 130, 0, 0, 0, 1, 0),
+(28, 9, 2, 'move', 190, 716, 513, 0, 0, 0, 1, 0),
+(29, 9, 2, 'turn', 0, 716, 513, 30, 429, 138, 1.8, 0),
+(30, 9, 2, 'move', 10, 706, 513, 0, 0, 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -271,7 +288,7 @@ CREATE TABLE `ships` (
   `id` int(3) NOT NULL,
   `gameid` int(3) DEFAULT NULL,
   `userid` int(3) DEFAULT NULL,
-  `shipclass` varchar(255) DEFAULT NULL,
+  `shipClass` varchar(255) DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL,
   `available` int(3) DEFAULT NULL,
   `destroyed` tinyint(1) DEFAULT NULL
@@ -281,20 +298,15 @@ CREATE TABLE `ships` (
 -- Daten für Tabelle `ships`
 --
 
-INSERT INTO `ships` (`id`, `gameid`, `userid`, `shipclass`, `status`, `available`, `destroyed`) VALUES
-(1, 1, 1, 'Omega', 'bought', 2, 0),
-(2, 1, 1, 'Omega', 'deployed', 1, 0),
+INSERT INTO `ships` (`id`, `gameid`, `userid`, `shipClass`, `status`, `available`, `destroyed`) VALUES
 (3, 1, 2, 'Sharlin', 'deployed', 1, 0),
 (4, 2, 1, 'Omega', 'deployed', 1, 0),
 (5, 2, 1, 'Omega', 'deployed', 1, 0),
 (8, 2, 2, 'Sharlin', 'deployed', 1, 0),
 (9, 2, 2, 'Sharlin', 'deployed', 1, 0),
-(10, 2, 1, 'Omega', 'bought', 2, 0),
-(11, 4, 1, 'Hyperion', 'bought', 1, 0),
-(12, 4, 1, 'Hyperion', 'bought', 1, 0),
-(13, 4, 1, 'Hyperion', 'bought', 1, 0),
-(14, 4, 1, 'Hyperion', 'bought', 1, 0),
-(18, 2, 1, 'Sharlin', 'bought', 6, 0);
+(10, 2, 1, 'Omega', 'deployed', 2, 0),
+(19, 2, 1, 'Hyperion', 'bought', 3, 0),
+(20, 2, 2, 'Sharlin', 'bought', 6, 0);
 
 -- --------------------------------------------------------
 
@@ -408,17 +420,17 @@ ALTER TABLE `reinforce`
 -- AUTO_INCREMENT für Tabelle `reinforcements`
 --
 ALTER TABLE `reinforcements`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT für Tabelle `shipactions`
 --
 ALTER TABLE `shipactions`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 --
 -- AUTO_INCREMENT für Tabelle `ships`
 --
 ALTER TABLE `ships`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT für Tabelle `users`
 --

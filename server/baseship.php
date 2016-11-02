@@ -15,7 +15,7 @@ class Ship {
 	public $shipClass;
 	public $shipType = "type";
 	public $userid;
-	public $availabe;
+	public $available;
 
 	public $name;
 	public $faction;

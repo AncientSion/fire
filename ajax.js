@@ -60,7 +60,7 @@ window.ajax = {
 		});
 	},
 
-	confirmDeployment: function(){
+	confirmDeployment: function(callback){
 		var deployedShips = [];
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid = game.userid){
@@ -91,8 +91,7 @@ window.ajax = {
 					deployedShips: deployedShips,
 					reinforcements: game.reinforcements
 					},
-			//success: goToLobby,
-			success: goToLobby,
+			success: callback,
 			error: ajax.error,
 		});
 	},
@@ -135,7 +134,7 @@ window.ajax = {
 		});
 	},
 
-	confirmFiringOrders: function(){
+	confirmFiringOrders: function(callback){
 		var fires = [];
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid == game.userid){
@@ -163,7 +162,7 @@ window.ajax = {
 		});
 	},
 
-	confirmDamageControl: function(){
+	confirmDamageControl: function(callback){
 		$.ajax({
 			type: "POST",
 			url: "postGameData.php",
@@ -182,7 +181,6 @@ window.ajax = {
 	},
 
 	checkGameState: function(callback){
-
 		console.log("ding");
 		callback();
 	},

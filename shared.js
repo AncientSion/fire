@@ -56,7 +56,7 @@ function refresh(data){
 }
 
 function goToLobby(){
-    console.log("redirect");
+    console.log("goToLobby");
     setTimeout(function(){
         window.location = "lobby.php"
     }, 1000);

@@ -191,10 +191,13 @@ canvas {
 	text-align: center;
 	margin: auto;
 	margin-top: 20px;
+	width: 500px;
+	padding: 10px;
 }
 
 .lobbyDiv table {
 	border-collapse: collapse;
+	width: 100%;
 }
 
 .lobbyDiv td {
@@ -450,12 +453,12 @@ canvas {
 	z-index: 8;
 	border: 1px solid black;
 	width: 300px;
+	background-color: white
 }
 
 #overview {
 	border-collapse: collapse;
 	width: 100%;
-	margin-bottom: 10px;
 }
 
 #overview th {
@@ -464,6 +467,14 @@ canvas {
 
 #overview td {
 	border: 1px solid black;
+}
+
+#confirmOrders {
+	font-size: 20px;
+	cursor: pointer;
+}
+#confirmOrders:hover {
+	background-color: lightGreen;
 }
 
 #combatlogWrapper {

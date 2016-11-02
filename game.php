@@ -39,6 +39,14 @@ switch ($manager->game["phase"]){
 		break;
 }
 
+$status;
+
+foreach ($manager->playerstatus as $player){
+	if ($player["userid"] == $userid){
+		$status = $player["status"];
+	}
+}
+
 //echo sizeof($ships);
 //echo var_export($ships[0]);
 //$fireorders = $manager->fires;
@@ -57,6 +65,7 @@ echo "window.gd = ".json_encode($manager->game, JSON_NUMERIC_CHECK).";";
 echo "window.ships = ".json_encode($manager->ships, JSON_NUMERIC_CHECK).";";
 echo "window.playerstatus = ".json_encode($manager->playerstatus, JSON_NUMERIC_CHECK).";";
 echo "window.reinforcements = ".json_encode($manager->reinforcements, JSON_NUMERIC_CHECK).";";
+echo "window.incoming = ".json_encode($manager->incoming, JSON_NUMERIC_CHECK).";";
 //echo "window.fireOrders = ".json_encode($fireorders, JSON_NUMERIC_CHECK).";";
 echo "</script>";
 
@@ -95,8 +104,10 @@ echo "</script>";
 			</div>
 			<div id="canvasDiv">
 				<div id="upperGUI">
-				<!--	<div id="buttons"></div>
 					<div id="currentPos">0 / 0</div>
+
+				
+				<!--	<div id="buttons"></div>
 					<span id="onArc">null</span>
 					<span id="curArc">0</span>
 					<span id="dist" style="color: red">0</span>
@@ -124,8 +135,16 @@ echo "</script>";
 								<?php echo $manager->reinforce["points"]; ?>
 							</td>
 						</tr>
+						<tr>
+							<th colSpan=3 id="confirmOrders" onclick="game.endPhase()">
+								<?php 
+									if ($status == "ready"){
+										echo "Waiting for Opponent";
+									} else echo "Confirm Orders";
+								?>
+							</th>
+						</tr>
 					</table>
-					<input type="button" value="Confirm Orders" onclick="endPhase()"></input>
 				</div>
 				<div id="combatlogWrapper">
 					<table id="combatLog" class="disabled">
@@ -157,7 +176,7 @@ echo "</script>";
 				<div id ="deployWrapper" class="disabled">
 					<table id="deployTable">
 						<tr>
-							<th style="font-size: 18px; background-color: lightGreen;" colSpan=4>
+							<th style="font-size: 18px; background-color: lightGreen;" colSpan=3>
 								Incoming Reinforcements
 							</th>
 						</tr>
@@ -165,15 +184,12 @@ echo "</script>";
 							<th  width="50%" colSpan="2">
 								Class
 							</th>
-							<th  width="30%" >
-								Type
-							</th>
-							<th  width="20%" >
+							<th colSpan=2 width="20%" >
 								Arrival in
 							</th>
 						</tr>
 					</table>
-					<table id="reinforceTable" class="disabled">
+					<table id="reinforceTable">
 						<tr>
 							<th style="font-size: 18px; background-color: lightGreen;" colSpan=4>
 								Requestable Reinforcements
@@ -245,36 +261,12 @@ echo "</script>";
 
 		var i = 0;
 
-		$(".requestReinforcements").each(function(i){
-			$(this)
-			.data("id", window.reinforcements[i]["id"])
-			.data("cost", window.reinforcements[i]["cost "])
-			.click(function(e){
-				e.stopPropagation();
-				if (! game.deploying){
-					if ($(this).hasClass("selected")){
-						$(this).removeClass("selected");
-					}
-					else {
-						$(this).addClass("selected");
-					}
-				}
-
-				game.selectReinforcements($(this).data("id"));
-			})
+		$("#deployWrapper").contextmenu(function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			$(this).hide();
 		})
 
-		$("#confirmReinforcements").hover(
-			function(e){
-				$(this).addClass("selected");
-			},
-			function(e){
-				$(this).removeClass("selected");
-			}
-		).
-		click(function(e){
-			$(game.confirmReinforcements);
-		});
 
 		$("#popupWrapper").contextmenu(function(e){
 			e.preventDefault();
@@ -282,5 +274,39 @@ echo "</script>";
 			$(this).hide();
 		});
 
+		$(".requestReinforcements").each(function(i){
+			$(this)
+			.data("id", window.reinforcements[i]["id"])
+			.data("cost", window.reinforcements[i]["cost"])
+			.click(function(e){
+				e.stopPropagation();
+				if (game.phase == -1){
+					if (! game.deploying){				
+						if ($(this).hasClass("selected")){
+							$(this).removeClass("selected");
+							game.selectReinforcements($(this).data("id"));
+						}	
+						else {
+							if (game.reinforcePoints >= $(this).data("cost") + game.getCurrentReinforceCost()){
+								$(this).addClass("selected");
+								game.selectReinforcements($(this).data("id"));
+							}
+							else {
+								popup("You have insufficient Reinforce Points ("+game.reinforcePoints+") available.");
+							}
+						}
+					}
+					else {
+						popup("Ship deployment active, please deploy and try again.");
+					}
+				}
+				else {
+					popup("Reinforces can only be requested in Deployment/Initial Phase.");
+				}
+			})
+		})
 	})
+
+
+
 </script>

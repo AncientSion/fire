@@ -319,12 +319,10 @@ class DBManager {
 			$sql = "DELETE FROM reinforcements WHERE id = ".$ships[$i]["id"];
 			$this->delete($sql);
 		}
-		debug::log("cost: ".$cost);
 
 		$this->alterReinforcementPoints($userid, $gameid, $cost);
 		$this->buyShips($userid, $gameid, $ships);
 		return true;
-
 	}
 
 	public function buyShips($userid, $gameid, $ships){
@@ -333,9 +331,9 @@ class DBManager {
 
 		$stmt = $this->connection->prepare("
 			INSERT INTO ships 
-				(gameid, userid, shipclass, status, available, destroyed)
+				(gameid, userid, shipClass, status, available, destroyed)
 			VALUES
-				(:gameid, :userid, :shipclass, :status, :available, :destroyed)
+				(:gameid, :userid, :shipClass, :status, :available, :destroyed)
 		");
 
 
@@ -346,7 +344,7 @@ class DBManager {
 		debug::log($ships[$i]["shipClass"]);
 			$stmt->bindParam(":gameid", $gameid);
 			$stmt->bindParam(":userid", $userid);
-			$stmt->bindParam(":shipclass", $ships[$i]["shipClass"]);
+			$stmt->bindParam(":shipClass", $ships[$i]["shipClass"]);
 			$stmt->bindParam(":status", $status);
 			$stmt->bindParam(":available", $ships[$i]["turn"]);
 			$stmt->bindParam(":destroyed", $destroyed);
@@ -676,7 +674,7 @@ class DBManager {
 		else return false;
 	}
 
-	public function getShipBuyValue($gameid, $userid = 0){
+	public function getReinforcePoints($gameid, $userid = 0){
 		debug::log("getShipBuyValue");
 		if (! $userid){
 			return false;
@@ -778,7 +776,7 @@ class DBManager {
 
 		$stmt = $this->connection->prepare("
 			SELECT
-				shipclass 
+				shipClass 
 			FROM 
 				ships
 			WHERE
@@ -852,14 +850,39 @@ class DBManager {
 		return $result;
 	}
 
-	public function getAllShipsForGame($gameid){
+	public function getIncomingShips($gameid, $turn){
 		$stmt = $this->connection->prepare("
 			SELECT * FROM ships
 			WHERE gameid = :gameid
+			AND available > :turn
 			ORDER BY userid ASC
 		");
 		
 		$stmt->bindParam(":gameid", $gameid);
+		$stmt->bindParam(":turn", $turn);
+		$stmt->execute();
+				
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		if ($result){
+			return $result;
+		}
+		else {
+			return false;
+		}
+
+	}
+
+	public function getActiveShips($gameid, $turn){
+		$stmt = $this->connection->prepare("
+			SELECT * FROM ships
+			WHERE gameid = :gameid
+			AND available <= :turn
+			ORDER BY userid ASC
+		");
+		
+		$stmt->bindParam(":gameid", $gameid);
+		$stmt->bindParam(":turn", $turn);
 		$stmt->execute();
 				
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -930,7 +953,7 @@ class DBManager {
 
 	public function resolveDeployment($gameid){
 		Debug::log("resolveDeployment");
-		$ships = $this->getAllShipsForGame($gameid);
+		$ships = $this->getActiveShips($gameid);
 		$stmt = $this->connection->prepare("
 			UPDATE shipactions
 			SET resolved = 1
@@ -958,7 +981,7 @@ class DBManager {
 
 	public function resolveMovement($gameid){
 		Debug::log("resolveMovement");
-		$ships = $this->getAllShipsForGame($gameid);
+		$ships = $this->getActiveShips($gameid);
 		$stmt = $this->connection->prepare("
 			UPDATE shipactions
 			SET resolved = 1

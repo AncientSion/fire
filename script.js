@@ -71,17 +71,6 @@ function executeAll(){
 	}
 }
 
-function endPhase(){
-	game.endPhase();
-}
-
-function endTurn(){
-	if (game){
-		game.endTurn();
-	}
-}
-
-
 function mouseCanvasZoom(e){
 	e.preventDefault();	
 	var rect = this.getBoundingClientRect();		
