@@ -1,17 +1,11 @@
 <?php
 
-error_reporting(E_ALL); ini_set('display_errors', '1');
-require_once("dbManager.php");
-require_once("gameManager.php");
-require_once("debug.php");
-
-session_start();
-
+include_once 'global.php';
 
 if (isset($_SESSION["userid"])){
 	$gameid = $_GET["gameid"];
 	$playerid = $_SESSION["userid"];
-
+	
 	$_SESSION["gameid"] = $_GET["gameid"];
 	echo "<script> var gameid = ".$gameid."; var playerid = ".$playerid.";</script>";
 	$dbManager = DBManager::app($gameid);
@@ -131,15 +125,15 @@ else {
 					<div style="margin: auto; margin-top: 30px; margin-left: 50px;">
 						<table id ="shipsBoughtTable">
 							<tr>
-								<th colSpan=2 style="width: 300px; font-size: 16px">
+								<th colSpan=2 style="width: 300px; font-size: 20px">
 									Current Fleet Selection
 								</th>
 							</tr>
 							<tr>
-								<th style="font-size: 16px">
+								<th style="font-size: 14px;">
 									Total Fleet Cost:
 								</th>
-								<th id="totalFleetCost">
+								<th id="totalFleetCost" style="font-size: 14px; width:50px">
 									0
 								</th>
 							</tr>
@@ -161,21 +155,8 @@ else {
 				</td>
 			</tr>
 		</table>
-		<table id="shipPreview" class="shipPreview disabled" style="width: 700px;">
-			<tr>
-				<td style="vertical-align: top;">
-						<table>
-							<tr>
-								<td>
-							</td>
-								<td id="game">
-								</td>
-							</tr>
-						</table>
-					</div>
-				</td>
-			</tr>
-		</table>
+		<div id="game" style="width: 420px; height: 400px">
+		</div>
 	</body>
 </html>
 
@@ -295,7 +276,7 @@ else {
 
 	function addToFleet(ele){
 		var ship = {
-			shipclass: $(ele).data("shipclass"),
+			shipClass: $(ele).data("shipClass"),
 			cost: $(ele).data("cost"),
 			purchaseId: window.window.game.shipsBought.length,
 			turn: 1
@@ -332,7 +313,7 @@ else {
 				);
 
 			for (var i in ship){
-				if (i != "purchaseId"){
+				if (i != "purchaseId" && i != "turn"){
 					var td = document.createElement("td");
 						td.style.textAlign = "center";
 						td.innerHTML = ship[i];
@@ -374,7 +355,7 @@ else {
 		ajax.confirmFleetPurchase(playerid, gameid, window.game.shipsBought, window.reinforceFaction, redirect);
 	}
 
-	function requestShipData(shipclass){
+	function requestShipData(shipClass){
 		//		console.log("requestShipData");
 		$.ajax({
 			type: "GET",
@@ -382,7 +363,7 @@ else {
 			datatype: "json",
 			data: {
 					type: "shipdata",
-					shipclass: shipclass,
+					shipClass: shipClass,
 					},
 			success: showShipPreview,		
 			error: ajax.error,
@@ -395,7 +376,7 @@ else {
 
 		var ship = new Ship(
 							data.id,
-							data.shipclass,
+							data.shipClass,
 							0,
 							0,
 							0,
@@ -560,7 +541,7 @@ else {
 					})
 
 					var subTd = document.createElement("td");
-						subTd.innerHTML = shiplist[i]["shipclass"];
+						subTd.innerHTML = shiplist[i]["shipClass"];
 						subTr.appendChild(subTd); 
 
 					var subTd = document.createElement("td");
@@ -569,7 +550,7 @@ else {
 
 					var subTd = document.createElement("td");							
 						subTd.innerHTML = "Add to fleet";
-						$(subTd).data("shipclass", shiplist[i]["shipclass"]).data("cost", shiplist[i]["cost"]).mouseenter(function(){
+						$(subTd).data("shipClass", shiplist[i]["shipClass"]).data("cost", shiplist[i]["cost"]).mouseenter(function(){
 							$(this).addClass("fontHighlight");
 						}).mouseleave(function(){
 							$(this).removeClass("fontHighlight");

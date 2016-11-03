@@ -29,21 +29,20 @@
 	height: 50px;
 }
 
-.borderTable {
+.fullBorderTable {
 	border-collapse: collapse;
 	border: 1px solid black;
 }
 
-.borderTable tr, th, td {
-	border: 1px solid black;
-}
 
-.borderTable th {
+.fullBorderTable th {
+	border: 1px solid black;
 	padding: 4px;
 	font-size: 25px;
 }
 
-.borderTable  td {
+.fullBorderTable td {
+	border: 1px solid black;
 	padding: 4px;
 	font-size: 20px;
 	text-align: right;
@@ -145,10 +144,17 @@ canvas {
 	margin: 0 0 0 0;
 }
 
+#factionDiv tr, th, td {
+	border: none;
+}
+
 .factionUpperTable {
 	width: 500px;
 	margin: auto;
 	border-collapse: collapse;
+	border: 1px solid black;
+}
+.factionUpperTable tr {
 	border: 1px solid black;
 }
 

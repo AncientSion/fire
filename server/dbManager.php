@@ -1,5 +1,9 @@
 <?php
 
+
+require_once("server\classes.php");
+
+
 class DBManager {
 
 	private $connection = null;

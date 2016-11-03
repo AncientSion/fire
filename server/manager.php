@@ -1,9 +1,5 @@
 <?php
 
-error_reporting(E_ALL); ini_set('display_errors', '1');
-require_once("server\baseship.php");
-require_once("server\math.php");
-require_once("server\classes.php");
 
 
 class Manager {
@@ -21,7 +17,6 @@ class Manager {
 	public $damages = array();
 	public $playerstatus = array();
 
-
 	function __construct($userid = 0, $gameid = 0){
 		$this->userid = $userid;
 		$this->gameid = $gameid;
@@ -35,13 +30,6 @@ class Manager {
 
 			if ($this->turn == -1){
 				return;
-			}
-			else {
-				$this->getGameData();
-
-				if ($this->canAdvanceGameState()){
-					$this->doAdvanceGameState();
-				}
 			}
 		}
 		else {
@@ -140,6 +128,7 @@ class Manager {
 		$ships;
 
 		$this->game = $db->getGameDetails($this->gameid);
+		echo json_encode($this->game);
 		$this->turn = $this->game["turn"];
 		$this->phase = $this->game["phase"];
 
@@ -604,7 +593,8 @@ class Manager {
 			case "Earth Alliance";
 				$ships = array(
 					"Omega",
-					"Hyperion"
+					"Hyperion",
+					"Tethys"
 				);
 				break;
 			case "Centauri Republic";
@@ -612,7 +602,9 @@ class Manager {
 				break;
 			case "Minbari Federation";
 				$ships = array(
-					"Sharlin"
+					"Sharlin",
+					"Tinashi",
+					"WhiteStar",
 				);
 				break;
 			default:
@@ -645,6 +637,7 @@ class Manager {
 	}
 
 	public function logShips(){
+		debug::log("logShips");
 		$allShips = array();
 
 		$factions = $this->getFactions();

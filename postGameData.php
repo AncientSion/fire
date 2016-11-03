@@ -1,11 +1,6 @@
 <?php
 
-error_reporting(E_ALL); ini_set('display_errors', '1');
-require_once("dbManager.php");
-require_once("gameManager.php");
-require_once("debug.php");
-
-session_start();
+include_once 'global.php';
 
 $manager;
 $dbManager;

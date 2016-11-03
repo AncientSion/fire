@@ -36,7 +36,7 @@ window.ajax = {
 					userid: userid,
 					gameid: gameid
 					},
-			success: callback,
+			success: goToLobby,
 			error: ajax.error,
 		});
 	},

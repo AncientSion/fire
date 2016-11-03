@@ -46,7 +46,6 @@ class Omega extends Ship {
 		$structs[] = $left;
 
 
-
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 		}

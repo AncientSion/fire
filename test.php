@@ -1,10 +1,6 @@
 <?php
 
-error_reporting(E_ALL); ini_set('display_errors', '1');
-require_once("dbManager.php");
-require_once("gameManager.php");
-require_once("debug.php");
-session_start();
+include_once 'global.php';
 
 $manager = new Manager();
 $ships = $manager->logShips();
@@ -19,7 +15,7 @@ $ships = $manager->logShips();
 	<script src="jquery-2.1.1.min.js"></script>
 </head>
 	<body> 
-		<table class="borderTable">
+		<table class="fullBorderTable">
 			<tr>
 				<th>
 					Class
@@ -39,11 +35,14 @@ $ships = $manager->logShips();
 				<th>
 					Total
 				</th>
-				<th>
+				<th style='text-align: center'"'>
 					Struct / Armour R
 				</th>
 				<th>
 					Mass / Health R
+				</th>
+				<th>
+					Cost / Health R
 				</th>
 			</tr>
 			<?php 
@@ -60,8 +59,9 @@ $ships = $manager->logShips();
 					echo "<td>".$struct."</td>";
 					echo "<td>".$armour."</td>";
 					echo "<td>".($struct + $armour)."</td>";
-					echo "<td>".(floor($struct / $armour * 100)/10)."</td>";
-					echo "<td>".(floor($mass / ($struct + $armour) * 100)/10)."</td>";
+					echo "<td style='text-align: center'>".(floor($struct / $armour * 100)/10)."</td>";
+					echo "<td style='text-align: center'>".(floor($mass / ($struct + $armour) * 100)/10)."</td>";
+					echo "<td style='text-align: center'>".(floor($ships[$i]::$value / ($struct + $armour) * 100)/10)."</td>";
 					echo "</tr>";
 				}
 			?>

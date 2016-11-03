@@ -1,12 +1,5 @@
 <?php
 
-error_reporting(E_ALL); ini_set('display_errors', '1');
-require_once("server\ships\sharlin.php");
-require_once("server\ships\omega.php");
-require_once("server\ships\hyperion.php");
-require_once("server\systems\systems.php");
-require_once("debug.php");
-
 class Ship {
 	public $id;
 	public $x = 0;

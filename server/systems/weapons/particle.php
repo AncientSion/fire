@@ -1,6 +1,5 @@
 <?php
 
-
 class Particle extends Weapon {
 	public $type = "Particle";
 	public $animation = "projectile";

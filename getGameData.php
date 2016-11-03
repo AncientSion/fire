@@ -1,14 +1,6 @@
 <?php
 
-
-error_reporting(E_ALL); ini_set('display_errors', '1');
-require_once("dbManager.php");
-require_once("gameManager.php");
-require_once("debug.php");
-
-session_start();
-
-
+include_once 'global.php';
 
 if (isset($_SESSION["userid"]) && isset($_SESSION["gameid"])){
 	$dbManager = DBManager::app();
@@ -29,7 +21,7 @@ if (isset($_SESSION["userid"]) && isset($_SESSION["gameid"])){
 			echo json_encode($ships);
 		}
 		else if ($_GET["type"] == "shipdata"){
-			$ship = $manager->getShipClass($_GET["shipclass"]);
+			$ship = $manager->getShipClass($_GET["shipClass"]);
 			echo json_encode($ship);
 		}
 	}
