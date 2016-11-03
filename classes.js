@@ -74,7 +74,7 @@ function FireOrder(id, shooterId, targetId, weaponId, turn, hits){
 	this.shooterId = shooterId;
 	this.dist;
 	this.shots;
-	this.guns;
+	this.guns = 1;
 	this.animated = false;
 	this.anim = [];
 	this.turn = turn;

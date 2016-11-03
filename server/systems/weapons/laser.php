@@ -3,6 +3,7 @@
 class Laser extends Weapon {
 	public $type = "Laser";
 	public $animation = "beam";
+	public $beamWidth;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -26,7 +27,8 @@ class HeavyLaser extends Laser {
 	public $display = "Heavy Laser";
 	public $animColor = "red";
 	public $rakeTime = 70;
-	public $width = 2;
+	public $beamWidth = 2;
+	public $exploSize = 10;
 	public $minDmg = 400;
 	public $maxDmg = 400;
 	public $optRange = 800;
@@ -45,7 +47,8 @@ class NeutronLaser extends Laser {
 	public $display = "Neutron Laser";
 	public $rakeTime = 40;
 	public $animColor = "blue";
-	public $width = 1;
+	public $beamWidth = 2;
+	public $exploSize = 7;
 	public $minDmg = 350;
 	public $maxDmg = 350;
 	public $optRange = 1000;

@@ -154,12 +154,14 @@ function Ship(id, shipclass, x, y, facing, userid){
 				if (this.actions.length == 1){
 					this.x = this.actions[0].x;
 					this.y = this.actions[0].y;
+					return;
 				}
 				else {
 					for (var i = this.actions.length-1; i >= 0; i--){
-						if (this.actions[i].resolved){
+						if (this.actions[i].resolved && this.actions[i].turn == game.turn -1){
 							this.x = this.actions[i].x;
 							this.y = this.actions[i].y;
+							return;
 						}
 					}
 				}
@@ -185,9 +187,9 @@ function Ship(id, shipclass, x, y, facing, userid){
 		var facing = 0;
 
 		if (this.deployed){
-			if (game.phase == 2){
+			if (game.phase == 2){ // FIRE -> animating moves
 				for (var i = 0; i < this.actions.length; i++){
-					if (this.actions[i].turn <= game.turn){
+					if (this.actions[i].turn < game.turn){
 						facing = addAngle(facing, this.actions[i].a);
 					}
 				}	
@@ -1323,13 +1325,11 @@ function Ship(id, shipclass, x, y, facing, userid){
 
 		for (var i = 0; i < this.structures.length; i++){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
-				if (this.structures[i].systems[j].fireOrders.length){
-					for (var k = this.structures[i].systems[j].fireOrders.length-1; k >= 0; k--){
-						if (this.structures[i].systems[j].fireOrders[k].turn == game.turn){
-							fires.push(this.structures[i].systems[j].fireOrders[k]);
-						}
-						else return fires;
+				for (var k = this.structures[i].systems[j].fireOrders.length-1; k >= 0; k--){
+					if (this.structures[i].systems[j].fireOrders[k].turn == game.turn){
+						fires.push(this.structures[i].systems[j].fireOrders[k]);
 					}
+					else break;
 				}
 			}
 		}

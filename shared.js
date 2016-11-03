@@ -59,7 +59,7 @@ function goToLobby(){
     console.log("goToLobby");
     setTimeout(function(){
         window.location = "lobby.php"
-    }, 1000);
+    }, 2000);
 }
 
 function processEcho(echo){

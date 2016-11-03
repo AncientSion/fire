@@ -381,7 +381,7 @@ class Manager {
 
 	public function handleMovementPhase(){
 		Debug::log("handleMovementPhase");
-		if (DBManager::app()->resolveMovement($this->gameid)){
+		if (DBManager::app()->resolveMovement($this->ships)){
 			return true;
 		}
 	}

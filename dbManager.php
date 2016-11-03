@@ -454,6 +454,17 @@ class DBManager {
 		} else return false;
 	}
 
+	public function issueMovement($gameid, $ships){
+		for ($i = 0; $i < sizeof($ships); $i++){
+			if  ($this->insertActionsForShip($ships[$i]["id"], $ships[$i]["actions"])){
+				continue;
+			}
+			else return false;
+
+		}
+		return true;
+	}
+
 	public function insertActionsForShip($shipid, $actions){
 		$stmt = $this->connection->prepare("
 			INSERT INTO shipactions 
@@ -484,17 +495,6 @@ class DBManager {
 			else {
 				return false;
 			}
-		}
-		return true;
-	}
-
-	public function issueMovement($gameid, $ships){
-		for ($i = 0; $i < sizeof($ships); $i++){
-			if  ($this->insertActionsForShip($ships[$i]["id"], $ships[$i]["actions"])){
-				continue;
-			}
-			else return false;
-
 		}
 		return true;
 	}
@@ -979,9 +979,9 @@ class DBManager {
 		return true;
 	}
 
-	public function resolveMovement($gameid){
+	public function resolveMovement($ships){
 		Debug::log("resolveMovement");
-		$ships = $this->getActiveShips($gameid);
+
 		$stmt = $this->connection->prepare("
 			UPDATE shipactions
 			SET resolved = 1
@@ -990,7 +990,7 @@ class DBManager {
 		");
 
 		for ($i = 0; $i < sizeof($ships); $i++){
-			$stmt->bindParam(":shipid", $ships[$i]["id"]);
+			$stmt->bindParam(":shipid", $ships[$i]->id);
 			$stmt->execute();
 
 			if ($stmt->errorCode() == 0){

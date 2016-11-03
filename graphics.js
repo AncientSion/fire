@@ -37,7 +37,7 @@ function drawBeam(weapon, ox, oy, x, y){
 	fxCtx.lineTo(x, y);
 	fxCtx.closePath();
 	fxCtx.strokeStyle = weapon.animColor;
-	fxCtx.lineWidth = weapon.width;
+	fxCtx.lineWidth = weapon.beamWidth;
 	fxCtx.stroke();
 	
 	/*fxCtx.globalAlpha = 0.6;

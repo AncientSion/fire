@@ -87,19 +87,20 @@ function System(id, parentId, name, display){
 		var parentId = this.parentId;
 		var selected = false;
 
-		if (this.hasActiveFireOrder()){
-			this.unsetFireOrder();
-		}
+		if (this.canFire()){
+			if (this.hasActiveFireOrder()){
+				this.unsetFireOrder();
+			}
 
-		if (this.selected){
-			this.selected = false;
-		}
-		else {
-			this.selected = true;
-		}
+			if (this.selected){
+				this.selected = false;
+			}
+			else {
+				this.selected = true;
+			}
 
-
-		this.setTableRow();
+			this.setTableRow();
+		}
 
 		var ship = game.getShipById(parentId);
 	
@@ -300,13 +301,14 @@ function System(id, parentId, name, display){
 	}
 }
 				
-function Weapon(id, parentId, name, display, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4){
+function Weapon(id, parentId, name, display, exploSize, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4){
 	this.minDmg = minDmg;
 	this.maxDmg = maxDmg;
 	this.shots = shots;
 	this.reload = reload;
 	this.loaded;
 	this.accDecay = accDecay;
+	this.exploSize = exploSize;
 	this.fireOrders = [];
 	this.arc = [
 				[arc1, arc2]
@@ -330,32 +332,22 @@ function Weapon(id, parentId, name, display, output, minDmg, maxDmg, accDecay, s
 
 	this.getTimeLoaded = function(){
 
-		var load = this.reload;
-		var limit;
+		var turnsLoaded = this.reload // 3
+		var max = this.reload;
 
-		if (game.phase == 2){
-			limit = game.turn-1;
-		}
-		else if (game.phase == 3){
-			limit = game.turn;
-		}
-
-
-		if (this.fireOrders.length){
-			for (var i = 0; i <= limit; i++){
-				if (load < this.reload){
-					load++;
-				}
-
-				for (var j = 0; j < this.fireOrders.length; j++){
-					if (this.fireOrders[j].turn == i){
-						load = 0;
-					}
+		for (var i = 1; i <= game.turn; i++){
+			if (turnsLoaded < max){
+				turnsLoaded++;
+			}
+			for (var j = 0; j < this.fireOrders.length; j++){
+				if (this.fireOrders[j].turn == i){
+					turnsLoaded = 0;
+					break;
 				}
 			}
 		}
 
-		return load;
+		return turnsLoaded;
 	}
 
 	this.getDamage = function(){
@@ -368,25 +360,26 @@ function Weapon(id, parentId, name, display, output, minDmg, maxDmg, accDecay, s
 Weapon.prototype = Object.create(System.prototype);
 
 
-function Particle(id, parentId, name, display, animColor, projSize, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4){
-	Weapon.call(this, id, parentId, name, display, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4);	
+function Particle(id, parentId, name, display, exploSize, animColor, projSize, projSpeed, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4){
+	Weapon.call(this, id, parentId, name, display, exploSize, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4);	
 	this.type = "particle";
 	this.animation = "projectile";
 	this.animColor = animColor;
 	this.projSize = projSize;
+	this.projSpeed = projSpeed;
 }
 Particle.prototype = Object.create(Weapon.prototype);
 
 
-function Laser(id, parentId, name, display, rakeTime, animColor, width, output, minDmg, maxDmg, optRange, dmgDecay, accDecay, shots, reload, arc1, arc2, arc3, arc4){
-	Weapon.call(this, id, parentId, name, display, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4);	
+function Laser(id, parentId, name, display, exploSize, rakeTime, animColor, beamWidth, output, minDmg, maxDmg, optRange, dmgDecay, accDecay, shots, reload, arc1, arc2, arc3, arc4){
+	Weapon.call(this, id, parentId, name, display, exploSize, output, minDmg, maxDmg, accDecay, shots, reload, arc1, arc2, arc3, arc4);	
+	this.type = "laser";
+	this.animation = "beam";
 	this.optRange = optRange;
 	this.dmgDecay = dmgDecay;
 	this.rakeTime = rakeTime;
-	this.type = "laser";
-	this.animation = "beam";
 	this.animColor = animColor;
-	this.width = width;
+	this.beamWidth = beamWidth;
 	
 	this.getFillStyle = function(x, y, dist){
 		var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);
