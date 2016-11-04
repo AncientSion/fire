@@ -675,7 +675,7 @@ class DBManager {
 	}
 
 	public function getReinforcePoints($gameid, $userid = 0){
-		debug::log("getShipBuyValue");
+		debug::log("getReinforcePoints");
 		if (! $userid){
 			return false;
 		}

@@ -18,6 +18,18 @@ function Ship(id, shipclass, x, y, facing, userid){
 	this.profile = [];
 	this.mass = 0;
 
+	this.getDamageEntriesByFireId = function(fireid){
+		var ret = [];
+		for (var i = 0; i < this.structures.length; i++){
+			for (var j = 0; j < this.structures[i].damages.length; j++){
+				if (this.structures[i].damages[j].fireid == fireid){
+					ret.push(this.structures[i].damages[j]);
+				}
+			}
+		}
+		return ret;
+	}
+
 	this.drawShipForPreview = function(){
 		shipCtx.clearRect(0, 0, res.x, res.y);
 		shipCtx.save();

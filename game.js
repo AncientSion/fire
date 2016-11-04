@@ -462,7 +462,7 @@ function Game(id, name, status, userid, turn, phase){
 		this.drawShips();		
 	}
 	
-	this.drawShips = function(){	
+	this.drawShips = function(){
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].draw();
 		}
@@ -712,12 +712,17 @@ function Game(id, name, status, userid, turn, phase){
 		//	console.log("getShotDetails");
 		//	this.fireOrders = [this.fireOrders[0]];
 
+		for (var i = 0; i < this.ships.length; i++){
+		}
+
 
 		for (var i = 0; i < this.fireOrders.length; i++){
 			this.fireOrders[i].shooter = game.getShipById(this.fireOrders[i].shooterId);
 			this.fireOrders[i].target = game.getShipById(this.fireOrders[i].targetId);
 			this.fireOrders[i].weapon = this.fireOrders[i].shooter.getSystemById(this.fireOrders[i].weaponId);
 			this.fireOrders[i].hits = [this.fireOrders[i].hits];
+			this.fireOrders[i].damages = this.fireOrders[i].target.getDamageEntriesByFireId(this.fireOrders[i].id);
+
 		}
 		
 		for (var i = 0; i < this.fireOrders.length; i++){
@@ -731,6 +736,9 @@ function Game(id, name, status, userid, turn, phase){
 								if (a.targetId == b.targetId){
 									if (a.weapon.name == b.weapon.name){
 										this.fireOrders[i].guns += this.fireOrders[j].guns;
+										for (var k = 0; k < this.fireOrders[j].damages.length; k++){
+											this.fireOrders[i].damages.push(this.fireOrders[j].damages[k])
+										}
 										this.fireOrders[i].hits.push(this.fireOrders[j].hits[0]);
 										this.fireOrders[j].guns = 0;
 									}
@@ -743,24 +751,23 @@ function Game(id, name, status, userid, turn, phase){
 		}
 
 
-		for (var i = 0; i < this.fireOrders.length; i++){
-			this.fireOrders[i].dist = getDistance(
-													{
-														x: this.fireOrders[i].shooter.x,
-														y: this.fireOrders[i].shooter.y
-													},
-													{	x: this.fireOrders[i].target.x,
-														y: this.fireOrders[i].target.y
-													}
-												);
-		}
-
 
 		//console.log(this.fireOrders);
 		for (var i = this.fireOrders.length-1; i >= 0; i--){
 			if (! this.fireOrders[i].guns){
 				this.fireOrders.splice(i, 1);
 
+			}
+			else {
+				this.fireOrders[i].dist = getDistance(
+														{
+															x: this.fireOrders[i].shooter.x,
+															y: this.fireOrders[i].shooter.y
+														},
+														{	x: this.fireOrders[i].target.x,
+															y: this.fireOrders[i].target.y
+														}
+													);
 			}
 		}
 	}
@@ -828,9 +835,8 @@ function Game(id, name, status, userid, turn, phase){
 								animated: false
 						}
 					}
-					
 					if (hit){
-						subAnim.explo = {t: [0, 100], s: this.fireOrders[k].weapon.exploSize};
+						subAnim.explo = {t: [0, 130], s: this.fireOrders[i].weapon.exploSize};
 					}
 					//		console.log(subAnim);
 				
@@ -850,7 +856,7 @@ function Game(id, name, status, userid, turn, phase){
 	
 		animation = setInterval(function(){
 
-			$("#combatLog").show();
+			$("#combatlogWrapper").show();
 			fxCtx.clearRect(0, 0, res.x, res.y);
 
 			for (var i = 0; i  < game.fireOrders.length; i++){
@@ -868,16 +874,16 @@ function Game(id, name, status, userid, turn, phase){
 									if (game.fireOrders[i].anim[j][k].t[0] > 0){ // t valid, now animate
 	x = game.fireOrders[i].anim[j][k].ox + (game.fireOrders[i].anim[j][k].v.x * game.fireOrders[i].anim[j][k].t[0] / game.fireOrders[i].anim[j][k].t[1]);
 	y = game.fireOrders[i].anim[j][k].oy + (game.fireOrders[i].anim[j][k].v.y * game.fireOrders[i].anim[j][k].t[0] / game.fireOrders[i].anim[j][k].t[1]);
-										drawProjectile(game.fireOrders[i].weapon, x, y);
+	drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].ox, game.fireOrders[i].anim[j][k].oy, x, y);
 									}
 								}
 								else {// animate EXPLO
 									if (game.fireOrders[i].anim[j][k].explo){
 										if (game.fireOrders[i].anim[j][k].explo.t[0] < game.fireOrders[i].anim[j][k].explo.t[1]){
-											game.fireOrders[i].anim[j][k].explo.t[0] += 10;
+											game.fireOrders[i].anim[j][k].explo.t[0] += 5;
 	x = game.fireOrders[i].anim[j][k].ox + game.fireOrders[i].anim[j][k].v.x;
 	y = game.fireOrders[i].anim[j][k].oy + game.fireOrders[i].anim[j][k].v.y;	
-											drawExplosion(x, y, game.fireOrders[i].anim[j][k].explo.s * game.fireOrders[i].anim[j][k].explo.t[0] / game.fireOrders[i].anim[j][k].explo.t[1]); // EXPLO
+	drawExplosion(x, y, game.fireOrders[i].anim[j][k].explo.s, game.fireOrders[i].anim[j][k].explo.t[0], game.fireOrders[i].anim[j][k].explo.t[1]); // EXPLO
 										}
 										else {
 											game.fireOrders[i].anim[j][k].animated = true;
@@ -893,10 +899,10 @@ function Game(id, name, status, userid, turn, phase){
 
 								x = game.fireOrders[i].anim[j][k].tax + (game.fireOrders[i].anim[j][k].v.x * game.fireOrders[i].anim[j][k].t[0] / game.fireOrders[i].anim[j][k].t[1]);
 								y = game.fireOrders[i].anim[j][k].tay + (game.fireOrders[i].anim[j][k].v.y * game.fireOrders[i].anim[j][k].t[0] / game.fireOrders[i].anim[j][k].t[1]);
-								drawBeam(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].ox, game.fireOrders[i].anim[j][k].oy, x, y); // BEAM
+	drawBeam(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].ox, game.fireOrders[i].anim[j][k].oy, x, y); // BEAM
 								if (game.fireOrders[i].anim[j][k].explo){
 									game.fireOrders[i].anim[j][k].explo.t[0] = game.fireOrders[i].anim[j][k].explo.t[1];		
-									drawExplosion(x, y, game.fireOrders[i].anim[j][k].explo.s * game.fireOrders[i].anim[j][k].explo.t[0] / game.fireOrders[i].anim[j][k].explo.t[1]); // EXPLO
+	drawBeamExplosion(x, y, game.fireOrders[i].anim[j][k].explo.s, game.fireOrders[i].anim[j][k].t[0], game.fireOrders[i].anim[j][k].t[1]); // EXPLO
 								}
 								if (game.fireOrders[i].anim[j][k].t[0] == game.fireOrders[i].anim[j][k].t[1]){
 									game.fireOrders[i].anim[j][k].animated = true;
@@ -950,15 +956,23 @@ function Game(id, name, status, userid, turn, phase){
 
 		 var shots = 0;
 		 var hits = 0;
+
+		 var struct = 0;
+		 var armour = 0;
 		
 		for (var i = 0; i < fire.guns; i++){
 			shots += fire.weapon.shots;
 			hits += fire.hits[i];
 		}
+		for (var i = 0; i < fire.damages.length; i++){
+			struct += fire.damages[i].structDmg;
+			armour += fire.damages[i].armourDmg;
+		}
 
 		var log = document.getElementById("combatLog");
 
 		var tr = document.createElement("tr");
+			tr.style.borderBottom = "2px solid black";
 		var td = document.createElement("td");
 			td.innerHTML = "FIRE:"; tr.appendChild(td);
 
@@ -967,13 +981,15 @@ function Game(id, name, status, userid, turn, phase){
 		var td = document.createElement("td");
 			td.innerHTML = fire.target.shipClass + " #" + fire.target.id; tr.appendChild(td);
 		var td = document.createElement("td");
-			td.innerHTML = fire.weapon.name; tr.appendChild(td);
-		var td = document.createElement("td");
-			td.innerHTML = fire.guns; tr.appendChild(td);
+			td.innerHTML = fire.guns + "x " + fire.weapon.name; tr.appendChild(td);
 		var td = document.createElement("td");
 			td.innerHTML = hits; tr.appendChild(td);
 		var td = document.createElement("td");
 			td.innerHTML = shots; tr.appendChild(td);
+		var td = document.createElement("td");
+			td.innerHTML = armour; tr.appendChild(td);
+		var td = document.createElement("td");
+			td.innerHTML = struct; tr.appendChild(td);
 		
 			log.appendChild(tr);
 	}

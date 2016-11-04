@@ -28,7 +28,7 @@ class HeavyLaser extends Laser {
 	public $animColor = "red";
 	public $rakeTime = 70;
 	public $beamWidth = 2;
-	public $exploSize = 10;
+	public $exploSize = 6;
 	public $minDmg = 400;
 	public $maxDmg = 400;
 	public $optRange = 800;
@@ -48,7 +48,7 @@ class NeutronLaser extends Laser {
 	public $rakeTime = 40;
 	public $animColor = "blue";
 	public $beamWidth = 2;
-	public $exploSize = 7;
+	public $exploSize = 5;
 	public $minDmg = 350;
 	public $maxDmg = 350;
 	public $optRange = 1000;

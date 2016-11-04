@@ -16,10 +16,10 @@ class StandardParticleBeam extends Particle {
 	public $maxDmg = 80;
 	public $accDecay = 150;
 	public $shots = 3;
-	public $animColor = "black";
-	public $projSize = 2;
-	public $projSpeed = 5;
-	public $exploSize = 3;
+	public $animColor = "blue";
+	public $projSize = 4;
+	public $projSpeed = 4;
+	public $exploSize = 4;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -33,8 +33,8 @@ class FusionCannon extends Particle {
 	public $accDecay = 130;
 	public $shots = 2;
 	public $animColor = "blue";
-	public $projSize = 2;
-	public $projSpeed = 4;
+	public $projSize = 4;
+	public $projSpeed = 3;
 	public $exploSize = 5;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){

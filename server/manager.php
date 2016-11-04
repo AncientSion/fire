@@ -1,7 +1,6 @@
 <?php
 
 
-
 class Manager {
 	public $userid;
 	public $gameid;
@@ -11,11 +10,13 @@ class Manager {
 	public $index = 0;
 
 	public $ships = array();
-	public $incoming = array();
 	public $gd = array();
 	public $fires = array();
 	public $damages = array();
 	public $playerstatus = array();
+	public $reinforcements = array();
+	public $reinforce = array();
+	public $incoming = array();
 
 	function __construct($userid = 0, $gameid = 0){
 		$this->userid = $userid;
@@ -31,9 +32,9 @@ class Manager {
 			if ($this->turn == -1){
 				return;
 			}
-		}
-		else {
-			return;
+			else {
+				$this->getGameData();
+			}
 		}
 	}
 
@@ -128,7 +129,7 @@ class Manager {
 		$ships;
 
 		$this->game = $db->getGameDetails($this->gameid);
-		echo json_encode($this->game);
+		//echo json_encode($this->game);
 		$this->turn = $this->game["turn"];
 		$this->phase = $this->game["phase"];
 

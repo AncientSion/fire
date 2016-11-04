@@ -14,8 +14,6 @@ $manager = new Manager($userid, $gameid);
 
 echo "<script> window.gameid = ".$gameid."; window.userid = ".$userid.";</script>";
 
-//$manager->pickReinforcements();
-
 $phase;
 
 switch ($manager->game["phase"]){
@@ -42,20 +40,6 @@ foreach ($manager->playerstatus as $player){
 		$status = $player["status"];
 	}
 }
-
-//echo sizeof($ships);
-//echo var_export($ships[0]);
-//$fireorders = $manager->fires;
-
-/*$w = new Omega(5, 2, "test", 50, 25, 90);
-
-foreach ($w->systems[0] as $key => $value){
-		if ($value == NULL){$value = "null";} echo "key: ".$key." val: ".$value."</br>";
-	}
-*/
-	
-//	var_export(json_encode($manager->fireOrders));
-
 echo "<script>";
 echo "window.gd = ".json_encode($manager->game, JSON_NUMERIC_CHECK).";";
 echo "window.ships = ".json_encode($manager->ships, JSON_NUMERIC_CHECK).";";
@@ -90,7 +74,7 @@ echo "</script>";
 			</div>
 		</div>
 		<div id="game">
-			<div id ="phaseSwitchDiv" class="disabled">
+			<div id ="phaseSwitchDiv">
 				<div id="phaseSwitchInnerDiv">
 					<div id="turnDiv">
 					</div>
@@ -142,29 +126,34 @@ echo "</script>";
 						</tr>
 					</table>
 				</div>
-				<div id="combatlogWrapper">
-					<table id="combatLog" class="disabled">
+				<div id="combatlogWrapper" class="disabled">
+					<table id="combatLog">
+						<tr style="border: 1px solid black">
+							<th colspan=8 style="font-size: 16px; width: 100%">
+								Combat Log
+							</th>
+						</tr>
 						<tr>
-							<th style="width: 10%">
+							<th style="width: 45px">
 								Type
 							</th>
-							<th style="width: 20%">
+							<th style="width: 90px">
 								Shooter
 							</th>
-							<th style="width: 20%">
+							<th style="width: 90px">
 								Target
 							</th>
-							<th style="width: 20%">
+							<th style="width: 100px">
 								Weapon
 							</th>
-							<th style="width: 10%">
-								Guns
-							</th>
-							<th style="width: 10%">
+							<th style="width: 10px">
 								Hits
 							</th>
-							<th style="width: 10%">
+							<th style="width: 60px">
 								Shots
+							</th>
+							<th colSpan = 2 style="width: 20px">
+								Damage
 							</th>
 						</tr>
 					</table>
@@ -301,6 +290,12 @@ echo "</script>";
 				}
 			})
 		})
+
+		document.getElementById("combatlogWrapper").onmousedown = function () {
+		    _drag_init(this);
+		    return false;
+		};
+
 	})
 
 

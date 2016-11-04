@@ -79,6 +79,7 @@ function FireOrder(id, shooterId, targetId, weaponId, turn, hits){
 	this.anim = [];
 	this.turn = turn;
 	this.hits = hits;
+	this.damages = [];
 }
 
 function Damage (id, fireid, gameid, shipid, structureid, turn, type, totalDmg, shieldDmg, structDmg, armourDmg, mitigation, destroyed, notes){
