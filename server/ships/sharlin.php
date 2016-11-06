@@ -21,21 +21,21 @@ class Sharlin extends Ship {
 	public function addStructures(){
 		$structs = [];
 
-		$left = new Structure($this->getId(), $this->id, 240, 360, 4000, 3500, 85);
+		$left = new Structure($this->getId(), $this->id, 240, 360, 4500, 3750, 85);
 		$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 		$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 		$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
 		$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
 		$structs[] = $left;
 
-		$right = new Structure($this->getId(), $this->id, 0, 120, 4000, 3500, 85);
+		$right = new Structure($this->getId(), $this->id, 0, 120, 4500, 3750, 85);
 		$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 		$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 		$right->systems[] = new FusionCannon($this->getId(), $this->id, 0, 120);
 		$right->systems[] = new FusionCannon($this->getId(), $this->id, 0, 120);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 120, 240, 3000, 2000, 75);
+		$aft = new Structure($this->getId(), $this->id, 120, 240, 3500, 2500, 75);
 		$aft->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 		$aft->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 		$aft->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);

@@ -7,9 +7,9 @@ class Tinashi extends Ship {
 	public $faction = "Minbari Federation";
 	public $size = 80;
 	public static $value = 1100;
-	public $profile = array(0.75, 0.9);
+	public $profile = array(0.9, 1.1);
 	public $mass = 9000;
-	public $ep = 450;
+	public $ep = 300;
 
 	function __construct($id, $userid, $x, $y, $facing, $available){		
         parent::__construct($id, $userid, $x, $y, $facing, $available);
@@ -18,19 +18,19 @@ class Tinashi extends Ship {
 	public function addStructures(){
 		$structs = [];
 
-		$left = new Structure($this->getId(), $this->id, 240, 360, 2000, 1500, 70);
+		$left = new Structure($this->getId(), $this->id, 240, 360, 1750, 1250, 70);
 		$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 		$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
 		$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
 		$structs[] = $left;
 
-		$right = new Structure($this->getId(), $this->id, 0, 120, 2000, 1500, 70);
+		$right = new Structure($this->getId(), $this->id, 0, 120, 1750, 1250, 70);
 		$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 		$right->systems[] = new FusionCannon($this->getId(), $this->id, 0, 120);
 		$right->systems[] = new FusionCannon($this->getId(), $this->id, 0, 120);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 120, 240, 1250, 1000, 65);
+		$aft = new Structure($this->getId(), $this->id, 120, 240, 1750, 1250, 65);
 		$aft->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
 		$aft->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
 		$aft->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);

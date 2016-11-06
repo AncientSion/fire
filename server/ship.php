@@ -78,7 +78,7 @@ class Ship {
 		return $fire;
 	}
 
-	public function createDamageObject($fire){
+	public function createDamageObject($fire, $index){
 		//Debug::log("createDamageObject");	
 		$structure = $this->getStructureById($fire->pick);
 
@@ -94,10 +94,8 @@ class Ship {
 		$armourDmg = round($dmg / 100 * $mitigation);
 		$structDmg = round($dmg - $armourDmg);
 
-		$notes = "";
-		$destroyed = false;
-		$type = $fire->weapon->type;
-
+		//debug::log("index: ".$index);
+		//gadebug::log("rolls: ".$fire->rolls[$index]);
 
 		$dmg = new Damage(
 			sizeof($structure->damages)+1,
@@ -106,14 +104,15 @@ class Ship {
 			$this->id, 
 			$structure->id, 
 			$fire->turn,
-			$type,
+			$fire->rolls[$index],
+			$fire->weapon->type,
 			$fire->dmgRoll,
 			$shielDmg,
 			$structDmg, 
 			$armourDmg,
 			$mitigation,
-			$destroyed,
-			$notes,
+			false,
+			"",
 			1
 		);
 		return $dmg;

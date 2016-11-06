@@ -5,11 +5,11 @@ class WhiteStar extends Ship {
 	public $shipClass = "WhiteStar";
 	public $name = "White Star";
 	public $faction = "Minbari Federation";
-	public $size = 80;
+	public $size = 40;
 	public static $value = 600;
-	public $profile = array(0.55, 65);
-	public $mass = 3250;
-	public $ep = 300;
+	public $profile = array(1, 1.1);
+	public $mass = 2750;
+	public $ep = 120;
 
 	function __construct($id, $userid, $x, $y, $facing, $available){		
         parent::__construct($id, $userid, $x, $y, $facing, $available);
@@ -18,21 +18,20 @@ class WhiteStar extends Ship {
 	public function addStructures(){
 		$structs = [];
 
-		$left = new Structure($this->getId(), $this->id, 240, 360, 750, 750, 60);
-		$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
-		$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
-		$structs[] = $left;
+		$front = new Structure($this->getId(), $this->id, 300, 60, 450, 450, 70);
+		$front->systems[] = new NeutronLaser($this->getId(), $this->id, 330, 30);
+		$front->systems[] = new NeutronLaser($this->getId(), $this->id, 330, 30);
+		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 0, 120, 750, 750, 60);
-		$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
-		$right->systems[] = new FusionCannon($this->getId(), $this->id, 0, 120);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 450, 450, 70);
+		$right->systems[] = new FusionPulsar($this->getId(), $this->id, 0, 60);
+		$right->systems[] = new FusionPulsar($this->getId(), $this->id, 0, 60);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 120, 240, 750, 750, 60);
-		$aft->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
-		$aft->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
-		$structs[] = $aft;
-
+		$left = new Structure($this->getId(), $this->id, 180, 300, 450, 450, 70);
+		$left->systems[] = new FusionPulsar($this->getId(), $this->id, 300, 360);
+		$left->systems[] = new FusionPulsar($this->getId(), $this->id, 300, 360);
+		$structs[] = $left;
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 		}

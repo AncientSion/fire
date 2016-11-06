@@ -504,7 +504,10 @@ canvas {
 	margin: auto;
 }
 
-#combatLog th, td {
+#combatLog th {
+	border: 1px solid black;
+}
+#combatLog td {
 	border: 1px solid black;
 }
 
@@ -571,6 +574,8 @@ canvas {
 	z-index: 10;
 	position: absolute;
 	text-align: center;
+	font-size: 14px;
+	padding: 3px;
 }
 
 .shipAvailable {

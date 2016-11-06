@@ -539,7 +539,7 @@ function Ship(id, shipclass, x, y, facing, userid){
 	}
 	
 	this.getBaseTurnDelay = function(){
-		return Math.ceil(Math.pow(this.mass, 0.5));
+		return Math.ceil(Math.pow(this.mass, 0.55));
 	}
 	
 	this.getTurnDelay = function(){
@@ -550,14 +550,19 @@ function Ship(id, shipclass, x, y, facing, userid){
 		var shipPos = this.getBaseOffsetPos();
 		moveCtx.beginPath();			
 		moveCtx.arc(shipPos.x, shipPos.y, this.size/2, 0, 2*Math.PI, false);
+		moveCtx.fillStyle = 
 		moveCtx.closePath();
 		
 		if (this.friendly){
 			moveCtx.strokeStyle = "green";
 		}
-		else moveCtx.strokeStyle = "red";
-	
+		else {
+			moveCtx.strokeStyle = "red";
+		}
+
+		moveCtx.lineWidth = 3;
 		moveCtx.stroke();
+		moveCtx.lineWidth = 1;
 		moveCtx.strokeStyle = "black";
 	}
 	

@@ -5,7 +5,7 @@ include_once 'global.php';
 if (isset($_SESSION["userid"])){
 	$gameid = $_GET["gameid"];
 	$playerid = $_SESSION["userid"];
-	
+
 	$_SESSION["gameid"] = $_GET["gameid"];
 	echo "<script> var gameid = ".$gameid."; var playerid = ".$playerid.";</script>";
 	$dbManager = DBManager::app($gameid);
@@ -595,7 +595,7 @@ else {
 
 	function leaveGame(){
 		console.log("leaveGame");
-		ajax.leaveGame(playerid, gameid, refresh);
+		ajax.leaveGame(playerid, gameid);
 	}
 
 </script>

@@ -318,6 +318,7 @@ function Weapon(id, parentId, name, display, exploSize, output, minDmg, maxDmg, 
 		if (this.getLoadLevel() >= 1){
 			return true;
 		}
+		else return false;
 	}
 
 	this.getLoadLevel = function(){
@@ -327,7 +328,10 @@ function Weapon(id, parentId, name, display, exploSize, output, minDmg, maxDmg, 
 		if (has / need > 1){
 			return 1;
 		}
-		else return has/need;
+		else if (has > 0){
+			return has/need;
+		}
+		else return has;
 	}
 
 	this.getTimeLoaded = function(){
@@ -340,7 +344,7 @@ function Weapon(id, parentId, name, display, exploSize, output, minDmg, maxDmg, 
 				turnsLoaded++;
 			}
 			for (var j = 0; j < this.fireOrders.length; j++){
-				if (this.fireOrders[j].turn == i){
+				if (this.fireOrders[j].turn == i && this.fireOrders[j].resolved == 1){
 					turnsLoaded = 0;
 					break;
 				}

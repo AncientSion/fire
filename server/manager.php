@@ -29,7 +29,8 @@ class Manager {
 		else if ($this->gameid){
 			$this->getGameAndPlayerStatus();
 
-			if ($this->turn == -1){
+			if ($this->game["status"] == "open"){
+				Debug::log("open");
 				return;
 			}
 			else {
@@ -135,7 +136,7 @@ class Manager {
 
 		$this->playerstatus = $db->getPlayerStatus($this->gameid);
 		$this->reinforce = $db->getReinforcePoints($this->gameid, $this->userid);
-
+		debug::log("turn: ".$this->turn);
 		$ships = $db->getActiveShips($this->gameid, $this->turn);
 		$ships = $db->getActionsForShips($ships);
 
@@ -294,6 +295,7 @@ class Manager {
 
 	public function doAdvanceGameState(){
 		Debug::log("doAdvanceGameState for game".$this->gameid);
+		Debug::log("OLD: ".$this->phase);
 
 		switch ($this->phase){
 			case -1; // from deploy to move
@@ -318,6 +320,7 @@ class Manager {
 				break;
 		}
 
+		Debug::log("NEW: ".$this->phase);
 		return true;
 	}
 
@@ -343,7 +346,7 @@ class Manager {
 
 	public function handleDeploymentPhase(){
 		Debug::log("handleDeploymentPhase");
-		if (DBManager::app()->resolveDeployment($this->gameid)){
+		if (DBManager::app()->resolveDeployment($this->gameid, $this->turn)){
 			return true;
 		}
 	}
@@ -351,13 +354,13 @@ class Manager {
 	public function startMovementPhase(){
 		Debug::log("startMovementPhase");
 		$dbManager = DBManager::app();
-		$phase = 1;
+		$this->phase = 1;
 
-		if ($dbManager->setGameTurnPhase($this->gameid, $this->turn, $phase)){
+		if ($dbManager->setGameTurnPhase($this->gameid, $this->turn, $this->phase)){
 			$players = $dbManager->getPlayerStatus($this->gameid);
 
 			for ($i = 0; $i < sizeof($players); $i++){
-				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->turn, $phase, "waiting")){
+				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->turn, $this->phase, "waiting")){
 					continue;
 				}
 				else {
@@ -379,13 +382,13 @@ class Manager {
 	public function startFiringPhase(){
 		Debug::log("startFiringPhase");
 		$dbManager = DBManager::app();
-		$phase = 2;
+		$this->phase = 2;
 
-		if ($dbManager->setGameTurnPhase($this->gameid, $this->turn, $phase)){
+		if ($dbManager->setGameTurnPhase($this->gameid, $this->turn, $this->phase)){
 			$players = $dbManager->getPlayerStatus($this->gameid);
 
 			for ($i = 0; $i < sizeof($players); $i++){
-				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->turn, $phase, "waiting")){
+				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->turn, $this->phase, "waiting")){
 					continue;
 				}
 				else {
@@ -495,24 +498,18 @@ class Manager {
 
 	public function rollForHit($fire){
 		//Debug::log("rollForHit for fire ID ".$fire->id);
-
-		$hits = 0;
-		$notes = "";
-
 		$fire = $fire->weapon->rollForHit($fire);
 		return $fire;
 	}
 
 	public function rollForDamage($fire){
 		//Debug::log("rollForDamage for fire ID ".$fire->id);	
-
 		$fire = $fire->weapon->getDamage($fire);
 		return $fire;
 	}
 
 	public function getHitSection($fire){
-		//Debug::log("getHitSection for fire ID ".$fire->id);	
-
+		//Debug::log("getHitSection for fire ID ".$fire->id);
 		$fire = $fire->target->getHitSection($fire);
 		return $fire;
 	}
@@ -522,7 +519,7 @@ class Manager {
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->id == $fire->targetid){
 				for ($j = 0; $j < $fire->hits; $j++){
-					$dmg = $this->ships[$i]->createDamageObject($fire);
+					$dmg = $this->ships[$i]->createDamageObject($fire, $j);
 					$this->ships[$i]->applyDamage($fire->pick, $dmg);
 					$this->damages[] = $dmg;
 				}
@@ -538,7 +535,7 @@ class Manager {
 
 	public function writeDamageEntries(){
 		debug::log("writeDamageEntries");
-		DBManager::app()->insertDamageEntires($this->damages);
+		DBManager::app()->insertDamageEntries($this->damages);
 	}
 
 

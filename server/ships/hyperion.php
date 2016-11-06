@@ -6,7 +6,7 @@ class Hyperion extends Ship {
 	public $faction = "Earth Alliance";
 	public $size = 45;
 	public static $value = 850;
-	public $profile = array(0.70, 0.85);
+	public $profile = array(0.90, 1.10);
 	public $mass = 8000;
 	public $ep = 260;
 
@@ -17,12 +17,12 @@ class Hyperion extends Ship {
 	public function addStructures(){
 		$structs = [];
 
-		$front = new Structure($this->getId(), $this->id, 330, 30, 1750, 1500, 70);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 1250, 1250, 70);
 		$front->systems[] = new HeavyLaser($this->getId(), $this->id, 300, 360);
 		$front->systems[] = new HeavyLaser($this->getId(), $this->id, 0, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 30, 150, 1500, 1250, 60);
+		$right = new Structure($this->getId(), $this->id, 30, 150, 1000, 1000, 60);
 		$right->systems[] = new StandardParticleBeam($this->getId(), $this->id, 0, 180);
 		$right->systems[] = new StandardParticleBeam($this->getId(), $this->id, 0, 180);
 		$right->systems[] = new StandardParticleBeam($this->getId(), $this->id, 0, 180);
@@ -33,7 +33,7 @@ class Hyperion extends Ship {
 		$aft->systems[] = new HeavyLaser($this->getId(), $this->id, 180, 240);
 		$structs[] = $aft;
 
-		$left = new Structure($this->getId(), $this->id, 210, 330, 1500, 1250, 60);
+		$left = new Structure($this->getId(), $this->id, 210, 330, 1000, 1000, 60);
 		$left->systems[] = new StandardParticleBeam($this->getId(), $this->id, 180, 360);
 		$left->systems[] = new StandardParticleBeam($this->getId(), $this->id, 180, 360);
 		$left->systems[] = new StandardParticleBeam($this->getId(), $this->id, 180, 360);

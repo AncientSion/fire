@@ -18,13 +18,15 @@ spl_autoload_register(
                 'weapon' => '/server/systems/system.php',
 
                 'laser' => '/server/systems/weapons/laser.php',
+                'lightlaser' => '/server/systems/weapons/laser.php',
                 'heavylaser' => '/server/systems/weapons/laser.php',
                 'neutronlaser' => '/server/systems/weapons/laser.php',
 
                 'particle' => '/server/systems/weapons/particle.php',
                 'standardparticlebeam' => '/server/systems/weapons/particle.php',
                 'fusioncannon' => '/server/systems/weapons/particle.php',
-
+                'fusionpulsar' => '/server/systems/weapons/particle.php',
+                
                 'structure' => '/server/systems/structure.php',
 
                 'debug' => '/server/debug.php',

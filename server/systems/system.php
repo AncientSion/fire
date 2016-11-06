@@ -1,6 +1,5 @@
 <?php
 
-
 class System {
 	public $id;
 	public $parentId;
@@ -39,13 +38,13 @@ class Weapon extends System {
 	}
 
 	public function rollForHit($fire){
+		//Debug::log("rollForHit");	
 		$hits = 0;
 		$notes = "";
 
 		for ($j = 0; $j < $this->shots; $j++){
 				$roll = mt_rand(1, 100);
-				$notes = $notes.$roll.",";
-
+				$fire->rolls[] = $roll;
 			if ($roll <= $fire->req){
 				$hits++;
 			}
@@ -53,7 +52,6 @@ class Weapon extends System {
 
 		$fire->hits = $hits;
 		$fire->notes = $notes;
-
 		return $fire;
 	}
 

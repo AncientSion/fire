@@ -67,28 +67,32 @@ function Path (a, b){
 	this.setup();
 };
 
-function FireOrder(id, shooterId, targetId, weaponId, turn, hits){
+function FireOrder(id, turn, shooterId, targetId, weaponId, req, notes, hits, resolved){
 	this.id = id;
-	this.weaponId = weaponId;
-	this.targetId = targetId;
+	this.turn = turn;
 	this.shooterId = shooterId;
+	this.targetId = targetId;
+	this.weaponId = weaponId;
+	this.req = req;
+	this.notes = notes;
+	this.hits = hits;
+	this.resolved = resolved;
 	this.dist;
 	this.shots;
 	this.guns = 1;
 	this.animated = false;
 	this.anim = [];
-	this.turn = turn;
-	this.hits = hits;
 	this.damages = [];
 }
 
-function Damage (id, fireid, gameid, shipid, structureid, turn, type, totalDmg, shieldDmg, structDmg, armourDmg, mitigation, destroyed, notes){
+function Damage (id, fireid, gameid, shipid, structureid, turn, roll, type, totalDmg, shieldDmg, structDmg, armourDmg, mitigation, destroyed, notes){
 	this.id = id;
 	this.fireid = fireid;
 	this.gameid = gameid;
 	this.shipid = shipid;
 	this.structureid = structureid;
 	this.turn = turn;
+	this.roll = roll;
 	this.type = type;
 	this.totalDmg = totalDmg;
 	this.shieldDmg = shieldDmg;

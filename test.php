@@ -60,7 +60,7 @@ $ships = $manager->logShips();
 					echo "<td>".$armour."</td>";
 					echo "<td>".($struct + $armour)."</td>";
 					echo "<td style='text-align: center'>".(floor($struct / $armour * 100)/10)."</td>";
-					echo "<td style='text-align: center'>".(floor($mass / ($struct + $armour) * 100)/10)."</td>";
+					echo "<td style='text-align: center'>".(floor($mass / ($struct + $armour)*100)/100)."</td>";
 					echo "<td style='text-align: center'>".(floor($ships[$i]::$value / ($struct + $armour) * 100)/10)."</td>";
 					echo "</tr>";
 				}

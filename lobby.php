@@ -43,6 +43,7 @@ if (isset($_SESSION["userid"])){
 		$ongoingGamesElement .= "</tr>";
 		
 		foreach ($ongoingGames as $game){
+			//echo json_encode($game);
 			$phase;
 
 			switch ($game["phase"]){

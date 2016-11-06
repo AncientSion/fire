@@ -6,9 +6,9 @@ class Tethys extends Ship {
 	public $faction = "Earth Alliance";
 	public $size = 30;
 	public static $value = 300;
-	public $profile = array(0.40, 0.405);
+	public $profile = array(0.95, 1.05);
 	public $mass = 1500;
-	public $ep = 200;
+	public $ep = 32;
 
 	function __construct($id, $userid, $x, $y, $facing, $available){
         parent::__construct($id, $userid, $x, $y, $facing, $available);
@@ -17,16 +17,16 @@ class Tethys extends Ship {
 	public function addStructures(){
 		$structs = [];
 
-		$front = new Structure($this->getId(), $this->id, 330, 30, 200, 150, 45);
-		$front->systems[] = new HeavyLaser($this->getId(), $this->id, 300, 360);
-		$front->systems[] = new HeavyLaser($this->getId(), $this->id, 0, 60);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 275, 200, 35);
+		$front->systems[] = new LightLaser($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new LightLaser($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 30, 150, 200, 150, 45);
+		$right = new Structure($this->getId(), $this->id, 30, 150, 250, 175, 30);
 		$right->systems[] = new StandardParticleBeam($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 210, 330, 200, 150, 45);
+		$left = new Structure($this->getId(), $this->id, 210, 330, 250, 175, 30);
 		$left->systems[] = new StandardParticleBeam($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
 

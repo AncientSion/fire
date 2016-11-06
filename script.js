@@ -53,7 +53,6 @@ function init(){
 	fxCanvas = canv[2];
 	fxCtx = fxCanvas.getContext("2d");
 
-
 	moveCanvas = canv[3];
 	moveCtx = moveCanvas.getContext("2d");
 	
@@ -222,10 +221,12 @@ function canvasMouseMove(e){
 		}
 	}
 	else if (game.deploying){
-		$("#deployOverlay").html("Deploy craft </br> at curser position")
-		.css("left", pos.x - 30 + "px")
-		.css("top", pos.y + 40 + "px")
+		$("#deployOverlay").html("Deploy at cursor position")
+		.css("left", pos.x - 70 + "px")
+		.css("top", pos.y + 60 + "px")
 		.show();
+		moveCtx.clearRect(0, 0, res.x, res.y);
+		moveCtx.drawImage(game.getShipById(game.deploying).img, pos.x - 25, pos.y + 10, 50, 50);
 	}
 	else if (!game.deploying){
 		$("#deployOverlay").hide();
@@ -260,6 +261,7 @@ function canvasMouseClick(e){
 				}
 			}
 			game.ships[i].doDeploy(pos);
+			moveCtx.clearRect(0, 0, res.x, res.y);
 		}
 		else if (!game.deploying){
 			if (aShip){
@@ -392,6 +394,13 @@ function canvasMouseClick(e){
 					var shipLoc = ship.getOffsetPos();
 					var facing = ship.getPlannedFacingToMove();
 					var dist = Math.floor(getDistance(shipLoc, {x: clickShip.x, y: clickShip.y}));
+						angle = getAngleFromTo(clickShip.getOffsetPos(), shipLoc);
+						angle = addAngle(angle, -clickShip.getPlannedFacingToMove());
+					var baseHit = clickShip.getHitChanceFromAngle(angle);
+
+					console.log(baseHit);
+
+
 					
 					if (clickShip){
 						if (ship.hasWeaponsSelected()){
@@ -399,14 +408,19 @@ function canvasMouseClick(e){
 								for (var j = ship.structures[i].systems.length-1; j >= 0; j--){
 									if (ship.structures[i].systems[j].selected){
 										if (ship.structures[i].systems[j].posIsOnArc(shipLoc, clickShip.getOffsetPos(), facing)){
+											// FireOrder(id, turn, shooterId, targetId, weaponId, req, notes, hits, resolved){
 											ship.structures[i].systems[j].setFireOrder(
 												new FireOrder(
-													0,
-													ship.id,
-													clickShip.id,
-													ship.structures[i].systems[j].id,
-													game.turn,
-													-1)
+														0,
+														game.turn,
+														ship.id,
+														clickShip.id,
+														ship.structures[i].systems[j].id,
+														-1,
+														"",
+														-1,
+														-1
+													)
 												);
 										}
 									}

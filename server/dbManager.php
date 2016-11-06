@@ -1,8 +1,5 @@
 <?php
-
-
 require_once("server\classes.php");
-
 
 class DBManager {
 
@@ -536,7 +533,7 @@ class DBManager {
 	}
 
 	public function updateFireOrders($fires){
-		debug::log("DB updateFireOrders: ".sizeof($fires));
+		//debug::log("DB updateFireOrders: ".sizeof($fires));
 
 		$stmt = $this->connection->prepare("
 			UPDATE fireorders
@@ -593,6 +590,7 @@ class DBManager {
 					$result[$i]["shipid"],
 					$result[$i]["structureid"],
 					$result[$i]["turn"],
+					$result[$i]["roll"],
 					$result[$i]["type"],
 					$result[$i]["totalDmg"],
 					$result[$i]["shieldDmg"],
@@ -613,14 +611,15 @@ class DBManager {
 	}
 
 
-	public function insertDamageEntires($damages){
-		debug::log("DB insertDamageEntires");
+	public function insertDamageEntries($damages){
+		debug::log("DB insertDamageEntries");
+
 
 		$stmt = $this->connection->prepare("
 			INSERT INTO damages 
-				( fireid, shipid, gameid, structureid, turn, type, totalDmg, shieldDmg, structDmg, armourDmg, mitigation, destroyed, notes, new)
+				( fireid, shipid, gameid, structureid, turn, roll, type, totalDmg, shieldDmg, structDmg, armourDmg, mitigation, destroyed, notes, new)
 			VALUES
-				( :fireid, :shipid, :gameid, :structureid, :turn, :type, :totalDmg, :shieldDmg, :structDmg, :armourDmg, :mitigation, :destroyed, :notes, :new)
+				( :fireid, :shipid, :gameid, :structureid, :turn, :roll, :type, :totalDmg, :shieldDmg, :structDmg, :armourDmg, :mitigation, :destroyed, :notes, :new)
 		");
 
 		$new = 0;
@@ -634,6 +633,7 @@ class DBManager {
 				$stmt->bindParam(":gameid", $damages[$i]->gameid);
 				$stmt->bindParam(":structureid", $damages[$i]->structureid);
 				$stmt->bindParam(":turn", $damages[$i]->turn);
+				$stmt->bindParam(":roll", $damages[$i]->roll);
 				$stmt->bindParam(":type", $damages[$i]->type);
 				$stmt->bindParam(":totalDmg", $damages[$i]->totalDmg);
 				$stmt->bindParam(":shieldDmg", $damages[$i]->shieldDmg);
@@ -874,6 +874,8 @@ class DBManager {
 	}
 
 	public function getActiveShips($gameid, $turn){
+		debug::log("gameid: ".$gameid);
+		debug::log("turn: ".$turn);
 		$stmt = $this->connection->prepare("
 			SELECT * FROM ships
 			WHERE gameid = :gameid
@@ -951,9 +953,9 @@ class DBManager {
 
 	}
 
-	public function resolveDeployment($gameid){
+	public function resolveDeployment($gameid, $turn){
 		Debug::log("resolveDeployment");
-		$ships = $this->getActiveShips($gameid);
+		$ships = $this->getActiveShips($gameid, $turn);
 		$stmt = $this->connection->prepare("
 			UPDATE shipactions
 			SET resolved = 1
@@ -961,6 +963,8 @@ class DBManager {
 				shipid = :shipid
 			AND 
 				type = :type
+			AND 
+				turn = :turn
 		");
 
 		$type = "deploy";
@@ -968,6 +972,7 @@ class DBManager {
 		for ($i = 0; $i < sizeof($ships); $i++){
 			$stmt->bindParam(":shipid", $ships[$i]["id"]);
 			$stmt->bindParam(":type", $type);
+			$stmt->bindParam(":turn", $turn);
 			$stmt->execute();
 
 			if ($stmt->errorCode() == 0){

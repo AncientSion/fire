@@ -129,7 +129,7 @@ echo "</script>";
 				<div id="combatlogWrapper" class="disabled">
 					<table id="combatLog">
 						<tr style="border: 1px solid black">
-							<th colspan=8 style="font-size: 16px; width: 100%">
+							<th colspan=10 style="font-size: 16px; width: 100%">
 								Combat Log
 							</th>
 						</tr>
@@ -145,6 +145,9 @@ echo "</script>";
 							</th>
 							<th style="width: 100px">
 								Weapon
+							</th>
+							<th colSpan = 2 style="width: 20px">
+								Chance
 							</th>
 							<th style="width: 10px">
 								Hits
@@ -249,6 +252,10 @@ echo "</script>";
 		$("#deployWrapper").contextmenu(function(e){
 			e.preventDefault();
 			e.stopPropagation();
+			game.disableDeployment();
+			$("#deployTable").find(".selected").each(function(){
+				$(this).removeClass("selected");
+			});
 			$(this).hide();
 		})
 
