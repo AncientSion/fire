@@ -75,13 +75,11 @@ function Game(id, name, status, userid, turn, phase){
 		this.deploying = shipid;
 
 		for (var i = 0; i < this.ships.length; i++){
-			if (ship.deployed && this.ships[i].actions[0].turn != this.turn){
-				var zone = {x: this.ships[i].x, y: this.ships[i].y, s: this.ships[i].s};
-				this.drawDeploymentBlock(zone.x, zone.y, this.ships[i].size*2);
+			if (ship.deployed && this.ships[i].actions[0].turn < this.turn){
+				this.drawDeploymentBlock(ship);
 			}
 			else if (this.ships[i].id == shipid){
-				var zone = {x: Math.random()*res.x, y: Math.random()*res.y, s: this.ships[i].s};
-				this.drawDeploymentZone(zone.x, zone.y, this.ships[i].size*2);
+				this.setupDeploymentZone(ship);
 			}
 		}
 	}
@@ -95,6 +93,27 @@ function Game(id, name, status, userid, turn, phase){
 		$("#deployOverlay").hide();
 	}
 
+	this.setupDeploymentZone = function(ship){
+		var x;
+		var y;
+
+		if (game.turn == 1){			
+			x = 
+			y = res.y;
+			this.drawDeploymentRectangle(
+				0 + (ship.userid-1)*res.x/2 + (ship.userid-1)*300,
+				0,
+				0 + (ship.userid)*res.x/4 + (ship.userid-1)*300,
+				res.y
+			);
+		}
+		else {
+			x = range(res.x/2 * (ship.userid-1) + ship.size, res.x/2 * ship.userid - ship.size);
+			y = range(0 + ship.size, res.y - ship.size);
+			this.drawDeploymentCircle(x, y, ship.size);
+		}
+	}
+
 	this.drawDeploymentZone = function(x, y, s){
 		fxCtx.beginPath();
 		fxCtx.arc(x+cam.o.x, y+cam.o.y, s, 0, 2*Math.PI, false);
@@ -102,7 +121,17 @@ function Game(id, name, status, userid, turn, phase){
 		fxCtx.fillStyle = "green";
 		fxCtx.globalAlpha  = 0.3;
 		fxCtx.fill();
-		fxCtx.stroke();
+		fxCtx.opacity = 1;
+	}
+
+	this.drawDeploymentRectangle = function(x1, y1, x2, y2){
+		console.log(arguments)
+		fxCtx.beginPath();
+		fxCtx.rect(x1+cam.o.x, y1+cam.o.y, x2+cam.o.x, y2+cam.o.y);
+		fxCtx.closePath();
+		fxCtx.fillStyle = "green";
+		fxCtx.globalAlpha  = 0.3;
+		fxCtx.fill();
 		fxCtx.opacity = 1;
 	}
 
@@ -113,7 +142,6 @@ function Game(id, name, status, userid, turn, phase){
 		fxCtx.fillStyle = "red";
 		fxCtx.globalAlpha  = 0.4;
 		fxCtx.fill();
-		fxCtx.stroke();
 		fxCtx.opacity = 1;
 	}
 
@@ -298,7 +326,6 @@ function Game(id, name, status, userid, turn, phase){
 					window.ships[i].structures[j].start,
 					window.ships[i].structures[j].end,
 					window.ships[i].structures[j].integrity,
-					window.ships[i].structures[j].armour,
 					window.ships[i].structures[j].mitigation,
 					window.ships[i].structures[j].destroyed
 				);

@@ -29,7 +29,7 @@ function System(id, parentId, name, display){
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
 			td.className = "weapon";
-			td.innerHTML = this.name + " #" + (this.id);
+			td.innerHTML = this.display;
 
 			if (this.hasActiveFireOrder()){
 				td.className = "weapon fireOrder";

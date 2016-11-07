@@ -305,10 +305,10 @@ else {
 					$("#totalFleetCost").html(getFleetCost());
 				}).hover(
 					function(e){
-						$(this).addClass("selected");
+						$(this).addClass("fontHighlight");
 					},
 					function(e){
-						$(this).removeClass("selected");
+						$(this).removeClass("fontHighlight");
 					}
 				);
 
@@ -400,7 +400,6 @@ else {
 				data.structures[j].start,
 				data.structures[j].end,
 				data.structures[j].integrity,
-				data.structures[j].armour,
 				data.structures[j].mitigation,
 				data.structures[j].destroyed
 			);
@@ -551,9 +550,9 @@ else {
 					var subTd = document.createElement("td");							
 						subTd.innerHTML = "Add to fleet";
 						$(subTd).data("shipClass", shiplist[i]["shipClass"]).data("cost", shiplist[i]["cost"]).mouseenter(function(){
-							$(this).addClass("fontHighlight");
+							$(this).addClass("selected");
 						}).mouseleave(function(){
-							$(this).removeClass("fontHighlight");
+							$(this).removeClass("selected");
 						}).click(function(){
 							addToFleet(this);
 						})

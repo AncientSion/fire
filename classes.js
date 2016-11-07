@@ -103,7 +103,7 @@ function Damage (id, fireid, gameid, shipid, structureid, turn, roll, type, tota
 	this.notes = notes;
 }
 
-function Structure(id, parentId, start, end, integrity, armour, mitigation, destroyed){
+function Structure(id, parentId, start, end, integrity, mitigation, destroyed){
 	this.name = "Structure";
 	this.display = "Structure";
 	this.id = id;
@@ -111,11 +111,10 @@ function Structure(id, parentId, start, end, integrity, armour, mitigation, dest
 	this.start = start;
 	this.end = end;
 	this.integrity = integrity;
-	this.armour = armour;
 	this.mitigation = mitigation;
+	this.highlight = false;
 	this.destroyed = destroyed || false;
 	this.systems = [];
-	this.highlight = false;
 	this.damages = [];
 
 	this.getTableRow = function(){
@@ -123,20 +122,20 @@ function Structure(id, parentId, start, end, integrity, armour, mitigation, dest
 		var td = document.createElement("td");
 			td.className = "struct";
 
-		var rem = this.getRemainingIntegrity();
+		var rem = this.getRemainingArmour();
 
 		var span = document.createElement("div");
-			span.className = "integrityAmount";
+			span.className = "armourAmount";
 			span.innerHTML = rem + " / " + this.integrity;
 			td.appendChild(span);
 
 		var lowerDiv = document.createElement("div");
-			lowerDiv.className = "integrityNow";
+			lowerDiv.className = "armourNow";
 			lowerDiv.style.width =  rem/this.integrity * 100 + "%";
 			td.appendChild(lowerDiv);
 			
 		var upperDiv = document.createElement("div");
-			upperDiv.className = "integrityFull";
+			upperDiv.className = "armourFull";
 			td.appendChild(upperDiv);
 
 		$(td).data("shipId", this.parentId);
@@ -170,7 +169,10 @@ function Structure(id, parentId, start, end, integrity, armour, mitigation, dest
 		var a;
 
 
-		if (a > b){
+		if (a == 0 && b == 360){
+			return 0;
+		}
+		else if (a > b){
 		   c = a + b;
 		}
 		else {
@@ -233,24 +235,17 @@ function Structure(id, parentId, start, end, integrity, armour, mitigation, dest
 		var table = document.createElement("table");
 			
 		var tr = document.createElement("tr");
-		var td = document.createElement("td"); td.style.width = "60%";
-			td.innerHTML = "Integrity"; tr.appendChild(td);
-		var td = document.createElement("td");
-
-			td.innerHTML = this.getRemainingIntegrity() + " / " + this.integrity; tr.appendChild(td); table.appendChild(tr);
-			
-		var tr = document.createElement("tr");
 		var td = document.createElement("td"); td.style.width = "40%";
 			td.innerHTML = "Armour"; tr.appendChild(td);
 		var td = document.createElement("td");
-			td.innerHTML = this.getRemainingArmour() + " / " + this.armour; tr.appendChild(td); table.appendChild(tr);
+			td.innerHTML = this.getRemainingArmour() + " / " + this.integrity; tr.appendChild(td); table.appendChild(tr);
 
 		var tr = document.createElement("tr");
 		var td = document.createElement("td"); td.style.width = "40%";
 			td.innerHTML = "Mitigation"; tr.appendChild(td);
 		var td = document.createElement("td");
 			td.innerHTML = this.getRemainingMitigation() + "%" + " / " + this.mitigation + "%"; tr.appendChild(td); table.appendChild(tr);
-			
+
 		div.appendChild(table);
 			
 		return div;
@@ -265,7 +260,7 @@ function Structure(id, parentId, start, end, integrity, armour, mitigation, dest
 	}
 
 	this.getRemainingArmour = function(){
-		var armour = this.armour;
+		var armour = this.integrity;
 		for (var i = 0; i < this.damages.length; i++){
 			armour -= this.damages[i].armourDmg;
 		}
@@ -273,7 +268,7 @@ function Structure(id, parentId, start, end, integrity, armour, mitigation, dest
 	}
 
 	this.getRemainingMitigation = function(){
-		return Math.round((Math.pow(this.getRemainingArmour(), 0.5) / Math.pow(this.armour, 0.5)) * this.mitigation);
+		return Math.round((Math.pow(this.getRemainingIntegrity(), 0.5) / Math.pow(this.integrity, 0.5)) * this.mitigation);
 	}
 
 }

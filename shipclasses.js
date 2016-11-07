@@ -1050,9 +1050,9 @@ function Ship(id, shipclass, x, y, facing, userid){
 
 		$(div).drag();
 		$(div).contextmenu(function(e){
-			e.preventDefault();
+			//e.preventDefault();
 			e.stopPropagation();
-			$(this).hide();
+			//$(this).hide();
 		})
 			
 		document.getElementById("game").appendChild(div);
@@ -1091,30 +1091,36 @@ function Ship(id, shipclass, x, y, facing, userid){
 			structDiv.appendChild(structTable);
 			structContainer.appendChild(structDiv);
 
-			var a = this.structures[i].getDirection();
-			var pos = getPointInDirection(130, addAngle(a, -90), pWidth/2, pHeight/2);
-			var w = $(structTable).width() / 2; 
-			var h = $(structTable).height() /2 +45;
-			//console.log("id: " + this.structures[i].id + ", a: " + a);
-			//console.log(w, h);
-			$(structDiv)
-				.data("id", this.structures[i].id)
-				.data("structureId", i)
-				.css("left", pos.x - w -2)
-				.css("top", pos.y - h);
+			if (i != this.structures.length-1){
+				var a = this.structures[i].getDirection();
+				var pos = getPointInDirection(130, addAngle(a, -90), pWidth/2-10, pHeight/2-50);
 
+				$(structDiv)
+					.data("id", this.structures[i].id)
+					.data("structureId", i)
+					.css("left", pos.x - $(structTable).width() / 2 +5)
+					.css("top", pos.y - $(structTable).height() /2);				
+				}
+			else {
 
-			var div = document.createElement("div");
-				div.className = "iconDiv";
-
-			var img = new Image();
-				img.src = "shipIcons/" + this.shipClass.toLowerCase() + ".png";
-				$(img)
-					.addClass("rotate270")
-					.css("width", 100)
-					.css("height", 100)
-				div.appendChild(img);
+				$(structDiv)
+					.data("id", this.structures[i].id)
+					.data("structureId", i)
+					.css("left", pWidth / 2-53)
+					.css("top", pHeight/ 2-10)
+			}
 		}
+
+		var div = document.createElement("div");
+			div.className = "iconDiv";
+
+		var img = new Image();
+			img.src = "shipIcons/" + this.shipClass.toLowerCase() + ".png";
+			$(img)
+				.addClass("rotate270")
+				.css("width", 100)
+				.css("height", 100)
+			div.appendChild(img);
 
 		structContainer.appendChild(div);
 		$(div)

@@ -18,20 +18,24 @@ class WhiteStar extends Ship {
 	public function addStructures(){
 		$structs = [];
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 450, 450, 70);
+		$front = new Structure($this->getId(), $this->id, 300, 60, $this->mass, 70);
 		$front->systems[] = new NeutronLaser($this->getId(), $this->id, 330, 30);
 		$front->systems[] = new NeutronLaser($this->getId(), $this->id, 330, 30);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 450, 450, 70);
+		$right = new Structure($this->getId(), $this->id, 60, 180, $this->mass, 70);
 		$right->systems[] = new FusionPulsar($this->getId(), $this->id, 0, 60);
 		$right->systems[] = new FusionPulsar($this->getId(), $this->id, 0, 60);
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 450, 450, 70);
+		$left = new Structure($this->getId(), $this->id, 180, 300, $this->mass, 70);
 		$left->systems[] = new FusionPulsar($this->getId(), $this->id, 300, 360);
 		$left->systems[] = new FusionPulsar($this->getId(), $this->id, 300, 360);
 		$structs[] = $left;
+
+		$primary = new Primary($this->getId(), $this->id, 0, 360, $this->mass, 85);
+		$structs[] = $primary;
+
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 		}

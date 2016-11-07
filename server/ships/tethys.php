@@ -17,18 +17,22 @@ class Tethys extends Ship {
 	public function addStructures(){
 		$structs = [];
 
-		$front = new Structure($this->getId(), $this->id, 330, 30, 275, 200, 35);
+		$front = new Structure($this->getId(), $this->id, 300, 60, $this->mass, 35);
 		$front->systems[] = new LightLaser($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new LightLaser($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 30, 150, 250, 175, 30);
+		$right = new Structure($this->getId(), $this->id, 60, 180, $this->mass, 30);
 		$right->systems[] = new StandardParticleBeam($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 210, 330, 250, 175, 30);
+		$left = new Structure($this->getId(), $this->id, 180, 300, $this->mass, 30);
 		$left->systems[] = new StandardParticleBeam($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
+
+		$primary = new Primary($this->getId(), $this->id, 0, 360, $this->mass, 35);
+		$structs[] = $primary;
+
 
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
