@@ -37,13 +37,15 @@ class Tinashi extends Ship {
 		$aft->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
 		$structs[] = $aft;
 
-		$primary = new Primary($this->getId(), $this->id, 0, 360, $this->mass, 85);
-		$structs[] = $primary;
-
 
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 		}
+	}
+
+
+	public function addPrimary(){
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, $this->mass, 85);
 	}
 }
 

@@ -39,15 +39,6 @@ class Structure {
 		}
 		return $remIntegrity;
 	}
-
-	public function getRemainingArmour(){
-		$remArmour = $this->armour;
-		for ($i = 0; $i < sizeof($this->damages); $i++){
-			$remArmour -= $this->damages[$i]->armourDmg;
-		}
-		
-		return $remArmour;
-	}
 }
 
 class Primary extends Structure {
@@ -58,6 +49,14 @@ class Primary extends Structure {
 
 	public function getIntegrity($mass){
 		return $mass/2;
+	}
+
+	public function getRemainingIntegrity(){
+		$remIntegrity = $this->integrity;
+		for ($i = 0; $i < sizeof($this->damages); $i++){
+			$remIntegrity -= $this->damages[$i]->structDmg;
+		}
+		return $remIntegrity;
 	}
 }
 

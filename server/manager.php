@@ -1,6 +1,5 @@
 <?php
 
-
 class Manager {
 	public $userid;
 	public $gameid;
@@ -209,12 +208,13 @@ class Manager {
 		//echo "ship size: ".sizeof($ships)."\n";
 		for ($j = 0; $j < sizeof($this->damages); $j++){
 			if ($ship->id == $this->damages[$j]->shipid){
-				for ($k = 0; $k < sizeof($ship->structures); $k++){
+				for ($k = 0; $k < sizeof($ship->structures)-1; $k++){
 					if ($ship->structures[$k]->id == $this->damages[$j]->structureid){
 						$ship->structures[$k]->damages[] = $this->damages[$j];
 					}
 				}
 
+				$ship->primary->damages[] = $this->damages[$j];
 			}
 		}
 		//echo json_encode($this->damages);
@@ -463,7 +463,6 @@ class Manager {
 					$this->fires[$i]->target = $this->getShipById($this->fires[$i]->targetid);
 					$this->fires[$i] = $this->calculateHitChance($this->fires[$i]);
 					$this->fires[$i] = $this->rollForHit($this->fires[$i]);
-					$this->fires[$i] = $this->rollForDamage($this->fires[$i]);
 					$this->fires[$i] = $this->getHitSection($this->fires[$i]);
 					$this->doDamage($this->fires[$i]);
 
@@ -499,12 +498,6 @@ class Manager {
 	public function rollForHit($fire){
 		//Debug::log("rollForHit for fire ID ".$fire->id);
 		$fire = $fire->weapon->rollForHit($fire);
-		return $fire;
-	}
-
-	public function rollForDamage($fire){
-		//Debug::log("rollForDamage for fire ID ".$fire->id);	
-		$fire = $fire->weapon->getDamage($fire);
 		return $fire;
 	}
 
@@ -654,6 +647,11 @@ class Manager {
 		}
 
 	return $allShips;
+	}
+
+	public function reset(){
+			Debug::log("B");
+		if (DBManager::app()->reset()){return true;}
 	}
 
 }

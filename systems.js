@@ -7,7 +7,6 @@ function System(id, parentId, name, display){
 	this.highlight = false;
 	this.selected = false;
 	this.destroyed = false;
-	this.tr = false;
 	this.weapon = false;
 				
 	this.posIsOnArc = function(loc, pos, facing){
@@ -25,8 +24,7 @@ function System(id, parentId, name, display){
 		}
 	}
 	
-	this.getTableRow = function(){
-		var tr = document.createElement("tr");
+	this.getTableData = function(){
 		var td = document.createElement("td");
 			td.className = "weapon";
 			td.innerHTML = this.display;
@@ -63,12 +61,7 @@ function System(id, parentId, name, display){
 					game.getShipById(shipId).getSystemById(systemId).select();
 				}
 			);
-
-			tr.appendChild(td);
-
-			this.tr = tr;
-			
-		return tr;
+		return td;
 	}
 
 	this.hasActiveFireOrder = function(){

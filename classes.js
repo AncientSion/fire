@@ -121,21 +121,22 @@ function Structure(id, parentId, start, end, integrity, mitigation, destroyed){
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
 			td.className = "struct";
+			td.colSpan = 2;
 
-		var rem = this.getRemainingArmour();
+		var rem = this.getRemainingIntegrity();
 
 		var span = document.createElement("div");
-			span.className = "armourAmount";
+			span.className = "integrityAmount";
 			span.innerHTML = rem + " / " + this.integrity;
 			td.appendChild(span);
 
 		var lowerDiv = document.createElement("div");
-			lowerDiv.className = "armourNow";
+			lowerDiv.className = "integrityNow";
 			lowerDiv.style.width =  rem/this.integrity * 100 + "%";
 			td.appendChild(lowerDiv);
 			
 		var upperDiv = document.createElement("div");
-			upperDiv.className = "armourFull";
+			upperDiv.className = "integrityFull";
 			td.appendChild(upperDiv);
 
 		$(td).data("shipId", this.parentId);
@@ -238,7 +239,7 @@ function Structure(id, parentId, start, end, integrity, mitigation, destroyed){
 		var td = document.createElement("td"); td.style.width = "40%";
 			td.innerHTML = "Armour"; tr.appendChild(td);
 		var td = document.createElement("td");
-			td.innerHTML = this.getRemainingArmour() + " / " + this.integrity; tr.appendChild(td); table.appendChild(tr);
+			td.innerHTML = this.getRemainingIntegrity() + " / " + this.integrity; tr.appendChild(td); table.appendChild(tr);
 
 		var tr = document.createElement("tr");
 		var td = document.createElement("td"); td.style.width = "40%";
@@ -254,21 +255,76 @@ function Structure(id, parentId, start, end, integrity, mitigation, destroyed){
 	this.getRemainingIntegrity = function(){
 		var integrity = this.integrity;
 		for (var i = 0; i < this.damages.length; i++){
-			integrity -= this.damages[i].structDmg;
+			integrity -= this.damages[i].armourDmg;
 		}
 		return integrity;
-	}
-
-	this.getRemainingArmour = function(){
-		var armour = this.integrity;
-		for (var i = 0; i < this.damages.length; i++){
-			armour -= this.damages[i].armourDmg;
-		}
-		return armour;
 	}
 
 	this.getRemainingMitigation = function(){
 		return Math.round((Math.pow(this.getRemainingIntegrity(), 0.5) / Math.pow(this.integrity, 0.5)) * this.mitigation);
 	}
+}
 
+function Primary(id, parentId, integrity, damages){
+	this.name = "Primary";
+	this.display = "Primary";
+	this.id = id;
+	this.parentId = parentId;
+	this.integrity = integrity;
+	this.damages = damages
+	this.highlight = false;	
+
+	this.getTableRow = function(){
+		var tr = document.createElement("tr");
+		var td = document.createElement("td");
+			td.className = "struct";
+
+		var rem = this.getRemainingIntegrity();
+
+		var span = document.createElement("div");
+			span.className = "integrityAmount";
+			span.innerHTML = rem + " / " + this.integrity;
+			td.appendChild(span);
+
+		var lowerDiv = document.createElement("div");
+			lowerDiv.className = "integrityNow";
+			lowerDiv.style.width =  rem/this.integrity * 100 + "%";
+			td.appendChild(lowerDiv);
+			
+		var upperDiv = document.createElement("div");
+			upperDiv.className = "integrityFull";
+			td.appendChild(upperDiv);
+
+		$(td).data("shipId", this.parentId);
+		$(td).data("systemId", this.id);
+		$(td).hover(
+			function(e){
+				var shipId = $(this).data("shipId");
+				var systemId = $(this).data("systemId");
+				game.getShipById(shipId).getSystemById(systemId).hover();
+			},
+			function(e){
+				var shipId = $(this).data("shipId");
+				var systemId = $(this).data("systemId");
+				game.getShipById(shipId).getSystemById(systemId).hover();
+			}
+		)
+		$(td).click(function(e){
+			var shipId = $(this).data("shipId");
+			var systemId = $(this).data("systemId");
+			console.log(game.getShipById(shipId).getSystemById(systemId).damages);
+		})
+
+			tr.appendChild(td);
+			
+		return tr;
+	}
+
+	this.getRemainingIntegrity = function(){
+		var integrity = this.integrity;
+		for (var i = 0; i < this.damages.length; i++){
+			integrity -= this.damages[i].structDmg;
+		}
+		return integrity;
+	}
 }

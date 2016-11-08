@@ -22,6 +22,7 @@ class Ship {
 	public $index = 0;
 	public $actions = array();
 	public $structures = array();
+	public $primary;
 
 	function __construct($id, $userid, $x, $y, $facing, $available){
 		$this->id = $id;
@@ -32,6 +33,7 @@ class Ship {
 		$this->available = $available;
 		
 		$this->addStructures();
+		$this->addPrimary();
 	}
 
 	public function getId(){
@@ -69,8 +71,10 @@ class Ship {
 		$angle = $fire->angleIn;
 		$valid = array();
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if (Math::isInArc($angle, $this->structures[$i]->start, $this->structures[$i]->end)){
-				$valid[] = $this->structures[$i]->id;
+			if (! $this->structures[$i] instanceof Primary){
+				if (Math::isInArc($angle, $this->structures[$i]->start, $this->structures[$i]->end)){
+					$valid[] = $this->structures[$i]->id;
+				}
 			}
 		}
 		$fire->hitLocs = $valid;
@@ -80,42 +84,37 @@ class Ship {
 
 	public function createDamageObject($fire, $index){
 		//Debug::log("createDamageObject");	
-		$structure = $this->getStructureById($fire->pick);
+		$armour = $this->getStructureById($fire->pick);
+		$remIntegrity = $armour->getRemainingIntegrity();
 
-		$remIntegrity = $structure->getRemainingIntegrity();
-		$remArmour = $structure->getRemainingArmour();
+		$armourMod = pow($remIntegrity, 0.5) / pow($armour->integrity, 0.5);
+		$mitigation = round($armour->mitigation * $armourMod);
 
-		$armourMod = pow($remArmour, 0.5) / pow($structure->armour, 0.5);
-		$mitigation = round($structure->mitigation * $armourMod);
-
-		$dmg = $fire->dmgRoll;
+		$dmg = $fire->weapon->getDamage($fire);
 
 		$shielDmg = 0;
-		$armourDmg = round($dmg / 100 * $mitigation);
-		$structDmg = round($dmg - $armourDmg);
+		$outerArmourDmg = round($dmg / 100 * $mitigation);
+		$primaryDmg = round($dmg - $outerArmourDmg);
 
-		//debug::log("index: ".$index);
-		//gadebug::log("rolls: ".$fire->rolls[$index]);
-
-		$dmg = new Damage(
-			sizeof($structure->damages)+1,
+		$entry = new Damage(
+			sizeof($armour->damages)+1,
 			$fire->id,
 			$fire->gameid,
 			$this->id, 
-			$structure->id, 
+			$armour->id, 
 			$fire->turn,
 			$fire->rolls[$index],
 			$fire->weapon->type,
-			$fire->dmgRoll,
+			$dmg,
 			$shielDmg,
-			$structDmg, 
-			$armourDmg,
+			$primaryDmg, 
+			$outerArmourDmg,
 			$mitigation,
 			false,
 			"",
 			1
 		);
-		return $dmg;
+		return $entry;
 	}
 
 	public function applyDamage($id, $dmg){

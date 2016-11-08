@@ -125,6 +125,7 @@ echo "</script>";
 							</th>
 						</tr>
 					</table>
+					<input type="button" value="reset" onclick=reset()></input>
 				</div>
 				<div id="combatlogWrapper" class="disabled">
 					<table id="combatLog">
@@ -233,6 +234,16 @@ echo "</script>";
 </html>
 
 <script>
+
+	function reset(){
+		$.ajax({
+			type: "POST",
+			url: "postGameData.php",
+			datatype: "json",
+			data: {type: "reset"},
+			error: ajax.error,
+		});
+	}
 
 	$(document).ready(function(){
 		$("#reinforce").hover(

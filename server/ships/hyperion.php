@@ -39,12 +39,14 @@ class Hyperion extends Ship {
 		$left->systems[] = new StandardParticleBeam($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
 
-		$primary = new Primary($this->getId(), $this->id, 0, 360, $this->mass, 70);
-		$structs[] = $primary;
-
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 		}
+	}
+
+
+	public function addPrimary(){
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, $this->mass, 70);
 	}
 }
 

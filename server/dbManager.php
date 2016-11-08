@@ -30,6 +30,24 @@ class DBManager {
         }
         return self::$instance;
 	}
+
+	public function reset(){
+			Debug::log("C");
+		$sql = array();
+
+		$sql[] = "UPDATE playerstatus SET phase = 2, status = 'ready'";
+		$sql[] = "UPDATE fireorders SET resolved = 0";
+		$sql[] = "UPDATE games SET phase = 2";
+		$sql[] = "DELETE from damages WHERE id";
+		foreach ($sql as $query){
+			if($this->update($query)){
+				continue;
+			}
+			else return false;
+		}
+
+		return true;
+	}
 	
 
 	public function test($sql){
@@ -64,11 +82,11 @@ class DBManager {
 		$stmt = $this->connection->prepare($sql);
 		
 		if ($stmt->execute()){
-		debug::log("true");
+			debug::log("true");
 			return true;
 		}
 		else {
-		debug::log("false");
+			debug::log("false");
 			return false;
 		}
 	}

@@ -16,7 +16,7 @@ function Game(id, name, status, userid, turn, phase){
 	this.reinforcements = [];
 	this.confirmedReinforcments = false;
 	this.animating = false;
-	this.deployZone;
+	this.deployArea = false;
 	this.deployBlock = [];
 	
 	this.endPhase = function(){
@@ -41,22 +41,16 @@ function Game(id, name, status, userid, turn, phase){
 				}
 			}
 			if (this.phase == 1){ // MOVEMENT
-				var valid = true;
 				for (var i = 0; i < this.ships.length; i++){
 					if (this.ships[i].userid == this.userid){
 						if (this.ships[i].getRemainingImpulse() > 0){
-							valid = false;
-							break;
+							console.log(this.ships[i]);
+							popup("You have ships with unused impulse.");
+							return;
 						}
 					}
 				}
-
-				if (valid){
-					ajax.confirmMovement(goToLobby);
-				}
-				else {
-					popup("You have ships with unused impulse.");
-				}
+				ajax.confirmMovement(goToLobby);
 			}
 			else if (this.phase == 2){ // 
 				ajax.confirmFiringOrders(goToLobby);
@@ -71,22 +65,18 @@ function Game(id, name, status, userid, turn, phase){
 	}
 
 	this.enableDeployment = function(shipid){
-		var ship = game.getShipById(shipid);
-		this.deploying = shipid;
-
 		for (var i = 0; i < this.ships.length; i++){
-			if (ship.deployed && this.ships[i].actions[0].turn < this.turn){
-				this.drawDeploymentBlock(ship);
-			}
-			else if (this.ships[i].id == shipid){
-				this.setupDeploymentZone(ship);
+			if (this.ships[i].id == shipid){
+				this.setupDeploymentZone(this.ships[i]);
+				this.deploying = shipid;
+				return;
 			}
 		}
 	}
 
 	this.disableDeployment = function(){
 		this.deploying = false;
-		this.deployZone = false;
+		this.deployArea = false;
 		this.deployBlock = false;
 		moveCtx.clearRect(0, 0, res.x, res.y);
 		fxCtx.clearRect(0, 0, res.x, res.y);
@@ -94,45 +84,46 @@ function Game(id, name, status, userid, turn, phase){
 	}
 
 	this.setupDeploymentZone = function(ship){
-		var x;
-		var y;
-
-		if (game.turn == 1){			
-			x = 
-			y = res.y;
-			this.drawDeploymentRectangle(
-				0 + (ship.userid-1)*res.x/2 + (ship.userid-1)*300,
-				0,
-				0 + (ship.userid)*res.x/4 + (ship.userid-1)*300,
-				res.y
-			);
+		if (game.turn == 1){	
+			var area = {
+				type: "rect",
+				x: 0 + (ship.userid-1)*res.x/2 + (ship.userid-1)*350,
+				y: 0,
+				w: 250,
+				h: res.y
+			}
 		}
 		else {
-			x = range(res.x/2 * (ship.userid-1) + ship.size, res.x/2 * ship.userid - ship.size);
-			y = range(0 + ship.size, res.y - ship.size);
-			this.drawDeploymentCircle(x, y, ship.size);
+			var area = {
+				type: "circle",
+				x: range(res.x/2 * (ship.userid-1) + ship.size, res.x/2 * ship.userid - ship.size),
+				y: range(0 + ship.size, res.y - ship.size),
+				s: ship.size
+			}
 		}
+		this.deployArea = area;
+		this.drawDeploymentArea(area)
 	}
 
-	this.drawDeploymentZone = function(x, y, s){
-		fxCtx.beginPath();
-		fxCtx.arc(x+cam.o.x, y+cam.o.y, s, 0, 2*Math.PI, false);
-		fxCtx.closePath();
-		fxCtx.fillStyle = "green";
-		fxCtx.globalAlpha  = 0.3;
-		fxCtx.fill();
-		fxCtx.opacity = 1;
-	}
-
-	this.drawDeploymentRectangle = function(x1, y1, x2, y2){
-		console.log(arguments)
-		fxCtx.beginPath();
-		fxCtx.rect(x1+cam.o.x, y1+cam.o.y, x2+cam.o.x, y2+cam.o.y);
-		fxCtx.closePath();
-		fxCtx.fillStyle = "green";
-		fxCtx.globalAlpha  = 0.3;
-		fxCtx.fill();
-		fxCtx.opacity = 1;
+	this.drawDeploymentArea = function(area){
+		if (area.type == "circle"){
+			fxCtx.beginPath();
+			fxCtx.arc(area.x+cam.o.x, area.y+cam.o.y, area.s, 0, 2*Math.PI, false);
+			fxCtx.closePath();
+			fxCtx.fillStyle = "green";
+			fxCtx.globalAlpha  = 0.3;
+			fxCtx.fill();
+			fxCtx.opacity = 1;
+		}
+		else {
+			fxCtx.beginPath();
+			fxCtx.rect(area.x+cam.o.x, area.y + cam.o.y, area.w, area.h);
+			fxCtx.closePath();
+			fxCtx.fillStyle = "green";
+			fxCtx.globalAlpha  = 0.3;
+			fxCtx.fill();
+			fxCtx.opacity = 1;
+		}
 	}
 
 	this.drawDeploymentBlock = function(x, y, s){
@@ -316,6 +307,14 @@ function Game(id, name, status, userid, turn, phase){
 			ship.friendly = friendly;
 			ship.deployed = deployed;
 			ship.available = window.ships[i].available;
+			ship.primary = window.ships[i].primary;
+
+			ship.primary = new Primary(
+				window.ships[i].primary.id,
+				window.ships[i].primary.parentId,
+				window.ships[i].primary.integrity,
+				window.ships[i].primary.damages
+			)
 
 
 			//function Structure(parentId, start, end, armour, integrity){

@@ -81,6 +81,12 @@ if (isset($_POST["type"])) {
 			echo "damageControl success";
 		}
 	}
+	else if ($_POST["type"] == "reset"){
+			Debug::log("A");
+		if ($manager->reset()){
+			Debug::log("RESET");
+		}
+	}
 }
 else {
 	echo "no data to be found";

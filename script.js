@@ -138,10 +138,10 @@ function canvasMouseMove(e){
 			if (vessel){
 				dist = Math.floor(getDistance(shipLoc, vessel.getOffsetPos()));
 				angle = getAngleFromTo(vessel.getOffsetPos(), shipLoc);
-				//console.log(angle);
 				angle = addAngle(angle, -vessel.getPlannedFacingToMove());
 				//console.log(angle);
 
+				//var section = vessel.getHitSectionFromAngle(angle); console.log(section);
 				var baseHit = vessel.getHitChanceFromAngle(angle);
 
 				var tr = document.createElement("tr");
@@ -260,8 +260,18 @@ function canvasMouseClick(e){
 					break;
 				}
 			}
-			game.ships[i].doDeploy(pos);
-			moveCtx.clearRect(0, 0, res.x, res.y);
+
+				for (var i = 0; i < game.ships[index].turns.length; i++){
+					var turn = game.ships[index].turns[i];
+					if (clickedOn(pos, turn)){
+						game.ships[index].issueDeploymentTurn(turn);
+						return;
+					}
+				}
+
+			if (game.ships[index].canDeploy(pos.getOffset())){
+				game.ships[index].doDeploy(pos);
+			}
 		}
 		else if (!game.deploying){
 			if (aShip){
@@ -272,27 +282,18 @@ function canvasMouseClick(e){
 						break;
 					}
 				}
-
 				if (game.getShipByClick(pos) == ship){
 					ship.unselect();
 					return;
-				}
-				else {
-					for (var i = 0; i < ship.turns.length; i++){
-						var turn = ship.turns[i];
-						if (clickedOn(pos, turn)){
-							game.ships[index].issueDeploymentTurn(turn);
-							return;
-						}
-					}
-				
-					game.ships[index].doDeploy(pos);
 				}
 			}
 			else {
 				ship = game.getShipByClick(pos);
 				if (ship){
 					ship.select();
+					if (ship.actions[0].turn == game.turn){
+						game.enableDeployment(ship.id);
+					}
 					return;
 				}
 			}

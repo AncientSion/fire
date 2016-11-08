@@ -297,7 +297,6 @@ canvas {
 
 .structDiv {
 	display: inline-block;
-	padding: 3px;
 	position: absolute;
 	color: white;
 	border: 1px solid black;
@@ -322,7 +321,29 @@ canvas {
 	font-size: 16px;
 }
 
-.armourAmount {
+.primaryDiv {
+	display: inline-block;
+	position: absolute;
+	color: white;
+	border: 1px solid black;
+	padding: 2px;
+}
+
+.primaryTable {
+	margin: auto;
+	width: 100px;
+}
+
+.primaryTable td {
+	position: relative;
+}
+
+.primaryTable td, .primaryTable th {
+	border: 1px solid black;
+}
+
+
+.integrityAmount {
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -333,11 +354,9 @@ canvas {
 	color: white;
 	margin: auto;
 }
-.armourAmount.red {
-	color: red;
-}
 
-.armourFull {
+
+.integrityFull {
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -347,7 +366,7 @@ canvas {
 	width: 100%;
 }
 
-.armourNow {
+.integrityNow {
 	position: absolute;
 	left: 0;
 	top: 0;

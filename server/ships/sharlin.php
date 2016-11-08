@@ -21,14 +21,19 @@ class Sharlin extends Ship {
 	public function addStructures(){
 		$structs = [];
 
-		$left = new Structure($this->getId(), $this->id, 240, 360, $this->mass, 85);
+		$left = new Structure($this->getId(), $this->id, 240, 330, $this->mass, 85);
 		$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 		$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 		$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
 		$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
 		$structs[] = $left;
 
-		$right = new Structure($this->getId(), $this->id, 0, 120, $this->mass, 85);
+		$front = new Structure($this->getId(), $this->id, 330, 30, $this->mass, 85);
+		$front->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
+		$structs[] = $front;
+
+		$right = new Structure($this->getId(), $this->id, 30, 120, $this->mass, 85);
 		$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 		$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 		$right->systems[] = new FusionCannon($this->getId(), $this->id, 0, 120);
@@ -42,12 +47,13 @@ class Sharlin extends Ship {
 		$aft->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
 		$structs[] = $aft;		
 
-		$primary = new Primary($this->getId(), $this->id, 0, 360, $this->mass, 85);
-		$structs[] = $primary;
-
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 		}
+	}
+
+	public function addPrimary(){
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, $this->mass, 85);
 	}
 }
 

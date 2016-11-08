@@ -20,7 +20,7 @@ function Ship(id, shipclass, x, y, facing, userid){
 
 	this.getDamageEntriesByFireId = function(fireid){
 		var ret = [];
-		for (var i = 0; i < this.structures.length; i++){
+		for (var i = 0; i < this.structures.length-1; i++){
 			for (var j = 0; j < this.structures[i].damages.length; j++){
 				if (this.structures[i].damages[j].fireid == fireid){
 					ret.push(this.structures[i].damages[j]);
@@ -108,15 +108,30 @@ function Ship(id, shipclass, x, y, facing, userid){
 		return angle;
 	}
 
+	this.canDeploy = function(pos){
+		if (game.deployArea.type == "rect"){
+			if (pos.x >= game.deployArea.x && pos.x <= game.deployArea.x + game.deployArea.w){
+				if (pos.y >= game.deployArea.y && pos.y <= game.deployArea.y + game.deployArea.h){
+					return true;
+				}
+			}
+		}
+		else if (game.deployArea == "circle"){
+			if (getDistance(pos, {x: game.deployArea.x, y: game.deployArea.y}) <= game.deployArea.s){
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	this.doDeploy = function(pos){
 		if (this.actions.length){
 			this.actions[0].x = pos.x - cam.o.x;
 			this.actions[0].y = pos.y - cam.o.y;
 			this.unselect();
-			this.select();
 		}
 		else {
-
 			var facing = 0;
 			if (this.userid == 1){facing = 0;}else {facing = 180};
 			this.actions.push(new Move("deploy", 0, pos.x - cam.o.x, pos.y - cam.o.y, facing, 0, 0));
@@ -130,10 +145,9 @@ function Ship(id, shipclass, x, y, facing, userid){
 				}
 			})
 		}
-
-		game.deploying = false;
 		this.setPosition();
 		this.setFacing();
+		game.disableDeployment();
 		game.draw();
 	}
 	
@@ -368,8 +382,10 @@ function Ship(id, shipclass, x, y, facing, userid){
 				var p1 = getPointInDirection(80, thrustTextLoc, center.x, center.y);
 					turn.thrustTextLoc = p1;
 				
-				drawText(moveCtx, "blue", "cost: " + Math.ceil(turn.cost*turn.costmod), 10, {x: p1.x, y: p1.y});
-				drawText(moveCtx, "blue", "delay; " + Math.ceil(turn.delay/turn.costmod), 10, {x: p1.x, y: p1.y+15});
+				if (game.phase != -1){
+					drawText(moveCtx, "blue", "cost: " + Math.ceil(turn.cost*turn.costmod), 10, {x: p1.x, y: p1.y});
+					drawText(moveCtx, "blue", "delay; " + Math.ceil(turn.delay/turn.costmod), 10, {x: p1.x, y: p1.y+15});
+				}
 				
 				if (this.canShortenTurn()){
 					moveCtx.beginPath();
@@ -406,7 +422,7 @@ function Ship(id, shipclass, x, y, facing, userid){
 			for (var j = 1; j >= -1; j = j-2){
 				for (var i = 1; i <= 1; i++){
 				
-					var modAngle = 30 * i * j;
+				var modAngle = 30 * i * j;
 					var newAngle = addAngle(plannedAngle, modAngle);
 					var turnButton = getPointInDirection(80, newAngle, center.x, center.y);
 					
@@ -423,27 +439,29 @@ function Ship(id, shipclass, x, y, facing, userid){
 									costmod: 1
 								}
 
-				var p = getPointInDirection(300, newAngle, center.x, center.y);
-					moveCtx.beginPath();
-					moveCtx.moveTo(center.x, center.y);
-					moveCtx.lineTo(p.x, p.y);
-					moveCtx.closePath();
-					moveCtx.stroke();
+					var p = getPointInDirection(300, newAngle, center.x, center.y);
+						moveCtx.beginPath();
+						moveCtx.moveTo(center.x, center.y);
+						moveCtx.lineTo(p.x, p.y);
+						moveCtx.closePath();
+						moveCtx.stroke();
+						
+						moveCtx.beginPath();
+						moveCtx.arc(turnButton.x, turnButton.y, 10, 0, 2*Math.PI);
+						moveCtx.closePath();
+						moveCtx.fillStyle = "white";
+						moveCtx.fill(); moveCtx.stroke();
+						
+					var thrustTextLoc = addAngle(plannedAngle, 90 * j);
 					
-					moveCtx.beginPath();
-					moveCtx.arc(turnButton.x, turnButton.y, 10, 0, 2*Math.PI);
-					moveCtx.closePath();
-					moveCtx.fillStyle = "white";
-					moveCtx.fill(); moveCtx.stroke();
-					
-				var thrustTextLoc = addAngle(plannedAngle, 90 * j);
-				
-				var p1 = getPointInDirection(80, thrustTextLoc, center.x, center.y);
-					turn.thrustTextLoc = p1;
-									
-					drawText(moveCtx, "blue", "cost: " + Math.ceil(turn.cost*turn.costmod), 10, {x: p1.x, y: p1.y});
-					drawText(moveCtx, "blue", "delay; " + Math.ceil(turn.delay/turn.costmod), 10, {x: p1.x, y: p1.y+15});
-					
+					var p1 = getPointInDirection(80, thrustTextLoc, center.x, center.y);
+						turn.thrustTextLoc = p1;
+										
+					if (game.phase != -1){
+						drawText(moveCtx, "blue", "cost: " + Math.ceil(turn.cost*turn.costmod), 10, {x: p1.x, y: p1.y});
+						drawText(moveCtx, "blue", "delay; " + Math.ceil(turn.delay/turn.costmod), 10, {x: p1.x, y: p1.y+15});
+					}
+						
 					if (this.canShortenTurn()){
 						moveCtx.beginPath();
 						moveCtx.arc(turnButton.x -20, turnButton.y, 7, 0, 2*Math.PI);
@@ -535,7 +553,7 @@ function Ship(id, shipclass, x, y, facing, userid){
 	}
 	
 	this.getTurnCost = function(){
-		return Math.ceil((Math.pow(this.mass, 1.55) / 10000) *  this.getImpulseMod());
+		return Math.ceil((Math.pow(this.mass, 1.56) / 10000) *  this.getImpulseMod());
 	}
 	
 	this.getBaseTurnDelay = function(){
@@ -968,6 +986,14 @@ function Ship(id, shipclass, x, y, facing, userid){
 		return Math.ceil(Math.pow(this.mass, 0.5));
 	}
 
+	this.getHitSectionFromAngle = function(a){
+		for (var i = 0; i < this.structures.length; i++){
+			if (isInArc(a, this.structures[i].start, this.structures[i].end)){
+				return this.structures[i];
+			}
+		}
+	}
+
 	this.getHitChanceFromAngle = function(angle){
 		//console.log(angle);				342
 		var a, b, c, base;
@@ -1064,6 +1090,8 @@ function Ship(id, shipclass, x, y, facing, userid){
 		var pWidth = $(structContainer).width();
 		var pHeight = $(structContainer).height();
 
+
+		// OUTER STRUCTS
 		for (var i = 0; i < this.structures.length; i++){
 
 			var structDiv = document.createElement("div");
@@ -1083,34 +1111,54 @@ function Ship(id, shipclass, x, y, facing, userid){
 
 			structTable.appendChild(this.structures[i].getTableRow());
 
+			var entry = 0;
+
 			for (var j = 0; j < this.structures[i].systems.length; j++){
-				var ele = this.structures[i].systems[j].getTableRow();
+				if (entry < 2){
+					var tr = document.createElement("tr");
+				}
+
+				var ele = this.structures[i].systems[j].getTableData();
+				entry++;
+				tr.appendChild(ele);
 				structTable.appendChild(ele);
+
+				if (entry == 2){
+					structTable.appendChild(tr);
+					entry = 0;
+				}
 			}
 
 			structDiv.appendChild(structTable);
 			structContainer.appendChild(structDiv);
 
-			if (i != this.structures.length-1){
-				var a = this.structures[i].getDirection();
-				var pos = getPointInDirection(130, addAngle(a, -90), pWidth/2-10, pHeight/2-50);
+			var a = this.structures[i].getDirection();
+			var pos = getPointInDirection(130, addAngle(a, -90), pWidth/2-10, pHeight/2-50);
 
-				$(structDiv)
-					.data("id", this.structures[i].id)
-					.data("structureId", i)
-					.css("left", pos.x - $(structTable).width() / 2 +5)
-					.css("top", pos.y - $(structTable).height() /2);				
-				}
-			else {
-
-				$(structDiv)
-					.data("id", this.structures[i].id)
-					.data("structureId", i)
-					.css("left", pWidth / 2-53)
-					.css("top", pHeight/ 2-10)
-			}
+			$(structDiv)
+				.data("id", this.structures[i].id)
+				.data("structureId", i)
+				.css("left", pos.x - $(structTable).width() / 2 +5)
+				.css("top", pos.y - $(structTable).height() /2);
 		}
 
+
+		// PRIMARY
+		var primaryContainer = document.createElement("div");
+			$(primaryContainer).addClass("primaryDiv")
+				.html("primary")
+				.css("left", pWidth / 2-55)
+				.css("top", pHeight / 2)
+
+				
+		var primaryTable = document.createElement("table");
+			primaryTable.className = "PrimaryTable";
+			primaryTable.appendChild(this.primary.getTableRow());
+
+			primaryContainer.appendChild(primaryTable);
+
+		structContainer.appendChild(primaryContainer);
+		/*
 		var div = document.createElement("div");
 			div.className = "iconDiv";
 
@@ -1126,6 +1174,7 @@ function Ship(id, shipclass, x, y, facing, userid){
 		$(div)
 			.css("left", pWidth/2-50)
 			.css("top", pHeight/2-50)
+		*/
 	}
 	
 	this.updateDiv = function(){
@@ -1307,6 +1356,8 @@ function Ship(id, shipclass, x, y, facing, userid){
 		aShip = false;
 		$("#vectorDiv").addClass("disabled");
 		this.selected = false;
+
+		if (game.deploying){game.disableDeployment()}
 		this.turns = [];
 		this.unselectWeapons();
 		this.switchDiv();

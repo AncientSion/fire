@@ -64,10 +64,7 @@ class Weapon extends System {
 	}
 
 	public function getDamage($fire){
-		$fire->dmgRoll = mt_rand($this->minDmg, $this->maxDmg);
-		$fire->loss = $this->getDmgLoss($fire);
-
-		return $fire;
+		return mt_rand($this->minDmg, $this->maxDmg) / 100 * (100-$this->getDmgLoss($fire));
 	}
 }
 
