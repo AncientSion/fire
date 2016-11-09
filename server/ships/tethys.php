@@ -4,7 +4,7 @@ class Tethys extends Ship {
 	public $shipClass = "Tethys";
 	public $name = "Tethys";
 	public $faction = "Earth Alliance";
-	public $size = 30;
+	public $size = 40;
 	public static $value = 300;
 	public $profile = array(0.95, 1.05);
 	public $mass = 1500;

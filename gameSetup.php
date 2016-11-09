@@ -391,6 +391,12 @@ else {
 		ship.ep = data.ep;
 		ship.profile = data.profile;
 		ship.size = data.size;
+		ship.primary = new Primary(
+			data.primary.id,
+			data.primary.parentId,
+			data.primary.integrity,
+			data.primary.damages
+			)
 
 
 		for (var j = 0; j < data.structures.length; j++){

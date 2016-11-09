@@ -82,11 +82,102 @@ echo "</script>";
 					</div>
 				</div>
 			</div>
+			<div id= "impulseGUI" class="ui disabled">
+				<table>
+					<tr>
+						<td>
+							Engine Power:
+						</td>
+						<td  id="enginePower">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Impulse:
+						</td>
+						<td  id="impulse">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Impulse Change:
+						</td>
+						<td  id="impulseChange">
+						</td>
+					</tr>
+					<tr id="increaseImpulse" class="disabled">
+						<td colspan=2>
+							Increase Impulse
+						</td>
+					</tr>
+					<tr id="decreaseImpulse" class="disabled">
+						<td colspan=2>
+							Decrease Impulse
+						</td>
+					</tr>
+					<tr id="undoLastAction" class="disabled">
+						<td colspan=2>
+							Undo last action
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div id="addImpulse" class="ui disabled">
+			</div>
+			<div id="removeImpulse" class="ui disabled">
+			</div>
+			<div id="undoAction" class="ui disabled">
+			</div>
+			<div id="turnLeft" class="turnEle ui disabled">
+				<table style="margin:auto;">
+					<tr>
+						<th colSpan=2>
+							Turn
+						</th>
+					</tr>
+					<tr>
+						<td>
+							EP Cost
+						</td>
+						<td id="epCost">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Next Turn
+						</td>
+						<td id="turnDelay">
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div id="turnRight" class="turnEle ui disabled">
+				<table style="margin:auto;">
+					<tr>
+						<th colSpan=2>
+							Turn
+						</th>
+					</tr>
+					<tr>
+						<td>
+							EP Cost
+						</td>
+						<td id="epCost">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Next Turn
+						</td>
+						<td id="turnDelay">
+						</td>
+					</tr>
+				</table>
+			</div>
 			<div id="canvasDiv">
 				<div id="upperGUI">
 					<div id="currentPos">0 / 0</div>
 
-				
 				<!--	<div id="buttons"></div>
 					<span id="onArc">null</span>
 					<span id="curArc">0</span>
@@ -246,6 +337,26 @@ echo "</script>";
 	}
 
 	$(document).ready(function(){
+
+		$(this).keypress(function(e){
+			if (game){
+				if (e.keyCode == 32){
+					if (game.vector == true){
+						game.vector = false;
+						$("#vectorDiv").addClass("disabled");
+						mouseCtx.clearRect(0, 0, res.x, res.y);
+					}
+
+
+
+					else {
+						game.vector = true;
+					}
+				}
+				console.log(game.vector);
+			}
+		})
+
 		$("#reinforce").hover(
 			function(e){
 				$(this).addClass("selected");
@@ -314,6 +425,30 @@ echo "</script>";
 		    return false;
 		};
 
+
+		$("#increaseImpulse")
+		.click(function(){
+			console.log("doIncreaseImpulse")
+			game.getShipById(aShip).doIncreaseImpulse();
+		});
+
+		$("#decreaseImpulse")
+		.click(function(){
+			console.log("doDecreaseImpulse")
+			game.getShipById(aShip).doDecreaseImpulse();
+		});
+
+		$("#undoLastAction")
+		.click(function(){
+			console.log("undoLastAction")
+			game.getShipById(aShip).undoLastOrder()
+		});
+
+		$(".turnEle")
+		.click(function(){
+			console.log("issueTurn")
+			game.getShipById($(this).data("shipid")).issueTurn($(this).data("a"))
+		})
 	})
 
 

@@ -4,7 +4,7 @@ class Omega extends Ship {
 	public $shipClass = "Omega";
 	public $name = "Omega Destroyer";
 	public $faction = "Earth Alliance";
-	public $size = 60;
+	public $size = 100;
 	public static $value = 1200;
 	public $profile = array(0.85, 1.20);
 	public $mass = 15000;

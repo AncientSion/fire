@@ -317,23 +317,6 @@ function canvasMouseClick(e){
 	
 		if (game.mode == 1){ //no active weapon but ship active -> MOVE MODE
 			//drawVector(ship.getOffsetPos(), pos);
-
-
-			
-			if (ship.undoOrderButton){
-				if (clickedOn(pos, ship.undoOrderButton)){
-					ship.undoLastOrder();
-					return;
-				}
-			}
-			if (ship.impulseAdjust.length){ // adjust speed
-				for (var i = 0; i < ship.impulseAdjust.length; i++){
-					if (clickedOn(pos, ship.impulseAdjust[i])){
-						ship.doAdjustImpulse(ship.impulseAdjust[i]);
-						return;
-					}
-				}
-			}
 			if (ship.maxVector){ // straight max vector movement
 				if (clickedOn(pos, ship.maxVector)){
 					ship.moveToMaxVector(pos);
@@ -355,27 +338,6 @@ function canvasMouseClick(e){
 					}
 				}
 				else {console.log("occupied");}
-			}
-			else { // check if click on turn buttons
-				for (var i = 0; i < ship.turns.length; i++){
-					var turn = ship.turns[i];
-					if (turn.thrustUp){
-						if (clickedOn(pos, turn.thrustUp)){
-							ship.issueShortenTurnDelay(i);
-							return;
-						}
-					}
-					if (turn.thrustDown){
-						if (clickedOn(pos, turn.thrustDown)){
-							ship.cancelShortenTurnDelay(i);
-							return
-						}
-					}
-					if (clickedOn(pos, turn)){
-						ship.issueTurn(turn);
-						return;
-					}
-				}
 			}
 		}
 	}

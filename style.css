@@ -229,6 +229,9 @@ canvas {
 }
 
 #game {
+	position: absolute;
+	top: 0px;
+	left: 0px;
 }
 
 #game.disabled {
@@ -622,4 +625,51 @@ canvas {
 }
 #vectorDiv.disabled {
 	display: none;
+}
+
+#impulseGUI table {
+	width: 175px;
+	border-collapse: collapse;
+}
+
+#impulseGUI tr {
+	border: 1px solid black;
+}
+
+#impulseGUI.disabled {
+	display: none;
+}
+
+.ui {
+	position: absolute;
+	display: inline-block;
+	border: 1px solid black;
+	background-color: white;
+	z-index: 6;
+}
+
+#increaseImpulse, #decreaseImpulse, #undoLastAction {
+	border: 1px solid black;
+	background-color: lightGreen;
+
+}
+#increaseImpulse:hover, #decreaseImpulse:hover, #undoLastAction:hover {
+	background-color: green;
+}
+
+#increaseImpulse.disabled, #decreaseImpulse.disabled, #undoLastAction.disabled {
+	display: none;
+}
+
+.turnEle {
+	width: 100px;
+	height: 60px;
+	border-radius: 5px;
+}
+
+.turnEle.disabled {
+	display: none;
+}
+.turnEle:hover {
+	background-color: lightGreen;
 }

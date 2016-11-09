@@ -4,7 +4,7 @@ class Hyperion extends Ship {
 	public $shipClass = "Hyperion";
 	public $name = "Hyperion Light Cruiser";
 	public $faction = "Earth Alliance";
-	public $size = 45;
+	public $size = 80;
 	public static $value = 850;
 	public $profile = array(0.90, 1.10);
 	public $mass = 8000;

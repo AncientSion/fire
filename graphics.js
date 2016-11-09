@@ -1,5 +1,6 @@
 
 function drawVector(loc, pos, dist, angle){
+	if (! game.vector){return}
 	//console.log(angle);
 	pos = {x: pos.x + cam.o.x, y: pos.y + cam.o.y};
 	mouseCtx.clearRect(0, 0, res.x, res.y);
@@ -33,8 +34,8 @@ function drawProjectile(weapon, ox, oy, x, y){
 	var trailEnd = getPointInDirection(weapon.projSize*-2, getAngleFromTo({x: ox, y: oy}, {x: x, y: y}), x, y);
 
 	fxCtx.beginPath();
-	fxCtx.moveTo(x, y);
-	fxCtx.lineTo(trailEnd.x, trailEnd.y);
+	fxCtx.moveTo(x+cam.o.x, y+cam.o.y);
+	fxCtx.lineTo(trailEnd.x+cam.o.x, trailEnd.y+cam.o.y);
 	fxCtx.closePath();
 	fxCtx.strokeStyle = weapon.animColor;
 	fxCtx.lineWidth = weapon.projSize / 3;
@@ -46,14 +47,13 @@ function drawBeam(weapon, ox, oy, x, y, as, ae){
 
 	fxCtx.lineCap = "round";	
 	fxCtx.beginPath();
-	fxCtx.moveTo(ox, oy);
-	fxCtx.lineTo(x, y);
+	fxCtx.moveTo(ox+cam.o.x, oy+cam.o.y);
+	fxCtx.lineTo(x+cam.o.x, y+cam.o.y);
 	fxCtx.closePath();
 	fxCtx.strokeStyle = weapon.animColor;
 	fxCtx.lineWidth = weapon.beamWidth * cos + 1;
 	fxCtx.globalAlpha = 1-cos;
 	fxCtx.stroke();
-	if (as == ae){console.log("done")}
 	fxCtx.lineWidth = 1
 	fxCtx.globalAlpha = 1;	
 	fxCtx.lineCap = "butt";	
@@ -68,27 +68,22 @@ function drawExplosion(x, y, s, now, max){
 	}
 	//console.log(s);
 
-		fxCtx.beginPath(); fxCtx.arc(x, y, s, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = "rgb(255,255,155)"; fxCtx.fill();
-		fxCtx.beginPath(); fxCtx.arc(x, y, s/3*2, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = "orange"; fxCtx.fill();
-		fxCtx.beginPath(); fxCtx.arc(x, y, s/4, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = "red"; fxCtx.fill();
+		fxCtx.beginPath(); fxCtx.arc(x+cam.o.x, y+cam.o.y, s, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = "rgb(255,255,155)"; fxCtx.fill();
+		fxCtx.beginPath(); fxCtx.arc(x+cam.o.x, y+cam.o.y, s/3*2, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = "orange"; fxCtx.fill();
+		fxCtx.beginPath(); fxCtx.arc(x+cam.o.x, y+cam.o.y, s/4, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = "red"; fxCtx.fill();
 }
 
 function drawBeamExplosion(x, y, s, now, max){
-
 	//console.log(s);
-
-
 	fxCtx.globalAlpha = now/max;	
-
 	for (var i = 0; i < 1; i++){
 		var subX = x + range(-2, 3);
 		var subY = y + range(-2, 3);
 		var subS = s + (range(-s*.15, s*.15));
 
-
-		fxCtx.beginPath(); fxCtx.arc(x, y, subS, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = "rgb(255,255,155)"; fxCtx.fill();
-		fxCtx.beginPath(); fxCtx.arc(x, y, subS/3*2, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = "orange"; fxCtx.fill();
-		fxCtx.beginPath(); fxCtx.arc(x, y, subS/4, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = "red"; fxCtx.fill();
+		fxCtx.beginPath(); fxCtx.arc(x+cam.o.x, y+cam.o.y, subS, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = "rgb(255,255,155)"; fxCtx.fill();
+		fxCtx.beginPath(); fxCtx.arc(x+cam.o.x, y+cam.o.y, subS/3*2, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = "orange"; fxCtx.fill();
+		fxCtx.beginPath(); fxCtx.arc(x+cam.o.x, y+cam.o.y, subS/4, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = "red"; fxCtx.fill();
 	}
 
 	fxCtx.globalAlpha = 1;	

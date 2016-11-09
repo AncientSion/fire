@@ -156,7 +156,7 @@ function Structure(id, parentId, start, end, integrity, mitigation, destroyed){
 		$(td).click(function(e){
 			var shipId = $(this).data("shipId");
 			var systemId = $(this).data("systemId");
-			console.log(game.getShipById(shipId).getSystemById(systemId).damages);
+			console.log(game.getShipById(shipId).getSystemById(systemId));
 		})
 
 			tr.appendChild(td);
@@ -216,7 +216,7 @@ function Structure(id, parentId, start, end, integrity, mitigation, destroyed){
 					if ($(this).data("systemId") == id){
 						var offset = $(this).offset();
 						div.style.top = offset.top + 0 + "px";
-						div.style.left = offset.left + 125 + "px";
+						div.style.left = offset.left + 100 + "px";
 						$("#game").append(div);
 						return;
 					}
@@ -301,23 +301,74 @@ function Primary(id, parentId, integrity, damages){
 			function(e){
 				var shipId = $(this).data("shipId");
 				var systemId = $(this).data("systemId");
-				game.getShipById(shipId).getSystemById(systemId).hover();
+				game.getShipById(shipId).primary.hover();
 			},
 			function(e){
 				var shipId = $(this).data("shipId");
 				var systemId = $(this).data("systemId");
-				game.getShipById(shipId).getSystemById(systemId).hover();
+				game.getShipById(shipId).primary.hover();
 			}
 		)
 		$(td).click(function(e){
 			var shipId = $(this).data("shipId");
 			var systemId = $(this).data("systemId");
-			console.log(game.getShipById(shipId).getSystemById(systemId).damages);
+			console.log(game.getShipById(shipId).primary);
 		})
 
 			tr.appendChild(td);
 			
 		return tr;
+	}
+
+	this.hover = function(){
+		if (this.highlight){
+			this.highlight = false;
+			this.hideInfoDiv();
+		}
+		else {
+			this.highlight = true;
+			this.showInfoDiv();
+		}
+	}
+
+	this.getSystemDetailsDiv = function(){
+		var div = document.createElement("div");
+			div.id = "systemDetailsDiv";
+		var table = document.createElement("table");
+			
+		var tr = document.createElement("tr");
+		var td = document.createElement("td"); td.style.width = "40%";
+			td.innerHTML = "Structure"; tr.appendChild(td);
+		var td = document.createElement("td");
+			td.innerHTML = this.getRemainingIntegrity() + " / " + this.integrity; tr.appendChild(td); table.appendChild(tr);
+
+		div.appendChild(table);
+			
+		return div;
+	}
+	this.showInfoDiv = function(){
+		var div = this.getSystemDetailsDiv();
+		var parentId = this.parentId;
+		var id = this.id;
+		
+		var div = $(".shipDiv").each(function(i){
+			if ($(this).data("shipId") == parentId){
+				$(this).find(".struct").each(function(j){
+					if ($(this).data("systemId") == id){
+						var offset = $(this).offset();
+						div.style.top = offset.top + 0 + "px";
+						div.style.left = offset.left + 125 + "px";
+						$("#game").append(div);
+						return;
+					}
+				})
+			}
+		})
+	}
+	
+	this.hideInfoDiv = function(){
+		var div = document.getElementById("systemDetailsDiv");
+			$(div).remove();
 	}
 
 	this.getRemainingIntegrity = function(){
@@ -326,5 +377,9 @@ function Primary(id, parentId, integrity, damages){
 			integrity -= this.damages[i].structDmg;
 		}
 		return integrity;
+	}
+
+	this.getRemainingMitigation = function(){
+		return Math.round((Math.pow(this.getRemainingIntegrity(), 0.5) / Math.pow(this.integrity, 0.5)) * this.mitigation);
 	}
 }

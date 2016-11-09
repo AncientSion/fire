@@ -27,6 +27,13 @@ window.cam = {
 			return Math.floor((number - cam.zoom.screen.y) * (1 / cam.zoom.scale) + cam.zoom.world.y);
 		},
 	},
+
+	setFocus: function(x, y){
+		console.log(this.o.x, this.o.y)
+		this.o.x = res.x/2 - x;
+		this.o.y =  res.y/2 - y;
+		console.log(this.o.x, this.o.y)
+	},
 	
 	doScroll: function(pos){
 		this.o.x -= pos.x - res.x/2;

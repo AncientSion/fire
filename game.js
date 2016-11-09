@@ -18,6 +18,7 @@ function Game(id, name, status, userid, turn, phase){
 	this.animating = false;
 	this.deployArea = false;
 	this.deployBlock = [];
+	this.vector = false;
 	
 	this.endPhase = function(){
 		if (this.canSubmit){
@@ -302,13 +303,11 @@ function Game(id, name, status, userid, turn, phase){
 			ship.value = window.ships[i].value;
 			ship.ep = window.ships[i].ep;
 			ship.profile = window.ships[i].profile;
-			ship.size = window.ships[i].mass / 100;
+			ship.size = window.ships[i].size;
 			ship.shipType = window.ships[i].shipType;
 			ship.friendly = friendly;
 			ship.deployed = deployed;
 			ship.available = window.ships[i].available;
-			ship.primary = window.ships[i].primary;
-
 			ship.primary = new Primary(
 				window.ships[i].primary.id,
 				window.ships[i].primary.parentId,

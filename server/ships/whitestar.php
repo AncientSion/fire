@@ -5,7 +5,7 @@ class WhiteStar extends Ship {
 	public $shipClass = "WhiteStar";
 	public $name = "White Star";
 	public $faction = "Minbari Federation";
-	public $size = 40;
+	public $size = 50;
 	public static $value = 600;
 	public $profile = array(1, 1.1);
 	public $mass = 2750;

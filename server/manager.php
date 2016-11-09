@@ -208,13 +208,12 @@ class Manager {
 		//echo "ship size: ".sizeof($ships)."\n";
 		for ($j = 0; $j < sizeof($this->damages); $j++){
 			if ($ship->id == $this->damages[$j]->shipid){
-				for ($k = 0; $k < sizeof($ship->structures)-1; $k++){
+				for ($k = 0; $k < sizeof($ship->structures); $k++){
 					if ($ship->structures[$k]->id == $this->damages[$j]->structureid){
 						$ship->structures[$k]->damages[] = $this->damages[$j];
+						$ship->primary->damages[] = $this->damages[$j];
 					}
 				}
-
-				$ship->primary->damages[] = $this->damages[$j];
 			}
 		}
 		//echo json_encode($this->damages);

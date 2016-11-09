@@ -5,11 +5,11 @@ class Tinashi extends Ship {
 	public $shipClass = "Tinashi";
 	public $name = "Tinashi";
 	public $faction = "Minbari Federation";
-	public $size = 80;
-	public static $value = 1100;
+	public $size = 70;
+	public static $value = 1000;
 	public $profile = array(0.9, 1.1);
-	public $mass = 9000;
-	public $ep = 300;
+	public $mass = 7000;
+	public $ep = 250;
 
 	function __construct($id, $userid, $x, $y, $facing, $available){		
         parent::__construct($id, $userid, $x, $y, $facing, $available);

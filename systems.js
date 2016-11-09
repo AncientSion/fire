@@ -186,7 +186,7 @@ function System(id, parentId, name, display){
 						var offset = $(this).offset();
 						//console.log(offset);
 						div.style.top = offset.top + 0 + "px";
-						div.style.left = offset.left + 125 + "px";
+						div.style.left = offset.left + 80 + "px";
 						$("#game").append(div);
 						return;
 					}
