@@ -12,8 +12,8 @@ class Particle extends Weapon {
 class StandardParticleBeam extends Particle {
 	public $name = "ParticleBeam";
 	public $display = "Particle Beam";
-	public $minDmg = 60;
-	public $maxDmg = 80;
+	public $minDmg = 40;
+	public $maxDmg = 60;
 	public $accDecay = 150;
 	public $shots = 3;
 	public $animColor = "blue";
@@ -28,8 +28,8 @@ class StandardParticleBeam extends Particle {
 class FusionCannon extends Particle {
 	public $name = "FusionCannon";
 	public $display = "Fusion Cannon";
-	public $minDmg = 90;
-	public $maxDmg = 120;
+	public $minDmg = 60;
+	public $maxDmg = 80;
 	public $accDecay = 130;
 	public $shots = 2;
 	public $animColor = "green";
@@ -45,8 +45,8 @@ class FusionCannon extends Particle {
 class FusionPulsar extends Particle {
 	public $name = "FusionPulsar";
 	public $display = "Fusion Pulsar";
-	public $minDmg = 50;
-	public $maxDmg = 60;
+	public $minDmg = 40;
+	public $maxDmg = 50;
 	public $accDecay = 200;
 	public $shots = 6;
 	public $animColor = "lightGreen";
@@ -65,11 +65,11 @@ class FusionPulsar extends Particle {
 			$roll = mt_rand(1, 100);
 
 			if ($roll <= $fire->req){
-				$notes = "salvo hit";
 				$hits = $this->shots;
-			}
-			else {				
-				$notes = "salvo miss";
+				for ($i = 0; $i < $hits; $i++){
+					$fire->rolls[] = $roll;
+					$notes += $roll."-";
+				}
 			}
 
 		$fire->hits = $hits;

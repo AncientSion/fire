@@ -86,16 +86,16 @@ echo "</script>";
 				<table>
 					<tr>
 						<td>
-							Engine Power:
+							Impulse:
 						</td>
-						<td  id="enginePower">
+						<td  id="impulse">
 						</td>
 					</tr>
 					<tr>
 						<td>
-							Impulse:
+							Engine Power:
 						</td>
-						<td  id="impulse">
+						<td  id="enginePower">
 						</td>
 					</tr>
 					<tr>
@@ -121,12 +121,6 @@ echo "</script>";
 						</td>
 					</tr>
 				</table>
-			</div>
-			<div id="addImpulse" class="ui disabled">
-			</div>
-			<div id="removeImpulse" class="ui disabled">
-			</div>
-			<div id="undoAction" class="ui disabled">
 			</div>
 			<div id="turnLeft" class="turnEle ui disabled">
 				<table style="margin:auto;">
@@ -173,6 +167,10 @@ echo "</script>";
 						</td>
 					</tr>
 				</table>
+			</div>
+			<div id="maxTurnVector" class="ui disabled">
+			</div>
+			<div id="maxVector" class="ui disabled">
 			</div>
 			<div id="canvasDiv">
 				<div id="upperGUI">
@@ -448,6 +446,18 @@ echo "</script>";
 		.click(function(){
 			console.log("issueTurn")
 			game.getShipById($(this).data("shipid")).issueTurn($(this).data("a"))
+		})
+
+		$("#maxVector")
+		.click(function(){
+			console.log("maxVector")
+			game.getShipById($(this).data("shipid")).moveToMaxVector();
+		})
+
+		$("#maxTurnVector")
+		.click(function(){
+			console.log("maxTurnVector")
+			game.getShipById($(this).data("shipid")).moveToMaxTurnVector();
 		})
 	})
 

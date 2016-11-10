@@ -29,10 +29,9 @@ window.cam = {
 	},
 
 	setFocus: function(x, y){
-		console.log(this.o.x, this.o.y)
+		return;
 		this.o.x = res.x/2 - x;
 		this.o.y =  res.y/2 - y;
-		console.log(this.o.x, this.o.y)
 	},
 	
 	doScroll: function(pos){

@@ -94,6 +94,7 @@ function System(id, parentId, name, display){
 
 			this.setTableRow();
 		}
+		else return false;
 
 		var ship = game.getShipById(parentId);
 	

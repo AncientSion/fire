@@ -11,8 +11,6 @@ function Ship(id, shipclass, x, y, facing, userid){
 	this.actions = [];
 	this.validMoveArcs = [];
 	this.impulseAdjust = [];
-	this.maxVector = false;
-	this.undoOrderButton = false;
 	this.structures = [];
 
 	this.profile = [];
@@ -409,11 +407,11 @@ function Ship(id, shipclass, x, y, facing, userid){
 	}
 	
 	this.getBaseTurnDelay = function(){
-		return Math.ceil(Math.pow(this.mass, 0.55));
+		return Math.pow(this.mass, 0.55);
 	}
 	
 	this.getTurnDelay = function(){
-		return this.getBaseTurnDelay() / this.getImpulseMod();
+		return Math.ceil(this.getBaseTurnDelay() / this.getImpulseMod());
 	}
 	
 	this.drawSelector = function(){
@@ -437,6 +435,7 @@ function Ship(id, shipclass, x, y, facing, userid){
 	}
 
 	this.drawArcIndicator = function(){
+		return;
 		var shipPos = this.getBaseOffsetPos();
 		var angle = this.getPlannedFacingToMove(this.actions.length-1);
 
@@ -504,21 +503,6 @@ function Ship(id, shipclass, x, y, facing, userid){
 			moveCtx.strokeStyle = "red";
 			moveCtx.stroke();
 			moveCtx.strokeStyle = "black";	
-			
-			if (this.getRemainingImpulse() > delay){
-				var last = this.actions[this.actions.length-1];
-				var turnP = getPointInDirection(delay, angle, center.x, center.y);
-				var arcP = getPointInDirection(this.getRemainingImpulse() + 70, angle, last.x + cam.o.x, last.y + cam.o.y);
-				moveCtx.beginPath();
-				moveCtx.arc(arcP.x, arcP.y, 8, 0, 2*Math.PI, false);
-				moveCtx.closePath();
-				moveCtx.stroke();
-				
-				this.maxTurnVector = {clickX: arcP.x, clickY: arcP.y, x: turnP.x, y: turnP.y};
-			}
-			else {
-				this.maxTurnVector = false;
-			}
 		}
 	}
 	
@@ -560,34 +544,6 @@ function Ship(id, shipclass, x, y, facing, userid){
 		}
 	}
 		
-	this.drawImpulseIndicator = function(){
-		var center = this.getPlannedPosition();
-		var angle = this.getPlannedFacingToMove(this.actions.length-1)
-		/*var p = getPointInDirection(20, angle, center.x, center.y);
-		var p1 = getPointInDirection(300, angle, center.x, center.y);
-		
-		moveCtx.beginPath();			
-		moveCtx.moveTo(p.x, p.y);
-		moveCtx.lineTo(p1.x, p1.y); 
-		moveCtx.closePath();
-		moveCtx.lineWidth = 1;
-		moveCtx.stroke();
-		*/
-		if (this.getRemainingImpulse() > 0){		
-			var p2 = getPointInDirection(this.getRemainingImpulse(), angle, center.x, center.y);
-			var p3 = getPointInDirection(this.getRemainingImpulse() + 40, angle, center.x, center.y);
-		
-			moveCtx.beginPath();	
-			moveCtx.arc(p3.x, p3.y, 10, 0, 2*Math.PI, false);
-			moveCtx.closePath();
-			moveCtx.stroke();
-			this.maxVector = {clickX: p3.x, clickY: p3.y, x: p2.x, y: p2.y};
-		}
-		else {
-			this.maxVector = false;
-		}
-	}
-	
 	this.getPlannedFacingToMove = function(end){
 		if (end == undefined){
 			end = this.actions.length-1;
@@ -716,12 +672,64 @@ function Ship(id, shipclass, x, y, facing, userid){
 
 	this.drawMovementUI = function(){
 		this.drawNewImpulseUI();
+		this.drawVectorMovementUI();
 
 		if (this.canTurn()){
 			this.drawNewTurnUI();
 			this.updateDiv();
 		}
 	}
+
+	this.drawVectorIndicator = function(){
+		var center = this.getPlannedPosition();
+		var angle = this.getPlannedFacingToMove(this.actions.length-1);
+		var p = getPointInDirection(200, angle, center.x, center.y);
+		
+		moveCtx.beginPath();			
+		moveCtx.moveTo(center.x, center.y);
+		moveCtx.lineTo(p.x, p.y);
+		moveCtx.closePath();
+		moveCtx.lineWidth = 1;
+		moveCtx.stroke();
+	}
+
+	this.drawVectorMovementUI = function(){
+		var center = this.getPlannedPosition();
+		var angle = this.getPlannedFacingToMove(this.actions.length-1);
+		var rem = this.getRemainingImpulse();
+		var delay = this.getRemainingDelay();
+		var ele;
+
+		if (rem > 0){
+			ele = document.getElementById("maxVector");
+			var p = getPointInDirection(rem + 80, angle, center.x, center.y);
+			var left = p.x - $(ele).width()/2;
+			var top = p.y - $(ele).height()/2;
+
+			$(ele)
+				.data("shipid", this.id)
+				.html("<div style='margin-left: 5px; margin-top: 5px'>"+rem+"<div>")
+				.css("left", left)
+				.css("top", top)
+				.removeClass("disabled")
+		}
+		if (delay > 0){
+			if (rem >= delay){
+				ele = document.getElementById("maxTurnVector");
+				var p = getPointInDirection(rem + 40, angle, center.x, center.y);
+				var left = p.x - $(ele).width()/2;
+				var top = p.y - $(ele).height()/2;
+
+				$(ele)
+					.data("shipid", this.id)
+					.html("<div style='margin-left: 5px; margin-top: 5px'>"+delay+"<div>")
+					.css("left", left)
+					.css("top", top)
+					.removeClass("disabled")
+			}
+		}
+	}
+
 	this.drawNewTurnUI = function(){
 		var center;
 		var plannedAngle = this.getPlannedFacingToMove(this.actions.length-1);
@@ -729,17 +737,13 @@ function Ship(id, shipclass, x, y, facing, userid){
 		if (this.actions.length){
 			center = new Point(this.actions[this.actions.length-1].x + cam.o.x, this.actions[this.actions.length-1].y + cam.o.y);
 		}
-		else {
-			center = this.getBaseOffsetPos();
-		}
+		else center = this.getBaseOffsetPos();
 
 		for (var j = 1; j >= -1; j = j-2){
 			for (var i = 1; i <= 1; i++){
 			
 				var modAngle = 30 * i * j;
 				var newAngle = addAngle(plannedAngle, modAngle);
-				var turnButton = getPointInDirection(80, newAngle, center.x, center.y);
-				
 				var turn = 
 							{
 								x: center.x,
@@ -814,12 +818,17 @@ function Ship(id, shipclass, x, y, facing, userid){
 	}
 
 	
-	this.issueMove = function(pos, dist){			
-		this.actions.push(new Move("move", dist, pos.x - cam.o.x, pos.y - cam.o.y, 0, 0));		
-		this.maxVector = false;
-		this.maxTurnVector = false;
-		this.turns = [];
-						
+	this.issueMove = function(pos, dist){
+
+		if (this.actions[this.actions.length-1].type == "move" && this.actions[this.actions.length-1].turn == game.turn){
+			this.actions[this.actions.length-1].dist+= dist;	
+			this.actions[this.actions.length-1].x = pos.x - cam.o.x;
+			this.actions[this.actions.length-1].y = pos.y - cam.o.y;
+		}
+		else {
+			this.actions.push(new Move("move", dist, pos.x - cam.o.x, pos.y - cam.o.y, 0, 0));	
+		}
+		this.turns = [];						
 		game.drawShips();
 		this.unsetMoveMode();
 		this.setMoveMode();
@@ -844,15 +853,24 @@ function Ship(id, shipclass, x, y, facing, userid){
 		this.unsetMoveMode();
 		this.setMoveMode();
 	}
+
+
 	
+	//function Move(type, dist, x, y, a, delay, cost, costmod){
+	//this.issueMove = function(pos, dist){	
+
 	this.moveToMaxVector = function(){
-		var dist = Math.ceil(getDistance(this.getOffsetPos(), this.maxVector));
-		this.issueMove(this.maxVector, dist);
+		var pos = this.getOffsetPos();
+		var dist = this.getRemainingImpulse();
+		var goal = getPointInDirection(dist, this.getPlannedFacingToMove(this.actions.length-1), pos.x, pos.y);
+		this.issueMove(goal, dist);
 	}
 	
-	this.moveToMaxTurnVector = function(pos){
-		var dist = Math.ceil(getDistance(this.getOffsetPos(), this.maxTurnVector));
-		this.issueMove(this.maxTurnVector, dist);
+	this.moveToMaxTurnVector = function(){
+		var pos = this.getOffsetPos();
+		var dist = this.getRemainingDelay();
+		var goal = getPointInDirection(dist, this.getPlannedFacingToMove(this.actions.length-1), pos.x, pos.y);
+		this.issueMove(goal, dist);
 	}
 	
 	this.canTurn = function(){
@@ -1050,6 +1068,8 @@ function Ship(id, shipclass, x, y, facing, userid){
 			var a = this.structures[i].getDirection();
 			var pos = getPointInDirection(130, addAngle(a, -90), pWidth/2-10, pHeight/2-50);
 
+
+
 			$(structDiv)
 				.data("id", this.structures[i].id)
 				.data("structureId", i)
@@ -1073,6 +1093,7 @@ function Ship(id, shipclass, x, y, facing, userid){
 
 		structContainer.appendChild(primaryContainer);
 
+		/*
 		var div = document.createElement("div");
 			div.className = "iconDiv";
 
@@ -1088,6 +1109,7 @@ function Ship(id, shipclass, x, y, facing, userid){
 		$(div)
 			.css("left", pWidth/2-50)
 			.css("top", pHeight/2-50)
+		*/
 
 	}
 	
@@ -1177,30 +1199,25 @@ function Ship(id, shipclass, x, y, facing, userid){
 	this.setMoveMode = function(){
 		game.mode = 1;
 		this.drawSelector();
+		this.drawMoveRange();
 		this.drawArcIndicator();
-
+		this.drawVectorIndicator();
 
 		if (game.phase == -1){ // DEPLOYMENT
 			if (this.actions[0].type == "deploy"  && this.actions[0].turn == game.turn){
-				this.drawTurnControl();
-				this.updateDiv();
+				this.drawNewTurnUI();
 			}
 			else {
 				console.log("deployed earlier!");
 			}
 		}
 		else if (game.phase == 1){ // MOVE
-			this.drawMoveRange();
-			this.drawImpulseIndicator();
 			this.drawMovementUI();
 			this.drawMovePlan();
 		}
 		else if (game.phase == 2){ // FIRE
-			
 		}
 		else if (game.phase == 3){ // Dmg control
-			this.drawMoveRange();
-			this.drawImpulseIndicator();
 		}
 
 		this.updateDiv();
@@ -1211,6 +1228,8 @@ function Ship(id, shipclass, x, y, facing, userid){
 		$("#vectorDiv").addClass("disabled");
 		$("#impulseGUI").addClass("disabled");
 		$(".turnEle").addClass("disabled");
+		$("#maxVector").addClass("disabled");
+		$("#maxTurnVector").addClass("disabled");
 		moveCtx.clearRect(0, 0, res.x, res.y);
 		planCtx.clearRect(0, 0, res.x, res.y);
 		mouseCtx.clearRect(0, 0, res.x, res.y);

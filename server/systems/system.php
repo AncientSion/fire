@@ -43,9 +43,10 @@ class Weapon extends System {
 		$notes = "";
 
 		for ($j = 0; $j < $this->shots; $j++){
-				$roll = mt_rand(1, 100);
-				$fire->rolls[] = $roll;
+			$roll = mt_rand(1, 100);
+			$fire->rolls[] = $roll;
 			if ($roll <= $fire->req){
+				$notes .= $roll."-";
 				$hits++;
 			}
 		}

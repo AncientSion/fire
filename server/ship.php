@@ -96,6 +96,8 @@ class Ship {
 		$outerArmourDmg = round($dmg / 100 * $mitigation);
 		$primaryDmg = round($dmg - $outerArmourDmg);
 
+		Debug::log($fire->weapon->id.", ".$fire->weapon->name);
+
 		$entry = new Damage(
 			sizeof($armour->damages)+1,
 			$fire->id,

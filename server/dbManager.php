@@ -36,7 +36,7 @@ class DBManager {
 		$sql = array();
 
 		$sql[] = "UPDATE playerstatus SET phase = 2, status = 'ready'";
-		$sql[] = "UPDATE fireorders SET resolved = 0";
+		$sql[] = "UPDATE fireorders SET resolved = 0 WHERE turn = 2";
 		$sql[] = "UPDATE games SET phase = 2";
 		$sql[] = "DELETE from damages WHERE id";
 		foreach ($sql as $query){

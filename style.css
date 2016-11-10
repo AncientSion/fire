@@ -48,6 +48,9 @@
 	text-align: right;
 }
 
+body {
+	margin: 0 0 0 0;
+}
 
 body, table, tr, td, div, span {
 	font-family: arial;
@@ -229,7 +232,7 @@ canvas {
 }
 
 #game {
-	position: absolute;
+	position: relative;
 	top: 0px;
 	left: 0px;
 }
@@ -671,5 +674,24 @@ canvas {
 	display: none;
 }
 .turnEle:hover {
+	background-color: lightGreen;
+}
+
+#maxTurnVector {
+	width: 30px;
+	height: 30px;
+	border-radius: 20px;
+}
+
+#maxVector {
+	width: 30px;
+	height: 30px;
+	border-radius: 20px;
+}
+
+#maxVector.disabled, #maxTurnVector.disabled {
+	display: none;
+}
+#maxVector:hover, #maxTurnVector:hover {
 	background-color: lightGreen;
 }
