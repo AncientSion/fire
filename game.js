@@ -7,7 +7,7 @@ function Game(id, name, status, userid, turn, phase){
 	this.turn = turn;
 	this.phase = phase;
 	this.ships = [];
-	this.fireOrders = [];
+	this.fireOrders = []
 	this.mode = false;
 	this.deploying = false;
 	this.canSubmit = false;
@@ -106,7 +106,10 @@ function Game(id, name, status, userid, turn, phase){
 		this.drawDeploymentArea(area)
 	}
 
-	this.drawDeploymentArea = function(area){
+	this.drawDeploymentArea = function(){
+		var area = this.deployArea;
+		console.log(area);
+
 		if (area.type == "circle"){
 			fxCtx.beginPath();
 			fxCtx.arc(area.x+cam.o.x, area.y+cam.o.y, area.s, 0, 2*Math.PI, false);
@@ -149,7 +152,7 @@ function Game(id, name, status, userid, turn, phase){
 			}
 		}
 		for (var i = 0; i < window.incoming.length; i++){
-			if (this.ships[i].userid == this.userid){
+			if (window.incoming[i].userid == this.userid){
 				toDo.push(window.incoming[i]);
 			}
 		}
@@ -497,8 +500,8 @@ function Game(id, name, status, userid, turn, phase){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].deployed){
 				var shipPos = this.ships[i].getBaseOffsetPos();
-				if (shipPos.x < pos.x + this.ships[i].size/3 && shipPos.x > pos.x - this.ships[i].size/3){
-					if (shipPos.y > pos.y - this.ships[i].size/3 && shipPos.y < pos.y + this.ships[i].size/3){
+				if (shipPos.x < pos.x + this.ships[i].size/4 && shipPos.x > pos.x - this.ships[i].size/4){
+					if (shipPos.y > pos.y - this.ships[i].size/4 && shipPos.y < pos.y + this.ships[i].size/4){
 						return this.ships[i];
 					}
 				}

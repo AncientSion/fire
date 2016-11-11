@@ -260,15 +260,6 @@ function canvasMouseClick(e){
 					break;
 				}
 			}
-
-				for (var i = 0; i < game.ships[index].turns.length; i++){
-					var turn = game.ships[index].turns[i];
-					if (clickedOn(pos, turn)){
-						game.ships[index].issueDeploymentTurn(turn);
-						return;
-					}
-				}
-
 			if (game.ships[index].canDeploy(pos.getOffset())){
 				game.ships[index].doDeploy(pos);
 			}

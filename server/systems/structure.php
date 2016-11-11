@@ -29,13 +29,12 @@ class Structure {
 		}
 		
 		return floor($t / 360 * $mass / 2);
-
 	}
 
 	public function getRemainingIntegrity(){
 		$remIntegrity = $this->integrity;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
-			$remIntegrity -= $this->damages[$i]->structDmg;
+			$remIntegrity -= $this->damages[$i]->armourDmg;
 		}
 		return $remIntegrity;
 	}

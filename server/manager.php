@@ -323,24 +323,23 @@ class Manager {
 		return true;
 	}
 
-
 	public function pickReinforcements($userid){
 		Debug::log("pickReinforcements");
 		$status = DBManager::app()->getReinforceStatus($this->gameid, $userid);
 		$available = DBManager::app()->getAvailableReinforcements($this->gameid, $userid);
 		$validShips = $this->getShipsForFaction($status["faction"]);
-		$req = 8;
+		$req = 10;
+		$picks = array();
 
-		for ($i = sizeof($validShips)-1; $i >= 0; $i--){
-			if (mt_rand(1, 10) > $req){
-				array_splice($validShips, $i, 1);
-			}
-			else {
-				$validShips[$i]["arrival"] = (mt_rand(2, 4));
-			}
+		if (mt_rand(1, 10) < $req - sizeof($available)){
+			$subPick = mt_rand(0, sizeof($validShips)-1);
+			$arrival  = mt_rand(2, 4);
+			$picks[] = $validShips[$subPick];
+			$picks[sizeof($picks)-1]["arrival"] = mt_rand(2, 4);
+			Debug::log("picking: ".$subPick["shipClass"]." with arrival ".$arrival);
 		}
 
-		DBManager::app()->insertReinforcements($this->gameid, $userid, $this->turn, $validShips);
+		DBManager::app()->insertReinforcements($this->gameid, $userid, $this->turn, $picks);
 	}
 
 	public function handleDeploymentPhase(){
