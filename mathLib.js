@@ -13,23 +13,17 @@ function degreeToRadian(angle){
 	return (angle / (180.0 / Math.PI)); 
 }
 
-function radianToDegree(angle){
-	return angle * (180.0 / Math.PI);
+function radianToDegree(radian){
+	var x = radian * (180.0 / Math.PI);
+	return x;
 }
 
 function getAngleFromTo(a, b){
-	var ret = Math.atan2(b.y-a.y, b.x-a.x);
-		ret = radianToDegree(ret);
-	return ret;
-}
+	return radianToDegree(Math.atan2(b.y-a.y, b.x-a.x));;
+} 
 
-function addAngle(angle, facing){
-
-	//console.log(arguments);
-	var ret = angle + facing;
-
-	//console.log(ret);
-
+function addAngle(f, a){
+	ret = 360 - f + a;
 	if (ret > 360){
 		ret -= 360;
 	}
@@ -39,10 +33,28 @@ function addAngle(angle, facing){
 	//console.log(ret);
 	return ret;
 }
+
+
+function addToDirection(current, add){
+    add = add % 360;
+
+	var ret = 0;
+	if (current + add > 360){
+		ret =  0+(add-(360-current));
+			
+	}else if (current + add < 0){
+		ret = 360 + (current + add);
+	}else{	
+		ret = current + add;
+	}
+
+	return ret;
+	}
+
+
                        //    150     180
 function adjustForFacing(facing, angle){
 	//console.log(arguments)
-	var ret = angle - facing;
 	//console.log(ret);
 	return angle - facing;
 
@@ -74,8 +86,7 @@ function isInArc(direction, start, end){
 function getCompassHeadingOfPoint(observer, target, facing){
 	var dX = target.x - observer.x;
 	var dY = target.y - observer.y;
-	var heading = 0.0;
-	//console.log("dX: " +dX+ " dY: " + dY);				
+	var heading = 0.0;			
 	if (dX == 0){
 		if (dY>0){
 			heading = 180.0;
@@ -92,21 +103,18 @@ function getCompassHeadingOfPoint(observer, target, facing){
 			heading = 270.0;
 		}
 	}else if (dX>0 && dY<0 ){
-		//console.log("h:1");
 		heading = radianToDegree(Math.atan(dX/Math.abs(dY)));
 	}else if (dX>0 && dY>0 ){
-		//console.log("h:2");
 		heading = radianToDegree(Math.atan(dY/dX)) + 90;
 	}else if (dX<0 && dY>0){
-		//console.log("h:3");
 		heading = radianToDegree(Math.atan(Math.abs(dX)/dY)) + 180;
 	}else if (dX<0 && dY<0){
-		//console.log("h:4");
 		heading = radianToDegree(Math.atan(dY/dX)) + 270;
 	}
-	heading = addAngle(Math.round(heading), -90);
+	heading = addToDirection(Math.round(heading), -90);
+	heading = addToDirection(heading, -facing);
 
-	return addAngle(heading, -facing);
+	return heading;
 }
 
 		

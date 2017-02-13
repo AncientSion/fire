@@ -28,17 +28,11 @@ if (isset($_POST["type"])) {
 		}
 	}
 	else if ($_POST["type"] == "buyInitialFleet") {
-		$valid = $manager->validateFleetCost($_POST["gameid"], $_POST["ships"]);
-		if ($valid){
-			if ($dbManager->buyShips($_POST["userid"], $_POST["gameid"], $_POST["ships"])) {
-				if ($dbManager->createReinforceEntry($_POST["userid"], $_POST["gameid"], $valid, $_POST["faction"])) {
-					if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], -1, -1, "ready")) {
-						if ($dbManager->gameIsReady($_POST["gameid"])) {
-							if ($dbManager->startGame($_POST["gameid"])) {
-							}
-						}
-						else {
-							echo "player ready, game not";
+		if ($manager->validateFleetCost($_POST["ships"], $_POST["faction"])){
+			if ($dbManager->processInitialBuy($_POST["userid"], $_POST["gameid"], $_POST["ships"])) {
+				if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], -1, -1, "ready")) {
+					if ($dbManager->gameIsReady($_POST["gameid"])) {
+						if ($dbManager->startGame($_POST["gameid"])) {
 						}
 					}
 				}
@@ -47,8 +41,13 @@ if (isset($_POST["type"])) {
 	}
 	else if ($_POST["type"] == "deployment"){
 		if (isset($_POST["deployedShips"])){
-			$dbManager->deployShips($_POST["gameid"], $_POST["deployedShips"]);
-
+			$dbManager->deployShipsDB($_POST["gameid"], $_POST["deployedShips"]);
+		}
+		if (isset($_POST["deployedFlights"])){
+			$dbManager->deployFlightsDB($_POST["userid"], $_POST["gameid"], $_POST["deployedFlights"]);
+		}
+		if (isset($_POST["fireOrders"])){
+			$dbManager->insertFireOrders($_POST["gameid"], $_POST["gameturn"], $_POST["fireOrders"]);
 		}
 		if (isset($_POST["reinforcements"])){
 			$dbManager->requestReinforcements($_POST["userid"], $_POST["gameid"], $_POST["reinforcements"]);
@@ -67,7 +66,7 @@ if (isset($_POST["type"])) {
 		}
 	}
 	else if ($_POST["type"] == "firing"){
-		if ($dbManager->issueFire($_POST["gameid"], $_POST["gameturn"], $_POST["fire"])){
+		if ($dbManager->insertFireOrders($_POST["gameid"], $_POST["gameturn"], $_POST["fireOrders"])){
 			if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["gameturn"], $_POST["gamephase"], "ready")){
 				echo "firing success";
 			}
@@ -82,9 +81,7 @@ if (isset($_POST["type"])) {
 		}
 	}
 	else if ($_POST["type"] == "reset"){
-			Debug::log("A");
 		if ($manager->reset()){
-			Debug::log("RESET");
 		}
 	}
 }

@@ -1,34 +1,33 @@
 <?php
 
-class WhiteStar extends Ship {
+class WhiteStar extends Light {
 
-	public $shipClass = "WhiteStar";
+	public $classname = "WhiteStar";
 	public $name = "White Star";
 	public $faction = "Minbari Federation";
 	public $size = 50;
 	public static $value = 600;
-	public $profile = array(1, 1.1);
+	public $profile = array(0.95, 1.05);
 	public $mass = 2750;
-	public $ep = 120;
 
-	function __construct($id, $userid, $x, $y, $facing, $available){		
-        parent::__construct($id, $userid, $x, $y, $facing, $available);
+	function __construct($id, $userid, $available){		
+        parent::__construct($id, $userid, $available);
 	}
 
 	public function addStructures(){
 		$structs = [];
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, $this->mass, 70);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 600, 70, 34);
 		$front->systems[] = new NeutronLaser($this->getId(), $this->id, 330, 30);
 		$front->systems[] = new NeutronLaser($this->getId(), $this->id, 330, 30);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, $this->mass, 70);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 500, 70, 30);
 		$right->systems[] = new FusionPulsar($this->getId(), $this->id, 0, 60);
 		$right->systems[] = new FusionPulsar($this->getId(), $this->id, 0, 60);
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, $this->mass, 70);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 500, 70, 30);
 		$left->systems[] = new FusionPulsar($this->getId(), $this->id, 300, 360);
 		$left->systems[] = new FusionPulsar($this->getId(), $this->id, 300, 360);
 		$structs[] = $left;
@@ -38,9 +37,14 @@ class WhiteStar extends Ship {
 		}
 	}
 
-
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, $this->mass, 85);
+		$primary = new Primary($this->getId(), $this->id, 0, 360, 950, 70);
+		$primary->systems[] =  new Bridge($this->getId(), $this->id, 50);
+		$primary->systems[] =  new Engine($this->getId(), $this->id, 50, 120);
+		$primary->systems[] =  new Reactor($this->getId(), $this->id, 50, 20);
+		$primary->systems[] =  new Lifesupport($this->getId(), $this->id, 50);
+		$primary->systems[] =  new Sensor($this->getId(), $this->id, 50);
+		$this->primary = $primary;
 	}
 }
 

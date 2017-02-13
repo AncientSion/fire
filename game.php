@@ -16,17 +16,21 @@ echo "<script> window.gameid = ".$gameid."; window.userid = ".$userid.";</script
 
 $phase;
 
+
 switch ($manager->game["phase"]){
-	case -1;
+	case -1:
 		$phase = "Deployment / Initial";
 		break;
-	case 1;
-		$phase = "Movement";
+	case 0:
+		$phase = "Capital Movement";
 		break;
-	case 2;
+	case 1:
+		$phase = "Flight Movement";
+		break;
+	case 2:
 		$phase = "Firing";
 		break;
-	case 3;
+	case 3:
 		$phase = "Damage Control";
 		break;
 	default:
@@ -40,16 +44,17 @@ foreach ($manager->playerstatus as $player){
 		$status = $player["status"];
 	}
 }
-echo "<script>";
-echo "window.gd = ".json_encode($manager->game, JSON_NUMERIC_CHECK).";";
-echo "window.ships = ".json_encode($manager->ships, JSON_NUMERIC_CHECK).";";
-echo "window.playerstatus = ".json_encode($manager->playerstatus, JSON_NUMERIC_CHECK).";";
-echo "window.reinforcements = ".json_encode($manager->reinforcements, JSON_NUMERIC_CHECK).";";
-echo "window.incoming = ".json_encode($manager->incoming, JSON_NUMERIC_CHECK).";";
-//echo "window.fireOrders = ".json_encode($fireorders, JSON_NUMERIC_CHECK).";";
-echo "</script>";
+	echo "<script>";
+	echo "window.gd = ".json_encode($manager->game, JSON_NUMERIC_CHECK).";";
+	echo "window.ships = ".json_encode($manager->ships, JSON_NUMERIC_CHECK).";";
+	echo "window.ballistics = ".json_encode($manager->ballistics, JSON_NUMERIC_CHECK).";";
+	echo "window.playerstatus = ".json_encode($manager->playerstatus, JSON_NUMERIC_CHECK).";";
+	echo "window.reinforcements = ".json_encode($manager->reinforcements, JSON_NUMERIC_CHECK).";";
+	echo "window.incoming = ".json_encode($manager->incoming, JSON_NUMERIC_CHECK).";";
+	//echo "window.fireOrders = ".json_encode($fireorders, JSON_NUMERIC_CHECK).";";
+	echo "</script>";
+	?>
 
-?>
 
 <!DOCTYPE html>
 <html>
@@ -59,6 +64,7 @@ echo "</script>";
 	<script src='mathLib.js'></script>
 	<script src='shared.js'></script>
 	<script src='shipclasses.js'></script>
+	<script src='flights.js'></script>
 	<script src='classes.js'></script>
 	<script src='systems.js'></script>
 	<script src='graphics.js'></script>
@@ -73,6 +79,10 @@ echo "</script>";
 			<div id="popupText">
 			</div>
 		</div>
+		<div id ="instructWrapper">
+			<div id="instructText">
+			</div>
+		</div>
 		<div id="game">
 			<div id ="phaseSwitchDiv">
 				<div id="phaseSwitchInnerDiv">
@@ -82,13 +92,27 @@ echo "</script>";
 					</div>
 				</div>
 			</div>
-			<div id= "impulseGUI" class="ui disabled">
+			<div id="impulseGUI" class="ui disabled">
 				<table>
 					<tr>
 						<td>
 							Impulse:
 						</td>
 						<td  id="impulse">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Active Turn Delay:
+						</td>
+						<td  id="remTurnDelay">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Future Turn Delay:
+						</td>
+						<td  id="nextTurnDelay">
 						</td>
 					</tr>
 					<tr>
@@ -103,6 +127,12 @@ echo "</script>";
 							Impulse Change:
 						</td>
 						<td  id="impulseChange">
+						</td>
+					</tr>
+						<td>
+							Turn Cost:
+						</td>
+						<td  id="turnCost">
 						</td>
 					</tr>
 					<tr id="increaseImpulse" class="disabled">
@@ -205,11 +235,13 @@ echo "</script>";
 							</td>
 						</tr>
 						<tr>
-							<th colSpan=3 id="confirmOrders" onclick="game.endPhase()">
-								<?php 
-									if ($status == "ready"){
-										echo "Waiting for Opponent";
-									} else echo "Confirm Orders";
+							<?php 
+								if ($status == "ready"){
+									echo '<th style="background-color: red;" colSpan=3 id="confirmOrders" onclick="game.endPhase()">Waiting for Opponent';
+								}
+								else {
+									echo '<th colSpan=3 id="confirmOrders" onclick="game.endPhase()">Confirm Orders';
+								}
 								?>
 							</th>
 						</tr>
@@ -218,35 +250,35 @@ echo "</script>";
 				</div>
 				<div id="combatlogWrapper" class="disabled">
 					<table id="combatLog">
-						<tr style="border: 1px solid black">
-							<th colspan=10 style="font-size: 16px; width: 100%">
+						<tr>
+							<th colspan=8 style="font-size: 16px; width: 100%; border: 1px solid white"">
 								Combat Log
 							</th>
 						</tr>
 						<tr>
-							<th style="width: 45px">
+							<th style="width: 15%">
 								Type
 							</th>
-							<th style="width: 90px">
+							<th style="width: 14%">
 								Shooter
 							</th>
-							<th style="width: 90px">
+							<th style="width: 19%">
 								Target
 							</th>
-							<th style="width: 100px">
+							<th style="width: 17%">
 								Weapon
 							</th>
-							<th colSpan = 2 style="width: 20px">
+							<th style="width: 8%">
 								Chance
 							</th>
-							<th style="width: 10px">
-								Hits
+							<th style="width: 12%">
+								Hits / Shots
 							</th>
-							<th style="width: 60px">
-								Shots
+							<th style="width: 10%">
+								Armour
 							</th>
-							<th colSpan = 2 style="width: 20px">
-								Damage
+							<th style="width: 10%">
+								Structure
 							</th>
 						</tr>
 					</table>
@@ -254,7 +286,7 @@ echo "</script>";
 				<div id ="deployWrapper" class="disabled">
 					<table id="deployTable">
 						<tr>
-							<th style="font-size: 18px; background-color: lightGreen;" colSpan=3>
+							<th style="font-size: 18px; background-color: lightBlue; color: black" colSpan=3>
 								Incoming Reinforcements
 							</th>
 						</tr>
@@ -269,7 +301,7 @@ echo "</script>";
 					</table>
 					<table id="reinforceTable">
 						<tr>
-							<th style="font-size: 18px; background-color: lightGreen;" colSpan=4>
+							<th style="font-size: 18px; background-color: lightBlue; color: black;" colSpan=4>
 								Requestable Reinforcements
 							</th>
 						</tr>
@@ -288,8 +320,8 @@ echo "</script>";
 							if (sizeof($manager->reinforcements)){
 								foreach ($manager->reinforcements as $entry){
 									echo "<tr class='requestReinforcements'>";
-									echo "<td><img class='img50' src=shipIcons/".strtolower($entry["shipClass"]).".png></td>";
-									echo "<td>".$entry["shipClass"]."</td>";
+									echo "<td><img class='img50' src=shipIcons/".strtolower($entry["classname"]).".png></td>";
+									echo "<td>".$entry["classname"]."</td>";
 									echo "<td>".$entry["arrival"]." turn/s</td>";
 									echo "<td>".$entry["cost"]."</td>";
 									echo "</tr>";
@@ -306,7 +338,6 @@ echo "</script>";
 						?>
 					</table>
 				</div>
-
 				<canvas id ="canvas"></canvas>
 				<canvas id ="planCanvas"></canvas>
 				<canvas id ="fxCanvas"></canvas>
@@ -314,11 +345,40 @@ echo "</script>";
 				<canvas id ="mouseCanvas"></canvas>
 			</div>
 		</div>
+		<div id="shortInfo" class="disabled"></div>
 		<div id="weaponAimTableWrapper" class="disabled">
-			<table id="weaponAimTable"></table>
+			<table id="targetInfo"></table>
+			<table id="weaponInfo">
+				<tr class="weaponAimHeader">
+					<td style="width: 52%">Weapon</td>
+					<td style="width: 12%">Fire Control</td>
+					<td style="width: 12%">Dmg loss</td>
+					<td style="width: 12%">Acc loss</td>
+					<td style="width: 12%">Final est.</td>
+				</tr>
+			</table>
 		</div>
+
+
+
 		<div id="deployOverlay" class="disabled"></div>
 		<div id="vectorDiv" class="disabled"></div>
+		<div id="hangarLoadoutDiv" class="disabled">
+			<div class="header">
+				Assemble and launch a flight
+			</div>
+			<div class="header">
+				Can launch up to <span id="launchRate"></span> units per turn
+			</div>
+			<div class="header">
+				Has a capacity of <span id="capacity"></span> tons
+			</div>
+			<table id="hangarTable">
+			</table>
+			<div class="header">
+				<input type="button" class="disabled" value="Launch selected strikecraft as mixed flight";
+			</div>
+		</div>
 	</body>
 </html>
 
@@ -336,25 +396,65 @@ echo "</script>";
 
 	$(document).ready(function(){
 
+		window.res.x = window.innerWidth-1;
+		window.res.y = window.innerHeight-1;
+
+		$("#mouseCanvas").bind("mouseleave", function(){
+			$("#weaponAimTableWrapper").hide();
+		})
+
 		$(this).keypress(function(e){
 			if (game){
-				if (e.keyCode == 32){
-					if (game.vector == true){
+				if (e.keyCode == 32){ // space
+					if (game.vector){
 						game.vector = false;
 						$("#vectorDiv").addClass("disabled");
 						mouseCtx.clearRect(0, 0, res.x, res.y);
 					}
-
-
-
 					else {
 						game.vector = true;
+						$("#vectorDiv").removeClass("disabled");
+					}
+				//console.log(game.vector);
+				}
+				else if (e.keyCode == 111){ // ctrl, opacity
+					if (game.opacity){
+						$(this).find(".ui").each(function(i){
+							$(this).removeClass("opaque");
+						})
+						game.opacity = false;
+					}
+					else {
+						$(this).find(".ui").each(function(i){
+							$(this).addClass("opaque");
+						})
+						game.opacity = true;
 					}
 				}
-				console.log(game.vector);
+				else if (e.keyCode == 99){ // alt, cancel animation
+					if (game.animateFire){
+						game.animateFire = false;
+						window.cancelAnimationFrame(anim);
+						fxCtx.clearRect(0, 0, res.x, res.y);
+						game.draw();
+						$("#combatLog").find("tr").each(function(i){
+							if (i > 2){
+								$(this).remove()
+							}
+						})
+						for (var i = 0; i < game.fireOrders.length; i++){
+							game.createLogEntry(game.fireOrders[i]);
+						}
+						for (var i = 0; i < game.ballistics.length; i++){
+							if (game.ballistics[i].type = "Impact"){
+								game.createBallisticLogEntry(game.ballistics[i]);
+							}
+						}
+					}
+				}
 			}
 		})
-
+		
 		$("#reinforce").hover(
 			function(e){
 				$(this).addClass("selected");
@@ -367,8 +467,6 @@ echo "</script>";
 			$("#deployWrapper").show();
 		});
 
-		var i = 0;
-
 		$("#deployWrapper").contextmenu(function(e){
 			e.preventDefault();
 			e.stopPropagation();
@@ -378,13 +476,6 @@ echo "</script>";
 			});
 			$(this).hide();
 		})
-
-
-		$("#popupWrapper").contextmenu(function(e){
-			e.preventDefault();
-			e.stopPropagation();
-			$(this).hide();
-		});
 
 		$(".requestReinforcements").each(function(i){
 			$(this)
@@ -426,41 +517,40 @@ echo "</script>";
 
 		$("#increaseImpulse")
 		.click(function(){
-			console.log("doIncreaseImpulse")
-			game.getShipById(aShip).doIncreaseImpulse();
+			//console.log("doIncreaseImpulse")
+			game.getUnitById(aShip).doIncreaseImpulse();
 		});
 
 		$("#decreaseImpulse")
 		.click(function(){
-			console.log("doDecreaseImpulse")
-			game.getShipById(aShip).doDecreaseImpulse();
+			//console.log("doDecreaseImpulse")
+			game.getUnitById(aShip).doDecreaseImpulse();
 		});
 
 		$("#undoLastAction")
 		.click(function(){
-			console.log("undoLastAction")
-			game.getShipById(aShip).undoLastOrder()
+			//console.log("undoLastAction")
+			game.getUnitById(aShip).undoLastOrder()
 		});
 
 		$(".turnEle")
 		.click(function(){
-			console.log("issueTurn")
-			game.getShipById($(this).data("shipid")).issueTurn($(this).data("a"))
+			//console.log("issueTurn")
+			game.getUnitById($(this).data("shipid")).issueTurn($(this).data("a"))
 		})
 
 		$("#maxVector")
 		.click(function(){
-			console.log("maxVector")
-			game.getShipById($(this).data("shipid")).moveToMaxVector();
+			//console.log("maxVector")
+			game.getUnitById($(this).data("shipid")).moveToMaxVector();
 		})
 
 		$("#maxTurnVector")
 		.click(function(){
-			console.log("maxTurnVector")
-			game.getShipById($(this).data("shipid")).moveToMaxTurnVector();
+			//console.log("maxTurnVector")
+			game.getUnitById($(this).data("shipid")).moveToMaxTurnVector();
 		})
 	})
-
 
 
 </script>

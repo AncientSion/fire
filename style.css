@@ -1,3 +1,16 @@
+body {
+	color: white;
+	background-color: black;
+}
+
+.cache {
+	position: absolute;
+	z-index: 20;
+	width: 100px;
+	height: 100px;
+	background-color: white;
+}
+
 #popupWrapper {
 	display: none;
 	position: absolute;
@@ -9,7 +22,7 @@
 	padding: 20px;
 	width: 400px;
 	height: 70px;
-	z-index: 10;
+	z-index: 20;
 }
 
 #popupText {
@@ -24,6 +37,37 @@
 	font-size: 20px;
 }
 
+#instructWrapper {
+	display: none;
+	position: absolute;
+	left: 500px;
+	top: 300px;
+	background-color: black;
+	border-radius: 5px;
+	border: 5px solid green;
+	padding: 20px;
+	width: 400px;
+	height: 70px;
+	z-index: 20;
+}
+
+#instructText {
+	margin: auto;
+	text-align: center;
+	width: 80%;
+	left: 500px;
+	top: 500px;
+	background-color: black;
+	border-radius: 5px;
+	color: white;
+	font-size: 20px;
+}
+
+.img15 {
+	width: 15px;
+	height: 15px;
+}
+
 .img50 {
 	width: 50px;
 	height: 50px;
@@ -31,18 +75,18 @@
 
 .fullBorderTable {
 	border-collapse: collapse;
-	border: 1px solid black;
+	border: 1px solid white;
 }
 
 
 .fullBorderTable th {
-	border: 1px solid black;
+	border: 1px solid white;
 	padding: 4px;
 	font-size: 25px;
 }
 
 .fullBorderTable td {
-	border: 1px solid black;
+	border: 1px solid white;
 	padding: 4px;
 	font-size: 20px;
 	text-align: right;
@@ -62,20 +106,15 @@ table, th, tr, td {
 	text-align: center;
 }
 
-canvas {
-	border-radius: 5px;
-	border: 1px solid black;
-}
-
 #deployWrapper {
 	position: absolute;
 	display: inline-block;
-	border: 1px solid black;
+	border: 1px solid white;
 	border-radius: 5px;
 	padding: 5 5 5 5;
 	z-index: 10;
 	background-color: black;
-	top: 100px;
+	top: 110px;
 }
 
 #deployWrapper .disabled  {
@@ -86,19 +125,19 @@ canvas {
 	margin: auto;
 	width: 300px;
 	border-collapse: collapse;
-	border: 1px solid black;
+	border: 1px solid white;
 }
 
 #deployTable tr {	
-	background-color: white;
+	background-color: black;
 }
 
 #deployTable th, #deployTable td {
-	border: 1px solid black
+	border: 1px solid white
 }
 
-#deployTable .selected {
-	background-color: lightBlue;
+#deployTable tr.selected {
+	box-shadow: inset 0 0 0.5em 0.5em lightGreen;
 }
 
 #reinforceTable {
@@ -106,19 +145,50 @@ canvas {
 	margin-top: 40px;
 	width: 300px;
 	border-collapse: collapse;
-	border: 1px solid black;
+	border: 1px solid white;
 }
 
 #reinforceTable tr {	
-	background-color: white;
+	background-color: black;
 }
 
 #reinforceTable th, #reinforceTable td {
-	border: 1px solid black
+	border: 1px solid white
 }
 
-#reinforceTable .selected {
-	background-color: lightBlue;
+.requestReinforcements.selected {
+	box-shadow: inset 0 0 0.5em 0.5em lightGreen;
+}
+
+.header {
+	width: 90%;
+	margin: auto;
+	font-size: 14px;
+	text-align: center;
+	padding: 3 3 0 0;
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+
+#launchRate, #capacity {
+	color: red;
+}
+
+#hangarLoadoutDiv {
+	position: absolute;
+	width: 500px;
+	height: 200px;
+	border: 1px solid white;
+	background-color: black;
+	z-index: 11;
+}
+
+#hangarTable {
+	width: 90%;
+	margin: auto;
+	border-collapse: collapse;
+	border: 1px solid white;
+	background-color: black;
 }
 
 #confirmFleet {
@@ -133,7 +203,7 @@ canvas {
 	vertical-align: top;
 	margin: 0 0 0 0;
 	border-collapse: collapse;
-	border: 1px solid black;
+	border: 1px solid white;
 }
 
 #shipsBoughtTable tr.selected {
@@ -141,7 +211,6 @@ canvas {
 }
 
 #factionDiv {
-	width: 700px;
 	display: inline-block;
 	vertical-align: top;
 	margin: 0 0 0 0;
@@ -152,42 +221,35 @@ canvas {
 }
 
 .factionUpperTable {
-	width: 500px;
+	width: 405px;
 	margin: auto;
 	border-collapse: collapse;
-	border: 1px solid black;
+	border: 1px solid white;
 }
 .factionUpperTable tr {
-	border: 1px solid black;
+	border: 1px solid white;
 }
 
 .factionUpperTable td.selected {
 	background-color: lightBlue;
 }
 
-.factionShipclassTable {
-	width: 500px;
-	display: inline-block;
+.factionclassnameTable {
+	margin: auto;
+	width: 95%;
 	border-collapse: collapse;
-	border: 1px solid black;
+	border: 1px solid white;
 }
-.factionShipclassTable tr {
+.factionclassnameTable tr {
 }
 
-.factionShipclassTable td {
+.factionclassnameTable td {
 	text-align: center;
 }
 
-.shipPreview {
-	display: inline-block;
-	vertical-align: top;
-	width: auto;
-	border-radius: 5px;
-}
-
 .highlight {
-	background-color: black;
-	color: white;
+	background-color: white;
+	color: black;
 }
 
 .fontHighlight {
@@ -211,24 +273,24 @@ canvas {
 
 .lobbyDiv td {
 	border-collapse: collapse;
-	border: 1px solid black;
+	border: 1px solid white;
 }
 
 .gui {
 	display: inline-block;
-	border: 1px solid black;
+	border: 1px solid white;
 	position: absolute;
 }
 
 .gameSetupStatus {
 	margin: 0 0 0 0;
 	border-collapse: collapse;
-	border: 1px solid black;
+	border: 1px solid white;
 	width: 300px;
 }
 
 .gameSetupStatus td {
-	border: 1px solid black;
+	border: 1px solid white;
 }
 
 #game {
@@ -241,43 +303,47 @@ canvas {
 	display: none;
 }
 
-#canvasDiv {
-	width: 1200px;
-	height: 800px;
+.previewCanvas {
+	background-image: url("varIcons/space.jpg");
+}
+
+#shipCanvas {
+	border: 1px solid white;
+	position: absolute;
+	z-index: 3;
 }
 
 #canvas {
 	display: inline-block;
 	position: absolute;
-	border: 1px solid black;
 	z-index: 1;
+	background-image: url("varIcons/space.jpg");
 }
 
 #fxCanvas {
 	display: inline-block;
 	position: absolute;
-	border: 1px solid black;
 	z-index: 2;
+}
+#fxCanvas.disabled {
+	display: none;
 }
 
 #planCanvas {
 	display: inline-block;
 	position: absolute;
-	border: 1px solid black;
 	z-index: 3;
 }
 
 #moveCanvas {
 	display: inline-block;
 	position: absolute;
-	border: 1px solid black;
 	z-index: 4;
 }
 
 #mouseCanvas {
 	display: inline-block;
 	position: absolute;
-	border: 1px solid black;
 	z-index: 5;
 }
 
@@ -287,97 +353,126 @@ canvas {
 }
 
 .rotate270 {
-  transform: rotate(270deg);
-  -webkit-transform: rotate(270deg);
-  -ms-transform: rotate(270deg);
+	transform: rotate(270deg);
+	-webkit-transform: rotate(270deg);
+	-ms-transform: rotate(270deg);
+}
+
+.rotate270size100 {
+	width: 120px;
+	height: 120px;
+	margin: auto;
+	transform: rotate(270deg);
+	-webkit-transform: rotate(270deg);
+	-ms-transform: rotate(270deg);
 }
 
 .structContainer {
-	display: inline-block;
 	width: 400px;
 	height: 400px;
 	position: relative;
 	color: white;
 	margin: auto;
+	border: 1px solid white;
+	margin-top: 5px;
 }
 
-.structDiv {
+.structDiv, .primaryDiv {
 	display: inline-block;
 	position: absolute;
-	color: white;
-	border: 1px solid black;
-	padding: 2px;
-}
-
-.structTable {
-	margin: auto;
-	width: 100px;
+	color: black;
+	border: 1px solid white;
+	padding: 1px;
 }
 
 .structTable td {
 	position: relative;
 }
 
-.structTable td, .structTable th {
-	border: 1px solid black;
+.structTable td, .structTable th, .primaryTable td, .primaryTable th {
+	border: 1px solid white;
 }
 
 .struct {
-	height: 20px;
+	height: 25px;
 	font-size: 16px;
-}
-
-.primaryDiv {
-	display: inline-block;
-	position: absolute;
-	color: white;
-	border: 1px solid black;
-	padding: 2px;
 }
 
 .primaryTable {
 	margin: auto;
-	width: 100px;
 }
 
 .primaryTable td {
 	position: relative;
 }
 
-.primaryTable td, .primaryTable th {
-	border: 1px solid black;
+.primaryTable.system {
+	background-color: lightBlue;
 }
 
 
-.integrityAmount {
+.struct div.integrityAmount {
+	position: absolute;
+	top: 3;
+	z-index: 2;
+	font-size: 16px;
+	color: white;
+	margin: auto;
+	width: 100%;
+	height: 100%;
+}
+
+.struct div.integrityNow {
 	position: absolute;
 	left: 0;
 	top: 0;
 	bottom: 0;
 	z-index: 1;
-	width: 100%;
-	font-size: 16px;
-	color: white;
-	margin: auto;
+	background-color: green;
+	height: 100%;
 }
 
-
-.integrityFull {
+.struct div.integrityFull {
 	position: absolute;
 	left: 0;
 	top: 0;
 	bottom: 0;
 	background-color: red;
-	z-index: -1;
+	z-index: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.integrityAmount {
+	position: absolute;
+	top: 24;
+	z-index: 2;
+	font-size: 16px;
+	color: white;
+	margin: auto;
+	height: 8;
 	width: 100%;
 }
 
 .integrityNow {
 	position: absolute;
 	left: 0;
-	top: 0;
+	top: 24;
 	bottom: 0;
+	z-index: 1;
 	background-color: green;
+	height: 8;
+}
+
+.integrityFull {
+	position: absolute;
+	left: 0;
+	top: 24;
+	bottom: 0;
+	background-color: red;
+	z-index: 0;
+	height: 8;
+	width: 100%;
 }
 
 .loadLevel {
@@ -389,55 +484,193 @@ canvas {
 	z-index: -1;
 }
 
-.weapon {
-	color: black;
+.bgloadLevel {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	background-color: white;
+	z-index: -2;
 }
 
-.weapon.selected {
+.outputMask {
+	margin: auto;
+	position: absolute;
+	top: 12px;
+	width: 100%;
+	color: white;
+}
+
+
+.system {
+	color: black;
+	height: 32px;
+	width: 32px;
+}
+
+.system.fighter {
+	position: relative;
+	color: black;
+	height: 16px;
+	width: 16px;
+}
+
+.system.destroyed {
+	background-color: red;
+}
+
+.system.selected {
 	box-shadow: inset 0 0 6px blue;
 }
 
-.weapon.fireOrder {
+.system.fireOrder {
 	box-shadow: inset 0 0 6px red;
+}
+
+.system.hasCritical {
+	color: red;
+}
+
+.system.hasCritical.destroyed {
+	background-color: red;
+	color: black;
+}
+.system.hasCritical.disabled {
+	background-color: red;
+	color: black;
+}
+
+.ammoDiv {
+	position: absolute;
+	border: 1px solid white;
+	border-radius: 5px;
+	z-index: 10;
+	background-color: black;
+	padding: 5px;
+	width: 350px;
+	border-collapse: collapse;
+}
+
+.ammoDiv table {
+	margin: auto;
+	border: 1px solid white;
+	border-collapse: collapse;
+	margin-bottom: 5px;
+}
+
+.ammoDiv td {
+	border: 1px solid white;
+}
+
+.impact {
+	background-color: blue;
+}
+
+.ammoImpact {
+	position: absolute;
+	left: 0;
+	top: 40;
+
+}
+.ammoDestroyed {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+.ammoLostLock {
+	position: absolute;
+	left: 0;
+	top: 40;
+}
+
+.fighterDiv {
+	position: absolute;
+	color: black;
+	height: 50px;
+	width: 50px;
+	text-align: center;
+}
+
+.overlay {
+	position: absolute;
+	top: 5;
+	left: 10;
+}
+
+.size30 {
+	width: 30px;
+	height: 30px;
+}
+
+.size40 {
+	width: 40px;
+	height: 40px;
+}
+
+.iconContainer {
+	position: relative;
+	height: 60px;
+	border: 1px solid white;
+	border-collapse: collapse;
+}
+
+.iconContainer.destroyed {
+	background-color: red;
+}
+
+.iconIntegrity {
+	position: relative;
+	height: 20px;
+	border: 1px solid white;
+	border-collapse: collapse;
 }
 
 .shipDiv {
 	position: absolute;
-	border: 1px solid black;
+	border: 1px solid white;
 	border-radius: 5px;
 	z-index: 10;
-	background-color: white;
+	background-color: black;
 	padding: 10px;
 }
 
-.shipDiv .general {
-	margin: auto;
+.shipdiv .header {
+	display: inline-block;
 	width: 220px;
-	border: 1px solid black;
-	border-radius: 3px;
+	margin: auto;
+	padding: 0 0 0 0;
+	border: 1px solid white;
+}
+
+.shipDiv .general {
+	width: 100%;
+	height: 120px;
+	color: white;
 	border-collapse: collapse;
+}
+
+.shipDiv .iconContainer {
+	float: right;
+	display: inline-block;
+	border: none;
+	width: 120px;
+	height: 120px;
 }
 
 .shipDiv .structure {
 	width: 140px;
-	border: 1px solid black;
+	border: 1px solid white;
 	border-radius: 3px;
+}
+
+#totalShipCost {
+	margin: auto;
+	width: 300px;
 }
 
 .shipDiv th, td {
 	margin: auto;
 	text-align: center;
-}
-
-.shortInfo {
-	z-index: 5;
-	display: inline-block;
-	position: absolute;
-	color: white;
-	background-color: black;
-	border: 1px solid black;
-	border-radius: 5px;
-	padding: 3px;
 }
 
 #phaseSwitchInnerDiv {
@@ -446,9 +679,9 @@ canvas {
 	width: 600px;
 	height: 200px;
 	z-index: 20;
-	border: 2px solid blue;
-	background: white;
-	color: black;
+	border: 2px solid white;
+	background: black;
+	color: white;
 	margin-top: 300px;
 	margin-left: 300px;
 	border-radius: 5px;
@@ -463,39 +696,84 @@ canvas {
 #phaseSwitchDiv {
 	position: absolute;
 	z-index: 20;
-	border: 1px solid black;
-	background: white;
-	color: black;
+	background: black;
+	color: white;
 }
 
 #systemDetailsDiv {
 	z-index: 15;
 	display: inline-block;
 	position: absolute;
-	background: white;
-	color: black;
 }
+
 #systemDetailsDiv table {
-	width: 180px;
+	width: 200px;
+	border: 2px solid white;
 	border-collapse: collapse;
 }
 
-#systemDetailsDiv td {
+#systemDetailsDiv th {
+	font-size: 14px;
+	border-bottom: 1px solid white;
+}
+
+#systemDetailsDiv th, #systemDetailsDiv td {
+	background: black;
+	color: white;
+}
+
+#systemDetailsDiv td.negative {
+	font-size: 12px;
+	color: red;
+}
+
+#systemDetailsDiv td.positive {
+	font-size: 12px;
+	color: green;
+}
+
+.subDiv {
+	z-index: 15;
+	display: none;
+	position: absolute;
+	margin-left: -16px;
+	margin-top: -30px;
+}
+
+.plusShot {
+	display: block;
+	color: black;
+	background-color: green;
 	border: 1px solid black;
+	width: 14px;
+	height: 14px;
+}
+
+.minusShot {
+	display: block;
+	color: black;
+	background-color: red;
+	border: 1px solid black;
+	width: 14px;
+	height: 14px;
 }
 
 #upperGUI {
 	display: inline-block;
 	position: absolute;
 	z-index: 8;
-	border: 1px solid black;
+	border: 1px solid white;
+	color: white;
 	width: 300px;
-	background-color: white
+	background-color: black;
+	padding: 5px;
+	border-radius: 5px;
 }
 
 #overview {
 	border-collapse: collapse;
 	width: 100%;
+	color: white;
 }
 
 #overview th {
@@ -509,6 +787,8 @@ canvas {
 #confirmOrders {
 	font-size: 20px;
 	cursor: pointer;
+	color: black;
+	background-color: lightBlue;
 }
 
 #confirmOrders:hover {
@@ -517,36 +797,42 @@ canvas {
 
 #combatlogWrapper {
 	position: absolute;
-	top: 120px;
-	width: 450px;	
+	top: 600px;
+	width: 700px;	
 	z-index: 8;
+	padding: 5px;
+	border-radius: 5px;
+	border: 1px solid white;
 }
+
 #combatlogWrapper disabled {
 	display: none;
 }
 
 #combatLog {
-	width: 450px;
-	border: 1px solid black;
-	border-collapse: collapse;
 	border-radius: 5px;
-	background: white;
-	color: black;
+	border: 1px solid white;
+	border-collapse: collapse;
+	background: black;
+	color: white;
 	margin: auto;
+	width: 100%;
 }
 
-#combatLog th {
-	border: 1px solid black;
-}
-#combatLog td {
-	border: 1px solid black;
+#combatLog tr {
+	height: 22px;
 }
 
 .friendly {
-	background-color: green;
+	border: 2px solid green;
 }
+
 .hostile {
-	background-color: red;
+	border: 2px solid red;
+}
+
+.size16 {
+	font-size: 16px;
 }
 
 .red {
@@ -557,44 +843,51 @@ canvas {
 	display: none;
 }
 
+#shortInfo {
+	z-index: 5;
+	display: inline-block;
+	position: absolute;
+	color: white;
+	background-color: black;
+	border-radius: 5px;;
+}
+
 #weaponAimTableWrapper {
 	background-color: black;
 	color: white;
-	opacity: 0.8;
 	border: 2px solid white;
 	border-radius: 5px;
 	z-index: 10;
-	padding: 5 5 5 5;
+	padding: 3 3 3 3;
 	position: absolute;
 	text-align: center;
+	width: 340px;
 }
+
 #weaponAimTableWrapper.disabled {
 	display: none;
 }
 
-#weaponAimTable {
+#targetInfo, #weaponInfo {
 	background-color: black;
 	color: white;
-	opacity: 0.8;
-	border: 2px solid white;
 	z-index: 10;
 	margin: auto;
-}
-
-.weaponAimHeader {
-	color: red;
-	font-size: 18px;
-}
-
-#weaponAimTable tr td {
 	border-collapse: collapse;
+	width: 95%;
+}
+
+#targetInfo {
+	margin-bottom: 10px;
+}
+
+.weaponAimHeader td{
+	color: red;
+	font-size: 14px;
 	border: 1px solid white;
 }
 
-#reinforce.selected {
-	background-color: lightBlue;
-}
-	
+
 #deployOverlay {
 	background-color: black;
 	color: white;
@@ -610,22 +903,27 @@ canvas {
 }
 
 .shipAvailable {
-	background-color: lightGreen;
+	font-size: 20px;
+	color: green;
+	box-shadow: inset 0 0 20px green;
 }
 
 .shipUnavailable {
-	background-color: Red;
+	font-size: 20px;
+	color: red;
 }
 
 #vectorDiv {
 	display: inline;
 	position: absolute;
-	border: 1px solid white;
+	border: 1px solid black;
 	border-radius: 5px;
-	background-color: black;
-	color: white;
+	background-color: white;
+	color: black;
 	padding: 5px;
+	z-index: 5;
 }
+
 #vectorDiv.disabled {
 	display: none;
 }
@@ -646,18 +944,23 @@ canvas {
 .ui {
 	position: absolute;
 	display: inline-block;
-	border: 1px solid black;
-	background-color: white;
+	border: 1px solid white;
+	background-color: black;
 	z-index: 6;
 }
 
+.opaque {
+	opacity: 0.2;
+}
+
 #increaseImpulse, #decreaseImpulse, #undoLastAction {
-	border: 1px solid black;
-	background-color: lightGreen;
+	color: black;
+	background-color: lightBlue;
 
 }
 #increaseImpulse:hover, #decreaseImpulse:hover, #undoLastAction:hover {
-	background-color: green;
+	color: black;
+	background-color: lightGreen;
 }
 
 #increaseImpulse.disabled, #decreaseImpulse.disabled, #undoLastAction.disabled {
@@ -668,6 +971,11 @@ canvas {
 	width: 100px;
 	height: 60px;
 	border-radius: 5px;
+	background-color: lightBlue;
+}
+
+.turnEle th, .turnEle td {
+	color: black;
 }
 
 .turnEle.disabled {
@@ -681,17 +989,40 @@ canvas {
 	width: 30px;
 	height: 30px;
 	border-radius: 20px;
+	color: black;
+	background-color: lightBlue;
 }
 
 #maxVector {
 	width: 30px;
 	height: 30px;
 	border-radius: 20px;
+	color: black;
+	background-color: lightBlue;
 }
 
 #maxVector.disabled, #maxTurnVector.disabled {
 	display: none;
 }
+
 #maxVector:hover, #maxTurnVector:hover {
 	background-color: lightGreen;
+}
+
+.tri4 {
+	position: absolute;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 10px 20px 10px 0;
+	border-color: transparent white transparent transparent;
+}
+
+.tri6 {
+	position: absolute;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 10px 0 10px 20px;
+	border-color: transparent transparent transparent white;
 }

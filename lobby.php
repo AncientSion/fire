@@ -9,7 +9,7 @@ if (isset($_SESSION["userid"])){
 	$playerName = $manager->getUsername();
 	$_SESSION["username"] = $playerName;
 
-	//function __construct($id, $userid, $shipClass, $x, $y, $facing){
+	//function __construct($id, $userid, $classname, $x, $y, $facing){
 	//$ship = new Omega(1, 1, 5, 5, 100);
 	//echo "<script> var omega = ".json_encode($ship, JSON_NUMERIC_CHECK).";</script>";
 
@@ -29,7 +29,7 @@ if (isset($_SESSION["userid"])){
 		$welcome = "<font color='red'>Welcome, ".$playerName.", your player ID: ".$_SESSION['userid']."</font>";
 	}
 	
-	$ongoingGamesElement = "<table style='border: 1px solid black; margin: auto; border-radius: 5px'>";
+	$ongoingGamesElement = "<table style='border: 1px solid white; margin: auto; border-radius: 5px'>";
 	if ($ongoingGames) {	
 		$ongoingGamesElement .= "<tr>";
 		$ongoingGamesElement .= "<th colSpan = 4>My Ongoing Games</th>";
@@ -43,20 +43,22 @@ if (isset($_SESSION["userid"])){
 		$ongoingGamesElement .= "</tr>";
 		
 		foreach ($ongoingGames as $game){
-			//echo json_encode($game);
-			$phase;
+			$phase = "";
 
 			switch ($game["phase"]){
-				case -1;
-					$phase = "Deployment/Initial";
+				case -1:
+					$phase = "Deployment / Initial";
 					break;
-				case 1;
-					$phase = "Movement";
+				case 0:
+					$phase = "Capital Movement";
 					break;
-				case 2;
+				case 1:
+					$phase = "Flight Movement";
+					break;
+				case 2:
 					$phase = "Firing";
 					break;
-				case 3;
+				case 3:
 					$phase = "Damage Control";
 					break;
 				default:
@@ -78,10 +80,10 @@ if (isset($_SESSION["userid"])){
 			$status = $gameStatus["status"];
 			$td;
 			if ($status == "waiting"){
-				$td = "<td style='background-color: red'>".$status."</td>";
+				$td = "<td style='color: white; background-color: red'>".$status."</td>";
 			}
 			else {
-				$td = "<td style='background-color: lightGreen'>".$status."</td>";
+				$td = "<td style='color: white; background-color: green'>".$status."</td>";
 			}
 			$ongoingGamesElement .= $td;
 			$ongoingGamesElement .= "</tr>";
@@ -93,7 +95,7 @@ if (isset($_SESSION["userid"])){
 		$ongoingGamesElement .= "<tr><td>no Active Games found</tr></td></table>";
 	}
 
-	$openGamesElement = "<table style='border: 1px solid black; margin: auto; border-radius: 5px'>";
+	$openGamesElement = "<table style='border: 1px solid white; margin: auto; border-radius: 5px'>";
 	if ($openGames) {
 		$openGamesElement .= "<tr>";
 		$openGamesElement .= "<th colSpan = 2>Open Games</th>";

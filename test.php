@@ -53,7 +53,7 @@ $ships = $manager->logShips();
 					$armour = $ships[$i]->getArmour();
 
 					echo "<tr>";
-					echo "<td>".$ships[$i]->shipClass."</td>";
+					echo "<td>".$ships[$i]->classname."</td>";
 					echo "<td>".$ships[$i]::$value."</td>";
 					echo "<td>".$mass."</td>";
 					echo "<td>".$struct."</td>";
