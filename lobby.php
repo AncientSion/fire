@@ -15,8 +15,7 @@ if (isset($_SESSION["userid"])){
 	//function __construct($id, $userid, $classname, $x, $y, $facing){
 	//$ship = new Omega(1, 1, 5, 5, 100);
 	//echo "<script> var omega = ".json_encode($ship, JSON_NUMERIC_CHECK).";</script>";
-
-//	json_encode($ship, JSON_NUMERIC_CHECK);
+	//son_encode($ship, JSON_NUMERIC_CHECK);
 	
 	$ongoingGames = $manager->getOngoingGames();
 	for ($i = 0; $i < sizeof($ongoingGames); $i++){

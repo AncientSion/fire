@@ -3,6 +3,7 @@ include(dirname(__FILE__) . "/autoload.php");
 
 if (isset($_SESSION["userid"]) && $_SESSION["userid"] != false){
 	header("Location: lobby.php");
+	return;
 }
 
 if (isset($_POST["username"]) && isset($_POST["password"])){
@@ -10,8 +11,10 @@ if (isset($_POST["username"]) && isset($_POST["password"])){
 		$dbManager = DBManager::app();
 		$data = $dbManager->validateLogin($_POST["username"], $_POST["password"]);
 		if ($data){
+			echo "got data";
 			$_SESSION["userid"] = $data["id"];
 			$_SESSION["access"] = $data["access"];
+			echo "session set";
 			header("Location: lobby.php");	
 		}
 		else {

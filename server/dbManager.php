@@ -135,6 +135,7 @@ class DBManager {
 	}
 	
 	public function validateLogin($name, $pass){
+		echo "validateLogin";
 		
 		$stmt = $this->connection->prepare("
 			SELECT id, access FROM users
@@ -149,9 +150,11 @@ class DBManager {
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 		
 		if ($result){
+			echo "valid";
 			return $result;
 		}
 		else {
+			echo "invalid";
 			return false;
 		}	
 	}
