@@ -15,7 +15,7 @@ class Sharlin extends SuperHeavy {
 	}
 
 	public function addStructures(){
-		$structs = [];
+		$structs = array();
 
 		$left = new Structure($this->getId(), $this->id, 240, 360, 3200, 75, 44);
 			$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);

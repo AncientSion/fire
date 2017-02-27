@@ -15,7 +15,7 @@ class Tinashi extends Medium {
 	}
 
 	public function addStructures(){
-		$structs = [];
+		$structs = array();
 
 		$left = new Structure($this->getId(), $this->id, 240, 360, 1050, 60, 35);
 			$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);

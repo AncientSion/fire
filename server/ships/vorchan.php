@@ -14,7 +14,7 @@ class Vorchan extends Light {
 	}
 
 	public function addStructures(){
-		$structs = [];
+		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 225, 30, 19);
 		$front->systems[] = new MediumAssaultArray($this->getId(), $this->id, 270, 90);

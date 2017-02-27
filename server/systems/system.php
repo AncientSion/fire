@@ -243,7 +243,7 @@ class Weapon extends System {
 	public $guns = 1;
 	public $reload = 1;
 	public $powerReq = 2;
-	public $fireOrders = [];
+	public $fireOrders = array();
 	public $priority;
 	public $chance = 10;
 	public $fc = array(0 => 100, 1 => 100);
@@ -442,7 +442,7 @@ class Weapon extends System {
 class Hangar extends Weapon {
 	public $name = "Hangar";
 	public $display = "Hangar";	
-	public $loads = [];	
+	public $loads = array();	
 
 	function __construct($id, $parentId, $start, $end, $output, $effiency, $loads, $destroyed = false){
 		$this->powerReq = $effiency;

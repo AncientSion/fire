@@ -605,7 +605,7 @@ class Manager {
 
 	public function writePrimaryCriticals(){
 		Debug::log("writePrimaryCriticals");
-		$crits = [];
+		$crits = array();
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			for ($j = 0; $j < sizeof($this->ships[$i]->primary->systems); $j++){
@@ -867,7 +867,7 @@ class Manager {
 
 	public function writeCritEntries(){
 		//debug::log("writeCritEntries");
-		$all = [];
+		$all = array()
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$all = array_merge($all, $this->ships[$i]->getNewCrits($this->turn));
 		}
@@ -928,8 +928,8 @@ class Manager {
 
 	public function getShipsForFaction($faction){
 		Debug::log("getShipsForFaction");
-		$ships = [];
-		$data = [];
+		$ships = array();
+		$data = array();
 
 		switch ($faction){
 			case "Earth Alliance";

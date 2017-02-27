@@ -14,7 +14,7 @@ class Primus extends Heavy {
 	}
 
 	public function addStructures(){
-		$structs = [];
+		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 1250, 60, 35);
 		$front->systems[] = new HeavyAssaultArray($this->getId(), $this->id, 300, 60);

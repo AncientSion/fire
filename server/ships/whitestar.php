@@ -15,7 +15,7 @@ class WhiteStar extends Light {
 	}
 
 	public function addStructures(){
-		$structs = [];
+		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 550, 70, 30);
 		$front->systems[] = new NeutronLaser($this->getId(), $this->id, 330, 30);

@@ -2,8 +2,6 @@
 
 include_once 'global.php';
 
-echo "ding";
-
 if (isset($_SESSION["userid"])){
 	echo "Userid: ".$_SESSION["userid"];
 
@@ -137,7 +135,6 @@ if (isset($_SESSION["userid"])){
 else {
 	echo "NO USER ID";
 }
-echo "ding";
 
 ?>
 

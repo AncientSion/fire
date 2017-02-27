@@ -14,7 +14,7 @@ class Omega extends Heavy {
 	}
 
 	public function addStructures(){
-		$structs = [];
+		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 1200, 65, 38);
 			$front->systems[] = new HeavyLaser($this->getId(), $this->id, 300, 360);

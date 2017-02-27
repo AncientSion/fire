@@ -14,7 +14,7 @@ class Haven extends Light {
 	}
 
 	public function addStructures(){
-		$structs = [];
+		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 160, 30, 16);
 		$front->systems[] = new LightAssaultArray($this->getId(), $this->id, 240, 120);

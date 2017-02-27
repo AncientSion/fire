@@ -14,7 +14,7 @@ class Saggitarius extends Medium {
 	}
 
 	public function addStructures(){
-		$structs = [];
+		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 550, 65, 26);
 			$front->systems[] = new ParticleBeam($this->getId(), $this->id, 240, 120);

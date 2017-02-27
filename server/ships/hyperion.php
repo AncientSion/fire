@@ -14,7 +14,7 @@ class Hyperion extends Medium {
 	}
 
 	public function addStructures(){
-		$structs = [];
+		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 60, 32);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);

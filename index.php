@@ -12,11 +12,8 @@ if (isset($_POST["username"]) && isset($_POST["password"])){
 		$dbManager = DBManager::app();
 		$data = $dbManager->validateLogin($_POST["username"], $_POST["password"]);
 		if ($data){
-			echo "valid data received";
 			$_SESSION["userid"] = $data["id"];
 			$_SESSION["access"] = $data["access"];
-			echo "session set";
-			echo "forward";
 			header("Location: lobby.php");	
 		}
 		else {
@@ -24,7 +21,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])){
 		}
 	}
 	else {
-			echo "<font color='red'>Please enter valid login data</font>";
+		echo "<font color='red'>Please enter valid login data</font>";
 	}
 }
 else if (isset($_POST["newUsername"]) && isset($_POST["newPassword"])){

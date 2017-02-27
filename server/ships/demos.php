@@ -14,7 +14,7 @@ class Demos extends Medium {
 	}
 
 	public function addStructures(){
-		$structs = [];
+		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 50, 22);
 		$front->systems[] = new HeavyAssaultArray($this->getId(), $this->id, 300, 60);

@@ -14,7 +14,7 @@ class Tethys extends Light {
 	}
 
 	public function addStructures(){
-		$structs = [];
+		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 250, 35, 16);
 		$front->systems[] = new LightLaser($this->getId(), $this->id, 300, 60);
