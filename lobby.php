@@ -1,6 +1,7 @@
 <?php
 
 include_once 'global.php';
+echo "v: ".PHP_VERSION;
 
 if (isset($_SESSION["userid"])){
 
