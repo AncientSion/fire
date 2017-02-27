@@ -1,5 +1,5 @@
 <?php
-include_once 'global.php';
+include(dirname(__FILE__) . "/autoload.php");
 
 if (isset($_SESSION["userid"]) && $_SESSION["userid"] != false){
 	header("Location: lobby.php");
