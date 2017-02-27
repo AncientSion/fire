@@ -1,17 +1,7 @@
 <?php
 
 error_reporting(E_ALL); ini_set('display_errors', '1');
-require_once("debug.php");
 
-class Point {
-	public $x;
-	public $y;
-
-	function __construct($x, $y){
-		$this->x = $x;
-		$this->y = $y;
-	}
-}
 
 class Action {
 	public $turn;

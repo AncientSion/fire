@@ -1,5 +1,4 @@
 <?php
-require_once("server\classes.php");
 
 class DBManager {
 
@@ -10,10 +9,10 @@ class DBManager {
 
 		if ($this->connection === null){
 			$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",
-						//	"aatu",
-						//	"Kiiski",
-							"root",
-							"147147",
+							"aatu",
+							"Kiiski",
+						//	"root",
+						//	"147147",
 							array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 		}
 	//	if ($this->connection != null){

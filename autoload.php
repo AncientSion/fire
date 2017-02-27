@@ -86,12 +86,12 @@ spl_autoload_register(
                 'structure' => '/server/systems/structure.php',
 
                 'debug' => '/server/debug.php',
-                'Point' => '/server/classes.php',
-                'Action' => '/server/classes.php',
-                'FireOrder' => '/server/classes.php',
-                'Damage' => '/server/classes.php',
-                'Crit' => '/server/classes.php',
-                'Divider' => '/server/classes.php',
+                'point' => '/server/classes.php',
+                'action' => '/server/classes.php',
+                'fireorder' => '/server/classes.php',
+                'damage' => '/server/classes.php',
+                'crit' => '/server/classes.php',
+                'divider' => '/server/classes.php',
                 'manager' => '/server/manager.php',
                 'dbmanager' => '/server/dbManager.php',
             );

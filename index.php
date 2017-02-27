@@ -1,11 +1,9 @@
 <?php
 include_once 'global.php';
 
-
 if (isset($_SESSION["userid"]) && $_SESSION["userid"] != false){
 	header("Location: lobby.php");
 }
-
 
 if (isset($_POST["username"]) && isset($_POST["password"])){
 	if ( $_POST["username"] != "" && $_POST["password"] != "" ){
