@@ -4,8 +4,8 @@ include_once 'global.php';
 
 if (isset($_SESSION["userid"])){
 
-	$dbManager = DBManager::app();
 	$manager = new Manager($_SESSION["userid"]);
+	$dbManager = DBManager::app();
 	$playerName = $manager->getUsername();
 	$_SESSION["username"] = $playerName;
 
@@ -24,9 +24,18 @@ if (isset($_SESSION["userid"])){
 
 	$openGames = $manager->getOpenGames();
 	
-	
+	if ($manager){
+		echo "Manager";
+	}
+	if ($dbManager){
+		echo "dbManager";
+	}
+		
 	if ($playerName){
 		$welcome = "<font color='red'>Welcome, ".$playerName.", your player ID: ".$_SESSION['userid']."</font>";
+	} 
+	else {
+		$welcome = "<font color='red'> No Playername for your ID: ".$_SESSION['userid']."found !</font>";
 	}
 	
 	$ongoingGamesElement = "<table style='border: 1px solid white; margin: auto; border-radius: 5px'>";
