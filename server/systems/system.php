@@ -277,15 +277,15 @@ class Weapon extends System {
 	}
 
 	public function getCritEffects(){
-		return ("range1", "damage1", "range2", "damage2", "disabled");
+		return array("range1", "damage1", "range2", "damage2", "disabled");
 	}
 
 	public function getCritTreshs(){
-		return (20, 30, 45, 55, 80);
+		return array(20, 30, 45, 55, 80);
 	}
 
 	public function getCritDuration(){
-		return (0, 0, 0, 0, 1);
+		return array(0, 0, 0, 0, 1);
 	}
 
 	public function rollForHit($fire){
@@ -468,11 +468,11 @@ class Hangar extends Weapon {
 	}
 
 	public function getCritEffects(){
-		return ("launch1", "launch2", "launch3"];
+		return array("launch1", "launch2", "launch3");
 	}
 
 	public function getCritTreshs(){
-		return  [15, 25, 35];
+		return array(15, 25, 35);
 	}
 
 	public function adjustLoad($dbLoad){

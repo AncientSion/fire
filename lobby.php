@@ -3,7 +3,6 @@
 include_once 'global.php';
 
 if (isset($_SESSION["userid"])){
-	echo "Userid: ".$_SESSION["userid"];
 
 	$manager = new Manager($_SESSION["userid"]);
 	$dbManager = DBManager::app();
@@ -23,13 +22,6 @@ if (isset($_SESSION["userid"])){
 	}
 
 	$openGames = $manager->getOpenGames();
-	
-	if ($manager){
-		echo "Manager";
-	} else echo "no Manager";
-	if ($dbManager){
-		echo "dbManager";
-	} else echo "no dbManager";
 		
 	if ($playerName){
 		$welcome = "<font color='red'>Welcome, ".$playerName.", your player ID: ".$_SESSION['userid']."</font>";
