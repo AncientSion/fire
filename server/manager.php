@@ -867,7 +867,7 @@ class Manager {
 
 	public function writeCritEntries(){
 		//debug::log("writeCritEntries");
-		$all = array()
+		$all = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$all = array_merge($all, $this->ships[$i]->getNewCrits($this->turn));
 		}
