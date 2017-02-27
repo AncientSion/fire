@@ -24,11 +24,8 @@ class DBManager {
 	}
 	
 	static public function app(){
-		echo "dbmanager::app";
         if(self::$instance === null OR !is_a(self::$instance, "DBManager")) {
-			echo "return tb";
             self::$instance = new DBManager();
-        } else echo "no db";
         return self::$instance;
 	}
 

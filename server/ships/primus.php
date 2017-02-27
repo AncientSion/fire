@@ -27,7 +27,7 @@ class Primus extends Heavy {
 		$right->systems[] = new LightAssaultArray($this->getId(), $this->id, 300, 180);
 		$right->systems[] = new LightAssaultArray($this->getId(), $this->id, 300, 180);
 		$right->systems[] = new LightAssaultArray($this->getId(), $this->id, 300, 180);
-		$right->systems[] = new Hangar($this->getId(), $this->id, 30, 90, 400, 6, ["Sentri"]);
+		$right->systems[] = new Hangar($this->getId(), $this->id, 30, 90, 400, 6, array("Sentri"));
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 1000, 50, 30);
@@ -40,7 +40,7 @@ class Primus extends Heavy {
 		$left->systems[] = new LightAssaultArray($this->getId(), $this->id, 180, 60);
 		$left->systems[] = new LightAssaultArray($this->getId(), $this->id, 180, 60);
 		$left->systems[] = new LightAssaultArray($this->getId(), $this->id, 180, 60);
-		$left->systems[] = new Hangar($this->getId(), $this->id, 270, 330, 400, 6, ["Sentri"]);
+		$left->systems[] = new Hangar($this->getId(), $this->id, 270, 330, 400, 6, array("Sentri"));
 		$structs[] = $left;
 		
 		for ($i = 0; $i < sizeof($structs); $i++){

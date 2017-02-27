@@ -19,7 +19,7 @@ class Hyperion extends Medium {
 		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 60, 32);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new ParticleBeam($this->getId(), $this->id, 240, 120);
-		$front->systems[] = new Hangar($this->getId(), $this->id, 330, 30, 350, 6, ["Aurora"]);
+		$front->systems[] = new Hangar($this->getId(), $this->id, 330, 30, 350, 6, array("Aurora"));
 		$front->systems[] = new ParticleBeam($this->getId(), $this->id, 240, 120);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;

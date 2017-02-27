@@ -19,7 +19,7 @@ class Omega extends Heavy {
 		$front = new Structure($this->getId(), $this->id, 330, 30, 1200, 65, 38);
 			$front->systems[] = new HeavyLaser($this->getId(), $this->id, 300, 360);
 			$front->systems[] = new HeavyLaser($this->getId(), $this->id, 300, 360);
-			$front->systems[] = new Hangar($this->getId(), $this->id, 330, 30, 850, 12, ["Aurora", "Thunderbolt"]);
+			$front->systems[] = new Hangar($this->getId(), $this->id, 330, 30, 850, 12, array("Aurora", "Thudnerbolt"))
 			$front->systems[] = new HeavyLaser($this->getId(), $this->id, 0, 60);
 			$front->systems[] = new HeavyLaser($this->getId(), $this->id, 0, 60);
 		$structs[] = $front;
@@ -36,7 +36,7 @@ class Omega extends Heavy {
 			$aft->systems[] = new ParticleBeam($this->getId(), $this->id, 90, 270);
 			$aft->systems[] = new ParticleBeam($this->getId(), $this->id, 90, 270);
 			$aft->systems[] = new ParticleBeam($this->getId(), $this->id, 90, 270);
-			$aft->systems[] = new Hangar($this->getId(), $this->id, 150, 210, 350, 6, ["Aurora", "Thunderbolt"]);
+			$aft->systems[] = new Hangar($this->getId(), $this->id, 150, 210, 350, 6, array("Aurora", "Thudnerbolt"))
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 1500, 60, 34);

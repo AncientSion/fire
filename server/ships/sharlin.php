@@ -43,7 +43,7 @@ class Sharlin extends SuperHeavy {
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
-			$aft->systems[] = new Hangar($this->getId(), $this->id, 150, 210, 1200, 12, ["Nial"]);
+			$aft->systems[] = new Hangar($this->getId(), $this->id, 150, 210, 1200, 12, array("Nial"));
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 0, 120);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 0, 120);
