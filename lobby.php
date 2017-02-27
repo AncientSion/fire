@@ -26,10 +26,10 @@ if (isset($_SESSION["userid"])){
 	
 	if ($manager){
 		echo "Manager";
-	}
+	} else echo "no Manager";
 	if ($dbManager){
 		echo "dbManager";
-	}
+	} else echo "no dbManager";
 		
 	if ($playerName){
 		$welcome = "<font color='red'>Welcome, ".$playerName.", your player ID: ".$_SESSION['userid']."</font>";
