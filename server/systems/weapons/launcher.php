@@ -32,11 +32,11 @@ class Launcher extends Weapon {
 	}
 
 	public function getCritEffects(){
-		return ["disabled1", "ammoLoss", "ammolossDamage"];
+		return array("disabled1", "ammoLoss", "ammolossDamage");
 	}
 
 	public function getCritTreshs(){
-		return  [25, 50, 80];
+		return array(25, 50, 80);
 	}
 }
 

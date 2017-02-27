@@ -75,15 +75,15 @@ class System {
 	}
 
 	public function getCritEffects(){
-		return ["control1", "control2", "control3", "control4", "control5", "control6"];
+		return array("control1", "control2", "control3", "control4", "control5", "control6");
 	}
 
 	public function getCritTreshs(){
-		return [20, 30, 50, 65, 80, 90];
+		return array(20, 30, 50, 65, 80, 90);
 	}
 
 	public function getCritDuration(){
-		return [2, 2, 2, 2, 2, 2];
+		return array(2, 2, 2, 2, 2, 2);
 	}
 
 	public function determineCrititcal($dmg, $turn){
@@ -128,15 +128,15 @@ class Bridge extends System {
 	}
 
 	public function getCritEffects(){
-		return ["bridge_accu-10", "bridge_nomove", "bridge_disabled"];
+		return array("bridge_accu-10", "bridge_nomove", "bridge_disabled");
 	}
 
 	public function getCritTreshs(){
-		return [10, 20, 35];
+		return array(10, 20, 35);
 	}
 
 	public function getCritDuration(){
-		return [2, 1, 1];
+		return array(2, 1, 1);
 	}
 }
 
@@ -152,15 +152,15 @@ class Engine extends System {
     }
 
 	public function getCritEffects(){
-		return ["output_0.9", "output_0.5", "output_0.85", "output_0"];
+		return array("output_0.9", "output_0.5", "output_0.85", "output_0");
 	}
 
 	public function getCritTreshs(){
-		return [10, 25, 40, 55];
+		return array(10, 25, 40, 55);
 	}
 
 	public function getCritDuration(){
-		return [0, 1, 0, 1];
+		return array(0, 1, 0, 1);
 	}
 }
 
@@ -176,15 +176,15 @@ class Reactor extends System {
     }
 
 	public function getCritEffects(){
-		return ["output_0.9", "output_0.9", "output_0.5", "output_0", "meltdown"];
+		return array("output_0.9", "output_0.9", "output_0.5", "output_0", "meltdown");
 	}
 
 	public function getCritTreshs(){
-		return [10, 25, 40, 55, 80];
+		return array(10, 25, 40, 55, 80);
 	}
 
 	public function getCritDuration(){
-		return [0, 0, 1, 1, 0];
+		return array(0, 0, 1, 1, 0);
 	}
 }
 
@@ -199,14 +199,14 @@ class LifeSupport extends System {
     }
 
 	public function getCritEffects(){
-		return ["dmg05", "dmg15", "dmg25", "dmg35"];
+		return array("dmg05", "dmg15", "dmg25", "dmg35");
 	}
 
 	public function getCritTreshs(){
-		return [5, 15, 25, 35];
+		return array(5, 15, 25, 35);
 	}
 	public function getCritDuration(){
-		return [1, 1, 1, 1];
+		return array(1, 1, 1, 1);
 	}
 }
 
@@ -221,14 +221,14 @@ class Sensor extends System {
         parent::__construct($id, $parentId, $output, $destroyed);
     }
 	public function getCritEffects(){
-		return ["output_0.85", "output_0.7", "sensor_0"];
+		return array("output_0.85", "output_0.7", "sensor_0");
 	}
 
 	public function getCritTreshs(){
-		return [10, 25, 40];
+		return array(10, 25, 40);
 	}
 	public function getCritDuration(){
-		return [0, 0, 1];
+		return array(0, 0, 1);
 	}
 }
 
@@ -277,15 +277,15 @@ class Weapon extends System {
 	}
 
 	public function getCritEffects(){
-		return ["range1", "damage1", "range2", "damage2", "disabled"];
+		return ("range1", "damage1", "range2", "damage2", "disabled");
 	}
 
 	public function getCritTreshs(){
-		return [20, 30, 45, 55, 80];
+		return (20, 30, 45, 55, 80);
 	}
 
 	public function getCritDuration(){
-		return [0, 0, 0, 0, 1];
+		return (0, 0, 0, 0, 1);
 	}
 
 	public function rollForHit($fire){
@@ -468,7 +468,7 @@ class Hangar extends Weapon {
 	}
 
 	public function getCritEffects(){
-		return ["launch1", "launch2", "launch3"];
+		return ("launch1", "launch2", "launch3"];
 	}
 
 	public function getCritTreshs(){

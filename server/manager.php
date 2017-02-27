@@ -919,7 +919,7 @@ class Manager {
 	}
 
 	public function getFactions(){
-		return ["Earth Alliance", "Centauri Republic", "Minbari Federation"];
+		return array("Earth Alliance", "Centauri Republic", "Minbari Federation");
 	}
 
 	public function getFightersForFaction($faction){

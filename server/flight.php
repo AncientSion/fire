@@ -154,11 +154,11 @@ class Fighter extends Structure implements JsonSerializable {
     }
 
 	public function getCritEffects(){
-		return ["disengaged"];
+		return array("disengaged");
 	}
 
 	public function getCritTreshs(){
-		return [85];
+		return array(85);
 	}
 
 	public function testCriticalsStructureLevel($turn){
