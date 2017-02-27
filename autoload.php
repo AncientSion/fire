@@ -1,5 +1,6 @@
 <?php
 
+echo "autoloadgin";
 spl_autoload_register(
     function($class) {
         static $classes = null;
@@ -102,4 +103,7 @@ spl_autoload_register(
         }
     }
 );
+
+echo "autoload done;";
+
 

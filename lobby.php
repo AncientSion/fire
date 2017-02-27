@@ -2,7 +2,10 @@
 
 include_once 'global.php';
 
+echo "ding";
+
 if (isset($_SESSION["userid"])){
+	echo "Userid: ".$_SESSION["userid"];
 
 	$manager = new Manager($_SESSION["userid"]);
 	$dbManager = DBManager::app();
@@ -133,8 +136,9 @@ if (isset($_SESSION["userid"])){
 	}
 }
 else {
-		Debug::log("no user id");
+	echo "NO USER ID";
 }
+echo "ding";
 
 ?>
 
