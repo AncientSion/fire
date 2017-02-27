@@ -17,7 +17,7 @@ class Sharlin extends SuperHeavy {
 	public function addStructures(){
 		$structs = [];
 
-		$left = new Structure($this->getId(), $this->id, 240, 360, 3750, 75, 48);
+		$left = new Structure($this->getId(), $this->id, 240, 360, 3200, 75, 44);
 			$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$left->systems[] = new NeutronLaser($this->getId(), $this->id, 210, 330);
@@ -28,7 +28,7 @@ class Sharlin extends SuperHeavy {
 			$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
 		$structs[] = $left;
 
-		$right = new Structure($this->getId(), $this->id, 0, 120, 3750, 75, 48);
+		$right = new Structure($this->getId(), $this->id, 0, 120, 3200, 75, 44);
 			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 30, 150);
@@ -39,7 +39,7 @@ class Sharlin extends SuperHeavy {
 			$right->systems[] = new FusionCannon($this->getId(), $this->id, 0, 120);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 120, 240, 3250, 65, 43);
+		$aft = new Structure($this->getId(), $this->id, 120, 240, 2850, 65, 36);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
@@ -56,13 +56,13 @@ class Sharlin extends SuperHeavy {
 	}
 
 	public function addPrimary(){
-		$primary = new Primary($this->getId(), $this->id, 0, 360, 6750, 70);
-		$primary->systems[] = new Bridge($this->getId(), $this->id, 300);
-		$primary->systems[] = new Engine($this->getId(), $this->id, 300, 850);
-		$primary->systems[] = new Reactor($this->getId(), $this->id, 300, 20);
-		$primary->systems[] = new Lifesupport($this->getId(), $this->id, 300);
-		$primary->systems[] = new Sensor($this->getId(), $this->id, 300);
+		$primary = new Primary($this->getId(), $this->id, 0, 360, 5750, 70);
+		$primary->systems[] = new Bridge($this->getId(), $this->id, 250);
+		$primary->systems[] = new Engine($this->getId(), $this->id, 250, 850, 8);
+		$primary->systems[] = new Lifesupport($this->getId(), $this->id, 250);
+		$primary->systems[] = new Sensor($this->getId(), $this->id, 250, 10, 10);
 		$this->primary = $primary;
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 250, $this->getPowerReq()+10);
 	}
 }
 

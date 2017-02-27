@@ -13,6 +13,7 @@ class Ship {
 	public static $value;
 	public $cost;
 
+	public $ship = true;
 	public $flight = false;
 	public $salvo = false;
 
@@ -76,6 +77,8 @@ class Ship {
 	}
 
 	public function addDamageDB($damages){
+		//Debug::log("begin: ".microtime(true));
+		//soert damages by systemid ?
 		for ($i = 0; $i < sizeof($damages); $i++){
 			if ($damages[$i]->systemid == -1){
 				$this->primary->damages[] = $damages[$i];
@@ -84,6 +87,27 @@ class Ship {
 				$this->getSystemById($damages[$i]->systemid)->damages[] = $damages[$i];
 			}
 			$this->getStructureById($damages[$i]->structureid)->damages[] = $damages[$i];
+		}
+		//Debug::log("finish: ".microtime(true));
+		return true;
+	}
+
+	public function addPowerDB($powers){
+		for ($j = 0; $j < sizeof($powers); $j++){
+			for ($k = 0; $k < sizeof($this->structures); $k++){
+				for ($l = 0; $l < sizeof($this->structures[$k]->systems); $l++){
+					if ($this->structures[$k]->systems[$l]->id == $powers[$j]->systemid){
+						$this->structures[$k]->systems[$l]->powers[] = $powers[$j];
+						break 2;
+					}
+				}
+			}
+			for ($k = 0; $k < sizeof($this->primary->systems); $k++){
+				if ($this->primary->systems[$k]->id == $powers[$j]->systemid){
+					$this->primary->systems[$k]->powers[] = $powers[$j];
+					break;
+				}
+			}
 		}
 		return true;
 	}
@@ -109,25 +133,30 @@ class Ship {
 	}
 
 	public function applyDamage($dmg){
-		$system = false;
-		if ($dmg->systemid == -1){
-			$this->primary->damages[] = $dmg;
-			$system = true;	
-		}
-
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->id == $dmg->structureid){
 				$this->structures[$i]->damages[] = $dmg;
-				if (!$system){
-					for ($j = 0; $j < sizeof($this->structures[$i]->systems[$j]); $j++){
+				if ($dmg->systemid == -1){
+					$this->primary->damages[] = $dmg;
+					return;
+				}
+				else {
+					for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 						if ($this->structures[$i]->systems[$j]->id == $dmg->systemid){
 							$this->structures[$i]->systems[$j]->damages[] = $dmg;
+							return;
+						}
+					}
+					for ($j = 0; $j < sizeof($this->primary->systems); $j++){
+						if ($this->primary->systems[$j]->id == $dmg->systemid){
+							$this->primary->systems[$j]->damages[] = $dmg;
 							return;
 						}
 					}
 				}
 			}
 		}
+		Debug::log("couldnt apply");
 		return;
 	}
 
@@ -142,12 +171,15 @@ class Ship {
 		return true;
 	}
 
-	public function getPowerNeed(){
+	public function getPowerReq(){
 		$need = 0;
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				$need += $this->structures[$i]->systems[$j]->powerReq;
 			}
+		}
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+			$need += $this->primary->systems[$i]->powerReq;
 		}
 		return $need;
 	}
@@ -305,6 +337,9 @@ class Ship {
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$this->structures[$i]->testCriticalsStructureLevel($turn);
 		}
+		if($this->ship){
+			$this->primary->testCriticalsStructureLevel($turn);
+		}
 	}
 
 	public function addSystem($obj){
@@ -364,14 +399,21 @@ class Ship {
 		return $total;
 	}
 
-	public function getNewCrits(){
+	public function getNewCrits($turn){
 		$crits = array();
 		for ($j = 0; $j < sizeof($this->structures); $j++){
 			for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
 				for ($l = 0; $l < sizeof($this->structures[$j]->systems[$k]->crits); $l++){
-					if ($this->structures[$j]->systems[$k]->crits[$l]->turn == turn){
+					if ($this->structures[$j]->systems[$k]->crits[$l]->turn == $turn){
 						$crits[] = $this->structures[$j]->systems[$k]->crits[$l];
 					}
+				}
+			}
+		}
+		for ($k = 0; $k < sizeof($this->primary->systems); $k++){
+			for ($l = 0; $l < sizeof($this->primary->systems[$k]->crits); $l++){
+				if ($this->primary->systems[$k]->crits[$l]->turn == $turn){
+					$crits[] = $this->primary->systems[$k]->crits[$l];
 				}
 			}
 		}

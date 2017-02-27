@@ -115,16 +115,18 @@ function canvasMouseMove(e){
 	//console.log(pos);
 	//$("#currentPos").html(pos.x + " / " + pos.y + "____" + cam.o.x + " / " + cam.o.y+ "___" + (pos.x-cam.o.x) + " / " + (pos.y-cam.o.y));
 
-	var ammo = game.hasAmmoOnPos(pos);
-	var ships = game.hasShipOnPos(pos);
-	if (ammo){
-		game.unitHover(ammo);
-	}
-	else if (ships){
-		game.unitHover(ships);
-	}
-	else if (game.shortInfo){		
-		game.resetHover();
+	if (!game.deploying){
+		var ammo = game.hasAmmoOnPos(pos);
+		var ships = game.hasShipOnPos(pos);
+		if (ammo){
+			game.unitHover(ammo);
+		}
+		else if (ships){
+			game.unitHover(ships);
+		}
+		else if (game.shortInfo){		
+			game.resetHover();
+		}
 	}
 	 
 	if (aShip){

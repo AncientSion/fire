@@ -3,19 +3,22 @@
 class System {
 	public $id;
 	public $parentId;
-	public $weapon = false;
-	public $destroyed = false;
+	public $weapon = 0;
+	public $destroyed = 0;
+	public $disabled = 0;
 	public $powerReq = 1;
 	public $output;
 	public $name;
 	public $display;
 	public $chance = 3;
-	public $crits = array();
 	public $damages = array();
+	public $powers = array();
+	public $crits = array();
 	public $integrity = 0;
 	public $linked = 1;
+	public $effiency = 0;
 
-	function __construct($id, $parentId, $output = 0, $destroyed = false){
+	function __construct($id, $parentId, $output = 0, $destroyed = 0){
 		$this->id = $id;
 		$this->parentId = $parentId;
 		$this->output = $output;
@@ -24,6 +27,16 @@ class System {
 
 	public function getArmourMod(){
 		return 1;
+	}
+
+	public function isPowered($turn){
+		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
+			if ($this->powers[$i]->turn == $turn){
+				if ($this->powers[$i]->type == 0){
+					return false;
+				}
+			} return true;
+		}
 	}
 
 	function getRemainingIntegrity(){
@@ -69,26 +82,34 @@ class System {
 		return [20, 30, 50, 65, 80, 90];
 	}
 
+	public function getCritDuration(){
+		return [2, 2, 2, 2, 2, 2];
+	}
+
 	public function determineCrititcal($dmg, $turn){
+		//Debug::log("Crit test for: #".$this->id." - ".get_class($this).", dmg: ".$dmg."%");
 		$crits = $this->getCritEffects();
 		$tresh = $this->getCritTreshs();
+		$duration = $this->getCritDuration();
+		$mod = mt_rand(0, 10);
 
 		for ($i = sizeof($tresh)-1; $i >= 0; $i--){
-			if ($dmg >= $tresh[$i]){	
-				$this->crits[] = new Crit(
-					sizeof($this->crits)+1,
-					-1,
-					$this->parentId,
-					$this->id,
-					$turn,
-					$crits[$i],
-					15,
-					1
-				);
-				return;
+			if ($dmg + $mod > $tresh[$i]){
+				if (mt_rand(1, 10) > 3){
+					//$id, $shipid, $systemid, $turn, $type, $duration, $new){
+					$this->crits[] = new Crit(
+						sizeof($this->crits)+1,
+						$this->parentId,
+						$this->id,
+						$turn,
+						$crits[$i],
+						$duration[$i],
+						1
+					);
+					return;
+				}
 			}
 		}
-		return;
 	}
 
 	public function applyDamage($dmg){
@@ -100,9 +121,22 @@ class Bridge extends System {
 	public $name = "Bridge";
 	public $display = "Bridge";
 
-	function __construct($id, $parentId, $integrity, $output = 0, $destroyed = false){
+	function __construct($id, $parentId, $integrity, $output = 0, $effiency = 0, $destroyed = 0){
 		$this->integrity = $integrity;
+		$this->effiency = $effiency;
         parent::__construct($id, $parentId, $output, $destroyed);
+	}
+
+	public function getCritEffects(){
+		return ["bridge_accu-10", "bridge_nomove", "bridge_disabled"];
+	}
+
+	public function getCritTreshs(){
+		return [10, 20, 35];
+	}
+
+	public function getCritDuration(){
+		return [2, 1, 1];
 	}
 }
 
@@ -110,40 +144,92 @@ class Engine extends System {
 	public $name = "Engine";
 	public $display = "Engine";
 
-	function __construct($id, $parentId, $integrity, $output = 0, $destroyed = false){
+	function __construct($id, $parentId, $integrity, $output = 0, $effiency = 0, $destroyed = 0){
 		$this->integrity = $integrity;
+		$this->effiency = $effiency;
+		$this->powerReq = ceil($output / 5);
         parent::__construct($id, $parentId, $output, $destroyed);
     }
+
+	public function getCritEffects(){
+		return ["output_0.9", "output_0.5", "output_0.85", "output_0"];
+	}
+
+	public function getCritTreshs(){
+		return [10, 25, 40, 55];
+	}
+
+	public function getCritDuration(){
+		return [0, 1, 0, 1];
+	}
 }
 
 class Reactor extends System {
 	public $name = "Reactor";
 	public $display = "Reactor";
+	public $powerReq = 0;
 
-	function __construct($id, $parentId, $integrity, $output = 0, $destroyed = false){
+	function __construct($id, $parentId, $integrity, $output = 0, $effiency = 0, $destroyed = 0){
 		$this->integrity = $integrity;
+		$this->effiency = $effiency;
         parent::__construct($id, $parentId, $output, $destroyed);
     }
+
+	public function getCritEffects(){
+		return ["output_0.9", "output_0.9", "output_0.5", "output_0", "meltdown"];
+	}
+
+	public function getCritTreshs(){
+		return [10, 25, 40, 55, 80];
+	}
+
+	public function getCritDuration(){
+		return [0, 0, 1, 1, 0];
+	}
 }
 
 class LifeSupport extends System {
 	public $name = "LifeSupport";
 	public $display = "Life Support";
 
-	function __construct($id, $parentId, $integrity, $output = 0, $destroyed = false){
+	function __construct($id, $parentId, $integrity, $output = 0, $effiency = 0, $destroyed = 0){
 		$this->integrity = $integrity;
+		$this->effiency = $effiency;
         parent::__construct($id, $parentId, $output, $destroyed);
     }
+
+	public function getCritEffects(){
+		return ["dmg05", "dmg15", "dmg25", "dmg35"];
+	}
+
+	public function getCritTreshs(){
+		return [5, 15, 25, 35];
+	}
+	public function getCritDuration(){
+		return [1, 1, 1, 1];
+	}
 }
 
 class Sensor extends System {
 	public $name = "Sensor";
 	public $display = "Sensor";
 
-	function __construct($id, $parentId, $integrity, $output = 0, $destroyed = false){
+	function __construct($id, $parentId, $integrity, $output = 0, $effiency = 0, $destroyed = 0){
 		$this->integrity = $integrity;
+		$this->effiency = $effiency;
+		$this->powerReq = $output*2;
         parent::__construct($id, $parentId, $output, $destroyed);
     }
+	public function getCritEffects(){
+		return ["output_0.85", "output_0.7", "sensor_0"];
+	}
+
+	public function getCritTreshs(){
+		return [10, 25, 40];
+	}
+	public function getCritDuration(){
+		return [0, 0, 1];
+	}
 }
 
 class Weapon extends System {
@@ -191,11 +277,15 @@ class Weapon extends System {
 	}
 
 	public function getCritEffects(){
-		return ["range1", "damage1", "range2", "damage2", "disabled1", "destroyed"];
+		return ["range1", "damage1", "range2", "damage2", "disabled"];
 	}
 
 	public function getCritTreshs(){
-		return [20, 30, 50, 65, 80, 90];
+		return [20, 30, 45, 55, 80];
+	}
+
+	public function getCritDuration(){
+		return [0, 0, 0, 0, 1];
 	}
 
 	public function rollForHit($fire){
@@ -234,7 +324,7 @@ class Weapon extends System {
 		for ($i = 0; $i < $fire->shots; $i++){
 			if ($fire->rolls[$i] <= $fire->req){
 				$destroyed = false;
-				$totalDmg = $this->getDamage($fire) * $this->getDamageMod();
+				$totalDmg = floor($this->getBaseDamage($fire) * $this->getDamageMod($fire));
 				$hitSystem = $fire->target->getHitSystem($fire);
 				$remInt = $hitSystem->getRemainingIntegrity();
 				$negation = $fire->target->getStructureById($fire->hitSection)->getRemainingNegation($fire) * $hitSystem->getArmourMod();
@@ -243,7 +333,7 @@ class Weapon extends System {
 				if ($remInt - $dmg->structDmg < 1){
 					$destroyed = true;
 					$hitSystem->destroyed = true;
-					//Debug::log("target system #".$hitSystem->id." destroyed: rem: ".$remInt.", doing: ".$structDmg);
+					Debug::log(" => target system #".$hitSystem->id." destroyed. rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".(abs($remInt - $dmg->structDmg)." dmg"));
 				}
 				//$id, $fireid, $gameid, $shipid, $structureid, $systemid, $turn, $roll, $type, $totalDmg, $shieldDmg, $structDmg, $armourDmg, $mitigation, $negation, $destroyed, $notes, $new){
 				$dmg = new Damage(
@@ -290,47 +380,73 @@ class Weapon extends System {
 		return ceil(($this->accDecay * $mod) * $dist / $this->decayVar);
 	}
 
-	public function getDmgLoss($fire){
+	public function getDmgPenaltyRange($fire){
 		return 0;
 	}
 
-	public function getDamage($fire){
-		return floor(mt_rand($this->getMinDamage(), $this->getMaxDamage()) / 100 * (100-$this->getDmgLoss($fire)));
+	public function getBaseDamage($fire){
+		return mt_rand($this->getMinDamage(), $this->getMaxDamage());
 	}
 
-	public function getDamageMod(){
+	public function getDamageMod($fire){
 		$mod = 1;
+
+		$crit = $this->getCritPenalty($fire->turn); if ($crit){Debug::log("crit mod: ".$crit);};
+		$boost = $this->getBoostLevel($fire->turn) * 0.25; if ($boost){Debug::log("boost mod: ".$boost);}
+		$range = $this->getDmgPenaltyRange($fire); if ($range){Debug::log("range mod: ".$range);}
+
+		return $mod + $crit + $boost + $range;
+	}
+
+	public function getCritPenalty($turn){
+		$mod = 0;
 		for ($i = 0; $i < sizeof($this->crits); $i++){
 			switch ($this->crits[$i]->type){
 				case "damage1": 
-					$mod = $mod - 0.1;
+					$mod -= 0.1;
 					break;
 				case "damage2":
-					$mod = $mod - 0.2;
+					$mod -= 0.2;
 					break;
 			}
 		}
-		//if ($mod != 1){Debug::log("weapon id: ".$this->id.", DAMAGE mod: ".$mod);}
+		//if ($mod){Debug::log("crit mod level: ".$mod);}
 		return $mod;
 	}
 
+	public function getBoostLevel($turn){
+		$boost = 0;
+		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
+			if ($this->powers[$i]->turn == $turn){
+				switch ($this->powers[$i]->type){
+					case 1: 
+					$boost++;
+					break;
+				}
+			}
+			else break;
+		}
+		//if ($boost){Debug::log("boost level: ".$boost);}
+		return $boost;
+	}
+
 	public function getMinDamage(){
-		return floor($this->minDmg);
+		return $this->minDmg;
 	}
 
 	public function getMaxDamage(){
-		return floor($this->maxDmg);
+		return $this->maxDmg;
 	}
 }
 
 class Hangar extends Weapon {
 	public $name = "Hangar";
 	public $display = "Hangar";	
-	public $launchRate;
 	public $loads = [];	
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $launchRate, $loads, $destroyed = false){
-		$this->launchRate = $launchRate;
+	function __construct($id, $parentId, $start, $end, $output, $effiency, $loads, $destroyed = false){
+		$this->powerReq = $effiency;
+		$this->effiency = $effiency;
 		$this->integrity = floor($output/3);
 
 		for ($i = 0; $i < sizeof($loads); $i++){
@@ -356,7 +472,7 @@ class Hangar extends Weapon {
 	}
 
 	public function getCritTreshs(){
-		return  [10, 20, 30];
+		return  [15, 25, 35];
 	}
 
 	public function adjustLoad($dbLoad){

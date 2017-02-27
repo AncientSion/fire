@@ -158,7 +158,7 @@ class Fighter extends Structure implements JsonSerializable {
 	}
 
 	public function getCritTreshs(){
-		return [80];
+		return [85];
 	}
 
 	public function testCriticalsStructureLevel($turn){

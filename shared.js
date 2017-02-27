@@ -106,7 +106,8 @@ function initiateShip(i){
 				window.ships[i].primary.systems[j].display,
 				window.ships[i].primary.systems[j].integrity,
 				window.ships[i].primary.systems[j].powerReq,
-				window.ships[i].primary.systems[j].output
+				window.ships[i].primary.systems[j].output,
+				window.ships[i].primary.systems[j].effiency
 			)
 
 			for (var k = 0; k < window.ships[i].primary.systems[j].damages.length; k++){
@@ -130,6 +131,19 @@ function initiateShip(i){
 					window.ships[i].primary.systems[j].damages[k].notes
 				)
 				primSystem.damages.push(dmg);
+			}
+
+			for (var l = 0; l < window.ships[i].primary.systems[j].powers.length; l++){
+				primSystem.powers.push(
+					new Power(
+						window.ships[i].primary.systems[j].powers[l].id,
+						window.ships[i].primary.systems[j].powers[l].unitid,
+						window.ships[i].primary.systems[j].powers[l].systemid,
+						window.ships[i].primary.systems[j].powers[l].turn,
+						window.ships[i].primary.systems[j].powers[l].type,
+						window.ships[i].primary.systems[j].powers[l].cost
+					)
+				)
 			}
 
 			for (var l = 0; l < window.ships[i].primary.systems[j].crits.length; l++){
@@ -222,6 +236,7 @@ function initiateShip(i){
                     window.ships[i].structures[j].systems[k].integrity,
                     window.ships[i].structures[j].systems[k].powerReq,
                     window.ships[i].structures[j].systems[k].rakes,
+                    window.ships[i].structures[j].systems[k].effiency,
                     window.ships[i].structures[j].systems[k].fc,
 					window.ships[i].structures[j].systems[k].minDmg,
 					window.ships[i].structures[j].systems[k].maxDmg,
@@ -249,6 +264,7 @@ function initiateShip(i){
                     window.ships[i].structures[j].systems[k].integrity,
                     window.ships[i].structures[j].systems[k].powerReq,
 					window.ships[i].structures[j].systems[k].output,
+                    window.ships[i].structures[j].systems[k].effiency,
                     window.ships[i].structures[j].systems[k].fc,
 					window.ships[i].structures[j].systems[k].minDmg,
 					window.ships[i].structures[j].systems[k].maxDmg,
@@ -268,8 +284,9 @@ function initiateShip(i){
 					window.ships[i].structures[j].systems[k].display,
 					window.ships[i].structures[j].systems[k].launchRate,
                     window.ships[i].structures[j].systems[k].integrity,
-					window.ships[i].structures[j].systems[k].output,
                     window.ships[i].structures[j].systems[k].powerReq,
+					window.ships[i].structures[j].systems[k].output,
+                    window.ships[i].structures[j].systems[k].effiency,
 					window.ships[i].structures[j].systems[k].reload,
 					window.ships[i].structures[j].systems[k].start,
 					window.ships[i].structures[j].systems[k].end
@@ -297,7 +314,7 @@ function initiateShip(i){
                     window.ships[i].structures[j].systems[k].integrity,
 					window.ships[i].structures[j].systems[k].powerReq,
 					window.ships[i].structures[j].systems[k].output,
-                    window.ships[i].structures[j].systems[k].launchRate,                    
+                    window.ships[i].structures[j].systems[k].effiency,                
                     window.ships[i].structures[j].systems[k].loads
 				)
 			}
@@ -342,6 +359,19 @@ function initiateShip(i){
 							window.ships[i].structures[j].systems[k].damages[l].negation,
 							window.ships[i].structures[j].systems[k].damages[l].destroyed,
 							window.ships[i].structures[j].systems[k].damages[l].notes
+						)
+					)
+				}
+
+				for (var l = 0; l < window.ships[i].structures[j].systems[k].powers.length; l++){
+					system.powers.push(
+						new Power(
+							window.ships[i].structures[j].systems[k].powers[l].id,
+							window.ships[i].structures[j].systems[k].powers[l].unitid,
+							window.ships[i].structures[j].systems[k].powers[l].systemid,
+							window.ships[i].structures[j].systems[k].powers[l].turn,
+							window.ships[i].structures[j].systems[k].powers[l].type,
+							window.ships[i].structures[j].systems[k].powers[l].cost
 						)
 					)
 				}

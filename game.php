@@ -135,25 +135,20 @@ foreach ($manager->playerstatus as $player){
 						<td  id="turnCost">
 						</td>
 					</tr>
-					<tr id="increaseImpulse" class="disabled">
-						<td colspan=2>
-							Increase Impulse
-						</td>
-					</tr>
-					<tr id="decreaseImpulse" class="disabled">
-						<td colspan=2>
-							Decrease Impulse
-						</td>
-					</tr>
-					<tr id="undoLastAction" class="disabled">
-						<td colspan=2>
-							Undo last action
-						</td>
-					</tr>
 				</table>
 			</div>
+			<div id="plusImpulse" class="ui">
+				<img src="varIcons/plus.png" style="width: 30px; height: 30px">
+			</div>
+			<div id="minusImpulse" class="ui">
+				<img src="varIcons/minus.png" style="width: 30px; height: 30px">
+			</div>
+			<div id="undoLastAction" class="ui">
+				<img src="varIcons/destroyed.png" style="width: 30px; height: 30px">
+			</div>
+
 			<div id="turnLeft" class="turnEle ui disabled">
-				<table style="margin:auto;">
+				<table class="doTurn" style="margin:auto; width: 100%;">
 					<tr>
 						<th colSpan=2>
 							Turn
@@ -161,22 +156,36 @@ foreach ($manager->playerstatus as $player){
 					</tr>
 					<tr>
 						<td>
-							EP Cost
+							Cost:
 						</td>
 						<td id="epCost">
 						</td>
 					</tr>
 					<tr>
 						<td>
-							Next Turn
+							Delay:
 						</td>
 						<td id="turnDelay">
+						</td>
+					</tr>
+				</table>
+				<table class="shortenTurn" style="margin:auto; width: 100%;">
+					<tr>
+						<td style="width: 50%">
+							<div class="doShortenTurn">
+								<img src="varIcons/plus.png">
+							</div>
+						</td>
+						<td>
+							<div class="DoUndoShortenTurn">
+								<img src="varIcons/minus.png">
+							</div>
 						</td>
 					</tr>
 				</table>
 			</div>
 			<div id="turnRight" class="turnEle ui disabled">
-				<table style="margin:auto;">
+				<table class="doTurn" style="margin:auto; width: 100%;">
 					<tr>
 						<th colSpan=2>
 							Turn
@@ -184,16 +193,30 @@ foreach ($manager->playerstatus as $player){
 					</tr>
 					<tr>
 						<td>
-							EP Cost
+							Cost:
 						</td>
 						<td id="epCost">
 						</td>
 					</tr>
 					<tr>
 						<td>
-							Next Turn
+							Delay:
 						</td>
 						<td id="turnDelay">
+						</td>
+					</tr>
+				</table>
+				<table class="shortenTurn" style="margin:auto; width: 100%;">
+					<tr>
+						<td style="width: 50%">
+							<div class="doShortenTurn">
+								<img src="varIcons/plus.png">
+							</div>
+						</td>
+						<td>
+							<div class="doUndoShortenTurn">
+								<img src="varIcons/minus.png">
+							</div>
 						</td>
 					</tr>
 				</table>
@@ -446,10 +469,16 @@ foreach ($manager->playerstatus as $player){
 							game.createLogEntry(game.fireOrders[i]);
 						}
 						for (var i = 0; i < game.ballistics.length; i++){
+							game.ballistics[i].x = game.ballistics[i].actions[game.ballistics[i].actions.length-1].x;
+							game.ballistics[i].y = game.ballistics[i].actions[game.ballistics[i].actions.length-1].y;
+							for (var j = 0; j < game.ballistics[i].intercepts.length; j++){
+								game.createLogEntry(game.ballistics[i].intercepts[j]);
+							}
 							if (game.ballistics[i].type = "Impact"){
 								game.createBallisticLogEntry(game.ballistics[i]);
 							}
 						}
+						game.draw();
 					}
 				}
 			}
@@ -464,18 +493,20 @@ foreach ($manager->playerstatus as $player){
 			}
 		).
 		click(function(e){
-			$("#deployWrapper").show();
-		});
-
-		$("#deployWrapper").contextmenu(function(e){
-			e.preventDefault();
 			e.stopPropagation();
-			game.disableDeployment();
-			$("#deployTable").find(".selected").each(function(){
-				$(this).removeClass("selected");
-			});
-			$(this).hide();
-		})
+			var wrap = $("#deployWrapper")[0];
+			if (wrap.style.display == "none"){
+				$(wrap).show();
+			}
+			else {
+				$(wrap)
+					.hide()
+					.find(".selected").each(function(){
+						$(this).removeClass("selected");
+					})
+				}
+			}
+		)
 
 		$(".requestReinforcements").each(function(i){
 			$(this)
@@ -514,29 +545,37 @@ foreach ($manager->playerstatus as $player){
 		    return false;
 		};
 
-
-		$("#increaseImpulse")
+		$("#plusImpulse")
 		.click(function(){
-			//console.log("doIncreaseImpulse")
 			game.getUnitById(aShip).doIncreaseImpulse();
 		});
 
-		$("#decreaseImpulse")
+		$("#minusImpulse")
 		.click(function(){
-			//console.log("doDecreaseImpulse")
 			game.getUnitById(aShip).doDecreaseImpulse();
 		});
 
 		$("#undoLastAction")
 		.click(function(){
-			//console.log("undoLastAction")
-			game.getUnitById(aShip).undoLastOrder()
+			game.getUnitById(aShip).undoLastAction()
 		});
 
-		$(".turnEle")
+		$(".doTurn")
 		.click(function(){
 			//console.log("issueTurn")
 			game.getUnitById($(this).data("shipid")).issueTurn($(this).data("a"))
+		})
+
+		$(".doShortenTurn")
+		.click(function(e){
+			e.stopPropagation();
+			game.getUnitById(aShip).doShortenTurn()
+		})
+
+		$(".doUndoShortenTurn")
+		.click(function(e){
+			e.stopPropagation();
+			game.getUnitById(aShip).doUndoShortenTurn()
 		})
 
 		$("#maxVector")

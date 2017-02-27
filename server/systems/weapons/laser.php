@@ -7,19 +7,17 @@ class Laser extends Weapon {
 	public $priority = 5;
 	public $rakes;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
+	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $destroyed = 0){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
 	}
 	
-	public function getDmgLoss($fire){
-		return 0;
+	public function getDmgPenaltyRange($fire){
 		$dist = $fire->dist;
 		if ($dist < $this->optRange){
 			$dist = $this->optRange - $dist;
 		}
 		else $dist = $dist - $this->optRange;
-
-		return ceil($this->dmgDecay * $dist / 100);
+		return $dist * $this->dmgDecay / 10000 * -1;
 	}
 
 	public function rollForHit($fire){
@@ -41,7 +39,8 @@ class Laser extends Weapon {
 		
 		for ($i = 0; $i < $fire->shots; $i++){
 			if ($fire->rolls[$i] <= $fire->req){
-				$totalDmg = $this->getDamage($fire) * $this->getDamageMod();
+				$totalDmg = floor($this->getBaseDamage($fire) * $this->getDamageMod($fire));
+				Debug::log(" => totalDmg: ".$totalDmg." over ".$this->rakes." rakes");
 				$rake = floor($totalDmg / $this->rakes);
 				for ($j = 0; $j < $this->rakes; $j++){
 					$destroyed = false;
@@ -53,6 +52,8 @@ class Laser extends Weapon {
 					if ($remInt - $dmg->structDmg < 1){
 						$destroyed = true;
 						$hitSystem->destroyed = true;
+						Debug::log(" => target system #".$hitSystem->id." destroyed. rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".(abs($remInt - $dmg->structDmg)." dmg"));
+
 					}
 
 					$dmg = new Damage(
@@ -99,6 +100,7 @@ class LightLaser extends Laser {
 	public $accDecay = 150;
 	public $shots = 1;
 	public $reload = 1;
+	public $powerReq = 3;
 	public $integrity = 25;
 	public $rakes = 3;
 	public $fc = array(0 => 100, 1 => 120);
@@ -122,6 +124,7 @@ class MediumLaser extends Laser {
 	public $accDecay = 100;
 	public $shots = 1;
 	public $reload = 2;
+	public $powerReq = 5;
 	public $integrity = 45;
 	public $rakes = 3;
 
@@ -144,8 +147,10 @@ class HeavyLaser extends Laser {
 	public $accDecay = 50;
 	public $shots = 1;
 	public $reload = 3;
+	public $powerReq = 8;
 	public $integrity = 70;
 	public $rakes = 3;
+	public $effiency = 4;
 	public $fc = array(0 => 120, 1 => 40);
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
@@ -167,8 +172,10 @@ class NeutronLaser extends Laser {
 	public $accDecay = 60;
 	public $shots = 1;
 	public $reload = 2;
+	public $powerReq = 6;
 	public $integrity = 60;
 	public $rakes = 2;
+	public $effiency = 3;
 	public $fc = array(0 => 130, 1 => 65);
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){

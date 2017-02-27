@@ -35,6 +35,24 @@ class Action {
 	}
 }
 
+class Power {
+	public $id;
+	public $unitid;
+	public $systemid;
+	public $turn;
+	public $type;
+	public $cost;
+
+	function __construct($id, $unitid, $systemid, $turn, $type, $cost){
+		$this->id = $id;
+		$this->unitid = $unitid;
+		$this->systemid = $systemid;
+		$this->turn = $turn;
+		$this->type = $type;
+		$this->cost = $cost;
+	}
+}
+
 class FireOrder {
 	public $id;
 	public $gameid;
@@ -124,16 +142,26 @@ class Crit {
 	public $type;
 	public $duration;
 	public $new;
+	public $outputmod;
 
-	function __construct($id, $gameid, $shipid, $systemid, $turn, $type, $duration, $new){
+	function __construct($id, $shipid, $systemid, $turn, $type, $duration, $new){
 		$this->id = $id;
-		$this->gameid = $gameid;
 		$this->shipid = $shipid;
 		$this->systemid = $systemid;
 		$this->turn = $turn;
 		$this->type = $type;
 		$this->duration = $duration;
 		$this->new = $new;
+	}
+
+	function inEffect($turn){
+		if ($this->duration == 0){
+			return true;
+		}
+		else if ($turn <= $this->turn + $this->duration){
+			return true;
+		}
+		else return false;
 	}
 }
 

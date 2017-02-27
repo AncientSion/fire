@@ -67,7 +67,7 @@ function Fighter(id, classname, name, ep, turns, mass, integrity, value, negatio
 					.append($("<tr>").append($("<td>").attr("colspan", 2).css("fontSize", 16).css("borderBottom", "1px solid white").css("borderTop", "1px solid white").html("Modifiers")))
 
 			for (var i = 0; i < this.crits.length; i++){
-				val = this.crits[i].getStringValue();
+				val = this.crits[i].html;
 				$(table)
 					.append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("negative").html(val)))
 			}
@@ -99,8 +99,6 @@ function Flight(id, classname, shipType, x, y, facing, faction, mass, cost, prof
 		this.setFacing();
 		this.setPosition();
 		this.setLayout()
-		this.createDiv();
-		//this.createCacheImage();
 	}
 
 	this.setFighterState = function(){
@@ -350,7 +348,7 @@ function Flight(id, classname, shipType, x, y, facing, faction, mass, cost, prof
 				wrap.appendChild(lowerDiv);
 				
 			var upperDiv = document.createElement("div");
-				upperDiv.className = "integrityFull"; upperDiv.style.top = 0; upperDiv.style.height = "100%";
+				upperDiv.className = "integrityFull"; upperDiv.style.top = 0;
 				wrap.appendChild(upperDiv);
 
 			fighterDiv.appendChild(wrap);

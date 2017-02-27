@@ -72,7 +72,7 @@ function drawExplosion(x, y, s, now, max){
 function drawBeam(weapon, ox, oy, x, y, now, max, hit){
 	var fraction = now/max;
 
-	var charge =  0.5 - 0.5*Math.cos(2*Math.PI*fraction);
+	var charge =  0.5 - 0.3*Math.cos(2*Math.PI*fraction);
 	fxCtx.fillStyle = weapon.animColor;
 	fxCtx.beginPath();
 	fxCtx.arc(ox+cam.o.x, oy+cam.o.y, weapon.beamWidth*1.5*charge, 0, 2*Math.PI);

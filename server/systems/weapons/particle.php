@@ -13,8 +13,8 @@ class Particle extends Weapon {
 class LightAssaultArray extends Particle {
 	public $name = "LightAssaultArray";
 	public $display = "Lgt Assault Array";
-	public $minDmg = 18;
-	public $maxDmg = 25;
+	public $minDmg = 20;
+	public $maxDmg = 27;
 	public $accDecay = 200;
 	public $shots = 2;
 	public $animColor = "brown";
@@ -23,7 +23,7 @@ class LightAssaultArray extends Particle {
 	public $exploSize = 4;
 	public $reload = 1;
 	public $integrity = 20;
-	public $fc = array(0 => 90, 1 => 140);
+	public $fc = array(0 => 80, 1 => 155);
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -33,14 +33,14 @@ class LightAssaultArray extends Particle {
 class MediumAssaultArray extends LightAssaultArray {
 	public $name = "MediumAssaultArray";
 	public $display = "Mdm Assault Array";
-	public $minDmg = 34;
-	public $maxDmg = 48;
+	public $minDmg = 35;
+	public $maxDmg = 49;
 	public $accDecay = 90;
 	public $projSize = 3;
 	public $projSpeed = 5;
 	public $exploSize = 5;
 	public $integrity = 35;
-	public $fc = array(0 => 100, 1 => 90);
+	public $fc = array(0 => 110, 1 => 100);
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -58,7 +58,7 @@ class HeavyAssaultArray extends LightAssaultArray {
 	public $projSpeed = 4;
 	public $exploSize = 6;
 	public $integrity = 50;
-	public $fc = array(0 => 125, 1 => 70);
+	public $fc = array(0 => 130, 1 => 65);
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -77,7 +77,7 @@ class ParticleBeam extends Particle {
 	public $projSpeed = 6;
 	public $exploSize = 6;
 	public $integrity = 28;
-	public $fc = array(0 => 80, 1 => 180);
+	public $fc = array(0 => 80, 1 => 170);
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

@@ -73,6 +73,15 @@ function Path (a, b){
 	this.setup();
 }
 
+function Power(id, unitid, systemid, turn, type, cost){
+	this.id = id;
+	this.unitid = unitid;
+	this.systemid = systemid;
+	this.turn = turn;
+	this.type = type;
+	this.cost = cost;
+}
+
 function TempAmmo(classname, minDmg, maxDmg, maxDist, impulse, mass, integrity, armour, fc){
 	this.classname = classname;
 	this.minDmg = minDmg;
@@ -153,6 +162,7 @@ function Salvo(id, userid, targetid, classname, amount, status, destroyed, actio
 	this.facing;
 	this.img;
 	this.highlight = false;
+	this.friendly = false;
 
 	this.getSystemById = function(id){
 		for (var i = 0; i < this.structures.length; i++){
@@ -327,7 +337,7 @@ function Salvo(id, userid, targetid, classname, amount, status, destroyed, actio
 				td.appendChild(lowerDiv);
 				
 			var upperDiv = document.createElement("div");
-				upperDiv.className = "integrityFull"; upperDiv.style.top = 0; upperDiv.style.height = "100%";
+				upperDiv.className = "integrityFull"; upperDiv.style.top = 0;
 				td.appendChild(upperDiv);
 
 			tr2.appendChild(td);
@@ -394,6 +404,9 @@ function Salvo(id, userid, targetid, classname, amount, status, destroyed, actio
 		this.createDiv();
 		this.setFacing();
 		this.setLayout();
+		if (this.userid == game.userid){
+			this.friendly = true;
+		} else this.friendly = false;
 	}
 
 	this.setImage = function(){
@@ -709,31 +722,82 @@ function Crit (id, shipid, systemid, turn, type, duration){
 	this.turn = turn;
 	this.type = type;
 	this.duration = duration;
+	this.html = "";
+	this.outputMod = 0;
 
-	this.getStringValue = function(){
-		var html = "Turn " + this.turn + ": ";
+	this.create = function(){
+		var html = "";
+		var mod = 0;
+		if (this.duration > 0){
+			html = "Turns " + this.turn + " - " + (this.turn + this.duration) +": ";
+		} else {
+			html = "Perma: ";
+		}
 
 		switch (this.type){
-			case "range1": 
-				return html += "Less accurate over range.";
+			case "range1":
+				html += "Accuracy loss x 1.1"; break;
 			case "damage1":
-				return html += "Less damage.";
-			case "range2": 
-				return html += "Far less accurate over range.";
+				html += "Damage x 0.9"; break;
+			case "range2":
+				html += "Accuracy loss x 1.2"; break;
 			case "damage2":
-				return html += "Far less damage.";
-			case "control1":
-				return html += "control4";
-			case "control2":
-				return html += "control4";
-			case "control3":
-				return html += "control4";
-			case "control4":
-				return html += "control4";
+				html += "Damage x 0.8"; break;
+			case "disabled1":
+				html += "Disabled"; break;
+			case "launch1":
+				html += "Launch Rate x 0.7";
+				mod *= 0.7; break;
+			case "launch2":
+				html += "Launch Rate x 0.5";
+				mod *= 0.5; break;
+			case "launch3":
+				html += "Launch Rate x 0.3";
+				mod *= 0.3; break;
+			case "bridge_accu-10":
+				html += "Weapon to hit x 0.9"; break;
+			case "bridge_nomove":
+				html += "Unable to manover"; break;
+			case "bridge_disabled1":
+				html += "Unable to manover or fire."; break;
+			case "output_0.9":
+				html += "Output x 0.9";
+				mod *= 0.9; break;
+			case "output_0.85":
+				html += "Output x 0.85";
+				mod *= 0.85; break;
+			case "output_0.8":
+				html += "Output x 0.8";
+				mod *= 0.8; break;
+			case "output_0.7":
+				html += "Output x 0.7";
+				mod *= 0.; break;
+			case "output_0.5":
+				html += "Output x 0.5";
+				mod *= 0.5; break;
+			case "output_0":
+				html += "Disabled";
+				mod *= 0; break;
 			default: 
-				return this.type;
+				html += this.type; break;
 		}
+
+		this.html = html;
+		this.outputMod = mod;
 	}
+
+	this.inEffect = function(){
+		if (this.duration == 0){
+			return true;
+		}
+		else if (game.turn <= this.turn + this.duration){
+			return true;
+		}
+		else return false;
+	}
+
+
+	this.create();
 }
 
 function Structure(id, parentId, start, end, integrity, mitigation, negation, destroyed){
@@ -792,8 +856,7 @@ function Structure(id, parentId, start, end, integrity, mitigation, negation, de
 			console.log(game.getShipById(shipId).getSystemById(systemId));
 		})
 
-			tr.appendChild(td);
-			
+		tr.appendChild(td);
 		return tr;
 	}
 

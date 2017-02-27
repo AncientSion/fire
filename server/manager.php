@@ -83,7 +83,7 @@ class Manager {
 		$this->playerstatus = DBManager::app()->getPlayerStatus($this->gameid);
 	}
 
-	public function validateFleetCost($ships, $faction){
+	public function validateFleetCost($ships){
 		$used = 0;
 
 		for ($i = 0; $i < sizeof($ships); $i++){
@@ -93,7 +93,7 @@ class Manager {
 		$avail = $this->game["pv"];
 
 		if ($used <= $avail){
-			if (DBManager::app()->createReinforceEntry($this->userid, $this->gameid, ($avail - $used), $faction)){
+			if (DBManager::app()->createReinforceEntry($this->userid, $this->gameid, ($avail - $used), $ships[0]["faction"])){
 				return true;
 			}
 		}
@@ -186,7 +186,7 @@ class Manager {
 	}
 
 	public function canAdvanceGameState(){
-		Debug::log("canAdvanceGameState?");
+		Debug::log("canAdvanceGameState ?");
 
 		if ($this->game["status"] == "open"){
 			return false;
@@ -203,8 +203,7 @@ class Manager {
 	}
 
 	public function doAdvanceGameState(){
-		Debug::log("doAdvanceGameState for game".$this->gameid);
-		Debug::log("FROM PHASE: ".$this->phase);
+		Debug::log("doAdvanceGameState for game".$this->gameid." FROM PHASE: ".$this->phase." to phase".($this->phase+1));
 
 		switch ($this->phase){
 			case -1; // from deploy to move
@@ -233,13 +232,11 @@ class Manager {
 			default:
 				break;
 		}
-
-		Debug::log("TO PHASE: ".$this->phase);
 		return true;
 	}
 	
 	public function assembleUnits(){
-		$db =  DBManager::app()->getActiveUnits($this->gameid, $this->turn);
+		$db =  DBManager::app()->getActiveUnits($this->gameid, $this->turn); 
 		$units = array();
 
 		for ($i = 0; $i < sizeof($db); $i++){
@@ -256,6 +253,7 @@ class Manager {
 		}
 
 		DBManager::app()->getDamages($units);
+		DBManager::app()->getPowers($units);
 		DBManager::app()->getCrits($units);
 		DBManager::app()->getActions($units);
 		DBManager::app()->getShipLoad($units);
@@ -404,6 +402,7 @@ class Manager {
 		Debug::log("startFighterMovementPhase");
 		$dbManager = DBManager::app();
 		$this->phase = 1;
+		$players;
 
 		if ($dbManager->setGameTurnPhase($this->gameid, $this->turn, $this->phase)){
 			$players = $dbManager->getPlayerStatus($this->gameid);
@@ -412,13 +411,28 @@ class Manager {
 				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->turn, $this->phase, "waiting")){
 					continue;
 				}
-				else {
-					return false;
+			}
+		}
+
+		$flight = false;
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->flight){
+				$flight = true;
+				break;
+			}
+		}
+
+		if (!$flight){
+			for ($i = 0; $i < sizeof($players); $i++){
+				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->turn, $this->phase, "ready")){
+					continue;
 				}
 			}
-
-			return true;
+			$this->playerstatus = DBManager::app()->getPlayerStatus($this->gameid);
+			$this->doAdvanceGameState();
 		}
+
+		return true;
 	}
 
 	public function handleShipMovementPhase(){
@@ -453,21 +467,22 @@ class Manager {
 		$dogfights = array();
 
 		for ($i = 0; $i < sizeof($this->ships)-1; $i++){
-			for ($j = $i+1; $j < sizeof($this->ships); $j++){
-				if (get_class($this->ships[$i]) == "Flight" && get_class($this->ships[$j]) == "Flight"){
-					if ($this->ships[$i]->userid != $this->ships[$j]->userid){
+			if ($this->ships[$i]->flight){
+				for ($j = $i+1; $j < sizeof($this->ships); $j++){
+					if ($this->ships[$j]->flight){
 						$dist = Math::getDist2($this->ships[$i]->getCurrentPosition(), $this->ships[$j]->getCurrentPosition());
 						if ($dist <= $this->ships[$i]->size / 2 + $this->ships[$j]->size / 2){
+							$new = true;
 							for ($k = 0; $k < sizeof($this->ships[$i]->dogfights); $k++){
 								if ($this->ships[$i]->dogfights[$k] == $this->ships[$j]->id){
-									Debug::log("skipping alrdy initiated dogfight");
-									break 2;
+									$new = false;
 								}
 							}
-							//Debug::log("i #".$this->ships[$i]->id." <--> j #".$this->ships[$j]->id.": ".$dist.", overlap: ".(abs($dist - ($this->ships[$i]->size + $this->ships[$j]->size) / 2)));
-							$this->ships[$i]->dogfights[] = $this->ships[$j]->id;
-							$this->ships[$j]->dogfights[] = $this->ships[$i]->id;
-							$dogfights[] = array(0 => $this->ships[$i]->id, 1 => $this->ships[$j]->id);
+							if ($new){
+								$this->ships[$i]->dogfights[] = $this->ships[$j]->id;
+								$this->ships[$j]->dogfights[] = $this->ships[$i]->id;
+								$dogfights[] = array(0 => $this->ships[$i]->id, 1 => $this->ships[$j]->id);
+							}
 						}
 					}
 				}
@@ -494,7 +509,7 @@ class Manager {
 		$fires = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$flights = array();
-			$counts = array(1);
+			$counts = array(0);
 			if ($this->ships[$i]->flight && sizeof($this->ships[$i]->dogfights)){
 				for ($j = 0; $j < sizeof($this->ships[$i]->dogfights); $j++){
 					$count = $counts[sizeof($counts)-1];
@@ -547,7 +562,7 @@ class Manager {
 		$this->resolveBallisticImpacts();
 		$this->testCriticals();
 		$this->writeDamageEntries();
-		$this->writeOuterCritEntries();
+		$this->writeCritEntries();
 		return true;
 	}
 
@@ -831,7 +846,6 @@ class Manager {
 
 
 	public function testCriticals(){
-		Debug::log("testCriticals");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$this->ships[$i]->testCriticalsShipLevel($this->turn, $this->phase);
 		}
@@ -851,11 +865,11 @@ class Manager {
 		}
 	}
 
-	public function writeOuterCritEntries(){
-		//debug::log("writeOuterCritEntries");
+	public function writeCritEntries(){
+		//debug::log("writeCritEntries");
 		$all = [];
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			$all = array_merge($all, $this->ships[$i]->getNewCrits());
+			$all = array_merge($all, $this->ships[$i]->getNewCrits($this->turn));
 		}
 		DBManager::app()->insertCritEntries($all, $this->gameid);
 	}
@@ -864,13 +878,13 @@ class Manager {
 		Debug::log("startDamageControlPhase");
 
 		$dbManager = DBManager::app();
-		$phase = 3;
+		$this->phase = 3;
 
-		if ($dbManager->setGameTurnPhase($this->gameid, $this->turn, $phase)){
+		if ($dbManager->setGameTurnPhase($this->gameid, $this->turn, $this->phase)){
 			$players = $dbManager->getPlayerStatus($this->gameid);
 
 			for ($i = 0; $i < sizeof($players); $i++){
-				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->turn, $phase, "waiting")){
+				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->turn, $this->phase, "waiting")){
 					continue;
 				}
 				else {
@@ -959,7 +973,6 @@ class Manager {
 		}
 
 		return $data;
-
 	}
 
 	public function getShipData($name){

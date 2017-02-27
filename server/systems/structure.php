@@ -91,6 +91,12 @@ class Primary extends Structure {
 		return $mass;
 	}
 
+	public function testCriticalsStructureLevel($turn){
+		for ($i = 0; $i < sizeof($this->systems); $i++){
+			$this->systems[$i]->testCriticalSystemLevel($turn);
+		}
+	}
+
 	public function getRemainingIntegrity(){
 		$remIntegrity = $this->integrity;
 		for ($i = 0; $i < sizeof($this->damages); $i++){

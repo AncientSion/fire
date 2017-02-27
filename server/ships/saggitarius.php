@@ -16,23 +16,23 @@ class Saggitarius extends Medium {
 	public function addStructures(){
 		$structs = [];
 
-		$front = new Structure($this->getId(), $this->id, 330, 30, 650, 65, 30);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 550, 65, 26);
 			$front->systems[] = new ParticleBeam($this->getId(), $this->id, 240, 120);
-			$front->systems[] = new MissileLauncher($this->getId(), $this->id, 240, 120, 20, 4);
-			$front->systems[] = new MissileLauncher($this->getId(), $this->id, 240, 120, 20, 4);
+			$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60, 20, 3);
+			$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60, 20, 3);
 			$front->systems[] = new ParticleBeam($this->getId(), $this->id, 240, 120);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 30, 150, 800, 60, 25);
+		$right = new Structure($this->getId(), $this->id, 30, 150, 650, 60, 21);
 			$right->systems[] = new MissileLauncher($this->getId(), $this->id, 0, 180, 20, 2);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 150, 210, 500, 50, 25);
+		$aft = new Structure($this->getId(), $this->id, 150, 210, 425, 50, 21);
 			$aft->systems[] = new ParticleBeam($this->getId(), $this->id, 60, 300);
 			$aft->systems[] = new ParticleBeam($this->getId(), $this->id, 60, 300);
 		$structs[] = $aft;
 
-		$left = new Structure($this->getId(), $this->id, 210, 330, 800, 60, 25);
+		$left = new Structure($this->getId(), $this->id, 210, 330, 650, 60, 21);
 			$left->systems[] = new MissileLauncher($this->getId(), $this->id, 180, 360, 20, 2);
 		$structs[] = $left;
 		
@@ -42,7 +42,7 @@ class Saggitarius extends Medium {
 	}
 
 	public function addPrimary(){
-		$primary = new Primary($this->getId(), $this->id, 0, 360, 2250, 70);
+		$primary = new Primary($this->getId(), $this->id, 0, 360, 1650, 70);
 		$primary->systems[] = new Bridge($this->getId(), $this->id, 125);
 		$primary->systems[] = new Engine($this->getId(), $this->id, 125, 180);
 		$primary->systems[] = new Reactor($this->getId(), $this->id, 125);

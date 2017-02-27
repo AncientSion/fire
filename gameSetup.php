@@ -285,6 +285,7 @@ else {
 			var td = document.createElement("td");
 
 				$(td).contextmenu(function(e){
+					return;
 					e.preventDefault();
 					e.stopPropagation();
 					var fact = $(this).html();
@@ -355,14 +356,18 @@ else {
 	}
 
 	function canSubmit(){
-		var fleetCost = getFleetCost();
-
-		if (reinforceFaction.length && fleetCost){
+		if (getFleetCost()){
+			$("#confirmFleet").removeClass("disabled")
+		}
+		else {
+			$("#confirmFleet").addClass("disabled")
+		}
+		/*if (reinforceFaction.length && fleetCost){
 			$("#confirmFleet").removeClass("disabled");
 		}
 		else {
 			$("#confirmFleet").addClass("disabled");
-		}
+		}*/
 	}
 
 	function confirmFleetPurchase(){
@@ -439,6 +444,7 @@ else {
 
 			var ship = {
 				classname: game.ships[0].classname,
+				faction: game.ships[0].faction,
 				value: game.ships[0].totalCost,
 				purchaseId: window.game.shipsBought.length,
 				upgrades: game.ships[0].upgrades,

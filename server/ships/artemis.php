@@ -16,19 +16,19 @@ class Artemis extends Medium {
 	public function addStructures(){
 		$structs = [];
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 650, 50, 28);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 550, 50, 24);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new HeavyRailGun($this->getId(), $this->id, 315, 45);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 475, 50, 24);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 400, 50, 20);
 		$right->systems[] = new ParticleBeam($this->getId(), $this->id, 0, 180);
 		$right->systems[] = new ParticleBeam($this->getId(), $this->id, 0, 180);
 		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 120, 8, 2);
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 475, 50, 24);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 400, 50, 20);
 		$left->systems[] = new ParticleBeam($this->getId(), $this->id, 180, 360);
 		$left->systems[] = new ParticleBeam($this->getId(), $this->id, 180, 360);
 		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 240, 60, 8, 2);
@@ -43,9 +43,9 @@ class Artemis extends Medium {
 		$primary = new Primary($this->getId(), $this->id, 0, 360, $this->mass, 70);
 		$primary->systems[] =  new Bridge($this->getId(), $this->id, 150);
 		$primary->systems[] =  new Engine($this->getId(), $this->id, 100, 95);
-		$primary->systems[] =  new Reactor($this->getId(), $this->id, 100, 20);
 		$primary->systems[] =  new Lifesupport($this->getId(), $this->id, 200);
 		$primary->systems[] =  new Sensor($this->getId(), $this->id, 100);
+		$primary->systems[] =  new Reactor($this->getId(), $this->id, 100, $this->getPowerReq());
 		$this->primary = $primary;
 	}
 }

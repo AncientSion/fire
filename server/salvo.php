@@ -1,12 +1,13 @@
 <?php
 
 class Mini extends Ship {
+	public $ship = false;
 
-	public function getNewCrits(){
+	public function getNewCrits($turn){
 		$crits = array();
 		for ($j = 0; $j < sizeof($this->structures); $j++){
 			for ($l = 0; $l < sizeof($this->structures[$j]->crits); $l++){
-				if ($this->structures[$j]->crits[$l]->turn == turn){
+				if ($this->structures[$j]->crits[$l]->turn == $turn){
 					$crits[] = $this->structures[$j]->crits[$l];
 				}
 			}
@@ -49,7 +50,7 @@ class Mini extends Ship {
 
 	public function setState(){
 		if (get_class($this) == "Flight"){
-			$this->size = 30 + sizeof($this->structures)*7;
+			$this->size = 32 + sizeof($this->structures)*7;
 			//Debug::log("flight id #".$this->id.", size: ".$this->size);
 		}
 		for ($i = 0; $i < sizeof($this->structures); $i++){
@@ -69,9 +70,13 @@ class Mini extends Ship {
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->id == $dmg->structureid){
 				$this->structures[$i]->damages[] = $dmg;
+				if ($dmg->destroyed){
+					$this->structures[$i]->destroyed = true;
+				}
 				return;
 			}
 		}
+		Debug::log("flight, couldnt apply");
 	}
 	
 	public function getRemainingIntegrity($fire){
@@ -281,7 +286,7 @@ class Ammo extends Weapon implements JsonSerializable{
 		return 0;
 	}
 
-	public function getDamageMod(){
+	public function getDamageMod($turn){
 		return 1;
 	}
 

@@ -55,7 +55,7 @@ class Primus extends Heavy {
 		$primary->systems[] = new Engine($this->getId(), $this->id, 160, 500);
 		$primary->systems[] = new Lifesupport($this->getId(), $this->id, 160);
 		$primary->systems[] = new Sensor($this->getId(), $this->id, 160);
-		$primary->systems[] = new Reactor($this->getId(), $this->id, 250, $this->getPowerNeed());
+		$primary->systems[] = new Reactor($this->getId(), $this->id, 250, $this->getPowerReq());
 
 		$this->primary = $primary;
 	}

@@ -10,6 +10,7 @@ class Launcher extends Weapon {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $launchRate, $destroyed = false){
 		$this->launchRate = $launchRate;
+		$this->powerReq = $launchRate;
 		$ammo = $this->getAmmo();
 		if ($ammo){
 			$this->ammo = new $ammo(0, 0, 0, 0);
@@ -21,7 +22,8 @@ class Launcher extends Weapon {
 	public function getArmourMod(){
 		$w = $this->getArcWidth();
 
-		if ($w <= 180){return 0.7;}
+		if ($w <= 120){return 0.8;}
+		else if ($w <= 180){return 0.6;}
 		else return 0.3;
 	}
 
@@ -30,11 +32,11 @@ class Launcher extends Weapon {
 	}
 
 	public function getCritEffects(){
-		return ["disengaged"];
+		return ["disabled1", "ammoLoss", "ammolossDamage"];
 	}
 
 	public function getCritTreshs(){
-		return [50];
+		return  [25, 50, 80];
 	}
 }
 
@@ -51,7 +53,7 @@ class TorpedoLauncher extends Launcher {
 		return "BallisticTorpedo";
 	}
 
-	public function getDamage($fire){
+	public function getBaseDamage($fire){
 		return 0;
 	}
 
@@ -74,7 +76,7 @@ class MissileLauncher extends Launcher {
 		return "BallisticMissile";
 	}
 
-	public function getDamage($fire){
+	public function getBaseDamage($fire){
 		return 0;
 	}
 

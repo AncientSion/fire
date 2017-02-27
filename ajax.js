@@ -79,6 +79,7 @@ window.ajax = {
 	confirmDeployment: function(callback){
 		var deployedShips = [];
 		var fireOrders = [];
+		var powers = [];
 		var deployedFlights = [];
 			deployedFlights = game.getDeployedFlights();
 
@@ -96,11 +97,15 @@ window.ajax = {
 							}
 						}
 					}
+					var power = game.ships[i].getPowerOrders();
+					for (var j = 0; j < power.length; j++){
+						powers.push(power[j]);
+					}
 				}
 
-				var fire = game.ships[i].getFireOrders();
-				for (var j = 0; j < fire.length; j++){
-					fireOrders.push(fire[j]);
+				var fires = game.ships[i].getFireOrders();
+				for (var j = 0; j < fires.length; j++){
+					fireOrders.push(fires[j]);
 				}
 			}
 		}
@@ -117,6 +122,7 @@ window.ajax = {
 					gamephase: game.phase,
 					deployedShips: deployedShips,
 					deployedFlights: deployedFlights,
+					powers: powers,
 					fireOrders: fireOrders,
 					reinforcements: game.reinforcements
 					},

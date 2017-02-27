@@ -201,7 +201,7 @@ class DBManager {
 		$stmt->bindParam(":gameid", $gameid);
 		$stmt->bindParam(":userid", $userid);
 		$stmt->bindParam(":points", $points);
-		$stmt->bindParam(":faction", $faction[0]);
+		$stmt->bindParam(":faction", $faction);
 
 		$stmt->execute();
 
@@ -705,6 +705,7 @@ class DBManager {
 	}
 
 	public function insertDogfights($gameid, $turn, $dogfights){
+		Debug::log("insertDogfights");
 		$stmt = $this->connection->prepare("
 			INSERT INTO dogfights 
 				(gameid, turn, a, b)
@@ -800,6 +801,31 @@ class DBManager {
 		return true;
 	}
 
+	public function insertPowers($gameid, $turn, $powers){
+		$stmt = $this->connection->prepare("
+			INSERT INTO powers 
+				( unitid, systemid, turn, type, cost )
+			VALUES
+				( :unitid, :systemid, :turn, :type, :cost )
+		");
+
+		for ($i = 0; $i < sizeof($powers); $i++){
+			$stmt->bindParam(":unitid", $powers[$i]["unitid"]);
+			$stmt->bindParam(":systemid", $powers[$i]["systemid"]);
+			$stmt->bindParam(":turn", $powers[$i]["turn"]);
+			$stmt->bindParam(":type", $powers[$i]["type"]);
+			$stmt->bindParam(":cost", $powers[$i]["cost"]);
+
+			$stmt->execute();
+
+			if ($stmt->errorCode() == 0){
+				continue;
+			}
+			else return false;
+		}
+		return true;
+	}
+
 	public function insertFireOrders($gameid, $turn, $fires){
 
 		$stmt = $this->connection->prepare("
@@ -827,7 +853,6 @@ class DBManager {
 			}
 			else return false;
 		}
-
 		return true;
 	}	
 
@@ -953,6 +978,35 @@ class DBManager {
 			}
 		}
 		return true;
+	}
+
+	public function getPowers($units){
+		$stmt = $this->connection->prepare("
+			SELECT * FROM powers
+			WHERE unitid = :unitid
+		");
+
+		for ($i = 0; $i < sizeof($units); $i++){
+			$stmt->bindParam(":unitid", $units[$i]->id);
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			if ($result){
+				for ($j = 0; $j < (sizeof($result)); $j++){
+					$power = new Power(
+						$result[$j]["id"],
+						$result[$j]["unitid"],
+						$result[$j]["systemid"],
+						$result[$j]["turn"],
+						$result[$j]["type"],
+						$result[$j]["cost"]
+					);
+
+					$result[$j] = $power;
+				}
+				$units[$i]->addPowerDB($result);
+			}
+		}
+		return true;
 	}	
 
 	public function getCrits($units){
@@ -969,7 +1023,6 @@ class DBManager {
 			for ($j = 0; $j < (sizeof($result)); $j++){
 					$crit = new Crit(
 						$result[$j]["id"],
-						$result[$j]["gameid"],
 						$result[$j]["shipid"],
 						$result[$j]["systemid"],
 						$result[$j]["turn"],
@@ -1070,14 +1123,13 @@ class DBManager {
 		
 		$stmt = $this->connection->prepare("
 			INSERT INTO systemcrits 
-				( gameid, shipid, systemid, turn, type, duration)
+				( shipid, systemid, turn, type, duration)
 			VALUES
-				( :gameid, :shipid, :systemid, :turn, :type, :duration)
+				( :shipid, :systemid, :turn, :type, :duration)
 		");
 
 		for ($i = 0; $i < sizeof($crits); $i++){
 			if ($crits[$i]->new == 1){
-				$stmt->bindParam(":gameid", $gameid);
 				$stmt->bindParam(":shipid", $crits[$i]->shipid);
 				$stmt->bindParam(":systemid", $crits[$i]->systemid);
 				$stmt->bindParam(":turn", $crits[$i]->turn);
