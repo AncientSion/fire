@@ -26,6 +26,7 @@ class DBManager {
 	static public function app(){
         if(self::$instance === null OR !is_a(self::$instance, "DBManager")) {
             self::$instance = new DBManager();
+        }
         return self::$instance;
 	}
 
