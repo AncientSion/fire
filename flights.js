@@ -108,6 +108,17 @@ function Flight(id, classname, shipType, x, y, facing, faction, mass, cost, prof
 					this.structures[i].disabled = true;
 				}
 			}
+
+			if (this.structures[i].destroyed){
+				for (var k = 0; k < this.structures[i].systems.length; k++){
+					this.structures[i].systems[k].destroyed = true;
+				}
+			}
+			else if (this.structures[i].disabled){
+				for (var k = 0; k < this.structures[i].systems.length; k++){
+					this.structures[i].systems[k].disabled = true;
+				}
+			}
 		}
 	}
 
@@ -188,6 +199,28 @@ function Flight(id, classname, shipType, x, y, facing, faction, mass, cost, prof
 					size, 
 					size
 				);
+			}
+		}
+	}
+	
+	this.canShortenTurn = function(){
+		return false;
+		if (game.phase == 0 || game.phase == 1){
+			if (this.getRemainingEP() >= this.getShortenTurnCost()){
+				return true;
+			}
+		}
+
+		return false;
+	}
+	
+	this.canUndoShortenTurn = function(){
+		return false;
+		if (game.phase == 0 || game.phase == 1){
+			if (this.turns.length){
+				if (this.turns[0].costmod > 1){
+					return true;
+				}
 			}
 		}
 	}
@@ -356,10 +389,8 @@ function Flight(id, classname, shipType, x, y, facing, faction, mass, cost, prof
 			var s = 20;
 			// FIGHTER WEAPONS
 			for (var j = 0; j < this.structures[i].systems.length; j++){
-				var td = this.structures[i].systems[j].getTableData();
+				var td = this.structures[i].systems[j].getTableData(true);
 					$(td.childNodes[0]).attr("width", s).attr("height", s);
-					$(td.childNodes[td.childNodes.length-1]).remove();
-					$(td.childNodes[td.childNodes.length-1]).remove();
 					fighterDiv.appendChild(td);
 					$(td)
 						.addClass("fighter")

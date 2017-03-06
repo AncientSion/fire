@@ -21,7 +21,7 @@ if (isset($_GET["type"])){
 		echo json_encode($ships);
 	}
 	else if ($_GET["type"] == "shipdata"){
-		$ship = $manager->getShipData($_GET["classname"]);
+		$ship = $manager->getPreviewData($_GET["classname"]);
 		echo json_encode($ship);
 	}
 }

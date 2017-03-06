@@ -94,59 +94,67 @@ function Game(id, name, status, userid, turn, phase){
 		return ret;
 	}
 
-	this.click
-	
-	this.endPhase = function(){
-		if (this.canSubmit){
-			if (this.phase == -1){
-				var valid = true;
-				for (var i = 0; i < this.ships.length; i++){
-					if (this.ships[i].userid == this.userid){
-						if (! this.ships[i].deployed){
-							if (this.ships[i].available <= this.turn){
-								valid = false;
-								break;
+	this.checkDeployment = function(){
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].userid == this.userid){
+				if (! this.ships[i].deployed){
+					if (this.ships[i].available <= this.turn){
+						popup("You need to deploy all arriving vessels.");
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	this.checkPower = function(){
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].userid == this.userid){
+				if (this.ships[i].ship){
+					for (var j = 0; j < this.ships[i].primary.systems.length; j++){
+						if (this.ships[i].primary.systems[j].name == "Reactor"){
+							if (this.ships[i].primary.systems[j].getOutput() < 0){
+								popup("You have units with invalid Reactor settings (#" + this.ships[i].id + ")"); 
+								return true;
 							}
 						}
 					}
 				}
-				if (valid){
-					ajax.confirmDeployment(goToLobby);
-				}
-				else {
-					popup("You need to deploy all arriving vessels.");
-					return;
-				}
 			}
-			else if (this.phase == 0){ // SHIP MOVEMENT
-				for (var i = 0; i < this.ships.length; i++){
-					if (this.ships[i].userid == this.userid && this.ships[i].deployed && !this.ships[i].flight){
-						if (this.ships[i].getRemainingImpulse() > 0){
-							console.log(this.ships[i].id + ", :" + this.ships[i].getRemainingImpulse());
-							popup("You have units with unused impulse.");
-							return;
-						}
+		}
+		return false;
+	}
+
+	this.checkMoves = function(){
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].userid == this.userid){
+				if ((game.phase == 0 && this.ships[i].ship) || (game.phase == 1 && this.ships[i].flight)){
+					if (this.ships[i].getRemainingImpulse() > 0){
+						popup("You have units with unused Impulse (#" + this.ships[i].id + ")"); 
+						return true;
 					}
 				}
-				ajax.confirmMovement(goToLobby);
 			}
-			else if (this.phase == 1){ // FLIGHT MOVEMENT
-				for (var i = 0; i < this.ships.length; i++){
-					if (this.ships[i].userid == this.userid && this.ships[i].deployed && this.ships[i].flight){
-						if (this.ships[i].getRemainingImpulse() > 0){
-							console.log(this.ships[i].id + ", :" + this.ships[i].getRemainingImpulse());
-							popup("You have units with unused impulse.");
-							return;
-						}
-					}
+		}
+		return false;
+	}
+	
+	this.endPhase = function(){
+		if (this.canSubmit){
+			if (this.phase == -1){
+				if (this.checkDeployment()){return;}
+				else if (this.checkPower()){return;}
+				else {ajax.confirmDeployment(goToLobby);
 				}
-				ajax.confirmMovement(goToLobby);
 			}
-			else if (this.phase == 2){ // 
-				ajax.confirmFiringOrders(goToLobby);
+			else if (this.phase == 0 || this.phase == 1){ // SHIP MOVEMENT
+				if (this.checkMoves()){return;}
+				else {ajax.confirmMovement(goToLobby);}
 			}
-			else if (this.phase == 3){
-				ajax.confirmDamageControl(goToLobby);
+			else if (this.phase == 2){ajax.confirmFiringOrders(goToLobby);
+			}
+			else if (this.phase == 3){ajax.confirmDamageControl(goToLobby);
 			}
 		}
 		else {
@@ -889,8 +897,6 @@ this.getShipByClick = function(pos){
 			fxCtx.clearRect(0, 0, res.x, res.y);
 			ctx.clearRect(0, 0, res.x, res.y);
 			game.drawBallistics();
-
-
 		
 			for (var i = 0; i < game.ships.length; i++){
 				if (game.ships[i].deployed){

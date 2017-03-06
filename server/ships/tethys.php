@@ -16,16 +16,16 @@ class Tethys extends Light {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 250, 35, 16);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 250, 16);
 		$front->systems[] = new LightLaser($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new LightLaser($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 200, 30, 14);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 200, 14);
 		$right->systems[] = new ParticleBeam($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 200, 30, 14);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 200, 14);
 		$left->systems[] = new ParticleBeam($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
 
@@ -35,13 +35,12 @@ class Tethys extends Light {
 	}
 
 	public function addPrimary(){
-		$primary = new Primary($this->getId(), $this->id, 0, 360, 425, 70);
-		$primary->systems[] = new Bridge($this->getId(), $this->id, 30);
-		$primary->systems[] = new Engine($this->getId(), $this->id, 30, 32);
-		$primary->systems[] = new Lifesupport($this->getId(), $this->id, 30);
-		$primary->systems[] = new Sensor($this->getId(), $this->id, 30);
-		$primary->systems[] = new Reactor($this->getId(), $this->id, 30, $this->getPowerReq());
-		$this->primary = $primary;
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 425);
+		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 60);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, 60, 32);
+		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 60);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 60, 6, 6);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 60, $this->getPowerReq());
 	}
 }
 

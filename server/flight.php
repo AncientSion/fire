@@ -105,8 +105,8 @@ class Flight extends Mini {
 }
 
 class Fighter extends Structure implements JsonSerializable {
-	public static $value;
-	public static $mass;
+	public $value;
+	public $mass;
 	public $ep;
 	public $negation = array();
 	public $crits = array();
@@ -140,8 +140,8 @@ class Fighter extends Structure implements JsonSerializable {
         	"classname" => $this->classname,
         	"name" => $this->name,
         	"faction" => $this->faction,
-        	"value" => static::$value,
-        	"mass" => static::$mass,
+        	"value" => $this->value,
+        	"mass" => $this->mass,
         	"integrity" => $this->integrity,
         	"ep" => $this->ep,
         	"turns" => $this->turns,
@@ -241,7 +241,7 @@ class Fighter extends Structure implements JsonSerializable {
 	}
 
 	public function getSubHitChance(){
-		return ceil(static::$mass/2);
+		return ceil($this->mass/2);
 	}
 }
 
@@ -249,8 +249,8 @@ class Aurora extends Fighter {
 	public $classname = "Aurora";
 	public $name = "Aurora";
 	public $faction = "Earth Alliance";
-	public static $value = 34;
-	public static $mass = 38;
+	public $value = 34;
+	public $mass = 38;
 	public $ep = 100;
 	public $integrity = 32;
 	public $negation = array(8, 7, 6);
@@ -269,8 +269,8 @@ class Thunderbolt extends Fighter {
 	public $classname = "Thunderbolt";
 	public $name = "Thunderbolt";
 	public $faction = "Earth Alliance";
-	public static $value = 40;
-	public static $mass = 42;
+	public $value = 40;
+	public $mass = 42;
 	public $ep = 105;
 	public $integrity = 36;
 	public $negation = array(9, 8, 7);
@@ -289,8 +289,8 @@ class Nial extends Fighter {
 	public $classname = "Nial";
 	public $name = "Nial";
 	public $faction = "Minbari Federation";
-	public static $value = 58;
-	public static $mass = 36;
+	public $value = 58;
+	public $mass = 36;
 	public $ep = 120;
 	public $integrity = 40;
 	public $negation = array(11, 10, 8);
@@ -309,8 +309,8 @@ class Sentri extends Fighter {
 	public $classname = "Sentri";
 	public $name = "Sentri";
 	public $faction = "Centauri Republic";
-	public static $value = 28;
-	public static $mass = 32;
+	public $value = 28;
+	public $mass = 32;
 	public $ep = 110;
 	public $integrity = 36;
 	public $negation = array(8, 7, 7);

@@ -4,22 +4,20 @@ class Structure {
 	public $parentId;
 	public $start;
 	public $end;
-	public $mitigation;
 	public $negation;
 	public $destroyed = false;
 	public $integrity;
 	public $systems = array();
 	public $damages = array();
 
-	function __construct($id, $parentId, $start, $end, $mass, $mitigation, $negation, $destroyed = false){
+	function __construct($id, $parentId, $start, $end, $integrity, $negation, $destroyed = false){
 		$this->id = $id;
 		$this->parentId = $parentId;
 		$this->start = $start;
 		$this->end = $end;
-		$this->mitigation = $mitigation;
 		$this->negation = $negation;
 		$this->destroyed = $destroyed;
-		$this->integrity = $this->getIntegrity($mass);
+		$this->integrity = $integrity;
 	}
 
 	public function applyDamage($dmg){
@@ -42,32 +40,12 @@ class Structure {
 		return $dmg;
 	}
 
-	public function getIntegrity($mass){
-		return $mass;
-
-		$t = 0;
-
-		if ($this->start < $this->end){
-			$t = $this->end - $this->start;
-		}
-		else if ($this->start > $this->end){
-			$t += 360 - $this->start;
-			$t += $this->end;
-		}
-		
-		return floor($t / 360 * ($mass / 1.5));
-	}
-
 	public function getRemainingIntegrity(){
 		$remIntegrity = $this->integrity;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			$remIntegrity -= $this->damages[$i]->armourDmg;
 		}
 		return floor($remIntegrity);
-	}
-
-	public function getRemainingMitigation(){
-		return round(pow($this->getRemainingIntegrity(), 0.75) / pow($this->integrity, 0.75) * $this->mitigation);
 	}
 
 	public function getRemainingNegation($fire){
@@ -77,9 +55,9 @@ class Structure {
 }
 
 class Primary extends Structure {
-
-	function __construct($id, $parentId, $start, $end, $mass, $mitigation, $destroyed = false){	
-        parent::__construct($id, $parentId, $start, $end, $mass, $mitigation, $destroyed);
+	
+	function __construct($id, $parentId, $start, $end, $integrity, $destroyed = false){
+        parent::__construct($id, $parentId, $start, $end, $integrity, 0, $destroyed);
         $this->id = -1;
 	}
 
@@ -87,8 +65,8 @@ class Primary extends Structure {
 		return 1;
 	}
 
-	public function getIntegrity($mass){
-		return $mass;
+	public function getHitChance(){
+		return $this->integrity;
 	}
 
 	public function testCriticalsStructureLevel($turn){

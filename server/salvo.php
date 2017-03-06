@@ -124,7 +124,7 @@ class Mini extends Ship {
 		}
 	}
 
-	public function getHitSection($fire){
+	public function getHitSection($id){
 		$locs = array();
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (!$this->structures[$i]->destroyed){
@@ -233,7 +233,7 @@ class Ammo extends Weapon implements JsonSerializable{
 	public $integrity;
 	public $armour;
 	public $damages = array();
-	public static $mass;
+	public $mass;
 	public $destroyed = false;
 	public $fc = array();
 
@@ -253,7 +253,7 @@ class Ammo extends Weapon implements JsonSerializable{
         	"impulse" => $this->impulse,
         	"integrity" => $this->integrity,
         	"armour" => $this->armour,
-        	"mass" => static::$mass,
+        	"mass" => $this->mass,
         	"damages" => $this->damages,
         	"crits" => $this->crits,
         	"destroyed" => $this->destroyed,
@@ -310,7 +310,7 @@ class Ammo extends Weapon implements JsonSerializable{
 	}
 
 	public function getSubHitChance(){
-		return ceil(static::$mass*5);
+		return ceil($this->$mass*5);
 	}
 }
 
@@ -323,7 +323,7 @@ class BallisticTorpedo extends Ammo {
 	public $impulse = 180;
 	public $integrity = 18;
 	public $armour = 8;
-	public static $mass = 4;
+	public $mass = 4;
 	public $fc = array(0 => 90, 1 => 30);
 
 	function __construct($parentId, $id){
@@ -340,7 +340,7 @@ class BallisticMissile extends Ammo {
 	public $impulse = 280;
 	public $integrity = 14;
 	public $armour = 6;
-	public static $mass = 3;
+	public $mass = 3;
 	public $fc = array(0 => 80, 1 => 70);
 
 	function __construct($parentId, $id){

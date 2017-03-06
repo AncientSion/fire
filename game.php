@@ -46,7 +46,7 @@ foreach ($manager->playerstatus as $player){
 }
 	echo "<script>";
 	echo "window.gd = ".json_encode($manager->game, JSON_NUMERIC_CHECK).";";
-	echo "window.ships = ".json_encode($manager->ships, JSON_NUMERIC_CHECK).";";
+	echo "window.ships = ".json_encode($manager->getShipData($userid), JSON_NUMERIC_CHECK).";";
 	echo "window.ballistics = ".json_encode($manager->ballistics, JSON_NUMERIC_CHECK).";";
 	echo "window.playerstatus = ".json_encode($manager->playerstatus, JSON_NUMERIC_CHECK).";";
 	echo "window.reinforcements = ".json_encode($manager->reinforcements, JSON_NUMERIC_CHECK).";";
@@ -98,7 +98,7 @@ foreach ($manager->playerstatus as $player){
 						<td>
 							Impulse:
 						</td>
-						<td  id="impulse">
+						<td id="impulse">
 						</td>
 					</tr>
 					<tr>
@@ -112,27 +112,27 @@ foreach ($manager->playerstatus as $player){
 						<td>
 							Future Turn Delay:
 						</td>
-						<td  id="nextTurnDelay">
+						<td id="nextTurnDelay">
 						</td>
 					</tr>
 					<tr>
 						<td>
 							Engine Power:
 						</td>
-						<td  id="enginePower">
+						<td id="enginePower">
 						</td>
 					</tr>
 					<tr>
 						<td>
 							Impulse Change:
 						</td>
-						<td  id="impulseChange">
+						<td id="impulseChange">
 						</td>
 					</tr>
 						<td>
-							Turn Cost:
+							Base Turn Cost:
 						</td>
-						<td  id="turnCost">
+						<td id="turnCost">
 						</td>
 					</tr>
 				</table>
@@ -173,12 +173,12 @@ foreach ($manager->playerstatus as $player){
 					<tr>
 						<td style="width: 50%">
 							<div class="doShortenTurn">
-								<img src="varIcons/plus.png">
+								<img src="varIcons/plusWhite.png">
 							</div>
 						</td>
 						<td>
-							<div class="DoUndoShortenTurn">
-								<img src="varIcons/minus.png">
+							<div class="doUndoShortenTurn">
+								<img src="varIcons/minusWhite.png">
 							</div>
 						</td>
 					</tr>
@@ -210,12 +210,12 @@ foreach ($manager->playerstatus as $player){
 					<tr>
 						<td style="width: 50%">
 							<div class="doShortenTurn">
-								<img src="varIcons/plus.png">
+								<img src="varIcons/plusWhite.png">
 							</div>
 						</td>
 						<td>
 							<div class="doUndoShortenTurn">
-								<img src="varIcons/minus.png">
+								<img src="varIcons/minusWhite.png">
 							</div>
 						</td>
 					</tr>
@@ -362,8 +362,8 @@ foreach ($manager->playerstatus as $player){
 					</table>
 				</div>
 				<canvas id ="canvas"></canvas>
-				<canvas id ="planCanvas"></canvas>
 				<canvas id ="fxCanvas"></canvas>
+				<canvas id ="planCanvas"></canvas>
 				<canvas id ="moveCanvas"></canvas>
 				<canvas id ="mouseCanvas"></canvas>
 			</div>
@@ -428,7 +428,7 @@ foreach ($manager->playerstatus as $player){
 
 		$(this).keypress(function(e){
 			if (game){
-				if (e.keyCode == 32){ // space
+				if (e.keyCode == 32){ // space - dist logger
 					if (game.vector){
 						game.vector = false;
 						$("#vectorDiv").addClass("disabled");
@@ -442,26 +442,26 @@ foreach ($manager->playerstatus as $player){
 				}
 				else if (e.keyCode == 111){ // ctrl, opacity
 					if (game.opacity){
+						game.opacity = false;
 						$(this).find(".ui").each(function(i){
 							$(this).removeClass("opaque");
 						})
-						game.opacity = false;
 					}
 					else {
+						game.opacity = true;
 						$(this).find(".ui").each(function(i){
 							$(this).addClass("opaque");
 						})
-						game.opacity = true;
 					}
 				}
-				else if (e.keyCode == 99){ // alt, cancel animation
+				else if (e.keyCode == 102){ // f, cancel fire animation
 					if (game.animateFire){
 						game.animateFire = false;
 						window.cancelAnimationFrame(anim);
 						fxCtx.clearRect(0, 0, res.x, res.y);
 						game.draw();
 						$("#combatLog").find("tr").each(function(i){
-							if (i > 2){
+							if (i >= 2){
 								$(this).remove()
 							}
 						})
@@ -480,6 +480,17 @@ foreach ($manager->playerstatus as $player){
 						}
 						game.draw();
 					}
+				}
+				else if (e.keyCode == 109){ // m, cancel move animation
+					window.cancelAnimationFrame(anim);
+
+					for (var i = 0; i < game.ships.length; i++){
+						game.ships[i].setPosition();
+						game.ships[i].setFacing();
+					}
+
+					game.draw();
+
 				}
 			}
 		})

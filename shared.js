@@ -11,7 +11,13 @@ window.actionCanvas;
 window.actionCtx;
 window.mouseCanvas;
 window.mouseCtx;
-window.cache
+window.cache;
+
+function doSort(a, b){
+	if (a.name != b.name){
+		return 1;
+	} else return 0;
+}
 
 window.shipImages = {};
 window.factionImages = {};
@@ -175,7 +181,6 @@ function initiateShip(i){
 				window.ships[i].structures[j].start,
 				window.ships[i].structures[j].end,
 				window.ships[i].structures[j].integrity,
-				window.ships[i].structures[j].mitigation,
 				window.ships[i].structures[j].negation,
 				window.ships[i].structures[j].destroyed
 			);

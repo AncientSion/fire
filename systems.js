@@ -178,6 +178,9 @@ function System(id, parentId, name, display, integrity, powerReq, output, effien
 	}
 
 	this.doUnpower = function(){
+		if (this.selected){
+			this.select();
+		}
 		if (!this.disabled){
 			for (var i = this.powers.length-1; i >= 0; i--){
 				if (this.powers[i].turn == game.turn){
@@ -331,15 +334,16 @@ function System(id, parentId, name, display, integrity, powerReq, output, effien
 			$("#systemDetailsDiv").remove();
 	}
 
-
-
-	this.getTableData = function(){
+	this.getTableData = function(forFighter){
 		var td = document.createElement("td");
 			td.className = "system";
 
 		var img = new Image();
-			img.src = "sysIcons/" + this.name + ".png";
-			img.className = "sysIcon";
+		var file = "sysIcons/" + this.name;
+		if (forFighter){file += this.linked;}
+		else {img.className = "sysIcon";}
+			file += ".png";
+			img.src = file;
 		td.appendChild(img);
 
 		var div = document.createElement("div");
@@ -353,34 +357,37 @@ function System(id, parentId, name, display, integrity, powerReq, output, effien
 			td.appendChild(div);
 
 			$(td).data("systemId", this.id);
-		
-		var lowerDiv = document.createElement("div");
-			lowerDiv.className = "integrityNow";
-			lowerDiv.style.width = this.getRemainingIntegrity() /  this.integrity * 100 + "%";
-			td.appendChild(lowerDiv);
 
-		var div = document.createElement("div");
-			div.className = "integrityFull";
-			td.appendChild(div);
+		if (!forFighter){
+			var lowerDiv = document.createElement("div");
+				lowerDiv.className = "integrityNow";
+				lowerDiv.style.width = this.getRemainingIntegrity() /  this.integrity * 100 + "%";
+				td.appendChild(lowerDiv);
 
-		if (!this.destroyed){
-			if (this instanceof PrimarySystem || this.effiency){
-				var outputDiv = document.createElement("div");
-					outputDiv.className = "outputMask";
-					//output.innerHTML = "<span>" + this.output + "</span>";
-					outputDiv.innerHTML = this.getOutput();
-					td.appendChild(outputDiv);
+			var div = document.createElement("div");
+				div.className = "integrityFull";
+				td.appendChild(div);
+
+			if (!this.destroyed){
+				if (this instanceof PrimarySystem || this.effiency){
+					var outputDiv = document.createElement("div");
+						outputDiv.className = "outputMask";
+						//output.innerHTML = "<span>" + this.output + "</span>";
+						outputDiv.innerHTML = this.getOutput();
+						td.appendChild(outputDiv);
+				}
 			}
-		}
 
-		var powerDiv = this.getPowerDiv();
-		if (powerDiv){td.appendChild(powerDiv)};
-		var boostDiv = this.getBoostDiv();
-		if (boostDiv){td.appendChild(boostDiv)};
+			var powerDiv = this.getPowerDiv();
+			if (powerDiv){td.appendChild(powerDiv)};
+			var boostDiv = this.getBoostDiv();
+			if (boostDiv){td.appendChild(boostDiv)};
+		}
 
 		$(td).data("systemId", this.id);
 		return this.setElementStatus(td);
 	}
+
 
 	this.setElementStatus = function(ele){
 		if (this.destroyed){
@@ -506,21 +513,24 @@ function PrimarySystem(id, parentId, name, display, integrity, powerReq, output,
 	}
 
 	this.getOutput = function(){
-		if (this.disabled){
+		if (this.disabled || this.destroyed){
 			return 0;
 		}
-		var output = this.output;
-		for (var i = this.powers.length-1; i >= 0; i--){
-			if (this.powers[i].turn == game.turn){
-				output += this.powers[i].type * this.output/10;
-			}
-			else break;
-		}
-		return Math.floor(output);
+		return Math.floor(this.output * this.getOutputMods() - this.getOutputUsage());
 	}
 
-	this.getOutputMod = function(){
+	this.getOutputUsage = function(){
+		return 0;
+	}
+
+	this.getOutputMods = function(){
 		var mod = 1;
+
+		for (var i = this.powers.length-1; i >= 0; i--){
+			if (this.powers[i].turn == game.turn){
+				mod += 0.1 * this.powers[i].type;
+			} else break;
+		}
 		for (var i = 0; i < this.crits.length; i++){
 			if (this.crits[i].outputMod != 1){
 				if (this.crits[i].inEffect()){
@@ -528,12 +538,12 @@ function PrimarySystem(id, parentId, name, display, integrity, powerReq, output,
 				}
 			}
 		}
+
 		return mod;
 	}
 
 	this.getOutputString = function(){
-		var mod = this.getOutputMod();
-		return (this.output * mod + " + " + this.getExtraOutput() * mod);
+		return this.output + " + " + this.getExtraOutput();
 	}
 
 	this.getSystemDetailsDiv = function(){
@@ -626,13 +636,6 @@ Bridge.prototype = Object.create(PrimarySystem.prototype);
 				
 function Reactor(id, parentId, name, display, integrity, powerReq, output, effiency){
 	PrimarySystem.call(this, id, parentId, name, display, integrity, powerReq, output, effiency);
-
-	this.getOutput = function(){
-		if (this.disabled){
-			return 0;
-		}
-		return this.output * this.getOutputMod() - this.getOutputUsage();
-	}
 
 	this.getUnusedPower = function(){
 		return this.getOutput();
@@ -729,14 +732,14 @@ function Weapon(id, parentId, name, display, exploSize, integrity, powerReq, out
 		var id = this.id;
 		var parentId = this.parentId;
 		var selected = false;
-		var ship;
+		var unit;
 
 		if (this.destroyed || this.disabled){
 			return false;
 		}
 		else {
-			ship = game.getShipById(parentId);
-			if (ship instanceof Flight && (ship.dogfights.length)){
+			unit = game.getShipById(parentId);
+			if (unit instanceof Flight && (unit.dogfights.length)){
 				return false;
 			}
 			else if (this.canFire()){
@@ -746,7 +749,7 @@ function Weapon(id, parentId, name, display, exploSize, integrity, powerReq, out
 				if (this.selected){
 					this.selected = false;
 				}
-				else if(! ship.hasHangarSelected()){
+				else if(! unit.hasHangarSelected()){
 					this.selected = true;
 				}
 			}
@@ -754,9 +757,9 @@ function Weapon(id, parentId, name, display, exploSize, integrity, powerReq, out
 			this.setTableRow();
 		}
 	
-		if (ship.hasWeaponsSelected()){
+		if (unit.hasWeaponsSelected()){
 			game.mode = 2;
-			ship.highlightAllSelectedWeapons();
+			unit.highlightAllSelectedWeapons();
 		}
 		else {
 			$("#weaponAimTableWrapper").hide();
@@ -1354,8 +1357,32 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, ou
 		return false;
 	}
 
-	this.getMount = function(){
+	this.getMount = function(){;
 		return Math.ceil(game.getShipById(aShip).getStructureById(this.structureId).getRemainingNegation() * 0.5);
+	}
+
+	this.getOutput = function(){
+		return this.getLaunchRate();
+	}
+
+	this.getLaunchRate = function(){
+		var rate = this.effiency;
+		var mod = 1;
+		for (var i = 0; i < this.crits.length; i++){
+			switch (this.crits[i].type){
+				case "launch1":
+					mod *= 0.7;
+					break;
+				case "launch2":
+					mod *= 0.5;
+					break;
+				case "launch3":
+					mod *= 0.3;
+					break;
+				default: break;
+			}
+		}
+		return Math.ceil(rate*mod);
 	}
 
 	this.drawArc = function(){
@@ -1580,7 +1607,7 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, ou
 
 	this.setupHangarLoadout = function(e){
 		var div = document.getElementById("hangarLoadoutDiv");
-		$("#launchRate").html(this.effiency);
+		$("#launchRate").html(this.getOutput());
 		$("#capacity").html(this.output);
 		if ($(div).hasClass("disabled")){
 			$(div).data("systemid", this.id).css("top", e.clientY + 30).css("left", e.clientX - 150).removeClass("disabled");
@@ -1590,26 +1617,6 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, ou
 			window.game.setShipTotal();
 			$(div).addClass("disabled");
 		}
-	}
-
-	this.getLaunchRate = function(){
-		var rate = this.effiency;
-		var mod = 1;
-		for (var i = 0; i < this.crits.length; i++){
-			switch (this.crits[i].type){
-				case "launch1":
-					mod *= 0.7;
-					break;
-				case "launch2":
-					mod *= 0.5;
-					break;
-				case "launch3":
-					mod *= 0.3;
-					break;
-				default: break;
-			}
-		}
-		return Math.ceil(rate*mod);
 	}
 	
 	this.getSystemDetailsDiv = function(){

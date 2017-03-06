@@ -104,6 +104,7 @@ class LightLaser extends Laser {
 	public $integrity = 25;
 	public $rakes = 3;
 	public $fc = array(0 => 100, 1 => 120);
+	public $mass = 16;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -127,6 +128,7 @@ class MediumLaser extends Laser {
 	public $powerReq = 5;
 	public $integrity = 45;
 	public $rakes = 3;
+	public $mass = 20;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -152,6 +154,7 @@ class HeavyLaser extends Laser {
 	public $rakes = 3;
 	public $effiency = 4;
 	public $fc = array(0 => 120, 1 => 40);
+	public $mass = 26;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -177,6 +180,7 @@ class NeutronLaser extends Laser {
 	public $rakes = 2;
 	public $effiency = 3;
 	public $fc = array(0 => 130, 1 => 65);
+	public $mass = 22;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

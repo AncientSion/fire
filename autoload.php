@@ -42,6 +42,7 @@ spl_autoload_register(
                 'tethys' => '/server/ships/tethys.php',
 
                 'system' => '/server/systems/system.php',
+                'primarysystem' => '/server/systems/system.php',
                 'weapon' => '/server/systems/system.php',
                 
                 'bridge' => '/server/systems/system.php',
@@ -85,10 +86,12 @@ spl_autoload_register(
                 'structure' => '/server/systems/structure.php',
 
                 'debug' => '/server/debug.php',
+                'math' => '/server/math.php',
                 'point' => '/server/classes.php',
                 'action' => '/server/classes.php',
                 'fireorder' => '/server/classes.php',
                 'damage' => '/server/classes.php',
+                'power' => '/server/classes.php',
                 'crit' => '/server/classes.php',
                 'divider' => '/server/classes.php',
                 'manager' => '/server/manager.php',

@@ -197,7 +197,6 @@ else {
 					return this.ships[0];
 				},
 				shipsBought: [],
-				hangers: [],
 
 				addFighter: function(ele){
 					game.ships[0].getSystemById($("#hangarLoadoutDiv").data("systemid")).addFighter(ele);
@@ -332,8 +331,7 @@ else {
 				subTr.appendChild(subTh);
 					subTh = document.createElement("th");
 					subTh.style.fontSize = "16px";
-				subTr.appendChild(subTh);						
-
+				subTr.appendChild(subTh);
 
 				subTable.appendChild(subTr);
 				td.appendChild(subTable); 

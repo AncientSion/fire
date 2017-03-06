@@ -10,13 +10,13 @@ class System {
 	public $output;
 	public $name;
 	public $display;
-	public $chance = 3;
 	public $damages = array();
 	public $powers = array();
 	public $crits = array();
 	public $integrity = 0;
 	public $linked = 1;
 	public $effiency = 0;
+	public $mass;
 
 	function __construct($id, $parentId, $output = 0, $destroyed = 0){
 		$this->id = $id;
@@ -45,6 +45,10 @@ class System {
 			$rem -= $this->damages[$i]->structDmg;
 		}
 		return $rem;
+	}
+
+	public function getHitChance(){
+		return $this->mass*10;
 	}
 
 	public function testCriticalSystemLevel($turn){
@@ -117,7 +121,17 @@ class System {
 	}
 }
 
-class Bridge extends System {
+class PrimarySystem extends System {
+	function __construct($id, $parentId, $output = 0, $destroyed = 0){
+		parent::__construct($id, $parentId, $output, $destroyed);
+	}
+
+	public function getHitChance(){
+		return $this->integrity*2;
+	}
+}
+
+class Bridge extends PrimarySystem {
 	public $name = "Bridge";
 	public $display = "Bridge";
 
@@ -140,7 +154,7 @@ class Bridge extends System {
 	}
 }
 
-class Engine extends System {
+class Engine extends PrimarySystem {
 	public $name = "Engine";
 	public $display = "Engine";
 
@@ -164,7 +178,7 @@ class Engine extends System {
 	}
 }
 
-class Reactor extends System {
+class Reactor extends PrimarySystem {
 	public $name = "Reactor";
 	public $display = "Reactor";
 	public $powerReq = 0;
@@ -176,19 +190,19 @@ class Reactor extends System {
     }
 
 	public function getCritEffects(){
-		return array("output_0.9", "output_0.9", "output_0.5", "output_0", "meltdown");
+		return array("output_0.9", "output_0.7", "output_0.5", "meltdown");
 	}
 
 	public function getCritTreshs(){
-		return array(10, 25, 40, 55, 80);
+		return array(15, 40, 55, 80);
 	}
 
 	public function getCritDuration(){
-		return array(0, 0, 1, 1, 0);
+		return array(0, 1, 1, 0);
 	}
 }
 
-class LifeSupport extends System {
+class LifeSupport extends PrimarySystem {
 	public $name = "LifeSupport";
 	public $display = "Life Support";
 
@@ -210,7 +224,7 @@ class LifeSupport extends System {
 	}
 }
 
-class Sensor extends System {
+class Sensor extends PrimarySystem {
 	public $name = "Sensor";
 	public $display = "Sensor";
 
@@ -245,7 +259,6 @@ class Weapon extends System {
 	public $powerReq = 2;
 	public $fireOrders = array();
 	public $priority;
-	public $chance = 10;
 	public $fc = array(0 => 100, 1 => 100);
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
@@ -391,10 +404,13 @@ class Weapon extends System {
 	public function getDamageMod($fire){
 		$mod = 1;
 
-		$crit = $this->getCritPenalty($fire->turn); if ($crit){Debug::log("crit mod: ".$crit);};
-		$boost = $this->getBoostLevel($fire->turn) * 0.25; if ($boost){Debug::log("boost mod: ".$boost);}
-		$range = $this->getDmgPenaltyRange($fire); if ($range){Debug::log("range mod: ".$range);}
+		$crit = $this->getCritPenalty($fire->turn);
+		$boost = $this->getBoostLevel($fire->turn) * 0.25;
+		$range = $this->getDmgPenaltyRange($fire);
 
+		if ($crit || $boost || $range){
+			Debug::log("crits: ".$crit.", boost: ".$boost.". range: ".$range);
+		}
 		return $mod + $crit + $boost + $range;
 	}
 
@@ -439,10 +455,11 @@ class Weapon extends System {
 	}
 }
 
+
 class Hangar extends Weapon {
 	public $name = "Hangar";
-	public $display = "Hangar";	
-	public $loads = array();	
+	public $display = "Hangar";
+	public $loads = array();
 
 	function __construct($id, $parentId, $start, $end, $output, $effiency, $loads, $destroyed = false){
 		$this->powerReq = $effiency;
@@ -450,11 +467,12 @@ class Hangar extends Weapon {
 		$this->integrity = floor($output/3);
 
 		for ($i = 0; $i < sizeof($loads); $i++){
+			$fighter = new $loads[$i](0,0);
 			$this->loads[] = array(
 				"classname" => $loads[$i],
 				"amount" => 0,
-				"cost" => $loads[$i]::$value,
-				"mass" => $loads[$i]::$mass,
+				"cost" => $fighter->value,
+				"mass" => $fighter->mass,
 				"launch" => 0
 			);
 		}
@@ -465,6 +483,10 @@ class Hangar extends Weapon {
 
 	public function getArmourMod(){
 		return 0.5;
+	}
+
+	public function getHitChance(){
+		return $this->output * 2;
 	}
 
 	public function getCritEffects(){

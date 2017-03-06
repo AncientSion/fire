@@ -35,6 +35,7 @@ class MediumRailGun extends Matter {
 	public $reload = 2;
 	public $integrity = 45;
 	public $fc = array(0 => 100, 1 => 80);
+	public $mass = 20;
 
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
@@ -56,6 +57,7 @@ class HeavyRailGun extends Matter {
 	public $reload = 3;
 	public $integrity = 75;
 	public $fc = array(0 => 130, 1 => 85);
+	public $mass = 26;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

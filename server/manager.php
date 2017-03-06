@@ -127,6 +127,26 @@ class Manager {
 		$this->crits = array();
 	}
 
+	public function getShipData($userid){
+		if ($this->phase == -1){
+			for ($i = 0; $i < sizeof($this->ships); $i++){
+				if ($this->ships[$i]->userid != $userid){
+					for ($j = 0; $j < sizeof($this->ships[$i]->structures); $j++){
+						for ($k = 0; $k < sizeof($this->ships[$i]->structures[$j]->systems); $k++){
+							for ($l = sizeof($this->ships[$i]->structures[$j]->systems[$k]->powers)-1; $l >= 0; $l--){
+								if ($this->ships[$i]->structures[$j]->systems[$k]->powers[$l]->turn == $this->turn){
+									array_splice($this->ships[$i]->structures[$j]->systems[$k]->powers, $l, 1);
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return $this->ships;
+	}
+
 	public function deleteResolvedFireOrders(){
 		for ($i = sizeof($this->fires)-1; $i >= 0; $i--){
 			if ($this->fires[$i]->resolved){
@@ -203,7 +223,7 @@ class Manager {
 	}
 
 	public function doAdvanceGameState(){
-		Debug::log("doAdvanceGameState for game".$this->gameid." FROM PHASE: ".$this->phase." to phase".($this->phase+1));
+		Debug::log("doAdvanceGameState for game".$this->gameid." from phase ".$this->phase." to phase ".($this->phase+1));
 
 		switch ($this->phase){
 			case -1; // from deploy to move
@@ -308,7 +328,6 @@ class Manager {
 			$arrival  = mt_rand(2, 4);
 			$picks[] = $validShips[$subPick];
 			$picks[sizeof($picks)-1]["arrival"] = mt_rand(2, 4);
-			Debug::log("picking: ".$subPick["classname"]." with arrival ".$arrival);
 		}
 
 		DBManager::app()->insertReinforcements($this->gameid, $userid, $this->turn, $picks);
@@ -927,7 +946,7 @@ class Manager {
 	}
 
 	public function getShipsForFaction($faction){
-		Debug::log("getShipsForFaction");
+		//Debug::log("getShipsForFaction");
 		$ships = array();
 		$data = array();
 
@@ -975,15 +994,28 @@ class Manager {
 		return $data;
 	}
 
-	public function getShipData($name){
-		debug::log("asking for preview of: ".$name);
+	public function getPreviewData($name){
+		//debug::log("asking for preview of: ".$name);
 		$ship = new $name(1, 1, 0);
 		return $ship;
 
 	}
 
-	public function logShips(){
-		debug::log("logShips");
+	public function logShips($elements){
+		$data = func_get_args();
+		if ($data[0] == "All"){
+			return $this->logAllShips();
+		}
+		else {
+			$ships = array();
+			for ($i = 0; $i < sizeof($data); $i++){
+				$ships[] = new $data[$i](0,0,0,0,0,0);
+			}
+			return $ships;
+		}
+	}
+
+	public function logAllShips(){
 		$allShips = array();
 
 		$factions = $this->getFactions();

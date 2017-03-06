@@ -1,0 +1,27 @@
+doAdvanceGameState for game2 from phase 2 to phase 3
+handleFiringPhase
+doDamage - NORMAL, weapon: FusionCannon, target: 1
+doDamage - NORMAL, weapon: FusionCannon, target: 1
+doDamage - NORMAL, weapon: FusionCannon, target: 1
+doDamage - NORMAL, weapon: NeutronLaser, target: 2
+crits: 0, boost: 0.75. range: -0.1611
+ => totalDmg: 166 over 2 rakes
+doDamage - NORMAL, weapon: NeutronLaser, target: 3
+crits: 0, boost: 0.25. range: -0.1815
+ => totalDmg: 118 over 2 rakes
+doDamage - NORMAL, weapon: FusionCannon, target: 3
+doDamage - NORMAL, weapon: MediumRailGun, target: 4
+doDamage - NORMAL, weapon: MediumRailGun, target: 4
+doDamage - NORMAL, weapon: HeavyLaser, target: 4
+crits: 0, boost: 0.5. range: -0.214
+ => totalDmg: 326 over 3 rakes
+doDamage - NORMAL, weapon: ParticleBeam, target: 4
+DB deleteUnresolvedFireOrders: 13
+DB deleteUnresolvedFireOrders DONE: 13
+DB updateFireOrders: 13
+createAndResolveBallisticMoves, size: 0
+resolveBallisticImpacts :0
+ => DB insertDamageEntries: 15
+ => DB insertCritEntries: 4
+startDamageControlPhase
+entry CREATE for player 1 in game 3 phase: -1 and status joined

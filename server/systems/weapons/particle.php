@@ -24,6 +24,7 @@ class LightAssaultArray extends Particle {
 	public $reload = 1;
 	public $integrity = 20;
 	public $fc = array(0 => 80, 1 => 155);
+	public $mass = 12;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -41,6 +42,7 @@ class MediumAssaultArray extends LightAssaultArray {
 	public $exploSize = 5;
 	public $integrity = 35;
 	public $fc = array(0 => 110, 1 => 100);
+	public $mass = 16;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -59,6 +61,7 @@ class HeavyAssaultArray extends LightAssaultArray {
 	public $exploSize = 6;
 	public $integrity = 50;
 	public $fc = array(0 => 130, 1 => 65);
+	public $mass = 20;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -78,6 +81,7 @@ class ParticleBeam extends Particle {
 	public $exploSize = 6;
 	public $integrity = 28;
 	public $fc = array(0 => 80, 1 => 170);
+	public $mass = 15;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -114,6 +118,7 @@ class FusionCannon extends Particle {
 	public $exploSize = 7;
 	public $integrity = 42;
 	public $fc = array(0 => 100, 1 => 145);
+	public $mass = 14;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

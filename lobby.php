@@ -1,7 +1,7 @@
 <?php
 
 include_once 'global.php';
-echo "v: ".PHP_VERSION;
+echo "PHP: ".PHP_VERSION;
 
 if (isset($_SESSION["userid"])){
 
@@ -126,7 +126,6 @@ if (isset($_SESSION["userid"])){
 	}
 }
 else {
-	echo "NO USER ID";
 }
 
 ?>

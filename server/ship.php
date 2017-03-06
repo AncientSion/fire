@@ -212,7 +212,7 @@ class Ship {
 		$fire->dist = $this->getHitDist($fire);
 		$fire->angleIn = $this->getHitAngle($fire);
 		$fire->hitSection = $this->getHitSection($fire);
-		$fire->req = ($this->getHitChance($fire) / 100 * $fire->weapon->getFireControlMod($fire))- $fire->weapon->getAccLoss($fire->dist);
+		$fire->req = ($this->getHitChance($fire) / 100 * $fire->weapon->getFireControlMod($fire)) - $fire->weapon->getAccLoss($fire->dist);
 		//Debug::log("normal hitangle from ship #".$fire->shooter->id." to target #".$this->id." : ".$fire->angleIn.", picking section: ".$fire->hitSection);
 		$fire->weapon->rollForHit($fire);
 
@@ -258,24 +258,64 @@ class Ship {
 
 	public function getHitSystem($fire){
 		$roll;
+		$current = 0;
+		$total = $this->primary->getHitChance();
+
 		$struct = $fire->target->getStructureById($fire->hitSection);
-		for ($j = 0; $j < sizeof($struct->systems); $j++){
-			if (! $struct->systems[$j]->destroyed){
-				$roll = mt_rand(0, 100);
-				if ($roll <= $struct->systems[$j]->chance){
-					return $struct->systems[$j];
+
+		for ($i = 0; $i < sizeof($struct->systems); $i++){
+			if (! $struct->systems[$i]->destroyed){
+				$total += $struct->systems[$i]->getHitChance();
+			}
+		}
+
+		$roll = mt_rand(0, $total);
+		$current += $this->primary->getHitChance();
+		if ($roll <= $current){
+			return $this->getPrimaryHitSystem();
+		}
+		else {
+			for ($i = 0; $i < sizeof($struct->systems); $i++){
+				if (! $struct->systems[$i]->destroyed){
+					$current += $struct->systems[$i]->getHitChance();
+					if ($roll <= $current){
+						//Debug::log("hitting: ".$struct->systems[$i]->name." #".$struct->systems[$i]->id);
+						return $struct->systems[$i];
+					}
 				}
 			}
 		}
-		for ($j = 0; $j < sizeof($this->primary->systems); $j++){
-			if (! $this->primary->systems[$j]->destroyed){
-			$roll = mt_rand(0, 100);
-				if ($roll <= $this->primary->systems[$j]->chance){
-					return $this->primary->systems[$j];
+	}
+
+	public function getPrimaryHitSystem(){
+		$roll;
+		$current = 0;
+		$total = $this->primary->getHitChance();
+
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+			if (! $this->primary->systems[$i]->destroyed){
+				$total += $this->primary->systems[$i]->getHitChance();
+			}
+		}
+
+		$roll = mt_rand(0, $total);
+		$current += $this->primary->getHitChance();
+
+		if ($roll <= $current){
+			//Debug::log("hitting primary");
+			return $this->primary;
+		}
+		else {
+			for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+				if (! $this->primary->systems[$i]->destroyed){
+					$current += $this->primary->systems[$i]->getHitChance();
+					if ($roll <= $current){
+						//Debug::log("hitting: ".$this->primary->systems[$i]->name." #".$this->primary->systems[$i]->id);
+						return $this->primary->systems[$i];
+					}
 				}
 			}
 		}
-		return $this->primary;
 	}
 
 	public function getHitChance($fire){
@@ -381,22 +421,23 @@ class Ship {
 		}
 	}
 
-	public function getStructure(){
+	public function getArmour(){
+		$data = array(
+			"integrity" => 0,
+			"negation" => array()
+		);
+
 		$total = 0;
 
 		foreach ($this->structures as $struct){
-			$total += $struct->integrity;
+			$data["integrity"] += $struct->integrity;
+			$data["negation"][] = $struct->negation;
 		}
-		return $total;
+		return $data;
 	}
 
-	public function getArmour(){
-		$total = 0;
-
-		foreach ($this->structures as $struct){
-			$total += $struct->armour;
-		}
-		return $total;
+	public function getStructure(){
+		return $this->primary->integrity;
 	}
 
 	public function getNewCrits($turn){

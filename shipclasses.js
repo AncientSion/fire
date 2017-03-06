@@ -566,13 +566,13 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 			var delayRad1 = degreeToRadian(start-45);
 			var delayRad2 = degreeToRadian(end+45);
 			moveCtx.beginPath();			
-			moveCtx.arc(center.x, center.y, this.size, delayRad1, delayRad2, false);
+			moveCtx.arc(center.x, center.y, delay, delayRad1, delayRad2, false);
 			moveCtx.closePath();
 			moveCtx.strokeStyle = "white";
 			moveCtx.lineWidth = 2
 			moveCtx.stroke();
 			moveCtx.strokeStyle = "black";	
-			moveCtx.arc(center.x, center.y, this.size, 0, 2*Math.PI, false);
+			moveCtx.arc(center.x, center.y, delay-3, 0, 2*Math.PI, false);
 			moveCtx.globalCompositeOperation = "destination-out";
 			moveCtx.fill();
 			moveCtx.globalCompositeOperation = "source-over";
@@ -729,7 +729,8 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		for (var i = 0; i < this.turns.length; i++){
 			this.turns[i].costmod += 0.2;
 		}
-		this.updateTurnElements()
+		this.drawDelayEstimator();
+		this.updateTurnElements();
 	}
 	
 	this.doUndoShortenTurn = function(){
@@ -738,7 +739,8 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 				this.turns[i].costmod -= 0.2;
 			}
 		}
-		this.updateTurnElements()
+		this.drawDelayEstimator();
+		this.updateTurnElements();
 	}
 
 	this.updateTurnElements = function(){
@@ -749,9 +751,13 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		$(".turnEle").each(function(i){
 			$(this).find("#epCost").html(Math.floor(self.turns[i].cost * self.turns[i].costmod) + " EP")
 			$(this).find("#turnDelay").html(Math.floor(self.turns[i].delay / self.turns[i].costmod) + "px")
+
+			if (self.turns[i].cost * (self.turns[i].costmod + 0.2) + self.getTurnCost() > self.getRemainingEP()){
+				$(this).find("#epCost").removeClass("green").addClass("red");
+			} else $(this).find("#epCost").removeClass("red").addClass("green");
+
 			if (!canShorten && !canUndoShorten){
-				$(this).find(".shortenTurn").hide();
-				return;
+				$(this).find(".shortenTurn").hide(); return;
 			} else {
 				$(this).find(".shortenTurn").show();
 			}
@@ -865,6 +871,8 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 	this.drawTurnUI = function(){
 		var center;
 		var plannedAngle = this.getPlannedFacingToMove(this.actions.length-1);
+		var cost = this.getTurnCost();
+		var delay = this.getTurnDelay();
 		
 		if (this.actions.length){
 			center = new Point(this.actions[this.actions.length-1].x + cam.o.x, this.actions[this.actions.length-1].y + cam.o.y);
@@ -879,8 +887,6 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 			
 				var modAngle = a * i * j;
 				var newAngle = addToDirection(plannedAngle, modAngle);
-				var cost = this.getTurnCost();
-				var delay = this.getTurnDelay();
 
 				var turn = {
 							x: center.x,
@@ -910,7 +916,7 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 				$(turnEle).find("#epCost").html(Math.floor(cost * turn.costmod) + " EP");
 				$(turnEle).find("#turnDelay").html(Math.floor(delay / turn.costmod) + "px");
 
-				var p1 = getPointInDirection(150, newAngle, center.x, center.y);
+				var p1 = getPointInDirection(150, addToDirection(newAngle, modAngle), center.x, center.y);
 				var left = p1.x - $(turnEle).width()/2;
 				var top = p1.y - $(turnEle).height()/2;
 
@@ -921,58 +927,56 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 				$(turnEle)
 					.css("left", left)
 					.css("top", top)
-					.removeClass("disabled")
-
-
-		/*		if (canShorten){
-					$(turnEle).find(".doShortenTurn").find("img").show();
-				} else $(turnEle).find(".doShortenTurn").find("img").hide();
-				if (canUndoShorten){
-					$(turnEle).find(".doUndoShortenTurn").find("img").show();
-				} else $(turnEle).find(".doUndoShortenTurn").find("img").hide();
-		*/	}
+					.removeClass("disabled")}
 		}
 
-		this.updateTurnElements()
+	
+		this.drawDelayEstimator();
+		this.updateTurnElements();
 
 	}
 
+	this.drawDelayEstimator = function(){
+		mouseCtx.clearRect(0, 0, res.x, res.y);
+		var delay = this.turns[0].delay / this.turns[0].costmod;
+		if (delay){
+			var center;
+			var plannedAngle = this.getPlannedFacingToMove(this.actions.length-1);
+			if (this.actions.length){
+				center = new Point(this.actions[this.actions.length-1].x + cam.o.x, this.actions[this.actions.length-1].y + cam.o.y);
+			}
+			else center = this.getBaseOffsetPos();
+
+			var delayRad1 = degreeToRadian(plannedAngle-45);
+			var delayRad2 = degreeToRadian(plannedAngle+45);
+			mouseCtx.beginPath();			
+			mouseCtx.arc(center.x, center.y, delay, delayRad1, delayRad2, false);
+			mouseCtx.closePath();
+			mouseCtx.strokeStyle = "red";
+			mouseCtx.lineWidth = 2
+			mouseCtx.stroke();
+			mouseCtx.strokeStyle = "black";	
+			mouseCtx.arc(center.x, center.y, delay, 0, 2*Math.PI, false);
+			mouseCtx.globalCompositeOperation = "destination-out";
+			mouseCtx.fill();
+			mouseCtx.globalCompositeOperation = "source-over";
+		}
+	}
+
 	this.drawImpulseUI = function(){
-		var center;
+		var center = {x: this.x + cam.o.x, y: this.y + cam.o.y};
 		var w = $("#impulseGUI").width();
 		var h = $("#impulseGUI").height();
-		var p;
-
 		var gui = $("#impulseGUI");
+		var p = getPointInDirection(this.size/2 + 150, this.facing + 180, center.x, center.y);
 
-		//if (this.actions.length){
-		//	center = new Point(this.actions[this.actions.length-1].x + cam.o.x, this.actions[this.actions.length-1].y + cam.o.y);
-		//} else center = this.getBaseOffsetPos();
-		center = {x: this.x + cam.o.x, y: this.y + cam.o.y};
-
-		/*if (this.facing > 90 && this.facing < 270){
-			var p = getPointInDirection(this.size*1.25, this.getTurnStartFacing() + 180, center.x, center.y);
-			$(gui).css("left", p.x).css("top", p.y - h/2).removeClass("disabled");
-		}
-		else {
-
-*/			
-			var p = getPointInDirection(this.size/2 + 150, this.facing + 180, center.x, center.y);
-			$(gui).css("left", p.x - w/2).css("top", p.y - h/2).removeClass("disabled");
-//		}
-
+		$(gui).css("left", p.x - w/2).css("top", p.y - h/2).removeClass("disabled");
 		$(gui).find("#enginePower").html(this.getRemainingEP() + " / " + this.getEP());
+		$(gui).find("#impulse").html(this.getRemainingImpulse() + " / " + this.getTotalImpulse());
 		$(gui).find("#remTurnDelay").html(this.getRemainingDelay());
 		$(gui).find("#nextTurnDelay").html(this.getTurnDelay());
-		$(gui).find("#impulse").html(this.getRemainingImpulse() + " / " + this.getTotalImpulse());
 		$(gui).find("#impulseChange").html(this.getImpulseChangeCost() + " EP");
-		$(gui).find("#turnCost").html(this.getTurnCost() + " EP");
-
-		//if (this.canIncreaseImpulse()){$("#impulseGUI").find("#increaseImpulse").removeClass("disabled")}
-		//else {$("#impulseGUI").find("#increaseImpulse").addClass("disabled")}
-
-		//if (this.canDecreaseImpulse()){$("#impulseGUI").find("#decreaseImpulse").removeClass("disabled")}
-		//else {$("#impulseGUI").find("#decreaseImpulse").addClass("disabled")}
+		$(gui).find("#turnCost").html("<span>" + this.getTurnCost() + " EP</span>");
 
 		var p1 = getPointInDirection(this.size/2 + 10 + 15, this.facing + 180, center.x, center.y);
 
@@ -1140,6 +1144,7 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		return Math.ceil(sub);
 	}
 	
+
 	this.createDiv = function(){
 		var div = document.createElement("div");
 			div.className = "shipDiv";
@@ -1171,12 +1176,6 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
-			td.innerHTML = "Engine Power: "; tr.appendChild(td);
-		var td = document.createElement("td"); td.className = "ep";
-			td.innerHTML = this.getRemainingEP() + " / " + this.getEP(); tr.appendChild(td); table.appendChild(tr);
-
-		var tr = document.createElement("tr");
-		var td = document.createElement("td");
 			td.innerHTML = "Impulse: "; tr.appendChild(td);
 		var td = document.createElement("td"); td.className = "impulse";
 			td.innerHTML = this.getRemainingImpulse() + " / " + this.getTotalImpulse(); tr.appendChild(td); table.appendChild(tr);
@@ -1189,9 +1188,15 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
+			td.innerHTML = "Engine Power: "; tr.appendChild(td);
+		var td = document.createElement("td"); td.className = "ep";
+			td.innerHTML = this.getRemainingEP() + " / " + this.getEP(); tr.appendChild(td); table.appendChild(tr);
+
+		var tr = document.createElement("tr");
+		var td = document.createElement("td");
 			td.innerHTML = "Impulse Change: "; tr.appendChild(td);
 		var td = document.createElement("td"); td.className = "change";
-			td.innerHTML = this.getImpulseChangeCost(); tr.appendChild(td); table.appendChild(tr);
+			td.innerHTML = this.getImpulseChangeCost() + " EP"; tr.appendChild(td); table.appendChild(tr);
 				
 		subDiv.appendChild(table);
 		div.appendChild(subDiv);
@@ -1215,6 +1220,16 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		structContainer.className = "structContainer";
 		div.appendChild(structContainer);
 
+
+		var noFront = true	
+
+		for (var i = 0; i < this.structures.length; i++){
+			this.structures[i].direction = this.structures[i].getDirection();
+			if (this.structures[i].direction == 0 || this.structures[i].direction == 360){
+				noFront = false;
+			}
+		}
+
 		var conWidth = $(structContainer).width();
 		var conHeight = $(structContainer).height();
 
@@ -1234,7 +1249,7 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 					var tr = document.createElement("tr");
 				}
 
-				var td = this.primary.systems[i].getTableData();
+				var td = this.primary.systems[i].getTableData(false);
 					td = this.attachEvent(td);
 				systems++;
 				tr.appendChild(td);
@@ -1246,14 +1261,19 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 				}
 			}
 
+		var offsetX = 0;
+		var offsetY = 0;
+		if (noFront){
+			offsetY -= 20;
+		}
+
 		primaryDiv.appendChild(primaryTable);
 		structContainer.appendChild(primaryDiv);
 		var w = $(primaryDiv).width();
 		var h = $(primaryDiv).height();
 		$(primaryDiv)
 			.css("left", conWidth/2 - w/2)
-			.css("top", conHeight/2 - h/2)
-
+			.css("top", conHeight/2 - h/2 + offsetY)
 
 		// OUTER STRUCTS
 		for (var i = 0; i < this.structures.length; i++){
@@ -1267,15 +1287,16 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 
 			structTable.appendChild(this.structures[i].getTableRow());
 
-			var entries = 0;
+			var col = 0;
+			var colWidth = 1;
 			var max;
-			var a = this.structures[i].getDirection();
+			var a = this.structures[i].direction;
 			var w;
 			var maxRow = 0;
 
 			if (a == 0 || a == 180 || a == 360){ // front or aft
 				if (a == 180){
-					max = 8;
+					max = 6;
 				}
 				else if (this.structures[i].systems.length % 4 == 0){
 					max = 4;
@@ -1302,52 +1323,76 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 				}
 			}
 
-			for (var j = 0; j < this.structures[i].systems.length; j++){
-				if (entries == 0){
+			var systems = this.structures[i].systems;
+
+			/*	this.fireOrders.sort(function(a, b){
+					return (
+						a.shooter.flight - b.shooter.flight ||
+						a.targetid - b.targetid ||
+						a.weapon.priority - b.weapon.priority ||
+						a.shooterid - b.shooterid
+					)
+				});
+			*/
+			var toDo = systems.length
+			for (var j = 0; j < toDo; j++){
+				if (col == 0){
 					tr = document.createElement("tr");
+					if (toDo - j != max){
+						if ((toDo - j) *2 == max){
+							colWidth = 2;
+						}
+					}
 				}
 
-				var td = this.structures[i].systems[j].getTableData();
+				var td = systems[j].getTableData(false);
+					td.colSpan = colWidth;
 					td = this.attachEvent(td);
-				var boostDiv = this.structures[i].systems[j].getBoostDiv();
-				entries++;
+				var boostDiv = systems[j].getBoostDiv();
+				col++;
 				tr.appendChild(td);
 
 
-				if (entries == max){
+				if (col == max){
 					structTable.appendChild(tr);
-					if (maxRow < entries){maxRow = entries;}
-					entries = 0;
+					if (maxRow < col){
+						maxRow = col;
+					}
+					col = 0;
 				}
-				if (j == this.structures[i].systems.length-1){
+				if (j == systems.length-1){
 					structTable.appendChild(tr);
-					if (maxRow < entries){maxRow = entries;}
-					entries = 0;
+					if (maxRow < col){
+						maxRow = col;
+					}
+					col = 0;
 					$(structTable).find(".struct").attr("colSpan", maxRow);
 				}
+
 			}
 
 			structDiv.appendChild(structTable);
 			structContainer.appendChild(structDiv);
 
+			var pos = getPointInDirection(135, a-90, conWidth/2, conHeight/2-40);
+			var offsetX = 0;			
+			var offsetY = 0;
+			var w = $(structDiv).width();
+			var h = $(structDiv).height();
+
+			if (noFront){
+				offsetY = -20;
+			}
 
 			if (a == 0 || a == 360){
 				offsetY = -10;
 			}
 			else if (a == 180){
-				offsetY = 10;
+				offsetY = -10;
 			}
 			else {
 				offsetY = -40
 			}
-			
-			a = a - 90;
-
-			var pos = getPointInDirection(135, a, conWidth/2, conHeight/2-40);
-			var offsetX = 0;			
-			var offsetY = 0;
-			var w = $(structDiv).width();
-			var h = $(structDiv).height();
 
 			
 			$(structDiv)
@@ -1391,7 +1436,7 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		$(divs).find(".ep").html(this.getRemainingEP() + " / " + this.getEP());
 		$(divs).find(".impulse").html(this.getRemainingImpulse() + " / " + this.getTotalImpulse());
 		$(divs).find(".delay").html( this.getRemainingDelay());
-		$(divs).find(".change").html(this.getImpulseChangeCost());
+		$(divs).find(".change").html(this.getImpulseChangeCost() + " EP");
 	}
 
 	this.updateDivPower = function(system){
@@ -1545,9 +1590,7 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 	this.setMoveMode = function(){
 		game.mode = 1;
 		this.turns = [];
-		game.draw();
 		this.drawMoveRange();
-		//this.drawArcIndicator();
 		this.drawVectorIndicator();
 
 		if (game.phase == -1){ // DEPLOYMENT

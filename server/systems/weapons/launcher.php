@@ -9,6 +9,7 @@ class Launcher extends Weapon {
 	public $launchRate;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $launchRate, $destroyed = false){
+		$this->mass = $launchRate * 10;
 		$this->launchRate = $launchRate;
 		$this->powerReq = $launchRate;
 		$ammo = $this->getAmmo();

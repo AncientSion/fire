@@ -727,7 +727,7 @@ function Crit (id, shipid, systemid, turn, type, duration){
 
 	this.create = function(){
 		var html = "";
-		var mod = 0;
+		var mod = 1;
 		if (this.duration > 0){
 			html = "Turns " + this.turn + " - " + (this.turn + this.duration) +": ";
 		} else {
@@ -771,7 +771,7 @@ function Crit (id, shipid, systemid, turn, type, duration){
 				mod *= 0.8; break;
 			case "output_0.7":
 				html += "Output x 0.7";
-				mod *= 0.; break;
+				mod *= 0.7; break;
 			case "output_0.5":
 				html += "Output x 0.5";
 				mod *= 0.5; break;
@@ -800,7 +800,7 @@ function Crit (id, shipid, systemid, turn, type, duration){
 	this.create();
 }
 
-function Structure(id, parentId, start, end, integrity, mitigation, negation, destroyed){
+function Structure(id, parentId, start, end, integrity, negation, destroyed){
 	this.name = "Structure";
 	this.display = "Structure";
 	this.id = id;
@@ -808,12 +808,12 @@ function Structure(id, parentId, start, end, integrity, mitigation, negation, de
 	this.start = start;
 	this.end = end;
 	this.integrity = integrity;
-	this.mitigation = mitigation;
 	this.negation = negation;
 	this.destroyed = destroyed || false;
 	this.highlight = false;
 	this.systems = [];
 	this.damages = [];
+	this.direction;
 
 	this.getTableRow = function(){
 		var tr = document.createElement("tr");
@@ -960,13 +960,13 @@ function Structure(id, parentId, start, end, integrity, mitigation, negation, de
 }
 
 function Primary(id, parentId, integrity, damages, destroyed){
-	Structure.call(this, id, parentId, 0, 360, integrity, 0, 0, destroyed);
+	Structure.call(this, id, parentId, 0, 360, integrity, 0, destroyed);
 	this.name = "Primary";
 	this.display = "Primary";
 	this.damages = damages
 	this.highlight = false;	
 	this.systems = [];
-
+	
 	this.getTableRow = function(){
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");

@@ -83,6 +83,14 @@ body {
 	border: 1px solid white;
 }
 
+.unitTest {
+	width: 210px;
+	border: 1px solid white;
+	display: inline-block;
+}
+.unitTest th, .unitTest td {
+	font-size: 18px;
+}
 
 .fullBorderTable th {
 	border: 1px solid white;
@@ -455,7 +463,6 @@ table, th, tr, td {
 	font-size: 16px;
 	color: white;
 	margin: auto;
-	height: 6px;
 	width: 100%;
 }
 
@@ -466,7 +473,6 @@ table, th, tr, td {
 	bottom: 0;
 	z-index: 1;
 	background-color: green;
-	height: 6px;
 }
 
 .integrityFull {
@@ -476,7 +482,6 @@ table, th, tr, td {
 	bottom: 0;
 	background-color: red;
 	z-index: 0;
-	height: 6px;
 	width: 100%;
 }
 
@@ -502,7 +507,7 @@ table, th, tr, td {
 .outputMask {
 	margin: auto;
 	position: absolute;
-	top: 8px;
+	top: 10px;
 	width: 100%;
 	font-size: 12px;
 	color: white;
@@ -745,12 +750,6 @@ table, th, tr, td {
 	color: green;
 }
 
-.sysIcon {
-	position: absolute;
-	left: 2px;
-	top: -1px;
-}
-
 .boostDiv {
 	z-index: 15;
 	position: absolute;
@@ -852,6 +851,10 @@ table, th, tr, td {
 
 .red {
 	color: red;
+}
+
+.green {
+	color: lightGreen;
 }
 
 .disabled {
@@ -958,7 +961,6 @@ table, th, tr, td {
 }
 
 #plusImpulse, #minusImpulse {
-	border-radius: 5px;
 }
 
 #plusImpulse:hover, #minusImpulse:hover {
@@ -990,6 +992,7 @@ table, th, tr, td {
 	border: 1px solid white;
 	background-color: black;
 	z-index: 6;
+	border-radius: 5px;
 }
 
 .ui.disabled {
