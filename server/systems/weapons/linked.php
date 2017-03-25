@@ -1,8 +1,9 @@
 <?php
 
 class Linked extends Weapon {
-	public $exploSize = 3;
+	public $exploSize = 4;
 	public $projSpeed = 7;
+	public $projSize = 3;
 	public $reload = 1;
 }
 
@@ -16,10 +17,9 @@ class LinkedParticle extends Linked {
 class LinkedParticleGun extends LinkedParticle {
 	public $name = "LinkedParticleGun";
 	public $display = "Linked Particle Gun";
+	public $animColor = "blue";
 	public $accDecay = 300;
 	public $shots = 1;
-	public $animColor = "blue";
-	public $projSize = 2;
 
 	function __construct($id, $fighterId, $parentId, $linked, $minDmg, $maxDmg, $start, $end){
 		$this->id = $id;
@@ -36,10 +36,9 @@ class LinkedParticleGun extends LinkedParticle {
 class LinkedNeutronRepeater extends LinkedParticle {
 	public $name = "LinkedNeutronRepeater";
 	public $display = "Linked Neutron Repeater";
+	public $animColor = "green";
 	public $accDecay = 240;
 	public $shots = 1;
-	public $animColor = "green";
-	public $projSize = 2;
 
 	function __construct($id, $fighterId, $parentId, $linked, $minDmg, $maxDmg, $start, $end){
 		$this->id = $id;

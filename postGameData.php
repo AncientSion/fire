@@ -28,16 +28,20 @@ if (isset($_POST["type"])) {
 		}
 	}
 	else if ($_POST["type"] == "buyInitialFleet") {
-		if ($manager->validateFleetCost($_POST["ships"])){
-			if ($dbManager->processInitialBuy($_POST["userid"], $_POST["gameid"], $_POST["ships"])) {
-				if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], -1, -1, "ready")) {
-					if ($dbManager->gameIsReady($_POST["gameid"])) {
-						if ($dbManager->startGame($_POST["gameid"])) {
-						}
+		$rem = $manager->validateFleetCost($_POST["ships"]);
+		if ($rem >= 0){
+			if ($dbManager->processInitialBuy($_POST["userid"], $_POST["gameid"], $_POST["ships"], $rem, $_POST["ships"][0]["faction"])) {
+				if ($dbManager->gameIsReady($_POST["gameid"])) {
+					if ($dbManager->startGame($_POST["gameid"])) {
+						header("Location: game.php?gameid=".$_POST["gameid"]);
 					}
+				}
+				else {
+					header("Location: lobby.php");
 				}
 			}
 		}
+		else echo "Invalid Fleet";
 	}
 	else if ($_POST["type"] == "deployment"){
 		if (isset($_POST["deployedShips"])){
@@ -53,6 +57,9 @@ if (isset($_POST["type"])) {
 			$dbManager->insertFireOrders($_POST["gameid"], $_POST["gameturn"], $_POST["fireOrders"]);
 		}
 		if (isset($_POST["reinforcements"])){
+			for ($i = 0; $i < sizeof($_POST["reinforcements"]); $i++){
+				$_POST["reinforcements"][$i]["turn"] = $manager->turn;
+			}
 			$dbManager->requestReinforcements($_POST["userid"], $_POST["gameid"], $_POST["reinforcements"]);
 		}
 

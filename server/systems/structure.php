@@ -7,6 +7,8 @@ class Structure {
 	public $negation;
 	public $destroyed = false;
 	public $integrity;
+	public $intBase;
+	public $remaining;
 	public $systems = array();
 	public $damages = array();
 
@@ -18,6 +20,7 @@ class Structure {
 		$this->negation = $negation;
 		$this->destroyed = $destroyed;
 		$this->integrity = $integrity;
+		$this->intBase = pow($integrity, 1.25);
 	}
 
 	public function applyDamage($dmg){
@@ -40,6 +43,12 @@ class Structure {
 		return $dmg;
 	}
 
+	public function setRemainingIntegrity(){
+		if (!$this->destroyed){
+			$this->remaining = $this->getRemainingIntegrity();
+		}
+	}
+
 	public function getRemainingIntegrity(){
 		$remIntegrity = $this->integrity;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
@@ -48,9 +57,13 @@ class Structure {
 		return floor($remIntegrity);
 	}
 
+	public function getCurrentIntegrity(){
+		return $this->remaining;
+	}
+
 	public function getRemainingNegation($fire){
-		return $this->getRemainingIntegrity() / $this->integrity * $this->negation;
-		return round(pow($this->getRemainingIntegrity(), 1) / pow($this->integrity, 1) * $this->negation);
+		//return $this->getRemainingIntegrity() / $this->integrity * $this->negation;
+		return round(pow($this->remaining, 1.25) / $this->intBase * $this->negation);
 	}
 }
 

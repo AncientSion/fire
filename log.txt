@@ -1,27 +1,90 @@
-doAdvanceGameState for game2 from phase 2 to phase 3
+doAdvanceGameState for game1 from phase 2 to phase 3
 handleFiringPhase
-doDamage - NORMAL, weapon: FusionCannon, target: 1
-doDamage - NORMAL, weapon: FusionCannon, target: 1
-doDamage - NORMAL, weapon: FusionCannon, target: 1
-doDamage - NORMAL, weapon: NeutronLaser, target: 2
-crits: 0, boost: 0.75. range: -0.1611
- => totalDmg: 166 over 2 rakes
-doDamage - NORMAL, weapon: NeutronLaser, target: 3
-crits: 0, boost: 0.25. range: -0.1815
- => totalDmg: 118 over 2 rakes
-doDamage - NORMAL, weapon: FusionCannon, target: 3
-doDamage - NORMAL, weapon: MediumRailGun, target: 4
-doDamage - NORMAL, weapon: MediumRailGun, target: 4
-doDamage - NORMAL, weapon: HeavyLaser, target: 4
-crits: 0, boost: 0.5. range: -0.214
- => totalDmg: 326 over 3 rakes
-doDamage - NORMAL, weapon: ParticleBeam, target: 4
-DB deleteUnresolvedFireOrders: 13
-DB deleteUnresolvedFireOrders DONE: 13
+ship #1 setup for Damage, remaining: 4290
+ship #4 setup for Damage, remaining: 425
+ship #3 setup for Damage, remaining: 694
+ship #2 setup for Damage, remaining: 925
+ship #14 setup for Damage, remaining: 1350
+ship #17 setup for Damage, remaining: 800
+ship #9 setup for Damage, remaining: 280
+ship #8 setup for Damage, remaining: 280
+ship #7 setup for Damage, remaining: 800
+ship #6 setup for Damage, remaining: 800
+ship #5 setup for Damage, remaining: 4018
+resolveFireOrder ID 65, shooter: Omega #1 vs Flight #15, w: ParticleBeam #26
+resolveFireOrder ID 64, shooter: Omega #1 vs Flight #15, w: ParticleBeam #25
+resolveFireOrder ID 63, shooter: Omega #1 vs Flight #15, w: ParticleBeam #24
+resolveFireOrder ID 62, shooter: Omega #1 vs Flight #15, w: ParticleBeam #23
+resolveFireOrder ID 61, shooter: Omega #1 vs Flight #15, w: ParticleBeam #22
+resolveFireOrder ID 60, shooter: Omega #1 vs Flight #15, w: ParticleBeam #21
+Overkill on Salvo or Fighter
+resolveFireOrder ID 90, shooter: Haven #8 vs Flight #22, w: IonBolter #2
+resolveFireOrder ID 91, shooter: Haven #8 vs Flight #22, w: IonBolter #3
+resolveFireOrder ID 92, shooter: Haven #8 vs Flight #22, w: IonBolter #5
+resolveFireOrder ID 93, shooter: Haven #8 vs Flight #22, w: IonBolter #7
+resolveFireOrder ID 86, shooter: Haven #9 vs Flight #22, w: IonBolter #2
+Overkill on Salvo or Fighter
+resolveFireOrder ID 87, shooter: Haven #9 vs Flight #22, w: IonBolter #3
+resolveFireOrder ID 88, shooter: Haven #9 vs Flight #22, w: IonBolter #5
+resolveFireOrder ID 89, shooter: Haven #9 vs Flight #22, w: IonBolter #7
+ding
+deleteing: 1 invalid FOs
+DB updateFireOrders: 70
+createAndResolveBallisticMoves, size: 6
+handleAntiBallistics balls:6, intercepts: 3
+resolveFireOrder ID 49, shooter: Demos #6 vs Salvo #18, w: IonBolter #7
+Overkill on Salvo or Fighter
+unit already destroyed
+resolveFireOrder ID 54, shooter: Demos #7 vs Salvo #19, w: IonBolter #7
+Overkill on Salvo or Fighter
+resolveFireOrder ID 35, shooter: Tethys #4 vs Salvo #21, w: ParticleBeam #5
+Overkill on Salvo or Fighter
+DB updateFireOrders: 3
+resolveBallisticActions :6
+resolveBallisticFireOrder ID 94, shooter: Salvo #18 vs Demos #6, w: 0
+resolveBallisticFireOrder ID 95, shooter: Salvo #18 vs Demos #6, w: 1
+resolveBallisticFireOrder ID 96, shooter: Salvo #18 vs Demos #6, w: 2
+hitting main structure
+resolveBallisticFireOrder ID 97, shooter: Salvo #19 vs Demos #7, w: 0
+resolveBallisticFireOrder ID 98, shooter: Salvo #19 vs Demos #7, w: 1
+ => target system IonBolter #7 destroyed. rem: 28, doing: 48, OK for: 20 dmg
+resolveBallisticFireOrder ID 99, shooter: Salvo #19 vs Demos #7, w: 3
+resolveBallisticFireOrder ID 103, shooter: Salvo #20 vs Artemis #2, w: 3
+resolveBallisticFireOrder ID 102, shooter: Salvo #20 vs Artemis #2, w: 2
+resolveBallisticFireOrder ID 101, shooter: Salvo #20 vs Artemis #2, w: 1
+resolveBallisticFireOrder ID 100, shooter: Salvo #20 vs Artemis #2, w: 0
+resolveBallisticFireOrder ID 104, shooter: Salvo #21 vs Tethys #4, w: 0
+resolveBallisticFireOrder ID 105, shooter: Salvo #21 vs Tethys #4, w: 2
+ => target system ParticleBeam #7 destroyed. rem: 5, doing: 34, OK for: 29 dmg
+resolveBallisticFireOrder ID 106, shooter: Salvo #21 vs Tethys #4, w: 3
+hitting main structure
 DB updateFireOrders: 13
-createAndResolveBallisticMoves, size: 0
-resolveBallisticImpacts :0
- => DB insertDamageEntries: 15
+ => DB insertDamageEntries: 32
  => DB insertCritEntries: 4
 startDamageControlPhase
-entry CREATE for player 1 in game 3 phase: -1 and status joined
+time: 0.683 seconds.
+createPlayerStatus
+1
+1
+0
+-1
+joined
+createPlayerStatus
+1
+1
+0
+-1
+joined
+join
+createPlayerStatus
+2
+1
+0
+-1
+joined
+doAdvanceGameState for game1 from phase -1 to phase 0
+handleDeploymentPhase
+initBallistics
+resolveDeployActions
+startShipMovementPhase
+time: 0.029 seconds.

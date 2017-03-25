@@ -27,8 +27,7 @@ window.multi = 1;
 window.anim = false;
 
 window.fire = [];
-window.aShip = false;
-window.aBall = false;
+window.aUnit = false;
 window.mode = false;
 window.icon;
 window.pickedMoves = [];
@@ -47,35 +46,14 @@ function Animate(){
 }
 window.animate = new Animate();
 
-window.frameCounter = 0;
-window.fps = 200;
-window.fpsInterval, window.startTime, window.now, window.then, window.elapsed;
+window.fps = 100;
+window.fpsInterval = 1000 / window.fps;
+window.speedMod = 10;
 
-function initFireAnimation(){
-	window.fpsInterval = 1000 / window.fps;
-	window.then = Date.now();
-	window.startTime = then;
-	fxCtx.clearRect(0, 0, res.x, res.y);
-	ctx.clearRect(0, 0, res.x, res.y);
-	game.drawShips();
-	game.animateFireOrders();
-	game.animateFire = true;
-}
+window.startTime, window.now, window.then, window.elapsed;
 
-function initShipMovement(){
-	window.fpsInterval = 1000 / window.fps;
-	window.then = Date.now();
-	window.startTime = then;
-	game.animateShipMovement();
-}
 
-function initDeployAnimation(deploys){
-	window.fpsInterval = 1000 / window.fps;
-	window.then = Date.now();
-	window.startTime = then;
-	game.animateDeploys(deploys);
-}
-
+window.iterator = 0;
 
 function initiateShip(i){
 
@@ -113,7 +91,8 @@ function initiateShip(i){
 				window.ships[i].primary.systems[j].integrity,
 				window.ships[i].primary.systems[j].powerReq,
 				window.ships[i].primary.systems[j].output,
-				window.ships[i].primary.systems[j].effiency
+				window.ships[i].primary.systems[j].effiency,
+				window.ships[i].primary.systems[j].maxBoost
 			)
 
 			for (var k = 0; k < window.ships[i].primary.systems[j].damages.length; k++){
@@ -188,7 +167,6 @@ function initiateShip(i){
 		else {
 			var struct = new Fighter(
 				window.ships[i].structures[j].id,
-				window.ships[i].structures[j].classname,
 				window.ships[i].structures[j].name,
 				window.ships[i].structures[j].ep,
 				window.ships[i].structures[j].turns,
@@ -242,6 +220,7 @@ function initiateShip(i){
                     window.ships[i].structures[j].systems[k].powerReq,
                     window.ships[i].structures[j].systems[k].rakes,
                     window.ships[i].structures[j].systems[k].effiency,
+                    window.ships[i].structures[j].systems[k].maxBoost,
                     window.ships[i].structures[j].systems[k].fc,
 					window.ships[i].structures[j].systems[k].minDmg,
 					window.ships[i].structures[j].systems[k].maxDmg,
@@ -255,8 +234,7 @@ function initiateShip(i){
 					window.ships[i].structures[j].systems[k].end
 				)
 			}
-			else if (window.ships[i].structures[j].systems[k].type == "Particle" || window.ships[i].structures[j].systems[k].type == "Matter")
-				{
+			else if (window.ships[i].structures[j].systems[k].type == "Particle" || window.ships[i].structures[j].systems[k].type == "Matter" || window.ships[i].structures[j].systems[k].type == "EM"){
 				var system = new window[window.ships[i].structures[j].systems[k].type](
 					window.ships[i].structures[j].systems[k].id,
 					window.ships[i].structures[j].systems[k].parentId,
@@ -270,6 +248,7 @@ function initiateShip(i){
                     window.ships[i].structures[j].systems[k].powerReq,
 					window.ships[i].structures[j].systems[k].output,
                     window.ships[i].structures[j].systems[k].effiency,
+                    window.ships[i].structures[j].systems[k].maxBoost,
                     window.ships[i].structures[j].systems[k].fc,
 					window.ships[i].structures[j].systems[k].minDmg,
 					window.ships[i].structures[j].systems[k].maxDmg,
@@ -292,15 +271,16 @@ function initiateShip(i){
                     window.ships[i].structures[j].systems[k].powerReq,
 					window.ships[i].structures[j].systems[k].output,
                     window.ships[i].structures[j].systems[k].effiency,
+                    window.ships[i].structures[j].systems[k].maxBoost,
 					window.ships[i].structures[j].systems[k].reload,
 					window.ships[i].structures[j].systems[k].start,
 					window.ships[i].structures[j].systems[k].end
 				)
 				system.ammo = new TempAmmo(
-					window.ships[i].structures[j].systems[k].ammo.classname,
+					window.ships[i].structures[j].systems[k].ammo.name,
+					window.ships[i].structures[j].systems[k].ammo.display,
 					window.ships[i].structures[j].systems[k].ammo.minDmg,
 					window.ships[i].structures[j].systems[k].ammo.maxDmg,
-					window.ships[i].structures[j].systems[k].ammo.maxDist,
 					window.ships[i].structures[j].systems[k].ammo.impulse,
 					window.ships[i].structures[j].systems[k].ammo.mass,
 					window.ships[i].structures[j].systems[k].ammo.integrity,
@@ -422,14 +402,14 @@ function refresh(data){
 	console.log(data);
 	setTimeout(function(){
 		window.location.reload(true);
-	}, 500);
+	}, 300);
 }
 
 function goToLobby(){
     console.log("goToLobby");
     setTimeout(function(){
-        window.location = "lobby.php"
-    }, 2000);
+        window.location = "lobby.php";
+    }, 300);
 }
 
 function processEcho(echo){
@@ -442,31 +422,27 @@ function processEcho(echo){
 	else if (echo == "gameStart"){
 		setTimeout(function(){
 			window.location = "game.php?gameid=" + gameid
-		}, 500);
+		}, 300);
 	}
 }
 
 function sharedLaunchFlight(e){
-	game.getShipById(aShip).getSystemById(e.data.systemid).launchFlight();
+	game.getUnitById(aUnit).getSystemById(e.data.systemid).launchFlight();
 }
 
 function redirect(url){
 	console.log("redirect");
 	setTimeout(function(){
 		window.location = "lobby.php"
-	}, 500);
+	}, 300);
 }
 
-
-
 function popup(text){
-    $("#popupText").html(text).show();
-    $("#popupWrapper").show();
+    $("#popupWrapper").show().find("#popupText").html(text);
 }
 
 function instruct(text){
-    $("#instructText").html(text).show();
-    $("#instructWrapper").show();
+    $("#instructWrapper").show().find("#instructText").html(text);
 }
 
 $(document).ready(function(){

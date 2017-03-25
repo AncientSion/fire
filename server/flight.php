@@ -3,8 +3,8 @@
 class Flight extends Mini {
 	public $flight = true;
 	public $shipType = "Flight";
-	public $name = "Flight";
 	public $classname = "Flight";
+	public $name = "Flight";
 	public $faction = false;
 	public $size = 0;
 	public $cost = 0;
@@ -54,9 +54,9 @@ class Flight extends Mini {
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (!$this->structures[$i]->destroyed){
-				$pick = mt_rand(1, $counts[sizeof($counts)-1]); // 9
+				$roll = mt_rand($counts[0], $counts[sizeof($counts)-1]); // 9
 				for ($j = sizeof($counts)-1; $j >= 0; $j--){
-					if ($pick < $counts[$j] && $pick >= $counts[$j-1]){
+					if ($roll <= $counts[$j] && $roll >= $counts[$j-1]){
 						$fires[] = array(
 							"gameid" => $gameid,
 							"turn" =>$turn,
@@ -65,6 +65,7 @@ class Flight extends Mini {
 							"weaponid" => $this->structures[$i]->systems[0]->id,
 							"shots" => $this->structures[$i]->systems[0]->shots
 						);
+						break;
 					}
 				}
 			}
@@ -73,7 +74,7 @@ class Flight extends Mini {
 	}
 
 	public function resolveDogfightFireOrder($fire){
-		Debug::log("resolveDogfightFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".$fire->weaponid);
+		//Debug::log("resolveDogfightFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".$fire->weaponid);
 
 		$fire->dist = 0;
 		$fire->angleIn = mt_rand(0, 359);
@@ -86,12 +87,6 @@ class Flight extends Mini {
 		}
 		$fire->resolved = 1;
 		return;
-	}
-
-	public function getHitDist($fire){
-		$tPos = $this->getCurrentPosition();
-		$sPos = $fire->shooter->getCurrentPosition();
-		return Math::getDist($tPos->x, $tPos->y,  $sPos->x, $sPos->y);
 	}
 
 	public function isDogfight($fire){
@@ -134,10 +129,13 @@ class Fighter extends Structure implements JsonSerializable {
 		}
 	}
 
+	public function getCurrentIntegrity(){
+		return $this->getRemainingIntegrity();
+	}
+
 	public function jsonSerialize(){
 		return array(
         	"id" => $this->id,
-        	"classname" => $this->classname,
         	"name" => $this->name,
         	"faction" => $this->faction,
         	"value" => $this->value,
@@ -158,7 +156,7 @@ class Fighter extends Structure implements JsonSerializable {
 	}
 
 	public function getCritTreshs(){
-		return array(85);
+		return array(75);
 	}
 
 	public function testCriticalsStructureLevel($turn){
@@ -175,28 +173,28 @@ class Fighter extends Structure implements JsonSerializable {
 				$dmg = ceil($dmg / $this->integrity * 100);
 				$crits = $this->getCritEffects();
 				$tresh = $this->getCritTreshs();
-				$mod = mt_rand(0, 35);
-
+				$mod = mt_rand(-10, 15);
+				$val = $dmg + $mod;
+				if ($val <= $tresh[0]){
+					return false;
+				}
+				
 				for ($i = sizeof($tresh)-1; $i >= 0; $i--){
-					if ($dmg + $mod > $tresh[$i]){
-						if (mt_rand(1, 10) > 5){
-							//$id, $gameid, $shipid, $systemid, $turn, $type, $duration, $new){
-							$this->crits[] = new Crit(
-								sizeof($this->crits)+1,
-								-1,
-								$this->parentId,
-								$this->id,
-								$turn,
-								$crits[$i],
-								-1,
-								1
-							);
-							return;
-						}
+					if ($val > $tresh[$i]){
+						//($id, $shipid, $systemid, $turn, $type, $duration, $new){
+						$this->crits[] = new Crit(
+							sizeof($this->crits)+1,
+							$this->parentId,
+							$this->id,
+							$turn,
+							$crits[$i],
+							-1,
+							1
+						);
+						return;
 					}
 				}
 			}
-			return;
 		}
 	}
 
@@ -232,6 +230,9 @@ class Fighter extends Structure implements JsonSerializable {
     }
 
 	public function isDestroyed(){
+		if ($this->destroyed){
+			return true;
+		}
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			if ($this->damages[$i]->destroyed){
 				return true;
@@ -241,19 +242,18 @@ class Fighter extends Structure implements JsonSerializable {
 	}
 
 	public function getSubHitChance(){
-		return ceil($this->mass/2);
+		return ceil($this->mass/1.5);
 	}
 }
 
 class Aurora extends Fighter {
-	public $classname = "Aurora";
 	public $name = "Aurora";
 	public $faction = "Earth Alliance";
 	public $value = 34;
 	public $mass = 38;
-	public $ep = 100;
-	public $integrity = 32;
-	public $negation = array(8, 7, 6);
+	public $ep = 90;
+	public $integrity = 34;
+	public $negation = array(8, 6, 6);
 	public $turns = 2;
 
 	function __construct($id, $parentId){
@@ -266,33 +266,33 @@ class Aurora extends Fighter {
 }
 
 class Thunderbolt extends Fighter {
-	public $classname = "Thunderbolt";
 	public $name = "Thunderbolt";
 	public $faction = "Earth Alliance";
 	public $value = 40;
 	public $mass = 42;
-	public $ep = 105;
-	public $integrity = 36;
-	public $negation = array(9, 8, 7);
+	public $ep = 100;
+	public $integrity = 38;
+	public $negation = array(10, 8, 8);
 	public $turns = 2;
+
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
 	}
 
 	public function addSystems(){
-		$this->systems[] = new ParticlePulsar(sizeof($this->systems), $this->id, $this->parentId, 13, 17, 330, 30);
+		//$id, $fighterId, $parentId, $linked, $minDmg, $maxDmg, $start, $end){
+		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 2, 14, 17, 330, 30);
 	}
 }
 
 class Nial extends Fighter {
-	public $classname = "Nial";
 	public $name = "Nial";
 	public $faction = "Minbari Federation";
 	public $value = 58;
 	public $mass = 36;
 	public $ep = 120;
-	public $integrity = 40;
+	public $integrity = 42;
 	public $negation = array(11, 10, 8);
 	public $turns = 3;
 
@@ -306,13 +306,12 @@ class Nial extends Fighter {
 }
 
 class Sentri extends Fighter {
-	public $classname = "Sentri";
 	public $name = "Sentri";
 	public $faction = "Centauri Republic";
 	public $value = 28;
 	public $mass = 32;
 	public $ep = 110;
-	public $integrity = 36;
+	public $integrity = 32;
 	public $negation = array(8, 7, 7);
 	public $turns = 2;
 
@@ -321,7 +320,7 @@ class Sentri extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 2, 11, 15, 330, 30);
+		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 2, 12, 15, 330, 30);
 	}
 }
 ?>

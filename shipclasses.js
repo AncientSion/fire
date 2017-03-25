@@ -1,6 +1,6 @@
-function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
+function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
 	this.id = id;
-	this.classname = classname;
+	this.name = name;
 	this.shipType = shipType;
 	this.x = x;
 	this.y = y;
@@ -12,6 +12,7 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 	this.size = size;
 	this.userid = userid;
 	this.shipType = shipType;
+	this.baseHitChance = Math.ceil(Math.pow(this.mass, 0.55));
 	this.friendly;
 	this.deployed;
 	this.available = available;
@@ -19,6 +20,7 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 	this.ship = true;
 	this.flight = false;
 	this.highlight = false;
+	this.destroyed = false;
 
 	this.img;
 	this.turns = [];
@@ -41,30 +43,28 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 
 	this.draw = function(){
 		if (this.deployed){
-			ctx.save();
-			ctx.translate(this.x + cam.o.x, this.y + cam.o.y);
 			this.drawSelf();
 			this.drawIndicator();
 			//this.drawCenterPoint();
-			ctx.restore();
 		}
 	}
 
-	this.drawSelf = function(){	
-		var size = this.size*cam.z;
-		ctx.rotate((this.facing) * (Math.PI/180));
-		ctx.drawImage(this.img, -size/2, -size/2, size, size);
+	this.drawSelf = function(){
+		var a = this.facing * Math.PI/180;
+		ctx.save();
+		ctx.translate(this.x, this.y)
+		ctx.rotate(a);
+		ctx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
+		ctx.restore();
 	}
 
 	this.drawIndicator = function(){
-		var size = this.size*cam.z;
-
 		ctx.beginPath();
-		ctx.arc(0, 0, size/2, 0, 2*Math.PI, false);
+		ctx.arc(this.x, this.y, this.size/2, 0, 2*Math.PI, false);
 		ctx.closePath();
 
 		ctx.lineWidth = 2;
-		ctx.globalAlpha = 0.7;
+		ctx.globalAlpha = 0.8;
 		if (this.friendly){ctx.strokeStyle = "green";}
 		else {ctx.strokeStyle = "red";}
 		ctx.stroke();
@@ -139,16 +139,13 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 
 	this.getFacing = function(){
 		var angle = 0;
-
 		for (var i = 0; i < this.actions.length; i++){
 			if (this.actions[i].resolved == 1){
 				angle += this.actions[i].a;
 			}
 		}
-
 		return angle;
 	}
-
 
 	this.getControlArea = function(){
 		if (this.actions.length){
@@ -160,22 +157,39 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 
 	this.canDeployHere = function(pos){
 		//console.log(pos);
-		if (pos.x >= game.deployArea.x && pos.x <= game.deployArea.x + game.deployArea.w){
+		var valid = false;
+		if (game.deployArea.x > 0){
+			if (pos.x >= game.deployArea.x && pos.x <= game.deployArea.x + game.deployArea.w){
+				if (pos.y >= game.deployArea.y && pos.y <= game.deployArea.y + game.deployArea.h){
+					valid = true;
+				}
+			}
+		}
+		else if (pos.x <= game.deployArea.x && pos.x >= game.deployArea.x + game.deployArea.w){
 			if (pos.y >= game.deployArea.y && pos.y <= game.deployArea.y + game.deployArea.h){
-				for (var i = 0; i < game.ships.length; i++){
-					if (game.ships[i].id != this.id){
-						var area = game.ships[i].getControlArea();
-						if (area){
-							var dist = getDistance(pos, area.pos);
-							if (dist <= area.s){
-								popup("The selected entry point is subject to gravitic distortions and cant be chosen");
-								return false;
-							}
+				valid = true;
+			}
+		}
+		else if (pos.x > game.deployArea.x && pos.x < game.deployArea.x + game.deployArea.w){
+			if (pos.y > game.deployArea.y && pos.y < game.deployArea.y + game.deployArea.h){
+				valid = true;
+			}
+		}
+
+		if (valid){
+			for (var i = 0; i < game.ships.length; i++){
+				if (game.ships[i].id != this.id){
+					var area = game.ships[i].getControlArea();
+					if (area){
+						var dist = getDistance(pos, area.pos);
+						if (dist <= area.s){
+							popup("The selected entry point is subject to gravitic distortions and cant be chosen");
+							return false;
 						}
 					}
 				}
-				return true;
 			}
+			return true;
 		}
 		return false;
 	}
@@ -184,7 +198,7 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		if (this.actions.length){
 			this.actions[0].x = pos.x;
 			this.actions[0].y = pos.y;
-			this.unselect();
+			this.select();
 		}
 		else {
 			var facing = 0;
@@ -232,11 +246,11 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 	}
 	
 	this.getOffsetPos = function(){
-		return {x: this.actions[this.actions.length-1].x + cam.o.x, y: this.actions[this.actions.length-1].y + cam.o.y};
+		return {x: this.actions[this.actions.length-1].x, y: this.actions[this.actions.length-1].y};
 	}
 	
 	this.getOnsetPos = function(){
-		return {x: this.actions[this.actions.length-1].x - cam.o.x, y: this.actions[this.actions.length-1].y - cam.o.y};
+		return {x: this.actions[this.actions.length-1].x, y: this.actions[this.actions.length-1].y};
 	}
 
 	this.setPosition = function(){
@@ -285,9 +299,23 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 	}
 	
 	this.create = function(){
-		this.img = window.shipImages[this.classname.toLowerCase()];
+		this.img = window.shipImages[this.name.toLowerCase()];
 		this.setPosition();
 		this.setFacing()
+	}
+
+	this.isDestroyed = function(){
+		if (this.primary.destroyed){
+			return true;
+		}
+		return false;
+	}
+
+	this.isDestroyedThisTurn = function(){
+		if (this.primary.destroyed && this.primary.damages[this.primary.damages.length-1].turn == game.turn){
+			return true;
+		}
+		return false;
 	}
 
 	this.hasHangarSelected = function(){		
@@ -378,6 +406,9 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 	
 	this.highlightAllSelectedWeapons = function(){
 		fxCtx.clearRect(0, 0, res.x, res.y);
+		fxCtx.translate(cam.o.x, cam.o.y);
+		fxCtx.scale(cam.z, cam.z);
+
 		$(fxCanvas).css("opacity", 0.2);
 		var angle = this.getPlannedFacingToMove(this.actions.length-1);
 		var pos = this.getOffsetPos();
@@ -391,10 +422,14 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 				}
 			}
 		}
+		fxCtx.setTransform(1,0,0,1,0,0);
 	}
 
 	this.drawStructureAxis = function(struct){
 		fxCtx.clearRect(0, 0, res.x, res.y);
+		fxCtx.translate(cam.o.x, cam.o.y);
+		fxCtx.scale(cam.z, cam.z);
+
 		$(fxCanvas).css("opacity", 1);
 		var angle = this.getPlannedFacingToMove(this.actions.length-1);
 		var pos = this.getOffsetPos();
@@ -414,11 +449,15 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		fxCtx.globalAlpha = 1;
 		fxCtx.strokeStyle = "black";
 		fxCtx.stroke();
-	}
 
+		fxCtx.setTransform(1,0,0,1,0,0);
+	}
 
 	this.showHangarLaunchAxis = function(hangar){
 		fxCtx.clearRect(0, 0, res.x, res.y);
+		fxCtx.translate(cam.o.x, cam.o.y);
+		fxCtx.scale(cam.z, cam.z);
+
 		$(fxCanvas).css("opacity", 1);
 		var angle = this.getPlannedFacingToMove(this.actions.length-1);
 		var pos = this.getOffsetPos();
@@ -438,6 +477,8 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		fxCtx.globalAlpha = 1;
 		fxCtx.strokeStyle = "black";
 		fxCtx.stroke();
+
+		fxCtx.setTransform(1,0,0,1,0,0);
 	}
 	
 	this.weaponHighlight = function(weapon){
@@ -483,7 +524,7 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 
 	this.getTotalImpulse = function(){	
 		var base = this.getBaseImpulse();
-		var change = this.getImpulseChangeConst();
+		var change = this.getImpulseStep();
 		
 		for (var i = 0; i < this.actions.length; i++){
 			if (this.actions[i].type == "speedChange"){
@@ -499,8 +540,9 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		return base;
 	}
 
-	this.getImpulseChangeConst = function(){
+	this.getImpulseStep = function(){
 		return 15;
+		Math.floor(this.getBaseImpulse() / 10);
 	}
 	
 	this.getImpulseMod = function(){
@@ -508,7 +550,7 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 	}
 	
 	this.getTurnCost = function(){
-		if (this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0){
+		if (this.actions.length && (this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0)){
 			return 0;
 		}
 		else return Math.ceil((Math.pow(this.mass, 1.56) / 10000) *  this.getImpulseMod());
@@ -545,8 +587,9 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 
 	}
 	
-	this.drawMoveRange = function(){
-		center = new Point(this.actions[this.actions.length-1].x + cam.o.x, this.actions[this.actions.length-1].y + cam.o.y);
+	this.drawMoveRange = function(){	
+
+		center = new Point(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y);
 		
 		var rem = this.getRemainingImpulse();
 		var angle = this.getPlannedFacingToMove(this.actions.length-1);
@@ -592,6 +635,7 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		moveCtx.fillStyle = "white";
 		moveCtx.fill();
 		moveCtx.globalAlpha = 1;
+
 	}
 
 	this.getEP = function(){
@@ -636,10 +680,10 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 
 	this.getPlannedPosition = function(){
 		if (this.actions.length){
-			return new Point(this.actions[this.actions.length-1].x + cam.o.x, this.actions[this.actions.length-1].y + cam.o.y);
+			return new Point(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y);
 		}
 		else {
-			return new Point(this.x + cam.o.x, this.y + cam.o.y);
+			return new Point(this.x, this.y);
 		}
 	}
 		
@@ -725,15 +769,31 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		}
 	}
 	
-	this.doShortenTurn = function(){
-		for (var i = 0; i < this.turns.length; i++){
-			this.turns[i].costmod += 0.2;
+	this.doShortenTurn = function(max){
+		if (max && !this.canDoAnotherTurn()){
+			while (this.canShortenTurn()){
+				for (var i = 0; i < this.turns.length; i++){
+					this.turns[i].costmod += 0.2;
+				}
+			}
+		}
+		else if (max){
+			while (this.canDoAnotherTurn()){
+				for (var i = 0; i < this.turns.length; i++){
+					this.turns[i].costmod += 0.2;
+				}
+			}
+		}
+		else {
+			for (var i = 0; i < this.turns.length; i++){
+				this.turns[i].costmod += 0.2;
+			}
 		}
 		this.drawDelayEstimator();
 		this.updateTurnElements();
 	}
 	
-	this.doUndoShortenTurn = function(){
+	this.doUndoShortenTurn = function(max){
 		for (var i = 0; i < this.turns.length; i++){
 			if (this.turns[i].costmod > 1){
 				this.turns[i].costmod -= 0.2;
@@ -744,17 +804,19 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 	}
 
 	this.updateTurnElements = function(){
-		var self = this;
 		var canShorten = this.canShortenTurn();
 		var canUndoShorten = this.canUndoShortenTurn();
+		var canDoAnotherTurn = this.canDoAnotherTurn();
+		var cost = Math.floor(this.turns[0].cost * this.turns[0].costmod);
+		var delay = Math.floor(this.turns[0].delay / this.turns[0].costmod);
 
 		$(".turnEle").each(function(i){
-			$(this).find("#epCost").html(Math.floor(self.turns[i].cost * self.turns[i].costmod) + " EP")
-			$(this).find("#turnDelay").html(Math.floor(self.turns[i].delay / self.turns[i].costmod) + "px")
+			$(this).find("#epCost").html(cost +  " EP");
+			$(this).find("#turnDelay").html(delay + "px");
 
-			if (self.turns[i].cost * (self.turns[i].costmod + 0.2) + self.getTurnCost() > self.getRemainingEP()){
-				$(this).find("#epCost").removeClass("green").addClass("red");
-			} else $(this).find("#epCost").removeClass("red").addClass("green");
+			if (canDoAnotherTurn){
+				$(this).find("#epCost").removeClass("red").addClass("green");
+			} else $(this).find("#epCost").removeClass("green").addClass("red");
 
 			if (!canShorten && !canUndoShorten){
 				$(this).find(".shortenTurn").hide(); return;
@@ -770,13 +832,21 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		})
 	}
 
+	this.canDoAnotherTurn = function(){
+		var i = 0;
+		if (this.turns[i].cost * (this.turns[i].costmod + 0.2) + this.getTurnCost() < this.getRemainingEP()){
+			return true;
+		}
+		else return false;
+	}
+
 	this.doIncreaseImpulse = function(){
 		var shipPos = this.getPlannedPosition();
 		if (this.actions.length && this.actions[this.actions.length-1].type == "speedChange" && this.actions[this.actions.length-1].dist == -1){
 			this.actions.splice(this.actions.length-1, 1);
 		}
 		else {
-			var action = new Move("speedChange", 1, shipPos.x - cam.o.x, shipPos.y - cam.o.y, false, 0, this.getImpulseChangeCost());
+			var action = new Move("speedChange", 1, shipPos.x, shipPos.y, false, 0, this.getImpulseChangeCost());
 			this.actions.push(action);
 		}
 		this.unsetMoveMode();
@@ -789,11 +859,46 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 			this.actions.splice(this.actions.length-1, 1);
 		}
 		else {
-			var action = new Move("speedChange", -1, shipPos.x - cam.o.x, shipPos.y - cam.o.y, false, 0, this.getImpulseChangeCost());
+			var action = new Move("speedChange", -1, shipPos.x, shipPos.y, false, 0, this.getImpulseChangeCost());
 			this.actions.push(action);
 		}
 		this.unsetMoveMode();
 		this.setMoveMode();
+	}
+	
+	this.drawMovementPlan = function(){
+		planCtx.strokeStyle = "#00ea00";
+		for (var i = 0; i < this.actions.length; i++){
+			if (this.actions[i].turn == game.turn){
+				var action = this.actions[i];
+				planCtx.beginPath();
+				
+				if (i == 0){
+					var p = this.getBaseOffsetPos();
+					planCtx.moveTo(p.x, p.y);
+				}
+				else {
+					planCtx.moveTo(this.actions[i-1].x, this.actions[i-1].y);
+				}
+					
+							
+				if (action.type == "move"){
+					planCtx.lineTo(action.x, action.y);
+					planCtx.closePath();
+					planCtx.stroke();
+				}
+				else if (action.type == "turn"){
+					var angle = this.getPlannedFacingToMove(i);
+					
+					planCtx.beginPath();
+					planCtx.arc(action.x, action.y, 5, 0, 2*Math.PI, false);
+					planCtx.stroke();
+				}
+				
+				planCtx.closePath();
+			}
+		}		
+		planCtx.strokeStyle = "black";			
 	}
 
 	this.drawMovementUI = function(){
@@ -803,6 +908,43 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		if (this.canTurn()){
 			this.drawTurnUI();
 			this.updateDiv();
+		}
+	}
+
+	this.drawVectorMovementUI = function(){
+		var center = this.getPlannedPosition();
+		var angle = this.getPlannedFacingToMove(this.actions.length-1);
+		var rem = this.getRemainingImpulse();
+		var delay = this.getRemainingDelay();
+		var ele;
+
+		if (rem > 0){
+			ele = document.getElementById("maxVector");
+			var p = getPointInDirection(rem + 80, angle, center.x, center.y);
+			var left = p.x * cam.z  + cam.o.x - $(ele).width()/2;
+			var top = p.y * cam.z  + cam.o.y - $(ele).height()/2;
+
+			$(ele)
+				.data("shipid", this.id)
+				.html("<div style='margin-left: 4px; margin-top: 7px'>"+rem+"<div>")
+				.css("left", left)
+				.css("top", top)
+				.removeClass("disabled")
+		}
+		if (delay > 0){
+			if (rem >= delay){
+				ele = document.getElementById("maxTurnVector");
+				var p = getPointInDirection(rem + 40, angle, center.x, center.y);
+				var left = p.x  * cam.z  + cam.o.x - $(ele).width()/2;
+				var top = p.y * cam.z  + cam.o.y - $(ele).height()/2;
+
+				$(ele)
+					.data("shipid", this.id)
+					.html("<div style='margin-left: 4px; margin-top: 7px'>"+delay+"<div>")
+					.css("left", left)
+					.css("top", top)
+					.removeClass("disabled")
+			}
 		}
 	}
 
@@ -823,45 +965,8 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		moveCtx.strokeStyle = "black";
 	}
 
-	this.drawVectorMovementUI = function(){
-		var center = this.getPlannedPosition();
-		var angle = this.getPlannedFacingToMove(this.actions.length-1);
-		var rem = this.getRemainingImpulse();
-		var delay = this.getRemainingDelay();
-		var ele;
-
-		if (rem > 0){
-			ele = document.getElementById("maxVector");
-			var p = getPointInDirection(rem + 80, angle, center.x, center.y);
-			var left = p.x - $(ele).width()/2;
-			var top = p.y - $(ele).height()/2;
-
-			$(ele)
-				.data("shipid", this.id)
-				.html("<div style='margin-left: 4px; margin-top: 7px'>"+rem+"<div>")
-				.css("left", left)
-				.css("top", top)
-				.removeClass("disabled")
-		}
-		if (delay > 0){
-			if (rem >= delay){
-				ele = document.getElementById("maxTurnVector");
-				var p = getPointInDirection(rem + 40, angle, center.x, center.y);
-				var left = p.x - $(ele).width()/2;
-				var top = p.y - $(ele).height()/2;
-
-				$(ele)
-					.data("shipid", this.id)
-					.html("<div style='margin-left: 4px; margin-top: 7px'>"+delay+"<div>")
-					.css("left", left)
-					.css("top", top)
-					.removeClass("disabled")
-			}
-		}
-	}
-
 	this.getTurnAngle = function(){
-		return 30;
+		return 25;
 	}
 
 	this.getTurnWidth = function(){
@@ -875,7 +980,7 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		var delay = this.getTurnDelay();
 		
 		if (this.actions.length){
-			center = new Point(this.actions[this.actions.length-1].x + cam.o.x, this.actions[this.actions.length-1].y + cam.o.y);
+			center = new Point(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y);
 		}
 		else center = this.getBaseOffsetPos();
 
@@ -899,7 +1004,7 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 							}
 				this.turns.push(turn)
 
-				var p = getPointInDirection(this.size*1.5, newAngle, center.x, center.y);
+				var p = getPointInDirection(this.size*1.5*cam.z, newAngle, center.x, center.y);
 
 				moveCtx.beginPath();
 				moveCtx.moveTo(center.x, center.y);
@@ -916,9 +1021,12 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 				$(turnEle).find("#epCost").html(Math.floor(cost * turn.costmod) + " EP");
 				$(turnEle).find("#turnDelay").html(Math.floor(delay / turn.costmod) + "px");
 
-				var p1 = getPointInDirection(150, addToDirection(newAngle, modAngle), center.x, center.y);
-				var left = p1.x - $(turnEle).width()/2;
-				var top = p1.y - $(turnEle).height()/2;
+				var p1 = getPointInDirection(150/cam.z, addToDirection(newAngle, modAngle), center.x, center.y);
+				
+				//	return { x: (this.x - cam.o.x) / cam.z, y: (this.y - cam.o.y) / cam.z}
+
+				var left = p1.x * cam.z + cam.o.x - $(turnEle).width()/2;
+				var top = p1.y * cam.z + cam.o.y - $(turnEle).height()/2;
 
 				$(turnEle).find(".doTurn")
 					.data("a", modAngle)
@@ -927,9 +1035,9 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 				$(turnEle)
 					.css("left", left)
 					.css("top", top)
-					.removeClass("disabled")}
+					.removeClass("disabled")
+			}
 		}
-
 	
 		this.drawDelayEstimator();
 		this.updateTurnElements();
@@ -937,13 +1045,15 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 	}
 
 	this.drawDelayEstimator = function(){
-		mouseCtx.clearRect(0, 0, res.x, res.y);
 		var delay = this.turns[0].delay / this.turns[0].costmod;
 		if (delay){
+			mouseCtx.clearRect(0, 0, res.x, res.y);
+			mouseCtx.translate(cam.o.x, cam.o.y);
+			mouseCtx.scale(cam.z, cam.z);
 			var center;
 			var plannedAngle = this.getPlannedFacingToMove(this.actions.length-1);
 			if (this.actions.length){
-				center = new Point(this.actions[this.actions.length-1].x + cam.o.x, this.actions[this.actions.length-1].y + cam.o.y);
+				center = new Point(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y);
 			}
 			else center = this.getBaseOffsetPos();
 
@@ -960,17 +1070,19 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 			mouseCtx.globalCompositeOperation = "destination-out";
 			mouseCtx.fill();
 			mouseCtx.globalCompositeOperation = "source-over";
+			mouseCtx.setTransform(1,0,0,1,0,0);
 		}
 	}
 
-	this.drawImpulseUI = function(){
-		var center = {x: this.x + cam.o.x, y: this.y + cam.o.y};
-		var w = $("#impulseGUI").width();
-		var h = $("#impulseGUI").height();
-		var gui = $("#impulseGUI");
-		var p = getPointInDirection(this.size/2 + 150, this.facing + 180, center.x, center.y);
 
-		$(gui).css("left", p.x - w/2).css("top", p.y - h/2).removeClass("disabled");
+	this.drawImpulseUI = function(){
+		var center = {x: this.x, y: this.y};
+		var gui = $("#impulseGUI");
+		var w = $(gui).width();
+		var h = $(gui).height();
+		var p = getPointInDirection((this.size/2 + w)/cam.z, this.facing + 180, center.x, center.y);
+
+		$(gui).css("left", p.x * cam.z + cam.o.x - w/2).css("top", p.y * cam.z + cam.o.y - h/2).removeClass("disabled");
 		$(gui).find("#enginePower").html(this.getRemainingEP() + " / " + this.getEP());
 		$(gui).find("#impulse").html(this.getRemainingImpulse() + " / " + this.getTotalImpulse());
 		$(gui).find("#remTurnDelay").html(this.getRemainingDelay());
@@ -982,27 +1094,34 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 
 		if (this.canIncreaseImpulse()){
 			var pPlus = getPointInDirection(50, this.facing +90, p1.x, p1.y);
-			$("#plusImpulse").css("left", pPlus.x - 15).css("top", pPlus.y - 15).removeClass("disabled");
+			var ox = pPlus.x * cam.z + cam.o.x - 15;
+			var oy = pPlus.y * cam.z + cam.o.y - 15;
+			$("#plusImpulse").css("left", ox).css("top", oy).removeClass("disabled");
 		} else $("#plusImpulse").addClass("disabled");
 
 		if (this.canDecreaseImpulse()){
 			var mMinus = getPointInDirection(50, this.facing -90, p1.x, p1.y);
-			$("#minusImpulse").css("left", mMinus.x - 15).css("top", mMinus.y - 15).removeClass("disabled");
+			var ox = mMinus.x * cam.z + cam.o.x - 15;
+			var oy = mMinus.y * cam.z + cam.o.y - 15;
+			$("#minusImpulse").css("left", ox).css("top", oy).removeClass("disabled");
 		} else $("#minusImpulse").addClass("disabled");
 
 		if (this.canUndoLastAction()){
-			$("#undoLastAction").css("left", p1.x - 15).css("top", p1.y - 15).removeClass("disabled");
+			var ox = p1.x * cam.z + cam.o.x - 15;
+			var oy = p1.y * cam.z + cam.o.y - 15;
+			$("#undoLastAction").css("left", ox).css("top", oy).removeClass("disabled");
 		} else $("#undoLastAction").addClass("disabled");
 	}
+
 	
 	this.issueMove = function(pos, dist){
 		if (this.actions[this.actions.length-1].type == "move" && this.actions[this.actions.length-1].turn == game.turn){
 			this.actions[this.actions.length-1].dist+= dist;	
-			this.actions[this.actions.length-1].x = pos.x - cam.o.x;
-			this.actions[this.actions.length-1].y = pos.y - cam.o.y;
+			this.actions[this.actions.length-1].x = pos.x;
+			this.actions[this.actions.length-1].y = pos.y;
 		}
 		else {
-			this.actions.push(new Move("move", dist, pos.x - cam.o.x, pos.y - cam.o.y, 0, 0));	
+			this.actions.push(new Move("move", dist, pos.x, pos.y, 0, 0));	
 		}
 		this.turns = [];
 		this.unsetMoveMode();
@@ -1066,7 +1185,7 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 				var turns = 0;
 				for (var i = this.actions.length-1; i >= 0; i--){
 					if (this.actions[i].turn != game.turn){
-						return false;
+						continue;
 					}
 					else  if (this.actions[i].type == "turn"){
 						turns++
@@ -1089,6 +1208,8 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 	this.issueTurn = function(a){
 		if (this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0){
 			this.actions[0].a += a;
+			this.facing += a;
+			game.draw();
 		}
 		else {
 			for (var i = 0; i < this.turns.length; i++){
@@ -1097,8 +1218,8 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 						new Move(
 							"turn",
 							0,
-							this.turns[i].x - cam.o.x,
-							this.turns[i].y - cam.o.y,
+							this.turns[i].x,
+							this.turns[i].y,
 							this.turns[i].a,
 							this.turns[i].delay,
 							this.turns[i].cost,
@@ -1114,7 +1235,7 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 	}
 
 	this.getBaseHitChance = function(){
-		return Math.ceil(Math.pow(this.mass, 0.5));
+		return this.baseHitChance;
 	}
 
 	this.getHitSectionFromAngle = function(a){
@@ -1144,8 +1265,7 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		return Math.ceil(sub);
 	}
 	
-
-	this.createDiv = function(){
+	this.createBaseDiv = function(){
 		var div = document.createElement("div");
 			div.className = "shipDiv";
 			$(div).data("shipId", this.id);
@@ -1158,21 +1278,24 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 			
 		var tr = document.createElement("tr");
 		var th = document.createElement("th");
-			th.innerHTML = this.classname.toUpperCase() + " #" + this.id;
+			th.innerHTML = this.name.toUpperCase() + " #" + this.id;
 			th.colSpan = 2; th.style.textAlign = "center";
 			tr.appendChild(th); table.appendChild(tr);
 
+		/*
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
 			td.innerHTML = "Position: "; tr.appendChild(td);
 		var td = document.createElement("td"); td.className = "pos";
 			td.innerHTML = this.x + " / " + this.y; tr.appendChild(td); table.appendChild(tr);
-			
+		
+
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
 			td.innerHTML = "Mass: "; tr.appendChild(td);
 		var td = document.createElement("td");
 			td.innerHTML = this.mass; tr.appendChild(td); table.appendChild(tr);
+		*/
 
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
@@ -1197,13 +1320,23 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 			td.innerHTML = "Impulse Change: "; tr.appendChild(td);
 		var td = document.createElement("td"); td.className = "change";
 			td.innerHTML = this.getImpulseChangeCost() + " EP"; tr.appendChild(td); table.appendChild(tr);
+
+		var tr = document.createElement("tr");
+		var td = document.createElement("td");
+			td.innerHTML = "Turning: "; tr.appendChild(td);
+		var td = document.createElement("td"); td.className = "turn";
+			td.innerHTML = this.getTurnCost() + " EP"; tr.appendChild(td); table.appendChild(tr);
 				
 		subDiv.appendChild(table);
 		div.appendChild(subDiv);
+		div = this.extendDiv(div);
 
+	}
+
+	this.extendDiv = function(div){
 		var iconContainer = document.createElement("div");
 			iconContainer.className = "iconContainer";
-		var img =  window.shipImages[this.classname.toLowerCase()].cloneNode(true); img.className = "rotate270size100";
+		var img =  window.shipImages[this.name.toLowerCase()].cloneNode(true); img.className = "rotate270size90";
 			iconContainer.appendChild(img);
 		div.appendChild(iconContainer);
 
@@ -1221,12 +1354,16 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		div.appendChild(structContainer);
 
 
-		var noFront = true	
+		var noFront = true;
+		var noAft = true;
 
 		for (var i = 0; i < this.structures.length; i++){
 			this.structures[i].direction = this.structures[i].getDirection();
 			if (this.structures[i].direction == 0 || this.structures[i].direction == 360){
 				noFront = false;
+			}
+			else if (this.structures[i].direction == 180){
+				noAft = false;
 			}
 		}
 
@@ -1251,6 +1388,15 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 
 				var td = this.primary.systems[i].getTableData(false);
 					td = this.attachEvent(td);
+
+				var boostDiv = this.primary.systems[i].getBoostDiv();
+				if (boostDiv){td.appendChild(boostDiv)};
+
+				var powerDiv = this.primary.systems[i].getPowerDiv();
+				if (powerDiv){
+					powerDiv.style.left = 31 + "px"
+					td.appendChild(powerDiv);
+				}
 				systems++;
 				tr.appendChild(td);
 
@@ -1264,7 +1410,10 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		var offsetX = 0;
 		var offsetY = 0;
 		if (noFront){
-			offsetY -= 20;
+			offsetY -= 70;
+		}
+		else if (noAft){
+			offsetY -= 40;
 		}
 
 		primaryDiv.appendChild(primaryTable);
@@ -1296,7 +1445,7 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 
 			if (a == 0 || a == 180 || a == 360){ // front or aft
 				if (a == 180){
-					max = 6;
+					max = Math.min(6, this.structures[i].systems.length);
 				}
 				else if (this.structures[i].systems.length % 4 == 0){
 					max = 4;
@@ -1315,40 +1464,51 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 
 				if (this.structures[i].systems.length <= 3){
 					max = 1;
-					structTable.childNodes[0].style.height = "60px";
 				}
 				else {
-					max = 2;
-					structTable.childNodes[0].style.height = "40px";
+					if (this.structures[i].systems.length <= 4 && noFront){
+						max = 1;
+					}
+					else {
+						max = 2;
+					}
 				}
 			}
 
-			var systems = this.structures[i].systems;
+			if (max == 1){
+				structTable.childNodes[0].childNodes[0].style.height = "62px";
+			}
+			else if (max == 2){
+				structTable.childNodes[0].childNodes[0].style.height = "42px";
+			}
+			else {
+				structTable.childNodes[0].childNodes[0].style.height = "23px";
+			}
 
-			/*	this.fireOrders.sort(function(a, b){
-					return (
-						a.shooter.flight - b.shooter.flight ||
-						a.targetid - b.targetid ||
-						a.weapon.priority - b.weapon.priority ||
-						a.shooterid - b.shooterid
-					)
-				});
-			*/
-			var toDo = systems.length
-			for (var j = 0; j < toDo; j++){
+
+			for (var j = 0; j < this.structures[i].systems.length; j++){
 				if (col == 0){
 					tr = document.createElement("tr");
-					if (toDo - j != max){
-						if ((toDo - j) *2 == max){
+					if (this.structures[i].systems.length - j != max){
+						if ((this.structures[i].systems.length - j) *2 == max){
 							colWidth = 2;
 						}
 					}
 				}
 
-				var td = systems[j].getTableData(false);
+				var td = this.structures[i].systems[j].getTableData(false);
 					td.colSpan = colWidth;
 					td = this.attachEvent(td);
-				var boostDiv = systems[j].getBoostDiv();
+
+				var boostDiv = this.structures[i].systems[j].getBoostDiv();
+				if (boostDiv){td.appendChild(boostDiv)};
+
+				var powerDiv = this.structures[i].systems[j].getPowerDiv();
+				if (powerDiv){
+					powerDiv.style.left = colWidth * 31 + "px"
+					td.appendChild(powerDiv);
+				}
+
 				col++;
 				tr.appendChild(td);
 
@@ -1360,38 +1520,53 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 					}
 					col = 0;
 				}
-				if (j == systems.length-1){
+				if (j == this.structures[i].systems.length-1){
 					structTable.appendChild(tr);
 					if (maxRow < col){
 						maxRow = col;
 					}
 					col = 0;
-					$(structTable).find(".struct").attr("colSpan", maxRow);
+					$(structTable).find(".struct").attr("colSpan", maxRow);			
 				}
-
 			}
 
 			structDiv.appendChild(structTable);
 			structContainer.appendChild(structDiv);
 
-			var pos = getPointInDirection(135, a-90, conWidth/2, conHeight/2-40);
-			var offsetX = 0;			
-			var offsetY = 0;
+			var offsetX = 0;
+			var offsetY = -10;
+
+
+			if (a == 90 || a == 270){
+				if (max == 2){
+					offsetX += 25;
+				}
+				else if (max == 1){
+					offsetX += 30;
+				}
+			}
+			else if (a == 60 || a == 300){
+					offsetX += 10;
+			}
+			
+			var pos = getPointInDirection(135 - offsetX, a-90, conWidth/2, conHeight/2-40);
 			var w = $(structDiv).width();
 			var h = $(structDiv).height();
 
 			if (noFront){
-				offsetY = -20;
+				offsetY -= 60;
 			}
 
 			if (a == 0 || a == 360){
-				offsetY = -10;
+			}
+			else if (noAft){
+				offsetY -= 60;
 			}
 			else if (a == 180){
-				offsetY = -10;
+				offsetY += 40;
 			}
-			else {
-				offsetY = -40
+			else if (!noFront && !noAft){
+				offsetY -= 30;
 			}
 
 			
@@ -1402,25 +1577,27 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 				.css("top", pos.y + offsetY)
 		}
 
-		$(div).addClass("disabled");
+		var width = 0;
+		var height = 0;
+		$(div).find(".structDiv").each(function(){
+			var x = $(this).position().left + $(this).width();
+			if (x > width){
+				width = x;
+			}
+			var y = $(this).position().top + $(this).height();
+			if (y > height){
+				height = y;
+			}
+		})
 
-				/*
-			var div = document.createElement("div");
-				div.className = "iconDiv";
+		$(structContainer).css("height", height + 20);
 
-			var img = new Image();
-				img.src = "shipIcons/" + this.classname.toLowerCase() + ".png";
-				$(img)
-					.addClass("rotate270")
-					.css("width", 100)
-					.css("height", 100)
-				div.appendChild(img);
+		var w = $(div).width();
+		var h = $(div).height();
 
-			structContainer.appendChild(div);
-			$(div)
-				.css("left", pWidth/2-50)
-				.css("top", pHeight/2-50)
-		*/
+		$(div).css("top", 0).css("left", res.x/2 - w/2).addClass("disabled");
+
+		return div;
 	}
 	
 	this.updateDiv = function(){
@@ -1437,9 +1614,17 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		$(divs).find(".impulse").html(this.getRemainingImpulse() + " / " + this.getTotalImpulse());
 		$(divs).find(".delay").html( this.getRemainingDelay());
 		$(divs).find(".change").html(this.getImpulseChangeCost() + " EP");
+		$(divs).find(".turn").html(this.getImpulseChangeCost() + " EP");
 	}
 
 	this.updateDivPower = function(system){
+		/*
+		if (system instanceof Launcher){
+			this.updateNonPowerOutput(system);
+			return;
+		}
+		*/
+
 		var divs = document.getElementsByClassName("shipDiv");
 		for (var i = 0; i < divs.length; i++){
 			if ($(divs[i]).data("shipId") == this.id){
@@ -1473,6 +1658,26 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		)
 	}
 
+	this.updateNonPowerOutput = function(system){
+		var divs = document.getElementsByClassName("shipDiv");
+		for (var i = 0; i < divs.length; i++){
+			if ($(divs[i]).data("shipId") == this.id){
+				var divs = divs[i];
+				break;
+			}
+		}
+
+		$(divs).find(".system").each(
+			function(){
+				if ($(this).data("systemId") == system.id){
+					$(this).find(".outputMask").html(system.getOutput());
+					system.update();
+					return;
+				}
+			}
+		)
+	}
+
 	this.getSystemByName = function(name){
 		for (var i = 0; i < this.primary.systems.length; i++){
 			if (this.primary.systems[i].name == name){
@@ -1486,18 +1691,18 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		$(td).hover(
 			function(e){
 				e.stopPropagation();
-				game.getShipById($(this).data("shipId")).getSystemById($(this).data("systemId")).hover(e);
+				game.getUnitById($(this).data("shipId")).getSystemById($(this).data("systemId")).hover(e);
 			}
 		).click(
 			function(e){
 				e.stopPropagation();
-				game.getShipById($(this).data("shipId")).getSystemById($(this).data("systemId")).select(e);
+				game.getUnitById($(this).data("shipId")).getSystemById($(this).data("systemId")).select(e);
 			}
 		).
 		contextmenu(
 			function(e){
 				e.preventDefault();
-				game.getShipById($(this).data("shipId")).selectAll(e, $(this).data("systemId"));
+				game.getUnitById($(this).data("shipId")).selectAll(e, $(this).data("systemId"));
 			}
 		);
 		return td;
@@ -1519,20 +1724,20 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 
 	this.getShortInfo = function(){
 		var ele = $("#shortInfo");
-
 		if (game.shortInfo){
 			game.shortInfo = false;
 			$(ele).html("");
-		}
+		}		
 		game.shortInfo = this.id;
+
 		if (this.userid == game.userid){
 			$(ele).attr("class", "friendly");
 		} else $(ele).attr("class", "hostile");
 
 		var baseHit = this.getBaseHitChance();
 		var table = document.createElement("table");
-			table.insertRow(-1).insertCell(-1).innerHTML =  this.classname + " #" + this.id;
-			table.insertRow(-1).insertCell(-1).innerHTML =  "Base Hit: " + Math.floor(this.profile[0] * baseHit) + "% - " + Math.floor(this.profile[1] * baseHit) + "%";
+			table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id;
+			table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit: " + Math.floor(this.profile[0] * baseHit) + "% - " + Math.floor(this.profile[1] * baseHit) + "%";
 		return table;
 	}
 
@@ -1547,17 +1752,12 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 	}
 
 	this.switchDiv = function(){
-		var id = this.id;
-		var x = this.x;
-		var y = this.y;
-
+		var self = this;
 		$(".shipDiv").each(function(){
-			if ($(this).data("shipId") == id){
+			if ($(this).data("shipId") == self.id){
 				if ($(this).hasClass("disabled")){
 					$(this)
 					.removeClass("disabled")
-					.css("left", x + cam.o.x - $(this).outerWidth()/2)
-					.css("top", y + cam.o.y + 100)
 				}
 				else {
 					$(this).addClass("disabled");
@@ -1571,7 +1771,20 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		if (system.disabled || system.destroyed){
 			return false;
 		}
-		else if (system instanceof Weapon && system.canFire() || !(system instanceof Weapon)){
+		else if (system instanceof Weapon && !system.disabled && !system.destroyed && system.getLoadLevel() >= 1){
+			if (system instanceof Launcher){
+				if (system.getOutput() < system.effiency){
+					return true;
+				}
+			}
+			else if (system.getBoostLevel() < system.maxBoost){
+				console.log(system.getBoostLevel());
+				if (this.getUnusedPower() >= system.getEffiency()){
+					return true;
+				}
+			}
+		}
+		else if (!(system instanceof Weapon)){
 			if (this.getUnusedPower() >= system.getEffiency()){
 				return true;
 			}
@@ -1588,6 +1801,12 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 	}
 	
 	this.setMoveMode = function(){
+
+		moveCtx.translate(cam.o.x, cam.o.y);
+		moveCtx.scale(cam.z, cam.z);
+		planCtx.translate(cam.o.x, cam.o.y);
+		planCtx.scale(cam.z, cam.z);
+
 		game.mode = 1;
 		this.turns = [];
 		this.drawMoveRange();
@@ -1601,14 +1820,14 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		else if (game.phase == 0){
 			if (!this.flight){
 				this.drawMovementUI();
-				this.drawMovePlan();
+				this.drawMovementPlan();
 			}
 		}
 		else if (game.phase == 1){
 			if (this.flight){
 				if (! this.dogfights.length){
 					this.drawMovementUI();
-					this.drawMovePlan();
+					this.drawMovementPlan();
 				}
 			}
 		}
@@ -1616,6 +1835,9 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		}
 		else if (game.phase == 3){ // Dmg control
 		}
+
+		moveCtx.setTransform(1,0,0,1,0,0);
+		planCtx.setTransform(1,0,0,1,0,0);
 
 		this.updateDiv();
 	}
@@ -1635,53 +1857,25 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		mouseCtx.clearRect(0, 0, res.x, res.y);
 	}
 	
-	this.drawMovePlan = function(){
-		planCtx.strokeStyle = "red";
-		for (var i = 0; i < this.actions.length; i++){
-			if (this.actions[i].turn == game.turn){
-				var action = this.actions[i];
-				planCtx.beginPath();
-				
-				if (i == 0){
-					var p = this.getBaseOffsetPos();
-					planCtx.moveTo(p.x, p.y);
-				}
-				else {
-					planCtx.moveTo(this.actions[i-1].x + cam.o.x, this.actions[i-1].y + cam.o.y);
-				}
-					
-							
-				if (action.type == "move"){
-					planCtx.lineTo(action.x + cam.o.x, action.y + cam.o.y);
-					planCtx.closePath();
-					planCtx.stroke();
-				}
-				else if (action.type == "turn"){
-					var angle = this.getPlannedFacingToMove(i);
-					
-					planCtx.beginPath();
-					planCtx.arc(action.x + cam.o.x, action.y + cam.o.y, 5, 0, 2*Math.PI, false);
-					planCtx.stroke();
-				}
-				
-				planCtx.closePath();
-			}
-		}		
-		planCtx.strokeStyle = "black";			
-	}
-	
 	this.select = function(){
+		if (this.selected){
+			this.doUnselect();
+		}
+		else {
+			this.doSelect();
+		}
+	}
+
+	this.doSelect = function(){
 		console.log(this);
-		//cam.setFocus(this.x, this.y);
-		//game.draw();
-		aShip = this.id;
+		aUnit = this.id;
 		this.selected = true;
 		this.switchDiv();
 		this.setMoveMode();
 	}
 	
-	this.unselect = function(){
-		aShip = false;
+	this.doUnselect = function(){
+		aUnit = false;
 		this.selected = false;
 		if (game.deploying){game.disableDeployment()}
 		this.turns = [];
@@ -1700,16 +1894,18 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 		}	
 		else {
 			this.highlight = true;
+			ctx.translate(cam.o.x, cam.o.y);
+			ctx.scale(cam.z, cam.z);
 			ctx.beginPath();
-			ctx.arc(this.x + cam.o.x, this.y + cam.o.y, this.size*cam.z/2, 0, 2*Math.PI, false);
+			ctx.arc(this.x, this.y, this.size/2, 0, 2*Math.PI, false);
 			ctx.closePath();
 			ctx.lineWidth = 5;
 			ctx.globalAlpha = 1;
 			if (this.friendly){ctx.strokeStyle = "green";}
 			else {ctx.strokeStyle = "red";}
 			ctx.stroke();
+			ctx.setTransform(1,0,0,1,0,0);
 		}
-		return;
 	}
 	
 	this.unselectSystems = function(){	
@@ -1774,8 +1970,18 @@ function Ship(id, classname, shipType, x, y, facing, faction, mass, cost, profil
 }
 
 
-function SuperHeavy(id, classname, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
-	Ship.call(this, id, classname, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available);
+function UltraHeavy(id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
+	Ship.call(this, id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available);
+	this.shipType = "UltraHeavy";
+	
+	this.getBaseImpulse = function(){
+		return 115;
+	}	
+}
+UltraHeavy.prototype = Object.create(Ship.prototype);
+
+function SuperHeavy(id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
+	Ship.call(this, id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available);
 	this.shipType = "SuperHeavy";
 	
 	this.getBaseImpulse = function(){
@@ -1785,8 +1991,8 @@ function SuperHeavy(id, classname, shipType, x, y, facing, faction, mass, cost, 
 SuperHeavy.prototype = Object.create(Ship.prototype);
 
 
-function Heavy(id, classname, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
-	Ship.call(this, id, classname, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available);
+function Heavy(id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
+	Ship.call(this, id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available);
 	this.shipType = "Heavy";
 	
 	this.getBaseImpulse = function(){
@@ -1796,8 +2002,8 @@ function Heavy(id, classname, shipType, x, y, facing, faction, mass, cost, profi
 Heavy.prototype = Object.create(Ship.prototype);
 
 
-function Medium(id, classname, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
-	Ship.call(this, id, classname, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available);
+function Medium(id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
+	Ship.call(this, id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available);
 	this.shipType = "Medium";
 	
 	this.getBaseImpulse = function(){
@@ -1807,8 +2013,8 @@ function Medium(id, classname, shipType, x, y, facing, faction, mass, cost, prof
 Medium.prototype = Object.create(Ship.prototype);
 
 
-function Light(id, classname, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
-	Ship.call(this, id, classname, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available);
+function Light(id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
+	Ship.call(this, id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available);
 	this.shipType = "Light";
 	
 	this.getBaseImpulse = function(){
@@ -1818,12 +2024,12 @@ function Light(id, classname, shipType, x, y, facing, faction, mass, cost, profi
 Light.prototype = Object.create(Ship.prototype);
 
 
-function SuperLight(id, classname, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available, primary){
-	Ship.call(this, id, classname, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available, primary);
+function SuperLight(id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available, primary){
+	Ship.call(this, id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available, primary);
 	this.shipType = "SuperLight";
 	
 	this.getBaseImpulse = function(){
-		return 205;
+		return 200;
 	}
 }
 SuperLight.prototype = Object.create(Ship.prototype);

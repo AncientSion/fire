@@ -36,12 +36,12 @@ window.ajax = {
 					userid: userid,
 					gameid: gameid
 					},
-			success: goToLobby,
+			success: callback,
 			error: ajax.error,
 		});
 	},
 
-	confirmFleetPurchase: function(userid, gameid, ships, factions, callback){
+	confirmFleetPurchase: function(userid, gameid, ships, callback){
 
 		for (var i = 0; i < ships.length; i++){
 			if (ships[i].upgrades.length == 0){
@@ -69,7 +69,6 @@ window.ajax = {
 					gameturn: game.turn,
 					gamephase: game.phase,
 					ships: ships,
-					faction: factions
 					},
 			success: callback,
 			error: ajax.error,

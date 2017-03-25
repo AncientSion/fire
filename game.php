@@ -4,6 +4,7 @@ include_once 'global.php';
 
 $gameid = $_GET["gameid"];
 $userid;
+$phase;
 
 if (isset($_SESSION["userid"])) {
 	$userid = $_SESSION["userid"];
@@ -11,10 +12,11 @@ if (isset($_SESSION["userid"])) {
 else $userid = 0;
 
 $manager = new Manager($userid, $gameid);
+if ($manager->game["status"] == ""){
+	header("Location: lobby.php");
+}
 
 echo "<script> window.gameid = ".$gameid."; window.userid = ".$userid.";</script>";
-
-$phase;
 
 
 switch ($manager->game["phase"]){
@@ -75,16 +77,16 @@ foreach ($manager->playerstatus as $player){
 	<script src='script.js'></script>
 </head>
 	<body>
-		<div id ="popupWrapper">
+		<div id="popupWrapper">
 			<div id="popupText">
 			</div>
 		</div>
-		<div id ="instructWrapper">
+		<div id="instructWrapper">
 			<div id="instructText">
 			</div>
 		</div>
 		<div id="game">
-			<div id ="phaseSwitchDiv">
+			<div id="phaseSwitchDiv">
 				<div id="phaseSwitchInnerDiv">
 					<div id="turnDiv">
 					</div>
@@ -146,7 +148,6 @@ foreach ($manager->playerstatus as $player){
 			<div id="undoLastAction" class="ui">
 				<img src="varIcons/destroyed.png" style="width: 30px; height: 30px">
 			</div>
-
 			<div id="turnLeft" class="turnEle ui disabled">
 				<table class="doTurn" style="margin:auto; width: 100%;">
 					<tr>
@@ -225,168 +226,162 @@ foreach ($manager->playerstatus as $player){
 			</div>
 			<div id="maxVector" class="ui disabled">
 			</div>
-			<div id="canvasDiv">
-				<div id="upperGUI">
-					<div id="currentPos">0 / 0</div>
-
-				<!--	<div id="buttons"></div>
-					<span id="onArc">null</span>
-					<span id="curArc">0</span>
-					<span id="dist" style="color: red">0</span>
-				-->
-					<table id="overview">
-						<tr>
-							<th width="10%">
-								Turn
-							</th>
-							<th width="55%">
-								Phase
-							</th>
-							<th width="35%">
-								Reinforce
-							</th>
-						</tr>
-						<tr>
-							<td>
-								<?php echo $manager->game["turn"]; ?>
-							</td>
-							<td>
-								<?php echo $phase; ?>
-							</td>
-							<td id="reinforce">
-								<?php echo $manager->reinforce["points"]; ?>
-							</td>
-						</tr>
-						<tr>
-							<?php 
-								if ($status == "ready"){
-									echo '<th style="background-color: red;" colSpan=3 id="confirmOrders" onclick="game.endPhase()">Waiting for Opponent';
-								}
-								else {
-									echo '<th colSpan=3 id="confirmOrders" onclick="game.endPhase()">Confirm Orders';
-								}
-								?>
-							</th>
-						</tr>
-					</table>
-					<input type="button" value="reset" onclick=reset()></input>
-				</div>
-				<div id="combatlogWrapper" class="disabled">
-					<table id="combatLog">
-						<tr>
-							<th colspan=8 style="font-size: 16px; width: 100%; border: 1px solid white"">
-								Combat Log
-							</th>
-						</tr>
-						<tr>
-							<th style="width: 15%">
-								Type
-							</th>
-							<th style="width: 14%">
-								Shooter
-							</th>
-							<th style="width: 19%">
-								Target
-							</th>
-							<th style="width: 17%">
-								Weapon
-							</th>
-							<th style="width: 8%">
-								Chance
-							</th>
-							<th style="width: 12%">
-								Hits / Shots
-							</th>
-							<th style="width: 10%">
-								Armour
-							</th>
-							<th style="width: 10%">
-								Structure
-							</th>
-						</tr>
-					</table>
-				</div>
-				<div id ="deployWrapper" class="disabled">
-					<table id="deployTable">
-						<tr>
-							<th style="font-size: 18px; background-color: lightBlue; color: black" colSpan=3>
-								Incoming Reinforcements
-							</th>
-						</tr>
-						<tr>
-							<th  width="50%" colSpan="2">
-								Class
-							</th>
-							<th colSpan=2 width="20%" >
-								Arrival in
-							</th>
-						</tr>
-					</table>
-					<table id="reinforceTable">
-						<tr>
-							<th style="font-size: 18px; background-color: lightBlue; color: black;" colSpan=4>
-								Requestable Reinforcements
-							</th>
-						</tr>
-						<tr>
-							<th  width="50%" colSpan="2">
-								Class
-							</th>
-							<th  width="30%" >
-								Arrival
-							</th>
-							<th  width="20%" >
-								Cost
-							</th>
-						</tr>
-						<?php
-							if (sizeof($manager->reinforcements)){
-								foreach ($manager->reinforcements as $entry){
-									echo "<tr class='requestReinforcements'>";
-									echo "<td><img class='img50' src=shipIcons/".strtolower($entry["classname"]).".png></td>";
-									echo "<td>".$entry["classname"]."</td>";
-									echo "<td>".$entry["arrival"]." turn/s</td>";
-									echo "<td>".$entry["cost"]."</td>";
-									echo "</tr>";
-								}
-
-								echo "<tr>";
-								echo "<th style='border: none; background-color: black;'></th>";
-								echo "<th style='border: none; background-color: black;'></th>";
-								echo "<th style='padding: 5px; font-size: 12px'> Total Cost</th>";
-								echo "<th style='padding: 5px; font-size: 15px' id='totalRequestCost'>0</th>";
-								echo "</tr>";
-
+			<div id="upperGUI">
+				<table id="overview">
+					<tr>
+						<th width="10%">
+							Turn
+						</th>
+						<th width="55%">
+							Phase
+						</th>
+						<th width="35%">
+							Reinforce
+						</th>
+					</tr>
+					<tr>
+						<td>
+							<?php echo $manager->game["turn"]; ?>
+						</td>
+						<td>
+							<?php echo $phase; ?>
+						</td>
+						<td id="reinforce">
+							<?php
+								echo $manager->value;
+							?>
+						</td>
+					</tr>
+					<tr>
+						<?php 
+							if ($status == "ready"){
+								echo '<th colSpan=3 id="confirmOrders" style="background-color: red;">Waiting for Opponent</th>';
+								echo '</th>';
 							}
-						?>
-					</table>
-				</div>
-				<canvas id ="canvas"></canvas>
-				<canvas id ="fxCanvas"></canvas>
-				<canvas id ="planCanvas"></canvas>
-				<canvas id ="moveCanvas"></canvas>
-				<canvas id ="mouseCanvas"></canvas>
+							else {
+								echo '<th colSpan=3 id="confirmOrders" onclick="this.disabled=true;game.endPhase()">Confirm Orders</th>';
+							}
+							?>
+					</tr>
+				</table>
 			</div>
-		</div>
-		<div id="shortInfo" class="disabled"></div>
-		<div id="weaponAimTableWrapper" class="disabled">
-			<table id="targetInfo"></table>
-			<table id="weaponInfo">
-				<tr class="weaponAimHeader">
-					<td style="width: 52%">Weapon</td>
-					<td style="width: 12%">Fire Control</td>
-					<td style="width: 12%">Dmg loss</td>
-					<td style="width: 12%">Acc loss</td>
-					<td style="width: 12%">Final est.</td>
-				</tr>
-			</table>
-		</div>
+			<div id="canvasDiv">
+				<canvas id="canvas"></canvas>
+				<canvas id="fxCanvas"></canvas>
+				<canvas id="planCanvas"></canvas>
+				<canvas id="moveCanvas"></canvas>
+				<canvas id="mouseCanvas"></canvas>
+			</div>
+			<div id="shortInfo" class="disabled">				
+			</div>
+			<div id="weaponAimTableWrapper" class="disabled">
+				<table id="targetInfo"></table>
+				<table id="weaponInfo">
+					<tr class="weaponAimHeader">
+						<td style="width: 52%">Weapon</td>
+						<td style="width: 12%">Fire Control</td>
+						<td style="width: 12%">Dmg loss</td>
+						<td style="width: 12%">Acc loss</td>
+						<td style="width: 12%">Final est.</td>
+					</tr>
+				</table>
+			</div>
+			<div id="combatlogWrapper" class="disabled">
+				<table id="combatLog">
+					<tr>
+						<th colspan=8 style="font-size: 16px; width: 100%; border: 1px solid white"">
+							Combat Log
+						</th>
+					</tr>
+					<tr>
+						<th style="width: 15%">
+							Type
+						</th>
+						<th style="width: 14%">
+							Shooter
+						</th>
+						<th style="width: 19%">
+							Target
+						</th>
+						<th style="width: 17%">
+							Weapon
+						</th>
+						<th style="width: 8%">
+							Chance
+						</th>
+						<th style="width: 12%">
+							Hits / Shots
+						</th>
+						<th style="width: 10%">
+							Armour
+						</th>
+						<th style="width: 10%">
+							Structure
+						</th>
+					</tr>
+				</table>
+			</div>
+			<div id ="deployWrapper" class="disabled">
+				<table id="deployTable">
+					<tr>
+						<th style="font-size: 18px; background-color: lightBlue; color: black" colSpan=3>
+							Incoming Reinforcements
+						</th>
+					</tr>
+					<tr>
+						<th  width="50%" colSpan="2">
+							Class
+						</th>
+						<th colSpan=2 width="20%" >
+							Arrival in
+						</th>
+					</tr>
+				</table>
+				<table id="reinforceTable">
+					<tr>
+						<th style="font-size: 18px; background-color: lightBlue; color: black;" colSpan=4>
+							Requestable Reinforcements
+						</th>
+					</tr>
+					<tr>
+						<th  width="50%" colSpan="2">
+							Class
+						</th>
+						<th  width="30%" >
+							Arrival
+						</th>
+						<th  width="20%" >
+							Cost
+						</th>
+					</tr>
+					<?php
+						if (sizeof($manager->reinforcements)){
+							foreach ($manager->reinforcements as $entry){
+								echo "<tr class='requestReinforcements'>";
+								echo "<td><img class='img50' src=shipIcons/".strtolower($entry["classname"]).".png></td>";
+								echo "<td>".$entry["classname"]."</td>";
+								echo "<td>".$entry["arrival"]." turn/s</td>";
+								echo "<td>".$entry["cost"]."</td>";
+								echo "</tr>";
+							}
 
+							echo "<tr>";
+							echo "<th style='border: none; background-color: black;'></th>";
+							echo "<th style='border: none; background-color: black;'></th>";
+							echo "<th style='padding: 5px; font-size: 12px'> Total Cost</th>";
+							echo "<th style='padding: 5px; font-size: 15px' id='totalRequestCost'>0</th>";
+							echo "</tr>";
 
-
-		<div id="deployOverlay" class="disabled"></div>
-		<div id="vectorDiv" class="disabled"></div>
-		<div id="hangarLoadoutDiv" class="disabled">
+						}
+					?>
+				</table>
+			</div>
+			<div id="deployOverlay" class="disabled">
+				<span>Deploy</span>			
+				<div class="img"></div>			
+			</div>
+			<div id="vectorDiv" class="disabled"></div>
+			<div id="hangarLoadoutDiv" class="disabled">
 			<div class="header">
 				Assemble and launch a flight
 			</div>
@@ -399,7 +394,7 @@ foreach ($manager->playerstatus as $player){
 			<table id="hangarTable">
 			</table>
 			<div class="header">
-				<input type="button" class="disabled" value="Launch selected strikecraft as mixed flight";
+				<input type="button" class="disabled" value="Launch selected strikecraft as mixed flight">
 			</div>
 		</div>
 	</body>
@@ -418,10 +413,8 @@ foreach ($manager->playerstatus as $player){
 	}
 
 	$(document).ready(function(){
-
 		window.res.x = window.innerWidth-1;
 		window.res.y = window.innerHeight-1;
-
 		$("#mouseCanvas").bind("mouseleave", function(){
 			$("#weaponAimTableWrapper").hide();
 		})
@@ -474,7 +467,7 @@ foreach ($manager->playerstatus as $player){
 							for (var j = 0; j < game.ballistics[i].intercepts.length; j++){
 								game.createLogEntry(game.ballistics[i].intercepts[j]);
 							}
-							if (game.ballistics[i].type = "Impact"){
+							if (game.ballistics[i].type == "Impact"){
 								game.createBallisticLogEntry(game.ballistics[i]);
 							}
 						}
@@ -482,15 +475,15 @@ foreach ($manager->playerstatus as $player){
 					}
 				}
 				else if (e.keyCode == 109){ // m, cancel move animation
-					window.cancelAnimationFrame(anim);
-
-					for (var i = 0; i < game.ships.length; i++){
-						game.ships[i].setPosition();
-						game.ships[i].setFacing();
+					if (game.phase == 1 || game.phase == 2){
+						window.cancelAnimationFrame(anim);
+						for (var i = 0; i < game.ships.length; i++){
+							game.ships[i].deployed = true;
+							game.ships[i].setPosition();
+							game.ships[i].setFacing();
+						}
 					}
-
-					game.draw();
-
+					game.deployDone();
 				}
 			}
 		})
@@ -558,17 +551,17 @@ foreach ($manager->playerstatus as $player){
 
 		$("#plusImpulse")
 		.click(function(){
-			game.getUnitById(aShip).doIncreaseImpulse();
+			game.getUnitById(aUnit).doIncreaseImpulse();
 		});
 
 		$("#minusImpulse")
 		.click(function(){
-			game.getUnitById(aShip).doDecreaseImpulse();
+			game.getUnitById(aUnit).doDecreaseImpulse();
 		});
 
 		$("#undoLastAction")
 		.click(function(){
-			game.getUnitById(aShip).undoLastAction()
+			game.getUnitById(aUnit).undoLastAction()
 		});
 
 		$(".doTurn")
@@ -580,13 +573,18 @@ foreach ($manager->playerstatus as $player){
 		$(".doShortenTurn")
 		.click(function(e){
 			e.stopPropagation();
-			game.getUnitById(aShip).doShortenTurn()
+			game.getUnitById(aUnit).doShortenTurn(false)
+		})
+		.contextmenu(function(e){
+			e.stopPropagation();
+			e.preventDefault();
+			game.getUnitById(aUnit).doShortenTurn(true)
 		})
 
 		$(".doUndoShortenTurn")
 		.click(function(e){
 			e.stopPropagation();
-			game.getUnitById(aShip).doUndoShortenTurn()
+			game.getUnitById(aUnit).doUndoShortenTurn()
 		})
 
 		$("#maxVector")

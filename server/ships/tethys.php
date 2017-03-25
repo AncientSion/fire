@@ -7,7 +7,7 @@ class Tethys extends Light {
 	public $size = 40;
 	public static $value = 300;
 	public $profile = array(0.95, 1.05);
-	public $mass = 1500;
+	public $mass = 1200;
 
 	function __construct($id, $userid, $available){
         parent::__construct($id, $userid, $available);
@@ -37,7 +37,7 @@ class Tethys extends Light {
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 425);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 60);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 60, 32);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, 60, 28);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 60);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 60, 6, 6);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 60, $this->getPowerReq());

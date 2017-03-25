@@ -1,23 +1,28 @@
 <?php
 
-
 include_once 'global.php';
 
 if (isset($_SESSION["userid"])){
 	if (isset($_POST["gameName"]) && isset($_POST["pointValue"])){
-		if ( $_POST["gameName"] != "" && $_POST["pointValue"] != "" ){
-			$dbManager = new DBManager();
-			If ($dbManager->createNewGameAndJoin($_SESSION["userid"], $_POST["gameName"], $_POST["pointValue"])){
-				header("Location: lobby.php");
+		if ( $_POST["gameName"] != "" && $_POST["pointValue"] != ""){
+			if (ctype_digit($_POST["pointValue"])){
+				$dbManager = new DBManager();
+				$id = $dbManager->createNewGameAndJoin($_SESSION["userid"], $_POST["gameName"], $_POST["pointValue"]);
+				if ($id){
+					header("Location: gameSetup.php?gameid=".$id);
+				}
+			}
+			else {
+				echo "<span class='hinter'>Invalid point value entered</span>";
 			}
 		}
 		else {
-			echo "Please enter game data";
+				echo "<span class='hinter'>Please enter valid game data</span>";
 		}
 	}
 }
 else {
-	echo "invalid";
+	echo "<span class='hinter'>Please login</span>";
 }
 ?>
 
@@ -37,7 +42,7 @@ else {
 				<table>
 					<tr>
 						<td>
-							<input type="form" placeholder="Game Namee" name="gameName"></input>		
+							<input type="form" value='myGame' placeholder="Game Name" name="gameName"></input>		
 						</td>
 					</tr>
 					<tr>

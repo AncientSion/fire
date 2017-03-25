@@ -5,7 +5,6 @@ class Math {
 	function __construct(){
 	}
 
-
 	static function getPointInDirection($dist, $a, $oX, $oY){
 		$x = round($oX + $dist * cos($a * M_PI / 180));
 		$y = round($oY + $dist * sin($a * M_PI / 180));

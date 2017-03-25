@@ -3,8 +3,7 @@ function Point(x, y){
 	this.y = Math.floor(y);
 	
 	this.getOffset = function(){
-	//	console.log({x: cam.scale.x(this.x - cam.o.x), y: cam.scale.y(this.y - cam.o.y)});
-		return { x: this.x - cam.o.x, y: this.y - cam.o.y };
+		return { x: Math.round((this.x - cam.o.x) / cam.z), y: Math.round((this.y - cam.o.y) / cam.z) }
 	}
 }
 
@@ -45,7 +44,6 @@ function Vector(a, b){
 	}
 	
 	this.setup();
-
 }
 
 function Dot(a, b){
@@ -82,11 +80,11 @@ function Power(id, unitid, systemid, turn, type, cost){
 	this.cost = cost;
 }
 
-function TempAmmo(classname, minDmg, maxDmg, maxDist, impulse, mass, integrity, armour, fc){
-	this.classname = classname;
+function TempAmmo(name, display, minDmg, maxDmg, impulse, mass, integrity, armour, fc){
+	this.name = name;
+	this.display = display;
 	this.minDmg = minDmg;
 	this.maxDmg = maxDmg;
-	this.maxDist = maxDist;
 	this.impulse = impulse;
 	this.mass = mass;
 	this.integrity = integrity;
@@ -117,12 +115,12 @@ function TempAmmo(classname, minDmg, maxDmg, maxDist, impulse, mass, integrity, 
 	}
 }				
 
-function Ammo(id, classname, minDmg, maxDmg, maxDist, impulse, mass, integrity, armour, fc, damages, crits, destroyed){
+function Ammo(id, name, display, minDmg, maxDmg, impulse, mass, integrity, armour, fc, damages, crits, destroyed){
 	this.id = id;
-	this.classname = classname;
+	this.name = name;
+	this.display = display;
 	this.minDmg = minDmg;
 	this.maxDmg = maxDmg;
-	this.maxDist = maxDist;
 	this.impulse = impulse;
 	this.size = mass*3;
 	this.mass = mass;
@@ -143,11 +141,11 @@ function Ammo(id, classname, minDmg, maxDmg, maxDist, impulse, mass, integrity, 
 	}
 }
 
-function Salvo(id, userid, targetid, classname, amount, status, destroyed, actions){
+function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 	this.id = id;
 	this.userid = userid;
 	this.targetid = targetid;
-	this.classname = classname;
+	this.name = name;
 	this.amount = amount;
 	this.status = status;
 	this.destroyed = destroyed;
@@ -163,6 +161,7 @@ function Salvo(id, userid, targetid, classname, amount, status, destroyed, actio
 	this.img;
 	this.highlight = false;
 	this.friendly = false;
+	this.display = "";
 
 	this.getSystemById = function(id){
 		for (var i = 0; i < this.structures.length; i++){
@@ -188,19 +187,21 @@ function Salvo(id, userid, targetid, classname, amount, status, destroyed, actio
 		if (this.highlight){
 			this.highlight = false;
 			game.draw();
-		}
+		}	
 		else {
 			this.highlight = true;
+			ctx.translate(cam.o.x, cam.o.y);
+			ctx.scale(cam.z, cam.z);
 			ctx.beginPath();
-			ctx.arc(this.x + cam.o.x, this.y + cam.o.y, 9*cam.z, 0, 2*Math.PI, false);
+			ctx.arc(this.x, this.y, this.size/2, 0, 2*Math.PI, false);
 			ctx.closePath();
-			ctx.lineWidth = 3;
+			ctx.lineWidth = 5;
 			ctx.globalAlpha = 1;
 			if (this.friendly){ctx.strokeStyle = "green";}
 			else {ctx.strokeStyle = "red";}
 			ctx.stroke();
+			ctx.setTransform(1,0,0,1,0,0);
 		}
-		return;
 	}
 
 	this.getDamage = function(){
@@ -223,14 +224,8 @@ function Salvo(id, userid, targetid, classname, amount, status, destroyed, actio
 		return this.structures[0].maxDmg;
 	}
 
-	this.getRemDist = function(){
-		var fuel = this.structures[0].maxDist;
-
-		for (var i = 1; i < this.actions.length; i++){
-			fuel -= getDistance( {x: this.actions[i-1].x, y: this.actions[i-1].y}, {x: this.actions[i].x, y: this.actions[i].y} )
-		}
-
-		return Math.floor(fuel);
+	this.getImpulse = function(){
+		return this.structures[0].impulse;
 	}
 
 	this.createDiv = function(){
@@ -241,27 +236,32 @@ function Salvo(id, userid, targetid, classname, amount, status, destroyed, actio
 		var table = document.createElement("table");
 			table.style.width = "95%"
 
-		var tr = document.createElement("tr");
-		var th = document.createElement("th");
-		var target = game.getShipById(this.targetid);
-			th.innerHTML = this.structures.length + "x " + this.classname + " #" + this.id + " vs " + target.classname + " #" + target.id;
-			th.style.fontSize = "16px";
-			th.colSpan = 5;
-			tr.appendChild(th); table.appendChild(tr);
+		var tr = table.insertRow(-1);
+		var td = tr.insertCell(-1);
+			td.innerHTML = this.structures.length + "x " + this.name + " #" + this.id; td.colSpan = 4;
+			td.className = "header";	
+
+		var tr = table.insertRow(-1);
+		var td = tr.insertCell(-1);
+			td.innerHTML = this.display; td.colSpan = 4;
+			td.className = "header";
+
+		var tr = table.insertRow(-1);
+		var td = tr.insertCell(-1);
+			td.innerHTML = "Targeting: " + game.getUnitById(this.targetid).name + " #" + this.targetid; td.colSpan = 4;
+			td.className = "subHeader";
 
     	$(table)
 			.append($("<tr>")
 	    		.append($("<th>").html("Damage"))
 	    		.append($("<th>").html("Armour"))
 	    		.append($("<th>").html("Impulse"))
-	    		.append($("<th>").html("rem. Fuel"))
 	    		.append($("<th>").html("Fire Control"))
 			)
 			.append($("<tr>")
 	    		.append($("<td>").html(this.getDamage()))
 	    		.append($("<td>").html(this.structures[0].armour))
-	    		.append($("<td>").html(this.structures[0].impulse))
-	    		.append($("<td>").html(this.getRemDist()))
+	    		.append($("<td>").html(this.getImpulse()))
 	    		.append($("<td>").html(this.structures[0].fc[0] + "% / " + this.structures[0].fc[1] + "%"))
 			)
 
@@ -298,12 +298,9 @@ function Salvo(id, userid, targetid, classname, amount, status, destroyed, actio
 				td.className = "iconContainer"; 
 				$(td).data("id", this.structures[i].id);
 				td.addEventListener("click", function(){
-					console.log(game.getBallById(aBall).getSystemById($(this).data("id")));
+					console.log(game.getBallById(aUnit).getSystemById($(this).data("id")));
 				})
-
-				td.appendChild(window.ballImages[this.structures[i].classname.toLowerCase()].cloneNode(true))
-				//if (status != ""){td.className += " " + status;}
-
+				
 				if (status == "impact"){
 					var img = new Image(); img.className = "ammoImpact"; img.src = "/fire/varIcons/impact.png";
 					td.appendChild(img);
@@ -318,6 +315,8 @@ function Salvo(id, userid, targetid, classname, amount, status, destroyed, actio
 					//var img = new Image(); img.className = "ammoLostLock"; img.src = "/fire/varIcons/lostlock.png";
 					//td.appendChild(img);
 				}
+
+				td.appendChild(window.ballImages[this.name.toLowerCase()].cloneNode(true))
 
 			tr1.appendChild(td);
 
@@ -349,27 +348,30 @@ function Salvo(id, userid, targetid, classname, amount, status, destroyed, actio
 			//e.preventDefault();
 			//$(this).addClass("disabled");
 		}).drag();
-
-		//$(div).mousemove(ballisticInterceptionHover);
-		//$(div).click(ballisticInterceptionClick);
 			
 		document.getElementById("game").appendChild(div);
 	}
 
 	this.select = function(){
 		if (this.selected){
-			this.selected = false;
-			aBall = false;
-			this.disableDiv();
-			fxCtx.clearRect(0, 0, res.x, res.y);
+			this.doUnselect();
 		}
 		else {
-			console.log(this);
-			this.selected = true;
-			aBall = this.id;
-			this.enableDiv();
-			this.drawFlightPath();
+			this.doSelect();
 		}
+	}
+
+	this.doSelect = function(){
+		console.log(this);
+		aUnit = this.id;
+		this.selected = true;
+		this.enableDiv();
+	}
+	
+	this.doUnselect = function(){
+		aUnit = false;
+		this.selected = false;
+		this.disableDiv();
 	}
 
 	this.enableDiv = function(){
@@ -401,6 +403,7 @@ function Salvo(id, userid, targetid, classname, amount, status, destroyed, actio
 		this.y = this.actions[this.actions.length-1].y;
 
 		this.setImage();
+		this.setDisplay();
 		this.createDiv();
 		this.setFacing();
 		this.setLayout();
@@ -410,7 +413,11 @@ function Salvo(id, userid, targetid, classname, amount, status, destroyed, actio
 	}
 
 	this.setImage = function(){
-		this.img = window.ballImages[this.structures[0].classname.toLowerCase()].cloneNode(true);
+		this.img = window.ballImages[this.name.toLowerCase()].cloneNode(true);
+	}
+
+	this.setDisplay = function(){
+		this.display = this.structures[0].display;
 	}
 
 	this.setLayout = function(){
@@ -444,7 +451,7 @@ function Salvo(id, userid, targetid, classname, amount, status, destroyed, actio
 	}
 
 	this.setFacing = function(){
-		var goal = game.getShipById(this.targetid).getBaseOffsetPos();
+		var goal = game.getUnitById(this.targetid).getBaseOffsetPos();
 		var i;
 		if (this.actions[this.actions.length-1].type == "impact"){
 			i = this.actions.length-2;
@@ -457,7 +464,8 @@ function Salvo(id, userid, targetid, classname, amount, status, destroyed, actio
 
 	this.draw = function(){
 		ctx.save();
-		ctx.translate(this.x + cam.o.x, this.y + cam.o.y);
+		ctx.translate(this.x, this.y);
+		ctx.scale(cam.z, cam.z);
 		ctx.rotate((this.facing + 90) * (Math.PI/180));
 		this.drawSelf();		
 		this.drawIndicator();
@@ -466,7 +474,7 @@ function Salvo(id, userid, targetid, classname, amount, status, destroyed, actio
 	}
 
 	this.drawSelf = function(){
-		var size = 15 *cam.z;
+		var size = 12;
 
 		ctx.drawImage(
 			this.img,
@@ -480,10 +488,10 @@ function Salvo(id, userid, targetid, classname, amount, status, destroyed, actio
 
 	this.drawIndicator = function(){
 		ctx.beginPath();
-		ctx.arc(0, 0, 9*cam.z, 0, 2*Math.PI, false);
+		ctx.arc(0, 0, 9, 0, 2*Math.PI, false);
 		ctx.closePath();
 		ctx.lineWidth = 1;
-		ctx.globalAlpha = 0.9;
+		ctx.globalAlpha = 0.8;
 		if (this.userid == game.userid){ctx.strokeStyle = "green";}
 		else {ctx.strokeStyle = "red";}
 		ctx.stroke();
@@ -502,101 +510,78 @@ function Salvo(id, userid, targetid, classname, amount, status, destroyed, actio
 	}
 
 	this.drawFlightPath = function(){
-		var goal = game.getShipById(this.targetid).getPlannedPosition();
+		var origin = this.actions[this.actions.length-1];
+		var goal = game.getUnitById(this.targetid).getPlannedPosition();
+		var dist = getDistance({x: this.x, y: this.y}, {x: goal.x, y: goal.y});
+		var a = getAngleFromTo({x: this.x, y: this.y}, {x: goal.x, y: goal.y});
+		var step = Math.min(this.structures[0].impulse, dist);
 
+		var inRange = false;
+		if (this.structures[0].impulse >= dist){
+			inRange = true;
+		}
+
+		var t = getPointInDirection(step, a, this.x, this.y);
+
+		mouseCtx.translate(cam.o.x, cam.o.y);
+		mouseCtx.scale(cam.z, cam.z)
+		mouseCtx.translate(origin.x, origin.y);
 		mouseCtx.beginPath();
-		mouseCtx.moveTo(this.actions[this.actions.length-1].x + cam.o.x, this.actions[this.actions.length-1].y + cam.o.y);
-		mouseCtx.lineTo(goal.x, goal.y);
+		mouseCtx.moveTo(0, 0);
+		mouseCtx.translate(-origin.x + t.x, -origin.y + t.y);
+		mouseCtx.lineTo(0, 0);
 		mouseCtx.closePath();
 
-		mouseCtx.globalAlpha = 0.6;
+		mouseCtx.globalAlpha = 1;
 		mouseCtx.strokeStyle = "white";
 		mouseCtx.stroke();
-		mouseCtx.globalAlpha = 1;
+		mouseCtx.setTransform(1,0,0,1,0,0);
 
-		var dist = getDistance({x: this.x, y: this.y}, {x: goal.x - cam.o.x, y: goal.y - cam.o.y});
-
-		if (this.structures[0].impulse >= dist){
+		if (!inRange){
+			mouseCtx.translate(cam.o.x, cam.o.y);
+			mouseCtx.scale(cam.z, cam.z)
+			mouseCtx.translate(t.x, t.y);
 			mouseCtx.beginPath();
-			mouseCtx.moveTo(this.actions[this.actions.length-1].x + cam.o.x, this.actions[this.actions.length-1].y + cam.o.y);
-			mouseCtx.lineTo(goal.x, goal.y);
+			mouseCtx.moveTo(0, 0);
+			mouseCtx.translate(-t.x + goal.x, -t.y + goal.y);
+			mouseCtx.lineTo(0, 0);
 			mouseCtx.closePath();
+
 			mouseCtx.globalAlpha = 1;
 			mouseCtx.strokeStyle = "red";
 			mouseCtx.stroke();
-
-			mouseCtx.strokeStyle = "white";
-			mouseCtx.globalAlpha = 1;
+			mouseCtx.setTransform(1,0,0,1,0,0);
 		}
-		else {
-			var a = getAngleFromTo({x: this.x, y: this.y}, {x: goal.x - cam.o.x, y: goal.y - cam.o.y});
-			var step = getPointInDirection(this.structures[0].impulse, a, this.x, this.y);
-			mouseCtx.beginPath();
-			mouseCtx.moveTo(this.actions[this.actions.length-1].x + cam.o.x, this.actions[this.actions.length-1].y + cam.o.y);
-			mouseCtx.lineTo(step.x + cam.o.x, step.y + cam.o.y);
-			mouseCtx.closePath();
-			mouseCtx.globalAlpha = 1;
-			mouseCtx.strokeStyle = "red";
-			mouseCtx.stroke();
 
-			mouseCtx.strokeStyle = "white";
-			mouseCtx.globalAlpha = 1;
-		}
 		game.flightPath = true;
 	}
 
-	/*this.drawFlightPath = function(){
-		var target = game.getShipById(this.fire.targetid);
-		var goal = target.getBaseOffsetPos();
-		var dist = getDistance({x: this.x, y: this.y}, goal);
-
-		ctx.beginPath();
-		ctx.moveTo(this.x + cam.o.x, this.y + cam.o.y);
-		ctx.lineTo(goal.x + cam.o.x, goal.y + cam.o.y);
-		ctx.closePath();
-		ctx.globalAlpha = 0.7;
-		ctx.strokeStyle = "white";
-		ctx.stroke();
-
-		if (! window.anim){
-			if (this.impulse < dist){
-				var a = getAngleFromTo({x: this.x, y: this.y}, goal);
-				var step = getPointInDirection(this.impulse, a, this.x, this.y);
-
-				ctx.beginPath();
-				ctx.moveTo(this.x + cam.o.x, this.y + cam.o.y);
-				ctx.lineTo(step.x + cam.o.x, step.y + cam.o.y);
-				ctx.closePath();
-				ctx.globalAlpha = 0.7;
-				ctx.strokeStyle = "red";
-				ctx.stroke();
-			}
-		}
-		ctx.globalAlpha = 1;
-	}*/
-
 	this.getShortInfo = function(){
+		var ele = $("#shortInfo");
 		if (game.shortInfo){
 			game.shortInfo = false;
-			$("#shortInfo").html("");
+			$(ele).html("");
 		}
 		game.shortInfo = this.id;
-		var table = document.createElement("table");
 
-		var tr = document.createElement("tr");
-		var td = document.createElement("td");
-			td.innerHTML = this.structures.length + "x " + this.classname + " # " + this.id;
-			tr.appendChild(td); table.appendChild(tr);
+		if (this.userid == game.userid){
+			$(ele).attr("class", "friendly");
+		} else $(ele).attr("class", "hostile");
+
+		var table = document.createElement("table");
+		var tr = table.insertRow(-1);
+			tr.insertCell(-1).innerHTML = this.structures.length + "x " + this.name + " #" + this.id;
+		var tr = table.insertRow(-1);
+			tr.insertCell(-1).innerHTML = "Base hit: " + this.getHitChanceFromAngle() + "%";
+
 		if (this.impactThisTurn()){
-			var tr = document.createElement("tr");
-			var td = document.createElement("td");
+			var tr = table.insertRow(-1);
 			if (game.phase < 3){
-				td.innerHTML += "<font color='red'>IMPACT IMMINENT</font>";
+				tr.insertCell(-1).innerHTML = "<font color='red'>IMPACT IMMINENT</font>";
 			}
 			else if (this.actions[this.actions.length-1].type == "impact"){
-				td.innerHTML += "<font color='red'>DID IMPACT</font>";
+				tr.insertCell(-1).innerHTML = "<font color='red'>DID IMPACT</font>";
 			}
-			tr.appendChild(td); table.appendChild(tr);
 		}
 		return table;
 	}
@@ -612,7 +597,7 @@ function Salvo(id, userid, targetid, classname, amount, status, destroyed, actio
 	}
 
 	this.impactThisTurn = function(){
-		target = game.getShipById(this.targetid);
+		target = game.getUnitById(this.targetid);
 		if (getDistance({x: target.x, y: target.y}, {x: this.x, y: this.y}) <= this.structures[0].impulse){
 			return true;
 		} else return false;
@@ -695,7 +680,7 @@ function FireOrder(id, turn, shooterid, targetid, weaponid, shots, req, notes, h
 	this.damages = [];
 }
 
-function Damage (id, fireid, gameid, shipid, structureid, systemid, turn, roll, type, totalDmg, shieldDmg, structDmg, armourDmg, mitigation, negation, destroyed, notes){
+function Damage(id, fireid, gameid, shipid, structureid, systemid, turn, roll, type, totalDmg, shieldDmg, structDmg, armourDmg, mitigation, negation, destroyed, notes){
 	this.id = id;
 	this.fireid = fireid;
 	this.gameid = gameid;
@@ -715,7 +700,7 @@ function Damage (id, fireid, gameid, shipid, structureid, systemid, turn, roll, 
 	this.notes = notes;
 }
 
-function Crit (id, shipid, systemid, turn, type, duration){
+function Crit(id, shipid, systemid, turn, type, duration){
 	this.id = id;
 	this.shipid = shipid;
 	this.systemid = systemid;
@@ -729,7 +714,7 @@ function Crit (id, shipid, systemid, turn, type, duration){
 		var html = "";
 		var mod = 1;
 		if (this.duration > 0){
-			html = "Turns " + this.turn + " - " + (this.turn + this.duration) +": ";
+			html = "Turn " + (this.turn + this.duration) +": ";
 		} else {
 			html = "Perma: ";
 		}
@@ -746,20 +731,23 @@ function Crit (id, shipid, systemid, turn, type, duration){
 			case "disabled1":
 				html += "Disabled"; break;
 			case "launch1":
+				html += "Launch Rate x 0.85";
+				mod *= 0.85; break;
+			case "launch2":
 				html += "Launch Rate x 0.7";
 				mod *= 0.7; break;
-			case "launch2":
-				html += "Launch Rate x 0.5";
-				mod *= 0.5; break;
 			case "launch3":
-				html += "Launch Rate x 0.3";
-				mod *= 0.3; break;
+				html += "Launch Rate x 0.55";
+				mod *= 0.55; break;
 			case "bridge_accu-10":
 				html += "Weapon to hit x 0.9"; break;
 			case "bridge_nomove":
 				html += "Unable to manover"; break;
 			case "bridge_disabled1":
 				html += "Unable to manover or fire."; break;
+			case "output_0.95":
+				html += "Output x 0.95";
+				mod *= 0.9; break;
 			case "output_0.9":
 				html += "Output x 0.9";
 				mod *= 0.9; break;
@@ -814,6 +802,7 @@ function Structure(id, parentId, start, end, integrity, negation, destroyed){
 	this.systems = [];
 	this.damages = [];
 	this.direction;
+	this.intBase = Math.pow(integrity, 1.25);
 
 	this.getTableRow = function(){
 		var tr = document.createElement("tr");
@@ -842,18 +831,18 @@ function Structure(id, parentId, start, end, integrity, negation, destroyed){
 			function(e){
 				var shipId = $(this).data("shipId");
 				var systemId = $(this).data("systemId");
-				game.getShipById(shipId).getSystemById(systemId).hover(e);
+				game.getUnitById(shipId).getSystemById(systemId).hover(e);
 			},
 			function(e){
 				var shipId = $(this).data("shipId");
 				var systemId = $(this).data("systemId");
-				game.getShipById(shipId).getSystemById(systemId).hover(e);
+				game.getUnitById(shipId).getSystemById(systemId).hover(e);
 			}
 		)
 		$(td).click(function(e){
 			var shipId = $(this).data("shipId");
 			var systemId = $(this).data("systemId");
-			console.log(game.getShipById(shipId).getSystemById(systemId));
+			console.log(game.getUnitById(shipId).getSystemById(systemId));
 		})
 
 		tr.appendChild(td);
@@ -887,7 +876,7 @@ function Structure(id, parentId, start, end, integrity, negation, destroyed){
 			this.highlight = false;
 			fxCtx.clearRect(0, 0, res.x, res.y);
 			$("#systemDetailsDiv").remove();
-			game.getShipById(this.parentId).highlightAllSelectedWeapons();
+			game.getUnitById(this.parentId).highlightAllSelectedWeapons();
 		}
 		else {
 			this.highlight = true;
@@ -897,7 +886,7 @@ function Structure(id, parentId, start, end, integrity, negation, destroyed){
 	}
 
 	this.showHitAxis = function(){
-		game.getShipById(this.parentId).drawStructureAxis(this);
+		game.getUnitById(this.parentId).drawStructureAxis(this);
 	}
 
 	this.showInfoDiv = function(e){
@@ -949,13 +938,9 @@ function Structure(id, parentId, start, end, integrity, negation, destroyed){
 		return Math.floor(integrity);
 	}
 
-	this.getRemainingMitigation = function(){
-		return Math.round((Math.pow(this.getRemainingIntegrity(), 0.75) / Math.pow(this.integrity, 0.75)) * this.mitigation);
-	}
-
 	this.getRemainingNegation = function(){
-		return Math.floor((this.getRemainingIntegrity() / this.integrity) * this.negation);
-		return Math.round((Math.pow(this.getRemainingIntegrity(), 1) / Math.pow(this.integrity, 1)) * this.negation);
+		//return Math.floor((this.getRemainingIntegrity() / this.integrity) * this.negation);
+		return Math.round((Math.pow(this.getRemainingIntegrity(), 1.25) / this.intBase) * this.negation);
 	}
 }
 
@@ -995,13 +980,13 @@ function Primary(id, parentId, integrity, damages, destroyed){
 			function(e){
 				var shipId = $(this).data("shipId");
 				var systemId = $(this).data("systemId");
-				game.getShipById(shipId).primary.hover(e);
+				game.getUnitById(shipId).primary.hover(e);
 			}
 		)
 		$(td).click(function(e){
 			var shipId = $(this).data("shipId");
 			var systemId = $(this).data("systemId");
-			console.log(game.getShipById(shipId).primary);
+			console.log(game.getUnitById(shipId).primary);
 		})
 
 			tr.appendChild(td);

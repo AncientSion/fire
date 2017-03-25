@@ -5,10 +5,10 @@ class Mini extends Ship {
 
 	public function getNewCrits($turn){
 		$crits = array();
-		for ($j = 0; $j < sizeof($this->structures); $j++){
-			for ($l = 0; $l < sizeof($this->structures[$j]->crits); $l++){
-				if ($this->structures[$j]->crits[$l]->turn == $turn){
-					$crits[] = $this->structures[$j]->crits[$l];
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			for ($j = 0; $j < sizeof($this->structures[$i]->crits); $j++){
+				if ($this->structures[$i]->crits[$j]->turn == $turn){
+					$crits[] = $this->structures[$i]->crits[$j];
 				}
 			}
 		}
@@ -76,7 +76,6 @@ class Mini extends Ship {
 				return;
 			}
 		}
-		Debug::log("flight, couldnt apply");
 	}
 	
 	public function getRemainingIntegrity($fire){
@@ -97,16 +96,13 @@ class Mini extends Ship {
 	}
 
 	public function resolveFireOrder($fire){
-		//Debug::log("resolveFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
+		Debug::log("resolveFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
 		
 		if ($this->isDestroyed()){
 			Debug::log("target entirely destroyed id: #".$fire->target->id);
-			$this->destroyed = true;
-			return false;
 		}
 		else if ($this->isDogfight($fire)){
 			$this->resolveDogfightFireOrder($fire);
-			return true;
 		}
 		else {
 			$fire->dist = $this->getHitDist($fire);
@@ -119,9 +115,8 @@ class Mini extends Ship {
 			if ($fire->hits){
 				$fire->weapon->doDamage($fire);
 			}
-			$fire->resolved = 1;
-			return;
 		}
+		$fire->resolved = 1;
 	}
 
 	public function getHitSection($id){
@@ -131,6 +126,7 @@ class Mini extends Ship {
 				$locs[] = $this->structures[$i]->id;
 			}
 		}
+
 		return $locs[mt_rand(0, sizeof($locs)-1)];
 	}
 
@@ -209,10 +205,6 @@ class Salvo extends Mini {
 		}
 	}
 
-	public function getCurrentPosition(){
-		return new Point($this->actions[sizeof($this->actions)-1]->x, $this->actions[sizeof($this->actions)-1]->y);
-	}	
-
 	public function getImpactTrajectory(){
 		return new Point($this->actions[sizeof($this->actions)-2]->x, $this->actions[sizeof($this->actions)-2]->y);
 	}
@@ -222,15 +214,9 @@ class Salvo extends Mini {
 	}
 }
 
-class Ammo extends Weapon implements JsonSerializable{
+class Ammo extends Weapon{
 	public $id;
-	public $classname;
-	public $type;
-	public $minDmg;
-	public $maxDmg;
-	public $maxDist;
 	public $impulse;
-	public $integrity;
 	public $armour;
 	public $damages = array();
 	public $mass;
@@ -245,11 +231,11 @@ class Ammo extends Weapon implements JsonSerializable{
 	public function jsonSerialize(){
 		return array(
         	"id" => $this->id,
-        	"classname" => $this->classname,
+        	"name" => $this->name,
+        	"display" => $this->display,
         	"type" => $this->type,
         	"minDmg" => $this->minDmg,
         	"maxDmg" => $this->maxDmg,
-        	"maxDist" => $this->maxDist,
         	"impulse" => $this->impulse,
         	"integrity" => $this->integrity,
         	"armour" => $this->armour,
@@ -301,6 +287,9 @@ class Ammo extends Weapon implements JsonSerializable{
 	}
 
 	public function isDestroyed(){
+		if ($this->destroyed){
+			return true;
+		}
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			if ($this->damages[$i]->destroyed){
 				return true;
@@ -310,41 +299,7 @@ class Ammo extends Weapon implements JsonSerializable{
 	}
 
 	public function getSubHitChance(){
-		return ceil($this->$mass*5);
-	}
-}
-
-class BallisticTorpedo extends Ammo {
-	public $classname = "BallisticTorpedo";
-	public $type = "explosive";
-	public $minDmg = 65;
-	public $maxDmg = 85;
-	public $maxDist = 1400;
-	public $impulse = 180;
-	public $integrity = 18;
-	public $armour = 8;
-	public $mass = 4;
-	public $fc = array(0 => 90, 1 => 30);
-
-	function __construct($parentId, $id){
-		parent::__construct($parentId, $id);
-	}
-}
-
-class BallisticMissile extends Ammo {
-	public $classname = "BallisticMissile";
-	public $type = "explosive";
-	public $minDmg = 45;
-	public $maxDmg = 60;
-	public $maxDist = 900;
-	public $impulse = 280;
-	public $integrity = 14;
-	public $armour = 6;
-	public $mass = 3;
-	public $fc = array(0 => 80, 1 => 70);
-
-	function __construct($parentId, $id){
-		parent::__construct($parentId, $id);
+		return ceil($this->mass*5);
 	}
 }
 

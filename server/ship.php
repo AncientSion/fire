@@ -23,6 +23,8 @@ class Ship {
 	public $actions = array();
 	public $structures = array();
 
+	public $hitChance;
+
 	public $destroyed = false;
 
 	function __construct($id, $userid, $available){
@@ -33,6 +35,8 @@ class Ship {
 		$this->addStructures();
 		$this->addPrimary();
 		$this->cost = $this::$value;
+
+		$this->baseHitChance = ceil(pow($this->mass, 0.55));
 	}
 
 	public function getId(){
@@ -132,12 +136,22 @@ class Ship {
 		return true;
 	}
 
+	public function setupForDamage(){
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			$this->structures[$i]->setRemainingIntegrity();
+		}
+		$this->primary->setRemainingIntegrity();
+		Debug::log("ship #".$this->id." setup for Damage, remaining: ".$this->primary->remaining);
+	}
+
 	public function applyDamage($dmg){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->id == $dmg->structureid){
 				$this->structures[$i]->damages[] = $dmg;
+				$this->structures[$i]->remaining -= $dmg->armourDmg;
 				if ($dmg->systemid == -1){
 					$this->primary->damages[] = $dmg;
+					$this->primary->remaining -= $dmg->structDmg;
 					return;
 				}
 				else {
@@ -156,7 +170,7 @@ class Ship {
 				}
 			}
 		}
-		Debug::log("couldnt apply");
+		Debug::log("couldnt apply dmg");
 		return;
 	}
 
@@ -202,7 +216,7 @@ class Ship {
 	}
 
 	public function resolveFireOrder($fire){
-		//Debug::log("resolveFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
+		Debug::log("resolveFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
 
 		if ($this->destroyed){
 			Debug::log("target destroyed id: #".$fire->target->id);
@@ -291,31 +305,53 @@ class Ship {
 		$roll;
 		$current = 0;
 		$total = $this->primary->getHitChance();
+		$fraction = round($this->primary->remaining / $this->primary->integrity, 3);
+		//Debug::log("fraction:".$fraction);
+		$valid = array();
 
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 			if (! $this->primary->systems[$i]->destroyed){
-				$total += $this->primary->systems[$i]->getHitChance();
+				if ($this->isHitable($fraction, $this->primary->systems[$i])){
+					$valid[] = $this->primary->systems[$i];
+				}
 			}
 		}
 
-		$roll = mt_rand(0, $total);
-		$current += $this->primary->getHitChance();
+		//Debug::log("valid:".sizeof($valid));
 
-		if ($roll <= $current){
-			//Debug::log("hitting primary");
-			return $this->primary;
+		for ($i = 0; $i < sizeof($valid); $i++){
+			$total += $valid[$i]->getHitChance();
 		}
-		else {
-			for ($i = 0; $i < sizeof($this->primary->systems); $i++){
-				if (! $this->primary->systems[$i]->destroyed){
-					$current += $this->primary->systems[$i]->getHitChance();
+
+		if (sizeof($valid)){
+			$roll = mt_rand(0, $total);
+			$current += $this->primary->getHitChance();
+
+			if ($roll <= $current){
+				Debug::log("hitting main structure");
+				return $this->primary;
+			}
+			else {
+				//Debug::log("hitting internal");
+				for ($i = 0; $i < sizeof($valid); $i++){
+					$current += $valid[$i]->getHitChance();
 					if ($roll <= $current){
-						//Debug::log("hitting: ".$this->primary->systems[$i]->name." #".$this->primary->systems[$i]->id);
-						return $this->primary->systems[$i];
+						Debug::log("hitting: ".$valid[$i]->name." #".$valid[$i]->id);
+						return $valid[$i];
 					}
 				}
 			}
 		}
+		else {
+			return $this->primary;
+		}
+	}
+
+	public function isHitable($fraction, $system){
+		if ($fraction <= $this->getHitTreshold($system)){
+			return true;
+		}
+		return false;
 	}
 
 	public function getHitChance($fire){
@@ -338,7 +374,7 @@ class Ship {
 	}
 
 	public function getBaseHitChance(){
-		return ceil(pow($this->mass, 0.5));
+		return $this->baseHitChance;
 	}
 
 	public function getCurrentPosition(){
@@ -347,13 +383,13 @@ class Ship {
 				return new Point($this->actions[$i]->x, $this->actions[$i]->y);
 			}
 		}
-		return new Point(false, false);
+		return false;
 	}
 
 	public function getHitDist($fire){
 		$tPos = $this->getCurrentPosition();
 		$sPos = $fire->shooter->getCurrentPosition();
-		return Math::getDist($tPos->x, $tPos->y,  $sPos->x, $sPos->y);
+		return Math::getDist($tPos->x, $tPos->y, $sPos->x, $sPos->y);
 	}
 
 	public function getHitAngle($fire){
@@ -421,6 +457,24 @@ class Ship {
 		}
 	}
 
+	public function getInternals(){
+		return $this->primary->systems[0]->integrity / $this->primary->integrity;
+	}
+
+	public function getWeapons(){
+		$mass = 0;
+
+		for ($j = 0; $j < sizeof($this->structures); $j++){
+			for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
+				if (is_a($this->structures[$j]->systems[$k], "Hangar")){
+					continue;
+				}
+				$mass += $this->structures[$j]->systems[$k]->mass;
+			}
+		}
+		return $mass;
+	}
+
 	public function getArmour(){
 		$data = array(
 			"integrity" => 0,
@@ -438,6 +492,18 @@ class Ship {
 
 	public function getStructure(){
 		return $this->primary->integrity;
+	}
+
+	public function getEP(){
+		for ($j = 0; $j < sizeof($this->primary->systems); $j++){
+			if ($this->primary->systems[$j]->name == "Engine"){
+				return $this->primary->systems[$j]->output;
+			}
+		}
+	}
+
+	public function getTurnCost(){
+		return ceil(pow($this->mass, 1.56) / 10000);
 	}
 
 	public function getNewCrits($turn){
@@ -463,11 +529,39 @@ class Ship {
 }
 
 
+class UltraHeavy extends Ship {
+	public $shipType = "UltraHeavy";
+	
+	function __construct($id, $userid, $available){
+        parent::__construct($id, $userid, $available);
+	}
+
+	public function getHitTreshold($system){
+		switch ($system->name){
+			case "Bridge": return 0.15;
+			case "Engine": return 0.4;
+			case "LifeSupport": return 0.6;
+			case "Sensor": return 0.7;
+			case "Reactor": return 0.6;
+		}
+	}
+}
+
 class SuperHeavy extends Ship {
 	public $shipType = "SuperHeavy";
 	
 	function __construct($id, $userid, $available){
         parent::__construct($id, $userid, $available);
+	}
+
+	public function getHitTreshold($system){
+		switch ($system->name){
+			case "Bridge": return 0.25;
+			case "Engine": return 0.5;
+			case "Lifesupport": return 0.6;
+			case "Sensor": return 0.7;
+			case "Reactor": return 0.7;
+		}
 	}
 }
 
@@ -477,14 +571,35 @@ class Heavy extends Ship {
 	function __construct($id, $userid, $available){
         parent::__construct($id, $userid, $available);
 	}
+
+	public function getHitTreshold($system){
+		switch ($system->name){
+			case "Bridge": return 0.35;
+			case "Engine": return 0.6;
+			case "LifeSupport": return 0.7;
+			case "Sensor": return 0.8;
+			case "Reactor": return 0.7;
+		}
+	}
 }
 
 class Medium extends Ship {
 	public $shipType = "Medium";
-	
+
 	function __construct($id, $userid, $available){
         parent::__construct($id, $userid, $available);
 	}
+
+	public function getHitTreshold($system){
+		switch ($system->name){
+			case "Bridge": return 0.6;
+			case "Engine": return 0.7;
+			case "LifeSupport": return 0.8;
+			case "Sensor": return 0.9;
+			case "Reactor": return 0.7;
+		}
+	}
+	
 }
 
 class Light extends Ship {
@@ -493,6 +608,16 @@ class Light extends Ship {
 	function __construct($id, $userid, $available){
         parent::__construct($id, $userid, $available);
 	}
+
+	public function getHitTreshold($system){
+		switch ($system->name){
+			case "Bridge": return 0.8;
+			case "Engine": return 0.8;
+			case "LifeSupport": return 1;
+			case "Sensor": return 1;
+			case "Reactor": return 0.8;
+		}
+	}
 }
 
 class SuperLight extends Ship {
@@ -500,6 +625,16 @@ class SuperLight extends Ship {
 	
 	function __construct($id, $userid, $available){
         parent::__construct($id, $userid, $available);
+	}
+
+	public function getHitTreshold($system){
+		switch ($system->name){
+			case "Bridge": return 1;
+			case "Engine": return 1;
+			case "LifeSupport": return 1;
+			case "Sensor": return 1;
+			case "Reactor": return 0.9;
+		}
 	}
 }
 

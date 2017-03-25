@@ -1,7 +1,6 @@
 <?php
 
 include_once 'global.php';
-echo "PHP: ".PHP_VERSION;
 
 if (isset($_SESSION["userid"])){
 
@@ -31,16 +30,16 @@ if (isset($_SESSION["userid"])){
 		$welcome = "<font color='red'> No Playername for your ID: ".$_SESSION['userid']."found !</font>";
 	}
 	
-	$ongoingGamesElement = "<table style='border: 1px solid white; margin: auto; border-radius: 5px'>";
+	$ongoingGamesElement = "<table>";
 	if ($ongoingGames) {	
 		$ongoingGamesElement .= "<tr>";
 		$ongoingGamesElement .= "<th colSpan = 4>My Ongoing Games</th>";
 		$ongoingGamesElement .= "</tr>";
 
 		$ongoingGamesElement .= "<tr>";
-		$ongoingGamesElement .= "<th style='width: 50%'>Game Name</th>";
+		$ongoingGamesElement .= "<th style='width: 40%'>Game Name</th>";
 		$ongoingGamesElement .= "<th style='width: 10%'>Turn</th>";
-		$ongoingGamesElement .= "<th style='width: 20%'>Phase</th>";
+		$ongoingGamesElement .= "<th style='width: 30%'>Phase</th>";
 		$ongoingGamesElement .= "<th style='width: 15%'>Status</th>";
 		$ongoingGamesElement .= "</tr>";
 		
@@ -94,10 +93,10 @@ if (isset($_SESSION["userid"])){
 		$ongoingGamesElement .= "</table>";
 	}
 	else {
-		$ongoingGamesElement .= "<tr><td>no Active Games found</tr></td></table>";
+		$ongoingGamesElement .= "<tr><th>no Active Games found</tr></th></table>";
 	}
 
-	$openGamesElement = "<table style='border: 1px solid white; margin: auto; border-radius: 5px'>";
+	$openGamesElement = "<table>";
 	if ($openGames) {
 		$openGamesElement .= "<tr>";
 		$openGamesElement .= "<th colSpan = 2>Open Games</th>";
@@ -138,7 +137,7 @@ else {
 	<script src='ajax.js'></script>
 </head>
 	<body>
-		<div style="margin: auto; width: 500px">
+		<div style>
 			<div class="lobbyDiv">
 				<span>
 					<?php echo $welcome; ?>
@@ -159,24 +158,3 @@ else {
 		</div>
 	</body>
 </html>
-
-<script>
-
-	
-function createGame(){
-	var name = document.getElementById("gameName").value;
-	if (name != "" && name != "undefined" && name != null){
-		ajax.createGame(name, refresh);
-	}
-	else {
-		alert("please enter a game name");
-	}
-}
-
-function initTurnProcession(data){
-	var data = data.split(".");
-	console.log(data);
-	location.href = "gameProcess.php?gameid=" + data[0] + "&turn=" + data[1];
-}
-
-</script>

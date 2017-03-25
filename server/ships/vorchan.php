@@ -17,17 +17,17 @@ class Vorchan extends Light {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 225, 19);
-		$front->systems[] = new MediumAssaultArray($this->getId(), $this->id, 270, 90);
-		$front->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, 8, 2);
-		$front->systems[] = new MediumAssaultArray($this->getId(), $this->id, 270, 90);
+		$front->systems[] = new IonProjector($this->getId(), $this->id, 270, 90);
+		$front->systems[] = new CEMissileLauncher($this->getId(), $this->id, 300, 60, 8, 2);
+		$front->systems[] = new IonProjector($this->getId(), $this->id, 270, 90);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 170, 17);
-		$right->systems[] = new LightAssaultArray($this->getId(), $this->id, 300, 180);
+		$right->systems[] = new IonBolter($this->getId(), $this->id, 300, 180);
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 170, 17);
-		$left->systems[] = new LightAssaultArray($this->getId(), $this->id, 180, 60);
+		$left->systems[] = new IonBolter($this->getId(), $this->id, 180, 60);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

@@ -3,6 +3,11 @@ body {
 	background-color: black;
 }
 
+.hinter {
+	font-size: 24px;
+	color: red;
+}
+
 .cache {
 	position: absolute;
 	z-index: 20;
@@ -68,9 +73,19 @@ body {
 	height: 15px;
 }
 
+.img30 {
+	width: 30px;
+	height: 30px;
+}
+
 .img50 {
 	width: 50px;
 	height: 50px;
+}
+
+.img80 {
+	width: 80px;
+	height: 80px;
 }
 
 .img100pct {
@@ -84,12 +99,18 @@ body {
 }
 
 .unitTest {
-	width: 210px;
+	width: 220px;
 	border: 1px solid white;
 	display: inline-block;
 }
-.unitTest th, .unitTest td {
-	font-size: 18px;
+
+.unitTest td {
+	font-size: 15px;
+}
+
+.unitTest th {
+	font-size: 15px;
+	color: red;
 }
 
 .fullBorderTable th {
@@ -194,10 +215,10 @@ table, th, tr, td {
 #hangarLoadoutDiv {
 	position: absolute;
 	width: 500px;
-	height: 200px;
 	border: 1px solid white;
 	background-color: black;
 	z-index: 11;
+	border-radius: 5px;
 }
 
 #hangarTable {
@@ -212,6 +233,11 @@ table, th, tr, td {
 	font-size: 22px;
 	background-color: blue;
 	color: white;
+	cursor: pointer;
+}
+
+#confirmFleet:hover {
+	color: red;
 }
 
 #shipsBoughtTable {
@@ -242,6 +268,7 @@ table, th, tr, td {
 	margin: auto;
 	border-collapse: collapse;
 	border: 1px solid white;
+	border-radius: 5px;
 }
 .factionUpperTable tr {
 	border: 1px solid white;
@@ -275,20 +302,31 @@ table, th, tr, td {
 }
 
 .lobbyDiv {
-	padding: 5px;
 	text-align: center;
 	margin: auto;
-	margin-top: 20px;
-	width: 600px;
-	padding: 10px;
+	margin-top: 60px;
+	padding: 5px;
+	width: 700px;
+}
+
+.lobbDiv a {
+	font-size: 16px;
 }
 
 .lobbyDiv table {
 	border-collapse: collapse;
-	width: 100%;
+	width: 95%;
+	border: 1px solid black;
+	margin: auto;
 }
 
 .lobbyDiv td {
+	font-size: 16px;
+	border-collapse: collapse;
+	border: 1px solid white;
+}
+.lobbyDiv th {
+	font-size: 20px;
 	border-collapse: collapse;
 	border: 1px solid white;
 }
@@ -303,10 +341,24 @@ table, th, tr, td {
 	margin: 0 0 0 0;
 	border-collapse: collapse;
 	border: 1px solid white;
-	width: 300px;
+	width: 405px;
+	border-radius: 5px;
+}
+
+.joinGame, .leaveGame, .toLobby {
+	height: 30px;
+	font-size: 20px;
+	cursor: pointer;
+	background-color: blue;
+	color: white;
+}
+
+.joinGame:hover, .leaveGame:hover, .toLobby:hover {
+	color: red;
 }
 
 .gameSetupStatus td {
+	font-size: 16px;
 	border: 1px solid white;
 }
 
@@ -324,6 +376,14 @@ table, th, tr, td {
 	border: 1px solid white;
 	position: absolute;
 	z-index: 3;
+}
+
+#background {
+	position: absolute;
+	width: 200px;
+	height: 200px;
+	background-image: url("varIcons/space.jpg");
+	z-index: 1;
 }
 
 #canvas {
@@ -371,9 +431,9 @@ table, th, tr, td {
 	-ms-transform: rotate(270deg);
 }
 
-.rotate270size100 {
-	width: 120px;
-	height: 120px;
+.rotate270size90 {
+	width: 90px;
+	height: 90px;
 	margin: auto;
 	transform: rotate(270deg);
 	-webkit-transform: rotate(270deg);
@@ -381,13 +441,12 @@ table, th, tr, td {
 }
 
 .structContainer {
-	width: 400px;
 	height: 400px;
 	position: relative;
 	color: white;
 	margin: auto;
-	border: 1px solid white;
 	margin-top: 5px;
+	border: 1px solid white;
 }
 
 .structDiv, .primaryDiv {
@@ -395,7 +454,6 @@ table, th, tr, td {
 	position: absolute;
 	color: black;
 	border: 1px solid white;
-	padding: 1px;
 }
 
 .structTable td {
@@ -407,12 +465,16 @@ table, th, tr, td {
 }
 
 .struct {
-	height: 25px;
+	height: 42px;
 	font-size: 16px;
 }
 
 .primaryTable {
 	margin: auto;
+}
+
+.primaryTable .struct {
+	height: 25px;
 }
 
 .primaryTable td {
@@ -510,10 +572,10 @@ table, th, tr, td {
 	top: 10px;
 	width: 100%;
 	font-size: 12px;
-	color: white;
-	display: table-cell;
+	color: red;
+	text-align: center;
 	vertical-align: middle;
-	left: -1px;
+	display: table-cell;
 }
 
 .system {
@@ -576,6 +638,15 @@ table, th, tr, td {
 	margin-bottom: 5px;
 }
 
+.ammoDiv .header {
+	font-size: 18px;
+}
+
+.ammoDiv .subHeader {
+	color: red;
+	font-size: 14px;
+}
+
 .ammoDiv td {
 	border: 1px solid white;
 }
@@ -586,15 +657,12 @@ table, th, tr, td {
 
 .ammoImpact {
 	position: absolute;
-	left: 0;
-	top: 40;
-
 }
+
 .ammoDestroyed {
 	position: absolute;
-	left: 0;
-	top: 0;
 }
+
 .ammoLostLock {
 	position: absolute;
 	left: 0;
@@ -625,15 +693,8 @@ table, th, tr, td {
 	height: 40px;
 }
 
-.iconContainer {
-	position: relative;
-	height: 60px;
-	border: 1px solid white;
-	border-collapse: collapse;
-}
-
-.iconContainer.destroyed {
-	background-color: red;
+.selectionHighlight {
+	color: red;
 }
 
 .iconIntegrity {
@@ -649,12 +710,14 @@ table, th, tr, td {
 	border-radius: 5px;
 	z-index: 10;
 	background-color: black;
-	padding: 10px;
+	padding: 5px;
+	width: 315px;
 }
 
 .shipdiv .header {
 	display: inline-block;
 	width: 220px;
+	height: 100px;
 	margin: auto;
 	padding: 0 0 0 0;
 	border: 1px solid white;
@@ -662,7 +725,6 @@ table, th, tr, td {
 
 .shipDiv .general {
 	width: 100%;
-	height: 120px;
 	color: white;
 	border-collapse: collapse;
 }
@@ -670,9 +732,8 @@ table, th, tr, td {
 .shipDiv .iconContainer {
 	float: right;
 	display: inline-block;
-	border: none;
-	width: 120px;
-	height: 120px;
+	height: 100px;
+	border: 1px solid white;
 }
 
 .shipDiv .structure {
@@ -719,7 +780,7 @@ table, th, tr, td {
 }
 
 #systemDetailsDiv {
-	z-index: 15;
+	z-index: 10;
 	display: inline-block;
 	position: absolute;
 }
@@ -769,7 +830,6 @@ table, th, tr, td {
 	z-index: 15;
 	position: absolute;
 	top: -1px;
-	left: 31px;
 }
 
 #upperGUI {
@@ -811,7 +871,7 @@ table, th, tr, td {
 
 #combatlogWrapper {
 	position: absolute;
-	top: 600px;
+	top: 120px;
 	width: 700px;	
 	z-index: 8;
 	padding: 5px;
@@ -963,7 +1023,7 @@ table, th, tr, td {
 #plusImpulse, #minusImpulse {
 }
 
-#plusImpulse:hover, #minusImpulse:hover {
+#plusImpulse:hover, #minusImpulse:hover, #undoLastAction:hover {
 	background-color: white;
 }
 
@@ -974,6 +1034,7 @@ table, th, tr, td {
 #undoLastAction {
 	color: black;
 	background-color: black;
+	z-index: 7;
 }
 
 #turnLeft, #turnRight {
@@ -1030,6 +1091,23 @@ table, th, tr, td {
 #maxVector:hover, #maxTurnVector:hover {
 	background-color: white;
 	color: black;
+}
+
+.dogFightHeader {
+	display: inline-block;
+	color: red;
+	font-size: 12px;
+	text-align: center;
+	width: 100%;
+	margin-top: 5px;
+	margin-bottom: 20px;
+}
+
+.dogFightEntry {
+	display: inline-block;
+	color: white;
+	text-align: center;
+	width: 100%;
 }
 
 .tri4 {

@@ -1,6 +1,6 @@
 <?php
 
-class Hyperion extends Medium {
+class Hyperion extends Heavy {
 	public $classname = "Hyperion";
 	public $name = "Hyperion Light Cruiser";
 	public $faction = "Earth Alliance";
@@ -51,7 +51,7 @@ class Hyperion extends Medium {
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 2750);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 125);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 125, 260, 10);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, 125, 240, 10);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 125);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 125, 10, 8);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 125, $this->getPowerReq() + 12);

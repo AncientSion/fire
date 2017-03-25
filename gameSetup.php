@@ -9,23 +9,27 @@ if (isset($_SESSION["userid"])){
 	$_SESSION["gameid"] = $_GET["gameid"];
 	echo "<script> var gameid = ".$gameid."; var playerid = ".$playerid.";</script>";
 	$dbManager = DBManager::app($gameid);
-	$manager = new Manager($playerid);
-
-	echo "<script> window.factions = ".json_encode($manager->getFactions()).";</script>";
-
 	$game = $dbManager->getGameDetails($gameid);
+	if (!$game){
+		header("Location: lobby.php");
+	}
+
+	if ($game["status"] == "active"){
+		header("Location: game.php?gameid=".$game["id"]);
+	}
+	$manager = new Manager($playerid);
 	$players = $dbManager->getPlayersInGame($gameid);
-	echo "<script> window.players = ".json_encode($players).";</script>";
+	echo "<script>";
+	echo "window.players = ".json_encode($players).";";
+	echo "window.factions = ".json_encode($manager->getFactions()).";";
+	echo "window.maxPoints = ".$game["pv"].";";
+	echo "</script>";
 	$joined = false;
 	$ready = false;
 
 	$element = "<table class='gameSetupStatus'";
 	$element .= "<tr>";
-	$element .= "<th colSpan=2 style='font-size: 20px; border: 2px solid white'>".$game["name"]."</th>";
-	$element .= "</tr>";
-	$element .= "<tr style='border:1px solid white'>";
-	$element .= "<th>Point Value: </th><th id='maxPointValue'>".$game["pv"]."</th>";
-	$element .= "</tr>";
+	$element .= "<th colSpan=2 style='font-size: 20px; border: 2px solid white'>".$game["name"]." - ".$game["pv"]." points</th>";
 
 	$element .= "<tr>";
 	$element .= "<th>Player Name</th>";
@@ -64,22 +68,15 @@ if (isset($_SESSION["userid"])){
 	}
 
 	if ($ready){
-
 	}
 	else if ($joined){
-		$element .= "<tr><td colSpan='2'>";	
-		$element .= "<input id='gameId' style='width: 100%' type='button' value='Leave Game' onclick='leaveGame()'>";
-		$element .= "</tr></td>";
+		$element .= "<tr><td colSpan='2' class='leaveGame' onclick='leaveGame()'>Leave Game</td></tr>";	
 	}
 	else {
-		$element .= "<tr><td colSpan='2'>";	
-		$element .= "<input id='gameId' style='width: 100%' type='button' value='Join Game' onclick='joinGame()'>";
-		$element .= "</tr></td>";
+		$element .= "<tr><td colSpan='2' class='joinGame' onclick='joinGame()'>Join Game</td></tr>";	
 	}
+		$element .= "<tr><td colSpan='2' class='toLobby' onclick='window.goToLobby()'>Return to Lobby</td></tr>";	
 
-	$element .= "<tr><td style='padding: 10px 10px 10px 10px; text-align: center' colSpan='2'>";
-	$element .= "<a href='lobby.php'>Return to Lobby</a>";
-	$element .= "</tr></td>";
 	$element .= "</table>";
 
 	if ($ready){
@@ -113,7 +110,7 @@ else {
 	<script src='systems.js'></script>
 	<script src='imageloader.js'></script>
 </head>
-	<body>
+	<body style="padding: 20px">
 		<div id ="popupWrapper">
 			<div id="popupText">
 			</div>
@@ -121,12 +118,12 @@ else {
 		<table style="height: 200px; width: 700px;">
 			<tr>
 				<td style="vertical-align: top;">
-					<div style="margin: auto; margin-top: 30px;">
+					<div style="margin: auto">
 						<?php echo $element; ?>
 					</div>
 				</td>
 				<td style="vertical-align: top;">
-					<div style="margin: auto; margin-top: 30px; margin-left: 50px;">
+					<div style="margin: auto; margin-left: 30px;">
 						<table id ="shipsBoughtTable">
 							<tr>
 								<th colSpan=2 style="width: 300px; font-size: 20px">
@@ -141,8 +138,8 @@ else {
 									0
 								</th>
 							</tr>
-							<tr id="confirmFleet" class="disabled" onclick="confirmFleetPurchase()">
-								<th colSpan = 2 style="cursor: pointer">
+							<tr id="confirmFleet" class="disabled">
+								<th onclick="confirmFleetPurchase()" colSpan=2>
 									Confirm Fleet Selection
 								</th>
 							</tr>
@@ -159,9 +156,10 @@ else {
 				</td>
 			</tr>
 		</table>
-		<div id="game" style="width: 420px; height: 400px">
+		<div id="game" class="disabled" style="width: 420px; height: 400px">
 			<canvas id="shipCanvas"></canvas>
 			<canvas id="fxCanvas"></canvas>
+			<div id="background"></div>
 		</div>
 		<div id="hangarLoadoutDiv" class="disabled">
 			<div class="header">
@@ -175,35 +173,43 @@ else {
 			</div>
 			<table id="hangarTable">
 			</table>
+			<div class="header">
+				<input type="button" value="Confirm Hangar loadout" onclick='confirmSystemLoadout()'>
+			</div>
 		</div>
 	</body>
 </html>
 
 <script>
 	window.preload();
-	var reinforceFaction = [];
 
 	$(document).ready(function(){
+		$("#confirmFleet").hover(function(){
+			$(this).toggleClass("selectionHighlight");
+		});
+
 		if (window.ready){
 			$("#shipsBoughtTable").hide();
+			$("#game").hide();
 		}
 		else if (window.joined){
 			 window.preview = true;
 
 			 window.game = {
 			 	phase: -2,
-				ships: [],
-				getShipById: function(id){	
-					return this.ships[0];
-				},
+				ships: [],				
 				shipsBought: [],
 
-				addFighter: function(ele){
-					game.ships[0].getSystemById($("#hangarLoadoutDiv").data("systemid")).addFighter(ele);
+				getUnitById: function(id){	
+					return this.ships[0];
 				},
 
-				removeFighter: function(ele){
-					game.ships[0].getSystemById($("#hangarLoadoutDiv").data("systemid")).removeFighter(ele);
+				addFighter: function(ele, all){
+					game.ships[0].getSystemById($("#hangarLoadoutDiv").data("systemid")).addFighter(ele, all);
+				},
+
+				removeFighter: function(ele, all){
+					game.ships[0].getSystemById($("#hangarLoadoutDiv").data("systemid")).removeFighter(ele, all);
 				},
 
 				setShipTotal: function(){
@@ -227,29 +233,35 @@ else {
 
 					var table = document.getElementById("totalShipCost");
 						table.innerHTML = "";
-					var tr = document.createElement("tr");
-					var td = document.createElement("td");
-						td.innerHTML = "Base Ship Cost: "; tr.appendChild(td);
-					var td = document.createElement("td");
-						td.innerHTML = game.ships[0].cost; tr.appendChild(td); table.appendChild(tr);
+
+					var tr = table.insertRow(-1);
+						tr.insertCell(-1).innerHTML = "Base Ship Cost";
+						tr.insertCell(-1).innerHTML = game.ships[0].cost;
 
 					for (var i = 0; i < game.ships[0].upgrades.length; i++){
-						var tr = document.createElement("tr");
-						var td = document.createElement("td");
-							td.innerHTML = game.ships[0].upgrades[i].name; tr.appendChild(td);
-						var td = document.createElement("td");
-							td.innerHTML = game.ships[0].upgrades[i].cost; tr.appendChild(td); table.appendChild(tr);
+						var tr = table.insertRow(-1);
+							tr.insertCell(-1).innerHTML = game.ships[0].upgrades[i].name
+							tr.insertCell(-1).innerHTML = game.ships[0].upgrades[i].cost;
 							game.ships[0].totalCost += game.ships[0].upgrades[i].cost;
 					}
 
-					var tr = document.createElement("tr");
-					var th = document.createElement("th");
-						th.innerHTML = "Total Cost: "; tr.appendChild(th);
-					var th = document.createElement("th");
-						th.innerHTML = game.ships[0].totalCost; tr.appendChild(th); table.appendChild(tr);
-				}
-		}
+					var tr = table.insertRow(-1);
+						tr.insertCell(-1).innerHTML = "Total Cost";
+						tr.insertCell(-1).innerHTML = game.ships[0].totalCost;
 
+
+					var tr = table.insertRow(-1);
+					var button = tr.insertCell(-1);
+						button.innerHTML = "--- Confirm Ship Selection ---";
+						button.style = "font-size: 20px; cursor: pointer; background-color: blue";
+						button.colSpan = 2;
+						$(button).hover(function(){
+							$(this).toggleClass("selectionHighlight");
+						}).click(function(){
+							window.addShipToFleet();
+						});
+					}
+			}
 
 		window.res = {x:200, y: 200};
 		initPreviewCanvas();
@@ -342,6 +354,10 @@ else {
 
 			$("#factionDiv").append(table);
 		}
+		else {
+			$("#game").hide();
+		}
+
 	});
 
 
@@ -353,12 +369,24 @@ else {
 		return cost;
 	}
 
+	function confirmSystemLoadout(){
+		for (var i = 0; i < game.ships[0].structures.length; i++){
+			for (var j = 0; j < game.ships[0].structures[i].systems.length; j++){
+				if (game.ships[0].structures[i].systems[j].selected){
+					game.ships[0].structures[i].systems[j].select();
+					return;
+				}
+			}
+		}
+	}
+
 	function canSubmit(){
-		if (getFleetCost()){
-			$("#confirmFleet").removeClass("disabled")
+		var fleetCost = getFleetCost();
+		if (fleetCost && fleetCost <= window.maxPoints){
+			$("#shipsBoughtTable").find("#confirmFleet").removeClass("disabled");
 		}
 		else {
-			$("#confirmFleet").addClass("disabled")
+			$("#shipsBoughtTable").find("#confirmFleet").addClass("disabled");
 		}
 		/*if (reinforceFaction.length && fleetCost){
 			$("#confirmFleet").removeClass("disabled");
@@ -369,7 +397,7 @@ else {
 	}
 
 	function confirmFleetPurchase(){
-		ajax.confirmFleetPurchase(playerid, gameid, window.game.shipsBought, window.reinforceFaction, redirect);
+		ajax.confirmFleetPurchase(playerid, gameid, window.game.shipsBought, redirect);
 	}
 
 	function requestShipData(classname){
@@ -402,33 +430,20 @@ else {
 
 		game.ships[0] = ship;
 		ship.create();
-		$("#fxCanvas").removeClass("disabled");
-		$("#shipCanvas").removeClass("disabled");
+		$("#game").removeClass("disabled");
+		ship.createBaseDiv();
+		$(".shipDiv").css("left", "435px").css("top", "-315px").removeClass("disabled");
 		drawShipPreview();
-		ship.createDiv();
 
 		var div = document.createElement("div");
-			div.style.display = "block";
 			div.style.border = "1px solid white";
-			div.style.width = "400px";
-		var table = document.createElement("table");
+		var table = document.createElement("table");		
 			table.id = "totalShipCost";
 
-		var input = document.createElement("input");
-			input.type = "button";
-			input.value = "Confirm Ship Selection";
-			input.addEventListener("click", function(){
-				window.addShipToFleet();
-			})
-
-		var subDiv = document.createElement("div"); subDiv.className = "header";
-			subDiv.appendChild(input);
-
-		div.appendChild(table); div.appendChild(subDiv);
+		div.appendChild(table);
 
 		document.getElementsByClassName("shipDiv")[0].appendChild(div);
 		window.game.setShipTotal();
-		$(".shipDiv").css("position", "relative").css("left", "415px").css("top", "-285px").removeClass("disabled");
 	}
 
 
@@ -436,12 +451,12 @@ else {
 
 		var cur = Math.floor($("#totalFleetCost").html());
 		var add = game.ships[0].totalCost;
-		var max = Math.floor($("#maxPointValue").html());
+		var max = window.maxPoints;
 
 		if (cur + add <= max){
 
 			var ship = {
-				classname: game.ships[0].classname,
+				classname: game.ships[0].name,
 				faction: game.ships[0].faction,
 				value: game.ships[0].totalCost,
 				purchaseId: window.game.shipsBought.length,
@@ -454,52 +469,48 @@ else {
 
 			var tr = document.createElement("tr");
 			$(tr).data("purchaseId", ship.purchaseId)
-				.contextmenu(function(e){
+				.click(function(e){
 					e.preventDefault();
-					for (var i = window.game.shipsBought.length; i--; i > 0){
-						if (window.game.shipsBought[i].purchaseId == $(this).data("purchaseId")){
-							window.game.shipsBought.splice(i, 1);
-							break;
-						}
-					}
-					$(this).remove();
-					$("#totalFleetCost").html(getFleetCost());
-				}).hover(
-					function(e){
-						$(this).addClass("fontHighlight");
-					},
-					function(e){
-						$(this).removeClass("fontHighlight");
-					}
-			);
+					removeShipFromFleet($(this));
+				}).hover(function(e){
+					$(this).toggleClass("fontHighlight");
+				})
 
-			var td = document.createElement("td");
-				td.style.textAlign = "center";
-				td.innerHTML = ship.classname; tr.appendChild(td);
-			var td = document.createElement("td");
-				td.style.textAlign = "center";
-				td.innerHTML = ship.value; tr.appendChild(td);
+			var td = tr.insertCell(-1)
+				td.innerHTML = ship.classname;
+			var td = tr.insertCell(-1)
+				td.innerHTML = ship.value;
 			tr.appendChild(td);
 
 			var target = document.getElementById("totalFleetCost");
 				target.parentNode.parentNode.insertBefore(tr, target.parentNode);
 				$(target).html(getFleetCost());
-				$(".shipDiv").addClass("disabled");
-				$("#shipCanvas").addClass("disabled");
-				$("#fxCanvas").addClass("disabled");
+				$(".shipDiv").remove();
+				$("#game").addClass("disabled");
 				$("#hangarLoadoutDiv").addClass("disabled");
 				$("#hangarTable").html("");
 				canSubmit();
 		}
 		else {
-			alert ("you have insufficient point value left");
+			popup("You have insufficient point value left");
 			return false;
 		}
 	}
 
+	function removeShipFromFleet(ele){
+		for (var i = window.game.shipsBought.length; i--; i > 0){
+			if (window.game.shipsBought[i].purchaseId == $(ele).data("purchaseId")){
+				window.game.shipsBought.splice(i, 1);
+				$(ele).remove();
+				break;
+			}
+		}
+		$("#totalFleetCost").html(getFleetCost());
+		canSubmit();
+	}
+
 	function initPreviewCanvas(){
 		window.fxCanvas = document.getElementById("fxCanvas");
-		window.fxCanvas.className ="previewCanvas disabled";
 		window.fxCanvas.width = res.x;
 		window.fxCanvas.height = res.y;
 		window.fxCanvas.style.width = res.x;
@@ -507,7 +518,6 @@ else {
 		window.fxCtx = fxCanvas.getContext("2d");
 
 		window.shipCanvas = document.getElementById("shipCanvas");
-		window.shipCanvas.className = "disabled";
 		window.shipCanvas.width = res.x;
 		window.shipCanvas.height = res.y;
 		window.shipCanvas.style.width = res.x;
@@ -520,7 +530,7 @@ else {
 		window.shipCtx.save();
 		window.shipCtx.translate(res.x/2, res.y/2);
 		window.shipCtx.rotate(-90*(Math.PI/180));
-		var size = 50;
+		var size = shipCanvas.width/4;
 		window.shipCtx.drawImage(game.ships[0].img, -size, -size, size*2, size*2);
 		window.shipCtx.restore();
 	}
@@ -559,29 +569,24 @@ else {
 		if (!$(ele).data("avail")){
 			for (var i = 0; i < shiplist.length; i++){
 				var subTr = document.createElement("tr")
-					$(subTr).mouseenter(function(){
-						$(this).addClass("highlight");
-					}).mouseleave(function(){
-						$(this).removeClass("highlight");
-					});
+					$(subTr).hover(function(){
+						$(this).toggleClass("highlight");
+					})
 
-					var subTd = document.createElement("td");
+					var subTd = subTr.insertCell(-1);
 						subTd.innerHTML = shiplist[i]["classname"];
-						subTr.appendChild(subTd); 
 
-					var subTd = document.createElement("td");
+					var subTd = subTr.insertCell(-1);
 						subTd.innerHTML = shiplist[i]["value"];
-						subTr.appendChild(subTd); 
 
-					var subTd = document.createElement("td");							
+					var subTd = subTr.insertCell(-1);	
 						subTd.innerHTML = "Add to fleet";
-						$(subTd).data("classname", shiplist[i]["classname"]).data("value", shiplist[i]["value"]).mouseenter(function(){
-							$(this).addClass("selected");
-						}).mouseleave(function(){
-							$(this).removeClass("selected");
-						}).click(function(){
-							requestShipData(this.parentNode.childNodes[0].innerHTML);
-						})
+						$(subTd).data("classname", shiplist[i]["classname"]).data("value", shiplist[i]["value"])
+							.hover(function(){
+								$(this).toggleClass("selectionHighlight");
+							}).click(function(){
+								requestShipData(this.parentNode.childNodes[0].innerHTML);
+							})
 						subTr.appendChild(subTd); 
 
 					//	subTable.appendChild(subTr);
@@ -620,7 +625,7 @@ else {
 
 	function leaveGame(){
 		console.log("leaveGame");
-		ajax.leaveGame(playerid, gameid);
+		ajax.leaveGame(playerid, gameid, window.goToLobby);
 	}
 
 </script>

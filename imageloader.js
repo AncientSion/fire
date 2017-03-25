@@ -10,11 +10,11 @@ window.preload = function(){
 }
 
 window.preLoadBallistics = function(){
-	window.ballImages.ballistictorpedo = new Image();
-	window.ballImages.ballistictorpedo.src = "ballIcons/ballistictorpedo.png";
+	window.ballImages.hasta = new Image();
+	window.ballImages.hasta.src = "ballIcons/hasta.png";
 
-	window.ballImages.ballisticmissile = new Image();
-	window.ballImages.ballisticmissile.src = "ballIcons/ballisticmissile.png";
+	window.ballImages.baracuda = new Image();
+	window.ballImages.baracuda.src = "ballIcons/baracuda.png";
 }
 
 

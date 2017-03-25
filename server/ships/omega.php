@@ -1,6 +1,6 @@
 <?php
 
-class Omega extends Heavy {
+class Omega extends SuperHeavy {
 	public $classname = "Omega";
 	public $name = "Omega Destroyer";
 	public $faction = "Earth Alliance";
@@ -30,16 +30,19 @@ class Omega extends Heavy {
 			$right->systems[] = new ParticleBeam($this->getId(), $this->id, 0, 180);
 			$right->systems[] = new ParticleBeam($this->getId(), $this->id, 0, 180);
 			$right->systems[] = new ParticleBeam($this->getId(), $this->id, 0, 180);
+			$right->systems[] = new ParticleBeam($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 1050, 30);
 			$aft->systems[] = new ParticleBeam($this->getId(), $this->id, 90, 270);
 			$aft->systems[] = new ParticleBeam($this->getId(), $this->id, 90, 270);
-			$aft->systems[] = new ParticleBeam($this->getId(), $this->id, 90, 270);
 			$aft->systems[] = new Hangar($this->getId(), $this->id, 150, 210, 350, 6, array("Aurora", "Thunderbolt"));
+			$aft->systems[] = new ParticleBeam($this->getId(), $this->id, 90, 270);
+			$aft->systems[] = new ParticleBeam($this->getId(), $this->id, 90, 270);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 1500, 34);
+			$left->systems[] = new ParticleBeam($this->getId(), $this->id, 180, 360);
 			$left->systems[] = new ParticleBeam($this->getId(), $this->id, 180, 360);
 			$left->systems[] = new ParticleBeam($this->getId(), $this->id, 180, 360);
 			$left->systems[] = new ParticleBeam($this->getId(), $this->id, 180, 360);
@@ -53,12 +56,12 @@ class Omega extends Heavy {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 5500);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 4500);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 200, 8);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 200, 550, 10);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, 200, 530, 10);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 200);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 200, 7, 7);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 200, $this->getPowerReq());
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 200, $this->getPowerReq()+10);
 	}
 }
 

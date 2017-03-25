@@ -10,58 +10,57 @@ class Particle extends Weapon {
 	}
 }
 
-class LightAssaultArray extends Particle {
-	public $name = "LightAssaultArray";
-	public $display = "Lgt Assault Array";
-	public $minDmg = 20;
-	public $maxDmg = 27;
-	public $accDecay = 200;
-	public $shots = 2;
-	public $animColor = "brown";
+class IonBolter extends Particle {
+	public $name = "IonBolter";
+	public $display = "Ion Bolter";
+	public $minDmg = 16;
+	public $maxDmg = 23;
+	public $accDecay = 170;
+	public $shots = 4;
+	public $animColor = "grey";
 	public $projSize = 2;
-	public $projSpeed = 5;
+	public $projSpeed = 6;
 	public $exploSize = 4;
 	public $reload = 1;
-	public $integrity = 20;
-	public $fc = array(0 => 80, 1 => 155);
-	public $mass = 12;
+	public $fc = array(0 => 85, 1 => 220);
+	public $mass = 14;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
 	}
 }
 
-class MediumAssaultArray extends LightAssaultArray {
-	public $name = "MediumAssaultArray";
-	public $display = "Mdm Assault Array";
-	public $minDmg = 35;
-	public $maxDmg = 49;
-	public $accDecay = 90;
+class IonProjector extends IonBolter {
+	public $name = "IonProjector";
+	public $display = "Ion Projector";
+	public $minDmg = 33;
+	public $maxDmg = 47;
+	public $accDecay = 100;
+	public $shots = 2;
 	public $projSize = 3;
 	public $projSpeed = 5;
-	public $exploSize = 5;
-	public $integrity = 35;
-	public $fc = array(0 => 110, 1 => 100);
-	public $mass = 16;
+	public $exploSize = 6;
+	public $fc = array(0 => 100, 1 => 80);
+	public $mass = 19;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
 	}
 }
 
-class HeavyAssaultArray extends LightAssaultArray {
-	public $name = "HeavyAssaultArray";
-	public $display = "Hvy Aassault Array";
-	public $minDmg = 66;
-	public $maxDmg = 94;
-	public $accDecay = 60;
+class IonCannon extends IonBolter {
+	public $name = "IonCannon";
+	public $display = "Ion Cannon";
+	public $minDmg = 53;
+	public $maxDmg = 79;
+	public $accDecay = 70;
+	public $shots = 2;
 	public $reload = 2;
-	public $projSize = 3;
-	public $projSpeed = 4;
-	public $exploSize = 6;
-	public $integrity = 50;
-	public $fc = array(0 => 130, 1 => 65);
-	public $mass = 20;
+	public $projSize = 4;
+	public $projSpeed = 5;
+	public $exploSize = 7;
+	public $fc = array(0 => 120, 1 => 45);
+	public $mass = 28;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -71,16 +70,15 @@ class HeavyAssaultArray extends LightAssaultArray {
 class ParticleBeam extends Particle {
 	public $name = "ParticleBeam";
 	public $display = "Particle Beam";
-	public $minDmg = 25;
-	public $maxDmg = 34;
+	public $minDmg = 21;
+	public $maxDmg = 28;
 	public $accDecay = 150;
 	public $shots = 3;
 	public $animColor = "blue";
 	public $projSize = 3;
 	public $projSpeed = 6;
 	public $exploSize = 6;
-	public $integrity = 28;
-	public $fc = array(0 => 80, 1 => 170);
+	public $fc = array(0 => 85, 1 => 170);
 	public $mass = 15;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
@@ -99,6 +97,7 @@ class HeavyParticleBeam extends ParticleBeam {
 	public $projSpeed = 4;
 	public $exploSize = 7;
 	public $fc = array(0 => 120, 1 => 120);
+	public $mass = 24;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -108,17 +107,16 @@ class HeavyParticleBeam extends ParticleBeam {
 class FusionCannon extends Particle {
 	public $name = "FusionCannon";
 	public $display = "Fusion Cannon";
-	public $minDmg = 31;
-	public $maxDmg = 40;
+	public $minDmg = 28;
+	public $maxDmg = 37;
 	public $accDecay = 130;
 	public $shots = 2;
 	public $animColor = "green";
 	public $projSize = 3;
 	public $projSpeed = 5;
 	public $exploSize = 7;
-	public $integrity = 42;
 	public $fc = array(0 => 100, 1 => 145);
-	public $mass = 14;
+	public $mass = 18;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -128,15 +126,16 @@ class FusionCannon extends Particle {
 class FusionPulsar extends Particle {
 	public $name = "FusionPulsar";
 	public $display = "Fusion Pulsar";
-	public $minDmg = 45;
-	public $maxDmg = 55;
+	public $minDmg = 25;
+	public $maxDmg = 35;
 	public $accDecay = 180;
 	public $shots = 4;
 	public $animColor = "lightGreen";
 	public $projSize = 3;
 	public $projSpeed = 5;
 	public $exploSize = 4;
-	public $integrity = 24;
+	public $fc = array(0 => 115, 1 => 90);
+	public $mass = 16;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -153,31 +152,6 @@ class FusionPulsar extends Particle {
 			}
 		}
 		return true;
-	}
-}
-
-class ParticlePulsar extends Particle {
-	public $name = "ParticlePulsar";
-	public $display = "Particle Pulsar";
-	public $minDmg;
-	public $maxDmg;
-	public $accDecay = 270;
-	public $shots = 3;
-	public $animColor = "yellow";
-	public $projSize = 1;
-	public $projSpeed = 5;
-	public $exploSize = 2;
-	public $reload = 1;
-	public $fc = array(0 => 100, 1 => 200);
-
-	function __construct($id, $fighterId, $parentId, $minDmg, $maxDmg, $start, $end){
-		$this->id = $id;
-		$this->fighterId = $fighterId;
-		$this->parentId = $parentId;
-		$this->minDmg = $minDmg;
-		$this->maxDmg = $maxDmg;
-		$this->start = $start;
-		$this->end = $end;
 	}
 }
 
