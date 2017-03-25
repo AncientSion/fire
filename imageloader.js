@@ -56,7 +56,7 @@ window.preloadShips = function(){
 	window.shipImages.tinashi.src = "shipIcons/tinashi.png";
 
 	window.shipImages.whitestar = new Image();
-	window.shipImages.whitestar.src = "shipIcons/whiteStar.png";
+	window.shipImages.whitestar.src = "shipIcons/whitestar.png";
 
 	window.shipImages.aurora = new Image();
 	window.shipImages.aurora.src = "shipIcons/aurora.png";

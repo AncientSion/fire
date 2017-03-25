@@ -99,7 +99,7 @@ class Flight extends Mini {
 	}
 }
 
-class Fighter extends Structure implements JsonSerializable {
+class Fighter extends Structure {
 	public $value;
 	public $mass;
 	public $ep;
