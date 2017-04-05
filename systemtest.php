@@ -9,92 +9,29 @@
 	<link rel='stylesheet' href='style.css'/>
 </head>
 	<body> 
-		<table class="fullBorderTable">
-			<tr>
-				<th>
-					Class
-				</th>
-				<th>
-					Cost
-				</th>
-				<th>
-					Mass
-				</th>
-				<th>
-					Struct
-				</th>
-				<th>
-					Armour
-				</th>
-				<th>
-					Struct per M
-				</th>
-				<th>
-					Armour per M
-				</th>
-			</tr>
-		</table>
 			<?php
 
 				$time = -microtime(true);
 
-				$ships = $manager->logShips("All");
-				
+				$systems = $manager->logSystemsByClass(array("Matter", "Ion"));
+				//$compare = array("LightIon", "MediumIon", "LightPulseCannon", "MediumPulseCannon", "FusionCannon");
+				//$systems = $manager->compareSystems($compare);
 
-				function sortMass($a, $b){
-					return $a->mass - $b->mass;
-				}
+				for ($i = 0; $i < sizeof($systems); $i++){
 
-				usort($ships, "sortMass");
-
+				echo "<table class='unitTest'><tr><th colSpan=2 style='width: 210px'>".$systems[$i]->name."</th></tr>";
 
 
-				for ($i = 0; $i < sizeof($ships); $i++){
-					$fires[] = new FireOrder(0,0,0,0,0,0,0,0,0,0,0,0);
-				}
-				for ($i = 0; $i < sizeof($fires); $i++){
-					$fires[$i]->hitSection = $ships[$i]->structures[0]->id;
-					$fires[$i]->target = $ships[$i];
+					$avg = round(($systems[$i]->minDmg + $systems[$i]->maxDmg)/2, 2);
 
-					echo "<table class='unitTest'><tr><th colSpan=2 style='width: 210px'>".$ships[$i]->classname."</th></tr>";
-
-					$main = 0;
-					$internal = 0;
-					$wpn = 0;
-					$hangar = 0;
-
-					for ($j = 0; $j < 500; $j++){
-						$sys = $ships[$i]->getHitSystem($fires[$i]);
-						if ($sys instanceof Hangar){
-							$hangar++;
-						}
-						else if ($sys instanceof Weapon){
-							$wpn++;
-						}
-						else if ($sys instanceof PrimarySystem){
-							$internal++;
-						}
-						else {
-							$main++;
-						}
-					}
-
-					$mass = $ships[$i]->mass;
-					$armour = $ships[$i]->getArmour();			
-					$struct = $ships[$i]->getStructure();
-					$negation = array_sum($armour["negation"]) / sizeof($armour["negation"]);
-
-					echo "<tr><td>Mass</td><td style='text-align: right'>".($ships[$i]->mass)."</td></tr>";
-					echo "<tr><td>Str per 1 Mass</td><td style='text-align: right'>".(round($struct / $mass, 2))."</td></tr>";
-					echo "<tr><td>Arm per 1 Mass</td><td style='text-align: right'>".(round($armour["integrity"] / $mass, 2))."</td></tr>";
-					echo "<tr><td>Weapon Mass</td><td style='text-align: right'>".(round($ships[$i]->getWeapons() / $mass, 3))."</td></tr>";
-					echo "<tr><td>Avg Armour</td><td style='text-align: right'>".(round($negation, 2))."</td></tr>";
-					echo "<tr><td></td><td></td></tr>";
-					echo "<tr><td>Main Structure</td><td style='text-align: right'>".(round($main / $j, 2)*100)."%</td></tr>";
-					echo "<tr><td>Internals</td><td style='text-align: right'>".(round($internal / $j, 2)*100)."%</td></tr>";
-					echo "<tr><td>Primary Total</td><td style='text-align: right'>".(round(($main+$internal) / $j, 2)*100)."%</td></tr>";
-					echo "<tr><td>Weapons</td><td style='text-align: right'>".(round($wpn / $j, 2)*100)."%</td></tr>";
-					echo "<tr><td>Hangar</td><td style='text-align: right'>".(round($hangar / $j, 2)*100)."%</td></tr>";
+					echo "<tr><th colSpan=2 style='text-align: center'>".($systems[$i]->display)."</th></tr>";
+					echo "<tr><td colSpan=2>".$systems[$i]->fc[0]."% / ".$systems[$i]->fc[1]."%</td></tr>";
+					echo "<tr><td>AccDecay</td><td style='text-align: right'>".($systems[$i]->accDecay)."</td></tr>";
+					echo "<tr><td>Shots</td><td style='text-align: right'>".($systems[$i]->shots)."</td></tr>";
+					echo "<tr><td>MinDmg</td><td style='text-align: right'>".($systems[$i]->minDmg)."</td></tr>";
+					echo "<tr><td>MaxDmg</td><td style='text-align: right'>".($systems[$i]->maxDmg)."</td></tr>";
+					echo "<tr><td>Avg</td><td style='text-align: right'>".($avg)."</td></tr>";
+					echo "<tr><td>Dmg per Salvo</td><td style='text-align: right'>".($avg*$systems[$i]->shots)."</td></tr>";
 
 					echo "</table>";
 

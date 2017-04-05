@@ -12,6 +12,28 @@ class Point {
 	}
 }
 
+class Vector {
+	public $x;
+	public $y;
+
+	public $m;
+	public $vx;
+	public $vy;
+
+	function __construct($a, $b){
+		$this->x = $b->x - $a->x;
+		$this->y = $b->y - $a->y;
+
+		$x = pow($this->x, 2);
+		$y = pow($this->y, 2);
+
+		$this->m = sqrt($x + $y);
+		$this->vx = $this->x / $this->m;
+		$this->vy = $this->y / $this->m;
+	}
+}
+
+
 class Action {
 	public $turn;
 	public $type;

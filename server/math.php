@@ -81,6 +81,115 @@ class Math {
 			}
 		}
 	}
+
+	static function getVector($a, $b, $s){
+		return new Vector($a, $b, $s);
+	}
+
+	static function canIntercept($origin, $target, $targetVector, $v){
+		$tx = $target->x - $origin->x;
+		$ty = $target->y - $origin->y;
+		$tvx = $targetVector->vx;
+		$tvy = $targetVector->vy;
+
+		$a = $tvx*$tvx + $tvy*$tvy - $v*$v;
+		$b = 2 * ($tvx * $tx + $tvy * $ty);
+		$c = $tx*$tx + $ty*$ty;
+
+		$ts = Math::solve($a, $b, $c);
+
+		$sol = false;
+		if ($ts){
+			$t0 = $ts[0];
+			$t1 = $ts[1];
+			$t = min($t0, $t1);
+			if ($t < 0){$t = max($t0, $t1);}
+			if ($t0 > 0){
+				$sol = new Point(
+					$target->x + $tvx * $t,
+					$target->y + $tvy * $t
+				);
+			}
+		}
+		return $sol;
+	}
+
+	static function solve($a, $b, $c){
+		$sol = false;
+		if (abs($a) < 1e-6){
+			if (abs($b) < 1e-6){
+				$sol = abs($c) < 1e-6 ? array(0, 0) : false;
+			}
+			else {
+				$sol = array(-$c/$b, -$c/$b);
+			}
+		}
+		else {
+			$disc = $b*$b - 4*$a*$c;
+			if ($disc >= 0){
+				$disc = sqrt($disc);
+				$a = 2*$a;
+				$sol = array( (-$b-$disc)/$a, (-$b+$disc)/$a );
+			}
+		}
+		return $sol;
+	}
+
+
+/*
+	function getIntercept(src, dst, v){
+		var tx = dst.x - src.x;
+		var	ty = dst.y - src.y;
+		var	tvx = dst.move.vx;
+		var	tvy = dst.move.vy;
+
+		// Get quadratic equation components
+		var a = tvx*tvx + tvy*tvy - v*v;
+		var b = 2 * (tvx * tx + tvy * ty);
+		var c = tx*tx + ty*ty;
+
+		// Solve quadratic
+		var ts = quad(a, b, c); // See quad(), below
+
+		// Find smallest positive solution
+		var sol = null;
+		if (ts) {
+			var t0 = ts[0], t1 = ts[1];
+			var t = Math.min(t0, t1);
+			if (t < 0) t = Math.max(t0, t1);    
+			if (t > 0) {
+				sol = {
+					x: dst.x + dst.move.vx * t,
+					y: dst.y + dst.move.vy * t
+				};
+			}
+		}
+		return sol;
+	}
+
+	function quad(a,b,c) {
+		var sol = null;
+		if (Math.abs(a) < 1e-6) {
+			if (Math.abs(b) < 1e-6) {
+				sol = Math.abs(c) < 1e-6 ? [0,0] : null;
+			} else {
+				sol = [-c/b, -c/b];
+			}
+		} else {
+			var disc = b*b - 4*a*c;
+			if (disc >= 0) {
+				disc = Math.sqrt(disc);
+				a = 2*a;
+				sol = [(-b-disc)/a, (-b+disc)/a];
+			}
+		}
+		return sol;
+	}
+*/
+
+
+
+
 }
 
 

@@ -1,9 +1,8 @@
 <?php
 
 class Tinashi extends Medium {
-
-	public $classname = "Tinashi";
 	public $name = "Tinashi";
+	public $display = "Tinashi";
 	public $faction = "Minbari Federation";
 	public $size = 70;
 	public static $value = 1000;

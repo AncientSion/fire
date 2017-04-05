@@ -12,13 +12,14 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 	this.size = size;
 	this.userid = userid;
 	this.shipType = shipType;
-	this.baseHitChance = Math.ceil(Math.pow(this.mass, 0.55));
+	this.baseHitChance = Math.ceil(Math.pow(this.mass, 0.5));
 	this.friendly;
 	this.deployed;
 	this.available = available;
 	this.primary;
 	this.ship = true;
 	this.flight = false;
+	this.salvo = false;
 	this.highlight = false;
 	this.destroyed = false;
 
@@ -50,10 +51,9 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 	}
 
 	this.drawSelf = function(){
-		var a = this.facing * Math.PI/180;
 		ctx.save();
 		ctx.translate(this.x, this.y)
-		ctx.rotate(a);
+		ctx.rotate(this.facing * Math.PI/180);
 		ctx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
 		ctx.restore();
 	}
@@ -71,7 +71,6 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		ctx.lineWidth = 1;
 		ctx.globalAlpha = 1;
 		ctx.strokeStyle = "black";
-		return true;
 	}
 
 	this.drawCenterPoint = function(){
@@ -217,6 +216,8 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		this.setPosition();
 		this.setFacing();
 		game.disableDeployment();
+		this.select();
+		game.enableDeployment(this.id);
 		game.draw();
 	}
 
@@ -409,7 +410,7 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		fxCtx.translate(cam.o.x, cam.o.y);
 		fxCtx.scale(cam.z, cam.z);
 
-		$(fxCanvas).css("opacity", 0.2);
+		$(fxCanvas).css("opacity", 0.3);
 		var angle = this.getPlannedFacingToMove(this.actions.length-1);
 		var pos = this.getOffsetPos();
 
@@ -425,19 +426,19 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		fxCtx.setTransform(1,0,0,1,0,0);
 	}
 
-	this.drawStructureAxis = function(struct){
+	this.drawSystemAxis = function(system){
 		fxCtx.clearRect(0, 0, res.x, res.y);
 		fxCtx.translate(cam.o.x, cam.o.y);
 		fxCtx.scale(cam.z, cam.z);
 
-		$(fxCanvas).css("opacity", 1);
+		$(fxCanvas).css("opacity", 1)
 		var angle = this.getPlannedFacingToMove(this.actions.length-1);
 		var pos = this.getOffsetPos();
-		var p1 = getPointInDirection(res.x, struct.start + angle, pos.x, pos.y);
-		var p2 = getPointInDirection(res.y, struct.end + angle, pos.x, pos.y)
+		var p1 = getPointInDirection(system.range || res.x, system.start + angle, pos.x, pos.y);
+		var p2 = getPointInDirection(system.range || res.y, system.end + angle, pos.x, pos.y)
 		var dist = getDistance( {x: pos.x, y: pos.y}, p1);
-		var rad1 = degreeToRadian(struct.start + angle);
-		var rad2 = degreeToRadian(struct.end + angle);
+		var rad1 = degreeToRadian(system.start + angle);
+		var rad2 = degreeToRadian(system.end + angle);
 		
 		fxCtx.beginPath();			
 		fxCtx.moveTo(pos.x, pos.y);
@@ -447,36 +448,6 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		fxCtx.fillStyle = "lightBlue";
 		fxCtx.fill();
 		fxCtx.globalAlpha = 1;
-		fxCtx.strokeStyle = "black";
-		fxCtx.stroke();
-
-		fxCtx.setTransform(1,0,0,1,0,0);
-	}
-
-	this.showHangarLaunchAxis = function(hangar){
-		fxCtx.clearRect(0, 0, res.x, res.y);
-		fxCtx.translate(cam.o.x, cam.o.y);
-		fxCtx.scale(cam.z, cam.z);
-
-		$(fxCanvas).css("opacity", 1);
-		var angle = this.getPlannedFacingToMove(this.actions.length-1);
-		var pos = this.getOffsetPos();
-		var p1 = getPointInDirection(hangar.range, hangar.start + angle, pos.x, pos.y);
-		var p2 = getPointInDirection(hangar.range, hangar.end + angle, pos.x, pos.y)
-		var dist = getDistance( {x: pos.x, y: pos.y}, p1);
-		var rad1 = degreeToRadian(hangar.start + angle);
-		var rad2 = degreeToRadian(hangar.end + angle);
-		
-		fxCtx.beginPath();			
-		fxCtx.moveTo(pos.x, pos.y);
-		fxCtx.arc(pos.x, pos.y, dist, rad1, rad2, false);
-		fxCtx.closePath();
-		fxCtx.globalAlpha = 0.3;			
-		fxCtx.fillStyle = "lightBlue";
-		fxCtx.fill();
-		fxCtx.globalAlpha = 1;
-		fxCtx.strokeStyle = "black";
-		fxCtx.stroke();
 
 		fxCtx.setTransform(1,0,0,1,0,0);
 	}
@@ -518,7 +489,7 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 	}
 	
 	this.getImpulseChangeCost = function(){
-		var cost = Math.ceil((Math.pow(this.mass, 1.25))*this.getImpulseMod() / 500);	
+		var cost = Math.ceil((Math.pow(this.mass, 1.20))*this.getImpulseMod() / 500);	
 		return cost;
 	}
 
@@ -1329,11 +1300,11 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 				
 		subDiv.appendChild(table);
 		div.appendChild(subDiv);
-		div = this.extendDiv(div);
+		div = this.expandDiv(div);
 
 	}
 
-	this.extendDiv = function(div){
+	this.expandDiv = function(div){
 		var iconContainer = document.createElement("div");
 			iconContainer.className = "iconContainer";
 		var img =  window.shipImages[this.name.toLowerCase()].cloneNode(true); img.className = "rotate270size90";
@@ -1356,6 +1327,7 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 
 		var noFront = true;
 		var noAft = true;
+		var sides = 0;
 
 		for (var i = 0; i < this.structures.length; i++){
 			this.structures[i].direction = this.structures[i].getDirection();
@@ -1365,9 +1337,25 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 			else if (this.structures[i].direction == 180){
 				noAft = false;
 			}
+			else if (this.structures[i].direction > 0 && this.structures[i].direction < 180 || this.structures[i].direction > 180 && this.structures[i].direction < 360){
+				sides++;
+			}
+		}
+		sides /= 2;
+
+		var maxWidth = 0;
+		if (this.structures.length <= 4){
+			maxWidth = 320;
+		}
+		else {
+			maxWidth = 360;
 		}
 
+		$(div).css("width", maxWidth);
+
+
 		var conWidth = $(structContainer).width();
+//		console.log(conWidth);
 		var conHeight = $(structContainer).height();
 
 		// PRIMARY
@@ -1461,8 +1449,10 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 				}
 			}
 			else { // sides
-
-				if (this.structures[i].systems.length <= 3){
+				if (sides > 1){
+					max = 2;
+				}
+				else if (this.structures[i].systems.length <= 3){
 					max = 1;
 				}
 				else {
@@ -1558,17 +1548,22 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 			}
 
 			if (a == 0 || a == 360){
+				if (!noAft && this.structures[i].systems.length <= 3){
+					offsetY += 30;
+				}
 			}
 			else if (noAft){
-				offsetY -= 60;
+				offsetY -= 60 + this.structures.length*12;
 			}
 			else if (a == 180){
+				offsetY += 40;
+			}
+			else if (sides >= 2 && a-90 != 0 && a-90 != 180){
 				offsetY += 40;
 			}
 			else if (!noFront && !noAft){
 				offsetY -= 30;
 			}
-
 			
 			$(structDiv)
 				.data("id", this.structures[i].id)
@@ -1774,20 +1769,21 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		else if (system instanceof Weapon && !system.disabled && !system.destroyed && system.getLoadLevel() >= 1){
 			if (system instanceof Launcher){
 				if (system.getOutput() < system.effiency){
-					return true;
-				}
+					if (system.getRemainingAmmo() > system.getOutput()){
+						return true;
+					} else popup("There is not enough ammunition left");
+				} else popup("The launcher is already at maximum capacity");
 			}
 			else if (system.getBoostLevel() < system.maxBoost){
-				console.log(system.getBoostLevel());
 				if (this.getUnusedPower() >= system.getEffiency()){
 					return true;
-				}
+				} else popup("You have insufficient power remaining");
 			}
 		}
 		else if (!(system instanceof Weapon)){
 			if (this.getUnusedPower() >= system.getEffiency()){
 				return true;
-			}
+			} else popup("You have insufficient power remaining");
 		}
 		return false;
 	}

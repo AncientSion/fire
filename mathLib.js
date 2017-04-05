@@ -64,7 +64,7 @@ function isInArc(direction, start, end){
 	//console.log("direction: "+direction + " start: " + start + " end: " + end);	
 	//direction: 300 start: 360 end: 240
 	
-	$("#curArc").html("vector angle, start, end: " + direction + " - " + start + " - " + end);
+	//$("#curArc").html("vector angle, start, end: " + direction + " - " + start + " - " + end);
 	
 	if (start == end)
 		return true;
@@ -117,6 +117,105 @@ function getCompassHeadingOfPoint(observer, target, facing){
 	return heading;
 }
 
+function getIntercept(src, dst, vector, mod){
+	var tx = dst.x - src.x;
+	var	ty = dst.y - src.y;
+	var	tvx = vector.nx;
+	var	tvy = vector.ny;
+
+	// Get quadratic equation components
+	var a = tvx*tvx + tvy*tvy - mod*mod;
+	var b = 2 * (tvx * tx + tvy * ty);
+	var c = tx*tx + ty*ty;
+
+	// Solve quadratic
+	var ts = quad(a, b, c); // See quad(), below
+	// Find smallest positive solution
+	var sol = null;
+
+	if (src instanceof Ship){
+		console.log(ts);
+	}
+
+	if (ts) {
+		var t0 = ts[0], t1 = ts[1];
+		var t = Math.min(t0, t1);
+		if (t < 0) t = Math.max(t0, t1);    
+		if (t > 0) {
+			sol = {
+				x: dst.x + vector.nx * t,
+				y: dst.y + vector.ny * t
+			};
+		}
+	}
+	return sol;
+}
+
+function randomize(pos, x, y){
+	pos.x += range(-x, x);
+	pos.y += range(-y, y);
+	return pos;
+}
+
+function getProjIntercept(src, dst, vector, mod){
+	var tx = dst.x - src.x;
+	var	ty = dst.y - src.y;
+	var	tvx = vector.nx;
+	var	tvy = vector.ny;
+
+	// Get quadratic equation components
+	var a = tvx*tvx + tvy*tvy - mod*mod;
+	var b = 2 * (tvx * tx + tvy * ty);
+	var c = tx*tx + ty*ty;
+
+	// Solve quadratic
+	var ts = quad(a, b, c); // See quad(), below
+	// Find smallest positive solution
+	var sol = null;
+
+
+	if (ts) {
+		var t0 = ts[0], t1 = ts[1];
+		var t = Math.min(t0, t1);
+		console.log(ts);
+		if (t < 0) t = Math.max(t0, t1);  
+		//t = range(1, t);
+
+		if (t > 0) {
+			sol = {
+				x: dst.x + vector.nx * t,
+				y: dst.y + vector.ny * t
+			};
+		}
+	}
+	//console.log(t);
+	return sol;
+}
+
+function quad(a,b,c) {
+	var sol = null;
+	if (Math.abs(a) < 1e-6) {
+		if (Math.abs(b) < 1e-6) {
+			sol = Math.abs(c) < 1e-6 ? [0,0] : null;
+		} else {
+			sol = [-c/b, -c/b];
+		}
+	} else {
+		var disc = b*b - 4*a*c;
+		if (disc >= 0) {
+			disc = Math.sqrt(disc);
+			a = 2*a;
+			sol = [(-b-disc)/a, (-b+disc)/a];
+		}
+	}
+	return sol;
+}
+
+function randomize(pos, x, y){
+	pos.x += range(-x, x);
+	pos.y += range (-y, y);
+	return pos;
+}
 		
 function drawAndRotate(posX, posY, w, h, iw, ih, angle, img){
 

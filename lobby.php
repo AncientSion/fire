@@ -9,6 +9,23 @@ if (isset($_SESSION["userid"])){
 	$playerName = $manager->getUsername();
 	$_SESSION["username"] = $playerName;
 
+	if (isset($_POST["gameName"]) && isset($_POST["pointValue"])){
+		if ( $_POST["gameName"] != "" && $_POST["pointValue"] != ""){
+			if (ctype_digit($_POST["pointValue"])){
+				$id = $dbManager->createNewGameAndJoin($_SESSION["userid"], $_POST["gameName"], $_POST["pointValue"]);
+				if ($id){
+					header("Location: gameSetup.php?gameid=".$id);
+				}
+			}
+			else {
+				echo "<span class='hinter'>Invalid point value entered</span>";
+			}
+		}
+		else {
+			echo "<span class='hinter'>Please enter valid game data</span>";
+		}
+	}
+
 	//function __construct($id, $userid, $classname, $x, $y, $facing){
 	//$ship = new Omega(1, 1, 5, 5, 100);
 	//echo "<script> var omega = ".json_encode($ship, JSON_NUMERIC_CHECK).";</script>";
@@ -16,8 +33,9 @@ if (isset($_SESSION["userid"])){
 	
 	$ongoingGames = $manager->getOngoingGames();
 	for ($i = 0; $i < sizeof($ongoingGames); $i++){
-		if ($manager->canAdvanceFromLobby($ongoingGames[$i]["id"])){
-			$manager->doAdvanceFromLobby($ongoingGames[$i]["id"]);
+		if ($manager->canAdvance($ongoingGames[$i]["id"])){
+			$manager->prepareAdvance($ongoingGames[$i]["id"]);
+			$manager->doAdvance();
 		}
 	}
 
@@ -128,6 +146,12 @@ else {
    header("Location: index.php");
 }
 
+
+
+
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -150,12 +174,47 @@ else {
 			<div class="lobbyDiv">
 				<?php echo $openGamesElement; ?>
 			</div>
-			<div class="lobbyDiv">
-				<a href="createGame.php">Create Game</a>
+			<div class="link">
+				Create a new Game
 			</div>
-			<div class="lobbyDiv">
-				<a href="logout.php">LOGOUT</a>
+			<div id="createGame" class="disabled">
+				<form method="post">
+					<table style="width: 100%; margin: auto" >
+						<tr>
+							<td>
+								<input type="form" style="text-align: center" value='myGame' placeholder="Game Name" name="gameName"></input>		
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="form" style="text-align: center" placeholder="Point Value" name="pointValue"></input>		
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="submit" style="width: 100%" value="Confirm and Forward"></input>	
+							</td>
+						</tr>
+					</table>
+			</div>
+			<div class="link">
+				Logout
 			</div>
 		</div>
 	</body>
 </html>
+
+
+<script>
+	$(document).ready(function(){
+		var buttons = $(".link");
+		console.log(buttons);
+		$(buttons[0]).click(function(){
+			$("#createGame").toggleClass("disabled");
+		})
+		$(buttons[1]).click(function(){
+			window.location = "logout.php"
+		})
+	})
+
+</script>

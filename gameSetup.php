@@ -177,6 +177,22 @@ else {
 				<input type="button" value="Confirm Hangar loadout" onclick='confirmSystemLoadout()'>
 			</div>
 		</div>
+		<div id="weaponLoadoutDiv" class="disabled">
+			<div class="header">
+				Pick Ammunition for the selected weapon
+			</div>
+			<div class="header">
+				Can fire up to <span id="launchRate"></span> units all <span id="reload"></span> turn/s.
+			</div>
+			<div class="header">
+				Can hold up to <span id="capacity"></span> units of ordnance.
+			</div>
+			<table id="weaponTable">
+			</table>
+			<div class="header">
+				<input type="button" value="Confirm weapon loadout" onclick='confirmSystemLoadout()'>
+			</div>
+		</div>
 	</body>
 </html>
 
@@ -204,14 +220,6 @@ else {
 					return this.ships[0];
 				},
 
-				addFighter: function(ele, all){
-					game.ships[0].getSystemById($("#hangarLoadoutDiv").data("systemid")).addFighter(ele, all);
-				},
-
-				removeFighter: function(ele, all){
-					game.ships[0].getSystemById($("#hangarLoadoutDiv").data("systemid")).removeFighter(ele, all);
-				},
-
 				setShipTotal: function(){
 					game.ships[0].totalCost = game.ships[0].cost;
 					game.ships[0].upgrades = [];
@@ -219,14 +227,7 @@ else {
 					for (var i = 0; i < game.ships[0].structures.length; i++){
 						for (var j = 0; j < game.ships[0].structures[i].systems.length; j++){
 							if (game.ships[0].structures[i].systems[j].totalCost > 0){
-								game.ships[0].upgrades.push(
-									{
-										name: game.ships[0].structures[i].systems[j].display,
-										systemid: game.ships[0].structures[i].systems[j].id,
-										cost: game.ships[0].structures[i].systems[j].totalCost,
-										loads: game.ships[0].structures[i].systems[j].loads
-									}
-								)
+								game.ships[0].upgrades.push(game.ships[0].structures[i].systems[j].getUpgradeData());
 							}
 						}
 					}
@@ -400,7 +401,7 @@ else {
 		ajax.confirmFleetPurchase(playerid, gameid, window.game.shipsBought, redirect);
 	}
 
-	function requestShipData(classname){
+	function requestShipData(name){
 		//		console.log("requestShipData");
 		$.ajax({
 			type: "GET",
@@ -408,7 +409,7 @@ else {
 			datatype: "json",
 			data: {
 					type: "shipdata",
-					classname: classname,
+					name: name,
 					},
 			success: showShipDiv,		
 			error: ajax.error,
@@ -421,6 +422,7 @@ else {
 		window.ships[0] = JSON.parse(data);
 		$(".shipDiv").remove();
 		$("#hangarLoadoutDiv").addClass("disabled");
+		$("#weaponLoadoutDiv").addClass("disabled");
 		$("#hangarTable").html("");
 
 		for (var i = 0; i < window.ships.length; i++){
@@ -456,7 +458,7 @@ else {
 		if (cur + add <= max){
 
 			var ship = {
-				classname: game.ships[0].name,
+				name: game.ships[0].name,
 				faction: game.ships[0].faction,
 				value: game.ships[0].totalCost,
 				purchaseId: window.game.shipsBought.length,
@@ -477,7 +479,7 @@ else {
 				})
 
 			var td = tr.insertCell(-1)
-				td.innerHTML = ship.classname;
+				td.innerHTML = ship.name;
 			var td = tr.insertCell(-1)
 				td.innerHTML = ship.value;
 			tr.appendChild(td);
@@ -574,14 +576,14 @@ else {
 					})
 
 					var subTd = subTr.insertCell(-1);
-						subTd.innerHTML = shiplist[i]["classname"];
+						subTd.innerHTML = shiplist[i]["name"];
 
 					var subTd = subTr.insertCell(-1);
 						subTd.innerHTML = shiplist[i]["value"];
 
 					var subTd = subTr.insertCell(-1);	
 						subTd.innerHTML = "Add to fleet";
-						$(subTd).data("classname", shiplist[i]["classname"]).data("value", shiplist[i]["value"])
+						$(subTd).data("name", shiplist[i]["name"]).data("value", shiplist[i]["value"])
 							.hover(function(){
 								$(this).toggleClass("selectionHighlight");
 							}).click(function(){

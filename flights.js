@@ -95,8 +95,8 @@ function Fighter(id, name, ep, turns, mass, integrity, value, negation, crits, d
 	}
 }
 
-function Flight(id, classname, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
-	Ship.call(this, id, classname, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available);
+function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
+	Ship.call(this, id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available);
 	this.ship = false;
 	this.flight = true;
 	this.layout = [];
@@ -107,7 +107,7 @@ function Flight(id, classname, shipType, x, y, facing, faction, mass, cost, prof
 	this.dogfights = [];
 	
 	this.create = function(){
-		this.size = 32 + this.structures.length*7;
+		this.size = 32 + this.structures.length*5;
 		this.setFighterState();
 		this.setMaxMass()
 		this.setEP()
@@ -192,6 +192,9 @@ function Flight(id, classname, shipType, x, y, facing, faction, mass, cost, prof
 	}
 
 	this.getEP = function(){
+		//if (this.actions[0].turn == game.turn){
+		//	return Math.floor(this.ep/2);
+		//}
 		return this.ep;
 	}
 
@@ -283,6 +286,9 @@ function Flight(id, classname, shipType, x, y, facing, faction, mass, cost, prof
 	}
 	
 	this.getBaseImpulse = function(){
+		//if (this.actions[0].turn == game.turn){
+		//	return Math.floor(210/2);
+		//}
 		return 210;
 	}
 
@@ -308,7 +314,7 @@ function Flight(id, classname, shipType, x, y, facing, faction, mass, cost, prof
 		return false;
 	}
 
-	this.extendDiv = function(div){
+	this.expandDiv = function(div){
 
 		if (this.dogfights.length){
 			var iconContainer = document.createElement("div");

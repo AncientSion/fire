@@ -39,7 +39,7 @@ switch ($manager->game["phase"]){
 		break;
 }
 
-$status;
+$status = 0;
 
 foreach ($manager->playerstatus as $player){
 	if ($player["userid"] == $userid){
@@ -63,7 +63,7 @@ foreach ($manager->playerstatus as $player){
 <head>
 	<link rel='stylesheet' href='style.css'/>
 	<script src="jquery-2.1.1.min.js"></script>
-	<script src='mathLib.js'></script>
+	<script src='mathLib.js'></script>	
 	<script src='shared.js'></script>
 	<script src='shipclasses.js'></script>
 	<script src='flights.js'></script>
@@ -254,9 +254,11 @@ foreach ($manager->playerstatus as $player){
 					</tr>
 					<tr>
 						<?php 
-							if ($status == "ready"){
+							if (!$status){
+								echo '<th colSpan=3 id="confirmOrders" style="background-color: yellow;">Anonymus Mode</th>';
+							}
+							else if ($status == "ready"){
 								echo '<th colSpan=3 id="confirmOrders" style="background-color: red;">Waiting for Opponent</th>';
-								echo '</th>';
 							}
 							else {
 								echo '<th colSpan=3 id="confirmOrders" onclick="this.disabled=true;game.endPhase()">Confirm Orders</th>';
@@ -358,8 +360,8 @@ foreach ($manager->playerstatus as $player){
 						if (sizeof($manager->reinforcements)){
 							foreach ($manager->reinforcements as $entry){
 								echo "<tr class='requestReinforcements'>";
-								echo "<td><img class='img50' src=shipIcons/".strtolower($entry["classname"]).".png></td>";
-								echo "<td>".$entry["classname"]."</td>";
+								echo "<td><img class='img50' src=shipIcons/".strtolower($entry["name"]).".png></td>";
+								echo "<td>".$entry["name"]."</td>";
 								echo "<td>".$entry["arrival"]." turn/s</td>";
 								echo "<td>".$entry["cost"]."</td>";
 								echo "</tr>";
@@ -459,13 +461,13 @@ foreach ($manager->playerstatus as $player){
 							}
 						})
 						for (var i = 0; i < game.fireOrders.length; i++){
-							game.createLogEntry(game.fireOrders[i]);
+							game.createCombatLogEntry(game.fireOrders[i]);
 						}
 						for (var i = 0; i < game.ballistics.length; i++){
 							game.ballistics[i].x = game.ballistics[i].actions[game.ballistics[i].actions.length-1].x;
 							game.ballistics[i].y = game.ballistics[i].actions[game.ballistics[i].actions.length-1].y;
 							for (var j = 0; j < game.ballistics[i].intercepts.length; j++){
-								game.createLogEntry(game.ballistics[i].intercepts[j]);
+								game.createCombatLogEntry(game.ballistics[i].intercepts[j]);
 							}
 							if (game.ballistics[i].type == "Impact"){
 								game.createBallisticLogEntry(game.ballistics[i]);
@@ -542,6 +544,12 @@ foreach ($manager->playerstatus as $player){
 					popup("Reinforces can only be requested in Deployment/Initial Phase.");
 				}
 			})
+			.contextmenu(function(e){
+				if (game.phase == -1 && !game.deploying && !game.aShip){
+					e.stopPropagation(); e.preventDefault();
+					game.showReinforcementsPreview($(this).data("id"));
+				}
+			});
 		})
 
 		document.getElementById("combatlogWrapper").onmousedown = function () {

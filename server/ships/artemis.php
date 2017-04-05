@@ -1,11 +1,11 @@
 <?php
 
 class Artemis extends Medium {
-	public $classname = "Artemis";
 	public $name = "Artemis";
-	public $faction = "Earth Alliances";
+	public $display = "Artemis";
+	public $faction = "Earth Alliance";
 	public $size = 50;
-	public static $value = 600;
+	public static $value = 475;
 	public $profile = array(0.93, 1.07);
 	public $mass = 3500;
 
@@ -25,13 +25,13 @@ class Artemis extends Medium {
 		$right = new Structure($this->getId(), $this->id, 60, 180, 350, 22);
 		$right->systems[] = new ParticleBeam($this->getId(), $this->id, 0, 180);
 		$right->systems[] = new ParticleBeam($this->getId(), $this->id, 0, 180);
-		$right->systems[] = new EAMissileLauncher($this->getId(), $this->id, 300, 120, 8, 2);
+		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 120, 8, 2, array("Barracuda", "Myrmidon"));
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 350, 22);
 		$left->systems[] = new ParticleBeam($this->getId(), $this->id, 180, 360);
 		$left->systems[] = new ParticleBeam($this->getId(), $this->id, 180, 360);
-		$left->systems[] = new EAMissileLauncher($this->getId(), $this->id, 240, 60, 8, 2);
+		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 240, 60, 8, 2, array("Barracuda", "Myrmidon"));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

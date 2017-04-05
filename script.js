@@ -76,7 +76,6 @@ function init(){
 		}
 	}
 	game.create();
-	game.draw();
 }
 
 function executeAll(){
@@ -138,8 +137,8 @@ function canvasMouseMove(e){
 	 
 	if (aUnit){
 		var ship = game.getUnitById(aUnit);
+		var angle;
 		if (!ship){return;}
-		else if (ship instanceof Salvo){return;}
 		var shipLoc = ship.getPlannedPosition();
 		var facing = ship.getPlannedFacingToMove();
 
@@ -149,6 +148,8 @@ function canvasMouseMove(e){
 				a = addAngle(facing, a);
 			drawVector(shipLoc, {x: e.clientX - rect.left, y: e.clientY - rect.top}, dist, a);
 		}
+
+		if (ship.salvo){return}
 		
 		if (ship.hasWeaponsSelected()){
 			var dist;
@@ -158,9 +159,9 @@ function canvasMouseMove(e){
 			var vessel;
 
 			if (ammo){
-				if (ammo[0].targetid == ship.id || ship instanceof Flight){
+				//if (ammo[0].targetid == ship.id || ship instanceof Flight){
 					vessel = ammo[0];
-				}
+				//}
 			}
 			else if (ships){
 				vessel = ships[0]
@@ -171,19 +172,24 @@ function canvasMouseMove(e){
 
 			if (vessel){
 				if (vessel.userid != ship.userid){
-					if (vessel instanceof Salvo && !(ship instanceof Flight)){ // intercepting incoming ball by target
-						dist = Math.max(0, Math.floor(getDistance(shipLoc, vessel.getBaseOffsetPos()) - vessel.getImpulse()));
+					if (vessel instanceof Salvo){ // aiming at SALVO
+						if (game.phase <= 2){
+							if (vessel.targetid == ship.id){ // direct interception
+								dist = Math.max(ship.size/2, Math.floor(getDistance(shipLoc, vessel.getBaseOffsetPos()) - vessel.getImpulse()));
+							}
+							else if (ship.flight){// indirect interception
+								dist = Math.abs(Math.floor(getDistance(shipLoc, vessel.nextStep)));
+							}
+						} 
+						else dist = Math.floor(getDistance(shipLoc, vessel.getBaseOffsetPos()));
 					}
-					else if (ship instanceof Flight){ // flight
+					else {
 						dist = Math.floor(getDistance(shipLoc, vessel.getBaseOffsetPos()));
 					}
-					else { // n
-						dist = Math.floor(getDistance(shipLoc, vessel.getBaseOffsetPos()));
-					}
-					a = getAngleFromTo(vessel.getBaseOffsetPos(), shipLoc);
-					a = addAngle(vessel.getPlannedFacingToMove(), a);
+					angle = getAngleFromTo(vessel.getBaseOffsetPos(), shipLoc);
+					angle = addAngle(vessel.getPlannedFacingToMove(), angle);
 
-					var baseHit = vessel.getHitChanceFromAngle(a);
+					var baseHit = vessel.getHitChanceFromAngle(angle);
 
 					var tr = table.insertRow(-1);
 						tr.insertCell(-1).textContent = "Target";
@@ -193,12 +199,12 @@ function canvasMouseMove(e){
 					table.appendChild(tr);
 
 					var tr = table.insertRow(-1);
-						tr.insertCell(-1).textContent = vessel.classname + " " + vessel.id;
+						tr.insertCell(-1).textContent = vessel.name + " " + vessel.id;
 						tr.insertCell(-1).textContent = baseHit + "%";
 						tr.insertCell(-1).textContent = dist;
 					table.appendChild(tr);
 				}
-				else vessel = false;
+				else return;
 			}
 			else {
 				dist = Math.floor(getDistance(shipLoc, pos));
@@ -210,30 +216,44 @@ function canvasMouseMove(e){
 			}
 
 			var validWeapon = false;
+
+			if (vessel){pos = vessel.getBaseOffsetPos();}
 				
 			for (var i = 0; i < ship.structures.length; i++){
 				for (var j = 0; j < ship.structures[i].systems.length; j++){
 					if (ship.structures[i].systems[j].weapon && ship.structures[i].systems[j].selected){
+						var inArc = false;
+						var legalTarget = true;
+
+						var msg = "";
 						var tr = document.createElement("tr");
 						var td = document.createElement("td");
 							td.innerHTML = ship.structures[i].systems[j].name + " #" + ship.structures[i].systems[j].id; tr.appendChild(td);
 
-						
-						var valid = false;
-						if (vessel){
-							if (ship.structures[i].systems[j].posIsOnArc(shipLoc, vessel.getBaseOffsetPos(), facing)) {
-								valid = true;
+						if (ship.ship && vessel.salvo && !(ship.structures[i].systems[j] instanceof Launcher) && ship.id != vessel.targetid){
+							legalTarget = false;
+							msg = "Unable to aquire target";
+						}
+						else if (ship.flight && vessel.salvo){
+							var start = true;
+							var end = true;
+							if (!ship.structures[i].systems[j].posIsOnArc(shipLoc, pos, facing)){start = false;}
+							if (ship.id == vessel.targetid){if(!isInArc(angle, ship.structures[i].systems[j].arc[0][0], ship.structures[i].systems[j].arc[0][1])){end = false;}}
+							else if (!ship.structures[i].systems[j].posIsOnArc(shipLoc, vessel.nextStep, facing)){end = false;}
+							if (!start || !end){
+								msg = "Ballistic trajectory out of scope.";
+							} else {
+								inArc = true;
 								validWeapon = true;
 							}
 						}
-						else {
-							if (ship.structures[i].systems[j].posIsOnArc(shipLoc, pos, facing)){
-								valid = true;
-								validWeapon = true;
-							}
+						else if (ship.structures[i].systems[j].posIsOnArc(shipLoc, pos, facing)){
+							inArc = true;
+							validWeapon = true;
 						}
+						else msg = "Not in weapon arc";
 						
-						if (valid){
+						if (inArc && legalTarget){
 							var fc = 0;
 							if (vessel){
 								fc = ship.structures[i].systems[j].getFireControl(vessel)
@@ -262,8 +282,8 @@ function canvasMouseMove(e){
 						}
 						else {
 							var td = document.createElement("td");
-								if (vessel){td.colSpan = 5;} else {td.colSpan = 3;}
-								td.innerHTML = "Not in weapon arc";  tr.appendChild(td); table.appendChild(tr);
+							td.innerHTML = msg; tr.appendChild(td); table.appendChild(tr);
+							if (vessel){td.colSpan = 5;} else {td.colSpan = 3;}
 						}
 					}
 				}
@@ -275,12 +295,12 @@ function canvasMouseMove(e){
 			var left = (e.clientX) - w;
 			$(ele).css("top", top).css("left", left);
 
-			if (validWeapon){
+			//if (validWeapon){
 				$(ele).show();
-			}
-			else {
-				$(ele).hide();
-			}
+			//}
+			//else {
+			//	$(ele).hide();
+			//}
 		}
 		else if (game.flightDeploy){					
 			var ele = $("#deployOverlay");
@@ -395,13 +415,13 @@ function movePhase(e, rect){
 
 window.getBearing = function(shooter, target){
 	var tStart = target.getTurnStartPosition();
-	var tEnd = target.getTurnEndPosition();
+	var tEnd = target.getTurnfinalStepition();
 	var tFaceStart = tStart.a;
 	var tFaceEnd = target.facing;
 	var tFacePro = tFaceEnd - tFaceStart;
 
-	var startBearing = getAngleFromTo(shooter.getTurnEndPosition(), tStart)
-	var endBearing = getAngleFromTo(shooter.getTurnEndPosition(), tEnd)
+	var startBearing = getAngleFromTo(shooter.getTurnfinalStepition(), tStart)
+	var endBearing = getAngleFromTo(shooter.getTurnfinalStepition(), tEnd)
 	var aDif = endBearing - startBearing;
 
 	return;
@@ -437,28 +457,16 @@ function firePhase(e, rect){
 				console.log(baseHit);
 				*/
 				if (vessel){
-					if (vessel instanceof Salvo && !(ship instanceof Flight) && vessel.targetid != ship.id){return false;}
 					if (ship.hasWeaponsSelected()){
 						for (var i = 0; i < ship.structures.length; i++){
 							for (var j = ship.structures[i].systems.length-1; j >= 0; j--){
 								if (ship.structures[i].systems[j].weapon && ship.structures[i].systems[j].selected){
+									if (vessel.salvo && ship.ship && ship.id != vessel.targetid && ship.structures[i].systems[j].selected instanceof Launcher){continue;}
+
 									if (ship.structures[i].systems[j].canFire()){
 										if (ship.structures[i].systems[j].posIsOnArc(shipLoc, pos, facing)){
 											// FireOrder(id, turn, shooterid, targetid, weaponid, req, notes, hits, resolved){
-											ship.structures[i].systems[j].setFireOrder(
-												new FireOrder(
-														0,
-														game.turn,
-														ship.id,
-														vessel.id,
-														ship.structures[i].systems[j].id,
-														ship.structures[i].systems[j].getShots(),
-														-1,
-														"",
-														-1,
-														-1
-												)
-											);
+											ship.structures[i].systems[j].setFireOrder(vessel.id);
 										}
 									}
 								}

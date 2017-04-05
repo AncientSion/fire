@@ -36,7 +36,7 @@ class Ship {
 		$this->addPrimary();
 		$this->cost = $this::$value;
 
-		$this->baseHitChance = ceil(pow($this->mass, 0.55));
+		$this->baseHitChance = ceil(pow($this->mass, 0.5));
 	}
 
 	public function getId(){
@@ -44,7 +44,7 @@ class Ship {
 		return $this->index;
 	}
 
-	public function addLoadout($dbLoad){ // [4, 17, 17]
+	public function addFighterout($dbLoad){ // [4, 17, 17]
 		$chunk = array();
 		$chunk[] = $dbLoad[0];
 
@@ -141,29 +141,27 @@ class Ship {
 			$this->structures[$i]->setRemainingIntegrity();
 		}
 		$this->primary->setRemainingIntegrity();
-		Debug::log("ship #".$this->id." setup for Damage, remaining: ".$this->primary->remaining);
+		//Debug::log("ship #".$this->id." setup for Damage, remaining: ".$this->primary->remaining);
 	}
 
 	public function applyDamage($dmg){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->id == $dmg->structureid){
-				$this->structures[$i]->damages[] = $dmg;
-				$this->structures[$i]->remaining -= $dmg->armourDmg;
+				$this->structures[$i]->applyDamage($dmg);
 				if ($dmg->systemid == -1){
-					$this->primary->damages[] = $dmg;
-					$this->primary->remaining -= $dmg->structDmg;
+					$this->primary->applyDamage($dmg);
 					return;
 				}
 				else {
 					for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 						if ($this->structures[$i]->systems[$j]->id == $dmg->systemid){
-							$this->structures[$i]->systems[$j]->damages[] = $dmg;
+							$this->structures[$i]->systems[$j]->applyDamage($dmg);
 							return;
 						}
 					}
 					for ($j = 0; $j < sizeof($this->primary->systems); $j++){
 						if ($this->primary->systems[$j]->id == $dmg->systemid){
-							$this->primary->systems[$j]->damages[] = $dmg;
+							$this->primary->systems[$j]->applyDamage($dmg);
 							return;
 						}
 					}
@@ -207,8 +205,12 @@ class Ship {
 	}
 
 	public function isDestroyed(){
+		if ($this->destroyed){
+			return true;
+		}
 		for ($i = 0; $i < sizeof($this->primary->damages); $i++){
 			if ($this->primary->damages[$i]->destroyed){
+				$this->destroyed = true;
 				return true;
 			}
 		}
@@ -218,8 +220,7 @@ class Ship {
 	public function resolveFireOrder($fire){
 		Debug::log("resolveFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
 
-		if ($this->destroyed){
-			Debug::log("target destroyed id: #".$fire->target->id);
+		if ($this->isDestroyed()){
 			return false;
 		}
 
@@ -240,8 +241,7 @@ class Ship {
 	public function resolveBallisticFireOrder($fire){
 		Debug::log("resolveBallisticFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".$fire->weaponid);
 
-		if ($this->destroyed){
-			Debug::log("target destroyed id: #".$fire->target->id);
+		if ($this->isDestroyed()){
 			return false;
 		}
 
@@ -249,15 +249,12 @@ class Ship {
 		$fire->angleIn = $this->getBallisticHitAngle($fire);
 		$fire->hitSection = $this->getHitSection($fire);
 		$fire->req = $fire->weapon->getFireControlMod($fire);
-
-		//Debug::log("ballistic hitangle from ball #".$fire->shooter->id." to target #".$this->id." : ".$fire->angleIn.", picking section: ".$fire->hitSection);
 		$fire->weapon->rollForHit($fire);
 
 		if ($fire->hits){
 			$fire->weapon->doDamage($fire);
 		}
 		$fire->resolved = 1;
-		return;
 	}
 
 	public function getHitSection($fire){
@@ -293,7 +290,7 @@ class Ship {
 				if (! $struct->systems[$i]->destroyed){
 					$current += $struct->systems[$i]->getHitChance();
 					if ($roll <= $current){
-						//Debug::log("hitting: ".$struct->systems[$i]->name." #".$struct->systems[$i]->id);
+						//Debug::log("EXTERNAL HIT: ".$struct->systems[$i]->name." #".$struct->systems[$i]->id);
 						return $struct->systems[$i];
 					}
 				}
@@ -328,7 +325,7 @@ class Ship {
 			$current += $this->primary->getHitChance();
 
 			if ($roll <= $current){
-				Debug::log("hitting main structure");
+				//Debug::log("hitting main structure");
 				return $this->primary;
 			}
 			else {
@@ -336,7 +333,7 @@ class Ship {
 				for ($i = 0; $i < sizeof($valid); $i++){
 					$current += $valid[$i]->getHitChance();
 					if ($roll <= $current){
-						Debug::log("hitting: ".$valid[$i]->name." #".$valid[$i]->id);
+						//Debug::log("non primary HIT --- ".$valid[$i]->name." #".$valid[$i]->id);
 						return $valid[$i];
 					}
 				}

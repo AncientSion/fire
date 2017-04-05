@@ -25,6 +25,20 @@ class Structure {
 
 	public function applyDamage($dmg){
 		$this->damages[] = $dmg;
+		$this->remaining -= $dmg->armourDmg;
+	}
+
+	public function isDestroyed(){
+		if ($this->destroyed){
+			return true;
+		}
+		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
+			if ($this->damages[$i]->destroyed){
+				return true;
+				$this->destroyed = true;
+			}
+		}
+		return false;
 	}
 
 	public function testCriticalsStructureLevel($turn){
@@ -72,6 +86,14 @@ class Primary extends Structure {
 	function __construct($id, $parentId, $start, $end, $integrity, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $integrity, 0, $destroyed);
         $this->id = -1;
+	}
+
+	public function applyDamage($dmg){
+		$this->damages[] = $dmg;
+		$this->remaining -= $dmg->structDmg;
+		if ($dmg->destroyed){
+			$this->destroyed = 1;
+		}
 	}
 
 	public function getArmourMod(){

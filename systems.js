@@ -33,7 +33,16 @@ function System(id, parentId, name, display, integrity, powerReq, output, effien
 			this.showInfoDiv(e);
 			this.showOptions();
 		}
-		if (!game.getUnitById(this.parentId).hasHangarSelected()){
+		if (this instanceof Hangar){
+			if (game.getUnitById(this.parentId).hasWeaponsSelected()){
+				return;
+			}
+			else if (this.highlight){
+				this.drawArc();
+			}
+			else fxCtx.clearRect(0, 0, res.x, res.y);
+		}
+		else if (!game.getUnitById(this.parentId).hasHangarSelected()){
 			game.getUnitById(this.parentId).highlightAllSelectedWeapons();
 		}
 	}
@@ -41,7 +50,7 @@ function System(id, parentId, name, display, integrity, powerReq, output, effien
 	this.setTableRow = function(){
 		var id = this.id;
 		var parentId = this.parentId;
-		var activeFire = this.hasActiveFireOrder();
+		var activeFire = this.hasUnresolvedFireOrder();
 		var selected = this.selected;
 		var disabled = this.disabled;
 		var destroyed = this.destroyed;
@@ -82,6 +91,50 @@ function System(id, parentId, name, display, integrity, powerReq, output, effien
 				})
 			}
 		})
+	}
+
+	this.canFire = function(){
+		if (this.destroyed || this.disabled){
+			return false;
+		}
+		else if (game.phase == -2){
+			return false;
+		}
+		if (this instanceof Launcher && game.phase == -1 || this instanceof Hangar && game.phase == -1 || this instanceof Weapon && game.phase == 2){
+			if (this.getLoadLevel() >= 1){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	this.getLoadLevel = function(){
+		var need = this.reload;
+		var has = this.getTimeLoaded();
+		if (has / need > 1){
+			return 1;
+		}
+		else if (has > 0){
+			return has/need;
+		}
+		else return has;
+	}
+
+	this.getTimeLoaded = function(){
+		var turnsLoaded = this.reload
+		var max = this.reload;
+		for (var i = 1; i <= game.turn; i++){
+			if (turnsLoaded < max){
+				turnsLoaded++;
+			}
+			for (var j = 0; j < this.fireOrders.length; j++){
+				if (this.fireOrders[j].turn == i && this.fireOrders[j].resolved == 1){
+					turnsLoaded = 0;
+					break;
+				}
+			}
+		}
+		return turnsLoaded;
 	}
 
 	this.getBoostLevel = function(){
@@ -191,7 +244,7 @@ function System(id, parentId, name, display, integrity, powerReq, output, effien
 	}
 
 	this.doUnboost = function(){
-		this.powers.splice(this.powers.lenght-1, 1);
+		this.powers.splice(this.powers.length-1, 1);
 		return true;
 	}
 
@@ -383,6 +436,26 @@ function System(id, parentId, name, display, integrity, powerReq, output, effien
 			)
 		return;
 	}
+	
+	this.setFireOrder = function(targetId){
+		this.fireOrders.push(
+			//id, turn, shooterid, targetid, weaponid, shots, req, notes, hits, resolved
+			new FireOrder(0, game.turn, this.parentId, targetId, this.id, this.getShots(), -1, "", -1, 0)
+		);
+		this.selected = false;
+		this.highlight = false;
+		this.setTableRow();
+	}
+
+	this.unsetFireOrder = function(){
+		for (var i = this.fireOrders.length-1; i >= 0; i--){
+			if (this.fireOrders[i].turn == game.turn){
+				this.fireOrders.splice(i, 1);
+			}
+		}
+
+		this.setTableRow();
+	}
 
 	this.hideInfoDiv = function(){
 			$("#systemDetailsDiv").remove();
@@ -402,8 +475,9 @@ function System(id, parentId, name, display, integrity, powerReq, output, effien
 
 		var div = document.createElement("div");
 			div.className = "loadLevel";
-			if (this.weapon){div.style.width = this.getLoadLevel() * 100 + "%"}
-			else {div.style.width = 100 + "%"};
+		//	if (this.weapon){div.style.width = this.getLoadLevel() * 100 + "%"}
+		//	else {div.style.width = 100 + "%"};
+			div.style.width = this.getLoadLevel() * 100 + "%";
 			td.appendChild(div);
 
 		var div = document.createElement("div");
@@ -451,13 +525,13 @@ function System(id, parentId, name, display, integrity, powerReq, output, effien
 		//	$(ele).addClass("hasCritical");
 		//}
 
-		if (this.hasActiveFireOrder()){
+		if (this.hasUnresolvedFireOrder()){
 			$(ele).addClass("fireOrder");
 		}
 		return ele;
 	}
 
-	this.hasActiveFireOrder = function(){
+	this.hasUnresolvedFireOrder = function(){
 		return false;
 	}
 
@@ -772,20 +846,16 @@ function Weapon(id, parentId, name, display, exploSize, animColor, integrity, po
 	}
 
 	this.posIsOnArc = function(loc, pos, facing){
-		//console.log(arguments);
-		var targetCompassHeading = getCompassHeadingOfPoint(loc, pos, facing);
-	
 		for (var i = 0; i < this.arc.length; i++){
 			var start = this.arc[i][0];
 			var end = this.arc[i][1];
-			var inArc = isInArc(targetCompassHeading, start, end);
-			return inArc;
+			return isInArc(getCompassHeadingOfPoint(loc, pos, facing), start, end);
 		}
 	}
 
-	this.hasActiveFireOrder = function(){
+	this.hasUnresolvedFireOrder = function(){
 		for (var i = 0; i < this.fireOrders.length; i++){
-			if (this.fireOrders[i].turn == game.turn && this.fireOrders[i].resolved == -1){
+			if (this.fireOrders[i].turn == game.turn && this.fireOrders[i].resolved == 0){
 				return true;
 			}
 		}
@@ -808,7 +878,7 @@ function Weapon(id, parentId, name, display, exploSize, animColor, integrity, po
 				return false;
 			}
 			else if (this.getLoadLevel() >= 1){
-				if (this.hasActiveFireOrder()){
+				if (this.hasUnresolvedFireOrder()){
 					this.unsetFireOrder();
 				}
 				if (this.selected){
@@ -869,7 +939,7 @@ function Weapon(id, parentId, name, display, exploSize, animColor, integrity, po
 			
 		var tr = document.createElement("tr");		
 		var th = document.createElement("th");
-			th.colSpan = 2; th.innerHTML = this.display.toUpperCase(); th.style.width = "40%"; tr.appendChild(th); table.appendChild(tr);
+			th.colSpan = 2; th.innerHTML = this.display; th.style.width = "40%"; tr.appendChild(th); table.appendChild(tr);
 
 		$(table).append($("<tr>").append($("<td>").html("Weapon Type")).append($("<td>").html(this.type)));
 
@@ -884,23 +954,27 @@ function Weapon(id, parentId, name, display, exploSize, animColor, integrity, po
 		}
 
 		$(table).append($("<tr>").append($("<td>").html("Loading")).append($("<td>").html(this.getTimeLoaded() + " / " + this.reload)));
-		$(table).append($("<tr>").append($("<td>").html("Fire Control")).append($("<td>").html(this.getFireControlString())));
 
 		if (this instanceof Launcher){
-			$(table).append($("<tr>").append($("<td>").html("Ammo type")).append($("<td>").html(this.ammo.name)));
-			$(table).append($("<tr>").append($("<td>").html("")).append($("<td>").html(this.ammo.display)));
-			$(table).append($("<tr>").append($("<td>").html("Ammo amount")).append($("<td>").html(this.getRemainingAmmo() + " / " + this.output)));
-			$(table).append($("<tr>").append($("<td>").html("Impulse")).append($("<td>").html(this.getBallImpulse())));
+			if (this.ammo){
+				$(table).append($("<tr>").append($("<th>").css("border-top", "1px solid white").attr("colSpan", 2).html(this.ammo.name)));
+				$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).html(this.ammo.display)));
+				$(table).append($("<tr>").append($("<td>").html("Ammo amount")).append($("<td>").html(this.getRemainingAmmo() + " / " + this.getMaxAmmo())));
+				$(table).append($("<tr>").append($("<td>").html("Fire Control")).append($("<td>").html(this.getFireControlString())));
+				$(table).append($("<tr>").append($("<td>").html("Impulse")).append($("<td>").html(this.getBallImpulse())));
+			}
 			$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("<font color='red'>" + this.getOutput() + "</font> - max " + this.effiency)
 					.attr("id", "detailsShots")
 				));
 		}
 		else if (this instanceof Laser){
+			$(table).append($("<tr>").append($("<td>").html("Fire Control")).append($("<td>").html(this.getFireControlString())));
 			$(table).append($("<tr>").append($("<td>").html("Focus point")).append($("<td>").html(this.optRange + "px")));
 			$(table).append($("<tr>").append($("<td>").html("Damage loss")).append($("<td>").html(this.dmgDecay + "% per 100px")));
 			$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").html(this.getAccDecay()/10 + "% per 100px")));
 		}
 		else {
+			$(table).append($("<tr>").append($("<td>").html("Fire Control")).append($("<td>").html(this.getFireControlString())));
 			$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").html(this.getAccDecay()/10 + "% per 100px")));
 		}
 
@@ -941,23 +1015,6 @@ function Weapon(id, parentId, name, display, exploSize, animColor, integrity, po
 			}
 		})
 	}
-	
-	this.setFireOrder = function(fire){
-		this.selected = false;
-		this.highlight = false;
-		this.fireOrders.push(fire);
-		this.setTableRow();
-	}
-
-	this.unsetFireOrder = function(){
-		for (var i = this.fireOrders.length-1; i >= 0; i--){
-			if (this.fireOrders[i].turn == game.turn){
-				this.fireOrders.splice(i, 1);
-			}
-		}
-
-		this.setTableRow();
-	}
 
 	this.drawArc = function(facing, pos){
 		for (var i = 0; i < this.arc.length; i++){
@@ -992,47 +1049,6 @@ function Weapon(id, parentId, name, display, exploSize, animColor, integrity, po
 	
 	this.getFillStyle = function(x, y, dist){
 		return "green";
-	}
-
-	this.canFire = function(){
-		if (this.destroyed || this.disabled){
-			return false;
-		}
-		if (this instanceof Launcher && game.phase == -1 || this instanceof Weapon && game.phase == 2){
-			if (this.getLoadLevel() >= 1){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	this.getLoadLevel = function(){
-		var need = this.reload;
-		var has = this.getTimeLoaded();
-		if (has / need > 1){
-			return 1;
-		}
-		else if (has > 0){
-			return has/need;
-		}
-		else return has;
-	}
-
-	this.getTimeLoaded = function(){
-		var turnsLoaded = this.reload
-		var max = this.reload;
-		for (var i = 1; i <= game.turn; i++){
-			if (turnsLoaded < max){
-				turnsLoaded++;
-			}
-			for (var j = 0; j < this.fireOrders.length; j++){
-				if (this.fireOrders[j].turn == i && this.fireOrders[j].resolved == 1){
-					turnsLoaded = 0;
-					break;
-				}
-			}
-		}
-		return turnsLoaded;
 	}
 
 	this.getAccDecay = function(){
@@ -1124,28 +1140,128 @@ function Particle(id, parentId, name, display, exploSize, animColor, projSize, p
 	this.animation = "projectile";
 	this.projSize = projSize;
 	this.projSpeed = projSpeed;
-	this.priority = 6;
+	this.priority = 6;	
+
+	this.getAnimation = function(fire){
+		allAnims = [];
+		var gunInterval = 50;
+		var shotInterval = 10;
+
+		if (fire.shooter instanceof Flight){
+			gunInterval = 10;
+		}
+		
+		for (var j = 0; j < fire.guns; j++){
+			var gunAnims = [];
+			var ox = fire.shooter.x + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2); // WEAPON origin
+			var oy = fire.shooter.y + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2);
+			
+			for (var k = 0; k < this.shots; k++){
+				var hit = false;
+				var explo = false;
+				var dist;
+
+				if (fire.hits[j] > k){
+					hit = true;
+				}	
+
+				if (hit){ // shot hit
+					tx = fire.target.x + range(fire.target.size * 0.2 * -1, fire.target.size * 0.2);
+					ty = fire.target.y + range(fire.target.size * 0.2 * -1, fire.target.size * 0.2);
+					dist = getDistance( {x: ox, y: oy}, {x: tx, y: ty} );
+					explo = {t: [0, 80], s: this.exploSize};
+				}
+				else { // shot miss
+					tx = fire.target.x + range(fire.target.size * 0.5 * -1, fire.target.size * 0.5);
+					ty = fire.target.y + range(fire.target.size * 0.5 * -1, fire.target.size * 0.5);
+				}
+
+				shotAnim = {
+					ox: ox,
+					oy: oy,
+					tx: tx,
+					ty: ty,
+					t: [0 - (j*gunInterval + k*shotInterval), getDistance({x: ox, y: oy}, {x: tx, y: ty}) / this.projSpeed / speedMod],
+					hit: hit,
+					v: new Vector({x: ox, y: oy}, {x: tx, y: ty}),
+					explo: explo,
+					animated: false
+				}
+				gunAnims.push(shotAnim);
+			}
+			allAnims.push(gunAnims)
+		}
+		return allAnims;
+	}
 }
 Particle.prototype = Object.create(Weapon.prototype);
 
 function Matter(id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, fc, minDmg,maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){
-	Weapon.call(this, id, parentId, name, display, exploSize, animColor, integrity, powerReq, output, effiency, maxBoost, fc, minDmg, maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4);	
+	Particle.call(this, id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, fc, minDmg, maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4);	
 	this.type = "matter";
-	this.animation = "projectile";
-	this.projSize = projSize;
-	this.projSpeed = projSpeed;
 	this.priority = 6;
 }
 Matter.prototype = Object.create(Particle.prototype);
 
-
 function EM(id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, fc, minDmg,maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){
-	Weapon.call(this, id, parentId, name, display, exploSize, animColor, integrity, powerReq, output, effiency, maxBoost, fc, minDmg, maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4);	
+	Particle.call(this, id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, fc, minDmg, maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4);	
 	this.type = "EM";
 }
-
 EM.prototype = Object.create(Particle.prototype);
 
+function Pulse(id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, fc, minDmg,maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){
+	Particle.call(this, id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, fc, minDmg, maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4);	
+	this.type = "Pulse";
+
+	this.getAnimation = function(fire){
+		allAnims = [];
+		var gunInterval = 50;
+		var shotInterval = 5;
+
+		for (var j = 0; j < fire.guns; j++){
+			var gunAnims = [];
+			var ox = fire.shooter.x + range(fire.shooter.size * -0.2, fire.shooter.size * 0.2); // WEAPON origin
+			var oy = fire.shooter.y + range(fire.shooter.size * -0.2, fire.shooter.size * 0.2);
+			var tx;
+			var ty;
+			var dist;
+			var explo = false;
+			var hasHit = false;
+			if (fire.hits[j] >= 1){
+				hasHit = true;
+				explo = {t: [0, 80], s: this.exploSize};
+			}
+			else {
+				tx = fire.target.x + range(fire.target.size * -1, fire.target.size * 1); // salvo missed
+				ty = fire.target.y + range(fire.target.size * -1, fire.target.size * 1);
+			}
+			
+			for (var k = 0; k < this.shots; k++){
+				if (hasHit){
+					tx = fire.target.x + range(fire.target.size * -0.1, fire.target.size * 0.1); // salvo hit
+					ty = fire.target.y + range(fire.target.size * -0.1, fire.target.size * 0.1);
+					explo = {t: [0, 80], s: this.exploSize};
+				}
+
+				shotAnim = {
+					ox: ox,
+					oy: oy,
+					tx: tx,
+					ty: ty,
+					t: [0 - (j*gunInterval + k*shotInterval), getDistance({x: ox, y: oy}, {x: tx, y: ty}) / this.projSpeed / speedMod],
+					hit: hasHit,
+					v: new Vector({x: ox, y: oy}, {x: tx, y: ty}),
+					explo: explo,
+					animated: false
+				}
+				gunAnims.push(shotAnim);
+			}
+			allAnims.push(gunAnims)
+		}
+		return allAnims;
+	}
+}
+Pulse.prototype = Object.create(Particle.prototype);
 
 function Laser(id, parentId, name, display, exploSize, rakeTime, animColor, beamWidth, integrity, powerReq, output, effiency, maxBoost, fc, minDmg,maxDmg, optRange, dmgDecay, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){
 	Weapon.call(this, id, parentId, name, display, exploSize, animColor, integrity, powerReq, output, effiency, maxBoost, fc, minDmg,maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4);	
@@ -1156,6 +1272,60 @@ function Laser(id, parentId, name, display, exploSize, rakeTime, animColor, beam
 	this.rakeTime = rakeTime;
 	this.beamWidth = beamWidth;
 	this.priority = 5;
+
+	this.getAnimation = function(fire){
+		console.log(fire);
+		allAnims = [];
+		var grouping = 1;
+		var delay = 30;
+		
+		for (var j = 0; j < fire.guns; j++){
+			var gunAnims = [];
+			var ox = fire.shooter.x + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2); // WEAPON origin
+			var oy = fire.shooter.y + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2);
+			
+			for (var k = 0; k < this.shots; k++){
+				var tx; var ty; var a; var tb;
+				var hit = false;
+
+				if (fire.hits[j] > k){
+					hit = true;
+				}	
+
+				if (hit){ // shot hit
+					tx = fire.target.x + range(-fire.target.size * 0.45, fire.target.size * 0.45); // BEAM swipe begin on HIT
+					ty = fire.target.y + range(-fire.target.size * 0.45, fire.target.size * 0.45);
+					a = getAngleFromTo( {x: tx, y: ty}, {x: fire.target.x, y: fire.target.y} );
+					a = addToDirection(a, range(-10, 10));
+					tb = getPointInDirection(fire.weapon.rakeTime/2, a, tx, ty); // BEAM swipe END on HIT	
+				}
+				else { // shot miss
+					tx = fire.target.x + range(-fire.target.size * 0.6, fire.target.size * 0.6); // BEAM swipe begin on MISS
+					ty = fire.target.y + range(-fire.target.size * 0.6, fire.target.size * 0.6);
+					a = getAngleFromTo( {x: tx, y: ty}, {x: fire.target.x, y: fire.target.y} );
+					a = addToDirection(a, range(-60, 60));
+					tb = getPointInDirection(fire.weapon.rakeTime/2, a, tx, ty); // BEAM swipe END on HIT	
+				}
+
+				shotAnim = {
+					ox: ox,
+					oy: oy,
+					tax: tx,
+					tay: ty,
+					tbx: tb.x,
+					tby: tb.y,
+					t: [0 - (range(-5, 5)) - (Math.floor(j / grouping) * delay), fire.weapon.rakeTime],
+					hit: hit,
+					v: new Vector({x: tx, y: ty}, {x: tb.x, y: tb.y}),
+					explo: false,
+					animated: false
+				}
+				gunAnims.push(shotAnim);
+			}
+			allAnims.push(gunAnims)
+		}
+		return allAnims;
+	}
 	
 	this.getFillStyle = function(x, y, dist){
 		var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);
@@ -1182,111 +1352,68 @@ function Laser(id, parentId, name, display, exploSize, rakeTime, animColor, beam
 	}
 	
 	this.getDamageDecay = function(dist){
-	//	var dist = getDistance(ship.getPlannedPos(), pos);
 		var decay = this.dmgDecay;
 		
 		if (dist < this.optRange){
 			dist = this.optRange - dist;
 		} else dist = dist - this.optRange;
-	//	console.log(dist);
 		
 		return Math.ceil(decay * dist/100);
 	}
 }
 Laser.prototype = Object.create(Weapon.prototype);
 
-function Launcher(id, parentId, name, display, launchRate, integrity, powerReq, output, effiency, maxBoost, reload, arc1, arc2, arc3, arc4){
+function Launcher(id, parentId, name, display, ammo, launchRate, integrity, powerReq, output, effiency, maxBoost, reload, arc1, arc2, arc3, arc4){
 	Weapon.call(this, id, parentId, name, display, 0, 0, integrity, powerReq, output, effiency, maxBoost, 0, 0, 0, 0, 0, 1, reload, arc1, arc2, arc3, arc4);	
 	this.effiency = launchRate;
 	this.type = "ballistic";
 	this.animation = "ballistic";
 	this.priority = 6;
+	this.loads = [];
+	this.ammo = ammo || false;
 
-	this.setFireOrder = function(fire){
-		this.selected = false;
-		this.highlight = false;
-		this.fireOrders.push(fire);
-		this.setTableRow();
-	}
-
-	this.getShots = function(){
-		return this.getOutput();
-	}
-
-	this.getMount = function(){
-		if (game.getUnitById(aUnit) instanceof Flight){
-			return false;
-		}
-		var w = this.getArcWidth();
-		var a = game.getUnitById(aUnit).getStructureById(this.structureId).getRemainingNegation();
-
-
-		if (w <= 120){return "Tube / " + Math.floor(a * 0.8)}
-		else if (w <= 180){return "Canister / " + Math.floor(a * 0.6)}
-		else return "Arm Rail / " + Math.floor(a * 0.3);
-	}
-
-	this.getFireControlString = function(){
-		return this.ammo.fc[0] + "% / " + this.ammo.fc[1] + "%";
-	}
-
-	this.getFireControl = function(target){
-		if (target instanceof Flight || target instanceof Salvo){
-			return this.ammo.fc[1];
-		} else return this.ammo.fc[0];
-	}
-
-	this.getOutput = function(){
-		var base = this.shots;
-		if (this.powers.length && this.powers[this.powers.length-1].turn == game.turn && this.powers[this.powers.length-1].type > 0){
-			base += this.powers[this.powers.length-1].type;
-		}
-		return base;
-	}
-
-	this.doBoost = function(){
-		if (this.powers.length){
-			if (this.powers[this.powers.length-1].turn == game.turn && this.powers[this.powers.length-1].type > 0){
-				this.powers[this.powers.length-1].type++;
-				this.updateOverlay();
-				return;
+	this.getUpgradeData = function(){
+		var loads = [];
+		for (var i = 0; i < this.loads.length; i++){
+			if (this.loads[i].amount > 0){
+				loads.push({"amount": this.loads[i].amount, "cost": this.loads[i].cost, name: this.loads[i].name});
 			}
 		}
-		this.powers.push(
-			new Power(
-				this.powers.length+1,
-				this.parentId,
-				this.id,
-				game.turn,
-				1,
-				0
-			)
-		)
-		this.updateOverlay();
+
+		return {name: this.display, systemid: this.id, cost: this.totalCost, loads: loads};
 	}
 
-	this.doUnboost = function(){
-		if (this.powers[this.powers.length-1].turn == game.turn){
-			if (this.powers[this.powers.length-1].type > 2){
-				this.powers[this.powers.length-1].type--;
-			} else {
-				this.powers.splice(this.powers.lenght-1, 1);
+	this.getAccurayDecay = function(dist){		
+		return 0;
+	}
+
+	this.create = function(){
+		if (game.phase == -2){
+			for (var i = 0; i < this.loads.length; i++){
+				this.loads[i].amount = 0;
 			}
 		}
 		else {
-			this.powers.splice(this.powers.lenght-1, 1);
+			if (this.ammo  == false || this.getRemainingAmmo() == 0){
+				this.shots = 0;
+			}
 		}
-		this.updateOverlay();
-	}
-
-	this.updateOverlay = function(){
-		$("#systemDetailsDiv").find("#detailsShots").html("<font color='red'>" + this.getOutput() + "</font> - max " + this.effiency);
 	}
 
 	this.select = function(e){
 		console.log(this);
 
-		if (game.phase != -1){
+		if (game.phase == -2){
+			if (this.selected){
+				this.selected = false;
+			}
+			else {
+				this.selected = true;
+			}
+			this.setTableRow();
+			this.setupAmmoLoadout(e);
+		}
+		else if (game.phase != -1 || this.shots == 0){
 			return false;
 		}
 		
@@ -1298,7 +1425,7 @@ function Launcher(id, parentId, name, display, launchRate, integrity, powerReq, 
 			return false;
 		}
 		else if (this.canFire()){
-			if (this.hasActiveFireOrder()){
+			if (this.hasUnresolvedFireOrder()){
 				this.unsetFireOrder();
 			}
 
@@ -1326,48 +1453,288 @@ function Launcher(id, parentId, name, display, launchRate, integrity, powerReq, 
 		}
 	}
 
+	this.getShots = function(){
+		return this.getOutput();
+	}
+
+	this.getMount = function(){
+		if (game.getUnitById(aUnit) instanceof Flight){
+			return false;
+		}
+		var w = this.getArcWidth();
+		var a = game.getUnitById(aUnit).getStructureById(this.structureId).getRemainingNegation();
+
+		if (w <= 120){return "Tube / " + Math.floor(a * 0.8)}
+		else if (w <= 180){return "Canister / " + Math.floor(a * 0.6)}
+		else return "Arm Rail / " + Math.floor(a * 0.3);
+	}
+
+	this.getFireControlString = function(){
+		if (this.ammo){
+			return this.ammo.fc[0] + "% / " + this.ammo.fc[1] + "%";
+		}
+	}
+
+	this.getFireControl = function(target){
+		if (target instanceof Flight || target instanceof Salvo){
+			return this.ammo.fc[1];
+		} else return this.ammo.fc[0];
+	}
+
+	this.getDamage = function(){
+		if (this.ammo){
+			return this.ammo.minDmg + " - " + this.ammo.maxDmg;
+		}
+	}
+
+	this.getOutput = function(){
+		var base = this.shots;
+		if (this.powers.length && this.powers[this.powers.length-1].turn == game.turn && this.powers[this.powers.length-1].type > 0){
+			base += this.powers[this.powers.length-1].type;
+		}
+		return base;
+	}
+
+	this.alterExistingPowerEntry = function(mod){
+		this.powers[this.powers.length-1].type += mod;
+	}
+
+	this.createNewPowerEntry = function(type){
+		this.powers.push(
+			new Power(
+				this.powers.length+1,
+				this.parentId,
+				this.id,
+				game.turn,
+				type,
+				0
+			)
+		)
+	}
+
+	this.doBoost = function(){
+		if (this.powers.length){
+			if (this.powers[this.powers.length-1].turn == game.turn){
+				if (this.powers[this.powers.length-1].type > 0){
+					this.alterExistingPowerEntry(1);
+				}
+			}
+			else {
+				this.createNewPowerEntry(1);
+			}
+		}
+		else {
+			this.createNewPowerEntry(1);
+		}
+		this.updateOverlay();
+	}
+
+	this.doUnboost = function(){
+		if (this.powers[this.powers.length-1].turn == game.turn){
+			if (this.powers[this.powers.length-1].type >= 2){
+				this.alterExistingPowerEntry(-1);
+			} else {
+				this.powers.splice(this.powers.length-1, 1);
+			}
+		}
+		else {
+			this.powers.splice(this.powers.length-1, 1);
+		}
+		this.updateOverlay();
+	}
+
+	this.updateOverlay = function(){
+		$("#systemDetailsDiv").find("#detailsShots").html("<font color='red'>" + this.getOutput() + "</font> - max " + this.effiency);
+	}
+
+	this.setupAmmoLoadout = function(e){
+		var div = document.getElementById("weaponLoadoutDiv");
+
+		if ($(div).hasClass("disabled")){
+			$(div).find("#launchRate").html(this.effiency);
+			$(div).find("#reload").html(this.reload);
+			$(div).find("#capacity").html(this.output);
+			$(div).data("systemid", this.id).css("top", e.clientY + 30).css("left", e.clientX - 150).removeClass("disabled");
+			this.updateTotals();
+		}
+		else {
+			window.game.setShipTotal();
+			$(div).addClass("disabled");
+		}
+	}
+
+	this.addAmmo = function(ele, all){
+		var tMass = 0;
+		var tCost = 0;
+		var add = 1;
+		var name = ele.childNodes[0].innerHTML;
+		var sMass = 0;
+
+		var canAdd = true;
+		var index = 0;
+		for (var i = 0; i < this.loads.length; i++){
+			if (this.loads[i].name == name){
+				index = i;
+			}
+
+			if (this.loads[i].amount > 0 && this.loads[i].name != name){
+				canAdd = false
+				break;
+			}
+			else if (this.loads[i].amount == this.loads[i].name){
+				canAdd = false;
+				break;
+			}
+		}
+
+		if (canAdd){
+			if (all){
+				this.loads[index].amount = this.output;
+			}
+			else {
+				this.loads[index].amount++;
+			}
+			this.updateTotals();
+		}
+	}
+
+	this.removeAmmo = function(ele, all){
+		for (var i = 0; i < this.loads.length; i++){
+			if (this.loads[i].name == ele.childNodes[0].innerHTML){
+				if (this.loads[i].amount >= 1){
+					if (all){
+						this.loads[i].amount = 0;
+					}
+					else {
+						this.loads[i].amount -= 1;
+					}
+					this.updateTotals();
+					return;
+				}
+			}
+		}
+	}
+
+	this.updateTotals = function(){
+		var amount = 0;
+		var tCost = 0;
+		var table = document.getElementById("weaponTable");
+			table.innerHTML = "";
+
+			var tr = document.createElement("tr");
+			var th = document.createElement("th"); th.innerHTML = "Class"; th.width = "80px"; tr.appendChild(th)
+			var th = document.createElement("th"); th.innerHTML = "Type"; th.width = "200px"; tr.appendChild(th)
+			var th = document.createElement("th"); th.innerHTML = "Cost"; th.width = "40px"; tr.appendChild(th)
+			var th = document.createElement("th"); th.innerHTML = ""; tr.appendChild(th)
+			var th = document.createElement("th"); th.innerHTML = ""; tr.appendChild(th)
+			var th = document.createElement("th"); th.innerHTML = "Amount"; th.width = "70px"; tr.appendChild(th)
+			var th = document.createElement("th"); th.innerHTML = "Total Cost"; th.width = "70px"; tr.appendChild(th)
+			table.appendChild(tr);
+
+		for (var i = 0; i < this.loads.length; i++){
+			var tr = table.insertRow(-1);
+				tr.insertCell(-1).innerHTML = this.loads[i].name;
+				tr.insertCell(-1).innerHTML = this.loads[i].display;
+				tr.insertCell(-1).innerHTML = this.loads[i].cost;
+			var td = document.createElement("td");
+				td.innerHTML = "<img src='varIcons/plus.png'>"; tr.appendChild(td);
+				td.addEventListener("click", function(e){
+					e.preventDefault(); e.stopPropagation();
+					window.game.ships[0].getSystemById($("#weaponLoadoutDiv").data("systemid")).addAmmo(this.parentNode, false);
+				})
+				td.addEventListener("contextmenu", function(e){
+					e.preventDefault(); e.stopPropagation();
+					window.game.ships[0].getSystemById($("#weaponLoadoutDiv").data("systemid")).addAmmo(this.parentNode, true);
+				})
+			var td = document.createElement("td");
+				td.innerHTML = "<img src='varIcons/minus.png'>"; tr.appendChild(td);
+				td.addEventListener("click", function(e){
+					e.preventDefault(); e.stopPropagation();
+					window.game.ships[0].getSystemById($("#weaponLoadoutDiv").data("systemid")).removeAmmo(this.parentNode, false);
+				})
+				td.addEventListener("contextmenu", function(e){
+					e.preventDefault(); e.stopPropagation();
+					window.game.ships[0].getSystemById($("#weaponLoadoutDiv").data("systemid")).removeAmmo(this.parentNode, true);
+				})
+
+				amount += this.loads[i].amount
+				tCost += this.loads[i].amount * this.loads[i].cost
+				tr.insertCell(-1).innerHTML = this.loads[i].amount
+				tr.insertCell(-1).innerHTML = this.loads[i].amount * this.loads[i].cost
+		}
+
+		var tr = document.createElement("tr");
+		var th = document.createElement("th"); tr.appendChild(th);
+			th.innerHTML = "Grand Total";
+			th.colSpan = 5;
+		var th = document.createElement("th"); th.innerHTML = amount; tr.appendChild(th);
+		var th = document.createElement("th"); th.innerHTML = tCost; tr.appendChild(th);
+		table.appendChild(tr);
+		this.totalCost = tCost;
+	}
+
 	this.getRemainingAmmo = function(){
-		var ammo = this.output;
+		var ammo = this.getMaxAmmo();
 		for (var i = 0; i < this.fireOrders.length; i++){
 			ammo -= this.fireOrders[i].shots;
 		}
 		return ammo;
 	}
 
-	this.getDamage = function(){
-		return this.ammo.getDamage();
-	}
-
-	this.getMaxDist = function(){
-		return this.ammo.maxDist;
+	this.getMaxAmmo = function(){
+		return this.ammo.output;
 	}
 
 	this.getBallImpulse = function(){
 		return this.ammo.impulse;
 	}
+
+	this.create();
 }
 Launcher.prototype = Object.create(Weapon.prototype);
 
-function Hangar(id, parentId, name, display, start, end, integrity, powerReq, output, effiency, loads){
+function Hangar(id, parentId, name, display, start, end, integrity, powerReq, reload, output, effiency, loads){
 	System.call(this, id, parentId, name, display, integrity, powerReq, output, effiency, 0);
 	this.start = start;
 	this.end = end;
+	this.reload = reload;
 	this.effiency = effiency;
 	this.loads = loads;
 	//this.weapon = false;
 	this.range = 75;
 
+	this.getUpgradeData = function(){
+		return {
+			name: this.display,
+			systemid: this.id,
+			cost: this.totalCost,
+			loads: this.loads
+		}
+	}
+
+	this.setFireOrder = function(){
+		this.fireOrders.push(
+			//id, turn, shooterid, targetid, weaponid, shots, req, notes, hits, resolved
+			new FireOrder(0, game.turn, this.parentId, 0, this.id, 0, -1, "fighterLaunch", -1, 1)
+		);
+		return this;
+	}
+
 	this.select = function(e){
 		console.log(this);
-
 		var id = this.id;
 		var parentId = this.parentId;
 		var selected = false;
 		var ship = game.getUnitById(parentId);
 
 		if (game.phase == -2){
-			this.setupHangarLoadout(e);
-			if (this.selected){this.selected = false;}else{this.selected= true;}
+			if (!this.selected && ship.hasHangarSelected()){
+				return false;
+			}
+			else {
+				this.setupHangarLoadout(e);
+				if (this.selected){this.selected = false;}else{this.selected = true;}
+			}
 		}
 		else if (this.destroyed || this.disabled){
 			return false;
@@ -1383,7 +1750,7 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, ou
 		}
 		else {
 			this.selected = false;
-			this.hideHangarDiv();
+			$("#hangarLoadoutDiv").addClass("disabled");
 			if (game.flightDeploy){
 				game.flightDeploy = false;
 				$("#deployOverlay").hide();
@@ -1437,7 +1804,7 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, ou
 	}
 
 	this.drawArc = function(){
-		game.getUnitById(this.parentId).showHangarLaunchAxis(this);
+		game.getUnitById(this.parentId).drawSystemAxis(this);
 	}
 
 	this.enableHangarDeployment = function(e){
@@ -1476,10 +1843,10 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, ou
 
 		for (var i = 0; i < this.loads.length; i++){
 			var tr = table.insertRow(-1)
-				tr.insertCell(-1).innerHTML = this.loads[i].classname;
+				tr.insertCell(-1).innerHTML = this.loads[i].name;
 				tr.insertCell(-1).innerHTML = this.loads[i].amount;
 				var td = document.createElement("td");
-					td.innerHTML = "<img src='varIcons/plus.png'>"; $(td).data("classname", this.loads[i].classname).data("val", 1); tr.appendChild(td);
+					td.innerHTML = "<img src='varIcons/plus.png'>"; $(td).data("name", this.loads[i].name).data("val", 1); tr.appendChild(td);
 					td.addEventListener("click", function(){
 						game.getUnitById(aUnit).getSystemById(id).alterFlight(this, false);
 					});
@@ -1488,7 +1855,7 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, ou
 						game.getUnitById(aUnit).getSystemById(id).alterFlight(this, true);
 					});
 				var td = document.createElement("td");
-					td.innerHTML = "<img src='varIcons/minus.png'>"; $(td).data("classname", this.loads[i].classname).data("val", -1); tr.appendChild(td);
+					td.innerHTML = "<img src='varIcons/minus.png'>"; $(td).data("name", this.loads[i].name).data("val", -1); tr.appendChild(td);
 					td.addEventListener("click", function(){
 						game.getUnitById(aUnit).getSystemById(id).alterFlight(this, false);
 					});
@@ -1497,7 +1864,7 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, ou
 						game.getUnitById(aUnit).getSystemById(id).alterFlight(this, true);
 					});
 				var td = document.createElement("td");
-					td.id = this.loads[i].classname + "Amount";
+					td.id = this.loads[i].name + "Amount";
 					td.innerHTML = this.loads[i].launch; tr.appendChild(td);
 
 			table.appendChild(tr);
@@ -1517,6 +1884,7 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, ou
 					if (game.ships[i].actions[0].resolved == 0){
 						if (game.ships[i].launchdata.shipid == window.aUnit && game.ships[i].launchdata.systemid == this.id){
 							console.log("splice");
+							this.unsetFireOrder();
 							game.ships.splice(i, 1);
 							game.draw();
 							break;
@@ -1533,8 +1901,8 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, ou
 	}
 
 	this.alterFlight = function(ele, max){
-		if (game.phase != -1){return false}
-		var classname = $(ele).data("classname");
+		if (game.phase != -1 || !this.canFire()){return false}
+		var name = $(ele).data("name");
 		var add = $(ele).data("val");
 		var launchRate = this.getLaunchRate();
 		var current = 0;
@@ -1550,7 +1918,7 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, ou
 		else {
 			if (max){
 				for (var i = 0; i < this.loads.length; i++){
-					if (this.loads[i].classname == classname){
+					if (this.loads[i].name == name){
 						add = -this.loads[i].launch;
 						break;
 					}
@@ -1558,9 +1926,8 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, ou
 			}
 		}
 
-
 		for (var i = 0; i < this.loads.length; i++){
-			if (this.loads[i].classname == classname){
+			if (this.loads[i].name == name){
 				if (add > 0){
 					add = Math.min(add, this.loads[i].amount - this.loads[i].launch);
 					if (current + add <= launchRate && this.loads[i].launch + add <= this.loads[i].amount && this.loads[i].launch + add >= 0){
@@ -1570,7 +1937,7 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, ou
 				else {
 					this.loads[i].launch += add;
 				}
-				$("#" + this.loads[i].classname + "Amount").html(this.loads[i].launch);
+				$("#" + this.loads[i].name + "Amount").html(this.loads[i].launch);
 				break;
 			}
 		}
@@ -1584,33 +1951,27 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, ou
 	}
 
 	this.canLaunchFlight = function(){
-		for (var i = 0; i < this.loads.length; i++){
-			if (this.loads[i].launch >= 1){
-				return true;
+		if (this.canFire()){
+			for (var i = 0; i < this.loads.length; i++){
+				if (this.loads[i].launch >= 1){
+					return true;
+				}
 			}
 		}
 		return false;
-	}
-
-	this.getLoadLevel = function(){
-		return 1;
-	}
-
-	this.hideHangarDiv = function(){
-		$("#hangarLoadoutDiv").addClass("disabled").find("input").addClass("disabled");
 	}
 
 	this.addFighter = function(ele, all){
 		var tMass = 0;
 		var tCost = 0;
 		var add = 1;
-		var classname = ele.childNodes[0].innerHTML;
+		var name = ele.childNodes[0].innerHTML;
 		var sMass = 0;
 
 		for (var i = 0; i < this.loads.length; i++){
 			tMass += this.loads[i].amount * this.loads[i].mass;
 			tCost += this.loads[i].amount * this.loads[i].cost;
-			if (this.loads[i].classname == classname){
+			if (this.loads[i].name == name){
 				sMass = this.loads[i].mass;
 			}
 		}
@@ -1620,7 +1981,7 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, ou
 		}
 
 		for (var i = 0; i < this.loads.length; i++){
-			if (this.loads[i].classname == classname){
+			if (this.loads[i].name == name){
 				if (tMass + this.loads[i].mass <= this.output){
 					this.loads[i].amount += add;
 					this.updateTotals();
@@ -1635,7 +1996,7 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, ou
 
 	this.removeFighter = function(ele, all){
 		for (var i = 0; i < this.loads.length; i++){
-			if (this.loads[i].classname == ele.childNodes[0].innerHTML){
+			if (this.loads[i].name == ele.childNodes[0].innerHTML){
 				if (this.loads[i].amount >= 1){
 					if (all){
 						this.loads[i].amount = 0;
@@ -1670,28 +2031,28 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, ou
 
 		for (var i = 0; i < this.loads.length; i++){
 			var tr = table.insertRow(-1);
-				tr.insertCell(-1).innerHTML = this.loads[i].classname;
+				tr.insertCell(-1).innerHTML = this.loads[i].name;
 				tr.insertCell(-1).innerHTML = this.loads[i].mass;
 				tr.insertCell(-1).innerHTML = this.loads[i].cost;
 			var td = document.createElement("td");
 				td.innerHTML = "<img src='varIcons/plus.png'>"; tr.appendChild(td);
 				td.addEventListener("click", function(e){
 					e.preventDefault(); e.stopPropagation();
-					window.game.addFighter(this.parentNode, false);
+					window.game.ships[0].getSystemById($("#hangarLoadoutDiv").data("systemid")).addFighter(this.parentNode, false);
 				})
 				td.addEventListener("contextmenu", function(e){
 					e.preventDefault(); e.stopPropagation();
-					window.game.addFighter(this.parentNode, true);
+					window.game.ships[0].getSystemById($("#hangarLoadoutDiv").data("systemid")).addFighter(this.parentNode, true);
 				})
 			var td = document.createElement("td");
 				td.innerHTML = "<img src='varIcons/minus.png'>"; tr.appendChild(td);
 				td.addEventListener("click", function(e){
 					e.preventDefault(); e.stopPropagation();
-					window.game.removeFighter(this.parentNode, false);
+					window.game.ships[0].getSystemById($("#hangarLoadoutDiv").data("systemid")).removeFighter(this.parentNode, false);
 				})
 				td.addEventListener("contextmenu", function(e){
 					e.preventDefault(); e.stopPropagation();
-					window.game.removeFighter(this.parentNode, true);
+					window.game.ships[0].getSystemById($("#hangarLoadoutDiv").data("systemid")).removeFighter(this.parentNode, true);
 				})
 
 				amount += this.loads[i].amount
@@ -1715,9 +2076,9 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, ou
 
 	this.setupHangarLoadout = function(e){
 		var div = document.getElementById("hangarLoadoutDiv");
-		$("#launchRate").html(this.getOutput());
-		$("#capacity").html(this.output);
 		if ($(div).hasClass("disabled")){
+			$(div).find("#launchRate").html(this.getOutput());
+			$(div).find("#capacity").html(this.output);
 			$(div).data("systemid", this.id).css("top", e.clientY + 30).css("left", e.clientX - 150).removeClass("disabled");
 			this.updateTotals();
 		}
@@ -1734,7 +2095,7 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, ou
 			
 		var tr = document.createElement("tr");		
 		var th = document.createElement("th");
-			th.colSpan = 2; th.innerHTML = this.display.toUpperCase(); th.style.width = "40%"; tr.appendChild(th); table.appendChild(tr);
+			th.colSpan = 2; th.innerHTML = this.display; th.style.width = "40%"; tr.appendChild(th); table.appendChild(tr);
 
 		$(table).append($("<tr>").append($("<td>").html("Mass Capacity")).append($("<td>").html(this.output + " metric tons")));
 		$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));

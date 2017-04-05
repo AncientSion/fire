@@ -28,21 +28,29 @@ class Manager {
 		$this->userid = $userid;
 		$this->gameid = $gameid;
 
-		if ($this->gameid & !$this->userid){
+		if ($this->gameid){
 			$this->getGameAndPlayerStatus();
-			$this->getGameData();
-		}
-		else if ($this->gameid){
-			$this->getGameAndPlayerStatus();
-
 			if ($this->game["status"] == "open"){
-				//Debug::log("open");
 				return;
 			}
 			else {
 				$this->getGameData();
 			}
 		}
+
+		/*if ($this->gameid & !$this->userid){
+			$this->getGameAndPlayerStatus();
+			$this->getGameData();
+		}
+		else if ($this->gameid){
+			$this->getGameAndPlayerStatus();
+			if ($this->game["status"] == "open"){
+				return;
+			}
+			else {
+				$this->getGameData();
+			}
+		}*/
 		//$this->getMemory();
 	}
 
@@ -119,10 +127,11 @@ class Manager {
 
 		$this->ballistics = $this->assembleBallistics();
 		$this->ships = $this->assembleUnits();
-		//$this->deleteResolvedFireOrders();
 
 		$this->reinforcements = $db->getAvailableReinforcements($this->gameid, $this->userid);
 		$this->incoming = $db->getIncomingShips($this->gameid, $this->turn);
+		
+		$this->deleteResolvedFireOrders();
 
 		$this->damages = array();
 		$this->crits = array();
@@ -170,6 +179,24 @@ class Manager {
 			}
 		}
 		*/
+		else if ($this->phase == 2){
+			for ($i = 0; $i < sizeof($this->ships); $i++){
+				if ($this->ships[$i]->userid != $userid){
+					for ($j = 0; $j < sizeof($this->ships[$i]->structures); $j++){
+						for ($k = 0; $k < sizeof($this->ships[$i]->structures[$j]->systems); $k++){
+							for ($l = sizeof($this->ships[$i]->structures[$j]->systems[$k]->fireOrders)-1; $l >= 0; $l--){
+								if ($this->ships[$i]->structures[$j]->systems[$k]->fireOrders[$l]->turn == $this->turn){
+									array_splice($this->ships[$i]->structures[$j]->systems[$k]->fireOrders, $l, 1);
+								}
+								else {
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 		return $this->ships;
 	}
 
@@ -185,27 +212,6 @@ class Manager {
 		if (DBManager::app()->createGame($this->userid, $name)){
 			return true;
 		}
-	}	
-
-	public function getGameStatus($gameid, $turn){
-		$status = DBManager::app()->getGameStatus($gameid, $this->userid, $turn);
-		
-		if ($status){
-			return $status;
-		}
-	}
-
-	public function canAdvanceFromLobby($gameid){
-		$this->purge();
-		$status = DBManager::app()->getPlayerStatus($gameid);
-
-		for ($i = 0; $i < sizeof($status); $i++){
-			if ($status[$i]["status"] == "waiting"){
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 	public function purge(){
@@ -225,21 +231,80 @@ class Manager {
 		return true;
 	}
 
-	public function doAdvanceFromLobby($gameid){
-		$this->gameid = $gameid;
-		$this->getGameData();
-		$this->doAdvanceGameState();
+	public function assembleUnits(){
+		$db =  DBManager::app()->getActiveUnits($this->gameid, $this->turn); 
+		$units = array();
+
+		for ($i = 0; $i < sizeof($db); $i++){
+			$unit = new $db[$i]["name"](
+				$db[$i]["id"],
+				$db[$i]["userid"],
+				$db[$i]["available"]
+			);
+
+			if ($unit->flight){
+				$unit->addFighters($db[$i]["fighters"]);
+			}
+			$units[] = $unit;
+		}
+
+		DBManager::app()->getDamages($units);
+		DBManager::app()->getPowers($units);
+		DBManager::app()->getCrits($units);
+		DBManager::app()->getActions($units);
+		DBManager::app()->getShipLoad($units);
+		DBManager::app()->getDogfights($units);
+
+		for ($i = 0; $i < sizeof($units); $i++){
+			$units[$i]->addFireDB($this->fires);
+			$units[$i]->setState(); //check damage state after dmg is applied
+		}
+
+		return $units;
 	}
 
-	public function canAdvanceGameState(){
-		Debug::log("canAdvanceGameState ?");
+	public function assembleBallistics(){
+		//Debug::log("assembleBallistics");
+		$ballistics = DBManager::app()->getActiveBallistics($this->gameid, $this->turn);
 
+		for ($i = 0; $i < sizeof($ballistics); $i++){
+			$ballistics[$i] = new Salvo(
+				$ballistics[$i]["id"],
+				$ballistics[$i]["userid"],
+				$ballistics[$i]["ship"],
+				$ballistics[$i]["name"],
+				$ballistics[$i]["status"],
+				$ballistics[$i]["available"],
+				$ballistics[$i]["destroyed"]
+			);
+		}
+		DBManager::app()->getDamages($ballistics);
+		DBManager::app()->getCrits($ballistics);
+		DBManager::app()->getActions($ballistics);
+
+		for ($i = 0; $i < sizeof($ballistics); $i++){ //check damage state after dmg is applied
+			$ballistics[$i]->addFireDB($this->fires);
+			$ballistics[$i]->setState();
+		}
+
+		return $ballistics;
+	}
+
+	public function getGameStatus($gameid, $turn){
+		$status = DBManager::app()->getGameStatus($gameid, $this->userid, $turn);
+		
+		if ($status){
+			return $status;
+		}
+	}
+
+	public function canAdvance($gameid){
+		$this->playerstatus = DBManager::app()->getPlayerStatus($gameid);
 		if ($this->game["status"] == "open"){
 			return false;
 		}
 		else if (sizeof($this->playerstatus) >= 2){
 			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-				//echo json_encode($this->playerstatus[$i]);
 				if ($this->playerstatus[$i]["status"] == "waiting"){
 					return false;
 				}
@@ -248,8 +313,13 @@ class Manager {
 		return true;
 	}
 
-	public function doAdvanceGameState(){
-		Debug::log("doAdvanceGameState for game".$this->gameid." from phase ".$this->phase." to phase ".($this->phase+1));
+	public function prepareAdvance($gameid){
+		$this->gameid = $gameid;
+		$this->getGameData();
+	}
+
+	public function doAdvance(){
+		//Debug::log("doAdvance for game".$this->gameid." from phase ".$this->phase." to phase ".($this->phase+1));
 
 		$time = -microtime(true);
 
@@ -281,69 +351,10 @@ class Manager {
 				break;
 		}
 		$time += microtime(true); 
-		Debug::log("time: ".round($time, 3)." seconds.");
+		//Debug::log("advancing game state time: ".round($time, 3)." seconds.");
 		return true;
 	}
 	
-	public function assembleUnits(){
-		$db =  DBManager::app()->getActiveUnits($this->gameid, $this->turn); 
-		$units = array();
-
-		for ($i = 0; $i < sizeof($db); $i++){
-			$unit = new $db[$i]["classname"](
-				$db[$i]["id"],
-				$db[$i]["userid"],
-				$db[$i]["available"]
-			);
-
-			if (get_class($unit) == "Flight"){
-				$unit->addFighters($db[$i]["fighters"]);
-			}
-			$units[] = $unit;
-		}
-
-		DBManager::app()->getDamages($units);
-		DBManager::app()->getPowers($units);
-		DBManager::app()->getCrits($units);
-		DBManager::app()->getActions($units);
-		DBManager::app()->getShipLoad($units);
-		DBManager::app()->getDogfights($units);
-
-		for ($i = 0; $i < sizeof($units); $i++){
-			$units[$i]->addFireDB($this->fires);
-			$units[$i]->setState(); //check damage state after dmg is applied
-		}
-
-		return $units;
-	}
-
-	public function assembleBallistics(){
-		//Debug::log("assembleBallistics");
-		$ballistics = DBManager::app()->getActiveBallistics($this->gameid, $this->turn);
-
-		for ($i = 0; $i < sizeof($ballistics); $i++){
-			$ballistics[$i] = new Salvo(
-				$ballistics[$i]["id"],
-				$ballistics[$i]["userid"],
-				$ballistics[$i]["ship"],
-				$ballistics[$i]["classname"],
-				$ballistics[$i]["status"],
-				$ballistics[$i]["available"],
-				$ballistics[$i]["destroyed"]
-			);
-		}
-		DBManager::app()->getDamages($ballistics);
-		DBManager::app()->getCrits($ballistics);
-		DBManager::app()->getActions($ballistics);
-
-		for ($i = 0; $i < sizeof($ballistics); $i++){ //check damage state after dmg is applied
-			$ballistics[$i]->addFireDB($this->fires);
-			$ballistics[$i]->setState();
-		}
-
-		return $ballistics;
-	}
-
 	public function pickReinforcements(){
 		Debug::log("pickReinforcements");
 		if ($this->turn > 1){
@@ -375,63 +386,37 @@ class Manager {
 
 	public function initBallistics(){
 		Debug::log("initBallistics");
-		$fires = DBManager::app()->getOpenBallisticFireOrders($this->gameid, $this->turn);
+		$fires = DBManager::app()->getUnresolvedFireOrders($this->gameid, $this->turn);
+		usort($fires, function($a, $b){
+			return $a->shooterid - $b->shooterid;
+		});
+
 		$balls = array();
-
 		for ($i = 0; $i < sizeof($fires); $i++){
-			for ($j = 0; $j < sizeof($this->ships); $j++){
-				if ($fires[$i]->shooterid == $this->ships[$j]->id){
-					for ($k = 0; $k < sizeof($this->ships[$j]->structures); $k++){
-						for ($l = 0; $l < sizeof($this->ships[$j]->structures[$k]->systems); $l++){
-							if ($fires[$i]->weaponid == $this->ships[$j]->structures[$k]->systems[$l]->id){
-
-								for ($m = 0; $m < sizeof($balls); $m++){
-									if ($balls[$m]->destroyed == $this->ships[$j]->id){
-										if ($this->ships[$j]->structures[$k]->systems[$l]->getAmmo() == $balls[$m]->classname){
-											$balls[$m]->amount += $this->fires[$i]->shots;
-											break 4;
-										}
-									}
-								}
-
-								//($id, $userid, $fireid, $classname, $status, $amount, $destroyed){
-								$ball = new Salvo(
-									0,
-									$this->ships[$j]->userid,
-									$fires[$i]->targetid,
-									$this->ships[$j]->structures[$k]->systems[$l]->getAmmo(),
-									"launched",
-									$fires[$i]->shots,
-									$this->ships[$j]->id // shooter id
-								);
-
-								$sPos = $this->ships[$j]->getCurrentPosition();
-								$tPos = $this->getUnitById($this->fires[$i]->targetid)->getCurrentPosition();
-								$a = Math::getAngle($sPos->x, $sPos->y, $tPos->x, $tPos->y);
-								
-								$launchPoint = Math::getPointInDirection(
-									$this->ships[$j]->size/3 + mt_rand($this->ships[$j]->size/5, $this->ships[$j]->size/2.5),
-									$a,
-									$sPos->x + mt_rand(-6, 6),
-									$sPos->y + mt_rand(-6, 6)
-								);
-
-								$ball->actions[] = new Action(
-									$this->turn,
-									"launch",
-									0,
-									$launchPoint->x,
-									$launchPoint->y,
-									0, 0, 0, 0, 0
-								);
-								$balls[] = $ball;
-								break 3;
-							}
-						}
-					}
+			//var_export($fires[$i]);
+			$skip = false;
+			$shooter = $this->getUnitById($fires[$i]->shooterid);
+			$name = $shooter->getSystemById($fires[$i]->weaponid)->getAmmo();
+			for ($j = 0; $j < sizeof($balls); $j++){
+				if ($balls[$j]->destroyed == $shooter->id && $balls[$j]->targetid == $fires[$i]->targetid && $balls[$j]->name == $name){
+					$balls[$j]->amount += $fires[$i]->shots;
+					$skip = true;
+					break;
 				}
 			}
+
+			if ($skip){continue;}
+			$sPos = $shooter->getCurrentPosition();
+			$tPos = $this->getUnitById($fires[$i]->targetid)->getCurrentPosition();
+			$a = Math::getAngle($sPos->x, $sPos->y, $tPos->x, $tPos->y);
+
+			$launch = Math::getPointInDirection($shooter->size/3, $a, $sPos->x + mt_rand(-10, 10), $sPos->y + mt_rand(-10, 10));
+
+			$ball = new Salvo(0, $shooter->userid, $fires[$i]->targetid, $name, "launched", $fires[$i]->shots, $shooter->id);
+			$ball->actions[] = new Action($this->turn, "launch", 0, $launch->x, $launch->y,0, 0, 0, 0, 0);
+			$balls[] = $ball;
 		}
+
 		if (sizeof($balls)){
 			DBManager::app()->insertBallistics($this->gameid, $balls);
 			DBManager::app()->updateBallisticFireOrder($fires);
@@ -463,37 +448,29 @@ class Manager {
 		Debug::log("startFighterMovementPhase");
 		$dbManager = DBManager::app();
 		$this->phase = 1;
-		$players;
 
 		if ($dbManager->setGameTurnPhase($this->gameid, $this->turn, $this->phase)){
-			$players = $dbManager->getPlayerStatus($this->gameid);
+			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+				$hasFlight = false;
+				for ($j = 0; $j < sizeof($this->ships); $j++){
+					if ($this->ships[$j]->userid == $this->playerstatus[$i]["userid"] && $this->ships[$j]->flight){
+						$hasFlight = true;
+						break;
+					}
+				}
 
-			for ($i = 0; $i < sizeof($players); $i++){
-				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->turn, $this->phase, "waiting")){
-					continue;
+				if ($hasFlight){
+					$dbManager->setPlayerstatus($this->playerstatus[$i]["userid"], $this->gameid, $this->turn, $this->phase, "waiting");
+				}
+				else {
+					$dbManager->setPlayerstatus($this->playerstatus[$i]["userid"], $this->gameid, $this->turn, $this->phase, "ready");
 				}
 			}
 		}
 
-		$flight = false;
-		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->flight){
-				$flight = true;
-				break;
-			}
+		if ($this->canAdvance($this->gameid)){
+			$this->doAdvance();
 		}
-
-		if (!$flight){
-			for ($i = 0; $i < sizeof($players); $i++){
-				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->turn, $this->phase, "ready")){
-					continue;
-				}
-			}
-			$this->playerstatus = DBManager::app()->getPlayerStatus($this->gameid);
-			$this->doAdvanceGameState();
-		}
-
-		return true;
 	}
 
 	public function handleShipMovementPhase(){
@@ -609,12 +586,8 @@ class Manager {
 
 	public function handleFiringPhase(){
 		debug::log("handleFiringPhase");
-		$this->handleFireOrders();
-		$this->updateFireOrders($this->fires);
-		$this->setBallisticStates();
-		$this->createAndResolveBallisticMoves();
-		$this->handleAntiBallistics();
-		$this->resolveBallisticActions();
+		$this->handleNormalFireOrders();
+		$this->handleBallistics();
 		$this->testCriticals();
 		$this->writeDamageEntries();
 		$this->writeCritEntries();
@@ -623,8 +596,6 @@ class Manager {
 
 	public function handleDamageControlPhase(){
 		Debug::log("handleDamageControlPhase");
-		//$this->testPrimaryCriticals();
-		//$this->writePrimaryCriticals();
 		$this->adjustUnitStates();
 		$this->adjustBallisticStates();
 		return true;
@@ -641,40 +612,11 @@ class Manager {
 					DBManager::app()->setUnitStatus($this->ballistics[$i]->id, "impact", 1);
 				}
 			}
-			else if ($this->ballistics[$i]->destroyed){
-				DBManager::app()->setUnitStatus($this->ballistics[$i]->id, "launched", 1);
+			else if ($this->ballistics[$i]->isDestroyed()){
+				DBManager::app()->setUnitStatus($this->ballistics[$i]->id, "intercepted", 1);
 			}
 		}
 		return;
-	}
-
-	public function testPrimaryCriticals(){
-		Debug::log("testPrimaryCriticals");
-		return false;
-		for ($i = 0; $i < sizeof($this->ships); $i++){
-			for ($j = 0; $j < sizeof($this->ships[$i]->primary->systems); $j++){
-				$this->ships[$i]->primary->systems[$j]->testDamageEffect($this->turn);
-			}
-		}
-	}
-
-	public function writePrimaryCriticals(){
-		Debug::log("writePrimaryCriticals");
-		$crits = array();
-
-		for ($i = 0; $i < sizeof($this->ships); $i++){
-			for ($j = 0; $j < sizeof($this->ships[$i]->primary->systems); $j++){
-				for ($k = 0; $k < sizeof($this->ships[$i]->primary->systems[$j]->crits); $k++){
-					if ($this->ships[$i]->primary->systems[$j]->crits[$k]->turn == $this->turn){
-						$crits[] = $this->ships[$i]->primary->systems[$j]->crits[$k];
-					}
-				}
-			}
-		}
-
-		if (DBManager::app()->insertCritEntries($crits, $this->gameid)){
-			return true;
-		}
 	}
 
 	public function endTurn(){
@@ -716,21 +658,21 @@ class Manager {
 		$this->pickReinforcements();
 	}
 
-	public function handleFireOrders(){
+	public function handleNormalFireOrders(){
 		$this->setFireOrderDetails();
 		$this->sortFireOrders();
 		$this->setupShipsForDamage();
 		$this->resolveShipFireOrders();
 		$this->resolveFighterFireOrders();
+		$this->updateFireOrders($this->fires);
 	}
-
 
 	public function setFireOrderDetails(){
 		for ($i = sizeof($this->fires)-1; $i >= 0; $i--){
 			$this->fires[$i]->shooter = $this->getUnitById($this->fires[$i]->shooterid);
 			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystemById($this->fires[$i]->weaponid);
 			$this->fires[$i]->target = $this->getUnitById($this->fires[$i]->targetid);
-			if (is_a($this->fires[$i]->target, "Salvo")){
+			if ($this->fires[$i]->target->salvo){
 				$this->intercepts[] = $this->fires[$i];
 				array_splice($this->fires, $i, 1);
 			}
@@ -744,6 +686,7 @@ class Manager {
 	}
 
 	public function sortFireOrders(){
+		//sort to shooter, prio, target
 		usort($this->fires, function($a, $b){
 			if ($a->targetid != $b->targetid){
 				return $a->targetid - $b->targetid;
@@ -757,7 +700,7 @@ class Manager {
 
 	public function setupShipsForDamage(){
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if (!(is_a($this->ships[$i], "Mini"))){
+			if (!$this->ships[$i]->salvo && !$this->ships[$i]->flight){
 				$this->ships[$i]->setupForDamage();
 			}
 		}
@@ -824,74 +767,181 @@ class Manager {
 		}
 	}
 
-	public function setBallisticStates(){
+	public function handleBallistics(){
+		$this->sortBallistics();
+		$this->createBallisticActions();
+		$this->handleBallisticInterception();
+		$this->resolveBallisticActions();
+	}
+
+	public function sortBallistics(){
 		for ($i = 0; $i < sizeof($this->ballistics); $i++){
-			if ($this->ballistics[$i]->isDestroyed()){
-				$this->ballistics[$i]->destroyed = true;
+			$this->ballistics[$i]->target = $this->getUnitById($this->ballistics[$i]->targetid);
+		}
+
+		usort($this->ballistics, function($a, $b){
+			if ($a->target->salvo != $b->target->salvo){
+				return $b->target->salvo - $a->target->salvo;
+			}
+			else return $a->target->id - $b->target->id;
+		});
+	}
+
+	public function createBallisticActions(){
+		Debug::log("createBallisticActions, size: ".sizeof($this->ballistics));
+		for ($i = sizeof($this->ballistics)-1; $i >= 0; $i--){
+			if (!$this->ballistics[$i]->target->salvo){
+				$this->createStandardBallisticAction($this->ballistics[$i]);
+			}
+			else if ($this->ballistics[$i]->target->salvo){
+				$this->createInterceptionBallisticAction($this->ballistics[$i]);
 			}
 		}
 	}
 
-	public function createAndResolveBallisticMoves(){
-		Debug::log("createAndResolveBallisticMoves, size: ".sizeof($this->ballistics));
-		for ($i = 0; $i < sizeof($this->ballistics); $i++){
-			$sPos = $this->ballistics[$i]->getCurrentPosition();
-			$target = $this->getUnitById($this->ballistics[$i]->targetid);
-			$tPos = $target->getCurrentPosition();
+	public function createStandardBallisticAction($ballistic){
+		$sPos = $ballistic->getCurrentPosition();
+		$tPos = $ballistic->target->getCurrentPosition();
 
-			if (! $this->ballistics[$i]->destroyed){
-				$dist = Math::getDist($sPos->x, $sPos->y, $tPos->x, $tPos->y);
+		if (! $ballistic->isDestroyed()){
+			$dist = Math::getDist($sPos->x, $sPos->y, $tPos->x, $tPos->y);
 
-	  			// MOVE ($turn, $type, $dist, $x, $y, $a, $cost, $delay, $costmod, $resolved){
+  			// MOVE ($turn, $type, $dist, $x, $y, $a, $cost, $delay, $costmod, $resolved){
+			
+			if ($ballistic->getImpulse() >= $dist){ // IMPACT VECTOR
+				//Debug::log("impact");
+				$ox = mt_rand(-$ballistic->target->size/7, $ballistic->target->size/7);
+				$oy = mt_rand(-$ballistic->target->size/7, $ballistic->target->size/7);
+				$ballistic->actions[] = new Action(
+					$this->turn,
+					"impact",
+					$dist,
+					$tPos->x + $ox,
+					$tPos->y + $oy,
+					0, 0, 0, 0, 0
+				);
+			} 
+			else { // home in target vector
+				//Debug::log("home in");
+				$a = Math::getAngle($sPos->x, $sPos->y, $tPos->x, $tPos->y);
+				$iPos = Math::getPointInDirection($ballistic->getImpulse(), $a, $sPos->x, $sPos->y);
+				$ballistic->actions[] = new Action(
+					$this->turn,
+					"move",
+					$ballistic->structures[0]->impulse,
+					$iPos->x,
+					$iPos->y,
+					0, 0, 0, 0, 0
+				);
+			}
+		}
+		else { // MOVE VECTOR to animate fire on destroyed salvo
+			//Debug::log("move for destruct anim");
+			$ballistic->actions[] = new Action(
+				$this->turn,
+				"move",
+				$ballistic->getImpulse(),
+				$tPos->x,	
+				$tPos->y,
+				0, 0, 0, 0, 0
+			);
+		}
+	}
+
+	public function createInterceptionBallisticAction($ballistic){
+		if (!$ballistic->isDestroyed()){
+			$interceptStartPos = $ballistic->getCurrentPosition();
+			/*
+			echo "Interceptor pos: </br>";
+			var_export($interceptPos);
+			echo "</br>";
+			*/
+			$speedMod = $ballistic->getImpulse() / $ballistic->target->getImpulse();
+			$targetPos = $ballistic->target->getCurrentPosition();
+			$targetMoveVector = new Vector($targetPos, $ballistic->target->actions[sizeof($ballistic->target->actions)-1]);
+
+			/*
+			echo "Ballistic START pos: </br>";
+			var_export($targetPos);
+			echo "</br>";
+			echo "Ballistic END pos: </br>";
+			var_export($ballistic->target->actions[sizeof($ballistic->target->actions)-1]);
+			echo "</br>";
+			*/
+			$interceptEndPos = Math::canIntercept($interceptStartPos, $targetPos, $targetMoveVector, $speedMod);
+			$interceptRange = $ballistic->getImpulse();
+
+			/*
+			if ($interceptEndPos){
+				$interceptDist = Math::getDist2($interceptStartPos, $interceptEndPos);
 				
-				if ($this->ballistics[$i]->structures[0]->impulse >= $dist){ // IMPACT VECTOR
-					$ox = mt_rand(-$target->size/10, $target->size/10);
-					$oy = mt_rand(-$target->size/10, $target->size/10);
-					$this->ballistics[$i]->actions[] = new Action(
-						$this->turn,
-						"impact",
-						$dist,
-						$tPos->x + $ox,
-						$tPos->y + $oy,
-						0, 0, 0, 0, 0
-					);
-				} 
-				else { // home in target vector
-					$a = Math::getAngle($sPos->x, $sPos->y, $tPos->x, $tPos->y);
-					$iPos = Math::getPointInDirection($this->ballistics[$i]->structures[0]->impulse, $a, $sPos->x, $sPos->y);
-					$this->ballistics[$i]->actions[] = new Action(
+				var_export($interceptEndPos);
+				echo "</br>earliest intercept at dist: ".$interceptDist;
+				echo "</br>Target move vector dist: ".floor($targetMoveVector->m);
+				echo "</br>";
+				echo "</br>";
+				if ($interceptDist > $interceptRange){
+					echo ("unable to intercept, too much distance");
+				}
+				else if ($interceptDist / $speedMod > $targetMoveVector->m){
+					echo ("unable to intercept, too slow");
+				}
+				else echo ("valid intercept");
+			}
+			else {
+				echo "impossible intercept";
+			}
+			*/
+			if ($interceptEndPos){
+				$interceptDist = Math::getDist2($interceptStartPos, $interceptEndPos);
+				if ($interceptDist > $interceptRange || $interceptDist / $speedMod > $targetMoveVector->m){
+					Debug::log("intercept home in");
+					$a = Math::getAngle($interceptStartPos->x, $interceptStartPos->y, $interceptEndPos->x, $interceptEndPos->y);
+					$iPos = Math::getPointInDirection($interceptRange, $a, $interceptStartPos->x, $interceptStartPos->y);
+					$ballistic->actions[] = new Action(
 						$this->turn,
 						"move",
-						$this->ballistics[$i]->structures[0]->impulse,
+						$interceptDist,
 						$iPos->x,
 						$iPos->y,
 						0, 0, 0, 0, 0
 					);
 				}
-			}
-			else { // MOVE VECTOR to animate fire on destroyed salvo
-				$this->ballistics[$i]->actions[] = new Action(
-					$this->turn,
-					"move",
-					$this->ballistics[$i]->structures[0]->impulse,
-					$tPos->x,	
-					$tPos->y,
-					0, 0, 0, 0, 0
-				);
+				else if ($interceptRange >= $interceptDist){ // IMPACT VECTOR
+					Debug::log("intercept impact");
+					$ox = mt_rand(-$ballistic->target->size/7, $ballistic->target->size/7);
+					$oy = mt_rand(-$ballistic->target->size/7, $ballistic->target->size/7);
+					$ballistic->actions[] = new Action(
+						$this->turn,
+						"impact",
+						$interceptDist,
+						$interceptEndPos->x + $ox,
+						$interceptEndPos->y + $oy,
+						0, 0, 0, 0, 0
+					);
+				}
+				else {
+					Debug::log("somethin went wrong");
+				}
 			}
 		}
-		DBManager::app()->insertBallisticActions($this->ballistics);
 	}
 
-	public function handleAntiBallistics(){
-		Debug::log("handleAntiBallistics balls:".sizeof($this->ballistics).", intercepts: ".sizeof($this->intercepts));
+	public function handleBallisticInterception(){
+		Debug::log("handleBallisticInterception | balls:".sizeof($this->ballistics).", intercepts: ".sizeof($this->intercepts));
 
+		//sort to shooter, target, id
 		usort($this->intercepts, function($a, $b){
 			if ($a->targetid != $b->targetid){
 				return $a->targetid - $b->targetid;
 			}
+			else return $a->shooterid - $b->shooterid;
 		});
 
+		//foreach ($this->intercepts as $int){Debug::log("int id: ".$int->id.", shooter #".$int->shooterid." versus targetid #".$int->targetid);}
+
+		DBManager::app()->insertBallisticActions($this->ballistics);
+		
 		for ($i = 0; $i < sizeof($this->ballistics); $i++){
 			$ints = array();
 			$index = 0;
@@ -905,8 +955,6 @@ class Manager {
 				}
 			}
 
-			//echo "</br>";var_dump($ints);echo "</br>";
-			
 			for ($j = 0; $j < sizeof($ints); $j++){
 				$ints[$j]->shooter = $this->getUnitById($ints[$j]->shooterid);
 				$ints[$j]->weapon = $ints[$j]->shooter->getSystemById($ints[$j]->weaponid);
@@ -917,44 +965,30 @@ class Manager {
 				}
 			}
 		}
-
 		$this->updateFireOrders($this->intercepts);
-
 	}
 
 	public function resolveBallisticActions(){
-		Debug::log("resolveBallisticActions :".sizeof($this->ballistics));
+		Debug::log("resolveBallisticActions: ".sizeof($this->ballistics));
 		$fires = array();
+		$status;
 
 		for ($i = 0; $i < sizeof($this->ballistics); $i++){
-			if (! $this->ballistics[$i]->destroyed){
+			if (! $this->ballistics[$i]->isDestroyed()){ // create fireorders
 				if ($this->ballistics[$i]->actions[sizeof($this->ballistics[$i]->actions)-1]->type == "impact"){
-					for ($j = 0; $j < sizeof($this->ballistics[$i]->structures); $j++){
-						if (!$this->ballistics[$i]->structures[$j]->destroyed){
-							$fires[] = array(
-								"id" => -1,
-								"gameid" => $this->gameid,
-								"shooterid" => $this->ballistics[$i]->id,
-								"targetid" => $this->ballistics[$i]->targetid,
-								"weaponid" => $this->ballistics[$i]->structures[$j]->id,
-								"shots" => 1
-							);
-						}
-					}
+					$fires = array_merge($fires, $this->ballistics[$i]->createFireOrders($this->gameid, $this->turn, false, false));
 				}
-			}
-			else { // destroyed
-				DBManager::app()->setUnitStatus($this->ballistics[$i]->id, "launched", 1);
 			}
 		}
 
-		if (sizeof($fires)){
-			DBManager::app()->insertFireOrders($this->gameid, $this->turn, $fires, true);
-			unset($fires);
+		if (sizeof($fires)){ // resolve fireorders
+			DBManager::app()->insertFireOrders($this->gameid, $this->turn, $fires);
+			$fires = array();
+			$fires = DBManager::app()->getUnresolvedFireOrders($this->gameid, $this->turn);		
 
-			$fires = DBManager::app()->getOpenBallisticFireOrders($this->gameid, $this->turn);
 			for ($i = 0; $i < sizeof($fires); $i++){
 				$fires[$i]->shooter = $this->getUnitById($fires[$i]->shooterid);
+				$fires[$i]->shooter->status = "impact";
 				$fires[$i]->weapon = $fires[$i]->shooter->getSystemById($fires[$i]->weaponid);
 				$fires[$i]->target = $this->getUnitById($fires[$i]->targetid);
 				$fires[$i]->target->resolveBallisticFireOrder($fires[$i]);
@@ -963,8 +997,9 @@ class Manager {
 				}
 			}
 			$this->updateFireOrders($fires);
-
 		}
+		
+		DBManager::app()->setUnitStatusMassed($this->ballistics);
 	}
 
 	public function testCriticals(){
@@ -1056,10 +1091,10 @@ class Manager {
 			case "Earth Alliance";
 				$ships = array(
 					"Omega",
+					"Avenger",
 					"Hyperion",
 					"Saggitarius",
 					"Artemis",
-					"Olympus",
 					"Tethys"
 				);
 				break;
@@ -1087,7 +1122,7 @@ class Manager {
 		for ($i = 0; $i < sizeof($ships); $i++){
 			$name = $ships[$i];
 			$ship = array(
-				"classname" => $ships[$i],
+				"name" => $ships[$i],
 				"value" => $name::$value,
 				"arrival" => 0
 			);
@@ -1101,7 +1136,42 @@ class Manager {
 		//debug::log("asking for preview of: ".$name);
 		$ship = new $name(1, 1, 0);
 		return $ship;
+	}
 
+	public function logSystemsByClass($array){
+		$systems = array();
+
+		for ($i = 0; $i < sizeof($array); $i++){
+			switch ($array[$i]){
+				case "Ion":
+					$systems[] = array("LightIon", "MediumIon", "HeavyIon"); break;
+				case "Pulse":
+					$systems[] = array("LightPulseCannon", "MediumPulseCannon"); break;
+				case "Laser":
+					$systems[] = array("LightLaser", "MediumLaser", "HeavyLaser"); break;
+				case "Matter":
+					$systems[] = array("MediumRailGun", "HeavyRailGun"); break;
+				default: break;
+			}
+		}
+
+		$return = array();
+
+		for ($i = 0; $i < sizeof($systems); $i++){
+			for ($j = 0; $j < sizeof($systems[$i]); $j++){
+				$return[] = new $systems[$i][$j](0, 0, 0, 0);
+			}
+		}
+		return $return;
+	}
+
+	public function compareSystems($array){
+		$systems = array();
+
+		for ($i = 0; $i < sizeof($array); $i++){
+			$systems[$i] = new $array[$i](0, 0, 0, 0);
+		}
+		return $systems;
 	}
 
 	public function logShips($elements){
@@ -1130,7 +1200,7 @@ class Manager {
 		}
 
 		for ($i = 0; $i < sizeof($allShips); $i++){
-			$name = $allShips[$i]["classname"];
+			$name = $allShips[$i]["name"];
 			$ship = new $name(0, 0, 0, 0, 0, 0);
 			$allShips[$i] = $ship;
 			continue;
@@ -1143,5 +1213,20 @@ class Manager {
 		if (DBManager::app()->reset()){return true;}
 	}
 
+	static function convertToFireOrder($data){
+		return new FireOrder(
+			$data["id"],
+			$data["gameid"],
+			$data["turn"],
+			$data["shooterid"],
+			$data["targetid"],
+			$data["weaponid"],
+			$data["shots"],
+			$data["req"],
+			$data["notes"],
+			$data["hits"],
+			$data["resolved"]
+		);
+	}
 }
 ?>

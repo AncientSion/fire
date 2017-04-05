@@ -41,6 +41,19 @@ class System {
 		}
 	}
 
+	public function isDestroyed(){
+		if ($this->destroyed){
+			return true;
+		}
+		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
+			if ($this->damages[$i]->destroyed){
+				$this->destroyed = true;
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public function getCurrentIntegrity(){
 		return $this->getRemainingIntegrity();
 	}
@@ -125,6 +138,9 @@ class System {
 
 	public function applyDamage($dmg){
 		$this->damages[] = $dmg;
+		if ($dmg->destroyed){
+			$this->destroyed = true;
+		}
 	}
 }
 
@@ -338,23 +354,19 @@ class Weapon extends System {
 		$negation; $armourDmg; $structDmg; $totalDmg; $hitSystem; $remInt; $destroyed;
 		
 		for ($i = 0; $i < $fire->shots; $i++){
+			$destroyed = false;
+			//Debug::log("shot: ".$i);
 			if ($fire->rolls[$i] <= $fire->req){
-				$destroyed = false;
 				$totalDmg = floor($this->getBaseDamage($fire) * $this->getDamageMod($fire));
 				$hitSystem = $fire->target->getHitSystem($fire);
-				if ($hitSystem->destroyed){Debug::log("unit already destroyed"); return;}
+				if ($hitSystem->destroyed){Debug::log("SYSTEM already destroyed, RETURN"); return;}
 				$remInt = $hitSystem->getCurrentIntegrity();
 				$negation = $fire->target->getStructureById($fire->hitSection)->getRemainingNegation($fire) * $hitSystem->getArmourMod();
 				$dmg = $this->determineDamage($totalDmg, $negation);
 
 				if ($remInt - $dmg->structDmg < 1){
 					$destroyed = true;
-					if (!(is_a($fire->target, "Mini"))){
-						Debug::log(" => target system ".$hitSystem->name." #".$hitSystem->id." destroyed. rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".(abs($remInt - $dmg->structDmg)." dmg"));
-					}
-					else {
-						Debug::log("Overkill on Salvo or Fighter");
-					}
+					Debug::log(" => target system ".$hitSystem->name." #".$hitSystem->id." DESTROYED ----  rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".(abs($remInt - $dmg->structDmg)." dmg"));
 				}
 				//$id, $fireid, $gameid, $shipid, $structureid, $systemid, $turn, $roll, $type, $totalDmg, $shieldDmg, $structDmg, $armourDmg, $mitigation, $negation, $destroyed, $notes, $new){
 				$dmg = new Damage(
@@ -467,6 +479,7 @@ class Hangar extends Weapon {
 	public $name = "Hangar";
 	public $display = "Hangar";
 	public $loads = array();
+	public $reload = 2;
 
 	function __construct($id, $parentId, $start, $end, $output, $effiency, $loads, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -478,7 +491,7 @@ class Hangar extends Weapon {
 		for ($i = 0; $i < sizeof($loads); $i++){
 			$fighter = new $loads[$i](0,0);
 			$this->loads[] = array(
-				"classname" => $loads[$i],
+				"name" => $loads[$i],
 				"amount" => 0,
 				"cost" => $fighter->value,
 				"mass" => $fighter->mass,
@@ -506,7 +519,7 @@ class Hangar extends Weapon {
 	public function adjustLoad($dbLoad){
 		for ($i = 0; $i < sizeof($dbLoad); $i++){
 			for ($j = 0; $j < sizeof($this->loads); $j++){
-				if ($dbLoad[$i]["classname"] == $this->loads[$j]["classname"]){
+				if ($dbLoad[$i]["name"] == $this->loads[$j]["name"]){
 					$this->loads[$j]["amount"] = $dbLoad[$i]["amount"];
 					break; 
 				}

@@ -3,8 +3,8 @@
 class Flight extends Mini {
 	public $flight = true;
 	public $shipType = "Flight";
-	public $classname = "Flight";
 	public $name = "Flight";
+	public $display = "Flight";
 	public $faction = false;
 	public $size = 0;
 	public $cost = 0;
@@ -19,11 +19,16 @@ class Flight extends Mini {
 		$this->available = $available;
 	}
 
+	function setState(){
+		$this->size = 32 + sizeof($this->structures)*5;
+		parent::setState();
+	}
+
 	public function addFighters($fighters){
 		$fighter;
 		for ($i = 0; $i < sizeof($fighters); $i++){
 			for ($j = 1; $j <= $fighters[$i]["amount"]; $j++){
-				$this->structures[] = new $fighters[$i]["classname"](
+				$this->structures[] = new $fighters[$i]["name"](
 					$this->getId(),
 					$this->id
 				);
@@ -48,22 +53,23 @@ class Flight extends Mini {
 		}
 	}
 
-	public function createFireOrders($gameid, $turn, $flights, $counts){ //[1, 7, 12]
+	public function createFireOrders($gameid, $turn, $targets, $odds){ //[1, 7, 12]
 		//$id, $gameid, $turn, $shooterid, $targetid, $weaponid, $shots, $req, $notes, $hits, $resolved){
 		$fires = array();
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (!$this->structures[$i]->destroyed){
-				$roll = mt_rand($counts[0], $counts[sizeof($counts)-1]); // 9
-				for ($j = sizeof($counts)-1; $j >= 0; $j--){
-					if ($roll <= $counts[$j] && $roll >= $counts[$j-1]){
+				$roll = mt_rand($odds[0], $odds[sizeof($odds)-1]); // 9
+				for ($j = sizeof($odds)-1; $j >= 0; $j--){
+					if ($roll <= $odds[$j] && $roll >= $odds[$j-1]){
 						$fires[] = array(
 							"gameid" => $gameid,
 							"turn" =>$turn,
 							"shooterid" => $this->id,
-							"targetid" => $flights[$j-1]->id,
+							"targetid" => $targets[$j-1]->id,
 							"weaponid" => $this->structures[$i]->systems[0]->id,
-							"shots" => $this->structures[$i]->systems[0]->shots
+							"shots" => $this->structures[$i]->systems[0]->shots,
+							"resolved" => 0
 						);
 						break;
 					}
@@ -207,8 +213,8 @@ class Fighter extends Structure {
 	}
 
 	public function getHitAngle($fire){
-		$tPos = $this->getCurrentPosition();
-		$sPos = $fire->shooter->getCurrentPosition();
+		$tPos = $this->getPosition();
+		$sPos = $fire->shooter->getPosition();
 		$angle = Math::getAngle($tPos->x, $tPos->y, $sPos->x, $sPos->y);
 		return round(Math::addAngle($this->facing, $angle));
 	}
@@ -229,20 +235,8 @@ class Fighter extends Structure {
     	return 1;
     }
 
-	public function isDestroyed(){
-		if ($this->destroyed){
-			return true;
-		}
-		for ($i = 0; $i < sizeof($this->damages); $i++){
-			if ($this->damages[$i]->destroyed){
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public function getSubHitChance(){
-		return ceil($this->mass/1.5);
+		return ceil($this->mass);
 	}
 }
 
@@ -261,7 +255,7 @@ class Aurora extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 2, 13, 16, 330, 30);
+		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 1, 2, 13, 16, 330, 30);
 	}
 }
 
@@ -275,14 +269,13 @@ class Thunderbolt extends Fighter {
 	public $negation = array(10, 8, 8);
 	public $turns = 2;
 
-
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
 	}
 
 	public function addSystems(){
 		//$id, $fighterId, $parentId, $linked, $minDmg, $maxDmg, $start, $end){
-		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 2, 14, 17, 330, 30);
+		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 2, 2, 14, 17, 330, 30);
 	}
 }
 
@@ -301,7 +294,7 @@ class Nial extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new LinkedNeutronRepeater(sizeof($this->systems), $this->id, $this->parentId, 3, 16, 19, 330, 30);
+		$this->systems[] = new LinkedNeutronRepeater(sizeof($this->systems), $this->id, $this->parentId, 1, 3, 16, 19, 330, 30);
 	}
 }
 
@@ -320,7 +313,7 @@ class Sentri extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 2, 12, 15, 330, 30);
+		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 1, 2, 12, 15, 330, 30);
 	}
 }
 ?>

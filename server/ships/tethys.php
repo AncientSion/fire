@@ -1,8 +1,8 @@
 <?php
 
 class Tethys extends Light {
-	public $classname = "Tethys";
 	public $name = "Tethys";
+	public $display = "Tethys";
 	public $faction = "Earth Alliance";
 	public $size = 40;
 	public static $value = 300;

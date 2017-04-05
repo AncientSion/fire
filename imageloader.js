@@ -12,15 +12,24 @@ window.preload = function(){
 window.preLoadBallistics = function(){
 	window.ballImages.hasta = new Image();
 	window.ballImages.hasta.src = "ballIcons/hasta.png";
+	window.ballImages.javelin = new Image();
+	window.ballImages.javelin.src = "ballIcons/hasta.png";
 
-	window.ballImages.baracuda = new Image();
-	window.ballImages.baracuda.src = "ballIcons/baracuda.png";
+	window.ballImages.barracuda = new Image();
+	window.ballImages.barracuda.src = "ballIcons/barracuda.png";
+	window.ballImages.myrmidon = new Image();
+	window.ballImages.myrmidon.src = "ballIcons/barracuda.png";
+	window.ballImages.zeus = new Image();
+	window.ballImages.zeus.src = "ballIcons/barracuda.png";
 }
 
 
 window.preloadShips = function(){
 	window.shipImages.omega = new Image();
 	window.shipImages.omega.src = "shipIcons/omega.png";
+
+	window.shipImages.avenger = new Image();
+	window.shipImages.avenger.src = "shipIcons/avenger.png";
 
 	window.shipImages.hyperion = new Image();
 	window.shipImages.hyperion.src = "shipIcons/hyperion.png";

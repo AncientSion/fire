@@ -15,7 +15,6 @@ function Game(id, name, status, userid, turn, phase){
 	this.index = 1;
 	this.reinforcePoints = 0;
 	this.reinforcements = [];
-	this.confirmedReinforcments = false;
 	this.animating = false;
 	this.deployArea = false;
 	this.deployBlock = [];
@@ -28,23 +27,11 @@ function Game(id, name, status, userid, turn, phase){
 	this.flightPath = false;
 
 	this.doDeployFlight = function(e, pos){
-		//id, classname, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available
 		var facing = Math.floor(getAngleFromTo(game.getUnitById(aUnit).getOffsetPos(), {x: pos.x, y: pos.y}))
 
+			//id, classname, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available
 		var flight = new Flight(
-			-game.ships.length,
-			"Flight",
-			"Flight",
-			pos.x,
-			pos.y,
-			facing,
-			false,
-			false, 
-			false, 
-			0,
-			0,
-			this.userid,
-			this.turn
+			-game.ships.length, "Flight", "Flight", pos.x, pos.y, facing, false, false, false, 0, 0, this.userid, this.turn
 		)
 
 		flight.deployed = 1;
@@ -60,7 +47,7 @@ function Game(id, name, status, userid, turn, phase){
 		for (var i = 0; i < this.flightDeploy.loads.length; i++){
 			for (var j = 1; j <= this.flightDeploy.loads[i].launch; j++){
 				//function Fighter(id, classname, name, ep, mass, integrity, value, negation, crits, destroyed){
-				flight.structures.push(new Fighter(j, this.flightDeploy.loads[i].classname, 0, 0, 0, 0, 0, 0, 0, 0));
+				flight.structures.push(new Fighter(j, this.flightDeploy.loads[i].name, 0, 0, 0, 0, 0, 0, 0, 0));
 			}
 		}
 
@@ -70,18 +57,18 @@ function Game(id, name, status, userid, turn, phase){
 
 		$("#instructWrapper").hide();
 		$("#deployOverlay").hide();
-		game.getUnitById(aUnit).getSystemById(this.flightDeploy.id).select(e);
+		game.getUnitById(aUnit).getSystemById(this.flightDeploy.id).setFireOrder().select(e);
 		game.flightDeploy = false;
 		this.draw();
 	}
-
+	
 	this.getDeployedFlights = function(){
 		var ret = [];
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid == this.userid){
 				if (this.ships[i].flight && this.ships[i].actions[0].turn == this.turn){
 					var flight = {
-						classname: "Flight",
+						name: "Flight",
 						launchdata: this.ships[i].launchdata,
 						actions: this.ships[i].actions,
 						turn: this.turn,
@@ -160,6 +147,12 @@ function Game(id, name, status, userid, turn, phase){
 		}
 		else {
 			popup("You have already confirmed your orders");
+		}
+	}
+
+	this.drawBallisticFlightPaths = function(){
+		for (var i = 0; i < game.ballistics.length; i++){
+			if (game.ballistics[i].targetid == game.ballistics[i].id){}
 		}
 	}
 
@@ -349,6 +342,7 @@ function Game(id, name, status, userid, turn, phase){
 	}
 
 	this.fireResolved = function(){
+		this.draw();
 		console.log("fireResolved");
 	}
 	
@@ -400,14 +394,17 @@ function Game(id, name, status, userid, turn, phase){
 		}
 		else if (n == 3){
 			this.phase = n;
-				$("#deployWrapper").hide();
+				$("#phaseSwitchDiv").remove();
+					game.initDamageControl();
+			/*	$("#deployWrapper").hide();
 				$("#phaseDiv").html("Damage Control")
 				$("#phaseSwitchDiv").fadeIn(200);
 				$("#phaseSwitchDiv").click(function(){
 					$(this).hide()
 					game.initDamageControl();
 					//$(this).fadeOut(200);
-				});
+				//});
+			*/
 		}
 	}
 	
@@ -457,59 +454,8 @@ function Game(id, name, status, userid, turn, phase){
 		}
 
 		for (var i = 0; i < window.ballistics.length; i++){
-
-			//(id, userid, targetid, classname, display, amount, status, destroyed, actions){
-
-			var salvo = new Salvo(
-					window.ballistics[i].id,
-					window.ballistics[i].userid,
-					window.ballistics[i].targetid,
-					window.ballistics[i].classname,
-					window.ballistics[i].amount,
-					window.ballistics[i].status,
-					window.ballistics[i].destroyed,
-					window.ballistics[i].actions
-					);
-
-			for (var j = 0; j < window.ballistics[i].structures.length; j++){
-				salvo.structures.push(
-					new Ammo(
-						window.ballistics[i].structures[j].id,
-						window.ballistics[i].structures[j].name,
-						window.ballistics[i].structures[j].display,
-						window.ballistics[i].structures[j].minDmg,
-						window.ballistics[i].structures[j].maxDmg,
-						window.ballistics[i].structures[j].impulse,
-						window.ballistics[i].structures[j].mass,
-						window.ballistics[i].structures[j].integrity,
-						window.ballistics[i].structures[j].armour,
-						window.ballistics[i].structures[j].fc,
-						window.ballistics[i].structures[j].damages,
-						window.ballistics[i].structures[j].crits,
-						window.ballistics[i].structures[j].destroyed
-					)
-				)
-				for (var k = 0; k < window.ballistics[i].structures[j].fireOrders.length; k++){
-					salvo.structures[j].fireOrders.push(
-						new FireOrder(
-							window.ballistics[i].structures[j].fireOrders[k].id,
-							window.ballistics[i].structures[j].fireOrders[k].turn,
-							window.ballistics[i].structures[j].fireOrders[k].shooterid,
-							window.ballistics[i].structures[j].fireOrders[k].targetid,
-							window.ballistics[i].structures[j].fireOrders[k].weaponid,
-							window.ballistics[i].structures[j].fireOrders[k].shots,
-							window.ballistics[i].structures[j].fireOrders[k].req,
-							window.ballistics[i].structures[j].fireOrders[k].notes,
-							window.ballistics[i].structures[j].fireOrders[k].hits,
-							window.ballistics[i].structures[j].fireOrders[k].resolved
-						)
-					)
-				}
-			}
-			salvo.create();
-			game.ballistics.push(salvo);
+			game.ballistics.push(window.initiateBallistic(i));
 		}
-
 
 		var canSubmit = false;
 		var isPlaying = false;
@@ -528,15 +474,6 @@ function Game(id, name, status, userid, turn, phase){
 		cam.setFocus(0, 0);
 		this.initPhase(this.phase);
 	}
-	
-
-
-	//    var gameX = parseInt((this.x - cam.o.x) / cam.z);
-	//    var gameY = parseInt((this.y - cam.o.y) / cam.z);
-	//    console.log(this.x +"/" +  this.y + " -> " + gameX + "/"+ gameY);
-	//	console.log({x: cam.scale.x(this.x - cam.o.x), y: cam.scale.y(this.y - cam.o.y)});
-	//	return { x: (this.x - cam.o.x) / cam.z, y: (this.y - cam.o.y) / cam.z}
-
 
 	this.unitHover = function(elements){
 		if (elements){
@@ -545,14 +482,12 @@ function Game(id, name, status, userid, turn, phase){
 			for (var i = 0; i < elements.length; i++){
 				table = elements[i].getShortInfo();
 				ele.append(table);
-				var balls = elements[i].getIncomingBallistics();
-				if (balls.length){
-					for (var j = 0; j < balls.length; j++){
-						balls[j].drawFlightPath();
-					}
-				}
-				if  (elements[i] instanceof Salvo){
-					elements[i].drawFlightPath();
+
+				var balls = this.getRelevantBallistics(elements[i]);
+
+				for (var j = 0; j < balls.length; j++){
+					if (balls[j].destroyed){continue;}
+					balls[j].drawFlightPath();
 				}
 			}
 
@@ -563,6 +498,21 @@ function Game(id, name, status, userid, turn, phase){
 
 			$(ele).css("top", top).css("left", left).show();
 		}
+	}
+
+	this.getRelevantBallistics = function(unit){
+		var ret = [];
+		for (var i = 0; i < this.ballistics.length; i++){
+			if (this.ballistics[i].id == unit.id || this.ballistics[i].targetid == unit.id || this.ballistics[i].id == unit.targetid){
+				ret.push(this.ballistics[i]);
+				for (var j = i+1; j < this.ballistics.length; j++){
+					if (this.ballistics[i].id == this.ballistics[j].targetid){
+						ret.push(this.ballistics[j]);
+					}
+				}
+			}
+		}
+		return ret;
 	}
 
 	this.resetHover = function(){
@@ -780,8 +730,18 @@ function Game(id, name, status, userid, turn, phase){
 				}
 			}
 		}
-
 		$("#totalRequestCost").html(this.getCurrentReinforceCost());
+	}
+
+	this.showReinforcementsPreview = function(id){
+		found = 0;
+		for (var i = 0; i < window.reinforcements.length; i++){
+			if (window.reinforcements[i].id == id){
+				found = i;
+				break;
+			}
+		}
+		console.log(window.reinforcements[i]);
 	}
 
 	this.resolveDeployment = function(){
@@ -1066,18 +1026,19 @@ function Game(id, name, status, userid, turn, phase){
 	this.resolveFire = function(){
 		this.getResolvingFireOrders();
 		this.getShotDetails();
-		this.getAnimationDetails();
-		this.getBallisticMovementDetails();
+		this.getFireAnimationDetails();
+		this.getBallMoveDetails();
 		this.getShipExplosionDetails();
 
 		$("#combatlogWrapper").show();
 		window.then = Date.now();
 		window.startTime = then;
-		//fxCtx.clearRect(0, 0, res.x, res.y);
-		//ctx.clearRect(0, 0, res.x, res.y);
+		
+		fxCtx.clearRect(0, 0, res.x, res.y);
+		ctx.clearRect(0, 0, res.x, res.y);
 
 		this.animateFire = true;
-		this.draw();
+		this.drawShips();
 		this.animateFireOrders();
 	}
 
@@ -1110,20 +1071,27 @@ function Game(id, name, status, userid, turn, phase){
 		}
 
 		for (var i = 0; i < this.fireOrders.length; i++){
-			var a = this.fireOrders[i];
 			if (this.fireOrders[i].guns){
+				this.fireOrders[i].min = this.fireOrders[i].req;
+				this.fireOrders[i].max = this.fireOrders[i].req;
 				for (var j = i+1; j < this.fireOrders.length; j++){
-					var b = this.fireOrders[j];
 					if (this.fireOrders[j].guns){
-						if (a.shooterid == b.shooterid){
-							if (a.targetid == b.targetid){
-								if (a.weapon.name == b.weapon.name){
+						if (this.fireOrders[i].shooterid == this.fireOrders[j].shooterid){
+							if (this.fireOrders[i].targetid == this.fireOrders[j].targetid){
+								if (this.fireOrders[i].weapon.name == this.fireOrders[j].weapon.name){
 									this.fireOrders[i].guns += this.fireOrders[j].guns;
 									for (var k = 0; k < this.fireOrders[j].damages.length; k++){
 										this.fireOrders[i].damages.push(this.fireOrders[j].damages[k])
 									}
 									this.fireOrders[i].hits.push(this.fireOrders[j].hits[0]);
 									this.fireOrders[j].guns = 0;
+
+									if (this.fireOrders[j].req > this.fireOrders[i].max){
+										this.fireOrders[i].max = this.fireOrders[j].req;
+									}
+									else if (this.fireOrders[j].req != -1 && this.fireOrders[j].req < this.fireOrders[i].min){
+										this.fireOrders[i].min = this.fireOrders[j].req;
+									}
 								}
 							}
 						}
@@ -1134,6 +1102,7 @@ function Game(id, name, status, userid, turn, phase){
 
 		//console.log(this.fireOrders);
 		for (var i = this.fireOrders.length-1; i >= 0; i--){
+				this.fireOrders[i].type = "Regular Fire";
 			if (! this.fireOrders[i].guns){
 				this.fireOrders.splice(i, 1);
 				continue;
@@ -1159,119 +1128,13 @@ function Game(id, name, status, userid, turn, phase){
 				this.fireOrders.splice(i, 1);
 			}
 			else {
-				this.fireOrders[i].type = "Fire";
 			}
 		}
 	}
 
-	this.getAnimationDetails = function(){
+	this.getFireAnimationDetails = function(){
 		for (var i = 0; i < this.fireOrders.length; i++){
-			for (var j = 0; j < this.fireOrders[i].guns; j++){
-
-				var hasHit = false;
-				if (this.fireOrders[i].hits[j] >= 1){
-					hasHit = true;
-				}
-
-				var ox = this.fireOrders[i].shooter.x + range(this.fireOrders[i].shooter.size * 0.2 * -1, this.fireOrders[i].shooter.size * 0.2); // WEAPON origin
-				var oy = this.fireOrders[i].shooter.y + range(this.fireOrders[i].shooter.size * 0.2 * -1, this.fireOrders[i].shooter.size * 0.2); // WEAPON origin
-				
-				var anims = [];
-				
-				for (var k = 0; k < this.fireOrders[i].weapon.shots; k++){						
-
-					var tx; var ty;
-					var hit = true;
-					var subAnim = {};
-					var explo = false;
-
-					if (!hasHit){
-						tx = this.fireOrders[i].target.x + range(this.fireOrders[i].target.size * 0.5 * -1, this.fireOrders[i].target.size * 0.5); // salvo missed
-						ty = this.fireOrders[i].target.y + range(this.fireOrders[i].target.size * 0.5 * -1, this.fireOrders[i].target.size * 0.5);
-					}
-					else {
-						tx = this.fireOrders[i].target.x + range(this.fireOrders[i].target.size * 0.2 * -1, this.fireOrders[i].target.size * 0.2); // at least 1 hit
-						ty = this.fireOrders[i].target.y + range(this.fireOrders[i].target.size * 0.2 * -1, this.fireOrders[i].target.size * 0.2);
-					}
-					
-					if (this.fireOrders[i].weapon.animation == "projectile"){
-						if (k >= this.fireOrders[i].hits[j]){ // is a MISS
-							hit = false;
-						}
-
-						var dist = getDistance( {x: ox, y: oy}, {x: tx, y: ty} );
-						var gunInterval = 50;
-						var shotInterval = 10;
-						if (this.fireOrders[i].shooter instanceof Flight){
-							gunInterval = 10;
-							shotInterval = 10;
-						}
-						else if (this.fireOrders[i].weapon.shots == 4){
-							var gunInterval = 30;
-							var shotInterval = 10;
-						}
-
-						if (hit){
-							explo = {t: [0, 80], s: this.fireOrders[i].weapon.exploSize};
-						}
-
-						subAnim = {
-							ox: ox,
-							oy: oy,
-							tx: tx,
-							ty: ty,
-							t: [0 - (j*gunInterval + k*shotInterval), dist / this.fireOrders[i].weapon.projSpeed / speedMod],
-							hit: hit,
-							v: new Vector({x: ox, y: oy}, {x: tx, y: ty}),
-							explo: explo,
-							animated: false
-						}
-					}
-					else if (this.fireOrders[i].weapon.animation == "beam"){
-						var tx; 
-						var ty;
-						var a;
-						var tb;
-
-						if (k >= this.fireOrders[i].hits[j]){ // MISS
-							hit = false;
-							tx = this.fireOrders[i].target.x + range(-this.fireOrders[i].target.size * 0.6, this.fireOrders[i].target.size * 0.6); // BEAM swipe begin on MISS
-							ty = this.fireOrders[i].target.y + range(-this.fireOrders[i].target.size * 0.6, this.fireOrders[i].target.size * 0.6);
-							a = getAngleFromTo( {x: tx, y: ty}, {x: this.fireOrders[i].target.x, y: this.fireOrders[i].target.y} );
-							a = addToDirection(a, range(-60, 60));
-							tb = getPointInDirection(this.fireOrders[i].weapon.rakeTime/2, a, tx, ty); // BEAM swipe END on HIT	
-						}
-						else {
-							tx = this.fireOrders[i].target.x + range(-this.fireOrders[i].target.size * 0.45, this.fireOrders[i].target.size * 0.45); // BEAM swipe begin on HIT
-							ty = this.fireOrders[i].target.y + range(-this.fireOrders[i].target.size * 0.45, this.fireOrders[i].target.size * 0.45);
-							a = getAngleFromTo( {x: tx, y: ty}, {x: this.fireOrders[i].target.x, y: this.fireOrders[i].target.y} );
-							a = addToDirection(a, range(-10, 10));
-							tb = getPointInDirection(this.fireOrders[i].weapon.rakeTime/2, a, tx, ty); // BEAM swipe END on HIT	
-						}
-
-						var grouping = 1;
-						var delay = 30;
-
-						subAnim = {
-							ox: ox,
-							oy: oy,
-							tax: tx,
-							tay: ty,
-							tbx: tb.x,
-							tby: tb.y,
-							t: [0 - (range(-5, 5)) - (Math.floor(j / grouping) * delay), this.fireOrders[i].weapon.rakeTime],
-							hit: hit,
-							v: new Vector({x: tx, y: ty}, {x: tb.x, y: tb.y}),
-							explo: false,
-							animated: false
-						}
-						//console.log(subAnim);
-					}
-				
-				anims.push(subAnim);
-				}
-				this.fireOrders[i].anim.push(anims);
-			}
+			this.fireOrders[i].anim = this.fireOrders[i].weapon.getAnimation(this.fireOrders[i]);
 		}
 
 		this.fireOrders.sort(function(a, b){
@@ -1282,9 +1145,135 @@ function Game(id, name, status, userid, turn, phase){
 				a.shooterid - b.shooterid
 			)
 		});
-
-      return;
+		//console.log(this.fireOrders)
     }
+
+	this.getBallMoveDetails = function(){
+		for (var i = 0; i < game.ballistics.length; i++){
+			if (game.ballistics[i].actions[game.ballistics[i].actions.length-1].type == "impact"){
+				var fireOrder = new FireOrder(0, this.turn, game.ballistics[i].id, game.ballistics[i].targetid, 0, 0, 0, "", [], 1);
+					fireOrder.type = "Ballistic";
+					fireOrder.weapon = game.ballistics[i].structures[0];
+					fireOrder.shooter = game.ballistics[i];
+					fireOrder.target = game.getUnitById(game.ballistics[i].targetid);
+					fireOrder.req = 0;
+					fireOrder.guns = 0;
+				//(id, turn, shooterid, targetid, weaponid, shots, req, notes, hits, resolved){
+				for (var j = 0; j < game.ballistics[i].structures.length; j++){
+					for (var k = 0; k < game.ballistics[i].structures[j].fireOrders.length; k++){
+						fireOrder.guns++;
+						var damages = game.getUnitById(game.ballistics[i].targetid).getDamageEntriesByFireId(game.ballistics[i].structures[j].fireOrders[k].id);
+						for (var l = 0; l < damages.length; l++){fireOrder.damages.push(damages[l]);}
+						if (fireOrder.req == 0){fireOrder.min = game.ballistics[i].structures[j].fireOrders[k].req; fireOrder.max = game.ballistics[i].structures[j].fireOrders[k].req; fireOrder.req = game.ballistics[i].structures[j].fireOrders[k].req;}
+						fireOrder.hits.push(game.ballistics[i].structures[j].fireOrders[k].hits);
+					}
+				}
+				game.ballistics[i].fireOrder = fireOrder;
+			}
+			game.ballistics[i].found = false;
+			if (!game.getUnitById(game.ballistics[i].targetid).salvo){
+				game.ballistics[i].found = true;
+				animate.ballAnims.push({"done": false,"anims": [game.ballistics[i]]});
+			}
+		}
+
+		for (var i = 0; i < animate.ballAnims.length; i++){
+			for (var j = 0; j < animate.intercepts.length; j++){
+				if (!animate.intercepts[j].found && animate.ballAnims[i].anims[0].id == animate.intercepts[j].targetid){
+					console.log(animate.intercepts[j]);
+					animate.intercepts[j].found = true;
+					animate.ballAnims[i].anims.push(animate.intercepts[j]);
+				}
+			}
+			for (var j = 0; j < game.ballistics.length; j++){
+				if (game.ballistics[j].found){continue;}
+				else if (animate.ballAnims[i].anims[0].id == game.ballistics[j].targetid){
+					game.ballistics[j].found = true;
+					animate.ballAnims[i].anims.push(game.ballistics[j]);
+				}
+			}
+		}
+
+		for (var i = 0; i < animate.ballAnims.length; i++){
+			for (var j = 0; j < animate.ballAnims[i].anims.length; j++){
+				if (animate.ballAnims[i].anims[j] instanceof Salvo){
+					animate.ballAnims[i].anims[j].anim.push(
+						new BallVector(
+							animate.ballAnims[i].anims[j].actions[animate.ballAnims[i].anims[j].actions.length-2],
+							animate.ballAnims[i].anims[j].actions[animate.ballAnims[i].anims[j].actions.length-1],
+							animate.ballAnims[i].anims[j].getImpulse() / animate.ballAnims[i].anims[0].getImpulse()
+						)
+					);
+				}
+				else if (animate.ballAnims[i].anims[j] instanceof FireOrder){
+					console.log(animate.ballAnims[i].anims[j]);
+					var targetMove = new Vector(
+						animate.ballAnims[i].anims[j].target.actions[animate.ballAnims[i].anims[j].target.actions.length-2],
+						animate.ballAnims[i].anims[j].target.actions[animate.ballAnims[i].anims[j].target.actions.length-1]
+					);
+					var interceptPos = getProjIntercept(
+						animate.ballAnims[i].anims[j].shooter,
+						animate.ballAnims[i].anims[j].target.actions[animate.ballAnims[i].anims[j].target.actions.length-2],
+						targetMove, animate.ballAnims[i].anims[j].weapon.projSpeed
+					);
+					for (var k = 0; k < animate.ballAnims[i].anims[j].guns; k++){
+						for (var l = 0; l < animate.ballAnims[i].anims[j].shots; l++){
+							var interceptVector = new BallVector(
+								animate.ballAnims[i].anims[j].shooter,
+								randomize(interceptPos, 6, 6),
+								animate.ballAnims[i].anims[j].weapon.projSpeed 
+							);
+							animate.ballAnims[i].anims[j].anim.push(interceptVector);
+						}
+					}
+				}
+			}
+			//console.log(window.animate.ballAnims[i]);
+		}
+	}
+
+	this.getShipExplosionDetails = function(){
+		window.animations = [];
+
+		for (var i = 0; i < game.ships.length; i++){
+			if (game.ships[i].deployed){
+				var anim = {
+						anims: [],
+						base: {x: game.ships[i].x, y: game.ships[i].y},
+						done: false
+				}
+
+				if (game.ships[i].flight){
+					for (var j = 0; j < game.ships[i].structures.length; j++){
+						if (game.ships[i].structures[j].isDestroyedThisTurn()){
+							anim.anims.push({
+								a: game.ships[i].facing+90,
+								id: game.ships[i].id,
+								t: [0-30*anim.anims.length, 70],
+								s: game.ships[i].structures[j].mass / 3,
+								x: game.ships[i].layout[j].x,
+								y: game.ships[i].layout[j].y
+							})
+						}
+					}
+				}
+				else if (game.ships[i].ship && game.ships[i].isDestroyedThisTurn()){
+					anim.anims.push({
+						a: game.ships[i].facing,
+						id: game.ships[i].id,
+						t: [0, 100],
+						s: game.ships[i].structures[j].mass / 400,
+						x: range(-20, 20),
+						y: range(-20, 20)
+					})
+				}
+			}
+		
+			if (anim.anims.length){
+				animations.push(anim);
+			}
+		}
+	}
 
 	this.animateFireOrders = function(){
 		//this.animateShipExplosions(); return;
@@ -1310,21 +1299,19 @@ function Game(id, name, status, userid, turn, phase){
 										drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].ox, game.fireOrders[i].anim[j][k].oy, x, y, game.fireOrders[i].anim[j][k].t[0], game.fireOrders[i].anim[j][k].t[1]);
 									}
 								}
-								else {// animate EXPLO
-									if (game.fireOrders[i].anim[j][k].explo){
-										if (game.fireOrders[i].anim[j][k].explo.t[0] < game.fireOrders[i].anim[j][k].explo.t[1]){
-											game.fireOrders[i].anim[j][k].explo.t[0] += 5;
-											x = game.fireOrders[i].anim[j][k].ox + game.fireOrders[i].anim[j][k].v.x;
-											y = game.fireOrders[i].anim[j][k].oy + game.fireOrders[i].anim[j][k].v.y;	
-											drawExplosion(x, y, game.fireOrders[i].anim[j][k].explo.s, game.fireOrders[i].anim[j][k].explo.t[0], game.fireOrders[i].anim[j][k].explo.t[1]); // EXPLO
-										}
-										else {
-											game.fireOrders[i].anim[j][k].animated = true;
-										}
+								else if (game.fireOrders[i].anim[j][k].explo){ // shot animated, does it explode ?
+									if (game.fireOrders[i].anim[j][k].explo.t[0] < game.fireOrders[i].anim[j][k].explo.t[1]){
+										game.fireOrders[i].anim[j][k].explo.t[0] += 5;
+										x = game.fireOrders[i].anim[j][k].ox + game.fireOrders[i].anim[j][k].v.x;
+										y = game.fireOrders[i].anim[j][k].oy + game.fireOrders[i].anim[j][k].v.y;	
+										drawExplosion(x, y, game.fireOrders[i].anim[j][k].explo.s, game.fireOrders[i].anim[j][k].explo.t[0], game.fireOrders[i].anim[j][k].explo.t[1]); // EXPLO
 									}
 									else {
 										game.fireOrders[i].anim[j][k].animated = true;
 									}
+								}
+								else {
+									game.fireOrders[i].anim[j][k].animated = true;
 								}
 							}
 							else if (game.fireOrders[i].weapon.animation == "beam"){
@@ -1368,7 +1355,7 @@ function Game(id, name, status, userid, turn, phase){
 					
 					if (allAnimated){
 						game.fireOrders[i].animated = allAnimated;
-						game.createLogEntry(game.fireOrders[i]);
+						game.createCombatLogEntry(game.fireOrders[i]);
 					}
 				
 					break;
@@ -1386,328 +1373,73 @@ function Game(id, name, status, userid, turn, phase){
 			if (done){
 				window.cancelAnimationFrame(anim);
 				fxCtx.clearRect(0, 0, res.x, res.y);
-				game.animateBallisticMovement();
-			}
-		}
-		else {
-		}
-	}
-
-	this.getBallisticMovementDetails = function(){
-		for (var i = 0; i < game.ballistics.length; i++){
-
-			var start = game.ballistics[i].actions[game.ballistics[i].actions.length-2];
-			var end = game.ballistics[i].actions[game.ballistics[i].actions.length-1];
-
-			game.ballistics[i].v = new Vector(start, end);
-			game.ballistics[i].v.t = [0, getDistance(end, start) * window.fps / this.ballistics[i].structures[0].impulse];
-			game.ballistics[i].x = start.x;
-			game.ballistics[i].y = start.y;
-			game.ballistics[i].animated = false;
-			game.ballistics[i].moveAnimated = false;
-			game.ballistics[i].intercepts = [];
-			game.ballistics[i].interceptAnimated = false;
-			game.ballistics[i].exploAnimated = false;
-			game.ballistics[i].goal = game.getUnitById(game.ballistics[i].targetid).getBaseOffsetPos();
-			game.ballistics[i].explo = false;
-
-			if (end.type == "impact"){
-				game.ballistics[i].type = "Impact";			
-				for (var j = 0; j < game.ballistics[i].structures.length; j++){
-					if (game.ballistics[i].structures[j].destroyed){
-						continue;
-					}
-					if (game.ballistics[i].structures[j].fireOrders[0].hits){
-						var step = range(0, (j+1)*60);
-						var exploSize = ((game.ballistics[i].getMinDmg() + game.ballistics[i].getMaxDmg()) / 2) / 7;
-						game.ballistics[i].structures[j].fireOrders[0].explo = {t: [0+step, 120+step], s: exploSize + range(-exploSize/3, exploSize/3)};
-						game.ballistics[i].structures[j].fireOrders[0].exploAnimated = false;
-						game.ballistics[i].structures[j].fireOrders[0].ox = range(-16, 16);
-						game.ballistics[i].structures[j].fireOrders[0].oy = range(-16, 16);
-					} else {
-						game.ballistics[i].structures[j].fireOrders[0].explo = false;
-					}
-				}
-			}
-			else {
-				game.ballistics[i].type = "Move";
-			}
-
-			//	t: [0 - (j*30 + k*10), this.fireOrders[i].dist / this.fireOrders[i].weapon.projSpeed],
-
-			for (var j = 0; j < animate.intercepts.length; j++){
-				if (game.ballistics[i].id == animate.intercepts[j].targetid){
-					//console.log("shots: " + animate.intercepts[j].guns * animate.intercepts[j].weapon.shots)
-					//console.log("hits: " + animate.intercepts[j].hits.length);
-					//console.log(game.ballistics[i].v);
-
-					for (var k = 1; k <= animate.intercepts[j].guns; k++){
-						var ox = animate.intercepts[j].shooter.x + range(animate.intercepts[j].shooter.size * 0.3 * -1, animate.intercepts[j].shooter.size * 0.3); // WEAPON origin
-						var oy = animate.intercepts[j].shooter.y + range(animate.intercepts[j].shooter.size * 0.3 * -1, animate.intercepts[j].shooter.size * 0.3); // WEAPON origin
-
-						for (var l = 1; l <= animate.intercepts[j].weapon.shots; l++){
-							var tx;
-							var ty;				
-							var explo = false;			
-							var hit = false;
-							if (l <= animate.intercepts[j].hits[k-1]){
-								hit = true;
-								explo = true;
-								explo = {t: [0, 80], s: animate.intercepts[j].weapon.exploSize};
-								tx = start.x + game.ballistics[i].v.x * 0.5 + range(-8, 8);
-								ty = start.y + game.ballistics[i].v.y * 0.5 + range(-8, 8);
-							}
-							else {
-								tx = start.x + game.ballistics[i].v.x * 0.5 + range(-16, 16);
-								ty = start.y + game.ballistics[i].v.y * 0.5 + range(-16, 16);
-							}
-
-							subAnim = {
-								ox: ox,
-								oy: oy,
-								tx: tx,
-								ty: ty,
-								t: [0 - l*8, getDistance( {x: ox, y: oy}, {x: tx, y: ty} ) / animate.intercepts[j].weapon.projSpeed],
-								hit: hit,
-								v: new Vector( {x: ox, y: oy}, {x: tx, y: ty} ),
-								explo: explo,
-								animated: false
-							}
-
-							animate.intercepts[j].anim.push(subAnim);
-						}
-					}
-
-					game.ballistics[i].intercepts.push(animate.intercepts[j]);
-					//console.log(game.ballistics[i].intercepts);
-				}
-			}
-		
-			if (! game.ballistics[i].intercepts.length){
-				game.ballistics[i].interceptAnimated = true;
+				game.animateBallistics();
 			}
 		}
 	}
 
-	this.getShipExplosionDetails = function(){
-		window.animations = [];
+	this.animateBallistics = function(){
+		anim = window.requestAnimationFrame(game.animateBallistics.bind(this));
 
-		for (var i = 0; i < game.ships.length; i++){
-			if (game.ships[i].deployed){
-				var anim = {
-						anims: [],
-						base: {x: game.ships[i].x, y: game.ships[i].y},
-						done: false
-				}
+		ctx.clearRect(0, 0, res.x, res.y);
+		fxCtx.clearRect(0, 0, res.x, res.y);
+		game.drawShips();
+		ctx.translate(cam.o.x, cam.o.y);
+		ctx.scale(cam.z, cam.z);
 
-				if (game.ships[i].flight){
-					for (var j = 0; j < game.ships[i].structures.length; j++){
-						if (game.ships[i].structures[j].isDestroyedThisTurn()){
-							anim.anims.push({
-								a: game.ships[i].facing+90,
-								id: game.ships[i].id,
-								t: [0-30*anim.anims.length, 70],
-								s: game.ships[i].structures[j].mass / 4,
-								x: game.ships[i].layout[j].x,
-								y: game.ships[i].layout[j].y
-							})
-						}
-					}
-				}
-				else if (game.ships[i].ship && game.ships[i].isDestroyedThisTurn()){
-					anim.anims.push({
-						a: game.ships[i].facing,
-						id: game.ships[i].id,
-						t: [0, 100],
-						s: game.ships[i].structures[j].mass / 400,
-						x: range(-20, 20),
-						y: range(-20, 20)
-					})
-				}
-			}
-		
-			if (anim.anims.length){
-				animations.push(anim);
-			}
-		}
-	}
-
-	this.animateBallisticMovement = function(){
-		anim = window.requestAnimationFrame(game.animateBallisticMovement.bind(this));
-		window.now = Date.now();		
-		window.elapsed = window.now - window.then;
-		if (elapsed > window.fpsInterval){
-			window.then = window.now - (window.elapsed % window.fpsInterval);
-			ctx.clearRect(0, 0, res.x, res.y);
-			fxCtx.clearRect(0, 0, res.x, res.y);
-			game.drawShips();
-
-			ctx.translate(cam.o.x, cam.o.y);
-			ctx.scale(cam.z, cam.z);
-
-			for (var i = 0; i < game.ballistics.length; i++){
-				game.ballistics[i].draw() 
-				ctx.beginPath();
-				ctx.moveTo(game.ballistics[i].x, game.ballistics[i].y);
-				ctx.lineTo(game.ballistics[i].goal.x, game.ballistics[i].goal.y);
-				ctx.closePath();
-				ctx.globalAlpha = 0.2;
-				ctx.strokeStyle = "white";
-				ctx.stroke();
-				ctx.globalAlpha = 1;
-
-				if (! game.ballistics[i].animated){
-					if (! game.ballistics[i].moveAnimated){
-						if (game.ballistics[i].v.t[0] < game.ballistics[i].v.t[1]){
-							game.ballistics[i].v.t[0] += 1;
-							game.ballistics[i].x += game.ballistics[i].v.x * 1 / game.ballistics[i].v.t[1];
-							game.ballistics[i].y += game.ballistics[i].v.y * 1 / game.ballistics[i].v.t[1];
-						}
-						else {
-							game.ballistics[i].moveAnimated = true;
-						}
-					}
-
-					if (! game.ballistics[i].interceptAnimated){
-						allInterceptAnimated = true;
-
-						for (var j = 0; j < game.ballistics[i].intercepts.length; j++){
-							if (! game.ballistics[i].intercepts[j].animated){
-								for (var k = 0; k < game.ballistics[i].intercepts[j].anim.length; k++){
-									//if (game.ballistics[i].intercepts[j].anim[k].explo == false){continue;}
-									if (! game.ballistics[i].intercepts[j].anim[k].animated){	
-										allInterceptAnimated = false;
-
-										var x = game.ballistics[i].intercepts[j].anim[k].ox + (game.ballistics[i].intercepts[j].anim[k].v.x * game.ballistics[i].intercepts[j].anim[k].t[0] / game.ballistics[i].intercepts[j].anim[k].t[1]); 
-										var y = game.ballistics[i].intercepts[j].anim[k].oy + (game.ballistics[i].intercepts[j].anim[k].v.y * game.ballistics[i].intercepts[j].anim[k].t[0] / game.ballistics[i].intercepts[j].anim[k].t[1]); 
-
-										if (game.ballistics[i].intercepts[j].anim[k].t[0] <= 0){
-											game.ballistics[i].intercepts[j].anim[k].t[0] += 1;										
-										}
-										else if (game.ballistics[i].intercepts[j].anim[k].t[0] > 0 && game.ballistics[i].intercepts[j].anim[k].t[0] <= game.ballistics[i].intercepts[j].anim[k].t[1]){
-											game.ballistics[i].intercepts[j].anim[k].t[0] += 1;										
-											drawProjectile(
-												game.ballistics[i].intercepts[j].weapon,
-												game.ballistics[i].intercepts[j].anim[k].ox,
-												game.ballistics[i].intercepts[j].anim[k].oy, 
-												x, y,
-												game.ballistics[i].intercepts[j].anim[k].t[0],
-												game.ballistics[i].intercepts[j].anim[k].t[1]
-											);
-										}
-										else if (game.ballistics[i].intercepts[j].anim[k].explo && game.ballistics[i].intercepts[j].anim[k].t[0] >= game.ballistics[i].intercepts[j].anim[k].t[1]){
-											game.ballistics[i].intercepts[j].anim[k].explo.t[0] += 5;
-											if (game.ballistics[i].intercepts[j].anim[k].explo.t[0] <= game.ballistics[i].intercepts[j].anim[k].explo.t[1]){
-												drawExplosion(
-													x,
-													y,
-													game.ballistics[i].intercepts[j].anim[k].explo.s,
-													game.ballistics[i].intercepts[j].anim[k].explo.t[0],
-													game.ballistics[i].intercepts[j].anim[k].explo.t[1]
-												);
-											}
-											else {
-												game.ballistics[i].intercepts[j].anim[k].animated = true;
-											}
-										}
-										else  if (game.ballistics[i].intercepts[j].anim[k].t[0] >= game.ballistics[i].intercepts[j].anim[k].t[1]){
-											game.ballistics[i].intercepts[j].anim[k].animated = true;
-										}
-									}
-								}
-							}
-							if (allInterceptAnimated){
-								game.createLogEntry(game.ballistics[i].intercepts[j]);
-							}
-						}
-						game.ballistics[i].interceptAnimated = allInterceptAnimated;
-					}
-
-					if (game.ballistics[i].type == "Impact"){
-						if (! game.ballistics[i].exploAnimated){
-							if (game.ballistics[i].moveAnimated){
-								for (var j = 0; j < game.ballistics[i].structures.length; j++){
-									if (!game.ballistics[i].structures[j].destroyed){
-										if (game.ballistics[i].structures[j].fireOrders[0].explo){
-											if (game.ballistics[i].structures[j].fireOrders[0].explo.t[0] < game.ballistics[i].structures[j].fireOrders[0].explo.t[1]){
-												game.ballistics[i].structures[j].fireOrders[0].explo.t[0] += 2;
-												drawExplosion(
-													game.ballistics[i].x + game.ballistics[i].structures[j].fireOrders[0].ox,
-													game.ballistics[i].y + game.ballistics[i].structures[j].fireOrders[0].oy,
-													game.ballistics[i].structures[j].fireOrders[0].explo.s,
-													game.ballistics[i].structures[j].fireOrders[0].explo.t[0],
-													game.ballistics[i].structures[j].fireOrders[0].explo.t[1]
-												);
-											}
-											else {
-												game.ballistics[i].structures[j].fireOrders[0].exploAnimated = true;
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-
-					var done = true;
-
-					if (game.ballistics[i].type == "Impact"){
-						for (var j = 0; j < game.ballistics[i].structures.length; j++){
-							if (!game.ballistics[i].structures[j].destroyed){
-								if (game.ballistics[i].structures[j].fireOrders[0].explo){
-									if (!game.ballistics[i].structures[j].fireOrders[0].exploAnimated){
-										done = false;
-										break;
-									}
-								}
-							}
-							else {
-								if (!game.ballistics[i].moveAnimated){
-									done = false;
-									break;
-								}
-							}
-						}
+		for (var i = 0; i < animate.ballAnims.length; i++){
+			if (!animate.ballAnims[i].done){
+				animate.ballAnims[i].done = true;
+				for (var j = 0; j < animate.ballAnims[i].anims.length; j++){
+					if (animate.ballAnims[i].anims[j].animated){
+						animate.ballAnims[i].anims[j].drawSelf();
 					}
 					else {
-						if (!game.ballistics[i].moveAnimated || !game.ballistics[i].interceptAnimated){
-							done = false;
-							break;
+						var done = true;
+						for (var k = 0; k < animate.ballAnims[i].anims[j].anim.length; k++){
+							if (animate.ballAnims[i].anims[j].anim[k].done){continue;}
+							else if (animate.isDone(i, j)){
+								animate.ballAnims[i].anims[j].anim[k].done = true;
+							}
+							else{
+								animate.doAnimate(i, j, k);
+								done = false;
+							}
 						}
-					}
-
-					if (done){
-						game.ballistics[i].animated = true;
-						if (game.ballistics[i].type == "Impact"){
-							game.createBallisticLogEntry(game.ballistics[i]);
-						}
-					}
-				
-					if (! game.ballistics[i].animated){
-						break;
+						if (done){
+							animate.doLog(i, j);
+							animate.ballAnims[i].anims[j].animated = true;
+						} else animate.ballAnims[i].done = false;
 					}
 				}
-			}
-
-			ctx.setTransform(1,0,0,1,0,0);
-
-			var done = true;
-			for (var i = 0; i < game.ballistics.length; i++){
-				if (! game.ballistics[i].animated){
-					done = false;
+				if (!animate.ballAnims[i].done){
 					break;
 				}
 			}
-
-			if (done){
-				window.cancelAnimationFrame(anim);
-				for (var i = 0; i < game.ballistics.length; i++){
-					game.ballistics[i].x = game.ballistics[i].actions[game.ballistics[i].actions.length-1].x;
-					game.ballistics[i].y = game.ballistics[i].actions[game.ballistics[i].actions.length-1].y;
+			else {
+				for (var j = 0; j <= i; j++){
+					for (var k = 0; k < animate.ballAnims[j].anims.length; k++){
+						animate.ballAnims[j].anims[k].drawSelf();
+					}
 				}
-				game.draw();
-				game.animateShipExplosions();
 			}
+		}
+
+		ctx.setTransform(1,0,0,1,0,0);
+
+		allDone = true;
+		for (var i = 0; i < animate.ballAnims.length; i++){
+			if (!animate.ballAnims[i].done){
+				allDone = false;
+				break;
+			}
+		}
+
+		//allDone = true;
+		if (allDone){
+			window.cancelAnimationFrame(anim);
+			game.draw();
+			game.animateShipExplosions();
 		}
 	}
 
@@ -1719,12 +1451,14 @@ function Game(id, name, status, userid, turn, phase){
 			window.then = window.now - (window.elapsed % window.fpsInterval);
 			fxCtx.clearRect(0, 0, res.x, res.y);
 
+			fxCtx.translate(cam.o.x, cam.o.y);
+			fxCtx.scale(cam.z, cam.z);
+
 			var allDone = true;
 			for (var i = 0; i < window.animations.length; i++){
 				if (!window.animations[i].done){
 
-					fxCtx.translate(window.animations[i].base.x + cam.o.x, window.animations[i].base.y + cam.o.y);
-					fxCtx.scale(cam.z, cam.z)
+					fxCtx.translate(window.animations[i].base.x, window.animations[i].base.y);
 					fxCtx.rotate(window.animations[i].anims[0].a * (Math.PI/180));
 
 					var done = true;
@@ -1755,74 +1489,19 @@ function Game(id, name, status, userid, turn, phase){
 				}
 			}
 
+
 			if (allDone){
 				window.cancelAnimationFrame(anim);
 				fxCtx.setTransform(1,0,0,1,0,0);
 				fxCtx.clearRect(0, 0, res.x, res.y);
 				game.animateFire = false;
-				game.draw();
 				game.fireResolved();
 			}
 		}
 	}
 
-	this.createBallisticLogEntry = function(ball){
-		var struct = 0;
-		var armour = 0;
-		var target = game.getUnitById(ball.targetid);
-		var hits = 0;
-		var req = 100;
-		var log = document.getElementById("combatLog");
-		var summary = {
-			target: target,
-			damages: []
-		}
-
-		for (var i = 0; i < ball.structures.length; i++){
-			if (ball.structures[i].destroyed){
-				continue;
-			}
-			else if (ball.structures[i].fireOrders.length){
-				req = Math.min(req, ball.structures[i].fireOrders[0].req);
-				if (ball.structures[i].fireOrders[0].hits){
-					ball.structures[i].fireOrders[0].damages = target.getDamageEntriesByFireId(ball.structures[i].fireOrders[0].id);
-					for (var j = 0; j < ball.structures[i].fireOrders[0].damages.length; j++){
-						summary.damages.push(ball.structures[i].fireOrders[0].damages[j]);
-						struct += ball.structures[i].fireOrders[0].damages[j].structDmg;
-						armour += ball.structures[i].fireOrders[0].damages[j].armourDmg;
-						hits++;
-					}
-				}
-			}
-		}
-
-		var tr = document.createElement("tr"); tr.style.border = "1px solid white";
-		$(tr)
-			.data("shooterid", ball.id)
-			.data("targetid", ball.targetid)
-			.hover(function(){
-				var data = $(this).data();
-				game.getUnitById(data.shooterid).doHighlight();
-				game.getUnitById(data.targetid).doHighlight();
-			})
-		tr.insertCell(-1).innerHTML = ball.type + ":" + ball.id;
-		var td = document.createElement("td"); td.colSpan = 2;
-			td.innerHTML = "Salvo of " + ball.amount + "x " + ball.name; tr.appendChild(td);
-		tr.insertCell(-1).innerHTML = target.name + " #" + target.id;
-		tr.insertCell(-1).innerHTML = req + "%";
-		tr.insertCell(-1).innerHTML = hits;
-		tr.insertCell(-1).innerHTML = armour;
-		tr.insertCell(-1).innerHTML = struct;
-		
-		log.appendChild(tr);
-
-
-		if (hits){
-			this.setDamageDetails(summary, log, tr);
-		}
-	}
-
-	this.createLogEntry = function(fire){
+	this.createCombatLogEntry = function(fire){
+		if (fire == undefined){return;}
 		var shots = 0;
 		var hits = 0;
 		var struct = 0;
@@ -1849,6 +1528,10 @@ function Game(id, name, status, userid, turn, phase){
 		if (fire.weapon.output){
 			hits /= fire.weapon.output;
 		}
+		var chance = ""
+		if (fire.min != fire.max){
+			chance = fire.min + " - " + fire.max;
+		} else chance = fire.req;
 
 		var tr = document.createElement("tr"); tr.style.border = "1px solid white";
 
@@ -1861,11 +1544,11 @@ function Game(id, name, status, userid, turn, phase){
 				game.getUnitById(data.targetid).doHighlight();
 			})
 
-		tr.insertCell(-1).innerHTML = fire.type + ":" + fire.id;
+		tr.insertCell(-1).innerHTML = fire.type //+ ":" + fire.id;
 		tr.insertCell(-1).innerHTML = fire.shooter.name + " #" + fire.shooter.id;
 		tr.insertCell(-1).innerHTML = fire.target.name + " #" + fire.target.id;
 		tr.insertCell(-1).innerHTML = fire.weapon.display;
-		tr.insertCell(-1).innerHTML = fire.req + "%";
+		tr.insertCell(-1).innerHTML = chance + "%";
 		tr.insertCell(-1).innerHTML = hits + " / " + shots;
 		tr.insertCell(-1).innerHTML = armour;
 		tr.insertCell(-1).innerHTML = struct;

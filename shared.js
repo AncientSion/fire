@@ -38,17 +38,102 @@ window.ballInfo = false;
 window.animation;
 
 window.decayVar = 1000;
-
 window.index = 0;
 
 function Animate(){
 	this.intercepts = [];
+	this.ballAnims = [];
+
+	this.isDone = function(i, j, k){
+		var ele = this.ballAnims[i].anims[j];
+
+		if (ele instanceof FireOrder){
+			for (var i = 0; i < ele.anim.length; i++){
+				if (ele.damages.length && ele.anim[i].n <= ele.anim[i].m*1.25 ||!ele.damages.length && ele.anim[i].n <= ele.anim[i].m){
+					return false;
+				}
+			}
+			return true;
+		}
+		else if (ele instanceof Salvo){
+			for (var i = 0; i < ele.anim.length; i++){
+				if (ele.fireOrder == undefined && ele.anim[i].n <= ele.anim[i].m*1 || ele.fireOrder != undefined && ele.anim[i].n <= ele.anim[i].m*1.25){
+					return false;
+				}
+			}
+			return true;
+		}
+	}
+
+	this.doAnimate = function(i, j, k){
+		var ele = this.ballAnims[i].anims[j];
+
+		if (ele instanceof FireOrder){
+			ele.anim[k].n++;
+			if (ele.damages.length && ele.anim[k].n >= ele.anim[k].m){
+				var x = ele.shooter.x + (ele.anim[k].nx * ele.anim[k].m);
+				var y = ele.shooter.y + (ele.anim[k].ny * ele.anim[k].m);
+				drawExplosion(x, y, 10, ele.anim[k].n, ele.anim[k].m*1.25);
+			}
+			else {
+				var x = ele.shooter.x + (ele.anim[k].nx * ele.anim[k].n);
+				var y = ele.shooter.y + (ele.anim[k].ny * ele.anim[k].n);
+				drawProjectile(
+					ele.weapon,
+					ele.shooter.x,
+					ele.shooter.y,
+					x, y,
+					ele.anim[k].n,
+					ele.anim[k].m
+				);
+			}
+		}
+		else if (ele instanceof Salvo){
+			ele.anim[0].n++;
+			if (ele.fireOrder != undefined && ele.fireOrder.damages.length && ele.anim[0].n >= ele.anim[0].m){
+				drawExplosion(ele.x, ele.y, 10, ele.anim[0].n, ele.anim[0].m*1.25);
+			}
+			else {
+				var x = ele.actions[ele.actions.length-2].x + (ele.anim[0].nx * ele.anim[0].n);
+				var y = ele.actions[ele.actions.length-2].y + (ele.anim[0].ny * ele.anim[0].n);
+				ctx.save();
+				ctx.translate(x, y);
+
+				ctx.rotate((ele.anim[0].f + 90) * (Math.PI/180));
+				ctx.drawImage(ele.img, 0 -ele.size/2, 0 -ele.size/2, ele.size, ele.size);
+
+				ctx.restore();
+
+				ctx.beginPath();
+				ctx.moveTo(x, y);
+				ctx.lineTo(ele.actions[ele.actions.length-1].x, ele.actions[ele.actions.length-1].y);
+				ctx.closePath();
+
+				ctx.globalAlpha = 0.2;
+				ctx.strokeStyle = "white";
+				ctx.stroke();
+				ctx.globalAlpha = 1;
+			}
+		}
+	}
+
+	this.doLog = function(i, j){
+		var ele = this.ballAnims[i].anims[j];
+
+		if (ele instanceof FireOrder){
+			game.createCombatLogEntry(ele);
+		}
+		else if (ele instanceof Salvo){
+			game.createCombatLogEntry(ele.fireOrder);
+		}
+	}
 }
+
 window.animate = new Animate();
 
 window.fps = 100;
 window.fpsInterval = 1000 / window.fps;
-window.speedMod = 10;
+window.speedMod = 1;
 
 window.startTime, window.now, window.then, window.elapsed;
 
@@ -59,7 +144,7 @@ function initiateShip(i){
 
 	var ship = new window[window.ships[i].shipType](
 		window.ships[i].id,
-		window.ships[i].classname,
+		window.ships[i].name,
 		window.ships[i].shipType,
 		0,
 		0,
@@ -153,8 +238,9 @@ function initiateShip(i){
 	}
 
 	for (var j = 0; j < window.ships[i].structures.length; j++){
+		var struct;
 		if (! ship.flight){
-			var struct = new Structure(
+			struct = new Structure(
 				window.ships[i].structures[j].id,
 				window.ships[i].structures[j].parentId,
 				window.ships[i].structures[j].start,
@@ -165,7 +251,7 @@ function initiateShip(i){
 			);
 		}
 		else {
-			var struct = new Fighter(
+			struct = new Fighter(
 				window.ships[i].structures[j].id,
 				window.ships[i].structures[j].name,
 				window.ships[i].structures[j].ep,
@@ -234,7 +320,10 @@ function initiateShip(i){
 					window.ships[i].structures[j].systems[k].end
 				)
 			}
-			else if (window.ships[i].structures[j].systems[k].type == "Particle" || window.ships[i].structures[j].systems[k].type == "Matter" || window.ships[i].structures[j].systems[k].type == "EM"){
+			else if (window.ships[i].structures[j].systems[k].type == "Particle"
+				|| window.ships[i].structures[j].systems[k].type == "Matter"
+				|| window.ships[i].structures[j].systems[k].type == "Pulse"
+				|| window.ships[i].structures[j].systems[k].type == "EM"){
 				var system = new window[window.ships[i].structures[j].systems[k].type](
 					window.ships[i].structures[j].systems[k].id,
 					window.ships[i].structures[j].systems[k].parentId,
@@ -266,6 +355,7 @@ function initiateShip(i){
 					window.ships[i].structures[j].systems[k].parentId,
 					window.ships[i].structures[j].systems[k].name,
 					window.ships[i].structures[j].systems[k].display,
+					window.ships[i].structures[j].systems[k].ammo,
 					window.ships[i].structures[j].systems[k].launchRate,
                     window.ships[i].structures[j].systems[k].integrity,
                     window.ships[i].structures[j].systems[k].powerReq,
@@ -276,17 +366,28 @@ function initiateShip(i){
 					window.ships[i].structures[j].systems[k].start,
 					window.ships[i].structures[j].systems[k].end
 				)
-				system.ammo = new TempAmmo(
-					window.ships[i].structures[j].systems[k].ammo.name,
-					window.ships[i].structures[j].systems[k].ammo.display,
-					window.ships[i].structures[j].systems[k].ammo.minDmg,
-					window.ships[i].structures[j].systems[k].ammo.maxDmg,
-					window.ships[i].structures[j].systems[k].ammo.impulse,
-					window.ships[i].structures[j].systems[k].ammo.mass,
-					window.ships[i].structures[j].systems[k].ammo.integrity,
-					window.ships[i].structures[j].systems[k].ammo.armour,
-					window.ships[i].structures[j].systems[k].ammo.fc
-				)
+
+				for (var l = 0; l < window.ships[i].structures[j].systems[k].loads.length; l++){
+					system.loads.push(
+						new Ammo(
+							window.ships[i].structures[j].systems[k].loads[l].id,
+							window.ships[i].structures[j].systems[k].loads[l].name,
+							window.ships[i].structures[j].systems[k].loads[l].cost,
+							window.ships[i].structures[j].systems[k].loads[l].display,
+							window.ships[i].structures[j].systems[k].loads[l].minDmg,
+							window.ships[i].structures[j].systems[k].loads[l].maxDmg,
+							window.ships[i].structures[j].systems[k].loads[l].impulse,
+							window.ships[i].structures[j].systems[k].loads[l].mass,
+							window.ships[i].structures[j].systems[k].loads[l].integrity,
+							window.ships[i].structures[j].systems[k].loads[l].armour,
+							window.ships[i].structures[j].systems[k].loads[l].fc,
+							window.ships[i].structures[j].systems[k].loads[l].damages,
+							window.ships[i].structures[j].systems[k].loads[l].crits,
+							window.ships[i].structures[j].systems[k].loads[l].destroyed
+						)
+					)
+				}
+				system.create();
 			}
 			else if (window.ships[i].structures[j].systems[k].name == "Hangar"){
 				var system = new window[window.ships[i].structures[j].systems[k].name](
@@ -298,8 +399,9 @@ function initiateShip(i){
 					window.ships[i].structures[j].systems[k].end,
                     window.ships[i].structures[j].systems[k].integrity,
 					window.ships[i].structures[j].systems[k].powerReq,
+                    window.ships[i].structures[j].systems[k].reload,
 					window.ships[i].structures[j].systems[k].output,
-                    window.ships[i].structures[j].systems[k].effiency,                
+                    window.ships[i].structures[j].systems[k].effiency,
                     window.ships[i].structures[j].systems[k].loads
 				)
 			}
@@ -384,6 +486,60 @@ function initiateShip(i){
 	return ship;
 }
 
+function initiateBallistic(i){
+	//(id, userid, targetid, classname, display, amount, status, destroyed, actions){
+
+	var salvo = new Salvo(
+			window.ballistics[i].id,
+			window.ballistics[i].userid,
+			window.ballistics[i].targetid,
+			window.ballistics[i].name,
+			window.ballistics[i].amount,
+			window.ballistics[i].status,
+			window.ballistics[i].destroyed,
+			window.ballistics[i].actions
+			);
+
+	for (var j = 0; j < window.ballistics[i].structures.length; j++){
+		salvo.structures.push(
+			new Ammo(
+				window.ballistics[i].structures[j].id,
+				window.ballistics[i].structures[j].name,
+				window.ballistics[i].structures[j].cost,
+				window.ballistics[i].structures[j].display,
+				window.ballistics[i].structures[j].minDmg,
+				window.ballistics[i].structures[j].maxDmg,
+				window.ballistics[i].structures[j].impulse,
+				window.ballistics[i].structures[j].mass,
+				window.ballistics[i].structures[j].integrity,
+				window.ballistics[i].structures[j].armour,
+				window.ballistics[i].structures[j].fc,
+				window.ballistics[i].structures[j].damages,
+				window.ballistics[i].structures[j].crits,
+				window.ballistics[i].structures[j].destroyed
+			)
+		)
+		for (var k = 0; k < window.ballistics[i].structures[j].fireOrders.length; k++){
+			salvo.structures[j].fireOrders.push(
+				new FireOrder(
+					window.ballistics[i].structures[j].fireOrders[k].id,
+					window.ballistics[i].structures[j].fireOrders[k].turn,
+					window.ballistics[i].structures[j].fireOrders[k].shooterid,
+					window.ballistics[i].structures[j].fireOrders[k].targetid,
+					window.ballistics[i].structures[j].fireOrders[k].weaponid,
+					window.ballistics[i].structures[j].fireOrders[k].shots,
+					window.ballistics[i].structures[j].fireOrders[k].req,
+					window.ballistics[i].structures[j].fireOrders[k].notes,
+					window.ballistics[i].structures[j].fireOrders[k].hits,
+					window.ballistics[i].structures[j].fireOrders[k].resolved
+				)
+			)
+		}
+	}
+	salvo.create();
+	return salvo;
+}
+
 function getShipId(){
 	return (game.ships.length+1);
 }
@@ -457,6 +613,7 @@ $(document).ready(function(){
         $(this).hide();
 	});
     $("#hangarLoadoutDiv").drag()
+    $("#weaponLoadoutDiv").drag()
 });
 
 

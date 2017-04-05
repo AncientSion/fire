@@ -22,13 +22,45 @@ function Move(type, dist, x, y, a, delay, cost, costmod, resolved){
 	this.resolved = resolved || 0;
 }
 
+function BallVector(a, b, s){
+	this.x;
+	this.y;
+	this.nx;
+	this.ny;
+	this.n = 0;
+	this.m;
+	this.done = 0;
+	this.f;
+	
+	this.setup = function(){
+		this.x = b.x - a.x;
+		this.y = b.y - a.y;
+
+		this.f = getAngleFromTo(a, b);
+		
+		var x = Math.pow(this.x, 2);
+		var y = Math.pow(this.y, 2);
+		var m = (x + y) / 1
+		
+		this.m = Math.sqrt(m);
+		this.nx = this.x/this.m*s;
+		this.ny = this.y/this.m*s;
+		this.m /= s;
+	}
+	
+	this.setup();
+}
+
 function Vector(a, b){
 	this.x;
 	this.y;
 	this.nx;
 	this.ny;
+	this.n = 0;
 	this.m;
 	this.t;
+	this.s = 0;
+	this.done = 0;
 	
 	this.setup = function(){
 		this.x = b.x - a.x;
@@ -38,7 +70,7 @@ function Vector(a, b){
 		var y = Math.pow(this.y, 2);
 		var m = x + y;
 		
-		this.m = Math.sqrt(m);			
+		this.m = Math.sqrt(m);	
 		this.nx = this.x/this.m;
 		this.ny = this.y/this.m;
 	}
@@ -50,27 +82,6 @@ function Dot(a, b){
 	this.dot = (a.nx * b.nx) + (a.ny * b.ny);
 }
 
-function Path (a, b){
-	this.a = a;
-	this.b = b;
-	this.distance;
-	this.animated = false;
-	
-	this.setup = function(){
-		var a = this.a.x - this.b.x;
-		var b = this.a.y - this.b.y;
-		
-		var a = Math.pow(a, 2);
-		var b = Math.pow(b, 2);
-		var c = a + b;
-		var c = Math.sqrt(c);
-		
-		this.distance = Math.floor(c);
-	}
-	
-	this.setup();
-}
-
 function Power(id, unitid, systemid, turn, type, cost){
 	this.id = id;
 	this.unitid = unitid;
@@ -78,17 +89,78 @@ function Power(id, unitid, systemid, turn, type, cost){
 	this.turn = turn;
 	this.type = type;
 	this.cost = cost;
+}	
+
+function Marker(shooterid, targetid, systemid, turn){
+	this.shooterid = shooterid;
+	this.targetid = targetid;
+	this.systemid = systemid;
+	this.turn = turn;
 }
 
-function TempAmmo(name, display, minDmg, maxDmg, impulse, mass, integrity, armour, fc){
+function FireOrder(id, turn, shooterid, targetid, weaponid, shots, req, notes, hits, resolved){
+	this.id = id;
+	this.turn = turn;
+	this.shooterid = shooterid;
+	this.targetid = targetid;
+	this.weaponid = weaponid;
+	this.shots = shots;
+	this.req = req;
+	this.notes = notes;
+	this.hits = hits;
+	this.resolved = resolved;
+	this.dist;
+	this.guns = 1;
+	this.animated = false;
+	this.anim = [];
+	this.damages = [];
+	this.min;
+	this.max;
+	this.found = false;
+
+	this.drawSelf = function(){
+		return false;
+	}
+}
+
+function Damage(id, fireid, gameid, shipid, structureid, systemid, turn, roll, type, totalDmg, shieldDmg, structDmg, armourDmg, mitigation, negation, destroyed, notes){
+	this.id = id;
+	this.fireid = fireid;
+	this.gameid = gameid;
+	this.shipid = shipid;
+	this.structureid = structureid;
+	this.systemid = systemid;
+	this.turn = turn;
+	this.roll = roll;
+	this.type = type;
+	this.totalDmg = totalDmg;
+	this.shieldDmg = shieldDmg;
+	this.structDmg = structDmg;
+	this.armourDmg = armourDmg;
+	this.mitigation = mitigation;
+	this.negation = negation;
+	this.destroyed = destroyed;
+	this.notes = notes;
+}
+
+function Ammo(id, name, cost, display, minDmg, maxDmg, impulse, mass, integrity, armour, fc, damages, crits, destroyed){
+	this.id = id;
 	this.name = name;
+	this.cost = cost;
 	this.display = display;
 	this.minDmg = minDmg;
 	this.maxDmg = maxDmg;
 	this.impulse = impulse;
+	this.size = mass*3;
 	this.mass = mass;
 	this.integrity = integrity;
+	this.armour = armour;
 	this.fc = fc;
+	this.damages = damages || false;
+	this.crits = crits;
+	this.destroyed = destroyed;
+	this.shots = 1;
+	this.fireOrders = [];
 
 	this.getDamage = function(){
 		var min = this.getMinDmg();
@@ -113,24 +185,6 @@ function TempAmmo(name, display, minDmg, maxDmg, impulse, mass, integrity, armou
 	this.getRemainingIntegrity = function(){
 		return this.integrity;
 	}
-}				
-
-function Ammo(id, name, display, minDmg, maxDmg, impulse, mass, integrity, armour, fc, damages, crits, destroyed){
-	this.id = id;
-	this.name = name;
-	this.display = display;
-	this.minDmg = minDmg;
-	this.maxDmg = maxDmg;
-	this.impulse = impulse;
-	this.size = mass*3;
-	this.mass = mass;
-	this.integrity = integrity;
-	this.armour = armour;
-	this.fc = fc;
-	this.damages = damages;
-	this.crits = crits;
-	this.destroyed = destroyed;
-	this.fireOrders = [];
 
 	this.getRemainingIntegrity = function(){
 		var integrity = this.integrity;
@@ -162,6 +216,13 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 	this.highlight = false;
 	this.friendly = false;
 	this.display = "";
+	this.ship = false;
+	this.flight = false;
+	this.salvo = true;
+	this.nextStep;
+	this.finalStep;
+	this.anim = [];
+	this.animated = false;
 
 	this.getSystemById = function(id){
 		for (var i = 0; i < this.structures.length; i++){
@@ -181,6 +242,10 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 			}
 		}
 		return ret;
+	}
+
+	this.getPlannedPosition = function(){
+		return new Point(this.x, this.y);
 	}
 
 	this.doHighlight = function(){
@@ -238,19 +303,20 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 
 		var tr = table.insertRow(-1);
 		var td = tr.insertCell(-1);
-			td.innerHTML = this.structures.length + "x " + this.name + " #" + this.id; td.colSpan = 4;
 			td.className = "header";	
+			td.innerHTML = this.structures.length + "x '" + this.name + "' #" + this.id; td.colSpan = 4;
 
 		var tr = table.insertRow(-1);
 		var td = tr.insertCell(-1);
-			td.innerHTML = this.display; td.colSpan = 4;
-			td.className = "header";
-
-		var tr = table.insertRow(-1);
-		var td = tr.insertCell(-1);
-			td.innerHTML = "Targeting: " + game.getUnitById(this.targetid).name + " #" + this.targetid; td.colSpan = 4;
 			td.className = "subHeader";
+			td.innerHTML = this.display; td.colSpan = 4;
 
+		var target = game.getUnitById(this.targetid);
+		var tr = table.insertRow(-1);
+		var td = tr.insertCell(-1);
+			td.className = "subHeader";
+			td.innerHTML = "Targeting: " + target.name + " #" + target.id + " - Distance: "+ Math.ceil(getDistance({x: this.x, y: this.y}, {x: target.x, y: target.y})) + "px"; td.colSpan = 4;
+			
     	$(table)
 			.append($("<tr>")
 	    		.append($("<th>").html("Damage"))
@@ -357,12 +423,14 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 			this.doUnselect();
 		}
 		else {
+			//this.intercept();
+			console.log(this);
 			this.doSelect();
 		}
 	}
 
 	this.doSelect = function(){
-		console.log(this);
+		//console.log(this);
 		aUnit = this.id;
 		this.selected = true;
 		this.enableDiv();
@@ -398,7 +466,7 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 	}
 
 	this.create = function(){
-		this.size = Math.ceil(this.structures.length)*8;
+		this.size = 18;
 		this.x = this.actions[this.actions.length-1].x;
 		this.y = this.actions[this.actions.length-1].y;
 
@@ -407,6 +475,9 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 		this.createDiv();
 		this.setFacing();
 		this.setLayout();
+		this.setFinalStep();
+		this.setNextStep();
+
 		if (this.userid == game.userid){
 			this.friendly = true;
 		} else this.friendly = false;
@@ -418,6 +489,18 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 
 	this.setDisplay = function(){
 		this.display = this.structures[0].display;
+	}
+
+	this.setFacing = function(){
+		var goal = game.getUnitById(this.targetid).getBaseOffsetPos();
+		var i;
+		if (this.actions[this.actions.length-1].type == "impact"){
+			i = this.actions.length-2;
+		}
+		else {
+			i = this.actions.length-1;
+		}
+		this.facing = Math.floor(getAngleFromTo( this.actions[i], {x: goal.x + cam.o.x, y: goal.y + cam.o.y} ));
 	}
 
 	this.setLayout = function(){
@@ -449,47 +532,27 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 			c++
 		}
 	}
-
-	this.setFacing = function(){
-		var goal = game.getUnitById(this.targetid).getBaseOffsetPos();
-		var i;
-		if (this.actions[this.actions.length-1].type == "impact"){
-			i = this.actions.length-2;
-		}
-		else {
-			i = this.actions.length-1;
-		}
-		this.facing = Math.floor(getAngleFromTo( this.actions[i], {x: goal.x + cam.o.x, y: goal.y + cam.o.y} ));
-	}
-
+	
 	this.draw = function(){
-		ctx.save();
-		ctx.translate(this.x, this.y);
-		ctx.scale(cam.z, cam.z);
-		ctx.rotate((this.facing + 90) * (Math.PI/180));
+		if (game.animateFire){return;}
 		this.drawSelf();		
 		this.drawIndicator();
 		//this.drawCenterPoint();
-		ctx.restore();
 	}
 
 	this.drawSelf = function(){
-		var size = 12;
-
-		ctx.drawImage(
-			this.img,
-			0 -size/2,
-			0 -size/2,
-			size, 
-			size
-		);
-		return;
+		ctx.save();
+		ctx.translate(this.x, this.y);
+		ctx.rotate((this.facing + 90) * (Math.PI/180));
+		ctx.drawImage(this.img, 0 -this.size/2, 0 -this.size/2, this.size, this.size);
+		ctx.restore();
 	}
 
 	this.drawIndicator = function(){
 		ctx.beginPath();
-		ctx.arc(0, 0, 9, 0, 2*Math.PI, false);
+		ctx.arc(this.x, this.y, this.size/2, 0, 2*Math.PI, false);
 		ctx.closePath();
+
 		ctx.lineWidth = 1;
 		ctx.globalAlpha = 0.8;
 		if (this.userid == game.userid){ctx.strokeStyle = "green";}
@@ -498,7 +561,6 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 		ctx.lineWidth = 1;
 		ctx.globalAlpha = 1;
 		ctx.strokeStyle = "black";
-		return;
 	}
 
 	this.drawCenterPoint = function(){
@@ -509,41 +571,82 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 		ctx.fill();
 	}
 
+	this.setFinalStep = function(){
+		if (this.finalStep != undefined){
+			return;
+		}
+
+		var target = game.getUnitById(this.targetid);
+
+		if (target.salvo){
+			if (target.finalStep == undefined){
+				target.setFinalStep();
+			}
+			var vector = new Vector(target, game.getUnitById(target.targetid));
+			var speedMod = this.getImpulse() / target.getImpulse();
+			this.finalStep = getIntercept(this.getPlannedPosition(), target, vector, speedMod);
+		}
+		else {
+			this.finalStep = target.getPlannedPosition();
+		}
+	}
+
+	this.setNextStep = function(){
+		var dist = getDistance(this.getPlannedPosition(), this.finalStep);
+		var impulse = this.getImpulse();
+		if (impulse < dist){
+			var a = getAngleFromTo(this, game.getUnitById(this.targetid));
+			this.nextStep = getPointInDirection(impulse, a, this.x, this.y);
+		}
+		else {
+			this.nextStep = this.finalStep;
+		}
+	}
+
 	this.drawFlightPath = function(){
+		var goal;
+		var target = game.getUnitById(this.targetid);
+		if (target.salvo){
+			//target.drawFlightPath();
+			goal = this.finalStep;
+		}
+		else {
+			goal = target.getPlannedPosition();
+		}
 		var origin = this.actions[this.actions.length-1];
-		var goal = game.getUnitById(this.targetid).getPlannedPosition();
-		var dist = getDistance({x: this.x, y: this.y}, {x: goal.x, y: goal.y});
-		var a = getAngleFromTo({x: this.x, y: this.y}, {x: goal.x, y: goal.y});
-		var step = Math.min(this.structures[0].impulse, dist);
+		//var dist = getDistance({x: this.x, y: this.y}, {x: goal.x, y: goal.y});
+		//var a = getAngleFromTo({x: this.x, y: this.y}, {x: goal.x, y: goal.y});
+		//var step = Math.min(this.structures[0].impulse, dist);
 
 		var inRange = false;
-		if (this.structures[0].impulse >= dist){
+		if (this.nextStep == this.finalStep){
 			inRange = true;
 		}
 
-		var t = getPointInDirection(step, a, this.x, this.y);
+		//var t = getPointInDirection(step, a, this.x, this.y);
 
 		mouseCtx.translate(cam.o.x, cam.o.y);
 		mouseCtx.scale(cam.z, cam.z)
 		mouseCtx.translate(origin.x, origin.y);
 		mouseCtx.beginPath();
 		mouseCtx.moveTo(0, 0);
-		mouseCtx.translate(-origin.x + t.x, -origin.y + t.y);
+		mouseCtx.translate(-origin.x + this.nextStep.x, -origin.y + this.nextStep.y);
 		mouseCtx.lineTo(0, 0);
 		mouseCtx.closePath();
 
 		mouseCtx.globalAlpha = 1;
 		mouseCtx.strokeStyle = "white";
+		mouseCtx.lineWidth = 1;
 		mouseCtx.stroke();
 		mouseCtx.setTransform(1,0,0,1,0,0);
 
 		if (!inRange){
 			mouseCtx.translate(cam.o.x, cam.o.y);
 			mouseCtx.scale(cam.z, cam.z)
-			mouseCtx.translate(t.x, t.y);
+			mouseCtx.translate(this.nextStep.x, this.nextStep.y);
 			mouseCtx.beginPath();
 			mouseCtx.moveTo(0, 0);
-			mouseCtx.translate(-t.x + goal.x, -t.y + goal.y);
+			mouseCtx.translate(-this.nextStep.x + this.finalStep.x, -this.nextStep.y + this.finalStep.y);
 			mouseCtx.lineTo(0, 0);
 			mouseCtx.closePath();
 
@@ -604,7 +707,7 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 	}
 
 	this.getHitChanceFromAngle = function(){
-		return this.structures[0].mass * 5;
+		return Math.ceil(Math.sqrt(this.structures[0].mass)*10);
 	}
 
 	this.getPlannedFacingToMove = function(){
@@ -653,51 +756,6 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 			)
 		}
 	}
-}
-
-function Marker(shooterid, targetid, systemid, turn){
-	this.shooterid = shooterid;
-	this.targetid = targetid;
-	this.systemid = systemid;
-	this.turn = turn;
-}
-
-function FireOrder(id, turn, shooterid, targetid, weaponid, shots, req, notes, hits, resolved){
-	this.id = id;
-	this.turn = turn;
-	this.shooterid = shooterid;
-	this.targetid = targetid;
-	this.weaponid = weaponid;
-	this.shots = shots;
-	this.req = req;
-	this.notes = notes;
-	this.hits = hits;
-	this.resolved = resolved;
-	this.dist;
-	this.guns = 1;
-	this.animated = false;
-	this.anim = [];
-	this.damages = [];
-}
-
-function Damage(id, fireid, gameid, shipid, structureid, systemid, turn, roll, type, totalDmg, shieldDmg, structDmg, armourDmg, mitigation, negation, destroyed, notes){
-	this.id = id;
-	this.fireid = fireid;
-	this.gameid = gameid;
-	this.shipid = shipid;
-	this.structureid = structureid;
-	this.systemid = systemid;
-	this.turn = turn;
-	this.roll = roll;
-	this.type = type;
-	this.totalDmg = totalDmg;
-	this.shieldDmg = shieldDmg;
-	this.structDmg = structDmg;
-	this.armourDmg = armourDmg;
-	this.mitigation = mitigation;
-	this.negation = negation;
-	this.destroyed = destroyed;
-	this.notes = notes;
 }
 
 function Crit(id, shipid, systemid, turn, type, duration){
@@ -886,7 +944,7 @@ function Structure(id, parentId, start, end, integrity, negation, destroyed){
 	}
 
 	this.showHitAxis = function(){
-		game.getUnitById(this.parentId).drawStructureAxis(this);
+		game.getUnitById(this.parentId).drawSystemAxis(this);
 	}
 
 	this.showInfoDiv = function(e){

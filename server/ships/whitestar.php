@@ -1,9 +1,8 @@
 <?php
 
 class WhiteStar extends Light {
-
-	public $classname = "WhiteStar";
-	public $name = "White Star";
+	public $name = "WhiteStar";
+	public $display = "White Star";
 	public $faction = "Minbari Federation";
 	public $size = 50;
 	public static $value = 600;

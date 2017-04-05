@@ -1,8 +1,8 @@
 <?php
 
 class Vorchan extends Light {
-	public $classname = "Vorchan";
 	public $name = "Vorchan";
+	public $display = "Vorchan";
 	public $faction = "Centauri Republic";
 	public $size = 40;
 	public static $value = 370;
@@ -17,17 +17,17 @@ class Vorchan extends Light {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 225, 19);
-		$front->systems[] = new IonProjector($this->getId(), $this->id, 270, 90);
-		$front->systems[] = new CEMissileLauncher($this->getId(), $this->id, 300, 60, 8, 2);
-		$front->systems[] = new IonProjector($this->getId(), $this->id, 270, 90);
+		$front->systems[] = new MediumIon($this->getId(), $this->id, 270, 90);
+		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60, 8, 2, array("Javelin", "Hasta"));
+		$front->systems[] = new MediumIon($this->getId(), $this->id, 270, 90);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 170, 17);
-		$right->systems[] = new IonBolter($this->getId(), $this->id, 300, 180);
+		$right->systems[] = new LightIon($this->getId(), $this->id, 300, 180);
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 170, 17);
-		$left->systems[] = new IonBolter($this->getId(), $this->id, 180, 60);
+		$left->systems[] = new LightIon($this->getId(), $this->id, 180, 60);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

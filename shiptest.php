@@ -31,14 +31,14 @@
 				$fires[$i]->hitSection = $ships[$i]->structures[0]->id;
 				$fires[$i]->target = $ships[$i];
 
-				echo "<table class='unitTest'><tr><th colSpan=2 style='width: 210px'>".$ships[$i]->classname."</th></tr>";
+				echo "<table class='unitTest'><tr><th colSpan=2 style='width: 210px'>".$ships[$i]->name."</th></tr>";
 
 				$main = 0;
 				$internal = 0;
 				$wpn = 0;
 				$hangar = 0;
 
-				for ($j = 0; $j < 100; $j++){
+				for ($j = 0; $j < 200; $j++){
 					$sys = $ships[$i]->getHitSystem($fires[$i]);
 					if ($sys instanceof Hangar){
 						$hangar++;

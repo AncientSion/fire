@@ -18,7 +18,10 @@ spl_autoload_register(
                 'ammo' => '/server/salvo.php',    
 
                 'hasta' => '/server/systems/weapons/launcher.php',
-                'baracuda' => '/server/systems/weapons/launcher.php',
+                'javelin' => '/server/systems/weapons/launcher.php',
+                'barracuda' => '/server/systems/weapons/launcher.php',
+                'myrmidon' => '/server/systems/weapons/launcher.php',
+                'zeus' => '/server/systems/weapons/launcher.php',
 
                 'flight' => '/server/flight.php',
 
@@ -38,14 +41,15 @@ spl_autoload_register(
                 'whitestar' => '/server/ships/whitestar.php',
 
                 'omega' => '/server/ships/omega.php',
-                'saggitarius' => '/server/ships/saggitarius.php',
+                'avenger' => '/server/ships/avenger.php',
                 'hyperion' => '/server/ships/hyperion.php',
+                'saggitarius' => '/server/ships/saggitarius.php',
                 'artemis' => '/server/ships/artemis.php',
                 'olympus' => '/server/ships/olympus.php',
                 'tethys' => '/server/ships/tethys.php',
 
                 'system' => '/server/systems/system.php',
-                'primarysystem' => '/server/systems/system.php',
+                'primarysys tem' => '/server/systems/system.php',
                 'weapon' => '/server/systems/system.php',
                 
                 'bridge' => '/server/systems/system.php',
@@ -68,21 +72,24 @@ spl_autoload_register(
                 'mediumrailgun' => '/server/systems/weapons/matter.php',
                 'lightrailgun' => '/server/systems/weapons/matter.php',
 
+                'pulse' => '/server/systems/weapons/pulse.php',
+                'lightpulsecannon' => '/server/systems/weapons/pulse.php',
+                'mediumpulsecannon' => '/server/systems/weapons/pulse.php',
+
                 'particle' => '/server/systems/weapons/particle.php',
-                'ionbolter' => '/server/systems/weapons/particle.php',
-                'ionprojector' => '/server/systems/weapons/particle.php',
-                'ioncannon' => '/server/systems/weapons/particle.php',
+                'lightion' => '/server/systems/weapons/particle.php',
+                'mediumion' => '/server/systems/weapons/particle.php',
+                'heavyion' => '/server/systems/weapons/particle.php',
                 'particlebeam' => '/server/systems/weapons/particle.php',
                 'heavyparticlebeam' => '/server/systems/weapons/particle.php',
-                'fusioncannon' => '/server/systems/weapons/particle.php',
+                'FusionCannon' => '/server/systems/weapons/particle.php',
                 'fusionpulsar' => '/server/systems/weapons/particle.php',
 
                 'em' => '/server/systems/weapons/em.php',
                 'empulsecannon' => '/server/systems/weapons/em.php',
 
                 'launcher' => '/server/systems/weapons/launcher.php',
-                'eamissilelauncher' => '/server/systems/weapons/launcher.php',
-                'cemissilelauncher' => '/server/systems/weapons/launcher.php',
+                'missilelauncher' => '/server/systems/weapons/launcher.php',
 
                 'linked' => '/server/systems/weapons/linked.php',
                 'linkedparticle' => '/server/systems/weapons/linked.php',
@@ -94,6 +101,7 @@ spl_autoload_register(
                 'debug' => '/server/debug.php',
                 'math' => '/server/math.php',
                 'point' => '/server/classes.php',
+                'vector' => '/server/classes.php',
                 'action' => '/server/classes.php',
                 'fireorder' => '/server/classes.php',
                 'damage' => '/server/classes.php',

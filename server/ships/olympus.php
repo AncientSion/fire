@@ -1,9 +1,9 @@
 <?php
 
 class Olympus extends Light {
-	public $classname = "Olympus";
 	public $name = "Olympus";
-	public $faction = "Earth Alliances";
+	public $display = "Olympus";
+	public $faction = "Earth Alliance";
 	public $size = 45;
 	public static $value = 525;
 	public $profile = array(0.94, 1.06);
