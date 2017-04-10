@@ -9,8 +9,8 @@ class Saggitarius extends Medium {
 	public $profile = array(0.90, 1.10);
 	public $mass = 4500;
 
-	function __construct($id, $userid, $available){
-        parent::__construct($id, $userid, $available);
+	function __construct($id, $userid, $available, $status, $destroyed){
+        parent::__construct($id, $userid, $available, $status, $destroyed);
 	}
 
 	public function addStructures(){

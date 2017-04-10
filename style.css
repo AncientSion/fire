@@ -146,12 +146,12 @@ table, th, tr, td {
 	border: 1px solid white;
 	border-radius: 5px;
 	padding: 5 5 5 5;
-	z-index: 10;
+	z-index: 6;
 	background-color: black;
 	top: 110px;
 }
 
-#deployWrapper .disabled  {
+#deployWrapper.disabled  {
 	display: none;
 }
 
@@ -897,7 +897,7 @@ table, th, tr, td {
 #combatlogWrapper {
 	position: absolute;
 	top: 120px;
-	width: 700px;	
+	width: 750px;	
 	z-index: 8;
 	padding: 5px;
 	border-radius: 5px;

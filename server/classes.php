@@ -33,7 +33,22 @@ class Vector {
 	}
 }
 
+class Effect {
+	public $type;
+	public $value;
 
+	function __construct($type, $value){
+		$this->type = $type;
+		$this->value = $value;
+	}
+}
+
+class HitTable {
+
+	function __construct($systems){
+		
+	}
+}
 class Action {
 	public $turn;
 	public $type;

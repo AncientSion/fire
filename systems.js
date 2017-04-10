@@ -1,9 +1,14 @@
-function System(id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost){
+function System(id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost, boostEffect){
 	this.id = id;
 	this.parentId = parentId;
 	this.name = name;
 	this.display = display;
 	this.integrity = integrity;
+	this.powerReq = powerReq;
+	this.output = output;
+	this.effiency = effiency;
+	this.maxBoost = maxBoost;
+	this.boostEffect = boostEffect;
 	this.crits = [];
 	this.damages = [];
 	this.detailsTable = false;
@@ -12,14 +17,11 @@ function System(id, parentId, name, display, integrity, powerReq, output, effien
 	this.destroyed = false;
 	this.disabled = false;
 	this.weapon = false;
-	this.powerReq = powerReq;
-	this.output = output;
-	this.effiency = effiency;
-	this.maxBoost = maxBoost;
 	this.totalCost = 0;
 	this.hasOptions = 0;
 	this.powers = [];
 	this.fireOrders = [];
+	this.type = "";
 
 	this.hover = function(e){
 		if (game.flightDeploy){return false;}
@@ -151,13 +153,10 @@ function System(id, parentId, name, display, integrity, powerReq, output, effien
 	}
 
 	this.getBoostEffect = function(){
-		switch (this.name){
-			case "HeavyLaser": return "+ 25 % Damage";
-			case "NeutronLaser": return "+ 25 % Damage";
-			case "NeutronAccelerator": return "+ 25 % Damage";
-			case "Engine": return "+ 10 % Output";
-			case "Sensor": return "+ 10 % Output";
+		if (this.boostEffect){
+			return "+" + this.boostEffect.value + "% " + this.boostEffect.type;
 		}
+		else return "MISSING";
 	}
 
 	this.getBoostDiv = function(){
@@ -597,14 +596,18 @@ function System(id, parentId, name, display, integrity, powerReq, output, effien
 		var extra = 0;
 		for (var i = this.powers.length-1; i >= 0; i--){
 			if (this.powers[i].turn == game.turn){
-				extra += this.output * 0.1 * this.powers[i].type;
+				extra += this.output * this.boostEffect.value / 100 * this.powers[i].type;
 			} else break;
 		}
 		return Math.floor(extra);
 	}
 
 	this.getEffiency = function(){
-		return this.effiency;
+		return Math.ceil(this.effiency * (1+(this.getBoostLevel() * this.getBoostCostIncrease())));
+	}
+
+	this.getBoostCostIncrease = function(){
+		return 0;
 	}
 
 	this.getPowerReq = function(){
@@ -622,8 +625,10 @@ function System(id, parentId, name, display, integrity, powerReq, output, effien
 	}
 }
 
-function PrimarySystem(id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost){
-	System.call(this, id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost);
+function PrimarySystem(id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost, boostEffect){
+	this.exposed = 0;
+	
+	System.call(this, id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost, boostEffect);
 
 	this.select = function(e){
 		console.log(this);
@@ -654,7 +659,7 @@ function PrimarySystem(id, parentId, name, display, integrity, powerReq, output,
 
 		for (var i = this.powers.length-1; i >= 0; i--){
 			if (this.powers[i].turn == game.turn){
-				mod += 0.1 * this.powers[i].type;
+				mod += this.boostEffect.value/100 * this.powers[i].type;
 			} else break;
 		}
 		for (var i = 0; i < this.crits.length; i++){
@@ -670,6 +675,10 @@ function PrimarySystem(id, parentId, name, display, integrity, powerReq, output,
 
 	this.getOutputString = function(){
 		return this.output + " + " + this.getExtraOutput();
+	}
+
+	this.getBoostCostIncrease = function(){
+		return 0.2;
 	}
 
 	this.getSystemDetailsDiv = function(){
@@ -750,8 +759,8 @@ function PrimarySystem(id, parentId, name, display, integrity, powerReq, output,
 }
 PrimarySystem.prototype = Object.create(System.prototype);
 
-function Bridge(id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost){
-	PrimarySystem.call(this, id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost);
+function Bridge(id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost, boostEffect){
+	PrimarySystem.call(this, id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost, boostEffect);
 
 	this.getBoostDiv = function(){
 		return false;
@@ -760,8 +769,8 @@ function Bridge(id, parentId, name, display, integrity, powerReq, output, effien
 
 Bridge.prototype = Object.create(PrimarySystem.prototype);
 				
-function Reactor(id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost){
-	PrimarySystem.call(this, id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost);
+function Reactor(id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost, boostEffect){
+	PrimarySystem.call(this, id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost, boostEffect);
 
 	this.getUnusedPower = function(){
 		return this.getOutput();
@@ -784,17 +793,16 @@ function Reactor(id, parentId, name, display, integrity, powerReq, output, effie
 		}
 		return use;
 	}
-
 }
 Reactor.prototype = Object.create(PrimarySystem.prototype);
 
-function Engine(id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost){
-	PrimarySystem.call(this, id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost);
+function Engine(id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost, boostEffect){
+	PrimarySystem.call(this, id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost, boostEffect);
 }
 Engine.prototype = Object.create(PrimarySystem.prototype);
 				
-function LifeSupport(id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost){
-	PrimarySystem.call(this, id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost);
+function LifeSupport(id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost, boostEffect){
+	PrimarySystem.call(this, id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost, boostEffect);
 	this.display = "Life Support";
 	
 	this.getBoostDiv = function(){
@@ -803,14 +811,13 @@ function LifeSupport(id, parentId, name, display, integrity, powerReq, output, e
 }
 LifeSupport.prototype = Object.create(PrimarySystem.prototype);
 				
-function Sensor(id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost){
-	PrimarySystem.call(this, id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost);
+function Sensor(id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost, boostEffect){
+	PrimarySystem.call(this, id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost, boostEffect);
 }
 Sensor.prototype = Object.create(PrimarySystem.prototype);
 
-
-function Weapon(id, parentId, name, display, exploSize, animColor, integrity, powerReq, output, effiency, maxBoost, fc, minDmg, maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){
-	System.call(this, id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost);
+function Weapon(id, parentId, name, display, exploSize, animColor, integrity, powerReq, output, effiency, maxBoost, boostEffect, fc, minDmg, maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){
+	System.call(this, id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost, boostEffect);
 	this.exploSize = exploSize;
 	this.animColor = animColor;
 	this.weapon = true;
@@ -1095,7 +1102,7 @@ function Weapon(id, parentId, name, display, exploSize, animColor, integrity, po
 			if (this.powers[i].turn == game.turn){
 				switch (this.powers[i].type){
 					case 1:
-						mod = mod + 0.25;
+						mod = mod + this.boostEffect.value / 100;
 						break;
 					default:
 						break; 
@@ -1122,7 +1129,7 @@ function Weapon(id, parentId, name, display, exploSize, animColor, integrity, po
 			if (this.powers[i].turn == game.turn){
 				switch (this.powers[i].type){
 					case 1:
-						mod = mod + 0.25;
+						mod = mod + this.boostEffect.value / 100;
 						break;
 					default:
 						break; 
@@ -1134,9 +1141,8 @@ function Weapon(id, parentId, name, display, exploSize, animColor, integrity, po
 }
 Weapon.prototype = Object.create(System.prototype); 
 
-function Particle(id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, fc, minDmg,maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){
-	Weapon.call(this, id, parentId, name, display, exploSize, animColor, integrity, powerReq, output, effiency, maxBoost, fc, minDmg,maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4);	
-	this.type = "particle";
+function Particle(id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, boostEffect, fc, minDmg,maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){
+	Weapon.call(this, id, parentId, name, display, exploSize, animColor, integrity, powerReq, output, effiency, maxBoost, boostEffect, fc, minDmg,maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4);	
 	this.animation = "projectile";
 	this.projSize = projSize;
 	this.projSpeed = projSpeed;
@@ -1144,10 +1150,10 @@ function Particle(id, parentId, name, display, exploSize, animColor, projSize, p
 
 	this.getAnimation = function(fire){
 		allAnims = [];
-		var gunInterval = 50;
+		var gunInterval = this.shots * 13;
 		var shotInterval = 10;
 
-		if (fire.shooter instanceof Flight){
+		if (fire.shooter.flight){
 			gunInterval = 10;
 		}
 		
@@ -1175,8 +1181,10 @@ function Particle(id, parentId, name, display, exploSize, animColor, projSize, p
 					tx = fire.target.x + range(fire.target.size * 0.5 * -1, fire.target.size * 0.5);
 					ty = fire.target.y + range(fire.target.size * 0.5 * -1, fire.target.size * 0.5);
 				}
+				var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, this.projSpeed, hit);
+					shotAnim.n = 0 - (j*gunInterval + k*shotInterval);
 
-				shotAnim = {
+				/*shotAnim = {
 					ox: ox,
 					oy: oy,
 					tx: tx,
@@ -1186,7 +1194,7 @@ function Particle(id, parentId, name, display, exploSize, animColor, projSize, p
 					v: new Vector({x: ox, y: oy}, {x: tx, y: ty}),
 					explo: explo,
 					animated: false
-				}
+				}*/
 				gunAnims.push(shotAnim);
 			}
 			allAnims.push(gunAnims)
@@ -1196,23 +1204,20 @@ function Particle(id, parentId, name, display, exploSize, animColor, projSize, p
 }
 Particle.prototype = Object.create(Weapon.prototype);
 
-function Matter(id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, fc, minDmg,maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){
-	Particle.call(this, id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, fc, minDmg, maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4);	
-	this.type = "matter";
+function Matter(id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, boostEffect, fc, minDmg,maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){
+	Particle.call(this, id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, boostEffect,  fc, minDmg, maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4);	
 	this.priority = 6;
 }
 Matter.prototype = Object.create(Particle.prototype);
 
-function EM(id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, fc, minDmg,maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){
-	Particle.call(this, id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, fc, minDmg, maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4);	
-	this.type = "EM";
+function EM(id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, boostEffect, fc, minDmg,maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){
+	Particle.call(this, id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, boostEffect,  fc, minDmg, maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4);	
 }
 EM.prototype = Object.create(Particle.prototype);
 
-function Pulse(id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, fc, minDmg,maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){
-	Particle.call(this, id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, fc, minDmg, maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4);	
-	this.type = "Pulse";
-
+function Pulse(id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, boostEffect, fc, minDmg,maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){
+	Particle.call(this, id, parentId, name, display, exploSize, animColor, projSize, projSpeed, integrity, powerReq, output, effiency, maxBoost, boostEffect,  fc, minDmg, maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4);	
+	
 	this.getAnimation = function(fire){
 		allAnims = [];
 		var gunInterval = 50;
@@ -1226,34 +1231,35 @@ function Pulse(id, parentId, name, display, exploSize, animColor, projSize, proj
 			var ty;
 			var dist;
 			var explo = false;
-			var hasHit = false;
+			var hit = false;
 			if (fire.hits[j] >= 1){
-				hasHit = true;
-				explo = {t: [0, 80], s: this.exploSize};
+				hit = true;
 			}
 			else {
-				tx = fire.target.x + range(fire.target.size * -1, fire.target.size * 1); // salvo missed
-				ty = fire.target.y + range(fire.target.size * -1, fire.target.size * 1);
+				tx = fire.target.x + range(fire.target.size * -0.7, fire.target.size * 0.7); // salvo missed7
+				ty = fire.target.y + range(fire.target.size * -0.7, fire.target.size * 0.7);
 			}
 			
 			for (var k = 0; k < this.shots; k++){
-				if (hasHit){
-					tx = fire.target.x + range(fire.target.size * -0.1, fire.target.size * 0.1); // salvo hit
-					ty = fire.target.y + range(fire.target.size * -0.1, fire.target.size * 0.1);
-					explo = {t: [0, 80], s: this.exploSize};
+				if (hit){
+					tx = fire.target.x + range(fire.target.size * -0.07, fire.target.size * 0.07); // salvo hit
+					ty = fire.target.y + range(fire.target.size * -0.07, fire.target.size * 0.07);
 				}
+				var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, this.projSpeed/2, hit);
+					shotAnim.n = 0 - (j*gunInterval + k*shotInterval);
 
+				/*}
 				shotAnim = {
 					ox: ox,
 					oy: oy,
 					tx: tx,
 					ty: ty,
 					t: [0 - (j*gunInterval + k*shotInterval), getDistance({x: ox, y: oy}, {x: tx, y: ty}) / this.projSpeed / speedMod],
-					hit: hasHit,
+					hit: hit,
 					v: new Vector({x: ox, y: oy}, {x: tx, y: ty}),
 					explo: explo,
 					animated: false
-				}
+				}*/
 				gunAnims.push(shotAnim);
 			}
 			allAnims.push(gunAnims)
@@ -1263,9 +1269,8 @@ function Pulse(id, parentId, name, display, exploSize, animColor, projSize, proj
 }
 Pulse.prototype = Object.create(Particle.prototype);
 
-function Laser(id, parentId, name, display, exploSize, rakeTime, animColor, beamWidth, integrity, powerReq, output, effiency, maxBoost, fc, minDmg,maxDmg, optRange, dmgDecay, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){
-	Weapon.call(this, id, parentId, name, display, exploSize, animColor, integrity, powerReq, output, effiency, maxBoost, fc, minDmg,maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4);	
-	this.type = "laser";
+function Laser(id, parentId, name, display, exploSize, rakeTime, animColor, beamWidth, integrity, powerReq, output, effiency, maxBoost, boostEffect, fc, minDmg,maxDmg, optRange, dmgDecay, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){
+	Weapon.call(this, id, parentId, name, display, exploSize, animColor, integrity, powerReq, output, effiency, maxBoost, boostEffect, fc, minDmg,maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4);	
 	this.animation = "beam";
 	this.optRange = optRange;
 	this.dmgDecay = dmgDecay;
@@ -1274,18 +1279,15 @@ function Laser(id, parentId, name, display, exploSize, rakeTime, animColor, beam
 	this.priority = 5;
 
 	this.getAnimation = function(fire){
-		console.log(fire);
 		allAnims = [];
 		var grouping = 1;
 		var delay = 30;
 		
 		for (var j = 0; j < fire.guns; j++){
 			var gunAnims = [];
-			var ox = fire.shooter.x + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2); // WEAPON origin
-			var oy = fire.shooter.y + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2);
 			
 			for (var k = 0; k < this.shots; k++){
-				var tx; var ty; var a; var tb;
+				var tx; var ty; var tb;
 				var hit = false;
 
 				if (fire.hits[j] > k){
@@ -1295,31 +1297,28 @@ function Laser(id, parentId, name, display, exploSize, rakeTime, animColor, beam
 				if (hit){ // shot hit
 					tx = fire.target.x + range(-fire.target.size * 0.45, fire.target.size * 0.45); // BEAM swipe begin on HIT
 					ty = fire.target.y + range(-fire.target.size * 0.45, fire.target.size * 0.45);
-					a = getAngleFromTo( {x: tx, y: ty}, {x: fire.target.x, y: fire.target.y} );
+					var a = getAngleFromTo( {x: tx, y: ty}, {x: fire.target.x, y: fire.target.y} );
 					a = addToDirection(a, range(-10, 10));
-					tb = getPointInDirection(fire.weapon.rakeTime/2, a, tx, ty); // BEAM swipe END on HIT	
+					tb = getPointInDirection(fire.weapon.rakeTime/4, a, tx, ty); // BEAM swipe END on HIT	
 				}
 				else { // shot miss
-					tx = fire.target.x + range(-fire.target.size * 0.6, fire.target.size * 0.6); // BEAM swipe begin on MISS
-					ty = fire.target.y + range(-fire.target.size * 0.6, fire.target.size * 0.6);
-					a = getAngleFromTo( {x: tx, y: ty}, {x: fire.target.x, y: fire.target.y} );
-					a = addToDirection(a, range(-60, 60));
-					tb = getPointInDirection(fire.weapon.rakeTime/2, a, tx, ty); // BEAM swipe END on HIT	
+					tx = fire.target.x + range(-fire.target.size * 0.7, fire.target.size * 0.7); // BEAM swipe begin on MISS
+					ty = fire.target.y + range(-fire.target.size * 0.7, fire.target.size * 0.7);
+					var a = getAngleFromTo( {x: tx, y: ty}, {x: fire.target.x, y: fire.target.y} );
+					a = addToDirection(a, range(-40, 40));
+					tb = getPointInDirection(fire.weapon.rakeTime/3, a, tx, ty); // BEAM swipe END on MISS	
 				}
 
-				shotAnim = {
-					ox: ox,
-					oy: oy,
-					tax: tx,
-					tay: ty,
-					tbx: tb.x,
-					tby: tb.y,
-					t: [0 - (range(-5, 5)) - (Math.floor(j / grouping) * delay), fire.weapon.rakeTime],
-					hit: hit,
-					v: new Vector({x: tx, y: ty}, {x: tb.x, y: tb.y}),
-					explo: false,
-					animated: false
-				}
+				var shotAnim = new BeamVector(
+					{x: fire.shooter.x + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2), 
+					y: fire.shooter.y + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2)},
+					{x: tx, y: ty},
+					{x: tb.x, y: tb.y}, 
+					0 - (range(-5, 5)) - (Math.floor(j / grouping) * delay),
+					fire.weapon.rakeTime,
+					hit
+				);
+
 				gunAnims.push(shotAnim);
 			}
 			allAnims.push(gunAnims)
@@ -1364,9 +1363,12 @@ function Laser(id, parentId, name, display, exploSize, rakeTime, animColor, beam
 Laser.prototype = Object.create(Weapon.prototype);
 
 function Launcher(id, parentId, name, display, ammo, launchRate, integrity, powerReq, output, effiency, maxBoost, reload, arc1, arc2, arc3, arc4){
-	Weapon.call(this, id, parentId, name, display, 0, 0, integrity, powerReq, output, effiency, maxBoost, 0, 0, 0, 0, 0, 1, reload, arc1, arc2, arc3, arc4);	
+	
+	Weapon.call(this, id, parentId, name, display, 0, 0, integrity, powerReq, output, effiency, maxBoost, 0, 0, 0, 0, 0, 0, 1, reload, arc1, arc2, arc3, arc4);	
+	         // Weapon(id, parentId, name, display, exploSize, animColor, integrity, powerReq, output, effiency, maxBoost, boostEffect, fc, minDmg, maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){
+
 	this.effiency = launchRate;
-	this.type = "ballistic";
+	this.type = "Ballistic";
 	this.animation = "ballistic";
 	this.priority = 6;
 	this.loads = [];
@@ -1399,6 +1401,11 @@ function Launcher(id, parentId, name, display, ammo, launchRate, integrity, powe
 			}
 		}
 	}
+
+	this.getEffiency = function(){
+		return this.effiency;
+	}
+
 
 	this.select = function(e){
 		console.log(this);

@@ -6,6 +6,8 @@ class Ship {
 	public $shipType;
 	public $userid;
 	public $available;
+	public $status;
+	public $destroyed;
 
 	public $name;
 	public $faction;
@@ -23,14 +25,16 @@ class Ship {
 	public $actions = array();
 	public $structures = array();
 
+	public $hitTable;
+
 	public $hitChance;
 
-	public $destroyed = false;
-
-	function __construct($id, $userid, $available){
+	function __construct($id, $userid, $available, $status, $destroyed){
 		$this->id = $id;
 		$this->userid = $userid;
 		$this->available = $available;
+		$this->status = $status;
+		$this->destroyed = $destroyed;
 		
 		$this->addStructures();
 		$this->addPrimary();
@@ -211,6 +215,7 @@ class Ship {
 		for ($i = 0; $i < sizeof($this->primary->damages); $i++){
 			if ($this->primary->damages[$i]->destroyed){
 				$this->destroyed = true;
+				$this->status = "destroyed";
 				return true;
 			}
 		}
@@ -221,40 +226,41 @@ class Ship {
 		Debug::log("resolveFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
 
 		if ($this->isDestroyed()){
-			return false;
+			$fire->resolved = -1;
 		}
+		else {
+			$fire->dist = $this->getHitDist($fire);
+			$fire->angleIn = $this->getHitAngle($fire);
+			$fire->hitSection = $this->getHitSection($fire);
+			$fire->req = ($this->getHitChance($fire) / 100 * $fire->weapon->getFireControlMod($fire)) - $fire->weapon->getAccLoss($fire->dist);
+			//Debug::log("normal hitangle from ship #".$fire->shooter->id." to target #".$this->id." : ".$fire->angleIn.", picking section: ".$fire->hitSection);
+			$fire->weapon->rollForHit($fire);
 
-		$fire->dist = $this->getHitDist($fire);
-		$fire->angleIn = $this->getHitAngle($fire);
-		$fire->hitSection = $this->getHitSection($fire);
-		$fire->req = ($this->getHitChance($fire) / 100 * $fire->weapon->getFireControlMod($fire)) - $fire->weapon->getAccLoss($fire->dist);
-		//Debug::log("normal hitangle from ship #".$fire->shooter->id." to target #".$this->id." : ".$fire->angleIn.", picking section: ".$fire->hitSection);
-		$fire->weapon->rollForHit($fire);
-
-		if ($fire->hits){
-			$fire->weapon->doDamage($fire);
+			if ($fire->hits){
+				$fire->weapon->doDamage($fire);
+			}
+			$fire->resolved = 1;
 		}
-		$fire->resolved = 1;
-		return;
 	}
 
 	public function resolveBallisticFireOrder($fire){
 		Debug::log("resolveBallisticFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".$fire->weaponid);
 
 		if ($this->isDestroyed()){
-			return false;
+			$fire->resolved = -1;
 		}
+		else {
+			$fire->dist = 0;
+			$fire->angleIn = $this->getBallisticHitAngle($fire);
+			$fire->hitSection = $this->getHitSection($fire);
+			$fire->req = $fire->weapon->getFireControlMod($fire);
+			$fire->weapon->rollForHit($fire);
 
-		$fire->dist = 0;
-		$fire->angleIn = $this->getBallisticHitAngle($fire);
-		$fire->hitSection = $this->getHitSection($fire);
-		$fire->req = $fire->weapon->getFireControlMod($fire);
-		$fire->weapon->rollForHit($fire);
-
-		if ($fire->hits){
-			$fire->weapon->doDamage($fire);
+			if ($fire->hits){
+				$fire->weapon->doDamage($fire);
+			}
+			$fire->resolved = 1;
 		}
-		$fire->resolved = 1;
 	}
 
 	public function getHitSection($fire){
@@ -392,7 +398,6 @@ class Ship {
 	public function getHitAngle($fire){
 		$tPos = $this->getCurrentPosition();
 		$sPos = $fire->shooter->getCurrentPosition();
-
 		$angle = Math::getAngle($tPos->x, $tPos->y, $sPos->x, $sPos->y);
 		return round(Math::addAngle($this->facing, $angle));
 	}
@@ -433,7 +438,6 @@ class Ship {
 	}
 
 	public function getSystemById($id){
-		//debug::log("looking for :".$id);
 		if ($id == -1){
 			return $this->primary;
 		}
@@ -445,10 +449,24 @@ class Ship {
 			}
 			for ($i = 0; $i < sizeof($this->structures); $i++){
 				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-					//debug::log("now :".$this->structures[$i]->systems[$j]->id);
 					if ($this->structures[$i]->systems[$j]->id == $id){
 						return $this->structures[$i]->systems[$j];
 					}
+				}
+			}
+		}
+	}
+
+	public function getSystemByName($name){
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+			if ($this->primary->systems[$i]->name == $name){
+				return $this->primary->systems[$i];
+			}
+		}
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				if ($this->structures[$i]->systems[$j]->name == $name){
+					return $this->structures[$i]->systems[$j];
 				}
 			}
 		}
@@ -523,115 +541,100 @@ class Ship {
 		}
 		return $crits;
 	}
+
+	public function getHitTreshold($system){
+		return $this->hitTable[$system->name];
+	}
 }
 
 
 class UltraHeavy extends Ship {
 	public $shipType = "UltraHeavy";
 	
-	function __construct($id, $userid, $available){
-        parent::__construct($id, $userid, $available);
-	}
-
-	public function getHitTreshold($system){
-		switch ($system->name){
-			case "Bridge": return 0.15;
-			case "Engine": return 0.4;
-			case "LifeSupport": return 0.6;
-			case "Sensor": return 0.7;
-			case "Reactor": return 0.6;
-		}
+	function __construct($id, $userid, $available, $status, $destroyed){
+        parent::__construct($id, $userid, $available, $status, $destroyed);
+		$this->hitTable = array(
+			"Bridge" => 0.25,
+			"Engine" => 0.4,
+			"LifeSupport" => 0.6,
+			"Sensor" => 0.7,
+			"Reactor" => 0.6
+		);
 	}
 }
 
 class SuperHeavy extends Ship {
 	public $shipType = "SuperHeavy";
 	
-	function __construct($id, $userid, $available){
-        parent::__construct($id, $userid, $available);
-	}
-
-	public function getHitTreshold($system){
-		switch ($system->name){
-			case "Bridge": return 0.25;
-			case "Engine": return 0.5;
-			case "Lifesupport": return 0.6;
-			case "Sensor": return 0.7;
-			case "Reactor": return 0.7;
-		}
+	function __construct($id, $userid, $available, $status, $destroyed){
+        parent::__construct($id, $userid, $available, $status, $destroyed);
+		$this->hitTable = array(
+			"Bridge" => 0.35,
+			"Engine" => 0.5,
+			"LifeSupport" => 0.6,
+			"Sensor" => 0.75,
+			"Reactor" => 0.7
+		);
 	}
 }
 
 class Heavy extends Ship {
 	public $shipType = "Heavy";
 	
-	function __construct($id, $userid, $available){
-        parent::__construct($id, $userid, $available);
-	}
-
-	public function getHitTreshold($system){
-		switch ($system->name){
-			case "Bridge": return 0.35;
-			case "Engine": return 0.6;
-			case "LifeSupport": return 0.7;
-			case "Sensor": return 0.8;
-			case "Reactor": return 0.7;
-		}
+	function __construct($id, $userid, $available, $status, $destroyed){
+        parent::__construct($id, $userid, $available, $status, $destroyed);
+		$this->hitTable = array(
+			"Bridge" => 0.45,
+			"Engine" => 0.6,
+			"LifeSupport" => 0.7,
+			"Sensor" => 0.85,
+			"Reactor" => 0.7
+		);
 	}
 }
 
 class Medium extends Ship {
 	public $shipType = "Medium";
 
-	function __construct($id, $userid, $available){
-        parent::__construct($id, $userid, $available);
+	function __construct($id, $userid, $available, $status, $destroyed){
+        parent::__construct($id, $userid, $available, $status, $destroyed);
+		$this->hitTable = array(
+			"Bridge" => 0.55,
+			"Engine" => 0.6,
+			"LifeSupport" => 0.8,
+			"Sensor" => 0.9,
+			"Reactor" => 0.7
+		);
 	}
-
-	public function getHitTreshold($system){
-		switch ($system->name){
-			case "Bridge": return 0.6;
-			case "Engine": return 0.7;
-			case "LifeSupport": return 0.8;
-			case "Sensor": return 0.9;
-			case "Reactor": return 0.7;
-		}
-	}
-	
 }
 
 class Light extends Ship {
 	public $shipType = "Light";
 	
-	function __construct($id, $userid, $available){
-        parent::__construct($id, $userid, $available);
-	}
-
-	public function getHitTreshold($system){
-		switch ($system->name){
-			case "Bridge": return 0.8;
-			case "Engine": return 0.8;
-			case "LifeSupport": return 1;
-			case "Sensor": return 1;
-			case "Reactor": return 0.8;
-		}
+	function __construct($id, $userid, $available, $status, $destroyed){
+        parent::__construct($id, $userid, $available, $status, $destroyed);
+		$this->hitTable = array(
+			"Bridge" => 0.7,
+			"Engine" => 0.7,
+			"LifeSupport" => 1,
+			"Sensor" => 1,
+			"Reactor" => 0.8
+		);
 	}
 }
 
 class SuperLight extends Ship {
 	public $shipType = "SuperLight";
 	
-	function __construct($id, $userid, $available){
-        parent::__construct($id, $userid, $available);
-	}
-
-	public function getHitTreshold($system){
-		switch ($system->name){
-			case "Bridge": return 1;
-			case "Engine": return 1;
-			case "LifeSupport": return 1;
-			case "Sensor": return 1;
-			case "Reactor": return 0.9;
-		}
+	function __construct($id, $userid, $available, $status, $destroyed){
+        parent::__construct($id, $userid, $available, $status, $destroyed);
+		$this->hitTable = array(
+			"Bridge" => 1,
+			"Engine" => 1,
+			"LifeSupport" => 1,
+			"Sensor" => 1,
+			"Reactor" => 0.9
+		);
 	}
 }
 

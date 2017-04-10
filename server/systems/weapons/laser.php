@@ -9,6 +9,7 @@ class Laser extends Weapon {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $destroyed = 0){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+		$this->boostEffect = new Effect("Damage", 25);
 	}
 	
 	public function getDmgPenaltyRange($fire){
@@ -178,23 +179,23 @@ class NeutronLaser extends Laser {
 	public $powerReq = 6;
 	public $rakes = 2;
 	public $effiency = 3;
-	public $maxBoost = 2;
+	public $maxBoost = 1;
 	public $fc = array(0 => 130, 1 => 65);
 	public $mass = 26;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+        $this->boostEffect->value = 20;
 	}
 }
-
 
 class NeutronAccelerator extends Laser {
 	public $name = "NeutronAccelerator";
 	public $display = "Neutron Accelerator";
-	public $rakeTime = 20;
+	public $rakeTime = 60;
 	public $animColor = "yellow";
 	public $beamWidth = 2;
-	public $exploSize = 4;
+	public $exploSize = 5;
 	public $minDmg = 58;
 	public $maxDmg = 72;
 	public $optRange = 400;
@@ -202,15 +203,16 @@ class NeutronAccelerator extends Laser {
 	public $accDecay = 100;
 	public $shots = 1;
 	public $reload = 1;
-	public $powerReq = 4;
+	public $powerReq = 5;
 	public $rakes = 1;
 	public $effiency = 3;
-	public $maxBoost = 1;
-	public $fc = array(0 => 110, 1 => 85);
+	public $maxBoost = 2;
+	public $fc = array(0 => 125, 1 => 80);
 	public $mass = 23;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+        $this->boostEffect->value = 35;
 	}
 }
 

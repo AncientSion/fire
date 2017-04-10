@@ -9,8 +9,8 @@ class WhiteStar extends Light {
 	public $profile = array(0.95, 1.05);
 	public $mass = 2500;
 
-	function __construct($id, $userid, $available){		
-        parent::__construct($id, $userid, $available);
+	function __construct($id, $userid, $available, $status, $destroyed){		
+        parent::__construct($id, $userid, $available, $status, $destroyed);
 	}
 
 	public function addStructures(){
@@ -24,12 +24,12 @@ class WhiteStar extends Light {
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 425, 25);
 		$right->systems[] = new FusionPulsar($this->getId(), $this->id, 0, 60);
-		$right->systems[] = new EMPulseCannon($this->getId(), $this->id, 180, 360);
+		$right->systems[] = new EMPulseCannon($this->getId(), $this->id, 0, 360);
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 425, 25);
 		$left->systems[] = new FusionPulsar($this->getId(), $this->id, 300, 360);
-		$left->systems[] = new EMPulseCannon($this->getId(), $this->id, 0, 180);
+		$left->systems[] = new EMPulseCannon($this->getId(), $this->id, 0, 360);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -40,7 +40,9 @@ class WhiteStar extends Light {
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 825);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 60);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 60, 110, 5);
+		$e = new Engine($this->getId(), $this->id, 60, 110, 5);
+		$e->boostEffect->value = 50;
+		$this->primary->systems[] = $e;
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 60);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 60);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 60, $this->getPowerReq());

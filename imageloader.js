@@ -25,6 +25,9 @@ window.preLoadBallistics = function(){
 
 
 window.preloadShips = function(){
+	window.shipImages.battlecrab = new Image();
+	window.shipImages.battlecrab.src = "shipIcons/omega.png";
+
 	window.shipImages.omega = new Image();
 	window.shipImages.omega.src = "shipIcons/omega.png";
 
@@ -95,4 +98,6 @@ window.preLoadFactions = function(){
 	window.factionImages.centauriFaction.src = "factionIcons/centauri.png";
 	window.factionImages.minbariFaction = new Image();
 	window.factionImages.minbariFaction.src = "factionIcons/minbari.png";
+	window.factionImages.shadowFaction = new Image();
+	window.factionImages.shadowFaction.src = "factionIcons/minbari.png";
 }

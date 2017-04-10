@@ -267,7 +267,7 @@ else {
 		window.res = {x:200, y: 200};
 		initPreviewCanvas();
 
-		var icons = [factionImages.earthFaction, factionImages.centauriFaction, factionImages.minbariFaction];
+		var icons = [factionImages.earthFaction, factionImages.centauriFaction, factionImages.minbariFaction, factionImages.shadowFaction];
 
 		var table = document.createElement("table"); 
 			table.className = "factionUpperTable";
@@ -278,6 +278,7 @@ else {
 			th.innerHTML = "Assemble Your Fleet"; tr.appendChild(th); table.appendChild(tr);
 
 		for (var i = 0; i < factions.length; i++){
+			console.log(factions[i]);
 			var tr = document.createElement("tr");
 				$(tr).data("row", i);
 				$(tr).data("faction", factions[i]);

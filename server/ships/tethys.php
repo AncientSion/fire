@@ -9,8 +9,8 @@ class Tethys extends Light {
 	public $profile = array(0.95, 1.05);
 	public $mass = 1200;
 
-	function __construct($id, $userid, $available){
-        parent::__construct($id, $userid, $available);
+	function __construct($id, $userid, $available, $status, $destroyed){
+        parent::__construct($id, $userid, $available, $status, $destroyed);
 	}
 
 	public function addStructures(){

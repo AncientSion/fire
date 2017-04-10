@@ -9,8 +9,8 @@ class Hyperion extends Heavy {
 	public $profile = array(0.90, 1.10);
 	public $mass = 8000;
 
-	function __construct($id, $userid, $available){
-        parent::__construct($id, $userid, $available);
+	function __construct($id, $userid, $available, $status, $destroyed){
+        parent::__construct($id, $userid, $available, $status, $destroyed);
 	}
 
 	public function addStructures(){

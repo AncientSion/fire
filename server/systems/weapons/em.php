@@ -17,19 +17,27 @@ class EM extends Weapon {
 		$negation; $armourDmg; $structDmg; $totalDmg; $hitSystem; $remInt; $destroyed;
 		
 		for ($i = 0; $i < $fire->shots; $i++){
-			$totalDmg = floor(($this->getBaseDamage($fire) + $this->getBoostLevel()*2) * $this->getDamageMod($fire));
-			$hitSystem = $fire->target->getHitSystem($fire);
-			if ($hitSystem->destroyed){Debug::log("unit already destroyed"); return;}
+			$totalDmg = floor($this->getBaseDamage($fire) * (1+$this->getBoostLevel($fire->turn)*0.2) * $this->getDamageMod($fire));
+			$hitSystem = $fire->target->getHitSystem($fire); Debug::log("EM hitting: ".$hitSystem->id);
+			if ($hitSystem->destroyed){Debug::log("SYSTEM already destroyed, RETURN"); return;}
 			$negation = $fire->target->getStructureById($fire->hitSection)->getRemainingNegation($fire) * $hitSystem->getArmourMod();
+			//Debug::log("angle: ".$fire->angleIn);
 
-			if ($totalDmg > $negation){
-				Debug::log("totalDmg > negation");
+			if (($totalDmg > $negation && mt_rand(0, 1)) || ($totalDmg > $negation/2 && mt_rand(0, 3) == 3)){
+				//Debug::log("doing: ".$totalDmg." vs negation: ".$negation." - full penetration + lucky");
+				if ($fire->target->flight){
+					$hitSystem->crits[] = new Crit(sizeof($hitSystem->crits)+1, $hitSystem->parentId, $hitSystem->id, $fire->turn, "disengaged", -1, 1);
+					$hitSystem->destroyed = true;
+				}
+				else if ($hitSystem->weapon && !$hitSystem->isDisabled()){
+					$hitSystem->crits[] = new Crit(sizeof($hitSystem->crits)+1, $hitSystem->parentId, $hitSystem->id, $fire->turn, "disabled", 1, 1);
+				}
+				else {
+					$fire->getSystemByName("Reactor")->crits[] = new Crit(sizeof($hitSystem->crits)+1, $hitSystem->parentId, $hitSystem->id, $fire->turn, "drain1", 1, 1);
+				}
 			}
-			else if ($totalDmg > $negation/2 && mt_rand(0, 1) == 1){
-				Debug::log("totalDmg > negation/2 and mt_rand()");
-			}
-			else {
-				Debug::log("cant penetrate");
+			else { // no pen, no effect
+				Debug::log("doing: ".$totalDmg." vs negation: ".$negation." - no pen, no effect");
 			}
 		}
 		return;
@@ -49,21 +57,23 @@ class EMPulseCannon extends EM {
 	public $name = "EMPulseCannon";
 	public $display = "EM Pulse Cannon";
 	public $minDmg = 6;
-	public $maxDmg = 10;
+	public $maxDmg = 9;
 	public $accDecay = 170;
-	public $shots = 1;
+	public $shots = 3;
 	public $animColor = "lightBlue";
 	public $projSize = 2;
-	public $projSpeed = 6;
-	public $exploSize = 4;
+	public $projSpeed = 8;
+	public $exploSize = 7;
 	public $reload = 1;
 	public $fc = array(0 => 85, 1 => 220);
 	public $mass = 14;
-	public $effiency = 1;
-	public $maxBoost = 10;
+	public $effiency = 2;
+	public $maxBoost = 3;
+	public $powerReq = 4;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+		$this->boostEffect = new Effect("Damage", 20);
 	}
 }
 

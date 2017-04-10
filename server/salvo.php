@@ -37,7 +37,7 @@ class Mini extends Ship {
 	}
 
 	public function addCritDB($crits){
-	for ($j = 0; $j < sizeof($crits); $j++){
+		for ($j = 0; $j < sizeof($crits); $j++){
 			for ($k = 0; $k < sizeof($this->structures); $k++){
 				if ($this->structures[$k]->id == $crits[$j]->systemid){
 					$this->structures[$k]->crits[] = $crits[$j];
@@ -49,17 +49,11 @@ class Mini extends Ship {
 	}
 
 	public function setState(){
+		//Debug::log("setting state for #".$this->id);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$this->structures[$i]->setState();
 		}
-		$destroyed = true;
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if (!$this->structures[$i]->destroyed){
-				$destroyed = false;
-				break;
-			}
-		}
-		$this->destroyed = $destroyed;
+		$this->isDestroyed();
 	}
 
 	public function applyDamage($dmg){
@@ -80,22 +74,25 @@ class Mini extends Ship {
 
 	public function isDestroyed(){
 		if ($this->destroyed){
+			//Debug::log(" -> destroyed");
 			return true;
 		}
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (! $this->structures[$i]->isDestroyed()){
+				//Debug::log(" -> not destroyed");
 				return false;
 			}
 		}
+		//Debug::log(" -> destroyed");
 		$this->destroyed = true;
+		if ($this->flight){$this->status = "destroyed";}
 		return true;
 	}
 
 	public function createFireOrders($gameid, $turn, $targets, $odds){
 		$fires = array();
 		for ($j = 0; $j < sizeof($this->structures); $j++){
-			if (!$this->structures[$j]->isDestroyed()){
-				
+			if (!$this->structures[$j]->isDestroyed()){				
 				$fires[] = array(
 					"id" => -1,
 					"gameid" => $gameid,
@@ -132,13 +129,9 @@ class Mini extends Ship {
 }
 
 class Salvo extends Mini {
-	public $id;
-	public $userid;
 	public $targetid;
 	public $name;
-	public $status;
 	public $amount;
-	public $destroyed;
 	public $salvo = true;
 	public $target;
 	public $index = 0;
@@ -225,7 +218,7 @@ class Salvo extends Mini {
 		
 		if ($this->isDestroyed()){
 			Debug::log("skipping FireOrder - target entirely destroyed id: #".$fire->target->id);
-			$fire->req = -1;
+			$fire->resolved = -1;
 		}
 		else {
 			$fire->dist = $this->getInterceptHitDist($fire);
@@ -237,8 +230,8 @@ class Salvo extends Mini {
 			if ($fire->hits){
 				$fire->weapon->doDamage($fire);
 			}
+			$fire->resolved = 1;
 		}
-		$fire->resolved = 1;
 	}
 
 	public function getHitDist($fire){
@@ -264,6 +257,7 @@ class Ammo extends Weapon {
 	public $destroyed = false;
 	public $fc = array();
 	public $cost;
+	public $exploSize = 10;
 
 	function __construct($parentId, $id){
 		$this->parentId = $parentId;

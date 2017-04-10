@@ -133,9 +133,7 @@ function getIntercept(src, dst, vector, mod){
 	// Find smallest positive solution
 	var sol = null;
 
-	if (src instanceof Ship){
-		console.log(ts);
-	}
+	//if (src instanceof Ship){console.log(ts);}
 
 	if (ts) {
 		var t0 = ts[0], t1 = ts[1];
@@ -177,7 +175,7 @@ function getProjIntercept(src, dst, vector, mod){
 	if (ts) {
 		var t0 = ts[0], t1 = ts[1];
 		var t = Math.min(t0, t1);
-		console.log(ts);
+		//console.log(ts);
 		if (t < 0) t = Math.max(t0, t1);  
 		//t = range(1, t);
 

@@ -18,6 +18,7 @@ class System {
 	public $effiency = 0;
 	public $maxBoost = 0;
 	public $mass;
+	public $boostEffect = 0;
 
 	function __construct($id, $parentId, $output = 0, $destroyed = 0){
 		$this->id = $id;
@@ -52,6 +53,14 @@ class System {
 			}
 		}
 		return false;
+	}
+
+	public function isDisabled($turn){
+		if (!sizeof($this->crits)){
+			return false;
+		} else if ($this->crits[sizeof($this->crits)-1]->type == "disabled" && $this->crits[sizeof($this->crits)-1]->turn == $turn){
+			return true;
+		} return false;
 	}
 
 	public function getCurrentIntegrity(){
@@ -153,6 +162,7 @@ class PrimarySystem extends System {
 		$this->mass = $mass;
 		$this->integrity = $mass;
 		$this->effiency = $effiency;
+		$this->boostEffect = new Effect("Output", 10);
 	}
 
 	public function getHitChance(){

@@ -9,8 +9,8 @@ class Primus extends Heavy {
 	public $profile = array(0.87, 1.13);
 	public $mass = 12500;
 
-	function __construct($id, $userid, $available){
-        parent::__construct($id, $userid, $available);
+	function __construct($id, $userid, $available, $status, $destroyed){
+        parent::__construct($id, $userid, $available, $status, $destroyed);
 	}
 
 	public function addStructures(){

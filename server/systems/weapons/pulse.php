@@ -83,11 +83,11 @@ class LightPulseCannon extends Pulse {
 	public $display = "32mm Pulse Cannon";
 	public $minDmg = 18;
 	public $maxDmg = 24;
-	public $accDecay = 140;
+	public $accDecay = 160;
 	public $shots = 3;
 	public $animColor = "brown";
 	public $projSize = 2;
-	public $projSpeed = 8;
+	public $projSpeed = 11;
 	public $exploSize = 3;
 	public $reload = 1;
 	public $fc = array(0 => 100, 1 => 180);
@@ -101,16 +101,16 @@ class LightPulseCannon extends Pulse {
 class MediumPulseCannon extends Pulse {
 	public $name = "MediumPulseCannon";
 	public $display = "58mm Pulse Cannon";
-	public $minDmg = 26;
-	public $maxDmg = 34;
-	public $accDecay = 120;
+	public $minDmg = 28;
+	public $maxDmg = 36;
+	public $accDecay = 110;
 	public $shots = 3;
 	public $animColor = "brown";
 	public $projSize = 3;
-	public $projSpeed = 6;
+	public $projSpeed = 8;
 	public $exploSize = 4;
 	public $reload = 1;
-	public $fc = array(0 => 110, 1 => 140);
+	public $fc = array(0 => 115, 1 => 135);
 	public $mass = 20;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){

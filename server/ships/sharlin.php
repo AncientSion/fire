@@ -6,11 +6,11 @@ class Sharlin extends UltraHeavy {
 	public $faction = "Minbari Federation";
 	public $size = 120;
 	public static $value = 2000;
-	public $profile = array(0.80, 1.20);
+	public $profile = array(0.87, 1.13);
 	public $mass = 20000;
 
-	function __construct($id, $userid, $available){
-        parent::__construct($id, $userid, $available);
+	function __construct($id, $userid, $available, $status, $destroyed){
+        parent::__construct($id, $userid, $available, $status, $destroyed);
 	}
 
 	public function addStructures(){

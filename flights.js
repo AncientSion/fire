@@ -28,19 +28,19 @@ function Fighter(id, name, ep, turns, mass, integrity, value, negation, crits, d
 	}
 	
 	this.isDestroyedThisTurn = function(){
-		if (this.destroyed){
-			for (var j = this.damages.length-1; j >= 0; j--){
-				if (this.damages[j].destroyed == 1 && this.damages[j].turn == game.turn){
-					return true;
-				}
-			}					
-		}
-		else if (this.disabled){
+		if (this.disabled){
 			for (var j = this.crits.length-1; j >= 0; j--){
 				if (this.crits[j].type == "disengaged" && this.crits[j].turn == game.turn){
 					return true;
 				}
 			}
+		}
+		else if (this.destroyed){
+			for (var j = this.damages.length-1; j >= 0; j--){
+				if (this.damages[j].destroyed == 1 && this.damages[j].turn == game.turn){
+					return true;
+				}
+			}					
 		}
 		return false;
 	}
@@ -107,7 +107,6 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 	this.dogfights = [];
 	
 	this.create = function(){
-		this.size = 32 + this.structures.length*5;
 		this.setFighterState();
 		this.setMaxMass()
 		this.setEP()
@@ -118,14 +117,12 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 	}
 
 	this.isDestroyed = function(){
-		var des = true;
 		for (var i = 0; i < this.structures.length; i++){
 			if (!this.structures[i].destroyed && !this.structures[i].disabled){
-				des = false;
-				break;
+				return false;
 			}
 		}
-		return des;
+		return true;
 	}
 
 	this.setFighterState = function(){
@@ -153,6 +150,7 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 		var size = 15;
 
 		var toDo = Math.min(4, Math.ceil(this.structures.length/2));
+		var alive = (this.size - 32) / 5;
 		var done = 0;
 
 		for (var i = 0; i < toDo; i++){
@@ -168,7 +166,7 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 		}
 
 		if (done < this.structures.length){
-			for (var i = 0; i < this.structures.length-done; i++){
+			for (var i = 0; i < (this.structures.length-done)/2; i++){
 				this.layout.push({
 					x: -size/2 - size/2*i,
 					y: size/2 + size*i
@@ -192,9 +190,9 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 	}
 
 	this.getEP = function(){
-		//if (this.actions[0].turn == game.turn){
-		//	return Math.floor(this.ep/2);
-		//}
+		if (this.actions[0].turn == game.turn){
+			return Math.floor(this.ep/2);
+		}
 		return this.ep;
 	}
 
@@ -236,6 +234,13 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 					this.drawFighter(i);
 				}
 			}
+	/*		var index = 0;
+			for (var i = 0; i < this.layout.length; i++){
+				if (!this.structures[i].destroyed && !this.structures[i].disabled){
+					this.drawFighter(index);
+					index++
+				}
+			}*/
 		}
 		ctx.restore();
 	}
@@ -286,9 +291,9 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 	}
 	
 	this.getBaseImpulse = function(){
-		//if (this.actions[0].turn == game.turn){
-		//	return Math.floor(210/2);
-		//}
+		if (this.actions[0].turn == game.turn){
+			return Math.floor(210/2);
+		}
 		return 210;
 	}
 

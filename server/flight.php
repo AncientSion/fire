@@ -13,15 +13,23 @@ class Flight extends Mini {
 	public $primary = false;
 	public $dogfights = array();
 
-	function __construct($id, $userid, $available){
+	function __construct($id, $userid, $available, $status, $destroyed){
 		$this->id = $id;
 		$this->userid = $userid;
 		$this->available = $available;
+		$this->status = $status;
+		$this->destroyed = $destroyed;
 	}
 
 	function setState(){
-		$this->size = 32 + sizeof($this->structures)*5;
 		parent::setState();
+		$alive = 0;
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if (!$this->structures[$i]->destroyed){
+				$alive++;
+			}
+		}
+		$this->size = 32 + $alive*5;
 	}
 
 	public function addFighters($fighters){
@@ -82,17 +90,21 @@ class Flight extends Mini {
 	public function resolveDogfightFireOrder($fire){
 		//Debug::log("resolveDogfightFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".$fire->weaponid);
 
-		$fire->dist = 0;
-		$fire->angleIn = mt_rand(0, 359);
-		$fire->hitSection = $this->getHitSection($fire);
-		$fire->req = ($this->getHitChance($fire) / 100 * $fire->weapon->getFireControlMod($fire));
-		$fire->weapon->rollForHit($fire);
-
-		if ($fire->hits){
-			$fire->weapon->doDamage($fire);
+		if ($this->isDestroyed){
+			$fire->resolved = -1;
 		}
-		$fire->resolved = 1;
-		return;
+		else {
+			$fire->dist = 0;
+			$fire->angleIn = mt_rand(0, 359);
+			$fire->hitSection = $this->getHitSection($fire);
+			$fire->req = ($this->getHitChance($fire) / 100 * $fire->weapon->getFireControlMod($fire));
+			$fire->weapon->rollForHit($fire);
+
+			if ($fire->hits){
+				$fire->weapon->doDamage($fire);
+			}
+			$fire->resolved = 1;
+		}
 	}
 
 	public function isDogfight($fire){
@@ -112,7 +124,6 @@ class Fighter extends Structure {
 	public $negation = array();
 	public $crits = array();
 	public $integrity;
-	public $disabled = false;
 	public $turns = 1;
 	
 	function __construct($id, $parentId){
@@ -130,7 +141,7 @@ class Fighter extends Structure {
 		}
 		for ($i = 0; $i < sizeof($this->crits); $i++){
 			if ($this->crits[$i]->type == "disengaged"){
-				$this->disabled = true;
+				$this->destroyed = true;
 			}
 		}
 	}
@@ -166,7 +177,7 @@ class Fighter extends Structure {
 	}
 
 	public function testCriticalsStructureLevel($turn){
-		if ($this->destroyed || $this->disabled || empty($this->damages)){
+		if ($this->destroyed || empty($this->damages)){
 			return;
 		}
 		else {
@@ -213,21 +224,22 @@ class Fighter extends Structure {
 	}
 
 	public function getHitAngle($fire){
-		$tPos = $this->getPosition();
-		$sPos = $fire->shooter->getPosition();
+		$tPos = $this->getCurrentPosition();
+		$sPos = $fire->shooter->getCurrentPosition();
 		$angle = Math::getAngle($tPos->x, $tPos->y, $sPos->x, $sPos->y);
 		return round(Math::addAngle($this->facing, $angle));
 	}
 
     public function getRemainingNegation($fire){
-    	if ($fire->angleIn >= 330 && $fire->angleIn <= 30){
+    	//Debug::log("getRemainingNegation FLIGHT, angle: ".$fire->angleIn);
+    	if ($fire->angleIn >= 330 || $fire->angleIn <= 30){
     		return $this->negation[0];
     	}
-    	else if ($fire->angleIn >= 150 && $fire->angleIn <= 210){
-    		return $this->negation[2];
+    	else if (($fire->angleIn > 30 && $fire->angleIn < 150) || ($fire->angleIn > 210 && $fire->angleIn < 330)){
+    		return $this->negation[1];
 		}
 		else {
-    		return $this->negation[1];
+    		return $this->negation[2];
 		}
     }
 
@@ -236,7 +248,7 @@ class Fighter extends Structure {
     }
 
 	public function getSubHitChance(){
-		return ceil($this->mass);
+		return ceil($this->mass/1.5);
 	}
 }
 
@@ -255,14 +267,14 @@ class Aurora extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 1, 2, 13, 16, 330, 30);
+		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 1, 2, 14, 18, 330, 30);
 	}
 }
 
 class Thunderbolt extends Fighter {
 	public $name = "Thunderbolt";
 	public $faction = "Earth Alliance";
-	public $value = 40;
+	public $value = 46;
 	public $mass = 42;
 	public $ep = 100;
 	public $integrity = 38;
@@ -275,7 +287,7 @@ class Thunderbolt extends Fighter {
 
 	public function addSystems(){
 		//$id, $fighterId, $parentId, $linked, $minDmg, $maxDmg, $start, $end){
-		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 2, 2, 14, 17, 330, 30);
+		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 2, 2, 14, 18, 330, 30);
 	}
 }
 
@@ -294,7 +306,7 @@ class Nial extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new LinkedNeutronRepeater(sizeof($this->systems), $this->id, $this->parentId, 1, 3, 16, 19, 330, 30);
+		$this->systems[] = new LinkedNeutronRepeater(sizeof($this->systems), $this->id, $this->parentId, 1, 3, 17, 21, 330, 30);
 	}
 }
 
@@ -313,7 +325,7 @@ class Sentri extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 1, 2, 12, 15, 330, 30);
+		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 1, 2, 13, 17, 330, 30);
 	}
 }
 ?>

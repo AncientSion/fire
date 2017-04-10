@@ -89,8 +89,9 @@ window.ajax = {
 						if (game.ships[i].actions[j].type == "deploy"){
 							if (game.ships[i].actions[j].turn == game.turn){
 								var ship = {
+									actions: [ game.ships[i].actions[j] ],
 									id: game.ships[i].id,
-									actions: [ game.ships[i].actions[j] ]
+									status: "deployed",
 								}
 								deployedShips.push(ship);
 							}

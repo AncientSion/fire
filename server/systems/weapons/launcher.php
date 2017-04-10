@@ -44,11 +44,14 @@ class Launcher extends Weapon {
 	}
 
 	public function getCritEffects(){
-		return array("disabled1", "ammoLoss", "ammolossDamage");
+		return array("disabled", "ammoLoss", "ammolossDamage");
 	}
 
 	public function getCritTreshs(){
 		return array(25, 50, 80);
+	}
+	public function getCritDuration(){
+		return array(1, 0, 0);
 	}
 }
 
@@ -71,7 +74,7 @@ class Hasta extends Ammo {
 	public $type = "explosive";
 	public $minDmg = 23;
 	public $maxDmg = 29;
-	public $impulse = 240;
+	public $impulse = 260;
 	public $integrity = 12;
 	public $armour = 3;
 	public $mass = 2;
@@ -107,7 +110,7 @@ class Barracuda extends Ammo {
 	public $type = "explosive";
 	public $minDmg = 16;
 	public $maxDmg = 22;
-	public $impulse = 320;
+	public $impulse = 300;
 	public $integrity = 10;
 	public $armour = 3;
 	public $mass = 3;
@@ -125,7 +128,7 @@ class Myrmidon extends Ammo {
 	public $type = "explosive";
 	public $minDmg = 55;
 	public $maxDmg = 76;
-	public $impulse = 220;
+	public $impulse = 190;
 	public $integrity = 18;
 	public $armour = 6;
 	public $mass = 5;
@@ -143,7 +146,7 @@ class Zeus extends Ammo {
 	public $type = "explosive";
 	public $minDmg = 78;
 	public $maxDmg = 96;
-	public $impulse = 180;
+	public $impulse = 170;
 	public $integrity = 22;
 	public $armour = 7;
 	public $mass = 6;

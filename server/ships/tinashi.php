@@ -9,8 +9,8 @@ class Tinashi extends Medium {
 	public $profile = array(0.9, 1.1);
 	public $mass = 4000;
 
-	function __construct($id, $userid, $available){		
-        parent::__construct($id, $userid, $available);
+	function __construct($id, $userid, $available, $status, $destroyed){		
+        parent::__construct($id, $userid, $available, $status, $destroyed);
 	}
 
 	public function addStructures(){

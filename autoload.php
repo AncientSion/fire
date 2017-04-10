@@ -48,6 +48,8 @@ spl_autoload_register(
                 'olympus' => '/server/ships/olympus.php',
                 'tethys' => '/server/ships/tethys.php',
 
+                'battlecrab' => '/server/ships/battlecrab.php',
+
                 'system' => '/server/systems/system.php',
                 'primarysys tem' => '/server/systems/system.php',
                 'weapon' => '/server/systems/system.php',
@@ -82,7 +84,7 @@ spl_autoload_register(
                 'heavyion' => '/server/systems/weapons/particle.php',
                 'particlebeam' => '/server/systems/weapons/particle.php',
                 'heavyparticlebeam' => '/server/systems/weapons/particle.php',
-                'FusionCannon' => '/server/systems/weapons/particle.php',
+                'fusioncannon' => '/server/systems/weapons/particle.php',
                 'fusionpulsar' => '/server/systems/weapons/particle.php',
 
                 'em' => '/server/systems/weapons/em.php',
@@ -107,6 +109,7 @@ spl_autoload_register(
                 'damage' => '/server/classes.php',
                 'power' => '/server/classes.php',
                 'crit' => '/server/classes.php',
+                'effect' => '/server/classes.php',
                 'divider' => '/server/classes.php',
                 'manager' => '/server/manager.php',
                 'dbmanager' => '/server/dbManager.php',

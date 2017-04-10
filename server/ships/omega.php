@@ -9,8 +9,8 @@ class Omega extends SuperHeavy {
 	public $profile = array(0.88, 1.12);
 	public $mass = 14500;
 
-	function __construct($id, $userid, $available){
-        parent::__construct($id, $userid, $available);
+	function __construct($id, $userid, $available, $status, $destroyed){
+        parent::__construct($id, $userid, $available, $status, $destroyed);
 	}
 
 	public function addStructures(){

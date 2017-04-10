@@ -9,8 +9,8 @@ class Artemis extends Medium {
 	public $profile = array(0.93, 1.07);
 	public $mass = 3500;
 
-	function __construct($id, $userid, $available){		
-        parent::__construct($id, $userid, $available);
+	function __construct($id, $userid, $available, $status, $destroyed){		
+        parent::__construct($id, $userid, $available, $status, $destroyed);
 	}
 
 	public function addStructures(){

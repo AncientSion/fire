@@ -230,11 +230,11 @@ function canvasMouseMove(e){
 						var td = document.createElement("td");
 							td.innerHTML = ship.structures[i].systems[j].name + " #" + ship.structures[i].systems[j].id; tr.appendChild(td);
 
-						if (ship.ship && vessel.salvo && !(ship.structures[i].systems[j] instanceof Launcher) && ship.id != vessel.targetid){
+						if (ship.ship && vessel.salvo && !(ship.structures[i].systems[j] instanceof Launcher) && ship.id != vessel.targetid){ // ship vs salvo indirect
 							legalTarget = false;
 							msg = "Unable to aquire target";
 						}
-						else if (ship.flight && vessel.salvo){
+						else if (ship.flight && vessel.salvo){ // fighter vs salvo, get trajectory
 							var start = true;
 							var end = true;
 							if (!ship.structures[i].systems[j].posIsOnArc(shipLoc, pos, facing)){start = false;}
@@ -247,7 +247,7 @@ function canvasMouseMove(e){
 								validWeapon = true;
 							}
 						}
-						else if (ship.structures[i].systems[j].posIsOnArc(shipLoc, pos, facing)){
+						else if (ship.structures[i].systems[j].posIsOnArc(shipLoc, pos, facing)){ // ship vs ship/fighter
 							inArc = true;
 							validWeapon = true;
 						}
@@ -439,44 +439,51 @@ function firePhase(e, rect){
 	}
 	else {
 		vessel = game.getUnitByClick(pos);
+		ship = game.getUnitById(aUnit)
 		if (vessel){
-			if (vessel.id != aUnit && (vessel.userid != game.userid && vessel.userid != game.getUnitById(aUnit).userid)){
-				var ship = game.getUnitById(aUnit)
-				var shipLoc = ship.getOffsetPos();
-				var facing = ship.getPlannedFacingToMove();
-				/*
-				var dist = Math.floor(getDistance(shipLoc, {x: clickShip.x, y: clickShip.y}));
-					a = getAngleFromTo(clickShip.getOffsetPos(), shipLoc);
-					a = addAngle(a, -clickShip.getPlannedFacingToMove());
-				var baseHit = clickShip.getHitChanceFromAngle(a);
-				
-				console.log("dist: " + dist + ", sSpeed: " + ship.getTotalImpulse() + ", tSpeed: " + clickShip.getTotalImpulse());
-				console.log("sFace: " + ship.facing + ", tFace: " + clickShip.facing + ", a: "+ a);
-				console.log("incoming from: " + window.getBearing
-				window.getBearing(ship, clickShip);
-				console.log(baseHit);
-				*/
-				if (vessel){
-					if (ship.hasWeaponsSelected()){
-						for (var i = 0; i < ship.structures.length; i++){
-							for (var j = ship.structures[i].systems.length-1; j >= 0; j--){
-								if (ship.structures[i].systems[j].weapon && ship.structures[i].systems[j].selected){
-									if (vessel.salvo && ship.ship && ship.id != vessel.targetid && ship.structures[i].systems[j].selected instanceof Launcher){continue;}
+			if (vessel.id != ship.id && (vessel.userid != game.userid && vessel.userid != ship.userid)){
+				if (ship.hasWeaponsSelected()){
+					var shipLoc = ship.getOffsetPos();
+					var facing = ship.getPlannedFacingToMove();
+					var pos = vessel.getBaseOffsetPos();
+					for (var i = 0; i < ship.structures.length; i++){
+						for (var j = ship.structures[i].systems.length-1; j >= 0; j--){
+							if (ship.structures[i].systems[j].selected && ship.structures[i].systems[j].weapon){
+								if (ship.structures[i].systems[j].canFire()){
+									var inArc = false;
+									var legalTarget = true;
+									
+									if (ship.ship && vessel.salvo && !(ship.structures[i].systems[j] instanceof Launcher) && ship.id != vessel.targetid){ // ship vs salvo indirect
+										legalTarget = false;
+									}
+									else if (ship.flight && vessel.salvo){ // fighter vs salvo, get trajectory
+										/*var start = true;
+										var end = true;
+										if (!ship.structures[i].systems[j].posIsOnArc(shipLoc, pos, facing)){start = false;}
+										if (ship.id == vessel.targetid){if(!isInArc(angle, ship.structures[i].systems[j].arc[0][0], ship.structures[i].systems[j].arc[0][1])){end = false;}}
+										else if (!ship.structures[i].systems[j].posIsOnArc(shipLoc, vessel.nextStep, facing)){end = false;}
+										if (start && end){
+										*/	inArc = true;
+											validWeapon = true;
+										//}
+									}
+									else if (ship.structures[i].systems[j].posIsOnArc(shipLoc, pos, facing)){ // ship vs ship/fighter
+										inArc = true;
+										validWeapon = true;	
+									}
 
-									if (ship.structures[i].systems[j].canFire()){
-										if (ship.structures[i].systems[j].posIsOnArc(shipLoc, pos, facing)){
-											// FireOrder(id, turn, shooterid, targetid, weaponid, req, notes, hits, resolved){
-											ship.structures[i].systems[j].setFireOrder(vessel.id);
-										}
+									if (inArc && validWeapon){
+										// FireOrder(id, turn, shooterid, targetid, weaponid, req, notes, hits, resolved){
+										ship.structures[i].systems[j].setFireOrder(vessel.id);
 									}
 								}
 							}
 						}
-						$("#weaponAimTableWrapper").hide()
-						ship.highlightAllSelectedWeapons();
-						game.draw();
 					}
 				}
+				$("#weaponAimTableWrapper").hide()
+				ship.highlightAllSelectedWeapons();
+				//game.draw();
 			}
 		}
 	}

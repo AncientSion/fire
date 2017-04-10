@@ -9,8 +9,8 @@ class Olympus extends Light {
 	public $profile = array(0.94, 1.06);
 	public $mass = 2500;
 
-	function __construct($id, $userid, $available){		
-        parent::__construct($id, $userid, $available);
+	function __construct($id, $userid, $available, $status, $destroyed){		
+        parent::__construct($id, $userid, $available, $status, $destroyed);
 	}
 
 	public function addStructures(){

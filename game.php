@@ -2,6 +2,9 @@
 
 include_once 'global.php';
 
+$time = -microtime(true);
+
+
 $gameid = $_GET["gameid"];
 $userid;
 $phase;
@@ -368,12 +371,11 @@ foreach ($manager->playerstatus as $player){
 							}
 
 							echo "<tr>";
-							echo "<th style='border: none; background-color: black;'></th>";
-							echo "<th style='border: none; background-color: black;'></th>";
-							echo "<th style='padding: 5px; font-size: 12px'> Total Cost</th>";
-							echo "<th style='padding: 5px; font-size: 15px' id='totalRequestCost'>0</th>";
+							echo "<td style='border: none; background-color: black;'></td>";
+							echo "<td style='border: none; background-color: black;'></td>";
+							echo "<td style='padding: 5px; font-size: 12px'> Total Cost</td>";
+							echo "<td style='padding: 5px; font-size: 15px' id='totalRequestCost'>0</td>";
 							echo "</tr>";
-
 						}
 					?>
 				</table>
@@ -402,6 +404,11 @@ foreach ($manager->playerstatus as $player){
 	</body>
 </html>
 
+<?php 
+	$time += microtime(true); 
+	//Debug::log("serve gamedata time: ".round($time, 3)." seconds.");
+?>
+
 <script>
 
 	function reset(){
@@ -417,6 +424,7 @@ foreach ($manager->playerstatus as $player){
 	$(document).ready(function(){
 		window.res.x = window.innerWidth-1;
 		window.res.y = window.innerHeight-1;
+		$("#reinforceTable").hide();
 		$("#mouseCanvas").bind("mouseleave", function(){
 			$("#weaponAimTableWrapper").hide();
 		})
@@ -454,7 +462,6 @@ foreach ($manager->playerstatus as $player){
 						game.animateFire = false;
 						window.cancelAnimationFrame(anim);
 						fxCtx.clearRect(0, 0, res.x, res.y);
-						game.draw();
 						$("#combatLog").find("tr").each(function(i){
 							if (i >= 2){
 								$(this).remove()
@@ -463,14 +470,9 @@ foreach ($manager->playerstatus as $player){
 						for (var i = 0; i < game.fireOrders.length; i++){
 							game.createCombatLogEntry(game.fireOrders[i]);
 						}
-						for (var i = 0; i < game.ballistics.length; i++){
-							game.ballistics[i].x = game.ballistics[i].actions[game.ballistics[i].actions.length-1].x;
-							game.ballistics[i].y = game.ballistics[i].actions[game.ballistics[i].actions.length-1].y;
-							for (var j = 0; j < game.ballistics[i].intercepts.length; j++){
-								game.createCombatLogEntry(game.ballistics[i].intercepts[j]);
-							}
-							if (game.ballistics[i].type == "Impact"){
-								game.createBallisticLogEntry(game.ballistics[i]);
+						for (var i = 0; i < animate.ballAnims.length; i++){
+							for (var j = 0; j < animate.ballAnims[i].anims.length; j++){
+								animate.doLog(i, j);
 							}
 						}
 						game.draw();
@@ -552,7 +554,7 @@ foreach ($manager->playerstatus as $player){
 			});
 		})
 
-		document.getElementById("combatlogWrapper").onmousedown = function () {
+		document.getElementById("combatlogWrapper").onmousedown = function(){
 		    _drag_init(this);
 		    return false;
 		};

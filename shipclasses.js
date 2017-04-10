@@ -23,11 +23,11 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 	this.highlight = false;
 	this.destroyed = false;
 
+	this.hitTable;
 	this.img;
 	this.turns = [];
 	this.actions = [];
 	this.validMoveArcs = [];
-	this.impulseAdjust = [];
 	this.structures = [];
 
 	this.getDamageEntriesByFireId = function(fireid){
@@ -44,8 +44,8 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 
 	this.draw = function(){
 		if (this.deployed){
-			this.drawSelf();
 			this.drawIndicator();
+			this.drawSelf();
 			//this.drawCenterPoint();
 		}
 	}
@@ -105,7 +105,7 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 
 	this.getTurnStartPosition = function(){
 		for (var i = this.actions.length-1; i >= 0; i--){
-			if (this.actions[i].turn == game.turn-1){
+			if (this.actions[i].turn < game.turn){
 				return this.actions[i];
 			}
 		}
@@ -302,7 +302,21 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 	this.create = function(){
 		this.img = window.shipImages[this.name.toLowerCase()];
 		this.setPosition();
-		this.setFacing()
+		this.setFacing();
+		this.setHitTable();
+	}
+
+	this.setHitTable = function(){
+		//console.log("id: " + this.id);
+		this.primary.setRemainingIntegrity();
+		var fraction = this.primary.remaining / this.primary.integrity;
+
+		for (var i = 0; i < this.primary.systems.length; i++){
+			if (fraction <= this.hitTable[this.primary.systems[i].name]){
+				this.primary.systems[i].exposed = 1;
+				console.log(this.primary.systems[i].name + " exposed: " + this.primary.systems[i].exposed);
+			}
+		}
 	}
 
 	this.isDestroyed = function(){
@@ -678,7 +692,7 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 			if (this.actions.length == 1){
 				return true;
 			}
-			else if (this.actions[this.actions.length-1].turn == game.turn -1){
+			else if (this.actions[this.actions.length-1].turn < game.turn){
 				return true;
 			}
 			if (this.actions[this.actions.length-1].type == "speedChange" && this.actions[this.actions.length-1].dist == 1){
@@ -697,7 +711,7 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 			if (this.actions.length == 1){
 				return true;
 			}
-			else if (this.actions[this.actions.length-1].turn == game.turn -1){
+			else if (this.actions[this.actions.length-1].turn < game.turn){
 				return true;
 			}
 			if (this.actions[this.actions.length-1].type == "speedChange" && this.actions[this.actions.length-1].dist == -1){
@@ -1158,10 +1172,14 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 					if (this.actions[i].turn != game.turn){
 						continue;
 					}
-					else  if (this.actions[i].type == "turn"){
-						turns++
+					else if (this.actions[i].type == "turn"){
+						var a = Math.abs(this.actions[i].a);
+						while (a > 0){
+							a -= this.getTurnAngle();
+							turns++;
+						}
+						break;
 					}
-					else break;
 				}
 
 				if (turns < this.maxTurns){
@@ -1185,18 +1203,21 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		else {
 			for (var i = 0; i < this.turns.length; i++){
 				if (this.turns[i].a == a){
+					if (this.flight){
+						if (this.actions[this.actions.length-1].type == "turn" && this.actions[this.actions.length-1].turn == game.turn){
+							this.actions[this.actions.length-1].a += this.turns[i].a;
+							this.actions[this.actions.length-1].delay += this.turns[i].delay;
+							this.actions[this.actions.length-1].cost += this.turns[i].cost;
+							break;
+						}
+					}
+
 					this.actions.push(
 						new Move(
-							"turn",
-							0,
-							this.turns[i].x,
-							this.turns[i].y,
-							this.turns[i].a,
-							this.turns[i].delay,
-							this.turns[i].cost,
-							this.turns[i].costmod
-							)
-						);
+							"turn", 0, this.turns[i].x, this.turns[i].y, 
+							this.turns[i].a, this.turns[i].delay, this.turns[i].cost, this.turns[i].costmod
+						)
+					);
 					break;
 				}
 			}
@@ -1768,16 +1789,20 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		}
 		else if (system instanceof Weapon && !system.disabled && !system.destroyed && system.getLoadLevel() >= 1){
 			if (system instanceof Launcher){
-				if (system.getOutput() < system.effiency){
+				if (system.getOutput() < system.getEffiency()){
 					if (system.getRemainingAmmo() > system.getOutput()){
 						return true;
 					} else popup("There is not enough ammunition left");
 				} else popup("The launcher is already at maximum capacity");
 			}
-			else if (system.getBoostLevel() < system.maxBoost){
-				if (this.getUnusedPower() >= system.getEffiency()){
-					return true;
-				} else popup("You have insufficient power remaining");
+			else {
+				if (system.getBoostLevel() < system.maxBoost){
+					var avail = this.getUnusedPower();
+					var need = system.getEffiency();
+					if (avail >= need){
+						return true;
+					} else popup("You have insufficient power remaining");
+				} else popup("The selected system cant be boosted further.");
 			}
 		}
 		else if (!(system instanceof Weapon)){
@@ -1981,7 +2006,7 @@ function SuperHeavy(id, name, shipType, x, y, facing, faction, mass, cost, profi
 	this.shipType = "SuperHeavy";
 	
 	this.getBaseImpulse = function(){
-		return 130;
+		return 125;
 	}
 }
 SuperHeavy.prototype = Object.create(Ship.prototype);
@@ -1992,7 +2017,7 @@ function Heavy(id, name, shipType, x, y, facing, faction, mass, cost, profile, s
 	this.shipType = "Heavy";
 	
 	this.getBaseImpulse = function(){
-		return 145;
+		return 135;
 	}
 }
 Heavy.prototype = Object.create(Ship.prototype);
@@ -2003,7 +2028,7 @@ function Medium(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 	this.shipType = "Medium";
 	
 	this.getBaseImpulse = function(){
-		return 165;
+		return 150;
 	}
 }
 Medium.prototype = Object.create(Ship.prototype);
@@ -2014,7 +2039,7 @@ function Light(id, name, shipType, x, y, facing, faction, mass, cost, profile, s
 	this.shipType = "Light";
 	
 	this.getBaseImpulse = function(){
-		return 185;
+		return 165;
 	}
 }
 Light.prototype = Object.create(Ship.prototype);
@@ -2025,7 +2050,7 @@ function SuperLight(id, name, shipType, x, y, facing, faction, mass, cost, profi
 	this.shipType = "SuperLight";
 	
 	this.getBaseImpulse = function(){
-		return 200;
+		return 180;
 	}
 }
 SuperLight.prototype = Object.create(Ship.prototype);

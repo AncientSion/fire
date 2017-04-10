@@ -247,7 +247,7 @@ class DBManager {
 		");
 		
 		$status = "open";
-		$reinforce = floor($pv / 10);
+		$reinforce = floor($pv / 20);
 		$turn = -1;
 		$phase = -1;
 		
@@ -327,6 +327,7 @@ class DBManager {
 		for ($i = 0; $i < sizeof($units); $i++){
 			if ($units[$i]["name"] == "Flight"){
 				$ship = 0;
+				$status = "deployed";
 			}
 			else {
 				$ship = 1;
@@ -463,23 +464,6 @@ class DBManager {
 		return true;
 	}
 
-
-	public function getActiveBallistics($gameid, $turn){
-		//Debug::log("DB getBallistics");	
-		$stmt = $this->connection->prepare("
-			SELECT * from units
-			WHERE gameid = :gameid
-			AND ball = 1
-			AND status != 'disabled'
-		");
-
-		$stmt->bindParam(":gameid", $gameid);
-		$stmt->execute();
-
-		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		return $result;
-	}
-
 	public function gameIsReady($gameid){
 		$stmt = $this->connection->prepare("
 			SELECT playerstatus.status from playerstatus
@@ -542,14 +526,11 @@ class DBManager {
 	}
 
 	public function deployShipsDB($gameid, $ships){
+		$this->setUnitStatusDB($ships);
 		for ($i = 0; $i < sizeof($ships); $i++){
-			if ($this->setUnitStatus($ships[$i]["id"], "deployed")){
-				if ($this->insertActionsForShip($ships[$i]["id"], $ships[$i]["actions"])){
-					continue;
-				}
-				else return false;
+			if ($this->insertActionsForShip($ships[$i]["id"], $ships[$i]["actions"])){
+				continue;
 			}
-			else return false;
 		}
 		return true;
 	}
@@ -615,45 +596,17 @@ class DBManager {
 		return true;
 	}
 
-
-	public function setUnitStatus($unitid, $status, $destroyed = 0){
-		Debug::log("id: ".$unitid.", status: ".$status.", des ".$destroyed);
-		$stmt = $this->connection->prepare("
-			UPDATE units 
-			SET 
-				status = :status,
-				destroyed = :destroyed
-			WHERE
-				id = :id				
-		");
-		
-		$stmt->bindParam(":status", $status);
-		$stmt->bindParam(":destroyed", $destroyed);
-		$stmt->bindParam(":id", $unitid);
-		$stmt->execute();
-
-		if ($stmt->errorCode() == 0){
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-	public function setUnitStatusMassed($units){
-		Debug::log("setUnitStatusMassed");
+	public function setUnitStatusDB($units){
+		Debug::log("setUnitStatusDB");
 		$stmt = $this->connection->prepare("
 			UPDATE units 
 			SET
-				status = :status,
-				destroyed = :destroyed
+				status = :status
 			WHERE id = :id
 		");
 
 		for ($i = 0; $i < sizeof($units); $i++){
-			Debug::log("id: ".$units[$i]->id.", status: ".$units[$i]->status.", des ".$units[$i]->destroyed);
 			$stmt->bindParam(":status", $units[$i]->status);
-			$stmt->bindParam(":destroyed", $units[$i]->destroyed);
 			$stmt->bindParam(":id", $units[$i]->id);
 			$stmt->execute();
 
@@ -664,29 +617,28 @@ class DBManager {
 		return true;
 	}
 
-	public function DBdisableBallistics($balls){
+	public function destroyUnitsDB($array){
+		Debug::log("destroyUnitsDB");
 		$stmt = $this->connection->prepare("
 			UPDATE units 
 			SET 
-				status = :status
+				destroyed = :destroyed
 			WHERE
-				id = :id				
+				id = :id
 		");
-
-		$status = "disabled";
 		
-		for ($i = 0; $i < sizeof($balls); $i++){
-			$stmt->bindParam(":id", $balls[$i]);
-			$stmt->bindParam(":status", $status);
-			$stmt->execute();
+		for ($i = 0; $i < sizeof($array); $i++){
+			for ($j = 0; $j < sizeof($array[$i]); $j++){
+				$stmt->bindParam(":id", $array[$i][$j]->id);
+				$stmt->bindParam(":destroyed",  $array[$i][$j]->destroyed);
+				$stmt->execute();
 
-			if ($stmt->errorCode() == 0){
-				continue;
-			}
-			else {
-				return false;
+				if ($stmt->errorCode() == 0){
+					continue;
+				}
 			}
 		}
+
 		return;
 	}
 
@@ -740,6 +692,24 @@ class DBManager {
 		return true;
 	}
 
+
+	public function deleteDogfights($data){
+		Debug::log("deleteDogfights: ".sizeof($data));
+
+		$stmt = $this->connection->prepare("
+			DELETE FROM dogfights
+			WHERE 
+				a = :a
+			OR 
+				b = :b
+		");
+
+		for ($i = 0; $i < sizeof($data); $i++){
+			$stmt->bindParam(":a", $data[$i]);
+			$stmt->bindParam(":b", $data[$i]);
+			$stmt->execute();
+		}
+	}
 
 	public function issueMovement($gameid, $ships){
 		for ($i = 0; $i < sizeof($ships); $i++){
@@ -840,26 +810,22 @@ class DBManager {
 		return true;
 	}	
 
-	public function deleteUnresolvedFireOrders($fires){
-		debug::log("DB deleteUnresolvedFireOrders: ".sizeof($fires));
+	public function deleteUnresolvedFireOrders($gameid){
 		$stmt = $this->connection->prepare("
-			DELETE from fireorders WHERE id = :id
+			DELETE FROM fireorders
+			WHERE gameid = :gameid
+			AND resolved = :resolved
 		");
 
-		for ($i = sizeof($fires)-1; $i >= 0; $i--){
-			if ($fires[$i]->resolved == 0){
-				$stmt->bindParam(":id", $fires[$i]->id);
-				$stmt->execute();				
+		$resolved = -1;
 
-				if ($stmt->errorCode() == 0){
-					array_splice($fires, $i, 1);
-					continue;
-				}
-			}
-		}
+		$stmt->bindParam(":gameid", $gameid);
+		$stmt->bindParam(":resolved", $resolved);
+		$stmt->execute();
 
-		debug::log("DB deleteUnresolvedFireOrders DONE: ".sizeof($fires));
-		return true;
+		if ($stmt->errorCode() == 0){
+			return true;
+		} else return false;
 	}
 
 	public function updateFireOrders($fires){
@@ -881,25 +847,6 @@ class DBManager {
 			$stmt->bindParam(":notes", $fires[$i]->notes);
 			$stmt->bindParam(":hits", $fires[$i]->hits);
 			$stmt->bindParam(":resolved",$fires[$i]->resolved);
-			$stmt->bindParam(":id", $fires[$i]->id);
-			$stmt->execute();
-
-			if ($stmt->errorCode() == 0){
-				continue;
-			}
-			else return false;
-		}
-
-		return true;
-	}
-
-	public function deleteInvalidFireOrders($fires){
-		Debug::log("deleting: ".sizeof($fires)." invalid FOs");
-		$stmt = $this->connection->prepare("
-			DELETE FROM fireorders where id = :id
-		");
-
-		for ($i = 0; $i < sizeof($fires); $i++){
 			$stmt->bindParam(":id", $fires[$i]->id);
 			$stmt->execute();
 
@@ -1392,7 +1339,25 @@ class DBManager {
 			}
 		}
 
+		//debug::log("getting: ".sizeof($units)." units");
 		return $units;
+	}
+
+	public function getActiveBallistics($gameid, $turn){
+		//Debug::log("DB getBallistics");	
+		$stmt = $this->connection->prepare("
+			SELECT * from units
+			WHERE gameid = :gameid
+			AND ball = 1
+			AND destroyed = 0
+		");
+
+		$stmt->bindParam(":gameid", $gameid);
+		$stmt->execute();
+
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		//debug::log("getting: ".sizeof($result)." ballistics");
+		return $result;
 	}
 
 	public function getShipLoad($ships){

@@ -22,7 +22,7 @@ function Move(type, dist, x, y, a, delay, cost, costmod, resolved){
 	this.resolved = resolved || 0;
 }
 
-function BallVector(a, b, s){
+function BallVector(a, b, s, h){
 	this.x;
 	this.y;
 	this.nx;
@@ -31,8 +31,13 @@ function BallVector(a, b, s){
 	this.m;
 	this.done = 0;
 	this.f;
+	this.h = h;
 	
 	this.setup = function(){
+		this.ox = a.x;
+		this.oy = a.y;
+		this.tx = b.x;
+		this.ty = b.y;
 		this.x = b.x - a.x;
 		this.y = b.y - a.y;
 
@@ -40,7 +45,7 @@ function BallVector(a, b, s){
 		
 		var x = Math.pow(this.x, 2);
 		var y = Math.pow(this.y, 2);
-		var m = (x + y) / 1
+		var m = (x + y);
 		
 		this.m = Math.sqrt(m);
 		this.nx = this.x/this.m*s;
@@ -51,6 +56,36 @@ function BallVector(a, b, s){
 	this.setup();
 }
 
+function BeamVector(o, a, b, n, m, h){
+	this.ox = o.x;
+	this.oy = o.y;
+	this.n = n;
+	this.m = m;
+	this.h = h;
+	this.done = 0;
+	this.x;
+	this.y;
+
+
+	this.setup = function(){
+		this.tax = a.x;
+		this.tay = a.y;
+		this.tbx = b.x;
+		this.tby = b.y;
+		this.x = b.x - a.x;
+		this.y = b.y - a.y;
+		
+		var x = Math.pow(this.x, 2);
+		var y = Math.pow(this.y, 2);
+		var m = (x + y);
+		
+		this.nx = this.x/this.m;
+		this.ny = this.y/this.m;
+	}
+	this.setup();
+}
+
+
 function Vector(a, b){
 	this.x;
 	this.y;
@@ -58,7 +93,7 @@ function Vector(a, b){
 	this.ny;
 	this.n = 0;
 	this.m;
-	this.t;
+	this.t = [];
 	this.s = 0;
 	this.done = 0;
 	
@@ -119,7 +154,7 @@ function FireOrder(id, turn, shooterid, targetid, weaponid, shots, req, notes, h
 	this.found = false;
 
 	this.drawSelf = function(){
-		return false;
+		return;
 	}
 }
 
@@ -143,11 +178,12 @@ function Damage(id, fireid, gameid, shipid, structureid, systemid, turn, roll, t
 	this.notes = notes;
 }
 
-function Ammo(id, name, cost, display, minDmg, maxDmg, impulse, mass, integrity, armour, fc, damages, crits, destroyed){
+function Ammo(id, name, cost, display, exploSize, minDmg, maxDmg, impulse, mass, integrity, armour, fc, damages, crits, destroyed){
 	this.id = id;
 	this.name = name;
 	this.cost = cost;
 	this.display = display;
+	this.exploSize = exploSize;
 	this.minDmg = minDmg;
 	this.maxDmg = maxDmg;
 	this.impulse = impulse;
@@ -223,6 +259,13 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 	this.finalStep;
 	this.anim = [];
 	this.animated = false;
+	this.layout = [];
+
+	this.setLayout = function(){
+		for (var i = 0; i < this.structurs.length; i++){
+			this.layout.push({x: range(-14, 14)});
+		}
+	}
 
 	this.getSystemById = function(id){
 		for (var i = 0; i < this.structures.length; i++){
@@ -492,15 +535,24 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 	}
 
 	this.setFacing = function(){
-		var goal = game.getUnitById(this.targetid).getBaseOffsetPos();
-		var i;
+		var target = game.getUnitById(this.targetid);
+		var start;
+		var end;
+
 		if (this.actions[this.actions.length-1].type == "impact"){
-			i = this.actions.length-2;
+			start = this.actions[this.actions.length-2];
 		}
 		else {
-			i = this.actions.length-1;
+			start = this.actions[this.actions.length-1];
 		}
-		this.facing = Math.floor(getAngleFromTo( this.actions[i], {x: goal.x + cam.o.x, y: goal.y + cam.o.y} ));
+
+		if (!target.salvo){
+			end = game.getUnitById(this.targetid).getBaseOffsetPos();
+		}
+		else if (this.status == "impact"){
+			end = this.actions[this.actions.length-1];
+		} 
+		this.facing = Math.floor(getAngleFromTo(start, end));
 	}
 
 	this.setLayout = function(){
@@ -592,10 +644,14 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 	}
 
 	this.setNextStep = function(){
+		var target = game.getUnitById(this.targetid);
+		if (target.salvo){
+			target = target.nextStep;
+		}
 		var dist = getDistance(this.getPlannedPosition(), this.finalStep);
 		var impulse = this.getImpulse();
 		if (impulse < dist){
-			var a = getAngleFromTo(this, game.getUnitById(this.targetid));
+			var a = getAngleFromTo(this, target);
 			this.nextStep = getPointInDirection(impulse, a, this.x, this.y);
 		}
 		else {
@@ -786,7 +842,11 @@ function Crit(id, shipid, systemid, turn, type, duration){
 				html += "Accuracy loss x 1.2"; break;
 			case "damage2":
 				html += "Damage x 0.8"; break;
-			case "disabled1":
+			case "disabled":
+				html += "Disabled"; break;
+			case "drain1":
+				html += "Output -1"; break;
+			case "drain":
 				html += "Disabled"; break;
 			case "launch1":
 				html += "Launch Rate x 0.85";
@@ -860,7 +920,7 @@ function Structure(id, parentId, start, end, integrity, negation, destroyed){
 	this.systems = [];
 	this.damages = [];
 	this.direction;
-	this.intBase = Math.pow(integrity, 1.25);
+	this.intBase = Math.floor(Math.pow(integrity, 1.5));
 
 	this.getTableRow = function(){
 		var tr = document.createElement("tr");
@@ -970,7 +1030,6 @@ function Structure(id, parentId, start, end, integrity, negation, destroyed){
 		var td = document.createElement("td");
 			td.innerHTML = this.getRemainingIntegrity() + " / " + this.integrity; tr.appendChild(td); table.appendChild(tr);
 
-
 	/*	var tr = document.createElement("tr");
 		var td = document.createElement("td"); td.style.width = "40%";
 			td.innerHTML = "Dmg Mitigation"; tr.appendChild(td);
@@ -998,7 +1057,7 @@ function Structure(id, parentId, start, end, integrity, negation, destroyed){
 
 	this.getRemainingNegation = function(){
 		//return Math.floor((this.getRemainingIntegrity() / this.integrity) * this.negation);
-		return Math.round((Math.pow(this.getRemainingIntegrity(), 1.25) / this.intBase) * this.negation);
+		return Math.round((Math.pow(this.getRemainingIntegrity(), 1.5) / this.intBase) * this.negation);
 	}
 }
 
@@ -1009,6 +1068,7 @@ function Primary(id, parentId, integrity, damages, destroyed){
 	this.damages = damages
 	this.highlight = false;	
 	this.systems = [];
+	this.remaining;
 	
 	this.getTableRow = function(){
 		var tr = document.createElement("tr");
@@ -1016,16 +1076,14 @@ function Primary(id, parentId, integrity, damages, destroyed){
 			td.className = "struct";
 			td.colSpan = 2;
 
-		var rem = this.getRemainingIntegrity();
-
 		var span = document.createElement("div");
 			span.className = "integrityAmount";
-			span.innerHTML = rem + " / " + this.integrity;
+			span.innerHTML = this.remaining + " / " + this.integrity;
 			td.appendChild(span);
 
 		var lowerDiv = document.createElement("div");
 			lowerDiv.className = "integrityNow";
-			lowerDiv.style.width =  rem/this.integrity * 100 + "%";
+			lowerDiv.style.width =  this.remaining/this.integrity * 100 + "%";
 			td.appendChild(lowerDiv);
 			
 		var upperDiv = document.createElement("div");
@@ -1050,6 +1108,10 @@ function Primary(id, parentId, integrity, damages, destroyed){
 			tr.appendChild(td);
 			
 		return tr;
+	}
+
+	this.setRemainingIntegrity = function(){		
+		this.remaining = this.getRemainingIntegrity();
 	}
 
 	this.hover = function(e){
@@ -1077,7 +1139,7 @@ function Primary(id, parentId, integrity, damages, destroyed){
 		var td = document.createElement("td"); td.style.width = "40%";
 			td.innerHTML = "Integrity"; tr.appendChild(td);
 		var td = document.createElement("td");
-			td.innerHTML = this.getRemainingIntegrity() + " / " + this.integrity; tr.appendChild(td); table.appendChild(tr);
+			td.innerHTML = this.remaining + " / " + this.integrity; tr.appendChild(td); table.appendChild(tr);
 
 		div.appendChild(table);
 			

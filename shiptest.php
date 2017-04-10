@@ -27,6 +27,13 @@
 			for ($i = 0; $i < sizeof($ships); $i++){
 				$fires[] = new FireOrder(0,0,0,0,0,0,0,0,0,0,0,0);
 			}
+
+			$fireA = new FireOrder(0,0,0,0,0,0,0,0,0,0,0,0);
+			$fireA->angleIn = 0;
+
+			$fireB = new FireOrder(0,0,0,0,0,0,0,0,0,0,0,0);
+			$fireB->angleIn = 90;
+
 			for ($i = 0; $i < sizeof($fires); $i++){
 				$fires[$i]->hitSection = $ships[$i]->structures[0]->id;
 				$fires[$i]->target = $ships[$i];
@@ -63,7 +70,7 @@
 
 				echo "<tr><td colSpan=2>".($ships[$i]->shipType)."</td></tr>";
 				echo "<tr><td>Mass</td><td style='text-align: right'>".($mass)."</td></tr>";
-				echo "<tr><td>Hit </td><td style='text-align: right'>".($ships[$i]->getBaseHitChance())."%</td></tr>";
+				echo "<tr><td>Hit </td><td style='text-align: right'>".($ships[$i]->getBaseHitChance())." (".$ships[$i]->getHitChance($fireA)." / ".$ships[$i]->getHitChance($fireB).")</td></tr>";
 				echo "<tr><td>HP</td><td style='text-align: right'>".($ships[$i]->primary->integrity)."</td></tr>";
 				echo "<tr><td>EP</td><td style='text-align: right'>".($ep)."</td></tr>";
 				echo "<tr><td>Turn Cost</td><td style='text-align: right'>".($turncost)."</td></tr>";

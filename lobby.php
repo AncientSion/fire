@@ -208,7 +208,7 @@ else {
 <script>
 	$(document).ready(function(){
 		var buttons = $(".link");
-		console.log(buttons);
+		//console.log(buttons);
 		$(buttons[0]).click(function(){
 			$("#createGame").toggleClass("disabled");
 		})

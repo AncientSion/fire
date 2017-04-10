@@ -20,7 +20,7 @@ class Structure {
 		$this->negation = $negation;
 		$this->destroyed = $destroyed;
 		$this->integrity = $integrity;
-		$this->intBase = pow($integrity, 1.25);
+		$this->intBase = pow($integrity, 1.5);
 	}
 
 	public function applyDamage($dmg){
@@ -77,7 +77,7 @@ class Structure {
 
 	public function getRemainingNegation($fire){
 		//return $this->getRemainingIntegrity() / $this->integrity * $this->negation;
-		return round(pow($this->remaining, 1.25) / $this->intBase * $this->negation);
+		return round(pow($this->remaining, 1.5) / $this->intBase * $this->negation);
 	}
 }
 

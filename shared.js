@@ -48,20 +48,41 @@ function Animate(){
 		var ele = this.ballAnims[i].anims[j];
 
 		if (ele instanceof FireOrder){
-			for (var i = 0; i < ele.anim.length; i++){
-				if (ele.damages.length && ele.anim[i].n <= ele.anim[i].m*1.25 ||!ele.damages.length && ele.anim[i].n <= ele.anim[i].m){
-					return false;
-				}
+			if (ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m*1.25 || !ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m){
+				return false;
 			}
 			return true;
 		}
 		else if (ele instanceof Salvo){
-			for (var i = 0; i < ele.anim.length; i++){
-				if (ele.fireOrder == undefined && ele.anim[i].n <= ele.anim[i].m*1 || ele.fireOrder != undefined && ele.anim[i].n <= ele.anim[i].m*1.25){
-					return false;
-				}
+			if (ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m*1.25 || !ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m){
+				return false;
 			}
 			return true;
+		}
+	}
+
+	this.isReady = function(i, j, k){
+		var ele = this.ballAnims[i].anims[j];
+		if (ele instanceof FireOrder){
+			if (ele.anim[k].n >= 0){
+				return true;
+			} else return false;
+		}
+
+		else if (ele instanceof Salvo){
+			if (ele.anim[0].n >= 0){
+				return true;
+			} else return false;
+		}
+	}
+
+	this.doAdvance = function(i, j, k){
+		var ele = this.ballAnims[i].anims[j];
+		if (ele instanceof FireOrder){
+			ele.anim[k].n++;
+		}
+		else if (ele instanceof Salvo){
+			ele.anim[k].n++;
 		}
 	}
 
@@ -70,36 +91,32 @@ function Animate(){
 
 		if (ele instanceof FireOrder){
 			ele.anim[k].n++;
-			if (ele.damages.length && ele.anim[k].n >= ele.anim[k].m){
-				var x = ele.shooter.x + (ele.anim[k].nx * ele.anim[k].m);
-				var y = ele.shooter.y + (ele.anim[k].ny * ele.anim[k].m);
-				drawExplosion(x, y, 10, ele.anim[k].n, ele.anim[k].m*1.25);
+			if (ele.anim[k].h && ele.anim[k].n >= ele.anim[k].m){
+				drawExplosion(ele.weapon, ele.anim[k].tx, ele.anim[k].ty, ele.anim[k].n, ele.anim[k].m*1.25);
+				//drawExplosion(ele.weapon, ele.shooter, ele.anim[k]);
 			}
 			else {
-				var x = ele.shooter.x + (ele.anim[k].nx * ele.anim[k].n);
-				var y = ele.shooter.y + (ele.anim[k].ny * ele.anim[k].n);
-				drawProjectile(
-					ele.weapon,
-					ele.shooter.x,
-					ele.shooter.y,
-					x, y,
-					ele.anim[k].n,
-					ele.anim[k].m
-				);
+				//drawProjectile(ele.weapon, ele.shooter.x, ele.shooter.y, tx, ty, ele.anim[k].n, ele.anim[k].m);
+				drawProjectile(ele.weapon, ele.anim[k]);
 			}
 		}
 		else if (ele instanceof Salvo){
-			ele.anim[0].n++;
-			if (ele.fireOrder != undefined && ele.fireOrder.damages.length && ele.anim[0].n >= ele.anim[0].m){
-				drawExplosion(ele.x, ele.y, 10, ele.anim[0].n, ele.anim[0].m*1.25);
+			ele.anim[k].n++;
+			if (ele.fireOrder != undefined && ele.fireOrder.damages.length && ele.anim[k].n >= ele.anim[k].m){
+				for (var i = 0; i < ele.layout.length; i++){
+					if (ele.fireOrder.hits[i]){
+						drawExplosion(ele.structures[i], ele.x + ele.layout[i].x, ele.y + ele.layout[i].y, ele.anim[k].n, ele.anim[k].m*1.25);
+						//drawExplosion(ele.structures[i], ele, ele.anim[k]);
+					}
+				}
 			}
 			else {
-				var x = ele.actions[ele.actions.length-2].x + (ele.anim[0].nx * ele.anim[0].n);
-				var y = ele.actions[ele.actions.length-2].y + (ele.anim[0].ny * ele.anim[0].n);
+				var x = ele.actions[ele.actions.length-2].x + (ele.anim[k].nx * ele.anim[k].n);
+				var y = ele.actions[ele.actions.length-2].y + (ele.anim[k].ny * ele.anim[k].n);
 				ctx.save();
 				ctx.translate(x, y);
 
-				ctx.rotate((ele.anim[0].f + 90) * (Math.PI/180));
+				ctx.rotate((ele.anim[k].f + 90) * (Math.PI/180));
 				ctx.drawImage(ele.img, 0 -ele.size/2, 0 -ele.size/2, ele.size, ele.size);
 
 				ctx.restore();
@@ -123,7 +140,7 @@ function Animate(){
 		if (ele instanceof FireOrder){
 			game.createCombatLogEntry(ele);
 		}
-		else if (ele instanceof Salvo){
+		else if (ele instanceof Salvo && ele.fireOrder != undefined && ele.fireOrder.guns){
 			game.createCombatLogEntry(ele.fireOrder);
 		}
 	}
@@ -131,14 +148,19 @@ function Animate(){
 
 window.animate = new Animate();
 
-window.fps = 100;
-window.fpsInterval = 1000 / window.fps;
+window.fps;
+window.fpsInterval;
 window.speedMod = 1;
 
 window.startTime, window.now, window.then, window.elapsed;
 
 
 window.iterator = 0;
+
+function setFPS(fps){
+	window.fps = fps;
+	window.fpsInterval = 1000 / window.fps;
+}
 
 function initiateShip(i){
 
@@ -158,7 +180,9 @@ function initiateShip(i){
 		window.ships[i].available
 	)
 
+
 	if (! ship.flight){
+		ship.hitTable = window.ships[i].hitTable
 		ship.primary = new Primary(
 			window.ships[i].primary.id,
 			window.ships[i].primary.parentId,
@@ -177,7 +201,8 @@ function initiateShip(i){
 				window.ships[i].primary.systems[j].powerReq,
 				window.ships[i].primary.systems[j].output,
 				window.ships[i].primary.systems[j].effiency,
-				window.ships[i].primary.systems[j].maxBoost
+				window.ships[i].primary.systems[j].maxBoost,
+				window.ships[i].primary.systems[j].boostEffect
 			)
 
 			for (var k = 0; k < window.ships[i].primary.systems[j].damages.length; k++){
@@ -307,6 +332,7 @@ function initiateShip(i){
                     window.ships[i].structures[j].systems[k].rakes,
                     window.ships[i].structures[j].systems[k].effiency,
                     window.ships[i].structures[j].systems[k].maxBoost,
+                    window.ships[i].structures[j].systems[k].boostEffect,
                     window.ships[i].structures[j].systems[k].fc,
 					window.ships[i].structures[j].systems[k].minDmg,
 					window.ships[i].structures[j].systems[k].maxDmg,
@@ -338,6 +364,7 @@ function initiateShip(i){
 					window.ships[i].structures[j].systems[k].output,
                     window.ships[i].structures[j].systems[k].effiency,
                     window.ships[i].structures[j].systems[k].maxBoost,
+                    window.ships[i].structures[j].systems[k].boostEffect,
                     window.ships[i].structures[j].systems[k].fc,
 					window.ships[i].structures[j].systems[k].minDmg,
 					window.ships[i].structures[j].systems[k].maxDmg,
@@ -374,6 +401,7 @@ function initiateShip(i){
 							window.ships[i].structures[j].systems[k].loads[l].name,
 							window.ships[i].structures[j].systems[k].loads[l].cost,
 							window.ships[i].structures[j].systems[k].loads[l].display,
+							window.ships[i].structures[j].systems[k].loads[l].exploSize,
 							window.ships[i].structures[j].systems[k].loads[l].minDmg,
 							window.ships[i].structures[j].systems[k].loads[l].maxDmg,
 							window.ships[i].structures[j].systems[k].loads[l].impulse,
@@ -407,6 +435,7 @@ function initiateShip(i){
 			}
 
 			if (system){
+				system.type = window.ships[i].structures[j].systems[k].type;
 				if (system.fireOrders){
 					for (var l = 0; l < window.ships[i].structures[j].systems[k].fireOrders.length; l++){
 						system.fireOrders.push(
@@ -507,6 +536,7 @@ function initiateBallistic(i){
 				window.ballistics[i].structures[j].name,
 				window.ballistics[i].structures[j].cost,
 				window.ballistics[i].structures[j].display,
+				window.ballistics[i].structures[j].exploSize,
 				window.ballistics[i].structures[j].minDmg,
 				window.ballistics[i].structures[j].maxDmg,
 				window.ballistics[i].structures[j].impulse,

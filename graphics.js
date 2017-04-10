@@ -19,22 +19,27 @@ function drawVector(origin, target, dist, angle){
 }
 
 
-function drawProjectile(weapon, ox, oy, x, y, as, ae){
+//function drawProjectile(weapon, ox, oy, x, y, now, end){
+function drawProjectile(weapon, fire){
+	//getPointInDirection(dis, angle, oX, oY){
+
+	var x = fire.ox + fire.nx * fire.n;
+	var y = fire.oy + fire.ny * fire.n;
+	var trailEnd = getPointInDirection(weapon.projSize*2.5, fire.f, x, y);
+	var w = 1;
+
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z)
 
-	var trailEnd = getPointInDirection(weapon.projSize*2.5, getAngleFromTo({x: ox, y: oy}, {x: x, y: y}), x, y);
-	var w = 1;
-
-	if (as / ae > 0.7){
-		w -= 2*(as/ae - 0.7);
+	if (fire.n/fire.m > 0.7){
+		w -= 2*(fire.n/fire.m- 0.7);
 	}
 
 	fxCtx.globalAlpha = w
 	fxCtx.beginPath();
 	fxCtx.moveTo(x, y);
 	fxCtx.lineTo(trailEnd.x, trailEnd.y);
-	fxCtx.closePath();	
+	fxCtx.closePath();
 	fxCtx.strokeStyle = weapon.animColor;
 	fxCtx.lineWidth = weapon.projSize/2;
 	fxCtx.stroke();
@@ -48,20 +53,36 @@ function drawProjectile(weapon, ox, oy, x, y, as, ae){
 	fxCtx.setTransform(1,0,0,1,0,0);
 }
 
-function drawExplosion(x, y, s, now, max){
+function drawExplosion(weapon, x, y, now, max){
+//function drawExplosion(weapon, shooter, ele){
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z)
 
-	var sin = s*0.5*Math.sin(Math.PI*now/max);
+	var sin = weapon.exploSize*1.25*Math.sin(Math.PI*now/max);
 	if (sin < 0){
 		return;
 	}
 
 	fxCtx.globalAlpha = 1.5 - (now/max);
 
-	fxCtx.beginPath(); fxCtx.arc(x, y, sin, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = "rgb(255,225,75)"; fxCtx.fill();
-	fxCtx.beginPath(); fxCtx.arc(x, y, sin/3*2, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = "rgb(255,200,0)"; fxCtx.fill();
-	fxCtx.beginPath(); fxCtx.arc(x, y, sin/4, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = "rgb(255,0,0)"; fxCtx.fill();
+	var outer;
+	var mid;
+	var inner;
+
+	if (weapon instanceof EM){
+		outer = "rgb(95,125,255)";
+		mid = "rgb(95,125,255)";
+		inner = "rgb(255,255,255)";
+	}
+	else {
+		outer ="rgb(255,225,75)";
+		mid = "rgb(255,200,0)";
+		inner = "rgb(255,0,0)";
+	}
+
+	fxCtx.beginPath(); fxCtx.arc(x, y, sin, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = outer; fxCtx.fill();
+	fxCtx.beginPath(); fxCtx.arc(x, y, sin/3*2, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = mid; fxCtx.fill();
+	fxCtx.beginPath(); fxCtx.arc(x, y, sin/4, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = inner; fxCtx.fill();
 
 	fxCtx.globalAlpha = 1;
 	fxCtx.setTransform(1,0,0,1,0,0);
@@ -82,32 +103,35 @@ function drawFighterExplosion(x, y, s, now, max){
 	fxCtx.globalAlpha = 1;
 }
 
-function drawBeam(weapon, ox, oy, x, y, now, max, hit){
+function drawBeam(weapon, fire){
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z)
 
-	var fraction = now/max;
+	var fraction = fire.n/fire.m;
 	var charge =  0.5 - 0.3*Math.cos(2*Math.PI*fraction);
 
 	fxCtx.globalAlpha = 1;
 	fxCtx.beginPath();
-	fxCtx.arc(ox, oy, weapon.beamWidth*1.5*charge, 0, 2*Math.PI);
+	fxCtx.arc(fire.ox, fire.oy, weapon.beamWidth*charge, 0, 2*Math.PI);
 	fxCtx.closePath();	
 	fxCtx.fillStyle = weapon.animColor;
 	fxCtx.fill();
 
 	fxCtx.beginPath();
-	fxCtx.arc(ox, oy, weapon.beamWidth*charge, 0, 2*Math.PI);
+	fxCtx.arc(fire.ox, fire.oy, weapon.beamWidth/2*charge, 0, 2*Math.PI);
 	fxCtx.closePath();
 	fxCtx.globalCompositeOperation = "lighter";
 	fxCtx.fillStyle = "white";
 	fxCtx.fill();	
 
+	var x = fire.tax + fire.nx * fire.n;
+	var y = fire.tay + fire.ny * fire.n;
+
 	if (fraction > 0.3){
 		var beamW = 0.5 + 0.5 * Math.cos(2*Math.PI*fraction);
 		fxCtx.lineCap = "round";	
 		fxCtx.beginPath();
-		fxCtx.moveTo(ox, oy);
+		fxCtx.moveTo(fire.ox, fire.oy);
 		fxCtx.lineTo(x, y);
 		fxCtx.closePath();
 
@@ -121,7 +145,7 @@ function drawBeam(weapon, ox, oy, x, y, now, max, hit){
 		fxCtx.lineWidth = 1 + 1* beamW;
 		fxCtx.strokeStyle = "white";
 		fxCtx.stroke();
-		if (hit){
+		if (fire.h){
 			drawBeamExplosion(weapon, x, y, fraction);
 		}
 	}

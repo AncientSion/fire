@@ -1,19 +1,31 @@
 <?php
 	include_once 'global.php';
 	$manager = new Manager();
-?>
 
-<!DOCTYPE html>
-<html>
-<head>
-	<link rel='stylesheet' href='style.css'/>
-</head>
-	<body> 
+
+	foreach ($_POST as $key => $val){
+		if (!$val){
+			continue;
+		}
+		$system = new $val(0, 0, 0, 0);
+		$avg = round(($system->minDmg + $system->maxDmg)/2, 2);
+		echo "<table class='unitTest'><tr><th colSpan=2 style='width: 210px'>".$system->name."</th></tr>";
+		echo "<tr><th colSpan=2 style='text-align: center'>".($system->display)."</th></tr>";
+		echo "<tr><td colSpan=2>".$system->fc[0]."% / ".$system->fc[1]."%</td></tr>";
+		echo "<tr><td>AccDecay</td><td style='text-align: right'>".($system->accDecay)."</td></tr>";
+		echo "<tr><td>Shots</td><td style='text-align: right'>".($system->shots)."</td></tr>";
+		echo "<tr><td>MinDmg</td><td style='text-align: right'>".($system->minDmg)."</td></tr>";
+		echo "<tr><td>MaxDmg</td><td style='text-align: right'>".($system->maxDmg)."</td></tr>";
+		echo "<tr><td>Avg</td><td style='text-align: right'>".($avg)."</td></tr>";
+		echo "<tr><td>Dmg per Salvo</td><td style='text-align: right'>".($avg*$system->shots)."</td></tr>";
+		echo "</table>";
+	}
+		/*	
 			<?php
 
 				$time = -microtime(true);
 
-				$systems = $manager->logSystemsByClass(array("Matter", "Ion"));
+				$systems = $manager->logSystemsByClass(array("Matter", "Ion", "Pulse"));
 				//$compare = array("LightIon", "MediumIon", "LightPulseCannon", "MediumPulseCannon", "FusionCannon");
 				//$systems = $manager->compareSystems($compare);
 
@@ -41,8 +53,51 @@
 				echo "</br><span style='font-size: 20px'>Time: ".round($time, 3)." seconds.";
 
 			?>
+*/
 
-		</table>
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel='stylesheet' href='style.css'/>
+</head>
+	<body> 
+		<div>
+			<form method="post">
+				<table style="width: 100%; margin: auto" >
+					<tr>
+						<td>
+							<input type="form" style="text-align: center" placeholder="system name" name="a"></input>		
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="form" style="text-align: center" placeholder="system name" name="b"></input>		
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="form" style="text-align: center" placeholder="system name" name="c"></input>		
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="form" style="text-align: center" placeholder="system name" name="d"></input>		
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="form" style="text-align: center" placeholder="system name" name="e"></input>		
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="submit" value="Confirm and Forward"></input>	
+						</td>
+					</tr>
+				</table>
+		</div>
 	</body>
 </html>
 
