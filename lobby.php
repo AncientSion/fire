@@ -31,7 +31,7 @@ if (isset($_SESSION["userid"])){
 	//echo "<script> var omega = ".json_encode($ship, JSON_NUMERIC_CHECK).";</script>";
 	//son_encode($ship, JSON_NUMERIC_CHECK);
 	
-	$ongoingGames = $manager->getOngoingGames();
+	$ongoingGames = $dbManager->getMyGames($_SESSION["userid"]);
 	for ($i = 0; $i < sizeof($ongoingGames); $i++){
 		if ($manager->canAdvance($ongoingGames[$i]["id"])){
 			$manager->prepareAdvance($ongoingGames[$i]["id"]);
@@ -62,29 +62,26 @@ if (isset($_SESSION["userid"])){
 		$ongoingGamesElement .= "</tr>";
 		
 		foreach ($ongoingGames as $game){
+			var_export($game);
+			echo "<br>";
+			echo "<br>";
+
 			$phase = "";
 
 			switch ($game["phase"]){
 				case -1:
-					$phase = "Deployment / Initial";
-					break;
+					$phase = "Deployment / Initial"; break;
 				case 0:
-					$phase = "Capital Movement";
-					break;
+					$phase = "Capital Movement"; break;
 				case 1:
-					$phase = "Flight Movement";
-					break;
+					$phase = "Flight Movement"; break;
 				case 2:
-					$phase = "Firing";
-					break;
+					$phase = "Firing"; break;
 				case 3:
-					$phase = "Damage Control";
-					break;
+					$phase = "Damage Control"; break;
 				default:
 					break;
 			}
-
-			$gameStatus = $manager->getGameStatus($game["id"], $game["turn"]);
 			
 			$ongoingGamesElement .= "<tr>";
 			$ongoingGamesElement .= "<td>";
@@ -96,13 +93,13 @@ if (isset($_SESSION["userid"])){
 			$ongoingGamesElement .= "<td>".$game["turn"]."</td>";
 			$ongoingGamesElement .= "<td>".$phase."</td>";
 
-			$status = $gameStatus["status"];
+			$status = $game["playerstatus"];
 			$td;
 			if ($status == "waiting"){
-				$td = "<td style='color: white; background-color: red'>".$status."</td>";
+				$td = "<td style='color: white; background-color: red'>Awaiting Orders</td>";
 			}
 			else {
-				$td = "<td style='color: white; background-color: green'>".$status."</td>";
+				$td = "<td style='color: white; background-color: green'>Waiting for Opponent</td>";
 			}
 			$ongoingGamesElement .= $td;
 			$ongoingGamesElement .= "</tr>";

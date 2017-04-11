@@ -1241,7 +1241,7 @@ class DBManager {
 		return $result[0]["turn"];
 	}
 	
-	public function getGameStatus($gameid, $userid, $turn){
+	public function getMyStatusForGame($gameid, $userid, $turn){
 	
 		$stmt = $this->connection->prepare("
 			SELECT status FROM playerstatus
@@ -1500,26 +1500,31 @@ class DBManager {
 	}
 
 
-	public function getOngoingGames($id){
-		$stmt = $this->connection->prepare("
-			SELECT * FROM games
-			WHERE status = :status
-		");
 		
-		$ongoing = "active";
-		$stmt->bindParam(":status", $ongoing);
+
+	public function getMyGames($userid){
+	/*	$stmt = $this->connection->prepare("
+			SELECT * FROM games
+			JOIN playerstatus 
+				ON playerstatus.userid = :id
+			AND games.id = playerstatus.userid
+		");
+	*/
+
+		$stmt = $this->connection->prepare("
+			SELECT playerstatus.status as playerstatus, games.id, games.name, games.turn, games.phase, games.status FROM playerstatus
+			RIGHT JOIN games
+				ON playerstatus.gameid = games.id
+			WHERE playerstatus.userid = :userid
+			AND games.status = :status
+		");
+		$status = "active";
+		$stmt->bindParam(":status", $status);
+		$stmt->bindParam(":userid", $userid);
 		$stmt->execute();
 		
-		$result = $stmt->fetchAll();
-		
-		if (sizeof($result) >= 1){
-		//	debug::log("Games found: ".sizeof($result));
-			return $result;
-		}
-		else {
-		//	debug::log("no gams found");
-			return false;
-		}
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		return $result;
 	}
 
 
