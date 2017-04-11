@@ -201,7 +201,7 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		}
 		else {
 			var facing = 0;
-			if (this.userid == 1){facing = 0;}else {facing = 180};
+			if (game.playerindex % 2 == 0){facing = 180;}
 			this.actions.push(new Move("deploy", 0, pos.x, pos.y, facing, 0, 0));
 			this.deployed = true;
 

@@ -1881,7 +1881,7 @@ function Hangar(id, parentId, name, display, start, end, integrity, powerReq, re
 
 		if (this.canLaunchFlight()){
 			$("#hangarLoadoutDiv").find("input").removeClass("disabled");
-		}
+		} else $("#hangarLoadoutDiv").find("input").addClass("disabled");
 	}
 
 	this.launchFlight = function(){
