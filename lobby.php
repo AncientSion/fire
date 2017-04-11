@@ -62,10 +62,6 @@ if (isset($_SESSION["userid"])){
 		$ongoingGamesElement .= "</tr>";
 		
 		foreach ($ongoingGames as $game){
-			var_export($game);
-			echo "<br>";
-			echo "<br>";
-
 			$phase = "";
 
 			switch ($game["phase"]){
