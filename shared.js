@@ -92,7 +92,7 @@ function Animate(){
 		if (ele instanceof FireOrder){
 			ele.anim[k].n++;
 			if (ele.anim[k].h && ele.anim[k].n >= ele.anim[k].m){
-				drawExplosion(ele.weapon, ele.anim[k].tx, ele.anim[k].ty, ele.anim[k].n, ele.anim[k].m*1.25);
+				drawExplosion(ele.weapon, ele.anim[k].tx, ele.anim[k].ty, ele.anim[k].n, ele.anim[k].m+30);
 				//drawExplosion(ele.weapon, ele.shooter, ele.anim[k]);
 			}
 			else {
@@ -105,7 +105,7 @@ function Animate(){
 			if (ele.fireOrder != undefined && ele.fireOrder.damages.length && ele.anim[k].n >= ele.anim[k].m){
 				for (var i = 0; i < ele.layout.length; i++){
 					if (ele.fireOrder.hits[i]){
-						drawExplosion(ele.structures[i], ele.x + ele.layout[i].x, ele.y + ele.layout[i].y, ele.anim[k].n, ele.anim[k].m*1.25);
+						drawExplosion(ele.structures[i], ele.x + ele.layout[i].x, ele.y + ele.layout[i].y, ele.anim[k].n, ele.anim[k].m+30);
 						//drawExplosion(ele.structures[i], ele, ele.anim[k]);
 					}
 				}

@@ -67,3 +67,45 @@ id: 16, status: impact, des
  => DB insertDamageEntries: 29
  => DB insertCritEntries: 0
 startDamageControlPhase
+handleShipMovementPhase
+resolveUnitMovement
+resolveUnitMovementDB
+startFighterMovementPhase
+handleFighterMovementPhase
+resolveUnitMovement
+resolveUnitMovementDB
+initiateDogfights
+createDogfightFires
+startFiringPhase
+advancing game state time: 0.018 seconds.
+advancing game state time: 0.048 seconds.
+handleFiringPhase
+resolveFireOrder ID 9, shooter: Vorchan #3 vs Omega #1, w: MediumIon #2
+resolveFireOrder ID 10, shooter: Vorchan #3 vs Omega #1, w: MediumIon #4
+resolveFireOrder ID 12, shooter: Omega #1 vs Vorchan #3, w: HeavyLaser #2
+resolveFireOrder ID 13, shooter: Omega #1 vs Vorchan #3, w: HeavyLaser #3
+DB updateFireOrders: 4
+createBallisticActions, size: 2
+handleBallisticInterception | balls:2, intercepts: 1
+resolveFireOrder ID 11, shooter: Vorchan #3 vs Salvo #5, w: LightIon #8
+intercept range: 61
+ => target system Myrmidon #2 DESTROYED ----  rem: 6, doing: 10, OK for: 4 dmg
+DB updateFireOrders: 1
+resolveBallisticActions: 2
+resolveBallisticFireOrder ID 14, shooter: Salvo #6 vs Artemis #2, w: 0
+resolveBallisticFireOrder ID 15, shooter: Salvo #6 vs Artemis #2, w: 1
+DB updateFireOrders: 2
+handleDogfights
+deleteDogfights: 0
+ => DB insertDamageEntries: 8
+ => DB insertCritEntries: 0
+setUnitStatusDB
+setUnitStatusDB
+startDamageControlPhase
+advancing game state time: 0.144 seconds.
+createPlayerStatus
+1
+2
+0
+-1
+joined

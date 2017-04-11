@@ -389,14 +389,37 @@ table, th, tr, td {
 	border: 1px solid white;
 }
 
+.buttonSelection {
+	cursor: pointer;
+	background-color: blue;
+	color: white;
+}
+
+.buttonSelection td {
+	font-size: 20px;
+}
+
+.buttonSelection:hover {
+	color: red;
+}
+
 #game {
-	position: relative;
+}
+
+.game {
+	position: absolute;
 	top: 0px;
 	left: 0px;
 }
 
 #game.disabled {
 	display: none;
+}
+
+#game.setup {
+	position: relative;
+	top: 0px;
+	left: 0px;
 }
 
 #shipCanvas {
@@ -530,8 +553,12 @@ table, th, tr, td {
 	top: 0;
 	bottom: 0;
 	z-index: 1;
-	background-color: green;
+	background-color: blue;
 	height: 100%;
+}
+
+.primaryTable div.integrityNow {
+	background-color: green;
 }
 
 .struct div.integrityFull {
@@ -952,7 +979,8 @@ table, th, tr, td {
 	position: absolute;
 	color: white;
 	background-color: black;
-	border-radius: 5px;;
+	border-radius: 5px;
+	width: 80px
 }
 
 #weaponAimTableWrapper {

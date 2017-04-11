@@ -362,7 +362,7 @@ class Manager {
 				$picks = array();
 				$validShips = $this->getShipsForFaction($this->playerstatus[$i]["faction"]);
 				for ($j = 0; $j < 2; $j++){
-					if (mt_rand(0, 2) == 1){
+					if (mt_rand(0, 3) == 3){
 						$picks[] = $validShips[mt_rand(0, sizeof($validShips)-1)];
 						$picks[sizeof($picks)-1]["arrival"] = mt_rand(2, 4);
 					}

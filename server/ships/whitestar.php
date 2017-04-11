@@ -24,12 +24,10 @@ class WhiteStar extends Light {
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 425, 25);
 		$right->systems[] = new FusionPulsar($this->getId(), $this->id, 0, 60);
-		$right->systems[] = new EMPulseCannon($this->getId(), $this->id, 0, 360);
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 425, 25);
 		$left->systems[] = new FusionPulsar($this->getId(), $this->id, 300, 360);
-		$left->systems[] = new EMPulseCannon($this->getId(), $this->id, 0, 360);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

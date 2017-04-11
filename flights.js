@@ -291,14 +291,14 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 	}
 	
 	this.getBaseImpulse = function(){
-		if (this.actions[0].turn == game.turn){
+		if (this.actions.length && this.actions[0].turn == game.turn){
 			return Math.floor(210/2);
 		}
 		return 210;
 	}
 
 	this.getTurnAngle = function(){
-		return 30;
+		return 25;
 	}
 
 	this.hasWeaponsSelected = function(){		
@@ -467,8 +467,12 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 
 		var w = $(div).width();
 		var h = $(div).height();
+		var left = 50;
+		if (this.facing < 90 || this.facing > 270){
+			left = res.x - w - 50;
+		}
 
-		$(div).css("top", 0).css("left", res.x/2 - w/2);
+		$(div).css("top", 100).css("left", left).addClass("disabled");
 
 		$(div).contextmenu(function(e){
 			e.stopPropagation();
@@ -504,7 +508,7 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 		
 		var table = document.createElement("table");
 			table.insertRow(-1).insertCell(-1).innerHTML =  this.structures.length + " Fighters #" + this.id;
-			table.insertRow(-1).insertCell(-1).innerHTML =  "Base hit: " + this.getBaseHitChance() + "%";
+			table.insertRow(-1).insertCell(-1).innerHTML =  this.getBaseHitChance() + "%";
 			if (this.dogfight){
 				table.insertRow(-1).insertCell(-1).innerHTML = "<span class='red'>Dogfight-lock vs #" + this.dogfight + "</span>";
 			}

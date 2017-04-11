@@ -58,7 +58,7 @@ function drawExplosion(weapon, x, y, now, max){
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z)
 
-	var sin = weapon.exploSize*1.25*Math.sin(Math.PI*now/max);
+	var sin = weapon.exploSize*1*Math.sin(Math.PI*now/max);
 	if (sin < 0){
 		return;
 	}

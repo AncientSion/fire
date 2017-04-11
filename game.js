@@ -330,6 +330,8 @@ function Game(id, name, status, userid, turn, phase){
 	}
 
 	this.initDeployment = function(){
+		cam.setZoom(0.5);
+		//cam.setFocus()
 		$("#deployWrapper").removeClass("disabled");
 	}
 
@@ -771,7 +773,7 @@ function Game(id, name, status, userid, turn, phase){
 					game.ships[i].drawSelf();
 				}
 				else {
-					game.ships[i].deployAnim.t[0] += 20;
+					game.ships[i].deployAnim.t[0] += 3;
 					var fraction = game.ships[i].deployAnim.t[0] / game.ships[i].deployAnim.t[1];
 
 					if (fraction >= 1){
@@ -1208,9 +1210,9 @@ drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
 								}
 								else if (game.fireOrders[i].anim[j][k].h){ // shot animated, does it explode ?
 									game.fireOrders[i].anim[j][k].n += 1;
-drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].tx, game.fireOrders[i].anim[j][k].ty, game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m*1.25); // EXPLO
+drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].tx, game.fireOrders[i].anim[j][k].ty, game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m+30); // EXPLO
 									//drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].shooter, game.fireOrders[i].anim[j][k]);
-									if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m*1.25){
+									if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m+30){
 										game.fireOrders[i].anim[j][k].done = true;
 									}
 								}

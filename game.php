@@ -424,10 +424,11 @@ foreach ($manager->playerstatus as $player){
 	$(document).ready(function(){
 		window.res.x = window.innerWidth-1;
 		window.res.y = window.innerHeight-1;
-		$("#reinforceTable").hide();
+		//$("#reinforceTable").hide();
 		$("#mouseCanvas").bind("mouseleave", function(){
 			$("#weaponAimTableWrapper").hide();
 		})
+		$("#game").addClass("game");
 
 		$(this).keypress(function(e){
 			if (game){

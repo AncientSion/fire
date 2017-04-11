@@ -138,7 +138,7 @@ else {
 									0
 								</th>
 							</tr>
-							<tr id="confirmFleet" class="disabled">
+							<tr id="confirmFleet" class="buttonSelection disabled">
 								<th onclick="confirmFleetPurchase()" colSpan=2>
 									Confirm Fleet Selection
 								</th>
@@ -252,13 +252,11 @@ else {
 
 
 					var tr = table.insertRow(-1);
+						tr.className = "buttonSelection";
 					var button = tr.insertCell(-1);
 						button.innerHTML = "--- Confirm Ship Selection ---";
-						button.style = "font-size: 20px; cursor: pointer; background-color: blue";
 						button.colSpan = 2;
-						$(button).hover(function(){
-							$(this).toggleClass("selectionHighlight");
-						}).click(function(){
+						$(button).click(function(){
 							window.addShipToFleet();
 						});
 					}
@@ -435,7 +433,7 @@ else {
 		ship.create();
 		$("#game").removeClass("disabled");
 		ship.createBaseDiv();
-		$(".shipDiv").css("left", "435px").css("top", "-315px").removeClass("disabled");
+		$(".shipDiv").css("left", "460px").css("top", "220px").removeClass("disabled");
 		drawShipPreview();
 
 		var div = document.createElement("div");

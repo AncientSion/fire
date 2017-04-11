@@ -21,8 +21,8 @@ class Sharlin extends UltraHeavy {
 			$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$left->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
 			$left->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
-			$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
-			$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
+			$left->systems[] = new EMPulseCannon($this->getId(), $this->id, 180, 0);
+			$left->systems[] = new EMPulseCannon($this->getId(), $this->id, 180, 0);
 			$left->systems[] = new FusionCannon($this->getId(), $this->id, 210, 330);
 			$left->systems[] = new FusionCannon($this->getId(), $this->id, 210, 330);
 			$left->systems[] = new NeutronLaser($this->getId(), $this->id, 210, 330);
@@ -34,8 +34,8 @@ class Sharlin extends UltraHeavy {
 			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$right->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
 			$right->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
-			$right->systems[] = new FusionCannon($this->getId(), $this->id, 0, 120);
-			$right->systems[] = new FusionCannon($this->getId(), $this->id, 0, 120);
+			$right->systems[] = new EMPulseCannon($this->getId(), $this->id, 0, 180);
+			$right->systems[] = new EMPulseCannon($this->getId(), $this->id, 0, 180);
 			$right->systems[] = new FusionCannon($this->getId(), $this->id, 30, 150);
 			$right->systems[] = new FusionCannon($this->getId(), $this->id, 30, 150);
 			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 30, 150);

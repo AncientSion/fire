@@ -1610,8 +1610,12 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 
 		var w = $(div).width();
 		var h = $(div).height();
+		var left = 50;
+		if (this.facing < 90 || this.facing > 270){
+			left = res.x - w - 50;
+		}
 
-		$(div).css("top", 0).css("left", res.x/2 - w/2).addClass("disabled");
+		$(div).css("top", 100).css("left", left).addClass("disabled");
 
 		return div;
 	}
@@ -1751,9 +1755,9 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		} else $(ele).attr("class", "hostile");
 
 		var baseHit = this.getBaseHitChance();
-		var table = document.createElement("table");
+		var table = document.createElement("table"); table.style.margin = "auto";
 			table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id;
-			table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit: " + Math.floor(this.profile[0] * baseHit) + "% - " + Math.floor(this.profile[1] * baseHit) + "%";
+			table.insertRow(-1).insertCell(-1).innerHTML = Math.floor(this.profile[0] * baseHit) + "% - " + Math.floor(this.profile[1] * baseHit) + "%";
 		return table;
 	}
 
