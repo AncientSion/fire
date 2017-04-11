@@ -411,15 +411,15 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 				})
 				
 				if (status == "impact"){
-					var img = new Image(); img.className = "ammoImpact"; img.src = "/fire/varIcons/impact.png";
+					var img = new Image(); img.className = "ammoImpact"; img.src = "varIcons/impact.png";
 					td.appendChild(img);
 				}
 				else if (status == "destroyed"){
-					var img = new Image(); img.className = "ammoDestroyed"; img.src = "/fire/varIcons/destroyed.png";
+					var img = new Image(); img.className = "ammoDestroyed"; img.src = "varIcons/destroyed.png";
 					td.appendChild(img);
 				}
 				else if (status == "lostlock"){
-					var img = new Image(); img.className = "ammoDestroyed"; img.src = "/fire/varIcons/destroyed.png";
+					var img = new Image(); img.className = "ammoDestroyed"; img.src = "varIcons/destroyed.png";
 					td.appendChild(img);
 					//var img = new Image(); img.className = "ammoLostLock"; img.src = "/fire/varIcons/lostlock.png";
 					//td.appendChild(img);

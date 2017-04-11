@@ -190,7 +190,7 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 	}
 
 	this.getEP = function(){
-		if (this.actions[0].turn == game.turn){
+		if (this.actions.length && this.actions[0].turn == game.turn){
 			return Math.floor(this.ep/2);
 		}
 		return this.ep;
