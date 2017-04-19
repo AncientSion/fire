@@ -21,8 +21,8 @@ class Flight extends Mini {
 		$this->destroyed = $destroyed;
 	}
 
-	function setState(){
-		parent::setState();
+	function setState($turn){
+		parent::setState($turn);
 		$alive = 0;
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (!$this->structures[$i]->destroyed){
@@ -124,7 +124,7 @@ class Fighter extends Structure {
 	public $negation = array();
 	public $crits = array();
 	public $integrity;
-	public $turns = 1;
+	public $turns;
 	
 	function __construct($id, $parentId){
 		$this->id = $id;
@@ -132,7 +132,7 @@ class Fighter extends Structure {
 		$this->addSystems();
 	}
 
-	function setState(){
+	function setState($turn){
 		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
 			if ($this->damages[$i]->destroyed){
 				$this->destroyed = true;
@@ -257,10 +257,10 @@ class Aurora extends Fighter {
 	public $faction = "Earth Alliance";
 	public $value = 34;
 	public $mass = 38;
-	public $ep = 90;
+	public $ep = 100;
 	public $integrity = 34;
 	public $negation = array(8, 6, 6);
-	public $turns = 2;
+	public $turns = 3;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -276,10 +276,10 @@ class Thunderbolt extends Fighter {
 	public $faction = "Earth Alliance";
 	public $value = 46;
 	public $mass = 42;
-	public $ep = 100;
+	public $ep = 110;
 	public $integrity = 38;
 	public $negation = array(10, 8, 8);
-	public $turns = 2;
+	public $turns = 3;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -296,10 +296,10 @@ class Nial extends Fighter {
 	public $faction = "Minbari Federation";
 	public $value = 58;
 	public $mass = 36;
-	public $ep = 120;
+	public $ep = 140;
 	public $integrity = 42;
 	public $negation = array(11, 10, 8);
-	public $turns = 3;
+	public $turns = 5;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -315,10 +315,10 @@ class Sentri extends Fighter {
 	public $faction = "Centauri Republic";
 	public $value = 28;
 	public $mass = 32;
-	public $ep = 110;
+	public $ep = 115;
 	public $integrity = 32;
 	public $negation = array(8, 7, 7);
-	public $turns = 2;
+	public $turns = 3;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

@@ -1,11 +1,11 @@
 <?php
 
 class Linked extends Weapon {
-	public $exploSize = 4;
+	public $exploSize = 2;
 	public $projSpeed = 7;
 	public $projSize = 3;
 	public $reload = 1;
-	public $priority = 6;
+	public $priority = 10;
 	public $fc = array(0 => 100, 1 => 200);
 
 	function __construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end){

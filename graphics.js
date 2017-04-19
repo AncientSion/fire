@@ -14,7 +14,7 @@ function drawVector(origin, target, dist, angle){
 
 	$("#vectorDiv").html("Distance: " + dist + " </br>Angle: " + Math.round(angle))
 	.css("left", target.x- 45 + "px")
-	.css("top", target.y - 60 + "px")
+	.css("top", target.y + 40 + "px")
 	.removeClass("disabled");
 }
 
@@ -81,8 +81,8 @@ function drawExplosion(weapon, x, y, now, max){
 	}
 
 	fxCtx.beginPath(); fxCtx.arc(x, y, sin, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = outer; fxCtx.fill();
-	fxCtx.beginPath(); fxCtx.arc(x, y, sin/3*2, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = mid; fxCtx.fill();
-	fxCtx.beginPath(); fxCtx.arc(x, y, sin/4, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = inner; fxCtx.fill();
+	fxCtx.beginPath(); fxCtx.arc(x, y, sin*0.66, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = mid; fxCtx.fill();
+	fxCtx.beginPath(); fxCtx.arc(x, y, sin*0.35, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = inner; fxCtx.fill();
 
 	fxCtx.globalAlpha = 1;
 	fxCtx.setTransform(1,0,0,1,0,0);

@@ -6,6 +6,7 @@ class System {
 	public $weapon = 0;
 	public $destroyed = 0;
 	public $disabled = 0;
+	public $dual = 0;
 	public $powerReq = 1;
 	public $output;
 	public $name;
@@ -19,6 +20,8 @@ class System {
 	public $maxBoost = 0;
 	public $mass;
 	public $boostEffect = 0;
+	public $modes = array();
+	public $armourMod;
 
 	function __construct($id, $parentId, $output = 0, $destroyed = 0){
 		$this->id = $id;
@@ -26,26 +29,42 @@ class System {
 		$this->output = $output;
 		$this->destroyed = $destroyed;
 		$this->integrity = $this->mass*2;
+
+		$this->setArmourMod();
 	}
 
-	public function getArmourMod(){
-		return 1;
+	public function setState($turn){
+		$this->isPowered($turn);
+		$this->isDestroyed();
+	}
+
+	public function getActiveSystem(){
+		return $this;
+	}
+
+	public function addPowerEntry($power){
+		$this->powers[] = $power;
+	}
+
+	public function setArmourMod(){
+		$this->armourMod = 1;
 	}
 
 	public function isPowered($turn){
+		if ($this->disabled){return false;}
 		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
 			if ($this->powers[$i]->turn == $turn){
 				if ($this->powers[$i]->type == 0){
+					$this->disabled = 1;
 					return false;
 				}
-			} return true;
-		}
+			} else break;
+		} 
+		return true;
 	}
 
 	public function isDestroyed(){
-		if ($this->destroyed){
-			return true;
-		}
+		if ($this->destroyed){return true;}
 		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
 			if ($this->damages[$i]->destroyed){
 				$this->destroyed = true;
@@ -303,12 +322,15 @@ class Weapon extends System {
 		return $w;
 	}
 
-	public function getArmourMod(){
+	public function setArmourMod(){
 		$w = $this->getArcWidth();
+		if ($w <= 60){$this->armourMod = 0.9;}
+		else if ($w <= 120){$this->armourMod = 0.7;}
+		else if ($w <= 360){$this->armourMod = 0.5;}
+	}
 
-		if ($w <= 60){return 0.9;}
-		else if ($w <= 120){return 0.7;}
-		else if ($w <= 360){return 0.5;}
+	public function getArmourMod(){
+		return $this->armourMod;
 	}
 
 	public function getFireControlMod($fire){
@@ -347,8 +369,8 @@ class Weapon extends System {
 		$armourDmg = 0;
 		$structDmg = 0;
 
-		if ($totalDmg <= $negation/2){
-			$armourDmg = ceil($totalDmg/2);
+		if ($totalDmg <= $negation){
+			$armourDmg = ceil($totalDmg);
 		}
 		else {
 			$armourDmg = ceil(min($totalDmg, $negation));
@@ -486,6 +508,7 @@ class Weapon extends System {
 
 
 class Hangar extends Weapon {
+	public $type = "Hangar";
 	public $name = "Hangar";
 	public $display = "Hangar";
 	public $loads = array();
@@ -493,7 +516,7 @@ class Hangar extends Weapon {
 
 	function __construct($id, $parentId, $start, $end, $output, $effiency, $loads, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-		$this->powerReq = $effiency;
+		$this->powerReq = floor($effiency/2);
 		$this->effiency = $effiency;
 		$this->mass = $output;
 		$this->integrity = $output / 2;
@@ -510,8 +533,8 @@ class Hangar extends Weapon {
 		}
 	}
 
-	public function getArmourMod(){
-		return 0.5;
+	public function setArmourMod(){
+		$this->armourMod = 0.5;
 	}
 
 	public function getHitChance(){

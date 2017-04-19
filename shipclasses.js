@@ -12,7 +12,7 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 	this.size = size;
 	this.userid = userid;
 	this.shipType = shipType;
-	this.baseHitChance = Math.ceil(Math.pow(this.mass, 0.5));
+	this.baseHitChance = Math.ceil(Math.pow(this.mass, 1/3)*5);
 	this.friendly;
 	this.deployed;
 	this.available = available;
@@ -22,6 +22,7 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 	this.salvo = false;
 	this.highlight = false;
 	this.destroyed = false;
+	this.element;
 
 	this.hitTable;
 	this.img;
@@ -157,24 +158,26 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 	this.canDeployHere = function(pos){
 		//console.log(pos);
 		var valid = false;
-		if (game.deployArea.x > 0){
-			if (pos.x >= game.deployArea.x && pos.x <= game.deployArea.x + game.deployArea.w){
-				if (pos.y >= game.deployArea.y && pos.y <= game.deployArea.y + game.deployArea.h){
-					valid = true;
+		for (var i = 0; i < game.deployArea.length; i++){
+			if (game.deployArea[i].id != game.userid){continue;}
+			if (game.deployArea[i].x > 0){
+				if (pos.x >= game.deployArea[i].x && pos.x <= game.deployArea[i].x + game.deployArea[i].w){
+					if (pos.y >= game.deployArea[i].y && pos.y <= game.deployArea[i].y + game.deployArea[i].h){
+						valid = true; break;
+					}
+				}
+			}
+			else if (pos.x <= game.deployArea[i].x && pos.x >= game.deployArea[i].x + game.deployArea[i].w){
+				if (pos.y >= game.deployArea[i].y && pos.y <= game.deployArea[i].y + game.deployArea[i].h){
+					valid = true; break;
+				}
+			}
+			else if (pos.x > game.deployArea[i].x && pos.x < game.deployArea[i].x + game.deployArea[i].w){
+				if (pos.y > game.deployArea[i].y && pos.y < game.deployArea[i].y + game.deployArea[i].h){
+					valid = true; break;
 				}
 			}
 		}
-		else if (pos.x <= game.deployArea.x && pos.x >= game.deployArea.x + game.deployArea.w){
-			if (pos.y >= game.deployArea.y && pos.y <= game.deployArea.y + game.deployArea.h){
-				valid = true;
-			}
-		}
-		else if (pos.x > game.deployArea.x && pos.x < game.deployArea.x + game.deployArea.w){
-			if (pos.y > game.deployArea.y && pos.y < game.deployArea.y + game.deployArea.h){
-				valid = true;
-			}
-		}
-
 		if (valid){
 			for (var i = 0; i < game.ships.length; i++){
 				if (game.ships[i].id != this.id){
@@ -190,6 +193,8 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 			}
 			return true;
 		}
+		else popup("Please deploy inside the green colored area.");
+
 		return false;
 	}
 
@@ -571,6 +576,10 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		moveCtx.stroke();
 
 	}
+
+	this.getSlipAngle = function(){
+		return this.getTurnAngle();
+	}
 	
 	this.drawMoveRange = function(){	
 
@@ -578,10 +587,11 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		
 		var rem = this.getRemainingImpulse();
 		var angle = this.getPlannedFacingToMove(this.actions.length-1);
-		var start = addAngle(10, angle);
-		var end = addAngle(350, angle);
+		var slipAngle = this.getSlipAngle();
+		var start = addAngle(0 + slipAngle, angle);
+		var end = addAngle(360 - slipAngle, angle);
 		
-		this.validMoveArcs = {start: 350, end: 10};
+		this.validMoveArcs = {start: 360 - slipAngle, end: 0 + slipAngle};
 
 		var p1 = getPointInDirection(rem, start, center.x, center.y);
 		var dist = getDistance( {x: center.x, y: center.y}, p1);
@@ -963,14 +973,13 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		var plannedAngle = this.getPlannedFacingToMove(this.actions.length-1);
 		var cost = this.getTurnCost();
 		var delay = this.getTurnDelay();
+		var a = this.getTurnAngle();
+		var w = this.getTurnWidth();
 		
 		if (this.actions.length){
 			center = new Point(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y);
 		}
 		else center = this.getBaseOffsetPos();
-
-		var a = this.getTurnAngle();
-		var w = this.getTurnWidth();
 		
 		for (var j = 1; j >= -1; j = j-2){
 			for (var i = 1; i <= w; i++){
@@ -1063,17 +1072,17 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 	this.drawImpulseUI = function(){
 		var center = {x: this.x, y: this.y};
 		var gui = $("#impulseGUI");
-		var w = $(gui).width();
-		var h = $(gui).height();
+		var w = gui.width();
+		var h = gui.height();
 		var p = getPointInDirection((this.size/2 + w)/cam.z, this.facing + 180, center.x, center.y);
 
-		$(gui).css("left", p.x * cam.z + cam.o.x - w/2).css("top", p.y * cam.z + cam.o.y - h/2).removeClass("disabled");
-		$(gui).find("#enginePower").html(this.getRemainingEP() + " / " + this.getEP());
-		$(gui).find("#impulse").html(this.getRemainingImpulse() + " / " + this.getTotalImpulse());
-		$(gui).find("#remTurnDelay").html(this.getRemainingDelay());
-		$(gui).find("#nextTurnDelay").html(this.getTurnDelay());
-		$(gui).find("#impulseChange").html(this.getImpulseChangeCost() + " EP");
-		$(gui).find("#turnCost").html("<span>" + this.getTurnCost() + " EP</span>");
+		gui.css("left", p.x * cam.z + cam.o.x - w/2).css("top", p.y * cam.z + cam.o.y - h/2).removeClass("disabled");
+		gui.find("#enginePower").html(this.getRemainingEP() + " / " + this.getEP());
+		gui.find("#impulse").html(this.getRemainingImpulse() + " / " + this.getTotalImpulse());
+		gui.find("#remTurnDelay").html(this.getRemainingDelay());
+		gui.find("#nextTurnDelay").html(this.getTurnDelay());
+		gui.find("#impulseChange").html(this.getImpulseChangeCost() + " EP");
+		gui.find("#turnCost").html("<span>" + this.getTurnCost() + " EP</span>");
 
 		var p1 = getPointInDirection(this.size/2 + 10 + 15, this.facing + 180, center.x, center.y);
 
@@ -1321,8 +1330,24 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 				
 		subDiv.appendChild(table);
 		div.appendChild(subDiv);
-		div = this.expandDiv(div);
 
+		$(this.expandDiv(div))
+			.addClass("disabled")
+			.drag()
+			.find($(".structContainer")
+				.contextmenu(function(e){e.stopPropagation;})
+				.hide()
+			)
+			.find($(".header")
+				.contextmenu(
+					function(e){
+						e.stopImmediatePropagation(); e.preventDefault();
+						$(this).parent().find($(".structContainer")).toggle();
+					}
+				)
+			)
+
+		this.element = div;
 	}
 
 	this.expandDiv = function(div){
@@ -1331,13 +1356,6 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		var img =  window.shipImages[this.name.toLowerCase()].cloneNode(true); img.className = "rotate270size90";
 			iconContainer.appendChild(img);
 		div.appendChild(iconContainer);
-
-		$(div).drag();
-		$(div).contextmenu(function(e){
-			//e.preventDefault();
-			e.stopPropagation();
-			//$(this).addClass("disabled");
-		})
 			
 		document.getElementById("game").appendChild(div);
 
@@ -1376,7 +1394,6 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 
 
 		var conWidth = $(structContainer).width();
-//		console.log(conWidth);
 		var conHeight = $(structContainer).height();
 
 		// PRIMARY
@@ -1406,6 +1423,7 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 					powerDiv.style.left = 31 + "px"
 					td.appendChild(powerDiv);
 				}
+
 				systems++;
 				tr.appendChild(td);
 
@@ -1441,7 +1459,6 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 				
 			var structTable = document.createElement("table");
 				structTable.className = "structTable";
-				$(structDiv).data("structureId", i);
 
 			structTable.appendChild(this.structures[i].getTableRow());
 
@@ -1516,8 +1533,17 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 
 				var powerDiv = this.structures[i].systems[j].getPowerDiv();
 				if (powerDiv){
-					powerDiv.style.left = colWidth * 31 + "px"
+					powerDiv.style.left = colWidth * 31 + "px";
 					td.appendChild(powerDiv);
+				}
+
+				var modeDiv = this.structures[i].systems[j].getModeDiv();
+				if (modeDiv){
+					td.appendChild(modeDiv);
+				}
+
+				if (this.structures[i].systems[j].dual && !this.structures[i].systems[j].effiency){
+					$(td).find(".outputMask").hide();
 				}
 
 				col++;
@@ -1588,7 +1614,6 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 			
 			$(structDiv)
 				.data("id", this.structures[i].id)
-				.data("structureId", i)
 				.css("left", pos.x + -w/2)
 				.css("top", pos.y + offsetY)
 		}
@@ -1608,16 +1633,17 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 
 		$(structContainer).css("height", height + 20);
 
-		var w = $(div).width();
+/*		var w = $(div).width();
 		var h = $(div).height();
 		var left = 50;
 		if (this.facing < 90 || this.facing > 270){
 			left = res.x - w - 50;
 		}
+		var x = this.x +cam.o.x - w/2;
+		var y = this.y +cam.o.y + 150;
 
-		$(div).css("top", 100).css("left", left).addClass("disabled");
-
-		return div;
+		$(div).css("left", x).css("top", y);
+*/		return div;
 	}
 	
 	this.updateDiv = function(){
@@ -1638,25 +1664,24 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 	}
 
 	this.updateDivPower = function(system){
-		/*
-		if (system instanceof Launcher){
-			this.updateNonPowerOutput(system);
-			return;
-		}
-		*/
-
-		var divs = document.getElementsByClassName("shipDiv");
+		/*var divs = document.getElementsByClassName("shipDiv");
 		for (var i = 0; i < divs.length; i++){
 			if ($(divs[i]).data("shipId") == this.id){
 				var divs = divs[i];
 				break;
 			}
-		}
+		}*/
 		var reactor = this.getSystemByName("Reactor");
-		var rFound = false;
-		var sFound = false;
+		//var rFound = false;
+		//var sFound = false;
 
-		$(divs).find(".system").each(
+		$(system.element).find(".outputMask").html(system.getOutput());
+		system.update();
+
+		var s = reactor.getOutput();
+		$(this.getSystemByName("Reactor").element).find(".outputMask").html(reactor.getOutput());
+
+		/*$(divs).find(".system").each(
 			function(){
 				if ($(this).data("systemId") == reactor.id){
 					$(this).find(".outputMask").html(reactor.getOutput());
@@ -1675,7 +1700,7 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 					}
 				}
 			}
-		)
+		)*/
 	}
 
 	this.updateNonPowerOutput = function(system){
@@ -1729,36 +1754,34 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 	}
 
 	this.selectAll = function(e, id){
-		var display = this.getSystemById(id).display;
+		var name = this.getSystemById(id).getImageName();
+		var dual = 0;
+		if (name == "Hangar"){return;}
+
 		for (var i = 0; i < this.structures.length; i++){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
-				if (this.structures[i].systems[j].display == display){
+				if (this.structures[i].systems[j].getImageName() == name){
 					if (! this.structures[i].systems[j].destroyed){
 						this.structures[i].systems[j].select(e);
 					}
 				}
 			}
 		}
-		return true;
+		return;
 	}
 
 	this.getShortInfo = function(){
 		var ele = $("#shortInfo");
-		if (game.shortInfo){
-			game.shortInfo = false;
-			$(ele).html("");
-		}		
-		game.shortInfo = this.id;
-
 		if (this.userid == game.userid){
 			$(ele).attr("class", "friendly");
 		} else $(ele).attr("class", "hostile");
 
 		var baseHit = this.getBaseHitChance();
-		var table = document.createElement("table"); table.style.margin = "auto";
+		var table = document.createElement("table");
 			table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id;
-			table.insertRow(-1).insertCell(-1).innerHTML = Math.floor(this.profile[0] * baseHit) + "% - " + Math.floor(this.profile[1] * baseHit) + "%";
-		return table;
+			table.insertRow(-1).insertCell(-1).innerHTML = Math.floor(this.profile[0] * baseHit) + "% - " + Math.floor(this.profile[1] * baseHit) + "%";		
+			table.insertRow(-1).insertCell(-1).innerHTML =  "Impulse: " + this.getTotalImpulse();
+			return table;
 	}
 
 	this.getIncomingBallistics = function(){
@@ -1772,22 +1795,23 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 	}
 
 	this.switchDiv = function(){
-		var self = this;
-		$(".shipDiv").each(function(){
-			if ($(this).data("shipId") == self.id){
-				if ($(this).hasClass("disabled")){
-					$(this)
-					.removeClass("disabled")
-				}
-				else {
-					$(this).addClass("disabled");
-				}
-				return;
-			}
-		})
+		if ($(this.element).hasClass("disabled")){
+			$(this.element)
+			.removeClass("disabled")
+		}
+		else {
+			$(this.element).addClass("disabled");
+		}
+		return;
 	}
 
 	this.canBoost = function(system){
+		if (system instanceof Dual){
+			console.log("cost: "+system.getActiveWeapon().effiency);
+			console.log("max: "+system.getActiveWeapon().maxBoost);
+			console.log(system.getActiveWeapon().boostEffect);
+		}
+
 		if (system.disabled || system.destroyed){
 			return false;
 		}
@@ -1903,11 +1927,14 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		aUnit = false;
 		this.selected = false;
 		if (game.deploying){game.disableDeployment()}
+		else if (game.flightDeploy){game.flightDeploy = false;}
 		this.turns = [];
 		this.unselectSystems();
 		this.switchDiv();
 		this.unsetMoveMode();
 		$("#hangarLoadoutDiv").addClass("disabled");
+		$("#popupWrapper").hide()
+		$("#instructWrapper").hide()
 		$("#systemDetailsDiv").remove();
 		$(fxCanvas).css("opacity", 1);
 	}
@@ -1977,7 +2004,7 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		for (var i = 0; i < this.structures.length; i++){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
 				for (var k = 0; k < this.structures[i].systems[j].powers.length; k++){
-					if (this.structures[i].systems[j].powers[k].turn == game.turn){
+					if (this.structures[i].systems[j].powers[k].new){
 						powers.push(this.structures[i].systems[j].powers[k]);
 					}
 				}
@@ -1985,7 +2012,7 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		}
 		for (var i = 0; i < this.primary.systems.length; i++){
 			for (var j = 0; j < this.primary.systems[i].powers.length; j++){
-				if (this.primary.systems[i].powers[j].turn == game.turn){
+				if (this.primary.systems[i].powers[j].new){
 					powers.push(this.primary.systems[i].powers[j]);
 				}
 			}

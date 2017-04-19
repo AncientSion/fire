@@ -3,7 +3,7 @@
 class Launcher extends Weapon {
 	public $type = "Launcher";
 	public $animation = "projectile";
-	public $priority = 6;
+	public $priority = 8;
 	public $loads = array();
 	public $reload = 2;
 	public $launchRate;
@@ -35,12 +35,12 @@ class Launcher extends Weapon {
 		$this->ammo->output = $dbLoad[0]["amount"];
 	}
 
-	public function getArmourMod(){
+	public function setArmourMod(){
 		$w = $this->getArcWidth();
 
-		if ($w <= 120){return 0.8;}
-		else if ($w <= 180){return 0.6;}
-		else return 0.3;
+		if ($w <= 120){$this->armourMod = 0.8;}
+		else if ($w <= 180){$this->armourMod =  0.6;}
+		else $this->armourMod =  0.3;
 	}
 
 	public function getCritEffects(){
@@ -59,9 +59,6 @@ class MissileLauncher extends Launcher {
 	public $name = "MissileLauncher";
 	public $display = "Missile Launcher";
 	public $animColor = "black";
-	public $projSize = 2;
-	public $projSpeed = 6;
-	public $exploSize = 3;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $launchRate, $loads, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $launchRate, $loads, $destroyed);
@@ -74,12 +71,13 @@ class Hasta extends Ammo {
 	public $type = "explosive";
 	public $minDmg = 23;
 	public $maxDmg = 29;
-	public $impulse = 260;
+	public $impulse = 110;
 	public $integrity = 12;
 	public $armour = 3;
 	public $mass = 2;
 	public $fc = array(0 => 90, 1 => 90);
 	public $cost = 3;
+	public $exploSize = 5;
 
 	function __construct($parentId, $id){
 		parent::__construct($parentId, $id);
@@ -92,12 +90,13 @@ class Javelin extends Ammo {
 	public $type = "explosive";
 	public $minDmg = 35;
 	public $maxDmg = 45;
-	public $impulse = 215;
+	public $impulse = 90;
 	public $integrity = 16;
 	public $armour = 5;
 	public $mass = 4;
 	public $fc = array(0 => 85, 1 => 85);
 	public $cost = 5;
+	public $exploSize = 6;
 
 	function __construct($parentId, $id){
 		parent::__construct($parentId, $id);
@@ -110,12 +109,13 @@ class Barracuda extends Ammo {
 	public $type = "explosive";
 	public $minDmg = 16;
 	public $maxDmg = 22;
-	public $impulse = 300;
+	public $impulse = 140;
 	public $integrity = 10;
 	public $armour = 3;
 	public $mass = 3;
 	public $fc = array(0 => 85, 1 => 95);
 	public $cost = 4;
+	public $exploSize = 5;
 
 	function __construct($parentId, $id){
 		parent::__construct($parentId, $id);
@@ -128,12 +128,13 @@ class Myrmidon extends Ammo {
 	public $type = "explosive";
 	public $minDmg = 55;
 	public $maxDmg = 76;
-	public $impulse = 190;
+	public $impulse = 70;
 	public $integrity = 18;
 	public $armour = 6;
 	public $mass = 5;
 	public $fc = array(0 => 90, 1 => 65);
 	public $cost = 7;
+	public $exploSize = 8;
 
 	function __construct($parentId, $id){
 		parent::__construct($parentId, $id);
@@ -146,12 +147,13 @@ class Zeus extends Ammo {
 	public $type = "explosive";
 	public $minDmg = 78;
 	public $maxDmg = 96;
-	public $impulse = 170;
+	public $impulse = 60;
 	public $integrity = 22;
 	public $armour = 7;
 	public $mass = 6;
 	public $fc = array(0 => 90, 1 => 45);
 	public $cost = 10;
+	public $exploSize = 10;
 
 	function __construct($parentId, $id){
 		parent::__construct($parentId, $id);

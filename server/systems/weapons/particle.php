@@ -3,7 +3,7 @@
 class Particle extends Weapon {
 	public $type = "Particle";
 	public $animation = "projectile";
-	public $priority = 6;
+	public $priority = 5;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -12,7 +12,7 @@ class Particle extends Weapon {
 
 class LightIon extends Particle {
 	public $name = "LightIon";
-	public $display = "28m Ion Bolter Array";
+	public $display = "32mm Ion Bolter Array";
 	public $minDmg = 16;
 	public $maxDmg = 23;
 	public $accDecay = 180;
@@ -32,7 +32,7 @@ class LightIon extends Particle {
 
 class MediumIon extends LightIon {
 	public $name = "MediumIon";
-	public $display = "62mm Twin Ion Cannon";
+	public $display = "56mm Twin Ion Cannon";
 	public $minDmg = 33;
 	public $maxDmg = 47;
 	public $accDecay = 100;
@@ -41,7 +41,7 @@ class MediumIon extends LightIon {
 	public $reload = 2;
 	public $projSize = 3;
 	public $projSpeed = 5;
-	public $exploSize = 3;
+	public $exploSize = 4;
 	public $fc = array(0 => 100, 1 => 120);
 	public $mass = 19;
 
@@ -52,7 +52,7 @@ class MediumIon extends LightIon {
 
 class HeavyIon extends LightIon {
 	public $name = "HeavyIon";
-	public $display = "144mm Ion Cannon";
+	public $display = "133mm Ion Cannon";
 	public $minDmg = 53;
 	public $maxDmg = 79;
 	public $accDecay = 70;
@@ -61,7 +61,7 @@ class HeavyIon extends LightIon {
 	public $reload = 1;
 	public $projSize = 4;
 	public $projSpeed = 5;
-	public $exploSize = 4;
+	public $exploSize = 5;
 	public $fc = array(0 => 120, 1 => 45);
 	public $mass = 28;
 
@@ -70,48 +70,11 @@ class HeavyIon extends LightIon {
 	}
 }
 
-class ParticleBeam extends Particle {
-	public $name = "ParticleBeam";
-	public $display = "Particle Beam";
-	public $minDmg = 21;
-	public $maxDmg = 28;
-	public $accDecay = 150;
-	public $shots = 3;
-	public $animColor = "blue";
-	public $projSize = 3;
-	public $projSpeed = 6;
-	public $exploSize = 6;
-	public $fc = array(0 => 85, 1 => 170);
-	public $mass = 15;
-
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-	}
-}
-
-class HeavyParticleBeam extends ParticleBeam {
-	public $name = "HeavyParticleBeam";
-	public $display = "Hvy Particle Beam";
-	public $minDmg = 35;
-	public $maxDmg = 50;
-	public $accDecay = 110;
-	public $shots = 2;
-	public $projSize = 5;
-	public $projSpeed = 4;
-	public $exploSize = 7;
-	public $fc = array(0 => 120, 1 => 120);
-	public $mass = 24;
-
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-	}
-}
-
 class FusionCannon extends Particle {
 	public $name = "FusionCannon";
-	public $display = "Fusion Cannon";
-	public $minDmg = 28;
-	public $maxDmg = 37;
+	public $display = "46mm Fusion Cannon";
+	public $minDmg = 30;
+	public $maxDmg = 38;
 	public $accDecay = 110;
 	public $shots = 2;
 	public $animColor = "green";

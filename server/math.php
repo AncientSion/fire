@@ -67,7 +67,7 @@ class Math {
 		return $ret;
 		*/
 	}
-
+	
 	static function isInArc($angle, $start, $end){
 		if ($angle >= $start && $angle <= $end){
 			return true;

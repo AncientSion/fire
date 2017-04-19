@@ -17,24 +17,24 @@ class Saggitarius extends Medium {
 		$structs = array();
 		
 		$front = new Structure($this->getId(), $this->id, 330, 30, 375, 23);
-			$front->systems[] = new ParticleBeam($this->getId(), $this->id, 300, 60);
-			$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60, 20, 4, array("Myrmidon", "Zeus"));
-			$front->systems[] = new ParticleBeam($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new Dual($this->getId(), $this->id, 300, 60, 24, array("LightPulse", "LightParticleBeam"));
+		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60, 20, 4, array("Myrmidon", "Zeus"));
+		$front->systems[] = new Dual($this->getId(), $this->id, 300, 60, 24, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 450, 19);
-			$right->systems[] = new MissileLauncher($this->getId(), $this->id, 0, 180, 20, 3, array("Barracuda", "Myrmidon"));
-			$right->systems[] = new MissileLauncher($this->getId(), $this->id, 0, 180, 20, 3, array("Barracuda", "Myrmidon"));
+		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 0, 180, 20, 3, array("Barracuda", "Myrmidon"));
+		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 0, 180, 20, 3, array("Barracuda", "Myrmidon"));
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 325, 16);
-			$aft->systems[] = new ParticleBeam($this->getId(), $this->id, 120, 240);
-			$aft->systems[] = new ParticleBeam($this->getId(), $this->id, 120, 240);
+		$aft->systems[] = new Dual($this->getId(), $this->id, 120, 240, 24, array("LightPulse", "LightParticleBeam"));
+		$aft->systems[] = new Dual($this->getId(), $this->id, 120, 240, 24, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 450, 19);
-			$left->systems[] = new MissileLauncher($this->getId(), $this->id, 180, 360, 20, 3, array("Barracuda", "Myrmidon"));
-			$left->systems[] = new MissileLauncher($this->getId(), $this->id, 180, 360, 20, 3, array("Barracuda", "Myrmidon"));
+		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 180, 360, 20, 3, array("Barracuda", "Myrmidon"));
+		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 180, 360, 20, 3, array("Barracuda", "Myrmidon"));
 		$structs[] = $left;
 		
 		for ($i = 0; $i < sizeof($structs); $i++){

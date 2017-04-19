@@ -68,16 +68,6 @@ class Manager {
 		}
 	}
 	
-	public function getOngoingGames(){
-		$list = DBManager::app()->getOngoingGames($this->userid);
-		if ($list){
-			return $list;
-		}
-		else {
-			return null;
-		}
-	}
-	
 	public function getOpenGames(){
 		$list = DBManager::app()->getOpenGames($this->userid);
 		if ($list){
@@ -250,7 +240,7 @@ class Manager {
 
 		for ($i = 0; $i < sizeof($ballistics); $i++){ //check damage state after dmg is applied
 			$ballistics[$i]->addFireDB($this->fires);
-			$ballistics[$i]->setState();
+			$ballistics[$i]->setState($this->turn);
 		}
 
 		return $ballistics;
@@ -284,7 +274,7 @@ class Manager {
 
 		for ($i = 0; $i < sizeof($units); $i++){
 			$units[$i]->addFireDB($this->fires);
-			$units[$i]->setState(); //check damage state after dmg is applied
+			$units[$i]->setState($this->turn); //check damage state after dmg is applied
 		}
 
 		return $units;
@@ -583,7 +573,8 @@ class Manager {
 	}
 
 	public function handleFiringPhase(){
-		debug::log("handleFiringPhase");
+		//return;
+		//Debug::log("handleFiringPhase");
 		$this->handleNormalFireOrders();
 		$this->handleBallistics();
 		$this->handleDogfights();
@@ -635,6 +626,8 @@ class Manager {
 
 	public function setFireOrderDetails(){
 		for ($i = sizeof($this->fires)-1; $i >= 0; $i--){
+			//echo "fire: ".$this->fires[$i]->id; echo "</br></br>";
+			//var_export($this->fires[$i]); echo "</br></br>";
 			$this->fires[$i]->shooter = $this->getUnitById($this->fires[$i]->shooterid);
 			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystemById($this->fires[$i]->weaponid);
 			$this->fires[$i]->target = $this->getUnitById($this->fires[$i]->targetid);
@@ -642,6 +635,8 @@ class Manager {
 				$this->intercepts[] = $this->fires[$i];
 				array_splice($this->fires, $i, 1);
 			}
+			//var_export($this->fires[$i]->weapon); echo "</br></br>";
+			//var_export($this->fires[$i]->weapon->getBoostLevel($this->turn)); echo "</br></br>";
 		}
 
 		for ($i = 0; $i < sizeof($this->fires); $i++){
@@ -652,6 +647,10 @@ class Manager {
 	}
 
 	public function sortFireOrders(){
+		//for ($i = 0; $i < sizeof($this->fires); $i++){
+			//echo $this->fires[$i]->weapon->name;
+			//echo $this->fires[$i]->weapon->priority;
+		//}
 		//sort to shooter, prio, target
 		usort($this->fires, function($a, $b){
 			if ($a->targetid != $b->targetid){
@@ -1143,7 +1142,7 @@ class Manager {
 				case "Ion":
 					$systems[] = array("LightIon", "MediumIon", "HeavyIon"); break;
 				case "Pulse":
-					$systems[] = array("LightPulseCannon", "MediumPulseCannon"); break;
+					$systems[] = array("LightPulse", "MediumPulse"); break;
 				case "Laser":
 					$systems[] = array("LightLaser", "MediumLaser", "HeavyLaser"); break;
 				case "Matter":

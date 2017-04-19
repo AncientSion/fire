@@ -6,7 +6,7 @@ class Demos extends Medium {
 	public $faction = "Centauri Republic";
 	public $size = 50;
 	public static $value = 600;
-	public $profile = array(0.9, 1.1);
+	public $profile = array(0.92, 1.08);
 	public $mass = 3250;
 
 	function __construct($id, $userid, $available, $status, $destroyed){		
@@ -17,9 +17,9 @@ class Demos extends Medium {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 500, 24);
-		$front->systems[] = new HeavyIon($this->getId(), $this->id, 315, 45);
-		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60, 14, 4, array("Javelin", "Hasta"));
-		$front->systems[] = new HeavyIon($this->getId(), $this->id, 315, 45);
+		$front->systems[] = new MediumPlasma($this->getId(), $this->id, 315, 45);
+		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60, 14, 4, array("Javelin"));
+		$front->systems[] = new MediumPlasma($this->getId(), $this->id, 315, 45);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 350, 22);

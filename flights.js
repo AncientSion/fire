@@ -1,28 +1,28 @@
-function Fighter(id, name, ep, turns, mass, integrity, value, negation, crits, destroyed){
-	this.id = id;
-	this.name = name;
-	this.ep = ep;
-	this.turns = turns;
-	this.mass = mass;
-	this.integrity = integrity;
-	this.value = value;
-	this.negation = negation;
+function Fighter(data){
+	this.id = data.id;
+	this.name = data.name;
+	this.ep = data.ep;
+	this.turns = data.turns;
+	this.mass = data.mass;
+	this.integrity = data.integrity;
+	this.value = data.value;
+	this.negation = data.negation;
+	this.destroyed = data.destroyed;
 	this.crits = [];
-	this.destroyed = destroyed;
-	this.fighter = true;
 	this.damages = [];
 	this.systems = [];
+	this.fighter = true;
 	this.highlight = false;
 	this.disabled = false;
 
-	for (var i = 0; i < crits.length; i++){
+	for (var i = 0; i < data.crits.length; i++){
 		this.crits.push(new Crit(
-				crits[i].id,
-				crits[i].shipid,
-				crits[i].systemid,
-				crits[i].turn,
-				crits[i].type,
-				crits[i].duration
+				data.crits[i].id,
+				data.crits[i].shipid,
+				data.crits[i].systemid,
+				data.crits[i].turn,
+				data.crits[i].type,
+				data.crits[i].duration
 			)
 		)
 	}
@@ -283,11 +283,11 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 	}
 
 	this.getTurnCost = function(){
-		return Math.ceil(this.mass/3*this.getImpulseMod());
+		return Math.ceil(this.mass/50*this.getImpulseMod() * this.getTurnAngle());
 	}
 	
 	this.getBaseTurnDelay = function(){
-		return this.mass;
+		return this.mass/2;
 	}
 	
 	this.getBaseImpulse = function(){
@@ -298,7 +298,7 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 	}
 
 	this.getTurnAngle = function(){
-		return 25;
+		return 15;
 	}
 
 	this.hasWeaponsSelected = function(){		
@@ -320,7 +320,6 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 	}
 
 	this.expandDiv = function(div){
-
 		if (this.dogfights.length){
 			var iconContainer = document.createElement("div");
 				iconContainer.className = "iconContainer";
@@ -334,10 +333,10 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 			$(div).find(".header").css("width", "99%");
 		}
 
-		var structDiv = document.createElement("div");
-			structDiv.className = "structContainer";
+		var structContainer = document.createElement("div");
+			structContainer.className = "structContainer";
 
-		div.appendChild(structDiv);
+		div.appendChild(structContainer);
 			
 		document.getElementById("game").appendChild(div);
 
@@ -380,7 +379,7 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 				fighterDiv.appendChild(img);
 
 			if (!active){
-				fighterDiv.appendChild(new Image()).src = "/fire/varIcons/destroyed.png";
+				fighterDiv.appendChild(new Image()).src = "varIcons/destroyed.png";
 				fighterDiv.childNodes[1].className = "overlay size30";
 			}
 			else {
@@ -390,13 +389,13 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 				});
 			}
 
-			structDiv.appendChild(fighterDiv);
+			structContainer.appendChild(fighterDiv);
 
 			var w = $(fighterDiv).width();
 			var h = $(fighterDiv).height();
 
-			var x = $(structDiv).width()/2 + this.layout[i].x*5- w/2;
-			var y = $(structDiv).height()/2 + this.layout[i].y*5 - 20;
+			var x = $(structContainer).width()/2 + this.layout[i].x*5- w/2;
+			var y = $(structContainer).height()/2 + this.layout[i].y*5 - 20;
 
 			$(fighterDiv)
 				.css("left", x)
@@ -456,28 +455,24 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 
 
 		var height = 0;
-		$(structDiv).find(".fighterDiv").each(function(){
+		$(structContainer).find(".fighterDiv").each(function(){
 			var y = $(this).position().top + $(this).height();
 			if (y > height){
 				height = y;
 			}
 		})
 
-		$(structDiv).css("height", height + 20);
+		$(structContainer).css("height", height + 20);
 
-		var w = $(div).width();
+		/*var w = $(div).width();
 		var h = $(div).height();
 		var left = 50;
 		if (this.facing < 90 || this.facing > 270){
 			left = res.x - w - 50;
 		}
 
-		$(div).css("top", 100).css("left", left).addClass("disabled");
-
-		$(div).contextmenu(function(e){
-			e.stopPropagation();
-		}).addClass("disabled").drag();
-		return div;
+		$(div).css("top", 100).css("left", left);
+		*/return div;
 	}
 
 	this.selectAll = function(e, id){
@@ -496,22 +491,14 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 
 	this.getShortInfo = function(){
 		var ele = $("#shortInfo");
-
-		if (game.shortInfo){
-			game.shortInfo = false;
-			$(ele).html("");
-		}
-		game.shortInfo = this.id;
 		if (this.userid == game.userid){
 			$(ele).attr("class", "friendly");
 		} else $(ele).attr("class", "hostile");
 		
 		var table = document.createElement("table");
-			table.insertRow(-1).insertCell(-1).innerHTML =  this.structures.length + " Fighters #" + this.id;
+			table.insertRow(-1).insertCell(-1).innerHTML = "Flight #" + this.id;
 			table.insertRow(-1).insertCell(-1).innerHTML =  this.getBaseHitChance() + "%";
-			if (this.dogfight){
-				table.insertRow(-1).insertCell(-1).innerHTML = "<span class='red'>Dogfight-lock vs #" + this.dogfight + "</span>";
-			}
+			table.insertRow(-1).insertCell(-1).innerHTML =  "Impulse: " + this.getTotalImpulse();
 		return table;
 	}
 

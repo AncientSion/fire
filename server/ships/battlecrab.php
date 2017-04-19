@@ -18,8 +18,8 @@ class BattleCrab extends SuperHeavy {
 
 
 		$right = new Structure($this->getId(), $this->id, 30, 90, 1500, 34);
-			$right->systems[] = new LightPulseCannon($this->getId(), $this->id, 0, 180);
-			$right->systems[] = new LightPulseCannon($this->getId(), $this->id, 0, 180);
+			$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 180);
+			$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 90, 150, 1050, 30);
@@ -28,13 +28,13 @@ class BattleCrab extends SuperHeavy {
 
 
 		$left = new Structure($this->getId(), $this->id, 210, 270, 1500, 34);
-			$left->systems[] = new LightPulseCannon($this->getId(), $this->id, 180, 360);
-			$left->systems[] = new LightPulseCannon($this->getId(), $this->id, 180, 360);
+			$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 360);
+			$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
 
 		$left = new Structure($this->getId(), $this->id, 270, 330, 1500, 34);
-			$left->systems[] = new LightPulseCannon($this->getId(), $this->id, 180, 360);
-			$left->systems[] = new LightPulseCannon($this->getId(), $this->id, 180, 360);
+			$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 360);
+			$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
 
 		

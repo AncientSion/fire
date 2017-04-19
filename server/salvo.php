@@ -48,10 +48,10 @@ class Mini extends Ship {
 		return true;
 	}
 
-	public function setState(){
+	public function setState($turn){
 		//Debug::log("setting state for #".$this->id);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			$this->structures[$i]->setState();
+			$this->structures[$i]->setState($turn);
 		}
 		$this->isDestroyed();
 	}
@@ -170,8 +170,8 @@ class Salvo extends Mini {
 		return true;
 	}
 
-	public function setState(){
-		parent::setState();
+	public function setState($turn){
+		parent::setState($turn);
 		if ($this->actions[sizeof($this->actions)-1]->type == "impact"){
 			$this->destroyed = true;
 			return;
@@ -198,8 +198,21 @@ class Salvo extends Mini {
 		return false;
 	}
 
-	public function getImpulse(){
+	public function getBaseImpulse(){
 		return $this->structures[0]->impulse;
+	}
+
+	public function getMaxImpulse(){
+		return $this->getBaseImpulse() * 3;
+	}
+
+	public function getAccelSteps(){
+		return sizeof($this->actions);
+	}
+
+	public function getImpulse(){
+		Debug::log("salvo #".$this->id." impulse: ".min($this->getMaxImpulse(), $this->getBaseImpulse() * $this->getAccelSteps()));
+		return min($this->getMaxImpulse(), $this->getBaseImpulse() * $this->getAccelSteps());
 	}
 
 	public function resolveBallisticFireOrder($fire){
@@ -257,7 +270,6 @@ class Ammo extends Weapon {
 	public $destroyed = false;
 	public $fc = array();
 	public $cost;
-	public $exploSize = 10;
 
 	function __construct($parentId, $id){
 		$this->parentId = $parentId;
@@ -312,7 +324,7 @@ class Ammo extends Weapon {
 		return 1;
 	}
 
-	function setState(){
+	function setState($turn){
 		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
 			if ($this->damages[$i]->destroyed){
 				$this->destroyed = true;

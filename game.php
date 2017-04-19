@@ -292,12 +292,10 @@ foreach ($manager->playerstatus as $player){
 				</table>
 			</div>
 			<div id="combatlogWrapper" class="disabled">
+				<div class="combatLogHeader">
+					Combat Log
+				</div>
 				<table id="combatLog">
-					<tr>
-						<th colspan=8 style="font-size: 16px; width: 100%; border: 1px solid white"">
-							Combat Log
-						</th>
-					</tr>
 					<tr>
 						<th style="width: 15%">
 							Type
@@ -390,7 +388,7 @@ foreach ($manager->playerstatus as $player){
 				Assemble and launch a flight
 			</div>
 			<div class="header">
-				Can launch up to <span id="launchRate"></span> units per turn
+				Can launch up to <span id="launchRate"></span> units per cycle.
 			</div>
 			<div class="header">
 				Has a capacity of <span id="capacity"></span> tons
@@ -429,6 +427,13 @@ foreach ($manager->playerstatus as $player){
 			$("#weaponAimTableWrapper").hide();
 		})
 		$("#game").addClass("game");
+		$("#combatLog").contextmenu(function(e){
+			e.stopPropagation();
+		})
+		$("#combatlogWrapper").contextmenu(function(e){
+			e.preventDefault(); e.stopPropagation();
+			$(this).find("#combatLog").toggleClass("disabled");
+		})
 
 		$(this).keypress(function(e){
 			if (game){

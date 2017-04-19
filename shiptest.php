@@ -13,8 +13,12 @@
 
 			$time = -microtime(true);
 
-			$ships = $manager->logShips("All");
-			
+			$ships = $manager->logShips("all");
+		/*	foreach ($ships[0]->structures[3]->systems as $sys){
+				var_export($sys);
+				echo "<br><br>";
+			}
+		*/
 
 			function sortMass($a, $b){
 				return $b->mass - $a->mass;

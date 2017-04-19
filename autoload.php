@@ -62,7 +62,15 @@ spl_autoload_register(
                 
                 'hangar' => '/server/systems/system.php',
 
+                'dual' => '/server/systems/weapons/dual.php',
+                'dualpulseion' => '/server/systems/weapons/dual.php',
+
+                'plasma' => '/server/systems/weapons/plasma.php',
+                'mediumplasma' => '/server/systems/weapons/plasma.php',
+                'heavyplasma' => '/server/systems/weapons/plasma.php',
+
                 'laser' => '/server/systems/weapons/laser.php',
+                'lightparticlebeam' => '/server/systems/weapons/laser.php',
                 'lightlaser' => '/server/systems/weapons/laser.php',
                 'mediumlaser' => '/server/systems/weapons/laser.php',
                 'heavylaser' => '/server/systems/weapons/laser.php',
@@ -75,15 +83,15 @@ spl_autoload_register(
                 'lightrailgun' => '/server/systems/weapons/matter.php',
 
                 'pulse' => '/server/systems/weapons/pulse.php',
-                'lightpulsecannon' => '/server/systems/weapons/pulse.php',
-                'mediumpulsecannon' => '/server/systems/weapons/pulse.php',
+                'lightpulse' => '/server/systems/weapons/pulse.php',
+                'mediumpulse' => '/server/systems/weapons/pulse.php',
 
                 'particle' => '/server/systems/weapons/particle.php',
                 'lightion' => '/server/systems/weapons/particle.php',
                 'mediumion' => '/server/systems/weapons/particle.php',
                 'heavyion' => '/server/systems/weapons/particle.php',
-                'particlebeam' => '/server/systems/weapons/particle.php',
-                'heavyparticlebeam' => '/server/systems/weapons/particle.php',
+                'Dual' => '/server/systems/weapons/particle.php',
+                'heavyDual' => '/server/systems/weapons/particle.php',
                 'fusioncannon' => '/server/systems/weapons/particle.php',
                 'fusionpulsar' => '/server/systems/weapons/particle.php',
 

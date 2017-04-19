@@ -23,13 +23,13 @@ class Olympus extends Light {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 22);
-		$right->systems[] = new ParticleBeam($this->getId(), $this->id, 0, 180);
-		$right->systems[] = new ParticleBeam($this->getId(), $this->id, 0, 180);
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180);
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 300, 22);
-		$left->systems[] = new ParticleBeam($this->getId(), $this->id, 180, 360);
-		$left->systems[] = new ParticleBeam($this->getId(), $this->id, 180, 360);
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360);
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

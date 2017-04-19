@@ -4,7 +4,7 @@ class EM extends Weapon {
 	public $type = "EM";
 	public $animation = "beam";
 	public $beamWidth;
-	public $priority = 5;
+	public $priority = 10;
 	public $rakes;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $destroyed = 0){

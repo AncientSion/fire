@@ -166,7 +166,7 @@ else {
 				Pick Strikecraft for the selected Hangar
 			</div>
 			<div class="header">
-				Can launch up to <span id="launchRate"></span> units per turn
+				Can launch up to <span id="launchRate"></span> units per cycle.
 			</div>
 			<div class="header">
 				Has a capacity of <span id="capacity"></span> tons
@@ -433,7 +433,7 @@ else {
 		ship.create();
 		$("#game").removeClass("disabled");
 		ship.createBaseDiv();
-		$(".shipDiv").css("left", "460px").css("top", "220px").removeClass("disabled");
+		$(".shipDiv").css("left", "460px").css("top", "220px").removeClass("disabled").find(".structContainer").show();
 		drawShipPreview();
 
 		var div = document.createElement("div");

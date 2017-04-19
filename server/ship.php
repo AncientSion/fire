@@ -40,7 +40,7 @@ class Ship {
 		$this->addPrimary();
 		$this->cost = $this::$value;
 
-		$this->baseHitChance = ceil(pow($this->mass, 0.5));
+		$this->baseHitChance = ceil(pow($this->mass, 1/3)*5);
 	}
 
 	public function getId(){
@@ -85,8 +85,6 @@ class Ship {
 	}
 
 	public function addDamageDB($damages){
-		//Debug::log("begin: ".microtime(true));
-		//soert damages by systemid ?
 		for ($i = 0; $i < sizeof($damages); $i++){
 			if ($damages[$i]->systemid == -1){
 				$this->primary->damages[] = $damages[$i];
@@ -96,7 +94,6 @@ class Ship {
 			}
 			$this->getStructureById($damages[$i]->structureid)->damages[] = $damages[$i];
 		}
-		//Debug::log("finish: ".microtime(true));
 		return true;
 	}
 
@@ -105,7 +102,7 @@ class Ship {
 			for ($k = 0; $k < sizeof($this->structures); $k++){
 				for ($l = 0; $l < sizeof($this->structures[$k]->systems); $l++){
 					if ($this->structures[$k]->systems[$l]->id == $powers[$j]->systemid){
-						$this->structures[$k]->systems[$l]->powers[] = $powers[$j];
+						$this->structures[$k]->systems[$l]->addPowerEntry($powers[$j]);
 						break 2;
 					}
 				}
@@ -177,13 +174,19 @@ class Ship {
 	}
 
 
-	public function setState(){
+	public function setState($turn){
 		for ($i = sizeof($this->primary->damages)-1; $i >= 0; $i--){
 			if ($this->primary->damages[$i]->destroyed){
 				$this->destroyed = true;
 				break;
 			}
 		}
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				$this->structures[$i]->systems[$j]->setState($turn);
+			}
+		}
+
 		return true;
 	}
 
@@ -450,7 +453,7 @@ class Ship {
 			for ($i = 0; $i < sizeof($this->structures); $i++){
 				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 					if ($this->structures[$i]->systems[$j]->id == $id){
-						return $this->structures[$i]->systems[$j];
+						return $this->structures[$i]->systems[$j]->getActiveSystem();
 					}
 				}
 			}

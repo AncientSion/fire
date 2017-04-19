@@ -4,12 +4,40 @@
 		"selected_items":
 		[
 			[
-				"back",
-				"background-color"
+				"getSyst",
+				"getSystemDetailsDiv"
+			],
+			[
+				"prio",
+				"priority"
 			],
 			[
 				"getRem",
-				"getRemainingNegation"
+				"getRemainingAmmo"
+			],
+			[
+				"output",
+				"outputMod"
+			],
+			[
+				"setSystem",
+				"setSystemImage"
+			],
+			[
+				"getA",
+				"getActiveWeapon"
+			],
+			[
+				"outp",
+				"outputMask"
+			],
+			[
+				"getAcc",
+				"getAccelSteps"
+			],
+			[
+				"back",
+				"background-color"
 			],
 			[
 				"getBoos",
@@ -486,34 +514,6 @@
 			[
 				"createEne",
 				"createPlanetEnviroment"
-			],
-			[
-				"backgrou",
-				"background"
-			],
-			[
-				"backgr",
-				"background-color"
-			],
-			[
-				"JSO",
-				"json_encode"
-			],
-			[
-				"mysql",
-				"mysql_query"
-			],
-			[
-				"js",
-				"json_encode"
-			],
-			[
-				"mysqli",
-				"mysqli_fetch"
-			],
-			[
-				"inline",
-				"inline-block"
 			]
 		]
 	},
@@ -532,7 +532,7 @@
 			"file": "server/classes.php",
 			"settings":
 			{
-				"buffer_size": 4214,
+				"buffer_size": 4246,
 				"encoding": "UTF-8",
 				"line_ending": "Windows",
 				"name": "<?php"
@@ -542,16 +542,26 @@
 			"file": "classes.js",
 			"settings":
 			{
-				"buffer_size": 28637,
+				"buffer_size": 28952,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Searching 61 files for \"powers.p\"\n\nC:\\xampp\\htdocs\\fire\\ajax.js:\n  100  \t\t\t\t\tvar power = game.ships[i].getPowerOrders();\n  101  \t\t\t\t\tfor (var j = 0; j < power.length; j++){\n  102: \t\t\t\t\t\tpowers.push(power[j]);\n  103  \t\t\t\t\t}\n  104  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n  195  \n  196  \t\t\tfor (var l = 0; l < window.ships[i].primary.systems[j].powers.length; l++){\n  197: \t\t\t\tprimSystem.powers.push(new Power(window.ships[i].primary.systems[j].powers[l]));\n  198  \t\t\t}\n  199  \n  ...\n  242  \n  243  \t\t\t\tfor (var l = 0; l < window.ships[i].structures[j].systems[k].powers.length; l++){\n  244: \t\t\t\t\tsystem.powers.push(new Power(window.ships[i].structures[j].systems[k].powers[l]));\n  245  \t\t\t\t}\n  246  \n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 2003  \t\t\t\tfor (var k = 0; k < this.structures[i].systems[j].powers.length; k++){\n 2004  \t\t\t\t\tif (this.structures[i].systems[j].powers[k].turn == game.turn){\n 2005: \t\t\t\t\t\tpowers.push(this.structures[i].systems[j].powers[k]);\n 2006  \t\t\t\t\t}\n 2007  \t\t\t\t}\n ....\n 2011  \t\t\tfor (var j = 0; j < this.primary.systems[i].powers.length; j++){\n 2012  \t\t\t\tif (this.primary.systems[i].powers[j].turn == game.turn){\n 2013: \t\t\t\t\tpowers.push(this.primary.systems[i].powers[j]);\n 2014  \t\t\t\t}\n 2015  \t\t\t}\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  255  \n  256  \tthis.doBoost = function(){\n  257: \t\tthis.powers.push(\n  258  \t\t\tnew Power({\n  259  \t\t\t\tid: this.powers.length+1,\n  ...\n  313  \t\t\t}\n  314  \n  315: \t\t\tthis.powers.push(\n  316  \t\t\t\tnew Power({\n  317  \t\t\t\t\tid: this.powers.length+1,\n  ...\n 1415  \tthis.initMain = function(){\n 1416  \t\tthis.states[this.states.length-1] = 1;\n 1417: \t\tthis.powers.push({id: this.powers.length, unitid: this.parentId, systemid: this.id, turn: game.turn, type: -1})\n 1418  \t\tthis.cycleActiveWeapon();\n 1419  \t\tthis.copyProps();\n ....\n 1571  \t\t\t\t\tcost: this.getEffiency()\n 1572  \t\t\t\t})\n 1573: \t\tthis.powers.push(p);\n 1574: \t\tthis.getActiveWeapon().powers.push(p);\n 1575  \t}\n 1576  \n\n10 matches across 4 files\n\n\nSearching 61 files for \"powers.p\"\n\nC:\\xampp\\htdocs\\fire\\ajax.js:\n  100  \t\t\t\t\tvar power = game.ships[i].getPowerOrders();\n  101  \t\t\t\t\tfor (var j = 0; j < power.length; j++){\n  102: \t\t\t\t\t\tpowers.push(power[j]);\n  103  \t\t\t\t\t}\n  104  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n  195  \n  196  \t\t\tfor (var l = 0; l < window.ships[i].primary.systems[j].powers.length; l++){\n  197: \t\t\t\tprimSystem.powers.push(new Power(window.ships[i].primary.systems[j].powers[l]));\n  198  \t\t\t}\n  199  \n  ...\n  242  \n  243  \t\t\t\tfor (var l = 0; l < window.ships[i].structures[j].systems[k].powers.length; l++){\n  244: \t\t\t\t\tsystem.powers.push(new Power(window.ships[i].structures[j].systems[k].powers[l]));\n  245  \t\t\t\t}\n  246  \n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 2003  \t\t\t\tfor (var k = 0; k < this.structures[i].systems[j].powers.length; k++){\n 2004  \t\t\t\t\tif (this.structures[i].systems[j].powers[k].new){\n 2005: \t\t\t\t\t\tpowers.push(this.structures[i].systems[j].powers[k]);\n 2006  \t\t\t\t\t}\n 2007  \t\t\t\t}\n ....\n 2011  \t\t\tfor (var j = 0; j < this.primary.systems[i].powers.length; j++){\n 2012  \t\t\t\tif (this.primary.systems[i].powers[j].new){\n 2013: \t\t\t\t\tpowers.push(this.primary.systems[i].powers[j]);\n 2014  \t\t\t\t}\n 2015  \t\t\t}\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  255  \n  256  \tthis.doBoost = function(){\n  257: \t\tthis.powers.push(\n  258  \t\t\tnew Power({\n  259  \t\t\t\tid: this.powers.length+1,\n  ...\n  313  \t\t\t}\n  314  \n  315: \t\t\tthis.powers.push(\n  316  \t\t\t\tnew Power({\n  317  \t\t\t\t\tid: this.powers.length+1,\n  ...\n 1415  \tthis.initMain = function(){\n 1416  \t\tthis.states[this.states.length-1] = 1;\n 1417: \t\tthis.powers.push({id: this.powers.length, unitid: this.parentId, systemid: this.id, turn: game.turn, type: -1})\n 1418  \t\tthis.cycleActiveWeapon();\n 1419  \t\tthis.copyProps();\n ....\n 1571  \t\t\t\t\tcost: this.getEffiency()\n 1572  \t\t\t\t})\n 1573: \t\tthis.powers.push(p);\n 1574: \t\tthis.getActiveWeapon().powers.push(p);\n 1575  \t}\n 1576  \n\n10 matches across 4 files\n\n\nSearching 61 files for \"isPowered\"\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\system.php:\n   50  \t}\n   51  \n   52: \tpublic function isPowered($turn){\n   53  \t\tfor ($i = sizeof($this->powers)-1; $i >= 0; $i--){\n   54  \t\t\tif ($this->powers[$i]->turn == $turn){\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  261  \t}\n  262  \n  263: \tthis.isPowered = function(){\n  264  \t\tif (this.destroyed || this.disabled){\n  265  \t\t\treturn false;\n  ...\n  276  \n  277  \tthis.isUnpowered = function(){\n  278: \t\tif (!this.isPowered()){\n  279  \t\t\treturn true;\n  280  \t\t}\n  ...\n  283  \n  284  \tthis.canUnpower = function(){\n  285: \t\tif (this.powerReq && this.isPowered()){\n  286  \t\t\treturn true;\n  287  \t\t} else return false;\n  ...\n  289  \n  290  \tthis.canPower = function(){\n  291: \t\tif (this.powerReq && !this.isPowered()){\n  292  \t\t\treturn true;\n  293  \t\t} else return false;\n  ...\n  765  \t\tfor (var i = 0; i < ship.structures.length; i++){\n  766  \t\t\tfor (var j = 0; j < ship.structures[i].systems.length; j++){\n  767: \t\t\t\tif (ship.structures[i].systems[j].isPowered()){\n  768  \t\t\t\t\tuse += ship.structures[i].systems[j].getCurrentPowerUsage();\n  769  \t\t\t\t}\n  ...\n  771  \t\t}\n  772  \t\tfor (var i = 0; i < ship.primary.systems.length; i++){\n  773: \t\t\tif (ship.primary.systems[i].isPowered()){\n  774  \t\t\t\tuse += ship.primary.systems[i].getCurrentPowerUsage();\n  775  \t\t\t}\n\n7 matches across 2 files\n\n\nSearching 47 files for \"isPowered\"\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\system.php:\n   50  \t}\n   51  \n   52: \tpublic function isPowered($turn){\n   53  \t\tfor ($i = sizeof($this->powers)-1; $i >= 0; $i--){\n   54  \t\t\tif ($this->powers[$i]->turn == $turn){\n\n1 match in 1 file\n\n\nSearching 61 files for \"isPowered($turn)\"\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\system.php:\n   50  \t}\n   51  \n   52: \tpublic function isPowered($turn){\n   53  \t\tfor ($i = sizeof($this->powers)-1; $i >= 0; $i--){\n   54  \t\t\tif ($this->powers[$i]->turn == $turn){\n\n1 match in 1 file\n\n\nSearching 61 files for \"getActiveSystem\"\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  454  \t\t\t\tfor ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){\n  455  \t\t\t\t\tif ($this->structures[$i]->systems[$j]->id == $id){\n  456: \t\t\t\t\t\treturn $this->structures[$i]->systems[$j]->getActiveSystem();\n  457  \t\t\t\t\t}\n  458  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\system.php:\n   39  \t}\n   40  \n   41: \tpublic function getActiveSystem(){\n   42  \t\treturn $this;\n   43  \t}\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php:\n   21  \t}\n   22  \n   23: \tpublic function getActiveSystem(){\n   24  \t\tfor ($i = 0; $i < sizeof($this->states); $i++){\n   25  \t\t\tif ($this->states[$i]){\n   ..\n   41  \t\t\t\t}\n   42  \t\t\t\telse if ($this->powers[$i]->type == 1){\n   43: \t\t\t\t\t$this->getActiveSystem()->addPowerEntry($this->powers[$i]);\n   44  \t\t\t\t}\n   45  \t\t\t}\n   46  \t\t}\n   47: \t\t//echo $this->getActiveSystem()->name;\n   48  \t}\n   49  }\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  392  \t\t\tfor (var j = 0; j < this.structures[i].systems.length; j++){\n  393  \t\t\t\tif (this.structures[i].systems[j].id == id){\n  394: \t\t\t\t\treturn this.structures[i].systems[j].getActiveSystem();\n  395  \t\t\t\t}\n  396  \t\t\t}\n  ...\n 1805  \tthis.canBoost = function(system){\n 1806  \t\tif (system instanceof Dual){\n 1807: \t\t\tconsole.log(\"cost: \"+system.getActiveSystem().effiency);\n 1808: \t\t\tconsole.log(\"max: \"+system.getActiveSystem().maxBoost);\n 1809: \t\t\tconsole.log(system.getActiveSystem().boostEffect);\n 1810  \t\t}\n 1811  \n\nC:\\xampp\\htdocs\\fire\\systems.js:\n   29  \tthis.dual = 0;\n   30  \n   31: \tthis.getActiveSystem = function(){\n   32  \t\treturn this;\n   33  \t}\n   ..\n 1376  \t\n 1377  \tthis.setFireOrder = function(targetid){\n 1378: \t\tvar w = this.getActiveSystem();\n 1379  \n 1380  \t\tthis.fireOrders.push(\n ....\n 1401  \n 1402  \tthis.getImageName = function(){\n 1403: \t\treturn this.getActiveSystem().name;\n 1404  \t}\n 1405  \n ....\n 1425  \t\t\t\t}\n 1426  \t\t\t\telse if (this.powers[i].type > 0){\n 1427: \t\t\t\t\tthis.getActiveSystem().powers.push(this.powers[i]);\n 1428  \t\t\t\t}\n 1429  \t\t\t}\n ....\n 1522  \n 1523  \tthis.update = function(){\n 1524: \t\tthis.getActiveSystem().updateSystemDetailsDiv();\n 1525  \t\tgame.getUnitById(this.parentId).updateDiv();\n 1526  \t}\n 1527  \n 1528  \tthis.getSystemDetailsDiv = function(){\n 1529: \t\treturn this.getActiveSystem().getSystemDetailsDiv();\n 1530  \t}\n 1531  \n 1532  \tthis.drawArc = function(facing, pos){\n 1533: \t\tthis.getActiveSystem().drawArc(facing, pos);\n 1534  \t}\n 1535  \n 1536  \tthis.getSystem = function(){\n 1537: \t\treturn this.getActiveSystem();\n 1538  \t}\n 1539  \n ....\n 1577  \tthis.doUnboost = function(){\n 1578  \t\tthis.powers.splice(this.powers.length-1, 1);\n 1579: \t\tvar w = this.getActiveSystem();\n 1580  \t\t\tw.powers.splice(w.powers.length-1, 1);\n 1581  \t}\n ....\n 1586  \t\t\t\t\tturn: game.turn,type: 1, cost: this.getEffiency(), new: 1};\n 1587  \t\tthis.powers.push(p);\n 1588: \t\tthis.getActiveSystem().powers.push(p);\n 1589  \t}\n 1590  \n 1591: \tthis.getActiveSystem = function(){\n 1592  \t\tfor (var i = 0; i < this.states.length; i++){\n 1593  \t\t\tif (this.states[i]){\n\n20 matches across 5 files\n\n\nSearching 61 files for \"public $priority =\"\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\em.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 5;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 5;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php:\n    4  \tpublic $type = \"Launcher\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \tpublic $loads = array();\n    8  \tpublic $reload = 2;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\linked.php:\n    6  \tpublic $projSize = 3;\n    7  \tpublic $reload = 1;\n    8: \tpublic $priority = 6;\n    9  \tpublic $fc = array(0 => 100, 1 => 200);\n   10  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\matter.php:\n    4  \tpublic $type = \"Matter\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 4;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php:\n    4  \tpublic $type = \"Particle\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php:\n    3  class Plasma extends Weapon {\n    4  \tpublic $type = \"Plasma\";\n    5: \tpublic $priority = 5;\n    6  \tpublic $dmgDecay = 8;\n    7  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php:\n    4  \tpublic $type = \"Pulse\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\n8 matches across 8 files\n\n\nSearching 61 files for \"sortfireo\"\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  618  \tpublic function handleNormalFireOrders(){\n  619  \t\t$this->setFireOrderDetails();\n  620: \t\t$this->sortFireOrders();\n  621  \t\t$this->setupShipsForDamage();\n  622  \t\t$this->resolveShipFireOrders();\n  ...\n  647  \t}\n  648  \n  649: \tpublic function sortFireOrders(){\n  650  \t\t//sort to shooter, prio, target\n  651  \t\tusort($this->fires, function($a, $b){\n\n2 matches in 1 file\n\n\nSearching 61 files for \"$this->prio\"\n\n0 matches\n\nSearching 61 files for \"public $pio\"\n\n0 matches\n\nSearching 61 files for \"public $prio\"\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\system.php:\n  307  \tpublic $powerReq = 2;\n  308  \tpublic $fireOrders = array();\n  309: \tpublic $priority;\n  310  \tpublic $fc = array(0 => 100, 1 => 100);\n  311  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\em.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 5;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 5;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php:\n    4  \tpublic $type = \"Launcher\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \tpublic $loads = array();\n    8  \tpublic $reload = 2;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\linked.php:\n    6  \tpublic $projSize = 3;\n    7  \tpublic $reload = 1;\n    8: \tpublic $priority = 1;\n    9  \tpublic $fc = array(0 => 100, 1 => 200);\n   10  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\matter.php:\n    4  \tpublic $type = \"Matter\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 4;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php:\n    4  \tpublic $type = \"Particle\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php:\n    3  class Plasma extends Weapon {\n    4  \tpublic $type = \"Plasma\";\n    5: \tpublic $priority = 5;\n    6  \tpublic $dmgDecay = 8;\n    7  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php:\n    4  \tpublic $type = \"Pulse\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\n9 matches across 9 files\n\n\nSearching 61 files for \"public $prio\"\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\system.php:\n  307  \tpublic $powerReq = 2;\n  308  \tpublic $fireOrders = array();\n  309: \tpublic $priority;\n  310  \tpublic $fc = array(0 => 100, 1 => 100);\n  311  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\em.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 10;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 4;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php:\n    4  \tpublic $type = \"Launcher\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 8;\n    7  \tpublic $loads = array();\n    8  \tpublic $reload = 2;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\linked.php:\n    6  \tpublic $projSize = 3;\n    7  \tpublic $reload = 1;\n    8: \tpublic $priority = 10;\n    9  \tpublic $fc = array(0 => 100, 1 => 200);\n   10  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\matter.php:\n    4  \tpublic $type = \"Matter\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 9;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php:\n    4  \tpublic $type = \"Particle\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php:\n    3  class Plasma extends Weapon {\n    4  \tpublic $type = \"Plasma\";\n    5: \tpublic $priority = 5;\n    6  \tpublic $dmgDecay = 8;\n    7  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php:\n    4  \tpublic $type = \"Pulse\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\n9 matches across 9 files\n\n\nSearching 61 files for \"public $prio\"\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\system.php:\n  307  \tpublic $powerReq = 2;\n  308  \tpublic $fireOrders = array();\n  309: \tpublic $priority;\n  310  \tpublic $fc = array(0 => 100, 1 => 100);\n  311  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\em.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 10;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 4;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php:\n    4  \tpublic $type = \"Launcher\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 8;\n    7  \tpublic $loads = array();\n    8  \tpublic $reload = 2;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\linked.php:\n    6  \tpublic $projSize = 3;\n    7  \tpublic $reload = 1;\n    8: \tpublic $priority = 10;\n    9  \tpublic $fc = array(0 => 100, 1 => 200);\n   10  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\matter.php:\n    4  \tpublic $type = \"Matter\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 9;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php:\n    4  \tpublic $type = \"Particle\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 5;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php:\n    3  class Plasma extends Weapon {\n    4  \tpublic $type = \"Plasma\";\n    5: \tpublic $priority = 5;\n    6  \tpublic $dmgDecay = 8;\n    7  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php:\n    4  \tpublic $type = \"Pulse\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\n9 matches across 9 files\n\n\nSearching 61 files for \"public $prio\"\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\system.php:\n  307  \tpublic $powerReq = 2;\n  308  \tpublic $fireOrders = array();\n  309: \tpublic $priority;\n  310  \tpublic $fc = array(0 => 100, 1 => 100);\n  311  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\em.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 10;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 4;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php:\n    4  \tpublic $type = \"Launcher\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 8;\n    7  \tpublic $loads = array();\n    8  \tpublic $reload = 2;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\linked.php:\n    6  \tpublic $projSize = 3;\n    7  \tpublic $reload = 1;\n    8: \tpublic $priority = 10;\n    9  \tpublic $fc = array(0 => 100, 1 => 200);\n   10  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\matter.php:\n    4  \tpublic $type = \"Matter\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 9;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php:\n    4  \tpublic $type = \"Particle\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 5;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php:\n    3  class Plasma extends Weapon {\n    4  \tpublic $type = \"Plasma\";\n    5: \tpublic $priority = 6;\n    6  \tpublic $dmgDecay = 8;\n    7  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php:\n    4  \tpublic $type = \"Pulse\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\n9 matches across 9 files\n\n\nSearching 61 files for \"particle beam\"\n\n0 matches\n\nSearching 61 files for \"ParticleBeam\"\n\n0 matches\n\nSearching 61 files for \"deployArea\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n   17  \tthis.reinforcements = [];\n   18  \tthis.animating = false;\n   19: \tthis.deployArea = false;\n   20  \tthis.deployBlock = [];\n   21  \tthis.vector = false;\n   ..\n  172  \tthis.disableDeployment = function(){\n  173  \t\tthis.deploying = false;\n  174: \t\tthis.deployArea = false;\n  175  \t\tthis.deployBlock = false;\n  176  \t\tmoveCtx.clearRect(0, 0, res.x, res.y);\n  ...\n  231  \t\t\t\t};\n  232  \t\t\t}\n  233: \t\t\tthis.deployArea.push(area);\n  234  \t\t}\n  235  \t}\n  ...\n  237  \tthis.drawDeploymentZone = function(){\n  238  \n  239: \t\tfor (var i = 0; i < this.deployArea; i++){\n  240  \t\t\tfxCtx.clearRect(0, 0, res.x, res.y);\n  241  \t\t\tfxCtx.translate(cam.o.x, cam.o.y)\n  242  \t\t\tfxCtx.scale(cam.z, cam.z)\n  243  \t\t\tfxCtx.beginPath();\n  244: \t\t\tfxCtx.rect(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].w, this.deployArea[i].h);\n  245  \t\t\tfxCtx.closePath();\n  246: \t\t\tfxCtx.fillStyle = deployArea[i].c;\n  247  \t\t\tfxCtx.fill();\n  248  \t\t}\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  159  \t\t//console.log(pos);\n  160  \t\tvar valid = false;\n  161: \t\tif (game.deployArea.x > 0){\n  162: \t\t\tif (pos.x >= game.deployArea.x && pos.x <= game.deployArea.x + game.deployArea.w){\n  163: \t\t\t\tif (pos.y >= game.deployArea.y && pos.y <= game.deployArea.y + game.deployArea.h){\n  164  \t\t\t\t\tvalid = true;\n  165  \t\t\t\t}\n  166  \t\t\t}\n  167  \t\t}\n  168: \t\telse if (pos.x <= game.deployArea.x && pos.x >= game.deployArea.x + game.deployArea.w){\n  169: \t\t\tif (pos.y >= game.deployArea.y && pos.y <= game.deployArea.y + game.deployArea.h){\n  170  \t\t\t\tvalid = true;\n  171  \t\t\t}\n  172  \t\t}\n  173: \t\telse if (pos.x > game.deployArea.x && pos.x < game.deployArea.x + game.deployArea.w){\n  174: \t\t\tif (pos.y > game.deployArea.y && pos.y < game.deployArea.y + game.deployArea.h){\n  175  \t\t\t\tvalid = true;\n  176  \t\t\t}\n\n28 matches across 2 files\n\n\nSearching 61 files for \"this.deployArea = false\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n   17  \tthis.reinforcements = [];\n   18  \tthis.animating = false;\n   19: \tthis.deployArea = false;\n   20  \tthis.deployBlock = [];\n   21  \tthis.vector = false;\n   ..\n  172  \tthis.disableDeployment = function(){\n  173  \t\tthis.deploying = false;\n  174: \t\tthis.deployArea = false;\n  175  \t\tthis.deployBlock = false;\n  176  \t\tmoveCtx.clearRect(0, 0, res.x, res.y);\n\n2 matches in 1 file\n\n\nSearching 61 files for \"if (this.deployArea\"\n\n0 matches\n\nSearching 61 files for \"playerindex\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  200  \t\t\tfor (var i = 0; i < 2; i++){\n  201  \t\t\t\tvar step = -1;\n  202: \t\t\t\tif (this.playerindex % i == 0){\n  203  \t\t\t\t\tstep = 1;\n  204  \t\t\t\t\tcolor = \"red\";\n\nC:\\xampp\\htdocs\\fire\\script.js:\n   64  \tfor (var i = 0; i < window.playerstatus.length; i++){\n   65  \t\tif (userid == window.playerstatus[i].userid){\n   66: \t\t\tgame.playerindex = i+1;\n   67  \t\t\tbreak;\n   68  \t\t}\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  203  \t\telse {\n  204  \t\t\tvar facing = 0;\n  205: \t\t\tif (game.playerindex % 2 == 0){facing = 180;}\n  206  \t\t\tthis.actions.push(new Move(\"deploy\", 0, pos.x, pos.y, facing, 0, 0));\n  207  \t\t\tthis.deployed = true;\n\n3 matches across 3 files\n",
+			"settings":
+			{
+				"buffer_size": 22630,
+				"line_ending": "Windows",
+				"name": "Find Results",
+				"scratch": true
 			}
 		},
 		{
 			"file": "style.css",
 			"settings":
 			{
-				"buffer_size": 15824,
+				"buffer_size": 16432,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -560,8 +570,16 @@
 			"file": "systems.js",
 			"settings":
 			{
-				"buffer_size": 62412,
+				"buffer_size": 66849,
 				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "test.php",
+			"settings":
+			{
+				"buffer_size": 2954,
 				"line_ending": "Windows"
 			}
 		},
@@ -569,7 +587,7 @@
 			"file": "shipclasses.js",
 			"settings":
 			{
-				"buffer_size": 55182,
+				"buffer_size": 56423,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -596,7 +614,7 @@
 			"file": "server/math.php",
 			"settings":
 			{
-				"buffer_size": 3578,
+				"buffer_size": 3579,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -605,7 +623,7 @@
 			"file": "game.php",
 			"settings":
 			{
-				"buffer_size": 14604,
+				"buffer_size": 14791,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -614,7 +632,16 @@
 			"file": "server/manager.php",
 			"settings":
 			{
-				"buffer_size": 34258,
+				"buffer_size": 34528,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "server/dbManager.php",
+			"settings":
+			{
+				"buffer_size": 39559,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -623,7 +650,7 @@
 			"file": "server/debug.php",
 			"settings":
 			{
-				"buffer_size": 187,
+				"buffer_size": 185,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -632,7 +659,7 @@
 			"file": "server/ships/omega.php",
 			"settings":
 			{
-				"buffer_size": 3275,
+				"buffer_size": 3637,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -641,16 +668,7 @@
 			"file": "server/ships/hyperion.php",
 			"settings":
 			{
-				"buffer_size": 2609,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "server/ships/avenger.php",
-			"settings":
-			{
-				"buffer_size": 3233,
+				"buffer_size": 2689,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -659,7 +677,7 @@
 			"file": "server/ships/saggitarius.php",
 			"settings":
 			{
-				"buffer_size": 2359,
+				"buffer_size": 2502,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -668,7 +686,7 @@
 			"file": "server/ships/artemis.php",
 			"settings":
 			{
-				"buffer_size": 2104,
+				"buffer_size": 2256,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -677,7 +695,7 @@
 			"file": "server/ships/tethys.php",
 			"settings":
 			{
-				"buffer_size": 1634,
+				"buffer_size": 1710,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -692,19 +710,10 @@
 			}
 		},
 		{
-			"file": "autoload.php",
-			"settings":
-			{
-				"buffer_size": 5702,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "server/ships/battlecrab.php",
 			"settings":
 			{
-				"buffer_size": 1742,
+				"buffer_size": 1706,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -719,20 +728,10 @@
 			}
 		},
 		{
-			"contents": "Searching 58 files for \"exposed\"\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  314  \t\tfor (var i = 0; i < this.primary.systems.length; i++){\n  315  \t\t\tif (fraction <= this.hitTable[this.primary.systems[i].name]){\n  316: \t\t\t\tthis.primary.systems[i].exposed = 1;\n  317  \t\t\t}\n  318: \t\t\tconsole.log(this.primary.systems[i].name + \" exposed: \" + this.primary.systems[i].exposed);\n  319  \t\t}\n  320  \t}\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  627  \n  628  function PrimarySystem(id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost, boostEffect){\n  629: \tthis.exposed = 0;\n  630  \t\n  631  \tSystem.call(this, id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost, boostEffect);\n\n4 matches across 2 files\n",
-			"settings":
-			{
-				"buffer_size": 733,
-				"line_ending": "Windows",
-				"name": "Find Results",
-				"scratch": true
-			}
-		},
-		{
 			"file": "script.js",
 			"settings":
 			{
-				"buffer_size": 15861,
+				"buffer_size": 15733,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -750,16 +749,37 @@
 			"file": "server/systems/weapons/particle.php",
 			"settings":
 			{
-				"buffer_size": 4318,
+				"buffer_size": 3278,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "server/systems/weapons/pulse.php",
+			"file": "server/systems/weapons/dual.php",
 			"settings":
 			{
-				"buffer_size": 3481,
+				"buffer_size": 1823,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "server/systems/weapons/plasma.php",
+			"settings":
+			{
+				"buffer_size": 3555,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "<?php\n\nclass Pulse extends Weapon {\n\tpublic $type = \"Pulse\";\n\tpublic $animation = \"projectile\";\n\tpublic $priority = 5;\n\n\tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);\n\t}\n\n\tpublic function rollForHit($fire){\n\t\tfor ($i = 0; $i < $this->linked; $i++){\n\t\t\t$roll = mt_rand(1, 100);\n\t\t\t$fire->rolls[] = $roll;\n\t\t\t$fire->notes .= $roll.\" \";\n\t\t\tif ($roll <= $fire->req){\n\t\t\t\t$fire->hits += $this->shots;\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\n\n\tpublic function doDamage($fire){\n\t\tDebug::log(\"doDamage, weapon: \".get_class($this).\", target: \".$fire->target->id);\n\n\t\t$negation; $armourDmg; $structDmg; $totalDmg; $hitSystem; $remInt; $destroyed;\t\t\n\n\t\tif ($fire->rolls[0] <= $fire->req){\n\t\t\t$destroyed = false;\n\t\t\t$mod = $this->getDamageMod($fire);\n\t\t\t$hitSystem = $fire->target->getHitSystem($fire);\n\t\t\t$structure = $fire->target->getStructureById($fire->hitSection);\n\t\t\t$armourMod = $hitSystem->getArmourMod();\n\n\t\t\tif ($hitSystem->destroyed){Debug::log(\"unit already destroyed\"); return;}\n\n\t\t\tfor ($i = 0; $i < $this->shots; $i++){\n\t\t\t\t$totalDmg = floor($this->getBaseDamage($fire) * $mod);\n\t\t\t\t$remInt = $hitSystem->getCurrentIntegrity();\n\t\t\t\t$negation = $structure->getRemainingNegation($fire) * $armourMod;\n\t\t\t\t$dmg = $this->determineDamage($totalDmg, $negation);\n\n\t\t\t\tif ($remInt - $dmg->structDmg < 1){\n\t\t\t\t\t$destroyed = true;\n\t\t\t\t\tif (!(is_a($fire->target, \"Mini\"))){\n\t\t\t\t\t\tDebug::log(\" => target system \".$hitSystem->name.\" #\".$hitSystem->id.\" destroyed. rem: \".$remInt.\", doing: \".$dmg->structDmg.\", OK for: \".(abs($remInt - $dmg->structDmg).\" dmg\"));\n\t\t\t\t\t}\n\t\t\t\t\telse {\n\t\t\t\t\t\tDebug::log(\"Overkill on Salvo or Fighter\");\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\t//$id, $fireid, $gameid, $shipid, $structureid, $systemid, $turn, $roll, $type, $totalDmg, $shieldDmg, $structDmg, $armourDmg, $mitigation, $negation, $destroyed, $notes, $new){\n\t\t\t\t$dmg = new Damage(\n\t\t\t\t\t-1,\n\t\t\t\t\t$fire->id,\n\t\t\t\t\t$fire->gameid,\n\t\t\t\t\t$fire->targetid,\n\t\t\t\t\t$fire->hitSection,\n\t\t\t\t\t$hitSystem->id,\n\t\t\t\t\t$fire->turn,\n\t\t\t\t\t$fire->rolls[0],\n\t\t\t\t\t$fire->weapon->type,\n\t\t\t\t\t$totalDmg,\n\t\t\t\t\t$dmg->shieldDmg,\n\t\t\t\t\t$dmg->structDmg,\n\t\t\t\t\t$dmg->armourDmg,\n\t\t\t\t\t0,\n\t\t\t\t\t$negation,\n\t\t\t\t\t$destroyed,\n\t\t\t\t\t\"\",\n\t\t\t\t\t1\n\t\t\t\t);\n\t\t\t\t$fire->damages[] = $dmg;\n\t\t\t\t$fire->target->applyDamage($dmg);\n\t\t\t}\n\t\t}\n\t}\t\n}\n\nclass LightPulse extends Pulse {\n\tpublic $name = \"LightPulse\";\n\tpublic $display = \"38mm Pulse Cannon\";\n\tpublic $minDmg = 20;\n\tpublic $maxDmg = 26;\n\tpublic $accDecay = 140;\n\tpublic $shots = 3;\n\tpublic $animColor = \"brown\";\n\tpublic $projSize = 2;\n\tpublic $projSpeed = 11;\n\tpublic $exploSize = 3;\n\tpublic $reload = 1;\n\tpublic $fc = array(0 => 100, 1 => 180);\n\tpublic $mass = 12;\n\n\tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);\n\t}\n}\n\nclass MediumPulse extends Pulse {\n\tpublic $name = \"MediumPulse\";\n\tpublic $display = \"66mm Pulse Cannon\";\n\tpublic $minDmg = 28;\n\tpublic $maxDmg = 35;\n\tpublic $accDecay = 110;\n\tpublic $shots = 3;\n\tpublic $animColor = \"brown\";\n\tpublic $projSize = 3;\n\tpublic $projSpeed = 8;\n\tpublic $exploSize = 4;\n\tpublic $reload = 2;\n\tpublic $fc = array(0 => 115, 1 => 135);\n\tpublic $mass = 20;\n\n\tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);\n\t}\n}",
+			"file": "server/systems/weapons/pulse.php",
+			"file_size": 3567,
+			"file_write_time": 131370119297472353,
+			"settings":
+			{
+				"buffer_size": 3449,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -768,7 +788,7 @@
 			"file": "server/ship.php",
 			"settings":
 			{
-				"buffer_size": 16774,
+				"buffer_size": 16874,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -777,7 +797,7 @@
 			"file": "server/salvo.php",
 			"settings":
 			{
-				"buffer_size": 8094,
+				"buffer_size": 8494,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -786,7 +806,7 @@
 			"file": "cam.js",
 			"settings":
 			{
-				"buffer_size": 551,
+				"buffer_size": 579,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -795,7 +815,7 @@
 			"file": "server/systems/system.php",
 			"settings":
 			{
-				"buffer_size": 13049,
+				"buffer_size": 13583,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -804,7 +824,43 @@
 			"file": "server/ships/olympus.php",
 			"settings":
 			{
-				"buffer_size": 1871,
+				"buffer_size": 1839,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "createGame.php",
+			"settings":
+			{
+				"buffer_size": 1418,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "lobby.php",
+			"settings":
+			{
+				"buffer_size": 5596,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "server/ships/avenger.php",
+			"settings":
+			{
+				"buffer_size": 3806,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "autoload.php",
+			"settings":
+			{
+				"buffer_size": 6093,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -813,7 +869,7 @@
 			"file": "graphics.js",
 			"settings":
 			{
-				"buffer_size": 5572,
+				"buffer_size": 5573,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -822,7 +878,7 @@
 			"file": "server/systems/weapons/em.php",
 			"settings":
 			{
-				"buffer_size": 2829,
+				"buffer_size": 2830,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -831,16 +887,7 @@
 			"file": "game.js",
 			"settings":
 			{
-				"buffer_size": 45096,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "server/dbManager.php",
-			"settings":
-			{
-				"buffer_size": 39280,
+				"buffer_size": 46657,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -849,7 +896,25 @@
 			"file": "shared.js",
 			"settings":
 			{
-				"buffer_size": 24842,
+				"buffer_size": 12390,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "gameSetup.php",
+			"settings":
+			{
+				"buffer_size": 16992,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "server/ships/tinashi.php",
+			"settings":
+			{
+				"buffer_size": 2260,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -864,19 +929,10 @@
 			}
 		},
 		{
-			"file": "server/ships/tinashi.php",
-			"settings":
-			{
-				"buffer_size": 2428,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "server/ships/whitestar.php",
 			"settings":
 			{
-				"buffer_size": 1926,
+				"buffer_size": 1775,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -894,7 +950,7 @@
 			"file": "server/ships/demos.php",
 			"settings":
 			{
-				"buffer_size": 1884,
+				"buffer_size": 1885,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -921,7 +977,7 @@
 			"file": "server/systems/weapons/linked.php",
 			"settings":
 			{
-				"buffer_size": 1639,
+				"buffer_size": 1640,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -930,7 +986,7 @@
 			"file": "flights.js",
 			"settings":
 			{
-				"buffer_size": 14380,
+				"buffer_size": 14297,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -939,26 +995,17 @@
 			"file": "server/flight.php",
 			"settings":
 			{
-				"buffer_size": 8371,
+				"buffer_size": 8383,
 				"encoding": "UTF-8",
 				"line_ending": "Windows",
 				"name": "<?php"
 			}
 		},
 		{
-			"file": "gameSetup.php",
-			"settings":
-			{
-				"buffer_size": 17061,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "log.txt",
 			"settings":
 			{
-				"buffer_size": 8604,
+				"buffer_size": 13525,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -976,16 +1023,7 @@
 			"file": "shiptest.php",
 			"settings":
 			{
-				"buffer_size": 4132,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "createGame.php",
-			"settings":
-			{
-				"buffer_size": 1418,
+				"buffer_size": 4239,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -994,16 +1032,7 @@
 			"file": "index.php",
 			"settings":
 			{
-				"buffer_size": 2390,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "lobby.php",
-			"settings":
-			{
-				"buffer_size": 5663,
+				"buffer_size": 2379,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1012,7 +1041,7 @@
 			"file": "server/systems/weapons/launcher.php",
 			"settings":
 			{
-				"buffer_size": 3727,
+				"buffer_size": 3812,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1030,7 +1059,7 @@
 			"file": "systemtest.php",
 			"settings":
 			{
-				"buffer_size": 3564,
+				"buffer_size": 3552,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1039,7 +1068,7 @@
 			"file": "server/systems/weapons/laser.php",
 			"settings":
 			{
-				"buffer_size": 6067,
+				"buffer_size": 6741,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1061,13 +1090,17 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 392.0,
-		"last_filter": "",
+		"height": 311.0,
+		"last_filter": "Package Control: ",
 		"selected_items":
 		[
 			[
 				"Package Control: ",
-				"Package Control: Install Package"
+				"Package Control: List Packages"
+			],
+			[
+				"Package Control: list",
+				"Package Control: List Packages"
 			],
 			[
 				"package control install package",
@@ -1112,11 +1145,11 @@
 	"file_history":
 	[
 		"/C/xampp/htdocs/fire/systems.js",
+		"/C/xampp/htdocs/fire/shipclasses.js",
 		"/C/xampp/htdocs/fire/server/flight.php",
 		"/C/xampp/htdocs/fire/server/dbManager.php",
 		"/C/xampp/htdocs/fire/server/ship.php",
 		"/C/xampp/htdocs/fire/server/salvo.php",
-		"/C/xampp/htdocs/fire/shipclasses.js",
 		"/C/xampp/htdocs/fire/server/manager.php",
 		"/C/xampp/htdocs/fire/test.php",
 		"/C/xampp/htdocs/fire/server/ships/tinashi.php",
@@ -1242,13 +1275,28 @@
 	],
 	"find":
 	{
-		"height": 34.0
+		"height": 36.0
 	},
 	"find_in_files":
 	{
 		"height": 90.0,
 		"where_history":
 		[
+			"",
+			"*.php",
+			"",
+			"*.php",
+			"*,php",
+			"",
+			"*.php",
+			"\t",
+			"",
+			"*.js",
+			"",
+			"classes.js",
+			"",
+			"*.js",
+			".js",
 			"",
 			"systems.js",
 			"",
@@ -1361,22 +1409,7 @@
 			"",
 			"*.php",
 			".php",
-			"php",
-			"",
-			"*.php",
-			"dbManager.php",
-			"",
-			"gamemanager.php",
-			"",
-			"dbmanager.php",
-			"",
-			"*.php",
-			".php",
-			"",
-			"*.php",
-			"",
-			"css",
-			"*.js, *.css"
+			"php"
 		]
 	},
 	"find_state":
@@ -1384,134 +1417,134 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"intba",
-			"exposed",
-			"getremainingnegation",
-			"700",
-			"primarySys",
-			"getWeaponPosition",
-			"getremainingint",
-			"getRemainingIntegrity",
-			"getremaining",
-			"intBase",
-			"faction",
-			"getFactions",
-			"validMoveArcs",
-			"impulseAdjust",
-			"function pulse",
-			"function part",
-			"echo",
-			"isDestroyedThisTurn",
-			"\"Weapon Type",
-			"drawExplosion",
-			"animated = true",
-			"EM",
-			"hasHit",
-			"systems[$i]",
-			"getRemainingDelay",
-			"\"turn \"",
-			"drawself",
-			"system destroyed fighter",
-			"disabled",
-			"this->disable",
-			"set",
-			"var step = 3",
-			"getTurnAngle",
-			"turnangle",
-			"class FusionPu",
-			"function particle",
+			", \"LightLaser\"",
+			"function plasma",
+			"dmgdecay",
+			"function plasma",
+			"this.dmgDecay = system.dmgDecay",
+			"deployArea.",
+			"playerindex",
+			"if (this.deployArea",
+			"this.deployArea = false",
+			"deployArea",
+			"Plasma1",
+			"ParticleBeam",
+			"particle beam",
+			"setstate = ",
+			"setState",
+			"== -2",
+			"setSystemWindow",
+			"cycleActiveWeapon",
+			"showoptions",
+			"ParticleBeam",
+			"deployarea",
+			"public $prio",
+			"public $pio",
+			"$this->prio",
+			"sortfireo",
+			"public $priority =",
+			"this.pri",
+			"this.priority",
+			"plasma",
+			"dmgde",
+			"){\n",
+			"explosize",
+			"getActiveWeapon ",
+			"getActiveWeapon",
+			"getactivesystem",
+			"getactiveSystem ",
+			"getactiveSystem",
+			"getActiveSystem",
+			"getactivesystem",
+			"this.select ",
+			"function dual",
+			"showoptions",
+			"getSystem ",
+			"getActiveSystem",
+			"this.getSystem ",
+			"getActiveSystem",
+			"getActiveWeapon",
 			"getFireAnimationDetails",
-			"getshotdetais",
-			"getshotdetaisl",
-			"getHitTreshold",
-			"isDisabled",
-			"canfire",
-			"disen",
-			"getCritDuration",
-			"disabled",
-			"disabled1",
-			"getsystemby",
-			"new crit",
-			"dodamag",
-			"getcritef",
-			"dise",
-			"angle:",
-			"angle",
-			"debug:",
-			"getHitAngle",
-			"getRemainingNegation",
-			"getPosition()",
-			"getPosition",
-			"gethitAngle",
-			"anglein",
-			"fire->angleIn",
-			"fire-angleIn",
-			"angleIn",
-			"getHitAngle(",
-			"getHitAngle",
+			"getFireAnimationDetails\n",
+			"getFireAnimationDetails\ngetFireAnimationDetails",
+			"getFireAnimationDetails",
+			"handleNormalFireOrders",
+			"handlefiringp",
+			"handleFiringPhase",
+			"handleNormalFireOrders",
+			"handleFiringPhase",
+			"getboostlevel",
+			"handleNormalFireOrders",
+			"handlefir",
 			"dodamage",
-			"resolve",
-			"resolvefire",
-			"resolveFireOrde",
-			"resolveFireOrder",
-			"getRemainingNegation",
-			"getSubHitChance",
-			"serve g",
-			"server g",
-			"serve",
-			"fire.t",
-			"drawExplosion",
-			"getFireAnimationDetails",
-			"getshotdetaisl",
-			"explo",
-			"explo = {",
-			"explo",
-			"shotd",
-			"drawExplosion",
-			"drawProjectile",
-			"ae",
-			"game.fireOrders[i].anim[j][k].",
-			"drawExplosion",
-			"drawProjectile",
-			"0.25",
-			"boostEffect.v",
-			"boostEffect",
-			"this.getOutput = fun",
-			"getExtraOutput",
-			"getextra",
-			"effiency",
-			"this.geteffiency",
-			"doboost ",
-			"doboost",
-			"updateOverlay",
-			"updateOverlay =",
-			"updateOverlay",
-			"getBoostEffect ",
-			"getBoostEffect",
-			"getboosteffect",
-			", maxBoost);",
-			", maxBoost){",
-			"maxBoost,",
-			"new ",
-			"getBoostCostIncrease",
-			"getEffiency =",
-			"getEffiency ",
-			"getEffiency",
-			"\treturn Math.ceil(this.effiency * (1+(this.getBoostLevel() / this.getBoostCostIncrease())));",
-			"canboost",
-			"combatlogWrapper",
-			"combatlog",
-			"extends EM",
-			"combatlog",
-			"dolog",
-			"animateballis",
-			"key",
-			"keyDown",
-			"keydoen",
-			"press",
-			"this.getTurnStartPosition = function(){",
-			"== \"turn",
-			"setlayout"
+			"setState = function()",
+			"setState()",
+			"addPowerEntry",
+			"addda",
+			"isPowered($turn)",
+			"isPowered",
+			"assembleunits",
+			"setstate",
+			"handleNormalFireOrders",
+			"handleFiringPhase",
+			"handleNormalFireOrders",
+			"handlefiri",
+			"this.setfireorder",
+			"setfireor",
+			"getsystembyId($id)",
+			"getsystembyId",
+			"dual",
+			"*100",
+			"assembleunit",
+			"assemblesh",
+			"handleBallisticInterception",
+			"copyprops",
+			"initsu",
+			"showoptions",
+			"cosT:",
+			"var p = ",
+			"new power",
+			"this.powers.p",
+			"new power",
+			"powers.p",
+			"new Power",
+			"this.doboost",
+			"getCurrentPowerUsage ",
+			"getoutput ",
+			"getoutput",
+			"switchmode",
+			"getRemainingAmmo",
+			"this.doboost",
+			"this.getremainingam",
+			"setfireorder =",
+			"setfireorder",
+			"this.minus",
+			"this.plus ",
+			"this.plus",
+			"this.plus ",
+			"this.doboost",
+			"createnewpower",
+			"new power",
+			"createnewpowerEntry",
+			"type: ",
+			"\tthis.showOptions = function(){",
+			"impacthisturn",
+			"hideOptions",
+			"getModeDiv",
+			"phase == 2",
+			"showoptions",
+			"this.hover ",
+			"setElementStatus",
+			"setSelectionShadow",
+			"setfireorder",
+			"new Fighter",
+			"$(gui)",
+			".find",
+			"find",
+			"$(ele)",
+			"dopower ",
+			".find",
+			"setsystemwindow"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1519,6 +1552,29 @@
 		"regex": false,
 		"replace_history":
 		[
+			", \"LightParticleBeam\"",
+			"deployArea[i].",
+			"deployArea[i]",
+			"MediumPlasma",
+			"Dual",
+			"getActiveSystem",
+			"setState = function($turn)",
+			"setState($turn)",
+			"setSystemBorder",
+			"gui",
+			"ele",
+			"boostable",
+			"MediumPulse",
+			"LightPulse",
+			"getImpulse",
+			"system",
+			"= data.",
+			"",
+			"getTotalImpulse",
+			"getRemainingImpulse()",
+			"structContainer",
+			"ele",
+			" = data.",
 			"hit",
 			"system",
 			"fire.explo.t",
@@ -1623,30 +1679,7 @@
 			"$crits",
 			"$this",
 			"$this->structures",
-			"$fires",
-			"$unit",
-			"insertUnits",
-			", ",
-			"actions",
-			"getCurrentPosition",
-			"fires",
-			"fire",
-			"parent::__construct($id, $userid, $available);",
-			"function __construct($id, $userid, $available){",
-			"\tfunction __construct($id, $userid, $available){\t\t\n        parent::__construct($id, $userid, $available);",
-			"this.antiBallistics",
-			"[$j]",
-			"getShipById",
-			"getUnitById",
-			"classname",
-			"window.ships[i].structures[j].systems[k].ammo.",
-			"ParticleBeam",
-			"this.getEP()",
-			"td",
-			"$toHandle",
-			"data",
-			"shipClass",
-			"game."
+			"$fires"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -1657,7 +1690,7 @@
 	"groups":
 	[
 		{
-			"selected": 11,
+			"selected": 28,
 			"sheets":
 			[
 				{
@@ -1673,8 +1706,8 @@
 						"selection":
 						[
 							[
-								1899,
-								1905
+								2389,
+								2389
 							]
 						],
 						"settings":
@@ -1742,10 +1775,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1186.0,
+						"translation.y": 1335.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 47,
+					"stack_index": 42,
 					"type": "text"
 				},
 				{
@@ -1754,15 +1787,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4214,
+						"buffer_size": 4246,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								340,
-								340
+								1245,
+								1245
 							]
 						],
 						"settings":
@@ -1831,10 +1864,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 306.0,
+						"translation.y": 819.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 31,
+					"stack_index": 43,
 					"type": "text"
 				},
 				{
@@ -1843,15 +1876,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 28637,
+						"buffer_size": 28952,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								25593,
-								25593
+								1946,
+								1946
 							]
 						],
 						"settings":
@@ -1919,27 +1952,581 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 18467.0,
+						"translation.y": 1959.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
 					"buffer": 3,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 22630,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										186,
+										194
+									],
+									[
+										385,
+										393
+									],
+									[
+										601,
+										609
+									],
+									[
+										907,
+										915
+									],
+									[
+										1150,
+										1158
+									],
+									[
+										1314,
+										1322
+									],
+									[
+										1427,
+										1435
+									],
+									[
+										1605,
+										1613
+									],
+									[
+										1845,
+										1853
+									],
+									[
+										1893,
+										1901
+									],
+									[
+										2142,
+										2150
+									],
+									[
+										2341,
+										2349
+									],
+									[
+										2557,
+										2565
+									],
+									[
+										2849,
+										2857
+									],
+									[
+										3078,
+										3086
+									],
+									[
+										3242,
+										3250
+									],
+									[
+										3355,
+										3363
+									],
+									[
+										3533,
+										3541
+									],
+									[
+										3773,
+										3781
+									],
+									[
+										3821,
+										3829
+									],
+									[
+										4010,
+										4019
+									],
+									[
+										4202,
+										4211
+									],
+									[
+										4369,
+										4378
+									],
+									[
+										4504,
+										4513
+									],
+									[
+										4657,
+										4666
+									],
+									[
+										4905,
+										4914
+									],
+									[
+										5124,
+										5133
+									],
+									[
+										5370,
+										5379
+									],
+									[
+										5651,
+										5667
+									],
+									[
+										6075,
+										6090
+									],
+									[
+										6212,
+										6227
+									],
+									[
+										6361,
+										6376
+									],
+									[
+										6560,
+										6575
+									],
+									[
+										6672,
+										6687
+									],
+									[
+										6930,
+										6945
+									],
+									[
+										7098,
+										7113
+									],
+									[
+										7164,
+										7179
+									],
+									[
+										7222,
+										7237
+									],
+									[
+										7351,
+										7366
+									],
+									[
+										7498,
+										7513
+									],
+									[
+										7631,
+										7646
+									],
+									[
+										7755,
+										7770
+									],
+									[
+										7889,
+										7904
+									],
+									[
+										8073,
+										8088
+									],
+									[
+										8192,
+										8207
+									],
+									[
+										8308,
+										8323
+									],
+									[
+										8464,
+										8479
+									],
+									[
+										8664,
+										8679
+									],
+									[
+										8729,
+										8744
+									],
+									[
+										9042,
+										9060
+									],
+									[
+										9222,
+										9240
+									],
+									[
+										9419,
+										9437
+									],
+									[
+										9625,
+										9643
+									],
+									[
+										9843,
+										9861
+									],
+									[
+										10110,
+										10128
+									],
+									[
+										10368,
+										10386
+									],
+									[
+										10566,
+										10584
+									],
+									[
+										10899,
+										10908
+									],
+									[
+										11045,
+										11054
+									],
+									[
+										11435,
+										11447
+									],
+									[
+										11633,
+										11645
+									],
+									[
+										11813,
+										11825
+									],
+									[
+										12010,
+										12022
+									],
+									[
+										12216,
+										12228
+									],
+									[
+										12434,
+										12446
+									],
+									[
+										12701,
+										12713
+									],
+									[
+										12959,
+										12971
+									],
+									[
+										13157,
+										13169
+									],
+									[
+										13471,
+										13483
+									],
+									[
+										13669,
+										13681
+									],
+									[
+										13850,
+										13862
+									],
+									[
+										14047,
+										14059
+									],
+									[
+										14253,
+										14265
+									],
+									[
+										14472,
+										14484
+									],
+									[
+										14739,
+										14751
+									],
+									[
+										14997,
+										15009
+									],
+									[
+										15195,
+										15207
+									],
+									[
+										15509,
+										15521
+									],
+									[
+										15707,
+										15719
+									],
+									[
+										15888,
+										15900
+									],
+									[
+										16085,
+										16097
+									],
+									[
+										16291,
+										16303
+									],
+									[
+										16510,
+										16522
+									],
+									[
+										16777,
+										16789
+									],
+									[
+										17035,
+										17047
+									],
+									[
+										17233,
+										17245
+									],
+									[
+										17547,
+										17559
+									],
+									[
+										17745,
+										17757
+									],
+									[
+										17926,
+										17938
+									],
+									[
+										18123,
+										18135
+									],
+									[
+										18329,
+										18341
+									],
+									[
+										18548,
+										18560
+									],
+									[
+										18815,
+										18827
+									],
+									[
+										19073,
+										19085
+									],
+									[
+										19271,
+										19283
+									],
+									[
+										19669,
+										19679
+									],
+									[
+										19847,
+										19857
+									],
+									[
+										19997,
+										20007
+									],
+									[
+										20135,
+										20145
+									],
+									[
+										20335,
+										20345
+									],
+									[
+										20357,
+										20367
+									],
+									[
+										20379,
+										20389
+									],
+									[
+										20401,
+										20411
+									],
+									[
+										20476,
+										20486
+									],
+									[
+										20641,
+										20651
+									],
+									[
+										20688,
+										20698
+									],
+									[
+										20718,
+										20728
+									],
+									[
+										20738,
+										20748
+									],
+									[
+										20782,
+										20792
+									],
+									[
+										20812,
+										20822
+									],
+									[
+										20832,
+										20842
+									],
+									[
+										20941,
+										20951
+									],
+									[
+										20971,
+										20981
+									],
+									[
+										20991,
+										21001
+									],
+									[
+										21034,
+										21044
+									],
+									[
+										21064,
+										21074
+									],
+									[
+										21084,
+										21094
+									],
+									[
+										21178,
+										21188
+									],
+									[
+										21207,
+										21217
+									],
+									[
+										21227,
+										21237
+									],
+									[
+										21269,
+										21279
+									],
+									[
+										21298,
+										21308
+									],
+									[
+										21318,
+										21328
+									],
+									[
+										21553,
+										21576
+									],
+									[
+										21731,
+										21754
+									],
+									[
+										22072,
+										22083
+									],
+									[
+										22309,
+										22320
+									],
+									[
+										22455,
+										22466
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								22316,
+								22316
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 20,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ \t].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 15820.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 18,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
 					"file": "style.css",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 15824,
+						"buffer_size": 16432,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								12253,
-								12253
+								11317,
+								11329
 							]
 						],
 						"settings":
@@ -2007,27 +2594,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 15751.0,
+						"translation.y": 16165.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 5,
 					"file": "systems.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 62412,
+						"buffer_size": 66849,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								15085,
-								15085
+								33209,
+								33209
 							]
 						],
 						"settings":
@@ -2040,16 +2627,16 @@
 								"bh_tag_open",
 								"bh_tag_close",
 								"bh_tag_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
@@ -2060,63 +2647,91 @@
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
 								"bh_single_quote",
 								"bh_single_quote_center",
 								"bh_single_quote_open",
 								"bh_single_quote_close",
 								"bh_single_quote_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
 								"bh_round",
 								"bh_round_center",
 								"bh_round_open",
 								"bh_round_close",
-								"bh_round_content"
+								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content"
 							],
-							"history_list_is_closing": true,
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 10863.0,
+						"translation.y": 24143.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
-					"file": "shipclasses.js",
+					"buffer": 6,
+					"file": "test.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 55182,
+						"buffer_size": 2954,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7821,
-								7821
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 57,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "shipclasses.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 56423,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3939,
+								3939
 							]
 						],
 						"settings":
@@ -2184,14 +2799,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5266.0,
+						"translation.y": 3070.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 8,
 					"file": "mathLib.js",
 					"semi_transient": false,
 					"settings":
@@ -2203,8 +2818,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								697,
+								697
 							]
 						],
 						"settings":
@@ -2272,14 +2887,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 161.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 63,
+					"stack_index": 32,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 9,
 					"file": "global.php",
 					"semi_transient": false,
 					"settings":
@@ -2291,36 +2906,95 @@
 						"selection":
 						[
 							[
-								326,
-								326
+								455,
+								455
 							]
 						],
 						"settings":
 						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content"
+							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 60,
+					"stack_index": 46,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 10,
 					"file": "server/math.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3578,
+						"buffer_size": 3579,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1291,
-								1291
+								1292,
+								1292
 							]
 						],
 						"settings":
@@ -2388,203 +3062,292 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 19.0,
+						"translation.y": 89.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 61,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "game.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 14604,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								609,
-								609
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
-							],
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 421.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 42,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "server/manager.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 34258,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								31762,
-								31762
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
-							],
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 20899.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 18,
+					"stack_index": 59,
 					"type": "text"
 				},
 				{
 					"buffer": 11,
-					"file": "server/debug.php",
+					"file": "game.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 187,
+						"buffer_size": 14791,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								58,
-								58
+								579,
+								579
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 437.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 19,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "server/manager.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 34528,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								17968,
+								17968
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 12767.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 26,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "server/dbManager.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 39559,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								23050,
+								23050
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content"
+							],
+							"history_list_is_closing": true,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 809.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 40,
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "server/debug.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 185,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								56,
+								56
 							]
 						],
 						"settings":
@@ -2595,24 +3358,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 53,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 15,
 					"file": "server/ships/omega.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3275,
+						"buffer_size": 3637,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1351,
-								1351
+								1736,
+								1736
 							]
 						],
 						"settings":
@@ -2680,27 +3443,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 162.0,
+						"translation.y": 240.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 16,
 					"file": "server/ships/hyperion.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2609,
+						"buffer_size": 2689,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								251,
-								255
+								535,
+								535
 							]
 						],
 						"settings":
@@ -2768,56 +3531,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 18.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 55,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
-					"buffer": 14,
-					"file": "server/ships/avenger.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3233,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								462,
-								462
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 18.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 58,
-					"type": "text"
-				},
-				{
-					"buffer": 15,
+					"buffer": 17,
 					"file": "server/ships/saggitarius.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2359,
+						"buffer_size": 2502,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								551,
-								551
+								477,
+								477
 							]
 						],
 						"settings":
@@ -2826,27 +3560,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 36.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 52,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 16,
+					"buffer": 18,
 					"file": "server/ships/artemis.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2104,
+						"buffer_size": 2256,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1584,
-								1584
+								775,
+								775
 							]
 						],
 						"settings":
@@ -2917,24 +3651,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 59,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 17,
+					"buffer": 19,
 					"file": "server/ships/tethys.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1634,
+						"buffer_size": 1710,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								807,
-								807
+								974,
+								974
 							]
 						],
 						"settings":
@@ -2946,11 +3680,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 51,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 18,
+					"buffer": 20,
 					"file": "imageloader.js",
 					"semi_transient": false,
 					"settings":
@@ -2972,116 +3706,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 378.0,
+						"translation.y": 420.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 67,
 					"type": "text"
 				},
 				{
-					"buffer": 19,
-					"file": "autoload.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5702,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3225,
-								3225
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content"
-							],
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1117.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 20,
+					"buffer": 21,
 					"file": "server/ships/battlecrab.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1742,
+						"buffer_size": 1706,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1437,
-								1437
+								681,
+								681
 							]
 						],
 						"settings":
@@ -3149,14 +3794,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 270.0,
+						"translation.y": 138.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 47,
 					"type": "text"
 				},
 				{
-					"buffer": 21,
+					"buffer": 22,
 					"file": "server/systems/structure.php",
 					"semi_transient": false,
 					"settings":
@@ -3240,65 +3885,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 22,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 733,
-						"regions":
-						{
-							"match":
-							{
-								"flags": 112,
-								"regions":
-								[
-									[
-										242,
-										249
-									],
-									[
-										322,
-										329
-									],
-									[
-										359,
-										366
-									],
-									[
-										567,
-										574
-									]
-								],
-								"scope": ""
-							}
-						},
-						"selection":
-						[
-							[
-								323,
-								323
-							]
-						],
-						"settings":
-						{
-							"detect_indentation": false,
-							"line_numbers": false,
-							"output_tag": 1,
-							"result_base_dir": "",
-							"result_file_regex": "^([^ \t].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 10,
+					"stack_index": 51,
 					"type": "text"
 				},
 				{
@@ -3307,15 +3894,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 15861,
+						"buffer_size": 15733,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								10846,
-								10848
+								1670,
+								1670
 							]
 						],
 						"settings":
@@ -3323,31 +3910,11 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
@@ -3358,35 +3925,55 @@
 								"bh_default_open",
 								"bh_default_close",
 								"bh_default_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
 								"bh_single_quote",
 								"bh_single_quote_center",
 								"bh_single_quote_open",
 								"bh_single_quote_close",
 								"bh_single_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content"
 							],
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 34.0,
-						"translation.y": 6640.0,
+						"translation.x": 0.0,
+						"translation.y": 881.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 38,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
@@ -3471,10 +4058,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 350.0,
+						"translation.y": 218.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 48,
+					"stack_index": 73,
 					"type": "text"
 				},
 				{
@@ -3483,15 +4070,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4318,
+						"buffer_size": 3278,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3029,
-								3029
+								2126,
+								2126
 							]
 						],
 						"settings":
@@ -3559,27 +4146,115 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1531.0,
+						"translation.y": 1194.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
 					"buffer": 26,
-					"file": "server/systems/weapons/pulse.php",
+					"file": "server/systems/weapons/dual.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3481,
+						"buffer_size": 1823,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2920,
-								2920
+								34,
+								34
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 27,
+					"file": "server/systems/weapons/plasma.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3555,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3378,
+								3378
 							]
 						],
 						"settings":
@@ -3588,27 +4263,56 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1315.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
-					"buffer": 27,
-					"file": "server/ship.php",
+					"buffer": 28,
+					"file": "server/systems/weapons/pulse.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 16774,
+						"buffer_size": 3449,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								234,
-								234
+								2523,
+								2523
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1615.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 29,
+					"file": "server/ship.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 16874,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								11931,
+								11931
 							]
 						],
 						"settings":
@@ -3676,27 +4380,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 907.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 27,
 					"type": "text"
 				},
 				{
-					"buffer": 28,
+					"buffer": 30,
 					"file": "server/salvo.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8094,
+						"buffer_size": 8494,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								7062,
+								7062
 							]
 						],
 						"settings":
@@ -3764,27 +4468,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3052.0,
+						"translation.y": 5045.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 40,
+					"stack_index": 34,
 					"type": "text"
 				},
 				{
-					"buffer": 29,
+					"buffer": 31,
 					"file": "cam.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 551,
+						"buffer_size": 579,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								294,
-								294
+								347,
+								347
 							]
 						],
 						"settings":
@@ -3855,24 +4559,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 70,
+					"stack_index": 77,
 					"type": "text"
 				},
 				{
-					"buffer": 30,
+					"buffer": 32,
 					"file": "server/systems/system.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 13049,
+						"buffer_size": 13583,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1094,
-								1094
+								131,
+								135
 							]
 						],
 						"settings":
@@ -3940,19 +4644,19 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 162.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 33,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
-					"buffer": 31,
+					"buffer": 33,
 					"file": "server/ships/olympus.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1871,
+						"buffer_size": 1839,
 						"regions":
 						{
 						},
@@ -3972,30 +4676,442 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 54,
+					"stack_index": 23,
 					"type": "text"
-				}
-			]
-		},
-		{
-			"selected": 6,
-			"sheets":
-			[
+				},
 				{
-					"buffer": 32,
-					"file": "graphics.js",
+					"buffer": 34,
+					"file": "createGame.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5572,
+						"buffer_size": 1418,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3536,
-								3536
+								393,
+								393
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 62,
+					"type": "text"
+				},
+				{
+					"buffer": 35,
+					"file": "lobby.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5596,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2716,
+								2716
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 68.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 61,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 40,
+			"sheets":
+			[
+				{
+					"buffer": 36,
+					"file": "server/ships/avenger.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3806,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								621,
+								621
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 70.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 26,
+					"file": "server/systems/weapons/dual.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1823,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1492,
+								1492
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 48,
+					"type": "text"
+				},
+				{
+					"buffer": 30,
+					"file": "server/salvo.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8494,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4994,
+								4994
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3587.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 54,
+					"type": "text"
+				},
+				{
+					"buffer": 37,
+					"file": "autoload.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6093,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3163,
+								3180
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 895.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 38,
+					"file": "graphics.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5573,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1798,
+								1798
 							]
 						],
 						"settings":
@@ -4064,27 +5180,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1784.0,
+						"translation.y": 1033.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 23,
+					"stack_index": 33,
 					"type": "text"
 				},
 				{
-					"buffer": 33,
+					"buffer": 39,
 					"file": "server/systems/weapons/em.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2829,
+						"buffer_size": 2830,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1014,
-								1014
+								126,
+								126
 							]
 						],
 						"settings":
@@ -4096,24 +5212,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 31,
 					"type": "text"
 				},
 				{
-					"buffer": 30,
+					"buffer": 32,
 					"file": "server/systems/system.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 13049,
+						"buffer_size": 13583,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								11397,
-								11397
+								11902,
+								11902
 							]
 						],
 						"settings":
@@ -4181,27 +5297,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 447.0,
+						"translation.y": 9290.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 37,
+					"stack_index": 38,
 					"type": "text"
 				},
 				{
-					"buffer": 34,
+					"buffer": 40,
 					"file": "game.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 45096,
+						"buffer_size": 46657,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								33135,
-								33135
+								7150,
+								7150
 							]
 						],
 						"settings":
@@ -4209,26 +5325,6 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
@@ -4239,21 +5335,6 @@
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
@@ -4263,33 +5344,68 @@
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
-								"bh_square_content"
+								"bh_square_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
 							],
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 21609.0,
+						"translation.y": 5079.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 7,
 					"file": "shipclasses.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 55182,
+						"buffer_size": 56423,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2571,
-								2571
+								9781,
+								9781
 							]
 						],
 						"settings":
@@ -4297,6 +5413,11 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
@@ -4307,6 +5428,31 @@
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
 								"bh_round",
 								"bh_round_center",
 								"bh_round_open",
@@ -4321,50 +5467,20 @@
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
-								"bh_regex_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
+								"bh_regex_content"
 							],
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1413.0,
+						"translation.y": 7455.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 46,
+					"stack_index": 36,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 8,
 					"file": "mathLib.js",
 					"semi_transient": false,
 					"settings":
@@ -4445,27 +5561,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2181.0,
+						"translation.y": 2423.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 44,
+					"stack_index": 72,
 					"type": "text"
 				},
 				{
-					"buffer": 35,
+					"buffer": 13,
 					"file": "server/dbManager.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 39280,
+						"buffer_size": 39559,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								195,
-								195
+								338,
+								338
 							]
 						],
 						"settings":
@@ -4473,61 +5589,61 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
 								"bh_default_close",
 								"bh_default_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
-								"bh_angle_content"
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content"
 							],
 							"history_list_is_closing": true,
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
@@ -4537,16 +5653,16 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 41,
 					"type": "text"
 				},
 				{
-					"buffer": 32,
+					"buffer": 38,
 					"file": "graphics.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5572,
+						"buffer_size": 5573,
 						"regions":
 						{
 						},
@@ -4623,10 +5739,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 488.0,
+						"translation.y": 542.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 68,
 					"type": "text"
 				},
 				{
@@ -4635,15 +5751,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 28637,
+						"buffer_size": 28952,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								7286,
+								7286
 							]
 						],
 						"settings":
@@ -4711,27 +5827,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 18235.0,
+						"translation.y": 6803.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 41,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
-					"buffer": 29,
+					"buffer": 31,
 					"file": "cam.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 551,
+						"buffer_size": 579,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								209,
-								209
+								322,
+								322
 							]
 						],
 						"settings":
@@ -4802,24 +5918,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 62,
+					"stack_index": 49,
 					"type": "text"
 				},
 				{
-					"buffer": 36,
+					"buffer": 41,
 					"file": "shared.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 24842,
+						"buffer_size": 12390,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								15797,
-								15797
+								2630,
+								2630
 							]
 						],
 						"settings":
@@ -4887,56 +6003,203 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5481.0,
+						"translation.y": 1433.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 35,
 					"type": "text"
 				},
 				{
-					"buffer": 37,
-					"file": "server/ships/sharlin.php",
+					"buffer": 23,
+					"file": "script.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3671,
+						"buffer_size": 15733,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								124,
-								124
+								9135,
+								9135
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 5766.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 50,
 					"type": "text"
 				},
 				{
-					"buffer": 38,
-					"file": "server/ships/tinashi.php",
+					"buffer": 42,
+					"file": "gameSetup.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2428,
+						"buffer_size": 16992,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1174,
-								1174
+								11662,
+								11662
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 8105.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 25,
+					"type": "text"
+				},
+				{
+					"buffer": 43,
+					"file": "server/ships/tinashi.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2260,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								678,
+								754
 							]
 						],
 						"settings":
@@ -4948,24 +6211,53 @@
 						"translation.y": 12.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 50,
+					"stack_index": 64,
 					"type": "text"
 				},
 				{
-					"buffer": 39,
-					"file": "server/ships/whitestar.php",
+					"buffer": 44,
+					"file": "server/ships/sharlin.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1926,
+						"buffer_size": 3671,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1297,
-								1297
+								895,
+								895
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 336.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 63,
+					"type": "text"
+				},
+				{
+					"buffer": 45,
+					"file": "server/ships/whitestar.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1775,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								934,
+								934
 							]
 						],
 						"settings":
@@ -5033,27 +6325,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 100.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 43,
+					"stack_index": 65,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 10,
 					"file": "server/math.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3578,
+						"buffer_size": 3579,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1876,
-								1876
+								953,
+								953
 							]
 						],
 						"settings":
@@ -5121,10 +6413,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 63.0,
+						"translation.y": 252.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 64,
+					"stack_index": 56,
 					"type": "text"
 				},
 				{
@@ -5133,15 +6425,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4214,
+						"buffer_size": 4246,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3516,
-								3516
+								3548,
+								3548
 							]
 						],
 						"settings":
@@ -5210,14 +6502,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2556.0,
+						"translation.y": 2834.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 39,
+					"stack_index": 71,
 					"type": "text"
 				},
 				{
-					"buffer": 40,
+					"buffer": 46,
 					"file": "server/ships/primus.php",
 					"semi_transient": false,
 					"settings":
@@ -5229,8 +6521,8 @@
 						"selection":
 						[
 							[
-								1621,
-								1621
+								1786,
+								1786
 							]
 						],
 						"settings":
@@ -5298,27 +6590,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 54.0,
+						"translation.y": 73.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 53,
+					"stack_index": 52,
 					"type": "text"
 				},
 				{
-					"buffer": 41,
+					"buffer": 47,
 					"file": "server/ships/demos.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1884,
+						"buffer_size": 1885,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								533,
-								533
+								560,
+								560
 							]
 						],
 						"settings":
@@ -5389,11 +6681,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 57,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 42,
+					"buffer": 48,
 					"file": "server/ships/vorchan.php",
 					"semi_transient": false,
 					"settings":
@@ -5418,11 +6710,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 49,
+					"stack_index": 74,
 					"type": "text"
 				},
 				{
-					"buffer": 43,
+					"buffer": 49,
 					"file": "server/ships/haven.php",
 					"semi_transient": false,
 					"settings":
@@ -5447,24 +6739,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 56,
+					"stack_index": 75,
 					"type": "text"
 				},
 				{
-					"buffer": 44,
+					"buffer": 50,
 					"file": "server/systems/weapons/linked.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1639,
+						"buffer_size": 1640,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1232,
-								1232
+								129,
+								129
 							]
 						],
 						"settings":
@@ -5473,27 +6765,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 270.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 66,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
-					"buffer": 45,
+					"buffer": 51,
 					"file": "flights.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 14380,
+						"buffer_size": 14297,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								845,
-								845
+								229,
+								229
 							]
 						],
 						"settings":
@@ -5561,27 +6853,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 244.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 44,
 					"type": "text"
 				},
 				{
-					"buffer": 46,
+					"buffer": 52,
 					"file": "server/flight.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8371,
+						"buffer_size": 8383,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								540,
-								540
+								7421,
+								7421
 							]
 						],
 						"settings":
@@ -5650,98 +6942,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 293.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 32,
-					"type": "text"
-				},
-				{
-					"buffer": 47,
-					"file": "gameSetup.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 17061,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								8305,
-								8305
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
-							],
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 451.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 19,
+					"stack_index": 39,
 					"type": "text"
 				},
 				{
@@ -5757,8 +6961,8 @@
 						"selection":
 						[
 							[
-								5021,
-								5021
+								4919,
+								4919
 							]
 						],
 						"settings":
@@ -5826,27 +7030,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3852.0,
+						"translation.y": 4300.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 66,
 					"type": "text"
 				},
 				{
-					"buffer": 48,
+					"buffer": 53,
 					"file": "log.txt",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8604,
+						"buffer_size": 13525,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7437,
-								7437
+								0,
+								0
 							]
 						],
 						"settings":
@@ -5914,27 +7118,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 380.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 37,
 					"type": "text"
 				},
 				{
-					"buffer": 28,
+					"buffer": 30,
 					"file": "server/salvo.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8094,
+						"buffer_size": 8494,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								5277,
+								5277
 							]
 						],
 						"settings":
@@ -6002,14 +7206,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2027.0,
+						"translation.y": 3371.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 34,
+					"stack_index": 55,
 					"type": "text"
 				},
 				{
-					"buffer": 21,
+					"buffer": 22,
 					"file": "server/systems/structure.php",
 					"semi_transient": false,
 					"settings":
@@ -6093,11 +7297,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 30,
+					"stack_index": 70,
 					"type": "text"
 				},
 				{
-					"buffer": 49,
+					"buffer": 54,
 					"file": "getGameData.php",
 					"semi_transient": false,
 					"settings":
@@ -6181,24 +7385,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 69,
 					"type": "text"
 				},
 				{
-					"buffer": 50,
+					"buffer": 55,
 					"file": "shiptest.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4132,
+						"buffer_size": 4239,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1055,
-								1055
+								229,
+								229
 							]
 						],
 						"settings":
@@ -6207,27 +7411,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 756.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 45,
+					"stack_index": 58,
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 29,
 					"file": "server/ship.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 16774,
+						"buffer_size": 16874,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7600,
-								7600
+								871,
+								871
 							]
 						],
 						"settings":
@@ -6295,85 +7499,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 162.0,
+						"translation.y": 80.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 35,
+					"stack_index": 45,
 					"type": "text"
 				},
 				{
-					"buffer": 51,
-					"file": "createGame.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1418,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								466,
-								466
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 67,
-					"type": "text"
-				},
-				{
-					"buffer": 52,
+					"buffer": 56,
 					"file": "index.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2390,
+						"buffer_size": 2379,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								328,
-								328
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 68,
-					"type": "text"
-				},
-				{
-					"buffer": 53,
-					"file": "lobby.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5663,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5575,
-								5575
+								1782,
+								1782
 							]
 						],
 						"settings":
@@ -6381,11 +7527,36 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
@@ -6396,72 +7567,47 @@
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
 								"bh_tag_close",
-								"bh_tag_content"
+								"bh_tag_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
 							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 415.0,
+						"translation.y": 604.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
+					"stack_index": 60,
 					"type": "text"
 				},
 				{
-					"buffer": 54,
+					"buffer": 57,
 					"file": "server/systems/weapons/launcher.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3727,
+						"buffer_size": 3812,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1107,
-								1107
+								102,
+								102
 							]
 						],
 						"settings":
@@ -6529,14 +7675,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 198.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 36,
+					"stack_index": 30,
 					"type": "text"
 				},
 				{
-					"buffer": 55,
+					"buffer": 58,
 					"file": "balltest.php",
 					"semi_transient": false,
 					"settings":
@@ -6561,24 +7707,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 65,
+					"stack_index": 76,
 					"type": "text"
 				},
 				{
-					"buffer": 56,
+					"buffer": 59,
 					"file": "systemtest.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3564,
+						"buffer_size": 3552,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								255,
-								255
+								342,
+								342
 							]
 						],
 						"settings":
@@ -6590,24 +7736,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 24,
 					"type": "text"
 				},
 				{
-					"buffer": 57,
+					"buffer": 60,
 					"file": "server/systems/weapons/laser.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6067,
+						"buffer_size": 6741,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5319,
-								5319
+								2977,
+								2977
 							]
 						],
 						"settings":
@@ -6675,14 +7821,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 639.0,
+						"translation.y": 1975.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 58,
+					"buffer": 61,
 					"file": "server/systems/weapons/matter.php",
 					"semi_transient": false,
 					"settings":
@@ -6694,8 +7840,8 @@
 						"selection":
 						[
 							[
-								1255,
-								1255
+								119,
+								119
 							]
 						],
 						"settings":
@@ -6763,10 +7909,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 180.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 69,
+					"stack_index": 28,
 					"type": "text"
 				}
 			]
@@ -6774,7 +7920,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 34.0
+		"height": 28.0
 	},
 	"input":
 	{
@@ -6800,7 +7946,7 @@
 		"cols":
 		[
 			0.0,
-			0.524958198341,
+			0.579780009403,
 			1.0
 		],
 		"rows":
@@ -6818,7 +7964,7 @@
 	"project": "p1.sublime-project",
 	"replace":
 	{
-		"height": 62.0
+		"height": 66.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -6828,52 +7974,396 @@
 		"selected_items":
 		[
 			[
-				"db",
-				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
-			],
-			[
-				"de",
-				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
-			],
-			[
-				"auto",
-				"C:\\xampp\\htdocs\\fire\\autoload.php"
-			],
-			[
-				"par",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php"
-			],
-			[
-				"sharl",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\sharlin.php"
-			],
-			[
-				"omeg",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\omega.php"
-			],
-			[
-				"str",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\structure.php"
-			],
-			[
-				"sh",
-				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
-			],
-			[
-				"clas",
-				"C:\\xampp\\htdocs\\fire\\classes.js"
+				"puls",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
 			],
 			[
 				"las",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php"
 			],
 			[
-				"style",
-				"C:\\xampp\\htdocs\\fire\\style.css"
+				"auo",
+				"C:\\xampp\\htdocs\\fire\\autoload.php"
+			],
+			[
+				"laser",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php"
+			],
+			[
+				"par",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php"
+			],
+			[
+				"dem",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\demos.php"
+			],
+			[
+				"aut",
+				"C:\\xampp\\htdocs\\fire\\autoload.php"
+			],
+			[
+				"plas",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php"
 			],
 			[
 				"sys",
 				"C:\\xampp\\htdocs\\fire\\systems.js"
+			],
+			[
+				"pla",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php"
+			],
+			[
+				"scr",
+				"C:\\xampp\\htdocs\\fire\\script.js"
+			],
+			[
+				"sh",
+				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
+			],
+			[
+				"game.",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
+				"clas",
+				"C:\\xampp\\htdocs\\fire\\classes.js"
+			],
+			[
+				"la",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php"
+			],
+			[
+				"sag",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\saggitarius.php"
+			],
+			[
+				"pul",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
+			],
+			[
+				"sty",
+				"C:\\xampp\\htdocs\\fire\\style.css"
+			],
+			[
+				"sy",
+				"C:\\xampp\\htdocs\\fire\\systems.js"
+			],
+			[
+				"dua",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php"
+			],
+			[
+				"ome",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\omega.php"
+			],
+			[
+				"art",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\artemis.php"
+			],
+			[
+				"tet",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\tethys.php"
+			],
+			[
+				"av",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\avenger.php"
+			],
+			[
+				"hyp",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\hyperion.php"
+			],
+			[
+				"games",
+				"C:\\xampp\\htdocs\\fire\\gameSetup.php"
+			],
+			[
+				"man",
+				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
+			],
+			[
+				"mana",
+				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
+			],
+			[
+				"pa",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php"
+			],
+			[
+				"au",
+				"C:\\xampp\\htdocs\\fire\\autoload.php"
+			],
+			[
+				"mat",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\matter.php"
+			],
+			[
+				"plasma",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php"
+			],
+			[
+				"gr",
+				"C:\\xampp\\htdocs\\fire\\graphics.js"
+			],
+			[
+				"lau",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php"
+			],
+			[
+				"link",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\linked.php"
+			],
+			[
+				"sal",
+				"C:\\xampp\\htdocs\\fire\\server\\salvo.php"
+			],
+			[
+				"sha",
+				"C:\\xampp\\htdocs\\fire\\shared.js"
+			],
+			[
+				"game",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
+				"ship",
+				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
+			],
+			[
+				"shi",
+				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
+			],
+			[
+				"log",
+				"C:\\xampp\\htdocs\\fire\\log.txt"
+			],
+			[
+				"game.js",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
+				"",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php"
+			],
+			[
+				"dual",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php"
+			],
+			[
+				"lasr",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php"
+			],
+			[
+				"du",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php"
+			],
+			[
+				"db",
+				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
+			],
+			[
+				"mna",
+				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
+			],
+			[
+				"sc",
+				"C:\\xampp\\htdocs\\fire\\script.js"
+			],
+			[
+				"aja",
+				"C:\\xampp\\htdocs\\fire\\ajax.js"
+			],
+			[
+				"xlas",
+				"C:\\xampp\\htdocs\\fire\\server\\classes.php"
+			],
+			[
+				"style",
+				"C:\\xampp\\htdocs\\fire\\style.css"
+			],
+			[
+				"fl",
+				"C:\\xampp\\htdocs\\fire\\flights.js"
+			],
+			[
+				"find",
+				"Find Results"
+			],
+			[
+				"ave",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\avenger.php"
+			],
+			[
+				"shr",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\hyperion.php"
+			],
+			[
+				"class",
+				"C:\\xampp\\htdocs\\fire\\classes.js"
+			],
+			[
+				"shipc",
+				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
+			],
+			[
+				"a",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\avenger.php"
+			],
+			[
+				"shared",
+				"C:\\xampp\\htdocs\\fire\\shared.js"
+			],
+			[
+				"cam",
+				"C:\\xampp\\htdocs\\fire\\cam.js"
+			],
+			[
+				"scri",
+				"C:\\xampp\\htdocs\\fire\\script.js"
+			],
+			[
+				"shar",
+				"C:\\xampp\\htdocs\\fire\\shared.js"
+			],
+			[
+				"styl",
+				"C:\\xampp\\htdocs\\fire\\style.css"
+			],
+			[
+				"grap",
+				"C:\\xampp\\htdocs\\fire\\graphics.js"
+			],
+			[
+				"share",
+				"C:\\xampp\\htdocs\\fire\\shared.js"
+			],
+			[
+				"str",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\structure.php"
+			],
+			[
+				"aven",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\avenger.php"
+			],
+			[
+				"pri",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\primus.php"
+			],
+			[
+				"pr",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\primus.php"
+			],
+			[
+				"ckass",
+				"Package Control Messages"
+			],
+			[
+				"deb",
+				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
+			],
+			[
+				"fi",
+				"C:\\xampp\\htdocs\\fire\\server\\flight.php"
+			],
+			[
+				"ma",
+				"C:\\xampp\\htdocs\\fire\\server\\math.php"
+			],
+			[
+				"uls",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
+			],
+			[
+				"part",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php"
+			],
+			[
+				"gm.",
+				"C:\\xampp\\htdocs\\fire\\game.php"
+			],
+			[
+				"hy",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\hyperion.php"
+			],
+			[
+				"shipt",
+				"C:\\xampp\\htdocs\\fire\\shiptest.php"
+			],
+			[
+				"auto",
+				"C:\\xampp\\htdocs\\fire\\autoload.php"
+			],
+			[
+				"spart",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php"
+			],
+			[
+				"index",
+				"C:\\xampp\\htdocs\\fire\\index.php"
+			],
+			[
+				"lob",
+				"C:\\xampp\\htdocs\\fire\\lobby.php"
+			],
+			[
+				"creat",
+				"C:\\xampp\\htdocs\\fire\\createGame.php"
+			],
+			[
+				"gamese",
+				"C:\\xampp\\htdocs\\fire\\gameSetup.php"
+			],
+			[
+				"crea",
+				"C:\\xampp\\htdocs\\fire\\createGame.php"
+			],
+			[
+				"pdb",
+				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
+			],
+			[
+				"lobby",
+				"C:\\xampp\\htdocs\\fire\\lobby.php"
+			],
+			[
+				"de",
+				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
+			],
+			[
+				"sharl",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\sharlin.php"
+			],
+			[
+				"ti",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\tinashi.php"
+			],
+			[
+				"tin",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\tinashi.php"
+			],
+			[
+				"wh",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\whitestar.php"
+			],
+			[
+				"gra",
+				"C:\\xampp\\htdocs\\fire\\graphics.js"
+			],
+			[
+				"game.php",
+				"C:\\xampp\\htdocs\\fire\\createGame.php"
+			],
+			[
+				"games.",
+				"C:\\xampp\\htdocs\\fire\\gameSetup.php"
+			],
+			[
+				"cre",
+				"C:\\xampp\\htdocs\\fire\\createGame.php"
+			],
+			[
+				"omeg",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\omega.php"
 			],
 			[
 				"cla",
@@ -6888,100 +8378,16 @@
 				"C:\\xampp\\htdocs\\fire\\imageloader.js"
 			],
 			[
-				"mana",
-				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
-			],
-			[
 				"ima",
 				"C:\\xampp\\htdocs\\fire\\imageloader.js"
-			],
-			[
-				"gamese",
-				"C:\\xampp\\htdocs\\fire\\gameSetup.php"
-			],
-			[
-				"uls",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
-			],
-			[
-				"log",
-				"C:\\xampp\\htdocs\\fire\\log.txt"
-			],
-			[
-				"lob",
-				"C:\\xampp\\htdocs\\fire\\lobby.php"
-			],
-			[
-				"sy",
-				"C:\\xampp\\htdocs\\fire\\systems.js"
-			],
-			[
-				"gr",
-				"C:\\xampp\\htdocs\\fire\\graphics.js"
-			],
-			[
-				"game.js",
-				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
-				"ome",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\omega.php"
-			],
-			[
-				"sha",
-				"C:\\xampp\\htdocs\\fire\\shared.js"
-			],
-			[
-				"grap",
-				"C:\\xampp\\htdocs\\fire\\graphics.js"
-			],
-			[
-				"game.",
-				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
-				"gra",
-				"C:\\xampp\\htdocs\\fire\\graphics.js"
-			],
-			[
-				"shar",
-				"C:\\xampp\\htdocs\\fire\\shared.js"
 			],
 			[
 				"lobb",
 				"C:\\xampp\\htdocs\\fire\\lobby.php"
 			],
 			[
-				"fl",
-				"C:\\xampp\\htdocs\\fire\\flights.js"
-			],
-			[
-				"ship",
-				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
-			],
-			[
-				"sty",
-				"C:\\xampp\\htdocs\\fire\\style.css"
-			],
-			[
 				"em",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\em.php"
-			],
-			[
-				"pa",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php"
-			],
-			[
-				"shi",
-				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
-			],
-			[
-				"laser",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php"
-			],
-			[
-				"class",
-				"C:\\xampp\\htdocs\\fire\\classes.js"
 			],
 			[
 				"cr",
@@ -6992,28 +8398,12 @@
 				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
 			],
 			[
-				"sal",
-				"C:\\xampp\\htdocs\\fire\\server\\salvo.php"
-			],
-			[
-				"lau",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php"
-			],
-			[
 				"gam",
-				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
-				"game",
 				"C:\\xampp\\htdocs\\fire\\game.js"
 			],
 			[
 				"grp",
 				"C:\\xampp\\htdocs\\fire\\graphics.js"
-			],
-			[
-				"wh",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\whitestar.php"
 			],
 			[
 				"whit",
@@ -7024,22 +8414,6 @@
 				"C:\\xampp\\htdocs\\fire\\game.php"
 			],
 			[
-				"shared",
-				"C:\\xampp\\htdocs\\fire\\shared.js"
-			],
-			[
-				"ma",
-				"C:\\xampp\\htdocs\\fire\\mathLib.js"
-			],
-			[
-				"scr",
-				"C:\\xampp\\htdocs\\fire\\script.js"
-			],
-			[
-				"puls",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
-			],
-			[
 				"shalr",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\sharlin.php"
 			],
@@ -7048,24 +8422,12 @@
 				"C:\\xampp\\htdocs\\fire\\lobby.php"
 			],
 			[
-				"man",
-				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
-			],
-			[
-				"aja",
-				"C:\\xampp\\htdocs\\fire\\ajax.js"
-			],
-			[
 				"fli",
 				"C:\\xampp\\htdocs\\fire\\server\\flight.php"
 			],
 			[
 				"post",
 				"C:\\xampp\\htdocs\\fire\\postGameData.php"
-			],
-			[
-				"deb",
-				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
 			],
 			[
 				"maan",
@@ -7086,14 +8448,6 @@
 			[
 				"game.ph",
 				"C:\\xampp\\htdocs\\fire\\game.php"
-			],
-			[
-				"scri",
-				"C:\\xampp\\htdocs\\fire\\script.js"
-			],
-			[
-				"styl",
-				"C:\\xampp\\htdocs\\fire\\style.css"
 			],
 			[
 				"game.s",
@@ -7128,216 +8482,8 @@
 				"C:\\xampp\\htdocs\\fire\\mathLib.js"
 			],
 			[
-				"",
-				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
 				"class.",
 				"C:\\xampp\\htdocs\\fire\\classes.js"
-			],
-			[
-				"math.",
-				"C:\\xampp\\htdocs\\fire\\server\\math.php"
-			],
-			[
-				"av",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\avenger.php"
-			],
-			[
-				"hyp",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\hyperion.php"
-			],
-			[
-				"ave",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\avenger.php"
-			],
-			[
-				"sag",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\saggitarius.php"
-			],
-			[
-				"launc",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php"
-			],
-			[
-				"pri",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\primus.php"
-			],
-			[
-				"ar",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\artemis.php"
-			],
-			[
-				"tina",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\tinashi.php"
-			],
-			[
-				"sc",
-				"C:\\xampp\\htdocs\\fire\\script.js"
-			],
-			[
-				"pos",
-				"C:\\xampp\\htdocs\\fire\\postGameData.php"
-			],
-			[
-				"balls",
-				"C:\\xampp\\htdocs\\fire\\balltest.php"
-			],
-			[
-				"d",
-				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
-			],
-			[
-				"lo",
-				"C:\\xampp\\htdocs\\fire\\log.txt"
-			],
-			[
-				"ball",
-				"C:\\xampp\\htdocs\\fire\\balltest.php"
-			],
-			[
-				"mat",
-				"C:\\xampp\\htdocs\\fire\\server\\math.php"
-			],
-			[
-				"lauc",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php"
-			],
-			[
-				"game.php",
-				"C:\\xampp\\htdocs\\fire\\game.php"
-			],
-			[
-				"pul",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
-			],
-			[
-				"pulse",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
-			],
-			[
-				"figh",
-				"C:\\xampp\\htdocs\\fire\\server\\flight.php"
-			],
-			[
-				"dem",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\demos.php"
-			],
-			[
-				"part",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php"
-			],
-			[
-				"art",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\artemis.php"
-			],
-			[
-				"aut",
-				"C:\\xampp\\htdocs\\fire\\autoload.php"
-			],
-			[
-				"aven",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\avenger.php"
-			],
-			[
-				"linked",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\linked.php"
-			],
-			[
-				"ffl",
-				"C:\\xampp\\htdocs\\fire\\flights.js"
-			],
-			[
-				"shipc",
-				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
-			],
-			[
-				"link",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\linked.php"
-			],
-			[
-				"crea",
-				"C:\\xampp\\htdocs\\fire\\createGame.php"
-			],
-			[
-				"ajax",
-				"C:\\xampp\\htdocs\\fire\\ajax.js"
-			],
-			[
-				"pu",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
-			],
-			[
-				"lin",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\linked.php"
-			],
-			[
-				"sa",
-				"C:\\xampp\\htdocs\\fire\\server\\salvo.php"
-			],
-			[
-				"pus",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
-			],
-			[
-				"fi",
-				"C:\\xampp\\htdocs\\fire\\index.php"
-			],
-			[
-				"matt",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\matter.php"
-			],
-			[
-				"au",
-				"C:\\xampp\\htdocs\\fire\\autoload.php"
-			],
-			[
-				"maa",
-				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
-			],
-			[
-				"flig",
-				"C:\\xampp\\htdocs\\fire\\flights.js"
-			],
-			[
-				"getgame",
-				"C:\\xampp\\htdocs\\fire\\getGameData.php"
-			],
-			[
-				"games",
-				"C:\\xampp\\htdocs\\fire\\gameSetup.php"
-			],
-			[
-				"oly",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\olympus.php"
-			],
-			[
-				"image",
-				"C:\\xampp\\htdocs\\fire\\imageloader.js"
-			],
-			[
-				"vor",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\vorchan.php"
-			],
-			[
-				"arte",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\artemis.php"
-			],
-			[
-				"la",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php"
-			],
-			[
-				"games.",
-				"C:\\xampp\\htdocs\\fire\\gameSetup.php"
-			],
-			[
-				"salo",
-				"C:\\xampp\\htdocs\\fire\\server\\salvo.php"
-			],
-			[
-				"po",
-				"C:\\xampp\\htdocs\\fire\\postGameData.php"
 			]
 		],
 		"width": 0.0

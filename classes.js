@@ -117,13 +117,16 @@ function Dot(a, b){
 	this.dot = (a.nx * b.nx) + (a.ny * b.ny);
 }
 
-function Power(id, unitid, systemid, turn, type, cost){
-	this.id = id;
-	this.unitid = unitid;
-	this.systemid = systemid;
-	this.turn = turn;
-	this.type = type;
-	this.cost = cost;
+//	type 1 - charge up
+//	type 0 - unpower
+function Power(data){
+	this.id = data.id;
+	this.unitid = data.unitid;
+	this.systemid = data.systemid;
+	this.turn = data.turn;
+	this.type = data.type;
+	this.cost = data.cost;
+	this.new = data.new || 0;
 }	
 
 function Marker(shooterid, targetid, systemid, turn){
@@ -133,17 +136,17 @@ function Marker(shooterid, targetid, systemid, turn){
 	this.turn = turn;
 }
 
-function FireOrder(id, turn, shooterid, targetid, weaponid, shots, req, notes, hits, resolved){
-	this.id = id;
-	this.turn = turn;
-	this.shooterid = shooterid;
-	this.targetid = targetid;
-	this.weaponid = weaponid;
-	this.shots = shots;
-	this.req = req;
-	this.notes = notes;
-	this.hits = hits;
-	this.resolved = resolved;
+function FireOrder(data){
+	this.id = data.id || -1;
+	this.turn = data.turn || game.turn;
+	this.shooterid = data.shooterid || -1;
+	this.targetid = data.targetid || -1;
+	this.weaponid = data.weaponid || -1;
+	this.shots = data.shots || 0;
+	this.req = data.req || 0;
+	this.notes = data.notes || "";
+	this.hits = data.hits || 0;
+	this.resolved = data.resolved || 0;
 	this.dist;
 	this.guns = 1;
 	this.animated = false;
@@ -158,43 +161,43 @@ function FireOrder(id, turn, shooterid, targetid, weaponid, shots, req, notes, h
 	}
 }
 
-function Damage(id, fireid, gameid, shipid, structureid, systemid, turn, roll, type, totalDmg, shieldDmg, structDmg, armourDmg, mitigation, negation, destroyed, notes){
-	this.id = id;
-	this.fireid = fireid;
-	this.gameid = gameid;
-	this.shipid = shipid;
-	this.structureid = structureid;
-	this.systemid = systemid;
-	this.turn = turn;
-	this.roll = roll;
-	this.type = type;
-	this.totalDmg = totalDmg;
-	this.shieldDmg = shieldDmg;
-	this.structDmg = structDmg;
-	this.armourDmg = armourDmg;
-	this.mitigation = mitigation;
-	this.negation = negation;
-	this.destroyed = destroyed;
-	this.notes = notes;
+function Damage(data){
+	this.id = data.id;
+	this.fireid = data.fireid;
+	this.gameid = data.gameid;
+	this.shipid = data.shipid;
+	this.structureid = data.structureid;
+	this.systemid = data.systemid;
+	this.turn = data.turn;
+	this.roll = data.roll;
+	this.type = data.type;
+	this.totalDmg = data.totalDmg;
+	this.shieldDmg = data.shieldDmg;
+	this.structDmg = data.structDmg;
+	this.armourDmg = data.armourDmg;
+	this.mitigation = data.mitigation;
+	this.negation = data.negation;
+	this.destroyed = data.destroyed;
+	this.notes = data.notes;
 }
 
-function Ammo(id, name, cost, display, exploSize, minDmg, maxDmg, impulse, mass, integrity, armour, fc, damages, crits, destroyed){
-	this.id = id;
-	this.name = name;
-	this.cost = cost;
-	this.display = display;
-	this.exploSize = exploSize;
-	this.minDmg = minDmg;
-	this.maxDmg = maxDmg;
-	this.impulse = impulse;
-	this.size = mass*3;
-	this.mass = mass;
-	this.integrity = integrity;
-	this.armour = armour;
-	this.fc = fc;
-	this.damages = damages || false;
-	this.crits = crits;
-	this.destroyed = destroyed;
+function Ammo(data){
+	this.id = data.id;
+	this.name = data.name;
+	this.cost = data.cost;
+	this.display = data.display;
+	this.exploSize = data.exploSize;
+	this.minDmg = data.minDmg;
+	this.maxDmg = data.maxDmg;
+	this.impulse = data.impulse;
+	this.size = data.mass*3;
+	this.mass = data.mass;
+	this.integrity = data.integrity;
+	this.armour = data.armour;
+	this.fc = data.fc;
+	this.damages = data.damages || false;
+	this.crits = data.crits;
+	this.destroyed = data.destroyed;
 	this.shots = 1;
 	this.fireOrders = [];
 
@@ -332,8 +335,20 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 		return this.structures[0].maxDmg;
 	}
 
-	this.getImpulse = function(){
-		return this.structures[0].impulse;
+	this.getBaseImpulse = function(){
+		return this.structures[0].impulse
+	}
+
+	this.getAccelSteps = function(){
+		return this.actions.length;
+	}
+
+	this.getMaxImpulse = function(){
+		return this.getBaseImpulse() * 3;
+	}
+
+	this.getTotalImpulse = function(){
+		return Math.min(this.getMaxImpulse(), this.getBaseImpulse()*this.getAccelSteps());
 	}
 
 	this.createDiv = function(){
@@ -370,7 +385,7 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 			.append($("<tr>")
 	    		.append($("<td>").html(this.getDamage()))
 	    		.append($("<td>").html(this.structures[0].armour))
-	    		.append($("<td>").html(this.getImpulse()))
+	    		.append($("<td>").html(this.getBaseImpulse() + " x" + this.getAccelSteps() + " - max: " + this.getMaxImpulse()))
 	    		.append($("<td>").html(this.structures[0].fc[0] + "% / " + this.structures[0].fc[1] + "%"))
 			)
 
@@ -635,7 +650,7 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 				target.setFinalStep();
 			}
 			var vector = new Vector(target, game.getUnitById(target.targetid));
-			var speedMod = this.getImpulse() / target.getImpulse();
+			var speedMod = this.getTotalImpulse() / target.getTotalImpulse();
 			this.finalStep = getIntercept(this.getPlannedPosition(), target, vector, speedMod);
 		}
 		else {
@@ -649,7 +664,7 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 			target = target.nextStep;
 		}
 		var dist = getDistance(this.getPlannedPosition(), this.finalStep);
-		var impulse = this.getImpulse();
+		var impulse = this.getTotalImpulse();
 		if (impulse < dist){
 			var a = getAngleFromTo(this, target);
 			this.nextStep = getPointInDirection(impulse, a, this.x, this.y);
@@ -717,21 +732,14 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 
 	this.getShortInfo = function(){
 		var ele = $("#shortInfo");
-		if (game.shortInfo){
-			game.shortInfo = false;
-			$(ele).html("");
-		}
-		game.shortInfo = this.id;
-
 		if (this.userid == game.userid){
 			$(ele).attr("class", "friendly");
 		} else $(ele).attr("class", "hostile");
 
 		var table = document.createElement("table");
-		var tr = table.insertRow(-1);
-			tr.insertCell(-1).innerHTML = this.structures.length + "x " + this.name + " #" + this.id;
-		var tr = table.insertRow(-1);
-			tr.insertCell(-1).innerHTML = "Base hit: " + this.getHitChanceFromAngle() + "%";
+			table.insertRow(-1).insertCell(-1).innerHTML = this.structures.length + "x " + this.name + " #" + this.id;
+			table.insertRow(-1).insertCell(-1).innerHTML = this.getHitChanceFromAngle() + "%";
+			table.insertRow(-1).insertCell(-1).innerHTML =  "Impulse: " + this.getTotalImpulse();
 
 		if (this.impactThisTurn()){
 			var tr = table.insertRow(-1);
@@ -757,7 +765,7 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 
 	this.impactThisTurn = function(){
 		target = game.getUnitById(this.targetid);
-		if (getDistance({x: target.x, y: target.y}, {x: this.x, y: this.y}) <= this.structures[0].impulse){
+		if (getDistance({x: target.x, y: target.y}, {x: this.x, y: this.y}) <= this.getTotalImpulse()){
 			return true;
 		} else return false;
 	}
@@ -814,13 +822,13 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 	}
 }
 
-function Crit(id, shipid, systemid, turn, type, duration){
-	this.id = id;
-	this.shipid = shipid;
-	this.systemid = systemid;
-	this.turn = turn;
-	this.type = type;
-	this.duration = duration;
+function Crit(data){
+	this.id = data.id;
+	this.shipid = data.shipid;
+	this.systemid = data.systemid;
+	this.turn = data.turn;
+	this.type = data.type;
+	this.duration = data.duration;
 	this.html = "";
 	this.outputMod = 0;
 
@@ -906,21 +914,22 @@ function Crit(id, shipid, systemid, turn, type, duration){
 	this.create();
 }
 
-function Structure(id, parentId, start, end, integrity, negation, destroyed){
+function Structure(data){
 	this.name = "Structure";
 	this.display = "Structure";
-	this.id = id;
-	this.parentId = parentId;
-	this.start = start;
-	this.end = end;
-	this.integrity = integrity;
-	this.negation = negation;
-	this.destroyed = destroyed || false;
+	this.id = data.id;
+	this.parentId = data.parentId;
+	this.start = data.start;
+	this.end = data.end;
+	this.integrity = data.integrity;
+	this.negation = data.negation;
+	this.destroyed = data.destroyed || false;
 	this.highlight = false;
 	this.systems = [];
 	this.damages = [];
 	this.direction;
-	this.intBase = Math.floor(Math.pow(integrity, 1.5));
+	this.intBase = Math.floor(Math.pow(data.integrity, 1.5));
+	this.remainingNegation;
 
 	this.getTableRow = function(){
 		var tr = document.createElement("tr");
@@ -1010,9 +1019,8 @@ function Structure(id, parentId, start, end, integrity, negation, destroyed){
 	this.showInfoDiv = function(e){
 		$(document.body).append(
 			$(this.getSystemDetailsDiv())
-				.css("left", e.clientX + 20)
-				.css("top", e.clientY + 20)
-			)
+				.css("left", e.clientX - 90)
+				.css("top", e.clientY + 40)			)
 	}
 
 	this.getSystemDetailsDiv = function(){
@@ -1057,15 +1065,19 @@ function Structure(id, parentId, start, end, integrity, negation, destroyed){
 
 	this.getRemainingNegation = function(){
 		//return Math.floor((this.getRemainingIntegrity() / this.integrity) * this.negation);
-		return Math.round((Math.pow(this.getRemainingIntegrity(), 1.5) / this.intBase) * this.negation);
+		return this.remainingNegation;
+	}
+
+	this.setRemainingNegation = function(){
+		this.remainingNegation = Math.round((Math.pow(this.getRemainingIntegrity(), 1.5) / this.intBase) * this.negation);
 	}
 }
 
-function Primary(id, parentId, integrity, damages, destroyed){
-	Structure.call(this, id, parentId, 0, 360, integrity, 0, destroyed);
+function Primary(data){
+	Structure.call(this, data);
 	this.name = "Primary";
 	this.display = "Primary";
-	this.damages = damages
+	this.damages = data.damages
 	this.highlight = false;	
 	this.systems = [];
 	this.remaining;

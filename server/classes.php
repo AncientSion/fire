@@ -78,6 +78,7 @@ class Power {
 	public $turn;
 	public $type;
 	public $cost;
+	public $new;
 
 	function __construct($id, $unitid, $systemid, $turn, $type, $cost){
 		$this->id = $id;
@@ -86,6 +87,7 @@ class Power {
 		$this->turn = $turn;
 		$this->type = $type;
 		$this->cost = $cost;
+		$this->new = 0;
 	}
 }
 

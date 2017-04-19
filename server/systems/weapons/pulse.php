@@ -3,7 +3,7 @@
 class Pulse extends Weapon {
 	public $type = "Pulse";
 	public $animation = "projectile";
-	public $priority = 6;
+	public $priority = 5;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -22,7 +22,7 @@ class Pulse extends Weapon {
 	}
 
 	public function doDamage($fire){
-		Debug::log("doDamage - PULSE, weapon: ".get_class($this).", target: ".$fire->target->id);
+		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id);
 
 		$negation; $armourDmg; $structDmg; $totalDmg; $hitSystem; $remInt; $destroyed;		
 
@@ -78,12 +78,12 @@ class Pulse extends Weapon {
 	}	
 }
 
-class LightPulseCannon extends Pulse {
-	public $name = "LightPulseCannon";
-	public $display = "32mm Pulse Cannon";
-	public $minDmg = 18;
-	public $maxDmg = 24;
-	public $accDecay = 160;
+class LightPulse extends Pulse {
+	public $name = "LightPulse";
+	public $display = "38mm Pulse Cannon";
+	public $minDmg = 20;
+	public $maxDmg = 26;
+	public $accDecay = 140;
 	public $shots = 3;
 	public $animColor = "brown";
 	public $projSize = 2;
@@ -98,18 +98,18 @@ class LightPulseCannon extends Pulse {
 	}
 }
 
-class MediumPulseCannon extends Pulse {
-	public $name = "MediumPulseCannon";
-	public $display = "58mm Pulse Cannon";
+class MediumPulse extends Pulse {
+	public $name = "MediumPulse";
+	public $display = "66mm Pulse Cannon";
 	public $minDmg = 28;
-	public $maxDmg = 36;
+	public $maxDmg = 35;
 	public $accDecay = 110;
 	public $shots = 3;
 	public $animColor = "brown";
 	public $projSize = 3;
 	public $projSpeed = 8;
 	public $exploSize = 4;
-	public $reload = 1;
+	public $reload = 2;
 	public $fc = array(0 => 115, 1 => 135);
 	public $mass = 20;
 

@@ -839,7 +839,7 @@ table, th, tr, td {
 
 #systemDetailsDiv table {
 	width: 220px;
-	border: 2px solid white;
+	border: 3px solid white;
 	border-collapse: collapse;
 }
 
@@ -884,6 +884,21 @@ table, th, tr, td {
 	top: -1px;
 }
 
+.mode {
+	display: block;
+	background-color: black;
+	border: 1px solid red;
+	width: 20px;
+	height: 20px;
+}
+
+.modeDiv {
+	z-index: 15;
+	position: absolute;
+	top: 30px;
+	left: 7px;
+}
+
 #upperGUI {
 	display: inline-block;
 	position: absolute;
@@ -926,14 +941,22 @@ table, th, tr, td {
 	top: 120px;
 	width: 750px;	
 	z-index: 8;
-	padding: 5px;
+	padding: 3px;
 	border-radius: 5px;
 	border: 1px solid white;
+	background-color: black;
 }
 
 #combatlogWrapper disabled {
 	display: none;
 }
+
+.combatLogheader {
+	font-size: 18px;
+	width: 100%;
+	text-align: center;
+	border: 1px solid white;
+} 
 
 #combatLog {
 	border-radius: 5px;
@@ -975,12 +998,11 @@ table, th, tr, td {
 
 #shortInfo {
 	z-index: 5;
-	display: inline-block;
 	position: absolute;
 	color: white;
 	background-color: black;
 	border-radius: 5px;
-	width: 80px
+	width: 90px;
 }
 
 #weaponAimTableWrapper {
@@ -1053,6 +1075,7 @@ table, th, tr, td {
 	color: black;
 	padding: 5px;
 	z-index: 10;
+	width: 75px;
 }
 
 #vectorDiv.disabled {
