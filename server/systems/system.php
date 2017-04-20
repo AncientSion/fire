@@ -50,6 +50,10 @@ class System {
 		$this->armourMod = 1;
 	}
 
+	public function getArmourMod(){
+		return $this->armourMod;
+	}
+
 	public function isPowered($turn){
 		if ($this->disabled){return false;}
 		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
@@ -327,10 +331,6 @@ class Weapon extends System {
 		if ($w <= 60){$this->armourMod = 0.9;}
 		else if ($w <= 120){$this->armourMod = 0.7;}
 		else if ($w <= 360){$this->armourMod = 0.5;}
-	}
-
-	public function getArmourMod(){
-		return $this->armourMod;
 	}
 
 	public function getFireControlMod($fire){

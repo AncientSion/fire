@@ -74,7 +74,7 @@ class Hasta extends Ammo {
 	public $impulse = 110;
 	public $integrity = 12;
 	public $armour = 3;
-	public $mass = 2;
+	public $mass = 3;
 	public $fc = array(0 => 90, 1 => 90);
 	public $cost = 3;
 	public $exploSize = 5;
@@ -88,8 +88,8 @@ class Javelin extends Ammo {
 	public $name = "Javelin";
 	public $display = "Multi-purpose Missiles";
 	public $type = "explosive";
-	public $minDmg = 35;
-	public $maxDmg = 45;
+	public $minDmg = 36;
+	public $maxDmg = 48;
 	public $impulse = 90;
 	public $integrity = 16;
 	public $armour = 5;
@@ -107,12 +107,12 @@ class Barracuda extends Ammo {
 	public $name = "Barracuda";
 	public $display = "Light Interceptor Missiles";
 	public $type = "explosive";
-	public $minDmg = 16;
-	public $maxDmg = 22;
+	public $minDmg = 13;
+	public $maxDmg = 18;
 	public $impulse = 140;
 	public $integrity = 10;
 	public $armour = 3;
-	public $mass = 3;
+	public $mass = 2;
 	public $fc = array(0 => 85, 1 => 95);
 	public $cost = 4;
 	public $exploSize = 5;
@@ -128,7 +128,7 @@ class Myrmidon extends Ammo {
 	public $type = "explosive";
 	public $minDmg = 55;
 	public $maxDmg = 76;
-	public $impulse = 70;
+	public $impulse = 75;
 	public $integrity = 18;
 	public $armour = 6;
 	public $mass = 5;
@@ -147,7 +147,7 @@ class Zeus extends Ammo {
 	public $type = "explosive";
 	public $minDmg = 78;
 	public $maxDmg = 96;
-	public $impulse = 60;
+	public $impulse = 65;
 	public $integrity = 22;
 	public $armour = 7;
 	public $mass = 6;

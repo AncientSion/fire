@@ -174,7 +174,10 @@ function getProjIntercept(src, dst, vector, mod){
 
 	if (ts) {
 		var t0 = ts[0], t1 = ts[1];
+		//var t = Math.min(t0, t1);
 		var t = Math.min(t0, t1);
+		console.log(t0);
+		console.log(t1);
 		//console.log(ts);
 		if (t < 0) t = Math.max(t0, t1);  
 		//t = range(1, t);
@@ -189,6 +192,45 @@ function getProjIntercept(src, dst, vector, mod){
 	//console.log(t);
 	return sol;
 }
+
+
+function getBeamIntercept(src, dst, vector){
+	var tx = dst.x - src.x;
+	var	ty = dst.y - src.y;
+	var	tvx = vector.nx;
+	var	tvy = vector.ny;
+
+	// Get quadratic equation components
+	var a = tvx*tvx + tvy*tvy - 25;
+	var b = 2 * (tvx * tx + tvy * ty);
+	var c = tx*tx + ty*ty;
+
+	// Solve quadratic
+	var ts = quad(a, b, c); // See quad(), below
+	// Find smallest positive solution
+	var sol = null;
+
+
+	if (ts) {
+		var t0 = ts[0], t1 = ts[1];
+		//var t = Math.min(t0, t1);
+		var t = Math.min(t0, t1);
+		if (t < 0) t = Math.max(t0, t1);  
+		//t = range(1, t);
+
+		if (t > 0) {
+			sol = {
+				x: dst.x + vector.nx * t,
+				y: dst.y + vector.ny * t
+			};
+		}
+	}
+	//console.log(t);
+	return sol;
+}
+
+
+
 
 function quad(a,b,c) {
 	var sol = null;
@@ -207,12 +249,6 @@ function quad(a,b,c) {
 		}
 	}
 	return sol;
-}
-
-function randomize(pos, x, y){
-	pos.x += range(-x, x);
-	pos.y += range (-y, y);
-	return pos;
 }
 		
 function drawAndRotate(posX, posY, w, h, iw, ih, angle, img){

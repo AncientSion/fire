@@ -303,10 +303,10 @@ foreach ($manager->playerstatus as $player){
 						<th style="width: 14%">
 							Shooter
 						</th>
-						<th style="width: 19%">
+						<th style="width: 17%">
 							Target
 						</th>
-						<th style="width: 17%">
+						<th style="width: 19%">
 							Weapon
 						</th>
 						<th style="width: 8%">

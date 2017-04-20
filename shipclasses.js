@@ -610,7 +610,7 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 			moveCtx.lineWidth = 2
 			moveCtx.stroke();
 			moveCtx.strokeStyle = "black";	
-			moveCtx.arc(center.x, center.y, delay-3, 0, 2*Math.PI, false);
+			moveCtx.arc(center.x, center.y, Math.max(0,delay-3), 0, 2*Math.PI, false);
 			moveCtx.globalCompositeOperation = "destination-out";
 			moveCtx.fill();
 			moveCtx.globalCompositeOperation = "source-over";
@@ -1336,7 +1336,7 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 			.drag()
 			.find($(".structContainer")
 				.contextmenu(function(e){e.stopPropagation;})
-				.hide()
+				.addClass("disabled")
 			)
 			.find($(".header")
 				.contextmenu(
@@ -1346,6 +1346,10 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 					}
 				)
 			)
+
+		if (game.phase == 2){
+			$(div).find(".structContainer").show();
+		}
 
 		this.element = div;
 	}
@@ -1655,12 +1659,13 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 			}
 		}
 		
-		$(divs).find(".pos").html(this.x + " / " + this.y);
-		$(divs).find(".ep").html(this.getRemainingEP() + " / " + this.getEP());
-		$(divs).find(".impulse").html(this.getRemainingImpulse() + " / " + this.getTotalImpulse());
-		$(divs).find(".delay").html( this.getRemainingDelay());
-		$(divs).find(".change").html(this.getImpulseChangeCost() + " EP");
-		$(divs).find(".turn").html(this.getImpulseChangeCost() + " EP");
+		$(divs)
+			.find(".pos").html(this.x + " / " + this.y).end()
+			.find(".ep").html(this.getRemainingEP() + " / " + this.getEP()).end()
+			.find(".impulse").html(this.getRemainingImpulse() + " / " + this.getTotalImpulse()).end()
+			.find(".delay").html(this.getRemainingDelay())		
+			.find(".change").html(this.getImpulseChangeCost() + " EP").end()			
+			.find(".turn").html(this.getImpulseChangeCost() + " EP").end()
 	}
 
 	this.updateDivPower = function(system){
@@ -1806,11 +1811,11 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 	}
 
 	this.canBoost = function(system){
-		if (system instanceof Dual){
+		/*if (system instanceof Dual){
 			console.log("cost: "+system.getActiveWeapon().effiency);
 			console.log("max: "+system.getActiveWeapon().maxBoost);
 			console.log(system.getActiveWeapon().boostEffect);
-		}
+		}*/
 
 		if (system.disabled || system.destroyed){
 			return false;

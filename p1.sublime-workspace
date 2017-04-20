@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"interc",
+				"interceptVector"
+			],
+			[
 				"getSyst",
 				"getSystemDetailsDiv"
 			],
@@ -218,10 +222,6 @@
 			[
 				"create",
 				"createLogEntry"
-			],
-			[
-				"interc",
-				"interceptAnimated"
 			],
 			[
 				"explo",
@@ -548,29 +548,22 @@
 			}
 		},
 		{
-			"contents": "Searching 61 files for \"powers.p\"\n\nC:\\xampp\\htdocs\\fire\\ajax.js:\n  100  \t\t\t\t\tvar power = game.ships[i].getPowerOrders();\n  101  \t\t\t\t\tfor (var j = 0; j < power.length; j++){\n  102: \t\t\t\t\t\tpowers.push(power[j]);\n  103  \t\t\t\t\t}\n  104  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n  195  \n  196  \t\t\tfor (var l = 0; l < window.ships[i].primary.systems[j].powers.length; l++){\n  197: \t\t\t\tprimSystem.powers.push(new Power(window.ships[i].primary.systems[j].powers[l]));\n  198  \t\t\t}\n  199  \n  ...\n  242  \n  243  \t\t\t\tfor (var l = 0; l < window.ships[i].structures[j].systems[k].powers.length; l++){\n  244: \t\t\t\t\tsystem.powers.push(new Power(window.ships[i].structures[j].systems[k].powers[l]));\n  245  \t\t\t\t}\n  246  \n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 2003  \t\t\t\tfor (var k = 0; k < this.structures[i].systems[j].powers.length; k++){\n 2004  \t\t\t\t\tif (this.structures[i].systems[j].powers[k].turn == game.turn){\n 2005: \t\t\t\t\t\tpowers.push(this.structures[i].systems[j].powers[k]);\n 2006  \t\t\t\t\t}\n 2007  \t\t\t\t}\n ....\n 2011  \t\t\tfor (var j = 0; j < this.primary.systems[i].powers.length; j++){\n 2012  \t\t\t\tif (this.primary.systems[i].powers[j].turn == game.turn){\n 2013: \t\t\t\t\tpowers.push(this.primary.systems[i].powers[j]);\n 2014  \t\t\t\t}\n 2015  \t\t\t}\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  255  \n  256  \tthis.doBoost = function(){\n  257: \t\tthis.powers.push(\n  258  \t\t\tnew Power({\n  259  \t\t\t\tid: this.powers.length+1,\n  ...\n  313  \t\t\t}\n  314  \n  315: \t\t\tthis.powers.push(\n  316  \t\t\t\tnew Power({\n  317  \t\t\t\t\tid: this.powers.length+1,\n  ...\n 1415  \tthis.initMain = function(){\n 1416  \t\tthis.states[this.states.length-1] = 1;\n 1417: \t\tthis.powers.push({id: this.powers.length, unitid: this.parentId, systemid: this.id, turn: game.turn, type: -1})\n 1418  \t\tthis.cycleActiveWeapon();\n 1419  \t\tthis.copyProps();\n ....\n 1571  \t\t\t\t\tcost: this.getEffiency()\n 1572  \t\t\t\t})\n 1573: \t\tthis.powers.push(p);\n 1574: \t\tthis.getActiveWeapon().powers.push(p);\n 1575  \t}\n 1576  \n\n10 matches across 4 files\n\n\nSearching 61 files for \"powers.p\"\n\nC:\\xampp\\htdocs\\fire\\ajax.js:\n  100  \t\t\t\t\tvar power = game.ships[i].getPowerOrders();\n  101  \t\t\t\t\tfor (var j = 0; j < power.length; j++){\n  102: \t\t\t\t\t\tpowers.push(power[j]);\n  103  \t\t\t\t\t}\n  104  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n  195  \n  196  \t\t\tfor (var l = 0; l < window.ships[i].primary.systems[j].powers.length; l++){\n  197: \t\t\t\tprimSystem.powers.push(new Power(window.ships[i].primary.systems[j].powers[l]));\n  198  \t\t\t}\n  199  \n  ...\n  242  \n  243  \t\t\t\tfor (var l = 0; l < window.ships[i].structures[j].systems[k].powers.length; l++){\n  244: \t\t\t\t\tsystem.powers.push(new Power(window.ships[i].structures[j].systems[k].powers[l]));\n  245  \t\t\t\t}\n  246  \n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 2003  \t\t\t\tfor (var k = 0; k < this.structures[i].systems[j].powers.length; k++){\n 2004  \t\t\t\t\tif (this.structures[i].systems[j].powers[k].new){\n 2005: \t\t\t\t\t\tpowers.push(this.structures[i].systems[j].powers[k]);\n 2006  \t\t\t\t\t}\n 2007  \t\t\t\t}\n ....\n 2011  \t\t\tfor (var j = 0; j < this.primary.systems[i].powers.length; j++){\n 2012  \t\t\t\tif (this.primary.systems[i].powers[j].new){\n 2013: \t\t\t\t\tpowers.push(this.primary.systems[i].powers[j]);\n 2014  \t\t\t\t}\n 2015  \t\t\t}\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  255  \n  256  \tthis.doBoost = function(){\n  257: \t\tthis.powers.push(\n  258  \t\t\tnew Power({\n  259  \t\t\t\tid: this.powers.length+1,\n  ...\n  313  \t\t\t}\n  314  \n  315: \t\t\tthis.powers.push(\n  316  \t\t\t\tnew Power({\n  317  \t\t\t\t\tid: this.powers.length+1,\n  ...\n 1415  \tthis.initMain = function(){\n 1416  \t\tthis.states[this.states.length-1] = 1;\n 1417: \t\tthis.powers.push({id: this.powers.length, unitid: this.parentId, systemid: this.id, turn: game.turn, type: -1})\n 1418  \t\tthis.cycleActiveWeapon();\n 1419  \t\tthis.copyProps();\n ....\n 1571  \t\t\t\t\tcost: this.getEffiency()\n 1572  \t\t\t\t})\n 1573: \t\tthis.powers.push(p);\n 1574: \t\tthis.getActiveWeapon().powers.push(p);\n 1575  \t}\n 1576  \n\n10 matches across 4 files\n\n\nSearching 61 files for \"isPowered\"\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\system.php:\n   50  \t}\n   51  \n   52: \tpublic function isPowered($turn){\n   53  \t\tfor ($i = sizeof($this->powers)-1; $i >= 0; $i--){\n   54  \t\t\tif ($this->powers[$i]->turn == $turn){\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  261  \t}\n  262  \n  263: \tthis.isPowered = function(){\n  264  \t\tif (this.destroyed || this.disabled){\n  265  \t\t\treturn false;\n  ...\n  276  \n  277  \tthis.isUnpowered = function(){\n  278: \t\tif (!this.isPowered()){\n  279  \t\t\treturn true;\n  280  \t\t}\n  ...\n  283  \n  284  \tthis.canUnpower = function(){\n  285: \t\tif (this.powerReq && this.isPowered()){\n  286  \t\t\treturn true;\n  287  \t\t} else return false;\n  ...\n  289  \n  290  \tthis.canPower = function(){\n  291: \t\tif (this.powerReq && !this.isPowered()){\n  292  \t\t\treturn true;\n  293  \t\t} else return false;\n  ...\n  765  \t\tfor (var i = 0; i < ship.structures.length; i++){\n  766  \t\t\tfor (var j = 0; j < ship.structures[i].systems.length; j++){\n  767: \t\t\t\tif (ship.structures[i].systems[j].isPowered()){\n  768  \t\t\t\t\tuse += ship.structures[i].systems[j].getCurrentPowerUsage();\n  769  \t\t\t\t}\n  ...\n  771  \t\t}\n  772  \t\tfor (var i = 0; i < ship.primary.systems.length; i++){\n  773: \t\t\tif (ship.primary.systems[i].isPowered()){\n  774  \t\t\t\tuse += ship.primary.systems[i].getCurrentPowerUsage();\n  775  \t\t\t}\n\n7 matches across 2 files\n\n\nSearching 47 files for \"isPowered\"\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\system.php:\n   50  \t}\n   51  \n   52: \tpublic function isPowered($turn){\n   53  \t\tfor ($i = sizeof($this->powers)-1; $i >= 0; $i--){\n   54  \t\t\tif ($this->powers[$i]->turn == $turn){\n\n1 match in 1 file\n\n\nSearching 61 files for \"isPowered($turn)\"\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\system.php:\n   50  \t}\n   51  \n   52: \tpublic function isPowered($turn){\n   53  \t\tfor ($i = sizeof($this->powers)-1; $i >= 0; $i--){\n   54  \t\t\tif ($this->powers[$i]->turn == $turn){\n\n1 match in 1 file\n\n\nSearching 61 files for \"getActiveSystem\"\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  454  \t\t\t\tfor ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){\n  455  \t\t\t\t\tif ($this->structures[$i]->systems[$j]->id == $id){\n  456: \t\t\t\t\t\treturn $this->structures[$i]->systems[$j]->getActiveSystem();\n  457  \t\t\t\t\t}\n  458  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\system.php:\n   39  \t}\n   40  \n   41: \tpublic function getActiveSystem(){\n   42  \t\treturn $this;\n   43  \t}\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php:\n   21  \t}\n   22  \n   23: \tpublic function getActiveSystem(){\n   24  \t\tfor ($i = 0; $i < sizeof($this->states); $i++){\n   25  \t\t\tif ($this->states[$i]){\n   ..\n   41  \t\t\t\t}\n   42  \t\t\t\telse if ($this->powers[$i]->type == 1){\n   43: \t\t\t\t\t$this->getActiveSystem()->addPowerEntry($this->powers[$i]);\n   44  \t\t\t\t}\n   45  \t\t\t}\n   46  \t\t}\n   47: \t\t//echo $this->getActiveSystem()->name;\n   48  \t}\n   49  }\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  392  \t\t\tfor (var j = 0; j < this.structures[i].systems.length; j++){\n  393  \t\t\t\tif (this.structures[i].systems[j].id == id){\n  394: \t\t\t\t\treturn this.structures[i].systems[j].getActiveSystem();\n  395  \t\t\t\t}\n  396  \t\t\t}\n  ...\n 1805  \tthis.canBoost = function(system){\n 1806  \t\tif (system instanceof Dual){\n 1807: \t\t\tconsole.log(\"cost: \"+system.getActiveSystem().effiency);\n 1808: \t\t\tconsole.log(\"max: \"+system.getActiveSystem().maxBoost);\n 1809: \t\t\tconsole.log(system.getActiveSystem().boostEffect);\n 1810  \t\t}\n 1811  \n\nC:\\xampp\\htdocs\\fire\\systems.js:\n   29  \tthis.dual = 0;\n   30  \n   31: \tthis.getActiveSystem = function(){\n   32  \t\treturn this;\n   33  \t}\n   ..\n 1376  \t\n 1377  \tthis.setFireOrder = function(targetid){\n 1378: \t\tvar w = this.getActiveSystem();\n 1379  \n 1380  \t\tthis.fireOrders.push(\n ....\n 1401  \n 1402  \tthis.getImageName = function(){\n 1403: \t\treturn this.getActiveSystem().name;\n 1404  \t}\n 1405  \n ....\n 1425  \t\t\t\t}\n 1426  \t\t\t\telse if (this.powers[i].type > 0){\n 1427: \t\t\t\t\tthis.getActiveSystem().powers.push(this.powers[i]);\n 1428  \t\t\t\t}\n 1429  \t\t\t}\n ....\n 1522  \n 1523  \tthis.update = function(){\n 1524: \t\tthis.getActiveSystem().updateSystemDetailsDiv();\n 1525  \t\tgame.getUnitById(this.parentId).updateDiv();\n 1526  \t}\n 1527  \n 1528  \tthis.getSystemDetailsDiv = function(){\n 1529: \t\treturn this.getActiveSystem().getSystemDetailsDiv();\n 1530  \t}\n 1531  \n 1532  \tthis.drawArc = function(facing, pos){\n 1533: \t\tthis.getActiveSystem().drawArc(facing, pos);\n 1534  \t}\n 1535  \n 1536  \tthis.getSystem = function(){\n 1537: \t\treturn this.getActiveSystem();\n 1538  \t}\n 1539  \n ....\n 1577  \tthis.doUnboost = function(){\n 1578  \t\tthis.powers.splice(this.powers.length-1, 1);\n 1579: \t\tvar w = this.getActiveSystem();\n 1580  \t\t\tw.powers.splice(w.powers.length-1, 1);\n 1581  \t}\n ....\n 1586  \t\t\t\t\tturn: game.turn,type: 1, cost: this.getEffiency(), new: 1};\n 1587  \t\tthis.powers.push(p);\n 1588: \t\tthis.getActiveSystem().powers.push(p);\n 1589  \t}\n 1590  \n 1591: \tthis.getActiveSystem = function(){\n 1592  \t\tfor (var i = 0; i < this.states.length; i++){\n 1593  \t\t\tif (this.states[i]){\n\n20 matches across 5 files\n\n\nSearching 61 files for \"public $priority =\"\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\em.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 5;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 5;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php:\n    4  \tpublic $type = \"Launcher\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \tpublic $loads = array();\n    8  \tpublic $reload = 2;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\linked.php:\n    6  \tpublic $projSize = 3;\n    7  \tpublic $reload = 1;\n    8: \tpublic $priority = 6;\n    9  \tpublic $fc = array(0 => 100, 1 => 200);\n   10  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\matter.php:\n    4  \tpublic $type = \"Matter\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 4;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php:\n    4  \tpublic $type = \"Particle\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php:\n    3  class Plasma extends Weapon {\n    4  \tpublic $type = \"Plasma\";\n    5: \tpublic $priority = 5;\n    6  \tpublic $dmgDecay = 8;\n    7  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php:\n    4  \tpublic $type = \"Pulse\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\n8 matches across 8 files\n\n\nSearching 61 files for \"sortfireo\"\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  618  \tpublic function handleNormalFireOrders(){\n  619  \t\t$this->setFireOrderDetails();\n  620: \t\t$this->sortFireOrders();\n  621  \t\t$this->setupShipsForDamage();\n  622  \t\t$this->resolveShipFireOrders();\n  ...\n  647  \t}\n  648  \n  649: \tpublic function sortFireOrders(){\n  650  \t\t//sort to shooter, prio, target\n  651  \t\tusort($this->fires, function($a, $b){\n\n2 matches in 1 file\n\n\nSearching 61 files for \"$this->prio\"\n\n0 matches\n\nSearching 61 files for \"public $pio\"\n\n0 matches\n\nSearching 61 files for \"public $prio\"\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\system.php:\n  307  \tpublic $powerReq = 2;\n  308  \tpublic $fireOrders = array();\n  309: \tpublic $priority;\n  310  \tpublic $fc = array(0 => 100, 1 => 100);\n  311  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\em.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 5;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 5;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php:\n    4  \tpublic $type = \"Launcher\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \tpublic $loads = array();\n    8  \tpublic $reload = 2;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\linked.php:\n    6  \tpublic $projSize = 3;\n    7  \tpublic $reload = 1;\n    8: \tpublic $priority = 1;\n    9  \tpublic $fc = array(0 => 100, 1 => 200);\n   10  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\matter.php:\n    4  \tpublic $type = \"Matter\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 4;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php:\n    4  \tpublic $type = \"Particle\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php:\n    3  class Plasma extends Weapon {\n    4  \tpublic $type = \"Plasma\";\n    5: \tpublic $priority = 5;\n    6  \tpublic $dmgDecay = 8;\n    7  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php:\n    4  \tpublic $type = \"Pulse\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\n9 matches across 9 files\n\n\nSearching 61 files for \"public $prio\"\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\system.php:\n  307  \tpublic $powerReq = 2;\n  308  \tpublic $fireOrders = array();\n  309: \tpublic $priority;\n  310  \tpublic $fc = array(0 => 100, 1 => 100);\n  311  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\em.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 10;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 4;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php:\n    4  \tpublic $type = \"Launcher\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 8;\n    7  \tpublic $loads = array();\n    8  \tpublic $reload = 2;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\linked.php:\n    6  \tpublic $projSize = 3;\n    7  \tpublic $reload = 1;\n    8: \tpublic $priority = 10;\n    9  \tpublic $fc = array(0 => 100, 1 => 200);\n   10  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\matter.php:\n    4  \tpublic $type = \"Matter\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 9;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php:\n    4  \tpublic $type = \"Particle\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php:\n    3  class Plasma extends Weapon {\n    4  \tpublic $type = \"Plasma\";\n    5: \tpublic $priority = 5;\n    6  \tpublic $dmgDecay = 8;\n    7  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php:\n    4  \tpublic $type = \"Pulse\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\n9 matches across 9 files\n\n\nSearching 61 files for \"public $prio\"\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\system.php:\n  307  \tpublic $powerReq = 2;\n  308  \tpublic $fireOrders = array();\n  309: \tpublic $priority;\n  310  \tpublic $fc = array(0 => 100, 1 => 100);\n  311  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\em.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 10;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 4;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php:\n    4  \tpublic $type = \"Launcher\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 8;\n    7  \tpublic $loads = array();\n    8  \tpublic $reload = 2;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\linked.php:\n    6  \tpublic $projSize = 3;\n    7  \tpublic $reload = 1;\n    8: \tpublic $priority = 10;\n    9  \tpublic $fc = array(0 => 100, 1 => 200);\n   10  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\matter.php:\n    4  \tpublic $type = \"Matter\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 9;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php:\n    4  \tpublic $type = \"Particle\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 5;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php:\n    3  class Plasma extends Weapon {\n    4  \tpublic $type = \"Plasma\";\n    5: \tpublic $priority = 5;\n    6  \tpublic $dmgDecay = 8;\n    7  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php:\n    4  \tpublic $type = \"Pulse\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\n9 matches across 9 files\n\n\nSearching 61 files for \"public $prio\"\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\system.php:\n  307  \tpublic $powerReq = 2;\n  308  \tpublic $fireOrders = array();\n  309: \tpublic $priority;\n  310  \tpublic $fc = array(0 => 100, 1 => 100);\n  311  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\em.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 10;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php:\n    5  \tpublic $animation = \"beam\";\n    6  \tpublic $beamWidth;\n    7: \tpublic $priority = 4;\n    8  \tpublic $rakes;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php:\n    4  \tpublic $type = \"Launcher\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 8;\n    7  \tpublic $loads = array();\n    8  \tpublic $reload = 2;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\linked.php:\n    6  \tpublic $projSize = 3;\n    7  \tpublic $reload = 1;\n    8: \tpublic $priority = 10;\n    9  \tpublic $fc = array(0 => 100, 1 => 200);\n   10  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\matter.php:\n    4  \tpublic $type = \"Matter\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 9;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php:\n    4  \tpublic $type = \"Particle\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 5;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php:\n    3  class Plasma extends Weapon {\n    4  \tpublic $type = \"Plasma\";\n    5: \tpublic $priority = 6;\n    6  \tpublic $dmgDecay = 8;\n    7  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php:\n    4  \tpublic $type = \"Pulse\";\n    5  \tpublic $animation = \"projectile\";\n    6: \tpublic $priority = 6;\n    7  \n    8  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\n9 matches across 9 files\n\n\nSearching 61 files for \"particle beam\"\n\n0 matches\n\nSearching 61 files for \"ParticleBeam\"\n\n0 matches\n\nSearching 61 files for \"deployArea\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n   17  \tthis.reinforcements = [];\n   18  \tthis.animating = false;\n   19: \tthis.deployArea = false;\n   20  \tthis.deployBlock = [];\n   21  \tthis.vector = false;\n   ..\n  172  \tthis.disableDeployment = function(){\n  173  \t\tthis.deploying = false;\n  174: \t\tthis.deployArea = false;\n  175  \t\tthis.deployBlock = false;\n  176  \t\tmoveCtx.clearRect(0, 0, res.x, res.y);\n  ...\n  231  \t\t\t\t};\n  232  \t\t\t}\n  233: \t\t\tthis.deployArea.push(area);\n  234  \t\t}\n  235  \t}\n  ...\n  237  \tthis.drawDeploymentZone = function(){\n  238  \n  239: \t\tfor (var i = 0; i < this.deployArea; i++){\n  240  \t\t\tfxCtx.clearRect(0, 0, res.x, res.y);\n  241  \t\t\tfxCtx.translate(cam.o.x, cam.o.y)\n  242  \t\t\tfxCtx.scale(cam.z, cam.z)\n  243  \t\t\tfxCtx.beginPath();\n  244: \t\t\tfxCtx.rect(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].w, this.deployArea[i].h);\n  245  \t\t\tfxCtx.closePath();\n  246: \t\t\tfxCtx.fillStyle = deployArea[i].c;\n  247  \t\t\tfxCtx.fill();\n  248  \t\t}\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  159  \t\t//console.log(pos);\n  160  \t\tvar valid = false;\n  161: \t\tif (game.deployArea.x > 0){\n  162: \t\t\tif (pos.x >= game.deployArea.x && pos.x <= game.deployArea.x + game.deployArea.w){\n  163: \t\t\t\tif (pos.y >= game.deployArea.y && pos.y <= game.deployArea.y + game.deployArea.h){\n  164  \t\t\t\t\tvalid = true;\n  165  \t\t\t\t}\n  166  \t\t\t}\n  167  \t\t}\n  168: \t\telse if (pos.x <= game.deployArea.x && pos.x >= game.deployArea.x + game.deployArea.w){\n  169: \t\t\tif (pos.y >= game.deployArea.y && pos.y <= game.deployArea.y + game.deployArea.h){\n  170  \t\t\t\tvalid = true;\n  171  \t\t\t}\n  172  \t\t}\n  173: \t\telse if (pos.x > game.deployArea.x && pos.x < game.deployArea.x + game.deployArea.w){\n  174: \t\t\tif (pos.y > game.deployArea.y && pos.y < game.deployArea.y + game.deployArea.h){\n  175  \t\t\t\tvalid = true;\n  176  \t\t\t}\n\n28 matches across 2 files\n\n\nSearching 61 files for \"this.deployArea = false\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n   17  \tthis.reinforcements = [];\n   18  \tthis.animating = false;\n   19: \tthis.deployArea = false;\n   20  \tthis.deployBlock = [];\n   21  \tthis.vector = false;\n   ..\n  172  \tthis.disableDeployment = function(){\n  173  \t\tthis.deploying = false;\n  174: \t\tthis.deployArea = false;\n  175  \t\tthis.deployBlock = false;\n  176  \t\tmoveCtx.clearRect(0, 0, res.x, res.y);\n\n2 matches in 1 file\n\n\nSearching 61 files for \"if (this.deployArea\"\n\n0 matches\n\nSearching 61 files for \"playerindex\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  200  \t\t\tfor (var i = 0; i < 2; i++){\n  201  \t\t\t\tvar step = -1;\n  202: \t\t\t\tif (this.playerindex % i == 0){\n  203  \t\t\t\t\tstep = 1;\n  204  \t\t\t\t\tcolor = \"red\";\n\nC:\\xampp\\htdocs\\fire\\script.js:\n   64  \tfor (var i = 0; i < window.playerstatus.length; i++){\n   65  \t\tif (userid == window.playerstatus[i].userid){\n   66: \t\t\tgame.playerindex = i+1;\n   67  \t\t\tbreak;\n   68  \t\t}\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  203  \t\telse {\n  204  \t\t\tvar facing = 0;\n  205: \t\t\tif (game.playerindex % 2 == 0){facing = 180;}\n  206  \t\t\tthis.actions.push(new Move(\"deploy\", 0, pos.x, pos.y, facing, 0, 0));\n  207  \t\t\tthis.deployed = true;\n\n3 matches across 3 files\n",
-			"settings":
-			{
-				"buffer_size": 22630,
-				"line_ending": "Windows",
-				"name": "Find Results",
-				"scratch": true
-			}
-		},
-		{
 			"file": "style.css",
 			"settings":
 			{
-				"buffer_size": 16432,
+				"buffer_size": 16430,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
+			"contents": "function System(system){\n\tthis.id = system.id;\n\tthis.parentId = system.parentId;\n\tthis.name = system.name;\n\tthis.display = system.display;\n\tthis.integrity = system.integrity;\n\tthis.powerReq = system.powerReq;\n\tthis.output = system.output;\n\tthis.effiency = system.effiency;\n\tthis.maxBoost = system.maxBoost;\n\tthis.boostEffect = system.boostEffect;\n\tthis.armourMod = system.armourMod;\n\tthis.crits = [];\n\tthis.damages = [];\n\tthis.detailsTable = false;\n\tthis.highlight = false;\n\tthis.selected = false;\n\tthis.destroyed = false;\n\tthis.disabled = false;\n\tthis.weapon = false;\n\tthis.totalCost = 0;\n\tthis.powers = [];\n\tthis.fireOrders = [];\n\tthis.type = \"\";\n\tthis.modes = {};\n\tthis.element;\n\tthis.armour;\n\tthis.type = system.type || \"Internal\";\n\tthis.dual = 0;\n\n\tthis.getSystem = function(){\n\t\treturn this;\n\t}\n\n\tthis.getActiveWeapon = function(){\n\t\treturn this;\n\t}\n\t\n\tthis.hover = function(e){\n\t\tif (game.flightDeploy){return false;}\n\t\tif (this.highlight){\n\t\t\tthis.highlight = false;\n\t\t\tthis.hideInfoDiv(e);\n\t\t\tthis.hideOptions();\n\t\t}\n\t\telse {\n\t\t\tthis.highlight = true;\n\t\t\tthis.showInfoDiv(e);\n\t\t\tthis.showOptions();\n\t\t}\n\t\tif (this instanceof Hangar){\n\t\t\tif (game.getUnitById(this.parentId).hasWeaponsSelected()){\n\t\t\t\treturn;\n\t\t\t}\n\t\t\telse if (this.highlight){\n\t\t\t\tthis.drawArc();\n\t\t\t}\n\t\t\telse fxCtx.clearRect(0, 0, res.x, res.y);\n\t\t}\n\t\telse if (!game.getUnitById(this.parentId).hasHangarSelected()){\n\t\t\tgame.getUnitById(this.parentId).highlightAllSelectedWeapons();\n\t\t}\n\t}\n\n\tthis.setTableRow = function(){\n\t\tvar ele = $(this.element);\n\t\tif (this.destroyed){\n\t\t\tele.addClass(\"destroyed\");\n\t\t} else ele.removeClass(\"destroyed\");\n\n\t\tif (this.disabled){\n\t\t\tele.addClass(\"unpowered\").find(\".boostDiv\").hide().end().find(\".outputMask\").hide();\n\t\t} else if (this.effiency){\n\t\t\tele.removeClass(\"unpowered\").find(\".boostDiv\").show().end().find(\".outputMask\").show();\n\t\t} else {\t\t\t\n\t\t\tele.removeClass(\"unpowered\");\n\t\t}\n\t}\n\n\tthis.setSystemBorder = function(){\n\t\tvar ele = $(this.element);\n\t\tif (this.hasUnresolvedFireOrder()){\n\t\t\tele.addClass(\"fireOrder\");\n\t\t} else ele.removeClass(\"fireOrder\");\n\t\tif (this.selected){\n\t\t\tele.addClass(\"selected\");\n\t\t} else ele.removeClass(\"selected\");\n\t}\n\n\tthis.canFire = function(){\n\t\tif (this.destroyed || this.disabled){\n\t\t\treturn false;\n\t\t}\n\t\telse if (game.phase == -2){\n\t\t\treturn false;\n\t\t}\n\t\tif (this instanceof Launcher && game.phase == -1 || this instanceof Hangar && game.phase == -1 || this instanceof Weapon && game.phase == 2){\n\t\t\tif (this.getLoadLevel() >= 1){\n\t\t\t\treturn true;\n\t\t\t}\n\t\t}\n\t\treturn false;\n\t}\n\n\tthis.getLoadLevel = function(){\n\t\tvar need = this.reload;\n\t\tvar has = this.getTimeLoaded();\n\t\tif (has / need > 1){\n\t\t\treturn 1;\n\t\t}\n\t\telse if (has > 0){\n\t\t\treturn has/need;\n\t\t}\n\t\telse return has;\n\t}\n\n\tthis.getTimeLoaded = function(){\n\t\tvar turnsLoaded = this.reload\n\t\tvar max = this.reload;\n\t\tfor (var i = 1; i <= game.turn; i++){\n\t\t\tif (turnsLoaded < max){\n\t\t\t\tturnsLoaded++;\n\t\t\t}\n\t\t\tfor (var j = 0; j < this.fireOrders.length; j++){\n\t\t\t\tif (this.fireOrders[j].turn == i && this.fireOrders[j].resolved == 1){\n\t\t\t\t\tturnsLoaded = 0;\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\treturn turnsLoaded;\n\t}\n\n\tthis.getBoostLevel = function(){\n\t\tvar level = 0;\n\t\tfor (var i = this.powers.length-1; i >= 0; i--){\n\t\t\tif (this.powers[i].turn == game.turn && this.powers[i].type == 1){\n\t\t\t\tlevel++;\n\t\t\t}\n\t\t\telse if (this.powers[i].turn != game.turn){\n\t\t\t\treturn level;\n\t\t\t}\n\t\t}\n\t\treturn level;\n\t}\n\n\tthis.getBoostEffect = function(){\n\t\tif (this.boostEffect){\n\t\t\treturn \"+\" + this.boostEffect.value + \"% \" + this.boostEffect.type;\n\t\t}\n\t\telse return \"MISSING\";\n\t}\n\n\tthis.getBoostDiv = function(){\n\t\tif (!this.destroyed){\n\t\t\tif (this.effiency){\n\t\t\t\tvar div = document.createElement(\"div\");\n\t\t\t\t\tdiv.className = \"boostDiv disabled\";\n\t\t\t\t\t$(div).data(\"shipId\", this.parentId);\n\t\t\t\t\t$(div).data(\"systemId\", this.id);\n\t\t\t\tvar subDiv = document.createElement(\"div\");\n\t\t\t\t\tsubDiv.className = \"plus\";\n\t\t\t\t\tsubDiv.innerHTML = \"<img src='varIcons/plus.png'</img>\";\n\t\t\t\t\tsubDiv.childNodes[0].className = \"img100pct\";\n\t\t\t\t\t$(subDiv).bind(\"click\", function(e){\n\t\t\t\t\t\te.stopPropagation();\n\t\t\t\t\t\tif (game.phase != -1){return;}\n\t\t\t\t\t\tvar data = $(this.parentNode).data();\n\t\t\t\t\t\tgame.getUnitById(data.shipId).getSystemById(data.systemId).plus();\n\t\t\t\t\t});\n\t\t\t\t\tdiv.appendChild(subDiv);\n\t\t\t\tvar subDiv = document.createElement(\"div\");\n\t\t\t\t\tsubDiv.className = \"minus\";\n\t\t\t\t\tsubDiv.innerHTML = \"<img src='varIcons/minus.png'</img>\";\n\t\t\t\t\tsubDiv.childNodes[0].className = \"img100pct\";\n\t\t\t\t\t$(subDiv).bind(\"click\", function(e){\n\t\t\t\t\t\te.stopPropagation();\n\t\t\t\t\t\tif (game.phase != -1){return;}\n\t\t\t\t\t\tvar data = $(this.parentNode).data();\n\t\t\t\t\t\tgame.getUnitById(data.shipId).getSystemById(data.systemId).minus();\n\t\t\t\t\t});\n\t\t\t\t\tdiv.appendChild(subDiv);\n\t\t\t\treturn div;\n\t\t\t}\n\t\t\telse return false;\n\t\t}\n\t}\n\n\tthis.getPowerDiv = function(){\n\t\tif (!this.destroyed){\n\t\t\tif (this.powerReq){\n\t\t\t\tvar div = document.createElement(\"div\");\n\t\t\t\t\tdiv.className = \"powerDiv disabled\";\n\t\t\t\t\t$(div).data(\"shipId\", this.parentId);\n\t\t\t\t\t$(div).data(\"systemId\", this.id);\n\t\t\t\tvar subDiv = document.createElement(\"div\");\n\t\t\t\t\tsubDiv.className = \"plus\";\n\t\t\t\t\tsubDiv.innerHTML = \"<img src='varIcons/power.png'</img>\";\n\t\t\t\t\tsubDiv.childNodes[0].className = \"img100pct\";\n\t\t\t\t\t$(subDiv).bind(\"click\", function(e){\n\t\t\t\t\t\te.stopPropagation();\n\t\t\t\t\t\tif (game.phase != -1){return;}\n\t\t\t\t\t\tvar data = $(this.parentNode).data();\n\t\t\t\t\t\tgame.getUnitById(data.shipId).getSystemById(data.systemId).doPower();\n\t\t\t\t\t});\n\t\t\t\t\tdiv.appendChild(subDiv);\n\t\t\t\tvar subDiv = document.createElement(\"div\");\n\t\t\t\t\tsubDiv.className = \"minus\";\n\t\t\t\t\tsubDiv.innerHTML = \"<img src='varIcons/unpower.png'</img>\";\n\t\t\t\t\tsubDiv.childNodes[0].className = \"img100pct\";\n\t\t\t\t\t$(subDiv).bind(\"click\", function(e){\n\t\t\t\t\t\te.stopPropagation();\n\t\t\t\t\t\tif (game.phase != -1){return;}\n\t\t\t\t\t\tvar data = $(this.parentNode).data();\n\t\t\t\t\t\tgame.getUnitById(data.shipId).getSystemById(data.systemId).doUnpower();\n\t\t\t\t\t});\n\t\t\t\t\tdiv.appendChild(subDiv);\n\t\t\t\treturn div;\n\t\t\t}\n\t\t\telse return false;\n\t\t}\n\t}\n\n\tthis.getModeDiv = function(){\n\t\tif (!Object.keys(this.modes).length){return;}\n\t\tvar div = document.createElement(\"div\");\n\t\t\tdiv.className = \"modeDiv disabled\";\n\t\t\t$(div).data(\"shipId\", this.parentId);\n\t\t\t$(div).data(\"systemId\", this.id);\n\t\tvar subDiv = document.createElement(\"div\");\n\t\t\tsubDiv.className = \"mode\";\n\t\t\tsubDiv.innerHTML = \"<img src='varIcons/mode.png'</img>\";\n\t\t\tsubDiv.childNodes[0].className = \"img100pct\";\n\t\t\t$(subDiv).bind(\"click\", function(e){\n\t\t\t\te.stopPropagation();\n\t\t\t\t//if (game.phase != -1){return;}\n\t\t\t\tvar data = $(this.parentNode).data();\n\t\t\t\tgame.getUnitById(data.shipId).getSystemById(data.systemId).switchMode();\n\t\t\t});\n\t\t\tdiv.appendChild(subDiv);\n\t\treturn div;\n\t}\n\n\tthis.canUnboost = function(){\n\t\tif (this.powers.length){\n\t\t\tif (this.powers[this.powers.length-1].turn == game.turn){\n\t\t\t\tif (this.powers[this.powers.length-1].type > 0){\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\treturn false;\n\t}\n\n\tthis.doUnboost = function(){\n\t\tthis.powers.splice(this.powers.length-1, 1);\n\t\treturn true;\n\t}\n\n\tthis.doBoost = function(){\n\t\tthis.powers.push({\n\t\t\tid: this.powers.length+1, unitid: this.parentId, systemid: this.id,\n\t\t\tturn: game.turn,type: 1, cost: this.getEffiency(), new: 1\n\t\t})\n\t}\n\n\tthis.isPowered = function(){\n\t\tif (this.destroyed || this.disabled){\n\t\t\treturn false;\n\t\t}\n\t\telse if (this.powers.length){\n\t\t\tif (this.powers[this.powers.length-1].turn == game.turn){\n\t\t\t\tif (this.powers[this.powers.length-1].type == 0){\n\t\t\t\t\treturn false;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\n\n\tthis.isUnpowered = function(){\n\t\tif (!this.isPowered()){\n\t\t\treturn true;\n\t\t}\n\t\telse return false;\n\t}\n\n\tthis.canUnpower = function(){\n\t\tif (this.powerReq && this.isPowered()){\n\t\t\treturn true;\n\t\t} else return false;\n\t}\n\n\tthis.canPower = function(){\n\t\tif (this.powerReq && !this.isPowered()){\n\t\t\treturn true;\n\t\t} else return false;\n\t}\n\n\tthis.doUnpower = function(){\n\t\tif (this.selected){\n\t\t\tthis.select();\n\t\t}\n\t\tif (!this.disabled){\n\t\t\tfor (var i = this.powers.length-1; i >= 0; i--){\n\t\t\t\tif (this.powers[i].turn == game.turn){\n\t\t\t\t\tthis.powers.splice(i, 1);\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tthis.powers.push({\n\t\t\t\tid: this.powers.length+1, unitid: this.parentId, systemid: this.id,\n\t\t\t\tturn: game.turn, type: 0, cost: 0, new: 1\n\t\t\t})\n\t\t\tthis.disabled = 1;\n\t\t\tthis.doUndoActions();\n\t\t\tthis.setTableRow();\n\t\t\tthis.setSystemBorder();\n\t\t\tgame.getUnitById(this.parentId).updateDivPower(this);\n\t\t}\n\t}\n\n\tthis.doPower = function(){\n\t\tif (this.powers.length && this.powers[this.powers.length-1].type == 0){\n\t\t\tthis.powers.splice(this.powers.length-1, 1);\n\t\t\tthis.disabled = 0;\n\t\t\tthis.setTableRow();\n\t\t\tgame.getUnitById(this.parentId).updateDivPower(this);\n\t\t}\n\t}\n\n\tthis.plus = function(){\n\t\tvar ship = game.getUnitById(this.parentId);\n\t\tif (ship.canBoost(this)){\n\t\t\tthis.doBoost();\n\t\t\tship.updateDivPower(this);\n\t\t\treturn true;\n\t\t}\n\t\treturn false;\n\t}\n\n\tthis.minus = function(){\n\t\tif (this.canUnboost()){\n\t\t\tthis.doUnboost()\n\t\t\tgame.getUnitById(this.parentId).updateDivPower(this);\n\t\t\treturn true;\n\t\t}\n\t\treturn false;\n\t}\n\n\tthis.showOptions = function(){\n\t\tif (this.destroyed || this.dual && this.locked){return;}\n\t\tvar ele = $(this.element);\n\t\t\n\t\t/*if (game.phase == -2 &&\n\t\t\tif (Object.keys(this.modes).length){\n\t\t\t\tele.find(\".modeDiv\").show();\n\t\t\t}\n\t\t}*/\n\t\tif (game.phase == -1){\n\t\t\tif (game.getUnitById(this.parentId).userid == game.userid){\n\t\t\t\tvar boost = this.effiency;\n\t\t\t\tvar canModeChange = Object.keys(this.modes).length;\n\t\t\t\tvar canPower = this.canPower();\n\t\t\t\tvar canUnpower = this.canUnpower();\n\t\t\t\tif (canPower){\n\t\t\t\t\tboost = false;\n\t\t\t\t}\n\t\t\t\telse if (boost){\n\t\t\t\t\tif (this.getLoadLevel() != 1){\n\t\t\t\t\t\tboost = false;\n\t\t\t\t\t}\n\t\t\t\t}\n\n\t\t\t\tif (boost || canModeChange || canPower || canUnpower){\n\t\t\t\t\tif (boost){\n\t\t\t\t\t\tele.find(\".boostDiv\").show();\n\t\t\t\t\t}\n\t\t\t\t\tif (canModeChange){\n\t\t\t\t\t\tele.find(\".modeDiv\").show();\n\t\t\t\t\t}\n\t\t\t\t\tif (canPower || canUnpower){\n\t\t\t\t\t\tele.find(\".powerDiv\").show();\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\t/*else if (game.phase == 2){\n\t\t\tif (Object.keys(this.modes).length){\n\t\t\t\t$(ele).find(\".boostDiv\").show().end().find(\".modeDiv\").show().end().find(\".powerDiv\").show();\n\t\t\t}\n\t\t}*/\n\t}\n\n\tthis.hideOptions = function(){\n\t\tif (this.destroyed){return;}\n\t\tvar ele = $(this.element);\n\n\t\tif (game.phase == -2){\n\t\t\tif (Object.keys(this.modes).length){\n\t\t\t\tele.find(\".modeDiv\").hide();\n\t\t\t}\n\t\t}\n\t\tif (game.phase == -1){\n\t\t\tif (game.getUnitById(this.parentId).userid == game.userid){\n\t\t\t\tvar boost = this.effiency;\n\t\t\t\tvar canPower = this.canPower();\n\t\t\t\tvar canUnpower = this.canUnpower();\n\n\t\t\t\tif (boost || canPower || canUnpower){\n\t\t\t\t\t$(ele).find(\".boostDiv\").hide().end().find(\".modeDiv\").hide().end().find(\".powerDiv\").hide();\n\t\t\t\t\treturn;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\t/*else if (game.phase == 2){\n\t\t\tif (Object.keys(this.modes).length){\n\t\t\t\t$(ele).find(\".boostDiv\").hide().end().find(\".modeDiv\").hide().end().find(\".powerDiv\").hide();\n\t\t\t}\n\t\t}*/\n\t}\n\n\tthis.showInfoDiv = function(e){\n\t\t$(document.body).append(\n\t\t\t$(this.getSystemDetailsDiv())\n\t\t\t\t.css(\"left\", e.clientX - 90)\n\t\t\t\t.css(\"top\", e.clientY + 50)\n\t\t\t)\n\t\treturn;\n\t}\n\t\n\tthis.setFireOrder = function(targetid){\n\t\tthis.fireOrders.push(\n\t\t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n\t\t\tshots: this.getShots(), req: -1, notes: \"\", hits: -1, resolved: 0}\n\t\t);\n\t\tthis.selected = false;\n\t\tthis.highlight = false;\n\t\tthis.setSystemBorder();\n\t}\n\n\tthis.unsetFireOrder = function(){\n\t\tfor (var i = this.fireOrders.length-1; i >= 0; i--){\n\t\t\tif (this.fireOrders[i].turn == game.turn){\n\t\t\t\tthis.fireOrders.splice(i, 1);\n\t\t\t}\n\t\t}\n\t\tthis.setSystemBorder();\n\t}\n\n\tthis.hideInfoDiv = function(){\n\t\t$(\"#systemDetailsDiv\").remove();\n\t}\n\n\tthis.getImageName = function(){\n\t\treturn this.name;\n\t}\n\n\tthis.canBeBoosted = function(){\n\t\treturn this.effiency;\n\t}\n\n\tthis.getTableData = function(forFighter){\n\t\tvar td = document.createElement(\"td\");\n\t\t\ttd.className = \"system\";\n\n\t\tvar img = new Image();\n\t\tvar file = \"sysIcons/\" + this.getImageName();\n\t\tif (forFighter){file += this.linked;}\n\t\telse {img.className = \"sysIcon\";}\n\t\t\tfile += \".png\";\n\t\t\timg.src = file;\n\t\ttd.appendChild(img);\n\n\t\tvar div = document.createElement(\"div\");\n\t\t\tdiv.className = \"loadLevel\";\n\t\t//\tif (this.weapon){div.style.width = this.getLoadLevel() * 100 + \"%\"}\n\t\t//\telse {div.style.width = 100 + \"%\"};\n\t\t\tdiv.style.width = this.getLoadLevel() * 100 + \"%\";\n\t\t\ttd.appendChild(div);\n\n\t\tvar div = document.createElement(\"div\");\n\t\t\tdiv.className = \"bgloadlevel\";\n\t\t\ttd.appendChild(div);\n\n\t\t\t$(td).data(\"systemId\", this.id);\n\n\t\tif (!forFighter){\n\t\t\tvar lowerDiv = document.createElement(\"div\");\n\t\t\t\tlowerDiv.className = \"integrityNow\";\n\t\t\t\tlowerDiv.style.width = this.getRemainingIntegrity() /  this.integrity * 100 + \"%\";\n\t\t\t\ttd.appendChild(lowerDiv);\n\n\t\t\tvar div = document.createElement(\"div\");\n\t\t\t\tdiv.className = \"integrityFull\";\n\t\t\t\ttd.appendChild(div);\n\n\t\t\tif (!this.destroyed){\n\t\t\t\tif (this instanceof PrimarySystem || this.canBeBoosted()){\n\t\t\t\t\tvar outputDiv = document.createElement(\"div\");\n\t\t\t\t\t\toutputDiv.className = \"outputMask\";\n\t\t\t\t\t\t//output.innerHTML = \"<span>\" + this.outputp + \"</span>\";\n\t\t\t\t\t\toutputDiv.innerHTML = this.getOutput();\n\t\t\t\t\t\ttd.appendChild(outputDiv);\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\t$(td).data(\"systemId\", this.id);\n\t\tthis.element = td;\n\n\t\tthis.setTableRow();\n\t\tthis.setSystemBorder();\n\t\treturn this.element;\n\t}\n\n\tthis.hasUnresolvedFireOrder = function(){\n\t\treturn false;\n\t}\n\n\tthis.update = function(){\n\t\tthis.updateSystemDetailsDiv();\n\t\tgame.getUnitById(this.parentId).updateDiv();\n\t}\n\n\tthis.getRemainingIntegrity = function(){\n\t\tvar dmg = 0;\n\t\tfor (var i = 0; i < this.damages.length; i++){\n\t\t\tdmg += this.damages[i].structDmg;\n\t\t}\n\t\treturn this.integrity - dmg;\n\t}\n\n\tthis.isDestroyed = function(){\n\t\tif (this.destroyed){\n\t\t\treturn true;\n\t\t}\n\t\tfor (var i = this.damages.length-1; i >= 0; i--){\n\t\t\tif (this.damages[i].destroyed){\n\t\t\t\treturn true;\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.setState = function(){\n\t\tif (this.isDestroyed()){\n\t\t\tthis.destroyed = true;\n\t\t}\n\t\telse if (this.isUnpowered()){\n\t\t\tthis.disabled = true;\n\t\t}\n\t\tthis.adjustStateByCritical();\n\t}\n\n\tthis.adjustStateByCritical = function(){\n\t\tfor (var i = 0; i < this.crits.length; i++){\n\t\t\tif (this.crits[i].inEffect()){\n\t\t\t\tswitch (this.crits[i].type){\n\t\t\t\t\tcase \"disabled\":\n\t\t\t\t\t\tthis.disabled = true;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\tdefault:\n\t\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.critIsActive = function(){\n\t\t\n\t}\n\n\tthis.getMount = function(){\n\t\tif (game.getUnitById(aUnit) instanceof Flight){\n\t\t\treturn false;\n\t\t}\n\t\tif (this.mount.length){\n\t\t\treturn this.mount + \" / \" + this.armour;\n\t\t} else return this.armour;\n\t}\n\n\n\tthis.getOutput = function(){\n\t\tvar output = 0;\n\n\t\tfor (var i = this.powers.length-1; i >= 0; i--){\n\t\t\tif (this.powers[i].turn == game.turn && this.powers[i].type > 0){\n\t\t\t\toutput += this.powers[i].type;\n\t\t\t}\n\t\t\telse break;\n\t\t}\n\t\treturn output;\n\t}\n\n\tthis.getExtraOutput = function(){\n\t\tvar extra = 0;\n\t\tfor (var i = this.powers.length-1; i >= 0; i--){\n\t\t\tif (this.powers[i].turn == game.turn){\n\t\t\t\textra += this.output * this.boostEffect.value / 100 * this.powers[i].type;\n\t\t\t} else break;\n\t\t}\n\t\treturn Math.floor(extra);\n\t}\n\n\tthis.getEffiency = function(){\n\t\treturn Math.ceil(this.effiency * (1+(this.getBoostLevel() * this.getBoostCostIncrease())));\n\t}\n\n\tthis.getBoostCostIncrease = function(){\n\t\treturn 0;\n\t}\n\n\tthis.getPowerReq = function(){\n\t\treturn this.powerReq;\n\t}\n\n\tthis.getCurrentPowerUsage = function(){\n\t\tvar usage = this.powerReq;\n\t\tfor (var i = this.powers.length-1; i >= 0; i--){\n\t\t\tif (this.powers[i].turn == game.turn && this.powers[i].type > 0){\n\t\t\t\tusage += this.powers[i].cost;\n\t\t\t} else break;\n\t\t}\n\t\treturn usage;\n\t}\n}\n\nfunction PrimarySystem(system){\n\tSystem.call(this, system);\n\tthis.exposed = 0;\n\n\tthis.select = function(e){\n\t\tconsole.log(this);\n\t\treturn;\n\t}\n\n\tthis.doUndoActions = function(){\n\t\treturn;\n\t}\n\n\tthis.getLoadLevel = function(){\n\t\treturn 1;\n\t}\n\n\tthis.getOutput = function(){\n\t\tif (this.disabled || this.destroyed){\n\t\t\treturn 0;\n\t\t}\n\t\treturn Math.floor(this.output * this.getOutputMods() - this.getOutputUsage());\n\t}\n\n\tthis.getOutputUsage = function(){\n\t\treturn 0;\n\t}\n\n\tthis.getOutputMods = function(){\n\t\tvar mod = 1;\n\n\t\tfor (var i = this.powers.length-1; i >= 0; i--){\n\t\t\tif (this.powers[i].turn == game.turn){\n\t\t\t\tmod += this.boostEffect.value/100 * this.powers[i].type;\n\t\t\t} else break;\n\t\t}\n\t\tfor (var i = 0; i < this.crits.length; i++){\n\t\t\tif (this.crits[i].outputMod != 1){\n\t\t\t\tif (this.crits[i].inEffect()){\n\t\t\t\t\tmod *= this.crits[i].outputMod;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\treturn mod;\n\t}\n\n\tthis.getOutputString = function(){\n\t\treturn this.output + \" + \" + this.getExtraOutput();\n\t}\n\n\tthis.getBoostCostIncrease = function(){\n\t\treturn 0.2;\n\t}\n\n\tthis.getSystemDetailsDiv = function(){\n\t\tvar div = document.createElement(\"div\");\n\t\t\tdiv.id = \"systemDetailsDiv\";\n\t\t\tdiv.className = this.id;\n\t\tvar table = document.createElement(\"table\");\n\t\t\t\n\t\tvar tr = table.insertRow(-1);\t\t\t\t\n\t\tvar th = document.createElement(\"th\"); th.colSpan = 2;\n\t\t\tth.innerHTML = this.display; tr.appendChild(th); table.appendChild(tr)\n\n\t\tvar tr = table.insertRow(-1);\n\t\tvar td = document.createElement(\"td\"); td.style.width = \"60%\";\n\t\t\ttd.innerHTML = \"Integrity\"; tr.appendChild(td);\n\t\tvar td = document.createElement(\"td\");\n\t\t\ttd.innerHTML = this.getRemainingIntegrity() + \" / \" + this.integrity; tr.appendChild(td); table.appendChild(tr);\n\n\t\tif (this.output){\n\t\t\tvar tr = table.insertRow(-1);\n\t\t\t\ttr.insertCell(-1).innerHTML = \"Current Output\";\n\t\t\t\ttr.insertCell(-1).innerHTML = this.getOutputString();\n\t\t\t\ttr.childNodes[1].className = \"output\";\n\t\t}\n\t\tif (this.powerReq){\n\t\t\tvar tr = table.insertRow(-1);\n\t\t\t\ttr.insertCell(-1).innerHTML = \"Base Power Req\";\n\t\t\t\ttr.insertCell(-1).innerHTML = this.getPowerReq();\n\t\t\t\ttr.childNodes[1].className = \"powerReq\";\n\t\t}\n\t\tif (this.effiency){\n\t\t\tvar tr = table.insertRow(-1);\n\t\t\t\ttr.insertCell(-1).innerHTML = \"Boost Power Cost\";\n\t\t\t\ttr.insertCell(-1).innerHTML = this.getEffiency();\n\t\t\t\ttr.childNodes[1].className = \"boostReq\";\n\t\t\tvar tr = table.insertRow(-1);\n\t\t\t\ttr.insertCell(-1).innerHTML = \"Boost Effect\";\n\t\t\t\ttr.insertCell(-1).innerHTML = this.getBoostEffect();\n\t\t}\n\t\t\n\t\tif (this.crits.length){\n\t\t\tvar tr = document.createElement(\"tr\");\n\t\t\tvar td = document.createElement(\"td\");\n\t\t\t\ttd.colSpan = 2; td.style.fontSize = \"16px\"; td.style.borderBottom = \"1px solid white\"; td.style.borderTop = \"1px solid white\"; \n\t\t\t\ttd.innerHTML = \"Modifiers\"; tr.appendChild(td); table.appendChild(tr);\n\n\t\t\tfor (var i = 0; i < this.crits.length; i++){\n\t\t\t\tvar tr = table.insertRow(-1);\t\t\t\t\n\t\t\t\tvar td = document.createElement(\"td\");\n\t\t\t\t\ttd.colSpan = 2;\n\t\t\t\t\ttd.className = \"negative\";\n\t\t\t\t\ttd.innerHTML = this.crits[i].html; tr.appendChild(td); table.appendChild(tr);\n\t\t\t}\n\t\t}\n\t\t\t\n\t\tdiv.appendChild(table);\n\t\treturn div;\n\t}\n\n\tthis.updateSystemDetailsDiv = function(){\n\t\tvar output = this.getOutputString();\n\t\tvar powerReq = this.getPowerReq();\n\t\tvar boostReq = this.getEffiency();\n\t\t$(\"#systemDetailsDiv\").find(\"tr\").each(function(i){\n\t\t\tif (this.childNodes.length == 2){\n\t\t\t\tif (this.childNodes[1].className == \"output\"){\n\t\t\t\t\tthis.childNodes[1].innerHTML = output;\n\t\t\t\t}\n\t\t\t\telse if (this.childNodes[1].className == \"powerReq\"){\n\t\t\t\t\tthis.childNodes[1].innerHTML = powerReq;\n\t\t\t\t}\n\t\t\t\telse if (this.childNodes[1].className == \"boostReq\"){\n\t\t\t\t\tthis.childNodes[1].innerHTML = boostReq;\n\t\t\t\t}\n\t\t\t}\n\t\t})\n\t}\n}\nPrimarySystem.prototype = Object.create(System.prototype);\n\nfunction Bridge(system){\n\tPrimarySystem.call(this, system);\n\n\tthis.getBoostDiv = function(){\n\t\treturn false;\n\t}\n}\n\nBridge.prototype = Object.create(PrimarySystem.prototype);\n\t\t\t\t\nfunction Reactor(system){\n\tPrimarySystem.call(this, system);\n\n\tthis.getUnusedPower = function(){\n\t\treturn this.getOutput();\n\t}\n\n\tthis.getOutputUsage = function(){\n\t\tvar use = 0;\n\t\tvar ship = game.getUnitById(this.parentId);\n\t\tfor (var i = 0; i < ship.structures.length; i++){\n\t\t\tfor (var j = 0; j < ship.structures[i].systems.length; j++){\n\t\t\t\tif (ship.structures[i].systems[j].isPowered()){\n\t\t\t\t\tuse += ship.structures[i].systems[j].getCurrentPowerUsage();\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tfor (var i = 0; i < ship.primary.systems.length; i++){\n\t\t\tif (ship.primary.systems[i].isPowered()){\n\t\t\t\tuse += ship.primary.systems[i].getCurrentPowerUsage();\n\t\t\t}\n\t\t}\n\t\treturn use;\n\t}\n}\nReactor.prototype = Object.create(PrimarySystem.prototype);\n\nfunction Engine(system){\n\tPrimarySystem.call(this, system);\n}\nEngine.prototype = Object.create(PrimarySystem.prototype);\n\t\t\t\t\nfunction LifeSupport(system){\n\tPrimarySystem.call(this, system);\n\tthis.display = \"Life Support\";\n\t\n\tthis.getBoostDiv = function(){\n\t\treturn false;\n\t}\n}\nLifeSupport.prototype = Object.create(PrimarySystem.prototype);\n\t\t\t\t\nfunction Sensor(id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost, boostEffect){\n\tPrimarySystem.call(this, id, parentId, name, display, integrity, powerReq, output, effiency, maxBoost, boostEffect);\n}\nSensor.prototype = Object.create(PrimarySystem.prototype);\n\nfunction Weapon(system){\n\tSystem.call(this, system);\n\tthis.exploSize = system.exploSize;\n\tthis.animColor = system.animColor;\n\tthis.weapon = true;\n\tthis.fc = system.fc;\n\tthis.minDmg = system.minDmg;\n\tthis.maxDmg = system.maxDmg;\n\tthis.accDecay = system.accDecay;\n\tthis.linked = system.linked;\n\tthis.shots = system.shots;\n\tthis.reload = system.reload;\n\tthis.arc = [\n\t\t\t\t\t[system.start, system.end]\n\t\t\t\t];\n\tthis.priority = system.priority;\n\tthis.loaded;\n\tthis.fireOrders = [];\n\tthis.mount;\n\n\tthis.doUndoActions = function(){\n\t\tfor (var i = this.fireOrders.length-1; i >= 0; i--){\n\t\t\tif (this.fireOrders[i].turn == game.turn){\n\t\t\t\tthis.fireOrders.splice(i, 1);\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.getFireControl = function(target){\n\t\tif (target instanceof Flight || target instanceof Salvo){\n\t\t\treturn this.fc[1];\n\t\t} else return this.fc[0];\n\t}\n\n\tthis.getShots = function(){\n\t\treturn this.shots;\n\t}\n\n\tthis.posIsOnArc = function(loc, pos, facing){\n\t\tfor (var i = 0; i < this.arc.length; i++){\n\t\t\tvar start = this.arc[i][0];\n\t\t\tvar end = this.arc[i][1];\n\t\t\treturn isInArc(getCompassHeadingOfPoint(loc, pos, facing), start, end);\n\t\t}\n\t}\n\n\tthis.hasUnresolvedFireOrder = function(){\n\t\tfor (var i = 0; i < this.fireOrders.length; i++){\n\t\t\tif (this.fireOrders[i].turn == game.turn && this.fireOrders[i].resolved == 0){\n\t\t\t\treturn true;\n\t\t\t}\n\t\t}\n\t\treturn false;\n\t}\n\n\tthis.select = function(e){\n\t\tconsole.log(this);\n\t\tvar id = this.id;\n\t\tvar parentId = this.parentId;\n\t\tvar selected = false;\n\t\tvar unit;\n\n\t\tif (this.destroyed || this.disabled){\n\t\t\treturn false;\n\t\t}\n\t\telse {\n\t\t\tunit = game.getUnitById(parentId);\n\t\t\tif (unit instanceof Flight && (unit.dogfights.length)){\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\telse if (this.getLoadLevel() >= 1){\n\t\t\t\tif (this.hasUnresolvedFireOrder()){\n\t\t\t\t\tthis.unsetFireOrder();\n\t\t\t\t}\n\t\t\t\tif (this.selected){\n\t\t\t\t\tthis.selected = false;\n\t\t\t\t}\n\t\t\t\telse if(! unit.hasHangarSelected()){\n\t\t\t\t\tthis.selected = true;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tthis.setSystemBorder();\n\t\t}\n\t\n\t\tif (unit.hasWeaponsSelected()){\n\t\t\tgame.mode = 2;\n\t\t\tunit.highlightAllSelectedWeapons();\n\t\t}\n\t\telse {\n\t\t\t$(\"#weaponAimTableWrapper\").hide();\n\t\t\tgame.mode = 1;\n\t\t\tfxCtx.clearRect(0, 0, res.x, res.y);\n\t\t}\n\t}\n\n\tthis.getArcWidth = function(){\n\t\tvar w = 0;\n\n\t\tif (this.arc[0][0] < this.arc[0][1]){\n\t\t\tw = this.arc[0][1] - this.arc[0][0];\n\t\t}\n\t\telse if (this.arc[0][0] > this.arc[0][1]){\n\t\t\tw = 360 - this.arc[0][0] + this.arc[0][1];\n\t\t}\n\n\t\treturn w;\n\t}\n\n\tthis.setMount = function(amount){\n\t\tif (game.getUnitById(aUnit) instanceof Flight){\n\t\t\tthis.negation = 0;\n\t\t}\n\n\t\tvar w = this.getArcWidth();\n\n\t\tif (w <= 60){\n\t\t\tthis.mount = \"Fixed\";\n\t\t} else if (w <= 120){\n\t\t\tthis.mount = \"Embedded\";\n\t\t} else {\n\t\t\tthis.mount = \"Turret\";\n\t\t}\n\t\tthis.armour =  Math.floor(amount * this.armourMod);\n\t}\n\n\tthis.getFireControlString = function(){\n\t\treturn this.fc[0] + \"% / \" + this.fc[1] + \"%\";\n\t}\n\n\tthis.getSystemDetailsDiv = function(){\n\t\tvar div = document.createElement(\"div\");\n\t\t\tdiv.id = \"systemDetailsDiv\";\n\t\tvar table = document.createElement(\"table\");\n\t\t\t\n\t\tvar tr = document.createElement(\"tr\");\t\t\n\t\tvar th = document.createElement(\"th\");\n\t\t\tth.colSpan = 2; th.innerHTML = this.display; th.style.width = \"40%\"; tr.appendChild(th); table.appendChild(tr);\n\n\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Weapon Type\")).append($(\"<td>\").html(this.type)));\n\n\t\tif (!(game.getUnitById(aUnit) instanceof Flight)){\n\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Integrity\")).append($(\"<td>\").html(this.getRemainingIntegrity() + \" / \" + this.integrity)));\n\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Mount / Armour\")).append($(\"<td>\").html(this.getMount())));\n\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Base Power Req\")).append($(\"<td>\").html(this.getPowerReq())));\n\t\t\tif (this.effiency && !(this instanceof Launcher)){\n\t\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Boost Power Cost\")).append($(\"<td>\").html(this.getEffiency())));\n\t\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Boost Effect\")).append($(\"<td>\").html(this.getBoostEffect())));\n\t\t\t}\n\t\t}\n\n\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Loading\")).append($(\"<td>\").html(this.getTimeLoaded() + \" / \" + this.reload)));\n\n\t\tif (this instanceof Launcher){\n\t\t\tif (this.ammo){\n\t\t\t\t$(table).append($(\"<tr>\").append($(\"<th>\").css(\"border-top\", \"1px solid white\").attr(\"colSpan\", 2).html(this.ammo.name)));\n\t\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").attr(\"colSpan\", 2).html(this.ammo.display)));\n\t\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Ammo amount\")).append($(\"<td>\").html(\"<font color='red'>\" + this.getRemainingAmmo() + \"</font> / \" + this.getMaxAmmo()).attr(\"id\", \"ammo\")));\n\t\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Fire Control\")).append($(\"<td>\").html(this.getFireControlString())));\n\t\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Impulse\")).append($(\"<td>\").html(this.getBallImpulse())));\n\t\t\t}\n\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Launch Rate\")).append($(\"<td>\").html(\"<font color='red'>\" + this.getOutput() + \"</font> - max \" + this.effiency)\n\t\t\t\t\t.attr(\"id\", \"detailsShots\")\n\t\t\t\t));\n\t\t}\n\t\telse if (this instanceof Laser){\n\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Fire Control\")).append($(\"<td>\").html(this.getFireControlString())));\n\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Focus point\")).append($(\"<td>\").html(this.optRange + \"px\")));\n\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Damage loss\")).append($(\"<td>\").html(this.dmgDecay + \"% per 100px\")));\n\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Accuracy loss\")).append($(\"<td>\").html(this.getAccDecay()/10 + \"% per 100px\")));\n\t\t}\n\t\telse {\n\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Fire Control\")).append($(\"<td>\").html(this.getFireControlString())));\n\t\t\tif (this instanceof Plasma){\n\t\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Damage loss\")).append($(\"<td>\").html(this.dmgDecay + \"% per 100px\")));\n\t\t\t}\n\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Accuracy loss\")).append($(\"<td>\").html(this.getAccDecay()/10 + \"% per 100px\")));\n\t\t}\n\n\t\tif (this.linked > 1){\n\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Linked Shots\")).append($(\"<td>\").html(this.linked + \" x \" + this.shots)));\n\t\t}\n\t\telse if (this instanceof Laser){\n\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Shots & Rakes\")).append($(\"<td>\").html(this.shots + \" w/ \" + this.output + \" rakes\")));\n\t\t}\n\t\telse if (!(this instanceof Launcher)){\n\t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Shots\")).append($(\"<td>\").html(this.shots)));\n\t\t}\n\n\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Damage\")).append($(\"<td>\").addClass(\"damage\").html(this.getDamage())));\n\n\t\tif (this.crits.length){\n\t\t\tvar tr = table.insertRow(-1); tr.insertCell(-1).innerHTML = \"Modifiers\"; tr.childNodes[0].colSpan = 2; tr.childNodes[0].border = \"1px solid white\";\n\t\t\tfor (var i = 0; i < this.crits.length; i++){\n\t\t\t\tvar tr = document.createElement(\"tr\");\n\t\t\t\tvar td = document.createElement(\"td\");\n\t\t\t\t\ttd.colSpan = 2;\n\t\t\t\t\ttd.className = \"negative\"\n\t\t\t\t\ttd.innerHTML = this.crits[i].html; tr.appendChild(td); table.appendChild(tr);\n\t\t\t}\n\t\t}\n\t\tdiv.appendChild(table);\n\t\t\t\n\t\treturn div;\n\t}\n\n\tthis.updateSystemDetailsDiv = function(){\n\t\tvar dmg = this.getDamage();\n\t\t$(\"#systemDetailsDiv\").find(\"tr\").each(function(i){\n\t\t\tif (this.childNodes.length == 2){\n\t\t\t\tif (this.childNodes[1].className == \"damage\"){\n\t\t\t\t\tthis.childNodes[1].innerHTML = dmg;\n\t\t\t\t}\n\t\t\t}\n\t\t})\n\t}\n\n\tthis.drawArc = function(facing, pos){\n\t\tfor (var i = 0; i < this.arc.length; i++){\n\t\t\tvar p1 = getPointInDirection(res.x, this.arc[i][0] + facing, pos.x, pos.y);\n\t\t\tvar p2 = getPointInDirection(res.y, this.arc[i][1] + facing, pos.x, pos.y)\n\t\t\tvar dist = getDistance( {x: pos.x, y: pos.y}, p1);\n\t\t\tvar rad1 = degreeToRadian(this.arc[i][0] + facing);\n\t\t\tvar rad2 = degreeToRadian(this.arc[i][1] + facing);\n\n\t\t\tfxCtx.beginPath();\t\t\t\n\t\t\tfxCtx.moveTo(pos.x, pos.y);\n\t\t\tfxCtx.arc(pos.x, pos.y, dist, rad1, rad2, false);\n\t\t\tfxCtx.closePath();\t\t\n\t\t\tfxCtx.fillStyle = this.getFillStyle(pos.x, pos.y, dist);\n\t\t\tfxCtx.fill();\n\t\t}\n\t}\n\t\n\tthis.getAccurayDecay = function(dist){\t\t\n\t\treturn Math.ceil(this.getAccDecay() * dist/decayVar);\n\t}\n\t\n\tthis.getDamageDecay = function(dist){\n\t\treturn 0;\n\t}\n\t\n\tthis.getExpectedDamage = function(dist){\n\t\tvar loss = this.getDamageDecay(dist);\n\t\t\n\t\treturn Math.floor(this.damage - (this.damage / 100 * loss));\n\t}\n\t\n\tthis.getFillStyle = function(x, y, dist){\n\t\treturn \"green\";\n\t}\n\n\tthis.getAccDecay = function(){\n\t\tvar mod = 1;\n\t\tfor (var i = 0; i < this.crits.length; i++){\n\t\t\tswitch (this.crits[i].type){\n\t\t\t\tcase \"range1\":\n\t\t\t\t\tmod = mod + 0.1;\n\t\t\t\t\tbreak;\n\t\t\t\tcase \"range2\":\n\t\t\t\t\tmod = mod + 0.2;\n\t\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\t\treturn Math.floor(this.accDecay * mod);\n\t}\n\n\tthis.getDamage = function(){\n\t\tvar min = this.getMinDmg();\n\t\tvar max = this.getMaxDmg();\n\n\t\tif (min == max){\n\t\t\treturn min;\n\t\t}\n\t\telse {\n\t\t\treturn min + \" - \" + max;\n\t\t}\n\t}\n\n\tthis.getMinDmg = function(){\n\t\tvar mod = 1;\n\t\tfor (var i = 0; i < this.crits.length; i++){\n\t\t\tswitch (this.crits[i].type){\n\t\t\t\tcase \"damage1\":\n\t\t\t\t\tmod = mod - 0.1;\n\t\t\t\t\tbreak;\n\t\t\t\tcase \"damage2\":\n\t\t\t\t\tmod = mod - 0.2;\n\t\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\n\t\tif (this.boostEffect){\n\t\t\tfor (var i = this.powers.length-1; i >= 0; i--){\n\t\t\t\tif (this.powers[i].turn == game.turn){\n\t\t\t\t\tswitch (this.powers[i].type){\n\t\t\t\t\t\tcase 1:\n\t\t\t\t\t\t\tmod = mod + this.boostEffect.value / 100;\n\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\tdefault:\n\t\t\t\t\t\t\tbreak; \n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\treturn Math.floor(this.minDmg * mod);\n\t}\n\n\tthis.getMaxDmg = function(){\n\t\tvar mod = 1;\n\t\tfor (var i = 0; i < this.crits.length; i++){\n\t\t\tswitch (this.crits[i].type){\n\t\t\t\tcase \"damage1\":\n\t\t\t\t\tmod = mod - 0.1;\n\t\t\t\t\tbreak;\n\t\t\t\tcase \"damage2\":\n\t\t\t\t\tmod = mod - 0.2;\n\t\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\n\t\tif (this.boostEffect){\n\t\t\tfor (var i = this.powers.length-1; i >= 0; i--){\n\t\t\t\tif (this.powers[i].turn == game.turn){\n\t\t\t\t\tswitch (this.powers[i].type){\n\t\t\t\t\t\tcase 1:\n\t\t\t\t\t\t\tmod = mod + this.boostEffect.value / 100;\n\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\tdefault:\n\t\t\t\t\t\t\tbreak; \n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\treturn Math.floor(this.maxDmg * mod);\n\t}\n}\nWeapon.prototype = Object.create(System.prototype);\n\nfunction Particle(system){\n\tWeapon.call(this, system);\t\n\tthis.animation = \"projectile\";\n\tthis.projSize = system.projSize;\n\tthis.projSpeed = system.projSpeed;\n\n\tthis.getAnimation = function(fire){\n\t\tallAnims = [];\n\t\tvar gunInterval = this.shots * 13;\n\t\tvar shotInterval = 10;\n\n\t\tif (fire.shooter.flight){\n\t\t\tgunInterval = 10;\n\t\t}\n\t\t\n\t\tfor (var j = 0; j < fire.guns; j++){\n\t\t\tvar gunAnims = [];\n\t\t\tvar ox = fire.shooter.x + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2); // WEAPON origin\n\t\t\tvar oy = fire.shooter.y + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2);\n\t\t\t\n\t\t\tfor (var k = 0; k < this.shots; k++){\n\t\t\t\tvar hit = false;\n\t\t\t\tvar explo = false;\n\t\t\t\tvar dist;\n\n\t\t\t\tif (fire.hits[j] > k){\n\t\t\t\t\thit = true;\n\t\t\t\t}\t\n\n\t\t\t\tif (hit){ // shot hit\n\t\t\t\t\ttx = fire.target.x + range(fire.target.size * 0.2 * -1, fire.target.size * 0.2);\n\t\t\t\t\tty = fire.target.y + range(fire.target.size * 0.2 * -1, fire.target.size * 0.2);\n\t\t\t\t\tdist = getDistance( {x: ox, y: oy}, {x: tx, y: ty} );\n\t\t\t\t\texplo = {t: [0, 80], s: this.exploSize};\n\t\t\t\t}\n\t\t\t\telse { // shot miss\n\t\t\t\t\ttx = fire.target.x + range(fire.target.size * 0.5 * -1, fire.target.size * 0.5);\n\t\t\t\t\tty = fire.target.y + range(fire.target.size * 0.5 * -1, fire.target.size * 0.5);\n\t\t\t\t}\n\t\t\t\tvar shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, this.projSpeed, hit);\n\t\t\t\t\tshotAnim.n = 0 - (j*gunInterval + k*shotInterval);\n\n\t\t\t\t/*shotAnim = {\n\t\t\t\t\tox: ox,\n\t\t\t\t\toy: oy,\n\t\t\t\t\ttx: tx,\n\t\t\t\t\tty: ty,\n\t\t\t\t\tt: [0 - (j*gunInterval + k*shotInterval), getDistance({x: ox, y: oy}, {x: tx, y: ty}) / this.projSpeed / speedMod],\n\t\t\t\t\thit: hit,\n\t\t\t\t\tv: new Vector({x: ox, y: oy}, {x: tx, y: ty}),\n\t\t\t\t\texplo: explo,\n\t\t\t\t\tanimated: false\n\t\t\t\t}*/\n\t\t\t\tgunAnims.push(shotAnim);\n\t\t\t}\n\t\t\tallAnims.push(gunAnims)\n\t\t}\n\t\treturn allAnims;\n\t}\n}\nParticle.prototype = Object.create(Weapon.prototype);\n\nfunction Matter(system){\n\tParticle.call(this, system);\n}\nMatter.prototype = Object.create(Particle.prototype);\n\nfunction Plasma(system){\n\tParticle.call(this, system);\n\tthis.dmgDecay = system.dmgDecay;\n\n\tthis.getDamageDecay = function(dist){\t\t\n\t\treturn Math.ceil(this.dmgDecay * dist/100);\n\t}\n\n\tthis.getFillStyle = function(x, y, dist){\n\t\tvar grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);\n\n\t\tgrad.addColorStop(5000 / this.dmgDecay / decayVar, \"red\");\n\t\tgrad.addColorStop(3000 / this.dmgDecay / decayVar, \"yellow\");\n\t\tgrad.addColorStop(0, \"green\");\n\t\t\t\t\n\t\treturn grad;\n\t}\n}\nPlasma.prototype = Object.create(Particle.prototype);\n\nfunction EM(system){\n\tParticle.call(this, system);\t\n}\nEM.prototype = Object.create(Particle.prototype);\n\nfunction Pulse(system){\n\tParticle.call(this, system);\t\n\t\n\tthis.getAnimation = function(fire){\n\t\tallAnims = [];\n\t\tvar gunInterval = 50;\n\t\tvar shotInterval = 5;\n\n\t\tfor (var j = 0; j < fire.guns; j++){\n\t\t\tvar gunAnims = [];\n\t\t\tvar ox = fire.shooter.x + range(fire.shooter.size * -0.2, fire.shooter.size * 0.2); // WEAPON origin\n\t\t\tvar oy = fire.shooter.y + range(fire.shooter.size * -0.2, fire.shooter.size * 0.2);\n\t\t\tvar tx;\n\t\t\tvar ty;\n\t\t\tvar dist;\n\t\t\tvar explo = false;\n\t\t\tvar hit = false;\n\t\t\tif (fire.hits[j] >= 1){\n\t\t\t\thit = true;\n\t\t\t}\n\t\t\telse {\n\t\t\t\ttx = fire.target.x + range(fire.target.size * -0.7, fire.target.size * 0.7); // salvo missed7\n\t\t\t\tty = fire.target.y + range(fire.target.size * -0.7, fire.target.size * 0.7);\n\t\t\t}\n\t\t\t\n\t\t\tfor (var k = 0; k < this.shots; k++){\n\t\t\t\tif (hit){\n\t\t\t\t\ttx = fire.target.x + range(fire.target.size * -0.07, fire.target.size * 0.07); // salvo hit\n\t\t\t\t\tty = fire.target.y + range(fire.target.size * -0.07, fire.target.size * 0.07);\n\t\t\t\t}\n\t\t\t\tvar shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, this.projSpeed/2, hit);\n\t\t\t\t\tshotAnim.n = 0 - (j*gunInterval + k*shotInterval);\n\n\t\t\t\t/*}\n\t\t\t\tshotAnim = {\n\t\t\t\t\tox: ox,\n\t\t\t\t\toy: oy,\n\t\t\t\t\ttx: tx,\n\t\t\t\t\tty: ty,\n\t\t\t\t\tt: [0 - (j*gunInterval + k*shotInterval), getDistance({x: ox, y: oy}, {x: tx, y: ty}) / this.projSpeed / speedMod],\n\t\t\t\t\thit: hit,\n\t\t\t\t\tv: new Vector({x: ox, y: oy}, {x: tx, y: ty}),\n\t\t\t\t\texplo: explo,\n\t\t\t\t\tanimated: false\n\t\t\t\t}*/\n\t\t\t\tgunAnims.push(shotAnim);\n\t\t\t}\n\t\t\tallAnims.push(gunAnims)\n\t\t}\n\t\treturn allAnims;\n\t}\n}\nPulse.prototype = Object.create(Particle.prototype);\n\nfunction Laser(system){\n\tWeapon.call(this, system);\t\n\tthis.animation = \"beam\";\n\tthis.optRange = system.optRange;\n\tthis.dmgDecay = system.dmgDecay;\n\tthis.rakeTime = system.rakeTime;\n\tthis.output = system.rakes;\n\tthis.beamWidth = system.beamWidth;\n\n\tthis.getAnimation = function(fire){\n\t\tallAnims = [];\n\t\tvar grouping = 1;\n\t\tvar delay = 30;\n\t\t\n\t\tfor (var j = 0; j < fire.guns; j++){\n\t\t\tvar gunAnims = [];\n\t\t\t\n\t\t\tfor (var k = 0; k < this.shots; k++){\n\t\t\t\tvar tx; var ty; var tb;\n\t\t\t\tvar hit = false;\n\n\t\t\t\tif (fire.hits[j] > k){\n\t\t\t\t\thit = true;\n\t\t\t\t}\t\n\n\t\t\t\tif (hit){ // shot hit\n\t\t\t\t\ttx = fire.target.x + range(-fire.target.size * 0.45, fire.target.size * 0.45); // BEAM swipe begin on HIT\n\t\t\t\t\tty = fire.target.y + range(-fire.target.size * 0.45, fire.target.size * 0.45);\n\t\t\t\t\tvar a = getAngleFromTo( {x: tx, y: ty}, {x: fire.target.x, y: fire.target.y} );\n\t\t\t\t\ta = addToDirection(a, range(-10, 10));\n\t\t\t\t\ttb = getPointInDirection(fire.weapon.rakeTime/4, a, tx, ty); // BEAM swipe END on HIT\t\n\t\t\t\t}\n\t\t\t\telse { // shot miss\n\t\t\t\t\ttx = fire.target.x + range(-fire.target.size * 0.7, fire.target.size * 0.7); // BEAM swipe begin on MISS\n\t\t\t\t\tty = fire.target.y + range(-fire.target.size * 0.7, fire.target.size * 0.7);\n\t\t\t\t\tvar a = getAngleFromTo( {x: tx, y: ty}, {x: fire.target.x, y: fire.target.y} );\n\t\t\t\t\ta = addToDirection(a, range(-40, 40));\n\t\t\t\t\ttb = getPointInDirection(fire.weapon.rakeTime/3, a, tx, ty); // BEAM swipe END on MISS\t\n\t\t\t\t}\n\n\t\t\t\tvar shotAnim = new BeamVector(\n\t\t\t\t\t{x: fire.shooter.x + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2), \n\t\t\t\t\ty: fire.shooter.y + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2)},\n\t\t\t\t\t{x: tx, y: ty},\n\t\t\t\t\t{x: tb.x, y: tb.y}, \n\t\t\t\t\t0 - (range(-5, 5)) - (Math.floor(j / grouping) * delay),\n\t\t\t\t\tfire.weapon.rakeTime,\n\t\t\t\t\thit\n\t\t\t\t);\n\n\t\t\t\tgunAnims.push(shotAnim);\n\t\t\t}\n\t\t\tallAnims.push(gunAnims)\n\t\t}\n\t\treturn allAnims;\n\t}\n\t\n\tthis.getFillStyle = function(x, y, dist){\n\t\tvar grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);\n\t\tvar opt = this.optRange / res.x;\n\n\t\tif (opt > 1){opt = 1;}\n\t\n\t\t\tgrad.addColorStop(0, \"red\");\n\t\t\tgrad.addColorStop(opt/2, \"yellow\");\n\t\t\tgrad.addColorStop(opt, \"green\");\n\t\t//\tgrad.addColorStop(this.optRange/res.x*1.5, \"yellow\");\n\t\t\n\t\t\tif (opt*1.5 > 1){\n\t\t\t\tgrad.addColorStop(1, \"yellow\");\n\t\t\t}\n\t\t\telse {\n\t\t\t\tgrad.addColorStop(opt*1.5, \"yellow\");\n\t\t\t\tif (opt*2 < 1){\t\n\t\t\t\t\tgrad.addColorStop(opt*2, \"red\");\n\t\t\t\t}\n\t\t\t}\n\t\t\t\t\n\t\treturn grad;\n\t}\n\t\n\tthis.getDamageDecay = function(dist){\n\t\tvar decay = this.dmgDecay;\n\t\t\n\t\tif (dist < this.optRange){\n\t\t\tdist = this.optRange - dist;\n\t\t} else dist = dist - this.optRange;\n\t\t\n\t\treturn Math.ceil(decay * dist/100);\n\t}\n}\nLaser.prototype = Object.create(Weapon.prototype);\n\nfunction Dual(system){\n\tWeapon.call(this, system);\n\tthis.weapons = system.weapons;\n\tthis.modes = system.modes;\n\tthis.states = system.states;\n\tthis.dual = 1;\n\tthis.locked = 0;\n\n\tthis.canBeBoosted = function(){\n\t\tfor (var i = 0; i < this.weapons.length; i++){\n\t\t\tif (this.weapons[i].effiency){\n\t\t\t\treturn 1;\n\t\t\t}\n\t\t}\n\t\treturn 0;\n\t}\n\t\n\tthis.setFireOrder = function(targetid){\n\t\tvar w = this.getActiveWeapon();\n\n\t\tthis.fireOrders.push(\n\t\t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n\t\t\tshots: w.getShots(), req: -1, notes: \"\", hits: -1, resolved: 0}\n\t\t);\n\t\tthis.selected = false;\n\t\tthis.highlight = false;\n\t\tthis.setSystemBorder();\n\t}\n\n\n\tthis.setState = function(){\n\t\tif (this.isDestroyed()){\n\t\t\tthis.destroyed = true;\n\t\t}\n\t\telse if (this.isUnpowered()){\n\t\t\tthis.disabled = true;\n\t\t}\n\n\t\tthis.adjustStateByCritical();\n\t\tthis.initSubWeapons();\n\t\tthis.initMain();\n\t}\n\n\tthis.getImageName = function(){\n\t\treturn this.getActiveWeapon().name;\n\t}\n\n\tthis.initSubWeapons = function(){\n\t\tfor (var i = 0; i < this.weapons.length; i++){\n\t\t\tthis.weapons[i] = new window[this.weapons[i].type](this.weapons[i]);\n\t\t\tthis.weapons[i].mount = this.mount;\n\t\t\tthis.weapons[i].armour = this.armour;\n\t\t\tthis.weapons[i].mass = this.mass;\n\t\t\tthis.weapons[i].integrity = this.integrity;\n\t\t\t//this.weapons[i].display = \"HYBRID - \" + this.weapons[i].display;\n\t\t}\n\t}\n\n\tthis.initMain = function(){\n\t\tvar set = 0;\n\n\t\tfor (var i = 0; i < this.powers.length; i++){\n\t\t\tif (this.powers[i].turn == game.turn && !this.powers[i].new){\n\t\t\t\tif (this.powers[i].type < 0){\n\t\t\t\t\tset = 1;\n\t\t\t\t\tthis.locked = 1;\n\t\t\t\t\tthis.states[-(this.powers[i].type+1)] = 1;\n\t\t\t\t}\n\t\t\t\telse if (this.powers[i].type > 0){\n\t\t\t\t\tthis.getActiveWeapon().powers.push(this.powers[i]);\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\tif (!set){\n\t\t\tthis.states[this.states.length-1] = 1;\n\t\t\tthis.powers.push({id: this.powers.length, unitid: this.parentId, systemid: this.id, cost: 0, turn: game.turn, type: -1, new: 1})\n\t\t\tthis.cycleActiveWeapon();\n\t\t}\n\n\t\tthis.copyProps();\n\t}\n\n\tthis.switchMode = function(){\n\t\tthis.resetPowers();\n\t\tthis.cycleActiveWeapon();\n\t\tthis.copyProps();\n\t\tthis.setSystemImage()\n\t\tthis.setSystemWindow();\n\t\tthis.resetDetailsDiv();\n\t\tgame.getUnitById(this.parentId).updateDivPower(this);\n\n\t\tconsole.log(this.powers);\n\t}\n\n\tthis.setSystemImage = function(){\n\t\tthis.element.childNodes[0].src = \"sysIcons/\" + this.getImageName() + \".png\";\n\t}\n\n\tthis.cycleActiveWeapon = function(){\n\t\tvar index = 0;\n\t\tfor (var i = 0; i < this.states.length; i++){\n\t\t\tif (this.states[i]){\n\t\t\t\tthis.states[i] = 0;\n\t\t\t\tindex = i\n\t\t\t\tif (index+1 >= this.states.length){\n\t\t\t\t\tindex = 0;\n\t\t\t\t} else index++;\n\n\t\t\t\tthis.states[index] = 1;\n\t\t\t\tthis.powers[this.powers.length-1].type = -(index+1);\n\t\t\t\treturn;\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.resetPowers = function(){\n\t\tfor (var i = this.powers.length-1; i >= 0; i--){\n\t\t\tif (this.powers[i].turn == game.turn && this.powers[i].type == 1){\n\t\t\t\tthis.powers.splice(i, 1);\n\t\t\t} else break;\n\t\t}\n\t\tfor (var j = 0; j < this.weapons.length; j++){\n\t\t\tfor (var i = this.weapons[j].powers.length-1; i >= 0; i--){\n\t\t\t\tif (this.weapons[j].powers[i].turn == game.turn && this.weapons[j].powers[i].type == 1){\n\t\t\t\t\tthis.weapons[j].powers.splice(i, 1);\n\t\t\t\t} else break;\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.copyProps = function(){\n\t\tfor (var i = 0; i < this.states.length; i++){\n\t\t\tif (this.states[i]){\n\t\t\t\tthis.effiency = this.weapons[i].effiency;\n\t\t\t\tthis.maxBoost = this.weapons[i].maxBoost;\n\t\t\t\tthis.boostEffect = this.weapons[i].boostEffect;\n\t\t\t\tthis.powerReq = this.weapons[i].powerReq;\n\t\t\t\tthis.weapons[i];\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.setSystemWindow = function(){\n\t\t//if (game.phase == -2){return;}\n\t\tif (this.canPower() || !this.effiency){\n\t\t\t$(this.element).find(\".boostDiv\").hide().end().find(\".outputMask\").hide();\n\t\t}\n\t\telse if (this.effiency){\n\t\t\t$(this.element).find(\".boostDiv\").show().end().find(\".outputMask\").show();\n\t\t}\n\t}\n\n\tthis.resetDetailsDiv = function(){\n\t\tvar old = $(\"#systemDetailsDiv\");\n\t\tvar y = $(old).css(\"top\")\n\t\tvar x = $(old).css(\"left\")\n\t\t\told.remove();\n\n\t\t$(document.body).append(\n\t\t\t$(this.getSystemDetailsDiv())\n\t\t\t.css(\"left\", x)\n\t\t\t.css(\"top\", y)\n\t\t)\n\t}\n\n\tthis.update = function(){\n\t\tthis.getActiveWeapon().updateSystemDetailsDiv();\n\t\tgame.getUnitById(this.parentId).updateDiv();\n\t}\n\n\tthis.getSystemDetailsDiv = function(){\n\t\treturn this.getActiveWeapon().getSystemDetailsDiv();\n\t}\n\n\tthis.drawArc = function(facing, pos){\n\t\tthis.getActiveWeapon().drawArc(facing, pos);\n\t}\n\n\tthis.getSystem = function(){\n\t\treturn this.getActiveWeapon();\n\t}\n\n\tthis.getBoostDiv = function(){\n\t\tif (!this.destroyed){\n\t\t\tfor (var i = 0; i < this.weapons.length; i++){\n\t\t\t\tif (this.weapons[i].effiency){\n\t\t\t\t\tvar div = document.createElement(\"div\");\n\t\t\t\t\t\tdiv.className = \"boostDiv disabled\";\n\t\t\t\t\t\t$(div).data(\"shipId\", this.parentId);\n\t\t\t\t\t\t$(div).data(\"systemId\", this.id);\n\t\t\t\t\tvar subDiv = document.createElement(\"div\");\n\t\t\t\t\t\tsubDiv.className = \"plus\";\n\t\t\t\t\t\tsubDiv.innerHTML = \"<img src='varIcons/plus.png'</img>\";\n\t\t\t\t\t\tsubDiv.childNodes[0].className = \"img100pct\";\n\t\t\t\t\t\t$(subDiv).bind(\"click\", function(e){\n\t\t\t\t\t\t\te.stopPropagation();\n\t\t\t\t\t\t\tif (game.phase != -1){return;}\n\t\t\t\t\t\t\tvar data = $(this.parentNode).data();\n\t\t\t\t\t\t\tgame.getUnitById(data.shipId).getSystemById(data.systemId).plus();\n\t\t\t\t\t\t});\n\t\t\t\t\t\tdiv.appendChild(subDiv);\n\t\t\t\t\tvar subDiv = document.createElement(\"div\");\n\t\t\t\t\t\tsubDiv.className = \"minus\";\n\t\t\t\t\t\tsubDiv.innerHTML = \"<img src='varIcons/minus.png'</img>\";\n\t\t\t\t\t\tsubDiv.childNodes[0].className = \"img100pct\";\n\t\t\t\t\t\t$(subDiv).bind(\"click\", function(e){\n\t\t\t\t\t\t\te.stopPropagation();\n\t\t\t\t\t\t\tif (game.phase != -1){return;}\n\t\t\t\t\t\t\tvar data = $(this.parentNode).data();\n\t\t\t\t\t\t\tgame.getUnitById(data.shipId).getSystemById(data.systemId).minus();\n\t\t\t\t\t\t});\n\t\t\t\t\tdiv.appendChild(subDiv);\t\n\t\t\t\t\treturn div;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\treturn false;\n\t}\n\n\tthis.doUnboost = function(){\n\t\tthis.powers.splice(this.powers.length-1, 1);\n\t\tvar w = this.getActiveWeapon();\n\t\t\tw.powers.splice(w.powers.length-1, 1);\n\t}\n\n\n\tthis.doBoost = function(){\n\t\tvar p = {id: this.powers.length+1,unitid: this.parentId,systemid: this.id,\n\t\t\t\t\tturn: game.turn,type: 1, cost: this.getEffiency(), new: 1};\n\t\tthis.powers.push(p);\n\t\tthis.getActiveWeapon().powers.push(p);\n\t}\n\n\tthis.getActiveWeapon = function(){\n\t\tfor (var i = 0; i < this.states.length; i++){\n\t\t\tif (this.states[i]){\n\t\t\t\treturn this.weapons[i];\n\t\t\t}\n\t\t}\n\t}\n}\nDual.prototype = Object.create(Weapon.prototype);\n\n\nfunction Launcher(system){\n\tWeapon.call(this, system);\t\n\t//Weapon.call(this, id, parentId, name, display, 0, 0, integrity, powerReq, output, effiency, maxBoost, 0, 0, 0, 0, 0, 0, 1, reload, arc1, arc2, arc3, arc4);\t\n\t         // Weapon(id, parentId, name, display, exploSize, animColor, integrity, powerReq, output, effiency, maxBoost, boostEffect, fc, minDmg, maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){\n\n\tthis.effiency = system.launchRate;\n\tthis.type = \"Ballistic\";\n\tthis.animation = \"ballistic\";\n\tthis.loads = [];\n\tthis.ammo = system.ammo || false;\n\n\tthis.getUpgradeData = function(){\n\t\tvar loads = [];\n\t\tfor (var i = 0; i < this.loads.length; i++){\n\t\t\tif (this.loads[i].amount > 0){\n\t\t\t\tloads.push({\"amount\": this.loads[i].amount, \"cost\": this.loads[i].cost, name: this.loads[i].name});\n\t\t\t}\n\t\t}\n\n\t\treturn {name: this.display, systemid: this.id, cost: this.totalCost, loads: loads};\n\t}\n\n\tthis.getAccurayDecay = function(dist){\t\t\n\t\treturn 0;\n\t}\n\n\tthis.create = function(){\n\t\tfor (var i = 0; i < system.loads.length; i++){\n\t\t\tthis.loads.push(new Ammo(system.loads[i]));\n\t\t}\n\t\tif (game.phase == -2){\n\t\t\tfor (var i = 0; i < this.loads.length; i++){\n\t\t\t\tthis.loads[i].amount = 0;\n\t\t\t}\n\t\t}\n\t\telse {\n\t\t\tif (this.ammo  == false || this.getRemainingAmmo() == 0){\n\t\t\t\tthis.shots = 0;\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.getEffiency = function(){\n\t\treturn this.effiency;\n\t}\n\n\tthis.select = function(e){\n\t\tconsole.log(this);\n\n\t\tif (game.phase == -2){\n\t\t\tif (this.selected){\n\t\t\t\tthis.selected = false;\n\t\t\t}\n\t\t\telse {\n\t\t\t\tthis.selected = true;\n\t\t\t}\n\t\t\tthis.setSystemBorder();\n\t\t\tthis.setupAmmoLoadout(e);\n\t\t}\n\t\telse if (game.phase != -1 || this.shots == 0){\n\t\t\treturn false;\n\t\t}\n\t\t\n\t\tvar id = this.id;\n\t\tvar parentId = this.parentId;\n\t\tvar selected = false;\n\n\t\tif (this.destroyed || this.disabled){\n\t\t\treturn false;\n\t\t}\n\t\telse if (this.canFire()){\n\t\t\tif (this.hasUnresolvedFireOrder()){\n\t\t\t\tthis.unsetFireOrder();\n\t\t\t}\n\n\t\t\tif (this.selected){\n\t\t\t\tthis.selected = false;\n\t\t\t}\n\t\t\telse {\n\t\t\t\tthis.selected = true;\n\t\t\t}\n\t\t\tthis.setSystemBorder();\n\t\t}\n\t\telse return false;\n\n\t\tvar ship = game.getUnitById(parentId);\n\t\n\t\tif (ship.hasWeaponsSelected()){\n\t\t\tgame.mode = 2;\n\t\t\tship.highlightAllSelectedWeapons();\n\t\t}\n\t\telse {\n\t\t\t$(\"#weaponAimTableWrapper\").hide();\n\t\t\tgame.mode = 1;\n\t\t\tfxCtx.clearRect(0, 0, res.x, res.y);\n\t\t}\n\t}\n\n\tthis.setMount = function(amount){\n\t\tif (game.getUnitById(aUnit) instanceof Flight){\n\t\t\tthis.negation = 0;\n\t\t}\n\t\tvar w = this.getArcWidth();\n\n\t\tif (w <= 60){\n\t\t\tthis.mount = \"Tube\";\n\t\t} else if (w <= 120){\n\t\t\tthis.mount = \"Canister\";\n\t\t} else {\n\t\t\tthis.mount = \"Arm Rail\";\n\t\t}\n\t\tthis.armour =  Math.floor(amount * this.armourMod);\n\t}\n\n\tthis.getFireControlString = function(){\n\t\tif (this.ammo){\n\t\t\treturn this.ammo.fc[0] + \"% / \" + this.ammo.fc[1] + \"%\";\n\t\t}\n\t}\n\n\tthis.getFireControl = function(target){\n\t\tif (target instanceof Flight || target instanceof Salvo){\n\t\t\treturn this.ammo.fc[1];\n\t\t} else return this.ammo.fc[0];\n\t}\n\n\tthis.getDamage = function(){\n\t\tif (this.ammo){\n\t\t\treturn this.ammo.minDmg + \" - \" + this.ammo.maxDmg;\n\t\t}\n\t}\n\n\tthis.getOutput = function(){\n\t\treturn this.shots;\n\t}\n\n\tthis.plus = function(){\n\t\tif (this.shots < this.effiency){\n\t\t\tthis.shots++;\n\t\t\tthis.adjustFireOrder();\n\t\t\tthis.updateGUI();\n\t\t}\n\t}\n\n\tthis.minus = function(){\n\t\tif (this.shots > 1){\n\t\t\tthis.shots--;\n\t\t\tthis.adjustFireOrder();\n\t\t\tthis.updateGUI();\n\t\t}\n\t}\n\n\tthis.adjustFireOrder = function(){\n\t\tif (!this.fireOrders.length){return;}\n\t\tif (this.fireOrders[this.fireOrders.length-1].turn == game.turn && !this.fireOrders[this.fireOrders.length-1].resolved){\n\t\t\tthis.fireOrders[this.fireOrders.length-1].shots = this.getOutput();\n\t\t}\n\t}\n\n\tthis.updateGUI = function(){\n\t\t$(\"#systemDetailsDiv\")\n\t\t\t.find(\"#detailsShots\").html(\"<font color='red'>\" + this.getOutput() + \"</font> - max \" + this.effiency)\n\t\t\t\t.end()\n\t\t\t.find(\"#ammo\").html(\"<font color='red'>\" + this.getRemainingAmmo() + \"</font> / \" + this.getMaxAmmo());\n\n\n\t\t$(this.element).find(\".outputMask\").html(this.getOutput());\n\t}\n\n\tthis.setupAmmoLoadout = function(e){\n\t\tvar div = document.getElementById(\"weaponLoadoutDiv\");\n\n\t\tif ($(div).hasClass(\"disabled\")){\n\t\t\t$(div).find(\"#launchRate\").html(this.effiency);\n\t\t\t$(div).find(\"#reload\").html(this.reload);\n\t\t\t$(div).find(\"#capacity\").html(this.output);\n\t\t\t$(div).data(\"systemid\", this.id).css(\"top\", e.clientY + 30).css(\"left\", e.clientX - 150).removeClass(\"disabled\");\n\t\t\tthis.updateTotals();\n\t\t}\n\t\telse {\n\t\t\twindow.game.setShipTotal();\n\t\t\t$(div).addClass(\"disabled\");\n\t\t}\n\t}\n\n\tthis.addAmmo = function(ele, all){\n\t\tvar tMass = 0;\n\t\tvar tCost = 0;\n\t\tvar add = 1;\n\t\tvar name = ele.childNodes[0].innerHTML;\n\t\tvar sMass = 0;\n\n\t\tvar canAdd = true;\n\t\tvar index = 0;\n\t\tfor (var i = 0; i < this.loads.length; i++){\n\t\t\tif (this.loads[i].name == name){\n\t\t\t\tindex = i;\n\t\t\t}\n\n\t\t\tif (this.loads[i].amount > 0 && this.loads[i].name != name){\n\t\t\t\tcanAdd = false\n\t\t\t\tbreak;\n\t\t\t}\n\t\t\telse if (this.loads[i].amount == this.loads[i].name){\n\t\t\t\tcanAdd = false;\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\n\t\tif (canAdd){\n\t\t\tif (all){\n\t\t\t\tthis.loads[index].amount = this.output;\n\t\t\t}\n\t\t\telse {\n\t\t\t\tthis.loads[index].amount++;\n\t\t\t}\n\t\t\tthis.updateTotals();\n\t\t}\n\t}\n\n\tthis.removeAmmo = function(ele, all){\n\t\tfor (var i = 0; i < this.loads.length; i++){\n\t\t\tif (this.loads[i].name == ele.childNodes[0].innerHTML){\n\t\t\t\tif (this.loads[i].amount >= 1){\n\t\t\t\t\tif (all){\n\t\t\t\t\t\tthis.loads[i].amount = 0;\n\t\t\t\t\t}\n\t\t\t\t\telse {\n\t\t\t\t\t\tthis.loads[i].amount -= 1;\n\t\t\t\t\t}\n\t\t\t\t\tthis.updateTotals();\n\t\t\t\t\treturn;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.updateTotals = function(){\n\t\tvar amount = 0;\n\t\tvar tCost = 0;\n\t\tvar table = document.getElementById(\"weaponTable\");\n\t\t\ttable.innerHTML = \"\";\n\n\t\t\tvar tr = document.createElement(\"tr\");\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"Class\"; th.width = \"80px\"; tr.appendChild(th)\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"Type\"; th.width = \"200px\"; tr.appendChild(th)\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"Cost\"; th.width = \"40px\"; tr.appendChild(th)\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"\"; tr.appendChild(th)\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"\"; tr.appendChild(th)\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"Amount\"; th.width = \"70px\"; tr.appendChild(th)\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"Total Cost\"; th.width = \"70px\"; tr.appendChild(th)\n\t\t\ttable.appendChild(tr);\n\n\t\tfor (var i = 0; i < this.loads.length; i++){\n\t\t\tvar tr = table.insertRow(-1);\n\t\t\t\ttr.insertCell(-1).innerHTML = this.loads[i].name;\n\t\t\t\ttr.insertCell(-1).innerHTML = this.loads[i].display;\n\t\t\t\ttr.insertCell(-1).innerHTML = this.loads[i].cost;\n\t\t\tvar td = document.createElement(\"td\");\n\t\t\t\ttd.innerHTML = \"<img src='varIcons/plus.png'>\"; tr.appendChild(td);\n\t\t\t\ttd.addEventListener(\"click\", function(e){\n\t\t\t\t\te.preventDefault(); e.stopPropagation();\n\t\t\t\t\twindow.game.ships[0].getSystemById($(\"#weaponLoadoutDiv\").data(\"systemid\")).addAmmo(this.parentNode, false);\n\t\t\t\t})\n\t\t\t\ttd.addEventListener(\"contextmenu\", function(e){\n\t\t\t\t\te.preventDefault(); e.stopPropagation();\n\t\t\t\t\twindow.game.ships[0].getSystemById($(\"#weaponLoadoutDiv\").data(\"systemid\")).addAmmo(this.parentNode, true);\n\t\t\t\t})\n\t\t\tvar td = document.createElement(\"td\");\n\t\t\t\ttd.innerHTML = \"<img src='varIcons/minus.png'>\"; tr.appendChild(td);\n\t\t\t\ttd.addEventListener(\"click\", function(e){\n\t\t\t\t\te.preventDefault(); e.stopPropagation();\n\t\t\t\t\twindow.game.ships[0].getSystemById($(\"#weaponLoadoutDiv\").data(\"systemid\")).removeAmmo(this.parentNode, false);\n\t\t\t\t})\n\t\t\t\ttd.addEventListener(\"contextmenu\", function(e){\n\t\t\t\t\te.preventDefault(); e.stopPropagation();\n\t\t\t\t\twindow.game.ships[0].getSystemById($(\"#weaponLoadoutDiv\").data(\"systemid\")).removeAmmo(this.parentNode, true);\n\t\t\t\t})\n\n\t\t\t\tamount += this.loads[i].amount\n\t\t\t\ttCost += this.loads[i].amount * this.loads[i].cost\n\t\t\t\ttr.insertCell(-1).innerHTML = this.loads[i].amount\n\t\t\t\ttr.insertCell(-1).innerHTML = this.loads[i].amount * this.loads[i].cost\n\t\t}\n\n\t\tvar tr = document.createElement(\"tr\");\n\t\tvar th = document.createElement(\"th\"); tr.appendChild(th);\n\t\t\tth.innerHTML = \"Grand Total\";\n\t\t\tth.colSpan = 5;\n\t\tvar th = document.createElement(\"th\"); th.innerHTML = amount; tr.appendChild(th);\n\t\tvar th = document.createElement(\"th\"); th.innerHTML = tCost; tr.appendChild(th);\n\t\ttable.appendChild(tr);\n\t\tthis.totalCost = tCost;\n\t}\n\n\tthis.getRemainingAmmo = function(){\n\t\tvar ammo = this.getMaxAmmo();\n\t\tfor (var i = 0; i < this.fireOrders.length; i++){\n\t\t\tammo -= this.fireOrders[i].shots;\n\t\t}\n\t\treturn ammo;\n\t}\n\n\tthis.getMaxAmmo = function(){\n\t\treturn this.ammo.output;\n\t}\n\n\tthis.getBallImpulse = function(){\n\t\treturn this.ammo.impulse;\n\t}\n\n\tthis.create();\n}\nLauncher.prototype = Object.create(Weapon.prototype);\n\nfunction Hangar(system){\n\tSystem.call(this, system);\n\tthis.start = system.start;\n\tthis.end = system.end;\n\tthis.reload = system.reload;\n\tthis.effiency = system.effiency;\n\tthis.loads = system.loads;\n\t//this.weapon = false;\n\tthis.range = 75;\n\n\tthis.getUpgradeData = function(){\n\t\treturn {\n\t\t\tname: this.display,\n\t\t\tsystemid: this.id,\n\t\t\tcost: this.totalCost,\n\t\t\tloads: this.loads\n\t\t}\n\t}\n\n\tthis.setFireOrder = function(targetid){\n\t\tthis.fireOrders.push(\n\t\t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: 0, weaponid: this.id, \n\t\t\tshots: 0, req: -1, notes: \"fighterLaunch\", hits: -1, resolved: 1}\n\t\t);\n\t\treturn this;\n\t}\n\n\tthis.select = function(e){\n\t\tconsole.log(this);\n\t\tvar id = this.id;\n\t\tvar parentId = this.parentId;\n\t\tvar selected = false;\n\t\tvar ship = game.getUnitById(parentId);\n\n\t\tif (game.phase == -2){\n\t\t\tif (!this.selected && ship.hasHangarSelected()){\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\telse {\n\t\t\t\tthis.setupHangarLoadout(e);\n\t\t\t\tif (this.selected){this.selected = false;}else{this.selected = true;}\n\t\t\t}\n\t\t}\n\t\telse if (this.destroyed || this.disabled){\n\t\t\treturn false;\n\t\t}\n\t\telse if (! this.selected){\n\t\t\tif (game.getUnitById(aUnit).actions[0].resolved){\n\t\t\t\tif (! ship.hasSystemsSelected()){\n\t\t\t\t\tthis.selected = true;\n\t\t\t\t\tthis.enableHangarDeployment(e);\n\t\t\t\t\tthis.drawArc();\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\telse {\n\t\t\tthis.selected = false;\n\t\t\t$(\"#hangarLoadoutDiv\").addClass(\"disabled\");\n\t\t\tif (game.flightDeploy){\n\t\t\t\tgame.flightDeploy = false;\n\t\t\t\t$(\"#deployOverlay\").hide();\n\t\t\t}\n\t\t}\n\n\t\tthis.setSystemBorder();\n\t}\n\n\tthis.update = function(){\n\t\tgame.getUnitById(this.parentId).updateDiv();\n\t}\n\n\tthis.doUndoActions = function(){\n\t\tfor (var i = game.ships.length-1; i >= 0; i--){\n\t\t\tif (game.ships[i] instanceof Flight){\n\t\t\t\tif (game.ships[i].id < 0){\n\t\t\t\t\tif (game.ships[i].launchdata.shipid == this.parentId && game.ships[i].launchdata.systemid == this.id){\n\t\t\t\t\t\tvar ele = $(\".shipDiv\").each(function(){\n\t\t\t\t\t\t\tif ($(this).data(\"shipId\") == game.ships[i].id){\n\t\t\t\t\t\t\t\t$(this).remove();\n\t\t\t\t\t\t\t\treturn;\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t})\n\t\t\t\t\t\tgame.ships.splice(i, 1);\n\t\t\t\t\t\tthis.fireOrders.splice(this.fireOrders.length-1, 1);\n\t\t\t\t\t\tfor (var j = 0; j < this.loads.length; j++){\n\t\t\t\t\t\t\tthis.loads[j].launch = 0;\n\t\t\t\t\t\t}\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tgame.draw();\n\t}\n\n\tthis.getBoostDiv = function(){\n\t\treturn false;\n\t}\n\n\tthis.setMount = function(amount){\n\t\tif (game.getUnitById(aUnit) instanceof Flight){\n\t\t\treturn false;\n\t\t}\n\t\tthis.mount = \"\"\n\t\tthis.armour =  Math.floor(amount * this.armourMod);\n\t}\n\n\tthis.getOutput = function(){\n\t\treturn this.getLaunchRate();\n\t}\n\n\tthis.getLaunchRate = function(){\n\t\tvar rate = this.effiency;\n\n\t\tfor (var i = 0; i < this.crits.length; i++){\n\t\t\trate *= this.crits[i].outputMod;\n\t\t}\n\t\treturn Math.ceil(rate);\n\t}\n\n\tthis.drawArc = function(){\n\t\tgame.getUnitById(this.parentId).drawSystemAxis(this);\n\t}\n\n\tthis.enableHangarDeployment = function(e){\n\t\tif (game.getUnitById(aUnit).userid != game.userid){\n\t\t\treturn false;\n\t\t}\n\t\tvar div = document.getElementById(\"hangarLoadoutDiv\");\n\t\t\t$(\"#launchRate\").html(this.getLaunchRate());\n\t\t\t$(\"#capacity\").html(this.output);\n\t\tthis.unsetFireOrder();\n\t\tthis.doUndoActions();\n\t\tthis.showHangarControl();\n\n\t\tif ($(div).hasClass(\"disabled\")){\n\t\t\t$(div).data(\"systemid\", this.id).css(\"top\", e.clientY + 150).css(\"left\", e.clientX - 150).removeClass(\"disabled\");\n\t\t}\n\t\telse {\n\t\t\t$(div).addClass(\"disabled\");\n\t\t}\n\t}\n\n\tthis.showHangarControl = function(){\n\t\tif (game.getUnitById(aUnit).userid != game.userid){\n\t\t\treturn false;\n\t\t}\n\t\tvar table = document.getElementById(\"hangarTable\");\n\t\t\ttable.innerHTML = \"\";\n\n\t\t\tvar tr = document.createElement(\"tr\");\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"Class\"; tr.appendChild(th)\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"Available\"; tr.appendChild(th)\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"\"; tr.appendChild(th)\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"\"; tr.appendChild(th)\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"To launch\"; tr.appendChild(th)\n\t\t\ttable.appendChild(tr);\n\n\t\tvar id = this.id;\n\n\t\tfor (var i = 0; i < this.loads.length; i++){\n\t\t\tvar tr = table.insertRow(-1)\n\t\t\t\ttr.insertCell(-1).innerHTML = this.loads[i].name;\n\t\t\t\ttr.insertCell(-1).innerHTML = this.loads[i].amount;\n\t\t\t\tvar td = document.createElement(\"td\");\n\t\t\t\t\ttd.innerHTML = \"<img src='varIcons/plus.png'>\"; $(td).data(\"name\", this.loads[i].name).data(\"val\", 1); tr.appendChild(td);\n\t\t\t\t\ttd.addEventListener(\"click\", function(){\n\t\t\t\t\t\tgame.getUnitById(aUnit).getSystemById(id).alterFlight(this, false);\n\t\t\t\t\t});\n\t\t\t\t\ttd.addEventListener(\"contextmenu\", function(e){\n\t\t\t\t\t\te.preventDefault();\n\t\t\t\t\t\tgame.getUnitById(aUnit).getSystemById(id).alterFlight(this, true);\n\t\t\t\t\t});\n\t\t\t\tvar td = document.createElement(\"td\");\n\t\t\t\t\ttd.innerHTML = \"<img src='varIcons/minus.png'>\"; $(td).data(\"name\", this.loads[i].name).data(\"val\", -1); tr.appendChild(td);\n\t\t\t\t\ttd.addEventListener(\"click\", function(){\n\t\t\t\t\t\tgame.getUnitById(aUnit).getSystemById(id).alterFlight(this, false);\n\t\t\t\t\t});\n\t\t\t\t\ttd.addEventListener(\"contextmenu\", function(e){\n\t\t\t\t\t\te.preventDefault();\n\t\t\t\t\t\tgame.getUnitById(aUnit).getSystemById(id).alterFlight(this, true);\n\t\t\t\t\t});\n\t\t\t\tvar td = document.createElement(\"td\");\n\t\t\t\t\ttd.id = this.loads[i].name + \"Amount\";\n\t\t\t\t\ttd.innerHTML = this.loads[i].launch; tr.appendChild(td);\n\n\t\t\ttable.appendChild(tr);\n\t\t}\n\n\t\t$(\"#hangarLoadoutDiv\").find(\"input\").unbind().click({systemid: id}, window.sharedLaunchFlight);\n\n\t\tif (this.canLaunchFlight()){\n\t\t\t$(\"#hangarLoadoutDiv\").find(\"input\").removeClass(\"disabled\");\n\t\t} else $(\"#hangarLoadoutDiv\").find(\"input\").addClass(\"disabled\");\n\t}\n\n\tthis.launchFlight = function(){\n\t\tfor (var i = game.ships.length-1; i >= 0; i--){\n\t\t\tif (game.ships[i].userid == game.userid){\n\t\t\t\tif (game.ships[i].flight){\n\t\t\t\t\tif (game.ships[i].actions[0].resolved == 0){\n\t\t\t\t\t\tif (game.ships[i].launchdata.shipid == window.aUnit && game.ships[i].launchdata.systemid == this.id){\n\t\t\t\t\t\t\t//console.log(\"splice\");\n\t\t\t\t\t\t\t//this.unsetFireOrder();\n\t\t\t\t\t\t\tgame.ships.splice(i, 1);\n\t\t\t\t\t\t\tgame.draw();\n\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tinstruct(\"Select a deployment point. The flight's facing will be projected onwards the launching vessel.\");\n\t\tthis.drawArc();\n\t\tmoveCtx.clearRect(0, 0, res.x, res.y);\n\t\tgame.setupDeploymentDiv();\n\t\tgame.flightDeploy = this;\n\t}\n\n\tthis.alterFlight = function(ele, max){\n\t\tif (game.phase != -1 || !this.canFire()){return false}\n\t\tvar name = $(ele).data(\"name\");\n\t\tvar add = $(ele).data(\"val\");\n\t\tvar launchRate = this.getLaunchRate();\n\t\tvar current = 0;\n\n\t\tif (add > 0){\n\t\t\tfor (var i = 0; i < this.loads.length; i++){\n\t\t\t\tcurrent += this.loads[i].launch;\n\t\t\t}\n\t\t\tif (max){\n\t\t\t\tadd = launchRate - current;\n\t\t\t}\n\t\t}\n\t\telse {\n\t\t\tif (max){\n\t\t\t\tfor (var i = 0; i < this.loads.length; i++){\n\t\t\t\t\tif (this.loads[i].name == name){\n\t\t\t\t\t\tadd = -this.loads[i].launch;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\tfor (var i = 0; i < this.loads.length; i++){\n\t\t\tif (this.loads[i].name == name){\n\t\t\t\tif (add > 0){\n\t\t\t\t\tadd = Math.min(add, this.loads[i].amount - this.loads[i].launch);\n\t\t\t\t\tif (current + add <= launchRate && this.loads[i].launch + add <= this.loads[i].amount && this.loads[i].launch + add >= 0){\n\t\t\t\t\t\tthis.loads[i].launch += add;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\telse {\n\t\t\t\t\tthis.loads[i].launch += add;\n\t\t\t\t}\n\t\t\t\t$(\"#\" + this.loads[i].name + \"Amount\").html(this.loads[i].launch);\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\n\t\tif (this.canLaunchFlight()){\n\t\t\t$(\"#hangarLoadoutDiv\").find(\"input\").removeClass(\"disabled\");\n\t\t}\n\t\telse {\n\t\t\t$(\"#hangarLoadoutDiv\").find(\"input\").addClass(\"disabled\");\n\t\t}\n\t}\n\n\tthis.canLaunchFlight = function(){\n\t\tif (this.canFire()){\n\t\t\tfor (var i = 0; i < this.loads.length; i++){\n\t\t\t\tif (this.loads[i].launch >= 1){\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\treturn false;\n\t}\n\n\tthis.addFighter = function(ele, all){\n\t\tvar tMass = 0;\n\t\tvar tCost = 0;\n\t\tvar add = 1;\n\t\tvar name = ele.childNodes[0].innerHTML;\n\t\tvar sMass = 0;\n\n\t\tfor (var i = 0; i < this.loads.length; i++){\n\t\t\ttMass += this.loads[i].amount * this.loads[i].mass;\n\t\t\ttCost += this.loads[i].amount * this.loads[i].cost;\n\t\t\tif (this.loads[i].name == name){\n\t\t\t\tsMass = this.loads[i].mass;\n\t\t\t}\n\t\t}\n\n\t\tif (all){\n\t\t\tadd = Math.floor((this.output - tMass) / sMass);\n\t\t}\n\n\t\tfor (var i = 0; i < this.loads.length; i++){\n\t\t\tif (this.loads[i].name == name){\n\t\t\t\tif (tMass + this.loads[i].mass <= this.output){\n\t\t\t\t\tthis.loads[i].amount += add;\n\t\t\t\t\tthis.updateTotals();\n\t\t\t\t\treturn;\n\t\t\t\t}\n\t\t\t\telse {\n\t\t\t\t\tpopup(\"Insufficient Hangar Space available\");\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.removeFighter = function(ele, all){\n\t\tfor (var i = 0; i < this.loads.length; i++){\n\t\t\tif (this.loads[i].name == ele.childNodes[0].innerHTML){\n\t\t\t\tif (this.loads[i].amount >= 1){\n\t\t\t\t\tif (all){\n\t\t\t\t\t\tthis.loads[i].amount = 0;\n\t\t\t\t\t} else {\n\t\t\t\t\t\tthis.loads[i].amount -= 1;\n\t\t\t\t\t}\n\t\t\t\t\tthis.updateTotals();\n\t\t\t\t\treturn;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.updateTotals = function(){\n\t\tvar amount = 0;\n\t\tvar tMass = 0;\n\t\tvar tCost = 0;\n\t\tvar table = document.getElementById(\"hangarTable\");\n\t\t\ttable.innerHTML = \"\";\n\n\t\t\tvar tr = document.createElement(\"tr\");\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"Class\"; tr.appendChild(th)\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"Mass\"; th.width = \"40px\"; tr.appendChild(th)\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"Cost\"; th.width = \"40px\"; tr.appendChild(th)\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"\"; tr.appendChild(th)\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"\"; tr.appendChild(th)\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"Amount\"; th.width = \"70px\"; tr.appendChild(th)\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"Total Mass\"; th.width = \"70px\"; tr.appendChild(th)\n\t\t\tvar th = document.createElement(\"th\"); th.innerHTML = \"Total Cost\"; th.width = \"70px\"; tr.appendChild(th)\n\t\t\ttable.appendChild(tr);\n\n\n\t\tfor (var i = 0; i < this.loads.length; i++){\n\t\t\tvar tr = table.insertRow(-1);\n\t\t\t\ttr.insertCell(-1).innerHTML = this.loads[i].name;\n\t\t\t\ttr.insertCell(-1).innerHTML = this.loads[i].mass;\n\t\t\t\ttr.insertCell(-1).innerHTML = this.loads[i].cost;\n\t\t\tvar td = document.createElement(\"td\");\n\t\t\t\ttd.innerHTML = \"<img src='varIcons/plus.png'>\"; tr.appendChild(td);\n\t\t\t\ttd.addEventListener(\"click\", function(e){\n\t\t\t\t\te.preventDefault(); e.stopPropagation();\n\t\t\t\t\twindow.game.ships[0].getSystemById($(\"#hangarLoadoutDiv\").data(\"systemid\")).addFighter(this.parentNode, false);\n\t\t\t\t})\n\t\t\t\ttd.addEventListener(\"contextmenu\", function(e){\n\t\t\t\t\te.preventDefault(); e.stopPropagation();\n\t\t\t\t\twindow.game.ships[0].getSystemById($(\"#hangarLoadoutDiv\").data(\"systemid\")).addFighter(this.parentNode, true);\n\t\t\t\t})\n\t\t\tvar td = document.createElement(\"td\");\n\t\t\t\ttd.innerHTML = \"<img src='varIcons/minus.png'>\"; tr.appendChild(td);\n\t\t\t\ttd.addEventListener(\"click\", function(e){\n\t\t\t\t\te.preventDefault(); e.stopPropagation();\n\t\t\t\t\twindow.game.ships[0].getSystemById($(\"#hangarLoadoutDiv\").data(\"systemid\")).removeFighter(this.parentNode, false);\n\t\t\t\t})\n\t\t\t\ttd.addEventListener(\"contextmenu\", function(e){\n\t\t\t\t\te.preventDefault(); e.stopPropagation();\n\t\t\t\t\twindow.game.ships[0].getSystemById($(\"#hangarLoadoutDiv\").data(\"systemid\")).removeFighter(this.parentNode, true);\n\t\t\t\t})\n\n\t\t\t\tamount += this.loads[i].amount\n\t\t\t\ttMass += this.loads[i].amount * this.loads[i].mass\n\t\t\t\ttCost += this.loads[i].amount * this.loads[i].cost\n\t\t\t\ttr.insertCell(-1).innerHTML = this.loads[i].amount\n\t\t\t\ttr.insertCell(-1).innerHTML = this.loads[i].amount * this.loads[i].mass\n\t\t\t\ttr.insertCell(-1).innerHTML = this.loads[i].amount * this.loads[i].cost\n\t\t}\n\n\t\tvar tr = document.createElement(\"tr\");\n\t\tvar th = document.createElement(\"th\"); tr.appendChild(th);\n\t\t\tth.innerHTML = \"Grand Total\";\n\t\t\tth.colSpan = 5;\n\t\tvar th = document.createElement(\"th\"); th.innerHTML = amount; tr.appendChild(th);\n\t\tvar th = document.createElement(\"th\"); th.innerHTML = tMass; tr.appendChild(th);\n\t\tvar th = document.createElement(\"th\"); th.innerHTML = tCost; tr.appendChild(th);\n\t\ttable.appendChild(tr);\n\t\tthis.totalCost = tCost;\n\t}\n\n\tthis.setupHangarLoadout = function(e){\n\t\tvar div = document.getElementById(\"hangarLoadoutDiv\");\n\t\tif ($(div).hasClass(\"disabled\")){\n\t\t\t$(div).find(\"#launchRate\").html(this.getOutput());\n\t\t\t$(div).find(\"#capacity\").html(this.output);\n\t\t\t$(div).data(\"systemid\", this.id).css(\"top\", e.clientY + 30).css(\"left\", e.clientX - 150).removeClass(\"disabled\");\n\t\t\tthis.updateTotals();\n\t\t}\n\t\telse {\n\t\t\twindow.game.setShipTotal();\n\t\t\t$(div).addClass(\"disabled\");\n\t\t}\n\t}\n\t\n\tthis.getSystemDetailsDiv = function(){\n\t\tvar div = document.createElement(\"div\");\n\t\t\tdiv.id = \"systemDetailsDiv\";\n\t\tvar table = document.createElement(\"table\");\n\t\t\t\n\t\tvar tr = document.createElement(\"tr\");\t\t\n\t\tvar th = document.createElement(\"th\");\n\t\t\tth.colSpan = 2; th.innerHTML = this.display; th.style.width = \"40%\"; tr.appendChild(th); table.appendChild(tr);\n\n\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Mass Capacity\")).append($(\"<td>\").html(this.output + \" metric tons\")));\n\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Integrity\")).append($(\"<td>\").html(this.getRemainingIntegrity() + \" / \" + this.integrity)));\n\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Armour\")).append($(\"<td>\").html(this.getMount())));\n\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Launch Rate\")).append($(\"<td>\").html(this.effiency + \" per cycle\")));\n\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Base Power Req\")).append($(\"<td>\").html(this.effiency)));\n\n\t\tif (this.crits.length){\n\t\t\tvar tr = table.insertRow(-1); tr.insertCell(-1).innerHTML = \"Modifiers\"; tr.childNodes[0].colSpan = 2; tr.childNodes[0].border = \"1px solid white\";\n\n\t\t\tfor (var i = 0; i < this.crits.length; i++){\n\t\t\t\tvar tr = document.createElement(\"tr\");\n\t\t\t\tvar td = document.createElement(\"td\");\n\t\t\t\t\ttd.colSpan = 2;\n\t\t\t\t\ttd.className = \"negative\"\n\t\t\t\t\ttd.innerHTML = this.crits[i].html; tr.appendChild(td); table.appendChild(tr);\n\t\t\t}\n\t\t}\n\t\tdiv.appendChild(table);\n\t\t\t\n\t\treturn div;\n\t}\n}\nHangar.prototype = Object.create(Weapon.prototype);",
 			"file": "systems.js",
+			"file_size": 69289,
+			"file_write_time": 131371787247215515,
 			"settings":
 			{
-				"buffer_size": 66849,
+				"buffer_size": 66940,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -587,7 +580,7 @@
 			"file": "shipclasses.js",
 			"settings":
 			{
-				"buffer_size": 56423,
+				"buffer_size": 56527,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -596,7 +589,7 @@
 			"file": "mathLib.js",
 			"settings":
 			{
-				"buffer_size": 5239,
+				"buffer_size": 5899,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -758,7 +751,7 @@
 			"file": "server/systems/weapons/dual.php",
 			"settings":
 			{
-				"buffer_size": 1823,
+				"buffer_size": 1858,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -767,19 +760,16 @@
 			"file": "server/systems/weapons/plasma.php",
 			"settings":
 			{
-				"buffer_size": 3555,
+				"buffer_size": 3573,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"contents": "<?php\n\nclass Pulse extends Weapon {\n\tpublic $type = \"Pulse\";\n\tpublic $animation = \"projectile\";\n\tpublic $priority = 5;\n\n\tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);\n\t}\n\n\tpublic function rollForHit($fire){\n\t\tfor ($i = 0; $i < $this->linked; $i++){\n\t\t\t$roll = mt_rand(1, 100);\n\t\t\t$fire->rolls[] = $roll;\n\t\t\t$fire->notes .= $roll.\" \";\n\t\t\tif ($roll <= $fire->req){\n\t\t\t\t$fire->hits += $this->shots;\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\n\n\tpublic function doDamage($fire){\n\t\tDebug::log(\"doDamage, weapon: \".get_class($this).\", target: \".$fire->target->id);\n\n\t\t$negation; $armourDmg; $structDmg; $totalDmg; $hitSystem; $remInt; $destroyed;\t\t\n\n\t\tif ($fire->rolls[0] <= $fire->req){\n\t\t\t$destroyed = false;\n\t\t\t$mod = $this->getDamageMod($fire);\n\t\t\t$hitSystem = $fire->target->getHitSystem($fire);\n\t\t\t$structure = $fire->target->getStructureById($fire->hitSection);\n\t\t\t$armourMod = $hitSystem->getArmourMod();\n\n\t\t\tif ($hitSystem->destroyed){Debug::log(\"unit already destroyed\"); return;}\n\n\t\t\tfor ($i = 0; $i < $this->shots; $i++){\n\t\t\t\t$totalDmg = floor($this->getBaseDamage($fire) * $mod);\n\t\t\t\t$remInt = $hitSystem->getCurrentIntegrity();\n\t\t\t\t$negation = $structure->getRemainingNegation($fire) * $armourMod;\n\t\t\t\t$dmg = $this->determineDamage($totalDmg, $negation);\n\n\t\t\t\tif ($remInt - $dmg->structDmg < 1){\n\t\t\t\t\t$destroyed = true;\n\t\t\t\t\tif (!(is_a($fire->target, \"Mini\"))){\n\t\t\t\t\t\tDebug::log(\" => target system \".$hitSystem->name.\" #\".$hitSystem->id.\" destroyed. rem: \".$remInt.\", doing: \".$dmg->structDmg.\", OK for: \".(abs($remInt - $dmg->structDmg).\" dmg\"));\n\t\t\t\t\t}\n\t\t\t\t\telse {\n\t\t\t\t\t\tDebug::log(\"Overkill on Salvo or Fighter\");\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\t//$id, $fireid, $gameid, $shipid, $structureid, $systemid, $turn, $roll, $type, $totalDmg, $shieldDmg, $structDmg, $armourDmg, $mitigation, $negation, $destroyed, $notes, $new){\n\t\t\t\t$dmg = new Damage(\n\t\t\t\t\t-1,\n\t\t\t\t\t$fire->id,\n\t\t\t\t\t$fire->gameid,\n\t\t\t\t\t$fire->targetid,\n\t\t\t\t\t$fire->hitSection,\n\t\t\t\t\t$hitSystem->id,\n\t\t\t\t\t$fire->turn,\n\t\t\t\t\t$fire->rolls[0],\n\t\t\t\t\t$fire->weapon->type,\n\t\t\t\t\t$totalDmg,\n\t\t\t\t\t$dmg->shieldDmg,\n\t\t\t\t\t$dmg->structDmg,\n\t\t\t\t\t$dmg->armourDmg,\n\t\t\t\t\t0,\n\t\t\t\t\t$negation,\n\t\t\t\t\t$destroyed,\n\t\t\t\t\t\"\",\n\t\t\t\t\t1\n\t\t\t\t);\n\t\t\t\t$fire->damages[] = $dmg;\n\t\t\t\t$fire->target->applyDamage($dmg);\n\t\t\t}\n\t\t}\n\t}\t\n}\n\nclass LightPulse extends Pulse {\n\tpublic $name = \"LightPulse\";\n\tpublic $display = \"38mm Pulse Cannon\";\n\tpublic $minDmg = 20;\n\tpublic $maxDmg = 26;\n\tpublic $accDecay = 140;\n\tpublic $shots = 3;\n\tpublic $animColor = \"brown\";\n\tpublic $projSize = 2;\n\tpublic $projSpeed = 11;\n\tpublic $exploSize = 3;\n\tpublic $reload = 1;\n\tpublic $fc = array(0 => 100, 1 => 180);\n\tpublic $mass = 12;\n\n\tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);\n\t}\n}\n\nclass MediumPulse extends Pulse {\n\tpublic $name = \"MediumPulse\";\n\tpublic $display = \"66mm Pulse Cannon\";\n\tpublic $minDmg = 28;\n\tpublic $maxDmg = 35;\n\tpublic $accDecay = 110;\n\tpublic $shots = 3;\n\tpublic $animColor = \"brown\";\n\tpublic $projSize = 3;\n\tpublic $projSpeed = 8;\n\tpublic $exploSize = 4;\n\tpublic $reload = 2;\n\tpublic $fc = array(0 => 115, 1 => 135);\n\tpublic $mass = 20;\n\n\tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);\n\t}\n}",
 			"file": "server/systems/weapons/pulse.php",
-			"file_size": 3567,
-			"file_write_time": 131370119297472353,
 			"settings":
 			{
-				"buffer_size": 3449,
+				"buffer_size": 3451,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -797,7 +787,7 @@
 			"file": "server/salvo.php",
 			"settings":
 			{
-				"buffer_size": 8494,
+				"buffer_size": 8503,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -848,6 +838,15 @@
 			}
 		},
 		{
+			"file": "game.js",
+			"settings":
+			{
+				"buffer_size": 47448,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "server/ships/avenger.php",
 			"settings":
 			{
@@ -884,19 +883,10 @@
 			}
 		},
 		{
-			"file": "game.js",
-			"settings":
-			{
-				"buffer_size": 46657,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "shared.js",
 			"settings":
 			{
-				"buffer_size": 12390,
+				"buffer_size": 12539,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -986,7 +976,7 @@
 			"file": "flights.js",
 			"settings":
 			{
-				"buffer_size": 14297,
+				"buffer_size": 14465,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -995,7 +985,7 @@
 			"file": "server/flight.php",
 			"settings":
 			{
-				"buffer_size": 8383,
+				"buffer_size": 8497,
 				"encoding": "UTF-8",
 				"line_ending": "Windows",
 				"name": "<?php"
@@ -1005,7 +995,7 @@
 			"file": "log.txt",
 			"settings":
 			{
-				"buffer_size": 13525,
+				"buffer_size": 35094,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -1275,7 +1265,7 @@
 	],
 	"find":
 	{
-		"height": 36.0
+		"height": 35.0
 	},
 	"find_in_files":
 	{
@@ -1417,6 +1407,50 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"animateBallistics",
+			"getIntercept",
+			"getProjIntercept",
+			"balldet",
+			"getBallDetails",
+			"resolvefire",
+			"animateballistic",
+			"balldeta",
+			"balldetais",
+			"balldetaisl",
+			"randomize",
+			"balldetails",
+			"drawbeam",
+			"intercept",
+			"crits.p",
+			"new Crit",
+			"adjustStateByCritical",
+			"function getar",
+			"getArmourMod",
+			"getarmour",
+			"getarmourmod",
+			"setarmourmod",
+			"getarmourmod",
+			"delay",
+			"target",
+			"createcombatlogentry",
+			"setprops",
+			"gethitchance ",
+			"gethitchance",
+			"getSubHitChance",
+			"subhitchance",
+			"impulse",
+			"getunitbyclick",
+			"setState",
+			"assembleun",
+			"assembleunti",
+			"this.dogfights ",
+			"this.dog",
+			"function Flight",
+			"shipdiv",
+			"turncost",
+			"this.element",
+			"setMoveMode",
+			"impulse",
 			", \"LightLaser\"",
 			"function plasma",
 			"dmgdecay",
@@ -1500,51 +1534,7 @@
 			"handleBallisticInterception",
 			"copyprops",
 			"initsu",
-			"showoptions",
-			"cosT:",
-			"var p = ",
-			"new power",
-			"this.powers.p",
-			"new power",
-			"powers.p",
-			"new Power",
-			"this.doboost",
-			"getCurrentPowerUsage ",
-			"getoutput ",
-			"getoutput",
-			"switchmode",
-			"getRemainingAmmo",
-			"this.doboost",
-			"this.getremainingam",
-			"setfireorder =",
-			"setfireorder",
-			"this.minus",
-			"this.plus ",
-			"this.plus",
-			"this.plus ",
-			"this.doboost",
-			"createnewpower",
-			"new power",
-			"createnewpowerEntry",
-			"type: ",
-			"\tthis.showOptions = function(){",
-			"impacthisturn",
-			"hideOptions",
-			"getModeDiv",
-			"phase == 2",
-			"showoptions",
-			"this.hover ",
-			"setElementStatus",
-			"setSelectionShadow",
-			"setfireorder",
-			"new Fighter",
-			"$(gui)",
-			".find",
-			"find",
-			"$(ele)",
-			"dopower ",
-			".find",
-			"setsystemwindow"
+			"showoptions"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1690,7 +1680,7 @@
 	"groups":
 	[
 		{
-			"selected": 28,
+			"selected": 35,
 			"sheets":
 			[
 				{
@@ -1775,10 +1765,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1335.0,
+						"translation.y": 1273.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 42,
+					"stack_index": 46,
 					"type": "text"
 				},
 				{
@@ -1864,10 +1854,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 819.0,
+						"translation.y": 813.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 43,
+					"stack_index": 47,
 					"type": "text"
 				},
 				{
@@ -1883,8 +1873,8 @@
 						"selection":
 						[
 							[
-								1946,
-								1946
+								21667,
+								21667
 							]
 						],
 						"settings":
@@ -1952,581 +1942,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1959.0,
+						"translation.y": 15509.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 22630,
-						"regions":
-						{
-							"match":
-							{
-								"flags": 112,
-								"regions":
-								[
-									[
-										186,
-										194
-									],
-									[
-										385,
-										393
-									],
-									[
-										601,
-										609
-									],
-									[
-										907,
-										915
-									],
-									[
-										1150,
-										1158
-									],
-									[
-										1314,
-										1322
-									],
-									[
-										1427,
-										1435
-									],
-									[
-										1605,
-										1613
-									],
-									[
-										1845,
-										1853
-									],
-									[
-										1893,
-										1901
-									],
-									[
-										2142,
-										2150
-									],
-									[
-										2341,
-										2349
-									],
-									[
-										2557,
-										2565
-									],
-									[
-										2849,
-										2857
-									],
-									[
-										3078,
-										3086
-									],
-									[
-										3242,
-										3250
-									],
-									[
-										3355,
-										3363
-									],
-									[
-										3533,
-										3541
-									],
-									[
-										3773,
-										3781
-									],
-									[
-										3821,
-										3829
-									],
-									[
-										4010,
-										4019
-									],
-									[
-										4202,
-										4211
-									],
-									[
-										4369,
-										4378
-									],
-									[
-										4504,
-										4513
-									],
-									[
-										4657,
-										4666
-									],
-									[
-										4905,
-										4914
-									],
-									[
-										5124,
-										5133
-									],
-									[
-										5370,
-										5379
-									],
-									[
-										5651,
-										5667
-									],
-									[
-										6075,
-										6090
-									],
-									[
-										6212,
-										6227
-									],
-									[
-										6361,
-										6376
-									],
-									[
-										6560,
-										6575
-									],
-									[
-										6672,
-										6687
-									],
-									[
-										6930,
-										6945
-									],
-									[
-										7098,
-										7113
-									],
-									[
-										7164,
-										7179
-									],
-									[
-										7222,
-										7237
-									],
-									[
-										7351,
-										7366
-									],
-									[
-										7498,
-										7513
-									],
-									[
-										7631,
-										7646
-									],
-									[
-										7755,
-										7770
-									],
-									[
-										7889,
-										7904
-									],
-									[
-										8073,
-										8088
-									],
-									[
-										8192,
-										8207
-									],
-									[
-										8308,
-										8323
-									],
-									[
-										8464,
-										8479
-									],
-									[
-										8664,
-										8679
-									],
-									[
-										8729,
-										8744
-									],
-									[
-										9042,
-										9060
-									],
-									[
-										9222,
-										9240
-									],
-									[
-										9419,
-										9437
-									],
-									[
-										9625,
-										9643
-									],
-									[
-										9843,
-										9861
-									],
-									[
-										10110,
-										10128
-									],
-									[
-										10368,
-										10386
-									],
-									[
-										10566,
-										10584
-									],
-									[
-										10899,
-										10908
-									],
-									[
-										11045,
-										11054
-									],
-									[
-										11435,
-										11447
-									],
-									[
-										11633,
-										11645
-									],
-									[
-										11813,
-										11825
-									],
-									[
-										12010,
-										12022
-									],
-									[
-										12216,
-										12228
-									],
-									[
-										12434,
-										12446
-									],
-									[
-										12701,
-										12713
-									],
-									[
-										12959,
-										12971
-									],
-									[
-										13157,
-										13169
-									],
-									[
-										13471,
-										13483
-									],
-									[
-										13669,
-										13681
-									],
-									[
-										13850,
-										13862
-									],
-									[
-										14047,
-										14059
-									],
-									[
-										14253,
-										14265
-									],
-									[
-										14472,
-										14484
-									],
-									[
-										14739,
-										14751
-									],
-									[
-										14997,
-										15009
-									],
-									[
-										15195,
-										15207
-									],
-									[
-										15509,
-										15521
-									],
-									[
-										15707,
-										15719
-									],
-									[
-										15888,
-										15900
-									],
-									[
-										16085,
-										16097
-									],
-									[
-										16291,
-										16303
-									],
-									[
-										16510,
-										16522
-									],
-									[
-										16777,
-										16789
-									],
-									[
-										17035,
-										17047
-									],
-									[
-										17233,
-										17245
-									],
-									[
-										17547,
-										17559
-									],
-									[
-										17745,
-										17757
-									],
-									[
-										17926,
-										17938
-									],
-									[
-										18123,
-										18135
-									],
-									[
-										18329,
-										18341
-									],
-									[
-										18548,
-										18560
-									],
-									[
-										18815,
-										18827
-									],
-									[
-										19073,
-										19085
-									],
-									[
-										19271,
-										19283
-									],
-									[
-										19669,
-										19679
-									],
-									[
-										19847,
-										19857
-									],
-									[
-										19997,
-										20007
-									],
-									[
-										20135,
-										20145
-									],
-									[
-										20335,
-										20345
-									],
-									[
-										20357,
-										20367
-									],
-									[
-										20379,
-										20389
-									],
-									[
-										20401,
-										20411
-									],
-									[
-										20476,
-										20486
-									],
-									[
-										20641,
-										20651
-									],
-									[
-										20688,
-										20698
-									],
-									[
-										20718,
-										20728
-									],
-									[
-										20738,
-										20748
-									],
-									[
-										20782,
-										20792
-									],
-									[
-										20812,
-										20822
-									],
-									[
-										20832,
-										20842
-									],
-									[
-										20941,
-										20951
-									],
-									[
-										20971,
-										20981
-									],
-									[
-										20991,
-										21001
-									],
-									[
-										21034,
-										21044
-									],
-									[
-										21064,
-										21074
-									],
-									[
-										21084,
-										21094
-									],
-									[
-										21178,
-										21188
-									],
-									[
-										21207,
-										21217
-									],
-									[
-										21227,
-										21237
-									],
-									[
-										21269,
-										21279
-									],
-									[
-										21298,
-										21308
-									],
-									[
-										21318,
-										21328
-									],
-									[
-										21553,
-										21576
-									],
-									[
-										21731,
-										21754
-									],
-									[
-										22072,
-										22083
-									],
-									[
-										22309,
-										22320
-									],
-									[
-										22455,
-										22466
-									]
-								],
-								"scope": ""
-							}
-						},
-						"selection":
-						[
-							[
-								22316,
-								22316
-							]
-						],
-						"settings":
-						{
-							"detect_indentation": false,
-							"line_numbers": false,
-							"output_tag": 20,
-							"result_base_dir": "",
-							"result_file_regex": "^([^ \t].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 15820.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 18,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
 					"file": "style.css",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 16432,
+						"buffer_size": 16430,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								11317,
-								11329
+								15870,
+								15870
 							]
 						],
 						"settings":
@@ -2594,27 +2030,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 16165.0,
+						"translation.y": 21981.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 4,
 					"file": "systems.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 66849,
+						"buffer_size": 66940,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								33209,
-								33209
+								13988,
+								13988
 							]
 						],
 						"settings":
@@ -2682,14 +2118,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 24143.0,
+						"translation.y": 9979.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 5,
 					"file": "test.php",
 					"semi_transient": false,
 					"settings":
@@ -2718,20 +2154,20 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 6,
 					"file": "shipclasses.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 56423,
+						"buffer_size": 56527,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3939,
-								3939
+								48713,
+								48717
 							]
 						],
 						"settings":
@@ -2799,27 +2235,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3070.0,
+						"translation.y": 34008.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 7,
 					"file": "mathLib.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5239,
+						"buffer_size": 5899,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								697,
-								697
+								4697,
+								4697
 							]
 						],
 						"settings":
@@ -2887,14 +2323,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 161.0,
+						"translation.y": 2531.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 32,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 8,
 					"file": "global.php",
 					"semi_transient": false,
 					"settings":
@@ -2977,11 +2413,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 46,
+					"stack_index": 48,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 9,
 					"file": "server/math.php",
 					"semi_transient": false,
 					"settings":
@@ -3062,14 +2498,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 89.0,
+						"translation.y": 33.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 59,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 10,
 					"file": "game.php",
 					"semi_transient": false,
 					"settings":
@@ -3081,8 +2517,8 @@
 						"selection":
 						[
 							[
-								579,
-								579
+								6631,
+								6631
 							]
 						],
 						"settings":
@@ -3150,14 +2586,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 437.0,
+						"translation.y": 5291.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 19,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 11,
 					"file": "server/manager.php",
 					"semi_transient": false,
 					"settings":
@@ -3169,8 +2605,8 @@
 						"selection":
 						[
 							[
-								17968,
-								17968
+								6659,
+								6659
 							]
 						],
 						"settings":
@@ -3238,14 +2674,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 12767.0,
+						"translation.y": 4930.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 23,
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 12,
 					"file": "server/dbManager.php",
 					"semi_transient": false,
 					"settings":
@@ -3257,8 +2693,8 @@
 						"selection":
 						[
 							[
-								23050,
-								23050
+								23871,
+								23871
 							]
 						],
 						"settings":
@@ -3327,14 +2763,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 809.0,
+						"translation.y": 18706.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 40,
+					"stack_index": 25,
 					"type": "text"
 				},
 				{
-					"buffer": 14,
+					"buffer": 13,
 					"file": "server/debug.php",
 					"semi_transient": false,
 					"settings":
@@ -3346,23 +2782,82 @@
 						"selection":
 						[
 							[
-								56,
-								56
+								177,
+								177
 							]
 						],
 						"settings":
 						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content"
+							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 53,
+					"stack_index": 27,
 					"type": "text"
 				},
 				{
-					"buffer": 15,
+					"buffer": 14,
 					"file": "server/ships/omega.php",
 					"semi_transient": false,
 					"settings":
@@ -3443,14 +2938,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 240.0,
+						"translation.y": 152.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 32,
 					"type": "text"
 				},
 				{
-					"buffer": 16,
+					"buffer": 15,
 					"file": "server/ships/hyperion.php",
 					"semi_transient": false,
 					"settings":
@@ -3534,11 +3029,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 33,
 					"type": "text"
 				},
 				{
-					"buffer": 17,
+					"buffer": 16,
 					"file": "server/ships/saggitarius.php",
 					"semi_transient": false,
 					"settings":
@@ -3563,11 +3058,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
-					"buffer": 18,
+					"buffer": 17,
 					"file": "server/ships/artemis.php",
 					"semi_transient": false,
 					"settings":
@@ -3651,11 +3146,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 34,
 					"type": "text"
 				},
 				{
-					"buffer": 19,
+					"buffer": 18,
 					"file": "server/ships/tethys.php",
 					"semi_transient": false,
 					"settings":
@@ -3680,11 +3175,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 31,
 					"type": "text"
 				},
 				{
-					"buffer": 20,
+					"buffer": 19,
 					"file": "imageloader.js",
 					"semi_transient": false,
 					"settings":
@@ -3706,14 +3201,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 420.0,
+						"translation.y": 399.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 67,
 					"type": "text"
 				},
 				{
-					"buffer": 21,
+					"buffer": 20,
 					"file": "server/ships/battlecrab.php",
 					"semi_transient": false,
 					"settings":
@@ -3794,14 +3289,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 138.0,
+						"translation.y": 132.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 47,
+					"stack_index": 49,
 					"type": "text"
 				},
 				{
-					"buffer": 22,
+					"buffer": 21,
 					"file": "server/systems/structure.php",
 					"semi_transient": false,
 					"settings":
@@ -3885,11 +3380,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 51,
+					"stack_index": 53,
 					"type": "text"
 				},
 				{
-					"buffer": 23,
+					"buffer": 22,
 					"file": "script.js",
 					"semi_transient": false,
 					"settings":
@@ -3970,14 +3465,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 881.0,
+						"translation.y": 837.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 37,
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 23,
 					"file": "postGameData.php",
 					"semi_transient": false,
 					"settings":
@@ -4058,14 +3553,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 218.0,
+						"translation.y": 212.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 73,
+					"stack_index": 72,
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 24,
 					"file": "server/systems/weapons/particle.php",
 					"semi_transient": false,
 					"settings":
@@ -4146,27 +3641,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1194.0,
+						"translation.y": 140.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 30,
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 25,
 					"file": "server/systems/weapons/dual.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1823,
+						"buffer_size": 1858,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								34,
-								34
+								301,
+								301
 							]
 						],
 						"settings":
@@ -4237,24 +3732,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 26,
 					"file": "server/systems/weapons/plasma.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3555,
+						"buffer_size": 3573,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3378,
-								3378
+								2609,
+								2609
 							]
 						],
 						"settings":
@@ -4266,24 +3761,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
-					"buffer": 28,
+					"buffer": 27,
 					"file": "server/systems/weapons/pulse.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3449,
+						"buffer_size": 3451,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2523,
-								2523
+								2573,
+								2573
 							]
 						],
 						"settings":
@@ -4292,14 +3787,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1615.0,
+						"translation.y": 1174.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
-					"buffer": 29,
+					"buffer": 28,
 					"file": "server/ship.php",
 					"semi_transient": false,
 					"settings":
@@ -4311,8 +3806,8 @@
 						"selection":
 						[
 							[
-								11931,
-								11931
+								9896,
+								9896
 							]
 						],
 						"settings":
@@ -4380,27 +3875,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 907.0,
+						"translation.y": 6476.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 30,
+					"buffer": 29,
 					"file": "server/salvo.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8494,
+						"buffer_size": 8503,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7062,
-								7062
+								3716,
+								3716
 							]
 						],
 						"settings":
@@ -4468,14 +3963,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5045.0,
+						"translation.y": 2296.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 34,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
-					"buffer": 31,
+					"buffer": 30,
 					"file": "cam.js",
 					"semi_transient": false,
 					"settings":
@@ -4559,11 +4054,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 77,
+					"stack_index": 76,
 					"type": "text"
 				},
 				{
-					"buffer": 32,
+					"buffer": 31,
 					"file": "server/systems/system.php",
 					"semi_transient": false,
 					"settings":
@@ -4575,8 +4070,8 @@
 						"selection":
 						[
 							[
-								131,
-								135
+								840,
+								840
 							]
 						],
 						"settings":
@@ -4644,14 +4139,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 399.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 33,
+					"buffer": 32,
 					"file": "server/ships/olympus.php",
 					"semi_transient": false,
 					"settings":
@@ -4676,11 +4171,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 23,
+					"stack_index": 38,
 					"type": "text"
 				},
 				{
-					"buffer": 34,
+					"buffer": 33,
 					"file": "createGame.php",
 					"semi_transient": false,
 					"settings":
@@ -4709,7 +4204,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 35,
+					"buffer": 34,
 					"file": "lobby.php",
 					"semi_transient": false,
 					"settings":
@@ -4790,16 +4285,104 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 68.0,
+						"translation.y": 65.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 61,
+					"type": "text"
+				},
+				{
+					"buffer": 35,
+					"file": "game.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 47448,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								27531,
+								27531
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 19992.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 40,
+			"selected": 8,
 			"sheets":
 			[
 				{
@@ -4815,8 +4398,8 @@
 						"selection":
 						[
 							[
-								621,
-								621
+								503,
+								503
 							]
 						],
 						"settings":
@@ -4826,27 +4409,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 70.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 25,
 					"file": "server/systems/weapons/dual.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1823,
+						"buffer_size": 1858,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1492,
-								1492
+								1527,
+								1527
 							]
 						],
 						"settings":
@@ -4917,24 +4500,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 48,
+					"stack_index": 50,
 					"type": "text"
 				},
 				{
-					"buffer": 30,
+					"buffer": 29,
 					"file": "server/salvo.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8494,
+						"buffer_size": 8503,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4994,
-								4994
+								2968,
+								2968
 							]
 						],
 						"settings":
@@ -5002,10 +4585,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3587.0,
+						"translation.y": 1852.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 54,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
@@ -5091,10 +4674,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 895.0,
+						"translation.y": 868.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
@@ -5110,8 +4693,8 @@
 						"selection":
 						[
 							[
-								1798,
-								1798
+								3137,
+								3137
 							]
 						],
 						"settings":
@@ -5180,10 +4763,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1033.0,
+						"translation.y": 1638.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 33,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -5212,11 +4795,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 31,
+					"stack_index": 43,
 					"type": "text"
 				},
 				{
-					"buffer": 32,
+					"buffer": 31,
 					"file": "server/systems/system.php",
 					"semi_transient": false,
 					"settings":
@@ -5297,115 +4880,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 9290.0,
+						"translation.y": 8860.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 38,
+					"stack_index": 45,
 					"type": "text"
 				},
 				{
-					"buffer": 40,
-					"file": "game.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 46657,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								7150,
-								7150
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content"
-							],
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 5079.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 17,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
+					"buffer": 6,
 					"file": "shipclasses.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 56423,
+						"buffer_size": 56527,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9781,
-								9781
+								10010,
+								10010
 							]
 						],
 						"settings":
@@ -5473,27 +4968,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 7455.0,
+						"translation.y": 7087.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 36,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 7,
 					"file": "mathLib.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5239,
+						"buffer_size": 5899,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								4504,
+								4504
 							]
 						],
 						"settings":
@@ -5561,14 +5056,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2423.0,
+						"translation.y": 3379.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 72,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 12,
 					"file": "server/dbManager.php",
 					"semi_transient": false,
 					"settings":
@@ -5580,8 +5075,8 @@
 						"selection":
 						[
 							[
-								338,
-								338
+								600,
+								600
 							]
 						],
 						"settings":
@@ -5653,7 +5148,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 41,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
@@ -5739,7 +5234,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 542.0,
+						"translation.y": 515.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 68,
@@ -5827,14 +5322,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 6803.0,
+						"translation.y": 6463.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 36,
 					"type": "text"
 				},
 				{
-					"buffer": 31,
+					"buffer": 30,
 					"file": "cam.js",
 					"semi_transient": false,
 					"settings":
@@ -5918,24 +5413,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 49,
+					"stack_index": 51,
 					"type": "text"
 				},
 				{
-					"buffer": 41,
+					"buffer": 40,
 					"file": "shared.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 12390,
+						"buffer_size": 12539,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2630,
-								2630
+								1745,
+								1745
 							]
 						],
 						"settings":
@@ -6003,14 +5498,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1433.0,
+						"translation.y": 1326.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 35,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 23,
+					"buffer": 22,
 					"file": "script.js",
 					"semi_transient": false,
 					"settings":
@@ -6091,14 +5586,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5766.0,
+						"translation.y": 5478.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 50,
+					"stack_index": 52,
 					"type": "text"
 				},
 				{
-					"buffer": 42,
+					"buffer": 41,
 					"file": "gameSetup.php",
 					"semi_transient": false,
 					"settings":
@@ -6179,14 +5674,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 8105.0,
+						"translation.y": 408.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 40,
 					"type": "text"
 				},
 				{
-					"buffer": 43,
+					"buffer": 42,
 					"file": "server/ships/tinashi.php",
 					"semi_transient": false,
 					"settings":
@@ -6215,7 +5710,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 44,
+					"buffer": 43,
 					"file": "server/ships/sharlin.php",
 					"semi_transient": false,
 					"settings":
@@ -6237,14 +5732,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 336.0,
+						"translation.y": 330.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 63,
 					"type": "text"
 				},
 				{
-					"buffer": 45,
+					"buffer": 44,
 					"file": "server/ships/whitestar.php",
 					"semi_transient": false,
 					"settings":
@@ -6325,14 +5820,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 100.0,
+						"translation.y": 95.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 65,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 9,
 					"file": "server/math.php",
 					"semi_transient": false,
 					"settings":
@@ -6413,7 +5908,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 252.0,
+						"translation.y": 170.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 56,
@@ -6502,14 +5997,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2834.0,
+						"translation.y": 2695.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 71,
 					"type": "text"
 				},
 				{
-					"buffer": 46,
+					"buffer": 45,
 					"file": "server/ships/primus.php",
 					"semi_transient": false,
 					"settings":
@@ -6593,11 +6088,11 @@
 						"translation.y": 73.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 52,
+					"stack_index": 54,
 					"type": "text"
 				},
 				{
-					"buffer": 47,
+					"buffer": 46,
 					"file": "server/ships/demos.php",
 					"semi_transient": false,
 					"settings":
@@ -6681,11 +6176,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 35,
 					"type": "text"
 				},
 				{
-					"buffer": 48,
+					"buffer": 47,
 					"file": "server/ships/vorchan.php",
 					"semi_transient": false,
 					"settings":
@@ -6710,11 +6205,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 74,
+					"stack_index": 73,
 					"type": "text"
 				},
 				{
-					"buffer": 49,
+					"buffer": 48,
 					"file": "server/ships/haven.php",
 					"semi_transient": false,
 					"settings":
@@ -6739,11 +6234,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 75,
+					"stack_index": 74,
 					"type": "text"
 				},
 				{
-					"buffer": 50,
+					"buffer": 49,
 					"file": "server/systems/weapons/linked.php",
 					"semi_transient": false,
 					"settings":
@@ -6768,24 +6263,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 42,
 					"type": "text"
 				},
 				{
-					"buffer": 51,
+					"buffer": 50,
 					"file": "flights.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 14297,
+						"buffer_size": 14465,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								229,
-								229
+								7081,
+								7081
 							]
 						],
 						"settings":
@@ -6853,27 +6348,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 5242.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 44,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
-					"buffer": 52,
+					"buffer": 51,
 					"file": "server/flight.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8383,
+						"buffer_size": 8497,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7421,
-								7421
+								1177,
+								1177
 							]
 						],
 						"settings":
@@ -6942,10 +6437,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 293.0,
+						"translation.y": 114.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 39,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -7030,19 +6525,19 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4300.0,
+						"translation.y": 4085.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 66,
 					"type": "text"
 				},
 				{
-					"buffer": 53,
+					"buffer": 52,
 					"file": "log.txt",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 13525,
+						"buffer_size": 35094,
 						"regions":
 						{
 						},
@@ -7121,24 +6616,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 37,
+					"stack_index": 44,
 					"type": "text"
 				},
 				{
-					"buffer": 30,
+					"buffer": 29,
 					"file": "server/salvo.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8494,
+						"buffer_size": 8503,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5277,
-								5277
+								5363,
+								5363
 							]
 						],
 						"settings":
@@ -7206,14 +6701,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3371.0,
+						"translation.y": 3652.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 55,
 					"type": "text"
 				},
 				{
-					"buffer": 22,
+					"buffer": 21,
 					"file": "server/systems/structure.php",
 					"semi_transient": false,
 					"settings":
@@ -7301,7 +6796,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 54,
+					"buffer": 53,
 					"file": "getGameData.php",
 					"semi_transient": false,
 					"settings":
@@ -7389,7 +6884,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 55,
+					"buffer": 54,
 					"file": "shiptest.php",
 					"semi_transient": false,
 					"settings":
@@ -7418,7 +6913,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 29,
+					"buffer": 28,
 					"file": "server/ship.php",
 					"semi_transient": false,
 					"settings":
@@ -7430,8 +6925,8 @@
 						"selection":
 						[
 							[
-								871,
-								871
+								4536,
+								4536
 							]
 						],
 						"settings":
@@ -7499,14 +6994,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 80.0,
+						"translation.y": 3221.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 45,
+					"stack_index": 24,
 					"type": "text"
 				},
 				{
-					"buffer": 56,
+					"buffer": 55,
 					"file": "index.php",
 					"semi_transient": false,
 					"settings":
@@ -7587,14 +7082,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 604.0,
+						"translation.y": 599.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 60,
 					"type": "text"
 				},
 				{
-					"buffer": 57,
+					"buffer": 56,
 					"file": "server/systems/weapons/launcher.php",
 					"semi_transient": false,
 					"settings":
@@ -7606,8 +7101,8 @@
 						"selection":
 						[
 							[
-								102,
-								102
+								3258,
+								3258
 							]
 						],
 						"settings":
@@ -7675,14 +7170,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1986.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 30,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
-					"buffer": 58,
+					"buffer": 57,
 					"file": "balltest.php",
 					"semi_transient": false,
 					"settings":
@@ -7707,11 +7202,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 76,
+					"stack_index": 75,
 					"type": "text"
 				},
 				{
-					"buffer": 59,
+					"buffer": 58,
 					"file": "systemtest.php",
 					"semi_transient": false,
 					"settings":
@@ -7736,11 +7231,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 39,
 					"type": "text"
 				},
 				{
-					"buffer": 60,
+					"buffer": 59,
 					"file": "server/systems/weapons/laser.php",
 					"semi_transient": false,
 					"settings":
@@ -7752,8 +7247,8 @@
 						"selection":
 						[
 							[
-								2977,
-								2977
+								2811,
+								2811
 							]
 						],
 						"settings":
@@ -7761,51 +7256,46 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
 								"bh_round",
 								"bh_round_center",
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
@@ -7815,20 +7305,25 @@
 								"bh_tag_center",
 								"bh_tag_open",
 								"bh_tag_close",
-								"bh_tag_content"
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content"
 							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1975.0,
+						"translation.y": 1554.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 61,
+					"buffer": 60,
 					"file": "server/systems/weapons/matter.php",
 					"semi_transient": false,
 					"settings":
@@ -7912,7 +7407,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 41,
 					"type": "text"
 				}
 			]
@@ -7920,7 +7415,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 28.0
+		"height": 27.0
 	},
 	"input":
 	{
@@ -7946,7 +7441,7 @@
 		"cols":
 		[
 			0.0,
-			0.579780009403,
+			0.53331871986,
 			1.0
 		],
 		"rows":
@@ -7964,7 +7459,7 @@
 	"project": "p1.sublime-project",
 	"replace":
 	{
-		"height": 66.0
+		"height": 50.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -7974,8 +7469,124 @@
 		"selected_items":
 		[
 			[
+				"math",
+				"C:\\xampp\\htdocs\\fire\\mathLib.js"
+			],
+			[
+				"game",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
+				"sha",
+				"C:\\xampp\\htdocs\\fire\\shared.js"
+			],
+			[
+				"gr",
+				"C:\\xampp\\htdocs\\fire\\graphics.js"
+			],
+			[
+				"gam",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
+				"grap",
+				"C:\\xampp\\htdocs\\fire\\graphics.js"
+			],
+			[
+				"shared",
+				"C:\\xampp\\htdocs\\fire\\shared.js"
+			],
+			[
+				"game.js",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
+				"sys",
+				"C:\\xampp\\htdocs\\fire\\systems.js"
+			],
+			[
+				"clas",
+				"C:\\xampp\\htdocs\\fire\\classes.js"
+			],
+			[
+				"game.",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
+				"laser",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php"
+			],
+			[
 				"puls",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
+			],
+			[
+				"sh",
+				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
+			],
+			[
+				"fl",
+				"C:\\xampp\\htdocs\\fire\\server\\flight.php"
+			],
+			[
+				"sal",
+				"C:\\xampp\\htdocs\\fire\\server\\salvo.php"
+			],
+			[
+				"dua",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php"
+			],
+			[
+				"sy",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\system.php"
+			],
+			[
+				"pla",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php"
+			],
+			[
+				"dual",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php"
+			],
+			[
+				"aven",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\avenger.php"
+			],
+			[
+				"lau",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php"
+			],
+			[
+				"flight",
+				"C:\\xampp\\htdocs\\fire\\flights.js"
+			],
+			[
+				"sty",
+				"C:\\xampp\\htdocs\\fire\\style.css"
+			],
+			[
+				"sasl",
+				"C:\\xampp\\htdocs\\fire\\server\\salvo.php"
+			],
+			[
+				"mana",
+				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
+			],
+			[
+				"shi",
+				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
+			],
+			[
+				"sg",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\saggitarius.php"
+			],
+			[
+				"de",
+				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
+			],
+			[
+				"db",
+				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
 			],
 			[
 				"las",
@@ -7984,10 +7595,6 @@
 			[
 				"auo",
 				"C:\\xampp\\htdocs\\fire\\autoload.php"
-			],
-			[
-				"laser",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php"
 			],
 			[
 				"par",
@@ -8006,28 +7613,8 @@
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php"
 			],
 			[
-				"sys",
-				"C:\\xampp\\htdocs\\fire\\systems.js"
-			],
-			[
-				"pla",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php"
-			],
-			[
 				"scr",
 				"C:\\xampp\\htdocs\\fire\\script.js"
-			],
-			[
-				"sh",
-				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
-			],
-			[
-				"game.",
-				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
-				"clas",
-				"C:\\xampp\\htdocs\\fire\\classes.js"
 			],
 			[
 				"la",
@@ -8040,18 +7627,6 @@
 			[
 				"pul",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
-			],
-			[
-				"sty",
-				"C:\\xampp\\htdocs\\fire\\style.css"
-			],
-			[
-				"sy",
-				"C:\\xampp\\htdocs\\fire\\systems.js"
-			],
-			[
-				"dua",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php"
 			],
 			[
 				"ome",
@@ -8082,10 +7657,6 @@
 				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
 			],
 			[
-				"mana",
-				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
-			],
-			[
 				"pa",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php"
 			],
@@ -8102,51 +7673,19 @@
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php"
 			],
 			[
-				"gr",
-				"C:\\xampp\\htdocs\\fire\\graphics.js"
-			],
-			[
-				"lau",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php"
-			],
-			[
 				"link",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\linked.php"
-			],
-			[
-				"sal",
-				"C:\\xampp\\htdocs\\fire\\server\\salvo.php"
-			],
-			[
-				"sha",
-				"C:\\xampp\\htdocs\\fire\\shared.js"
-			],
-			[
-				"game",
-				"C:\\xampp\\htdocs\\fire\\game.js"
 			],
 			[
 				"ship",
 				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
 			],
 			[
-				"shi",
-				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
-			],
-			[
 				"log",
 				"C:\\xampp\\htdocs\\fire\\log.txt"
 			],
 			[
-				"game.js",
-				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
 				"",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php"
-			],
-			[
-				"dual",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php"
 			],
 			[
@@ -8156,10 +7695,6 @@
 			[
 				"du",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php"
-			],
-			[
-				"db",
-				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
 			],
 			[
 				"mna",
@@ -8180,10 +7715,6 @@
 			[
 				"style",
 				"C:\\xampp\\htdocs\\fire\\style.css"
-			],
-			[
-				"fl",
-				"C:\\xampp\\htdocs\\fire\\flights.js"
 			],
 			[
 				"find",
@@ -8210,10 +7741,6 @@
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\avenger.php"
 			],
 			[
-				"shared",
-				"C:\\xampp\\htdocs\\fire\\shared.js"
-			],
-			[
 				"cam",
 				"C:\\xampp\\htdocs\\fire\\cam.js"
 			],
@@ -8230,20 +7757,12 @@
 				"C:\\xampp\\htdocs\\fire\\style.css"
 			],
 			[
-				"grap",
-				"C:\\xampp\\htdocs\\fire\\graphics.js"
-			],
-			[
 				"share",
 				"C:\\xampp\\htdocs\\fire\\shared.js"
 			],
 			[
 				"str",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\structure.php"
-			],
-			[
-				"aven",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\avenger.php"
 			],
 			[
 				"pri",
@@ -8326,10 +7845,6 @@
 				"C:\\xampp\\htdocs\\fire\\lobby.php"
 			],
 			[
-				"de",
-				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
-			],
-			[
 				"sharl",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\sharlin.php"
 			],
@@ -8398,10 +7913,6 @@
 				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
 			],
 			[
-				"gam",
-				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
 				"grp",
 				"C:\\xampp\\htdocs\\fire\\graphics.js"
 			],
@@ -8432,10 +7943,6 @@
 			[
 				"maan",
 				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
-			],
-			[
-				"flight",
-				"C:\\xampp\\htdocs\\fire\\flights.js"
 			],
 			[
 				"shipcl",
@@ -8470,20 +7977,8 @@
 				"C:\\xampp\\htdocs\\fire\\mathLib.js"
 			],
 			[
-				"math",
-				"C:\\xampp\\htdocs\\fire\\mathLib.js"
-			],
-			[
 				"mt",
 				"C:\\xampp\\htdocs\\fire\\mathLib.js"
-			],
-			[
-				"mathl",
-				"C:\\xampp\\htdocs\\fire\\mathLib.js"
-			],
-			[
-				"class.",
-				"C:\\xampp\\htdocs\\fire\\classes.js"
 			]
 		],
 		"width": 0.0
@@ -8506,7 +8001,7 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 1,
+	"selected_group": 0,
 	"settings":
 	{
 	},

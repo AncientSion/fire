@@ -93,13 +93,20 @@ function Animate(){
 
 		if (ele instanceof FireOrder){
 			ele.anim[k].n++;
-			if (ele.anim[k].h && ele.anim[k].n >= ele.anim[k].m){
-				drawExplosion(ele.weapon, ele.anim[k].tx, ele.anim[k].ty, ele.anim[k].n, ele.anim[k].m+30);
-				//drawExplosion(ele.weapon, ele.shooter, ele.anim[k]);
+			if (ele.weapon instanceof Laser){
+				if (ele.anim[k].n > 0){
+					drawBeam(ele.weapon, ele.anim[k]);
+				}
 			}
 			else {
-				//drawProjectile(ele.weapon, ele.shooter.x, ele.shooter.y, tx, ty, ele.anim[k].n, ele.anim[k].m);
-				drawProjectile(ele.weapon, ele.anim[k]);
+				if (ele.anim[k].h && ele.anim[k].n >= ele.anim[k].m){
+					drawExplosion(ele.weapon, ele.anim[k].tx, ele.anim[k].ty, ele.anim[k].n, ele.anim[k].m+30);
+					//drawExplosion(ele.weapon, ele.shooter, ele.anim[k]);
+				}
+				else {
+					//drawProjectile(ele.weapon, ele.shooter.x, ele.shooter.y, tx, ty, ele.anim[k].n, ele.anim[k].m);
+					drawProjectile(ele.weapon, ele.anim[k]);
+				}
 			}
 		}
 		else if (ele instanceof Salvo){
@@ -189,8 +196,8 @@ function initiateShip(i){
 		for (var j = 0; j < window.ships[i].primary.systems.length; j++){
 			var primSystem = new window[window.ships[i].primary.systems[j].name](window.ships[i].primary.systems[j]);
 
-			for (var k = 0; k < window.ships[i].primary.systems[j].damages.length; k++){
-				primSystem.damages.push(new Damage(window.ships[i].primary.systems[j].damages[k]));
+			for (var l = 0; l < window.ships[i].primary.systems[j].damages.length; l++){
+				primSystem.damages.push(new Damage(window.ships[i].primary.systems[j].damages[l]));
 			}
 
 			for (var l = 0; l < window.ships[i].primary.systems[j].powers.length; l++){
@@ -198,7 +205,7 @@ function initiateShip(i){
 			}
 
 			for (var l = 0; l < window.ships[i].primary.systems[j].crits.length; l++){
-				primSystem.crits.push(window.ships[i].primary.systems[j].crits[l]);
+				primSystem.crits.push(new Crit(window.ships[i].primary.systems[j].crits[l]));
 			}
 
 			primSystem.setState();

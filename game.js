@@ -586,10 +586,8 @@ function Game(id, name, status, userid, turn, phase){
 
 	this.hasShipOnPos = function(pos){
 		var ret = [];
-		var r = 12;
-		//pos = new Point(pos.x, pos.y).getOffset();
-
 		for (var i = 0; i < this.ships.length; i++){
+			var r = this.ships[i].size/4;
 			if (! this.ships[i].destroyed){
 				if (this.ships[i].deployed){
 					var shipPos = this.ships[i].getBaseOffsetPos();
@@ -622,8 +620,8 @@ function Game(id, name, status, userid, turn, phase){
 	}
 
 	this.getShipByClick = function(pos){
-		var r = 12;
 		for (var i = 0; i < this.ships.length; i++){
+			var r = this.ships[i].size/4;
 			if (! this.ships[i].destroyed){
 				if (this.ships[i].deployed){
 					var shipPos = this.ships[i].getBaseOffsetPos();
@@ -1083,6 +1081,7 @@ function Game(id, name, status, userid, turn, phase){
 
 		this.animateFire = true;
 		this.drawShips();
+		//this.animateBallistics()
 		this.animateFireOrders();
 
 		//this.animateFire = true; this.fireResolved();
@@ -1255,13 +1254,13 @@ function Game(id, name, status, userid, turn, phase){
 								if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
 									game.fireOrders[i].anim[j][k].n += 1;
 									if (game.fireOrders[i].anim[j][k].n > 0){ // valid, now animate
-//drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].shooter.x, game.fireOrders[i].shooter.y, game.fireOrders[i].anim[j][k].nx, game.fireOrders[i].anim[j][k].ny, game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m);
-drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
+										//drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].shooter.x, game.fireOrders[i].shooter.y, game.fireOrders[i].anim[j][k].nx, game.fireOrders[i].anim[j][k].ny, game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m);
+										drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
 									}
 								}
 								else if (game.fireOrders[i].anim[j][k].h){ // shot animated, does it explode ?
 									game.fireOrders[i].anim[j][k].n += 1;
-drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].tx, game.fireOrders[i].anim[j][k].ty, game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m+30); // EXPLO
+										drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].tx, game.fireOrders[i].anim[j][k].ty, game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m+30); // EXPLO
 									//drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].shooter, game.fireOrders[i].anim[j][k]);
 									if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m+30){
 										game.fireOrders[i].anim[j][k].done = true;
@@ -1378,42 +1377,6 @@ drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].tx, game.
 			}
 		}
 
-
-		/*
-
-function BallVector(a, b, s, h){
-	this.x;
-	this.y;
-	this.nx;
-	this.ny;
-	this.n = 0;
-	this.m;
-	this.done = 0;
-	this.f;
-	this.h = h;
-	
-	this.setup = function(){
-		this.x = b.x - a.x;
-		this.y = b.y - a.y;
-
-		this.f = getAngleFromTo(a, b);
-		
-		var x = Math.pow(this.x, 2);
-		var y = Math.pow(this.y, 2);
-		var m = (x + y);
-		
-		this.m = Math.sqrt(m);
-		this.nx = this.x/this.m*s;
-		this.ny = this.y/this.m*s;
-		this.m /= s;
-	}
-	
-	this.setup();
-}
-
-
-*/
-
 		for (var i = 0; i < animate.ballAnims.length; i++){
 			for (var j = 0; j < animate.ballAnims[i].anims.length; j++){
 				if (animate.ballAnims[i].anims[j] instanceof Salvo){
@@ -1431,31 +1394,63 @@ function BallVector(a, b, s, h){
 					);
 				}
 				else if (animate.ballAnims[i].anims[j] instanceof FireOrder){
-					//console.log(animate.ballAnims[i].anims[j]);
 					var targetMove = new Vector(
 						animate.ballAnims[i].anims[j].target.actions[animate.ballAnims[i].anims[j].target.actions.length-2],
 						animate.ballAnims[i].anims[j].target.actions[animate.ballAnims[i].anims[j].target.actions.length-1]
 					);
-					var interceptPos = getProjIntercept(
-						animate.ballAnims[i].anims[j].shooter,
-						animate.ballAnims[i].anims[j].target.actions[animate.ballAnims[i].anims[j].target.actions.length-2],
-						targetMove,
-						animate.ballAnims[i].anims[j].weapon.projSpeed/2
-					);
-					for (var k = 0; k < animate.ballAnims[i].anims[j].guns; k++){
-						for (var l = 0; l < animate.ballAnims[i].anims[j].shots; l++){
-							var hit = false;
-							if (l < animate.ballAnims[i].anims[j].hits[k]){
-								hit = true;
+
+					if (!(animate.ballAnims[i].anims[j].weapon instanceof Laser)){
+						var interceptPos = getProjIntercept(
+							animate.ballAnims[i].anims[j].shooter,
+							animate.ballAnims[i].anims[j].target.actions[animate.ballAnims[i].anims[j].target.actions.length-2],
+							targetMove,
+							animate.ballAnims[i].anims[j].weapon.projSpeed/2
+						);
+						for (var k = 0; k < animate.ballAnims[i].anims[j].guns; k++){
+							for (var l = 0; l < animate.ballAnims[i].anims[j].shots; l++){
+								var hit = false;
+								if (l < animate.ballAnims[i].anims[j].hits[k]){
+									hit = true;
+								}
+								var interceptVector = new BallVector(
+									animate.ballAnims[i].anims[j].shooter,
+									randomize(interceptPos, 6, 6),
+									animate.ballAnims[i].anims[j].weapon.projSpeed/2,
+									hit
+								);
+								interceptVector.n -= l*15;
+								animate.ballAnims[i].anims[j].anim.push(interceptVector);
 							}
-							var interceptVector = new BallVector(
-								animate.ballAnims[i].anims[j].shooter,
-								randomize(interceptPos, 6, 6),
-								animate.ballAnims[i].anims[j].weapon.projSpeed/2,
-								hit
-							);
-							interceptVector.n -= l*15;
-							animate.ballAnims[i].anims[j].anim.push(interceptVector);
+						}
+					}
+					else {
+						var interceptPos = getBeamIntercept(
+							animate.ballAnims[i].anims[j].shooter,
+							animate.ballAnims[i].anims[j].target.actions[animate.ballAnims[i].anims[j].target.actions.length-2],
+							targetMove
+						);
+						for (var k = 0; k < animate.ballAnims[i].anims[j].guns; k++){
+							for (var l = 0; l < animate.ballAnims[i].anims[j].shots; l++){
+								var hit = false;
+								if (l < animate.ballAnims[i].anims[j].hits[k]){
+									hit = true;
+								}
+								var interceptVector = new BallVector(
+									animate.ballAnims[i].anims[j].shooter,
+									randomize(interceptPos, 8, 8),
+									1,
+									hit
+								);
+								interceptVector.ox = animate.ballAnims[i].anims[j].shooter.x + range(-15, 15);
+								interceptVector.oy = animate.ballAnims[i].anims[j].shooter.y + range(-15, 15);
+								interceptVector.n -= 5*k;
+								interceptVector.m *= 0.5;
+								interceptVector.nx = 0;
+								interceptVector.ny = 0;
+								interceptVector.tax = interceptPos.x
+								interceptVector.tay = interceptPos.y
+								animate.ballAnims[i].anims[j].anim.push(interceptVector);
+							}
 						}
 					}
 				}
@@ -1658,9 +1653,9 @@ function BallVector(a, b, s, h){
 		for (var i = 0; i < fire.damages.length; i++){
 			var name;
 			if (fire.damages[i].systemid == -1){
-				name = "Primary";
+				name = "Main Structure";
 			}
-			else name = fire.target.getSystemById(fire.damages[i].systemid).name;
+			else name = fire.target.getSystemById(fire.damages[i].systemid).display;
 
 			if (dmgs.hasOwnProperty(name)){
 				dmgs[name]++;

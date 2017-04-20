@@ -119,10 +119,6 @@ class Mini extends Ship {
 		return $locs[mt_rand(0, sizeof($locs)-1)];
 	}
 
-	public function getHitChance($fire){
-		return $this->getStructureById($fire->hitSection)->getSubHitChance();
-	}
-
 	public function getHitSystem($fire){
 		return $this->getStructureById($fire->hitSection);
 	}
@@ -148,6 +144,15 @@ class Salvo extends Mini {
 		$this->destroyed = $destroyed;
 		
 		$this->addStructures($amount);
+		$this->setProps();
+	}
+
+	public function setProps(){
+		$this->baseHitChance = ceil(sqrt($this->structures[0]->mass)*10);
+	}
+
+	public function getHitChance($fire){
+		return $this->getBaseHitChance();
 	}
 
 	public function addStructures($amount){
@@ -331,10 +336,6 @@ class Ammo extends Weapon {
 				return;
 			}
 		}
-	}
-
-	public function getSubHitChance(){
-		return ceil(sqrt($this->mass)*10);
 	}
 }
 

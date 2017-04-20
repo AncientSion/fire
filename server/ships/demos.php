@@ -7,7 +7,7 @@ class Demos extends Medium {
 	public $size = 50;
 	public static $value = 600;
 	public $profile = array(0.92, 1.08);
-	public $mass = 3250;
+	public $mass = 3000;
 
 	function __construct($id, $userid, $available, $status, $destroyed){		
         parent::__construct($id, $userid, $available, $status, $destroyed);
@@ -38,12 +38,12 @@ class Demos extends Medium {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 800);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 100);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 100, 80, 6);
-		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 100);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 100);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 100, $this->getPowerReq());
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 700);
+		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 90);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, 90, 85, 6);
+		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 90);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 90);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 90, $this->getPowerReq());
 	}
 }
 

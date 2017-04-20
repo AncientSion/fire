@@ -105,7 +105,7 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 	this.turns = 10;
 	this.maxTurns = 1;
 	this.dogfights = [];
-	
+
 	this.create = function(){
 		this.setFighterState();
 		this.setMaxMass()
@@ -298,7 +298,7 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 	}
 
 	this.getTurnAngle = function(){
-		return 15;
+		return 20;
 	}
 
 	this.hasWeaponsSelected = function(){		
@@ -319,19 +319,23 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 		return false;
 	}
 
+	this.launchedThisTurn = function(){
+		if (this.actions[0].turn == game.turn){
+			return true;
+		} return false;
+	}
+
 	this.expandDiv = function(div){
-		if (this.dogfights.length){
-			var iconContainer = document.createElement("div");
-				iconContainer.className = "iconContainer";
-				$(iconContainer).css("width", 100).append($("<div class='dogFightHeader'>Active Dogfights</div>"));
-				for (var j = 0; j < this.dogfights.length; j++){
-					$(iconContainer).append($("<div class='dogFightEntry'>").html("VS #" + this.dogfights[j]));
-				}
-			div.appendChild(iconContainer);
-		}
-		else {
-			$(div).find(".header").css("width", "99%");
-		}
+		var iconContainer = document.createElement("div");
+			iconContainer.className = "iconContainer";
+			$(iconContainer).css("width", 120)//.append($("<div class='dogFightHeader'>Active Dogfights</div>"));
+			if (this.launchedThisTurn()){
+				$(iconContainer).append($("<div class='dogFightEntry'>").html("50 % EP / Impulse due to launch."));
+			}
+			for (var j = 0; j < this.dogfights.length; j++){
+				$(iconContainer).append($("<div class='dogFightEntry'>").html("Dogfight VS #" + this.dogfights[j]));
+			}
+		div.appendChild(iconContainer);
 
 		var structContainer = document.createElement("div");
 			structContainer.className = "structContainer";

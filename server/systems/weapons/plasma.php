@@ -75,12 +75,11 @@ class Plasma extends Weapon {
 }
 
 
-
 class MediumPlasma extends Plasma {
 	public $name = "MediumPlasma";
-	public $display = "MediumPlasma";
-	public $minDmg = 30;
-	public $maxDmg = 30;
+	public $display = "78mm Plasma Accelerator";
+	public $minDmg = 34;
+	public $maxDmg = 44;
 	public $accDecay = 100;
 	public $shots = 1;
 	public $animColor = "darkGreen";
@@ -98,9 +97,9 @@ class MediumPlasma extends Plasma {
 
 class HeavyPlasma extends Plasma {
 	public $name = "HeavyPlasma";
-	public $display = "HeavyPlasma";
-	public $minDmg = 50;
-	public $maxDmg = 50;
+	public $display = "148mm Plasma Cannon";
+	public $minDmg = 44;
+	public $maxDmg = 62;
 	public $accDecay = 100;
 	public $shots = 1;
 	public $animColor = "darkGreen";

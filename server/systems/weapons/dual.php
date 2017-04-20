@@ -2,6 +2,7 @@
 
 class Dual extends Weapon {
 	public $type = "Dual";
+	public $display = "Combo System";
 	public $modes = array();
 	public $states = array();
 	public $weapons = array();

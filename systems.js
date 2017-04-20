@@ -297,8 +297,6 @@ function System(system){
 		} else return false;
 	}
 
-
-
 	this.doUnpower = function(){
 		if (this.selected){
 			this.select();
@@ -2082,6 +2080,8 @@ function Hangar(system){
 		var div = document.getElementById("hangarLoadoutDiv");
 			$("#launchRate").html(this.getLaunchRate());
 			$("#capacity").html(this.output);
+		this.unsetFireOrder();
+		this.doUndoActions();
 		this.showHangarControl();
 
 		if ($(div).hasClass("disabled")){
@@ -2151,8 +2151,8 @@ function Hangar(system){
 				if (game.ships[i].flight){
 					if (game.ships[i].actions[0].resolved == 0){
 						if (game.ships[i].launchdata.shipid == window.aUnit && game.ships[i].launchdata.systemid == this.id){
-							console.log("splice");
-							this.unsetFireOrder();
+							//console.log("splice");
+							//this.unsetFireOrder();
 							game.ships.splice(i, 1);
 							game.draw();
 							break;

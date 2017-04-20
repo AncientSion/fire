@@ -115,6 +115,10 @@ class Flight extends Mini {
 		}
 		return false;
 	}
+
+	public function getHitChance($fire){
+		return $this->getStructureById($fire->hitSection)->getSubHitChance();
+	}
 }
 
 class Fighter extends Structure {

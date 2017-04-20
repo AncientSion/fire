@@ -1172,7 +1172,7 @@ class Manager {
 
 	public function logShips($elements){
 		$data = func_get_args();
-		if ($data[0] == "All"){
+		if ($data[0] == "all"){
 			return $this->logAllShips();
 		}
 		else {
