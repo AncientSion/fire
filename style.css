@@ -632,6 +632,10 @@ table, th, tr, td {
 	display: table-cell;
 }
 
+.exposed {
+	background-color: rgb(255, 177, 0);
+}
+
 .system {
 	color: black;
 	height: 32px;
@@ -992,6 +996,10 @@ table, th, tr, td {
 	color: lightGreen;
 }
 
+.bgYellow {
+	background: yellow;
+}
+
 .disabled {
 	display: none;
 }
@@ -1002,7 +1010,7 @@ table, th, tr, td {
 	color: white;
 	background-color: black;
 	border-radius: 5px;
-	width: 90px;
+	width: 135px;
 }
 
 #weaponAimTableWrapper {

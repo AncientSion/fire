@@ -103,8 +103,8 @@ class Javelin extends Ammo {
 	}
 }
 
-class Barracuda extends Ammo {
-	public $name = "Barracuda";
+class Patriot extends Ammo {
+	public $name = "Patriot";
 	public $display = "Light Interceptor Missiles";
 	public $type = "explosive";
 	public $minDmg = 13;
@@ -122,8 +122,27 @@ class Barracuda extends Ammo {
 	}
 }
 
-class Myrmidon extends Ammo {
-	public $name = "Myrmidon";
+class Naga extends Ammo {
+	public $name = "Naga";
+	public $display = "Multi-purpose Missiles";
+	public $type = "explosive";
+	public $minDmg = 36;
+	public $maxDmg = 48;
+	public $impulse = 90;
+	public $integrity = 16;
+	public $armour = 5;
+	public $mass = 4;
+	public $fc = array(0 => 85, 1 => 85);
+	public $cost = 5;
+	public $exploSize = 6;
+
+	function __construct($parentId, $id){
+		parent::__construct($parentId, $id);
+	}
+}
+
+class Cyclops extends Ammo {
+	public $name = "Cyclops";
 	public $display = "Light Antiship Missiles";
 	public $type = "explosive";
 	public $minDmg = 55;
@@ -141,8 +160,8 @@ class Myrmidon extends Ammo {
 	}
 }
 
-class Zeus extends Ammo {
-	public $name = "Zeus";
+class Titan extends Ammo {
+	public $name = "Titan";
 	public $display = "Heavy Antiship Missiles";
 	public $type = "explosive";
 	public $minDmg = 78;

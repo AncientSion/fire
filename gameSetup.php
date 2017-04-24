@@ -433,7 +433,10 @@ else {
 		ship.create();
 		$("#game").removeClass("disabled");
 		ship.createBaseDiv();
-		$(".shipDiv").css("left", "460px").css("top", "220px").removeClass("disabled").find(".structContainer").show();
+		ship.previewSetup();
+		$(".shipDiv")
+			.css("left", "460px").css("top", "220px").removeClass("disabled")
+			.find(".structContainer").show();
 		drawShipPreview();
 
 		var div = document.createElement("div");

@@ -67,6 +67,11 @@ class System {
 		return true;
 	}
 
+	public function doUnpower($turn){
+		$this->powers[] = new Power(0, $this->parentId, $this->id, $turn, 0, 0, 1);
+		$this->disabled = 1;
+	}
+
 	public function isDestroyed(){
 		if ($this->destroyed){return true;}
 		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
@@ -299,7 +304,7 @@ class Sensor extends PrimarySystem {
 }
 
 class Weapon extends System {
-	public $weapon = true;
+	public $weapon = 1;
 	public $decayVar = 1000;
 	public $minDmg;
 	public $maxDmg;
@@ -455,7 +460,7 @@ class Weapon extends System {
 	public function getDamageMod($fire){
 		$mod = 1;
 
-		$crit = $this->getCritPenalty($fire->turn);
+		$crit = $this->getCritMod($fire->turn);
 		$boost = $this->getBoostLevel($fire->turn) * $this->getBoostDamageEffect();
 		$range = $this->getDmgPenaltyRange($fire);
 
@@ -467,7 +472,7 @@ class Weapon extends System {
 		return 0.25;
 	}
 
-	public function getCritPenalty($turn){
+	public function getCritMod($turn){
 		$mod = 0;
 		for ($i = 0; $i < sizeof($this->crits); $i++){
 			switch ($this->crits[$i]->type){
@@ -479,6 +484,7 @@ class Weapon extends System {
 					break;
 			}
 		}
+		//if ($mod){Debug::log("crit mod level: ".$mod);}
 		return $mod;
 	}
 
@@ -494,6 +500,7 @@ class Weapon extends System {
 			}
 			else break;
 		}
+		//if ($boost){Debug::log("power boost level: ".$boost);}
 		return $boost;
 	}
 

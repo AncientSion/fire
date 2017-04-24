@@ -3,11 +3,15 @@
 class Ship {
 	public $id;
 	public $facing = 0;
-	public $shipType;
+	public $shipType = "Ship";
 	public $userid;
 	public $available;
 	public $status;
 	public $destroyed;
+
+	public $baseHitChance;
+	public $currentImpulse;
+	public $baseImpulse;
 
 	public $name;
 	public $faction;
@@ -27,8 +31,6 @@ class Ship {
 
 	public $hitTable;
 
-	public $hitChance;
-
 	function __construct($id, $userid, $available, $status, $destroyed){
 		$this->id = $id;
 		$this->userid = $userid;
@@ -38,14 +40,39 @@ class Ship {
 		
 		$this->addStructures();
 		$this->addPrimary();
-		$this->cost = $this::$value;
-
+		
 		$this->baseHitChance = ceil(pow($this->mass, 1/3)*5);
+		$this->cost = static::$value;
 	}
 
 	public function getId(){
 		$this->index++;
 		return $this->index;
+	}
+
+	public function setProps(){
+		$this->setCurrentImpulse();
+	}
+
+	public function getBaseImpulse(){
+		return $this->baseImpulse;
+	}
+
+	public function setCurrentImpulse(){
+		$base = $this->getBaseImpulse();
+		$step = $this->getImpulseStep();
+
+		for ($i = 0; $i < sizeof($this->actions); $i++){
+			if ($this->actions[$i]->type == "speedChange"){
+				$base += $step*$this->actions[$i]->dist;
+			}
+		}
+
+		$this->currentImpulse = $base;
+	}
+
+	public function getCurrentImpulse(){
+		return $this->currentImpulse;
 	}
 
 	public function addFighterout($dbLoad){ // [4, 17, 17]
@@ -71,50 +98,26 @@ class Ship {
 	public function addFireDB($fires){
 		for ($i = 0; $i < sizeof($fires); $i++){
 			if ($fires[$i]->shooterid == $this->id){
-				for ($k = 0; $k < sizeof($this->structures); $k++){
-					for ($l = 0; $l < sizeof($this->structures[$k]->systems); $l++){
-						if ($fires[$i]->weaponid == $this->structures[$k]->systems[$l]->id){
-							$this->structures[$k]->systems[$l]->fireOrders[] = $fires[$i];
-							break 2;
-						}
-					}
-				}
+				$this->getBaseSystemById($fires[$i]->weaponid)->fireOrders[] = $fires[$i];
 			}
 		}
-		return true;
 	}
 
 	public function addDamageDB($damages){
 		for ($i = 0; $i < sizeof($damages); $i++){
+			$this->getStructureById($damages[$i]->structureid)->damages[] = $damages[$i];
+
 			if ($damages[$i]->systemid == -1){
 				$this->primary->damages[] = $damages[$i];
 			}
-			else {
-				$this->getSystemById($damages[$i]->systemid)->damages[] = $damages[$i];
-			}
-			$this->getStructureById($damages[$i]->structureid)->damages[] = $damages[$i];
+			else $this->getBaseSystemById($damages[$i]->systemid)->damages[] = $damages[$i];
 		}
-		return true;
 	}
 
 	public function addPowerDB($powers){
-		for ($j = 0; $j < sizeof($powers); $j++){
-			for ($k = 0; $k < sizeof($this->structures); $k++){
-				for ($l = 0; $l < sizeof($this->structures[$k]->systems); $l++){
-					if ($this->structures[$k]->systems[$l]->id == $powers[$j]->systemid){
-						$this->structures[$k]->systems[$l]->addPowerEntry($powers[$j]);
-						break 2;
-					}
-				}
-			}
-			for ($k = 0; $k < sizeof($this->primary->systems); $k++){
-				if ($this->primary->systems[$k]->id == $powers[$j]->systemid){
-					$this->primary->systems[$k]->powers[] = $powers[$j];
-					break;
-				}
-			}
+		for ($i = 0; $i < sizeof($powers); $i++){
+			$this->getBaseSystemById($powers[$i]->systemid)->addPowerEntry($powers[$i]);
 		}
-		return true;
 	}
 
 	public function addCritDB($crits){
@@ -181,13 +184,32 @@ class Ship {
 				break;
 			}
 		}
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+			$this->primary->systems[$i]->setState($turn);
+			if ($this->primary->systems[$i]->name == "Reactor"){
+				if ($this->primary->systems[$i]->destroyed || $this->primary->systems[$i]->disabled){
+					$this->doUnpowerAllSystems($turn);
+				}
+			}
+		}
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				$this->structures[$i]->systems[$j]->setState($turn);
 			}
 		}
 
+		$this->setProps();
+
 		return true;
+	}
+
+	public function doUnpowerAllSystems($turn){
+		return;
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				$this->structures[$i]->systems[$j]->doUnpower($turn);
+			}
+		}
 	}
 
 	public function getPowerReq(){
@@ -215,6 +237,11 @@ class Ship {
 		if ($this->destroyed){
 			return true;
 		}
+		else if ($this->getSystemByName("Reactor")->destroyed){
+			$this->destroyed = true;
+			return true;
+		}
+
 		for ($i = 0; $i < sizeof($this->primary->damages); $i++){
 			if ($this->primary->damages[$i]->destroyed){
 				$this->destroyed = true;
@@ -235,7 +262,7 @@ class Ship {
 			$fire->dist = $this->getHitDist($fire);
 			$fire->angleIn = $this->getHitAngle($fire);
 			$fire->hitSection = $this->getHitSection($fire);
-			$fire->req = ($this->getHitChance($fire) / 100 * $fire->weapon->getFireControlMod($fire)) - $fire->weapon->getAccLoss($fire->dist);
+			$fire->req = ceil(($this->getHitChance($fire) / 100 * $fire->weapon->getFireControlMod($fire)) - $fire->weapon->getAccLoss($fire->dist));
 			//Debug::log("normal hitangle from ship #".$fire->shooter->id." to target #".$this->id." : ".$fire->angleIn.", picking section: ".$fire->hitSection);
 			$fire->weapon->rollForHit($fire);
 
@@ -256,7 +283,7 @@ class Ship {
 			$fire->dist = 0;
 			$fire->angleIn = $this->getBallisticHitAngle($fire);
 			$fire->hitSection = $this->getHitSection($fire);
-			$fire->req = $fire->weapon->getFireControlMod($fire);
+			$fire->req = ceil($fire->weapon->getFireControlMod($fire));
 			$fire->weapon->rollForHit($fire);
 
 			if ($fire->hits){
@@ -284,7 +311,7 @@ class Ship {
 		$struct = $fire->target->getStructureById($fire->hitSection);
 
 		for ($i = 0; $i < sizeof($struct->systems); $i++){
-			if (! $struct->systems[$i]->destroyed){
+			if (!$struct->systems[$i]->destroyed){
 				$total += $struct->systems[$i]->getHitChance();
 			}
 		}
@@ -296,7 +323,7 @@ class Ship {
 		}
 		else {
 			for ($i = 0; $i < sizeof($struct->systems); $i++){
-				if (! $struct->systems[$i]->destroyed){
+				if (!$struct->systems[$i]->destroyed){
 					$current += $struct->systems[$i]->getHitChance();
 					if ($roll <= $current){
 						//Debug::log("EXTERNAL HIT: ".$struct->systems[$i]->name." #".$struct->systems[$i]->id);
@@ -323,33 +350,31 @@ class Ship {
 			}
 		}
 
+		if (!sizeof($valid)){
+			return $this->primary;
+		}
+
 		//Debug::log("valid:".sizeof($valid));
 
 		for ($i = 0; $i < sizeof($valid); $i++){
 			$total += $valid[$i]->getHitChance();
 		}
+		$roll = mt_rand(0, $total);
+		$current += $this->primary->getHitChance();
 
-		if (sizeof($valid)){
-			$roll = mt_rand(0, $total);
-			$current += $this->primary->getHitChance();
-
-			if ($roll <= $current){
-				//Debug::log("hitting main structure");
-				return $this->primary;
-			}
-			else {
-				//Debug::log("hitting internal");
-				for ($i = 0; $i < sizeof($valid); $i++){
-					$current += $valid[$i]->getHitChance();
-					if ($roll <= $current){
-						//Debug::log("non primary HIT --- ".$valid[$i]->name." #".$valid[$i]->id);
-						return $valid[$i];
-					}
-				}
-			}
+		if ($roll <= $current){
+			//Debug::log("hitting main structure");
+			return $this->primary;
 		}
 		else {
-			return $this->primary;
+			//Debug::log("hitting internal");
+			for ($i = 0; $i < sizeof($valid); $i++){
+				$current += $valid[$i]->getHitChance();
+				if ($roll <= $current){
+					//Debug::log("non primary HIT --- ".$valid[$i]->name." #".$valid[$i]->id);
+					return $valid[$i];
+				}
+			}
 		}
 	}
 
@@ -370,7 +395,7 @@ class Ship {
 			$angle *= -1;
 		}
 		
-		$base = $this->getBaseHitChance();
+		$base = $this->getBaseHitChance() * $this->getProfileMod();
 		$a = $base * $this->profile[0];
 		$b = $base * $this->profile[1];
 		$sub = ((90 - $angle) * $a) + (($angle - 0) * $b);
@@ -381,6 +406,14 @@ class Ship {
 
 	public function getBaseHitChance(){
 		return $this->baseHitChance;
+	}
+
+	public function getProfileMod(){
+		return 1+($this->getBaseImpulse() / $this->getCurrentImpulse()-1)/2;
+	}
+
+	public function getImpulseStep(){
+		return floor($this->getBaseImpulse() / 10);
 	}
 
 	public function getCurrentPosition(){
@@ -436,6 +469,24 @@ class Ship {
 			//Debug::log("now: ".$this->structures[$i]->id);
 			if ($this->structures[$i]->id == $id){
 				return $this->structures[$i];
+			}
+		}
+	}
+
+	public function getBaseSystemById($id){
+		//echo $id."</br>";
+		if ($this->ship){
+			for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+				if ($this->primary->systems[$i]->id == $id){
+					return $this->primary->systems[$i];
+				}
+			}
+		}
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				if ($this->structures[$i]->systems[$j]->id == $id){
+					return $this->structures[$i]->systems[$j];
+				}
 			}
 		}
 	}
@@ -552,7 +603,7 @@ class Ship {
 
 
 class UltraHeavy extends Ship {
-	public $shipType = "UltraHeavy";
+	public $baseImpulse = 115;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
         parent::__construct($id, $userid, $available, $status, $destroyed);
@@ -567,7 +618,7 @@ class UltraHeavy extends Ship {
 }
 
 class SuperHeavy extends Ship {
-	public $shipType = "SuperHeavy";
+	public $baseImpulse = 125;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
         parent::__construct($id, $userid, $available, $status, $destroyed);
@@ -582,7 +633,7 @@ class SuperHeavy extends Ship {
 }
 
 class Heavy extends Ship {
-	public $shipType = "Heavy";
+	public $baseImpulse = 135;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
         parent::__construct($id, $userid, $available, $status, $destroyed);
@@ -597,7 +648,7 @@ class Heavy extends Ship {
 }
 
 class Medium extends Ship {
-	public $shipType = "Medium";
+	public $baseImpulse = 150;
 
 	function __construct($id, $userid, $available, $status, $destroyed){
         parent::__construct($id, $userid, $available, $status, $destroyed);
@@ -612,7 +663,7 @@ class Medium extends Ship {
 }
 
 class Light extends Ship {
-	public $shipType = "Light";
+	public $baseImpulse = 165;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
         parent::__construct($id, $userid, $available, $status, $destroyed);
@@ -627,7 +678,7 @@ class Light extends Ship {
 }
 
 class SuperLight extends Ship {
-	public $shipType = "SuperLight";
+	public $baseImpulse = 180;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
         parent::__construct($id, $userid, $available, $status, $destroyed);

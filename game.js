@@ -29,9 +29,10 @@ function Game(id, name, status, userid, turn, phase){
 	this.doDeployFlight = function(e, pos){
 		var facing = Math.floor(getAngleFromTo(game.getUnitById(aUnit).getOffsetPos(), {x: pos.x, y: pos.y}))
 
-			//id, classname, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available
+	//id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available, baseHitChance, baseImpulse
 		var flight = new Flight(
-			-game.ships.length, "Flight", "Flight", pos.x, pos.y, facing, false, false, false, 0, 0, this.userid, this.turn
+			{id: -game.ships.length, name: "Flight", shipType: "Flight", x: pos.x, y: pos.y, facing: facing, 
+			faction: false, mass: false, cost: false, profile: false, size: 0, userid: this.userid, available: this.turn, baseHitChance: 0, baseImpulse: 0}
 		)
 
 		flight.deployed = 1;
@@ -201,7 +202,7 @@ function Game(id, name, status, userid, turn, phase){
 				var step;
 				var h = 700;
 				var w = 200;
-				var x = 300;
+				var x = 600;
 				var y = h/2;
 
 				if (i % 2 == 0){
@@ -352,7 +353,7 @@ function Game(id, name, status, userid, turn, phase){
 	}
 
 	this.initDeployment = function(){
-		cam.setZoom(0.5);
+		cam.setZoom(0.6);
 		//cam.setFocus()
 		$("#deployWrapper").removeClass("disabled");
 	}

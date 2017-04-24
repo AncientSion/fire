@@ -643,6 +643,8 @@ class Manager {
 			$this->fires[$i]->shooter = $this->getUnitById($this->fires[$i]->shooterid);
 			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystemById($this->fires[$i]->weaponid);
 			$this->fires[$i]->target = $this->getUnitById($this->fires[$i]->targetid);
+			//echo "c: ".$this->fires[$i]->weapon->name."</br>";
+			//echo "p: ".$this->fires[$i]->weapon->priority."</br>";
 		}
 	}
 
@@ -1131,6 +1133,7 @@ class Manager {
 	public function getPreviewData($name){
 		//debug::log("asking for preview of: ".$name);
 		$ship = new $name(1, 1, 0, "", 0);
+		$ship->setState(0);
 		return $ship;
 	}
 

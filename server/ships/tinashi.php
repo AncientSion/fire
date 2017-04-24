@@ -7,7 +7,7 @@ class Tinashi extends Medium {
 	public $size = 70;
 	public static $value = 1000;
 	public $profile = array(0.9, 1.1);
-	public $mass = 4000;
+	public $mass = 4250;
 
 	function __construct($id, $userid, $available, $status, $destroyed){		
         parent::__construct($id, $userid, $available, $status, $destroyed);
@@ -44,7 +44,7 @@ class Tinashi extends Medium {
 
 	public function addPrimary(){
 		//id, $parentId, $integrity, $output = 0, $effiency = 0, $destroyed = 0){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1325);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1050);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 125);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 125, 110, 6);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 125);

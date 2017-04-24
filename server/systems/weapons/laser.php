@@ -26,6 +26,12 @@ class Laser extends Weapon {
 			$roll = mt_rand(1, 100);
 			$fire->rolls[] = $roll;
 			$fire->notes .= $roll." ";
+			if (is_a($this, "HeavyLaser")){
+				debug::log("roll: ".$roll.", req: ".$fire->req.", rakes: ".$this->rakes);
+				if ($roll <= $fire->req){
+					debug::log("hit");
+				} else debug::log("miss");
+			}
 			if ($roll <= $fire->req){
 				$fire->hits += $this->rakes;
 			}
@@ -97,9 +103,9 @@ class LightParticleBeam extends Laser {
 	public $exploSize = 2;
 	public $minDmg = 33;
 	public $maxDmg = 46;
-	public $optRange = 300;
-	public $dmgDecay = 12;
-	public $accDecay = 125;
+	public $optRange = 400;
+	public $dmgDecay = 8;
+	public $accDecay = 95;
 	public $shots = 1;
 	public $reload = 1;
 	public $powerReq = 2;
@@ -121,13 +127,13 @@ class LightLaser extends Laser {
 	public $exploSize = 3;
 	public $minDmg = 95;
 	public $maxDmg = 135;
-	public $optRange = 325;
+	public $optRange = 300;
 	public $dmgDecay = 10;
-	public $accDecay = 110;
+	public $accDecay = 120;
 	public $shots = 1;
 	public $reload = 1;
-	public $powerReq = 3;
-	public $effiency = 3;
+	public $powerReq = 4;
+	public $effiency = 2;
 	public $maxBoost = 1;
 	public $rakes = 3;
 	public $fc = array(0 => 100, 1 => 120);
@@ -148,11 +154,11 @@ class MediumLaser extends Laser {
 	public $minDmg = 145;
 	public $maxDmg = 185;
 	public $optRange = 550;
-	public $dmgDecay = 7;
+	public $dmgDecay = 8;
 	public $accDecay = 85;
 	public $reload = 2;
-	public $powerReq = 5;
-	public $effiency = 5;
+	public $powerReq = 6;
+	public $effiency = 4;
 	public $maxBoost = 1;
 	public $rakes = 3;
 	public $mass = 26;
@@ -172,11 +178,12 @@ class HeavyLaser extends Laser {
 	public $minDmg = 195;
 	public $maxDmg = 255;
 	public $optRange = 800;
-	public $dmgDecay = 5;
+	public $dmgDecay = 6;
 	public $accDecay = 50;
 	public $reload = 3;
-	public $powerReq = 8;
-	public $effiency = 8;
+	public $powerReq = 10;
+	public $rakes = 3;
+	public $effiency = 6;
 	public $maxBoost = 1;
 	public $fc = array(0 => 120, 1 => 40);
 	public $mass = 34;
@@ -192,7 +199,7 @@ class NeutronLaser extends Laser {
 	public $rakeTime = 40;
 	public $animColor = "yellow";
 	public $beamWidth = 3;
-	public $exploSize = 5;
+	public $exploSize = 4;
 	public $minDmg = 105;
 	public $maxDmg = 145;
 	public $optRange = 1000;

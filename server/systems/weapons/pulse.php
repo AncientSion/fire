@@ -92,6 +92,7 @@ class LightPulse extends Pulse {
 	public $reload = 1;
 	public $fc = array(0 => 100, 1 => 180);
 	public $mass = 12;
+	public $powerReq = 2;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -112,6 +113,7 @@ class MediumPulse extends Pulse {
 	public $reload = 2;
 	public $fc = array(0 => 115, 1 => 135);
 	public $mass = 20;
+	public $powerReq = 4;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

@@ -19,9 +19,10 @@ spl_autoload_register(
 
                 'hasta' => '/server/systems/weapons/launcher.php',
                 'javelin' => '/server/systems/weapons/launcher.php',
-                'barracuda' => '/server/systems/weapons/launcher.php',
-                'myrmidon' => '/server/systems/weapons/launcher.php',
-                'zeus' => '/server/systems/weapons/launcher.php',
+                'patriot' => '/server/systems/weapons/launcher.php',
+                'naga' => '/server/systems/weapons/launcher.php',
+                'cyclops' => '/server/systems/weapons/launcher.php',
+                'titan' => '/server/systems/weapons/launcher.php',
 
                 'flight' => '/server/flight.php',
 

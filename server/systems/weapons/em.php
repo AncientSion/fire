@@ -24,16 +24,17 @@ class EM extends Weapon {
 			//Debug::log("angle: ".$fire->angleIn);
 
 			if (($totalDmg > $negation && mt_rand(0, 1)) || ($totalDmg > $negation/2 && mt_rand(0, 3) == 3)){
-				//Debug::log("doing: ".$totalDmg." vs negation: ".$negation." - full penetration + lucky");
-				if ($fire->target->flight){
+				Debug::log("doing: ".$totalDmg." vs negation: ".$negation." - full penetration + lucky");
+				if ($fire->target->flight || $fire->target->salvo){
 					$hitSystem->crits[] = new Crit(sizeof($hitSystem->crits)+1, $hitSystem->parentId, $hitSystem->id, $fire->turn, "disengaged", -1, 1);
 					$hitSystem->destroyed = true;
 				}
-				else if ($hitSystem->weapon && !$hitSystem->isDisabled()){
-					$hitSystem->crits[] = new Crit(sizeof($hitSystem->crits)+1, $hitSystem->parentId, $hitSystem->id, $fire->turn, "disabled", 1, 1);
+				else if (is_a($hitSystem, "Primary")){
+					$reactor = $fire->target->getSystemByName("Reactor");
+					$reactor->crits[] = new Crit(sizeof($reactor->crits)+1, $reactor->parentId, $reactor->id, $fire->turn, "drain1", 1, 1);
 				}
-				else {
-					$fire->getSystemByName("Reactor")->crits[] = new Crit(sizeof($hitSystem->crits)+1, $hitSystem->parentId, $hitSystem->id, $fire->turn, "drain1", 1, 1);
+				else if ($hitSystem->weapon && !$hitSystem->isDisabled($fire->turn)){
+					$hitSystem->crits[] = new Crit(sizeof($hitSystem->crits)+1, $hitSystem->parentId, $hitSystem->id, $fire->turn, "disabled", 1, 1);
 				}
 			}
 			else { // no pen, no effect
@@ -46,7 +47,7 @@ class EM extends Weapon {
 	public function getDamageMod($fire){
 		$mod = 1;
 
-		$crit = $this->getCritPenalty($fire->turn);
+		$crit = $this->getCritMod($fire->turn);
 		$range = $this->getDmgPenaltyRange($fire);
 
 		return $mod + $crit + $range;

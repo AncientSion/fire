@@ -97,7 +97,7 @@ class Flight extends Mini {
 			$fire->dist = 0;
 			$fire->angleIn = mt_rand(0, 359);
 			$fire->hitSection = $this->getHitSection($fire);
-			$fire->req = ($this->getHitChance($fire) / 100 * $fire->weapon->getFireControlMod($fire));
+			$fire->req = ceil(($this->getHitChance($fire) / 100 * $fire->weapon->getFireControlMod($fire)));
 			$fire->weapon->rollForHit($fire);
 
 			if ($fire->hits){

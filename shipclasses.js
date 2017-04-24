@@ -1,25 +1,31 @@
-function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
-	this.id = id;
-	this.name = name;
-	this.shipType = shipType;
-	this.x = x;
-	this.y = y;
-	this.facing = facing;
-	this.faction = faction;
-	this.mass = mass;
-	this.cost = cost;
-	this.profile = profile;
-	this.size = size;
-	this.userid = userid;
-	this.shipType = shipType;
-	this.baseHitChance = Math.ceil(Math.pow(this.mass, 1/3)*5);
+function Ship(data){
+	//id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available, baseHitChance, baseImpulse
+	this.id = data.id;
+	this.name = data.name;
+	this.shipType = data.shipType;
+	this.x = data.x || 0;
+	this.y = data.y || 0;
+	this.facing = data.facing || 0;
+	this.faction = data.faction;
+	this.mass = data.mass;
+	this.cost = data.cost;
+	this.profile = data.profile;
+	this.size = data.size;
+	this.userid = data.userid;
+	this.shipType = data.shipType;
+	this.available = data.available;
+	this.baseHitChance = data.baseHitChance;
+	this.baseImpulse = data.baseImpulse;
+
+	this.ship = data.ship;
+	this.flight = data.flight;
+	this.salvo = data.salvo;
+
 	this.friendly;
 	this.deployed;
-	this.available = available;
+
 	this.primary;
-	this.ship = true;
-	this.flight = false;
-	this.salvo = false;
+
 	this.highlight = false;
 	this.destroyed = false;
 	this.element;
@@ -309,6 +315,29 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		this.setPosition();
 		this.setFacing();
 		this.setHitTable();
+		this.setInternals();
+	}
+
+	this.setInternals = function(){
+	/*	for (var i = 0; i < this.primary.systems.length; i++){
+			if (this.primary.systems[i] instanceof Reactor){
+				if (this.primary.systems[i].disabled || this.primary.systems[i].destroyed){
+					this.unpowerAllSystems();
+				}
+			}
+		}*/
+	}
+
+
+	this.unpowerAllSystems = function(){
+		for (var i = 0; i < this.structures.length; i++){
+			for (var j = 0; j < this.structures[i].systems.length; j++){
+				if (!this.structures[i].systems[j].destroyed){
+					this.structures[i].systems[j].disabled = 1;
+					this.structures[i].systems[j].setTableRow();
+				}
+			}
+		}
 	}
 
 	this.setHitTable = function(){
@@ -319,7 +348,6 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		for (var i = 0; i < this.primary.systems.length; i++){
 			if (fraction <= this.hitTable[this.primary.systems[i].name]){
 				this.primary.systems[i].exposed = 1;
-				console.log(this.primary.systems[i].name + " exposed: " + this.primary.systems[i].exposed);
 			}
 		}
 	}
@@ -512,6 +540,10 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		return cost;
 	}
 
+	this.getBaseImpulse = function(){
+		return this.baseImpulse;
+	}
+
 	this.getTotalImpulse = function(){	
 		var base = this.getBaseImpulse();
 		var change = this.getImpulseStep();
@@ -531,8 +563,8 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 	}
 
 	this.getImpulseStep = function(){
-		return 15;
-		Math.floor(this.getBaseImpulse() / 10);
+		//return 15;
+		return Math.floor(this.getBaseImpulse() / 10);
 	}
 	
 	this.getImpulseMod = function(){
@@ -1248,7 +1280,6 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 	}
 
 	this.getHitChanceFromAngle = function(angle){
-		//console.log(angle);				342
 		var a, b, c, base;
 		
 		while (angle > 90){
@@ -1258,7 +1289,7 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 			angle *= -1;
 		}
 
-		base = this.getBaseHitChance();
+		base = this.getBaseHitChance() / 100 * this.getProfileMod();
 		a = base * this.profile[0];
 		b = base * this.profile[1];
 		sub = ((90 - angle) * a) + ((angle - 0) * b);
@@ -1649,6 +1680,16 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		$(div).css("left", x).css("top", y);
 */		return div;
 	}
+
+	this.previewSetup = function(){
+		for (var i = 0; i < this.structures.length; i++){
+			for (var j = 0; j < this.structures[i].systems.length; j++){
+				if (this.structures[i].systems[j].loadout){
+					$(this.structures[i].systems[j].element).addClass("bgYellow");
+				}
+			}
+		}
+	}
 	
 	this.updateDiv = function(){
 		var divs = document.getElementsByClassName("shipDiv");
@@ -1669,43 +1710,12 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 	}
 
 	this.updateDivPower = function(system){
-		/*var divs = document.getElementsByClassName("shipDiv");
-		for (var i = 0; i < divs.length; i++){
-			if ($(divs[i]).data("shipId") == this.id){
-				var divs = divs[i];
-				break;
-			}
-		}*/
 		var reactor = this.getSystemByName("Reactor");
-		//var rFound = false;
-		//var sFound = false;
-
-		$(system.element).find(".outputMask").html(system.getOutput());
-		system.update();
-
 		var s = reactor.getOutput();
 		$(this.getSystemByName("Reactor").element).find(".outputMask").html(reactor.getOutput());
 
-		/*$(divs).find(".system").each(
-			function(){
-				if ($(this).data("systemId") == reactor.id){
-					$(this).find(".outputMask").html(reactor.getOutput());
-					//reactor.updateSystemDetailsDiv();
-					rFound = true;
-					if (rFound && sFound){
-						return;
-					}
-				}
-				else if ($(this).data("systemId") == system.id){
-					$(this).find(".outputMask").html(system.getOutput());
-					system.update();
-					sFound = true;
-					if (rFound && sFound){
-						return;
-					}
-				}
-			}
-		)*/
+		$(system.element).find(".outputMask").html(system.getOutput());
+		system.update();
 	}
 
 	this.updateNonPowerOutput = function(system){
@@ -1759,13 +1769,12 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 	}
 
 	this.selectAll = function(e, id){
-		var name = this.getSystemById(id).getImageName();
-		var dual = 0;
+		var name = this.getSystemById(id).name;
 		if (name == "Hangar"){return;}
 
 		for (var i = 0; i < this.structures.length; i++){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
-				if (this.structures[i].systems[j].getImageName() == name){
+				if (this.structures[i].systems[j].name == name){
 					if (! this.structures[i].systems[j].destroyed){
 						this.structures[i].systems[j].select(e);
 					}
@@ -1773,6 +1782,31 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 			}
 		}
 		return;
+	}
+
+	this.switchModeAll = function(id){
+		var system = this.getSystemById(id);
+		var name = system.getActiveWeapon().name;
+
+		for (var i = 0; i < this.structures.length; i++){
+			for (var j = 0; j < this.structures[i].systems.length; j++){
+				if (this.structures[i].systems[j].dual && !this.structures[i].systems[j].locked){
+					if (this.structures[i].systems[j].getActiveWeapon().name == name){
+						this.structures[i].systems[j].switchMode();
+					}
+				}
+			}
+		}
+	}
+
+	this.switchMode = function(){
+		this.resetPowers();
+		this.cycleActiveWeapon();
+		this.copyProps();
+		this.setSystemImage()
+		this.setSystemWindow();
+		this.resetDetailsDiv();
+		game.getUnitById(this.parentId).updateDivPower(this);
 	}
 
 	this.getShortInfo = function(){
@@ -1784,9 +1818,14 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		var baseHit = this.getBaseHitChance();
 		var table = document.createElement("table");
 			table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id;
-			table.insertRow(-1).insertCell(-1).innerHTML = Math.floor(this.profile[0] * baseHit) + "% - " + Math.floor(this.profile[1] * baseHit) + "%";		
 			table.insertRow(-1).insertCell(-1).innerHTML =  "Impulse: " + this.getTotalImpulse();
+			table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit: " + Math.floor(this.profile[0] * baseHit) + "% - " + Math.floor(this.profile[1] * baseHit) + "%";
+			table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit  *" + this.getProfileMod() + "%";
 			return table;
+	}
+
+	this.getProfileMod = function(){
+		return Math.floor((1+((((this.getBaseImpulse() / this.getTotalImpulse())-1)/2)))*1000)/10;
 	}
 
 	this.getIncomingBallistics = function(){
@@ -2025,69 +2064,3 @@ function Ship(id, name, shipType, x, y, facing, faction, mass, cost, profile, si
 		return powers;
 	}
 }
-
-
-function UltraHeavy(id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
-	Ship.call(this, id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available);
-	this.shipType = "UltraHeavy";
-	
-	this.getBaseImpulse = function(){
-		return 115;
-	}	
-}
-UltraHeavy.prototype = Object.create(Ship.prototype);
-
-function SuperHeavy(id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
-	Ship.call(this, id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available);
-	this.shipType = "SuperHeavy";
-	
-	this.getBaseImpulse = function(){
-		return 125;
-	}
-}
-SuperHeavy.prototype = Object.create(Ship.prototype);
-
-
-function Heavy(id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
-	Ship.call(this, id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available);
-	this.shipType = "Heavy";
-	
-	this.getBaseImpulse = function(){
-		return 135;
-	}
-}
-Heavy.prototype = Object.create(Ship.prototype);
-
-
-function Medium(id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
-	Ship.call(this, id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available);
-	this.shipType = "Medium";
-	
-	this.getBaseImpulse = function(){
-		return 150;
-	}
-}
-Medium.prototype = Object.create(Ship.prototype);
-
-
-function Light(id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
-	Ship.call(this, id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available);
-	this.shipType = "Light";
-	
-	this.getBaseImpulse = function(){
-		return 165;
-	}
-}
-Light.prototype = Object.create(Ship.prototype);
-
-
-function SuperLight(id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available, primary){
-	Ship.call(this, id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available, primary);
-	this.shipType = "SuperLight";
-	
-	this.getBaseImpulse = function(){
-		return 180;
-	}
-}
-SuperLight.prototype = Object.create(Ship.prototype);
-

@@ -1,106 +1,8 @@
-function Fighter(data){
-	this.id = data.id;
-	this.name = data.name;
-	this.ep = data.ep;
-	this.turns = data.turns;
-	this.mass = data.mass;
-	this.integrity = data.integrity;
-	this.value = data.value;
-	this.negation = data.negation;
-	this.destroyed = data.destroyed;
-	this.crits = [];
-	this.damages = [];
-	this.systems = [];
-	this.fighter = true;
-	this.highlight = false;
-	this.disabled = false;
-
-	for (var i = 0; i < data.crits.length; i++){
-		this.crits.push(new Crit(
-				data.crits[i].id,
-				data.crits[i].shipid,
-				data.crits[i].systemid,
-				data.crits[i].turn,
-				data.crits[i].type,
-				data.crits[i].duration
-			)
-		)
-	}
-	
-	this.isDestroyedThisTurn = function(){
-		if (this.disabled){
-			for (var j = this.crits.length-1; j >= 0; j--){
-				if (this.crits[j].type == "disengaged" && this.crits[j].turn == game.turn){
-					return true;
-				}
-			}
-		}
-		else if (this.destroyed){
-			for (var j = this.damages.length-1; j >= 0; j--){
-				if (this.damages[j].destroyed == 1 && this.damages[j].turn == game.turn){
-					return true;
-				}
-			}					
-		}
-		return false;
-	}
-
-	this.getRemainingIntegrity = function(){
-		var integrity = this.integrity;
-		for (var i = 0; i < this.damages.length; i++){
-			integrity -= this.damages[i].structDmg;
-		}
-		return integrity;
-	}
-
-	this.hover = function(e){
-		if (!this.highlight){
-			this.highlight = true;
-			var ele = this.getDetailsDiv();
-			$("#game").append(ele);
-			$(ele).css("left", e.clientX).css("top", e.clientY + 20)
-		}
-		else {
-			this.highlight = false;
-			$("#systemDetailsDiv").remove();
-		}
-	}
-
-	this.getDetailsDiv = function(){
-		var div = document.createElement("div");
-			div.id = "systemDetailsDiv";
-			div.className = this.id;
-
-			var table = $("<table>")
-				.append($("<tr>").append($("<th>").attr("colspan", 2).html(this.name)))
-				.append($("<tr>").append($("<td>").html("Mass / Turn Delay")).append($("<td>").html(this.mass)))
-				.append($("<tr>").append($("<td>").html("Engine Power")).append($("<td>").html(this.ep)))
-				.append($("<tr>").append($("<td>").html("Frontal Armour")).append($("<td>").html(this.negation[0])))
-				.append($("<tr>").append($("<td>").html("Side Armour")).append($("<td>").html(this.negation[1])))
-				.append($("<tr>").append($("<td>").html("Rear Armour")).append($("<td>").html(this.negation[2])))
-
-		if (this.crits.length){
-				$(table)
-					.append($("<tr>").append($("<td>").attr("colspan", 2).css("fontSize", 16).css("borderBottom", "1px solid white").css("borderTop", "1px solid white").html("Modifiers")))
-
-			for (var i = 0; i < this.crits.length; i++){
-				val = this.crits[i].html;
-				$(table)
-					.append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("negative").html(val)))
-			}
-		}
-			
-		div.appendChild(table[0]);
-		return div;
-	}
-}
-
-function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available){
-	Ship.call(this, id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available);
-	this.ship = false;
+function Flight(data){
+	Ship.call(this, data);
 	this.flight = true;
-	this.layout = [];
 	this.primary = false;
+	this.layout = [];
 	this.ep = 1000;
 	this.turns = 10;
 	this.maxTurns = 1;
@@ -320,7 +222,7 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 	}
 
 	this.launchedThisTurn = function(){
-		if (this.actions[0].turn == game.turn){
+		if (!(this.actions.length) || this.actions[0].turn == game.turn){
 			return true;
 		} return false;
 	}
@@ -501,8 +403,9 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 		
 		var table = document.createElement("table");
 			table.insertRow(-1).insertCell(-1).innerHTML = "Flight #" + this.id;
-			table.insertRow(-1).insertCell(-1).innerHTML =  this.getBaseHitChance() + "%";
-			table.insertRow(-1).insertCell(-1).innerHTML =  "Impulse: " + this.getTotalImpulse();
+			table.insertRow(-1).insertCell(-1).innerHTML = "Impulse: " + this.getTotalImpulse();
+			table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit: " +  this.getBaseHitChance() + "% ";
+			table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit  *" + this.getProfileMod() + "%";
 		return table;
 	}
 
@@ -527,7 +430,7 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 	}
 
 	this.getHitChanceFromAngle = function(angle){
-		return this.getBaseHitChance();
+		return Math.ceil(this.getBaseHitChance() / 100 * this.getProfileMod());
 	}
 
 	this.getWeaponPosition = function(fire){
@@ -542,3 +445,100 @@ function Flight(id, name, shipType, x, y, facing, faction, mass, cost, profile, 
 }
 
 Flight.prototype = Object.create(Ship.prototype);
+
+function Fighter(data){
+	this.id = data.id;
+	this.name = data.name;
+	this.ep = data.ep;
+	this.turns = data.turns;
+	this.mass = data.mass;
+	this.integrity = data.integrity;
+	this.value = data.value;
+	this.negation = data.negation;
+	this.destroyed = data.destroyed;
+	this.crits = [];
+	this.damages = [];
+	this.systems = [];
+	this.fighter = true;
+	this.highlight = false;
+	this.disabled = false;
+
+	for (var i = 0; i < data.crits.length; i++){
+		this.crits.push(new Crit(
+				data.crits[i].id,
+				data.crits[i].shipid,
+				data.crits[i].systemid,
+				data.crits[i].turn,
+				data.crits[i].type,
+				data.crits[i].duration
+			)
+		)
+	}
+	
+	this.isDestroyedThisTurn = function(){
+		if (this.disabled){
+			for (var j = this.crits.length-1; j >= 0; j--){
+				if (this.crits[j].type == "disengaged" && this.crits[j].turn == game.turn){
+					return true;
+				}
+			}
+		}
+		else if (this.destroyed){
+			for (var j = this.damages.length-1; j >= 0; j--){
+				if (this.damages[j].destroyed == 1 && this.damages[j].turn == game.turn){
+					return true;
+				}
+			}					
+		}
+		return false;
+	}
+
+	this.getRemainingIntegrity = function(){
+		var integrity = this.integrity;
+		for (var i = 0; i < this.damages.length; i++){
+			integrity -= this.damages[i].structDmg;
+		}
+		return integrity;
+	}
+
+	this.hover = function(e){
+		if (!this.highlight){
+			this.highlight = true;
+			var ele = this.getDetailsDiv();
+			$("#game").append(ele);
+			$(ele).css("left", e.clientX).css("top", e.clientY + 20)
+		}
+		else {
+			this.highlight = false;
+			$("#systemDetailsDiv").remove();
+		}
+	}
+
+	this.getDetailsDiv = function(){
+		var div = document.createElement("div");
+			div.id = "systemDetailsDiv";
+			div.className = this.id;
+
+			var table = $("<table>")
+				.append($("<tr>").append($("<th>").attr("colspan", 2).html(this.name)))
+				.append($("<tr>").append($("<td>").html("Mass / Turn Delay")).append($("<td>").html(this.mass)))
+				.append($("<tr>").append($("<td>").html("Engine Power")).append($("<td>").html(this.ep)))
+				.append($("<tr>").append($("<td>").html("Frontal Armour")).append($("<td>").html(this.negation[0])))
+				.append($("<tr>").append($("<td>").html("Side Armour")).append($("<td>").html(this.negation[1])))
+				.append($("<tr>").append($("<td>").html("Rear Armour")).append($("<td>").html(this.negation[2])))
+
+		if (this.crits.length){
+				$(table)
+					.append($("<tr>").append($("<td>").attr("colspan", 2).css("fontSize", 16).css("borderBottom", "1px solid white").css("borderTop", "1px solid white").html("Modifiers")))
+
+			for (var i = 0; i < this.crits.length; i++){
+				val = this.crits[i].html;
+				$(table)
+					.append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("negative").html(val)))
+			}
+		}
+			
+		div.appendChild(table[0]);
+		return div;
+	}
+}

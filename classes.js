@@ -234,7 +234,7 @@ function Ammo(data){
 	}
 }
 
-function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
+function Salvo(id, userid, targetid, name, amount, status, destroyed, actions, baseImpulse){
 	this.id = id;
 	this.userid = userid;
 	this.targetid = targetid;
@@ -243,6 +243,7 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 	this.status = status;
 	this.destroyed = destroyed;
 	this.actions = actions;
+	this.baseImpulse = baseImpulse;
 	this.shortInfo = false;
 	this.selected = false;
 	this.structures = [];
@@ -336,11 +337,11 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 	}
 
 	this.getBaseImpulse = function(){
-		return this.structures[0].impulse
+		return this.baseImpulse;
 	}
 
 	this.getAccelSteps = function(){
-		return this.actions.length;
+		return this.actions.length-1;
 	}
 
 	this.getMaxImpulse = function(){
@@ -348,7 +349,7 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 	}
 
 	this.getTotalImpulse = function(){
-		return Math.min(this.getMaxImpulse(), this.getBaseImpulse()*this.getAccelSteps());
+		return Math.floor(this.baseImpulse + (this.baseImpulse / 2 * this.getAccelSteps()));
 	}
 
 	this.createDiv = function(){
@@ -385,7 +386,7 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions){
 			.append($("<tr>")
 	    		.append($("<td>").html(this.getDamage()))
 	    		.append($("<td>").html(this.structures[0].armour))
-	    		.append($("<td>").html(this.getBaseImpulse() + " x" + this.getAccelSteps() + " - max: " + this.getMaxImpulse()))
+	    		.append($("<td>").html(this.getBaseImpulse() + " + " + Math.floor(this.getBaseImpulse()/2) + " per Turn."))
 	    		.append($("<td>").html(this.structures[0].fc[0] + "% / " + this.structures[0].fc[1] + "%"))
 			)
 

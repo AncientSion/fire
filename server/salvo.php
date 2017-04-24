@@ -133,6 +133,7 @@ class Salvo extends Mini {
 	public $index = 0;
 	public $actions = array();
 	public $structures = array();
+	public $baseImpulse;
 
 	function __construct($id, $userid, $targetid, $name, $status, $amount, $destroyed){
 		$this->id = $id;
@@ -149,6 +150,8 @@ class Salvo extends Mini {
 
 	public function setProps(){
 		$this->baseHitChance = ceil(sqrt($this->structures[0]->mass)*10);
+		$this->baseImpulse = ceil(pow($this->structures[0]->mass, -0.5)*250);
+
 	}
 
 	public function getHitChance($fire){
@@ -204,7 +207,7 @@ class Salvo extends Mini {
 	}
 
 	public function getBaseImpulse(){
-		return $this->structures[0]->impulse;
+		return $this->baseImpulse;
 	}
 
 	public function getMaxImpulse(){
@@ -212,12 +215,12 @@ class Salvo extends Mini {
 	}
 
 	public function getAccelSteps(){
-		return sizeof($this->actions);
+		return sizeof($this->actions)-1;
 	}
 
 	public function getImpulse(){
 		Debug::log("salvo #".$this->id." impulse: ".min($this->getMaxImpulse(), $this->getBaseImpulse() * $this->getAccelSteps()));
-		return min($this->getMaxImpulse(), $this->getBaseImpulse() * $this->getAccelSteps());
+		return $this->baseImpulse + ($this->baseImpulse / 2 * $this->getAccelSteps());
 	}
 
 	public function resolveBallisticFireOrder($fire){
@@ -241,7 +244,7 @@ class Salvo extends Mini {
 		else {
 			$fire->dist = $this->getInterceptHitDist($fire);
 			$fire->hitSection = $this->getHitSection($fire);
-			$fire->req = ($this->getHitChance($fire) / 100 * $fire->weapon->getFireControlMod($fire)) - $fire->weapon->getAccLoss($fire->dist);
+			$fire->req = ceil(($this->getHitChance($fire) / 100 * $fire->weapon->getFireControlMod($fire)) - $fire->weapon->getAccLoss($fire->dist));
 
 			$fire->weapon->rollForHit($fire);
 

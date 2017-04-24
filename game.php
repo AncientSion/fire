@@ -261,7 +261,7 @@ foreach ($manager->playerstatus as $player){
 								echo '<th colSpan=3 id="confirmOrders" style="background-color: yellow;">Anonymus Mode</th>';
 							}
 							else if ($status == "ready"){
-								echo '<th colSpan=3 id="confirmOrders" style="background-color: red;">Waiting for Opponent</th>';
+								echo '<th colSpan=3 id="confirmOrders" style="background-color: lightGreen;">Waiting for Opponent</th>';
 							}
 							else {
 								echo '<th colSpan=3 id="confirmOrders" onclick="this.disabled=true;game.endPhase()">Confirm Orders</th>';

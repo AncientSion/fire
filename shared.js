@@ -173,7 +173,7 @@ function setFPS(fps){
 
 function initiateShip(i){
 
-	var ship = new window[window.ships[i].shipType](
+	/*var ship = new window[window.ships[i].shipType](
 		window.ships[i].id,
 		window.ships[i].name,
 		window.ships[i].shipType,
@@ -186,9 +186,12 @@ function initiateShip(i){
 		window.ships[i].profile,
 		window.ships[i].size,
 		window.ships[i].userid,
-		window.ships[i].available
-	)
+		window.ships[i].available,
+		window.ships[i].baseHitChance,
+		window.ships[i].baseImpulse
+	)*/
 
+	var ship = new window[window.ships[i].shipType](window.ships[i]);
 
 	if (! ship.flight){
 		ship.hitTable = window.ships[i].hitTable
@@ -275,7 +278,8 @@ function initiateBallistic(i){
 			window.ballistics[i].amount,
 			window.ballistics[i].status,
 			window.ballistics[i].destroyed,
-			window.ballistics[i].actions
+			window.ballistics[i].actions,
+			window.ballistics[i].baseImpulse
 			);
 
 	for (var j = 0; j < window.ballistics[i].structures.length; j++){

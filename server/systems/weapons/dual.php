@@ -13,39 +13,55 @@ class Dual extends Weapon {
 		parent::__construct($id, $parentId, $start, $end, 0, $destroyed);
 
 		for ($i = 0; $i < sizeof($modes); $i++){
-			$id = (string)($this->id * 100).(string)$i;
-
-			$this->modes[] = $modes[$i];
 			$this->states[] = 0;
+			$this->modes[] = $modes[$i];
 			$this->weapons[] = new $modes[$i]($i, $parentId, $start, $end, 0, 0);
-		}
-	}
-
-	public function getActiveSystem(){
-		for ($i = 0; $i < sizeof($this->states); $i++){
-			if ($this->states[$i]){
-				return $this->weapons[$i];
-			}
 		}
 	}
 
 	public function setState($turn){
 		parent::setState($turn);
-		//echo "</br>system ".$this->id."</br>";
+		$this->setActiveSystem($turn);
+		$this->setProps();
 
-		for ($i = 0; $i < sizeof($this->powers); $i++){
-			if ($this->powers[$i]->turn == $turn){
-				if ($this->powers[$i]->type < 0){
-					//echo "type: ".$this->powers[$i]->type;
-					$index = -($this->powers[$i]->type+1);
-					$this->states[$index] = 1;
-				}
-				else if ($this->powers[$i]->type == 1){
-					$this->getActiveSystem()->addPowerEntry($this->powers[$i]);
+		//if ($this->id == 16 && $this->parentId == 4){var_export($this->getActiveSystem());}
+	}
+
+	public function setActiveSystem($turn){
+		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
+			if ($this->powers[$i]->type < 0){
+				if ($this->powers[$i]->turn == $turn || $this->powers[$i]->turn == $turn-1){
+					$this->states[abs($this->powers[$i]->type)-1] = 1;
+					return;
 				}
 			}
 		}
-		//echo $this->getActiveSystem()->name;
+		$this->powers[] = new Power(0, $this->parentId, $this->id, $turn, -1, 0);
+		$this->powers[sizeof($this->powers)-1]->new = 1;
+		$this->states[0] = 1;
+	}
+
+	public function getActiveSystem(){
+		//echo "getActiveSystem ".$this->parentId."/".$this->id."</br>";
+		//var_Export($this->states); echo "<br>";
+		//var_export($this->powers);echo "<br>";
+		for ($i = 0; $i < sizeof($this->states); $i++){
+			if ($this->states[$i]){
+				//echo "returning </br>";
+				return $this->weapons[$i];
+			}
+		}
+		Debug::log($this->parentId."/".$this->id." CANT RETURN ACTIVE WEAPON");
+	}
+
+	public function setProps(){
+		for ($i = 0; $i < sizeof($this->states); $i++){
+			if ($this->states[$i]){
+				$this->weapons[$i]->powers = $this->powers;
+				$this->weapons[$i]->crits = $this->crits;
+				return;
+			}
+		}
 	}
 }
 

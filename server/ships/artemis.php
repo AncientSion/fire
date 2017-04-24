@@ -25,13 +25,13 @@ class Artemis extends Medium {
 		$right = new Structure($this->getId(), $this->id, 60, 180, 350, 22);
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 24, array("LightPulse", "LightParticleBeam"));
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 24, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 120, 8, 2, array("Barracuda", "Myrmidon"));
+		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 120, 8, 2, array("Naga", "Cyclops"));
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 350, 22);
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 24, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 24, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 240, 60, 8, 2, array("Barracuda", "Myrmidon"));
+		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 240, 60, 8, 2, array("Naga", "Cyclops"));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -40,7 +40,7 @@ class Artemis extends Medium {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 925);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 850);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 95);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 95, 75, 4);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 95);

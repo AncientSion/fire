@@ -24,8 +24,8 @@ class Matter extends Weapon {
 class MediumRailGun extends Matter {
 	public $name = "MediumRailGun";
 	public $display = "127mm Rail Gun";
-	public $minDmg = 46;
-	public $maxDmg = 58;
+	public $minDmg = 39;
+	public $maxDmg = 51;
 	public $accDecay = 90;
 	public $shots = 2;
 	public $animColor = "grey";
@@ -33,9 +33,9 @@ class MediumRailGun extends Matter {
 	public $projSpeed = 13;
 	public $exploSize = 5;
 	public $reload = 2;
-	public $integrity = 45;
 	public $fc = array(0 => 100, 1 => 80);
 	public $mass = 20;
+	public $powerReq = 4;
 
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
@@ -46,18 +46,18 @@ class MediumRailGun extends Matter {
 class HeavyRailGun extends Matter {
 	public $name = "HeavyRailGun";
 	public $display = "203mm Rail Gun";
-	public $minDmg = 82;
-	public $maxDmg = 108;
+	public $minDmg = 66;
+	public $maxDmg = 84;
 	public $accDecay = 65;
 	public $shots = 2;
 	public $animColor = "grey";
 	public $projSize = 4;
 	public $projSpeed = 10;
-	public $exploSize = 8;
+	public $exploSize = 6.5;
 	public $reload = 3;
-	public $integrity = 75;
 	public $fc = array(0 => 130, 1 => 85);
 	public $mass = 26;
+	public $powerReq = 6;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

@@ -15,12 +15,14 @@ window.preLoadBallistics = function(){
 	window.ballImages.javelin = new Image();
 	window.ballImages.javelin.src = "ballIcons/hasta.png";
 
-	window.ballImages.barracuda = new Image();
-	window.ballImages.barracuda.src = "ballIcons/barracuda.png";
-	window.ballImages.myrmidon = new Image();
-	window.ballImages.myrmidon.src = "ballIcons/barracuda.png";
-	window.ballImages.zeus = new Image();
-	window.ballImages.zeus.src = "ballIcons/barracuda.png";
+	window.ballImages.patriot = new Image();
+	window.ballImages.patriot.src = "ballIcons/patriot.png";
+	window.ballImages.naga = new Image();
+	window.ballImages.naga.src = "ballIcons/naga.png";
+	window.ballImages.cyclops = new Image();
+	window.ballImages.cyclops.src = "ballIcons/cyclops.png";
+	window.ballImages.titan = new Image();
+	window.ballImages.titan.src = "ballIcons/titan.png";
 }
 
 

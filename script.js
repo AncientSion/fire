@@ -59,7 +59,7 @@ function init(){
 	ca.style.width = 100; ca.style.height = 100;
 	*/
 
-
+	console.time("time");
 	game = new Game(gd.id, gd.name, gd.status, userid, gd.turn, gd.phase);
 	for (var i = 0; i < window.playerstatus.length; i++){
 		if (userid == window.playerstatus[i].userid){
@@ -68,6 +68,8 @@ function init(){
 		}
 	}
 	game.create();
+
+	console.timeEnd("time");
 }
 
 function executeAll(){
@@ -161,6 +163,13 @@ function canvasMouseMove(e){
 				vessel = false;
 			}
 
+			var tr = table.insertRow(-1);
+				tr.insertCell(-1).textContent = "Target";
+				tr.insertCell(-1).textContent = "Base Chance";
+				tr.insertCell(-1).textContent = "Dist";
+				tr.className = "weaponAimHeader";
+			table.appendChild(tr);
+
 			if (vessel){
 				if (vessel.userid != ship.userid){
 					if (vessel instanceof Salvo){ // aiming at SALVO
@@ -183,13 +192,6 @@ function canvasMouseMove(e){
 					var baseHit = vessel.getHitChanceFromAngle(angle);
 
 					var tr = table.insertRow(-1);
-						tr.insertCell(-1).textContent = "Target";
-						tr.insertCell(-1).textContent = "Base Chance";
-						tr.insertCell(-1).textContent = "Dist";
-						tr.className = "weaponAimHeader";
-					table.appendChild(tr);
-
-					var tr = table.insertRow(-1);
 						tr.insertCell(-1).textContent = vessel.name + " " + vessel.id;
 						tr.insertCell(-1).textContent = baseHit + "%";
 						tr.insertCell(-1).textContent = dist;
@@ -199,6 +201,12 @@ function canvasMouseMove(e){
 			}
 			else {
 				dist = Math.floor(getDistance(shipLoc, pos));
+
+				var tr = table.insertRow(-1);
+					tr.insertCell(-1);
+					tr.insertCell(-1);
+					tr.insertCell(-1).textContent = dist;
+				table.appendChild(tr);
 			}
 
 			var table = document.getElementById("weaponInfo");

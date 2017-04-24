@@ -10,6 +10,10 @@ function System(system){
 	this.maxBoost = system.maxBoost;
 	this.boostEffect = system.boostEffect;
 	this.armourMod = system.armourMod;
+	this.disabled = system.disabled;
+	if (system.disabled){
+		console.log("ding");
+	}
 	this.crits = [];
 	this.damages = [];
 	this.detailsTable = false;
@@ -27,599 +31,627 @@ function System(system){
 	this.armour;
 	this.type = system.type || "Internal";
 	this.dual = 0;
-
-	this.getSystem = function(){
-		return this;
+	this.locked = 0;
+	this.loadout = 0;
+	this.loaded = 0;
+}
+System.prototype.setState = function(){
+	if (this.isDestroyed()){
+		this.destroyed = true;
 	}
-
-	this.getActiveWeapon = function(){
-		return this;
-	}
-	
-	this.hover = function(e){
-		if (game.flightDeploy){return false;}
-		if (this.highlight){
-			this.highlight = false;
-			this.hideInfoDiv(e);
-			this.hideOptions();
-		}
-		else {
-			this.highlight = true;
-			this.showInfoDiv(e);
-			this.showOptions();
-		}
-		if (this instanceof Hangar){
-			if (game.getUnitById(this.parentId).hasWeaponsSelected()){
-				return;
-			}
-			else if (this.highlight){
-				this.drawArc();
-			}
-			else fxCtx.clearRect(0, 0, res.x, res.y);
-		}
-		else if (!game.getUnitById(this.parentId).hasHangarSelected()){
-			game.getUnitById(this.parentId).highlightAllSelectedWeapons();
-		}
-	}
-
-	this.setTableRow = function(){
-		var ele = $(this.element);
-		if (this.destroyed){
-			ele.addClass("destroyed");
-		} else ele.removeClass("destroyed");
-
-		if (this.disabled){
-			ele.addClass("unpowered").find(".boostDiv").hide().end().find(".outputMask").hide();
-		} else if (this.effiency){
-			ele.removeClass("unpowered").find(".boostDiv").show().end().find(".outputMask").show();
-		} else {			
-			ele.removeClass("unpowered");
-		}
-	}
-
-	this.setSystemBorder = function(){
-		var ele = $(this.element);
-		if (this.hasUnresolvedFireOrder()){
-			ele.addClass("fireOrder");
-		} else ele.removeClass("fireOrder");
-		if (this.selected){
-			ele.addClass("selected");
-		} else ele.removeClass("selected");
-	}
-
-	this.canFire = function(){
-		if (this.destroyed || this.disabled){
-			return false;
-		}
-		else if (game.phase == -2){
-			return false;
-		}
-		if (this instanceof Launcher && game.phase == -1 || this instanceof Hangar && game.phase == -1 || this instanceof Weapon && game.phase == 2){
-			if (this.getLoadLevel() >= 1){
-				return true;
+	else {
+		this.setTimeLoaded();
+		if (game.phase == -1 && game.turn > 1){
+			for (var i = this.powers.length-1; i >= 0; i--){
+				if (this.powers[i].turn == game.turn-1){
+					//if (this.getLoadLevel() >= 1){
+						this.copyPowers();
+						break;
+					//}
+				}
+				else if (this.powers[i].turn < game.turn -1){
+					break;
+				}
 			}
 		}
+		if (this.isUnpowered()){
+			this.disabled = true;
+		}
+	}
+	this.adjustStateByCritical();
+}
+System.prototype.getSystem = function(){
+	return this;
+}
+System.prototype.getActiveWeapon = function(){
+	return this;
+}
+System.prototype.hover = function(e){
+	if (game.flightDeploy){return false;}
+	if (this.highlight){
+		this.highlight = false;
+		this.hideInfoDiv(e);
+		this.hideOptions();
+	}
+	else {
+		this.highlight = true;
+		this.showInfoDiv(e);
+		this.showOptions();
+	}
+	if (this instanceof Hangar){
+		if (game.getUnitById(this.parentId).hasWeaponsSelected()){
+			return;
+		}
+		else if (this.highlight){
+			this.drawArc();
+		}
+		else fxCtx.clearRect(0, 0, res.x, res.y);
+	}
+	else if (!game.getUnitById(this.parentId).hasHangarSelected()){
+		game.getUnitById(this.parentId).highlightAllSelectedWeapons();
+	}
+}
+System.prototype.setTableRow = function(){
+	var ele = $(this.element);
+	if (this.destroyed){
+		ele.addClass("destroyed");
+	} else ele.removeClass("destroyed");
+
+	if (this.disabled){
+		ele.addClass("unpowered").find(".boostDiv").hide().end().find(".outputMask").hide();
+	} else if (this.effiency){
+		ele.removeClass("unpowered").find(".boostDiv").show().end().find(".outputMask").show();
+	} else {			
+		ele.removeClass("unpowered");
+	}
+}
+System.prototype.setSystemBorder = function(){
+	var ele = $(this.element);
+	if (this.hasUnresolvedFireOrder()){
+		ele.addClass("fireOrder");
+	} else ele.removeClass("fireOrder");
+	if (this.selected){
+		ele.addClass("selected");
+	} else ele.removeClass("selected");
+}
+System.prototype.canFire = function(){
+	if (this.destroyed || this.disabled){
 		return false;
 	}
-
-	this.getLoadLevel = function(){
-		var need = this.reload;
-		var has = this.getTimeLoaded();
-		if (has / need > 1){
-			return 1;
-		}
-		else if (has > 0){
-			return has/need;
-		}
-		else return has;
+	else if (game.phase == -2){
+		return false;
 	}
+	if (this instanceof Launcher && game.phase == -1 || this instanceof Hangar && game.phase == -1 || this instanceof Weapon && game.phase == 2){
+		if (this.getLoadLevel() >= 1){
+			return true;
+		}
+	}
+	return false;
+}
+System.prototype.getLoadLevel = function(){
+	var need = this.reload;
+	var has = this.getTimeLoaded();
+	if (has / need > 1){
+		return 1;
+	}
+	else return has/need;
+}
+System.prototype.setTimeLoaded = function(){
+	var turnsLoaded = this.reload
+	var max = this.reload;
+	//var start = game.getUnitById(this.parentId).available;
 
-	this.getTimeLoaded = function(){
-		var turnsLoaded = this.reload
-		var max = this.reload;
-		for (var i = 1; i <= game.turn; i++){
-			if (turnsLoaded < max){
-				turnsLoaded++;
+	for (var i = 1; i <= game.turn; i++){
+		if (turnsLoaded < max){
+			turnsLoaded++;
+		}
+		for (var j = 0; j < this.fireOrders.length; j++){
+			if (this.fireOrders[j].turn == i && this.fireOrders[j].resolved == 1){
+				turnsLoaded = 0;
+				break;
 			}
-			for (var j = 0; j < this.fireOrders.length; j++){
-				if (this.fireOrders[j].turn == i && this.fireOrders[j].resolved == 1){
+		}
+		if (turnsLoaded){
+			for (var j = 0; j < this.powers.length; j++){
+				if (this.powers[j].turn == i && this.powers[j].type == 0){
 					turnsLoaded = 0;
 					break;
 				}
 			}
 		}
-		return turnsLoaded;
 	}
-
-	this.getBoostLevel = function(){
-		var level = 0;
-		for (var i = this.powers.length-1; i >= 0; i--){
-			if (this.powers[i].turn == game.turn && this.powers[i].type == 1){
-				level++;
-			}
-			else if (this.powers[i].turn != game.turn){
-				return level;
-			}
+	this.loaded = turnsLoaded;
+}
+System.prototype.getTimeLoaded = function(){
+	return this.loaded;
+}
+System.prototype.getBoostLevel = function(){
+	var level = 0;
+	for (var i = this.powers.length-1; i >= 0; i--){
+		if (this.powers[i].turn == game.turn && this.powers[i].type == 1){
+			level++;
 		}
-		return level;
-	}
-
-	this.getBoostEffect = function(){
-		if (this.boostEffect){
-			return "+" + this.boostEffect.value + "% " + this.boostEffect.type;
-		}
-		else return "MISSING";
-	}
-
-	this.getBoostDiv = function(){
-		if (!this.destroyed){
-			if (this.effiency){
-				var div = document.createElement("div");
-					div.className = "boostDiv disabled";
-					$(div).data("shipId", this.parentId);
-					$(div).data("systemId", this.id);
-				var subDiv = document.createElement("div");
-					subDiv.className = "plus";
-					subDiv.innerHTML = "<img src='varIcons/plus.png'</img>";
-					subDiv.childNodes[0].className = "img100pct";
-					$(subDiv).bind("click", function(e){
-						e.stopPropagation();
-						if (game.phase != -1){return;}
-						var data = $(this.parentNode).data();
-						game.getUnitById(data.shipId).getSystemById(data.systemId).plus();
-					});
-					div.appendChild(subDiv);
-				var subDiv = document.createElement("div");
-					subDiv.className = "minus";
-					subDiv.innerHTML = "<img src='varIcons/minus.png'</img>";
-					subDiv.childNodes[0].className = "img100pct";
-					$(subDiv).bind("click", function(e){
-						e.stopPropagation();
-						if (game.phase != -1){return;}
-						var data = $(this.parentNode).data();
-						game.getUnitById(data.shipId).getSystemById(data.systemId).minus();
-					});
-					div.appendChild(subDiv);
-				return div;
-			}
-			else return false;
+		else if (this.powers[i].turn != game.turn){
+			return level;
 		}
 	}
-
-	this.getPowerDiv = function(){
-		if (!this.destroyed){
-			if (this.powerReq){
-				var div = document.createElement("div");
-					div.className = "powerDiv disabled";
-					$(div).data("shipId", this.parentId);
-					$(div).data("systemId", this.id);
-				var subDiv = document.createElement("div");
-					subDiv.className = "plus";
-					subDiv.innerHTML = "<img src='varIcons/power.png'</img>";
-					subDiv.childNodes[0].className = "img100pct";
-					$(subDiv).bind("click", function(e){
-						e.stopPropagation();
-						if (game.phase != -1){return;}
-						var data = $(this.parentNode).data();
-						game.getUnitById(data.shipId).getSystemById(data.systemId).doPower();
-					});
-					div.appendChild(subDiv);
-				var subDiv = document.createElement("div");
-					subDiv.className = "minus";
-					subDiv.innerHTML = "<img src='varIcons/unpower.png'</img>";
-					subDiv.childNodes[0].className = "img100pct";
-					$(subDiv).bind("click", function(e){
-						e.stopPropagation();
-						if (game.phase != -1){return;}
-						var data = $(this.parentNode).data();
-						game.getUnitById(data.shipId).getSystemById(data.systemId).doUnpower();
-					});
-					div.appendChild(subDiv);
-				return div;
-			}
-			else return false;
-		}
+	return level;
+}
+System.prototype.getTimeLoaded = function(){
+	return this.loaded;
+}
+System.prototype.getBoostEffect = function(){
+	if (this.boostEffect){
+		return "+" + this.boostEffect.value + "% " + this.boostEffect.type;
 	}
-
-	this.getModeDiv = function(){
-		if (!Object.keys(this.modes).length){return;}
-		var div = document.createElement("div");
-			div.className = "modeDiv disabled";
-			$(div).data("shipId", this.parentId);
-			$(div).data("systemId", this.id);
-		var subDiv = document.createElement("div");
-			subDiv.className = "mode";
-			subDiv.innerHTML = "<img src='varIcons/mode.png'</img>";
-			subDiv.childNodes[0].className = "img100pct";
-			$(subDiv).bind("click", function(e){
-				e.stopPropagation();
-				//if (game.phase != -1){return;}
-				var data = $(this.parentNode).data();
-				game.getUnitById(data.shipId).getSystemById(data.systemId).switchMode();
-			});
-			div.appendChild(subDiv);
-		return div;
-	}
-
-	this.canUnboost = function(){
-		if (this.powers.length){
-			if (this.powers[this.powers.length-1].turn == game.turn){
-				if (this.powers[this.powers.length-1].type > 0){
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	this.doUnboost = function(){
-		this.powers.splice(this.powers.length-1, 1);
-		return true;
-	}
-
-	this.doBoost = function(){
-		this.powers.push({
-			id: this.powers.length+1, unitid: this.parentId, systemid: this.id,
-			turn: game.turn,type: 1, cost: this.getEffiency(), new: 1
-		})
-	}
-
-	this.isPowered = function(){
-		if (this.destroyed || this.disabled){
-			return false;
-		}
-		else if (this.powers.length){
-			if (this.powers[this.powers.length-1].turn == game.turn){
-				if (this.powers[this.powers.length-1].type == 0){
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-
-	this.isUnpowered = function(){
-		if (!this.isPowered()){
-			return true;
+	else return "MISSING";
+}
+System.prototype.getBoostDiv = function(){
+	if (!this.destroyed){
+		if (this.effiency){
+			var div = document.createElement("div");
+				div.className = "boostDiv disabled";
+				$(div).data("shipId", this.parentId);
+				$(div).data("systemId", this.id);
+			var subDiv = document.createElement("div");
+				subDiv.className = "plus";
+				subDiv.innerHTML = "<img src='varIcons/plus.png'</img>";
+				subDiv.childNodes[0].className = "img100pct";
+				$(subDiv).bind("click", function(e){
+					e.stopPropagation();
+					if (game.phase != -1){return;}
+					var data = $(this.parentNode).data();
+					game.getUnitById(data.shipId).getSystemById(data.systemId).plus();
+				});
+				div.appendChild(subDiv);
+			var subDiv = document.createElement("div");
+				subDiv.className = "minus";
+				subDiv.innerHTML = "<img src='varIcons/minus.png'</img>";
+				subDiv.childNodes[0].className = "img100pct";
+				$(subDiv).bind("click", function(e){
+					e.stopPropagation();
+					if (game.phase != -1){return;}
+					var data = $(this.parentNode).data();
+					game.getUnitById(data.shipId).getSystemById(data.systemId).minus();
+				});
+				div.appendChild(subDiv);
+			return div;
 		}
 		else return false;
 	}
-
-	this.canUnpower = function(){
-		if (this.powerReq && this.isPowered()){
-			return true;
-		} else return false;
-	}
-
-	this.canPower = function(){
-		if (this.powerReq && !this.isPowered()){
-			return true;
-		} else return false;
-	}
-
-	this.doUnpower = function(){
-		if (this.selected){
-			this.select();
-		}
-		if (!this.disabled){
-			for (var i = this.powers.length-1; i >= 0; i--){
-				if (this.powers[i].turn == game.turn){
-					this.powers.splice(i, 1);
-				}
-			}
-
-			this.powers.push({
-				id: this.powers.length+1, unitid: this.parentId, systemid: this.id,
-				turn: game.turn, type: 0, cost: 0, new: 1
-			})
-			this.disabled = 1;
-			this.doUndoActions();
-			this.setTableRow();
-			this.setSystemBorder();
-			game.getUnitById(this.parentId).updateDivPower(this);
-		}
-	}
-
-	this.doPower = function(){
-		if (this.powers.length && this.powers[this.powers.length-1].type == 0){
-			this.powers.splice(this.powers.length-1, 1);
-			this.disabled = 0;
-			this.setTableRow();
-			game.getUnitById(this.parentId).updateDivPower(this);
-		}
-	}
-
-	this.plus = function(){
-		var ship = game.getUnitById(this.parentId);
-		if (ship.canBoost(this)){
-			this.doBoost();
-			ship.updateDivPower(this);
-			return true;
-		}
-		return false;
-	}
-
-	this.minus = function(){
-		if (this.canUnboost()){
-			this.doUnboost()
-			game.getUnitById(this.parentId).updateDivPower(this);
-			return true;
-		}
-		return false;
-	}
-
-	this.showOptions = function(){
-		if (this.destroyed || this.dual && this.locked){return;}
-		var ele = $(this.element);
-		
-		/*if (game.phase == -2 &&
-			if (Object.keys(this.modes).length){
-				ele.find(".modeDiv").show();
-			}
-		}*/
-		if (game.phase == -1){
-			if (game.getUnitById(this.parentId).userid == game.userid){
-				var boost = this.effiency;
-				var canModeChange = Object.keys(this.modes).length;
-				var canPower = this.canPower();
-				var canUnpower = this.canUnpower();
-				if (canPower){
-					boost = false;
-				}
-				else if (boost){
-					if (this.getLoadLevel() != 1){
-						boost = false;
-					}
-				}
-
-				if (boost || canModeChange || canPower || canUnpower){
-					if (boost){
-						ele.find(".boostDiv").show();
-					}
-					if (canModeChange){
-						ele.find(".modeDiv").show();
-					}
-					if (canPower || canUnpower){
-						ele.find(".powerDiv").show();
-					}
-				}
-			}
-		}
-		/*else if (game.phase == 2){
-			if (Object.keys(this.modes).length){
-				$(ele).find(".boostDiv").show().end().find(".modeDiv").show().end().find(".powerDiv").show();
-			}
-		}*/
-	}
-
-	this.hideOptions = function(){
-		if (this.destroyed){return;}
-		var ele = $(this.element);
-
-		if (game.phase == -2){
-			if (Object.keys(this.modes).length){
-				ele.find(".modeDiv").hide();
-			}
-		}
-		if (game.phase == -1){
-			if (game.getUnitById(this.parentId).userid == game.userid){
-				var boost = this.effiency;
-				var canPower = this.canPower();
-				var canUnpower = this.canUnpower();
-
-				if (boost || canPower || canUnpower){
-					$(ele).find(".boostDiv").hide().end().find(".modeDiv").hide().end().find(".powerDiv").hide();
-					return;
-				}
-			}
-		}
-		/*else if (game.phase == 2){
-			if (Object.keys(this.modes).length){
-				$(ele).find(".boostDiv").hide().end().find(".modeDiv").hide().end().find(".powerDiv").hide();
-			}
-		}*/
-	}
-
-	this.showInfoDiv = function(e){
-		$(document.body).append(
-			$(this.getSystemDetailsDiv())
-				.css("left", e.clientX - 90)
-				.css("top", e.clientY + 50)
-			)
-		return;
-	}
-	
-	this.setFireOrder = function(targetid){
-		this.fireOrders.push(
-			{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, 
-			shots: this.getShots(), req: -1, notes: "", hits: -1, resolved: 0}
-		);
-		this.selected = false;
-		this.highlight = false;
-		this.setSystemBorder();
-	}
-
-	this.unsetFireOrder = function(){
-		for (var i = this.fireOrders.length-1; i >= 0; i--){
-			if (this.fireOrders[i].turn == game.turn){
-				this.fireOrders.splice(i, 1);
-			}
-		}
-		this.setSystemBorder();
-	}
-
-	this.hideInfoDiv = function(){
-		$("#systemDetailsDiv").remove();
-	}
-
-	this.getImageName = function(){
-		return this.name;
-	}
-
-	this.canBeBoosted = function(){
-		return this.effiency;
-	}
-
-	this.getTableData = function(forFighter){
-		var td = document.createElement("td");
-			td.className = "system";
-
-		var img = new Image();
-		var file = "sysIcons/" + this.getImageName();
-		if (forFighter){file += this.linked;}
-		else {img.className = "sysIcon";}
-			file += ".png";
-			img.src = file;
-		td.appendChild(img);
-
-		var div = document.createElement("div");
-			div.className = "loadLevel";
-		//	if (this.weapon){div.style.width = this.getLoadLevel() * 100 + "%"}
-		//	else {div.style.width = 100 + "%"};
-			div.style.width = this.getLoadLevel() * 100 + "%";
-			td.appendChild(div);
-
-		var div = document.createElement("div");
-			div.className = "bgloadlevel";
-			td.appendChild(div);
-
-			$(td).data("systemId", this.id);
-
-		if (!forFighter){
-			var lowerDiv = document.createElement("div");
-				lowerDiv.className = "integrityNow";
-				lowerDiv.style.width = this.getRemainingIntegrity() /  this.integrity * 100 + "%";
-				td.appendChild(lowerDiv);
-
+}
+System.prototype.getPowerDiv = function(){
+	if (!this.destroyed){
+		if (this.powerReq){
 			var div = document.createElement("div");
-				div.className = "integrityFull";
-				td.appendChild(div);
-
-			if (!this.destroyed){
-				if (this instanceof PrimarySystem || this.canBeBoosted()){
-					var outputDiv = document.createElement("div");
-						outputDiv.className = "outputMask";
-						//output.innerHTML = "<span>" + this.outputp + "</span>";
-						outputDiv.innerHTML = this.getOutput();
-						td.appendChild(outputDiv);
-				}
-			}
+				div.className = "powerDiv disabled";
+				$(div).data("shipId", this.parentId);
+				$(div).data("systemId", this.id);
+			var subDiv = document.createElement("div");
+				subDiv.className = "plus";
+				subDiv.innerHTML = "<img src='varIcons/power.png'</img>";
+				subDiv.childNodes[0].className = "img100pct";
+				$(subDiv).bind("click", function(e){
+					e.stopPropagation();
+					if (game.phase != -1){return;}
+					var data = $(this.parentNode).data();
+					game.getUnitById(data.shipId).getSystemById(data.systemId).doPower();
+				});
+				div.appendChild(subDiv);
+			var subDiv = document.createElement("div");
+				subDiv.className = "minus";
+				subDiv.innerHTML = "<img src='varIcons/unpower.png'</img>";
+				subDiv.childNodes[0].className = "img100pct";
+				$(subDiv).bind("click", function(e){
+					e.stopPropagation();
+					if (game.phase != -1){return;}
+					var data = $(this.parentNode).data();
+					game.getUnitById(data.shipId).getSystemById(data.systemId).doUnpower();
+				});
+				div.appendChild(subDiv);
+			return div;
 		}
-
-		$(td).data("systemId", this.id);
-		this.element = td;
-
-		this.setTableRow();
-		this.setSystemBorder();
-		return this.element;
+		else return false;
 	}
-
-	this.hasUnresolvedFireOrder = function(){
-		return false;
-	}
-
-	this.update = function(){
-		this.updateSystemDetailsDiv();
-		game.getUnitById(this.parentId).updateDiv();
-	}
-
-	this.getRemainingIntegrity = function(){
-		var dmg = 0;
-		for (var i = 0; i < this.damages.length; i++){
-			dmg += this.damages[i].structDmg;
-		}
-		return this.integrity - dmg;
-	}
-
-	this.isDestroyed = function(){
-		if (this.destroyed){
-			return true;
-		}
-		for (var i = this.damages.length-1; i >= 0; i--){
-			if (this.damages[i].destroyed){
+}
+System.prototype.getModeDiv = function(){
+	if (!Object.keys(this.modes).length){return;}
+	var div = document.createElement("div");
+		div.className = "modeDiv disabled";
+		$(div).data("shipId", this.parentId);
+		$(div).data("systemId", this.id);
+	var subDiv = document.createElement("div");
+		subDiv.className = "mode";
+		subDiv.innerHTML = "<img src='varIcons/mode.png'</img>";
+		subDiv.childNodes[0].className = "img100pct";
+		$(subDiv)
+			.click(function(e){
+				e.stopPropagation(); e.preventDefault();
+				var data = $(this.parentNode).data();
+				game.getUnitById(data.shipId).getSystemById(data.systemId).switchMode();
+			})
+			.contextmenu(function(e){
+				e.stopPropagation(); e.preventDefault();
+				var data = $(this.parentNode).data();
+				game.getUnitById(data.shipId).switchModeAll(data.systemId);
+			});
+		div.appendChild(subDiv);
+	return div;
+}
+System.prototype.canUnboost = function(){
+	if (this.powers.length){
+		if (this.powers[this.powers.length-1].turn == game.turn){
+			if (this.powers[this.powers.length-1].type > 0){
 				return true;
 			}
 		}
 	}
-
-	this.setState = function(){
-		if (this.isDestroyed()){
-			this.destroyed = true;
-		}
-		else if (this.isUnpowered()){
-			this.disabled = true;
-		}
-		this.adjustStateByCritical();
+	return false;
+}
+System.prototype.doUnboost = function(){
+	this.powers.splice(this.powers.length-1, 1);
+	return true;
+}
+System.prototype.doBoost = function(){
+	this.powers.push({
+		id: this.powers.length+1, unitid: this.parentId, systemid: this.id,
+		turn: game.turn,type: 1, cost: this.getEffiency(), new: 1
+	})
+}
+System.prototype.isPowered = function(){
+	if (this.destroyed || this.disabled){
+		return false;
 	}
+	else if (this.powers.length){
+		if (this.powers[this.powers.length-1].turn == game.turn){
+			if (this.powers[this.powers.length-1].type == 0){
+				return false;
+			}
+		}
+	}
+	return true;
+}
+System.prototype.isUnpowered = function(){
+	if (!this.isPowered()){
+		return true;
+	}
+	else return false;
+}
+System.prototype.canUnpower = function(){
+	if (this.powerReq && this.isPowered()){
+		return true;
+	} else return false;
+}
+System.prototype.canPower = function(){
+	if (this.powerReq && !this.isPowered()){
+		return true;
+	} else return false;
+}
+System.prototype.doUnpower = function(){
+	if (this.selected){
+		this.select();
+	}
+	if (!this.disabled){
+		for (var i = this.powers.length-1; i >= 0; i--){
+			if (this.powers[i].turn == game.turn && this.powers[i].type > 0){
+				this.powers.splice(i, 1);
+			} else if (this.powers[i].turn < game.turn){
+				break;
+			}
+		}
 
-	this.adjustStateByCritical = function(){
-		for (var i = 0; i < this.crits.length; i++){
-			if (this.crits[i].inEffect()){
-				switch (this.crits[i].type){
-					case "disabled":
-						this.disabled = true;
-						break;
-					default:
-						continue;
+		this.powers.push({
+			id: this.powers.length+1, unitid: this.parentId, systemid: this.id,
+			turn: game.turn, type: 0, cost: 0, new: 1
+		})
+		this.disabled = 1;
+		this.doUndoActions();
+		this.setTableRow();
+		this.setSystemBorder();
+		game.getUnitById(this.parentId).updateDivPower(this);
+	}
+}
+System.prototype.forceUnpower = function(){
+	if (this.powers.length && this.powers[this.powers.length-1].type == 0){
+		this.powers.splice(this.powers.length-1, 1);
+		this.disabled = 0;
+		this.setTableRow();
+		game.getUnitById(this.parentId).updateDivPower(this);
+	}
+}
+System.prototype.doPower = function(){
+	if (this.powers.length && this.powers[this.powers.length-1].type == 0){
+		this.powers.splice(this.powers.length-1, 1);
+		this.disabled = 0;
+		this.setTableRow();
+		game.getUnitById(this.parentId).updateDivPower(this);
+	}
+}
+System.prototype.plus = function(){
+	var ship = game.getUnitById(this.parentId);
+	if (ship.canBoost(this)){
+		this.doBoost();
+		ship.updateDivPower(this);
+		return true;
+	}
+	return false;
+}
+System.prototype.minus = function(){
+	if (this.canUnboost()){
+		this.doUnboost()
+		game.getUnitById(this.parentId).updateDivPower(this);
+		return true;
+	}
+	return false;
+}
+System.prototype.showOptions = function(){
+	if (this.destroyed || this.locked){return;}
+	var ele = $(this.element);
+	
+	/*if (game.phase == -2 &&
+		if (Object.keys(this.modes).length){
+			ele.find(".modeDiv").show();
+		}
+	}*/
+	if (game.phase == -1){
+		if (game.getUnitById(this.parentId).userid == game.userid){
+			var boost = this.effiency;
+			var canModeChange = Object.keys(this.modes).length;
+			var canPower = this.canPower();
+			var canUnpower = this.canUnpower();
+			if (canPower){
+				boost = false;
+			}
+			else if (boost){
+				if (this.getLoadLevel() != 1){
+					boost = false;
+				}
+			}
+
+			if (boost || canModeChange || canPower || canUnpower){
+				if (boost){
+					ele.find(".boostDiv").show();
+				}
+				if (canModeChange){
+					ele.find(".modeDiv").show();
+				}
+				if (canPower || canUnpower){
+					ele.find(".powerDiv").show();
 				}
 			}
 		}
 	}
-
-	this.getMount = function(){
-		if (game.getUnitById(aUnit) instanceof Flight){
-			return false;
+	/*else if (game.phase == 2){
+		if (Object.keys(this.modes).length){
+			$(ele).find(".boostDiv").show().end().find(".modeDiv").show().end().find(".powerDiv").show();
 		}
-		if (this.mount.length){
-			return this.mount + " / " + this.armour;
-		} else return this.armour;
+	}*/
+}
+System.prototype.hideOptions = function(){
+	if (this.destroyed){return;}
+	var ele = $(this.element);
+
+	if (game.phase == -2){
+		if (Object.keys(this.modes).length){
+			ele.find(".modeDiv").hide();
+		}
 	}
+	if (game.phase == -1){
+		if (game.getUnitById(this.parentId).userid == game.userid){
+			var boost = this.effiency;
+			var canPower = this.canPower();
+			var canUnpower = this.canUnpower();
 
-
-	this.getOutput = function(){
-		var output = 0;
-
-		for (var i = this.powers.length-1; i >= 0; i--){
-			if (this.powers[i].turn == game.turn && this.powers[i].type > 0){
-				output += this.powers[i].type;
+			if (boost || canPower || canUnpower){
+				$(ele).find(".boostDiv").hide().end().find(".modeDiv").hide().end().find(".powerDiv").hide();
+				return;
 			}
-			else break;
 		}
-		return output;
 	}
-
-	this.getExtraOutput = function(){
-		var extra = 0;
-		for (var i = this.powers.length-1; i >= 0; i--){
-			if (this.powers[i].turn == game.turn){
-				extra += this.output * this.boostEffect.value / 100 * this.powers[i].type;
-			} else break;
+	/*else if (game.phase == 2){
+		if (Object.keys(this.modes).length){
+			$(ele).find(".boostDiv").hide().end().find(".modeDiv").hide().end().find(".powerDiv").hide();
 		}
-		return Math.floor(extra);
-	}
-
-	this.getEffiency = function(){
-		return Math.ceil(this.effiency * (1+(this.getBoostLevel() * this.getBoostCostIncrease())));
-	}
-
-	this.getBoostCostIncrease = function(){
-		return 0;
-	}
-
-	this.getPowerReq = function(){
-		return this.powerReq;
-	}
-
-	this.getCurrentPowerUsage = function(){
-		var usage = this.powerReq;
-		for (var i = this.powers.length-1; i >= 0; i--){
-			if (this.powers[i].turn == game.turn && this.powers[i].type > 0){
-				usage += this.powers[i].cost;
-			} else break;
+	}*/
+}
+System.prototype.showInfoDiv = function(e){
+	$(document.body).append(
+		$(this.getSystemDetailsDiv())
+			.css("left", e.clientX - 90)
+			.css("top", e.clientY + 50)
+		)
+	return;
+}
+System.prototype.setFireOrder = function(targetid){
+	this.fireOrders.push(
+		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, 
+		shots: this.getShots(), req: -1, notes: "", hits: -1, resolved: 0}
+	);
+	this.selected = false;
+	this.highlight = false;
+	this.setSystemBorder();
+}
+System.prototype.unsetFireOrder = function(){
+	for (var i = this.fireOrders.length-1; i >= 0; i--){
+		if (this.fireOrders[i].turn == game.turn){
+			this.fireOrders.splice(i, 1);
 		}
-		return usage;
+	}
+	this.setSystemBorder();
+}
+System.prototype.hideInfoDiv = function(){
+	$("#systemDetailsDiv").remove();
+}
+System.prototype.getImageName = function(){
+	return this.name;
+}
+System.prototype.canBeBoosted = function(){
+	return this.effiency;
+}
+System.prototype.getTableData = function(forFighter){
+	var td = document.createElement("td");
+		td.className = "system";
+
+	var img = new Image();
+	var file = "sysIcons/" + this.getImageName();
+	if (forFighter){file += this.linked;}
+	else {img.className = "sysIcon";}
+		file += ".png";
+		img.src = file;
+	td.appendChild(img);
+
+	var div = document.createElement("div");
+		if (this instanceof PrimarySystem && this.exposed){
+			div.className = "loadLevel exposed";
+		} else div.className = "loadLevel";
+	//	if (this.weapon){div.style.width = this.getLoadLevel() * 100 + "%"}
+	//	else {div.style.width = 100 + "%"};
+		div.style.width = this.getLoadLevel() * 100 + "%";
+		td.appendChild(div);
+
+	var div = document.createElement("div");
+		div.className = "bgloadlevel";
+		td.appendChild(div);
+
+		$(td).data("systemId", this.id);
+
+	if (!forFighter){
+		var lowerDiv = document.createElement("div");
+			lowerDiv.className = "integrityNow";
+			lowerDiv.style.width = this.getRemainingIntegrity() /  this.integrity * 100 + "%";
+			td.appendChild(lowerDiv);
+
+		var div = document.createElement("div");
+			div.className = "integrityFull";
+			td.appendChild(div);
+
+		if (!this.destroyed){
+			if (this instanceof PrimarySystem || this.canBeBoosted()){
+				var outputDiv = document.createElement("div");
+					outputDiv.className = "outputMask";
+					//output.innerHTML = "<span>" + this.outputp + "</span>";
+					outputDiv.innerHTML = this.getOutput();
+					td.appendChild(outputDiv);
+			}
+		}
+	}
+
+	$(td).data("systemId", this.id);
+	this.element = td;
+
+	this.setTableRow();
+	this.setSystemBorder();
+	return this.element;
+}
+System.prototype.hasUnresolvedFireOrder = function(){
+	return false;
+}
+System.prototype.update = function(){
+	this.updateSystemDetailsDiv();
+	game.getUnitById(this.parentId).updateDiv();
+}
+
+System.prototype.getRemainingIntegrity = function(){
+	var dmg = 0;
+	for (var i = 0; i < this.damages.length; i++){
+		dmg += this.damages[i].structDmg;
+	}
+	return this.integrity - dmg;
+}
+System.prototype.isDestroyed = function(){
+	if (this.destroyed){
+		return true;
+	}
+	for (var i = this.damages.length-1; i >= 0; i--){
+		if (this.damages[i].destroyed){
+			return true;
+		}
 	}
 }
+System.prototype.copyPowers = function(){
+	var copy = [];
+
+	if (this instanceof PrimarySystem){return;}
+	//if (this instanceof EM){console.log("ding");}
+
+	for (var i = 0; i < this.powers.length; i++){
+		if (this.powers[i].turn == game.turn-1 && this.powers[i].type <= 0){
+			copy.push($.extend(true, {}, this.powers[i]));
+		}
+	}
+
+	for (var i = 0; i < copy.length; i++){
+		//if (this.parentId == 4 && this.id == 16){console.log("ding");}
+		copy[i].new = 1;
+		copy[i].turn = game.turn;
+		this.powers.push(copy[i]);
+	}
+}
+
+System.prototype.adjustStateByCritical = function(){
+	for (var i = 0; i < this.crits.length; i++){
+		if (this.crits[i].inEffect()){
+			switch (this.crits[i].type){
+				case "disabled":
+					this.disabled = true;
+					break;
+				default:
+					continue;
+			}
+		}
+	}
+}
+System.prototype.getMount = function(){
+	if (game.getUnitById(aUnit) instanceof Flight){
+		return false;
+	}
+	if (this.mount.length){
+		return this.mount + " / " + this.armour;
+	} else return this.armour;
+}
+System.prototype.getOutput = function(){
+	var output = 0;
+	for (var i = this.powers.length-1; i >= 0; i--){
+		if (this.powers[i].turn == game.turn && this.powers[i].type > 0){
+			output += this.powers[i].type;
+		}
+		else break;
+	}
+	return output;
+}
+System.prototype.getExtraOutput = function(){
+	var extra = 0;
+	for (var i = this.powers.length-1; i >= 0; i--){
+		if (this.powers[i].turn == game.turn){
+			extra += this.output * this.boostEffect.value / 100 * this.powers[i].type;
+		} else break;
+	}
+	return Math.floor(extra);
+}
+
+System.prototype.getEffiency = function(){
+	return Math.ceil(this.effiency * (1+(this.getBoostLevel() * this.getBoostCostIncrease())));
+}
+
+System.prototype.getBoostCostIncrease = function(){
+	return 0;
+}
+
+System.prototype.getPowerReq = function(){
+	return this.powerReq;
+}
+
+System.prototype.getCurrentPowerUsage = function(){
+	var usage = this.powerReq;
+	for (var i = this.powers.length-1; i >= 0; i--){
+		if (this.powers[i].turn == game.turn && this.powers[i].type > 0){
+			usage += this.powers[i].cost;
+		} else break;
+	}
+	return usage;
+}
+
+
 
 function PrimarySystem(system){
 	System.call(this, system);
@@ -1247,8 +1279,9 @@ function Pulse(system){
 	
 	this.getAnimation = function(fire){
 		allAnims = [];
-		var gunInterval = 50;
-		var shotInterval = 5;
+		var grouping = 2;
+		var delay = 40;
+		var shotInterval = 6;
 
 		for (var j = 0; j < fire.guns; j++){
 			var gunAnims = [];
@@ -1272,21 +1305,21 @@ function Pulse(system){
 					tx = fire.target.x + range(fire.target.size * -0.07, fire.target.size * 0.07); // salvo hit
 					ty = fire.target.y + range(fire.target.size * -0.07, fire.target.size * 0.07);
 				}
-				var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, this.projSpeed/2, hit);
-					shotAnim.n = 0 - (j*gunInterval + k*shotInterval);
 
-				/*}
-				shotAnim = {
-					ox: ox,
-					oy: oy,
-					tx: tx,
-					ty: ty,
-					t: [0 - (j*gunInterval + k*shotInterval), getDistance({x: ox, y: oy}, {x: tx, y: ty}) / this.projSpeed / speedMod],
-					hit: hit,
-					v: new Vector({x: ox, y: oy}, {x: tx, y: ty}),
-					explo: explo,
-					animated: false
-				}*/
+
+				var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, this.projSpeed/2, hit);
+				//console.log(fire.guns);
+				if (fire.guns > grouping){
+					shotAnim.n = 0 - (Math.floor(j / grouping) * delay) + k*shotInterval;
+				}
+				else {
+					shotAnim.n = 0 - (j*delay + k*shotInterval);
+				}
+
+					//shotAnim.n = 0 - (j*gunInterval + k*shotInterval);
+							  // 0 - (range(-5, 5)) - (Math.floor(j / grouping) * delay) - k*15,
+
+
 				gunAnims.push(shotAnim);
 			}
 			allAnims.push(gunAnims)
@@ -1309,6 +1342,7 @@ function Laser(system){
 		allAnims = [];
 		var grouping = 1;
 		var delay = 30;
+		var shotInterval = 15;
 		
 		for (var j = 0; j < fire.guns; j++){
 			var gunAnims = [];
@@ -1341,7 +1375,7 @@ function Laser(system){
 					y: fire.shooter.y + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2)},
 					{x: tx, y: ty},
 					{x: tb.x, y: tb.y}, 
-					0 - (range(-5, 5)) - (Math.floor(j / grouping) * delay),
+					0 - (range(-5, 5)) - (Math.floor(j / grouping) * delay) - k*shotInterval,
 					fire.weapon.rakeTime,
 					hit
 				);
@@ -1396,6 +1430,7 @@ function Dual(system){
 	this.states = system.states;
 	this.dual = 1;
 	this.locked = 0;
+	this.weapons;
 
 	this.canBeBoosted = function(){
 		for (var i = 0; i < this.weapons.length; i++){
@@ -1418,16 +1453,8 @@ function Dual(system){
 		this.setSystemBorder();
 	}
 
-
 	this.setState = function(){
-		if (this.isDestroyed()){
-			this.destroyed = true;
-		}
-		else if (this.isUnpowered()){
-			this.disabled = true;
-		}
-
-		this.adjustStateByCritical();
+		System.prototype.setState.call(this);
 		this.initSubWeapons();
 		this.initMain();
 	}
@@ -1443,30 +1470,25 @@ function Dual(system){
 			this.weapons[i].armour = this.armour;
 			this.weapons[i].mass = this.mass;
 			this.weapons[i].integrity = this.integrity;
+			this.weapons[i].damages = this.damages;
+			this.weapons[i].crits = this.crits;
 			//this.weapons[i].display = "HYBRID - " + this.weapons[i].display;
 		}
 	}
 
 	this.initMain = function(){
-		var set = 0;
-
-		for (var i = 0; i < this.powers.length; i++){
-			if (this.powers[i].turn == game.turn && !this.powers[i].new){
-				if (this.powers[i].type < 0){
-					set = 1;
-					this.locked = 1;
-					this.states[-(this.powers[i].type+1)] = 1;
-				}
-				else if (this.powers[i].type > 0){
-					this.getActiveWeapon().powers.push(this.powers[i]);
+		for (var i = 0; i < this.states.length; i++){
+			if (this.states[i]){
+				for (var j = 0; j < this.powers.length; j++){
+					if (this.powers[this.powers.length-1] == game.turn && this.powers[this.powers.length-1].type > 0){
+						this.getActiveWeapon().powers.push(this.powers[j]);
+					}
+					else if (this.powers[j].turn > game.turn){
+						break;
+					}
+					else break;
 				}
 			}
-		}
-
-		if (!set){
-			this.states[this.states.length-1] = 1;
-			this.powers.push({id: this.powers.length, unitid: this.parentId, systemid: this.id, cost: 0, turn: game.turn, type: -1, new: 1})
-			this.cycleActiveWeapon();
 		}
 
 		this.copyProps();
@@ -1480,12 +1502,25 @@ function Dual(system){
 		this.setSystemWindow();
 		this.resetDetailsDiv();
 		game.getUnitById(this.parentId).updateDivPower(this);
-
-		console.log(this.powers);
 	}
 
 	this.setSystemImage = function(){
 		this.element.childNodes[0].src = "sysIcons/" + this.getImageName() + ".png";
+	}
+
+	this.resetPowers = function(){
+		for (var i = this.powers.length-1; i >= 0; i--){
+			if (this.powers[i].turn == game.turn && this.powers[i].type == 1){
+				this.powers.splice(i, 1);
+			} else break;
+		}
+		for (var j = 0; j < this.weapons.length; j++){
+			for (var i = this.weapons[j].powers.length-1; i >= 0; i--){
+				if (this.weapons[j].powers[i].turn == game.turn && this.weapons[j].powers[i].type == 1){
+					this.weapons[j].powers.splice(i, 1);
+				} else break;
+			}
+		}
 	}
 
 	this.cycleActiveWeapon = function(){
@@ -1501,21 +1536,6 @@ function Dual(system){
 				this.states[index] = 1;
 				this.powers[this.powers.length-1].type = -(index+1);
 				return;
-			}
-		}
-	}
-
-	this.resetPowers = function(){
-		for (var i = this.powers.length-1; i >= 0; i--){
-			if (this.powers[i].turn == game.turn && this.powers[i].type == 1){
-				this.powers.splice(i, 1);
-			} else break;
-		}
-		for (var j = 0; j < this.weapons.length; j++){
-			for (var i = this.weapons[j].powers.length-1; i >= 0; i--){
-				if (this.weapons[j].powers[i].turn == game.turn && this.weapons[j].powers[i].type == 1){
-					this.weapons[j].powers.splice(i, 1);
-				} else break;
 			}
 		}
 	}
@@ -1644,6 +1664,7 @@ function Launcher(system){
 	this.animation = "ballistic";
 	this.loads = [];
 	this.ammo = system.ammo || false;
+	this.loadout = 1;
 
 	this.getUpgradeData = function(){
 		var loads = [];
@@ -1672,6 +1693,7 @@ function Launcher(system){
 		else {
 			if (this.ammo  == false || this.getRemainingAmmo() == 0){
 				this.shots = 0;
+				this.forceUnpower();
 			}
 		}
 	}
@@ -1958,6 +1980,7 @@ function Hangar(system){
 	this.loads = system.loads;
 	//this.weapon = false;
 	this.range = 75;
+	this.loadout = 1;
 
 	this.getUpgradeData = function(){
 		return {

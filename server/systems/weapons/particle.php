@@ -24,6 +24,7 @@ class LightIon extends Particle {
 	public $reload = 1;
 	public $fc = array(0 => 85, 1 => 220);
 	public $mass = 14;
+	public $powerReq = 2;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -44,6 +45,7 @@ class MediumIon extends LightIon {
 	public $exploSize = 4;
 	public $fc = array(0 => 100, 1 => 120);
 	public $mass = 19;
+	public $powerReq = 4;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -64,6 +66,7 @@ class HeavyIon extends LightIon {
 	public $exploSize = 5;
 	public $fc = array(0 => 120, 1 => 45);
 	public $mass = 28;
+	public $powerReq = 6;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -80,9 +83,10 @@ class FusionCannon extends Particle {
 	public $animColor = "green";
 	public $projSize = 3;
 	public $projSpeed = 5;
-	public $exploSize = 7;
+	public $exploSize = 4;
 	public $fc = array(0 => 100, 1 => 145);
 	public $mass = 18;
+	public $powerReq = 3;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -102,6 +106,7 @@ class FusionPulsar extends Particle {
 	public $exploSize = 4;
 	public $fc = array(0 => 115, 1 => 90);
 	public $mass = 16;
+	public $powerReq = 4;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
