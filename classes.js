@@ -198,6 +198,7 @@ function Ammo(data){
 	this.damages = data.damages || false;
 	this.crits = data.crits;
 	this.destroyed = data.destroyed;
+	this.traverse = data.traverse;
 	this.shots = 1;
 	this.fireOrders = [];
 
@@ -234,16 +235,17 @@ function Ammo(data){
 	}
 }
 
-function Salvo(id, userid, targetid, name, amount, status, destroyed, actions, baseImpulse){
-	this.id = id;
-	this.userid = userid;
-	this.targetid = targetid;
-	this.name = name;
-	this.amount = amount;
-	this.status = status;
-	this.destroyed = destroyed;
-	this.actions = actions;
-	this.baseImpulse = baseImpulse;
+function Salvo(data){
+	this.id = data.id;
+	this.userid = data.userid;
+	this.targetid = data.targetid;
+	this.name = data.name;
+	this.amount = data.amount;
+	this.status = data.status;
+	this.destroyed = data.destroyed;
+	this.actions = data.actions;
+	this.baseImpulse = data.baseImpulse;
+	this.traverse = -4;
 	this.shortInfo = false;
 	this.selected = false;
 	this.structures = [];
@@ -352,6 +354,15 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions, b
 		return Math.floor(this.baseImpulse + (this.baseImpulse / 2 * this.getAccelSteps()));
 	}
 
+	this.getTrackingString = function(){
+		var t = game.getUnitById(this.targetid).traverse;
+		var html = "Up to: "
+		if (this.structures[0].traverse <= t){
+			html +="<span class='green'>";
+		} else html += "<span class='red'>";	
+		return html += game.getUnitType(this.structures[0].traverse) + "</span>";
+	}
+
 	this.createDiv = function(){
 		var div = document.createElement("div");
 			div.className = "ammoDiv disabled";
@@ -381,13 +392,13 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions, b
 	    		.append($("<th>").html("Damage"))
 	    		.append($("<th>").html("Armour"))
 	    		.append($("<th>").html("Impulse"))
-	    		.append($("<th>").html("Fire Control"))
+	    		.append($("<th>").html("Tracking"))
 			)
 			.append($("<tr>")
 	    		.append($("<td>").html(this.getDamage()))
 	    		.append($("<td>").html(this.structures[0].armour))
 	    		.append($("<td>").html(this.getBaseImpulse() + " + " + Math.floor(this.getBaseImpulse()/2) + " per Turn."))
-	    		.append($("<td>").html(this.structures[0].fc[0] + "% / " + this.structures[0].fc[1] + "%"))
+	    		.append($("<td>").html(this.getTrackingString()))
 			)
 
 		div.appendChild(table);
@@ -679,16 +690,12 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions, b
 		var goal;
 		var target = game.getUnitById(this.targetid);
 		if (target.salvo){
-			//target.drawFlightPath();
 			goal = this.finalStep;
 		}
 		else {
 			goal = target.getPlannedPosition();
 		}
 		var origin = this.actions[this.actions.length-1];
-		//var dist = getDistance({x: this.x, y: this.y}, {x: goal.x, y: goal.y});
-		//var a = getAngleFromTo({x: this.x, y: this.y}, {x: goal.x, y: goal.y});
-		//var step = Math.min(this.structures[0].impulse, dist);
 
 		var inRange = false;
 		if (this.nextStep == this.finalStep){
@@ -697,35 +704,35 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions, b
 
 		//var t = getPointInDirection(step, a, this.x, this.y);
 
-		mouseCtx.translate(cam.o.x, cam.o.y);
-		mouseCtx.scale(cam.z, cam.z)
-		mouseCtx.translate(origin.x, origin.y);
-		mouseCtx.beginPath();
-		mouseCtx.moveTo(0, 0);
-		mouseCtx.translate(-origin.x + this.nextStep.x, -origin.y + this.nextStep.y);
-		mouseCtx.lineTo(0, 0);
-		mouseCtx.closePath();
+		salvoCtx.translate(cam.o.x, cam.o.y);
+		salvoCtx.scale(cam.z, cam.z)
+		salvoCtx.translate(origin.x, origin.y);
+		salvoCtx.beginPath();
+		salvoCtx.moveTo(0, 0);
+		salvoCtx.translate(-origin.x + this.nextStep.x, -origin.y + this.nextStep.y);
+		salvoCtx.lineTo(0, 0);
+		salvoCtx.closePath();
 
-		mouseCtx.globalAlpha = 1;
-		mouseCtx.strokeStyle = "white";
-		mouseCtx.lineWidth = 1;
-		mouseCtx.stroke();
-		mouseCtx.setTransform(1,0,0,1,0,0);
+		salvoCtx.globalAlpha = 1;
+		salvoCtx.strokeStyle = "white";
+		salvoCtx.lineWidth = 1;
+		salvoCtx.stroke();
+		salvoCtx.setTransform(1,0,0,1,0,0);
 
 		if (!inRange){
-			mouseCtx.translate(cam.o.x, cam.o.y);
-			mouseCtx.scale(cam.z, cam.z)
-			mouseCtx.translate(this.nextStep.x, this.nextStep.y);
-			mouseCtx.beginPath();
-			mouseCtx.moveTo(0, 0);
-			mouseCtx.translate(-this.nextStep.x + this.finalStep.x, -this.nextStep.y + this.finalStep.y);
-			mouseCtx.lineTo(0, 0);
-			mouseCtx.closePath();
+			salvoCtx.translate(cam.o.x, cam.o.y);
+			salvoCtx.scale(cam.z, cam.z)
+			salvoCtx.translate(this.nextStep.x, this.nextStep.y);
+			salvoCtx.beginPath();
+			salvoCtx.moveTo(0, 0);
+			salvoCtx.translate(-this.nextStep.x + this.finalStep.x, -this.nextStep.y + this.finalStep.y);
+			salvoCtx.lineTo(0, 0);
+			salvoCtx.closePath();
 
-			mouseCtx.globalAlpha = 1;
-			mouseCtx.strokeStyle = "red";
-			mouseCtx.stroke();
-			mouseCtx.setTransform(1,0,0,1,0,0);
+			salvoCtx.globalAlpha = 1;
+			salvoCtx.strokeStyle = "red";
+			salvoCtx.stroke();
+			salvoCtx.setTransform(1,0,0,1,0,0);
 		}
 
 		game.flightPath = true;
@@ -739,8 +746,8 @@ function Salvo(id, userid, targetid, name, amount, status, destroyed, actions, b
 
 		var table = document.createElement("table");
 			table.insertRow(-1).insertCell(-1).innerHTML = this.structures.length + "x " + this.name + " #" + this.id;
-			table.insertRow(-1).insertCell(-1).innerHTML = this.getHitChanceFromAngle() + "%";
 			table.insertRow(-1).insertCell(-1).innerHTML =  "Impulse: " + this.getTotalImpulse();
+			table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit: " + this.getHitChanceFromAngle() + "%";
 
 		if (this.impactThisTurn()){
 			var tr = table.insertRow(-1);

@@ -3,7 +3,7 @@
 class Pulse extends Weapon {
 	public $type = "Pulse";
 	public $animation = "projectile";
-	public $priority = 5;
+	public $priority = 8;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -93,6 +93,7 @@ class LightPulse extends Pulse {
 	public $fc = array(0 => 100, 1 => 180);
 	public $mass = 12;
 	public $powerReq = 2;
+	public $traverse = -4;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -110,10 +111,11 @@ class MediumPulse extends Pulse {
 	public $projSize = 3;
 	public $projSpeed = 8;
 	public $exploSize = 4;
-	public $reload = 2;
+	public $reload = 1;
 	public $fc = array(0 => 115, 1 => 135);
 	public $mass = 20;
 	public $powerReq = 4;
+	public $traverse = -1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

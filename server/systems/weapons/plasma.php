@@ -78,8 +78,8 @@ class Plasma extends Weapon {
 class MediumPlasma extends Plasma {
 	public $name = "MediumPlasma";
 	public $display = "78mm Plasma Accelerator";
-	public $minDmg = 34;
-	public $maxDmg = 44;
+	public $minDmg = 43;
+	public $maxDmg = 57;
 	public $accDecay = 100;
 	public $shots = 1;
 	public $animColor = "darkGreen";
@@ -89,6 +89,8 @@ class MediumPlasma extends Plasma {
 	public $reload = 1;
 	public $fc = array(0 => 130, 1 => 80);
 	public $mass = 22;
+	public $traverse = 0;
+	public $powerReq = 6;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -98,8 +100,8 @@ class MediumPlasma extends Plasma {
 class HeavyPlasma extends Plasma {
 	public $name = "HeavyPlasma";
 	public $display = "148mm Plasma Cannon";
-	public $minDmg = 44;
-	public $maxDmg = 62;
+	public $minDmg = 58;
+	public $maxDmg = 75;
 	public $accDecay = 100;
 	public $shots = 1;
 	public $animColor = "darkGreen";
@@ -109,6 +111,8 @@ class HeavyPlasma extends Plasma {
 	public $reload = 1;
 	public $fc = array(0 => 130, 1 => 80);
 	public $mass = 36;
+	public $traverse = 1;
+	public $powerReq = 8;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

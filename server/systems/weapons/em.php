@@ -4,7 +4,7 @@ class EM extends Weapon {
 	public $type = "EM";
 	public $animation = "beam";
 	public $beamWidth;
-	public $priority = 10;
+	public $priority = 12;
 	public $rakes;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $destroyed = 0){
@@ -71,6 +71,7 @@ class EMPulseCannon extends EM {
 	public $effiency = 2;
 	public $maxBoost = 3;
 	public $powerReq = 4;
+	public $traverse = -4;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

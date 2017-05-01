@@ -57,7 +57,7 @@ class Manager {
 	public function getMemory(){
 		$size = memory_get_usage(true);
 	    $unit=array('b','kb','mb','gb','tb','pb');
-	    debug::log(@round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i]);
+	    Debug::log(@round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i]);
 	}
 	
 	public function getUsername(){
@@ -269,6 +269,7 @@ class Manager {
 		DBManager::app()->getPowers($units);
 		DBManager::app()->getCrits($units);
 		DBManager::app()->getActions($units);
+		DBManager::app()->getEW($units, $this->turn);
 		DBManager::app()->getShipLoad($units);
 		DBManager::app()->getDogfights($units);
 
@@ -346,7 +347,7 @@ class Manager {
 	}
 	
 	public function pickReinforcements(){
-		Debug::log("pickReinforcements");
+		//Debug::log("pickReinforcements");
 		if ($this->turn > 1){
 			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 				$picks = array();
@@ -368,14 +369,14 @@ class Manager {
 	}
 
 	public function handleDeploymentPhase(){
-		Debug::log("handleDeploymentPhase");
+		//Debug::log("handleDeploymentPhase");
 		$this->initBallistics();
 		DBManager::app()->deleteEmptyLoads($this->gameid);
 		DBManager::app()->resolveDeployActions($this->gameid, $this->turn);
 	}
 
 	public function initBallistics(){
-		Debug::log("initBallistics");
+		//Debug::log("initBallistics");
 		$fires = DBManager::app()->getUnresolvedFireOrders($this->gameid, $this->turn);
 		usort($fires, function($a, $b){
 			return $a->shooterid - $b->shooterid;
@@ -414,7 +415,7 @@ class Manager {
 	}
 
 	public function startShipMovementPhase(){
-		Debug::log("startShipMovementPhase");
+		//Debug::log("startShipMovementPhase");
 		$dbManager = DBManager::app();
 		$this->phase = 0;
 
@@ -435,7 +436,7 @@ class Manager {
 	}
 
 	public function startFighterMovementPhase(){
-		Debug::log("startFighterMovementPhase");
+		//Debug::log("startFighterMovementPhase");
 		$dbManager = DBManager::app();
 		$this->phase = 1;
 
@@ -464,19 +465,19 @@ class Manager {
 	}
 
 	public function handleShipMovementPhase(){
-		Debug::log("handleShipMovementPhase");
+		//Debug::log("handleShipMovementPhase");
 		$this->resolveUnitMovement();
 	}
 
 	public function handleFighterMovementPhase(){
-		Debug::log("handleFighterMovementPhase");
+		//Debug::log("handleFighterMovementPhase");
 		$this->resolveUnitMovement();
 		$this->initiateDogfights();
 		$this->createDogfightFires();
 	}
 	
 	public function resolveUnitMovement(){
-		Debug::log("resolveUnitMovement");
+		//Debug::log("resolveUnitMovement");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			for ($j = sizeof($this->ships[$i]->actions)-1; $j >= 0; $j--){
 				if ($this->ships[$i]->actions[$j]->resolved == 0){
@@ -491,7 +492,7 @@ class Manager {
 	}
 
 	public function initiateDogfights(){
-		Debug::log("initiateDogfights");
+		//Debug::log("initiateDogfights");
 		$dogfights = array();
 
 		for ($i = 0; $i < sizeof($this->ships)-1; $i++){
@@ -525,7 +526,7 @@ class Manager {
 	}	
 
 	public function createDogfightFires(){
-		Debug::log("createDogfightFires");
+		//Debug::log("createDogfightFires");
 		$fires = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->flight && sizeof($this->ships[$i]->dogfights)){
@@ -552,7 +553,7 @@ class Manager {
 	}
 
 	public function startFiringPhase(){
-		Debug::log("startFiringPhase");
+	//	Debug::log("startFiringPhase");
 		$dbManager = DBManager::app();
 		$this->phase = 2;
 
@@ -587,12 +588,12 @@ class Manager {
 	}
 
 	public function handleDamageControlPhase(){
-		Debug::log("handleDamageControlPhase");
+		//Debug::log("handleDamageControlPhase");
 		return true;
 	}
 
 	public function endTurn(){
-		Debug::log("endTurn");
+		//Debug::log("endTurn");
 		$this->alterReinforcementPoints();
 		DBManager::app()->destroyUnitsDB(array($this->ships, $this->ballistics));
 	}
@@ -604,24 +605,61 @@ class Manager {
 	}
 
 	public function startNewTurn(){
-		Debug::log("startNewTurn");
+		//Debug::log("startNewTurn");
 		$this->turn = $this->turn+1;
 		$this->phase = -1;
 		DBManager::app()->setGameTurnPhase($this->gameid, $this->turn, $this->phase);
 	}
 
 	public function startDeploymentPhase(){
-		Debug::log("startDeploymentPhase");
+		//Debug::log("startDeploymentPhase");
 		$this->pickReinforcements();
 	}
 
 	public function handleNormalFireOrders(){
+		$this->setupShips();
 		$this->setFireOrderDetails();
 		$this->sortFireOrders();
-		$this->setupShipsForDamage();
 		$this->resolveShipFireOrders();
 		$this->resolveFighterFireOrders();
 		$this->updateFireOrders($this->fires);
+	}
+
+
+	public function setupShips(){
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->ship){
+				$this->ships[$i]->setupForDamage();
+				$this->setShipLocks($this->ships[$i]);
+			}
+		}
+	}
+
+	public function setShipLocks($ship){
+		$origin = $ship->getCurrentPosition();
+		$sensor =  $ship->getSystemByName("Sensor");
+		$ew = $sensor->getEW($this->turn);
+		if (!$ew){
+			return;
+		}
+		//Debug::log("EW for ship #".$ship->id);
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->id == $ship->id || $ship->userid == $this->ships[$i]->userid){continue;}
+			$target = $this->ships[$i]->getCurrentPosition();
+			$dist = Math::getDist2($origin, $target);
+			if ($dist <= $ew->dist){
+				//Debug::log("potential lock vs: #".$this->ships[$i]->id);
+				$str = $sensor->getOutput($this->turn);
+				$len = 20;
+				$p = 1.5;
+				$w = min(180, $len * pow($str/$ew->dist, $p));
+				$start = Math::addAngle(0 + $w-$ship->facing, $ew->angle);
+				$end = Math::addAngle(360 - $w-$ship->facing, $ew->angle);
+				if (Math::isInArc(Math::getAngle2($origin, $target), $start, $end)){
+					$ship->locks[] = $this->ships[$i]->id;
+				}
+			}
+		}
 	}
 
 	public function setFireOrderDetails(){
@@ -649,11 +687,8 @@ class Manager {
 	}
 
 	public function sortFireOrders(){
-		//for ($i = 0; $i < sizeof($this->fires); $i++){
-			//echo $this->fires[$i]->weapon->name;
-			//echo $this->fires[$i]->weapon->priority;
-		//}
-		//sort to shooter, prio, target
+	//order target id ASC, weapon priority ASC, shooterider id ASC
+
 		usort($this->fires, function($a, $b){
 			if ($a->targetid != $b->targetid){
 				return $a->targetid - $b->targetid;
@@ -663,14 +698,6 @@ class Manager {
 			}
 			else return $a->shooterid - $b->shooterid;
 		});
-	}
-
-	public function setupShipsForDamage(){
-		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if (!$this->ships[$i]->salvo && !$this->ships[$i]->flight){
-				$this->ships[$i]->setupForDamage();
-			}
-		}
 	}
 
 	public function resolveShipFireOrders(){
@@ -752,7 +779,7 @@ class Manager {
 	}
 
 	public function createBallisticActions(){
-		Debug::log("createBallisticActions, size: ".sizeof($this->ballistics));
+		//Debug::log("createBallisticActions, size: ".sizeof($this->ballistics));
 		for ($i = sizeof($this->ballistics)-1; $i >= 0; $i--){
 			if (!$this->ballistics[$i]->target->salvo){
 				$this->createStandardBallisticAction($this->ballistics[$i]);
@@ -859,7 +886,7 @@ class Manager {
 			if ($interceptEndPos){
 				$interceptDist = Math::getDist2($interceptStartPos, $interceptEndPos);
 				if ($interceptDist > $interceptRange || $interceptDist / $speedMod > $targetMoveVector->m){
-					Debug::log("intercept home in");
+					//Debug::log("intercept home in");
 					$a = Math::getAngle($interceptStartPos->x, $interceptStartPos->y, $interceptEndPos->x, $interceptEndPos->y);
 					$iPos = Math::getPointInDirection($interceptRange, $a, $interceptStartPos->x, $interceptStartPos->y);
 					$ballistic->actions[] = new Action(
@@ -872,7 +899,7 @@ class Manager {
 					);
 				}
 				else if ($interceptRange >= $interceptDist){ // IMPACT VECTOR
-					Debug::log("intercept impact");
+					//Debug::log("intercept impact");
 					$ox = mt_rand(-$ballistic->target->size/7, $ballistic->target->size/7);
 					$oy = mt_rand(-$ballistic->target->size/7, $ballistic->target->size/7);
 					$ballistic->actions[] = new Action(
@@ -885,14 +912,14 @@ class Manager {
 					);
 				}
 				else {
-					Debug::log("somethin went wrong");
+					//Debug::log("somethin went wrong");
 				}
 			}
 		}
 	}
 
 	public function handleBallisticInterception(){
-		Debug::log("handleBallisticInterception | balls:".sizeof($this->ballistics).", intercepts: ".sizeof($this->intercepts));
+		//Debug::log("handleBallisticInterception | balls:".sizeof($this->ballistics).", intercepts: ".sizeof($this->intercepts));
 
 		//sort to shooter, target, id
 		usort($this->intercepts, function($a, $b){
@@ -933,7 +960,7 @@ class Manager {
 	}
 
 	public function resolveBallisticActions(){
-		Debug::log("resolveBallisticActions: ".sizeof($this->ballistics));
+		//Debug::log("resolveBallisticActions: ".sizeof($this->ballistics));
 		$fires = array();
 		$status;
 
@@ -973,7 +1000,7 @@ class Manager {
 	}
 
 	public function handleDogfights(){
-		Debug::log("handleDogfights");
+		//Debug::log("handleDogfights");
 		$data = array();
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -1010,7 +1037,7 @@ class Manager {
 	}
 
 	public function writeCritEntries(){
-		//debug::log("writeCritEntries");
+		//Debug::log("writeCritEntries");
 		$all = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$all = array_merge($all, $this->ships[$i]->getNewCrits($this->turn));
@@ -1024,7 +1051,7 @@ class Manager {
 	}
 
 	public function startDamageControlPhase(){
-		Debug::log("startDamageControlPhase");
+		//Debug::log("startDamageControlPhase");
 
 		$dbManager = DBManager::app();
 		$this->phase = 3;
@@ -1046,7 +1073,7 @@ class Manager {
 	}
 
 	public function finishTurn(){
-		Debug::log("finishTurn");
+		//Debug::log("finishTurn");
 	}
 
 	public function getId(){
@@ -1054,7 +1081,7 @@ class Manager {
 	}
 
 	public function getUnitById($id){
-		//debug::log("looking for unit :".$unitid);
+		//Debug::log("looking for unit :".$unitid);
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->id == $id){
 				return $this->ships[$i];
@@ -1072,7 +1099,7 @@ class Manager {
 	}
 
 	public function getFightersForFaction($faction){
-		Debug::log("getFightersForFaction");
+		//Debug::log("getFightersForFaction");
 	}
 
 	public function getShipsForFaction($faction){
@@ -1131,7 +1158,7 @@ class Manager {
 	}
 
 	public function getPreviewData($name){
-		//debug::log("asking for preview of: ".$name);
+		//Debug::log("asking for preview of: ".$name);
 		$ship = new $name(1, 1, 0, "", 0);
 		$ship->setState(0);
 		return $ship;

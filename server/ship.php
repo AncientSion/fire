@@ -22,12 +22,13 @@ class Ship {
 	public $ship = true;
 	public $flight = false;
 	public $salvo = false;
-
+	public $traverse;
 	public $mass = 0;
 	public $profile = array();
 	public $index = 0;
 	public $actions = array();
 	public $structures = array();
+	public $locks = array();
 
 	public $hitTable;
 
@@ -40,9 +41,7 @@ class Ship {
 		
 		$this->addStructures();
 		$this->addPrimary();
-		
-		$this->baseHitChance = ceil(pow($this->mass, 1/3)*5);
-		$this->cost = static::$value;
+		$this->setBaseStats();
 	}
 
 	public function getId(){
@@ -52,6 +51,11 @@ class Ship {
 
 	public function setProps(){
 		$this->setCurrentImpulse();
+	}
+
+	public function setBaseStats(){
+		$this->baseHitChance = ceil(pow($this->mass, 1/3)*5);
+		$this->cost = static::$value;
 	}
 
 	public function getBaseImpulse(){
@@ -75,7 +79,7 @@ class Ship {
 		return $this->currentImpulse;
 	}
 
-	public function addFighterout($dbLoad){ // [4, 17, 17]
+	public function addFighterLoad($dbLoad){ // [4, 17, 17]
 		$chunk = array();
 		$chunk[] = $dbLoad[0];
 
@@ -262,7 +266,12 @@ class Ship {
 			$fire->dist = $this->getHitDist($fire);
 			$fire->angleIn = $this->getHitAngle($fire);
 			$fire->hitSection = $this->getHitSection($fire);
-			$fire->req = ceil(($this->getHitChance($fire) / 100 * $fire->weapon->getFireControlMod($fire)) - $fire->weapon->getAccLoss($fire->dist));
+			$fire->req = ceil($this->getHitChance($fire) * (1-($fire->weapon->getTraverseMod($fire)*0.2)) - $fire->weapon->getAccLoss($fire->dist));
+			 //Math.floor(baseHit * (1-(traverseMod*0.2)) - accLoss) + "%";
+			//Debug::log($this->getHitChance($fire));
+			//Debug::log("t: " + (1-($fire->weapon->getTraverseMod($fire)*0.2)));
+			//Debug::log($fire->weapon->getAccLoss($fire->dist));
+
 			//Debug::log("normal hitangle from ship #".$fire->shooter->id." to target #".$this->id." : ".$fire->angleIn.", picking section: ".$fire->hitSection);
 			$fire->weapon->rollForHit($fire);
 
@@ -283,7 +292,7 @@ class Ship {
 			$fire->dist = 0;
 			$fire->angleIn = $this->getBallisticHitAngle($fire);
 			$fire->hitSection = $this->getHitSection($fire);
-			$fire->req = ceil($fire->weapon->getFireControlMod($fire));
+			$fire->req = ceil(100 * (1-($fire->weapon->getTraverseMod($fire)*0.2)));
 			$fire->weapon->rollForHit($fire);
 
 			if ($fire->hits){
@@ -395,7 +404,7 @@ class Ship {
 			$angle *= -1;
 		}
 		
-		$base = $this->getBaseHitChance() * $this->getProfileMod();
+		$base = $this->getBaseHitChance() * $this->getLockMod($fire) * $this->getProfileMod();
 		$a = $base * $this->profile[0];
 		$b = $base * $this->profile[1];
 		$sub = ((90 - $angle) * $a) + (($angle - 0) * $b);
@@ -410,6 +419,21 @@ class Ship {
 
 	public function getProfileMod(){
 		return 1+($this->getBaseImpulse() / $this->getCurrentImpulse()-1)/2;
+	}
+
+	public function getLockMod($fire){
+		if ($fire->shooter->hasLockOn($fire->target->id)){
+			return 1.5;
+		} else return 1;
+	}
+
+	public function hasLockOn($id){
+		for ($i = 0; $i < sizeof($this->locks); $i++){
+			if ($this->locks[$i] == $id){
+				//Debug::log("lock active");
+				return true;
+			}
+		} return false;
 	}
 
 	public function getImpulseStep(){
@@ -571,6 +595,12 @@ class Ship {
 		}
 	}
 
+	public function getActiveLocks($turn){
+		$sensor = $this->getSystemByName("Sensor");
+		$str = $sensor->getOutput($turn);
+		$ew = $sensor->ew[sizeof($sensor->ew)-1];
+	}
+
 	public function getTurnCost(){
 		return ceil(pow($this->mass, 1.56) / 10000);
 	}
@@ -604,6 +634,7 @@ class Ship {
 
 class UltraHeavy extends Ship {
 	public $baseImpulse = 115;
+	public $traverse = 3;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
         parent::__construct($id, $userid, $available, $status, $destroyed);
@@ -619,6 +650,7 @@ class UltraHeavy extends Ship {
 
 class SuperHeavy extends Ship {
 	public $baseImpulse = 125;
+	public $traverse = 2;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
         parent::__construct($id, $userid, $available, $status, $destroyed);
@@ -634,6 +666,7 @@ class SuperHeavy extends Ship {
 
 class Heavy extends Ship {
 	public $baseImpulse = 135;
+	public $traverse = 1;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
         parent::__construct($id, $userid, $available, $status, $destroyed);
@@ -649,6 +682,7 @@ class Heavy extends Ship {
 
 class Medium extends Ship {
 	public $baseImpulse = 150;
+	public $traverse = 0;
 
 	function __construct($id, $userid, $available, $status, $destroyed){
         parent::__construct($id, $userid, $available, $status, $destroyed);
@@ -664,6 +698,7 @@ class Medium extends Ship {
 
 class Light extends Ship {
 	public $baseImpulse = 165;
+	public $traverse = -1;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
         parent::__construct($id, $userid, $available, $status, $destroyed);
@@ -679,6 +714,7 @@ class Light extends Ship {
 
 class SuperLight extends Ship {
 	public $baseImpulse = 180;
+	public $traverse = -2;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
         parent::__construct($id, $userid, $available, $status, $destroyed);

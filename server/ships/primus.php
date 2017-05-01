@@ -6,7 +6,7 @@ class Primus extends Heavy {
 	public $faction = "Centauri Republic";
 	public $size = 100;
 	public static $value = 1080;
-	public $profile = array(0.87, 1.13);
+	public $profile = array(0.91, 1.09);
 	public $mass = 12500;
 
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -56,7 +56,7 @@ class Primus extends Heavy {
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 160);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 160, 500, 10);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 160);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 160);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 160, 1200, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 160, $this->getPowerReq());
     }
 }

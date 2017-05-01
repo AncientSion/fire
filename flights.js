@@ -181,10 +181,12 @@ function Flight(data){
 	}
 
 	this.getImpulseChangeCost = function(){
+		return Math.ceil(Math.pow(this.mass, 1.15)/3*this.getImpulseMod());
 		return Math.ceil(this.mass/3*this.getImpulseMod());
 	}
 
 	this.getTurnCost = function(){
+		return Math.ceil(Math.pow(this.mass, 1.15)/100*this.getImpulseMod() * this.getTurnAngle());
 		return Math.ceil(this.mass/50*this.getImpulseMod() * this.getTurnAngle());
 	}
 	
@@ -244,7 +246,8 @@ function Flight(data){
 
 		div.appendChild(structContainer);
 			
-		document.getElementById("game").appendChild(div);
+		////document.getElementById("game").appendChild(div);
+		document.body.appendChild(div);
 
 
 
@@ -400,12 +403,16 @@ function Flight(data){
 		if (this.userid == game.userid){
 			$(ele).attr("class", "friendly");
 		} else $(ele).attr("class", "hostile");
+
+		var baseHit = this.getBaseHitChance();
+		var impulse = this.getTotalImpulse();
 		
 		var table = document.createElement("table");
-			table.insertRow(-1).insertCell(-1).innerHTML = "Flight #" + this.id;
-			table.insertRow(-1).insertCell(-1).innerHTML = "Impulse: " + this.getTotalImpulse();
+			table.insertRow(-1).insertCell(-1).innerHTML = "Flight #" + this.id + " (" +game.getUnitType(this.traverse) + ")";
+			table.insertRow(-1).insertCell(-1).innerHTML =  "Impulse: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")";
 			table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit: " +  this.getBaseHitChance() + "% ";
-			table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit  *" + this.getProfileMod() + "%";
+		var baseHit = this.getBaseHitChance();
+		var impulse = this.getTotalImpulse();
 		return table;
 	}
 

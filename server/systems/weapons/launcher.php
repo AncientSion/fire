@@ -76,8 +76,9 @@ class Hasta extends Ammo {
 	public $armour = 3;
 	public $mass = 3;
 	public $fc = array(0 => 90, 1 => 90);
-	public $cost = 3;
+	public $cost = 6;
 	public $exploSize = 5;
+	public $traverse = -3;
 
 	function __construct($parentId, $id){
 		parent::__construct($parentId, $id);
@@ -95,8 +96,9 @@ class Javelin extends Ammo {
 	public $armour = 5;
 	public $mass = 4;
 	public $fc = array(0 => 85, 1 => 85);
-	public $cost = 5;
+	public $cost = 10;
 	public $exploSize = 6;
+	public $traverse = -2;
 
 	function __construct($parentId, $id){
 		parent::__construct($parentId, $id);
@@ -114,8 +116,9 @@ class Patriot extends Ammo {
 	public $armour = 3;
 	public $mass = 2;
 	public $fc = array(0 => 85, 1 => 95);
-	public $cost = 4;
+	public $cost = 8;
 	public $exploSize = 5;
+	public $traverse = -4;
 
 	function __construct($parentId, $id){
 		parent::__construct($parentId, $id);
@@ -133,8 +136,9 @@ class Naga extends Ammo {
 	public $armour = 5;
 	public $mass = 4;
 	public $fc = array(0 => 85, 1 => 85);
-	public $cost = 5;
+	public $cost = 10;
 	public $exploSize = 6;
+	public $traverse = -2;
 
 	function __construct($parentId, $id){
 		parent::__construct($parentId, $id);
@@ -152,8 +156,9 @@ class Cyclops extends Ammo {
 	public $armour = 6;
 	public $mass = 5;
 	public $fc = array(0 => 90, 1 => 65);
-	public $cost = 7;
+	public $cost = 14;
 	public $exploSize = 8;
+	public $traverse = 0;
 
 	function __construct($parentId, $id){
 		parent::__construct($parentId, $id);
@@ -171,8 +176,9 @@ class Titan extends Ammo {
 	public $armour = 7;
 	public $mass = 6;
 	public $fc = array(0 => 90, 1 => 45);
-	public $cost = 10;
+	public $cost = 20;
 	public $exploSize = 10;
+	public $traverse = 1;
 
 	function __construct($parentId, $id){
 		parent::__construct($parentId, $id);

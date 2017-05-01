@@ -196,6 +196,42 @@ class PrimarySystem extends System {
 	public function getHitChance(){
 		return $this->mass;
 	}
+
+	public function getOutput($turn){
+		if ($this->disabled || $this->destroyed){
+			return 0;
+		}
+		return floor($this->output * $this->getOutputMods($turn) - $this->getOutputUsage($turn));
+	}
+
+	public function getOutputMods($turn){
+		$mod = 1;
+		$mod += $this->getOutputPowerMods($turn);
+		$mod *= $this->getOutputCritMods($turn);
+		return $mod;
+	}
+
+	public function getOutputPowerMods($turn){
+		$mod = 0;
+		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
+			if ($this->powers[$i]->turn > $turn){
+				break;
+			}
+			else if ($this->powers[$i]->turn == $turn && $this->powers[$i]->type == 1){
+				$mod += $this->boostEffect->value/100 * $this->powers[$i]->type;
+			}
+		}
+		return $mod;
+	}
+
+	public function getOutputCritMods($turn){
+		$mod = 1;
+		return $mod;
+	}
+
+	public function getOutputUsage($turn){
+		return 0;
+	}
 }
 
 class Bridge extends PrimarySystem {
@@ -286,9 +322,10 @@ class LifeSupport extends PrimarySystem {
 class Sensor extends PrimarySystem {
 	public $name = "Sensor";
 	public $display = "Sensor";
+	public $ew = array();
 
 	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
-		$this->powerReq = $output*2;
+		$this->powerReq = floor($output/20);
         parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
     }
 	public function getCritEffects(){
@@ -300,6 +337,17 @@ class Sensor extends PrimarySystem {
 	}
 	public function getCritDuration(){
 		return array(0, 0, 1);
+	}
+
+	public function getEW($turn){
+		for ($i = sizeof($this->ew)-1; $i >= 0; $i--){
+			if ($this->ew[$i]->turn == $turn){
+				return $this->ew[$i];
+			} else if ($this->ew[$i]->turn < $turn){
+				break;
+			}
+		}
+		return false;
 	}
 }
 
@@ -316,6 +364,7 @@ class Weapon extends System {
 	public $powerReq = 2;
 	public $fireOrders = array();
 	public $priority;
+	public $traverse = 0;
 	public $fc = array(0 => 100, 1 => 100);
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
@@ -338,11 +387,10 @@ class Weapon extends System {
 		else if ($w <= 360){$this->armourMod = 0.5;}
 	}
 
-	public function getFireControlMod($fire){
-		if ($fire->target->flight || $fire->target->salvo){
-			return $this->fc[1];
-		}
-		else return $this->fc[0];
+	public function getTraverseMod($fire){
+		//Debug::log("this: ".$this->traverse);
+		//Debug::log("target: ".$fire->target->traverse);
+		return max(0, $this->traverse - $fire->target->traverse);
 	}
 
 	public function getCritEffects(){

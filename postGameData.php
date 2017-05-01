@@ -11,7 +11,6 @@ if (isset($_POST["type"])) {
 
 
 	if ($_POST["type"] == "joinGame") {
-		debug::log("join");
 		if ($dbManager->createPlayerStatus($_POST["userid"], $_POST["gameid"], 0, -1, "joined")) {
 			echo "joinGame success";
 		}
@@ -56,13 +55,16 @@ if (isset($_POST["type"])) {
 		if (isset($_POST["fireOrders"])){
 			$dbManager->insertFireOrders($_POST["gameid"], $_POST["gameturn"], $_POST["fireOrders"]);
 		}
+		if (isset($_POST["ew"])){
+			$dbManager->insertEW($_POST["ew"]);
+		}
 		if (isset($_POST["reinforcements"])){
 			for ($i = 0; $i < sizeof($_POST["reinforcements"]); $i++){
 				$_POST["reinforcements"][$i]["turn"] = $manager->turn;
 			}
 			$dbManager->requestReinforcements($_POST["userid"], $_POST["gameid"], $_POST["reinforcements"]);
 		}
-
+		//return;
 		$dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["gameturn"], $_POST["gamephase"], "ready");
 	}
 	else if ($_POST["type"] == "movement"){

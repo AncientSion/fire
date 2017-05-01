@@ -35,7 +35,7 @@
 
 
 					$avg = round(($systems[$i]->minDmg + $systems[$i]->maxDmg)/2, 2);
-
+dem
 					echo "<tr><th colSpan=2 style='text-align: center'>".($systems[$i]->display)."</th></tr>";
 					echo "<tr><td colSpan=2>".$systems[$i]->fc[0]."% / ".$systems[$i]->fc[1]."%</td></tr>";
 					echo "<tr><td>AccDecay</td><td style='text-align: right'>".($systems[$i]->accDecay)."</td></tr>";

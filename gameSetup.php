@@ -7,7 +7,7 @@ if (isset($_SESSION["userid"])){
 	$playerid = $_SESSION["userid"];
 
 	$_SESSION["gameid"] = $_GET["gameid"];
-	echo "<script> var gameid = ".$gameid."; var playerid = ".$playerid.";</script>";
+	echo "<script>var gameid = ".$gameid."; var playerid = ".$playerid.";</script>";
 	$dbManager = DBManager::app($gameid);
 	$game = $dbManager->getGameDetails($gameid);
 	if (!$game){
@@ -157,9 +157,9 @@ else {
 			</tr>
 		</table>
 		<div id="game" class="disabled" style="width: 420px; height: 400px">
-			<canvas id="shipCanvas"></canvas>
-			<canvas id="fxCanvas"></canvas>
-			<div id="background"></div>
+			<canvas id="canvas" style='z-index: 0'></canvas>
+			<canvas id="shipCanvas" style='z-index: 2'></canvas>
+			<canvas id="fxCanvas" style='z-index: 1'></canvas>
 		</div>
 		<div id="hangarLoadoutDiv" class="disabled">
 			<div class="header">
@@ -219,6 +219,18 @@ else {
 				getUnitById: function(id){	
 					return this.ships[0];
 				},
+				getUnitType: function(val){
+					switch (val){
+						case 3: return "Ultra Heavy";
+						case 2: return "Super Heavy";
+						case 1: return "Heavy";
+						case 0: return "Medium";
+						case -1: return "Light";
+						case -2: return "SuperLight";
+						case -3: return "Flight";
+						case -4: return "Salvo";
+					}
+				},
 
 				setShipTotal: function(){
 					game.ships[0].totalCost = game.ships[0].cost;
@@ -260,7 +272,7 @@ else {
 							window.addShipToFleet();
 						});
 					}
-			}
+		}
 
 		window.res = {x:200, y: 200};
 		initPreviewCanvas();
@@ -276,7 +288,6 @@ else {
 			th.innerHTML = "Assemble Your Fleet"; tr.appendChild(th); table.appendChild(tr);
 
 		for (var i = 0; i < factions.length; i++){
-			console.log(factions[i]);
 			var tr = document.createElement("tr");
 				$(tr).data("row", i);
 				$(tr).data("faction", factions[i]);
@@ -514,18 +525,19 @@ else {
 	}
 
 	function initPreviewCanvas(){
+
+		var canva = document.getElementsByTagName("canvas");
+		for (var i = 0; i < canva.length; i++){
+			canva[i].width = res.x;
+			canva[i].height = res.y;
+			canva[i].style.width = res.x;
+			canva[i].style.height = res.y;
+		}
+
 		window.fxCanvas = document.getElementById("fxCanvas");
-		window.fxCanvas.width = res.x;
-		window.fxCanvas.height = res.y;
-		window.fxCanvas.style.width = res.x;
-		window.fxCanvas.style.height = res.y;
 		window.fxCtx = fxCanvas.getContext("2d");
 
 		window.shipCanvas = document.getElementById("shipCanvas");
-		window.shipCanvas.width = res.x;
-		window.shipCanvas.height = res.y;
-		window.shipCanvas.style.width = res.x;
-		window.shipCanvas.style.height = res.y;
 		window.shipCtx = shipCanvas.getContext("2d");
 	}
 

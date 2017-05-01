@@ -83,6 +83,23 @@ function Game(id, name, status, userid, turn, phase){
 		return ret;
 	}
 
+	this.canSetSensor = function(){
+		var sensor = this.getSystemByName("Sensor");
+		if (sensor.locked){
+			return false;
+		} return true;
+	}
+
+	this.getSensorSettings = function(){
+		var ret = [];
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].ship && this.ships[i].userid == this.userid){
+				ret.push(this.ships[i].getSensorSettings());
+			}
+		}
+		return ret;
+	}
+
 	this.checkDeployment = function(){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid == this.userid){
@@ -161,7 +178,6 @@ function Game(id, name, status, userid, turn, phase){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].id == shipid){
 				this.deploying = shipid;
-				fxCanvas.style.opacity = 0.3;
 				this.setupDeploymentDiv()
 				this.setupDeploymentZone();
 				this.drawDeploymentZone();
@@ -175,9 +191,7 @@ function Game(id, name, status, userid, turn, phase){
 		this.deployArea = [];
 		this.deployBlock = false;
 		moveCtx.clearRect(0, 0, res.x, res.y);
-		fxCtx.clearRect(0, 0, res.x, res.y);
 		$("#deployOverlay").hide();
-		fxCanvas.style.opacity = 1;
 	}
 
 	this.setupDeploymentDiv = function(){
@@ -245,32 +259,37 @@ function Game(id, name, status, userid, turn, phase){
 
 	this.drawDeploymentZone = function(){
 
-		fxCtx.clearRect(0, 0, res.x, res.y);
+		planCtx.clearRect(0, 0, res.x, res.y);
+		planCtx.globalAlpha = 0.3;
 		for (var i = 0; i < this.deployArea.length; i++){
-			fxCtx.translate(cam.o.x, cam.o.y)
-			fxCtx.scale(cam.z, cam.z)
-			fxCtx.beginPath();
-			fxCtx.rect(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].w, this.deployArea[i].h);
-			fxCtx.closePath();
-			fxCtx.fillStyle = this.deployArea[i].c;
-			fxCtx.fill();
-			fxCtx.setTransform(1,0,0,1,0,0);
+			planCtx.translate(cam.o.x, cam.o.y)
+			planCtx.scale(cam.z, cam.z)
+			planCtx.beginPath();
+			planCtx.rect(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].w, this.deployArea[i].h);
+			planCtx.closePath();
+			planCtx.fillStyle = this.deployArea[i].c;
+			planCtx.fill();
+			planCtx.setTransform(1,0,0,1,0,0);
 		}
-		return;
+		//return;
 
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].id != game.deploying){
+			//if (this.ships[i].id != game.deploying){
 				var inValid = this.ships[i].getControlArea();
 				if (inValid){
-					fxCtx.beginPath();
-					fxCtx.arc(inValid.pos.x, inValid.pos.y, inValid.s, 0, 2*Math.PI, false);
-					fxCtx.closePath();
-					fxCtx.fillStyle = "red";
-					fxCtx.fill();
+					planCtx.translate(cam.o.x, cam.o.y)
+					planCtx.scale(cam.z, cam.z)
+					planCtx.beginPath();
+					planCtx.arc(inValid.pos.x, inValid.pos.y, inValid.s, 0, 2*Math.PI, false);
+					planCtx.closePath();
+					planCtx.fillStyle = "red";
+					planCtx.fill();
+					planCtx.setTransform(1,0,0,1,0,0);
 				}
-			}
+			//}
 		}
-		fxCtx.setTransform(1,0,0,1,0,0);
+		planCtx.globalAlpha = 1;
+		//moveCtx.setTransform(1,0,0,1,0,0);
 	}
 
 	this.createDeploymentTable = function(){
@@ -385,6 +404,18 @@ function Game(id, name, status, userid, turn, phase){
 		}
 	}
 
+Game.prototype.getUnitType = function (val){
+	switch (val){
+		case 3: return "Ultra Heavy";
+		case 2: return "Super Heavy";
+		case 1: return "Heavy";
+		case 0: return "Medium";
+		case -1: return "Light";
+		case -2: return "SuperLight";
+		case -3: return "Flight";
+		case -4: return "Salvo";
+	}
+}
 /*		var w = $(div).width();
 		var h = $(div).height();
 		var left = 50;
@@ -534,6 +565,10 @@ function Game(id, name, status, userid, turn, phase){
 					if (balls[j].destroyed){continue;}
 					balls[j].drawFlightPath();
 				}
+
+				if (elements[i].ship){
+					elements[i].getSystemByName("Sensor").drawEW();
+				}
 			}
 
 			var oX = $(ele).width()/2;
@@ -562,13 +597,14 @@ function Game(id, name, status, userid, turn, phase){
 
 	this.resetHover = function(){
 		if (game.flightPath){
-			mouseCtx.clearRect(0, 0, res.x, res.y);
+			salvoCtx.clearRect(0, 0, res.x, res.y);
 			game.flightPath = false;
 		}
 		if (game.deploying){
 			game.drawDeploymentZone();
 		}
 		$("#shortInfo").html("").hide();
+		mouseCtx.clearRect(0, 0, res.x, res.y);
 		game.shortInfo = false;
 	}
 	
@@ -655,6 +691,7 @@ function Game(id, name, status, userid, turn, phase){
 	this.redraw = function(){
 		planCtx.clearRect(0, 0, res.x, res.y);
 		moveCtx.clearRect(0, 0, res.x, res.y)
+		salvoCtx.clearRect(0, 0, res.x, res.y)
 		mouseCtx.clearRect(0, 0, res.x, res.y)
 		game.draw();
 
@@ -666,8 +703,11 @@ function Game(id, name, status, userid, turn, phase){
 				if (unit.hasWeaponsSelected()){
 					unit.highlightAllSelectedWeapons();
 				}
-				unit.unsetMoveMode();
-				unit.setMoveMode();
+				if (game.phase == 0 || game.phase == 1){
+					unit.unsetMoveMode();
+					unit.setMoveMode();
+					//unit.getSystemByName("Sensor").drawEW();
+				}
 			}
 		}
 	}

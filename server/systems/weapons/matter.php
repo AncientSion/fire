@@ -3,7 +3,7 @@
 class Matter extends Weapon {
 	public $type = "Matter";
 	public $animation = "projectile";
-	public $priority = 9;
+	public $priority = 4;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -36,6 +36,7 @@ class MediumRailGun extends Matter {
 	public $fc = array(0 => 100, 1 => 80);
 	public $mass = 20;
 	public $powerReq = 4;
+	public $traverse = 0;
 
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
@@ -58,6 +59,7 @@ class HeavyRailGun extends Matter {
 	public $fc = array(0 => 130, 1 => 85);
 	public $mass = 26;
 	public $powerReq = 6;
+	public $traverse = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

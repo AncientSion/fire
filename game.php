@@ -275,19 +275,34 @@ foreach ($manager->playerstatus as $player){
 				<canvas id="fxCanvas"></canvas>
 				<canvas id="planCanvas"></canvas>
 				<canvas id="moveCanvas"></canvas>
+				<canvas id="salvoCanvas"></canvas>
 				<canvas id="mouseCanvas"></canvas>
 			</div>
 			<div id="shortInfo" class="disabled">				
 			</div>
 			<div id="weaponAimTableWrapper" class="disabled">
-				<table id="targetInfo"></table>
+				<table id="targetInfo">
+					<tr>
+						<th width=30%>Target</th>
+						<th width=15%>Type</th>
+						<th width=25%>Sensor Lock</th>
+						<th width=20%>Chance</th>
+						<th width=10%>Dist</th>
+					</tr>
+					<tr id="targetData">
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</table>
 				<table id="weaponInfo">
-					<tr class="weaponAimHeader">
-						<td style="width: 52%">Weapon</td>
-						<td style="width: 12%">Fire Control</td>
-						<td style="width: 12%">Dmg loss</td>
-						<td style="width: 12%">Acc loss</td>
-						<td style="width: 12%">Final est.</td>
+					<tr>
+						<th width=40%>Weapon</th>
+						<th width=10%>Dmg</th>
+						<th width=30%>Tracking</th>
+						<th width=10%>Range</th>
+						<th width=10%>Final</th>
 					</tr>
 				</table>
 			</div>

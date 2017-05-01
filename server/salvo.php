@@ -134,6 +134,7 @@ class Salvo extends Mini {
 	public $actions = array();
 	public $structures = array();
 	public $baseImpulse;
+	public $traverse = -4;
 
 	function __construct($id, $userid, $targetid, $name, $status, $amount, $destroyed){
 		$this->id = $id;
@@ -219,7 +220,7 @@ class Salvo extends Mini {
 	}
 
 	public function getImpulse(){
-		Debug::log("salvo #".$this->id." impulse: ".min($this->getMaxImpulse(), $this->getBaseImpulse() * $this->getAccelSteps()));
+		//Debug::log("salvo #".$this->id." impulse: ".min($this->getMaxImpulse(), $this->getBaseImpulse() * $this->getAccelSteps()));
 		return $this->baseImpulse + ($this->baseImpulse / 2 * $this->getAccelSteps());
 	}
 
@@ -244,7 +245,7 @@ class Salvo extends Mini {
 		else {
 			$fire->dist = $this->getInterceptHitDist($fire);
 			$fire->hitSection = $this->getHitSection($fire);
-			$fire->req = ceil(($this->getHitChance($fire) / 100 * $fire->weapon->getFireControlMod($fire)) - $fire->weapon->getAccLoss($fire->dist));
+			$fire->req = ceil(($this->getHitChance($fire) / 100 * $fire->weapon->getTraverseMod($fire)) - $fire->weapon->getAccLoss($fire->dist));
 
 			$fire->weapon->rollForHit($fire);
 
@@ -263,7 +264,7 @@ class Salvo extends Mini {
 		if ($this->targetid == $fire->shooter->id){
 			$dist = max($dist, $fire->shooter->size/2);			
 		}
-		Debug::log("intercept range: ".$dist);
+		//Debug::log("intercept range: ".$dist);
 		return $dist;
 	}
 
@@ -278,6 +279,7 @@ class Ammo extends Weapon {
 	public $destroyed = false;
 	public $fc = array();
 	public $cost;
+	public $traverse = 2;
 
 	function __construct($parentId, $id){
 		$this->parentId = $parentId;

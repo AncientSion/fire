@@ -12,6 +12,7 @@ class Flight extends Mini {
 	public $profile = 0;
 	public $primary = false;
 	public $dogfights = array();
+	public $traverse = -3;
 
 	function __construct($id, $userid, $available, $status, $destroyed){
 		$this->id = $id;
@@ -97,7 +98,7 @@ class Flight extends Mini {
 			$fire->dist = 0;
 			$fire->angleIn = mt_rand(0, 359);
 			$fire->hitSection = $this->getHitSection($fire);
-			$fire->req = ceil(($this->getHitChance($fire) / 100 * $fire->weapon->getFireControlMod($fire)));
+			$fire->req = ceil(($this->getHitChance($fire) / 100 * $fire->weapon->getTraverseMod($fire)));
 			$fire->weapon->rollForHit($fire);
 
 			if ($fire->hits){
@@ -264,7 +265,7 @@ class Aurora extends Fighter {
 	public $ep = 100;
 	public $integrity = 34;
 	public $negation = array(8, 6, 6);
-	public $turns = 3;
+	public $turns = 5;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -283,7 +284,7 @@ class Thunderbolt extends Fighter {
 	public $ep = 110;
 	public $integrity = 38;
 	public $negation = array(10, 8, 8);
-	public $turns = 3;
+	public $turns = 5;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -303,7 +304,7 @@ class Nial extends Fighter {
 	public $ep = 140;
 	public $integrity = 42;
 	public $negation = array(11, 10, 8);
-	public $turns = 5;
+	public $turns = 8;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -322,7 +323,7 @@ class Sentri extends Fighter {
 	public $ep = 115;
 	public $integrity = 32;
 	public $negation = array(8, 7, 7);
-	public $turns = 3;
+	public $turns = 6;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

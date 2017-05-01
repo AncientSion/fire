@@ -4,7 +4,7 @@ class Laser extends Weapon {
 	public $type = "Laser";
 	public $animation = "beam";
 	public $beamWidth;
-	public $priority = 4;
+	public $priority = 2;
 	public $rakes;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $destroyed = 0){
@@ -26,12 +26,12 @@ class Laser extends Weapon {
 			$roll = mt_rand(1, 100);
 			$fire->rolls[] = $roll;
 			$fire->notes .= $roll." ";
-			if (is_a($this, "HeavyLaser")){
-				debug::log("roll: ".$roll.", req: ".$fire->req.", rakes: ".$this->rakes);
+			/*if (is_a($this, "HeavyLaser")){
+				Debug::log("roll: ".$roll.", req: ".$fire->req.", rakes: ".$this->rakes);
 				if ($roll <= $fire->req){
-					debug::log("hit");
-				} else debug::log("miss");
-			}
+					Debug::log("hit");
+				} else Debug::log("miss");
+			}*/
 			if ($roll <= $fire->req){
 				$fire->hits += $this->rakes;
 			}
@@ -104,7 +104,7 @@ class LightParticleBeam extends Laser {
 	public $minDmg = 33;
 	public $maxDmg = 46;
 	public $optRange = 400;
-	public $dmgDecay = 8;
+	public $dmgDecay = 16;
 	public $accDecay = 95;
 	public $shots = 1;
 	public $reload = 1;
@@ -112,6 +112,7 @@ class LightParticleBeam extends Laser {
 	public $rakes = 1;
 	public $fc = array(0 => 120, 1 => 120);
 	public $mass = 20;
+	public $traverse = -2;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -138,6 +139,7 @@ class LightLaser extends Laser {
 	public $rakes = 3;
 	public $fc = array(0 => 100, 1 => 120);
 	public $mass = 20;
+	public $traverse = -1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -162,6 +164,7 @@ class MediumLaser extends Laser {
 	public $maxBoost = 1;
 	public $rakes = 3;
 	public $mass = 26;
+	public $traverse = 0;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -187,6 +190,7 @@ class HeavyLaser extends Laser {
 	public $maxBoost = 1;
 	public $fc = array(0 => 120, 1 => 40);
 	public $mass = 34;
+	public $traverse = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -213,6 +217,7 @@ class NeutronLaser extends Laser {
 	public $maxBoost = 1;
 	public $fc = array(0 => 130, 1 => 65);
 	public $mass = 26;
+	public $traverse = -1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -240,6 +245,7 @@ class NeutronAccelerator extends Laser {
 	public $maxBoost = 2;
 	public $fc = array(0 => 125, 1 => 80);
 	public $mass = 23;
+	public $traverse = 0;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

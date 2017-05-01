@@ -16,6 +16,7 @@ function Ship(data){
 	this.available = data.available;
 	this.baseHitChance = data.baseHitChance;
 	this.baseImpulse = data.baseImpulse;
+	this.traverse = data.traverse
 
 	this.ship = data.ship;
 	this.flight = data.flight;
@@ -156,7 +157,7 @@ function Ship(data){
 	this.getControlArea = function(){
 		if (this.actions.length){
 			var pos = this.getBaseOffsetPos();
-			return {pos: pos, s: this.size*2};
+			return {pos: pos, s: this.size*1};
 		}
 		else return false;
 	}
@@ -190,7 +191,7 @@ function Ship(data){
 					var area = game.ships[i].getControlArea();
 					if (area){
 						var dist = getDistance(pos, area.pos);
-						if (dist <= area.s){
+						if (dist <= area.s + this.size*1){
 							popup("The selected entry point is subject to gravitic distortions and cant be chosen");
 							return false;
 						}
@@ -407,6 +408,21 @@ function Ship(data){
 		return false;
 	}
 
+	this.checkSensorHighlight = function(){
+		var sensor = this.getSystemByName("Sensor");
+		if (sensor.selected || sensor.highlight){sensor.drawEW()}
+	}
+
+	this.hasSystemSelected = function(name){		
+		for (var i = 0; i < this.primary.systems.length; i++){
+			if (this.primary.systems[i].name == name && this.primary.systems[i].selected){
+				return this.primary.systems[i];
+			}
+		}
+
+		return false;
+	}
+
 	this.getStructureById = function(id){
 		for (var i = 0; i < this.structures.length; i++){
 			if (this.structures[i].id == id){
@@ -613,10 +629,8 @@ function Ship(data){
 		return this.getTurnAngle();
 	}
 	
-	this.drawMoveRange = function(){	
-
-		center = new Point(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y);
-		
+	this.drawMoveRange = function(){
+		var center = new Point(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y);		
 		var rem = this.getRemainingImpulse();
 		var angle = this.getPlannedFacingToMove(this.actions.length-1);
 		var slipAngle = this.getSlipAngle();
@@ -1307,57 +1321,28 @@ function Ship(data){
 		
 		var table = document.createElement("table");
 			table.className = "general";
-			
-		var tr = document.createElement("tr");
-		var th = document.createElement("th");
-			th.innerHTML = this.name.toUpperCase() + " #" + this.id;
-			th.colSpan = 2; th.style.textAlign = "center";
-			tr.appendChild(th); table.appendChild(tr);
 
-		/*
-		var tr = document.createElement("tr");
-		var td = document.createElement("td");
-			td.innerHTML = "Position: "; tr.appendChild(td);
-		var td = document.createElement("td"); td.className = "pos";
-			td.innerHTML = this.x + " / " + this.y; tr.appendChild(td); table.appendChild(tr);
-		
-
-		var tr = document.createElement("tr");
-		var td = document.createElement("td");
-			td.innerHTML = "Mass: "; tr.appendChild(td);
-		var td = document.createElement("td");
-			td.innerHTML = this.mass; tr.appendChild(td); table.appendChild(tr);
-		*/
-
-		var tr = document.createElement("tr");
-		var td = document.createElement("td");
-			td.innerHTML = "Impulse: "; tr.appendChild(td);
-		var td = document.createElement("td"); td.className = "impulse";
-			td.innerHTML = this.getRemainingImpulse() + " / " + this.getTotalImpulse(); tr.appendChild(td); table.appendChild(tr);
-			
-		var tr = document.createElement("tr");
-		var td = document.createElement("td");
-			td.innerHTML = "Active Turn Delay: "; tr.appendChild(td);
-		var td = document.createElement("td"); td.className = "delay";
-			td.innerHTML = this.getRemainingDelay(); tr.appendChild(td); table.appendChild(tr);
-
-		var tr = document.createElement("tr");
-		var td = document.createElement("td");
-			td.innerHTML = "Engine Power: "; tr.appendChild(td);
-		var td = document.createElement("td"); td.className = "ep";
-			td.innerHTML = this.getRemainingEP() + " / " + this.getEP(); tr.appendChild(td); table.appendChild(tr);
-
-		var tr = document.createElement("tr");
-		var td = document.createElement("td");
-			td.innerHTML = "Impulse Change: "; tr.appendChild(td);
-		var td = document.createElement("td"); td.className = "change";
-			td.innerHTML = this.getImpulseChangeCost() + " EP"; tr.appendChild(td); table.appendChild(tr);
-
-		var tr = document.createElement("tr");
-		var td = document.createElement("td");
-			td.innerHTML = "Turning: "; tr.appendChild(td);
-		var td = document.createElement("td"); td.className = "turn";
-			td.innerHTML = this.getTurnCost() + " EP"; tr.appendChild(td); table.appendChild(tr);
+			$(table)
+				.append($("<tr>")
+					.append($("<th>").html(this.name.toUpperCase() + " #" + this.id).attr("colspan", 2).css("textAlign", "center")))
+				.append($("<tr>")
+					.append($("<td>").html("Classification:"))
+					.append($("<td>").html(game.getUnitType(this.traverse))))
+				.append($("<tr>")
+					.append($("<td>").html("Impulse:"))
+					.append($("<td>").html(this.getRemainingImpulse() + " / " + this.getTotalImpulse()).addClass("impulse")))
+				.append($("<tr>")
+					.append($("<td>").html("Active Turn Delay:"))
+					.append($("<td>").html(this.getRemainingDelay()).addClass("delay")))
+				.append($("<tr>")
+					.append($("<td>").html("Engine Power:"))
+					.append($("<td>").html(this.getRemainingEP() + " / " + this.getEP()).addClass("ep")))
+				.append($("<tr>")
+					.append($("<td>").html("Impulse Change:"))
+					.append($("<td>").html(this.getImpulseChangeCost() + " EP").addClass("change")))
+				.append($("<tr>")
+					.append($("<td>").html("Turning:"))
+					.append($("<td>").html(this.getTurnCost() + " EP").addClass("turn")))
 				
 		subDiv.appendChild(table);
 		div.appendChild(subDiv);
@@ -1392,7 +1377,8 @@ function Ship(data){
 			iconContainer.appendChild(img);
 		div.appendChild(iconContainer);
 			
-		document.getElementById("game").appendChild(div);
+		//document.getElementById("game").appendChild(div);
+		document.body.appendChild(div);
 
 		structContainer = document.createElement("div");
 		structContainer.className = "structContainer";
@@ -1816,12 +1802,13 @@ function Ship(data){
 		} else $(ele).attr("class", "hostile");
 
 		var baseHit = this.getBaseHitChance();
+		var impulse = this.getTotalImpulse();
+
 		var table = document.createElement("table");
-			table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id;
-			table.insertRow(-1).insertCell(-1).innerHTML =  "Impulse: " + this.getTotalImpulse();
+			table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id + " (" +game.getUnitType(this.traverse) + ")";
+			table.insertRow(-1).insertCell(-1).innerHTML =  "Impulse: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")";
 			table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit: " + Math.floor(this.profile[0] * baseHit) + "% - " + Math.floor(this.profile[1] * baseHit) + "%";
-			table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit  *" + this.getProfileMod() + "%";
-			return table;
+		return table;
 	}
 
 	this.getProfileMod = function(){
@@ -1894,7 +1881,6 @@ function Ship(data){
 	}
 	
 	this.setMoveMode = function(){
-
 		moveCtx.translate(cam.o.x, cam.o.y);
 		moveCtx.scale(cam.z, cam.z);
 		planCtx.translate(cam.o.x, cam.o.y);
@@ -1931,6 +1917,8 @@ function Ship(data){
 
 		moveCtx.setTransform(1,0,0,1,0,0);
 		planCtx.setTransform(1,0,0,1,0,0);
+
+		this.checkSensorHighlight();
 
 		this.updateDiv();
 	}
@@ -2003,22 +1991,55 @@ function Ship(data){
 			ctx.setTransform(1,0,0,1,0,0);
 		}
 	}
+
+	this.hasLockOnUnit = function(target){
+		var sensor = this.getSystemByName("Sensor");
+		var ew = sensor.ew[sensor.ew.length-1];
+		var origin = this.getBaseOffsetPos();
+		var d = getDistance(origin, target.getBaseOffsetPos());
+		if (d <= ew.dist){
+			var str = sensor.getOutput();
+			var len = 20;
+			var p = 1.5;
+			var	w = Math.min(180, len * Math.pow(str/ew.dist, p));
+			var start = addAngle(0 + w-this.facing, ew.angle);
+			var end = addAngle(360 - w-this.facing, ew.angle);
+
+			if (isInArc(getAngleFromTo(origin, target.getBaseOffsetPos()), start, end)){
+				return 1;
+			}
+		}
+		return 0;
+
+	}
+
+	this.getLockString = function(lock){
+		if (lock){
+			return "<span class='green'>Active Lock</span>";
+		}
+		return "<span class='red'>No Sensor Lock</span>";
+	}
+
+	this.canSetSensor = function(){
+		var sensor = this.getSystemByName("Sensor");
+		if (sensor.selected && !sensor.locked){
+			return true;
+		} return false;
+	}
 	
 	this.unselectSystems = function(){	
 		fxCtx.clearRect(0, 0, res.x, res.y);
-		var divs = document.getElementsByClassName("shipDiv")
-		
-		for (var i = 0; i < divs.length; i++){
-			if ($(divs[i]).data("shipId") == this.id){
-				divs = divs[i];
-				break;
-			}				
-		}
 	
-		var buttons = $(divs).find(".system.selected").each(function(){
+		var buttons = $(this.element).find(".system.selected").each(function(){
 			$(this).removeClass("selected");
 		});			
-		
+
+		for (var i = 0; i < this.primary.systems.length; i++){
+			if (this.primary.systems[i].selected){
+				this.primary.systems[i].select();
+			}
+		}
+
 		for (var i = 0; i < this.structures.length; i++){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
 				this.structures[i].systems[j].highlight = false;
@@ -2041,6 +2062,10 @@ function Ship(data){
 			}
 		}
 		return fires;
+	}
+
+	this.getSensorSettings = function(){
+		return this.getSystemByName("Sensor").getEW();
 	}
 
 	this.getPowerOrders = function(){

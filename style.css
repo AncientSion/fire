@@ -422,31 +422,20 @@ table, th, tr, td {
 	left: 0px;
 }
 
-#shipCanvas {
-	border: 1px solid white;
-	position: absolute;
-	z-index: 3;
-}
-
-#background {
-	position: absolute;
-	width: 200px;
-	height: 200px;
-	background-image: url("varIcons/space.jpg");
-	z-index: 1;
-}
-
 #canvas {
 	display: inline-block;
 	position: absolute;
-	z-index: 1;
 	background-image: url("varIcons/space.jpg");
+}
+
+#shipCanvas {
+	display: inline-block;
+	position: absolute;
 }
 
 #fxCanvas {
 	display: inline-block;
 	position: absolute;
-	z-index: 2;
 }
 #fxCanvas.disabled {
 	display: none;
@@ -455,19 +444,20 @@ table, th, tr, td {
 #planCanvas {
 	display: inline-block;
 	position: absolute;
-	z-index: 3;
 }
 
 #moveCanvas {
 	display: inline-block;
+}
+
+#salvoCanvas {
+	display: inline-block;
 	position: absolute;
-	z-index: 4;
 }
 
 #mouseCanvas {
 	display: inline-block;
 	position: absolute;
-	z-index: 5;
 }
 
 .iconDiv {
@@ -485,6 +475,7 @@ table, th, tr, td {
 	width: 90px;
 	height: 90px;
 	margin: auto;
+	margin-top: 10px;
 	transform: rotate(270deg);
 	-webkit-transform: rotate(270deg);
 	-ms-transform: rotate(270deg);
@@ -773,7 +764,7 @@ table, th, tr, td {
 .shipdiv .header {
 	display: inline-block;
 	width: 220px;
-	height: 100px;
+	height: 120px;
 	margin: auto;
 	padding: 0 0 0 0;
 	border: 1px solid white;
@@ -788,7 +779,7 @@ table, th, tr, td {
 .shipDiv .iconContainer {
 	float: right;
 	display: inline-block;
-	height: 100px;
+	height: 120px;
 	border: 1px solid white;
 }
 
@@ -1005,7 +996,7 @@ table, th, tr, td {
 }
 
 #shortInfo {
-	z-index: 5;
+	z-index: 7;
 	position: absolute;
 	color: white;
 	background-color: black;
@@ -1022,7 +1013,7 @@ table, th, tr, td {
 	padding: 3 3 3 3;
 	position: absolute;
 	text-align: center;
-	width: 340px;
+	width: 500px;
 }
 
 #weaponAimTableWrapper.disabled {
@@ -1035,19 +1026,19 @@ table, th, tr, td {
 	z-index: 10;
 	margin: auto;
 	border-collapse: collapse;
-	width: 95%;
+	width: 97%;
 }
 
-#targetInfo {
-	margin-bottom: 10px;
-}
-
-.weaponAimHeader td{
-	color: red;
+#targetInfo th, #weaponInfo th {
+	color: #00e7ff;
+	text-align: center;
 	font-size: 14px;
 	border: 1px solid white;
 }
 
+#targetInfo {
+	margin-bottom: 20px;
+}
 
 #deployOverlay {
 	background-color: black;
@@ -1136,7 +1127,7 @@ table, th, tr, td {
 	display: inline-block;
 	border: 1px solid white;
 	background-color: black;
-	z-index: 6;
+	z-index: 8;
 	border-radius: 5px;
 }
 

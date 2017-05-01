@@ -44,7 +44,6 @@ class Effect {
 }
 
 class HitTable {
-
 	function __construct($systems){
 		
 	}
@@ -68,6 +67,23 @@ class Action {
 		$this->delay = $delay;
 		$this->costmod = $costmod;
 		$this->resolved = $resolved;
+	}
+}
+
+class EW {
+	public $id;
+	public $unitid;
+	public $systemid;
+	public $turn;
+	public $angle;
+	public $dist;
+	function __construct($id, $unitid, $systemid, $turn, $angle, $dist){
+		$this->id = $id;
+		$this->unitid = $unitid;
+		$this->systemid = $systemid;
+		$this->turn = $turn;
+		$this->angle = $angle;
+		$this->dist = $dist;
 	}
 }
 

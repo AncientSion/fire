@@ -4,6 +4,7 @@ class Math {
 
 	function __construct(){
 	}
+	
 
 	static function getPointInDirection($dist, $a, $oX, $oY){
 		$x = round($oX + $dist * cos($a * M_PI / 180));
@@ -21,6 +22,10 @@ class Math {
 
 	static function getAngle($ax, $ay, $bx, $by){
 		return Math::radToDeg(atan2($by - $ay, $bx - $ax));
+	}
+
+	static function getAngle2($a, $b){
+		return Math::radToDeg(atan2($b->y - $a->y, $b->x - $a->x));
 	}
 
 	static function radToDeg($rad){

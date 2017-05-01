@@ -18,7 +18,7 @@ class Vorchan extends Light {
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 225, 19);
 		$front->systems[] = new MediumIon($this->getId(), $this->id, 270, 90);
-		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60, 8, 2, array("Javelin", "Hasta"));
+		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60, 6, 3, array("Javelin", "Hasta"));
 		$front->systems[] = new MediumIon($this->getId(), $this->id, 270, 90);
 		$structs[] = $front;
 
@@ -40,7 +40,7 @@ class Vorchan extends Light {
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 55);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 55, 28);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 55);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 55);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 55, 475, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 55, $this->getPowerReq());
 	}
 }

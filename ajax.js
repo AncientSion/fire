@@ -82,6 +82,8 @@ window.ajax = {
 		var deployedFlights = [];
 			deployedFlights = game.getDeployedFlights();
 
+		var ew = game.getSensorSettings();
+
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid == game.userid){
 				if (! game.ships[i].flight){
@@ -124,9 +126,11 @@ window.ajax = {
 					deployedFlights: deployedFlights,
 					powers: powers,
 					fireOrders: fireOrders,
-					reinforcements: game.reinforcements
+					reinforcements: game.reinforcements,
+					ew: ew
 					},
 			success: callback,
+			//success: console.log,
 			error: ajax.error,
 		});
 	},

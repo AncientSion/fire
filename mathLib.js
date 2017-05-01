@@ -155,6 +155,10 @@ function randomize(pos, x, y){
 	return pos;
 }
 
+function round(val){1,08979
+	return Math.floor(val * 100) / 100; 
+}
+
 function getProjIntercept(src, dst, vector, mod){
 	var tx = dst.x - src.x;
 	var	ty = dst.y - src.y;
