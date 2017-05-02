@@ -409,6 +409,7 @@ function Ship(data){
 	}
 
 	this.checkSensorHighlight = function(){
+		if (this.flight || this.salvo){return;}
 		var sensor = this.getSystemByName("Sensor");
 		if (sensor.selected || sensor.highlight){sensor.drawEW()}
 	}
