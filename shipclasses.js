@@ -2067,18 +2067,12 @@ function Ship(data){
 		} return false;
 	}
 	
-	this.unselectSystems = function(){	
+	this.unselectSystems = function(){
 		fxCtx.clearRect(0, 0, res.x, res.y);
-	
+		$("#weaponAimTableWrapper").hide();
 		var buttons = $(this.element).find(".system.selected").each(function(){
 			$(this).removeClass("selected");
-		});			
-
-		for (var i = 0; i < this.primary.systems.length; i++){
-			if (this.primary.systems[i].selected){
-				this.primary.systems[i].select();
-			}
-		}
+		});	
 
 		for (var i = 0; i < this.structures.length; i++){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
@@ -2087,7 +2081,13 @@ function Ship(data){
 			}
 		}
 		
-		$("#weaponAimTableWrapper").hide();
+		if (ship.flight || ship.salvo){return;
+		}
+		for (var i = 0; i < this.primary.systems.length; i++){
+			if (this.primary.systems[i].selected){
+				this.primary.systems[i].select();
+			}
+		}
 	}
 
 	this.getFireOrders = function(){
