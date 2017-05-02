@@ -2060,6 +2060,7 @@ function Ship(data){
 	}
 
 	this.canSetSensor = function(){
+		if (this.flight || this.salvo){return false;}
 		var sensor = this.getSystemByName("Sensor");
 		if (sensor.selected && !sensor.locked){
 			return true;
