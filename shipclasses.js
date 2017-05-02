@@ -2081,8 +2081,8 @@ function Ship(data){
 			}
 		}
 		
-		if (ship.flight || ship.salvo){return;
-		}
+		if (this.flight || this.salvo){return;}
+		
 		for (var i = 0; i < this.primary.systems.length; i++){
 			if (this.primary.systems[i].selected){
 				this.primary.systems[i].select();
