@@ -438,7 +438,7 @@ foreach ($manager->playerstatus as $player){
 		window.res.x = window.innerWidth-1;
 		window.res.y = window.innerHeight-1;
 		//$("#reinforceTable").hide();
-		$("#mouseCanvas").bind("mouseleave", function(){
+		$("#mouseCanvas").on("mouseleave", function(){
 			$("#weaponAimTableWrapper").hide();
 		})
 		$("#game").addClass("game");

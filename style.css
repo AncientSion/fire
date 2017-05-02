@@ -865,7 +865,7 @@ table, th, tr, td {
 	left: -15px;
 }
 
-.plus, .minus {
+.plus, .minus, .power, .unpower {
 	display: block;
 	background-color: black;
 	border: 1px solid red;

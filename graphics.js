@@ -80,17 +80,19 @@ function drawProjectile(weapon, fire){
 	fxCtx.setTransform(1,0,0,1,0,0);
 }
 
-function drawExplosion(weapon, x, y, now, max){
-//function drawExplosion(weapon, shooter, ele){
+function drawExplosion(weapon, x, y, now, max, explo){  // 150, 150, 30
+	var fraction = (now-max)/(explo);
+	//	console.log(now, max);
+	//function drawExplosion(weapon, shooter, ele){
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z)
 
-	var sin = weapon.exploSize*1*Math.sin(Math.PI*now/max);
+	var sin = weapon.exploSize*1*Math.sin(Math.PI*fraction);
 	if (sin < 0){
 		return;
 	}
-
-	fxCtx.globalAlpha = 1.5 - (now/max);
+	//console.log(sin);
+	fxCtx.globalAlpha = 1.5 - fraction;
 
 	var outer;
 	var mid;

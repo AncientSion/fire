@@ -507,8 +507,8 @@ function Ship(data){
 		fxCtx.moveTo(pos.x, pos.y);
 		fxCtx.arc(pos.x, pos.y, dist, rad1, rad2, false);
 		fxCtx.closePath();
-		fxCtx.globalAlpha = 0.3;			
-		fxCtx.fillStyle = "lightBlue";
+		fxCtx.globalAlpha = 0.5;			
+		fxCtx.fillStyle = "blue";
 		fxCtx.fill();
 		fxCtx.globalAlpha = 1;
 
@@ -1770,6 +1770,38 @@ function Ship(data){
 		return;
 	}
 
+	this.doUnpowerAll = function(id){
+		var system = this.getSystemById(id);
+			$(system.element).find(".powerDiv").find(".unpower").hide().end().find(".power").show();
+		var name = system.getActiveWeapon().name;
+
+		for (var i = 0; i < this.structures.length; i++){
+			for (var j = 0; j < this.structures[i].systems.length; j++){
+				if (this.structures[i].systems[j].isPowered()){
+					if (this.structures[i].systems[j].getActiveWeapon().name == name){
+						this.structures[i].systems[j].doUnpower();
+					}
+				}
+			}
+		}
+	}
+
+	this.doPowerAll = function(id){
+		var system = this.getSystemById(id);
+			$(system.element).find(".powerDiv").find(".power").hide().end().find(".unpower").show();
+		var name = system.getActiveWeapon().name;
+
+		for (var i = 0; i < this.structures.length; i++){
+			for (var j = 0; j < this.structures[i].systems.length; j++){
+				if (!this.structures[i].systems[j].isPowered()){
+					if (this.structures[i].systems[j].getActiveWeapon().name == name){
+						this.structures[i].systems[j].doPower();
+					}
+				}
+			}
+		}
+	}
+
 	this.switchModeAll = function(id){
 		var system = this.getSystemById(id);
 		var name = system.getActiveWeapon().name;
@@ -1881,13 +1913,10 @@ function Ship(data){
 	}
 	
 	this.setMoveMode = function(){
-		moveCtx.translate(cam.o.x, cam.o.y);
-		moveCtx.scale(cam.z, cam.z);
-		planCtx.translate(cam.o.x, cam.o.y);
-		planCtx.scale(cam.z, cam.z);
 
 		game.mode = 1;
 		this.turns = [];
+		this.setTranslation();
 		this.drawMoveRange();
 		this.drawVectorIndicator();
 
@@ -1915,12 +1944,21 @@ function Ship(data){
 		else if (game.phase == 3){ // Dmg control
 		}
 
+		this.resetTranslation();
+		this.checkSensorHighlight();
+		this.updateDiv();
+	}
+
+	this.setTranslation = function(){
+		moveCtx.translate(cam.o.x, cam.o.y);
+		moveCtx.scale(cam.z, cam.z);
+		planCtx.translate(cam.o.x, cam.o.y);
+		planCtx.scale(cam.z, cam.z);
+	}
+
+	this.resetTranslation = function(){
 		moveCtx.setTransform(1,0,0,1,0,0);
 		planCtx.setTransform(1,0,0,1,0,0);
-
-		this.checkSensorHighlight();
-
-		this.updateDiv();
 	}
 
 	this.unsetMoveMode = function(){

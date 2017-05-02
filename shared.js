@@ -102,7 +102,7 @@ function Animate(){
 			}
 			else {
 				if (ele.anim[k].h && ele.anim[k].n >= ele.anim[k].m){
-					drawExplosion(ele.weapon, ele.anim[k].tx, ele.anim[k].ty, ele.anim[k].n, ele.anim[k].m+30);
+					drawExplosion(ele.weapon, ele.anim[k].tx, ele.anim[k].ty, ele.anim[k].n, ele.anim[k].m, 30);
 					//drawExplosion(ele.weapon, ele.shooter, ele.anim[k]);
 				}
 				else {
@@ -116,7 +116,7 @@ function Animate(){
 			if (ele.fireOrder != undefined && ele.fireOrder.damages.length && ele.anim[k].n >= ele.anim[k].m){
 				for (var i = 0; i < ele.layout.length; i++){
 					if (ele.fireOrder.hits[i]){
-						drawExplosion(ele.structures[i], ele.x + ele.layout[i].x, ele.y + ele.layout[i].y, ele.anim[k].n, ele.anim[k].m+30);
+						drawExplosion(ele.structures[i], ele.x + ele.layout[i].x, ele.y + ele.layout[i].y, ele.anim[k].n, ele.anim[k].m, 30);
 						//drawExplosion(ele.structures[i], ele, ele.anim[k]);
 					}
 				}
@@ -327,8 +327,8 @@ function processEcho(echo){
 	}
 }
 
-function sharedLaunchFlight(e){
-	game.getUnitById(aUnit).getSystemById(e.data.systemid).launchFlight();
+function launchFlight(e){
+	game.getUnitById(aUnit).getSystemById(e.data.systemid).doLaunchFlight();
 }
 
 function redirect(url){
@@ -506,33 +506,6 @@ function handleMouseMove(e){
   cam.o.x += dx;
   cam.o.y += dy;
   game.redraw();
-}
-
-function drawSensorArc(w, d, p, str, len, loc, facing, a){
-	if (w == 180){
-		var d = str/Math.pow(180/len, 1/p);
-		mouseCtx.beginPath();			
-		mouseCtx.arc(loc.x, loc.y, d, 0, 2*Math.PI, false);
-		mouseCtx.closePath();
-	}
-	else {
-		var start = addAngle(0 + w-facing, a);
-		var end = addAngle(360 - w-facing, a);
-		var p1 = getPointInDirection(str, start, loc.x, loc.y);
-		var rad1 = degreeToRadian(start);
-		var rad2 = degreeToRadian(end);
-		mouseCtx.beginPath();			
-		mouseCtx.moveTo(loc.x, loc.y);
-		mouseCtx.lineTo(p1.x, p1.y); 
-		mouseCtx.arc(loc.x, loc.y, d, rad1, rad2, false);
-		mouseCtx.closePath();
-	}
-
-	mouseCtx.globalAlpha = 0.2;
-	mouseCtx.fillStyle = "red";
-	mouseCtx.fill();
-	mouseCtx.globalAlpha = 1;
-	mouseCtx.setTransform(1,0,0,1,0,0);
 }
 
 function sensorEvent(isClick, ship, loc, facing, d, a){

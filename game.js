@@ -51,7 +51,7 @@ function Game(id, name, status, userid, turn, phase){
 				flight.structures.push(f);
 			}
 		}
-
+		flight.size = 32 + (flight.structures.length-1)*5;
 		flight.create();
 		flight.createBaseDiv();
 		game.ships.push(flight);
@@ -703,10 +703,13 @@ Game.prototype.getUnitType = function (val){
 				if (unit.hasWeaponsSelected()){
 					unit.highlightAllSelectedWeapons();
 				}
-				if (game.phase == 0 || game.phase == 1){
+				if (game.phase == -1 || game.phase == 0 || game.phase == 1){
 					unit.unsetMoveMode();
 					unit.setMoveMode();
 					//unit.getSystemByName("Sensor").drawEW();
+				}
+				if (game.flightDeploy){
+					game.flightDeploy.drawArc();
 				}
 			}
 		}
@@ -1295,13 +1298,12 @@ Game.prototype.getUnitType = function (val){
 								if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
 									game.fireOrders[i].anim[j][k].n += 1;
 									if (game.fireOrders[i].anim[j][k].n > 0){ // valid, now animate
-										//drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].shooter.x, game.fireOrders[i].shooter.y, game.fireOrders[i].anim[j][k].nx, game.fireOrders[i].anim[j][k].ny, game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m);
 										drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
 									}
 								}
 								else if (game.fireOrders[i].anim[j][k].h){ // shot animated, does it explode ?
 									game.fireOrders[i].anim[j][k].n += 1;
-										drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].tx, game.fireOrders[i].anim[j][k].ty, game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m+30); // EXPLO
+									drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].tx, game.fireOrders[i].anim[j][k].ty, game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m, 30); // EXPLO
 									//drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].shooter, game.fireOrders[i].anim[j][k]);
 									if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m+30){
 										game.fireOrders[i].anim[j][k].done = true;

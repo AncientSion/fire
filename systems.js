@@ -194,7 +194,7 @@ System.prototype.getBoostDiv = function(){
 				subDiv.className = "plus";
 				subDiv.innerHTML = "<img src='varIcons/plus.png'</img>";
 				subDiv.childNodes[0].className = "img100pct";
-				$(subDiv).bind("click", function(e){
+				$(subDiv).click(function(e){
 					e.stopPropagation();
 					if (game.phase != -1){return;}
 					var data = $(this.parentNode).data();
@@ -205,7 +205,7 @@ System.prototype.getBoostDiv = function(){
 				subDiv.className = "minus";
 				subDiv.innerHTML = "<img src='varIcons/minus.png'</img>";
 				subDiv.childNodes[0].className = "img100pct";
-				$(subDiv).bind("click", function(e){
+				$(subDiv).click(function(e){
 					e.stopPropagation();
 					if (game.phase != -1){return;}
 					var data = $(this.parentNode).data();
@@ -221,30 +221,44 @@ System.prototype.getPowerDiv = function(){
 	if (!this.destroyed){
 		if (this.powerReq){
 			var div = document.createElement("div");
-				div.className = "powerDiv disabled";
+				div.className = "powerDiv";
 				$(div).data("shipId", this.parentId);
 				$(div).data("systemId", this.id);
 			var subDiv = document.createElement("div");
-				subDiv.className = "plus";
+				subDiv.className = "power disabled";
 				subDiv.innerHTML = "<img src='varIcons/power.png'</img>";
 				subDiv.childNodes[0].className = "img100pct";
-				$(subDiv).bind("click", function(e){
-					e.stopPropagation();
-					if (game.phase != -1){return;}
-					var data = $(this.parentNode).data();
-					game.getUnitById(data.shipId).getSystemById(data.systemId).doPower();
-				});
+				$(subDiv)
+					.click(function(e){
+						e.stopPropagation();
+						if (game.phase != -1){return;}
+						var data = $(this.parentNode).data();
+						game.getUnitById(data.shipId).getSystemById(data.systemId).doPower();
+					})
+					.contextmenu(function(e){
+						e.stopPropagation(); e.preventDefault();
+						if (game.phase != -1){return;}
+						var data = $(this.parentNode).data();
+						game.getUnitById(data.shipId).doPowerAll(data.systemId);
+					})
 				div.appendChild(subDiv);
 			var subDiv = document.createElement("div");
-				subDiv.className = "minus";
+				subDiv.className = "unpower disabled";
 				subDiv.innerHTML = "<img src='varIcons/unpower.png'</img>";
 				subDiv.childNodes[0].className = "img100pct";
-				$(subDiv).bind("click", function(e){
-					e.stopPropagation();
-					if (game.phase != -1){return;}
-					var data = $(this.parentNode).data();
-					game.getUnitById(data.shipId).getSystemById(data.systemId).doUnpower();
-				});
+				$(subDiv)
+					.click(function(e){
+						e.stopPropagation();
+						if (game.phase != -1){return;}
+						var data = $(this.parentNode).data();
+						game.getUnitById(data.shipId).getSystemById(data.systemId).doUnpower();
+					})
+					.contextmenu(function(e){
+						e.stopPropagation(); e.preventDefault();
+						if (game.phase != -1){return;}
+						var data = $(this.parentNode).data();
+						game.getUnitById(data.shipId).doUnpowerAll(data.systemId);
+					})
 				div.appendChild(subDiv);
 			return div;
 		}
@@ -398,23 +412,26 @@ System.prototype.showOptions = function(){
 			var canUnpower = this.canUnpower();
 			if (canPower){
 				boost = false;
+					canModeChange = false;
 			}
 			else if (boost){
 				if (this.getLoadLevel() != 1){
 					boost = false;
+					canModeChange = false;
 				}
 			}
 
-			if (boost || canModeChange || canPower || canUnpower){
-				if (boost){
-					ele.find(".boostDiv").show();
-				}
-				if (canModeChange){
-					ele.find(".modeDiv").show();
-				}
-				if (canPower || canUnpower){
-					ele.find(".powerDiv").show();
-				}
+			if (boost){
+				ele.find(".boostDiv").show();
+			}
+			if (canModeChange){
+				ele.find(".modeDiv").show();
+			}
+			if (canPower){
+				ele.find(".powerDiv").find(".power").show();
+			}
+			else if (canUnpower){
+				ele.find(".powerDiv").find(".unpower").show();
 			}
 		}
 	}
@@ -440,7 +457,10 @@ System.prototype.hideOptions = function(){
 			var canUnpower = this.canUnpower();
 
 			if (boost || canPower || canUnpower){
-				$(ele).find(".boostDiv").hide().end().find(".modeDiv").hide().end().find(".powerDiv").hide();
+				$(ele)
+					.find(".boostDiv").hide().end()
+					.find(".modeDiv").hide().end()
+					.find(".powerDiv").children().hide();
 				return;
 			}
 		}
@@ -1009,7 +1029,6 @@ Sensor.prototype.drawEW = function(){
 
 function Weapon(system){
 	System.call(this, system);
-	this.exploSize = system.exploSize;
 	this.animColor = system.animColor;
 	this.weapon = true;
 	this.fc = system.fc;
@@ -1027,6 +1046,7 @@ function Weapon(system){
 	this.loaded;
 	this.fireOrders = [];
 	this.mount;
+	this.exploSize = (this.minDmg+this.maxDmg)/30;
 }
 Weapon.prototype = Object.create(System.prototype);
 
@@ -1409,13 +1429,15 @@ function Particle(system){
 	this.animation = "projectile";
 	this.projSize = system.projSize;
 	this.projSpeed = system.projSpeed;
+	//this.projSpeed = 15
+	//this.exploSize = (this.minDmg + this.maxDmg) / 20;
 }
 Particle.prototype = Object.create(Weapon.prototype);
 
 Particle.prototype.getAnimation = function(fire){
 	var allAnims = [];
 	var grouping = 2;
-	var delay = 40;
+	var delay = 30;
 	var shotInterval = 6;
 
 	//var gunInterval = this.shots * 13;
@@ -1430,6 +1452,9 @@ Particle.prototype.getAnimation = function(fire){
 		delay = 80;
 		shotInterval = 10;
 	}
+
+	//console.log(this.exploSize);
+	//console.log(this.projSpeed);
 	
 	for (var j = 0; j < fire.guns; j++){
 		var hasHit = 0;
@@ -1455,8 +1480,6 @@ Particle.prototype.getAnimation = function(fire){
 		
 		for (var k = 0; k < this.shots; k++){
 			var hit = false;
-			var explo = false;
-			var dist;
 			var tfx;
 			var tfy;
 
@@ -1468,14 +1491,13 @@ Particle.prototype.getAnimation = function(fire){
 				tfx = tx + range(-8, 8);
 				tfy = ty + range(-8, 8);
 				dist = getDistance( {x: ox, y: oy}, {x: tfx, y: tfy} );
-				explo = {t: [0, 80], s: this.exploSize};
 			}
 			else { // shot miss
 				tfx = tx + range(-15, 15);
 				tfy = ty + range(-15, 15);
 			}
 
-			var shotAnim = new BallVector({x: ox, y: oy}, {x: tfx, y: tfy}, this.projSpeed/2, hit);
+			var shotAnim = new BallVector({x: ox, y: oy}, {x: tfx, y: tfy}, this.projSpeed, hit);
 			
 			if (fire.guns > grouping){
 				shotAnim.n = 0 - (Math.floor(j / grouping) * delay) + k*shotInterval;
@@ -1541,7 +1563,6 @@ Pulse.prototype.getAnimation = function(fire){
 		var tx;
 		var ty;
 		var dist;
-		var explo = false;
 		var hit = false;
 		if (fire.hits[j] >= 1){
 			hit = true;
@@ -1557,8 +1578,7 @@ Pulse.prototype.getAnimation = function(fire){
 				ty = fire.target.y + range(fire.target.size * -0.07, fire.target.size * 0.07);
 			}
 
-
-			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, this.projSpeed/2, hit);
+			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, this.projSpeed, hit);
 			//console.log(fire.guns);
 			if (fire.guns > grouping){
 				shotAnim.n = 0 - (Math.floor(j / grouping) * delay) + k*shotInterval + rng;
@@ -1585,7 +1605,8 @@ function Laser(system){
 	this.dmgDecay = system.dmgDecay;
 	this.rakeTime = system.rakeTime;
 	this.output = system.rakes;
-	this.beamWidth = system.beamWidth;
+	this.beamWidth = (this.minDmg+this.maxDmg)/system.rakes/35;
+	this.exploSize = (this.minDmg+this.maxDmg)/system.rakes/30;
 }
 Laser.prototype = Object.create(Weapon.prototype);
 
@@ -1855,7 +1876,7 @@ Dual.prototype.getBoostDiv = function(){
 					subDiv.className = "plus";
 					subDiv.innerHTML = "<img src='varIcons/plus.png'</img>";
 					subDiv.childNodes[0].className = "img100pct";
-					$(subDiv).bind("click", function(e){
+					$(subDiv).click(function(e){
 						e.stopPropagation();
 						if (game.phase != -1){return;}
 						var data = $(this.parentNode).data();
@@ -1866,7 +1887,7 @@ Dual.prototype.getBoostDiv = function(){
 					subDiv.className = "minus";
 					subDiv.innerHTML = "<img src='varIcons/minus.png'</img>";
 					subDiv.childNodes[0].className = "img100pct";
-					$(subDiv).bind("click", function(e){
+					$(subDiv).click(function(e){
 						e.stopPropagation();
 						if (game.phase != -1){return;}
 						var data = $(this.parentNode).data();
@@ -2440,18 +2461,19 @@ Hangar.prototype.showHangarControl = function(){
 		table.appendChild(tr);
 	}
 
-	$("#hangarLoadoutDiv").find("input").unbind().click({systemid: id}, window.sharedLaunchFlight);
+	var button = $("#hangarLoadoutDiv").find("input").off().on("click", {systemid: id}, launchFlight)
+	console.log(button);
 
 	if (this.canLaunchFlight()){
 		$("#hangarLoadoutDiv").find("input").removeClass("disabled");
 	} else $("#hangarLoadoutDiv").find("input").addClass("disabled");
 }
 
-Hangar.prototype.launchFlight = function(){
+Hangar.prototype.doLaunchFlight = function(){
 	for (var i = game.ships.length-1; i >= 0; i--){
 		if (game.ships[i].userid == game.userid){
 			if (game.ships[i].flight){
-				if (game.ships[i].actions[0].resolved == 0){
+				if (!game.ships[i].actions[0].resolved0){
 					if (game.ships[i].launchdata.shipid == window.aUnit && game.ships[i].launchdata.systemid == this.id){
 						//console.log("splice");
 						//this.unsetFireOrder();

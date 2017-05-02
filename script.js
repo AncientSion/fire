@@ -7,8 +7,8 @@ $(window).on("load", function() {
 
 function init(){
 	$("#mouseCanvas").mousemove(canvasMouseMove);
-	$("#mouseCanvas").bind('wheel', mouseCanvasZoom)
-	$("#mouseCanvas").bind('contextmenu', mouseCanvasScroll)
+	$("#mouseCanvas").bind('wheel', mouseCanvasZoom);
+	$("#mouseCanvas").contextmenu(mouseCanvasScroll);
 
 	$("#mouseCanvas").mousedown(handleMouseDown);
 	$("#mouseCanvas").mousemove(function(e){handleMouseMove(e);});
@@ -341,7 +341,7 @@ function deployPhase(e){
 	else if (!game.deploying){
 		if (aUnit){
 			if (game.getUnitById(aUnit).hasSystemSelected("Sensor")){
-				sensorize(game.getUnitById(aUnit, pos));
+				sensorize(game.getUnitById(aUnit), pos);
 				return;
 			}
 			firePhase(e);
