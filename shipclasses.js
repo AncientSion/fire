@@ -414,7 +414,8 @@ function Ship(data){
 		if (sensor.selected || sensor.highlight){sensor.drawEW()}
 	}
 
-	this.hasSystemSelected = function(name){		
+	this.hasSystemSelected = function(name){	
+		if (this.flight || this.salvo){return false;}	
 		for (var i = 0; i < this.primary.systems.length; i++){
 			if (this.primary.systems[i].name == name && this.primary.systems[i].selected){
 				return this.primary.systems[i];
@@ -2031,7 +2032,11 @@ function Ship(data){
 		}
 	}
 
+
+	//	return isInArc(getCompassHeadingOfPoint(loc, pos, facing), start, end);
+
 	this.hasLockOnUnit = function(target){
+		if (target.flight || target.salvo){return false;}
 		var sensor = this.getSystemByName("Sensor");
 		var ew = sensor.ew[sensor.ew.length-1];
 		var origin = this.getBaseOffsetPos();
@@ -2041,12 +2046,10 @@ function Ship(data){
 			var len = 20;
 			var p = 1.5;
 			var	w = Math.min(180, len * Math.pow(str/ew.dist, p));
-			var start = addAngle(0 + w-this.facing, ew.angle);
-			var end = addAngle(360 - w-this.facing, ew.angle);
+			var start = addAngle(0 + w, ew.angle);
+			var end = addAngle(360 - w, ew.angle);
 
-			if (isInArc(getAngleFromTo(origin, target.getBaseOffsetPos()), start, end)){
-				return 1;
-			}
+			return isInArc(getCompassHeadingOfPoint(origin,  target.getBaseOffsetPos(), this.facing), start, end);
 		}
 		return 0;
 

@@ -551,7 +551,7 @@
 			"file": "style.css",
 			"settings":
 			{
-				"buffer_size": 16407,
+				"buffer_size": 16425,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -568,7 +568,7 @@
 			"file": "shipclasses.js",
 			"settings":
 			{
-				"buffer_size": 55887,
+				"buffer_size": 57190,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -592,13 +592,11 @@
 			}
 		},
 		{
-			"contents": "<?php\n\nclass Math {\n\n\tfunction __construct(){\n\t}\n\n\n\tstatic function getPointInDirection($dist, $a, $oX, $oY){\n\t\t$x = round($oX + $dist * cos($a * M_PI / 180));\n\t\t$y = round($oY + $dist * sin($a * M_PI / 180));\n\t\treturn new Point($x, $y);\n\t} \n\n\tstatic function getDist($ax, $ay, $bx, $by){\n\t\treturn ceil(sqrt ( pow($bx - $ax, 2) + pow($by - $ay, 2) ) );\n\t}\n\n\tstatic function getDist2($a, $b){\n\t\treturn ceil(sqrt ( pow($b->x - $a->x, 2) + pow($b->y - $a->y, 2) ) );\n\t}\n\n\tstatic function getAngle($ax, $ay, $bx, $by){\n\t\treturn Math::radToDeg(atan2($by - $ay, $bx - $ax));\n\t}\n\n\tstatic function getAngle2($a, $b){\n\t\treturn Math::radToDeg(atan2($b->y - $a->y, $b->x - $a->x));\n\t}\n\n\tstatic function radToDeg($rad){\n\t\treturn $rad * (180 / M_PI);\n\t}\n\n\tstatic function addAngle($f, $a){ // facing, angle\n\t//demos vs sag\t   f 60,  a  49  -> 109    -10/350\n\t//primus vs omega  f 30,  a -35  -> 354    -60/300\n\n\t\t//360 - f +  a\n\t\t//$a = $a % 360;\n\t\t$ret = 360 - $f + $a;\n\t\t//Debug::log(\"f: \".$f.\", a: \".$a.\", ret: \".$ret);\n\n\t\tif ($ret >= 360){\n\t\t\treturn $ret - 360;\n\t\t}\n\t\telse if ($ret < 0){\n\t\t\treturn $ret + 360;\n\t\t}\n\t\telse return $ret;\n\n\n\n\n\t\t/*if ($f > 180 && $a < 0){\n\t\t\t$f -= 180; \n\t\t\t$a *= 1;\n\t\t}\n\n\t\tif ($a < 0){\n\t\t\t$f = 360 - $f;\n\t\t}\n\t\tif ($f + $a > 360){\n\t\t\t$ret = 0 + ($a -(360-$f));\n\t\t}\n\t\telse if ($f + $a < 0){\n\t\t\t$ret = 360 + ($f + $a);\n\t\t}\n\t\telse {\n\t\t\t$ret = $f + $a;\n\t\t}\n\t\treturn $ret;\n\t\t*/\n\t}\n\t\n\tstatic function isInArc($angle, $start, $end){\n\t\tif ($angle >= $start && $angle <= $end){\n\t\t\treturn true;\n\t\t}\n\t\telseif ($start > $end){\n\t\t\tif ($angle > $start){\n\t\t\t\treturn true;\n\t\t\t}\n\t\t\telseif ($angle < $end){\n\t\t\t\treturn true;\n\t\t\t}\n\t\t}\n\t}\n\n\tstatic function getVector($a, $b, $s){\n\t\treturn new Vector($a, $b, $s);\n\t}\n\n\tstatic function canIntercept($origin, $target, $targetVector, $v){\n\t\t$tx = $target->x - $origin->x;\n\t\t$ty = $target->y - $origin->y;\n\t\t$tvx = $targetVector->vx;\n\t\t$tvy = $targetVector->vy;\n\n\t\t$a = $tvx*$tvx + $tvy*$tvy - $v*$v;\n\t\t$b = 2 * ($tvx * $tx + $tvy * $ty);\n\t\t$c = $tx*$tx + $ty*$ty;\n\n\t\t$ts = Math::solve($a, $b, $c);\n\n\t\t$sol = false;\n\t\tif ($ts){\n\t\t\t$t0 = $ts[0];\n\t\t\t$t1 = $ts[1];\n\t\t\t$t = min($t0, $t1);\n\t\t\tif ($t < 0){$t = max($t0, $t1);}\n\t\t\tif ($t0 > 0){\n\t\t\t\t$sol = new Point(\n\t\t\t\t\t$target->x + $tvx * $t,\n\t\t\t\t\t$target->y + $tvy * $t\n\t\t\t\t);\n\t\t\t}\n\t\t}\n\t\treturn $sol;\n\t}\n\n\tstatic function solve($a, $b, $c){\n\t\t$sol = false;\n\t\tif (abs($a) < 1e-6){\n\t\t\tif (abs($b) < 1e-6){\n\t\t\t\t$sol = abs($c) < 1e-6 ? array(0, 0) : false;\n\t\t\t}\n\t\t\telse {\n\t\t\t\t$sol = array(-$c/$b, -$c/$b);\n\t\t\t}\n\t\t}\n\t\telse {\n\t\t\t$disc = $b*$b - 4*$a*$c;\n\t\t\tif ($disc >= 0){\n\t\t\t\t$disc = sqrt($disc);\n\t\t\t\t$a = 2*$a;\n\t\t\t\t$sol = array( (-$b-$disc)/$a, (-$b+$disc)/$a );\n\t\t\t}\n\t\t}\n\t\treturn $sol;\n\t}\n\n\n/*\n\tfunction getIntercept(src, dst, v){\n\t\tvar tx = dst.x - src.x;\n\t\tvar\tty = dst.y - src.y;\n\t\tvar\ttvx = dst.move.vx;\n\t\tvar\ttvy = dst.move.vy;\n\n\t\t// Get quadratic equation components\n\t\tvar a = tvx*tvx + tvy*tvy - v*v;\n\t\tvar b = 2 * (tvx * tx + tvy * ty);\n\t\tvar c = tx*tx + ty*ty;\n\n\t\t// Solve quadratic\n\t\tvar ts = quad(a, b, c); // See quad(), below\n\n\t\t// Find smallest positive solution\n\t\tvar sol = null;\n\t\tif (ts) {\n\t\t\tvar t0 = ts[0], t1 = ts[1];\n\t\t\tvar t = Math.min(t0, t1);\n\t\t\tif (t < 0) t = Math.max(t0, t1);    \n\t\t\tif (t > 0) {\n\t\t\t\tsol = {\n\t\t\t\t\tx: dst.x + dst.move.vx * t,\n\t\t\t\t\ty: dst.y + dst.move.vy * t\n\t\t\t\t};\n\t\t\t}\n\t\t}\n\t\treturn sol;\n\t}\n\n\tfunction quad(a,b,c) {\n\t\tvar sol = null;\n\t\tif (Math.abs(a) < 1e-6) {\n\t\t\tif (Math.abs(b) < 1e-6) {\n\t\t\t\tsol = Math.abs(c) < 1e-6 ? [0,0] : null;\n\t\t\t} else {\n\t\t\t\tsol = [-c/b, -c/b];\n\t\t\t}\n\t\t} else {\n\t\t\tvar disc = b*b - 4*a*c;\n\t\t\tif (disc >= 0) {\n\t\t\t\tdisc = Math.sqrt(disc);\n\t\t\t\ta = 2*a;\n\t\t\t\tsol = [(-b-disc)/a, (-b+disc)/a];\n\t\t\t}\n\t\t}\n\t\treturn sol;\n\t}\n*/\n\n\n\n\n}\n\n\n?>",
 			"file": "server/math.php",
-			"file_size": 3883,
-			"file_write_time": 131381358338387817,
 			"settings":
 			{
 				"buffer_size": 3682,
+				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
@@ -606,9 +604,19 @@
 			"file": "game.php",
 			"settings":
 			{
-				"buffer_size": 15039,
+				"buffer_size": 15037,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Searching 61 files for \"launch selected\"\n\nC:\\xampp\\htdocs\\fire\\game.php:\n  412  \t\t\t</table>\n  413  \t\t\t<div class=\"header\">\n  414: \t\t\t\t<input type=\"button\" class=\"disabled\" value=\"Launch selected strikecraft as mixed flight\">\n  415  \t\t\t</div>\n  416  \t\t</div>\n\n1 match in 1 file\n\n\nSearching 61 files for \"launchFlight\"\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n  328  }\n  329  \n  330: function launchFlight(e){\n  331: \tgame.getUnitById(aUnit).getSystemById(e.data.systemid).launchFlight();\n  332  }\n  333  \n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 2462  \t}\n 2463  \n 2464: \tvar button = $(\"#hangarLoadoutDiv\").find(\"input\").on(\"click\", {systemid: id}, launchFlight)\n 2465  \tconsole.log(button);\n 2466  \n 2467: \tif (this.canLaunchFlight()){\n 2468  \t\t$(\"#hangarLoadoutDiv\").find(\"input\").removeClass(\"disabled\");\n 2469  \t} else $(\"#hangarLoadoutDiv\").find(\"input\").addClass(\"disabled\");\n 2470  }\n 2471  \n 2472: Hangar.prototype.launchFlight = function(){\n 2473  \tfor (var i = game.ships.length-1; i >= 0; i--){\n 2474  \t\tif (game.ships[i].userid == game.userid){\n ....\n 2535  \t}\n 2536  \n 2537: \tif (this.canLaunchFlight()){\n 2538  \t\t$(\"#hangarLoadoutDiv\").find(\"input\").removeClass(\"disabled\");\n 2539  \t}\n ....\n 2543  }\n 2544  \n 2545: Hangar.prototype.canLaunchFlight = function(){\n 2546  \tif (this.canFire()){\n 2547  \t\tfor (var i = 0; i < this.loads.length; i++){\n\n7 matches across 2 files\n\n\nSearching 61 files for \"launchFlight\n\"\n\n0 matches\n\nSearching 61 files for \"launchFLight\"\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n  328  }\n  329  \n  330: function launchFlight(e){\n  331: \tgame.getUnitById(aUnit).getSystemById(e.data.systemid).launchFlight();\n  332  }\n  333  \n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 2462  \t}\n 2463  \n 2464: \tvar button = $(\"#hangarLoadoutDiv\").find(\"input\").on(\"click\", {systemid: id}, launchFlight)\n 2465  \tconsole.log(button);\n 2466  \n 2467: \tif (this.canLaunchFlight()){\n 2468  \t\t$(\"#hangarLoadoutDiv\").find(\"input\").removeClass(\"disabled\");\n 2469  \t} else $(\"#hangarLoadoutDiv\").find(\"input\").addClass(\"disabled\");\n 2470  }\n 2471  \n 2472: Hangar.prototype.launchFlight = function(){\n 2473  \tfor (var i = game.ships.length-1; i >= 0; i--){\n 2474  \t\tif (game.ships[i].userid == game.userid){\n ....\n 2535  \t}\n 2536  \n 2537: \tif (this.canLaunchFlight()){\n 2538  \t\t$(\"#hangarLoadoutDiv\").find(\"input\").removeClass(\"disabled\");\n 2539  \t}\n ....\n 2543  }\n 2544  \n 2545: Hangar.prototype.canLaunchFlight = function(){\n 2546  \tif (this.canFire()){\n 2547  \t\tfor (var i = 0; i < this.loads.length; i++){\n\n7 matches across 2 files\n",
+			"settings":
+			{
+				"buffer_size": 2514,
+				"line_ending": "Windows",
+				"name": "Find Results",
+				"scratch": true
 			}
 		},
 		{
@@ -621,10 +629,13 @@
 			}
 		},
 		{
+			"contents": "<?php\n\nclass DBManager {\n\n\tprivate $connection = null;\n\tstatic protected $instance = null;\n\n\tfunction __construct(){\n\n\t\tif ($this->connection === null){\n\t\t\t$user = \"aatu\"; $pass = \"Kiiski\";\n\t\t\t$user = \"root\"; $pass = \"147147\";\n\t\t\t$this->connection = new PDO(\"mysql:host=localhost;dbname=spacecombat\",$user,$pass);\n\t\t\t//$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);\n\t\t\t//$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);\n\t\t}\n\t}\n\t\n\tstatic public function app(){\n        if(self::$instance === null OR !is_a(self::$instance, \"DBManager\")) {\n            self::$instance = new DBManager();\n        }\n        return self::$instance;\n\t}\n\tpublic function getLastInsertId(){\n\t\treturn $this->connection->lastInsertId();\n\t}\n\n\tpublic function query($sql){\n\t\t$stmt = $this->connection->prepare($sql);\n\t\t$stmt->execute();\n\t\treturn $stmt->fetchAll(PDO::FETCH_ASSOC);\n\t}\n\n\tpublic function delete($sql){\n\t\t\n\t\t$stmt = $this->connection->prepare($sql);\n\t\t$stmt->execute();\n\t\tif ($stmt->errorCode() == 0){\n\t\t\treturn true;\n\t\t}\n\t}\n\n\tpublic function update($sql){\n\t\t\n\t\t//Debug::log(\"upd\");\n\t\t$stmt = $this->connection->prepare($sql);\n\t\t\n\t\tif ($stmt->execute()){\n\t\t\t//Debug::log(\"true\");\n\t\t\treturn true;\n\t\t}\n\t\telse {\n\t\t\t//Debug::log(\"false\");\n\t\t\treturn false;\n\t\t}\n\t}\n\n\tpublic function registerAccount($name, $pass){\n\t\t\n\t\t$sql = \"SELECT * FROM users\";\n\t\t$result = $this->query($sql);\n\t\t\n\t\t$valid = true;\n\t\t\n\t\tif ($result){\n\t\t\tforeach ($result as $entry){\n\t\t\t\tif ($entry[\"username\"] == $name){\n\t\t\t\t\t$valid = false;\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\t\n\t\tif ($valid){\n\t\t\t$stmt = $this->connection->prepare(\"\n\t\t\t\tINSERT INTO users\n\t\t\t\t\t(username, password, access)\n\t\t\t\tVALUES\n\t\t\t\t\t(:username, :password, :access)\n\t\t\t\");\n\n\t\t\t$access = 0;\n\t\t\t\n\t\t\t$stmt->bindParam(\":username\", $name);\n\t\t\t$stmt->bindParam(\":password\", $pass);\n\t\t\t$stmt->bindParam(\":access\", $access);\n\t\t\t\n\t\t\t$stmt->execute();\n\t\t\tif ($stmt->errorCode() == 0){\n\t\t\t\techo \"<script>alert('Account created, please login');</script>\";\n\t\t\t}\n\t\t}\n\t\telse { \n\t\t\techo \"Account already exists !\";\n\t\t}\n\t}\n\t\n\tpublic function validateLogin($name, $pass){\t\t\n\t\tDebug::log(\"validating login\");\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT id, access FROM users\n\t\t\tWHERE username = :username\n\t\t\tAND\tpassword = :password\n\t\t\");\n\t\t\n\t\t$stmt->bindParam(\":username\", $name);\n\t\t$stmt->bindParam(\":password\", $pass);\n\t\t$stmt->execute();\n\t\t\t\t\n\t\t$result = $stmt->fetch(PDO::FETCH_ASSOC);\n\t\t\n\t\tif ($result){\n\t\t\treturn $result;\n\t\t}\n\t\telse {\n\t\t\treturn false;\n\t\t}\t\n\t}\n\n\tpublic function createNewGameAndJoin($userid, $name, $pv){\n\t\t$this->createNewGame($name, $pv);\n\t\t$id = $this->getLastInsertId();\n\t\t$this->createPlayerStatus($userid, $id, 0, -1, \"joined\");\n\t\tif ($id){\n\t\t\treturn $id;\n\t\t} else return 0;\n\t}\n\n\tpublic function createPlayerStatus($userid, $gameid, $turn, $phase, $status){\n\t\tDebug::log(\"createPlayerStatus\");\n\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tINSERT INTO playerstatus\n\t\t\t\t(userid, gameid, turn, phase, faction, value, status)\n\t\t\tVALUES\n\t\t\t\t(:userid, :gameid, :turn, :phase, :faction, :value, :status)\n\t\t\");\n\n\t\t$faction = \"\";\n\t\t$points = 0;\n\n\t\t$stmt->bindParam(\":userid\", $userid);\n\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t$stmt->bindParam(\":turn\", $turn);\n\t\t$stmt->bindParam(\":phase\", $phase);\n\t\t$stmt->bindParam(\":faction\", $faction);\n\t\t$stmt->bindParam(\":value\", $points);\n\t\t$stmt->bindParam(\":status\", $status);\n\n\t\t$stmt->execute();\n\n\t\tif ($stmt->errorCode() == 0){\n\t\t\t//Debug::log(\"entry CREATE for player \".$userid.\" in game \".$gameid.\" phase: \".$phase.\" and status \".$status);\n\t\t\treturn true;\n\t\t} else return false;\n\t}\n\n\tpublic function getAvailableReinforcements($gameid, $userid){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT * FROM reinforcements \n\t\t\tWHERE gameid = :gameid\n\t\t\tAND userid = :userid\n\t\t\");\n\n\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t$stmt->bindParam(\":userid\", $userid);\n\n\t\t$stmt->execute();\n\n\t\t$result = $stmt->fetchAll(PDO::FETCH_ASSOC);\n\n\t\tif ($result){\n\t\t\treturn $result;\n\t\t} else return null;\n\t}\n\n\tpublic function insertReinforcements($gameid, $userid, $ships){\n\t\t\t//Debug::log(\"insertReinforcements\");\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tINSERT INTO reinforcements\n\t\t\t\t(gameid, userid, name, arrival, cost)\n\t\t\tVALUES\n\t\t\t\t(:gameid, :userid, :name, :arrival, :cost)\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($ships); $i++){\n\t\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t\t$stmt->bindParam(\":userid\", $userid);\n\t\t\t$stmt->bindParam(\":name\", $ships[$i][\"name\"]);\n\t\t\t$stmt->bindParam(\":arrival\", $ships[$i][\"arrival\"]);\n\t\t\t$stmt->bindParam(\":cost\", $ships[$i][\"value\"]);\n\t\t\t$stmt->execute();\n\t\t\t\n\t\t\tif ($stmt->errorCode() == 0){\n\t\t\t\tcontinue;\n\t\t\t}\n\t\t\telse {\n\t\t\t\treturn $stmt->errorCode();\n\t\t\t}\n\t\t}\n\n\t\treturn true;\n\t}\n\t\n\tpublic function createNewGame($name, $pv){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tINSERT INTO games\n\t\t\t\t(name, status, turn, phase, pv, reinforce)\n\t\t\tVALUES\n\t\t\t\t(:name, :status, :turn, :phase, :pv, :reinforce)\n\t\t\");\n\t\t\n\t\t$status = \"open\";\n\t\t$reinforce = floor($pv / 20);\n\t\t$turn = -1;\n\t\t$phase = -1;\n\t\t\n\t\t$stmt->bindParam(\":name\", $name);\n\t\t$stmt->bindParam(\":status\", $status);\n\t\t$stmt->bindParam(\":turn\", $turn);\n\t\t$stmt->bindParam(\":phase\", $phase);\n\t\t$stmt->bindParam(\":pv\", $pv);\n\t\t$stmt->bindParam(\":reinforce\", $reinforce);\n\t\t\n\t\t$stmt->execute();\n\t\t\n\t\tif ($stmt->errorCode() == 0){\n\t\t\treturn true;\n\t\t}\n\t\telse {\n\t\t\techo \"<script>alert('ERROR');</script>\";\n\t\t}\n\t}\n\t\n\tpublic function leaveGame($userid, $gameid){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tDELETE FROM playerstatus\n\t\t\tWHERE gameid = :gameid\n\t\t\tAND userid = :userid\n\t\t\");\t\t\n\t\t\n\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t$stmt->bindParam(\":userid\", $userid);\n\t\t$stmt->execute();\n\t\t\n\t\tif ($stmt->errorCode() == 0){\n\t\t\treturn true;\n\t\t}\n\t\telse {\n\t\t\treturn $stmt->errorCode();\n\t\t}\n\t}\n\n\tpublic function requestReinforcements($userid, $gameid, $units){\n\t\t$cost = 0;\n\t\tfor ($i = 0; $i < sizeof($units); $i++){\n\t\t\t$cost += $units[$i][\"cost\"];\n\t\t\t$sql = \"DELETE FROM reinforcements WHERE id = \".$units[$i][\"id\"];\n\t\t\t$this->delete($sql);\n\t\t}\n\n\t\t$this->addReinforceValue($userid, $gameid, -$cost);\n\t\t$this->insertUnits($userid, $gameid, $units);\n\t\treturn true;\n\t}\n\n\tpublic function processInitialBuy($userid, $gameid, $units, $rem, $faction){\n\t\t$this->insertUnits($userid, $gameid, $units);\n\t\t$this->insertLoads($userid, $gameid, $units);\n\t\t$this->setReinforceFaction($userid, $gameid, $faction);\n\t\t$this->addReinforceValue($userid, $gameid, $rem);\n\t\t$this->setPlayerStatus($userid, $gameid, -1, -1, \"ready\");\n\t\treturn true;\n\t}\n\n\tpublic function insertUnits($userid, $gameid, &$units){\n\t\t//Debug::log(\"DB insertUnits S: \".sizeof($units));\n\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tINSERT INTO units \n\t\t\t\t(gameid, userid, ship, ball, name, status, available, destroyed)\n\t\t\tVALUES\n\t\t\t\t(:gameid, :userid, :ship, :ball, :name, :status, :available, :destroyed)\n\t\t\");\n\n\t\t$ship;\n\t\t$ball = 0;\n\t\t$status = \"bought\";\n\t\t$destroyed = 0;\n\n\t\tfor ($i = 0; $i < sizeof($units); $i++){\n\t\t\tif ($units[$i][\"name\"] == \"Flight\"){\n\t\t\t\t$ship = 0;\n\t\t\t\t$status = \"deployed\";\n\t\t\t}\n\t\t\telse {\n\t\t\t\t$ship = 1;\n\t\t\t}\n\n\t\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t\t$stmt->bindParam(\":userid\", $userid);\n\t\t\t$stmt->bindParam(\":ship\", $ship);\n\t\t\t$stmt->bindParam(\":ball\", $ball);\n\t\t\t$stmt->bindParam(\":name\", $units[$i][\"name\"]);\n\t\t\t$stmt->bindParam(\":status\", $status);\n\t\t\t$stmt->bindValue(\":available\", (floor($units[$i][\"turn\"]) + floor($units[$i][\"arrival\"])));\n\t\t\t$stmt->bindParam(\":destroyed\", $destroyed);\n\t\t\t$stmt->execute();\n\t\t\t\n\t\t\tif ($stmt->errorCode() == 0){\n\t\t\t\t$units[$i][\"id\"] = $this->getLastInsertId();\n\t\t\t\t//echo json_encode($units[$i][\"id\"]);\n\t\t\t\tcontinue;\n\t\t\t}\n\t\t\telse {\n\t\t\t\tDebug::log($stmt->errorCode());\n\t\t\t\treturn false;\n\t\t\t}\n\t\t}\n\t}\n\n\tpublic function insertLoads($userid, $gameid, &$units){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tINSERT INTO loads \n\t\t\t\t(shipid, systemid, name, amount)\n\t\t\tVALUES\n\t\t\t\t(:shipid, :systemid, :name, :amount)\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($units); $i++){\n\t\t\tif (isset($units[$i][\"upgrades\"])){\n\t\t\t\tfor ($j = 0; $j < sizeof($units[$i][\"upgrades\"]); $j++){\n\t\t\t\t\tfor ($k = 0; $k < sizeof($units[$i][\"upgrades\"][$j][\"loads\"]); $k++){\n\t\t\t\t\t\t$stmt->bindParam(\":shipid\", $units[$i][\"id\"]);\n\t\t\t\t\t\t$stmt->bindParam(\":systemid\", $units[$i][\"upgrades\"][$j][\"systemid\"]);\n\t\t\t\t\t\t$stmt->bindParam(\":name\", $units[$i][\"upgrades\"][$j][\"loads\"][$k][\"name\"]);\n\t\t\t\t\t\t$stmt->bindParam(\":amount\", $units[$i][\"upgrades\"][$j][\"loads\"][$k][\"amount\"]);\n\n\t\t\t\t\t\t$stmt->execute();\n\t\t\t\t\t\tif ($stmt->errorCode() == 0){\n\t\t\t\t\t\t\tcontinue;\n\t\t\t\t\t\t}\n\t\t\t\t\t\telse {\n\t\t\t\t\t\t\treturn false;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\treturn true;\n\t}\n\n\tpublic function insertBallistics($gameid, $balls){\n\t\t//Debug::log(\"DB insertBallistics\");\n\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tINSERT INTO units \n\t\t\t\t(gameid, userid, ship, ball, name, status, available, destroyed)\n\t\t\tVALUES\n\t\t\t\t(:gameid, :userid, :ship, :ball, :name, :status, :available, :destroyed)\n\t\t\");\n\n\t\t$ball = 1;\n\t\t$status = \"launched\";\n\t\t$destroyed = 0;\n\n\t\tfor ($i = 0; $i < sizeof($balls); $i++){\n\t\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t\t$stmt->bindParam(\":userid\", $balls[$i]->userid);\n\t\t\t$stmt->bindParam(\":ship\", $balls[$i]->targetid);\n\t\t\t$stmt->bindParam(\":ball\", $ball);\n\t\t\t$stmt->bindParam(\":name\", $balls[$i]->name);\n\t\t\t$stmt->bindParam(\":status\", $status);\n\t\t\t$stmt->bindParam(\":available\", $balls[$i]->amount);\n\t\t\t$stmt->bindParam(\":destroyed\", $destroyed);\n\t\t\t$stmt->execute();\n\t\t\t\n\t\t\tif ($stmt->errorCode() == 0){\n\t\t\t\t$balls[$i]->id = $this->getLastInsertId();\n\t\t\t\tcontinue;\n\t\t\t}\n\t\t\telse {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t}\n\n\t\t$this->insertBallisticActions($balls);\n\t\treturn true;\n\t}\n\n\tpublic function insertBallisticActions($balls){\n\t\t//Debug::log(\"DB insertBallisticActions\");\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tINSERT INTO actions \n\t\t\t\t(shipid, turn, type, dist, x, y, a, cost, delay, costmod, resolved)\n\t\t\tVALUES\n\t\t\t\t(:shipid, :turn, :type, :dist, :x, :y, :a, :cost, :delay, :costmod, :resolved)\n\t\t\");\n\t\t$dist = 0;\n\t\t$resolved = 1;\n\n\t\tfor ($i = 0; $i < sizeof($balls); $i++){\n\t\t\tfor ($j = 0; $j < sizeof($balls[$i]->actions); $j++){\n\t\t\t\tif ($balls[$i]->actions[$j]->resolved == 0){\n\t\t\t\t\t$stmt->bindParam(\":shipid\", $balls[$i]->id);\n\t\t\t\t\t$stmt->bindParam(\":turn\", $balls[$i]->actions[$j]->turn);\n\t\t\t\t\t$stmt->bindParam(\":type\", $balls[$i]->actions[$j]->type);\n\t\t\t\t\t$stmt->bindParam(\":dist\", $dist);\n\t\t\t\t\t$stmt->bindParam(\":x\", $balls[$i]->actions[$j]->x);\n\t\t\t\t\t$stmt->bindParam(\":y\", $balls[$i]->actions[$j]->y);\n\t\t\t\t\t$stmt->bindParam(\":a\", $dist);\n\t\t\t\t\t$stmt->bindParam(\":cost\", $dist);\n\t\t\t\t\t$stmt->bindParam(\":delay\", $dist);\n\t\t\t\t\t$stmt->bindParam(\":costmod\", $dist);\n\t\t\t\t\t$stmt->bindParam(\":resolved\", $resolved);\n\t\t\t\t\t$stmt->execute();\t\t\t\n\t\t\t\t\tif ($stmt->errorCode() == 0){\n\t\t\t\t\t\t$balls[$i]->actions[$j]->resolved = 1;\n\t\t\t\t\t\tcontinue;\n\t\t\t\t\t}\n\t\t\t\t\telse {\n\t\t\t\t\t\treturn false;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\n\n\tpublic function gameIsReady($gameid){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT playerstatus.status from playerstatus\n\t\t\tJOIN games\n\t\t\tON games.id = :gameid\n\t\t\tAND playerstatus.gameid = :gameid\n\t\t\");\n\t\t\n\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t$stmt->execute();\n\t\t$result = $stmt->fetchAll(PDO::FETCH_ASSOC);\n\n\t\tif (sizeof($result) > 1){\n\t\t\t$ready = true;\n\n\t\t\tforeach ($result as $player){\n\t\t\t\tif ($player[\"status\"] != \"ready\"){\n\t\t\t\t\t$ready = false;\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tif ($ready){\n\t\t\t\treturn true;\n\t\t\t}\n\t\t}\n\t\telse {\n\t\t\treturn false;\n\t\t}\n\t}\n\n\tpublic function startGame($gameid){\n\t\t$players = $this->getPlayersInGame($gameid);\n\t\tfor ($i = 0; $i < sizeof($players); $i++){\n\t\t\t$this->setPlayerstatus($players[$i][\"userid\"], $gameid, 1, -1, \"waiting\");\n\t\t}\n\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tUPDATE games \n\t\t\tSET \n\t\t\t\tstatus = :status,\n\t\t\t\tturn = :turn\n\t\t\tWHERE\n\t\t\t\tid = :id\t\t\t\t\n\t\t\");\n\n\t\t$status = \"active\";\n\t\t$turn = 1;\n\n\t\t$stmt->bindParam(\":status\", $status);\n\t\t$stmt->bindParam(\":turn\", $turn);\n\t\t$stmt->bindParam(\":id\", $gameid);\n\n\t\t$stmt->execute();\n\n\t\tif ($stmt->errorCode() == 0){\n\t\t\treturn true;\n\t\t}\n\t\telse return false;\n\t}\n\n\tpublic function deployShipsDB($gameid, $ships){\n\t\t$this->setUnitStatusDB($ships);\n\t\tfor ($i = 0; $i < sizeof($ships); $i++){\n\t\t\tif ($this->insertActionsForShip($ships[$i][\"id\"], $ships[$i][\"actions\"])){\n\t\t\t\tcontinue;\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\n\n\tpublic function deployFlightsDB($userid, $gameid, $flights){\n\t\t//Debug::log(\"deployFlights\");\n\t\tif (sizeof($flights)){\n\t\t\t$this->insertUnits($userid, $gameid, $flights);\n\t\t\tfor ($i = 0; $i < sizeof($flights); $i++){\n\t\t\t\t$this->insertFlightElements($flights[$i]);\n\t\t\t\t$this->updateSystemLoad($flights[$i][\"launchdata\"]);\n\t\t\t\t$this->insertActionsForShip($flights[$i][\"id\"], $flights[$i][\"actions\"]);\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\n\n\tpublic function insertFlightElements($flight){\n\t\t//Debug::log(\"insertFlightElements\");\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tINSERT INTO fighters \n\t\t\t\t(unitid, amount, name)\n\t\t\tVALUES\n\t\t\t\t(:unitid, :amount, :name)\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($flight[\"launchdata\"][\"loads\"]); $i++){\n\t\t\t$stmt->bindParam(\":unitid\", $flight[\"id\"]);\n\t\t\tif ($flight[\"launchdata\"][\"loads\"][$i][\"launch\"] >= 1){\n\t\t\t\t$stmt->bindValue(\":amount\", $flight[\"launchdata\"][\"loads\"][$i][\"launch\"]);\n\t\t\t\t$stmt->bindValue(\":name\", $flight[\"launchdata\"][\"loads\"][$i][\"name\"]);\n\t\t\t\t$stmt->execute();\n\t\t\t\tif ($stmt->errorCode() != 0){\n\t\t\t\t\treturn false;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\t\n\n\tpublic function updateSystemLoad($data){\n\t\t//Debug::log(\"updateSystemLoad\");\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tUPDATE loads\n\t\t\tSET amount = amount - :amount\n\t\t\tWHERE shipid = :shipid\n\t\t\tAND systemid = :systemid\n\t\t\tAND name = :name\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($data[\"loads\"]); $i++){\n\t\t\t$stmt->bindParam(\":shipid\", $data[\"shipid\"]);\n\t\t\t$stmt->bindParam(\":systemid\", $data[\"systemid\"]);\n\t\t\tif ($data[\"loads\"][$i][\"launch\"] >= 1){\n\t\t\t\t$stmt->bindValue(\":name\", $data[\"loads\"][$i][\"name\"]);\n\t\t\t\t$stmt->bindValue(\":amount\", $data[\"loads\"][$i][\"launch\"]);\n\t\t\t\t$stmt->execute();\n\t\t\t\tif ($stmt->errorCode() == 0){\n\t\t\t\t\tcontinue;\n\t\t\t\t} else return false;\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\n\n\tpublic function setUnitStatusDB($units){\n\t\tDebug::log(\"setUnitStatusDB\");\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tUPDATE units \n\t\t\tSET\n\t\t\t\tstatus = :status\n\t\t\tWHERE id = :id\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($units); $i++){\n\t\t\t$stmt->bindParam(\":status\", $units[$i]->status);\n\t\t\t$stmt->bindParam(\":id\", $units[$i]->id);\n\t\t\t$stmt->execute();\n\n\t\t\tif ($stmt->errorCode() == 0){\n\t\t\t\tcontinue;\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\n\n\tpublic function destroyUnitsDB($array){\n\t\tDebug::log(\"destroyUnitsDB\");\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tUPDATE units \n\t\t\tSET \n\t\t\t\tdestroyed = :destroyed\n\t\t\tWHERE\n\t\t\t\tid = :id\n\t\t\");\n\t\t\n\t\tfor ($i = 0; $i < sizeof($array); $i++){\n\t\t\tfor ($j = 0; $j < sizeof($array[$i]); $j++){\n\t\t\t\t$stmt->bindParam(\":id\", $array[$i][$j]->id);\n\t\t\t\t$stmt->bindParam(\":destroyed\",  $array[$i][$j]->destroyed);\n\t\t\t\t$stmt->execute();\n\n\t\t\t\tif ($stmt->errorCode() == 0){\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\treturn;\n\t}\n\n\tpublic function insertDogfights($gameid, $turn, $dogfights){\n\t\tDebug::log(\"insertDogfights\");\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tINSERT INTO dogfights \n\t\t\t\t(gameid, turn, a, b)\n\t\t\tVALUES\n\t\t\t\t(:gameid, :turn, :a, :b)\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($dogfights); $i++){\n\t\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t\t$stmt->bindParam(\":turn\", $turn);\n\t\t\t$stmt->bindParam(\":a\", $dogfights[$i][0]);\n\t\t\t$stmt->bindParam(\":b\", $dogfights[$i][1]);\n\t\t\t$stmt->execute();\n\n\t\t\tif ($stmt->errorCode() == 0){\n\t\t\t\tcontinue;\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\n\n\tpublic function getDogfights($units){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT * FROM dogfights\n\t\t\tWHERE a = :a\n\t\t\tOR b = :b\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($units); $i++){\n\t\t\tif ($units[$i]->flight){\n\t\t\t\t$stmt->bindParam(\":a\", $units[$i]->id);\n\t\t\t\t$stmt->bindParam(\":b\", $units[$i]->id);\n\t\t\t\t$stmt->execute();\n\t\t\t\t$result = $stmt->fetchAll(PDO::FETCH_ASSOC);\n\t\t\t\tif ($result){\n\t\t\t\t\tfor ($j = 0; $j < sizeof($result); $j++){\n\t\t\t\t\t\tif ($result[$j][\"a\"] == $units[$i]->id){\n\t\t\t\t\t\t\t$units[$i]->dogfights[] = $result[$j][\"b\"];\n\t\t\t\t\t\t}\n\t\t\t\t\t\telse {\n\t\t\t\t\t\t\t$units[$i]->dogfights[] = $result[$j][\"a\"];\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\n\n\n\tpublic function deleteDogfights($data){\n\t\tDebug::log(\"deleteDogfights: \".sizeof($data));\n\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tDELETE FROM dogfights\n\t\t\tWHERE \n\t\t\t\ta = :a\n\t\t\tOR \n\t\t\t\tb = :b\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($data); $i++){\n\t\t\t$stmt->bindParam(\":a\", $data[$i]);\n\t\t\t$stmt->bindParam(\":b\", $data[$i]);\n\t\t\t$stmt->execute();\n\t\t}\n\t}\n\n\tpublic function issueMovement($gameid, $ships){\n\t\tfor ($i = 0; $i < sizeof($ships); $i++){\n\t\t\tif  ($this->insertActionsForShip($ships[$i][\"id\"], $ships[$i][\"actions\"])){\n\t\t\t\tcontinue;\n\t\t\t}\n\t\t\telse return false;\n\n\t\t}\n\t\treturn true;\n\t}\n\n\tpublic function insertActionsForShip($shipid, $actions){\n\t\t//Debug::log(\"insertActionsForShip\");\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tINSERT INTO actions \n\t\t\t\t(shipid, turn, type, dist, x, y, a, cost, delay, costmod, resolved)\n\t\t\tVALUES\n\t\t\t\t(:shipid, :turn, :type, :dist, :x, :y, :a, :cost, :delay, :costmod, :resolved)\n\t\t\");\n\n\t\t$resolved = 0;\n\n\t\tfor ($i = 0; $i < sizeof($actions); $i++){\n\t\t\t$stmt->bindParam(\":shipid\", $shipid);\n\t\t\t$stmt->bindParam(\":turn\", $actions[$i][\"turn\"]);\n\t\t\t$stmt->bindParam(\":type\", $actions[$i][\"type\"]);\n\t\t\t$stmt->bindParam(\":dist\", $actions[$i][\"dist\"]);\n\t\t\t$stmt->bindParam(\":x\", $actions[$i][\"x\"]);\n\t\t\t$stmt->bindParam(\":y\", $actions[$i][\"y\"]);\n\t\t\t$stmt->bindParam(\":a\", $actions[$i][\"a\"]);\n\t\t\t$stmt->bindParam(\":cost\", $actions[$i][\"cost\"]);\n\t\t\t$stmt->bindParam(\":delay\", $actions[$i][\"delay\"]);\n\t\t\t$stmt->bindParam(\":costmod\", $actions[$i][\"costmod\"]);\n\t\t\t$stmt->bindParam(\":resolved\", $resolved);\n\t\t\t$stmt->execute();\n\n\t\t\tif ($stmt->errorCode() == 0){\n\t\t\t\tcontinue;\n\t\t\t} \n\t\t\telse {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\n\n\tpublic function insertPowers($gameid, $turn, $powers){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tINSERT INTO powers \n\t\t\t\t( unitid, systemid, turn, type, cost )\n\t\t\tVALUES\n\t\t\t\t( :unitid, :systemid, :turn, :type, :cost )\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($powers); $i++){\n\t\t\t$stmt->bindParam(\":unitid\", $powers[$i][\"unitid\"]);\n\t\t\t$stmt->bindParam(\":systemid\", $powers[$i][\"systemid\"]);\n\t\t\t$stmt->bindParam(\":turn\", $powers[$i][\"turn\"]);\n\t\t\t$stmt->bindParam(\":type\", $powers[$i][\"type\"]);\n\t\t\t$stmt->bindParam(\":cost\", $powers[$i][\"cost\"]);\n\n\t\t\t$stmt->execute();\n\n\t\t\tif ($stmt->errorCode() == 0){\n\t\t\t\tcontinue;\n\t\t\t}\n\t\t\telse return false;\n\t\t}\n\t\treturn true;\n\t}\n\n\tpublic function insertFireOrders($gameid, $turn, $fires){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tINSERT INTO fireorders \n\t\t\t\t(gameid, turn, shooterid, targetid, weaponid, shots, resolved)\n\t\t\tVALUES\n\t\t\t\t(:gameid, :turn, :shooterid, :targetid, :weaponid, :shots, :resolved)\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($fires); $i++){\n\t\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t\t$stmt->bindParam(\":turn\", $turn);\n\t\t\t$stmt->bindParam(\":shooterid\", $fires[$i][\"shooterid\"]);\n\t\t\t$stmt->bindParam(\":targetid\", $fires[$i][\"targetid\"]);\n\t\t\t$stmt->bindParam(\":weaponid\", $fires[$i][\"weaponid\"]);\n\t\t\t$stmt->bindParam(\":shots\", $fires[$i][\"shots\"]);\n\t\t\t$stmt->bindParam(\":resolved\", $fires[$i][\"resolved\"]);\n\n\t\t\t$stmt->execute();\n\n\t\t\tif ($stmt->errorCode() == 0){\n\t\t\t\tcontinue;\n\t\t\t} else return false;\n\t\t}\n\t\treturn true;\n\t}\n\n\tpublic function insertEW($data){\n\t\t//Debug::log(\"insertSensorSettings\".sizeof($data));\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tINSERT INTO sensors \n\t\t\t\t(unitid, systemid, turn, angle, dist)\n\t\t\tVALUES\n\t\t\t\t(:unitid, :systemid, :turn, :angle, :dist)\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($data); $i++){\n\t\t\t//Debug::log(\"loop\".$i);\n\t\t\t$stmt->bindParam(\":unitid\", $data[$i][\"unitid\"]);\n\t\t\t$stmt->bindParam(\":systemid\", $data[$i][\"systemid\"]);\n\t\t\t$stmt->bindParam(\":turn\", $data[$i][\"turn\"]);\n\t\t\t$stmt->bindParam(\":angle\", $data[$i][\"angle\"]);\n\t\t\t$stmt->bindParam(\":dist\", $data[$i][\"dist\"]);\n\t\t\tif  (!$stmt->execute()){\n\t\t\t\techo ($stmt->errorInfo());\n\t\t\t} else continue;\n\t\t}\n\t\treturn true;\n\t}\n\n\tpublic function deleteUnresolvedFireOrders($gameid){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tDELETE FROM fireorders\n\t\t\tWHERE gameid = :gameid\n\t\t\tAND resolved = :resolved\n\t\t\");\n\n\t\t$resolved = -1;\n\n\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t$stmt->bindParam(\":resolved\", $resolved);\n\t\t$stmt->execute();\n\n\t\tif ($stmt->errorCode() == 0){\n\t\t\treturn true;\n\t\t} else return false;\n\t}\n\n\tpublic function updateFireOrders($fires){\n\t\tDebug::log(\"DB updateFireOrders: \".sizeof($fires));\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tUPDATE fireorders\n\t\t\tSET\n\t\t\t\treq = :req,\n\t\t\t\tnotes = :notes,\n\t\t\t\thits = :hits,\n\t\t\t\tresolved = :resolved\n\t\t\tWHERE\n\t\t\t\tid = :id\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($fires); $i++){\n\t\t\t//ebug::log(\"fire id: \".$fires[$i]->id);\n\t\t\t$stmt->bindParam(\":req\", $fires[$i]->req);\n\t\t\t$stmt->bindParam(\":notes\", $fires[$i]->notes);\n\t\t\t$stmt->bindParam(\":hits\", $fires[$i]->hits);\n\t\t\t$stmt->bindParam(\":resolved\",$fires[$i]->resolved);\n\t\t\t$stmt->bindParam(\":id\", $fires[$i]->id);\n\t\t\t$stmt->execute();\n\n\t\t\tif ($stmt->errorCode() == 0){\n\t\t\t\tcontinue;\n\t\t\t}\n\t\t\telse return false;\n\t\t}\n\n\t\treturn true;\n\t}\n\n\tpublic function updateBallisticFireOrder($fires){\n\t\tDebug::log(\"DB updateBallisticFireOrder\");\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tUPDATE fireorders\n\t\t\tSET\n\t\t\t\tresolved = :resolved\n\t\t\tWHERE\n\t\t\t\tid = :id\n\t\t\");\n\n\t\t$resolved = 1;\n\n\t\tfor ($i = 0; $i < sizeof($fires); $i++){\n\t\t\t$stmt->bindParam(\":id\", $fires[$i]->id);\n\t\t\t$stmt->bindParam(\":resolved\", $resolved);\n\t\t\t$stmt->execute();\n\n\t\t\tif ($stmt->errorCode() == 0){\n\t\t\t\tcontinue;\n\t\t\t}\n\t\t\telse return false;\n\t\t}\n\n\t\treturn true;\n\t}\n\n\tpublic function getDamages($units){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT * FROM damages\n\t\t\tWHERE shipid = :shipid\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($units); $i++){\n\t\t\t$stmt->bindParam(\":shipid\", $units[$i]->id);\n\t\t\t$stmt->execute();\n\t\t\t$result = $stmt->fetchAll(PDO::FETCH_ASSOC);\n\t\t\tif ($result){\n\t\t\t\tfor ($j = 0; $j < (sizeof($result)); $j++){\n\t\t\t\t\t$dmg = new Damage(\n\t\t\t\t\t\t$result[$j][\"id\"],\n\t\t\t\t\t\t$result[$j][\"fireid\"],\n\t\t\t\t\t\t$result[$j][\"gameid\"],\n\t\t\t\t\t\t$result[$j][\"shipid\"],\n\t\t\t\t\t\t$result[$j][\"structureid\"],\n\t\t\t\t\t\t$result[$j][\"systemid\"],\n\t\t\t\t\t\t$result[$j][\"turn\"],\n\t\t\t\t\t\t$result[$j][\"roll\"],\n\t\t\t\t\t\t$result[$j][\"type\"],\n\t\t\t\t\t\t$result[$j][\"totalDmg\"],\n\t\t\t\t\t\t$result[$j][\"shieldDmg\"],\n\t\t\t\t\t\t$result[$j][\"structDmg\"],\n\t\t\t\t\t\t$result[$j][\"armourDmg\"],\n\t\t\t\t\t\t$result[$j][\"mitigation\"],\n\t\t\t\t\t\t$result[$j][\"negation\"],\n\t\t\t\t\t\t$result[$j][\"destroyed\"],\n\t\t\t\t\t\t$result[$j][\"notes\"],\n\t\t\t\t\t\t$result[$j][\"new\"]\n\t\t\t\t\t);\n\n\t\t\t\t\t$result[$j] = $dmg;\n\t\t\t\t}\n\t\t\t\t$units[$i]->addDamageDB($result);\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\n\n\tpublic function getPowers($units){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT * FROM powers\n\t\t\tWHERE unitid = :unitid\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($units); $i++){\n\t\t\t$stmt->bindParam(\":unitid\", $units[$i]->id);\n\t\t\t$stmt->execute();\n\t\t\t$result = $stmt->fetchAll(PDO::FETCH_ASSOC);\n\t\t\tif ($result){\n\t\t\t\tfor ($j = 0; $j < (sizeof($result)); $j++){\n\t\t\t\t\t$power = new Power(\n\t\t\t\t\t\t$result[$j][\"id\"],\n\t\t\t\t\t\t$result[$j][\"unitid\"],\n\t\t\t\t\t\t$result[$j][\"systemid\"],\n\t\t\t\t\t\t$result[$j][\"turn\"],\n\t\t\t\t\t\t$result[$j][\"type\"],\n\t\t\t\t\t\t$result[$j][\"cost\"]\n\t\t\t\t\t);\n\n\t\t\t\t\t$result[$j] = $power;\n\t\t\t\t}\n\t\t\t\t$units[$i]->addPowerDB($result);\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\t\n\n\tpublic function getCrits($units){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT * FROM systemcrits\n\t\t\tWHERE shipid = :shipid\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($units); $i++){\n\t\t\t$stmt->bindParam(\":shipid\", $units[$i]->id);\n\t\t\t$stmt->execute();\n\t\t\t$result = $stmt->fetchAll(PDO::FETCH_ASSOC);\n\t\t\tif ($result){\n\t\t\tfor ($j = 0; $j < (sizeof($result)); $j++){\n\t\t\t\t\t$crit = new Crit(\n\t\t\t\t\t\t$result[$j][\"id\"],\n\t\t\t\t\t\t$result[$j][\"shipid\"],\n\t\t\t\t\t\t$result[$j][\"systemid\"],\n\t\t\t\t\t\t$result[$j][\"turn\"],\n\t\t\t\t\t\t$result[$j][\"type\"],\n\t\t\t\t\t\t$result[$j][\"duration\"],\n\t\t\t\t\t\t0\n\t\t\t\t\t);\n\n\t\t\t\t\t$result[$j] = $crit;\n\t\t\t\t}\n\t\t\t\t$units[$i]->addCritDB($result);\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\t\n\n\tpublic function getActions($units){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT * FROM actions\n\t\t\tWHERE shipid = :shipid\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($units); $i++){\n\t\t\t$stmt->bindParam(\":shipid\", $units[$i]->id);\n\t\t\t$stmt->execute();\n\t\t\t$result = $stmt->fetchAll(PDO::FETCH_ASSOC);\n\n\t\t\tif ($result){\n\t\t\t\tfor ($j = 0; $j < sizeof($result); $j++){\n\t\t\t\t\t$units[$i]->actions[] = new Action(\n\t\t\t\t\t\t$result[$j][\"turn\"],\n\t\t\t\t\t\t$result[$j][\"type\"],\n\t\t\t\t\t\t$result[$j][\"dist\"],\n\t\t\t\t\t\t$result[$j][\"x\"],\n\t\t\t\t\t\t$result[$j][\"y\"],\n\t\t\t\t\t\t$result[$j][\"a\"],\n\t\t\t\t\t\t$result[$j][\"cost\"],\n\t\t\t\t\t\t$result[$j][\"delay\"],\n\t\t\t\t\t\t$result[$j][\"costmod\"],\n\t\t\t\t\t\t$result[$j][\"resolved\"]\n\t\t\t\t\t);\n\n\t\t\t\t\t$units[$i]->facing += $result[$j][\"a\"];\n\t\t\t\t}\n\t\t\t\t//Debug::log($units[$i]->classname.\" facing: \".$units[$i]->facing);\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\n\n\tpublic function getEW($units, $turn){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT * FROM sensors\n\t\t\tWHERE unitid = :unitid\n\t\t\tAND turn = :turn\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($units); $i++){\n\t\t\tif (!$units[$i]->ship){continue;}\n\t\t\t$stmt->bindParam(\":unitid\", $units[$i]->id);\n\t\t\t$stmt->bindParam(\":turn\", $turn);\n\t\t\t$stmt->execute();\n\t\t\t$result = $stmt->fetchAll(PDO::FETCH_ASSOC);\n\n\t\t\tif ($result){\n\t\t\t\tfor ($j = 0; $j < sizeof($result); $j++){\n\t\t\t\t\t$units[$i]->getSystemById($result[$j][\"systemid\"])->ew[] = new EW(\n\t\t\t\t\t\t$result[$j][\"id\"],\n\t\t\t\t\t\t$result[$j][\"unitid\"],\n\t\t\t\t\t\t$result[$j][\"systemid\"],\n\t\t\t\t\t\t$result[$j][\"turn\"],\n\t\t\t\t\t\t$result[$j][\"angle\"],\n\t\t\t\t\t\t$result[$j][\"dist\"]\n\t\t\t\t\t);\n\t\t\t\t}\n\t\t\t\t//Debug::log($units[$i]->classname.\" facing: \".$units[$i]->facing);\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\n\n\tpublic function insertDamageEntries($damages){\n\t\tDebug::log(\" => DB insertDamageEntries: \".sizeof($damages));\n\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tINSERT INTO damages \n\t\t\t\t( fireid, shipid, gameid, structureid, systemid, turn, roll, type, totalDmg, shieldDmg, structDmg, armourDmg, mitigation, negation, destroyed, notes, new)\n\t\t\tVALUES\n\t\t\t\t( :fireid, :shipid, :gameid, :structureid, :systemid, :turn, :roll, :type, :totalDmg, :shieldDmg, :structDmg, :armourDmg, :mitigation, :negation, :destroyed, :notes, :new)\n\t\t\");\n\n\t\t$new = 0;\n\n\t\t//echo json_encode($damages[0]);\n\t\tfor ($i = 0; $i < sizeof($damages); $i++){\n\t\t\t$stmt->bindParam(\":fireid\", $damages[$i]->fireid);\n\t\t\t$stmt->bindParam(\":shipid\", $damages[$i]->shipid);\n\t\t\t$stmt->bindParam(\":gameid\", $damages[$i]->gameid);\n\t\t\t$stmt->bindParam(\":structureid\", $damages[$i]->structureid);\n\t\t\t$stmt->bindParam(\":systemid\", $damages[$i]->systemid);\n\t\t\t$stmt->bindParam(\":turn\", $damages[$i]->turn);\n\t\t\t$stmt->bindParam(\":roll\", $damages[$i]->roll);\n\t\t\t$stmt->bindParam(\":type\", $damages[$i]->type);\n\t\t\t$stmt->bindParam(\":totalDmg\", $damages[$i]->totalDmg);\n\t\t\t$stmt->bindParam(\":shieldDmg\", $damages[$i]->shieldDmg);\n\t\t\t$stmt->bindParam(\":structDmg\", $damages[$i]->structDmg);\n\t\t\t$stmt->bindParam(\":armourDmg\", $damages[$i]->armourDmg);\n\t\t\t$stmt->bindParam(\":mitigation\", $damages[$i]->mitigation);\n\t\t\t$stmt->bindParam(\":negation\", $damages[$i]->negation);\n\t\t\t$stmt->bindParam(\":destroyed\", $damages[$i]->destroyed);\n\t\t\t$stmt->bindParam(\":notes\", $damages[$i]->notes);\n\t\t\t$stmt->bindParam(\":new\", $new);\n\n\t\t\t$stmt->execute();\n\n\t\t\tif ($stmt->errorCode() == 0){\n\t\t\t\tcontinue;\n\t\t\t}\n\t\t\telse return false;\n\t\t}\n\n\t\treturn true;\n\t}\n\n\n\n\tpublic function insertCritEntries($crits, $gameid){\n\t\tDebug::log(\" => DB insertCritEntries: \".sizeof($crits));\n\t\t\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tINSERT INTO systemcrits \n\t\t\t\t( shipid, systemid, turn, type, duration)\n\t\t\tVALUES\n\t\t\t\t( :shipid, :systemid, :turn, :type, :duration)\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($crits); $i++){\n\t\t\tif ($crits[$i]->new == 1){\n\t\t\t\t$stmt->bindParam(\":shipid\", $crits[$i]->shipid);\n\t\t\t\t$stmt->bindParam(\":systemid\", $crits[$i]->systemid);\n\t\t\t\t$stmt->bindParam(\":turn\", $crits[$i]->turn);\n\t\t\t\t$stmt->bindParam(\":type\", $crits[$i]->type);\n\t\t\t\t$stmt->bindParam(\":duration\", $crits[$i]->duration);\n\t\t\t\t$stmt->execute();\n\n\t\t\t\tif ($stmt->errorCode() == 0){\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\t\t\t\telse return false;\n\t\t\t}\n\t\t}\n\n\t\treturn true;\n\t}\n\n\tpublic function getPlayerStatus($gameid){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT * FROM playerstatus\n\t\t\tWHERE\n\t\t\t\tgameid = :gameid\n\t\t\");\n\n\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t$stmt->execute();\n\n\t\t$result = $stmt->fetchAll(PDO::FETCH_ASSOC);\n\n\t\tif ($result){\n\t\t\treturn $result;\n\t\t}\n\t\telse return false;\n\t}\n\n\tpublic function DBalterReinforcementPoints($userid, $gameid, $points){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tUPDATE reinforce \n\t\t\tSET \n\t\t\t\tpoints = points + :points\n\t\t\tWHERE\n\t\t\t\tgameid = :gameid\n\t\t\tAND\n\t\t\t\tuserid = :userid\n\t\t\");\n\n\t\t$stmt->bindParam(\":userid\", $userid);\n\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t$stmt->bindParam(\":points\", $points);\n\n\t\t$stmt->execute();\n\n\t\tif ($stmt->errorCode() == 0){\n\t\t\treturn true;\n\t\t}\n\t\telse return false;\n\t}\n\n\tpublic function setPlayerstatus($userid, $gameid, $turn, $phase, $status){\n\t\t//Debug::log(\"setPlayerstatus for player \".$userid. \" adjusted to turn/phase: \".$turn.\"/\".$phase);\n\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tUPDATE playerstatus \n\t\t\tSET \n\t\t\t\tturn = :turn,\n\t\t\t\tphase = :phase,\n\t\t\t\tstatus = :status\n\t\t\tWHERE\n\t\t\t\tgameid = :gameid\n\t\t\tAND\n\t\t\t\tuserid = :userid\n\t\t\");\n\n\t\t$stmt->bindParam(\":userid\", $userid);\n\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t$stmt->bindParam(\":turn\", $turn);\n\t\t$stmt->bindParam(\":phase\", $phase);\n\t\t$stmt->bindParam(\":status\", $status);\n\n\t\t$stmt->execute();\n\n\t\tif ($stmt->errorCode() == 0){\n\t\t\t//Debug::log(\"game \".$gameid.\",user \".$userid.\" adjusting to turn/phase/status \".$turn.\" \".$phase.\" \".$status);\n\t\t\treturn true;\n\t\t} else return false;\n\t}\n\n\tpublic function setReinforceFaction($userid, $gameid, $faction){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tUPDATE playerstatus \n\t\t\tSET faction = :faction\n\t\t\tWHERE\n\t\t\t\tgameid = :gameid\n\t\t\tAND\n\t\t\t\tuserid = :userid\n\t\t\");\n\n\t\t$stmt->bindParam(\":faction\", $faction);\n\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t$stmt->bindParam(\":userid\", $userid);\n\n\t\t$stmt->execute();\n\n\t\tif ($stmt->errorCode() == 0){\n\t\t\treturn true;\n\t\t} else return false;\n\t}\n\n\tpublic function addReinforceValue($userid, $gameid, $add){\n\t\t//Debug::log(\"addReinforceValue: \".$add);\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tUPDATE playerstatus \n\t\t\tSET\tvalue = value + :add\n\t\t\tWHERE\n\t\t\t\tgameid = :gameid\n\t\t\tAND\n\t\t\t\tuserid = :userid\n\t\t\");\n\n\t\t$stmt->bindParam(\":add\", $add);\n\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t$stmt->bindParam(\":userid\", $userid);\n\n\t\t$stmt->execute();\n\n\t\tif ($stmt->errorCode() == 0){\n\t\t\treturn true;\n\t\t} else return false;\n\t}\n\n\tpublic function getAmountOfPlayersInGame($gameid){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT COUNT(*) FROM users\n\t\t\tJOIN playerstatus \n\t\t\tON playerstatus.gameid = :gameid\n\t\t\tAND users.id = playerstatus.userid\n\t\t\t\");\n\n\n\t\t$stmt->bindParam(\":gameid\", $gameid);\n\n\t\t$stmt->execute();\n\n\t\tif ($stmt->errorCode() == 0){\n\t\t\treturn $stmt->fetch();\n\n\t\t}\n\t\telse \n\t\t\treturn $stmt->errorCode();\n\t}\n\t\n\tpublic function getUsername($id){\t\n\t\t$sql = \"(SELECT username FROM users WHERE ID = \".$id.\")\";\n\t\t$result = $this->query($sql);\t\t\n\t\treturn $result[0][\"username\"];\n\t}\n\t\n\n\tpublic function getCurrentTurn($gameid){\n\n\t\t$sql = \"(SELECT turn FROM games WHERE id = \".$gameid.\")\";\n\t\t$result = $this->query($sql);\n\t\treturn $result[0][\"turn\"];\n\t}\n\t\n\tpublic function getMyStatusForGame($gameid, $userid, $turn){\n\t\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT status FROM playerstatus\n\t\t\tWHERE gameid = :gameid\n\t\t\tAND userid = :userid\n\t\t\tAND turn = :turn\n\t\t\");\n\t\t\n\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t$stmt->bindParam(\":userid\", $userid);\n\t\t$stmt->bindParam(\":turn\", $turn);\n\t\t$stmt->execute();\n\t\t\t\t\n\t\t$result = $stmt->fetch(PDO::FETCH_ASSOC);\n\t\t\n\t\tif ($result){\n\t\t\treturn $result;\n\t\t}\n\t\telse {\n\t\t\treturn false;\n\t\t}\n\t}\n\n\tpublic function getGameDetails($gameid){\n\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT * FROM games WHERE id = :id\n\t\t\");\n\n\t\t$stmt->bindParam(\":id\", $gameid);\n\t\t$stmt->execute();\t\t\t\t\n\t\t$result = $stmt->fetch(PDO::FETCH_ASSOC);\n\t\treturn $result;\n\t}\n\n\tpublic function getIncomingShips($gameid, $turn){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT * FROM units\n\t\t\tWHERE gameid = :gameid\n\t\t\tAND available > :turn\n\t\t\tAND destroyed = 0\n\t\t\tAND status = 'bought'\n\t\t\tORDER BY userid ASC\n\t\t\");\n\t\t\n\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t$stmt->bindParam(\":turn\", $turn);\n\t\t$stmt->execute();\n\t\t\t\t\n\t\t$result = $stmt->fetchAll(PDO::FETCH_ASSOC);\n\t\t\n\t\tif ($result){\n\t\t\treturn $result;\n\t\t}\n\t\telse {\n\t\t\treturn false;\n\t\t}\n\n\t}\n\n\tpublic function getActiveUnits($gameid, $turn){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT * FROM units\n\t\t\tWHERE gameid = :gameid\n\t\t\tAND ball = 0\n\t\t\tAND destroyed = 0\n\t\t\tAND available <= :turn\n\t\t\tORDER BY userid ASC\n\t\t\");\n\t\t\n\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t$stmt->bindParam(\":turn\", $turn);\n\t\t$stmt->execute();\n\t\t\t\t\n\t\t$units = $stmt->fetchAll(PDO::FETCH_ASSOC);\n\t\t\n\t\tif ($units){\n\t\t\tfor ($i = 0; $i < sizeof($units); $i++){\n\t\t\t\t$stmt = $this->connection->prepare(\"\n\t\t\t\t\tSELECT * FROM fighters\n\t\t\t\t\tWHERE fighters.unitid = :id\n\t\t\t\t\");\n\t\t\t\t\n\t\t\t\t$stmt->bindParam(\":id\", $units[$i][\"id\"]);\n\t\t\t\t$stmt->execute();\n\t\t\t\t\t\t\n\t\t\t\t$result = $stmt->fetchAll(PDO::FETCH_ASSOC);\n\n\t\t\t\tif ($result){\n\t\t\t\t\t$units[$i][\"fighters\"] = array();\n\t\t\t\t\tfor ($j = 0; $j < sizeof($result); $j++){\n\t\t\t\t\t\t$units[$i][\"fighters\"][] = $result[$j];\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\t//Debug::log(\"getting: \".sizeof($units).\" units\");\n\t\treturn $units;\n\t}\n\n\tpublic function getActiveBallistics($gameid, $turn){\n\t\t//Debug::log(\"DB getBallistics\");\t\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT * from units\n\t\t\tWHERE gameid = :gameid\n\t\t\tAND ball = 1\n\t\t\tAND destroyed = 0\n\t\t\");\n\n\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t$stmt->execute();\n\n\t\t$result = $stmt->fetchAll(PDO::FETCH_ASSOC);\n\t\t//Debug::log(\"getting: \".sizeof($result).\" ballistics\");\n\t\treturn $result;\n\t}\n\n\tpublic function getShipLoad($ships){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT systemid, name, amount \n\t\t\tFROM loads \n\t\t\tWHERE shipid = :shipid\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($ships); $i++){\n\t\t\t$stmt->bindParam(\":shipid\", $ships[$i]->id);\n\t\t\t$stmt->execute();\n\t\t\t$result = $stmt->fetchAll(PDO::FETCH_ASSOC);\n\n\t\t\tif ($result){\n\t\t\t\t$ships[$i]->addFighterLoad($result);\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\n\n\tpublic function deleteEmptyLoads(){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tDELETE FROM loads\n\t\t\tWHERE amount = 0;\n\t\t\");\n\n\t\t$stmt->execute();\n\t\tif ($stmt->errorCode() == 0){\n\t\t\treturn true;\n\t\t}\n\t}\n\n\tpublic function getAllFireOrders($gameid){\n\t\t//Debug::log(\"getAllFireOrders for game: \".$gameid);\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT * FROM fireorders\n\t\t\tWHERE gameid = :gameid\n\t\t\");\n\n\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t$stmt->execute();\n\t\t$result = $stmt->fetchAll(PDO::FETCH_ASSOC);\n\n\t\tif ($result){\n\t\t\tfor ($i = 0; $i < (sizeof($result)); $i++){\n\t\t\t\t$result[$i] = Manager::convertToFireOrder($result[$i]);\n\t\t\t}\n\t\t}\n\t\treturn $result;\n\t}\n\n\tpublic function getUnresolvedFireOrders($gameid, $turn){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT * FROM fireorders\n\t\t\tWHERE gameid = :gameid\n\t\t\tAND resolved = :resolved\n\t\t\");\n\t\t$resolved = 0;\n\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t$stmt->bindParam(\":resolved\", $resolved);\n\t\t$stmt->execute();\n\t\t$result = $stmt->fetchAll(PDO::FETCH_ASSOC);\n\n\t\tif ($result){\n\t\t\tfor ($i = 0; $i < (sizeof($result)); $i++){\n\t\t\t\t$result[$i] = Manager::convertToFireOrder($result[$i]);\n\t\t\t}\n\t\t}\n\t\treturn $result;\n\n\t}\n\n\tpublic function resolveDeployActions($gameid, $turn){\n\t\tDebug::log(\"resolveDeployActions\");\n\t\t$ships = $this->getActiveUnits($gameid, $turn);\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tUPDATE actions\n\t\t\tSET resolved = 1\n\t\t\tWHERE \n\t\t\t\tshipid = :shipid\n\t\t\tAND \n\t\t\t\ttype = :type\n\t\t\tAND \n\t\t\t\tturn = :turn\n\t\t\");\n\n\t\t$type = \"deploy\";\n\n\t\tfor ($i = 0; $i < sizeof($ships); $i++){\n\t\t\t$stmt->bindParam(\":shipid\", $ships[$i][\"id\"]);\n\t\t\t$stmt->bindParam(\":type\", $type);\n\t\t\t$stmt->bindParam(\":turn\", $turn);\n\t\t\t$stmt->execute();\n\t\t\tif ($stmt->errorCode() == 0){\n\t\t\t\tcontinue;\n\t\t\t}\n\t\t}\n\n\t\treturn true;\n\t}\n\n\tpublic function resolveUnitMovementDB($ships){\n\t\tDebug::log(\"resolveUnitMovementDB\");\n\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tUPDATE actions\n\t\t\tSET resolved = 1\n\t\t\tWHERE \n\t\t\t\tshipid = :shipid\n\t\t\tAND\n\t\t\t\tresolved = 0\n\t\t\");\n\n\t\tfor ($i = 0; $i < sizeof($ships); $i++){\n\t\t\t$stmt->bindParam(\":shipid\", $ships[$i]->id);\n\t\t\t$stmt->execute();\n\n\t\t\tif ($stmt->errorCode() == 0){\n\t\t\t\tcontinue;\n\t\t\t}\n\t\t\telse return false;\n\t\t}\n\n\t\treturn true;\n\t}\n\t\t\n\tpublic function getPlayersInGame($gameid){\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT * FROM users\n\t\t\tJOIN playerstatus \n\t\t\tON playerstatus.gameid = :gameid\n\t\t\tAND users.id = playerstatus.userid\n\t\t\");\n\n\t\t$stmt->bindParam(\":gameid\", $gameid);\n\t\t$stmt->execute();\t\t\t\t\n\t\t$result = $stmt->fetchAll(PDO::FETCH_ASSOC);\n\t\treturn $result;\n\t}\n\n\n\t\t\n\n\tpublic function getMyGames($userid){\n\t/*\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT * FROM games\n\t\t\tJOIN playerstatus \n\t\t\t\tON playerstatus.userid = :id\n\t\t\tAND games.id = playerstatus.userid\n\t\t\");\n\t*/\n\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT playerstatus.status as playerstatus, games.id, games.name, games.turn, games.phase, games.status FROM playerstatus\n\t\t\tRIGHT JOIN games\n\t\t\t\tON playerstatus.gameid = games.id\n\t\t\tWHERE playerstatus.userid = :userid\n\t\t\tAND games.status = :status\n\t\t\");\n\t\t$status = \"active\";\n\t\t$stmt->bindParam(\":status\", $status);\n\t\t$stmt->bindParam(\":userid\", $userid);\n\t\t$stmt->execute();\n\t\t\n\t\t$result = $stmt->fetchAll(PDO::FETCH_ASSOC);\n\t\treturn $result;\n\t}\n\n\n\tpublic function getOpenGames($id){\n\t\n\t\t$null = 0;\n\t\t\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT * FROM games\n\t\t\tWHERE games.status = :status\n\t\t\");\n\t\t\n\t\t$open = \"open\";\n\t\t$stmt->bindParam (\":status\", $open);\n\t\t$stmt->execute();\n\t\t\n\t\t$result = $stmt->fetchAll(PDO::FETCH_ASSOC);\t\t\n\n\n\t\tif ($result){\n\t\t\treturn $result;\n\t\t}\n\t\telse {\n\t\t\treturn false;\n\t\t}\n\t}\n\n\n\tpublic function getWaitingForOpponentGames($id){\n\t\n\t\t$null = 0;\n\t\t\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT id, name\n\t\t\tFROM games\n\t\t\tWHERE playerA = :value1\n\t\t\tAND playerB = 0\n\t\t\tOR playerB = :value1\n\t\t\tAND playerA = 0\n\t\t\");\n\t\t\n\t\t$stmt->bindParam(\":value1\", $id);\n\t\t$stmt->execute();\n\t\t\n\t\t$result = $stmt->fetchAll();\n\t\t\n\t\tif (sizeof($result) >= 1){\n\t\t//\tDebug::log(\"Games found: \".sizeof($result));\n\t\t\treturn $result;\n\t\t}\n\t\telse {\n\t\t//\tDebug::log(\"no gams found\");\n\t\t\treturn false;\n\t\t}\n\t}\n\n\n\n\tpublic function getAllUnfinishedGames(){\n\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tSELECT * FROM games\n\t\t\tWHERE status <> (:finished)\n\t\t\");\n\t\t$finished = \"finished\";\n\t\t$stmt->bindParam(\":finished\", $finished);\n\n\t\t$stmt->execute();\n\n\t\t$result = $stmt->FetchAll(PDO::FETCH_ASSOC);\n\t\t$playerInfo = array();\n\n\t\tfor ($i = 0; $i < sizeof($result); $i++){\n\t\t\t\n\t\t\t$result[$i][\"playerdata\"] = array();\n\n\t\t\t$stmt = $this->connection->prepare(\"\n\t\t\t\tSELECT playerstatus.playerid, playerstatus.status, player.username FROM usersstatus\n\t\t\t\tINNER JOIN player\n\t\t\t\t\tON playerstatus.playerid = player.id\n\t\t\t\tWHERE playerstatus.gameid = :gameid\n\t\t\t\");\n\n\t\t\t$stmt->bindParam(\":gameid\", $result[$i][\"id\"]);\n\n\t\t\t$stmt->execute();\n\n\t\t\t$playerdata = $stmt->FetchAll(PDO::FETCH_ASSOC);\n\n\t\t\tif ($playerdata){\n\t\t\t\t$result[$i][\"playerdata\"] = $playerdata;\n\t\t\t}\n\n\t\t}\n\t\t\n\t\tif ($result){\n\t\t\treturn $result;\n\t\t}\n\t\telse {\n\t\t\treturn false;\n\t\t}\n\t}\n\n\tpublic function updateAllPlayerStatusForGame($gameid, $turn, $status){\n\t\tDebug::log(\"updateAllPlayerStatusForGame\");\n\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tUPDATE playerstatus\n\t\t\tSET \n\t\t\t\tturn = :turn,\n\t\t\t\tstatus = :status\n\t\t\tWHERE gameid = :gameid\n\t\t\");\n\n\t\t$newTurn = $turn +1;\n\n\t\t$stmt->bindParam(\":turn\", $newTurn);\n\t\t$stmt->bindParam(\":status\", $status);\n\t\t$stmt->bindParam(\":gameid\", $gameid);\n\n\t\t$stmt->execute();\n\n\t\tif ($stmt->errorCode() == 0){\n\t\t//\tDebug::log(\"done\");\n\t\t\treturn true;\n\t\t}\n\t\telse return false;\n\t}\n\n\n\tpublic function setGameTurn($turn){\n\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tUPDATE games\n\t\t\tSET\tturn = :turn\n\t\t\tWHERE gameid = :gameid\n\t\t\");\n\n\t\t$stmt->bindParam(\":turn\", $turn);\n\n\t\t$stmt->execute();\n\n\t\tif ($stmt->errorCode() == 0){\n\t\t\treturn true;\n\t\t}\n\t\telse return false;\n\t}\n\n\tpublic function setGameTurnPhase($gameid, $turn, $phase){\n\t\t//Debug::log(\"setGameTurnPhase: \".$turn.\"/\".$phase);\n\t\t$stmt = $this->connection->prepare(\"\n\t\t\tUPDATE games\n\t\t\tSET\n\t\t\t\tphase = :phase,\n\t\t\t\tturn = :turn\n\t\t\tWHERE id = :id\n\t\t\");\n\n\t\t$stmt->bindParam(\":turn\", $turn);\n\t\t$stmt->bindParam(\":phase\", $phase);\n\t\t$stmt->bindParam(\":id\", $gameid);\n\n\t\t$stmt->execute();\n\n\t\tif ($stmt->errorCode() == 0){\n\t\t\treturn true;\n\t\t}\n\t\telse return false;\n\t}\n}\t\t\n\n?>\n",
 			"file": "server/dbManager.php",
+			"file_size": 42116,
+			"file_write_time": 131382291495775579,
 			"settings":
 			{
-				"buffer_size": 40399,
+				"buffer_size": 40397,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -633,7 +644,7 @@
 			"file": "server/debug.php",
 			"settings":
 			{
-				"buffer_size": 187,
+				"buffer_size": 185,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -768,7 +779,27 @@
 			"file": "systems.js",
 			"settings":
 			{
-				"buffer_size": 75105,
+				"buffer_size": 75803,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "\nfunction drawVector(origin, target, dist, angle){\n\tmouseCtx.clearRect(0, 0, res.x, res.y);\n\tmouseCtx.beginPath();\n\tmouseCtx.moveTo(origin.x * cam.z + cam.o.x, origin.y * cam.z + cam.o.y);\n\tmouseCtx.lineTo(target.x, target.y);\n\tmouseCtx.closePath();\n\tmouseCtx.strokeStyle = \"white\";\n\tmouseCtx.stroke();\n\n\tif (angle > 180){\n\t\tangle = (360-angle) *-1;\n\t}\n\n\t$(\"#vectorDiv\").html(\"Distance: \" + dist + \" </br>Angle: \" + Math.round(angle))\n\t.css(\"left\", target.x- 45 + \"px\")\n\t.css(\"top\", target.y + 40 + \"px\")\n\t.removeClass(\"disabled\");\n}\n\nfunction drawSensorArc(w, d, p, str, len, loc, facing, a){\n\tif (w == 180){\n\t\tvar d = str/Math.pow(180/len, 1/p);\n\t\tmouseCtx.beginPath();\t\t\t\n\t\tmouseCtx.arc(loc.x, loc.y, d, 0, 2*Math.PI, false);\n\t\tmouseCtx.closePath();\n\t}\n\telse {\n\t\tvar start = addAngle(0 + w-facing, a);\n\t\tvar end = addAngle(360 - w-facing, a);\n\t\tvar p1 = getPointInDirection(str, start, loc.x, loc.y);\n\t\tvar rad1 = degreeToRadian(start);\n\t\tvar rad2 = degreeToRadian(end);\n\t\tmouseCtx.beginPath();\t\t\t\n\t\tmouseCtx.moveTo(loc.x, loc.y);\n\t\tmouseCtx.lineTo(p1.x, p1.y); \n\t\tmouseCtx.arc(loc.x, loc.y, d, rad1, rad2, false);\n\t\tmouseCtx.closePath();\n\t}\n\n\tmouseCtx.globalAlpha = 0.2;\n\tmouseCtx.fillStyle = \"red\";\n\tmouseCtx.fill();\n\tmouseCtx.globalAlpha = 1;\n\tmouseCtx.setTransform(1,0,0,1,0,0);\n}\n\n\n//function drawProjectile(weapon, ox, oy, x, y, now, end){\nfunction drawProjectile(weapon, fire){\n\t//getPointInDirection(dis, angle, oX, oY){\n\n\tvar x = fire.ox + fire.nx * fire.n;\n\tvar y = fire.oy + fire.ny * fire.n;\n\tvar trailEnd = getPointInDirection(weapon.projSize*2.5, fire.f, x, y);\n\tvar w = 1;\n\n\tfxCtx.translate(cam.o.x, cam.o.y);\n\tfxCtx.scale(cam.z, cam.z)\n\n\tif (fire.n/fire.m > 0.7){\n\t\tw -= 2*(fire.n/fire.m- 0.7);\n\t}\n\n\tfxCtx.globalAlpha = w\n\tfxCtx.beginPath();\n\tfxCtx.moveTo(x, y);\n\tfxCtx.lineTo(trailEnd.x, trailEnd.y);\n\tfxCtx.closePath();\n\tfxCtx.strokeStyle = weapon.animColor;\n\tfxCtx.lineWidth = weapon.projSize/2;\n\tfxCtx.stroke();\n\n\tfxCtx.globalCompositeOperation = \"lighter\";\n\tfxCtx.strokeStyle = \"white\";\n\tfxCtx.lineWidth = weapon.projSize/4;\n\tfxCtx.stroke();\n\n\tfxCtx.globalCompositeOperation = \"source-over\";\n\tfxCtx.setTransform(1,0,0,1,0,0);\n}\n\nfunction drawExplosion(weapon, x, y, now, max, explo){  // 150, 150, 30\n\tvar fraction = (now-max)/(explo);\n\t//\tconsole.log(now, max);\n\t//function drawExplosion(weapon, shooter, ele){\n\tfxCtx.translate(cam.o.x, cam.o.y);\n\tfxCtx.scale(cam.z, cam.z)\n\n\tvar sin = weapon.exploSize*1*Math.sin(Math.PI*fraction);\n\tif (sin < 0){\n\t\treturn;\n\t}\n\t//console.log(sin);\n\tfxCtx.globalAlpha = 1.5 - fraction;\n\n\tvar outer;\n\tvar mid;\n\tvar inner;\n\n\tif (weapon instanceof EM){\n\t\touter = \"rgb(95,125,255)\";\n\t\tmid = \"rgb(95,125,255)\";\n\t\tinner = \"rgb(255,255,255)\";\n\t}\n\telse {\n\t\touter =\"rgb(255,225,75)\";\n\t\tmid = \"rgb(255,200,0)\";\n\t\tinner = \"rgb(255,0,0)\";\n\t}\n\n\tfxCtx.beginPath(); fxCtx.arc(x, y, sin, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = outer; fxCtx.fill();\n\tfxCtx.beginPath(); fxCtx.arc(x, y, sin*0.66, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = mid; fxCtx.fill();\n\tfxCtx.beginPath(); fxCtx.arc(x, y, sin*0.35, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = inner; fxCtx.fill();\n\n\tfxCtx.globalAlpha = 1;\n\tfxCtx.setTransform(1,0,0,1,0,0);\n}\n\nfunction drawFighterExplosion(x, y, s, now, max){\n\tvar sin = s*0.5*Math.sin(Math.PI*now/max);\n\tif (sin < 0){\n\t\treturn;\n\t}\n\n\tfxCtx.globalAlpha = 1.5 - (now/max);\n\n\tfxCtx.beginPath(); fxCtx.arc(x, y, sin, 0, 2*Math.PI); fxCtx.closePath();\tfxCtx.fillStyle = \"rgb(255,225,75)\"; fxCtx.fill();\n\tfxCtx.beginPath(); fxCtx.arc(x, y, sin/3*2, 0, 2*Math.PI); fxCtx.closePath();\tfxCtx.fillStyle = \"rgb(255,200,0)\"; fxCtx.fill();\n\tfxCtx.beginPath(); fxCtx.arc(x, y, sin/4, 0, 2*Math.PI); fxCtx.closePath();\tfxCtx.fillStyle = \"rgb(255,0,0)\"; fxCtx.fill();\n\n\tfxCtx.globalAlpha = 1;\n}\n\nfunction drawBeam(weapon, fire){\n\tfxCtx.translate(cam.o.x, cam.o.y);\n\tfxCtx.scale(cam.z, cam.z)\n\n\tvar fraction = fire.n/fire.m;\n\tvar charge =  0.5 - 0.3*Math.cos(2*Math.PI*fraction);\n\n\tfxCtx.globalAlpha = 1;\n\tfxCtx.beginPath();\n\tfxCtx.arc(fire.ox, fire.oy, weapon.beamWidth*charge, 0, 2*Math.PI);\n\tfxCtx.closePath();\t\n\tfxCtx.fillStyle = weapon.animColor;\n\tfxCtx.fill();\n\n\tfxCtx.beginPath();\n\tfxCtx.arc(fire.ox, fire.oy, weapon.beamWidth/2*charge, 0, 2*Math.PI);\n\tfxCtx.closePath();\n\tfxCtx.globalCompositeOperation = \"lighter\";\n\tfxCtx.fillStyle = \"white\";\n\tfxCtx.fill();\t\n\n\tvar x = fire.tax + fire.nx * fire.n;\n\tvar y = fire.tay + fire.ny * fire.n;\n\n\tif (fraction > 0.3){\n\t\tvar beamW = 0.5 + 0.5 * Math.cos(2*Math.PI*fraction);\n\t\tfxCtx.lineCap = \"round\";\t\n\t\tfxCtx.beginPath();\n\t\tfxCtx.moveTo(fire.ox, fire.oy);\n\t\tfxCtx.lineTo(x, y);\n\t\tfxCtx.closePath();\n\n\t\tfxCtx.globalAlpha = 1 - beamW;\n\t\tfxCtx.globalCompositeOperation = \"source-over\";\n\t\tfxCtx.lineWidth = weapon.beamWidth * 0.5 + weapon.beamWidth * beamW;\n\t\tfxCtx.strokeStyle = weapon.animColor;\n\t\tfxCtx.stroke();\n\n\t\tfxCtx.globalCompositeOperation = \"lighter\";\n\t\tfxCtx.lineWidth = 1 + 1* beamW;\n\t\tfxCtx.strokeStyle = \"white\";\n\t\tfxCtx.stroke();\n\t\tif (fire.h){\n\t\t\tdrawBeamExplosion(weapon, x, y, fraction);\n\t\t}\n\t}\n\t\t\n\tfxCtx.globalCompositeOperation = \"source-over\";\n\tfxCtx.lineCap = \"butt\";\n\tfxCtx.setTransform(1,0,0,1,0,0);\n}\n\nfunction drawBeamExplosion(weapon, x, y, fraction){\n\tfxCtx.globalAlpha = 1.5 - fraction;\n\tfxCtx.globalCompositeOperation = \"source-over\";\n\n\tfor (var i = 0; i < 1; i++){\n\t\tvar subX = x + range(-2, 3);\n\t\tvar subY = y + range(-2, 3);\n\t\tvar subS = weapon.exploSize + (range(-weapon.exploSize*.15, weapon.exploSize*.15));\n\n\t\tfxCtx.beginPath(); fxCtx.arc(x, y, subS, 0, 2*Math.PI); fxCtx.closePath();\tfxCtx.fillStyle = \"rgb(255,255,155)\"; fxCtx.fill();\n\t\tfxCtx.beginPath(); fxCtx.arc(x, y, subS/3*2, 0, 2*Math.PI); fxCtx.closePath();\tfxCtx.fillStyle = \"orange\"; fxCtx.fill();\n\t\tfxCtx.beginPath(); fxCtx.arc(x, y, subS/4, 0, 2*Math.PI); fxCtx.closePath();\tfxCtx.fillStyle = \"red\"; fxCtx.fill();\n\t}\n\tfxCtx.globalAlpha = 1;\n}\n\nfunction drawCircle(x, y, s, op, color){\n\tctx.globalCompositeOperation = op;\n\tctx.beginPath();\n\tctx.arc(x, y, s, 0, 2*Math.PI, false);\n\tctx.closePath();\n\tctx.fillStyle = color;\n\tctx.fill();\n}\n\n\nfunction getRadialGradient(x, y, s){\n\tvar grad = fxCtx.createRadialGradient(x, y, 0, x, y, s);\n\t\t/*\n\t\tgrad.addColorStop(0, \"white\");\n\t\tgrad.addColorStop(0.3, \"yellow\");\n\t\tgrad.addColorStop(0.8, \"orange\");\n\t\tgrad.addColorStop(1, \"red\");\n\t\t*/\n\n\t\tgrad.addColorStop(0.25, \"red\");\n\t\tgrad.addColorStop(0.4, \"orange\");\n\t\tgrad.addColorStop(1, \"rgba(255,255,0,0)\");\n\treturn grad;\n}\t",
+			"file": "graphics.js",
+			"file_size": 6659,
+			"file_write_time": 131382153683348077,
+			"settings":
+			{
+				"buffer_size": 6434,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "server/systems/weapons/particle.php",
+			"settings":
+			{
+				"buffer_size": 3512,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -795,7 +826,7 @@
 			"file": "script.js",
 			"settings":
 			{
-				"buffer_size": 15439,
+				"buffer_size": 15433,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -813,17 +844,19 @@
 			"file": "game.js",
 			"settings":
 			{
-				"buffer_size": 48658,
+				"buffer_size": 48549,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
+			"contents": "function Flight(data){\n\tShip.call(this, data);\n\tthis.flight = true;\n\tthis.primary = false;\n\tthis.layout = [];\n\tthis.ep = 1000;\n\tthis.turns = 10;\n\tthis.maxTurns = 1;\n\tthis.dogfights = [];\n\n\tthis.create = function(){\n\t\tthis.setFighterState();\n\t\tthis.setMaxMass();\n\t\tthis.setEP();\n\t\tthis.setTurns();\n\t\tthis.setFacing();\n\t\tthis.setPosition();\n\t\tthis.setLayout();\n\t}\n\n\tthis.isDestroyed = function(){\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tif (!this.structures[i].destroyed && !this.structures[i].disabled){\n\t\t\t\treturn false;\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\n\n\tthis.setFighterState = function(){\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tfor (var j = 0; j < this.structures[i].crits.length; j++){\n\t\t\t\tif (this.structures[i].crits[j].type == \"disengaged\"){\n\t\t\t\t\tthis.structures[i].disabled = true;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tif (this.structures[i].destroyed){\n\t\t\t\tfor (var k = 0; k < this.structures[i].systems.length; k++){\n\t\t\t\t\tthis.structures[i].systems[k].destroyed = true;\n\t\t\t\t}\n\t\t\t}\n\t\t\telse if (this.structures[i].disabled){\n\t\t\t\tfor (var k = 0; k < this.structures[i].systems.length; k++){\n\t\t\t\t\tthis.structures[i].systems[k].disabled = true;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.setLayout = function(){\n\t\tvar size = 15;\n\n\t\tvar toDo = Math.min(4, Math.ceil(this.structures.length/2));\n\t\tvar alive = (this.size - 32) / 5;\n\t\tvar done = 0;\n\n\t\tfor (var i = 0; i < toDo; i++){\n\t\t\tthis.layout.push({\n\t\t\t\tx: -size/2 - size*i/2,\n\t\t\t\ty: -toDo*size/2 +size*(i)\n \t\t\t});\n\t\t\tthis.layout.push({\n\t\t\t\tx: size/2 + size*i/2,\n\t\t\t\ty: -toDo*size/2 +size*(i)\n \t\t\t});\n \t\t\tdone += 2;\n\t\t}\n\n\t\tif (done < this.structures.length){\n\t\t\tfor (var i = 0; i < (this.structures.length-done)/2; i++){\n\t\t\t\tthis.layout.push({\n\t\t\t\t\tx: -size/2 - size/2*i,\n\t\t\t\t\ty: size/2 + size*i\n\t \t\t\t});\n\t\t\t\tthis.layout.push({\n\t\t\t\t\tx: size/2 + size/2*i,\n\t\t\t\t\ty: size/2 + size*i\n\t \t\t\t});\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.setMaxMass = function(){\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tif (! this.structures[i].destroyed){\n\t\t\t\tif (this.structures[i].mass > this.mass){\n\t\t\t\t\tthis.mass = this.structures[i].mass; \n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.getEP = function(){\n\t\tif (this.actions.length && this.actions[0].turn == game.turn){\n\t\t\treturn Math.floor(this.ep/2);\n\t\t}\n\t\treturn this.ep;\n\t}\n\n\tthis.setEP = function(){\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tif (! this.structures[i].destroyed){\n\t\t\t\tthis.ep = Math.min(this.ep, this.structures[i].ep);\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.setTurns = function(){\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tif (! this.structures[i].destroyed){\n\t\t\t\tthis.maxTurns = Math.min(this.turns, this.structures[i].turns);\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.drawSelf = function(){\n\t\tctx.save();\n\t\tctx.translate(this.x, this.y)\n\t\tctx.rotate((this.facing+90) * (Math.PI/180));\n\n\t\tif (game.animateFire){\n\t\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\t\tvar draw = false;\n\t\t\t\tif (this.structures[i].destroyed || this.structures[i].disabled){\n\t\t\t\t\tif (this.structures[i].isDestroyedThisTurn()){\n\t\t\t\t\t\tthis.drawFighter(i);\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\telse this.drawFighter(i);\n\t\t\t}\n\t\t}\n\t\telse {\n\t\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\t\tif (!this.structures[i].destroyed && !this.structures[i].disabled){\n\t\t\t\t\tthis.drawFighter(i);\n\t\t\t\t}\n\t\t\t}\n\t/*\t\tvar index = 0;\n\t\t\tfor (var i = 0; i < this.layout.length; i++){\n\t\t\t\tif (!this.structures[i].destroyed && !this.structures[i].disabled){\n\t\t\t\t\tthis.drawFighter(index);\n\t\t\t\t\tindex++\n\t\t\t\t}\n\t\t\t}*/\n\t\t}\n\t\tctx.restore();\n\t}\n\n\tthis.drawFighter = function(i){\n\t\tvar size = 12;\n\t\tctx.drawImage(\n\t\t\twindow.shipImages[this.structures[i].name.toLowerCase()],\n\t\t\tthis.layout[i].x -size/2,\n\t\t\tthis.layout[i].y -size/2,\n\t\t\tsize, \n\t\t\tsize\n\t\t);\n\t}\n\n\tthis.canShortenTurn = function(){\n\t\treturn false;\n\t\tif (game.phase == 0 || game.phase == 1){\n\t\t\tif (this.getRemainingEP() >= this.getShortenTurnCost()){\n\t\t\t\treturn true;\n\t\t\t}\n\t\t}\n\n\t\treturn false;\n\t}\n\t\n\tthis.canUndoShortenTurn = function(){\n\t\treturn false;\n\t\tif (game.phase == 0 || game.phase == 1){\n\t\t\tif (this.turns.length){\n\t\t\t\tif (this.turns[0].costmod > 1){\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.getImpulseChangeCost = function(){\n\t\treturn Math.ceil(Math.pow(this.mass, 1.15)/3*this.getImpulseMod());\n\t\treturn Math.ceil(this.mass/3*this.getImpulseMod());\n\t}\n\n\tthis.getTurnCost = function(){\n\t\treturn Math.ceil(Math.pow(this.mass, 1.15)/100*this.getImpulseMod() * this.getTurnAngle());\n\t\treturn Math.ceil(this.mass/50*this.getImpulseMod() * this.getTurnAngle());\n\t}\n\t\n\tthis.getBaseTurnDelay = function(){\n\t\treturn this.mass/2;\n\t}\n\t\n\tthis.getBaseImpulse = function(){\n\t\tif (this.actions.length && this.actions[0].turn == game.turn){\n\t\t\treturn Math.floor(210/2);\n\t\t}\n\t\treturn 210;\n\t}\n\n\tthis.getTurnAngle = function(){\n\t\treturn 20;\n\t}\n\n\tthis.hasWeaponsSelected = function(){\t\t\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tfor (var j = 0; j < this.structures[i].systems.length; j++){\n\t\t\t\tif (this.structures[i].systems[j].weapon){\n\t\t\t\t\tif (this.structures[i].systems[j].selected){\n\t\t\t\t\t\treturn true;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\treturn false;\n\t}\n\n\tthis.hasHangarSelected = function(){\n\t\treturn false;\n\t}\n\n\tthis.launchedThisTurn = function(){\n\t\tif (!(this.actions.length) || this.actions[0].turn == game.turn){\n\t\t\treturn true;\n\t\t} return false;\n\t}\n\n\tthis.expandDiv = function(div){\n\t\tvar iconContainer = document.createElement(\"div\");\n\t\t\ticonContainer.className = \"iconContainer\";\n\t\t\t$(iconContainer).css(\"width\", 120)//.append($(\"<div class='dogFightHeader'>Active Dogfights</div>\"));\n\t\t\tif (this.launchedThisTurn()){\n\t\t\t\t$(iconContainer).append($(\"<div class='dogFightEntry'>\").html(\"50 % EP / Impulse due to launch.\"));\n\t\t\t}\n\t\t\tfor (var j = 0; j < this.dogfights.length; j++){\n\t\t\t\t$(iconContainer).append($(\"<div class='dogFightEntry'>\").html(\"Dogfight VS #\" + this.dogfights[j]));\n\t\t\t}\n\t\tdiv.appendChild(iconContainer);\n\n\t\tvar structContainer = document.createElement(\"div\");\n\t\t\tstructContainer.className = \"structContainer\";\n\n\t\tdiv.appendChild(structContainer);\n\t\t\t\n\t\t////document.getElementById(\"game\").appendChild(div);\n\t\tdocument.body.appendChild(div);\n\n\n\n\t\tvar maxWidth = 0;\n\t\tif (this.structures.length <= 6){\n\t\t\tmaxWidth = 330;\n\t\t}\n\t\telse if (this.structures.length <= 12){\n\t\t\tmaxWidth = 400;\n\t\t}\n\n\t\t$(div).css(\"width\", maxWidth);\n\n\n\t\t// OUTER STRUCTS\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tvar active = true;\n\t\t\tif (this.structures[i].destroyed || this.structures[i].disabled){\n\t\t\t\tactive = false;\n\t\t\t}\n\n\t\t\tvar img = new Image()\n\t\t\t\timg.src = window.shipImages[this.structures[i].name.toLowerCase() + \"l\"].src;\n\t\t\t\timg.className = \"size40\";\n\n\t\t\t\t$(img)\n\t\t\t\t\t.data(\"shipId\", this.id)\n\t\t\t\t\t.data(\"fighterId\", this.structures[i].id)\n\t\t\t\t\t.addClass(\"size40\")\n\t\t\t\t\t.click(function(e){\n\t\t\t\t\t\te.stopPropagation();\n\t\t\t\t\t\tconsole.log(game.getUnitById($(this).data(\"shipId\")).getSystemById($(this).data(\"fighterId\")));\n\t\t\t\t\t})\n\n\n\t\t\tvar fighterDiv = document.createElement(\"div\");\n\t\t\t\tfighterDiv.className = \"fighterDiv\";\n\t\t\t\tfighterDiv.appendChild(img);\n\n\t\t\tif (!active){\n\t\t\t\tfighterDiv.appendChild(new Image()).src = \"varIcons/destroyed.png\";\n\t\t\t\tfighterDiv.childNodes[1].className = \"overlay size30\";\n\t\t\t}\n\t\t\telse {\n\t\t\t\t$(img).hover(function(e){\n\t\t\t\t\te.stopPropagation();\n\t\t\t\t\tgame.getUnitById($(this).data(\"shipId\")).getSystemById($(this).data(\"fighterId\")).hover(e);\n\t\t\t\t});\n\t\t\t}\n\n\t\t\tstructContainer.appendChild(fighterDiv);\n\n\t\t\tvar w = $(fighterDiv).width();\n\t\t\tvar h = $(fighterDiv).height();\n\n\t\t\tvar x = $(structContainer).width()/2 + this.layout[i].x*5- w/2;\n\t\t\tvar y = $(structContainer).height()/2 + this.layout[i].y*5 - 20;\n\n\t\t\t$(fighterDiv)\n\t\t\t\t.css(\"left\", x)\n\t\t\t\t.css(\"top\", y)\n\n\t\t\tvar wrap = document.createElement(\"div\");\n\t\t\t\twrap.className = \"iconIntegrity\"; wrap.style.height = 12;\n\n\t\t\tvar rem = this.structures[i].getRemainingIntegrity();\n\n\t\t\tvar bgDiv = document.createElement(\"div\");\n\t\t\t\tbgDiv.className = \"integrityAmount\"; bgDiv.style.textAlign = \"center\"; bgDiv.style.fontSize = 12; bgDiv.style.top = 0;\n\t\t\t\tbgDiv.innerHTML = rem + \" / \" + this.structures[i].integrity;\n\t\t\t\twrap.appendChild(bgDiv);\n\n\t\t\tvar lowerDiv = document.createElement(\"div\");\n\t\t\t\tlowerDiv.className = \"integrityNow\"; lowerDiv.style.top = 0; lowerDiv.style.height = \"100%\";\n\t\t\t\tlowerDiv.style.width = rem/this.structures[i].integrity * 100 + \"%\";\n\t\t\t\twrap.appendChild(lowerDiv);\n\t\t\t\t\n\t\t\tvar upperDiv = document.createElement(\"div\");\n\t\t\t\tupperDiv.className = \"integrityFull\"; upperDiv.style.top = 0;\n\t\t\t\twrap.appendChild(upperDiv);\n\n\t\t\tfighterDiv.appendChild(wrap);\n\n\t\t\tvar s = 20;\n\t\t\t// FIGHTER WEAPONS\n\t\t\tfor (var j = 0; j < this.structures[i].systems.length; j++){\n\t\t\t\tvar td = this.structures[i].systems[j].getTableData(true);\n\t\t\t\t\t$(td.childNodes[0]).attr(\"width\", s).attr(\"height\", s);\n\t\t\t\t\tfighterDiv.appendChild(td);\n\t\t\t\t\t$(td)\n\t\t\t\t\t\t.addClass(\"fighter\")\n\t\t\t\t\t\t.css(\"top\", -h -s - 5)\n\t\t\t\t\t\t.css(\"left\", w/2 - s/2)\n\t\t\t\t\t\t.data(\"shipId\", this.id)\n\t\t\t\t\t\t.click(function(e){\n\t\t\t\t\t\t\te.stopPropagation();\n\t\t\t\t\t\t\tgame.getUnitById($(this).data(\"shipId\")).getSystemById($(this).data(\"systemId\")).select(e)\n\t\t\t\t\t\t})\n\t\t\t\t\t\t.contextmenu(function(e){\n\t\t\t\t\t\t\te.stopPropagation();\n\t\t\t\t\t\t\te.preventDefault();\n\t\t\t\t\t\t\tgame.getUnitById($(this).data(\"shipId\")).selectAll(e, $(this).data(\"systemId\"));\n\t\t\t\t\t\t});\n\n\t\t\t\tif (active){\t\t\t\t\t\n\t\t\t\t\t$(td).hover(function(e){\n\t\t\t\t\t\te.stopPropagation();\n\t\t\t\t\t\t$(\"#systemDetailsDiv\").remove();\n\t\t\t\t\t\tgame.getUnitById($(this).data(\"shipId\")).getSystemById($(this).data(\"systemId\")).hover(e)\n\t\t\t\t\t})\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\n\t\tvar height = 0;\n\t\t$(structContainer).find(\".fighterDiv\").each(function(){\n\t\t\tvar y = $(this).position().top + $(this).height();\n\t\t\tif (y > height){\n\t\t\t\theight = y;\n\t\t\t}\n\t\t})\n\n\t\t$(structContainer).css(\"height\", height + 20);\n\n\t\t/*var w = $(div).width();\n\t\tvar h = $(div).height();\n\t\tvar left = 50;\n\t\tif (this.facing < 90 || this.facing > 270){\n\t\t\tleft = res.x - w - 50;\n\t\t}\n\n\t\t$(div).css(\"top\", 100).css(\"left\", left);\n\t\t*/return div;\n\t}\n\n\tthis.selectAll = function(e, id){\n\t\tvar display = this.getSystemById(id).display;\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tfor (var j = 0; j < this.structures[i].systems.length; j++){\n\t\t\t\tif (this.structures[i].systems[j].display == display){\n\t\t\t\t\tif (! this.structures[i].systems[j].destroyed){\n\t\t\t\t\t\tthis.structures[i].systems[j].select(e);\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\treturn true;\n\t}\n\n\tthis.getShortInfo = function(){\n\t\tvar ele = $(\"#shortInfo\");\n\t\tif (this.userid == game.userid){\n\t\t\t$(ele).attr(\"class\", \"friendly\");\n\t\t} else $(ele).attr(\"class\", \"hostile\");\n\n\t\tvar baseHit = this.getBaseHitChance();\n\t\tvar impulse = this.getTotalImpulse();\n\t\t\n\t\tvar table = document.createElement(\"table\");\n\t\t\ttable.insertRow(-1).insertCell(-1).innerHTML = \"Flight #\" + this.id + \" (\" +game.getUnitType(this.traverse) + \")\";\n\t\t\ttable.insertRow(-1).insertCell(-1).innerHTML =  \"Impulse: \" + impulse + \" (\" + round(impulse / this.getBaseImpulse(), 2) + \")\";\n\t\t\ttable.insertRow(-1).insertCell(-1).innerHTML = \"Base Hit: \" +  this.getBaseHitChance() + \"% \";\n\t\tvar baseHit = this.getBaseHitChance();\n\t\tvar impulse = this.getTotalImpulse();\n\t\treturn table;\n\t}\n\n\tthis.getBaseHitChance = function(){\n\t\tvar min = 0; var max = 0;\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tif (!this.structures[i].destroyed){\n\t\t\t\tmin = Math.max(min, this.structures[i].mass);\n\t\t\t\tmax = Math.max(max, this.structures[i].mass);\n\t\t\t}\n\t\t}\n\t\tif (min == max){return Math.ceil(min/1.5)}\n\t\telse return Math.ceil(min/1.5) + \" - \" + Math.ceil(max/1.5);\n\t}\n\n\tthis.getHitSectionFromAngle = function(a){\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tif (isInArc(a, this.structures[i].start, this.structures[i].end)){\n\t\t\t\treturn this.structures[i];\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.getHitChanceFromAngle = function(angle){\n\t\treturn Math.ceil(this.getBaseHitChance() / 100 * this.getProfileMod());\n\t}\n\n\tthis.getWeaponPosition = function(fire){\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tfor (var j = 0; j < this.structures[i].systems.length; j++){\n\t\t\t\tif (this.structures[i].systems[j].id == fire.weaponid){\n\t\t\t\t\treturn {x: this.layout[i].x, y: this.layout[i].y};\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}\n\nFlight.prototype = Object.create(Ship.prototype);\n\nfunction Fighter(data){\n\tthis.id = data.id;\n\tthis.name = data.name;\n\tthis.ep = data.ep;\n\tthis.turns = data.turns;\n\tthis.mass = data.mass;\n\tthis.integrity = data.integrity;\n\tthis.value = data.value;\n\tthis.negation = data.negation;\n\tthis.destroyed = data.destroyed;\n\tthis.crits = [];\n\tthis.damages = [];\n\tthis.systems = [];\n\tthis.fighter = true;\n\tthis.highlight = false;\n\tthis.disabled = false;\n\n\tfor (var i = 0; i < data.crits.length; i++){\n\t\tthis.crits.push(new Crit(\n\t\t\t\tdata.crits[i].id,\n\t\t\t\tdata.crits[i].shipid,\n\t\t\t\tdata.crits[i].systemid,\n\t\t\t\tdata.crits[i].turn,\n\t\t\t\tdata.crits[i].type,\n\t\t\t\tdata.crits[i].duration\n\t\t\t)\n\t\t)\n\t}\n\t\n\tthis.isDestroyedThisTurn = function(){\n\t\tif (this.disabled){\n\t\t\tfor (var j = this.crits.length-1; j >= 0; j--){\n\t\t\t\tif (this.crits[j].type == \"disengaged\" && this.crits[j].turn == game.turn){\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\telse if (this.destroyed){\n\t\t\tfor (var j = this.damages.length-1; j >= 0; j--){\n\t\t\t\tif (this.damages[j].destroyed == 1 && this.damages[j].turn == game.turn){\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\t\t\t}\t\t\t\t\t\n\t\t}\n\t\treturn false;\n\t}\n\n\tthis.getRemainingIntegrity = function(){\n\t\tvar integrity = this.integrity;\n\t\tfor (var i = 0; i < this.damages.length; i++){\n\t\t\tintegrity -= this.damages[i].structDmg;\n\t\t}\n\t\treturn integrity;\n\t}\n\n\tthis.hover = function(e){\n\t\tif (!this.highlight){\n\t\t\tthis.highlight = true;\n\t\t\tvar ele = this.getDetailsDiv();\n\t\t\t$(\"#game\").append(ele);\n\t\t\t$(ele).css(\"left\", e.clientX).css(\"top\", e.clientY + 20)\n\t\t}\n\t\telse {\n\t\t\tthis.highlight = false;\n\t\t\t$(\"#systemDetailsDiv\").remove();\n\t\t}\n\t}\n\n\tthis.getDetailsDiv = function(){\n\t\tvar div = document.createElement(\"div\");\n\t\t\tdiv.id = \"systemDetailsDiv\";\n\t\t\tdiv.className = this.id;\n\n\t\t\tvar table = $(\"<table>\")\n\t\t\t\t.append($(\"<tr>\").append($(\"<th>\").attr(\"colspan\", 2).html(this.name)))\n\t\t\t\t.append($(\"<tr>\").append($(\"<td>\").html(\"Mass / Turn Delay\")).append($(\"<td>\").html(this.mass)))\n\t\t\t\t.append($(\"<tr>\").append($(\"<td>\").html(\"Engine Power\")).append($(\"<td>\").html(this.ep)))\n\t\t\t\t.append($(\"<tr>\").append($(\"<td>\").html(\"Frontal Armour\")).append($(\"<td>\").html(this.negation[0])))\n\t\t\t\t.append($(\"<tr>\").append($(\"<td>\").html(\"Side Armour\")).append($(\"<td>\").html(this.negation[1])))\n\t\t\t\t.append($(\"<tr>\").append($(\"<td>\").html(\"Rear Armour\")).append($(\"<td>\").html(this.negation[2])))\n\n\t\tif (this.crits.length){\n\t\t\t\t$(table)\n\t\t\t\t\t.append($(\"<tr>\").append($(\"<td>\").attr(\"colspan\", 2).css(\"fontSize\", 16).css(\"borderBottom\", \"1px solid white\").css(\"borderTop\", \"1px solid white\").html(\"Modifiers\")))\n\n\t\t\tfor (var i = 0; i < this.crits.length; i++){\n\t\t\t\tval = this.crits[i].html;\n\t\t\t\t$(table)\n\t\t\t\t\t.append($(\"<tr>\").append($(\"<td>\").attr(\"colSpan\", 2).addClass(\"negative\").html(val)))\n\t\t\t}\n\t\t}\n\t\t\t\n\t\tdiv.appendChild(table[0]);\n\t\treturn div;\n\t}\n}",
 			"file": "flights.js",
+			"file_size": 15364,
+			"file_write_time": 131380467746388572,
 			"settings":
 			{
-				"buffer_size": 14814,
-				"encoding": "UTF-8",
+				"buffer_size": 14817,
 				"line_ending": "Windows"
 			}
 		},
@@ -849,19 +882,9 @@
 			"file": "log.txt",
 			"settings":
 			{
-				"buffer_size": 0,
+				"buffer_size": 91,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "Searching 61 files for \"hit\"\"\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php:\n   30  \t\t\t\tDebug::log(\"roll: \".$roll.\", req: \".$fire->req.\", rakes: \".$this->rakes);\n   31  \t\t\t\tif ($roll <= $fire->req){\n   32: \t\t\t\t\tDebug::log(\"hit\");\n   33  \t\t\t\t} else Debug::log(\"miss\");\n   34  \t\t\t}\n\n1 match in 1 file\n",
-			"settings":
-			{
-				"buffer_size": 308,
-				"line_ending": "Windows",
-				"name": "Find Results",
-				"scratch": true
 			}
 		},
 		{
@@ -869,15 +892,6 @@
 			"settings":
 			{
 				"buffer_size": 6157,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "graphics.js",
-			"settings":
-			{
-				"buffer_size": 6327,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -892,13 +906,11 @@
 			}
 		},
 		{
-			"contents": "window.res = {x: 0, y: 0};\nwindow.ml;\nwindow.game;\nwindow.canvas;\nwindow.ctx;\nwindow.fxCanvas;\nwindow.fxCtx;\nwindow.planCanvas;\nwindow.planCtx;\nwindow.moveCanvas;\nwindow.moveCtx;\nwindow.salvoCanvas;\nwindow.salvoCtx;\nwindow.mouseCanvas;\nwindow.mouseCtx;\nwindow.cache;\n\nfunction doSort(a, b){\n\tif (a.name != b.name){\n\t\treturn 1;\n\t} else return 0;\n}\n\nwindow.shipImages = {};\nwindow.factionImages = {};\n\nwindow.multi = 1;\n\nwindow.anim = false;\n\nwindow.fire = [];\nwindow.aUnit = false;\nwindow.mode = false;\nwindow.icon;\nwindow.pickedMoves = [];\n\nwindow.shortInfo = false;\nwindow.ballInfo = false;\n\nwindow.animation;\n\nwindow.decayVar = 1000;\nwindow.index = 0;\n\nwindow.offset = {x: 0, y: 0};\n\nfunction Animate(){\n\tthis.intercepts = [];\n\tthis.ballAnims = [];\n\n\tthis.isDone = function(i, j, k){\n\t\tvar ele = this.ballAnims[i].anims[j];\n\n\t\tif (ele instanceof FireOrder){\n\t\t\tif (ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m*1.25 || !ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m){\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn true;\n\t\t}\n\t\telse if (ele instanceof Salvo){\n\t\t\tif (ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m*1.25 || !ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m){\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn true;\n\t\t}\n\t}\n\n\tthis.isReady = function(i, j, k){\n\t\tvar ele = this.ballAnims[i].anims[j];\n\t\tif (ele instanceof FireOrder){\n\t\t\tif (ele.anim[k].n >= 0){\n\t\t\t\treturn true;\n\t\t\t} else return false;\n\t\t}\n\n\t\telse if (ele instanceof Salvo){\n\t\t\tif (ele.anim[0].n >= 0){\n\t\t\t\treturn true;\n\t\t\t} else return false;\n\t\t}\n\t}\n\n\tthis.doAdvance = function(i, j, k){\n\t\tvar ele = this.ballAnims[i].anims[j];\n\t\tif (ele instanceof FireOrder){\n\t\t\tele.anim[k].n++;\n\t\t}\n\t\telse if (ele instanceof Salvo){\n\t\t\tele.anim[k].n++;\n\t\t}\n\t}\n\n\tthis.doAnimate = function(i, j, k){\n\t\tvar ele = this.ballAnims[i].anims[j];\n\n\t\tif (ele instanceof FireOrder){\n\t\t\tele.anim[k].n++;\n\t\t\tif (ele.weapon instanceof Laser){\n\t\t\t\tif (ele.anim[k].n > 0){\n\t\t\t\t\tdrawBeam(ele.weapon, ele.anim[k]);\n\t\t\t\t}\n\t\t\t}\n\t\t\telse {\n\t\t\t\tif (ele.anim[k].h && ele.anim[k].n >= ele.anim[k].m){\n\t\t\t\t\tdrawExplosion(ele.weapon, ele.anim[k].tx, ele.anim[k].ty, ele.anim[k].n, ele.anim[k].m+30);\n\t\t\t\t\t//drawExplosion(ele.weapon, ele.shooter, ele.anim[k]);\n\t\t\t\t}\n\t\t\t\telse {\n\t\t\t\t\t//drawProjectile(ele.weapon, ele.shooter.x, ele.shooter.y, tx, ty, ele.anim[k].n, ele.anim[k].m);\n\t\t\t\t\tdrawProjectile(ele.weapon, ele.anim[k]);\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\telse if (ele instanceof Salvo){\n\t\t\tele.anim[k].n++;\n\t\t\tif (ele.fireOrder != undefined && ele.fireOrder.damages.length && ele.anim[k].n >= ele.anim[k].m){\n\t\t\t\tfor (var i = 0; i < ele.layout.length; i++){\n\t\t\t\t\tif (ele.fireOrder.hits[i]){\n\t\t\t\t\t\tdrawExplosion(ele.structures[i], ele.x + ele.layout[i].x, ele.y + ele.layout[i].y, ele.anim[k].n, ele.anim[k].m+30);\n\t\t\t\t\t\t//drawExplosion(ele.structures[i], ele, ele.anim[k]);\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t\telse {\n\t\t\t\tvar x = ele.actions[ele.actions.length-2].x + (ele.anim[k].nx * ele.anim[k].n);\n\t\t\t\tvar y = ele.actions[ele.actions.length-2].y + (ele.anim[k].ny * ele.anim[k].n);\n\t\t\t\tctx.save();\n\t\t\t\tctx.translate(x, y);\n\n\t\t\t\tctx.rotate((ele.anim[k].f + 90) * (Math.PI/180));\n\t\t\t\tctx.drawImage(ele.img, 0 -ele.size/2, 0 -ele.size/2, ele.size, ele.size);\n\n\t\t\t\tctx.restore();\n\n\t\t\t\tctx.beginPath();\n\t\t\t\tctx.moveTo(x, y);\n\t\t\t\tctx.lineTo(ele.actions[ele.actions.length-1].x, ele.actions[ele.actions.length-1].y);\n\t\t\t\tctx.closePath();\n\n\t\t\t\tctx.globalAlpha = 0.2;\n\t\t\t\tctx.strokeStyle = \"white\";\n\t\t\t\tctx.stroke();\n\t\t\t\tctx.globalAlpha = 1;\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.doLog = function(i, j){\n\t\tvar ele = this.ballAnims[i].anims[j];\n\n\t\tif (ele instanceof FireOrder){\n\t\t\tgame.createCombatLogEntry(ele);\n\t\t}\n\t\telse if (ele instanceof Salvo && ele.fireOrder != undefined && ele.fireOrder.guns){\n\t\t\tgame.createCombatLogEntry(ele.fireOrder);\n\t\t}\n\t}\n}\n\nwindow.animate = new Animate();\n\nwindow.fps;\nwindow.fpsInterval;\nwindow.speedMod = 1;\n\nwindow.startTime, window.now, window.then, window.elapsed;\n\n\nwindow.iterator = 0;\n\nfunction setFPS(fps){\n\twindow.fps = fps;\n\twindow.fpsInterval = 1000 / window.fps;\n}\n\nfunction initiateShip(i){\n\n\t/*var ship = new window[window.ships[i].shipType](\n\t\twindow.ships[i].id,\n\t\twindow.ships[i].name,\n\t\twindow.ships[i].shipType,\n\t\t0,\n\t\t0,\n\t\t0,\n\t\twindow.ships[i].faction,\n\t\twindow.ships[i].mass,\n\t\twindow.ships[i].cost,\n\t\twindow.ships[i].profile,\n\t\twindow.ships[i].size,\n\t\twindow.ships[i].userid,\n\t\twindow.ships[i].available,\n\t\twindow.ships[i].baseHitChance,\n\t\twindow.ships[i].baseImpulse\n\t)*/\n\n\tvar ship = new window[window.ships[i].shipType](window.ships[i]);\n\n\tif (! ship.flight){\n\t\tship.hitTable = window.ships[i].hitTable\n\t\tship.primary = new Primary(window.ships[i].primary);\n\t\tfor (var j = 0; j < window.ships[i].primary.systems.length; j++){\n\t\t\tvar primSystem = new window[window.ships[i].primary.systems[j].name](window.ships[i].primary.systems[j]);\n\n\t\t\tfor (var l = 0; l < window.ships[i].primary.systems[j].damages.length; l++){\n\t\t\t\tprimSystem.damages.push(new Damage(window.ships[i].primary.systems[j].damages[l]));\n\t\t\t}\n\n\t\t\tfor (var l = 0; l < window.ships[i].primary.systems[j].powers.length; l++){\n\t\t\t\tprimSystem.powers.push(new Power(window.ships[i].primary.systems[j].powers[l]));\n\t\t\t}\n\n\t\t\tfor (var l = 0; l < window.ships[i].primary.systems[j].crits.length; l++){\n\t\t\t\tprimSystem.crits.push(new Crit(window.ships[i].primary.systems[j].crits[l]));\n\t\t\t}\n\n\t\t\tprimSystem.setState();\n\t\t\tship.primary.systems.push(primSystem);\n\t\t}\n\t}\n\telse {\n\t\tship.dogfights = window.ships[i].dogfights;\n\t}\n\n\tfor (var j = 0; j < window.ships[i].structures.length; j++){\n\t\tvar struct;\n\t\tif (!ship.flight){\n\t\t\tstruct = new Structure(window.ships[i].structures[j]);\n\t\t}\n\t\telse {\n\t\t\tstruct = new Fighter(window.ships[i].structures[j]);\n\t\t}\n\n\t\tif (window.ships[i].structures[j].damages.length){\n\t\t\tfor (var k = 0; k < window.ships[i].structures[j].damages.length; k++){\n\t\t\t\tstruct.damages.push(new Damage(window.ships[i].structures[j].damages[k]));\n\t\t\t}\n\t\t}\n\t\tif (!ship.flight){struct.setRemainingNegation();}\n\n\t\tfor (var k = 0; k < window.ships[i].structures[j].systems.length; k++){\n\t\t\tvar system = new window[window.ships[i].structures[j].systems[k].type](window.ships[i].structures[j].systems[k]);\n\t\t\tif (system){\n\t\t\t\tsystem.setMount(struct.remainingNegation);\n\t\t\t\t\n\t\t\t\tif (system.fireOrders){\n\t\t\t\t\tfor (var l = 0; l < window.ships[i].structures[j].systems[k].fireOrders.length; l++){\n\t\t\t\t\t\tsystem.fireOrders.push(new FireOrder(window.ships[i].structures[j].systems[k].fireOrders[l]));\n\t\t\t\t\t}\n\t\t\t\t}\n\n\t\t\t\tfor (var l = 0; l < window.ships[i].structures[j].systems[k].damages.length; l++){\n\t\t\t\t\tsystem.damages.push(new Damage(window.ships[i].structures[j].systems[k].damages[l]));\n\t\t\t\t}\n\n\t\t\t\tfor (var l = 0; l < window.ships[i].structures[j].systems[k].powers.length; l++){\n\t\t\t\t\tsystem.powers.push(new Power(window.ships[i].structures[j].systems[k].powers[l]));\n\t\t\t\t}\n\n\t\t\t\tfor (var l = 0; l < window.ships[i].structures[j].systems[k].crits.length; l++){\n\t\t\t\t\tsystem.crits.push(new Crit(window.ships[i].structures[j].systems[k].crits[l]));\n\t\t\t\t}\n\t\t\t\tsystem.setState();\n\t\t\t\tstruct.systems.push(system);\n\t\t\t}\t\n\t\t}\n\t\tship.structures.push(struct);\n\t}\n\n\treturn ship;\n}\n\nfunction initiateBallistic(i){\n\t//(id, userid, targetid, classname, display, amount, status, destroyed, actions){\n\n\tvar salvo = new Salvo(window.ballistics[i]);\n\n\tfor (var j = 0; j < window.ballistics[i].structures.length; j++){\n\t\tsalvo.structures.push(new Ammo(window.ballistics[i].structures[j]));\n\n\t\tfor (var k = 0; k < window.ballistics[i].structures[j].fireOrders.length; k++){\n\t\t\tsalvo.structures[j].fireOrders.push(window.ballistics[i].structures[j].fireOrders[k]);\n\t\t}\n\t}\n\tsalvo.create();\n\treturn salvo;\n}\n\nfunction getShipId(){\n\treturn (game.ships.length+1);\n}\n\nfunction resetIndex(){\n\twindow.index = 0;\n}\n\nfunction getId(){\n\twindow.index++;\n\treturn window.index;\n}\n\nfunction refresh(data){\n\tconsole.log(\"refresh\");\n\tconsole.log(data);\n\tsetTimeout(function(){\n\t\twindow.location.reload(true);\n\t}, 300);\n}\n\nfunction goToLobby(){\n    console.log(\"goToLobby\");\n    setTimeout(function(){\n        window.location = \"lobby.php\";\n    }, 300);\n}\n\nfunction processEcho(echo){\n\tconsole.log(\"echo\");\n\tconsole.log(echo);\n\n\tif (echo == \"PlayerReady\"){\n\t\trefresh();\n\t}\n\telse if (echo == \"gameStart\"){\n\t\tsetTimeout(function(){\n\t\t\twindow.location = \"game.php?gameid=\" + gameid\n\t\t}, 300);\n\t}\n}\n\nfunction sharedLaunchFlight(e){\n\tgame.getUnitById(aUnit).getSystemById(e.data.systemid).launchFlight();\n}\n\nfunction redirect(url){\n\tconsole.log(\"redirect\");\n\tsetTimeout(function(){\n\t\twindow.location = \"lobby.php\"\n\t}, 300);\n}\n\nfunction popup(text){\n    $(\"#popupWrapper\").show().find(\"#popupText\").html(text);\n}\n\nfunction instruct(text){\n    $(\"#instructWrapper\").show().find(\"#instructText\").html(text);\n}\n\n$(document).ready(function(){\n    $(\"#popupWrapper\").contextmenu(function(e){\n        e.preventDefault();\n        e.stopPropagation();\n        $(this).hide();\n\t});\n    $(\"#instructWrapper\").contextmenu(function(e){\n        e.preventDefault();\n        e.stopPropagation();\n        $(this).hide();\n\t});\n    $(\"#hangarLoadoutDiv\").drag()\n    $(\"#weaponLoadoutDiv\").drag()\n});\n\n\nvar selected = null, // Object of the element to be moved\n    x_pos = 0, y_pos = 0, // Stores x & y coordinates of the mouse pointer\n    x_elem = 0, y_elem = 0; // Stores top, left values (edge) of the element\n\n// Will be called when user starts dragging an element\nfunction _drag_init(elem) {\n    // Store the object of the element which needs to be moved\n    selected = elem;\n    x_elem = x_pos - selected.offsetLeft;\n    y_elem = y_pos - selected.offsetTop;\n}\n\n// Will be called when user dragging an element\nfunction _move_elem(e) {\n    x_pos = document.all ? window.event.clientX : e.pageX;\n    y_pos = document.all ? window.event.clientY : e.pageY;\n    if (selected !== null) {\n        selected.style.left = (x_pos - x_elem) + 'px';\n        selected.style.top = (y_pos - y_elem) + 'px';\n    }\n}\n\n// Destroy the object when we are done\nfunction _destroy() {\n    selected = null;\n}\n\n\ndocument.onmousemove = _move_elem;\ndocument.onmouseup = _destroy;\n\n// Draggable plugin\n(function($) {\n    $.fn.drag = function(options) {\n        options = $.extend({\n            handle: null,\n            draggingClass: 'dragging'\n        }, options);\n\n        var $handle = this,\n            $drag = this;\n\n        if( options.handle ) {\n            $handle = $(options.handle);\n        }\n\n        $handle\n            .css('cursor', options.cursor)\n            .on(\"mousedown\", function(e) {\n                var x = $drag.offset().left - e.pageX,\n                    y = $drag.offset().top - e.pageY,\n                    z = $drag.css('z-index');\n\n                $(document.documentElement)\n                    .on('mousemove.drag', function(e) {\n                        $drag.offset({\n                            left: x + e.pageX,\n                            top: y + e.pageY\n                        });\n                    })\n                    .one('mouseup', function() {\n                        $(this).off('mousemove.drag');\n                        $drag.css('z-index', z);\n                    });\n\n                // disable selection\n                e.preventDefault();\n                e.stopPropagation();\n            });\n            return this;\n    };\n})(jQuery);\n\n\n\nfunction reOffset(){\n\tvar s = mouseCanvas.getBoundingClientRect();\n\toffset.x = s.left;\n\toffset.y = s.top;        \n}\n/*\nvar hold\n\nvar timeoutId = 0;\n\n$('#myElement').on('mousedown', function() {\n    timeoutId = setTimeout(myFunction, 1000);\n}).on('mouseup mouseleave', function() {\n    clearTimeout(timeoutId);\n});\n\n*/\nfunction handleMouseDown(e){\n\t//console.log(e)\n\te.preventDefault();\n\te.stopPropagation();\n\n\tif (e.originalEvent.button == 0){\n\t\tcanvasMouseClick(e);\n\t\tcam.scroll = 1;\n\t\tcam.sx = e.clientX;\n\t\tcam.sy = e.clientY;\n\t}\n\telse if (e.originalEvent.button == 2){\n\t\tif (aUnit){\n\t\t\tgame.getUnitById(aUnit).select();\n\t\t}\n\t}\n}\n\nfunction handleMouseUp(e){\n\te.preventDefault();\n\te.stopPropagation();\n\tcam\t.scroll = 0;\n}\n\nfunction handleMouseOut(e){\n\te.preventDefault();\n\te.stopPropagation();\n\tcam.scroll = 0;\n}\n\nfunction handleMouseMove(e){\n  if(!cam.scroll){return;}\n  e.preventDefault();\n  e.stopPropagation();\n\n  // get the current mouse position\n  var mouseX = e.clientX;\n  var mouseY = e.clientY;\n\n  // dx & dy are the distance the mouse has moved since\n  // the last mousemove event\n  var dx = mouseX- cam.sx;\n  var dy = mouseY- cam.sy;\n\n  // reset the vars for next mousemove\n  cam.sx = mouseX;\n  cam.sy = mouseY;\n\n  // accumulate the net panning done\n  cam.o.x += dx;\n  cam.o.y += dy;\n  game.redraw();\n}\n\nfunction sensorEvent(isClick, ship, loc, facing, d, a){\n\tmouseCtx.clearRect(0, 0, res.x, res.y);\n\tmouseCtx.translate(cam.o.x, cam.o.y);\n\tmouseCtx.scale(cam.z, cam.z);\n\tvar sensor = ship.getSystemByName(\"Sensor\");\n\tvar str = sensor.getOutput();\n\t\td = Math.min(str, d);\n\tvar p = 1.5;\n\tvar len = 20;\n\tvar\tw = Math.min(180, len * Math.pow(str/d, p));\n\n\tdrawSensorArc(w, d, p, str, len, loc, facing, a)\n\t//console.log(\"angle from facing: \" + a + \", dist: \" + dist + \", strength: \"+str + \", FINAL: \" + newWidth);\n\n\tif (isClick){\n\t\t//console.log(\"setting sensor to w: \"+w*2+\", dist: \"+d+\", angle: \"+a);\n\t\tsensor.setEW({\n\t\t\tangle: Math.floor(a),\n\t\t\tdist: Math.floor(d),\n\t\t\tturn: game.turn,\n\t\t\tunitid: ship.id,\n\t\t\tsystemid: sensor.id\n\t\t});\n\t}\n}",
 			"file": "shared.js",
-			"file_size": 14557,
-			"file_write_time": 131381152649578120,
 			"settings":
 			{
-				"buffer_size": 13242,
+				"buffer_size": 13240,
+				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
@@ -1021,11 +1033,13 @@
 			}
 		},
 		{
+			"contents": "<?php\n\nclass Launcher extends Weapon {\n\tpublic $type = \"Launcher\";\n\tpublic $animation = \"projectile\";\n\tpublic $priority = 8;\n\tpublic $loads = array();\n\tpublic $reload = 2;\n\tpublic $launchRate;\n\tpublic $ammo;\n\n\tfunction __construct($id, $parentId, $start, $end, $output, $launchRate, $loads, $destroyed = false){\n\t\t$this->mass = $launchRate * 10;\n\t\t$this->launchRate = $launchRate;\n\t\t$this->powerReq = $launchRate;\n\n\t\tfor ($i = 0; $i < sizeof($loads); $i++){\n\t\t\t$this->loads[] = new $loads[$i]($this->id, -1);\n\t\t}\n\n        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);\n\t}\n\n\tpublic function getAmmo(){\n\t\treturn $this->ammo->name;\n\t}\n\n\tpublic function getBaseDamage($fire){\n\t\treturn 0;\n\t}\n\n\tpublic function adjustLoad($dbLoad){\n\t\t$this->loads = array();\n\t\t$this->ammo = new $dbLoad[0][\"name\"]($this->id, 0);\n\t\t$this->ammo->output = $dbLoad[0][\"amount\"];\n\t}\n\n\tpublic function setArmourMod(){\n\t\t$w = $this->getArcWidth();\n\n\t\tif ($w <= 120){$this->armourMod = 0.8;}\n\t\telse if ($w <= 180){$this->armourMod =  0.6;}\n\t\telse $this->armourMod =  0.3;\n\t}\n\n\tpublic function getCritEffects(){\n\t\treturn array(\"disabled\", \"ammoLoss\", \"ammolossDamage\");\n\t}\n\n\tpublic function getCritTreshs(){\n\t\treturn array(25, 50, 80);\n\t}\n\tpublic function getCritDuration(){\n\t\treturn array(1, 0, 0);\n\t}\n}\n\nclass MissileLauncher extends Launcher {\n\tpublic $name = \"MissileLauncher\";\n\tpublic $display = \"Missile Launcher\";\n\tpublic $animColor = \"black\";\n\n\tfunction __construct($id, $parentId, $start, $end, $output = 0, $launchRate, $loads, $destroyed = false){\n        parent::__construct($id, $parentId, $start, $end, $output, $launchRate, $loads, $destroyed);\n\t}\n}\n\nclass Hasta extends Ammo {\n\tpublic $name = \"Hasta\";\n\tpublic $display = \"Light Antifighter Missiles\";\n\tpublic $type = \"explosive\";\n\tpublic $minDmg = 23;3\n\tpublic $maxDmg = 29;\n\tpublic $impulse = 110;\n\tpublic $integrity = 12;\n\tpublic $armour = 3;\n\tpublic $mass = 3;\n\tpublic $fc = array(0 => 90, 1 => 90);\n\tpublic $cost = 6;\n\tpublic $exploSize = 5;\n\tpublic $traverse = -3;\n\n\tfunction __construct($parentId, $id){\n\t\tparent::__construct($parentId, $id);\n\t}\n}\n\nclass Javelin extends Ammo {\n\tpublic $name = \"Javelin\";\n\tpublic $display = \"Multi-purpose Missiles\";\n\tpublic $type = \"explosive\";\n\tpublic $minDmg = 36;\n\tpublic $maxDmg = 48;\n\tpublic $impulse = 90;\n\tpublic $integrity = 16;\n\tpublic $armour = 5;\n\tpublic $mass = 4;\n\tpublic $fc = array(0 => 85, 1 => 85);\n\tpublic $cost = 10;\n\tpublic $exploSize = 6;\n\tpublic $traverse = -2;\n\n\tfunction __construct($parentId, $id){\n\t\tparent::__construct($parentId, $id);\n\t}\n}\n\nclass Patriot extends Ammo {\n\tpublic $name = \"Patriot\";\n\tpublic $display = \"Light Interceptor Missiles\";\n\tpublic $type = \"explosive\";\n\tpublic $minDmg = 13;\n\tpublic $maxDmg = 18;\n\tpublic $impulse = 140;\n\tpublic $integrity = 10;\n\tpublic $armour = 3;\n\tpublic $mass = 2;\n\tpublic $fc = array(0 => 85, 1 => 95);\n\tpublic $cost = 8;\n\tpublic $exploSize = 5;\n\tpublic $traverse = -4;\n\n\tfunction __construct($parentId, $id){\n\t\tparent::__construct($parentId, $id);\n\t}\n}\n\nclass Naga extends Ammo {\n\tpublic $name = \"Naga\";\n\tpublic $display = \"Multi-purpose Missiles\";\n\tpublic $type = \"explosive\";\n\tpublic $minDmg = 36;\n\tpublic $maxDmg = 48;\n\tpublic $impulse = 90;\n\tpublic $integrity = 16;\n\tpublic $armour = 5;\n\tpublic $mass = 4;\n\tpublic $fc = array(0 => 85, 1 => 85);\n\tpublic $cost = 10;\n\tpublic $exploSize = 6;\n\tpublic $traverse = -2;\n\n\tfunction __construct($parentId, $id){\n\t\tparent::__construct($parentId, $id);\n\t}\n}\n\nclass Cyclops extends Ammo {\n\tpublic $name = \"Cyclops\";\n\tpublic $display = \"Light Antiship Missiles\";\n\tpublic $type = \"explosive\";\n\tpublic $minDmg = 55;\n\tpublic $maxDmg = 76;\n\tpublic $impulse = 75;\n\tpublic $integrity = 18;\n\tpublic $armour = 6;\n\tpublic $mass = 5;\n\tpublic $fc = array(0 => 90, 1 => 65);\n\tpublic $cost = 14;\n\tpublic $exploSize = 8;\n\tpublic $traverse = 0;\n\n\tfunction __construct($parentId, $id){\n\t\tparent::__construct($parentId, $id);\n\t}\n}\n\nclass Titan extends Ammo {\n\tpublic $name = \"Titan\";\n\tpublic $display = \"Heavy Antiship Missiles\";\n\tpublic $type = \"explosive\";\n\tpublic $minDmg = 78;\n\tpublic $maxDmg = 96;\n\tpublic $impulse = 65;\n\tpublic $integrity = 22;\n\tpublic $armour = 7;\n\tpublic $mass = 6;\n\tpublic $fc = array(0 => 90, 1 => 45);\n\tpublic $cost = 20;\n\tpublic $exploSize = 10;\n\tpublic $traverse = 1;\n\n\tfunction __construct($parentId, $id){\n\t\tparent::__construct($parentId, $id);\n\t}\n}",
 			"file": "server/systems/weapons/launcher.php",
+			"file_size": 4561,
+			"file_write_time": 131380478977520956,
 			"settings":
 			{
-				"buffer_size": 4376,
-				"encoding": "UTF-8",
+				"buffer_size": 4377,
 				"line_ending": "Windows"
 			}
 		},
@@ -1043,15 +1057,6 @@
 			"settings":
 			{
 				"buffer_size": 3555,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "server/systems/weapons/particle.php",
-			"settings":
-			{
-				"buffer_size": 3512,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1418,6 +1423,41 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"unselectSystems",
+			"this.dounselect",
+			"checksensorhig",
+			"launchFLight",
+			"launchFlight\n",
+			"launchFlight",
+			"this.size",
+			"this.size ",
+			"launch selected",
+			"launched Flight",
+			"launch selected fl",
+			"confirm and l",
+			"game.mode = ",
+			"this.mode = ",
+			"checkSensorHighlight",
+			"powerdiv",
+			"canPower",
+			"canpower\ncanPower",
+			"switchModeAll",
+			"Launcher",
+			"prototype.select",
+			"select()",
+			".bind",
+			"sharedLaunchFlight",
+			"unbind",
+			"bind",
+			".bind",
+			"getanim",
+			"this.explos",
+			"setanimation",
+			"this.exploSize =",
+			"this.exploSize = ",
+			"this.explosize = ",
+			"drawExplosion",
+			"sensori",
 			"animatefireor",
 			"hit\"",
 			"setupsh",
@@ -1510,42 +1550,7 @@
 			"sensorEvent",
 			"getPointInDirection",
 			"setTransform",
-			"drawMoveRange",
-			"center",
-			"Tracing",
-			"tracking:",
-			"\"sens",
-			"hasSystemSelected",
-			"sensore",
-			"\"sens",
-			"\"sensr",
-			"\"sensro",
-			"hasSystemSelected",
-			"\"sensor",
-			"mousectx",
-			"handleMouseDown",
-			"canvasMouseClick",
-			"salvoPathCtx",
-			"mouseCtx",
-			"flightpath",
-			"canvasMouseMove",
-			"hasSystemsSelected",
-			"hasWeaponsSelected ,",
-			"prototype.plus",
-			"function pluss",
-			"1",
-			"scale",
-			"drawarc ",
-			"drawarc",
-			"..",
-			"attach",
-			"getOutputMods",
-			"getOutputMods\n",
-			"function sensor",
-			"this.getoutput ",
-			"maxturn",
-			"intercept rang",
-			"sort"
+			"drawMoveRange"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1691,7 +1696,7 @@
 	"groups":
 	[
 		{
-			"selected": 12,
+			"selected": 13,
 			"sheets":
 			[
 				{
@@ -1779,7 +1784,7 @@
 						"translation.y": 4112.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 35,
 					"type": "text"
 				},
 				{
@@ -1868,7 +1873,7 @@
 						"translation.y": 995.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 50,
+					"stack_index": 54,
 					"type": "text"
 				},
 				{
@@ -1956,7 +1961,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 58,
+					"stack_index": 61,
 					"type": "text"
 				},
 				{
@@ -1965,15 +1970,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 16407,
+						"buffer_size": 16425,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5829,
-								5829
+								11801,
+								11801
 							]
 						],
 						"settings":
@@ -2041,10 +2046,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 7316.0,
+						"translation.y": 15007.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 32,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
@@ -2073,7 +2078,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 78,
+					"stack_index": 80,
 					"type": "text"
 				},
 				{
@@ -2082,15 +2087,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 55887,
+						"buffer_size": 57190,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								53936,
-								53936
+								55365,
+								55365
 							]
 						],
 						"settings":
@@ -2158,10 +2163,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 35728.0,
+						"translation.y": 36744.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -2249,7 +2254,7 @@
 						"translation.y": 1305.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 38,
 					"type": "text"
 				},
 				{
@@ -2336,7 +2341,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 33,
+					"stack_index": 42,
 					"type": "text"
 				},
 				{
@@ -2424,7 +2429,7 @@
 						"translation.y": 29.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 70,
+					"stack_index": 72,
 					"type": "text"
 				},
 				{
@@ -2433,15 +2438,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 15039,
+						"buffer_size": 15037,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								12654,
-								12654
+								9851,
+								9851
 							]
 						],
 						"settings":
@@ -2509,14 +2514,116 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 9177.0,
+						"translation.y": 6980.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
 					"buffer": 10,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2514,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										179,
+										194
+									],
+									[
+										383,
+										395
+									],
+									[
+										463,
+										475
+									],
+									[
+										634,
+										646
+									],
+									[
+										705,
+										717
+									],
+									[
+										908,
+										920
+									],
+									[
+										1086,
+										1098
+									],
+									[
+										1234,
+										1246
+									],
+									[
+										1527,
+										1539
+									],
+									[
+										1607,
+										1619
+									],
+									[
+										1778,
+										1790
+									],
+									[
+										1849,
+										1861
+									],
+									[
+										2052,
+										2064
+									],
+									[
+										2230,
+										2242
+									],
+									[
+										2378,
+										2390
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								2056,
+								2056
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 4,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ \t].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1008.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
 					"file": "server/manager.php",
 					"semi_transient": false,
 					"settings":
@@ -2600,24 +2707,24 @@
 						"translation.y": 11187.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 12,
 					"file": "server/dbManager.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 40399,
+						"buffer_size": 40397,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1116,
-								1116
+								1114,
+								1114
 							]
 						],
 						"settings":
@@ -2686,27 +2793,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 236.0,
+						"translation.y": 92.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 42,
+					"stack_index": 48,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 13,
 					"file": "server/debug.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 187,
+						"buffer_size": 185,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								58,
-								58
+								56,
+								56
 							]
 						],
 						"settings":
@@ -2714,61 +2821,61 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
 								"bh_double_quote_close",
 								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content"
 							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax"
 						},
@@ -2776,11 +2883,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 14,
 					"file": "server/ships/omega.php",
 					"semi_transient": false,
 					"settings":
@@ -2864,11 +2971,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 34,
 					"type": "text"
 				},
 				{
-					"buffer": 14,
+					"buffer": 15,
 					"file": "server/ships/hyperion.php",
 					"semi_transient": false,
 					"settings":
@@ -2952,11 +3059,11 @@
 						"translation.y": 36.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 51,
+					"stack_index": 55,
 					"type": "text"
 				},
 				{
-					"buffer": 15,
+					"buffer": 16,
 					"file": "server/ships/saggitarius.php",
 					"semi_transient": false,
 					"settings":
@@ -2981,11 +3088,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 59,
+					"stack_index": 62,
 					"type": "text"
 				},
 				{
-					"buffer": 16,
+					"buffer": 17,
 					"file": "server/ships/artemis.php",
 					"semi_transient": false,
 					"settings":
@@ -2997,8 +3104,8 @@
 						"selection":
 						[
 							[
-								2142,
-								2142
+								449,
+								449
 							]
 						],
 						"settings":
@@ -3066,14 +3173,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 72.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 56,
+					"stack_index": 23,
 					"type": "text"
 				},
 				{
-					"buffer": 17,
+					"buffer": 18,
 					"file": "server/ships/tethys.php",
 					"semi_transient": false,
 					"settings":
@@ -3098,11 +3205,11 @@
 						"translation.y": 36.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 52,
+					"stack_index": 56,
 					"type": "text"
 				},
 				{
-					"buffer": 18,
+					"buffer": 19,
 					"file": "imageloader.js",
 					"semi_transient": false,
 					"settings":
@@ -3127,11 +3234,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 71,
+					"stack_index": 73,
 					"type": "text"
 				},
 				{
-					"buffer": 19,
+					"buffer": 20,
 					"file": "server/ships/battlecrab.php",
 					"semi_transient": false,
 					"settings":
@@ -3215,11 +3322,11 @@
 						"translation.y": 56.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 73,
+					"stack_index": 75,
 					"type": "text"
 				},
 				{
-					"buffer": 20,
+					"buffer": 21,
 					"file": "server/systems/structure.php",
 					"semi_transient": false,
 					"settings":
@@ -3303,11 +3410,11 @@
 						"translation.y": 115.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 23,
+					"stack_index": 36,
 					"type": "text"
 				},
 				{
-					"buffer": 21,
+					"buffer": 22,
 					"file": "postGameData.php",
 					"semi_transient": false,
 					"settings":
@@ -3391,11 +3498,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 44,
+					"stack_index": 50,
 					"type": "text"
 				},
 				{
-					"buffer": 22,
+					"buffer": 23,
 					"file": "server/systems/weapons/dual.php",
 					"semi_transient": false,
 					"settings":
@@ -3479,11 +3586,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 68,
+					"stack_index": 70,
 					"type": "text"
 				},
 				{
-					"buffer": 23,
+					"buffer": 24,
 					"file": "server/systems/weapons/plasma.php",
 					"semi_transient": false,
 					"settings":
@@ -3508,11 +3615,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 65,
+					"stack_index": 67,
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 25,
 					"file": "server/salvo.php",
 					"semi_transient": false,
 					"settings":
@@ -3596,11 +3703,11 @@
 						"translation.y": 186.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 40,
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 26,
 					"file": "cam.js",
 					"semi_transient": false,
 					"settings":
@@ -3684,11 +3791,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 81,
+					"stack_index": 83,
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 27,
 					"file": "server/systems/system.php",
 					"semi_transient": false,
 					"settings":
@@ -3769,27 +3876,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5679.0,
+						"translation.y": 459.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 28,
 					"file": "systems.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 75105,
+						"buffer_size": 75803,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								39602,
-								39602
+								67367,
+								67367
 							]
 						],
 						"settings":
@@ -3857,14 +3964,191 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 26026.0,
+						"translation.y": 42691.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 28,
+					"buffer": 29,
+					"file": "graphics.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6434,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								672,
+								672
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content"
+							],
+							"spell_check": true,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 14,
+					"type": "text"
+				},
+				{
+					"buffer": 30,
+					"file": "server/systems/weapons/particle.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3512,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								314,
+								314
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content"
+							],
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 20,
+					"type": "text"
+				},
+				{
+					"buffer": 31,
 					"file": "server/ships/olympus.php",
 					"semi_transient": false,
 					"settings":
@@ -3948,11 +4232,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 63,
+					"stack_index": 65,
 					"type": "text"
 				},
 				{
-					"buffer": 29,
+					"buffer": 32,
 					"file": "createGame.php",
 					"semi_transient": false,
 					"settings":
@@ -4036,24 +4320,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 57,
+					"stack_index": 60,
 					"type": "text"
 				},
 				{
-					"buffer": 30,
+					"buffer": 33,
 					"file": "script.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 15439,
+						"buffer_size": 15433,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5014,
-								5014
+								233,
+								233
 							]
 						],
 						"settings":
@@ -4121,14 +4405,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2988.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
-					"buffer": 31,
+					"buffer": 34,
 					"file": "lobby.php",
 					"semi_transient": false,
 					"settings":
@@ -4212,24 +4496,24 @@
 						"translation.y": 2006.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 27,
 					"type": "text"
 				},
 				{
-					"buffer": 32,
+					"buffer": 35,
 					"file": "game.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 48658,
+						"buffer_size": 48549,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								13262,
-								13262
+								1619,
+								1619
 							]
 						],
 						"settings":
@@ -4297,27 +4581,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 9124.0,
+						"translation.y": 324.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 33,
+					"buffer": 36,
 					"file": "flights.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 14814,
+						"buffer_size": 14817,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								13333,
-								13333
+								13336,
+								13336
 							]
 						],
 						"settings":
@@ -4388,11 +4672,11 @@
 						"translation.y": 8595.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 61,
+					"stack_index": 64,
 					"type": "text"
 				},
 				{
-					"buffer": 34,
+					"buffer": 37,
 					"file": "server/ship.php",
 					"semi_transient": false,
 					"settings":
@@ -4473,20 +4757,20 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 7209.0,
+						"translation.y": 783.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 17,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 13,
+			"selected": 12,
 			"sheets":
 			[
 				{
-					"buffer": 35,
+					"buffer": 38,
 					"file": "server/ships/avenger.php",
 					"semi_transient": false,
 					"settings":
@@ -4512,11 +4796,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 72,
+					"stack_index": 74,
 					"type": "text"
 				},
 				{
-					"buffer": 22,
+					"buffer": 23,
 					"file": "server/systems/weapons/dual.php",
 					"semi_transient": false,
 					"settings":
@@ -4600,11 +4884,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 38,
+					"stack_index": 45,
 					"type": "text"
 				},
 				{
-					"buffer": 34,
+					"buffer": 37,
 					"file": "server/ship.php",
 					"semi_transient": false,
 					"settings":
@@ -4685,19 +4969,19 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 7316.0,
+						"translation.y": 890.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 33,
 					"type": "text"
 				},
 				{
-					"buffer": 36,
+					"buffer": 39,
 					"file": "log.txt",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 0,
+						"buffer_size": 91,
 						"regions":
 						{
 						},
@@ -4718,57 +5002,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 37,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 308,
-						"regions":
-						{
-							"match":
-							{
-								"flags": 112,
-								"regions":
-								[
-									[
-										232,
-										236
-									]
-								],
-								"scope": ""
-							}
-						},
-						"selection":
-						[
-							[
-								234,
-								234
-							]
-						],
-						"settings":
-						{
-							"detect_indentation": false,
-							"line_numbers": false,
-							"output_tag": 1,
-							"result_base_dir": "",
-							"result_file_regex": "^([^ \t].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
 					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 25,
 					"file": "server/salvo.php",
 					"semi_transient": false,
 					"settings":
@@ -4852,11 +5090,11 @@
 						"translation.y": 965.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 39,
+					"stack_index": 46,
 					"type": "text"
 				},
 				{
-					"buffer": 38,
+					"buffer": 40,
 					"file": "autoload.php",
 					"semi_transient": false,
 					"settings":
@@ -4868,8 +5106,8 @@
 						"selection":
 						[
 							[
-								296,
-								296
+								614,
+								614
 							]
 						],
 						"settings":
@@ -4941,24 +5179,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 34,
+					"stack_index": 25,
 					"type": "text"
 				},
 				{
-					"buffer": 39,
+					"buffer": 29,
 					"file": "graphics.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6327,
+						"buffer_size": 6434,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4758,
-								4758
+								2149,
+								2149
 							]
 						],
 						"settings":
@@ -5027,14 +5265,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2711.0,
+						"translation.y": 1196.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
-					"buffer": 40,
+					"buffer": 41,
 					"file": "server/systems/weapons/em.php",
 					"semi_transient": false,
 					"settings":
@@ -5059,11 +5297,11 @@
 						"translation.y": 43.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 37,
+					"stack_index": 44,
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 27,
 					"file": "server/systems/system.php",
 					"semi_transient": false,
 					"settings":
@@ -5147,7 +5385,7 @@
 						"translation.y": 3320.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 32,
 					"type": "text"
 				},
 				{
@@ -5156,15 +5394,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 55887,
+						"buffer_size": 57190,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								52836,
-								52836
+								54052,
+								54052
 							]
 						],
 						"settings":
@@ -5232,27 +5470,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 35422.0,
+						"translation.y": 36124.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 30,
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 28,
 					"file": "systems.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 75105,
+						"buffer_size": 75803,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								25440,
-								25440
+								11422,
+								11422
 							]
 						],
 						"settings":
@@ -5319,11 +5557,11 @@
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": -0.0,
-						"translation.y": 17116.0,
+						"translation.x": 0.0,
+						"translation.y": 7015.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
@@ -5411,24 +5649,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 49,
+					"stack_index": 53,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 12,
 					"file": "server/dbManager.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 40399,
+						"buffer_size": 40397,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								180,
-								180
+								193,
+								193
 							]
 						],
 						"settings":
@@ -5436,61 +5674,61 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
 								"bh_double_quote_close",
 								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
 								"bh_default_close",
 								"bh_default_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content"
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
 							],
 							"history_list_is_closing": true,
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
@@ -5500,16 +5738,16 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 39,
+					"buffer": 29,
 					"file": "graphics.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6327,
+						"buffer_size": 6434,
 						"regions":
 						{
 						},
@@ -5589,7 +5827,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 39,
 					"type": "text"
 				},
 				{
@@ -5677,11 +5915,11 @@
 						"translation.y": 12833.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 47,
+					"stack_index": 51,
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 26,
 					"file": "cam.js",
 					"semi_transient": false,
 					"settings":
@@ -5693,8 +5931,8 @@
 						"selection":
 						[
 							[
-								347,
-								347
+								573,
+								573
 							]
 						],
 						"settings":
@@ -5765,24 +6003,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 45,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
-					"buffer": 32,
+					"buffer": 35,
 					"file": "game.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 48658,
+						"buffer_size": 48549,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								34200,
-								34200
+								17531,
+								17531
 							]
 						],
 						"settings":
@@ -5849,28 +6087,28 @@
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 197.0,
-						"translation.y": 23038.0,
+						"translation.x": 0.0,
+						"translation.y": 12136.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 41,
+					"buffer": 42,
 					"file": "shared.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 13242,
+						"buffer_size": 13240,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								12803,
-								12803
+								8011,
+								8011
 							]
 						],
 						"settings":
@@ -5938,14 +6176,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 8846.0,
+						"translation.y": 5332.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
-					"buffer": 42,
+					"buffer": 43,
 					"file": "gameSetup.php",
 					"semi_transient": false,
 					"settings":
@@ -6026,14 +6264,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 7226.0,
+						"translation.y": 6607.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
-					"buffer": 43,
+					"buffer": 44,
 					"file": "server/ships/tinashi.php",
 					"semi_transient": false,
 					"settings":
@@ -6058,11 +6296,11 @@
 						"translation.y": 57.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 67,
+					"stack_index": 69,
 					"type": "text"
 				},
 				{
-					"buffer": 44,
+					"buffer": 45,
 					"file": "server/ships/sharlin.php",
 					"semi_transient": false,
 					"settings":
@@ -6087,11 +6325,11 @@
 						"translation.y": 131.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 69,
+					"stack_index": 71,
 					"type": "text"
 				},
 				{
-					"buffer": 45,
+					"buffer": 46,
 					"file": "server/ships/whitestar.php",
 					"semi_transient": false,
 					"settings":
@@ -6175,7 +6413,7 @@
 						"translation.y": 19.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 74,
+					"stack_index": 76,
 					"type": "text"
 				},
 				{
@@ -6263,7 +6501,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 31,
 					"type": "text"
 				},
 				{
@@ -6349,14 +6587,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 162.0,
+						"translation.y": 90.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 80,
+					"stack_index": 82,
 					"type": "text"
 				},
 				{
-					"buffer": 46,
+					"buffer": 47,
 					"file": "server/ships/primus.php",
 					"semi_transient": false,
 					"settings":
@@ -6440,11 +6678,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 37,
 					"type": "text"
 				},
 				{
-					"buffer": 47,
+					"buffer": 48,
 					"file": "server/ships/demos.php",
 					"semi_transient": false,
 					"settings":
@@ -6528,11 +6766,11 @@
 						"translation.y": 90.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 54,
+					"stack_index": 58,
 					"type": "text"
 				},
 				{
-					"buffer": 48,
+					"buffer": 49,
 					"file": "server/ships/vorchan.php",
 					"semi_transient": false,
 					"settings":
@@ -6557,11 +6795,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 30,
+					"stack_index": 41,
 					"type": "text"
 				},
 				{
-					"buffer": 49,
+					"buffer": 50,
 					"file": "server/ships/haven.php",
 					"semi_transient": false,
 					"settings":
@@ -6586,11 +6824,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 53,
+					"stack_index": 57,
 					"type": "text"
 				},
 				{
-					"buffer": 50,
+					"buffer": 51,
 					"file": "server/systems/weapons/linked.php",
 					"semi_transient": false,
 					"settings":
@@ -6615,24 +6853,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 66,
+					"stack_index": 68,
 					"type": "text"
 				},
 				{
-					"buffer": 33,
+					"buffer": 36,
 					"file": "flights.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 14814,
+						"buffer_size": 14817,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5927,
-								5927
+								5054,
+								5054
 							]
 						],
 						"settings":
@@ -6700,14 +6938,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3688.0,
+						"translation.y": 3786.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 46,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 51,
+					"buffer": 52,
 					"file": "server/flight.php",
 					"semi_transient": false,
 					"settings":
@@ -6719,8 +6957,8 @@
 						"selection":
 						[
 							[
-								8044,
-								8044
+								690,
+								690
 							]
 						],
 						"settings":
@@ -6789,10 +7027,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 295.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 41,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -6880,11 +7118,11 @@
 						"translation.y": 3907.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 60,
+					"stack_index": 63,
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 25,
 					"file": "server/salvo.php",
 					"semi_transient": false,
 					"settings":
@@ -6968,11 +7206,11 @@
 						"translation.y": 3496.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 77,
+					"stack_index": 79,
 					"type": "text"
 				},
 				{
-					"buffer": 20,
+					"buffer": 21,
 					"file": "server/systems/structure.php",
 					"semi_transient": false,
 					"settings":
@@ -7056,11 +7294,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 48,
+					"stack_index": 52,
 					"type": "text"
 				},
 				{
-					"buffer": 52,
+					"buffer": 53,
 					"file": "getGameData.php",
 					"semi_transient": false,
 					"settings":
@@ -7144,11 +7382,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 43,
+					"stack_index": 49,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 11,
 					"file": "server/manager.php",
 					"semi_transient": false,
 					"settings":
@@ -7232,11 +7470,11 @@
 						"translation.y": 19593.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 40,
+					"stack_index": 47,
 					"type": "text"
 				},
 				{
-					"buffer": 53,
+					"buffer": 54,
 					"file": "shiptest.php",
 					"semi_transient": false,
 					"settings":
@@ -7261,11 +7499,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 75,
+					"stack_index": 77,
 					"type": "text"
 				},
 				{
-					"buffer": 54,
+					"buffer": 55,
 					"file": "index.php",
 					"semi_transient": false,
 					"settings":
@@ -7349,24 +7587,24 @@
 						"translation.y": 518.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 79,
+					"stack_index": 81,
 					"type": "text"
 				},
 				{
-					"buffer": 55,
+					"buffer": 56,
 					"file": "server/systems/weapons/launcher.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4376,
+						"buffer_size": 4377,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4243,
-								4243
+								3979,
+								3979
 							]
 						],
 						"settings":
@@ -7374,74 +7612,74 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
 								"bh_double_quote_close",
 								"bh_double_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
 								"bh_regex_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
 								"bh_single_quote",
 								"bh_single_quote_center",
 								"bh_single_quote_open",
 								"bh_single_quote_close",
 								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content"
+								"bh_unmatched_content"
 							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2556.0,
+						"translation.y": 2968.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 31,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 56,
+					"buffer": 57,
 					"file": "balltest.php",
 					"semi_transient": false,
 					"settings":
@@ -7466,11 +7704,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 76,
+					"stack_index": 78,
 					"type": "text"
 				},
 				{
-					"buffer": 57,
+					"buffer": 58,
 					"file": "systemtest.php",
 					"semi_transient": false,
 					"settings":
@@ -7495,11 +7733,11 @@
 						"translation.y": 54.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 55,
+					"stack_index": 59,
 					"type": "text"
 				},
 				{
-					"buffer": 58,
+					"buffer": 30,
 					"file": "server/systems/weapons/particle.php",
 					"semi_transient": false,
 					"settings":
@@ -7511,8 +7749,8 @@
 						"selection":
 						[
 							[
-								723,
-								723
+								1493,
+								1493
 							]
 						],
 						"settings":
@@ -7580,10 +7818,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 530.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 62,
+					"stack_index": 24,
 					"type": "text"
 				},
 				{
@@ -7672,7 +7910,7 @@
 						"translation.y": 63.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
@@ -7688,8 +7926,8 @@
 						"selection":
 						[
 							[
-								117,
-								117
+								3220,
+								3220
 							]
 						],
 						"settings":
@@ -7701,11 +7939,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 35,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
-					"buffer": 23,
+					"buffer": 24,
 					"file": "server/systems/weapons/plasma.php",
 					"semi_transient": false,
 					"settings":
@@ -7730,7 +7968,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 36,
+					"stack_index": 43,
 					"type": "text"
 				},
 				{
@@ -7818,7 +8056,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 64,
+					"stack_index": 66,
 					"type": "text"
 				}
 			]
@@ -7852,7 +8090,7 @@
 		"cols":
 		[
 			0.0,
-			0.225921678336,
+			0.610570609867,
 			1.0
 		],
 		"rows":
@@ -7880,12 +8118,32 @@
 		"selected_items":
 		[
 			[
-				"de",
+				"d",
 				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
 			],
 			[
 				"db",
 				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
+			],
+			[
+				"lau",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php"
+			],
+			[
+				"f",
+				"C:\\xampp\\htdocs\\fire\\flights.js"
+			],
+			[
+				"fl",
+				"C:\\xampp\\htdocs\\fire\\server\\flight.php"
+			],
+			[
+				"sh",
+				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
+			],
+			[
+				"de",
+				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
 			],
 			[
 				"log",
@@ -7896,20 +8154,76 @@
 				"C:\\xampp\\htdocs\\fire\\game.js"
 			],
 			[
+				"game.",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
+				"cam",
+				"C:\\xampp\\htdocs\\fire\\cam.js"
+			],
+			[
+				"sha",
+				"C:\\xampp\\htdocs\\fire\\shared.js"
+			],
+			[
+				"sy",
+				"C:\\xampp\\htdocs\\fire\\systems.js"
+			],
+			[
+				"gae",
+				"C:\\xampp\\htdocs\\fire\\game.php"
+			],
+			[
 				"sys",
 				"C:\\xampp\\htdocs\\fire\\systems.js"
 			],
 			[
-				"sh",
-				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
+				"style",
+				"C:\\xampp\\htdocs\\fire\\style.css"
+			],
+			[
+				"pul",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
+			],
+			[
+				"gr",
+				"C:\\xampp\\htdocs\\fire\\graphics.js"
+			],
+			[
+				"gam",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
+				"game",
+				"C:\\xampp\\htdocs\\fire\\gameSetup.php"
+			],
+			[
+				"gra",
+				"C:\\xampp\\htdocs\\fire\\graphics.js"
+			],
+			[
+				"shar",
+				"C:\\xampp\\htdocs\\fire\\shared.js"
+			],
+			[
+				"grap",
+				"C:\\xampp\\htdocs\\fire\\graphics.js"
+			],
+			[
+				"par",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php"
+			],
+			[
+				"part",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\artemis.php"
+			],
+			[
+				"au",
+				"C:\\xampp\\htdocs\\fire\\autoload.php"
 			],
 			[
 				"mana",
 				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
-			],
-			[
-				"sy",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\system.php"
 			],
 			[
 				"man",
@@ -7936,20 +8250,12 @@
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\omega.php"
 			],
 			[
-				"sha",
-				"C:\\xampp\\htdocs\\fire\\shared.js"
-			],
-			[
 				"games",
 				"C:\\xampp\\htdocs\\fire\\gameSetup.php"
 			],
 			[
 				"aja",
 				"C:\\xampp\\htdocs\\fire\\ajax.js"
-			],
-			[
-				"game",
-				"C:\\xampp\\htdocs\\fire\\game.php"
 			],
 			[
 				"scr",
@@ -7968,28 +8274,12 @@
 				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
 			],
 			[
-				"gra",
-				"C:\\xampp\\htdocs\\fire\\graphics.js"
-			],
-			[
 				"g",
-				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
-				"gam",
 				"C:\\xampp\\htdocs\\fire\\game.js"
 			],
 			[
 				"vor",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\vorchan.php"
-			],
-			[
-				"lau",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php"
-			],
-			[
-				"style",
-				"C:\\xampp\\htdocs\\fire\\style.css"
 			],
 			[
 				"ga",
@@ -8020,14 +8310,6 @@
 				"C:\\xampp\\htdocs\\fire\\getGameData.php"
 			],
 			[
-				"cam",
-				"C:\\xampp\\htdocs\\fire\\cam.js"
-			],
-			[
-				"fl",
-				"C:\\xampp\\htdocs\\fire\\flights.js"
-			],
-			[
 				"sty",
 				"C:\\xampp\\htdocs\\fire\\style.css"
 			],
@@ -8038,10 +8320,6 @@
 			[
 				"pos",
 				"C:\\xampp\\htdocs\\fire\\postGameData.php"
-			],
-			[
-				"gr",
-				"C:\\xampp\\htdocs\\fire\\graphics.js"
 			],
 			[
 				"cla",
@@ -8058,14 +8336,6 @@
 			[
 				"post",
 				"C:\\xampp\\htdocs\\fire\\postGameData.php"
-			],
-			[
-				"d",
-				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
-			],
-			[
-				"shar",
-				"C:\\xampp\\htdocs\\fire\\shared.js"
 			],
 			[
 				"hyp",
@@ -8092,16 +8362,8 @@
 				"C:\\xampp\\htdocs\\fire\\classes.js"
 			],
 			[
-				"game.",
-				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
 				"em",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\em.php"
-			],
-			[
-				"par",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php"
 			],
 			[
 				"puls",
@@ -8156,10 +8418,6 @@
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\linked.php"
 			],
 			[
-				"pul",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
-			],
-			[
 				"plas",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php"
 			],
@@ -8178,10 +8436,6 @@
 			[
 				"tin",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\tinashi.php"
-			],
-			[
-				"part",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php"
 			],
 			[
 				"ssh",
@@ -8216,10 +8470,6 @@
 				"C:\\xampp\\htdocs\\fire\\imageloader.js"
 			],
 			[
-				"au",
-				"C:\\xampp\\htdocs\\fire\\autoload.php"
-			],
-			[
 				"sagg",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\saggitarius.php"
 			],
@@ -8250,10 +8500,6 @@
 			[
 				"la",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php"
-			],
-			[
-				"f",
-				"C:\\xampp\\htdocs\\fire\\server\\flight.php"
 			],
 			[
 				"st",
@@ -8290,10 +8536,6 @@
 			[
 				"plasma",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php"
-			],
-			[
-				"grap",
-				"C:\\xampp\\htdocs\\fire\\graphics.js"
 			],
 			[
 				"shared",
@@ -8386,10 +8628,6 @@
 			[
 				"uls",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
-			],
-			[
-				"gm.",
-				"C:\\xampp\\htdocs\\fire\\game.php"
 			]
 		],
 		"width": 0.0
@@ -8412,7 +8650,7 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 1,
+	"selected_group": 0,
 	"settings":
 	{
 	},

@@ -84,6 +84,7 @@ function Game(id, name, status, userid, turn, phase){
 	}
 
 	this.canSetSensor = function(){
+		if (this.flight || this.salvo){return false;}
 		var sensor = this.getSystemByName("Sensor");
 		if (sensor.locked){
 			return false;
