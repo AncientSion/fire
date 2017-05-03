@@ -2036,7 +2036,7 @@ function Ship(data){
 	//	return isInArc(getCompassHeadingOfPoint(loc, pos, facing), start, end);
 
 	this.hasLockOnUnit = function(target){
-		if (target.flight || target.salvo){return false;}
+		if (this.flight || this.salvo){return false;}
 		var sensor = this.getSystemByName("Sensor");
 		var ew = sensor.ew[sensor.ew.length-1];
 		var origin = this.getBaseOffsetPos();
