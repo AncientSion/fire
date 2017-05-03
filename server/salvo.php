@@ -221,7 +221,8 @@ class Salvo extends Mini {
 
 	public function getImpulse(){
 		//Debug::log("salvo #".$this->id." impulse: ".min($this->getMaxImpulse(), $this->getBaseImpulse() * $this->getAccelSteps()));
-		return $this->baseImpulse + ($this->baseImpulse / 2 * $this->getAccelSteps());
+		//return $this->baseImpulse + ($this->baseImpulse / 2 * $this->getAccelSteps());
+		return $this->getBaseImpulse() * $this->getAccelSteps();
 	}
 
 	public function resolveBallisticFireOrder($fire){
@@ -272,12 +273,7 @@ class Salvo extends Mini {
 
 class Ammo extends Weapon {
 	public $id;
-	public $impulse;
 	public $armour;
-	public $damages = array();
-	public $mass;
-	public $destroyed = false;
-	public $fc = array();
 	public $cost;
 	public $traverse = 2;
 

@@ -707,7 +707,6 @@ Game.prototype.getUnitType = function (val){
 				if (game.phase == -1 || game.phase == 0 || game.phase == 1){
 					unit.unsetMoveMode();
 					unit.setMoveMode();
-					//unit.getSystemByName("Sensor").drawEW();
 				}
 				if (game.flightDeploy){
 					game.flightDeploy.drawArc();

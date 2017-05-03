@@ -71,13 +71,10 @@ class Hasta extends Ammo {
 	public $type = "explosive";
 	public $minDmg = 23;
 	public $maxDmg = 29;
-	public $impulse = 110;
 	public $integrity = 12;
 	public $armour = 3;
 	public $mass = 3;
-	public $fc = array(0 => 90, 1 => 90);
 	public $cost = 6;
-	public $exploSize = 5;
 	public $traverse = -3;
 
 	function __construct($parentId, $id){
@@ -91,13 +88,10 @@ class Javelin extends Ammo {
 	public $type = "explosive";
 	public $minDmg = 36;
 	public $maxDmg = 48;
-	public $impulse = 90;
 	public $integrity = 16;
 	public $armour = 5;
 	public $mass = 4;
-	public $fc = array(0 => 85, 1 => 85);
 	public $cost = 10;
-	public $exploSize = 6;
 	public $traverse = -2;
 
 	function __construct($parentId, $id){
@@ -111,13 +105,10 @@ class Patriot extends Ammo {
 	public $type = "explosive";
 	public $minDmg = 13;
 	public $maxDmg = 18;
-	public $impulse = 140;
 	public $integrity = 10;
 	public $armour = 3;
 	public $mass = 2;
-	public $fc = array(0 => 85, 1 => 95);
 	public $cost = 8;
-	public $exploSize = 5;
 	public $traverse = -4;
 
 	function __construct($parentId, $id){
@@ -131,13 +122,10 @@ class Naga extends Ammo {
 	public $type = "explosive";
 	public $minDmg = 36;
 	public $maxDmg = 48;
-	public $impulse = 90;
 	public $integrity = 16;
 	public $armour = 5;
 	public $mass = 4;
-	public $fc = array(0 => 85, 1 => 85);
 	public $cost = 10;
-	public $exploSize = 6;
 	public $traverse = -2;
 
 	function __construct($parentId, $id){
@@ -151,13 +139,10 @@ class Cyclops extends Ammo {
 	public $type = "explosive";
 	public $minDmg = 55;
 	public $maxDmg = 76;
-	public $impulse = 75;
 	public $integrity = 18;
 	public $armour = 6;
-	public $mass = 5;
-	public $fc = array(0 => 90, 1 => 65);
+	public $mass = 6;
 	public $cost = 14;
-	public $exploSize = 8;
 	public $traverse = 0;
 
 	function __construct($parentId, $id){
@@ -174,10 +159,8 @@ class Titan extends Ammo {
 	public $impulse = 65;
 	public $integrity = 22;
 	public $armour = 7;
-	public $mass = 6;
-	public $fc = array(0 => 90, 1 => 45);
+	public $mass = 8;
 	public $cost = 20;
-	public $exploSize = 10;
 	public $traverse = 1;
 
 	function __construct($parentId, $id){

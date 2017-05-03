@@ -1447,7 +1447,7 @@ Particle.prototype.getAnimation = function(fire){
 		grouping = 1;
 		delay = 0;
 	}
-	else if (this.shots >= 4){
+	else if (this.shots >= 4 && fire.guns <= 3){
 		grouping = 1;
 		delay = 80;
 		shotInterval = 10;
@@ -2473,7 +2473,7 @@ Hangar.prototype.doLaunchFlight = function(){
 	for (var i = game.ships.length-1; i >= 0; i--){
 		if (game.ships[i].userid == game.userid){
 			if (game.ships[i].flight){
-				if (!game.ships[i].actions[0].resolved0){
+				if (!game.ships[i].actions[0].resolved){
 					if (game.ships[i].launchdata.shipid == window.aUnit && game.ships[i].launchdata.systemid == this.id){
 						//console.log("splice");
 						//this.unsetFireOrder();

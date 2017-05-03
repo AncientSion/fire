@@ -10,12 +10,12 @@ function Flight(data){
 
 	this.create = function(){
 		this.setFighterState();
-		this.setMaxMass()
-		this.setEP()
+		this.setMaxMass();
+		this.setEP();
 		this.setTurns();
 		this.setFacing();
 		this.setPosition();
-		this.setLayout()
+		this.setLayout();
 	}
 
 	this.isDestroyed = function(){
