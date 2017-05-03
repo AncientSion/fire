@@ -18,6 +18,10 @@ function Flight(data){
 		this.setLayout();
 	}
 
+	this.hasSystemSelected = function(name){
+		return false;
+	}
+
 	this.isDestroyed = function(){
 		for (var i = 0; i < this.structures.length; i++){
 			if (!this.structures[i].destroyed && !this.structures[i].disabled){

@@ -245,6 +245,7 @@ function Salvo(data){
 	this.destroyed = data.destroyed;
 	this.actions = data.actions;
 	this.baseImpulse = data.baseImpulse;
+	this.baseHitChance = data.baseHitChance;
 	this.traverse = -4;
 	this.shortInfo = false;
 	this.selected = false;
@@ -266,6 +267,10 @@ function Salvo(data){
 	this.anim = [];
 	this.animated = false;
 	this.layout = [];
+
+	this.hasSystemSelected = function(name){
+		return false;
+	}
 
 	this.setLayout = function(){
 		for (var i = 0; i < this.structurs.length; i++){
@@ -343,15 +348,11 @@ function Salvo(data){
 	}
 
 	this.getAccelSteps = function(){
-		return this.actions.length-1;
-	}
-
-	this.getMaxImpulse = function(){
-		return this.getBaseImpulse() * 3;
+		return this.actions.length;
 	}
 
 	this.getTotalImpulse = function(){
-		return Math.floor(this.baseImpulse + (this.baseImpulse / 2 * this.getAccelSteps()));
+		return Math.floor(this.getBaseImpulse() * this.getAccelSteps());
 	}
 
 	this.getTrackingString = function(){
@@ -372,32 +373,33 @@ function Salvo(data){
 			table.style.width = "95%"
 
 		var tr = table.insertRow(-1);
-		var td = tr.insertCell(-1);
-			td.className = "header";	
+		var td = tr.insertCell(-1); td.className = "header";	
 			td.innerHTML = this.structures.length + "x '" + this.name + "' #" + this.id; td.colSpan = 4;
 
 		var tr = table.insertRow(-1);
-		var td = tr.insertCell(-1);
-			td.className = "subHeader";
+		var td = tr.insertCell(-1); td.className = "subHeader";
 			td.innerHTML = this.display; td.colSpan = 4;
 
 		var target = game.getUnitById(this.targetid);
 		var tr = table.insertRow(-1);
 		var td = tr.insertCell(-1);
 			td.className = "subHeader";
-			td.innerHTML = "Targeting: " + target.name + " #" + target.id + " - Distance: "+ Math.ceil(getDistance({x: this.x, y: this.y}, {x: target.x, y: target.y})) + "px"; td.colSpan = 4;
-			
+			td.innerHTML = "Targeting: <font color='red'>" + target.name + " #" + target.id + "</font> -- Distance: "+ Math.ceil(getDistance({x: this.x, y: this.y}, {x: target.x, y: target.y})) + "px"; td.colSpan = 4;
+		div.appendChild(table);
+
+		var table = document.createElement("table");
+			table.style.width = "95%"; table.style.marginTop = "20px";
     	$(table)
 			.append($("<tr>")
-	    		.append($("<th>").html("Damage"))
+	    		.append($("<th>").html("Impulse / Acceleration"))
 	    		.append($("<th>").html("Armour"))
-	    		.append($("<th>").html("Impulse / Accel"))
+	    		.append($("<th>").html("Damage"))
 	    		.append($("<th>").html("Tracking"))
 			)
 			.append($("<tr>")
-	    		.append($("<td>").html(this.getDamage()))
+	    		.append($("<td>").html(this.getTotalImpulse() + " / " + Math.floor(this.getBaseImpulse()) + " per Turn."))
 	    		.append($("<td>").html(this.structures[0].armour))
-	    		.append($("<td>").html(this.getBaseImpulse() + " / " + Math.floor(this.getBaseImpulse()) + " per Turn."))
+	    		.append($("<td>").html(this.getDamage()))
 	    		.append($("<td>").html(this.getTrackingString()))
 			)
 
@@ -779,7 +781,7 @@ function Salvo(data){
 	}
 
 	this.getHitChanceFromAngle = function(){
-		return Math.ceil(Math.sqrt(this.structures[0].mass)*10);
+		return this.baseHitChance;
 	}
 
 	this.getPlannedFacingToMove = function(){

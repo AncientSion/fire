@@ -819,7 +819,7 @@ class Manager {
 				$ballistic->actions[] = new Action(
 					$this->turn,
 					"move",
-					$ballistic->structures[0]->impulse,
+					$ballistic->getImpulse(),
 					$iPos->x,
 					$iPos->y,
 					0, 0, 0, 0, 0
@@ -831,7 +831,7 @@ class Manager {
 			$ballistic->actions[] = new Action(
 				$this->turn,
 				"move",
-				$ballistic->getImpulse(),
+				min($dist, $ballistic->getImpulse()),
 				$tPos->x,	
 				$tPos->y,
 				0, 0, 0, 0, 0

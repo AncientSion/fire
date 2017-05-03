@@ -67,6 +67,10 @@ class Mini extends Ship {
 			}
 		}
 	}
+
+	public function hasLockOn($id){
+		return false;
+	}
 	
 	public function getRemainingIntegrity($fire){
 		return $this->getStructureById($fire->hitSystem->id)->getRemainingIntegrity();
@@ -152,11 +156,10 @@ class Salvo extends Mini {
 	public function setProps(){
 		$this->baseHitChance = ceil(sqrt($this->structures[0]->mass)*10);
 		$this->baseImpulse = ceil(pow($this->structures[0]->mass, -0.5)*250);
-
 	}
 
 	public function getHitChance($fire){
-		return $this->getBaseHitChance();
+		return $this->getBaseHitChance() * $this->getLockMod($fire);
 	}
 
 	public function addStructures($amount){
@@ -216,7 +219,7 @@ class Salvo extends Mini {
 	}
 
 	public function getAccelSteps(){
-		return sizeof($this->actions)-1;
+		return sizeof($this->actions);
 	}
 
 	public function getImpulse(){

@@ -87,10 +87,8 @@ class LightPulse extends Pulse {
 	public $shots = 3;
 	public $animColor = "brown";
 	public $projSize = 2;
-	public $projSpeed = 11;
-	public $exploSize = 2.5;
+	public $projSpeed = 8;
 	public $reload = 1;
-	public $fc = array(0 => 100, 1 => 180);
 	public $mass = 12;
 	public $powerReq = 2;
 	public $traverse = -4;
@@ -109,10 +107,8 @@ class MediumPulse extends Pulse {
 	public $shots = 3;
 	public $animColor = "brown";
 	public $projSize = 3;
-	public $projSpeed = 8;
-	public $exploSize = 4;
+	public $projSpeed = 6;
 	public $reload = 1;
-	public $fc = array(0 => 115, 1 => 135);
 	public $mass = 20;
 	public $powerReq = 4;
 	public $traverse = -1;

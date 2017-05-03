@@ -695,7 +695,7 @@ table, th, tr, td {
 	font-size: 15px;
 }
 
-.ammoDiv td {
+.ammoDiv td, .ammoDiv th {
 	border: 1px solid white;
 }
 

@@ -430,7 +430,6 @@ class Ship {
 	public function hasLockOn($id){
 		for ($i = 0; $i < sizeof($this->locks); $i++){
 			if ($this->locks[$i] == $id){
-				//Debug::log("lock active");
 				return true;
 			}
 		} return false;
