@@ -5,7 +5,7 @@ class Demos extends Medium {
 	public $display = "Demos";
 	public $faction = "Centauri Republic";
 	public $size = 50;
-	public static $value = 600;
+	public static $value = 430;
 	public $profile = array(0.92, 1.08);
 	public $mass = 3000;
 
@@ -16,20 +16,20 @@ class Demos extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 500, 24);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 22);
 		$front->systems[] = new MediumPlasma($this->getId(), $this->id, 315, 45);
-		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60, 14, 4, array("Javelin"));
+		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60, 16, 4, array("Javelin"));
 		$front->systems[] = new MediumPlasma($this->getId(), $this->id, 315, 45);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 350, 22);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 20);
 		$right->systems[] = new MediumIon($this->getId(), $this->id, 300, 120);
-		$right->systems[] = new LightIon($this->getId(), $this->id, 0, 240);
+		$right->systems[] = new MediumIon($this->getId(), $this->id, 300, 120);
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 350, 22);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 20);
 		$left->systems[] = new MediumIon($this->getId(), $this->id, 240, 60);
-		$left->systems[] = new LightIon($this->getId(), $this->id, 120, 360);
+		$left->systems[] = new MediumIon($this->getId(), $this->id, 240, 60);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -42,7 +42,7 @@ class Demos extends Medium {
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 90);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 90, 85, 6);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 90);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 90, 600, 10);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 90, 750, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 90, $this->getPowerReq());
 	}
 }

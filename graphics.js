@@ -19,8 +19,12 @@ function drawVector(origin, target, dist, angle){
 }
 
 function drawSensorArc(w, d, p, str, len, loc, facing, a){
+	mouseCtx.clearRect(0, 0, res.x, res.y);
+	mouseCtx.translate(cam.o.x, cam.o.y);
+	mouseCtx.scale(cam.z, cam.z);
+	
+	w = Math.ceil(w);	
 	if (w == 180){
-		var d = str/Math.pow(180/len, 1/p);
 		mouseCtx.beginPath();			
 		mouseCtx.arc(loc.x, loc.y, d, 0, 2*Math.PI, false);
 		mouseCtx.closePath();

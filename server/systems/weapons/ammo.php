@@ -2,176 +2,167 @@
 
 class Ammo extends Weapon {
 	public $id;
-	public $userid;
-	public $classname;
-	public $maxLaunch;
-	public $impulse;
-	public $amount;
-	public $actions = array();
-	public $fireid;
-	public $integrity;
 	public $armour;
-	public $damages = array();
-	public $fire;
-	public $mass;
-	public $destroyed;
-	public $shots;
-	public $type;
+	public $cost;
+	public $traverse = 2;
 
-	function __construct($id, $userid, $fireid, $amount, $destroyed){
+	function __construct($parentId, $id){
+		$this->parentId = $parentId;
 		$this->id = $id;
-		$this->userid = $userid;
-		$this->fireid = $fireid;
-		$this->amount = $amount;
-		$this->destroyed = $destroyed;
-        parent::__construct($id, $parentId, $output, $destroyed);
+		$this->integrity = 2+$this->mass*3;
+		$this->armour = 2+$this->mass;
 	}
 
-	public function doDamage($fire){
-		Debug::log("BALLISTIC DO DAMAGE");
-        parent::doDamage($fire);
-	}
-
-	public function getPosition(){
-		return new Point($this->actions[sizeof($this->actions)-1]->x, $this->actions[sizeof($this->actions)-1]->y);
-	}	
-
-	public function getTrajectory(){
-		return new Point($this->actions[sizeof($this->actions)-2]->x, $this->actions[sizeof($this->actions)-2]->y);
-	}
-
-	public function resolveFireOrder($fire){
-		Debug::log("resolveFireOrder ID ".$fire->id.", shooter: ".$fire->shooterid." vs ".$fire->targetid.", w: ".$fire->weaponid);
-
-		$fire->dist = $this->getHitDist($fire);
-		$fire->angleIn = $this->getHitAngle($fire);
-		$fire->profile = $this->getHitChance($fire);
-		$rangeLoss = $fire->weapon->getAccLoss($fire->dist);
-		$fire->req = $fire->profile - $rangeLoss;
-
-		$fire = $fire->weapon->rollForHit($fire);
-
-		if ($fire->hits){
-			$fire = $this->getHitSystem($fire);
-			$fire = $fire->weapon->doDamage($fire);
-		}
-		return $fire;
-	}
-
-	public function getHitDist($fire){
-		$tPos = $this->getPosition();
-		$sPos = $fire->shooter->getPosition();		
-		return Math::getDist($tPos->x, $tPos->y,  $sPos->x, $sPos->y);
-	}
-
-	public function getHitAngle($fire){
-		$tPos = $this->getPosition();
-		$sPos = $fire->shooter->getPosition();
-		$angle = Math::getAngle($tPos->x, $tPos->y, $sPos->x, $sPos->y);
-		return $angle;
-	}
-
-	public function getHitChance($fire){
-		return 70;
-	}
-
-	public function getRangeLossMultiplier($dist){
-		return sqrt(10-$this->mass);
-	}
-
-	public function getHitSystem($fire){
-		for ($i = 1; $i <= $fire->hits; $i++){
-			$pick = mt_rand(1, $this->amount);
-			$fire->hitSystem[$i-1] = $pick;
-		}
-		return $fire;
-	}
-
-	public function willBeDestroyed($i, $amount = 0){
-		$left = $this->integrity;
-		foreach ($this->damages as $dmg){
-			if ($dmg->systemid == $i){
-				$left -= $dmg->structDmg;
+	public function rollToHit($fire){
+		for ($i = 0; $i < $fire->shots; $i++){
+			$roll = mt_rand(1, 100);
+			$fire->rolls[] = $roll;
+			$fire->notes = $fire->notes." ".$roll;
+			if ($roll <= $fire->req){
+				$fire->hits++;
 			}
 		}
-		//Debug::log("pick: ".$i." rem Health: ".$left." - ".$amount);
-		if ($left - $amount > 0){
-			return false;
-		}
-		else return true;
+		return true;
 	}
 
-	public function applyDamage($damage){
-		if ($this->willBeDestroyed($damage->systemid, $damage->structDmg)){
-			//Debug::log("destroyed!");
-			$damage->destroyed = true;
+	public function jsonSerialize(){
+		return array(
+        	"id" => $this->id,
+        	"name" => $this->name,
+        	"display" => $this->display,
+        	"type" => $this->type,
+        	"minDmg" => $this->minDmg,
+        	"maxDmg" => $this->maxDmg,
+        	"impulse" => $this->impulse,
+        	"integrity" => $this->integrity,
+        	"armour" => $this->armour,
+        	"mass" => $this->mass,
+        	"damages" => $this->damages,
+        	"crits" => $this->crits,
+        	"destroyed" => $this->destroyed,
+        	"fc" => $this->fc,
+        	"fireOrders" => $this->fireOrders
+        );
+    }
+
+	public function getRemainingIntegrity(){
+		$total = $this->integrity;
+		for ($i = 0; $i < sizeof($this->damages); $i++){
+			$total -= $this->damages[$i]->structDmg;
 		}
-		$this->damages[] = $damage;
-		return;
+		return $total;
 	}
 
-	public function getSalvoStatus(){
-		Debug::log("getSalvoStatus");
-		$status = array();
-		$amount = $this->amount;
+	public function getSubHitChance(){
+		return ceil(sqrt($this->mass)*10);
+	}
 
-		for ($i = 0; $i < $amount; $i++){
-			$status[] = 0;
-		}
+	public function getAccLoss($dist){
+		return 0;
+	}
 
-		for ($j = sizeof($this->damages)-1; $j >= 0; $j--){
-			if ($this->damages[$j]->destroyed){
-				$status[$this->damages[$j]->systemid-1] = 1;
+	public function getDamageMod($turn){
+		return 1;
+	}
+
+	function setState($turn){
+		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
+			if ($this->damages[$i]->destroyed){
+				$this->destroyed = true;
+				return;
 			}
 		}
-		return $status;
-	}
-
-	public function resolveImpact($status){
-		Debug::log("resolveImpact");
-		for ($i = 0; $i < sizeof($status); $i++){
-			if ($status[$i] == 0){
-				$this->shots++;
-			}
-		}
-
-		$this->fire->shooter = $this;
-		$this->fire->weapon = $this;
-		$this->fire->target->resolveBallisticFireOrder($this->fire);
-	}
-
-	public function rollForHit($fire){
-		$hits = 0;
-		$notes = "";
-
-		for ($j = 0; $j < $this->shots; $j++){
-			$fire->rolls[] = 1;
-			$hits++;
-		}
-
-		$fire->hits = $hits;
-		return $fire;
 	}
 }
 
-class BallisticTorpedo extends Ammo {
-	public $classname = "BallisticTorpedo";
+class Hasta extends Ammo {
+	public $name = "Hasta";
+	public $display = "Light Antifighter Missiles";
 	public $type = "explosive";
-	public $minDmg = 45;
-	public $maxDmg = 60;
-	public $maxDist = 1200;
-	public $impulse = 300;
-	public $actions = array();
-	public $integrity = 30;
-	public $armour = 10;
-	public $damages = array();
-	public $mass = 3;
+	public $minDmg = 25;
+	public $maxDmg = 30;
+	public $mass = 2;
+	public $cost = 6;
+	public $traverse = -3;
 
-	function __construct($id = 0, $userid, $fireid = 0, $amount = 1, $destroyed = 0){
-		parent::__construct($id, $userid, $fireid, $amount, $destroyed);
+	function __construct($parentId, $id){
+		parent::__construct($parentId, $id);
 	}
+}
 
+class Javelin extends Ammo {
+	public $name = "Javelin";
+	public $display = "Multi-purpose Missiles";
+	public $type = "explosive";
+	public $minDmg = 36;
+	public $maxDmg = 48;
+	public $mass = 4;
+	public $cost = 10;
+	public $traverse = -1;
 
+	function __construct($parentId, $id){
+		parent::__construct($parentId, $id);
+	}
+}
+
+class Patriot extends Ammo {
+	public $name = "Patriot";
+	public $display = "Light Interceptor Missiles";
+	public $type = "explosive";
+	public $minDmg = 13;
+	public $maxDmg = 18;
+	public $mass = 2;
+	public $cost = 8;
+	public $traverse = -4;
+
+	function __construct($parentId, $id){
+		parent::__construct($parentId, $id);
+	}
+}
+
+class Naga extends Ammo {
+	public $name = "Naga";
+	public $display = "Multi-purpose Missiles";
+	public $type = "explosive";
+	public $minDmg = 36;
+	public $maxDmg = 48;
+	public $mass = 4;
+	public $cost = 10;
+	public $traverse = -1;
+
+	function __construct($parentId, $id){
+		parent::__construct($parentId, $id);
+	}
+}
+
+class Cyclops extends Ammo {
+	public $name = "Cyclops";
+	public $display = "Light Antiship Missiles";
+	public $type = "explosive";
+	public $minDmg = 55;
+	public $maxDmg = 76;
+	public $mass = 6;
+	public $cost = 14;
+	public $traverse = 0;
+
+	function __construct($parentId, $id){
+		parent::__construct($parentId, $id);
+	}
+}
+
+class Titan extends Ammo {
+	public $name = "Titan";
+	public $display = "Heavy Antiship Missiles";
+	public $type = "explosive";
+	public $minDmg = 78;
+	public $maxDmg = 96;
+	public $mass = 8;
+	public $cost = 16;
+	public $traverse = 1;
+
+	function __construct($parentId, $id){
+		parent::__construct($parentId, $id);
+	}
 }
 
 ?>

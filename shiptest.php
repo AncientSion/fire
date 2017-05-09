@@ -33,13 +33,13 @@
 			}
 
 			$fireA = new FireOrder(0,0,0,0,0,0,0,0,0,0,0,0);
-			$fireA->angleIn = 0;
+			$fireA->angle = 0;
 
 			$fireB = new FireOrder(0,0,0,0,0,0,0,0,0,0,0,0);
-			$fireB->angleIn = 90;
+			$fireB->angle = 90;
 
 			for ($i = 0; $i < sizeof($fires); $i++){
-				$fires[$i]->hitSection = $ships[$i]->structures[0]->id;
+				$fires[$i]->section = $ships[$i]->structures[0]->id;
 				$fires[$i]->target = $ships[$i];
 
 				echo "<table class='unitTest'><tr><th colSpan=2 style='width: 210px'>".$ships[$i]->name."</th></tr>";

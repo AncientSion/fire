@@ -93,9 +93,9 @@ function mouseCanvasZoom(e){
 }
 
 function mouseCanvasScroll(e){
-	e.preventDefault();
+	e.preventDefault();return;
 	if (aUnit){
-		game.getUnitById(aUnit).select();
+		game.getUnitById(aUnit).doUnselect();
 	}
 	else {
 		return;
@@ -138,7 +138,7 @@ function canvasMouseMove(e){
 		var ship = game.getUnitById(aUnit);
 		if (!ship){return;}
 		var shipLoc = ship.getPlannedPosition();
-		var facing = ship.getPlannedFacingToMove();
+		var facing = ship.getPlannedFacing();
 
 		if (game.vector){
 			var dist = Math.floor(getDistance(shipLoc, pos));
@@ -149,10 +149,11 @@ function canvasMouseMove(e){
 
 		if (ship.salvo){return}
 
-		if (ship.canSetSensor()){
+		if (ship.hasSystemSelected("Sensor")){
 			sensorEvent(false, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), addAngle(facing, getAngleFromTo(shipLoc, pos)));
 			return;
 		}
+		
 		if (ship.hasWeaponsSelected()){
 			var baseHit;
 			var lock = false;
@@ -183,7 +184,7 @@ function canvasMouseMove(e){
 						dist = Math.floor(getDistance(shipLoc, vessel.getBaseOffsetPos()));
 					}
 					angle = getAngleFromTo(vessel.getBaseOffsetPos(), shipLoc);
-					angle = addAngle(vessel.getPlannedFacingToMove(), angle);
+					angle = addAngle(vessel.getPlannedFacing(), angle);
 
 					lock = ship.hasLockOnUnit(vessel);
 					baseHit = vessel.getHitChanceFromAngle(angle);
@@ -303,7 +304,7 @@ function canvasMouseMove(e){
 }
 
 function sensorize(ship, pos){
-	var facing = ship.getPlannedFacingToMove();
+	var facing = ship.getPlannedFacing();
 	var shipLoc = ship.getPlannedPosition();
 	var a = addAngle(facing, getAngleFromTo(shipLoc, pos));
 	sensorEvent(true, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), a);
@@ -364,15 +365,19 @@ function deployPhase(e){
 	}
 }
 
+
+
 function movePhase(e){	
 	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
 	var ship;
 	var index;
 	if (aUnit){
 		ship = game.getUnitById(aUnit);
-		if (game.getShipByClick(pos) == ship){
+		var clickShip = game.getShipByClick(pos);
+		if (ship == clickShip){
 			ship.select();
-			return;
+		} else if (clickShip){
+			clickShip.switchDiv();
 		}
 		else if (ship.flight && game.phase == 0 || ship.ship && game.phase == 1){
 			return;
@@ -422,6 +427,21 @@ window.getBearing = function(shooter, target){
 	return;
 }
 
+
+
+	if (aUnit){
+		ship = game.getUnitById(aUnit);
+		var clickShip = game.getShipByClick(pos);
+		if (ship == clickShip){
+			ship.select();
+		} else if (clickShip){
+			clickShip.switchDiv();
+		}
+	}
+
+
+
+
 function firePhase(e){
 	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
 	var ship;
@@ -439,7 +459,7 @@ function firePhase(e){
 			if (vessel.id != ship.id && (vessel.userid != game.userid && vessel.userid != ship.userid)){
 				if (ship.hasWeaponsSelected()){
 					var shipLoc = ship.getOffsetPos();
-					var facing = ship.getPlannedFacingToMove();
+					var facing = ship.getPlannedFacing();
 					var pos = vessel.getBaseOffsetPos();
 					for (var i = 0; i < ship.structures.length; i++){
 						for (var j = ship.structures[i].systems.length-1; j >= 0; j--){
@@ -480,10 +500,12 @@ function firePhase(e){
 						}
 					}
 				}
+
 				$("#weaponAimTableWrapper").hide()
 				ship.highlightAllSelectedWeapons();
 				//game.draw();
 			}
+			else vessel.switchDiv();
 		}
 	}
 }
@@ -494,9 +516,11 @@ function dmgPhase(e){
 	var index;
 	if (aUnit){
 		ship = game.getUnitById(aUnit);
-		if (game.getShipByClick(pos) == ship){
+		var clickShip = game.getShipByClick(pos);
+		if (ship == clickShip){
 			ship.select();
-			return;
+		} else if (clickShip){
+			clickShip.switchDiv();
 		}
 	}
 	else {
@@ -514,11 +538,10 @@ function dmgPhase(e){
 function canvasMouseClick(e){
 	//var rect = this.getBoundingClientRect();
 	//var pos = new Point(e.clientX - rect.left, e.clientY - rect.top);
-
-	var gamepos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
-
+	//var gamepos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
 	//console.log("canvas pos " + pos.x + " / " + pos.y);
-	console.log("game pos " + gamepos.x	+ " / " + gamepos.y);
+	//console.log("game pos " + gamepos.x	+ " / " + gamepos.y);
+	
 	switch (game.phase){
 		case -1:
 			deployPhase(e); break;
@@ -547,8 +570,7 @@ function checkWeaponHighlight(ele, weaponid){
 }
 
 function checkIfOnMovementArc(unit, target){
-	var targetCompassHeading = getCompassHeadingOfPoint(unit.getOffsetPos(), target, unit.getPlannedFacingToMove());
-	if (isInArc(targetCompassHeading, unit.validMoveArcs.start, unit.validMoveArcs.end)){
+	if (isInArc(getCompassHeadingOfPoint(unit.getOffsetPos(), target, 0), unit.moveAngles.start, unit.moveAngles.end)){
 		return true;
 	}
 	

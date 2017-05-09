@@ -42,7 +42,7 @@ class WhiteStar extends Light {
 		$e->boostEffect->value = 50;
 		$this->primary->systems[] = $e;
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 60);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 60);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 60, 850, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 60, $this->getPowerReq());
 	}
 }

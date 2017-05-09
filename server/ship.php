@@ -8,6 +8,7 @@ class Ship {
 	public $available;
 	public $status;
 	public $destroyed;
+	public $disabled = false;
 
 	public $baseHitChance;
 	public $currentImpulse;
@@ -56,6 +57,39 @@ class Ship {
 	public function setBaseStats(){
 		$this->baseHitChance = ceil(pow($this->mass, 1/3)*5);
 		$this->cost = static::$value;
+	}
+
+	public function hidePowers($turn){
+		for ($j = 0; $j < sizeof($this->structures); $j++){
+			for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
+				for ($l = sizeof($this->structures[$j]->systems[$k]->powers)-1; $l >= 0; $l--){
+					if ($this->structures[$j]->systems[$k]->powers[$l]->turn == $turn){
+						array_splice($this->structures[$j]->systems[$k]->powers, $l, 1);
+					} else break;
+				}
+			}
+		}
+		if (!$this->ship){return;}
+
+		for ($j = 0; $j < sizeof($this->primary->systems); $j++){
+			for ($k = sizeof($this->primary->systems[$j]->powers)-1; $k >= 0; $k--){
+				if ($this->primary->systems[$j]->powers[$k]->turn == $turn){
+					array_splice($this->primary->systems[$j]->powers, $k, 1);
+				} else break;
+			}
+		}
+	}
+
+	public function hideFireOrders($turn){
+		for ($j = 0; $j < sizeof($this->structures); $j++){
+			for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
+				for ($l = sizeof($this->structures[$j]->systems[$k]->fireOrders)-1; $l >= 0; $l--){
+					if ($this->structures[$j]->systems[$k]->fireOrders[$l]->turn == $turn){
+						array_splice($this->structures[$j]->systems[$k]->fireOrders, $l, 1);
+					} else break;
+				}
+			}
+		}
 	}
 
 	public function getBaseImpulse(){
@@ -190,10 +224,17 @@ class Ship {
 		}
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 			$this->primary->systems[$i]->setState($turn);
-			if ($this->primary->systems[$i]->name == "Reactor"){
-				if ($this->primary->systems[$i]->destroyed || $this->primary->systems[$i]->disabled){
-					$this->doUnpowerAllSystems($turn);
-				}
+			switch ($this->primary->systems[$i]->name){
+				case "Reactor":
+					if ($this->primary->systems[$i]->destroyed || $this->primary->systems[$i]->disabled){
+						$this->doUnpowerAllSystems($turn);
+					}
+					break;
+				case "Bridge":
+					if ($this->primary->systems[$i]->destroyed || $this->primary->systems[$i]->disabled){
+						$this->doUncommandShip($turn);
+					}
+					break;
 			}
 		}
 		for ($i = 0; $i < sizeof($this->structures); $i++){
@@ -208,10 +249,22 @@ class Ship {
 	}
 
 	public function doUnpowerAllSystems($turn){
-		return;
+		debug::log("doUnpowerAllSystems");
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				$this->structures[$i]->systems[$j]->doUnpower($turn);
+			}
+		}
+	}
+
+	public function doUncommandShip(){
+		$this->disabled = 1;
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+			$this->primary->systems[$i]->locked = 1;
+		}
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				$this->structures[$i]->systems[$j]->locked = 1;
 			}
 		}
 	}
@@ -264,19 +317,16 @@ class Ship {
 		}
 		else {
 			$fire->dist = $this->getHitDist($fire);
-			$fire->angleIn = $this->getHitAngle($fire);
-			$fire->hitSection = $this->getHitSection($fire);
+			$fire->angle = $this->getHitAngle($fire);
+			$fire->section = $this->getSection($fire);
 			$fire->req = ceil($this->getHitChance($fire) * (1-($fire->weapon->getTraverseMod($fire)*0.2)) - $fire->weapon->getAccLoss($fire->dist));
-			 //Math.floor(baseHit * (1-(traverseMod*0.2)) - accLoss) + "%";
-			//Debug::log($this->getHitChance($fire));
-			//Debug::log("t: " + (1-($fire->weapon->getTraverseMod($fire)*0.2)));
-			//Debug::log($fire->weapon->getAccLoss($fire->dist));
+			$fire->weapon->rollToHit($fire);
 
-			//Debug::log("normal hitangle from ship #".$fire->shooter->id." to target #".$this->id." : ".$fire->angleIn.", picking section: ".$fire->hitSection);
-			$fire->weapon->rollForHit($fire);
-
-			if ($fire->hits){
-				$fire->weapon->doDamage($fire);
+			for ($i = 0; $i < $fire->shots; $i++){
+				if (!isset($fire->rolls[$i])){Debug::log("no roll for: ".$fire->id.", ".get_class($fire->weapon));}
+				if ($fire->rolls[$i] <= $fire->req){
+					$fire->weapon->doDamage($fire, $fire->rolls[$i], $this->getHitSystem($fire));
+				}
 			}
 			$fire->resolved = 1;
 		}
@@ -289,23 +339,34 @@ class Ship {
 			$fire->resolved = -1;
 		}
 		else {
+			$fire->shots = $fire->shooter->getShots();
 			$fire->dist = 0;
-			$fire->angleIn = $this->getBallisticHitAngle($fire);
-			$fire->hitSection = $this->getHitSection($fire);
+			$fire->angle = $this->getBallisticHitAngle($fire);
+			$fire->section = $this->getSection($fire);
 			$fire->req = ceil(100 * (1-($fire->weapon->getTraverseMod($fire)*0.2)));
-			$fire->weapon->rollForHit($fire);
+			$fire->weapon->rollToHit($fire);
 
-			if ($fire->hits){
-				$fire->weapon->doDamage($fire);
+			for ($i = 0; $i < $fire->shots; $i++){
+				if ($fire->rolls[$i] <= $fire->req){
+					$fire->weapon->doDamage($fire, $fire->rolls[$i], $this->getHitSystem($fire));
+				}
 			}
 			$fire->resolved = 1;
 		}
 	}
 
-	public function getHitSection($fire){
+	public function getArmourElement($fire){
+		return $this->getStructureById($fire->section);
+	}
+
+	public function getArmourValue($fire, $hitSystem){
+		return $this->getStructureById($fire->section)->getRemainingNegation($fire) * $hitSystem->getArmourMod();
+	}
+
+	public function getSection($fire){
 		$locs = array();
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if (Math::isInArc($fire->angleIn, $this->structures[$i]->start, $this->structures[$i]->end)){
+			if (Math::isInArc($fire->angle, $this->structures[$i]->start, $this->structures[$i]->end)){
 				$locs[] = $this->structures[$i]->id;
 			}
 		}
@@ -317,7 +378,7 @@ class Ship {
 		$current = 0;
 		$total = $this->primary->getHitChance();
 
-		$struct = $fire->target->getStructureById($fire->hitSection);
+		$struct = $fire->target->getStructureById($fire->section);
 
 		for ($i = 0; $i < sizeof($struct->systems); $i++){
 			if (!$struct->systems[$i]->destroyed){
@@ -395,7 +456,7 @@ class Ship {
 	}
 
 	public function getHitChance($fire){
-		$angle = $fire->angleIn;
+		$angle = $fire->angle;
 
 		while ($angle > 90){
 			$angle -= 180;
@@ -422,7 +483,7 @@ class Ship {
 	}
 
 	public function getLockMod($fire){
-		if ($fire->shooter->hasLockOn($fire->target->id)){
+		if ($fire->shooter->hasLockOn($this->id)){
 			return 1.5;
 		} else return 1;
 	}

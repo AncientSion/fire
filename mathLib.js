@@ -180,8 +180,6 @@ function getProjIntercept(src, dst, vector, mod){
 		var t0 = ts[0], t1 = ts[1];
 		//var t = Math.min(t0, t1);
 		var t = Math.min(t0, t1);
-		console.log(t0);
-		console.log(t1);
 		//console.log(ts);
 		if (t < 0) t = Math.max(t0, t1);  
 		//t = range(1, t);

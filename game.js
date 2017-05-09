@@ -83,14 +83,6 @@ function Game(id, name, status, userid, turn, phase){
 		return ret;
 	}
 
-	this.canSetSensor = function(){
-		if (this.flight || this.salvo){return false;}
-		var sensor = this.getSystemByName("Sensor");
-		if (sensor.locked){
-			return false;
-		} return true;
-	}
-
 	this.getSensorSettings = function(){
 		var ret = [];
 		for (var i = 0; i < this.ships.length; i++){
@@ -394,14 +386,18 @@ function Game(id, name, status, userid, turn, phase){
 	this.setShipDivs = function(){
 		for (var i = 0; i < this.ships.length; i++){
 			var ele = $(this.ships[i].element);
+			var h = $(ele).height();
+			/*
 			var w = $(ele).width();
 			var h = $(ele).height();
 			var x = this.ships[i].x + cam.o.x + w/2;
 			var y = this.ships[i].y + cam.o.y;
+			*/
+			
 
 			$(ele)
-				.css("left", x)
-				.css("top", y);
+				.css("left", 100)
+				.css("top", res.y/2 - h/2);
 		}
 	}
 
@@ -567,9 +563,7 @@ Game.prototype.getUnitType = function (val){
 					balls[j].drawFlightPath();
 				}
 
-				if (elements[i].ship){
-					elements[i].getSystemByName("Sensor").drawEW();
-				}
+				elements[i].drawHoverElements();
 			}
 
 			var oX = $(ele).width()/2;
@@ -690,6 +684,7 @@ Game.prototype.getUnitType = function (val){
 	}
 
 	this.redraw = function(){
+		console.log("ding");
 		planCtx.clearRect(0, 0, res.x, res.y);
 		moveCtx.clearRect(0, 0, res.x, res.y)
 		salvoCtx.clearRect(0, 0, res.x, res.y)
@@ -704,10 +699,10 @@ Game.prototype.getUnitType = function (val){
 				if (unit.hasWeaponsSelected()){
 					unit.highlightAllSelectedWeapons();
 				}
-				if (game.phase == -1 || game.phase == 0 || game.phase == 1){
+				//if (game.phase == -1 || game.phase == 0 || game.phase == 1){
 					unit.unsetMoveMode();
 					unit.setMoveMode();
-				}
+				//}
 				if (game.flightDeploy){
 					game.flightDeploy.drawArc();
 				}
@@ -1288,6 +1283,9 @@ Game.prototype.getUnitType = function (val){
 			window.then = window.now - (window.elapsed % window.fpsInterval);
 			fxCtx.clearRect(0, 0, res.x, res.y);
 
+			//if (game.fireOrders[1].anim[0][0].n){console.log("Ding");}
+
+
 			for (var i = 0; i  < game.fireOrders.length; i++){ 
 				if (! game.fireOrders[i].animated){
 					//cam.setFocus(game.fireOrders[i].focus.x, game.fireOrders[i].focus.y);
@@ -1375,27 +1373,23 @@ Game.prototype.getUnitType = function (val){
 	this.getBallDetails = function(){
 		for (var i = 0; i < game.ballistics.length; i++){
 			if (game.ballistics[i].actions[game.ballistics[i].actions.length-1].type == "impact"){
-				//var fireOrder = new FireOrder(0, this.turn, game.ballistics[i].id, game.ballistics[i].targetid, 0, 0, 0, "", [], 1);
-				var fireOrder = new FireOrder({id: 0, turn: game.turn, shooterid: game.ballistics[i].id, targetid: game.ballistics[i].targetid,
-					weaponid: 0, shots: 0, req: 0, notes: "", hits: [], resolved: 1})
-					fireOrder.type = "Ballistic";
-					fireOrder.weapon = game.ballistics[i].structures[0];
-					fireOrder.shooter = game.ballistics[i];
-					fireOrder.target = game.getUnitById(game.ballistics[i].targetid);
-					fireOrder.req = 0;
-					fireOrder.guns = 0;
-				//(id, turn, shooterid, targetid, weaponid, shots, req, notes, hits, resolved){
+				game.ballistics[i].fireOrder.type = "Ballistic";
+				game.ballistics[i].fireOrder.weapon = game.ballistics[i].structures[0];
+				game.ballistics[i].fireOrder.shooter = game.ballistics[i];
+				game.ballistics[i].fireOrder.target = game.getUnitById(game.ballistics[i].targetid);
+				game.ballistics[i].fireOrder.damages = game.getUnitById(game.ballistics[i].targetid).getDamageEntriesByFireId(game.ballistics[i].fireOrder.id);
+				game.ballistics[i].fireOrder.hits = [game.ballistics[i].fireOrder.hits];
+				var guns = 0;
 				for (var j = 0; j < game.ballistics[i].structures.length; j++){
-					for (var k = 0; k < game.ballistics[i].structures[j].fireOrders.length; k++){
-						fireOrder.guns++;
-						var damages = game.getUnitById(game.ballistics[i].targetid).getDamageEntriesByFireId(game.ballistics[i].structures[j].fireOrders[k].id);
-						for (var l = 0; l < damages.length; l++){fireOrder.damages.push(damages[l]);}
-						if (fireOrder.req == 0){fireOrder.min = game.ballistics[i].structures[j].fireOrders[k].req; fireOrder.max = game.ballistics[i].structures[j].fireOrders[k].req; fireOrder.req = game.ballistics[i].structures[j].fireOrders[k].req;}
-						fireOrder.hits.push(game.ballistics[i].structures[j].fireOrders[k].hits);
+					if (!game.ballistics[i].structures[j].destroyed){
+						game.ballistics[i].fireOrder.hits.push(0);
+						guns++;
 					}
 				}
-				game.ballistics[i].fireOrder = fireOrder;
+				game.ballistics[i].fireOrder.guns = guns;
+
 			}
+
 			game.ballistics[i].found = false;
 			if (!game.getUnitById(game.ballistics[i].targetid).salvo){
 				game.ballistics[i].found = true;
@@ -1523,7 +1517,7 @@ Game.prototype.getUnitType = function (val){
 							if (animate.ballAnims[i].anims[j].anim[k].done){continue;}
 							else if (animate.isDone(i, j, k)){
 								animate.ballAnims[i].anims[j].anim[k].done = true;
-								animate.doAnimate(i, j, k);
+								//animate.doAnimate(i, j, k);
 							}
 							else if (animate.isReady(i, j, k)){
 								animate.doAnimate(i, j, k);
@@ -1628,6 +1622,7 @@ Game.prototype.getUnitType = function (val){
 
 	this.createCombatLogEntry = function(fire){
 		if (fire == undefined){return;}
+		var friendly = 0;
 		var shots = 0;
 		var hits = 0;
 		var struct = 0;
@@ -1636,7 +1631,7 @@ Game.prototype.getUnitType = function (val){
 		var log = document.getElementById("combatLog");
 		
 		for (var i = 0; i < fire.guns; i++){
-			shots += fire.weapon.shots;
+			shots += fire.weapon.getShots();
 			hits += fire.hits[i];
 		}
 		for (var i = 0; i < fire.damages.length; i++){
@@ -1654,6 +1649,9 @@ Game.prototype.getUnitType = function (val){
 		if (fire.weapon.output){
 			hits /= fire.weapon.output;
 		}
+		if (fire.shooter.userid == this.userid){
+			friendly = 1;
+		}
 		var chance = ""
 		if (fire.min != fire.max){
 			chance = fire.min + " - " + fire.max;
@@ -1670,9 +1668,17 @@ Game.prototype.getUnitType = function (val){
 				game.getUnitById(data.targetid).doHighlight();
 			})
 
+		var shooterClass = "red";
+		var targetClass = "green";
+
+		if (friendly){
+			shooterClass = "green";
+			targetClass = "red";
+		}
+
 		tr.insertCell(-1).innerHTML = fire.type //+ ":" + fire.id;
-		tr.insertCell(-1).innerHTML = fire.shooter.name + " #" + fire.shooter.id;
-		tr.insertCell(-1).innerHTML = fire.target.name + " #" + fire.target.id;
+		tr.insertCell(-1).innerHTML = "<span class='" + shooterClass + "'>" + fire.shooter.name + " #" + fire.shooter.id + "</span>";
+		tr.insertCell(-1).innerHTML = "<span class='" + targetClass + "'>" + fire.target.name + " #" + fire.target.id + "</span>";
 		tr.insertCell(-1).innerHTML = fire.weapon.display;
 		tr.insertCell(-1).innerHTML = chance + "%";
 		tr.insertCell(-1).innerHTML = hits + " / " + shots;
@@ -1715,11 +1721,11 @@ Game.prototype.getUnitType = function (val){
 		log.appendChild(details);
 
 		$(parent).click(function(){
-			if ($(this).hasClass("red")){
-				$(this).removeClass("red").next().hide();
+			if ($(this).hasClass("selected")){
+				$(this).removeClass("selected").next().hide();
 			}
 			else {
-				$(this).addClass("red").next().show();
+				$(this).addClass("selected").next().show();
 			}
 
 		})

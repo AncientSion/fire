@@ -186,9 +186,9 @@ function Ammo(data){
 	this.name = data.name;
 	this.cost = data.cost;
 	this.display = data.display;
-	this.exploSize = data.exploSize;
 	this.minDmg = data.minDmg;
 	this.maxDmg = data.maxDmg;
+	this.exploSize = (this.minDmg+this.maxDmg)/30;
 	this.impulse = data.impulse;
 	this.size = data.mass*3;
 	this.mass = data.mass;
@@ -233,6 +233,10 @@ function Ammo(data){
 		}
 		return integrity;
 	}
+
+	this.getShots = function(){
+		return 1;
+	}
 }
 
 function Salvo(data){
@@ -246,6 +250,7 @@ function Salvo(data){
 	this.actions = data.actions;
 	this.baseImpulse = data.baseImpulse;
 	this.baseHitChance = data.baseHitChance;
+	this.fireOrder = data.fireOrder;
 	this.traverse = -4;
 	this.shortInfo = false;
 	this.selected = false;
@@ -270,6 +275,10 @@ function Salvo(data){
 
 	this.hasSystemSelected = function(name){
 		return false;
+	}
+
+	this.drawHoverElements = function(){
+		return;
 	}
 
 	this.setLayout = function(){
@@ -314,10 +323,10 @@ function Salvo(data){
 			ctx.beginPath();
 			ctx.arc(this.x, this.y, this.size/2, 0, 2*Math.PI, false);
 			ctx.closePath();
-			ctx.lineWidth = 5;
+			ctx.lineWidth = 3;
 			ctx.globalAlpha = 1;
-			if (this.friendly){ctx.strokeStyle = "green";}
-			else {ctx.strokeStyle = "red";}
+			if (this.friendly){ctx.strokeStyle = "white";}
+			else {ctx.strokeStyle = "white";}
 			ctx.stroke();
 			ctx.setTransform(1,0,0,1,0,0);
 		}
@@ -348,7 +357,13 @@ function Salvo(data){
 	}
 
 	this.getAccelSteps = function(){
-		return this.actions.length;
+		var steps = 2;
+		for (var i = 1; i < this.actions.length; i++){
+			if (this.actions[i].resolved && this.actions[i].type == "move"){
+				steps++;
+			}
+		}
+		return steps;
 	}
 
 	this.getTotalImpulse = function(){
@@ -357,11 +372,15 @@ function Salvo(data){
 
 	this.getTrackingString = function(){
 		var t = game.getUnitById(this.targetid).traverse;
-		var html = "Up to: "
-		if (this.structures[0].traverse <= t){
-			html +="<span class='green'>";
-		} else html += "<span class='red'>";	
-		return html += game.getUnitType(this.structures[0].traverse) + "</span>";
+		var html = "";
+		var d = Math.max(0, (this.structures[0].traverse - t));
+		html += game.getUnitType(this.structures[0].traverse) + "<span class=";
+
+		if (d > 0){
+			html += "'red'>";
+		} else html += "'green'>";
+		
+		return html + " (" + Math.floor(100-d*20) + "%)</span>";
 	}
 
 	this.createDiv = function(){
@@ -384,20 +403,20 @@ function Salvo(data){
 		var tr = table.insertRow(-1);
 		var td = tr.insertCell(-1);
 			td.className = "subHeader";
-			td.innerHTML = "Targeting: <font color='red'>" + target.name + " #" + target.id + "</font> -- Distance: "+ Math.ceil(getDistance({x: this.x, y: this.y}, {x: target.x, y: target.y})) + "px"; td.colSpan = 4;
+			td.innerHTML = "Targeting: <span class='red size15'>" + target.name + " #" + target.id + "</span> -- Distance: "+ Math.ceil(getDistance({x: this.x, y: this.y}, {x: target.x, y: target.y})) + "px"; td.colSpan = 4;
 		div.appendChild(table);
 
 		var table = document.createElement("table");
 			table.style.width = "95%"; table.style.marginTop = "20px";
     	$(table)
 			.append($("<tr>")
-	    		.append($("<th>").html("Impulse / Acceleration"))
+	    		.append($("<th>").html("Impulse / Accel"))
 	    		.append($("<th>").html("Armour"))
 	    		.append($("<th>").html("Damage"))
-	    		.append($("<th>").html("Tracking"))
+	    		.append($("<th>").html("Tracking up to"))
 			)
 			.append($("<tr>")
-	    		.append($("<td>").html(this.getTotalImpulse() + " / " + Math.floor(this.getBaseImpulse()) + " per Turn."))
+	    		.append($("<td>").html(this.getTotalImpulse() + " (+" + Math.floor(this.getBaseImpulse()) + " per Turn)"))
 	    		.append($("<td>").html(this.structures[0].armour))
 	    		.append($("<td>").html(this.getDamage()))
 	    		.append($("<td>").html(this.getTrackingString()))
@@ -575,12 +594,21 @@ function Salvo(data){
 			start = this.actions[this.actions.length-1];
 		}
 
-		if (!target.salvo){
+		/*
+			if (target.salvo){
+				end = game.getUnitById(this.targetid).nextStep;
+			}
+			else if (this.status == "impact"){
+				end = this.actions[this.actions.length-1];
+			}
+			else end = game.getUnitById(this.targetid).getBaseOffsetPos();
+		*/
+		if (this.status == "impact"){
+			end = this.actions[this.actions.length-1];
+		}
+		else {
 			end = game.getUnitById(this.targetid).getBaseOffsetPos();
 		}
-		else if (this.status == "impact"){
-			end = this.actions[this.actions.length-1];
-		} 
 		this.facing = Math.floor(getAngleFromTo(start, end));
 	}
 
@@ -666,6 +694,7 @@ function Salvo(data){
 			var vector = new Vector(target, game.getUnitById(target.targetid));
 			var speedMod = this.getTotalImpulse() / target.getTotalImpulse();
 			this.finalStep = getIntercept(this.getPlannedPosition(), target, vector, speedMod);
+			//this.finalStep = target.nextStep;
 		}
 		else {
 			this.finalStep = target.getPlannedPosition();
@@ -680,7 +709,7 @@ function Salvo(data){
 		var dist = getDistance(this.getPlannedPosition(), this.finalStep);
 		var impulse = this.getTotalImpulse();
 		if (impulse < dist){
-			var a = getAngleFromTo(this, target);
+			var a = getAngleFromTo(this, target.getPlannedPosition());
 			this.nextStep = getPointInDirection(impulse, a, this.x, this.y);
 		}
 		else {
@@ -689,17 +718,15 @@ function Salvo(data){
 	}
 
 	this.drawFlightPath = function(){
-		var goal;
-		var target = game.getUnitById(this.targetid);
-		if (target.salvo){
-			goal = this.finalStep;
-		}
-		else {
-			goal = target.getPlannedPosition();
-		}
 		var origin = this.actions[this.actions.length-1];
-
 		var inRange = false;
+		var target = game.getUnitById(this.targetid);
+
+		if (!target.salvo){
+			this.finalStep = target.getPlannedPosition();
+			this.setNextStep();
+		}
+
 		if (this.nextStep == this.finalStep){
 			inRange = true;
 		}
@@ -716,7 +743,7 @@ function Salvo(data){
 		salvoCtx.closePath();
 
 		salvoCtx.globalAlpha = 1;
-		salvoCtx.strokeStyle = "white";
+		salvoCtx.strokeStyle = "red";
 		salvoCtx.lineWidth = 1;
 		salvoCtx.stroke();
 		salvoCtx.setTransform(1,0,0,1,0,0);
@@ -732,7 +759,7 @@ function Salvo(data){
 			salvoCtx.closePath();
 
 			salvoCtx.globalAlpha = 1;
-			salvoCtx.strokeStyle = "red";
+			salvoCtx.strokeStyle = "white";
 			salvoCtx.stroke();
 			salvoCtx.setTransform(1,0,0,1,0,0);
 		}
@@ -754,10 +781,10 @@ function Salvo(data){
 		if (this.impactThisTurn()){
 			var tr = table.insertRow(-1);
 			if (game.phase < 3){
-				tr.insertCell(-1).innerHTML = "<font color='red'>IMPACT IMMINENT</font>";
+				tr.insertCell(-1).innerHTML = "<span class='red'>IMPACT IMMINENT</span>";
 			}
 			else if (this.actions[this.actions.length-1].type == "impact"){
-				tr.insertCell(-1).innerHTML = "<font color='red'>DID IMPACT</font>";
+				tr.insertCell(-1).innerHTML = "<span class='red'>DID IMPACT</span>";
 			}
 		}
 		return table;
@@ -784,7 +811,7 @@ function Salvo(data){
 		return this.baseHitChance;
 	}
 
-	this.getPlannedFacingToMove = function(){
+	this.getPlannedFacing = function(){
 		return this.facing;
 	}
 	
@@ -847,9 +874,7 @@ function Crit(data){
 		var mod = 1;
 		if (this.duration > 0){
 			html = "Turn " + (this.turn + this.duration) +": ";
-		} else {
-			html = "Perma: ";
-		}
+		} else html = "Permanent: ";
 
 		switch (this.type){
 			case "range1":

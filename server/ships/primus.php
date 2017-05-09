@@ -16,7 +16,7 @@ class Primus extends Heavy {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 330, 30, 1050, 34);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 1050, 36);
 		$front->systems[] = new HeavyIon($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new HeavyIon($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new HeavyIon($this->getId(), $this->id, 300, 60);
@@ -31,7 +31,7 @@ class Primus extends Heavy {
 		$right->systems[] = new Hangar($this->getId(), $this->id, 30, 90, 300, 9, array("Sentri"));
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 150, 210, 900, 39);
+		$aft = new Structure($this->getId(), $this->id, 150, 210, 900, 29);
 		$aft->systems[] = new MediumIon($this->getId(), $this->id, 45, 315);
 		$aft->systems[] = new MediumIon($this->getId(), $this->id, 45, 315);
 		$aft->systems[] = new MediumIon($this->getId(), $this->id, 45, 315);
@@ -56,7 +56,7 @@ class Primus extends Heavy {
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 160);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 160, 500, 10);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 160);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 160, 1200, 10);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 160, 1050, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 160, $this->getPowerReq());
     }
 }

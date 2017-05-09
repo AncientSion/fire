@@ -14,6 +14,7 @@ window.salvoCtx;
 window.mouseCanvas;
 window.mouseCtx;
 window.cache;
+window.downTime = 0;
 
 function doSort(a, b){
 	if (a.name != b.name){
@@ -52,13 +53,13 @@ function Animate(){
 		var ele = this.ballAnims[i].anims[j];
 
 		if (ele instanceof FireOrder){
-			if (ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m*1.25 || !ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m){
+			if (ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m+30 || !ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m){
 				return false;
 			}
 			return true;
 		}
 		else if (ele instanceof Salvo){
-			if (ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m*1.25 || !ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m){
+			if (ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m+30 || !ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m){
 				return false;
 			}
 			return true;
@@ -114,11 +115,8 @@ function Animate(){
 		else if (ele instanceof Salvo){
 			ele.anim[k].n++;
 			if (ele.fireOrder != undefined && ele.fireOrder.damages.length && ele.anim[k].n >= ele.anim[k].m){
-				for (var i = 0; i < ele.layout.length; i++){
-					if (ele.fireOrder.hits[i]){
-						drawExplosion(ele.structures[i], ele.x + ele.layout[i].x, ele.y + ele.layout[i].y, ele.anim[k].n, ele.anim[k].m, 30);
-						//drawExplosion(ele.structures[i], ele, ele.anim[k]);
-					}
+				for (var i = 0; i < ele.fireOrder.hits[0]; i++){
+					drawExplosion(ele.structures[i], ele.x + ele.layout[i].x, ele.y + ele.layout[i].y, ele.anim[k].n, ele.anim[k].m, 30);
 				}
 			}
 			else {
@@ -151,7 +149,7 @@ function Animate(){
 		if (ele instanceof FireOrder){
 			game.createCombatLogEntry(ele);
 		}
-		else if (ele instanceof Salvo && ele.fireOrder != undefined && ele.fireOrder.guns){
+		else if (ele instanceof Salvo && ele.fireOrder != undefined && ele.fireOrder.damages.length){
 			game.createCombatLogEntry(ele.fireOrder);
 		}
 	}
@@ -455,27 +453,52 @@ $('#myElement').on('mousedown', function() {
 
 */
 function handleMouseDown(e){
+	//console.log("DOWN");
 	//console.log(e)
 	e.preventDefault();
 	e.stopPropagation();
+	var rect = this.getBoundingClientRect();
+	var pos = new Point(e.clientX - rect.left, e.clientY - rect.top).getOffset();
 
 	if (e.originalEvent.button == 0){
-		canvasMouseClick(e);
+		window.downTime = new Date();
 		cam.scroll = 1;
 		cam.sx = e.clientX;
 		cam.sy = e.clientY;
 	}
 	else if (e.originalEvent.button == 2){
-		if (aUnit){
-			game.getUnitById(aUnit).select();
+		unit = game.getUnitByClick(pos);
+		if (unit){
+			if (aUnit == unit.id){
+				game.getUnitById(aUnit).doUnselect();
+			} else unit.switchDiv();
+		}
+		else if (aUnit){
+			game.getUnitById(aUnit).doUnselect();
 		}
 	}
 }
 
 function handleMouseUp(e){
+	//console.log("UP");
 	e.preventDefault();
 	e.stopPropagation();
-	cam	.scroll = 0;
+	if (e.originalEvent.button == 0){
+		var t = (new Date().getTime() - window.downTime.getTime());
+		if (t < 166){
+			canvasMouseClick(e);
+		}
+	}
+	else if (e.originalEvent.button == 2){
+		if (aUnit){
+			var t = (new Date().getTime() - window.downTime.getTime());
+			if (t < 166){
+				console.log(t);
+				game.getUnitById(aUnit).doUnselect();
+			}
+		}
+	}
+	cam.scroll = 0;
 }
 
 function handleMouseOut(e){
@@ -485,44 +508,50 @@ function handleMouseOut(e){
 }
 
 function handleMouseMove(e){
-  if(!cam.scroll){return;}
-  e.preventDefault();
-  e.stopPropagation();
+	e.preventDefault();
+	e.stopPropagation();
+	if(!cam.scroll){return;}
+	window.iterator++;
+	if (window.iterator < 2){
+		return;
+	}
+	window.iterator = 0;
 
-  // get the current mouse position
-  var mouseX = e.clientX;
-  var mouseY = e.clientY;
+	// get the current mouse position
+	var mouseX = e.clientX;
+	var mouseY = e.clientY;
 
-  // dx & dy are the distance the mouse has moved since
-  // the last mousemove event
-  var dx = mouseX- cam.sx;
-  var dy = mouseY- cam.sy;
+	// dx & dy are the distance the mouse has moved since
+	// the last mousemove event
+	var dx = mouseX- cam.sx;
+	var dy = mouseY- cam.sy;
 
-  // reset the vars for next mousemove
-  cam.sx = mouseX;
-  cam.sy = mouseY;
+	// reset the vars for next mousemove
+	cam.sx = mouseX;
+	cam.sy = mouseY;
 
-  // accumulate the net panning done
-  cam.o.x += dx;
-  cam.o.y += dy;
-  game.redraw();
+	// accumulate the net panning done
+	cam.o.x += dx;
+	cam.o.y += dy;
+	game.redraw();
 }
 
 function sensorEvent(isClick, ship, loc, facing, d, a){
-	mouseCtx.clearRect(0, 0, res.x, res.y);
-	mouseCtx.translate(cam.o.x, cam.o.y);
-	mouseCtx.scale(cam.z, cam.z);
 	var sensor = ship.getSystemByName("Sensor");
 	var str = sensor.getOutput();
 		d = Math.min(str, d);
 	var p = 1.5;
 	var len = 20;
 	var	w = Math.min(180, len * Math.pow(str/d, p));
+	if (w == 180){
+		a = 0;
+		d = str/Math.pow(w/len, 1/p);
+	}
 
 	drawSensorArc(w, d, p, str, len, loc, facing, a)
 	//console.log("angle from facing: " + a + ", dist: " + dist + ", strength: "+str + ", FINAL: " + newWidth);
 
-	if (isClick){
+	if (isClick && ship.canSetSensor(sensor)){
 		//console.log("setting sensor to w: "+w*2+", dist: "+d+", angle: "+a);
 		sensor.setEW({
 			angle: Math.floor(a),

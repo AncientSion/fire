@@ -97,7 +97,7 @@ class DBManager {
 	}
 	
 	public function validateLogin($name, $pass){		
-		Debug::log("validating login");
+		//Debug::log("validating login");
 		$stmt = $this->connection->prepare("
 			SELECT id, access FROM users
 			WHERE username = :username
@@ -562,7 +562,7 @@ class DBManager {
 	}
 
 	public function setUnitStatusDB($units){
-		Debug::log("setUnitStatusDB");
+		//Debug::log("setUnitStatusDB");
 		$stmt = $this->connection->prepare("
 			UPDATE units 
 			SET

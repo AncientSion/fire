@@ -56,7 +56,6 @@ function Flight(data){
 		var size = 15;
 
 		var toDo = Math.min(4, Math.ceil(this.structures.length/2));
-		var alive = (this.size - 32) / 5;
 		var done = 0;
 
 		for (var i = 0; i < toDo; i++){
@@ -97,7 +96,7 @@ function Flight(data){
 
 	this.getEP = function(){
 		if (this.actions.length && this.actions[0].turn == game.turn){
-			return Math.floor(this.ep/2);
+			return Math.floor(this.ep/3);
 		}
 		return this.ep;
 	}
@@ -118,6 +117,18 @@ function Flight(data){
 		}
 	}
 
+	this.getShooterPosition = function(j){
+		for (var i = j; i < this.structures.length; i++){
+			if (!this.structures[i].destroyed || !this.structures[i].disabled){
+				return this.layout[j];
+			}
+		}
+	}
+
+	this.drawHoverElements = function(){
+		this.drawMoveLength();
+	}
+
 	this.drawSelf = function(){
 		ctx.save();
 		ctx.translate(this.x, this.y)
@@ -135,28 +146,25 @@ function Flight(data){
 			}
 		}
 		else {
+			var alive = (this.size - 32) / 5;
+			var oy = (this.structures.length-alive)*4;
+			var index = 0;
 			for (var i = 0; i < this.structures.length; i++){
 				if (!this.structures[i].destroyed && !this.structures[i].disabled){
-					this.drawFighter(i);
-				}
-			}
-	/*		var index = 0;
-			for (var i = 0; i < this.layout.length; i++){
-				if (!this.structures[i].destroyed && !this.structures[i].disabled){
-					this.drawFighter(index);
+					this.drawFighter(index, oy);
 					index++
 				}
-			}*/
+			}
 		}
 		ctx.restore();
 	}
 
-	this.drawFighter = function(i){
+	this.drawFighter = function(i, oy = 0){
 		var size = 12;
 		ctx.drawImage(
 			window.shipImages[this.structures[i].name.toLowerCase()],
 			this.layout[i].x -size/2,
-			this.layout[i].y -size/2,
+			this.layout[i].y -size/2 + oy,
 			size, 
 			size
 		);
@@ -200,9 +208,9 @@ function Flight(data){
 	
 	this.getBaseImpulse = function(){
 		if (this.actions.length && this.actions[0].turn == game.turn){
-			return Math.floor(210/2);
+			return Math.floor(this.baseImpulse/3*2);
 		}
-		return 210;
+		return this.baseImpulse;
 	}
 
 	this.getTurnAngle = function(){
@@ -422,14 +430,15 @@ function Flight(data){
 
 	this.getBaseHitChance = function(){
 		var min = 0; var max = 0;
+		var p = 1.25;
 		for (var i = 0; i < this.structures.length; i++){
 			if (!this.structures[i].destroyed){
 				min = Math.max(min, this.structures[i].mass);
 				max = Math.max(max, this.structures[i].mass);
 			}
 		}
-		if (min == max){return Math.ceil(min/1.5)}
-		else return Math.ceil(min/1.5) + " - " + Math.ceil(max/1.5);
+		if (min == max){return Math.ceil(min/p)}
+		else return Math.ceil(min/p) + " - " + Math.ceil(max/p);
 	}
 
 	this.getHitSectionFromAngle = function(a){
@@ -460,6 +469,7 @@ Flight.prototype = Object.create(Ship.prototype);
 function Fighter(data){
 	this.id = data.id;
 	this.name = data.name;
+	this.display = data.display;
 	this.ep = data.ep;
 	this.turns = data.turns;
 	this.mass = data.mass;
@@ -516,8 +526,9 @@ function Fighter(data){
 		if (!this.highlight){
 			this.highlight = true;
 			var ele = this.getDetailsDiv();
-			$("#game").append(ele);
-			$(ele).css("left", e.clientX).css("top", e.clientY + 20)
+			$(document.body).append(ele);
+			var w = $(ele).width();
+			$(ele).css("left", e.clientX - w/2).css("top", e.clientY + 40)
 		}
 		else {
 			this.highlight = false;

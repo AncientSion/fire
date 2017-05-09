@@ -11,37 +11,29 @@ class EM extends Weapon {
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
 	}
 
-	public function doDamage($fire){
-		Debug::log("doDamage - EM, weapon: ".get_class($this).", target: ".$fire->target->id);
+	public function doDamage($fire, $roll, $system){
+		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id."/".$system->id);
 
-		$negation; $armourDmg; $structDmg; $totalDmg; $hitSystem; $remInt; $destroyed;
-		
-		for ($i = 0; $i < $fire->shots; $i++){
-			$totalDmg = floor($this->getBaseDamage($fire) * (1+$this->getBoostLevel($fire->turn)*0.2) * $this->getDamageMod($fire));
-			$hitSystem = $fire->target->getHitSystem($fire); Debug::log("EM hitting: ".$hitSystem->id);
-			if ($hitSystem->destroyed){Debug::log("SYSTEM already destroyed, RETURN"); return;}
-			$negation = $fire->target->getStructureById($fire->hitSection)->getRemainingNegation($fire) * $hitSystem->getArmourMod();
-			//Debug::log("angle: ".$fire->angleIn);
+		$totalDmg = floor($this->getBaseDamage($fire) * (1+$this->getBoostLevel($fire->turn)*0.2) * $this->getDamageMod($fire));
+		$negation = $fire->target->getArmourValue($fire, $hitSystem);
 
-			if (($totalDmg > $negation && mt_rand(0, 1)) || ($totalDmg > $negation/2 && mt_rand(0, 3) == 3)){
-				Debug::log("doing: ".$totalDmg." vs negation: ".$negation." - full penetration + lucky");
-				if ($fire->target->flight || $fire->target->salvo){
-					$hitSystem->crits[] = new Crit(sizeof($hitSystem->crits)+1, $hitSystem->parentId, $hitSystem->id, $fire->turn, "disengaged", -1, 1);
-					$hitSystem->destroyed = true;
-				}
-				else if (is_a($hitSystem, "Primary")){
-					$reactor = $fire->target->getSystemByName("Reactor");
-					$reactor->crits[] = new Crit(sizeof($reactor->crits)+1, $reactor->parentId, $reactor->id, $fire->turn, "drain1", 1, 1);
-				}
-				else if ($hitSystem->weapon && !$hitSystem->isDisabled($fire->turn)){
-					$hitSystem->crits[] = new Crit(sizeof($hitSystem->crits)+1, $hitSystem->parentId, $hitSystem->id, $fire->turn, "disabled", 1, 1);
-				}
+		if (($totalDmg > $negation && mt_rand(0, 1)) || ($totalDmg > $negation/2 && mt_rand(0, 3) == 3)){
+			Debug::log("doing: ".$totalDmg." vs negation: ".$negation." - penetration by chance");
+			if ($fire->target->flight || $fire->target->salvo){
+				$hitSystem->crits[] = new Crit(sizeof($hitSystem->crits)+1, $hitSystem->parentId, $hitSystem->id, $fire->turn, "disengaged", -1, 1);
+				$hitSystem->destroyed = true;
 			}
-			else { // no pen, no effect
-				Debug::log("doing: ".$totalDmg." vs negation: ".$negation." - no pen, no effect");
+			else if (is_a($hitSystem, "Primary")){
+				$reactor = $fire->target->getSystemByName("Reactor");
+				$reactor->crits[] = new Crit(sizeof($reactor->crits)+1, $reactor->parentId, $reactor->id, $fire->turn, "drain1", 1, 1);
+			}
+			else if ($hitSystem->weapon && !$hitSystem->isDisabled($fire->turn)){
+				$hitSystem->crits[] = new Crit(sizeof($hitSystem->crits)+1, $hitSystem->parentId, $hitSystem->id, $fire->turn, "disabled", 1, 1);
 			}
 		}
-		return;
+		else { // no pen, no effect
+			Debug::log("doing: ".$totalDmg." vs negation: ".$negation." - no pen, no effect");
+		}
 	}
 
 	public function getDamageMod($fire){

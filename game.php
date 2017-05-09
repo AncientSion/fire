@@ -492,7 +492,7 @@ foreach ($manager->playerstatus as $player){
 							game.createCombatLogEntry(game.fireOrders[i]);
 						}
 						for (var i = 0; i < animate.ballAnims.length; i++){
-							for (var j = 0; j < animate.ballAnims[i].anims.length; j++){
+							for (var j = animate.ballAnims[i].anims.length-1; j >= 0; j--){
 								animate.doLog(i, j);
 							}
 						}

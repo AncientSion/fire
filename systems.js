@@ -11,13 +11,13 @@ function System(system){
 	this.boostEffect = system.boostEffect;
 	this.armourMod = system.armourMod;
 	this.disabled = system.disabled;
+	this.locked = system.locked;
 	this.crits = [];
 	this.damages = [];
 	this.detailsTable = false;
 	this.highlight = false;
 	this.selected = false;
 	this.destroyed = false;
-	this.disabled = false;
 	this.weapon = false;
 	this.totalCost = 0;
 	this.powers = [];
@@ -28,7 +28,6 @@ function System(system){
 	this.armour;
 	this.type = system.type || "Internal";
 	this.dual = 0;
-	this.locked = 0;
 	this.loadout = 0;
 	this.loaded = 0;
 }
@@ -88,18 +87,41 @@ System.prototype.hover = function(e){
 		game.getUnitById(this.parentId).highlightAllSelectedWeapons();
 	}
 }
+
+
+
+
 System.prototype.setTableRow = function(){
 	var ele = $(this.element);
 	if (this.destroyed){
-		ele.addClass("destroyed");
-	} else ele.removeClass("destroyed");
+		ele.addClass("destroyed"); 
+		return;
+	}
 
 	if (this.disabled){
-		ele.addClass("unpowered").find(".boostDiv").hide().end().find(".outputMask").hide();
-	} else if (this.effiency){
-		ele.removeClass("unpowered").find(".boostDiv").show().end().find(".outputMask").show();
-	} else {			
-		ele.removeClass("unpowered");
+		if (this.highlight){
+			ele.addClass("unpowered")
+				.find(".boostDiv").hide().end()
+				.find(".outputMask").hide().end()
+				.find(".powerDiv").find(".power").show().end().find(".unpower").hide().end();
+		} else ele.addClass("unpowered").find(".outputMask").hide();
+	}
+	else {
+		if (this.highlight){
+			ele.removeClass("unpowered")
+				.find(".boostDiv").show().end()
+				.find(".outputMask").show().end()
+				.find(".powerDiv").find(".power").hide().end().find(".unpower").show().end();
+		} else ele.removeClass("unpowered").find(".outputMask").show();
+	}
+
+	if (Object.keys(this.modes).length){
+		if (this.highlight && this.disabled){
+			ele.find(".modeDiv").hide()
+		}
+		else if (this.highlight && !this.disabled){
+			ele.find(".modeDiv").show()
+		}
 	}
 }
 System.prototype.setSystemBorder = function(){
@@ -112,7 +134,7 @@ System.prototype.setSystemBorder = function(){
 	} else ele.removeClass("selected");
 }
 System.prototype.canFire = function(){
-	if (this.destroyed || this.disabled){
+	if (this.destroyed || this.disabled || this.locked){
 		return false;
 	}
 	else if (game.phase == -2){
@@ -184,89 +206,81 @@ System.prototype.getBoostEffect = function(){
 	else return "MISSING";
 }
 System.prototype.getBoostDiv = function(){
-	if (!this.destroyed){
-		if (this.effiency){
-			var div = document.createElement("div");
-				div.className = "boostDiv disabled";
-				$(div).data("shipId", this.parentId);
-				$(div).data("systemId", this.id);
-			var subDiv = document.createElement("div");
-				subDiv.className = "plus";
-				subDiv.innerHTML = "<img src='varIcons/plus.png'</img>";
-				subDiv.childNodes[0].className = "img100pct";
-				$(subDiv).click(function(e){
-					e.stopPropagation();
-					if (game.phase != -1){return;}
-					var data = $(this.parentNode).data();
-					game.getUnitById(data.shipId).getSystemById(data.systemId).plus();
-				});
-				div.appendChild(subDiv);
-			var subDiv = document.createElement("div");
-				subDiv.className = "minus";
-				subDiv.innerHTML = "<img src='varIcons/minus.png'</img>";
-				subDiv.childNodes[0].className = "img100pct";
-				$(subDiv).click(function(e){
-					e.stopPropagation();
-					if (game.phase != -1){return;}
-					var data = $(this.parentNode).data();
-					game.getUnitById(data.shipId).getSystemById(data.systemId).minus();
-				});
-				div.appendChild(subDiv);
-			return div;
-		}
-		else return false;
-	}
+	if (this.destroyed || !this.effiency){return};
+	var div = document.createElement("div");
+		div.className = "boostDiv disabled";
+		$(div).data("shipId", this.parentId);
+		$(div).data("systemId", this.id);
+	var subDiv = document.createElement("div");
+		subDiv.className = "plus";
+		subDiv.innerHTML = "<img src='varIcons/plus.png'</img>";
+		subDiv.childNodes[0].className = "img100pct";
+		$(subDiv).click(function(e){
+			e.stopPropagation();
+			if (game.phase != -1){return;}
+			var data = $(this.parentNode).data();
+			game.getUnitById(data.shipId).getSystemById(data.systemId).plus();
+		});
+		div.appendChild(subDiv);
+	var subDiv = document.createElement("div");
+		subDiv.className = "minus";
+		subDiv.innerHTML = "<img src='varIcons/minus.png'</img>";
+		subDiv.childNodes[0].className = "img100pct";
+		$(subDiv).click(function(e){
+			e.stopPropagation();
+			if (game.phase != -1){return;}
+			var data = $(this.parentNode).data();
+			game.getUnitById(data.shipId).getSystemById(data.systemId).minus();
+		});
+		div.appendChild(subDiv);
+	return div;
 }
 System.prototype.getPowerDiv = function(){
-	if (!this.destroyed){
-		if (this.powerReq){
-			var div = document.createElement("div");
-				div.className = "powerDiv";
-				$(div).data("shipId", this.parentId);
-				$(div).data("systemId", this.id);
-			var subDiv = document.createElement("div");
-				subDiv.className = "power disabled";
-				subDiv.innerHTML = "<img src='varIcons/power.png'</img>";
-				subDiv.childNodes[0].className = "img100pct";
-				$(subDiv)
-					.click(function(e){
-						e.stopPropagation();
-						if (game.phase != -1){return;}
-						var data = $(this.parentNode).data();
-						game.getUnitById(data.shipId).getSystemById(data.systemId).doPower();
-					})
-					.contextmenu(function(e){
-						e.stopPropagation(); e.preventDefault();
-						if (game.phase != -1){return;}
-						var data = $(this.parentNode).data();
-						game.getUnitById(data.shipId).doPowerAll(data.systemId);
-					})
-				div.appendChild(subDiv);
-			var subDiv = document.createElement("div");
-				subDiv.className = "unpower disabled";
-				subDiv.innerHTML = "<img src='varIcons/unpower.png'</img>";
-				subDiv.childNodes[0].className = "img100pct";
-				$(subDiv)
-					.click(function(e){
-						e.stopPropagation();
-						if (game.phase != -1){return;}
-						var data = $(this.parentNode).data();
-						game.getUnitById(data.shipId).getSystemById(data.systemId).doUnpower();
-					})
-					.contextmenu(function(e){
-						e.stopPropagation(); e.preventDefault();
-						if (game.phase != -1){return;}
-						var data = $(this.parentNode).data();
-						game.getUnitById(data.shipId).doUnpowerAll(data.systemId);
-					})
-				div.appendChild(subDiv);
-			return div;
-		}
-		else return false;
-	}
+	if (this.destroyed || !this.powerReq){return};
+	var div = document.createElement("div");
+		div.className = "powerDiv";
+		$(div).data("shipId", this.parentId);
+		$(div).data("systemId", this.id);
+	var subDiv = document.createElement("div");
+		subDiv.className = "power disabled";
+		subDiv.innerHTML = "<img src='varIcons/power.png'</img>";
+		subDiv.childNodes[0].className = "img100pct";
+		$(subDiv)
+			.click(function(e){
+				e.stopPropagation();
+				if (game.phase != -1){return;}
+				var data = $(this.parentNode).data();
+				game.getUnitById(data.shipId).getSystemById(data.systemId).doPower();
+			})
+			.contextmenu(function(e){
+				e.stopPropagation(); e.preventDefault();
+				if (game.phase != -1){return;}
+				var data = $(this.parentNode).data();
+				game.getUnitById(data.shipId).doPowerAll(data.systemId);
+			})
+		div.appendChild(subDiv);
+	var subDiv = document.createElement("div");
+		subDiv.className = "unpower disabled";
+		subDiv.innerHTML = "<img src='varIcons/unpower.png'</img>";
+		subDiv.childNodes[0].className = "img100pct";
+		$(subDiv)
+			.click(function(e){
+				e.stopPropagation();
+				if (game.phase != -1){return;}
+				var data = $(this.parentNode).data();
+				game.getUnitById(data.shipId).getSystemById(data.systemId).doUnpower();
+			})
+			.contextmenu(function(e){
+				e.stopPropagation(); e.preventDefault();
+				if (game.phase != -1){return;}
+				var data = $(this.parentNode).data();
+				game.getUnitById(data.shipId).doUnpowerAll(data.systemId);
+			})
+		div.appendChild(subDiv);
+	return div;
 }
 System.prototype.getModeDiv = function(){
-	if (!Object.keys(this.modes).length){return;}
+	if (this.destroyed || !Object.keys(this.modes).length){return;}
 	var div = document.createElement("div");
 		div.className = "modeDiv disabled";
 		$(div).data("shipId", this.parentId);
@@ -338,6 +352,14 @@ System.prototype.canPower = function(){
 		return true;
 	} else return false;
 }
+System.prototype.forceUnpower = function(){
+	if (this.powers.length && this.powers[this.powers.length-1].type == 0){
+		this.powers.splice(this.powers.length-1, 1);
+		this.disabled = 0;
+		this.setTableRow();
+		game.getUnitById(this.parentId).updateDivPower(this);
+	}
+}
 System.prototype.doUnpower = function(){
 	if (this.selected){
 		this.select();
@@ -359,14 +381,6 @@ System.prototype.doUnpower = function(){
 		this.doUndoActions();
 		this.setTableRow();
 		this.setSystemBorder();
-		game.getUnitById(this.parentId).updateDivPower(this);
-	}
-}
-System.prototype.forceUnpower = function(){
-	if (this.powers.length && this.powers[this.powers.length-1].type == 0){
-		this.powers.splice(this.powers.length-1, 1);
-		this.disabled = 0;
-		this.setTableRow();
 		game.getUnitById(this.parentId).updateDivPower(this);
 	}
 }
@@ -889,8 +903,8 @@ Sensor.prototype.setState = function(){
 	PrimarySystem.prototype.setState.call(this);	
 	if (game.phase == -1){
 		this.setEW({
-			angle: 360,
-			dist: 0,
+			angle: 0,
+			dist: Math.ceil(this.getOutput() / Math.pow(180/20, 1/1.5)),
 			turn: game.turn,
 			unitid: this.parentId,
 			systemid: this.id
@@ -899,7 +913,6 @@ Sensor.prototype.setState = function(){
 	else if (game.phase != -1){
 		this.locked = 1;
 	}
-
 }
 
 Sensor.prototype.setEW = function(data){
@@ -924,6 +937,24 @@ Sensor.prototype.getEW = function(data){
 	}
 }
 
+Sensor.prototype.drawEW = function(){
+	if (this.ew.length && this.ew[this.ew.length-1].turn == game.turn){
+		var ship = game.getUnitById(this.parentId);
+		var loc = ship.getPlannedPosition();
+		var ew = this.ew[this.ew.length-1];
+		var str = this.getOutput();
+		var len = 20;
+		var p = 1.5;
+		var facing = ship.getPlannedFacing();
+		var w;
+		if (ew.angle == 0){
+			w = 180;
+		} else var	w = Math.min(180, len * Math.pow(str/ew.dist, p));
+
+		drawSensorArc(w, ew.dist, p, str, len, loc, facing, ew.angle);
+	}
+}
+
 Sensor.prototype.select = function(e){
 	console.log(this);
 	var id = this.id;
@@ -931,7 +962,7 @@ Sensor.prototype.select = function(e){
 	var selected = false;
 	var unit;
 
-	if (this.destroyed || this.disabled){
+	if (this.destroyed || this.disabled || this.locked){
 		return false;
 	}
 	else {
@@ -975,56 +1006,6 @@ Sensor.prototype.doUnboost = function(){
 	System.prototype.doUnboost.call(this);
 	mouseCtx.clearRect(0, 0, res.x, res.y);
 	this.drawEW();
-}
-
-Sensor.prototype.drawEW = function(){
-
-	if (this.ew.length && this.ew[this.ew.length-1].turn == game.turn){
-		var ship = game.getUnitById(this.parentId);
-		var loc = ship.getPlannedPosition();
-		var ew = this.ew[this.ew.length-1];
-		//console.log(ew);
-		var facing = ship.getPlannedFacingToMove();
-
-		// addAngle(facing, getAngleFromTo(shipLoc, pos)));
-
-
-		mouseCtx.clearRect(0, 0, res.x, res.y);
-		mouseCtx.translate(cam.o.x, cam.o.y);
-		mouseCtx.scale(cam.z, cam.z);
-
-		var str = this.getOutput();
-		var len = 20;
-		var p = 1.5;
-		var	w = Math.min(180, len * Math.pow(str/ew.dist, p));
-
-		drawSensorArc(w, ew.dist, p, str, len, loc, facing, ew.angle);
-
-	/*	if (w == 180){
-			var d = str/Math.pow(180/len, 1/p);
-			mouseCtx.beginPath();			
-			mouseCtx.arc(loc.x, loc.y, d, 0, 2*Math.PI, false);
-			mouseCtx.closePath();
-		}
-		else {
-			var start = addAngle(0 + w-facing, ew.angle);
-			var end = addAngle(360 - w-facing, ew.angle);
-			var p1 = getPointInDirection(ew.dist, start, loc.x, loc.y);
-			var rad1 = degreeToRadian(start);
-			var rad2 = degreeToRadian(end);
-			mouseCtx.beginPath();			
-			mouseCtx.moveTo(loc.x, loc.y);
-			mouseCtx.lineTo(p1.x, p1.y); 
-			mouseCtx.arc(loc.x, loc.y, ew.dist, rad1, rad2, false);
-			mouseCtx.closePath();
-		}
-
-		mouseCtx.globalAlpha = 0.2;
-		mouseCtx.fillStyle = "red";
-		mouseCtx.fill();
-		mouseCtx.globalAlpha = 1;
-		mouseCtx.setTransform(1,0,0,1,0,0);*/
-	}
 }
 
 function Weapon(system){
@@ -1138,12 +1119,12 @@ Weapon.prototype.select = function(e){
 	var selected = false;
 	var unit;
 
-	if (this.destroyed || this.disabled){
+	if (this.destroyed || this.disabled || this.locked){
 		return false;
 	}
 	else {
 		unit = game.getUnitById(parentId);
-		if (unit instanceof Flight && (unit.dogfights.length)){
+		if (unit.hasSystemSelected("Sensor") || unit instanceof Flight && (unit.dogfights.length)){
 			return false;
 		}
 		else if (this.getLoadLevel() >= 1){
@@ -1242,7 +1223,6 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 			$(table).append($("<tr>").append($("<th>").css("border-top", "1px solid white").attr("colSpan", 2).html(this.ammo.name)));
 			$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).html(this.ammo.display)));
 			$(table).append($("<tr>").append($("<td>").html("Ammo amount")).append($("<td>").html("<font color='red'>" + this.getRemainingAmmo() + "</font> / " + this.getMaxAmmo()).attr("id", "ammo")));
-			//$(table).append($("<tr>").append($("<td>").html("Fire Control")).append($("<td>").html(this.getFireControlString())));
 			$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + game.getUnitType(this.getTraverseRating()))));
 			$(table).append($("<tr>").append($("<td>").html("Impulse")).append($("<td>").html(this.getBallImpulse())));
 		}
@@ -1251,14 +1231,12 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 			));
 	}
 	else if (this instanceof Laser){
-		//$(table).append($("<tr>").append($("<td>").html("Fire Control")).append($("<td>").html(this.getFireControlString())));
 		$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + game.getUnitType(this.getTraverseRating()))));
 		$(table).append($("<tr>").append($("<td>").html("Focus point")).append($("<td>").html(this.optRange + "px")));
 		$(table).append($("<tr>").append($("<td>").html("Damage loss")).append($("<td>").html(this.dmgDecay + "% per 100px")));
 		$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").html(this.getAccDecay()/10 + "% per 100px")));
 	}
 	else {
-		//$(table).append($("<tr>").append($("<td>").html("Fire Control")).append($("<td>").html(this.getFireControlString())));
 		$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + game.getUnitType(this.getTraverseRating()))));
 		if (this instanceof Plasma){
 			$(table).append($("<tr>").append($("<td>").html("Damage loss")).append($("<td>").html(this.dmgDecay + "% per 100px")));
@@ -1273,7 +1251,9 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 		$(table).append($("<tr>").append($("<td>").html("Shots & Rakes")).append($("<td>").html(this.shots + " w/ " + this.output + " rakes")));
 	}
 	else if (!(this instanceof Launcher)){
-		$(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").html(this.shots)));
+		if (this instanceof Pulse){
+			$(table).append($("<tr>").append($("<td>").html("Volley")).append($("<td>").html(this.shots + " w/ " + this.volley + " shots")));
+		} else $(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").html(this.shots)));
 	}
 
 	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDamage())));
@@ -1445,7 +1425,7 @@ Particle.prototype.getAnimation = function(fire){
 
 	if (fire.shooter.flight){
 		grouping = 1;
-		delay = 0;
+		delay = 10;
 	}
 	else if (this.shots >= 4 && fire.guns <= 3){
 		grouping = 1;
@@ -1459,12 +1439,21 @@ Particle.prototype.getAnimation = function(fire){
 	for (var j = 0; j < fire.guns; j++){
 		var hasHit = 0;
 		var gunAnims = [];
-		var ox = fire.shooter.x + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2); // WEAPON origin
-		var oy = fire.shooter.y + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2);
+		var ox;
+		var oy;
+		if (fire.shooter.flight){
+			var o = fire.shooter.getShooterPosition(j);
+			ox = fire.shooter.x + o.x;
+			oy = fire.shooter.y + o.y;
+		}
+		else {
+			ox = fire.shooter.x + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2); // WEAPON origin
+			oy = fire.shooter.y + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2);
+		}
 
 		for (var k = 0; k < this.shots; k++){
 			if (fire.hits[j] > k){
-				var hasHit = 1;
+				hasHit = 1;
 				break;
 			}
 		}
@@ -1500,7 +1489,7 @@ Particle.prototype.getAnimation = function(fire){
 			var shotAnim = new BallVector({x: ox, y: oy}, {x: tfx, y: tfy}, this.projSpeed, hit);
 			
 			if (fire.guns > grouping){
-				shotAnim.n = 0 - (Math.floor(j / grouping) * delay) + k*shotInterval;
+				shotAnim.n = 0 - ((j / grouping) * delay + k*shotInterval);
 			}
 			else {
 				shotAnim.n = 0 - (j*delay + k*shotInterval);
@@ -1532,8 +1521,8 @@ Plasma.prototype.getDamageLoss = function(dist){
 Plasma.prototype.getFillStyle = function(x, y, dist){
 	var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);
 
-	grad.addColorStop(5000 / this.dmgDecay / decayVar, "red");
-	grad.addColorStop(3000 / this.dmgDecay / decayVar, "yellow");
+	grad.addColorStop(4000 / this.dmgDecay / decayVar, "red");
+	grad.addColorStop(2000 / this.dmgDecay / decayVar, "yellow");
 	grad.addColorStop(0, "green");
 			
 	return grad;
@@ -1546,8 +1535,10 @@ EM.prototype = Object.create(Particle.prototype);
 
 function Pulse(system){
 	Particle.call(this, system);
+	this.volley = system.volley;
 }
 Pulse.prototype = Object.create(Particle.prototype);
+
 	
 Pulse.prototype.getAnimation = function(fire){
 	allAnims = [];
@@ -1572,7 +1563,7 @@ Pulse.prototype.getAnimation = function(fire){
 			ty = fire.target.y + range(fire.target.size * -0.7, fire.target.size * 0.7);
 		}
 		
-		for (var k = 0; k < this.shots; k++){
+		for (var k = 0; k < this.volley; k++){
 			if (hit){
 				tx = fire.target.x + range(fire.target.size * -0.07, fire.target.size * 0.07); // salvo hit
 				ty = fire.target.y + range(fire.target.size * -0.07, fire.target.size * 0.07);
@@ -1581,7 +1572,7 @@ Pulse.prototype.getAnimation = function(fire){
 			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, this.projSpeed, hit);
 			//console.log(fire.guns);
 			if (fire.guns > grouping){
-				shotAnim.n = 0 - (Math.floor(j / grouping) * delay) + k*shotInterval + rng;
+				shotAnim.n = 0 - ((j / grouping) * delay + k*shotInterval + rng);
 			}
 			else {
 				shotAnim.n = 0 - (j*delay + k*shotInterval);
@@ -1699,7 +1690,6 @@ function Dual(system){
 	this.modes = system.modes;
 	this.states = system.states;
 	this.dual = 1;
-	this.locked = 0;
 	this.weapons;
 }
 Dual.prototype = Object.create(Weapon.prototype);
@@ -1767,6 +1757,7 @@ Dual.prototype.initMain = function(){
 }
 
 Dual.prototype.switchMode = function(){
+	if (this.destroyed || this.disabled || this.locked){return;}
 	this.resetPowers();
 	this.cycleActiveWeapon();
 	this.copyProps();
@@ -2019,7 +2010,7 @@ Launcher.prototype.select = function(e){
 	var parentId = this.parentId;
 	var selected = false;
 
-	if (this.destroyed || this.disabled){
+	if (this.destroyed || this.disabled || this.locked){
 		return false;
 	}
 	else if (this.canFire()){
@@ -2266,7 +2257,7 @@ Launcher.prototype.getMaxAmmo = function(){
 }
 
 Launcher.prototype.getBallImpulse = function(){
-	return this.ammo.impulse;
+	return Math.ceil(Math.pow(this.ammo.mass, -0.5)*250);
 }
 
 function Hangar(system){
@@ -2315,7 +2306,7 @@ Hangar.prototype.select = function(e){
 			if (this.selected){this.selected = false;}else{this.selected = true;}
 		}
 	}
-	else if (this.destroyed || this.disabled){
+	else if (this.destroyed || this.disabled || this.locked){
 		return false;
 	}
 	else if (! this.selected){

@@ -20,9 +20,7 @@ class LightIon extends Particle {
 	public $animColor = "orange";
 	public $projSize = 2;
 	public $projSpeed = 6;
-	public $exploSize = 3;
 	public $reload = 1;
-	public $fc = array(0 => 85, 1 => 220);
 	public $mass = 14;
 	public $powerReq = 2;
 	public $traverse = -4;
@@ -43,8 +41,6 @@ class MediumIon extends LightIon {
 	public $reload = 2;
 	public $projSize = 3;
 	public $projSpeed = 5;
-	public $exploSize = 4;
-	public $fc = array(0 => 100, 1 => 120);
 	public $mass = 19;
 	public $powerReq = 4;
 	public $traverse = -1;
@@ -65,8 +61,6 @@ class HeavyIon extends LightIon {
 	public $reload = 1;
 	public $projSize = 4;
 	public $projSpeed = 5;
-	public $exploSize = 5;
-	public $fc = array(0 => 120, 1 => 45);
 	public $mass = 28;
 	public $powerReq = 6;
 	public $traverse = 1;
@@ -86,8 +80,6 @@ class FusionCannon extends Particle {
 	public $animColor = "green";
 	public $projSize = 3;
 	public $projSpeed = 5;
-	public $exploSize = 4;
-	public $fc = array(0 => 100, 1 => 145);
 	public $mass = 18;
 	public $powerReq = 3;
 	public $traverse = -1;
@@ -107,8 +99,6 @@ class FusionPulsar extends Particle {
 	public $animColor = "lightGreen";
 	public $projSize = 2;
 	public $projSpeed = 6;
-	public $exploSize = 4;
-	public $fc = array(0 => 115, 1 => 90);
 	public $mass = 16;
 	public $powerReq = 4;
 	public $traverse = 0;
@@ -117,7 +107,7 @@ class FusionPulsar extends Particle {
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
 	}
 
-	public function xxxrollForHit($fire){
+	public function xxxrollToHit($fire){
 		$roll = mt_rand(1, 100);
 		if ($roll <= $fire->req){
 			$fire->hits = $this->shots;

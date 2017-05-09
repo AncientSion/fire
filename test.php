@@ -53,7 +53,7 @@
 					$fires[] = new FireOrder(0,0,0,0,0,0,0,0,0,0,0,0);
 				}
 				for ($i = 0; $i < sizeof($fires); $i++){
-					$fires[$i]->hitSection = $ships[$i]->structures[0]->id;
+					$fires[$i]->section = $ships[$i]->structures[0]->id;
 					$fires[$i]->target = $ships[$i];
 
 					echo "<table class='unitTest'><tr><th colSpan=2 style='width: 210px'>".$ships[$i]->classname."</th></tr>";

@@ -25,14 +25,14 @@ class Math {
 	}
 
 	static function getAngle2($a, $b){
-		return Math::radToDeg(atan2($b->y - $a->y, $b->x - $a->x));
+		return Math::addAngle(0, Math::radToDeg(atan2($b->y - $a->y, $b->x - $a->x)));
 	}
 
 	static function radToDeg($rad){
 		return $rad * (180 / M_PI);
 	}
 
-	static function addAngle($f, $a){ // facing, angle
+	static function addAngle($f, $a){ // facing, angle      0 - 160
 	//demos vs sag	   f 60,  a  49  -> 109    -10/350
 	//primus vs omega  f 30,  a -35  -> 354    -60/300
 
