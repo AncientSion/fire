@@ -43,11 +43,7 @@ function BallVector(a, b, s, h){
 
 		this.f = getAngleFromTo(a, b);
 		
-		var x = Math.pow(this.x, 2);
-		var y = Math.pow(this.y, 2);
-		var m = (x + y);
-		
-		this.m = Math.sqrt(m);
+		this.m = Math.sqrt((Math.pow(this.x, 2) + Math.pow(this.y, 2)));
 		this.nx = this.x/this.m*s;
 		this.ny = this.y/this.m*s;
 		this.m /= s;
@@ -189,12 +185,10 @@ function Ammo(data){
 	this.minDmg = data.minDmg;
 	this.maxDmg = data.maxDmg;
 	this.exploSize = (this.minDmg+this.maxDmg)/30;
-	this.impulse = data.impulse;
 	this.size = data.mass*3;
 	this.mass = data.mass;
 	this.integrity = data.integrity;
 	this.armour = data.armour;
-	this.fc = data.fc;
 	this.damages = data.damages || false;
 	this.crits = data.crits;
 	this.destroyed = data.destroyed;
@@ -272,6 +266,7 @@ function Salvo(data){
 	this.anim = [];
 	this.animated = false;
 	this.layout = [];
+	this.element;
 
 	this.hasSystemSelected = function(name){
 		return false;
@@ -357,11 +352,16 @@ function Salvo(data){
 	}
 
 	this.getAccelSteps = function(){
-		var steps = 2;
-		for (var i = 1; i < this.actions.length; i++){
-			if (this.actions[i].resolved && this.actions[i].type == "move"){
-				steps++;
+		var steps = 3;
+		for (var i = 1; i < this.actions.length-1; i++){
+			if (this.actions[i].resolved){
+				switch (this.actions[i].type){
+					case "move": steps++; break;
+				}
 			}
+		}
+		if (game.phase != 3 && !this.destroyed && this.animated){
+			steps--;
 		}
 		return steps;
 	}
@@ -505,7 +505,8 @@ function Salvo(data){
 			//e.preventDefault();
 			//$(this).addClass("disabled");
 		}).drag();
-			
+		
+		this.element = div;
 		document.getElementById("game").appendChild(div);
 	}
 
@@ -524,36 +525,23 @@ function Salvo(data){
 		//console.log(this);
 		aUnit = this.id;
 		this.selected = true;
-		this.enableDiv();
+		this.switchDiv();
 	}
 	
 	this.doUnselect = function(){
 		aUnit = false;
 		this.selected = false;
-		this.disableDiv();
+		this.switchDiv();
 	}
 
-	this.enableDiv = function(){
-		var pos = this.getBaseOffsetPos();
-		var id = this.id;
-
-		$(".ammoDiv").each(function(){
-			if ($(this).data("ammoId") == id){
-				$(this)
-					.css("left", pos.x + cam.o.x - $(this).width()/2)
-					.css("top", pos.y + cam.o.y + 90 + (($(this).height()+20) * 0))
-					.removeClass("disabled");
-			}
-		})
-	}
-
-	this.disableDiv = function(){
-		var id = this.id;
-		$(".ammoDiv").each(function(){
-			if ($(this).data("ammoId") == id){
-				$(this).addClass("disabled");
-			}
-		})
+	this.switchDiv = function(){
+		if (this.selected){
+			$(this.element)
+				.removeClass("disabled");
+		}
+		else {
+			$(this.element).addClass("disabled");
+		}
 	}
 
 	this.create = function(){
@@ -703,9 +691,6 @@ function Salvo(data){
 
 	this.setNextStep = function(){
 		var target = game.getUnitById(this.targetid);
-		if (target.salvo){
-			target = target.nextStep;
-		}
 		var dist = getDistance(this.getPlannedPosition(), this.finalStep);
 		var impulse = this.getTotalImpulse();
 		if (impulse < dist){

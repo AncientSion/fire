@@ -60,7 +60,7 @@ class Omega extends SuperHeavy {
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 200);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 200, 530, 10);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 200);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 200, 1050, 10);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 200, 925, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 200, $this->getPowerReq());
 	}
 }

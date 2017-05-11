@@ -9,7 +9,7 @@ class DBManager {
 
 		if ($this->connection === null){
 			$user = "aatu"; $pass = "Kiiski";
-			//$user = "root"; $pass = "147147";
+			$user = "root"; $pass = "147147";
 			$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$user,$pass);
 			//$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			//$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -659,22 +659,56 @@ class DBManager {
 	}
 
 
-	public function deleteDogfights($data){
-		Debug::log("deleteDogfights: ".sizeof($data));
-
+	public function deleteDogfightKill($data, $gameid){
+		Debug::log("deleteDogfightKill: ".sizeof($data));
 		$stmt = $this->connection->prepare("
 			DELETE FROM dogfights
 			WHERE 
+				gameid = :gameid
+			AND
 				a = :a
 			OR 
 				b = :b
 		");
 
 		for ($i = 0; $i < sizeof($data); $i++){
+			$stmt->bindParam(":gameid", $gameid);
 			$stmt->bindParam(":a", $data[$i]);
 			$stmt->bindParam(":b", $data[$i]);
 			$stmt->execute();
 		}
+	}	
+
+	public function deleteDogfightRange($data, $gameid){
+		Debug::log("deleteDogfightRange: ".sizeof($data));
+		$stmt = $this->connection->prepare("
+			DELETE FROM dogfights
+			WHERE 
+				gameid = :gameid
+			AND
+				a = :a
+			AND 
+				b = :b
+		");
+
+		for ($i = 0; $i < sizeof($data); $i++){
+			$stmt->bindParam(":gameid", $gameid);
+			$stmt->bindParam(":a", $data[$i]["a"]);
+			$stmt->bindParam(":b", $data[$i]["b"]);
+			$stmt->execute();
+		}
+	}
+
+	public function endAllDogfights($gameid){
+		Debug::log("endAllDogfights: ");
+		$stmt = $this->connection->prepare("
+			DELETE FROM dogfights
+			WHERE 
+				gameid = :gameid
+		");
+
+		$stmt->bindParam(":gameid", $gameid);
+		$stmt->execute();
 	}
 
 	public function issueMovement($gameid, $ships){
@@ -751,9 +785,9 @@ class DBManager {
 	public function insertFireOrders($gameid, $turn, $fires){
 		$stmt = $this->connection->prepare("
 			INSERT INTO fireorders 
-				(gameid, turn, shooterid, targetid, weaponid, shots, resolved)
+				(gameid, turn, shooterid, targetid, weaponid, resolved)
 			VALUES
-				(:gameid, :turn, :shooterid, :targetid, :weaponid, :shots, :resolved)
+				(:gameid, :turn, :shooterid, :targetid, :weaponid, :resolved)
 		");
 
 		for ($i = 0; $i < sizeof($fires); $i++){
@@ -762,7 +796,6 @@ class DBManager {
 			$stmt->bindParam(":shooterid", $fires[$i]["shooterid"]);
 			$stmt->bindParam(":targetid", $fires[$i]["targetid"]);
 			$stmt->bindParam(":weaponid", $fires[$i]["weaponid"]);
-			$stmt->bindParam(":shots", $fires[$i]["shots"]);
 			$stmt->bindParam(":resolved", $fires[$i]["resolved"]);
 
 			$stmt->execute();
@@ -820,6 +853,7 @@ class DBManager {
 		$stmt = $this->connection->prepare("
 			UPDATE fireorders
 			SET
+				shots = :shots,
 				req = :req,
 				notes = :notes,
 				hits = :hits,
@@ -830,6 +864,7 @@ class DBManager {
 
 		for ($i = 0; $i < sizeof($fires); $i++){
 			//ebug::log("fire id: ".$fires[$i]->id);
+			$stmt->bindParam(":shots", $fires[$i]->shots);
 			$stmt->bindParam(":req", $fires[$i]->req);
 			$stmt->bindParam(":notes", $fires[$i]->notes);
 			$stmt->bindParam(":hits", $fires[$i]->hits);
@@ -847,10 +882,11 @@ class DBManager {
 	}
 
 	public function updateBallisticFireOrder($fires){
-		Debug::log("DB updateBallisticFireOrder");
+		Debug::log("DB updateBallisticFireOrder, s: ".sizeof($fires));
 		$stmt = $this->connection->prepare("
 			UPDATE fireorders
 			SET
+				shots = :shots,
 				resolved = :resolved
 			WHERE
 				id = :id
@@ -860,6 +896,7 @@ class DBManager {
 
 		for ($i = 0; $i < sizeof($fires); $i++){
 			$stmt->bindParam(":id", $fires[$i]->id);
+			$stmt->bindParam(":shots", $fires[$i]->shots);
 			$stmt->bindParam(":resolved", $resolved);
 			$stmt->execute();
 

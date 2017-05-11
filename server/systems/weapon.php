@@ -71,7 +71,10 @@ class Weapon extends System {
 		$armourDmg = 0;
 		$structDmg = 0;
 
-		if ($totalDmg <= $negation){
+		if ($totalDmg <= $negation*0.75){ 
+			$armourDmg = ceil($totalDmg/2);
+		}
+		else if ($totalDmg <= $negation){ 
 			$armourDmg = ceil($totalDmg);
 		}
 		else {
@@ -189,6 +192,10 @@ class Weapon extends System {
 		}
 		//if ($boost){Debug::log("power boost level: ".$boost);}
 		return $boost;
+	}
+
+	public function getShots($turn){
+		return $this->shots;
 	}
 
 	public function getMinDamage(){

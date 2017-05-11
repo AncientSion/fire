@@ -238,20 +238,24 @@ function canvasMouseMove(e){
 							legalTarget = false;
 							msg = "Unable to aquire target";
 						}
-						else if (ship.flight && vessel.salvo){ // fighter vs salvo, get trajectory
-							var start = true;
-							var end = true;
-							if (!system.posIsOnArc(shipLoc, pos, facing)){start = false;}
-							if (ship.id == vessel.targetid){if(!isInArc(angle, system.arc[0][0], system.arc[0][1])){end = false;}}
-							//else if (!system.posIsOnArc(shipLoc, vessel.nextStep, facing)){end = false;}
-							else if (!system.posIsOnArc(shipLoc, vessel, facing)){end = false;}
-							if (!start || !end){
-								msg = "Ballistic trajectory out of scope.";
-							} else {
-								inArc = true;
-								validWeapon = true;
-							}
+						/*
+						else if (ship.flight && vessel.salvo){ // fighter vs salvo
+							
+								var start = true;
+								var end = true;
+								if (!system.posIsOnArc(shipLoc, pos, facing)){start = false;}
+								if (ship.id == vessel.targetid){if(!isInArc(angle, system.arc[0][0], system.arc[0][1])){end = false;}}
+								//else if (!system.posIsOnArc(shipLoc, vessel.nextStep, facing)){end = false;}
+								else if (!system.posIsOnArc(shipLoc, vessel, facing)){end = false;}
+								if (!start || !end){
+									msg = "Ballistic trajectory out of scope.";
+								} else {
+									inArc = true;
+									validWeapon = true;
+								}
+							
 						}
+						*/
 						else if (system.posIsOnArc(shipLoc, pos, facing)){ // ship vs ship/fighter
 							inArc = true;
 							validWeapon = true;

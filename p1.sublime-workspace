@@ -542,7 +542,7 @@
 			"file": "classes.js",
 			"settings":
 			{
-				"buffer_size": 29811,
+				"buffer_size": 29761,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -569,9 +569,19 @@
 			"file": "shipclasses.js",
 			"settings":
 			{
-				"buffer_size": 59377,
+				"buffer_size": 60099,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Searching 12 files for \"shipDiv\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  383  \t}\n  384  \n  385: \tthis.setShipDivs = function(){\n  386  \t\tfor (var i = 0; i < this.ships.length; i++){\n  387  \t\t\tvar ele = $(this.ships[i].element);\n  ...\n  429  \t\t$(\"#turnDiv\").html(\"Turn: \" + this.turn);\n  430  \t\tthis.createDeploymentTable();\n  431: \t\tthis.setShipDivs();\n  432  \t\tgame.draw();\n  433  \n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 1387  \tthis.createBaseDiv = function(){\n 1388  \t\tvar div = document.createElement(\"div\");\n 1389: \t\t\tdiv.className = \"shipDiv\";\n 1390  \t\t\t$(div).data(\"shipId\", this.id);\n 1391  \n ....\n 1766  \t\n 1767  \tthis.updateDiv = function(){\n 1768: \t\tvar divs = document.getElementsByClassName(\"shipDiv\");\n 1769  \t\tfor (var i = 0; i < divs.length; i++){\n 1770  \t\t\tif ($(divs[i]).data(\"shipId\") == this.id){\n ....\n 1793  \n 1794  \tthis.updateNonPowerOutput = function(system){\n 1795: \t\tvar divs = document.getElementsByClassName(\"shipDiv\");\n 1796  \t\tfor (var i = 0; i < divs.length; i++){\n 1797  \t\t\tif ($(divs[i]).data(\"shipId\") == this.id){\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 2340  \t\t\tif (game.ships[i].id < 0){\n 2341  \t\t\t\tif (game.ships[i].launchdata.shipid == this.parentId && game.ships[i].launchdata.systemid == this.id){\n 2342: \t\t\t\t\tvar ele = $(\".shipDiv\").each(function(){\n 2343  \t\t\t\t\t\tif ($(this).data(\"shipId\") == game.ships[i].id){\n 2344  \t\t\t\t\t\t\t$(this).remove();\n\n6 matches across 3 files\n\n\nSearching 12 files for \"sensorEvent\"\n\nC:\\xampp\\htdocs\\fire\\script.js:\n  151  \n  152  \t\tif (ship.hasSystemSelected(\"Sensor\")){\n  153: \t\t\tsensorEvent(false, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), addAngle(facing, getAngleFromTo(shipLoc, pos)));\n  154  \t\t\treturn;\n  155  \t\t}\n  ...\n  308  \tvar shipLoc = ship.getPlannedPosition();\n  309  \tvar a = addAngle(facing, getAngleFromTo(shipLoc, pos));\n  310: \tsensorEvent(true, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), a);\n  311  }\n  312  \n\nC:\\xampp\\htdocs\\fire\\shared.js:\n  537  }\n  538  \n  539: function sensorEvent(isClick, ship, loc, facing, d, a){\n  540  \tvar sensor = ship.getSystemByName(\"Sensor\");\n  541  \tvar str = sensor.getOutput();\n\n3 matches across 2 files\n\n\nSearching 65 files for \"sensorEvent\"\n\nC:\\xampp\\htdocs\\fire\\script.js:\n  151  \n  152  \t\tif (ship.hasSystemSelected(\"Sensor\")){\n  153: \t\t\tsensorEvent(false, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), addAngle(facing, getAngleFromTo(shipLoc, pos)));\n  154  \t\t\treturn;\n  155  \t\t}\n  ...\n  308  \tvar shipLoc = ship.getPlannedPosition();\n  309  \tvar a = addAngle(facing, getAngleFromTo(shipLoc, pos));\n  310: \tsensorEvent(true, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), a);\n  311  }\n  312  \n\nC:\\xampp\\htdocs\\fire\\shared.js:\n  537  }\n  538  \n  539: function sensorEvent(isClick, ship, loc, facing, d, a){\n  540  \tvar sensor = ship.getSystemByName(\"Sensor\");\n  541  \tvar str = sensor.getOutput();\n\n3 matches across 2 files\n\n\nSearching 65 files for \"setEw\"\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n  558  \tif (isClick && ship.canSetSensor(sensor)){\n  559  \t\t//console.log(\"setting sensor to w: \"+w*2+\", dist: \"+d+\", angle: \"+a);\n  560: \t\tsensor.setEW({\n  561  \t\t\tangle: Math.floor(a),\n  562  \t\t\tdist: Math.floor(d),\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  901  \tPrimarySystem.prototype.setState.call(this);\t\n  902  \tif (game.phase == -1){\n  903: \t\tthis.setEW({\n  904  \t\t\tangle: 0,\n  905  \t\t\tdist: Math.ceil(this.getOutput() / Math.pow(180/20, 1/1.5)),\n  ...\n  914  }\n  915  \n  916: Sensor.prototype.setEW = function(data){\n  917  \t\tfor (var i = this.ew.length-1; i >= 0; i--){\n  918  \t\t\tif (this.ew[i].turn == game.turn){\n\n3 matches across 2 files\n",
+			"settings":
+			{
+				"buffer_size": 3622,
+				"line_ending": "Windows",
+				"name": "Find Results",
+				"scratch": true
 			}
 		},
 		{
@@ -633,7 +643,7 @@
 			"file": "server/dbManager.php",
 			"settings":
 			{
-				"buffer_size": 40403,
+				"buffer_size": 40401,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -642,7 +652,7 @@
 			"file": "server/debug.php",
 			"settings":
 			{
-				"buffer_size": 187,
+				"buffer_size": 185,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -651,7 +661,7 @@
 			"file": "server/ships/omega.php",
 			"settings":
 			{
-				"buffer_size": 3635,
+				"buffer_size": 3634,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -786,7 +796,7 @@
 			"file": "server/salvo.php",
 			"settings":
 			{
-				"buffer_size": 8304,
+				"buffer_size": 8305,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -823,19 +833,9 @@
 			"file": "systems.js",
 			"settings":
 			{
-				"buffer_size": 75440,
+				"buffer_size": 75522,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"contents": "Searching 65 files for \"if (this.destroyed || this.disabled){\"\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  135  }\n  136  System.prototype.canFire = function(){\n  137: \tif (this.destroyed || this.disabled){\n  138  \t\treturn false;\n  139  \t}\n  ...\n  325  }\n  326  System.prototype.isPowered = function(){\n  327: \tif (this.destroyed || this.disabled){\n  328  \t\treturn false;\n  329  \t}\n  ...\n  963  \tvar unit;\n  964  \n  965: \tif (this.destroyed || this.disabled){\n  966  \t\treturn false;\n  967  \t}\n  ...\n 1120  \tvar unit;\n 1121  \n 1122: \tif (this.destroyed || this.disabled){\n 1123  \t\treturn false;\n 1124  \t}\n ....\n 1749  \n 1750  Dual.prototype.switchMode = function(){\n 1751: \tif (this.destroyed || this.disabled){return;}\n 1752  \tthis.resetPowers();\n 1753  \tthis.cycleActiveWeapon();\n ....\n 2002  \tvar selected = false;\n 2003  \n 2004: \tif (this.destroyed || this.disabled){\n 2005  \t\treturn false;\n 2006  \t}\n ....\n 2298  \t\t}\n 2299  \t}\n 2300: \telse if (this.destroyed || this.disabled){\n 2301  \t\treturn false;\n 2302  \t}\n\n7 matches in 1 file\n\n\nSearching 65 files for \"fireRe\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  379  \t}\n  380  \n  381: \tthis.fireResolved = function(){\n  382  \t\tthis.draw();\n  383: \t\tconsole.log(\"fireResolved\");\n  384  \t}\n  385  \n  ...\n 1123  \t\tthis.animateFireOrders();\n 1124  \n 1125: \t\t//this.animateFire = true; this.fireResolved();\n 1126  \t}\n 1127  \n ....\n 1612  \t\t\t\tfxCtx.setTransform(1,0,0,1,0,0);\n 1613  \t\t\t\tfxCtx.clearRect(0, 0, res.x, res.y);\n 1614: \t\t\t\tgame.fireResolved();\n 1615  \t\t\t}\n 1616  \t\t}\n\n4 matches in 1 file\n\n\nSearching 65 files for \"0.3\"\n\nC:\\xampp\\htdocs\\fire\\classes.js:\n  839  \tthis.getFiringPosition = function(){\n  840  \t\treturn new Point(\n  841: \t\t\tthis.x + range(this.size * 0.3 * -1, this.size * 0.3),\n  842: \t\t\tthis.y + range(this.size * 0.3 * -1, this.size * 0.3)\n  843  \t\t)\n  844  \t}\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  254  \n  255  \t\tplanCtx.clearRect(0, 0, res.x, res.y);\n  256: \t\tplanCtx.globalAlpha = 0.3;\n  257  \t\tfor (var i = 0; i < this.deployArea.length; i++){\n  258  \t\t\tplanCtx.translate(cam.o.x, cam.o.y)\n  ...\n  873  \t\t\t\t\t\tdrawCircle(game.ships[i].x, game.ships[i].y, game.ships[i].size*0.2*sin/2, \"lighter\", \"lightBlue\");\n  874  \n  875: \t\t\t\t\t\tif (fraction >= 0.3){\n  876  \t\t\t\t\t\t\tctx.globalAlpha = fraction;\n  877  \t\t\t\t\t\t\tgame.ships[i].drawSelf();\n\nC:\\xampp\\htdocs\\fire\\graphics.js:\n  116  \tfxCtx.beginPath(); fxCtx.arc(x, y, sin, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = outer; fxCtx.fill();\n  117  \tfxCtx.beginPath(); fxCtx.arc(x, y, sin*0.66, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = mid; fxCtx.fill();\n  118: \tfxCtx.beginPath(); fxCtx.arc(x, y, sin*0.35, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = inner; fxCtx.fill();\n  119  \n  120  \tfxCtx.globalAlpha = 1;\n  ...\n  142  \n  143  \tvar fraction = fire.n/fire.m;\n  144: \tvar charge =  0.5 - 0.3*Math.cos(2*Math.PI*fraction);\n  145  \n  146  \tfxCtx.globalAlpha = 1;\n  ...\n  161  \tvar y = fire.tay + fire.ny * fire.n;\n  162  \n  163: \tif (fraction > 0.3){\n  164  \t\tvar beamW = 0.5 + 0.5 * Math.cos(2*Math.PI*fraction);\n  165  \t\tfxCtx.lineCap = \"round\";\t\n  ...\n  219  \t\t/*\n  220  \t\tgrad.addColorStop(0, \"white\");\n  221: \t\tgrad.addColorStop(0.3, \"yellow\");\n  222  \t\tgrad.addColorStop(0.8, \"orange\");\n  223  \t\tgrad.addColorStop(1, \"red\");\n\nC:\\xampp\\htdocs\\fire\\server\\salvo.php:\n  103  \t\t\tfor ($i = 0; $i < $fire->shots; $i++){\n  104  \t\t\t\t$fire->hitSystem[] = $this->getHitSystem($fire);\n  105: \t\t\t\t$fire->req = ceil($this->getHitChance($fire) * (1-($fire->weapon->getTraverseMod($fire)*0.3)) - $fire->weapon->getAccLoss($fire->dist));\n  106  \t\t\t}\n  107  \t\t\t\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  716          parent::__construct($id, $userid, $available, $status, $destroyed);\n  717  \t\t$this->hitTable = array(\n  718: \t\t\t\"Bridge\" => 0.35,\n  719  \t\t\t\"Engine\" => 0.5,\n  720  \t\t\t\"LifeSupport\" => 0.6,\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php:\n   41  \t\tif ($w <= 120){$this->armourMod = 0.8;}\n   42  \t\telse if ($w <= 180){$this->armourMod =  0.6;}\n   43: \t\telse $this->armourMod =  0.3;\n   44  \t}\n   45  \n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  101  \tthis.getFiringPosition = function(){\n  102  \t\treturn new Point(\n  103: \t\t\tthis.x + range(this.size * 0.3 * -1, this.size * 0.3),\n  104: \t\t\tthis.y + range(this.size * 0.3 * -1, this.size * 0.3)\n  105  \t\t)\n  106  \t}\n  ...\n  108  \tthis.getTargettingPos = function(){\n  109  \t\treturn new Point(\n  110: \t\t\tthis.x + range(this.size * 0.3 * -1, this.size * 0.3),\n  111: \t\t\tthis.y + range(this.size * 0.3 * -1, this.size * 0.3)\n  112  \t\t)\t\t\n  113  \t}\n  ...\n  523  \t\tfxCtx.scale(cam.z, cam.z);\n  524  \n  525: \t\t$(fxCanvas).css(\"opacity\", 0.3);\n  526  \t\tvar angle = this.getPlannedFacing(this.actions.length-1);\n  527  \t\tvar pos = this.getOffsetPos();\n\n22 matches across 7 files\n\n\nSearching 65 files for \"<font\"\n\nC:\\xampp\\htdocs\\fire\\classes.js:\n  404  \t\tvar td = tr.insertCell(-1);\n  405  \t\t\ttd.className = \"subHeader\";\n  406: \t\t\ttd.innerHTML = \"Targeting: <font color='red'>\" + target.name + \" #\" + target.id + \"</font> -- Distance: \"+ Math.ceil(getDistance({x: this.x, y: this.y}, {x: target.x, y: target.y})) + \"px\"; td.colSpan = 4;\n  407  \t\tdiv.appendChild(table);\n  408  \n  ...\n  782  \t\t\tvar tr = table.insertRow(-1);\n  783  \t\t\tif (game.phase < 3){\n  784: \t\t\t\ttr.insertCell(-1).innerHTML = \"<font color='red'>IMPACT IMMINENT</font>\";\n  785  \t\t\t}\n  786  \t\t\telse if (this.actions[this.actions.length-1].type == \"impact\"){\n  787: \t\t\t\ttr.insertCell(-1).innerHTML = \"<font color='red'>DID IMPACT</font>\";\n  788  \t\t\t}\n  789  \t\t}\n\nC:\\xampp\\htdocs\\fire\\index.php:\n   18  \t\t}\n   19  \t\telse {\n   20: \t\t\techo \"<font color='red'>Please enter valid login data</font>\";\n   21  \t\t}\n   22  \t}\n   23  \telse {\n   24: \t\techo \"<font color='red'>Please enter valid login data</font>\";\n   25  \t}\n   26  }\n\nC:\\xampp\\htdocs\\fire\\lobby.php:\n   43  \t\t\n   44  \tif ($playerName){\n   45: \t\t$welcome = \"<font color='red'>Welcome, \".$playerName.\", your player ID: \".$_SESSION['userid'].\"</font>\";\n   46  \t} \n   47  \telse {\n   48: \t\t$welcome = \"<font color='red'> No Playername for your ID: \".$_SESSION['userid'].\"found !</font>\";\n   49  \t}\n   50  \t\n   ..\n   83  \t\t\t$ongoingGamesElement .= \"<td>\";\n   84  \t\t\t$ongoingGamesElement .= \"<a href=game.php?gameid=\".$game['id'].\">\";\n   85: \t\t\t$ongoingGamesElement .= \"<font color='darkcyan'>\".$game[\"name\"].\"</font>\";\n   86  \t\t\t$ongoingGamesElement .= \"</a>\";\n   87  \t\t\t$ongoingGamesElement .= \"</td>\";\n   ..\n  122  \t\t\t$openGamesElement .= \"<td width='80%'>\";\n  123  \t\t\t$openGamesElement .= \"<a href=gameSetup.php?gameid=\".$game['id'].\">\";\n  124: \t\t\t$openGamesElement .= \"<font color='darkcyan'>\".$game[\"name\"].\"</font>\";\n  125  \t\t\t$openGamesElement .= \"</a>\";\n  126  \t\t\t$openGamesElement .= \"</td>\";\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 1223  \t\t\t$(table).append($(\"<tr>\").append($(\"<th>\").css(\"border-top\", \"1px solid white\").attr(\"colSpan\", 2).html(this.ammo.name)));\n 1224  \t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").attr(\"colSpan\", 2).html(this.ammo.display)));\n 1225: \t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Ammo amount\")).append($(\"<td>\").html(\"<font color='red'>\" + this.getRemainingAmmo() + \"</font> / \" + this.getMaxAmmo()).attr(\"id\", \"ammo\")));\n 1226  \t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Tracking\")).append($(\"<td>\").html(this.getTraverseRating() + \" / \" + game.getUnitType(this.getTraverseRating()))));\n 1227  \t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Impulse\")).append($(\"<td>\").html(this.getBallImpulse())));\n 1228  \t\t}\n 1229: \t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Launch Rate\")).append($(\"<td>\").html(\"<font color='red'>\" + this.getOutput() + \"</font> - max \" + this.effiency)\n 1230  \t\t\t\t.attr(\"id\", \"detailsShots\")\n 1231  \t\t\t));\n ....\n 2111  Launcher.prototype.updateGUI = function(){\n 2112  \t$(\"#systemDetailsDiv\")\n 2113: \t\t.find(\"#detailsShots\").html(\"<font color='red'>\" + this.getOutput() + \"</font> - max \" + this.effiency)\n 2114  \t\t\t.end()\n 2115: \t\t.find(\"#ammo\").html(\"<font color='red'>\" + this.getRemainingAmmo() + \"</font> / \" + this.getMaxAmmo());\n 2116  \n 2117  \n\n13 matches across 4 files\n\n\nSearching 65 files for \"handleMouseMove\"\n\nC:\\xampp\\htdocs\\fire\\script.js:\n   12  \n   13  \t$(\"#mouseCanvas\").mousedown(handleMouseDown);\n   14: \t$(\"#mouseCanvas\").mousemove(function(e){handleMouseMove(e);});\n   15  \t$(\"#mouseCanvas\").mouseup(function(e){handleMouseUp(e);});\n   16  \t$(\"#mouseCanvas\").mouseout(function(e){handleMouseOut(e);});\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n  482  }\n  483  \n  484: function handleMouseMove(e){\n  485    if(!cam.scroll){return;}\n  486    e.preventDefault();\n\n2 matches across 2 files\n\n\nSearching 65 files for \"cam.scrol\"\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n  459  \tif (e.originalEvent.button == 0){\n  460  \t\tcanvasMouseClick(e);\n  461: \t\tcam.scroll = 1;\n  462  \t\tcam.sx = e.clientX;\n  463  \t\tcam.sy = e.clientY;\n  ...\n  479  \te.preventDefault();\n  480  \te.stopPropagation();\n  481: \tcam.scroll = 0;\n  482  }\n  483  \n  484  function handleMouseMove(e){\n  485:   if(!cam.scroll){return;}\n  486    e.preventDefault();\n  487    e.stopPropagation();\n\n3 matches in 1 file\n\n\nSearching 65 files for \"date\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  839  \t\t}\n  840  \t\tsetFPS(60);\n  841: \t\twindow.then = Date.now();\n  842  \t\twindow.startTime = then;\n  843  \t\tthis.animating = true;\n  ...\n  848  \tthis.animateDeployment = function(){\n  849  \t\tanim = window.requestAnimationFrame(game.animateDeployment.bind(this));\n  850: \t\twindow.now = Date.now();\t\t\n  851  \t\twindow.elapsed = window.now - window.then;\n  852  \t\tif (elapsed > window.fpsInterval){\n  ...\n  994  \t\t}\n  995  \n  996: \t\twindow.then = Date.now();\n  997  \t\twindow.startTime = then;\n  998  \t\tgame.animateShipMovement();\n  ...\n 1001  \tthis.animateShipMovement = function(){\n 1002  \t\tanim = window.requestAnimationFrame(game.animateShipMovement.bind(this));\n 1003: \t\twindow.now = Date.now();\t\t\n 1004  \t\twindow.elapsed = window.now - window.then;\n 1005  \t\tif (elapsed > window.fpsInterval){\n ....\n 1113  \t\t$(\"#combatlogWrapper\").show();\n 1114  \t\tsetFPS(45);\n 1115: \t\twindow.then = Date.now();\n 1116  \t\twindow.startTime = then;\n 1117  \t\t\n ....\n 1278  \tthis.animateFireOrders = function(){\n 1279  \t\tanim = window.requestAnimationFrame(game.animateFireOrders.bind(this));\n 1280: \t\twindow.now = Date.now();\t\t\n 1281  \t\twindow.elapsed = window.now - window.then;\n 1282  \t\tif (elapsed > window.fpsInterval){\n ....\n 1565  \tthis.animateShipExplosions = function(){\n 1566  \t\tanim = window.requestAnimationFrame(game.animateShipExplosions.bind(this));\n 1567: \t\twindow.now = Date.now();\t\t\n 1568  \t\twindow.elapsed = window.now - window.then;\n 1569  \t\tif (elapsed > window.fpsInterval){\n\nC:\\xampp\\htdocs\\fire\\index.php:\n   11  \tif ( $_POST[\"username\"] != \"\" && $_POST[\"password\"] != \"\" ){\n   12  \t\t$dbManager = DBManager::app();\n   13: \t\t$data = $dbManager->validateLogin($_POST[\"username\"], $_POST[\"password\"]);\n   14  \t\tif ($data){\n   15  \t\t\t$_SESSION[\"userid\"] = $data[\"id\"];\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n  120  resolveFireOrder ID 126, shooter: Flight #7 vs Primus #4, w: LinkedParticleGun #8\n  121  doDamage, weapon: LinkedParticleGun, target: 4/-1\n  122: DB updateFireOrders: 55\n  123  resolveFireOrder ID 142, shooter: Primus #4 vs Salvo #15, w: LightIon #20\n  124  resolveFireOrder ID 141, shooter: Primus #4 vs Salvo #15, w: LightIon #19\n  125  resolveFireOrder ID 140, shooter: Primus #4 vs Salvo #15, w: LightIon #18\n  126  resolveFireOrder ID 139, shooter: Primus #4 vs Salvo #15, w: LightIon #17\n  127: DB updateFireOrders: 4\n  128  resolveBallisticActions: 4\n  129  resolveBallisticFireOrder ID 167, shooter: Salvo #10 vs Demos #6, w: 0\n  ...\n  140  doDamage, weapon: Javelin, target: 7/15\n  141   => target system Aurora #15 DESTROYED ----  rem: 6, doing: 30, OK for: 24 dmg\n  142: DB updateFireOrders: 2\n  143  deleteDogfights: 0\n  144   => DB insertDamageEntries: 79\n  ...\n  230  resolveFireOrder ID 127, shooter: Flight #7 vs Primus #4, w: LinkedParticleGun #10\n  231  doDamage, weapon: LinkedParticleGun, target: 4/21\n  232: DB updateFireOrders: 46\n  233  resolveFireOrder ID 134, shooter: Primus #4 vs Salvo #15, w: LightIon #10\n  234  resolveFireOrder ID 133, shooter: Primus #4 vs Salvo #15, w: LightIon #9\n  235  doDamage, weapon: LightIon, target: 15/0\n  236  resolveFireOrder ID 132, shooter: Primus #4 vs Salvo #15, w: LightIon #8\n  237: DB updateFireOrders: 3\n  238  resolveBallisticActions: 4\n  239  resolveBallisticFireOrder ID 157, shooter: Salvo #15 vs Primus #4, w: 0\n  ...\n  257  doDamage, weapon: Javelin, target: 7/5\n  258   => target system Aurora #5 DESTROYED ----  rem: 14, doing: 35, OK for: 21 dmg\n  259: DB updateFireOrders: 3\n  260  deleteDogfights: 0\n  261   => DB insertDamageEntries: 74\n  ...\n  344  doDamage, weapon: LinkedParticleGun, target: 4/-1\n  345  resolveFireOrder ID 131, shooter: Flight #7 vs Primus #4, w: LinkedParticleGun #18\n  346: DB updateFireOrders: 28\n  347  resolveFireOrder ID 134, shooter: Primus #4 vs Salvo #15, w: LightIon #10\n  348  doDamage, weapon: LightIon, target: 15/2\n  ...\n  351  resolveFireOrder ID 132, shooter: Primus #4 vs Salvo #15, w: LightIon #8\n  352  doDamage, weapon: LightIon, target: 15/3\n  353: DB updateFireOrders: 3\n  354  resolveBallisticActions: 4\n  355  resolveBallisticFireOrder ID 139, shooter: Salvo #15 vs Primus #4, w: 0\n  ...\n  367  doDamage, weapon: Javelin, target: 7/5\n  368   => target system Aurora #5 DESTROYED ----  rem: 6, doing: 38, OK for: 32 dmg\n  369: DB updateFireOrders: 3\n  370  deleteDogfights: 0\n  371   => DB insertDamageEntries: 62\n\nC:\\xampp\\htdocs\\fire\\postGameData.php:\n   28  \t}\n   29  \telse if ($_POST[\"type\"] == \"buyInitialFleet\") {\n   30: \t\t$rem = $manager->validateFleetCost($_POST[\"ships\"]);\n   31  \t\tif ($rem >= 0){\n   32  \t\t\tif ($dbManager->processInitialBuy($_POST[\"userid\"], $_POST[\"gameid\"], $_POST[\"ships\"], $rem, $_POST[\"ships\"][0][\"faction\"])) {\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n   42  \t}\n   43  \n   44: \tpublic function update($sql){\n   45  \t\t\n   46  \t\t//Debug::log(\"upd\");\n   ..\n   97  \t}\n   98  \t\n   99: \tpublic function validateLogin($name, $pass){\t\t\n  100  \t\t//Debug::log(\"validating login\");\n  101  \t\t$stmt = $this->connection->prepare(\"\n  ...\n  468  \n  469  \t\t$stmt = $this->connection->prepare(\"\n  470: \t\t\tUPDATE games \n  471  \t\t\tSET \n  472  \t\t\t\tstatus = :status,\n  ...\n  507  \t\t\tfor ($i = 0; $i < sizeof($flights); $i++){\n  508  \t\t\t\t$this->insertFlightElements($flights[$i]);\n  509: \t\t\t\t$this->updateSystemLoad($flights[$i][\"launchdata\"]);\n  510  \t\t\t\t$this->insertActionsForShip($flights[$i][\"id\"], $flights[$i][\"actions\"]);\n  511  \t\t\t}\n  ...\n  537  \t}\t\n  538  \n  539: \tpublic function updateSystemLoad($data){\n  540: \t\t//Debug::log(\"updateSystemLoad\");\n  541  \t\t$stmt = $this->connection->prepare(\"\n  542: \t\t\tUPDATE loads\n  543  \t\t\tSET amount = amount - :amount\n  544  \t\t\tWHERE shipid = :shipid\n  ...\n  565  \t\t//Debug::log(\"setUnitStatusDB\");\n  566  \t\t$stmt = $this->connection->prepare(\"\n  567: \t\t\tUPDATE units \n  568  \t\t\tSET\n  569  \t\t\t\tstatus = :status\n  ...\n  586  \t\tDebug::log(\"destroyUnitsDB\");\n  587  \t\t$stmt = $this->connection->prepare(\"\n  588: \t\t\tUPDATE units \n  589  \t\t\tSET \n  590  \t\t\t\tdestroyed = :destroyed\n  ...\n  816  \t}\n  817  \n  818: \tpublic function updateFireOrders($fires){\n  819: \t\tDebug::log(\"DB updateFireOrders: \".sizeof($fires));\n  820  \t\t$stmt = $this->connection->prepare(\"\n  821: \t\t\tUPDATE fireorders\n  822  \t\t\tSET\n  823  \t\t\t\treq = :req,\n  ...\n  847  \t}\n  848  \n  849: \tpublic function updateBallisticFireOrder($fires){\n  850: \t\tDebug::log(\"DB updateBallisticFireOrder\");\n  851  \t\t$stmt = $this->connection->prepare(\"\n  852: \t\t\tUPDATE fireorders\n  853  \t\t\tSET\n  854  \t\t\t\tresolved = :resolved\n  ...\n 1132  \tpublic function DBalterReinforcementPoints($userid, $gameid, $points){\n 1133  \t\t$stmt = $this->connection->prepare(\"\n 1134: \t\t\tUPDATE reinforce \n 1135  \t\t\tSET \n 1136  \t\t\t\tpoints = points + :points\n ....\n 1157  \n 1158  \t\t$stmt = $this->connection->prepare(\"\n 1159: \t\t\tUPDATE playerstatus \n 1160  \t\t\tSET \n 1161  \t\t\t\tturn = :turn,\n ....\n 1184  \tpublic function setReinforceFaction($userid, $gameid, $faction){\n 1185  \t\t$stmt = $this->connection->prepare(\"\n 1186: \t\t\tUPDATE playerstatus \n 1187  \t\t\tSET faction = :faction\n 1188  \t\t\tWHERE\n ....\n 1206  \t\t//Debug::log(\"addReinforceValue: \".$add);\n 1207  \t\t$stmt = $this->connection->prepare(\"\n 1208: \t\t\tUPDATE playerstatus \n 1209  \t\t\tSET\tvalue = value + :add\n 1210  \t\t\tWHERE\n ....\n 1454  \t\t$ships = $this->getActiveUnits($gameid, $turn);\n 1455  \t\t$stmt = $this->connection->prepare(\"\n 1456: \t\t\tUPDATE actions\n 1457  \t\t\tSET resolved = 1\n 1458  \t\t\tWHERE \n ....\n 1483  \n 1484  \t\t$stmt = $this->connection->prepare(\"\n 1485: \t\t\tUPDATE actions\n 1486  \t\t\tSET resolved = 1\n 1487  \t\t\tWHERE \n ....\n 1647  \t}\n 1648  \n 1649: \tpublic function updateAllPlayerStatusForGame($gameid, $turn, $status){\n 1650: \t\tDebug::log(\"updateAllPlayerStatusForGame\");\n 1651  \n 1652  \t\t$stmt = $this->connection->prepare(\"\n 1653: \t\t\tUPDATE playerstatus\n 1654  \t\t\tSET \n 1655  \t\t\t\tturn = :turn,\n ....\n 1677  \n 1678  \t\t$stmt = $this->connection->prepare(\"\n 1679: \t\t\tUPDATE games\n 1680  \t\t\tSET\tturn = :turn\n 1681  \t\t\tWHERE gameid = :gameid\n ....\n 1695  \t\t//Debug::log(\"setGameTurnPhase: \".$turn.\"/\".$phase);\n 1696  \t\t$stmt = $this->connection->prepare(\"\n 1697: \t\t\tUPDATE games\n 1698  \t\t\tSET\n 1699  \t\t\t\tphase = :phase,\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n   85  \t}\n   86  \n   87: \tpublic function validateFleetCost($ships){\n   88  \t\t$used = 0;\n   89  \n   ..\n  378  \t\tif (sizeof($balls)){\n  379  \t\t\tDBManager::app()->insertBallistics($this->gameid, $balls);\n  380: \t\t\tDBManager::app()->updateBallisticFireOrder($fires);\n  381  \t\t}\n  382  \t}\n  ...\n  590  \t\t$this->resolveShipFireOrders();\n  591  \t\t$this->resolveFighterFireOrders();\n  592: \t\t$this->updateFireOrders($this->fires);\n  593  \t}\n  594  \n  ...\n  923  \t\t\t}\n  924  \t\t}\n  925: \t\t$this->updateFireOrders($this->intercepts);\n  926  \t}\n  927  \n  ...\n  964  \t\t\t\t}\n  965  \t\t\t}\n  966: \t\t\t$this->updateFireOrders($fires);\n  967  \t\t}\n  968  \t}\n  ...\n  993  \t}\n  994  \n  995: \tpublic function updateFireOrders($fires){\n  996  \t\tif ($fires){\n  997: \t\t\tDBManager::app()->updateFireOrders($fires);\n  998  \t\t}\n  999  \t}\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  897  \t\t}\n  898  \t\tthis.drawDelayEstimator();\n  899: \t\tthis.updateTurnElements();\n  900  \t}\n  901  \t\n  ...\n  907  \t\t}\n  908  \t\tthis.drawDelayEstimator();\n  909: \t\tthis.updateTurnElements();\n  910  \t}\n  911  \n  912: \tthis.updateTurnElements = function(){\n  913  \t\tvar canShorten = this.canShortenTurn();\n  914  \t\tvar canUndoShorten = this.canUndoShortenTurn();\n  ...\n 1013  \t\tif (this.canTurn()){\n 1014  \t\t\tthis.drawTurnUI();\n 1015: \t\t\tthis.updateDiv();\n 1016  \t\t}\n 1017  \t}\n ....\n 1145  \t\n 1146  \t\tthis.drawDelayEstimator();\n 1147: \t\tthis.updateTurnElements();\n 1148  \n 1149  \t}\n ....\n 1756  \t}\n 1757  \t\n 1758: \tthis.updateDiv = function(){\n 1759  \t\tvar divs = document.getElementsByClassName(\"shipDiv\");\n 1760  \t\tfor (var i = 0; i < divs.length; i++){\n ....\n 1774  \t}\n 1775  \n 1776: \tthis.updateDivPower = function(system){\n 1777  \t\tvar reactor = this.getSystemByName(\"Reactor\");\n 1778  \t\tvar s = reactor.getOutput();\n ....\n 1780  \n 1781  \t\t$(system.element).find(\".outputMask\").html(system.getOutput());\n 1782: \t\tsystem.update();\n 1783  \t}\n 1784  \n 1785: \tthis.updateNonPowerOutput = function(system){\n 1786  \t\tvar divs = document.getElementsByClassName(\"shipDiv\");\n 1787  \t\tfor (var i = 0; i < divs.length; i++){\n ....\n 1796  \t\t\t\tif ($(this).data(\"systemId\") == system.id){\n 1797  \t\t\t\t\t$(this).find(\".outputMask\").html(system.getOutput());\n 1798: \t\t\t\t\tsystem.update();\n 1799  \t\t\t\t\treturn;\n 1800  \t\t\t\t}\n ....\n 1903  \t\tthis.setSystemWindow();\n 1904  \t\tthis.resetDetailsDiv();\n 1905: \t\tgame.getUnitById(this.parentId).updateDivPower(this);\n 1906  \t}\n 1907  \n ....\n 2023  \t\tthis.resetTranslation();\n 2024  \t\tthis.checkSensorHighlight();\n 2025: \t\tthis.updateDiv();\n 2026  \t}\n 2027  \n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  358  \t\tthis.disabled = 0;\n  359  \t\tthis.setTableRow();\n  360: \t\tgame.getUnitById(this.parentId).updateDivPower(this);\n  361  \t}\n  362  }\n  ...\n  382  \t\tthis.setTableRow();\n  383  \t\tthis.setSystemBorder();\n  384: \t\tgame.getUnitById(this.parentId).updateDivPower(this);\n  385  \t}\n  386  }\n  ...\n  390  \t\tthis.disabled = 0;\n  391  \t\tthis.setTableRow();\n  392: \t\tgame.getUnitById(this.parentId).updateDivPower(this);\n  393  \t}\n  394  }\n  ...\n  397  \tif (ship.canBoost(this)){\n  398  \t\tthis.doBoost();\n  399: \t\tship.updateDivPower(this);\n  400  \t\treturn true;\n  401  \t}\n  ...\n  405  \tif (this.canUnboost()){\n  406  \t\tthis.doUnboost()\n  407: \t\tgame.getUnitById(this.parentId).updateDivPower(this);\n  408  \t\treturn true;\n  409  \t}\n  ...\n  578  \treturn false;\n  579  }\n  580: System.prototype.update = function(){\n  581: \tthis.updateSystemDetailsDiv();\n  582: \tgame.getUnitById(this.parentId).updateDiv();\n  583  }\n  584  \n  ...\n  824  }\n  825  \n  826: PrimarySystem.prototype.updateSystemDetailsDiv = function(){\n  827  \tvar output = this.getOutputString();\n  828  \tvar powerReq = this.getPowerReq();\n  ...\n 1274  }\n 1275  \n 1276: Weapon.prototype.updateSystemDetailsDiv = function(){\n 1277  \tvar dmg = this.getDamage();\n 1278  \t$(\"#systemDetailsDiv\").find(\"tr\").each(function(i){\n ....\n 1765  \tthis.setSystemWindow();\n 1766  \tthis.resetDetailsDiv();\n 1767: \tgame.getUnitById(this.parentId).updateDivPower(this);\n 1768  }\n 1769  \n ....\n 1839  }\n 1840  \n 1841: Dual.prototype.update = function(){\n 1842: \tthis.getActiveWeapon().updateSystemDetailsDiv();\n 1843: \tgame.getUnitById(this.parentId).updateDiv();\n 1844  }\n 1845  \n ....\n 2090  \t\tthis.shots++;\n 2091  \t\tthis.adjustFireOrder();\n 2092: \t\tthis.updateGUI();\n 2093  \t}\n 2094  }\n ....\n 2098  \t\tthis.shots--;\n 2099  \t\tthis.adjustFireOrder();\n 2100: \t\tthis.updateGUI();\n 2101  \t}\n 2102  }\n ....\n 2109  }\n 2110  \n 2111: Launcher.prototype.updateGUI = function(){\n 2112  \t$(\"#systemDetailsDiv\")\n 2113  \t\t.find(\"#detailsShots\").html(\"<font color='red'>\" + this.getOutput() + \"</font> - max \" + this.effiency)\n ....\n 2127  \t\t$(div).find(\"#capacity\").html(this.output);\n 2128  \t\t$(div).data(\"systemid\", this.id).css(\"top\", e.clientY + 30).css(\"left\", e.clientX - 150).removeClass(\"disabled\");\n 2129: \t\tthis.updateTotals();\n 2130  \t}\n 2131  \telse {\n ....\n 2166  \t\t\tthis.loads[index].amount++;\n 2167  \t\t}\n 2168: \t\tthis.updateTotals();\n 2169  \t}\n 2170  }\n ....\n 2180  \t\t\t\t\tthis.loads[i].amount -= 1;\n 2181  \t\t\t\t}\n 2182: \t\t\t\tthis.updateTotals();\n 2183  \t\t\t\treturn;\n 2184  \t\t\t}\n ....\n 2187  }\n 2188  \n 2189: Launcher.prototype.updateTotals = function(){\n 2190  \tvar amount = 0;\n 2191  \tvar tCost = 0;\n ....\n 2331  }\n 2332  \n 2333: Hangar.prototype.update = function(){\n 2334: \tgame.getUnitById(this.parentId).updateDiv();\n 2335  }\n 2336  \n ....\n 2568  \t\t\tif (tMass + this.loads[i].mass <= this.output){\n 2569  \t\t\t\tthis.loads[i].amount += add;\n 2570: \t\t\t\tthis.updateTotals();\n 2571  \t\t\t\treturn;\n 2572  \t\t\t}\n ....\n 2587  \t\t\t\t\tthis.loads[i].amount -= 1;\n 2588  \t\t\t\t}\n 2589: \t\t\t\tthis.updateTotals();\n 2590  \t\t\t\treturn;\n 2591  \t\t\t}\n ....\n 2594  }\n 2595  \n 2596: Hangar.prototype.updateTotals = function(){\n 2597  \tvar amount = 0;\n 2598  \tvar tMass = 0;\n ....\n 2664  \t\t$(div).find(\"#capacity\").html(this.output);\n 2665  \t\t$(div).data(\"systemid\", this.id).css(\"top\", e.clientY + 30).css(\"left\", e.clientX - 150).removeClass(\"disabled\");\n 2666: \t\tthis.updateTotals();\n 2667  \t}\n 2668  \telse {\n\n90 matches across 8 files\n\n\nSearching 12 files for \"date\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  839  \t\t}\n  840  \t\tsetFPS(60);\n  841: \t\twindow.then = Date.now();\n  842  \t\twindow.startTime = then;\n  843  \t\tthis.animating = true;\n  ...\n  848  \tthis.animateDeployment = function(){\n  849  \t\tanim = window.requestAnimationFrame(game.animateDeployment.bind(this));\n  850: \t\twindow.now = Date.now();\t\t\n  851  \t\twindow.elapsed = window.now - window.then;\n  852  \t\tif (elapsed > window.fpsInterval){\n  ...\n  994  \t\t}\n  995  \n  996: \t\twindow.then = Date.now();\n  997  \t\twindow.startTime = then;\n  998  \t\tgame.animateShipMovement();\n  ...\n 1001  \tthis.animateShipMovement = function(){\n 1002  \t\tanim = window.requestAnimationFrame(game.animateShipMovement.bind(this));\n 1003: \t\twindow.now = Date.now();\t\t\n 1004  \t\twindow.elapsed = window.now - window.then;\n 1005  \t\tif (elapsed > window.fpsInterval){\n ....\n 1113  \t\t$(\"#combatlogWrapper\").show();\n 1114  \t\tsetFPS(45);\n 1115: \t\twindow.then = Date.now();\n 1116  \t\twindow.startTime = then;\n 1117  \t\t\n ....\n 1278  \tthis.animateFireOrders = function(){\n 1279  \t\tanim = window.requestAnimationFrame(game.animateFireOrders.bind(this));\n 1280: \t\twindow.now = Date.now();\t\t\n 1281  \t\twindow.elapsed = window.now - window.then;\n 1282  \t\tif (elapsed > window.fpsInterval){\n ....\n 1565  \tthis.animateShipExplosions = function(){\n 1566  \t\tanim = window.requestAnimationFrame(game.animateShipExplosions.bind(this));\n 1567: \t\twindow.now = Date.now();\t\t\n 1568  \t\twindow.elapsed = window.now - window.then;\n 1569  \t\tif (elapsed > window.fpsInterval){\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n  466  \t\tcam.sx = e.clientX;\n  467  \t\tcam.sy = e.clientY;\n  468: \t\twindow.downTime = Date.now();\n  469  \n  470  \t\tif (aUnit){\n  ...\n  476  function handleMouseUp(e){\n  477  \tconsole.log(\"UP\");\n  478: \tconsole.log(Date.now() - window.downTime);\n  479  \te.preventDefault();\n  480  \te.stopPropagation();\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  897  \t\t}\n  898  \t\tthis.drawDelayEstimator();\n  899: \t\tthis.updateTurnElements();\n  900  \t}\n  901  \t\n  ...\n  907  \t\t}\n  908  \t\tthis.drawDelayEstimator();\n  909: \t\tthis.updateTurnElements();\n  910  \t}\n  911  \n  912: \tthis.updateTurnElements = function(){\n  913  \t\tvar canShorten = this.canShortenTurn();\n  914  \t\tvar canUndoShorten = this.canUndoShortenTurn();\n  ...\n 1013  \t\tif (this.canTurn()){\n 1014  \t\t\tthis.drawTurnUI();\n 1015: \t\t\tthis.updateDiv();\n 1016  \t\t}\n 1017  \t}\n ....\n 1145  \t\n 1146  \t\tthis.drawDelayEstimator();\n 1147: \t\tthis.updateTurnElements();\n 1148  \n 1149  \t}\n ....\n 1756  \t}\n 1757  \t\n 1758: \tthis.updateDiv = function(){\n 1759  \t\tvar divs = document.getElementsByClassName(\"shipDiv\");\n 1760  \t\tfor (var i = 0; i < divs.length; i++){\n ....\n 1774  \t}\n 1775  \n 1776: \tthis.updateDivPower = function(system){\n 1777  \t\tvar reactor = this.getSystemByName(\"Reactor\");\n 1778  \t\tvar s = reactor.getOutput();\n ....\n 1780  \n 1781  \t\t$(system.element).find(\".outputMask\").html(system.getOutput());\n 1782: \t\tsystem.update();\n 1783  \t}\n 1784  \n 1785: \tthis.updateNonPowerOutput = function(system){\n 1786  \t\tvar divs = document.getElementsByClassName(\"shipDiv\");\n 1787  \t\tfor (var i = 0; i < divs.length; i++){\n ....\n 1796  \t\t\t\tif ($(this).data(\"systemId\") == system.id){\n 1797  \t\t\t\t\t$(this).find(\".outputMask\").html(system.getOutput());\n 1798: \t\t\t\t\tsystem.update();\n 1799  \t\t\t\t\treturn;\n 1800  \t\t\t\t}\n ....\n 1903  \t\tthis.setSystemWindow();\n 1904  \t\tthis.resetDetailsDiv();\n 1905: \t\tgame.getUnitById(this.parentId).updateDivPower(this);\n 1906  \t}\n 1907  \n ....\n 2023  \t\tthis.resetTranslation();\n 2024  \t\tthis.checkSensorHighlight();\n 2025: \t\tthis.updateDiv();\n 2026  \t}\n 2027  \n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  358  \t\tthis.disabled = 0;\n  359  \t\tthis.setTableRow();\n  360: \t\tgame.getUnitById(this.parentId).updateDivPower(this);\n  361  \t}\n  362  }\n  ...\n  382  \t\tthis.setTableRow();\n  383  \t\tthis.setSystemBorder();\n  384: \t\tgame.getUnitById(this.parentId).updateDivPower(this);\n  385  \t}\n  386  }\n  ...\n  390  \t\tthis.disabled = 0;\n  391  \t\tthis.setTableRow();\n  392: \t\tgame.getUnitById(this.parentId).updateDivPower(this);\n  393  \t}\n  394  }\n  ...\n  397  \tif (ship.canBoost(this)){\n  398  \t\tthis.doBoost();\n  399: \t\tship.updateDivPower(this);\n  400  \t\treturn true;\n  401  \t}\n  ...\n  405  \tif (this.canUnboost()){\n  406  \t\tthis.doUnboost()\n  407: \t\tgame.getUnitById(this.parentId).updateDivPower(this);\n  408  \t\treturn true;\n  409  \t}\n  ...\n  578  \treturn false;\n  579  }\n  580: System.prototype.update = function(){\n  581: \tthis.updateSystemDetailsDiv();\n  582: \tgame.getUnitById(this.parentId).updateDiv();\n  583  }\n  584  \n  ...\n  824  }\n  825  \n  826: PrimarySystem.prototype.updateSystemDetailsDiv = function(){\n  827  \tvar output = this.getOutputString();\n  828  \tvar powerReq = this.getPowerReq();\n  ...\n 1274  }\n 1275  \n 1276: Weapon.prototype.updateSystemDetailsDiv = function(){\n 1277  \tvar dmg = this.getDamage();\n 1278  \t$(\"#systemDetailsDiv\").find(\"tr\").each(function(i){\n ....\n 1765  \tthis.setSystemWindow();\n 1766  \tthis.resetDetailsDiv();\n 1767: \tgame.getUnitById(this.parentId).updateDivPower(this);\n 1768  }\n 1769  \n ....\n 1839  }\n 1840  \n 1841: Dual.prototype.update = function(){\n 1842: \tthis.getActiveWeapon().updateSystemDetailsDiv();\n 1843: \tgame.getUnitById(this.parentId).updateDiv();\n 1844  }\n 1845  \n ....\n 2090  \t\tthis.shots++;\n 2091  \t\tthis.adjustFireOrder();\n 2092: \t\tthis.updateGUI();\n 2093  \t}\n 2094  }\n ....\n 2098  \t\tthis.shots--;\n 2099  \t\tthis.adjustFireOrder();\n 2100: \t\tthis.updateGUI();\n 2101  \t}\n 2102  }\n ....\n 2109  }\n 2110  \n 2111: Launcher.prototype.updateGUI = function(){\n 2112  \t$(\"#systemDetailsDiv\")\n 2113  \t\t.find(\"#detailsShots\").html(\"<font color='red'>\" + this.getOutput() + \"</font> - max \" + this.effiency)\n ....\n 2127  \t\t$(div).find(\"#capacity\").html(this.output);\n 2128  \t\t$(div).data(\"systemid\", this.id).css(\"top\", e.clientY + 30).css(\"left\", e.clientX - 150).removeClass(\"disabled\");\n 2129: \t\tthis.updateTotals();\n 2130  \t}\n 2131  \telse {\n ....\n 2166  \t\t\tthis.loads[index].amount++;\n 2167  \t\t}\n 2168: \t\tthis.updateTotals();\n 2169  \t}\n 2170  }\n ....\n 2180  \t\t\t\t\tthis.loads[i].amount -= 1;\n 2181  \t\t\t\t}\n 2182: \t\t\t\tthis.updateTotals();\n 2183  \t\t\t\treturn;\n 2184  \t\t\t}\n ....\n 2187  }\n 2188  \n 2189: Launcher.prototype.updateTotals = function(){\n 2190  \tvar amount = 0;\n 2191  \tvar tCost = 0;\n ....\n 2331  }\n 2332  \n 2333: Hangar.prototype.update = function(){\n 2334: \tgame.getUnitById(this.parentId).updateDiv();\n 2335  }\n 2336  \n ....\n 2568  \t\t\tif (tMass + this.loads[i].mass <= this.output){\n 2569  \t\t\t\tthis.loads[i].amount += add;\n 2570: \t\t\t\tthis.updateTotals();\n 2571  \t\t\t\treturn;\n 2572  \t\t\t}\n ....\n 2587  \t\t\t\t\tthis.loads[i].amount -= 1;\n 2588  \t\t\t\t}\n 2589: \t\t\t\tthis.updateTotals();\n 2590  \t\t\t\treturn;\n 2591  \t\t\t}\n ....\n 2594  }\n 2595  \n 2596: Hangar.prototype.updateTotals = function(){\n 2597  \tvar amount = 0;\n 2598  \tvar tMass = 0;\n ....\n 2664  \t\t$(div).find(\"#capacity\").html(this.output);\n 2665  \t\t$(div).data(\"systemid\", this.id).css(\"top\", e.clientY + 30).css(\"left\", e.clientX - 150).removeClass(\"disabled\");\n 2666: \t\tthis.updateTotals();\n 2667  \t}\n 2668  \telse {\n\n48 matches across 4 files\n\n\nSearching 12 files for \"Date\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  839  \t\t}\n  840  \t\tsetFPS(60);\n  841: \t\twindow.then = Date.now();\n  842  \t\twindow.startTime = then;\n  843  \t\tthis.animating = true;\n  ...\n  848  \tthis.animateDeployment = function(){\n  849  \t\tanim = window.requestAnimationFrame(game.animateDeployment.bind(this));\n  850: \t\twindow.now = Date.now();\t\t\n  851  \t\twindow.elapsed = window.now - window.then;\n  852  \t\tif (elapsed > window.fpsInterval){\n  ...\n  994  \t\t}\n  995  \n  996: \t\twindow.then = Date.now();\n  997  \t\twindow.startTime = then;\n  998  \t\tgame.animateShipMovement();\n  ...\n 1001  \tthis.animateShipMovement = function(){\n 1002  \t\tanim = window.requestAnimationFrame(game.animateShipMovement.bind(this));\n 1003: \t\twindow.now = Date.now();\t\t\n 1004  \t\twindow.elapsed = window.now - window.then;\n 1005  \t\tif (elapsed > window.fpsInterval){\n ....\n 1113  \t\t$(\"#combatlogWrapper\").show();\n 1114  \t\tsetFPS(45);\n 1115: \t\twindow.then = Date.now();\n 1116  \t\twindow.startTime = then;\n 1117  \t\t\n ....\n 1278  \tthis.animateFireOrders = function(){\n 1279  \t\tanim = window.requestAnimationFrame(game.animateFireOrders.bind(this));\n 1280: \t\twindow.now = Date.now();\t\t\n 1281  \t\twindow.elapsed = window.now - window.then;\n 1282  \t\tif (elapsed > window.fpsInterval){\n ....\n 1565  \tthis.animateShipExplosions = function(){\n 1566  \t\tanim = window.requestAnimationFrame(game.animateShipExplosions.bind(this));\n 1567: \t\twindow.now = Date.now();\t\t\n 1568  \t\twindow.elapsed = window.now - window.then;\n 1569  \t\tif (elapsed > window.fpsInterval){\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n  466  \t\tcam.sx = e.clientX;\n  467  \t\tcam.sy = e.clientY;\n  468: \t\twindow.downTime = Date.now();\n  469  \n  470  \t\tif (aUnit){\n  ...\n  476  function handleMouseUp(e){\n  477  \tconsole.log(\"UP\");\n  478: \tconsole.log((Date.now() - window.downTime)/1000);\n  479  \te.preventDefault();\n  480  \te.stopPropagation();\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  897  \t\t}\n  898  \t\tthis.drawDelayEstimator();\n  899: \t\tthis.updateTurnElements();\n  900  \t}\n  901  \t\n  ...\n  907  \t\t}\n  908  \t\tthis.drawDelayEstimator();\n  909: \t\tthis.updateTurnElements();\n  910  \t}\n  911  \n  912: \tthis.updateTurnElements = function(){\n  913  \t\tvar canShorten = this.canShortenTurn();\n  914  \t\tvar canUndoShorten = this.canUndoShortenTurn();\n  ...\n 1013  \t\tif (this.canTurn()){\n 1014  \t\t\tthis.drawTurnUI();\n 1015: \t\t\tthis.updateDiv();\n 1016  \t\t}\n 1017  \t}\n ....\n 1145  \t\n 1146  \t\tthis.drawDelayEstimator();\n 1147: \t\tthis.updateTurnElements();\n 1148  \n 1149  \t}\n ....\n 1756  \t}\n 1757  \t\n 1758: \tthis.updateDiv = function(){\n 1759  \t\tvar divs = document.getElementsByClassName(\"shipDiv\");\n 1760  \t\tfor (var i = 0; i < divs.length; i++){\n ....\n 1774  \t}\n 1775  \n 1776: \tthis.updateDivPower = function(system){\n 1777  \t\tvar reactor = this.getSystemByName(\"Reactor\");\n 1778  \t\tvar s = reactor.getOutput();\n ....\n 1780  \n 1781  \t\t$(system.element).find(\".outputMask\").html(system.getOutput());\n 1782: \t\tsystem.update();\n 1783  \t}\n 1784  \n 1785: \tthis.updateNonPowerOutput = function(system){\n 1786  \t\tvar divs = document.getElementsByClassName(\"shipDiv\");\n 1787  \t\tfor (var i = 0; i < divs.length; i++){\n ....\n 1796  \t\t\t\tif ($(this).data(\"systemId\") == system.id){\n 1797  \t\t\t\t\t$(this).find(\".outputMask\").html(system.getOutput());\n 1798: \t\t\t\t\tsystem.update();\n 1799  \t\t\t\t\treturn;\n 1800  \t\t\t\t}\n ....\n 1903  \t\tthis.setSystemWindow();\n 1904  \t\tthis.resetDetailsDiv();\n 1905: \t\tgame.getUnitById(this.parentId).updateDivPower(this);\n 1906  \t}\n 1907  \n ....\n 2023  \t\tthis.resetTranslation();\n 2024  \t\tthis.checkSensorHighlight();\n 2025: \t\tthis.updateDiv();\n 2026  \t}\n 2027  \n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  358  \t\tthis.disabled = 0;\n  359  \t\tthis.setTableRow();\n  360: \t\tgame.getUnitById(this.parentId).updateDivPower(this);\n  361  \t}\n  362  }\n  ...\n  382  \t\tthis.setTableRow();\n  383  \t\tthis.setSystemBorder();\n  384: \t\tgame.getUnitById(this.parentId).updateDivPower(this);\n  385  \t}\n  386  }\n  ...\n  390  \t\tthis.disabled = 0;\n  391  \t\tthis.setTableRow();\n  392: \t\tgame.getUnitById(this.parentId).updateDivPower(this);\n  393  \t}\n  394  }\n  ...\n  397  \tif (ship.canBoost(this)){\n  398  \t\tthis.doBoost();\n  399: \t\tship.updateDivPower(this);\n  400  \t\treturn true;\n  401  \t}\n  ...\n  405  \tif (this.canUnboost()){\n  406  \t\tthis.doUnboost()\n  407: \t\tgame.getUnitById(this.parentId).updateDivPower(this);\n  408  \t\treturn true;\n  409  \t}\n  ...\n  578  \treturn false;\n  579  }\n  580: System.prototype.update = function(){\n  581: \tthis.updateSystemDetailsDiv();\n  582: \tgame.getUnitById(this.parentId).updateDiv();\n  583  }\n  584  \n  ...\n  824  }\n  825  \n  826: PrimarySystem.prototype.updateSystemDetailsDiv = function(){\n  827  \tvar output = this.getOutputString();\n  828  \tvar powerReq = this.getPowerReq();\n  ...\n 1274  }\n 1275  \n 1276: Weapon.prototype.updateSystemDetailsDiv = function(){\n 1277  \tvar dmg = this.getDamage();\n 1278  \t$(\"#systemDetailsDiv\").find(\"tr\").each(function(i){\n ....\n 1765  \tthis.setSystemWindow();\n 1766  \tthis.resetDetailsDiv();\n 1767: \tgame.getUnitById(this.parentId).updateDivPower(this);\n 1768  }\n 1769  \n ....\n 1839  }\n 1840  \n 1841: Dual.prototype.update = function(){\n 1842: \tthis.getActiveWeapon().updateSystemDetailsDiv();\n 1843: \tgame.getUnitById(this.parentId).updateDiv();\n 1844  }\n 1845  \n ....\n 2090  \t\tthis.shots++;\n 2091  \t\tthis.adjustFireOrder();\n 2092: \t\tthis.updateGUI();\n 2093  \t}\n 2094  }\n ....\n 2098  \t\tthis.shots--;\n 2099  \t\tthis.adjustFireOrder();\n 2100: \t\tthis.updateGUI();\n 2101  \t}\n 2102  }\n ....\n 2109  }\n 2110  \n 2111: Launcher.prototype.updateGUI = function(){\n 2112  \t$(\"#systemDetailsDiv\")\n 2113  \t\t.find(\"#detailsShots\").html(\"<font color='red'>\" + this.getOutput() + \"</font> - max \" + this.effiency)\n ....\n 2127  \t\t$(div).find(\"#capacity\").html(this.output);\n 2128  \t\t$(div).data(\"systemid\", this.id).css(\"top\", e.clientY + 30).css(\"left\", e.clientX - 150).removeClass(\"disabled\");\n 2129: \t\tthis.updateTotals();\n 2130  \t}\n 2131  \telse {\n ....\n 2166  \t\t\tthis.loads[index].amount++;\n 2167  \t\t}\n 2168: \t\tthis.updateTotals();\n 2169  \t}\n 2170  }\n ....\n 2180  \t\t\t\t\tthis.loads[i].amount -= 1;\n 2181  \t\t\t\t}\n 2182: \t\t\t\tthis.updateTotals();\n 2183  \t\t\t\treturn;\n 2184  \t\t\t}\n ....\n 2187  }\n 2188  \n 2189: Launcher.prototype.updateTotals = function(){\n 2190  \tvar amount = 0;\n 2191  \tvar tCost = 0;\n ....\n 2331  }\n 2332  \n 2333: Hangar.prototype.update = function(){\n 2334: \tgame.getUnitById(this.parentId).updateDiv();\n 2335  }\n 2336  \n ....\n 2568  \t\t\tif (tMass + this.loads[i].mass <= this.output){\n 2569  \t\t\t\tthis.loads[i].amount += add;\n 2570: \t\t\t\tthis.updateTotals();\n 2571  \t\t\t\treturn;\n 2572  \t\t\t}\n ....\n 2587  \t\t\t\t\tthis.loads[i].amount -= 1;\n 2588  \t\t\t\t}\n 2589: \t\t\t\tthis.updateTotals();\n 2590  \t\t\t\treturn;\n 2591  \t\t\t}\n ....\n 2594  }\n 2595  \n 2596: Hangar.prototype.updateTotals = function(){\n 2597  \tvar amount = 0;\n 2598  \tvar tMass = 0;\n ....\n 2664  \t\t$(div).find(\"#capacity\").html(this.output);\n 2665  \t\t$(div).data(\"systemid\", this.id).css(\"top\", e.clientY + 30).css(\"left\", e.clientX - 150).removeClass(\"disabled\");\n 2666: \t\tthis.updateTotals();\n 2667  \t}\n 2668  \telse {\n\n48 matches across 4 files\n",
-			"settings":
-			{
-				"buffer_size": 37438,
-				"line_ending": "Windows",
-				"name": "Find Results",
-				"scratch": true
 			}
 		},
 		{
@@ -896,7 +896,7 @@
 			"file": "game.js",
 			"settings":
 			{
-				"buffer_size": 48130,
+				"buffer_size": 48271,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -941,9 +941,9 @@
 			"file": "log.txt",
 			"settings":
 			{
-				"buffer_size": 0,
+				"buffer_size": 10880,
 				"encoding": "UTF-8",
-				"line_ending": "Windows"
+				"line_ending": "Unix"
 			}
 		},
 		{
@@ -968,7 +968,7 @@
 			"file": "shared.js",
 			"settings":
 			{
-				"buffer_size": 13897,
+				"buffer_size": 14017,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1022,7 +1022,7 @@
 			"file": "server/ships/demos.php",
 			"settings":
 			{
-				"buffer_size": 1892,
+				"buffer_size": 1976,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1317,6 +1317,7 @@
 		"height": 90.0,
 		"where_history":
 		[
+			"",
 			"*.js",
 			"",
 			"classes.js",
@@ -1443,8 +1444,7 @@
 			"",
 			"*.php",
 			"",
-			"*.php",
-			""
+			"*.php"
 		]
 	},
 	"find_state":
@@ -1452,6 +1452,26 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"getShots =",
+			"getShots",
+			"setEw",
+			"getboostdiv ",
+			"sensorize",
+			"sensorEvent",
+			"resolveDeployment",
+			"animatedeployment",
+			"initDeployment",
+			"shipDiv",
+			"enableDeployment",
+			"deploy",
+			"salvoCtx",
+			"planCtx",
+			"doturn",
+			"the selec",
+			"drawIndicator",
+			"doSelect",
+			"drawself",
+			"setMoveMode",
 			"mousemove",
 			"firephase",
 			"drawMoveRange",
@@ -1559,27 +1579,7 @@
 			"rollf",
 			"isInArc",
 			"273",
-			"rollToHit",
-			"doDamage($fire)",
-			"gethitchance",
-			"getHitChance",
-			"rollToHit",
-			"rollForHit",
-			"getHitChance",
-			"getSubHitChance",
-			"getHitSystem",
-			"getHitChance",
-			"function gethitChance",
-			"getHitChance",
-			"getHitSystem",
-			"getsection",
-			"getHitAngle",
-			"rollForHit",
-			"getSection",
-			"class System",
-			"System",
-			"class System",
-			"class Weapon"
+			"rollToHit"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1587,6 +1587,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"ctx",
 			"</span>",
 			"<span class='red'",
 			"<span",
@@ -1713,8 +1714,7 @@
 			"",
 			"$this->primary->systems[] = new",
 			"return (",
-			"$structs = array()",
-			"powerReq"
+			"$structs = array()"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -1725,7 +1725,7 @@
 	"groups":
 	[
 		{
-			"selected": 13,
+			"selected": 34,
 			"sheets":
 			[
 				{
@@ -1813,7 +1813,7 @@
 						"translation.y": 2678.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 49,
+					"stack_index": 51,
 					"type": "text"
 				},
 				{
@@ -1899,10 +1899,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 186.0,
+						"translation.y": 114.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 47,
+					"stack_index": 49,
 					"type": "text"
 				},
 				{
@@ -1911,15 +1911,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 29811,
+						"buffer_size": 29761,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								15229,
-								15229
+								3699,
+								3699
 							]
 						],
 						"settings":
@@ -1987,10 +1987,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 11431.0,
+						"translation.y": 2956.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -2078,7 +2078,7 @@
 						"translation.y": 13150.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
@@ -2107,7 +2107,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 57,
+					"stack_index": 59,
 					"type": "text"
 				},
 				{
@@ -2116,15 +2116,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 59377,
+						"buffer_size": 60099,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								37678,
-								37678
+								48740,
+								48740
 							]
 						],
 						"settings":
@@ -2192,14 +2192,116 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 24786.0,
+						"translation.y": 32296.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
 					"buffer": 6,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3622,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										98,
+										105
+									],
+									[
+										334,
+										341
+									],
+									[
+										532,
+										539
+									],
+									[
+										697,
+										704
+									],
+									[
+										930,
+										937
+									],
+									[
+										1253,
+										1260
+									],
+									[
+										1538,
+										1549
+									],
+									[
+										1824,
+										1835
+									],
+									[
+										1991,
+										2002
+									],
+									[
+										2293,
+										2304
+									],
+									[
+										2579,
+										2590
+									],
+									[
+										2746,
+										2757
+									],
+									[
+										3123,
+										3128
+									],
+									[
+										3327,
+										3332
+									],
+									[
+										3473,
+										3478
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								3621,
+								3621
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 4,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ \t].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1710.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
 					"file": "mathLib.js",
 					"semi_transient": false,
 					"settings":
@@ -2287,7 +2389,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 8,
 					"file": "global.php",
 					"semi_transient": false,
 					"settings":
@@ -2374,7 +2476,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 9,
 					"file": "server/math.php",
 					"semi_transient": false,
 					"settings":
@@ -2458,11 +2560,11 @@
 						"translation.y": 7.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 31,
+					"stack_index": 35,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 10,
 					"file": "game.php",
 					"semi_transient": false,
 					"settings":
@@ -2546,11 +2648,11 @@
 						"translation.y": 8380.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 11,
 					"file": "server/manager.php",
 					"semi_transient": false,
 					"settings":
@@ -2634,11 +2736,11 @@
 						"translation.y": 10829.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 12,
 					"file": "server/flight.php",
 					"semi_transient": false,
 					"settings":
@@ -2723,24 +2825,24 @@
 						"translation.y": 214.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 39,
+					"stack_index": 42,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 13,
 					"file": "server/dbManager.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 40403,
+						"buffer_size": 40401,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2060,
-								2060
+								1053,
+								1053
 							]
 						],
 						"settings":
@@ -2809,27 +2911,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 492.0,
+						"translation.y": 132.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 40,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 14,
 					"file": "server/debug.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 187,
+						"buffer_size": 185,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								58,
-								58
+								177,
+								177
 							]
 						],
 						"settings":
@@ -2837,61 +2939,61 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
-								"bh_regex_content"
+								"bh_regex_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content"
 							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax"
 						},
@@ -2899,24 +3001,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
-					"buffer": 14,
+					"buffer": 15,
 					"file": "server/ships/omega.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3635,
+						"buffer_size": 3634,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								2593,
+								2593
 							]
 						],
 						"settings":
@@ -2984,14 +3086,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 486.0,
+						"translation.y": 198.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 78,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
-					"buffer": 15,
+					"buffer": 16,
 					"file": "server/ships/hyperion.php",
 					"semi_transient": false,
 					"settings":
@@ -3075,11 +3177,11 @@
 						"translation.y": 18.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 69,
+					"stack_index": 71,
 					"type": "text"
 				},
 				{
-					"buffer": 16,
+					"buffer": 17,
 					"file": "server/ships/saggitarius.php",
 					"semi_transient": false,
 					"settings":
@@ -3104,11 +3206,11 @@
 						"translation.y": 54.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 67,
+					"stack_index": 69,
 					"type": "text"
 				},
 				{
-					"buffer": 17,
+					"buffer": 18,
 					"file": "server/ships/artemis.php",
 					"semi_transient": false,
 					"settings":
@@ -3192,11 +3294,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
-					"buffer": 18,
+					"buffer": 19,
 					"file": "server/ships/tethys.php",
 					"semi_transient": false,
 					"settings":
@@ -3221,11 +3323,11 @@
 						"translation.y": 378.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 77,
+					"stack_index": 78,
 					"type": "text"
 				},
 				{
-					"buffer": 19,
+					"buffer": 20,
 					"file": "imageloader.js",
 					"semi_transient": false,
 					"settings":
@@ -3254,7 +3356,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 20,
+					"buffer": 21,
 					"file": "server/ships/battlecrab.php",
 					"semi_transient": false,
 					"settings":
@@ -3338,11 +3440,11 @@
 						"translation.y": 56.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 62,
+					"stack_index": 64,
 					"type": "text"
 				},
 				{
-					"buffer": 21,
+					"buffer": 22,
 					"file": "server/systems/structure.php",
 					"semi_transient": false,
 					"settings":
@@ -3426,11 +3528,11 @@
 						"translation.y": 41.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 60,
+					"stack_index": 62,
 					"type": "text"
 				},
 				{
-					"buffer": 22,
+					"buffer": 23,
 					"file": "postGameData.php",
 					"semi_transient": false,
 					"settings":
@@ -3514,11 +3616,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 48,
+					"stack_index": 50,
 					"type": "text"
 				},
 				{
-					"buffer": 23,
+					"buffer": 24,
 					"file": "server/systems/weapons/dual.php",
 					"semi_transient": false,
 					"settings":
@@ -3606,7 +3708,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 25,
 					"file": "cam.js",
 					"semi_transient": false,
 					"settings":
@@ -3690,11 +3792,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 55,
+					"stack_index": 57,
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 26,
 					"file": "server/systems/system.php",
 					"semi_transient": false,
 					"settings":
@@ -3778,11 +3880,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 33,
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 27,
 					"file": "server/systems/weapon.php",
 					"semi_transient": false,
 					"settings":
@@ -3866,11 +3968,11 @@
 						"translation.y": 1482.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 38,
+					"stack_index": 41,
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 28,
 					"file": "server/systems/nonweapon.php",
 					"semi_transient": false,
 					"settings":
@@ -3954,11 +4056,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 31,
 					"type": "text"
 				},
 				{
-					"buffer": 28,
+					"buffer": 29,
 					"file": "server/systems/weapons/laser.php",
 					"semi_transient": false,
 					"settings":
@@ -4043,24 +4145,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 45,
+					"stack_index": 47,
 					"type": "text"
 				},
 				{
-					"buffer": 29,
+					"buffer": 30,
 					"file": "server/salvo.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8304,
+						"buffer_size": 8305,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5212,
-								5212
+								5914,
+								5914
 							]
 						],
 						"settings":
@@ -4128,14 +4230,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2819.0,
+						"translation.y": 3560.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 30,
+					"buffer": 31,
 					"file": "server/fighter.php",
 					"semi_transient": false,
 					"settings":
@@ -4217,14 +4319,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1667.0,
+						"translation.y": 299.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 32,
 					"type": "text"
 				},
 				{
-					"buffer": 31,
+					"buffer": 32,
 					"file": "server/ship.php",
 					"semi_transient": false,
 					"settings":
@@ -4305,14 +4407,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 8434.0,
+						"translation.y": 820.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 23,
 					"type": "text"
 				},
 				{
-					"buffer": 32,
+					"buffer": 33,
 					"file": "server/systems/weapons/pulse.php",
 					"semi_transient": false,
 					"settings":
@@ -4396,24 +4498,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 53,
+					"stack_index": 55,
 					"type": "text"
 				},
 				{
-					"buffer": 33,
+					"buffer": 34,
 					"file": "systems.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 75440,
+						"buffer_size": 75522,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								41478,
+								41478
 							]
 						],
 						"settings":
@@ -4481,1059 +4583,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 25543.0,
+						"translation.y": 27310.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
-					"type": "text"
-				},
-				{
-					"buffer": 34,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 37438,
-						"regions":
-						{
-							"match":
-							{
-								"flags": 112,
-								"regions":
-								[
-									[
-										160,
-										197
-									],
-									[
-										302,
-										339
-									],
-									[
-										413,
-										450
-									],
-									[
-										524,
-										561
-									],
-									[
-										664,
-										701
-									],
-									[
-										824,
-										861
-									],
-									[
-										935,
-										972
-									],
-									[
-										1123,
-										1129
-									],
-									[
-										1194,
-										1200
-									],
-									[
-										1318,
-										1324
-									],
-									[
-										1466,
-										1472
-									],
-									[
-										1700,
-										1703
-									],
-									[
-										1722,
-										1725
-									],
-									[
-										1765,
-										1768
-									],
-									[
-										1787,
-										1790
-									],
-									[
-										1931,
-										1934
-									],
-									[
-										2197,
-										2200
-									],
-									[
-										2612,
-										2615
-									],
-									[
-										2810,
-										2813
-									],
-									[
-										2965,
-										2968
-									],
-									[
-										3154,
-										3157
-									],
-									[
-										3499,
-										3502
-									],
-									[
-										3749,
-										3752
-									],
-									[
-										4011,
-										4014
-									],
-									[
-										4181,
-										4184
-									],
-									[
-										4203,
-										4206
-									],
-									[
-										4246,
-										4249
-									],
-									[
-										4268,
-										4271
-									],
-									[
-										4408,
-										4411
-									],
-									[
-										4430,
-										4433
-									],
-									[
-										4473,
-										4476
-									],
-									[
-										4495,
-										4498
-									],
-									[
-										4609,
-										4612
-									],
-									[
-										4928,
-										4933
-									],
-									[
-										5267,
-										5272
-									],
-									[
-										5438,
-										5443
-									],
-									[
-										5575,
-										5580
-									],
-									[
-										5683,
-										5688
-									],
-									[
-										5849,
-										5854
-									],
-									[
-										5989,
-										5994
-									],
-									[
-										6255,
-										6260
-									],
-									[
-										6559,
-										6564
-									],
-									[
-										7051,
-										7056
-									],
-									[
-										7555,
-										7560
-									],
-									[
-										7808,
-										7813
-									],
-									[
-										7930,
-										7935
-									],
-									[
-										8242,
-										8257
-									],
-									[
-										8467,
-										8482
-									],
-									[
-										8727,
-										8736
-									],
-									[
-										8872,
-										8881
-									],
-									[
-										8954,
-										8963
-									],
-									[
-										9173,
-										9177
-									],
-									[
-										9405,
-										9409
-									],
-									[
-										9563,
-										9567
-									],
-									[
-										9804,
-										9808
-									],
-									[
-										10004,
-										10008
-									],
-									[
-										10214,
-										10218
-									],
-									[
-										10486,
-										10490
-									],
-									[
-										10771,
-										10775
-									],
-									[
-										11077,
-										11081
-									],
-									[
-										11432,
-										11436
-									],
-									[
-										11713,
-										11717
-									],
-									[
-										11960,
-										11964
-									],
-									[
-										12280,
-										12284
-									],
-									[
-										12561,
-										12565
-									],
-									[
-										12808,
-										12812
-									],
-									[
-										13102,
-										13106
-									],
-									[
-										13382,
-										13386
-									],
-									[
-										13600,
-										13604
-									],
-									[
-										13882,
-										13886
-									],
-									[
-										13987,
-										13991
-									],
-									[
-										14175,
-										14179
-									],
-									[
-										14364,
-										14368
-									],
-									[
-										14556,
-										14560
-									],
-									[
-										14604,
-										14608
-									],
-									[
-										14680,
-										14684
-									],
-									[
-										14870,
-										14874
-									],
-									[
-										15027,
-										15031
-									],
-									[
-										15138,
-										15142
-									],
-									[
-										15188,
-										15192
-									],
-									[
-										15281,
-										15285
-									],
-									[
-										15384,
-										15388
-									],
-									[
-										15442,
-										15446
-									],
-									[
-										15526,
-										15530
-									],
-									[
-										15731,
-										15735
-									],
-									[
-										15871,
-										15875
-									],
-									[
-										16067,
-										16071
-									],
-									[
-										16250,
-										16254
-									],
-									[
-										16441,
-										16445
-									],
-									[
-										16570,
-										16574
-									],
-									[
-										16677,
-										16681
-									],
-									[
-										16753,
-										16757
-									],
-									[
-										16849,
-										16853
-									],
-									[
-										16979,
-										16983
-									],
-									[
-										17176,
-										17180
-									],
-									[
-										17316,
-										17320
-									],
-									[
-										17502,
-										17506
-									],
-									[
-										17664,
-										17668
-									],
-									[
-										17759,
-										17763
-									],
-									[
-										17862,
-										17866
-									],
-									[
-										17957,
-										17961
-									],
-									[
-										18033,
-										18037
-									],
-									[
-										18179,
-										18183
-									],
-									[
-										18287,
-										18291
-									],
-									[
-										18340,
-										18344
-									],
-									[
-										18559,
-										18563
-									],
-									[
-										18658,
-										18662
-									],
-									[
-										18736,
-										18740
-									],
-									[
-										18909,
-										18913
-									],
-									[
-										19141,
-										19145
-									],
-									[
-										19182,
-										19186
-									],
-									[
-										19481,
-										19485
-									],
-									[
-										19637,
-										19641
-									],
-									[
-										19769,
-										19773
-									],
-									[
-										19932,
-										19936
-									],
-									[
-										20082,
-										20086
-									],
-									[
-										20227,
-										20231
-									],
-									[
-										20347,
-										20351
-									],
-									[
-										20506,
-										20510
-									],
-									[
-										20621,
-										20625
-									],
-									[
-										20655,
-										20659
-									],
-									[
-										20721,
-										20725
-									],
-									[
-										20805,
-										20809
-									],
-									[
-										20977,
-										20981
-									],
-									[
-										21220,
-										21224
-									],
-									[
-										21304,
-										21308
-									],
-									[
-										21356,
-										21360
-									],
-									[
-										21422,
-										21426
-									],
-									[
-										21528,
-										21532
-									],
-									[
-										21636,
-										21640
-									],
-									[
-										21717,
-										21721
-									],
-									[
-										22081,
-										22085
-									],
-									[
-										22191,
-										22195
-									],
-									[
-										22300,
-										22304
-									],
-									[
-										22396,
-										22400
-									],
-									[
-										22517,
-										22521
-									],
-									[
-										22578,
-										22582
-									],
-									[
-										22728,
-										22732
-									],
-									[
-										22849,
-										22853
-									],
-									[
-										22943,
-										22947
-									],
-									[
-										23213,
-										23217
-									],
-									[
-										23397,
-										23401
-									],
-									[
-										23629,
-										23633
-									],
-									[
-										23787,
-										23791
-									],
-									[
-										24028,
-										24032
-									],
-									[
-										24228,
-										24232
-									],
-									[
-										24438,
-										24442
-									],
-									[
-										24710,
-										24714
-									],
-									[
-										24938,
-										24942
-									],
-									[
-										25066,
-										25070
-									],
-									[
-										25255,
-										25259
-									],
-									[
-										25363,
-										25367
-									],
-									[
-										25416,
-										25420
-									],
-									[
-										25635,
-										25639
-									],
-									[
-										25734,
-										25738
-									],
-									[
-										25812,
-										25816
-									],
-									[
-										25985,
-										25989
-									],
-									[
-										26217,
-										26221
-									],
-									[
-										26258,
-										26262
-									],
-									[
-										26557,
-										26561
-									],
-									[
-										26713,
-										26717
-									],
-									[
-										26845,
-										26849
-									],
-									[
-										27008,
-										27012
-									],
-									[
-										27158,
-										27162
-									],
-									[
-										27303,
-										27307
-									],
-									[
-										27423,
-										27427
-									],
-									[
-										27582,
-										27586
-									],
-									[
-										27697,
-										27701
-									],
-									[
-										27731,
-										27735
-									],
-									[
-										27797,
-										27801
-									],
-									[
-										27881,
-										27885
-									],
-									[
-										28053,
-										28057
-									],
-									[
-										28296,
-										28300
-									],
-									[
-										28380,
-										28384
-									],
-									[
-										28432,
-										28436
-									],
-									[
-										28498,
-										28502
-									],
-									[
-										28604,
-										28608
-									],
-									[
-										28712,
-										28716
-									],
-									[
-										28793,
-										28797
-									],
-									[
-										29157,
-										29161
-									],
-									[
-										29267,
-										29271
-									],
-									[
-										29376,
-										29380
-									],
-									[
-										29472,
-										29476
-									],
-									[
-										29593,
-										29597
-									],
-									[
-										29654,
-										29658
-									],
-									[
-										29804,
-										29808
-									],
-									[
-										29925,
-										29929
-									],
-									[
-										30019,
-										30023
-									],
-									[
-										30289,
-										30293
-									],
-									[
-										30473,
-										30477
-									],
-									[
-										30705,
-										30709
-									],
-									[
-										30863,
-										30867
-									],
-									[
-										31104,
-										31108
-									],
-									[
-										31304,
-										31308
-									],
-									[
-										31514,
-										31518
-									],
-									[
-										31786,
-										31790
-									],
-									[
-										32014,
-										32018
-									],
-									[
-										32143,
-										32147
-									],
-									[
-										32338,
-										32342
-									],
-									[
-										32446,
-										32450
-									],
-									[
-										32499,
-										32503
-									],
-									[
-										32718,
-										32722
-									],
-									[
-										32817,
-										32821
-									],
-									[
-										32895,
-										32899
-									],
-									[
-										33068,
-										33072
-									],
-									[
-										33300,
-										33304
-									],
-									[
-										33341,
-										33345
-									],
-									[
-										33640,
-										33644
-									],
-									[
-										33796,
-										33800
-									],
-									[
-										33928,
-										33932
-									],
-									[
-										34091,
-										34095
-									],
-									[
-										34241,
-										34245
-									],
-									[
-										34386,
-										34390
-									],
-									[
-										34506,
-										34510
-									],
-									[
-										34665,
-										34669
-									],
-									[
-										34780,
-										34784
-									],
-									[
-										34814,
-										34818
-									],
-									[
-										34880,
-										34884
-									],
-									[
-										34964,
-										34968
-									],
-									[
-										35136,
-										35140
-									],
-									[
-										35379,
-										35383
-									],
-									[
-										35463,
-										35467
-									],
-									[
-										35515,
-										35519
-									],
-									[
-										35581,
-										35585
-									],
-									[
-										35687,
-										35691
-									],
-									[
-										35795,
-										35799
-									],
-									[
-										35876,
-										35880
-									],
-									[
-										36240,
-										36244
-									],
-									[
-										36350,
-										36354
-									],
-									[
-										36459,
-										36463
-									],
-									[
-										36555,
-										36559
-									],
-									[
-										36676,
-										36680
-									],
-									[
-										36737,
-										36741
-									],
-									[
-										36887,
-										36891
-									],
-									[
-										37008,
-										37012
-									],
-									[
-										37102,
-										37106
-									],
-									[
-										37372,
-										37376
-									]
-								],
-								"scope": ""
-							}
-						},
-						"selection":
-						[
-							[
-								31280,
-								31280
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content"
-							],
-							"detect_indentation": false,
-							"line_numbers": false,
-							"output_tag": 9,
-							"result_base_dir": "",
-							"result_file_regex": "^([^ \t].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 19206.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -5622,7 +4675,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 33,
+					"stack_index": 36,
 					"type": "text"
 				},
 				{
@@ -5710,7 +4763,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 37,
+					"stack_index": 40,
 					"type": "text"
 				},
 				{
@@ -5902,8 +4955,8 @@
 						"selection":
 						[
 							[
-								2303,
-								2303
+								9267,
+								9267
 							]
 						],
 						"settings":
@@ -5971,10 +5024,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1444.0,
+						"translation.y": 5476.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -6062,7 +5115,7 @@
 						"translation.y": 23.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 64,
+					"stack_index": 66,
 					"type": "text"
 				},
 				{
@@ -6071,15 +5124,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 48130,
+						"buffer_size": 48271,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								9892,
+								9892
 							]
 						],
 						"settings":
@@ -6147,10 +5200,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 11934.0,
+						"translation.y": 6412.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -6238,7 +5291,7 @@
 						"translation.y": 4069.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 35,
+					"stack_index": 38,
 					"type": "text"
 				},
 				{
@@ -6327,30 +5380,30 @@
 						"translation.y": 306.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 43,
+					"stack_index": 45,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 14,
+			"selected": 27,
 			"sheets":
 			[
 				{
-					"buffer": 29,
+					"buffer": 30,
 					"file": "server/salvo.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8304,
+						"buffer_size": 8305,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8021,
-								8021
+								8022,
+								8022
 							]
 						],
 						"settings":
@@ -6421,7 +5474,7 @@
 						"translation.y": 5626.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
@@ -6451,11 +5504,11 @@
 						"translation.y": 180.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 71,
+					"stack_index": 73,
 					"type": "text"
 				},
 				{
-					"buffer": 23,
+					"buffer": 24,
 					"file": "server/systems/weapons/dual.php",
 					"semi_transient": false,
 					"settings":
@@ -6543,7 +5596,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 31,
+					"buffer": 32,
 					"file": "server/ship.php",
 					"semi_transient": false,
 					"settings":
@@ -6624,10 +5677,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 492.0,
+						"translation.y": 222.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 34,
+					"stack_index": 37,
 					"type": "text"
 				},
 				{
@@ -6715,11 +5768,11 @@
 						"translation.y": 432.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 42,
+					"stack_index": 44,
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 27,
 					"file": "server/systems/weapon.php",
 					"semi_transient": false,
 					"settings":
@@ -6803,7 +5856,7 @@
 						"translation.y": 2257.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 51,
+					"stack_index": 53,
 					"type": "text"
 				},
 				{
@@ -6812,7 +5865,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 0,
+						"buffer_size": 10880,
 						"regions":
 						{
 						},
@@ -6891,7 +5944,7 @@
 						"translation.y": 1883.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
@@ -6980,7 +6033,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 46,
+					"stack_index": 48,
 					"type": "text"
 				},
 				{
@@ -7069,7 +6122,7 @@
 						"translation.y": 108.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 30,
+					"stack_index": 34,
 					"type": "text"
 				},
 				{
@@ -7157,11 +6210,11 @@
 						"translation.y": 43.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 50,
+					"stack_index": 52,
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 26,
 					"file": "server/systems/system.php",
 					"semi_transient": false,
 					"settings":
@@ -7245,7 +6298,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 59,
+					"stack_index": 61,
 					"type": "text"
 				},
 				{
@@ -7254,15 +6307,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 59377,
+						"buffer_size": 60099,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								55574,
-								55584
+								55952,
+								55952
 							]
 						],
 						"settings":
@@ -7330,27 +6383,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 36558.0,
+						"translation.y": 36994.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 33,
+					"buffer": 34,
 					"file": "systems.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 75440,
+						"buffer_size": 75522,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								29250,
+								29250
 							]
 						],
 						"settings":
@@ -7418,14 +6471,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 16471.0,
+						"translation.y": 19732.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 32,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 7,
 					"file": "mathLib.js",
 					"semi_transient": false,
 					"settings":
@@ -7509,24 +6562,24 @@
 						"translation.y": 1928.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 66,
+					"stack_index": 68,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 13,
 					"file": "server/dbManager.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 40403,
+						"buffer_size": 40401,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								195,
-								195
+								761,
+								761
 							]
 						],
 						"settings":
@@ -7598,7 +6651,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
@@ -7696,7 +6749,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 29811,
+						"buffer_size": 29761,
 						"regions":
 						{
 						},
@@ -7772,14 +6825,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 12031.0,
+						"translation.y": 11995.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 65,
+					"stack_index": 67,
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 25,
 					"file": "cam.js",
 					"semi_transient": false,
 					"settings":
@@ -7863,7 +6916,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
@@ -7872,15 +6925,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 48130,
+						"buffer_size": 48271,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								17403,
-								17403
+								6525,
+								6532
 							]
 						],
 						"settings":
@@ -7948,10 +7001,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 11813.0,
+						"translation.y": 4235.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
@@ -7960,15 +7013,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 13897,
+						"buffer_size": 14017,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								13183,
-								13183
+								13599,
+								13599
 							]
 						],
 						"settings":
@@ -8037,7 +7090,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 9130.0,
+						"translation.y": 9383.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
@@ -8128,7 +7181,7 @@
 						"translation.y": 145.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 63,
+					"stack_index": 65,
 					"type": "text"
 				},
 				{
@@ -8157,7 +7210,7 @@
 						"translation.y": 489.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 76,
+					"stack_index": 77,
 					"type": "text"
 				},
 				{
@@ -8186,7 +7239,7 @@
 						"translation.y": 815.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 75,
+					"stack_index": 76,
 					"type": "text"
 				},
 				{
@@ -8274,11 +7327,11 @@
 						"translation.y": 397.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 74,
+					"stack_index": 75,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 9,
 					"file": "server/math.php",
 					"semi_transient": false,
 					"settings":
@@ -8362,7 +7415,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 41,
+					"stack_index": 43,
 					"type": "text"
 				},
 				{
@@ -8467,8 +7520,8 @@
 						"selection":
 						[
 							[
-								2608,
-								2608
+								705,
+								705
 							]
 						],
 						"settings":
@@ -8536,10 +7589,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 624.0,
+						"translation.y": 66.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 73,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -8548,15 +7601,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1892,
+						"buffer_size": 1976,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								540,
-								540
+								1792,
+								1792
 							]
 						],
 						"settings":
@@ -8627,7 +7680,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -8715,7 +7768,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 30,
 					"type": "text"
 				},
 				{
@@ -8744,7 +7797,7 @@
 						"translation.y": 306.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 72,
+					"stack_index": 74,
 					"type": "text"
 				},
 				{
@@ -8832,7 +7885,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
@@ -8920,11 +7973,11 @@
 						"translation.y": 1944.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 23,
+					"stack_index": 27,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 12,
 					"file": "server/flight.php",
 					"semi_transient": false,
 					"settings":
@@ -9009,7 +8062,7 @@
 						"translation.y": 1769.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 25,
 					"type": "text"
 				},
 				{
@@ -9025,8 +8078,8 @@
 						"selection":
 						[
 							[
-								262,
-								262
+								263,
+								263
 							]
 						],
 						"settings":
@@ -9098,11 +8151,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
-					"buffer": 30,
+					"buffer": 31,
 					"file": "server/fighter.php",
 					"semi_transient": false,
 					"settings":
@@ -9187,7 +8240,7 @@
 						"translation.y": 1576.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 24,
 					"type": "text"
 				},
 				{
@@ -9275,11 +8328,11 @@
 						"translation.y": 3907.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 58,
+					"stack_index": 60,
 					"type": "text"
 				},
 				{
-					"buffer": 21,
+					"buffer": 22,
 					"file": "server/systems/structure.php",
 					"semi_transient": false,
 					"settings":
@@ -9455,7 +8508,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 11,
 					"file": "server/manager.php",
 					"semi_transient": false,
 					"settings":
@@ -9539,7 +8592,7 @@
 						"translation.y": 225.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 68,
+					"stack_index": 70,
 					"type": "text"
 				},
 				{
@@ -9568,7 +8621,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 56,
+					"stack_index": 58,
 					"type": "text"
 				},
 				{
@@ -9744,7 +8797,7 @@
 						"translation.y": 753.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 44,
+					"stack_index": 46,
 					"type": "text"
 				},
 				{
@@ -9802,7 +8855,7 @@
 						"translation.y": 108.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 70,
+					"stack_index": 72,
 					"type": "text"
 				},
 				{
@@ -9894,7 +8947,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 28,
+					"buffer": 29,
 					"file": "server/systems/weapons/laser.php",
 					"semi_transient": false,
 					"settings":
@@ -9979,11 +9032,11 @@
 						"translation.y": 3304.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 36,
+					"stack_index": 39,
 					"type": "text"
 				},
 				{
-					"buffer": 32,
+					"buffer": 33,
 					"file": "server/systems/weapons/pulse.php",
 					"semi_transient": false,
 					"settings":
@@ -10067,7 +9120,7 @@
 						"translation.y": 273.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 54,
+					"stack_index": 56,
 					"type": "text"
 				},
 				{
@@ -10096,7 +9149,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 61,
+					"stack_index": 63,
 					"type": "text"
 				},
 				{
@@ -10184,7 +9237,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 52,
+					"stack_index": 54,
 					"type": "text"
 				}
 			]
@@ -10246,6 +9299,66 @@
 		"selected_items":
 		[
 			[
+				"sys",
+				"C:\\xampp\\htdocs\\fire\\systems.js"
+			],
+			[
+				"sy",
+				"C:\\xampp\\htdocs\\fire\\systems.js"
+			],
+			[
+				"dem",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\demos.php"
+			],
+			[
+				"sh",
+				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
+			],
+			[
+				"sha",
+				"C:\\xampp\\htdocs\\fire\\shared.js"
+			],
+			[
+				"shar",
+				"C:\\xampp\\htdocs\\fire\\shared.js"
+			],
+			[
+				"clas",
+				"C:\\xampp\\htdocs\\fire\\classes.js"
+			],
+			[
+				"game",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
+				"sal",
+				"C:\\xampp\\htdocs\\fire\\server\\salvo.php"
+			],
+			[
+				"amm",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\ammo.php"
+			],
+			[
+				"ome",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\omega.php"
+			],
+			[
+				"game.",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
+				"scr",
+				"C:\\xampp\\htdocs\\fire\\script.js"
+			],
+			[
+				"gam",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
+				"game.js",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
 				"de",
 				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
 			],
@@ -10254,32 +9367,12 @@
 				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
 			],
 			[
-				"sha",
-				"C:\\xampp\\htdocs\\fire\\shared.js"
-			],
-			[
-				"scr",
-				"C:\\xampp\\htdocs\\fire\\script.js"
-			],
-			[
-				"game",
-				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
-				"sh",
-				"C:\\xampp\\htdocs\\fire\\shared.js"
-			],
-			[
 				"ca",
 				"C:\\xampp\\htdocs\\fire\\cam.js"
 			],
 			[
 				"cam",
 				"C:\\xampp\\htdocs\\fire\\cam.js"
-			],
-			[
-				"dem",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\demos.php"
 			],
 			[
 				"ar",
@@ -10298,28 +9391,12 @@
 				"C:\\xampp\\htdocs\\fire\\style.css"
 			],
 			[
-				"clas",
-				"C:\\xampp\\htdocs\\fire\\classes.js"
-			],
-			[
-				"game.js",
-				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
 				"game.php",
 				"C:\\xampp\\htdocs\\fire\\game.php"
 			],
 			[
 				"ga",
 				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
-				"amm",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\ammo.php"
-			],
-			[
-				"sal",
-				"C:\\xampp\\htdocs\\fire\\server\\salvo.php"
 			],
 			[
 				"mana",
@@ -10334,14 +9411,6 @@
 				"C:\\xampp\\htdocs\\fire\\server\\flight.php"
 			],
 			[
-				"sy",
-				"C:\\xampp\\htdocs\\fire\\systems.js"
-			],
-			[
-				"sys",
-				"C:\\xampp\\htdocs\\fire\\systems.js"
-			],
-			[
 				"link",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\linked.php"
 			],
@@ -10352,10 +9421,6 @@
 			[
 				"vorc",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\vorchan.php"
-			],
-			[
-				"gam",
-				"C:\\xampp\\htdocs\\fire\\game.js"
 			],
 			[
 				"shi",
@@ -10474,10 +9539,6 @@
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapon.php"
 			],
 			[
-				"game.",
-				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
 				"laser",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php"
 			],
@@ -10508,10 +9569,6 @@
 			[
 				"tet",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\tethys.php"
-			],
-			[
-				"ome",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\omega.php"
 			],
 			[
 				"stru",
@@ -10552,10 +9609,6 @@
 			[
 				"gra",
 				"C:\\xampp\\htdocs\\fire\\graphics.js"
-			],
-			[
-				"shar",
-				"C:\\xampp\\htdocs\\fire\\shared.js"
 			],
 			[
 				"part",

@@ -496,7 +496,7 @@ System.prototype.showInfoDiv = function(e){
 System.prototype.setFireOrder = function(targetid){
 	this.fireOrders.push(
 		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, 
-		shots: this.getShots(), req: -1, notes: "", hits: -1, resolved: 0}
+		shots: 0, req: -1, notes: "", hits: -1, resolved: 0}
 	);
 	this.selected = false;
 	this.highlight = false;
@@ -842,17 +842,17 @@ PrimarySystem.prototype.updateSystemDetailsDiv = function(){
 	})
 }
 
+
 function Bridge(system){
 	PrimarySystem.call(this, system);
+	this.effiency = 0;
+	this.powerReq = 0;
 }
 Bridge.prototype = Object.create(PrimarySystem.prototype);
-
-Bridge.prototype.getBoostDiv = function(){
-	return false;
-}
 				
 function Reactor(system){
 	PrimarySystem.call(this, system);
+	this.powerReq = 0;
 }
 Reactor.prototype = Object.create(PrimarySystem.prototype);
 
@@ -886,12 +886,10 @@ Engine.prototype = Object.create(PrimarySystem.prototype);
 function LifeSupport(system){
 	PrimarySystem.call(this, system);
 	this.display = "Life Support";
+	this.powerReq = 0;
+	this.effiency = 0;
 }
 LifeSupport.prototype = Object.create(PrimarySystem.prototype);
-
-LifeSupport.prototype.getBoostDiv = function(){
-	return false;
-}
 				
 function Sensor(system){
 	PrimarySystem.call(this, system);
@@ -902,6 +900,8 @@ Sensor.prototype = Object.create(PrimarySystem.prototype);
 Sensor.prototype.setState = function(){
 	PrimarySystem.prototype.setState.call(this);	
 	if (game.phase == -1){
+		if (this.disabled){return;}
+
 		this.setEW({
 			angle: 0,
 			dist: Math.ceil(this.getOutput() / Math.pow(180/20, 1/1.5)),
@@ -999,13 +999,13 @@ Sensor.prototype.hover = function(e){
 Sensor.prototype.doBoost = function(){
 	System.prototype.doBoost.call(this);
 	mouseCtx.clearRect(0, 0, res.x, res.y);
-	this.drawEW();
+	this.setState();
 }
 
 Sensor.prototype.doUnboost = function(){
 	System.prototype.doUnboost.call(this);
 	mouseCtx.clearRect(0, 0, res.x, res.y);
-	this.drawEW();
+	this.setState();
 }
 
 function Weapon(system){
@@ -1027,7 +1027,7 @@ function Weapon(system){
 	this.loaded;
 	this.fireOrders = [];
 	this.mount;
-	this.exploSize = (this.minDmg+this.maxDmg)/30;
+	this.exploSize = 1+((this.minDmg+this.maxDmg)/30);
 }
 Weapon.prototype = Object.create(System.prototype);
 
@@ -1114,16 +1114,13 @@ Weapon.prototype.hasUnresolvedFireOrder = function(){
 
 Weapon.prototype.select = function(e){
 	console.log(this);
-	var id = this.id;
-	var parentId = this.parentId;
-	var selected = false;
 	var unit;
 
-	if (this.destroyed || this.disabled || this.locked){
+	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit){
 		return false;
 	}
 	else {
-		unit = game.getUnitById(parentId);
+		unit = game.getUnitById(this.parentId);
 		if (unit.hasSystemSelected("Sensor") || unit instanceof Flight && (unit.dogfights.length)){
 			return false;
 		}
@@ -1409,8 +1406,6 @@ function Particle(system){
 	this.animation = "projectile";
 	this.projSize = system.projSize;
 	this.projSpeed = system.projSpeed;
-	//this.projSpeed = 15
-	//this.exploSize = (this.minDmg + this.maxDmg) / 20;
 }
 Particle.prototype = Object.create(Weapon.prototype);
 
@@ -1419,9 +1414,6 @@ Particle.prototype.getAnimation = function(fire){
 	var grouping = 2;
 	var delay = 30;
 	var shotInterval = 6;
-
-	//var gunInterval = this.shots * 13;
-	//var shotInterval = 10;
 
 	if (fire.shooter.flight){
 		grouping = 1;
@@ -1432,9 +1424,6 @@ Particle.prototype.getAnimation = function(fire){
 		delay = 80;
 		shotInterval = 10;
 	}
-
-	//console.log(this.exploSize);
-	//console.log(this.projSpeed);
 	
 	for (var j = 0; j < fire.guns; j++){
 		var hasHit = 0;
@@ -1539,6 +1528,9 @@ function Pulse(system){
 }
 Pulse.prototype = Object.create(Particle.prototype);
 
+Pulse.prototype.getShots = function(){
+	return this.volley;
+}
 	
 Pulse.prototype.getAnimation = function(fire){
 	allAnims = [];
@@ -1606,6 +1598,10 @@ Laser.prototype.getAnimation = function(fire){
 	var grouping = 1;
 	var delay = 30;
 	var shotInterval = 15;
+
+	if (fire.guns >= 6){
+		delay = 15;
+	}
 	
 	for (var j = 0; j < fire.guns; j++){
 		var gunAnims = [];
@@ -1708,7 +1704,7 @@ Dual.prototype.setFireOrder = function(targetid){
 
 	this.fireOrders.push(
 		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, 
-		shots: w.getShots(), req: -1, notes: "", hits: -1, resolved: 0}
+		shots: 0, req: -1, notes: "", hits: -1, resolved: 0}
 	);
 	this.selected = false;
 	this.highlight = false;
@@ -1948,6 +1944,34 @@ Launcher.prototype.create = function(loads){
 	}
 }
 
+Launcher.prototype.plus = function(){
+	var ship = game.getUnitById(this.parentId);
+	if (ship.canBoost(this)){
+		this.doBoost();
+		this.updateGUI();
+		return true;
+	}
+	return false;
+}
+Launcher.prototype.minus = function(){
+	if (this.canUnboost()){
+		this.doUnboost()
+		this.updateGUI();
+		return true;
+	}
+	return false;
+}
+
+Launcher.prototype.doBoost = function(){
+	this.powers.push({
+		id: this.powers.length+1, unitid: this.parentId, systemid: this.id,
+		turn: game.turn, type: 1, cost: 0, new: 1
+	})
+}
+
+Launcher.prototype.getShots = function(){
+	return this.shots;
+}
 
 Launcher.prototype.getTraverseRating = function(){
 	return this.ammo.traverse || 0
@@ -2082,30 +2106,7 @@ Launcher.prototype.getDamage = function(){
 }
 
 Launcher.prototype.getOutput = function(){
-	return this.shots;
-}
-
-Launcher.prototype.plus = function(){
-	if (this.shots < this.effiency){
-		this.shots++;
-		this.adjustFireOrder();
-		this.updateGUI();
-	}
-}
-
-Launcher.prototype.minus = function(){
-	if (this.shots > 1){
-		this.shots--;
-		this.adjustFireOrder();
-		this.updateGUI();
-	}
-}
-
-Launcher.prototype.adjustFireOrder = function(){
-	if (!this.fireOrders.length){return;}
-	if (this.fireOrders[this.fireOrders.length-1].turn == game.turn && !this.fireOrders[this.fireOrders.length-1].resolved){
-		this.fireOrders[this.fireOrders.length-1].shots = this.getOutput();
-	}
+	return this.shots + this.getBoostLevel();
 }
 
 Launcher.prototype.updateGUI = function(){
@@ -2257,7 +2258,9 @@ Launcher.prototype.getMaxAmmo = function(){
 }
 
 Launcher.prototype.getBallImpulse = function(){
-	return Math.ceil(Math.pow(this.ammo.mass, -0.5)*250);
+	var val = Math.ceil(Math.pow(this.ammo.mass, -0.75)*200);
+
+	return val*2 + " + " + val + " / Turn";
 }
 
 function Hangar(system){

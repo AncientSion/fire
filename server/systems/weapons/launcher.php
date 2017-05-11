@@ -25,6 +25,10 @@ class Launcher extends Weapon {
 		return $this->ammo->name;
 	}
 
+	public function getShots($turn){
+		return 1 + $this->getBoostLevel($turn);
+	}
+
 	public function getBaseDamage($fire){
 		return 0;
 	}

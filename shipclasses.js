@@ -69,14 +69,14 @@ function Ship(data){
 
 	this.drawIndicator = function(){
 		var c = "";
-		if (this.friendly){c = "green";}
+		if (this.selected){c = "white"}
+		else if (this.friendly){c = "green";}
 		else {c = "red";}
 
 		ctx.beginPath();
 		ctx.arc(this.x, this.y, this.size/2, 0, 2*Math.PI, false);
 		ctx.closePath();
 		ctx.lineWidth = 2;
-		ctx.globalAlpha = 0.8;
 		ctx.strokeStyle = c;
 		ctx.stroke();
 		ctx.lineWidth = 1;
@@ -195,7 +195,7 @@ function Ship(data){
 					if (area){
 						var dist = getDistance(pos, area.pos);
 						if (dist <= area.s + this.size*1){
-							popup("The selected entry point is subject to gravitic distortions and cant be chosen");
+							popup("The selected point is too close to another ship. Please select another point.");
 							return false;
 						}
 					}
@@ -233,6 +233,8 @@ function Ship(data){
 		game.disableDeployment();
 		this.select();
 		game.enableDeployment(this.id);
+		this.unsetMoveMode();
+		this.setMoveMode();
 		game.draw();
 	}
 
@@ -431,6 +433,13 @@ function Ship(data){
 	this.drawHoverElements = function(){
 		this.drawEW();
 		this.drawMoveLength();
+
+		/*moveCtx.translate(cam.o.x, cam.o.y);
+		moveCtx.scale(cam.z, cam.z);
+		this.drawMoveRange();
+
+		moveCtx.setTransform(1,0,0,1,0,0);
+		*/
 	}
 
 	this.drawEW = function(){
@@ -1322,6 +1331,8 @@ function Ship(data){
 		if (this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0){
 			this.actions[0].a += a;
 			this.facing += a;
+			this.unsetMoveMode();
+			this.setMoveMode();
 			game.draw();
 		}
 		else {
@@ -1345,9 +1356,9 @@ function Ship(data){
 					break;
 				}
 			}
+			this.unsetMoveMode();
+			this.setMoveMode();
 		}
-		this.unsetMoveMode();
-		this.setMoveMode();
 	}
 
 	this.getBaseHitChance = function(){
@@ -1602,6 +1613,11 @@ function Ship(data){
 				}
 			}
 
+			if (this.structures[i].systems.length == 1){
+				if (a == 0 || a == 360){
+					structTable.childNodes[0].childNodes[0].style.width = "70px";
+				}
+			}
 			if (max == 1){
 				structTable.childNodes[0].childNodes[0].style.height = "62px";
 			}
@@ -1810,6 +1826,16 @@ function Ship(data){
 		}
 		return false;
 	}
+
+	this.getActiveSensor = function(){
+		for (var i = 0; i < this.primary.systems.length; i++){
+			if (this.primary.systems[i].selected && this.primary.systems[i].name == "Sensor"){
+				return this.primary.systems[i];
+			}
+		}
+		return false;
+	}
+
 	this.attachEvent = function(td){
 		$(td).data("shipId", this.id);
 		$(td).hover(
@@ -1946,12 +1972,6 @@ function Ship(data){
 	}
 
 	this.canBoost = function(system){
-		/*if (system instanceof Dual){
-			console.log("cost: "+system.getActiveWeapon().effiency);
-			console.log("max: "+system.getActiveWeapon().maxBoost);
-			console.log(system.getActiveWeapon().boostEffect);
-		}*/
-
 		if (system.disabled || system.destroyed){
 			return false;
 		}
@@ -1988,11 +2008,38 @@ function Ship(data){
 			}
 		}
 	}
+
+
+	this.setTranslation = function(){
+		for (var i = 0; i < arguments.length; i++){
+			arguments[i].translate(cam.o.x, cam.o.y);
+			arguments[i].scale(cam.o.x, cam.o.y);
+		}
+	}
+
+	this.resetTranslation = function(){
+		for (var i = 0; i < arguments.length; i++){
+			arguments[i].setTransform(1,0,0,1,0,0);
+		}
+	}
+
+	this.setMoveTranslation = function(){
+		moveCtx.translate(cam.o.x, cam.o.y);
+		moveCtx.scale(cam.z, cam.z);
+		planCtx.translate(cam.o.x, cam.o.y);
+		planCtx.scale(cam.z, cam.z);
+	}
+
+	this.resetMoveTranslation = function(){
+		moveCtx.setTransform(1,0,0,1,0,0);
+		planCtx.setTransform(1,0,0,1,0,0);
+	}
 	
 	this.setMoveMode = function(){
 		game.mode = 1;
 		this.turns = [];
-		this.setTranslation();
+		//this.setTranslation(moveCtx, planCtx);
+		this.setMoveTranslation();
 		this.drawMoveRange();
 		this.drawVectorIndicator();
 
@@ -2020,23 +2067,11 @@ function Ship(data){
 		else if (game.phase == 3){ // Dmg control
 		}
 
-		this.resetTranslation();
+		this.resetMoveTranslation();
 		this.checkSensorHighlight();
 		this.updateDiv();
 	}
-
-	this.setTranslation = function(){
-		moveCtx.translate(cam.o.x, cam.o.y);
-		moveCtx.scale(cam.z, cam.z);
-		planCtx.translate(cam.o.x, cam.o.y);
-		planCtx.scale(cam.z, cam.z);
-	}
-
-	this.resetTranslation = function(){
-		moveCtx.setTransform(1,0,0,1,0,0);
-		planCtx.setTransform(1,0,0,1,0,0);
-	}
-
+	
 	this.unsetMoveMode = function(){
 		game.mode = false;
 		$("#vectorDiv").addClass("disabled");
@@ -2051,7 +2086,7 @@ function Ship(data){
 		planCtx.clearRect(0, 0, res.x, res.y);
 		salvoCtx.clearRect(0, 0, res.x, res.y);
 	}
-	
+
 	this.select = function(){
 		if (!this.selected){
 			this.doSelect();
@@ -2062,8 +2097,16 @@ function Ship(data){
 		console.log(this);
 		aUnit = this.id;
 		this.selected = true;
+		//this.drawSelector();
+		game.draw();
 		this.switchDiv();
 		this.setMoveMode();
+	}
+
+	this.drawSelector = function(){
+		game.setShipTransform();
+		this.drawIndicator();
+		game.resetShipTransform();
 	}
 	
 	this.doUnselect = function(){
@@ -2073,6 +2116,8 @@ function Ship(data){
 		else if (game.flightDeploy){game.flightDeploy = false;}
 		this.turns = [];
 		this.unselectSystems();
+		//this.drawSelector();
+		game.draw();
 		this.switchDiv();
 		this.unsetMoveMode();
 		$("#hangarLoadoutDiv").addClass("disabled");
@@ -2107,11 +2152,20 @@ function Ship(data){
 	//	return isInArc(getCompassHeadingOfPoint(loc, pos, facing), start, end);
 
 	this.hasLockOnUnit = function(target){
+		var tPos;
 		if (this.flight || this.salvo){return false;}
+		if (target.salvo){
+			if (target.targetid == this.id){
+				tPos = target.nextStep;
+			}
+			else return 0;
+		} else tPos = target.getBaseOffsetPos();
+
 		var sensor = this.getSystemByName("Sensor");
+		if (sensor.disabled || sensor.destroyed){return 0;}
 		var ew = sensor.ew[sensor.ew.length-1];
 		var origin = this.getBaseOffsetPos();
-		var d = getDistance(origin, target.getBaseOffsetPos());
+		var d = getDistance(origin, tPos);
 		if (d <= ew.dist){
 			var str = sensor.getOutput();
 			var len = 20;
@@ -2120,7 +2174,7 @@ function Ship(data){
 			var start = addAngle(0 + w, ew.angle);
 			var end = addAngle(360 - w, ew.angle);
 
-			return isInArc(getCompassHeadingOfPoint(origin,  target.getBaseOffsetPos(), this.facing), start, end);
+			return isInArc(getCompassHeadingOfPoint(origin,  tPos, this.facing), start, end);
 		}
 		return 0;
 
@@ -2177,7 +2231,7 @@ function Ship(data){
 		return fires;
 	}
 
-	this.getSensorSettings = function(){
+	this.getEWSettings = function(){
 		return this.getSystemByName("Sensor").getEW();
 	}
 

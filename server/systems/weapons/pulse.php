@@ -10,6 +10,10 @@ class Pulse extends Weapon {
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
 	}
 
+	public function getShots($turn){
+		return $this->shots;
+	}
+
 	public function rollToHit($fire){
 		for ($i = 0; $i < $this->shots; $i++){
 			$roll = mt_rand(1, 100);

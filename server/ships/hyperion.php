@@ -32,7 +32,7 @@ class Hyperion extends Heavy {
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 24);
 		$aft->systems[] = new HeavyLaser($this->getId(), $this->id, 120, 180);
-		$aft->systems[] = new HeavyLaser($this->getId(), $this->id, 0, 360);
+		$aft->systems[] = new HeavyLaser($this->getId(), $this->id, 180, 240);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 800, 27);

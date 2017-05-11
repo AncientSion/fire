@@ -312,30 +312,16 @@ foreach ($manager->playerstatus as $player){
 				</div>
 				<table id="combatLog">
 					<tr>
-						<th style="width: 15%">
-							Type
-						</th>
-						<th style="width: 14%">
-							Shooter
-						</th>
-						<th style="width: 17%">
-							Target
-						</th>
-						<th style="width: 19%">
-							Weapon
-						</th>
-						<th style="width: 8%">
-							Chance
-						</th>
-						<th style="width: 12%">
-							Hits / Shots
-						</th>
-						<th style="width: 10%">
-							Armour
-						</th>
-						<th style="width: 10%">
-							Structure
-						</th>
+
+
+						<th width=12%>Type</th>
+						<th width=14%>Shooter</th>
+						<th width=14%>Target</th>
+						<th width=22%>Weapon</th>
+						<th width=9%>Chance</th>
+						<th width=12%>Hits / Shots</th>
+						<th width=10%>Armour</th>
+						<th width=10%>Structure</th>
 					</tr>
 				</table>
 			</div>

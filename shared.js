@@ -149,7 +149,7 @@ function Animate(){
 		if (ele instanceof FireOrder){
 			game.createCombatLogEntry(ele);
 		}
-		else if (ele instanceof Salvo && ele.fireOrder != undefined && ele.fireOrder.damages.length){
+		else if (ele instanceof Salvo && ele.fireOrder != undefined){
 			game.createCombatLogEntry(ele.fireOrder);
 		}
 	}
@@ -461,6 +461,10 @@ function handleMouseDown(e){
 	var pos = new Point(e.clientX - rect.left, e.clientY - rect.top).getOffset();
 
 	if (e.originalEvent.button == 0){
+		if (aUnit && game.getUnitById(aUnit).hasSystemSelected("Sensor")){
+			sensorize(game.getUnitById(aUnit), pos);
+			return;
+		}
 		window.downTime = new Date();
 		cam.scroll = 1;
 		cam.sx = e.clientX;
@@ -537,7 +541,7 @@ function handleMouseMove(e){
 }
 
 function sensorEvent(isClick, ship, loc, facing, d, a){
-	var sensor = ship.getSystemByName("Sensor");
+	var sensor = ship.getActiveSensor();
 	var str = sensor.getOutput();
 		d = Math.min(str, d);
 	var p = 1.5;

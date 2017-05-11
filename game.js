@@ -83,11 +83,11 @@ function Game(id, name, status, userid, turn, phase){
 		return ret;
 	}
 
-	this.getSensorSettings = function(){
+	this.getEWSettings = function(){
 		var ret = [];
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].ship && this.ships[i].userid == this.userid){
-				ret.push(this.ships[i].getSensorSettings());
+				ret.push(this.ships[i].getEWSettings());
 			}
 		}
 		return ret;
@@ -251,7 +251,6 @@ function Game(id, name, status, userid, turn, phase){
 	}
 
 	this.drawDeploymentZone = function(){
-
 		planCtx.clearRect(0, 0, res.x, res.y);
 		planCtx.globalAlpha = 0.3;
 		for (var i = 0; i < this.deployArea.length; i++){
@@ -397,7 +396,21 @@ function Game(id, name, status, userid, turn, phase){
 
 			$(ele)
 				.css("left", 100)
-				.css("top", res.y/2 - h/2);
+				.css("top", res.y/2 - h/2 + 100);
+		}
+		for (var i = 0; i < this.ballistics.length; i++){
+			var ele = $(this.ballistics[i].element);
+			var h = $(ele).height();
+			/*
+			var w = $(ele).width();
+			var h = $(ele).height();
+			var x = this.ships[i].x + cam.o.x + w/2;
+			var y = this.ships[i].y + cam.o.y;
+			*/
+
+			$(ele)
+				.css("left",res.x - 400)
+				.css("top", res.y/2 - h/2 + 200);
 		}
 	}
 
@@ -547,6 +560,9 @@ Game.prototype.getUnitType = function (val){
 	}
 
 	this.unitHover = function(elements){
+		if (elements[0].id == game.shortInfo){
+			return;
+		}
 		if (elements){
 			var ele = $("#shortInfo");
 				$(ele).children().remove();
@@ -600,6 +616,7 @@ Game.prototype.getUnitType = function (val){
 		}
 		$("#shortInfo").html("").hide();
 		mouseCtx.clearRect(0, 0, res.x, res.y);
+		//moveCtx.clearRect(0, 0, res.x, res.y);
 		game.shortInfo = false;
 	}
 	
@@ -684,12 +701,11 @@ Game.prototype.getUnitType = function (val){
 	}
 
 	this.redraw = function(){
-		console.log("ding");
+		//console.log("ding");
 		planCtx.clearRect(0, 0, res.x, res.y);
 		moveCtx.clearRect(0, 0, res.x, res.y)
 		salvoCtx.clearRect(0, 0, res.x, res.y)
 		mouseCtx.clearRect(0, 0, res.x, res.y)
-		game.draw();
 
 		$("#shortInfo").hide();
 
@@ -703,11 +719,9 @@ Game.prototype.getUnitType = function (val){
 					unit.unsetMoveMode();
 					unit.setMoveMode();
 				//}
-				if (game.flightDeploy){
-					game.flightDeploy.drawArc();
-				}
 			}
 		}
+		game.draw();
 	}
 	
 	this.draw = function(){
@@ -716,18 +730,28 @@ Game.prototype.getUnitType = function (val){
 		this.drawShips();
 		this.drawBallistics();
 
-		if (this.deploying){
-			this.drawDeploymentZone();
+		if (game.flightDeploy){
+			game.flightDeploy.drawArc();
+		} else if (game.deploying){
+			game.drawDeploymentZone();
 		}
+	}
+
+	this.setShipTransform = function(){
+		ctx.translate(cam.o.x, cam.o.y);
+		ctx.scale(cam.z, cam.z);
+	}
+
+	this.resetShipTransform = function(){
+		ctx.setTransform(1,0,0,1,0,0);
 	}
 	
 	this.drawShips = function(){
-		ctx.translate(cam.o.x, cam.o.y);
-		ctx.scale(cam.z, cam.z);
+		this.setShipTransform();
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].draw();
 		}
-		ctx.setTransform(1,0,0,1,0,0);
+		this.resetShipTransform();
 	}
 
 	this.drawBallistics = function(){
@@ -1622,7 +1646,6 @@ Game.prototype.getUnitType = function (val){
 
 	this.createCombatLogEntry = function(fire){
 		if (fire == undefined){return;}
-		var friendly = 0;
 		var shots = 0;
 		var hits = 0;
 		var struct = 0;
@@ -1649,9 +1672,7 @@ Game.prototype.getUnitType = function (val){
 		if (fire.weapon.output){
 			hits /= fire.weapon.output;
 		}
-		if (fire.shooter.userid == this.userid){
-			friendly = 1;
-		}
+
 		var chance = ""
 		if (fire.min != fire.max){
 			chance = fire.min + " - " + fire.max;
@@ -1671,7 +1692,7 @@ Game.prototype.getUnitType = function (val){
 		var shooterClass = "red";
 		var targetClass = "green";
 
-		if (friendly){
+		if (fire.shooter.friendly){
 			shooterClass = "green";
 			targetClass = "red";
 		}
@@ -1698,8 +1719,12 @@ Game.prototype.getUnitType = function (val){
 			td.colSpan = 8;
 
 		var dmgs = {};
+		var destroyed = 0
 
 		for (var i = 0; i < fire.damages.length; i++){
+			if (fire.damages[i].destroyed){
+				destroyed++;
+			}
 			var name;
 			if (fire.damages[i].systemid == -1){
 				name = "Main Structure";
@@ -1716,6 +1741,12 @@ Game.prototype.getUnitType = function (val){
 
 		for (var i in dmgs){
 			td.innerHTML += dmgs[i] + "x " + i + ";  ";
+		}
+
+		if (fire.target.flight || fire.target.salvo){
+			td.innerHTML += " (Kills: " + destroyed + ")";
+		} else {
+			td.innerHTML += " (Kills: " + destroyed + ")";
 		}
 	
 		log.appendChild(details);

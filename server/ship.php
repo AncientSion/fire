@@ -339,7 +339,7 @@ class Ship {
 			$fire->resolved = -1;
 		}
 		else {
-			$fire->shots = $fire->shooter->getShots();
+			$fire->shots = $fire->shooter->getShots($fire->turn);
 			$fire->dist = 0;
 			$fire->angle = $this->getBallisticHitAngle($fire);
 			$fire->section = $this->getSection($fire);

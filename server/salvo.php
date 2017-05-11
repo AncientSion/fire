@@ -67,28 +67,6 @@ class Mini extends Ship {
 			}
 		}
 	}
-/*
-	public function resolveFireOrder($fire){
-		Debug::log("resolveFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
-
-		if ($this->isDestroyed()){
-			$fire->resolved = -1;
-		}
-		else {
-			$fire->dist = $this->getHitDist($fire);
-			$fire->angle = $this->getHitAngle($fire);
-			$fire->section = $this->getSection($fire);
-			$fire->hitSystem[] = $this->getHitSystem($fire);
-			$fire->req = ceil($this->getHitChance($fire) * (1-($fire->weapon->getTraverseMod($fire)*0.2)) - $fire->weapon->getAccLoss($fire->dist));
-			$fire->weapon->rollToHit($fire);
-
-			for ($i = 0; $i < $fire->shots; $i++){
-				if ($fire->rolls[$i] <= $fire->req)
-					$fire->weapon->doDamage($fire, $fire->rolls[$i], $fire->hitSystem[$i]);
-				}
-			}
-		$fire->resolved = 1;
-	}*/
 
 	public function resolveFireOrder($fire){
 		Debug::log("resolveFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
@@ -141,13 +119,6 @@ class Mini extends Ship {
 	}
 
 	public function createFireOrders($gameid, $turn, $targets, $odds){
-		$shots = 0;
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if (!$this->structures[$i]->destroyed && !$this->structures[$i]->disabled){
-				$shots++;
-			}
-		}
-		//Debug::log("salvo: ".$this->id.", shots: ".$shots);
 		$fires = array();
 		$fires[] = array(
 			"id" => -1,
@@ -156,10 +127,8 @@ class Mini extends Ship {
 			"shooterid" => $this->id,
 			"targetid" => $this->targetid,
 			"weaponid" => 0,
-			"shots" => $shots,
 			"resolved" => 0
 		);
-
 		return $fires;
 	}
 
@@ -208,7 +177,7 @@ class Salvo extends Mini {
 		$this->setProps();
 	}
 
-	public function getShots(){
+	public function getShots($turn){
 		$shots = 0;
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (!$this->structures[$i]->isDestroyed()){
@@ -220,7 +189,7 @@ class Salvo extends Mini {
 
 	public function setProps(){
 		$this->baseHitChance = ceil(sqrt($this->structures[0]->mass)*10);
-		$this->baseImpulse = ceil(pow($this->structures[0]->mass, -0.5)*250);
+		$this->baseImpulse = ceil(pow($this->structures[0]->mass, -0.75)*200);
 	}
 
 	public function addStructures($amount){
@@ -307,7 +276,7 @@ class Salvo extends Mini {
 		if ($this->targetid == $fire->shooter->id){
 			$dist = max($dist, $fire->shooter->size/2);			
 		}
-		//Debug::log("intercept range: ".$dist);
+
 		return $dist;
 	}
 

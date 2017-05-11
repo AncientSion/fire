@@ -33,7 +33,7 @@ class LinkedParticleGun extends LinkedParticle {
 	public $name = "LinkedParticleGun";
 	public $display = "Linked Particle Gun";
 	public $animColor = "blue";
-	public $accDecay = 300;
+	public $accDecay = 220;
 	
 	function __construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end){
 		parent::__construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end);
@@ -44,7 +44,7 @@ class LinkedNeutronRepeater extends LinkedParticle {
 	public $name = "LinkedNeutronRepeater";
 	public $display = "Linked Neutron Repeater";
 	public $animColor = "green";
-	public $accDecay = 240;
+	public $accDecay = 180;
 	
 	function __construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end){
 		parent::__construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end);

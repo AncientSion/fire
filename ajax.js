@@ -82,7 +82,7 @@ window.ajax = {
 		var deployedFlights = [];
 			deployedFlights = game.getDeployedFlights();
 
-		var ew = game.getSensorSettings();
+		var ew = game.getEWSettings();
 
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid == game.userid){

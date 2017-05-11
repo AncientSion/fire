@@ -23,8 +23,12 @@ class Flight extends Mini {
 		$this->destroyed = $destroyed;
 	}
 
-	function setState($turn){
+	public function setState($turn){
 		parent::setState($turn);
+		$this->setSize();
+	}
+
+	public function setSize(){
 		$alive = 0;
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (!$this->structures[$i]->destroyed){
@@ -78,7 +82,6 @@ class Flight extends Mini {
 							"shooterid" => $this->id,
 							"targetid" => $targets[$j-1]->id,
 							"weaponid" => $this->structures[$i]->systems[0]->id,
-							"shots" => $this->structures[$i]->systems[0]->shots,
 							"resolved" => 0
 						);
 						break;
