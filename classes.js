@@ -352,6 +352,7 @@ function Salvo(data){
 	}
 
 	this.getAccelSteps = function(){
+		if (this.actions.length == 1){return 2;}
 		var steps = 3;
 		for (var i = 1; i < this.actions.length-1; i++){
 			if (this.actions[i].resolved){

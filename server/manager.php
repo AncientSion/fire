@@ -767,9 +767,9 @@ class Manager {
 	public function createStandardBallisticAction($ballistic){
 		$sPos = $ballistic->getCurrentPosition();
 		$tPos = $ballistic->target->getCurrentPosition();
+		$dist = Math::getDist($sPos->x, $sPos->y, $tPos->x, $tPos->y);
 
 		if (! $ballistic->isDestroyed()){
-			$dist = Math::getDist($sPos->x, $sPos->y, $tPos->x, $tPos->y);
 
   			// MOVE ($turn, $type, $dist, $x, $y, $a, $cost, $delay, $costmod, $resolved){
 			
@@ -1007,7 +1007,7 @@ class Manager {
 
 	public function testCriticals(){
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			$this->ships[$i]->testCriticalsShipLevel($this->turn, $this->phase);
+			$this->ships[$i]->testCriticalUnitLevel($this->turn, $this->phase);
 		}
 	}
 

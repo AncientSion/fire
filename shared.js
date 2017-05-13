@@ -551,8 +551,6 @@ function sensorEvent(isClick, ship, loc, facing, d, a){
 		a = 0;
 		d = str/Math.pow(w/len, 1/p);
 	}
-
-	drawSensorArc(w, d, p, str, len, loc, facing, a)
 	//console.log("angle from facing: " + a + ", dist: " + dist + ", strength: "+str + ", FINAL: " + newWidth);
 
 	if (isClick && ship.canSetSensor(sensor)){
@@ -564,5 +562,5 @@ function sensorEvent(isClick, ship, loc, facing, d, a){
 			unitid: ship.id,
 			systemid: sensor.id
 		});
-	}
+	} else drawSensorArc(w, d, p, str, len, loc, facing, a);
 }

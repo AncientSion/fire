@@ -2156,7 +2156,9 @@ function Ship(data){
 		if (this.flight || this.salvo){return false;}
 		if (target.salvo){
 			if (target.targetid == this.id){
-				tPos = target.nextStep;
+				if (target.nextStep == target.finalStep){
+					tPos = target.getBaseOffsetPos;
+				} else tPos = target.nextStep;
 			}
 			else return 0;
 		} else tPos = target.getBaseOffsetPos();

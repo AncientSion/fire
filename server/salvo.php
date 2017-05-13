@@ -188,7 +188,7 @@ class Salvo extends Mini {
 	}
 
 	public function setProps(){
-		$this->baseHitChance = ceil(sqrt($this->structures[0]->mass)*10);
+		$this->baseHitChance = $this->structures[0]->getSubHitChance();
 		$this->baseImpulse = ceil(pow($this->structures[0]->mass, -0.75)*200);
 	}
 

@@ -41,9 +41,9 @@ class Structure {
 		return false;
 	}
 
-	public function testCriticalsStructureLevel($turn){
+	public function testCritical($turn){
 		for ($i = 0; $i < sizeof($this->systems); $i++){
-			$this->systems[$i]->testCriticalSystemLevel($turn);
+			$this->systems[$i]->testCritical($turn);
 		}
 	}
 
@@ -102,12 +102,6 @@ class Primary extends Structure {
 
 	public function getHitChance(){
 		return $this->integrity;
-	}
-
-	public function testCriticalsStructureLevel($turn){
-		for ($i = 0; $i < sizeof($this->systems); $i++){
-			$this->systems[$i]->testCriticalSystemLevel($turn);
-		}
 	}
 
 	public function getRemainingIntegrity(){

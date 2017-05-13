@@ -159,7 +159,8 @@ function Flight(data){
 		ctx.restore();
 	}
 
-	this.drawFighter = function(i, oy = 0){
+	this.drawFighter = function(i, oy){
+		if (oy == undefined){oy = 0;}
 		var size = 12;
 		ctx.drawImage(
 			window.shipImages[this.structures[i].name.toLowerCase()],

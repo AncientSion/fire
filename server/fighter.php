@@ -61,7 +61,7 @@ class Fighter extends Structure {
 		return array(75);
 	}
 
-	public function testCriticalsStructureLevel($turn){
+	public function testCritical($turn){
 		if ($this->destroyed || empty($this->damages)){
 			return;
 		}

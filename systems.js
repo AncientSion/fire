@@ -903,7 +903,7 @@ Sensor.prototype.setState = function(){
 		if (this.disabled){return;}
 
 		this.setEW({
-			angle: 0,
+			angle: -1,
 			dist: Math.ceil(this.getOutput() / Math.pow(180/20, 1/1.5)),
 			turn: game.turn,
 			unitid: this.parentId,
@@ -947,7 +947,7 @@ Sensor.prototype.drawEW = function(){
 		var p = 1.5;
 		var facing = ship.getPlannedFacing();
 		var w;
-		if (ew.angle == 0){
+		if (ew.angle == -1){
 			w = 180;
 		} else var	w = Math.min(180, len * Math.pow(str/ew.dist, p));
 

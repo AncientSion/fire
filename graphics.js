@@ -18,38 +18,6 @@ function drawVector(origin, target, dist, angle){
 	.removeClass("disabled");
 }
 
-function drawSensorArc(w, d, p, str, len, loc, facing, a){
-	mouseCtx.clearRect(0, 0, res.x, res.y);
-	mouseCtx.translate(cam.o.x, cam.o.y);
-	mouseCtx.scale(cam.z, cam.z);
-	
-	w = Math.ceil(w);	
-	if (w == 180){
-		mouseCtx.beginPath();			
-		mouseCtx.arc(loc.x, loc.y, d, 0, 2*Math.PI, false);
-		mouseCtx.closePath();
-	}
-	else {
-		var start = addAngle(0 + w-facing, a);
-		var end = addAngle(360 - w-facing, a);
-		var p1 = getPointInDirection(str, start, loc.x, loc.y);
-		var rad1 = degreeToRadian(start);
-		var rad2 = degreeToRadian(end);
-		mouseCtx.beginPath();			
-		mouseCtx.moveTo(loc.x, loc.y);
-		mouseCtx.lineTo(p1.x, p1.y); 
-		mouseCtx.arc(loc.x, loc.y, d, rad1, rad2, false);
-		mouseCtx.closePath();
-	}
-
-	mouseCtx.globalAlpha = 0.2;
-	mouseCtx.fillStyle = "red";
-	mouseCtx.fill();
-	mouseCtx.globalAlpha = 1;
-	mouseCtx.setTransform(1,0,0,1,0,0);
-}
-
-
 //function drawProjectile(weapon, ox, oy, x, y, now, end){
 function drawProjectile(weapon, fire){
 	//getPointInDirection(dis, angle, oX, oY){
@@ -228,3 +196,34 @@ function getRadialGradient(x, y, s){
 		grad.addColorStop(1, "rgba(255,255,0,0)");
 	return grad;
 }	
+
+function drawSensorArc(w, d, p, str, len, loc, facing, a){
+	mouseCtx.clearRect(0, 0, res.x, res.y);
+	mouseCtx.translate(cam.o.x, cam.o.y);
+	mouseCtx.scale(cam.z, cam.z);
+	
+	w = Math.ceil(w);	
+	if (w == 180){
+		mouseCtx.beginPath();			
+		mouseCtx.arc(loc.x, loc.y, d, 0, 2*Math.PI, false);
+		mouseCtx.closePath();
+	}
+	else {
+		var start = addAngle(0 + w-facing, a);
+		var end = addAngle(360 - w-facing, a);
+		var p1 = getPointInDirection(str, start, loc.x, loc.y);
+		var rad1 = degreeToRadian(start);
+		var rad2 = degreeToRadian(end);
+		mouseCtx.beginPath();			
+		mouseCtx.moveTo(loc.x, loc.y);
+		mouseCtx.lineTo(p1.x, p1.y); 
+		mouseCtx.arc(loc.x, loc.y, d, rad1, rad2, false);
+		mouseCtx.closePath();
+	}
+
+	mouseCtx.globalAlpha = 0.2;
+	mouseCtx.fillStyle = "red";
+	mouseCtx.fill();
+	mouseCtx.globalAlpha = 1;
+	mouseCtx.setTransform(1,0,0,1,0,0);
+}

@@ -13,6 +13,23 @@ class Ammo extends Weapon {
 		$this->armour = 2+$this->mass;
 	}
 
+	public function testCritical($turn){
+		Debug::log("testing ammo crit");
+		parent::testCritical($turn);
+	}
+
+	public function getCritEffects(){
+		return array("disengaged");
+	}
+
+	public function getCritTreshs(){
+		return array(60);
+	}
+
+	public function getCritDuration(){
+		return array(0);
+	}
+
 	public function rollToHit($fire){
 		for ($i = 0; $i < $fire->shots; $i++){
 			$roll = mt_rand(1, 100);
@@ -54,7 +71,7 @@ class Ammo extends Weapon {
 	}
 
 	public function getSubHitChance(){
-		return ceil(sqrt($this->mass)*10);
+		return ceil(sqrt($this->mass)*15);
 	}
 
 	public function getAccLoss($dist){
@@ -79,9 +96,9 @@ class Hasta extends Ammo {
 	public $name = "Hasta";
 	public $display = "Light Antifighter Missiles";
 	public $type = "explosive";
-	public $minDmg = 25;
-	public $maxDmg = 30;
-	public $mass = 2;
+	public $minDmg = 23;
+	public $maxDmg = 28;
+	public $mass = 3;
 	public $cost = 6;
 	public $traverse = -3;
 
@@ -94,8 +111,8 @@ class Javelin extends Ammo {
 	public $name = "Javelin";
 	public $display = "Multi-purpose Missiles";
 	public $type = "explosive";
-	public $minDmg = 36;
-	public $maxDmg = 48;
+	public $minDmg = 33;
+	public $maxDmg = 45;
 	public $mass = 4;
 	public $cost = 10;
 	public $traverse = -1;
@@ -110,7 +127,7 @@ class Patriot extends Ammo {
 	public $display = "Light Interceptor Missiles";
 	public $type = "explosive";
 	public $minDmg = 13;
-	public $maxDmg = 18;
+	public $maxDmg = 17;
 	public $mass = 2;
 	public $cost = 8;
 	public $traverse = -4;
@@ -124,8 +141,8 @@ class Naga extends Ammo {
 	public $name = "Naga";
 	public $display = "Multi-purpose Missiles";
 	public $type = "explosive";
-	public $minDmg = 36;
-	public $maxDmg = 48;
+	public $minDmg = 33;
+	public $maxDmg = 45;
 	public $mass = 4;
 	public $cost = 10;
 	public $traverse = -1;

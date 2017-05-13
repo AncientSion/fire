@@ -27,7 +27,7 @@ class Vorchan extends Light {
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 170, 14);
-		$left->systems[] = new MediumPlasma($this->getId(), $this->id, 300, 120);
+		$left->systems[] = new MediumPlasma($this->getId(), $this->id, 240, 60);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

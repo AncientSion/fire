@@ -85,7 +85,7 @@ class LightPulse extends Pulse {
 	public $reload = 1;
 	public $mass = 12;
 	public $powerReq = 2;
-	public $traverse = -4;
+	public $traverse = -3;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

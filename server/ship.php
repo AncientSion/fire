@@ -530,13 +530,13 @@ class Ship {
 		return round(Math::addAngle($this->facing, $angle));
 	}
 
-	public function testCriticalsShipLevel($turn, $phase){
-		//Debug::log("= testCriticalsShipLevel for ".$this->classname.", ".$this->id.", turn: ".$turn);
+	public function testCriticalUnitLevel($turn, $phase){
+		//Debug::log("= testCriticalUnitLevel for ".$this->classname.", ".$this->id.", turn: ".$turn);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			$this->structures[$i]->testCriticalsStructureLevel($turn);
+			$this->structures[$i]->testCritical($turn);
 		}
-		if($this->ship){
-			$this->primary->testCriticalsStructureLevel($turn);
+		if ($this->ship){
+			$this->primary->testCritical($turn);
 		}
 	}
 

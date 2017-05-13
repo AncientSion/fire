@@ -114,7 +114,7 @@ class System {
 		return $this->mass*10;
 	}
 
-	public function testCriticalSystemLevel($turn){
+	public function testCritical($turn){
 		if ($this->destroyed){
 			return;
 		}
