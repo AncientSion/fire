@@ -18,6 +18,20 @@ class Linked extends Weapon {
 		$this->start = $start;
 		$this->end = $end;
 	}
+
+	public function rollToHit($fire){
+		echo "w: ".get_class($this).", s: ".$this->shots.", l: ".$this->linked."</br></br>";
+		for ($i = 0; $i < $this->shots; $i++){
+			echo "shot: ".($i+1)."</br></br>";
+			$roll = mt_rand(1, 100);
+			$fire->rolls[] = $roll;
+			$fire->notes .= $roll." ";
+			if ($roll <= $fire->req){
+				$fire->hits += $this->volley;
+			}
+		}
+		return true;
+	}
 }
 
 class LinkedParticle extends Linked {
