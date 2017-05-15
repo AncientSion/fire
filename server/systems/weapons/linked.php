@@ -27,7 +27,7 @@ class Linked extends Weapon {
 			$fire->rolls[] = $roll;
 			$fire->notes .= $roll." ";
 			if ($roll <= $fire->req){
-				$fire->hits += $this->volley;
+				$fire->hits++;
 			}
 		}
 		return true;
