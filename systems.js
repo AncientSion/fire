@@ -1806,7 +1806,7 @@ Dual.prototype.copyProps = function(){
 			this.maxBoost = this.weapons[i].maxBoost;
 			this.boostEffect = this.weapons[i].boostEffect;
 			this.powerReq = this.weapons[i].powerReq;
-			this.weapons[i];
+			//this.weapons[i];
 		}
 	}
 }

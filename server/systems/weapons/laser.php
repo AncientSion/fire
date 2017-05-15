@@ -37,6 +37,9 @@ class Laser extends Weapon {
 		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id);
 		
 		$totalDmg = floor($this->getBaseDamage($fire) * $this->getDamageMod($fire));
+		if ($totalDmg <= 0){
+			return;
+		}
 		$rake = floor($totalDmg / $this->rakes);
 		for ($j = 0; $j < $this->rakes; $j++){
 			$system = $fire->target->getHitSystem($fire);

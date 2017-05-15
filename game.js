@@ -1396,7 +1396,7 @@ Game.prototype.getUnitType = function (val){
 
 	this.getBallDetails = function(){
 		for (var i = 0; i < game.ballistics.length; i++){
-			if (game.ballistics[i].actions[game.ballistics[i].actions.length-1].type == "impact"){
+			if (game.ballistics[i].actions[game.ballistics[i].actions.length-1].type == "impact" && game.ballistics[i].status != "intercepted"){
 				game.ballistics[i].fireOrder.type = "Ballistic";
 				game.ballistics[i].fireOrder.weapon = game.ballistics[i].structures[0];
 				game.ballistics[i].fireOrder.shooter = game.ballistics[i];

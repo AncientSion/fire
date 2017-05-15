@@ -398,7 +398,7 @@ class DBManager {
 			VALUES
 				(:shipid, :turn, :type, :dist, :x, :y, :a, :cost, :delay, :costmod, :resolved)
 		");
-		$dist = 0;
+		$val = 0;
 		$resolved = 1;
 
 		for ($i = 0; $i < sizeof($balls); $i++){
@@ -410,10 +410,10 @@ class DBManager {
 					$stmt->bindParam(":dist", $dist);
 					$stmt->bindParam(":x", $balls[$i]->actions[$j]->x);
 					$stmt->bindParam(":y", $balls[$i]->actions[$j]->y);
-					$stmt->bindParam(":a", $dist);
-					$stmt->bindParam(":cost", $dist);
-					$stmt->bindParam(":delay", $dist);
-					$stmt->bindParam(":costmod", $dist);
+					$stmt->bindParam(":a", $val);
+					$stmt->bindParam(":cost", $val);
+					$stmt->bindParam(":delay", $val);
+					$stmt->bindParam(":costmod", $val);
 					$stmt->bindParam(":resolved", $resolved);
 					$stmt->execute();			
 					if ($stmt->errorCode() == 0){

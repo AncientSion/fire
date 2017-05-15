@@ -936,9 +936,10 @@ class Manager {
 				}
 				else { // create fireorders
 					//Debug::log("valid, creating FOs");
+					$this->ballistics[$i]->status = "impact";
 					$fires = array_merge($fires, $this->ballistics[$i]->createFireOrders($this->gameid, $this->turn, false, false));
 				}
-			}
+			} else $this->ballistics[$i]->status = "launched";
 		}
 
 		if (sizeof($fires)){ // resolve fireorders, insert and get to receive DB id
@@ -949,7 +950,7 @@ class Manager {
 			for ($i = 0; $i < sizeof($fires); $i++){
 				$fires[$i]->shooter = $this->getUnitById($fires[$i]->shooterid);
 				$fires[$i]->shots = $fires[$i]->shooter->getShots($this->turn);
-				$fires[$i]->shooter->status = "impact";
+				//$fires[$i]->shooter->status = "impact";
 				$fires[$i]->weapon = $fires[$i]->shooter->getSystemById($fires[$i]->weaponid);
 				$fires[$i]->target = $this->getUnitById($fires[$i]->targetid);
 				$fires[$i]->target->resolveBallisticFireOrder($fires[$i]);
@@ -1008,6 +1009,9 @@ class Manager {
 	public function testCriticals(){
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$this->ships[$i]->testCriticalUnitLevel($this->turn, $this->phase);
+		}
+		for ($i = 0; $i < sizeof($this->ballistics); $i++){
+			$this->ballistics[$i]->testCriticalUnitLevel($this->turn, $this->phase);
 		}
 	}
 

@@ -770,7 +770,10 @@ function Salvo(data){
 				tr.insertCell(-1).innerHTML = "<span class='red'>IMPACT IMMINENT</span>";
 			}
 			else if (this.actions[this.actions.length-1].type == "impact"){
-				tr.insertCell(-1).innerHTML = "<span class='red'>DID IMPACT</span>";
+				if (this.status = "intercepted"){
+					tr.insertCell(-1).innerHTML = "<span class='red'>INTERCEPTED</span>";
+				}
+				else tr.insertCell(-1).innerHTML = "<span class='red'>DID IMPACT</span>";
 			}
 		}
 		return table;

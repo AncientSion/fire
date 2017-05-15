@@ -31,9 +31,9 @@ class Weapon extends System {
 
 	public function setArmourMod(){
 		$w = $this->getArcWidth();
-		if ($w <= 60){$this->armourMod = 0.9;}
-		else if ($w <= 120){$this->armourMod = 0.7;}
-		else if ($w <= 360){$this->armourMod = 0.5;}
+		if ($w <= 60){$this->armourMod = 0.8;}
+		else if ($w <= 120){$this->armourMod = 0.6;}
+		else if ($w <= 360){$this->armourMod = 0.4;}
 	}
 
 	public function getTraverseMod($fire){

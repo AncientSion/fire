@@ -14,9 +14,39 @@ class Ammo extends Weapon {
 	}
 
 	public function testCritical($turn){
-		Debug::log("testing ammo crit");
 		parent::testCritical($turn);
 	}
+
+	public function determineCrititcal($dmg, $turn){
+		Debug::log("determineCrititcal crit for #".$this->parentId."/".$this->id.", dmg: ".$dmg);
+		$crits = $this->getCritEffects();
+		$tresh = $this->getCritTreshs();
+		$duration = $this->getCritDuration();
+		$mod = 0;
+		$val = $dmg + $mod;
+		if ($val <= $tresh[0]){
+			Debug::log("below tresh");
+			return false;
+		}
+
+		for ($i = sizeof($tresh)-1; $i >= 0; $i--){
+			if ($val > $tresh[$i]){
+				//$id, $shipid, $systemid, $turn, $type, $duration, $new){
+				$this->crits[] = new Crit(
+					sizeof($this->crits)+1,
+					$this->parentId,
+					$this->id,
+					$turn,
+					$crits[$i],
+					$duration[$i],
+					1
+				);
+				Debug::log("crit");
+				return true;
+			}
+		}
+	}
+
 
 	public function getCritEffects(){
 		return array("disengaged");

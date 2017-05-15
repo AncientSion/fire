@@ -72,7 +72,7 @@ class DualPulseIon extends Weapon {
 	public $modes = array("LightPulse", "LightParticleBeam", "HeavyLaser");
 	public $states = array(0, 0, 0);
 	public $weapons = array();
-	public $mass = 18;
+	public $mass = 15;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = 0){
 		for ($i = 0; $i < sizeof($this->modes); $i++){

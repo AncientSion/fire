@@ -274,7 +274,7 @@ class Salvo extends Mini {
 		$dist = Math::getDist($tPos->x, $tPos->y, $sPos->x, $sPos->y);
 
 		if ($this->targetid == $fire->shooter->id){
-			$dist = max($dist, $fire->shooter->size/2);			
+			$dist = max($dist, $fire->shooter->size/2);
 		}
 
 		return $dist;
