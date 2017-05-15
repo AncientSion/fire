@@ -25,6 +25,8 @@ class Linked extends Weapon {
 			echo "shot: ".($i+1)."</br></br>";
 			$roll = mt_rand(1, 100);
 			$fire->rolls[] = $roll;
+			var_dump($fire->rolls);
+			echo "</br></br>";
 			$fire->notes .= $roll." ";
 			if ($roll <= $fire->req){
 				$fire->hits++;
