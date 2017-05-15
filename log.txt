@@ -1,0 +1,422 @@
+resolveFireOrder ID 332, shooter: Omega #22 vs Flight #25, w: LightPulse #8
+doDamage, weapon: LightPulse, target: 25
+doing volley shot: 1
+doing volley shot: 2
+Overkill on Salvo or Fighter
+resolveFireOrder ID 336, shooter: Omega #22 vs Flight #25, w: LightPulse #12
+doDamage, weapon: LightPulse, target: 25
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+Overkill on Salvo or Fighter
+resolveFireOrder ID 335, shooter: Omega #22 vs Flight #25, w: LightPulse #11
+doDamage, weapon: LightPulse, target: 25
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+Overkill on Salvo or Fighter
+resolveFireOrder ID 334, shooter: Omega #22 vs Flight #25, w: LightPulse #10
+doDamage, weapon: LightPulse, target: 25
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+Overkill on Salvo or Fighter
+resolveFireOrder ID 333, shooter: Omega #22 vs Flight #25, w: LightPulse #9
+doDamage, weapon: LightPulse, target: 25
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+Overkill on Salvo or Fighter
+resolveFireOrder ID 337, shooter: Omega #22 vs Flight #25, w: LightPulse #13
+doDamage, weapon: LightPulse, target: 25
+doing volley shot: 1
+doing volley shot: 2
+Overkill on Salvo or Fighter
+resolveDogfightFireOrder ID 311, shooter: Flight #26 vs Flight #24, w: 2
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 318, shooter: Flight #26 vs Flight #24, w: 16
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 312, shooter: Flight #26 vs Flight #24, w: 4
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 322, shooter: Flight #26 vs Flight #24, w: 24
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+Overkill on Salvo or Fighter
+resolveDogfightFireOrder ID 321, shooter: Flight #26 vs Flight #24, w: 22
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 320, shooter: Flight #26 vs Flight #24, w: 20
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 319, shooter: Flight #26 vs Flight #24, w: 18
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+Overkill on Salvo or Fighter
+resolveDogfightFireOrder ID 317, shooter: Flight #26 vs Flight #24, w: 14
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+Overkill on Salvo or Fighter
+resolveDogfightFireOrder ID 316, shooter: Flight #26 vs Flight #24, w: 12
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+Overkill on Salvo or Fighter
+resolveDogfightFireOrder ID 315, shooter: Flight #26 vs Flight #24, w: 10
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+Overkill on Salvo or Fighter
+resolveDogfightFireOrder ID 314, shooter: Flight #26 vs Flight #24, w: 8
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 313, shooter: Flight #26 vs Flight #24, w: 6
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+Overkill on Salvo or Fighter
+resolveDogfightFireOrder ID 329, shooter: Flight #24 vs Flight #26, w: 14
+doDamage, weapon: LinkedParticleGun, target: 26/17
+resolveDogfightFireOrder ID 330, shooter: Flight #24 vs Flight #26, w: 16
+doDamage, weapon: LinkedParticleGun, target: 26/11
+resolveDogfightFireOrder ID 331, shooter: Flight #24 vs Flight #26, w: 18
+doDamage, weapon: LinkedParticleGun, target: 26/11
+resolveDogfightFireOrder ID 328, shooter: Flight #24 vs Flight #26, w: 12
+doDamage, weapon: LinkedParticleGun, target: 26/1
+resolveDogfightFireOrder ID 327, shooter: Flight #24 vs Flight #26, w: 10
+doDamage, weapon: LinkedParticleGun, target: 26/5
+resolveDogfightFireOrder ID 326, shooter: Flight #24 vs Flight #26, w: 8
+doDamage, weapon: LinkedParticleGun, target: 26/7
+resolveDogfightFireOrder ID 325, shooter: Flight #24 vs Flight #26, w: 6
+doDamage, weapon: LinkedParticleGun, target: 26/9
+resolveDogfightFireOrder ID 323, shooter: Flight #24 vs Flight #26, w: 2
+doDamage, weapon: LinkedParticleGun, target: 26/3
+resolveDogfightFireOrder ID 324, shooter: Flight #24 vs Flight #26, w: 4
+doDamage, weapon: LinkedParticleGun, target: 26/11
+DB updateFireOrders: 27
+resolveBallisticActions: 0
+endAllDogfights: 
+ => DB insertDamageEntries: 27
+ => DB insertCritEntries: 2
+advancing game state time: 0.227 seconds.
+resolveFireOrder ID 332, shooter: Omega #22 vs Flight #25, w: LightPulse #8
+doDamage, weapon: LightPulse, target: 25
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+Overkill on Salvo or Fighter
+resolveFireOrder ID 336, shooter: Omega #22 vs Flight #25, w: LightPulse #12
+doDamage, weapon: LightPulse, target: 25
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+Overkill on Salvo or Fighter
+resolveFireOrder ID 335, shooter: Omega #22 vs Flight #25, w: LightPulse #11
+doDamage, weapon: LightPulse, target: 25
+doing volley shot: 1
+doing volley shot: 2
+Overkill on Salvo or Fighter
+resolveFireOrder ID 334, shooter: Omega #22 vs Flight #25, w: LightPulse #10
+doDamage, weapon: LightPulse, target: 25
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+Overkill on Salvo or Fighter
+resolveFireOrder ID 333, shooter: Omega #22 vs Flight #25, w: LightPulse #9
+doDamage, weapon: LightPulse, target: 25
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+Overkill on Salvo or Fighter
+resolveFireOrder ID 337, shooter: Omega #22 vs Flight #25, w: LightPulse #13
+doDamage, weapon: LightPulse, target: 25
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+Overkill on Salvo or Fighter
+resolveDogfightFireOrder ID 311, shooter: Flight #26 vs Flight #24, w: 2
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 318, shooter: Flight #26 vs Flight #24, w: 16
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 312, shooter: Flight #26 vs Flight #24, w: 4
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 322, shooter: Flight #26 vs Flight #24, w: 24
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 321, shooter: Flight #26 vs Flight #24, w: 22
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 320, shooter: Flight #26 vs Flight #24, w: 20
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+Overkill on Salvo or Fighter
+resolveDogfightFireOrder ID 319, shooter: Flight #26 vs Flight #24, w: 18
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 317, shooter: Flight #26 vs Flight #24, w: 14
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 316, shooter: Flight #26 vs Flight #24, w: 12
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+Overkill on Salvo or Fighter
+resolveDogfightFireOrder ID 315, shooter: Flight #26 vs Flight #24, w: 10
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 314, shooter: Flight #26 vs Flight #24, w: 8
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+Overkill on Salvo or Fighter
+resolveDogfightFireOrder ID 313, shooter: Flight #26 vs Flight #24, w: 6
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+Overkill on Salvo or Fighter
+resolveDogfightFireOrder ID 329, shooter: Flight #24 vs Flight #26, w: 14
+doDamage, weapon: LinkedParticleGun, target: 26/1
+resolveDogfightFireOrder ID 330, shooter: Flight #24 vs Flight #26, w: 16
+doDamage, weapon: LinkedParticleGun, target: 26/9
+resolveDogfightFireOrder ID 331, shooter: Flight #24 vs Flight #26, w: 18
+doDamage, weapon: LinkedParticleGun, target: 26/11
+resolveDogfightFireOrder ID 328, shooter: Flight #24 vs Flight #26, w: 12
+doDamage, weapon: LinkedParticleGun, target: 26/15
+resolveDogfightFireOrder ID 327, shooter: Flight #24 vs Flight #26, w: 10
+doDamage, weapon: LinkedParticleGun, target: 26/23
+resolveDogfightFireOrder ID 326, shooter: Flight #24 vs Flight #26, w: 8
+doDamage, weapon: LinkedParticleGun, target: 26/3
+resolveDogfightFireOrder ID 325, shooter: Flight #24 vs Flight #26, w: 6
+doDamage, weapon: LinkedParticleGun, target: 26/23
+resolveDogfightFireOrder ID 323, shooter: Flight #24 vs Flight #26, w: 2
+doDamage, weapon: LinkedParticleGun, target: 26/7
+resolveDogfightFireOrder ID 324, shooter: Flight #24 vs Flight #26, w: 4
+doDamage, weapon: LinkedParticleGun, target: 26/1
+DB updateFireOrders: 27
+resolveBallisticActions: 0
+endAllDogfights: 
+ => DB insertDamageEntries: 27
+ => DB insertCritEntries: 3
+advancing game state time: 0.321 seconds.
+resolveFireOrder ID 332, shooter: Omega #22 vs Flight #25, w: LightPulse #8
+resolveFireOrder ID 336, shooter: Omega #22 vs Flight #25, w: LightPulse #12
+resolveFireOrder ID 335, shooter: Omega #22 vs Flight #25, w: LightPulse #11
+resolveFireOrder ID 334, shooter: Omega #22 vs Flight #25, w: LightPulse #10
+doDamage, weapon: LightPulse, target: 25
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+Overkill on Salvo or Fighter
+resolveFireOrder ID 333, shooter: Omega #22 vs Flight #25, w: LightPulse #9
+resolveFireOrder ID 337, shooter: Omega #22 vs Flight #25, w: LightPulse #13
+resolveDogfightFireOrder ID 311, shooter: Flight #26 vs Flight #24, w: 2
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 318, shooter: Flight #26 vs Flight #24, w: 16
+resolveDogfightFireOrder ID 312, shooter: Flight #26 vs Flight #24, w: 4
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 322, shooter: Flight #26 vs Flight #24, w: 24
+resolveDogfightFireOrder ID 321, shooter: Flight #26 vs Flight #24, w: 22
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 320, shooter: Flight #26 vs Flight #24, w: 20
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+Overkill on Salvo or Fighter
+resolveDogfightFireOrder ID 319, shooter: Flight #26 vs Flight #24, w: 18
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 317, shooter: Flight #26 vs Flight #24, w: 14
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 316, shooter: Flight #26 vs Flight #24, w: 12
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+Overkill on Salvo or Fighter
+resolveDogfightFireOrder ID 315, shooter: Flight #26 vs Flight #24, w: 10
+resolveDogfightFireOrder ID 314, shooter: Flight #26 vs Flight #24, w: 8
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+doing volley shot: 4
+resolveDogfightFireOrder ID 313, shooter: Flight #26 vs Flight #24, w: 6
+resolveDogfightFireOrder ID 329, shooter: Flight #24 vs Flight #26, w: 14
+resolveDogfightFireOrder ID 330, shooter: Flight #24 vs Flight #26, w: 16
+doDamage, weapon: LinkedParticleGun, target: 26/7
+resolveDogfightFireOrder ID 331, shooter: Flight #24 vs Flight #26, w: 18
+resolveDogfightFireOrder ID 328, shooter: Flight #24 vs Flight #26, w: 12
+resolveDogfightFireOrder ID 327, shooter: Flight #24 vs Flight #26, w: 10
+doDamage, weapon: LinkedParticleGun, target: 26/21
+resolveDogfightFireOrder ID 326, shooter: Flight #24 vs Flight #26, w: 8
+doDamage, weapon: LinkedParticleGun, target: 26/3
+resolveDogfightFireOrder ID 325, shooter: Flight #24 vs Flight #26, w: 6
+doDamage, weapon: LinkedParticleGun, target: 26/9
+resolveDogfightFireOrder ID 323, shooter: Flight #24 vs Flight #26, w: 2
+doDamage, weapon: LinkedParticleGun, target: 26/17
+resolveDogfightFireOrder ID 324, shooter: Flight #24 vs Flight #26, w: 4
+doDamage, weapon: LinkedParticleGun, target: 26/15
+DB updateFireOrders: 27
+resolveBallisticActions: 0
+endAllDogfights: 
+ => DB insertDamageEntries: 15
+ => DB insertCritEntries: 4
+advancing game state time: 0.332 seconds.
+resolveFireOrder ID 332, shooter: Omega #22 vs Flight #25, w: LightPulse #8
+resolveFireOrder ID 336, shooter: Omega #22 vs Flight #25, w: LightPulse #12
+doDamage, weapon: LightPulse, target: 25
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+Overkill on Salvo or Fighter
+resolveFireOrder ID 335, shooter: Omega #22 vs Flight #25, w: LightPulse #11
+doDamage, weapon: LightPulse, target: 25
+doing volley shot: 1
+doing volley shot: 2
+Overkill on Salvo or Fighter
+resolveFireOrder ID 334, shooter: Omega #22 vs Flight #25, w: LightPulse #10
+resolveFireOrder ID 333, shooter: Omega #22 vs Flight #25, w: LightPulse #9
+resolveFireOrder ID 337, shooter: Omega #22 vs Flight #25, w: LightPulse #13
+doDamage, weapon: LightPulse, target: 25
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+Overkill on Salvo or Fighter
+resolveDogfightFireOrder ID 311, shooter: Flight #26 vs Flight #24, w: 2
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+resolveDogfightFireOrder ID 318, shooter: Flight #26 vs Flight #24, w: 16
+resolveDogfightFireOrder ID 312, shooter: Flight #26 vs Flight #24, w: 4
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+Overkill on Salvo or Fighter
+resolveDogfightFireOrder ID 322, shooter: Flight #26 vs Flight #24, w: 24
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+resolveDogfightFireOrder ID 321, shooter: Flight #26 vs Flight #24, w: 22
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+resolveDogfightFireOrder ID 320, shooter: Flight #26 vs Flight #24, w: 20
+resolveDogfightFireOrder ID 319, shooter: Flight #26 vs Flight #24, w: 18
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+resolveDogfightFireOrder ID 317, shooter: Flight #26 vs Flight #24, w: 14
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+Overkill on Salvo or Fighter
+resolveDogfightFireOrder ID 316, shooter: Flight #26 vs Flight #24, w: 12
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+resolveDogfightFireOrder ID 315, shooter: Flight #26 vs Flight #24, w: 10
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+doing volley shot: 3
+resolveDogfightFireOrder ID 314, shooter: Flight #26 vs Flight #24, w: 8
+doDamage, weapon: ParticlePulsar, target: 24
+doing volley shot: 1
+doing volley shot: 2
+Overkill on Salvo or Fighter
+resolveDogfightFireOrder ID 313, shooter: Flight #26 vs Flight #24, w: 6
+resolveDogfightFireOrder ID 329, shooter: Flight #24 vs Flight #26, w: 14
+doDamage, weapon: LinkedParticleGun, target: 26/17
+resolveDogfightFireOrder ID 330, shooter: Flight #24 vs Flight #26, w: 16
+doDamage, weapon: LinkedParticleGun, target: 26/7
+resolveDogfightFireOrder ID 331, shooter: Flight #24 vs Flight #26, w: 18
+doDamage, weapon: LinkedParticleGun, target: 26/19
+resolveDogfightFireOrder ID 328, shooter: Flight #24 vs Flight #26, w: 12
+doDamage, weapon: LinkedParticleGun, target: 26/5
+resolveDogfightFireOrder ID 327, shooter: Flight #24 vs Flight #26, w: 10
+doDamage, weapon: LinkedParticleGun, target: 26/13
+resolveDogfightFireOrder ID 326, shooter: Flight #24 vs Flight #26, w: 8
+doDamage, weapon: LinkedParticleGun, target: 26/9
+resolveDogfightFireOrder ID 325, shooter: Flight #24 vs Flight #26, w: 6
+doDamage, weapon: LinkedParticleGun, target: 26/21
+resolveDogfightFireOrder ID 323, shooter: Flight #24 vs Flight #26, w: 2
+doDamage, weapon: LinkedParticleGun, target: 26/9
+resolveDogfightFireOrder ID 324, shooter: Flight #24 vs Flight #26, w: 4
+doDamage, weapon: LinkedParticleGun, target: 26/15
+DB updateFireOrders: 27
+resolveBallisticActions: 0
+endAllDogfights: 
+ => DB insertDamageEntries: 21
+ => DB insertCritEntries: 2
+advancing game state time: 0.327 seconds.

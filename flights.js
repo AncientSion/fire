@@ -301,8 +301,16 @@ function Flight(data){
 				fighterDiv.appendChild(img);
 
 			if (!active){
-				fighterDiv.appendChild(new Image()).src = "varIcons/destroyed.png";
-				fighterDiv.childNodes[1].className = "overlay size30";
+				var overlay = new Image();
+				$(overlay)
+					.attr("src", "varIcons/destroyed.png")
+					.addClass("overlay").addClass("size30")
+					.hover(function(e){
+						e.stopPropagation();
+						var p = $(this).parent().children()[0];
+						game.getUnitById($(p).data("shipId")).getSystemById($(p).data("fighterId")).hover(e);
+					})
+				fighterDiv.appendChild(overlay);
 			}
 			else {
 				$(img).hover(function(e){
@@ -486,15 +494,7 @@ function Fighter(data){
 	this.disabled = false;
 
 	for (var i = 0; i < data.crits.length; i++){
-		this.crits.push(new Crit(
-				data.crits[i].id,
-				data.crits[i].shipid,
-				data.crits[i].systemid,
-				data.crits[i].turn,
-				data.crits[i].type,
-				data.crits[i].duration
-			)
-		)
+		this.crits.push(new Crit(data.crits[i]))
 	}
 	
 	this.isDestroyedThisTurn = function(){

@@ -464,7 +464,7 @@ class Ship {
 		if ($angle < 0){
 			$angle *= -1;
 		}
-		
+	
 		$base = $this->getBaseHitChance() * $this->getLockMod($fire) * $this->getProfileMod();
 		$a = $base * $this->profile[0];
 		$b = $base * $this->profile[1];
@@ -479,7 +479,8 @@ class Ship {
 	}
 
 	public function getProfileMod(){
-		return 1+($this->getBaseImpulse() / $this->getCurrentImpulse()-1)/2;
+		$i = $this->getCurrentImpulse();
+		return 1+((($this->getBaseImpulse() / $this->getCurrentImpulse())-1)/3);
 	}
 
 	public function getLockMod($fire){

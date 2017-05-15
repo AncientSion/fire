@@ -991,6 +991,7 @@ class DBManager {
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			if ($result){
 			for ($j = 0; $j < (sizeof($result)); $j++){
+				//var_export($result[$j]);
 					$crit = new Crit(
 						$result[$j]["id"],
 						$result[$j]["shipid"],

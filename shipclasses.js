@@ -1948,7 +1948,7 @@ function Ship(data){
 	}
 
 	this.getProfileMod = function(){
-		return Math.floor((1+((((this.getBaseImpulse() / this.getTotalImpulse())-1)/2)))*1000)/10;
+		return Math.floor((1+((((this.getBaseImpulse() / this.getTotalImpulse())-1)/3)))*100);
 	}
 
 	this.getIncomingBallistics = function(){
@@ -2184,7 +2184,7 @@ function Ship(data){
 
 	this.getLockString = function(lock){
 		if (lock){
-			return "<span class='green'>Active Lock</span>";
+			return "<span class='green'>Active Lock (x 1.5)</span>";
 		}
 		return "<span class='red'>No Sensor Lock</span>";
 	}

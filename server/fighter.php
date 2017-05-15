@@ -144,7 +144,7 @@ class Thunderbolt extends Fighter {
 	public $name = "Thunderbolt";
 	public $display = "Thunderbolt";
 	public $faction = "Earth Alliance";
-	public $value = 46;
+	public $value = 42;
 	public $mass = 42;
 	public $ep = 110;
 	public $integrity = 38;
@@ -156,8 +156,8 @@ class Thunderbolt extends Fighter {
 	}
 
 	public function addSystems(){
-		//$id, $fighterId, $parentId, $linked, $minDmg, $maxDmg, $start, $end){
-		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 2, 2, 14, 18, 330, 30);
+			//t($id, $fighterId, $parentId, $shots, $minDmg, $maxDmg, $start, $end){
+		$this->systems[] = new ParticlePulsar(sizeof($this->systems), $this->id, $this->parentId, 3, 12, 16, 330, 30);
 	}
 }
 

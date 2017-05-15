@@ -31,43 +31,54 @@ class Pulse extends Weapon {
 
 		$mod = $this->getDamageMod($fire);
 
+		$total = 0;
+		$shield = 0;
+		$struct = 0;
+		$armour = 0;
+		$destroyed = false;
+		$remInt = $system->getCurrentIntegrity();
+		$negation = $fire->target->getArmourValue($fire, $system);
+
 		for ($i = 0; $i < $this->volley; $i++){
-			$destroyed = false;
+			Debug::log("doing volley shot: ".($i+1));
 			$totalDmg = floor($this->getBaseDamage($fire) * $mod);
-			$remInt = $system->getCurrentIntegrity();
-			$negation = $fire->target->getArmourValue($fire, $system);
 			$dmg = $this->determineDamage($totalDmg, $negation);
 
-			if ($remInt - $dmg->structDmg < 1){
+			$total += $totalDmg;
+			$struct += $dmg->structDmg;
+			$armour += $dmg->armourDmg;
+
+			if ($remInt - $struct < 1){
 				$destroyed = true;
 				if (!(is_a($fire->target, "Mini"))){
 					Debug::log(" => target system ".$system->name." #".$system->id." destroyed. rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".(abs($remInt - $dmg->structDmg)." dmg"));
 				} else Debug::log("Overkill on Salvo or Fighter");
+				break;
 			}
-
-			$dmg = new Damage(
-				-1,
-				$fire->id,
-				$fire->gameid,
-				$fire->targetid,
-				$fire->section,
-				$system->id,
-				$fire->turn,
-			$roll,
-				$fire->weapon->type,
-				$totalDmg,
-				$dmg->shieldDmg,
-				$dmg->structDmg,
-				$dmg->armourDmg,
-				0,
-				$negation,
-				$destroyed,
-				"",
-				1
-			);
-			$fire->damages[] = $dmg;
-			$fire->target->applyDamage($dmg);
 		}
+
+		$dmg = new Damage(
+			-1,
+			$fire->id,
+			$fire->gameid,
+			$fire->targetid,
+			$fire->section,
+			$system->id,
+			$fire->turn,
+			$roll,
+			$fire->weapon->type,
+			$total,
+			$shield,
+			$struct,
+			$armour,
+			0,
+			$negation,
+			$destroyed,
+			"",
+			1
+		);
+		$fire->damages[] = $dmg;
+		$fire->target->applyDamage($dmg);
 	}	
 }
 

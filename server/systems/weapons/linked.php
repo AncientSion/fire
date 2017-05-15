@@ -18,22 +18,6 @@ class Linked extends Weapon {
 		$this->start = $start;
 		$this->end = $end;
 	}
-
-	public function rollToHit($fire){
-		echo "w: ".get_class($this).", s: ".$this->shots.", l: ".$this->linked."</br></br>";
-		for ($i = 0; $i < $this->shots; $i++){
-			echo "shot: ".($i+1)."</br></br>";
-			$roll = mt_rand(1, 100);
-			$fire->rolls[] = $roll;
-			var_dump($fire->rolls);
-			echo "</br></br>";
-			$fire->notes .= $roll." ";
-			if ($roll <= $fire->req){
-				$fire->hits++;
-			}
-		}
-		return true;
-	}
 }
 
 class LinkedParticle extends Linked {
@@ -67,4 +51,31 @@ class LinkedNeutronRepeater extends LinkedParticle {
 	}
 }
 
+class FighterPulse extends Pulse {
+	public $type = "Pulse";
+	public $animation = "projectile";
+	public $projSpeed = 7;
+	public $projSize = 1.5;
+	public $traverse = -4;
+
+	function __construct($id, $fighterId, $parentId, $volley, $minDmg, $maxDmg, $start, $end){
+		parent::__construct($id, $parentId, $start, $end, 0, 0);
+		$this->fighterId = $fighterId;
+		$this->volley = $volley;
+		$this->minDmg = $minDmg;
+		$this->maxDmg = $maxDmg;
+	}
+}
+
+class ParticlePulsar extends FighterPulse {
+	public $name = "ParticlePulsar";
+	public $display = "Particle Pulsar";
+	public $animColor = "blue";
+	public $accDecay = 220;
+	public $shots = 1;
+	
+	function __construct($id, $fighterId, $parentId, $volley, $minDmg, $maxDmg, $start, $end){
+		parent::__construct($id, $fighterId, $parentId, $volley, $minDmg, $maxDmg, $start, $end);
+	}
+}
 ?>

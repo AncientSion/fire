@@ -109,3 +109,77 @@ createPlayerStatus
 0
 -1
 joined
+resolveUnitMovementDB
+resolveUnitMovementDB
+advancing game state time: 0.017 seconds.
+advancing game state time: 0.047 seconds.
+resolveBallisticActions: 0
+endAllDogfights: 
+ => DB insertCritEntries: 0
+advancing game state time: 0.025 seconds.
+destroyUnitsDB
+advancing game state time: 0.024 seconds.
+resolveDeployActions
+advancing game state time: 0.031 seconds.
+resolveUnitMovementDB
+advancing game state time: 0.02 seconds.
+resolveUnitMovementDB
+advancing game state time: 0.018 seconds.
+resolveBallisticActions: 0
+endAllDogfights: 
+ => DB insertCritEntries: 0
+advancing game state time: 0.023 seconds.
+destroyUnitsDB
+advancing game state time: 0.038 seconds.
+resolveDeployActions
+advancing game state time: 0.013 seconds.
+resolveUnitMovementDB
+advancing game state time: 0.01 seconds.
+resolveUnitMovementDB
+advancing game state time: 0.022 seconds.
+resolveFireOrder ID 281, shooter: Flight #24 vs Omega #22, w: LinkedParticleGun #2
+resolveFireOrder ID 283, shooter: Flight #24 vs Omega #22, w: LinkedParticleGun #6
+doDamage, weapon: LinkedParticleGun, target: 22/2
+resolveFireOrder ID 284, shooter: Flight #24 vs Omega #22, w: LinkedParticleGun #8
+resolveFireOrder ID 285, shooter: Flight #24 vs Omega #22, w: LinkedParticleGun #10
+resolveFireOrder ID 286, shooter: Flight #24 vs Omega #22, w: LinkedParticleGun #12
+resolveFireOrder ID 287, shooter: Flight #24 vs Omega #22, w: LinkedParticleGun #14
+resolveFireOrder ID 288, shooter: Flight #24 vs Omega #22, w: LinkedParticleGun #16
+doDamage, weapon: LinkedParticleGun, target: 22/-1
+resolveFireOrder ID 289, shooter: Flight #24 vs Omega #22, w: LinkedParticleGun #18
+resolveFireOrder ID 282, shooter: Flight #24 vs Omega #22, w: LinkedParticleGun #4
+resolveFireOrder ID 295, shooter: Flight #25 vs Omega #22, w: LinkedParticleGun #12
+resolveFireOrder ID 298, shooter: Flight #25 vs Omega #22, w: LinkedParticleGun #18
+resolveFireOrder ID 297, shooter: Flight #25 vs Omega #22, w: LinkedParticleGun #16
+doDamage, weapon: LinkedParticleGun, target: 22/-1
+resolveFireOrder ID 296, shooter: Flight #25 vs Omega #22, w: LinkedParticleGun #14
+resolveFireOrder ID 294, shooter: Flight #25 vs Omega #22, w: LinkedParticleGun #10
+resolveFireOrder ID 292, shooter: Flight #25 vs Omega #22, w: LinkedParticleGun #6
+doDamage, weapon: LinkedParticleGun, target: 22/-1
+resolveFireOrder ID 291, shooter: Flight #25 vs Omega #22, w: LinkedParticleGun #4
+resolveFireOrder ID 290, shooter: Flight #25 vs Omega #22, w: LinkedParticleGun #2
+resolveFireOrder ID 293, shooter: Flight #25 vs Omega #22, w: LinkedParticleGun #8
+resolveFireOrder ID 305, shooter: Flight #26 vs Primus #23, w: ParticlePulsar #14
+resolveFireOrder ID 309, shooter: Flight #26 vs Primus #23, w: ParticlePulsar #22
+resolveFireOrder ID 308, shooter: Flight #26 vs Primus #23, w: ParticlePulsar #20
+resolveFireOrder ID 307, shooter: Flight #26 vs Primus #23, w: ParticlePulsar #18
+doDamage, weapon: ParticlePulsar, target: 23
+resolveFireOrder ID 306, shooter: Flight #26 vs Primus #23, w: ParticlePulsar #16
+doDamage, weapon: ParticlePulsar, target: 23
+resolveFireOrder ID 302, shooter: Flight #26 vs Primus #23, w: ParticlePulsar #8
+doDamage, weapon: ParticlePulsar, target: 23
+resolveFireOrder ID 304, shooter: Flight #26 vs Primus #23, w: ParticlePulsar #12
+resolveFireOrder ID 303, shooter: Flight #26 vs Primus #23, w: ParticlePulsar #10
+doDamage, weapon: ParticlePulsar, target: 23
+resolveFireOrder ID 301, shooter: Flight #26 vs Primus #23, w: ParticlePulsar #6
+resolveFireOrder ID 300, shooter: Flight #26 vs Primus #23, w: ParticlePulsar #4
+doDamage, weapon: ParticlePulsar, target: 23
+resolveFireOrder ID 299, shooter: Flight #26 vs Primus #23, w: ParticlePulsar #2
+doDamage, weapon: ParticlePulsar, target: 23
+resolveFireOrder ID 310, shooter: Flight #26 vs Primus #23, w: ParticlePulsar #24
+DB updateFireOrders: 30
+resolveBallisticActions: 0
+endAllDogfights: 
+ => DB insertDamageEntries: 28
+ => DB insertCritEntries: 1
+advancing game state time: 0.305 seconds.

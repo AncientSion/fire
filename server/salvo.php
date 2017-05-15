@@ -146,10 +146,10 @@ class Mini extends Ship {
 	}
 
 	public function getHitChance($fire){
-		return ceil($fire->hitSystem[sizeof($fire->hitSystem)-1]->getSubHitChance() * $this->getLockMod($fire));
+		return ceil($fire->hitSystem[sizeof($fire->hitSystem)-1]->getSubHitChance() * $this->getLockMod($fire) * $this->getProfileMod());
 	}
-
 }
+
 
 class Salvo extends Mini {
 	public $targetid;
@@ -175,6 +175,10 @@ class Salvo extends Mini {
 		
 		$this->addStructures($amount);
 		$this->setProps();
+	}	
+
+	public function getProfileMod(){
+		return 1;
 	}
 
 	public function getShots($turn){

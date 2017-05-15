@@ -26,6 +26,7 @@ class Flight extends Mini {
 	public function setState($turn){
 		parent::setState($turn);
 		$this->setSize();
+		$this->setCurrentImpulse();
 	}
 
 	public function setSize(){
@@ -106,7 +107,7 @@ class Flight extends Mini {
     }
 
 	public function resolveDogfightFireOrder($fire){
-		echo ("resolveDogfightFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".$fire->weaponid."</br></br>");
+		Debug::log("resolveDogfightFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".$fire->weaponid);
 
 		if ($this->isDestroyed()){
 			$fire->resolved = -1;
@@ -120,6 +121,7 @@ class Flight extends Mini {
 			$fire->weapon->rollToHit($fire);
 
 			for ($i = 0; $i < $fire->shots; $i++){
+				if (!isset($fire->rolls[$i])){Debug::log("no roll for: ".$fire->id.", ".get_class($fire->weapon));}
 				if ($fire->rolls[$i] <= $fire->req){
 					$fire->weapon->doDamage($fire, $fire->rolls[$i], $fire->hitSystem[$i]);
 				}

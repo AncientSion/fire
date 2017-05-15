@@ -1538,6 +1538,11 @@ Pulse.prototype.getAnimation = function(fire){
 	var delay = 40;
 	var shotInterval = 6;
 
+	if (fire.shooter.flight){
+		grouping = 4;
+		delay = 20;
+	}
+
 	for (var j = 0; j < fire.guns; j++){
 		var rng = range(0, 15)
 		var gunAnims = [];

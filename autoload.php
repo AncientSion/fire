@@ -106,6 +106,11 @@ spl_autoload_register(
                 'linkedparticlegun' => '/server/systems/weapons/linked.php',
                 'linkedneutronrepeater' => '/server/systems/weapons/linked.php',
 
+
+                'fighterpulse' => '/server/systems/weapons/linked.php',
+                'particlepulsar' => '/server/systems/weapons/linked.php',
+
+
                 'structure' => '/server/systems/structure.php',
 
                 'debug' => '/server/debug.php',

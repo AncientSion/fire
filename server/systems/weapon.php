@@ -14,7 +14,8 @@ class Weapon extends System {
 	public $fireOrders = array();
 	public $priority;
 	public $traverse = 0;
-	public $fc = array(0 => 100, 1 => 100);
+	public $projSize = 10;
+	public $projSpeed = 5;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
 		$this->start = $start;
@@ -72,6 +73,7 @@ class Weapon extends System {
 		$structDmg = 0;
 
 		if ($totalDmg <= $negation*0.75){ 
+			Debug::log("no pen");
 			$armourDmg = ceil($totalDmg/2);
 		}
 		else if ($totalDmg <= $negation){ 
