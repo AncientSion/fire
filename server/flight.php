@@ -106,7 +106,7 @@ class Flight extends Mini {
     }
 
 	public function resolveDogfightFireOrder($fire){
-		Debug::log("resolveDogfightFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".$fire->weaponid);
+		echo ("resolveDogfightFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".$fire->weaponid."</br></br>");
 
 		if ($this->isDestroyed()){
 			$fire->resolved = -1;
