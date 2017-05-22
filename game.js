@@ -391,18 +391,18 @@ function Game(id, name, status, userid, turn, phase){
 			var w = $(ele).width();
 			var h = $(ele).height();
 
-			if (x + w/2 > res.x){
-				x += 300;
-				y += 100;
-			}
-			else {
-				x += w/2;
-				y += h/2;
-			}
+
+			x += 80;
+			y += 100;
 
 			$(ele)
 				.css("left", x)
 				.css("top", y);
+
+			if (i == 5){
+				x = 700;
+				y = 400;
+			}
 		}
 
 		for (var i = 0; i < this.ballistics.length; i++){
