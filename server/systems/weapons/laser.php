@@ -180,7 +180,7 @@ class NeutronLaser extends Laser {
 	public $display = "216mm Neutron Laser";
 	public $rakeTime = 40;
 	public $animColor = "yellow";
-	public $beamWidth = 3;
+	public $beamWidth = 2;
 	public $minDmg = 105;
 	public $maxDmg = 145;
 	public $optRange = 1000;

@@ -117,10 +117,10 @@ function Flight(data){
 		}
 	}
 
-	this.getShooterPosition = function(j){
+	this.getGunOrigin = function(j){
 		for (var i = j; i < this.structures.length; i++){
-			if (!this.structures[i].destroyed || !this.structures[i].disabled){
-				return this.layout[j];
+			if ( (!this.structures[i].destroyed && !this.structures[i].disabled) || this.structures[i].isDestroyedThisTurn() ) {
+				return this.layout[i];
 			}
 		}
 	}

@@ -9,7 +9,6 @@ class PrimarySystem extends System {
 		$this->mass = $mass;
 		$this->integrity = $mass;
 		$this->effiency = $effiency;
-		$this->boostEffect = new Effect("Output", 10);
 	}
 
 	public function getHitChance(){
@@ -80,6 +79,7 @@ class Engine extends PrimarySystem {
 
 	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
 		$this->powerReq = ceil($output / 5);
+		$this->boostEffect = new Effect("Output", 15);
         parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
     }
 
@@ -145,6 +145,9 @@ class Sensor extends PrimarySystem {
 
 	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
 		$this->powerReq = floor($output/20);
+		$this->boostEffect = new Effect("Output", 10);
+		$this->modes = array("Lock", "Mask");
+		$this->states = array(1, 0);
         parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
     }
 	public function getCritEffects(){

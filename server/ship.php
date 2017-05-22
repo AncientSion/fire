@@ -479,11 +479,13 @@ class Ship {
 	}
 
 	public function getProfileMod(){
+		//return 1;
 		$i = $this->getCurrentImpulse();
 		return 1+((($this->getBaseImpulse() / $this->getCurrentImpulse())-1)/3);
 	}
 
 	public function getLockMod($fire){
+		//return false;
 		if ($fire->shooter->hasLockOn($this->id)){
 			return 1.5;
 		} else return 1;

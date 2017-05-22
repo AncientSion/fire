@@ -49,7 +49,7 @@
 				$wpn = 0;
 				$hangar = 0;
 
-				for ($j = 0; $j < 200; $j++){
+				for ($j = 0; $j < 100; $j++){
 					$sys = $ships[$i]->getHitSystem($fires[$i]);
 					if ($sys instanceof Hangar){
 						$hangar++;

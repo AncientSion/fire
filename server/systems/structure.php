@@ -82,6 +82,7 @@ class Structure {
 }
 
 class Primary extends Structure {
+	public $name = "Main Structure";
 	
 	function __construct($id, $parentId, $start, $end, $integrity, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $integrity, 0, $destroyed);

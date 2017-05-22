@@ -11,7 +11,7 @@ function init(){
 	$("#mouseCanvas").contextmenu(mouseCanvasScroll);
 
 	$("#mouseCanvas").mousedown(handleMouseDown);
-	$("#mouseCanvas").mousemove(function(e){handleMouseMove(e);});
+	//$("#mouseCanvas").mousemove(function(e){handleMouseMove(e);});
 	$("#mouseCanvas").mouseup(function(e){handleMouseUp(e);});
 	$("#mouseCanvas").mouseout(function(e){handleMouseOut(e);});
 
@@ -111,10 +111,30 @@ function canvasMouseMove(e){
 	e.stopPropagation();
 
 	window.iterator++;
-	if (window.iterator != 3){
+	if (window.iterator < 2){
 		return;
 	}
 	window.iterator = 0;
+
+	if (cam.scroll){
+		// get the current mouse position
+		var mouseX = e.clientX;
+		var mouseY = e.clientY;
+
+		// dx & dy are the distance the mouse has moved since
+		// the last mousemove event
+		var dx = mouseX- cam.sx;
+		var dy = mouseY- cam.sy;
+
+		// reset the vars for next mousemove
+		cam.sx = mouseX;
+		cam.sy = mouseY;
+
+		// accumulate the net panning done
+		cam.o.x += dx;
+		cam.o.y += dy;
+		game.redraw();
+	}
 
 	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
 	//$("#currentPos").html(pos.x + " / " + pos.y + "____" + cam.o.x + " / " + cam.o.y+ "___" + (pos.x-cam.o.x) + " / " + (pos.y-cam.o.y));
@@ -301,6 +321,18 @@ function canvasMouseMove(e){
 		var top = (e.clientY)  + 40;
 		var left = (e.clientX) - w;
 		$(ele).css("top", top).css("left", left).show();
+
+		mouseCtx.clearRect(0, 0, res.x, res.y);
+		mouseCtx.globalAlpha = 0.3;
+		mouseCtx.translate(cam.o.x, cam.o.y)
+		mouseCtx.scale(cam.z, cam.z)
+		mouseCtx.beginPath();
+		mouseCtx.arc(pos.x, pos.y, game.getUnitById(game.deploying).size*1, 0, 2*Math.PI, false);
+		mouseCtx.closePath();
+		mouseCtx.fillStyle = "red";
+		mouseCtx.fill();
+		mouseCtx.setTransform(1,0,0,1,0,0);
+		mouseCtx.globalAlpha = 1;
 	}
 	else if (!game.deploying){
 		$("#deployOverlay").hide();

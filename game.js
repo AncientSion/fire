@@ -184,6 +184,7 @@ function Game(id, name, status, userid, turn, phase){
 		this.deployArea = [];
 		this.deployBlock = false;
 		moveCtx.clearRect(0, 0, res.x, res.y);
+		mouseCtx.clearRect(0, 0, res.x, res.y);
 		$("#deployOverlay").hide();
 	}
 
@@ -263,25 +264,25 @@ function Game(id, name, status, userid, turn, phase){
 			planCtx.fill();
 			planCtx.setTransform(1,0,0,1,0,0);
 		}
-		//return;
 
 		for (var i = 0; i < this.ships.length; i++){
-			//if (this.ships[i].id != game.deploying){
-				var inValid = this.ships[i].getControlArea();
-				if (inValid){
-					planCtx.translate(cam.o.x, cam.o.y)
-					planCtx.scale(cam.z, cam.z)
-					planCtx.beginPath();
-					planCtx.arc(inValid.pos.x, inValid.pos.y, inValid.s, 0, 2*Math.PI, false);
-					planCtx.closePath();
-					planCtx.fillStyle = "red";
-					planCtx.fill();
-					planCtx.setTransform(1,0,0,1,0,0);
-				}
-			//}
+			var zone = this.ships[i].getControlZone();
+			this.drawControlZone(zone);
 		}
 		planCtx.globalAlpha = 1;
-		//moveCtx.setTransform(1,0,0,1,0,0);
+	}
+
+	this.drawControlZone = function(zone){
+		if (zone){
+			planCtx.translate(cam.o.x, cam.o.y)
+			planCtx.scale(cam.z, cam.z)
+			planCtx.beginPath();
+			planCtx.arc(zone.pos.x, zone.pos.y, zone.s, 0, 2*Math.PI, false);
+			planCtx.closePath();
+			planCtx.fillStyle = "red";
+			planCtx.fill();
+			planCtx.setTransform(1,0,0,1,0,0);
+		}
 	}
 
 	this.createDeploymentTable = function(){
@@ -383,20 +384,19 @@ function Game(id, name, status, userid, turn, phase){
 	}
 
 	this.setShipDivs = function(){
+		var x = 100;
+		var y = 400;
 		for (var i = 0; i < this.ships.length; i++){
 			var ele = $(this.ships[i].element);
-			var h = $(ele).height();
-			/*
 			var w = $(ele).width();
 			var h = $(ele).height();
-			var x = this.ships[i].x + cam.o.x + w/2;
-			var y = this.ships[i].y + cam.o.y;
-			*/
-			
 
 			$(ele)
-				.css("left", 100)
-				.css("top", res.y/2 - h/2 + 100);
+				.css("left", x)
+				.css("top", y);
+
+			x += w/2;
+			y += h/2;
 		}
 		for (var i = 0; i < this.ballistics.length; i++){
 			var ele = $(this.ballistics[i].element);

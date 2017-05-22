@@ -562,5 +562,5 @@ function sensorEvent(isClick, ship, loc, facing, d, a){
 			unitid: ship.id,
 			systemid: sensor.id
 		});
-	} else drawSensorArc(w, d, p, str, len, loc, facing, a);
+	} else drawSensorArc(w, d, p, str, len, loc, facing, a, sensor);
 }

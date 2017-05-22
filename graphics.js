@@ -197,11 +197,17 @@ function getRadialGradient(x, y, s){
 	return grad;
 }	
 
-function drawSensorArc(w, d, p, str, len, loc, facing, a){
+function drawSensorArc(w, d, p, str, len, loc, facing, a, sensor){
+	var color = "";
+	if (sensor.states[0]){
+		color = "red"
+	}
+	else color = "blue";
+
 	mouseCtx.clearRect(0, 0, res.x, res.y);
 	mouseCtx.translate(cam.o.x, cam.o.y);
 	mouseCtx.scale(cam.z, cam.z);
-	
+
 	w = Math.ceil(w);	
 	if (w == 180){
 		mouseCtx.beginPath();			
@@ -222,7 +228,7 @@ function drawSensorArc(w, d, p, str, len, loc, facing, a){
 	}
 
 	mouseCtx.globalAlpha = 0.2;
-	mouseCtx.fillStyle = "red";
+	mouseCtx.fillStyle = color;
 	mouseCtx.fill();
 	mouseCtx.globalAlpha = 1;
 	mouseCtx.setTransform(1,0,0,1,0,0);

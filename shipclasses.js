@@ -157,7 +157,7 @@ function Ship(data){
 		return angle;
 	}
 
-	this.getControlArea = function(){
+	this.getControlZone = function(){
 		if (this.actions.length){
 			var pos = this.getBaseOffsetPos();
 			return {pos: pos, s: this.size*1};
@@ -191,7 +191,7 @@ function Ship(data){
 		if (valid){
 			for (var i = 0; i < game.ships.length; i++){
 				if (game.ships[i].id != this.id){
-					var area = game.ships[i].getControlArea();
+					var area = game.ships[i].getControlZone();
 					if (area){
 						var dist = getDistance(pos, area.pos);
 						if (dist <= area.s + this.size*1){
@@ -1533,6 +1533,10 @@ function Ship(data){
 					powerDiv.style.left = 31 + "px"
 					td.appendChild(powerDiv);
 				}
+				var modeDiv =this.primary.systems[i].getModeDiv();
+				if (modeDiv){
+					td.appendChild(modeDiv);
+				}
 
 				systems++;
 				tr.appendChild(td);
@@ -1919,16 +1923,6 @@ function Ship(data){
 				}
 			}
 		}
-	}
-
-	this.switchMode = function(){
-		this.resetPowers();
-		this.cycleActiveWeapon();
-		this.copyProps();
-		this.setSystemImage()
-		this.setSystemWindow();
-		this.resetDetailsDiv();
-		game.getUnitById(this.parentId).updateDivPower(this);
 	}
 
 	this.getShortInfo = function(){

@@ -803,6 +803,12 @@ PrimarySystem.prototype.getSystemDetailsDiv = function(){
 			tr.insertCell(-1).innerHTML = "Boost Effect";
 			tr.insertCell(-1).innerHTML = this.getBoostEffect();
 	}
+	if (this.modes.length){
+		var tr = table.insertRow(-1);
+			tr.insertCell(-1).innerHTML = "Sensor Mode";
+			tr.insertCell(-1).innerHTML = this.getEWMode();
+			tr.childNodes[1].className = "sensorMode negative";
+	}
 	
 	if (this.crits.length){
 		var tr = document.createElement("tr");
@@ -840,6 +846,10 @@ PrimarySystem.prototype.updateSystemDetailsDiv = function(){
 			}
 		}
 	})
+
+	if (this instanceof Sensor){
+		$("#systemDetailsDiv").find(".sensorMode").html(this.getEWMode());
+	}
 }
 
 
@@ -892,10 +902,43 @@ function LifeSupport(system){
 LifeSupport.prototype = Object.create(PrimarySystem.prototype);
 				
 function Sensor(system){
-	PrimarySystem.call(this, system);
+	PrimarySystem.call(this, system)
 	this.ew = system.ew;
+	this.modes = system.modes;
+	this.states = system.states;
 }
 Sensor.prototype = Object.create(PrimarySystem.prototype);
+
+Sensor.prototype.getModeDiv = function(){
+	return false;
+}
+
+Sensor.prototype.switchMode = function(){
+	if (this.destroyed || this.disabled || this.locked){return;}
+	var index = 0;
+	for (var i = 0; i < this.states.length; i++){
+		if (this.states[i]){
+			this.states[i] = 0;
+			index = i
+			if (index+1 >= this.states.length){
+				index = 0;
+			} else index++;
+
+			this.states[index] = 1;
+			this.updateSystemDetailsDiv();
+			this.drawEW();
+			return;
+		}
+	}
+}
+
+Sensor.prototype.getEWMode = function(){
+	for (var i = 0; i < this.states.length; i++){
+		if (this.states[i]){
+			return this.modes[i];
+		}
+	}
+}
 
 Sensor.prototype.setState = function(){
 	PrimarySystem.prototype.setState.call(this);	
@@ -951,7 +994,7 @@ Sensor.prototype.drawEW = function(){
 			w = 180;
 		} else var	w = Math.min(180, len * Math.pow(str/ew.dist, p));
 
-		drawSensorArc(w, ew.dist, p, str, len, loc, facing, ew.angle);
+		drawSensorArc(w, ew.dist, p, str, len, loc, facing, ew.angle, this);
 	}
 }
 
@@ -1431,7 +1474,7 @@ Particle.prototype.getAnimation = function(fire){
 		var ox;
 		var oy;
 		if (fire.shooter.flight){
-			var o = fire.shooter.getShooterPosition(j);
+			var o = fire.shooter.getGunOrigin(j);
 			ox = fire.shooter.x + o.x;
 			oy = fire.shooter.y + o.y;
 		}
@@ -1593,7 +1636,7 @@ function Laser(system){
 	this.dmgDecay = system.dmgDecay;
 	this.rakeTime = system.rakeTime;
 	this.output = system.rakes;
-	this.beamWidth = (this.minDmg+this.maxDmg)/system.rakes/35;
+	this.beamWidth = system.beamWidth || (this.minDmg+this.maxDmg)/system.rakes/35;
 	this.exploSize = (this.minDmg+this.maxDmg)/system.rakes/30;
 }
 Laser.prototype = Object.create(Weapon.prototype);
