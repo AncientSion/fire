@@ -392,8 +392,8 @@ function Game(id, name, status, userid, turn, phase){
 			var h = $(ele).height();
 
 			if (x + w/2 > res.x){
-				x = 100;
-				y += 400;
+				x += 300;
+				y += 100;
 			}
 			else {
 				x += w/2;
