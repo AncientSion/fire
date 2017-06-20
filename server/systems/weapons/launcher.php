@@ -21,7 +21,7 @@ class Launcher extends Weapon {
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
 	}
 
-	public function getAmmo(){
+	public function getWarhead(){
 		return $this->ammo->name;
 	}
 
@@ -45,17 +45,6 @@ class Launcher extends Weapon {
 		if ($w <= 120){$this->armourMod = 0.8;}
 		else if ($w <= 180){$this->armourMod =  0.6;}
 		else $this->armourMod =  0.3;
-	}
-
-	public function getCritEffects(){
-		return array("disabled", "ammoLoss", "ammolossDamage");
-	}
-
-	public function getCritTreshs(){
-		return array(25, 50, 80);
-	}
-	public function getCritDuration(){
-		return array(1, 0, 0);
 	}
 }
 

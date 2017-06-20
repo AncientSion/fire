@@ -42,7 +42,7 @@
 				$fires[$i]->section = $ships[$i]->structures[0]->id;
 				$fires[$i]->target = $ships[$i];
 
-				echo "<table class='unitTest'><tr><th colSpan=2 style='width: 210px'>".$ships[$i]->name."</th></tr>";
+				echo "<table class='unitTest'><tr><th colSpan=2 style='width: 80%'>".$ships[$i]->name."</th></tr>";
 
 				$main = 0;
 				$internal = 0;
@@ -73,25 +73,26 @@
 				$ep = $ships[$i]->getEP();
 
 				echo "<tr><td colSpan=2>".($ships[$i]->shipType)."</td></tr>";
-				echo "<tr><td>Mass</td><td style='text-align: right'>".($mass)."</td></tr>";
-				echo "<tr><td>Hit </td><td style='text-align: right'>".($ships[$i]->getBaseHitChance())." (".$ships[$i]->getHitChance($fireA)." / ".$ships[$i]->getHitChance($fireB).")</td></tr>";
-				echo "<tr><td>HP</td><td style='text-align: right'>".($ships[$i]->primary->integrity)."</td></tr>";
-				echo "<tr><td>EP</td><td style='text-align: right'>".($ep)."</td></tr>";
-				echo "<tr><td>Turn Cost</td><td style='text-align: right'>".($turncost)."</td></tr>";
-				echo "<tr><td>Turns by EP</td><td style='text-align: right'>".(round($ep / $turncost, 2))."</td></tr>";
-				echo "<tr><td>Str per 1 Mass</td><td style='text-align: right'>".(round($struct / $mass, 2))."</td></tr>";
-				echo "<tr><td>Arm per 1 Mass</td><td style='text-align: right'>".(round($armour["integrity"] / $mass, 2))."</td></tr>";
-				echo "<tr><td>Weapon Mass</td><td style='text-align: right'>".(round($ships[$i]->getWeapons() / $mass * 100, 2))."%</td></tr>";
-				echo "<tr><td>Avg Armour</td><td style='text-align: right'>".(round($negation, 2))."</td></tr>";
+				echo "<tr><td style='text-align: left'>Mass</td><td style='text-align: right'>".($mass)."</td></tr>";
+				echo "<tr><td style='text-align: left'>Hit </td><td style='text-align: right'>".$ships[$i]->getHitChance($fireA)." / ".$ships[$i]->getHitChance($fireB).")</td></tr>";
+			//	echo "<tr><td style='text-align: left'>Hit </td><td style='text-align: right'>".($ships[$i]->getBaseHitChance())." (".$ships[$i]->getHitChance($fireA)." / ".$ships[$i]->getHitChance($fireB).")</td></tr>";
+				echo "<tr><td style='text-align: left'>HP</td><td style='text-align: right'>".($ships[$i]->primary->integrity)."</td></tr>";
+				echo "<tr><td style='text-align: left'>EP</td><td style='text-align: right'>".($ep)."</td></tr>";
+				echo "<tr><td style='text-align: left'>Turn Cost</td><td style='text-align: right'>".($turncost)."</td></tr>";
+				echo "<tr><td style='text-align: left'>Turns by EP</td><td style='text-align: right'>".(round($ep / $turncost, 2))."</td></tr>";
+				echo "<tr><td style='text-align: left'>Str per 1 Mass</td><td style='text-align: right'>".(round($struct / $mass, 2))."</td></tr>";
+				echo "<tr><td style='text-align: left'>Arm per 1 Mass</td><td style='text-align: right'>".(round($armour["integrity"] / $mass, 2))."</td></tr>";
+				echo "<tr><td style='text-align: left'>Weapon Mass</td><td style='text-align: right'>".(round($ships[$i]->getWeapons() / $mass * 100, 2))."%</td></tr>";
+				echo "<tr><td style='text-align: left'>Avg Armour</td><td style='text-align: right'>".(round($negation, 2))."</td></tr>";
 
-				echo "<tr><td>Internal R</td><td style='text-align: right'>".(round($ships[$i]->getInternals(), 3))."</td></tr>";
+				echo "<tr><td style='text-align: left'>Internal R</td><td style='text-align: right'>".(round($ships[$i]->getInternals(), 3))."</td></tr>";
 
-				echo "<tr><td></td><td></td></tr>";
-				echo "<tr><td>Main Structure</td><td style='text-align: right'>".(round($main / $j, 2)*100)."%</td></tr>";
-				echo "<tr><td>Internals</td><td style='text-align: right'>".(round($internal / $j, 2)*100)."%</td></tr>";
+				echo "<tr><td style='text-align: left'></td><td style='text-align: left'></td></tr>";
+				echo "<tr><td style='text-align: left'>Main Structure</td><td style='text-align: right'>".(round($main / $j, 2)*100)."%</td></tr>";
+				echo "<tr><td style='text-align: left'>Internals</td><td style='text-align: right'>".(round($internal / $j, 2)*100)."%</td></tr>";
 				echo "<tr><th>Primary Total</th><th style='text-align: right'>".(round(($main+$internal) / $j, 2)*100)."%</th></tr>";
-				echo "<tr><td>Weapons</td><td style='text-align: right'>".(round($wpn / $j, 2)*100)."%</td></tr>";
-				echo "<tr><td>Hangar</td><td style='text-align: right'>".(round($hangar / $j, 2)*100)."%</td></tr>";
+				echo "<tr><td style='text-align: left'>Weapons</td><td style='text-align: right'>".(round($wpn / $j, 2)*100)."%</td></tr>";
+				echo "<tr><td style='text-align: left'>Hangar</td><td style='text-align: right'>".(round($hangar / $j, 2)*100)."%</td></tr>";
 				echo "<tr><th>Outer Total</th><th style='text-align: right'>".(round(($wpn+$hangar) / $j, 2)*100)."%</th></tr>";
 
 				echo "</table>";

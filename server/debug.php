@@ -7,4 +7,4 @@ class Debug {
 		//file_put_contents('log.txt', $string."\n", FILE_APPEND);
 	}
 }
-?>))
+?>

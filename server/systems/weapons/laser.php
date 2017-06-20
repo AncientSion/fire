@@ -9,7 +9,7 @@ class Laser extends Weapon {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $destroyed = 0){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-		$this->boostEffect = new Effect("Damage", 20);
+		$this->boostEffect[] = new Effect("Damage", 0.20);
 	}
 	
 	public function getDmgPenaltyRange($fire){
@@ -44,12 +44,13 @@ class Laser extends Weapon {
 		for ($j = 0; $j < $this->rakes; $j++){
 			$system = $fire->target->getHitSystem($fire);
 			$destroyed = false;
-			$remInt = $system->getCurrentIntegrity();
+			$remInt = $system->getRemainingIntegrity();
 			$negation = $fire->target->getArmourValue($fire, $system);
 			$dmg = $this->determineDamage($rake, $negation);
 
 			if ($remInt - $dmg->structDmg < 1){
 				$destroyed = true;
+				Debug::log(" => target system ".get_class($system)." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".(abs($remInt - $dmg->structDmg)." dmg"));
 			}
 
 			$dmg = new Damage(
@@ -89,16 +90,19 @@ class LightParticleBeam extends Laser {
 	public $maxDmg = 46;
 	public $optRange = 400;
 	public $dmgDecay = 16;
-	public $accDecay = 85;
+	public $accDecay = 110;
 	public $shots = 1;
 	public $reload = 1;
 	public $powerReq = 2;
+	public $effiency = 2;
+	public $maxBoost = 1;
 	public $rakes = 1;
 	public $mass = 20;
 	public $traverse = -2;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+		$this->boostEffect[] = new Effect("Accuracy", 0.30);
 	}
 }
 
@@ -129,7 +133,7 @@ class LightLaser extends Laser {
 
 class MediumLaser extends Laser {
 	public $name = "MediumLaser";
-	public $display = "216mm 'Medium' Laser";
+	public $display = "164mm 'Medium' Laser";
 	public $animColor = "red";
 	public $rakeTime = 80;
 	public $beamWidth = 3;
@@ -152,6 +156,30 @@ class MediumLaser extends Laser {
 }
 
 class HeavyLaser extends Laser {
+	public $name = "HeavyLaser";
+	public $display = "215mm Pulse Laser";
+	public $animColor = "red";
+	public $rakeTime = 80;
+	public $beamWidth = 4;
+	public $minDmg = 125;
+	public $maxDmg = 175;
+	public $optRange = 800;
+	public $dmgDecay = 6;
+	public $accDecay = 60;
+	public $reload = 2;
+	public $powerReq = 10;
+	public $rakes = 3;
+	public $effiency = 6;
+	public $maxBoost = 2;
+	public $mass = 34;
+	public $traverse = -1;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
+        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	}
+}
+
+class HeavyLaser1a extends Laser {
 	public $name = "HeavyLaser";
 	public $display = "340mm 'Heavy' Laser";
 	public $animColor = "red";
@@ -177,7 +205,7 @@ class HeavyLaser extends Laser {
 
 class NeutronLaser extends Laser {
 	public $name = "NeutronLaser";
-	public $display = "216mm Neutron Laser";
+	public $display = "238mm Neutron Laser";
 	public $rakeTime = 40;
 	public $animColor = "yellow";
 	public $beamWidth = 2;
@@ -185,7 +213,7 @@ class NeutronLaser extends Laser {
 	public $maxDmg = 145;
 	public $optRange = 1000;
 	public $dmgDecay = 3;
-	public $accDecay = 60;
+	public $accDecay = 50;
 	public $shots = 1;
 	public $reload = 2;
 	public $powerReq = 6;
@@ -197,7 +225,6 @@ class NeutronLaser extends Laser {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-        $this->boostEffect->value = 20;
 	}
 }
 
@@ -223,7 +250,7 @@ class NeutronAccelerator extends Laser {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-        $this->boostEffect->value = 35;
+		$this->boostEffect[0]->value = 0.35;
 	}
 }
 

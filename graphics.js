@@ -1,4 +1,3 @@
-
 function drawVector(origin, target, dist, angle){
 	mouseCtx.clearRect(0, 0, res.x, res.y);
 	mouseCtx.beginPath();
@@ -199,10 +198,10 @@ function getRadialGradient(x, y, s){
 
 function drawSensorArc(w, d, p, str, len, loc, facing, a, sensor){
 	var color = "";
-	if (sensor.states[0]){
-		color = "red"
+	switch (sensor.ew[sensor.ew.length-1].type){
+		case 0: color = "red"; break;
+		case 1: color = "blue"; break;
 	}
-	else color = "blue";
 
 	mouseCtx.clearRect(0, 0, res.x, res.y);
 	mouseCtx.translate(cam.o.x, cam.o.y);

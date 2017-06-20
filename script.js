@@ -1,5 +1,3 @@
-
-
 window.preload();
 $(window).on("load", function() {
 	init();
@@ -11,7 +9,6 @@ function init(){
 	$("#mouseCanvas").contextmenu(mouseCanvasScroll);
 
 	$("#mouseCanvas").mousedown(handleMouseDown);
-	//$("#mouseCanvas").mousemove(function(e){handleMouseMove(e);});
 	$("#mouseCanvas").mouseup(function(e){handleMouseUp(e);});
 	$("#mouseCanvas").mouseout(function(e){handleMouseOut(e);});
 
@@ -65,14 +62,9 @@ function init(){
 	*/
 
 	console.time("time");
-	game = new Game(gd.id, gd.name, gd.status, userid, gd.turn, gd.phase);
-	for (var i = 0; i < window.playerstatus.length; i++){
-		if (userid == window.playerstatus[i].userid){
-			game.playerindex = i+1;
-			break;
-		}
-	}
+	game = new Game(game, userid);
 	game.create();
+	initReinforcementWrapper();
 
 	console.timeEnd("time");
 }
@@ -88,7 +80,7 @@ function mouseCanvasZoom(e){
 	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y);
 	if (game){
 		cam.adjustZoom(e, pos);
-		game.draw();
+		//game.draw();
 	}	
 }
 
@@ -111,7 +103,7 @@ function canvasMouseMove(e){
 	e.stopPropagation();
 
 	window.iterator++;
-	if (window.iterator < 2){
+	if (window.iterator < 3){
 		return;
 	}
 	window.iterator = 0;
@@ -126,14 +118,17 @@ function canvasMouseMove(e){
 		var dx = mouseX- cam.sx;
 		var dy = mouseY- cam.sy;
 
-		// reset the vars for next mousemove
-		cam.sx = mouseX;
-		cam.sy = mouseY;
+		if (dx != 0 || dy != 0){
+			// reset the vars for next mousemove
+			cam.sx = mouseX;
+			cam.sy = mouseY;
 
-		// accumulate the net panning done
-		cam.o.x += dx;
-		cam.o.y += dy;
-		game.redraw();
+			// accumulate the net panning done
+			cam.o.x += dx;
+			cam.o.y += dy;
+			//console.log(dx, dy);
+			game.redraw();
+		}
 	}
 
 	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
@@ -176,8 +171,14 @@ function canvasMouseMove(e){
 		
 		if (ship.hasWeaponsSelected()){
 			var baseHit;
-			var lock = false;
+			var impulse;
+			var impulseString = "";
+			var lock;
+			var lockString = "";// = "<span class ='red'>0.0</span>";
+			var mask;
+			var maskString = "";// = "<span class ='green'>0.0</span>";
 			var dist;
+			var final;
 			var valid = false;
 			var targetData = $("#game").find("#weaponAimTableWrapper").find("#targetInfo").find("#targetData");
 			var weaponInfo = $("#game").find("#weaponAimTableWrapper").find("#weaponInfo");
@@ -188,34 +189,57 @@ function canvasMouseMove(e){
 			else{vessel = false;}
 
 			if (vessel){
+				var multi = 1;
 				if (vessel.userid != ship.userid){
-					if (vessel instanceof Salvo){ // aiming at SALVO
+					if (vessel.salvo){ // aiming at SALVO
 						if (game.phase <= 2){
-							if (vessel.targetid == ship.id){ // direct interception
-								dist = Math.max(ship.size/2, Math.floor(getDistance(shipLoc, vessel.getBaseOffsetPos()) - vessel.getTotalImpulse()));
+							if (vessel.targetid == ship.id){// direct interception
+								if (vessel.impactThisTurn()){
+									dist = Math.min(ship.size/2, Math.floor(getDistance(shipLoc, vessel.getBaseOffsetPos())));
+								} else dist = Math.floor(getDistance(shipLoc, vessel.nextStep));
 							}
 							else if (ship.flight){// indirect interception
 								dist = Math.abs(Math.floor(getDistance(shipLoc, vessel)));
 							}
-						} 
-						else dist = Math.floor(getDistance(shipLoc, vessel.getBaseOffsetPos()));
+						}
 					}
-					else {
+					if (!dist){
 						dist = Math.floor(getDistance(shipLoc, vessel.getBaseOffsetPos()));
 					}
+
 					angle = getAngleFromTo(vessel.getBaseOffsetPos(), shipLoc);
 					angle = addAngle(vessel.getPlannedFacing(), angle);
-
-					lock = ship.hasLockOnUnit(vessel);
 					baseHit = vessel.getHitChanceFromAngle(angle);
-					baseHit *= 1+(lock*0.5);
+					impulse = 1 - vessel.getImpulseMod();
+					lock = ship.hasLockOnUnit(vessel);
+					mask = vessel.isMaskedFromUnit(ship);
 
+					if (lock){
+						multi += 0.5;
+						lockString = "<span class ='green'>+0.5</span>";
+					}
+					if (mask){
+						multi -= 0.5;
+						maskString = "<span class ='red'>-0.5</span>";
+					}
+					if (impulse){
+						multi += impulse / 2;
+						if (impulse/2 < 0){
+							impulseString = "<span class ='red'>";
+						} else impulseString = "<span class ='green'>";
+						impulseString += round(impulse/2) + "</span>";
+					}
+
+					final = Math.floor(baseHit * multi);
 					targetData
 						.empty()
 						.append($("<td>").html(vessel.name + " #" + vessel.id))
 						.append($("<td>").html(game.getUnitType(vessel.traverse)))
-						.append($("<td>").html(ship.getLockString(lock)))
-						.append($("<td>").html(Math.floor(baseHit) + "%"))
+						.append($("<td>").html(baseHit + "%"))
+						.append($("<td>").html(impulseString))
+						.append($("<td>").html(lockString))
+						.append($("<td>").html(maskString))
+						.append($("<td>").html(final + "%"))
 						.append($("<td>").html(dist))
 				}
 				else return;
@@ -225,11 +249,9 @@ function canvasMouseMove(e){
 
 				targetData
 					.empty()
-					.append($("<td>").html(""))
-					.append($("<td>").html(""))
-					.append($("<td>").html(""))
-					.append($("<td>").html(""))
-					.append($("<td>").html(dist))
+					.append($("<td>").html("")).append($("<td>").html("")).append($("<td>").html(""))
+					.append($("<td>").html("")).append($("<td>").html("")).append($("<td>").html(""))
+					.append($("<td>").html("")).append($("<td>").html(dist))
 				
 			}
 
@@ -252,30 +274,12 @@ function canvasMouseMove(e){
 						var msg = "";
 
 						var row = $("<tr>");
-							row.append($("<td>").html(system.display + " #" + system.id))
+							row.append($("<td>").html(system.display + " #" + ship.structures[i].systems[j].id))
 
 						if (ship.ship && vessel.salvo && !(system instanceof Launcher) && ship.id != vessel.targetid){ // ship vs salvo indirect
 							legalTarget = false;
 							msg = "Unable to aquire target";
 						}
-						/*
-						else if (ship.flight && vessel.salvo){ // fighter vs salvo
-							
-								var start = true;
-								var end = true;
-								if (!system.posIsOnArc(shipLoc, pos, facing)){start = false;}
-								if (ship.id == vessel.targetid){if(!isInArc(angle, system.arc[0][0], system.arc[0][1])){end = false;}}
-								//else if (!system.posIsOnArc(shipLoc, vessel.nextStep, facing)){end = false;}
-								else if (!system.posIsOnArc(shipLoc, vessel, facing)){end = false;}
-								if (!start || !end){
-									msg = "Ballistic trajectory out of scope.";
-								} else {
-									inArc = true;
-									validWeapon = true;
-								}
-							
-						}
-						*/
 						else if (system.posIsOnArc(shipLoc, pos, facing)){ // ship vs ship/fighter
 							inArc = true;
 							validWeapon = true;
@@ -283,7 +287,7 @@ function canvasMouseMove(e){
 						else msg = "Not in weapon arc";
 
 						if (inArc && legalTarget){
-							system.getAimData(vessel, baseHit, dist, row);
+							system.getAimData(vessel, final, dist, row);
 						}
 						else {
 							$(row).append($("<td>").html(msg).attr("colspan", 4))
@@ -321,18 +325,7 @@ function canvasMouseMove(e){
 		var top = (e.clientY)  + 40;
 		var left = (e.clientX) - w;
 		$(ele).css("top", top).css("left", left).show();
-
-		mouseCtx.clearRect(0, 0, res.x, res.y);
-		mouseCtx.globalAlpha = 0.3;
-		mouseCtx.translate(cam.o.x, cam.o.y)
-		mouseCtx.scale(cam.z, cam.z)
-		mouseCtx.beginPath();
-		mouseCtx.arc(pos.x, pos.y, game.getUnitById(game.deploying).size*1, 0, 2*Math.PI, false);
-		mouseCtx.closePath();
-		mouseCtx.fillStyle = "red";
-		mouseCtx.fill();
-		mouseCtx.setTransform(1,0,0,1,0,0);
-		mouseCtx.globalAlpha = 1;
+		game.getDeployingUnit().drawDeploymentPreview(pos);
 	}
 	else if (!game.deploying){
 		$("#deployOverlay").hide();
@@ -351,28 +344,20 @@ function deployPhase(e){
 	var ship;
 	var ammo;
 	var index;
-	if (game.deploying){ // ship deploy
-		for (var i = 0; i < game.ships.length; i++){
-			if (game.ships[i].id == game.deploying){
-				var index = i;
-				break;
-			}
-		}
-		if (game.ships[index].hasSystemSelected("Sensor")){
-			sensorize(game.ships[index], pos);
-			return;
-		}
-		else if (game.ships[index].canDeployHere(pos)){
-			game.ships[index].doDeploy(pos);
+	if (game.deploying){
+		var r = game.getUnitById(game.deploying); // ship deploy
+		if (r.canDeployHere(pos)){
+			game.doDeployShip(e, r, pos);
 		}
 	}
 	else if (game.flightDeploy){ // deploy via hangar
 		if (game.getUnitById(aUnit).canDeployFlightHere(pos)){
 			game.doDeployFlight(e, pos);
+			$("#popupWrapper").hide();
 		}
 		else {
 			$("#instructWrapper").hide();
-			popup("Flight can not be deployed there");
+			popup("Flight can not be deployed there.");
 		}
 	}
 	else if (!game.deploying){
@@ -409,27 +394,23 @@ function movePhase(e){
 	var index;
 	if (aUnit){
 		ship = game.getUnitById(aUnit);
-		var clickShip = game.getShipByClick(pos);
-		if (ship == clickShip){
-			ship.select();
-		} else if (clickShip){
-			clickShip.switchDiv();
-		}
-		else if (ship.flight && game.phase == 0 || ship.ship && game.phase == 1){
+		if (ship.flight && game.phase == 0 || ship.ship && game.phase == 1){
 			return;
 		}
 		else {
 			if (game.mode == 1){ //no active weapon but ship active -> MOVE MODE
 				if (checkIfOnMovementArc(ship, pos)){ //check if clicked to move in movement arc
-					if (! game.posIsOccupied(ship, pos)){
-						var dist = Math.floor(getDistance(ship.getOffsetPos(), pos));
-						if (dist < ship.getRemainingImpulse()){
-							ship.issueMove(pos, dist);
-							return;
+					var dist = Math.floor(getDistance(ship.getOffsetPos(), pos));
+					if (dist < ship.getRemainingImpulse()){
+						if (ship.getRemainingImpulse() == 0){
+							if (!game.posIsOccupied(ship, pos)){
+								ship.issueMove(pos, dist);
+							}
 						}
-					}
-					else {
-						console.log("occupied");
+						else {
+							ship.issueMove(pos, dist);
+							//$("#popupWrapper").hide();
+						}
 					}
 				}
 			}
@@ -462,20 +443,6 @@ window.getBearing = function(shooter, target){
 
 	return;
 }
-
-
-
-	if (aUnit){
-		ship = game.getUnitById(aUnit);
-		var clickShip = game.getShipByClick(pos);
-		if (ship == clickShip){
-			ship.select();
-		} else if (clickShip){
-			clickShip.switchDiv();
-		}
-	}
-
-
 
 
 function firePhase(e){

@@ -43,18 +43,6 @@ class Weapon extends System {
 		return max(0, $this->traverse - $fire->target->traverse);
 	}
 
-	public function getCritEffects(){
-		return array("range1", "damage1", "range2", "damage2", "disabled");
-	}
-
-	public function getCritTreshs(){
-		return array(20, 30, 45, 55, 80);
-	}
-
-	public function getCritDuration(){
-		return array(0, 0, 0, 0, 1);
-	}
-
 	public function rollToHit($fire){
 		for ($i = 0; $i < $this->shots; $i++){
 			$roll = mt_rand(1, 100);
@@ -72,33 +60,30 @@ class Weapon extends System {
 		$armourDmg = 0;
 		$structDmg = 0;
 
-		if ($totalDmg <= $negation*0.75){ 
-			Debug::log("no pen");
-			$armourDmg = ceil($totalDmg/2);
-		}
-		else if ($totalDmg <= $negation){ 
-			$armourDmg = ceil($totalDmg);
+		if ($totalDmg <= $negation){ 
+			//Debug::log("no pen");
+			$armourDmg = round($totalDmg/2);
 		}
 		else {
-			$armourDmg = ceil(min($totalDmg, $negation));
-			$structDmg = ceil($totalDmg - $armourDmg);
+			$armourDmg = round(min($totalDmg, $negation));
+			$structDmg = round($totalDmg - $armourDmg);
 		}
 
 		return new Divider($shieldDmg * $this->linked, $armourDmg * $this->linked, $structDmg * $this->linked);
 	}
 
 	public function doDamage($fire, $roll, $system){
-		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id."/".$system->id);
+		Debug::log("doDamage, weapon: ".(get_class($this)).", target: ".$fire->target->id."/".$system->id);
 
 		$destroyed = false;
 		$totalDmg = floor($this->getBaseDamage($fire) * $this->getDamageMod($fire));
-		$remInt = $system->getCurrentIntegrity();
+		$remInt = $system->getRemainingIntegrity();
 		$negation = $fire->target->getArmourValue($fire, $system);
 		$dmg = $this->determineDamage($totalDmg, $negation);
 
 		if ($remInt - $dmg->structDmg < 1){
 			$destroyed = true;
-			Debug::log(" => target system ".$system->name." #".$system->id." DESTROYED ----  rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".(abs($remInt - $dmg->structDmg)." dmg"));
+			Debug::log(" => target system ".get_class($system)." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".(abs($remInt - $dmg->structDmg)." dmg"));
 		}
 
 		$dmg = new Damage(
@@ -125,20 +110,20 @@ class Weapon extends System {
 		$fire->target->applyDamage($dmg);
 	}
 
-	public function getAccLoss($dist){
+	public function getAccuracyMod($fire){
 		$mod = 1;
 		for ($i = 0; $i < sizeof($this->crits); $i++){
 			switch ($this->crits[$i]->type){
-				case "range1": 
-					$mod = $mod + 0.1;
-					break;
-				case "range2":
-					$mod = $mod + 0.2;
-					break;
+				case "Accuracy": 
+					$mod = $mod + $this->crits[$i]->value; break;
+				default: break;
 			}
 		}
-		//if ($mod != 1){Debug::log("weapon id: ".$this->id.", ACCURAVY mod: ".$mod);}
-		return ceil(($this->accDecay * $mod) * $dist / $this->decayVar);
+
+		$mod -= $this->getBoostLevel($fire->turn) * $this->getBoostEffect("Accuracy");
+
+		if ($mod != 1){Debug::log("weapon id: ".$this->id.", RANGE LOSS mod: ".$mod);}
+		return ceil(($this->accDecay * $mod) * $fire->dist / $this->decayVar);
 	}
 
 	public function getDmgPenaltyRange($fire){
@@ -153,30 +138,34 @@ class Weapon extends System {
 		$mod = 1;
 
 		$crit = $this->getCritMod($fire->turn);
-		$boost = $this->getBoostLevel($fire->turn) * $this->getBoostDamageEffect();
+		$boost = $this->getBoostLevel($fire->turn) * $this->getBoostEffect("Damage");
 		$range = $this->getDmgPenaltyRange($fire);
 
-		//if ($crit || $boost || $range){Debug::log(" => total mod: ".($crit + $boost + $range)." (crits: ".$crit.", boost: ".$boost.". range: ".$range.")");}
+		$mod = $mod + $crit + $boost + $range;
+		if ($mod != 1){Debug::log("weapon id: ".$this->id.", DAMAGE mod: ".($crit + $boost + $range)." (crits: ".$crit.", boost: ".$boost.". range: ".$range.")");
+		}
 		return $mod + $crit + $boost + $range;
 	}
 
-	public function getBoostDamageEffect(){
-		return 0.25;
+	public function getBoostEffect($type){
+		for ($i = 0; $i < sizeof($this->boostEffect); $i++){
+			if ($this->boostEffect[$i]->type == $type){
+				//Debug::log("return:".$this->boostEffect[$i]->value/100);
+				return $this->boostEffect[$i]->value;
+			}
+		}
+		return 0;
 	}
 
 	public function getCritMod($turn){
 		$mod = 0;
 		for ($i = 0; $i < sizeof($this->crits); $i++){
 			switch ($this->crits[$i]->type){
-				case "damage1": 
-					$mod -= 0.1;
-					break;
-				case "damage2":
-					$mod -= 0.2;
-					break;
+				case "Damage": 
+					$mod = $mod - $this->crits[$i]->value; break;
+				default: break;
 			}
 		}
-		//if ($mod){Debug::log("crit mod level: ".$mod);}
 		return $mod;
 	}
 
@@ -206,6 +195,14 @@ class Weapon extends System {
 
 	public function getMaxDamage(){
 		return $this->maxDmg;
+	}
+
+	public function getValidEffects(){
+		return array(// attr, %-tresh, duration, modifier
+			array("Disabled", 80, 1, 0),
+			array("Damage", 30, 0, 0),
+			array("Accuracy", 30, 0, 0)
+		);
 	}
 }
 

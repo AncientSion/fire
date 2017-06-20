@@ -16,7 +16,9 @@ spl_autoload_register(
 
                 'salvo' => '/server/salvo.php',
 
-                'ammo' => '/server/systems/weapons/ammo.php',
+                'missle ' =>  '/server/ammo.php',
+
+                'warhead' => '/server/systems/weapons/ammo.php',
                 'hasta' => '/server/systems/weapons/ammo.php',
                 'javelin' => '/server/systems/weapons/ammo.php',
                 'patriot' => '/server/systems/weapons/ammo.php',
@@ -66,6 +68,7 @@ spl_autoload_register(
                 'dualpulseion' => '/server/systems/weapons/dual.php',
 
                 'plasma' => '/server/systems/weapons/plasma.php',
+                'lightplasma' => '/server/systems/weapons/plasma.php',
                 'mediumplasma' => '/server/systems/weapons/plasma.php',
                 'heavyplasma' => '/server/systems/weapons/plasma.php',
 
@@ -85,6 +88,7 @@ spl_autoload_register(
                 'pulse' => '/server/systems/weapons/pulse.php',
                 'lightpulse' => '/server/systems/weapons/pulse.php',
                 'mediumpulse' => '/server/systems/weapons/pulse.php',
+                'heavypulse' => '/server/systems/weapons/pulse.php',
 
                 'particle' => '/server/systems/weapons/particle.php',
                 'lightion' => '/server/systems/weapons/particle.php',
@@ -110,8 +114,9 @@ spl_autoload_register(
                 'fighterpulse' => '/server/systems/weapons/linked.php',
                 'particlepulsar' => '/server/systems/weapons/linked.php',
 
-
                 'structure' => '/server/systems/structure.php',
+                'primary' => '/server/systems/structure.php',
+                'single' => '/server/systems/structure.php',
 
                 'debug' => '/server/debug.php',
                 'math' => '/server/math.php',

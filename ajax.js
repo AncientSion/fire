@@ -76,7 +76,8 @@ window.ajax = {
 	},
 
 	confirmDeployment: function(callback){
-		var deployedShips = [];
+		var initial = [];
+		var reinforce = [];
 		var fireOrders = [];
 		var powers = [];
 		var deployedFlights = [];
@@ -85,32 +86,43 @@ window.ajax = {
 		var ew = game.getEWSettings();
 
 		for (var i = 0; i < game.ships.length; i++){
+			if (game.ships[i].flight){continue;}
+			var ship;
 			if (game.ships[i].userid == game.userid){
-				if (! game.ships[i].flight){
-					for (var j = 0; j < game.ships[i].actions.length; j++){
-						if (game.ships[i].actions[j].type == "deploy"){
-							if (game.ships[i].actions[j].turn == game.turn){
-								var ship = {
-									actions: [ game.ships[i].actions[j] ],
-									id: game.ships[i].id,
-									status: "deployed",
-								}
-								deployedShips.push(ship);
-							}
+				for (var j = 0; j < game.ships[i].actions.length; j++){
+					if (game.ships[i].actions[j].type == "deploy" && game.ships[i].actions[j].turn == game.turn){
+						if (game.ships[i].available == game.turn){
+							ship = {
+								actions: [ game.ships[i].actions[j] ],
+								id: game.ships[i].id,
+								status: "initial"
+							};
+							initial.push(ship);
+						}
+						else {
+							ship = {
+								actions: [ game.ships[i].actions[j] ],
+								id: game.ships[i].id,
+								status: "request"
+							};
+							reinforce.push(ship);
 						}
 					}
-					var power = game.ships[i].getPowerOrders();
-					for (var j = 0; j < power.length; j++){
-						powers.push(power[j]);
-					}
 				}
-
-				var fires = game.ships[i].getFireOrders();
-				for (var j = 0; j < fires.length; j++){
-					fireOrders.push(fires[j]);
+				var power = game.ships[i].getPowerOrders();
+				for (var j = 0; j < power.length; j++){
+					powers.push(power[j]);
 				}
 			}
+
+			var fires = game.ships[i].getFireOrders();
+			for (var j = 0; j < fires.length; j++){
+				fireOrders.push(fires[j]);
+			}
 		}
+
+		//console.log(deployedShips);
+		//return;
 
 		$.ajax({
 			type: "POST",
@@ -122,11 +134,11 @@ window.ajax = {
 					userid: game.userid,
 					gameturn: game.turn,
 					gamephase: game.phase,
-					deployedShips: deployedShips,
+					initial: initial,
+					reinforce: reinforce,
 					deployedFlights: deployedFlights,
 					powers: powers,
 					fireOrders: fireOrders,
-					reinforcements: game.reinforcements,
 					ew: ew
 					},
 			success: callback,

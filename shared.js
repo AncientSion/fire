@@ -15,6 +15,7 @@ window.mouseCanvas;
 window.mouseCtx;
 window.cache;
 window.downTime = 0;
+window.timout = 0;
 
 function doSort(a, b){
 	if (a.name != b.name){
@@ -124,9 +125,10 @@ function Animate(){
 				var y = ele.actions[ele.actions.length-2].y + (ele.anim[k].ny * ele.anim[k].n);
 				ctx.save();
 				ctx.translate(x, y);
-
 				ctx.rotate((ele.anim[k].f + 90) * (Math.PI/180));
-				ctx.drawImage(ele.img, 0 -ele.size/2, 0 -ele.size/2, ele.size, ele.size);
+
+				ele.drawSelf();
+				ele.drawPositionMarker();
 
 				ctx.restore();
 
@@ -171,7 +173,7 @@ function setFPS(fps){
 	window.fpsInterval = 1000 / window.fps;
 }
 
-function initiateShip(i){
+function initiateShip(data){
 
 	/*var ship = new window[window.ships[i].shipType](
 		window.ships[i].id,
@@ -191,24 +193,27 @@ function initiateShip(i){
 		window.ships[i].baseImpulse
 	)*/
 
-	var ship = new window[window.ships[i].shipType](window.ships[i]);
+	var ship = new window[data.shipType](data);
+	if (data.id == 25){
+		console.log("ding");
+	}
 
 	if (! ship.flight){
-		ship.hitTable = window.ships[i].hitTable
-		ship.primary = new Primary(window.ships[i].primary);
-		for (var j = 0; j < window.ships[i].primary.systems.length; j++){
-			var primSystem = new window[window.ships[i].primary.systems[j].name](window.ships[i].primary.systems[j]);
+		ship.hitTable = data.hitTable
+		ship.primary = new Primary(data.primary);
+		for (var j = 0; j < data.primary.systems.length; j++){
+			var primSystem = new window[data.primary.systems[j].name](data.primary.systems[j]);
 
-			for (var l = 0; l < window.ships[i].primary.systems[j].damages.length; l++){
-				primSystem.damages.push(new Damage(window.ships[i].primary.systems[j].damages[l]));
+			for (var l = 0; l < data.primary.systems[j].damages.length; l++){
+				primSystem.damages.push(new Damage(data.primary.systems[j].damages[l]));
 			}
 
-			for (var l = 0; l < window.ships[i].primary.systems[j].powers.length; l++){
-				primSystem.powers.push(new Power(window.ships[i].primary.systems[j].powers[l]));
+			for (var l = 0; l < data.primary.systems[j].powers.length; l++){
+				primSystem.powers.push(new Power(data.primary.systems[j].powers[l]));
 			}
 
-			for (var l = 0; l < window.ships[i].primary.systems[j].crits.length; l++){
-				primSystem.crits.push(new Crit(window.ships[i].primary.systems[j].crits[l]));
+			for (var l = 0; l < data.primary.systems[j].crits.length; l++){
+				primSystem.crits.push(new Crit(data.primary.systems[j].crits[l]));
 			}
 
 			primSystem.setState();
@@ -216,46 +221,47 @@ function initiateShip(i){
 		}
 	}
 	else {
-		ship.dogfights = window.ships[i].dogfights;
+		ship.dogfights = data.dogfights;
 	}
 
-	for (var j = 0; j < window.ships[i].structures.length; j++){
+	for (var j = 0; j < data.structures.length; j++){
 		var struct;
 		if (!ship.flight){
-			struct = new Structure(window.ships[i].structures[j]);
+			struct = new Structure(data.structures[j]);
+			//if (ship.name == "Primus"){console.log(data.structures[j]);}
 		}
 		else {
-			struct = new Fighter(window.ships[i].structures[j]);
+			struct = new Fighter(data.structures[j]);
 		}
 
-		if (window.ships[i].structures[j].damages.length){
-			for (var k = 0; k < window.ships[i].structures[j].damages.length; k++){
-				struct.damages.push(new Damage(window.ships[i].structures[j].damages[k]));
+		if (data.structures[j].damages.length){
+			for (var k = 0; k < data.structures[j].damages.length; k++){
+				struct.damages.push(new Damage(data.structures[j].damages[k]));
 			}
 		}
-		if (!ship.flight){struct.setRemainingNegation();}
+		//if (!ship.flight){struct.setRemainingNegation();}
 
-		for (var k = 0; k < window.ships[i].structures[j].systems.length; k++){
-			var system = new window[window.ships[i].structures[j].systems[k].type](window.ships[i].structures[j].systems[k]);
+		for (var k = 0; k < data.structures[j].systems.length; k++){
+			var system = new window[data.structures[j].systems[k].type](data.structures[j].systems[k]);
 			if (system){
 				system.setMount(struct.remainingNegation);
 				
 				if (system.fireOrders){
-					for (var l = 0; l < window.ships[i].structures[j].systems[k].fireOrders.length; l++){
-						system.fireOrders.push(new FireOrder(window.ships[i].structures[j].systems[k].fireOrders[l]));
+					for (var l = 0; l < data.structures[j].systems[k].fireOrders.length; l++){
+						system.fireOrders.push(new FireOrder(data.structures[j].systems[k].fireOrders[l]));
 					}
 				}
 
-				for (var l = 0; l < window.ships[i].structures[j].systems[k].damages.length; l++){
-					system.damages.push(new Damage(window.ships[i].structures[j].systems[k].damages[l]));
+				for (var l = 0; l < data.structures[j].systems[k].damages.length; l++){
+					system.damages.push(new Damage(data.structures[j].systems[k].damages[l]));
 				}
 
-				for (var l = 0; l < window.ships[i].structures[j].systems[k].powers.length; l++){
-					system.powers.push(new Power(window.ships[i].structures[j].systems[k].powers[l]));
+				for (var l = 0; l < data.structures[j].systems[k].powers.length; l++){
+					system.powers.push(new Power(data.structures[j].systems[k].powers[l]));
 				}
 
-				for (var l = 0; l < window.ships[i].structures[j].systems[k].crits.length; l++){
-					system.crits.push(new Crit(window.ships[i].structures[j].systems[k].crits[l]));
+				for (var l = 0; l < data.structures[j].systems[k].crits.length; l++){
+					system.crits.push(new Crit(data.structures[j].systems[k].crits[l]));
 				}
 				system.setState();
 				struct.systems.push(system);
@@ -273,11 +279,17 @@ function initiateBallistic(i){
 	var salvo = new Salvo(window.ballistics[i]);
 
 	for (var j = 0; j < window.ballistics[i].structures.length; j++){
-		salvo.structures.push(new Ammo(window.ballistics[i].structures[j]));
+		salvo.structures.push(new Missile(window.ballistics[i].structures[j]));
+		
+		//console.log(window.ballistics[i].structures[j]);
 
-		for (var k = 0; k < window.ballistics[i].structures[j].fireOrders.length; k++){
-			salvo.structures[j].fireOrders.push(window.ballistics[i].structures[j].fireOrders[k]);
+		for (var k = 0; k < window.ballistics[i].structures[j].systems.length; k++){
+			salvo.structures[j].systems.push(new Warhead(window.ballistics[i].structures[j].systems[k]));
 		}
+
+		//for (var k = 0; k < window.ballistics[i].structures[j].fireOrders.length; k++){
+		//	salvo.structures[j].fireOrders.push(window.ballistics[i].structures[j].fireOrders[k]);
+		//}
 	}
 	salvo.create();
 	return salvo;
@@ -471,6 +483,15 @@ function handleMouseDown(e){
 		cam.sy = e.clientY;
 	}
 	else if (e.originalEvent.button == 2){
+		if (game.deploying){
+			$("#deployWrapper").find("#reinforceTable").find(".selected").each(function(){
+				if ($(this).data("id") == game.deploying){
+					$(this).removeClass("selected");
+					game.disableDeployment();
+					return;
+				}
+			})
+		}
 		unit = game.getUnitByClick(pos);
 		if (unit){
 			if (aUnit == unit.id){
@@ -511,35 +532,6 @@ function handleMouseOut(e){
 	cam.scroll = 0;
 }
 
-function handleMouseMove(e){
-	e.preventDefault();
-	e.stopPropagation();
-	if(!cam.scroll){return;}
-	window.iterator++;
-	if (window.iterator < 2){
-		return;
-	}
-	window.iterator = 0;
-
-	// get the current mouse position
-	var mouseX = e.clientX;
-	var mouseY = e.clientY;
-
-	// dx & dy are the distance the mouse has moved since
-	// the last mousemove event
-	var dx = mouseX- cam.sx;
-	var dy = mouseY- cam.sy;
-
-	// reset the vars for next mousemove
-	cam.sx = mouseX;
-	cam.sy = mouseY;
-
-	// accumulate the net panning done
-	cam.o.x += dx;
-	cam.o.y += dy;
-	game.redraw();
-}
-
 function sensorEvent(isClick, ship, loc, facing, d, a){
 	var sensor = ship.getActiveSensor();
 	var str = sensor.getOutput();
@@ -551,7 +543,7 @@ function sensorEvent(isClick, ship, loc, facing, d, a){
 		a = 0;
 		d = str/Math.pow(w/len, 1/p);
 	}
-	//console.log("angle from facing: " + a + ", dist: " + dist + ", strength: "+str + ", FINAL: " + newWidth);
+	//console.log("angle from facing: " + a + ", dist: " + dist + ", strength: "+str + ", FINAL: " + newidth);
 
 	if (isClick && ship.canSetSensor(sensor)){
 		//console.log("setting sensor to w: "+w*2+", dist: "+d+", angle: "+a);
@@ -560,7 +552,8 @@ function sensorEvent(isClick, ship, loc, facing, d, a){
 			dist: Math.floor(d),
 			turn: game.turn,
 			unitid: ship.id,
-			systemid: sensor.id
+			systemid: sensor.id,
+			type: sensor.ew[sensor.ew.length-1].type
 		});
 	} else drawSensorArc(w, d, p, str, len, loc, facing, a, sensor);
 }

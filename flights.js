@@ -7,6 +7,7 @@ function Flight(data){
 	this.turns = 10;
 	this.maxTurns = 1;
 	this.dogfights = [];
+	this.trueSize;
 
 	this.create = function(){
 		this.setFighterState();
@@ -16,6 +17,34 @@ function Flight(data){
 		this.setFacing();
 		this.setPosition();
 		this.setLayout();
+	}
+
+	this.getDamageEntriesByFireId = function(fire){
+		var dmgs = [];
+		var lookup = 0;
+
+		for (var i = 0; i < fire.hits.length; i++){
+			lookup += fire.hits[i]
+		}
+
+		if (!lookup){
+			return dmgs;
+		}
+
+		for (var i = 0; i < this.structures.length; i++){
+			for (var j = this.structures[i].damages.length-1; j >= 0; j--){
+				if (this.structures[i].damages[j].fireid == fire.id){
+					dmgs.push(this.structures[i].damages[j]);
+					dmgs[dmgs.length-1].system = this.structures[i].display;
+					lookup--;
+					if (!lookup){return dmgs};
+				}
+				else if (this.structures[i].damages[j].turn < fire.turn){
+					break;
+				}
+			}
+		}
+		return dmgs;
 	}
 
 	this.hasSystemSelected = function(name){
@@ -96,7 +125,7 @@ function Flight(data){
 
 	this.getEP = function(){
 		if (this.actions.length && this.actions[0].turn == game.turn){
-			return Math.floor(this.ep/3);
+			return Math.floor(this.ep*0.4);
 		}
 		return this.ep;
 	}
@@ -125,24 +154,43 @@ function Flight(data){
 		}
 	}
 
+	this.animationSetupDamage = function(){
+		var all = this.structures.length;
+		var postFire = (this.size - 32) / 5;
+		var preFire = postFire;
+
+		for (var i = 0; i < this.structures.length; i++){
+			if (this.structures[i].destroyed || this.structures[i].disabled){
+				this.structures[i].draw = false;
+				if (this.structures[i].isDestroyedThisTurn()){
+					this.structures[i].draw = true;
+					preFire++
+				}
+			}
+		}
+
+		//console.log("all: " + all + ", postFire: " + postFire + ", preFire: " + preFire);
+		this.trueSize = this.size;
+		this.size = preFire * 5 + 32;
+	}
+
 	this.drawHoverElements = function(){
-		this.drawMoveLength();
+	//	this.drawMoveLength();
 	}
 
 	this.drawSelf = function(){
+		/*if (this.id == 11){
+			console.log("ding");
+		}*/
 		ctx.save();
 		ctx.translate(this.x, this.y)
 		ctx.rotate((this.facing+90) * (Math.PI/180));
 
 		if (game.animateFire){
 			for (var i = 0; i < this.structures.length; i++){
-				var draw = false;
-				if (this.structures[i].destroyed || this.structures[i].disabled){
-					if (this.structures[i].isDestroyedThisTurn()){
-						this.drawFighter(i);
-					}
+				if (this.structures[i].draw){
+					this.drawFighter(i);
 				}
-				else this.drawFighter(i);
 			}
 		}
 		else {
@@ -209,7 +257,7 @@ function Flight(data){
 	
 	this.getBaseImpulse = function(){
 		if (this.actions.length && this.actions[0].turn == game.turn){
-			return Math.floor(this.baseImpulse/3*2);
+			return Math.floor(this.baseImpulse*0.6);
 		}
 		return this.baseImpulse;
 	}
@@ -247,7 +295,9 @@ function Flight(data){
 			iconContainer.className = "iconContainer";
 			$(iconContainer).css("width", 120)//.append($("<div class='dogFightHeader'>Active Dogfights</div>"));
 			if (this.launchedThisTurn()){
-				$(iconContainer).append($("<div class='dogFightEntry'>").html("50 % EP / Impulse due to launch."));
+				$(iconContainer).append($("<div class='dogFightEntry'>").html("Deployed this turn"));
+				$(iconContainer).append($("<div class='dogFightEntry'>").html("-60% EP"));
+				$(iconContainer).append($("<div class='dogFightEntry'>").html("-40% Impulse"));
 			}
 			for (var j = 0; j < this.dogfights.length; j++){
 				$(iconContainer).append($("<div class='dogFightEntry'>").html("Dogfight VS #" + this.dogfights[j]));
@@ -432,8 +482,6 @@ function Flight(data){
 			table.insertRow(-1).insertCell(-1).innerHTML = "Flight #" + this.id + " (" +game.getUnitType(this.traverse) + ")";
 			table.insertRow(-1).insertCell(-1).innerHTML =  "Impulse: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")";
 			table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit: " +  this.getBaseHitChance() + "% ";
-		var baseHit = this.getBaseHitChance();
-		var impulse = this.getTotalImpulse();
 		return table;
 	}
 
@@ -492,6 +540,7 @@ function Fighter(data){
 	this.fighter = true;
 	this.highlight = false;
 	this.disabled = false;
+	this.draw = true;
 
 	for (var i = 0; i < data.crits.length; i++){
 		this.crits.push(new Crit(data.crits[i]))

@@ -67,7 +67,7 @@ class EMPulseCannon extends EM {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-		$this->boostEffect = new Effect("Damage", 20);
+		$this->boostEffect[] = new Effect("Damage", 0.20);
 	}
 }
 

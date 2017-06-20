@@ -157,6 +157,7 @@ class DBManager {
 	}
 
 	public function getAvailableReinforcements($gameid, $userid){
+		//Debug::log("getAvailableReinforcements");
 		$stmt = $this->connection->prepare("
 			SELECT * FROM reinforcements 
 			WHERE gameid = :gameid
@@ -179,16 +180,16 @@ class DBManager {
 			//Debug::log("insertReinforcements");
 		$stmt = $this->connection->prepare("
 			INSERT INTO reinforcements
-				(gameid, userid, name, arrival, cost)
+				(gameid, userid, name, eta, cost)
 			VALUES
-				(:gameid, :userid, :name, :arrival, :cost)
+				(:gameid, :userid, :name, :eta, :cost)
 		");
 
 		for ($i = 0; $i < sizeof($ships); $i++){
 			$stmt->bindParam(":gameid", $gameid);
 			$stmt->bindParam(":userid", $userid);
 			$stmt->bindParam(":name", $ships[$i]["name"]);
-			$stmt->bindParam(":arrival", $ships[$i]["arrival"]);
+			$stmt->bindParam(":eta", $ships[$i]["eta"]);
 			$stmt->bindParam(":cost", $ships[$i]["value"]);
 			$stmt->execute();
 			
@@ -252,18 +253,6 @@ class DBManager {
 		}
 	}
 
-	public function requestReinforcements($userid, $gameid, $units){
-		$cost = 0;
-		for ($i = 0; $i < sizeof($units); $i++){
-			$cost += $units[$i]["cost"];
-			$sql = "DELETE FROM reinforcements WHERE id = ".$units[$i]["id"];
-			$this->delete($sql);
-		}
-
-		$this->addReinforceValue($userid, $gameid, -$cost);
-		$this->insertUnits($userid, $gameid, $units);
-		return true;
-	}
 
 	public function processInitialBuy($userid, $gameid, $units, $rem, $faction){
 		$this->insertUnits($userid, $gameid, $units);
@@ -304,7 +293,7 @@ class DBManager {
 			$stmt->bindParam(":ball", $ball);
 			$stmt->bindParam(":name", $units[$i]["name"]);
 			$stmt->bindParam(":status", $status);
-			$stmt->bindValue(":available", (floor($units[$i]["turn"]) + floor($units[$i]["arrival"])));
+			$stmt->bindValue(":available", (floor($units[$i]["turn"]) + floor($units[$i]["eta"])));
 			$stmt->bindParam(":destroyed", $destroyed);
 			$stmt->execute();
 			
@@ -352,7 +341,7 @@ class DBManager {
 		return true;
 	}
 
-	public function insertBallistics($gameid, $balls){
+	public function insertBallistics($gameid, $units){
 		//Debug::log("DB insertBallistics");
 
 		$stmt = $this->connection->prepare("
@@ -366,19 +355,19 @@ class DBManager {
 		$status = "launched";
 		$destroyed = 0;
 
-		for ($i = 0; $i < sizeof($balls); $i++){
+		for ($i = 0; $i < sizeof($units); $i++){
 			$stmt->bindParam(":gameid", $gameid);
-			$stmt->bindParam(":userid", $balls[$i]->userid);
-			$stmt->bindParam(":ship", $balls[$i]->targetid);
+			$stmt->bindParam(":userid", $units[$i]->userid);
+			$stmt->bindParam(":ship", $units[$i]->targetid);
 			$stmt->bindParam(":ball", $ball);
-			$stmt->bindParam(":name", $balls[$i]->name);
+			$stmt->bindParam(":name", $units[$i]->name);
 			$stmt->bindParam(":status", $status);
-			$stmt->bindParam(":available", $balls[$i]->amount);
+			$stmt->bindParam(":available", $units[$i]->amount);
 			$stmt->bindParam(":destroyed", $destroyed);
 			$stmt->execute();
 			
 			if ($stmt->errorCode() == 0){
-				$balls[$i]->id = $this->getLastInsertId();
+				$units[$i]->id = $this->getLastInsertId();
 				continue;
 			}
 			else {
@@ -386,38 +375,38 @@ class DBManager {
 			}
 		}
 
-		$this->insertBallisticActions($balls);
+		$this->insertServerActions($units);
 		return true;
 	}
 
-	public function insertBallisticActions($balls){
-		//Debug::log("DB insertBallisticActions");
+	public function insertServerActions($units){
+		Debug::log("DB insertServerActions");
 		$stmt = $this->connection->prepare("
 			INSERT INTO actions 
 				(shipid, turn, type, dist, x, y, a, cost, delay, costmod, resolved)
 			VALUES
 				(:shipid, :turn, :type, :dist, :x, :y, :a, :cost, :delay, :costmod, :resolved)
 		");
-		$val = 0;
-		$resolved = 1;
 
-		for ($i = 0; $i < sizeof($balls); $i++){
-			for ($j = 0; $j < sizeof($balls[$i]->actions); $j++){
-				if ($balls[$i]->actions[$j]->resolved == 0){
-					$stmt->bindParam(":shipid", $balls[$i]->id);
-					$stmt->bindParam(":turn", $balls[$i]->actions[$j]->turn);
-					$stmt->bindParam(":type", $balls[$i]->actions[$j]->type);
-					$stmt->bindParam(":dist", $dist);
-					$stmt->bindParam(":x", $balls[$i]->actions[$j]->x);
-					$stmt->bindParam(":y", $balls[$i]->actions[$j]->y);
-					$stmt->bindParam(":a", $val);
-					$stmt->bindParam(":cost", $val);
-					$stmt->bindParam(":delay", $val);
-					$stmt->bindParam(":costmod", $val);
-					$stmt->bindParam(":resolved", $resolved);
-					$stmt->execute();			
+		for ($i = 0; $i < sizeof($units); $i++){
+			for ($j = 0; $j < sizeof($units[$i]->actions); $j++){
+				if ($units[$i]->actions[$j]->resolved == 0){
+					//Debug::log("ding");
+					$units[$i]->actions[$j]->resolved = 1;
+					
+					$stmt->bindParam(":shipid", $units[$i]->id);
+					$stmt->bindParam(":turn", $units[$i]->actions[$j]->turn);
+					$stmt->bindParam(":type", $units[$i]->actions[$j]->type);
+					$stmt->bindParam(":dist", $units[$i]->actions[$j]->dist);
+					$stmt->bindParam(":x", $units[$i]->actions[$j]->x);
+					$stmt->bindParam(":y", $units[$i]->actions[$j]->y);
+					$stmt->bindParam(":a", $units[$i]->actions[$j]->a);
+					$stmt->bindParam(":cost", $units[$i]->actions[$j]->cost);
+					$stmt->bindParam(":delay", $units[$i]->actions[$j]->delay);
+					$stmt->bindParam(":costmod", $units[$i]->actions[$j]->costmod);
+					$stmt->bindParam(":resolved",$units[$i]->actions[$j]->resolved);
+					$stmt->execute();		
 					if ($stmt->errorCode() == 0){
-						$balls[$i]->actions[$j]->resolved = 1;
 						continue;
 					}
 					else {
@@ -490,24 +479,56 @@ class DBManager {
 		else return false;
 	}
 
-	public function deployShipsDB($gameid, $ships){
-		$this->setUnitStatusDB($ships);
-		for ($i = 0; $i < sizeof($ships); $i++){
-			if ($this->insertActionsForShip($ships[$i]["id"], $ships[$i]["actions"])){
-				continue;
+	public function requestShipsDB($userid, $gameid, $turn, $picks){
+		Debug::log("requestShipsDB, s: ".sizeof($picks));
+		$avail = $this->getAvailableReinforcements($gameid, $userid);
+		$delete = array();
+		//Debug::log("a: ".sizeof($avail));
+		$ships = array();
+		$cost = 0;
+
+		for ($i = 0; $i < sizeof($picks); $i++){
+			for ($j = 0; $j < sizeof($avail); $j++){
+				//Debug::log("s: ".$ships[$i]["id"]." vs ".$avail[$j]["id"]);
+				if (abs($picks[$i]["id"]) == $avail[$j]["id"]){
+					$avail[$j]["actions"] = $picks[$i]["actions"];
+					$avail[$j]["turn"] = $turn;
+					$cost += $avail[$j]["cost"];
+					$ships[] = $avail[$j];
+					$delete[] = $avail[$j];
+					break;
+				}
 			}
 		}
-		return true;
+
+		$this->deleteReinforcements($delete);
+		$this->addReinforceValue($userid, $gameid, -$cost);
+		$this->insertUnits($userid, $gameid, $ships);
+		$this->insertClientActions($gameid, $ships);
+	}
+
+	public function deleteReinforcements($units){
+		for ($i = 0; $i < sizeof($units); $i++){
+			$sql = "DELETE FROM reinforcements WHERE id = ".$units[$i]["id"];
+			$this->delete($sql);
+		}
+	}
+
+	public function deployShipsDB($gameid, $ships){
+		//Debug::log("requestShipsDB, s: ".sizeof($ships));
+		//$this->setUnitStatusDB($ships);
+		$this->insertClientActions($gameid, $ships);
 	}
 
 	public function deployFlightsDB($userid, $gameid, $flights){
 		//Debug::log("deployFlights");
 		if (sizeof($flights)){
 			$this->insertUnits($userid, $gameid, $flights);
+			$this->insertClientActions($gameid, $flights);
+
 			for ($i = 0; $i < sizeof($flights); $i++){
 				$this->insertFlightElements($flights[$i]);
 				$this->updateSystemLoad($flights[$i]["launchdata"]);
-				$this->insertActionsForShip($flights[$i]["id"], $flights[$i]["actions"]);
 			}
 		}
 		return true;
@@ -565,8 +586,7 @@ class DBManager {
 		//Debug::log("setUnitStatusDB");
 		$stmt = $this->connection->prepare("
 			UPDATE units 
-			SET
-				status = :status
+			SET status = :status
 			WHERE id = :id
 		");
 
@@ -711,19 +731,8 @@ class DBManager {
 		$stmt->execute();
 	}
 
-	public function issueMovement($gameid, $ships){
-		for ($i = 0; $i < sizeof($ships); $i++){
-			if  ($this->insertActionsForShip($ships[$i]["id"], $ships[$i]["actions"])){
-				continue;
-			}
-			else return false;
-
-		}
-		return true;
-	}
-
-	public function insertActionsForShip($shipid, $actions){
-		//Debug::log("insertActionsForShip");
+	public function insertClientActions($gameid, $units){
+		//Debug::log("insertClientActions");
 		$stmt = $this->connection->prepare("
 			INSERT INTO actions 
 				(shipid, turn, type, dist, x, y, a, cost, delay, costmod, resolved)
@@ -733,25 +742,28 @@ class DBManager {
 
 		$resolved = 0;
 
-		for ($i = 0; $i < sizeof($actions); $i++){
-			$stmt->bindParam(":shipid", $shipid);
-			$stmt->bindParam(":turn", $actions[$i]["turn"]);
-			$stmt->bindParam(":type", $actions[$i]["type"]);
-			$stmt->bindParam(":dist", $actions[$i]["dist"]);
-			$stmt->bindParam(":x", $actions[$i]["x"]);
-			$stmt->bindParam(":y", $actions[$i]["y"]);
-			$stmt->bindParam(":a", $actions[$i]["a"]);
-			$stmt->bindParam(":cost", $actions[$i]["cost"]);
-			$stmt->bindParam(":delay", $actions[$i]["delay"]);
-			$stmt->bindParam(":costmod", $actions[$i]["costmod"]);
-			$stmt->bindParam(":resolved", $resolved);
-			$stmt->execute();
+		for ($i = 0; $i < sizeof($units); $i++){
+			$stmt->bindParam(":shipid", $units[$i]["id"]);
 
-			if ($stmt->errorCode() == 0){
-				continue;
-			} 
-			else {
-				return false;
+			for ($j = 0; $j < sizeof($units[$i]["actions"]); $j++){
+				$stmt->bindParam(":turn", $units[$i]["actions"][$j]["turn"]);
+				$stmt->bindParam(":type", $units[$i]["actions"][$j]["type"]);
+				$stmt->bindParam(":dist", $units[$i]["actions"][$j]["dist"]);
+				$stmt->bindParam(":x", $units[$i]["actions"][$j]["x"]);
+				$stmt->bindParam(":y", $units[$i]["actions"][$j]["y"]);
+				$stmt->bindParam(":a", $units[$i]["actions"][$j]["a"]);
+				$stmt->bindParam(":cost", $units[$i]["actions"][$j]["cost"]);
+				$stmt->bindParam(":delay", $units[$i]["actions"][$j]["delay"]);
+				$stmt->bindParam(":costmod", $units[$i]["actions"][$j]["costmod"]);
+				$stmt->bindParam(":resolved", $resolved);
+				$stmt->execute();
+
+				if ($stmt->errorCode() == 0){
+					continue;
+				} 
+				else {
+					return false;
+				}
 			}
 		}
 		return true;
@@ -783,6 +795,7 @@ class DBManager {
 	}
 
 	public function insertFireOrders($gameid, $turn, $fires){
+		//Debug::log("insertFireOrders: ".sizeof($fires));
 		$stmt = $this->connection->prepare("
 			INSERT INTO fireorders 
 				(gameid, turn, shooterid, targetid, weaponid, resolved)
@@ -811,9 +824,9 @@ class DBManager {
 		//Debug::log("insertSensorSettings".sizeof($data));
 		$stmt = $this->connection->prepare("
 			INSERT INTO sensors 
-				(unitid, systemid, turn, angle, dist)
+				(unitid, systemid, turn, angle, dist, type)
 			VALUES
-				(:unitid, :systemid, :turn, :angle, :dist)
+				(:unitid, :systemid, :turn, :angle, :dist, :type)
 		");
 
 		for ($i = 0; $i < sizeof($data); $i++){
@@ -823,6 +836,7 @@ class DBManager {
 			$stmt->bindParam(":turn", $data[$i]["turn"]);
 			$stmt->bindParam(":angle", $data[$i]["angle"]);
 			$stmt->bindParam(":dist", $data[$i]["dist"]);
+			$stmt->bindParam(":type", $data[$i]["type"]);
 			if  (!$stmt->execute()){
 				echo ($stmt->errorInfo());
 			} else continue;
@@ -999,6 +1013,7 @@ class DBManager {
 						$result[$j]["turn"],
 						$result[$j]["type"],
 						$result[$j]["duration"],
+						$result[$j]["value"],
 						0
 					);
 
@@ -1035,10 +1050,8 @@ class DBManager {
 						$result[$j]["costmod"],
 						$result[$j]["resolved"]
 					);
-
 					$units[$i]->facing += $result[$j]["a"];
 				}
-				//Debug::log($units[$i]->classname." facing: ".$units[$i]->facing);
 			}
 		}
 		return true;
@@ -1066,7 +1079,8 @@ class DBManager {
 						$result[$j]["systemid"],
 						$result[$j]["turn"],
 						$result[$j]["angle"],
-						$result[$j]["dist"]
+						$result[$j]["dist"],
+						$result[$j]["type"]
 					);
 				}
 				//Debug::log($units[$i]->classname." facing: ".$units[$i]->facing);
@@ -1125,24 +1139,26 @@ class DBManager {
 		
 		$stmt = $this->connection->prepare("
 			INSERT INTO systemcrits 
-				( shipid, systemid, turn, type, duration)
+				( shipid, systemid, turn, type, duration, value)
 			VALUES
-				( :shipid, :systemid, :turn, :type, :duration)
+				( :shipid, :systemid, :turn, :type, :duration, :value)
 		");
 
 		for ($i = 0; $i < sizeof($crits); $i++){
-			if ($crits[$i]->new == 1){
+			if ($crits[$i]->new){
 				$stmt->bindParam(":shipid", $crits[$i]->shipid);
 				$stmt->bindParam(":systemid", $crits[$i]->systemid);
 				$stmt->bindParam(":turn", $crits[$i]->turn);
 				$stmt->bindParam(":type", $crits[$i]->type);
 				$stmt->bindParam(":duration", $crits[$i]->duration);
+				$stmt->bindParam(":value", $crits[$i]->value);
 				$stmt->execute();
 
 				if ($stmt->errorCode() == 0){
 					continue;
 				}
-				else return false;
+				else
+				var_export($crits[$i]); return false;
 			}
 		}
 
@@ -1334,8 +1350,19 @@ class DBManager {
 	}
 
 	public function getIncomingShips($gameid, $turn){
-		$stmt = $this->connection->prepare("
+	/*	$stmt = $this->connection->prepare("
 			SELECT * FROM units
+			WHERE gameid = :gameid
+			AND available > :turn
+			AND destroyed = 0
+			AND status = 'bought'
+			ORDER BY userid ASC
+		");
+	*/
+		$stmt = $this->connection->prepare("
+			SELECT units.id, units.userid, units.available, units.name, actions.x, actions.y, actions.a FROM units
+			INNER JOIN actions ON
+				units.id = actions.shipid	
 			WHERE gameid = :gameid
 			AND available > :turn
 			AND destroyed = 0
@@ -1351,6 +1378,7 @@ class DBManager {
 		
 		if ($result){
 			return $result;
+			return $this->getActions($result);
 		}
 		else {
 			return false;
@@ -1484,36 +1512,29 @@ class DBManager {
 			}
 		}
 		return $result;
-
 	}
 
-	public function resolveDeployActions($gameid, $turn){
-		Debug::log("resolveDeployActions");
-		$ships = $this->getActiveUnits($gameid, $turn);
+	public function resolveDeployActions($units){
+		Debug::log("resolveDeployActions s: ".sizeof($units));
+
 		$stmt = $this->connection->prepare("
 			UPDATE actions
-			SET resolved = 1
-			WHERE 
-				shipid = :shipid
-			AND 
-				type = :type
-			AND 
-				turn = :turn
+			SET resolved = :resolved
+			WHERE shipid = :shipid
 		");
 
-		$type = "deploy";
+		$resolved = 1;
 
-		for ($i = 0; $i < sizeof($ships); $i++){
-			$stmt->bindParam(":shipid", $ships[$i]["id"]);
-			$stmt->bindParam(":type", $type);
-			$stmt->bindParam(":turn", $turn);
+		for ($i = 0; $i < sizeof($units); $i++){
+			$stmt->bindParam(":shipid", $units[$i]);
+			$stmt->bindParam(":resolved", $resolved);
 			$stmt->execute();
+		//	Debug::log("aaa");
+
 			if ($stmt->errorCode() == 0){
 				continue;
 			}
 		}
-
-		return true;
 	}
 
 	public function resolveUnitMovementDB($ships){

@@ -49,16 +49,20 @@ foreach ($manager->playerstatus as $player){
 		$status = $player["status"];
 	}
 }
-	echo "<script>";
-	echo "window.gd = ".json_encode($manager->game, JSON_NUMERIC_CHECK).";";
-	echo "window.ships = ".json_encode($manager->getShipData($userid), JSON_NUMERIC_CHECK).";";
-	echo "window.ballistics = ".json_encode($manager->ballistics, JSON_NUMERIC_CHECK).";";
-	echo "window.playerstatus = ".json_encode($manager->playerstatus, JSON_NUMERIC_CHECK).";";
-	echo "window.reinforcements = ".json_encode($manager->reinforcements, JSON_NUMERIC_CHECK).";";
-	echo "window.incoming = ".json_encode($manager->incoming, JSON_NUMERIC_CHECK).";";
-	//echo "window.fireOrders = ".json_encode($fireorders, JSON_NUMERIC_CHECK).";";
-	echo "</script>";
-	?>
+
+
+$reinforcements = $manager->getReinforcements($userid);
+echo "<script>";
+echo "window.game = ".json_encode($manager->getClientData(), JSON_NUMERIC_CHECK).";";
+//echo "window.gd = ".json_encode($manager->game, JSON_NUMERIC_CHECK).";";
+//echo "window.ships = ".json_encode($manager->getShipData($userid), JSON_NUMERIC_CHECK).";";
+echo "window.ballistics = ".json_encode($manager->ballistics, JSON_NUMERIC_CHECK).";";
+echo "window.playerstatus = ".json_encode($manager->playerstatus, JSON_NUMERIC_CHECK).";";
+//echo "window.reinforcements = ".json_encode($reinforcements, JSON_NUMERIC_CHECK).";";
+//echo "window.incoming = ".json_encode($manager->incoming, JSON_NUMERIC_CHECK).";";
+//echo "window.fireOrders = ".json_encode($fireorders, JSON_NUMERIC_CHECK).";";
+echo "</script>";
+?>
 
 
 <!DOCTYPE html>
@@ -70,6 +74,7 @@ foreach ($manager->playerstatus as $player){
 	<script src='shared.js'></script>
 	<script src='shipclasses.js'></script>
 	<script src='flights.js'></script>
+	<script src='salvo.js'></script>
 	<script src='classes.js'></script>
 	<script src='systems.js'></script>
 	<script src='graphics.js'></script>
@@ -283,10 +288,13 @@ foreach ($manager->playerstatus as $player){
 			<div id="weaponAimTableWrapper" class="disabled">
 				<table id="targetInfo">
 					<tr>
-						<th width=30%>Target</th>
-						<th width=15%>Type</th>
-						<th width=25%>Sensor Lock</th>
-						<th width=20%>Chance</th>
+						<th width=20%>Target</th>
+						<th width=10%>Type</th>
+						<th width=12%>Base</th>
+						<th width=10%>Impulse</th>
+						<th width=9%>Lock</th>
+						<th width=9%>Mask</th>
+						<th width=10%>Final</th>
 						<th width=10%>Dist</th>
 					</tr>
 					<tr id="targetData">
@@ -298,11 +306,11 @@ foreach ($manager->playerstatus as $player){
 				</table>
 				<table id="weaponInfo">
 					<tr>
-						<th width=40%>Weapon</th>
+						<th width=45%>Weapon</th>
 						<th width=10%>Dmg</th>
-						<th width=30%>Tracking</th>
-						<th width=10%>Range</th>
-						<th width=10%>Final</th>
+						<th width=21%>Tracking</th>
+						<th width=12%>Range</th>
+						<th width=12%>Final</th>
 					</tr>
 				</table>
 			</div>
@@ -312,8 +320,6 @@ foreach ($manager->playerstatus as $player){
 				</div>
 				<table id="combatLog">
 					<tr>
-
-
 						<th width=12%>Type</th>
 						<th width=14%>Shooter</th>
 						<th width=14%>Target</th>
@@ -325,7 +331,17 @@ foreach ($manager->playerstatus as $player){
 					</tr>
 				</table>
 			</div>
-			<div id ="deployWrapper" class="disabled">
+			<div id="deployLogWrapper" class="disabled">
+				<div class="deployLogWrapper">
+					Deploy Log
+				</div>
+				<table id="deloyLog">
+					<tr>
+						<th width=100%>val</th>
+					</tr>
+				</table>
+			</div>
+			<div id ="deployWrapper">
 				<table id="deployTable">
 					<tr>
 						<th style="font-size: 18px; background-color: lightBlue; color: black" colSpan=3>
@@ -340,6 +356,31 @@ foreach ($manager->playerstatus as $player){
 							Arrival in
 						</th>
 					</tr>
+					<?php
+						foreach ($manager->ships as $ship){
+							if ($ship->ship && $manager->phase < 1 && $ship->userid == $manager->userid && $ship->available == $manager->turn){
+								$val = "deployNow ".$ship->id;
+								echo "<tr class='".$val."'</td>";
+								echo "<td><img class='img50' src=shipIcons/".strtolower($ship->name).".png></td>";
+								echo "<td>".$ship->name."</td>";
+								echo "<td class='green font20'> NOW </td>";
+								echo "</tr>";
+							}
+						}
+						for ($i = 0; $i < sizeof($manager->incoming); $i++){
+							//Debug::log("incoming ".$i);
+							if ($manager->incoming[$i]["userid"] == $manager->userid){
+								$val = "deployLater ".$manager->incoming[$i]["id"];
+								echo "<tr class='".$val."'</td>";
+								echo "<td><img class='img50' src=shipIcons/".strtolower($manager->incoming[$i]["name"]).".png></td>";
+								echo "<td>".$manager->incoming[$i]["name"]."</td>";
+								$rem = $manager->incoming[$i]["available"] - $manager->turn;
+								if ($rem == 1){
+									echo "<td class='red font20'>1 Turn</td></tr>";
+								} else echo "<td class='red font20'>".$rem." Turns</td></tr>";
+							}
+						}
+					?>
 				</table>
 				<table id="reinforceTable">
 					<tr>
@@ -352,22 +393,23 @@ foreach ($manager->playerstatus as $player){
 							Class
 						</th>
 						<th  width="30%" >
-							Arrival
+							ETA
 						</th>
 						<th  width="20%" >
 							Cost
 						</th>
 					</tr>
 					<?php
-						if (sizeof($manager->reinforcements)){
-							foreach ($manager->reinforcements as $entry){
-								echo "<tr class='requestReinforcements'>";
-								echo "<td><img class='img50' src=shipIcons/".strtolower($entry["name"]).".png></td>";
-								echo "<td>".$entry["name"]."</td>";
-								echo "<td>".$entry["arrival"]." turn/s</td>";
-								echo "<td>".$entry["cost"]."</td>";
-								echo "</tr>";
-							}
+						if (sizeof($reinforcements)){
+							//echo "<script>console.log(window.reinforcements)</script>";
+							foreach ($reinforcements as $ship){
+									echo "<tr class='requestReinforcements'>";
+									echo "<td><img class='img50' src=shipIcons/".strtolower($ship->name).".png></td>";
+									echo "<td>".$ship->name."</td>";
+									echo "<td>".($ship->available - $manager->turn)." turn/s</td>";
+									echo "<td class='cost'>".$ship::$value."</td>";
+									echo "</tr>";
+								}
 
 							echo "<tr>";
 							echo "<td style='border: none; background-color: black;'></td>";
@@ -436,6 +478,66 @@ foreach ($manager->playerstatus as $player){
 			$(this).find("#combatLog").toggleClass("disabled");
 		})
 
+		window.initiateKeyDowns();
+
+		document.getElementById("combatlogWrapper").onmousedown = function(){
+		    _drag_init(this);
+		    return false;
+		};
+
+		$("#plusImpulse")
+		.click(function(){
+			game.getUnitById(aUnit).doIncreaseImpulse();
+		});
+
+		$("#minusImpulse")
+		.click(function(){
+			game.getUnitById(aUnit).doDecreaseImpulse();
+		});
+
+		$("#undoLastAction")
+		.click(function(){
+			game.getUnitById(aUnit).undoLastAction()
+		});
+
+		$(".doTurn")
+		.click(function(){
+			//console.log("issueTurn")
+			game.getUnitById($(this).data("shipid")).issueTurn($(this).data("a"))
+		})
+
+		$(".doShortenTurn")
+		.click(function(e){
+			e.stopPropagation();
+			game.getUnitById(aUnit).doShortenTurn(false)
+		})
+		.contextmenu(function(e){
+			e.stopPropagation();
+			e.preventDefault();
+			game.getUnitById(aUnit).doShortenTurn(true)
+		})
+
+		$(".doUndoShortenTurn")
+		.click(function(e){
+			e.stopPropagation();
+			game.getUnitById(aUnit).doUndoShortenTurn()
+		})
+
+		$("#maxVector")
+		.click(function(){
+			//console.log("maxVector")
+			game.getUnitById($(this).data("shipid")).moveToMaxVector();
+		})
+
+		$("#maxTurnVector")
+		.click(function(){
+			//console.log("maxTurnVector")
+			game.getUnitById($(this).data("shipid")).moveToMaxTurnVector();
+		})
+	})
+
+
+	function initiateKeyDowns(){
 		$(this).keypress(function(e){
 			if (game){
 				if (e.keyCode == 32){ // space - dist logger
@@ -497,17 +599,11 @@ foreach ($manager->playerstatus as $player){
 					game.deployDone();
 				}
 			}
-		})
-		
-		$("#reinforce").hover(
-			function(e){
-				$(this).addClass("selected");
-			},
-			function(e){
-				$(this).removeClass("selected");
-			}
-		).
-		click(function(e){
+		});
+	}
+
+	function initReinforcementWrapper(){
+		$("#reinforce").click(function(e){
 			e.stopPropagation();
 			var wrap = $("#deployWrapper")[0];
 			if (wrap.style.display == "none"){
@@ -525,28 +621,23 @@ foreach ($manager->playerstatus as $player){
 
 		$(".requestReinforcements").each(function(i){
 			$(this)
-			.data("id", window.reinforcements[i]["id"])
-			.data("cost", window.reinforcements[i]["cost"])
+			.data("id", game.reinforcements[i]["id"])
+			.data("cost", game.reinforcements[i]["cost"])
 			.click(function(e){
 				e.stopPropagation();
 				if (game.phase == -1){
-					if (! game.deploying){				
-						if ($(this).hasClass("selected")){
-							$(this).removeClass("selected");
-							game.selectReinforcements($(this).data("id"));
-						}	
-						else {
-							if (game.reinforcePoints >= $(this).data("cost") + game.getCurrentReinforceCost()){
-								$(this).addClass("selected");
-								game.selectReinforcements($(this).data("id"));
-							}
-							else {
-								popup("You have insufficient Reinforce Points ("+game.reinforcePoints+") available.");
-							}
-						}
+					if (game.deploying && $(this).hasClass("selected")){
+						$(this).removeClass("selected");
+						game.disableDeployment();
 					}
-					else {
-						popup("Ship deployment active, please deploy and try again.");
+					else if (!aUnit){
+						if ($(this).hasClass("green") || Math.floor(game.reinforcePoints) >= $(this).data("cost") + game.getCurrentReinforceCost()){
+							$(this).addClass("selected");
+							game.enableDeployment($(this).data("id"));
+						}
+						else {
+							popup("You have insufficient Reinforce Points ("+game.reinforcePoints+") available.");
+						}
 					}
 				}
 				else {
@@ -554,68 +645,16 @@ foreach ($manager->playerstatus as $player){
 				}
 			})
 			.contextmenu(function(e){
-				if (game.phase == -1 && !game.deploying && !game.aShip){
-					e.stopPropagation(); e.preventDefault();
-					game.showReinforcementsPreview($(this).data("id"));
+				e.preventDefault(); e.stopPropagation();
+				if (game.phase == -1 && !aUnit && $(this).hasClass("green")){
+					game.undoDeployment($(this).data("id"));
+					$(this).removeClass("green");
+					$("#deployWrapper").find("#reinforceTable").find("#totalRequestCost").html(game.getCurrentReinforceCost());
+					game.draw();
 				}
 			});
 		})
-
-		document.getElementById("combatlogWrapper").onmousedown = function(){
-		    _drag_init(this);
-		    return false;
-		};
-
-		$("#plusImpulse")
-		.click(function(){
-			game.getUnitById(aUnit).doIncreaseImpulse();
-		});
-
-		$("#minusImpulse")
-		.click(function(){
-			game.getUnitById(aUnit).doDecreaseImpulse();
-		});
-
-		$("#undoLastAction")
-		.click(function(){
-			game.getUnitById(aUnit).undoLastAction()
-		});
-
-		$(".doTurn")
-		.click(function(){
-			//console.log("issueTurn")
-			game.getUnitById($(this).data("shipid")).issueTurn($(this).data("a"))
-		})
-
-		$(".doShortenTurn")
-		.click(function(e){
-			e.stopPropagation();
-			game.getUnitById(aUnit).doShortenTurn(false)
-		})
-		.contextmenu(function(e){
-			e.stopPropagation();
-			e.preventDefault();
-			game.getUnitById(aUnit).doShortenTurn(true)
-		})
-
-		$(".doUndoShortenTurn")
-		.click(function(e){
-			e.stopPropagation();
-			game.getUnitById(aUnit).doUndoShortenTurn()
-		})
-
-		$("#maxVector")
-		.click(function(){
-			//console.log("maxVector")
-			game.getUnitById($(this).data("shipid")).moveToMaxVector();
-		})
-
-		$("#maxTurnVector")
-		.click(function(){
-			//console.log("maxTurnVector")
-			game.getUnitById($(this).data("shipid")).moveToMaxTurnVector();
-		})
-	})
+	}
 
 
 </script>

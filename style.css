@@ -99,9 +99,10 @@ body {
 }
 
 .unitTest {
-	width: 220px;
+	width: 300px;
 	border: 1px solid white;
 	display: inline-block;
+	margin-left: 20px;
 }
 
 .unitTest td {
@@ -326,6 +327,10 @@ table, th, tr, td {
 .fontHighlight {
 	background-color: red;
 	color: white;
+}
+
+.font20 {
+	font-size: 18px;
 }
 
 .lobbyDiv {
@@ -707,16 +712,9 @@ table, th, tr, td {
 	position: absolute;
 }
 
-.ammoDestroyed {
+.ammoOverlay {
 	position: absolute;
 }
-
-.ammoLostLock {
-	position: absolute;
-	left: 0;
-	top: 40;
-}
-
 .fighterDiv {
 	position: absolute;
 	color: black;
@@ -854,12 +852,12 @@ table, th, tr, td {
 
 #systemDetailsDiv td.negative {
 	font-size: 12px;
-	color: red;
+	color: #ff3d00;
 }
 
 #systemDetailsDiv td.positive {
 	font-size: 12px;
-	color: green;
+	color: lightGreen;
 }
 
 .boostDiv {
@@ -935,7 +933,7 @@ table, th, tr, td {
 	background-color: lightGreen;
 }
 
-#combatlogWrapper {
+#combatlogWrapper, #deployLogWrapper {
 	position: absolute;
 	top: 120px;
 	width: 750px;	
@@ -946,17 +944,17 @@ table, th, tr, td {
 	background-color: black;
 }
 
-#combatlogWrapper disabled {
+#combatlogWrapper disabled, #deployLogWrapper disabled {
 	display: none;
 }
 
-.combatLogheader {
+.combatLogheader, .deployLogHeader {
 	font-size: 18px;
 	width: 100%;
 	text-align: center;
 } 
 
-#combatLog {
+#combatLog, #deployLog {
 	border-radius: 5px;
 	border: 1px solid white;
 	border-collapse: collapse;
@@ -990,7 +988,7 @@ table, th, tr, td {
 }
 
 .red {
-	color: ff3d00;
+	color: #ff3d00;
 }
 
 .green {
@@ -1190,6 +1188,7 @@ table, th, tr, td {
 }
 
 .dogFightEntry {
+	margin-top: 10px;
 	display: inline-block;
 	color: red;
 	text-align: center;

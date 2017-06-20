@@ -29,6 +29,7 @@ class Mini extends Ship {
 				for ($k = 0; $k < sizeof($this->structures); $k++){
 					if ($this->structures[$k]->id == $damages[$j]->systemid){
 						$this->structures[$k]->damages[] = $damages[$j];
+						break;
 					}
 				}
 			}
@@ -80,7 +81,7 @@ class Mini extends Ship {
 			$fire->section = $this->getSection($fire);
 			for ($i = 0; $i < $fire->shots; $i++){
 				$fire->hitSystem[] = $this->getHitSystem($fire);
-				$fire->req = ceil($this->getHitChance($fire) * (1-($fire->weapon->getTraverseMod($fire)*0.2)) - $fire->weapon->getAccLoss($fire->dist));
+				$fire->req = $this->calculateToHit($fire);
 			}
 			
 			$fire->weapon->rollToHit($fire);
@@ -146,10 +147,16 @@ class Mini extends Ship {
 	}
 
 	public function getHitChance($fire){
-		return ceil($fire->hitSystem[sizeof($fire->hitSystem)-1]->getSubHitChance() * $this->getLockMod($fire) * $this->getProfileMod());
+		return ceil($fire->hitSystem[sizeof($fire->hitSystem)-1]->getSubHitChance());
+	}
+
+	public function testCriticals($turn){
+		Debug::log("= testCriticals for ".$this->name.", #".$this->id.", turn: ".$turn);
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			$this->structures[$i]->testCrit($turn);
+		}
 	}
 }
-
 
 class Salvo extends Mini {
 	public $targetid;
@@ -175,9 +182,9 @@ class Salvo extends Mini {
 		
 		$this->addStructures($amount);
 		$this->setProps();
-	}	
+	}
 
-	public function getProfileMod(){
+	public function getImpulseProfileMod(){
 		return 1;
 	}
 
@@ -259,7 +266,7 @@ class Salvo extends Mini {
 	}
 
 	public function getArmourValue($fire, $hitSystem){
-		return $hitSystem->armour;
+		return $hitSystem->negation;
 	}
 
 	public function resolveBallisticFireOrder($fire){
@@ -273,17 +280,30 @@ class Salvo extends Mini {
 	}
 
 	public function getHitDist($fire){
-		$tPos = $this->getCurrentPosition();
 		$sPos = $fire->shooter->getCurrentPosition();
-		$dist = Math::getDist($tPos->x, $tPos->y, $sPos->x, $sPos->y);
+		$tPos; $dist;
 
-		if ($this->targetid == $fire->shooter->id){
-			$dist = max($dist, $fire->shooter->size/2);
+		if ($this->targetid == $fire->shooter->id){ // direct intercpet
+			if ($this->actions[sizeof($this->actions)-1]->type == "impact"){
+				$tPos = $this->actions[sizeof($this->actions)-2];
+				$dist = Math::getDist($tPos->x, $tPos->y, $sPos->x, $sPos->y);
+				$dist = min($dist, $fire->shooter->size/2);
+				//Debug::log("a");
+			}
+			else {
+				$tPos = $this->actions[sizeof($this->actions)-1];
+				$dist = $dist = Math::getDist($tPos->x, $tPos->y, $sPos->x, $sPos->y);
+				$dist = max($dist, $fire->shooter->size/2);
+				//Debug::log("b");
+			}
 		}
-
+		else {
+			$tPos = $this->getCurrentPosition();
+			$dist = Math::getDist($tPos->x, $tPos->y, $sPos->x, $sPos->y);
+		}
+		//Debug::log("dist: ".$dist);
 		return $dist;
 	}
-
 }
 
 ?>

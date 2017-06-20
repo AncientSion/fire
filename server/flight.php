@@ -27,6 +27,17 @@ class Flight extends Mini {
 		parent::setState($turn);
 		$this->setSize();
 		$this->setCurrentImpulse();
+		$this->lockFighterWeapons($turn);
+	}
+
+	public function lockFighterWeapons($turn){
+		if (sizeof($this->dogfights)){
+			for ($i = 0; $i < sizeof($this->structures); $i++){
+				if (!$this->structures[$i]->destroyed){
+					$this->structures[$i]->lockWeapons($turn);
+				}
+			}
+		}
 	}
 
 	public function setSize(){
@@ -69,27 +80,50 @@ class Flight extends Mini {
 	}
 
 	public function createFireOrders($gameid, $turn, $targets, $odds){ //[1, 7, 12]
+		Debug::log("creating fires for flight #".$this->id);
 		//$id, $gameid, $turn, $shooterid, $targetid, $weaponid, $shots, $req, $notes, $hits, $resolved){
 		$fires = array();
+		$self = 0;
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($this->structures[$i]->destroyed){
+				continue;
+			}
+			$self++;
+		}
+
+		$req = 80;
+		if ($odds[sizeof($odds)-1] < $self){
+			//Debug::log("ueberzahl");
+			$dif = ($self - $odds[sizeof($odds)-1])-2;
+			$req = 80 * (1-($dif*0.15));
+			//Debug::log("self: ".$self.", them: ".$odds[sizeof($odds)-1]." dif: ".$dif.", req: ".$req);
+		}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if (!$this->structures[$i]->destroyed){
-				$roll = mt_rand($odds[0], $odds[sizeof($odds)-1]); // 9
-				for ($j = sizeof($odds)-1; $j >= 0; $j--){
-					if ($roll <= $odds[$j] && $roll >= $odds[$j-1]){
-						$fires[] = array(
-							"gameid" => $gameid,
-							"turn" =>$turn,
-							"shooterid" => $this->id,
-							"targetid" => $targets[$j-1]->id,
-							"weaponid" => $this->structures[$i]->systems[0]->id,
-							"resolved" => 0
-						);
-						break;
+			if ($this->structures[$i]->destroyed){
+				continue;
+			}			
+			else {
+
+				if (mt_rand(0, 100) < $req){
+					$roll = mt_rand($odds[0], $odds[sizeof($odds)-1]); // 9
+					for ($j = sizeof($odds)-1; $j >= 0; $j--){
+						if ($roll <= $odds[$j] && $roll >= $odds[$j-1]){
+							$fires[] = array(
+								"gameid" => $gameid,
+								"turn" =>$turn,
+								"shooterid" => $this->id,
+								"targetid" => $targets[$j-1]->id,
+								"weaponid" => $this->structures[$i]->systems[0]->id,
+								"resolved" => 0
+							);
+							break;
+						}
 					}
 				}
 			}
 		}
+		Debug::log($self." fighters vs ".$odds[sizeof($odds)-1]." fighters, fires: ".sizeof($fires));
 		return $fires;
 	}
 
@@ -117,7 +151,7 @@ class Flight extends Mini {
 			$fire->angle = mt_rand(0, 359);
 			$fire->section = $this->getSection($fire);
 			$fire->hitSystem[] = $this->getHitSystem($fire);
-			$fire->req = ceil($this->getHitChance($fire) * $this->getDogfightHitModifier() * (1-($fire->weapon->getTraverseMod($fire)*0.2)) - $fire->weapon->getAccLoss($fire->dist));
+			$fire->req = $this->calculateDogfightToHit($fire);
 			$fire->weapon->rollToHit($fire);
 
 			for ($i = 0; $i < $fire->shots; $i++){
@@ -128,6 +162,24 @@ class Flight extends Mini {
 			}
 			$fire->resolved = 1;
 		}
+	}
+
+	public function calculateDogfightToHit($fire){
+		Debug::log("calculateDogfightToHit");
+		$base = $this->getHitChance($fire);
+		$traverse = $fire->weapon->getTraverseMod($fire);
+		$multi = $this->getDogfightHitModifier();
+		$req = 1;
+
+		if ($traverse){
+			//Debug::log("traverse: ". (1-($traverse*0.2)));
+			$multi -= (1-($traverse*0.2));
+		}
+
+		$req = $base * $multi;
+		//Debug::log("base: ".$base.", total mod: ".$multi.", req: ".$req);
+
+		return ceil($req);
 	}
 
 	public function isDogfight($fire){

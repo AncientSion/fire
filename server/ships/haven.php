@@ -21,13 +21,13 @@ class Haven extends SuperLight {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 120, 12);
-		$right->systems[] = new LightIon($this->getId(), $this->id, 315, 225);
-		$right->systems[] = new LightIon($this->getId(), $this->id, 315, 225);
+		$right->systems[] = new LightIon($this->getId(), $this->id, 300, 180);
+		$right->systems[] = new LightIon($this->getId(), $this->id, 300, 180);
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 120, 12);
-		$left->systems[] = new LightIon($this->getId(), $this->id, 135, 45);
-		$left->systems[] = new LightIon($this->getId(), $this->id, 135, 45);
+		$left->systems[] = new LightIon($this->getId(), $this->id, 180, 60);
+		$left->systems[] = new LightIon($this->getId(), $this->id, 180, 60);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

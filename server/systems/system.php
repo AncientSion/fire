@@ -20,7 +20,7 @@ class System {
 	public $effiency = 0;
 	public $maxBoost = 0;
 	public $mass;
-	public $boostEffect = 0;
+	public $boostEffect = array();
 	public $modes = array();
 	public $armourMod;
 
@@ -98,11 +98,7 @@ class System {
 		return false;
 	}
 
-	public function getCurrentIntegrity(){
-		return $this->getRemainingIntegrity();
-	}
-
-	function getRemainingIntegrity(){
+	public function getRemainingIntegrity(){
 		$rem = $this->integrity;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			$rem -= $this->damages[$i]->structDmg;
@@ -114,68 +110,50 @@ class System {
 		return $this->mass*10;
 	}
 
-	public function testCritical($turn){
-		if ($this->destroyed){
+	public function testCrit($turn){
+		if ($this->destroyed || empty($this->damages)){
 			return;
 		}
-		else if (empty($this->damages)){
-			return;
-		}
-		else {
-			$old = 0;
-			$new = 0;
-			for ($i = 0; $i < sizeof($this->damages); $i++){
-				if ($this->damages[$i]->turn == $turn){
-					$new += $this->damages[$i]->structDmg;
-				}
-				else {
-					$old += $this->damages[$i]->structDmg;
-				}
+
+		$old = 0; $new = 0;
+		for ($i = 0; $i < sizeof($this->damages); $i++){
+			if ($this->damages[$i]->turn > $turn){
+				break;
 			}
+			else if ($this->damages[$i]->turn == $turn){
+				$new += $this->damages[$i]->structDmg;
+			} else $old += $this->damages[$i]->structDmg;
+		}
 
-			if ($new){
-				$dmg = ceil(($new + ($old/2)) / $this->integrity * 100);
-				$this->determineCrititcal($dmg, $turn);
-			} else return;
+		if ($new){
+			$this->determineCrit(ceil(($new + ($old/2)) / $this->integrity * 100), $turn);
 		}
 	}
 
-	public function getCritEffects(){
-		return array("control1", "control2", "control3", "control4", "control5", "control6");
-	}
+	public function determineCrit($dmg, $turn){
+		$crits = $this->getValidEffects();
+		$valid = array();
 
-	public function getCritTreshs(){
-		return array(20, 30, 50, 65, 80, 90);
-	}
-
-	public function getCritDuration(){
-		return array(2, 2, 2, 2, 2, 2);
-	}
-
-	public function determineCrititcal($dmg, $turn){
-		//Debug::log("Crit test for: #".$this->id." - ".get_class($this).", dmg: ".$dmg."%");
-		$crits = $this->getCritEffects();
-		$tresh = $this->getCritTreshs();
-		$duration = $this->getCritDuration();
-		$mod = mt_rand(-15, 10);
-		$val = $dmg + $mod;
-		if ($val <= $tresh[0]){
-			return false;
+		for ($i = 0; $i < sizeof($crits); $i++){
+			if ($dmg > $crits[$i][1]){
+				$valid[] = $crits[$i];
+			}
 		}
 
-		for ($i = sizeof($tresh)-1; $i >= 0; $i--){
-			if ($val > $tresh[$i]){
-				//$id, $shipid, $systemid, $turn, $type, $duration, $new){
+		for ($i = 0; $i < sizeof($valid); $i++){
+			if (mt_rand(0, 1)){
+				$mod = 0;
+				if ($valid[$i][0] != "Disabled"){
+					$mod = 1-(round($dmg/20)/10);
+				}
+
 				$this->crits[] = new Crit(
 					sizeof($this->crits)+1,
-					$this->parentId,
-					$this->id,
-					$turn,
-					$crits[$i],
-					$duration[$i],
+					$this->parentId, $this->id, $turn,
+					$valid[$i][0], $valid[$i][2],
+					$mod,
 					1
 				);
-				return true;
 			}
 		}
 	}

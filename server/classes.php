@@ -77,13 +77,15 @@ class EW {
 	public $turn;
 	public $angle;
 	public $dist;
-	function __construct($id, $unitid, $systemid, $turn, $angle, $dist){
+	public $type;
+	function __construct($id, $unitid, $systemid, $turn, $angle, $dist, $type){
 		$this->id = $id;
 		$this->unitid = $unitid;
 		$this->systemid = $systemid;
 		$this->turn = $turn;
 		$this->angle = $angle;
 		$this->dist = $dist;
+		$this->type = $type;
 	}
 }
 
@@ -126,10 +128,10 @@ class FireOrder {
 	public $weapon = false;
 	public $dist = false;
 	public $angle = false;
-	public $loss = false;
-	public $dmgRoll = false;
-	public $hitSystem = array();
-	public $section = array();
+	//public $loss = false;
+	//public $dmgRoll = false;
+	//public $hitSystem = array();
+	//public $section = array();
 	public $damages = array();
 
 	function __construct($id, $gameid, $turn, $shooterid, $targetid, $weaponid, $shots, $req, $notes, $hits, $resolved){
@@ -195,16 +197,18 @@ class Crit {
 	public $turn;
 	public $type;
 	public $duration;
+	public $value;
 	public $new;
 	public $outputmod;
 
-	function __construct($id, $shipid, $systemid, $turn, $type, $duration, $new){
+	function __construct($id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 		$this->id = $id;
 		$this->shipid = $shipid;
 		$this->systemid = $systemid;
 		$this->turn = $turn;
 		$this->type = $type;
 		$this->duration = $duration;
+		$this->value = $value;
 		$this->new = $new;
 	}
 

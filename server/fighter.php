@@ -1,6 +1,6 @@
 <?php
 
-class Fighter extends Structure {
+class Fighter extends Single {
 	public $name;
 	public $display;
 	public $value;
@@ -12,27 +12,22 @@ class Fighter extends Structure {
 	public $turns;
 	
 	function __construct($id, $parentId){
-		$this->id = $id;
-		$this->parentId = $parentId;
+		parent::__construct($id, $parentId);
 		$this->addSystems();
 	}
 
-	function setState($turn){
-		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
-			if ($this->damages[$i]->destroyed){
-				$this->destroyed = true;
-				return;
+	public function lockWeapons($turn){
+		for ($i = 0; $i < sizeof($this->systems); $i++){
+			for ($j = sizeof($this->systems[$i]->fireOrders)-1; $j >= 0; $j--){
+				if ($this->systems[$i]->fireOrders[$j]->turn == $turn){
+					$this->systems[$i]->locked = 1;
+					return;
+				}
+				else if ($this->systems[$i]->fireOrders[$j]->turn < $turn){
+					return;
+				}
 			}
 		}
-		for ($i = 0; $i < sizeof($this->crits); $i++){
-			if ($this->crits[$i]->type == "disengaged"){
-				$this->destroyed = true;
-			}
-		}
-	}
-
-	public function getCurrentIntegrity(){
-		return $this->getRemainingIntegrity();
 	}
 
 	public function jsonSerialize(){
@@ -53,68 +48,6 @@ class Fighter extends Structure {
         );
     }
 
-	public function getCritEffects(){
-		return array("disengaged");
-	}
-
-	public function getCritTreshs(){
-		return array(75);
-	}
-
-	public function testCritical($turn){
-		if ($this->destroyed || empty($this->damages)){
-			return;
-		}
-		else {
-			$dmg = 0;
-			for ($i = 0; $i < sizeof($this->damages); $i++){
-				$dmg += $this->damages[$i]->structDmg;
-			}
-
-			if ($dmg){
-				$dmg = ceil($dmg / $this->integrity * 100);
-				$crits = $this->getCritEffects();
-				$tresh = $this->getCritTreshs();
-				$mod = mt_rand(-10, 15);
-				$val = $dmg + $mod;
-				if ($val <= $tresh[0]){
-					return false;
-				}
-				
-				for ($i = sizeof($tresh)-1; $i >= 0; $i--){
-					if ($val > $tresh[$i]){
-						//($id, $shipid, $systemid, $turn, $type, $duration, $new){
-						$this->crits[] = new Crit(
-							sizeof($this->crits)+1,
-							$this->parentId,
-							$this->id,
-							$turn,
-							$crits[$i],
-							-1,
-							1
-						);
-						return;
-					}
-				}
-			}
-		}
-	}
-
-	public function getRemainingIntegrity(){
-		$total = $this->integrity;
-		for ($i = 0; $i < sizeof($this->damages); $i++){
-			$total -= $this->damages[$i]->structDmg;
-		}
-		return $total;
-	}
-
-	public function getHitAngle($fire){
-		$tPos = $this->getCurrentPosition();
-		$sPos = $fire->shooter->getCurrentPosition();
-		$angle = Math::getAngle($tPos->x, $tPos->y, $sPos->x, $sPos->y);
-		return round(Math::addAngle($this->facing, $angle));
-	}
-
 	public function getSubHitChance(){
 		return ceil($this->mass/1.25);
 	}
@@ -128,7 +61,7 @@ class Aurora extends Fighter {
 	public $mass = 38;
 	public $ep = 100;
 	public $integrity = 34;
-	public $negation = array(8, 6, 6);
+	public $negation = array(7, 6, 6);
 	public $turns = 5;
 
 	function __construct($id, $parentId){
@@ -148,7 +81,7 @@ class Thunderbolt extends Fighter {
 	public $mass = 42;
 	public $ep = 110;
 	public $integrity = 38;
-	public $negation = array(10, 8, 8);
+	public $negation = array(9, 8, 8);
 	public $turns = 5;
 
 	function __construct($id, $parentId){
@@ -189,7 +122,7 @@ class Sentri extends Fighter {
 	public $mass = 32;
 	public $ep = 115;
 	public $integrity = 32;
-	public $negation = array(8, 7, 7);
+	public $negation = array(8, 8, 7);
 	public $turns = 6;
 
 	function __construct($id, $parentId){

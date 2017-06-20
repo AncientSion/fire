@@ -1,63 +1,59 @@
 <?php
 
-class Ammo extends Weapon {
-	public $id;
-	public $armour;
+class Missile extends Single {
+	public $negation;
 	public $cost;
-	public $traverse = 2;
+	public $start = 0;
+	public $end = 360;
 
-	function __construct($parentId, $id){
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
+		$this->integrity = 2+$this->mass*3;
+		$this->negation = $this->mass;
+		$this->systems[] = new Warhead($this->id, sizeof($this->systems)+1, $this->minDmg, $this->maxDmg, $this->traverse);
+	}
+
+	public function getValidEffects(){
+		return array(// attr, %-tresh, duration, modifier
+			array("Disabled", 80, 0, 0)
+		);
+	}
+
+	public function jsonSerialize(){
+		return array(
+        	"id" => $this->id,
+        	"name" => $this->name,
+        	"display" => $this->display,
+        	"type" => $this->type,
+        	"minDmg" => $this->minDmg,
+        	"maxDmg" => $this->maxDmg,
+        	"impulse" => $this->impulse,
+        	"integrity" => $this->integrity,
+        	"negation" => $this->negation,
+        	"mass" => $this->mass,
+        	"damages" => $this->damages,
+        	"crits" => $this->crits,
+        	"destroyed" => $this->destroyed,
+        	"fc" => $this->fc,
+        	"fireOrders" => $this->fireOrders
+        );
+    }
+
+	public function getSubHitChance(){
+		return ceil(sqrt($this->mass)*15);
+	}
+}
+
+class Warhead extends Weapon {
+	public $priority = 10;
+	public $type = "explosive";
+
+	function __construct($parentId, $id, $minDmg, $maxDmg, $traverse){
 		$this->parentId = $parentId;
 		$this->id = $id;
-		$this->integrity = 2+$this->mass*3;
-		$this->armour = 2+$this->mass;
-	}
-
-	public function testCritical($turn){
-		parent::testCritical($turn);
-	}
-
-	public function determineCrititcal($dmg, $turn){
-		Debug::log("determineCrititcal crit for #".$this->parentId."/".$this->id.", dmg: ".$dmg);
-		$crits = $this->getCritEffects();
-		$tresh = $this->getCritTreshs();
-		$duration = $this->getCritDuration();
-		$mod = 0;
-		$val = $dmg + $mod;
-		if ($val <= $tresh[0]){
-			Debug::log("below tresh");
-			return false;
-		}
-
-		for ($i = sizeof($tresh)-1; $i >= 0; $i--){
-			if ($val > $tresh[$i]){
-				//$id, $shipid, $systemid, $turn, $type, $duration, $new){
-				$this->crits[] = new Crit(
-					sizeof($this->crits)+1,
-					$this->parentId,
-					$this->id,
-					$turn,
-					$crits[$i],
-					$duration[$i],
-					1
-				);
-				Debug::log("crit");
-				return true;
-			}
-		}
-	}
-
-
-	public function getCritEffects(){
-		return array("disengaged");
-	}
-
-	public function getCritTreshs(){
-		return array(60);
-	}
-
-	public function getCritDuration(){
-		return array(0);
+		$this->minDmg = $minDmg;
+		$this->maxDmg = $maxDmg;
+		$this->traverse = $traverse;
 	}
 
 	public function rollToHit($fire){
@@ -72,57 +68,16 @@ class Ammo extends Weapon {
 		return true;
 	}
 
-	public function jsonSerialize(){
-		return array(
-        	"id" => $this->id,
-        	"name" => $this->name,
-        	"display" => $this->display,
-        	"type" => $this->type,
-        	"minDmg" => $this->minDmg,
-        	"maxDmg" => $this->maxDmg,
-        	"impulse" => $this->impulse,
-        	"integrity" => $this->integrity,
-        	"armour" => $this->armour,
-        	"mass" => $this->mass,
-        	"damages" => $this->damages,
-        	"crits" => $this->crits,
-        	"destroyed" => $this->destroyed,
-        	"fc" => $this->fc,
-        	"fireOrders" => $this->fireOrders
-        );
-    }
-
-	public function getRemainingIntegrity(){
-		$total = $this->integrity;
-		for ($i = 0; $i < sizeof($this->damages); $i++){
-			$total -= $this->damages[$i]->structDmg;
-		}
-		return $total;
-	}
-
-	public function getSubHitChance(){
-		return ceil(sqrt($this->mass)*15);
-	}
-
-	public function getAccLoss($dist){
+	public function getAccuracyMod($dist){
 		return 0;
 	}
 
 	public function getDamageMod($turn){
 		return 1;
 	}
-
-	function setState($turn){
-		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
-			if ($this->damages[$i]->destroyed){
-				$this->destroyed = true;
-				return;
-			}
-		}
-	}
 }
 
-class Hasta extends Ammo {
+class Hasta extends Missile {
 	public $name = "Hasta";
 	public $display = "Light Antifighter Missiles";
 	public $type = "explosive";
@@ -137,7 +92,7 @@ class Hasta extends Ammo {
 	}
 }
 
-class Javelin extends Ammo {
+class Javelin extends Missile {
 	public $name = "Javelin";
 	public $display = "Multi-purpose Missiles";
 	public $type = "explosive";
@@ -152,7 +107,7 @@ class Javelin extends Ammo {
 	}
 }
 
-class Patriot extends Ammo {
+class Patriot extends Missile {
 	public $name = "Patriot";
 	public $display = "Light Interceptor Missiles";
 	public $type = "explosive";
@@ -167,7 +122,7 @@ class Patriot extends Ammo {
 	}
 }
 
-class Naga extends Ammo {
+class Naga extends Missile {
 	public $name = "Naga";
 	public $display = "Multi-purpose Missiles";
 	public $type = "explosive";
@@ -182,7 +137,7 @@ class Naga extends Ammo {
 	}
 }
 
-class Cyclops extends Ammo {
+class Cyclops extends Missile {
 	public $name = "Cyclops";
 	public $display = "Light Antiship Missiles";
 	public $type = "explosive";
@@ -197,7 +152,7 @@ class Cyclops extends Ammo {
 	}
 }
 
-class Titan extends Ammo {
+class Titan extends Missile {
 	public $name = "Titan";
 	public $display = "Heavy Antiship Missiles";
 	public $type = "explosive";

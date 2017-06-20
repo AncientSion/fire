@@ -30,6 +30,9 @@ class Ship {
 	public $actions = array();
 	public $structures = array();
 	public $locks = array();
+	public $masks = array();
+	public $distances = array();
+	public $angles = array();
 
 	public $hitTable;
 
@@ -143,12 +146,11 @@ class Ship {
 
 	public function addDamageDB($damages){
 		for ($i = 0; $i < sizeof($damages); $i++){
-			$this->getStructureById($damages[$i]->structureid)->damages[] = $damages[$i];
-
+			//$this->getStructureById($damages[$i]->structureid)->damages[] = $damages[$i];
 			if ($damages[$i]->systemid == -1){
 				$this->primary->damages[] = $damages[$i];
 			}
-			else $this->getBaseSystemById($damages[$i]->systemid)->damages[] = $damages[$i];
+			else $this->getSystemByStructure($damages[$i]->structureid, $damages[$i]->systemid)->damages[] = $damages[$i];
 		}
 	}
 
@@ -179,50 +181,52 @@ class Ship {
 	}
 
 	public function setupForDamage(){
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			$this->structures[$i]->setRemainingIntegrity();
-		}
 		$this->primary->setRemainingIntegrity();
-		//Debug::log("ship #".$this->id." setup for Damage, remaining: ".$this->primary->remaining);
 	}
 
 	public function applyDamage($dmg){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->id == $dmg->structureid){
-				$this->structures[$i]->applyDamage($dmg);
-				if ($dmg->systemid == -1){
-					$this->primary->applyDamage($dmg);
-					return;
-				}
-				else {
+			if ($dmg->structureid == $this->structures[$i]->id){
+				$this->structures[$i]->armourDmg += $dmg->armourDmg;
+			}
+		}
+
+		if ($dmg->systemid == -1){
+			$this->primary->applyDamage($dmg);
+			return;
+		}
+		else {
+			for ($i = 0; $i < sizeof($this->structures); $i++){
+				if ($this->structures[$i]->id == $dmg->structureid){
 					for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 						if ($this->structures[$i]->systems[$j]->id == $dmg->systemid){
 							$this->structures[$i]->systems[$j]->applyDamage($dmg);
 							return;
 						}
 					}
-					for ($j = 0; $j < sizeof($this->primary->systems); $j++){
-						if ($this->primary->systems[$j]->id == $dmg->systemid){
-							$this->primary->systems[$j]->applyDamage($dmg);
-							return;
-						}
-					}
 				}
 			}
 		}
+		for ($j = 0; $j < sizeof($this->primary->systems); $j++){
+			if ($this->primary->systems[$j]->id == $dmg->systemid){
+				$this->primary->systems[$j]->applyDamage($dmg);
+				return;
+			}
+		}
+
 		Debug::log("couldnt apply dmg");
 		return;
 	}
 
 
 	public function setState($turn){
-		for ($i = sizeof($this->primary->damages)-1; $i >= 0; $i--){
+		for ($i = sizeof($this->primary->damages)-1; $i >= 0; $i--){ // check destroyed
 			if ($this->primary->damages[$i]->destroyed){
 				$this->destroyed = true;
-				break;
+				return;
 			}
 		}
-		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){ // check primary criticals
 			$this->primary->systems[$i]->setState($turn);
 			switch ($this->primary->systems[$i]->name){
 				case "Reactor":
@@ -237,10 +241,24 @@ class Ship {
 					break;
 			}
 		}
-		for ($i = 0; $i < sizeof($this->structures); $i++){
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){ // 
+			$armourDmg = 0;
+			$structDmg = 0;
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				$this->structures[$i]->systems[$j]->setState($turn);
+				$this->structures[$i]->systems[$j]->setState($turn); // set system states
+				for ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]->damages); $k++){// set armour
+					$armourDmg += $this->structures[$i]->systems[$j]->damages[$k]->armourDmg;
+					$structDmg += $this->structures[$i]->systems[$j]->damages[$k]->structDmg;
+				}
 			}
+			for ($j = 0; $j < sizeof($this->primary->damages); $j++){
+				if ($this->primary->damages[$j]->structureid == $this->structures[$i]->id){
+					$armourDmg += $this->primary->damages[$j]->armourDmg;
+					$structDmg += $this->primary->damages[$j]->structDmg;
+				}
+			}
+			$this->structures[$i]->setNegation($this->primary->integrity, $armourDmg);
 		}
 
 		$this->setProps();
@@ -310,7 +328,7 @@ class Ship {
 	}
 
 	public function resolveFireOrder($fire){
-		Debug::log("resolveFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
+		Debug::log("resolveFireOrder - ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
 
 		if ($this->isDestroyed()){
 			$fire->resolved = -1;
@@ -319,7 +337,7 @@ class Ship {
 			$fire->dist = $this->getHitDist($fire);
 			$fire->angle = $this->getHitAngle($fire);
 			$fire->section = $this->getSection($fire);
-			$fire->req = ceil($this->getHitChance($fire) * (1-($fire->weapon->getTraverseMod($fire)*0.2)) - $fire->weapon->getAccLoss($fire->dist));
+			$fire->req = $this->calculateToHit($fire);
 			$fire->weapon->rollToHit($fire);
 
 			for ($i = 0; $i < $fire->shots; $i++){
@@ -330,6 +348,35 @@ class Ship {
 			}
 			$fire->resolved = 1;
 		}
+	}
+
+	public function calculateToHit($fire){
+		//Debug::log("calculateToHit");
+		$base = $this->getHitChance($fire);
+		$impulse = $this->getImpulseProfileMod();
+		$traverse = $fire->weapon->getTraverseMod($fire);
+		$range = $fire->weapon->getAccuracyMod($fire);
+		$multi = 1;
+		$req = 1;
+
+		if ($fire->shooter->hasLockOn($this->id)){
+			//Debug::log("hasLock !");
+			$multi += 0.5;
+		}
+		if ($this->isMaskedFrom($fire->shooter->id)){
+			//Debug::log("isMasked !");
+			$multi -= 0.5;
+		}
+
+		if ($impulse != 1){
+			$multi += (1-$impulse)/2;
+			//Debug::log("impulse mod: ".(1-$impulse)/2);
+		}
+
+		$req = ($base * $multi) * (1-($traverse*0.2)) - $range;
+		//Debug::log("angle: ".$fire->angle.", base: ".$base.", total multi: ".$multi.", dist/range: ".$fire->dist."/".$range.", req: ".$req);
+
+		return ceil($req);
 	}
 
 	public function resolveBallisticFireOrder($fire){
@@ -360,7 +407,7 @@ class Ship {
 	}
 
 	public function getArmourValue($fire, $hitSystem){
-		return $this->getStructureById($fire->section)->getRemainingNegation($fire) * $hitSystem->getArmourMod();
+		return round($this->getStructureById($fire->section)->getCurrentNegation($fire) * $hitSystem->getArmourMod());
 	}
 
 	public function getSection($fire){
@@ -465,30 +512,23 @@ class Ship {
 			$angle *= -1;
 		}
 	
-		$base = $this->getBaseHitChance() * $this->getLockMod($fire) * $this->getProfileMod();
+		$base = $this->getBaseHitChance();
 		$a = $base * $this->profile[0];
 		$b = $base * $this->profile[1];
 		$sub = ((90 - $angle) * $a) + (($angle - 0) * $b);
 		$sub /= (90 - 0);
 
-		return ceil($sub);
+		return $sub;
 	}
 
 	public function getBaseHitChance(){
 		return $this->baseHitChance;
 	}
 
-	public function getProfileMod(){
-		//return 1;
-		$i = $this->getCurrentImpulse();
-		return 1+((($this->getBaseImpulse() / $this->getCurrentImpulse())-1)/3);
-	}
+	public function getImpulseProfileMod(){
+		return $this->getCurrentImpulse() / $this->getBaseImpulse();
 
-	public function getLockMod($fire){
-		//return false;
-		if ($fire->shooter->hasLockOn($this->id)){
-			return 1.5;
-		} else return 1;
+		//return 1+((($this->getBaseImpulse() / $this->getCurrentImpulse())-1)/2);
 	}
 
 	public function hasLockOn($id){
@@ -497,7 +537,16 @@ class Ship {
 				return true;
 			}
 		} return false;
+	}	
+
+	public function isMaskedFrom($id){
+		for ($i = 0; $i < sizeof($this->masks); $i++){
+			if ($this->masks[$i] == $id){
+				return true;
+			}
+		} return false;
 	}
+
 
 	public function getImpulseStep(){
 		return floor($this->getBaseImpulse() / 10);
@@ -513,12 +562,32 @@ class Ship {
 	}
 
 	public function getHitDist($fire){
+		
+		for ($i = 0; $i < sizeof($this->distances); $i++){
+			if ($this->distances[$i][0] == $fire->shooter->id){
+				//Debug::log("pre dist !");
+				return $this->distances[$i][1];
+			}
+		}
+
+		Debug::log("got no DIST set on ".$this->id." targeted by #".$fire->shooter->id);
+		
 		$tPos = $this->getCurrentPosition();
 		$sPos = $fire->shooter->getCurrentPosition();
 		return Math::getDist($tPos->x, $tPos->y, $sPos->x, $sPos->y);
 	}
 
 	public function getHitAngle($fire){
+		
+		for ($i = 0; $i < sizeof($this->angles); $i++){
+			if ($this->angles[$i][0] == $fire->shooter->id){
+				//Debug::log("pre angle !");
+				return $this->angles[$i][1];
+			}
+		}
+
+		Debug::log("got no ANGLE set on ".$this->id." targeted by #".$fire->shooter->id);
+		
 		$tPos = $this->getCurrentPosition();
 		$sPos = $fire->shooter->getCurrentPosition();
 		$angle = Math::getAngle($tPos->x, $tPos->y, $sPos->x, $sPos->y);
@@ -533,13 +602,15 @@ class Ship {
 		return round(Math::addAngle($this->facing, $angle));
 	}
 
-	public function testCriticalUnitLevel($turn, $phase){
-		//Debug::log("= testCriticalUnitLevel for ".$this->classname.", ".$this->id.", turn: ".$turn);
+	public function testCriticals($turn){
+		Debug::log("= testCriticals for ".$this->name.", #".$this->id.", turn: ".$turn);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			$this->structures[$i]->testCritical($turn);
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				$this->structures[$i]->systems[$j]->testCrit($turn);
+			}
 		}
-		if ($this->ship){
-			$this->primary->testCritical($turn);
+		for ($j = 0; $j < sizeof($this->primary->systems); $j++){
+			$this->primary->systems[$j]->testCrit($turn);
 		}
 	}
 
@@ -573,6 +644,25 @@ class Ship {
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if ($this->structures[$i]->systems[$j]->id == $id){
 					return $this->structures[$i]->systems[$j];
+				}
+			}
+		}
+	}
+
+	public function getSystemByStructure($structid, $systemid){
+		if ($structid == 1){
+			for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+				if ($this->primary->systems[$i]->id == $systemid){
+					return $this->primary->systems[$i];
+				}
+			}
+		}
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($this->structures[$i]->id == $structid){
+				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+					if ($this->structures[$i]->systems[$j]->id == $systemid){
+						return $this->structures[$i]->systems[$j];
+					}
 				}
 			}
 		}

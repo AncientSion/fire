@@ -436,7 +436,7 @@ else {
 		$("#hangarTable").html("");
 
 		for (var i = 0; i < window.ships.length; i++){
-			var ship = window.initiateShip(i);		
+			var ship = window.initiateShip(window.ships[i]);		
 			ship.actions.push(new Move("deploy", 0, res.x/2, res.y/2, 270, 0, 0));
 		}
 
@@ -477,7 +477,7 @@ else {
 				purchaseId: window.game.shipsBought.length,
 				upgrades: game.ships[0].upgrades,
 				turn: 1,
-				arrival: 0
+				eta: 0
 			}
 
 			window.game.shipsBought.push(ship);

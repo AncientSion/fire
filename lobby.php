@@ -92,7 +92,7 @@ if (isset($_SESSION["userid"])){
 			$status = $game["playerstatus"];
 			$td;
 			if ($status == "waiting"){
-				$td = "<td style='color: white; background-color: red'>Awaiting Orders</td>";
+				$td = "<td style='color: white; background-color: #ff3d00'>Awaiting Orders</td>";
 			}
 			else {
 				$td = "<td style='color: white; background-color: green'>Waiting for Opponent</td>";

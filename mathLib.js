@@ -155,7 +155,7 @@ function randomize(pos, x, y){
 	return pos;
 }
 
-function round(val){1,08979
+function round(val){
 	return Math.floor(val * 100) / 100; 
 }
 

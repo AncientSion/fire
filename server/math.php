@@ -41,10 +41,13 @@ class Math {
 		$ret = 360 - $f + $a;
 		//Debug::log("f: ".$f.", a: ".$a.", ret: ".$ret);
 
-		if ($ret >= 360){
+		while ($ret > 360){$ret -= 360;}
+
+		//Debug::log("ding, ".$ret);
+		/*if ($ret >= 360){
 			return $ret - 360;
 		}
-		else if ($ret < 0){
+		else*/if ($ret < 0){
 			return $ret + 360;
 		}
 		else return $ret;

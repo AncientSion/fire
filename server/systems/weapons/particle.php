@@ -14,8 +14,8 @@ class LightIon extends Particle {
 	public $name = "LightIon";
 	public $display = "32mm Ion Bolter Array";
 	public $minDmg = 16;
-	public $maxDmg = 23;
-	public $accDecay = 180;
+	public $maxDmg = 22;
+	public $accDecay = 210;
 	public $shots = 4;
 	public $animColor = "orange";
 	public $projSize = 2;

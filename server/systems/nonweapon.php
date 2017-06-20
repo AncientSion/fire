@@ -3,6 +3,7 @@
 class PrimarySystem extends System {
 	public $name = "PrimarySystem";
 	public $display = "PrimarySystem";
+	public $powerReq = 0;
 	
 	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
 		parent::__construct($id, $parentId, $output, $destroyed);
@@ -19,36 +20,60 @@ class PrimarySystem extends System {
 		if ($this->disabled || $this->destroyed){
 			return 0;
 		}
-		return floor($this->output * $this->getOutputMods($turn) - $this->getOutputUsage($turn));
+		return floor(($this->output + $this->getExtraOutput($turn) * $this->getOutputCrits($turn)) - $this->getOutputUsage($turn));
 	}
 
-	public function getOutputMods($turn){
-		$mod = 1;
-		$mod += $this->getOutputPowerMods($turn);
-		$mod *= $this->getOutputCritMods($turn);
-		return $mod;
-	}
+	public function getExtraOutput($turn){
+		$extra = 0;
+		$boost = 0;
 
-	public function getOutputPowerMods($turn){
-		$mod = 0;
-		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
-			if ($this->powers[$i]->turn > $turn){
+		for ($i = 0; $i < sizeof($this->boostEffect); $i++){
+			if ($this->boostEffect[$i]->type == "Output"){
+				$boost = $this->boostEffect[$i]->type;
 				break;
 			}
-			else if ($this->powers[$i]->turn == $turn && $this->powers[$i]->type == 1){
-				$mod += $this->boostEffect->value/100 * $this->powers[$i]->type;
+		}
+
+		if ($boost){
+			for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
+				if ($this->powers[$i]->turn > $turn){
+					break;
+				}
+				else if ($this->powers[$i]->turn == $turn && $this->powers[$i]->type == 1){
+					$extra += $this->output * $boost /100 * $this->powers[$i]->type;
+				}
+			}
+		}
+		if ($extra){
+			Debug::log($this->parentId."/".$this->id.", extra: ".$extra);
+		}
+		return floor($extra);
+	}
+
+	public function getOutputCrits($turn){
+		$mod = 1;
+		return $mod;
+		for ($i = 0; $i < sizeof($this->crits); $i++){
+			switch ($this->crits[$i]->type){
+				case "damage1": 
+					$mod -= 0.1;
+					break;
+				case "damage2":
+					$mod -= 0.2;
+					break;
 			}
 		}
 		return $mod;
 	}
 
-	public function getOutputCritMods($turn){
-		$mod = 1;
-		return $mod;
-	}
-
 	public function getOutputUsage($turn){
 		return 0;
+	}
+
+	public function getValidEffects(){
+		return array(
+			array("Output", 10, 1, 0) // attr, %-tresh, duration, modifier
+		);
 	}
 }
 
@@ -59,41 +84,17 @@ class Bridge extends PrimarySystem {
 	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
         parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
 	}
-
-	public function getCritEffects(){
-		return array("bridge_accu-10", "bridge_nomove", "disabled");
-	}
-
-	public function getCritTreshs(){
-		return array(10, 20, 35);
-	}
-
-	public function getCritDuration(){
-		return array(2, 1, 1);
-	}
 }
 
 class Engine extends PrimarySystem {
 	public $name = "Engine";
 	public $display = "Engine";
 
-	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
+	function __construct($id, $parentId, $mass, $output = 0, $destroyed = 0){
 		$this->powerReq = ceil($output / 5);
-		$this->boostEffect = new Effect("Output", 15);
-        parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
+		$this->boostEffect[] = new Effect("Output", 0.15);
+        parent::__construct($id, $parentId, $mass, $output, ceil($this->powerReq/5), $destroyed);
     }
-
-	public function getCritEffects(){
-		return array("output_0.9", "output_0.5", "output_0.9", "disabled");
-	}
-
-	public function getCritTreshs(){
-		return array(10, 25, 40, 55);
-	}
-
-	public function getCritDuration(){
-		return array(0, 1, 0, 1);
-	}
 }
 
 class Reactor extends PrimarySystem {
@@ -104,18 +105,6 @@ class Reactor extends PrimarySystem {
 	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
         parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
     }
-
-	public function getCritEffects(){
-		return array("output_0.95", "output_0.7", "output_0.5", "meltdown");
-	}
-
-	public function getCritTreshs(){
-		return array(15, 40, 55, 80);
-	}
-
-	public function getCritDuration(){
-		return array(0, 1, 1, 0);
-	}
 }
 
 class LifeSupport extends PrimarySystem {
@@ -125,17 +114,6 @@ class LifeSupport extends PrimarySystem {
 	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
         parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
     }
-
-	public function getCritEffects(){
-		return array("dmg05", "dmg15", "dmg25", "dmg35");
-	}
-
-	public function getCritTreshs(){
-		return array(5, 15, 25, 35);
-	}
-	public function getCritDuration(){
-		return array(1, 1, 1, 1);
-	}
 }
 
 class Sensor extends PrimarySystem {
@@ -143,23 +121,13 @@ class Sensor extends PrimarySystem {
 	public $display = "Sensor";
 	public $ew = array();
 
-	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
+	function __construct($id, $parentId, $mass, $output = 0, $effiency, $destroyed = 0){
 		$this->powerReq = floor($output/20);
-		$this->boostEffect = new Effect("Output", 10);
+		$this->boostEffect[] = new Effect("Output", 0.10);
 		$this->modes = array("Lock", "Mask");
-		$this->states = array(1, 0);
+		//$this->states = array(1, 0);
         parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
     }
-	public function getCritEffects(){
-		return array("output_0.85", "output_0.7", "disabled");
-	}
-
-	public function getCritTreshs(){
-		return array(10, 25, 40);
-	}
-	public function getCritDuration(){
-		return array(0, 0, 1);
-	}
 
 	public function getEW($turn){
 		for ($i = sizeof($this->ew)-1; $i >= 0; $i--){
@@ -206,15 +174,7 @@ class Hangar extends Weapon {
 	public function getHitChance(){
 		return $this->mass * 2;
 	}
-
-	public function getCritEffects(){
-		return array("launch1", "launch2", "launch3");
-	}
-
-	public function getCritTreshs(){
-		return array(15, 35, 55);
-	}
-
+	
 	public function adjustLoad($dbLoad){
 		for ($i = 0; $i < sizeof($dbLoad); $i++){
 			for ($j = 0; $j < sizeof($this->loads); $j++){

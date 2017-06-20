@@ -16,6 +16,7 @@ class Dual extends Weapon {
 			$this->states[] = 0;
 			$this->modes[] = $modes[$i];
 			$this->weapons[] = new $modes[$i]($i, $parentId, $start, $end, 0, 0);
+			$this->powerReq = max($this->powerReq, $this->weapons[$i]->powerReq);
 		}
 	}
 

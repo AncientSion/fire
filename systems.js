@@ -30,7 +30,40 @@ function System(system){
 	this.dual = 0;
 	this.loadout = 0;
 	this.loaded = 0;
+	this.notes = [];
 }
+
+System.prototype.attachDetailsMods = function(ele){
+	if (this.destroyed){
+		return;
+	}
+	var div = $(ele) || $("#systemDetailsDiv");
+		div.find(".modifiers").remove();
+	var boost = this.getBoostLevel();
+	var table;
+	if (boost || this.crits.length){
+		table = $("<table>").addClass("modifiers").append($("<tr>").append($("<th>").html("Modifiers").attr("colSpan", 2)));
+		if (boost){
+			for (var i = 0; i < this.boostEffect.length; i++){
+				$(table[0]).append($("<tr>").append($("<td>").html(this.boostEffect[i].type + ": +" + (this.boostEffect[i].value*100 * boost) + "%").attr("colSpan", 2).addClass("positive")));
+				//div.find("." + this.boostEffect[i].type.toLowerCase()).addClass("positive");
+			}
+		}
+		if (this.crits.length){
+			for (var i = 0; i < this.crits.length; i++){
+				if (this.crits[i].inEffect()){
+					$(table[0]).append($("<tr>").append($("<td>").html(this.crits[i].getString()).attr("colSpan", 2).addClass("negative")));
+				}
+			}
+		}
+		div.append(table);
+	}
+}
+
+System.prototype.getDisplay = function(){
+	return this.display;
+}
+
 System.prototype.setState = function(){
 	if (this.isDestroyed()){
 		this.destroyed = true;
@@ -87,9 +120,6 @@ System.prototype.hover = function(e){
 		game.getUnitById(this.parentId).highlightAllSelectedWeapons();
 	}
 }
-
-
-
 
 System.prototype.setTableRow = function(){
 	var ele = $(this.element);
@@ -199,11 +229,13 @@ System.prototype.getBoostLevel = function(){
 System.prototype.getTimeLoaded = function(){
 	return this.loaded;
 }
-System.prototype.getBoostEffect = function(){
-	if (this.boostEffect){
-		return "+" + this.boostEffect.value + "% " + this.boostEffect.type;
+System.prototype.getBoostEffectElements = function(table){
+	var data = $("<tr>").append($("<td>").html("Boost Effect"));
+	for (var i = 0; i < this.boostEffect.length; i++){
+		if (!i){
+			$(table).append($(data).append($("<td>").html(" + " + this.boostEffect[i].value*100 + "% " + this.boostEffect[i].type)));
+		} else $(table).append($("<tr>").append($("<td>").html("")).append($("<td>").html((" + " + this.boostEffect[i].value*100 + "% " + this.boostEffect[i].type))));
 	}
-	else return "MISSING";
 }
 System.prototype.getBoostDiv = function(){
 	if (this.destroyed || !this.effiency){return};
@@ -623,7 +655,7 @@ System.prototype.adjustStateByCritical = function(){
 	for (var i = 0; i < this.crits.length; i++){
 		if (this.crits[i].inEffect()){
 			switch (this.crits[i].type){
-				case "disabled":
+				case "Disabled":
 					this.disabled = true;
 					break;
 				default:
@@ -652,10 +684,22 @@ System.prototype.getOutput = function(){
 }
 System.prototype.getExtraOutput = function(){
 	var extra = 0;
-	for (var i = this.powers.length-1; i >= 0; i--){
-		if (this.powers[i].turn == game.turn){
-			extra += this.output * this.boostEffect.value / 100 * this.powers[i].type;
-		} else break;
+	var boost = 0;
+	for (var i = 0; i < this.boostEffect.length; i++){
+		if (this.boostEffect[i].type == "Output"){
+			boost = this.boostEffect[i].value;
+			break;
+		}
+	}
+	if (boost){
+		for (var i = this.powers.length-1; i >= 0; i--){
+			if (this.powers[i].turn > game.turn){
+				break;
+			}
+			else if (this.powers[i].turn == game.turn && this.powers[i].type == 1){
+				extra += this.output * boost / 100 * this.powers[i].type;
+			}
+		}
 	}
 	return Math.floor(extra);
 }
@@ -720,50 +764,41 @@ PrimarySystem.prototype.getOutput = function(){
 	if (this.disabled || this.destroyed){
 		return 0;
 	}
-	return Math.floor(this.output * this.getOutputMods() - this.getOutputUsage());
+
+	if (game.getUnitById(this.parentId).name == "Demos" && this.display == "Sensor"){
+		console.log("ding");
+	}
+	var effect = this.getOutputCrits();
+	var output = this.output + this.getExtraOutput();
+	var usage = this.getOutputUsage();
+
+	return Math.floor((output * effect) - usage);
+
+
+	//return Math.floor((this.output + this.getExtraOutput()) * this.getOutputCrits()) - this.getOutputUsage();
 }
 
 PrimarySystem.prototype.getOutputUsage = function(){
 	return 0;
 }
 
-PrimarySystem.prototype.getOutputMods = function(){
-	var mod = 1;
-		mod += this.getOutputPowerMods();
-		mod *= this.getOutputCritMods();
-
-	return mod;
-}
-
-PrimarySystem.prototype.getOutputPowerMods = function(){
-	var mod = 0;
-
-	for (var i = this.powers.length-1; i >= 0; i--){
-		if (this.powers[i].turn == game.turn){
-			mod += this.boostEffect.value/100 * this.powers[i].type;
-		} else break;
-	}
-	return mod;
-}
-
-PrimarySystem.prototype.getOutputCritMods = function(){
+PrimarySystem.prototype.getOutputCrits = function(){
 	var mod = 1;
 	for (var i = 0; i < this.crits.length; i++){
-		if (this.crits[i].outputMod != 1){
-			if (this.crits[i].inEffect()){
-				mod *= this.crits[i].outputMod;
-			}
+		if (this.crits[i].inEffect()){
+			mod -= 1-this.crits[i].value;
 		}
 	}
 	return mod;
 }
 
 PrimarySystem.prototype.getOutputString = function(){
-	return this.output + " + " + this.getExtraOutput();
+	var effect = this.getOutputCrits();
+	return Math.floor(this.output*effect) + " + " + Math.floor(this.getExtraOutput()*effect);
 }
 
 PrimarySystem.prototype.getBoostCostIncrease = function(){
-	return 0.2;
+	return 0.3;
 }
 
 PrimarySystem.prototype.getSystemDetailsDiv = function(){
@@ -771,61 +806,25 @@ PrimarySystem.prototype.getSystemDetailsDiv = function(){
 		div.id = "systemDetailsDiv";
 		div.className = this.id;
 	var table = document.createElement("table");
-		
-	var tr = table.insertRow(-1);				
-	var th = document.createElement("th"); th.colSpan = 2;
-		th.innerHTML = this.display; tr.appendChild(th); table.appendChild(tr)
-
-	var tr = table.insertRow(-1);
-	var td = document.createElement("td"); td.style.width = "60%";
-		td.innerHTML = "Integrity"; tr.appendChild(td);
-	var td = document.createElement("td");
-		td.innerHTML = this.getRemainingIntegrity() + " / " + this.integrity; tr.appendChild(td); table.appendChild(tr);
+	
+	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
+	$(table).append($("<tr>").append($("<td>").css("width", "60%").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
 
 	if (this.output){
-		var tr = table.insertRow(-1);
-			tr.insertCell(-1).innerHTML = "Current Output";
-			tr.insertCell(-1).innerHTML = this.getOutputString();
-			tr.childNodes[1].className = "output";
+		$(table).append($("<tr>").append($("<td>").html("Current Output")).append($("<td>").addClass("output").html(this.getOutputString())));
 	}
 	if (this.powerReq){
-		var tr = table.insertRow(-1);
-			tr.insertCell(-1).innerHTML = "Base Power Req";
-			tr.insertCell(-1).innerHTML = this.getPowerReq();
-			tr.childNodes[1].className = "powerReq";
+		$(table).append($("<tr>").append($("<td>").html("Base Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReq())));
 	}
 	if (this.effiency){
-		var tr = table.insertRow(-1);
-			tr.insertCell(-1).innerHTML = "Boost Power Cost";
-			tr.insertCell(-1).innerHTML = this.getEffiency();
-			tr.childNodes[1].className = "boostReq";
-		var tr = table.insertRow(-1);
-			tr.insertCell(-1).innerHTML = "Boost Effect";
-			tr.insertCell(-1).innerHTML = this.getBoostEffect();
+		$(table).append($("<tr>").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerReq").html(this.getEffiency())));
 	}
 	if (this.modes.length){
-		var tr = table.insertRow(-1);
-			tr.insertCell(-1).innerHTML = "Sensor Mode";
-			tr.insertCell(-1).innerHTML = this.getEWMode();
-			tr.childNodes[1].className = "sensorMode negative";
+		$(table).append($("<tr>").append($("<td>").html("Sensor Mode")).append($("<td>").addClass("sensorMode negative").html(this.getEWMode())));
 	}
-	
-	if (this.crits.length){
-		var tr = document.createElement("tr");
-		var td = document.createElement("td");
-			td.colSpan = 2; td.style.fontSize = "16px"; td.style.borderBottom = "1px solid white"; td.style.borderTop = "1px solid white"; 
-			td.innerHTML = "Modifiers"; tr.appendChild(td); table.appendChild(tr);
 
-		for (var i = 0; i < this.crits.length; i++){
-			var tr = table.insertRow(-1);				
-			var td = document.createElement("td");
-				td.colSpan = 2;
-				td.className = "negative";
-				td.innerHTML = this.crits[i].html; tr.appendChild(td); table.appendChild(tr);
-		}
-	}
-		
 	div.appendChild(table);
+	this.attachDetailsMods(div);
 	return div;
 }
 
@@ -909,39 +908,22 @@ function Sensor(system){
 }
 Sensor.prototype = Object.create(PrimarySystem.prototype);
 
-Sensor.prototype.getModeDiv = function(){
-	return false;
-}
-
 Sensor.prototype.switchMode = function(){
 	if (this.destroyed || this.disabled || this.locked){return;}
-	var index = 0;
-	for (var i = 0; i < this.states.length; i++){
-		if (this.states[i]){
-			this.states[i] = 0;
-			index = i
-			if (index+1 >= this.states.length){
-				index = 0;
-			} else index++;
-
-			this.states[index] = 1;
-			this.updateSystemDetailsDiv();
-			this.drawEW();
-			return;
-		}
-	}
+	if (this.ew[this.ew.length-1].type == 1){
+		this.ew[this.ew.length-1].type = 0;
+	} else this.ew[this.ew.length-1].type = 1;
+		this.updateSystemDetailsDiv();
+		this.drawEW();
 }
 
 Sensor.prototype.getEWMode = function(){
-	for (var i = 0; i < this.states.length; i++){
-		if (this.states[i]){
-			return this.modes[i];
-		}
-	}
+	if (this.disabled){return "NONE";}
+	return this.modes[this.ew[this.ew.length-1].type];
 }
 
 Sensor.prototype.setState = function(){
-	PrimarySystem.prototype.setState.call(this);	
+	PrimarySystem.prototype.setState.call(this);
 	if (game.phase == -1){
 		if (this.disabled){return;}
 
@@ -950,11 +932,39 @@ Sensor.prototype.setState = function(){
 			dist: Math.ceil(this.getOutput() / Math.pow(180/20, 1/1.5)),
 			turn: game.turn,
 			unitid: this.parentId,
-			systemid: this.id
+			systemid: this.id,
+			type: 0
 		})
 	}
 	else if (game.phase != -1){
 		this.locked = 1;
+	}
+}
+
+Sensor.prototype.doUndoActions = function(){
+	for (var i = this.ew.length-1; i >= 0; i--){
+		if (this.ew[i].turn == game.turn){
+			this.ew.splice(i, 1);
+			mousseCtx.clearRect(0, 0, res.x, res.y);
+		} else break;
+	}
+}
+
+Sensor.prototype.doPower = function(){
+	if (this.powers.length && this.powers[this.powers.length-1].type == 0){
+		this.powers.splice(this.powers.length-1, 1);
+		this.disabled = 0;
+		this.setEW({
+			angle: -1,
+			dist: Math.ceil(this.getOutput() / Math.pow(180/20, 1/1.5)),
+			turn: game.turn,
+			unitid: this.parentId,
+			systemid: this.id,
+			type: 0
+		})
+		this.drawEW();
+		this.setTableRow();
+		game.getUnitById(this.parentId).updateDivPower(this);
 	}
 }
 
@@ -967,7 +977,7 @@ Sensor.prototype.setEW = function(data){
 		this.ew.push(data);
 		if (this.selected){
 			this.select();
-			this.drawEW();
+		//	this.drawEW();
 		}
 		return;
 }
@@ -992,8 +1002,7 @@ Sensor.prototype.drawEW = function(){
 		var w;
 		if (ew.angle == -1){
 			w = 180;
-		} else var	w = Math.min(180, len * Math.pow(str/ew.dist, p));
-
+		} else w = Math.min(180, len * Math.pow(str/ew.dist, p));
 		drawSensorArc(w, ew.dist, p, str, len, loc, facing, ew.angle, this);
 	}
 }
@@ -1016,7 +1025,8 @@ Sensor.prototype.select = function(e){
 		else if (this.selected){
 			this.selected = false;
 			this.setSystemBorder();
-			mouseCtx.clearRect(0, 0, res.x, res.y);
+			
+			//mouseCtx.clearRect(0, 0, res.x, res.y);
 		}
 		else {
 			this.selected = true;
@@ -1042,23 +1052,24 @@ Sensor.prototype.hover = function(e){
 Sensor.prototype.doBoost = function(){
 	System.prototype.doBoost.call(this);
 	mouseCtx.clearRect(0, 0, res.x, res.y);
-	this.setState();
+	this.ew[this.ew.length-1].dist = Math.ceil(this.getOutput() / Math.pow(180/20, 1/1.5));
+	this.drawEW();
 }
 
 Sensor.prototype.doUnboost = function(){
 	System.prototype.doUnboost.call(this);
 	mouseCtx.clearRect(0, 0, res.x, res.y);
-	this.setState();
+	this.ew[this.ew.length-1].dist = Math.ceil(this.getOutput() / Math.pow(180/20, 1/1.5));
+	this.drawEW();
 }
 
 function Weapon(system){
 	System.call(this, system);
 	this.animColor = system.animColor;
 	this.weapon = true;
-	this.fc = system.fc;
 	this.minDmg = system.minDmg;
 	this.maxDmg = system.maxDmg;
-	this.accDecay = system.accDecay;
+	this.accDecay = system.accDecay/10;
 	this.linked = system.linked;
 	this.shots = system.shots;
 	this.reload = system.reload;
@@ -1074,7 +1085,7 @@ function Weapon(system){
 }
 Weapon.prototype = Object.create(System.prototype);
 
-Weapon.prototype.getAimData = function(target, baseHit, dist, row){
+Weapon.prototype.getAimData = function(target, final, dist, row){
 	var dmgLoss = this.getDamageLoss(dist);
 	var accLoss = this.getAccuracyLoss(dist);
 
@@ -1085,28 +1096,25 @@ Weapon.prototype.getAimData = function(target, baseHit, dist, row){
 	}
 
 	if (target){
-		this.getAimDataTarget(target, baseHit, accLoss, row);
+		this.getAimDataTarget(target, final, accLoss, row);
 	}
 	else {
 		this.getAimDataLocation(accLoss, row);
 	}
 }
 
-Weapon.prototype.getAimDataTarget = function(target, baseHit, accLoss, row){
+Weapon.prototype.getAimDataTarget = function(target, final, accLoss, row){
 	var traverseMod = this.getTraverseMod(target);
 
 	if (!traverseMod){
 		row.append($("<td>").html("<span class='green'>Full Tracking</span>"));
-	}
-	else {
-		row.append($("<td>").html("<span class='red'>-"+traverseMod+"</span> / -" + Math.floor(baseHit / 5 * traverseMod) + '%'));
-	}
+	} else row.append($("<td>").html("-"+ Math.floor(final / 5 * traverseMod) + "% (<span class='red'>" + traverseMod + '</span>)'));
+
 	if (accLoss){
 		row.append($("<td>").html(" -" + accLoss + "%"));
-	} else {			
-		row.append($("<td>").html(""));
-	}
-	row.append($("<td>").html(Math.floor(baseHit * (1-(traverseMod*0.2)) - accLoss) + "%"));
+	} else row.append($("<td>").html(""));
+
+	row.append($("<td>").html(Math.floor(final * (1-(traverseMod*0.2)) - accLoss) + "%"));
 }
 
 Weapon.prototype.getAimDataLocation = function(accLoss, row){
@@ -1126,12 +1134,6 @@ Weapon.prototype.doUndoActions = function(){
 			this.fireOrders.splice(i, 1);
 		}
 	}
-}
-
-Weapon.prototype.getFireControl = function(target){
-	if (target instanceof Flight || target instanceof Salvo){
-		return this.fc[1];
-	} else return this.fc[0];
 }
 
 Weapon.prototype.getShots = function(){
@@ -1164,7 +1166,7 @@ Weapon.prototype.select = function(e){
 	}
 	else {
 		unit = game.getUnitById(this.parentId);
-		if (unit.hasSystemSelected("Sensor") || unit instanceof Flight && (unit.dogfights.length)){
+		if (unit.hasSystemSelected("Sensor")){
 			return false;
 		}
 		else if (this.getLoadLevel() >= 1){
@@ -1223,10 +1225,6 @@ Weapon.prototype.setMount = function(amount){
 	this.armour =  Math.floor(amount * this.armourMod);
 }
 
-Weapon.prototype.getFireControlString = function(){
-	return this.fc[0] + "% / " + this.fc[1] + "%";
-}
-
 Weapon.prototype.getTraverseMod = function(target){
 	return Math.max(0, (this.traverse - target.traverse));
 }
@@ -1239,20 +1237,17 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 	var div = document.createElement("div");
 		div.id = "systemDetailsDiv";
 	var table = document.createElement("table");
-		
-	var tr = document.createElement("tr");		
-	var th = document.createElement("th");
-		th.colSpan = 2; th.innerHTML = this.display; th.style.width = "40%"; tr.appendChild(th); table.appendChild(tr);
-
+	
+	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
 	$(table).append($("<tr>").append($("<td>").html("Weapon Type")).append($("<td>").html(this.type)));
 
-	if (!(game.getUnitById(aUnit) instanceof Flight)){
+	if (!(game.getUnitById(aUnit).flight)){
 		$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
 		$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
 		$(table).append($("<tr>").append($("<td>").html("Base Power Req")).append($("<td>").html(this.getPowerReq())));
-		if (this.effiency && !(this instanceof Launcher)){
+		if (this.boostEffect.length && !(this instanceof Launcher)){
 			$(table).append($("<tr>").append($("<td>").html("Boost Power Cost")).append($("<td>").html(this.getEffiency())));
-			$(table).append($("<tr>").append($("<td>").html("Boost Effect")).append($("<td>").html(this.getBoostEffect())));
+			this.getBoostEffectElements(table);
 		}
 	}
 
@@ -1274,14 +1269,14 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 		$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + game.getUnitType(this.getTraverseRating()))));
 		$(table).append($("<tr>").append($("<td>").html("Focus point")).append($("<td>").html(this.optRange + "px")));
 		$(table).append($("<tr>").append($("<td>").html("Damage loss")).append($("<td>").html(this.dmgDecay + "% per 100px")));
-		$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").html(this.getAccDecay()/10 + "% per 100px")));
+		$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").addClass("accuracy").html(this.getAccuracy() + "% per 100px")));
 	}
 	else {
 		$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + game.getUnitType(this.getTraverseRating()))));
 		if (this instanceof Plasma){
 			$(table).append($("<tr>").append($("<td>").html("Damage loss")).append($("<td>").html(this.dmgDecay + "% per 100px")));
 		}
-		$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").html(this.getAccDecay()/10 + "% per 100px")));
+		$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").html(this.getAccuracy() + "% per 100px")));
 	}
 
 	if (this.linked > 1){
@@ -1292,36 +1287,43 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 	}
 	else if (!(this instanceof Launcher)){
 		if (this instanceof Pulse){
-			$(table).append($("<tr>").append($("<td>").html("Volley")).append($("<td>").html(this.shots + " w/ " + this.volley + " shots")));
+			$(table).append($("<tr>").append($("<td>").html("Volley")).append($("<td>").html(this.shots + " w/ " + this.basePulses + " pulses")));
+			$(table).append($("<tr>").append($("<td>").html("Burst")).append($("<td>").html(" +1 (max " + this.extraPulses + ") per " + this.grouping + "%")));
 		} else $(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").html(this.shots)));
 	}
 
 	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDamage())));
 
-	if (this.crits.length){
-		var tr = table.insertRow(-1); tr.insertCell(-1).innerHTML = "Modifiers"; tr.childNodes[0].colSpan = 2; tr.childNodes[0].border = "1px solid white";
-		for (var i = 0; i < this.crits.length; i++){
-			var tr = document.createElement("tr");
-			var td = document.createElement("td");
-				td.colSpan = 2;
-				td.className = "negative"
-				td.innerHTML = this.crits[i].html; tr.appendChild(td); table.appendChild(tr);
+	if (this.notes.length){
+		$(table).append($("<tr>").append($("<th>").html("Notes").attr("colSpan", 2)));
+		for (var i = 0; i < this.notes.length; i++){
+			$(table).append($("<tr>").append($("<td>").html(this.notes[i]).attr("colSpan", 2)));
 		}
 	}
+
 	div.appendChild(table);
+	this.attachDetailsMods(div);
 		
 	return div;
 }
 
 Weapon.prototype.updateSystemDetailsDiv = function(){
 	var dmg = this.getDamage();
-	$("#systemDetailsDiv").find("tr").each(function(i){
+	var acc = this.getAccuracy();
+	var ele = $("#systemDetailsDiv");
+
+	$(ele).find("tr").each(function(i){
 		if (this.childNodes.length == 2){
 			if (this.childNodes[1].className == "damage"){
 				this.childNodes[1].innerHTML = dmg;
 			}
+			if (this.childNodes[1].className == "accuracy"){
+				this.childNodes[1].innerHTML = acc + "% per 100px";
+			}
 		}
 	})
+
+	this.attachDetailsMods(ele);
 }
 
 Weapon.prototype.drawArc = function(facing, pos){
@@ -1332,17 +1334,19 @@ Weapon.prototype.drawArc = function(facing, pos){
 		var rad1 = degreeToRadian(this.arc[i][0] + facing);
 		var rad2 = degreeToRadian(this.arc[i][1] + facing);
 
+		fxCtx.globalAlpha = 0.7;
 		fxCtx.beginPath();			
 		fxCtx.moveTo(pos.x, pos.y);
 		fxCtx.arc(pos.x, pos.y, dist, rad1, rad2, false);
 		fxCtx.closePath();		
 		fxCtx.fillStyle = this.getFillStyle(pos.x, pos.y, dist);
 		fxCtx.fill();
+		fxCtx.globalAlpha = 1;
 	}
 }
 
 Weapon.prototype.getAccuracyLoss = function(dist){		
-	return Math.ceil(this.getAccDecay() * dist/decayVar);
+	return Math.ceil(this.getAccuracy()/100 * dist);
 }
 
 Weapon.prototype.getDamageLoss = function(dist){
@@ -1359,89 +1363,57 @@ Weapon.prototype.getFillStyle = function(x, y, dist){
 	return "green";
 }
 
-Weapon.prototype.getAccDecay = function(){
+Weapon.prototype.getAccuracy = function(){
 	var mod = 1;
 	for (var i = 0; i < this.crits.length; i++){
 		switch (this.crits[i].type){
-			case "range1":
-				mod = mod + 0.1;
-				break;
-			case "range2":
-				mod = mod + 0.2;
-				break;
+			case "Accuracy":
+				mod -= 1-this.crits[i].value; break;
+			default: break;
 		}
+	}
+
+	if (this.boostEffect.length){
+		var value = this.getBoostEffect("Accuracy");
+		var level = this.getBoostLevel();
+		mod += value * level;
 	}
 	return Math.floor(this.accDecay * mod);
 }
 
 Weapon.prototype.getDamage = function(){
-	var min = this.getMinDmg();
-	var max = this.getMaxDmg();
+	var mod = this.getTotalDamageMod();
 
-	if (min == max){
-		return min;
-	}
-	else {
-		return min + " - " + max;
-	}
+	if (this.minDmg == this.maxDmg){
+		return Math.floor(this.minDmg * mod);
+	} else return (Math.floor(this.minDmg*mod) + " - " + Math.floor(this.maxDmg*mod));
 }
 
-Weapon.prototype.getMinDmg = function(){
+Weapon.prototype.getBoostEffect = function(val){
+	for (var i = 0; i < this.boostEffect.length; i++){
+		if (this.boostEffect[i].type == val){
+			return this.boostEffect[i].value;
+		}
+	}
+	return 0;
+}
+
+Weapon.prototype.getTotalDamageMod = function(){
 	var mod = 1;
 	for (var i = 0; i < this.crits.length; i++){
 		switch (this.crits[i].type){
-			case "damage1":
-				mod = mod - 0.1;
-				break;
-			case "damage2":
-				mod = mod - 0.2;
-				break;
+			case "Damage":
+				mod = mod - this.crits[i].value; break;
+			default: break;
 		}
 	}
 
-	if (this.boostEffect){
-		for (var i = this.powers.length-1; i >= 0; i--){
-			if (this.powers[i].turn == game.turn){
-				switch (this.powers[i].type){
-					case 1:
-						mod = mod + this.boostEffect.value / 100;
-						break;
-					default:
-						break; 
-				}
-			}
-		}
+	if (this.boostEffect.length){
+		var value = this.getBoostEffect("Damage");
+		var level = this.getBoostLevel();
+		mod += value * level;
 	}
-	return Math.floor(this.minDmg * mod);
-}
-
-Weapon.prototype.getMaxDmg = function(){
-	var mod = 1;
-	for (var i = 0; i < this.crits.length; i++){
-		switch (this.crits[i].type){
-			case "damage1":
-				mod = mod - 0.1;
-				break;
-			case "damage2":
-				mod = mod - 0.2;
-				break;
-		}
-	}
-
-	if (this.boostEffect){
-		for (var i = this.powers.length-1; i >= 0; i--){
-			if (this.powers[i].turn == game.turn){
-				switch (this.powers[i].type){
-					case 1:
-						mod = mod + this.boostEffect.value / 100;
-						break;
-					default:
-						break; 
-				}
-			}
-		}
-	}
-	return Math.floor(this.maxDmg * mod);
+	return mod;
 }
 
 function Particle(system){
@@ -1460,7 +1432,7 @@ Particle.prototype.getAnimation = function(fire){
 
 	if (fire.shooter.flight){
 		grouping = 1;
-		delay = 10;
+		delay = 8;
 	}
 	else if (this.shots >= 4 && fire.guns <= 3){
 		grouping = 1;
@@ -1537,12 +1509,14 @@ Particle.prototype.getAnimation = function(fire){
 
 function Matter(system){
 	Particle.call(this, system);
+	this.notes = ["Ignores 50 % of Armour"];
 }
 Matter.prototype = Object.create(Particle.prototype);
 
 function Plasma(system){
 	Particle.call(this, system);
 	this.dmgDecay = system.dmgDecay;
+	this.notes = ["Adds 50 % damage to Armour"];
 }
 Plasma.prototype = Object.create(Particle.prototype);
 
@@ -1561,24 +1535,29 @@ Plasma.prototype.getFillStyle = function(x, y, dist){
 }
 
 function EM(system){
-	Particle.call(this, system);	
+	Particle.call(this, system);
+	this.notes = ["Does no actual damage", "Cause effects if it penetrates Armour"];
 }
 EM.prototype = Object.create(Particle.prototype);
 
 function Pulse(system){
 	Particle.call(this, system);
-	this.volley = system.volley;
+	this.basePulses = system.basePulses;
+	this.extraPulses = system.extraPulses;
+	this.grouping = system.grouping;
+	this.notes = ["Volley allocates versus the same subtarget"];
 }
 Pulse.prototype = Object.create(Particle.prototype);
 
 Pulse.prototype.getShots = function(){
-	return this.volley;
+	return this.basePulses + this.extraPulses;
 }
 	
 Pulse.prototype.getAnimation = function(fire){
+	//console.log(fire);
 	allAnims = [];
 	var grouping = 2;
-	var delay = 40;
+	var delay = 80;
 	var shotInterval = 6;
 
 	if (fire.shooter.flight){
@@ -1587,39 +1566,31 @@ Pulse.prototype.getAnimation = function(fire){
 	}
 
 	for (var j = 0; j < fire.guns; j++){
-		var rng = range(0, 15)
+		var gunHit = false;
+		var gunDelay = Math.floor(j / grouping) * delay;
+		var rng = range(0, 10)
 		var gunAnims = [];
 		var ox = fire.shooter.x + range(fire.shooter.size * -0.2, fire.shooter.size * 0.2); // WEAPON origin
 		var oy = fire.shooter.y + range(fire.shooter.size * -0.2, fire.shooter.size * 0.2);
 		var tx;
 		var ty;
 		var dist;
-		var hit = false;
 		if (fire.hits[j] >= 1){
-			hit = true;
+			gunHit = true;
 		}
 		else {
 			tx = fire.target.x + range(fire.target.size * -0.7, fire.target.size * 0.7); // salvo missed7
 			ty = fire.target.y + range(fire.target.size * -0.7, fire.target.size * 0.7);
 		}
 		
-		for (var k = 0; k < this.volley; k++){
-			if (hit){
+		for (var k = 0; k < this.basePulses + this.extraPulses; k++){
+			if (gunHit){
 				tx = fire.target.x + range(fire.target.size * -0.07, fire.target.size * 0.07); // salvo hit
 				ty = fire.target.y + range(fire.target.size * -0.07, fire.target.size * 0.07);
 			}
-
-			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, this.projSpeed, hit);
-			//console.log(fire.guns);
-			if (fire.guns > grouping){
-				shotAnim.n = 0 - ((j / grouping) * delay + k*shotInterval + rng);
-			}
-			else {
-				shotAnim.n = 0 - (j*delay + k*shotInterval);
-			}
-
-				//shotAnim.n = 0 - (j*gunInterval + k*shotInterval);
-						  // 0 - (range(-5, 5)) - (Math.floor(j / grouping) * delay) - k*15,
+			//console.log("hit: " + (k < fire.hits[j]));
+			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, this.projSpeed, (k < fire.hits[j]));
+				shotAnim.n = 0 - (gunDelay + k*shotInterval + rng);
 
 
 			gunAnims.push(shotAnim);
@@ -1783,16 +1754,16 @@ Dual.prototype.initSubWeapons = function(){
 }
 
 Dual.prototype.initMain = function(){
+	var w = this.getActiveWeapon();
 	for (var i = 0; i < this.states.length; i++){
 		if (this.states[i]){
 			for (var j = 0; j < this.powers.length; j++){
-				if (this.powers[this.powers.length-1] == game.turn && this.powers[this.powers.length-1].type > 0){
-					this.getActiveWeapon().powers.push(this.powers[j]);
+				if (this.powers[j].turn == game.turn && this.powers[j].type > 0){
+					w.powers.push(this.powers[j]);
 				}
-				else if (this.powers[j].turn > game.turn){
-					break;
-				}
-				else break;
+				//else if (this.powers[j].turn > game.turn){
+				//	break;
+				//}
 			}
 		}
 	}
@@ -1952,10 +1923,9 @@ Dual.prototype.doBoost = function(){
 
 Dual.prototype.getActiveWeapon = function(){
 	for (var i = 0; i < this.states.length; i++){
-		if (this.states[i]){
-			return this.weapons[i];
-		}
+		if (this.states[i]){return this.weapons[i];}
 	}
+	return this.weapons[0];
 }
 
 
@@ -1977,7 +1947,7 @@ Launcher.prototype = Object.create(Weapon.prototype);
 
 Launcher.prototype.create = function(loads){
 	for (var i = 0; i < loads.length; i++){
-		this.loads.push(new Ammo(loads[i]));
+		this.loads.push(new Missile(loads[i]));
 	}
 	if (game.phase == -2){
 		for (var i = 0; i < this.loads.length; i++){
@@ -2025,20 +1995,17 @@ Launcher.prototype.getTraverseRating = function(){
 	return this.ammo.traverse || 0
 }
 
-Launcher.prototype.getAimDataTarget = function(target, baseHit, accLoss, row){
+Launcher.prototype.getAimDataTarget = function(target, final, accLoss, row){
 	var traverseMod = this.getTraverseMod(target);
 
 	if (!traverseMod){
 		row.append($("<td>").html("<span class='green'>Full Tracking</span>"));
-	}
-	else {
-		row.append($("<td>").html("<span class='red'>-"+traverseMod+"</span> / -" + Math.floor(100 / 5 * traverseMod) + '%'));
-	}
+	} else row.append($("<td>").html("-"+ Math.floor(final / 5 * traverseMod) + "% (<span class='red'>" + traverseMod + '</span>)'));
+
 	if (accLoss){
 		row.append($("<td>").html(" -" + accLoss + "%"));
-	} else {			
-		row.append($("<td>").html(""));
-	}
+	} else row.append($("<td>").html(""));
+
 	row.append($("<td>").html(Math.floor(100 * (1-(traverseMod*0.2)) - accLoss) + "%"));
 }
 
@@ -2129,24 +2096,11 @@ Launcher.prototype.setMount = function(amount){
 	this.armour =  Math.floor(amount * this.armourMod);
 }
 
-Launcher.prototype.getFireControlString = function(){
-	if (this.ammo){
-		return this.ammo.fc[0] + "% / " + this.ammo.fc[1] + "%";
-	}
-}	
-
 Launcher.prototype.getTraverseMod = function(target){
 	if (this.ammo){
 		return Math.max(0, (this.ammo.traverse - target.traverse));
 	}
 }
-
-Launcher.prototype.getFireControl = function(target){
-	if (target instanceof Flight || target instanceof Salvo){
-		return this.ammo.fc[1];
-	} else return this.ammo.fc[0];
-}
-
 Launcher.prototype.getDamage = function(){
 	if (this.ammo){
 		return this.ammo.minDmg + " - " + this.ammo.maxDmg;
@@ -2429,7 +2383,7 @@ Hangar.prototype.getLaunchRate = function(){
 	var rate = this.effiency;
 
 	for (var i = 0; i < this.crits.length; i++){
-		rate *= this.crits[i].outputMod;
+		rate *= this.crits[i].value;
 	}
 	return Math.ceil(rate);
 }

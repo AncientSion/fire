@@ -29,8 +29,8 @@ class Artemis extends Medium {
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 375, 22);
-		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 18, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 18, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 0, 360, 18, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 0, 360, 18, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 240, 60, 8, 2, array("Naga", "Cyclops"));
 		$structs[] = $left;
 
@@ -42,7 +42,7 @@ class Artemis extends Medium {
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 850);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 95);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 95, 75, 4);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, 95, 80);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 95);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 95, 650, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 95, $this->getPowerReq());
