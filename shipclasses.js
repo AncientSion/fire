@@ -320,7 +320,9 @@ function Ship(data){
 		//this.setMoveMode();
 		//this.getSystemByName("Sensor").drawEW();
 
-		$("#deployWrapper").find("#reinforceTable").find(".requestReinforcements").each(function(){
+		$("#game")
+			.find("#deployOverlay").hide().end()
+			.find("#deployWrapper").find("#reinforceTable").find(".requestReinforcements").each(function(){
 			if ($(this).hasClass("selected")){
 				//$(this).find(".cost").addClass("green");
 				$(this).addClass("green");

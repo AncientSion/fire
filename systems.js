@@ -697,7 +697,7 @@ System.prototype.getExtraOutput = function(){
 				break;
 			}
 			else if (this.powers[i].turn == game.turn && this.powers[i].type == 1){
-				extra += this.output * boost / 100 * this.powers[i].type;
+				extra += this.output * boost * this.powers[i].type;
 			}
 		}
 	}
@@ -765,7 +765,7 @@ PrimarySystem.prototype.getOutput = function(){
 		return 0;
 	}
 
-	if (game.getUnitById(this.parentId).name == "Demos" && this.display == "Sensor"){
+	if (game.getUnitById(this.parentId).name == "Tinashi" && this.display == "Sensor"){
 		console.log("ding");
 	}
 	var effect = this.getOutputCrits();
@@ -817,7 +817,7 @@ PrimarySystem.prototype.getSystemDetailsDiv = function(){
 		$(table).append($("<tr>").append($("<td>").html("Base Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReq())));
 	}
 	if (this.effiency){
-		$(table).append($("<tr>").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerReq").html(this.getEffiency())));
+		$(table).append($("<tr>").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerCost").html(this.getEffiency())));
 	}
 	if (this.modes.length){
 		$(table).append($("<tr>").append($("<td>").html("Sensor Mode")).append($("<td>").addClass("sensorMode negative").html(this.getEWMode())));
@@ -840,7 +840,7 @@ PrimarySystem.prototype.updateSystemDetailsDiv = function(){
 			else if (this.childNodes[1].className == "powerReq"){
 				this.childNodes[1].innerHTML = powerReq;
 			}
-			else if (this.childNodes[1].className == "boostReq"){
+			else if (this.childNodes[1].className == "powerCost"){
 				this.childNodes[1].innerHTML = boostReq;
 			}
 		}
@@ -918,7 +918,7 @@ Sensor.prototype.switchMode = function(){
 }
 
 Sensor.prototype.getEWMode = function(){
-	if (this.disabled){return "NONE";}
+	if (this.disabled || game.phase == -2){return "NONE";}
 	return this.modes[this.ew[this.ew.length-1].type];
 }
 
