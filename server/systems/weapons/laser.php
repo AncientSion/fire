@@ -218,7 +218,7 @@ class NeutronLaser extends Laser {
 	public $reload = 2;
 	public $powerReq = 6;
 	public $rakes = 2;
-	public $effiency = 3;
+	public $effiency = 4;
 	public $maxBoost = 1;
 	public $mass = 26;
 	public $traverse = -1;

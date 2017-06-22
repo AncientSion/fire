@@ -29,8 +29,8 @@ class Artemis extends Medium {
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 375, 22);
-		$left->systems[] = new Dual($this->getId(), $this->id, 0, 360, 18, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new Dual($this->getId(), $this->id, 0, 360, 18, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 18, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 18, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 240, 60, 8, 2, array("Naga", "Cyclops"));
 		$structs[] = $left;
 

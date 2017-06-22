@@ -72,16 +72,16 @@ class HeavyIon extends LightIon {
 
 class FusionCannon extends Particle {
 	public $name = "FusionCannon";
-	public $display = "46mm Fusion Cannon";
+	public $display = "42mm Fusion Cannon";
 	public $minDmg = 30;
-	public $maxDmg = 38;
+	public $maxDmg = 41;
 	public $accDecay = 110;
-	public $shots = 2;
+	public $shots = 1;
 	public $animColor = "green";
 	public $projSize = 3;
-	public $projSpeed = 5;
-	public $mass = 18;
-	public $powerReq = 3;
+	public $projSpeed = 6;
+	public $mass = 24;
+	public $powerReq = 2;
 	public $traverse = -1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
