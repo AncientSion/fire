@@ -764,18 +764,11 @@ PrimarySystem.prototype.getOutput = function(){
 	if (this.disabled || this.destroyed){
 		return 0;
 	}
-
-	if (game.getUnitById(this.parentId).name == "Tinashi" && this.display == "Sensor"){
-		console.log("ding");
-	}
 	var effect = this.getOutputCrits();
 	var output = this.output + this.getExtraOutput();
 	var usage = this.getOutputUsage();
 
 	return Math.floor((output * effect) - usage);
-
-
-	//return Math.floor((this.output + this.getExtraOutput()) * this.getOutputCrits()) - this.getOutputUsage();
 }
 
 PrimarySystem.prototype.getOutputUsage = function(){
@@ -832,7 +825,8 @@ PrimarySystem.prototype.updateSystemDetailsDiv = function(){
 	var output = this.getOutputString();
 	var powerReq = this.getPowerReq();
 	var boostReq = this.getEffiency();
-	$("#systemDetailsDiv").find("tr").each(function(i){
+	var ele = $("#systemDetailsDiv");
+	$(ele).find("tr").each(function(i){
 		if (this.childNodes.length == 2){
 			if (this.childNodes[1].className == "output"){
 				this.childNodes[1].innerHTML = output;
@@ -849,6 +843,7 @@ PrimarySystem.prototype.updateSystemDetailsDiv = function(){
 	if (this instanceof Sensor){
 		$("#systemDetailsDiv").find(".sensorMode").html(this.getEWMode());
 	}
+	this.attachDetailsMods(ele);
 }
 
 
@@ -908,7 +903,7 @@ function Sensor(system){
 }
 Sensor.prototype = Object.create(PrimarySystem.prototype);
 
-Sensor.prototype.switchMode = function(){
+Sensor.prototype.switchMode = function(id){
 	if (this.destroyed || this.disabled || this.locked){return;}
 	if (this.ew[this.ew.length-1].type == 1){
 		this.ew[this.ew.length-1].type = 0;
@@ -945,7 +940,7 @@ Sensor.prototype.doUndoActions = function(){
 	for (var i = this.ew.length-1; i >= 0; i--){
 		if (this.ew[i].turn == game.turn){
 			this.ew.splice(i, 1);
-			mousseCtx.clearRect(0, 0, res.x, res.y);
+			mouseCtx.clearRect(0, 0, res.x, res.y);
 		} else break;
 	}
 }
@@ -1292,7 +1287,7 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 		} else $(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").html(this.shots)));
 	}
 
-	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDamage())));
+	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDamageString())));
 
 	if (this.notes.length){
 		$(table).append($("<tr>").append($("<th>").html("Notes").attr("colSpan", 2)));
@@ -1308,7 +1303,7 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 }
 
 Weapon.prototype.updateSystemDetailsDiv = function(){
-	var dmg = this.getDamage();
+	var dmg = this.getDamageString();
 	var acc = this.getAccuracy();
 	var ele = $("#systemDetailsDiv");
 
@@ -1363,26 +1358,29 @@ Weapon.prototype.getFillStyle = function(x, y, dist){
 	return "green";
 }
 
-Weapon.prototype.getAccuracy = function(){
-	var mod = 1;
+Weapon.prototype.getCritEffect = function(value){
+	var mod = 0;
+
 	for (var i = 0; i < this.crits.length; i++){
 		switch (this.crits[i].type){
-			case "Accuracy":
-				mod -= 1-this.crits[i].value; break;
+			case value:
+				mod += this.crits[i].value; break;
 			default: break;
 		}
 	}
+	return mod;
+}
 
-	if (this.boostEffect.length){
-		var value = this.getBoostEffect("Accuracy");
-		var level = this.getBoostLevel();
-		mod += value * level;
-	}
+Weapon.prototype.getAccuracy = function(){
+	var mod = 1;
+		mod += this.getCritEffect("Accuracy");
+		mod -= this.getBoostEffect("Accuracy") * this.getBoostLevel();
+
 	return Math.floor(this.accDecay * mod);
 }
 
-Weapon.prototype.getDamage = function(){
-	var mod = this.getTotalDamageMod();
+Weapon.prototype.getDamageString = function(){
+	var mod = this.getDamage();
 
 	if (this.minDmg == this.maxDmg){
 		return Math.floor(this.minDmg * mod);
@@ -1398,21 +1396,11 @@ Weapon.prototype.getBoostEffect = function(val){
 	return 0;
 }
 
-Weapon.prototype.getTotalDamageMod = function(){
+Weapon.prototype.getDamage = function(){
 	var mod = 1;
-	for (var i = 0; i < this.crits.length; i++){
-		switch (this.crits[i].type){
-			case "Damage":
-				mod = mod - this.crits[i].value; break;
-			default: break;
-		}
-	}
+		mod -= this.getCritEffect("Damage");
+		mod += this.getBoostEffect("Damage") * this.getBoostLevel();
 
-	if (this.boostEffect.length){
-		var value = this.getBoostEffect("Damage");
-		var level = this.getBoostLevel();
-		mod += value * level;
-	}
 	return mod;
 }
 
@@ -1771,13 +1759,13 @@ Dual.prototype.initMain = function(){
 	this.copyProps();
 }
 
-Dual.prototype.switchMode = function(){
+Dual.prototype.switchMode = function(id){
 	if (this.destroyed || this.disabled || this.locked){return;}
 	this.resetPowers();
 	this.cycleActiveWeapon();
 	this.copyProps();
 	this.setSystemImage()
-	this.setSystemWindow();
+	this.setSystemWindow(id);
 	this.resetDetailsDiv();
 	game.getUnitById(this.parentId).updateDivPower(this);
 }
@@ -1830,13 +1818,16 @@ Dual.prototype.copyProps = function(){
 	}
 }
 
-Dual.prototype.setSystemWindow = function(){
+Dual.prototype.setSystemWindow = function(id){
 	//if (game.phase == -2){return;}
 	if (this.canPower() || !this.effiency){
 		$(this.element).find(".boostDiv").hide().end().find(".outputMask").hide();
 	}
 	else if (this.effiency){
-		$(this.element).find(".boostDiv").show().end().find(".outputMask").show();
+		$(this.element).find(".outputMask").show();
+		if (id == undefined || this.id == id){
+			$(this.element).find(".boostDiv").show();
+		}
 	}
 }
 
@@ -2101,7 +2092,7 @@ Launcher.prototype.getTraverseMod = function(target){
 		return Math.max(0, (this.ammo.traverse - target.traverse));
 	}
 }
-Launcher.prototype.getDamage = function(){
+Launcher.prototype.getDamageString = function(){
 	if (this.ammo){
 		return this.ammo.minDmg + " - " + this.ammo.maxDmg;
 	}
@@ -2457,12 +2448,13 @@ Hangar.prototype.showHangarControl = function(){
 		table.appendChild(tr);
 	}
 
-	var button = $("#hangarLoadoutDiv").find("input").off().on("click", {systemid: id}, launchFlight)
-	console.log(button);
+	var button = $("#hangarLoadoutDiv");
+		$(button).find("input").off().on("click", {systemid: id}, launchFlight);
+	//console.log(button);
 
 	if (this.canLaunchFlight()){
-		$("#hangarLoadoutDiv").find("input").removeClass("disabled");
-	} else $("#hangarLoadoutDiv").find("input").addClass("disabled");
+		$(button).find("input").removeClass("disabled");
+	} else $(button).find("input").addClass("disabled");
 }
 
 Hangar.prototype.doLaunchFlight = function(){

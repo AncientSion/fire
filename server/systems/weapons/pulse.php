@@ -33,53 +33,45 @@ class Pulse extends Weapon {
 
 		$mod = $this->getDamageMod($fire);
 
+		$destroyed = false;
 		$total = 0;
 		$shield = 0;
 		$struct = 0;
 		$armour = 0;
-		$destroyed = false;
+		$overkill = 0;
 		$remInt = $system->getRemainingIntegrity();
 		$negation = $fire->target->getArmourValue($fire, $system);
 
 		for ($i = 0; $i < $fire->hits; $i++){
-			//Debug::log("doing volley pulse: ".($i+1));
 			$totalDmg = floor($this->getBaseDamage($fire) * $mod);
 			$dmg = $this->determineDamage($totalDmg, $negation);
 
-			$total += $totalDmg;
-			$struct += $dmg->structDmg;
-			$armour += $dmg->armourDmg;
+			if (!$destroyed){
+				$total += $totalDmg;
+				$struct += $dmg->structDmg;
+				$armour += $dmg->armourDmg;
+			}
+			else {
+				$overkill += $dmg->structDmg;	
+				$dmg->structDmg = 0;
+			}		
 
-			if ($remInt - $struct < 1){
+			if (!$destroyed && $remInt - $struct < 1){
 				$destroyed = true;
-				Debug::log(" => target system ".get_class($system)." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".(abs($remInt - $dmg->structDmg)." dmg"));
-				break;
+				$name = get_class($system);
+				$overkill = (abs($remInt - $dmg->structDmg));
+				Debug::log(" => target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$overkill." dmg");
+				$dmg->structDmg = $remInt;
 			}
 		}
 
 		$dmg = new Damage(
-			-1,
-			$fire->id,
-			$fire->gameid,
-			$fire->targetid,
-			$fire->section,
-			$system->id,
-			$fire->turn,
-			$roll,
-			$fire->weapon->type,
-			$total,
-			$shield,
-			$struct,
-			$armour,
-			0,
-			$negation,
-			$destroyed,
-			"",
-			1
+			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
+			$total, $shield, $struct, $armour, $overkill, $negation, $destroyed, $dmg->notes, 1
 		);
 		$fire->damages[] = $dmg;
 		$fire->target->applyDamage($dmg);
-	}	
+	}
 }
 
 class LightPulse extends Pulse {
@@ -105,8 +97,8 @@ class LightPulse extends Pulse {
 class MediumPulse extends Pulse {
 	public $name = "MediumPulse";
 	public $display = "66mm Pulse Cannon";
-	public $minDmg = 28;
-	public $maxDmg = 35;
+	public $minDmg = 24;
+	public $maxDmg = 31;
 	public $accDecay = 120;
 	public $shots = 1;
 	public $animColor = "brown";
@@ -125,8 +117,8 @@ class MediumPulse extends Pulse {
 class HeavyPulse extends Pulse {
 	public $name = "HeavyPulse";
 	public $display = "102mm Pulse Cannon";
-	public $minDmg = 42;
-	public $maxDmg = 57;
+	public $minDmg = 38;
+	public $maxDmg = 51;
 	public $accDecay = 80;
 	public $shots = 1;
 	public $animColor = "brown";

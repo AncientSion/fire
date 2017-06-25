@@ -185,5 +185,11 @@ class Hangar extends Weapon {
 			}
 		}
 	}
+
+	public function getValidEffects(){
+		return array(
+			array("Output", 20, 0, 0) // attr, %-tresh, duration, modifier
+		);
+	}
 }
 ?>

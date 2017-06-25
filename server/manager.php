@@ -307,7 +307,7 @@ class Manager {
 			$units[$i]->setState($this->turn); //check damage state after dmg is applied
 			if (!sizeof($units[$i]->actions)){
 				$units[$i]->facing = $this->getBaseFacing();
-				Debug::log($units[$i]->facing);
+				//Debug::log($units[$i]->facing);
 			}
 		}
 		return $units;
@@ -470,7 +470,7 @@ class Manager {
 			if ($this->turn > 1 && $this->ships[$i]->ship && $this->ships[$i]->available == $this->turn){
 				$order = $this->ships[$i]->actions[0];
 				$output = $this->ships[$i]->getSystemByName("Sensor")->getOutput($this->turn);
-				$shift = round($this->ships[$i]->size / $output*100, 2);
+				$shift = round($this->ships[$i]->size / $output*150, 2);
 				$aShift = ceil($shift * 2);
 				$pShift = ceil($shift * 4);
 				Debug::log("jumpin: #".$this->ships[$i]->id.", class: ".$this->ships[$i]->name.", size: ".$this->ships[$i]->size.", sensor: ".$output.", ordered to: ".$order->x."/".$order->y.", shiftPotential: ".$shift."%");
@@ -675,7 +675,7 @@ class Manager {
 		Debug::log("handleFiringPhase time: ".round($time, 3)." seconds.");
 		return true;
 	}
-
+	
 	public function handleDamageControlPhase(){
 		//Debug::log("handleDamageControlPhase");
 
@@ -799,7 +799,7 @@ class Manager {
 			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystemById($this->fires[$i]->weaponid);
 			$this->fires[$i]->shots = $this->fires[$i]->weapon->getShots($this->turn);
 			$this->fires[$i]->target = $this->getUnitById($this->fires[$i]->targetid);
-			if (!$this->fires[$i]->shooter->salvo && $this->fires[$i]->target->salvo){
+			if (!$this->fires[$i]->shooter->ship && $this->fires[$i]->target->salvo){
 				$this->intercepts[] = $this->fires[$i];
 				array_splice($this->fires, $i, 1);
 			}

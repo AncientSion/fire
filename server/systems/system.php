@@ -144,7 +144,7 @@ class System {
 			if (mt_rand(0, 1)){
 				$mod = 0;
 				if ($valid[$i][0] != "Disabled"){
-					$mod = 1-(round($dmg/20)/10);
+					$mod = (round($dmg/20)/10);
 				}
 
 				$this->crits[] = new Crit(

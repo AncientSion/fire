@@ -38,8 +38,8 @@ class WhiteStar extends Light {
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 825);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 60);
-		$e = new Engine($this->getId(), $this->id, 60, 110);
-		$e->boostEffect[0]->value = 0.20;
+		$e = new Engine($this->getId(), $this->id, 60, 110, 5);
+		$e->boostEffect[0]->value = 0.25;
 		$this->primary->systems[] = $e;
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 60);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 60, 850, 10);

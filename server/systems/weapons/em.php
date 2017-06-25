@@ -39,7 +39,7 @@ class EM extends Weapon {
 	public function getDamageMod($fire){
 		$mod = 1;
 
-		$crit = $this->getCritMod($fire->turn);
+		$crit = $this->getCritMod("Damage", $fire->turn);
 		$range = $this->getDmgPenaltyRange($fire);
 
 		return $mod + $crit + $range;

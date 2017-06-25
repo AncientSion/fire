@@ -461,7 +461,7 @@ function Ship(data){
 
 	this.setHitTable = function(){
 		//console.log("id: " + this.id);
-		this.primary.setRemainingIntegrity();
+		//this.primary.setRemainingIntegrity();
 		var fraction = this.primary.remaining / this.primary.integrity;
 
 		for (var i = 0; i < this.primary.systems.length; i++){
@@ -1374,16 +1374,9 @@ function Ship(data){
 	this.undoLastAction = function(pos){		
 		this.actions.splice(this.actions.length-1, 1);
 		this.turns = [];
-		//this.unsetMoveMode();
-		//this.setMoveMode();
 		game.redrawEW();
 		game.drawAllPlans();
 	}
-
-
-	
-	//function Move(type, dist, x, y, a, delay, cost, costmod){
-	//this.issueMove = function(pos, dist){	
 
 	this.moveToMaxVector = function(){
 		var pos = this.getOffsetPos();
@@ -1397,8 +1390,11 @@ function Ship(data){
 	this.moveToMaxTurnVector = function(){
 		var pos = this.getOffsetPos();
 		var dist = this.getRemainingDelay();
+		var impulse = this.getRemainingImpulse();
 		var goal = getPointInDirection(dist, this.getPlannedFacing(this.actions.length-1), pos.x, pos.y);
-		this.issueMove(goal, dist);
+		if (dist == impulse && !game.posIsOccupied(this, goal)){
+			this.issueMove(goal, dist);
+		} else this.issueMove(goal, dist);
 	}
 	
 	this.canTurn = function(){
@@ -2045,7 +2041,7 @@ function Ship(data){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
 				if (this.structures[i].systems[j].dual && !this.structures[i].systems[j].locked){
 					if (this.structures[i].systems[j].getActiveWeapon().name == name){
-						this.structures[i].systems[j].switchMode();
+						this.structures[i].systems[j].switchMode(id);
 					}
 				}
 			}

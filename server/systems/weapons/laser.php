@@ -47,35 +47,24 @@ class Laser extends Weapon {
 			$remInt = $system->getRemainingIntegrity();
 			$negation = $fire->target->getArmourValue($fire, $system);
 			$dmg = $this->determineDamage($rake, $negation);
+			$overkill = 0;
 
 			if ($remInt - $dmg->structDmg < 1){
 				$destroyed = true;
-				Debug::log(" => target system ".get_class($system)." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".(abs($remInt - $dmg->structDmg)." dmg"));
+				$name = get_class($system);
+				$overkill = (abs($remInt - $dmg->structDmg));
+				Debug::log(" => target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$overkill." dmg");
+				$dmg->structDmg = $remInt;
 			}
 
 			$dmg = new Damage(
-				-1,
-				$fire->id,
-				$fire->gameid,
-				$fire->targetid,
-				$fire->section,
-				$system->id,
-				$fire->turn,
-				$roll,
-				$fire->weapon->type,
-				$totalDmg,
-				$dmg->shieldDmg,
-				$dmg->structDmg,
-				$dmg->armourDmg,
-				0,
-				$negation,
-				$destroyed,
-				"",
-				1
+				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
+				$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $overkill, $negation, $destroyed, $dmg->notes, 1
 			);
 			$fire->damages[] = $dmg;
 			$fire->target->applyDamage($dmg);
-			//Debug::log("armour rem: ".$armour->getRemainingIntegrity()." / ".$armour->integrity.", now adding: ".$armourDmg);
+
+
 		}
 	}
 }
@@ -218,7 +207,7 @@ class NeutronLaser extends Laser {
 	public $reload = 2;
 	public $powerReq = 6;
 	public $rakes = 2;
-	public $effiency = 4;
+	public $effiency = 3;
 	public $maxBoost = 1;
 	public $mass = 26;
 	public $traverse = -1;

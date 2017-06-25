@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 20. Jun 2017 um 21:08
+-- Erstellungszeit: 25. Jun 2017 um 21:59
 -- Server-Version: 10.1.16-MariaDB
 -- PHP-Version: 7.0.9
 
@@ -61,7 +61,7 @@ CREATE TABLE `damages` (
   `shieldDmg` int(5) DEFAULT NULL,
   `structDmg` int(5) DEFAULT NULL,
   `armourDmg` int(3) DEFAULT NULL,
-  `mitigation` decimal(10,0) DEFAULT NULL,
+  `overkill` int(3) DEFAULT NULL,
   `negation` int(4) DEFAULT NULL,
   `destroyed` tinyint(1) DEFAULT NULL,
   `notes` varchar(255) DEFAULT NULL,
@@ -260,8 +260,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `access`) VALUES
-(1, 'Chris', '147147', 1),
-(2, '1', '147147', 1),
+(1, 'Chris', '1', 1),
+(2, '1', '1', 1),
 (3, 'cdfdf', '147147', 0),
 (4, '4', '777', 0);
 

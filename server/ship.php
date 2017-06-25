@@ -146,11 +146,7 @@ class Ship {
 
 	public function addDamageDB($damages){
 		for ($i = 0; $i < sizeof($damages); $i++){
-			//$this->getStructureById($damages[$i]->structureid)->damages[] = $damages[$i];
-			if ($damages[$i]->systemid == -1){
-				$this->primary->damages[] = $damages[$i];
-			}
-			else $this->getSystemByStructure($damages[$i]->structureid, $damages[$i]->systemid)->damages[] = $damages[$i];
+			$this->applyDamage($damages[$i]);
 		}
 	}
 
@@ -188,34 +184,36 @@ class Ship {
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($dmg->structureid == $this->structures[$i]->id){
 				$this->structures[$i]->armourDmg += $dmg->armourDmg;
-			}
-		}
 
-		if ($dmg->systemid == -1){
-			$this->primary->applyDamage($dmg);
-			return;
-		}
-		else {
-			for ($i = 0; $i < sizeof($this->structures); $i++){
-				if ($this->structures[$i]->id == $dmg->structureid){
-					for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-						if ($this->structures[$i]->systems[$j]->id == $dmg->systemid){
-							$this->structures[$i]->systems[$j]->applyDamage($dmg);
-							return;
+				if ($dmg->systemid == -1){
+					$this->primary->applyDamage($dmg);
+					return;
+				}
+				else {
+					for ($i = 0; $i < sizeof($this->structures); $i++){
+						if ($this->structures[$i]->id == $dmg->structureid){
+							for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+								if ($this->structures[$i]->systems[$j]->id == $dmg->systemid){
+									$this->structures[$i]->systems[$j]->applyDamage($dmg);
+									$this->primary->remaining -= $dmg->overkill;
+									return;
+								}
+							}
 						}
+					}
+				}
+				for ($j = 0; $j < sizeof($this->primary->systems); $j++){
+					if ($this->primary->systems[$j]->id == $dmg->systemid){
+						$this->primary->systems[$j]->applyDamage($dmg);
+						$this->primary->remaining -= $dmg->overkill;
+						return;
 					}
 				}
 			}
 		}
-		for ($j = 0; $j < sizeof($this->primary->systems); $j++){
-			if ($this->primary->systems[$j]->id == $dmg->systemid){
-				$this->primary->systems[$j]->applyDamage($dmg);
-				return;
-			}
-		}
 
-		Debug::log("couldnt apply dmg");
-		return;
+		Debug::log("couldnt apply damage: #.".$dmg->id);
+
 	}
 
 
@@ -258,7 +256,7 @@ class Ship {
 					$structDmg += $this->primary->damages[$j]->structDmg;
 				}
 			}
-			$this->structures[$i]->setNegation($this->primary->integrity, $armourDmg);
+			$this->structures[$i]->setNegation($this->primary->integrity, 0);
 		}
 
 		$this->setProps();
@@ -649,8 +647,8 @@ class Ship {
 		}
 	}
 
-	public function getSystemByStructure($structid, $systemid){
-		if ($structid == 1){
+	public function getSystemByStructure($id, $systemid){
+		if ($id == -1){
 			for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 				if ($this->primary->systems[$i]->id == $systemid){
 					return $this->primary->systems[$i];
@@ -658,7 +656,7 @@ class Ship {
 			}
 		}
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->id == $structid){
+			if ($this->structures[$i]->id == $id){
 				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 					if ($this->structures[$i]->systems[$j]->id == $systemid){
 						return $this->structures[$i]->systems[$j];

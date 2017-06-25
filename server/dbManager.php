@@ -949,7 +949,7 @@ class DBManager {
 						$result[$j]["shieldDmg"],
 						$result[$j]["structDmg"],
 						$result[$j]["armourDmg"],
-						$result[$j]["mitigation"],
+						$result[$j]["overkill"],
 						$result[$j]["negation"],
 						$result[$j]["destroyed"],
 						$result[$j]["notes"],
@@ -1050,7 +1050,9 @@ class DBManager {
 						$result[$j]["costmod"],
 						$result[$j]["resolved"]
 					);
-					$units[$i]->facing += $result[$j]["a"];
+					if ($result[$j]["resolved"]){
+						$units[$i]->facing += $result[$j]["a"];
+					}
 				}
 			}
 		}
@@ -1094,9 +1096,9 @@ class DBManager {
 
 		$stmt = $this->connection->prepare("
 			INSERT INTO damages 
-				( fireid, shipid, gameid, structureid, systemid, turn, roll, type, totalDmg, shieldDmg, structDmg, armourDmg, mitigation, negation, destroyed, notes, new)
+				( fireid, shipid, gameid, structureid, systemid, turn, roll, type, totalDmg, shieldDmg, structDmg, armourDmg, overkill, negation, destroyed, notes, new)
 			VALUES
-				( :fireid, :shipid, :gameid, :structureid, :systemid, :turn, :roll, :type, :totalDmg, :shieldDmg, :structDmg, :armourDmg, :mitigation, :negation, :destroyed, :notes, :new)
+				( :fireid, :shipid, :gameid, :structureid, :systemid, :turn, :roll, :type, :totalDmg, :shieldDmg, :structDmg, :armourDmg, :overkill, :negation, :destroyed, :notes, :new)
 		");
 
 		$new = 0;
@@ -1115,7 +1117,7 @@ class DBManager {
 			$stmt->bindParam(":shieldDmg", $damages[$i]->shieldDmg);
 			$stmt->bindParam(":structDmg", $damages[$i]->structDmg);
 			$stmt->bindParam(":armourDmg", $damages[$i]->armourDmg);
-			$stmt->bindParam(":mitigation", $damages[$i]->mitigation);
+			$stmt->bindParam(":overkill", $damages[$i]->overkill);
 			$stmt->bindParam(":negation", $damages[$i]->negation);
 			$stmt->bindParam(":destroyed", $damages[$i]->destroyed);
 			$stmt->bindParam(":notes", $damages[$i]->notes);

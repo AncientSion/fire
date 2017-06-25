@@ -187,7 +187,7 @@ function Damage(data){
 	this.shieldDmg = data.shieldDmg;
 	this.structDmg = data.structDmg;
 	this.armourDmg = data.armourDmg;
-	this.mitigation = data.mitigation;
+	this.overkill = data.overkill;
 	this.negation = data.negation;
 	this.destroyed = data.destroyed;
 	this.notes = data.notes;
@@ -345,7 +345,7 @@ function Crit(data){
 		if (!this.duration){
 			d = " (Permanent)";
 		} else d = " (Up to Turn " + (this.turn + this.duration + ")");
-		return (this.type + ": -" + (Math.round((1-this.value)*100)) + "%" + d);
+		return (this.type + ": -" + (this.value*100) + "%" + d);
 	}
 
 	this.inEffect = function(){
@@ -371,6 +371,7 @@ function Structure(data){
 	this.end = data.end;
 	this.negation = data.negation;
 	this.remainingNegation = data.remainingNegation;
+	//this.armourDmg = data.armourDmg;
 	this.destroyed = data.destroyed || false;
 	this.highlight = false;
 	this.systems = [];
@@ -518,13 +519,14 @@ function Structure(data){
 function Primary(data){
 	this.name = "Primary";
 	this.display = "Primary";
+	this.id = data.id;
 	this.parentId = data.parentId;
 	this.integrity = data.integrity;
 	this.damages = data.damages
 	this.destroyed = data.destroyed || false;
 	this.highlight = false;	
 	this.systems = [];
-	this.remaining;
+	this.remaining = data.remaining;
 	
 	this.getTableRow = function(){
 		var tr = document.createElement("tr");
@@ -615,6 +617,9 @@ function Primary(data){
 		var integrity = this.integrity;
 		for (var i = 0; i < this.damages.length; i++){
 			integrity -= this.damages[i].structDmg;
+			if (this.damages[i].overkill){
+				console.log("dnig");
+			}
 		}
 		return integrity;
 	}

@@ -823,7 +823,6 @@ Game.prototype.getUnitType = function (val){
 	}
 
 	this.redraw = function(){
-		//console.log("ding");
 		planCtx.clearRect(0, 0, res.x, res.y);
 		moveCtx.clearRect(0, 0, res.x, res.y)
 		salvoCtx.clearRect(0, 0, res.x, res.y)
@@ -844,6 +843,7 @@ Game.prototype.getUnitType = function (val){
 			}
 		}
 		game.draw();
+		game.drawAllPlans();
 	}
 
 	this.redrawEW = function(){
@@ -856,7 +856,6 @@ Game.prototype.getUnitType = function (val){
 	}
 	
 	this.draw = function(){
-		//console.trace();
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		
 		this.drawShips();
@@ -1805,6 +1804,7 @@ Game.prototype.getUnitType = function (val){
 		var shots = 0;
 		var hits = 0;
 		var struct = 0;
+		var overkill = 0;
 		var armour = 0;
 		var rolls = [];
 		var log = document.getElementById("combatLog");
@@ -1816,6 +1816,7 @@ Game.prototype.getUnitType = function (val){
 		for (var i = 0; i < fire.damages.length; i++){
 			struct += fire.damages[i].structDmg;
 			armour += fire.damages[i].armourDmg;
+			overkill += fire.damages[i].overkill;
 			rolls.push(fire.damages[i].roll);
 		}
 
@@ -1860,7 +1861,11 @@ Game.prototype.getUnitType = function (val){
 		tr.insertCell(-1).innerHTML = chance + "%";
 		tr.insertCell(-1).innerHTML = hits + " / " + shots;
 		tr.insertCell(-1).innerHTML = armour;
-		tr.insertCell(-1).innerHTML = struct;
+
+		var structStr = "";
+			structStr += struct;
+		if (overkill){structStr += " (+ " + overkill + ")";}
+		tr.insertCell(-1).innerHTML = structStr;
 	
 		log.appendChild(tr);
 

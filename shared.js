@@ -194,9 +194,7 @@ function initiateShip(data){
 	)*/
 
 	var ship = new window[data.shipType](data);
-	if (data.id == 25){
-		console.log("ding");
-	}
+	//console.log(data.facing + " / "  + ship.facing);
 
 	if (! ship.flight){
 		ship.hitTable = data.hitTable
