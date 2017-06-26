@@ -16,16 +16,12 @@ class Avenger extends Heavy {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 26);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 25);
 		$front->systems[] = new Dual($this->getId(), $this->id, 300, 60, 18, array("LightPulse", "LightParticleBeam"));
-		//$front->systems[] = new HeavyLaser($this->getId(), $this->id, 300, 60);
-		//$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new Dual($this->getId(), $this->id, 300, 60, 18, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $front;
 
-		$rightTop = new Structure($this->getId(), $this->id, 30, 90, 800, 24);
-		//$rightTop->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
-		//$rightTop->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
+		$rightTop = new Structure($this->getId(), $this->id, 30, 90, 800, 23);
 		$rightTop->systems[] = new Dual($this->getId(), $this->id, 0, 180, 18, array("LightPulse", "LightParticleBeam"));
 		$rightTop->systems[] = new Dual($this->getId(), $this->id, 0, 180, 18, array("LightPulse", "LightParticleBeam"));
 		$rightTop->systems[] = new Hangar($this->getId(), $this->id, 30, 150, 800, 12, array("Aurora"));
@@ -48,7 +44,7 @@ class Avenger extends Heavy {
 		$leftBottom->systems[] = new Hangar($this->getId(), $this->id, 210, 330, 800, 12, array("Aurora"));
 		$structs[] = $leftBottom;
 
-		$leftTop = new Structure($this->getId(), $this->id, 270, 330, 800, 24);
+		$leftTop = new Structure($this->getId(), $this->id, 270, 330, 800, 23);
 		$leftTop->systems[] = new Dual($this->getId(), $this->id, 180, 360, 18, array("LightPulse", "LightParticleBeam"));
 		$leftTop->systems[] = new Dual($this->getId(), $this->id, 180, 360, 18, array("LightPulse", "LightParticleBeam"));
 		$leftTop->systems[] = new Hangar($this->getId(), $this->id, 210, 330, 800, 12, array("Aurora"));
@@ -61,7 +57,7 @@ class Avenger extends Heavy {
 
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 2000);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 125);
+		$this->prisagmary->systems[] = new Bridge($this->getId(), $this->id, 125);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 125, 240, 10);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 125);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 125, 550, 10);

@@ -33,9 +33,12 @@ spl_autoload_register(
                 'thunderbolt' => '/server/fighter.php',
                 'nial' => '/server/fighter.php',
                 'sentri' => '/server/fighter.php',
+                'gorith' => '/server/fighter.php',
+                'frazi' => '/server/fighter.php',
 
                 'haven' => '/server/ships/haven.php',
                 'vorchan' => '/server/ships/vorchan.php',
+                'darkner' => '/server/ships/darkner.php',
                 'demos' => '/server/ships/demos.php',
                 'primus' => '/server/ships/primus.php',
 
@@ -51,7 +54,7 @@ spl_autoload_register(
                 'olympus' => '/server/ships/olympus.php',
                 'tethys' => '/server/ships/tethys.php',
 
-                'battlecrab' => '/server/ships/battlecrab.php',
+                'gquan' => '/server/ships/gquan.php',
 
                 'system' => '/server/systems/system.php',
                 'weapon' => '/server/systems/weapon.php',
@@ -77,6 +80,7 @@ spl_autoload_register(
                 'lightlaser' => '/server/systems/weapons/laser.php',
                 'mediumlaser' => '/server/systems/weapons/laser.php',
                 'heavylaser' => '/server/systems/weapons/laser.php',
+                'superheavylaser' => '/server/systems/weapons/laser.php',
                 'neutronlaser' => '/server/systems/weapons/laser.php',
                 'neutronaccelerator' => '/server/systems/weapons/laser.php',
 
@@ -89,6 +93,7 @@ spl_autoload_register(
                 'lightpulse' => '/server/systems/weapons/pulse.php',
                 'mediumpulse' => '/server/systems/weapons/pulse.php',
                 'heavypulse' => '/server/systems/weapons/pulse.php',
+                'fusionpulsar' => '/server/systems/weapons/pulse.php',
 
                 'particle' => '/server/systems/weapons/particle.php',
                 'lightion' => '/server/systems/weapons/particle.php',
@@ -97,7 +102,6 @@ spl_autoload_register(
                 'Dual' => '/server/systems/weapons/particle.php',
                 'heavyDual' => '/server/systems/weapons/particle.php',
                 'fusioncannon' => '/server/systems/weapons/particle.php',
-                'fusionpulsar' => '/server/systems/weapons/particle.php',
 
                 'em' => '/server/systems/weapons/em.php',
                 'empulsecannon' => '/server/systems/weapons/em.php',
@@ -109,7 +113,6 @@ spl_autoload_register(
                 'linkedparticle' => '/server/systems/weapons/linked.php',
                 'linkedparticlegun' => '/server/systems/weapons/linked.php',
                 'linkedneutronrepeater' => '/server/systems/weapons/linked.php',
-
 
                 'fighterpulse' => '/server/systems/weapons/linked.php',
                 'particlepulsar' => '/server/systems/weapons/linked.php',

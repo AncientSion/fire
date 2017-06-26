@@ -365,6 +365,7 @@ function Crit(data){
 function Structure(data){
 	this.name = "Structure";
 	this.display = "Structure";
+	this.armourDmg = data.armourDmg;
 	this.id = data.id;
 	this.parentId = data.parentId;
 	this.start = data.start;

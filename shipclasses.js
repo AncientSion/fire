@@ -1587,6 +1587,7 @@ function Ship(data){
 			
 		//document.getElementById("game").appendChild(div);
 		document.body.appendChild(div);
+		$(div).css("position", "absolute").css("top", 300);
 
 		structContainer = document.createElement("div");
 		structContainer.className = "structContainer";

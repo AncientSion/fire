@@ -34,9 +34,11 @@ class Laser extends Weapon {
 	}
 
 	public function doDamage($fire, $roll, $system){
-		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id);
 		
-		$totalDmg = floor($this->getBaseDamage($fire) * $this->getDamageMod($fire));
+		$base = $this->getBaseDamage($fire);
+		$mod = $this->getDamageMod($fire);
+		$totalDmg = floor($base * $mod);
+		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id.", base: ".$base.", mod: ".$mod);
 		if ($totalDmg <= 0){
 			return;
 		}
@@ -79,7 +81,7 @@ class LightParticleBeam extends Laser {
 	public $maxDmg = 46;
 	public $optRange = 400;
 	public $dmgDecay = 16;
-	public $accDecay = 110;
+	public $accDecay = 85;
 	public $shots = 1;
 	public $reload = 1;
 	public $powerReq = 2;
@@ -124,7 +126,7 @@ class MediumLaser extends Laser {
 	public $name = "MediumLaser";
 	public $display = "164mm 'Medium' Laser";
 	public $animColor = "red";
-	public $rakeTime = 80;
+	public $rakeTime = 55;
 	public $beamWidth = 3;
 	public $minDmg = 140;
 	public $maxDmg = 180;
@@ -148,7 +150,7 @@ class HeavyLaser extends Laser {
 	public $name = "HeavyLaser";
 	public $display = "215mm Pulse Laser";
 	public $animColor = "red";
-	public $rakeTime = 80;
+	public $rakeTime = 70;
 	public $beamWidth = 4;
 	public $minDmg = 125;
 	public $maxDmg = 175;
@@ -160,7 +162,7 @@ class HeavyLaser extends Laser {
 	public $rakes = 3;
 	public $effiency = 6;
 	public $maxBoost = 2;
-	public $mass = 34;
+	public $mass = 32;
 	public $traverse = -1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
@@ -168,27 +170,28 @@ class HeavyLaser extends Laser {
 	}
 }
 
-class HeavyLaser1a extends Laser {
-	public $name = "HeavyLaser";
+class SuperHeavyLaser extends Laser {
+	public $name = "SuperHeavyLaser";
 	public $display = "340mm 'Heavy' Laser";
 	public $animColor = "red";
-	public $rakeTime = 120;
-	public $beamWidth = 4;
-	public $minDmg = 185;
-	public $maxDmg = 235;
+	public $rakeTime = 100;
+	public $beamWidth = 5;
+	public $minDmg = 190;
+	public $maxDmg = 240;
 	public $optRange = 800;
 	public $dmgDecay = 6;
 	public $accDecay = 50;
 	public $reload = 3;
-	public $powerReq = 10;
+	public $powerReq = 14;
 	public $rakes = 3;
 	public $effiency = 6;
 	public $maxBoost = 2;
-	public $mass = 34;
+	public $mass = 40;
 	public $traverse = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+		$this->boostEffect[0]->value = 0.15;
 	}
 }
 

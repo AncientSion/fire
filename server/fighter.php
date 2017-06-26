@@ -134,4 +134,44 @@ class Sentri extends Fighter {
 	}
 }
 
+class Gorith extends Fighter {
+	public $name = "Gorith";
+	public $display = "Gorith";
+	public $faction = "Narn Regime";
+	public $value = 22;
+	public $mass = 30;
+	public $ep = 85;
+	public $integrity = 28;
+	public $negation = array(6, 5, 4);
+	public $turns = 5;
+
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
+	}
+
+	public function addSystems(){
+		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 1, 2, 13, 17, 330, 30);
+	}
+}
+
+class Frazi extends Fighter {
+	public $name = "Frazi";
+	public $display = "Frazi";
+	public $faction = "Narn Regime";
+	public $value = 32;
+	public $mass = 35;
+	public $ep = 100;
+	public $integrity = 34;
+	public $negation = array(7, 7, 6);
+	public $turns = 5;
+
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
+	}
+
+	public function addSystems(){
+		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 1, 2, 15, 19, 330, 30);
+	}
+}
+
 ?>

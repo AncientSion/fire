@@ -38,14 +38,16 @@ class Structure {
 	}
 
 	public function setNegation($main, $armourDmg){
-		$this->parentPow = round(pow($main, 1.25));
+		$p = 1.5;
+		$this->parentPow = round(pow($main, $p));
 		$this->parentIntegrity = $main;
 		$this->armourDmg += $armourDmg;
-		$this->remainingNegation = round((pow($main - $this->armourDmg, 1.25) / $this->parentPow) * $this->negation);
+		$this->remainingNegation = round((pow($main - $this->armourDmg, $p) / $this->parentPow) * $this->negation);
 	}
 
 	public function getCurrentNegation(){
-		return round(pow($this->parentIntegrity - $this->armourDmg, 1.25) / $this->parentPow * $this->negation);
+		$p = 1.5;
+		return round(pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow * $this->negation);
 	}
 }
 
@@ -178,7 +180,7 @@ class Single {
 	}
 
 	public function determineCrit($dmg, $turn){
-		Debug::log("ceching crit for".get_class($this));
+		Debug::log("checking crit for".get_class($this));
 		$crits = $this->getValidEffects();
 		$valid = array();
 

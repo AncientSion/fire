@@ -1228,7 +1228,7 @@ class Manager {
 	}
 
 	public function getFactions(){
-		return array("Earth Alliance", "Centauri Republic", "Minbari Federation", "The Shadows");
+		return array("Earth Alliance", "Centauri Republic", "Minbari Federation", "Narn Regime");
 	}
 
 	public function getFightersForFaction($faction){
@@ -1254,6 +1254,7 @@ class Manager {
 			case "Centauri Republic";
 				$ships = array(
 					"Primus",
+					"Darkner",
 					"Demos",
 					"Vorchan",
 					"Haven"
@@ -1266,9 +1267,9 @@ class Manager {
 					"WhiteStar",
 				);
 				break;
-			case "The Shadows";
+			case "Narn Regime";
 				$ships = array(
-					"BattleCrab"
+					"GQuan"
 				);
 				break;
 			default:

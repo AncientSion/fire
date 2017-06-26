@@ -133,3 +133,28 @@ class HeavyPulse extends Pulse {
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
 	}
 }
+
+
+class FusionPulsar extends Pulse {
+	public $name = "FusionPulsar";
+	public $display = "Fusion Pulsar";
+	public $minDmg = 25;
+	public $maxDmg = 35;
+	public $accDecay = 160;
+	public $animColor = "lightGreen";
+	public $projSize = 2;
+	public $projSpeed = 10;
+	public $mass = 18;
+	public $powerReq = 4;
+	public $traverse = -3;
+	public $basePulses = 2;
+	public $extraPulses = 3;
+	public $grouping = 15;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
+        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	}
+}
+
+
+?>

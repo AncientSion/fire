@@ -4,7 +4,7 @@ class Saggitarius extends Medium {
 	public $name = "Saggitarius";
 	public $display = "Saggitarius Missile Destroyer";
 	public $faction = "Earth Alliance";
-	public $size = 75;
+	public $size = 60;
 	public static $value = 400;
 	public $profile = array(0.90, 1.10);
 	public $mass = 4500;
@@ -43,9 +43,9 @@ class Saggitarius extends Medium {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1350);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1000);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 100);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 100, 85);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, 100, 70);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 100);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 100, 600, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 100, $this->getPowerReq());

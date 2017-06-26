@@ -178,6 +178,9 @@ System.prototype.canFire = function(){
 	return false;
 }
 System.prototype.getLoadLevel = function(){
+	if (this.parentId == 7 && this.id == 4){
+		console.log("ding");
+	}
 	var need = this.reload;
 	var has = this.getTimeLoaded();
 	if (has / need > 1){
@@ -186,6 +189,9 @@ System.prototype.getLoadLevel = function(){
 	else return has/need;
 }
 System.prototype.setTimeLoaded = function(){
+	if (this.parentId == 7 && this.id == 4){
+		console.log("ding");
+	}
 	var turnsLoaded = this.reload
 	var max = this.reload;
 	//var start = game.getUnitById(this.parentId).available;
@@ -1688,6 +1694,9 @@ Laser.prototype.getDamageLoss = function(dist){
 }
 
 function Dual(system){
+	if (system.parentId == 7 && system.id == 4){
+		console.log("ding");
+	}
 	Weapon.call(this, system);
 	this.weapons = system.weapons;
 	this.modes = system.modes;

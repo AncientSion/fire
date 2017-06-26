@@ -24,7 +24,7 @@ function doSort(a, b){
 }
 
 window.shipImages = {};
-window.factionImages = {};
+window.images = {};
 
 window.multi = 1;
 

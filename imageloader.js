@@ -51,11 +51,17 @@ window.preloadShips = function(){
 	window.shipImages.tethys = new Image();
 	window.shipImages.tethys.src = "shipIcons/tethys.png";
 
+	window.shipImages.gquan = new Image();
+	window.shipImages.gquan.src = "shipIcons/gquan.png";
+
 	window.shipImages.primus = new Image();
 	window.shipImages.primus.src = "shipIcons/primus.png";
 
 	window.shipImages.demos = new Image();
 	window.shipImages.demos.src = "shipIcons/demos.png";
+
+	window.shipImages.darkner = new Image();
+	window.shipImages.darkner.src = "shipIcons/darkner.png";
 
 	window.shipImages.vorchan = new Image();
 	window.shipImages.vorchan.src = "shipIcons/vorchan.png";
@@ -91,15 +97,25 @@ window.preloadShips = function(){
 	window.shipImages.nial.src = "shipIcons/nial.png";
 	window.shipImages.niall = new Image();
 	window.shipImages.niall.src = "shipIcons/niall.png";
+
+	window.shipImages.gorith = new Image();
+	window.shipImages.gorith.src = "shipIcons/gorith.png";
+	window.shipImages.gorithl = new Image();
+	window.shipImages.gorithl.src = "shipIcons/gorithl.png";
+
+	window.shipImages.frazi = new Image();
+	window.shipImages.frazi.src = "shipIcons/frazi.png";
+	window.shipImages.frazil = new Image();
+	window.shipImages.frazil.src = "shipIcons/frazil.png";
 }
 
 window.preLoadFactions = function(){
-	window.factionImages.earthFaction = new Image();
-	window.factionImages.earthFaction.src = "factionIcons/earth.png";
-	window.factionImages.centauriFaction = new Image();
-	window.factionImages.centauriFaction.src = "factionIcons/centauri.png";
-	window.factionImages.minbariFaction = new Image();
-	window.factionImages.minbariFaction.src = "factionIcons/minbari.png";
-	window.factionImages.shadowFaction = new Image();
-	window.factionImages.shadowFaction.src = "factionIcons/minbari.png";
+	window.images.earth = new Image();
+	window.images.earth.src = "factionIcons/earth.png";
+	window.images.centauri = new Image();
+	window.images.centauri.src = "factionIcons/centauri.png";
+	window.images.minbari = new Image();
+	window.images.minbari.src = "factionIcons/minbari.png";
+	window.images.narn = new Image();
+	window.images.narn.src = "factionIcons/narn.png";
 }

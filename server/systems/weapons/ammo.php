@@ -68,7 +68,7 @@ class Warhead extends Weapon {
 		return true;
 	}
 
-	public function getAccuracyMod($dist){
+	public function getAccuracyLoss($dist){
 		return 0;
 	}
 

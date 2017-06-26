@@ -89,36 +89,4 @@ class FusionCannon extends Particle {
 	}
 }
 
-class FusionPulsar extends Particle {
-	public $name = "FusionPulsar";
-	public $display = "Fusion Pulsar";
-	public $minDmg = 25;
-	public $maxDmg = 35;
-	public $accDecay = 180;
-	public $shots = 4;
-	public $animColor = "lightGreen";
-	public $projSize = 2;
-	public $projSpeed = 6;
-	public $mass = 16;
-	public $powerReq = 4;
-	public $traverse = 0;
-
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-	}
-
-	public function xxxrollToHit($fire){
-		$roll = mt_rand(1, 100);
-		if ($roll <= $fire->req){
-			$fire->hits = $this->shots;
-
-			for ($i = 0; $i < $hits; $i++){
-				$fire->rolls[] = $roll;
-				$fire->notes = $fire->notes." ".$roll;
-			}
-		}
-		return true;
-	}
-}
-
 ?>

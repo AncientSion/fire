@@ -277,7 +277,10 @@ else {
 		window.res = {x:200, y: 200};
 		initPreviewCanvas();
 
-		var icons = [factionImages.earthFaction, factionImages.centauriFaction, factionImages.minbariFaction, factionImages.shadowFaction];
+		var icons = [images.earth, images.centauri, images.minbari, images.narn];
+
+		console.log(window.factionImages);
+		console.log(window.factions);
 
 		var table = document.createElement("table"); 
 			table.className = "factionUpperTable";
@@ -305,24 +308,6 @@ else {
 				td.style.textAlign = "center";
 				td.appendChild(icons[i]); tr.appendChild(td);
 			var td = document.createElement("td");
-
-				$(td).contextmenu(function(e){
-					return;
-					e.preventDefault();
-					e.stopPropagation();
-					var fact = $(this).html();
-					if ($(this).hasClass("selected")){
-						$(this).removeClass("selected");
-						unselectReinforcementFaction(fact);
-					}
-					else {
-						$(this).addClass("selected");
-						selectReinforcementFaction(fact);
-					}
-
-					//console.log(reinforceFaction);
-				});
-
 				td.style.textAlign = "center";
 				td.style.fontSize = "20px";
 				td.innerHTML = factions[i];
@@ -575,10 +560,7 @@ else {
 	function showShipList(shiplist, ele){
 		if (shiplist){
 			shiplist = JSON.parse(shiplist);
-		}
-		else {
-			return;
-		}
+		} else return;
 
 		var row = $(ele).data("row");
 

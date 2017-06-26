@@ -60,6 +60,7 @@ class Dual extends Weapon {
 			if ($this->states[$i]){
 				$this->weapons[$i]->powers = $this->powers;
 				$this->weapons[$i]->crits = $this->crits;
+				$this->reload = $this->weapons[$i]->reload;
 				return;
 			}
 		}

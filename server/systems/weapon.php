@@ -2,7 +2,6 @@
 
 class Weapon extends System {
 	public $weapon = 1;
-	public $decayVar = 1000;
 	public $minDmg;
 	public $maxDmg;
 	public $accDecay;
@@ -100,13 +99,17 @@ class Weapon extends System {
 		$fire->target->applyDamage($dmg);	
 	}
 
+	public function getAccuracyLoss($fire){
+		return $ceil($this->accDecay * $fire->weapon->getAccuracyMod($fire) * $fire->dist / 1000);
+	}
+
 	public function getAccuracyMod($fire){
 		$mod = 1;
 		$mod += $this->getCritMod("Accuracy", $fire->turn);
 		$mod -= $this->getBoostEffect("Accuracy")* $this->getBoostLevel($fire->turn);
 
 		if ($mod != 1){Debug::log("weapon id: ".$this->id.", RANGE LOSS mod: ".$mod);}
-		return ceil(($this->accDecay * $mod) * $fire->dist / $this->decayVar);
+		return $mod;
 	}
 
 	public function getDmgPenaltyRange($fire){
@@ -127,7 +130,7 @@ class Weapon extends System {
 		$mod = $mod + $crit + $boost + $range;
 		if ($mod != 1){Debug::log("weapon id: ".$this->id.", DAMAGE mod: ".($crit + $boost + $range)." (crits: ".$crit.", boost: ".$boost.". range: ".$range.")");
 		}
-		return $mod + $crit + $boost + $range;
+		return $mod;
 	}
 
 	public function getBoostEffect($type){

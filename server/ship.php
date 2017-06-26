@@ -347,13 +347,13 @@ class Ship {
 			$fire->resolved = 1;
 		}
 	}
-
+	
 	public function calculateToHit($fire){
 		//Debug::log("calculateToHit");
 		$base = $this->getHitChance($fire);
 		$impulse = $this->getImpulseProfileMod();
 		$traverse = $fire->weapon->getTraverseMod($fire);
-		$range = $fire->weapon->getAccuracyMod($fire);
+		$range = $fire->weapon->getAccuracyLoss($fire);
 		$multi = 1;
 		$req = 1;
 
