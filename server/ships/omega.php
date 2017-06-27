@@ -18,19 +18,19 @@ class Omega extends SuperHeavy {
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 1200, 32);
 		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 35, array("HeavyLaser", "HeavyPulse"));
-		$front->systems[] = new HeavyPulse($this->getId(), $this->id, 300, 360);
+		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 35, array("HeavyLaser", "HeavyPulse"));
 		$front->systems[] = new Hangar($this->getId(), $this->id, 330, 30, 850, 12, array("Aurora", "Thunderbolt"));
-		$front->systems[] = new HeavyPulse($this->getId(), $this->id, 0, 60);
+		$front->systems[] = new Dual($this->getId(), $this->id, 0, 60, 35, array("HeavyLaser", "HeavyPulse"));
 		$front->systems[] = new Dual($this->getId(), $this->id, 0, 60, 35, array("HeavyLaser", "HeavyPulse"));
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 1500, 30);
-		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 18, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 18, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 18, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 18, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 18, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 18, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 1050, 28);
@@ -42,12 +42,12 @@ class Omega extends SuperHeavy {
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 1500, 30);
-		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 18, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 18, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 18, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 18, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 18, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 18, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $left;
 		
 		for ($i = 0; $i < sizeof($structs); $i++){

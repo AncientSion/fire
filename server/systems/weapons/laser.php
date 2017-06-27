@@ -180,14 +180,14 @@ class SuperHeavyLaser extends Laser {
 	public $maxDmg = 240;
 	public $optRange = 800;
 	public $dmgDecay = 6;
-	public $accDecay = 50;
+	public $accDecay = 40;
 	public $reload = 3;
 	public $powerReq = 14;
 	public $rakes = 3;
 	public $effiency = 6;
 	public $maxBoost = 2;
 	public $mass = 40;
-	public $traverse = 1;
+	public $traverse = 0;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

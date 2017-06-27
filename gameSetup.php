@@ -182,10 +182,7 @@ else {
 				Pick Ammunition for the selected weapon
 			</div>
 			<div class="header">
-				Can fire up to <span id="launchRate"></span> units all <span id="reload"></span> turn/s.
-			</div>
-			<div class="header">
-				Can hold up to <span id="capacity"></span> units of ordnance.
+				Can fire all <span id="reload"></span> turn/s.
 			</div>
 			<table id="weaponTable">
 			</table>

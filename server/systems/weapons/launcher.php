@@ -6,27 +6,30 @@ class Launcher extends Weapon {
 	public $priority = 8;
 	public $loads = array();
 	public $reload = 2;
-	public $launchRate;
 	public $ammo;
+	public $mass = 22;
+	public $capacity = array();
+	public $launchRate = array();
+	public $powerReq = 6;
+	public $effiency = 1;
+	public $shots = 0;
 
-	function __construct($id, $parentId, $start, $end, $output, $launchRate, $loads, $destroyed = false){
-		$this->mass = $launchRate * 10;
-		$this->launchRate = $launchRate;
-		$this->powerReq = $launchRate;
-
+	function __construct($id, $parentId, $start, $end, $loads, $destroyed = false){
 		for ($i = 0; $i < sizeof($loads); $i++){
-			$this->loads[] = new $loads[$i]($this->id, -1);
+			$this->loads[] = new $loads[$i][0]($this->id, -1);
+			$this->capacity[] = $loads[$i][1];
+			$this->launchRate[] = $loads[$i][2];
 		}
 
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+        parent::__construct($id, $parentId, $start, $end, 0, $destroyed);
 	}
 
-	public function getWarhead(){
-		return $this->ammo->name;
+	public function getAmmo(){
+		return $this->loads[$this->ammo];
 	}
 
 	public function getShots($turn){
-		return 1 + $this->getBoostLevel($turn);
+		return $this->getBoostLevel($turn);
 	}
 
 	public function getBaseDamage($fire){
@@ -34,9 +37,18 @@ class Launcher extends Weapon {
 	}
 
 	public function adjustLoad($dbLoad){
-		$this->loads = array();
-		$this->ammo = new $dbLoad[0]["name"]($this->id, 0);
-		$this->ammo->output = $dbLoad[0]["amount"];
+		for ($i = 0; $i < sizeof($dbLoad); $i++){
+			for ($j = 0; $j < sizeof($this->loads); $j++){
+				if ($dbLoad[$i]["name"] == $this->loads[$j]->name){
+					$this->ammo = $j;
+					$this->output = $dbLoad[$i]["amount"];
+					break;
+				}
+			}
+		//$this->loads = array();
+		//$this->ammo = new $dbLoad[0]["name"]($this->id, 0);
+		//$this->ammo->output = $dbLoad[0]["amount"];
+		}
 	}
 
 	public function setArmourMod(){
@@ -53,7 +65,7 @@ class MissileLauncher extends Launcher {
 	public $display = "Missile Launcher";
 	public $animColor = "black";
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $launchRate, $loads, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $launchRate, $loads, $destroyed);
+	function __construct($id, $parentId, $start, $end, $loads, $destroyed = false){
+        parent::__construct($id, $parentId, $start, $end, $loads, $destroyed);
 	}
 }

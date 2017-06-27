@@ -31,7 +31,7 @@ class LightPlasma extends Plasma {
 	public $minDmg = 32;
 	public $maxDmg = 43;
 	public $accDecay = 140;
-	public $dmgDecay = 16;
+	public $dmgDecay = 14;
 	public $shots = 1;
 	public $animColor = "darkGreen";
 	public $projSize = 2.5;
@@ -52,7 +52,7 @@ class MediumPlasma extends Plasma {
 	public $minDmg = 48;
 	public $maxDmg = 62;
 	public $accDecay = 110;
-	public $dmgDecay = 12;
+	public $dmgDecay = 10;
 	public $shots = 1;
 	public $animColor = "darkGreen";
 	public $projSize = 3;

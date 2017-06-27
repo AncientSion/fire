@@ -23,15 +23,15 @@ class Artemis extends Medium {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 375, 22);
-		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 18, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 18, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 120, 8, 2, array("Naga", "Cyclops"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 120, array(array("Naga", 8, 2), array("Cyclops", 4, 2)));
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 375, 22);
-		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 18, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 18, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 240, 60, 8, 2, array("Naga", "Cyclops"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 240, 60, array(array("Naga", 8, 2), array("Cyclops", 4, 2)));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

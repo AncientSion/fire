@@ -542,7 +542,7 @@
 			"file": "classes.js",
 			"settings":
 			{
-				"buffer_size": 14803,
+				"buffer_size": 14831,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -560,9 +560,19 @@
 			"file": "style.css",
 			"settings":
 			{
-				"buffer_size": 16663,
+				"buffer_size": 16666,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Searching 69 files for \"canSelect\"\n\n0 matches\n\nSearching 69 files for \"found\"\n\nC:\\xampp\\htdocs\\fire\\classes.js:\n  153: \tthis.found = false;\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  977: \t\tfound = 0;\n  980: \t\t\t\tfound = i;\n 1571: \t\t\tgame.ballistics[i].found = false;\n 1573: \t\t\t\tgame.ballistics[i].found = true;\n 1580: \t\t\t\tif (!animate.intercepts[j].found && animate.ballAnims[i].anims[0].id == animate.intercepts[j].targetid){\n 1582: \t\t\t\t\tanimate.intercepts[j].found = true;\n 1587: \t\t\t\tif (game.ballistics[j].found){continue;}\n 1589: \t\t\t\t\tgame.ballistics[j].found = true;\n\nC:\\xampp\\htdocs\\fire\\lobby.php:\n   48: \t\t$welcome = \"<font color='red'> No Playername for your ID: \".$_SESSION['userid'].\"found !</font>\";\n  107: \t\t$ongoingGamesElement .= \"<tr><th>no Active Games found</tr></th></table>\";\n  135: \t\t$openGamesElement .= \"<tr><td>no Open Games found</tr></td></table>\";\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n    1: found\n    2: found\n    3: found\n    4: found\n    5: found\n    6: found\n    7: found\n    8: found\n    9: found\n   10: found\n   11: found\n   12: found\n   13: found\n   14: found\n   15: found\n   16: found\n   17: found\n   18: found\n   19: found\n   20: found\n   21: found\n   22: found\n   23: found\n   24: found\n   25: found\n   26: found\n   27: found\n   28: found\n   29: found\n   30: found\n   31: found\n   32: found\n   33: found\n   34: found\n   35: found\n   36: found\n   37: found\n   38: found\n   39: found\n   40: found\n   41: found\n   42: found\n   43: found\n   44: found\n   45: found\n   46: found\n   47: found\n   48: found\n   49: found\n   50: found\n   51: found\n   52: found\n   53: found\n   54: found\n   55: found\n   56: found\n   57: found\n   58: found\n   59: found\n   60: found\n   61: found\n   62: found\n   63: found\n   64: found\n   65: found\n   66: found\n   67: found\n   68: found\n   69: found\n   70: found\n   71: found\n   72: found\n   73: found\n   74: found\n   75: found\n   76: found\n   77: found\n   78: found\n   79: found\n   80: found\n   81: found\n   82: found\n   83: found\n   84: found\n   85: found\n   86: found\n   87: found\n   88: found\n   89: found\n   90: found\n   91: found\n   92: found\n   99: found\n  100: found\n  101: found\n  102: found\n  103: found\n  104: found\n  105: found\n  106: found\n  107: found\n  108: found\n  109: found\n  110: found\n  111: found\n  112: found\n  113: found\n  114: found\n  115: found\n  116: found\n  117: found\n  118: found\n  119: found\n  120: found\n  121: found\n  122: found\n  123: found\n  124: found\n  125: found\n  126: found\n  131: found\n  132: found\n  133: found\n  134: found\n  135: found\n  136: found\n  137: found\n  138: found\n  139: found\n  140: found\n  141: found\n  142: found\n  143: found\n  144: found\n  145: found\n  146: found\n  147: found\n  148: found\n  149: found\n  150: found\n  151: found\n  152: found\n  153: found\n  154: found\n  155: found\n  156: found\n  157: found\n  158: found\n  159: found\n  160: found\n  161: found\n  162: found\n  173: found\n  174: found\n  175: found\n  176: found\n  177: found\n  178: found\n  179: found\n  180: found\n  181: found\n  182: found\n  183: found\n  184: found\n  185: found\n  186: found\n  187: found\n  188: found\n  189: found\n  190: found\n  191: found\n  192: found\n  193: found\n  194: found\n  195: found\n  196: found\n  197: found\n  198: found\n  199: found\n  200: found\n  203: found\n  204: found\n  205: found\n  206: found\n  207: found\n  208: found\n  209: found\n  210: found\n  211: found\n  212: found\n  213: found\n  214: found\n  215: found\n  216: found\n  217: found\n  218: found\n  219: found\n  220: found\n  221: found\n  222: found\n  227: found\n  228: found\n  229: found\n  230: found\n  231: found\n  232: found\n  233: found\n  234: found\n  235: found\n  236: found\n  237: found\n  238: found\n  239: found\n  240: found\n  241: found\n  242: found\n  243: found\n  244: found\n  245: found\n  246: found\n  247: found\n  248: found\n  249: found\n  250: found\n  255: found\n  256: found\n  257: found\n  258: found\n  259: found\n  260: found\n  261: found\n  262: found\n  263: found\n  264: found\n  265: found\n  266: found\n  267: found\n  268: found\n  269: found\n  270: found\n  271: found\n  272: found\n  273: found\n  274: found\n  304: found\n  305: found\n  306: found\n  307: found\n  308: found\n  309: found\n  310: found\n  311: found\n  312: found\n  313: found\n  314: found\n  315: found\n  316: found\n  317: found\n  318: found\n  319: found\n  320: found\n  321: found\n  322: found\n  323: found\n  324: found\n  325: found\n  326: found\n  327: found\n  330: found\n  331: found\n  332: found\n  333: found\n  334: found\n  335: found\n  336: found\n  337: found\n  338: found\n  339: found\n  340: found\n  341: found\n  342: found\n  343: found\n  344: found\n  345: found\n  346: found\n  347: found\n  348: found\n  349: found\n\nC:\\xampp\\htdocs\\fire\\postGameData.php:\n  101: \techo \"no data to be found\";\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n 1654: \t\t//\tDebug::log(\"Games found: \".sizeof($result));\n 1658: \t\t//\tDebug::log(\"no gams found\");\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php:\n   44: \t\t\t\t\tDebug::log(\"found\");\n\n304 matches across 7 files\n\n\nSearching 69 files for \"found\"\"\n\nC:\\xampp\\htdocs\\fire\\postGameData.php:\n  101: \techo \"no data to be found\";\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n 1658: \t\t//\tDebug::log(\"no gams found\");\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php:\n   44: \t\t\t\t\tDebug::log(\"found\");\n\n3 matches across 3 files\n\n\nSearching 69 files for \"insertBallistics\"\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n  344: \tpublic function insertBallistics($gameid, $units){\n  345: \t\t//Debug::log(\"DB insertBallistics\");\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  447: \t\t\tDBManager::app()->insertBallistics($this->gameid, $balls);\n\n3 matches across 2 files\n\n\nSearching 69 files for \"insertBallistics\"\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n  344: \tpublic function insertBallistics($gameid, $units){\n  345: \t\t//Debug::log(\"DB insertBallistics\");\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  447: \t\t\tDBManager::app()->insertBallistics($this->gameid, $balls);\n\n3 matches across 2 files\n\n\nSearching 69 files for \"getDisplay\"\n\nC:\\xampp\\htdocs\\fire\\classes.js:\n  208: Warhead.prototype.getDisplay = function(){\n\nC:\\xampp\\htdocs\\fire\\game.js:\n 1860: \t\ttr.insertCell(-1).innerHTML = fire.weapon.getDisplay();\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n   63: System.prototype.getDisplay = function(){\n\n3 matches across 3 files\n",
+			"settings":
+			{
+				"buffer_size": 6278,
+				"line_ending": "Windows",
+				"name": "Find Results",
+				"scratch": true
 			}
 		},
 		{
@@ -587,7 +597,7 @@
 			"file": "mathLib.js",
 			"settings":
 			{
-				"buffer_size": 5923,
+				"buffer_size": 5924,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -632,7 +642,7 @@
 			"file": "server/manager.php",
 			"settings":
 			{
-				"buffer_size": 41238,
+				"buffer_size": 41367,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -669,7 +679,7 @@
 			"file": "server/ships/omega.php",
 			"settings":
 			{
-				"buffer_size": 3700,
+				"buffer_size": 3766,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -696,7 +706,7 @@
 			"file": "server/ships/artemis.php",
 			"settings":
 			{
-				"buffer_size": 2250,
+				"buffer_size": 2290,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -777,7 +787,7 @@
 			"file": "server/systems/weapon.php",
 			"settings":
 			{
-				"buffer_size": 5233,
+				"buffer_size": 5537,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -813,7 +823,7 @@
 			"file": "server/salvo.php",
 			"settings":
 			{
-				"buffer_size": 7814,
+				"buffer_size": 7905,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -832,7 +842,7 @@
 			"file": "server/ship.php",
 			"settings":
 			{
-				"buffer_size": 23661,
+				"buffer_size": 23659,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -859,7 +869,7 @@
 			"file": "systems.js",
 			"settings":
 			{
-				"buffer_size": 76757,
+				"buffer_size": 77214,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -931,9 +941,9 @@
 			"file": "server/ships/demos.php",
 			"settings":
 			{
-				"buffer_size": 1971,
+				"buffer_size": 2000,
 				"encoding": "UTF-8",
-				"line_ending": "Windows"
+				"line_ending": "Unix"
 			}
 		},
 		{
@@ -958,7 +968,7 @@
 			"file": "server/systems/weapons/ammo.php",
 			"settings":
 			{
-				"buffer_size": 3796,
+				"buffer_size": 3792,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -994,7 +1004,7 @@
 			"file": "server/ships/gquan.php",
 			"settings":
 			{
-				"buffer_size": 2603,
+				"buffer_size": 2703,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1012,7 +1022,7 @@
 			"file": "gameSetup.php",
 			"settings":
 			{
-				"buffer_size": 16912,
+				"buffer_size": 16770,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1057,7 +1067,7 @@
 			"file": "server/ships/vorchan.php",
 			"settings":
 			{
-				"buffer_size": 1742,
+				"buffer_size": 1773,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1120,9 +1130,9 @@
 			"file": "server/systems/weapons/launcher.php",
 			"settings":
 			{
-				"buffer_size": 1513,
+				"buffer_size": 1791,
 				"encoding": "UTF-8",
-				"line_ending": "Windows"
+				"line_ending": "Unix"
 			}
 		},
 		{
@@ -1478,6 +1488,34 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"createcombatloge",
+			"warhead",
+			"getDisplay",
+			"resolve",
+			"baseimpul",
+			"impulse",
+			"insertBallistics",
+			"found\"",
+			"found",
+			"createStandardBallisticAction",
+			"createBallisticActions",
+			"baseimpulse",
+			", 18, array(\"L",
+			"getTraverseMod",
+			"pe.getAimDataTarge",
+			"getaimdata ",
+			"launcher",
+			"type.setfireorder",
+			"canSelect",
+			".red",
+			"getEffiency ",
+			"boostdiv ",
+			"boostdiv",
+			"type.plus ",
+			"Launch Rate",
+			"SystemDetailsDiv ",
+			"systemdetailsdiv",
+			"pe.getsystemd",
 			"new Sensor",
 			"Sensor",
 			"expanddiv",
@@ -1577,35 +1615,7 @@
 			"attachDetailsMods",
 			"this.boostEffect",
 			"(this.effiency",
-			"boosteffect",
-			"getAccurac",
-			"getBoostEffect",
-			"gettotalac",
-			"accuracylos",
-			"getTotalAccuracyMod",
-			"boosteff",
-			"outputmod",
-			"this.crits.length",
-			"getOutputCritMods",
-			"crits[i].",
-			"/10",
-			"getTotalAccuracyMod",
-			"getBoostEffect",
-			"getAccuracyMod",
-			"accu",
-			"getAccuracyMod",
-			"getBoostEffect",
-			"boostEffect = ",
-			"boostEffect",
-			"boostEffect[]",
-			"getAccuracyMod",
-			"range",
-			"getAccuracyMod",
-			"ACCURACY",
-			"getAccuracyMod",
-			"getCritMod",
-			"getBoostEffect",
-			"getAccuracyMod"
+			"boosteffect"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1613,6 +1623,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			", 14, array(\"L",
 			"images",
 			"\"overkill\"",
 			"color: #ff3d00",
@@ -1739,8 +1750,7 @@
 			"LightIon",
 			"expandDiv",
 			"fire",
-			"this",
-			"fire"
+			"this"
 		],
 		"reverse": false,
 		"show_context": false,
@@ -1751,7 +1761,7 @@
 	"groups":
 	[
 		{
-			"selected": 15,
+			"selected": 16,
 			"sheets":
 			[
 				{
@@ -1839,7 +1849,7 @@
 						"translation.y": 1691.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 87,
+					"stack_index": 89,
 					"type": "text"
 				},
 				{
@@ -1925,10 +1935,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 475.0,
+						"translation.y": 403.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 48,
+					"stack_index": 57,
 					"type": "text"
 				},
 				{
@@ -1937,15 +1947,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 14803,
+						"buffer_size": 14831,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								3986,
+								3986
 							]
 						],
 						"settings":
@@ -2013,10 +2023,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5288.0,
+						"translation.y": 3401.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 34,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -2104,7 +2114,7 @@
 						"translation.y": 2129.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 47,
 					"type": "text"
 				},
 				{
@@ -2113,15 +2123,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 16663,
+						"buffer_size": 16666,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								13493,
-								13493
+								8405,
+								8405
 							]
 						],
 						"settings":
@@ -2189,14 +2199,1320 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 17260.0,
+						"translation.y": 10808.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 59,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
 					"buffer": 5,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6278,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										125,
+										130
+									],
+									[
+										180,
+										185
+									],
+									[
+										202,
+										207
+									],
+									[
+										242,
+										247
+									],
+									[
+										287,
+										292
+									],
+									[
+										339,
+										344
+									],
+									[
+										451,
+										456
+									],
+									[
+										499,
+										504
+									],
+									[
+										548,
+										553
+									],
+									[
+										685,
+										690
+									],
+									[
+										760,
+										765
+									],
+									[
+										839,
+										844
+									],
+									[
+										903,
+										908
+									],
+									[
+										916,
+										921
+									],
+									[
+										929,
+										934
+									],
+									[
+										942,
+										947
+									],
+									[
+										955,
+										960
+									],
+									[
+										968,
+										973
+									],
+									[
+										981,
+										986
+									],
+									[
+										994,
+										999
+									],
+									[
+										1007,
+										1012
+									],
+									[
+										1020,
+										1025
+									],
+									[
+										1033,
+										1038
+									],
+									[
+										1046,
+										1051
+									],
+									[
+										1059,
+										1064
+									],
+									[
+										1072,
+										1077
+									],
+									[
+										1085,
+										1090
+									],
+									[
+										1098,
+										1103
+									],
+									[
+										1111,
+										1116
+									],
+									[
+										1124,
+										1129
+									],
+									[
+										1137,
+										1142
+									],
+									[
+										1150,
+										1155
+									],
+									[
+										1163,
+										1168
+									],
+									[
+										1176,
+										1181
+									],
+									[
+										1189,
+										1194
+									],
+									[
+										1202,
+										1207
+									],
+									[
+										1215,
+										1220
+									],
+									[
+										1228,
+										1233
+									],
+									[
+										1241,
+										1246
+									],
+									[
+										1254,
+										1259
+									],
+									[
+										1267,
+										1272
+									],
+									[
+										1280,
+										1285
+									],
+									[
+										1293,
+										1298
+									],
+									[
+										1306,
+										1311
+									],
+									[
+										1319,
+										1324
+									],
+									[
+										1332,
+										1337
+									],
+									[
+										1345,
+										1350
+									],
+									[
+										1358,
+										1363
+									],
+									[
+										1371,
+										1376
+									],
+									[
+										1384,
+										1389
+									],
+									[
+										1397,
+										1402
+									],
+									[
+										1410,
+										1415
+									],
+									[
+										1423,
+										1428
+									],
+									[
+										1436,
+										1441
+									],
+									[
+										1449,
+										1454
+									],
+									[
+										1462,
+										1467
+									],
+									[
+										1475,
+										1480
+									],
+									[
+										1488,
+										1493
+									],
+									[
+										1501,
+										1506
+									],
+									[
+										1514,
+										1519
+									],
+									[
+										1527,
+										1532
+									],
+									[
+										1540,
+										1545
+									],
+									[
+										1553,
+										1558
+									],
+									[
+										1566,
+										1571
+									],
+									[
+										1579,
+										1584
+									],
+									[
+										1592,
+										1597
+									],
+									[
+										1605,
+										1610
+									],
+									[
+										1618,
+										1623
+									],
+									[
+										1631,
+										1636
+									],
+									[
+										1644,
+										1649
+									],
+									[
+										1657,
+										1662
+									],
+									[
+										1670,
+										1675
+									],
+									[
+										1683,
+										1688
+									],
+									[
+										1696,
+										1701
+									],
+									[
+										1709,
+										1714
+									],
+									[
+										1722,
+										1727
+									],
+									[
+										1735,
+										1740
+									],
+									[
+										1748,
+										1753
+									],
+									[
+										1761,
+										1766
+									],
+									[
+										1774,
+										1779
+									],
+									[
+										1787,
+										1792
+									],
+									[
+										1800,
+										1805
+									],
+									[
+										1813,
+										1818
+									],
+									[
+										1826,
+										1831
+									],
+									[
+										1839,
+										1844
+									],
+									[
+										1852,
+										1857
+									],
+									[
+										1865,
+										1870
+									],
+									[
+										1878,
+										1883
+									],
+									[
+										1891,
+										1896
+									],
+									[
+										1904,
+										1909
+									],
+									[
+										1917,
+										1922
+									],
+									[
+										1930,
+										1935
+									],
+									[
+										1943,
+										1948
+									],
+									[
+										1956,
+										1961
+									],
+									[
+										1969,
+										1974
+									],
+									[
+										1982,
+										1987
+									],
+									[
+										1995,
+										2000
+									],
+									[
+										2008,
+										2013
+									],
+									[
+										2021,
+										2026
+									],
+									[
+										2034,
+										2039
+									],
+									[
+										2047,
+										2052
+									],
+									[
+										2060,
+										2065
+									],
+									[
+										2073,
+										2078
+									],
+									[
+										2086,
+										2091
+									],
+									[
+										2099,
+										2104
+									],
+									[
+										2112,
+										2117
+									],
+									[
+										2125,
+										2130
+									],
+									[
+										2138,
+										2143
+									],
+									[
+										2151,
+										2156
+									],
+									[
+										2164,
+										2169
+									],
+									[
+										2177,
+										2182
+									],
+									[
+										2190,
+										2195
+									],
+									[
+										2203,
+										2208
+									],
+									[
+										2216,
+										2221
+									],
+									[
+										2229,
+										2234
+									],
+									[
+										2242,
+										2247
+									],
+									[
+										2255,
+										2260
+									],
+									[
+										2268,
+										2273
+									],
+									[
+										2281,
+										2286
+									],
+									[
+										2294,
+										2299
+									],
+									[
+										2307,
+										2312
+									],
+									[
+										2320,
+										2325
+									],
+									[
+										2333,
+										2338
+									],
+									[
+										2346,
+										2351
+									],
+									[
+										2359,
+										2364
+									],
+									[
+										2372,
+										2377
+									],
+									[
+										2385,
+										2390
+									],
+									[
+										2398,
+										2403
+									],
+									[
+										2411,
+										2416
+									],
+									[
+										2424,
+										2429
+									],
+									[
+										2437,
+										2442
+									],
+									[
+										2450,
+										2455
+									],
+									[
+										2463,
+										2468
+									],
+									[
+										2476,
+										2481
+									],
+									[
+										2489,
+										2494
+									],
+									[
+										2502,
+										2507
+									],
+									[
+										2515,
+										2520
+									],
+									[
+										2528,
+										2533
+									],
+									[
+										2541,
+										2546
+									],
+									[
+										2554,
+										2559
+									],
+									[
+										2567,
+										2572
+									],
+									[
+										2580,
+										2585
+									],
+									[
+										2593,
+										2598
+									],
+									[
+										2606,
+										2611
+									],
+									[
+										2619,
+										2624
+									],
+									[
+										2632,
+										2637
+									],
+									[
+										2645,
+										2650
+									],
+									[
+										2658,
+										2663
+									],
+									[
+										2671,
+										2676
+									],
+									[
+										2684,
+										2689
+									],
+									[
+										2697,
+										2702
+									],
+									[
+										2710,
+										2715
+									],
+									[
+										2723,
+										2728
+									],
+									[
+										2736,
+										2741
+									],
+									[
+										2749,
+										2754
+									],
+									[
+										2762,
+										2767
+									],
+									[
+										2775,
+										2780
+									],
+									[
+										2788,
+										2793
+									],
+									[
+										2801,
+										2806
+									],
+									[
+										2814,
+										2819
+									],
+									[
+										2827,
+										2832
+									],
+									[
+										2840,
+										2845
+									],
+									[
+										2853,
+										2858
+									],
+									[
+										2866,
+										2871
+									],
+									[
+										2879,
+										2884
+									],
+									[
+										2892,
+										2897
+									],
+									[
+										2905,
+										2910
+									],
+									[
+										2918,
+										2923
+									],
+									[
+										2931,
+										2936
+									],
+									[
+										2944,
+										2949
+									],
+									[
+										2957,
+										2962
+									],
+									[
+										2970,
+										2975
+									],
+									[
+										2983,
+										2988
+									],
+									[
+										2996,
+										3001
+									],
+									[
+										3009,
+										3014
+									],
+									[
+										3022,
+										3027
+									],
+									[
+										3035,
+										3040
+									],
+									[
+										3048,
+										3053
+									],
+									[
+										3061,
+										3066
+									],
+									[
+										3074,
+										3079
+									],
+									[
+										3087,
+										3092
+									],
+									[
+										3100,
+										3105
+									],
+									[
+										3113,
+										3118
+									],
+									[
+										3126,
+										3131
+									],
+									[
+										3139,
+										3144
+									],
+									[
+										3152,
+										3157
+									],
+									[
+										3165,
+										3170
+									],
+									[
+										3178,
+										3183
+									],
+									[
+										3191,
+										3196
+									],
+									[
+										3204,
+										3209
+									],
+									[
+										3217,
+										3222
+									],
+									[
+										3230,
+										3235
+									],
+									[
+										3243,
+										3248
+									],
+									[
+										3256,
+										3261
+									],
+									[
+										3269,
+										3274
+									],
+									[
+										3282,
+										3287
+									],
+									[
+										3295,
+										3300
+									],
+									[
+										3308,
+										3313
+									],
+									[
+										3321,
+										3326
+									],
+									[
+										3334,
+										3339
+									],
+									[
+										3347,
+										3352
+									],
+									[
+										3360,
+										3365
+									],
+									[
+										3373,
+										3378
+									],
+									[
+										3386,
+										3391
+									],
+									[
+										3399,
+										3404
+									],
+									[
+										3412,
+										3417
+									],
+									[
+										3425,
+										3430
+									],
+									[
+										3438,
+										3443
+									],
+									[
+										3451,
+										3456
+									],
+									[
+										3464,
+										3469
+									],
+									[
+										3477,
+										3482
+									],
+									[
+										3490,
+										3495
+									],
+									[
+										3503,
+										3508
+									],
+									[
+										3516,
+										3521
+									],
+									[
+										3529,
+										3534
+									],
+									[
+										3542,
+										3547
+									],
+									[
+										3555,
+										3560
+									],
+									[
+										3568,
+										3573
+									],
+									[
+										3581,
+										3586
+									],
+									[
+										3594,
+										3599
+									],
+									[
+										3607,
+										3612
+									],
+									[
+										3620,
+										3625
+									],
+									[
+										3633,
+										3638
+									],
+									[
+										3646,
+										3651
+									],
+									[
+										3659,
+										3664
+									],
+									[
+										3672,
+										3677
+									],
+									[
+										3685,
+										3690
+									],
+									[
+										3698,
+										3703
+									],
+									[
+										3711,
+										3716
+									],
+									[
+										3724,
+										3729
+									],
+									[
+										3737,
+										3742
+									],
+									[
+										3750,
+										3755
+									],
+									[
+										3763,
+										3768
+									],
+									[
+										3776,
+										3781
+									],
+									[
+										3789,
+										3794
+									],
+									[
+										3802,
+										3807
+									],
+									[
+										3815,
+										3820
+									],
+									[
+										3828,
+										3833
+									],
+									[
+										3841,
+										3846
+									],
+									[
+										3854,
+										3859
+									],
+									[
+										3867,
+										3872
+									],
+									[
+										3880,
+										3885
+									],
+									[
+										3893,
+										3898
+									],
+									[
+										3906,
+										3911
+									],
+									[
+										3919,
+										3924
+									],
+									[
+										3932,
+										3937
+									],
+									[
+										3945,
+										3950
+									],
+									[
+										3958,
+										3963
+									],
+									[
+										3971,
+										3976
+									],
+									[
+										3984,
+										3989
+									],
+									[
+										3997,
+										4002
+									],
+									[
+										4010,
+										4015
+									],
+									[
+										4023,
+										4028
+									],
+									[
+										4036,
+										4041
+									],
+									[
+										4049,
+										4054
+									],
+									[
+										4062,
+										4067
+									],
+									[
+										4075,
+										4080
+									],
+									[
+										4088,
+										4093
+									],
+									[
+										4101,
+										4106
+									],
+									[
+										4114,
+										4119
+									],
+									[
+										4127,
+										4132
+									],
+									[
+										4140,
+										4145
+									],
+									[
+										4153,
+										4158
+									],
+									[
+										4166,
+										4171
+									],
+									[
+										4179,
+										4184
+									],
+									[
+										4192,
+										4197
+									],
+									[
+										4205,
+										4210
+									],
+									[
+										4218,
+										4223
+									],
+									[
+										4231,
+										4236
+									],
+									[
+										4244,
+										4249
+									],
+									[
+										4257,
+										4262
+									],
+									[
+										4270,
+										4275
+									],
+									[
+										4283,
+										4288
+									],
+									[
+										4296,
+										4301
+									],
+									[
+										4309,
+										4314
+									],
+									[
+										4322,
+										4327
+									],
+									[
+										4335,
+										4340
+									],
+									[
+										4348,
+										4353
+									],
+									[
+										4361,
+										4366
+									],
+									[
+										4374,
+										4379
+									],
+									[
+										4387,
+										4392
+									],
+									[
+										4400,
+										4405
+									],
+									[
+										4413,
+										4418
+									],
+									[
+										4426,
+										4431
+									],
+									[
+										4439,
+										4444
+									],
+									[
+										4452,
+										4457
+									],
+									[
+										4465,
+										4470
+									],
+									[
+										4478,
+										4483
+									],
+									[
+										4491,
+										4496
+									],
+									[
+										4504,
+										4509
+									],
+									[
+										4517,
+										4522
+									],
+									[
+										4530,
+										4535
+									],
+									[
+										4543,
+										4548
+									],
+									[
+										4556,
+										4561
+									],
+									[
+										4569,
+										4574
+									],
+									[
+										4582,
+										4587
+									],
+									[
+										4595,
+										4600
+									],
+									[
+										4608,
+										4613
+									],
+									[
+										4621,
+										4626
+									],
+									[
+										4634,
+										4639
+									],
+									[
+										4708,
+										4713
+									],
+									[
+										4790,
+										4795
+									],
+									[
+										4849,
+										4854
+									],
+									[
+										4941,
+										4946
+									],
+									[
+										5080,
+										5086
+									],
+									[
+										5164,
+										5170
+									],
+									[
+										5256,
+										5262
+									],
+									[
+										5403,
+										5419
+									],
+									[
+										5464,
+										5480
+									],
+									[
+										5554,
+										5570
+									],
+									[
+										5733,
+										5749
+									],
+									[
+										5794,
+										5810
+									],
+									[
+										5884,
+										5900
+									],
+									[
+										6048,
+										6058
+									],
+									[
+										6155,
+										6165
+									],
+									[
+										6227,
+										6237
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								6052,
+								6052
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 6,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ \t].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 6912.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
 					"file": "test.php",
 					"semi_transient": false,
 					"settings":
@@ -2221,11 +3537,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 60,
+					"stack_index": 66,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 7,
 					"file": "shipclasses.js",
 					"semi_transient": false,
 					"settings":
@@ -2237,8 +3553,8 @@
 						"selection":
 						[
 							[
-								43268,
-								43268
+								56724,
+								56724
 							]
 						],
 						"settings":
@@ -2306,27 +3622,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 28202.0,
+						"translation.y": 37454.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 30,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 8,
 					"file": "mathLib.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5923,
+						"buffer_size": 5924,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3160,
-								3160
+								0,
+								0
 							]
 						],
 						"settings":
@@ -2397,11 +3713,11 @@
 						"translation.y": 2359.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 64,
+					"stack_index": 70,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 9,
 					"file": "global.php",
 					"semi_transient": false,
 					"settings":
@@ -2484,11 +3800,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 61,
+					"stack_index": 67,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 10,
 					"file": "server/math.php",
 					"semi_transient": false,
 					"settings":
@@ -2572,11 +3888,11 @@
 						"translation.y": 415.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 79,
+					"stack_index": 82,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 11,
 					"file": "game.php",
 					"semi_transient": false,
 					"settings":
@@ -2660,11 +3976,11 @@
 						"translation.y": 792.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 81,
+					"stack_index": 84,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 12,
 					"file": "server/systems/weapons/plasma.php",
 					"semi_transient": false,
 					"settings":
@@ -2676,8 +3992,8 @@
 						"selection":
 						[
 							[
-								432,
-								432
+								1316,
+								1316
 							]
 						],
 						"settings":
@@ -2745,27 +4061,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 432.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 46,
+					"stack_index": 25,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 13,
 					"file": "server/manager.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 41238,
+						"buffer_size": 41367,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								39538,
-								39538
+								28083,
+								28083
 							]
 						],
 						"settings":
@@ -2833,14 +4149,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 24121.0,
+						"translation.y": 16479.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 15,
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 14,
 					"file": "server/flight.php",
 					"semi_transient": false,
 					"settings":
@@ -2925,11 +4241,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 72,
+					"stack_index": 76,
 					"type": "text"
 				},
 				{
-					"buffer": 14,
+					"buffer": 15,
 					"file": "server/dbManager.php",
 					"semi_transient": false,
 					"settings":
@@ -2941,8 +4257,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								8247,
+								8247
 							]
 						],
 						"settings":
@@ -3011,14 +4327,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 411.0,
+						"translation.y": 6021.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 32,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
-					"buffer": 15,
+					"buffer": 16,
 					"file": "server/debug.php",
 					"semi_transient": false,
 					"settings":
@@ -3030,8 +4346,8 @@
 						"selection":
 						[
 							[
-								56,
-								56
+								118,
+								118
 							]
 						],
 						"settings":
@@ -3101,24 +4417,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 16,
+					"buffer": 17,
 					"file": "server/ships/omega.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3700,
+						"buffer_size": 3766,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1738,
-								1738
+								801,
+								801
 							]
 						],
 						"settings":
@@ -3186,14 +4502,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 124.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
-					"buffer": 17,
+					"buffer": 18,
 					"file": "server/ships/hyperion.php",
 					"semi_transient": false,
 					"settings":
@@ -3205,8 +4521,8 @@
 						"selection":
 						[
 							[
-								2266,
-								2266
+								1148,
+								1148
 							]
 						],
 						"settings":
@@ -3214,31 +4530,21 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
@@ -3249,39 +4555,49 @@
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
 								"bh_regex_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content"
 							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 378.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
-					"buffer": 18,
+					"buffer": 19,
 					"file": "server/ships/saggitarius.php",
 					"semi_transient": false,
 					"settings":
@@ -3365,24 +4681,24 @@
 						"translation.y": 270.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 30,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
-					"buffer": 19,
+					"buffer": 20,
 					"file": "server/ships/artemis.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2250,
+						"buffer_size": 2290,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								748,
-								748
+								911,
+								922
 							]
 						],
 						"settings":
@@ -3450,14 +4766,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 162.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 23,
 					"type": "text"
 				},
 				{
-					"buffer": 20,
+					"buffer": 21,
 					"file": "server/ships/tethys.php",
 					"semi_transient": false,
 					"settings":
@@ -3469,8 +4785,8 @@
 						"selection":
 						[
 							[
-								1713,
-								1713
+								1298,
+								1298
 							]
 						],
 						"settings":
@@ -3479,14 +4795,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 306.0,
+						"translation.y": 234.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 94,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
-					"buffer": 21,
+					"buffer": 22,
 					"file": "imageloader.js",
 					"semi_transient": false,
 					"settings":
@@ -3511,11 +4827,11 @@
 						"translation.y": 1566.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 40,
 					"type": "text"
 				},
 				{
-					"buffer": 22,
+					"buffer": 23,
 					"file": "server/ships/battlecrab.php",
 					"semi_transient": false,
 					"settings":
@@ -3599,11 +4915,11 @@
 						"translation.y": 56.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 90,
+					"stack_index": 92,
 					"type": "text"
 				},
 				{
-					"buffer": 23,
+					"buffer": 24,
 					"file": "server/systems/structure.php",
 					"semi_transient": false,
 					"settings":
@@ -3615,8 +4931,8 @@
 						"selection":
 						[
 							[
-								681,
-								681
+								2439,
+								2439
 							]
 						],
 						"settings":
@@ -3684,14 +5000,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 212.0,
+						"translation.y": 1701.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 25,
 					"file": "postGameData.php",
 					"semi_transient": false,
 					"settings":
@@ -3775,11 +5091,11 @@
 						"translation.y": 54.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 84,
+					"stack_index": 86,
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 26,
 					"file": "server/systems/weapons/dual.php",
 					"semi_transient": false,
 					"settings":
@@ -3791,8 +5107,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								619,
+								619
 							]
 						],
 						"settings":
@@ -3863,11 +5179,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 83,
+					"stack_index": 24,
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 27,
 					"file": "cam.js",
 					"semi_transient": false,
 					"settings":
@@ -3951,11 +5267,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 96,
+					"stack_index": 97,
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 28,
 					"file": "server/systems/system.php",
 					"semi_transient": false,
 					"settings":
@@ -4036,27 +5352,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2481.0,
+						"translation.y": 321.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 38,
+					"stack_index": 27,
 					"type": "text"
 				},
 				{
-					"buffer": 28,
+					"buffer": 29,
 					"file": "server/systems/weapon.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5233,
+						"buffer_size": 5537,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								2400,
+								2400
 							]
 						],
 						"settings":
@@ -4124,14 +5440,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1238.0,
+						"translation.y": 1323.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 35,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 29,
+					"buffer": 30,
 					"file": "server/systems/weapons/matter.php",
 					"semi_transient": false,
 					"settings":
@@ -4215,11 +5531,11 @@
 						"translation.y": 486.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 45,
+					"stack_index": 55,
 					"type": "text"
 				},
 				{
-					"buffer": 30,
+					"buffer": 31,
 					"file": "server/systems/nonweapon.php",
 					"semi_transient": false,
 					"settings":
@@ -4303,11 +5619,11 @@
 						"translation.y": 1716.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 34,
 					"type": "text"
 				},
 				{
-					"buffer": 31,
+					"buffer": 32,
 					"file": "server/systems/weapons/laser.php",
 					"semi_transient": false,
 					"settings":
@@ -4319,8 +5635,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								1144,
+								1148
 							]
 						],
 						"settings":
@@ -4389,27 +5705,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 232.0,
+						"translation.y": 160.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 58,
+					"stack_index": 31,
 					"type": "text"
 				},
 				{
-					"buffer": 32,
+					"buffer": 33,
 					"file": "server/salvo.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7814,
+						"buffer_size": 7905,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5130,
-								5130
+								2553,
+								2553
 							]
 						],
 						"settings":
@@ -4477,14 +5793,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3272.0,
+						"translation.y": 1232.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 33,
+					"buffer": 34,
 					"file": "server/fighter.php",
 					"semi_transient": false,
 					"settings":
@@ -4569,16 +5885,16 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 69,
+					"stack_index": 74,
 					"type": "text"
 				},
 				{
-					"buffer": 34,
+					"buffer": 35,
 					"file": "server/ship.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 23661,
+						"buffer_size": 23659,
 						"regions":
 						{
 						},
@@ -4657,11 +5973,11 @@
 						"translation.y": 339.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 33,
+					"stack_index": 50,
 					"type": "text"
 				},
 				{
-					"buffer": 35,
+					"buffer": 36,
 					"file": "server/systems/weapons/pulse.php",
 					"semi_transient": false,
 					"settings":
@@ -4742,14 +6058,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 459.0,
+						"translation.y": 387.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 44,
 					"type": "text"
 				},
 				{
-					"buffer": 36,
+					"buffer": 37,
 					"file": "server/systems/weapons/em.php",
 					"semi_transient": false,
 					"settings":
@@ -4833,24 +6149,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 53,
+					"stack_index": 61,
 					"type": "text"
 				},
 				{
-					"buffer": 37,
+					"buffer": 38,
 					"file": "systems.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 76757,
+						"buffer_size": 77214,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								57650,
+								57650
 							]
 						],
 						"settings":
@@ -4918,14 +6234,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 14145.0,
+						"translation.y": 37420.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 44,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
-					"buffer": 38,
+					"buffer": 39,
 					"file": "graphics.js",
 					"semi_transient": false,
 					"settings":
@@ -5010,11 +6326,11 @@
 						"translation.y": 3222.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 88,
+					"stack_index": 90,
 					"type": "text"
 				},
 				{
-					"buffer": 39,
+					"buffer": 40,
 					"file": "server/systems/weapons/particle.php",
 					"semi_transient": false,
 					"settings":
@@ -5098,11 +6414,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 35,
 					"type": "text"
 				},
 				{
-					"buffer": 40,
+					"buffer": 41,
 					"file": "server/ships/olympus.php",
 					"semi_transient": false,
 					"settings":
@@ -5186,11 +6502,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 99,
+					"stack_index": 100,
 					"type": "text"
 				},
 				{
-					"buffer": 41,
+					"buffer": 42,
 					"file": "createGame.php",
 					"semi_transient": false,
 					"settings":
@@ -5274,11 +6590,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 74,
+					"stack_index": 78,
 					"type": "text"
 				},
 				{
-					"buffer": 42,
+					"buffer": 43,
 					"file": "script.js",
 					"semi_transient": false,
 					"settings":
@@ -5290,8 +6606,8 @@
 						"selection":
 						[
 							[
-								2368,
-								2368
+								7589,
+								7597
 							]
 						],
 						"settings":
@@ -5359,14 +6675,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1617.0,
+						"translation.y": 4696.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 40,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
-					"buffer": 43,
+					"buffer": 44,
 					"file": "lobby.php",
 					"semi_transient": false,
 					"settings":
@@ -5450,11 +6766,11 @@
 						"translation.y": 141.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 31,
+					"stack_index": 49,
 					"type": "text"
 				},
 				{
-					"buffer": 44,
+					"buffer": 45,
 					"file": "game.js",
 					"semi_transient": false,
 					"settings":
@@ -5466,8 +6782,8 @@
 						"selection":
 						[
 							[
-								51001,
-								51001
+								20154,
+								20154
 							]
 						],
 						"settings":
@@ -5535,27 +6851,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 32937.0,
+						"translation.y": 13842.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 39,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
-					"buffer": 45,
+					"buffer": 46,
 					"file": "server/ships/demos.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1971,
+						"buffer_size": 2000,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1037,
-								1037
+								446,
+								446
 							]
 						],
 						"settings":
@@ -5626,11 +6942,11 @@
 						"translation.y": 18.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
-					"buffer": 46,
+					"buffer": 47,
 					"file": "shared.js",
 					"semi_transient": false,
 					"settings":
@@ -5715,11 +7031,11 @@
 						"translation.y": 5513.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 86,
+					"stack_index": 88,
 					"type": "text"
 				},
 				{
-					"buffer": 47,
+					"buffer": 48,
 					"file": "flights.js",
 					"semi_transient": false,
 					"settings":
@@ -5803,24 +7119,24 @@
 						"translation.y": 9330.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 89,
+					"stack_index": 91,
 					"type": "text"
 				},
 				{
-					"buffer": 48,
+					"buffer": 49,
 					"file": "server/systems/weapons/ammo.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3796,
+						"buffer_size": 3792,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								112,
+								112
 							]
 						],
 						"settings":
@@ -5889,20 +7205,20 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 344.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 66,
+					"stack_index": 12,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 11,
+			"selected": 18,
 			"sheets":
 			[
 				{
-					"buffer": 42,
+					"buffer": 43,
 					"file": "script.js",
 					"semi_transient": false,
 					"settings":
@@ -5986,16 +7302,16 @@
 						"translation.y": 6837.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 42,
+					"stack_index": 54,
 					"type": "text"
 				},
 				{
-					"buffer": 32,
+					"buffer": 33,
 					"file": "server/salvo.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7814,
+						"buffer_size": 7905,
 						"regions":
 						{
 						},
@@ -6074,11 +7390,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 67,
+					"stack_index": 72,
 					"type": "text"
 				},
 				{
-					"buffer": 49,
+					"buffer": 50,
 					"file": "server/ships/avenger.php",
 					"semi_transient": false,
 					"settings":
@@ -6090,8 +7406,8 @@
 						"selection":
 						[
 							[
-								1144,
-								1144
+								358,
+								358
 							]
 						],
 						"settings":
@@ -6159,14 +7475,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 144.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 23,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 11,
 					"file": "game.php",
 					"semi_transient": false,
 					"settings":
@@ -6250,11 +7566,11 @@
 						"translation.y": 9062.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 41,
+					"stack_index": 53,
 					"type": "text"
 				},
 				{
-					"buffer": 50,
+					"buffer": 51,
 					"file": "server/ships/darkner.php",
 					"semi_transient": false,
 					"settings":
@@ -6276,14 +7592,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 229.0,
+						"translation.y": 157.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 45,
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 28,
 					"file": "server/systems/system.php",
 					"semi_transient": false,
 					"settings":
@@ -6367,11 +7683,11 @@
 						"translation.y": 1549.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 73,
+					"stack_index": 77,
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 26,
 					"file": "server/systems/weapons/dual.php",
 					"semi_transient": false,
 					"settings":
@@ -6455,16 +7771,16 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 91,
+					"stack_index": 93,
 					"type": "text"
 				},
 				{
-					"buffer": 34,
+					"buffer": 35,
 					"file": "server/ship.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 23661,
+						"buffer_size": 23659,
 						"regions":
 						{
 						},
@@ -6543,24 +7859,24 @@
 						"translation.y": 75.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 36,
+					"stack_index": 51,
 					"type": "text"
 				},
 				{
-					"buffer": 28,
+					"buffer": 29,
 					"file": "server/systems/weapon.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5233,
+						"buffer_size": 5537,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1914,
+								1914
 							]
 						],
 						"settings":
@@ -6628,14 +7944,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 890.0,
+						"translation.y": 1287.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 52,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 51,
+					"buffer": 52,
 					"file": "autoload.php",
 					"semi_transient": false,
 					"settings":
@@ -6717,27 +8033,27 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1112.0,
+						"translation.y": 356.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 38,
 					"type": "text"
 				},
 				{
-					"buffer": 52,
+					"buffer": 53,
 					"file": "server/ships/gquan.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2603,
+						"buffer_size": 2703,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1141,
-								1141
+								0,
+								0
 							]
 						],
 						"settings":
@@ -6745,51 +8061,31 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
@@ -6799,20 +8095,40 @@
 								"bh_single_quote_center",
 								"bh_single_quote_open",
 								"bh_single_quote_close",
-								"bh_single_quote_content"
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content"
 							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 270.0,
+						"translation.y": 198.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 32,
 					"type": "text"
 				},
 				{
-					"buffer": 53,
+					"buffer": 54,
 					"file": "log.txt",
 					"semi_transient": false,
 					"settings":
@@ -6833,6 +8149,11 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
@@ -6843,31 +8164,6 @@
 								"bh_default_open",
 								"bh_default_close",
 								"bh_default_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
@@ -6878,6 +8174,26 @@
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
@@ -6895,11 +8211,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 38,
+					"buffer": 39,
 					"file": "graphics.js",
 					"semi_transient": false,
 					"settings":
@@ -6984,11 +8300,11 @@
 						"translation.y": 3074.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 82,
+					"stack_index": 85,
 					"type": "text"
 				},
 				{
-					"buffer": 36,
+					"buffer": 37,
 					"file": "server/systems/weapons/em.php",
 					"semi_transient": false,
 					"settings":
@@ -7072,11 +8388,11 @@
 						"translation.y": 957.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 65,
+					"stack_index": 71,
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 28,
 					"file": "server/systems/system.php",
 					"semi_transient": false,
 					"settings":
@@ -7160,11 +8476,11 @@
 						"translation.y": 2340.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 76,
+					"stack_index": 80,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 7,
 					"file": "shipclasses.js",
 					"semi_transient": false,
 					"settings":
@@ -7176,8 +8492,8 @@
 						"selection":
 						[
 							[
-								12098,
-								12098
+								11918,
+								11918
 							]
 						],
 						"settings":
@@ -7248,16 +8564,16 @@
 						"translation.y": 7906.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 37,
+					"stack_index": 52,
 					"type": "text"
 				},
 				{
-					"buffer": 37,
+					"buffer": 38,
 					"file": "systems.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 76757,
+						"buffer_size": 77214,
 						"regions":
 						{
 						},
@@ -7336,24 +8652,24 @@
 						"translation.y": 13254.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 62,
+					"stack_index": 68,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 8,
 					"file": "mathLib.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5923,
+						"buffer_size": 5924,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2496,
-								2496
+								0,
+								0
 							]
 						],
 						"settings":
@@ -7424,11 +8740,11 @@
 						"translation.y": 1928.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 68,
+					"stack_index": 73,
 					"type": "text"
 				},
 				{
-					"buffer": 14,
+					"buffer": 15,
 					"file": "server/dbManager.php",
 					"semi_transient": false,
 					"settings":
@@ -7440,8 +8756,8 @@
 						"selection":
 						[
 							[
-								473,
-								473
+								195,
+								195
 							]
 						],
 						"settings":
@@ -7513,11 +8829,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 38,
+					"buffer": 39,
 					"file": "graphics.js",
 					"semi_transient": false,
 					"settings":
@@ -7602,7 +8918,7 @@
 						"translation.y": 3197.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 85,
+					"stack_index": 87,
 					"type": "text"
 				},
 				{
@@ -7611,7 +8927,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 14803,
+						"buffer_size": 14831,
 						"regions":
 						{
 						},
@@ -7690,11 +9006,11 @@
 						"translation.y": 3466.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 63,
+					"stack_index": 69,
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 27,
 					"file": "cam.js",
 					"semi_transient": false,
 					"settings":
@@ -7778,11 +9094,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 93,
+					"stack_index": 95,
 					"type": "text"
 				},
 				{
-					"buffer": 44,
+					"buffer": 45,
 					"file": "game.js",
 					"semi_transient": false,
 					"settings":
@@ -7794,8 +9110,8 @@
 						"selection":
 						[
 							[
-								18075,
-								18088
+								51463,
+								51463
 							]
 						],
 						"settings":
@@ -7863,14 +9179,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 12940.0,
+						"translation.y": 33190.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 43,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 46,
+					"buffer": 47,
 					"file": "shared.js",
 					"semi_transient": false,
 					"settings":
@@ -7955,24 +9271,24 @@
 						"translation.y": 50.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 39,
 					"type": "text"
 				},
 				{
-					"buffer": 54,
+					"buffer": 55,
 					"file": "gameSetup.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 16912,
+						"buffer_size": 16770,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8149,
-								8149
+								0,
+								0
 							]
 						],
 						"settings":
@@ -8043,11 +9359,11 @@
 						"translation.y": 4918.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 41,
 					"type": "text"
 				},
 				{
-					"buffer": 55,
+					"buffer": 56,
 					"file": "server/ships/tinashi.php",
 					"semi_transient": false,
 					"settings":
@@ -8072,11 +9388,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 48,
 					"type": "text"
 				},
 				{
-					"buffer": 56,
+					"buffer": 57,
 					"file": "server/ships/sharlin.php",
 					"semi_transient": false,
 					"settings":
@@ -8101,11 +9417,11 @@
 						"translation.y": 815.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 97,
+					"stack_index": 98,
 					"type": "text"
 				},
 				{
-					"buffer": 57,
+					"buffer": 58,
 					"file": "server/ships/whitestar.php",
 					"semi_transient": false,
 					"settings":
@@ -8189,11 +9505,11 @@
 						"translation.y": 181.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 56,
+					"stack_index": 64,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 10,
 					"file": "server/math.php",
 					"semi_transient": false,
 					"settings":
@@ -8277,7 +9593,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 51,
+					"stack_index": 60,
 					"type": "text"
 				},
 				{
@@ -8366,11 +9682,11 @@
 						"translation.y": 3312.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 77,
+					"stack_index": 81,
 					"type": "text"
 				},
 				{
-					"buffer": 58,
+					"buffer": 59,
 					"file": "server/ships/primus.php",
 					"semi_transient": false,
 					"settings":
@@ -8454,24 +9770,24 @@
 						"translation.y": 36.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 36,
 					"type": "text"
 				},
 				{
-					"buffer": 59,
+					"buffer": 60,
 					"file": "server/ships/vorchan.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1742,
+						"buffer_size": 1773,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								195,
-								195
+								971,
+								971
 							]
 						],
 						"settings":
@@ -8539,14 +9855,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 189.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 78,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 60,
+					"buffer": 61,
 					"file": "server/ships/haven.php",
 					"semi_transient": false,
 					"settings":
@@ -8571,11 +9887,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 43,
 					"type": "text"
 				},
 				{
-					"buffer": 61,
+					"buffer": 62,
 					"file": "server/systems/weapons/linked.php",
 					"semi_transient": false,
 					"settings":
@@ -8659,11 +9975,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 75,
+					"stack_index": 79,
 					"type": "text"
 				},
 				{
-					"buffer": 47,
+					"buffer": 48,
 					"file": "flights.js",
 					"semi_transient": false,
 					"settings":
@@ -8747,11 +10063,11 @@
 						"translation.y": 9990.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 71,
+					"stack_index": 75,
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 14,
 					"file": "server/flight.php",
 					"semi_transient": false,
 					"settings":
@@ -8836,24 +10152,24 @@
 						"translation.y": 357.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 57,
+					"stack_index": 65,
 					"type": "text"
 				},
 				{
-					"buffer": 48,
+					"buffer": 49,
 					"file": "server/systems/weapons/ammo.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3796,
+						"buffer_size": 3792,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1526,
+								1526
 							]
 						],
 						"settings":
@@ -8922,14 +10238,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2412.0,
+						"translation.y": 648.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 33,
+					"buffer": 34,
 					"file": "server/fighter.php",
 					"semi_transient": false,
 					"settings":
@@ -9014,7 +10330,7 @@
 						"translation.y": 2416.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 42,
 					"type": "text"
 				},
 				{
@@ -9102,11 +10418,11 @@
 						"translation.y": 3334.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 95,
+					"stack_index": 96,
 					"type": "text"
 				},
 				{
-					"buffer": 23,
+					"buffer": 24,
 					"file": "server/systems/structure.php",
 					"semi_transient": false,
 					"settings":
@@ -9190,11 +10506,11 @@
 						"translation.y": 1052.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 54,
+					"stack_index": 62,
 					"type": "text"
 				},
 				{
-					"buffer": 62,
+					"buffer": 63,
 					"file": "getGameData.php",
 					"semi_transient": false,
 					"settings":
@@ -9278,24 +10594,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 98,
+					"stack_index": 99,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 13,
 					"file": "server/manager.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 41238,
+						"buffer_size": 41367,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								18975,
-								18975
+								19061,
+								19061
 							]
 						],
 						"settings":
@@ -9363,14 +10679,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 12608.0,
+						"translation.y": 656.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 55,
+					"stack_index": 63,
 					"type": "text"
 				},
 				{
-					"buffer": 63,
+					"buffer": 64,
 					"file": "combattest.php",
 					"semi_transient": false,
 					"settings":
@@ -9454,11 +10770,11 @@
 						"translation.y": 63.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 80,
+					"stack_index": 83,
 					"type": "text"
 				},
 				{
-					"buffer": 64,
+					"buffer": 65,
 					"file": "shiptest.php",
 					"semi_transient": false,
 					"settings":
@@ -9483,11 +10799,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 92,
+					"stack_index": 94,
 					"type": "text"
 				},
 				{
-					"buffer": 65,
+					"buffer": 66,
 					"file": "index.php",
 					"semi_transient": false,
 					"settings":
@@ -9571,24 +10887,24 @@
 						"translation.y": 86.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 101,
+					"stack_index": 102,
 					"type": "text"
 				},
 				{
-					"buffer": 66,
+					"buffer": 67,
 					"file": "server/systems/weapons/launcher.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1513,
+						"buffer_size": 1791,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								659,
-								659
+								1540,
+								1540
 							]
 						],
 						"settings":
@@ -9656,14 +10972,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 918.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 70,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 67,
+					"buffer": 68,
 					"file": "balltest.php",
 					"semi_transient": false,
 					"settings":
@@ -9688,11 +11004,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 100,
+					"stack_index": 101,
 					"type": "text"
 				},
 				{
-					"buffer": 68,
+					"buffer": 69,
 					"file": "systemtest.php",
 					"semi_transient": false,
 					"settings":
@@ -9704,8 +11020,8 @@
 						"selection":
 						[
 							[
-								1274,
-								1274
+								789,
+								789
 							]
 						],
 						"settings":
@@ -9717,11 +11033,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 33,
 					"type": "text"
 				},
 				{
-					"buffer": 39,
+					"buffer": 40,
 					"file": "server/systems/weapons/particle.php",
 					"semi_transient": false,
 					"settings":
@@ -9805,11 +11121,11 @@
 						"translation.y": 62.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
+					"stack_index": 46,
 					"type": "text"
 				},
 				{
-					"buffer": 31,
+					"buffer": 32,
 					"file": "server/systems/weapons/laser.php",
 					"semi_transient": false,
 					"settings":
@@ -9891,14 +11207,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1935.0,
+						"translation.y": 207.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 37,
 					"type": "text"
 				},
 				{
-					"buffer": 35,
+					"buffer": 36,
 					"file": "server/systems/weapons/pulse.php",
 					"semi_transient": false,
 					"settings":
@@ -9979,14 +11295,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 422.0,
+						"translation.y": 350.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 47,
+					"stack_index": 56,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 12,
 					"file": "server/systems/weapons/plasma.php",
 					"semi_transient": false,
 					"settings":
@@ -10070,11 +11386,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 49,
+					"stack_index": 58,
 					"type": "text"
 				},
 				{
-					"buffer": 29,
+					"buffer": 30,
 					"file": "server/systems/weapons/matter.php",
 					"semi_transient": false,
 					"settings":
@@ -10158,7 +11474,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 50,
+					"stack_index": 59,
 					"type": "text"
 				}
 			]
@@ -10192,7 +11508,7 @@
 		"cols":
 		[
 			0.0,
-			0.583005059266,
+			0.377929992061,
 			1.0
 		],
 		"rows":
@@ -10220,10 +11536,6 @@
 		"selected_items":
 		[
 			[
-				"log",
-				"C:\\xampp\\htdocs\\fire\\log.txt"
-			],
-			[
 				"de",
 				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
 			],
@@ -10232,12 +11544,108 @@
 				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
 			],
 			[
-				"non",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\nonweapon.php"
+				"log",
+				"C:\\xampp\\htdocs\\fire\\log.txt"
+			],
+			[
+				"game",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
+				"clas",
+				"C:\\xampp\\htdocs\\fire\\classes.js"
+			],
+			[
+				"st",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\structure.php"
+			],
+			[
+				"amm",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\ammo.php"
+			],
+			[
+				"w",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapon.php"
+			],
+			[
+				"sal",
+				"C:\\xampp\\htdocs\\fire\\server\\salvo.php"
+			],
+			[
+				"stru",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\structure.php"
+			],
+			[
+				"lau",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php"
+			],
+			[
+				"dem",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\demos.php"
+			],
+			[
+				"vor",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\vorchan.php"
+			],
+			[
+				"mana",
+				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
+			],
+			[
+				"lgo",
+				"C:\\xampp\\htdocs\\fire\\log.txt"
+			],
+			[
+				"ma",
+				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
+			],
+			[
+				"ar",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\artemis.php"
+			],
+			[
+				"dual",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php"
+			],
+			[
+				"plas",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php"
+			],
+			[
+				"sy",
+				"C:\\xampp\\htdocs\\fire\\systems.js"
+			],
+			[
+				"sys",
+				"C:\\xampp\\htdocs\\fire\\systems.js"
+			],
+			[
+				"scr",
+				"C:\\xampp\\htdocs\\fire\\script.js"
+			],
+			[
+				"style",
+				"C:\\xampp\\htdocs\\fire\\style.css"
+			],
+			[
+				"sh",
+				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
+			],
+			[
+				"ome",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\omega.php"
+			],
+			[
+				"q",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\gquan.php"
 			],
 			[
 				"hyp",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\hyperion.php"
+			],
+			[
+				"non",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\nonweapon.php"
 			],
 			[
 				"gq",
@@ -10250,14 +11658,6 @@
 			[
 				"las",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php"
-			],
-			[
-				"sh",
-				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
-			],
-			[
-				"q",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\gquan.php"
 			],
 			[
 				"auto",
@@ -10288,10 +11688,6 @@
 				"C:\\xampp\\htdocs\\fire\\server\\fighter.php"
 			],
 			[
-				"mana",
-				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
-			],
-			[
 				"imag",
 				"C:\\xampp\\htdocs\\fire\\imageloader.js"
 			],
@@ -10308,10 +11704,6 @@
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
 			],
 			[
-				"dem",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\demos.php"
-			],
-			[
 				"dark",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\darkner.php"
 			],
@@ -10326,22 +11718,6 @@
 			[
 				"av",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\avenger.php"
-			],
-			[
-				"ome",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\omega.php"
-			],
-			[
-				"sal",
-				"C:\\xampp\\htdocs\\fire\\server\\salvo.php"
-			],
-			[
-				"stru",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\structure.php"
-			],
-			[
-				"amm",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\ammo.php"
 			],
 			[
 				"ti",
@@ -10368,16 +11744,8 @@
 				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
 			],
 			[
-				"clas",
-				"C:\\xampp\\htdocs\\fire\\classes.js"
-			],
-			[
 				"",
 				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
-			],
-			[
-				"w",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapon.php"
 			],
 			[
 				"we",
@@ -10408,16 +11776,8 @@
 				"C:\\xampp\\htdocs\\fire\\script.js"
 			],
 			[
-				"sys",
-				"C:\\xampp\\htdocs\\fire\\systems.js"
-			],
-			[
 				"npn",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\nonweapon.php"
-			],
-			[
-				"ar",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\artemis.php"
 			],
 			[
 				"lo",
@@ -10468,20 +11828,8 @@
 				"C:\\xampp\\htdocs\\fire\\style.css"
 			],
 			[
-				"sy",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\system.php"
-			],
-			[
-				"style",
-				"C:\\xampp\\htdocs\\fire\\style.css"
-			],
-			[
 				"fl",
 				"C:\\xampp\\htdocs\\fire\\server\\flight.php"
-			],
-			[
-				"game",
-				"C:\\xampp\\htdocs\\fire\\game.js"
 			],
 			[
 				"mis",
@@ -10490,14 +11838,6 @@
 			[
 				"fi",
 				"C:\\xampp\\htdocs\\fire\\server\\fighter.php"
-			],
-			[
-				"lau",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php"
-			],
-			[
-				"plas",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php"
 			],
 			[
 				"shar",
@@ -10516,10 +11856,6 @@
 				"C:\\xampp\\htdocs\\fire\\server\\flight.php"
 			],
 			[
-				"ma",
-				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
-			],
-			[
 				"fig",
 				"C:\\xampp\\htdocs\\fire\\server\\fighter.php"
 			],
@@ -10536,10 +11872,6 @@
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\haven.php"
 			],
 			[
-				"vor",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\vorchan.php"
-			],
-			[
 				"ship",
 				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
 			],
@@ -10550,10 +11882,6 @@
 			[
 				"og",
 				"C:\\xampp\\htdocs\\fire\\log.txt"
-			],
-			[
-				"scr",
-				"C:\\xampp\\htdocs\\fire\\script.js"
 			],
 			[
 				"oem",
@@ -10570,10 +11898,6 @@
 			[
 				"game.",
 				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
-				"dual",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php"
 			],
 			[
 				"post",
@@ -10722,14 +12046,6 @@
 			[
 				"gr",
 				"C:\\xampp\\htdocs\\fire\\graphics.js"
-			],
-			[
-				"np",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\nonweapon.php"
-			],
-			[
-				"s",
-				"C:\\xampp\\htdocs\\fire\\script.js"
 			]
 		],
 		"width": 0.0
@@ -10752,7 +12068,7 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 1,
+	"selected_group": 0,
 	"settings":
 	{
 	},

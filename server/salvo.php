@@ -81,6 +81,7 @@ class Mini extends Ship {
 			$fire->section = $this->getSection($fire);
 			for ($i = 0; $i < $fire->shots; $i++){
 				$fire->hitSystem[] = $this->getHitSystem($fire);
+				Debug::log("picking: ".$fire->hitSystem[sizeof($fire->hitSystem)-1]->id." as target");
 				$fire->req = $this->calculateToHit($fire);
 			}
 			
@@ -200,12 +201,12 @@ class Salvo extends Mini {
 
 	public function setProps(){
 		$this->baseHitChance = $this->structures[0]->getSubHitChance();
-		$this->baseImpulse = ceil(pow($this->structures[0]->mass, -0.75)*300);
+		$this->baseImpulse = ceil(pow($this->structures[0]->mass, -0.75)*250);
 	}
 
 	public function addStructures($amount){
 		for ($i = 0; $i < $amount; $i++){
-			$this->structures[] = new $this->name($this->id, $i);
+			$this->structures[] = new $this->name($i, $this->id);
 		}
 	}
 

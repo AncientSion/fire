@@ -80,7 +80,7 @@ function isInArc(direction, start, end){
 	}
 	else {
 		return false;
-	}
+	}$
 }
 
 function getCompassHeadingOfPoint(observer, target, facing){

@@ -18,7 +18,7 @@ class Demos extends Medium {
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 22);
 		$front->systems[] = new MediumIon($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60, 16, 4, array("Javelin"));
+		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60,	array(array("Javelin", 9, 3), array("Hasta", 12, 4)));
 		$front->systems[] = new MediumIon($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 

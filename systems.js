@@ -1255,16 +1255,15 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 	$(table).append($("<tr>").append($("<td>").html("Loading")).append($("<td>").html(this.getTimeLoaded() + " / " + this.reload)));
 
 	if (this instanceof Launcher){
-		if (this.ammo){
-			$(table).append($("<tr>").append($("<th>").css("border-top", "1px solid white").attr("colSpan", 2).html(this.ammo.name)));
-			$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).html(this.ammo.display)));
-			$(table).append($("<tr>").append($("<td>").html("Ammo amount")).append($("<td>").html("<font color='red'>" + this.getRemainingAmmo() + "</font> / " + this.getMaxAmmo()).attr("id", "ammo")));
+		if (this.ammo != undefined){
+			$(table).append($("<tr>").append($("<th>").css("border-top", "1px solid white").attr("colSpan", 2).html(this.loads[this.ammo].name)));
+			$(table).append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.loads[this.ammo].display)));
+			$(table).append($("<tr>").append($("<td>").html("Ammo amount")).append($("<td>").html("<span class='red'>" + this.getRemainingAmmo() + "</span> / " + this.getMaxAmmo()).attr("id", "ammo")));
 			$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + game.getUnitType(this.getTraverseRating()))));
 			$(table).append($("<tr>").append($("<td>").html("Impulse")).append($("<td>").html(this.getBallImpulse())));
+			//$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("<span class='red' id='detailShots'>" + this.getOutput() + "</span> / " + this.launchRate[this.ammo])));
+			$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("Up to <span class='red'>" + this.launchRate[this.ammo] + "</span> per cycle")));
 		}
-		$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("<font color='red'>" + this.getOutput() + "</font> - max " + this.effiency)
-				.attr("id", "detailsShots")
-			));
 	}
 	else if (this instanceof Laser){
 		$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + game.getUnitType(this.getTraverseRating()))));
@@ -1934,11 +1933,12 @@ function Launcher(system){
 	//Weapon.call(this, id, parentId, name, display, 0, 0, integrity, powerReq, output, effiency, maxBoost, 0, 0, 0, 0, 0, 0, 1, reload, arc1, arc2, arc3, arc4);	
 	         // Weapon(id, parentId, name, display, exploSize, animColor, integrity, powerReq, output, effiency, maxBoost, boostEffect, fc, minDmg, maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){
 
-	this.effiency = system.launchRate;
+	this.capacity = system.capacity;
+	this.launchRate = system.launchRate;
 	this.type = "Ballistic";
 	this.animation = "ballistic";
 	this.loads = [];
-	this.ammo = system.ammo || false;
+	this.ammo = system.ammo;
 	this.loadout = 1;
 
 	this.create(system.loads);
@@ -1954,11 +1954,9 @@ Launcher.prototype.create = function(loads){
 			this.loads[i].amount = 0;
 		}
 	}
-	else {
-		if (this.ammo  == false || this.getRemainingAmmo() == 0){
-			this.shots = 0;
-			this.forceUnpower();
-		}
+	else if (this.ammo  == false || this.getRemainingAmmo() == 0){
+		this.shots = 0;
+		this.forceUnpower();
 	}
 }
 
@@ -1988,11 +1986,11 @@ Launcher.prototype.doBoost = function(){
 }
 
 Launcher.prototype.getShots = function(){
-	return this.shots;
+	return this.getOutput();
 }
 
 Launcher.prototype.getTraverseRating = function(){
-	return this.ammo.traverse || 0
+	return this.loads[this.ammo].traverse;
 }
 
 Launcher.prototype.getAimDataTarget = function(target, final, accLoss, row){
@@ -2025,7 +2023,7 @@ Launcher.prototype.getAccuracyLoss = function(dist){
 }
 
 Launcher.prototype.getEffiency = function(){
-	return this.effiency;
+	return this.launchRate[this.ammo];
 }
 
 Launcher.prototype.select = function(e){
@@ -2041,7 +2039,7 @@ Launcher.prototype.select = function(e){
 		this.setSystemBorder();
 		this.setupAmmoLoadout(e);
 	}
-	else if (game.phase != -1 || this.shots == 0){
+	else if (game.phase != -1 || this.getOutput() == 0){
 		return false;
 	}
 	
@@ -2097,13 +2095,13 @@ Launcher.prototype.setMount = function(amount){
 }
 
 Launcher.prototype.getTraverseMod = function(target){
-	if (this.ammo){
-		return Math.max(0, (this.ammo.traverse - target.traverse));
+	if (this.ammo != undefined){
+		return Math.max(0, (this.loads[this.ammo].traverse - target.traverse));
 	}
 }
 Launcher.prototype.getDamageString = function(){
-	if (this.ammo){
-		return this.ammo.minDmg + " - " + this.ammo.maxDmg;
+	if (this.ammo != undefined){
+		return this.loads[this.ammo].minDmg + " - " + this.loads[this.ammo].maxDmg;
 	}
 }
 
@@ -2125,9 +2123,7 @@ Launcher.prototype.setupAmmoLoadout = function(e){
 	var div = document.getElementById("weaponLoadoutDiv");
 
 	if ($(div).hasClass("disabled")){
-		$(div).find("#launchRate").html(this.effiency);
 		$(div).find("#reload").html(this.reload);
-		$(div).find("#capacity").html(this.output);
 		$(div).data("systemid", this.id).css("top", e.clientY + 30).css("left", e.clientX - 150).removeClass("disabled");
 		this.updateTotals();
 	}
@@ -2155,7 +2151,7 @@ Launcher.prototype.addAmmo = function(ele, all){
 			canAdd = false
 			break;
 		}
-		else if (this.loads[i].amount == this.loads[i].name){
+		else if (this.loads[i].amount == this.capacity[i]){
 			canAdd = false;
 			break;
 		}
@@ -2163,7 +2159,7 @@ Launcher.prototype.addAmmo = function(ele, all){
 
 	if (canAdd){
 		if (all){
-			this.loads[index].amount = this.output;
+			this.loads[index].amount = this.capacity[index];
 		}
 		else {
 			this.loads[index].amount++;
@@ -2198,6 +2194,7 @@ Launcher.prototype.updateTotals = function(){
 		var tr = document.createElement("tr");
 		var th = document.createElement("th"); th.innerHTML = "Class"; th.width = "80px"; tr.appendChild(th)
 		var th = document.createElement("th"); th.innerHTML = "Type"; th.width = "200px"; tr.appendChild(th)
+		var th = document.createElement("th"); th.innerHTML = "RoF"; th.width = "40px"; tr.appendChild(th)
 		var th = document.createElement("th"); th.innerHTML = "Cost"; th.width = "40px"; tr.appendChild(th)
 		var th = document.createElement("th"); th.innerHTML = ""; tr.appendChild(th)
 		var th = document.createElement("th"); th.innerHTML = ""; tr.appendChild(th)
@@ -2209,6 +2206,7 @@ Launcher.prototype.updateTotals = function(){
 		var tr = table.insertRow(-1);
 			tr.insertCell(-1).innerHTML = this.loads[i].name;
 			tr.insertCell(-1).innerHTML = this.loads[i].display;
+			tr.insertCell(-1).innerHTML = this.launchRate[i];
 			tr.insertCell(-1).innerHTML = this.loads[i].cost;
 		var td = document.createElement("td");
 			td.innerHTML = "<img src='varIcons/plus.png'>"; tr.appendChild(td);
@@ -2233,14 +2231,14 @@ Launcher.prototype.updateTotals = function(){
 
 			amount += this.loads[i].amount
 			tCost += this.loads[i].amount * this.loads[i].cost
-			tr.insertCell(-1).innerHTML = this.loads[i].amount
+			tr.insertCell(-1).innerHTML = this.loads[i].amount + " / "  + this.capacity[i];
 			tr.insertCell(-1).innerHTML = this.loads[i].amount * this.loads[i].cost
 	}
 
 	var tr = document.createElement("tr");
 	var th = document.createElement("th"); tr.appendChild(th);
 		th.innerHTML = "Grand Total";
-		th.colSpan = 5;
+		th.colSpan = 6; th.style.fontAlign = "right";
 	var th = document.createElement("th"); th.innerHTML = amount; tr.appendChild(th);
 	var th = document.createElement("th"); th.innerHTML = tCost; tr.appendChild(th);
 	table.appendChild(tr);
@@ -2256,11 +2254,11 @@ Launcher.prototype.getRemainingAmmo = function(){
 }
 
 Launcher.prototype.getMaxAmmo = function(){
-	return this.ammo.output;
+	return this.capacity[this.ammo];
 }
 
 Launcher.prototype.getBallImpulse = function(){
-	var val = Math.ceil(Math.pow(this.ammo.mass, -0.75)*200);
+	var val = Math.ceil(Math.pow(this.loads[this.ammo].mass, -0.75)*300);
 
 	return val*2 + " + " + val + " / Turn";
 }

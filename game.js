@@ -758,7 +758,7 @@ Game.prototype.getUnitType = function (val){
 	this.hasShipOnPos = function(pos){
 		var ret = [];
 		for (var i = 0; i < this.ships.length; i++){
-			var r = this.ships[i].size/4;
+			var r = this.ships[i].size/3;
 			if (! this.ships[i].destroyed){
 				if (this.ships[i].deployed){
 					var shipPos = this.ships[i].getBaseOffsetPos();
@@ -792,7 +792,7 @@ Game.prototype.getUnitType = function (val){
 
 	this.getShipByClick = function(pos){
 		for (var i = 0; i < this.ships.length; i++){
-			var r = this.ships[i].size/4;
+			var r = this.ships[i].size/3;
 			if (! this.ships[i].destroyed){
 				if (this.ships[i].deployed){
 					var shipPos = this.ships[i].getBaseOffsetPos();

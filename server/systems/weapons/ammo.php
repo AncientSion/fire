@@ -108,13 +108,13 @@ class Javelin extends Missile {
 }
 
 class Patriot extends Missile {
-	public $name = "Patriot";
+	public $name = "TEST";
 	public $display = "Light Interceptor Missiles";
 	public $type = "explosive";
-	public $minDmg = 13;
-	public $maxDmg = 17;
+	public $minDmg = 9;
+	public $maxDmg = 12;
 	public $mass = 2;
-	public $cost = 8;
+	public $cost = 6;
 	public $traverse = -4;
 
 	function __construct($parentId, $id){

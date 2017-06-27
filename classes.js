@@ -206,7 +206,8 @@ Warhead.prototype.getShots = function(){
 	return 1;
 }
 Warhead.prototype.getDisplay = function(){
-	return game.getUnitById(this.parentId).display;
+	return "Warhead Impact";
+	//return game.getUnitById(this.parentId).display;
 }
 
 function Missile(data){

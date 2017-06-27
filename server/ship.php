@@ -216,7 +216,6 @@ class Ship {
 
 	}
 
-
 	public function setState($turn){
 		for ($i = sizeof($this->primary->damages)-1; $i >= 0; $i--){ // check destroyed
 			if ($this->primary->damages[$i]->destroyed){
@@ -347,7 +346,7 @@ class Ship {
 			$fire->resolved = 1;
 		}
 	}
-	
+
 	public function calculateToHit($fire){
 		//Debug::log("calculateToHit");
 		$base = $this->getHitChance($fire);

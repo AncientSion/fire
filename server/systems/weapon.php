@@ -79,6 +79,10 @@ class Weapon extends System {
 		$destroyed = false;
 		$totalDmg = floor($this->getBaseDamage($fire) * $this->getDamageMod($fire));
 		$remInt = $system->getRemainingIntegrity();
+
+		if ($remInt == 0){
+			Debug::log("applying damage to destroyed unit: ".$system->isDestroyed());
+		}
 		$negation = $fire->target->getArmourValue($fire, $system);
 		$dmg = $this->determineDamage($totalDmg, $negation);
 		$overkill = 0;
@@ -86,9 +90,14 @@ class Weapon extends System {
 		if ($remInt - $dmg->structDmg < 1){
 			$destroyed = true;
 			$name = get_class($system);
-			$overkill = abs($remInt - $dmg->structDmg);
-			Debug::log(" => target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$overkill." dmg");
-			$dmg->structDmg = $remInt;
+			if ($fire->target->ship){
+				$overkill = abs($remInt - $dmg->structDmg);
+				$dmg->structDmg = $remInt;
+				Debug::log(" => OK ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$overkill." dmg");
+			}
+			else {
+				Debug::log(" => overkilling non-ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg);
+			}
 		}
 
 		$dmg = new Damage(
@@ -100,7 +109,7 @@ class Weapon extends System {
 	}
 
 	public function getAccuracyLoss($fire){
-		return $ceil($this->accDecay * $fire->weapon->getAccuracyMod($fire) * $fire->dist / 1000);
+		return ceil($this->accDecay * $fire->weapon->getAccuracyMod($fire) * $fire->dist / 1000);
 	}
 
 	public function getAccuracyMod($fire){

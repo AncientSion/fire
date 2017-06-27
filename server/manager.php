@@ -421,9 +421,11 @@ class Manager {
 			$skip = false;
 			$shooter = $this->getUnitById($fires[$i]->shooterid);
 			$launcher = $shooter->getSystemById($fires[$i]->weaponid);
-			$name = $launcher->getWarhead();
+			$name = $launcher->getAmmo()->name;
 			$fires[$i]->shots = $launcher->getShots($this->turn);
+			//Debug::log("lookup: ".$name);
 			for ($j = 0; $j < sizeof($balls); $j++){
+				//Debug::log("current: ".$balls[$j]->name);
 				if ($balls[$j]->destroyed == $shooter->id && $balls[$j]->targetid == $fires[$i]->targetid && $balls[$j]->name == $name){
 					$balls[$j]->amount += $fires[$i]->shots;
 					$skip = true;
@@ -914,10 +916,11 @@ class Manager {
 		$dist = Math::getDist($sPos->x, $sPos->y, $tPos->x, $tPos->y);
 
 		if (! $ballistic->isDestroyed()){
-
+			$impulse = $ballistic->getImpulse();
+			//Debug::log("ball id #".$ballistic->id.", impulse: ".$impulse);
   			// MOVE ($turn, $type, $dist, $x, $y, $a, $cost, $delay, $costmod, $resolved){
 			
-			if ($ballistic->getImpulse() >= $dist){ // IMPACT VECTOR
+			if ($impulse >= $dist){ // IMPACT VECTOR
 				//Debug::log("impact");
 				$ox = mt_rand(-$ballistic->target->size/7, $ballistic->target->size/7);
 				$oy = mt_rand(-$ballistic->target->size/7, $ballistic->target->size/7);
@@ -933,11 +936,11 @@ class Manager {
 			else { // home in target vector
 				//Debug::log("home in");
 				$a = Math::getAngle($sPos->x, $sPos->y, $tPos->x, $tPos->y);
-				$iPos = Math::getPointInDirection($ballistic->getImpulse(), $a, $sPos->x, $sPos->y);
+				$iPos = Math::getPointInDirection($impulse, $a, $sPos->x, $sPos->y);
 				$ballistic->actions[] = new Action(
 					$this->turn,
 					"move",
-					$ballistic->getImpulse(),
+					$impulse,
 					$iPos->x,
 					$iPos->y,
 					0, 0, 0, 0, 0
@@ -949,7 +952,7 @@ class Manager {
 			$ballistic->actions[] = new Action(
 				$this->turn,
 				"move",
-				min($dist, $ballistic->getImpulse()),
+				min($dist, $impulse),
 				$tPos->x,	
 				$tPos->y,
 				0, 0, 0, 0, 0

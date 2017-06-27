@@ -18,8 +18,8 @@ class GQuan extends Heavy {
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 26);
 		$front->systems[] = new MediumPulse($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new SuperHeavyLaser($this->getId(), $this->id, 315, 45);
-		$front->systems[] = new SuperHeavyLaser($this->getId(), $this->id, 315, 45);
+		$front->systems[] = new SuperHeavyLaser($this->getId(), $this->id, 330, 30);
+		$front->systems[] = new SuperHeavyLaser($this->getId(), $this->id, 330, 30);
 		$front->systems[] = new MediumPulse($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
@@ -33,7 +33,7 @@ class GQuan extends Heavy {
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 24);
 		$aft->systems[] = new LightIon($this->getId(), $this->id, 0, 360);
 		$aft->systems[] = new LightIon($this->getId(), $this->id, 0, 360);
-		$aft->systems[] = new Hangar($this->getId(), $this->id, 330, 30, 800, 9, array("Gorith", "Frazi"));
+		$aft->systems[] = new Hangar($this->getId(), $this->id, 0, 360, 60, 9, array("Gorith", "Frazi"));
 		$aft->systems[] = new LightIon($this->getId(), $this->id, 0, 360);
 		$aft->systems[] = new LightIon($this->getId(), $this->id, 0, 360);
 		$structs[] = $aft;
