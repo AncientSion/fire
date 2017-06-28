@@ -2274,7 +2274,7 @@ Hangar.prototype.hover = function(e){
 }
 
 Hangar.prototype.getLoadLevel = function(e){
-	System.prototype.getLoadLevel.call(this);
+	return System.prototype.getLoadLevel.call(this);
 }
 
 Hangar.prototype.getUpgradeData = function(){
