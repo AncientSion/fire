@@ -2257,7 +2257,6 @@ function Hangar(system){
 	this.reload = system.reload;
 	this.effiency = system.effiency;
 	this.loads = system.loads;
-	//this.weapon = false;
 	this.range = 75;
 	this.loadout = 1;
 }
@@ -2274,7 +2273,7 @@ Hangar.prototype.hover = function(e){
 	else fxCtx.clearRect(0, 0, res.x, res.y); 
 }
 
-Hangar.prototype.hover = function(e){
+Hangar.prototype.getLoadLevel = function(e){
 	System.prototype.getLoadLevel.call(this);
 }
 
