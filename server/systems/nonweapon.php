@@ -152,8 +152,8 @@ class Hangar extends Weapon {
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
 		$this->powerReq = floor($effiency/2);
 		$this->effiency = $effiency;
-		$this->mass = $output;
-		$this->integrity = $output / 2;
+		$this->mass = $output / 2;
+		$this->integrity = $output / 4;
 
 		for ($i = 0; $i < sizeof($loads); $i++){
 			$fighter = new $loads[$i](0,0);

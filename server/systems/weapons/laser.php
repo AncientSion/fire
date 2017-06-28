@@ -182,9 +182,9 @@ class SuperHeavyLaser extends Laser {
 	public $dmgDecay = 6;
 	public $accDecay = 40;
 	public $reload = 3;
-	public $powerReq = 14;
+	public $powerReq = 16;
 	public $rakes = 3;
-	public $effiency = 6;
+	public $effiency = 8;
 	public $maxBoost = 2;
 	public $mass = 40;
 	public $traverse = 0;

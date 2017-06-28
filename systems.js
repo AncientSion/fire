@@ -107,16 +107,7 @@ System.prototype.hover = function(e){
 		this.showInfoDiv(e);
 		this.showOptions();
 	}
-	if (this instanceof Hangar){
-		if (game.getUnitById(this.parentId).hasWeaponsSelected()){
-			return;
-		}
-		else if (this.highlight){
-			this.drawArc();
-		}
-		else fxCtx.clearRect(0, 0, res.x, res.y);
-	}
-	else if (!game.getUnitById(this.parentId).hasHangarSelected()){
+	if (!game.getUnitById(this.parentId).hasHangarSelected()){
 		game.getUnitById(this.parentId).highlightAllSelectedWeapons();
 	}
 }
@@ -1381,7 +1372,7 @@ Weapon.prototype.getAccuracy = function(){
 		mod += this.getCritEffect("Accuracy");
 		mod -= this.getBoostEffect("Accuracy") * this.getBoostLevel();
 
-	return Math.floor(this.accDecay * mod);
+	return Math.round(this.accDecay * mod);
 }
 
 Weapon.prototype.getDamageString = function(){
@@ -2264,7 +2255,7 @@ Launcher.prototype.getBallImpulse = function(){
 }
 
 function Hangar(system){
-	System.call(this, system);
+	PrimarySystem.call(this, system);
 	this.start = system.start;
 	this.end = system.end;
 	this.reload = system.reload;
@@ -2274,7 +2265,18 @@ function Hangar(system){
 	this.range = 75;
 	this.loadout = 1;
 }
-Hangar.prototype = Object.create(Weapon.prototype);
+Hangar.prototype = Object.create(PrimarySystem.prototype);
+
+Hangar.prototype.hover = function(e){
+	System.prototype.hover.call(this, e);
+	if (game.getUnitById(this.parentId).hasWeaponsSelected()){
+		return;
+	}
+	else if (this.highlight){
+		this.drawArc();
+	}
+	else fxCtx.clearRect(0, 0, res.x, res.y); 
+}
 
 Hangar.prototype.getUpgradeData = function(){
 	return {
@@ -2339,22 +2341,20 @@ Hangar.prototype.update = function(){
 
 Hangar.prototype.doUndoActions = function(){
 	for (var i = game.ships.length-1; i >= 0; i--){
-		if (game.ships[i] instanceof Flight){
-			if (game.ships[i].id < 0){
+		if (game.ships[i].flight && game.ships[i].actions.length && game.ships[i].available == game.turn){
 				if (game.ships[i].launchdata.shipid == this.parentId && game.ships[i].launchdata.systemid == this.id){
-					var ele = $(".shipDiv").each(function(){
-						if ($(this).data("shipId") == game.ships[i].id){
-							$(this).remove();
-							return;
-							}
-						})
-					game.ships.splice(i, 1);
-					this.fireOrders.splice(this.fireOrders.length-1, 1);
-					for (var j = 0; j < this.loads.length; j++){
-						this.loads[j].launch = 0;
-					}
-					break;
+				var ele = $(".shipDiv").each(function(){
+					if ($(this).data("shipId") == game.ships[i].id){
+						$(this).remove();
+						return;
+						}
+					})
+				game.ships.splice(i, 1);
+				this.fireOrders.splice(this.fireOrders.length-1, 1);
+				for (var j = 0; j < this.loads.length; j++){
+					this.loads[j].launch = 0;
 				}
+				break;
 			}
 		}
 	}
@@ -2379,11 +2379,12 @@ Hangar.prototype.getOutput = function(){
 
 Hangar.prototype.getLaunchRate = function(){
 	var rate = this.effiency;
+	var mod = 1;
 
 	for (var i = 0; i < this.crits.length; i++){
-		rate *= this.crits[i].value;
+		mod -= this.crits[i].value;
 	}
-	return Math.ceil(rate);
+	return Math.ceil(rate * mod);
 }
 
 Hangar.prototype.drawArc = function(){
@@ -2690,18 +2691,8 @@ Hangar.prototype.getSystemDetailsDiv = function(){
 	$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html(this.effiency + " per cycle")));
 	$(table).append($("<tr>").append($("<td>").html("Base Power Req")).append($("<td>").html(this.effiency)));
 
-	if (this.crits.length){
-		var tr = table.insertRow(-1); tr.insertCell(-1).innerHTML = "Modifiers"; tr.childNodes[0].colSpan = 2; tr.childNodes[0].border = "1px solid white";
-
-		for (var i = 0; i < this.crits.length; i++){
-			var tr = document.createElement("tr");
-			var td = document.createElement("td");
-				td.colSpan = 2;
-				td.className = "negative"
-				td.innerHTML = this.crits[i].html; tr.appendChild(td); table.appendChild(tr);
-		}
-	}
 	div.appendChild(table);
+	this.attachDetailsMods(div);
 		
 	return div;
 }
