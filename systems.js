@@ -180,12 +180,8 @@ System.prototype.getLoadLevel = function(){
 	else return has/need;
 }
 System.prototype.setTimeLoaded = function(){
-	if (this.parentId == 7 && this.id == 4){
-		console.log("ding");
-	}
 	var turnsLoaded = this.reload
 	var max = this.reload;
-	//var start = game.getUnitById(this.parentId).available;
 
 	for (var i = 1; i <= game.turn; i++){
 		if (turnsLoaded < max){
@@ -2276,6 +2272,10 @@ Hangar.prototype.hover = function(e){
 		this.drawArc();
 	}
 	else fxCtx.clearRect(0, 0, res.x, res.y); 
+}
+
+Hangar.prototype.hover = function(e){
+	System.prototype.getLoadLevel.call(this);
 }
 
 Hangar.prototype.getUpgradeData = function(){
