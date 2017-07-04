@@ -62,6 +62,7 @@ echo "window.playerstatus = ".json_encode($manager->playerstatus, JSON_NUMERIC_C
 //echo "window.incoming = ".json_encode($manager->incoming, JSON_NUMERIC_CHECK).";";
 //echo "window.fireOrders = ".json_encode($fireorders, JSON_NUMERIC_CHECK).";";
 echo "</script>";
+
 ?>
 
 
@@ -102,51 +103,6 @@ echo "</script>";
 					</div>
 				</div>
 			</div>
-			<div id="impulseGUI" class="ui disabled">
-				<table>
-					<tr>
-						<td>
-							Impulse:
-						</td>
-						<td id="impulse">
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Active Turn Delay:
-						</td>
-						<td  id="remTurnDelay">
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Future Turn Delay:
-						</td>
-						<td id="nextTurnDelay">
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Engine Power:
-						</td>
-						<td id="enginePower">
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Impulse Change:
-						</td>
-						<td id="impulseChange">
-						</td>
-					</tr>
-						<td>
-							Base Turn Cost:
-						</td>
-						<td id="turnCost">
-						</td>
-					</tr>
-				</table>
-			</div>
 			<div id="plusImpulse" class="ui">
 				<img src="varIcons/plus.png" style="width: 30px; height: 30px">
 			</div>
@@ -156,77 +112,41 @@ echo "</script>";
 			<div id="undoLastAction" class="ui">
 				<img src="varIcons/destroyed.png" style="width: 30px; height: 30px">
 			</div>
-			<div id="turnLeft" class="turnEle ui disabled">
+			<div id="turnButton" class="turnEle ui disabled">
 				<table class="doTurn" style="margin:auto; width: 100%;">
 					<tr>
-						<th colSpan=2>
-							Turn
+						<th style="text-align: left">
+							 Turning
+						</th>
+						<th id="turnMode" style="text-align: center">
+							 OFF
 						</th>
 					</tr>
 					<tr>
-						<td>
-							Cost:
-						</td>
-						<td id="epCost">
-						</td>
+						<th style="text-align: left">
+							Cost
+						</th>
+						<th id="turnCost" style="width: 55px, text-align: center">
+						</th>
 					</tr>
 					<tr>
-						<td>
-							Delay:
-						</td>
-						<td id="turnDelay">
-						</td>
-					</tr>
-				</table>
-				<table class="shortenTurn" style="margin:auto; width: 100%;">
-					<tr>
-						<td style="width: 50%">
-							<div class="doShortenTurn">
-								<img src="varIcons/plusWhite.png">
-							</div>
-						</td>
-						<td>
-							<div class="doUndoShortenTurn">
-								<img src="varIcons/minusWhite.png">
-							</div>
-						</td>
+						<th style="text-align: left">
+							Delay
+						</th>
+						<th id="turnDelay" style="width: 55px; text-align: center">
+						</th>
 					</tr>
 				</table>
 			</div>
-			<div id="turnRight" class="turnEle ui disabled">
+			<div id="epButton" class="turnEle ui disabled">
 				<table class="doTurn" style="margin:auto; width: 100%;">
 					<tr>
-						<th colSpan=2>
-							Turn
+						<th style="text-align: left">
+							 EP
 						</th>
-					</tr>
-					<tr>
-						<td>
-							Cost:
-						</td>
-						<td id="epCost">
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Delay:
-						</td>
-						<td id="turnDelay">
-						</td>
-					</tr>
-				</table>
-				<table class="shortenTurn" style="margin:auto; width: 100%;">
-					<tr>
-						<td style="width: 50%">
-							<div class="doShortenTurn">
-								<img src="varIcons/plusWhite.png">
-							</div>
-						</td>
-						<td>
-							<div class="doUndoShortenTurn">
-								<img src="varIcons/minusWhite.png">
-							</div>
-						</td>
+						<th id="remEP" style="text-align: center">
+							 OFF
+						</th>
 					</tr>
 				</table>
 			</div>
@@ -324,10 +244,11 @@ echo "</script>";
 						<th width=14%>Shooter</th>
 						<th width=14%>Target</th>
 						<th width=22%>Weapon</th>
-						<th width=9%>Chance</th>
-						<th width=12%>Hits / Shots</th>
-						<th width=10%>Armour</th>
-						<th width=10%>Structure</th>
+						<th width=10%>Chance</th>
+						<th width=11%>Hits / Shots</th>
+						<th width=8%>Armour</th>
+						<th width=10%>System</th>
+						<th width=12%>Hull</th>
 					</tr>
 				</table>
 			</div>
@@ -368,7 +289,6 @@ echo "</script>";
 							}
 						}
 						for ($i = 0; $i < sizeof($manager->incoming); $i++){
-							//Debug::log("incoming ".$i);
 							if ($manager->incoming[$i]["userid"] == $manager->userid){
 								$val = "deployLater ".$manager->incoming[$i]["id"];
 								echo "<tr class='".$val."'</td>";
@@ -407,7 +327,7 @@ echo "</script>";
 									echo "<td><img class='img50' src=shipIcons/".strtolower($ship->name).".png></td>";
 									echo "<td>".$ship->name."</td>";
 									echo "<td>".($ship->available - $manager->turn)." turn/s</td>";
-									echo "<td class='cost'>".$ship::$value."</td>";
+									echo "<td class='cost'>".$ship->cost."</td>";
 									echo "</tr>";
 								}
 
@@ -503,7 +423,13 @@ echo "</script>";
 		$(".doTurn")
 		.click(function(){
 			//console.log("issueTurn")
-			game.getUnitById($(this).data("shipid")).issueTurn($(this).data("a"))
+		//	game.getUnitById($(this).data("shipid")).issueTurn($(this).data("a"))
+		//	game.getUnitById($(this).data("shipid")).switchTurnMode();
+
+		})
+		$("#turnButton")
+		.click(function(){
+			game.getUnitById(aUnit).switchTurnMode();
 		})
 
 		$(".doShortenTurn")
@@ -593,7 +519,7 @@ echo "</script>";
 						for (var i = 0; i < game.ships.length; i++){
 							game.ships[i].deployed = true;
 							game.ships[i].setPosition();
-							game.ships[i].setFacing();
+							game.ships[i].setPostMoveFacing();
 						}
 					}
 					game.deployDone();
@@ -631,18 +557,18 @@ echo "</script>";
 						game.disableDeployment();
 					}
 					else if (!aUnit){
-						if ($(this).hasClass("green") || Math.floor(game.reinforcePoints) >= $(this).data("cost") + game.getCurrentReinforceCost()){
+						if ($(this).hasClass("green")){
 							$(this).addClass("selected");
 							game.enableDeployment($(this).data("id"));
 						}
-						else {
-							popup("You have insufficient Reinforce Points ("+game.reinforcePoints+") available.");
+						else if (!game.deploying){
+							if (!$(this).hasClass("green") && Math.floor(game.reinforcePoints) >= $(this).data("cost") + game.getCurrentReinforceCost()){
+								$(this).addClass("selected");
+								game.enableDeployment($(this).data("id"));
+							} else popup("You have insufficient Reinforce Points ("+game.reinforcePoints+") available.");
 						}
 					}
-				}
-				else {
-					popup("Reinforces can only be requested in Deployment/Initial Phase.");
-				}
+				} else popup("Reinforces can only be requested in Deployment/Initial Phase.");
 			})
 			.contextmenu(function(e){
 				e.preventDefault(); e.stopPropagation();

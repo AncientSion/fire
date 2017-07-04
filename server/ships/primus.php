@@ -1,6 +1,6 @@
 <?php
 
-class Primus extends Heavy {
+class Primus extends SuperHeavy {
 	public $name = "Primus";
 	public $display = "Primus";
 	public $faction = "Centauri Republic";
@@ -16,14 +16,14 @@ class Primus extends Heavy {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 330, 30, 1050, 33);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 1050, 28);
 		$front->systems[] = new HeavyIon($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new HeavyIon($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new HeavyIon($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new HeavyIon($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 30, 150, 1300, 30);
+		$right = new Structure($this->getId(), $this->id, 30, 150, 1300, 26);
 		$right->systems[] = new LightIon($this->getId(), $this->id, 300, 180);
 		$right->systems[] = new LightIon($this->getId(), $this->id, 300, 180);
 		$right->systems[] = new LightIon($this->getId(), $this->id, 300, 180);
@@ -31,13 +31,13 @@ class Primus extends Heavy {
 		$right->systems[] = new Hangar($this->getId(), $this->id, 30, 90, 300, 9, array("Sentri"));
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 150, 210, 900, 27);
+		$aft = new Structure($this->getId(), $this->id, 150, 210, 900, 24);
 		$aft->systems[] = new MediumIon($this->getId(), $this->id, 45, 315);
 		$aft->systems[] = new MediumIon($this->getId(), $this->id, 45, 315);
 		$aft->systems[] = new MediumIon($this->getId(), $this->id, 45, 315);
 		$structs[] = $aft;
 
-		$left = new Structure($this->getId(), $this->id, 210, 330, 1300, 30);
+		$left = new Structure($this->getId(), $this->id, 210, 330, 1300, 26);
 		$left->systems[] = new LightIon($this->getId(), $this->id, 180, 60);
 		$left->systems[] = new LightIon($this->getId(), $this->id, 180, 60);
 		$left->systems[] = new LightIon($this->getId(), $this->id, 180, 60);

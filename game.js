@@ -26,6 +26,7 @@ function Game(data, userid){
 	this.antiBallistics = [];
 	this.shortInfo = false;
 	this.flightPath = false;
+	this.turnMode = 0;
 
 	this.doDeployShip = function(e, ship, pos){
 		for (var i = 0; i < this.ships.length; i++){
@@ -158,6 +159,41 @@ function Game(data, userid){
 		return false;
 	}
 	
+	this.checkFireOrders = function(){
+		var warning = true;
+
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].userid == this.userid){
+				var hasFire = false;
+				
+				check:
+				for (var j = 0; j < this.ships[i].structures.length; j++){
+					for (var k = 0; k < this.ships[i].structures[j].systems.length; k++){
+						if (this.ships[i].structures[j].systems[k].weapon){
+							if (this.ships[i].structures[j].systems[k].getLoadLevel() >= 1 && this.ships[i].structures[j].systems[k].isPowered()){
+								if (this.ships[i].structures[j].systems[k].hasFireOrder()){
+									hasFire = true;
+									break check;
+								}
+							}
+						}
+					}
+				}
+
+				if (hasFire){
+					warning = false;
+					break;
+				}
+			}
+		}
+
+		if (warning){
+			//popup("fire warning");
+			return true;
+		}
+		return true;
+	}
+
 	this.endPhase = function(){
 		if (this.canSubmit){
 			if (this.phase == -1){
@@ -171,7 +207,10 @@ function Game(data, userid){
 				if (this.checkMoves()){return;}
 				else {ajax.confirmMovement(goToLobby);}
 			}
-			else if (this.phase == 2){ajax.confirmFiringOrders(goToLobby);
+			else if (this.phase == 2){
+				if (this.checkFireOrders()){
+					ajax.confirmFiringOrders(goToLobby);
+				}
 			}
 			else if (this.phase == 3){ajax.confirmDamageControl(goToLobby);
 			}
@@ -836,8 +875,7 @@ Game.prototype.getUnitType = function (val){
 				if (unit.hasWeaponsSelected()){
 					unit.highlightAllSelectedWeapons();
 				}
-				unit.unsetMoveMode();
-				unit.setMoveMode();
+				unit.resetMoveMode();
 
 				if (unit.ship){unit.getSystemByName("Sensor").drawEW();}
 			}
@@ -848,8 +886,7 @@ Game.prototype.getUnitType = function (val){
 
 	this.redrawEW = function(){
 		var unit = game.getUnitById(aUnit);
-			unit.unsetMoveMode();
-			unit.setMoveMode();
+			unit.resetMoveMode();
 		if (unit.ship){
 			unit.getSystemByName("Sensor").drawEW();
 		}
@@ -1397,9 +1434,24 @@ Game.prototype.getUnitType = function (val){
 	}
 
 	this.getFireAnimationDetails = function(){
+		/*
 		for (var i = 0; i < this.fireOrders.length; i++){
-			this.fireOrders[i].anim = this.fireOrders[i].weapon.getAnimation(this.fireOrders[i]);
+			//this.fireOrders[i].anim = this.fireOrders[i].weapon.getAnimation(this.fireOrders[i]);
+			//console.log(this.fireOrders[i].weapon.priority);
 		}
+
+		usort($this->fires, function($a, $b){
+			if ($a->targetid != $b->targetid){
+				return $a->targetid - $b->targetid;
+			}
+			else if ($a->weapon->priority != $b->weapon->priority){
+				return $a->weapon->priority - $b->weapon->priority;
+			}
+			else return $a->shooterid - $b->shooterid;
+		});
+	*/
+
+
 
 		this.fireOrders.sort(function(a, b){
 			return (
@@ -1409,7 +1461,11 @@ Game.prototype.getUnitType = function (val){
 				a.shooterid - b.shooterid
 			)
 		});
-		//console.log(this.fireOrders)
+		//for (var i = 0; i < this.fireOrders.length; i++){
+		//	console.log(this.fireOrders[i].weapon.priority);
+		//}
+		//console.log("------------------");
+
     }
 
 	this.getShipExplosionDetails = function(){
@@ -1803,9 +1859,9 @@ Game.prototype.getUnitType = function (val){
 		if (fire == undefined){return;}
 		var shots = 0;
 		var hits = 0;
-		var struct = 0;
-		var overkill = 0;
 		var armour = 0;
+		var system = 0;
+		var struct = 0;
 		var rolls = [];
 		var log = document.getElementById("combatLog");
 		
@@ -1814,9 +1870,13 @@ Game.prototype.getUnitType = function (val){
 			hits += fire.hits[i];
 		}
 		for (var i = 0; i < fire.damages.length; i++){
-			struct += fire.damages[i].structDmg;
 			armour += fire.damages[i].armourDmg;
-			overkill += fire.damages[i].overkill;
+			struct += fire.damages[i].overkill;
+
+			if (fire.damages[i].system == "Main Structure"){
+				struct += fire.damages[i].structDmg;
+			} else system += fire.damages[i].structDmg;
+
 			rolls.push(fire.damages[i].roll);
 		}
 
@@ -1861,11 +1921,8 @@ Game.prototype.getUnitType = function (val){
 		tr.insertCell(-1).innerHTML = chance + "%";
 		tr.insertCell(-1).innerHTML = hits + " / " + shots;
 		tr.insertCell(-1).innerHTML = armour;
-
-		var structStr = "";
-			structStr += struct;
-		if (overkill){structStr += " (+ " + overkill + ")";}
-		tr.insertCell(-1).innerHTML = structStr;
+		tr.insertCell(-1).innerHTML = system;
+		tr.insertCell(-1).innerHTML = struct;
 	
 		log.appendChild(tr);
 

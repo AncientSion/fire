@@ -169,9 +169,7 @@ System.prototype.canFire = function(){
 	return false;
 }
 System.prototype.getLoadLevel = function(){
-	if (this.parentId == 7 && this.id == 4){
-		console.log("ding");
-	}
+	//return 1;
 	var need = this.reload;
 	var has = this.getTimeLoaded();
 	if (has / need > 1){
@@ -627,7 +625,7 @@ System.prototype.isDestroyed = function(){
 System.prototype.copyPowers = function(){
 	var copy = [];
 
-	if (this instanceof PrimarySystem){return;}
+	if (this instanceof PrimarySystem && !(this instanceof Hangar)){return;}
 	//if (this instanceof EM){console.log("ding");}
 
 	for (var i = 0; i < this.powers.length; i++){
@@ -757,11 +755,12 @@ PrimarySystem.prototype.getOutput = function(){
 	if (this.disabled || this.destroyed){
 		return 0;
 	}
-	var effect = this.getOutputCrits();
+
+	var mod = this.getOutputCrits();
 	var output = this.output + this.getExtraOutput();
 	var usage = this.getOutputUsage();
 
-	return Math.floor((output * effect) - usage);
+	return Math.floor(output * (1-mod) - usage);
 }
 
 PrimarySystem.prototype.getOutputUsage = function(){
@@ -769,17 +768,17 @@ PrimarySystem.prototype.getOutputUsage = function(){
 }
 
 PrimarySystem.prototype.getOutputCrits = function(){
-	var mod = 1;
+	var mod = 0;
 	for (var i = 0; i < this.crits.length; i++){
 		if (this.crits[i].inEffect()){
-			mod -= 1-this.crits[i].value;
+			mod += this.crits[i].value;
 		}
 	}
 	return mod;
 }
 
 PrimarySystem.prototype.getOutputString = function(){
-	var effect = this.getOutputCrits();
+	var effect = 1-this.getOutputCrits();
 	return Math.floor(this.output*effect) + " + " + Math.floor(this.getExtraOutput()*effect);
 }
 
@@ -897,24 +896,53 @@ function Sensor(system){
 Sensor.prototype = Object.create(PrimarySystem.prototype);
 
 Sensor.prototype.switchMode = function(id){
-	if (this.destroyed || this.disabled || this.locked){return;}
-	if (this.ew[this.ew.length-1].type == 1){
-		this.ew[this.ew.length-1].type = 0;
-	} else this.ew[this.ew.length-1].type = 1;
-		this.updateSystemDetailsDiv();
-		this.drawEW();
+	if (this.destroyed || this.disabled || this.locked){return false;}
+
+	var index = 0;
+	for (var i = 0; i < this.states.length; i++){
+		if (this.states[i]){
+			this.states[i] = 0;
+			index = i
+			if (index+1 >= this.states.length){
+				index = 0;
+			} else index++;
+
+			this.states[index] = 1;
+			this.setEWMode()
+			return;
+		}
+	}
+}
+
+
+Sensor.prototype.setEWMode = function(){
+	if (this.disabled || game.phase == -2){return "NONE";}
+
+	for (var i = 0; i < this.states.length; i++){
+		if (this.states[i]){
+			this.ew[this.ew.length-1].type = i;
+		}
+	}
+
+	this.updateSystemDetailsDiv();
+	this.updateEW();
+	this.drawEW();
 }
 
 Sensor.prototype.getEWMode = function(){
 	if (this.disabled || game.phase == -2){return "NONE";}
-	return this.modes[this.ew[this.ew.length-1].type];
+
+	for (var i = 0; i < this.states.length; i++){
+		if (this.states[i]){
+			return this.modes[i];
+		}
+	}
 }
 
 Sensor.prototype.setState = function(){
 	PrimarySystem.prototype.setState.call(this);
-	if (game.phase == -1){
-		if (this.disabled){return;}
-
+	if (this.disabled || this.locked){return;}
+	else if (game.phase == -1){
 		this.setEW({
 			angle: -1,
 			dist: Math.ceil(this.getOutput() / Math.pow(180/20, 1/1.5)),
@@ -922,10 +950,7 @@ Sensor.prototype.setState = function(){
 			unitid: this.parentId,
 			systemid: this.id,
 			type: 0
-		})
-	}
-	else if (game.phase != -1){
-		this.locked = 1;
+		});
 	}
 }
 
@@ -990,7 +1015,10 @@ Sensor.prototype.drawEW = function(){
 		var w;
 		if (ew.angle == -1){
 			w = 180;
-		} else w = Math.min(180, len * Math.pow(str/ew.dist, p));
+		}
+		else {
+			w = Math.min(180, len * Math.pow(str/ew.dist, p));
+		}
 		drawSensorArc(w, ew.dist, p, str, len, loc, facing, ew.angle, this);
 	}
 }
@@ -1002,7 +1030,7 @@ Sensor.prototype.select = function(e){
 	var selected = false;
 	var unit;
 
-	if (this.destroyed || this.disabled || this.locked){
+	if (this.destroyed || this.disabled || this.locked || this.getEWMode() == "Sweep" || this.getEWMode() == "Mask"){
 		return false;
 	}
 	else {
@@ -1037,17 +1065,33 @@ Sensor.prototype.hover = function(e){
 	}
 }
 
+Sensor.prototype.updateEW = function(){
+	var d = 0;
+	var w = 0;
+	if (this.ew[this.ew.length-1].type == 0 || this.ew[this.ew.length-1].type == 1){
+		d = Math.ceil(this.getOutput() / Math.pow(180/20, 1/1.5));
+		w = this.ew[this.ew.length-1].angle;
+	} else {
+		d = 1000;
+		//d = game.getUnitById(this.parentId).size / 2;
+		w = -1;
+	}
+
+	this.ew[this.ew.length-1].dist = d;
+	this.ew[this.ew.length-1].angle = w;
+}
+
 Sensor.prototype.doBoost = function(){
 	System.prototype.doBoost.call(this);
 	mouseCtx.clearRect(0, 0, res.x, res.y);
-	this.ew[this.ew.length-1].dist = Math.ceil(this.getOutput() / Math.pow(180/20, 1/1.5));
+	this.updateEW();
 	this.drawEW();
 }
 
 Sensor.prototype.doUnboost = function(){
 	System.prototype.doUnboost.call(this);
 	mouseCtx.clearRect(0, 0, res.x, res.y);
-	this.ew[this.ew.length-1].dist = Math.ceil(this.getOutput() / Math.pow(180/20, 1/1.5));
+	this.updateEW();
 	this.drawEW();
 }
 
@@ -1073,6 +1117,14 @@ function Weapon(system){
 }
 Weapon.prototype = Object.create(System.prototype);
 
+Weapon.prototype.hasFireOrder = function(){
+	for (var i = this.fireOrders.length-1; i >= 0; i--){
+		if (this.fireOrders[i].turn == game.turn){
+			return true;
+		}
+	}
+	return false;
+}
 Weapon.prototype.getAimData = function(target, final, dist, row){
 	var dmgLoss = this.getDamageLoss(dist);
 	var accLoss = this.getAccuracyLoss(dist);

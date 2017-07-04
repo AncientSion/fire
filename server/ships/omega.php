@@ -16,7 +16,7 @@ class Omega extends SuperHeavy {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 330, 30, 1200, 32);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 1200, 28);
 		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 35, array("HeavyLaser", "HeavyPulse"));
 		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 35, array("HeavyLaser", "HeavyPulse"));
 		$front->systems[] = new Hangar($this->getId(), $this->id, 330, 30, 850, 12, array("Aurora", "Thunderbolt"));
@@ -24,7 +24,7 @@ class Omega extends SuperHeavy {
 		$front->systems[] = new Dual($this->getId(), $this->id, 0, 60, 35, array("HeavyLaser", "HeavyPulse"));
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 30, 150, 1500, 30);
+		$right = new Structure($this->getId(), $this->id, 30, 150, 1500, 24);
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
@@ -33,7 +33,7 @@ class Omega extends SuperHeavy {
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 150, 210, 1050, 28);
+		$aft = new Structure($this->getId(), $this->id, 150, 210, 1050, 22);
 		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
 		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
 		$aft->systems[] = new Hangar($this->getId(), $this->id, 150, 210, 350, 6, array("Aurora", "Thunderbolt"));
@@ -41,7 +41,7 @@ class Omega extends SuperHeavy {
 		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
 		$structs[] = $aft;
 
-		$left = new Structure($this->getId(), $this->id, 210, 330, 1500, 30);
+		$left = new Structure($this->getId(), $this->id, 210, 330, 1500, 24);
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
@@ -56,12 +56,12 @@ class Omega extends SuperHeavy {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 2350);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 200);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 200, 530, 10);
-		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 200);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 200, 925, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 200, $this->getPowerReq());
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 2150);
+		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 180);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, 180, 530, 10);
+		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 180);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 180, 925, 10);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 180, $this->getPowerReq()-4);
 	}
 }
 

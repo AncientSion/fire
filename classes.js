@@ -344,9 +344,8 @@ function Crit(data){
 	this.getString = function(){
 		var d = "";
 		if (!this.duration){
-			d = " (Permanent)";
-		} else d = " (Up to Turn " + (this.turn + this.duration + ")");
-		return (this.type + ": -" + (this.value*100) + "%" + d);
+			return (this.type + ": -" + (this.value*100) + "%" + " (Permanent)");
+		} else return (this.type + ": -" + (this.value*100) + "%" + " (Up to Turn " + (this.turn + this.duration + ")"));
 	}
 
 	this.inEffect = function(){

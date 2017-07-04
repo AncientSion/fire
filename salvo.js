@@ -170,6 +170,10 @@ function Salvo(data){
 		
 		return html + " (" + Math.floor(100-d*20) + "%)</span>";
 	}
+	
+	this.getDefensiveBonus = function(s){
+		return 0;
+	}
 
 	this.createDiv = function(){
 		var div = document.createElement("div");
@@ -225,8 +229,6 @@ function Salvo(data){
 		}
 
 		for (var i = 0; i < this.structures.length; i++){
-			var img = new Image();
-				img.className = "ammoOverlay";
 			if (i % max === 0){
 			    var tbody = table.appendChild(document.createElement("tbody"));
 			    var tr1 = tbody.insertRow(-1);
@@ -240,8 +242,11 @@ function Salvo(data){
 					console.log(game.getBallById(aUnit).getSystemById($(this).data("id")));
 				})
 
-				if (this.structures[i].getRemainingIntegrity() < 1){
+				if (this.structures[i].destroyed || this.structures[i].disabled){
+				var img = new Image();
+					img.className = "ammoOverlay";
 					img.src = "varIcons/destroyed.png";
+					td.appendChild(img);
 				}
 				/*else if (impact){
 					if (true){
@@ -249,7 +254,6 @@ function Salvo(data){
 					} else img.src = "varIcons/ammoMiss.png";
 				}*/
 
-				td.appendChild(img);
 				td.appendChild(window.ballImages[this.name.toLowerCase()].cloneNode(true))
 
 			tr1.appendChild(td);

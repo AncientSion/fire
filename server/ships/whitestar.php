@@ -43,7 +43,7 @@ class WhiteStar extends Light {
 		$this->primary->systems[] = $e;
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 60);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 60, 850, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 60, $this->getPowerReq());
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 60, $this->getPowerReq()+4);
 	}
 }
 

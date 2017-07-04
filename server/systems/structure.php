@@ -146,7 +146,7 @@ class Single {
 			}
 		}
 		for ($i = 0; $i < sizeof($this->crits); $i++){
-			if ($this->crits[$i]->type == "disengaged"){
+			if ($this->crits[$i]->type == "Disabled"){
 				$this->destroyed = true;
 			}
 		}

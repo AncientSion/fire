@@ -121,13 +121,40 @@ class Sensor extends PrimarySystem {
 	public $display = "Sensor";
 	public $ew = array();
 
+
 	function __construct($id, $parentId, $mass, $output = 0, $effiency, $destroyed = 0){
 		$this->powerReq = floor($output/20);
 		$this->boostEffect[] = new Effect("Output", 0.10);
-		$this->modes = array("Lock", "Mask");
-		//$this->states = array(1, 0);
+		$this->modes = array("Lock", "Scramble", "Sweep", "Mask");
+		$this->states = array(0, 0, 0, 0);
         parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
     }
+
+    public function hideEW($turn){
+		$this->states = array(1, 0, 0, 0);
+		$this->locked = 0;
+		for ($k = sizeof($this->ew)-1; $k >= 0; $k--){
+			if ($this->ew[$k]->turn == $turn){
+				array_splice($this->ew, $k, 1);
+			} else break;
+		}
+    }
+
+	public function setState($turn){
+		parent::setState($turn);
+		$this->setEW($turn);
+	}
+
+	public function setEW($turn){
+		for ($i = sizeof($this->ew)-1; $i >= 0; $i--){
+			if ($this->ew[$i]->turn == $turn){
+				$this->states[$this->ew[$i]->type] = 1;
+				$this->locked = 1;
+				return;
+			}
+		}
+		$this->states[0] = 1;
+	}
 
 	public function getEW($turn){
 		for ($i = sizeof($this->ew)-1; $i >= 0; $i--){
@@ -139,6 +166,8 @@ class Sensor extends PrimarySystem {
 		}
 		return false;
 	}
+
+
 }
 
 class Hangar extends Weapon {
@@ -153,7 +182,7 @@ class Hangar extends Weapon {
 		$this->powerReq = floor($effiency/2);
 		$this->effiency = $effiency;
 		$this->mass = $output / 2;
-		$this->integrity = $output / 4;
+		$this->integrity = floor($output / 4);
 
 		for ($i = 0; $i < sizeof($loads); $i++){
 			$fighter = new $loads[$i](0,0);

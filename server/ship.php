@@ -34,6 +34,12 @@ class Ship {
 	public $distances = array();
 	public $angles = array();
 
+	public $turnAngle = 30;
+	public $slipAngle = 20;
+	public $turnStep = 1;
+	public $baseTurnCost;
+	public $baseTurnDelay;
+	public $baseImpulseCost;
 	public $hitTable;
 
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -45,7 +51,6 @@ class Ship {
 		
 		$this->addStructures();
 		$this->addPrimary();
-		$this->setBaseStats();
 	}
 
 	public function getId(){
@@ -54,12 +59,16 @@ class Ship {
 	}
 
 	public function setProps(){
+		$this->cost = static::$value;
 		$this->setCurrentImpulse();
+		$this->setBaseStats();
 	}
 
 	public function setBaseStats(){
 		$this->baseHitChance = ceil(pow($this->mass, 1/3)*5);
-		$this->cost = static::$value;
+		$this->baseTurnCost = round(pow($this->mass, 1.25)/20000, 2);
+		$this->baseTurnDelay = round(pow($this->mass, 0.5)/25, 2);
+		$this->baseImpulseCost = round(pow($this->mass, 1.20), 2);
 	}
 
 	public function hidePowers($turn){
@@ -75,6 +84,9 @@ class Ship {
 		if (!$this->ship){return;}
 
 		for ($j = 0; $j < sizeof($this->primary->systems); $j++){
+			if ($this->primary->systems[$j]->name == "Sensor"){
+				$this->primary->systems[$j]->hideEW($turn);
+			}
 			for ($k = sizeof($this->primary->systems[$j]->powers)-1; $k >= 0; $k--){
 				if ($this->primary->systems[$j]->powers[$k]->turn == $turn){
 					array_splice($this->primary->systems[$j]->powers, $k, 1);
@@ -356,14 +368,11 @@ class Ship {
 		$multi = 1;
 		$req = 1;
 
-		if ($fire->shooter->hasLockOn($this->id)){
-			//Debug::log("hasLock !");
-			$multi += 0.5;
-		}
-		if ($this->isMaskedFrom($fire->shooter->id)){
-			//Debug::log("isMasked !");
-			$multi -= 0.5;
-		}
+		//Debug::log("multi pre ".$multi);
+		$multi += $fire->shooter->getOffensiveBonus($this->id);
+		//Debug::log("multi: ".$multi);
+		$multi -= $this->getDefensiveBonus($fire->shooter->id);
+		//Debug::log("multi post ".$multi);
 
 		if ($impulse != 1){
 			$multi += (1-$impulse)/2;
@@ -528,20 +537,20 @@ class Ship {
 		//return 1+((($this->getBaseImpulse() / $this->getCurrentImpulse())-1)/2);
 	}
 
-	public function hasLockOn($id){
+	public function getOffensiveBonus($id){
 		for ($i = 0; $i < sizeof($this->locks); $i++){
-			if ($this->locks[$i] == $id){
-				return true;
+			if ($this->locks[$i][0] == $id){
+				return $this->locks[$i][1];
 			}
-		} return false;
+		} return 0;
 	}	
 
-	public function isMaskedFrom($id){
+	public function getDefensiveBonus($id){
 		for ($i = 0; $i < sizeof($this->masks); $i++){
-			if ($this->masks[$i] == $id){
-				return true;
+			if ($this->masks[$i][0] == $id){
+				return $this->masks[$i][1];
 			}
-		} return false;
+		} return 0;
 	}
 
 

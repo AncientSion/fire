@@ -79,14 +79,14 @@ class LightPulse extends Pulse {
 	public $display = "38mm Pulse Cannon";
 	public $minDmg = 15;
 	public $maxDmg = 19;
-	public $accDecay = 180;
+	public $accDecay = 100;
 	public $shots = 1;
 	public $animColor = "brown";
 	public $projSize = 2;
 	public $projSpeed = 10;
 	public $reload = 1;
 	public $mass = 12;
-	public $powerReq = 2;
+	public $powerReq = 1;
 	public $traverse = -3;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
@@ -106,7 +106,7 @@ class MediumPulse extends Pulse {
 	public $projSpeed = 9;
 	public $reload = 2;
 	public $mass = 21;
-	public $powerReq = 4;
+	public $powerReq = 3;
 	public $traverse = -1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
@@ -126,7 +126,7 @@ class HeavyPulse extends Pulse {
 	public $projSpeed = 8;
 	public $reload = 3;
 	public $mass = 32;
-	public $powerReq = 8;
+	public $powerReq = 6;
 	public $traverse = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){

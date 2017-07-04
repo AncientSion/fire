@@ -7,6 +7,7 @@ class Dual extends Weapon {
 	public $states = array();
 	public $weapons = array();
 	public $dual = 1;
+	public $powerReq = 0;
 
 	function __construct($id, $parentId, $start, $end, $mass, $modes, $destroyed = 0){
 		$this->mass = $mass;

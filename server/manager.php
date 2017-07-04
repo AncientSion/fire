@@ -77,6 +77,9 @@ class Manager {
 		//$this->setupShips();
 
 		//var_export($this->getUnitById(1)->getSystemById(13)->getBoostEffect("Damage"));
+
+	//	$this->pickReinforcements();
+
 		return array(
 			"id" => $this->game["id"],
 			"name" => $this->game["name"],
@@ -167,6 +170,7 @@ class Manager {
 			if ($this->reinforcements[$i]["userid"] == $this->userid){
 				$data[] = new $this->reinforcements[$i]["name"](-$this->reinforcements[$i]["id"], $this->userid, $this->turn + $this->reinforcements[$i]["eta"], "available", 0);
 				$data[$i]->facing = $this->getBaseFacing();
+				$data[$i]->cost = $this->reinforcements[$i]["cost"];
 				for ($j = 0; $j < sizeof($data[$i]->structures); $j++){
 					$data[$i]->structures[$j]->remainingNegation = $data[$i]->structures[$j]->negation;
 				} 
@@ -289,6 +293,7 @@ class Manager {
 			);
 
 			if ($unit->flight){
+				//Debug::log("id: ".$unit->id);
 				$unit->addFighters($db[$i]["fighters"]);
 			}
 			$units[] = $unit;
@@ -377,15 +382,23 @@ class Manager {
 		Debug::log("advancing game state time: ".round($time, 3)." seconds.");
 		return true;
 	}
-	
+
+	public function updatePlayerStatus($status){
+		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+			DBManager::app()->setPlayerstatus($this->playerstatus[$i]["userid"], $this->gameid, $this->turn, $this->phase, $status);
+		}
+	}
+
 	public function pickReinforcements(){
-		//Debug::log("pickReinforcements");
 		if ($this->turn > 1){
 			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 				$picks = array();
 				$validShips = $this->getShipsForFaction($this->playerstatus[$i]["faction"]);
+				//$validShips = array_merge($validShips, $this->getFlights());
+				//$validShips = $this->getFlights();
 				for ($j = 0; $j < 2; $j++){
-					if (mt_rand(0, 3) == 3){
+					//if (mt_rand(0, 3) == 3){
+					if (true){
 						$picks[] = $validShips[mt_rand(0, sizeof($validShips)-1)];
 						$picks[sizeof($picks)-1]["eta"] = mt_rand(2, 4);
 					}
@@ -393,8 +406,6 @@ class Manager {
 				if (sizeof($picks)){
 					DBManager::app()->insertReinforcements($this->gameid, $this->playerstatus[$i]["userid"], $picks);
 				}
-			
-				DBManager::app()->setPlayerstatus($this->playerstatus[$i]["userid"], $this->gameid, $this->turn, $this->phase, "waiting");
 			}
 		}
 		return;
@@ -472,11 +483,11 @@ class Manager {
 			if ($this->turn > 1 && $this->ships[$i]->ship && $this->ships[$i]->available == $this->turn){
 				$order = $this->ships[$i]->actions[0];
 				$output = $this->ships[$i]->getSystemByName("Sensor")->getOutput($this->turn);
-				$shift = round($this->ships[$i]->size / $output*150, 2);
-				$aShift = ceil($shift * 2);
-				$pShift = ceil($shift * 4);
+				$shift = round($this->ships[$i]->size / $output*500, 2);
+				$aShift = ceil($shift);
+				$pShift = ceil($shift*2);
 				Debug::log("jumpin: #".$this->ships[$i]->id.", class: ".$this->ships[$i]->name.", size: ".$this->ships[$i]->size.", sensor: ".$output.", ordered to: ".$order->x."/".$order->y.", shiftPotential: ".$shift."%");
-				Debug::log($this->ships[$i]->name.", aShift: ".$aShift."°, pShift: ".$pShift."% of ".$this->ships[$i]->size);
+				Debug::log($this->ships[$i]->name.", aShift: ".$aShift."°, pShift: ".$pShift."px");
 
 				$aShift = mt_rand(-$aShift, $aShift);
 				$xShift = mt_rand(-$pShift, $pShift);
@@ -490,7 +501,7 @@ class Manager {
 				$updated[] = $this->ships[$i];
 			}
 		}
-		//Debug::log("action size: ".sizeof($updated[0]->actions));
+		Debug::log("action size: ".sizeof($updated[0]->actions));
 		DBManager::app()->insertServerActions($updated);
 	}
 
@@ -500,17 +511,7 @@ class Manager {
 		$this->phase = 0;
 
 		if ($dbManager->setGameTurnPhase($this->gameid, $this->turn, $this->phase)){
-			$players = $dbManager->getPlayerStatus($this->gameid);
-
-			for ($i = 0; $i < sizeof($players); $i++){
-				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->turn, $this->phase, "waiting")){
-					continue;
-				}
-				else {
-					return false;
-				}
-			}
-
+			$this->updatePlayerStatus("waiting");
 			return true;
 		}
 	}
@@ -533,9 +534,7 @@ class Manager {
 				if ($hasFlight){
 					$dbManager->setPlayerstatus($this->playerstatus[$i]["userid"], $this->gameid, $this->turn, $this->phase, "waiting");
 				}
-				else {
-					$dbManager->setPlayerstatus($this->playerstatus[$i]["userid"], $this->gameid, $this->turn, $this->phase, "ready");
-				}
+				else $dbManager->setPlayerstatus($this->playerstatus[$i]["userid"], $this->gameid, $this->turn, $this->phase, "ready");
 			}
 		}
 
@@ -635,17 +634,8 @@ class Manager {
 		$this->phase = 2;
 
 		if ($dbManager->setGameTurnPhase($this->gameid, $this->turn, $this->phase)){
-			$players = $dbManager->getPlayerStatus($this->gameid);
-
-			for ($i = 0; $i < sizeof($players); $i++){
-				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->turn, $this->phase, "waiting")){
-					continue;
-				}
-				else {
-					return false;
-				}
-			}
-
+			//$players = $dbManager->getPlayerStatus($this->gameid);
+			$this->updatePlayerStatus("waiting");
 			return true;
 		}
 	}
@@ -659,7 +649,6 @@ class Manager {
 		$this->setFireOrderDetails();
 		$this->sortFireOrders();
 		$this->resolveShipFireOrders();
-		//return;
 		$this->resolveFighterFireOrders();
 		$this->updateFireOrders($this->fires);
 
@@ -709,6 +698,8 @@ class Manager {
 	public function startDeploymentPhase(){
 		//Debug::log("startDeploymentPhase");
 		$this->pickReinforcements();
+		$this->updatePlayerStatus("waiting");
+		return;
 	}
 
 	public function setupShips(){
@@ -751,42 +742,55 @@ class Manager {
 		if ($sensor->destroyed || $sensor->disabled  || !$ew){
 			return;
 		}
-		
-		$str = $sensor->getOutput($this->turn);
-		$len = 20;
-		$p = 1.5;
-		$w = min(180, $len * pow($str/$ew->dist, $p));
-		$start = Math::addAngle(0 + $w-$ship->facing, $ew->angle);
-		$end = Math::addAngle(360 - $w-$ship->facing, $ew->angle);
+		else if ($ew->type == 2 || $ew->type == 3){
+			//Debug::log("general EW for ship #".$ship->id);
+			for ($i = 0; $i < sizeof($this->ships); $i++){
+				//Debug::log("vs ".$this->ships[$i]->id);
+				if ($this->ships[$i]->id == $ship->id || $ship->userid == $this->ships[$i]->userid){continue;}
+				//Debug::log("applying");
+				switch ($ew->type){
+					case 2: $ship->locks[] = array($this->ships[$i]->id, 0.2); break;
+					case 3: $ship->masks[] = array($this->ships[$i]->id, 0.2); break;
+				}
+			}
+		}
+		else {
+			$str = $sensor->getOutput($this->turn);
+			$len = 20;
+			$p = 1.5;
+			$w = min(180, $len * pow($str/$ew->dist, $p));
+			$start = Math::addAngle(0 + $w-$ship->facing, $ew->angle);
+			$end = Math::addAngle(360 - $w-$ship->facing, $ew->angle);
 
-		//Debug::log("EW for ship #".$ship->id);
-		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->id == $ship->id || $ship->userid == $this->ships[$i]->userid){continue;}
-			$target = $this->ships[$i]->getCurrentPosition();
-			if (Math::getDist2($origin, $target) <= $ew->dist){
-				//Debug::log("this #".$this->ships[$i]->id.", a: ".$a." from ".$start." to ".$end);
-				if (Math::isInArc(Math::getAngle2($origin, $target), $start, $end)){
-					if ($ew->type == 0){ // LOCK
-						//Debug::log("locking on #".$this->ships[$i]->id);
-						$ship->locks[] = $this->ships[$i]->id;
-					}
-					else if ($ew->type == 1){ // MASK
-						if (!$this->ships[$i]->flight){
-							//Debug::log("masking from #".$this->ships[$i]->id);
-							$ship->masks[] = $this->ships[$i]->id;
+			//Debug::log("specific EW for ship #".$ship->id);
+			for ($i = 0; $i < sizeof($this->ships); $i++){
+				if ($this->ships[$i]->id == $ship->id || $ship->userid == $this->ships[$i]->userid){continue;}
+				$target = $this->ships[$i]->getCurrentPosition();
+				if (Math::getDist2($origin, $target) <= $ew->dist){
+					//Debug::log("this #".$this->ships[$i]->id.", a: ".$a." from ".$start." to ".$end);
+					if (Math::isInArc(Math::getAngle2($origin, $target), $start, $end)){
+						if ($ew->type == 0){ // LOCK
+							//Debug::log("locking on #".$this->ships[$i]->id);
+							$ship->locks[] = array($this->ships[$i]->id, 0.5);
+						}
+						else if ($ew->type == 1){ // MASK
+							if (!$this->ships[$i]->flight){
+								//Debug::log("masking from #".$this->ships[$i]->id);
+								$ship->masks[] = array($this->ships[$i]->id, 0.5);
+							}
 						}
 					}
 				}
 			}
-		}
 
-		for ($i = 0; $i < sizeof($this->ballistics); $i++){
-			if ($ship->userid == $this->ballistics[$i]->userid){continue;}
-			if ($ship->id == $this->ballistics[$i]->targetid){
-				$target = $this->ballistics[$i]->actions[sizeof($this->ballistics[$i]->actions)-1];
-				if (Math::getDist2($origin, $target) <= $ew->dist){
-					if (Math::isInArc(Math::getAngle2($origin, $target), $start, $end)){
-						$ship->locks[] = $this->ballistics[$i]->id;
+			for ($i = 0; $i < sizeof($this->ballistics); $i++){
+				if ($ship->userid == $this->ballistics[$i]->userid){continue;}
+				if ($ship->id == $this->ballistics[$i]->targetid){
+					$target = $this->ballistics[$i]->actions[sizeof($this->ballistics[$i]->actions)-1];
+					if (Math::getDist2($origin, $target) <= $ew->dist){
+						if (Math::isInArc(Math::getAngle2($origin, $target), $start, $end)){
+							$ship->locks[] = array($this->ballistics[$i]->id, 0.5);
+						}
 					}
 				}
 			}
@@ -1158,6 +1162,9 @@ class Manager {
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$this->ships[$i]->testCriticals($this->turn);
 		}
+		for ($i = 0; $i < sizeof($this->ballistics); $i++){
+			$this->ballistics[$i]->testCriticals($this->turn);
+		}
 	}
 
 	public function updateFireOrders($fires){
@@ -1178,6 +1185,9 @@ class Manager {
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$all = array_merge($all, $this->ships[$i]->getNewCrits($this->turn));
 		}
+		for ($i = 0; $i < sizeof($this->ballistics); $i++){
+			$all = array_merge($all, $this->ballistics[$i]->getNewCrits($this->turn));
+		}
 		DBManager::app()->insertCritEntries($all, $this->gameid);
 	}
 
@@ -1193,17 +1203,7 @@ class Manager {
 		$this->phase = 3;
 
 		if ($dbManager->setGameTurnPhase($this->gameid, $this->turn, $this->phase)){
-			$players = $dbManager->getPlayerStatus($this->gameid);
-
-			for ($i = 0; $i < sizeof($players); $i++){
-				if ($dbManager->setPlayerstatus($players[$i]["userid"], $this->gameid, $this->turn, $this->phase, "waiting")){
-					continue;
-				}
-				else {
-					return false;
-				}
-			}
-
+			$this->updatePlayerStatus("waiting");
 			return true;
 		}
 	}
@@ -1236,6 +1236,14 @@ class Manager {
 
 	public function getFightersForFaction($faction){
 		//Debug::log("getFightersForFaction");
+	}
+
+	public function getFlights(){
+		return array(array(
+			"name" => "Flight",
+			"value" => 500,
+			"eta" => 2
+		));
 	}
 
 	public function getShipsForFaction($faction){
@@ -1286,7 +1294,7 @@ class Manager {
 			$ship = array(
 				"name" => $ships[$i],
 				"value" => $name::$value,
-				"arrival" => 0
+				"eta" => 0
 			);
 			$data[] = $ship;
 		}

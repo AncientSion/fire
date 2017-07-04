@@ -6,7 +6,7 @@ $(window).on("load", function() {
 function init(){
 	$("#mouseCanvas").mousemove(canvasMouseMove);
 	$("#mouseCanvas").bind('wheel', mouseCanvasZoom);
-	$("#mouseCanvas").contextmenu(mouseCanvasScroll);
+	$("#mouseCanvas").contextmenu(function(e){e.preventDefault(); e.stopPropagation();});
 
 	$("#mouseCanvas").mousedown(handleMouseDown);
 	$("#mouseCanvas").mouseup(function(e){handleMouseUp(e);});
@@ -86,10 +86,11 @@ function mouseCanvasZoom(e){
 
 function mouseCanvasScroll(e){
 	e.preventDefault();return;
-	if (aUnit){
+	if (aUnit && game.turnMode){
+		game.getUnitById(aUnit).switchTurnMode();
+	} else if (aUnit){
 		game.getUnitById(aUnit).doUnselect();
-	}
-	else {
+	} else {
 		return;
 		var rect = this.getBoundingClientRect();
 		var pos = new Point(e.clientX - offset.x, e.clientY - offset.y);
@@ -112,7 +113,6 @@ function canvasMouseMove(e){
 		// get the current mouse position
 		var mouseX = e.clientX;
 		var mouseY = e.clientY;
-
 		// dx & dy are the distance the mouse has moved since
 		// the last mousemove event
 		var dx = mouseX- cam.sx;
@@ -163,13 +163,14 @@ function canvasMouseMove(e){
 		}
 
 		if (ship.salvo){return}
-
-		if (ship.hasSystemSelected("Sensor")){
+		else if (ship.hasSystemSelected("Sensor")){
 			sensorEvent(false, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), addAngle(facing, getAngleFromTo(shipLoc, pos)));
 			return;
 		}
-		
-		if (ship.hasWeaponsSelected()){
+		else if (game.turnMode){
+				ship.handleTurning(e, shipLoc, facing, pos);
+		}
+		else if (ship.hasWeaponsSelected()){
 			var baseHit;
 			var impulse;
 			var impulseString = "";
@@ -211,16 +212,16 @@ function canvasMouseMove(e){
 					angle = addAngle(vessel.getPlannedFacing(), angle);
 					baseHit = vessel.getHitChanceFromAngle(angle);
 					impulse = 1 - vessel.getImpulseMod();
-					lock = ship.hasLockOnUnit(vessel);
-					mask = vessel.isMaskedFromUnit(ship);
+					lock = ship.getOffensiveBonus(vessel);
+					mask = vessel.getDefensiveBonus(ship);
 
 					if (lock){
-						multi += 0.5;
-						lockString = "<span class ='green'>+0.5</span>";
+						multi += lock;
+						lockString = "<span class ='green'>+" + lock + "</span>";
 					}
 					if (mask){
-						multi -= 0.5;
-						maskString = "<span class ='red'>-0.5</span>";
+						multi -= mask;
+						maskString = "<span class ='red'>-" + mask + "</span>";
 					}
 					if (impulse){
 						multi += impulse / 2;
@@ -345,10 +346,10 @@ function deployPhase(e){
 	var ammo;
 	var index;
 	if (game.deploying){
-		var r = game.getUnitById(game.deploying); // ship deploy
-		if (r.canDeployHere(pos)){
-			game.doDeployShip(e, r, pos);
-		}
+		 ship = game.getUnitById(game.deploying); // ship deploy
+		if (!game.turnMode && ship.canDeployHere(pos)){
+			game.doDeployShip(e, ship, pos);
+		} else ship.handleTurnAttempt(pos);
 	}
 	else if (game.flightDeploy){ // deploy via hangar
 		if (game.getUnitById(aUnit).canDeployFlightHere(pos)){
@@ -386,8 +387,6 @@ function deployPhase(e){
 	}
 }
 
-
-
 function movePhase(e){	
 	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
 	var ship;
@@ -399,7 +398,10 @@ function movePhase(e){
 		}
 		else {
 			if (game.mode == 1){ //no active weapon but ship active -> MOVE MODE
-				if (checkIfOnMovementArc(ship, pos)){ //check if clicked to move in movement arc
+				if (game.turnMode){
+					ship.handleTurnAttempt(pos);
+				}
+				else if (isInArc(getCompassHeadingOfPoint(ship.getOffsetPos(), pos, 0), ship.moveAngles.start, ship.moveAngles.end)){ //check if clicked to move in movement arc
 					var dist = Math.floor(getDistance(ship.getOffsetPos(), pos));
 					if (dist < ship.getRemainingImpulse()){
 						if (ship.getRemainingImpulse() == 0){
@@ -570,22 +572,4 @@ function checkWeaponHighlight(ele, weaponid){
 			}
 		}
 	}
-}
-
-function checkIfOnMovementArc(unit, target){
-	if (isInArc(getCompassHeadingOfPoint(unit.getOffsetPos(), target, 0), unit.moveAngles.start, unit.moveAngles.end)){
-		return true;
-	}
-	
-	return false;
-}
-
-function clickedOn(click, btn){
-	if (click.x < btn.clickX + 10 && click.x > btn.clickX - 10){
-		if (click.y > btn.clickY - 10 && click.y < btn.clickY + 10){
-			return true;
-		}
-	}
-	
-	return false;
 }

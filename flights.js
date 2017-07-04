@@ -3,17 +3,17 @@ function Flight(data){
 	this.flight = true;
 	this.primary = false;
 	this.layout = [];
-	this.ep = 1000;
+	this.ep = data.ep;
+	this.mass = data.mass;
 	this.turns = 10;
-	this.maxTurns = 1;
 	this.dogfights = [];
 	this.trueSize;
 
 	this.create = function(){
 		this.setFighterState();
-		this.setMaxMass();
-		this.setEP();
-		this.setTurns();
+		//this.setMaxMass();
+		//this.setEP();
+		//this.setTurns();
 		this.setFacing();
 		this.setPosition();
 		this.setLayout();
@@ -63,7 +63,7 @@ function Flight(data){
 	this.setFighterState = function(){
 		for (var i = 0; i < this.structures.length; i++){
 			for (var j = 0; j < this.structures[i].crits.length; j++){
-				if (this.structures[i].crits[j].type == "disengaged"){
+				if (this.structures[i].crits[j].type == "Disabled"){
 					this.structures[i].disabled = true;
 				}
 			}
@@ -241,7 +241,7 @@ function Flight(data){
 		}
 	}
 
-	this.getImpulseChangeCost = function(){
+/*	this.getImpulseChangeCost = function(){
 		return Math.ceil(Math.pow(this.mass, 1.15)/3*this.getImpulseMod());
 		return Math.ceil(this.mass/3*this.getImpulseMod());
 	}
@@ -254,16 +254,12 @@ function Flight(data){
 	this.getBaseTurnDelay = function(){
 		return this.mass/2;
 	}
-	
+	*/
 	this.getBaseImpulse = function(){
 		if (this.actions.length && this.actions[0].turn == game.turn){
 			return Math.floor(this.baseImpulse*0.6);
 		}
 		return this.baseImpulse;
-	}
-
-	this.getTurnAngle = function(){
-		return 20;
 	}
 
 	this.hasWeaponsSelected = function(){		
@@ -528,7 +524,6 @@ function Fighter(data){
 	this.name = data.name;
 	this.display = data.display;
 	this.ep = data.ep;
-	this.turns = data.turns;
 	this.mass = data.mass;
 	this.integrity = data.integrity;
 	this.value = data.value;
@@ -549,7 +544,7 @@ function Fighter(data){
 	this.isDestroyedThisTurn = function(){
 		if (this.disabled){
 			for (var j = this.crits.length-1; j >= 0; j--){
-				if (this.crits[j].type == "disengaged" && this.crits[j].turn == game.turn){
+				if (this.crits[j].type == "Disabled" && this.crits[j].turn == game.turn){
 					return true;
 				}
 			}

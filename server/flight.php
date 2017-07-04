@@ -12,8 +12,10 @@ class Flight extends Mini {
 	public $profile = 0;
 	public $primary = false;
 	public $dogfights = array();
-	public $baseImpulse = 210;
+	public $baseImpulse = 200;
 	public $traverse = -3;
+	public $turnAngle = 40;
+	public $ep = 500;
 
 	function __construct($id, $userid, $available, $status, $destroyed){
 		$this->id = $id;
@@ -25,9 +27,34 @@ class Flight extends Mini {
 
 	public function setState($turn){
 		parent::setState($turn);
-		$this->setSize();
-		$this->setCurrentImpulse();
 		$this->lockFighterWeapons($turn);
+		$this->setBaseStats();
+	}
+
+	public function setBaseStats(){
+		$this->setSize();
+		$this->setMass();
+		$this->setEP();
+		$this->baseHitChance = ceil(pow($this->mass, 1/3)*5);
+		$this->baseTurnCost = round(pow($this->mass, 1.15)/100, 2);
+		$this->baseTurnDelay = $this->baseTurnCost * 2;
+		$this->baseImpulseCost = round(pow($this->mass, 1.15)/4, 2);
+	}
+
+	public function setMass(){
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if (!$this->structures[$i]->destroyed){
+				$this->mass = max($this->mass, $this->structures[$i]->mass);
+			}
+		}
+	}
+
+	public function setEP(){
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if (!$this->structures[$i]->destroyed){
+				$this->ep = min($this->ep, $this->structures[$i]->ep);
+			}
+		}
 	}
 
 	public function lockFighterWeapons($turn){
@@ -95,30 +122,27 @@ class Flight extends Mini {
 		if ($odds[sizeof($odds)-1] < $self){
 			//Debug::log("ueberzahl");
 			$dif = ($self - $odds[sizeof($odds)-1])-2;
-			$req = 80 * (1-($dif*0.15));
+			$req *= (1-($dif*0.15));
 			//Debug::log("self: ".$self.", them: ".$odds[sizeof($odds)-1]." dif: ".$dif.", req: ".$req);
 		}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed){
 				continue;
-			}			
-			else {
-
-				if (mt_rand(0, 100) < $req){
-					$roll = mt_rand($odds[0], $odds[sizeof($odds)-1]); // 9
-					for ($j = sizeof($odds)-1; $j >= 0; $j--){
-						if ($roll <= $odds[$j] && $roll >= $odds[$j-1]){
-							$fires[] = array(
-								"gameid" => $gameid,
-								"turn" =>$turn,
-								"shooterid" => $this->id,
-								"targetid" => $targets[$j-1]->id,
-								"weaponid" => $this->structures[$i]->systems[0]->id,
-								"resolved" => 0
-							);
-							break;
-						}
+			} 
+			else if (mt_rand(0, 100) < $req){
+				$roll = mt_rand($odds[0], $odds[sizeof($odds)-1]); // 9
+				for ($j = sizeof($odds)-1; $j >= 0; $j--){
+					if ($roll <= $odds[$j] && $roll >= $odds[$j-1]){
+						$fires[] = array(
+							"gameid" => $gameid,
+							"turn" =>$turn,
+							"shooterid" => $this->id,
+							"targetid" => $targets[$j-1]->id,
+							"weaponid" => $this->structures[$i]->systems[0]->id,
+							"resolved" => 0
+						);
+						break;
 					}
 				}
 			}

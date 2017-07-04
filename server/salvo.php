@@ -81,7 +81,7 @@ class Mini extends Ship {
 			$fire->section = $this->getSection($fire);
 			for ($i = 0; $i < $fire->shots; $i++){
 				$fire->hitSystem[] = $this->getHitSystem($fire);
-				Debug::log("picking: ".$fire->hitSystem[sizeof($fire->hitSystem)-1]->id." as target");
+				//Debug::log("picking: ".$fire->hitSystem[sizeof($fire->hitSystem)-1]->id." as target");
 				$fire->req = $this->calculateToHit($fire);
 			}
 			
@@ -152,7 +152,7 @@ class Mini extends Ship {
 	}
 
 	public function testCriticals($turn){
-		Debug::log("= testCriticals for ".$this->name.", #".$this->id.", turn: ".$turn);
+		Debug::log("= testCriticals for ".get_class($this).", #".$this->id.", turn: ".$turn);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$this->structures[$i]->testCrit($turn);
 		}
@@ -184,6 +184,7 @@ class Salvo extends Mini {
 		$this->addStructures($amount);
 		$this->setProps();
 	}
+
 
 	public function getImpulseProfileMod(){
 		return 1;

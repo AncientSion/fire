@@ -14,25 +14,47 @@ class EM extends Weapon {
 	public function doDamage($fire, $roll, $system){
 		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id."/".$system->id);
 
-		$totalDmg = floor($this->getBaseDamage($fire) * (1+$this->getBoostLevel($fire->turn)*0.2) * $this->getDamageMod($fire));
-		$negation = $fire->target->getArmourValue($fire, $hitSystem);
-
-		if (($totalDmg > $negation && mt_rand(0, 1)) || ($totalDmg > $negation/2 && mt_rand(0, 3) == 3)){
-			Debug::log("doing: ".$totalDmg." vs negation: ".$negation." - penetration by chance");
-			if ($fire->target->flight || $fire->target->salvo){
-				$hitSystem->crits[] = new Crit(sizeof($hitSystem->crits)+1, $hitSystem->parentId, $hitSystem->id, $fire->turn, "disengaged", -1, 1);
-				$hitSystem->destroyed = true;
-			}
-			else if (is_a($hitSystem, "Primary")){
-				$reactor = $fire->target->getSystemByName("Reactor");
-				$reactor->crits[] = new Crit(sizeof($reactor->crits)+1, $reactor->parentId, $reactor->id, $fire->turn, "drain1", 1, 1);
-			}
-			else if ($hitSystem->weapon && !$hitSystem->isDisabled($fire->turn)){
-				$hitSystem->crits[] = new Crit(sizeof($hitSystem->crits)+1, $hitSystem->parentId, $hitSystem->id, $fire->turn, "disabled", 1, 1);
-			}
+		if ($system->destroyed){
+			Debug::log("multi disable, return");
+			return;
 		}
-		else { // no pen, no effect
-			Debug::log("doing: ".$totalDmg." vs negation: ".$negation." - no pen, no effect");
+		$totalDmg = floor($this->getBaseDamage($fire) * (1+$this->getBoostLevel($fire->turn)*0.2) * $this->getDamageMod($fire));
+		$negation = $fire->target->getArmourValue($fire, $system);
+
+		$effect = false;
+
+		$print = ("doing: ".$totalDmg." vs negation: ".$negation. " - ");
+		if ($totalDmg > $negation *2){
+			$effect = true;
+			$print .= ("dmg > neg*2");
+		}
+		else if ($totalDmg > $negation && mt_rand(0, 1)){
+			$effect = true;
+			$print .= ("dmg > neg and 50 %");
+		}
+		else if ($totalDmg > $negation/2 && !mt_rand(0, 4)){
+			$effect = true;
+			$print .= ("dmg > neg/2 and 33%");
+		}
+		else {
+			$print .= ("deflected");
+		}
+
+		Debug::log($print);
+
+		if ($effect){
+			if ($fire->target->flight || $fire->target->salvo){
+				$system->crits[] = new Crit(sizeof($system->crits)+1, $system->parentId, $system->id, $fire->turn, "Disabled", 0, 0, 1);
+				$system->destroyed = true;
+			}
+			else if (is_a($system, "Primary")){
+				$reactor = $fire->target->getSystemByName("Reactor");
+				$reactor->crits[] = new Crit(sizeof($reactor->crits)+1, $reactor->parentId, $reactor->id, $fire->turn, "Output", 1, 0.1, 1);
+			}
+			else if ($system->weapon && !$system->isDisabled($fire->turn)){
+				$system->crits[] = new Crit(sizeof($system->crits)+1, $system->parentId, $system->id, $fire->turn, "Disabled", 1, 0, 1);
+				$system->disabled = true;
+			}
 		}
 	}
 
@@ -51,14 +73,13 @@ class EMPulseCannon extends EM {
 	public $display = "EM Pulse Cannon";
 	public $minDmg = 6;
 	public $maxDmg = 9;
-	public $accDecay = 170;
-	public $shots = 3;
+	public $accDecay = -270;
+	public $shots = 5;
 	public $animColor = "lightBlue";
 	public $projSize = 2;
 	public $projSpeed = 8;
 	public $exploSize = 7;
 	public $reload = 1;
-	public $fc = array(0 => 85, 1 => 220);
 	public $mass = 14;
 	public $effiency = 2;
 	public $maxBoost = 3;

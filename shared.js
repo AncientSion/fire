@@ -284,6 +284,9 @@ function initiateBallistic(i){
 		for (var k = 0; k < window.ballistics[i].structures[j].systems.length; k++){
 			salvo.structures[j].systems.push(new Warhead(window.ballistics[i].structures[j].systems[k]));
 		}
+		for (var k = 0; k < window.ballistics[i].structures[j].crits.length; k++){
+			salvo.structures[j].systems.push(new Crit(window.ballistics[i].structures[j].crits[k]));
+		}
 
 		//for (var k = 0; k < window.ballistics[i].structures[j].fireOrders.length; k++){
 		//	salvo.structures[j].fireOrders.push(window.ballistics[i].structures[j].fireOrders[k]);
@@ -463,8 +466,6 @@ $('#myElement').on('mousedown', function() {
 
 */
 function handleMouseDown(e){
-	//console.log("DOWN");
-	//console.log(e)
 	e.preventDefault();
 	e.stopPropagation();
 	var rect = this.getBoundingClientRect();
@@ -497,28 +498,20 @@ function handleMouseDown(e){
 			} else unit.switchDiv();
 		}
 		else if (aUnit){
-			game.getUnitById(aUnit).doUnselect();
+			if (game.turnMode){
+				game.getUnitById(aUnit).switchTurnMode();
+			} else game.getUnitById(aUnit).doUnselect();
 		}
 	}
 }
 
 function handleMouseUp(e){
-	//console.log("UP");
 	e.preventDefault();
 	e.stopPropagation();
 	if (e.originalEvent.button == 0){
 		var t = (new Date().getTime() - window.downTime.getTime());
 		if (t < 166){
 			canvasMouseClick(e);
-		}
-	}
-	else if (e.originalEvent.button == 2){
-		if (aUnit){
-			var t = (new Date().getTime() - window.downTime.getTime());
-			if (t < 166){
-				console.log(t);
-				game.getUnitById(aUnit).doUnselect();
-			}
 		}
 	}
 	cam.scroll = 0;

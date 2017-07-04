@@ -177,7 +177,7 @@ class DBManager {
 	}
 
 	public function insertReinforcements($gameid, $userid, $ships){
-			//Debug::log("insertReinforcements");
+		Debug::log("insertReinforcements: ".sizeof($ships));
 		$stmt = $this->connection->prepare("
 			INSERT INTO reinforcements
 				(gameid, userid, name, eta, cost)
@@ -1004,8 +1004,8 @@ class DBManager {
 			$stmt->execute();
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			if ($result){
-			for ($j = 0; $j < (sizeof($result)); $j++){
-				//var_export($result[$j]);
+				for ($j = 0; $j < (sizeof($result)); $j++){
+					//var_export($result[$j]);
 					$crit = new Crit(
 						$result[$j]["id"],
 						$result[$j]["shipid"],
@@ -1019,7 +1019,7 @@ class DBManager {
 
 					$result[$j] = $crit;
 				}
-				$units[$i]->addCritDB($result);
+			$units[$i]->addCritDB($result);
 			}
 		}
 		return true;
@@ -1181,29 +1181,6 @@ class DBManager {
 
 		if ($result){
 			return $result;
-		}
-		else return false;
-	}
-
-	public function DBalterReinforcementPoints($userid, $gameid, $points){
-		$stmt = $this->connection->prepare("
-			UPDATE reinforce 
-			SET 
-				points = points + :points
-			WHERE
-				gameid = :gameid
-			AND
-				userid = :userid
-		");
-
-		$stmt->bindParam(":userid", $userid);
-		$stmt->bindParam(":gameid", $gameid);
-		$stmt->bindParam(":points", $points);
-
-		$stmt->execute();
-
-		if ($stmt->errorCode() == 0){
-			return true;
 		}
 		else return false;
 	}
@@ -1406,20 +1383,22 @@ class DBManager {
 		
 		if ($units){
 			for ($i = 0; $i < sizeof($units); $i++){
-				$stmt = $this->connection->prepare("
-					SELECT * FROM fighters
-					WHERE fighters.unitid = :id
-				");
-				
-				$stmt->bindParam(":id", $units[$i]["id"]);
-				$stmt->execute();
-						
-				$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+				if ($units[$i]["name"] == "Flight"){
+					$stmt = $this->connection->prepare("
+						SELECT * FROM fighters
+						WHERE fighters.unitid = :id
+					");
+					
+					$stmt->bindParam(":id", $units[$i]["id"]);
+					$stmt->execute();
+							
+					$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-				if ($result){
-					$units[$i]["fighters"] = array();
-					for ($j = 0; $j < sizeof($result); $j++){
-						$units[$i]["fighters"][] = $result[$j];
+					if ($result){
+						$units[$i]["fighters"] = array();
+						for ($j = 0; $j < sizeof($result); $j++){
+							$units[$i]["fighters"][] = $result[$j];
+						}
 					}
 				}
 			}

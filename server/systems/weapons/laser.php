@@ -38,6 +38,7 @@ class Laser extends Weapon {
 		$base = $this->getBaseDamage($fire);
 		$mod = $this->getDamageMod($fire);
 		$totalDmg = floor($base * $mod);
+		$print = "hitting: ";
 		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id.", base: ".$base.", mod: ".$mod);
 		if ($totalDmg <= 0){
 			return;
@@ -45,6 +46,7 @@ class Laser extends Weapon {
 		$rake = floor($totalDmg / $this->rakes);
 		for ($j = 0; $j < $this->rakes; $j++){
 			$system = $fire->target->getHitSystem($fire);
+			$print .= " ".get_class($system)." ";
 			$destroyed = false;
 			$remInt = $system->getRemainingIntegrity();
 			$negation = $fire->target->getArmourValue($fire, $system);
@@ -66,7 +68,6 @@ class Laser extends Weapon {
 			$fire->damages[] = $dmg;
 			$fire->target->applyDamage($dmg);
 
-
 		}
 	}
 }
@@ -84,13 +85,14 @@ class LightParticleBeam extends Laser {
 	public $accDecay = 85;
 	public $shots = 1;
 	public $reload = 1;
-	public $powerReq = 2;
+	public $powerReq = 1;
 	public $effiency = 2;
 	public $maxBoost = 1;
 	public $rakes = 1;
 	public $mass = 20;
 	public $traverse = -2;
-
+	public $priority = 2.5;
+	
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
 		$this->boostEffect[] = new Effect("Accuracy", 0.30);
@@ -110,7 +112,7 @@ class LightLaser extends Laser {
 	public $accDecay = 120;
 	public $shots = 1;
 	public $reload = 1;
-	public $powerReq = 4;
+	public $powerReq = 3;
 	public $effiency = 3;
 	public $maxBoost = 1;
 	public $rakes = 3;
@@ -134,8 +136,8 @@ class MediumLaser extends Laser {
 	public $dmgDecay = 8;
 	public $accDecay = 85;
 	public $reload = 2;
-	public $powerReq = 6;
-	public $effiency = 4;
+	public $powerReq = 5;
+	public $effiency = 3;
 	public $maxBoost = 1;
 	public $rakes = 3;
 	public $mass = 26;
@@ -158,9 +160,9 @@ class HeavyLaser extends Laser {
 	public $dmgDecay = 6;
 	public $accDecay = 60;
 	public $reload = 2;
-	public $powerReq = 10;
+	public $powerReq = 7;
 	public $rakes = 3;
-	public $effiency = 6;
+	public $effiency = 4;
 	public $maxBoost = 2;
 	public $mass = 32;
 	public $traverse = -1;
@@ -210,7 +212,7 @@ class NeutronLaser extends Laser {
 	public $reload = 2;
 	public $powerReq = 6;
 	public $rakes = 2;
-	public $effiency = 3;
+	public $effiency = 4;
 	public $maxBoost = 1;
 	public $mass = 26;
 	public $traverse = -1;

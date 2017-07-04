@@ -30,7 +30,7 @@ class GQuan extends Heavy {
 		$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 24);
+		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 23);
 		$aft->systems[] = new LightIon($this->getId(), $this->id, 0, 360);
 		$aft->systems[] = new LightIon($this->getId(), $this->id, 0, 360);
 		$aft->systems[] = new Hangar($this->getId(), $this->id, 0, 360, 60, 9, array("Gorith", "Frazi"));
@@ -51,7 +51,7 @@ class GQuan extends Heavy {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1700);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1500);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 140);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 140, 300);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 140);
