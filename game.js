@@ -1434,11 +1434,12 @@ Game.prototype.getUnitType = function (val){
 	}
 
 	this.getFireAnimationDetails = function(){
-		/*
+		
 		for (var i = 0; i < this.fireOrders.length; i++){
-			//this.fireOrders[i].anim = this.fireOrders[i].weapon.getAnimation(this.fireOrders[i]);
+			this.fireOrders[i].anim = this.fireOrders[i].weapon.getAnimation(this.fireOrders[i]);
 			//console.log(this.fireOrders[i].weapon.priority);
 		}
+		/*
 
 		usort($this->fires, function($a, $b){
 			if ($a->targetid != $b->targetid){

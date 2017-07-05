@@ -79,7 +79,7 @@ class LightPulse extends Pulse {
 	public $display = "38mm Pulse Cannon";
 	public $minDmg = 15;
 	public $maxDmg = 19;
-	public $accDecay = 100;
+	public $accDecay = 180;
 	public $shots = 1;
 	public $animColor = "brown";
 	public $projSize = 2;

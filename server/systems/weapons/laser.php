@@ -80,9 +80,9 @@ class LightParticleBeam extends Laser {
 	public $beamWidth = 1;
 	public $minDmg = 33;
 	public $maxDmg = 46;
-	public $optRange = 400;
-	public $dmgDecay = 16;
-	public $accDecay = 85;
+	public $optRange = 600;
+	public $dmgDecay = 8;
+	public $accDecay = 100;
 	public $shots = 1;
 	public $reload = 1;
 	public $powerReq = 1;
@@ -95,7 +95,7 @@ class LightParticleBeam extends Laser {
 	
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-		$this->boostEffect[] = new Effect("Accuracy", 0.30);
+		$this->boostEffect[] = new Effect("Accuracy", 0.20);
 	}
 }
 
@@ -107,7 +107,7 @@ class LightLaser extends Laser {
 	public $beamWidth = 2;
 	public $minDmg = 95;
 	public $maxDmg = 130;
-	public $optRange = 300;
+	public $optRange = 350;
 	public $dmgDecay = 10;
 	public $accDecay = 120;
 	public $shots = 1;
@@ -132,7 +132,7 @@ class MediumLaser extends Laser {
 	public $beamWidth = 3;
 	public $minDmg = 140;
 	public $maxDmg = 180;
-	public $optRange = 550;
+	public $optRange = 600;
 	public $dmgDecay = 8;
 	public $accDecay = 85;
 	public $reload = 2;
@@ -163,7 +163,7 @@ class HeavyLaser extends Laser {
 	public $powerReq = 7;
 	public $rakes = 3;
 	public $effiency = 4;
-	public $maxBoost = 2;
+	public $maxBoost = 1;
 	public $mass = 32;
 	public $traverse = -1;
 
