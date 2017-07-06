@@ -731,7 +731,7 @@ function Ship(data){
 	}
 	
 	this.getImpulseChangeCost = function(){
-		var cost = Math.ceil(this.baseImpulseCost*this.getImpulseMod() / 500);	
+		var cost = Math.round(this.baseImpulseCost*this.getImpulseMod());	
 		return cost;
 	}
 
@@ -790,7 +790,7 @@ function Ship(data){
 		if (this.actions.length && this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0){
 			return 0;
 		}
-		else return this.getBaseTurnDelay() * this.getImpulseMod();
+		else return round(this.getBaseTurnDelay() * this.getImpulseMod(), 2);
 	}
 
 	this.drawArcIndicator = function(){

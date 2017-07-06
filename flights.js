@@ -255,6 +255,7 @@ function Flight(data){
 		return this.mass/2;
 	}
 	*/
+	
 	this.getBaseImpulse = function(){
 		if (this.actions.length && this.actions[0].turn == game.turn){
 			return Math.floor(this.baseImpulse*0.6);

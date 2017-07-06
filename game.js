@@ -1452,8 +1452,6 @@ Game.prototype.getUnitType = function (val){
 		});
 	*/
 
-
-
 		this.fireOrders.sort(function(a, b){
 			return (
 				a.shooter.flight - b.shooter.flight ||
