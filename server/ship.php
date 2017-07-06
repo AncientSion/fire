@@ -68,6 +68,7 @@ class Ship {
 		$this->baseHitChance = ceil(pow($this->mass, 1/3)*5);
 		$this->baseTurnCost = round(pow($this->mass, 1.25)/20000, 2);
 		$this->baseTurnDelay = round(pow($this->mass, 0.5)/25, 2);
+		$this->baseImpulseCost = round(pow($this->mass, 1.2)/500, 2);
 	}
 
 	public function hidePowers($turn){
