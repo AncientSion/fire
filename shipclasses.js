@@ -768,12 +768,13 @@ function Ship(data){
 	
 	this.getTurnCost = function(){
 		if (game.phase == -2){
-			return this.baseTurnCost
+			return this.baseTurnCost*this.getImpulseMod();
 		}
 		else if (this.actions.length && (this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0)){
 			return 0;
 		}
-		else return this.baseTurnCost; //Math.pow(this.mass, 1.25)/10000;
+		else return this.baseTurnCost*this.getImpulseMod();	
+		//else return this.baseTurnCost; //Math.pow(this.mass, 1.25)/10000;
 		//else return Math.found((Math.pow(this.mass, 1.56) / 10000) *  this.getImpulseMod());
 	}
 	
@@ -785,12 +786,13 @@ function Ship(data){
 	
 	this.getTurnDelay = function(){
 		if (game.phase == -2){
-			return this.getBaseTurnDelay();
+			return this.getBaseTurnDelay*this.getImpulseMod();
 		}
 		if (this.actions.length && this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0){
 			return 0;
 		}
-		else return round(this.getBaseTurnDelay() * this.getImpulseMod(), 2);
+		else return this.getBaseTurnDelay*this.getImpulseMod();
+		//else return round(this.getBaseTurnDelay() * this.getImpulseMod(), 2);
 	}
 
 	this.drawArcIndicator = function(){
@@ -1739,10 +1741,10 @@ function Ship(data){
 					.append($("<td>").html(this.getImpulseChangeCost() + " EP").addClass("change")))
 				.append($("<tr>")
 					.append($("<td>").html("Turn Cost per 1°"))
-					.append($("<td>").html(this.getTurnCost() + " EP")))
+					.append($("<td>").html(round(this.getTurnCost(), 2) + " EP")))
 				.append($("<tr>")
 					.append($("<td>").html("Turn Delay per 1°"))
-					.append($("<td>").html(this.getTurnDelay() + " px")))
+					.append($("<td>").html(round(this.getTurnDelay(), 2) + " px")))
 				.append($("<tr>")
 					.append($("<td>").html("Active Turn Delay"))
 					.append($("<td>").html(this.getRemainingDelay()).addClass("delay")))
