@@ -397,8 +397,8 @@ class Manager {
 				//$validShips = array_merge($validShips, $this->getFlights());
 				//$validShips = $this->getFlights();
 				for ($j = 0; $j < 2; $j++){
-					//if (mt_rand(0, 3) == 3){
-					if (true){
+					if (mt_rand(0, 3) == 3){
+					//if (true){
 						$picks[] = $validShips[mt_rand(0, sizeof($validShips)-1)];
 						$picks[sizeof($picks)-1]["eta"] = mt_rand(2, 4);
 					}
@@ -501,8 +501,11 @@ class Manager {
 				$updated[] = $this->ships[$i];
 			}
 		}
-		Debug::log("action size: ".sizeof($updated[0]->actions));
-		DBManager::app()->insertServerActions($updated);
+
+		if (sizeof($updated)){
+			Debug::log("action size: ".sizeof($updated[0]->actions));
+			DBManager::app()->insertServerActions($updated);
+		}
 	}
 
 	public function startShipMovementPhase(){

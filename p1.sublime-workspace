@@ -539,10 +539,10 @@
 			}
 		},
 		{
-			"contents": "Searching 68 files for \"picking\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n    1  resolveFireOrder ID 86, shooter: Tinashi #14 vs Flight #15, w: EMPulseCannon #4\n    2: picking: 15 as target\n    3: picking: 5 as target\n    4: picking: 1 as target\n    5: picking: 15 as target\n    6: picking: 3 as target\n    7  doDamage, weapon: EMPulseCannon, target: 15/15\n    8  doing: 9 vs negation: 6 - penetration by chance\n\nC:\\xampp\\htdocs\\fire\\server\\salvo.php:\n   82  \t\t\tfor ($i = 0; $i < $fire->shots; $i++){\n   83  \t\t\t\t$fire->hitSystem[] = $this->getHitSystem($fire);\n   84: \t\t\t\tDebug::log(\"picking: \".$fire->hitSystem[sizeof($fire->hitSystem)-1]->id.\" as target\");\n   85  \t\t\t\t$fire->req = $this->calculateToHit($fire);\n   86  \t\t\t}\n\n6 matches across 2 files\n\n\nSearching 68 files for \"picking\"\n\nC:\\xampp\\htdocs\\fire\\server\\salvo.php:\n   82  \t\t\tfor ($i = 0; $i < $fire->shots; $i++){\n   83  \t\t\t\t$fire->hitSystem[] = $this->getHitSystem($fire);\n   84: \t\t\t\t//Debug::log(\"picking: \".$fire->hitSystem[sizeof($fire->hitSystem)-1]->id.\" as target\");\n   85  \t\t\t\t$fire->req = $this->calculateToHit($fire);\n   86  \t\t\t}\n\n1 match in 1 file\n\n\nSearching 68 files for \"ammoOverlay\"\n\nC:\\xampp\\htdocs\\fire\\salvo.js:\n  227  \t\tfor (var i = 0; i < this.structures.length; i++){\n  228  \t\t\tvar img = new Image();\n  229: \t\t\t\timg.className = \"ammoOverlay\";\n  230  \t\t\tif (i % max === 0){\n  231  \t\t\t    var tbody = table.appendChild(document.createElement(\"tbody\"));\n\nC:\\xampp\\htdocs\\fire\\style.css:\n  713  }\n  714  \n  715: .ammoOverlay {\n  716  \tposition: absolute;\n  717  }\n\n2 matches across 2 files\n\n\nSearching 68 files for \"getDefensiveBonus\"\n\nC:\\xampp\\htdocs\\fire\\script.js:\n  214  \t\t\t\t\timpulse = 1 - vessel.getImpulseMod();\n  215  \t\t\t\t\tlock = ship.getOffensiveBonus(vessel);\n  216: \t\t\t\t\tmask = vessel.getDefensiveBonus(ship);\n  217  \n  218  \t\t\t\t\tif (lock){\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  372  \t\t$multi += $fire->shooter->getOffensiveBonus($this->id);\n  373  \t\t//Debug::log(\"multi: \".$multi);\n  374: \t\t$multi -= $this->getDefensiveBonus($fire->shooter->id);\n  375  \t\t//Debug::log(\"multi post \".$multi);\n  376  \n  ...\n  546  \t}\t\n  547  \n  548: \tpublic function getDefensiveBonus($id){\n  549  \t\tfor ($i = 0; $i < sizeof($this->masks); $i++){\n  550  \t\t\tif ($this->masks[$i][0] == $id){\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 2498  \t}\n 2499  \n 2500: \tthis.getDefensiveBonus = function(s){\n 2501  \t\tif (this.flight || this.salvo || s.flight){\n 2502  \t\t\treturn 0;\n\n4 matches across 3 files\n\n\nSearching 68 files for \"testCriticals\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n   28  DB updateFireOrders: 1\n   29  endAllDogfights: \n   30: = testCriticals for Hyperion, #10, turn: 4\n   31: = testCriticals for Omega, #11, turn: 4\n   32: = testCriticals for Artemis, #12, turn: 4\n   33: = testCriticals for Flight, #15, turn: 4\n   34: = testCriticals for Sharlin, #13, turn: 4\n   35: = testCriticals for Tinashi, #14, turn: 4\n   36   => DB insertDamageEntries: 2\n   37   => DB insertCritEntries: 1\n   ..\n   56  DB updateFireOrders: 1\n   57  endAllDogfights: \n   58: = testCriticals for Hyperion, #10, turn: 4\n   59: = testCriticals for Omega, #11, turn: 4\n   60: = testCriticals for Artemis, #12, turn: 4\n   61: = testCriticals for Flight, #15, turn: 4\n   62: = testCriticals for Sharlin, #13, turn: 4\n   63: = testCriticals for Tinashi, #14, turn: 4\n   64   => DB insertDamageEntries: 2\n   65   => DB insertCritEntries: 1\n   ..\n   82  DB updateFireOrders: 1\n   83  endAllDogfights: \n   84: = testCriticals for Hyperion, #10, turn: 4\n   85: = testCriticals for Omega, #11, turn: 4\n   86: = testCriticals for Artemis, #12, turn: 4\n   87: = testCriticals for Flight, #15, turn: 4\n   88: = testCriticals for Sharlin, #13, turn: 4\n   89: = testCriticals for Tinashi, #14, turn: 4\n   90   => DB insertDamageEntries: 1\n   91   => DB insertCritEntries: 0\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n 1161  \tpublic function testCrits(){\n 1162  \t\tfor ($i = 0; $i < sizeof($this->ships); $i++){\n 1163: \t\t\t$this->ships[$i]->testCriticals($this->turn);\n 1164  \t\t}\n 1165  \t}\n\nC:\\xampp\\htdocs\\fire\\server\\salvo.php:\n  152  \t}\n  153  \n  154: \tpublic function testCriticals($turn){\n  155: \t\tDebug::log(\"= testCriticals for \".$this->name.\", #\".$this->id.\", turn: \".$turn);\n  156  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  157  \t\t\t$this->structures[$i]->testCrit($turn);\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  609  \t}\n  610  \n  611: \tpublic function testCriticals($turn){\n  612: \t\tDebug::log(\"= testCriticals for \".$this->name.\", #\".$this->id.\", turn: \".$turn);\n  613  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  614  \t\t\tfor ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){\n\n23 matches across 4 files\n\n\nSearching 68 files for \"testCriticals\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n   28  DB updateFireOrders: 1\n   29  endAllDogfights: \n   30: = testCriticals for Hyperion, #10, turn: 4\n   31: = testCriticals for Omega, #11, turn: 4\n   32: = testCriticals for Artemis, #12, turn: 4\n   33: = testCriticals for Flight, #15, turn: 4\n   34: = testCriticals for Sharlin, #13, turn: 4\n   35: = testCriticals for Tinashi, #14, turn: 4\n   36   => DB insertDamageEntries: 2\n   37   => DB insertCritEntries: 1\n   ..\n   56  DB updateFireOrders: 1\n   57  endAllDogfights: \n   58: = testCriticals for Hyperion, #10, turn: 4\n   59: = testCriticals for Omega, #11, turn: 4\n   60: = testCriticals for Artemis, #12, turn: 4\n   61: = testCriticals for Flight, #15, turn: 4\n   62: = testCriticals for Sharlin, #13, turn: 4\n   63: = testCriticals for Tinashi, #14, turn: 4\n   64   => DB insertDamageEntries: 2\n   65   => DB insertCritEntries: 1\n   ..\n   82  DB updateFireOrders: 1\n   83  endAllDogfights: \n   84: = testCriticals for Hyperion, #10, turn: 4\n   85: = testCriticals for Omega, #11, turn: 4\n   86: = testCriticals for Artemis, #12, turn: 4\n   87: = testCriticals for Flight, #15, turn: 4\n   88: = testCriticals for Sharlin, #13, turn: 4\n   89: = testCriticals for Tinashi, #14, turn: 4\n   90   => DB insertDamageEntries: 1\n   91   => DB insertCritEntries: 0\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n 1161  \tpublic function testCrits(){\n 1162  \t\tfor ($i = 0; $i < sizeof($this->ships); $i++){\n 1163: \t\t\t$this->ships[$i]->testCriticals($this->turn);\n 1164  \t\t}\n 1165  \t}\n\nC:\\xampp\\htdocs\\fire\\server\\salvo.php:\n  152  \t}\n  153  \n  154: \tpublic function testCriticals($turn){\n  155: \t\tDebug::log(\"= testCriticals for \".$this->name.\", #\".$this->id.\", turn: \".$turn);\n  156  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  157  \t\t\t$this->structures[$i]->testCrit($turn);\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  609  \t}\n  610  \n  611: \tpublic function testCriticals($turn){\n  612: \t\tDebug::log(\"= testCriticals for \".$this->name.\", #\".$this->id.\", turn: \".$turn);\n  613  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  614  \t\t\tfor ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){\n\n23 matches across 4 files\n\n\nSearching 68 files for \"insertCritEntries\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n   35  = testCriticals for Tinashi, #14, turn: 4\n   36   => DB insertDamageEntries: 2\n   37:  => DB insertCritEntries: 1\n   38  handleFiringPhase time: 0.105 seconds.\n   39  advancing game state time: 0.124 seconds.\n   ..\n   63  = testCriticals for Tinashi, #14, turn: 4\n   64   => DB insertDamageEntries: 2\n   65:  => DB insertCritEntries: 1\n   66  handleFiringPhase time: 0.071 seconds.\n   67  advancing game state time: 0.084 seconds.\n   ..\n   89  = testCriticals for Tinashi, #14, turn: 4\n   90   => DB insertDamageEntries: 1\n   91:  => DB insertCritEntries: 0\n   92  handleFiringPhase time: 0.085 seconds.\n   93  advancing game state time: 0.099 seconds.\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n 1137  \n 1138  \n 1139: \tpublic function insertCritEntries($crits, $gameid){\n 1140: \t\tDebug::log(\" => DB insertCritEntries: \".sizeof($crits));\n 1141  \t\t\n 1142  \t\t$stmt = $this->connection->prepare(\"\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n 1186  \t\t\t$all = array_merge($all, $this->ships[$i]->getNewCrits($this->turn));\n 1187  \t\t}\n 1188: \t\tDBManager::app()->insertCritEntries($all, $this->gameid);\n 1189  \t}\n 1190  \n\n6 matches across 3 files\n\n\nSearching 68 files for \"testCriticals\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n   14  DB updateFireOrders: 1\n   15  endAllDogfights: \n   16: = testCriticals for Hyperion, #10, turn: 4\n   17: = testCriticals for Omega, #11, turn: 4\n   18: = testCriticals for Artemis, #12, turn: 4\n   19: = testCriticals for Flight, #15, turn: 4\n   20: = testCriticals for Sharlin, #13, turn: 4\n   21: = testCriticals for Tinashi, #14, turn: 4\n   22   => DB insertDamageEntries: 4\n   23   => DB insertCritEntries: 1\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n 1161  \tpublic function testCrits(){\n 1162  \t\tfor ($i = 0; $i < sizeof($this->ships); $i++){\n 1163: \t\t\t$this->ships[$i]->testCriticals($this->turn);\n 1164  \t\t}\n 1165  \t\tfor ($i = 0; $i < sizeof($this->ballistics); $i++){\n 1166: \t\t\t$this->ballistics[$i]->testCriticals($this->turn);\n 1167  \t\t}\n 1168  \t}\n\nC:\\xampp\\htdocs\\fire\\server\\salvo.php:\n  155  \t}\n  156  \n  157: \tpublic function testCriticals($turn){\n  158: \t\tDebug::log(\"= testCriticals for \".$this->name.\", #\".$this->id.\", turn: \".$turn);\n  159  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  160  \t\t\t$this->structures[$i]->testCrit($turn);\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  609  \t}\n  610  \n  611: \tpublic function testCriticals($turn){\n  612: \t\tDebug::log(\"= testCriticals for \".$this->name.\", #\".$this->id.\", turn: \".$turn);\n  613  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  614  \t\t\tfor ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){\n\n12 matches across 4 files\n\n\nSearching 69 files for \"insertReinforcements\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n    1  destroyUnitsDB\n    2: insertReinforcements: 2\n    3: insertReinforcements: 2\n    4  advancing game state time: 0.107 seconds.\n    5  \n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n  177  \t}\n  178  \n  179: \tpublic function insertReinforcements($gameid, $userid, $ships){\n  180: \t\t\tDebug::log(\"insertReinforcements: \".sizeof($ships));\n  181  \t\t$stmt = $this->connection->prepare(\"\n  182  \t\t\tINSERT INTO reinforcements\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  405  \t\t\t\t}\n  406  \t\t\t\tif (sizeof($picks)){\n  407: \t\t\t\t\tDBManager::app()->insertReinforcements($this->gameid, $this->playerstatus[$i][\"userid\"], $picks);\n  408  \t\t\t\t}\n  409  \t\t\t}\n\n5 matches across 3 files\n",
+			"contents": "Searching 68 files for \"picking\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n    1  resolveFireOrder ID 86, shooter: Tinashi #14 vs Flight #15, w: EMPulseCannon #4\n    2: picking: 15 as target\n    3: picking: 5 as target\n    4: picking: 1 as target\n    5: picking: 15 as target\n    6: picking: 3 as target\n    7  doDamage, weapon: EMPulseCannon, target: 15/15\n    8  doing: 9 vs negation: 6 - penetration by chance\n\nC:\\xampp\\htdocs\\fire\\server\\salvo.php:\n   82  \t\t\tfor ($i = 0; $i < $fire->shots; $i++){\n   83  \t\t\t\t$fire->hitSystem[] = $this->getHitSystem($fire);\n   84: \t\t\t\tDebug::log(\"picking: \".$fire->hitSystem[sizeof($fire->hitSystem)-1]->id.\" as target\");\n   85  \t\t\t\t$fire->req = $this->calculateToHit($fire);\n   86  \t\t\t}\n\n6 matches across 2 files\n\n\nSearching 68 files for \"picking\"\n\nC:\\xampp\\htdocs\\fire\\server\\salvo.php:\n   82  \t\t\tfor ($i = 0; $i < $fire->shots; $i++){\n   83  \t\t\t\t$fire->hitSystem[] = $this->getHitSystem($fire);\n   84: \t\t\t\t//Debug::log(\"picking: \".$fire->hitSystem[sizeof($fire->hitSystem)-1]->id.\" as target\");\n   85  \t\t\t\t$fire->req = $this->calculateToHit($fire);\n   86  \t\t\t}\n\n1 match in 1 file\n\n\nSearching 68 files for \"ammoOverlay\"\n\nC:\\xampp\\htdocs\\fire\\salvo.js:\n  227  \t\tfor (var i = 0; i < this.structures.length; i++){\n  228  \t\t\tvar img = new Image();\n  229: \t\t\t\timg.className = \"ammoOverlay\";\n  230  \t\t\tif (i % max === 0){\n  231  \t\t\t    var tbody = table.appendChild(document.createElement(\"tbody\"));\n\nC:\\xampp\\htdocs\\fire\\style.css:\n  713  }\n  714  \n  715: .ammoOverlay {\n  716  \tposition: absolute;\n  717  }\n\n2 matches across 2 files\n\n\nSearching 68 files for \"getDefensiveBonus\"\n\nC:\\xampp\\htdocs\\fire\\script.js:\n  214  \t\t\t\t\timpulse = 1 - vessel.getImpulseMod();\n  215  \t\t\t\t\tlock = ship.getOffensiveBonus(vessel);\n  216: \t\t\t\t\tmask = vessel.getDefensiveBonus(ship);\n  217  \n  218  \t\t\t\t\tif (lock){\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  372  \t\t$multi += $fire->shooter->getOffensiveBonus($this->id);\n  373  \t\t//Debug::log(\"multi: \".$multi);\n  374: \t\t$multi -= $this->getDefensiveBonus($fire->shooter->id);\n  375  \t\t//Debug::log(\"multi post \".$multi);\n  376  \n  ...\n  546  \t}\t\n  547  \n  548: \tpublic function getDefensiveBonus($id){\n  549  \t\tfor ($i = 0; $i < sizeof($this->masks); $i++){\n  550  \t\t\tif ($this->masks[$i][0] == $id){\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 2498  \t}\n 2499  \n 2500: \tthis.getDefensiveBonus = function(s){\n 2501  \t\tif (this.flight || this.salvo || s.flight){\n 2502  \t\t\treturn 0;\n\n4 matches across 3 files\n\n\nSearching 68 files for \"testCriticals\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n   28  DB updateFireOrders: 1\n   29  endAllDogfights: \n   30: = testCriticals for Hyperion, #10, turn: 4\n   31: = testCriticals for Omega, #11, turn: 4\n   32: = testCriticals for Artemis, #12, turn: 4\n   33: = testCriticals for Flight, #15, turn: 4\n   34: = testCriticals for Sharlin, #13, turn: 4\n   35: = testCriticals for Tinashi, #14, turn: 4\n   36   => DB insertDamageEntries: 2\n   37   => DB insertCritEntries: 1\n   ..\n   56  DB updateFireOrders: 1\n   57  endAllDogfights: \n   58: = testCriticals for Hyperion, #10, turn: 4\n   59: = testCriticals for Omega, #11, turn: 4\n   60: = testCriticals for Artemis, #12, turn: 4\n   61: = testCriticals for Flight, #15, turn: 4\n   62: = testCriticals for Sharlin, #13, turn: 4\n   63: = testCriticals for Tinashi, #14, turn: 4\n   64   => DB insertDamageEntries: 2\n   65   => DB insertCritEntries: 1\n   ..\n   82  DB updateFireOrders: 1\n   83  endAllDogfights: \n   84: = testCriticals for Hyperion, #10, turn: 4\n   85: = testCriticals for Omega, #11, turn: 4\n   86: = testCriticals for Artemis, #12, turn: 4\n   87: = testCriticals for Flight, #15, turn: 4\n   88: = testCriticals for Sharlin, #13, turn: 4\n   89: = testCriticals for Tinashi, #14, turn: 4\n   90   => DB insertDamageEntries: 1\n   91   => DB insertCritEntries: 0\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n 1161  \tpublic function testCrits(){\n 1162  \t\tfor ($i = 0; $i < sizeof($this->ships); $i++){\n 1163: \t\t\t$this->ships[$i]->testCriticals($this->turn);\n 1164  \t\t}\n 1165  \t}\n\nC:\\xampp\\htdocs\\fire\\server\\salvo.php:\n  152  \t}\n  153  \n  154: \tpublic function testCriticals($turn){\n  155: \t\tDebug::log(\"= testCriticals for \".$this->name.\", #\".$this->id.\", turn: \".$turn);\n  156  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  157  \t\t\t$this->structures[$i]->testCrit($turn);\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  609  \t}\n  610  \n  611: \tpublic function testCriticals($turn){\n  612: \t\tDebug::log(\"= testCriticals for \".$this->name.\", #\".$this->id.\", turn: \".$turn);\n  613  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  614  \t\t\tfor ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){\n\n23 matches across 4 files\n\n\nSearching 68 files for \"testCriticals\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n   28  DB updateFireOrders: 1\n   29  endAllDogfights: \n   30: = testCriticals for Hyperion, #10, turn: 4\n   31: = testCriticals for Omega, #11, turn: 4\n   32: = testCriticals for Artemis, #12, turn: 4\n   33: = testCriticals for Flight, #15, turn: 4\n   34: = testCriticals for Sharlin, #13, turn: 4\n   35: = testCriticals for Tinashi, #14, turn: 4\n   36   => DB insertDamageEntries: 2\n   37   => DB insertCritEntries: 1\n   ..\n   56  DB updateFireOrders: 1\n   57  endAllDogfights: \n   58: = testCriticals for Hyperion, #10, turn: 4\n   59: = testCriticals for Omega, #11, turn: 4\n   60: = testCriticals for Artemis, #12, turn: 4\n   61: = testCriticals for Flight, #15, turn: 4\n   62: = testCriticals for Sharlin, #13, turn: 4\n   63: = testCriticals for Tinashi, #14, turn: 4\n   64   => DB insertDamageEntries: 2\n   65   => DB insertCritEntries: 1\n   ..\n   82  DB updateFireOrders: 1\n   83  endAllDogfights: \n   84: = testCriticals for Hyperion, #10, turn: 4\n   85: = testCriticals for Omega, #11, turn: 4\n   86: = testCriticals for Artemis, #12, turn: 4\n   87: = testCriticals for Flight, #15, turn: 4\n   88: = testCriticals for Sharlin, #13, turn: 4\n   89: = testCriticals for Tinashi, #14, turn: 4\n   90   => DB insertDamageEntries: 1\n   91   => DB insertCritEntries: 0\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n 1161  \tpublic function testCrits(){\n 1162  \t\tfor ($i = 0; $i < sizeof($this->ships); $i++){\n 1163: \t\t\t$this->ships[$i]->testCriticals($this->turn);\n 1164  \t\t}\n 1165  \t}\n\nC:\\xampp\\htdocs\\fire\\server\\salvo.php:\n  152  \t}\n  153  \n  154: \tpublic function testCriticals($turn){\n  155: \t\tDebug::log(\"= testCriticals for \".$this->name.\", #\".$this->id.\", turn: \".$turn);\n  156  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  157  \t\t\t$this->structures[$i]->testCrit($turn);\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  609  \t}\n  610  \n  611: \tpublic function testCriticals($turn){\n  612: \t\tDebug::log(\"= testCriticals for \".$this->name.\", #\".$this->id.\", turn: \".$turn);\n  613  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  614  \t\t\tfor ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){\n\n23 matches across 4 files\n\n\nSearching 68 files for \"insertCritEntries\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n   35  = testCriticals for Tinashi, #14, turn: 4\n   36   => DB insertDamageEntries: 2\n   37:  => DB insertCritEntries: 1\n   38  handleFiringPhase time: 0.105 seconds.\n   39  advancing game state time: 0.124 seconds.\n   ..\n   63  = testCriticals for Tinashi, #14, turn: 4\n   64   => DB insertDamageEntries: 2\n   65:  => DB insertCritEntries: 1\n   66  handleFiringPhase time: 0.071 seconds.\n   67  advancing game state time: 0.084 seconds.\n   ..\n   89  = testCriticals for Tinashi, #14, turn: 4\n   90   => DB insertDamageEntries: 1\n   91:  => DB insertCritEntries: 0\n   92  handleFiringPhase time: 0.085 seconds.\n   93  advancing game state time: 0.099 seconds.\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n 1137  \n 1138  \n 1139: \tpublic function insertCritEntries($crits, $gameid){\n 1140: \t\tDebug::log(\" => DB insertCritEntries: \".sizeof($crits));\n 1141  \t\t\n 1142  \t\t$stmt = $this->connection->prepare(\"\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n 1186  \t\t\t$all = array_merge($all, $this->ships[$i]->getNewCrits($this->turn));\n 1187  \t\t}\n 1188: \t\tDBManager::app()->insertCritEntries($all, $this->gameid);\n 1189  \t}\n 1190  \n\n6 matches across 3 files\n\n\nSearching 68 files for \"testCriticals\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n   14  DB updateFireOrders: 1\n   15  endAllDogfights: \n   16: = testCriticals for Hyperion, #10, turn: 4\n   17: = testCriticals for Omega, #11, turn: 4\n   18: = testCriticals for Artemis, #12, turn: 4\n   19: = testCriticals for Flight, #15, turn: 4\n   20: = testCriticals for Sharlin, #13, turn: 4\n   21: = testCriticals for Tinashi, #14, turn: 4\n   22   => DB insertDamageEntries: 4\n   23   => DB insertCritEntries: 1\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n 1161  \tpublic function testCrits(){\n 1162  \t\tfor ($i = 0; $i < sizeof($this->ships); $i++){\n 1163: \t\t\t$this->ships[$i]->testCriticals($this->turn);\n 1164  \t\t}\n 1165  \t\tfor ($i = 0; $i < sizeof($this->ballistics); $i++){\n 1166: \t\t\t$this->ballistics[$i]->testCriticals($this->turn);\n 1167  \t\t}\n 1168  \t}\n\nC:\\xampp\\htdocs\\fire\\server\\salvo.php:\n  155  \t}\n  156  \n  157: \tpublic function testCriticals($turn){\n  158: \t\tDebug::log(\"= testCriticals for \".$this->name.\", #\".$this->id.\", turn: \".$turn);\n  159  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  160  \t\t\t$this->structures[$i]->testCrit($turn);\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  609  \t}\n  610  \n  611: \tpublic function testCriticals($turn){\n  612: \t\tDebug::log(\"= testCriticals for \".$this->name.\", #\".$this->id.\", turn: \".$turn);\n  613  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  614  \t\t\tfor ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){\n\n12 matches across 4 files\n\n\nSearching 69 files for \"insertReinforcements\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n    1  destroyUnitsDB\n    2: insertReinforcements: 2\n    3: insertReinforcements: 2\n    4  advancing game state time: 0.107 seconds.\n    5  \n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n  177  \t}\n  178  \n  179: \tpublic function insertReinforcements($gameid, $userid, $ships){\n  180: \t\t\tDebug::log(\"insertReinforcements: \".sizeof($ships));\n  181  \t\t$stmt = $this->connection->prepare(\"\n  182  \t\t\tINSERT INTO reinforcements\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  405  \t\t\t\t}\n  406  \t\t\t\tif (sizeof($picks)){\n  407: \t\t\t\t\tDBManager::app()->insertReinforcements($this->gameid, $this->playerstatus[$i][\"userid\"], $picks);\n  408  \t\t\t\t}\n  409  \t\t\t}\n\n5 matches across 3 files\n\n\nSearching 69 files for \"getImpulseChangeCost\"\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n  242  \t}\n  243  \n  244: /*\tthis.getImpulseChangeCost = function(){\n  245  \t\treturn Math.ceil(Math.pow(this.mass, 1.15)/3*this.getImpulseMod());\n  246  \t\treturn Math.ceil(this.mass/3*this.getImpulseMod());\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  731  \t}\n  732  \t\n  733: \tthis.getImpulseChangeCost = function(){\n  734  \t\tvar cost = Math.ceil(this.baseImpulseCost*this.getImpulseMod());\t\n  735  \t\treturn cost;\n  ...\n  959  \t\t\n  960  \tthis.canIncreaseImpulse = function(){\n  961: \t\tif (this.getRemainingEP() >= this.getImpulseChangeCost()){\n  962  \t\t\tif (this.actions.length == 1){\n  963  \t\t\t\treturn true;\n  ...\n  978  \t\n  979  \tthis.canDecreaseImpulse = function(){\n  980: \t\tif (this.getRemainingEP() >= this.getImpulseChangeCost()){\n  981  \t\t\tif (this.actions.length == 1){\n  982  \t\t\t\treturn true;\n  ...\n 1106  \t\t}\n 1107  \t\telse {\n 1108: \t\t\tvar action = new Move(\"speedChange\", 1, shipPos.x, shipPos.y, false, 0, this.getImpulseChangeCost());\n 1109  \t\t\tthis.actions.push(action);\n 1110  \t\t}\n ....\n 1120  \t\t}\n 1121  \t\telse {\n 1122: \t\t\tvar action = new Move(\"speedChange\", -1, shipPos.x, shipPos.y, false, 0, this.getImpulseChangeCost());\n 1123  \t\t\tthis.actions.push(action);\n 1124  \t\t}\n ....\n 1420  \t\tgui.find(\"#baseDelay\").html(round(this.getTurnDelay(), 1));\n 1421  \t\tgui.find(\"#enginePower\").html(this.getRemainingEP() + \" / \" + this.getEP());\n 1422: \t\tgui.find(\"#impulseChange\").html(this.getImpulseChangeCost() + \" EP\");\n 1423  \t\tgui.find(\"#turnCost\").html(\"<span>\" + round(this.getTurnCost(), 1) + \" EP</span>\");\n 1424  \n ....\n 1737  \t\t\t\t.append($(\"<tr>\")\n 1738  \t\t\t\t\t.append($(\"<td>\").html(\"Impulse Change:\"))\n 1739: \t\t\t\t\t.append($(\"<td>\").html(this.getImpulseChangeCost() + \" EP\").addClass(\"change\")))\n 1740  \t\t\t\t.append($(\"<tr>\")\n 1741  \t\t\t\t\t.append($(\"<td>\").html(\"Turn Cost per 1°\"))\n ....\n 2111  \t\t\t.find(\".impulse\").html(this.getRemainingImpulse() + \" / \" + this.getTotalImpulse()).end()\n 2112  \t\t\t.find(\".delay\").html(this.getRemainingDelay())\t\t\n 2113: \t\t\t.find(\".change\").html(this.getImpulseChangeCost() + \" EP\").end()\t\t\t\n 2114: \t\t\t.find(\".turn\").html(this.getImpulseChangeCost() + \" EP\").end()\n 2115  \t}\n 2116  \n\n10 matches across 2 files\n\n\nSearching 69 files for \"getImpulseChangeCost\"\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n  242  \t}\n  243  \n  244: /*\tthis.getImpulseChangeCost = function(){\n  245  \t\treturn Math.ceil(Math.pow(this.mass, 1.15)/3*this.getImpulseMod());\n  246  \t\treturn Math.ceil(this.mass/3*this.getImpulseMod());\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  731  \t}\n  732  \t\n  733: \tthis.getImpulseChangeCost = function(){\n  734  \t\tvar cost = Math.ceil(this.baseImpulseCost*this.getImpulseMod());\t\n  735  \t\treturn cost;\n  ...\n  959  \t\t\n  960  \tthis.canIncreaseImpulse = function(){\n  961: \t\tif (this.getRemainingEP() >= this.getImpulseChangeCost()){\n  962  \t\t\tif (this.actions.length == 1){\n  963  \t\t\t\treturn true;\n  ...\n  978  \t\n  979  \tthis.canDecreaseImpulse = function(){\n  980: \t\tif (this.getRemainingEP() >= this.getImpulseChangeCost()){\n  981  \t\t\tif (this.actions.length == 1){\n  982  \t\t\t\treturn true;\n  ...\n 1106  \t\t}\n 1107  \t\telse {\n 1108: \t\t\tvar action = new Move(\"speedChange\", 1, shipPos.x, shipPos.y, false, 0, this.getImpulseChangeCost());\n 1109  \t\t\tthis.actions.push(action);\n 1110  \t\t}\n ....\n 1120  \t\t}\n 1121  \t\telse {\n 1122: \t\t\tvar action = new Move(\"speedChange\", -1, shipPos.x, shipPos.y, false, 0, this.getImpulseChangeCost());\n 1123  \t\t\tthis.actions.push(action);\n 1124  \t\t}\n ....\n 1420  \t\tgui.find(\"#baseDelay\").html(round(this.getTurnDelay(), 1));\n 1421  \t\tgui.find(\"#enginePower\").html(this.getRemainingEP() + \" / \" + this.getEP());\n 1422: \t\tgui.find(\"#impulseChange\").html(this.getImpulseChangeCost() + \" EP\");\n 1423  \t\tgui.find(\"#turnCost\").html(\"<span>\" + round(this.getTurnCost(), 1) + \" EP</span>\");\n 1424  \n ....\n 1737  \t\t\t\t.append($(\"<tr>\")\n 1738  \t\t\t\t\t.append($(\"<td>\").html(\"Impulse Change:\"))\n 1739: \t\t\t\t\t.append($(\"<td>\").html(this.getImpulseChangeCost() + \" EP\").addClass(\"change\")))\n 1740  \t\t\t\t.append($(\"<tr>\")\n 1741  \t\t\t\t\t.append($(\"<td>\").html(\"Turn Cost per 1°\"))\n ....\n 2111  \t\t\t.find(\".impulse\").html(this.getRemainingImpulse() + \" / \" + this.getTotalImpulse()).end()\n 2112  \t\t\t.find(\".delay\").html(this.getRemainingDelay())\t\t\n 2113: \t\t\t.find(\".change\").html(this.getImpulseChangeCost() + \" EP\").end()\t\t\t\n 2114: \t\t\t.find(\".turn\").html(this.getImpulseChangeCost() + \" EP\").end()\n 2115  \t}\n 2116  \n\n10 matches across 2 files\n",
 			"settings":
 			{
-				"buffer_size": 10350,
+				"buffer_size": 14822,
 				"line_ending": "Windows",
 				"name": "Find Results",
 				"scratch": true
@@ -588,7 +588,7 @@
 			"file": "shipclasses.js",
 			"settings":
 			{
-				"buffer_size": 71502,
+				"buffer_size": 71507,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -642,7 +642,7 @@
 			"file": "server/manager.php",
 			"settings":
 			{
-				"buffer_size": 41969,
+				"buffer_size": 42001,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -851,7 +851,7 @@
 			"file": "server/ship.php",
 			"settings":
 			{
-				"buffer_size": 24167,
+				"buffer_size": 24170,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -932,7 +932,7 @@
 			"file": "game.js",
 			"settings":
 			{
-				"buffer_size": 54494,
+				"buffer_size": 54493,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -950,7 +950,7 @@
 			"file": "flights.js",
 			"settings":
 			{
-				"buffer_size": 16490,
+				"buffer_size": 16492,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1488,6 +1488,13 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"pickre",
+			"getImpulseMod",
+			"getImpulseMod ",
+			"getImpulseChangeCost",
+			"baseimpulsecost",
+			"baseImpulseCost",
+			"getTurnDelay",
 			"insertReinforcements",
 			"resolveDeployActions",
 			"handleDeploymentActions",
@@ -1608,14 +1615,7 @@
 			"issueturn",
 			"issuemove()",
 			"issuemove",
-			"handleTurnEvent",
-			"drawTurnUI()",
-			"drawTurnUI",
-			"switchturnm ",
-			"switchturnm",
-			"checkFireOrders",
-			"resetMoveMode",
-			"canTurn "
+			"handleTurnEvent"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1761,7 +1761,7 @@
 	"groups":
 	[
 		{
-			"selected": 17,
+			"selected": 13,
 			"sheets":
 			[
 				{
@@ -1849,7 +1849,7 @@
 						"translation.y": 994.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 38,
+					"stack_index": 41,
 					"type": "text"
 				},
 				{
@@ -1938,7 +1938,7 @@
 						"translation.y": 3488.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 34,
+					"stack_index": 37,
 					"type": "text"
 				},
 				{
@@ -1946,7 +1946,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10350,
+						"buffer_size": 14822,
 						"regions":
 						{
 							"match":
@@ -2281,6 +2281,86 @@
 									[
 										10219,
 										10239
+									],
+									[
+										10465,
+										10485
+									],
+									[
+										10708,
+										10728
+									],
+									[
+										10945,
+										10965
+									],
+									[
+										11139,
+										11159
+									],
+									[
+										11349,
+										11369
+									],
+									[
+										11543,
+										11563
+									],
+									[
+										11823,
+										11843
+									],
+									[
+										12087,
+										12107
+									],
+									[
+										12427,
+										12447
+									],
+									[
+										12503,
+										12523
+									],
+									[
+										12701,
+										12721
+									],
+									[
+										12944,
+										12964
+									],
+									[
+										13181,
+										13201
+									],
+									[
+										13375,
+										13395
+									],
+									[
+										13585,
+										13605
+									],
+									[
+										13779,
+										13799
+									],
+									[
+										14059,
+										14079
+									],
+									[
+										14323,
+										14343
+									],
+									[
+										14663,
+										14683
+									],
+									[
+										14739,
+										14759
 									]
 								],
 								"scope": ""
@@ -2289,15 +2369,15 @@
 						"selection":
 						[
 							[
-								9985,
-								9985
+								12958,
+								12958
 							]
 						],
 						"settings":
 						{
 							"detect_indentation": false,
 							"line_numbers": false,
-							"output_tag": 9,
+							"output_tag": 11,
 							"result_base_dir": "",
 							"result_file_regex": "^([^ \t].*):$",
 							"result_line_regex": "^ +([0-9]+):",
@@ -2305,10 +2385,10 @@
 							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 5238.0,
+						"translation.y": 6912.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -2425,7 +2505,7 @@
 						"translation.y": 2723.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 33,
+					"stack_index": 36,
 					"type": "text"
 				},
 				{
@@ -2551,15 +2631,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 71502,
+						"buffer_size": 71507,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								20181,
-								20181
+								18992,
+								18992
 							]
 						],
 						"settings":
@@ -2627,10 +2707,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 13864.0,
+						"translation.y": 12802.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -2982,7 +3062,7 @@
 						"translation.y": 72.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 23,
+					"stack_index": 27,
 					"type": "text"
 				},
 				{
@@ -3067,10 +3147,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 6941.0,
+						"translation.y": 569.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 40,
+					"stack_index": 43,
 					"type": "text"
 				},
 				{
@@ -3079,15 +3159,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 41969,
+						"buffer_size": 42001,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								13917,
-								13917
+								14189,
+								14189
 							]
 						],
 						"settings":
@@ -3155,10 +3235,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 8510.0,
+						"translation.y": 8457.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -3244,7 +3324,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 216.0,
+						"translation.y": 144.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 54,
@@ -3336,7 +3416,7 @@
 						"translation.y": 2822.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
@@ -3424,7 +3504,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
@@ -3440,8 +3520,8 @@
 						"selection":
 						[
 							[
-								117,
-								117
+								183,
+								183
 							]
 						],
 						"settings":
@@ -3454,31 +3534,46 @@
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
 								"bh_round",
 								"bh_round_center",
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
 								"bh_single_quote",
 								"bh_single_quote_center",
 								"bh_single_quote_open",
 								"bh_single_quote_close",
 								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
@@ -3488,22 +3583,7 @@
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
-								"bh_regex_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content"
+								"bh_regex_content"
 							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax"
 						},
@@ -3511,7 +3591,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -3599,7 +3679,7 @@
 						"translation.y": 255.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
@@ -3687,7 +3767,7 @@
 						"translation.y": 54.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
@@ -3716,7 +3796,7 @@
 						"translation.y": 432.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
@@ -3804,7 +3884,7 @@
 						"translation.y": 324.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 23,
 					"type": "text"
 				},
 				{
@@ -3833,7 +3913,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
@@ -4038,7 +4118,7 @@
 						"translation.y": 450.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 31,
 					"type": "text"
 				},
 				{
@@ -4126,7 +4206,7 @@
 						"translation.y": 54.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 37,
+					"stack_index": 40,
 					"type": "text"
 				},
 				{
@@ -4214,7 +4294,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 24,
 					"type": "text"
 				},
 				{
@@ -4478,7 +4558,7 @@
 						"translation.y": 806.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
@@ -4566,7 +4646,7 @@
 						"translation.y": 2822.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
@@ -4582,8 +4662,8 @@
 						"selection":
 						[
 							[
-								4649,
-								4649
+								4299,
+								4299
 							]
 						],
 						"settings":
@@ -4591,26 +4671,26 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
@@ -4626,36 +4706,36 @@
 								"bh_tag_open",
 								"bh_tag_close",
 								"bh_tag_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content"
+								"bh_regex_content"
 							],
 							"history_list_is_closing": true,
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2363.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -4831,7 +4911,7 @@
 						"translation.y": 284.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 30,
+					"stack_index": 33,
 					"type": "text"
 				},
 				{
@@ -4929,15 +5009,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 24167,
+						"buffer_size": 24170,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8385,
-								8385
+								1379,
+								1379
 							]
 						],
 						"settings":
@@ -5005,10 +5085,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4947.0,
+						"translation.y": 698.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -5024,8 +5104,8 @@
 						"selection":
 						[
 							[
-								1576,
-								1576
+								2722,
+								2722
 							]
 						],
 						"settings":
@@ -5033,11 +5113,46 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
@@ -5048,55 +5163,20 @@
 								"bh_tag_open",
 								"bh_tag_close",
 								"bh_tag_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
-								"bh_regex_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
+								"bh_regex_content"
 							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 284.0,
+						"translation.y": 1149.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -5184,7 +5264,7 @@
 						"translation.y": 18257.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 36,
+					"stack_index": 39,
 					"type": "text"
 				},
 				{
@@ -5270,7 +5350,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3428.0,
+						"translation.y": 3397.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 61,
@@ -5361,7 +5441,7 @@
 						"translation.y": 60.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
@@ -5713,7 +5793,7 @@
 						"translation.y": 23.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -5722,15 +5802,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 54494,
+						"buffer_size": 54493,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								38211,
-								38211
+								37310,
+								37310
 							]
 						],
 						"settings":
@@ -5753,6 +5833,11 @@
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
 								"bh_single_quote",
 								"bh_single_quote_center",
 								"bh_single_quote_open",
@@ -5763,45 +5848,40 @@
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
 								"bh_round",
 								"bh_round_center",
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content"
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
 							],
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 25962.0,
+						"translation.y": 25530.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 41,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -5898,15 +5978,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 16490,
+						"buffer_size": 16492,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								13231,
-								13231
+								5510,
+								5530
 							]
 						],
 						"settings":
@@ -5974,10 +6054,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 8628.0,
+						"translation.y": 4226.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -6072,7 +6152,7 @@
 			]
 		},
 		{
-			"selected": 13,
+			"selected": 32,
 			"sheets":
 			[
 				{
@@ -6160,7 +6240,7 @@
 						"translation.y": 3091.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 31,
+					"stack_index": 34,
 					"type": "text"
 				},
 				{
@@ -6190,7 +6270,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
@@ -6287,15 +6367,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 24167,
+						"buffer_size": 24170,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4349,
-								4349
+								4352,
+								4352
 							]
 						],
 						"settings":
@@ -6366,7 +6446,7 @@
 						"translation.y": 2733.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 32,
+					"stack_index": 35,
 					"type": "text"
 				},
 				{
@@ -6630,7 +6710,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
@@ -6807,7 +6887,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 35,
+					"stack_index": 38,
 					"type": "text"
 				},
 				{
@@ -6904,15 +6984,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 71502,
+						"buffer_size": 71507,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								44391,
-								44391
+								44396,
+								44396
 							]
 						],
 						"settings":
@@ -7175,8 +7255,8 @@
 						"selection":
 						[
 							[
-								195,
-								195
+								657,
+								657
 							]
 						],
 						"settings":
@@ -7184,31 +7264,46 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
 								"bh_round",
 								"bh_round_center",
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
@@ -7219,26 +7314,11 @@
 								"bh_tag_open",
 								"bh_tag_close",
 								"bh_tag_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
-								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content"
+								"bh_regex_content"
 							],
 							"history_list_is_closing": true,
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
@@ -7248,7 +7328,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -7522,7 +7602,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 54494,
+						"buffer_size": 54493,
 						"regions":
 						{
 						},
@@ -7690,7 +7770,7 @@
 						"translation.y": 4738.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 32,
 					"type": "text"
 				},
 				{
@@ -7895,7 +7975,7 @@
 						"translation.y": 90.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 30,
 					"type": "text"
 				},
 				{
@@ -8277,7 +8357,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
@@ -8365,7 +8445,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
@@ -8579,15 +8659,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 16490,
+						"buffer_size": 16492,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4454,
-								4454
+								15283,
+								15283
 							]
 						],
 						"settings":
@@ -8655,10 +8735,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3011.0,
+						"translation.y": 10246.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 43,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -8674,8 +8754,8 @@
 						"selection":
 						[
 							[
-								898,
-								898
+								675,
+								675
 							]
 						],
 						"settings":
@@ -8744,10 +8824,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 375.0,
+						"translation.y": 303.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 42,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -9198,7 +9278,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 41969,
+						"buffer_size": 42001,
 						"regions":
 						{
 						},
@@ -9277,7 +9357,7 @@
 						"translation.y": 3164.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 39,
+					"stack_index": 42,
 					"type": "text"
 				},
 				{
@@ -9335,7 +9415,7 @@
 						"translation.y": 558.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 25,
 					"type": "text"
 				},
 				{
@@ -10042,16 +10122,40 @@
 		"selected_items":
 		[
 			[
+				"mana",
+				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
+			],
+			[
+				"fl",
+				"C:\\xampp\\htdocs\\fire\\server\\flight.php"
+			],
+			[
+				"sh",
+				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
+			],
+			[
+				"game.js",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
+				"las",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php"
+			],
+			[
+				"laser",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php"
+			],
+			[
+				"pul",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
+			],
+			[
 				"db",
 				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
 			],
 			[
 				"de",
 				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
-			],
-			[
-				"mana",
-				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
 			],
 			[
 				"log",
@@ -10094,10 +10198,6 @@
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php"
 			],
 			[
-				"las",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php"
-			],
-			[
 				"puls",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
 			],
@@ -10112,10 +10212,6 @@
 			[
 				"nonw",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\nonweapon.php"
-			],
-			[
-				"sh",
-				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
 			],
 			[
 				"tin",
@@ -10170,14 +10266,6 @@
 				"C:\\xampp\\htdocs\\fire\\game.php"
 			],
 			[
-				"game.js",
-				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
-				"fl",
-				"C:\\xampp\\htdocs\\fire\\server\\flight.php"
-			],
-			[
 				"ar",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\artemis.php"
 			],
@@ -10196,10 +10284,6 @@
 			[
 				"matt",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\matter.php"
-			],
-			[
-				"laser",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php"
 			],
 			[
 				"sc",
@@ -10364,10 +10448,6 @@
 			[
 				"plasma",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php"
-			],
-			[
-				"pul",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
 			],
 			[
 				"whit",
@@ -10574,7 +10654,7 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 1,
+	"selected_group": 0,
 	"settings":
 	{
 	},
