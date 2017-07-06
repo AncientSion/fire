@@ -778,20 +778,14 @@ function Ship(data){
 		//else return Math.found((Math.pow(this.mass, 1.56) / 10000) *  this.getImpulseMod());
 	}
 	
-	this.getBaseTurnDelay = function(){
-		return this.baseTurnDelay;
-		//return Math.pow(this.mass, 0.5)/10;
-		//return Math.pow(this.mass, 0.55);
-	}
-	
 	this.getTurnDelay = function(){
 		if (game.phase == -2){
-			return this.getBaseTurnDelay*this.getImpulseMod();
+			return this.baseTurnDelay*this.getImpulseMod();
 		}
 		if (this.actions.length && this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0){
 			return 0;
 		}
-		else return this.getBaseTurnDelay*this.getImpulseMod();
+		else return this.baseTurnDelay*this.getImpulseMod();
 		//else return round(this.getBaseTurnDelay() * this.getImpulseMod(), 2);
 	}
 
