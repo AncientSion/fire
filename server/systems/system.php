@@ -35,6 +35,7 @@ class System {
 	}
 
 	public function setState($turn){
+		//Debug::log("set state system: ".$this->parentId);
 		$this->isDisabled($turn);
 		$this->isDestroyed();
 		$this->isPowered($turn);

@@ -64,12 +64,11 @@ class Ship {
 
 	public function setState($turn){
 		//Debug::log("setState #".$this->id);
-		for ($i = sizeof($this->primary->damages)-1; $i >= 0; $i--){ // check destroyed
-			if ($this->primary->damages[$i]->destroyed){
-				$this->destroyed = true;
-				return;
-			}
+		if ($this->primary->isDestroyed()){
+			$this->status = "destroyed";
+			$this->destroyed = true;
 		}
+
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){ // check primary criticals
 			$this->primary->systems[$i]->setState($turn);
 			switch ($this->primary->systems[$i]->name){
@@ -369,7 +368,11 @@ class Ship {
 							for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 								if ($this->structures[$i]->systems[$j]->id == $dmg->systemid){
 									$this->structures[$i]->systems[$j]->applyDamage($dmg);
-									$this->primary->remaining -= $dmg->overkill;
+									$this->primary->applyDamage($dmg);
+									if (!$this->primary->destroyed && $this->primary->isDestroyed()){
+										Debug::log("destroying unit #".$this->id);
+										$this->destroyed = 1;
+									}
 									return;
 								}
 							}
@@ -379,7 +382,11 @@ class Ship {
 				for ($j = 0; $j < sizeof($this->primary->systems); $j++){
 					if ($this->primary->systems[$j]->id == $dmg->systemid){
 						$this->primary->systems[$j]->applyDamage($dmg);
-						$this->primary->remaining -= $dmg->overkill;
+						$this->primary->applyDamage($dmg);
+							if (!$this->primary->destroyed && $this->primary->isDestroyed()){
+							Debug::log("destroying unit #".$this->id);
+							$this->destroyed = 1;
+						}
 						return;
 					}
 				}
@@ -438,14 +445,6 @@ class Ship {
 		else if ($this->getSystemByName("Reactor")->destroyed){
 			$this->destroyed = true;
 			return true;
-		}
-
-		for ($i = 0; $i < sizeof($this->primary->damages); $i++){
-			if ($this->primary->damages[$i]->destroyed){
-				$this->destroyed = true;
-				$this->status = "destroyed";
-				return true;
-			}
 		}
 		return false;
 	}
@@ -1028,7 +1027,7 @@ class SuperLight extends Ship {
 			"Sensor" => 1,
 			"Reactor" => 0.9
 		);
-	}
+	}	
 
 	public function getShipTypeMod(){
 		return 1.45;

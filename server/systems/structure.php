@@ -30,8 +30,8 @@ class Structure {
 		}
 		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
 			if ($this->damages[$i]->destroyed){
-				return true;
 				$this->destroyed = true;
+				return true;
 			}
 		}
 		return false;
@@ -72,10 +72,24 @@ class Primary {
 		$this->remaining = $integrity;
 	}
 
+	public function isDestroyed(){
+		if ($this->destroyed){
+			return true;
+		}
+		return false;
+	}
+
 	public function applyDamage($dmg){
+		//debug::log($this->remaining);
 		$this->damages[] = $dmg;
-		$this->remaining -= $dmg->structDmg;
-		if ($dmg->destroyed){
+		$this->remaining -= $dmg->overkill;
+
+		if ($dmg->systemid == -1){
+			$this->remaining -= $dmg->structDmg;
+		}
+
+		if (!$this->destroyed && $this->remaining < 1){
+			Debug::log("unit #".$this->id." below 0");
 			$this->destroyed = 1;
 		}
 	}
@@ -122,8 +136,8 @@ class Single {
 		}
 		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
 			if ($this->damages[$i]->destroyed){
-				return true;
 				$this->destroyed = true;
+				return true;
 			}
 		}
 		return false;
@@ -175,7 +189,7 @@ class Single {
 
 	public function getValidEffects(){
 		return array(// attr, %-tresh, duration, modifier
-			array("Disabled", 80, 0, 0)
+			array("Disabled", 70, 0, 0)
 		);
 	}
 

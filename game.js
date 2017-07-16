@@ -1284,7 +1284,7 @@ Game.prototype.getUnitType = function (val){
 		this.getShipExplosionDetails();
 
 		$("#combatlogWrapper").show();
-		setFPS(100);
+		setFPS(40);
 		window.then = Date.now();
 		window.startTime = then;
 		
@@ -1434,7 +1434,7 @@ Game.prototype.getUnitType = function (val){
 			if (game.ships[i].deployed){
 				var anim = {
 						anims: [],
-						base: {x: game.ships[i].x, y: game.ships[i].y},
+						base: game.ships[i].getPlannedPosition(),
 						done: false
 				}
 
@@ -1457,9 +1457,9 @@ Game.prototype.getUnitType = function (val){
 						a: game.ships[i].facing,
 						id: game.ships[i].id,
 						t: [0, 100],
-						s: game.ships[i].structures[j].mass / 400,
-						x: range(-20, 20),
-						y: range(-20, 20)
+						s: game.ships[i].size,
+						x: 0,
+						y: 0
 					})
 				}
 			}

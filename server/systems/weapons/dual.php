@@ -22,6 +22,7 @@ class Dual extends Weapon {
 	}
 
 	public function setState($turn){
+		//Debug::log("setState Dual");
 		parent::setState($turn);
 		$this->setActiveSystem($turn);
 		$this->setProps();
@@ -30,10 +31,12 @@ class Dual extends Weapon {
 	}
 
 	public function setActiveSystem($turn){
+		//Debug::log("setActiveSystem");
 		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
 			if ($this->powers[$i]->type < 0){
 				if ($this->powers[$i]->turn == $turn || $this->powers[$i]->turn == $turn-1){
 					$this->states[abs($this->powers[$i]->type)-1] = 1;
+					//Debug::log("setting active");
 					return;
 				}
 			}
@@ -45,15 +48,15 @@ class Dual extends Weapon {
 
 	public function getActiveSystem(){
 		//echo "getActiveSystem ".$this->parentId."/".$this->id."</br>";
-		//var_Export($this->states); echo "<br>";
-		//var_export($this->powers);echo "<br>";
+		//var_export($this->states); echo "<br><br>";
+		//var_export($this->powers);echo "<br><br>";
 		for ($i = 0; $i < sizeof($this->states); $i++){
 			if ($this->states[$i]){
 				//echo "returning </br>";
 				return $this->weapons[$i];
 			}
 		}
-		Debug::log($this->parentId."/".$this->id." CANT RETURN ACTIVE WEAPON");
+		Debug::log("ERROR - ".$this->parentId."/".$this->id." CANT RETURN ACTIVE WEAPON");
 	}
 
 	public function setProps(){
