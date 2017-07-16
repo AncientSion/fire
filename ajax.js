@@ -151,13 +151,13 @@ window.ajax = {
 		var myShips = [];
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid == game.userid){
-				if (game.phase == 0 && !game.ships[i].flight || game.phase == 1 && game.ships[i].flight){
+				if (game.phase == 0 && game.ships[i].ship || game.phase == 1 && game.ships[i].flight){
 					var ship = {
 						id: game.ships[i].id,
 						actions: []
 					}
 					for (var j = 0; j < game.ships[i].actions.length; j++){
-						if (game.ships[i].actions[j].turn == game.turn && game.ships[i].actions[j].type != "deploy"){
+						if (!game.ships[i].actions[j].resolved){
 							ship.actions.push(game.ships[i].actions[j]);
 						}
 					}
@@ -177,7 +177,7 @@ window.ajax = {
 					gameturn: game.turn,
 					gamephase: game.phase,
 					ships: myShips
-					},
+				},
 			success: callback,
 			error: ajax.error,
 		});

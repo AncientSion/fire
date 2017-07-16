@@ -17,11 +17,11 @@ class Omega extends SuperHeavy {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 1200, 28);
-		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 35, array("HeavyLaser", "HeavyPulse"));
-		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 35, array("HeavyLaser", "HeavyPulse"));
+		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 28, array("HeavyLaser", "HeavyPulse"));
+		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 28, array("HeavyLaser", "HeavyPulse"));
 		$front->systems[] = new Hangar($this->getId(), $this->id, 330, 30, 850, 12, array("Aurora", "Thunderbolt"));
-		$front->systems[] = new Dual($this->getId(), $this->id, 0, 60, 35, array("HeavyLaser", "HeavyPulse"));
-		$front->systems[] = new Dual($this->getId(), $this->id, 0, 60, 35, array("HeavyLaser", "HeavyPulse"));
+		$front->systems[] = new Dual($this->getId(), $this->id, 0, 60, 28, array("HeavyLaser", "HeavyPulse"));
+		$front->systems[] = new Dual($this->getId(), $this->id, 0, 60, 28, array("HeavyLaser", "HeavyPulse"));
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 1500, 24);

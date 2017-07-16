@@ -26,7 +26,7 @@ class Hyperion extends Heavy {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 800, 22);
-		$right->systems[] = new HeavyLaser($this->getId(), $this->id, 0, 60);
+		$right->systems[] = new HeavyLaser($this->getId(), $this->id, 300, 360);
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $right;
@@ -37,7 +37,7 @@ class Hyperion extends Heavy {
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 800, 22);
-		$left->systems[] = new HeavyLaser($this->getId(), $this->id, 300, 360);
+		$left->systems[] = new HeavyLaser($this->getId(), $this->id, 0, 60);
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $left;
@@ -48,12 +48,12 @@ class Hyperion extends Heavy {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1300);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 125);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 125, 240);
-		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 125);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 125, 700, 15);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 125, $this->getPowerReq()-6);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1200);
+		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 115);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, 115, 240);
+		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 115);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 115, 700, 15);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 115, $this->getPowerReq()-6);
 	}
 }
 

@@ -15,35 +15,47 @@ class LightIon extends Particle {
 	public $display = "32mm Ion Bolter Array";
 	public $minDmg = 16;
 	public $maxDmg = 22;
-	public $accDecay = 210;
+	public $accDecay = 220;
 	public $shots = 4;
 	public $animColor = "orange";
 	public $projSize = 2;
-	public $projSpeed = 6;
+	public $projSpeed = 9;
 	public $reload = 1;
-	public $mass = 14;
+	public $mass = 13;
 	public $powerReq = 2;
-	public $traverse = -3;
+	public $traverse = -4;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
 	}
 }
 
-class MediumIon extends LightIon {
-	public $name = "MediumIon";
-	public $display = "56mm Twin Ion Cannon";
+class MediumSingleIon extends LightIon {
+	public $name = "MediumSingleIon";
+	public $display = "62mm Ion Cannon";
 	public $minDmg = 33;
 	public $maxDmg = 47;
-	public $accDecay = 100;
-	public $shots = 2;
+	public $accDecay = 120;
+	public $shots = 1;
 	public $animColor = "orange";
 	public $reload = 2;
 	public $projSize = 3;
-	public $projSpeed = 5;
-	public $mass = 19;
-	public $powerReq = 4;
+	public $projSpeed = 6;
+	public $mass = 21;
+	public $powerReq = 3;
 	public $traverse = -1;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
+        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	}
+}
+
+class MediumTwinIon extends MediumSingleIon {
+	public $name = "MediumTwinIon";
+	public $display = "62mm Dual Ion Cannon";
+	public $shots = 2;
+	public $mass = 16;
+	public $powerReq = 4;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -53,22 +65,25 @@ class MediumIon extends LightIon {
 class HeavyIon extends LightIon {
 	public $name = "HeavyIon";
 	public $display = "133mm Ion Cannon";
-	public $minDmg = 53;
+	public $minDmg = 58;
 	public $maxDmg = 79;
-	public $accDecay = 70;
+	public $accDecay = 80;
 	public $shots = 1;
 	public $animColor = "orange";
-	public $reload = 1;
+	public $reload = 2;
 	public $projSize = 4;
 	public $projSpeed = 5;
-	public $mass = 28;
+	public $mass = 32;
 	public $powerReq = 6;
 	public $traverse = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+        $this->boostEffect[] = new Effect("Reload", -1);
+
 	}
 }
+
 
 class FusionCannon extends Particle {
 	public $name = "FusionCannon";

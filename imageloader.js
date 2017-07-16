@@ -14,6 +14,8 @@ window.preLoadBallistics = function(){
 	window.ballImages.hasta.src = "ballIcons/hasta.png";
 	window.ballImages.javelin = new Image();
 	window.ballImages.javelin.src = "ballIcons/hasta.png";
+	window.ballImages.triarii = new Image();
+	window.ballImages.triarii.src = "ballIcons/hasta.png";
 
 	window.ballImages.patriot = new Image();
 	window.ballImages.patriot.src = "ballIcons/patriot.png";
@@ -87,6 +89,11 @@ window.preloadShips = function(){
 	window.shipImages.thunderbolt.src = "shipIcons/thunderbolt.png";
 	window.shipImages.thunderboltl = new Image();
 	window.shipImages.thunderboltl.src = "shipIcons/thunderboltl.png";
+
+	window.shipImages.sitara = new Image();
+	window.shipImages.sitara.src = "shipIcons/sitara.png";
+	window.shipImages.sitaral = new Image();
+	window.shipImages.sitaral.src = "shipIcons/sitaral.png";
 
 	window.shipImages.sentri = new Image();
 	window.shipImages.sentri.src = "shipIcons/sentri.png";

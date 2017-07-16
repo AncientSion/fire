@@ -11,18 +11,20 @@ $phase;
 
 if (isset($_SESSION["userid"])) {
 	$userid = $_SESSION["userid"];
-}
-else $userid = 0;
+} else $userid = 0;
 
 $manager = new Manager($userid, $gameid);
-if ($manager->game["status"] == ""){
+if ($manager->status == "active"){
+	$manager->getGameData();
+} else {
 	header("Location: lobby.php");
 }
+
 
 echo "<script> window.gameid = ".$gameid."; window.userid = ".$userid.";</script>";
 
 
-switch ($manager->game["phase"]){
+switch ($manager->phase){
 	case -1:
 		$phase = "Deployment / Initial";
 		break;
@@ -98,8 +100,21 @@ echo "</script>";
 			<div id="phaseSwitchDiv">
 				<div id="phaseSwitchInnerDiv">
 					<div id="turnDiv">
+						<?php
+							echo "Turn ".$manager->turn;
+						?>
 					</div>
 					<div id="phaseDiv">
+						<?php
+							switch ($manager->phase){
+								case -1: echo "Deployment and Initial"; break;
+								case 0: echo "Capital Movement"; break;
+								case 1: echo "Flight Movement"; break;
+								case 2: echo "Firing Orders"; break;
+								case 3: echo "Damage Control"; break;
+								default: echo "???"; break;
+							}
+						?>
 					</div>
 				</div>
 			</div>
@@ -124,28 +139,60 @@ echo "</script>";
 					</tr>
 					<tr>
 						<th style="text-align: left">
-							Cost
+							 Difficulty
+						</th>
+						<th id="impulseMod" style="text-align: center">
+						</th>
+					</tr>
+					<tr>
+						<th style="text-align: left">
+							Cost / 1°
 						</th>
 						<th id="turnCost" style="width: 55px, text-align: center">
 						</th>
 					</tr>
 					<tr>
 						<th style="text-align: left">
-							Delay
+							Delay / 1°
 						</th>
 						<th id="turnDelay" style="width: 55px; text-align: center">
 						</th>
 					</tr>
+					<tr>
+						<th style="text-align: left">
+							EP Mod
+						</th>
+						<th id="turnMod" style="width: 55px; text-align: center">
+						</th>
+					</tr>
+					<tr id="shortenTurn" class="disabled">
+						<td>
+							<div class="doShortenTurn">
+								<img class="size20" src="varIcons/plusWhite.png">
+							</div>
+						</td>
+						<td>
+							<div class="doUndoShortenTurn">
+								<img class="size20" src="varIcons/minusWhite.png">
+							</div>
+						</td>
+					</tr>
 				</table>
 			</div>
 			<div id="epButton" class="turnEle ui disabled">
-				<table class="doTurn" style="margin:auto; width: 100%;">
+				<table style="margin:auto; width: 100%;">
 					<tr>
 						<th style="text-align: left">
-							 EP
+							 Engine Power
 						</th>
 						<th id="remEP" style="text-align: center">
-							 OFF
+						</th>
+					</tr>
+					<tr>
+						<th style="text-align: left">
+							 Thrust Change 
+						</th>
+						<th id="ImpulseCost" style="text-align: center">
 						</th>
 					</tr>
 				</table>
@@ -169,7 +216,7 @@ echo "</script>";
 					</tr>
 					<tr>
 						<td>
-							<?php echo $manager->game["turn"]; ?>
+							<?php echo $manager->turn; ?>
 						</td>
 						<td>
 							<?php echo $phase; ?>
@@ -195,6 +242,8 @@ echo "</script>";
 					</tr>
 				</table>
 			</div>
+			<div id="unitGUI">
+			</div>
 			<div id="canvasDiv">
 				<canvas id="canvas"></canvas>
 				<canvas id="fxCanvas"></canvas>
@@ -208,10 +257,10 @@ echo "</script>";
 			<div id="weaponAimTableWrapper" class="disabled">
 				<table id="targetInfo">
 					<tr>
-						<th width=20%>Target</th>
-						<th width=10%>Type</th>
-						<th width=12%>Base</th>
-						<th width=10%>Impulse</th>
+						<th width=18%>Target</th>
+						<th width=15%>Type</th>
+						<th width=9%>Base</th>
+						<th width=10%>Thrust</th>
 						<th width=9%>Lock</th>
 						<th width=9%>Mask</th>
 						<th width=10%>Final</th>
@@ -226,9 +275,9 @@ echo "</script>";
 				</table>
 				<table id="weaponInfo">
 					<tr>
-						<th width=45%>Weapon</th>
+						<th width=47%>Weapon</th>
 						<th width=10%>Dmg</th>
-						<th width=21%>Tracking</th>
+						<th width=19%>Tracking</th>
 						<th width=12%>Range</th>
 						<th width=12%>Final</th>
 					</tr>
@@ -240,33 +289,30 @@ echo "</script>";
 				</div>
 				<table id="combatLog">
 					<tr>
-						<th width=12%>Type</th>
-						<th width=14%>Shooter</th>
-						<th width=14%>Target</th>
-						<th width=22%>Weapon</th>
-						<th width=10%>Chance</th>
-						<th width=11%>Hits / Shots</th>
-						<th width=8%>Armour</th>
-						<th width=10%>System</th>
-						<th width=12%>Hull</th>
+						<th width=110px>Type</th>
+						<th width=105px>Shooter</th>
+						<th width=105px>Target</th>
+						<th width=160px>Weapon</th>
+						<th width=60px>Chance</th>
+						<th width=60px>Hits</th>
+						<th width=70px>Armour</th>
+						<th width=70px>System</th>
+						<th width=70px>Hull</th>
 					</tr>
 				</table>
 			</div>
 			<div id="deployLogWrapper" class="disabled">
-				<div class="deployLogWrapper">
-					Deploy Log
-				</div>
 				<table id="deloyLog">
 					<tr>
 						<th width=100%>val</th>
 					</tr>
 				</table>
 			</div>
-			<div id ="deployWrapper">
+			<div id="deployWrapper" class="disabled">
 				<table id="deployTable">
 					<tr>
 						<th style="font-size: 18px; background-color: lightBlue; color: black" colSpan=3>
-							Incoming Reinforcements
+							Incoming Units
 						</th>
 					</tr>
 					<tr>
@@ -274,18 +320,33 @@ echo "</script>";
 							Class
 						</th>
 						<th colSpan=2 width="20%" >
-							Arrival in
+							ETA
 						</th>
 					</tr>
 					<?php
 						foreach ($manager->ships as $ship){
 							if ($ship->ship && $manager->phase < 1 && $ship->userid == $manager->userid && $ship->available == $manager->turn){
-								$val = "deployNow ".$ship->id;
-								echo "<tr class='".$val."'</td>";
+								echo "<tr class='deployNow ".$ship->id."'</td>";
 								echo "<td><img class='img50' src=shipIcons/".strtolower($ship->name).".png></td>";
-								echo "<td>".$ship->name."</td>";
+								echo "<td class='green font20'>".$ship->name."</td>";
 								echo "<td class='green font20'> NOW </td>";
 								echo "</tr>";
+							}							
+							else if ($ship->ship && $manager->phase < 1 && $ship->userid != $manager->userid && $ship->available == $manager->turn){
+								if ($manager->phase == -1){
+									echo "<tr class='deployNow ".$ship->id."'</td>";
+									echo "<td><img class='img50' src=varIcons/vortex.png></td>";
+									echo "<td class='red font20'>Unknown</td>";
+									echo "<td class='red font20'> NOW </td>";
+									echo "</tr>";
+								}
+								else if ($manager->phase == 0){
+									echo "<tr class='deployNow ".$ship->id."'</td>";
+									echo "<td><img class='img50' src=shipIcons/".strtolower($ship->name).".png></td>";
+									echo "<td class='red font20'>".$ship->name."</td>";
+									echo "<td class='red font20'> NOW </td>";
+									echo "</tr>";
+								}
 							}
 						}
 						for ($i = 0; $i < sizeof($manager->incoming); $i++){
@@ -293,11 +354,18 @@ echo "</script>";
 								$val = "deployLater ".$manager->incoming[$i]["id"];
 								echo "<tr class='".$val."'</td>";
 								echo "<td><img class='img50' src=shipIcons/".strtolower($manager->incoming[$i]["name"]).".png></td>";
-								echo "<td>".$manager->incoming[$i]["name"]."</td>";
+								echo "<td class='green font20'>".$manager->incoming[$i]["name"]."</td>";
 								$rem = $manager->incoming[$i]["available"] - $manager->turn;
 								if ($rem == 1){
-									echo "<td class='red font20'>1 Turn</td></tr>";
-								} else echo "<td class='red font20'>".$rem." Turns</td></tr>";
+									echo "<td class='font20'>1 Turn</td></tr>";
+								} else echo "<td class='font20'>".$rem." Turns</td></tr>";
+							}
+							else if ($manager->incoming[$i]["userid"] != $manager->userid && $manager->incoming[$i]["available"] == $manager->turn+1){
+								$val = "deployLater ".$manager->incoming[$i]["id"];
+								echo "<tr class='".$val."'</td>";
+								echo "<td><img class='img50' src=varIcons/vortex.png></td>";
+								echo "<td class='red font20'>Unknown</td>";
+								echo "<td class='font20'>1 Turn</td></tr>";
 							}
 						}
 					?>
@@ -389,7 +457,6 @@ echo "</script>";
 		$("#mouseCanvas").on("mouseleave", function(){
 			$("#weaponAimTableWrapper").hide();
 		})
-		$("#game").addClass("game");
 		$("#combatLog").contextmenu(function(e){
 			e.stopPropagation();
 		})
@@ -446,7 +513,12 @@ echo "</script>";
 		$(".doUndoShortenTurn")
 		.click(function(e){
 			e.stopPropagation();
-			game.getUnitById(aUnit).doUndoShortenTurn()
+			game.getUnitById(aUnit).doUndoShortenTurn(false)
+		})
+		.contextmenu(function(e){
+			e.stopPropagation();
+			e.preventDefault();
+			game.getUnitById(aUnit).doUndoShortenTurn(true)
 		})
 
 		$("#maxVector")
@@ -478,20 +550,6 @@ echo "</script>";
 					}
 				//console.log(game.vector);
 				}
-				else if (e.keyCode == 111){ // ctrl, opacity
-					if (game.opacity){
-						game.opacity = false;
-						$(this).find(".ui").each(function(i){
-							$(this).removeClass("opaque");
-						})
-					}
-					else {
-						game.opacity = true;
-						$(this).find(".ui").each(function(i){
-							$(this).addClass("opaque");
-						})
-					}
-				}
 				else if (e.keyCode == 102){ // f, cancel fire animation
 					if (game.animateFire){
 						game.animateFire = false;
@@ -510,6 +568,9 @@ echo "</script>";
 								animate.doLog(i, j);
 							}
 						}
+						for (var i = 0; i < game.ballistics.length; i++){
+							game.ballistics[i].setPostMovePosition();
+						}
 						game.draw();
 					}
 				}
@@ -518,69 +579,28 @@ echo "</script>";
 						window.cancelAnimationFrame(anim);
 						for (var i = 0; i < game.ships.length; i++){
 							game.ships[i].deployed = true;
-							game.ships[i].setPosition();
+							game.ships[i].setPostMovePosition();
 							game.ships[i].setPostMoveFacing();
 						}
 					}
 					game.deployDone();
 				}
+				else if (e.keyCode == 43){ // +
+					if (game.phase == 0 || game.phase == 1){
+						if (game.turnMode){
+							game.getUnitById(aUnit).doShortenTurn(false);
+						}
+					}
+				}
+				else if (e.keyCode == 45){ // *
+					if (game.phase == 0 || game.phase == 1){
+						if (game.turnMode){
+							game.getUnitById(aUnit).doUndoShortenTurn(false);
+						}
+					}
+				}
 			}
 		});
 	}
-
-	function initReinforcementWrapper(){
-		$("#reinforce").click(function(e){
-			e.stopPropagation();
-			var wrap = $("#deployWrapper")[0];
-			if (wrap.style.display == "none"){
-				$(wrap).show();
-			}
-			else {
-				$(wrap)
-					.hide()
-					.find(".selected").each(function(){
-						$(this).removeClass("selected");
-					})
-				}
-			}
-		)
-
-		$(".requestReinforcements").each(function(i){
-			$(this)
-			.data("id", game.reinforcements[i]["id"])
-			.data("cost", game.reinforcements[i]["cost"])
-			.click(function(e){
-				e.stopPropagation();
-				if (game.phase == -1){
-					if (game.deploying && $(this).hasClass("selected")){
-						$(this).removeClass("selected");
-						game.disableDeployment();
-					}
-					else if (!aUnit){
-						if ($(this).hasClass("green")){
-							$(this).addClass("selected");
-							game.enableDeployment($(this).data("id"));
-						}
-						else if (!game.deploying){
-							if (!$(this).hasClass("green") && Math.floor(game.reinforcePoints) >= $(this).data("cost") + game.getCurrentReinforceCost()){
-								$(this).addClass("selected");
-								game.enableDeployment($(this).data("id"));
-							} else popup("You have insufficient Reinforce Points ("+game.reinforcePoints+") available.");
-						}
-					}
-				} else popup("Reinforces can only be requested in Deployment/Initial Phase.");
-			})
-			.contextmenu(function(e){
-				e.preventDefault(); e.stopPropagation();
-				if (game.phase == -1 && !aUnit && $(this).hasClass("green")){
-					game.undoDeployment($(this).data("id"));
-					$(this).removeClass("green");
-					$("#deployWrapper").find("#reinforceTable").find("#totalRequestCost").html(game.getCurrentReinforceCost());
-					game.draw();
-				}
-			});
-		})
-	}
-
 
 </script>

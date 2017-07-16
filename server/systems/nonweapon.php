@@ -13,61 +13,20 @@ class PrimarySystem extends System {
 	}
 
 	public function getHitChance(){
-		return $this->mass;
+		return $this->mass * 2;
 	}
 
 	public function getOutput($turn){
 		if ($this->disabled || $this->destroyed){
 			return 0;
 		}
-		return floor(($this->output + $this->getExtraOutput($turn) * $this->getOutputCrits($turn)) - $this->getOutputUsage($turn));
-	}
 
-	public function getExtraOutput($turn){
-		$extra = 0;
-		$boost = 0;
-
-		for ($i = 0; $i < sizeof($this->boostEffect); $i++){
-			if ($this->boostEffect[$i]->type == "Output"){
-				$boost = $this->boostEffect[$i]->type;
-				break;
-			}
-		}
-
-		if ($boost){
-			for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
-				if ($this->powers[$i]->turn > $turn){
-					break;
-				}
-				else if ($this->powers[$i]->turn == $turn && $this->powers[$i]->type == 1){
-					$extra += $this->output * $boost /100 * $this->powers[$i]->type;
-				}
-			}
-		}
-		if ($extra){
-			Debug::log($this->parentId."/".$this->id.", extra: ".$extra);
-		}
-		return floor($extra);
-	}
-
-	public function getOutputCrits($turn){
 		$mod = 1;
-		return $mod;
-		for ($i = 0; $i < sizeof($this->crits); $i++){
-			switch ($this->crits[$i]->type){
-				case "damage1": 
-					$mod -= 0.1;
-					break;
-				case "damage2":
-					$mod -= 0.2;
-					break;
-			}
-		}
-		return $mod;
-	}
+		$mod += $this->getBoostEffect("Output") * $this->getBoostLevel($turn);
+		$mod -= $this->getCritMod("Output", $turn);
 
-	public function getOutputUsage($turn){
-		return 0;
+		Debug::log("ship: #".$this->parentId.", output: ".floor($this->output*$mod));
+		return round($this->output * $mod);
 	}
 
 	public function getValidEffects(){
@@ -84,17 +43,6 @@ class Bridge extends PrimarySystem {
 	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
         parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
 	}
-}
-
-class Engine extends PrimarySystem {
-	public $name = "Engine";
-	public $display = "Engine";
-
-	function __construct($id, $parentId, $mass, $output = 0, $destroyed = 0){
-		$this->powerReq = ceil($output / 5);
-		$this->boostEffect[] = new Effect("Output", 0.15);
-        parent::__construct($id, $parentId, $mass, $output, ceil($this->powerReq/5), $destroyed);
-    }
 }
 
 class Reactor extends PrimarySystem {
@@ -116,18 +64,28 @@ class LifeSupport extends PrimarySystem {
     }
 }
 
+class Engine extends PrimarySystem {
+	public $name = "Engine";
+	public $display = "Engine";
+
+	function __construct($id, $parentId, $mass, $output = 0, $destroyed = 0){
+		$this->powerReq = ceil($output / 5);
+		$this->boostEffect[] = new Effect("Output", 0.15);
+        parent::__construct($id, $parentId, $mass, $output, ceil($this->powerReq/5), $destroyed);
+    }
+}
+
 class Sensor extends PrimarySystem {
 	public $name = "Sensor";
 	public $display = "Sensor";
 	public $ew = array();
 
-
 	function __construct($id, $parentId, $mass, $output = 0, $effiency, $destroyed = 0){
-		$this->powerReq = floor($output/20);
+		$this->powerReq = floor($output/30);
 		$this->boostEffect[] = new Effect("Output", 0.10);
 		$this->modes = array("Lock", "Scramble", "Sweep", "Mask");
 		$this->states = array(0, 0, 0, 0);
-        parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
+        parent::__construct($id, $parentId, $mass, $output, ceil($this->powerReq/5), $destroyed);
     }
 
     public function hideEW($turn){
@@ -179,10 +137,10 @@ class Hangar extends Weapon {
 
 	function __construct($id, $parentId, $start, $end, $output, $effiency, $loads, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-		$this->powerReq = floor($effiency/2);
+		$this->powerReq = floor($effiency/3);
 		$this->effiency = $effiency;
-		$this->mass = $output / 2;
-		$this->integrity = floor($output / 4);
+		$this->mass = $output;
+		$this->integrity = floor($output / 3);
 
 		for ($i = 0; $i < sizeof($loads); $i++){
 			$fighter = new $loads[$i](0,0);
@@ -201,7 +159,7 @@ class Hangar extends Weapon {
 	}
 
 	public function getHitChance(){
-		return $this->mass * 2;
+		return $this->mass;
 	}
 	
 	public function adjustLoad($dbLoad){

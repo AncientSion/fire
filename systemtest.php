@@ -26,7 +26,7 @@
 				$time = -microtime(true);
 
 				$systems = $manager->logSystemsByClass(array("Matter", "Ion", "Pulse"));
-				//$compare = array("LightIon", "MediumIon", "LightPulse", "MediumPulse", "FusionCannon");
+				//$compare = array("LightIon", "MediumTwinIon", "LightPulse", "MediumPulse", "FusionCannon");
 				//$systems = $manager->compareSystems($compare);
 
 				for ($i = 0; $i < sizeof($systems); $i++){

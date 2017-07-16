@@ -9,7 +9,7 @@ class DBManager {
 
 		if ($this->connection === null){
 			$user = "aatu"; $pass = "Kiiski";
-			//$user = "root"; $pass = "147147";
+			$user = "root"; $pass = "147147";
 			$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$user,$pass);
 			//$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			//$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -27,6 +27,7 @@ class DBManager {
 	}
 
 	public function query($sql){
+		///Debug::log("query: --".$sql."--");
 		$stmt = $this->connection->prepare($sql);
 		$stmt->execute();
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -253,7 +254,6 @@ class DBManager {
 		}
 	}
 
-
 	public function processInitialBuy($userid, $gameid, $units, $rem, $faction){
 		$this->insertUnits($userid, $gameid, $units);
 		$this->insertLoads($userid, $gameid, $units);
@@ -351,7 +351,6 @@ class DBManager {
 				(:gameid, :userid, :ship, :ball, :name, :status, :available, :destroyed)
 		");
 
-		$ball = 1;
 		$status = "launched";
 		$destroyed = 0;
 
@@ -359,10 +358,10 @@ class DBManager {
 			$stmt->bindParam(":gameid", $gameid);
 			$stmt->bindParam(":userid", $units[$i]->userid);
 			$stmt->bindParam(":ship", $units[$i]->targetid);
-			$stmt->bindParam(":ball", $ball);
+			$stmt->bindParam(":ball", $units[$i]->amount);
 			$stmt->bindParam(":name", $units[$i]->name);
 			$stmt->bindParam(":status", $status);
-			$stmt->bindParam(":available", $units[$i]->amount);
+			$stmt->bindParam(":available", $units[$i]->available);
 			$stmt->bindParam(":destroyed", $destroyed);
 			$stmt->execute();
 			
@@ -391,7 +390,6 @@ class DBManager {
 		for ($i = 0; $i < sizeof($units); $i++){
 			for ($j = 0; $j < sizeof($units[$i]->actions); $j++){
 				if ($units[$i]->actions[$j]->resolved == 0){
-					//Debug::log("ding");
 					$units[$i]->actions[$j]->resolved = 1;
 					
 					$stmt->bindParam(":shipid", $units[$i]->id);
@@ -491,6 +489,7 @@ class DBManager {
 			for ($j = 0; $j < sizeof($avail); $j++){
 				//Debug::log("s: ".$ships[$i]["id"]." vs ".$avail[$j]["id"]);
 				if (abs($picks[$i]["id"]) == $avail[$j]["id"]){
+					$picks[$i]["actions"][0]["turn"] += $avail[$j]["eta"];
 					$avail[$j]["actions"] = $picks[$i]["actions"];
 					$avail[$j]["turn"] = $turn;
 					$cost += $avail[$j]["cost"];
@@ -558,7 +557,7 @@ class DBManager {
 	}	
 
 	public function updateSystemLoad($data){
-		//Debug::log("updateSystemLoad");
+		Debug::log("updateSystemLoad");
 		$stmt = $this->connection->prepare("
 			UPDATE loads
 			SET amount = amount - :amount
@@ -581,6 +580,40 @@ class DBManager {
 		}
 		return true;
 	}
+
+	public function updateUnitEndState($states, $turn, $phase){
+		Debug::log("updateUnitEndState s:".sizeof($states)." ".$turn."/".$phase);
+		$stmt = $this->connection->prepare("
+			UPDATE units
+			SET x = :x,
+				y = :y,
+				angle = :angle,
+				delay = :delay,
+				thrust = :thrust,
+				turn = :turn,
+				phase = :phase
+			WHERE id = :id
+		");
+
+		for ($i = 0; $i < sizeof($states); $i++){
+			//foreach ($states[$i] as $key => $value){Debug::log($key." / ".$value);}
+
+			$stmt->bindParam(":x", $states[$i]["x"]);
+			$stmt->bindParam(":y", $states[$i]["y"]);
+			$stmt->bindParam(":angle", $states[$i]["angle"]);
+			$stmt->bindParam(":delay", $states[$i]["delay"]);
+			$stmt->bindParam(":thrust", $states[$i]["thrust"]);
+			$stmt->bindParam(":turn", $turn);
+			$stmt->bindParam(":phase", $phase);
+			$stmt->bindParam(":id",  $states[$i]["id"]);
+			$stmt->execute();
+
+			if ($stmt->errorCode() == 0){
+				continue;
+			}// else var_dump($stmt->errorCode());
+		}	
+		return true;
+}
 
 	public function setUnitStatusDB($units){
 		//Debug::log("setUnitStatusDB");
@@ -746,6 +779,9 @@ class DBManager {
 			$stmt->bindParam(":shipid", $units[$i]["id"]);
 
 			for ($j = 0; $j < sizeof($units[$i]["actions"]); $j++){
+				if ($units[$i]["actions"][$j]["resolved"]){
+					continue;
+				};
 				$stmt->bindParam(":turn", $units[$i]["actions"][$j]["turn"]);
 				$stmt->bindParam(":type", $units[$i]["actions"][$j]["type"]);
 				$stmt->bindParam(":dist", $units[$i]["actions"][$j]["dist"]);
@@ -1025,20 +1061,23 @@ class DBManager {
 		return true;
 	}	
 
-	public function getActions($units){
+	public function getActions($units, $turn){
 		$stmt = $this->connection->prepare("
 			SELECT * FROM actions
 			WHERE shipid = :shipid
+			AND turn = :turn
 		");
 
 		for ($i = 0; $i < sizeof($units); $i++){
 			$stmt->bindParam(":shipid", $units[$i]->id);
+			$stmt->bindParam(":turn", $turn);
 			$stmt->execute();
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 			if ($result){
 				for ($j = 0; $j < sizeof($result); $j++){
 					$units[$i]->actions[] = new Action(
+						$result[$j]["id"],
 						$result[$j]["turn"],
 						$result[$j]["type"],
 						$result[$j]["dist"],
@@ -1050,9 +1089,7 @@ class DBManager {
 						$result[$j]["costmod"],
 						$result[$j]["resolved"]
 					);
-					if ($result[$j]["resolved"]){
-						$units[$i]->facing += $result[$j]["a"];
-					}
+//					if ($result[$j]["resolved"]){$units[$i]->facing += $result[$j]["a"];}
 				}
 			}
 		}
@@ -1413,7 +1450,7 @@ class DBManager {
 		$stmt = $this->connection->prepare("
 			SELECT * from units
 			WHERE gameid = :gameid
-			AND ball = 1
+			AND ball > 0
 			AND destroyed = 0
 		");
 
@@ -1707,25 +1744,6 @@ class DBManager {
 
 		if ($stmt->errorCode() == 0){
 		//	Debug::log("done");
-			return true;
-		}
-		else return false;
-	}
-
-
-	public function setGameTurn($turn){
-
-		$stmt = $this->connection->prepare("
-			UPDATE games
-			SET	turn = :turn
-			WHERE gameid = :gameid
-		");
-
-		$stmt->bindParam(":turn", $turn);
-
-		$stmt->execute();
-
-		if ($stmt->errorCode() == 0){
 			return true;
 		}
 		else return false;

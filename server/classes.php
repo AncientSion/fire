@@ -49,6 +49,7 @@ class HitTable {
 	}
 }
 class Action {
+	public $id;
 	public $turn;
 	public $type;
 	public $dist;
@@ -56,7 +57,8 @@ class Action {
 	public $y;
 	public $resolved;
 
-	function __construct($turn, $type, $dist, $x, $y, $a, $cost, $delay, $costmod, $resolved){
+	function __construct($id, $turn, $type, $dist, $x, $y, $a, $cost, $delay, $costmod, $resolved){
+		$this->id = $id;
 		$this->turn = $turn;
 		$this->type = $type;
 		$this->dist = $dist;

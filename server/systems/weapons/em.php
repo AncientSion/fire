@@ -9,6 +9,7 @@ class EM extends Weapon {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $destroyed = 0){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+		$this->boostEffect[] = new Effect("Damage", 0.20);
 	}
 
 	public function doDamage($fire, $roll, $system){
@@ -18,7 +19,7 @@ class EM extends Weapon {
 			Debug::log("multi disable, return");
 			return;
 		}
-		$totalDmg = floor($this->getBaseDamage($fire) * (1+$this->getBoostLevel($fire->turn)*0.2) * $this->getDamageMod($fire));
+		$totalDmg = $this->getTotalDamage($fire);
 		$negation = $fire->target->getArmourValue($fire, $system);
 
 		$effect = false;
@@ -56,15 +57,6 @@ class EM extends Weapon {
 				$system->disabled = true;
 			}
 		}
-	}
-
-	public function getDamageMod($fire){
-		$mod = 1;
-
-		$crit = $this->getCritMod("Damage", $fire->turn);
-		$range = $this->getDmgPenaltyRange($fire);
-
-		return $mod + $crit + $range;
 	}
 }	
 

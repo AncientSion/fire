@@ -7,7 +7,8 @@ function Point(x, y){
 	}
 }
 
-function Move(type, dist, x, y, a, delay, cost, costmod, resolved){
+function Move(id, type, dist, x, y, a, delay, cost, costmod, resolved){
+	this.id = id;
 	this.turn = game.turn;
 	this.type = type;
 	this.dist = dist;
@@ -343,9 +344,13 @@ function Crit(data){
 
 	this.getString = function(){
 		var d = "";
-		if (!this.duration){
+
+		if (this.type == "Disabled"){
+			return  (this.type + " (Incl. Turn " + (this.turn + this.duration + ")"));
+		}
+		else if (!this.duration){
 			return (this.type + ": -" + (this.value*100) + "%" + " (Permanent)");
-		} else return (this.type + ": -" + (this.value*100) + "%" + " (Up to Turn " + (this.turn + this.duration + ")"));
+		} else return (this.type + ": -" + (this.value*100) + "%" + " (Incl. Turn " + (this.turn + this.duration + ")"));
 	}
 
 	this.inEffect = function(){
@@ -476,35 +481,13 @@ function Structure(data){
 	}
 
 	this.getSystemDetailsDiv = function(){
-		var div = document.createElement("div");
-			div.id = "systemDetailsDiv";
-		var table = document.createElement("table");
-			
-		var tr = document.createElement("tr");
-		var th = document.createElement("th"); th.colSpan = 2;
-			th.innerHTML = "Outer Armour"; tr.appendChild(th); table.appendChild(tr);
-
-	/*	var tr = document.createElement("tr");
-		var td = document.createElement("td"); td.style.width = "40%";
-			td.innerHTML = "Amount"; tr.appendChild(td);
-		var td = document.createElement("td");
-			td.innerHTML = this.getRemainingIntegrity() + " / " + this.integrity; tr.appendChild(td); table.appendChild(tr);
-*/
-	/*	var tr = document.createElement("tr");
-		var td = document.createElement("td"); td.style.width = "40%";
-			td.innerHTML = "Dmg Mitigation"; tr.appendChild(td);
-		var td = document.createElement("td");
-			td.innerHTML = this.getRemainingMitigation() + "%" + " / " + this.mitigation + "%"; tr.appendChild(td); table.appendChild(tr);
-	*/	
-		var tr = document.createElement("tr");
-		var td = document.createElement("td"); td.style.width = "40%";
-			td.innerHTML = "Dmg Negation"; tr.appendChild(td);
-		var td = document.createElement("td");
-			td.innerHTML = this.getRemainingNegation() + " / " + this.negation; tr.appendChild(td); table.appendChild(tr);
-
-		div.appendChild(table);
-			
-		return div;
+		return $("<div>").attr("id", "systemDetailsDiv")
+			.append($("<table>")
+				.append($("<tr>")
+					.append($("<th>").html("Outer Armour").attr("colSpan", 2)))
+				.append($("<tr>").attr("colSpan", 2)
+					.append($("<td>").html("Strength"))
+					.append($("<td>").html(this.getRemainingNegation() + " / " + this.negation))));
 	}
 
 	this.getRemainingIntegrity = function(){
@@ -595,24 +578,15 @@ function Primary(data){
 	}
 
 	this.getSystemDetailsDiv = function(){
-		var div = document.createElement("div");
-			div.id = "systemDetailsDiv";
-		var table = document.createElement("table");
-			
-		var tr = document.createElement("tr");
-		var th = document.createElement("th"); th.colSpan = 2;
-			th.innerHTML = "Main Structure"; tr.appendChild(th); table.appendChild(tr);
-			
-		var tr = document.createElement("tr");
-		var td = document.createElement("td"); td.style.width = "40%";
-			td.innerHTML = "Integrity"; tr.appendChild(td);
-		var td = document.createElement("td");
-			td.innerHTML = this.remaining + " / " + this.integrity; tr.appendChild(td); table.appendChild(tr);
-
-		div.appendChild(table);
-			
-		return div;
+		return $("<div>").attr("id", "systemDetailsDiv")
+			.append($("<table>")
+				.append($("<tr>")
+					.append($("<th>").html("Main Structure").attr("colSpan", 2)))
+				.append($("<tr>").attr("colSpan", 2)
+					.append($("<td>").html("Strength"))
+					.append($("<td>").html(this.remaining + " / " + this.integrity))));
 	}
+
 
 	this.getRemainingIntegrity = function(){
 		var integrity = this.integrity;

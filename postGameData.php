@@ -9,7 +9,6 @@ if (isset($_POST["type"])) {
 	$manager = new Manager($_POST["userid"], $_POST["gameid"]);
 	$dbManager = DBManager::app($_POST["userid"]);
 
-
 	if ($_POST["type"] == "joinGame") {
 		if ($dbManager->createPlayerStatus($_POST["userid"], $_POST["gameid"], 0, -1, "joined")) {
 			echo "joinGame success";
@@ -62,12 +61,9 @@ if (isset($_POST["type"])) {
 		if (isset($_POST["ew"])){
 			$dbManager->insertEW($_POST["ew"]);
 		}
-		if (isset($_POST["reinforcements"])){
-			$dbManager->requestReinforcements($_POST["userid"], $_POST["gameid"], $manager->turn, $_POST["reinforcements"]);
-		}
 		$dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["gameturn"], $_POST["gamephase"], "ready");
 	}
-	else if ($_POST["type"] == "movement"){
+	else if ($_POST["type"] == "movement"){;
 		if ($dbManager->insertClientActions($_POST["gameid"], $_POST["ships"])){
 			if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["gameturn"], $_POST["gamephase"], "ready")){
 				echo "movement success";

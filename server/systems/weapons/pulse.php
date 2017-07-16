@@ -43,7 +43,7 @@ class Pulse extends Weapon {
 		$negation = $fire->target->getArmourValue($fire, $system);
 
 		for ($i = 0; $i < $fire->hits; $i++){
-			$totalDmg = floor($this->getBaseDamage($fire) * $mod);
+			$totalDmg = $this->getTotalDamage($fire);
 			$dmg = $this->determineDamage($totalDmg, $negation);
 
 			if (!$destroyed){
@@ -86,7 +86,7 @@ class LightPulse extends Pulse {
 	public $projSpeed = 10;
 	public $reload = 1;
 	public $mass = 12;
-	public $powerReq = 1;
+	public $powerReq = 2;
 	public $traverse = -3;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){

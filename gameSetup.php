@@ -156,9 +156,9 @@ else {
 				</td>
 			</tr>
 		</table>
-		<div id="game" class="disabled" style="width: 420px; height: 400px">
+		<div id="game" class="disabled" style="width: 420px; height: 400px; top: 650px; left: 125px">
 			<canvas id="canvas" style='z-index: 0'></canvas>
-			<canvas id="shipCanvas" style='z-index: 2'></canvas>
+			<canvas id="shipCanvas" style='border: 2px solid white; z-index: 2'></canvas>
 			<canvas id="fxCanvas" style='z-index: 1'></canvas>
 		</div>
 		<div id="hangarLoadoutDiv" class="disabled">
@@ -206,9 +206,9 @@ else {
 			$("#game").hide();
 		}
 		else if (window.joined){
-			 window.preview = true;
-
-			 window.game = {
+			window.turn = new Turn();
+			window.preview = true;
+			window.game = {
 			 	phase: -2,
 				ships: [],				
 				shipsBought: [],
@@ -276,8 +276,7 @@ else {
 
 		var icons = [images.earth, images.centauri, images.minbari, images.narn];
 
-		console.log(window.factionImages);
-		console.log(window.factions);
+		
 
 		var table = document.createElement("table"); 
 			table.className = "factionUpperTable";
@@ -418,8 +417,9 @@ else {
 		$("#hangarTable").html("");
 
 		for (var i = 0; i < window.ships.length; i++){
-			var ship = window.initiateShip(window.ships[i]);		
-			ship.actions.push(new Move("deploy", 0, res.x/2, res.y/2, 270, 0, 0));
+			var ship = window.initiateShip(window.ships[i]);
+				ship.facing = -90;
+			ship.actions.push(new Move(-1, "deploy", 0, res.x/2, res.y/2, 270, 0, 0));
 		}
 
 		game.ships[0] = ship;
@@ -551,6 +551,9 @@ else {
 		}
 		else {
 			$(ele.parentNode.childNodes[($(ele).data("row")*2)+2]).slideToggle(0);
+			var t = $(".factionUpperTable").position();
+			var h =  $(".factionUpperTable").height();
+			$("#game").css("top", t.top+h+20);
 		}
 	}
 
@@ -594,6 +597,10 @@ else {
 
 
 		$(ele.parentNode.childNodes[(row*2)+2]).slideToggle(0);
+
+		var t = $(".factionUpperTable").position();
+		var h =  $(".factionUpperTable").height();
+		$("#game").css("top", t.top+h+20);
 
 	}
 

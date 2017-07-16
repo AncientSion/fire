@@ -5,18 +5,28 @@ function Flight(data){
 	this.layout = [];
 	this.ep = data.ep;
 	this.mass = data.mass;
+	this.baseSize = data.baseSize;
 	this.turns = 10;
 	this.dogfights = [];
 	this.trueSize;
 
 	this.create = function(){
+		this.img = window.shipImages[this.structures[0].name.toLowerCase() + "l"];
 		this.setFighterState();
+		this.setDrawData();
 		//this.setMaxMass();
 		//this.setEP();
 		//this.setTurns();
-		this.setFacing();
-		this.setPosition();
+	//	this.setPosition();
 		this.setLayout();
+	}
+
+	this.isDogfighting = function(id){
+		for (var i = 0; i < this.dogfights.length; i++){
+			if (this.dogfights[i] == id){
+				return true;
+			}
+		} return false;
 	}
 
 	this.getDamageEntriesByFireId = function(fire){
@@ -124,18 +134,7 @@ function Flight(data){
 	}
 
 	this.getEP = function(){
-		if (this.actions.length && this.actions[0].turn == game.turn){
-			return Math.floor(this.ep*0.4);
-		}
 		return this.ep;
-	}
-
-	this.setEP = function(){
-		for (var i = 0; i < this.structures.length; i++){
-			if (! this.structures[i].destroyed){
-				this.ep = Math.min(this.ep, this.structures[i].ep);
-			}
-		}
 	}
 
 	this.setTurns = function(){
@@ -156,7 +155,7 @@ function Flight(data){
 
 	this.animationSetupDamage = function(){
 		var all = this.structures.length;
-		var postFire = (this.size - 32) / 5;
+		var postFire = (this.size - this.baseSize) / 5;
 		var preFire = postFire;
 
 		for (var i = 0; i < this.structures.length; i++){
@@ -171,7 +170,7 @@ function Flight(data){
 
 		//console.log("all: " + all + ", postFire: " + postFire + ", preFire: " + preFire);
 		this.trueSize = this.size;
-		this.size = preFire * 5 + 32;
+		this.size = preFire * 5 + this.baseSize;
 	}
 
 	this.drawHoverElements = function(){
@@ -183,8 +182,8 @@ function Flight(data){
 			console.log("ding");
 		}*/
 		ctx.save();
-		ctx.translate(this.x, this.y)
-		ctx.rotate((this.facing+90) * (Math.PI/180));
+		ctx.translate(this.drawX, this.drawY);
+		ctx.rotate((this.getDrawFacing()+90) * (Math.PI/180));
 
 		if (game.animateFire){
 			for (var i = 0; i < this.structures.length; i++){
@@ -194,7 +193,7 @@ function Flight(data){
 			}
 		}
 		else {
-			var alive = (this.size - 32) / 5;
+			var alive = (this.size - this.baseSize) / 5;
 			var oy = (this.structures.length-alive)*4;
 			var index = 0;
 			for (var i = 0; i < this.structures.length; i++){
@@ -221,45 +220,13 @@ function Flight(data){
 
 	this.canShortenTurn = function(){
 		return false;
-		if (game.phase == 0 || game.phase == 1){
-			if (this.getRemainingEP() >= this.getShortenTurnCost()){
-				return true;
-			}
-		}
-
-		return false;
 	}
 	
 	this.canUndoShortenTurn = function(){
 		return false;
-		if (game.phase == 0 || game.phase == 1){
-			if (this.turns.length){
-				if (this.turns[0].costmod > 1){
-					return true;
-				}
-			}
-		}
 	}
-
-/*	this.getImpulseChangeCost = function(){
-		return Math.ceil(Math.pow(this.mass, 1.15)/3*this.getImpulseMod());
-		return Math.ceil(this.mass/3*this.getImpulseMod());
-	}
-
-	this.getTurnCost = function(){
-		return Math.ceil(Math.pow(this.mass, 1.15)/100*this.getImpulseMod() * this.getTurnAngle());
-		return Math.ceil(this.mass/50*this.getImpulseMod() * this.getTurnAngle());
-	}
-	
-	this.getBaseTurnDelay = function(){
-		return this.mass/2;
-	}
-	*/
 	
 	this.getBaseImpulse = function(){
-		if (this.actions.length && this.actions[0].turn == game.turn){
-			return Math.floor(this.baseImpulse*0.6);
-		}
 		return this.baseImpulse;
 	}
 
@@ -282,9 +249,10 @@ function Flight(data){
 	}
 
 	this.launchedThisTurn = function(){
-		if (!(this.actions.length) || this.actions[0].turn == game.turn){
+		if (this.available == game.turn){
 			return true;
-		} return false;
+		}
+		return false;
 	}
 
 	this.expandDiv = function(div){
@@ -305,15 +273,11 @@ function Flight(data){
 			structContainer.className = "structContainer";
 
 		div.appendChild(structContainer);
-			
-		////document.getElementById("game").appendChild(div);
 		document.body.appendChild(div);
-
-
 
 		var maxWidth = 0;
 		if (this.structures.length <= 6){
-			maxWidth = 330;
+			maxWidth = 350;
 		}
 		else if (this.structures.length <= 12){
 			maxWidth = 400;
@@ -473,11 +437,11 @@ function Flight(data){
 		} else $(ele).attr("class", "hostile");
 
 		var baseHit = this.getBaseHitChance();
-		var impulse = this.getTotalImpulse();
+		var impulse = this.getCurrentImpulse();
 		
 		var table = document.createElement("table");
 			table.insertRow(-1).insertCell(-1).innerHTML = "Flight #" + this.id + " (" +game.getUnitType(this.traverse) + ")";
-			table.insertRow(-1).insertCell(-1).innerHTML =  "Impulse: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")";
+			table.insertRow(-1).insertCell(-1).innerHTML =  "Thrust: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")";
 			table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit: " +  this.getBaseHitChance() + "% ";
 		return table;
 	}
@@ -519,6 +483,11 @@ function Flight(data){
 }
 
 Flight.prototype = Object.create(Ship.prototype);
+
+Flight.prototype.setPreMoveFacing = function(){
+	this.drawFacing = this.facing;
+}
+
 
 function Fighter(data){
 	this.id = data.id;
@@ -585,11 +554,11 @@ function Fighter(data){
 	this.getDetailsDiv = function(){
 		var div = document.createElement("div");
 			div.id = "systemDetailsDiv";
-			div.className = this.id;
+			div.className = this.id + " flight";
 
 			var table = $("<table>")
 				.append($("<tr>").append($("<th>").attr("colspan", 2).html(this.name)))
-				.append($("<tr>").append($("<td>").html("Mass / Turn Delay")).append($("<td>").html(this.mass)))
+				.append($("<tr>").append($("<td>").html("Mass / Turn Delay").css("width", 120)).append($("<td>").html(this.mass)))
 				.append($("<tr>").append($("<td>").html("Engine Power")).append($("<td>").html(this.ep)))
 				.append($("<tr>").append($("<td>").html("Frontal Armour")).append($("<td>").html(this.negation[0])))
 				.append($("<tr>").append($("<td>").html("Side Armour")).append($("<td>").html(this.negation[1])))

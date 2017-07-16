@@ -34,3 +34,32 @@ window.cam = {
 		game.redraw();
 	}	
 }
+
+function Turn(){
+	this.id;
+	this.a;
+	this.mod;
+	this.cost;
+	this.delay;
+	this.step = 0.1;
+	this.max;
+	this.dif
+
+	this.reset = function(){
+		//this.id = 0;
+		this.a = 0;
+		this.mod = 1;
+		this.cost = 0;
+		this.delay = 0;
+	}
+
+	this.set = function(unit){
+		this.id = unit.id;
+		this.a = 0;
+		this.mod = 1;
+		this.cost = unit.baseTurnCost;
+		this.delay = unit.baseTurnDelay;
+		this.max = unit.getMaxTurnAngle();
+		this.dif = round(unit.getCurrentImpulse() / unit.getBaseImpulse(), 1);
+	}
+}

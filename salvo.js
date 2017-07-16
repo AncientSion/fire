@@ -10,17 +10,22 @@ function Salvo(data){
 	this.destroyed = data.destroyed;
 	this.actions = data.actions;
 	this.baseImpulse = data.baseImpulse;
+	this.currentImpulse = data.currentImpulse;
 	this.baseHitChance = data.baseHitChance;
 	this.fireOrder = data.fireOrder;
-	this.traverse = -4;
+	this.available = data.available;
+	this.facing = data.facing;
+	this.x = data.x;
+	this.y = data.y;
+	this.drawX = data.x;
+	this.drawY = data.y;
+	this.traverse = data.traverse;
+	this.hold = false;
 	this.shortInfo = false;
 	this.selected = false;
 	this.structures = [];
 	this.layout = [];
 	this.size;
-	this.x;
-	this.y;
-	this.facing;
 	this.img;
 	this.highlight = false;
 	this.friendly = false;
@@ -90,7 +95,7 @@ function Salvo(data){
 	}
 
 	this.getPlannedPosition = function(){
-		return new Point(this.x, this.y);
+		return this.getBaseOffsetPos();
 	}
 
 	this.doHighlight = function(){
@@ -138,24 +143,10 @@ function Salvo(data){
 		return this.baseImpulse;
 	}
 
-	this.getAccelSteps = function(){
-		if (this.actions.length == 1){return 2;}
-		var steps = 3;
-		for (var i = 1; i < this.actions.length-1; i++){
-			if (this.actions[i].resolved){
-				switch (this.actions[i].type){
-					case "move": steps++; break;
-				}
-			}
-		}
-		if (game.phase != 3 && !this.destroyed && this.animated){
-			steps--;
-		}
-		return steps;
-	}
-
-	this.getTotalImpulse = function(){
-		return Math.floor(this.getBaseImpulse() * this.getAccelSteps());
+	this.getCurrentImpulse = function(){
+		if (game.phase >= 3){
+			return this.currentImpulse + this.baseImpulse*(1-this.destroyed);
+		} else return this.currentImpulse;
 	}
 
 	this.getTrackingString = function(){
@@ -202,13 +193,13 @@ function Salvo(data){
 			table.style.width = "95%"; table.style.marginTop = "20px";
     	$(table)
 			.append($("<tr>")
-	    		.append($("<th>").html("Impulse / Accel"))
+	    		.append($("<th>").html("Thrust / Accel"))
 	    		.append($("<th>").html("Armour"))
 	    		.append($("<th>").html("Damage"))
 	    		.append($("<th>").html("Tracking up to"))
 			)
 			.append($("<tr>")
-	    		.append($("<td>").html(this.getTotalImpulse() + " (+" + Math.floor(this.getBaseImpulse()) + " per Turn)"))
+	    		.append($("<td>").html(this.getCurrentImpulse() + " (+" + Math.floor(this.getBaseImpulse()) + " per Turn)"))
 	    		.append($("<td>").html(this.structures[0].negation))
 	    		.append($("<td>").html(this.getDamage()))
 	    		.append($("<td>").html(this.getTrackingString()))
@@ -224,7 +215,7 @@ function Salvo(data){
 		var max = Math.min(5, this.structures.length);
 
 		var impact = false;
-		if (this.actions[this.actions.length-1].type == "impact"){
+		if (this.actions.lenght && this.actions[this.actions.length-1].type == "impact"){
 			impact = true;
 		}
 
@@ -296,14 +287,12 @@ function Salvo(data){
 			this.doUnselect();
 		}
 		else {
-			//this.intercept();
-			console.log(this);
 			this.doSelect();
 		}
 	}
 
 	this.doSelect = function(){
-		//console.log(this);
+		console.log(this);
 		aUnit = this.id;
 		this.selected = true;
 		this.switchDiv();
@@ -315,25 +304,12 @@ function Salvo(data){
 		this.switchDiv();
 	}
 
-	this.switchDiv = function(){
-		if (this.selected){
-			$(this.element)
-				.removeClass("disabled");
-		}
-		else {
-			$(this.element).addClass("disabled");
-		}
-	}
-
 	this.create = function(){
 		this.size = 18;
-		this.x = this.actions[this.actions.length-1].x;
-		this.y = this.actions[this.actions.length-1].y;
-
-		this.setImage();
+		this.img = window.ballImages[this.name.toLowerCase()].cloneNode(true);
 		this.setDisplay();
+		//this.setFacing();
 		this.createDiv();
-		this.setFacing();
 		this.setLayout();
 		this.setFinalStep();
 		this.setNextStep();
@@ -343,42 +319,8 @@ function Salvo(data){
 		} else this.friendly = false;
 	}
 
-	this.setImage = function(){
-		this.img = window.ballImages[this.name.toLowerCase()].cloneNode(true);
-	}
-
 	this.setDisplay = function(){
 		this.display = this.structures[0].display;
-	}
-
-	this.setFacing = function(){
-		var target = game.getUnitById(this.targetid);
-		var start;
-		var end;
-
-		if (this.actions[this.actions.length-1].type == "impact"){
-			start = this.actions[this.actions.length-2];
-		}
-		else {
-			start = this.actions[this.actions.length-1];
-		}
-
-		/*
-			if (target.salvo){
-				end = game.getUnitById(this.targetid).nextStep;
-			}
-			else if (this.status == "impact"){
-				end = this.actions[this.actions.length-1];
-			}
-			else end = game.getUnitById(this.targetid).getBaseOffsetPos();
-		*/
-		if (this.status == "impact"){
-			end = this.actions[this.actions.length-1];
-		}
-		else {
-			end = game.getUnitById(this.targetid).getBaseOffsetPos();
-		}
-		this.facing = Math.floor(getAngleFromTo(start, end));
 	}
 
 	this.setLayout = function(){
@@ -410,6 +352,11 @@ function Salvo(data){
 			c++
 		}
 	}
+
+	this.setPostMovePosition = function(){
+		this.x = this.actions[this.actions.length-1].x;
+		this.y = this.actions[this.actions.length-1].y;
+	}
 	
 	this.draw = function(){
 		if (game.animateFire && !this.animated){return;}
@@ -417,6 +364,28 @@ function Salvo(data){
 		this.drawSelf();		
 		this.drawPositionMarker();
 		this.resetTransform()
+	}
+
+	this.drawMove = function(){
+
+		ctx.save();
+		ctx.translate(this.drawX, this.drawY);
+		ctx.rotate((this.facing + 90) * (Math.PI/180));
+
+		this.drawSelf();
+		this.drawPositionMarker();
+
+		ctx.restore();
+
+		ctx.beginPath();
+		ctx.moveTo(this.drawX, this.drawY);
+		ctx.lineTo(this.finalStep.x, this.finalStep.y);
+		ctx.closePath();
+
+		ctx.globalAlpha = 0.2;
+		ctx.strokeStyle = "white";
+		ctx.stroke();
+		ctx.globalAlpha = 1;
 	}
 
 	this.setTransform = function(){
@@ -468,7 +437,7 @@ function Salvo(data){
 				target.setFinalStep();
 			}
 			var vector = new Vector(target, game.getUnitById(target.targetid));
-			var speedMod = this.getTotalImpulse() / target.getTotalImpulse();
+			var speedMod = this.getCurrentImpulse() / target.getCurrentImpulse();
 			this.finalStep = getIntercept(this.getPlannedPosition(), target, vector, speedMod);
 			//this.finalStep = target.nextStep;
 		}
@@ -480,7 +449,7 @@ function Salvo(data){
 	this.setNextStep = function(){
 		var target = game.getUnitById(this.targetid);
 		var dist = getDistance(this.getPlannedPosition(), this.finalStep);
-		var impulse = this.getTotalImpulse();
+		var impulse = this.getCurrentImpulse();
 		if (impulse < dist){
 			var a = getAngleFromTo(this, target.getPlannedPosition());
 			this.nextStep = getPointInDirection(impulse, a, this.x, this.y);
@@ -491,7 +460,7 @@ function Salvo(data){
 	}
 
 	this.drawMovePlan = function(){
-		var origin = this.actions[this.actions.length-1];
+		//var origin = this.actions[this.actions.length-1];
 		var inRange = false;
 		var target = game.getUnitById(this.targetid);
 
@@ -508,10 +477,10 @@ function Salvo(data){
 
 		salvoCtx.translate(cam.o.x, cam.o.y);
 		salvoCtx.scale(cam.z, cam.z)
-		salvoCtx.translate(origin.x, origin.y);
+		salvoCtx.translate(this.x, this.y);
 		salvoCtx.beginPath();
 		salvoCtx.moveTo(0, 0);
-		salvoCtx.translate(-origin.x + this.nextStep.x, -origin.y + this.nextStep.y);
+		salvoCtx.translate(-this.x + this.nextStep.x, -this.y + this.nextStep.y);
 		salvoCtx.lineTo(0, 0);
 		salvoCtx.closePath();
 
@@ -548,7 +517,7 @@ function Salvo(data){
 
 		var table = document.createElement("table");
 			table.insertRow(-1).insertCell(-1).innerHTML = this.structures.length + "x " + this.name + " #" + this.id;
-			table.insertRow(-1).insertCell(-1).innerHTML =  "Impulse: " + this.getTotalImpulse();
+			table.insertRow(-1).insertCell(-1).innerHTML =  "Thrust: " + this.getCurrentImpulse();
 			table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit: " + this.getHitChanceFromAngle() + "%";
 
 		if (this.impactThisTurn()){
@@ -578,7 +547,7 @@ function Salvo(data){
 
 	this.impactThisTurn = function(){
 		target = game.getUnitById(this.targetid);
-		if (getDistance({x: target.x, y: target.y}, {x: this.x, y: this.y}) <= this.getTotalImpulse()){
+		if (getDistance(target.getPlannedPosition(), this.getBaseOffsetPos()) <= this.getCurrentImpulse()){
 			return true;
 		} else return false;
 	}
@@ -590,26 +559,20 @@ function Salvo(data){
 	this.getPlannedFacing = function(){
 		return this.facing;
 	}
-	
-	this.getOffsetPos = function(){
-		return {x: this.actions[this.actions.length-1].x + cam.o.x, y: this.actions[this.actions.length-1].y + cam.o.y};
-	}
 
 	this.getBaseOffsetPos = function(){
-		return {x: this.actions[this.actions.length-1].x, y: this.actions[this.actions.length-1].y};
+		if (this.actions.length){
+			for (var i = this.actions.length-1; i >= 0; i--){
+				if (this.actions[i].resolved == 1){
+					return {x: this.actions[i].x, y: this.actions[i].y};
+				}
+			}
+		}
+		return {x: this.x, y: this.y};
 	}
 
-	this.getTrajectory = function(){
-		
-		/*
-		if (this.actions.length >= 2){
-			return {x: this.actions[this.actions.length-2].x, y: this.actions[this.actions.length-2].y};
-		}
-		else { 
-			return this.getBaseOffsetPos();
-		}
-		*/
-		return this.getBaseOffsetPos();
+	this.getTrajectoryStart = function(){
+		return {x: this.x, y: this.y};
 	}
 
 	this.getFiringPosition = function(){
@@ -644,3 +607,7 @@ Salvo.prototype.isMaskedFromUnit = function(){
 Salvo.prototype.getImpulseMod = function(){
 	return 1;
 }
+Salvo.prototype.switchDiv = function(){
+	Ship.prototype.switchDiv.call(this);
+}
+

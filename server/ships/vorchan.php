@@ -17,9 +17,9 @@ class Vorchan extends Light {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 225, 16);
-		$front->systems[] = new LightIon($this->getId(), $this->id, 240, 120);
-		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60,	array(array("Hasta", 8, 4), array("Patriot", 16, 8)));
-		$front->systems[] = new LightIon($this->getId(), $this->id, 240, 120);
+		$front->systems[] = new MediumSingleIon($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60,	array(array("Hasta", 8, 4), array("Vanguard", 10, 5)));
+		$front->systems[] = new MediumSingleIon($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 170, 14);

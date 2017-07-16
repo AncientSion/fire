@@ -20,6 +20,10 @@ function radianToDegree(radian){
 
 function getAngleFromTo(a, b){
 	return radianToDegree(Math.atan2(b.y-a.y, b.x-a.x));;
+}
+
+function getAngle(ax, ay, bx, by){
+	return radianToDegree(Math.atan2(by-ay, bx-ax));;
 } 
 
 function addAngle(f, a){

@@ -17,6 +17,18 @@ class Linked extends Weapon {
 		$this->maxDmg = $maxDmg;
 		$this->start = $start;
 		$this->end = $end;
+
+		/*
+		unset($this->boostEffect);
+		unset($this->damages);
+		unset($this->modes);
+		unset($this->powers);
+
+		unset($this->armourMod);
+		unset($this->exploSize);
+		unset($this->mass);
+		unset($this->output);
+		*/
 	}
 }
 
@@ -24,6 +36,22 @@ class LinkedParticle extends Linked {
 	public $type = "Particle";
 	public $animation = "projectile";
 
+	function __construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end){
+		parent::__construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end);
+	}
+}
+
+class IonBolt extends LinkedParticle {
+	public $name = "IonBolt";
+	public $display = "Ion Accelerator";
+	public $accDecay = 200;
+	public $shots = 1;
+	public $animColor = "orange";
+	public $reload = 2;
+	public $projSize = 3;
+	public $projSpeed = 5;
+	public $traverse = -2;
+	
 	function __construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end){
 		parent::__construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end);
 	}
@@ -50,6 +78,7 @@ class LinkedNeutronRepeater extends LinkedParticle {
 		parent::__construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end);
 	}
 }
+
 
 class FighterPulse extends Pulse {
 	public $type = "Pulse";

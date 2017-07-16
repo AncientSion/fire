@@ -49,7 +49,7 @@ body {
 	top: 300px;
 	background-color: black;
 	border-radius: 5px;
-	border: 5px solid green;
+	border: 5px solid #27e627;
 	padding: 20px;
 	width: 400px;
 	height: 70px;
@@ -99,10 +99,10 @@ body {
 }
 
 .unitTest {
-	width: 300px;
 	border: 1px solid white;
 	display: inline-block;
 	margin-left: 20px;
+	margin-top: 20px;
 }
 
 .unitTest td {
@@ -172,11 +172,16 @@ table, th, tr, td {
 }
 
 #deployTable tr.selected {
-	box-shadow: inset 0 0 0.5em 0.5em lightGreen;
+	box-shadow: inset 0 0 0.5em 0.5em #27e627;
 }
 
 .selected {
-	box-shadow: inset 0 0 0.5em 0.5em lightGreen;
+	box-shadow: inset 0 0 0.5em 0.5em #27e627;
+}
+
+#reinforce:hover {
+	background-color: white;
+	color: black;
 }
 
 #reinforceTable {
@@ -196,7 +201,7 @@ table, th, tr, td {
 }
 
 .requestReinforcements.selected {
-	box-shadow: inset 0 0 0.5em 0.5em lightGreen;
+	box-shadow: inset 0 0 0.5em 0.5em #27e627;
 }
 
 .header {
@@ -245,7 +250,7 @@ table, th, tr, td {
 	width: 500px;
 	border: 3px solid red;
 	background-color: black;
-	z-index: 11;
+	z-index: 12;
 	border-radius: 5px;
 }
 
@@ -409,14 +414,10 @@ table, th, tr, td {
 }
 
 #game {
-}
-
-.game {
 	position: absolute;
 	top: 0px;
 	left: 0px;
 }
-
 #game.disabled {
 	display: none;
 }
@@ -476,14 +477,17 @@ table, th, tr, td {
 	-ms-transform: rotate(270deg);
 }
 
-.rotate270size90 {
+.size90 {
 	width: 90px;
 	height: 90px;
 	margin: auto;
 	margin-top: 10px;
-	transform: rotate(270deg);
-	-webkit-transform: rotate(270deg);
-	-ms-transform: rotate(270deg);
+}
+
+.size60 {
+	width: 60px;
+	height: 60px;
+	margin: auto;
 }
 
 .structContainer {
@@ -508,6 +512,9 @@ table, th, tr, td {
 
 .structTable td, .structTable th, .primaryTable td, .primaryTable th {
 	border: 1px solid white;
+}
+.structTable td.emptySystem {
+	border: none;
 }
 
 .struct {
@@ -636,6 +643,12 @@ table, th, tr, td {
 	color: black;
 	height: 32px;
 	width: 32px;
+}
+
+.emptySystem {
+	color: black;
+	height: 16px;
+	width: 16px;
 }
 
 .system.fighter {
@@ -827,22 +840,30 @@ table, th, tr, td {
 	background: black;
 	color: white;
 }
+#phaseSwitchDiv.disabled {
+	display: none;
+}
 
 #systemDetailsDiv {
-	z-index: 10;
+	z-index: 30;
 	display: inline-block;
 	position: absolute;
 }
 
 #systemDetailsDiv table {
 	width: 220px;
-	border: 3px solid white;
+	border: 2px solid white;
+	border-collapse: collapse;
+}
+
+#systemDetailsDiv.flight table {
+	width: 180px;
+	border: 2px solid white;
 	border-collapse: collapse;
 }
 
 #systemDetailsDiv th {
 	font-size: 14px;
-	border-bottom: 1px solid white;
 }
 
 #systemDetailsDiv th, #systemDetailsDiv td {
@@ -857,7 +878,7 @@ table, th, tr, td {
 
 #systemDetailsDiv td.positive {
 	font-size: 12px;
-	color: lightGreen;
+	color: #27e627;
 }
 
 .boostDiv {
@@ -908,6 +929,29 @@ table, th, tr, td {
 	border-radius: 5px;
 }
 
+#unitGUI {
+	display: inline-block;
+	position: absolute;
+	z-index: 8;
+	border: 1px solid white;
+	color: white;
+	background-color: black;
+	padding: 15px;
+	border-radius: 5px;
+}
+
+#unitGUI img:hover {
+	background-color: white;
+}
+
+#unitGUI .friendly {
+	border: 1px solid #27e627;
+}
+
+#unitGUI .hostile {
+	border: 1px solid red;
+}
+
 #overview {
 	border-collapse: collapse;
 	width: 100%;
@@ -930,13 +974,14 @@ table, th, tr, td {
 }
 
 #confirmOrders:hover {
-	background-color: lightGreen;
+	background-color: #27e627;
 }
 
 #combatlogWrapper, #deployLogWrapper {
 	position: absolute;
-	top: 120px;
-	width: 750px;	
+	top: 110px;
+	left: 400px;
+	width: 800px;	
 	z-index: 8;
 	padding: 3px;
 	border-radius: 5px;
@@ -954,6 +999,10 @@ table, th, tr, td {
 	text-align: center;
 } 
 
+.bold {
+	font-weight: bold;
+}
+
 #combatLog, #deployLog {
 	border-radius: 5px;
 	border: 1px solid white;
@@ -965,15 +1014,21 @@ table, th, tr, td {
 }
 
 #combatLog .selected {
-	box-shadow: inset 0 0 0.25em 0.25em red;
+	background-color: white;
+	color: black;
+	box-shadow: none;
+	border: 1px solid black;
+	border-left: 1px solid white;
+	border-right: 1px solid white;
 }
 
 #combatLog tr {
 	height: 22px;
+	border: 1px solid white;
 }
 
 .friendly {
-	border: 2px solid green;
+	border: 2px solid #27e627;
 }
 
 .hostile {
@@ -992,7 +1047,7 @@ table, th, tr, td {
 }
 
 .green {
-	color: lightGreen;
+	color: #27e627;
 }
 
 .bgYellow {
@@ -1065,8 +1120,8 @@ table, th, tr, td {
 
 .shipAvailable {
 	font-size: 20px;
-	color: green;
-	box-shadow: inset 0 0 20px green;
+	color: #27e627;
+	box-shadow: inset 0 0 20px #27e627;
 }
 
 .shipUnavailable {
@@ -1077,17 +1132,25 @@ table, th, tr, td {
 #vectorDiv {
 	display: inline;
 	position: absolute;
-	border: 1px solid black;
+	border: 1px solid white;
 	border-radius: 5px;
-	background-color: white;
-	color: black;
-	padding: 5px;
+	background-color: black;
+	color: white;
+	padding: 3px;
 	z-index: 10;
-	width: 75px;
+	width: 110px;
 }
 
 #vectorDiv.disabled {
 	display: none;
+}
+
+#vectorDiv table {
+	margin: auto;
+}
+
+#vectorDiv td {
+	color: white;
 }
 
 #impulseGUI {
@@ -1121,17 +1184,18 @@ table, th, tr, td {
 	z-index: 7;
 }
 
-#turnLeft, #turnRight {
-	color: white;
-	border-radius: 5px;
-	width: 90px;
-}
-
 #turnButton, #epButton {
 	color: white;
 	border-radius: 5px;
-	width: 100px;
+	width: 120px;
 }
+
+#epButton {
+	color: white;
+	border-radius: 5px;
+	width: 160px;
+}
+
 
 .turnEle.disabled {
 	display: none;
@@ -1142,11 +1206,16 @@ table, th, tr, td {
 }
 
 #turnMode.on {
-	color: lightGreen;
+	color: #27e627;
+}
+
+.size20 {
+	height: 20px;
+	width: 20px;
 }
 
 .ep {
-	color: lightGreen;
+	color: #27e627;
 }
 
 .ui {
@@ -1160,11 +1229,6 @@ table, th, tr, td {
 
 .ui.disabled {
 	display: none;
-}
-
-.doTurn:hover {
-	background-color: white;
-	color: black;
 }
 
 .doShortenTurn:hover, .doUndoShortenTurn:hover {
@@ -1186,7 +1250,7 @@ table, th, tr, td {
 	color: white;
 }
 
-#maxVector.disabled, #maxTurnVector.disabled {
+#maxVector.disabled, #maxTurnVector.disabled, #shortenTurn.disabled {
 	display: none;
 }
 

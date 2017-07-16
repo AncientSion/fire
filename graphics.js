@@ -5,6 +5,7 @@ function drawVector(origin, target, dist, angle){
 	mouseCtx.lineTo(target.x, target.y);
 	mouseCtx.closePath();
 	mouseCtx.strokeStyle = "white";
+	mouseCtx.lineWidth = 2;
 	mouseCtx.stroke();
 
 	if (angle > 180){
@@ -46,33 +47,59 @@ function drawProjectile(weapon, fire){
 	fxCtx.strokeStyle = "white";
 	fxCtx.lineWidth = weapon.projSize/4;
 	fxCtx.stroke();
+	fxCtx.closePath();
 
 	fxCtx.globalCompositeOperation = "source-over";
+
+/*	if (weapon instanceof Plasma){
+		//var end = getPointInDirection(13, fire.f-180, trailEnd.x, trailEnd.y);
+		for (i = 0; i < 3; i++){
+			x = x + range(-2, 2)
+			y = y + range(-2, 2)
+
+			fxCtx.globalAlpha = 1-w
+			fxCtx.beginPath();
+			fxCtx.arc(x, y, 0.5, 0, 2*Math.PI, false);
+			fxCtx.strokeStyle = weapon.animColor;
+			fxCtx.stroke();
+			fxCtx.beginPath();
+			fxCtx.arc(x, y, 0.5, 0, 2*Math.PI, false);
+			fxCtx.globalCompositeOperation = "lighter";
+			fxCtx.strokeStyle = "white";
+			fxCtx.stroke();
+		}
+	}*/
+
+
 	fxCtx.setTransform(1,0,0,1,0,0);
 }
-
-function drawExplosion(weapon, x, y, now, max, explo){  // 150, 150, 30
-	var fraction = (now-max)/(explo);
-	//	console.log(now, max);
-	//function drawExplosion(weapon, shooter, ele){
-	fxCtx.translate(cam.o.x, cam.o.y);
-	fxCtx.scale(cam.z, cam.z)
-
+//drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].tx, game.fireOrders[i].anim[j][k].ty, game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m, 30); // EXPLO
+									
+//function drawExplosion(weapon, x, y, now, max, explo){  // 150, 150, 30
+function drawExplosion(weapon, anim, frames){  // 150, 150, 30
+	var fraction = (anim.n-anim.m)/(frames);
 	var sin = weapon.exploSize*1*Math.sin(Math.PI*fraction);
 	if (sin < 0){
 		return;
 	}
-	//console.log(sin);
+
+	fxCtx.translate(cam.o.x, cam.o.y);
+	fxCtx.scale(cam.z, cam.z)
 	fxCtx.globalAlpha = 1.5 - fraction;
 
-	var outer;
-	var mid;
-	var inner;
+	var outer = "";
+	var mid = "";
+	var inner = "";
 
 	if (weapon instanceof EM){
 		outer = "rgb(95,125,255)";
 		mid = "rgb(95,125,255)";
 		inner = "rgb(255,255,255)";
+	}
+	else if (weapon instanceof Plasma){
+		outer ="rgb(150,255,0)";
+		mid = "rgb(255,200,0)";
+		inner = "rgb(150,150,0)";
 	}
 	else {
 		outer ="rgb(255,225,75)";
@@ -80,9 +107,36 @@ function drawExplosion(weapon, x, y, now, max, explo){  // 150, 150, 30
 		inner = "rgb(255,0,0)";
 	}
 
-	fxCtx.beginPath(); fxCtx.arc(x, y, sin, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = outer; fxCtx.fill();
-	fxCtx.beginPath(); fxCtx.arc(x, y, sin*0.66, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = mid; fxCtx.fill();
-	fxCtx.beginPath(); fxCtx.arc(x, y, sin*0.35, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = inner; fxCtx.fill();
+	fxCtx.beginPath(); fxCtx.arc(anim.tx, anim.ty, sin, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = outer; fxCtx.fill();
+	fxCtx.beginPath(); fxCtx.arc(anim.tx, anim.ty, sin*0.66, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = mid; fxCtx.fill();
+	fxCtx.beginPath(); fxCtx.arc(anim.tx, anim.ty, sin*0.35, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = inner; fxCtx.fill();
+
+	/*if (weapon instanceof Plasma){
+		for (i = 0; i < 6; i++){
+			var d = getPointInDirection(2*sin, 360/6*i + range(-15, 15), x, y)
+
+			fxCtx.beginPath();
+			fxCtx.moveTo(x, y);
+			fxCtx.lineTo(d.x, d.y);
+			fxCtx.strokeStyle = "orange";
+			fxCtx.lineWidth = 1;
+			fxCtx.stroke();
+			fxCtx.closePath()
+		}
+	}
+	if (weapon instanceof Plasma){
+		for (i = 0; i < 4; i++){
+			var d = getPointInDirection((3 + range(-1, 1))*sin, (getAngle(anim.ox, anim.oy, anim.tx, anim.ty)+(180-(4/2*10) + i*10)), anim.tx, anim.ty)
+
+			fxCtx.beginPath();
+			fxCtx.moveTo(anim.tx, anim.ty);
+			fxCtx.lineTo(d.x, d.y);
+			fxCtx.strokeStyle = "orange";
+			fxCtx.lineWidth = 1;
+			fxCtx.stroke();
+			fxCtx.closePath()
+		}
+	}*/
 
 	fxCtx.globalAlpha = 1;
 	fxCtx.setTransform(1,0,0,1,0,0);
@@ -206,15 +260,15 @@ function drawSensorArc(w, d, p, str, len, loc, facing, a, sensor){
 		case 3: color = "blue"; opacity = 0.15; break;
 	}
 
-	mouseCtx.clearRect(0, 0, res.x, res.y);
-	mouseCtx.translate(cam.o.x, cam.o.y);
-	mouseCtx.scale(cam.z, cam.z);
+	salvoCtx.clearRect(0, 0, res.x, res.y);
+	salvoCtx.translate(cam.o.x, cam.o.y);
+	salvoCtx.scale(cam.z, cam.z);
 
 	w = Math.ceil(w);	
 	if (w == 180){
-		mouseCtx.beginPath();			
-		mouseCtx.arc(loc.x, loc.y, d, 0, 2*Math.PI, false);
-		mouseCtx.closePath();
+		salvoCtx.beginPath();			
+		salvoCtx.arc(loc.x, loc.y, d, 0, 2*Math.PI, false);
+		salvoCtx.closePath();
 	}
 	else {
 		var start = addAngle(0 + w-facing, a);
@@ -222,16 +276,16 @@ function drawSensorArc(w, d, p, str, len, loc, facing, a, sensor){
 		var p1 = getPointInDirection(str, start, loc.x, loc.y);
 		var rad1 = degreeToRadian(start);
 		var rad2 = degreeToRadian(end);
-		mouseCtx.beginPath();			
-		mouseCtx.moveTo(loc.x, loc.y);
-		mouseCtx.lineTo(p1.x, p1.y); 
-		mouseCtx.arc(loc.x, loc.y, d, rad1, rad2, false);
-		mouseCtx.closePath();
+		salvoCtx.beginPath();			
+		salvoCtx.moveTo(loc.x, loc.y);
+		salvoCtx.lineTo(p1.x, p1.y); 
+		salvoCtx.arc(loc.x, loc.y, d, rad1, rad2, false);
+		salvoCtx.closePath();
 	}
 
-	mouseCtx.globalAlpha = opacity;
-	mouseCtx.fillStyle = color;
-	mouseCtx.fill();
-	mouseCtx.globalAlpha = 1;
-	mouseCtx.setTransform(1,0,0,1,0,0);
+	salvoCtx.globalAlpha = opacity;
+	salvoCtx.fillStyle = color;
+	salvoCtx.fill();
+	salvoCtx.globalAlpha = 1;
+	salvoCtx.setTransform(1,0,0,1,0,0);
 }

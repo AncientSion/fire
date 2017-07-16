@@ -5,7 +5,7 @@ class Haven extends SuperLight {
 	public $display = "Haven";
 	public $faction = "Centauri Republic";
 	public $size = 35;
-	public static $value = 310;
+	public static $value = 240;
 	public $profile = array(0.9, 1.1);
 	public $mass = 750;
 
@@ -17,7 +17,7 @@ class Haven extends SuperLight {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 130, 14);
-		$front->systems[] = new MediumIon($this->getId(), $this->id, 240, 120);
+		$front->systems[] = new MediumSingleIon($this->getId(), $this->id, 240, 120);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 120, 12);

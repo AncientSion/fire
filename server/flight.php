@@ -6,6 +6,7 @@ class Flight extends Mini {
 	public $name = "Flight";
 	public $display = "Flight";
 	public $faction = false;
+	public $baseSize = 35;
 	public $size = 0;
 	public $cost = 0;
 	public $mass = 0;
@@ -26,15 +27,37 @@ class Flight extends Mini {
 	}
 
 	public function setState($turn){
-		parent::setState($turn);
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			$this->structures[$i]->setState($turn);
+		}
+		$this->isDestroyed();
 		$this->lockFighterWeapons($turn);
-		$this->setBaseStats();
+		$this->setProps($turn);
 	}
 
-	public function setBaseStats(){
+	public function setProps($turn){
+		//Debug::log("setProps #".$this->id);
+		$this->cost = static::$value;
 		$this->setSize();
 		$this->setMass();
 		$this->setEP();
+		$this->setCurrentImpulse($turn);
+		$this->setRemainingImpulse($turn);
+		$this->setRemainingDelay($turn);
+		$this->setBaseStats();
+		$this->setLaunchPenalties($turn);
+	}
+
+	public function setLaunchPenalties($turn){
+		if ($this->available == $turn){
+			$this->currentImpulse = floor($this->currentImpulse * 0.6);
+			$this->ep = floor($this->currentImpulse * 0.4);
+		} else if ($this->available == $turn-1){
+			$this->currentImpulse = floor($this->currentImpulse / 0.6);
+		}
+	}
+
+	public function setBaseStats(){
 		$this->baseHitChance = ceil(pow($this->mass, 1/3)*5);
 		$this->baseTurnCost = round(pow($this->mass, 1.15)/100, 2);
 		$this->baseTurnDelay = $this->baseTurnCost * 2;
@@ -74,7 +97,7 @@ class Flight extends Mini {
 				$alive++;
 			}
 		}
-		$this->size = 32 + $alive*5;
+		$this->size = $this->baseSize + $alive*5;
 	}
 
 	public function addFighters($fighters){
@@ -175,7 +198,7 @@ class Flight extends Mini {
 			$fire->angle = mt_rand(0, 359);
 			$fire->section = $this->getSection($fire);
 			$fire->hitSystem[] = $this->getHitSystem($fire);
-			$fire->req = $this->calculateDogfightToHit($fire);
+			$fire->req = $this->calculateToHit($fire) *2;
 			$fire->weapon->rollToHit($fire);
 
 			for ($i = 0; $i < $fire->shots; $i++){
@@ -186,24 +209,6 @@ class Flight extends Mini {
 			}
 			$fire->resolved = 1;
 		}
-	}
-
-	public function calculateDogfightToHit($fire){
-		Debug::log("calculateDogfightToHit");
-		$base = $this->getHitChance($fire);
-		$traverse = $fire->weapon->getTraverseMod($fire);
-		$multi = $this->getDogfightHitModifier();
-		$req = 1;
-
-		if ($traverse){
-			//Debug::log("traverse: ". (1-($traverse*0.2)));
-			$multi -= (1-($traverse*0.2));
-		}
-
-		$req = $base * $multi;
-		//Debug::log("base: ".$base.", total mod: ".$multi.", req: ".$req);
-
-		return ceil($req);
 	}
 
 	public function isDogfight($fire){

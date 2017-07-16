@@ -40,8 +40,6 @@ window.shortInfo = false;
 window.ballInfo = false;
 
 window.animation;
-
-window.decayVar = 1000;
 window.index = 0;
 
 window.offset = {x: 0, y: 0};
@@ -63,6 +61,7 @@ function Animate(){
 			if (ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m+30 || !ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m){
 				return false;
 			}
+			ele.setPostMovePosition();
 			return true;
 		}
 	}
@@ -104,7 +103,7 @@ function Animate(){
 			}
 			else {
 				if (ele.anim[k].h && ele.anim[k].n >= ele.anim[k].m){
-					drawExplosion(ele.weapon, ele.anim[k].tx, ele.anim[k].ty, ele.anim[k].n, ele.anim[k].m, 30);
+					drawExplosion(ele.weapon, ele.anim[k], 30);
 					//drawExplosion(ele.weapon, ele.shooter, ele.anim[k]);
 				}
 				else {
@@ -117,30 +116,13 @@ function Animate(){
 			ele.anim[k].n++;
 			if (ele.fireOrder != undefined && ele.fireOrder.damages.length && ele.anim[k].n >= ele.anim[k].m){
 				for (var i = 0; i < ele.fireOrder.hits[0]; i++){
-					drawExplosion(ele.structures[i], ele.x + ele.layout[i].x, ele.y + ele.layout[i].y, ele.anim[k].n, ele.anim[k].m, 30);
+					drawExplosion(ele.structures[i], {n: ele.anim[k].n, m: ele.anim[k].m, tx: ele.actions[0].x + ele.layout[i].x, ty: ele.actions[0].y + ele.layout[i].y}, 30);
 				}
 			}
 			else {
-				var x = ele.actions[ele.actions.length-2].x + (ele.anim[k].nx * ele.anim[k].n);
-				var y = ele.actions[ele.actions.length-2].y + (ele.anim[k].ny * ele.anim[k].n);
-				ctx.save();
-				ctx.translate(x, y);
-				ctx.rotate((ele.anim[k].f + 90) * (Math.PI/180));
-
-				ele.drawSelf();
-				ele.drawPositionMarker();
-
-				ctx.restore();
-
-				ctx.beginPath();
-				ctx.moveTo(x, y);
-				ctx.lineTo(ele.actions[ele.actions.length-1].x, ele.actions[ele.actions.length-1].y);
-				ctx.closePath();
-
-				ctx.globalAlpha = 0.2;
-				ctx.strokeStyle = "white";
-				ctx.stroke();
-				ctx.globalAlpha = 1;
+				ele.drawX += ele.anim[k].nx;
+				ele.drawY += ele.anim[k].ny;
+				ele.drawMove();
 			}
 		}
 	}
@@ -321,7 +303,7 @@ function goToLobby(){
     console.log("goToLobby");
     setTimeout(function(){
         window.location = "lobby.php";
-    }, 300);
+    }, 600);
 }
 
 function processEcho(echo){
@@ -400,7 +382,6 @@ function _destroy() {
     selected = null;
 }
 
-
 document.onmousemove = _move_elem;
 document.onmouseup = _destroy;
 
@@ -472,7 +453,7 @@ function handleMouseDown(e){
 	var pos = new Point(e.clientX - rect.left, e.clientY - rect.top).getOffset();
 
 	if (e.originalEvent.button == 0){
-		if (aUnit && game.getUnitById(aUnit).hasSystemSelected("Sensor")){
+		if (game.sensorMode){
 			sensorize(game.getUnitById(aUnit), pos);
 			return;
 		}

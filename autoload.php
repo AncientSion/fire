@@ -21,7 +21,8 @@ spl_autoload_register(
                 'warhead' => '/server/systems/weapons/ammo.php',
                 'hasta' => '/server/systems/weapons/ammo.php',
                 'javelin' => '/server/systems/weapons/ammo.php',
-                'patriot' => '/server/systems/weapons/ammo.php',
+                'triarii' => '/server/systems/weapons/ammo.php',
+                'vanguard' => '/server/systems/weapons/ammo.php',
                 'naga' => '/server/systems/weapons/ammo.php',
                 'cyclops' => '/server/systems/weapons/ammo.php',
                 'titan' => '/server/systems/weapons/ammo.php',
@@ -33,6 +34,7 @@ spl_autoload_register(
                 'thunderbolt' => '/server/fighter.php',
                 'nial' => '/server/fighter.php',
                 'sentri' => '/server/fighter.php',
+                'sitara' => '/server/fighter.php',
                 'gorith' => '/server/fighter.php',
                 'frazi' => '/server/fighter.php',
 
@@ -89,6 +91,8 @@ spl_autoload_register(
                 'mediumrailgun' => '/server/systems/weapons/matter.php',
                 'lightrailgun' => '/server/systems/weapons/matter.php',
 
+                'test' => '/server/systems/weapons/matter.php',
+
                 'pulse' => '/server/systems/weapons/pulse.php',
                 'lightpulse' => '/server/systems/weapons/pulse.php',
                 'mediumpulse' => '/server/systems/weapons/pulse.php',
@@ -97,10 +101,9 @@ spl_autoload_register(
 
                 'particle' => '/server/systems/weapons/particle.php',
                 'lightion' => '/server/systems/weapons/particle.php',
-                'mediumion' => '/server/systems/weapons/particle.php',
+                'mediumsingleion' => '/server/systems/weapons/particle.php',
+                'mediumtwinion' => '/server/systems/weapons/particle.php',
                 'heavyion' => '/server/systems/weapons/particle.php',
-                'Dual' => '/server/systems/weapons/particle.php',
-                'heavyDual' => '/server/systems/weapons/particle.php',
                 'fusioncannon' => '/server/systems/weapons/particle.php',
 
                 'em' => '/server/systems/weapons/em.php',
@@ -111,6 +114,7 @@ spl_autoload_register(
 
                 'linked' => '/server/systems/weapons/linked.php',
                 'linkedparticle' => '/server/systems/weapons/linked.php',
+                'ionbolt' => '/server/systems/weapons/linked.php',
                 'linkedparticlegun' => '/server/systems/weapons/linked.php',
                 'linkedneutronrepeater' => '/server/systems/weapons/linked.php',
 

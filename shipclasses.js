@@ -1,5 +1,6 @@
 function Ship(data){
 	//id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available, baseHitChance, baseImpulse
+
 	this.id = data.id;
 	this.name = data.name;
 	this.shipType = data.shipType;
@@ -18,13 +19,18 @@ function Ship(data){
 	this.baseImpulse = data.baseImpulse;
 	this.traverse = data.traverse
 	this.status = data.status;
+	this.actions = data.actions || [];
 
 	this.slipAngle = data.slipAngle;
 	this.turnAngle = data.turnAngle;
 	this.turnStep = data.turnStep;
+	this.turnMod = 1;
 	this.baseTurnDelay = data.baseTurnDelay;
 	this.baseTurnCost = data.baseTurnCost;
 	this.baseImpulseCost = data.baseImpulseCost;
+	this.currentImpulse = data.currentImpulse;
+	this.remainingImpulse = data.remainingImpulse;
+	this.remainingDelay = data.remainingDelay;
 
 	this.turnAngles = {};
 	this.moveAngles = {};
@@ -35,6 +41,9 @@ function Ship(data){
 
 	this.friendly;
 	this.deployed;
+	this.drawFacing = 0;
+	this.drawX = 0;
+	this.drawY = 0;
 
 	this.primary;
 
@@ -45,7 +54,6 @@ function Ship(data){
 
 	this.hitTable;
 	this.img;
-	this.actions = [];
 	this.structures = [];
 
 	this.getDamageEntriesByFireId = function(fire){
@@ -117,7 +125,7 @@ function Ship(data){
 */
 		this.drawMarker(0, 0, "yellow", mouseCtx);
 		//mouseCtx.globalAlpha = 1;
-		mouseCtx.rotate(this.facing * Math.PI/180);
+		mouseCtx.rotate(this.getDrawFacing * Math.PI/180);
 		mouseCtx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
 
 		mouseCtx.setTransform(1,0,0,1,0,0);
@@ -125,8 +133,22 @@ function Ship(data){
 
 	}
 
+	this.isReady = function(){
+		if (this.available < game.turn){
+			return true;
+		}
+		else if (this.available == game.turn && !(game.phase == 0 && game.animating && !this.deployed)){
+			if (this.userid == game.userid && this.actions.length || game.phase >= 0){
+				return true;
+			}
+		} else if (this.available > game.turn && this.actions.length == 1 && !this.actions[0].resolved){
+			return true;
+		}
+		return false;
+	}
+
 	this.draw = function(){
-		if (this.deployed){
+		if (this.isReady()){
 			this.drawPositionMarker();
 			this.drawSelf();
 		}
@@ -134,10 +156,25 @@ function Ship(data){
 
 	this.drawSelf = function(){
 		ctx.save();
-		ctx.translate(this.x, this.y)
-		ctx.rotate(this.facing * Math.PI/180);
+		ctx.translate(this.drawX, this.drawY)
+		ctx.rotate(this.getDrawFacing() * Math.PI/180);
 		ctx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
 		ctx.restore();
+	}
+
+	this.getPlannedFacing = function(){
+		var angle = 0;
+
+		for (var i = 0; i < this.actions.length; i++){
+			if (this.actions[i].type == "turn"){
+				angle += this.actions[i].a;
+			}
+		}
+		return this.facing + angle;
+	}
+
+	this.getDrawFacing = function(){
+		return this.drawFacing;
 	}
 
 	this.drawPositionMarker = function(){
@@ -145,7 +182,7 @@ function Ship(data){
 		if (this.selected){c = "yellow"}
 		else if (this.friendly){c = "green";}
 		else {c = "red";}
-		this.drawMarker(this.x, this.y, c, ctx);
+		this.drawMarker(this.drawX, this.drawY, c, ctx);
 	}
 
 	this.drawPlanMarker = function(){
@@ -181,10 +218,8 @@ function Ship(data){
 	}
 
 	this.animationSetupMove = function(){
-		var start = this.getTurnStartPosition();
-		this.facing = this.getTurnStartFacing();
-		this.x = start.x;
-		this.y = start.y;
+		this.setPreMovePosition();
+		this.setPreMoveFacing();
 	}
 
 	this.animationSetupDamage = function(){
@@ -205,58 +240,15 @@ function Ship(data){
 		)		
 	}
 
-	this.getTurnStartPosition = function(){
-		if (this.id == 27){
-			console.log("ding");
-		}
-		for (var i = this.actions.length-1; i >= 0; i--){
-			if (this.actions[i].turn < game.turn || this.actions[i].type == "jump"){
-				return this.actions[i];
-			}
-		}
-		return this.actions[0];
-	}
-
 	this.getTurnEndPosition = function(){
 		return this.actions[this.actions.length-1];
 	}
 
-
-	this.getTurnStartFacing = function(){
-		var angle = 0;
-		var index = 0;
-
-		for (var i = 0; i < this.actions.length; i++){
-			if (this.actions[i].type == "deploy"){
-				angle += this.actions[i].a;
-			}
-			else if (this.actions[i].turn >= game.turn){
-				break;
-			}
-			else {
-				angle += this.actions[i].a;
-			}
+	this.canDeploy = function(){
+		if (this.userid == game.userid && (game.turn == 1 || this.id < 0)){
+			return true;
 		}
-
-		return angle;
-	}
-
-	this.getFacing = function(){
-		var angle = 0;
-		for (var i = 0; i < this.actions.length; i++){
-			if (this.actions[i].resolved == 1){
-				angle += this.actions[i].a;
-			}
-		}
-		return angle;
-	}
-
-	this.getControlZone = function(){
-		if (this.actions.length){
-			var pos = this.getBaseOffsetPos();
-			return {pos: pos, s: this.size*1};
-		}
-		else return false;
+		return false;
 	}
 
 	this.canDeployHere = function(pos){
@@ -283,22 +275,20 @@ function Ship(data){
 			}
 		}
 		if (valid){
-			/*for (var i = 0; i < game.ships.length; i++){
-				if (game.ships[i].id != this.id){
-					var area = game.ships[i].getControlZone();
-					if (area){
-						var dist = getDistance(pos, area.pos);
-						if (dist <= area.s + this.size*1){
-						popup("The selection position is too close to the position vessel (#"+this.ships[i].id+" - " + this.ships[i].display +")");							return false;
-						}
+			for (var i = 0; i < game.ships.length; i++){
+				if (game.ships[i].deployed && game.ships[i].id != this.id && game.ships[i].userid == this.userid){ // different ship, different owners
+					var step = game.ships[i].getBaseOffsetPos();
+					if (getDistance(pos, step) <= (game.ships[i].size/2 + this.size/2)){
+					popup("The selection position is too close to the position or planned position of vessel (#"+game.ships[i].id+")");
+						return false;
 					}
 				}
-			}*/
+			}
 			return true;
 		}
-		else popup("Please deploy inside the green colored area.");
 
 		return false;
+
 	}
 
 	this.doDeploy = function(pos){
@@ -306,10 +296,28 @@ function Ship(data){
 		if (this.actions.length){
 			this.actions[0].x = pos.x;
 			this.actions[0].y = pos.y;
+			this.x = pos.x;
+			this.y = pos.y;
+			this.drawX = pos.x;
+			this.drawY = pos.y;
 		}
 		else {
-			this.actions.push(new Move("deploy", 0, pos.x, pos.y, this.facing, 0, 0));
+			var facing = 0;
+			var index;
+			for (var i = 0; i < playerstatus.length; i++){
+				if (playerstatus[i].userid == this.userid){
+					index = i % 2;
+				}
+			}
+			facing = 0 + (180 * (index % 2));
+			this.actions.push(new Move(-1, "deploy", 0, pos.x, pos.y, facing, 0, 0));
 			this.deployed = true;
+			this.facing = facing;
+			this.drawFacing = facing;
+			this.x = pos.x;
+			this.y = pos.y;
+			this.drawX = pos.x;
+			this.drawY = pos.y;
 
 			var shipId = this.id;
 			var table = $("#deployTable").find("tr").each(function(i){
@@ -319,14 +327,7 @@ function Ship(data){
 				}
 			})
 		}
-		this.setPosition();
-		this.setFacing();
-		//game.disableDeployment();
 		this.select();
-		//game.enableDeployment(this.id);
-		//this.unsetMoveMode();
-		//this.setMoveMode();
-		//this.getSystemByName("Sensor").drawEW();
 
 		$("#game")
 			.find("#deployOverlay").hide().end()
@@ -344,7 +345,7 @@ function Ship(data){
 		var dist = getDistance({x: this.x, y: this.y}, {x: pos.x, y: pos.y})
 		if (dist <= game.flightDeploy.range){
 			var a = getAngleFromTo( {x: this.x, y: this.y}, {x: pos.x, y: pos.y} );
-				a = addAngle(this.facing, a);
+				a = addAngle(this.getDrawFacing(), a);
 			if (isInArc(a, game.flightDeploy.start, game.flightDeploy.end)){
 				return true;
 			}
@@ -353,69 +354,21 @@ function Ship(data){
 	}
 	
 	this.getBaseOffsetPos = function(){
-		if (this.actions.length == 1){
-			return {x: this.actions[0].x, y: this.actions[0].y};
-		}
-		else {
+		if (this.actions.length){
 			for (var i = this.actions.length-1; i >= 0; i--){
 				if (this.actions[i].resolved == 1){
 					return {x: this.actions[i].x, y: this.actions[i].y};
 				}
 			}
 		}
+		return {x: this.x, y: this.y};
 	}
 	
-	this.getOffsetPos = function(){
-		return {x: this.actions[this.actions.length-1].x, y: this.actions[this.actions.length-1].y};
-	}
-	
-	this.getOnsetPos = function(){
-		return {x: this.actions[this.actions.length-1].x, y: this.actions[this.actions.length-1].y};
-	}
-
-	this.setPosition = function(){
-		if (this.deployed){
-			if (this.actions.length == 1){
-				this.x = this.actions[0].x;
-				this.y = this.actions[0].y;
-				return;
-			}
-			for (var i = this.actions.length-1; i >= 0; i--){
-				if (this.actions[i].resolved){
-					this.x = this.actions[i].x;
-					this.y = this.actions[i].y;
-					return;
-				}
-			}
+	this.getPlannedPosition = function(){
+		if (this.actions.length){
+			return new Point(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y);
 		}
-	}
-
-	this.setPostMoveFacing = function(){
-		var facing = 0;
-		for (var i = 0; i < this.actions.length; i++){
-			if (this.actions[i].resolved){
-				facing += this.actions[i].a;
-			}
-		}
-		this.facing = facing;
-	}
-
-	this.setFacing = function(){
-		return;
-		var facing = 0;
-		if (this.deployed){
-			if (this.actions.length == 1){
-				this.facing = this.actions[0].a;
-				this.facing = facing;
-				return;
-			}
-			return;
-			for (var i = 0; i < this.actions.length; i++){
-				if (this.actions[i].resolved){
-					facing += this.actions[i].a;
-				}
-			}	
-		}
+		return new Point(this.x, this.y);
 	}
 
 	this.getWeaponPosition = function(fire){
@@ -431,8 +384,7 @@ function Ship(data){
 	
 	this.create = function(){
 		this.img = window.shipImages[this.name.toLowerCase()];
-		this.setPosition();
-		this.setFacing();
+		this.setDrawData();
 		this.setHitTable();
 		this.setInternals();
 		this.setSystems();
@@ -543,8 +495,19 @@ function Ship(data){
 		return false;
 	}
 
+	this.isInTransit = function(){
+		if (this.ship && this.available == game.turn && this.actions.length == 1 && this.actions[0].resolved){
+			return true;
+		}
+		return false
+	}
+
 	this.drawHoverElements = function(){
 		this.drawEW();
+		if (this.isInTransit()){
+			//game.drawJumpMarker(this.id);
+			console.log("warp");
+		}
 		//this.drawMoveLength();
 
 		/*moveCtx.translate(cam.o.x, cam.o.y);
@@ -556,6 +519,7 @@ function Ship(data){
 	}
 
 	this.drawEW = function(){
+		if (!this.ship){return;}
 		this.getSystemByName("Sensor").drawEW();
 	}
 
@@ -565,8 +529,8 @@ function Ship(data){
 		mouseCtx.scale(cam.z, cam.z);
 	
 		var center = this.getPlannedPosition();
-		var angle = this.getPlannedFacing(this.actions.length-1);
-		var p = getPointInDirection(this.getTotalImpulse(), angle, center.x, center.y);
+		var angle = this.getPlannedFacing();
+		var p = getPointInDirection(this.getCurrentImpulse(), angle, center.x, center.y);
 		
 		mouseCtx.beginPath();			
 		mouseCtx.moveTo(center.x, center.y);
@@ -592,7 +556,6 @@ function Ship(data){
 				return this.primary.systems[i];
 			}
 		}
-
 		return false;
 	}
 
@@ -628,8 +591,8 @@ function Ship(data){
 	}
 
 	this.highlightSingleSystem = function(system){
-		var angle = this.getPlannedFacing(this.actions.length-1);
-		var pos = this.getOffsetPos();
+		var angle = this.getPlannedFacing();
+		var pos = this.getPlannedPosition();
 		for (var i = 0; i < this.structures.length; i++){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
 				if (this.structures[i].systems[j].weapon){
@@ -642,13 +605,14 @@ function Ship(data){
 	}
 	
 	this.highlightAllSelectedWeapons = function(){
+		//mouseCtx.clearRect(0, 0, res.x, res.y);
 		fxCtx.clearRect(0, 0, res.x, res.y);
 		fxCtx.translate(cam.o.x, cam.o.y);
 		fxCtx.scale(cam.z, cam.z);
 
 		$(fxCanvas).css("opacity", 0.3);
-		var angle = this.getPlannedFacing(this.actions.length-1);
-		var pos = this.getOffsetPos();
+		var angle = this.getPlannedFacing();
+		var pos = this.getPlannedPosition();
 
 		for (var i = 0; i < this.structures.length; i++){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
@@ -670,8 +634,8 @@ function Ship(data){
 		fxCtx.translate(cam.o.x, cam.o.y);
 		fxCtx.scale(cam.z, cam.z);
 
-		var angle = this.getPlannedFacing(this.actions.length-1);
-		var pos = this.getOffsetPos();
+		var angle = this.getPlannedFacing();
+		var pos = this.getPlannedPosition();
 		var p1 = getPointInDirection(system.range || res.x, system.start + angle, pos.x, pos.y);
 		var p2 = getPointInDirection(system.range || res.y, system.end + angle, pos.x, pos.y)
 		var dist = getDistance( {x: pos.x, y: pos.y}, p1);
@@ -702,31 +666,10 @@ function Ship(data){
 		}
 		else {
 			$("#weaponTable" + weapon.id).removeClass("disabled");	
-			var angle = this.getPlannedFacing(this.actions.length-1);
-			var shipPos = this.getOffsetPos();
+			var angle = this.getPlannedFacing();
+			var shipPos = this.getPlannedPosition();
 			weapon.highlight = true;		
 			weapon.drawArc(angle, shipPos);
-		}
-	}
-
-	this.getRemainingImpulse = function(){	
-		var impulse = this.getTotalImpulse();
-
-		if (game.phase > 1){
-			return impulse;
-		}
-		else if (this.flight && this.dogfights.length){
-			return 0;
-		}
-		else {
-			for (var i = 0; i < this.actions.length; i++){
-				if (this.actions[i].turn == game.turn){
-					if (this.actions[i].type == "move"){
-						impulse -= this.actions[i].dist;
-					}
-				}
-			}
-			return impulse;
 		}
 	}
 	
@@ -739,7 +682,8 @@ function Ship(data){
 		return this.baseImpulse;
 	}
 
-	this.getTotalImpulse = function(){	
+	this.getCurrentImpulsea = function(){
+		console.log("a");
 		var base = this.getBaseImpulse();
 		var change = this.getImpulseStep();
 		
@@ -757,42 +701,91 @@ function Ship(data){
 		return base;
 	}
 
+	this.getCurrentImpulse = function(){
+		if (game.phase >= 1 && this.ship || game.phase >= 2 && this.flight){
+			return this.currentImpulse;
+		}
+		var step = this.getImpulseStep();
+		var amount = 0;
+		for (var i = 0; i < this.actions.length; i++){
+			if (this.actions[i].type != "speedChange"){continue;}
+			amount += this.actions[i].dist;
+		}
+		return this.currentImpulse + step*amount;
+	}
+
+	this.setCurrentImpulse = function(){
+		return;
+		var add = this.getImpulseStep() * this.actions[this.actions.length-1].dist
+		this.currentImpulse += add;
+		this.remainingImpulse += add;
+	}
+
+	this.getRemainingImpulse = function(){
+
+		if (game.phase >= 1 && this.ship || game.phase >= 2 && this.flight){
+			return 0;
+		}
+		var impulse = this.getCurrentImpulse();
+		for (var i = 0; i < this.actions.length; i++){
+			if (this.actions[i].turn == game.turn){
+				if (this.actions[i].type == "move"){
+					impulse -= this.actions[i].dist;
+				}
+			}
+		}
+		return impulse;
+	}
+
+	this.getRemainingImpulses = function(){
+		return this.remainingImpulse;
+	}
+
+	this.setRemainingImpulse = function(){
+		return;
+		this.remainingImpulse -= this.actions[this.actions.length-1].dist;
+	}
+
 	this.getImpulseStep = function(){
 		//return 15;
 		return Math.floor(this.getBaseImpulse() / 10);
 	}
 	
 	this.getImpulseMod = function(){
-		return this.getTotalImpulse() / this.getBaseImpulse();
+		return this.getCurrentImpulse() / this.getBaseImpulse();
 	}
 	
 	this.getTurnCost = function(){
 		if (game.phase == -2){
-			return this.baseTurnCost*this.getImpulseMod();
+			return 0;
 		}
 		else if (this.actions.length && (this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0)){
 			return 0;
 		}
-		else return this.baseTurnCost*this.getImpulseMod();	
+		else return this.baseTurnCost*this.getImpulseMod() * this.getTurnMod();
 		//else return this.baseTurnCost; //Math.pow(this.mass, 1.25)/10000;
 		//else return Math.found((Math.pow(this.mass, 1.56) / 10000) *  this.getImpulseMod());
+	}
+
+	this.getTurnMod = function(){
+		return turn.mod || 1;
 	}
 	
 	this.getTurnDelay = function(){
 		if (game.phase == -2){
-			return this.baseTurnDelay*this.getImpulseMod();
+			return this.baseTurnDelay*this.getImpulseMod() / this.getTurnMod();
 		}
 		if (this.actions.length && this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0){
 			return 0;
 		}
-		else return this.baseTurnDelay*this.getImpulseMod();
+		else return this.baseTurnDelay*this.getImpulseMod() / this.getTurnMod();
 		//else return round(this.getBaseTurnDelay() * this.getImpulseMod(), 2);
 	}
 
 	this.drawArcIndicator = function(){
 		return;
 		var shipPos = this.getBaseOffsetPos();
-		var angle = this.getPlannedFacing(this.actions.length-1);
+		var angle = this.getPlannedFacing();
 
 		var p1 = getPointInDirection(80, 90+angle, shipPos.x, shipPos.y);
 		var p2 = getPointInDirection(-80, 90+angle, shipPos.x, shipPos.y);
@@ -810,16 +803,13 @@ function Ship(data){
 	}
 
 	this.getSlipAngle = function(){
-		if (!this.actions[0].resolved){
-			return 180;
-		}
 		return this.slipAngle;
 	}
 
 	this.drawMoveRange = function(){
-		var center = new Point(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y);		
+		var center = this.getPlannedPosition();		
 		var rem = this.getRemainingImpulse();
-		var angle = this.getPlannedFacing(this.actions.length-1);
+		var angle = this.getPlannedFacing();
 		var slipAngle = this.getSlipAngle();
 
 		this.moveAngles = {start: addAngle(0 + slipAngle, angle), end: addAngle(360 - slipAngle, angle)};
@@ -828,17 +818,15 @@ function Ship(data){
 			this.drawMoveArea(center, rem);
 		}
 
-		var modAngle = this.getMaxTurnAngle();
-		var newAngle = addToDirection(angle, modAngle);
 		var turnEle = $("#game").find("#epButton")[0];
-		var p1 = getPointInDirection(150/cam.z, addToDirection(newAngle+30, modAngle), center.x, center.y);
+		var p1 = getPointInDirection(150/cam.z, addToDirection(angle, 90), center.x, center.y);
+
 		$(turnEle)
 			.css("left", p1.x * cam.z + cam.o.x - $(turnEle).width()/2)
 			.css("top", p1.y * cam.z + cam.o.y - $(turnEle).height()/2)
 			.removeClass("disabled")
-			.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end();
-
-		//this.drawMoveArcs(center, rem);
+			.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end()
+			.find("#impulseCost").html(this.getImpulseChangeCost() + " EP");
 	}
 	
 	this.drawMoveArea = function(center, rem){
@@ -903,10 +891,10 @@ function Ship(data){
 	this.getRemainingEP = function(){
 		var ep = this.getEP();
 		
-		for (var i = 1; i < this.actions.length; i++){
+		for (var i = 0; i < this.actions.length; i++){
 			if (this.actions[i].turn == game.turn){
 				if (this.actions[i].cost != 0){
-					ep -= this.actions[i].cost * this.actions[i].costmod;
+					ep -= this.actions[i].cost// * this.actions[i].costmod;
 				}
 			}
 		}
@@ -914,58 +902,45 @@ function Ship(data){
 		return Math.floor(ep);
 	}
 	
+
 	this.getRemainingDelay = function(){
-		var delay = 0;
+		var delay = this.remainingDelay;
 		for (var i = 0; i < this.actions.length; i++){
 			if (this.actions[i].type == "turn"){
 				//delay += Math.ceil(this.actions[i].delay/this.actions[i].costmod);
 				delay += this.actions[i].delay;
 			}
 			else if (this.actions[i].type == "move"){
-				if (delay > 0){ delay -= this.actions[i].dist;}
-				if (delay < 0){ delay = 0;}
+				delay = Math.max(0, delay - this.actions[i].dist);
 			}
 		}
-		return Math.floor(delay);
+		return Math.ceil(delay);
+	}	
+
+	this.getRemainingDelaya = function(){
+		return this.remainingDelay;
 	}
 
-	this.getPlannedPosition = function(){
-		if (this.actions.length){
-			return new Point(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y);
+	this.setRemainingDelay = function(){
+		return;
+		if (this.actions[this.actions.length-1].type == "move"){
+			this.remainingDelay = Math.max(0, Math.max(this.remainingDelay - this.actions[this.actions.length-1].dist), this.actions[this.actions.length-1].delay);
 		}
-		else {
-			return new Point(this.x, this.y);
+		else if (this.actions[this.actions.length-1].type == "turn"){
+			this.remainingDelay = Math.max(0, this.remainingDelay + this.actions[this.actions.length-1].delay);
 		}
-	}
-		
-	this.getPlannedFacing = function(end){
-		if (end == undefined){
-			end = this.actions.length-1;
-		}
-
-		var angle = 0;
-		
-		for (var i = 0; i <= end; i++){
-			if (this.actions[i].type == "turn" || this.actions[i].type == "deploy" || this.actions[i].type == "jump"){
-				angle += this.actions[i].a;
-			}
-		}
-		return angle;
 	}
 		
 	this.canIncreaseImpulse = function(){
 		if (this.getRemainingEP() >= this.getImpulseChangeCost()){
-			if (this.actions.length == 1){
+			if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship)){
 				return true;
 			}
-			else if (this.actions[this.actions.length-1].turn < game.turn){
-				return true;
-			}
-			if (this.actions[this.actions.length-1].type == "speedChange" && this.actions[this.actions.length-1].dist == 1){
+			else if (this.actions[this.actions.length-1].type == "speedChange" && this.actions[this.actions.length-1].dist == 1){
 				return true;
 			}
 		}
-		else if (this.actions[this.actions.length-1].type == "speedChange" && this.actions[this.actions.length-1].dist == -1){
+		else if (this.actions.length && this.actions[this.actions.length-1].type == "speedChange" && this.actions[this.actions.length-1].dist == -1){
 			return true;
 		}
 	
@@ -973,18 +948,16 @@ function Ship(data){
 	}
 	
 	this.canDecreaseImpulse = function(){
+		if (this.getCurrentImpulse() <= 0){return false;}
 		if (this.getRemainingEP() >= this.getImpulseChangeCost()){
-			if (this.actions.length == 1){
+			if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship)){
 				return true;
 			}
-			else if (this.actions[this.actions.length-1].turn < game.turn){
-				return true;
-			}
-			if (this.actions[this.actions.length-1].type == "speedChange" && this.actions[this.actions.length-1].dist == -1){
+			else if (this.actions[this.actions.length-1].type == "speedChange" && this.actions[this.actions.length-1].dist == -1){
 				return true;
 			}
 		}
-		else if (this.actions[this.actions.length-1].type == "speedChange" && this.actions[this.actions.length-1].dist == 1){
+		else if (this.actions.length && this.actions[this.actions.length-1].type == "speedChange" && this.actions[this.actions.length-1].dist == 1){
 			return true;
 		}
 	
@@ -992,96 +965,109 @@ function Ship(data){
 	}
 
 	this.getShortenTurnCost = function(){
-		if (this.turns.length){
-			return Math.ceil(this.turns[0].cost * (this.turns[0].costmod + 0.2));
-		}
-		else {
-			return Math.ceil(this.getTurnCost() * 1.2);
-		}
+		return this.getTurnCost() / turn.mod * (turn.mod + 0.1) * turn.a;
+
+		//return b * a * (m+s) * turn.a * (1+turn.step));
 	}
 	
 	this.canShortenTurn = function(){
 		if (game.phase == 0 || game.phase == 1){
-			if (this.getRemainingEP() >= this.getShortenTurnCost()){
+			if (turn.mod < 2 && this.getRemainingEP() >= this.getShortenTurnCost()){
+				//console.log("can shorten")
 				return true;
 			}
 		}
-
+		//console.log("cant shorten")
 		return false;
 	}
 	
 	this.canUndoShortenTurn = function(){
-		if (game.phase == 0 || game.phase == 1){
-			if (this.turns.length){
-				if (this.turns[0].costmod > 1){
-					return true;
-				}
+	if (game.phase == 0 || game.phase == 1){
+			if (turn.mod > 1){
+				//console.log("can unshorten")
+				return true;
 			}
 		}
+		//console.log("cant unshorten")
+		return false;
 	}
-	
+
 	this.doShortenTurn = function(max){
-		if (max && !this.canDoAnotherTurn()){
+		if (max){
 			while (this.canShortenTurn()){
-				for (var i = 0; i < this.turns.length; i++){
-					this.turns[i].costmod += 0.2;
-				}
+				turn.mod = round(turn.mod + turn.step, 1);
 			}
+			this.setTurnData();
 		}
-		else if (max){
-			while (this.canDoAnotherTurn()){
-				for (var i = 0; i < this.turns.length; i++){
-					this.turns[i].costmod += 0.2;
-				}
-			}
+		else if (this.canShortenTurn()){
+			turn.mod = round(turn.mod + turn.step, 1);
+			this.setTurnData();
 		}
-		else {
-			for (var i = 0; i < this.turns.length; i++){
-				this.turns[i].costmod += 0.2;
-			}
-		}
-		this.drawDelayEstimator();
-		this.updateTurnElements();
 	}
 	
 	this.doUndoShortenTurn = function(max){
-		for (var i = 0; i < this.turns.length; i++){
-			if (this.turns[i].costmod > 1){
-				this.turns[i].costmod -= 0.2;
-			}
+		if (turn.mod > 1){
+			if (max){
+				turn.mod = 1;
+			} else turn.mod = Math.floor((turn.mod * 10) - turn.step*10) / 10;
+			this.setTurnData();
 		}
-		this.drawDelayEstimator();
-		this.updateTurnElements();
 	}
 
-	this.updateTurnElements = function(){
-		return;
-		var canShorten = this.canShortenTurn();
-		var canUndoShorten = this.canUndoShortenTurn();
-		var canDoAnotherTurn = this.canDoAnotherTurn();
-		var cost = Math.floor(this.turns[0].cost * this.turns[0].costmod);
-		var delay = Math.floor(this.turns[0].delay / this.turns[0].costmod);
+	this.setTurnData = function(){
+		//console.log(turn);
 
-		$(".turnEle").each(function(i){
-			$(this).find("#epCost").html(cost +  " EP");
-			$(this).find("#turnDelay").html(delay + "px");
+		var button = $("#game").find("#turnButton");
+		var vector = $("#vectorDiv")
 
-			if (canDoAnotherTurn){
-				$(this).find("#epCost").removeClass("red").addClass("green");
-			} else $(this).find("#epCost").removeClass("green").addClass("red");
+		if (game.turnMode){
+			$(button)
+				.find("#turnMode").html("ON").addClass("on").end()
+				//.find("#impulseMod").html(turn.dif).end()
+				.find("#turnCost").html(round(turn.cost * turn.mod * turn.dif, 2) + " EP").end()
+				.find("#turnDelay").html(round(turn.delay * turn.mod * turn.dif, 2) + " px").end()
+				.find("#turnMod").html(turn.mod).end()
+				.find("#shortenTurn").removeClass("disabled");
 
-			if (!canShorten && !canUndoShorten){
-				$(this).find(".shortenTurn").hide(); return;
-			} else {
-				$(this).find(".shortenTurn").show();
-			}
-			if (canShorten){
-				$(this).find(".doShortenTurn").find("img").show();
-			} else $(this).find(".doShortenTurn").find("img").hide();
-			if (canUndoShorten){
-				$(this).find(".doUndoShortenTurn").find("img").show();
-			} else $(this).find(".doUndoShortenTurn").find("img").hide();
-		})
+			$(vector).empty()
+				.append($("<table>")
+					.append($("<tr>")
+						.append($("<td>").html("Angle: " + turn.a + "°")))
+					.append($("<tr>")
+						.append($("<td>").html("Cost: " + Math.ceil(turn.cost * turn.a * turn.mod * turn.dif) + " EP")))
+					.append($("<tr>")
+						.append($("<td>").html("Delay: " + Math.ceil(turn.delay * turn.a / turn.mod * turn.dif) + " px"))))
+				.removeClass("disabled");
+			this.drawDelay();
+			this.adjustMaxTurn()
+		}
+		else {
+			$(button)
+				.find("#turnMode").html("OFF").removeClass("on").end()
+				.find("#turnCost").html("").end()
+				.find("#turnDelay").html("").end()
+				.find("#turnMod").html("").end()
+				.find("#shortenTurn").addClass("disabled");
+			$(vector).addClass("disabled")
+		}
+
+		if (this.flight){
+			$(button).find("#shortenTurn").addClass("disabled");
+		}
+		this.drawEW();
+	}
+
+	this.adjustMaxTurn = function(){
+		//	console.log(this.getTurnAngle());
+		//	console.log("max angle: " + this.getMaxTurnAngle());
+		if (this.getMaxTurnAngle() < turn.max){
+			moveCtx.clearRect(0, 0, res.x, res.y);
+			this.setMoveTranslation();
+		//	this.drawMoveRange();
+			this.drawTurnArcs();
+			this.drawVectorIndicator();
+			this.resetMoveTranslation();
+		}
 	}
 
 	this.canDoAnotherTurn = function(){
@@ -1101,11 +1087,11 @@ function Ship(data){
 			this.actions.splice(this.actions.length-1, 1);
 		}
 		else {
-			var action = new Move("speedChange", 1, shipPos.x, shipPos.y, false, 0, this.getImpulseChangeCost());
+			var action = new Move(-1, "speedChange", 1, shipPos.x, shipPos.y, false, 0, this.getImpulseChangeCost());
 			this.actions.push(action);
 		}
-		this.unsetMoveMode();
-		this.setMoveMode();
+		this.setCurrentImpulse();
+		this.resetMoveMode();
 		game.drawAllPlans();
 	}
 
@@ -1115,14 +1101,14 @@ function Ship(data){
 			this.actions.splice(this.actions.length-1, 1);
 		}
 		else {
-			var action = new Move("speedChange", -1, shipPos.x, shipPos.y, false, 0, this.getImpulseChangeCost());
+			var action = new Move(-1, "speedChange", -1, shipPos.x, shipPos.y, false, 0, this.getImpulseChangeCost());
 			this.actions.push(action);
 		}
-		this.unsetMoveMode();
-		this.setMoveMode();
+		this.setCurrentImpulse();
+		this.resetMoveMode();
 		game.drawAllPlans();
 	}
-	
+
 	this.drawMovePlan = function(){
 		if (!this.actions.length || this.actions[this.actions.length-1].resolved){
 			return;
@@ -1175,13 +1161,14 @@ function Ship(data){
 		this.drawVectorMovementUI();
 		if (this.canTurn()){
 			this.drawTurnUI();
+			this.drawTurnArcs();
 			this.updateDiv();
 		}
 	}
 
 	this.drawVectorMovementUI = function(){
 		var center = this.getPlannedPosition();
-		var angle = this.getPlannedFacing(this.actions.length-1);
+		var angle = this.getPlannedFacing();
 		var rem = this.getRemainingImpulse();
 		var delay = this.getRemainingDelay();
 		var ele;
@@ -1218,7 +1205,7 @@ function Ship(data){
 
 	this.drawVectorIndicator = function(){
 		var center = this.getPlannedPosition();
-		var angle = this.getPlannedFacing(this.actions.length-1);
+		var angle = this.getPlannedFacing();
 		var p = getPointInDirection(200, angle, center.x, center.y);
 		
 		moveCtx.beginPath();			
@@ -1234,7 +1221,7 @@ function Ship(data){
 	}
 
 	this.getTurnAngle = function(){
-		if (!this.actions[0].resolved){
+		if (game.phase == -1 && (game.turn == 1 || this.id < 0)){
 			return 180;
 		}
 		return this.turnAngle;
@@ -1253,148 +1240,74 @@ function Ship(data){
 	}
 
 	this.drawTurnUI = function(){
-		var center;
-		var angle = this.getPlannedFacing(this.actions.length-1);
+		var center = this.getPlannedPosition();
+		var angle = this.getPlannedFacing();
+		var turnEle = $("#game").find("#turnButton")[0];
+		var p1 = getPointInDirection(150/cam.z, addToDirection(angle, -90), center.x, center.y);
+		$(turnEle)
+			.css("left", p1.x * cam.z + cam.o.x - $(turnEle).width()/2)
+			.css("top", p1.y * cam.z + cam.o.y - $(turnEle).height()/2)
+			.removeClass("disabled")
+			.find("#impulseMod").html("x " +turn.dif).end();
+	}
+
+	this.drawTurnArcs = function(){
+		var center = this.getPlannedPosition();
+		var angle = this.getPlannedFacing();
 		var turnAngle = this.getMaxTurnAngle();
 		var w = this.getTurnStep();
-		
-		if (this.actions.length){
-			center = new Point(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y);
-		} else center = this.getBaseOffsetPos();
 
 		this.turnAngles = {start: addAngle(0 + turnAngle, angle), end: addAngle(360 - turnAngle, angle)};
-		//console.log(this.turnAngles);
 		
 		for (var j = 1; j >= -1; j = j-2){
 			for (var i = 1; i <= w; i++){			
 				var modAngle = turnAngle * i * j;
 				var newAngle = addToDirection(angle, modAngle);
-				var p = getPointInDirection(this.size*1.5*cam.z, newAngle, center.x, center.y);
+				var p = getPointInDirection(Math.max(100, this.getRemainingImpulse()*2), newAngle, center.x, center.y);
 				if (turnAngle != 180){
 					moveCtx.beginPath();
 					moveCtx.moveTo(center.x, center.y);
 					moveCtx.lineTo(p.x, p.y);
 					moveCtx.closePath();
-					moveCtx.strokeStyle = "white";
+					moveCtx.strokeStyle = "red";
 					moveCtx.stroke();
 				}
 			}
 		}
-
-		var turnEle = $("#game").find("#turnButton")[0];
-		var p1 = getPointInDirection(150/cam.z, addToDirection(newAngle-30, modAngle), center.x, center.y);
-		$(turnEle)
-			.css("left", p1.x * cam.z + cam.o.x - $(turnEle).width()/2)
-			.css("top", p1.y * cam.z + cam.o.y - $(turnEle).height()/2)
-			.removeClass("disabled");
-
-		this.drawDelayEstimator();
-		//this.updateTurnElements();
 	}
 
-
-	this.drawTurnUIa = function(){
-		var center;
-		var plannedAngle = this.getPlannedFacing(this.actions.length-1);
-		var cost = this.getTurnCost();
-		var delay = this.getTurnDelay();
-		var a = this.getTurnAngle();
-		var w = this.getTurnStep();
-		
-		if (this.actions.length){
-			center = new Point(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y);
+	this.drawDelay = function(){
+		if (this.actions.length == 1){
+			mouseCtx.clearRect(0, 0, res.x, res.y);
 		}
-		else center = this.getBaseOffsetPos();
-		
-		for (var j = 1; j >= -1; j = j-2){
-			for (var i = 1; i <= w; i++){
-			
-				var modAngle = a * i * j;
-				var newAngle = addToDirection(plannedAngle, modAngle);
-
-				var turn = {
-							x: center.x,
-							y: center.y, 
-							a: modAngle,
-							cost: cost,
-							delay: delay,
-							thrustUp: false,
-							costmod: 1
-							}
-				this.turns.push(turn)
-
-				var p = getPointInDirection(this.size*1.5*cam.z, newAngle, center.x, center.y);
-
-				moveCtx.beginPath();
-				moveCtx.moveTo(center.x, center.y);
-				moveCtx.lineTo(p.x, p.y);
-				moveCtx.closePath();
-				moveCtx.strokeStyle = "white";
-				moveCtx.stroke();
-
-				var turnEle;
-
-				if (modAngle < 0){turnEle = document.getElementById("turnLeft")}
-				else {turnEle = document.getElementById("turnRight")}
-
-				$(turnEle).find("#epCost").html(Math.floor(cost * turn.costmod) + " EP");
-				$(turnEle).find("#turnDelay").html(Math.floor(delay / turn.costmod) + "px");
-
-				var p1 = getPointInDirection(150/cam.z, addToDirection(newAngle, modAngle), center.x, center.y);
-				
-				//	return { x: (this.x - cam.o.x) / cam.z, y: (this.y - cam.o.y) / cam.z}
-
-				var left = p1.x * cam.z + cam.o.x - $(turnEle).width()/2;
-				var top = p1.y * cam.z + cam.o.y - $(turnEle).height()/2;
-
-				$(turnEle).find(".doTurn")
-					.data("a", modAngle)
-					.data("shipid", this.id)
-
-				$(turnEle)
-					.css("left", left)
-					.css("top", top)
-					.removeClass("disabled")
-			}
-		}	
-		this.drawDelayEstimator();
-		this.updateTurnElements();
-	}
-
-	this.drawDelayEstimator = function(){
-		//var delay = this.turns[0].delay / this.turns[0].costmod;
-		var delay = this.getTurnDelay();
+		var delay = turn.a * turn.delay / turn.mod * turn.dif;
 		if (delay){
-			salvoCtx.clearRect(0, 0, res.x, res.y);
-			salvoCtx.translate(cam.o.x, cam.o.y);
-			salvoCtx.scale(cam.z, cam.z);
-			var center;
-			var plannedAngle = this.getPlannedFacing(this.actions.length-1);
-			if (this.actions.length){
-				center = new Point(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y);
-			}
-			else center = this.getBaseOffsetPos();
+			var angle = this.getPlannedFacing();
+			var center = this.getPlannedPosition();
+			var delayRad1 = degreeToRadian(angle-45);
+			var delayRad2 = degreeToRadian(angle+45);
 
-			var delayRad1 = degreeToRadian(plannedAngle-45);
-			var delayRad2 = degreeToRadian(plannedAngle+45);
-			salvoCtx.beginPath();			
-			salvoCtx.arc(center.x, center.y, delay, delayRad1, delayRad2, false);
-			salvoCtx.closePath();
-			salvoCtx.strokeStyle = "white";
-			salvoCtx.lineWidth = 2
-			salvoCtx.stroke();
-			salvoCtx.arc(center.x, center.y, delay, 0, 2*Math.PI, false);
-			salvoCtx.globalCompositeOperation = "destination-out";
-			salvoCtx.fill();
-			salvoCtx.globalCompositeOperation = "source-over";
-			salvoCtx.setTransform(1,0,0,1,0,0);
-		}
+			mouseCtx.clearRect(0, 0, res.x, res.y);
+			mouseCtx.translate(cam.o.x, cam.o.y);
+			mouseCtx.scale(cam.z, cam.z);
+			mouseCtx.beginPath();			
+			mouseCtx.arc(center.x, center.y, delay, delayRad1, delayRad2, false);
+			mouseCtx.closePath();
+			mouseCtx.strokeStyle = "red";
+			mouseCtx.lineWidth = 3
+			mouseCtx.stroke();
+			mouseCtx.arc(center.x, center.y, delay, 0, 2*Math.PI, false);
+			mouseCtx.globalCompositeOperation = "destination-out";
+			mouseCtx.fill();
+			mouseCtx.globalCompositeOperation = "source-over";
+			mouseCtx.setTransform(1,0,0,1,0,0);
+		} else 
+			mouseCtx.clearRect(0, 0, res.x, res.y);
 	}
-
 
 	this.drawImpulseUI = function(){
 		var center = {x: this.x, y: this.y};
-		var p1 = getPointInDirection(this.size/2 + 10 + 15, this.facing + 180, center.x, center.y);
+		var p1 = getPointInDirection(this.size/2 + 10 + 15, this.getDrawFacing() + 180, center.x, center.y);
 
 		if (this.canUndoLastAction()){
 			var ox = p1.x * cam.z + cam.o.x - 15;
@@ -1411,7 +1324,7 @@ function Ship(data){
 		var p = getPointInDirection((this.size/2 + w)/cam.z, this.facing + 180, center.x, center.y);
 
 		gui.css("left", p.x * cam.z + cam.o.x - w/2).css("top", p.y * cam.z + cam.o.y - h/2).removeClass("disabled");
-		gui.find("#impulse").html(this.getRemainingImpulse() + " / " + this.getTotalImpulse());
+		gui.find("#impulse").html(this.getRemainingImpulse() + " / " + this.getCurrentImpulse());
 		gui.find("#remTurnDelay").html(this.getRemainingDelay());
 		gui.find("#baseDelay").html(round(this.getTurnDelay(), 1));
 		gui.find("#enginePower").html(this.getRemainingEP() + " / " + this.getEP());
@@ -1419,14 +1332,14 @@ function Ship(data){
 		gui.find("#turnCost").html("<span>" + round(this.getTurnCost(), 1) + " EP</span>");
 
 	*/	if (this.canIncreaseImpulse()){
-			var pPlus = getPointInDirection(50, this.facing +90, p1.x, p1.y);
+			var pPlus = getPointInDirection(50, this.getDrawFacing() +90, p1.x, p1.y);
 			var ox = pPlus.x * cam.z + cam.o.x - 15;
 			var oy = pPlus.y * cam.z + cam.o.y - 15;
 			$("#plusImpulse").css("left", ox).css("top", oy).removeClass("disabled");
 		} else $("#plusImpulse").addClass("disabled");
 
 		if (this.canDecreaseImpulse()){
-			var mMinus = getPointInDirection(50, this.facing -90, p1.x, p1.y);
+			var mMinus = getPointInDirection(50, this.getDrawFacing() -90, p1.x, p1.y);
 			var ox = mMinus.x * cam.z + cam.o.x - 15;
 			var oy = mMinus.y * cam.z + cam.o.y - 15;
 			$("#minusImpulse").css("left", ox).css("top", oy).removeClass("disabled");
@@ -1434,17 +1347,17 @@ function Ship(data){
 	}	
 
 	this.issueMove = function(pos, dist){
-		if (this.actions[this.actions.length-1].type == "move" && this.actions[this.actions.length-1].turn == game.turn){
+		if (this.actions.length && this.actions[this.actions.length-1].type == "move" && this.actions[this.actions.length-1].turn == game.turn){
 			this.actions[this.actions.length-1].dist+= dist;	
 			this.actions[this.actions.length-1].x = pos.x;
 			this.actions[this.actions.length-1].y = pos.y;
-		}
-		else {
-			this.actions.push(new Move("move", dist, pos.x, pos.y, 0, 0));	
-		}
+		} else this.actions.push(new Move(-1, "move", dist, pos.x, pos.y, 0, 0));	
+		
 		this.turnAngles = {}
 		$("#popupWrapper").hide();
 		this.unsetMoveMode();
+		this.setRemainingImpulse();
+		this.setRemainingDelay();
 		this.setMoveMode();
 		game.redrawEW();
 		game.drawAllPlans();
@@ -1463,27 +1376,43 @@ function Ship(data){
 		return false;
 	}
 	
-	this.undoLastAction = function(pos){		
+	this.undoLastAction = function(pos){
+		if (this.actions[this.actions.length-1].type == "speedChange"){
+			this.actions[this.actions.length-1].dist *= -1;
+			this.setCurrentImpulse();
+		}
+		else if (this.actions[this.actions.length-1].type == "move"){
+			this.setRemainingDelay();
+			this.actions[this.actions.length-1].dist *= -1;
+			this.setRemainingImpulse();
+		}
+		else if (this.actions[this.actions.length-1].type == "turn"){
+			this.actions[this.actions.length-1].delay *= -1;
+			this.setRemainingDelay();
+		}
 		this.actions.splice(this.actions.length-1, 1);
+		if (game.turnMode){
+			this.switchTurnMode();
+		}
 		this.turnAngles = {}
 		game.redrawEW();
 		game.drawAllPlans();
 	}
 
 	this.moveToMaxVector = function(){
-		var pos = this.getOffsetPos();
+		var pos = this.getPlannedPosition();
 		var dist = this.getRemainingImpulse();
-		var goal = getPointInDirection(dist, this.getPlannedFacing(this.actions.length-1), pos.x, pos.y);
+		var goal = getPointInDirection(dist, this.getPlannedFacing(), pos.x, pos.y);
 		if (!game.posIsOccupied(this, goal)){
 			this.issueMove(goal, dist);
 		}
 	}
 	
 	this.moveToMaxTurnVector = function(){
-		var pos = this.getOffsetPos();
+		var pos = this.getPlannedPosition();
 		var dist = this.getRemainingDelay();
 		var impulse = this.getRemainingImpulse();
-		var goal = getPointInDirection(dist, this.getPlannedFacing(this.actions.length-1), pos.x, pos.y);
+		var goal = getPointInDirection(dist, this.getPlannedFacing(), pos.x, pos.y);
 		if (dist == impulse && !game.posIsOccupied(this, goal)){
 			this.issueMove(goal, dist);
 		} else this.issueMove(goal, dist);
@@ -1535,63 +1464,64 @@ function Ship(data){
 	}
 		
 	this.switchTurnMode = function(){
+		this.turnMod = 1;
 		if (game.turnMode){
+			turn.reset();
 			game.turnMode = 0;
 			mouseCtx.clearRect(0, 0, res.x, res.y);
-			if (this.ship){this.getSystemByName("Sensor").drawEW();}
-			$("#vectorDiv").addClass("disabled");
-			$("#game").find("#turnButton")
-				.find("#turnMode").html("OFF").removeClass("on", 0).end()
-				.find("#turnCost").html("").end()
-				.find("#turnDelay").html("");
-		}
+		}	
 		else {
 			game.turnMode = 1;
-			$("#vectorDiv").removeClass("disabled");
-			$("#game").find("#turnButton")
-			.find("#turnMode").html("ON").addClass("on", 0).end()
+			turn.set(this);
 		}
+		this.setTurnData();
 	}
 
 	this.handleTurning = function(e, o, f, pos){
 		var t = {x: e.clientX - offset.x, y: e.clientY - offset.y};
+		var max = this.getMaxTurnAngle();
 		var a =  getAngleFromTo(o, pos);
-			a = addAngle(f, a);
-
+			a = Math.round(addAngle(f, a));
 		if (a > 180){a = (360-a) *-1;}
+			a = Math.min(Math.abs(a), max);
+			turn.a = a;
 
-		$("#vectorDiv").html("Angle: " + Math.round(a))
-		.css("left", t.x- 45 + "px")
-		.css("top", t.y + 40 + "px")
+		var c = this.getTurnCost() * a;
+		var remEP = "Cost: " + Math.round(c, 2) + " (" + Math.round(this.getRemainingEP() - c) + ") EP";
+		var delay = "Delay: " + Math.round(this.getTurnDelay() * a, 2) + " px";
 
-		if (isInArc(getCompassHeadingOfPoint(this.getPlannedPosition(), pos, 0), this.turnAngles.start, this.turnAngles.end)){
-			mouseCtx.clearRect(0, 0, res.x, res.y);
-			mouseCtx.beginPath();
-			mouseCtx.moveTo(o.x * cam.z + cam.o.x, o.y * cam.z + cam.o.y);
-			mouseCtx.lineTo(t.x, t.y);
-			mouseCtx.closePath();
-			mouseCtx.strokeStyle = "white";
-			mouseCtx.stroke();
-		}
+	$("#vectorDiv")//.empty()
+	/*	.append($("<table>")
+			.append($("<tr>")
+				.append($("<td>").html("Angle: " + a + "°")))
+			.append($("<tr>")
+				.append($("<td>").html("Cost: " + Math.round(c, 2) + " (" + Math.round(this.getRemainingEP() - c) + ") EP")))
+			.append($("<tr>")
+				.append($("<td>").html("Delay: " + Math.round(this.getTurnDelay() * a, 2) + " px"))))
+	*/	.css("left", e.clientX - offset.x - 45 + "px")
+		.css("top", e.clientY - offset.y + 40 + "px")
+		.find("tr").each(function(i){
+			switch (i){
+				case 0: $(this).html("Angle: " + a + "°"); break;
+				case 1: $(this).html(remEP); break;
+				case 2: $(this).html(delay); break;
+				default: break;
+			}
+		})
 
-		if (a < 0){a *= -1;}
-		//console.log(a)
-		$("#game").find("#turnButton")
-			.find("#turnCost").html(Math.round(this.getTurnCost() * Math.min(a, this.getMaxTurnAngle()), 2) + " EP").end()
-			.find("#turnDelay").html(Math.round(this.getTurnDelay() * Math.min(a, this.getMaxTurnAngle()), 2) + " px");
+		this.drawDelay();
+		//if (this.ship){this.drawEW();}
+		this.drawMouseVector(o, t);
+	}
 
-
-		/*else {
-			$("#game").find("#turnButton")
-				.find("#turnCost").html("").end()
-				.find("#turnDelay").html("");
-		}*/
-
-
-		//if (IsOnMovementArc(this, pos)){
-		//	console.log("valid turn: " + a);
-			//this.issueTurn(a);
-		//}
+	this.drawMouseVector = function(o, t){
+		mouseCtx.beginPath();
+		mouseCtx.moveTo(o.x * cam.z + cam.o.x, o.y * cam.z + cam.o.y);
+		mouseCtx.lineTo(t.x, t.y);
+		mouseCtx.closePath();
+		mouseCtx.strokeStyle = "white";
+		mouseCtx.lineWidth = 1;
+		mouseCtx.stroke();
 	}
 
 	this.handleTurnAttempt = function(dest){
@@ -1611,23 +1541,36 @@ function Ship(data){
 	}
 
 	this.issueTurn = function(a){
-		//console.log("turn, a: ".a);
-		if (this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0){
+		if (this.actions.length && this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0){
 			this.actions[0].a += Math.round(a);
-			this.facing += Math.round(a);
+			if (this.actions[0].a > 360){
+				this.actions[0].a -= 360;
+			} else if (this.actions[0].a < 0){this.actions[0].a += 360;}
+			console.log(this.actions[0].a);
+			this.drawFacing = this.actions[0].a;
+			this.facing = this.actions[0].a;
+			//console.log(this.actions[0].a);
 			//this.unsetMoveMode();
 			//this.setMoveMode();
 			game.redraw()
 		}
 		else {
 			var o = this.getPlannedPosition();
+			if (this.getRemainingImpulse() == 0){
+				while (this.canShortenTurn()){
+					this.doShortenTurn();
+				}
+			}
 			this.actions.push(
-				new Move(
-					"turn", 0, o.x, o.y, 
-					Math.round(a), Math.round(this.getTurnDelay()*Math.abs(a)), Math.round(this.getTurnCost()*Math.abs(a)), 0
+				new Move(-1, "turn", 0, o.x, o.y, 
+					Math.round(a),
+					Math.round(this.getTurnDelay()*Math.abs(a)),
+					Math.round(this.getTurnCost()*Math.abs(a)),
+					round(turn.mod, 1), 0
 				)
 			);
-			console.log(this.actions[this.actions.length-1]);
+			this.setRemainingDelay();
+			//console.log(this.actions[this.actions.length-1]);
 			$("#game").find("#turnButton")
 				.find("#turnCost").html("").end()
 				.find("#turnDelay").html("");
@@ -1656,13 +1599,11 @@ function Ship(data){
 						}
 					}
 
-					if (this.getRemainingImpulse() == 0){
-						this.doShortenTurn(true);
-					}
+					//if (this.getRemainingImpulse() == 0){this.doShortenTurn(true);}
 
 					this.actions.push(
 						new Move(
-							"turn", 0, this.turns[i].x, this.turns[i].y, 
+							-1, "turn", 0, this.turns[i].x, this.turns[i].y, 
 							this.turns[i].a, this.turns[i].delay, this.turns[i].cost, this.turns[i].costmod
 						)
 					);
@@ -1705,8 +1646,10 @@ function Ship(data){
 	}
 	
 	this.createBaseDiv = function(){
+		var owner = "friendly";
+		if (this.userid != game.userid){owner = "hostile";}
 		var div = document.createElement("div");
-			div.className = "shipDiv";
+			div.className = "shipDiv " + owner;
 			$(div).data("shipId", this.id);
 
 		var subDiv = document.createElement("div");
@@ -1725,13 +1668,13 @@ function Ship(data){
 					.append($("<td>").html("Classification"))
 					.append($("<td>").html(game.getUnitType(this.traverse))))
 				.append($("<tr>")
-					.append($("<td>").html("Impulse"))
-					.append($("<td>").html(this.getRemainingImpulse() + " / " + this.getTotalImpulse()).addClass("impulse")))
+					.append($("<td>").html("Thrust"))
+					.append($("<td>").html(this.getRemainingImpulse() + " / " + this.getCurrentImpulse()).addClass("Thrust")))
 				.append($("<tr>")
 					.append($("<td>").html("Engine Power:"))
 					.append($("<td>").html(this.getRemainingEP() + " / " + this.getEP()).addClass("ep")))
 				.append($("<tr>")
-					.append($("<td>").html("Impulse Change:"))
+					.append($("<td>").html("Thrust Change:"))
 					.append($("<td>").html(this.getImpulseChangeCost() + " EP").addClass("change")))
 				.append($("<tr>")
 					.append($("<td>").html("Turn Cost per 1°"))
@@ -1776,11 +1719,7 @@ function Ship(data){
 	}
 
 	this.expandDiv = function(div){
-		var iconContainer = document.createElement("div");
-			iconContainer.className = "iconContainer";
-		var img =  window.shipImages[this.name.toLowerCase()].cloneNode(true); img.className = "rotate270size90";
-			iconContainer.appendChild(img);
-		div.appendChild(iconContainer);
+		$(div).append($("<div>").addClass("iconContainer").append($(window.shipImages[this.name.toLowerCase()].cloneNode(true)).addClass("rotate270").addClass("size90")));
 			
 		//document.getElementById("game").appendChild(div);
 		document.body.appendChild(div);
@@ -1842,17 +1781,19 @@ function Ship(data){
 				var td = this.primary.systems[i].getTableData(false);
 					td = this.attachEvent(td);
 
-				var boostDiv = this.primary.systems[i].getBoostDiv();
-				if (boostDiv){td.appendChild(boostDiv)};
+				if (game.turn == 1 || this.id > 0){
+					var boostDiv = this.primary.systems[i].getBoostDiv();
+					if (boostDiv){td.appendChild(boostDiv)};
 
-				var powerDiv = this.primary.systems[i].getPowerDiv();
-				if (powerDiv){
-					powerDiv.style.left = 31 + "px"
-					td.appendChild(powerDiv);
-				}
-				var modeDiv =this.primary.systems[i].getModeDiv();
-				if (modeDiv){
-					td.appendChild(modeDiv);
+					var powerDiv = this.primary.systems[i].getPowerDiv();
+					if (powerDiv){
+						powerDiv.style.left = 31 + "px"
+						td.appendChild(powerDiv);
+					}
+					var modeDiv =this.primary.systems[i].getModeDiv();
+					if (modeDiv){
+						td.appendChild(modeDiv);
+					}
 				}
 
 				systems++;
@@ -1878,9 +1819,11 @@ function Ship(data){
 		structContainer.appendChild(primaryDiv);
 		var w = $(primaryDiv).width();
 		var h = $(primaryDiv).height();
+		var primX = conWidth/2 - w/2;
+		var primY = conHeight/2 - h/2 + offsetY
 		$(primaryDiv)
-			.css("left", conWidth/2 - w/2)
-			.css("top", conHeight/2 - h/2 + offsetY)
+			.css("left", primX)
+			.css("top", primY)
 
 		// OUTER STRUCTS
 		for (var i = 0; i < this.structures.length; i++){
@@ -1896,11 +1839,11 @@ function Ship(data){
 			var col = 0;
 			var colWidth = 1;
 			var max;
-			var a = this.structures[i].direction;
+			var a = this.structures[i].direction; if (a == 360){a = 0;}
 			var w;
 			var maxRow = 0;
 
-			if (a == 0 || a == 180 || a == 360){ // front or aft
+			if (a == 0 || a == 180){ // front or aft
 				if (a == 180){
 					max = Math.min(6, this.structures[i].systems.length);
 				}
@@ -1934,11 +1877,6 @@ function Ship(data){
 				}
 			}
 
-			if (this.structures[i].systems.length == 1){
-				if (a == 0 || a == 360){
-					structTable.childNodes[0].childNodes[0].style.width = "70px";
-				}
-			}
 			if (max == 1){
 				structTable.childNodes[0].childNodes[0].style.height = "62px";
 			}
@@ -1947,6 +1885,14 @@ function Ship(data){
 			}
 			else {
 				structTable.childNodes[0].childNodes[0].style.height = "23px";
+			}
+
+			var fill = 0;
+			if (a == 0 || a == 180){
+				if (this.structures[i].systems.length == 1 || this.structures[i].systems.length == 2 && this.structures[i].systems[0].name != this.structures[i].systems[1].name){
+					max = 3;
+					fill = 1;
+				}
 			}
 
 
@@ -1960,22 +1906,28 @@ function Ship(data){
 					}
 				}
 
+				if (fill){
+					tr.insertCell(-1).className ="emptySystem"; col++;
+				}
+
 				var td = this.structures[i].systems[j].getTableData(false);
 					td.colSpan = colWidth;
 					td = this.attachEvent(td);
 
-				var boostDiv = this.structures[i].systems[j].getBoostDiv();
-				if (boostDiv){td.appendChild(boostDiv)};
+				if (game.turn == 1 || this.id > 0){
+					var boostDiv = this.structures[i].systems[j].getBoostDiv();
+					if (boostDiv){td.appendChild(boostDiv)};
 
-				var powerDiv = this.structures[i].systems[j].getPowerDiv();
-				if (powerDiv){
-					powerDiv.style.left = colWidth * 31 + "px";
-					td.appendChild(powerDiv);
-				}
+					var powerDiv = this.structures[i].systems[j].getPowerDiv();
+					if (powerDiv){
+						powerDiv.style.left = colWidth * 31 + "px";
+						td.appendChild(powerDiv);
+					}
 
-				var modeDiv = this.structures[i].systems[j].getModeDiv();
-				if (modeDiv){
-					td.appendChild(modeDiv);
+					var modeDiv = this.structures[i].systems[j].getModeDiv();
+					if (modeDiv){
+						td.appendChild(modeDiv);
+					}
 				}
 
 				if (this.structures[i].systems[j].dual && !this.structures[i].systems[j].effiency){
@@ -1985,6 +1937,9 @@ function Ship(data){
 				col++;
 				tr.appendChild(td);
 
+				if (fill){
+					tr.insertCell(-1).className ="emptySystem"; col++;
+				}
 
 				if (col == max){
 					structTable.appendChild(tr);
@@ -1999,7 +1954,7 @@ function Ship(data){
 						maxRow = col;
 					}
 					col = 0;
-					$(structTable).find(".struct").attr("colSpan", maxRow);			
+					$(structTable).find(".struct").attr("colSpan", maxRow);
 				}
 			}
 
@@ -2030,9 +1985,11 @@ function Ship(data){
 				offsetY -= 60;
 			}
 
-			if (a == 0 || a == 360){
+			if (a == 0){
 				if (!noAft && this.structures[i].systems.length <= 3){
 					offsetY += 30;
+				} else if (fill){
+					$(primaryDiv).css("top", (primY + 20));
 				}
 			}
 			else if (noAft){
@@ -2104,7 +2061,7 @@ function Ship(data){
 		$(divs)
 			.find(".pos").html(this.x + " / " + this.y).end()
 			.find(".ep").html(this.getRemainingEP() + " / " + this.getEP()).end()
-			.find(".impulse").html(this.getRemainingImpulse() + " / " + this.getTotalImpulse()).end()
+			.find(".impulse").html(this.getRemainingImpulse() + " / " + this.getCurrentImpulse()).end()
 			.find(".delay").html(this.getRemainingDelay())		
 			.find(".change").html(this.getImpulseChangeCost() + " EP").end()			
 			.find(".turn").html(this.getImpulseChangeCost() + " EP").end()
@@ -2254,17 +2211,17 @@ function Ship(data){
 		} else $(ele).attr("class", "hostile");
 
 		var baseHit = this.getBaseHitChance();
-		var impulse = this.getTotalImpulse();
+		var impulse = this.getCurrentImpulse();
 
 		var table = document.createElement("table");
 			table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id + " (" +game.getUnitType(this.traverse) + ")";
-			table.insertRow(-1).insertCell(-1).innerHTML =  "Impulse: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")";
+			table.insertRow(-1).insertCell(-1).innerHTML =  "Thrust: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")";
 			table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit: " + Math.floor(this.profile[0] * baseHit) + "% - " + Math.floor(this.profile[1] * baseHit) + "%";
 		return table;
 	}
 
 	this.getProfileMod = function(){
-		return Math.floor((1+((((this.getBaseImpulse() / this.getTotalImpulse())-1)/3)))*100);
+		return Math.floor((1+((((this.getBaseImpulse() / this.getCurrentImpulse())-1)/3)))*100);
 	}
 
 	this.getIncomingBallistics = function(){
@@ -2275,16 +2232,6 @@ function Ship(data){
 			}
 		}
 		return inc;
-	}
-
-	this.switchDiv = function(){
-		if (this.selected){
-			$(this.element).removeClass("disabled")
-		}
-		else if ($(this.element).hasClass("disabled")){
-			$(this.element).removeClass("disabled")
-		}
-		else  $(this.element).addClass("disabled");
 	}
 
 	this.canBoost = function(system){
@@ -2358,33 +2305,29 @@ function Ship(data){
 		if (turn && this.canTurn()){
 			this.switchTurnMode();
 		}
+		this.drawEW();
 	}
 
 	this.setMoveMode = function(){
 		game.mode = 1;
+		turn.set(this);
 		this.turnAngles = {};
 		//this.setTranslation(moveCtx, planCtx);
 		this.setMoveTranslation();
 		this.drawMoveRange();
 		this.drawVectorIndicator();
 
-		if (game.phase == -1){ // DEPLOYMENT
-			if (!this.flight && this.actions[0].type == "deploy"  && this.actions[0].turn == game.turn){
-				this.drawTurnUI();
-			}
+		if (game.phase == -1 && (this.available == game.turn && game.turn == 1|| this.id < 0)){
+			this.drawTurnUI();
+			this.drawTurnArcs();
+			//this.updateDiv();
 		}
-		else if (game.phase == 0){
-			if (!this.flight){
+		else if (game.phase == 0 && !this.flight){
+			this.drawMoveUI();
+		}
+		else if (game.phase == 1 && this.flight){
+			if (! this.dogfights.length){
 				this.drawMoveUI();
-			//	this.drawMovePlan();
-			}
-		}
-		else if (game.phase == 1){
-			if (this.flight){
-				if (! this.dogfights.length){
-					this.drawMoveUI();
-				//	this.drawMovePlan();
-				}
 			}
 		}
 		else if (game.phase == 2){ // FIRE
@@ -2423,17 +2366,21 @@ function Ship(data){
 		console.log(this);
 		aUnit = this.id;
 		this.selected = true;
+		this.setunitGUI();
 		game.setShipTransform();
 		this.drawPositionMarker();
 		game.resetShipTransform();
 		game.drawAllPlans();
 		this.switchDiv();
 		this.setMoveMode();
+
+		console.log(this.getRemainingEP() / this.baseTurnCost)
 	}
 	
 	this.doUnselect = function(){
 		aUnit = false;
 		this.selected = false;
+		this.setunitGUI();
 		if (game.deploying){game.disableDeployment();}
 		else if (game.flightDeploy){game.flightDeploy = false;}
 		this.unselectSystems();
@@ -2449,6 +2396,14 @@ function Ship(data){
 		$("#systemDetailsDiv").remove();
 		mouseCtx.clearRect(0, 0, res.x, res.y);
 	}
+	this.setunitGUI = function(){
+		var id = this.id;
+		$("#unitGUI").find("img").each(function(){
+			if ($(this).data("shipid") == id){
+				$(this).toggleClass("selected"); return;
+			}
+		})
+	}
 
 	this.doHighlight = function(){
 		if (this.highlight){
@@ -2460,12 +2415,11 @@ function Ship(data){
 			ctx.translate(cam.o.x, cam.o.y);
 			ctx.scale(cam.z, cam.z);
 			ctx.beginPath();
-			ctx.arc(this.x, this.y, this.size/2, 0, 2*Math.PI, false);
+			ctx.arc(this.drawX, this.drawY, this.size/2, 0, 2*Math.PI, false);
 			ctx.closePath();
 			ctx.lineWidth = 3;
 			ctx.globalAlpha = 1;
-			if (this.friendly){ctx.strokeStyle = "white";}
-			else {ctx.strokeStyle = "white";}
+			ctx.strokeStyle = "white";
 			ctx.stroke();
 			ctx.setTransform(1,0,0,1,0,0);
 		}
@@ -2528,7 +2482,7 @@ function Ship(data){
 		var	w = Math.min(180, len * Math.pow(str/ew.dist, p));
 		var start = addAngle(0 + w, ew.angle);
 		var end = addAngle(360 - w, ew.angle);
-		return isInArc(getCompassHeadingOfPoint(origin,  target, this.facing), start, end);
+		return isInArc(getCompassHeadingOfPoint(origin,  target, this.getPlannedFacing()), start, end);
 	}
 
 	this.getLockString = function(lock){
@@ -2607,3 +2561,81 @@ function Ship(data){
 		return powers;
 	}
 }
+
+Ship.prototype.switchDiv = function(){
+	if (this.selected){
+		game.zIndex++;
+		$(this.element).removeClass("disabled").css("zIndex", game.zIndex);
+	}
+	else if ($(this.element).hasClass("disabled")){
+		game.zIndex++;
+		$(this.element).removeClass("disabled").css("zIndex", game.zIndex);
+	}
+	else {
+		game.zIndex--;
+		$(this.element).addClass("disabled").css("zIndex", 10);
+	}
+}
+
+
+
+Ship.prototype.setPreMoveFacing = function(){
+		if (this.actions.length && this.actions[0].type == "deploy"){
+			this.drawFacing = 0;
+			for (var i = 0; i < Math.min(this.actions.length, 2); i++){
+				this.drawFacing += this.actions[i].a;
+			}
+		}
+		else {
+			this.drawFacing = this.facing;
+		}
+		//console.log(this.id + " " + this.drawFacing);
+	}
+
+Ship.prototype.setPostMoveFacing = function(){
+		this.drawFacing = this.facing;
+		for (var i = 0; i < this.actions.length; i++){
+			if (this.actions[i].type == "turn"){
+				this.drawFacing += this.actions[i].a;
+			}
+		}
+	}
+
+Ship.prototype.setPreMovePosition = function(){
+		this.drawX = this.x;
+		this.drawY = this.y;
+	}
+
+Ship.prototype.setPostMovePosition = function(){
+		if (this.ship){
+			this.drawX = this.actions[this.actions.length-1].x;
+			this.drawY = this.actions[this.actions.length-1].y;
+		}
+		else if (this.flight){
+			if (game.phase == 1){
+				this.drawX = this.x;
+				this.drawY = this.y;
+			}
+			else if (game.phase >= 2){
+				this.drawX = this.actions[this.actions.length-1].x;
+				this.drawY = this.actions[this.actions.length-1].y;
+			}
+		}
+	}
+
+Ship.prototype.setDrawData = function(){
+		if (this.available > game.turn || !this.available || game.turn == 1 && game.phase == -1){
+			return;
+		}
+		
+		if (game.phase > 1){
+			this.setPostMovePosition();
+			this.setPostMoveFacing();
+		}
+		else {
+			this.setPreMovePosition();
+			this.setPreMoveFacing();
+		}
+	}
+
+	

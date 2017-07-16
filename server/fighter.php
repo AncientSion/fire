@@ -60,9 +60,8 @@ class Aurora extends Fighter {
 	public $value = 34;
 	public $mass = 38;
 	public $ep = 100;
-	public $integrity = 34;
-	public $negation = array(7, 6, 6);
-	public $turns = 5;
+	public $integrity = 30;
+	public $negation = array(6, 5, 5);
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -80,9 +79,8 @@ class Thunderbolt extends Fighter {
 	public $value = 42;
 	public $mass = 42;
 	public $ep = 110;
-	public $integrity = 38;
-	public $negation = array(9, 8, 8);
-	public $turns = 5;
+	public $integrity = 34;
+	public $negation = array(7, 7, 6);
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -98,19 +96,18 @@ class Nial extends Fighter {
 	public $name = "Nial";
 	public $display = "Nial";
 	public $faction = "Minbari Federation";
-	public $value = 58;
+	public $value = 54;
 	public $mass = 36;
 	public $ep = 140;
-	public $integrity = 42;
-	public $negation = array(11, 10, 8);
-	public $turns = 8;
+	public $integrity = 36;
+	public $negation = array(10, 9, 7);
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
 	}
 
 	public function addSystems(){
-		$this->systems[] = new LinkedNeutronRepeater(sizeof($this->systems), $this->id, $this->parentId, 1, 3, 17, 21, 330, 30);
+		$this->systems[] = new LinkedNeutronRepeater(sizeof($this->systems), $this->id, $this->parentId, 1, 3, 16, 20, 330, 30);
 	}
 }
 
@@ -121,9 +118,8 @@ class Sentri extends Fighter {
 	public $value = 28;
 	public $mass = 32;
 	public $ep = 115;
-	public $integrity = 32;
-	public $negation = array(8, 8, 7);
-	public $turns = 6;
+	public $integrity = 28;
+	public $negation = array(7, 7, 6);
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -131,6 +127,25 @@ class Sentri extends Fighter {
 
 	public function addSystems(){
 		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 1, 2, 13, 17, 330, 30);
+	}
+}
+
+class Sitara extends Fighter {
+	public $name = "Sitara";
+	public $display = "Sitara";
+	public $faction = "Centauri Republic";
+	public $value = 24;
+	public $mass = 32;
+	public $ep = 105;
+	public $integrity = 26;
+	public $negation = array(5, 5, 5);
+
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
+	}
+
+	public function addSystems(){
+		$this->systems[] = new IonBolt(sizeof($this->systems), $this->id, $this->parentId, 1, 1, 30, 37, 330, 30);
 	}
 }
 
@@ -142,8 +157,7 @@ class Gorith extends Fighter {
 	public $mass = 30;
 	public $ep = 85;
 	public $integrity = 28;
-	public $negation = array(6, 5, 4);
-	public $turns = 5;
+	public $negation = array(5, 5, 4);
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -161,9 +175,8 @@ class Frazi extends Fighter {
 	public $value = 32;
 	public $mass = 35;
 	public $ep = 100;
-	public $integrity = 34;
+	public $integrity = 32;
 	public $negation = array(7, 7, 6);
-	public $turns = 5;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

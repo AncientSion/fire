@@ -49,14 +49,6 @@ class Mini extends Ship {
 		return true;
 	}
 
-	public function setState($turn){
-		//Debug::log("setting state for #".$this->id);
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			$this->structures[$i]->setState($turn);
-		}
-		$this->isDestroyed();
-	}
-
 	public function applyDamage($dmg){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->id == $dmg->systemid){
@@ -172,22 +164,22 @@ class Salvo extends Mini {
 	public $traverse = -4;
 	public $fireOrder;
 
-	function __construct($id, $userid, $targetid, $name, $status, $amount, $destroyed){
+	function __construct($id, $userid, $amount, $targetid, $name, $status, $available, $destroyed){
 		$this->id = $id;
 		$this->userid = $userid;
+		$this->amount = $amount;
 		$this->targetid = $targetid;
 		$this->name = $name;
 		$this->status = $status;
-		$this->amount = $amount;
+		$this->available = $available;
 		$this->destroyed = $destroyed;
 		
 		$this->addStructures($amount);
-		$this->setProps();
 	}
 
 
 	public function getImpulseProfileMod(){
-		return 1;
+		return 0;
 	}
 
 	public function getShots($turn){
@@ -200,9 +192,28 @@ class Salvo extends Mini {
 		return $shots;
 	}
 
-	public function setProps(){
+	public function getDeployState($turn){
+		if ($this->available == $turn){
+			return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x , "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => 0, "angle" => $this->actions[sizeof($this->actions)-1]->a, "thrust" => $this->currentImpulse);
+		}
+	}
+
+	public function getMoveState($turn){
+		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x , "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => 0, "angle" => $this->actions[sizeof($this->actions)-1]->a, "thrust" => $this->currentImpulse);
+	}
+
+	public function setProps($turn){
 		$this->baseHitChance = $this->structures[0]->getSubHitChance();
 		$this->baseImpulse = ceil(pow($this->structures[0]->mass, -0.75)*250);
+		$this->setCurrentImpulse($turn);
+	}
+
+	public function setCurrentImpulse($turn){
+		$this->currentImpulse = $this->baseImpulse * ($turn - $this->available +2);
+	}
+	
+	public function getCurrentImpulse(){
+		return $this->currentImpulse;
 	}
 
 	public function addStructures($amount){
@@ -222,11 +233,15 @@ class Salvo extends Mini {
 	}
 
 	public function setState($turn){
-		parent::setState($turn);
-		if ($this->actions[sizeof($this->actions)-1]->type == "impact"){
+		$this->setProps($turn);
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			$this->structures[$i]->setState($turn);
+		}
+		if (sizeof($this->actions) && $this->actions[sizeof($this->actions)-1]->type == "impact"){
 			$this->destroyed = true;
 			return;
 		}
+		$this->isDestroyed();
 	}
 
 	public function isDogfight($fire){
@@ -242,29 +257,11 @@ class Salvo extends Mini {
 	}
 
 	public function getImpactTrajectory(){
-		return new Point($this->actions[sizeof($this->actions)-2]->x, $this->actions[sizeof($this->actions)-2]->y);
+		return new Point($this->x, $this->y);
 	}
 
 	public function getHitAngle($fire){
 		return 0;
-	}
-
-	public function getBaseImpulse(){
-		return $this->baseImpulse;
-	}
-
-	public function getAccelSteps(){
-		$steps = 2;
-		for ($i = 1; $i < sizeof($this->actions); $i++){
-			if ($this->actions[$i]->resolved && $this->actions[$i]->type == "move"){
-				$steps++;
-			}
-		}
-		return $steps;
-	}
-
-	public function getImpulse(){
-		return $this->getBaseImpulse() * $this->getAccelSteps();
 	}
 
 	public function getArmourValue($fire, $hitSystem){
@@ -286,24 +283,17 @@ class Salvo extends Mini {
 		$tPos; $dist;
 
 		if ($this->targetid == $fire->shooter->id){ // direct intercpet
-			if ($this->actions[sizeof($this->actions)-1]->type == "impact"){
-				$tPos = $this->actions[sizeof($this->actions)-2];
-				$dist = Math::getDist($tPos->x, $tPos->y, $sPos->x, $sPos->y);
-				$dist = min($dist, $fire->shooter->size/2);
-				//Debug::log("a");
-			}
-			else {
-				$tPos = $this->actions[sizeof($this->actions)-1];
-				$dist = $dist = Math::getDist($tPos->x, $tPos->y, $sPos->x, $sPos->y);
-				$dist = max($dist, $fire->shooter->size/2);
-				//Debug::log("b");
-			}
+			$tPos = $this->getImpactTrajectory();
+			$dist = Math::getDist($tPos->x, $tPos->y, $sPos->x, $sPos->y);
+
+			if ($dist - $this->getCurrentImpulse() < $fire->shooter->size/2){
+				$dist = $fire->shooter->size/2;
+			} else $dist = $dist - $this->getCurrentImpulse();
 		}
 		else {
 			$tPos = $this->getCurrentPosition();
 			$dist = Math::getDist($tPos->x, $tPos->y, $sPos->x, $sPos->y);
 		}
-		//Debug::log("dist: ".$dist);
 		return $dist;
 	}
 }

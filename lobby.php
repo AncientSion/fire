@@ -6,8 +6,6 @@ if (isset($_SESSION["userid"])){
 
 	$manager = new Manager($_SESSION["userid"]);
 	$dbManager = DBManager::app();
-	$playerName = $manager->getUsername();
-	$_SESSION["username"] = $playerName;
 
 	if (isset($_POST["gameName"]) && isset($_POST["pointValue"])){
 		if ( $_POST["gameName"] != "" && $_POST["pointValue"] != ""){
@@ -33,21 +31,17 @@ if (isset($_SESSION["userid"])){
 	
 	$ongoingGames = $dbManager->getMyGames($_SESSION["userid"]);
 	for ($i = 0; $i < sizeof($ongoingGames); $i++){
+		//Debug::log("checking for canAdvance ".$ongoingGames[$i]["id"]);
 		if ($manager->canAdvance($ongoingGames[$i]["id"])){
+			//Debug::log("can!, now preparing");
 			$manager->prepareAdvance($ongoingGames[$i]["id"]);
 			$manager->doAdvance();
+			$manager = new Manager($_SESSION["userid"]);
 		}
 	}
 
 	$openGames = $manager->getOpenGames();
-		
-	if ($playerName){
-		$welcome = "<font color='red'>Welcome, ".$playerName.", your player ID: ".$_SESSION['userid']."</font>";
-	} 
-	else {
-		$welcome = "<font color='red'> No Playername for your ID: ".$_SESSION['userid']."found !</font>";
-	}
-	
+
 	$ongoingGamesElement = "<table>";
 	if ($ongoingGames) {	
 		$ongoingGamesElement .= "<tr>";
@@ -154,7 +148,11 @@ else {
 		<div style>
 			<div class="lobbyDiv">
 				<span>
-					<?php echo $welcome; ?>
+					<?php
+						if (isset($_SESSION["userid"])){
+							echo "<font color='red'>Welcome, ".$manager->getUsername().", your player ID: ".$_SESSION['userid']."</font>";
+						} else echo "erro2,2,2,";
+					?>
 				</span>
 			</div>
 			<div class="lobbyDiv">

@@ -8,7 +8,7 @@ class Missile extends Single {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->integrity = 2+$this->mass*3;
+		$this->integrity = $this->mass*3;
 		$this->negation = $this->mass;
 		$this->systems[] = new Warhead($this->id, sizeof($this->systems)+1, $this->minDmg, $this->maxDmg, $this->traverse);
 	}
@@ -27,7 +27,7 @@ class Missile extends Single {
         	"type" => $this->type,
         	"minDmg" => $this->minDmg,
         	"maxDmg" => $this->maxDmg,
-        	"impulse" => $this->impulse,
+        	"Thrust" => $this->impulse,
         	"integrity" => $this->integrity,
         	"negation" => $this->negation,
         	"mass" => $this->mass,
@@ -94,7 +94,7 @@ class Hasta extends Missile {
 
 class Javelin extends Missile {
 	public $name = "Javelin";
-	public $display = "Multi-purpose Missiles";
+	public $display = "Multirole Missiles";
 	public $type = "explosive";
 	public $minDmg = 33;
 	public $maxDmg = 45;
@@ -107,8 +107,23 @@ class Javelin extends Missile {
 	}
 }
 
-class Patriot extends Missile {
-	public $name = "TEST";
+class Triarii extends Missile {
+	public $name = "Triarii";
+	public $display = "Heavy Multirole Missiles";
+	public $type = "explosive";
+	public $minDmg = 41;
+	public $maxDmg = 53;
+	public $mass = 4;
+	public $cost = 13;
+	public $traverse = -1;
+
+	function __construct($parentId, $id){
+		parent::__construct($parentId, $id);
+	}
+}
+
+class Vanguard extends Missile {
+	public $name = "Vanguard";
 	public $display = "Light Interceptor Missiles";
 	public $type = "explosive";
 	public $minDmg = 9;
@@ -124,7 +139,7 @@ class Patriot extends Missile {
 
 class Naga extends Missile {
 	public $name = "Naga";
-	public $display = "Multi-purpose Missiles";
+	public $display = "Multirole Missiles";
 	public $type = "explosive";
 	public $minDmg = 33;
 	public $maxDmg = 45;

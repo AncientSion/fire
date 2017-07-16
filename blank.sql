@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 04. Jul 2017 um 21:12
+-- Erstellungszeit: 16. Jul 2017 um 21:02
 -- Server-Version: 10.1.16-MariaDB
 -- PHP-Version: 7.0.9
 
@@ -239,7 +239,14 @@ CREATE TABLE `units` (
   `name` varchar(255) DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL,
   `available` int(3) DEFAULT NULL,
-  `destroyed` tinyint(1) DEFAULT NULL
+  `destroyed` tinyint(1) DEFAULT NULL,
+  `x` int(4) DEFAULT '0',
+  `y` int(4) DEFAULT '0',
+  `angle` int(3) DEFAULT '0',
+  `delay` int(3) DEFAULT '0',
+  `thrust` int(3) DEFAULT '0',
+  `turn` int(1) DEFAULT '0',
+  `phase` int(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -254,16 +261,6 @@ CREATE TABLE `users` (
   `password` varchar(255) DEFAULT NULL,
   `access` int(3) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Daten für Tabelle `users`
---
-
-INSERT INTO `users` (`id`, `username`, `password`, `access`) VALUES
-(1, 'Chris', '1', 1),
-(2, '1', '1', 1),
-(3, 'cdfdf', '147147', 0),
-(4, '4', '777', 0);
 
 --
 -- Indizes der exportierten Tabellen
@@ -426,7 +423,7 @@ ALTER TABLE `units`
 -- AUTO_INCREMENT für Tabelle `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

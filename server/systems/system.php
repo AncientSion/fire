@@ -98,6 +98,43 @@ class System {
 		return false;
 	}
 
+	public function getBoostEffect($type){
+		for ($i = 0; $i < sizeof($this->boostEffect); $i++){
+			if ($this->boostEffect[$i]->type == $type){
+				//Debug::log("return:".$this->boostEffect[$i]->value/100);
+				return $this->boostEffect[$i]->value;
+			}
+		}
+		return 0;
+	}
+
+	public function getCritMod($type, $turn){
+		$mod = 0;
+		for ($i = 0; $i < sizeof($this->crits); $i++){
+			switch ($this->crits[$i]->type){
+				case $type: 
+					$mod = $mod - $this->crits[$i]->value; break;
+				default: break;
+			}
+		}
+		return $mod;
+	}
+
+	public function getBoostLevel($turn){
+		$boost = 0;
+		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
+			if ($this->powers[$i]->turn == $turn){
+				switch ($this->powers[$i]->type){
+					case 1: 
+					$boost++;
+					break;
+				}
+			}
+			else break;
+		}
+		return $boost;
+	}
+
 	public function getRemainingIntegrity(){
 		$rem = $this->integrity;
 		for ($i = 0; $i < sizeof($this->damages); $i++){

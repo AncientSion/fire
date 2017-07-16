@@ -73,12 +73,16 @@ class Weapon extends System {
 		return new Divider($shieldDmg * $this->linked, $armourDmg * $this->linked, $structDmg * $this->linked, $notes);
 	}
 
+	public function getTotalDamage($fire){
+		return floor($this->getBaseDamage($fire) * $this->getDamageMod($fire) * $this->getDmgRangeMod($fire));
+	}
+
 	public function doDamage($fire, $roll, $system){
-		Debug::log("doDamage, weapon: ".(get_class($this)).", target: ".$fire->target->id."/".$system->id);
 
 		$destroyed = false;
-		$totalDmg = floor($this->getBaseDamage($fire) * $this->getDamageMod($fire));
+		$totalDmg = $this->getTotalDamage($fire);
 		$remInt = $system->getRemainingIntegrity();
+		Debug::log("doDamage, weapon: ".(get_class($this)).", target: ".$fire->target->id."/".$system->id.", totalDmg: ".$totalDmg);
 
 		if ($remInt == 0){
 			Debug::log("applying damage to destroyed unit: ".$system->isDestroyed());
@@ -109,6 +113,7 @@ class Weapon extends System {
 	}
 
 	public function getAccuracyLoss($fire){
+		if (!$fire->dist){return 0;}
 		return ceil($this->accDecay * $fire->weapon->getAccuracyMod($fire) * $fire->dist / 1000);
 	}
 
@@ -121,8 +126,8 @@ class Weapon extends System {
 		return $mod;
 	}
 
-	public function getDmgPenaltyRange($fire){
-		return 0;
+	public function getDmgRangeMod($fire){
+		return 1;
 	}
 
 	public function getBaseDamage($fire){
@@ -133,51 +138,12 @@ class Weapon extends System {
 		$mod = 1;
 
 		$crit = $this->getCritMod("Damage", $fire->turn);
-		$boost = $this->getBoostEffect("Damage")* $this->getBoostLevel($fire->turn);
-		$range = $this->getDmgPenaltyRange($fire);
+		$boost = $this->getBoostEffect("Damage") * $this->getBoostLevel($fire->turn);
 
-		$mod = $mod + $crit + $boost + $range;
-		if ($mod != 1){Debug::log("weapon id: ".$this->id.", DAMAGE mod: ".($crit + $boost + $range)." (crits: ".$crit.", boost: ".$boost.". range: ".$range.")");
+		$mod = $mod + $crit + $boost;
+		if ($mod != 1){Debug::log(get_class($this).", weapon id: ".$this->id.", DAMAGE mod: ".($crit + $boost )." (crits: ".$crit.", boost: ".$boost.")");
 		}
 		return $mod;
-	}
-
-	public function getBoostEffect($type){
-		for ($i = 0; $i < sizeof($this->boostEffect); $i++){
-			if ($this->boostEffect[$i]->type == $type){
-				//Debug::log("return:".$this->boostEffect[$i]->value/100);
-				return $this->boostEffect[$i]->value;
-			}
-		}
-		return 0;
-	}
-
-	public function getCritMod($type, $turn){
-		$mod = 0;
-		for ($i = 0; $i < sizeof($this->crits); $i++){
-			switch ($this->crits[$i]->type){
-				case $type: 
-					$mod = $mod - $this->crits[$i]->value; break;
-				default: break;
-			}
-		}
-		return $mod;
-	}
-
-	public function getBoostLevel($turn){
-		$boost = 0;
-		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
-			if ($this->powers[$i]->turn == $turn){
-				switch ($this->powers[$i]->type){
-					case 1: 
-					$boost++;
-					break;
-				}
-			}
-			else break;
-		}
-		//if ($boost){Debug::log("power boost level: ".$boost);}
-		return $boost;
 	}
 
 	public function getShots($turn){

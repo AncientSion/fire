@@ -3,6 +3,8 @@
 class Ship {
 	public $id;
 	public $facing = 0;
+	public $x;
+	public $y;
 	public $shipType = "Ship";
 	public $userid;
 	public $available;
@@ -12,6 +14,8 @@ class Ship {
 
 	public $baseHitChance;
 	public $currentImpulse;
+	public $remainingImpulse;
+	public $remainingDelay;
 	public $baseImpulse;
 
 	public $name;
@@ -58,10 +62,71 @@ class Ship {
 		return $this->index;
 	}
 
-	public function setProps(){
+	public function setState($turn){
+		//Debug::log("setState #".$this->id);
+		for ($i = sizeof($this->primary->damages)-1; $i >= 0; $i--){ // check destroyed
+			if ($this->primary->damages[$i]->destroyed){
+				$this->destroyed = true;
+				return;
+			}
+		}
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){ // check primary criticals
+			$this->primary->systems[$i]->setState($turn);
+			switch ($this->primary->systems[$i]->name){
+				case "Reactor":
+					if ($this->primary->systems[$i]->destroyed || $this->primary->systems[$i]->disabled){
+						$this->doUnpowerAllSystems($turn);
+					}
+					break;
+				case "Bridge":
+					if ($this->primary->systems[$i]->destroyed || $this->primary->systems[$i]->disabled){
+						$this->doUncommandShip($turn);
+					}
+					break;
+			}
+		}
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){ // 
+			$armourDmg = 0;
+			$structDmg = 0;
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				$this->structures[$i]->systems[$j]->setState($turn); // set system states
+				for ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]->damages); $k++){// set armour
+					$armourDmg += $this->structures[$i]->systems[$j]->damages[$k]->armourDmg;
+					$structDmg += $this->structures[$i]->systems[$j]->damages[$k]->structDmg;
+				}
+			}
+			for ($j = 0; $j < sizeof($this->primary->damages); $j++){
+				if ($this->primary->damages[$j]->structureid == $this->structures[$i]->id){
+					$armourDmg += $this->primary->damages[$j]->armourDmg;
+					$structDmg += $this->primary->damages[$j]->structDmg;
+				}
+			}
+			$this->structures[$i]->setNegation($this->primary->integrity, 0);
+		}
+
+		$this->setProps($turn);
+
+		return true;
+	}
+
+	public function setProps($turn){
+		//Debug::log("setProps #".$this->id);
 		$this->cost = static::$value;
-		$this->setCurrentImpulse();
+		$this->setCurrentImpulse($turn);
+		$this->setRemainingImpulse($turn);
+		$this->setRemainingDelay($turn);
 		$this->setBaseStats();
+	}
+
+	public function setPosition(){
+		for ($i = sizeof($this->actions)-1; $i >= 0; $i--){
+			if ($this->actions[$i]->resolved){
+				$this->x = $this->actions[$i]->x;
+				$this->y = $this->actions[$i]->y;
+				return;
+			}
+		}
 	}
 
 	public function setBaseStats(){
@@ -107,25 +172,122 @@ class Ship {
 		}
 	}
 
+	public function hideActions(){;
+		for ($i = sizeof($this->actions)-1; $i >= 0; $i--){
+			if (!$this->actions[$i]->resolved){
+				switch($this->actions[$i]->type){
+					case "turn": $this->remainingDelay -= $this->actions[$i]->delay; break;
+					case "speedChange": $this->currentImpulse -= $this->getImpulseStep()*$this->actions[$i]->dist; break;
+					default: break;
+				}
+				array_splice($this->actions, $i, 1);
+			}
+		}
+	}
+
 	public function getBaseImpulse(){
 		return $this->baseImpulse;
 	}
 
-	public function setCurrentImpulse(){
-		$base = $this->getBaseImpulse();
+	public function setCurrentImpulse($turn){
+		$impulse = $this->currentImpulse;
+
+		if ($turn == $this->available){
+			$impulse = $this->getBaseImpulse();
+		}
 		$step = $this->getImpulseStep();
 
 		for ($i = 0; $i < sizeof($this->actions); $i++){
+			if (!$this->actions[$i]->resolved){continue;}
 			if ($this->actions[$i]->type == "speedChange"){
-				$base += $step*$this->actions[$i]->dist;
+				$impulse += $step*$this->actions[$i]->dist;
 			}
 		}
-
-		$this->currentImpulse = $base;
+		$this->currentImpulse = $impulse;
 	}
 
 	public function getCurrentImpulse(){
+		//Debug::log("getCurrentImpulse #".$this->id);
 		return $this->currentImpulse;
+	}
+
+	public function setRemainingImpulse($turn){
+		if (sizeof($this->actions) && $this->actions[sizeof($this->actions)-1]->turn == $turn){
+			$this->remainingImpulse = 0;
+		}
+		else { 
+			$this->remainingImpulse = $this->getCurrentImpulse();
+		}
+	}
+
+	public function getEndState($turn, $phase){
+		if ($phase == -1){
+			return $this->getDeployState($turn);
+		}
+		else return $this->getMoveState($turn);
+	}
+
+	public function getDeployState($turn){
+		if ($this->available < $turn){
+			return;
+		}
+		$angle = $this->facing;
+
+		for ($i = 0; $i < sizeof($this->actions); $i++){
+			if ($this->actions[$i]->turn < $turn){continue;}
+			if ($turn == 1 && $this->actions[$i]->type == "deploy"
+				|| ($this->flight && $turn == $this->available && $this->actions[$i]->type == "deploy")
+				|| ($this->salvo && $turn == $this->available && $this->actions[$i]->type == "launch")
+				|| $this->actions[$i]->type == "jump"){
+				$angle += $this->actions[$i]->a;
+			}
+		}
+
+		if ($angle > 360){
+			$angle -= 360;
+		} else if ($angle < 0){
+			$angle += 360;
+		}
+
+		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x , "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $this->remainingDelay, "angle" => $angle, "thrust" => $this->currentImpulse);
+	}
+
+
+	public function getMoveState($turn){
+		$delay = $this->remainingDelay;
+		$angle = $this->facing;
+		for ($i = 0; $i < sizeof($this->actions); $i++){
+			if ($this->actions[$i]->turn < $turn){continue;}
+			if ($delay && $this->actions[$i]->type == "move"){
+				$delay = max(0, $delay - $this->actions[$i]->dist);
+			} else if ($this->actions[$i]->type == "turn"){
+				$delay += $this->actions[$i]->delay;
+				$angle += $this->actions[$i]->a;
+			}
+		}
+
+		if ($angle > 360){
+			$angle -= 360;
+		} else if ($angle < 0){
+			$angle += 360;
+		}
+
+		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "angle" => $angle, "thrust" => $this->currentImpulse);
+	}
+
+	public function setRemainingDelay($turn){
+		$delay = 0;
+
+		for ($i = 0; $i < sizeof($this->actions); $i++){
+			if (!$this->actions[$i]->resolved){continue;}
+			if ($delay && $this->actions[$i]->type == "move"){
+				$delay = max(0, $delay - $this->actions[$i]->dist);
+			} else if ($this->actions[$i]->type == "turn"){
+				$delay += $this->actions[$i]->delay;
+			}
+		}
+
+		$this->remainingDelay = $delay;
 	}
 
 	public function addFighterLoad($dbLoad){ // [4, 17, 17]
@@ -224,55 +386,7 @@ class Ship {
 			}
 		}
 
-		Debug::log("couldnt apply damage: #.".$dmg->id);
-
-	}
-
-	public function setState($turn){
-		for ($i = sizeof($this->primary->damages)-1; $i >= 0; $i--){ // check destroyed
-			if ($this->primary->damages[$i]->destroyed){
-				$this->destroyed = true;
-				return;
-			}
-		}
-		for ($i = 0; $i < sizeof($this->primary->systems); $i++){ // check primary criticals
-			$this->primary->systems[$i]->setState($turn);
-			switch ($this->primary->systems[$i]->name){
-				case "Reactor":
-					if ($this->primary->systems[$i]->destroyed || $this->primary->systems[$i]->disabled){
-						$this->doUnpowerAllSystems($turn);
-					}
-					break;
-				case "Bridge":
-					if ($this->primary->systems[$i]->destroyed || $this->primary->systems[$i]->disabled){
-						$this->doUncommandShip($turn);
-					}
-					break;
-			}
-		}
-
-		for ($i = 0; $i < sizeof($this->structures); $i++){ // 
-			$armourDmg = 0;
-			$structDmg = 0;
-			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				$this->structures[$i]->systems[$j]->setState($turn); // set system states
-				for ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]->damages); $k++){// set armour
-					$armourDmg += $this->structures[$i]->systems[$j]->damages[$k]->armourDmg;
-					$structDmg += $this->structures[$i]->systems[$j]->damages[$k]->structDmg;
-				}
-			}
-			for ($j = 0; $j < sizeof($this->primary->damages); $j++){
-				if ($this->primary->damages[$j]->structureid == $this->structures[$i]->id){
-					$armourDmg += $this->primary->damages[$j]->armourDmg;
-					$structDmg += $this->primary->damages[$j]->structDmg;
-				}
-			}
-			$this->structures[$i]->setNegation($this->primary->integrity, 0);
-		}
-
-		$this->setProps();
-
-		return true;
+		Debug::log("WARNING couldnt apply damage: #.".$dmg->id);
 	}
 
 	public function doUnpowerAllSystems($turn){
@@ -361,26 +475,19 @@ class Ship {
 
 	public function calculateToHit($fire){
 		//Debug::log("calculateToHit");
+		$multi = 1;
+		$req = 0;
+		
 		$base = $this->getHitChance($fire);
-		$impulse = $this->getImpulseProfileMod();
 		$traverse = $fire->weapon->getTraverseMod($fire);
 		$range = $fire->weapon->getAccuracyLoss($fire);
-		$multi = 1;
-		$req = 1;
 
-		//Debug::log("multi pre ".$multi);
 		$multi += $fire->shooter->getOffensiveBonus($this->id);
-		//Debug::log("multi: ".$multi);
+		$multi += $this->getImpulseProfileMod();
 		$multi -= $this->getDefensiveBonus($fire->shooter->id);
-		//Debug::log("multi post ".$multi);
-
-		if ($impulse != 1){
-			$multi += (1-$impulse)/2;
-			//Debug::log("impulse mod: ".(1-$impulse)/2);
-		}
 
 		$req = ($base * $multi) * (1-($traverse*0.2)) - $range;
-		//Debug::log("angle: ".$fire->angle.", base: ".$base.", total multi: ".$multi.", dist/range: ".$fire->dist."/".$range.", req: ".$req);
+		//Debug::log("CALCULATE TO HIT - angle: ".$fire->angle.", base: ".$base.", trav: ".$traverse.", total multi: ".$multi.", dist/range: ".$fire->dist."/".$range.", req: ".$req);
 
 		return ceil($req);
 	}
@@ -429,7 +536,8 @@ class Ship {
 	public function getHitSystem($fire){
 		$roll;
 		$current = 0;
-		$total = $this->primary->getHitChance();
+		$main = $this->primary->getHitChance() * $this->getShipTypeMod();
+		$total = $main;
 
 		$struct = $fire->target->getStructureById($fire->section);
 
@@ -440,7 +548,7 @@ class Ship {
 		}
 
 		$roll = mt_rand(0, $total);
-		$current += $this->primary->getHitChance();
+		$current += $main;
 		if ($roll <= $current){
 			return $this->getPrimaryHitSystem();
 		}
@@ -455,6 +563,7 @@ class Ship {
 				}
 			}
 		}
+		Debug::log("ERROR getHitSystem()");
 	}
 
 	public function getPrimaryHitSystem(){
@@ -467,7 +576,7 @@ class Ship {
 
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 			if (! $this->primary->systems[$i]->destroyed){
-				if ($this->isHitable($fraction, $this->primary->systems[$i])){
+				if ($this->isExposed($fraction, $this->primary->systems[$i])){
 					$valid[] = $this->primary->systems[$i];
 				}
 			}
@@ -501,7 +610,7 @@ class Ship {
 		}
 	}
 
-	public function isHitable($fraction, $system){
+	public function isExposed($fraction, $system){
 		if ($fraction <= $this->getHitTreshold($system)){
 			return true;
 		}
@@ -532,7 +641,13 @@ class Ship {
 	}
 
 	public function getImpulseProfileMod(){
-		return $this->getCurrentImpulse() / $this->getBaseImpulse();
+		$now = $this->getCurrentImpulse();
+		$stock = $this->getBaseImpulse();
+
+		$ratio = $now/$stock;
+		if ($ratio == 1){
+			return 0;
+		} else return (1-$ratio)/2;
 
 		//return 1+((($this->getBaseImpulse() / $this->getCurrentImpulse())-1)/2);
 	}
@@ -553,7 +668,6 @@ class Ship {
 		} return 0;
 	}
 
-
 	public function getImpulseStep(){
 		return floor($this->getBaseImpulse() / 10);
 	}
@@ -564,7 +678,25 @@ class Ship {
 				return new Point($this->actions[$i]->x, $this->actions[$i]->y);
 			}
 		}
-		return false;
+		return new Point($this->x, $this->y);
+	}
+
+	public function getFacing(){
+		return $this->facing;
+	}
+
+	public function setFacing(){
+		for ($i = 0; $i < sizeof($this->actions); $i++){
+			if ($this->actions[$i]->type == "turn"){
+				$this->facing += $this->actions[$i]->a;
+			}
+		}
+
+		if ($this->facing > 360){
+			$this->facing -= 360;
+		} else if ($this->facing < 0){
+			$this->facing += 360;
+		}
 	}
 
 	public function getHitDist($fire){
@@ -710,7 +842,11 @@ class Ship {
 	}
 
 	public function getInternals(){
-		return $this->primary->systems[0]->integrity / $this->primary->integrity;
+		$sum = 0;
+		foreach ($this->primary->systems as $system){
+			$sum += $system->integrity;
+		}
+		return $sum;
 	}
 
 	public function getWeapons(){
@@ -760,10 +896,6 @@ class Ship {
 		$ew = $sensor->ew[sizeof($sensor->ew)-1];
 	}
 
-	public function getTurnCost(){
-		return ceil(pow($this->mass, 1.56) / 10000);
-	}
-
 	public function getNewCrits($turn){
 		$crits = array();
 		for ($j = 0; $j < sizeof($this->structures); $j++){
@@ -787,6 +919,10 @@ class Ship {
 
 	public function getHitTreshold($system){
 		return $this->hitTable[$system->name];
+	}
+
+	public function getShipTypeMod(){
+		return 1;
 	}
 }
 
@@ -814,11 +950,11 @@ class SuperHeavy extends Ship {
 	function __construct($id, $userid, $available, $status, $destroyed){
         parent::__construct($id, $userid, $available, $status, $destroyed);
 		$this->hitTable = array(
-			"Bridge" => 0.35,
-			"Engine" => 0.5,
+			"Bridge" => 0.5,
+			"Engine" => 0.55,
 			"LifeSupport" => 0.6,
-			"Sensor" => 0.75,
-			"Reactor" => 0.7
+			"Sensor" => 0.8,
+			"Reactor" => 0.75
 		);
 	}
 }
@@ -830,11 +966,11 @@ class Heavy extends Ship {
 	function __construct($id, $userid, $available, $status, $destroyed){
         parent::__construct($id, $userid, $available, $status, $destroyed);
 		$this->hitTable = array(
-			"Bridge" => 0.45,
-			"Engine" => 0.6,
+			"Bridge" => 0.55,
+			"Engine" => 0.65,
 			"LifeSupport" => 0.7,
 			"Sensor" => 0.85,
-			"Reactor" => 0.7
+			"Reactor" => 0.8
 		);
 	}
 }
@@ -846,12 +982,16 @@ class Medium extends Ship {
 	function __construct($id, $userid, $available, $status, $destroyed){
         parent::__construct($id, $userid, $available, $status, $destroyed);
 		$this->hitTable = array(
-			"Bridge" => 0.55,
-			"Engine" => 0.6,
+			"Bridge" => 0.65,
+			"Engine" => 0.7,
 			"LifeSupport" => 0.8,
-			"Sensor" => 0.9,
-			"Reactor" => 0.7
+			"Sensor" => 1,
+			"Reactor" => 0.8
 		);
+	}
+
+	public function getShipTypeMod(){
+		return 1.15;
 	}
 }
 
@@ -863,11 +1003,15 @@ class Light extends Ship {
         parent::__construct($id, $userid, $available, $status, $destroyed);
 		$this->hitTable = array(
 			"Bridge" => 0.7,
-			"Engine" => 0.7,
+			"Engine" => 0.8,
 			"LifeSupport" => 1,
 			"Sensor" => 1,
 			"Reactor" => 0.8
 		);
+	}
+
+	public function getShipTypeMod(){
+		return 1.3;
 	}
 }
 
@@ -884,6 +1028,10 @@ class SuperLight extends Ship {
 			"Sensor" => 1,
 			"Reactor" => 0.9
 		);
+	}
+
+	public function getShipTypeMod(){
+		return 1.45;
 	}
 }
 
