@@ -81,10 +81,10 @@ class Primary {
 
 	public function applyDamage($dmg){
 		//debug::log($this->remaining);
-		$this->damages[] = $dmg;
 		$this->remaining -= $dmg->overkill;
 
 		if ($dmg->systemid == -1){
+			$this->damages[] = $dmg;
 			$this->remaining -= $dmg->structDmg;
 		}
 
