@@ -1628,7 +1628,7 @@ Game.prototype.getUnitType = function (val){
 				else if (animate.ballAnims[i].anims[j] instanceof FireOrder){
 					var targetMove = new Vector(
 						animate.ballAnims[i].anims[j].target.getTrajectoryStart(),
-						animate.ballAnims[i].anims[j].target.getBaseOffsetPos(),
+						animate.ballAnims[i].anims[j].target.getBaseOffsetPos()
 					);
 
 					if (!(animate.ballAnims[i].anims[j].weapon instanceof Laser)){
