@@ -2140,7 +2140,7 @@ Game.prototype.getUnitType = function (val){
 			ele.append(
 			($(this.ballistics[i].img.cloneNode(true))
 				.data("id", this.ballistics[i].id))
-				.addClass("size60")
+				.addClass("size40")
 				.addClass(name)
 				.click(function(e){
 					e.preventDefault(); e.stopPropagation();						
@@ -2163,7 +2163,7 @@ Game.prototype.getUnitType = function (val){
 		}
 
 		if (l){
-			ele.width(l*46).css("top", 0).css("left", 400).drag();
+			ele.width(Math.min(510, l*46)).css("top", 0).css("left", 400).drag();
 		} else ele.hide();
 	}
 }
