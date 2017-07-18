@@ -23,6 +23,7 @@ class Manager {
 	public $crits = array();
 	public $playerstatus = array();
 	public $reinforcements = array();
+	public $rdyReinforcements = array();
 	public $incoming = array();
 	public $userindex = 0;
 
@@ -74,6 +75,7 @@ class Manager {
 	 	//var_dump($this->getUnitById(12)->getEndState(1));
 
 		//$this->setShipLocks($this->getUnitById(2)); return;
+
 		return array(
 			"id" => $this->gameid,
 			"name" => $this->name,
@@ -81,7 +83,7 @@ class Manager {
 			"turn" => $this->turn,
 			"phase" => $this->phase,
 			"ships" => $this->getShipData(),
-			"reinforcements" => $this->getReinforcements(),
+			"reinforcements" => $this->rdyReinforcements,
 			"incoming" =>$this->incoming
 		);
 
@@ -149,7 +151,8 @@ class Manager {
 		$this->ships = $this->assembleUnits();
 		$this->ballistics = $this->assembleBallistics();
 
-		$this->reinforcements = $db->getAvailableReinforcements($this->gameid, $this->userid);
+		$this->reinforcements = $db->getAllReinforcements($this->gameid, $this->userid);
+		$this->rdyReinforcements = $this->readyReinforcements();
 		$this->incoming = $db->getIncomingShips($this->gameid, $this->turn);
 		
 		$this->deleteResolvedFireOrders();
@@ -225,18 +228,20 @@ class Manager {
 		}
 	}
 
-	public function getReinforcements(){
+	public function readyReinforcements(){
+		//Debug::log("readyReinforcements s".sizeof($this->reinforcements));
 		$data = array();
+
 		for ($i = 0; $i < sizeof($this->reinforcements); $i++){
 			if ($this->reinforcements[$i]["userid"] == $this->userid){
-				$data[] = new $this->reinforcements[$i]["name"](-$this->reinforcements[$i]["id"], $this->userid, $this->turn + $this->reinforcements[$i]["eta"], "available", 0);
-				
-				$data[$i]->cost = $this->reinforcements[$i]["cost"];
-				$data[$i]->currentImpulse = $data[$i]->baseImpulse;
+				$s = new $this->reinforcements[$i]["name"](-$this->reinforcements[$i]["id"], $this->userid, $this->turn + $this->reinforcements[$i]["eta"], "available", 0);
+				$s->cost = $this->reinforcements[$i]["cost"];
+				$s->currentImpulse = $s->baseImpulse;
 
-				for ($j = 0; $j < sizeof($data[$i]->structures); $j++){
-					$data[$i]->structures[$j]->remainingNegation = $data[$i]->structures[$j]->negation;
-				} 
+				for ($j = 0; $j < sizeof($s->structures); $j++){
+					$s->structures[$j]->remainingNegation = $s->structures[$j]->negation;
+				}
+				$data[] = $s;
 			}
 		}
 		return $data;
@@ -387,9 +392,21 @@ class Manager {
 	}
 
 	public function pickReinforcements(){
-		if ($this->turn < 2){return;}
+		//if ($this->turn < 2){return;}
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+			$avail = 0;
+			for ($j = 0; $j < sizeof($this->reinforcements); $j++){
+				if ($this->reinforcements[$j]["userid"] == $this->playerstatus[$i]["userid"]){
+					$avail++;
+				}
+			}
+
+			if ($avail >= 4){
+				continue;
+			}
+
+
 			$picks = array();
 			$now = 0;
 			$max = mt_rand(1, 2);

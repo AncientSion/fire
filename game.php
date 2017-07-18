@@ -52,8 +52,6 @@ foreach ($manager->playerstatus as $player){
 	}
 }
 
-
-$reinforcements = $manager->getReinforcements($userid);
 echo "<script>";
 echo "window.game = ".json_encode($manager->getClientData(), JSON_NUMERIC_CHECK).";";
 //echo "window.gd = ".json_encode($manager->game, JSON_NUMERIC_CHECK).";";
@@ -388,9 +386,10 @@ echo "</script>";
 						</th>
 					</tr>
 					<?php
-						if (sizeof($reinforcements)){
+						if (sizeof($manager->rdyReinforcements)){
 							//echo "<script>console.log(window.reinforcements)</script>";
-							foreach ($reinforcements as $ship){
+							foreach ($manager->rdyReinforcements as $ship){
+									if ($ship->userid != $manager->userid){continue;}
 									echo "<tr class='requestReinforcements'>";
 									echo "<td><img class='img50' src=shipIcons/".strtolower($ship->name).".png></td>";
 									echo "<td>".$ship->name."</td>";

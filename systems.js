@@ -45,12 +45,17 @@ System.prototype.attachDetailsMods = function(ele){
 		table = $("<table>").addClass("modifiers").append($("<tr>").append($("<th>").html("Modifiers").attr("colSpan", 2)));
 		if (boost){
 			for (var i = 0; i < this.boostEffect.length; i++){
-			var mod = "";
-				if (this.boostEffect[i].value > 0){
-					mod = "+";
+				if (this.boostEffect[i].type == "Reload" || this.boostEffect[i].type == "Shots"){
+					var html = this.boostEffect[i].type + ": " + this.boostEffect[i].value;
+				}		
+				else {
+					var mod = "";
+					if (this.boostEffect[i].value > 0 && this.boostEffect[i].value){
+						mod = "+";
+					}
+					var html = this.boostEffect[i].type + ": " + mod + (this.boostEffect[i].value*100 * boost) + "%";
 				}
-				$(table[0]).append($("<tr>").append($("<td>").html(this.boostEffect[i].type + ": " + mod + (this.boostEffect[i].value*100 * boost) + "%").attr("colSpan", 2).addClass("positive")));
-				//div.find("." + this.boostEffect[i].type.toLowerCase()).addClass("positive");
+				$(table[0]).append($("<tr>").append($("<td>").html(html).attr("colSpan", 2).addClass("positive")));
 			}
 		}
 		if (this.crits.length){
@@ -182,6 +187,7 @@ System.prototype.setSystemBorder = function(){
 		ele.addClass("selected");
 	} else ele.removeClass("selected");
 }
+
 System.prototype.canFire = function(){
 	if (this.destroyed || this.disabled || this.locked){
 		return false;
@@ -198,7 +204,7 @@ System.prototype.canFire = function(){
 }
 System.prototype.getLoadLevel = function(){
 	//return 1;
-	var need = this.reload;
+	var need = Math.max(1, this.reload - this.getBoostLevel("Reload") * this.getBoostLevel());
 	var has = this.getTimeLoaded();
 	if (has / need > 1){
 		return 1;
@@ -249,20 +255,25 @@ System.prototype.getTimeLoaded = function(){
 	return this.loaded;
 }
 System.prototype.getBoostEffectElements = function(table){
-	var data = $("<tr>").append($("<td>").html("Boost Effect"));
 
 	for (var i = 0; i < this.boostEffect.length; i++){
-		var mod = "+";
-		if (this.boostEffect[i].value < 0){
-			mod = "";
+		if (this.boostEffect[i].type == "Reload" || this.boostEffect[i].type == "Shots"){
+			var html = this.boostEffect[i].type + ": " + this.boostEffect[i].value;
+		}		
+		else {
+			var mod = "";
+			if (this.boostEffect[i].value > 0 && this.boostEffect[i].value < 1){
+				mod = "+";
+			}
+			var html = this.boostEffect[i].type + ": " + mod + (this.boostEffect[i].value*100) + "%";
 		}
-		if (!i){
-			$(table).append($(data).append($("<td>").html(mod + this.boostEffect[i].value*100 + "% " + this.boostEffect[i].type)));
-		} else $(table).append($("<tr>").append($("<td>").html("")).append($("<td>").html((mod + this.boostEffect[i].value*100 + "% " + this.boostEffect[i].type))));
+		$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).html(html)));
 	}
 
-	$(table).find("tr").last().css("border-bottom", "2px solid white")
+	$(table).find("tr").last().css("border-bottom", "2px solid white");
 }
+
+
 System.prototype.getBoostDiv = function(){
 	if (this.destroyed || !this.effiency){return};
 	var div = document.createElement("div");
@@ -372,14 +383,25 @@ System.prototype.canUnboost = function(){
 	return false;
 }
 System.prototype.doUnboost = function(){
-	this.powers.splice(this.powers.length-1, 1);
+	if (this.powers[this.powers.length-1].turn == game.turn){
+		this.powers.splice(this.powers.length-1, 1);	
+	}
+
+	if (this.getBoostEffect("Reload")){
+		$(this.element).find(".loadLevel").css("width", this.getLoadLevel() * 100 + "%");
+	}
 	return true;
 }
 System.prototype.doBoost = function(){
+	console.log("boost");
 	this.powers.push({
 		id: this.powers.length+1, unitid: this.parentId, systemid: this.id,
 		turn: game.turn,type: 1, cost: this.getEffiency(), new: 1
 	})
+
+	if (this.getBoostEffect("Reload")){
+		$(this.element).find(".loadLevel").css("width", this.getLoadLevel() * 100 + "%");
+	}
 }
 System.prototype.isPowered = function(){
 	if (this.destroyed || this.disabled){
@@ -423,12 +445,8 @@ System.prototype.doUnpower = function(){
 		this.select();
 	}
 	if (!this.disabled){
-		for (var i = this.powers.length-1; i >= 0; i--){
-			if (this.powers[i].turn == game.turn && this.powers[i].type > 0){
-				this.powers.splice(i, 1);
-			} else if (this.powers[i].turn < game.turn){
-				break;
-			}
+		while (this.canUnboost()){
+			this.doUnboost();
 		}
 
 		this.powers.push({
@@ -484,12 +502,14 @@ System.prototype.showOptions = function(){
 			var canUnpower = this.canUnpower();
 			if (canPower){
 				boost = false;
-					canModeChange = false;
+				canModeChange = false;
 			}
 			else if (boost){
 				if (this.getLoadLevel() != 1){
-					boost = false;
-					canModeChange = false;
+					if (!this.getBoostEffect("Reload")){
+						boost = false;
+						canModeChange = false;
+					}
 				}
 			}
 
@@ -513,7 +533,9 @@ System.prototype.showOptions = function(){
 		}
 	}*/
 }
+
 System.prototype.hideOptions = function(){
+
 	if (this.destroyed){return;}
 	var ele = $(this.element);
 
@@ -682,6 +704,7 @@ System.prototype.adjustStateByCritical = function(){
 		if (this.crits[i].inEffect()){
 			switch (this.crits[i].type){
 				case "Disabled":
+					console.log("DISABLED STATE");
 					this.disabled = true;
 					break;
 				default:
@@ -730,16 +753,6 @@ System.prototype.getExtraOutput = function(){
 	return Math.floor(extra);
 }
 
-System.prototype.getEffiency = function(){
-	var boost = this.getBoostLevel();
-
-	return Math.max(this.effiency+boost, Math.ceil(this.effiency * (1+(boost * this.getBoostCostIncrease()))));
-}
-
-System.prototype.getBoostCostIncrease = function(){
-	return 0;
-}
-
 System.prototype.getPowerReq = function(){
 	return this.powerReq;
 }
@@ -754,12 +767,33 @@ System.prototype.getCurrentPowerUsage = function(){
 	return usage;
 }
 
+System.prototype.getEffiency = function(){
+	var boost = this.getBoostLevel();
+
+	return Math.floor(this.effiency * (1+(boost * this.getBoostCostIncrease())));
+}
+
+System.prototype.getBoostCostIncrease = function(){
+	return 0;
+}
+
 
 function PrimarySystem(system){
 	System.call(this, system);
 	this.exposed = 0;
 }
 PrimarySystem.prototype = Object.create(System.prototype);
+
+PrimarySystem.prototype.getEffiency = function(){
+	var boost = this.getBoostLevel();
+
+	return Math.max(this.effiency+boost, Math.ceil(this.effiency * (1+(boost * this.getBoostCostIncrease()))));
+}
+
+System.prototype.getBoostCostIncrease = function(){
+	return 0;
+}
+
 
 PrimarySystem.prototype.hover = function(e){
 	if (game.flightDeploy){return false;}
@@ -1081,7 +1115,7 @@ Sensor.prototype.select = function(e){
 		game.sensorMode = 0;
 		this.setSystemBorder();
 	}
-	else if (this.destroyed || this.disabled || this.locked || aUnit < 0 || this.getEWMode() == "Sweep" || this.getEWMode() == "Mask"){
+	else if (this.destroyed || this.disabled || this.locked || this.parent != aUnit || aUnit < 0 || this.getEWMode() == "Sweep" || this.getEWMode() == "Mask"){
 		return false;
 	}
 	else {
@@ -2174,7 +2208,6 @@ Launcher.prototype.getEffiency = function(){
 
 Launcher.prototype.select = function(e){
 	console.log(this);
-
 	if (game.phase == -2){
 		if (this.selected){
 			this.selected = false;
@@ -2472,7 +2505,7 @@ Hangar.prototype.select = function(e){
 			if (this.selected){this.selected = false;}else{this.selected = true;}
 		}
 	}
-	else if (this.destroyed || this.disabled || this.locked){
+	else if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit){
 		return false;
 	}
 	else if (! this.selected){

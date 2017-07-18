@@ -490,6 +490,12 @@ table, th, tr, td {
 	margin: auto;
 }
 
+.size40 {
+	width: 40px;
+	height: 40px;
+	margin: auto;
+}
+
 .structContainer {
 	height: 400px;
 	position: relative;
@@ -936,8 +942,13 @@ table, th, tr, td {
 	border: 1px solid white;
 	color: white;
 	background-color: black;
-	padding: 15px;
+	padding: 5px;
+	padding-bottom: 10px;
 	border-radius: 5px;
+}
+
+#unitGUI img {
+	margin: 2px;
 }
 
 #unitGUI img:hover {

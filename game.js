@@ -1955,6 +1955,17 @@ Game.prototype.getUnitType = function (val){
 	this.initDeploymentWrapper = function(){
 		$("#deployWrapper")	
 			.removeClass("disabled")
+			.contextmenu(function(e){
+				e.preventDefault();
+				$(this).hide();
+				$("#reinforce").data("on", 0);
+				if (game.phase == -1){
+					$(this).find("#reinforceTable").find(".selected").each(function(){
+						$(this).removeClass("selected");
+						game.disableDeployment();
+					})
+				}
+			})
 			.find("#deployTable")
 			.find("tr")
 			.each(function(){
@@ -2004,17 +2015,20 @@ Game.prototype.getUnitType = function (val){
 				if (!$(this).data("on")){
 					$(this).data("on", 1);
 					$("#deployWrapper").show();
-				} else {
+				}
+				else {
 					$(this).data("on", 0);
-					$("#deployWrapper")
-					.hide()
-					.find(".selected").each(function(){
-						$(this).removeClass("selected");
-					})
+					$("#deployWrapper").hide();
+					if (game.phase == -1){
+						$("#deployWrapper").find("#reinforceTable").find(".selected").each(function(){
+							$(this).removeClass("selected");
+							game.disableDeployment();
+						})
+					}
 				}
 			})
-
-		$(".requestReinforcements").each(function(i){
+		
+		$("#deployWrapper").find(".requestReinforcements").each(function(i){
 			$(this)
 			.data("id", game.reinforcements[i]["id"])
 			.data("cost", game.reinforcements[i]["cost"])
@@ -2054,7 +2068,13 @@ Game.prototype.getUnitType = function (val){
 	this.initSelectionWrapper = function(){
 		var ele = $("#unitGUI");
 		var l = 0;
+
+		this.ships.sort(function(a, b){
+			return a.userid - b.userid || b.cost- a.cost
+		});
+	
 		for (var i = 0; i < this.ships.length; i++){
+			console.log(this.ships[i].userid + " / " + this.ships[i].cost);
 			if (this.ships[i].isReady()){
 				var name = "friendly";
 				if (this.ships[i].userid != game.userid){
@@ -2065,7 +2085,7 @@ Game.prototype.getUnitType = function (val){
 				($(this.ships[i].img.cloneNode(true))
 					.data("id", this.ships[i].id))
 					.addClass("rotate270")
-					.addClass("size60")
+					.addClass("size40")
 					.addClass(name)
 					.click(function(e){
 						e.preventDefault(); e.stopPropagation();						
@@ -2143,7 +2163,7 @@ Game.prototype.getUnitType = function (val){
 		}
 
 		if (l){
-			ele.width(l*62).css("top", 0).css("left", 600).drag();
+			ele.width(l*46).css("top", 0).css("left", 400).drag();
 		} else ele.hide();
 	}
 }

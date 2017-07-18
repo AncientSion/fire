@@ -2238,7 +2238,7 @@ function Ship(data){
 		if (system.disabled || system.destroyed){
 			return false;
 		}
-		else if (system instanceof Weapon && !system.disabled && !system.destroyed && system.getLoadLevel() >= 1){
+		else if (system instanceof Weapon && !system.disabled && !system.destroyed && (system.getLoadLevel() >= 1 || system.getBoostEffect("Reload") && system.getLoadLevel() < 1)){
 			if (system instanceof Launcher){
 				if (system.getOutput() < system.getEffiency()){
 					if (system.getRemainingAmmo() > system.getOutput()){
@@ -2366,7 +2366,7 @@ function Ship(data){
 		console.log(this);
 		aUnit = this.id;
 		this.selected = true;
-		this.setunitGUI();
+		this.setUnitGUI();
 		game.setShipTransform();
 		this.drawPositionMarker();
 		game.resetShipTransform();
@@ -2380,7 +2380,7 @@ function Ship(data){
 	this.doUnselect = function(){
 		aUnit = false;
 		this.selected = false;
-		this.setunitGUI();
+		this.setUnitGUI();
 		if (game.deploying){game.disableDeployment();}
 		else if (game.flightDeploy){game.flightDeploy = false;}
 		this.unselectSystems();
@@ -2395,14 +2395,6 @@ function Ship(data){
 		$("#instructWrapper").hide()
 		$("#systemDetailsDiv").remove();
 		mouseCtx.clearRect(0, 0, res.x, res.y);
-	}
-	this.setunitGUI = function(){
-		var id = this.id;
-		$("#unitGUI").find("img").each(function(){
-			if ($(this).data("shipid") == id){
-				$(this).toggleClass("selected"); return;
-			}
-		})
 	}
 
 	this.doHighlight = function(){
@@ -2624,18 +2616,27 @@ Ship.prototype.setPostMovePosition = function(){
 	}
 
 Ship.prototype.setDrawData = function(){
-		if (this.available > game.turn || !this.available || game.turn == 1 && game.phase == -1){
-			return;
-		}
-		
-		if (game.phase > 1){
-			this.setPostMovePosition();
-			this.setPostMoveFacing();
-		}
-		else {
-			this.setPreMovePosition();
-			this.setPreMoveFacing();
-		}
+	if (this.available > game.turn || !this.available || game.turn == 1 && game.phase == -1){
+		return;
 	}
+	
+	if (game.phase > 1){
+		this.setPostMovePosition();
+		this.setPostMoveFacing();
+	}
+	else {
+		this.setPreMovePosition();
+		this.setPreMoveFacing();
+	}
+}
+
+Ship.prototype.setUnitGUI = function(){
+	var id = this.id;
+	$("#unitGUI").find("img").each(function(){
+		if ($(this).data("id") == id){
+			$(this).toggleClass("selected"); return;
+		}
+	});
+}
 
 	

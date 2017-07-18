@@ -282,28 +282,6 @@ function Salvo(data){
 		document.getElementById("game").appendChild(div);
 	}
 
-	this.select = function(){
-		if (this.selected){
-			this.doUnselect();
-		}
-		else {
-			this.doSelect();
-		}
-	}
-
-	this.doSelect = function(){
-		console.log(this);
-		aUnit = this.id;
-		this.selected = true;
-		this.switchDiv();
-	}
-	
-	this.doUnselect = function(){
-		aUnit = false;
-		this.selected = false;
-		this.switchDiv();
-	}
-
 	this.create = function(){
 		this.size = 18;
 		this.img = window.ballImages[this.name.toLowerCase()].cloneNode(true);
@@ -609,5 +587,28 @@ Salvo.prototype.getImpulseMod = function(){
 }
 Salvo.prototype.switchDiv = function(){
 	Ship.prototype.switchDiv.call(this);
+}
+Salvo.prototype.select = function(){
+	if (this.selected){
+		this.doUnselect();
+	}
+	else {
+		this.doSelect();
+	}
+}
+Salvo.prototype.doSelect = function(){
+	console.log(this);
+	aUnit = this.id;
+	this.selected = true;
+	this.setUnitGUI()
+	this.switchDiv();
+}
+Salvo.prototype.doUnselect = function(){
+	aUnit = false;
+	this.selected = false;
+	this.switchDiv();
+}
+Salvo.prototype.setUnitGUI = function(){
+	Ship.prototype.setUnitGUI.call(this);
 }
 

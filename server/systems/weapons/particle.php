@@ -44,9 +44,12 @@ class MediumSingleIon extends LightIon {
 	public $mass = 21;
 	public $powerReq = 3;
 	public $traverse = -1;
+	public $effiency = 2;
+	public $maxBoost = 2;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+		$this->boostEffect[] = new Effect("Damage", 0.15);
 	}
 }
 
@@ -76,6 +79,8 @@ class HeavyIon extends LightIon {
 	public $mass = 32;
 	public $powerReq = 6;
 	public $traverse = 1;
+	public $effiency = 1;
+	public $maxBoost = 4;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
