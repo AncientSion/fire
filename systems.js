@@ -1115,7 +1115,7 @@ Sensor.prototype.select = function(e){
 		game.sensorMode = 0;
 		this.setSystemBorder();
 	}
-	else if (this.destroyed || this.disabled || this.locked || this.parent != aUnit || aUnit < 0 || this.getEWMode() == "Sweep" || this.getEWMode() == "Mask"){
+	else if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || aUnit < 0 || this.getEWMode() == "Sweep" || this.getEWMode() == "Mask"){
 		return false;
 	}
 	else {
