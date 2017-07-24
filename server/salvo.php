@@ -71,20 +71,21 @@ class Mini extends Ship {
 			$fire->dist = $this->getHitDist($fire);
 			$fire->angle = $this->getHitAngle($fire);
 			$fire->section = $this->getSection($fire);
-			for ($i = 0; $i < $fire->shots; $i++){
-				$fire->hitSystem[] = $this->getHitSystem($fire);
-				//Debug::log("picking: ".$fire->hitSystem[sizeof($fire->hitSystem)-1]->id." as target");
-				$fire->req = $this->calculateToHit($fire);
-			}
-			
-			$fire->weapon->rollToHit($fire);
 
+			$rollIndex = 0;
 			for ($i = 0; $i < $fire->shots; $i++){
-				if ($fire->rolls[$i] <= $fire->req)
-					$fire->weapon->doDamage($fire, $fire->rolls[$i], $fire->hitSystem[$i]);
+				$fire->weapon->rollToHit($fire);
+				for ($j = $rollIndex; $j < sizeof($fire->rolls); $j++){
+					$fire->hitSystem[] = $this->getHitSystem($fire);
+					$fire->req = $this->calculateToHit($fire);
+					if ($fire->rolls[$j] <= $fire->req){
+						$fire->weapon->doDamage($fire, $fire->rolls[$j], $fire->hitSystem[$j]);
+					}
 				}
+				$rollIndex = sizeof($fire->rolls);
 			}
-		$fire->resolved = 1;
+			$fire->resolved = 1;
+		}
 	}
 
 	public function hasLockOn($id){

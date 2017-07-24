@@ -25,13 +25,14 @@ class PrimarySystem extends System {
 		$mod += $this->getBoostEffect("Output") * $this->getBoostLevel($turn);
 		$mod -= $this->getCritMod("Output", $turn);
 
-		Debug::log("ship: #".$this->parentId.", output: ".floor($this->output*$mod));
+		//Debug::log("ship: #".$this->parentId.", output: ".floor($this->output*$mod));
 		return round($this->output * $mod);
 	}
 
 	public function getValidEffects(){
 		return array(
-			array("Output", 10, 1, 0) // attr, %-tresh, duration, modifier
+			array("Output", 10, 1, 0), // attr, %-tresh, duration, modifier
+			array("Disabled", 60, 1, 0) // attr, %-tresh, duration, modifier
 		);
 	}
 }
@@ -42,6 +43,12 @@ class Bridge extends PrimarySystem {
 
 	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
         parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
+	}
+
+	public function getValidEffects(){
+		return array(
+			array("Disabled", 50, 1, 0) // attr, %-tresh, duration, modifier
+		);
 	}
 }
 
@@ -174,9 +181,7 @@ class Hangar extends Weapon {
 	}
 
 	public function getValidEffects(){
-		return array(
-			array("Output", 20, 0, 0) // attr, %-tresh, duration, modifier
-		);
+		return array();
 	}
 }
 ?>

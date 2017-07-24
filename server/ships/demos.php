@@ -17,18 +17,18 @@ class Demos extends Medium {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 22);
-		$front->systems[] = new MediumSingleIon($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new MediumPlasma($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 330, 30,	array(array("Triarii", 9, 3), array("Javelin", 9, 3)));
-		$front->systems[] = new MediumSingleIon($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new MediumPlasma($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 18);
-		$right->systems[] = new MediumPlasma($this->getId(), $this->id, 300, 120);
+		$right->systems[] = new MediumSingleIon($this->getId(), $this->id, 240, 60);
 		$right->systems[] = new LightIon($this->getId(), $this->id, 300, 180);
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 18);
-		$left->systems[] = new MediumPlasma($this->getId(), $this->id, 240, 60);
+		$left->systems[] = new MediumSingleIon($this->getId(), $this->id, 300, 120);
 		$left->systems[] = new LightIon($this->getId(), $this->id, 180, 60);
 		$structs[] = $left;
 

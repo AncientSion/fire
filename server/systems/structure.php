@@ -177,13 +177,19 @@ class Single {
 		if ($this->destroyed || empty($this->damages)){
 			return;
 		}
-		$dmg = 0;
+
+		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
-			$dmg += $this->damages[$i]->structDmg;
+			if ($this->damages[$i]->turn > $turn){
+				break;
+			}
+			else if ($this->damages[$i]->turn == $turn){
+				$new += $this->damages[$i]->structDmg;
+			} else $old += $this->damages[$i]->structDmg;
 		}
 
-		if ($dmg){
-			$this->determineCrit((ceil($dmg) / $this->integrity * 100), $turn);
+		if ($new){
+			$this->determineCrit($old, $new, $turn);
 		}
 	}
 
@@ -193,7 +199,8 @@ class Single {
 		);
 	}
 
-	public function determineCrit($dmg, $turn){
+	public function determineCrit($old, $new, $turn){
+		$dmg = ($old + $new) / $this->integrity * 100;
 		Debug::log("checking crit for".get_class($this));
 		$crits = $this->getValidEffects();
 		$valid = array();

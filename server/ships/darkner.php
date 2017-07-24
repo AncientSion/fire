@@ -22,11 +22,11 @@ class Darkner extends Medium {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 17);
-		$right->systems[] = new HeavyIon($this->getId(), $this->id, 285, 360);
+		$right->systems[] = new HeavyIon($this->getId(), $this->id, 315, 45);
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 17);
-		$left->systems[] = new HeavyIon($this->getId(), $this->id, 0, 75);
+		$left->systems[] = new HeavyIon($this->getId(), $this->id, 315, 45);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -37,7 +37,7 @@ class Darkner extends Medium {
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 750);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 95);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 95, 90);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, 95, 105);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 95);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 95, 800, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 95, $this->getPowerReq());

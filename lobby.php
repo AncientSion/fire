@@ -7,10 +7,10 @@ if (isset($_SESSION["userid"])){
 	$manager = new Manager($_SESSION["userid"]);
 	$dbManager = DBManager::app();
 
-	if (isset($_POST["gameName"]) && isset($_POST["pointValue"])){
-		if ( $_POST["gameName"] != "" && $_POST["pointValue"] != ""){
-			if (ctype_digit($_POST["pointValue"])){
-				$id = $dbManager->createNewGameAndJoin($_SESSION["userid"], $_POST["gameName"], $_POST["pointValue"]);
+	if (isset($_POST["gameName"]) && isset($_POST["pointValue"]) && isset($_POST["reinforceValue"])){
+		if ( $_POST["gameName"] != "" && $_POST["pointValue"] != "" && $_POST["reinforceValue"] != ""){
+			if (ctype_digit($_POST["pointValue"]) && ctype_digit($_POST["reinforceValue"])){
+				$id = $dbManager->createNewGameAndJoin($_SESSION["userid"], $_POST["gameName"], $_POST["pointValue"], $_POST["reinforceValue"]);
 				if ($id){
 					header("Location: gameSetup.php?gameid=".$id);
 				}
@@ -104,23 +104,49 @@ if (isset($_SESSION["userid"])){
 	$openGamesElement = "<table>";
 	if ($openGames) {
 		$openGamesElement .= "<tr>";
-		$openGamesElement .= "<th colSpan = 2>Open Games</th>";
+		$openGamesElement .= "<th style='font-size: 26px' colSpan = 5>Open Games</th>";
+		$openGamesElement .= "</tr>";
+
+		$openGamesElement .= "<tr>";
+		$openGamesElement .= "<td style='font-size: 18px' >Game Name</td>";
+		$openGamesElement .= "<td style='font-size: 18px' >Point Value</td>";
+		$openGamesElement .= "<td style='font-size: 18px' >Reinforce / Turn</td>";
+		$openGamesElement .= "<td style='font-size: 18px' >Players</td>";
+		$openGamesElement .= "<td>My Status</td>";
 		$openGamesElement .= "</tr>";
 
 		
-		foreach ($openGames as $game){
-		$players = 0;
-		$players = $dbManager->getAmountOfPlayersInGame($game["id"]);
+		foreach ($openGames as $game){;
+			$players = $dbManager->getPlayersInGame($game["id"]);
+		//$players = 0;
+		//$players = $dbManager->getAmountOfPlayersInGame($game["id"]);
 
 			$openGamesElement .= "<tr>";
-			$openGamesElement .= "<td width='80%'>";
+			$openGamesElement .= "<td width='40%'>";
 			$openGamesElement .= "<a href=gameSetup.php?gameid=".$game['id'].">";
 			$openGamesElement .= "<font color='darkcyan'>".$game["name"]."</font>";
 			$openGamesElement .= "</a>";
 			$openGamesElement .= "</td>";
-			$openGamesElement .= "<td>";
-			$openGamesElement .= "Players in game: ".$players["COUNT(*)"];
-			$openGamesElement .= "</td>";
+			$openGamesElement .= "<td>".$game["pv"]."</td>";
+			$openGamesElement .= "<td>".$game["reinforce"]."</td>";
+			$openGamesElement .= "<td>".sizeof($players)."</td>";
+
+			$in = false;
+			for ($i = 0; $i < sizeof($players); $i++){
+				//Debug::log("looking for: ".$manager->userid.", now: ".$players[$i]["id"]);
+				if ($players[$i]["userid"] == $manager->userid){
+					$in = true;
+					$status = $players[$i]["status"];
+					$style = "";
+					if ($status == "ready"){$style = "background-color: gree'n";
+					} else $style = "background-color: yellow; color: black'";
+					$openGamesElement .= "<td style='".$style.">".$status."</td>";
+				}
+			}
+			if (!$in){
+				$openGamesElement .= "<td></td>";
+			}
+
 		}
 		
 		$openGamesElement .= "</table>";
@@ -175,6 +201,11 @@ else {
 						<tr>
 							<td>
 								<input type="form" style="text-align: center" placeholder="Point Value" name="pointValue"></input>		
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="form" style="text-align: center" placeholder="Reinforce / Turn" name="reinforceValue"></input>		
 							</td>
 						</tr>
 						<tr>

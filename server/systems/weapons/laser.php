@@ -21,18 +21,6 @@ class Laser extends Weapon {
 		return 1-($dist * $this->dmgLoss / 10000);
 	}
 
-	public function rollToHit($fire){
-		for ($j = 0; $j < $this->shots; $j++){
-			$roll = mt_rand(1, 100);
-			$fire->rolls[] = $roll;
-			$fire->notes .= $roll." ";
-			if ($roll <= $fire->req){
-				$fire->hits += $this->rakes;
-			}
-		}
-		return true;
-	}
-
 	public function doDamage($fire, $roll, $system){
 		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id."/".$system->id);
 		$totalDmg = $this->getTotalDamage($fire);
@@ -62,6 +50,7 @@ class Laser extends Weapon {
 				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
 				$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $overkill, $negation, $destroyed, $dmg->notes, 1
 			);
+			$fire->hits++;
 			$fire->damages[] = $dmg;
 			$fire->target->applyDamage($dmg);
 
@@ -152,13 +141,13 @@ class HeavyLaser extends Laser {
 	public $animColor = "red";
 	public $rakeTime = 70;
 	public $beamWidth = 4;
-	public $minDmg = 125;
-	public $maxDmg = 175;
+	public $minDmg = 135;
+	public $maxDmg = 180;
 	public $optRange = 800;
 	public $dmgLoss = 6;
 	public $accDecay = 60;
 	public $reload = 3;
-	public $powerReq = 7;
+	public $powerReq = 6;
 	public $rakes = 3;
 	public $effiency = 4;
 	public $maxBoost = 1;

@@ -47,10 +47,15 @@ function init(){
 	moveCtx = moveCanvas.getContext("2d");
 
 	salvoCanvas = canv[4];
-	salvoCtx = salvoCanvas.getContext("2d");
-	
+	salvoCtx = salvoCanvas.getContext("2d");	
+
 	mouseCanvas = canv[5];
 	mouseCtx = mouseCanvas.getContext("2d");
+
+	drawCanvas = canv[6];
+	drawCanvas.style.zIndex = 0;
+	drawCtx = drawCanvas.getContext("2d");
+
 
 	/*
 	$("#game").append($("<canvas>").addClass("cache"));
@@ -224,7 +229,7 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 					}
 					else if (ship.id == vessel.targetid && getDistance(ship.getPlannedPosition(), vessel) <= ship.size/2){
 						legalTarget = false;
-						msg = "Unable to aquire target (timeout)";
+						msg = "Unable to aquire target (reaction time)";
 					} 
 					else if (system.posIsOnArc(shipLoc, pos, facing)){ // ship vs ship/fighter
 						inArc = true;
@@ -293,12 +298,12 @@ function canvasMouseMove(e){
 
 	if (!game.deploying){
 		var ammo = game.hasAmmoOnPos(pos);
-		var ships = game.hasShipOnPos(pos);
+		var ship = game.hasShipOnPos(pos);
 		if (ammo){
 			game.unitHover(ammo);
 		}
-		else if (ships){
-			game.unitHover(ships);
+		else if (ship){
+			game.unitHover(ship);
 		}
 		else if (game.shortInfo){		
 			game.resetHover();
@@ -431,15 +436,7 @@ function movePhase(e){
 				else if (isInArc(getCompassHeadingOfPoint(ship.getPlannedPosition(), pos, 0), ship.moveAngles.start, ship.moveAngles.end)){ //check if clicked to move in movement arc
 					var dist = Math.floor(getDistance(ship.getPlannedPosition(), pos));
 					if (dist < ship.getRemainingImpulse()){
-						if (ship.getRemainingImpulse() == 0){
-							if (!game.posIsOccupied(ship, pos)){
-								ship.issueMove(pos, dist);
-							}
-						}
-						else {
-							ship.issueMove(pos, dist);
-							//$("#popupWrapper").hide();
-						}
+						ship.issueMove(pos, dist);
 					}
 				}
 			}
@@ -524,7 +521,7 @@ function canvasMouseClick(e){
 	//var pos = new Point(e.clientX - rect.left, e.clientY - rect.top);
 	var gamepos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
 	//console.log("canvas pos " + pos.x + " / " + pos.y);
-	console.log("game pos " + gamepos.x	+ " / " + gamepos.y);
+	//console.log("game pos " + gamepos.x	+ " / " + gamepos.y);
 	
 	switch (game.phase){
 		case -1:

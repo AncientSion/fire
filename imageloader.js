@@ -59,6 +59,9 @@ window.preloadShips = function(){
 	window.shipImages.primus = new Image();
 	window.shipImages.primus.src = "shipIcons/primus.png";
 
+	window.shipImages.altarian = new Image();
+	window.shipImages.altarian.src = "shipIcons/altarian.png";
+
 	window.shipImages.demos = new Image();
 	window.shipImages.demos.src = "shipIcons/demos.png";
 

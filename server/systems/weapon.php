@@ -31,8 +31,8 @@ class Weapon extends System {
 
 	public function setArmourMod(){
 		$w = $this->getArcWidth();
-		if ($w <= 60){$this->armourMod = 0.8;}
-		else if ($w <= 120){$this->armourMod = 0.6;}
+		if ($w <= 60){$this->armourMod = 0.7;}
+		else if ($w <= 120){$this->armourMod = 0.55;}
 		else if ($w <= 360){$this->armourMod = 0.4;}
 	}
 
@@ -43,13 +43,12 @@ class Weapon extends System {
 	}
 
 	public function rollToHit($fire){
-		for ($i = 0; $i < $this->shots; $i++){
+		//Debug::log("rollToHit shots: ".$this->getShots($fire->turn));
+		for ($i = 0; $i < $this->getShots($fire->turn); $i++){
+			//Debug::log("shot: ".($i+1));
 			$roll = mt_rand(1, 100);
 			$fire->rolls[] = $roll;
-			$fire->notes = $fire->notes." ".$roll;
-			if ($roll <= $fire->req){
-				$fire->hits++;
-			}
+			$fire->notes .= $roll." ";
 		}
 		return true;
 	}
@@ -84,12 +83,11 @@ class Weapon extends System {
 		$remInt = $system->getRemainingIntegrity();
 		Debug::log("doDamage, weapon: ".(get_class($this)).", target: ".$fire->target->id."/".$system->id.", totalDmg: ".$totalDmg);
 
-		if ($remInt == 0){
-			Debug::log("applying damage to destroyed unit: ".$system->isDestroyed());
-		}
 		$negation = $fire->target->getArmourValue($fire, $system);
 		$dmg = $this->determineDamage($totalDmg, $negation);
 		$overkill = 0;
+
+		$fire->hits++;
 
 		if ($remInt - $dmg->structDmg < 1){
 			$destroyed = true;

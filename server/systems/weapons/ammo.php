@@ -56,18 +56,6 @@ class Warhead extends Weapon {
 		$this->traverse = $traverse;
 	}
 
-	public function rollToHit($fire){
-		for ($i = 0; $i < $fire->shots; $i++){
-			$roll = mt_rand(1, 100);
-			$fire->rolls[] = $roll;
-			$fire->notes = $fire->notes." ".$roll;
-			if ($roll <= $fire->req){
-				$fire->hits++;
-			}
-		}
-		return true;
-	}
-
 	public function getAccuracyLoss($dist){
 		return 0;
 	}

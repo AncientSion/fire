@@ -167,8 +167,10 @@ function Salvo(data){
 	}
 
 	this.createDiv = function(){
+		var owner = "friendly";
+		if (this.userid != game.userid){owner = "hostile";}
 		var div = document.createElement("div");
-			div.className = "ammoDiv disabled";
+			div.className = "ammoDiv " + owner + " disabled";
 			$(div).data("ammoId", this.id);
 		
 		var table = document.createElement("table");
@@ -606,6 +608,7 @@ Salvo.prototype.doSelect = function(){
 Salvo.prototype.doUnselect = function(){
 	aUnit = false;
 	this.selected = false;
+	this.setUnitGUI()
 	this.switchDiv();
 }
 Salvo.prototype.setUnitGUI = function(){

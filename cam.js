@@ -62,4 +62,14 @@ function Turn(){
 		this.max = unit.getMaxTurnAngle();
 		this.dif = round(unit.getCurrentImpulse() / unit.getBaseImpulse(), 1);
 	}
+
+	this.alter = function(unit, turn){
+		this.id = unit.id;
+		this.a = Math.abs(turn.a);
+		this.mod = turn.costmod;
+		this.cost = unit.baseTurnCost;
+		this.delay = unit.baseTurnDelay;
+		this.max = unit.getMaxTurnAngle();
+		this.dif = round(unit.getCurrentImpulse() / unit.getBaseImpulse(), 1);
+	}
 }

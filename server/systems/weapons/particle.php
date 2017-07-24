@@ -41,14 +41,15 @@ class MediumSingleIon extends LightIon {
 	public $reload = 2;
 	public $projSize = 3;
 	public $projSpeed = 6;
-	public $mass = 21;
+	public $mass = 16;
 	public $powerReq = 3;
 	public $traverse = -1;
-	public $effiency = 2;
-	public $maxBoost = 2;
+	public $effiency = 3;
+	public $maxBoost = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+        $this->boostEffect[] = new Effect("Reload", -1);
 		//$this->boostEffect[] = new Effect("Damage", 0.15);
 	}
 }
@@ -57,15 +58,17 @@ class MediumTwinIon extends MediumSingleIon {
 	public $name = "MediumTwinIon";
 	public $display = "62mm Dual Ion Cannon";
 	public $shots = 2;
-	public $mass = 16;
+	public $mass = 21;
 	public $powerReq = 4;
+	public $effiency = 3;
+	public $maxBoost = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
 	}
 }
 
-class HeavyIon extends LightIon {
+class HeavyIon extends MediumSingleIon {
 	public $name = "HeavyIon";
 	public $display = "133mm Ion Cannon";
 	public $minDmg = 58;
@@ -84,8 +87,6 @@ class HeavyIon extends LightIon {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-        $this->boostEffect[] = new Effect("Reload", -1);
-
 	}
 }
 

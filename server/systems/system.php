@@ -145,7 +145,7 @@ class System {
 	}
 
 	public function getHitChance(){
-		return $this->mass*10;
+		return $this->mass*5;
 	}
 
 	public function testCrit($turn){
@@ -164,11 +164,13 @@ class System {
 		}
 
 		if ($new){
-			$this->determineCrit(ceil(($new + ($old/2)) / $this->integrity * 100), $turn);
+			//$this->determineCrit(ceil(($new + ($old/2)) / $this->integrity * 100), $turn);
+			$this->determineCrit($old, $new, $turn);
 		}
 	}
 
-	public function determineCrit($dmg, $turn){
+	public function determineCrit($old, $new, $turn){
+		$dmg = ($new + ($old/2)) / $this->integrity * 100;
 		$crits = $this->getValidEffects();
 		$valid = array();
 
@@ -185,10 +187,17 @@ class System {
 					$mod = (round($dmg/20)/10);
 				}
 
+				if ($new >= $this->integrity * 0.3 && mt_rand(0, 1)){
+					$duration = 0;
+				}
+				else {
+					$duration = $valid[$i][2] + mt_rand(0, 1);
+				}
+
 				$this->crits[] = new Crit(
 					sizeof($this->crits)+1,
 					$this->parentId, $this->id, $turn,
-					$valid[$i][0], $valid[$i][2],
+					$valid[$i][0], $duration,
 					$mod,
 					1
 				);

@@ -73,7 +73,11 @@ class Ship {
 			$this->primary->systems[$i]->setState($turn);
 			switch ($this->primary->systems[$i]->name){
 				case "Reactor":
-					if ($this->primary->systems[$i]->destroyed || $this->primary->systems[$i]->disabled){
+					if ($this->primary->systems[$i]->destroyed){
+						$this->destroyed = 1;
+						$this->status = "destroyed";
+					}
+					else if ($this->primary->systems[$i]->disabled){
 						$this->doUnpowerAllSystems($turn);
 					}
 					break;
@@ -130,8 +134,8 @@ class Ship {
 
 	public function setBaseStats(){
 		$this->baseHitChance = ceil(pow($this->mass, 1/3)*5);
-		$this->baseTurnCost = round(pow($this->mass, 1.25)/20000, 2);
-		$this->baseTurnDelay = round(pow($this->mass, 0.5)/25, 2);
+		$this->baseTurnCost = round(pow($this->mass, 1.25)/30000, 2);
+		$this->baseTurnDelay = round(pow($this->mass, 0.5)/35, 2);
 		$this->baseImpulseCost = round(pow($this->mass, 1.2)/500, 2);
 	}
 
@@ -444,13 +448,14 @@ class Ship {
 		}
 		else if ($this->getSystemByName("Reactor")->destroyed){
 			$this->destroyed = true;
+			$this->status = "destroyed";
 			return true;
 		}
 		return false;
 	}
 
 	public function resolveFireOrder($fire){
-		Debug::log("resolveFireOrder - ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
+		Debug::log("resolveFireOrder - ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", guns: ".$fire->shots);
 
 		if ($this->isDestroyed()){
 			$fire->resolved = -1;
@@ -460,13 +465,47 @@ class Ship {
 			$fire->angle = $this->getHitAngle($fire);
 			$fire->section = $this->getSection($fire);
 			$fire->req = $this->calculateToHit($fire);
-			$fire->weapon->rollToHit($fire);
 
+			$rollIndex = 0;
 			for ($i = 0; $i < $fire->shots; $i++){
-				if (!isset($fire->rolls[$i])){Debug::log("no roll for: ".$fire->id.", ".get_class($fire->weapon));}
-				if ($fire->rolls[$i] <= $fire->req){
-					$fire->weapon->doDamage($fire, $fire->rolls[$i], $this->getHitSystem($fire));
+				//Debug::log("gun #".($i+1));
+				$fire->weapon->rollToHit($fire);
+				for ($j = $rollIndex; $j < sizeof($fire->rolls); $j++){
+					if ($fire->rolls[$j] <= $fire->req){
+						//Debug::log("roll: ".$fire->rolls[$j].", req: ".$fire->req.", doing damage");
+						$fire->weapon->doDamage($fire, $fire->rolls[$j], $this->getHitSystem($fire));
+					}
 				}
+				$rollIndex = sizeof($fire->rolls);
+			}
+			$fire->resolved = 1;
+		}
+	}
+
+	public function resolveBallisticFireOrder($fire){
+		Debug::log("resolveBallisticFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".$fire->weaponid);
+
+		if ($this->isDestroyed()){
+			$fire->resolved = -1;
+		}
+		else {
+			$fire->dist = 0;
+			$fire->angle = $this->getBallisticHitAngle($fire);
+			$fire->section = $this->getSection($fire);
+			$fire->req = ceil(100 * (1-($fire->weapon->getTraverseMod($fire)*0.2)));
+			$fire->shots = $fire->shooter->getShots($fire->turn);
+
+			$rollIndex = 0;
+			for ($i = 0; $i < $fire->shots; $i++){
+				//Debug::log("gun #".($i+1));
+				$fire->weapon->rollToHit($fire);
+				for ($j = $rollIndex; $j < sizeof($fire->rolls); $j++){
+					if ($fire->rolls[$j] <= $fire->req){
+						//Debug::log("roll: ".$fire->rolls[$j].", req: ".$fire->req.", doing damage");
+						$fire->weapon->doDamage($fire, $fire->rolls[$j], $this->getHitSystem($fire));
+					}
+				}
+				$rollIndex = sizeof($fire->rolls);
 			}
 			$fire->resolved = 1;
 		}
@@ -491,29 +530,6 @@ class Ship {
 		return ceil($req);
 	}
 
-	public function resolveBallisticFireOrder($fire){
-		Debug::log("resolveBallisticFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".$fire->weaponid);
-
-		if ($this->isDestroyed()){
-			$fire->resolved = -1;
-		}
-		else {
-			$fire->shots = $fire->shooter->getShots($fire->turn);
-			$fire->dist = 0;
-			$fire->angle = $this->getBallisticHitAngle($fire);
-			$fire->section = $this->getSection($fire);
-			$fire->req = ceil(100 * (1-($fire->weapon->getTraverseMod($fire)*0.2)));
-			$fire->weapon->rollToHit($fire);
-
-			for ($i = 0; $i < $fire->shots; $i++){
-				if ($fire->rolls[$i] <= $fire->req){
-					$fire->weapon->doDamage($fire, $fire->rolls[$i], $this->getHitSystem($fire));
-				}
-			}
-			$fire->resolved = 1;
-		}
-	}
-
 	public function getArmourElement($fire){
 		return $this->getStructureById($fire->section);
 	}
@@ -533,9 +549,11 @@ class Ship {
 	}
 
 	public function getHitSystem($fire){
+		//Debug::log("getHitSystem ".$this->name);
 		$roll;
 		$current = 0;
-		$main = $this->primary->getHitChance() * $this->getShipTypeMod();
+		$main = $this->primary->getHitChance();// * $this->getShipTypeMod();
+		//Debug::log("main: ".$main);
 		$total = $main;
 
 		$struct = $fire->target->getStructureById($fire->section);
@@ -543,12 +561,17 @@ class Ship {
 		for ($i = 0; $i < sizeof($struct->systems); $i++){
 			if (!$struct->systems[$i]->destroyed){
 				$total += $struct->systems[$i]->getHitChance();
+				//Debug::log("adding: ".$struct->systems[$i]->name." for ".$struct->systems[$i]->getHitChance());
 			}
 		}
 
+		//Debug::log("total: ".$total);
+
 		$roll = mt_rand(0, $total);
+		//Debug::log("roll: ".$roll);
 		$current += $main;
 		if ($roll <= $current){
+			//Debug::log("hitting MAIN");
 			return $this->getPrimaryHitSystem();
 		}
 		else {

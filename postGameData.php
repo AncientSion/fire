@@ -18,12 +18,7 @@ if (isset($_POST["type"])) {
 		}
 	}
 	else if ($_POST["type"] == "leaveGame") {
-		if ($dbManager->leaveGame($_POST["userid"], $_POST["gameid"])) {
-			echo "leaveGame success";
-		}
-		else {
-			echo "leaveGame fail";
-		}
+		echo $dbManager->leaveGame($_POST["userid"], $_POST["gameid"]);
 	}
 	else if ($_POST["type"] == "buyInitialFleet") {
 		$rem = $manager->validateFleetCost($_POST["ships"]);

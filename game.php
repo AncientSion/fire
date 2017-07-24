@@ -195,9 +195,14 @@ echo "</script>";
 					</tr>
 				</table>
 			</div>
+			<div id="maxCutVector" class="ui disabled">
+				<div></div>
+			</div>
 			<div id="maxTurnVector" class="ui disabled">
+				<div></div>
 			</div>
 			<div id="maxVector" class="ui disabled">
+				<div></div>
 			</div>
 			<div id="upperGUI">
 				<table id="overview">
@@ -249,6 +254,7 @@ echo "</script>";
 				<canvas id="moveCanvas"></canvas>
 				<canvas id="salvoCanvas"></canvas>
 				<canvas id="mouseCanvas"></canvas>
+				<canvas id="drawCanvas"></canvas>
 			</div>
 			<div id="shortInfo" class="disabled">				
 			</div>
@@ -371,7 +377,7 @@ echo "</script>";
 				<table id="reinforceTable">
 					<tr>
 						<th style="font-size: 18px; background-color: lightBlue; color: black;" colSpan=4>
-							Requestable Reinforcements
+							Reinforcements
 						</th>
 					</tr>
 					<tr>
@@ -520,7 +526,7 @@ echo "</script>";
 			game.getUnitById(aUnit).doUndoShortenTurn(true)
 		})
 
-		$("#maxVector")
+	/*	$("#maxVector")
 		.click(function(){
 			//console.log("maxVector")
 			game.getUnitById($(this).data("shipid")).moveToMaxVector();
@@ -531,6 +537,33 @@ echo "</script>";
 			//console.log("maxTurnVector")
 			game.getUnitById($(this).data("shipid")).moveToMaxTurnVector();
 		})
+
+		$("#maxCutVector")
+		.click(function(){
+			//console.log("maxTurnVector")
+			game.getUnitById($(this).data("shipid")).moveToMaxCutVector();
+		})
+	*/
+	
+		$("#maxCutVector")
+		.click(function(){
+			//console.log("maxVector")
+			game.getUnitById($(this).data("shipid")).moveInVector($(this).data("dist"));
+		})	
+		$("#maxTurnVector")
+		.click(function(){
+			//console.log("maxVector")
+			game.getUnitById($(this).data("shipid")).moveInVector($(this).data("dist"));
+		})	
+		$("#maxVector")
+		.click(function(){
+			//console.log("maxVector")
+			game.getUnitById($(this).data("shipid")).moveInVector($(this).data("dist"));
+		})
+
+
+
+
 	})
 
 

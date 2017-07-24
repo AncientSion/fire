@@ -11,28 +11,8 @@ class Pulse extends Weapon {
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
 	}
-
-	public function getShots($turn){
-		return $this->shots;
-	}
-
-	public function rollToHit($fire){
-		for ($i = 0; $i < $this->shots; $i++){
-			$roll = mt_rand(1, 100);
-			$fire->rolls[] = $roll;
-			$fire->notes .= $roll." ";
-			if ($roll <= $fire->req){
-				$fire->hits += $this->basePulses + min($this->extraPulses, floor(($fire->req - $roll) / $this->grouping));
-			}
-		}
-		return true;
-	}
-
-	public function doDamage($fire, $roll, $system){
-		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id);
-
-		$mod = $this->getDamageMod($fire);
-
+	
+	public function doDamage($fire, $roll, $system){		
 		$destroyed = false;
 		$total = 0;
 		$shield = 0;
@@ -42,8 +22,15 @@ class Pulse extends Weapon {
 		$remInt = $system->getRemainingIntegrity();
 		$negation = $fire->target->getArmourValue($fire, $system);
 
-		for ($i = 0; $i < $fire->hits; $i++){
+		$hits = $this->basePulses + min($this->extraPulses, floor(($fire->req - $fire->rolls[sizeof($fire->rolls)-1]) / $this->grouping));
+		$fire->hits += $hits;
+
+		Debug::log("fireid: ".$fire->id.", doDamage, weapon: ".get_class($this).", target: ".$fire->target->id.", hits: ".$hits);
+
+
+		for ($i = 0; $i < $hits; $i++){
 			$totalDmg = $this->getTotalDamage($fire);
+			//Debug::log("hit: ".($i+1).", doing dmg for: ".$totalDmg);
 			$dmg = $this->determineDamage($totalDmg, $negation);
 
 			if (!$destroyed){
@@ -77,8 +64,8 @@ class Pulse extends Weapon {
 class LightPulse extends Pulse {
 	public $name = "LightPulse";
 	public $display = "38mm Pulse Cannon";
-	public $minDmg = 15;
-	public $maxDmg = 19;
+	public $minDmg = 14;
+	public $maxDmg = 18;
 	public $accDecay = 180;
 	public $shots = 1;
 	public $animColor = "brown";
@@ -97,8 +84,8 @@ class LightPulse extends Pulse {
 class MediumPulse extends Pulse {
 	public $name = "MediumPulse";
 	public $display = "66mm Pulse Cannon";
-	public $minDmg = 24;
-	public $maxDmg = 31;
+	public $minDmg = 25;
+	public $maxDmg = 32;
 	public $accDecay = 120;
 	public $shots = 1;
 	public $animColor = "brown";
@@ -118,7 +105,7 @@ class HeavyPulse extends Pulse {
 	public $name = "HeavyPulse";
 	public $display = "102mm Pulse Cannon";
 	public $minDmg = 38;
-	public $maxDmg = 51;
+	public $maxDmg = 55;
 	public $accDecay = 80;
 	public $shots = 1;
 	public $animColor = "brown";
@@ -126,7 +113,7 @@ class HeavyPulse extends Pulse {
 	public $projSpeed = 8;
 	public $reload = 3;
 	public $mass = 32;
-	public $powerReq = 6;
+	public $powerReq = 5;
 	public $traverse = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){

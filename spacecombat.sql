@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 16. Jul 2017 um 21:02
+-- Erstellungszeit: 24. Jul 2017 um 20:26
 -- Server-Version: 10.1.16-MariaDB
 -- PHP-Version: 7.0.9
 
@@ -66,6 +66,23 @@ CREATE TABLE `damages` (
   `destroyed` tinyint(1) DEFAULT NULL,
   `notes` varchar(255) DEFAULT NULL,
   `new` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `deploys`
+--
+
+CREATE TABLE `deploys` (
+  `id` int(4) NOT NULL,
+  `gameid` int(4) DEFAULT '0',
+  `userid` int(4) DEFAULT '0',
+  `turn` int(2) DEFAULT '0',
+  `phase` int(2) DEFAULT '0',
+  `x` int(4) DEFAULT '0',
+  `y` int(4) DEFAULT '0',
+  `s` int(4) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -263,6 +280,16 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- Daten für Tabelle `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `password`, `access`) VALUES
+(1, 'Chris', '1', 1),
+(2, '1', '1', 1),
+(3, 'cdfdf', '147147', 0),
+(4, '4', '777', 0);
+
+--
 -- Indizes der exportierten Tabellen
 --
 
@@ -276,6 +303,12 @@ ALTER TABLE `actions`
 -- Indizes für die Tabelle `damages`
 --
 ALTER TABLE `damages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `deploys`
+--
+ALTER TABLE `deploys`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -365,6 +398,11 @@ ALTER TABLE `actions`
 ALTER TABLE `damages`
   MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT für Tabelle `deploys`
+--
+ALTER TABLE `deploys`
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT für Tabelle `dogfights`
 --
 ALTER TABLE `dogfights`
@@ -423,7 +461,7 @@ ALTER TABLE `units`
 -- AUTO_INCREMENT für Tabelle `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -30,6 +30,7 @@ function Game(data, userid){
 	this.zIndex = 10;
 	this.sensorMode = 0;
 	this.target = 0;
+	this.deploys = data.deploys;
 
 	this.doDeployShip = function(e, ship, pos){
 		for (var i = 0; i < this.ships.length; i++){
@@ -148,6 +149,24 @@ function Game(data, userid){
 		return false;
 	}
 
+	this.checkSensor = function(){
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].userid == this.userid && this.ships[i].available <= game.turn){
+				if (this.ships[i].ship){
+					for (var j = 0; j < this.ships[i].primary.systems.length; j++){
+						if (this.ships[i].primary.systems[j].name == "Sensor" && !this.ships[i].primary.systems[j].destroyed){
+							if (!this.ships[i].primary.systems[j].used){
+								popup("You havent setup EW for unit (#" + this.ships[i].id + ")"); 
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 	this.checkMoves = function(){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid == this.userid){
@@ -200,7 +219,7 @@ function Game(data, userid){
 	this.endPhase = function(){
 		if (this.canSubmit){
 			if (this.phase == -1){
-				if (this.checkDeployment() || this.checkPower()){
+				if (this.checkDeployment() || this.checkPower() || this.checkSensor()){
 					return
 				}
 				else {ajax.confirmDeployment(goToLobby);
@@ -244,7 +263,7 @@ function Game(data, userid){
 				this.deploying = id;
 				//if (this.ships[i].actions.length){this.ships[i].doSelect();}
 				this.setupDeploymentDiv(this.ships[i])
-				this.setupDeploymentZone();
+			//	this.setupDeploymentZone();
 				this.drawDeploymentZone();
 				$("#deployWrapper").find("#reinforceTable").find(".requestReinforcements").each(function(){
 					if ($(this).data("id") == id){
@@ -260,7 +279,7 @@ function Game(data, userid){
 			if (this.reinforcements[i].id == id){
 				this.deploying = id;
 				this.setupDeploymentDiv(this.reinforcements[i])
-				this.setupDeploymentZone();
+			//	this.setupDeploymentZone();
 				this.drawDeploymentZone();
 				return;
 			}
@@ -349,6 +368,38 @@ function Game(data, userid){
 	}
 
 	this.drawDeploymentZone = function(){
+
+		//drawCtx.globalAlpha = 0.3;
+		if (game.turn >= 2){
+			drawCtx.translate(cam.o.x, cam.o.y)
+			drawCtx.scale(cam.z, cam.z)
+			drawCtx.beginPath();
+			drawCtx.arc(0, 0, 750, 0, 2*Math.PI);
+			drawCtx.fillStyle = "green";
+			drawCtx.fill();
+			drawCtx.setTransform(1,0,0,1,0,0);
+		}
+		else {
+			for (var i = 0; i < this.deploys.length; i++){
+				drawCtx.translate(cam.o.x, cam.o.y)
+				drawCtx.scale(cam.z, cam.z)
+				drawCtx.beginPath();
+				drawCtx.arc(this.deploys[i].x, this.deploys[i].y, this.deploys[i].s, 0, 2*Math.PI);
+				if (this.deploys[i].userid == this.userid){
+					drawCtx.fillStyle = "green";
+				} else drawCtx.fillStyle = "red";
+				drawCtx.fill();
+				drawCtx.setTransform(1,0,0,1,0,0);
+			};
+		}
+
+		planCtx.clearRect(0, 0, res.x, res.y);
+		planCtx.globalAlpha = 0.3;
+		planCtx.drawImage(drawCanvas, 0, 0);
+		drawCtx.clearRect(0, 0, res.x, res.y);
+		return;
+
+
 		planCtx.clearRect(0, 0, res.x, res.y);
 		planCtx.globalAlpha = 0.3;
 		for (var i = 0; i < this.deployArea.length; i++){
@@ -632,37 +683,33 @@ Game.prototype.getUnitType = function (val){
 		this.initPhase(this.phase);
 	}
 
-	this.unitHover = function(elements){
-		if (elements[0].id == game.shortInfo){
+	this.unitHover = function(unit){
+		if (unit.id == game.shortInfo){
 			return;
 		}
-		if (elements){
-			var ele = $("#shortInfo");
-				$(ele).children().remove();
 
-			for (var i = 0; i < elements.length; i++){
-				table = elements[i].getShortInfo();
-				$(ele).append($(table).css("width", "100%"));
-				game.shortInfo = elements[i].id;
+		var ele = $("#shortInfo");
+		$(ele).children().remove();
+		table = unit.getShortInfo();
+		$(ele).append($(table).css("width", "100%"));
+		game.shortInfo = unit.id;
 
-				elements[i].drawHoverElements();
+		unit.drawHoverElements();
 
-				var balls = this.getRelevantBallistics(elements[i]);
+		var balls = this.getRelevantBallistics(unit);
 
-				for (var j = 0; j < balls.length; j++){
-					if (balls[j].destroyed){continue;}
-					balls[j].drawMovePlan();
-				}
-				elements[i].drawMovePlan();
-			}
-
-			var oX = $(ele).width()/2;
-			var pos = elements[0].getBaseOffsetPos();
-			var top = (pos.y * cam.z) + cam.o.y + 40;
-			var left =(pos.x * cam.z) + cam.o.x - oX;
-
-			$(ele).css("top", top).css("left", left).show();
+		for (var j = 0; j < balls.length; j++){
+			if (balls[j].destroyed){continue;}
+			balls[j].drawMovePlan();
 		}
+		unit.drawMovePlan();
+
+		var oX = $(ele).width()/2;
+		var pos = unit.getBaseOffsetPos();
+		var top = (pos.y * cam.z) + cam.o.y + 60;
+		var left =(pos.x * cam.z) + cam.o.x - oX;
+
+		$(ele).css("top", top).css("left", left).show();
 	}
 
 	this.resetHover = function(){
@@ -707,13 +754,15 @@ Game.prototype.getUnitType = function (val){
 	}
 	
 	this.posIsOccupied = function(ship, pos){
+		var dist = getDistance(ship, step) 
+		if (ship.getRemainingImpulse()){return false;}
 		if (ship.ship){
 			for (var i = 0; i < this.ships.length; i++){
 				if (this.ships[i].ship && this.ships[i].id != ship.id && this.ships[i].userid == ship.userid){ // different ship, different owners
 					var step = this.ships[i].getPlannedPosition();
 
-					if (!step.resolved && getDistance(pos, step) <= 0.66*(this.ships[i].size/2 + ship.size/2)){
-					popup("The selection position is too close to the position or planned position of vessel (#"+this.ships[i].id+")");
+					if (!this.ships[i].getRemainingImpulse() && getDistance(pos, step) <= 0.66*(this.ships[i].size/2 + ship.size/2)){
+					popup("The selected position is too close to the position or planned position of vessel (#"+this.ships[i].id+")");
 						return true;
 					}
 				}
@@ -725,7 +774,7 @@ Game.prototype.getUnitType = function (val){
 					var step = this.ships[i].getPlannedPosition();
 
 					if ((this.ships[i].ship || !step.resolved) && getDistance(pos, step) <= 0.66*(this.ships[i].size/2 + ship.size/2)){
-					popup("The selection position is too close to the position or planned position of a vessel (#"+this.ships[i].id+" - " + this.ships[i].name +")");
+					popup("The selected position is too close to the position or planned position of a vessel (#"+this.ships[i].id+" - " + this.ships[i].name +")");
 						return true;
 					}
 				}
@@ -735,7 +784,6 @@ Game.prototype.getUnitType = function (val){
 	}
 
 	this.hasShipOnPos = function(pos){
-		var ret = [];
 		for (var i = 0; i < this.ships.length; i++){
 			var r = this.ships[i].size/3;
 			if (! this.ships[i].destroyed){
@@ -743,29 +791,26 @@ Game.prototype.getUnitType = function (val){
 					var shipPos = this.ships[i].getBaseOffsetPos();
 					if (shipPos.x < pos.x + r && shipPos.x > pos.x - r){
 						if (shipPos.y > pos.y - r && shipPos.y < pos.y + r){
-							ret.push(this.ships[i]);
-							break;
+							return (this.ships[i]);
 						}
 					}
 				}
 			}
 		}	
-		if (ret.length){return ret;}else return false;
+		return false;
 	}
 
 	this.hasAmmoOnPos = function(pos){
-		var ret = [];
 		var r = 7;
 		for (var i = 0; i < this.ballistics.length; i++){
 			var ammoPos = this.ballistics[i].getBaseOffsetPos();
 			if (pos.x < ammoPos.x + r && pos.x > ammoPos.x - r){
 				if (pos.y > ammoPos.y - r && pos.y < ammoPos.y + r){
-					ret.push(this.ballistics[i]);
-					break;
+					return (this.ballistics[i]);
 				}
 			}
 		}
-		if (ret.length){return ret;}else return false;
+		return false;
 	}
 
 	this.getShipByClick = function(pos){
@@ -1000,7 +1045,7 @@ Game.prototype.getUnitType = function (val){
 			this.ships[i].deployed = true;
 			if (this.ships[i].available == game.turn){
 				if (this.ships[i].ship){
-					this.ships[i].deployAnim = [0, 40];
+					this.ships[i].deployAnim = [0, 5];
 					this.ships[i].deployed = false;
 				}
 			}
@@ -2111,6 +2156,7 @@ Game.prototype.getUnitType = function (val){
 					.hover(function(e){
 							var vessel = game.getUnitById($(this).data("id"));
 								vessel.doHighlight();
+								game.unitHover(vessel)
 							if (aUnit && aUnit != vessel.id){
 								var	ship = game.getUnitById(aUnit);
 								if (ship.salvo){return;}

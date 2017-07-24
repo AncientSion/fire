@@ -41,6 +41,7 @@ spl_autoload_register(
                 'haven' => '/server/ships/haven.php',
                 'vorchan' => '/server/ships/vorchan.php',
                 'darkner' => '/server/ships/darkner.php',
+                'altarian' => '/server/ships/altarian.php',
                 'demos' => '/server/ships/demos.php',
                 'primus' => '/server/ships/primus.php',
 
@@ -108,6 +109,9 @@ spl_autoload_register(
 
                 'em' => '/server/systems/weapons/em.php',
                 'empulsecannon' => '/server/systems/weapons/em.php',
+
+                'area' => '/server/systems/weapons/area.php',
+                'energymine' => '/server/systems/weapons/area.php',
 
                 'launcher' => '/server/systems/weapons/launcher.php',
                 'missilelauncher' => '/server/systems/weapons/launcher.php',

@@ -50,7 +50,7 @@ class IonBolt extends LinkedParticle {
 	public $reload = 2;
 	public $projSize = 3;
 	public $projSpeed = 5;
-	public $traverse = -2;
+	public $traverse = -1;
 	
 	function __construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end){
 		parent::__construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end);
@@ -102,6 +102,11 @@ class ParticlePulsar extends FighterPulse {
 	public $animColor = "blue";
 	public $accDecay = 220;
 	public $shots = 1;
+	public $traverse = -3;
+	public $basePulses = 2;
+	public $extraPulses = 1;
+	public $grouping = 20;
+
 	
 	function __construct($id, $fighterId, $parentId, $volley, $minDmg, $maxDmg, $start, $end){
 		parent::__construct($id, $fighterId, $parentId, $volley, $minDmg, $maxDmg, $start, $end);

@@ -251,9 +251,6 @@ System.prototype.getBoostLevel = function(){
 	}
 	return level;
 }
-System.prototype.getTimeLoaded = function(){
-	return this.loaded;
-}
 System.prototype.getBoostEffectElements = function(table){
 
 	for (var i = 0; i < this.boostEffect.length; i++){
@@ -574,6 +571,7 @@ System.prototype.showInfoDiv = function(e){
 	return;
 }
 System.prototype.setFireOrder = function(targetid){
+	if (this.odds <= 0){return;}
 	this.fireOrders.push(
 		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, 
 		shots: 0, req: -1, notes: "", hits: -1, resolved: 0}
@@ -777,6 +775,15 @@ System.prototype.getBoostCostIncrease = function(){
 	return 0;
 }
 
+System.prototype.getBoostEffect = function(val){
+	for (var i = 0; i < this.boostEffect.length; i++){
+		if (this.boostEffect[i].type == val){
+			return this.boostEffect[i].value;
+		}
+	}
+	return 0;
+}
+
 
 function PrimarySystem(system){
 	System.call(this, system);
@@ -968,11 +975,13 @@ function Sensor(system){
 	this.ew = system.ew;
 	this.modes = system.modes;
 	this.states = system.states;
+	this.used = 0;
 }
 Sensor.prototype = Object.create(PrimarySystem.prototype);
 
 Sensor.prototype.switchMode = function(id){
 	if (this.destroyed || this.disabled || this.locked){return false;}
+	this.used = 1;
 
 	var index = 0;
 	for (var i = 0; i < this.states.length; i++){
@@ -1126,6 +1135,7 @@ Sensor.prototype.select = function(e){
 		else {
 			this.selected = true;
 			game.sensorMode = 1;
+			this.used = 1;
 			this.setSystemBorder();
 			this.drawEW();
 		}
@@ -1194,6 +1204,7 @@ function Weapon(system){
 	this.fireOrders = [];
 	this.mount;
 	this.exploSize = 1+((this.minDmg+this.maxDmg)/30);
+	this.odds = 0;
 }
 Weapon.prototype = Object.create(System.prototype);
 
@@ -1257,7 +1268,10 @@ Weapon.prototype.getAimDataTarget = function(target, final, accLoss, row){
 		row.append($("<td>").html(" -" + accLoss + "%"));
 	} else row.append($("<td>").html(""));
 
-	row.append($("<td>").html(Math.floor(final * (1-(traverseMod*0.2)) - accLoss) + "%"));
+	final = Math.floor(final * (1-(traverseMod*0.2)) - accLoss);
+	this.odds = final;
+
+	row.append($("<td>").html(final + "%"));
 }
 
 Weapon.prototype.getAimDataLocation = function(accLoss, row){
@@ -1522,15 +1536,6 @@ Weapon.prototype.getDmgString = function(){
 	if (this.minDmg == this.maxDmg){
 		return Math.floor(this.minDmg * mod);
 	} else return (Math.floor(this.minDmg*mod) + " - " + Math.floor(this.maxDmg*mod));
-}
-
-Weapon.prototype.getBoostEffect = function(val){
-	for (var i = 0; i < this.boostEffect.length; i++){
-		if (this.boostEffect[i].type == val){
-			return this.boostEffect[i].value;
-		}
-	}
-	return 0;
 }
 
 Weapon.prototype.getDamage = function(){
@@ -1888,6 +1893,7 @@ Dual.prototype.canBeBoosted = function(){
 
 Dual.prototype.setFireOrder = function(targetid){
 	var w = this.getActiveWeapon();
+	if (w.odds <= 0){return;}
 
 	this.fireOrders.push(
 		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, 
@@ -1917,6 +1923,8 @@ Dual.prototype.initSubWeapons = function(){
 		this.weapons[i].integrity = this.integrity;
 		this.weapons[i].damages = this.damages;
 		this.weapons[i].crits = this.crits;
+		this.weapons[i].loaded = this.loaded;
+
 		//this.weapons[i].display = "HYBRID - " + this.weapons[i].display;
 	}
 }
@@ -2184,7 +2192,11 @@ Launcher.prototype.getAimDataTarget = function(target, final, accLoss, row){
 		row.append($("<td>").html(" -" + accLoss + "%"));
 	} else row.append($("<td>").html(""));
 
-	row.append($("<td>").html(Math.floor(100 * (1-(traverseMod*0.2)) - accLoss) + "%"));
+
+	final = Math.floor(100 * (1-(traverseMod*0.2)) - accLoss);
+	this.odds = final;
+
+	row.append($("<td>").html(final + "%"));
 }
 
 Launcher.prototype.getUpgradeData = function(){

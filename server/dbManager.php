@@ -119,8 +119,8 @@ class DBManager {
 		}	
 	}
 
-	public function createNewGameAndJoin($userid, $name, $pv){
-		$this->createNewGame($name, $pv);
+	public function createNewGameAndJoin($userid, $name, $pv, $rv){
+		$this->createNewGame($name, $pv, $rv);
 		$id = $this->getLastInsertId();
 		$this->createPlayerStatus($userid, $id, 0, -1, "joined");
 		if ($id){
@@ -204,7 +204,7 @@ class DBManager {
 		return true;
 	}
 	
-	public function createNewGame($name, $pv){
+	public function createNewGame($name, $pv, $rv){
 		$stmt = $this->connection->prepare("
 			INSERT INTO games
 				(name, status, turn, phase, pv, reinforce)
@@ -213,7 +213,6 @@ class DBManager {
 		");
 		
 		$status = "open";
-		$reinforce = floor($pv / 20);
 		$turn = -1;
 		$phase = -1;
 		
@@ -222,7 +221,7 @@ class DBManager {
 		$stmt->bindParam(":turn", $turn);
 		$stmt->bindParam(":phase", $phase);
 		$stmt->bindParam(":pv", $pv);
-		$stmt->bindParam(":reinforce", $reinforce);
+		$stmt->bindParam(":reinforce", $rv);
 		
 		$stmt->execute();
 		
@@ -246,6 +245,14 @@ class DBManager {
 		$stmt->execute();
 		
 		if ($stmt->errorCode() == 0){
+			$sql = "(SELECT * FROM playerstatus where gameid = ".$gameid.")";
+			$result = $this->query($sql);
+			if (!sizeof($result)){
+				Debug::log("deleting game");
+				$sql = "DELETE FROM games WHERE id = ".$gameid;
+				Debug::log($sql);
+				$this->query($sql);
+			}
 			return true;
 		}
 		else {
@@ -448,9 +455,20 @@ class DBManager {
 
 	public function startGame($gameid){
 		$players = $this->getPlayersInGame($gameid);
+		$deploys = array();
+
 		for ($i = 0; $i < sizeof($players); $i++){
 			$this->setPlayerstatus($players[$i]["userid"], $gameid, 1, -1, "waiting");
+			for ($j = 0; $j < mt_rand(3, 4); $j++){
+				$x = mt_rand(-600, -300) * (1-$i*2);
+				$y = mt_rand(-400, 400) * (1-$i*2);
+				$s = mt_rand(50, 100);
+
+				$deploys[] = array("gameid" => $gameid, "userid" => $players[$i]["userid"], "turn" => 1, "phase" => -1, "x" => $x, "y" => $y, "s" => $s);
+			}
 		}
+		
+		$this->insertDeployArea($deploys);
 
 		$stmt = $this->connection->prepare("
 			UPDATE games 
@@ -476,9 +494,50 @@ class DBManager {
 		else return false;
 	}
 
+	public function insertDeployArea($data){
+		$stmt = $this->connection->prepare("
+			INSERT INTO deploys
+			(gameid, userid, turn, phase, x, y, s)
+			VALUES
+			(:gameid, :userid, :turn, :phase, :x, :y, :s)	
+		");
+
+		for ($i = 0; $i < sizeof($data); $i++){
+			$stmt->bindParam(":gameid", $data[$i]["gameid"]);
+			$stmt->bindParam(":userid", $data[$i]["userid"]);
+			$stmt->bindParam(":turn", $data[$i]["turn"]);
+			$stmt->bindParam(":phase", $data[$i]["phase"]);
+			$stmt->bindParam(":x", $data[$i]["x"]);
+			$stmt->bindParam(":y", $data[$i]["y"]);
+			$stmt->bindParam(":s", $data[$i]["s"]);
+
+			$stmt->execute();
+
+			if ($stmt->errorCode() == 0){
+				//Debug::log("ding");
+				continue;
+			}
+		}
+	}
+
+	public function getDeployArea($gameid, $turn){
+		//Debug::log("getDeploy: ".$gameid."/".$turn);
+		$stmt = $this->connection->prepare("
+			SELECT * FROM deploys
+			WHERE gameid = :gameid
+			AND turn = :turn"
+		);
+
+		$stmt->bindParam(":gameid", $gameid);
+		$stmt->bindParam(":turn", $turn);
+
+		$stmt->execute();
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	}
+
 	public function requestShipsDB($userid, $gameid, $turn, $picks){
-		Debug::log("requestShipsDB, s: ".sizeof($picks));
-		$avail = $this->getAvailableReinforcements($gameid, $userid);
+		//Debug::log("requestShipsDB, s: ".sizeof($picks));
+		$avail = $this->getAllReinforcements($gameid, $userid);
 		$delete = array();
 		//Debug::log("a: ".sizeof($avail));
 		$ships = array();
@@ -1294,8 +1353,9 @@ class DBManager {
 	}
 
 	public function getAmountOfPlayersInGame($gameid){
+		//	SELECT COUNT(*) FROM users
 		$stmt = $this->connection->prepare("
-			SELECT COUNT(*) FROM users
+			SELECT * FROM users
 			JOIN playerstatus 
 			ON playerstatus.gameid = :gameid
 			AND users.id = playerstatus.userid

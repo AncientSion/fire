@@ -13,7 +13,10 @@
 
 			$time = -microtime(true);
 
-			$ships = $manager->logShips("Omega", "Primus", "Hyperion", "GQuan", "Artemis", "Demos", "Haven", "Olympus");
+		//	$ships = $manager->logShips("Omega", "Primus", "Hyperion", "GQuan", "Artemis", "Demos", "Haven", "Olympus");		
+
+			$ships = $manager->logShips("Omega", "Primus", "Hyperion", "Artemis", "Altarian", "Vorchan", "Haven");
+		//	$ships = $manager->logShips("all");
 		//	$ships = $manager->logShips("Olympus");
 			$shots = 100;
 		/*	foreach ($ships[0]->structures[3]->systems as $sys){
@@ -29,7 +32,6 @@
 			usort($ships, "sortMass");
 
 
-
 			for ($i = 0; $i < sizeof($ships); $i++){
 
 				$mass = $ships[$i]->mass;	
@@ -43,7 +45,11 @@
 
 				echo "<tr><td style='text-align: left'>EP</td><td style='text-align: right'>".($ep)."</td></tr>";
 				echo "<tr><td style='text-align: left'>Turn Cost per 1°</td><td style='text-align: right'>".($ships[$i]->baseTurnCost)."</td></tr>";
-				echo "<tr><td style='text-align: left'>Max Angle based on EP</td><td style='text-align: right'>".(round($ep / $ships[$i]->baseTurnCost, 2))."</td></tr>";
+				echo "<tr><td style='text-align: left'>Turn Delay per 1°</td><td style='text-align: right'>".($ships[$i]->baseTurnDelay)."</td></tr>";
+				echo "<tr><td style='text-align: left'>Max Angle based on EP</td><td style='text-align: right'>".(round($ep / $ships[$i]->baseTurnCost, 2))."°</td></tr>";
+				echo "<tr><td style='text-align: left'>Turn Delay 30°</td><td style='text-align: right'>".($ships[$i]->baseTurnDelay * 30)." px</td></tr>";
+				echo "<tr><td style='text-align: left'>Base Impulse</td><td style='text-align: right'>".($ships[$i]->baseImpulse)."</td></tr>";
+				echo "<tr><td style='text-align: left'>MAX Turn @ Base Impulse</td><td style='text-align: right; color: red'>".(round($ships[$i]->baseImpulse / $ships[$i]->baseTurnDelay, 2))."°</td></tr>";
 				echo "<tr><td style='text-align: left'>Struct per 1 Mass</td><td style='text-align: right'>".(round($ships[$i]->getStructure() / $mass, 3))."</td></tr>";
 				echo "<tr><td style='text-align: left'>Weapon Mass</td><td style='text-align: right'>".(round($ships[$i]->getWeapons() / $mass * 100, 2))."%</td></tr>";
 
@@ -68,6 +74,7 @@
 					}
 					else if ($sys instanceof PrimarySystem){
 						$internal++;
+						//echo "</br>hitting: ".$sys->name;
 					}
 					else {
 						$main++;

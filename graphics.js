@@ -256,8 +256,8 @@ function drawSensorArc(w, d, p, str, len, loc, facing, a, sensor){
 	switch (sensor.ew[sensor.ew.length-1].type){
 		case 0: color = "red"; break;
 		case 1: color = "blue"; break;
-		case 2: color = "red"; opacity = 0.15; break;
-		case 3: color = "blue"; opacity = 0.15; break;
+		case 2: color = "red"; opacity = 0.2; break;
+		case 3: color = "blue"; opacity = 0.2; break;
 	}
 
 	salvoCtx.clearRect(0, 0, res.x, res.y);

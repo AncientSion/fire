@@ -24,6 +24,7 @@ class Manager {
 	public $playerstatus = array();
 	public $reinforcements = array();
 	public $rdyReinforcements = array();
+	public $deploys = array();
 	public $incoming = array();
 	public $userindex = 0;
 
@@ -76,6 +77,8 @@ class Manager {
 
 		//$this->setShipLocks($this->getUnitById(2)); return;
 
+		//$this->deploy();
+
 		return array(
 			"id" => $this->gameid,
 			"name" => $this->name,
@@ -84,6 +87,7 @@ class Manager {
 			"phase" => $this->phase,
 			"ships" => $this->getShipData(),
 			"reinforcements" => $this->rdyReinforcements,
+			"deploys" => $this->deploys,
 			"incoming" =>$this->incoming
 		);
 
@@ -153,6 +157,7 @@ class Manager {
 
 		$this->reinforcements = $db->getAllReinforcements($this->gameid, $this->userid);
 		$this->rdyReinforcements = $this->readyReinforcements();
+		$this->deploys = $db->getDeployArea($this->gameid, $this->turn);
 		$this->incoming = $db->getIncomingShips($this->gameid, $this->turn);
 		
 		$this->deleteResolvedFireOrders();
@@ -422,7 +427,7 @@ class Manager {
 				if ($roll >= $pick["weight"]){
 					$now++;
 					$pick["eta"] += mt_rand(3, 4);
-					$pick["eta"] = min(2, $pick["eta"]);
+					$pick["eta"] = max(2, $pick["eta"]);
 					$pick["value"] = ceil($pick["value"] * (mt_rand(8, 12))/10);
 					$picks[] = $pick;
 
@@ -898,7 +903,8 @@ class Manager {
 			//var_export($this->fires[$i]); echo "</br></br>";
 			$this->fires[$i]->shooter = $this->getUnitById($this->fires[$i]->shooterid);
 			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystemById($this->fires[$i]->weaponid);
-			$this->fires[$i]->shots = $this->fires[$i]->weapon->getShots($this->turn);
+			//$this->fires[$i]->shots = $this->fires[$i]->weapon->getShots($this->turn);
+			$this->fires[$i]->shots = 1;
 			$this->fires[$i]->target = $this->getUnitById($this->fires[$i]->targetid);
 			if (!$this->fires[$i]->shooter->ship && $this->fires[$i]->target->salvo){
 				$this->intercepts[] = $this->fires[$i];
@@ -919,7 +925,10 @@ class Manager {
 			else if ($a->weapon->priority != $b->weapon->priority){
 				return $a->weapon->priority - $b->weapon->priority;
 			}
-			else return $a->shooterid - $b->shooterid;
+			else if ($a->shooterid != $b->shooterid){
+				return $a->shooterid - $b->shooterid;
+			}
+			else return $a->id - $b->id;
 		});
 	}
 
@@ -947,6 +956,26 @@ class Manager {
 				if ($this->fires[$i]->shooter->flight){
 					if ($this->fires[$i]->shooter->getStructureById($this->fires[$i]->weapon->fighterId)->destroyed){
 						$this->fires[$i]->resolved = -1;
+					}
+				}
+			}
+		}
+
+		for ($i = 0; $i < sizeof($this->fires); $i++){
+			if ($this->fires[$i]->resolved || !$this->fires[$i]->shooter->flight){continue;}
+			//Debug::log("comparing :".$this->fires[$i]->id);
+			for ($j = $i+1; $j < sizeof($this->fires); $j++){
+				if ($this->fires[$j]->resolved || !$this->fires[$j]->shooter->flight){continue;}
+				//Debug::log("to :".$this->fires[$j]->id);
+				if ($this->fires[$j]->shooterid == $this->fires[$i]->shooterid){
+					if ($this->fires[$j]->targetid == $this->fires[$i]->targetid){
+						if ($this->fires[$j]->weapon->name == $this->fires[$i]->weapon->name){
+							//Debug::log("could add fire: ".$this->fires[$j]->id." to fire ".$this->fires[$i]->id);
+							$this->fires[$i]->shots++;
+							$this->fires[$j]->shots--;
+							$this->fires[$j]->resolved = 1;
+							//$this->fires[$j]->notes = "+";
+						}
 					}
 				}
 			}
@@ -982,6 +1011,26 @@ class Manager {
 				}
 			}
 		}
+
+		$index = 0;
+		for ($i = $index; $i < sizeof($this->fires); $i++){
+			if ($this->fires[$i]->shooter->flight){
+				if ($this->fires[$i]->shots >= 2){
+					for ($j = $i+1; $j < sizeof($this->fires); $j++){
+						if ($this->fires[$i]->shooter->flight && $this->fires[$j]->shots == 0){
+							//$this->fires[$i]->shots--;
+							//$this->fires[$j]->shots = 1;
+							$this->fires[$j]->req = $this->fires[$i]->req;
+							if ($this->fires[$i]->shots == 1){
+								$index = $j+1;
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+
 	}
 
 	public function sortBallistics(){
@@ -1357,8 +1406,9 @@ class Manager {
 				break;
 			case "Centauri Republic";
 				$ships = array(
-					array("Primus", 8, 1),
-					array("Darkner", 5, 0),
+					array("Primus", 8, 2),
+					array("Altarian", 5, 0),
+					array("Darkner", 4, 0),
 					array("Demos", 5, 0),
 					array("Vorchan", 3, -1),
 					array("Haven", 3, -1),
@@ -1416,6 +1466,7 @@ class Manager {
 			case "Centauri Republic";
 				$ships = array(
 					"Primus",
+					"Altarian",
 					"Darkner",
 					"Demos",
 					"Vorchan",
@@ -1525,7 +1576,7 @@ class Manager {
 		for ($i = 0; $i < sizeof($allShips); $i++){
 			$name = $allShips[$i]["name"];
 			$ship = new $name(0, 0, 0, 0, 0, 0);
-			$ship->setProps();
+			$ship->setProps(1);
 			$allShips[$i] = $ship;
 			continue;
 		}

@@ -57,7 +57,38 @@ class Launcher extends Weapon {
 		if ($w <= 120){$this->armourMod = 0.8;}
 		else if ($w <= 180){$this->armourMod =  0.6;}
 		else $this->armourMod =  0.3;
+	}	
+
+	public function testCrit($turn){
+		return;
+		if ($this->destroyed || empty($this->damages)){
+			return;
+		}
+
+		$old = 0; $new = 0;
+		for ($i = 0; $i < sizeof($this->damages); $i++){
+			if ($this->damages[$i]->turn > $turn){
+				break;
+			}
+			else if ($this->damages[$i]->turn == $turn){
+				$new += $this->damages[$i]->structDmg;
+			} else $old += $this->damages[$i]->structDmg;
+		}
+
+		if ($new){
+			//$this->determineCrit(ceil(($new + ($old/2)) / $this->integrity * 100), $turn);
+			$this->determineCrit($old, $new, $turn);
+		}
 	}
+
+	public function getValidEffects(){
+		return array(// attr, %-tresh, duration, modifier
+			array("Disabled", 80, 1, 0),
+			array("Damage", 30, 0, 0),
+			array("Accuracy", 30, 0, 0)
+		);
+	}
+
 }
 
 class MissileLauncher extends Launcher {

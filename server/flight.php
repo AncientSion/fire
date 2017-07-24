@@ -7,6 +7,7 @@ class Flight extends Mini {
 	public $display = "Flight";
 	public $faction = false;
 	public $baseSize = 35;
+	public $fSize = 20;
 	public $size = 0;
 	public $cost = 0;
 	public $mass = 0;
@@ -58,7 +59,7 @@ class Flight extends Mini {
 	}
 
 	public function setBaseStats(){
-		$this->baseHitChance = ceil(pow($this->mass, 1/3)*5);
+		$this->baseHitChance = 0;//ceil(pow($this->mass, 1/3)*5);
 		$this->baseTurnCost = round(pow($this->mass, 1.15)/100, 2);
 		$this->baseTurnDelay = $this->baseTurnCost * 2;
 		$this->baseImpulseCost = round(pow($this->mass, 1.15)/4, 2);

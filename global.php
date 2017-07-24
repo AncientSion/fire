@@ -2,7 +2,7 @@
 	ini_set('display_errors', 1);
 	error_reporting(E_ALL);
 	
-	include(dirname(__FILE__) . "/autoload.php");
+	-include(dirname(__FILE__) . "/autoload.php");
 	//include(dirname(__FILE__) . "\server\classes.php");
 	//include(dirname(__FILE__) . "\server\math.php");
 	//include(dirname(__FILE__) . "\server\debug.php");

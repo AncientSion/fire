@@ -3,6 +3,7 @@ function Flight(data){
 	this.flight = true;
 	this.primary = false;
 	this.layout = [];
+	this.fSize = data.fSize;
 	this.ep = data.ep;
 	this.mass = data.mass;
 	this.baseSize = data.baseSize;
@@ -92,7 +93,7 @@ function Flight(data){
 	}
 
 	this.setLayout = function(){
-		var size = 15;
+		var size = this.fSize;
 
 		var toDo = Math.min(4, Math.ceil(this.structures.length/2));
 		var done = 0;
@@ -295,7 +296,7 @@ function Flight(data){
 
 			var img = new Image()
 				img.src = window.shipImages[this.structures[i].name.toLowerCase() + "l"].src;
-				img.className = "size40";
+				img.className = "size30";
 
 				$(img)
 					.data("shipId", this.id)
@@ -335,8 +336,8 @@ function Flight(data){
 			var w = $(fighterDiv).width();
 			var h = $(fighterDiv).height();
 
-			var x = $(structContainer).width()/2 + this.layout[i].x*5- w/2;
-			var y = $(structContainer).height()/2 + this.layout[i].y*5 - 20;
+			var x = $(structContainer).width()/2 + (this.layout[i].x*4)- w/2;
+			var y = $(structContainer).height()/2 + (this.layout[i].y*4) - 10;
 
 			$(fighterDiv)
 				.css("left", x)
@@ -372,7 +373,7 @@ function Flight(data){
 					$(td)
 						.addClass("fighter")
 						.css("top", -h -s - 5)
-						.css("left", w/2 - s/2)
+						.css("left", w/2 - s/2 +1 )
 						.data("shipId", this.id)
 						.click(function(e){
 							e.stopPropagation();
@@ -432,7 +433,7 @@ function Flight(data){
 
 	this.getShortInfo = function(){
 		var ele = $("#shortInfo");
-		if (this.userid == game.userid){
+		if (game.phase > -2 && this.userid == game.userid){
 			$(ele).attr("class", "friendly");
 		} else $(ele).attr("class", "hostile");
 
