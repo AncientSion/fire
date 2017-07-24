@@ -57,7 +57,7 @@ function Game(data, userid){
 		//id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available, baseHitChance, baseImpulse
 		var flight = new Flight(
 			{id: this.getUniqueID(), name: "Flight", shipType: "Flight", x: pos.x, y: pos.y, facing: facing, 
-			faction: false, mass: false, cost: false, profile: false, size: 0, userid: this.userid, available: this.turn, baseHitChance: 0, baseImpulse: 0}
+			faction: false, fSize: 20, mass: false, cost: false, profile: false, size: 0, userid: this.userid, available: this.turn, baseHitChance: 0, baseImpulse: 0}
 		)
 
 		flight.deployed = 1;

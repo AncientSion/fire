@@ -122,8 +122,7 @@ echo "</script>";
 							$hints[] = "Lasers can usually be boosted with extra power for increased damage output.";
 							$hints[] = "Each Pulse weapon will score a fixed base amount of hits. This amount will then be increased further if you scored a good roll on the hit dice.";
 							$hints[] = "Pulse weapons fire a volley of several shots. All shots of a volley hit the same unit (or system). As such, armour is applied for each single hit.";
-							$hints[] = "For the most part, weapons with more than 1 shot will spread all their shots over a target, instead of focusing them on a single fighter or system.;
-							";
+							$hints[] = "For the most part, weapons with more than 1 shot will spread all their shots over a target, instead of focusing them on a single fighter or system.";
 							echo $hints[mt_rand(0, sizeof($hints)-1)];
 						?>
 					</div>
