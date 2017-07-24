@@ -166,7 +166,7 @@ class Hangar extends Weapon {
 	}
 
 	public function getHitChance(){
-		return $this->mass;
+		return $this->mass/2;
 	}
 	
 	public function adjustLoad($dbLoad){

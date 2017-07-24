@@ -137,21 +137,21 @@ echo "</script>";
 					</tr>
 					<tr>
 						<th style="text-align: left">
-							 Difficulty
+							 Speed Mod
 						</th>
 						<th id="impulseMod" style="text-align: center">
 						</th>
 					</tr>
 					<tr>
 						<th style="text-align: left">
-							Cost / 1°
+							Cost / 1
 						</th>
 						<th id="turnCost" style="width: 55px, text-align: center">
 						</th>
 					</tr>
 					<tr>
 						<th style="text-align: left">
-							Delay / 1°
+							Delay / 1
 						</th>
 						<th id="turnDelay" style="width: 55px; text-align: center">
 						</th>

@@ -2895,7 +2895,7 @@ Hangar.prototype.getSystemDetailsDiv = function(){
 	$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
 	$(table).append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.getMount())));
 	$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html(this.effiency + " per cycle")));
-	$(table).append($("<tr>").append($("<td>").html("Base Power Req")).append($("<td>").html(this.effiency)));
+	$(table).append($("<tr>").append($("<td>").html("Base Power Req")).append($("<td>").html(this.powerReq)));
 
 	div.appendChild(table);
 	this.attachDetailsMods(div);
