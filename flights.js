@@ -190,7 +190,7 @@ function Flight(data){
 		if (game.animateFire){
 			for (var i = 0; i < this.structures.length; i++){
 				if (this.structures[i].draw){
-					this.drawFighter(i);
+					this.drawFighter(i, 0);
 				}
 			}
 		}
@@ -209,7 +209,7 @@ function Flight(data){
 	}
 
 	this.drawFighter = function(i, oy){
-		if (oy == undefined){oy = 0;}
+		//if (oy == undefined){oy = 0;}
 		var size = 12;
 		ctx.drawImage(
 			this.smallImg,
