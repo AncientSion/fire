@@ -56,7 +56,7 @@ function Game(data, userid){
 
 		//id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available, baseHitChance, baseImpulse
 		var flight = new Flight(
-			{id: this.getUniqueID(), name: "Flight", shipType: "Flight", x: pos.x, y: pos.y, facing: facing, 
+			{id: this.getUniqueID(), name: "Flight", shipType: "Flight", x: pos.x, y: pos.y, facing: facing, ep: 0, baseTurnCost: 0, baseTurnDelay: 0,
 			faction: false, fSize: 20, mass: false, cost: false, profile: false, size: 0, userid: this.userid, available: this.turn, baseHitChance: 0, baseImpulse: 0}
 		)
 
@@ -76,7 +76,8 @@ function Game(data, userid){
 				flight.structures.push(f);
 			}
 		}
-		flight.size = 32 + (flight.structures.length-1)*5;
+		flight.baseSize = 35;
+		flight.size = flight.baseSize + (flight.structures.length-1)*5;
 		flight.create();
 		flight.createBaseDiv();
 		game.ships.push(flight);

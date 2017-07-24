@@ -76,11 +76,11 @@ class Thunderbolt extends Fighter {
 	public $name = "Thunderbolt";
 	public $display = "Thunderbolt";
 	public $faction = "Earth Alliance";
-	public $value = 42;
+	public $value = 40;
 	public $mass = 42;
 	public $ep = 110;
 	public $integrity = 34;
-	public $negation = array(7, 7, 6);
+	public $negation = array(7, 6, 6);
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

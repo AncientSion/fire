@@ -7,7 +7,7 @@ class Darkner extends Medium {
 	public $size = 50;
 	public static $value = 420;
 	public $profile = array(0.95, 1.05);
-	public $mass = 3750;
+	public $mass = 3500;
 
 	function __construct($id, $userid, $available, $status, $destroyed){		
         parent::__construct($id, $userid, $available, $status, $destroyed);
@@ -16,16 +16,16 @@ class Darkner extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 19);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 18);
 		$front->systems[] = new MediumTwinIon($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new LightIon($this->getId(), $this->id, 240, 120);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 17);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 16);
 		$right->systems[] = new HeavyIon($this->getId(), $this->id, 315, 45);
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 17);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 16);
 		$left->systems[] = new HeavyIon($this->getId(), $this->id, 315, 45);
 		$structs[] = $left;
 
