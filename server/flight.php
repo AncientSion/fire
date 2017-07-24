@@ -98,7 +98,7 @@ class Flight extends Mini {
 				$alive++;
 			}
 		}
-		$this->size = $this->baseSize + $alive*5;
+		$this->size = $this->baseSize + $alive*6;
 	}
 
 	public function addFighters($fighters){

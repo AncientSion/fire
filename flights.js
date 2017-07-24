@@ -157,7 +157,7 @@ function Flight(data){
 
 	this.animationSetupDamage = function(){
 		var all = this.structures.length;
-		var postFire = (this.size - this.baseSize) / 5;
+		var postFire = (this.size - this.baseSize) / 6;
 		var preFire = postFire;
 
 		for (var i = 0; i < this.structures.length; i++){
@@ -172,7 +172,7 @@ function Flight(data){
 
 		//console.log("all: " + all + ", postFire: " + postFire + ", preFire: " + preFire);
 		this.trueSize = this.size;
-		this.size = preFire * 5 + this.baseSize;
+		this.size = preFire * 6 + this.baseSize;
 	}
 
 	this.drawHoverElements = function(){
@@ -195,7 +195,7 @@ function Flight(data){
 			}
 		}
 		else {
-			var alive = (this.size - this.baseSize) / 5;
+			var alive = (this.size - this.baseSize) / 6;
 			var oy = (this.structures.length-alive)*4;
 			var index = 0;
 			for (var i = 0; i < this.structures.length; i++){

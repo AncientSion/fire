@@ -77,7 +77,7 @@ function Game(data, userid){
 			}
 		}
 		flight.baseSize = 35;
-		flight.size = flight.baseSize + (flight.structures.length-1)*5;
+		flight.size = flight.baseSize + (flight.structures.length-1)*6;
 		flight.create();
 		flight.createBaseDiv();
 		game.ships.push(flight);
