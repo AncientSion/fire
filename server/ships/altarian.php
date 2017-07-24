@@ -23,18 +23,18 @@ class Altarian extends Medium {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 20);
-		$right->systems[] = new MediumSingleIon($this->getId(), $this->id, 180, 60);
-		$right->systems[] = new MediumSingleIon($this->getId(), $this->id, 180, 60);
+		$right->systems[] = new MediumSingleIon($this->getId(), $this->id, 0, 120);
+		$right->systems[] = new MediumSingleIon($this->getId(), $this->id, 0, 120);
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 18);
 		$aft->systems[] = new Hangar($this->getId(), $this->id, 330, 30, 200, 6, array("Sentri", "Sitara"));
-		$aft->systems[] = new LightIon($this->getId(), $this->id, 60, 300);
+		$aft->systems[] = new MediumTwinIon($this->getId(), $this->id, 60, 300);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 20);
-		$left->systems[] = new MediumSingleIon($this->getId(), $this->id, 300, 180);
-		$left->systems[] = new MediumSingleIon($this->getId(), $this->id, 300, 180);
+		$left->systems[] = new MediumSingleIon($this->getId(), $this->id, 240, 120);
+		$left->systems[] = new MediumSingleIon($this->getId(), $this->id, 240, 120);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
