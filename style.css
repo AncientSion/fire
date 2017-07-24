@@ -905,6 +905,14 @@ table, th, tr, td {
 	display: none;
 }
 
+#phaseSwitchInnerDiv .hintDiv {
+	width: 550px;
+	font-size: 15px;
+	text-align: center;
+	margin: auto;
+	margin-top: 60px;
+}
+
 #systemDetailsDiv {
 	z-index: 20;
 	display: inline-block;

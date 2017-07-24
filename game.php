@@ -35,7 +35,7 @@ switch ($manager->phase){
 		$phase = "Flight Movement";
 		break;
 	case 2:
-		$phase = "Firing";
+		$phase = "Firing Orders";
 		break;
 	case 3:
 		$phase = "Damage Control";
@@ -97,21 +97,34 @@ echo "</script>";
 		<div id="game">
 			<div id="phaseSwitchDiv">
 				<div id="phaseSwitchInnerDiv">
-					<div id="turnDiv">
+					<div>
 						<?php
 							echo "Turn ".$manager->turn;
 						?>
 					</div>
-					<div id="phaseDiv">
+					<div>
 						<?php
-							switch ($manager->phase){
-								case -1: echo "Deployment and Initial"; break;
-								case 0: echo "Capital Movement"; break;
-								case 1: echo "Flight Movement"; break;
-								case 2: echo "Firing Orders"; break;
-								case 3: echo "Damage Control"; break;
-								default: echo "???"; break;
-							}
+							echo $phase;
+						?>
+					</div>
+					<div class="hintDiv">
+						<?php
+							$hints = array();
+							$hints[] = "Press 'F' to cancel fire animations and display the combat log immediatly";
+							$hints[] = "Press 'M' to cancel move animations and immediatly position each unit";
+							$hints[] = "Press '+' or '-' to increase or decrease EP allocation for turn shortening";
+							$hints[] = "Press 'SPACE' to enable and disable a tool to measure distances and angles.";
+							$hints[] = "Matter weapons like the Railgun are able to penetrate enemy armour. They ignore 50 % of the target units armour.";
+							$hints[] = "In addition to dealing very high damage, Plasma weapons deal additional damage to the target units armour.";
+							$hints[] = "Plasma weapons do less damage the further the target is away. Get close or charge your plasma weapons up for less damage dropoff.";
+							$hints[] = "Laser have an optimal focal point. The farther away the target unit, the less damage the Laser will deal.";
+							$hints[] = "Laser rake over a target. As such they are likely to hit more than one system which also means their final damage is very dependant on the armour of the target unit.";
+							$hints[] = "Lasers can usually be boosted with extra power for increased damage output.";
+							$hints[] = "Each Pulse weapon will score a fixed base amount of hits. This amount will then be increased further if you scored a good roll on the hit dice.";
+							$hints[] = "Pulse weapons fire a volley of several shots. All shots of a volley hit the same unit (or system). As such, armour is applied for each single hit.";
+							$hints[] = "For the most part, weapons with more than 1 shot will spread all their shots over a target, instead of focusing them on a single fighter or system.;
+							";
+							echo $hints[mt_rand(0, sizeof($hints)-1)];
 						?>
 					</div>
 				</div>
