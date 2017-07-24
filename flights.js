@@ -13,6 +13,7 @@ function Flight(data){
 
 	this.create = function(){
 		this.img = window.shipImages[this.structures[0].name.toLowerCase() + "l"];
+		this.smallImg = window.shipImages[this.structures[0].name.toLowerCase()];
 		this.setFighterState();
 		this.setDrawData();
 		//this.setMaxMass();
@@ -211,7 +212,7 @@ function Flight(data){
 		if (oy == undefined){oy = 0;}
 		var size = 12;
 		ctx.drawImage(
-			window.shipImages[this.structures[i].name.toLowerCase()],
+			this.smallImg,
 			this.layout[i].x -size/2,
 			this.layout[i].y -size/2 + oy,
 			size, 
