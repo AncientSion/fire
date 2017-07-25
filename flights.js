@@ -470,7 +470,7 @@ function Flight(data){
 	}
 
 	this.getHitChanceFromAngle = function(angle){
-		return Math.ceil(this.getBaseHitChance() / 100 * this.getProfileMod());
+		return Math.ceil(this.getBaseHitChance());
 	}
 
 	this.getWeaponPosition = function(fire){

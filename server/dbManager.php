@@ -9,7 +9,7 @@ class DBManager {
 
 		if ($this->connection === null){
 			$user = "aatu"; $pass = "Kiiski";
-			//$user = "root"; $pass = "147147";
+			$user = "root"; $pass = "147147";
 			$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$user,$pass);
 			//$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			//$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -892,9 +892,9 @@ class DBManager {
 		//Debug::log("insertFireOrders: ".sizeof($fires));
 		$stmt = $this->connection->prepare("
 			INSERT INTO fireorders 
-				(gameid, turn, shooterid, targetid, weaponid, resolved)
+				(gameid, turn, shooterid, targetid, x, y, weaponid, resolved)
 			VALUES
-				(:gameid, :turn, :shooterid, :targetid, :weaponid, :resolved)
+				(:gameid, :turn, :shooterid, :targetid, :x, :y, :weaponid, :resolved)
 		");
 
 		for ($i = 0; $i < sizeof($fires); $i++){
@@ -902,6 +902,8 @@ class DBManager {
 			$stmt->bindParam(":turn", $turn);
 			$stmt->bindParam(":shooterid", $fires[$i]["shooterid"]);
 			$stmt->bindParam(":targetid", $fires[$i]["targetid"]);
+			$stmt->bindParam(":x", $fires[$i]["x"]);
+			$stmt->bindParam(":y", $fires[$i]["y"]);
 			$stmt->bindParam(":weaponid", $fires[$i]["weaponid"]);
 			$stmt->bindParam(":resolved", $fires[$i]["resolved"]);
 

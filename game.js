@@ -219,6 +219,7 @@ function Game(data, userid){
 
 	this.endPhase = function(){
 		if (this.canSubmit){
+			if (aUnit){game.getUnitBy(aUnit).select();}
 			if (this.phase == -1){
 				if (this.checkDeployment() || this.checkPower() || this.checkSensor()){
 					return

@@ -16,44 +16,6 @@ class Area extends Weapon {
 			Debug::log("multi disable, return");
 			return;
 		}
-		$totalDmg = $this->getTotalDamage($fire);
-		$negation = $fire->target->getArmourValue($fire, $system);
-
-		$effect = false;
-
-		$print = ("doing: ".$totalDmg." vs negation: ".$negation. " - ");
-		if ($totalDmg > $negation *2){
-			$effect = true;
-			$print .= ("dmg > neg*2");
-		}
-		else if ($totalDmg > $negation && mt_rand(0, 1)){
-			$effect = true;
-			$print .= ("dmg > neg and 50 %");
-		}
-		else if ($totalDmg > $negation/2 && !mt_rand(0, 4)){
-			$effect = true;
-			$print .= ("dmg > neg/2 and 33%");
-		}
-		else {
-			$print .= ("deflected");
-		}
-
-		Debug::log($print);
-
-		if ($effect){
-			if ($fire->target->flight || $fire->target->salvo){
-				$system->crits[] = new Crit(sizeof($system->crits)+1, $system->parentId, $system->id, $fire->turn, "Disabled", 0, 0, 1);
-				$system->destroyed = true;
-			}
-			else if (is_a($system, "Primary")){
-				$reactor = $fire->target->getSystemByName("Reactor");
-				$reactor->crits[] = new Crit(sizeof($reactor->crits)+1, $reactor->parentId, $reactor->id, $fire->turn, "Output", 1, 0.1, 1);
-			}
-			else if ($system->weapon && !$system->isDisabled($fire->turn)){
-				$system->crits[] = new Crit(sizeof($system->crits)+1, $system->parentId, $system->id, $fire->turn, "Disabled", 1, 0, 1);
-				$system->disabled = true;
-			}
-		}
 	}
 }	
 

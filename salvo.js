@@ -166,7 +166,7 @@ function Salvo(data){
 		return 0;
 	}
 
-	this.createDiv = function(){
+	this.createBaseDiv = function(){
 		var owner = "friendly";
 		if (this.userid != game.userid){owner = "hostile";}
 		var div = document.createElement("div");
@@ -276,8 +276,8 @@ function Salvo(data){
 
 		$(div).contextmenu(function(e){
 			e.stopPropagation();
-			//e.preventDefault();
-			//$(this).addClass("disabled");
+			e.preventDefault();
+			$(this).addClass("disabled");
 		}).drag();
 		
 		this.element = div;
@@ -289,7 +289,7 @@ function Salvo(data){
 		this.img = window.ballImages[this.name.toLowerCase()].cloneNode(true);
 		this.setDisplay();
 		//this.setFacing();
-		this.createDiv();
+		this.createBaseDiv();
 		this.setLayout();
 		this.setFinalStep();
 		this.setNextStep();
@@ -591,6 +591,9 @@ Salvo.prototype.switchDiv = function(){
 	Ship.prototype.switchDiv.call(this);
 }
 Salvo.prototype.select = function(){
+	console.log(this);
+	this.setUnitGUI();
+	this.switchDiv();
 	if (this.selected){
 		this.doUnselect();
 	}
@@ -600,14 +603,14 @@ Salvo.prototype.select = function(){
 }
 Salvo.prototype.doSelect = function(){
 	console.log(this);
-	aUnit = this.id;
-	this.selected = true;
+	//aUnit = this.id;
+	//this.selected = true;
 	this.setUnitGUI()
 	this.switchDiv();
 }
 Salvo.prototype.doUnselect = function(){
-	aUnit = false;
-	this.selected = false;
+	//aUnit = false;
+	//this.selected = false;
 	this.setUnitGUI()
 	this.switchDiv();
 }

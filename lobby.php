@@ -138,7 +138,7 @@ if (isset($_SESSION["userid"])){
 					$in = true;
 					$status = $players[$i]["status"];
 					$style = "";
-					if ($status == "ready"){$style = "background-color: gree'n";
+					if ($status == "ready"){$style = "background-color: green";
 					} else $style = "background-color: yellow; color: black'";
 					$openGamesElement .= "<td style='".$style.">".$status."</td>";
 				}

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 24. Jul 2017 um 20:26
+-- Erstellungszeit: 25. Jul 2017 um 16:41
 -- Server-Version: 10.1.16-MariaDB
 -- PHP-Version: 7.0.9
 
@@ -120,16 +120,18 @@ CREATE TABLE `fighters` (
 
 CREATE TABLE `fireorders` (
   `id` int(5) NOT NULL,
-  `gameid` int(3) DEFAULT NULL,
-  `turn` int(3) DEFAULT NULL,
-  `shooterid` int(5) DEFAULT NULL,
-  `targetid` int(5) DEFAULT NULL,
-  `weaponid` int(5) DEFAULT NULL,
+  `gameid` int(3) DEFAULT '0',
+  `turn` int(3) DEFAULT '0',
+  `shooterid` int(5) DEFAULT '0',
+  `targetid` int(5) DEFAULT '0',
+  `x` int(3) DEFAULT '0',
+  `y` int(3) DEFAULT '0',
+  `weaponid` int(5) DEFAULT '0',
   `shots` int(3) DEFAULT '0',
   `req` int(3) NOT NULL DEFAULT '0',
   `notes` varchar(255) NOT NULL DEFAULT '',
   `hits` int(3) NOT NULL DEFAULT '0',
-  `resolved` tinyint(1) DEFAULT NULL
+  `resolved` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

@@ -1079,7 +1079,7 @@ function Ship(data){
 			$(vector).empty()
 				.append($("<table>")
 					.append($("<tr>")
-						.append($("<td>").html("Angle: " + turn.a + "°")))
+						.append($("<td>").html("Angle: " + turn.a)))
 					.append($("<tr>")
 						.append($("<td>").html("Cost: " + Math.ceil(turn.cost * turn.a * turn.mod * turn.dif) + " EP")))
 					.append($("<tr>")
@@ -1676,19 +1676,12 @@ function Ship(data){
 		var remEP = "Cost: " + Math.round(c, 2) + " (" + Math.round(this.getRemainingEP() - c) + ") EP";
 		var delay = "Delay: " + Math.round(this.getTurnDelay() * a, 2) + " px";
 
-	$("#vectorDiv")//.empty()
-	/*	.append($("<table>")
-			.append($("<tr>")
-				.append($("<td>").html("Angle: " + a + "°")))
-			.append($("<tr>")
-				.append($("<td>").html("Cost: " + Math.round(c, 2) + " (" + Math.round(this.getRemainingEP() - c) + ") EP")))
-			.append($("<tr>")
-				.append($("<td>").html("Delay: " + Math.round(this.getTurnDelay() * a, 2) + " px"))))
-	*/	.css("left", e.clientX - offset.x - 45 + "px")
+	$("#vectorDiv")
+		.css("left", e.clientX - offset.x - 45 + "px")
 		.css("top", e.clientY - offset.y + 40 + "px")
 		.find("tr").each(function(i){
 			switch (i){
-				case 0: $(this).html("Angle: " + a + "°"); break;
+				case 0: $(this).html("Angle: " + a); break;
 				case 1: $(this).html(remEP); break;
 				case 2: $(this).html(delay); break;
 				default: break;
@@ -1863,10 +1856,10 @@ function Ship(data){
 					.append($("<td>").html("Thrust Change:"))
 					.append($("<td>").html(this.getImpulseChangeCost() + " EP").addClass("change")))
 				.append($("<tr>")
-					.append($("<td>").html("Turn Cost per 1°"))
+					.append($("<td>").html("Turn Cost per 1"))
 					.append($("<td>").html(round(this.getTurnCost(), 2) + " EP")))
 				.append($("<tr>")
-					.append($("<td>").html("Turn Delay per 1°"))
+					.append($("<td>").html("Turn Delay per 1"))
 					.append($("<td>").html(round(this.getTurnDelay(), 2) + " px")))
 				.append($("<tr>")
 					.append($("<td>").html("Active Turn Delay"))
