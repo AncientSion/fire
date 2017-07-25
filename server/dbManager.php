@@ -897,13 +897,16 @@ class DBManager {
 				(:gameid, :turn, :shooterid, :targetid, :x, :y, :weaponid, :resolved)
 		");
 
+		$x = 0;
+		$y = 0;
+
 		for ($i = 0; $i < sizeof($fires); $i++){
 			$stmt->bindParam(":gameid", $gameid);
 			$stmt->bindParam(":turn", $turn);
 			$stmt->bindParam(":shooterid", $fires[$i]["shooterid"]);
 			$stmt->bindParam(":targetid", $fires[$i]["targetid"]);
-			$stmt->bindParam(":x", $fires[$i]["x"]);
-			$stmt->bindParam(":y", $fires[$i]["y"]);
+			$stmt->bindParam(":x", $x);
+			$stmt->bindParam(":y", $y);
 			$stmt->bindParam(":weaponid", $fires[$i]["weaponid"]);
 			$stmt->bindParam(":resolved", $fires[$i]["resolved"]);
 
