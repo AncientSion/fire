@@ -892,9 +892,9 @@ class DBManager {
 		//Debug::log("insertFireOrders: ".sizeof($fires));
 		$stmt = $this->connection->prepare("
 			INSERT INTO fireorders 
-				(gameid, turn, shooterid, targetid, x, y, weaponid, resolved)
+				(gameid, turn, shooterid, targetid, weaponid, resolved)
 			VALUES
-				(:gameid, :turn, :shooterid, :targetid, :x, :y, :weaponid, :resolved)
+				(:gameid, :turn, :shooterid, :targetid, :weaponid, :resolved)
 		");
 
 		$x = 0;
@@ -905,8 +905,6 @@ class DBManager {
 			$stmt->bindParam(":turn", $turn);
 			$stmt->bindParam(":shooterid", $fires[$i]["shooterid"]);
 			$stmt->bindParam(":targetid", $fires[$i]["targetid"]);
-			$stmt->bindParam(":x", $x);
-			$stmt->bindParam(":y", $y);
 			$stmt->bindParam(":weaponid", $fires[$i]["weaponid"]);
 			$stmt->bindParam(":resolved", $fires[$i]["resolved"]);
 
