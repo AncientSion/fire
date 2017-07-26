@@ -24,6 +24,8 @@ if (isset($_SESSION["userid"])){
 		}
 	}
 
+//	$dbManager->startGame(2);
+
 	//function __construct($id, $userid, $classname, $x, $y, $facing){
 	//$ship = new Omega(1, 1, 5, 5, 100);
 	//echo "<script> var omega = ".json_encode($ship, JSON_NUMERIC_CHECK).";</script>";
@@ -116,7 +118,7 @@ if (isset($_SESSION["userid"])){
 		$openGamesElement .= "</tr>";
 
 		
-		foreach ($openGames as $game){;
+		foreach ($openGames as $game){
 			$players = $dbManager->getPlayersInGame($game["id"]);
 		//$players = 0;
 		//$players = $dbManager->getAmountOfPlayersInGame($game["id"]);
@@ -138,8 +140,9 @@ if (isset($_SESSION["userid"])){
 					$in = true;
 					$status = $players[$i]["status"];
 					$style = "";
-					if ($status == "ready"){$style = "background-color: green";
+					if ($status == "ready"){$style = "background-color: green'";
 					} else $style = "background-color: yellow; color: black'";
+
 					$openGamesElement .= "<td style='".$style.">".$status."</td>";
 				}
 			}

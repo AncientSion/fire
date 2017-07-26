@@ -22,7 +22,7 @@ class Laser extends Weapon {
 	}
 
 	public function doDamage($fire, $roll, $system){
-		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id."/".$system->id);
+		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id."/".$system->id.": ".$system->name);
 		$totalDmg = $this->getTotalDamage($fire);
 		$print = "hitting: ";
 		if ($totalDmg <= 0){

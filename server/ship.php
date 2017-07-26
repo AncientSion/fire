@@ -511,6 +511,10 @@ class Ship {
 		}
 	}
 
+	public function isDogfight($fire){
+		return false;
+	}
+
 	public function calculateToHit($fire){
 		//Debug::log("calculateToHit");
 		$multi = 1;
@@ -523,6 +527,10 @@ class Ship {
 		$multi += $fire->shooter->getOffensiveBonus($this->id);
 		$multi += $this->getImpulseProfileMod();
 		$multi -= $this->getDefensiveBonus($fire->shooter->id);
+
+		if ($this->isDogfight($fire)){
+			$base *= 2;
+		}
 
 		$req = ($base * $multi) * (1-($traverse*0.2)) - $range;
 		//Debug::log("CALCULATE TO HIT - angle: ".$fire->angle.", base: ".$base.", trav: ".$traverse.", total multi: ".$multi.", dist/range: ".$fire->dist."/".$range.", req: ".$req);
@@ -722,10 +730,13 @@ class Ship {
 	}
 
 	public function getHitDist($fire){
+
+		if ($this->isDogfight($fire)){
+			return 0;
+		}
 		
 		for ($i = 0; $i < sizeof($this->distances); $i++){
 			if ($this->distances[$i][0] == $fire->shooter->id){
-				//Debug::log("pre dist !");
 				return $this->distances[$i][1];
 			}
 		}
@@ -738,6 +749,10 @@ class Ship {
 	}
 
 	public function getHitAngle($fire){
+
+		if ($this->isDogfight($fire)){
+			return mt_rand(0, 359);
+		}
 		
 		for ($i = 0; $i < sizeof($this->angles); $i++){
 			if ($this->angles[$i][0] == $fire->shooter->id){
@@ -950,7 +965,7 @@ class Ship {
 
 
 class UltraHeavy extends Ship {
-	public $baseImpulse = 115;
+	public $baseImpulse = 150;
 	public $traverse = 3;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -966,7 +981,7 @@ class UltraHeavy extends Ship {
 }
 
 class SuperHeavy extends Ship {
-	public $baseImpulse = 125;
+	public $baseImpulse = 165;
 	public $traverse = 2;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -982,7 +997,7 @@ class SuperHeavy extends Ship {
 }
 
 class Heavy extends Ship {
-	public $baseImpulse = 135;
+	public $baseImpulse = 180;
 	public $traverse = 1;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -998,7 +1013,7 @@ class Heavy extends Ship {
 }
 
 class Medium extends Ship {
-	public $baseImpulse = 150;
+	public $baseImpulse = 195;
 	public $traverse = 0;
 
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -1018,7 +1033,7 @@ class Medium extends Ship {
 }
 
 class Light extends Ship {
-	public $baseImpulse = 165;
+	public $baseImpulse = 210;
 	public $traverse = -1;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -1038,7 +1053,7 @@ class Light extends Ship {
 }
 
 class SuperLight extends Ship {
-	public $baseImpulse = 180;
+	public $baseImpulse = 225;
 	public $traverse = -2;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){

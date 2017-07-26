@@ -7,6 +7,7 @@ function Flight(data){
 	this.ep = data.ep;
 	this.mass = data.mass;
 	this.baseSize = data.baseSize;
+	this.unitSize = data.unitSize;
 	this.turns = 10;
 	this.dogfights = [];
 	this.trueSize;
@@ -157,7 +158,7 @@ function Flight(data){
 
 	this.animationSetupDamage = function(){
 		var all = this.structures.length;
-		var postFire = (this.size - this.baseSize) / 6;
+		var postFire = (this.size - this.baseSize) / this.unitSize;
 		var preFire = postFire;
 
 		for (var i = 0; i < this.structures.length; i++){
@@ -172,7 +173,7 @@ function Flight(data){
 
 		//console.log("all: " + all + ", postFire: " + postFire + ", preFire: " + preFire);
 		this.trueSize = this.size;
-		this.size = preFire * 6 + this.baseSize;
+		this.size = preFire * this.unitSize + this.baseSize;
 	}
 
 	this.drawHoverElements = function(){
@@ -195,8 +196,8 @@ function Flight(data){
 			}
 		}
 		else {
-			var alive = (this.size - this.baseSize) / 6;
-			var oy = (this.structures.length-alive)*4;
+			var alive = (this.size - this.baseSize) / this.unitSize;
+			var oy = (this.structures.length-alive) * 4;
 			var index = 0;
 			for (var i = 0; i < this.structures.length; i++){
 				if (!this.structures[i].destroyed && !this.structures[i].disabled){
@@ -418,18 +419,25 @@ function Flight(data){
 		*/return div;
 	}
 
-	this.selectAll = function(e, id){
-		var display = this.getSystemById(id).display;
+	this.selectAlal = function(e, id){
+		var s = this.getSystemById(id);
+		var w = s.getActiveWeapon();
+		var name = w.name;
+		var hasFire = s.hasUnresolvedFireOrder();
+		if (name == "Hangar"){return;}
+
 		for (var i = 0; i < this.structures.length; i++){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
-				if (this.structures[i].systems[j].display == display){
-					if (! this.structures[i].systems[j].destroyed){
-						this.structures[i].systems[j].select(e);
+				if (! this.structures[i].systems[j].destroyed){
+					if (this.structures[i].systems[j].getActiveWeapon().name == name){
+						if (this.structures[i].systems[j].weapon && this.structures[i].systems[j].hasUnresolvedFireOrder() == hasFire){
+							this.structures[i].systems[j].select(e);
+						}
 					}
 				}
 			}
 		}
-		return true;
+		return;
 	}
 
 	this.getShortInfo = function(){

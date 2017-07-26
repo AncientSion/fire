@@ -15,10 +15,10 @@
 
 		//	$ships = $manager->logShips("Omega", "Primus", "Hyperion", "GQuan", "Artemis", "Demos", "Haven", "Olympus");		
 
-			$ships = $manager->logShips("Omega", "Primus", "Hyperion", "Artemis", "Altarian", "Vorchan", "Haven");
+		// $ships = $manager->logShips("Omega", "Primus", "Hyperion", "Artemis", "Altarian", "Vorchan", "Haven");
 		//	$ships = $manager->logShips("all");
-		//	$ships = $manager->logShips("Olympus");
-			$shots = 100;
+			$ships = $manager->logShips("Altarian");
+			$shots = 200;
 		/*	foreach ($ships[0]->structures[3]->systems as $sys){
 				var_export($sys);
 				echo "<br><br>";

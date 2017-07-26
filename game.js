@@ -140,6 +140,7 @@ function Game(data, userid){
 						if (this.ships[i].primary.systems[j].name == "Reactor"){
 							if (this.ships[i].primary.systems[j].getOutput() < 0){
 								popup("You have units with invalid Reactor settings (#" + this.ships[i].id + ")"); 
+								this.ships[i].select();
 								return true;
 							}
 						}
@@ -158,6 +159,7 @@ function Game(data, userid){
 						if (this.ships[i].primary.systems[j].name == "Sensor" && !this.ships[i].primary.systems[j].destroyed){
 							if (!this.ships[i].primary.systems[j].used){
 								popup("You havent setup EW for unit (#" + this.ships[i].id + ")"); 
+								this.ships[i].select();
 								return true;
 							}
 						}
@@ -174,6 +176,7 @@ function Game(data, userid){
 				if ((game.phase == 0 && this.ships[i].ship) || (game.phase == 1 && this.ships[i].flight)){
 					if (this.ships[i].getRemainingImpulse() > 0){
 						popup("You have units with unused Impulse (#" + this.ships[i].id + ")"); 
+						this.ships[i].select();
 						return true;
 					}
 				}
@@ -219,7 +222,7 @@ function Game(data, userid){
 
 	this.endPhase = function(){
 		if (this.canSubmit){
-			if (aUnit){game.getUnitBy(aUnit).select();}
+			if (aUnit){game.getUnitById(aUnit).select();}
 			if (this.phase == -1){
 				if (this.checkDeployment() || this.checkPower() || this.checkSensor()){
 					return
@@ -1962,6 +1965,10 @@ Game.prototype.getUnitType = function (val){
 	}
 
 	this.getDamageDetails = function(fire){
+
+		if (fire.shooter.id == 8){
+			console.log("dign");
+		}
 		var details = document.createElement("tr");
 			details.className = "selected";
 		var td = details.insertCell(-1)

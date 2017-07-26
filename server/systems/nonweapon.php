@@ -13,7 +13,7 @@ class PrimarySystem extends System {
 	}
 
 	public function getHitChance(){
-		return $this->mass * 2;
+		return $this->mass;
 	}
 
 	public function getOutput($turn){

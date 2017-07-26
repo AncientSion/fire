@@ -149,7 +149,7 @@ echo "</script>";
 					</tr>
 					<tr>
 						<th style="text-align: left">
-							 Speed Mod
+							 Speed
 						</th>
 						<th id="impulseMod" style="text-align: center">
 						</th>

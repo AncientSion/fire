@@ -99,7 +99,7 @@ class Primary {
 	}
 
 	public function getHitChance(){
-		return $this->integrity;
+		return $this->remaining;
 	}
 
 	public function setRemainingIntegrity(){
@@ -195,7 +195,7 @@ class Single {
 
 	public function getValidEffects(){
 		return array(// attr, %-tresh, duration, modifier
-			array("Disabled", 70, 0, 0)
+			array("Disabled", 65, 0, 0)
 		);
 	}
 
@@ -213,6 +213,7 @@ class Single {
 
 		for ($i = 0; $i < sizeof($valid); $i++){
 			if (mt_rand(0, 1)){
+				Debug::log("Droput!");
 				$this->crits[] = new Crit(
 					sizeof($this->crits)+1,
 					$this->parentId, $this->id, $turn,

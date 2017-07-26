@@ -7,6 +7,8 @@ class Flight extends Mini {
 	public $display = "Flight";
 	public $faction = false;
 	public $baseSize = 35;
+	public $unitSize = 8;
+
 	public $fSize = 20;
 	public $size = 0;
 	public $cost = 0;
@@ -14,7 +16,7 @@ class Flight extends Mini {
 	public $profile = 0;
 	public $primary = false;
 	public $dogfights = array();
-	public $baseImpulse = 200;
+	public $baseImpulse = 300;
 	public $traverse = -3;
 	public $turnAngle = 40;
 	public $ep = 500;
@@ -98,7 +100,7 @@ class Flight extends Mini {
 				$alive++;
 			}
 		}
-		$this->size = $this->baseSize + $alive*6;
+		$this->size = $this->baseSize + $alive*$this->unitSize;
 	}
 
 	public function addFighters($fighters){
@@ -188,30 +190,6 @@ class Flight extends Mini {
 		}
     }
 
-	public function resolveDogfightFireOrder($fire){
-		Debug::log("resolveDogfightFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".$fire->weaponid);
-
-		if ($this->isDestroyed()){
-			$fire->resolved = -1;
-		}
-		else {
-			$fire->dist = 0;
-			$fire->angle = mt_rand(0, 359);
-			$fire->section = $this->getSection($fire);
-			$fire->hitSystem[] = $this->getHitSystem($fire);
-			$fire->req = $this->calculateToHit($fire) *2;
-			$fire->weapon->rollToHit($fire);
-
-			for ($i = 0; $i < $fire->shots; $i++){
-				if (!isset($fire->rolls[$i])){Debug::log("no roll for: ".$fire->id.", ".get_class($fire->weapon));}
-				if ($fire->rolls[$i] <= $fire->req){
-					$fire->weapon->doDamage($fire, $fire->rolls[$i], $fire->hitSystem[$i]);
-				}
-			}
-			$fire->resolved = 1;
-		}
-	}
-
 	public function isDogfight($fire){
 		for ($i = 0; $i < sizeof($this->dogfights); $i++){
 			if ($this->dogfights[$i] == $fire->shooterid){
@@ -219,10 +197,6 @@ class Flight extends Mini {
 			}
 		}
 		return false;
-	}
-
-	public function getDogfightHitModifier(){
-		return 2;
 	}
 }
 ?>

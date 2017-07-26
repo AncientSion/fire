@@ -402,16 +402,18 @@ table, th, tr, td {
 
 .buttonSelection {
 	cursor: pointer;
-	background-color: blue;
-	color: white;
+	background-color: yellow;
+	color: black;
+}
+
+.buttonSelection:hover{
+	cursor: pointer;
+	background-color: white;
+	color: black;
 }
 
 .buttonSelection td {
 	font-size: 20px;
-}
-
-.buttonSelection:hover {
-	color: red;
 }
 
 #game {
@@ -839,7 +841,7 @@ table, th, tr, td {
 
 .shipdiv .header {
 	display: inline-block;
-	width: 220px;
+	width: 180px;
 	height: 130px;
 	margin: auto;
 	padding: 0 0 0 0;
@@ -867,7 +869,7 @@ table, th, tr, td {
 
 #totalShipCost {
 	margin: auto;
-	width: 300px;
+	width: 90%;
 }
 
 .shipDiv th, td {

@@ -106,6 +106,11 @@ function mouseCanvasScroll(e){
 
 function handleWeaponAimEvent(ship, vessel, e, pos){
 
+	if (ship.userid == vessel.userid){
+		$("#game").find("#weaponAimTableWrapper").hide();
+		return;
+	}
+
 	var shipLoc = ship.getPlannedPosition();
 	var facing = ship.getPlannedFacing();					
 	var targetData = $("#game").find("#weaponAimTableWrapper").find("#targetInfo").find("#targetData");
@@ -135,6 +140,11 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 			var valid = false;
 			var targetData = $("#game").find("#weaponAimTableWrapper").find("#targetInfo").find("#targetData");
 			var vessel;
+			var dogFight = false;
+
+			if (ship.flight && vessel.flight && ship.isDogfighting(vessel.id)){
+				dogFight = true;
+			}
 
 			if (vessel.salvo){ // aiming at SALVO
 				if (game.phase <= 2){
@@ -157,6 +167,11 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 			lock = ship.getOffensiveBonus(vessel);
 			mask = vessel.getDefensiveBonus(ship);
 
+			if (dogFight){
+				baseHit *= 2;
+				dist = 0;
+			}
+
 			if (lock){
 				multi += lock;
 				lockString = "<span class ='green'>+" + lock + "</span>";
@@ -172,6 +187,8 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 				} else impulseString = "<span class ='green'>";
 				impulseString += round(impulse/2) + "</span>";
 			}
+
+
 
 			final = Math.floor(baseHit * multi);
 			targetData
@@ -222,7 +239,11 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 				var row = $("<tr>");
 					row.append($("<td>").html(system.display + " #" + ship.structures[i].systems[j].id))
 
-				if (ship.ship && vessel.salvo){
+				if (ship.flight && vessel.flight && ship.isDogfighting(vessel.id)){
+					legalTarget = true;
+					inArc = true;
+				}
+				else if (ship.ship && vessel.salvo){
 					if (ship.id != vessel.targetid && !(system instanceof Launcher)){ // ship vs salvo indirect
 						legalTarget = false;
 						msg = "Unable to aquire target (trajectory)";
@@ -573,7 +594,10 @@ function handleFireClick(ship, vessel){
 								}
 
 								if (validWeapon && !inArc){
-									if (ship.structures[i].systems[j].posIsOnArc(shipLoc, pos, facing)){ // ship vs ship/fighter
+									if (ship.flight && vessel.flight && ship.isDogfighting(vessel.id)){
+										inArc = true;
+									}
+									else if (ship.structures[i].systems[j].posIsOnArc(shipLoc, pos, facing)){ // ship vs ship/fighter
 										inArc = true;
 									}
 								}

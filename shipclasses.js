@@ -200,11 +200,12 @@ function Ship(data){
 		context.beginPath();
 		context.arc(x, y, this.size/2, 0, 2*Math.PI, false);
 		context.closePath();
-		context.lineWidth = 2;
-		context.globalAlpha = 1;
+		context.lineWidth = 1;
+		context.globalAlpha = 0.8;
 		context.globalCompositeOperation = "source-over";
 		context.strokeStyle = c;
 		context.stroke();
+		context.globalAlpha = 1;
 		context.lineWidth = 1;
 		context.strokeStyle = "black";
 	}
@@ -1873,7 +1874,7 @@ function Ship(data){
 			.drag()
 			.find(".structContainer")
 				.contextmenu(function(e){e.stopPropagation;})
-				.addClass("disabled")
+				//.addClass("disabled")
 				.end()
 			.find(".header")
 				.contextmenu(function(e){
@@ -1929,10 +1930,12 @@ function Ship(data){
 
 		var maxWidth = 0;
 		if (this.structures.length <= 4){
-			maxWidth = 320;
+			if (this.structures[1].systems.length > 4){
+				maxWidth = 320;
+			} else maxWidth = 280;
 		}
 		else {
-			maxWidth = 360;
+			maxWidth = 340;
 		}
 
 		$(div).css("width", maxWidth);

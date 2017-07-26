@@ -385,6 +385,7 @@ class Manager {
 			default:
 				break;
 		}
+
 		$time += microtime(true); 
 		Debug::log("advancing game state time: ".round($time, 3)." seconds.");
 		return true;
@@ -594,7 +595,7 @@ class Manager {
 		//Debug::log("handleFighterMovementPhase");
 		$this->resolveUnitMovement();
 		$this->initiateDogfights();
-		$this->createDogfightFires();
+		//$this->createDogfightFires();
 	}
 	
 	public function resolveUnitMovement(){
@@ -982,13 +983,11 @@ class Manager {
 		}
 
 		// fighter vs fighter
-		for ($i = 0; $i < sizeof($this->fires); $i++){
+
+		for ($i = 0; $i < sizeof($this->fires); $i++){ // non-dogfights
 			if (!$this->fires[$i]->resolved){
 				if ($this->fires[$i]->shooter->flight && $this->fires[$i]->target->flight){
-					if ($this->fires[$i]->target->isDogfight($this->fires[$i])){
-						$this->fires[$i]->target->resolveDogfightFireOrder($this->fires[$i]);
-					} else $this->fires[$i]->target->resolveFireOrder($this->fires[$i]);
-
+					$this->fires[$i]->target->resolveFireOrder($this->fires[$i]);
 					if (sizeof($this->fires[$i]->damages)){
 						$this->damages = array_merge($this->damages, $this->fires[$i]->damages);
 					}

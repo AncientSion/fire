@@ -263,7 +263,7 @@ else {
 					var tr = table.insertRow(-1);
 						tr.className = "buttonSelection";
 					var button = tr.insertCell(-1);
-						button.innerHTML = "--- Confirm Ship Selection ---";
+						button.innerHTML = "Confirm Ship Selection";
 						button.colSpan = 2;
 						$(button).click(function(){
 							window.addShipToFleet();
