@@ -1438,7 +1438,16 @@ Game.prototype.getUnitType = function (val){
 				window.animate.intercepts.push(this.fireOrders[i]);
 				this.fireOrders.splice(i, 1);
 			}
-			else {
+		}
+
+		for (var i = 0; i < this.fireOrders.length; i++){
+			if (this.fireOrders[i].shooter.flight){
+				var j = 1;
+				while (this.fireOrders[i].hits[0] > 1){
+					this.fireOrders[i].hits[0+j] = 1;
+					this.fireOrders[i].hits[0]--;
+					j++;
+				}
 			}
 		}
 	}

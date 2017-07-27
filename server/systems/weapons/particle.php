@@ -13,8 +13,8 @@ class Particle extends Weapon {
 class LightIon extends Particle {
 	public $name = "LightIon";
 	public $display = "32mm Ion Bolter Array";
-	public $minDmg = 16;
-	public $maxDmg = 22;
+	public $minDmg = 1;
+	public $maxDmg = 1;
 	public $accDecay = 220;
 	public $shots = 4;
 	public $animColor = "orange";
@@ -60,7 +60,7 @@ class MediumTwinIon extends MediumSingleIon {
 	public $shots = 2;
 	public $mass = 21;
 	public $powerReq = 4;
-	public $effiency = 3;
+	public $effiency = 4;
 	public $maxBoost = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
@@ -70,13 +70,13 @@ class MediumTwinIon extends MediumSingleIon {
 
 class HeavyIon extends MediumSingleIon {
 	public $name = "HeavyIon";
-	public $display = "133mm Ion Cannon";
-	public $minDmg = 58;
-	public $maxDmg = 79;
+	public $display = "110mm Ion Cannon";
+	public $minDmg = 49;
+	public $maxDmg = 65;
 	public $accDecay = 80;
-	public $shots = 1;
+	public $shots = 2;
 	public $animColor = "orange";
-	public $reload = 2;
+	public $reload = 3;
 	public $projSize = 4;
 	public $projSpeed = 5;
 	public $mass = 32;

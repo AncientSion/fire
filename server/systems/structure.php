@@ -38,7 +38,7 @@ class Structure {
 	}
 
 	public function setNegation($main, $armourDmg){
-		$p = 1.5;
+		$p = 2;
 		$this->parentPow = round(pow($main, $p));
 		$this->parentIntegrity = $main;
 		$this->armourDmg += $armourDmg;
@@ -46,7 +46,7 @@ class Structure {
 	}
 
 	public function getCurrentNegation(){
-		$p = 1.5;
+		$p = 2;
 		return round(pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow * $this->negation);
 	}
 }
@@ -101,6 +101,7 @@ class Primary {
 	public function getHitChance(){
 		return $this->remaining;
 	}
+
 
 	public function setRemainingIntegrity(){
 		$rem = $this->integrity;

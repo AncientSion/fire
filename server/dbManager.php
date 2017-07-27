@@ -8,8 +8,8 @@ class DBManager {
 	function __construct(){
 
 		if ($this->connection === null){
-			$user = "aatu"; $pass = "Kiiski";
-		//	$user = "root"; $pass = "147147";
+		//	$user = "aatu"; $pass = "Kiiski";
+			$user = "root"; $pass = "147147";
 			$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$user,$pass);
 			//$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			//$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -463,9 +463,9 @@ class DBManager {
 			$this->setPlayerstatus($players[$i]["userid"], $gameid, 1, -1, "waiting");
 			$units = $this->query("SELECT * FROM units WHERE gameid = ".$gameid." AND userid = ".$players[$i]["userid"]);
 			for ($j = 0; $j < sizeof($units); $j++){
-				$x = mt_rand(-700, -200) * (1-$i*2);
-				$y = mt_rand(-500, 500) * (1-$i*2);
-				$s = mt_rand(50, 90);
+				$x = mt_rand(-700, -400) * (1-$i*2);
+				$y = mt_rand(-600, 600) * (1-$i*2);
+				$s = mt_rand(50, 80);
 
 				$deploys[] = array("gameid" => $gameid, "userid" => $players[$i]["userid"], "turn" => 1, "phase" => -1, "x" => $x, "y" => $y, "s" => $s);
 			}

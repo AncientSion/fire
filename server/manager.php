@@ -938,6 +938,7 @@ class Manager {
 		for ($i = 0; $i < sizeof($this->fires); $i++){
 			if (!$this->fires[$i]->resolved){
 				if ($this->fires[$i]->shooter->flight == false){
+					//var_export($this->fires[$i]->id);
 					$this->fires[$i]->target->resolveFireOrder($this->fires[$i]);
 					if (sizeof($this->fires[$i]->damages)){
 						$this->damages = array_merge($this->damages, $this->fires[$i]->damages);
@@ -1017,12 +1018,19 @@ class Manager {
 				if ($this->fires[$i]->shots >= 2){
 					for ($j = $i+1; $j < sizeof($this->fires); $j++){
 						if ($this->fires[$i]->shooter->flight && $this->fires[$j]->shots == 0){
-							//$this->fires[$i]->shots--;
-							//$this->fires[$j]->shots = 1;
-							$this->fires[$j]->req = $this->fires[$i]->req;
-							if ($this->fires[$i]->shots == 1){
-								$index = $j+1;
-								break;
+							if ($this->fires[$i]->targetid == $this->fires[$j]->targetid){
+								$this->fires[$j]->req = $this->fires[$i]->req;
+							/*	$this->fires[$i]->shots--;
+								$this->fires[$j]->shots++;
+
+								if ($this->fires[$i]->hits > 1){
+									$this->fires[$i]->hits--;
+									$this->fires[$j]->hits++;
+								}
+								if ($this->fires[$i]->shots == 1){
+									$index = $j+1;
+									break;
+								}*/
 							}
 						}
 					}

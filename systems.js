@@ -1557,7 +1557,7 @@ Particle.prototype = Object.create(Weapon.prototype);
 Particle.prototype.getAnimation = function(fire){
 	//console.log(this.display + " / " + this.projSpeed + " / " + fire.dist);
 	//console.log(fire);
-
+	
 	var allAnims = [];
 	var grouping = 2;
 	var delay = 30;

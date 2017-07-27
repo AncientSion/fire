@@ -29,7 +29,7 @@ class EM extends Weapon {
 			$effect = true;
 			$print .= ("dmg > neg*2");
 		}
-		else if ($totalDmg > $negation && mt_rand(0, 1)){
+		else if ($totalDmg > $negation && !mt_rand(0, 1)){
 			$effect = true;
 			$print .= ("dmg > neg and 50 %");
 		}
@@ -38,7 +38,7 @@ class EM extends Weapon {
 			$print .= ("dmg > neg/2 and 33%");
 		}
 		else {
-			$print .= ("deflected");
+			//$print .= ("dmg < neg/2 - deflected");
 		}
 
 		Debug::log($print);
@@ -65,7 +65,7 @@ class EMPulseCannon extends EM {
 	public $display = "EM Pulse Cannon";
 	public $minDmg = 6;
 	public $maxDmg = 9;
-	public $accDecay = -270;
+	public $accDecay = 200;
 	public $shots = 5;
 	public $animColor = "lightBlue";
 	public $projSize = 2;
@@ -80,7 +80,6 @@ class EMPulseCannon extends EM {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-		$this->boostEffect[] = new Effect("Damage", 0.20);
 	}
 }
 
