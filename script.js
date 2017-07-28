@@ -113,7 +113,8 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 
 	var shipLoc = ship.getPlannedPosition();
 	var facing = ship.getPlannedFacing();					
-	var targetData = $("#game").find("#weaponAimTableWrapper").find("#targetInfo").find("#targetData");
+	var targetData1 = $("#game").find("#weaponAimTableWrapper").find("#targetInfo").find("#targetData1");
+	var targetData2 = $("#game").find("#weaponAimTableWrapper").find("#targetInfo").find("#targetData2");
 	var weaponInfo = $("#game").find("#weaponAimTableWrapper").find("#weaponInfo");
 	var dist;
 
@@ -141,6 +142,7 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 			var targetData = $("#game").find("#weaponAimTableWrapper").find("#targetInfo").find("#targetData");
 			var vessel;
 			var dogFight = false;
+			var section;
 
 			if (ship.flight && vessel.flight && ship.isDogfighting(vessel.id)){
 				dogFight = true;
@@ -166,6 +168,10 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 			impulse = 1 - vessel.getImpulseMod();
 			lock = ship.getOffensiveBonus(vessel);
 			mask = vessel.getDefensiveBonus(ship);
+			section = vessel.getHitSectionFromAngle(angle);
+
+			//console.log("armour: "+section.remainingNegation + " / " + section.negation);
+
 
 			if (dogFight){
 				baseHit *= 2;
@@ -191,31 +197,41 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 
 
 			final = Math.floor(baseHit * multi);
-			targetData
+			targetData1
 				.empty()
 				.append($("<td>").html(vessel.name + " #" + vessel.id))
 				.append($("<td>").html(game.getUnitType(vessel.traverse) + " (" + vessel.traverse + ")"))
+				.append($("<td>").html(section.id))
+				.append($("<td>").html(section.remainingNegation + " / " + section.negation))
+				.append($("<td>").html(dist))
+
+			targetData2
+				.empty()
 				.append($("<td>").html(baseHit + "%"))
 				.append($("<td>").html(impulseString))
 				.append($("<td>").html(lockString))
 				.append($("<td>").html(maskString))
 				.append($("<td>").html(final + "%"))
-				.append($("<td>").html(dist))
 		}
 	}
 	else {
 		game.target = 0;
 		dist = Math.round(getDistance(ship.getPlannedPosition(), pos));
-		targetData
+		targetData1
 		.empty()
 		.append($("<td>").html(""))
 		.append($("<td>").html(""))
 		.append($("<td>").html(""))
 		.append($("<td>").html(""))
-		.append($("<td>").html(""))
-		.append($("<td>").html(""))
-		.append($("<td>").html(""))
 		.append($("<td>").html(dist));
+
+		targetData2
+		.empty()
+		.append($("<td>").html(""))
+		.append($("<td>").html(""))
+		.append($("<td>").html(""))
+		.append($("<td>").html(""))
+		.append($("<td>").html(""));
 	}
 
 	weaponInfo.children().children().each(function(i){

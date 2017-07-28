@@ -2604,6 +2604,7 @@ function Ship(data){
 	//	return isInArc(getCompassHeadingOfPoint(loc, pos, facing), start, end);
 
 	this.getOffensiveBonus = function(t){
+		return 0
 		var tPos;
 		if (this.flight){return false;}
 		if (t.salvo){
@@ -2630,6 +2631,7 @@ function Ship(data){
 	}
 
 	this.getDefensiveBonus = function(s){
+		return 0
 		if (this.flight || s.flight){
 			return 0;
 		}
@@ -2783,21 +2785,26 @@ Ship.prototype.setPreMovePosition = function(){
 	}
 
 Ship.prototype.setPostMovePosition = function(){
-		if (this.ship){
+	if (!this.actionslength){
+		this.drawX = this.x;
+		this.drawY = this.y;
+		return;
+	}
+	if (this.ship){
+		this.drawX = this.actions[this.actions.length-1].x;
+		this.drawY = this.actions[this.actions.length-1].y;
+	}
+	else if (this.flight){
+		if (game.phase == 1){
+			this.drawX = this.x;
+			this.drawY = this.y;
+		}
+		else if (game.phase >= 2){
 			this.drawX = this.actions[this.actions.length-1].x;
 			this.drawY = this.actions[this.actions.length-1].y;
 		}
-		else if (this.flight){
-			if (game.phase == 1){
-				this.drawX = this.x;
-				this.drawY = this.y;
-			}
-			else if (game.phase >= 2){
-				this.drawX = this.actions[this.actions.length-1].x;
-				this.drawY = this.actions[this.actions.length-1].y;
-			}
-		}
 	}
+}
 
 Ship.prototype.setDrawData = function(){
 	if (this.available > game.turn || !this.available || game.turn == 1 && game.phase == -1){

@@ -204,7 +204,9 @@ System.prototype.canFire = function(){
 }
 System.prototype.getLoadLevel = function(){
 	//return 1;
-	var need = Math.max(1, this.reload - this.getBoostLevel("Reload") * this.getBoostLevel());
+	//var need = Math.max(1, this.reload + (this.getBoostEffect("Reload") * this.getBoostLevel()));
+	
+	var need = this.reload;
 	var has = this.getTimeLoaded();
 	if (has / need > 1){
 		return 1;
@@ -214,13 +216,26 @@ System.prototype.getLoadLevel = function(){
 System.prototype.setTimeLoaded = function(){
 	var turnsLoaded = this.reload
 	var max = this.reload;
+	var boost = this.getBoostEffect("Reload");
 
 	for (var i = 1; i <= game.turn; i++){
+		//console.log("Turn " + i);
 		if (turnsLoaded < max){
+			//console.log("++")
 			turnsLoaded++;
+		}
+		if (boost){
+			for (var j = 0; j < this.powers.length; j++){
+				if (this.powers[j].turn == i && this.powers[j].type == 1){
+					turnsLoaded++;
+					//console.log("charge ++")
+					break;
+				}
+			}
 		}
 		for (var j = 0; j < this.fireOrders.length; j++){
 			if (this.fireOrders[j].turn == i && this.fireOrders[j].resolved == 1){
+				//console.log("fire")
 				turnsLoaded = 0;
 				break;
 			}
@@ -228,6 +243,7 @@ System.prototype.setTimeLoaded = function(){
 		if (turnsLoaded){
 			for (var j = 0; j < this.powers.length; j++){
 				if (this.powers[j].turn == i && this.powers[j].type == 0){
+					//console.log("disabled")
 					turnsLoaded = 0;
 					break;
 				}
@@ -237,7 +253,7 @@ System.prototype.setTimeLoaded = function(){
 	this.loaded = turnsLoaded;
 }
 System.prototype.getTimeLoaded = function(){
-	return this.loaded;
+	return this.loaded - this.getBoostEffect("Reload") * this.getBoostLevel();
 }
 System.prototype.getBoostLevel = function(){
 	var level = 0;
@@ -272,7 +288,11 @@ System.prototype.getBoostEffectElements = function(table){
 
 
 System.prototype.getBoostDiv = function(){
+	if (this.id == 3 && this.parentId == 2){
+		console.log("ding");
+	}
 	if (this.destroyed || !this.effiency){return};
+	if (this.boostEffect.length == 1 && this.boostEffect[0].type == "Reload" && this.getLoadLevel() == 1){return;}
 	var div = document.createElement("div");
 		div.className = "boostDiv disabled";
 		$(div).data("shipId", this.parentId);
@@ -386,6 +406,7 @@ System.prototype.doUnboost = function(){
 
 	if (this.getBoostEffect("Reload")){
 		$(this.element).find(".loadLevel").css("width", this.getLoadLevel() * 100 + "%");
+		$("#systemDetailsDiv").find(".loading").html(this.getTimeLoaded() + " / " + this.reload);
 	}
 	return true;
 }
@@ -398,6 +419,7 @@ System.prototype.doBoost = function(){
 
 	if (this.getBoostEffect("Reload")){
 		$(this.element).find(".loadLevel").css("width", this.getLoadLevel() * 100 + "%");
+		$("#systemDetailsDiv").find(".loading").html(this.getTimeLoaded() + " / " + this.reload);
 	}
 }
 System.prototype.isPowered = function(){
@@ -1408,7 +1430,7 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 		}
 	}
 
-	$(table).append($("<tr>").append($("<td>").html("Loading")).append($("<td>").html(this.getTimeLoaded() + " / " + this.reload)));
+	$(table).append($("<tr>").append($("<td>").html("Loading")).append($("<td>").addClass("loading").html(this.getTimeLoaded() + " / " + this.reload)));
 
 	if (this instanceof Launcher){
 		if (this.ammo != undefined){
@@ -2674,7 +2696,7 @@ Hangar.prototype.showHangarControl = function(){
 Hangar.prototype.doLaunchFlight = function(){
 	for (var i = game.ships.length-1; i >= 0; i--){
 		if (game.ships[i].userid == game.userid){
-			if (game.ships[i].flight){
+			if (game.ships[i].flight && game.ships[i].available == game.turn){
 				if (!game.ships[i].actions[0].resolved){
 					if (game.ships[i].launchdata.shipid == window.aUnit && game.ships[i].launchdata.systemid == this.id){
 						//console.log("splice");

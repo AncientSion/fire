@@ -16,13 +16,13 @@ class Altarian extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 21);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 400, 21);
 		$front->systems[] = new LightIon($this->getId(), $this->id, 240, 120);
 		$front->systems[] = new MediumTwinIon($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new LightIon($this->getId(), $this->id, 240, 120);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 20);
+		$right = new Structure($this->getId(), $this->id, 30, 150, 325, 20);
 		$right->systems[] = new MediumSingleIon($this->getId(), $this->id, 0, 120);
 		$right->systems[] = new MediumSingleIon($this->getId(), $this->id, 0, 120);
 		$structs[] = $right;
@@ -32,7 +32,7 @@ class Altarian extends Medium {
 		$aft->systems[] = new MediumTwinIon($this->getId(), $this->id, 60, 300);
 		$structs[] = $aft;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 20);
+		$left = new Structure($this->getId(), $this->id, 210, 330, 325, 20);
 		$left->systems[] = new MediumSingleIon($this->getId(), $this->id, 240, 360);
 		$left->systems[] = new MediumSingleIon($this->getId(), $this->id, 240, 360);
 		$structs[] = $left;

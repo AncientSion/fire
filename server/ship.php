@@ -133,7 +133,7 @@ class Ship {
 	}
 
 	public function setBaseStats(){
-		$this->baseHitChance = ceil(pow($this->mass, 1/3)*5);
+		$this->baseHitChance = ceil(pow($this->mass, 1/3)*5)*5;
 		$this->baseTurnCost = round(pow($this->mass, 1.25)/30000, 2);
 		$this->baseTurnDelay = round(pow($this->mass, 0.5)/35, 2);
 		$this->baseImpulseCost = round(pow($this->mass, 1.2)/600, 2);
@@ -275,7 +275,10 @@ class Ship {
 			$angle += 360;
 		}
 
-		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "angle" => $angle, "thrust" => $this->currentImpulse);
+		if (sizeof($this->actions)){
+			return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "angle" => $angle, "thrust" => $this->currentImpulse);
+		} else 
+			return array("id" => $this->id, "x" => $this->x, "y" => $this->y, "delay" => $delay, "angle" => $angle, "thrust" => $this->currentImpulse);
 	}
 
 	public function setRemainingDelay($turn){
@@ -579,13 +582,14 @@ class Ship {
 		//Debug::log("roll: ".$roll);
 		$current += $main;
 		if ($roll <= $current){
-			//Debug::log("hitting MAIN");
+			//Debug::log($roll.", hitting MAIN");
 			return $this->getPrimaryHitSystem();
 		}
 		else {
 			for ($i = 0; $i < sizeof($struct->systems); $i++){
 				if (!$struct->systems[$i]->destroyed){
 					$current += $struct->systems[$i]->getHitChance();
+					//Debug::log("current: ".$current);
 					if ($roll <= $current){
 						//Debug::log("EXTERNAL HIT: ".$struct->systems[$i]->name." #".$struct->systems[$i]->id);
 						return $struct->systems[$i];
@@ -623,15 +627,17 @@ class Ship {
 		}
 		$roll = mt_rand(0, $total);
 		$current += $this->primary->getHitChance();
+		//Debug::log("roll: ".$roll);
 
 		if ($roll <= $current){
-			//Debug::log("hitting main structure");
+			//Debug::log("current: ".$current.", hitting main structure");
 			return $this->primary;
 		}
 		else {
 			//Debug::log("hitting internal");
 			for ($i = 0; $i < sizeof($valid); $i++){
 				$current += $valid[$i]->getHitChance();
+				//Debug::log("current: ".$current);
 				if ($roll <= $current){
 					//Debug::log("non primary HIT --- ".$valid[$i]->name." #".$valid[$i]->id);
 					return $valid[$i];
@@ -965,7 +971,7 @@ class Ship {
 
 
 class UltraHeavy extends Ship {
-	public $baseImpulse = 150;
+	public $baseImpulse = 140;
 	public $traverse = 3;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -981,7 +987,7 @@ class UltraHeavy extends Ship {
 }
 
 class SuperHeavy extends Ship {
-	public $baseImpulse = 165;
+	public $baseImpulse = 155;
 	public $traverse = 2;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -997,7 +1003,7 @@ class SuperHeavy extends Ship {
 }
 
 class Heavy extends Ship {
-	public $baseImpulse = 180;
+	public $baseImpulse = 170;
 	public $traverse = 1;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -1013,7 +1019,7 @@ class Heavy extends Ship {
 }
 
 class Medium extends Ship {
-	public $baseImpulse = 195;
+	public $baseImpulse = 180;
 	public $traverse = 0;
 
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -1033,7 +1039,7 @@ class Medium extends Ship {
 }
 
 class Light extends Ship {
-	public $baseImpulse = 210;
+	public $baseImpulse = 190;
 	public $traverse = -1;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -1053,7 +1059,7 @@ class Light extends Ship {
 }
 
 class SuperLight extends Ship {
-	public $baseImpulse = 225;
+	public $baseImpulse = 200;
 	public $traverse = -2;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){

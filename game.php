@@ -273,16 +273,29 @@ echo "</script>";
 			<div id="weaponAimTableWrapper" class="disabled">
 				<table id="targetInfo">
 					<tr>
-						<th width=18%>Target</th>
-						<th width=15%>Type</th>
-						<th width=9%>Base</th>
-						<th width=10%>Thrust</th>
-						<th width=9%>Lock</th>
-						<th width=9%>Mask</th>
-						<th width=10%>Final</th>
-						<th width=10%>Dist</th>
+						<th width=20%>Target</th>
+						<th width=20%>Type</th>
+						<th width=20%>Section</th>
+						<th width=20%>Armour</th>
+						<th width=20%>Dist</th>
 					</tr>
-					<tr id="targetData">
+					<tr id="targetData1">
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr><td colSpan=5 height=10px></td></tr>
+					<tr>
+						<th>Base Hit</th>
+						<th>Thrust Mod</th>
+						<th>Lock Mod</th>
+						<th>Mask Mod</th>
+						<th>Final Hit</th>
+					</tr>
+					<tr id="targetData2">
+						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>

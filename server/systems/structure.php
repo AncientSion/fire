@@ -99,7 +99,7 @@ class Primary {
 	}
 
 	public function getHitChance(){
-		return $this->remaining;
+		return $this->integrity;
 	}
 
 

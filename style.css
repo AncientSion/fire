@@ -1178,7 +1178,6 @@ table, th, tr, td {
 	position: absolute;
 	text-align: center;
 	width: 500px;
-	opacity: 0.8;
 }
 
 #weaponAimTableWrapper.disabled {
@@ -1194,11 +1193,23 @@ table, th, tr, td {
 	width: 97%;
 }
 
+
+#targetInfo tr, #weaponInfo tr {
+	border-left: 1px solid white;
+	border-right: 1px solid white;
+	border-top: 1px solid white;
+	border-bottom: 1px solid white;
+}
+
+
 #targetInfo th, #weaponInfo th {
-	color: #00e7ff;
+	fcolor: #00e7ff;
+	color: black;
+	background-color: white;
 	text-align: center;
 	font-size: 14px;
-	border: 1px solid white;
+	border-top: 2px solid white;
+	border-bottom: 2px solid white;
 }
 
 #targetInfo {

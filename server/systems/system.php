@@ -145,7 +145,7 @@ class System {
 	}
 
 	public function getHitChance(){
-		return $this->mass*7;
+		return $this->mass*5;
 	}
 
 	public function testCrit($turn){

@@ -378,10 +378,14 @@ class Manager {
 			case 3; // from damage control to NEW TURN - deploymnt
 				if ($this->handleDamageControlPhase()){
 					$this->endTurn();
-					$this->startNewTurn();
-					$this->startDeploymentPhase();
+					//$this->startDeploymentPhase();
+					$this->turn++;
+					$this->phase = 2;
+					DBManager::app()->setGameTurnPhase($this->gameid, $this->turn, $this->phase);
+					$this->updatePlayerStatus("waiting");
 				}
 				break;
+		
 			default:
 				break;
 		}

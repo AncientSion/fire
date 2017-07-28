@@ -156,9 +156,9 @@ function Game(data, userid){
 			if (this.ships[i].userid == this.userid && this.ships[i].available <= game.turn){
 				if (this.ships[i].ship){
 					for (var j = 0; j < this.ships[i].primary.systems.length; j++){
-						if (this.ships[i].primary.systems[j].name == "Sensor" && !this.ships[i].primary.systems[j].destroyed){
+						if (this.ships[i].primary.systems[j].name == "Sensor" && !this.ships[i].primary.systems[j].disabled && !this.ships[i].primary.systems[j].destroyed){
 							if (!this.ships[i].primary.systems[j].used){
-								popup("You havent setup EW for unit (#" + this.ships[i].id + ")"); 
+								popup("Please setup EW for unit (#" + this.ships[i].id + ")"); 
 								this.ships[i].select();
 								return true;
 							}

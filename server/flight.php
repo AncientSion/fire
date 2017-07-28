@@ -16,7 +16,7 @@ class Flight extends Mini {
 	public $profile = 0;
 	public $primary = false;
 	public $dogfights = array();
-	public $baseImpulse = 300;
+	public $baseImpulse = 250;
 	public $traverse = -3;
 	public $turnAngle = 40;
 	public $ep = 500;
