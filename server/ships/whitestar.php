@@ -16,17 +16,17 @@ class WhiteStar extends Light {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 500, 28);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 500, 21);
 		$front->systems[] = new FusionPulsar($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new NeutronAccelerator($this->getId(), $this->id, 330, 30);
 		$front->systems[] = new FusionPulsar($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 425, 25);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 425, 19);
 		$right->systems[] = new FusionPulsar($this->getId(), $this->id, 0, 60);
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 425, 25);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 425, 19);
 		$left->systems[] = new FusionPulsar($this->getId(), $this->id, 300, 360);
 		$structs[] = $left;
 
@@ -43,7 +43,7 @@ class WhiteStar extends Light {
 		$this->primary->systems[] = $e;
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 60);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 60, 850, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 60, $this->getPowerReq()+4);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 60, +4);
 	}
 }
 

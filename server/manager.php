@@ -198,6 +198,9 @@ class Manager {
 					$this->ships[$i]->hideActions();
 				}
 			}
+			//if ($this->ships[$i]->id == 11){
+			//	Debug::log("11: ".$this->ships[$i]->currentImpulse);
+			//}
 		}
 
 		switch ($this->phase){
@@ -216,6 +219,7 @@ class Manager {
 				} break;
 			default: break;
 		}
+
 		return $this->ships;
 	}
 
@@ -376,16 +380,15 @@ class Manager {
 				$this->startDamageControlPhase();
 				break;
 			case 3; // from damage control to NEW TURN - deploymnt
-				if ($this->handleDamageControlPhase()){
-					$this->endTurn();
-					//$this->startDeploymentPhase();
-					$this->turn++;
-					$this->phase = 2;
-					DBManager::app()->setGameTurnPhase($this->gameid, $this->turn, $this->phase);
-					$this->updatePlayerStatus("waiting");
-				}
+				$this->handleDamageControlPhase();
+				$this->endTurn();
+				$this->startNewTurn();
+				$this->startDeploymentPhase();
+				//$this->turn++;
+				//$this->phase = 2;
+				//DBManager::app()->setGameTurnPhase($this->gameid, $this->turn, $this->phase);
+				//$this->updatePlayerStatus("waiting");
 				break;
-		
 			default:
 				break;
 		}
@@ -402,7 +405,7 @@ class Manager {
 	}
 
 	public function pickReinforcements(){
-		//if ($this->turn < 2){return;}
+		if ($this->turn < 2){return;}
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			$avail = 0;
@@ -419,7 +422,7 @@ class Manager {
 
 			$picks = array();
 			$now = 0;
-			$max = mt_rand(1, 2);
+			$max = 1;
 			if (!$max){continue;}
 			$validShips = $this->getReinforcementShips($this->playerstatus[$i]["faction"]);
 			//$validShips = array_merge($validShips, $this->getFlights());
@@ -854,25 +857,25 @@ class Manager {
 			$start = Math::addAngle(0 + $w-$ship->getFacing(), $ew->angle);
 			$end = Math::addAngle(360 - $w-$ship->getFacing(), $ew->angle);
 
-			Debug::log("specific EW for ship #".$ship->id.", EW from ".$start." to ".$end.", dist: ".$ew->dist);
+			//Debug::log("specific EW for ship #".$ship->id.", EW from ".$start." to ".$end.", dist: ".$ew->dist);
 			for ($i = 0; $i < sizeof($this->ships); $i++){
 				if ($this->ships[$i]->id == $ship->id || $ship->userid == $this->ships[$i]->userid){continue;}
 				$target = $this->ships[$i]->getCurrentPosition();
 				if (Math::getDist2($origin, $target) <= $ew->dist){
 					$a = Math::getAngle2($origin, $target);
-					Debug::log("versus #".$this->ships[$i]->id.", a: ".$a);
+					//Debug::log("versus #".$this->ships[$i]->id.", a: ".$a);
 					if (Math::isInArc($a, $start, $end)){
 						if ($ew->type == 0){ // LOCK
-							Debug::log("locking onto: #".$this->ships[$i]->id);
+							//Debug::log("locking onto: #".$this->ships[$i]->id);
 							$ship->locks[] = array($this->ships[$i]->id, 0.5);
 						}
 						else if ($ew->type == 1){ // MASK
 							if (!$this->ships[$i]->flight){
-								Debug::log("masking from #".$this->ships[$i]->id);
+								//Debug::log("masking from #".$this->ships[$i]->id);
 								$ship->masks[] = array($this->ships[$i]->id, 0.5);
 							}
 						}
-					} else Debug::log("out of arc");
+					}// else Debug::log("out of arc");
 				}
 			}
 
@@ -894,7 +897,7 @@ class Manager {
 					}
 
 					if ($range && Math::isInArc(Math::getAngle2($origin, $target), $start, $end)){
-						Debug::log("locking onto: #".$this->ballistics[$i]->id);
+						//Debug::log("locking onto: #".$this->ballistics[$i]->id);
 						$ship->locks[] = array($this->ballistics[$i]->id, 0.5);
 					}
 				}

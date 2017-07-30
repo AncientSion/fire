@@ -4,6 +4,7 @@ class PrimarySystem extends System {
 	public $name = "PrimarySystem";
 	public $display = "PrimarySystem";
 	public $powerReq = 0;
+	public $internal = 1;
 	
 	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
 		parent::__construct($id, $parentId, $output, $destroyed);
@@ -60,6 +61,11 @@ class Reactor extends PrimarySystem {
 	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
         parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
     }
+
+    public function setOutput($add){
+    	//Debug::log("out: ".$this->output.", add: ".$add);
+    	$this->output = $this->output + $add;
+    }
 }
 
 class LifeSupport extends PrimarySystem {
@@ -76,9 +82,9 @@ class Engine extends PrimarySystem {
 	public $display = "Engine";
 
 	function __construct($id, $parentId, $mass, $output = 0, $destroyed = 0){
-		$this->powerReq = ceil($output / 5);
+		$this->powerReq = ceil($output / 8);
 		$this->boostEffect[] = new Effect("Output", 0.15);
-        parent::__construct($id, $parentId, $mass, $output, ceil($this->powerReq/5), $destroyed);
+        parent::__construct($id, $parentId, $mass, $output, ceil($this->powerReq/3), $destroyed);
     }
 }
 
@@ -88,11 +94,11 @@ class Sensor extends PrimarySystem {
 	public $ew = array();
 
 	function __construct($id, $parentId, $mass, $output = 0, $effiency, $destroyed = 0){
-		$this->powerReq = floor($output/30);
+		$this->powerReq = floor($output/60);
 		$this->boostEffect[] = new Effect("Output", 0.10);
 		$this->modes = array("Lock", "Scramble", "Sweep", "Mask");
 		$this->states = array(0, 0, 0, 0);
-        parent::__construct($id, $parentId, $mass, $output, ceil($this->powerReq/5), $destroyed);
+        parent::__construct($id, $parentId, $mass, $output, ceil($this->powerReq/3), $destroyed);
     }
 
     public function hideEW($turn){
@@ -131,8 +137,6 @@ class Sensor extends PrimarySystem {
 		}
 		return false;
 	}
-
-
 }
 
 class Hangar extends Weapon {
@@ -141,6 +145,7 @@ class Hangar extends Weapon {
 	public $display = "Hangar";
 	public $loads = array();
 	public $reload = 2;
+	public $utility = 1;
 
 	function __construct($id, $parentId, $start, $end, $output, $effiency, $loads, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

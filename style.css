@@ -26,14 +26,13 @@ body {
 	border: 5px solid red;
 	padding: 20px;
 	width: 400px;
-	height: 70px;
 	z-index: 20;
 }
 
 #popupText {
 	margin: auto;
 	text-align: center;
-	width: 80%;
+	width: 90%;
 	left: 500px;
 	top: 500px;
 	background-color: black;
@@ -172,6 +171,12 @@ table, th, tr, td {
 	border: 1px solid white
 }
 
+#deployTable .head, #reinforceTable .head {
+	font-size: 18;
+	background-color: lightBlue;
+	color: black;
+}
+
 #deployTable tr.selected {
 	box-shadow: inset 0 0 0.5em 0.5em #27e627;
 }
@@ -261,17 +266,6 @@ table, th, tr, td {
 	border-collapse: collapse;
 	border: 1px solid white;
 	background-color: black;
-}
-
-#confirmFleet {
-	font-size: 22px;
-	background-color: blue;
-	color: white;
-	cursor: pointer;
-}
-
-#confirmFleet:hover {
-	color: red;
 }
 
 #shipsBoughtTable {
@@ -401,19 +395,19 @@ table, th, tr, td {
 }
 
 .buttonSelection {
+	font-size: 22px;
+	background-color: blue;
+	color: white;
 	cursor: pointer;
-	background-color: yellow;
-	color: black;
 }
 
 .buttonSelection:hover{
-	cursor: pointer;
-	background-color: white;
-	color: black;
+	color: red;
 }
 
-.buttonSelection td {
-	font-size: 20px;
+#totalShipCost img {
+	width: 20px;
+	height: 20px;
 }
 
 #game {
@@ -871,6 +865,9 @@ table, th, tr, td {
 	margin: auto;
 	width: 90%;
 }
+#totalShipCost td {
+	font-size: 16px;
+}
 
 .shipDiv th, td {
 	margin: auto;
@@ -1170,13 +1167,11 @@ table, th, tr, td {
 
 #weaponAimTableWrapper {
 	background-color: black;
-	color: white;
-	border: 2px solid white;
 	border-radius: 5px;
+	border: 2px solid white;
 	z-index: 11;
 	padding: 3 3 3 3;
 	position: absolute;
-	text-align: center;
 	width: 500px;
 }
 
@@ -1184,32 +1179,29 @@ table, th, tr, td {
 	display: none;
 }
 
+#weaponInfo {
+	position: relative;
+}
+
 #targetInfo, #weaponInfo {
-	background-color: black;
+	border: 1px solid white;
 	color: white;
 	z-index: 10;
 	margin: auto;
 	border-collapse: collapse;
-	width: 97%;
+	width: 100%;
 }
-
 
 #targetInfo tr, #weaponInfo tr {
-	border-left: 1px solid white;
-	border-right: 1px solid white;
-	border-top: 1px solid white;
-	border-bottom: 1px solid white;
 }
 
+.final {
+	font-size: 20px;
+}
 
 #targetInfo th, #weaponInfo th {
-	fcolor: #00e7ff;
-	color: black;
-	background-color: white;
 	text-align: center;
-	font-size: 14px;
-	border-top: 2px solid white;
-	border-bottom: 2px solid white;
+	background-color: #001ad2;
 }
 
 #targetInfo {

@@ -16,16 +16,16 @@ class Olympus extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 350, 19);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 350, 17);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		//$front->systems[] = new Hangar($this->getId(), $this->id, 330, 30, 400, 12, array("Aurora", "Thunderbolt"));
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 17);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 16);
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 300, 17);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 300, 16);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -39,7 +39,7 @@ class Olympus extends Medium {
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 40, 75);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 40);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 40, 500, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 40, $this->getPowerReq());
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 40);
 	}
 }
 

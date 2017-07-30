@@ -52,9 +52,10 @@ class Ship {
 		$this->available = $available;
 		$this->status = $status;
 		$this->destroyed = $destroyed;
-		
-		$this->addStructures();
+
 		$this->addPrimary();
+		$this->addStructures();
+		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq());
 	}
 
 	public function getId(){
@@ -133,7 +134,8 @@ class Ship {
 	}
 
 	public function setBaseStats(){
-		$this->baseHitChance = ceil(pow($this->mass, 1/3)*5)*5;
+		$this->baseHitChance = ceil(pow($this->mass, 1/3)*5);
+		//$this->baseHitChance = ceil(pow($this->mass, 0.3)*4)+20;
 		$this->baseTurnCost = round(pow($this->mass, 1.25)/30000, 2);
 		$this->baseTurnDelay = round(pow($this->mass, 0.5)/35, 2);
 		$this->baseImpulseCost = round(pow($this->mass, 1.2)/600, 2);
@@ -178,11 +180,11 @@ class Ship {
 	public function hideActions(){;
 		for ($i = sizeof($this->actions)-1; $i >= 0; $i--){
 			if (!$this->actions[$i]->resolved){
-				switch($this->actions[$i]->type){
+				/*switch($this->actions[$i]->type){
 					case "turn": $this->remainingDelay -= $this->actions[$i]->delay; break;
 					case "speedChange": $this->currentImpulse -= $this->getImpulseStep()*$this->actions[$i]->dist; break;
 					default: break;
-				}
+				}*/
 				array_splice($this->actions, $i, 1);
 			}
 		}
@@ -193,19 +195,25 @@ class Ship {
 	}
 
 	public function setCurrentImpulse($turn){
+		//if (!$this->flight){return;}
+		//Debug::log("id: ".$this->id);
 		$impulse = $this->currentImpulse;
-
+		//Debug::log("c ".$this->currentImpulse);
 		if ($turn == $this->available){
+			//Debug::log("launchTurn");
 			$impulse = $this->getBaseImpulse();
 		}
 		$step = $this->getImpulseStep();
+			//Debug::log("step: ".$step);
 
 		for ($i = 0; $i < sizeof($this->actions); $i++){
 			if (!$this->actions[$i]->resolved){continue;}
 			if ($this->actions[$i]->type == "speedChange"){
+				//Debug::log("add: ".$$step*$this->actions[$i]->dist);
 				$impulse += $step*$this->actions[$i]->dist;
 			}
 		}
+		//Debug::log("end: ".$this->currentImpulse);
 		$this->currentImpulse = $impulse;
 	}
 
@@ -275,10 +283,10 @@ class Ship {
 			$angle += 360;
 		}
 
-		if (sizeof($this->actions)){
+		//if (sizeof($this->actions)){
 			return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "angle" => $angle, "thrust" => $this->currentImpulse);
-		} else 
-			return array("id" => $this->id, "x" => $this->x, "y" => $this->y, "delay" => $delay, "angle" => $angle, "thrust" => $this->currentImpulse);
+		//} else 
+		///	return array("id" => $this->id, "x" => $this->x, "y" => $this->y, "delay" => $delay, "angle" => $angle, "thrust" => $this->currentImpulse);
 	}
 
 	public function setRemainingDelay($turn){
@@ -483,6 +491,29 @@ class Ship {
 			}
 			$fire->resolved = 1;
 		}
+	}
+
+	public function getTotalMass(){
+		$data = array();
+
+		$hangar = 0;
+		$main = $this->primary->integrity;
+		$guns = 0;
+		$int = 0;
+
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+			$int += $this->primary->systems[$i]->mass;
+		}
+
+		foreach ($this->structures as $struct){
+			foreach ($struct->systems as $sys){
+				if ($sys->utility){
+					$hangar += $sys->mass;
+				} else $guns += $sys->mass;
+			}
+		}
+
+		return array($main, $int, $guns, $hangar);
 	}
 
 	public function resolveBallisticFireOrder($fire){

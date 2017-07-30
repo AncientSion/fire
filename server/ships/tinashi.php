@@ -16,7 +16,7 @@ class Tinashi extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$left = new Structure($this->getId(), $this->id, 240, 360, 475, 26);
+		$left = new Structure($this->getId(), $this->id, 240, 360, 475, 22);
 			$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
 			$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
 			$left->systems[] = new EMPulseCannon($this->getId(), $this->id, 180, 0);
@@ -24,14 +24,14 @@ class Tinashi extends Medium {
 			$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 		$structs[] = $left;
 
-		$right = new Structure($this->getId(), $this->id, 0, 120, 475, 26);
+		$right = new Structure($this->getId(), $this->id, 0, 120, 475, 22);
 			$right->systems[] = new FusionCannon($this->getId(), $this->id, 0, 120);
 			$right->systems[] = new FusionCannon($this->getId(), $this->id, 0, 120);
 			$right->systems[] = new EMPulseCannon($this->getId(), $this->id, 0, 180);
 			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 120, 240, 400, 22);
+		$aft = new Structure($this->getId(), $this->id, 120, 240, 400, 18);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
 			$aft->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
@@ -50,7 +50,7 @@ class Tinashi extends Medium {
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 95, 110);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 95);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 95, 900, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 95, $this->getPowerReq()+4);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 95, +4);
 	}
 }
 

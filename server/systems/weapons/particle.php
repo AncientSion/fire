@@ -19,7 +19,7 @@ class LightIon extends Particle {
 	public $shots = 4;
 	public $animColor = "orange";
 	public $projSize = 2;
-	public $projSpeed = 9;
+	public $projSpeed = 20;
 	public $reload = 1;
 	public $mass = 13;
 	public $powerReq = 2;
@@ -43,7 +43,7 @@ class MediumSingleIon extends LightIon {
 	public $projSpeed = 6;
 	public $mass = 16;
 	public $powerReq = 3;
-	public $traverse = -1;
+	public $traverse = -2;
 	public $effiency = 3;
 	public $maxBoost = 1;
 

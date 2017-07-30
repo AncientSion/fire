@@ -4,6 +4,7 @@ class System {
 	public $id;
 	public $parentId;
 	public $weapon = 0;
+	public $utility = 0;
 	public $destroyed = 0;
 	public $disabled = 0;
 	public $locked = 0;
@@ -23,6 +24,7 @@ class System {
 	public $boostEffect = array();
 	public $modes = array();
 	public $armourMod;
+	public $internal = 0;
 
 	function __construct($id, $parentId, $output = 0, $destroyed = 0){
 		$this->id = $id;
@@ -145,7 +147,7 @@ class System {
 	}
 
 	public function getHitChance(){
-		return $this->mass*5;
+		return $this->mass*7;
 	}
 
 	public function testCrit($turn){
@@ -183,15 +185,19 @@ class System {
 		for ($i = 0; $i < sizeof($valid); $i++){
 			if (mt_rand(0, 1)){
 				$mod = 0;
-				if ($valid[$i][0] != "Disabled"){
-					$mod = (round($dmg/20)/10);
-				}
+				$duration = $valid[$i][2];
 
-				if ($new >= $this->integrity * 0.3 && mt_rand(0, 1)){
-					$duration = 0;
+				if ($valid[$i][0] == "Disabled"){ // is disabled && internal, 50% duration +1;
+					if (!$this->internal){
+						$duration += mt_rand(0, 1);
+					}
 				}
-				else {
-					$duration = $valid[$i][2] + mt_rand(0, 1);
+				else { // output, dmg, accuracy
+					$mod = (round($dmg/20)/10);
+
+					if ($this->internal){
+						$duration -= mt_rand(0, 1);
+					}
 				}
 
 				$this->crits[] = new Crit(

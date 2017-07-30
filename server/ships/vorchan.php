@@ -16,7 +16,7 @@ class Vorchan extends Light {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 225, 16);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 225, 15);
 		$front->systems[] = new MediumSingleIon($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60,	array(array("Hasta", 8, 4), array("Vanguard", 10, 5)));
 		$front->systems[] = new MediumSingleIon($this->getId(), $this->id, 300, 60);
@@ -37,11 +37,11 @@ class Vorchan extends Light {
 
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 375);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 55);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 55, 32);
-		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 55);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 55, 500, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 55, $this->getPowerReq());
+		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 45);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, 45, 50);
+		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 45);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 45, 500, 10);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 45);
 	}
 }
 

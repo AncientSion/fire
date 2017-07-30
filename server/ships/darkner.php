@@ -16,16 +16,16 @@ class Darkner extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 18);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 16);
 		$front->systems[] = new MediumTwinIon($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new LightIon($this->getId(), $this->id, 240, 120);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 16);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 15);
 		$right->systems[] = new HeavyIon($this->getId(), $this->id, 315, 45);
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 16);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 15);
 		$left->systems[] = new HeavyIon($this->getId(), $this->id, 315, 45);
 		$structs[] = $left;
 
@@ -40,7 +40,7 @@ class Darkner extends Medium {
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 95, 105);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 95);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 95, 800, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 95, $this->getPowerReq());
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 95);
 	}
 }
 

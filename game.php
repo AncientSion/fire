@@ -275,8 +275,8 @@ echo "</script>";
 					<tr>
 						<th width=20%>Target</th>
 						<th width=20%>Type</th>
-						<th width=20%>Section</th>
 						<th width=20%>Armour</th>
+						<th width=20%></th>
 						<th width=20%>Dist</th>
 					</tr>
 					<tr id="targetData1">
@@ -308,7 +308,7 @@ echo "</script>";
 						<th width=10%>Dmg</th>
 						<th width=19%>Tracking</th>
 						<th width=12%>Range</th>
-						<th width=12%>Final</th>
+						<th width=12%>End</th>
 					</tr>
 				</table>
 			</div>
@@ -340,7 +340,7 @@ echo "</script>";
 			<div id="deployWrapper" class="disabled">
 				<table id="deployTable">
 					<tr>
-						<th style="font-size: 18px; background-color: lightBlue; color: black" colSpan=3>
+						<th class="head" colSpan=3>
 							Incoming Units
 						</th>
 					</tr>
@@ -401,7 +401,7 @@ echo "</script>";
 				</table>
 				<table id="reinforceTable">
 					<tr>
-						<th style="font-size: 18px; background-color: lightBlue; color: black;" colSpan=4>
+						<th class="head" colSpan=4>
 							Reinforcements
 						</th>
 					</tr>

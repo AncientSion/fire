@@ -18,7 +18,7 @@ class Flight extends Mini {
 	public $dogfights = array();
 	public $baseImpulse = 250;
 	public $traverse = -3;
-	public $turnAngle = 40;
+	public $turnAngle = 45;
 	public $ep = 500;
 
 	function __construct($id, $userid, $available, $status, $destroyed){

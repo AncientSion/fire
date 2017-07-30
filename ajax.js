@@ -184,6 +184,7 @@ window.ajax = {
 	},
 
 	confirmFiringOrders: function(callback){
+		//console.log("ding"); return;
 		var fireOrders = [];
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid == game.userid){

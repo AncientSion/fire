@@ -65,11 +65,11 @@ class LightParticleBeam extends Laser {
 	public $animColor = "blue";
 	public $rakeTime = 22;
 	public $beamWidth = 1;
-	public $minDmg = 33;
-	public $maxDmg = 46;
+	public $minDmg = 27;
+	public $maxDmg = 34;
 	public $optRange = 600;
 	public $dmgLoss = 8;
-	public $accDecay = 100;
+	public $accDecay = 120;
 	public $shots = 1;
 	public $reload = 1;
 	public $powerReq = 2;
@@ -146,7 +146,7 @@ class HeavyLaser extends Laser {
 	public $optRange = 800;
 	public $dmgLoss = 6;
 	public $accDecay = 60;
-	public $reload = 1;
+	public $reload = 3;
 	public $powerReq = 6;
 	public $rakes = 3;
 	public $effiency = 4;

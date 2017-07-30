@@ -15,8 +15,8 @@ function Ship(data){
 	this.userid = data.userid;
 	this.shipType = data.shipType;
 	this.available = data.available;
-	this.baseHitChance = data.baseHitChance;
-	this.baseImpulse = data.baseImpulse;
+	this.baseHitChance = data.baseHitChance || 0;
+	this.baseImpulse = data.baseImpulse || 0;
 	this.traverse = data.traverse
 	this.status = data.status;
 	this.actions = data.actions || [];
@@ -25,12 +25,12 @@ function Ship(data){
 	this.turnAngle = data.turnAngle;
 	this.turnStep = data.turnStep;
 	this.turnMod = 1;
-	this.baseTurnDelay = data.baseTurnDelay;
-	this.baseTurnCost = data.baseTurnCost;
-	this.baseImpulseCost = data.baseImpulseCost;
-	this.currentImpulse = data.currentImpulse;
-	this.remainingImpulse = data.remainingImpulse;
-	this.remainingDelay = data.remainingDelay;
+	this.baseTurnDelay = data.baseTurnDelay || 0;
+	this.baseTurnCost = data.baseTurnCost || 0;
+	this.baseImpulseCost = data.baseImpulseCost || 0;
+	this.currentImpulse = data.currentImpulse || 0;
+	this.remainingImpulse = data.remainingImpulse || 0;
+	this.remainingDelay = data.remainingDelay || 0;
 
 	this.turnAngles = {};
 	this.moveAngles = {};
@@ -753,7 +753,6 @@ function Ship(data){
 	}
 
 	this.getRemainingImpulse = function(){
-
 		if (game.phase >= 1 && this.ship || game.phase >= 2 && this.flight){
 			return 0;
 		}
@@ -849,8 +848,12 @@ function Ship(data){
 			this.drawMoveArea(center, rem);
 		}
 
+		center = {x: this.x, y: this.y};
+		angle = this.facing
 		var turnEle = $("#game").find("#epButton")[0];
 		var p1 = getPointInDirection(150/cam.z, addToDirection(angle, 90), center.x, center.y);
+
+
 
 		$(turnEle)
 			.css("left", p1.x * cam.z + cam.o.x - $(turnEle).width()/2)
@@ -1162,6 +1165,7 @@ function Ship(data){
 			return;
 		}
 		else if (this.ship && game.phase == 0 || this.flight && game.phase == 1){
+		//else if (true){
 			this.setMoveTranslation();
 
 			planCtx.strokeStyle = "#00ea00";
@@ -1319,8 +1323,11 @@ function Ship(data){
 	}
 
 	this.drawTurnUI = function(){
-		var center = this.getPlannedPosition();
-		var angle = this.getPlannedFacing();
+		//var center = this.getPlannedPosition();
+		//var angle = this.getPlannedFacing();
+
+		var center = {x: this.x, y: this.y};
+		var angle = this.facing;
 		var turnEle = $("#game").find("#turnButton")[0];
 		var p1 = getPointInDirection(150/cam.z, addToDirection(angle, -90), center.x, center.y);
 		$(turnEle)
@@ -1797,14 +1804,6 @@ function Ship(data){
 
 	this.getBaseHitChance = function(){
 		return this.baseHitChance;
-	}
-
-	this.getHitSectionFromAngle = function(a){
-		for (var i = 0; i < this.structures.length; i++){
-			if (isInArc(a, this.structures[i].start, this.structures[i].end)){
-				return this.structures[i];
-			}
-		}
 	}
 
 	this.getHitChanceFromAngle = function(angle){
@@ -2604,7 +2603,7 @@ function Ship(data){
 	//	return isInArc(getCompassHeadingOfPoint(loc, pos, facing), start, end);
 
 	this.getOffensiveBonus = function(t){
-		return 0
+		//return 0
 		var tPos;
 		if (this.flight){return false;}
 		if (t.salvo){
@@ -2631,7 +2630,7 @@ function Ship(data){
 	}
 
 	this.getDefensiveBonus = function(s){
-		return 0
+		//return 0
 		if (this.flight || s.flight){
 			return 0;
 		}
@@ -2755,8 +2754,6 @@ Ship.prototype.switchDiv = function(){
 	}
 }
 
-
-
 Ship.prototype.setPreMoveFacing = function(){
 		if (this.actions.length && this.actions[0].type == "deploy"){
 			this.drawFacing = 0;
@@ -2785,11 +2782,11 @@ Ship.prototype.setPreMovePosition = function(){
 	}
 
 Ship.prototype.setPostMovePosition = function(){
-	if (!this.actionslength){
-		this.drawX = this.x;
-		this.drawY = this.y;
-		return;
-	}
+	//if (!this.actionslength){
+	//	this.drawX = this.x;
+	//	this.drawY = this.y;
+	//	return;
+	//}
 	if (this.ship){
 		this.drawX = this.actions[this.actions.length-1].x;
 		this.drawY = this.actions[this.actions.length-1].y;
@@ -2831,4 +2828,10 @@ Ship.prototype.setUnitGUI = function(){
 	$(this.element).toggleClass("selection");
 }
 
-	
+Ship.prototype.getArmourString = function(a){
+	for (var i = 0; i < this.structures.length; i++){
+		if (isInArc(a, this.structures[i].start, this.structures[i].end)){
+			return (this.structures[i].remainingNegation + " / " + this.structures[i].negation);
+		}
+	}
+}

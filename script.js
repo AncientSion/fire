@@ -168,7 +168,7 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 			impulse = 1 - vessel.getImpulseMod();
 			lock = ship.getOffensiveBonus(vessel);
 			mask = vessel.getDefensiveBonus(ship);
-			section = vessel.getHitSectionFromAngle(angle);
+			//section = vessel.getHitSectionFromAngle(angle);
 
 			//console.log("armour: "+section.remainingNegation + " / " + section.negation);
 
@@ -201,9 +201,9 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 				.empty()
 				.append($("<td>").html(vessel.name + " #" + vessel.id))
 				.append($("<td>").html(game.getUnitType(vessel.traverse) + " (" + vessel.traverse + ")"))
-				.append($("<td>").html(section.id))
-				.append($("<td>").html(section.remainingNegation + " / " + section.negation))
-				.append($("<td>").html(dist))
+				.append($("<td>").html(vessel.getArmourString(angle)))
+				.append($("<td>").html(""))
+				.append($("<td>").html(dist));
 
 			targetData2
 				.empty()
@@ -211,7 +211,7 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 				.append($("<td>").html(impulseString))
 				.append($("<td>").html(lockString))
 				.append($("<td>").html(maskString))
-				.append($("<td>").html(final + "%"))
+				.append($("<td>").addClass("final").html(final + "%"));
 		}
 	}
 	else {

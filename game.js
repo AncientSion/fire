@@ -56,9 +56,9 @@ function Game(data, userid){
 
 		//id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available, baseHitChance, baseImpulse
 		var flight = new Flight(
-			{id: this.getUniqueID(), name: "Flight", shipType: "Flight", x: pos.x, y: pos.y, facing: facing, ep: 0, baseTurnCost: 0, baseTurnDelay: 0,
-			faction: false, fSize: 20, mass: false, cost: false, profile: false, size: 0, userid: this.userid, available: this.turn, baseHitChance: 0, baseImpulse: 0}
-		)
+			{id: this.getUniqueID(), name: "Flight", shipType: "Flight",
+			x: pos.x, y: pos.y, facing: facing, ep: 0, baseImpulse: 250, currentImpulse: 250, fSize: 20, baseSize: 35, unitSize: 8, userid: this.userid, available: this.turn}
+		);
 
 		flight.deployed = 1;
 		flight.friendly = 1;
@@ -76,8 +76,7 @@ function Game(data, userid){
 				flight.structures.push(f);
 			}
 		}
-		flight.baseSize = 35;
-		flight.size = flight.baseSize + (flight.structures.length-1)*6;
+		flight.size = flight.baseSize + (flight.structures.length-1)*flight.unitSize;
 		flight.create();
 		flight.createBaseDiv();
 		game.ships.push(flight);
@@ -159,6 +158,7 @@ function Game(data, userid){
 						if (this.ships[i].primary.systems[j].name == "Sensor" && !this.ships[i].primary.systems[j].disabled && !this.ships[i].primary.systems[j].destroyed){
 							if (!this.ships[i].primary.systems[j].used){
 								popup("Please setup EW for unit (#" + this.ships[i].id + ")"); 
+								if (aUnit){this.getUnitById(aUnit).doUnselect();}
 								this.ships[i].select();
 								return true;
 							}
@@ -175,7 +175,8 @@ function Game(data, userid){
 			if (this.ships[i].userid == this.userid){
 				if ((game.phase == 0 && this.ships[i].ship) || (game.phase == 1 && this.ships[i].flight)){
 					if (this.ships[i].getRemainingImpulse() > 0){
-						popup("You have units with unused Impulse (#" + this.ships[i].id + ")"); 
+						popup("You have units with unused Impulse (#" + this.ships[i].id + ")");
+						if (aUnit){this.getUnitById(aUnit).doUnselect();}
 						this.ships[i].select();
 						return true;
 					}
@@ -186,7 +187,7 @@ function Game(data, userid){
 	}
 	
 	this.checkFireOrders = function(){
-		var warning = true;
+		var data = [];
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid == this.userid){
@@ -196,7 +197,7 @@ function Game(data, userid){
 				for (var j = 0; j < this.ships[i].structures.length; j++){
 					for (var k = 0; k < this.ships[i].structures[j].systems.length; k++){
 						if (this.ships[i].structures[j].systems[k].weapon){
-							if (this.ships[i].structures[j].systems[k].getLoadLevel() >= 1 && this.ships[i].structures[j].systems[k].isPowered()){
+							if (this.ships[i].structures[j].systems[k].isPowered() && this.ships[i].structures[j].systems[k].getLoadLevel() >= 1){
 								if (this.ships[i].structures[j].systems[k].hasFireOrder()){
 									hasFire = true;
 									break check;
@@ -205,16 +206,19 @@ function Game(data, userid){
 						}
 					}
 				}
-
-				if (hasFire){
-					warning = false;
-					break;
+				if (!hasFire){
+					data.push((this.ships[i].name + " #" + this.ships[i].id));
 				}
 			}
 		}
 
-		if (warning){
-			//popup("fire warning");
+		if (data.length){
+			var html = "The following units have no fireorders:";
+			for (var i = 0; i < data.length; i++){
+				html += "<p>" + data[i];
+			}
+			html += "</p><span style='cursor: pointer; padding: 3px; border: 1px solid white; font-size: 24px' onclick='ajax.confirmFiringOrders(goToLobby)'>Confirm Orders</span>";
+			popup(html);
 			return true;
 		}
 		return true;
@@ -232,12 +236,11 @@ function Game(data, userid){
 			}
 			else if (this.phase == 0 || this.phase == 1){ // SHIP MOVEMENT
 				if (this.checkMoves()){return;}
-				else {ajax.confirmMovement(goToLobby);}
+				else ajax.confirmMovement(goToLobby);
 			}
 			else if (this.phase == 2){
-				if (this.checkFireOrders()){
-					ajax.confirmFiringOrders(goToLobby);
-				}
+				if (this.checkFireOrders()){return;}
+				else ajax.confirmFiringOrders(goToLobby);
 			}
 			else if (this.phase == 3){ajax.confirmDamageControl(goToLobby);
 			}
@@ -2207,17 +2210,12 @@ Game.prototype.getUnitType = function (val){
 				.addClass("size40")
 				.addClass(name)
 				.click(function(e){
-					e.preventDefault(); e.stopPropagation();						
-					if (!aUnit && !game.getUnitById($(this).data("id")).selected){ // selecting
-						game.getUnitById($(this).data("id")).doSelect();
-					} else if (aUnit == $(this).data("id")){ // unselecting
-						game.getUnitById($(this).data("id")).doUnselect();
-					}
+					e.preventDefault(); e.stopPropagation();
+					game.getUnitById($(this).data("id")).select();
 				})
 				.contextmenu(function(e){
 					e.preventDefault(); e.stopPropagation();
-					var unit = game.getUnitById($(this).data("id"));
-					if (aUnit != unit.id){unit.switchDiv();}
+					game.getUnitById($(this).data("id")).select();
 				})
 				.hover(function(e){
 				var vessel = game.getUnitById($(this).data("id"));

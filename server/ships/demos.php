@@ -16,18 +16,18 @@ class Demos extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 20);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 18);
 		$front->systems[] = new MediumPlasma($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 330, 30,	array(array("Triarii", 9, 3), array("Javelin", 9, 3)));
 		$front->systems[] = new MediumPlasma($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 18);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 16);
 		$right->systems[] = new MediumSingleIon($this->getId(), $this->id, 300, 120);
 		$right->systems[] = new LightIon($this->getId(), $this->id, 300, 180);
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 18);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 16);
 		$left->systems[] = new MediumSingleIon($this->getId(), $this->id, 240, 60);
 		$left->systems[] = new LightIon($this->getId(), $this->id, 180, 60);
 		$structs[] = $left;
@@ -44,7 +44,7 @@ class Demos extends Medium {
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 90);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 90, 750, 10);
 		//$this->primary->systems[] = new Sensor($this->getId(), $this->id, 90, 750, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 90, $this->getPowerReq());
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 90);
 	}
 }
 

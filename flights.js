@@ -197,7 +197,7 @@ function Flight(data){
 		}
 		else {
 			var alive = (this.size - this.baseSize) / this.unitSize;
-			var oy = (this.structures.length-alive) * 4;
+			var oy = 0;
 			var index = 0;
 			for (var i = 0; i < this.structures.length; i++){
 				if (!this.structures[i].destroyed && !this.structures[i].disabled){
@@ -339,11 +339,11 @@ function Flight(data){
 			var h = $(fighterDiv).height();
 
 			var x = $(structContainer).width()/2 + (this.layout[i].x*4)- w/2;
-			var y = $(structContainer).height()/2 + (this.layout[i].y*4) - 10;
+			var y = $(structContainer).height()/2 + (this.layout[i].y*4);
 
 			$(fighterDiv)
 				.css("left", x)
-				.css("top", y)
+				.css("top", y - 20)
 
 			var wrap = document.createElement("div");
 				wrap.className = "iconIntegrity"; wrap.style.height = 12;
@@ -588,4 +588,12 @@ function Fighter(data){
 		div.appendChild(table[0]);
 		return div;
 	}
+}
+
+Flight.prototype.getArmourString = function(a){
+	if (a >= 330 || a <= 30){
+		return this.structures[0].negation[0];
+	} else if (a > 150 && a < 210){
+		return this.structures[0].negation[1];
+	} else return this.structures[0].negation[2];
 }

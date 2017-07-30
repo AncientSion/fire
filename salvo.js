@@ -591,30 +591,23 @@ Salvo.prototype.switchDiv = function(){
 	Ship.prototype.switchDiv.call(this);
 }
 Salvo.prototype.select = function(){
-	console.log(this);
-	this.setUnitGUI();
+	if (!this.selected){
+		this.selected = 1;
+	} else this.selected = 0;
+
 	this.switchDiv();
-	if (this.selected){
-		this.doUnselect();
-	}
-	else {
-		this.doSelect();
-	}
-}
-Salvo.prototype.doSelect = function(){
-	console.log(this);
-	//aUnit = this.id;
-	//this.selected = true;
-	this.setUnitGUI()
-	this.switchDiv();
-}
-Salvo.prototype.doUnselect = function(){
-	//aUnit = false;
-	//this.selected = false;
-	this.setUnitGUI()
-	this.switchDiv();
-}
-Salvo.prototype.setUnitGUI = function(){
-	Ship.prototype.setUnitGUI.call(this);
 }
 
+Salvo.prototype.setUnitGUI = function(){
+	var id = this.id;
+	$("#unitGUI").find("img").each(function(){
+		if ($(this).data("id") == id){
+			$(this).toggleClass("selected"); return;
+		}
+	});
+	$(this.element).toggleClass("selection");
+}
+
+Salvo.prototype.getArmourString = function(a){
+	return this.structures[0].negation;
+}

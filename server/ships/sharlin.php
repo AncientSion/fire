@@ -16,7 +16,7 @@ class Sharlin extends UltraHeavy {
 	public function addStructures(){
 		$structs = array();
 
-		$left = new Structure($this->getId(), $this->id, 240, 360, 2450, 35);
+		$left = new Structure($this->getId(), $this->id, 240, 360, 2450, 32);
 			$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$left->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
@@ -29,7 +29,7 @@ class Sharlin extends UltraHeavy {
 			$left->systems[] = new NeutronLaser($this->getId(), $this->id, 210, 330);
 		$structs[] = $left;
 
-		$right = new Structure($this->getId(), $this->id, 0, 120, 2450, 35);
+		$right = new Structure($this->getId(), $this->id, 0, 120, 2450, 32);
 			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$right->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
@@ -42,7 +42,7 @@ class Sharlin extends UltraHeavy {
 			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 30, 150);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 120, 240, 2100, 28);
+		$aft = new Structure($this->getId(), $this->id, 120, 240, 2100, 26);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 180, 0);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 180, 0);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
@@ -67,7 +67,7 @@ class Sharlin extends UltraHeavy {
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 225, 840, 8);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 225);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 225, 1300, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 225, $this->getPowerReq()+12);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 225, +12);
 	}
 }
 

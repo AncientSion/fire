@@ -17,8 +17,8 @@
 
 		// $ships = $manager->logShips("Omega", "Primus", "Hyperion", "Artemis", "Altarian", "Vorchan", "Haven");
 		//	$ships = $manager->logShips("all");
-			$ships = $manager->logShips("Altarian");
-			$shots = 500;
+			$ships = $manager->logShips("Omega", "Primus", "Hyperion", "Artemis", "Altarian", "Vorchan");
+			$shots = 200;
 		/*	foreach ($ships[0]->structures[3]->systems as $sys){
 				var_export($sys);
 				echo "<br><br>";
@@ -50,8 +50,14 @@
 				echo "<tr><td style='text-align: left'>Turn Delay 30°</td><td style='text-align: right'>".($ships[$i]->baseTurnDelay * 30)." px</td></tr>";
 				echo "<tr><td style='text-align: left'>Base Impulse</td><td style='text-align: right'>".($ships[$i]->baseImpulse)."</td></tr>";
 				echo "<tr><td style='text-align: left'>MAX Turn @ Base Impulse</td><td style='text-align: right; color: red'>".(round($ships[$i]->baseImpulse / $ships[$i]->baseTurnDelay, 2))."°</td></tr>";
-				echo "<tr><td style='text-align: left'>Struct per 1 Mass</td><td style='text-align: right'>".(round($ships[$i]->getStructure() / $mass, 3))."</td></tr>";
-				echo "<tr><td style='text-align: left'>Weapon Mass</td><td style='text-align: right'>".(round($ships[$i]->getWeapons() / $mass * 100, 2))."%</td></tr>";
+
+				$data = $ships[$i]->getTotalMass();
+				echo "<tr><td style='text-align: left'>Weapon Mass</td><td style='text-align: right'>".(round($data[2] / $mass * 100, 2))."%</td></tr>";
+				echo "<tr><td style='text-align: left'>Main</td><td style='text-align: right'>".($data[0])."</td></tr>";
+				echo "<tr><td style='text-align: left'>Internal</td><td style='text-align: right'>".($data[1])."</td></tr>";
+				echo "<tr><td style='text-align: left'>Guns</td><td style='text-align: right'>".($data[2])."</td></tr>";
+				echo "<tr><td style='text-align: left'>Hangar</td><td style='text-align: right'>".($data[3])."</td></tr>";
+				echo "<tr><td style='text-align: left'>Sum</td><td style='text-align: right'>".(array_sum($data))."</td></tr>";
 
 
 				$fire = new FireOrder(0,0,0,0,0,0,0,0,0,0,0,0);

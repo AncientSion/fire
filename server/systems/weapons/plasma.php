@@ -6,9 +6,8 @@ class Plasma extends Weapon {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $destroyed = 0){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-		//$this->boostEffect[] = new Effect("Damage", 25);
 		$this->boostEffect[] = new Effect("Damage loss", -0.25);
-		//$this->boostEffect[] = new Effect("Damage", 0.1);
+		$this->boostEffect[] = new Effect("Damage", 0.1);
 
 	}
 	

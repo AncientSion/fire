@@ -203,8 +203,7 @@ System.prototype.canFire = function(){
 	return false;
 }
 System.prototype.getLoadLevel = function(){
-	//return 1;
-	//var need = Math.max(1, this.reload + (this.getBoostEffect("Reload") * this.getBoostLevel()));
+	if (this.disabled || this.destroyed){return 0;}
 	
 	var need = this.reload;
 	var has = this.getTimeLoaded();
@@ -253,7 +252,7 @@ System.prototype.setTimeLoaded = function(){
 	this.loaded = turnsLoaded;
 }
 System.prototype.getTimeLoaded = function(){
-	return this.loaded - this.getBoostEffect("Reload") * this.getBoostLevel();
+	return this.loaded// - this.getBoostEffect("Reload") * this.getBoostLevel();
 }
 System.prototype.getBoostLevel = function(){
 	var level = 0;
@@ -405,19 +404,21 @@ System.prototype.doUnboost = function(){
 	}
 
 	if (this.getBoostEffect("Reload")){
+		this.setTimeLoaded();
 		$(this.element).find(".loadLevel").css("width", this.getLoadLevel() * 100 + "%");
 		$("#systemDetailsDiv").find(".loading").html(this.getTimeLoaded() + " / " + this.reload);
 	}
 	return true;
 }
 System.prototype.doBoost = function(){
-	console.log("boost");
+	//console.log("boost");
 	this.powers.push({
 		id: this.powers.length+1, unitid: this.parentId, systemid: this.id,
 		turn: game.turn,type: 1, cost: this.getEffiency(), new: 1
 	})
 
 	if (this.getBoostEffect("Reload")){
+		this.setTimeLoaded();
 		$(this.element).find(".loadLevel").css("width", this.getLoadLevel() * 100 + "%");
 		$("#systemDetailsDiv").find(".loading").html(this.getTimeLoaded() + " / " + this.reload);
 	}
@@ -968,9 +969,9 @@ Reactor.prototype.getOutputUsage  = function(){
 		}
 	}
 	for (var i = 0; i < ship.primary.systems.length; i++){
-		if (ship.primary.systems[i].isPowered()){
+		//if (ship.primary.systems[i].isPowered()){
 			use += ship.primary.systems[i].getCurrentPowerUsage();
-		}
+		//}
 	}
 	return use;
 }
