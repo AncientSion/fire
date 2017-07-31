@@ -64,8 +64,8 @@ class Pulse extends Weapon {
 class LightPulse extends Pulse {
 	public $name = "LightPulse";
 	public $display = "38mm Pulse Cannon";
-	public $minDmg = 14;
-	public $maxDmg = 18;
+	public $minDmg = 16;
+	public $maxDmg = 20;
 	public $accDecay = 180;
 	public $shots = 1;
 	public $animColor = "brown";

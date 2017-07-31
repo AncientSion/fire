@@ -159,10 +159,12 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 				}
 			}
 			if (!dist){
-				dist = Math.floor(getDistance(shipLoc, vessel.getBaseOffsetPos()));
+				dist = Math.floor(getDistance(shipLoc, vessel.getPlannedPosition()));
 			}
 
-			angle = getAngleFromTo(vessel.getBaseOffsetPos(), shipLoc);
+			//angle = getAngleFromTo(vessel.getBaseOffsetPos(), shipLoc);
+			//angle = addAngle(vessel.getPlannedFacing(), angle);
+			angle = getAngleFromTo(vessel.getPlannedPosition(), shipLoc);
 			angle = addAngle(vessel.getPlannedFacing(), angle);
 			baseHit = vessel.getHitChanceFromAngle(angle);
 			impulse = 1 - vessel.getImpulseMod();
@@ -242,7 +244,7 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 
 	var validWeapon = false;
 
-	if (vessel){pos = vessel.getBaseOffsetPos();}
+	if (vessel){pos = vessel.getPlannedPosition();}
 		
 	for (var i = 0; i < ship.structures.length; i++){
 		for (var j = 0; j < ship.structures[i].systems.length; j++){

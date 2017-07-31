@@ -118,7 +118,7 @@ function Game(data, userid){
 		return ret;
 	}
 
-	this.checkDeployment = function(){
+	this.hasInvalidDeploy = function(){
 		if (game.turn > 1){return;}
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid == this.userid){
@@ -131,7 +131,7 @@ function Game(data, userid){
 		return false;
 	}
 
-	this.checkPower = function(){
+	this.hasInvalidPower = function(){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid == this.userid && this.ships[i].available <= game.turn){
 				if (this.ships[i].ship){
@@ -150,27 +150,35 @@ function Game(data, userid){
 		return false;
 	}
 
-	this.checkSensor = function(){
+	this.hasBasicEW = function(){
+		var data = [];
+
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid == this.userid && this.ships[i].available <= game.turn){
 				if (this.ships[i].ship){
 					for (var j = 0; j < this.ships[i].primary.systems.length; j++){
 						if (this.ships[i].primary.systems[j].name == "Sensor" && !this.ships[i].primary.systems[j].disabled && !this.ships[i].primary.systems[j].destroyed){
 							if (!this.ships[i].primary.systems[j].used){
-								popup("Please setup EW for unit (#" + this.ships[i].id + ")"); 
-								if (aUnit){this.getUnitById(aUnit).doUnselect();}
-								this.ships[i].select();
-								return true;
+								data.push((this.ships[i].name + " #" + this.ships[i].id));
 							}
 						}
 					}
 				}
 			}
 		}
+		if (data.length){
+			var html = "The following units have only basic sensor settings:";
+			for (var i = 0; i < data.length; i++){
+				html += "<p>" + data[i];
+			}
+			html += "</p><span style='cursor: pointer; padding: 3px; border: 1px solid white; font-size: 24px' onclick='ajax.confirmDeployment(goToLobby)'>Confirm Orders</span>";
+			popup(html);
+			return true;
+		}
 		return false;
 	}
 
-	this.checkMoves = function(){
+	this.hasOpenMoves = function(){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid == this.userid){
 				if ((game.phase == 0 && this.ships[i].ship) || (game.phase == 1 && this.ships[i].flight)){
@@ -186,7 +194,7 @@ function Game(data, userid){
 		return false;
 	}
 	
-	this.checkFireOrders = function(){
+	this.hasNoFires = function(){
 		var data = [];
 
 		for (var i = 0; i < this.ships.length; i++){
@@ -221,25 +229,23 @@ function Game(data, userid){
 			popup(html);
 			return true;
 		}
-		return true;
+		return false;
 	}
 
 	this.endPhase = function(){
 		if (this.canSubmit){
 			if (aUnit){game.getUnitById(aUnit).select();}
 			if (this.phase == -1){
-				if (this.checkDeployment() || this.checkPower() || this.checkSensor()){
-					return
-				}
+				if (this.hasInvalidDeploy() || this.hasInvalidPower() || this.hasBasicEW()){return;}
 				else {ajax.confirmDeployment(goToLobby);
 				}
 			}
 			else if (this.phase == 0 || this.phase == 1){ // SHIP MOVEMENT
-				if (this.checkMoves()){return;}
+				if (this.hasOpenMoves()){return;}
 				else ajax.confirmMovement(goToLobby);
 			}
 			else if (this.phase == 2){
-				if (this.checkFireOrders()){return;}
+				if (this.hasNoFires()){return;}
 				else ajax.confirmFiringOrders(goToLobby);
 			}
 			else if (this.phase == 3){ajax.confirmDamageControl(goToLobby);

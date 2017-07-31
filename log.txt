@@ -1,0 +1,429 @@
+createPlayerStatus
+createPlayerStatus
+doAdvance for game2 from phase -1 to phase 0
+resolveDeployActions s: 6
+handleJumpActions
+jumpin: #19, class: Hyperion, size: 80, sensor: 700, ordered to: -597/-187, shiftPotential: 18.86%
+Hyperion, aShift: 19°, pShift: 38px
+--> aShift: 16°, psShift: -30/-4 (31px)
+jumpin: #20, class: Hyperion, size: 80, sensor: 700, ordered to: -413/278, shiftPotential: 18.86%
+Hyperion, aShift: 19°, pShift: 38px
+--> aShift: -2°, psShift: 29/-19 (35px)
+jumpin: #21, class: Hyperion, size: 80, sensor: 700, ordered to: -528/414, shiftPotential: 18.86%
+Hyperion, aShift: 19°, pShift: 38px
+--> aShift: -2°, psShift: 38/35 (52px)
+jumpin: #22, class: Primus, size: 100, sensor: 1050, ordered to: 568/-595, shiftPotential: 15.71%
+Primus, aShift: 16°, pShift: 32px
+--> aShift: -14°, psShift: -14/-6 (16px)
+jumpin: #23, class: Altarian, size: 55, sensor: 750, ordered to: 483/347, shiftPotential: 12.1%
+Altarian, aShift: 13°, pShift: 25px
+--> aShift: -13°, psShift: 5/19 (20px)
+jumpin: #24, class: Darkner, size: 50, sensor: 800, ordered to: 532/-119, shiftPotential: 10.31%
+Darkner, aShift: 11°, pShift: 21px
+--> aShift: 9°, psShift: 18/-11 (22px)
+action size: 2
+DB insertServerActions
+assembleEndStates
+updateUnitEndState s:6 1/-1
+advancing game state time: 0.071 seconds.
+doAdvance for game2 from phase 0 to phase 1
+resolveUnitMovementDB
+doAdvance for game2 from phase 1 to phase 2
+resolveUnitMovementDB
+advancing game state time: 0.019 seconds.
+advancing game state time: 0.074 seconds.
+doAdvance for game2 from phase 2 to phase 3
+resolveFireOrder - ID 205, shooter: Primus #22 vs Hyperion #20, w: HeavyIon #8, guns: 1
+resolveFireOrder - ID 206, shooter: Primus #22 vs Hyperion #20, w: HeavyIon #9, guns: 1
+doDamage, weapon: HeavyIon, target: 20/-1, totalDmg: 56
+resolveFireOrder - ID 207, shooter: Primus #22 vs Hyperion #20, w: HeavyIon #10, guns: 1
+resolveFireOrder - ID 208, shooter: Primus #22 vs Hyperion #20, w: HeavyIon #11, guns: 1
+doDamage, weapon: HeavyIon, target: 20/12, totalDmg: 55
+ => OK ship target system MediumRailGun #12 was destroyed, rem: 40, doing: 40, OK for: 3 dmg
+resolveFireOrder - ID 209, shooter: Primus #22 vs Hyperion #20, w: HeavyIon #24, guns: 1
+doDamage, weapon: HeavyIon, target: 20/-1, totalDmg: 63
+resolveFireOrder - ID 210, shooter: Darkner #24 vs Hyperion #20, w: HeavyIon #11, guns: 1
+resolveFireOrder - ID 211, shooter: Darkner #24 vs Hyperion #20, w: HeavyIon #13, guns: 1
+doDamage, weapon: HeavyIon, target: 20/-1, totalDmg: 50
+resolveFireOrder - ID 213, shooter: Hyperion #19 vs Primus #22, w: HeavyLaser #21, guns: 1
+doDamage, weapon: HeavyLaser, target: 22/9: HeavyIon
+HeavyLaser, weapon id: 21, DAMAGE mod: 0.2 (crits: 0, boost: 0.2)
+hitting:  Primary  Primary  HeavyIon 
+resolveFireOrder - ID 217, shooter: Hyperion #21 vs Primus #22, w: HeavyLaser #21, guns: 1
+doDamage, weapon: HeavyLaser, target: 22/-1: Main Structure
+HeavyLaser, weapon id: 21, DAMAGE mod: 0.2 (crits: 0, boost: 0.2)
+hitting:  HeavyIon  Primary  Primary 
+resolveFireOrder - ID 212, shooter: Hyperion #19 vs Altarian #23, w: HeavyLaser #14, guns: 1
+resolveFireOrder - ID 214, shooter: Hyperion #20 vs Altarian #23, w: HeavyLaser #14, guns: 1
+doDamage, weapon: HeavyLaser, target: 23/-1: Main Structure
+HeavyLaser, weapon id: 14, DAMAGE mod: 0.2 (crits: 0, boost: 0.2)
+hitting:  Primary  Primary  Sensor 
+resolveFireOrder - ID 216, shooter: Hyperion #21 vs Altarian #23, w: HeavyLaser #14, guns: 1
+resolveFireOrder - ID 215, shooter: Hyperion #20 vs Darkner #24, w: HeavyLaser #21, guns: 1
+doDamage, weapon: HeavyLaser, target: 24/5: Sensor
+HeavyLaser, weapon id: 21, DAMAGE mod: 0.2 (crits: 0, boost: 0.2)
+hitting:  Primary  Primary  Primary 
+DB updateFireOrders: 13
+handleBallisticInterception | balls:0, intercepts: 0
+DB insertServerActions
+resolveBallisticActions: 0
+endAllDogfights: 
+= testCriticals for Hyperion, #19, turn: 1
+= testCriticals for Hyperion, #20, turn: 1
+= testCriticals for Hyperion, #21, turn: 1
+= testCriticals for Primus, #22, turn: 1
+= testCriticals for Altarian, #23, turn: 1
+= testCriticals for Darkner, #24, turn: 1
+ => DB insertDamageEntries: 16
+ => DB insertCritEntries: 2
+handleFiringPhase time: 0.093 seconds.
+advancing game state time: 0.1 seconds.
+doAdvance for game2 from phase 3 to phase 4
+assembleEndStates
+updateUnitEndState s:6 1/3
+endTurn
+resolveDeployActions s: 0
+destroyUnitsDB
+insertReinforcements: 1
+advancing game state time: 0.041 seconds.
+updateSystemLoad
+updateSystemLoad
+updateSystemLoad
+updateSystemLoad
+updateSystemLoad
+updateSystemLoad
+doAdvance for game2 from phase -1 to phase 0
+resolveDeployActions s: 6
+handleJumpActions
+assembleEndStates
+updateUnitEndState s:12 2/-1
+advancing game state time: 0.064 seconds.
+doAdvance for game2 from phase 0 to phase 1
+resolveUnitMovementDB
+advancing game state time: 0.035 seconds.
+doAdvance for game2 from phase 1 to phase 2
+resolveUnitMovementDB
+advancing game state time: 0.032 seconds.
+doAdvance for game2 from phase 2 to phase 3
+resolveFireOrder - ID 224, shooter: Primus #22 vs Hyperion #19, w: HeavyIon #13, guns: 1
+doDamage, weapon: HeavyIon, target: 19/-1, totalDmg: 60
+resolveFireOrder - ID 225, shooter: Altarian #23 vs Hyperion #20, w: LightIon #8, guns: 1
+doDamage, weapon: LightIon, target: 20/8, totalDmg: 18
+doDamage, weapon: LightIon, target: 20/-1, totalDmg: 16
+resolveFireOrder - ID 226, shooter: Altarian #23 vs Hyperion #20, w: LightIon #10, guns: 1
+doDamage, weapon: LightIon, target: 20/-1, totalDmg: 18
+doDamage, weapon: LightIon, target: 20/-1, totalDmg: 16
+doDamage, weapon: LightIon, target: 20/8, totalDmg: 17
+resolveFireOrder - ID 227, shooter: Altarian #23 vs Hyperion #20, w: MediumTwinIon #17, guns: 1
+doDamage, weapon: MediumTwinIon, target: 20/-1, totalDmg: 47
+doDamage, weapon: MediumTwinIon, target: 20/-1, totalDmg: 42
+resolveFireOrder - ID 228, shooter: Altarian #23 vs Hyperion #20, w: MediumSingleIon #19, guns: 1
+doDamage, weapon: MediumSingleIon, target: 20/-1, totalDmg: 39
+resolveFireOrder - ID 229, shooter: Altarian #23 vs Hyperion #20, w: MediumSingleIon #20, guns: 1
+doDamage, weapon: MediumSingleIon, target: 20/-1, totalDmg: 43
+resolveFireOrder - ID 230, shooter: Altarian #23 vs Hyperion #20, w: MediumSingleIon #21, guns: 1
+doDamage, weapon: MediumSingleIon, target: 20/9, totalDmg: 37
+ => OK ship target system Dual #9 was destroyed, rem: 28, doing: 28, OK for: 3 dmg
+resolveFireOrder - ID 234, shooter: Hyperion #21 vs Altarian #23, w: LightParticleBeam #9, guns: 1
+doDamage, weapon: LightParticleBeam, target: 23/19: MediumSingleIon
+hitting:  Primary 
+resolveFireOrder - ID 235, shooter: Hyperion #21 vs Altarian #23, w: LightParticleBeam #11, guns: 1
+doDamage, weapon: LightParticleBeam, target: 23/-1: Main Structure
+hitting:  Primary 
+resolveFireOrder - ID 237, shooter: Hyperion #21 vs Altarian #23, w: LightParticleBeam #15, guns: 1
+doDamage, weapon: LightParticleBeam, target: 23/-1: Main Structure
+hitting:  Primary 
+resolveFireOrder - ID 238, shooter: Hyperion #21 vs Altarian #23, w: LightParticleBeam #16, guns: 1
+doDamage, weapon: LightParticleBeam, target: 23/-1: Main Structure
+hitting:  Sensor 
+resolveFireOrder - ID 231, shooter: Hyperion #19 vs Altarian #23, w: MediumRailGun #8, guns: 1
+doDamage, weapon: MediumRailGun, target: 23/-1, totalDmg: 37
+resolveFireOrder - ID 232, shooter: Hyperion #19 vs Altarian #23, w: MediumRailGun #12, guns: 1
+resolveFireOrder - ID 239, shooter: Hyperion #20 vs Altarian #23, w: MediumRailGun #8, guns: 1
+doDamage, weapon: MediumRailGun, target: 23/21, totalDmg: 34
+resolveFireOrder - ID 233, shooter: Hyperion #21 vs Altarian #23, w: MediumRailGun #8, guns: 1
+doDamage, weapon: MediumRailGun, target: 23/-1, totalDmg: 38
+resolveFireOrder - ID 236, shooter: Hyperion #21 vs Altarian #23, w: MediumRailGun #12, guns: 1
+doDamage, weapon: MediumRailGun, target: 23/5, totalDmg: 31
+resolveFireOrder - ID 240, shooter: Hyperion #20 vs Altarian #23, w: LightPulse #9, guns: 1
+fireid: 240, doDamage, weapon: LightPulse, target: 23, hits: 4
+resolveFireOrder - ID 241, shooter: Hyperion #20 vs Altarian #23, w: LightPulse #11, guns: 1
+fireid: 241, doDamage, weapon: LightPulse, target: 23, hits: 3
+ => target system MediumSingleIon #19 was destroyed, rem: 32, doing: 14, OK for: 18 dmg
+resolveFireOrder - ID 242, shooter: Hyperion #20 vs Altarian #23, w: LightPulse #15, guns: 1
+fireid: 242, doDamage, weapon: LightPulse, target: 23, hits: 3
+DB updateFireOrders: 19
+handleBallisticInterception | balls:0, intercepts: 0
+DB insertServerActions
+resolveBallisticActions: 0
+endAllDogfights: 
+= testCriticals for Hyperion, #19, turn: 2
+= testCriticals for Flight, #27, turn: 2
+= testCriticals for Flight, #26, turn: 2
+= testCriticals for Flight, #25, turn: 2
+= testCriticals for Hyperion, #21, turn: 2
+= testCriticals for Hyperion, #20, turn: 2
+= testCriticals for Altarian, #23, turn: 2
+= testCriticals for Darkner, #24, turn: 2
+= testCriticals for Primus, #22, turn: 2
+= testCriticals for Flight, #28, turn: 2
+= testCriticals for Flight, #29, turn: 2
+= testCriticals for Flight, #30, turn: 2
+ => DB insertDamageEntries: 22
+ => DB insertCritEntries: 3
+handleFiringPhase time: 0.267 seconds.
+advancing game state time: 0.286 seconds.
+doAdvance for game2 from phase 3 to phase 4
+assembleEndStates
+updateUnitEndState s:12 2/3
+endTurn
+resolveDeployActions s: 0
+destroyUnitsDB
+insertReinforcements: 1
+advancing game state time: 0.163 seconds.
+doAdvance for game2 from phase -1 to phase 0
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+updateUnitEndState s:12 3/-1
+advancing game state time: 0.008 seconds.
+doAdvance for game2 from phase 0 to phase 1
+resolveUnitMovementDB
+advancing game state time: 0.028 seconds.
+doAdvance for game2 from phase 1 to phase 2
+resolveUnitMovementDB
+insertDogfights
+advancing game state time: 0.036 seconds.
+doAdvance for game2 from phase 2 to phase 3
+resolveFireOrder - ID 243, shooter: Primus #22 vs Hyperion #19, w: HeavyIon #8, guns: 1
+doDamage, weapon: HeavyIon, target: 19/12, totalDmg: 49
+doDamage, weapon: HeavyIon, target: 19/-1, totalDmg: 51
+resolveFireOrder - ID 244, shooter: Primus #22 vs Hyperion #19, w: HeavyIon #10, guns: 1
+doDamage, weapon: HeavyIon, target: 19/-1, totalDmg: 60
+resolveFireOrder - ID 245, shooter: Primus #22 vs Hyperion #19, w: HeavyIon #11, guns: 1
+doDamage, weapon: HeavyIon, target: 19/-1, totalDmg: 55
+resolveFireOrder - ID 246, shooter: Primus #22 vs Hyperion #19, w: LightIon #14, guns: 1
+doDamage, weapon: LightIon, target: 19/-1, totalDmg: 14
+resolveFireOrder - ID 247, shooter: Primus #22 vs Hyperion #19, w: LightIon #15, guns: 1
+doDamage, weapon: LightIon, target: 19/-1, totalDmg: 18
+resolveFireOrder - ID 248, shooter: Primus #22 vs Hyperion #19, w: LightIon #16, guns: 1
+doDamage, weapon: LightIon, target: 19/11, totalDmg: 14
+resolveFireOrder - ID 249, shooter: Primus #22 vs Hyperion #19, w: LightIon #23, guns: 1
+doDamage, weapon: LightIon, target: 19/-1, totalDmg: 14
+doDamage, weapon: LightIon, target: 19/8, totalDmg: 14
+resolveFireOrder - ID 251, shooter: Primus #22 vs Hyperion #19, w: LightIon #25, guns: 1
+resolveFireOrder - ID 252, shooter: Primus #22 vs Hyperion #19, w: LightIon #26, guns: 1
+resolveFireOrder - ID 250, shooter: Primus #22 vs Hyperion #20, w: HeavyIon #24, guns: 1
+resolveFireOrder - ID 253, shooter: Altarian #23 vs Hyperion #20, w: MediumTwinIon #17, guns: 1
+doDamage, weapon: MediumTwinIon, target: 20/-1, totalDmg: 37
+resolveFireOrder - ID 269, shooter: Hyperion #19 vs Primus #22, w: LightPulse #9, guns: 1
+fireid: 269, doDamage, weapon: LightPulse, target: 22, hits: 3
+resolveFireOrder - ID 270, shooter: Hyperion #19 vs Primus #22, w: LightPulse #11, guns: 1
+resolveFireOrder - ID 271, shooter: Hyperion #19 vs Primus #22, w: LightPulse #22, guns: 1
+fireid: 271, doDamage, weapon: LightPulse, target: 22, hits: 3
+resolveFireOrder - ID 272, shooter: Hyperion #19 vs Primus #22, w: LightPulse #23, guns: 1
+resolveFireOrder - ID 273, shooter: Hyperion #21 vs Altarian #23, w: LightParticleBeam #9, guns: 1
+doDamage, weapon: LightParticleBeam, target: 23/12: MediumSingleIon
+hitting:  Reactor 
+resolveFireOrder - ID 274, shooter: Hyperion #21 vs Altarian #23, w: LightParticleBeam #11, guns: 1
+resolveFireOrder - ID 275, shooter: Hyperion #21 vs Altarian #23, w: LightParticleBeam #15, guns: 1
+resolveFireOrder - ID 276, shooter: Hyperion #21 vs Altarian #23, w: LightParticleBeam #16, guns: 1
+resolveFireOrder - ID 277, shooter: Hyperion #20 vs Altarian #23, w: LightPulse #11, guns: 1
+resolveFireOrder - ID 278, shooter: Hyperion #20 vs Altarian #23, w: LightPulse #15, guns: 1
+resolveFireOrder - ID 279, shooter: Hyperion #20 vs Altarian #23, w: LightPulse #16, guns: 1
+resolveFireOrder ID 254, shooter: Flight #30 vs Flight #26, w: LinkedParticleGun #2
+doDamage, weapon: LinkedParticleGun, target: 26/5, totalDmg: 12
+doDamage, weapon: LinkedParticleGun, target: 26/15, totalDmg: 11
+doDamage, weapon: LinkedParticleGun, target: 26/13, totalDmg: 15
+doDamage, weapon: LinkedParticleGun, target: 26/13, totalDmg: 15
+ => overkilling non-ship target system Aurora #13 was destroyed, rem: 5, doing: 22
+doDamage, weapon: LinkedParticleGun, target: 26/5, totalDmg: 14
+ => overkilling non-ship target system Aurora #5 was destroyed, rem: 11, doing: 20
+resolveFireOrder ID 280, shooter: Flight #26 vs Flight #30, w: LinkedParticleGun #2
+doDamage, weapon: LinkedParticleGun, target: 30/7, totalDmg: 12
+doDamage, weapon: LinkedParticleGun, target: 30/11, totalDmg: 13
+doDamage, weapon: LinkedParticleGun, target: 30/5, totalDmg: 12
+resolveFireOrder - ID 260, shooter: Flight #28 vs Hyperion #19, w: LinkedParticleGun #2, guns: 9
+doDamage, weapon: LinkedParticleGun, target: 19/11, totalDmg: 15
+doDamage, weapon: LinkedParticleGun, target: 19/-1, totalDmg: 13
+doDamage, weapon: LinkedParticleGun, target: 19/8, totalDmg: 11
+DB updateFireOrders: 45
+handleBallisticInterception | balls:0, intercepts: 0
+DB insertServerActions
+resolveBallisticActions: 0
+endAllDogfights: 
+= testCriticals for Hyperion, #19, turn: 3
+= testCriticals for Flight, #27, turn: 3
+= testCriticals for Flight, #26, turn: 3
+checking crit forAurora
+= testCriticals for Flight, #25, turn: 3
+= testCriticals for Hyperion, #21, turn: 3
+= testCriticals for Hyperion, #20, turn: 3
+= testCriticals for Altarian, #23, turn: 3
+= testCriticals for Darkner, #24, turn: 3
+= testCriticals for Primus, #22, turn: 3
+= testCriticals for Flight, #28, turn: 3
+= testCriticals for Flight, #29, turn: 3
+= testCriticals for Flight, #30, turn: 3
+checking crit forSentri
+checking crit forSentri
+checking crit forSentri
+ => DB insertDamageEntries: 24
+ => DB insertCritEntries: 4
+handleFiringPhase time: 0.333 seconds.
+advancing game state time: 0.339 seconds.
+doAdvance for game2 from phase 3 to phase 4
+assembleEndStates
+updateUnitEndState s:12 3/3
+endTurn
+resolveDeployActions s: 0
+destroyUnitsDB
+insertReinforcements: 1
+insertReinforcements: 1
+advancing game state time: 0.133 seconds.
+doAdvance for game2 from phase -1 to phase 0
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+updateUnitEndState s:12 4/-1
+advancing game state time: 0.016 seconds.
+doAdvance for game2 from phase -1 to phase 0
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+updateUnitEndState s:12 4/-1
+advancing game state time: 0.012 seconds.
+doAdvance for game2 from phase -1 to phase 0
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+updateUnitEndState s:12 4/-1
+advancing game state time: 0.013 seconds.
+doAdvance for game2 from phase -1 to phase 0
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+updateUnitEndState s:12 4/-1
+advancing game state time: 0.011 seconds.
+doAdvance for game2 from phase 0 to phase 1
+resolveUnitMovementDB
+advancing game state time: 0.044 seconds.
+doAdvance for game2 from phase 1 to phase 2
+resolveUnitMovementDB
+advancing game state time: 0.039 seconds.
+doAdvance for game2 from phase 2 to phase 3
+resolveFireOrder - ID 314, shooter: Primus #22 vs Hyperion #19, w: LightIon #14, guns: 1
+resolveFireOrder - ID 315, shooter: Primus #22 vs Hyperion #19, w: LightIon #15, guns: 1
+doDamage, weapon: LightIon, target: 19/-1, totalDmg: 15
+doDamage, weapon: LightIon, target: 19/22, totalDmg: 14
+doDamage, weapon: LightIon, target: 19/-1, totalDmg: 17
+resolveFireOrder - ID 316, shooter: Primus #22 vs Hyperion #19, w: LightIon #16, guns: 1
+doDamage, weapon: LightIon, target: 19/-1, totalDmg: 15
+doDamage, weapon: LightIon, target: 19/23, totalDmg: 16
+doDamage, weapon: LightIon, target: 19/23, totalDmg: 16
+resolveFireOrder - ID 317, shooter: Primus #22 vs Hyperion #19, w: LightIon #23, guns: 1
+doDamage, weapon: LightIon, target: 19/21, totalDmg: 14
+resolveFireOrder - ID 318, shooter: Primus #22 vs Hyperion #19, w: LightIon #25, guns: 1
+doDamage, weapon: LightIon, target: 19/-1, totalDmg: 15
+resolveFireOrder - ID 319, shooter: Primus #22 vs Hyperion #19, w: LightIon #26, guns: 1
+doDamage, weapon: LightIon, target: 19/21, totalDmg: 14
+doDamage, weapon: LightIon, target: 19/-1, totalDmg: 17
+resolveFireOrder - ID 325, shooter: Altarian #23 vs Hyperion #20, w: MediumSingleIon #14, guns: 1
+doDamage, weapon: MediumSingleIon, target: 20/-1, totalDmg: 38
+resolveFireOrder - ID 326, shooter: Altarian #23 vs Hyperion #20, w: MediumTwinIon #17, guns: 1
+doDamage, weapon: MediumTwinIon, target: 20/-1, totalDmg: 34
+doDamage, weapon: MediumTwinIon, target: 20/16, totalDmg: 42
+ => OK ship target system Dual #16 was destroyed, rem: 28, doing: 28, OK for: 6 dmg
+resolveFireOrder - ID 327, shooter: Darkner #24 vs Hyperion #20, w: MediumTwinIon #8, guns: 1
+doDamage, weapon: MediumTwinIon, target: 20/-1, totalDmg: 33
+resolveFireOrder - ID 328, shooter: Darkner #24 vs Hyperion #20, w: LightIon #9, guns: 1
+doDamage, weapon: LightIon, target: 20/-1, totalDmg: 18
+resolveFireOrder - ID 329, shooter: Darkner #24 vs Hyperion #20, w: HeavyIon #11, guns: 1
+doDamage, weapon: HeavyIon, target: 20/5, totalDmg: 49
+doDamage, weapon: HeavyIon, target: 20/15, totalDmg: 59
+ => OK ship target system Dual #15 was destroyed, rem: 28, doing: 28, OK for: 24 dmg
+resolveFireOrder - ID 330, shooter: Darkner #24 vs Hyperion #20, w: HeavyIon #13, guns: 1
+resolveFireOrder - ID 305, shooter: Hyperion #20 vs Primus #22, w: HeavyLaser #21, guns: 1
+doDamage, weapon: HeavyLaser, target: 22/-1: Main Structure
+hitting:  HeavyIon  Primary  Primary 
+resolveFireOrder - ID 303, shooter: Hyperion #20 vs Primus #22, w: MediumRailGun #8, guns: 1
+doDamage, weapon: MediumRailGun, target: 22/-1, totalDmg: 35
+doDamage, weapon: MediumRailGun, target: 22/-1, totalDmg: 32
+resolveFireOrder - ID 289, shooter: Hyperion #19 vs Primus #22, w: LightPulse #9, guns: 1
+resolveFireOrder - ID 293, shooter: Hyperion #19 vs Primus #22, w: LightPulse #22, guns: 1
+fireid: 293, doDamage, weapon: LightPulse, target: 22, hits: 3
+resolveFireOrder - ID 294, shooter: Hyperion #19 vs Primus #22, w: LightPulse #23, guns: 1
+fireid: 294, doDamage, weapon: LightPulse, target: 22, hits: 3
+resolveFireOrder - ID 304, shooter: Hyperion #20 vs Primus #22, w: LightPulse #11, guns: 1
+resolveFireOrder - ID 306, shooter: Hyperion #20 vs Primus #22, w: LightPulse #22, guns: 1
+resolveFireOrder - ID 307, shooter: Hyperion #20 vs Primus #22, w: LightPulse #23, guns: 1
+resolveFireOrder - ID 299, shooter: Hyperion #21 vs Altarian #23, w: HeavyLaser #14, guns: 1
+doDamage, weapon: HeavyLaser, target: 23/-1: Main Structure
+ => target system MediumSingleIon #13 was destroyed, rem: 32, doing: 35, OK for: 3 dmg
+ => target system MediumSingleIon #14 was destroyed, rem: 32, doing: 35, OK for: 3 dmg
+hitting:  Primary  MediumSingleIon  MediumSingleIon 
+resolveFireOrder - ID 296, shooter: Hyperion #21 vs Altarian #23, w: LightPulse #9, guns: 1
+resolveFireOrder - ID 297, shooter: Hyperion #21 vs Altarian #23, w: LightPulse #11, guns: 1
+resolveFireOrder - ID 300, shooter: Hyperion #21 vs Altarian #23, w: LightPulse #15, guns: 1
+resolveFireOrder - ID 301, shooter: Hyperion #21 vs Altarian #23, w: LightPulse #16, guns: 1
+fireid: 301, doDamage, weapon: LightPulse, target: 23, hits: 3
+resolveFireOrder - ID 290, shooter: Hyperion #19 vs Darkner #24, w: HeavyLaser #14, guns: 1
+doDamage, weapon: HeavyLaser, target: 24/-1: Main Structure
+HeavyLaser, weapon id: 14, DAMAGE mod: 0.2 (crits: 0, boost: 0.2)
+hitting:  Primary  Primary  MediumTwinIon 
+resolveFireOrder - ID 302, shooter: Hyperion #21 vs Darkner #24, w: HeavyLaser #21, guns: 1
+doDamage, weapon: HeavyLaser, target: 24/4: LifeSupport
+hitting:  Primary  Reactor  Primary 
+resolveFireOrder - ID 288, shooter: Hyperion #19 vs Darkner #24, w: MediumRailGun #8, guns: 1
+doDamage, weapon: MediumRailGun, target: 24/-1, totalDmg: 30
+resolveFireOrder - ID 295, shooter: Hyperion #21 vs Darkner #24, w: MediumRailGun #8, guns: 1
+resolveFireOrder - ID 298, shooter: Hyperion #21 vs Darkner #24, w: MediumRailGun #12, guns: 1
+resolveFireOrder - ID 291, shooter: Hyperion #19 vs Darkner #24, w: LightPulse #15, guns: 1
+resolveFireOrder - ID 292, shooter: Hyperion #19 vs Darkner #24, w: LightPulse #16, guns: 1
+resolveFireOrder ID 320, shooter: Altarian #23 vs Flight #26, w: LightIon #8
+resolveFireOrder ID 321, shooter: Altarian #23 vs Flight #26, w: MediumTwinIon #9
+resolveFireOrder ID 322, shooter: Altarian #23 vs Flight #26, w: LightIon #10
+doDamage, weapon: LightIon, target: 26/3, totalDmg: 14
+resolveFireOrder ID 323, shooter: Altarian #23 vs Flight #26, w: MediumSingleIon #12
+resolveFireOrder ID 324, shooter: Altarian #23 vs Flight #26, w: MediumSingleIon #13
+resolveFireOrder - ID 331, shooter: Flight #28 vs Hyperion #19, w: LinkedParticleGun #2, guns: 9
+doDamage, weapon: LinkedParticleGun, target: 19/-1, totalDmg: 15
+doDamage, weapon: LinkedParticleGun, target: 19/-1, totalDmg: 15
+doDamage, weapon: LinkedParticleGun, target: 19/-1, totalDmg: 15
+doDamage, weapon: LinkedParticleGun, target: 19/-1, totalDmg: 12
+doDamage, weapon: LinkedParticleGun, target: 19/21, totalDmg: 15
+doDamage, weapon: LinkedParticleGun, target: 19/-1, totalDmg: 14
+doDamage, weapon: LinkedParticleGun, target: 19/21, totalDmg: 12
+doDamage, weapon: LinkedParticleGun, target: 19/-1, totalDmg: 11
+resolveFireOrder - ID 340, shooter: Flight #29 vs Hyperion #20, w: LinkedParticleGun #2, guns: 9
+doDamage, weapon: LinkedParticleGun, target: 20/-1, totalDmg: 12
+doDamage, weapon: LinkedParticleGun, target: 20/-1, totalDmg: 14
+doDamage, weapon: LinkedParticleGun, target: 20/-1, totalDmg: 12
+doDamage, weapon: LinkedParticleGun, target: 20/-1, totalDmg: 11
+doDamage, weapon: LinkedParticleGun, target: 20/-1, totalDmg: 15
+resolveFireOrder - ID 308, shooter: Flight #26 vs Altarian #23, w: LinkedParticleGun #2, guns: 6
+doDamage, weapon: LinkedParticleGun, target: 23/-1, totalDmg: 13
+doDamage, weapon: LinkedParticleGun, target: 23/-1, totalDmg: 16
+doDamage, weapon: LinkedParticleGun, target: 23/-1, totalDmg: 13
+DB updateFireOrders: 61
+handleBallisticInterception | balls:0, intercepts: 0
+DB insertServerActions
+resolveBallisticActions: 0
+endAllDogfights: 
+= testCriticals for Hyperion, #19, turn: 4
+= testCriticals for Flight, #27, turn: 4
+= testCriticals for Flight, #26, turn: 4
+checking crit forAurora
+= testCriticals for Flight, #25, turn: 4
+= testCriticals for Hyperion, #21, turn: 4
+= testCriticals for Hyperion, #20, turn: 4
+= testCriticals for Altarian, #23, turn: 4
+= testCriticals for Darkner, #24, turn: 4
+= testCriticals for Primus, #22, turn: 4
+= testCriticals for Flight, #28, turn: 4
+= testCriticals for Flight, #29, turn: 4
+= testCriticals for Flight, #30, turn: 4
+ => DB insertDamageEntries: 52
+ => DB insertCritEntries: 6
+handleFiringPhase time: 0.477 seconds.
+advancing game state time: 0.488 seconds.

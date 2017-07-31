@@ -465,7 +465,7 @@ class DBManager {
 			for ($j = 0; $j < sizeof($units); $j++){
 				$x = mt_rand(-700, -400) * (1-$i*2);
 				$y = mt_rand(-600, 600) * (1-$i*2);
-				$s = mt_rand(50, 80);
+				$s = mt_rand(40, 70);
 
 				$deploys[] = array("gameid" => $gameid, "userid" => $players[$i]["userid"], "turn" => 1, "phase" => -1, "x" => $x, "y" => $y, "s" => $s);
 			}

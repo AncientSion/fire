@@ -13,13 +13,13 @@ class Particle extends Weapon {
 class LightIon extends Particle {
 	public $name = "LightIon";
 	public $display = "32mm Ion Bolter Array";
-	public $minDmg = 16;
-	public $maxDmg = 22;
-	public $accDecay = 220;
+	public $minDmg = 14;
+	public $maxDmg = 18;
+	public $accDecay = 200;
 	public $shots = 4;
 	public $animColor = "orange";
 	public $projSize = 2;
-	public $projSpeed = 20;
+	public $projSpeed = 8;
 	public $reload = 1;
 	public $mass = 13;
 	public $powerReq = 2;

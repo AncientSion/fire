@@ -57,18 +57,18 @@ class Aurora extends Fighter {
 	public $name = "Aurora";
 	public $display = "Aurora";
 	public $faction = "Earth Alliance";
-	public $value = 34;
+	public $value = 29;
 	public $mass = 38;
 	public $ep = 100;
-	public $integrity = 30;
-	public $negation = array(6, 5, 5);
+	public $integrity = 27;
+	public $negation = array(5, 4, 4);
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
 	}
 
 	public function addSystems(){
-		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 1, 2, 14, 18, 330, 30);
+		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 1, 2, 12, 16, 330, 30);
 	}
 }
 
@@ -76,11 +76,11 @@ class Thunderbolt extends Fighter {
 	public $name = "Thunderbolt";
 	public $display = "Thunderbolt";
 	public $faction = "Earth Alliance";
-	public $value = 40;
+	public $value = 32;
 	public $mass = 42;
 	public $ep = 110;
-	public $integrity = 34;
-	public $negation = array(7, 6, 6);
+	public $integrity = 31;
+	public $negation = array(6, 5, 5);
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -96,18 +96,18 @@ class Nial extends Fighter {
 	public $name = "Nial";
 	public $display = "Nial";
 	public $faction = "Minbari Federation";
-	public $value = 54;
+	public $value = 44;
 	public $mass = 36;
 	public $ep = 140;
-	public $integrity = 36;
-	public $negation = array(10, 9, 7);
+	public $integrity = 33;
+	public $negation = array(9, 8, 6);
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
 	}
 
 	public function addSystems(){
-		$this->systems[] = new LinkedNeutronRepeater(sizeof($this->systems), $this->id, $this->parentId, 1, 3, 16, 20, 330, 30);
+		$this->systems[] = new LinkedNeutronRepeater(sizeof($this->systems), $this->id, $this->parentId, 1, 3, 14, 18, 330, 30);
 	}
 }
 
@@ -118,15 +118,15 @@ class Sentri extends Fighter {
 	public $value = 28;
 	public $mass = 32;
 	public $ep = 115;
-	public $integrity = 28;
-	public $negation = array(7, 7, 6);
+	public $integrity = 26;
+	public $negation = array(6, 6, 5);
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
 	}
 
 	public function addSystems(){
-		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 1, 2, 13, 17, 330, 30);
+		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 1, 2, 11, 15, 330, 30);
 	}
 }
 
@@ -137,8 +137,8 @@ class Sitara extends Fighter {
 	public $value = 24;
 	public $mass = 32;
 	public $ep = 105;
-	public $integrity = 26;
-	public $negation = array(5, 5, 5);
+	public $integrity = 24;
+	public $negation = array(5, 4, 4);
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -156,15 +156,15 @@ class Gorith extends Fighter {
 	public $value = 22;
 	public $mass = 30;
 	public $ep = 85;
-	public $integrity = 28;
-	public $negation = array(5, 5, 4);
+	public $integrity = 24;
+	public $negation = array(4, 4, 3);
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
 	}
 
 	public function addSystems(){
-		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 1, 2, 13, 17, 330, 30);
+		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 1, 2, 12, 16, 330, 30);
 	}
 }
 
@@ -175,15 +175,15 @@ class Frazi extends Fighter {
 	public $value = 32;
 	public $mass = 35;
 	public $ep = 100;
-	public $integrity = 32;
-	public $negation = array(7, 7, 6);
+	public $integrity = 29;
+	public $negation = array(6, 5, 5);
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
 	}
 
 	public function addSystems(){
-		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 1, 2, 15, 19, 330, 30);
+		$this->systems[] = new LinkedParticleGun(sizeof($this->systems), $this->id, $this->parentId, 1, 2, 13, 17, 330, 30);
 	}
 }
 
