@@ -2489,6 +2489,7 @@ function Hangar(system){
 	this.loads = system.loads;
 	this.range = 75;
 	this.loadout = 1;
+	this.mission = 0;
 }
 Hangar.prototype = Object.create(PrimarySystem.prototype);
 
@@ -2684,10 +2685,35 @@ Hangar.prototype.showHangarControl = function(){
 
 		table.appendChild(tr);
 	}
-
+	var mission = this.getMission();
 	var button = $("#hangarLoadoutDiv");
-		$(button).find("input").off().on("click", {systemid: id}, launchFlight);
-	//console.log(button);
+		$(button)
+			.data("systemid", id)
+			.find("#missionType")
+				.find("tr").each(function(i){
+					$(this).off("click");
+					if (i){
+						if (mission == i){
+							$(this).addClass("selected");
+						}
+						//$(this).data("mission", i);
+						$(this).click(function(){
+							var hangar = game.getUnitById(aUnit).getSystemById($(this).parent().parent().parent().parent().data("systemid"));
+							var mission = hangar.getMission();
+
+							if (i == mission){
+								hangar.setMission(0);
+								$(this).removeClass("selected");
+							} else if (!mission){
+								hangar.setMission(i);
+								$(this).addClass("selected");
+							}
+
+							console.log(hangar.getMission());
+						})
+					}
+				})
+		//console.log(button);
 
 	if (this.canLaunchFlight()){
 		$(button).find("input").removeClass("disabled");
@@ -2751,7 +2777,7 @@ Hangar.prototype.alterFlight = function(ele, max){
 					this.loads[i].launch += add;
 				}
 			}
-			else {
+			else if (this.loads[i].launch > 0){
 				this.loads[i].launch += add;
 			}
 			$("#" + this.loads[i].name + "Amount").html(this.loads[i].launch);
@@ -2767,11 +2793,29 @@ Hangar.prototype.alterFlight = function(ele, max){
 	}
 }
 
+
+
+Hangar.prototype.getMission = function(){
+	return this.mission;
+}
+
+Hangar.prototype.setMission = function(val){
+	this.mission = val;
+	if (this.canLaunchFlight()){
+		$("#hangarLoadoutDiv").find("input").removeClass("disabled");
+	}
+	else {
+		$("#hangarLoadoutDiv").find("input").addClass("disabled");
+	}
+}
+
 Hangar.prototype.canLaunchFlight = function(){
-	if (this.canFire()){
-		for (var i = 0; i < this.loads.length; i++){
-			if (this.loads[i].launch >= 1){
-				return true;
+	if (this.getMission()){
+		if (this.canFire()){
+			for (var i = 0; i < this.loads.length; i++){
+				if (this.loads[i].launch >= 1){
+					return true;
+				}
 			}
 		}
 	}

@@ -456,6 +456,14 @@ echo "</script>";
 			</div>
 			<table id="hangarTable">
 			</table>
+			<div id ="missionType">
+				<table style="border: 1px solid white">
+					<tr><th colSpan=3>Select Mission Type</th></tr>
+					<tr><td></td><td width=40%>Patrol</td><td></td></tr>
+					<tr><td></td><td>Strike</td><td></td></tr>
+					<tr><td></td><td>Intercept</td><td></td></tr>
+				</table>
+			</div>
 			<div class="header">
 				<input type="button" class="disabled" value="Launch selected strikecraft as mixed flight">
 			</div>
