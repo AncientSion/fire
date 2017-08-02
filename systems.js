@@ -2686,8 +2686,8 @@ Hangar.prototype.showHangarControl = function(){
 		table.appendChild(tr);
 	}
 	var mission = this.getMission();
-	var button = $("#hangarLoadoutDiv");
-		$(button)
+	var element = $("#hangarLoadoutDiv");
+		$(element)
 			.data("systemid", id)
 			.find("#missionType")
 				.find("tr").each(function(i){
@@ -2716,8 +2716,8 @@ Hangar.prototype.showHangarControl = function(){
 		//console.log(button);
 
 	if (this.canLaunchFlight()){
-		$(button).find("input").removeClass("disabled");
-	} else $(button).find("input").addClass("disabled");
+		$(element).find("input").removeClass("disabled");
+	} else $(element).find("input").addClass("disabled");
 }
 
 Hangar.prototype.doLaunchFlight = function(){
@@ -2805,7 +2805,9 @@ Hangar.prototype.setMission = function(val){
 		$("#hangarLoadoutDiv").find("input").removeClass("disabled");
 	}
 	else {
+		game.flightDeploy = 0;
 		$("#hangarLoadoutDiv").find("input").addClass("disabled");
+		$("#deployOverlay").hide();
 	}
 }
 

@@ -347,6 +347,30 @@ function canvasMouseMove(e){
 		else if (game.shortInfo){		
 			game.resetHover();
 		}
+
+		if (game.flightDeploy){
+			var valid = false;
+			if (game.flightDeploy.mission == 1){ // patrol
+				valid = true;
+			}
+			else if (game.userid != ship.userid && game.flightDeploy.mission == 2 && ship && ship.ship){ // strike
+				valid = true
+			} 
+			else if (game.userid != ship.userid && game.flightDeploy.mission == 3 && (ammo || ship && ship.flight)){ // int
+				valid = true;
+			}
+
+
+			var ele = $("#deployOverlay");
+			var w = $(ele).width()/2;
+			var top = (e.clientY) + 40;
+			var left = (e.clientX) - w;
+			$(ele).css("top", top).css("left", left).show();
+			if (valid){
+				ele.find("#deployTarget").html(ship.name + " #" + ship.id);
+			} else ele.find("#deployTarget").html("");
+		}
+
 	}
 	 
 	if (aUnit){
@@ -379,13 +403,6 @@ function canvasMouseMove(e){
 		else if (ship.hasWeaponsSelected()){
 			var vessel = game.getUnitByClick(pos) || 0;
 			handleWeaponAimEvent(ship, vessel, e, pos);
-		}
-		else if (game.flightDeploy){					
-			var ele = $("#deployOverlay");
-			var w = $(ele).width()/2;
-			var top = (e.clientY) + 40;
-			var left = (e.clientX) - w;
-			$(ele).css("top", top).css("left", left).show();
 		}
 	}
 	else if (game.deploying){					
@@ -423,14 +440,7 @@ function deployPhase(e){
 		}
 	}
 	else if (game.flightDeploy){ // deploy via hangar
-		if (game.getUnitById(aUnit).canDeployFlightHere(pos)){
-			game.doDeployFlight(e, pos);
-			$("#popupWrapper").hide();
-		}
-		else {
-			$("#instructWrapper").hide();
-			popup("Flight can not be deployed there.");
-		}
+		game.handleFlightDeployment(pos);
 	}
 	else if (!game.deploying){
 		if (aUnit){

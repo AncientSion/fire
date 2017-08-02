@@ -1230,7 +1230,7 @@ table, th, tr, td {
 #deployOverlay {
 	background-color: black;
 	color: white;
-	opacity: 0.8;
+	width: 100px;
 	border: 2px solid white;
 	border-collapse: collapse;
 	border-radius: 5px;

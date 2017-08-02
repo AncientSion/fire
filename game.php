@@ -440,7 +440,8 @@ echo "</script>";
 				</table>
 			</div>
 			<div id="deployOverlay" class="disabled">
-				<span>Deploy</span>			
+				<span id="deployType"></span>	
+				<span id="deployTarget" class="red"></span>	
 				<div class="img"></div>			
 			</div>
 			<div id="vectorDiv" class="disabled"></div>
@@ -465,7 +466,7 @@ echo "</script>";
 				</table>
 			</div>
 			<div class="header">
-				<input type="button" class="disabled" value="Launch selected strikecraft as mixed flight">
+				<input type="button" class="disabled" value="Launch selected strikecraft as mixed flight" onclick='game.enableFlightDeployment()'>
 			</div>
 		</div>
 	</body>
