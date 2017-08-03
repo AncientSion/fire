@@ -278,6 +278,7 @@ class Manager {
 
 			if ($unit->flight){
 				$unit->addFighters($db[$i]["fighters"]);
+				$unit->setMission($db[$i]["mission"]);
 			}
 			$units[] = $unit;
 		}

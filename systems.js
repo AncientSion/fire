@@ -2572,7 +2572,7 @@ Hangar.prototype.update = function(){
 Hangar.prototype.doUndoActions = function(){
 	for (var i = game.ships.length-1; i >= 0; i--){
 		if (game.ships[i].flight && game.ships[i].actions.length && game.ships[i].available == game.turn){
-				if (game.ships[i].launchdata.shipid == this.parentId && game.ships[i].launchdata.systemid == this.id){
+				if (game.ships[i].launchData.shipid == this.parentId && game.ships[i].launchData.systemid == this.id){
 				var ele = $(".shipDiv").each(function(){
 					if ($(this).data("shipId") == game.ships[i].id){
 						$(this).remove();
@@ -2662,7 +2662,7 @@ Hangar.prototype.showHangarControl = function(){
 			tr.insertCell(-1).innerHTML = this.loads[i].name;
 			tr.insertCell(-1).innerHTML = this.loads[i].amount;
 			var td = document.createElement("td");
-				td.innerHTML = "<img src='varIcons/plus.png'>"; $(td).data("name", this.loads[i].name).data("val", 1); tr.appendChild(td);
+				td.innerHTML = "<img height='20px' width='20px' src='varIcons/plus.png'>"; $(td).data("name", this.loads[i].name).data("val", 1); tr.appendChild(td);
 				td.addEventListener("click", function(){
 					game.getUnitById(aUnit).getSystemById(id).alterFlight(this, false);
 				});
@@ -2671,7 +2671,7 @@ Hangar.prototype.showHangarControl = function(){
 					game.getUnitById(aUnit).getSystemById(id).alterFlight(this, true);
 				});
 			var td = document.createElement("td");
-				td.innerHTML = "<img src='varIcons/minus.png'>"; $(td).data("name", this.loads[i].name).data("val", -1); tr.appendChild(td);
+				td.innerHTML = "<img height='20px' width='20px' src='varIcons/minus.png'>"; $(td).data("name", this.loads[i].name).data("val", -1); tr.appendChild(td);
 				td.addEventListener("click", function(){
 					game.getUnitById(aUnit).getSystemById(id).alterFlight(this, false);
 				});
@@ -2725,7 +2725,7 @@ Hangar.prototype.doLaunchFlight = function(){
 		if (game.ships[i].userid == game.userid){
 			if (game.ships[i].flight && game.ships[i].available == game.turn){
 				if (!game.ships[i].actions[0].resolved){
-					if (game.ships[i].launchdata.shipid == window.aUnit && game.ships[i].launchdata.systemid == this.id){
+					if (game.ships[i].launchData.shipid == window.aUnit && game.ships[i].launchData.systemid == this.id){
 						//console.log("splice");
 						//this.unsetFireOrder();
 						game.ships.splice(i, 1);

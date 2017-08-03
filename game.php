@@ -441,7 +441,7 @@ echo "</script>";
 			</div>
 			<div id="deployOverlay" class="disabled">
 				<span id="deployType"></span>	
-				<span id="deployTarget" class="red"></span>	
+				<span id="deployTarget"</span>	
 				<div class="img"></div>			
 			</div>
 			<div id="vectorDiv" class="disabled"></div>

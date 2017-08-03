@@ -2,6 +2,7 @@
 
 class Mini extends Ship {
 	public $ship = false;
+	public $baseImpulse;
 
 	public function getNewCrits($turn){
 		$crits = array();
@@ -163,7 +164,6 @@ class Salvo extends Mini {
 	public $structures = array();
 	public $baseImpulse;
 	public $traverse = -4;
-	public $fireOrder;
 
 	function __construct($id, $userid, $amount, $targetid, $name, $status, $available, $destroyed){
 		$this->id = $id;

@@ -588,7 +588,8 @@ class DBManager {
 
 			for ($i = 0; $i < sizeof($flights); $i++){
 				$this->insertFlightElements($flights[$i]);
-				$this->updateSystemLoad($flights[$i]["launchdata"]);
+				$this->insertFlightMission($flights[$i]);
+				//$this->updateSystemLoad($flights[$i]["launchData"]);
 			}
 		}
 		return true;
@@ -603,11 +604,11 @@ class DBManager {
 				(:unitid, :amount, :name)
 		");
 
-		for ($i = 0; $i < sizeof($flight["launchdata"]["loads"]); $i++){
+		for ($i = 0; $i < sizeof($flight["launchData"]["loads"]); $i++){
 			$stmt->bindParam(":unitid", $flight["id"]);
-			if ($flight["launchdata"]["loads"][$i]["launch"] >= 1){
-				$stmt->bindValue(":amount", $flight["launchdata"]["loads"][$i]["launch"]);
-				$stmt->bindValue(":name", $flight["launchdata"]["loads"][$i]["name"]);
+			if ($flight["launchData"]["loads"][$i]["launch"] >= 1){
+				$stmt->bindValue(":amount", $flight["launchData"]["loads"][$i]["launch"]);
+				$stmt->bindValue(":name", $flight["launchData"]["loads"][$i]["name"]);
 				$stmt->execute();
 				if ($stmt->errorCode() != 0){
 					return false;
@@ -615,6 +616,28 @@ class DBManager {
 			}
 		}
 		return true;
+	}
+
+	public function insertFlightMission($flight){
+		Debug::log("insertFlightMission");
+		$stmt = $this->connection->prepare("
+			INSERT INTO missions 
+				(unitid, type, turn, targetid, x, y)
+			VALUES
+				(:unitid, :type, :turn, :targetid, :x, :y)
+		");
+
+		$stmt->bindParam(":unitid", $flight["id"]);
+		$stmt->bindParam(":type", $flight["launchData"]["mission"]);
+		$stmt->bindParam(":turn", $flight["turn"]);
+		$stmt->bindParam(":targetid", $flight["launchData"]["targetid"]);
+		$stmt->bindParam(":x", $flight["launchData"]["x"]);
+		$stmt->bindParam(":y", $flight["launchData"]["y"]);
+		$stmt->execute();
+		if ($stmt->errorCode() == 0){
+			return true;
+		}
+		return false;
 	}	
 
 	public function updateSystemLoad($data){
@@ -1486,28 +1509,42 @@ class DBManager {
 		if ($units){
 			for ($i = 0; $i < sizeof($units); $i++){
 				if ($units[$i]["name"] == "Flight"){
-					$stmt = $this->connection->prepare("
-						SELECT * FROM fighters
-						WHERE fighters.unitid = :id
-					");
-					
-					$stmt->bindParam(":id", $units[$i]["id"]);
-					$stmt->execute();
-							
-					$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-					if ($result){
-						$units[$i]["fighters"] = array();
-						for ($j = 0; $j < sizeof($result); $j++){
-							$units[$i]["fighters"][] = $result[$j];
-						}
-					}
+					$units[$i]["fighters"] = $this->getFighters($units[$i]);
+					$units[$i]["mission"] = $this->getMission($units[$i]);
 				}
 			}
 		}
 
 		//Debug::log("getting: ".sizeof($units)." units");
 		return $units;
+	}
+
+	public function getFighters($unit){
+		$stmt = $this->connection->prepare("
+			SELECT * FROM fighters
+			WHERE fighters.unitid = :id
+		");
+		
+		$stmt->bindParam(":id", $unit["id"]);
+		$stmt->execute();
+				
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		return $result;
+	}
+
+	public function getMission($unit){
+		$stmt = $this->connection->prepare("
+			SELECT * FROM missions
+			WHERE missions.unitid = :id
+		");
+		
+		$stmt->bindParam(":id", $unit["id"]);
+		$stmt->execute();
+				
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		return $result;
 	}
 
 	public function getActiveBallistics($gameid, $turn){

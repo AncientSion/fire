@@ -121,7 +121,7 @@ window.ajax = {
 			}
 		}
 
-		//console.log(deployedShips);
+		console.log(deployedFlights);
 		//return;
 
 		$.ajax({

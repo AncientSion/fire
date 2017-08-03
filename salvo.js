@@ -441,20 +441,12 @@ function Salvo(data){
 
 	this.drawMovePlan = function(){
 		//var origin = this.actions[this.actions.length-1];
-		var inRange = false;
-		var target = game.getUnitById(this.targetid);
 
 		if (!target.salvo){
 			this.finalStep = target.getPlannedPosition();
 			this.setNextStep();
 		}
-
-		if (this.nextStep == this.finalStep){
-			inRange = true;
-		}
-
-		//var t = getPointInDirection(step, a, this.x, this.y);
-
+		
 		salvoCtx.translate(cam.o.x, cam.o.y);
 		salvoCtx.scale(cam.z, cam.z)
 		salvoCtx.translate(this.x, this.y);
@@ -470,7 +462,7 @@ function Salvo(data){
 		salvoCtx.stroke();
 		salvoCtx.setTransform(1,0,0,1,0,0);
 
-		if (!inRange){
+		if (this.nextStep != this.finalStep){
 			salvoCtx.translate(cam.o.x, cam.o.y);
 			salvoCtx.scale(cam.z, cam.z)
 			salvoCtx.translate(this.nextStep.x, this.nextStep.y);
@@ -513,16 +505,6 @@ function Salvo(data){
 			}
 		}
 		return table;
-	}
-
-	this.getIncomingBallistics = function(){
-		var inc = [];
-		for (var i = 0; i < game.ballistics.length; i++){
-			if (game.ballistics[i].targetid == this.id){
-				inc.push(game.ballistics[i])
-			}
-		}
-		return inc;
 	}
 
 	this.impactThisTurn = function(){

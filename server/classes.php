@@ -43,6 +43,27 @@ class Effect {
 	}
 }
 
+class Mission {
+	public $id;
+	public $unitid;
+	public $type;
+	public $targetid;
+	public $turn;
+	public $x;
+	public $y;
+
+	function __construct($data){
+		//var_export($data);
+		$this->id = $data["id"];
+		$this->unitid = $data["unitid"];
+		$this->type = $data["type"];
+		$this->turn = $data["turn"];
+		$this->targetid = $data["targetid"];
+		$this->x = $data["x"];
+		$this->y = $data["y"];
+	}
+}
+
 class HitTable {
 	function __construct($systems){
 		

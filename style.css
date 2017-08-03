@@ -181,6 +181,11 @@ table, th, tr, td {
 	box-shadow: inset 0 0 0.5em 0.5em #27e627;
 }
 
+#deployTarget {
+	font-size: 16;
+	color: #ff3d00;
+}
+
 .selected {
 	box-shadow: inset 0 0 0.5em 0.5em #27e627;
 }
@@ -266,6 +271,7 @@ table, th, tr, td {
 	border-collapse: collapse;
 	border: 1px solid white;
 	background-color: black;
+	font-size: 14px;
 }
 
 #missionType table {

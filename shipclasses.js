@@ -21,9 +21,9 @@ function Ship(data){
 	this.status = data.status;
 	this.actions = data.actions || [];
 
-	this.slipAngle = data.slipAngle;
-	this.turnAngle = data.turnAngle;
-	this.turnStep = data.turnStep;
+	this.slipAngle = data.slipAngle || 0;
+	this.turnAngle = data.turnAngle || 0;
+	this.turnStep = data.turnStep || 0;
 	this.turnMod = 1;
 	this.baseTurnDelay = data.baseTurnDelay || 0;
 	this.baseTurnCost = data.baseTurnCost || 0;
@@ -537,7 +537,7 @@ function Ship(data){
 		this.drawEW();
 		if (this.isInTransit()){
 			//game.drawJumpMarker(this.id);
-			console.log("warp");
+			//console.log("warp");
 		}
 		//this.drawMoveLength();
 
@@ -2404,16 +2404,6 @@ function Ship(data){
 
 	this.getProfileMod = function(){
 		return Math.floor((1+((((this.getBaseImpulse() / this.getCurrentImpulse())-1)/3)))*100);
-	}
-
-	this.getIncomingBallistics = function(){
-		var inc = [];
-		for (var i = 0; i < game.ballistics.length; i++){
-			if (game.ballistics[i].targetid == this.id){
-				inc.push(game.ballistics[i])
-			}
-		}
-		return inc;
 	}
 
 	this.canBoost = function(system){

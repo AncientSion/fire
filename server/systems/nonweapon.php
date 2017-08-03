@@ -161,6 +161,7 @@ class Hangar extends Weapon {
 				"amount" => 0,
 				"cost" => $fighter->value,
 				"mass" => $fighter->mass,
+				"integrity" => $fighter->integrity,
 				"launch" => 0
 			);
 		}

@@ -52,63 +52,109 @@ function Game(data, userid){
 		return id+1;
 	}
 
+	this.getMissionString = function(val){
+		switch (val){
+			case 1: return "PATROL";
+			case 2: return "STRIKE";
+			case 3: return "INTERCEPT";
+			default: return "ERROR";
+		}
+	}
+
 	this.enableFlightDeployment = function(){
 		this.flightDeploy = this.getUnitById(aUnit).getSystemById($("#hangarLoadoutDiv").data("systemid"));
 
-		var mission = "";
-
-		switch (this.flightDeploy.mission){
-			case 1: mission = "PATROL"; break;
-			case 2: mission = "STRIKE"; break;
-			case 3: mission = "INTERCEPT"; break;
-			default: mission = "ERROR"; break;
-		}
+		var mission = this.getMissionString(this.flightDeploy.mission);
 
 		$("#game").find("#deployOverlay").find("#deployType").html("Select target for </br>" + mission + "</br></span>");
-
-
 	}
 
-	this.handleFlightDeployment = function(pos){
-		var t;
+	this.handleFlightDeployMove = function(e, pos, unit){
+
+		salvoCtx.clearRect(0, 0, res.x, res.y);
+
+		if (this.shortInfo){
+			this.getUnitById(this.shortInfo).drawEW();
+		} else if (aUnit){
+			this.getUnitById(aUnit).drawEW();
+		}
+
+		var valid = false;
+		if (this.flightDeploy.mission == 1){ // patrol
+			valid = true;
+			var s = 0;
+			for (var i = 0; i < this.flightDeploy.loads.length; i++){
+				s += this.flightDeploy.loads[i].launch;
+			}
+			s = 35 + s*8;
+			s = Math.floor(s/2);
+
+			salvoCtx.translate(cam.o.x, cam.o.y);
+			salvoCtx.scale(cam.z, cam.z);
+			salvoCtx.translate(pos.x, pos.y);
+			salvoCtx.beginPath();			
+			salvoCtx.arc(0, 0, s, 0, 2*Math.PI, false);
+			salvoCtx.closePath();
+			salvoCtx.fillStyle = "green";
+			salvoCtx.globalAlpha = 0.3;
+			salvoCtx.fill();
+			salvoCtx.globalAlpha = 1;
+			salvoCtx.setTransform(1,0,0,1,0,0);
+		}
+		else if (this.userid != unit.userid && this.flightDeploy.mission == 2 && unit && unit.ship){ // strike
+			valid = true
+		} 
+		else if (this.userid != unit.userid && this.flightDeploy.mission == 3 && unit && (!unit.ship)){ // int
+			valid = true;
+		}
+
+
+		var ele = $("#deployOverlay");
+		var w = $(ele).width()/2;
+		var top = (e.clientY) + 50;
+		var left = (e.clientX) - w;
+		$(ele).css("top", top).css("left", left).show();
+		/*if (valid){
+			if (game.flightDeploy.mission > 1){
+				ele.find("#deployTarget").html(unit.name + " #" + unit.id);
+			} else ele.find("#deployTarget").html(unit.name + " #" + unit.id);
+		} else ele.find("#deployTarget").html("");
+		*/return;
+	}
+
+	this.doDeployFlight = function(pos){
+		var valid = false;
+		var t = 0;
+		var dest;
 
 		if (this.flightDeploy.mission == 1){ // Patrol
 			console.log("PATROL");
-			console.log(pos);
-			return true;
+			dest = pos;		
+			valid = true;
 		}
-		else if (this.shortInfo && this.flightDeploy.mission == 2){ // Strike
+		else if (this.shortInfo){
 			t = game.getUnitById(this.shortInfo);
-			if (t && t.ship && t.userid != game.userid){
-				console.log("STRIKE");
-				return true;
-			}
-		}
-		else if (this.shortInfo && this.flightDeploy.mission == 3){ // intercept
-			t = game.getUnitById(this.shortInfo);
-			if (t && !t.ship && t.userid != game.userid){
-				console.log("INTERCEPT");
-				return true;
+			if (t && t.ship && t.userid != game.userid || t && !t.ship && t.userid != game.userid){
+				dest = t.getPlannedPosition();
+				t = t.id;
+				console.log("STRIKE / INTERCEPT");
+				valid = true;
 			}
 		}
 
-		return false;
-	}
+		if (!valid){
+			return false;
+		}
 
-	this.doDeployFlight = function(){
-		this.flightDeploy = 1;
 
-	//	var ship = 
-		var hangar = ship.getSystemById($("#hangarLoadoutDiv").data("systemid"));
+		var s = this.getUnitById(aUnit);
+		var o = s.getPlannedPosition();
+		var facing = getAngleFromTo(o, dest);
+		var p = getPointInDirection(s.size, facing, o.x, o.y);
 
-		var p = getPointInDirection(ship.size, ship.facing, ship.x, ship.y);
-		var facing = ship.facing;
 
-		//var facing = Math.floor(getAngleFromTo(game.getUnitById(aUnit).getPlannedPosition(), {x: pos.x, y: pos.y}))
-
-		//id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available, baseHitChance, baseImpulse
 		var flight = new Flight(
-			{id: this.getUniqueID(), name: "Flight", shipType: "Flight",
+			{id: -this.ships.length+1, name: "Flight", shipType: "Flight", mission: {type: this.flightDeploy.mission, targetid: t, x: dest.x, y: dest.y},
 			x: p.x, y: p.y, facing: facing, ep: 0, baseImpulse: 250, currentImpulse: 250, fSize: 20, baseSize: 35, unitSize: 8, userid: this.userid, available: this.turn}
 		);
 
@@ -116,15 +162,19 @@ function Game(data, userid){
 		flight.friendly = 1;
 		flight.primary = new Primary(0, flight.id, 0, 0, 0);
 		flight.actions.push(new Move(-1, "deploy", 0, p.x, p.y, facing, 0, 0));
-		flight.launchdata = {
+		flight.launchData = {
 			shipid: aUnit,
-			systemid: hangar.id,
-			loads: hangar.loads
+			systemid: this.flightDeploy.id,
+			loads: this.flightDeploy.loads,
+			mission: this.flightDeploy.mission,
+			targetid: t,
+			x: dest.x,
+			y: dest.y
 		}
 
-		for (var i = 0; i < hangar.loads.length; i++){
-			for (var j = 1; j <= hangar.loads[i].launch; j++){
-				var f = new Fighter({id: j, name: hangar.loads[i].name, ep: 0, mass: 0, integrity: 0, value: 0, negation: 0, crits: 0, destroyed: 0})
+		for (var i = 0; i < this.flightDeploy.loads.length; i++){
+			for (var j = 1; j <= this.flightDeploy.loads[i].launch; j++){
+				var f = new Fighter({id: j, name: this.flightDeploy.loads[i].name, ep: 0, mass: this.flightDeploy.loads[i].mass, integrity: this.flightDeploy.loads[i].integrity, value: 0, negation: 0, crits: 0, destroyed: 0})
 				flight.structures.push(f);
 			}
 		}
@@ -135,7 +185,7 @@ function Game(data, userid){
 
 		$("#instructWrapper").hide();
 		$("#deployOverlay").hide();
-		game.getUnitById(aUnit).getSystemById(hangar.id).setFireOrder().select();
+		game.getUnitById(aUnit).getSystemById(this.flightDeploy.id).setFireOrder().select();
 		game.flightDeploy = false;
 		this.draw();
 
@@ -148,14 +198,14 @@ function Game(data, userid){
 		//id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available, baseHitChance, baseImpulse
 		var flight = new Flight(
 			{id: this.getUniqueID(), name: "Flight", shipType: "Flight",
-			x: pos.x, y: pos.y, facing: facing, ep: 0, baseImpulse: 250, currentImpulse: 250, fSize: 20, baseSize: 35, unitSize: 8, userid: this.userid, available: this.turn}
+			x: pos.x, y: pos.y, facing: facing, ep: 0, fSize: 20, baseSize: 35, unitSize: 8, userid: this.userid, available: this.turn}
 		);
 
 		flight.deployed = 1;
 		flight.friendly = 1;
 		flight.primary = new Primary(0, flight.id, 0, 0, 0);
 		flight.actions.push(new Move(-1, "deploy", 0, pos.x, pos.y, facing, 0, 0));
-		flight.launchdata = {
+		flight.launchData = {
 			shipid: aUnit,
 			systemid: hangar.id,
 			loads: hangar.loads
@@ -186,7 +236,7 @@ function Game(data, userid){
 				if (this.ships[i].flight && this.ships[i].available == this.turn){
 					var flight = {
 						name: "Flight",
-						launchdata: this.ships[i].launchdata,
+						launchData: this.ships[i].launchData,
 						actions: this.ships[i].actions,
 						turn: this.turn,
 						eta: 0,
@@ -792,6 +842,7 @@ Game.prototype.getUnitType = function (val){
 		if (unit.id == game.shortInfo){
 			return;
 		}
+		console.log("ding")
 
 		var ele = $("#shortInfo");
 		$(ele).children().remove();
@@ -801,11 +852,11 @@ Game.prototype.getUnitType = function (val){
 
 		unit.drawHoverElements();
 
-		var balls = this.getRelevantBallistics(unit);
+		var incoming = this.getIncomingUnits(unit);
 
-		for (var j = 0; j < balls.length; j++){
-			if (balls[j].destroyed){continue;}
-			balls[j].drawMovePlan();
+		for (var j = 0; j < incoming.length; j++){
+			if (incoming[j].destroyed){continue;}
+			incoming[j].drawMovePlan();
 		}
 		unit.drawMovePlan();
 
@@ -843,10 +894,18 @@ Game.prototype.getUnitType = function (val){
 		}
 	}
 
-	this.getRelevantBallistics = function(unit){
+	this.getIncomingUnits = function(target){
 		var ret = [];
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].flight){
+				if (this.ships[i].mission.targetid == target.id){
+					ret.push(this.ships[i]);
+				}
+			}
+		}
+
 		for (var i = 0; i < this.ballistics.length; i++){
-			if (this.ballistics[i].id == unit.id || this.ballistics[i].targetid == unit.id || this.ballistics[i].id == unit.targetid){
+			if (this.ballistics[i].id == target.id || this.ballistics[i].targetid == target.id || this.ballistics[i].id == target.targetid){
 				ret.push(this.ballistics[i]);
 				for (var j = i+1; j < this.ballistics.length; j++){
 					if (this.ballistics[i].id == this.ballistics[j].targetid){
@@ -888,36 +947,6 @@ Game.prototype.getUnitType = function (val){
 		return false;
 	}
 
-	this.hasShipOnPos = function(pos){
-		for (var i = 0; i < this.ships.length; i++){
-			var r = this.ships[i].size/3;
-			if (! this.ships[i].destroyed){
-				if (this.ships[i].isReady()){
-					var shipPos = this.ships[i].getBaseOffsetPos();
-					if (shipPos.x < pos.x + r && shipPos.x > pos.x - r){
-						if (shipPos.y > pos.y - r && shipPos.y < pos.y + r){
-							return (this.ships[i]);
-						}
-					}
-				}
-			}
-		}	
-		return false;
-	}
-
-	this.hasAmmoOnPos = function(pos){
-		var r = 7;
-		for (var i = 0; i < this.ballistics.length; i++){
-			var ammoPos = this.ballistics[i].getBaseOffsetPos();
-			if (pos.x < ammoPos.x + r && pos.x > ammoPos.x - r){
-				if (pos.y > ammoPos.y - r && pos.y < ammoPos.y + r){
-					return (this.ballistics[i]);
-				}
-			}
-		}
-		return false;
-	}
-
 	this.getShipByClick = function(pos){
 		for (var i = 0; i < this.ships.length; i++){
 			var r = this.ships[i].size/3;
@@ -932,6 +961,7 @@ Game.prototype.getUnitType = function (val){
 				}
 			}
 		}
+		return false;
 	}
 
 	this.getAmmoByClick = function(pos){
@@ -944,6 +974,7 @@ Game.prototype.getUnitType = function (val){
 				}
 			}
 		}
+		return false;
 	}
 
 	this.getUnitByClick = function(pos){
@@ -967,6 +998,7 @@ Game.prototype.getUnitType = function (val){
 				unit.resetMoveMode();
 
 				if (unit.ship){unit.getSystemByName("Sensor").drawEW();}
+				if (unit.flight){unit.drawMovePlan()}
 			}
 		}
 		game.draw();

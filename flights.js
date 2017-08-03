@@ -11,17 +11,84 @@ function Flight(data){
 	this.turns = 10;
 	this.dogfights = [];
 	this.trueSize;
+	this.mission = data.mission || {};
 
 	this.create = function(){
 		this.img = window.shipImages[this.structures[0].name.toLowerCase() + "l"];
 		this.smallImg = window.shipImages[this.structures[0].name.toLowerCase()];
 		this.setFighterState();
 		this.setDrawData();
-		//this.setMaxMass();
+
+		if (this.id < 0){
+			this.setMaxMass();
+			this.setImpulse();
+		}
 		//this.setEP();
 		//this.setTurns();
 	//	this.setPosition();
 		this.setLayout();
+	}
+
+
+
+	this.setNextStep = function(){
+		var target = game.getUnitById(this.targetid);
+		var dist = getDistance(this.getPlannedPosition(), this.finalStep);
+		var impulse = this.getCurrentImpulse();
+		if (impulse < dist){
+			var a = getAngleFromTo(this, target.getPlannedPosition());
+			this.nextStep = getPointInDirection(impulse, a, this.x, this.y);
+		}
+		else {
+			this.nextStep = this.finalStep;
+		}
+	}
+
+	this.drawMovePlan = function(){
+		var target;
+		if (this.mission.type > 1){
+			target = game.getUnitById(this.mission.targetid).getPlannedPosition();
+		} else target = {x: this.mission.x, y: this.mission.y};
+
+		var dist = getDistance(this.getPlannedPosition(), target);
+		var impulse = this.getCurrentImpulse();
+
+		planCtx.globalAlpha = 1;
+		planCtx.translate(cam.o.x, cam.o.y);
+		planCtx.scale(cam.z, cam.z);
+		planCtx.beginPath();
+		planCtx.moveTo(this.x, this.y);
+
+		if (impulse < dist){
+			var a = getAngleFromTo(this, target);
+			var step = getPointInDirection(impulse, a, this.x, this.y);
+
+			planCtx.lineTo(step.x, step.y);
+			planCtx.closePath();
+			planCtx.strokeStyle = "white";
+			planCtx.stroke();
+			planCtx.beginPath();
+			planCtx.moveTo(step.x, step.y);
+		}
+
+		planCtx.lineTo(target.x, target.y);
+		planCtx.closePath();
+		planCtx.strokeStyle = "#00ea00";
+		if (!this.friendly){
+			planCtx.strokeStyle = "red";
+		}
+		planCtx.stroke();
+
+		if (this.mission.type == 1){
+			planCtx.beginPath();			
+			planCtx.arc(this.mission.x, this.mission.y, this.size/2, 0, 2*Math.PI, false);
+			planCtx.closePath();
+			planCtx.fillStyle = "green";
+			planCtx.globalAlpha = 0.3;
+			planCtx.fill();
+			planCtx.globalAlpha = 1;
+		}
+		planCtx.setTransform(1,0,0,1,0,0);
 	}
 
 	this.isDogfighting = function(id){
@@ -30,6 +97,10 @@ function Flight(data){
 				return true;
 			}
 		} return false;
+	}
+
+	this.resetMoveMode = function(){
+		return;
 	}
 
 	this.getDamageEntriesByFireId = function(fire){
@@ -136,6 +207,11 @@ function Flight(data){
 		}
 	}
 
+	this.setImpulse = function(){
+		this.baseImpulse = 100;
+		this.currentImpulse = 500;
+	}
+
 	this.getEP = function(){
 		return this.ep;
 	}
@@ -177,7 +253,6 @@ function Flight(data){
 	}
 
 	this.drawHoverElements = function(){
-	//	this.drawMoveLength();
 	}
 
 	this.drawSelf = function(){
@@ -257,6 +332,68 @@ function Flight(data){
 		}
 		return false;
 	}
+
+	this.createBaseDiv = function(){
+		var owner = "friendly";
+		if (game.phase > -2 && this.userid != game.userid){owner = "hostile";}
+		var div = document.createElement("div");
+			div.className = "shipDiv " + owner;
+			$(div).data("shipId", this.id);
+
+		var subDiv = document.createElement("div");
+			subDiv.className = "header";
+		
+		var table = document.createElement("table");
+			table.className = "general";
+
+		var header = "red";
+		if (this.friendly){header = "green";}
+
+			$(table)
+				.append($("<tr>")
+					.append($("<th>").html(this.name.toUpperCase() + " #" + this.id).attr("colspan", 2).addClass(header)))
+				.append($("<tr>")
+					.append($("<td>").html("Classification"))
+					.append($("<td>").html(game.getUnitType(this.traverse))))
+				.append($("<tr>")
+					.append($("<td>").html("Current Impulse"))
+					.append($("<td>").html(this.getCurrentImpulse())))
+				.append($("<tr>")
+					.append($("<td>").html("Current Mission"))
+					.append($("<td>").html(game.getMissionString(this.mission.type))))
+				
+		subDiv.appendChild(table);
+		div.appendChild(subDiv);
+
+		$(this.expandDiv(div))
+			.addClass("disabled")
+			.drag()
+			.find(".structContainer")
+				.contextmenu(function(e){e.stopPropagation;})
+				//.addClass("disabled")
+				.end()
+			.find(".header")
+				.contextmenu(function(e){
+					e.stopImmediatePropagation(); e.preventDefault();
+					$(this).parent().find($(".structContainer")).toggle();
+				})
+				.end()
+			.find(".iconContainer")
+				.contextmenu(function(e){
+					e.stopImmediatePropagation(); e.preventDefault();
+					if ($(this).parent().data("shipId") != aUnit){
+						$(this).parent().addClass("disabled");
+					}
+				})
+
+
+		if (game.phase == 2){
+			$(div).find(".structContainer").show();
+		}
+
+		this.element = div;
+	}
+
 
 	this.expandDiv = function(div){
 		var iconContainer = document.createElement("div");
@@ -419,7 +556,22 @@ function Flight(data){
 		*/return div;
 	}
 
-	this.selectAlal = function(e, id){
+	this.doSelect = function(){
+		console.log(this);
+		aUnit = this.id;
+		this.selected = true;
+		this.setUnitGUI();
+		game.setShipTransform();
+		this.drawPositionMarker();
+		game.resetShipTransform();
+		game.drawAllPlans();
+		this.switchDiv();
+		//this.setMoveMode();
+
+		//console.log(this.getRemainingEP() / this.baseTurnCost)
+	}
+
+	this.selectAllA = function(e, id){
 		var s = this.getSystemById(id);
 		var w = s.getActiveWeapon();
 		var name = w.name;

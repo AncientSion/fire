@@ -20,6 +20,8 @@ class Flight extends Mini {
 	public $traverse = -3;
 	public $turnAngle = 45;
 	public $ep = 500;
+	public $fireOrder;
+	public $mission;
 
 	function __construct($id, $userid, $available, $status, $destroyed){
 		$this->id = $id;
@@ -48,16 +50,6 @@ class Flight extends Mini {
 		$this->setRemainingImpulse($turn);
 		$this->setRemainingDelay($turn);
 		$this->setBaseStats();
-		$this->setLaunchPenalties($turn);
-	}
-
-	public function setLaunchPenalties($turn){
-		if ($this->available == $turn){
-			$this->currentImpulse = floor($this->currentImpulse * 0.6);
-			$this->ep = floor($this->currentImpulse * 0.4);
-		} else if ($this->available == $turn-1){
-			$this->currentImpulse = floor($this->currentImpulse / 0.6);
-		}
 	}
 
 	public function setBaseStats(){
@@ -73,6 +65,11 @@ class Flight extends Mini {
 				$this->mass = max($this->mass, $this->structures[$i]->mass);
 			}
 		}
+	}
+
+	public function setCurrentImpulse($turn){
+		$this->baseImpulse = floor(pow($this->mass, -1.5) * 50000);
+		$this->currentImpulse = $this->baseImpulse;
 	}
 
 	public function setEP(){
@@ -104,7 +101,7 @@ class Flight extends Mini {
 	}
 
 	public function addFighters($fighters){
-		$fighter;
+		//var_export($fighters);
 		for ($i = 0; $i < sizeof($fighters); $i++){
 			for ($j = 1; $j <= $fighters[$i]["amount"]; $j++){
 				$this->structures[] = new $fighters[$i]["name"](
@@ -117,8 +114,12 @@ class Flight extends Mini {
 			}
 		}
 		return true;
+	}	
+
+	public function setMission($data){
+		$this->mission = new Mission($data);
 	}
-	
+
 	public function getSystemById($id){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->id == $id){
