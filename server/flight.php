@@ -16,12 +16,10 @@ class Flight extends Mini {
 	public $profile = 0;
 	public $primary = false;
 	public $dogfights = array();
-	public $baseImpulse = 250;
 	public $traverse = -3;
-	public $turnAngle = 45;
-	public $ep = 500;
 	public $fireOrder;
 	public $mission;
+	public $enRoute = true;
 
 	function __construct($id, $userid, $available, $status, $destroyed){
 		$this->id = $id;
@@ -45,7 +43,7 @@ class Flight extends Mini {
 		$this->cost = static::$value;
 		$this->setSize();
 		$this->setMass();
-		$this->setEP();
+		//$this->setEP();
 		$this->setCurrentImpulse($turn);
 		$this->setRemainingImpulse($turn);
 		$this->setRemainingDelay($turn);

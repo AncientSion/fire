@@ -50,6 +50,7 @@ function Ship(data){
 	this.highlight = false;
 	this.destroyed = false;
 	this.disabled = data.disabled;
+	this.selected = false;
 	this.element;
 
 	this.hitTable;
@@ -2545,7 +2546,7 @@ function Ship(data){
 		game.resetShipTransform();
 		game.drawAllPlans();
 		this.switchDiv();
-		this.setMoveMode();
+		if (this.ship){this.setMoveMode();}
 
 		//console.log(this.getRemainingEP() / this.baseTurnCost)
 	}
@@ -2758,18 +2759,18 @@ Ship.prototype.setPreMoveFacing = function(){
 	}
 
 Ship.prototype.setPostMoveFacing = function(){
-		this.drawFacing = this.facing;
-		for (var i = 0; i < this.actions.length; i++){
-			if (this.actions[i].type == "turn"){
-				this.drawFacing += this.actions[i].a;
-			}
+	this.drawFacing = this.facing;
+	for (var i = 0; i < this.actions.length; i++){
+		if (this.actions[i].type == "turn"){
+			this.drawFacing += this.actions[i].a;
 		}
 	}
+}
 
 Ship.prototype.setPreMovePosition = function(){
-		this.drawX = this.x;
-		this.drawY = this.y;
-	}
+	this.drawX = this.x;
+	this.drawY = this.y;
+}
 
 Ship.prototype.setPostMovePosition = function(){
 	//if (!this.actionslength){

@@ -146,16 +146,14 @@ function Game(data, userid){
 			return false;
 		}
 
-
 		var s = this.getUnitById(aUnit);
 		var o = s.getPlannedPosition();
 		var facing = getAngleFromTo(o, dest);
 		var p = getPointInDirection(s.size, facing, o.x, o.y);
 
-
 		var flight = new Flight(
-			{id: -this.ships.length+1, name: "Flight", shipType: "Flight", mission: {type: this.flightDeploy.mission, targetid: t, x: dest.x, y: dest.y},
-			x: p.x, y: p.y, facing: facing, ep: 0, baseImpulse: 250, currentImpulse: 250, fSize: 20, baseSize: 35, unitSize: 8, userid: this.userid, available: this.turn}
+			{id: -this.ships.length-20, name: "Flight", shipType: "Flight", mission: {type: this.flightDeploy.mission, targetid: t, x: dest.x, y: dest.y},
+			x: p.x, y: p.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, currentImpulse: 0, fSize: 20, baseSize: 35, unitSize: 8, userid: this.userid, available: this.turn}
 		);
 
 		flight.deployed = 1;
@@ -842,7 +840,6 @@ Game.prototype.getUnitType = function (val){
 		if (unit.id == game.shortInfo){
 			return;
 		}
-		console.log("ding")
 
 		var ele = $("#shortInfo");
 		$(ele).children().remove();
@@ -1029,6 +1026,7 @@ Game.prototype.getUnitType = function (val){
 	this.drawAllPlans = function(){
 		if (game.phase < 0 || game.phase > 2){return;}
 		if (aUnit && !game.animating){
+			planCtx.clearRect(0, 0, res.x, res.y);
 			for (var i = 0; i < this.ships.length; i++){
 				this.ships[i].drawMovePlan();
 			}
@@ -1277,7 +1275,7 @@ Game.prototype.getUnitType = function (val){
 
 		cam.setZoom(1);
 		//cam.setFocus(this.ships[0].x, this.ships[0].y);
-		setFPS(50);
+		setFPS(60);
 		window.animShip = false;
 		window.animFlight = false;
 		if (game.phase == 1){
@@ -1324,8 +1322,11 @@ Game.prototype.getUnitType = function (val){
 			}
 
 			this.ships[i].animationSetupMove();
+			var frameMod;
 
-			var frameMod = window.fps / this.ships[i].getCurrentImpulse();
+			if (this.ships[i].ship){
+				var frameMod = window.fps / this.ships[i].getCurrentImpulse();
+			} else frameMod = window.fps / this.ships[i].actions[this.ships[i].actions.length-1].dist;
 
 			for (var j = 0; j < this.ships[i].actions.length; j++){
 				if (this.ships[i].actions[j].turn == game.turn){

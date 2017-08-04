@@ -541,7 +541,7 @@ function canvasMouseClick(e){
 	//var pos = new Point(e.clientX - rect.left, e.clientY - rect.top);
 	var gamepos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
 	//console.log("canvas pos " + pos.x + " / " + pos.y);
-	//console.log("game pos " + gamepos.x	+ " / " + gamepos.y);
+	console.log("game pos " + gamepos.x	+ " / " + gamepos.y);
 	
 	switch (game.phase){
 		case -1:

@@ -51,6 +51,7 @@ class Mission {
 	public $turn;
 	public $x;
 	public $y;
+	public $arrived;
 
 	function __construct($data){
 		//var_export($data);
@@ -61,6 +62,7 @@ class Mission {
 		$this->targetid = $data["targetid"];
 		$this->x = $data["x"];
 		$this->y = $data["y"];
+		$this->arrived = $data["arrived"];
 	}
 }
 

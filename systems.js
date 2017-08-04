@@ -287,9 +287,6 @@ System.prototype.getBoostEffectElements = function(table){
 
 
 System.prototype.getBoostDiv = function(){
-	if (this.id == 3 && this.parentId == 2){
-		console.log("ding");
-	}
 	if (this.destroyed || !this.effiency){return};
 	if (this.boostEffect.length == 1 && this.boostEffect[0].type == "Reload" && this.getLoadLevel() == 1){return;}
 	var div = document.createElement("div");
@@ -1893,9 +1890,6 @@ Laser.prototype.getFillStyle = function(x, y, dist){
 }
 
 function Dual(system){
-	if (system.parentId == 7 && system.id == 4){
-		console.log("ding");
-	}
 	Weapon.call(this, system);
 	this.weapons = system.weapons;
 	this.modes = system.modes;

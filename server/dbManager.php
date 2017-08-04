@@ -619,13 +619,15 @@ class DBManager {
 	}
 
 	public function insertFlightMission($flight){
-		Debug::log("insertFlightMission");
+		//Debug::log("insertFlightMission");
 		$stmt = $this->connection->prepare("
 			INSERT INTO missions 
-				(unitid, type, turn, targetid, x, y)
+				(unitid, type, turn, targetid, x, y, arrived)
 			VALUES
-				(:unitid, :type, :turn, :targetid, :x, :y)
+				(:unitid, :type, :turn, :targetid, :x, :y, :arrived)
 		");
+
+		$arrived = 0;
 
 		$stmt->bindParam(":unitid", $flight["id"]);
 		$stmt->bindParam(":type", $flight["launchData"]["mission"]);
@@ -633,12 +635,42 @@ class DBManager {
 		$stmt->bindParam(":targetid", $flight["launchData"]["targetid"]);
 		$stmt->bindParam(":x", $flight["launchData"]["x"]);
 		$stmt->bindParam(":y", $flight["launchData"]["y"]);
+		$stmt->bindParam(":arrived", $arrived);
 		$stmt->execute();
 		if ($stmt->errorCode() == 0){
 			return true;
 		}
 		return false;
 	}	
+
+	public function updateMissionState($data){
+		Debug::log("updateMissionState");
+		$stmt = $this->connection->prepare("
+			UPDATE missions
+			SET type = :type,
+				turn = :turn
+				targetid = :targeid,
+				x = :x,
+				y = :y,
+				arrived = :arrived
+			WHERE id = :id
+		");
+
+		for ($i = 0; $i < sizeof($data); $i++){
+			$stmt->bindParam(":type", $data[$i]->type);
+			$stmt->bindParam(":turn", $data[$i]->turn);
+			$stmt->bindParam(":targetid", $data[$i]->targetid);
+			$stmt->bindParam(":x", $data[$i]->y);
+			$stmt->bindParam(":x", $data[$i]->y);
+			$stmt->bindParam(":arrived", $data[$i]->arrived);
+			$stmt->bindParam(":id", $data[$i]->id);
+
+			$stmt->execute();
+			if ($stmt->errorCode() == 0){
+				continue;
+			} else Debug::log("ERROR"); return false;
+		}
+	}
 
 	public function updateSystemLoad($data){
 		Debug::log("updateSystemLoad");

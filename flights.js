@@ -12,6 +12,7 @@ function Flight(data){
 	this.dogfights = [];
 	this.trueSize;
 	this.mission = data.mission || {};
+	this.traverse = -3;
 
 	this.create = function(){
 		this.img = window.shipImages[this.structures[0].name.toLowerCase() + "l"];
@@ -29,7 +30,9 @@ function Flight(data){
 		this.setLayout();
 	}
 
-
+	this.canDeploy = function(){
+		return false;
+	}
 
 	this.setNextStep = function(){
 		var target = game.getUnitById(this.targetid);
@@ -45,10 +48,23 @@ function Flight(data){
 	}
 
 	this.drawMovePlan = function(){
+		this.drawFlightPath();
+		this.drawMissionArea();
+	}
+
+	this.drawFlightPath = function(){
+		if (this.mission.arrived){
+			return;
+		}
 		var target;
+		var origin = this.getPlannedPosition();
 		if (this.mission.type > 1){
 			target = game.getUnitById(this.mission.targetid).getPlannedPosition();
 		} else target = {x: this.mission.x, y: this.mission.y};
+
+		if (target === origin){
+			console.log("bing");
+		}
 
 		var dist = getDistance(this.getPlannedPosition(), target);
 		var impulse = this.getCurrentImpulse();
@@ -57,11 +73,11 @@ function Flight(data){
 		planCtx.translate(cam.o.x, cam.o.y);
 		planCtx.scale(cam.z, cam.z);
 		planCtx.beginPath();
-		planCtx.moveTo(this.x, this.y);
+		planCtx.moveTo(origin.x, origin.y);
 
 		if (impulse < dist){
 			var a = getAngleFromTo(this, target);
-			var step = getPointInDirection(impulse, a, this.x, this.y);
+			var step = getPointInDirection(impulse, a, origin.x, origin.y);
 
 			planCtx.lineTo(step.x, step.y);
 			planCtx.closePath();
@@ -78,16 +94,25 @@ function Flight(data){
 			planCtx.strokeStyle = "red";
 		}
 		planCtx.stroke();
+		planCtx.setTransform(1,0,0,1,0,0);
+	}
 
-		if (this.mission.type == 1){
-			planCtx.beginPath();			
-			planCtx.arc(this.mission.x, this.mission.y, this.size/2, 0, 2*Math.PI, false);
-			planCtx.closePath();
-			planCtx.fillStyle = "green";
-			planCtx.globalAlpha = 0.3;
-			planCtx.fill();
-			planCtx.globalAlpha = 1;
+	this.drawMissionArea = function(){
+		if (this.mission.type != 1){
+			return;
 		}
+
+		planCtx.translate(cam.o.x, cam.o.y);
+		planCtx.scale(cam.z, cam.z);
+		planCtx.beginPath();
+		planCtx.moveTo(origin.x, origin.y);
+		planCtx.beginPath();			
+		planCtx.arc(this.mission.x, this.mission.y, this.size/2, 0, 2*Math.PI, false);
+		planCtx.closePath();
+		planCtx.fillStyle = "green";
+		planCtx.globalAlpha = 0.3;
+		planCtx.fill();
+		planCtx.globalAlpha = 1;
 		planCtx.setTransform(1,0,0,1,0,0);
 	}
 
@@ -208,8 +233,8 @@ function Flight(data){
 	}
 
 	this.setImpulse = function(){
-		this.baseImpulse = 100;
-		this.currentImpulse = 500;
+		this.baseImpulse = Math.floor(Math.pow(this.mass, -1.5)*50000);
+		this.currentImpulse = this.baseImpulse;
 	}
 
 	this.getEP = function(){
@@ -556,21 +581,6 @@ function Flight(data){
 		*/return div;
 	}
 
-	this.doSelect = function(){
-		console.log(this);
-		aUnit = this.id;
-		this.selected = true;
-		this.setUnitGUI();
-		game.setShipTransform();
-		this.drawPositionMarker();
-		game.resetShipTransform();
-		game.drawAllPlans();
-		this.switchDiv();
-		//this.setMoveMode();
-
-		//console.log(this.getRemainingEP() / this.baseTurnCost)
-	}
-
 	this.selectAllA = function(e, id){
 		var s = this.getSystemById(id);
 		var w = s.getActiveWeapon();
@@ -647,8 +657,21 @@ function Flight(data){
 Flight.prototype = Object.create(Ship.prototype);
 
 Flight.prototype.setPreMoveFacing = function(){
-	this.drawFacing = this.facing;
+	var o = {x: this.x, y: this.y};
+	var t;
+
+	if (this.mission.type == 1){
+		t = {x: this.mission.x, y: this.mission.y};
+	} else t = game.getUnitById(this.mission.targetid).getPlannedPosition();
+
+
+	this.drawFacing = getAngleFromTo(o, t);
 }
+
+Flight.prototype.setPostMoveFacing = function(){
+	return;
+}
+
 
 
 function Fighter(data){

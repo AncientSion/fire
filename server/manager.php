@@ -69,6 +69,8 @@ class Manager {
 	}
 
 	public function getClientData(){
+
+		//$this->handleFighterMovementPhaseNew(); return;
 		//$this->test(); return;
 		//$this->initiateDogfights();
 		//$this->createDogfightFires();
@@ -370,10 +372,12 @@ class Manager {
 				break;
 			case 0; // ship moves
 				$this->handleShipMovementPhase();
-				$this->startFighterMovementPhase();
+				$this->handleFighterMovementPhaseNew();
+				$this->startFiringPhase();
+			//	$this->startFighterMovementPhase();startFiringPhase
 				break;
 			case 1; // fighters moves
-				$this->handleFighterMovementPhase();
+				//$this->handleFighterMovementPhase();
 				$this->startFiringPhase();
 				break;
 			case 2; // from fire to resolve fire
@@ -604,6 +608,70 @@ class Manager {
 		$this->resolveUnitMovement();
 		$this->initiateDogfights();
 		//$this->createDogfightFires();
+	}
+	public function handleFighterMovementPhaseNew(){
+		Debug::log("handleFighterMovementPhaseNew");
+
+		$this->determineFlightPosition();
+
+		//$this->resolveUnitMovement();
+		//$this->initiateDogfights();
+		//$this->createDogfightFires();
+	}
+
+	public function determineFlightPosition(){
+		Debug::log("determineFlightPosition");
+		$flights = array();
+		$missions = array();
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->flight){
+				Debug::log("_____________________");
+				$origin = $this->ships[$i]->getCurrentPosition();
+				$impulse = $this->ships[$i]->getCurrentImpulse();
+				$tPos;
+				$dist;
+				$angle;
+				if ($this->ships[$i]->mission->type == 1){
+					$tPos = new Point($this->ships[$i]->mission->x, $this->ships[$i]->mission->y);
+				}
+				else 
+					$tPos = $this->getUnitById($this->ships[$i]->mission->targetid)->getCurrentPosition();
+
+				$dist = Math::getDist2($origin, $tPos);
+				$angle = Math::getAngle2($origin, $tPos);
+
+				Debug::log("Flight #".$this->ships[$i]->id.", impulse: ".$impulse);
+				Debug::log("From ".$origin->x."/".$origin->y." to ".$tPos->x."/".$tPos->y);
+				Debug::log("Dist ".$dist.", angle: ".$angle);
+
+				if ($impulse <= $dist){
+					Debug::log("close in");
+					$tPos = Math::getPointInDirection($impulse, $angle, $origin->x, $origin->y);
+				}
+				else {
+					$this->ships[$i]->mission->arrived = 1;
+					$mission[] = $this->ships[$i]->mission;
+				}
+
+
+				$this->ships[$i]->facing = $angle;
+				$move = new Action(-1, $this->turn,	"move",	$dist, $tPos->x, $tPos->y,
+				$angle, 0, 0, 0, 0);
+				$this->ships[$i]->actions[] = $move;
+
+				Debug::log("adding move to: ".$move->x."/".$move->y);
+
+				$flights[] = $this->ships[$i];
+			}
+		}
+
+		if (sizeof($flights)){
+			DBManager::app()->insertServerActions($flights);
+		}
+		if (sizeof($missions)){
+			DBManager::app()->updateMissionState($missions);
+		}
 	}
 	
 	public function resolveUnitMovement(){
