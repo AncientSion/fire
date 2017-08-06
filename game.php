@@ -594,10 +594,6 @@ echo "</script>";
 			//console.log("maxVector")
 			game.getUnitById($(this).data("shipid")).moveInVector($(this).data("dist"));
 		})
-
-
-
-
 	})
 
 
@@ -645,8 +641,13 @@ echo "</script>";
 						window.cancelAnimationFrame(anim);
 						for (var i = 0; i < game.ships.length; i++){
 							game.ships[i].deployed = true;
-							game.ships[i].setPostMovePosition();
-							game.ships[i].setPostMoveFacing();
+							if (game.ships[i].flight){
+								game.ships[i].setPostMovePosition();
+								game.ships[i].setPostMoveImage();
+							} else {
+								game.ships[i].setPostMovePosition();
+								game.ships[i].setPostMoveFacing();
+							}
 						}
 					}
 					game.deployDone();

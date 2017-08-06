@@ -1,5 +1,7 @@
 <?php
 
+include_once 'global.php';
+
 class DBManager {
 
 	private $connection = null;
@@ -9,7 +11,7 @@ class DBManager {
 
 		if ($this->connection === null){
 			$user = "aatu"; $pass = "Kiiski";
-			$user = "root"; $pass = "147147";
+			//$user = "root"; $pass = "147147";
 			$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$user,$pass);
 			//$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			//$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -385,7 +387,7 @@ class DBManager {
 	}
 
 	public function insertServerActions($units){
-		Debug::log("DB insertServerActions");
+		Debug::log("DB insertServerActions s: ".sizeof($units));
 		$stmt = $this->connection->prepare("
 			INSERT INTO actions 
 				(shipid, turn, type, dist, x, y, a, cost, delay, costmod, resolved)
@@ -396,6 +398,7 @@ class DBManager {
 		for ($i = 0; $i < sizeof($units); $i++){
 			for ($j = 0; $j < sizeof($units[$i]->actions); $j++){
 				if ($units[$i]->actions[$j]->resolved == 0){
+					Debug::log("Insert Action for unit: ".$units[$i]->id);
 					$units[$i]->actions[$j]->resolved = 1;
 					
 					$stmt->bindParam(":shipid", $units[$i]->id);
@@ -648,8 +651,8 @@ class DBManager {
 		$stmt = $this->connection->prepare("
 			UPDATE missions
 			SET type = :type,
-				turn = :turn
-				targetid = :targeid,
+				turn = :turn,
+				targetid = :targetid,
 				x = :x,
 				y = :y,
 				arrived = :arrived
@@ -660,8 +663,8 @@ class DBManager {
 			$stmt->bindParam(":type", $data[$i]->type);
 			$stmt->bindParam(":turn", $data[$i]->turn);
 			$stmt->bindParam(":targetid", $data[$i]->targetid);
-			$stmt->bindParam(":x", $data[$i]->y);
-			$stmt->bindParam(":x", $data[$i]->y);
+			$stmt->bindParam(":x", $data[$i]->x);
+			$stmt->bindParam(":y", $data[$i]->y);
 			$stmt->bindParam(":arrived", $data[$i]->arrived);
 			$stmt->bindParam(":id", $data[$i]->id);
 

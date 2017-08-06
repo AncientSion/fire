@@ -45,6 +45,7 @@ class Ship {
 	public $baseTurnDelay;
 	public $baseImpulseCost;
 	public $hitTable;
+	public $cc = array();
 
 	function __construct($id, $userid, $available, $status, $destroyed){
 		$this->id = $id;
@@ -56,6 +57,16 @@ class Ship {
 		$this->addPrimary();
 		$this->addStructures();
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq());
+	}
+
+	public function isCloseCombat($fire){
+		for ($i = 0; $i < sizeof($this->cc); $i++){
+			if ($this->cc[$i] == $fire->shooterid){
+				Debug::log("close combat! ".$this->id."/".$fire->shooterid);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public function getId(){
@@ -545,10 +556,6 @@ class Ship {
 		}
 	}
 
-	public function isDogfight($fire){
-		return false;
-	}
-
 	public function calculateToHit($fire){
 		//Debug::log("calculateToHit");
 		$multi = 1;
@@ -562,9 +569,9 @@ class Ship {
 		$multi += $this->getImpulseProfileMod();
 		$multi -= $this->getDefensiveBonus($fire->shooter->id);
 
-		if ($this->isDogfight($fire)){
-			$base *= 2;
-		}
+	//if ($this->isCloseCombat($fire)){
+	//		$base *= 2;
+	//	}
 
 		$req = ($base * $multi) * (1-($traverse*0.2)) - $range;
 		//Debug::log("CALCULATE TO HIT - angle: ".$fire->angle.", base: ".$base.", trav: ".$traverse.", total multi: ".$multi.", dist/range: ".$fire->dist."/".$range.", req: ".$req);
@@ -748,6 +755,10 @@ class Ship {
 		return new Point($this->x, $this->y);
 	}
 
+	public function getLatestPosition(){
+		return $this->actions[sizeof($this->actions)-1];
+	}
+
 	public function getFacing(){
 		return $this->facing;
 	}
@@ -768,7 +779,7 @@ class Ship {
 
 	public function getHitDist($fire){
 
-		if ($this->isDogfight($fire)){
+		if ($this->isCloseCombat($fire)){
 			return 0;
 		}
 		
@@ -787,7 +798,7 @@ class Ship {
 
 	public function getHitAngle($fire){
 
-		if ($this->isDogfight($fire)){
+		if ($this->isCloseCombat($fire)){
 			return mt_rand(0, 359);
 		}
 		

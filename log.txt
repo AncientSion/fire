@@ -1,47 +1,60 @@
-insertFlightMission
-insertFlightMission
-36
-2
-2
-
-284
--264
-insertFlightMission
-37
-
-2
-
-
-
-insertFlightMission
-38
-2
-2
-32
-284
--264
-insertFlightMission
-39
-2
-2
-32
-284
--264
-insertFlightMission
-40
-1
-2
-0
--86
--100
-insertFlightMission
-insertFlightMission
-doAdvance for game3 from phase -1 to phase 0
-resolveDeployActions s: 2
-handleJumpActions
-assembleEndStates
-updateUnitEndState s:4 2/-1
-advancing game state time: 0.02 seconds.
-doAdvance for game3 from phase 0 to phase 1
-resolveUnitMovementDB
-advancing game state time: 0.021 seconds.
+valid: 3/2
+valid: 3/4
+valid: 2/4
+valid: 3/2
+valid: 3/4
+valid: 2/4
+valid: 3/2
+valid: 3/4
+valid: 2/4
+valid: 3/2
+valid: 3/4
+valid: 2/4
+valid: 3/2
+valid: 3/4
+valid: 2/4
+valid: 3/2
+valid: 3/4
+valid: 2/4
+valid: 3/2
+valid: 3/4
+valid: 2/4
+valid: 3/2
+valid: 3/4
+valid: 2/4
+valid: 3/2
+valid: 3/4
+valid: 2/4
+valid: 3/2
+valid: 3/4
+valid: 2/4
+valid: 3/2
+valid: 3/4
+valid: 2/4
+valid: 3/2
+valid: 3/4
+valid: 2/4
+valid: 3/2
+valid: 3/4
+valid: 2/4
+valid: 3/2
+valid: 3/4
+valid: 2/4
+valid: 3/2
+valid: 3/4
+valid: 2/4
+valid: 3/2
+valid: 3/4
+valid: 2/4
+valid: 3/2
+valid: 3/4
+valid: 2/4
+valid: 3/2
+valid: 3/4
+valid: 2/4
+valid: 3/2
+valid: 3/4
+valid: 2/4
+valid: 3/2
+valid: 3/4
+valid: 2/4

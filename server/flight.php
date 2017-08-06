@@ -15,7 +15,6 @@ class Flight extends Mini {
 	public $mass = 0;
 	public $profile = 0;
 	public $primary = false;
-	public $dogfights = array();
 	public $traverse = -3;
 	public $fireOrder;
 	public $mission;
@@ -34,7 +33,7 @@ class Flight extends Mini {
 			$this->structures[$i]->setState($turn);
 		}
 		$this->isDestroyed();
-		$this->lockFighterWeapons($turn);
+		//$this->lockFighterWeapons($turn);
 		$this->setProps($turn);
 	}
 
@@ -188,14 +187,5 @@ class Flight extends Mini {
     		return $hitSystem->negation[2];
 		}
     }
-
-	public function isDogfight($fire){
-		for ($i = 0; $i < sizeof($this->dogfights); $i++){
-			if ($this->dogfights[$i] == $fire->shooterid){
-				return true;
-			}
-		}
-		return false;
-	}
 }
 ?>

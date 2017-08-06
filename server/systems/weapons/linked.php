@@ -6,6 +6,7 @@ class Linked extends Weapon {
 	public $reload = 1;
 	public $priority = 10;
 	public $traverse = -4;
+	public $accDecay = 500;
 
 	function __construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end){
 		$this->id = $id;
@@ -44,7 +45,6 @@ class LinkedParticle extends Linked {
 class IonBolt extends LinkedParticle {
 	public $name = "IonBolt";
 	public $display = "Ion Accelerator";
-	public $accDecay = 300;
 	public $shots = 1;
 	public $animColor = "orange";
 	public $reload = 2;
@@ -61,7 +61,6 @@ class LinkedParticleGun extends LinkedParticle {
 	public $name = "LinkedParticleGun";
 	public $display = "Linked Particle Gun";
 	public $animColor = "blue";
-	public $accDecay = 300;
 	
 	function __construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end){
 		parent::__construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end);
@@ -72,7 +71,6 @@ class LinkedNeutronRepeater extends LinkedParticle {
 	public $name = "LinkedNeutronRepeater";
 	public $display = "Linked Neutron Repeater";
 	public $animColor = "green";
-	public $accDecay = 300;
 	
 	function __construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end){
 		parent::__construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end);
@@ -100,7 +98,6 @@ class ParticlePulsar extends FighterPulse {
 	public $name = "ParticlePulsar";
 	public $display = "Particle Pulsar";
 	public $animColor = "blue";
-	public $accDecay = 300;
 	public $shots = 1;
 	public $traverse = -3;
 	public $basePulses = 2;

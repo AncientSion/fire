@@ -122,8 +122,8 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 		var multi = 1;
 		if (vessel.userid != ship.userid){
 			if (game.target == vessel.id){
-				console.log("breaking");
-				//return;
+				//console.log("breaking");
+				return;
 			}
 			else {
 				game.target = vessel.id;
@@ -141,12 +141,7 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 			var valid = false;
 			var targetData = $("#game").find("#weaponAimTableWrapper").find("#targetInfo").find("#targetData");
 			var vessel;
-			var dogFight = false;
 			var section;
-
-			if (ship.flight && vessel.flight && ship.isDogfighting(vessel.id)){
-				dogFight = true;
-			}
 
 			if (vessel.salvo){ // aiming at SALVO
 				if (game.phase <= 2){
@@ -174,12 +169,6 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 
 			//console.log("armour: "+section.remainingNegation + " / " + section.negation);
 
-
-			if (dogFight){
-				baseHit *= 2;
-				dist = 0;
-			}
-
 			if (lock){
 				multi += lock;
 				lockString = "<span class ='green'>+" + lock + "</span>";
@@ -195,8 +184,6 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 				} else impulseString = "<span class ='green'>";
 				impulseString += round(impulse/2) + "</span>";
 			}
-
-
 
 			final = Math.floor(baseHit * multi);
 			targetData1
@@ -257,7 +244,7 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 				var row = $("<tr>");
 					row.append($("<td>").html(system.display + " #" + ship.structures[i].systems[j].id))
 
-				if (ship.flight && vessel.flight && ship.isDogfighting(vessel.id)){
+				if (game.isCloseCombat(ship, vessel)){
 					legalTarget = true;
 					inArc = true;
 				}
@@ -578,11 +565,7 @@ function handleFireClick(ship, vessel){
 								}
 
 								if (!validWeapon){
-									if (ship.flight && vessel.flight && ship.isDogfighting(vessel.id)){
-										inArc = true;
-										validWeapon = true;
-									}
-									else if (ship.ship && vessel.salvo){
+									if (ship.ship && vessel.salvo){
 										if (ship.id == vessel.targetid && getDistance(ship.getPlannedPosition(), vessel) >= ship.size/2){
 											validWeapon = true;
 										}
@@ -593,7 +576,8 @@ function handleFireClick(ship, vessel){
 								}
 
 								if (validWeapon && !inArc){
-									if (ship.flight && vessel.flight && ship.isDogfighting(vessel.id)){
+									if (game.isCloseCombat(ship, vessel)){
+										legalTarget = true;
 										inArc = true;
 									}
 									else if (ship.structures[i].systems[j].posIsOnArc(shipLoc, pos, facing)){ // ship vs ship/fighter

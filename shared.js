@@ -254,14 +254,10 @@ function initiateShip(data){
 }
 
 function initiateBallistic(i){
-	//(id, userid, targetid, classname, display, amount, status, destroyed, actions){
-
 	var salvo = new Salvo(window.ballistics[i]);
 
 	for (var j = 0; j < window.ballistics[i].structures.length; j++){
 		salvo.structures.push(new Missile(window.ballistics[i].structures[j]));
-		
-		//console.log(window.ballistics[i].structures[j]);
 
 		for (var k = 0; k < window.ballistics[i].structures[j].systems.length; k++){
 			salvo.structures[j].systems.push(new Warhead(window.ballistics[i].structures[j].systems[k]));
@@ -269,10 +265,6 @@ function initiateBallistic(i){
 		for (var k = 0; k < window.ballistics[i].structures[j].crits.length; k++){
 			salvo.structures[j].systems.push(new Crit(window.ballistics[i].structures[j].crits[k]));
 		}
-
-		//for (var k = 0; k < window.ballistics[i].structures[j].fireOrders.length; k++){
-		//	salvo.structures[j].fireOrders.push(window.ballistics[i].structures[j].fireOrders[k]);
-		//}
 	}
 	salvo.create();
 	return salvo;

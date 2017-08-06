@@ -151,6 +151,16 @@ class Mini extends Ship {
 			$this->structures[$i]->testCrit($turn);
 		}
 	}
+
+	public function getDeployState($turn){
+		if ($this->available == $turn){
+			return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x , "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => 0, "angle" => $this->actions[sizeof($this->actions)-1]->a, "thrust" => $this->currentImpulse);
+		}
+	}
+
+	public function getMoveState($turn){
+		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x , "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => 0, "angle" => $this->actions[sizeof($this->actions)-1]->a, "thrust" => $this->currentImpulse);
+	}
 }
 
 class Salvo extends Mini {
@@ -191,16 +201,6 @@ class Salvo extends Mini {
 			}
 		}
 		return $shots;
-	}
-
-	public function getDeployState($turn){
-		if ($this->available == $turn){
-			return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x , "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => 0, "angle" => $this->actions[sizeof($this->actions)-1]->a, "thrust" => $this->currentImpulse);
-		}
-	}
-
-	public function getMoveState($turn){
-		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x , "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => 0, "angle" => $this->actions[sizeof($this->actions)-1]->a, "thrust" => $this->currentImpulse);
 	}
 
 	public function setProps($turn){
@@ -244,11 +244,7 @@ class Salvo extends Mini {
 		}
 		$this->isDestroyed();
 	}
-
-	public function isDogfight($fire){
-		return 0;
-	}
-
+	
 	public function getSystemById($id){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->id == $id){

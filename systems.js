@@ -122,8 +122,10 @@ System.prototype.hover = function(e){
 			this.highlightFireOrder();
 		}
 	}
-	if (!game.getUnitById(this.parentId).hasHangarSelected()){
-		game.getUnitById(this.parentId).highlightAllSelectedWeapons();
+
+	var p = game.getUnitById(this.parentId);
+	if (p.ship && !p.hasHangarSelected()){
+		p.highlightAllSelectedWeapons();
 	}
 }
 
@@ -1361,7 +1363,7 @@ Weapon.prototype.select = function(e){
 		this.setSystemBorder();
 	}
 
-	if (unit.hasWeaponsSelected()){
+	if (unit.ship && unit.hasWeaponsSelected()){
 		game.mode = 2;
 		unit.highlightAllSelectedWeapons();
 	}

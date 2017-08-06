@@ -31,6 +31,8 @@ function Game(data, userid){
 	this.sensorMode = 0;
 	this.target = 0;
 	this.deploys = data.deploys;
+	this.animShip = 0;
+	this.animFlight = 0;
 
 	this.doDeployShip = function(e, ship, pos){
 		for (var i = 0; i < this.ships.length; i++){
@@ -52,8 +54,17 @@ function Game(data, userid){
 		return id+1;
 	}
 
-	this.getMissionString = function(val){
-		switch (val){
+	this.isCloseCombat = function(a, b){
+		for (var i = 0; i < a.cc.length; i++){
+			if (a.cc[i] == b.id){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	this.getMissionTypeString = function(mission){
+		switch (mission.type){
 			case 1: return "PATROL";
 			case 2: return "STRIKE";
 			case 3: return "INTERCEPT";
@@ -61,6 +72,13 @@ function Game(data, userid){
 		}
 	}
 
+	this.getMissionTargetString = function(mission){
+		if (mission.targetid){
+			var t = game.getUnitById(mission.targetid);
+			return t.name + " #" + t.id;
+		}
+		else return "";
+	}
 	this.enableFlightDeployment = function(){
 		this.flightDeploy = this.getUnitById(aUnit).getSystemById($("#hangarLoadoutDiv").data("systemid"));
 
@@ -153,7 +171,7 @@ function Game(data, userid){
 
 		var flight = new Flight(
 			{id: -this.ships.length-20, name: "Flight", shipType: "Flight", mission: {type: this.flightDeploy.mission, targetid: t, x: dest.x, y: dest.y},
-			x: p.x, y: p.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, currentImpulse: 0, fSize: 20, baseSize: 35, unitSize: 8, userid: this.userid, available: this.turn}
+			x: p.x, y: p.y, mass: 0, facing: 0, ep: 0, baseImpulse: 0, currentImpulse: 0, fSize: 20, baseSize: 35, unitSize: 8, userid: this.userid, available: this.turn}
 		);
 
 		flight.deployed = 1;
@@ -642,6 +660,13 @@ function Game(data, userid){
 	}
 
 	this.movementResolved = function(){
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].flight){
+				this.ships[i].setPostMoveSize();
+				this.ships[i].setPostMoveImage();
+			}
+		}
+		game.draw();
 		console.log("movementResolved");
 	}
 
@@ -749,14 +774,14 @@ Game.prototype.getUnitType = function (val){
 		else if (n == 1){
 			this.phase = n;
 				$("#phaseSwitchDiv").click(function(){
-					game.resolveShipMovement();
+					game.resolveUnitMovement();
 					$(this).hide()
 				//	$(this).fadeOut(200);
 				});
 		}
 		else if (n == 2){
 				$("#phaseSwitchDiv").click(function(){
-					game.resolveShipMovement();
+					game.resolveUnitMovement();
 					$(this).hide()
 				//	$(this).fadeOut(200);
 				});
@@ -801,11 +826,18 @@ Game.prototype.getUnitType = function (val){
 			ship.deployed = deployed;
 			ship.create();
 			this.ships[i] = ship;
-			ship.createBaseDiv();
 		}
 
 		for (var i = 0; i < window.ballistics.length; i++){
 			this.ballistics.push(window.initiateBallistic(i));
+		}
+
+		for (var i = 0; i < this.ships.length; i++){
+			this.ships[i].createBaseDiv();
+			if (this.ships[i].flight){this.ships[i].setTarget();}
+		}
+		for (var i = 0; i < this.ballistics.length; i++){
+			this.ballistics[i].setTarget();
 		}
 
 		for (var i = 0; i < this.reinforcements.length; i++){
@@ -836,6 +868,35 @@ Game.prototype.getUnitType = function (val){
 		this.initPhase(this.phase);
 	}
 
+	this.updateIntercepts = function(){
+		var stack = [];
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].flight && this.ships[i].mission.type == 2){
+				if (this.ships[i].mission.targetid == aUnit){
+					stack.push(this.ships[i]);
+				}
+			}
+		}
+		for (var j = 0; j < stack.length; j++){
+			for (var i = 0; i < this.ships.length; i++){
+				if (this.ships[i].flight && this.ships[i].mission.type == 2){
+					if (this.ships[i].mission.targetid == stack[j].id){
+						stack.push(this.ships[i]);
+					}
+				}
+			}
+		}
+		for (var i = 0; i < stack.length; i++){
+			stack[i].setTarget();
+			if (stack[i].mission.arrived){continue;}
+			stack[i].setImage();
+		}
+
+		if (stack.length){
+			game.redraw();
+		}
+	}
+
 	this.unitHover = function(unit){
 		if (unit.id == game.shortInfo){
 			return;
@@ -852,7 +913,7 @@ Game.prototype.getUnitType = function (val){
 		var incoming = this.getIncomingUnits(unit);
 
 		for (var j = 0; j < incoming.length; j++){
-			if (incoming[j].destroyed){continue;}
+			if (incoming[j].destroyed || incoming[j].mission.arrived){continue;}
 			incoming[j].drawMovePlan();
 		}
 		unit.drawMovePlan();
@@ -952,7 +1013,7 @@ Game.prototype.getUnitType = function (val){
 					var shipPos = this.ships[i].getBaseOffsetPos();
 					if (pos.x < shipPos.x + r && pos.x > shipPos.x - r){
 						if (pos.y > shipPos.y - r && pos.y < shipPos.y + r){
-							return this.ships[i];
+							return this.ships[i].getParent();
 						}
 					}
 				}
@@ -1011,6 +1072,7 @@ Game.prototype.getUnitType = function (val){
 	}
 	
 	this.draw = function(){
+		console.log("draw");
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		
 		this.drawShips();
@@ -1028,6 +1090,7 @@ Game.prototype.getUnitType = function (val){
 		if (aUnit && !game.animating){
 			planCtx.clearRect(0, 0, res.x, res.y);
 			for (var i = 0; i < this.ships.length; i++){
+				if (this.ships[i].flight && this.ships[i].mission.arrived){continue;}
 				this.ships[i].drawMovePlan();
 			}
 		}
@@ -1268,7 +1331,7 @@ Game.prototype.getUnitType = function (val){
 		console.log("deployDone");
 	}
 	
-	this.resolveShipMovement = function(){
+	this.resolveUnitMovementa = function(){
 		if (aUnit){
 			game.getUnitById(aUnit).select();
 		}
@@ -1276,8 +1339,7 @@ Game.prototype.getUnitType = function (val){
 		cam.setZoom(1);
 		//cam.setFocus(this.ships[0].x, this.ships[0].y);
 		setFPS(60);
-		window.animShip = false;
-		window.animFlight = false;
+
 		if (game.phase == 1){
 			animShip = true;
 		}
@@ -1362,11 +1424,86 @@ Game.prototype.getUnitType = function (val){
 
 		window.then = Date.now();
 		window.startTime = then;
-		game.animateShipMovement();
+		game.animateUnitMovement();
 	}
 
-	this.animateShipMovement = function(){
-		anim = window.requestAnimationFrame(game.animateShipMovement.bind(this));
+	this.resolveUnitMovement = function(){
+		if (aUnit){
+			game.getUnitById(aUnit).select();
+		}
+
+		cam.setZoom(1);
+		//cam.setFocus(this.ships[0].x, this.ships[0].y);
+		setFPS(60);
+
+		//console.log("animShip: "+animShip);
+		//console.log("animFlight: "+animFlight);
+
+		var toDo;
+		for (var i = 0; i < this.ships.length; i++){
+			var toDo = true;
+			if (! this.ships[i].deployed){
+				toDo = false;
+			}
+
+			if (! toDo){
+				continue;
+			}
+
+			this.ships[i].animationSetupMove();
+			var frameMod;
+
+			if (this.ships[i].ship){
+				var frameMod = window.fps / this.ships[i].getCurrentImpulse();
+			} else frameMod = window.fps / this.ships[i].actions[this.ships[i].actions.length-1].dist;
+
+			for (var j = 0; j < this.ships[i].actions.length; j++){
+				if (this.ships[i].actions[j].turn == game.turn){
+					var action = this.ships[i].actions[j];
+
+					if (action.type == "speedChange" || action.type == "deploy" || action.type == "jump" ||
+					 (this.ships[i].flight && this.ships[i].mission.type == 1 && this.ships[i].mission.arrived < game.turn)){
+						this.ships[i].actions[j].animated = true;
+					}
+					else if (j == 0){
+						if (action.type == "move"){
+							if (this.ships[i].id == 5){
+								console.log("ding");
+							}
+							var v = new Vector({x: this.ships[i].x, y: this.ships[i].y}, {x: action.x, y: action.y});
+								v.t = [0, action.dist * frameMod];
+							this.ships[i].actions[j].v = v;
+						}
+						else if (action.type == "turn"){
+							this.ships[i].actions[j].angle = this.ships[i].actions[j].a;
+						}
+					}
+					else {
+						if (action.type == "move"){
+							var v = new Vector({x: this.ships[i].actions[j-1].x, y: this.ships[i].actions[j-1].y}, {x: action.x, y: action.y});
+								v.t = [0, action.dist * frameMod];
+							this.ships[i].actions[j].v = v;
+							//console.log(v);
+						}
+						else if (action.type == "turn"){
+							this.ships[i].actions[j].angle = this.ships[i].actions[j].a;
+						}
+					}
+				}
+			}
+		}
+
+		window.then = Date.now();
+		window.startTime = then;
+
+		this.animShip = 1;
+		this.animFlight = 0;
+		game.animateUnitMovement();
+	}
+
+
+	this.animateUnitMovement = function(){
+		anim = window.requestAnimationFrame(game.animateUnitMovement.bind(this));
 		window.now = Date.now();		
 		window.elapsed = window.now - window.then;
 		if (elapsed > window.fpsInterval){
@@ -1382,7 +1519,7 @@ Game.prototype.getUnitType = function (val){
 		
 			for (var i = 0; i < game.ships.length; i++){
 				if (game.ships[i].deployed){
-					if (this.ships[i].flight && !animFlight || this.ships[i].ship && !animShip){
+					if (this.ships[i].flight && !this.animFlight || this.ships[i].ship && !this.animShip){
 						game.ships[i].draw();
 						continue;
 					}
@@ -1431,15 +1568,16 @@ Game.prototype.getUnitType = function (val){
 			var done = true;
 			
 			for (var i = 0; i < game.ships.length; i++){
-				if (! done){
+				if (!done){
 					break;
 				}
-				
-				for (var j = 0; j < game.ships[i].actions.length; j++){
-					if (game.ships[i].actions[j].turn == game.turn){
-						if (! game.ships[i].actions[j].animated){
-							done = false;
-							break;
+				else if (this.ships[i].flight && this.animFlight || this.ships[i].ship && this.animShip){
+					for (var j = 0; j < game.ships[i].actions.length; j++){
+						if (game.ships[i].actions[j].turn == game.turn){
+							if (! game.ships[i].actions[j].animated){
+								done = false;
+								break;
+							}
 						}
 					}
 				}
@@ -1447,8 +1585,11 @@ Game.prototype.getUnitType = function (val){
 			
 			if (done){
 				window.cancelAnimationFrame(anim);
-				game.draw();
-				game.movementResolved();
+				if (!game.animFlight){
+					game.animShip = 0;
+					game.animFlight = 1;
+					game.animateUnitMovement();
+				} else game.movementResolved();
 			}
 		}
 	}

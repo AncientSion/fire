@@ -291,12 +291,15 @@ function Salvo(data){
 		//this.setFacing();
 		this.createBaseDiv();
 		this.setLayout();
-		this.setFinalStep();
-		this.setNextStep();
 
 		if (this.userid == game.userid){
 			this.friendly = true;
 		} else this.friendly = false;
+	}
+
+	this.setTarget = function(){
+		this.setFinalStep();
+		this.setNextStep();
 	}
 
 	this.setDisplay = function(){
@@ -405,113 +408,8 @@ function Salvo(data){
 		ctx.fill();
 	}
 
-	this.setFinalStep = function(){
-		if (this.finalStep != undefined){
-			return;
-		}
-
-		var target = game.getUnitById(this.targetid);
-
-		if (target.salvo){
-			if (target.finalStep == undefined){
-				target.setFinalStep();
-			}
-			var vector = new Vector(target, game.getUnitById(target.targetid));
-			var speedMod = this.getCurrentImpulse() / target.getCurrentImpulse();
-			this.finalStep = getIntercept(this.getPlannedPosition(), target, vector, speedMod);
-			//this.finalStep = target.nextStep;
-		}
-		else {
-			this.finalStep = target.getPlannedPosition();
-		}
-	}
-
-	this.setNextStep = function(){
-		var target = game.getUnitById(this.targetid);
-		var dist = getDistance(this.getPlannedPosition(), this.finalStep);
-		var impulse = this.getCurrentImpulse();
-		if (impulse < dist){
-			var a = getAngleFromTo(this, target.getPlannedPosition());
-			this.nextStep = getPointInDirection(impulse, a, this.x, this.y);
-		}
-		else {
-			this.nextStep = this.finalStep;
-		}
-	}
-
-	this.drawMovePlan = function(){
-		//var origin = this.actions[this.actions.length-1];
-
-		if (!target.salvo){
-			this.finalStep = target.getPlannedPosition();
-			this.setNextStep();
-		}
-		
-		salvoCtx.translate(cam.o.x, cam.o.y);
-		salvoCtx.scale(cam.z, cam.z)
-		salvoCtx.translate(this.x, this.y);
-		salvoCtx.beginPath();
-		salvoCtx.moveTo(0, 0);
-		salvoCtx.translate(-this.x + this.nextStep.x, -this.y + this.nextStep.y);
-		salvoCtx.lineTo(0, 0);
-		salvoCtx.closePath();
-
-		salvoCtx.globalAlpha = 1;
-		salvoCtx.strokeStyle = "red";
-		salvoCtx.lineWidth = 1;
-		salvoCtx.stroke();
-		salvoCtx.setTransform(1,0,0,1,0,0);
-
-		if (this.nextStep != this.finalStep){
-			salvoCtx.translate(cam.o.x, cam.o.y);
-			salvoCtx.scale(cam.z, cam.z)
-			salvoCtx.translate(this.nextStep.x, this.nextStep.y);
-			salvoCtx.beginPath();
-			salvoCtx.moveTo(0, 0);
-			salvoCtx.translate(-this.nextStep.x + this.finalStep.x, -this.nextStep.y + this.finalStep.y);
-			salvoCtx.lineTo(0, 0);
-			salvoCtx.closePath();
-
-			salvoCtx.globalAlpha = 1;
-			salvoCtx.strokeStyle = "white";
-			salvoCtx.stroke();
-			salvoCtx.setTransform(1,0,0,1,0,0);
-		}
-
-		game.flightPath = true;
-	}
-
-	this.getShortInfo = function(){
-		var ele = $("#shortInfo");
-		if (this.userid == game.userid){
-			$(ele).attr("class", "friendly");
-		} else $(ele).attr("class", "hostile");
-
-		var table = document.createElement("table");
-			table.insertRow(-1).insertCell(-1).innerHTML = this.structures.length + "x " + this.name + " #" + this.id;
-			table.insertRow(-1).insertCell(-1).innerHTML =  "Thrust: " + this.getCurrentImpulse();
-			table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit: " + this.getHitChanceFromAngle() + "%";
-
-		if (this.impactThisTurn()){
-			var tr = table.insertRow(-1);
-			if (game.phase < 3){
-				tr.insertCell(-1).innerHTML = "<span class='red'>IMPACT IMMINENT</span>";
-			}
-			else if (this.actions[this.actions.length-1].type == "impact"){
-				if (this.status == "intercepted"){
-					tr.insertCell(-1).innerHTML = "<span class='red'>INTERCEPTED</span>";
-				}
-				else tr.insertCell(-1).innerHTML = "<span class='red'>DID IMPACT</span>";
-			}
-		}
-		return table;
-	}
-
-	this.impactThisTurn = function(){
-		target = game.getUnitById(this.targetid);
-		if (getDistance(target.getPlannedPosition(), this.getBaseOffsetPos()) <= this.getCurrentImpulse()){
-			return true;
-		} else return false;
+	this.getTarget = function(){
+		return game.getUnitById(this.targetid);
 	}
 
 	this.getHitChanceFromAngle = function(){
@@ -592,4 +490,113 @@ Salvo.prototype.setUnitGUI = function(){
 
 Salvo.prototype.getArmourString = function(a){
 	return this.structures[0].negation;
+}
+
+Salvo.prototype.inRange = function(){
+	if (getDistance(this.getTarget().getPlannedPosition(), this.getBaseOffsetPos()) <= this.getCurrentImpulse()){
+		return true;
+	} else return false;
+}
+
+Salvo.prototype.setFinalStep = function(){
+	if (this.id == 4){
+		console.log("ding");
+	}
+	if (this.finalStep != undefined){
+		return;
+	}
+
+	var target = this.getTarget();
+
+	if (this.salvo && target.salvo || this.flight && target.flight){
+		if (target.finalStep == undefined){
+			target.setFinalStep();
+		}
+		var vector = new Vector(target, target.getTarget());
+		var speedMod = this.getCurrentImpulse() / target.getCurrentImpulse();
+		this.finalStep = getIntercept(this.getPlannedPosition(), target, vector, speedMod);
+		//this.finalStep = target.nextStep;
+	}
+	else {
+		this.finalStep = target.getPlannedPosition();
+	}
+}
+
+Salvo.prototype.setNextStep = function(){
+	if (this.id == 4){
+		console.log("ding");
+	}
+	var target = this.getTarget();
+	var dist = getDistance(this.getPlannedPosition(), this.finalStep);
+	var impulse = this.getCurrentImpulse();
+	if (impulse < dist){
+		var a = getAngleFromTo(this, target.getPlannedPosition());
+		this.nextStep = getPointInDirection(impulse, a, this.x, this.y);
+	}
+	else {
+		this.nextStep = this.finalStep;
+	}
+}
+
+Salvo.prototype.drawMovePlan = function(){
+	
+	planCtx.translate(cam.o.x, cam.o.y);
+	planCtx.scale(cam.z, cam.z)
+	planCtx.translate(this.x, this.y);
+	planCtx.beginPath();
+	planCtx.moveTo(0, 0);
+	planCtx.translate(-this.x + this.nextStep.x, -this.y + this.nextStep.y);
+	planCtx.lineTo(0, 0);
+	planCtx.closePath();
+
+	planCtx.globalAlpha = 1;
+	planCtx.strokeStyle = "red";
+	planCtx.lineWidth = 1;
+	planCtx.stroke();
+	planCtx.setTransform(1,0,0,1,0,0);
+
+	if (this.nextStep != this.finalStep){
+		planCtx.translate(cam.o.x, cam.o.y);
+		planCtx.scale(cam.z, cam.z)
+		planCtx.translate(this.nextStep.x, this.nextStep.y);
+		planCtx.beginPath();
+		planCtx.moveTo(0, 0);
+		planCtx.translate(-this.nextStep.x + this.finalStep.x, -this.nextStep.y + this.finalStep.y);
+		planCtx.lineTo(0, 0);
+		planCtx.closePath();
+
+		planCtx.globalAlpha = 1;
+		planCtx.strokeStyle = "white";
+		planCtx.stroke();
+		planCtx.setTransform(1,0,0,1,0,0);
+	}
+
+	game.flightPath = true;
+}
+
+
+Salvo.prototype.getShortInfo = function(){
+	var ele = $("#shortInfo");
+	if (this.userid == game.userid){
+		$(ele).attr("class", "friendly");
+	} else $(ele).attr("class", "hostile");
+
+	var table = document.createElement("table");
+		table.insertRow(-1).insertCell(-1).innerHTML = this.structures.length + "x " + this.name + " #" + this.id;
+		table.insertRow(-1).insertCell(-1).innerHTML =  "Thrust: " + this.getCurrentImpulse();
+		table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit: " + this.getHitChanceFromAngle() + "%";
+
+	if (this.inRange()){
+		var tr = table.insertRow(-1);
+		if (game.phase < 3){
+			tr.insertCell(-1).innerHTML = "<span class='red'>IMPACT IMMINENT</span>";
+		}
+		else if (this.actions[this.actions.length-1].type == "impact"){
+			if (this.status == "intercepted"){
+				tr.insertCell(-1).innerHTML = "<span class='red'>INTERCEPTED</span>";
+			}
+			else tr.insertCell(-1).innerHTML = "<span class='red'>DID IMPACT</span>";
+		}
+	}
+	return table;
 }

@@ -544,6 +544,32 @@ table, th, tr, td {
 	border: 1px solid white;
 }
 
+.ccContainer {
+	width: 99%;
+	margin: auto;
+	margin-top: 10px;
+	display: inline-block;
+	color: black;
+}
+
+.flightDiv {
+	width: 99%;
+	display: inline-block;
+	border: 1px solid white;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.flightDiv div {
+	display: inline-block;
+}
+
+
+.center15 {
+	font-size: 15;
+	text-align: center;
+}
+
 .structTable td {
 	position: relative;
 }
@@ -575,7 +601,6 @@ table, th, tr, td {
 .primaryTable.system {
 	background-color: lightBlue;
 }
-
 
 .struct div.integrityAmount {
 	position: absolute;
@@ -684,6 +709,7 @@ table, th, tr, td {
 	vertical-align: middle;
 	display: table-cell;
 }
+
 
 .exposed {
 	background-color: rgb(255, 177, 0);
@@ -871,6 +897,15 @@ table, th, tr, td {
 	width: 100%;
 	color: white;
 	border-collapse: collapse;
+	text-align: center;
+}
+
+.shipDiv .flightTable {
+	width: 100%;
+	color: white;
+	border-collapse: collapse;
+	text-align: center;
+	margin: top: 10px;
 }
 
 .shipDiv .iconContainer {
