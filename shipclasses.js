@@ -1652,7 +1652,7 @@ function Ship(data){
 		var max = this.getMaxTurnAngle();
 
 		if (isInArc(getCompassHeadingOfPoint(origin, dest, 0), this.turnAngles.start, this.turnAngles.end)){
-			if (Math.abs(a) >= 5){
+			if (Math.abs(a) >= 2){
 				this.issueTurn(a);
 			}
 		} else if (a < 0){

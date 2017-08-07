@@ -1,5 +1,3 @@
-
-
 function Salvo(data){
 	this.id = data.id;
 	this.userid = data.userid;
@@ -15,6 +13,7 @@ function Salvo(data){
 	this.fireOrder = data.fireOrder;
 	this.available = data.available;
 	this.facing = data.facing;
+	this.mission = data.mission;
 	this.x = data.x;
 	this.y = data.y;
 	this.drawX = data.x;
@@ -42,6 +41,10 @@ function Salvo(data){
 
 	this.getShots = function(){
 		return this.fireOrder.shots;
+	}
+
+	this.setImage = function(){
+		return;
 	}
 
 	this.hasSystemSelected = function(name){
@@ -408,10 +411,6 @@ function Salvo(data){
 		ctx.fill();
 	}
 
-	this.getTarget = function(){
-		return game.getUnitById(this.targetid);
-	}
-
 	this.getHitChanceFromAngle = function(){
 		return this.baseHitChance;
 	}
@@ -458,18 +457,26 @@ function Salvo(data){
 	}
 }
 
+Salvo.prototype.getTarget = function(){
+	return game.getUnitById(this.targetid);	
+}
+
 Salvo.prototype.hasLockOnUnit = function(){
 	return false;
 }
+
 Salvo.prototype.isMaskedFromUnit = function(){
 	return false;
 }
+
 Salvo.prototype.getImpulseMod = function(){
 	return 1;
 }
+
 Salvo.prototype.switchDiv = function(){
 	Ship.prototype.switchDiv.call(this);
 }
+
 Salvo.prototype.select = function(){
 	if (!this.selected){
 		this.selected = 1;
@@ -492,18 +499,21 @@ Salvo.prototype.getArmourString = function(a){
 	return this.structures[0].negation;
 }
 
+Salvo.prototype.getTargetPosition = function(){
+	if (this.mission.targetid){
+		return this.getTarget().getPlannedPosition();
+	} else return this.mission;
+}
+
 Salvo.prototype.inRange = function(){
-	if (getDistance(this.getTarget().getPlannedPosition(), this.getBaseOffsetPos()) <= this.getCurrentImpulse()){
+	if (getDistance(this.getTargetPosition(), this.getBaseOffsetPos()) <= this.getCurrentImpulse()){
 		return true;
 	} else return false;
 }
 
 Salvo.prototype.setFinalStep = function(){
-	if (this.id == 4){
-		console.log("ding");
-	}
 	if (this.finalStep != undefined){
-		return;
+	//	return;
 	}
 
 	var target = this.getTarget();
@@ -523,9 +533,6 @@ Salvo.prototype.setFinalStep = function(){
 }
 
 Salvo.prototype.setNextStep = function(){
-	if (this.id == 4){
-		console.log("ding");
-	}
 	var target = this.getTarget();
 	var dist = getDistance(this.getPlannedPosition(), this.finalStep);
 	var impulse = this.getCurrentImpulse();
@@ -539,7 +546,6 @@ Salvo.prototype.setNextStep = function(){
 }
 
 Salvo.prototype.drawMovePlan = function(){
-	
 	planCtx.translate(cam.o.x, cam.o.y);
 	planCtx.scale(cam.z, cam.z)
 	planCtx.translate(this.x, this.y);

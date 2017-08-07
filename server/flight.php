@@ -111,10 +111,6 @@ class Flight extends Mini {
 			}
 		}
 		return true;
-	}	
-
-	public function setMission($data){
-		$this->mission = new Mission($data);
 	}
 
 	public function getSystemById($id){

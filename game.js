@@ -63,8 +63,8 @@ function Game(data, userid){
 		return false;
 	}
 
-	this.getMissionTypeString = function(mission){
-		switch (mission.type){
+	this.getMissionTypeString = function(val){
+		switch (val){
 			case 1: return "PATROL";
 			case 2: return "STRIKE";
 			case 3: return "INTERCEPT";
@@ -81,8 +81,7 @@ function Game(data, userid){
 	}
 	this.enableFlightDeployment = function(){
 		this.flightDeploy = this.getUnitById(aUnit).getSystemById($("#hangarLoadoutDiv").data("systemid"));
-
-		var mission = this.getMissionString(this.flightDeploy.mission);
+		var mission = this.getMissionTypeString(this.flightDeploy.mission);
 
 		$("#game").find("#deployOverlay").find("#deployType").html("Select target for </br>" + mission + "</br></span>");
 	}
@@ -170,8 +169,8 @@ function Game(data, userid){
 		var p = getPointInDirection(s.size, facing, o.x, o.y);
 
 		var flight = new Flight(
-			{id: -this.ships.length-20, name: "Flight", shipType: "Flight", mission: {type: this.flightDeploy.mission, targetid: t, x: dest.x, y: dest.y},
-			x: p.x, y: p.y, mass: 0, facing: 0, ep: 0, baseImpulse: 0, currentImpulse: 0, fSize: 20, baseSize: 35, unitSize: 8, userid: this.userid, available: this.turn}
+			{id: -this.ships.length-20, name: "Flight", shipType: "Flight", mission: {type: this.flightDeploy.mission, targetid: t, x: dest.x, y: dest.y, arrived: 0},
+			x: p.x, y: p.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, currentImpulse: 0, fSize: 20, baseSize: 35, unitSize: 8, userid: this.userid, available: this.turn}
 		);
 
 		flight.deployed = 1;
@@ -186,7 +185,7 @@ function Game(data, userid){
 			targetid: t,
 			x: dest.x,
 			y: dest.y
-		}
+		};
 
 		for (var i = 0; i < this.flightDeploy.loads.length; i++){
 			for (var j = 1; j <= this.flightDeploy.loads[i].launch; j++){
@@ -194,9 +193,10 @@ function Game(data, userid){
 				flight.structures.push(f);
 			}
 		}
-		flight.size = flight.baseSize + (flight.structures.length-1)*flight.unitSize;
+
 		flight.create();
 		flight.createBaseDiv();
+		flight.setTarget();
 		game.ships.push(flight);
 
 		$("#instructWrapper").hide();
@@ -868,6 +868,23 @@ Game.prototype.getUnitType = function (val){
 		this.initPhase(this.phase);
 	}
 
+	this.updateInterceptsa = function(){
+		var stack = [];
+
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].flight && this.ships[i].mission.type == 2 && this.ships[i].mission.targetid == aUnit){
+				this.ships[i].setTarget();
+				if (!this.ships[i].mission.arrived){this.ships[i].setImage();}
+				stack.push(this.ships[i].id);
+			}
+		}	
+
+		for (var i = 0; i < stack.length; i++){
+
+		}
+
+	}
+
 	this.updateIntercepts = function(){
 		var stack = [];
 		for (var i = 0; i < this.ships.length; i++){
@@ -877,15 +894,13 @@ Game.prototype.getUnitType = function (val){
 				}
 			}
 		}
-		for (var j = 0; j < stack.length; j++){
-			for (var i = 0; i < this.ships.length; i++){
-				if (this.ships[i].flight && this.ships[i].mission.type == 2){
-					if (this.ships[i].mission.targetid == stack[j].id){
-						stack.push(this.ships[i]);
-					}
-				}
+
+		for (var i = 0; i < this.ballistics.length; i++){
+			if (this.ballistics[i].mission.targetid = aUnit){
+				stack.push(this.ballistics[i]);
 			}
 		}
+
 		for (var i = 0; i < stack.length; i++){
 			stack[i].setTarget();
 			if (stack[i].mission.arrived){continue;}
@@ -913,7 +928,7 @@ Game.prototype.getUnitType = function (val){
 		var incoming = this.getIncomingUnits(unit);
 
 		for (var j = 0; j < incoming.length; j++){
-			if (incoming[j].destroyed || incoming[j].mission.arrived){continue;}
+			//if (incoming[j].destroyed || incoming[j].mission.arrived){continue;}
 			incoming[j].drawMovePlan();
 		}
 		unit.drawMovePlan();
@@ -1086,12 +1101,16 @@ Game.prototype.getUnitType = function (val){
 	}
 
 	this.drawAllPlans = function(){
-		if (game.phase < 0 || game.phase > 2){return;}
+		//if (game.phase < 0 || game.phase > 2){return;}
 		if (aUnit && !game.animating){
 			planCtx.clearRect(0, 0, res.x, res.y);
 			for (var i = 0; i < this.ships.length; i++){
 				if (this.ships[i].flight && this.ships[i].mission.arrived){continue;}
 				this.ships[i].drawMovePlan();
+			}
+			for (var i = 0; i < this.ballistics.length; i++){
+				if (this.ballistics[i].flight && this.ballistics[i].mission.arrived){continue;}
+				this.ballistics[i].drawMovePlan();
 			}
 		}
 	}

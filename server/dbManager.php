@@ -10,8 +10,8 @@ class DBManager {
 	function __construct(){
 
 		if ($this->connection === null){
-			$user = "aatu"; $pass = "Kiiski";
-			//$user = "root"; $pass = "147147";
+			//$user = "aatu"; $pass = "Kiiski";
+			$user = "root"; $pass = "147147";
 			$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$user,$pass);
 			//$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			//$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -1549,7 +1549,6 @@ class DBManager {
 				}
 			}
 		}
-
 		//Debug::log("getting: ".sizeof($units)." units");
 		return $units;
 	}
@@ -1578,7 +1577,6 @@ class DBManager {
 		$stmt->execute();
 				
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
-
 		return $result;
 	}
 
@@ -1594,9 +1592,15 @@ class DBManager {
 		$stmt->bindParam(":gameid", $gameid);
 		$stmt->execute();
 
-		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		//Debug::log("getting: ".sizeof($result)." ballistics");
-		return $result;
+		$units = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		if ($units){
+			for ($i = 0; $i < sizeof($units); $i++){
+				$units[$i]["mission"] = $this->getMission($units[$i]);
+			}
+		}
+		//Debug::log("getting: ".sizeof($units)." units");
+		return $units;
 	}
 
 	public function getShipLoad($ships){

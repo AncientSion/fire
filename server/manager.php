@@ -282,7 +282,7 @@ class Manager {
 
 			if ($unit->flight){
 				$unit->addFighters($db[$i]["fighters"]);
-				$unit->setMission($db[$i]["mission"]);
+				$unit->addMissionDB($db[$i]["mission"]);
 			}
 			$units[] = $unit;
 		}
@@ -348,6 +348,7 @@ class Manager {
 		DBManager::app()->getActions($units, $this->turn);
 
 		for ($i = 0; $i < sizeof($units); $i++){ //check damage state after dmg is applied
+			$units[$i]->addMissionDB($db[$i]["mission"]);
 			$units[$i]->addFireDB($this->fires);
 			$units[$i]->setState($this->turn);
 			$units[$i]->facing = Math::getAngle2($units[$i], $this->getUnitById($units[$i]->targetid)->getCurrentPosition());
@@ -391,6 +392,7 @@ class Manager {
 				break;
 			case 0; // ship moves
 				$this->handleShipMovementPhase();
+				$this->handleBallisticMovementPhase();
 				$this->handleFighterMovementPhaseNew();
 				$this->startFiringPhase();
 			//	$this->startFighterMovementPhase();startFiringPhase
@@ -622,20 +624,16 @@ class Manager {
 		$this->resolveUnitMovement();
 	}
 
-	public function handleFighterMovementPhase(){
-		//Debug::log("handleFighterMovementPhase");
-		$this->resolveUnitMovement();
-		//$this->initiateDogfights();
-		//$this->createDogfightFires();
-	}
 	public function handleFighterMovementPhaseNew(){
 		Debug::log("handleFighterMovementPhaseNew");
 
 		$this->determineFlightPosition();
+	}
 
-		//$this->resolveUnitMovement();
-		//$this->initiateDogfights();
-		//$this->createDogfightFires();
+	public function handleBallisticMovementPhase(){
+		$this->sortBallistics();
+		$this->createBallisticActions();
+		$this->resolveBallisticActions();
 	}
 
 	public function determineFlightPosition(){
@@ -868,11 +866,13 @@ class Manager {
 	}
 
 	public function handleFiringPhase(){
+
+		if (!sizeof($this->fires)){
+			$this->handleDamageControlPhase();
+			return true;
+		}
+
 		$time = -microtime(true);
-
-
-		$this->sortBallistics();
-		$this->createBallisticActions();
 
 		$this->setupShips();
 
@@ -883,7 +883,6 @@ class Manager {
 		$this->updateFireOrders($this->fires);
 
 		$this->handleBallisticInterception();
-		$this->resolveBallisticActions();
 
 	//	$this->endDogfightsFiring();
 

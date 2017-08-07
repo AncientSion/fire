@@ -35,25 +35,36 @@ function Flight(data){
 	}
 
 	this.setSize = function(){
-		if (this.mission.arrived < game.turn){
-			this.setPostMoveImage();
+		if (!this.mission.arrived){
+			this.setPreMoveSize();
+		}
+		else if (this.mission.arrived < game.turn){
+			this.setPostMoveSize();
 		}
 		else if (this.mission.arrived == game.turn){
 			if (game.phase <= 2){
 				this.setPreMoveSize();
 			} else this.setPostMoveSize();
-		} else this.setPostMoveSize();
+		}
 	}
 
 
 	this.setPreMoveSize = function(){
+		this.size = this.baseSize + this.unitSize * this.structures.length-1;
 	}
 
 	this.setPostMoveSize = function(){
-		if (this.mission.type == 2){
-			var s = game.getUnitById(this.mission.targetid).size;
-			this.size = s+30;
+		if (this.mission.arrived){
+			if (this.mission.type == 2){
+				var s = game.getUnitById(this.mission.targetid).size;
+				this.size = s+30;
+			}
+			else if (this.mission.type == 1){
+				this.size = this.baseSize + this.unitSize * this.structures.length-1;
+			}
 		}
+		else this.size = this.baseSize + this.unitSize * this.structures.length-1;
+
 	}
 
 	this.setDrawData = function(){
@@ -72,14 +83,17 @@ function Flight(data){
 	}
 
 	this.setImage = function(){
-		if (this.mission.arrived < game.turn){
+		if (!this.mission.arrived){
+			this.setPreMoveImage();
+		}
+		else if (this.mission.arrived < game.turn){
 			this.setPostMoveImage();
 		}
 		else if (this.mission.arrived == game.turn){
 			if (game.phase <= 2){
 				this.setPreMoveImage();
 			} else this.setPostMoveImage();
-		} else this.setPostMoveImage();
+		}
 	}
 
 	this.setPreMoveImage = function(){
@@ -111,59 +125,55 @@ function Flight(data){
 	}
 
 	this.setPostMoveImage = function(){
-		if (!this.mission.arrived){
-			this.setPreMoveImage();
-		}
-		else if (this.mission.arrived){
-			var size = 12;
-			var t = document.createElement("canvas");
-				t.width = this.size;
-				t.height = this.size;
-			var ctx = t.getContext("2d");
+		if (!this.mission.arrived){this.setPreMoveImage(); return;}
+		var size = 12;
+		var t = document.createElement("canvas");
+			t.width = this.size;
+			t.height = this.size;
+		var ctx = t.getContext("2d");
 
-			if (this.mission.type == 1){
-				ctx.translate(this.size/2, this.size/2);
-				for (var i = 0; i < this.structures.length; i++){
-					if (!this.structures[i].destroyed && !this.structures[i].disabled){
-						ctx.save();
-						var ox = range(-this.size/2.5, this.size/2.5);
-						var oy = range(-this.size/2.5, this.size/2.5);
+		if (this.mission.type == 1){
+			ctx.translate(this.size/2, this.size/2);
+			for (var i = 0; i < this.structures.length; i++){
+				if (!this.structures[i].destroyed && !this.structures[i].disabled){
+					ctx.save();
+					var ox = range(-this.size/2.5, this.size/2.5);
+					var oy = range(-this.size/2.5, this.size/2.5);
 
-						ctx.translate(ox, oy);			
-						ctx.rotate(range(0, 360) * (Math.PI/180));
-						ctx.drawImage(
-							this.smallImg,
-							0 -size/2,
-							0 -size/2,
-							size, 
-							size
-						);
-						ctx.restore();
-					}
+					ctx.translate(ox, oy);			
+					ctx.rotate(range(0, 360) * (Math.PI/180));
+					ctx.drawImage(
+						this.smallImg,
+						0 -size/2,
+						0 -size/2,
+						size, 
+						size
+					);
+					ctx.restore();
 				}
 			}
-			else if (this.mission.type == 2){
-				ctx.translate(this.size/2, this.size/2);
-				for (var i = 0; i < this.structures.length; i++){
-					if (!this.structures[i].destroyed && !this.structures[i].disabled){
-						ctx.save();		
-						ctx.rotate(((360/this.structures.length-1)*i) * (Math.PI/180));
-						ctx.drawImage(
-							this.smallImg,
-							0 -size/2,
-							this.size/2 -size/2 -5,
-							size, 
-							size
-						);
-						ctx.restore();
-					}
+		}
+		else if (this.mission.type == 2){
+			ctx.translate(this.size/2, this.size/2);
+			for (var i = 0; i < this.structures.length; i++){
+				if (!this.structures[i].destroyed && !this.structures[i].disabled){
+					ctx.save();		
+					ctx.rotate(((360/this.structures.length-1)*i) * (Math.PI/180));
+					ctx.drawImage(
+						this.smallImg,
+						0 -size/2,
+						this.size/2 -size/2 -5,
+						size, 
+						size
+					);
+					ctx.restore();
 				}
 			}
-			ctx.setTransform(1,0,0,1,0,0);
-			this.drawImg = t;
-			console.log(this.drawImg.toDataURL());
 		}
-	}
+		ctx.setTransform(1,0,0,1,0,0);
+		this.drawImg = t;
+		console.log(this.drawImg.toDataURL());
+}
 
 	this.setPostMoveFacing = function(){
 		if (this.mission.arrived){
@@ -175,10 +185,6 @@ function Flight(data){
 
 	this.canDeploy = function(){
 		return false;
-	}
-
-	this.getTarget = function(){
-		return game.getUnitById(this.mission.targetid);
 	}
 
 	this.resetMoveMode = function(){
@@ -470,7 +476,7 @@ function Flight(data){
 					.append($("<td>").html(this.getCurrentImpulse())))
 				.append($("<tr>")
 					.append($("<td>").html("Current Mission"))
-					.append($("<td>").html(game.getMissionTypeString(this.mission))))
+					.append($("<td>").html(game.getMissionTypeString(this.mission.type))))
 				.append($("<tr>")
 					.append($("<td>").html("Mission Target"))
 					.append($("<td>").html(game.getMissionTargetString(this.mission))))
@@ -1098,10 +1104,6 @@ Flight.prototype.drawMissionArea = function(){
 	planCtx.setTransform(1,0,0,1,0,0);
 }
 
-Flight.prototype.inRange = function(){
-	return Salvo.prototype.inRange.call(this);
-}
-
 Flight.prototype.getShortInfo = function(){
 	var ele = $("#shortInfo");
 	if (game.phase > -2 && this.userid == game.userid){
@@ -1129,4 +1131,16 @@ Flight.prototype.getParent = function(){
 		return game.getUnitById(this.cc[0]);
 	}
 	return this;	
+}
+
+Flight.prototype.getTargetPosition = function(){
+	return Salvo.prototype.getTargetPosition.call(this);
+}
+
+Flight.prototype.inRange = function(){
+	return Salvo.prototype.inRange.call(this);
+}
+
+Flight.prototype.getTarget = function(){
+	return game.getUnitById(this.mission.targetid);	
 }

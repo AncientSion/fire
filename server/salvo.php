@@ -3,6 +3,7 @@
 class Mini extends Ship {
 	public $ship = false;
 	public $baseImpulse;
+	public $mission = array();
 
 	public function getNewCrits($turn){
 		$crits = array();
@@ -60,6 +61,10 @@ class Mini extends Ship {
 				return;
 			}
 		}
+	}
+
+	public function addMissionDB($data){
+		$this->mission = new Mission($data);
 	}
 
 	public function resolveFireOrder($fire){
