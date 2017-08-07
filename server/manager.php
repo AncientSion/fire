@@ -296,22 +296,27 @@ class Manager {
 		DBManager::app()->getDogfights($units);
 
 
-		for ($i = 0; $i < sizeof($units); $i++){
-			$a = $units[$i]->getCurrentPosition();
-			for ($j = $i+1; $j < sizeof($units); $j++){
-				if ($units[$i]->id != $units[$j]->id){
-					$b = $units[$j]->getCurrentPosition();
-					if ($a->x == $b->x && $a->y == $b->y){
-						Debug::log("valid: ".$units[$i]->id."/".$units[$j]->id);
-						$units[$i]->cc[] = $units[$j]->id;
-						$units[$j]->cc[] = $units[$i]->id;
+		if ($this->turn > 1){
+			for ($i = 0; $i < sizeof($units); $i++){
+				$a = $units[$i]->getCurrentPosition();
+				for ($j = $i+1; $j < sizeof($units); $j++){
+					if ($units[$i]->id != $units[$j]->id){
+						$b = $units[$j]->getCurrentPosition();
+						if ($a->x == $b->x && $a->y == $b->y){
+							Debug::log("valid: ".$units[$i]->id."/".$units[$j]->id);
+							$units[$i]->cc[] = $units[$j]->id;
+							$units[$j]->cc[] = $units[$i]->id;
+						}
 					}
 				}
 			}
+		}
 
+		for ($i = 0; $i < sizeof($units); $i++){
 			$units[$i]->addFireDB($this->fires);
 			$units[$i]->setState($this->turn); //check damage state after dmg is applied
 		}
+
 		return $units;
 	}
 
