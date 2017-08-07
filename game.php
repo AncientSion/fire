@@ -460,9 +460,9 @@ echo "</script>";
 			<div id ="missionType">
 				<table style="border: 1px solid white">
 					<tr><th colSpan=3>Select Mission Type</th></tr>
-					<tr><td></td><td width=40%>Patrol</td><td></td></tr>
-					<tr><td></td><td>Strike</td><td></td></tr>
-					<tr><td></td><td>Intercept</td><td></td></tr>
+					<tr><td></td><td width=70%>Patrol Location</td><td></td></tr>
+					<tr><td></td><td>Strike Ship / Escort Ship</td><td></td></tr>
+					<tr><td></td><td>Intercept Flight / Salvo</td><td></td></tr>
 				</table>
 			</div>
 			<div class="header">

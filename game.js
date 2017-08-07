@@ -66,7 +66,7 @@ function Game(data, userid){
 	this.getMissionTypeString = function(val){
 		switch (val){
 			case 1: return "PATROL";
-			case 2: return "STRIKE";
+			case 2: return "STRIKE / ESCORT";
 			case 3: return "INTERCEPT";
 			default: return "ERROR";
 		}
@@ -151,10 +151,9 @@ function Game(data, userid){
 		}
 		else if (this.shortInfo){
 			t = game.getUnitById(this.shortInfo);
-			if (t && t.ship && t.userid != game.userid || t && !t.ship && t.userid != game.userid){
+			if (t && t.ship){
+				console.log("STRIKE / ESCORT");
 				dest = t.getPlannedPosition();
-				t = t.id;
-				console.log("STRIKE / INTERCEPT");
 				valid = true;
 			}
 		}
@@ -167,9 +166,15 @@ function Game(data, userid){
 		var o = s.getPlannedPosition();
 		var facing = getAngleFromTo(o, dest);
 		var p = getPointInDirection(s.size, facing, o.x, o.y);
+		var mission = {turn: this.turn, type: this.flightDeploy.mission, targetid: t.id, x: dest.x, y: dest.y, arrived: 0};
+
+		if (t.id == aUnit){
+			p = dest;
+			mission.arrived = 1;
+		}
 
 		var flight = new Flight(
-			{id: -this.ships.length-20, name: "Flight", shipType: "Flight", mission: {type: this.flightDeploy.mission, targetid: t, x: dest.x, y: dest.y, arrived: 0},
+			{id: -this.ships.length-20, name: "Flight", shipType: "Flight", mission: mission,
 			x: p.x, y: p.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, currentImpulse: 0, fSize: 20, baseSize: 35, unitSize: 8, userid: this.userid, available: this.turn}
 		);
 
@@ -181,8 +186,7 @@ function Game(data, userid){
 			shipid: aUnit,
 			systemid: this.flightDeploy.id,
 			loads: this.flightDeploy.loads,
-			mission: this.flightDeploy.mission,
-			targetid: t,
+			targetid: t.id,
 			x: dest.x,
 			y: dest.y
 		};
@@ -198,6 +202,11 @@ function Game(data, userid){
 		flight.createBaseDiv();
 		flight.setTarget();
 		game.ships.push(flight);
+
+		if (t.id == aUnit){
+			t.cc.push(flight.id),
+			t.getAttachDivs();
+		}
 
 		$("#instructWrapper").hide();
 		$("#deployOverlay").hide();
@@ -252,6 +261,7 @@ function Game(data, userid){
 				if (this.ships[i].flight && this.ships[i].available == this.turn){
 					var flight = {
 						name: "Flight",
+						mission: this.ships[i].mission,
 						launchData: this.ships[i].launchData,
 						actions: this.ships[i].actions,
 						turn: this.turn,
@@ -801,10 +811,6 @@ Game.prototype.getUnitType = function (val){
 	this.create = function(){
 		$("#phaseSwitchDiv").show();
 
-		this.ships.sort(function(a, b){
-			return a-b;
-		});
-
 		for (var i = 0; i < this.ships.length; i++){
 			var ship = window.initiateShip(this.ships[i]);
 			var deployed = 0;
@@ -1351,6 +1357,7 @@ Game.prototype.getUnitType = function (val){
 	}
 	
 	this.resolveUnitMovementa = function(){
+
 		if (aUnit){
 			game.getUnitById(aUnit).select();
 		}
@@ -1451,6 +1458,11 @@ Game.prototype.getUnitType = function (val){
 			game.getUnitById(aUnit).select();
 		}
 
+		this.ships.sort(function(a, b){
+			return a.flight-b.flight;
+		});
+
+
 		cam.setZoom(1);
 		//cam.setFocus(this.ships[0].x, this.ships[0].y);
 		setFPS(60);
@@ -1460,35 +1472,42 @@ Game.prototype.getUnitType = function (val){
 
 		var toDo;
 		for (var i = 0; i < this.ships.length; i++){
+			var frameMod;
 			var toDo = true;
-			if (! this.ships[i].deployed){
+			if (!this.ships[i].deployed){
 				toDo = false;
+			}
+			else if (this.ships[i].flight && this.ships[i].mission.arrived && this.ships[i].mission.arrived < game.turn){
+				for (var j = 0; j < this.ships[i].actions.length; j++){
+					this.ships[i].actions[j].animated = true;
+				}
 			}
 
 			if (! toDo){
 				continue;
 			}
 
+			if (this.ships[i].ship && this.ships[i].cc.length){
+				for (var j = 0; j < this.ships[i].cc.length; j++){
+					this.ships[i].attachAnims.push(this.getUnitById(this.ships[i].cc[j]));
+				}
+			}
+
 			this.ships[i].animationSetupMove();
-			var frameMod;
 
 			if (this.ships[i].ship){
-				var frameMod = window.fps / this.ships[i].getCurrentImpulse();
+				frameMod = window.fps / this.ships[i].getCurrentImpulse();
 			} else frameMod = window.fps / this.ships[i].actions[this.ships[i].actions.length-1].dist;
 
 			for (var j = 0; j < this.ships[i].actions.length; j++){
 				if (this.ships[i].actions[j].turn == game.turn){
 					var action = this.ships[i].actions[j];
 
-					if (action.type == "speedChange" || action.type == "deploy" || action.type == "jump" ||
-					 (this.ships[i].flight && this.ships[i].mission.type == 1 && this.ships[i].mission.arrived < game.turn)){
+					if (action.type == "speedChange" || action.type == "deploy" || action.type == "jump"){
 						this.ships[i].actions[j].animated = true;
 					}
 					else if (j == 0){
 						if (action.type == "move"){
-							if (this.ships[i].id == 5){
-								console.log("ding");
-							}
 							var v = new Vector({x: this.ships[i].x, y: this.ships[i].y}, {x: action.x, y: action.y});
 								v.t = [0, action.dist * frameMod];
 							this.ships[i].actions[j].v = v;
@@ -1560,20 +1579,25 @@ Game.prototype.getUnitType = function (val){
 							}
 							else if (action.type == "turn"){
 								var step = 1;
-								//	console.log("turn");
-									if (action.a > 0){
-										game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, step);
-										game.ships[i].actions[j].angle -= step;
-									}
-									else {
-										game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, -step);
-										game.ships[i].actions[j].angle += step;
-									}
-									
-									if (game.ships[i].actions[j].angle == 0){
-										game.ships[i].actions[j].animated = true;
-									}
+								if (action.a > 0){
+									game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, step);
+									game.ships[i].actions[j].angle -= step;
 								}
+								else {
+									game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, -step);
+									game.ships[i].actions[j].angle += step;
+								}
+								
+								if (game.ships[i].actions[j].angle == 0){
+									game.ships[i].actions[j].animated = true;
+								}
+							}
+
+							for (var k = 0; k < game.ships[i].attachAnims.length; k++){
+								game.ships[i].attachAnims[k].drawX = game.ships[i].drawX;
+								game.ships[i].attachAnims[k].drawY = game.ships[i].drawY;
+							//	game.ships[i].attachAnims[k].draw();
+							}
 							
 							break;
 						}

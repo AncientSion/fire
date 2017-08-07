@@ -36,6 +36,7 @@ function Ship(data){
 
 	this.turnAngles = {};
 	this.moveAngles = {};
+	this.attachAnims = [];
 
 	this.ship = data.ship;
 	this.flight = data.flight;
@@ -1763,6 +1764,7 @@ function Ship(data){
 		var div = document.createElement("div");
 			div.className = "shipDiv " + owner;
 			$(div).data("shipId", this.id);
+		this.element = div;
 
 		var subDiv = document.createElement("div");
 			subDiv.className = "header";
@@ -1826,8 +1828,6 @@ function Ship(data){
 		if (game.phase == 2){
 			$(div).find(".structContainer").show();
 		}
-
-		this.element = div;
 	}
 
 	this.expandDiv = function(div){
@@ -2153,6 +2153,11 @@ function Ship(data){
 		$(div).css("left", x).css("top", y);
 */	
 
+		this.getAttachDivs();
+		return div;
+	}
+
+	this.getAttachDivs = function(){
 		if (this.cc.length){
 			var ccContainer = $("<div>").addClass("ccContainer")
 				.append(($("<div>").addClass("general")
@@ -2160,31 +2165,10 @@ function Ship(data){
 
 			for (var i = 0; i < this.cc.length; i++){
 				var unit = game.getUnitById(this.cc[i]);
-				var color = "red";
-				if (unit.friendly){color = "green";}
-				var FlightDiv = $("<div>").addClass("flightDiv")
-					.append($("<div>").css("display", "block").addClass("center15 " + color).html("Flight #" + (" (click to select)")))
-					.data("id", unit.id)
-					.click(function(){
-						if (aUnit){
-							var ship = game.getUnitById(aUnit);
-								ship.doUnselect();
-								ship.switchDiv();
-						}
-						game.getUnitById($(this).data("id")).select();
-					});
-
-				for (var j = 0; j < unit.structures.length; j++){
-					if (unit.structures[j].destroyed || unit.structures[j].disabled){continue;}
-					FlightDiv.append($("<div>").append($("<img>").attr("src", unit.smallImg.src)));
-				}
-
-				ccContainer.append(FlightDiv);
+				ccContainer = unit.getAttachment(ccContainer);
 			}
-			$(div).append(ccContainer);
 		}
-
-		return div;
+		$(this.element).append(ccContainer);
 	}
 
 	this.previewSetup = function(){

@@ -633,12 +633,12 @@ class DBManager {
 		$arrived = 0;
 
 		$stmt->bindParam(":unitid", $flight["id"]);
-		$stmt->bindParam(":type", $flight["launchData"]["mission"]);
-		$stmt->bindParam(":turn", $flight["turn"]);
-		$stmt->bindParam(":targetid", $flight["launchData"]["targetid"]);
-		$stmt->bindParam(":x", $flight["launchData"]["x"]);
-		$stmt->bindParam(":y", $flight["launchData"]["y"]);
-		$stmt->bindParam(":arrived", $arrived);
+		$stmt->bindParam(":type", $flight["mission"]["type"]);
+		$stmt->bindParam(":turn", $flight["mission"]["turn"]);
+		$stmt->bindParam(":targetid", $flight["mission"]["targetid"]);
+		$stmt->bindParam(":x", $flight["mission"]["x"]);
+		$stmt->bindParam(":y", $flight["mission"]["y"]);
+		$stmt->bindParam(":arrived", $flight["mission"]["arrived"]);
 		$stmt->execute();
 		if ($stmt->errorCode() == 0){
 			return true;

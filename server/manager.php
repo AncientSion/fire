@@ -303,7 +303,7 @@ class Manager {
 					if ($units[$i]->id != $units[$j]->id){
 						$b = $units[$j]->getCurrentPosition();
 						if ($a->x == $b->x && $a->y == $b->y){
-							Debug::log("valid: ".$units[$i]->id."/".$units[$j]->id);
+							//Debug::log("valid: ".$units[$i]->id."/".$units[$j]->id);
 							$units[$i]->cc[] = $units[$j]->id;
 							$units[$j]->cc[] = $units[$i]->id;
 						}
@@ -867,11 +867,13 @@ class Manager {
 
 	public function handleFiringPhase(){
 
-		if (!sizeof($this->fires)){
-			$this->handleDamageControlPhase();
+	/*	if (!sizeof($this->fires)){
+			Debug::log("no fires skipping dmg");
+			$this->phase = 3;
+			$this->doAdvance();
 			return true;
 		}
-
+*/
 		$time = -microtime(true);
 
 		$this->setupShips();

@@ -132,7 +132,7 @@ function Flight(data){
 			t.height = this.size;
 		var ctx = t.getContext("2d");
 
-		if (this.mission.type == 1){
+		if (this.mission.type == 1){ // patrol
 			ctx.translate(this.size/2, this.size/2);
 			for (var i = 0; i < this.structures.length; i++){
 				if (!this.structures[i].destroyed && !this.structures[i].disabled){
@@ -153,12 +153,12 @@ function Flight(data){
 				}
 			}
 		}
-		else if (this.mission.type == 2){
+		else if (this.mission.type == 2){ // strike escort
 			ctx.translate(this.size/2, this.size/2);
 			for (var i = 0; i < this.structures.length; i++){
 				if (!this.structures[i].destroyed && !this.structures[i].disabled){
 					ctx.save();		
-					ctx.rotate(((360/this.structures.length-1)*i) * (Math.PI/180));
+					ctx.rotate((((360/this.structures.length-1)*i)+this.getDrawFacing()) * (Math.PI/180));
 					ctx.drawImage(
 						this.smallImg,
 						0 -size/2,
@@ -828,6 +828,31 @@ function Flight(data){
 
 		$(div).css("top", 100).css("left", left);
 		*/return div;
+	}
+
+	this.getAttachment = function(div){
+		var color = "red";
+
+		if (this.friendly){color = "green";}
+		var attachDiv = $("<div>").addClass("flightDiv")
+			.append($("<div>").css("display", "block").addClass("center15 " + color).html("Flight #" + (" (click to select)")))
+			.data("id", this.id)
+			.click(function(){
+				if (aUnit){
+					var ship = game.getUnitById(aUnit);
+						ship.doUnselect();
+						ship.switchDiv();
+				}
+				game.getUnitById($(this).data("id")).select();
+			});
+
+		for (var j = 0; j < this.structures.length; j++){
+			if (this.structures[j].destroyed || this.structures[j].disabled){continue;}
+			attachDiv.append($("<div>").append($("<img>").attr("src", this.smallImg.src)));
+		}
+
+		div.append(attachDiv);
+		return div;
 	}
 
 	this.selectAllA = function(e, id){
