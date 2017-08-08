@@ -387,7 +387,7 @@ class DBManager {
 	}
 
 	public function insertServerActions($units){
-		Debug::log("DB insertServerActions s: ".sizeof($units));
+		//Debug::log("DB insertServerActions s: ".sizeof($units));
 		$stmt = $this->connection->prepare("
 			INSERT INTO actions 
 				(shipid, turn, type, dist, x, y, a, cost, delay, costmod, resolved)
@@ -398,7 +398,7 @@ class DBManager {
 		for ($i = 0; $i < sizeof($units); $i++){
 			for ($j = 0; $j < sizeof($units[$i]->actions); $j++){
 				if ($units[$i]->actions[$j]->resolved == 0){
-					Debug::log("Insert Action for unit: ".$units[$i]->id);
+					//Debug::log("Insert Action for unit: ".$units[$i]->id);
 					$units[$i]->actions[$j]->resolved = 1;
 					
 					$stmt->bindParam(":shipid", $units[$i]->id);

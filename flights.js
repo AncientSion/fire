@@ -55,7 +55,7 @@ function Flight(data){
 
 	this.setPostMoveSize = function(){
 		if (this.mission.arrived){
-			if (this.mission.type == 2){
+			if (this.mission.type == 2 || this.mission.type == 3){
 				var s = game.getUnitById(this.mission.targetid).size;
 				this.size = s+30;
 			}
@@ -153,7 +153,7 @@ function Flight(data){
 				}
 			}
 		}
-		else if (this.mission.type == 2){ // strike escort
+		else if (this.mission.type == 2 || this.mission.type == 3){ // strike escort
 			ctx.translate(this.size/2, this.size/2);
 			for (var i = 0; i < this.structures.length; i++){
 				if (!this.structures[i].destroyed && !this.structures[i].disabled){
@@ -936,7 +936,7 @@ Flight.prototype.setTarget = function(){
 	else if (target.flight){
 		var i = this.getCurrentImpulse();
 		var d;
-		if (this.mission.type == 2){ // strike intercept goal
+		if (this.mission.type == 2 || this.mission.type == 3){ // strike intercept goal
 			if (target.finalStep == undefined){
 				target.setTarget();
 			}

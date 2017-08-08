@@ -151,10 +151,14 @@ function Game(data, userid){
 		}
 		else if (this.shortInfo){
 			t = game.getUnitById(this.shortInfo);
-			if (t && t.ship){
-				console.log("STRIKE / ESCORT");
-				dest = t.getPlannedPosition();
+			if (t){
 				valid = true;
+				dest = t.getPlannedPosition();
+				if (t.ship){
+					console.log("STRIKE / ESCORT");
+				} else if (t.flight){
+					console.log("INTERCEPT");
+				}
 			}
 		}
 
@@ -878,7 +882,7 @@ Game.prototype.getUnitType = function (val){
 		var stack = [];
 
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].flight && this.ships[i].mission.type == 2 && this.ships[i].mission.targetid == aUnit){
+			if (this.ships[i].flight && this.ships[i].mission.type == 2 || this.mission.type == 3 && this.ships[i].mission.targetid == aUnit){
 				this.ships[i].setTarget();
 				if (!this.ships[i].mission.arrived){this.ships[i].setImage();}
 				stack.push(this.ships[i].id);
@@ -894,7 +898,7 @@ Game.prototype.getUnitType = function (val){
 	this.updateIntercepts = function(){
 		var stack = [];
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].flight && this.ships[i].mission.type == 2){
+			if (this.ships[i].flight && this.ships[i].mission.type == 2 || this.mission.type == 3){
 				if (this.ships[i].mission.targetid == aUnit){
 					stack.push(this.ships[i]);
 				}
@@ -1489,7 +1493,10 @@ Game.prototype.getUnitType = function (val){
 
 			if (this.ships[i].ship && this.ships[i].cc.length){
 				for (var j = 0; j < this.ships[i].cc.length; j++){
-					this.ships[i].attachAnims.push(this.getUnitById(this.ships[i].cc[j]));
+					var attach = this.getUnitById(this.ships[i].cc[j]);
+					if (attach.mission.arrived < game.turn){
+						this.ships[i].attachAnims.push(attach);
+					}
 				}
 			}
 
