@@ -60,6 +60,8 @@ function Ship(data){
 	this.img;
 	this.structures = [];
 	this.flights = [];
+	this.drawImg;
+	this.doDraw = 1;
 
 	this.getDamageEntriesByFireId = function(fire){
 		var dmgs = [];
@@ -123,7 +125,7 @@ function Ship(data){
 		mouseCtx.translate(pos.x, pos.y);
 		/*mouseCtx.globalAlpha = 0.3;
 		mouseCtx.beginPath();
-		mouseCtx.arc(0, 0, this.size*1, 0, 2*Math.PI, false);
+		mouseCtx.arc(0, 0, size*1, 0, 2*Math.PI, false);
 		mouseCtx.closePath();
 		mouseCtx.fillStyle = "red";
 		mouseCtx.fill();
@@ -131,7 +133,7 @@ function Ship(data){
 		this.drawMarker(0, 0, "yellow", mouseCtx);
 		//mouseCtx.globalAlpha = 1;
 		mouseCtx.rotate(this.getDrawFacing * Math.PI/180);
-		mouseCtx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
+		mouseCtx.drawImage(this.img, -size/2, -size/2, size, size);
 
 		mouseCtx.setTransform(1,0,0,1,0,0);
 		//mouseCtx.globalAlpha = 1;
@@ -139,7 +141,10 @@ function Ship(data){
 	}
 
 	this.isReady = function(){
-		if (this.available < game.turn){
+		if (!this.doDraw){
+			return false;
+		}
+		else if (this.available < game.turn){
 			return true;
 		}
 		else if (this.available == game.turn && !(game.phase == 0 && game.animating && !this.deployed)){
@@ -153,10 +158,108 @@ function Ship(data){
 	}
 
 
+	this.setEscortImage = function(){
+		if (this.cc.length){
+			var size = this.size
+			//var size = 40;
+			var fSize = 12;
+
+			var t = document.createElement("canvas");
+				t.width = size*1.5;
+				t.height = size*1.5;			
+			var ctx = t.getContext("2d");
+
+			
+		/*	ctx.translate(t.width/2, t.height/2);
+			ctx.rotate((this.getDrawFacing()) * (Math.PI/180));
+
+			ctx.drawImage(this.img, -size/2, -size/2, size, size);
+
+			ctx.rotate((-this.getDrawFacing()) * (Math.PI/180));
+			ctx.translate-(t.width/2, -t.height/2);
+*/
+
+
+			if (this.cc.length){
+				var friendly = [];
+				var hostile = [];
+				for (var i = 0; i < this.cc.length; i++){
+					var attach = game.getUnitById(this.cc[i]);
+					if (!attach.doDraw){
+						for (var j = 0; j < attach.structures.length; j++){
+							if (this.userid == attach.userid){
+								friendly.push(attach.structures[j].name);
+							} else hostile.push(attach.structures[j].name);
+						}
+					}
+
+				}
+				//console.log(elements);
+			}
+
+			var drawFacing = this.getDrawFacing();
+			if (friendly.length){
+				ctx.translate(t.width/2, t.height/2);
+				for (var i = 0; i < friendly.length; i++){
+					ctx.save();		
+					ctx.rotate((((360/friendly.length-1)*i)+drawFacing) * (Math.PI/180));
+					ctx.drawImage(
+						window.shipImages[friendly[i].toLowerCase()],
+						0 -fSize/2,
+						size/2 -fSize/2 +3,
+						fSize, 
+						fSize
+					);
+					ctx.restore();
+				}
+				ctx.translate(-t.width/2, -t.height/2);
+			}
+
+			if (hostile.length){
+			ctx.translate(t.width/2, t.height/2);
+				for (var i = 0; i < hostile.length; i++){
+					ctx.save();		
+					ctx.rotate((((360/hostile.length-1)*i)+drawFacing) * (Math.PI/180));
+					ctx.drawImage(
+						window.shipImages[hostile[i].toLowerCase()],
+						0 -fSize/2,
+						size/2 -fSize/2 +15,
+						fSize, 
+						fSize
+					);
+					ctx.restore();
+				}
+				ctx.translate(-t.width/2, -t.height/2);
+			}
+			this.drawImg = t;
+
+			console.log(this.drawImg.toDataURL());
+			ctx.setTransform(1,0,0,1,0,0);
+		}
+	}
+
+	this.setImage = function(){
+		var size = this.size;
+		var t = document.createElement("canvas");
+			t.width = size*1.5;
+			t.height = size*1.5;			
+		var ctx = t.getContext("2d");
+
+		ctx.translate(t.width/2, t.height/2);
+		ctx.rotate((this.getDrawFacing()) * (Math.PI/180));
+		ctx.drawImage(this.img, -size/2, -size/2, size, size);
+
+		this.drawImg = t;
+		//console.log(this.drawImg.toDataURL());
+		ctx.setTransform(1,0,0,1,0,0);
+	}
+
+
 	this.draw = function(){
 		if (this.isReady()){
-			this.drawPositionMarker();
+		 	this.drawPositionMarker();
 			this.drawSelf();
+			this.drawEscort();
 		}
 	}
 
@@ -165,8 +268,31 @@ function Ship(data){
 		ctx.translate(this.drawX, this.drawY)
 		ctx.rotate(this.getDrawFacing() * Math.PI/180);
 		ctx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
+		//ctx.restore();
+	}
+
+	this.drawEscort = function(){
+		if (!this.cc.length){
+			ctx.restore();
+			return;
+		}
+		//ctx.save();
+		//ctx.translate(this.drawX, this.drawY)
+		//ctx.rotate(this.getDrawFacing() * Math.PI/180);
+		ctx.drawImage(this.drawImg, -this.drawImg.width/2, -this.drawImg.height/2, this.drawImg.height, this.drawImg.height);
 		ctx.restore();
 	}
+
+	/*this.drawSelf = function(){
+		//ctx.save();
+		ctx.translate(this.drawX, this.drawY)
+		//ctx.rotate(this.getDrawFacing() * Math.PI/180);
+		ctx.drawImage(this.drawImg, -this.drawImg.width/2, -this.drawImg.height/2);
+		ctx.translate(-this.drawX, -this.drawY);
+		//ctx.restore();
+	}*/
+
+
 
 	this.getPlannedFacing = function(){
 		var angle = 0;
@@ -235,15 +361,15 @@ function Ship(data){
 
 	this.getFiringPosition = function(){
 		return new Point(
-			this.x + range(this.size * 0.3 * -1, this.size * 0.3),
-			this.y + range(this.size * 0.3 * -1, this.size * 0.3)
+			this.x + range(size * 0.3 * -1, size * 0.3),
+			this.y + range(size * 0.3 * -1, size * 0.3)
 		)
 	}
 
 	this.getTargettingPos = function(){
 		return new Point(
-			this.x + range(this.size * 0.3 * -1, this.size * 0.3),
-			this.y + range(this.size * 0.3 * -1, this.size * 0.3)
+			this.x + range(size * 0.3 * -1, size * 0.3),
+			this.y + range(size * 0.3 * -1, size * 0.3)
 		)		
 	}
 
@@ -271,11 +397,11 @@ function Ship(data){
 			for (var i = 0; i < game.deploys.length; i++){
 				if (game.deploys[i].userid != this.userid){continue;}
 
-				if (getDistance(game.deploys[i], pos) + this.size/2 < game.deploys[i].s){
+				if (getDistance(game.deploys[i], pos) + size/2 < game.deploys[i].s){
 					for (var j = 0; j < game.ships.length; j++){
 						if (game.ships[j].deployed && game.ships[j].id != this.id && game.ships[j].userid == this.userid){ // different ship, different owners
 							var step = game.ships[j].getBaseOffsetPos();
-							if (getDistance(pos, step) <= (game.ships[j].size/2 + this.size/2)){
+							if (getDistance(pos, step) <= (game.ships[j].size/2 + size/2)){
 							popup("The selected position is too close to the position or planned position of vessel (#"+game.ships[i].id+")");
 								return false;
 							}
@@ -313,7 +439,7 @@ function Ship(data){
 			for (var i = 0; i < game.ships.length; i++){
 				if (game.ships[i].deployed && game.ships[i].id != this.id && game.ships[i].userid == this.userid){ // different ship, different owners
 					var step = game.ships[i].getBaseOffsetPos();
-					if (getDistance(pos, step) <= (game.ships[i].size/2 + this.size/2)){
+					if (getDistance(pos, step) <= (game.ships[i].size/2 + size/2)){
 					popup("The selected position is too close to the position or planned position of vessel (#"+game.ships[i].id+")");
 						return false;
 					}
@@ -411,7 +537,7 @@ function Ship(data){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
 				if (this.structures[i].systems[j].id == fire.weaponid){
 					var a = range(this.structures[i].start, this.structures[i].end);
-					return getPointInDirection(range(0, this.size / 4), a, 0, 0);
+					return getPointInDirection(range(0, size / 4), a, 0, 0);
 				}
 			}
 		}
@@ -421,6 +547,8 @@ function Ship(data){
 		this.img = window.shipImages[this.name.toLowerCase()];
 		this.setDrawData();
 		this.setHitTable();
+		this.setImage();
+	//	this.setEscortImage();
 	}
 
 	this.unpowerAllSystems = function(){
@@ -1323,7 +1451,7 @@ function Ship(data){
 
 	this.drawImpulseUI = function(){
 		var center = {x: this.x, y: this.y};
-		var p1 = getPointInDirection(this.size/2 + 10 + 15, this.getDrawFacing() + 180, center.x, center.y);
+		var p1 = getPointInDirection(size/2 + 10 + 15, this.getDrawFacing() + 180, center.x, center.y);
 
 		if (this.canUndoLastAction()){
 			var ox = p1.x * cam.z + cam.o.x - 15;
@@ -1337,7 +1465,7 @@ function Ship(data){
 	/*	var gui = $("#impulseGUI");
 		var w = gui.width();
 		var h = gui.height();
-		var p = getPointInDirection((this.size/2 + w)/cam.z, this.facing + 180, center.x, center.y);
+		var p = getPointInDirection((size/2 + w)/cam.z, this.facing + 180, center.x, center.y);
 
 		gui.css("left", p.x * cam.z + cam.o.x - w/2).css("top", p.y * cam.z + cam.o.y - h/2).removeClass("disabled");
 		gui.find("#impulse").html(this.getRemainingImpulse() + " / " + this.getCurrentImpulse());

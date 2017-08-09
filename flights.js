@@ -16,6 +16,7 @@ function Flight(data){
 	this.finalStep;
 	this.patrolFacing = [];
 	this.drawImg;
+	this.doDraw = 1;
 
 	this.create = function(){
 		this.img = window.shipImages[this.structures[0].name.toLowerCase() + "l"];
@@ -162,7 +163,7 @@ function Flight(data){
 					ctx.drawImage(
 						this.smallImg,
 						0 -size/2,
-						this.size/2 -size/2 -5,
+						this.size/2 -size/2 -7,
 						size, 
 						size
 					);
@@ -172,8 +173,8 @@ function Flight(data){
 		}
 		ctx.setTransform(1,0,0,1,0,0);
 		this.drawImg = t;
-		console.log(this.drawImg.toDataURL());
-}
+		//console.log(this.drawImg.toDataURL());
+	}
 
 	this.setPostMoveFacing = function(){
 		if (this.mission.arrived){
@@ -356,6 +357,7 @@ function Flight(data){
 	}
 
 	this.drawSelf = function(){
+		console.log(this.drawX + "/" + this.drawY + " id: " + this.id);
 		ctx.translate(this.drawX, this.drawY);
 		ctx.drawImage(this.drawImg, -this.drawImg.width/2, -this.drawImg.height/2);
 		ctx.translate(-this.drawX, -this.drawY);
@@ -921,40 +923,40 @@ Flight.prototype.setTarget = function(){
 		if (d < i){
 			this.nextStep = this.finalStep;
 		} else this.nextStep = getPointInDirection(i, this.facing, this.x, this.y);
-		return;
 	}
-
-	var target = this.getTarget();
-
-	if (target.ship){
-		this.finalStep = target.getPlannedPosition();
-		var d = getDistance(this, this.finalStep);
-		if (d < i){
-			this.nextStep = this.finalStep;
-		} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, this.finalStep), this.x, this.y);
-	}
-	else if (target.flight){
-		var i = this.getCurrentImpulse();
-		var d;
-		if (this.mission.type == 2 || this.mission.type == 3){ // strike intercept goal
-			if (target.finalStep == undefined){
-				target.setTarget();
+	else {
+		if (this.mission.type == 2){
+			var target = this.getTarget();
+			if (target.ship){
+				this.finalStep = target.getPlannedPosition();
+				var d = getDistance(this, this.finalStep);
+				if (d < i){
+					this.nextStep = this.finalStep;
+				} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, this.finalStep), this.x, this.y);
 			}
-			this.finalStep = target.nextStep;
-			d = getDistance(this, target.nextStep);
-			if (d < i){
-				this.nextStep = target.nextStep;
-			} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, target.nextStep), this.x, this.y);
+			else if (target.flight){
+				var i = this.getCurrentImpulse();
+				var d;
+				if (this.mission.type == 2 || this.mission.type == 3){ // strike intercept goal
+					if (target.finalStep == undefined){
+						target.setTarget();
+					}
+					this.finalStep = target.nextStep;
+					d = getDistance(this, target.nextStep);
+					if (d < i){
+						this.nextStep = target.nextStep;
+					} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, target.nextStep), this.x, this.y);
 
-			//var vector = new Vector(target, target.nextStep);
-			//var speedMod = this.getCurrentImpulse() / target.getCurrentImpulse();
-			//this.finalStep = getIntercept(this, target, vector, speedMod);
+					//var vector = new Vector(target, target.nextStep);
+					//var speedMod = this.getCurrentImpulse() / target.getCurrentImpulse();
+					//this.finalStep = getIntercept(this, target, vector, speedMod);
 
+				}
+
+			}
+			else if (target.salvo){
+			}
 		}
-
-	}
-	else if (target.salvo){
-
 	}
 
 	this.facing = getAngleFromTo(this, this.nextStep);

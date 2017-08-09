@@ -676,8 +676,16 @@ function Game(data, userid){
 	this.movementResolved = function(){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].flight){
-				this.ships[i].setPostMoveSize();
-				this.ships[i].setPostMoveImage();
+				if (this.ships[i].mission.arrived){
+					this.ships[i].doDraw = 0;
+				}
+				//this.ships[i].setPostMoveSize();
+				//this.ships[i].setPostMoveImage();
+			}
+		}
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].ship){
+				this.ships[i].setEscortImage();
 			}
 		}
 		game.draw();
@@ -843,8 +851,10 @@ Game.prototype.getUnitType = function (val){
 		}
 
 		for (var i = 0; i < this.ships.length; i++){
+			this.ships[i].create();
 			this.ships[i].createBaseDiv();
 			if (this.ships[i].flight){this.ships[i].setTarget();}
+			else this.ships[i].setEscortImage();
 		}
 		for (var i = 0; i < this.ballistics.length; i++){
 			this.ballistics[i].setTarget();
@@ -898,7 +908,7 @@ Game.prototype.getUnitType = function (val){
 	this.updateIntercepts = function(){
 		var stack = [];
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].flight && this.ships[i].mission.type == 2 || this.mission.type == 3){
+			if (this.ships[i].flight && (this.ships[i].mission.type == 2 || this.ships[i].mission.type == 3)){
 				if (this.ships[i].mission.targetid == aUnit){
 					stack.push(this.ships[i]);
 				}
@@ -1097,7 +1107,6 @@ Game.prototype.getUnitType = function (val){
 	}
 	
 	this.draw = function(){
-		console.log("draw");
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		
 		this.drawShips();
@@ -1552,6 +1561,7 @@ Game.prototype.getUnitType = function (val){
 		window.now = Date.now();		
 		window.elapsed = window.now - window.then;
 		if (elapsed > window.fpsInterval){
+			console.log("DRAW");
 			//frameCounter++;
 			//console.log(frameCounter);
 			window.then = window.now - (window.elapsed % window.fpsInterval);
@@ -1603,7 +1613,6 @@ Game.prototype.getUnitType = function (val){
 							for (var k = 0; k < game.ships[i].attachAnims.length; k++){
 								game.ships[i].attachAnims[k].drawX = game.ships[i].drawX;
 								game.ships[i].attachAnims[k].drawY = game.ships[i].drawY;
-							//	game.ships[i].attachAnims[k].draw();
 							}
 							
 							break;
@@ -2461,7 +2470,7 @@ Game.prototype.getUnitType = function (val){
 		});
 	
 		for (var i = 0; i < this.ships.length; i++){
-			console.log(this.ships[i].userid + " / " + this.ships[i].cost);
+			//console.log(this.ships[i].userid + " / " + this.ships[i].cost);
 			if (this.ships[i].isReady()){
 				var name = "friendly";
 				if (this.ships[i].userid != game.userid){

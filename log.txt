@@ -1,0 +1,32 @@
+doAdvance for game1 from phase -1 to phase 0
+resolveDeployActions s: 1
+handleJumpActions
+assembleEndStates
+updateUnitEndState s:8 3/-1
+advancing game state time: 0.08 seconds.
+doAdvance for game1 from phase 0 to phase 1
+resolveUnitMovementDB
+resolveBallisticActions: 0
+handleFighterMovementPhaseNew
+determineFlightPosition
+STATIC STRIKE #5, adding move to: -78/-124
+STATIC STRIKE #8, adding move to: 207/104
+resolving layer #0
+resolving layer #1
+resolving flight #6
+_____________________
+Flight #6, impulse: 213
+From -77/191 to 207/104
+Dist 298, angle: 342.96818161295
+close in
+adding move to: 127/129
+resolving flight #7
+_____________________
+Flight #7, impulse: 276
+From -63/-56 to -78/-124
+Dist 70, angle: 257.56043798115
+arrival
+adding move to: -78/-124
+resolving layer #2
+updateMissionState
+advancing game state time: 0.136 seconds.
