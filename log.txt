@@ -1,32 +1,70 @@
-doAdvance for game1 from phase -1 to phase 0
-resolveDeployActions s: 1
+doAdvance for game2 from phase 2 to phase 3
+resolveFireOrder - ID 33, shooter: Altarian #7 vs Hyperion #6, w: MediumTwinIon #9, guns: 1
+doDamage, weapon: MediumTwinIon, target: 6/-1, totalDmg: 35
+doDamage, weapon: MediumTwinIon, target: 6/-1, totalDmg: 38
+resolveFireOrder - ID 34, shooter: Altarian #7 vs Hyperion #6, w: MediumSingleIon #12, guns: 1
+resolveFireOrder - ID 35, shooter: Altarian #7 vs Hyperion #6, w: MediumSingleIon #13, guns: 1
+doDamage, weapon: MediumSingleIon, target: 6/15, totalDmg: 47
+ => OK ship target system Dual #15 was destroyed, rem: 28, doing: 28, OK for: 11 dmg
+resolveFireOrder - ID 36, shooter: Altarian #8 vs Hyperion #6, w: MediumTwinIon #9, guns: 1
+doDamage, weapon: MediumTwinIon, target: 6/-1, totalDmg: 46
+doDamage, weapon: MediumTwinIon, target: 6/-1, totalDmg: 37
+resolveFireOrder - ID 37, shooter: Altarian #8 vs Hyperion #6, w: MediumSingleIon #19, guns: 1
+resolveFireOrder - ID 38, shooter: Altarian #8 vs Hyperion #6, w: MediumSingleIon #20, guns: 1
+doDamage, weapon: MediumSingleIon, target: 6/-1, totalDmg: 35
+resolveFireOrder ID 29, shooter: Hyperion #6 vs Flight #10, w: LightPulse #9
+resolveFireOrder ID 30, shooter: Hyperion #6 vs Flight #10, w: LightPulse #11
+resolveFireOrder ID 31, shooter: Hyperion #6 vs Flight #10, w: LightPulse #15
+resolveFireOrder ID 32, shooter: Hyperion #6 vs Flight #10, w: LightPulse #16
+DB updateFireOrders: 10
+handleBallisticInterception | balls:0, intercepts: 0
+= testCriticals for Hyperion, #6, turn: 4
+= testCriticals for Flight, #11, turn: 4
+= testCriticals for Altarian, #7, turn: 4
+= testCriticals for Altarian, #8, turn: 4
+= testCriticals for Flight, #9, turn: 4
+= testCriticals for Flight, #10, turn: 4
+ => DB insertDamageEntries: 6
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.101 seconds.
+advancing game state time: 0.112 seconds.
+doAdvance for game2 from phase 3 to phase 4
+assembleEndStates
+updateUnitEndState s:6 4/3
+endTurn
+resolveDeployActions s: 0
+destroyUnitsDB
+insertReinforcements: 1
+insertReinforcements: 1
+advancing game state time: 0.111 seconds.
+doAdvance for game2 from phase -1 to phase 0
+resolveDeployActions s: 0
 handleJumpActions
 assembleEndStates
-updateUnitEndState s:8 3/-1
-advancing game state time: 0.08 seconds.
-doAdvance for game1 from phase 0 to phase 1
+updateUnitEndState s:6 5/-1
+advancing game state time: 0.02 seconds.
+doAdvance for game2 from phase 0 to phase 1
 resolveUnitMovementDB
 resolveBallisticActions: 0
 handleFighterMovementPhaseNew
 determineFlightPosition
-STATIC STRIKE #5, adding move to: -78/-124
-STATIC STRIKE #8, adding move to: 207/104
+STATIC STRIKE #11, adding move to: -369/-313
 resolving layer #0
 resolving layer #1
-resolving flight #6
+resolving flight #9
 _____________________
-Flight #6, impulse: 213
-From -77/191 to 207/104
-Dist 298, angle: 342.96818161295
+Flight #9, impulse: 276
+From -319/-31 to -369/-313
+Dist 287, angle: 259.94566440001
 close in
-adding move to: 127/129
-resolving flight #7
+adding move to: -367/-303
+resolving flight #10
 _____________________
-Flight #7, impulse: 276
-From -63/-56 to -78/-124
-Dist 70, angle: 257.56043798115
+Flight #10, impulse: 276
+From -411/-169 to -369/-313
+Dist 150, angle: 286.26020470831
 arrival
-adding move to: -78/-124
+adding move to: -369/-313
 resolving layer #2
 updateMissionState
-advancing game state time: 0.136 seconds.
+advancing game state time: 0.037 seconds.

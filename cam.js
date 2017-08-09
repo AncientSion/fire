@@ -20,7 +20,7 @@ window.cam = {
 
 	setZoom: function(val){
 		this.z = val;
-		game.draw();
+		//game.draw();
 	},
 	
 	adjustZoom: function(e, pos){

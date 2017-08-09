@@ -133,7 +133,7 @@ function Ship(data){
 		this.drawMarker(0, 0, "yellow", mouseCtx);
 		//mouseCtx.globalAlpha = 1;
 		mouseCtx.rotate(this.getDrawFacing * Math.PI/180);
-		mouseCtx.drawImage(this.img, -size/2, -size/2, size, size);
+		mouseCtx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
 
 		mouseCtx.setTransform(1,0,0,1,0,0);
 		//mouseCtx.globalAlpha = 1;
@@ -178,35 +178,52 @@ function Ship(data){
 			ctx.rotate((-this.getDrawFacing()) * (Math.PI/180));
 			ctx.translate-(t.width/2, -t.height/2);
 */
+	
+			var shipFriendly = true;
+			var flightFriendly = true;
 
+			if (this.userid != game.userid){
+				shipFriendly = false;
+			}
 
 			if (this.cc.length){
 				var friendly = [];
 				var hostile = [];
 				for (var i = 0; i < this.cc.length; i++){
 					var attach = game.getUnitById(this.cc[i]);
-					if (!attach.doDraw){
-						for (var j = 0; j < attach.structures.length; j++){
+					if (attach.doDraw){continue;}
+					for (var j = 0; j < attach.structures.length; j++){
+						if (shipFriendly){
 							if (this.userid == attach.userid){
 								friendly.push(attach.structures[j].name);
 							} else hostile.push(attach.structures[j].name);
 						}
+						else if (this.userid == attach.userid){
+							friendly.push(attach.structures[j].name);
+						} else hostile.push(attach.structures[j].name)
 					}
-
 				}
 				//console.log(elements);
 			}
 
+
 			var drawFacing = this.getDrawFacing();
-			if (friendly.length){
+			if (friendly.length){				
+				var color = "green";
+				if (!shipFriendly){color = "red";}
 				ctx.translate(t.width/2, t.height/2);
+				ctx.beginPath();
+				ctx.arc(0, 0, size/2 -fSize/2 +16, 0, 2*Math.PI);
+				ctx.closePath();
+				ctx.strokeStyle = color;
+				ctx.stroke();
 				for (var i = 0; i < friendly.length; i++){
 					ctx.save();		
 					ctx.rotate((((360/friendly.length-1)*i)+drawFacing) * (Math.PI/180));
 					ctx.drawImage(
 						window.shipImages[friendly[i].toLowerCase()],
 						0 -fSize/2,
-						size/2 -fSize/2 +3,
+						size/2 -fSize/2 +5,
 						fSize, 
 						fSize
 					);
@@ -216,14 +233,21 @@ function Ship(data){
 			}
 
 			if (hostile.length){
-			ctx.translate(t.width/2, t.height/2);
+				var color = "red";
+				if (!shipFriendly){color = "green";}
+				ctx.translate(t.width/2, t.height/2);
+				ctx.beginPath();
+				ctx.arc(0, 0, size/2 -fSize/2 +26, 0, 2*Math.PI);
+				ctx.closePath();
+				ctx.strokeStyle = color;
+				ctx.stroke();
 				for (var i = 0; i < hostile.length; i++){
 					ctx.save();		
 					ctx.rotate((((360/hostile.length-1)*i)+drawFacing) * (Math.PI/180));
 					ctx.drawImage(
 						window.shipImages[hostile[i].toLowerCase()],
 						0 -fSize/2,
-						size/2 -fSize/2 +15,
+						size/2 -fSize/2 +14,
 						fSize, 
 						fSize
 					);
@@ -247,7 +271,7 @@ function Ship(data){
 
 		ctx.translate(t.width/2, t.height/2);
 		ctx.rotate((this.getDrawFacing()) * (Math.PI/180));
-		ctx.drawImage(this.img, -size/2, -size/2, size, size);
+		ctx.drawImage(this.img, -size/2, -this.size/2, this.size, this.size);
 
 		this.drawImg = t;
 		//console.log(this.drawImg.toDataURL());
@@ -292,8 +316,6 @@ function Ship(data){
 		//ctx.restore();
 	}*/
 
-
-
 	this.getPlannedFacing = function(){
 		var angle = 0;
 
@@ -310,6 +332,7 @@ function Ship(data){
 	}
 
 	this.drawPositionMarker = function(){
+		if (!this.doDraw){return;}
 		var c = "";
 		if (this.selected){c = "yellow"}
 		else if (this.friendly){c = "green";}
@@ -1451,7 +1474,7 @@ function Ship(data){
 
 	this.drawImpulseUI = function(){
 		var center = {x: this.x, y: this.y};
-		var p1 = getPointInDirection(size/2 + 10 + 15, this.getDrawFacing() + 180, center.x, center.y);
+		var p1 = getPointInDirection(this.size/2 + 10 + 15, this.getDrawFacing() + 180, center.x, center.y);
 
 		if (this.canUndoLastAction()){
 			var ox = p1.x * cam.z + cam.o.x - 15;

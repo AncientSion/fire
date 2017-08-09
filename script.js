@@ -360,6 +360,7 @@ function canvasMouseMove(e){
 			ship.handleTurning(e, shipLoc, facing, pos);
 		}
 		else if (ship.hasWeaponsSelected()){
+			console.log("ddd");
 			handleWeaponAimEvent(ship, unit, e, pos);
 		}
 	}

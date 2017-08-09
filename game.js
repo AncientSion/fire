@@ -1561,7 +1561,7 @@ Game.prototype.getUnitType = function (val){
 		window.now = Date.now();		
 		window.elapsed = window.now - window.then;
 		if (elapsed > window.fpsInterval){
-			console.log("DRAW");
+			//console.log("DRAW");
 			//frameCounter++;
 			//console.log(frameCounter);
 			window.then = window.now - (window.elapsed % window.fpsInterval);
