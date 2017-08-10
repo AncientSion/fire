@@ -1345,7 +1345,7 @@ Weapon.prototype.select = function(e){
 	}
 	else {
 		unit = game.getUnitById(this.parentId);
-		if (unit.hasSystemSelected("Sensor")){
+		if (unit.flight && !unit.cc.length || unit.hasSystemSelected("Sensor")){
 			return false;
 		}
 		else if (this.getLoadLevel() >= 1){

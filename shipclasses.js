@@ -141,10 +141,7 @@ function Ship(data){
 	}
 
 	this.isReady = function(){
-		if (!this.doDraw){
-			return false;
-		}
-		else if (this.available < game.turn){
+		if (this.available < game.turn){
 			return true;
 		}
 		else if (this.available == game.turn && !(game.phase == 0 && game.animating && !this.deployed)){
@@ -193,6 +190,7 @@ function Ship(data){
 					var attach = game.getUnitById(this.cc[i]);
 					if (attach.doDraw){continue;}
 					for (var j = 0; j < attach.structures.length; j++){
+						if (attach.structures[j].destroyed){continue;}
 						if (shipFriendly){
 							if (this.userid == attach.userid){
 								friendly.push(attach.structures[j].name);
@@ -257,7 +255,7 @@ function Ship(data){
 			}
 			this.drawImg = t;
 
-			console.log(this.drawImg.toDataURL());
+			//console.log(this.drawImg.toDataURL());
 			ctx.setTransform(1,0,0,1,0,0);
 		}
 	}
@@ -280,6 +278,7 @@ function Ship(data){
 
 
 	this.draw = function(){
+		if (!this.doDraw){return;}
 		if (this.isReady()){
 		 	this.drawPositionMarker();
 			this.drawSelf();
@@ -353,7 +352,7 @@ function Ship(data){
 
 	this.drawMarker = function(x, y, c, context){
 		context.beginPath();
-		context.arc(x, y, this.size/2, 0, 2*Math.PI, false);
+		context.arc(x, y, (this.size-2)/2, 0, 2*Math.PI, false);
 		context.closePath();
 		context.lineWidth = 1;
 		context.globalAlpha = 0.8;
@@ -570,7 +569,7 @@ function Ship(data){
 		this.img = window.shipImages[this.name.toLowerCase()];
 		this.setDrawData();
 		this.setHitTable();
-		this.setImage();
+	//	this.setImage();
 	//	this.setEscortImage();
 	}
 

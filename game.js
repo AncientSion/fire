@@ -697,7 +697,12 @@ function Game(data, userid){
 	}
 
 	this.fireResolved = function(){
-		this.setFlightSizes();
+		//this.setFlightSizes();
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].ship){
+				this.ships[i].setEscortImage();
+			}
+		}
 		this.draw();
 		console.log("fireResolved");
 	}
@@ -842,19 +847,20 @@ Game.prototype.getUnitType = function (val){
 
 			ship.friendly = friendly;
 			ship.deployed = deployed;
-			ship.create();
 			this.ships[i] = ship;
+			this.ships[i].create();
 		}
 
 		for (var i = 0; i < window.ballistics.length; i++){
 			this.ballistics.push(window.initiateBallistic(i));
 		}
 
+
 		for (var i = 0; i < this.ships.length; i++){
-			this.ships[i].create();
 			this.ships[i].createBaseDiv();
 			if (this.ships[i].flight){this.ships[i].setTarget();}
 			else this.ships[i].setEscortImage();
+
 		}
 		for (var i = 0; i < this.ballistics.length; i++){
 			this.ballistics[i].setTarget();

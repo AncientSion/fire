@@ -546,20 +546,22 @@ Salvo.prototype.setNextStep = function(){
 }
 
 Salvo.prototype.drawMovePlan = function(){
-	planCtx.translate(cam.o.x, cam.o.y);
-	planCtx.scale(cam.z, cam.z)
-	planCtx.translate(this.x, this.y);
-	planCtx.beginPath();
-	planCtx.moveTo(0, 0);
-	planCtx.translate(-this.x + this.nextStep.x, -this.y + this.nextStep.y);
-	planCtx.lineTo(0, 0);
-	planCtx.closePath();
+	if (game.phase < 2){
+		planCtx.translate(cam.o.x, cam.o.y);
+		planCtx.scale(cam.z, cam.z)
+		planCtx.translate(this.x, this.y);
+		planCtx.beginPath();
+		planCtx.moveTo(0, 0);
+		planCtx.translate(-this.x + this.nextStep.x, -this.y + this.nextStep.y);
+		planCtx.lineTo(0, 0);
+		planCtx.closePath();
 
-	planCtx.globalAlpha = 1;
-	planCtx.strokeStyle = "red";
-	planCtx.lineWidth = 1;
-	planCtx.stroke();
-	planCtx.setTransform(1,0,0,1,0,0);
+		planCtx.globalAlpha = 1;
+		planCtx.strokeStyle = "red";
+		planCtx.lineWidth = 1;
+		planCtx.stroke();
+		planCtx.setTransform(1,0,0,1,0,0);
+	}
 
 	if (this.nextStep != this.finalStep){
 		planCtx.translate(cam.o.x, cam.o.y);
@@ -576,7 +578,6 @@ Salvo.prototype.drawMovePlan = function(){
 		planCtx.stroke();
 		planCtx.setTransform(1,0,0,1,0,0);
 	}
-
 	game.flightPath = true;
 }
 

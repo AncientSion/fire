@@ -22,7 +22,7 @@ function Flight(data){
 		this.img = window.shipImages[this.structures[0].name.toLowerCase() + "l"];
 		this.smallImg = window.shipImages[this.structures[0].name.toLowerCase()];
 		this.setFighterState();
-		this.setDrawData()
+		this.setDrawData();
 		if (this.id < 0){
 			this.setMaxMass();
 			this.setImpulse();
@@ -37,10 +37,16 @@ function Flight(data){
 	}
 
 	this.setStatus = function(){
-		if (this.mission.arrived && this.mission.arrived < game.turn){
-			this.doDraw = 0;
+		if (this.mission.arrived){
+			if (this.mission.arrived < game.turn){
+				this.doDraw = 0;
+			}
+			else if (game.phase > 2 && this.mission.arrived == game.turn){
+				this.doDraw = 0;
+			}
 		}
 	}
+
 	this.setSize = function(){
 		if (!this.mission.arrived){
 			this.setPreMoveSize();
@@ -853,10 +859,18 @@ function Flight(data){
 			.click(function(){
 				if (aUnit){
 					var ship = game.getUnitById(aUnit);
+					if (ship.hasWeaponsSelected()){
+						var target = game.getUnitById($(this).data("id"));
+						if (ship.userid != target.userid){
+							handleFireClick(ship, target);
+						}
+					} 
+					else {
 						ship.doUnselect();
 						ship.switchDiv();
+						game.getUnitById($(this).data("id")).select();
+					}
 				}
-				game.getUnitById($(this).data("id")).select();
 			})
 			.hover(function(e){
 				var vessel = game.getUnitById($(this).data("id"));
@@ -865,8 +879,8 @@ function Flight(data){
 				if (aUnit && aUnit != vessel.id){
 					var	ship = game.getUnitById(aUnit);
 					if (ship.salvo){return;}
-					var shipLoc = ship.getPlannedPosition();
-					var facing = ship.getPlannedFacing();
+					//var shipLoc = ship.getPlannedPosition();
+					//var facing = ship.getPlannedFacing();
 					if (ship.hasWeaponsSelected()){
 						if (ship.id != vessel.id){
 							handleWeaponAimEvent(ship, vessel, e);

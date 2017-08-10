@@ -1229,7 +1229,7 @@ table, th, tr, td {
 	background-color: black;
 	border-radius: 5px;
 	border: 2px solid white;
-	z-index: 11;
+	z-index: 30;
 	padding: 3 3 3 3;
 	position: absolute;
 	width: 500px;

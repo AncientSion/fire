@@ -643,14 +643,14 @@ echo "</script>";
 							game.ships[i].deployed = true;
 							if (game.ships[i].flight){
 								game.ships[i].setPostMovePosition();
-								game.ships[i].setPostMoveImage();
-							} else {
+							}
+							else {
 								game.ships[i].setPostMovePosition();
 								game.ships[i].setPostMoveFacing();
 							}
 						}
 					}
-					game.deployDone();
+					game.movementResolved();
 				}
 				else if (e.keyCode == 43){ // +
 					if (game.phase == 0 || game.phase == 1){

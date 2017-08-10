@@ -110,6 +110,9 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 		$("#game").find("#weaponAimTableWrapper").hide();
 		return;
 	}
+	//else if (ship.flight && !game.isCloseCombat(ship, vessel)){
+	//	return;
+	//}
 
 	var shipLoc = ship.getPlannedPosition();
 	var facing = ship.getPlannedFacing();					
@@ -118,7 +121,16 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 	var weaponInfo = $("#game").find("#weaponAimTableWrapper").find("#weaponInfo");
 	var dist;
 
-	if (vessel){
+	if (ship.flight){
+		var drop = 0;
+		if (vessel && !game.isCloseCombat(ship, vessel)){
+			drop = 1;
+		} else if (!vessel){
+			drop = 1;
+		}
+	}
+
+	if (vessel && !drop){
 		var multi = 1;
 		if (vessel.userid != ship.userid){
 			if (game.target == vessel.id){
@@ -139,23 +151,10 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 			var maskString = "";// = "<span class ='green'>0.0</span>";
 			var final;
 			var valid = false;
-			var targetData = $("#game").find("#weaponAimTableWrapper").find("#targetInfo").find("#targetData");
 			var vessel;
 			var section;
 
-			if (vessel.salvo){ // aiming at SALVO
-				if (game.phase <= 2){
-					if (vessel.targetid == ship.id){// direct interception
-						dist = Math.max(ship.size/2, Math.floor(getDistance(shipLoc, vessel.nextStep)));
-					}
-					else if (ship.flight){// indirect interception
-						dist = Math.abs(Math.floor(getDistance(shipLoc, vessel)));
-					}
-				}
-			}
-			if (!dist){
-				dist = Math.floor(getDistance(shipLoc, vessel.getPlannedPosition()));
-			}
+			dist = Math.floor(getDistance(shipLoc, vessel.getPlannedPosition()));
 
 			//angle = getAngleFromTo(vessel.getBaseOffsetPos(), shipLoc);
 			//angle = addAngle(vessel.getPlannedFacing(), angle);
@@ -205,6 +204,9 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 	}
 	else {
 		game.target = 0;
+		if (vessel){
+			pos = vessel.getPlannedPosition();
+		}
 		dist = Math.round(getDistance(ship.getPlannedPosition(), pos));
 		targetData1
 		.empty()
@@ -232,50 +234,52 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 	var validWeapon = false;
 
 	if (vessel){pos = vessel.getPlannedPosition();}
-		
-	for (var i = 0; i < ship.structures.length; i++){
-		for (var j = 0; j < ship.structures[i].systems.length; j++){
-			if (ship.structures[i].systems[j].weapon && ship.structures[i].systems[j].selected){
-				var system = ship.structures[i].systems[j].getSystem();
-				var inArc = false;
-				var legalTarget = true;
-				var msg = "";
+	
+	if (!drop){	
+		for (var i = 0; i < ship.structures.length; i++){
+			for (var j = 0; j < ship.structures[i].systems.length; j++){
+				if (ship.structures[i].systems[j].weapon && ship.structures[i].systems[j].selected){
+					var system = ship.structures[i].systems[j].getSystem();
+					var inArc = false;
+					var legalTarget = true;
+					var msg = "";
 
-				var row = $("<tr>");
-					row.append($("<td>").html(system.display + " #" + ship.structures[i].systems[j].id))
+					var row = $("<tr>");
+						row.append($("<td>").html(system.display + " #" + ship.structures[i].systems[j].id))
 
-				if (game.isCloseCombat(ship, vessel)){
-					legalTarget = true;
-					inArc = true;
-				}
-				else if (ship.ship && vessel.salvo){
-					if (ship.id != vessel.targetid && !(system instanceof Launcher)){ // ship vs salvo indirect
-						legalTarget = false;
-						msg = "Unable to aquire target (trajectory)";
+					if (game.isCloseCombat(ship, vessel)){
+						legalTarget = true;
+						inArc = true;
 					}
-					else if (ship.id == vessel.targetid && getDistance(ship.getPlannedPosition(), vessel) <= ship.size/2){
-						legalTarget = false;
-						msg = "Unable to aquire target (reaction time)";
-					} 
+					else if (ship.ship && vessel.salvo){
+						if (ship.id != vessel.targetid && !(system instanceof Launcher)){ // ship vs salvo indirect
+							legalTarget = false;
+							msg = "Unable to aquire target (trajectory)";
+						}
+						else if (ship.id == vessel.targetid && getDistance(ship.getPlannedPosition(), vessel) <= ship.size/2){
+							legalTarget = false;
+							msg = "Unable to aquire target (reaction time)";
+						} 
+						else if (system.posIsOnArc(shipLoc, pos, facing)){ // ship vs ship/fighter
+							inArc = true;
+							validWeapon = true;
+						}
+					}
 					else if (system.posIsOnArc(shipLoc, pos, facing)){ // ship vs ship/fighter
 						inArc = true;
 						validWeapon = true;
 					}
-				}
-				else if (system.posIsOnArc(shipLoc, pos, facing)){ // ship vs ship/fighter
-					inArc = true;
-					validWeapon = true;
-				}
-				else msg = "Not in weapon arc";
+					else msg = "Not in weapon arc";
 
-				if (inArc && legalTarget){
-					system.getAimData(vessel, final, dist, row);
-				}
-				else {
-					$(row).append($("<td>").html(msg).attr("colspan", 4))
-				}
+					if (inArc && legalTarget){
+						system.getAimData(vessel, final, dist, row);
+					}
+					else {
+						$(row).append($("<td>").html(msg).attr("colspan", 4))
+					}
 
-				weaponInfo.append(row);
+					weaponInfo.append(row);
+				}
 			}
 		}
 	}
@@ -548,6 +552,8 @@ function canvasMouseClick(e){
 function handleFireClick(ship, vessel){
 	if (vessel){
 		if (vessel.id != ship.id && (vessel.userid != game.userid && vessel.userid != ship.userid)){
+			if (ship.flight && !game.isCloseCombat(ship, vessel)){return;}
+			
 			if (ship.hasWeaponsSelected()){
 				var shipLoc = ship.getPlannedPosition();
 				var facing = ship.getPlannedFacing();
