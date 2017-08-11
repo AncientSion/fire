@@ -190,7 +190,7 @@ function Ship(data){
 					var attach = game.getUnitById(this.cc[i]);
 					if (attach.doDraw){continue;}
 					for (var j = 0; j < attach.structures.length; j++){
-						if (attach.structures[j].destroyed){continue;}
+						if (!attach.structures[j].draw){continue;}
 						if (shipFriendly){
 							if (this.userid == attach.userid){
 								friendly.push(attach.structures[j].name);
@@ -1981,7 +1981,19 @@ function Ship(data){
 	}
 
 	this.expandDiv = function(div){
-		$(div).append($("<div>").addClass("iconContainer").append($(window.shipImages[this.name.toLowerCase()].cloneNode(true)).addClass("rotate270").addClass("size90")));
+		$(div)
+		.append($("<div>")
+			.addClass("iconContainer")
+				.append($(window.shipImages[this.name.toLowerCase()].cloneNode(true)).addClass("rotate270").addClass("size90"))
+				.hover(function(e){
+					if (aUnit){
+						var ship = game.getUnitById(aUnit);
+						var target = game.getUnitById($(this).parent().data("shipId"));
+						if (ship.id != target.id && ship.hasWeaponsSelected()){
+							handleWeaponAimEvent(ship, target, e);
+						}
+					}
+				}))
 			
 		//document.getElementById("game").appendChild(div);
 		document.body.appendChild(div);

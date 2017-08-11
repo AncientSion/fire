@@ -697,7 +697,11 @@ function Game(data, userid){
 	}
 
 	this.fireResolved = function(){
-		//this.setFlightSizes();
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].flight){
+				this.ships[i].setPostFireImage();
+			}
+		}
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].ship){
 				this.ships[i].setEscortImage();
@@ -705,14 +709,6 @@ function Game(data, userid){
 		}
 		this.draw();
 		console.log("fireResolved");
-	}
-
-	this.setFlightSizes = function(){
-		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].flight){
-				this.ships[i].size = this.ships[i].trueSize;
-			}
-		}
 	}
 
 	this.setShipDivs = function(){

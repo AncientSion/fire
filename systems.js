@@ -1584,6 +1584,11 @@ Particle.prototype.getAnimation = function(fire){
 	var grouping = 2;
 	var delay = 30;
 	var shotInterval = 6;
+	var cc = 0;
+
+	if (game.isCloseCombat(fire.shooter, fire.target)){
+		cc = 1;
+	}
 
 	if (fire.shooter.flight){
 		grouping = 1;
@@ -1624,14 +1629,18 @@ Particle.prototype.getAnimation = function(fire){
 		else {
 		/*	var rollX = range(0, fire.target.size*0.6);
 			var rollY = range(0, fire.target.size*0.6);
-
 			var oX = Math.max(min, Math.abs(range(0, fire.target.size*0.6))) * (-1 + (2*range(0, 1)))
-			var oY = Math.max(min, Math.abs(range(0, fire.target.size*0.6);)) * (-1 + (2*range(0, 1)))
-		*/
+			var oY = Math.max(min, Math.abs(range(0, fire.target.size*0.6);)) * (-1 + (2*range(0, 1))) */
+		
 
 			var min = fire.target.size*0.3
 			tx = fire.target.drawX + Math.max(min, Math.abs(range(0, fire.target.size*0.6))) * (-1 + (2*range(0, 1)))
 			ty = fire.target.drawY + Math.max(min, Math.abs(range(0, fire.target.size*0.6))) * (-1 + (2*range(0, 1)))
+		}
+
+		if (cc){
+			tx += range(-fire.target.size/2, fire.target.size/2);
+			ty += range(-fire.target.size/2, fire.target.size/2);
 		}
 		
 		for (var k = 0; k < this.shots; k++){
@@ -1759,6 +1768,11 @@ Pulse.prototype.getAnimation = function(fire){
 	var grouping = 2;
 	var delay = 80;
 	var shotInterval = 6;
+	var cc = 0;
+
+	if (game.isCloseCombat(fire.shooter, fire.target)){
+		cc = 1;
+	}
 
 	if (fire.shooter.flight){
 		grouping = 4;
@@ -1779,15 +1793,23 @@ Pulse.prototype.getAnimation = function(fire){
 			gunHit = true;
 		}
 		else {
-			var min = fire.target.size*0.3;
-			tx = fire.target.drawX + Math.max(min, Math.abs(range(0, fire.target.size*0.6))) * (-1 + (2*range(0, 1)));
-			ty = fire.target.drawY + Math.max(min, Math.abs(range(0, fire.target.size*0.6))) * (-1 + (2*range(0, 1)));	
+			tx = fire.target.drawX;
+			ty = fire.target.drawY;
+
+			if (cc && fire.target.flight){
+				tx += range(-1, 1) * fire.target.size/3;
+				ty += range(-1, 1) * fire.target.size/3;
+			}
+			else {
+				var min = fire.target.size*0.3;
+				tx += Math.max(min, Math.abs(range(0, fire.target.size*0.6))) * (-1 + (2*range(0, 1)));
+				ty += Math.max(min, Math.abs(range(0, fire.target.size*0.6))) * (-1 + (2*range(0, 1)));	
+			}
 		}
-		
 		for (var k = 0; k < this.basePulses + this.extraPulses; k++){
 			if (gunHit){
-				tx = fire.target.drawX + range(fire.target.size * -0.07, fire.target.size * 0.07); // salvo hit
-				ty = fire.target.drawY + range(fire.target.size * -0.07, fire.target.size * 0.07);
+				tx += range(fire.target.size * -0.07, fire.target.size * 0.07); // salvo hit
+				ty += range(fire.target.size * -0.07, fire.target.size * 0.07);
 			}
 			//console.log("hit: " + (k < fire.hits[j]));
 			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, this.projSpeed, (k < fire.hits[j]));

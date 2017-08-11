@@ -120,16 +120,16 @@ function Flight(data){
 		ctx.rotate((this.getDrawFacing()+90) * (Math.PI/180));
 
 		for (var i = 0; i < this.structures.length; i++){
-			if (!this.structures[i].destroyed && !this.structures[i].disabled){
+			if (this.structures[i].draw){
 				ctx.drawImage(
 					this.smallImg,
 					this.layout[i].x -size/2,
 					this.layout[i].y -size/2,
 					size, 
 					size
-				);
-			}
-		}
+				)
+			;}
+		}	
 		//ctx.translate(this.size/2, this.size/2);
 		//ctx.rotate((this.getDrawFacing()+90) * (Math.PI/180));
 		ctx.setTransform(1,0,0,1,0,0);
@@ -148,7 +148,7 @@ function Flight(data){
 		if (this.mission.type == 1){ // patrol
 			ctx.translate(this.size/2, this.size/2);
 			for (var i = 0; i < this.structures.length; i++){
-				if (!this.structures[i].destroyed && !this.structures[i].disabled){
+				if (this.structures[i].draw){
 					ctx.save();
 					var ox = range(-this.size/2.5, this.size/2.5);
 					var oy = range(-this.size/2.5, this.size/2.5);
@@ -169,7 +169,7 @@ function Flight(data){
 		else if (this.mission.type == 2 || this.mission.type == 3){ // strike escort
 			ctx.translate(this.size/2, this.size/2);
 			for (var i = 0; i < this.structures.length; i++){
-				if (!this.structures[i].destroyed && !this.structures[i].disabled){
+				if (this.structures[i].draw){
 					ctx.save();		
 					ctx.rotate((((360/this.structures.length-1)*i)+this.getDrawFacing()) * (Math.PI/180));
 					ctx.drawImage(
@@ -186,6 +186,17 @@ function Flight(data){
 		ctx.setTransform(1,0,0,1,0,0);
 		this.drawImg = t;
 		//console.log(this.drawImg.toDataURL());
+	}
+
+
+	this.setPostFireImage = function(){
+		for (var i = 0; i < this.structures.length; i++){
+			this.structures[i].draw = 1;
+			if (this.structures[i].destroyed || this.structures[i].disabled){
+				this.structures[i].draw = 0;
+			}
+		}
+		this.setImage();
 	}
 
 	this.setPostMoveFacing = function(){
@@ -334,23 +345,15 @@ function Flight(data){
 	}
 
 	this.animationSetupDamage = function(){
-		var all = this.structures.length;
-		var postFire = (this.size - this.baseSize) / this.unitSize;
-		var preFire = postFire;
-
 		for (var i = 0; i < this.structures.length; i++){
 			if (this.structures[i].destroyed || this.structures[i].disabled){
 				this.structures[i].draw = false;
 				if (this.structures[i].isDestroyedThisTurn()){
 					this.structures[i].draw = true;
-					preFire++
 				}
 			}
 		}
-
-		//console.log("all: " + all + ", postFire: " + postFire + ", preFire: " + preFire);
-		this.trueSize = this.size;
-		this.size = preFire * this.unitSize + this.baseSize;
+		//this.size = preFire * this.unitSize + this.baseSize;
 	}
 
 	this.drawHoverElements = function(){
@@ -871,6 +874,8 @@ function Flight(data){
 						game.getUnitById($(this).data("id")).select();
 					}
 				}
+				else game.getUnitById($(this).data("id")).select();
+				
 			})
 			.hover(function(e){
 				var vessel = game.getUnitById($(this).data("id"));

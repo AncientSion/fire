@@ -28,6 +28,16 @@ class Flight extends Mini {
 		$this->destroyed = $destroyed;
 	}
 
+	public function isCloseCombat($fire){
+		for ($i = 0; $i < sizeof($this->cc); $i++){
+			if ($this->cc[$i] == $fire->shooterid){
+				//Debug::log("close combat! ".$this->id."/".$fire->shooterid);
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public function setState($turn){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$this->structures[$i]->setState($turn);

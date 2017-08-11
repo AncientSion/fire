@@ -59,16 +59,6 @@ class Ship {
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq());
 	}
 
-	public function isCloseCombat($fire){
-		for ($i = 0; $i < sizeof($this->cc); $i++){
-			if ($this->cc[$i] == $fire->shooterid){
-				Debug::log("close combat! ".$this->id."/".$fire->shooterid);
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public function getId(){
 		$this->index++;
 		return $this->index;
@@ -568,10 +558,6 @@ class Ship {
 		$multi += $fire->shooter->getOffensiveBonus($this->id);
 		$multi += $this->getImpulseProfileMod();
 		$multi -= $this->getDefensiveBonus($fire->shooter->id);
-
-	//if ($this->isCloseCombat($fire)){
-	//		$base *= 2;
-	//	}
 
 		$req = ($base * $multi) * (1-($traverse*0.2)) - $range;
 		//Debug::log("CALCULATE TO HIT - angle: ".$fire->angle.", base: ".$base.", trav: ".$traverse.", total multi: ".$multi.", dist/range: ".$fire->dist."/".$range.", req: ".$req);
