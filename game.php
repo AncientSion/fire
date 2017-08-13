@@ -469,7 +469,18 @@ echo "</script>";
 				<input type="button" class="disabled" value="Launch selected strikecraft as mixed flight" onclick='game.enableFlightDeployment()'>
 			</div>
 		</div>
-	</body>
+		<div id="missionAdjustDiv" class="disabled">
+			<table id="missionType">
+				<tr><th colSpan=3>Select New Mission</th></tr>
+				<tr><td></td><td width=70%>Patrol Location</td><td></td></tr>
+				<tr><td></td><td>Strike Ship / Escort Ship</td><td></td></tr>
+				<tr><td></td><td>Intercept Flight / Salvo</td><td></td></tr>
+			</table>
+			<div class="header">
+				<input type="button" class="disabled" value="Launch selected strikecraft as mixed flight" onclick=console.log('ding')>
+			</div>
+		</div>
+</body>
 </html>
 
 <?php 
@@ -633,7 +644,7 @@ echo "</script>";
 						for (var i = 0; i < game.ballistics.length; i++){
 							game.ballistics[i].setPostMovePosition();
 						}
-						game.draw();
+						game.fireResolved();
 					}
 				}
 				else if (e.keyCode == 109){ // m, cancel move animation

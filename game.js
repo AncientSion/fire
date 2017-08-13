@@ -170,7 +170,7 @@ function Game(data, userid){
 		var o = s.getPlannedPosition();
 		var facing = getAngleFromTo(o, dest);
 		var p = getPointInDirection(s.size, facing, o.x, o.y);
-		var mission = {turn: this.turn, type: this.flightDeploy.mission, targetid: t.id, x: dest.x, y: dest.y, arrived: 0};
+		var mission = {turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0};
 
 		if (t.id == aUnit){
 			p = dest;
@@ -190,7 +190,6 @@ function Game(data, userid){
 			shipid: aUnit,
 			systemid: this.flightDeploy.id,
 			loads: this.flightDeploy.loads,
-			targetid: t.id,
 			x: dest.x,
 			y: dest.y
 		};
@@ -207,20 +206,17 @@ function Game(data, userid){
 		flight.setTarget();
 		game.ships.push(flight);
 
-		if (t.id == aUnit){
-			t.cc.push(flight.id),
-			t.getAttachDivs();
-		}
-
 		$("#instructWrapper").hide();
 		$("#deployOverlay").hide();
 		game.getUnitById(aUnit).getSystemById(this.flightDeploy.id).setFireOrder().select();
 		game.flightDeploy = false;
 		this.draw();
 
-
+		if (t.id == aUnit){
+			game.getUnitById(aUnit).attachFlight(flight.id);
+		}
 	}
-	
+
 	this.doDeployFlighta = function(e, pos){
 		var facing = Math.floor(getAngleFromTo(game.getUnitById(aUnit).getPlannedPosition(), {x: pos.x, y: pos.y}))
 
@@ -386,7 +382,7 @@ function Game(data, userid){
 					}
 				}
 				if (!hasFire){
-					data.push((this.ships[i].name + " #" + this.ships[i].id));
+					data.push((this.ships[i]));
 				}
 			}
 		}
@@ -394,13 +390,20 @@ function Game(data, userid){
 		if (data.length){
 			var html = "The following units have no fireorders:";
 			for (var i = 0; i < data.length; i++){
-				html += "<p>" + data[i];
+				html += "<p onclick='game.switchToUnit(" + data.id +     "')>" + data[i].name + " #" + data[i].id;
 			}
 			html += "</p><span style='cursor: pointer; padding: 3px; border: 1px solid white; font-size: 24px' onclick='ajax.confirmFiringOrders(goToLobby)'>Confirm Orders</span>";
 			popup(html);
 			return true;
 		}
 		return false;
+	}
+
+	this.switchToUnit = function(id){
+		if (aUnit){
+			game.getUnitById(aUnit).doUnselect();
+		}
+		game.getUnitById(id).select();
 	}
 
 	this.endPhase = function(){
@@ -453,7 +456,7 @@ function Game(data, userid){
 				$("#deployWrapper").find("#reinforceTable").find(".requestReinforcements").each(function(){
 					if ($(this).data("id") == id){
 						$(this).addClass("selected");
-						return;
+						return false;
 					}
 				})
 				return;
@@ -669,6 +672,7 @@ function Game(data, userid){
 
 	this.initDeployment = function(){
 		cam.setZoom(0.6);
+		game.draw();
 		//cam.setFocus()
 		$("#deployWrapper").removeClass("disabled");
 	}
@@ -677,7 +681,13 @@ function Game(data, userid){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].flight){
 				if (this.ships[i].mission.arrived){
-					this.ships[i].doDraw = 0;
+					if (this.ships[i].mission.type == 1){
+						this.ships[i].setPostMoveSize();
+						this.ships[i].setPostMoveImage();
+					}
+					else if (this.ships[i].mission.type > 1){
+						this.ships[i].doDraw = 0;
+					}
 				}
 				//this.ships[i].setPostMoveSize();
 				//this.ships[i].setPostMoveImage();
@@ -1657,11 +1667,7 @@ Game.prototype.getUnitType = function (val){
 
 
 	this.resolveFire = function(){
-
-		for (var i = 0; i < this.ships.length; i++){
-			this.ships[i].animationSetupDamage();
-		}
-
+		this.resetImageData();
 		this.getResolvingFireOrders();
 		this.getShotDetails();
 		this.getFireAnimationDetails();
@@ -1680,8 +1686,18 @@ Game.prototype.getUnitType = function (val){
 		this.drawShips();
 		//this.animateBallistics()
 		this.animateFireOrders();
+		//this.animateShipExplosions()
 
 		//this.animateFire = true; this.fireResolved();
+	}
+
+	this.resetImageData = function(){
+		for (var i = 0; i < this.ships.length; i++){
+			 if (this.ships[i].flight){this.ships[i].setPreFireImage();}
+		}
+		for (var i = 0; i < this.ships.length; i++){
+			 if (this.ships[i].ship){this.ships[i].setEscortImage();}
+		}
 	}
 
 	this.getResolvingFireOrders= function(){
@@ -1840,8 +1856,8 @@ Game.prototype.getUnitType = function (val){
 								id: game.ships[i].id,
 								t: [0-30*anim.anims.length, 70],
 								s: game.ships[i].structures[j].mass / 3,
-								x: game.ships[i].layout[j].x,
-								y: game.ships[i].layout[j].y
+								x: game.ships[i].structures[j].layout.x,
+								y: game.ships[i].structures[j].layout.y
 							})
 						}
 					}
@@ -2175,7 +2191,7 @@ Game.prototype.getUnitType = function (val){
 				if (!window.animations[i].done){
 
 					fxCtx.translate(window.animations[i].base.x, window.animations[i].base.y);
-					fxCtx.rotate(window.animations[i].anims[0].a * (Math.PI/180));
+					//fxCtx.rotate(window.animations[i].anims[0].a * (Math.PI/180));
 
 					var done = true;
 
@@ -2309,10 +2325,6 @@ Game.prototype.getUnitType = function (val){
 	}
 
 	this.getDamageDetails = function(fire){
-
-		if (fire.shooter.id == 8){
-			console.log("dign");
-		}
 		var details = document.createElement("tr");
 			details.className = "selected";
 		var td = details.insertCell(-1)

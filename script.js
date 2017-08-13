@@ -296,7 +296,7 @@ function canvasMouseMove(e){
 	e.stopPropagation();
 
 	window.iterator++;
-	if (window.iterator < 3){
+	if (window.iterator < 2){
 		return;
 	}
 	window.iterator = 0;
@@ -364,7 +364,6 @@ function canvasMouseMove(e){
 			ship.handleTurning(e, shipLoc, facing, pos);
 		}
 		else if (ship.hasWeaponsSelected()){
-			console.log("ddd");
 			handleWeaponAimEvent(ship, unit, e, pos);
 		}
 	}

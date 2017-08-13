@@ -154,28 +154,157 @@ function Ship(data){
 		return false;
 	}
 
+	this.detachFlight = function(id){
+		for (var i = this.cc.length-1; i >= 0; i--){
+			if (this.cc[i] == id){
+				this.cc.splice(i, 1);
+				break;
+			}
+		}
+
+		$(this.element).find(".ccContainer").find(".flightDiv").each(function(i){
+			if ($(this).data("id") == id){
+				$(this).remove();
+				return false;
+			}
+		});
+
+		this.setEscortImage();
+		game.draw();
+	}
+
+	this.attachFlight = function(id){
+		var attach = game.getUnitById(id);
+		this.cc.push(attach.id);
+		$(this.element).find(".ccContainer").remove();
+		this.getAttachDivs();
+		this.setEscortImage();
+		attach.cc.push(this.id);
+		game.draw();
+	}
 
 	this.setEscortImage = function(){
 		if (this.cc.length){
 			var size = this.size
-			//var size = 40;
 			var fSize = 12;
+			var tresh = 10;
 
 			var t = document.createElement("canvas");
-				t.width = size*1.5;
-				t.height = size*1.5;			
+				t.width = size*2;
+				t.height = size*2;			
 			var ctx = t.getContext("2d");
+			var shipFriendly = true;
+			var flightFriendly = true;
 
-			
-		/*	ctx.translate(t.width/2, t.height/2);
-			ctx.rotate((this.getDrawFacing()) * (Math.PI/180));
+			if (this.userid != game.userid){
+				shipFriendly = false;
+			}
 
-			ctx.drawImage(this.img, -size/2, -size/2, size, size);
+			if (this.cc.length){
+				var friendly = [];
+				var hostile = [];
+				for (var i = 0; i < this.cc.length; i++){
+					var attach = game.getUnitById(this.cc[i]);
+					if (attach.doDraw){continue;}
+					for (var j = 0; j < attach.structures.length; j++){
+						if (!attach.structures[j].draw){;continue;}
+						if (shipFriendly){
+							if (this.userid == attach.userid){
+								friendly.push(attach.structures[j]);
+							} else hostile.push(attach.structures[j]);
+						}
+						else if (this.userid == attach.userid){
+							friendly.push(attach.structures[j]);
+						} else hostile.push(attach.structures[j])
+					}
+				}
+			}
 
-			ctx.rotate((-this.getDrawFacing()) * (Math.PI/180));
-			ctx.translate-(t.width/2, -t.height/2);
-*/
-	
+			var drawFacing = this.getDrawFacing();
+
+			if (friendly.length){
+				var color = "green";
+				if (!shipFriendly){color = "red";}
+				ctx.translate(t.width/2, t.height/2);
+				ctx.beginPath();
+				ctx.arc(0, 0, size/2 + tresh, 0, 2*Math.PI);
+				ctx.closePath();
+				ctx.strokeStyle = color;
+				ctx.stroke();
+				var split = Math.floor(360/friendly.length-1);
+				for (var i = 0; i < friendly.length; i++){
+					var a =  split*i;
+					var pos = getPointInDirection(size/2+tresh - fSize/2, a, 0, 0);
+					//console.log(a); 
+					//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
+					friendly[i].layout =  getPointInDirection(size/2+tresh - fSize/2, a+drawFacing, 0, 0);
+					ctx.translate(pos.x, +pos.y);
+					ctx.rotate((a-90)*(Math.PI/180));
+					ctx.drawImage(
+						window.shipImages[friendly[i].name.toLowerCase()],
+						-fSize/2,
+						-fSize/2,
+						fSize, 
+						fSize
+					);
+					ctx.rotate(-((a-90)*(Math.PI/180)));
+					ctx.translate(-pos.x, -pos.y);
+
+				}
+				ctx.translate(-t.width/2, -t.height/2);
+				tresh *= 2;
+			}
+
+			if (hostile.length){
+				var color = "red";
+				if (!shipFriendly){color = "green";}
+				ctx.translate(t.width/2, t.height/2);
+				ctx.beginPath();
+				ctx.arc(0, 0, size/2 + tresh, 0, 2*Math.PI);
+				ctx.closePath();
+				ctx.strokeStyle = color;
+				ctx.stroke();
+				var split = Math.floor(360/hostile.length-1);
+				for (var i = 0; i < hostile.length; i++){
+					var a =  split*i;
+					var pos = getPointInDirection(size/2+tresh - fSize/2, a, 0, 0);
+					//console.log(a); 
+					//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
+					hostile[i].layout =  getPointInDirection(size/2+tresh - fSize/2, a+drawFacing, 0, 0);;
+					ctx.translate(pos.x, +pos.y);
+					ctx.rotate((a-90)*(Math.PI/180));
+					ctx.drawImage(
+						window.shipImages[hostile[i].name.toLowerCase()],
+						-fSize/2,
+						-fSize/2,
+						fSize, 
+						fSize
+					);
+					ctx.rotate(-((a-90)*(Math.PI/180)));
+					ctx.translate(-pos.x, -pos.y);
+
+				}
+				ctx.translate(-t.width/2, -t.height/2);
+			}
+
+			this.drawImg = t;
+
+			//console.log(this.drawImg.toDataURL());
+			ctx.setTransform(1,0,0,1,0,0);
+		}
+	}
+
+
+	this.setEscortImagea = function(){
+		if (this.cc.length){
+			var size = this.size
+			var fSize = 12;
+			var tresh = 10;
+
+			var t = document.createElement("canvas");
+				t.width = size*2;
+				t.height = size*2;			
+			var ctx = t.getContext("2d");
 			var shipFriendly = true;
 			var flightFriendly = true;
 
@@ -201,7 +330,6 @@ function Ship(data){
 						} else hostile.push(attach.structures[j].name)
 					}
 				}
-				//console.log(elements);
 			}
 
 
@@ -211,48 +339,59 @@ function Ship(data){
 				if (!shipFriendly){color = "red";}
 				ctx.translate(t.width/2, t.height/2);
 				ctx.beginPath();
-				ctx.arc(0, 0, size/2 -fSize/2 +16, 0, 2*Math.PI);
+				ctx.arc(0, 0, size/2 + tresh, 0, 2*Math.PI);
 				ctx.closePath();
 				ctx.strokeStyle = color;
 				ctx.stroke();
 				for (var i = 0; i < friendly.length; i++){
-					ctx.save();		
-					ctx.rotate((((360/friendly.length-1)*i)+drawFacing) * (Math.PI/180));
+					var a =  (((360/friendly.length-1)*i)-drawFacing);
+					var pos = getPointInDirection(size/2+tresh - fSize/2, a, 0, 0);
+					ctx.translate(-pos.x, -pos.y);
+					ctx.rotate((a+90)*(Math.PI/180));
 					ctx.drawImage(
 						window.shipImages[friendly[i].toLowerCase()],
-						0 -fSize/2,
-						size/2 -fSize/2 +5,
+						-fSize/2,
+						-fSize/2,
 						fSize, 
 						fSize
 					);
-					ctx.restore();
+					ctx.rotate(-((a+90)*(Math.PI/180)));
+					ctx.translate(pos.x, pos.y);
+
 				}
 				ctx.translate(-t.width/2, -t.height/2);
 			}
+
+			tresh *= 2;
 
 			if (hostile.length){
 				var color = "red";
 				if (!shipFriendly){color = "green";}
 				ctx.translate(t.width/2, t.height/2);
 				ctx.beginPath();
-				ctx.arc(0, 0, size/2 -fSize/2 +26, 0, 2*Math.PI);
+				ctx.arc(0, 0, size/2 + tresh, 0, 2*Math.PI);
 				ctx.closePath();
 				ctx.strokeStyle = color;
 				ctx.stroke();
 				for (var i = 0; i < hostile.length; i++){
-					ctx.save();		
-					ctx.rotate((((360/hostile.length-1)*i)+drawFacing) * (Math.PI/180));
+					var a =  (((360/hostile.length-1)*i)-drawFacing);
+					var pos = getPointInDirection(size/2+tresh - fSize/2, a, 0, 0);
+					ctx.translate(-pos.x, -pos.y);
+					ctx.rotate((a+90)*(Math.PI/180));
 					ctx.drawImage(
 						window.shipImages[hostile[i].toLowerCase()],
-						0 -fSize/2,
-						size/2 -fSize/2 +14,
+						-fSize/2,
+						-fSize/2,
 						fSize, 
 						fSize
 					);
-					ctx.restore();
+					ctx.rotate(-((a+90)*(Math.PI/180)));
+					ctx.translate(pos.x, pos.y);
+
 				}
 				ctx.translate(-t.width/2, -t.height/2);
 			}
+
 			this.drawImg = t;
 
 			//console.log(this.drawImg.toDataURL());
@@ -375,10 +514,6 @@ function Ship(data){
 	this.animationSetupMove = function(){
 		this.setPreMovePosition();
 		this.setPreMoveFacing();
-	}
-
-	this.animationSetupDamage = function(){
-		return true;
 	}
 
 	this.getFiringPosition = function(){
@@ -1993,7 +2128,17 @@ function Ship(data){
 							handleWeaponAimEvent(ship, target, e);
 						}
 					}
-				}))
+				}).
+				click(function(e){
+					var ship = game.getUnitById(aUnit);
+					var target = game.getUnitById($(this).parent().data("shipId"));
+					if (target){
+						if (target.id != ship.id && (target.userid != game.userid && target.userid != ship.userid)){
+							handleFireClick(ship, target);
+						} else target.switchDiv();
+					}
+				}));
+				
 			
 		//document.getElementById("game").appendChild(div);
 		document.body.appendChild(div);
@@ -2323,11 +2468,19 @@ function Ship(data){
 		if (this.cc.length){
 			var ccContainer = $("<div>").addClass("ccContainer")
 				.append(($("<div>").addClass("general")
-					.append($("<span>").addClass("center15").html("Active Close Combat Engagements"))));
+					.append($("<span>").addClass("center15").html("Local Flights"))));
 
+			var attach = [];
 			for (var i = 0; i < this.cc.length; i++){
-				var unit = game.getUnitById(this.cc[i]);
-				ccContainer = unit.getAttachment(ccContainer);
+				attach.push(game.getUnitById(this.cc[i]));
+			}
+
+			attach.sort(function(a, b){
+				return b.friendly - a.friendly;
+			});
+
+			for (var i = 0; i < attach.length; i++){
+				ccContainer = attach[i].getAttachment(ccContainer);
 			}
 		}
 		$(this.element).append(ccContainer);

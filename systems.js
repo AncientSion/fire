@@ -1594,10 +1594,15 @@ Particle.prototype.getAnimation = function(fire){
 		grouping = 1;
 		delay = 8;
 	}
-	else if (this.shots >= 4 && fire.guns <= 3){
-		grouping = 1;
-		delay = 80;
+	else if (this.shots >= 4){
 		shotInterval = 10;
+		delay = 80;
+		if (fire.guns % 2 == 0){
+			grouping = 2;
+		} else if (fire.guns % 3 == 0){
+			grouping = 3;
+		}
+		else grouping = 1;
 	}
 	
 	for (var j = 0; j < fire.guns; j++){
@@ -1663,12 +1668,12 @@ Particle.prototype.getAnimation = function(fire){
 
 			var shotAnim = new BallVector({x: ox, y: oy}, {x: tfx, y: tfy}, this.projSpeed, hit);
 			
-			if (fire.guns > grouping){
+			//if (fire.guns > grouping){
 				shotAnim.n = 0 - ((j / grouping) * delay + k*shotInterval);
-			}
-			else {
-				shotAnim.n = 0 - (j*delay + k*shotInterval);
-			}
+			//}
+			//else {
+			//	shotAnim.n = 0 - (j*delay + k*shotInterval);
+			//}
 
 
 			gunAnims.push(shotAnim);
@@ -1786,28 +1791,37 @@ Pulse.prototype.getAnimation = function(fire){
 		var gunAnims = [];
 		var ox = fire.shooter.drawX + range(fire.shooter.size * -0.2, fire.shooter.size * 0.2); // WEAPON origin
 		var oy = fire.shooter.drawY + range(fire.shooter.size * -0.2, fire.shooter.size * 0.2);
-		var tx;
-		var ty;
+		var	tx = fire.target.drawX;
+		var	ty = fire.target.drawY;
 		var dist;
+		var min = fire.target.size*0.4;
+
 		if (fire.hits[j] >= 1){
 			gunHit = true;
 		}
-		else {
-			tx = fire.target.drawX;
-			ty = fire.target.drawY;
 
-			if (cc && fire.target.flight){
-				tx += range(-1, 1) * fire.target.size/3;
-				ty += range(-1, 1) * fire.target.size/3;
+		if (cc && fire.target.flight){
+			var t = fire.target.getFireDest(j);
+			if (gunHit){
+				tx = fire.target.drawX + t.x;
+				ty = fire.target.drawY + t.y;
 			}
 			else {
-				var min = fire.target.size*0.3;
 				tx += Math.max(min, Math.abs(range(0, fire.target.size*0.6))) * (-1 + (2*range(0, 1)));
 				ty += Math.max(min, Math.abs(range(0, fire.target.size*0.6))) * (-1 + (2*range(0, 1)));	
 			}
 		}
+		else if (gunHit){
+			tx += range(-fire.target.size*0.3, fire.target.size*0.3);
+			ty += range(-fire.target.size*0.3, fire.target.size*0.3);
+		}
+		else {
+			tx += Math.max(min, Math.abs(range(0, fire.target.size*0.6))) * (-1 + (2*range(0, 1)));
+			ty += Math.max(min, Math.abs(range(0, fire.target.size*0.6))) * (-1 + (2*range(0, 1)));	
+		}
+
 		for (var k = 0; k < this.basePulses + this.extraPulses; k++){
-			if (gunHit){
+			if (!cc && gunHit){
 				tx += range(fire.target.size * -0.07, fire.target.size * 0.07); // salvo hit
 				ty += range(fire.target.size * -0.07, fire.target.size * 0.07);
 			}
@@ -2590,11 +2604,15 @@ Hangar.prototype.update = function(){
 Hangar.prototype.doUndoActions = function(){
 	for (var i = game.ships.length-1; i >= 0; i--){
 		if (game.ships[i].flight && game.ships[i].actions.length && game.ships[i].available == game.turn){
-				if (game.ships[i].launchData.shipid == this.parentId && game.ships[i].launchData.systemid == this.id){
+			if (game.ships[i].launchData.shipid == this.parentId && game.ships[i].launchData.systemid == this.id){
+				if (game.ships[i].cc.length){
+					game.getUnitById(game.ships[i].cc[0]).detachFlight(game.ships[i].id);
+				}
+
 				var ele = $(".shipDiv").each(function(){
 					if ($(this).data("shipId") == game.ships[i].id){
 						$(this).remove();
-						return;
+						return false;
 						}
 					})
 				game.ships.splice(i, 1);
@@ -2602,7 +2620,7 @@ Hangar.prototype.doUndoActions = function(){
 				for (var j = 0; j < this.loads.length; j++){
 					this.loads[j].launch = 0;
 				}
-				break;
+			break;
 			}
 		}
 	}
@@ -2636,7 +2654,7 @@ Hangar.prototype.getLaunchRate = function(){
 }
 
 Hangar.prototype.drawArc = function(){
-	game.getUnitById(this.parentId).drawSystemAxis(this);
+	return;
 }
 
 Hangar.prototype.enableHangarDeployment = function(e){

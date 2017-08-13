@@ -464,6 +464,16 @@ class Ship {
 			return true;
 		}
 		return false;
+	}	
+
+	public function isCloseCombat($fire){
+		for ($i = 0; $i < sizeof($this->cc); $i++){
+			if ($this->cc[$i] == $fire->shooterid){
+				//Debug::log("close combat! ".$this->id."/".$fire->shooterid);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public function resolveFireOrder($fire){

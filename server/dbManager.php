@@ -10,8 +10,8 @@ class DBManager {
 	function __construct(){
 
 		if ($this->connection === null){
-			//$user = "aatu"; $pass = "Kiiski";
-			$user = "root"; $pass = "147147";
+			$user = "aatu"; $pass = "Kiiski";
+			//$user = "root"; $pass = "147147";
 			$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$user,$pass);
 			//$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			//$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -592,7 +592,7 @@ class DBManager {
 			for ($i = 0; $i < sizeof($flights); $i++){
 				$this->insertFlightElements($flights[$i]);
 				$this->insertFlightMission($flights[$i]);
-				//$this->updateSystemLoad($flights[$i]["launchData"]);
+				$this->updateSystemLoad($flights[$i]["launchData"]);
 			}
 		}
 		return true;
