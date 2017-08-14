@@ -2669,7 +2669,7 @@ Hangar.prototype.enableHangarDeployment = function(e){
 	this.showHangarControl();
 
 	if ($(div).hasClass("disabled")){
-		$(div).data("systemid", this.id).css("top", e.clientY + 150).css("left", e.clientX - 150).removeClass("disabled");
+		$(div).data("systemid", this.id).css("left", e.clientX - 150).css("top", e.clientY + 50).removeClass("disabled");
 	}
 	else {
 		$(div).addClass("disabled");
@@ -2724,36 +2724,43 @@ Hangar.prototype.showHangarControl = function(){
 	var mission = this.getMission();
 	var element = $("#hangarLoadoutDiv");
 		$(element)
+			.data("mission", mission)
 			.data("systemid", id)
 			.find("#missionType")
 				.find("tr").each(function(i){
 					$(this).off("click");
-					if (i){
-						if (mission == i){
-							$(this).addClass("selected");
-						}
-						//$(this).data("mission", i);
-						$(this).click(function(){
-							var hangar = game.getUnitById(aUnit).getSystemById($(this).parent().parent().parent().parent().data("systemid"));
-							var mission = hangar.getMission();
-
-							if (i == mission){
-								hangar.setMission(0);
-								$(this).removeClass("selected");
-							} else if (!mission){
-								hangar.setMission(i);
-								$(this).addClass("selected");
-							}
-
-							console.log(hangar.getMission());
-						})
-					}
+					$(this).click(function(){
+						game.getUnitById(aUnit).getSystemById($("#game").find("#hangarLoadoutDiv").data("systemid")).setMission(i);
+					})
 				})
-		//console.log(button);
 
 	if (this.canLaunchFlight()){
 		$(element).find("input").removeClass("disabled");
 	} else $(element).find("input").addClass("disabled");
+}
+
+Hangar.prototype.setMission = function(val){
+	this.mission = val;
+
+	$("#game").find("#hangarLoadoutDiv").find("#missionType").find("tr").each(function(i){
+		$(this).removeClass("selected");
+		if (val == i){
+			$(this).addClass("selected");
+		}
+	});
+
+	if (this.canLaunchFlight()){
+		$("#hangarLoadoutDiv").find("input").removeClass("disabled");
+	}
+	else {
+		game.flightDeploy = 0;
+		$("#hangarLoadoutDiv").find("input").addClass("disabled");
+		$("#deployOverlay").hide();
+	}
+}
+
+Hangar.prototype.getMission = function(){
+	return this.mission;
 }
 
 Hangar.prototype.doLaunchFlight = function(){
@@ -2826,24 +2833,6 @@ Hangar.prototype.alterFlight = function(ele, max){
 	}
 	else {
 		$("#hangarLoadoutDiv").find("input").addClass("disabled");
-	}
-}
-
-
-
-Hangar.prototype.getMission = function(){
-	return this.mission;
-}
-
-Hangar.prototype.setMission = function(val){
-	this.mission = val;
-	if (this.canLaunchFlight()){
-		$("#hangarLoadoutDiv").find("input").removeClass("disabled");
-	}
-	else {
-		game.flightDeploy = 0;
-		$("#hangarLoadoutDiv").find("input").addClass("disabled");
-		$("#deployOverlay").hide();
 	}
 }
 

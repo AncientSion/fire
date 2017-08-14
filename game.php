@@ -466,7 +466,7 @@ echo "</script>";
 				</table>
 			</div>
 			<div class="header">
-				<input type="button" class="disabled" value="Launch selected strikecraft as mixed flight" onclick='game.enableFlightDeployment()'>
+				<input type="button" class="disabled" value="Launch Flight" onclick='game.enableFlightDeployment()'>
 			</div>
 		</div>
 		<div id="missionAdjustDiv" class="disabled">
@@ -477,7 +477,7 @@ echo "</script>";
 				<tr><td></td><td>Intercept Flight / Salvo</td><td></td></tr>
 			</table>
 			<div class="header">
-				<input type="button" class="disabled" value="Launch selected strikecraft as mixed flight" onclick=console.log('ding')>
+				<input type="button" class="disabled" value="Reorder Flight" onclick=console.log('ding')>
 			</div>
 		</div>
 </body>

@@ -523,7 +523,7 @@ function Flight(data){
 				.append($("<td>").html("Mission Target"))
 				.append($("<td>").html(game.getMissionTargetString(this.mission))))
 
-		if (this.friendly){
+		if (this.friendly && game.phase == 0){
 			$(table)
 			.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
 			.append($("<tr>")
@@ -765,6 +765,10 @@ function Flight(data){
 
 		$(div).css("top", 100).css("left", left);
 		*/return div;
+	}
+
+	this.launchedFrom = function(){
+
 	}
 
 	this.expandDiva = function(div){

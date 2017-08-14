@@ -258,7 +258,7 @@ table, th, tr, td {
 
 #hangarLoadoutDiv, #weaponLoadoutDiv {
 	position: absolute;
-	width: 500px;
+	width: 300px;
 	border: 2px solid yellow;
 	background-color: black;
 	z-index: 15;
@@ -289,7 +289,6 @@ table, th, tr, td {
 }
 
 #missionType table {
-	width: 50%;
 	margin: auto;
 	margin-top: 20px;
 	margin-bottom: 20px;

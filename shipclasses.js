@@ -294,111 +294,6 @@ function Ship(data){
 		}
 	}
 
-
-	this.setEscortImagea = function(){
-		if (this.cc.length){
-			var size = this.size
-			var fSize = 12;
-			var tresh = 10;
-
-			var t = document.createElement("canvas");
-				t.width = size*2;
-				t.height = size*2;			
-			var ctx = t.getContext("2d");
-			var shipFriendly = true;
-			var flightFriendly = true;
-
-			if (this.userid != game.userid){
-				shipFriendly = false;
-			}
-
-			if (this.cc.length){
-				var friendly = [];
-				var hostile = [];
-				for (var i = 0; i < this.cc.length; i++){
-					var attach = game.getUnitById(this.cc[i]);
-					if (attach.doDraw){continue;}
-					for (var j = 0; j < attach.structures.length; j++){
-						if (!attach.structures[j].draw){continue;}
-						if (shipFriendly){
-							if (this.userid == attach.userid){
-								friendly.push(attach.structures[j].name);
-							} else hostile.push(attach.structures[j].name);
-						}
-						else if (this.userid == attach.userid){
-							friendly.push(attach.structures[j].name);
-						} else hostile.push(attach.structures[j].name)
-					}
-				}
-			}
-
-
-			var drawFacing = this.getDrawFacing();
-			if (friendly.length){				
-				var color = "green";
-				if (!shipFriendly){color = "red";}
-				ctx.translate(t.width/2, t.height/2);
-				ctx.beginPath();
-				ctx.arc(0, 0, size/2 + tresh, 0, 2*Math.PI);
-				ctx.closePath();
-				ctx.strokeStyle = color;
-				ctx.stroke();
-				for (var i = 0; i < friendly.length; i++){
-					var a =  (((360/friendly.length-1)*i)-drawFacing);
-					var pos = getPointInDirection(size/2+tresh - fSize/2, a, 0, 0);
-					ctx.translate(-pos.x, -pos.y);
-					ctx.rotate((a+90)*(Math.PI/180));
-					ctx.drawImage(
-						window.shipImages[friendly[i].toLowerCase()],
-						-fSize/2,
-						-fSize/2,
-						fSize, 
-						fSize
-					);
-					ctx.rotate(-((a+90)*(Math.PI/180)));
-					ctx.translate(pos.x, pos.y);
-
-				}
-				ctx.translate(-t.width/2, -t.height/2);
-			}
-
-			tresh *= 2;
-
-			if (hostile.length){
-				var color = "red";
-				if (!shipFriendly){color = "green";}
-				ctx.translate(t.width/2, t.height/2);
-				ctx.beginPath();
-				ctx.arc(0, 0, size/2 + tresh, 0, 2*Math.PI);
-				ctx.closePath();
-				ctx.strokeStyle = color;
-				ctx.stroke();
-				for (var i = 0; i < hostile.length; i++){
-					var a =  (((360/hostile.length-1)*i)-drawFacing);
-					var pos = getPointInDirection(size/2+tresh - fSize/2, a, 0, 0);
-					ctx.translate(-pos.x, -pos.y);
-					ctx.rotate((a+90)*(Math.PI/180));
-					ctx.drawImage(
-						window.shipImages[hostile[i].toLowerCase()],
-						-fSize/2,
-						-fSize/2,
-						fSize, 
-						fSize
-					);
-					ctx.rotate(-((a+90)*(Math.PI/180)));
-					ctx.translate(pos.x, pos.y);
-
-				}
-				ctx.translate(-t.width/2, -t.height/2);
-			}
-
-			this.drawImg = t;
-
-			//console.log(this.drawImg.toDataURL());
-			ctx.setTransform(1,0,0,1,0,0);
-		}
-	}
-
 	this.setImage = function(){
 		var size = this.size;
 		var t = document.createElement("canvas");
@@ -441,7 +336,8 @@ function Ship(data){
 		//ctx.save();
 		//ctx.translate(this.drawX, this.drawY)
 		//ctx.rotate(this.getDrawFacing() * Math.PI/180);
-		ctx.drawImage(this.drawImg, -this.drawImg.width/2, -this.drawImg.height/2, this.drawImg.height, this.drawImg.height);
+		//ctx.drawImage(this.drawImg, -this.drawImg.width/2, -this.drawImg.height/2, this.drawImg.height, this.drawImg.height);
+		ctx.drawImage(this.drawImg, -this.drawImg.width/2, -this.drawImg.height/2, this.drawImg.width, this.drawImg.height);
 		ctx.restore();
 	}
 
@@ -554,11 +450,11 @@ function Ship(data){
 			for (var i = 0; i < game.deploys.length; i++){
 				if (game.deploys[i].userid != this.userid){continue;}
 
-				if (getDistance(game.deploys[i], pos) + size/2 < game.deploys[i].s){
+				if (getDistance(game.deploys[i], pos) + this.size/2 < game.deploys[i].s){
 					for (var j = 0; j < game.ships.length; j++){
 						if (game.ships[j].deployed && game.ships[j].id != this.id && game.ships[j].userid == this.userid){ // different ship, different owners
 							var step = game.ships[j].getBaseOffsetPos();
-							if (getDistance(pos, step) <= (game.ships[j].size/2 + size/2)){
+							if (getDistance(pos, step) <= (game.ships[j].size/2 + this.size/2)){
 							popup("The selected position is too close to the position or planned position of vessel (#"+game.ships[i].id+")");
 								return false;
 							}

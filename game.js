@@ -169,7 +169,7 @@ function Game(data, userid){
 		var s = this.getUnitById(aUnit);
 		var o = s.getPlannedPosition();
 		var facing = getAngleFromTo(o, dest);
-		var p = getPointInDirection(s.size, facing, o.x, o.y);
+		var p = getPointInDirection(s.size*0.66, facing, o.x, o.y);
 		var mission = {turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0};
 
 		if (t.id == aUnit){
@@ -326,7 +326,7 @@ function Game(data, userid){
 					for (var j = 0; j < this.ships[i].primary.systems.length; j++){
 						if (this.ships[i].primary.systems[j].name == "Sensor" && !this.ships[i].primary.systems[j].disabled && !this.ships[i].primary.systems[j].destroyed){
 							if (!this.ships[i].primary.systems[j].used){
-								data.push((this.ships[i].name + " #" + this.ships[i].id));
+								data.push(this.ships[i]);
 							}
 						}
 					}
@@ -336,7 +336,7 @@ function Game(data, userid){
 		if (data.length){
 			var html = "The following units have only basic sensor settings:";
 			for (var i = 0; i < data.length; i++){
-				html += "<p>" + data[i];
+				html += "<p onclick='game.switchToUnit(" + data[i].id + ")'>" + data[i].name + " #" + data[i].id;
 			}
 			html += "</p><span style='cursor: pointer; padding: 3px; border: 1px solid white; font-size: 24px' onclick='ajax.confirmDeployment(goToLobby)'>Confirm Orders</span>";
 			popup(html);
@@ -390,7 +390,7 @@ function Game(data, userid){
 		if (data.length){
 			var html = "The following units have no fireorders:";
 			for (var i = 0; i < data.length; i++){
-				html += "<p onclick='game.switchToUnit(" + data.id +     "')>" + data[i].name + " #" + data[i].id;
+				html += "<p onclick='game.switchToUnit(" + data[i].id + ")'>" + data[i].name + " #" + data[i].id;
 			}
 			html += "</p><span style='cursor: pointer; padding: 3px; border: 1px solid white; font-size: 24px' onclick='ajax.confirmFiringOrders(goToLobby)'>Confirm Orders</span>";
 			popup(html);
@@ -1288,7 +1288,6 @@ Game.prototype.getUnitType = function (val){
 	}
 
 	this.resolveDeployment = function(){
-		console.log("resolveDeployment");
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].deployed = true;
 			if (this.ships[i].available == game.turn){
@@ -1305,10 +1304,23 @@ Game.prototype.getUnitType = function (val){
 		cam.setZoom(0.7);
 		this.animating = 1;
 		this.animateDeployment();
+		//this.logDeployment();
 	}
 
 	this.logDeployment = function(){
+		$("#combatlogWrapper")
+		.show()
+		.find(".combatLogHeader").html("Deployment Log").end()
+		.find("#combatLog").children().children().remove();
 
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].available == game.turn){
+				if (this.ships[i].flight){
+					$("#combatLog").find("tbody").append($("<tr>")
+						.append($("<td>").html("Flight #" + this.ships[i].id + " is deployed")));
+				}
+			}
+		}
 	}
 
 	this.animateDeployment = function(){

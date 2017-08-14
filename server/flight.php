@@ -75,7 +75,7 @@ class Flight extends Mini {
 	}
 
 	public function setCurrentImpulse($turn){
-		$this->baseImpulse = floor(pow($this->mass, -1.5) * 50000);
+		$this->baseImpulse = floor(pow($this->mass, -1.5) * 65000);
 		$this->currentImpulse = $this->baseImpulse;
 	}
 
