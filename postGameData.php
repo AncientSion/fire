@@ -47,6 +47,9 @@ if (isset($_POST["type"])) {
 		if (isset($_POST["deployedFlights"])){
 			$dbManager->deployFlightsDB($_POST["userid"], $_POST["gameid"], $_POST["deployedFlights"]);
 		}
+		if (isset($_POST["missions"])){
+			$dbManager->setNewMissions($_POST["missions"]);
+		}
 		if (isset($_POST["powers"])){
 			$dbManager->insertPowers($_POST["gameid"], $_POST["gameturn"], $_POST["powers"]);
 		}

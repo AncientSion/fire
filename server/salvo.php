@@ -76,7 +76,7 @@ class Mini extends Ship {
 		else {
 			$fire->dist = $this->getHitDist($fire);
 			$fire->angle = $this->getHitAngle($fire);
-			$fire->section = $this->getSection($fire);
+			$fire->section = $this->getHitSection($fire);
 
 			$rollIndex = 0;
 			for ($i = 0; $i < $fire->shots; $i++){
@@ -133,7 +133,7 @@ class Mini extends Ship {
 		return $fires;
 	}
 
-	public function getSection($fire){
+	public function getHitSection($fire){
 		return 0;
 	}
 	public function getHitSystem($fire){

@@ -1783,6 +1783,9 @@ Pulse.prototype.getAnimation = function(fire){
 		grouping = 4;
 		delay = 20;
 	}
+	else if (fire.guns == 5){
+		grouping = 5;
+	}
 
 	for (var j = 0; j < fire.guns; j++){
 		var gunHit = false;
@@ -2669,7 +2672,7 @@ Hangar.prototype.enableHangarDeployment = function(e){
 	this.showHangarControl();
 
 	if ($(div).hasClass("disabled")){
-		$(div).data("systemid", this.id).css("left", e.clientX - 150).css("top", e.clientY + 50).removeClass("disabled");
+		$(div).data("systemid", this.id).css("left", e.clientX +100).css("top", e.clientY + 50).removeClass("disabled");
 	}
 	else {
 		$(div).addClass("disabled");

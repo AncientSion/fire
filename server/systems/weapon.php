@@ -77,7 +77,6 @@ class Weapon extends System {
 	}
 
 	public function doDamage($fire, $roll, $system){
-
 		$destroyed = false;
 		$totalDmg = $this->getTotalDamage($fire);
 		$remInt = $system->getRemainingIntegrity();

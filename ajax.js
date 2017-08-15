@@ -82,6 +82,7 @@ window.ajax = {
 		var powers = [];
 		var deployedFlights = [];
 			deployedFlights = game.getDeployedFlights();
+		var missions = game.getNewMissions();
 
 		var ew = game.getEWSettings();
 
@@ -121,7 +122,7 @@ window.ajax = {
 			}
 		}
 
-		console.log(deployedFlights);
+		//console.log(missions);
 		//return;
 
 		$.ajax({
@@ -138,6 +139,7 @@ window.ajax = {
 					reinforce: reinforce,
 					deployedFlights: deployedFlights,
 					powers: powers,
+					missions: missions,
 					fireOrders: fireOrders,
 					ew: ew
 					},

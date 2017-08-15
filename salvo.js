@@ -38,6 +38,7 @@ function Salvo(data){
 	this.animated = false;
 	this.layout = [];
 	this.element;
+	this.doDraw = 1;
 
 	this.getShots = function(){
 		return this.fireOrder.shots;
@@ -49,10 +50,6 @@ function Salvo(data){
 
 	this.hasSystemSelected = function(name){
 		return false;
-	}
-
-	this.drawHoverElements = function(){
-		return;
 	}
 
 	this.setLayout = function(){
@@ -300,9 +297,43 @@ function Salvo(data){
 		} else this.friendly = false;
 	}
 
-	this.setTarget = function(){
+	this.setTargea = function(){
 		this.setFinalStep();
 		this.setNextStep();
+	}
+
+	this.setTarget = function(){
+		var i = this.getCurrentImpulse();
+		var target = this.getTarget();
+		if (target.ship){
+			this.finalStep = target.getPlannedPosition();
+			var d = getDistance(this, this.finalStep);
+			if (d < i){
+				this.nextStep = this.finalStep;
+			} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, this.finalStep), this.x, this.y);
+		}
+		else if (target.flight){
+			var i = this.getCurrentImpulse();
+			var d;
+			if (this.mission.type == 2 || this.mission.type == 3){ // strike intercept goal
+				if (target.finalStep == undefined){
+					target.setTarget();
+				}
+				this.finalStep = target.nextStep;
+				d = getDistance(this, target.nextStep);
+				if (d < i){
+					this.nextStep = target.nextStep;
+				} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, target.nextStep), this.x, this.y);
+
+				//var vector = new Vector(target, target.nextStep);
+				//var speedMod = this.getCurrentImpulse() / target.getCurrentImpulse();
+				//this.finalStep = getIntercept(this, target, vector, speedMod);
+
+			}
+
+		}
+		else if (target.salvo){
+		}
 	}
 
 	this.setDisplay = function(){
@@ -480,6 +511,7 @@ Salvo.prototype.switchDiv = function(){
 Salvo.prototype.select = function(){
 	if (!this.selected){
 		this.selected = 1;
+		console.log(this);
 	} else this.selected = 0;
 
 	this.switchDiv();
@@ -546,6 +578,7 @@ Salvo.prototype.setNextStep = function(){
 }
 
 Salvo.prototype.drawMovePlan = function(){
+	if (!this.doDraw){return;}
 	if (game.phase < 2){
 		planCtx.translate(cam.o.x, cam.o.y);
 		planCtx.scale(cam.z, cam.z)

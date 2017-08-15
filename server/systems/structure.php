@@ -202,7 +202,7 @@ class Single {
 
 	public function determineCrit($old, $new, $turn){
 		$dmg = ($old + $new) / $this->integrity * 100;
-		Debug::log("checking crit for".get_class($this));
+		Debug::log("checking crit for ".get_class($this));
 		$crits = $this->getValidEffects();
 		$valid = array();
 

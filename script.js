@@ -335,6 +335,9 @@ function canvasMouseMove(e){
 	if (game.flightDeploy){
 		game.handleFlightDeployMove(e, pos, unit)
 	}
+	else if (game.mission && game.mission.new){
+		game.handleFlightDeployMove(e, pos, unit)
+	}
 	 
 	if (aUnit){
 		var ship = game.getUnitById(aUnit);
@@ -403,6 +406,9 @@ function deployPhase(e){
 	}
 	else if (game.flightDeploy){ // deploy via hangar
 		game.doDeployFlight(pos);
+	}
+	else if (game.mission && game.mission.new){
+		game.issueMission(pos);
 	}
 	else if (!game.deploying){
 		if (aUnit){

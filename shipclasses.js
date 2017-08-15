@@ -684,29 +684,9 @@ function Ship(data){
 		return false;
 	}
 
-	this.isInTransit = function(){
-		if (this.ship && this.available == game.turn && this.actions.length == 1 && this.actions[0].resolved){
-			return true;
-		}
-		return false
-	}
-
 	this.drawHoverElements = function(){
-		this.drawEW();
-		if (this.isInTransit()){
-			//game.drawJumpMarker(this.id);
-			//console.log("warp");
-		}
-		//this.drawMoveLength();
-
-		/*moveCtx.translate(cam.o.x, cam.o.y);
-		moveCtx.scale(cam.z, cam.z);
-		this.drawMoveRange();
-
-		moveCtx.setTransform(1,0,0,1,0,0);
-		*/
 	}
-
+	
 	this.drawEW = function(){
 		if (!this.ship){return;}
 		this.getSystemByName("Sensor").drawEW();
@@ -2696,6 +2676,7 @@ function Ship(data){
 		this.setUnitGUI();
 		if (game.deploying){game.disableDeployment();}
 		else if (game.flightDeploy){game.flightDeploy = false;}
+		else if (game.mission){this.disableMissionMode()}
 		this.unselectSystems();
 		game.setShipTransform();
 		this.drawPositionMarker();

@@ -644,7 +644,36 @@ class DBManager {
 			return true;
 		}
 		return false;
-	}	
+	}
+
+	public function setNewMissions($data){
+		Debug::log("setNewMission s: ".sizeof($data));
+		$stmt = $this->connection->prepare("
+			UPDATE missions
+			SET type = :type,
+				turn = :turn,
+				targetid = :targetid,
+				x = :x,
+				y = :y,
+				arrived = :arrived
+			WHERE unitid = :unitid
+		");
+
+		for ($i = 0; $i < sizeof($data); $i++){
+			$stmt->bindParam(":type", $data[$i]["type"]);
+			$stmt->bindParam(":turn", $data[$i]["turn"]);
+			$stmt->bindParam(":targetid", $data[$i]["targetid"]);
+			$stmt->bindParam(":x", $data[$i]["x"]);
+			$stmt->bindParam(":y", $data[$i]["y"]);
+			$stmt->bindParam(":arrived", $data[$i]["arrived"]);
+			$stmt->bindParam(":unitid", $data[$i]["unitid"]);
+
+			$stmt->execute();
+			if ($stmt->errorCode() == 0){
+				continue;
+			} else Debug::log("ERROR"); return false;
+		}
+	}
 
 	public function updateMissionState($data){
 		Debug::log("updateMissionState");

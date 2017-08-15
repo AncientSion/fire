@@ -466,42 +466,14 @@ class Ship {
 		return false;
 	}	
 
-	public function isCloseCombat($fire){
+	public function isCloseCombat($id){
 		for ($i = 0; $i < sizeof($this->cc); $i++){
-			if ($this->cc[$i] == $fire->shooterid){
+			if ($this->cc[$i] == $id){
 				//Debug::log("close combat! ".$this->id."/".$fire->shooterid);
 				return true;
 			}
 		}
 		return false;
-	}
-
-	public function resolveFireOrder($fire){
-		Debug::log("resolveFireOrder - ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", guns: ".$fire->shots);
-
-		if ($this->isDestroyed()){
-			$fire->resolved = -1;
-		}
-		else {
-			$fire->dist = $this->getHitDist($fire);
-			$fire->angle = $this->getHitAngle($fire);
-			$fire->section = $this->getSection($fire);
-			$fire->req = $this->calculateToHit($fire);
-
-			$rollIndex = 0;
-			for ($i = 0; $i < $fire->shots; $i++){
-				//Debug::log("gun #".($i+1));
-				$fire->weapon->rollToHit($fire);
-				for ($j = $rollIndex; $j < sizeof($fire->rolls); $j++){
-					if ($fire->rolls[$j] <= $fire->req){
-						//Debug::log("roll: ".$fire->rolls[$j].", req: ".$fire->req.", doing damage");
-						$fire->weapon->doDamage($fire, $fire->rolls[$j], $this->getHitSystem($fire));
-					}
-				}
-				$rollIndex = sizeof($fire->rolls);
-			}
-			$fire->resolved = 1;
-		}
 	}
 
 	public function getTotalMass(){
@@ -527,6 +499,35 @@ class Ship {
 		return array($main, $int, $guns, $hangar);
 	}
 
+	public function resolveFireOrder($fire){
+		Debug::log("resolveFireOrder - ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", guns: ".$fire->shots);
+
+		if ($this->isDestroyed()){
+			$fire->resolved = -1;
+		}
+		else {
+			$fire->cc = $this->isCloseCombat($fire->shooter->id);
+			$fire->dist = $this->getHitDist($fire);
+			$fire->angle = $this->getHitAngle($fire);
+			$fire->section = $this->getHitSection($fire);
+			$fire->req = $this->calculateToHit($fire);
+
+			$rollIndex = 0;
+			for ($i = 0; $i < $fire->shots; $i++){
+				//Debug::log("gun #".($i+1));
+				$fire->weapon->rollToHit($fire);
+				for ($j = $rollIndex; $j < sizeof($fire->rolls); $j++){
+					if ($fire->rolls[$j] <= $fire->req){
+						//Debug::log("roll: ".$fire->rolls[$j].", req: ".$fire->req.", doing damage");
+						$fire->weapon->doDamage($fire, $fire->rolls[$j], $this->getHitSystem($fire));
+					}
+				}
+				$rollIndex = sizeof($fire->rolls);
+			}
+			$fire->resolved = 1;
+		}
+	}
+
 	public function resolveBallisticFireOrder($fire){
 		Debug::log("resolveBallisticFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".$fire->weaponid);
 
@@ -536,7 +537,7 @@ class Ship {
 		else {
 			$fire->dist = 0;
 			$fire->angle = $this->getBallisticHitAngle($fire);
-			$fire->section = $this->getSection($fire);
+			$fire->section = $this->getHitSection($fire);
 			$fire->req = ceil(100 * (1-($fire->weapon->getTraverseMod($fire)*0.2)));
 			$fire->shots = $fire->shooter->getShots($fire->turn);
 
@@ -583,7 +584,11 @@ class Ship {
 		return round($this->getStructureById($fire->section)->getCurrentNegation($fire) * $hitSystem->getArmourMod());
 	}
 
-	public function getSection($fire){
+	public function getHitSection($fire){
+		if ($fire->cc){
+			return $this->structures[mt_rand(0, sizeof($this->structures)-1)]->id;
+		}
+
 		$locs = array();
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (Math::isInArc($fire->angle, $this->structures[$i]->start, $this->structures[$i]->end)){
@@ -775,7 +780,7 @@ class Ship {
 
 	public function getHitDist($fire){
 
-		if ($this->isCloseCombat($fire)){
+		if ($fire->cc){
 			return 0;
 		}
 		
@@ -794,7 +799,7 @@ class Ship {
 
 	public function getHitAngle($fire){
 
-		if ($this->isCloseCombat($fire)){
+		if ($fire->cc){
 			return mt_rand(0, 359);
 		}
 		

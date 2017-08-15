@@ -117,25 +117,29 @@ function Flight(data){
 		if (!this.mission.arrived){
 			this.setPreMoveImage();
 		}
-		else if (this.mission.turn < game.turn){
-			this.setPostMoveImage();
-		}
-		else if (this.mission.arrived == game.turn){
-			if (game.phase <= 2){
-				this.setPreMoveImage();
-			} else this.setPostMoveImage();
+		else if (this.mission.arrived){
+			if (this.mission.arrived < game.turn){
+				this.setPostMoveImage();
+			} 
+			else if (this.mission.arrived == game.turn){
+				if (game.phase < 3){
+					this.setPreMoveImage();
+				} else this.setPostMoveImage();
+			}
 		}
 	}
 
 	this.setPreMoveImage = function(){
-		//if (this.id == 12){console.log("ding")}
+		if (this.id == 14){
+			console.log("setPreMoveImage");
+		}
 		var t = document.createElement("canvas");
-			t.width = this.size;
-			t.height = this.size;
+			t.width = this.size*2;
+			t.height = this.size*2;
 		var ctx = t.getContext("2d");
 
 		var size = 12;
-		ctx.translate(this.size/2, this.size/2);
+		ctx.translate(t.width/2, t.height/2);
 		ctx.rotate((this.getDrawFacing()+90) * (Math.PI/180));
 
 		for (var i = 0; i < this.structures.length; i++){
@@ -157,7 +161,6 @@ function Flight(data){
 	}
 
 	this.setPostMoveImage = function(){
-		if (!this.mission.arrived){this.setPreMoveImage(); return;}
 		var size = 12;
 		var t = document.createElement("canvas");
 			t.width = this.size;
@@ -185,7 +188,7 @@ function Flight(data){
 				}
 			}
 		}
-		else if (this.mission.type == 10 || this.mission.type == 3){ // strike escort
+		else if (this.mission.type == 2 || this.mission.type == 3){ // strike escort
 			ctx.translate(this.size/2, this.size/2);
 			for (var i = 0; i < this.structures.length; i++){
 				if (this.structures[i].draw){
@@ -364,15 +367,19 @@ function Flight(data){
 
 	this.getFireDest = function(j){
 		for (var i = j; i < this.structures.length; i++){
+			if (this.structures[i].isDamagedThisTurn()){
+				return this.structures[i].layout;
+			}
+		}
+		for (var i = 0; i < this.structures.length; i++){
 			if (this.structures[i].isDestroyedThisTurn()){
 				return this.structures[i].layout;
 			}
 		}
+		return false;
 	}
 
-	this.drawHoverElements = function(){
-	}
-
+	
 	this.getPlannedFacing = function(){
 		if (game.phase < 2){
 			return this.facing;
@@ -386,7 +393,9 @@ function Flight(data){
 	}
 
 	this.drawSelf = function(){
-		//console.log(this.drawX + "/" + this.drawY + " id: " + this.id);
+		//if (this.id == 14){
+		//	console.log(this.drawX + "/" + this.drawY + " id: " + this.id);
+		//}
 		ctx.translate(this.drawX, this.drawY);
 		ctx.drawImage(this.drawImg, -this.drawImg.width/2, -this.drawImg.height/2);
 		ctx.translate(-this.drawX, -this.drawY);
@@ -485,10 +494,10 @@ function Flight(data){
 		return false;
 	}
 
-	this.adjustMissiona = function(e){
-		$("#missionAdjustDiv").css("left", e.clientX - 150).css("top", e.clientY + 50).removeClass("disabled");
-
-		//console.log($("#adjustMission").css("top"));
+	this.getNewMission = function(){
+		if (this.mission.turn == game.turn){
+			return this.mission;
+		}
 	}
 
 	this.createBaseDiv = function(){
@@ -523,7 +532,7 @@ function Flight(data){
 				.append($("<td>").html("Mission Target"))
 				.append($("<td>").html(game.getMissionTargetString(this.mission))))
 
-		if (this.friendly && game.phase == 0){
+		if (this.friendly && game.phase == -1){
 			$(table)
 			.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
 			.append($("<tr>")
@@ -534,7 +543,7 @@ function Flight(data){
 					.html("Disengage From Mission")
 					.data("active", 0)
 					.data("mission", this.mission.type)
-					.click(function(e){
+			/*		.click(function(e){
 						var mission = $(this).data("mission");
 						if ($(this).data("active") == 0){
 							$(this).data("active", 1).html("Select New Mission");
@@ -555,12 +564,16 @@ function Flight(data){
 							})
 						}
 					})
+			*/
+					.click(function(e){
+						game.getUnitById(aUnit).switchMissionMode();
+					})
 					.hover(function(e){
 						$(this).toggleClass("highlight");
 					})))
-			.append($("<tr>").addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Patrol Location")))
-			.append($("<tr>").addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Strike/ Escort Ship")))
-			.append($("<tr>").addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Intercept Flight / Salvo")));
+			.append($("<tr>").click(function(){game.mission.set(1, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Patrol Location")))
+			.append($("<tr>").click(function(){game.mission.set(2, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Strike/ Escort Ship")))
+			.append($("<tr>").click(function(){game.mission.set(3, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Intercept Flight / Salvo")));
 		}
 				
 		subDiv.appendChild(table);
@@ -589,20 +602,6 @@ function Flight(data){
 		}
 
 		this.element = div;
-	}
-
-	this.adjustMission = function(){; return;
-		$(this.element).find(".header").css("height", "auto").find(".general")
-		//$(this.element).find(".header").find(".general").children().children().last().children().last().html("Select New Mission");
-
-		$(this.element).find(".header").css("height", "auto").find(".general")
-			.append($("<tr>")
-				.append($("<td>").attr("colSpan", 2).html("")))
-			.append($("<tr>")
-				.append($("<td>").attr("colSpan", 2).html("b")))
-			.append($("<tr>")
-				.append($("<td>").attr("colSpan", 2).html("c")))
-
 	}
 
 	this.expandDiv = function(div){
@@ -1132,6 +1131,17 @@ function Fighter(data){
 		}
 		return false;
 	}
+	
+	this.isDamagedThisTurn = function(){
+		for (var i = this.damages.length-1; i >= 0; i--){
+			if (this.damages[i].turn == game.turn){
+				return true;
+			} else if (this.damages[i].turn < game.turn){
+				return false;
+			}
+		}				
+		return false;
+	}
 
 	this.getRemainingIntegrity = function(){
 		var integrity = this.integrity;
@@ -1182,6 +1192,32 @@ function Fighter(data){
 		div.appendChild(table[0]);
 		return div;
 	}
+}
+
+Flight.prototype.switchMissionMode = function(){
+	if (game.mission){this.disableMissionMode();}
+	else this.enableMissionMode();
+}
+
+Flight.prototype.disableMissionMode = function(){
+	game.mission = 0;
+	$(this.element).find(".header").css("height", "130px").find("tr").slice(-4)
+	.each(function(i){
+		if (!i){
+			$(this).children()[0].innerHTML = "Disengage from Mission";
+		} else $(this).addClass("disabled").removeClass("selected");
+	});
+}
+
+
+Flight.prototype.enableMissionMode = function(){
+	game.mission = new Mission(this);
+	$(this.element).find(".header").css("height", "auto").find("tr").slice(-4)
+	.each(function(i){
+		if (!i){
+			$(this).children()[0].innerHTML = "Select new Mission";
+		} else $(this).removeClass("disabled");
+	});
 }
 
 Flight.prototype.getArmourString = function(a){
@@ -1286,7 +1322,13 @@ Flight.prototype.getShortInfo = function(){
 
 Flight.prototype.getParent = function(){
 	if (this.cc.length){
-		return game.getUnitById(this.cc[0]);
+		for (var j = 0; j < this.cc.length; j++){
+			for (var i = 0; i < game.ships.length; i++){
+				if (this.cc[j] == game.ships[i].id && game.ships[i].ship){
+					return game.ships[i];
+				}
+			}
+		}
 	}
 	return this;	
 }

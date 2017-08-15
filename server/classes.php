@@ -147,6 +147,7 @@ class FireOrder {
 	public $notes;
 	public $hits;
 	public $resolved;
+	public $cc = false;
 
 	public $shooter = false;
 	public $target = false;
