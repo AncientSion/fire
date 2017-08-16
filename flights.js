@@ -1048,47 +1048,18 @@ Flight.prototype.setTarget = function(){
 	var i = this.getCurrentImpulse();
 	if (this.mission.type == 1){  // patrol goal
 		this.finalStep = {x: this.mission.x, y: this.mission.y};
-		d = getDistance(this, this.finalStep);
-		if (d < i){
+		if (getDistance(this, this.finalStep) < i){
 			this.nextStep = this.finalStep;
 		} else this.nextStep = getPointInDirection(i, this.facing, this.x, this.y);
 	}
-	else {
-		if (this.mission.type == 2){
-			var target = this.getTarget();
-			if (target.ship){
-				this.finalStep = target.getPlannedPosition();
-				var d = getDistance(this, this.finalStep);
-				if (d < i){
-					this.nextStep = this.finalStep;
-				} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, this.finalStep), this.x, this.y);
-			}
-			else if (target.flight){
-				var i = this.getCurrentImpulse();
-				var d;
-				if (this.mission.type == 2 || this.mission.type == 3){ // strike intercept goal
-					if (target.finalStep == undefined){
-						target.setTarget();
-					}
-					this.finalStep = target.nextStep;
-					d = getDistance(this, target.nextStep);
-					if (d < i){
-						this.nextStep = target.nextStep;
-					} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, target.nextStep), this.x, this.y);
-
-					//var vector = new Vector(target, target.nextStep);
-					//var speedMod = this.getCurrentImpulse() / target.getCurrentImpulse();
-					//this.finalStep = getIntercept(this, target, vector, speedMod);
-
-				}
-
-			}
-			else if (target.salvo){
-			}
-		}
+	else if (this.mission.type == 2){
+		this.finalStep = this.getTarget().getPlannedPosition();
+		if (getDistance(this, this.finalStep) < i){
+			this.nextStep = this.finalStep;
+		} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, this.finalStep), this.x, this.y);
 	}
 
-	this.facing = getAngleFromTo(this, this.nextStep);
+	this.facing = getAngleFromTo(this, this.finalStep);
 }
 
 function Fighter(data){
