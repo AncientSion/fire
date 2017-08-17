@@ -462,22 +462,10 @@ echo "</script>";
 					<tr><th colSpan=3>Select Mission Type</th></tr>
 					<tr><td></td><td width=70%>Patrol Location</td><td></td></tr>
 					<tr><td></td><td>Strike Ship / Escort Ship</td><td></td></tr>
-					<tr><td></td><td>Intercept Flight / Salvo</td><td></td></tr>
 				</table>
 			</div>
 			<div class="header">
 				<input type="button" class="disabled" value="Launch Flight" onclick='game.enableFlightDeployment()'>
-			</div>
-		</div>
-		<div id="missionAdjustDiv" class="disabled">
-			<table id="missionType">
-				<tr><th colSpan=3>Select New Mission</th></tr>
-				<tr><td></td><td width=70%>Patrol Location</td><td></td></tr>
-				<tr><td></td><td>Strike Ship / Escort Ship</td><td></td></tr>
-				<tr><td></td><td>Intercept Flight / Salvo</td><td></td></tr>
-			</table>
-			<div class="header">
-				<input type="button" class="disabled" value="Reorder Flight" onclick=console.log('ding')>
 			</div>
 		</div>
 </body>

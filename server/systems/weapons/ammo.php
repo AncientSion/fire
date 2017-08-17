@@ -39,7 +39,7 @@ class Missile extends Single {
         );
     }
 
-	public function getSubHitChance(){
+	public function getSubHitChance($fire){
 		return ceil(sqrt($this->mass)*15);
 	}
 }

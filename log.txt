@@ -1,0 +1,273 @@
+createPlayerStatus
+createPlayerStatus
+doAdvance for game1 from phase -1 to phase 0
+resolveDeployActions s: 5
+handleJumpActions
+jumpin: #1, class: Hyperion, size: 80, sensor: 700, ordered to: -437/134, shiftPotential: 18.86%
+Hyperion, aShift: 19°, pShift: 38px
+--> aShift: -6°, psShift: 14/-24 (28px)
+jumpin: #2, class: Hyperion, size: 80, sensor: 700, ordered to: -546/448, shiftPotential: 18.86%
+Hyperion, aShift: 19°, pShift: 38px
+--> aShift: -18°, psShift: 26/-22 (35px)
+jumpin: #3, class: Altarian, size: 55, sensor: 750, ordered to: 478/-324, shiftPotential: 12.1%
+Altarian, aShift: 13°, pShift: 25px
+--> aShift: -11°, psShift: -16/-19 (25px)
+jumpin: #4, class: Altarian, size: 55, sensor: 750, ordered to: 501/459, shiftPotential: 12.1%
+Altarian, aShift: 13°, pShift: 25px
+--> aShift: 2°, psShift: -2/12 (13px)
+jumpin: #5, class: Altarian, size: 55, sensor: 750, ordered to: 603/-362, shiftPotential: 12.1%
+Altarian, aShift: 13°, pShift: 25px
+--> aShift: 10°, psShift: -24/-8 (26px)
+action size: 2
+assembleEndStates
+updateUnitEndState s:5 1/-1
+advancing game state time: 0.119 seconds.
+doAdvance for game1 from phase 0 to phase 1
+resolveUnitMovementDB
+resolveFighterMovement
+resolving layer #0
+resolving layer #1
+resolving layer #2
+createBallisticActions, size: 0
+resolveBallisticActions: 0
+advancing game state time: 0.046 seconds.
+doAdvance for game1 from phase 2 to phase 3
+specific EW for ship #1, EW from 173.35938472279 to 172.64061527721, dist: 162
+specific EW for ship #2, EW from 161.35938472279 to 160.64061527721, dist: 162
+specific EW for ship #3, EW from 349.02267272901 to 346.97732727099, dist: 174
+specific EW for ship #4, EW from 2.0226727290087 to 359.97732727099, dist: 174
+specific EW for ship #5, EW from 348.02267272901 to 345.97732727099, dist: 174
+handleBallisticInterception | balls:0, intercepts: 0
+= testCriticals for Hyperion, #1, turn: 1
+= testCriticals for Hyperion, #2, turn: 1
+= testCriticals for Altarian, #3, turn: 1
+= testCriticals for Altarian, #4, turn: 1
+= testCriticals for Altarian, #5, turn: 1
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.036 seconds.
+advancing game state time: 0.055 seconds.
+doAdvance for game1 from phase 3 to phase 4
+assembleEndStates
+updateUnitEndState s:5 1/3
+endTurn
+resolveDeployActions s: 0
+destroyUnitsDB
+insertReinforcements: 1
+advancing game state time: 0.041 seconds.
+updateSystemLoad
+updateSystemLoad
+doAdvance for game1 from phase -1 to phase 0
+resolveDeployActions s: 2
+handleJumpActions
+assembleEndStates
+updateUnitEndState s:7 2/-1
+advancing game state time: 0.042 seconds.
+doAdvance for game1 from phase 0 to phase 1
+resolveUnitMovementDB
+resolveFighterMovement
+resolving layer #0
+resolving layer #1
+resolving flight #6
+_____________________
+Flight #6, impulse: 277
+From -338/376 to 254/320
+Dist 595, angle: 354.59620863975
+close in
+adding move to: -62/350
+resolving flight #7
+_____________________
+Flight #7, impulse: 359
+From 302/454 to -85/74
+Dist 543, angle: 224.47710649051
+close in
+adding move to: 46/202
+resolving layer #2
+createBallisticActions, size: 0
+resolveBallisticActions: 0
+advancing game state time: 0.053 seconds.
+doAdvance for game1 from phase 2 to phase 3
+specific EW for ship #1, EW from 173.35938472279 to 172.64061527721, dist: 162
+specific EW for ship #2, EW from 161.35938472279 to 160.64061527721, dist: 162
+specific EW for ship #3, EW from 319.02267272901 to 316.97732727099, dist: 174
+specific EW for ship #4, EW from 122.02267272901 to 119.97732727099, dist: 174
+specific EW for ship #5, EW from 318.02267272901 to 315.97732727099, dist: 174
+resolveFireOrder - ID 15, shooter: Altarian #3 vs Hyperion #1, w: MediumTwinIon #9, guns: 1
+doDamage, weapon: MediumTwinIon, target: 1/-1, totalDmg: 40
+doDamage, weapon: MediumTwinIon, target: 1/-1, totalDmg: 45
+resolveFireOrder - ID 16, shooter: Altarian #3 vs Hyperion #1, w: MediumSingleIon #19, guns: 1
+doDamage, weapon: MediumSingleIon, target: 1/23, totalDmg: 34
+resolveFireOrder - ID 17, shooter: Altarian #3 vs Hyperion #1, w: MediumSingleIon #20, guns: 1
+doDamage, weapon: MediumSingleIon, target: 1/-1, totalDmg: 36
+resolveFireOrder - ID 18, shooter: Altarian #4 vs Hyperion #1, w: MediumTwinIon #17, guns: 1
+doDamage, weapon: MediumTwinIon, target: 1/16, totalDmg: 43
+ => OK ship target system Dual #16 was destroyed, rem: 28, doing: 28, OK for: 7 dmg
+doDamage, weapon: MediumTwinIon, target: 1/-1, totalDmg: 42
+resolveFireOrder - ID 19, shooter: Altarian #4 vs Hyperion #1, w: MediumSingleIon #19, guns: 1
+doDamage, weapon: MediumSingleIon, target: 1/-1, totalDmg: 39
+resolveFireOrder - ID 20, shooter: Altarian #4 vs Hyperion #1, w: MediumSingleIon #20, guns: 1
+resolveFireOrder - ID 21, shooter: Altarian #4 vs Hyperion #1, w: MediumSingleIon #21, guns: 1
+resolveFireOrder - ID 22, shooter: Altarian #5 vs Hyperion #1, w: MediumTwinIon #9, guns: 1
+doDamage, weapon: MediumTwinIon, target: 1/-1, totalDmg: 45
+resolveFireOrder - ID 23, shooter: Altarian #5 vs Hyperion #1, w: MediumSingleIon #12, guns: 1
+doDamage, weapon: MediumSingleIon, target: 1/-1, totalDmg: 45
+resolveFireOrder - ID 24, shooter: Altarian #5 vs Hyperion #1, w: MediumSingleIon #13, guns: 1
+resolveFireOrder - ID 10, shooter: Hyperion #1 vs Altarian #3, w: HeavyLaser #21, guns: 1
+doDamage, weapon: HeavyLaser, target: 3/-1: Main Structure
+hitting:  Primary  Primary  Primary 
+resolveFireOrder - ID 14, shooter: Hyperion #2 vs Altarian #3, w: HeavyLaser #21, guns: 1
+doDamage, weapon: HeavyLaser, target: 3/-1: Main Structure
+hitting:  Primary  Primary  MediumTwinIon 
+resolveFireOrder - ID 7, shooter: Hyperion #1 vs Altarian #4, w: HeavyLaser #14, guns: 1
+doDamage, weapon: HeavyLaser, target: 4/-1: Main Structure
+hitting:  Primary  Primary  Primary 
+resolveFireOrder - ID 13, shooter: Hyperion #2 vs Altarian #4, w: HeavyLaser #14, guns: 1
+doDamage, weapon: HeavyLaser, target: 4/-1: Main Structure
+ => target system MediumSingleIon #21 was destroyed, rem: 32, doing: 32, OK for: 0 dmg
+hitting:  Primary  Primary  MediumSingleIon 
+resolveFireOrder - ID 3, shooter: Hyperion #1 vs Altarian #4, w: MediumRailGun #8, guns: 1
+doDamage, weapon: MediumRailGun, target: 4/-1, totalDmg: 33
+resolveFireOrder - ID 6, shooter: Hyperion #1 vs Altarian #4, w: MediumRailGun #12, guns: 1
+resolveFireOrder - ID 11, shooter: Hyperion #2 vs Altarian #4, w: MediumRailGun #8, guns: 1
+doDamage, weapon: MediumRailGun, target: 4/20, totalDmg: 36
+ => OK ship target system MediumSingleIon #20 was destroyed, rem: 32, doing: 32, OK for: 0 dmg
+doDamage, weapon: MediumRailGun, target: 4/-1, totalDmg: 35
+resolveFireOrder - ID 12, shooter: Hyperion #2 vs Altarian #4, w: MediumRailGun #12, guns: 1
+doDamage, weapon: MediumRailGun, target: 4/5, totalDmg: 31
+resolveFireOrder - ID 4, shooter: Hyperion #1 vs Altarian #4, w: LightPulse #9, guns: 1
+resolveFireOrder - ID 5, shooter: Hyperion #1 vs Altarian #4, w: LightPulse #11, guns: 1
+resolveFireOrder - ID 8, shooter: Hyperion #1 vs Altarian #4, w: LightPulse #15, guns: 1
+resolveFireOrder - ID 9, shooter: Hyperion #1 vs Altarian #4, w: LightPulse #16, guns: 1
+DB updateFireOrders: 22
+handleBallisticInterception | balls:0, intercepts: 0
+= testCriticals for Hyperion, #1, turn: 2
+= testCriticals for Hyperion, #2, turn: 2
+= testCriticals for Flight, #6, turn: 2
+= testCriticals for Altarian, #3, turn: 2
+= testCriticals for Altarian, #4, turn: 2
+= testCriticals for Altarian, #5, turn: 2
+= testCriticals for Flight, #7, turn: 2
+ => DB insertDamageEntries: 25
+ => DB insertCritEntries: 5
+handleFiringPhase time: 0.225 seconds.
+advancing game state time: 0.242 seconds.
+doAdvance for game1 from phase 3 to phase 4
+assembleEndStates
+updateUnitEndState s:7 2/3
+endTurn
+resolveDeployActions s: 0
+destroyUnitsDB
+insertReinforcements: 1
+advancing game state time: 0.059 seconds.
+updateSystemLoad
+setNewMission s: 1
+updateSystemLoad
+updateSystemLoad
+setNewMission s: 1
+doAdvance for game1 from phase -1 to phase 0
+resolveDeployActions s: 3
+handleJumpActions
+assembleEndStates
+updateUnitEndState s:10 3/-1
+advancing game state time: 0.044 seconds.
+doAdvance for game1 from phase 0 to phase 1
+resolveUnitMovementDB
+resolveFighterMovement
+STATIC STRIKE #8, adding move to: 39/186
+resolving layer #0
+resolving layer #1
+resolving flight #6
+_____________________
+Flight #6, impulse: 277
+From -62/350 to 205/154
+Dist 332, angle: 323.71826300514
+close in
+adding move to: 161/186
+resolving flight #7
+_____________________
+Flight #7, impulse: 359
+From 46/202 to 39/186
+Dist 18, angle: 246.37062226934
+arrival
+adding move to: 39/186
+resolving flight #9
+_____________________
+Flight #9, impulse: 359
+From 153/-171 to 205/154
+Dist 330, angle: 80.909723079178
+arrival
+adding move to: 205/154
+resolving flight #10
+_____________________
+Flight #10, impulse: 359
+From 268/-193 to 205/154
+Dist 353, angle: 100.29031545728
+arrival
+adding move to: 205/154
+resolving layer #2
+updateMissionState
+createBallisticActions, size: 0
+resolveBallisticActions: 0
+advancing game state time: 0.08 seconds.
+doAdvance for game1 from phase 2 to phase 3
+specific EW for ship #1, EW from 173.35938472279 to 172.64061527721, dist: 162
+specific EW for ship #2, EW from 155.35938472279 to 154.64061527721, dist: 162
+specific EW for ship #4, EW from 24 to 24, dist: 157
+specific EW for ship #5, EW from 288.02267272901 to 285.97732727099, dist: 174
+specific EW for ship #3, EW from 289.02267272901 to 286.97732727099, dist: 174
+resolveFireOrder - ID 35, shooter: Altarian #3 vs Hyperion #1, w: LightIon #8, guns: 1
+doDamage, weapon: LightIon, target: 1/21, totalDmg: 18
+doDamage, weapon: LightIon, target: 1/-1, totalDmg: 17
+resolveFireOrder - ID 36, shooter: Altarian #3 vs Hyperion #1, w: LightIon #10, guns: 1
+doDamage, weapon: LightIon, target: 1/-1, totalDmg: 16
+doDamage, weapon: LightIon, target: 1/21, totalDmg: 16
+doDamage, weapon: LightIon, target: 1/-1, totalDmg: 15
+resolveFireOrder - ID 29, shooter: Altarian #4 vs Hyperion #1, w: MediumTwinIon #9, guns: 1
+resolveFireOrder - ID 31, shooter: Altarian #5 vs Hyperion #1, w: LightIon #8, guns: 1
+resolveFireOrder - ID 32, shooter: Altarian #5 vs Hyperion #1, w: LightIon #10, guns: 1
+doDamage, weapon: LightIon, target: 1/-1, totalDmg: 17
+resolveFireOrder - ID 33, shooter: Altarian #5 vs Hyperion #1, w: MediumSingleIon #19, guns: 1
+doDamage, weapon: MediumSingleIon, target: 1/-1, totalDmg: 41
+resolveFireOrder - ID 34, shooter: Altarian #5 vs Hyperion #1, w: MediumSingleIon #20, guns: 1
+resolveFireOrder ID 28, shooter: Altarian #4 vs Flight #6, w: LightIon #8
+resolveFireOrder ID 30, shooter: Altarian #4 vs Flight #6, w: LightIon #10
+resolveFireOrder ID 43, shooter: Flight #8 vs Flight #7, w: LinkedParticleGun #2
+resolveFireOrder ID 44, shooter: Flight #8 vs Flight #7, w: LinkedParticleGun #4
+doDamage, weapon: LinkedParticleGun, target: 7/9, totalDmg: 15
+resolveFireOrder ID 45, shooter: Flight #8 vs Flight #7, w: LinkedParticleGun #6
+doDamage, weapon: LinkedParticleGun, target: 7/7, totalDmg: 15
+resolveFireOrder ID 46, shooter: Flight #8 vs Flight #7, w: LinkedParticleGun #8
+resolveFireOrder ID 47, shooter: Flight #8 vs Flight #7, w: LinkedParticleGun #10
+doDamage, weapon: LinkedParticleGun, target: 7/9, totalDmg: 13
+ => overkilling non-ship target system Sitara #9 was destroyed, rem: 2, doing: 18
+resolveFireOrder ID 48, shooter: Flight #8 vs Flight #7, w: LinkedParticleGun #12
+resolveFireOrder ID 49, shooter: Flight #8 vs Flight #7, w: LinkedParticleGun #14
+doDamage, weapon: LinkedParticleGun, target: 7/5, totalDmg: 15
+resolveFireOrder ID 50, shooter: Flight #8 vs Flight #7, w: LinkedParticleGun #16
+doDamage, weapon: LinkedParticleGun, target: 7/1, totalDmg: 16
+ => overkilling non-ship target system Sitara #1 was destroyed, rem: 24, doing: 24
+resolveFireOrder - ID 38, shooter: Flight #7 vs Hyperion #1, w: IonBolt #4, guns: 1
+resolveFireOrder - ID 39, shooter: Flight #7 vs Hyperion #1, w: IonBolt #6, guns: 1
+doDamage, weapon: IonBolt, target: 1/-1, totalDmg: 30
+resolveFireOrder - ID 40, shooter: Flight #7 vs Hyperion #1, w: IonBolt #8, guns: 1
+doDamage, weapon: IonBolt, target: 1/8, totalDmg: 31
+resolveFireOrder - ID 42, shooter: Flight #7 vs Hyperion #1, w: IonBolt #12, guns: 1
+doDamage, weapon: IonBolt, target: 1/5, totalDmg: 34
+DB updateFireOrders: 23
+handleBallisticInterception | balls:0, intercepts: 0
+= testCriticals for Hyperion, #1, turn: 3
+= testCriticals for Flight, #8, turn: 3
+= testCriticals for Flight, #6, turn: 3
+= testCriticals for Hyperion, #2, turn: 3
+= testCriticals for Altarian, #4, turn: 3
+= testCriticals for Altarian, #5, turn: 3
+= testCriticals for Altarian, #3, turn: 3
+= testCriticals for Flight, #7, turn: 3
+checking crit for Sitara
+Droput!
+checking crit for Sitara
+= testCriticals for Flight, #9, turn: 3
+= testCriticals for Flight, #10, turn: 3
+ => DB insertDamageEntries: 15
+ => DB insertCritEntries: 2
+handleFiringPhase time: 0.198 seconds.
+advancing game state time: 0.204 seconds.

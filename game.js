@@ -81,7 +81,6 @@ function Game(data, userid){
 		switch (val){
 			case 1: return "PATROL";
 			case 2: return "STRIKE / ESCORT";
-			case 3: return "INTERCEPT";
 			default: return "ERROR";
 		}
 	}
@@ -236,14 +235,9 @@ function Game(data, userid){
 		}
 		else if (this.shortInfo){
 			t = game.getUnitById(this.shortInfo);
-			if (t){
+			if (t && t.ship){
 				valid = true;
 				dest = t.getPlannedPosition();
-				if (t.ship){
-					console.log("STRIKE / ESCORT");
-				} else if (t.flight){
-					console.log("INTERCEPT");
-				}
 			}
 		}
 
@@ -295,6 +289,7 @@ function Game(data, userid){
 		$("#deployOverlay").hide();
 		game.getUnitById(aUnit).getSystemById(this.flightDeploy.id).setFireOrder().select();
 		game.flightDeploy = false;
+		s.disableMissionMode();
 		this.draw();
 
 		if (t.id == aUnit){
@@ -450,8 +445,25 @@ function Game(data, userid){
 		var data = [];
 
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].flight && !this.ships[i].mission.arrived){continue;}
 			if (this.ships[i].userid == this.userid){
+				if (this.ships[i].flight){
+					if (!this.ships[i].cc.length){continue;}
+					else {
+						var doTest = false;
+						test:
+						for (var j = 0; j < this.ships[i].cc.length; j++){
+							for (var k = 0; k < this.ships.length; k++){
+								if (this.ships[i].cc[j] == this.ships[k].id){
+									if (this.ships[k].userid != this.ships[i].userid){
+										doTest = true;
+										break test;
+									}
+								}
+							}
+						}
+						if (!doTest){continue;}
+					}
+				}
 				var hasFire = false;
 				
 				check:

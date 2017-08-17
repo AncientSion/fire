@@ -573,7 +573,7 @@ function Flight(data){
 					})))
 			.append($("<tr>").click(function(){game.mission.set(1, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Patrol Location")))
 			.append($("<tr>").click(function(){game.mission.set(2, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Strike/ Escort Ship")))
-			.append($("<tr>").click(function(){game.mission.set(3, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Intercept Flight / Salvo")));
+			//.append($("<tr>").click(function(){game.mission.set(3, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Intercept Flight / Salvo")));
 		}
 				
 		subDiv.appendChild(table);
@@ -1008,7 +1008,7 @@ function Flight(data){
 	}
 	this.getBaseHitChance = function(){
 		var min = 0; var max = 0;
-		var p = 1.25;
+		var p = 1.5;
 		for (var i = 0; i < this.structures.length; i++){
 			if (!this.structures[i].destroyed){
 				min = Math.max(min, this.structures[i].mass);
@@ -1201,7 +1201,7 @@ Flight.prototype.switchMissionMode = function(){
 
 Flight.prototype.disableMissionMode = function(){
 	game.mission = 0;
-	$(this.element).find(".header").css("height", "130px").find("tr").slice(-4)
+	$(this.element).find(".header").css("height", "130px").find("tr").slice(-3)
 	.each(function(i){
 		if (!i){
 			$(this).children()[0].innerHTML = "Disengage from Mission";
@@ -1212,7 +1212,7 @@ Flight.prototype.disableMissionMode = function(){
 
 Flight.prototype.enableMissionMode = function(){
 	game.mission = new Mission(this);
-	$(this.element).find(".header").css("height", "auto").find("tr").slice(-4)
+	$(this.element).find(".header").css("height", "auto").find("tr").slice(-3)
 	.each(function(i){
 		if (!i){
 			$(this).children()[0].innerHTML = "Select new Mission";
@@ -1244,9 +1244,6 @@ Flight.prototype.drawMovePlana = function(){
 		target = game.getUnitById(this.mission.targetid).getPlannedPosition();
 	} else target = {x: this.mission.x, y: this.mission.y};
 
-	if (target === origin){
-		console.log("bing");
-	}
 
 	var dist = getDistance(this.getPlannedPosition(), target);
 	var impulse = this.getCurrentImpulse();

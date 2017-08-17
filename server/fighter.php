@@ -48,8 +48,8 @@ class Fighter extends Single {
         );
     }
 
-	public function getSubHitChance(){
-		return ceil($this->mass/1.25);
+	public function getSubHitChance($fire){
+		return ceil(($this->mass/1.5)*($fire->cc+1));
 	}
 }
 

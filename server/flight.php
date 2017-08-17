@@ -6,10 +6,10 @@ class Flight extends Mini {
 	public $name = "Flight";
 	public $display = "Flight";
 	public $faction = false;
-	public $baseSize = 35;
-	public $unitSize = 8;
+	public $baseSize = 30;
+	public $unitSize = 6;
 
-	public $fSize = 20;
+	public $fSize = 15;
 	public $size = 0;
 	public $cost = 0;
 	public $mass = 0;
@@ -26,16 +26,6 @@ class Flight extends Mini {
 		$this->available = $available;
 		$this->status = $status;
 		$this->destroyed = $destroyed;
-	}
-
-	public function isCloseCombat($id){
-		for ($i = 0; $i < sizeof($this->cc); $i++){
-			if ($this->cc[$i] == $fire->shooterid){
-				//Debug::log("close combat! ".$this->id."/".$fire->shooterid);
-				return true;
-			}
-		}
-		return false;
 	}
 
 	public function setState($turn){

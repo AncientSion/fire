@@ -624,7 +624,7 @@ class Manager {
 	public function handleMovementPhase(){
 		//Debug::log("handleShipMovementPhase");
 		$this->resolveShipMovement();
-		$this->resolveFighterMovement();
+		$this->resolveFlightMovement();
 		$this->resolveSalvoMovement();
 	}
 
@@ -643,8 +643,8 @@ class Manager {
 
 	}
 
-	public function resolveFighterMovement(){
-		Debug::log("resolveFighterMovement");
+	public function resolveFlightMovement(){
+		Debug::log("resolveFlightMovement");
 		$missions = array();
 		$stack = array(array(), array(), array());
 		$flights = array();

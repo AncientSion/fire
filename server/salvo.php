@@ -74,6 +74,7 @@ class Mini extends Ship {
 			$fire->resolved = -1;
 		}
 		else {
+			$fire->cc = $this->isCloseCombat($fire->shooter->id);
 			$fire->dist = $this->getHitDist($fire);
 			$fire->angle = $this->getHitAngle($fire);
 			$fire->section = $this->getHitSection($fire);
@@ -136,6 +137,7 @@ class Mini extends Ship {
 	public function getHitSection($fire){
 		return 0;
 	}
+	
 	public function getHitSystem($fire){
 		$elements = array();
 		for ($i = 0; $i < sizeof($this->structures); $i++){
@@ -147,7 +149,7 @@ class Mini extends Ship {
 	}
 
 	public function getHitChance($fire){
-		return ceil($fire->hitSystem[sizeof($fire->hitSystem)-1]->getSubHitChance());
+		return ceil($fire->hitSystem[sizeof($fire->hitSystem)-1]->getSubHitChance($fire));
 	}
 
 	public function testCriticals($turn){

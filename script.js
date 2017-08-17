@@ -161,6 +161,7 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 			angle = getAngleFromTo(vessel.getPlannedPosition(), shipLoc);
 			angle = addAngle(vessel.getPlannedFacing(), angle);
 			baseHit = vessel.getHitChanceFromAngle(angle);
+			if (ship.flight && vessel.flight){baseHit *= 2;}
 			impulse = 1 - vessel.getImpulseMod();
 			lock = ship.getOffensiveBonus(vessel);
 			mask = vessel.getDefensiveBonus(ship);
