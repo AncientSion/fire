@@ -174,6 +174,7 @@ class Salvo extends Mini {
 	public $targetid;
 	public $name;
 	public $amount;
+	public $unitType = "Salvo";
 	public $salvo = true;
 	public $target;
 	public $index = 0;
@@ -211,7 +212,7 @@ class Salvo extends Mini {
 	}
 
 	public function setProps($turn){
-		$this->baseHitChance = $this->structures[0]->getSubHitChance();
+		//$this->baseHitChance = $this->structures[0]->getSubHitChance();
 		$this->baseImpulse = ceil(pow($this->structures[0]->mass, -0.75)*250);
 		$this->setCurrentImpulse($turn);
 	}

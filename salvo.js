@@ -1,5 +1,5 @@
 function Salvo(data){
-	this.id = data.id;
+	Ship.call(this, data);
 	this.userid = data.userid;
 	this.targetid = data.targetid;
 	this.name = data.name;
@@ -9,7 +9,6 @@ function Salvo(data){
 	this.actions = data.actions;
 	this.baseImpulse = data.baseImpulse;
 	this.currentImpulse = data.currentImpulse;
-	this.baseHitChance = data.baseHitChance;
 	this.fireOrder = data.fireOrder;
 	this.available = data.available;
 	this.facing = data.facing;
@@ -32,6 +31,7 @@ function Salvo(data){
 	this.ship = false;
 	this.flight = false;
 	this.salvo = true;
+	this.unitType = "Salvo";
 	this.nextStep;
 	this.finalStep;
 	this.anim = [];
@@ -443,7 +443,7 @@ function Salvo(data){
 	}
 
 	this.getHitChanceFromAngle = function(){
-		return this.baseHitChance;
+		return Math.floor(Math.sqrt(this.structures[0].mass) * 15);
 	}
 
 	this.getPlannedFacing = function(){
@@ -487,6 +487,9 @@ function Salvo(data){
 		}
 	}
 }
+
+
+Salvo.prototype = Object.create(Ship.prototype);
 
 Salvo.prototype.getTarget = function(){
 	return game.getUnitById(this.targetid);	
@@ -639,4 +642,18 @@ Salvo.prototype.getShortInfo = function(){
 		}
 	}
 	return table;
+}
+
+Salvo.prototype.isReady = function(){
+	if (this.available < game.turn){
+		return true;
+	}
+	else if (this.available == game.turn && !(game.phase == 0 && game.animating && !this.deployed)){
+		if (this.userid == game.userid && this.actions.length || game.phase >= 0){
+			return true;
+		}
+	} else if (this.available > game.turn && this.actions.length == 1 && !this.actions[0].resolved){
+		return true;
+	}
+	return false;
 }

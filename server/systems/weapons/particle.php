@@ -55,7 +55,7 @@ class MediumSingleIon extends LightIon {
 }
 
 class MediumTwinIon extends MediumSingleIon {
-	public $name = "MediumTwinIon";
+	//public $name = "MediumTwinIon";
 	public $display = "62mm Dual Ion Cannon";
 	public $shots = 2;
 	public $mass = 21;

@@ -229,7 +229,7 @@ function Game(data, userid){
 		var dest;
 
 		if (this.flightDeploy.mission == 1){ // Patrol
-			console.log("PATROL");
+			//console.log("PATROL");
 			dest = pos;		
 			valid = true;
 		}
@@ -258,7 +258,7 @@ function Game(data, userid){
 
 		var flight = new Flight(
 			{id: -this.ships.length-20, name: "Flight", shipType: "Flight", mission: mission,
-			x: p.x, y: p.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, currentImpulse: 0, fSize: 20, baseSize: 35, unitSize: 8, userid: this.userid, available: this.turn}
+			x: p.x, y: p.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, currentImpulse: 0, fSize: 15, baseSize: 30, unitSize: 6, userid: this.userid, available: this.turn}
 		);
 
 		flight.deployed = 1;
@@ -289,12 +289,12 @@ function Game(data, userid){
 		$("#deployOverlay").hide();
 		game.getUnitById(aUnit).getSystemById(this.flightDeploy.id).setFireOrder().select();
 		game.flightDeploy = false;
-		s.disableMissionMode();
-		this.draw();
+		flight.disableMissionMode();
 
 		if (t.id == aUnit){
 			game.getUnitById(aUnit).attachFlight(flight.id);
 		}
+		this.draw();
 	}
 
 	this.doDeployFlighta = function(e, pos){
@@ -932,8 +932,13 @@ Game.prototype.getUnitType = function (val){
 	this.create = function(){
 		$("#phaseSwitchDiv").show();
 
+		//this.ships.sort(function(a, b){
+			//return a.ship-b.ship || a.flight - b.flight || a.salvo - b.salvo;
+		//	return a.salvo - b.salvo || a.flight - b.flight || a.ship-b.ship ;
+		//})
+
 		for (var i = 0; i < this.ships.length; i++){
-			var ship = window.initiateShip(this.ships[i]);
+			var ship = window.initiateUnit(this.ships[i]);
 			var deployed = 0;
 			var friendly = 0;
 
@@ -955,19 +960,11 @@ Game.prototype.getUnitType = function (val){
 			this.ships[i].create();
 		}
 
-		for (var i = 0; i < window.ballistics.length; i++){
-			this.ballistics.push(window.initiateBallistic(i));
-		}
-
-
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].createBaseDiv();
-			if (this.ships[i].flight){this.ships[i].setTarget();}
-			else this.ships[i].setEscortImage();
-
-		}
-		for (var i = 0; i < this.ballistics.length; i++){
-			this.ballistics[i].setTarget();
+			if (this.ships[i].ship){this.ships[i].setEscortImage();}
+			else if (this.ships[i].flight){this.ships[i].setTarget();}
+			else this.ships[i].setTarget();
 		}
 
 		for (var i = 0; i < this.reinforcements.length; i++){

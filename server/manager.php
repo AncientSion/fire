@@ -18,6 +18,7 @@ class Manager {
 	public $value = 0;
 
 	public $ships = array();
+	public $ballistics = array();
 	public $gd = array();
 	public $fires = array();
 	public $intercepts = array();
@@ -29,7 +30,6 @@ class Manager {
 	public $deploys = array();
 	public $incoming = array();
 	public $userindex = 0;
-
 	public $flights = array();
 
 	function __construct($userid = 0, $gameid = 0){
@@ -81,7 +81,8 @@ class Manager {
 
 		//$this->setShipLocks($this->getUnitById(2)); return;
 
-		//$this->deploy();
+		//$this->deploy();();
+		Debug::log(sizeof($this->ships));
 
 		return array(
 			"id" => $this->gameid,
@@ -157,7 +158,7 @@ class Manager {
 		$this->fires = $db->getAllFireOrders($this->gameid);
 
 		$this->ships = $this->assembleUnits();
-		$this->ballistics = $this->assembleBallistics();
+		//$this->ballistics = $this->assembleBallistics();
 
 		$this->reinforcements = $db->getAllReinforcements($this->gameid, $this->userid);
 		$this->rdyReinforcements = $this->readyReinforcements();
@@ -193,6 +194,7 @@ class Manager {
 	}
 
 	public function getShipData(){
+		Debug::log("ships: ".sizeof($this->ships));
 		for ($i = sizeof($this->ships)-1; $i >= 0; $i--){
 			if ($this->ships[$i]->userid != $this->userid){
 				if ($this->ships[$i]->flight && $this->ships[$i]->available == $this->turn && !$this->ships[$i]->actions[0]->resolved){
@@ -261,6 +263,12 @@ class Manager {
 	}
 
 	public function assembleUnits(){
+		$this->ships = $this->assembleShips();
+		return array_merge($this->ships, $this->assembleBallistics());
+		Debug::log(sizeof($this->ships));
+	}
+
+	public function assembleShips(){
 		//Debug::log("assembleUnits");
 		$db =  DBManager::app()->getActiveUnits($this->gameid, $this->turn); 
 		$units = array();

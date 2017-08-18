@@ -155,71 +155,92 @@ function setFPS(fps){
 	window.fpsInterval = 1000 / window.fps;
 }
 
-function initiateShip(data){
-
-	/*var ship = new window[window.ships[i].shipType](
-		window.ships[i].id,
-		window.ships[i].name,
-		window.ships[i].shipType,
-		0,
-		0,
-		0,
-		window.ships[i].faction,
-		window.ships[i].mass,
-		window.ships[i].cost,
-		window.ships[i].profile,
-		window.ships[i].size,
-		window.ships[i].userid,
-		window.ships[i].available,
-		window.ships[i].baseHitChance,
-		window.ships[i].baseImpulse
-	)*/
-
-	var ship = new window[data.shipType](data);
-	//console.log(data.facing + " / "  + ship.facing);
-
-	if (! ship.flight){
-		ship.hitTable = data.hitTable
-		ship.primary = new Primary(data.primary);
-		for (var j = 0; j < data.primary.systems.length; j++){
-			var primSystem = new window[data.primary.systems[j].name](data.primary.systems[j]);
-
-			for (var l = 0; l < data.primary.systems[j].damages.length; l++){
-				primSystem.damages.push(new Damage(data.primary.systems[j].damages[l]));
-			}
-
-			for (var l = 0; l < data.primary.systems[j].powers.length; l++){
-				primSystem.powers.push(new Power(data.primary.systems[j].powers[l]));
-			}
-
-			for (var l = 0; l < data.primary.systems[j].crits.length; l++){
-				primSystem.crits.push(new Crit(data.primary.systems[j].crits[l]));
-			}
-
-			primSystem.setState();
-			ship.primary.systems.push(primSystem);
-		}
+function initiateUnit(data){
+	switch (data.unitType){
+		case "Ship": return window.initiateShip(data);
+		case "Flight": return window.initiateFlight(data);
+		case "Salvo": return window.initiateSalvo(data);
 	}
-	else {
-		ship.dogfights = data.dogfights;
-	}
+}
+
+function initiateSalvo(data){
+	var salvo = new Salvo(data);
 
 	for (var j = 0; j < data.structures.length; j++){
-		var struct;
-		if (!ship.flight){
-			struct = new Structure(data.structures[j]);
-			//if (ship.name == "Primus"){console.log(data.structures[j]);}
+		salvo.structures.push(new Missile(data.structures[j]));
+
+		for (var k = 0; k < data.structures[j].systems.length; k++){
+			salvo.structures[j].systems.push(new Warhead(data.structures[j].systems[k]));
 		}
-		else {
-			struct = new Fighter(data.structures[j]);
+		for (var k = 0; k < data.structures[j].crits.length; k++){
+			salvo.structures[j].systems.push(new Crit(data.structures[j].crits[k]));
 		}
+	}
+	salvo.create();
+	return salvo;
+}
+
+
+function initiateFlight(data){
+
+	var flight = new Flight(data);
+
+	for (var j = 0; j < data.structures.length; j++){
+		var struct = new Fighter(data.structures[j]);
 
 		if (data.structures[j].damages.length){
 			for (var k = 0; k < data.structures[j].damages.length; k++){
 				struct.damages.push(new Damage(data.structures[j].damages[k]));
 			}
 		}
-		//if (!ship.flight){struct.setRemainingNegation();}
+
+		for (var k = 0; k < data.structures[j].systems.length; k++){
+			var system = new window[data.structures[j].systems[k].type](data.structures[j].systems[k]);				
+			if (system.fireOrders){
+				for (var l = 0; l < data.structures[j].systems[k].fireOrders.length; l++){
+					system.fireOrders.push(new FireOrder(data.structures[j].systems[k].fireOrders[l]));
+				}
+			}
+			system.setState();
+			struct.systems.push(system);
+		}
+		flight.structures.push(struct);
+	}
+
+	return flight;
+}
+
+function initiateShip(data){
+
+	var ship = new Ship(data);
+		ship.hitTable = data.hitTable
+		ship.primary = new Primary(data.primary);
+	for (var j = 0; j < data.primary.systems.length; j++){
+		var primSystem = new window[data.primary.systems[j].name](data.primary.systems[j]);
+
+		for (var l = 0; l < data.primary.systems[j].damages.length; l++){
+			primSystem.damages.push(new Damage(data.primary.systems[j].damages[l]));
+		}
+
+		for (var l = 0; l < data.primary.systems[j].powers.length; l++){
+			primSystem.powers.push(new Power(data.primary.systems[j].powers[l]));
+		}
+
+		for (var l = 0; l < data.primary.systems[j].crits.length; l++){
+			primSystem.crits.push(new Crit(data.primary.systems[j].crits[l]));
+		}
+
+		primSystem.setState();
+		ship.primary.systems.push(primSystem);
+	}
+
+	for (var j = 0; j < data.structures.length; j++){
+		var struct = new Structure(data.structures[j]);
+		if (data.structures[j].damages.length){
+			for (var k = 0; k < data.structures[j].damages.length; k++){
+				struct.damages.push(new Damage(data.structures[j].damages[k]));
+			}
+		}		
 
 		for (var k = 0; k < data.structures[j].systems.length; k++){
 			var system = new window[data.structures[j].systems[k].type](data.structures[j].systems[k]);
@@ -253,22 +274,6 @@ function initiateShip(data){
 	return ship;
 }
 
-function initiateBallistic(i){
-	var salvo = new Salvo(window.ballistics[i]);
-
-	for (var j = 0; j < window.ballistics[i].structures.length; j++){
-		salvo.structures.push(new Missile(window.ballistics[i].structures[j]));
-
-		for (var k = 0; k < window.ballistics[i].structures[j].systems.length; k++){
-			salvo.structures[j].systems.push(new Warhead(window.ballistics[i].structures[j].systems[k]));
-		}
-		for (var k = 0; k < window.ballistics[i].structures[j].crits.length; k++){
-			salvo.structures[j].systems.push(new Crit(window.ballistics[i].structures[j].crits[k]));
-		}
-	}
-	salvo.create();
-	return salvo;
-}
 
 function getShipId(){
 	return (game.ships.length+1);

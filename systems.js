@@ -2669,10 +2669,13 @@ Hangar.prototype.enableHangarDeployment = function(e){
 		$("#capacity").html(this.output);
 	this.unsetFireOrder();
 	this.doUndoActions();
-	this.showHangarControl();
+	this.showHangarControl(e);
 
 	if ($(div).hasClass("disabled")){
-		$(div).data("systemid", this.id).css("left", e.clientX +100).css("top", e.clientY + 50).removeClass("disabled");
+		var h = ($(div).height());
+		if (e.clientY + h > window.res.y){
+			$(div).data("systemid", this.id).css("left", e.clientX +100).css("top", window.res.y - h - 30).removeClass("disabled");
+		} else $(div).data("systemid", this.id).css("left", e.clientX +100).css("top", e.clientY + 50).removeClass("disabled");
 	}
 	else {
 		$(div).addClass("disabled");

@@ -2,7 +2,7 @@
 
 class Flight extends Mini {
 	public $flight = true;
-	public $shipType = "Flight";
+	public $unitType = "Flight";
 	public $name = "Flight";
 	public $display = "Flight";
 	public $faction = false;

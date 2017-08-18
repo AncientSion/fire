@@ -5,7 +5,7 @@ class Ship {
 	public $facing = 0;
 	public $x;
 	public $y;
-	public $shipType = "Ship";
+	public $unitType = "Ship";
 	public $userid;
 	public $available;
 	public $status;

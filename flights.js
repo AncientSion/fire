@@ -2,7 +2,6 @@ function Flight(data){
 	Ship.call(this, data);
 	this.flight = true;
 	this.primary = false;
-	this.layout = [];
 	this.fSize = data.fSize;
 	this.ep = data.ep;
 	this.mass = data.mass;
@@ -301,7 +300,7 @@ function Flight(data){
 	this.setLayout = function(){
 		var size = this.fSize;
 
-		var toDo = Math.min(4, Math.ceil(this.structures.length/2));
+		var toDo = Math.min(6, Math.ceil(this.structures.length/2));
 		var done = 0;
 
 		for (var i = 0; i < toDo; i++){
@@ -532,7 +531,7 @@ function Flight(data){
 				.append($("<td>").html("Mission Target"))
 				.append($("<td>").html(game.getMissionTargetString(this.mission))))
 
-		if (this.friendly && game.phase == -1){
+		if (this.friendly && game.phase == -1 && this.available < game.turn){
 			$(table)
 			.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
 			.append($("<tr>")
@@ -540,7 +539,7 @@ function Flight(data){
 					.attr("colSpan", 2)
 					.css("font-size", "16px")
 					.css("border", "1px solid white")
-					.html("Disengage From Mission")
+					.html("flight From Mission")
 					.data("active", 0)
 					.data("mission", this.mission.type)
 			/*		.click(function(e){

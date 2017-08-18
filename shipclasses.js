@@ -140,19 +140,6 @@ function Ship(data){
 
 	}
 
-	this.isReady = function(){
-		if (this.available < game.turn){
-			return true;
-		}
-		else if (this.available == game.turn && !(game.phase == 0 && game.animating && !this.deployed)){
-			if (this.userid == game.userid && this.actions.length || game.phase >= 0){
-				return true;
-			}
-		} else if (this.available > game.turn && this.actions.length == 1 && !this.actions[0].resolved){
-			return true;
-		}
-		return false;
-	}
 
 	this.detachFlight = function(id){
 		for (var i = this.cc.length-1; i >= 0; i--){
@@ -270,7 +257,7 @@ function Ship(data){
 					var pos = getPointInDirection(size/2+tresh - fSize/2, a, 0, 0);
 					//console.log(a); 
 					//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
-					hostile[i].layout =  getPointInDirection(size/2+tresh - fSize/2, a+drawFacing, 0, 0);;
+					hostile[i].layout =  getPointInDirection(size/2+tresh - fSize/2, a+drawFacing, 0, 0);
 					ctx.translate(pos.x, +pos.y);
 					ctx.rotate((a-90)*(Math.PI/180));
 					ctx.drawImage(
@@ -2171,17 +2158,7 @@ function Ship(data){
 						max = 2;
 					}
 				}
-			}
-
-			if (max == 1){
-				structTable.childNodes[0].childNodes[0].style.height = "62px";
-			}
-		/*	else if (max == 2){
-				structTable.childNodes[0].childNodes[0].style.height = "42px";
-			}
-		*/	else {
-				structTable.childNodes[0].childNodes[0].style.height = "23px";
-			}
+			}3
 
 			var fill = 0;
 			if (a == 0 || a == 180){
@@ -2191,6 +2168,12 @@ function Ship(data){
 				}
 			}
 
+			if (max == 1 && !fill){
+				structTable.childNodes[0].childNodes[0].style.height = "62px";
+			}
+			else {
+				structTable.childNodes[0].childNodes[0].style.height = "23px";
+			}
 
 			for (var j = 0; j < this.structures[i].systems.length; j++){
 				if (col == 0){
@@ -2997,4 +2980,19 @@ Ship.prototype.getShortInfo = function(){
 
 Ship.prototype.getParent = function(){
 	return this;
+}
+
+
+Ship.prototype.isReady = function(){
+	if (this.available < game.turn){
+		return true;
+	}
+	else if (this.available == game.turn && !(game.phase == 0 && game.animating && !this.deployed)){
+		if (this.userid == game.userid && this.actions.length || game.phase >= 0){
+			return true;
+		}
+	} else if (this.available > game.turn && this.actions.length == 1 && !this.actions[0].resolved){
+		return true;
+	}
+	return false;
 }
