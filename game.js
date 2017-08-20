@@ -1147,7 +1147,10 @@ Game.prototype.getUnitType = function (val){
 		return false;
 	}
 
-	this.getShipByClick = function(pos){
+	this.getUnitByClick = function(pos){
+		var pick = 0;
+		var max = 100;
+
 		for (var i = 0; i < this.ships.length; i++){
 			var r = this.ships[i].size/3;
 			if (! this.ships[i].destroyed){
@@ -1155,30 +1158,23 @@ Game.prototype.getUnitType = function (val){
 					var shipPos = this.ships[i].getBaseOffsetPos();
 					if (pos.x < shipPos.x + r && pos.x > shipPos.x - r){
 						if (pos.y > shipPos.y - r && pos.y < shipPos.y + r){
-							return this.ships[i].getParent();
+							var dist = getDistance(shipPos, pos);
+							if (dist < max){
+								pick = this.ships[i].id;
+							}
 						}
 					}
 				}
 			}
 		}
-		return false;
-	}
+		//return false;
 
-	this.getAmmoByClick = function(pos){
-		var r = 7;
-		for (var i = 0; i < this.ballistics.length; i++){
-			var ammoPos = this.ballistics[i].getBaseOffsetPos();
-			if (pos.x < ammoPos.x + r && pos.x > ammoPos.x - r){
-				if (pos.y > ammoPos.y - r && pos.y < ammoPos.y + r){
-					return this.ballistics[i];
-				}
-			}
+		if (!pick){
+			return false;
 		}
-		return false;
-	}
+		return this.getUnitById(pick).getParent();
 
-	this.getUnitByClick = function(pos){
-		return this.getAmmoByClick(pos) || this.getShipByClick(pos) || false;
+		//					return this.ships[i].getParent();
 	}
 
 	this.redraw = function(){
@@ -1329,7 +1325,7 @@ Game.prototype.getUnitType = function (val){
 	}
 
 	this.getUnitById = function(id){
-		return this.getReinforcementById(id) || this.getShipById(id) || this.getBallById(id) || this.getIncomingById(id) || false;
+		return this.getReinforcementById(id) || this.getShipById(id) || this.getIncomingById(id) || false;
 	}
 
 	this.getIncomingById = function(id){
