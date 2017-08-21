@@ -2,8 +2,29 @@
 
 class Mini extends Ship {
 	public $ship = false;
+	public $primary = false;
 	public $baseImpulse;
 	public $mission = array();
+	public $size = 0;
+	public $cost = 0;
+	public $mass = 0;
+	public $profile = 0;
+
+	function __construct($id, $userid, $available, $status, $destroyed){
+		$this->id = $id;
+		$this->userid = $userid;
+		$this->available = $available;
+		$this->status = $status;
+		$this->destroyed = $destroyed;
+	}
+
+	public function setState($turn){
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			$this->structures[$i]->setState($turn);
+		}
+		$this->isDestroyed();
+		$this->setProps($turn);
+	}
 
 	public function getNewCrits($turn){
 		$crits = array();
@@ -120,20 +141,6 @@ class Mini extends Ship {
 		return true;
 	}
 
-	public function createFireOrders($gameid, $turn, $targets, $odds){
-		$fires = array();
-		$fires[] = array(
-			"id" => -1,
-			"gameid" => $gameid,
-			"turn" => $turn,
-			"shooterid" => $this->id,
-			"targetid" => $this->targetid,
-			"weaponid" => 0,
-			"resolved" => 0
-		);
-		return $fires;
-	}
-
 	public function getHitSection($fire){
 		return 0;
 	}
@@ -148,6 +155,34 @@ class Mini extends Ship {
 		return $elements[mt_rand(0, sizeof($elements)-1)];
 	}
 
+	public function addSubUnit($elements){
+		for ($i = 0; $i < sizeof($elements); $i++){
+			for ($j = 1; $j <= $elements[$i]["amount"]; $j++){
+				$this->structures[] = new $elements[$i]["name"](
+					$this->getId(),
+					$this->id
+				);
+				for ($k = 0; $k < sizeof($this->structures[sizeof($this->structures)-1]->systems); $k++){
+					$this->structures[sizeof($this->structures)-1]->systems[$k]->id = $this->getId();
+				}
+			}
+		}
+		return true;
+	}
+
+	public function getSystemById($id){
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($this->structures[$i]->id == $id){
+				return $this->structures[$i];
+			}
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				if ($this->structures[$i]->systems[$j]->id == $id){
+					return $this->structures[$i]->systems[$j];
+				}
+			}
+		}
+	}
+
 	public function getHitChance($fire){
 		return ceil($fire->hitSystem[sizeof($fire->hitSystem)-1]->getSubHitChance($fire));
 	}
@@ -159,43 +194,20 @@ class Mini extends Ship {
 		}
 	}
 
-	public function getDeployState($turn){
-		if ($this->available == $turn){
-			return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x , "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => 0, "angle" => $this->actions[sizeof($this->actions)-1]->a, "thrust" => $this->currentImpulse);
-		}
-	}
-
 	public function getMoveState($turn){
 		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x , "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => 0, "angle" => $this->actions[sizeof($this->actions)-1]->a, "thrust" => $this->currentImpulse);
 	}
 }
 
 class Salvo extends Mini {
-	public $targetid;
-	public $name;
-	public $amount;
+	public $name = "Salvo";
 	public $unitType = "Salvo";
 	public $salvo = true;
-	public $target;
-	public $index = 0;
-	public $actions = array();
-	public $structures = array();
-	public $baseImpulse;
 	public $traverse = -4;
 
-	function __construct($id, $userid, $amount, $targetid, $name, $status, $available, $destroyed){
-		$this->id = $id;
-		$this->userid = $userid;
-		$this->amount = $amount;
-		$this->targetid = $targetid;
-		$this->name = $name;
-		$this->status = $status;
-		$this->available = $available;
-		$this->destroyed = $destroyed;
-		
-		$this->addStructures($amount);
+	function __construct($id, $userid, $available, $status, $destroyed){		
+        parent::__construct($id, $userid, $available, $status, $destroyed);
 	}
-
 
 	public function getImpulseProfileMod(){
 		return 0;
@@ -223,83 +235,6 @@ class Salvo extends Mini {
 	
 	public function getCurrentImpulse(){
 		return $this->currentImpulse;
-	}
-
-	public function addStructures($amount){
-		for ($i = 0; $i < $amount; $i++){
-			$this->structures[] = new $this->name($i, $this->id);
-		}
-	}
-
-	public function addFireDB($fires){
-		for ($i = 0; $i < sizeof($fires); $i++){
-			if ($fires[$i]->shooterid == $this->id){
-				$this->fireOrder = $fires[$i];
-				return;
-			}
-		}
-		return true;
-	}
-
-	public function setState($turn){
-		$this->setProps($turn);
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			$this->structures[$i]->setState($turn);
-		}
-		if (sizeof($this->actions) && $this->actions[sizeof($this->actions)-1]->type == "impact"){
-			$this->destroyed = true;
-			return;
-		}
-		$this->isDestroyed();
-	}
-	
-	public function getSystemById($id){
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->id == $id){
-				return $this->structures[$i];
-			}
-		}
-	}
-
-	public function getImpactTrajectory(){
-		return new Point($this->x, $this->y);
-	}
-
-	public function getHitAngle($fire){
-		return 0;
-	}
-
-	public function getArmourValue($fire, $hitSystem){
-		return $hitSystem->negation;
-	}
-
-	public function resolveBallisticFireOrder($fire){
-		parent::resolveBallisticFireOrder($fire);
-		if ($this->isDestroyed()){
-			$this->actions[sizeof($this->actions)-1]->x = $fire->shooter->actions[sizeof($fire->shooter->actions)-1]->x + mt_rand(-6, 6);
-			$this->actions[sizeof($this->actions)-1]->y = $fire->shooter->actions[sizeof($fire->shooter->actions)-1]->y + mt_rand(-6, 6);
-			$this->status = "intercepted";
-		}
-		return;
-	}
-
-	public function getHitDist($fire){
-		$sPos = $fire->shooter->getCurrentPosition();
-		$tPos; $dist;
-
-		if ($this->targetid == $fire->shooter->id){ // direct intercpet
-			$tPos = $this->getImpactTrajectory();
-			$dist = Math::getDist($tPos->x, $tPos->y, $sPos->x, $sPos->y);
-
-			if ($dist - $this->getCurrentImpulse() < $fire->shooter->size/2){
-				$dist = $fire->shooter->size/2;
-			} else $dist = $dist - $this->getCurrentImpulse();
-		}
-		else {
-			$tPos = $this->getCurrentPosition();
-			$dist = Math::getDist($tPos->x, $tPos->y, $sPos->x, $sPos->y);
-		}
-		return $dist;
 	}
 }
 

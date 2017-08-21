@@ -1,44 +1,133 @@
-function Salvo(data){
+function Mixed(data){
 	Ship.call(this, data);
-	this.userid = data.userid;
-	this.targetid = data.targetid;
-	this.name = data.name;
-	this.amount = data.amount;
-	this.status = data.status;
-	this.destroyed = data.destroyed;
-	this.actions = data.actions;
-	this.baseImpulse = data.baseImpulse;
-	this.currentImpulse = data.currentImpulse;
-	this.fireOrder = data.fireOrder;
-	this.available = data.available;
-	this.facing = data.facing;
-	this.mission = data.mission;
-	this.x = data.x;
-	this.y = data.y;
-	this.drawX = data.x;
-	this.drawY = data.y;
-	this.traverse = data.traverse;
-	this.hold = false;
-	this.shortInfo = false;
-	this.selected = false;
-	this.structures = [];
-	this.layout = [];
-	this.size;
-	this.img;
-	this.highlight = false;
-	this.friendly = false;
-	this.display = "";
 	this.ship = false;
-	this.flight = false;
-	this.salvo = true;
-	this.unitType = "Salvo";
+	this.primary = false;
+	this.mission = data.mission;
 	this.nextStep;
 	this.finalStep;
-	this.anim = [];
-	this.animated = false;
 	this.layout = [];
-	this.element;
-	this.doDraw = 1;
+}
+
+Mixed.prototype = Object.create(Ship.prototype);
+
+Mixed.prototype.hasLockOnUnit = function(){
+	return false;
+}
+
+Mixed.prototype.isMaskedFromUnit = function(){
+	return false;
+}
+
+Mixed.prototype.getImpulseMod = function(){
+	return 1;
+}
+
+Mixed.prototype.drawMovePlan = function(){
+	if (!this.doDraw){return;}
+	if (game.phase < 2){
+		planCtx.translate(cam.o.x, cam.o.y);
+		planCtx.scale(cam.z, cam.z)
+		planCtx.translate(this.x, this.y);
+		planCtx.beginPath();
+		planCtx.moveTo(0, 0);
+		planCtx.translate(-this.x + this.nextStep.x, -this.y + this.nextStep.y);
+		planCtx.lineTo(0, 0);
+		planCtx.closePath();
+
+		planCtx.globalAlpha = 1;
+		planCtx.strokeStyle = "red";
+		planCtx.lineWidth = 1;
+		planCtx.stroke();
+		planCtx.setTransform(1,0,0,1,0,0);
+	}
+
+	if (this.nextStep != this.finalStep){
+		planCtx.translate(cam.o.x, cam.o.y);
+		planCtx.scale(cam.z, cam.z)
+		planCtx.translate(this.nextStep.x, this.nextStep.y);
+		planCtx.beginPath();
+		planCtx.moveTo(0, 0);
+		planCtx.translate(-this.nextStep.x + this.finalStep.x, -this.nextStep.y + this.finalStep.y);
+		planCtx.lineTo(0, 0);
+		planCtx.closePath();
+
+		planCtx.globalAlpha = 1;
+		planCtx.strokeStyle = "white";
+		planCtx.stroke();
+		planCtx.setTransform(1,0,0,1,0,0);
+	}
+	game.flightPath = true;
+}
+
+
+Mixed.prototype.getTargetPosition = function(){
+	if (this.mission.targetid){
+		return this.getTarget().getPlannedPosition();
+	} else return this.mission;
+}
+
+Mixed.prototype.inRange = function(){
+	if (getDistance(this.getTargetPosition(), this.getBaseOffsetPos()) <= this.getCurrentImpulse()){
+		return true;
+	} else return false;
+}
+
+Mixed.prototype.getTarget = function(){
+	return game.getUnitById(this.mission.targetid);	
+}
+
+Mixed.prototype.setTarget = function(){
+	var i = this.getCurrentImpulse();
+	if (this.mission.type == 1){  // patrol goal
+		this.finalStep = {x: this.mission.x, y: this.mission.y};
+		d = getDistance(this, this.finalStep);
+		if (d < i){
+			this.nextStep = this.finalStep;
+		} else this.nextStep = getPointInDirection(i, this.facing, this.x, this.y);
+	}
+	else {
+		if (this.mission.type == 2){
+			var target = this.getTarget();
+			if (target.ship){
+				this.finalStep = target.getPlannedPosition();
+				var d = getDistance(this, this.finalStep);
+				if (d < i){
+					this.nextStep = this.finalStep;
+				} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, this.finalStep), this.x, this.y);
+			}
+			else if (target.flight){
+				var i = this.getCurrentImpulse();
+				var d;
+				if (this.mission.type == 2 || this.mission.type == 3){ // strike intercept goal
+					if (target.finalStep == undefined){
+						target.setTarget();
+					}
+					this.finalStep = target.nextStep;
+					d = getDistance(this, target.nextStep);
+					if (d < i){
+						this.nextStep = target.nextStep;
+					} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, target.nextStep), this.x, this.y);
+
+					//var vector = new Vector(target, target.nextStep);
+					//var speedMod = this.getCurrentImpulse() / target.getCurrentImpulse();
+					//this.finalStep = getIntercept(this, target, vector, speedMod);
+
+				}
+
+			}
+			else if (target.salvo){
+			}
+		}
+	}
+
+	this.facing = getAngleFromTo(this, this.nextStep);
+}
+
+
+
+function Salvo(data){
+	Mixed.call(this, data);
+	this.salvo = 1;
 
 	this.getShots = function(){
 		return this.fireOrder.shots;
@@ -53,7 +142,7 @@ function Salvo(data){
 	}
 
 	this.setLayout = function(){
-		for (var i = 0; i < this.structurs.length; i++){
+		for (var i = 0; i < this.structures.length; i++){
 			this.layout.push({x: range(-14, 14)});
 		}
 	}
@@ -247,7 +336,7 @@ function Salvo(data){
 					} else img.src = "varIcons/ammoMiss.png";
 				}*/
 
-				td.appendChild(window.ballImages[this.name.toLowerCase()].cloneNode(true))
+				td.appendChild(this.img.cloneNode(true))
 
 			tr1.appendChild(td);
 
@@ -286,7 +375,7 @@ function Salvo(data){
 
 	this.create = function(){
 		this.size = 18;
-		this.img = window.ballImages[this.name.toLowerCase()].cloneNode(true);
+		this.img = window.ballImages[this.structures[0].name.toLowerCase()].cloneNode(true);
 		this.setDisplay();
 		//this.setFacing();
 		this.createBaseDiv();
@@ -297,50 +386,11 @@ function Salvo(data){
 		} else this.friendly = false;
 	}
 
-	this.setTargea = function(){
-		this.setFinalStep();
-		this.setNextStep();
-	}
-
-	this.setTarget = function(){
-		var i = this.getCurrentImpulse();
-		var target = this.getTarget();
-		if (target.ship){
-			this.finalStep = target.getPlannedPosition();
-			var d = getDistance(this, this.finalStep);
-			if (d < i){
-				this.nextStep = this.finalStep;
-			} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, this.finalStep), this.x, this.y);
-		}
-		else if (target.flight){
-			var i = this.getCurrentImpulse();
-			var d;
-			if (this.mission.type == 2 || this.mission.type == 3){ // strike intercept goal
-				if (target.finalStep == undefined){
-					target.setTarget();
-				}
-				this.finalStep = target.nextStep;
-				d = getDistance(this, target.nextStep);
-				if (d < i){
-					this.nextStep = target.nextStep;
-				} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, target.nextStep), this.x, this.y);
-
-				//var vector = new Vector(target, target.nextStep);
-				//var speedMod = this.getCurrentImpulse() / target.getCurrentImpulse();
-				//this.finalStep = getIntercept(this, target, vector, speedMod);
-
-			}
-
-		}
-		else if (target.salvo){
-		}
-	}
-
 	this.setDisplay = function(){
 		this.display = this.structures[0].display;
 	}
 
-	this.setLayout = function(){
+	this.setLayouta = function(){
 		if (this.structures.length == 1){
 			this.layout.push({x: range(-3, 3), y: range(-3, 3)});
 			return;
@@ -488,24 +538,7 @@ function Salvo(data){
 	}
 }
 
-
-Salvo.prototype = Object.create(Ship.prototype);
-
-Salvo.prototype.getTarget = function(){
-	return game.getUnitById(this.targetid);	
-}
-
-Salvo.prototype.hasLockOnUnit = function(){
-	return false;
-}
-
-Salvo.prototype.isMaskedFromUnit = function(){
-	return false;
-}
-
-Salvo.prototype.getImpulseMod = function(){
-	return 1;
-}
+Salvo.prototype = Object.create(Mixed.prototype);
 
 Salvo.prototype.switchDiv = function(){
 	Ship.prototype.switchDiv.call(this);
@@ -533,90 +566,6 @@ Salvo.prototype.setUnitGUI = function(){
 Salvo.prototype.getArmourString = function(a){
 	return this.structures[0].negation;
 }
-
-Salvo.prototype.getTargetPosition = function(){
-	if (this.mission.targetid){
-		return this.getTarget().getPlannedPosition();
-	} else return this.mission;
-}
-
-Salvo.prototype.inRange = function(){
-	if (getDistance(this.getTargetPosition(), this.getBaseOffsetPos()) <= this.getCurrentImpulse()){
-		return true;
-	} else return false;
-}
-
-Salvo.prototype.setFinalStep = function(){
-	if (this.finalStep != undefined){
-	//	return;
-	}
-
-	var target = this.getTarget();
-
-	if (this.salvo && target.salvo || this.flight && target.flight){
-		if (target.finalStep == undefined){
-			target.setFinalStep();
-		}
-		var vector = new Vector(target, target.getTarget());
-		var speedMod = this.getCurrentImpulse() / target.getCurrentImpulse();
-		this.finalStep = getIntercept(this.getPlannedPosition(), target, vector, speedMod);
-		//this.finalStep = target.nextStep;
-	}
-	else {
-		this.finalStep = target.getPlannedPosition();
-	}
-}
-
-Salvo.prototype.setNextStep = function(){
-	var target = this.getTarget();
-	var dist = getDistance(this.getPlannedPosition(), this.finalStep);
-	var impulse = this.getCurrentImpulse();
-	if (impulse < dist){
-		var a = getAngleFromTo(this, target.getPlannedPosition());
-		this.nextStep = getPointInDirection(impulse, a, this.x, this.y);
-	}
-	else {
-		this.nextStep = this.finalStep;
-	}
-}
-
-Salvo.prototype.drawMovePlan = function(){
-	if (!this.doDraw){return;}
-	if (game.phase < 2){
-		planCtx.translate(cam.o.x, cam.o.y);
-		planCtx.scale(cam.z, cam.z)
-		planCtx.translate(this.x, this.y);
-		planCtx.beginPath();
-		planCtx.moveTo(0, 0);
-		planCtx.translate(-this.x + this.nextStep.x, -this.y + this.nextStep.y);
-		planCtx.lineTo(0, 0);
-		planCtx.closePath();
-
-		planCtx.globalAlpha = 1;
-		planCtx.strokeStyle = "red";
-		planCtx.lineWidth = 1;
-		planCtx.stroke();
-		planCtx.setTransform(1,0,0,1,0,0);
-	}
-
-	if (this.nextStep != this.finalStep){
-		planCtx.translate(cam.o.x, cam.o.y);
-		planCtx.scale(cam.z, cam.z)
-		planCtx.translate(this.nextStep.x, this.nextStep.y);
-		planCtx.beginPath();
-		planCtx.moveTo(0, 0);
-		planCtx.translate(-this.nextStep.x + this.finalStep.x, -this.nextStep.y + this.finalStep.y);
-		planCtx.lineTo(0, 0);
-		planCtx.closePath();
-
-		planCtx.globalAlpha = 1;
-		planCtx.strokeStyle = "white";
-		planCtx.stroke();
-		planCtx.setTransform(1,0,0,1,0,0);
-	}
-	game.flightPath = true;
-}
-
 
 Salvo.prototype.getShortInfo = function(){
 	var ele = $("#shortInfo");

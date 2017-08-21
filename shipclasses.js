@@ -671,7 +671,9 @@ function Ship(data){
 		return false;
 	}
 
-	this.drawHoverElements = function(){
+	this.doSpecificHover = function(){
+		this.drawEW();
+		this.drawMovePlan();
 	}
 	
 	this.drawEW = function(){

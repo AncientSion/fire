@@ -209,6 +209,7 @@ else {
 			window.turn = new Turn();
 			window.preview = true;
 			window.game = {
+				turn: 0,
 			 	phase: -2,
 				ships: [],				
 				shipsBought: [],
@@ -454,6 +455,7 @@ else {
 
 			var ship = {
 				name: game.ships[0].name,
+				type: "Ship",
 				faction: game.ships[0].faction,
 				value: game.ships[0].totalCost,
 				purchaseId: window.game.shipsBought.length,

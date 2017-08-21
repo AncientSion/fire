@@ -1,66 +1,57 @@
-9
-10
-0
-ships: 0
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
-10
-ships: 10
+2
+DB insertUnits S: 1
+success, got id: 13
+insertSubUnits
+success insertSubUnits
+insertMission
+success insertMission
+updateSystemLoad: 1
+success updateSystemLoad
+3
+doAdvance for game2 from phase -1 to phase 0
+merging
+DB insertUnits S: 1
+success, got id: 14
+insertSubUnits
+success insertSubUnits
+insertMission
+success insertMission
+updateSystemLoad: 1
+success updateSystemLoad
+DB updateBallisticFireOrder, s: 2
+updateSystemLoad: 2
+resolveDeployActions s: 1
+handleJumpActions
+assembleEndStates
+getDeployState for 11
+getDeployState for 13
+delving getDeployState for 13
+getDeployState for 12
+updateUnitEndState s:3 2/-1
+advancing game state time: 0.204 seconds.
+4
+3
+doAdvance for game2 from phase -1 to phase 0
+merging
+DB insertUnits S: 1
+success, got id: 14
+insertSubUnits
+success insertSubUnits
+insertMission
+success insertMission
+updateSystemLoad: 1
+success updateSystemLoad
+DB updateBallisticFireOrder, s: 2
+updateSystemLoad: 2
+resolveDeployActions s: 2
+handleJumpActions
+assembleEndStates
+getDeployState for 11
+getDeployState for 13
+delving getDeployState for 13
+getDeployState for 12
+getDeployState for 14
+delving getDeployState for 14
+updateUnitEndState s:4 2/-1
+advancing game state time: 0.141 seconds.
+4

@@ -1,18 +1,13 @@
 function Flight(data){
-	Ship.call(this, data);
-	this.flight = true;
-	this.primary = false;
+	Mixed.call(this, data);
+	this.flight = 1;
 	this.fSize = data.fSize;
 	this.ep = data.ep;
 	this.mass = data.mass;
 	this.baseSize = data.baseSize;
 	this.unitSize = data.unitSize;
-	this.turns = 10;
-	this.trueSize;
 	this.mission = data.mission || {};
 	this.traverse = -3;
-	this.nextStep;
-	this.finalStep;
 	this.patrolFacing = [];
 	this.drawImg;
 	this.doDraw = 1;
@@ -958,7 +953,7 @@ function Flight(data){
 			.hover(function(e){
 				var vessel = game.getUnitById($(this).data("id"));
 					//vessel.doHighlight();
-					//game.unitHover(vessel)
+					//game.doGenericHover(vessel)
 				if (aUnit && aUnit != vessel.id){
 					var	ship = game.getUnitById(aUnit);
 					if (ship.salvo){return;}
@@ -1041,7 +1036,7 @@ function Flight(data){
 	}
 }
 
-Flight.prototype = Object.create(Ship.prototype);
+Flight.prototype = Object.create(Mixed.prototype);
 
 Flight.prototype.setTarget = function(){
 	var i = this.getCurrentImpulse();

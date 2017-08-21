@@ -328,7 +328,7 @@ function canvasMouseMove(e){
 	//$("#currentPos").html(pos.x + " / " + pos.y + "____" + cam.o.x + " / " + cam.o.y+ "___" + (pos.x-cam.o.x) + " / " + (pos.y-cam.o.y));
 	var unit = game.getUnitByClick(pos);
 	if (unit){
-		game.unitHover(unit);
+		game.doGenericHover(unit);
 	} else if (game.shortInfo){
 		game.resetHover()
 	}

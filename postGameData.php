@@ -51,20 +51,20 @@ if (isset($_POST["type"])) {
 			$dbManager->setNewMissions($_POST["missions"]);
 		}
 		if (isset($_POST["powers"])){
-			$dbManager->insertPowers($_POST["gameid"], $_POST["gameturn"], $_POST["powers"]);
+			$dbManager->insertPowers($_POST["gameid"], $_POST["turn"], $_POST["powers"]);
 		}
 		if (isset($_POST["fireOrders"])){
-			$dbManager->insertFireOrders($_POST["gameid"], $_POST["gameturn"], $_POST["fireOrders"]);
+			$dbManager->insertFireOrders($_POST["gameid"], $_POST["turn"], $_POST["fireOrders"]);
 		}
 		if (isset($_POST["ew"])){
 			$dbManager->insertEW($_POST["ew"]);
 		}
 		//return;
-		$dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["gameturn"], $_POST["gamephase"], "ready");
+		$dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready");
 	}
 	else if ($_POST["type"] == "movement"){;
 		if ($dbManager->insertClientActions($_POST["gameid"], $_POST["ships"])){
-			if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["gameturn"], $_POST["gamephase"], "ready")){
+			if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready")){
 				echo "movement success";
 			}
 		}
@@ -73,8 +73,8 @@ if (isset($_POST["type"])) {
 		}
 	}
 	else if ($_POST["type"] == "firing"){
-		if ($dbManager->insertFireOrders($_POST["gameid"], $_POST["gameturn"], $_POST["fireOrders"])){
-			if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["gameturn"], $_POST["gamephase"], "ready")){
+		if ($dbManager->insertFireOrders($_POST["gameid"], $_POST["turn"], $_POST["fireOrders"])){
+			if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready")){
 				echo "firing success";
 			}
 		}
@@ -83,7 +83,7 @@ if (isset($_POST["type"])) {
 		}
 	}
 	else if ($_POST["type"] == "damageControl"){
-		if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["gameturn"], $_POST["gamephase"], "ready")){
+		if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready")){
 			echo "damageControl success";
 		}
 	}
