@@ -10,6 +10,78 @@ function Mixed(data){
 
 Mixed.prototype = Object.create(Ship.prototype);
 
+Mixed.prototype.canDeploy = function(){
+	return false;
+}
+
+Mixed.prototype.hasHangarSelected = function(){
+	return false;
+}
+
+Mixed.prototype.launchedThisTurn = function(){
+		if (this.available == game.turn){
+			return true;
+		}
+		return false;
+}
+
+Mixed.prototype.resetMoveMode = function(){
+	return;
+}
+
+
+Mixed.prototype.doHighlight = function(){
+	if (this.highlight){
+		this.highlight = false;
+		game.draw();
+	}	
+	else {
+		this.highlight = true;
+		ctx.translate(cam.o.x, cam.o.y);
+		ctx.scale(cam.z, cam.z);
+		ctx.beginPath();
+		ctx.arc(this.drawX, this.drawY, this.size/2, 0, 2*Math.PI, false);
+		ctx.closePath();
+		ctx.lineWidth = 3;
+		ctx.globalAlpha = 1;
+		ctx.strokeStyle = "white";
+		ctx.stroke();
+		ctx.setTransform(1,0,0,1,0,0);
+		this.drawMovePlan();
+	}
+}
+
+
+Mixed.prototype.isDestroyed = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		if (!this.structures[i].destroyed && !this.structures[i].disabled){
+			return false;
+		}
+	}
+	return true;
+}
+
+Mixed.prototype.setStatus = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].crits.length; j++){
+			if (this.structures[i].crits[j].type == "Disabled"){
+				this.structures[i].disabled = true;
+			}
+		}
+
+		if (this.structures[i].destroyed){
+			for (var k = 0; k < this.structures[i].systems.length; k++){
+				this.structures[i].systems[k].destroyed = true;
+			}
+		}
+		else if (this.structures[i].disabled){
+			for (var k = 0; k < this.structures[i].systems.length; k++){
+				this.structures[i].systems[k].disabled = true;
+			}
+		}
+	}
+}
+
 Mixed.prototype.hasLockOnUnit = function(){
 	return false;
 }
@@ -23,40 +95,44 @@ Mixed.prototype.getImpulseMod = function(){
 }
 
 Mixed.prototype.drawMovePlan = function(){
-	if (!this.doDraw){return;}
-	if (game.phase < 2){
-		planCtx.translate(cam.o.x, cam.o.y);
-		planCtx.scale(cam.z, cam.z)
-		planCtx.translate(this.x, this.y);
-		planCtx.beginPath();
-		planCtx.moveTo(0, 0);
-		planCtx.translate(-this.x + this.nextStep.x, -this.y + this.nextStep.y);
-		planCtx.lineTo(0, 0);
-		planCtx.closePath();
+	if (this.mission.arrived){
+		return;
+	}
+	var target;
+	var origin = this.getPlannedPosition();
+	if (this.mission.type > 1){
+		target = game.getUnitById(this.mission.targetid).getPlannedPosition();
+	} else target = {x: this.mission.x, y: this.mission.y};
 
-		planCtx.globalAlpha = 1;
+
+	var dist = getDistance(this.getPlannedPosition(), target);
+	var impulse = this.getCurrentImpulse();
+
+	planCtx.globalAlpha = 1;
+	planCtx.translate(cam.o.x, cam.o.y);
+	planCtx.scale(cam.z, cam.z);
+	planCtx.beginPath();
+	planCtx.moveTo(origin.x, origin.y);
+
+	if (impulse < dist){
+		var a = getAngleFromTo(this, target);
+		var step = getPointInDirection(impulse, a, origin.x, origin.y);
+
+		planCtx.lineTo(step.x, step.y);
+		planCtx.closePath();
+		if (!this.friendly){
 		planCtx.strokeStyle = "red";
-		planCtx.lineWidth = 1;
+		} else planCtx.strokeStyle = "#00ea00";
 		planCtx.stroke();
-		planCtx.setTransform(1,0,0,1,0,0);
-	}
-
-	if (this.nextStep != this.finalStep){
-		planCtx.translate(cam.o.x, cam.o.y);
-		planCtx.scale(cam.z, cam.z)
-		planCtx.translate(this.nextStep.x, this.nextStep.y);
 		planCtx.beginPath();
-		planCtx.moveTo(0, 0);
-		planCtx.translate(-this.nextStep.x + this.finalStep.x, -this.nextStep.y + this.finalStep.y);
-		planCtx.lineTo(0, 0);
-		planCtx.closePath();
-
-		planCtx.globalAlpha = 1;
-		planCtx.strokeStyle = "white";
-		planCtx.stroke();
-		planCtx.setTransform(1,0,0,1,0,0);
+		planCtx.moveTo(step.x, step.y);
 	}
-	game.flightPath = true;
+
+	planCtx.lineTo(target.x, target.y);
+	planCtx.closePath();
+	planCtx.strokeStyle = "white";
+	planCtx.stroke();
+	planCtx.setTransform(1,0,0,1,0,0);
 }
 
 
@@ -107,13 +183,7 @@ Mixed.prototype.setTarget = function(){
 					if (d < i){
 						this.nextStep = target.nextStep;
 					} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, target.nextStep), this.x, this.y);
-
-					//var vector = new Vector(target, target.nextStep);
-					//var speedMod = this.getCurrentImpulse() / target.getCurrentImpulse();
-					//this.finalStep = getIntercept(this, target, vector, speedMod);
-
 				}
-
 			}
 			else if (target.salvo){
 			}
@@ -123,35 +193,60 @@ Mixed.prototype.setTarget = function(){
 	this.facing = getAngleFromTo(this, this.nextStep);
 }
 
+Mixed.prototype.drawSelf = function(){
+	ctx.translate(this.drawX, this.drawY);
+	ctx.drawImage(this.drawImg, -this.drawImg.width/2, -this.drawImg.height/2);
+	ctx.translate(-this.drawX, -this.drawY);
+}
 
+Mixed.prototype.drawEscort = function(){
+	return;
+}
+
+Mixed.prototype.canShortenTurn = function(){
+	return false;
+}
+
+Mixed.prototype.canUndoShortenTurn = function(){
+	return false;
+}
+
+Mixed.prototype.create = function(){
+	this.setRawImage();
+	this.setStatus();
+	this.setLayout();
+	this.setDrawData();
+	if (this.id < 0){
+		this.setMaxMass();
+		this.setImpulse();
+	}
+	this.setSize();
+	this.setImage();
+}
+
+Mixed.prototype.hasSystemSelected = function(){
+	return false;
+}
+
+Mixed.prototype.getSystemById = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].id == id){
+			return this.structures[i];
+		}
+	}
+}
 
 function Salvo(data){
 	Mixed.call(this, data);
 	this.salvo = 1;
 
-	this.getShots = function(){
-		return this.fireOrder.shots;
-	}
-
-	this.setImage = function(){
-		return;
-	}
-
-	this.hasSystemSelected = function(name){
-		return false;
+	this.setSize = function(){
+		this.size = 18;
 	}
 
 	this.setLayout = function(){
 		for (var i = 0; i < this.structures.length; i++){
 			this.layout.push({x: range(-14, 14)});
-		}
-	}
-
-	this.getSystemById = function(id){
-		for (var i = 0; i < this.structures.length; i++){
-			if (this.structures[i].id == id){
-				return this.structures[i];
-			}
 		}
 	}
 
@@ -181,31 +276,6 @@ function Salvo(data){
 			}
 		}
 		return dmgs;
-	}
-
-	this.getPlannedPosition = function(){
-		return this.getBaseOffsetPos();
-	}
-
-	this.doHighlight = function(){
-		if (this.highlight){
-			this.highlight = false;
-			game.draw();
-		}	
-		else {
-			this.highlight = true;
-			ctx.translate(cam.o.x, cam.o.y);
-			ctx.scale(cam.z, cam.z);
-			ctx.beginPath();
-			ctx.arc(this.x, this.y, this.size/2, 0, 2*Math.PI, false);
-			ctx.closePath();
-			ctx.lineWidth = 3;
-			ctx.globalAlpha = 1;
-			if (this.friendly){ctx.strokeStyle = "white";}
-			else {ctx.strokeStyle = "white";}
-			ctx.stroke();
-			ctx.setTransform(1,0,0,1,0,0);
-		}
 	}
 
 	this.getDamage = function(){
@@ -239,7 +309,7 @@ function Salvo(data){
 	}
 
 	this.getTrackingString = function(){
-		var t = game.getUnitById(this.targetid).traverse;
+		var t = this.getTarget().traverse;
 		var html = "";
 		var d = Math.max(0, (this.structures[0].traverse - t));
 		html += game.getUnitType(this.structures[0].traverse) + "<span class=";
@@ -271,17 +341,17 @@ function Salvo(data){
 
 		var tr = table.insertRow(-1);
 		var td = tr.insertCell(-1); td.className = "subHeader";
-			td.innerHTML = this.display; td.colSpan = 4;
+			td.innerHTML = this.structures[0].display; td.colSpan = 4;
 
-		var target = game.getUnitById(this.targetid);
+		var tPos = this.getTarget().getPlannedPosition();
 		var tr = table.insertRow(-1);
 		var td = tr.insertCell(-1);
 			td.className = "subHeader";
-			td.innerHTML = "Targeting: <span class='red size15'>" + target.name + " #" + target.id + "</span> -- Distance: "+ Math.ceil(getDistance({x: this.x, y: this.y}, {x: target.x, y: target.y})) + "px"; td.colSpan = 4;
+			td.innerHTML = "Distance to target: "+ Math.ceil(getDistance({x: this.x, y: this.y}, {x: tPos.x, y: tPos.y})) + "px"; td.colSpan = 4;
 		div.appendChild(table);
 
 		var table = document.createElement("table");
-			table.style.width = "95%"; table.style.marginTop = "20px";
+			table.style.width = "95%"; table.style.marginTop = "10px";
     	$(table)
 			.append($("<tr>")
 	    		.append($("<th>").html("Thrust / Accel"))
@@ -321,7 +391,7 @@ function Salvo(data){
 				td.className = "iconContainer"; 
 				$(td).data("id", this.structures[i].id);
 				td.addEventListener("click", function(){
-					console.log(game.getBallById(aUnit).getSystemById($(this).data("id")));
+					console.log(game.getUnitByid(aUnit).getSystemById($(this).data("id")));
 				})
 
 				if (this.structures[i].destroyed || this.structures[i].disabled){
@@ -335,8 +405,7 @@ function Salvo(data){
 						img.src = "varIcons/ammoHit.png";
 					} else img.src = "varIcons/ammoMiss.png";
 				}*/
-
-				td.appendChild(this.img.cloneNode(true))
+				$(td).append($(this.img.cloneNode(true)).addClass("size40"));
 
 			tr1.appendChild(td);
 
@@ -346,7 +415,8 @@ function Salvo(data){
 			var rem = this.structures[i].getRemainingIntegrity();
 
 			var bgDiv = document.createElement("div");
-				bgDiv.className = "integrityAmount"; bgDiv.style.top = 1;
+				bgDiv.className = "integrityAmount"; bgDiv.style.top = 2;
+				bgDiv.style.fontSize = "12px";
 				bgDiv.innerHTML = rem + " / " + this.structures[i].integrity;
 				td.appendChild(bgDiv);
 
@@ -365,25 +435,12 @@ function Salvo(data){
 
 		$(div).contextmenu(function(e){
 			e.stopPropagation();
-			e.preventDefault();
-			$(this).addClass("disabled");
+		//	e.preventDefault();
+		//	$(this).addClass("disabled");
 		}).drag();
 		
 		this.element = div;
 		document.getElementById("game").appendChild(div);
-	}
-
-	this.create = function(){
-		this.size = 18;
-		this.img = window.ballImages[this.structures[0].name.toLowerCase()].cloneNode(true);
-		this.setDisplay();
-		//this.setFacing();
-		this.createBaseDiv();
-		this.setLayout();
-
-		if (this.userid == game.userid){
-			this.friendly = true;
-		} else this.friendly = false;
 	}
 
 	this.setDisplay = function(){
@@ -423,73 +480,6 @@ function Salvo(data){
 	this.setPostMovePosition = function(){
 		this.x = this.actions[this.actions.length-1].x;
 		this.y = this.actions[this.actions.length-1].y;
-	}
-	
-	this.draw = function(){
-		if (game.animateFire && !this.animated){return;}
-		this.setTransform()
-		this.drawSelf();		
-		this.drawPositionMarker();
-		this.resetTransform()
-	}
-
-	this.drawMove = function(){
-
-		ctx.save();
-		ctx.translate(this.drawX, this.drawY);
-		ctx.rotate((this.facing + 90) * (Math.PI/180));
-
-		this.drawSelf();
-		this.drawPositionMarker();
-
-		ctx.restore();
-
-		ctx.beginPath();
-		ctx.moveTo(this.drawX, this.drawY);
-		ctx.lineTo(this.finalStep.x, this.finalStep.y);
-		ctx.closePath();
-
-		ctx.globalAlpha = 0.2;
-		ctx.strokeStyle = "white";
-		ctx.stroke();
-		ctx.globalAlpha = 1;
-	}
-
-	this.setTransform = function(){
-		ctx.save();
-		ctx.translate(this.x, this.y);
-		ctx.rotate((this.facing + 90) * (Math.PI/180));
-	}
-
-	this.resetTransform = function(){
-		ctx.restore();
-	}
-
-	this.drawSelf = function(){
-		ctx.drawImage(this.img, 0 -this.size/2, 0 -this.size/2, this.size, this.size);
-	}
-
-	this.drawPositionMarker = function(){
-		ctx.beginPath();
-		ctx.arc(0, 0, this.size/2, 0, 2*Math.PI, false);
-		ctx.closePath();
-
-		ctx.lineWidth = 1;
-		ctx.globalAlpha = 0.8;
-		if (this.userid == game.userid){ctx.strokeStyle = "green";}
-		else {ctx.strokeStyle = "red";}
-		ctx.stroke();
-		ctx.lineWidth = 1;
-		ctx.globalAlpha = 1;
-		ctx.strokeStyle = "black";
-	}
-
-	this.drawCenterPoint = function(){
-		ctx.beginPath();
-		ctx.arc(0, 0, 2, 0, 2*Math.PI, false);
-		ctx.closePath();
-		ctx.fillStyle = "red";
-		ctx.fill();
 	}
 
 	this.getHitChanceFromAngle = function(){
@@ -605,4 +595,9 @@ Salvo.prototype.isReady = function(){
 		return true;
 	}
 	return false;
+}
+
+
+Salvo.prototype.setRawImage = function(){
+	this.img = window.ballImages[this.structures[0].name.toLowerCase()].cloneNode(true);
 }

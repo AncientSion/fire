@@ -5,7 +5,6 @@ class Mini extends Ship {
 	public $primary = false;
 	public $baseImpulse;
 	public $mission = array();
-	public $size = 0;
 	public $cost = 0;
 	public $mass = 0;
 	public $profile = 0;

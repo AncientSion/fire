@@ -884,7 +884,7 @@
 		}
 
 		public function insertClientActions($units){
-			//Debug::log("insertClientActions");
+			Debug::log("insertClientActions s: ".$units);
 			$stmt = $this->connection->prepare("
 				INSERT INTO actions 
 					(shipid, turn, type, dist, x, y, a, cost, delay, costmod, resolved)
@@ -895,12 +895,15 @@
 			$resolved = 0;
 
 			for ($i = 0; $i < sizeof($units); $i++){
+				//Debug::log($i);
 				$stmt->bindParam(":shipid", $units[$i]["id"]);
 
 				for ($j = 0; $j < sizeof($units[$i]["actions"]); $j++){
+					//Debug::log($j);
 					if ($units[$i]["actions"][$j]["resolved"]){
 						continue;
 					};
+					//Debug::log("DING 1");
 					$stmt->bindParam(":turn", $units[$i]["actions"][$j]["turn"]);
 					$stmt->bindParam(":type", $units[$i]["actions"][$j]["type"]);
 					$stmt->bindParam(":dist", $units[$i]["actions"][$j]["dist"]);
@@ -914,9 +917,11 @@
 					$stmt->execute();
 
 					if ($stmt->errorCode() == 0){
+						//Debug::log("DING 2");
 						continue;
 					} 
 					else {
+						Debug::log($stmt->errorCode());
 						return false;
 					}
 				}

@@ -1,57 +1,68 @@
-2
-DB insertUnits S: 1
-success, got id: 13
-insertSubUnits
-success insertSubUnits
-insertMission
-success insertMission
-updateSystemLoad: 1
-success updateSystemLoad
-3
-doAdvance for game2 from phase -1 to phase 0
-merging
-DB insertUnits S: 1
-success, got id: 14
-insertSubUnits
-success insertSubUnits
-insertMission
-success insertMission
-updateSystemLoad: 1
-success updateSystemLoad
-DB updateBallisticFireOrder, s: 2
-updateSystemLoad: 2
-resolveDeployActions s: 1
-handleJumpActions
-assembleEndStates
-getDeployState for 11
-getDeployState for 13
-delving getDeployState for 13
-getDeployState for 12
-updateUnitEndState s:3 2/-1
-advancing game state time: 0.204 seconds.
 4
-3
-doAdvance for game2 from phase -1 to phase 0
-merging
-DB insertUnits S: 1
-success, got id: 14
-insertSubUnits
-success insertSubUnits
-insertMission
-success insertMission
-updateSystemLoad: 1
-success updateSystemLoad
-DB updateBallisticFireOrder, s: 2
-updateSystemLoad: 2
-resolveDeployActions s: 2
-handleJumpActions
-assembleEndStates
-getDeployState for 11
-getDeployState for 13
-delving getDeployState for 13
-getDeployState for 12
-getDeployState for 14
-delving getDeployState for 14
-updateUnitEndState s:4 2/-1
-advancing game state time: 0.141 seconds.
+insertClientActions s: Array
+0
+0
+DING 1
+DING 2
+1
+DING 1
+DING 2
+4
+insertClientActions s: Array
+0
+0
+DING 1
+DING 2
+1
+DING 1
+DING 2
+doAdvance for game2 from phase 0 to phase 1
+resolveUnitMovementDB
+resolveFlightMovement
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving flight #13
+_____________________
+Flight #13, impulse: 238
+From -470/149 to 256/-300
+Dist 854, angle: 328.26497857782
+close in
+adding move to: -268/24
+resolving layer #2
+createBallisticActions, size: 0
+ball id #14, impulse: 178
+advancing game state time: 0.121 seconds.
+4
+insertClientActions s: Array
+4
+insertClientActions s: Array
+doAdvance for game2 from phase 0 to phase 1
+handleShipMovementPhase
+resolveUnitMovementDB
+resolveFlightMovement
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving flight #13
+_____________________
+Flight #13, impulse: 238
+From -470/149 to 307/-280
+Dist 888, angle: 331.09587691937
+close in
+adding move to: -262/34
+resolving layer #2
+createBallisticActions, size: 0
+ball id #14, impulse: 178
+advancing game state time: 0.102 seconds.
+4
+4
+4
+4
+4
+4
+4
+4
+4
+4
 4

@@ -226,7 +226,7 @@ function Ship(data){
 					//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
 					friendly[i].layout =  getPointInDirection(size/2+tresh - fSize/2, a+drawFacing, 0, 0);
 					ctx.translate(pos.x, +pos.y);
-					ctx.rotate((a-90)*(Math.PI/180));
+					ctx.rotate(a*(Math.PI/180));
 					ctx.drawImage(
 						window.shipImages[friendly[i].name.toLowerCase()],
 						-fSize/2,
@@ -234,7 +234,7 @@ function Ship(data){
 						fSize, 
 						fSize
 					);
-					ctx.rotate(-((a-90)*(Math.PI/180)));
+					ctx.rotate(-a*(Math.PI/180));
 					ctx.translate(-pos.x, -pos.y);
 
 				}
@@ -259,7 +259,7 @@ function Ship(data){
 					//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
 					hostile[i].layout =  getPointInDirection(size/2+tresh - fSize/2, a+drawFacing, 0, 0);
 					ctx.translate(pos.x, +pos.y);
-					ctx.rotate((a-90)*(Math.PI/180));
+					ctx.rotate(a*(Math.PI/180));
 					ctx.drawImage(
 						window.shipImages[hostile[i].name.toLowerCase()],
 						-fSize/2,
@@ -267,7 +267,7 @@ function Ship(data){
 						fSize, 
 						fSize
 					);
-					ctx.rotate(-((a-90)*(Math.PI/180)));
+					ctx.rotate(-a*(Math.PI/180));
 					ctx.translate(-pos.x, -pos.y);
 
 				}
@@ -281,23 +281,6 @@ function Ship(data){
 		}
 	}
 
-	this.setImage = function(){
-		var size = this.size;
-		var t = document.createElement("canvas");
-			t.width = size*1.5;
-			t.height = size*1.5;			
-		var ctx = t.getContext("2d");
-
-		ctx.translate(t.width/2, t.height/2);
-		ctx.rotate((this.getDrawFacing()) * (Math.PI/180));
-		ctx.drawImage(this.img, -size/2, -this.size/2, this.size, this.size);
-
-		this.drawImg = t;
-		//console.log(this.drawImg.toDataURL());
-		ctx.setTransform(1,0,0,1,0,0);
-	}
-
-
 	this.draw = function(){
 		if (!this.doDraw){return;}
 		if (this.isReady()){
@@ -305,14 +288,6 @@ function Ship(data){
 			this.drawSelf();
 			this.drawEscort();
 		}
-	}
-
-	this.drawSelf = function(){
-		ctx.save();
-		ctx.translate(this.drawX, this.drawY)
-		ctx.rotate(this.getDrawFacing() * Math.PI/180);
-		ctx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
-		//ctx.restore();
 	}
 
 	this.drawEscort = function(){
@@ -384,14 +359,6 @@ function Ship(data){
 		context.globalAlpha = 1;
 		context.lineWidth = 1;
 		context.strokeStyle = "black";
-	}
-
-	this.drawCenterPoint = function(){
-		ctx.beginPath();
-		ctx.arc(0, 0, 2, 0, 2*Math.PI, false);
-		ctx.closePath();
-		ctx.fillStyle = "red";
-		ctx.fill();
 	}
 
 	this.animationSetupMove = function(){
@@ -581,14 +548,6 @@ function Ship(data){
 				}
 			}
 		}
-	}
-	
-	this.create = function(){
-		this.img = window.shipImages[this.name.toLowerCase()];
-		this.setDrawData();
-		this.setHitTable();
-	//	this.setImage();
-	//	this.setEscortImage();
 	}
 
 	this.unpowerAllSystems = function(){
@@ -2634,68 +2593,6 @@ function Ship(data){
 		salvoCtx.clearRect(0, 0, res.x, res.y);
 	}
 
-	this.select = function(){
-		if (!this.selected){
-			this.doSelect();
-		} else this.switchDiv();
-	}
-
-	this.doSelect = function(){
-		console.log(this);
-		aUnit = this.id;
-		this.selected = true;
-		this.setUnitGUI();
-		game.setShipTransform();
-		this.drawPositionMarker();
-		game.resetShipTransform();
-		game.drawAllPlans();
-		this.switchDiv();
-		if (this.ship){this.setMoveMode();}
-
-		//console.log(this.getRemainingEP() / this.baseTurnCost)
-	}
-	
-	this.doUnselect = function(){
-		aUnit = false;
-		this.selected = false;
-		this.setUnitGUI();
-		if (game.deploying){game.disableDeployment();}
-		else if (game.flightDeploy){game.flightDeploy = false;}
-		else if (game.mission){this.disableMissionMode()}
-		this.unselectSystems();
-		game.setShipTransform();
-		this.drawPositionMarker();
-		game.resetShipTransform();
-		game.drawAllPlans();
-		this.switchDiv();
-		this.unsetMoveMode();
-		$("#hangarLoadoutDiv").addClass("disabled");
-		$("#popupWrapper").hide()
-		$("#instructWrapper").hide()
-		$("#systemDetailsDiv").remove();
-		mouseCtx.clearRect(0, 0, res.x, res.y);
-	}
-
-	this.doHighlight = function(){
-		if (this.highlight){
-			this.highlight = false;
-			game.draw();
-		}	
-		else {
-			this.highlight = true;
-			ctx.translate(cam.o.x, cam.o.y);
-			ctx.scale(cam.z, cam.z);
-			ctx.beginPath();
-			ctx.arc(this.drawX, this.drawY, this.size/2, 0, 2*Math.PI, false);
-			ctx.closePath();
-			ctx.lineWidth = 3;
-			ctx.globalAlpha = 1;
-			ctx.strokeStyle = "white";
-			ctx.stroke();
-			ctx.setTransform(1,0,0,1,0,0);
-		}
-	}
-
 	//	return isInArc(getCompassHeadingOfPoint(loc, pos, facing), start, end);
 
 	this.getOffensiveBonus = function(t){
@@ -2997,4 +2894,98 @@ Ship.prototype.isReady = function(){
 		return true;
 	}
 	return false;
+}
+
+
+Ship.prototype.select = function(){
+	if (!this.selected){
+		this.doSelect();
+	} else this.switchDiv();
+}
+
+Ship.prototype.doSelect = function(){
+	console.log(this);
+	aUnit = this.id;
+	this.selected = true;
+	this.setUnitGUI();
+	game.setShipTransform();
+	this.drawPositionMarker();
+	game.resetShipTransform();
+	game.drawAllPlans();
+	this.switchDiv();
+	if (this.ship){this.setMoveMode();}
+
+	//console.log(this.getRemainingEP() / this.baseTurnCost)
+}
+
+Ship.prototype.doUnselect = function(){
+	aUnit = false;
+	this.selected = false;
+	this.setUnitGUI();
+	if (game.deploying){game.disableDeployment();}
+	else if (game.flightDeploy){game.flightDeploy = false;}
+	else if (game.mission){this.disableMissionMode()}
+	this.unselectSystems();
+	game.setShipTransform();
+	this.drawPositionMarker();
+	game.resetShipTransform();
+	game.drawAllPlans();
+	this.switchDiv();
+	this.unsetMoveMode();
+	$("#hangarLoadoutDiv").addClass("disabled");
+	$("#popupWrapper").hide()
+	$("#instructWrapper").hide()
+	$("#systemDetailsDiv").remove();
+	mouseCtx.clearRect(0, 0, res.x, res.y);
+}
+
+Ship.prototype.doHighlight = function(){
+	if (this.highlight){
+		this.highlight = false;
+		game.draw();
+	}	
+	else {
+		this.highlight = true;
+		ctx.translate(cam.o.x, cam.o.y);
+		ctx.scale(cam.z, cam.z);
+		ctx.beginPath();
+		ctx.arc(this.drawX, this.drawY, this.size/2, 0, 2*Math.PI, false);
+		ctx.closePath();
+		ctx.lineWidth = 3;
+		ctx.globalAlpha = 1;
+		ctx.strokeStyle = "white";
+		ctx.stroke();
+		ctx.setTransform(1,0,0,1,0,0);
+	}
+}
+
+Ship.prototype.create = function(){
+	this.img = window.shipImages[this.name.toLowerCase()];
+	this.setDrawData();
+	this.setHitTable();
+}
+
+
+Ship.prototype.setImage = function(){
+	var size = this.size;
+	var t = document.createElement("canvas");
+		t.width = size*1.5;
+		t.height = size*1.5;			
+	var ctx = t.getContext("2d");
+
+	ctx.translate(t.width/2, t.height/2);
+	ctx.rotate((this.getDrawFacing()) * (Math.PI/180));
+	ctx.drawImage(this.img, -size/2, -this.size/2, this.size, this.size);
+
+	this.drawImg = t;
+	//console.log(this.drawImg.toDataURL());
+	ctx.setTransform(1,0,0,1,0,0);
+}
+
+Ship.prototype.drawSelf = function(){
+	ctx.save();
+	ctx.translate(this.drawX, this.drawY)
+	ctx.rotate(this.getDrawFacing() * Math.PI/180);
+	ctx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
+	//ctx.restore();
 }

@@ -63,7 +63,7 @@ if (isset($_POST["type"])) {
 		$dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready");
 	}
 	else if ($_POST["type"] == "movement"){;
-		if ($dbManager->insertClientActions($_POST["gameid"], $_POST["ships"])){
+		if ($dbManager->insertClientActions($_POST["ships"])){
 			if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready")){
 				echo "movement success";
 			}
