@@ -510,29 +510,6 @@ function Salvo(data){
 
 Salvo.prototype = Object.create(Mixed.prototype);
 
-Salvo.prototype.switchDiv = function(){
-	Ship.prototype.switchDiv.call(this);
-}
-
-Salvo.prototype.select = function(){
-	if (!this.selected){
-		this.selected = 1;
-		console.log(this);
-	} else this.selected = 0;
-
-	this.switchDiv();
-}
-
-Salvo.prototype.setUnitGUI = function(){
-	var id = this.id;
-	$("#unitGUI").find("img").each(function(){
-		if ($(this).data("id") == id){
-			$(this).toggleClass("selected"); return;
-		}
-	});
-	$(this.element).toggleClass("selection");
-}
-
 Salvo.prototype.getArmourString = function(a){
 	return this.structures[0].negation;
 }

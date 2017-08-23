@@ -26,7 +26,6 @@ function Game(data, userid){
 	this.ballistics = [];
 	this.antiBallistics = [];
 	this.shortInfo = false;
-	this.flightPath = false;
 	this.turnMode = 0;
 	this.zIndex = 10;
 	this.sensorMode = 0;
@@ -455,6 +454,7 @@ function Game(data, userid){
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid == this.userid){
+				if (this.ships[i].salvo){continue;}
 				if (this.ships[i].flight){
 					if (!this.ships[i].cc.length){continue;}
 					else {
@@ -1057,19 +1057,10 @@ Game.prototype.getUnitType = function (val){
 		var left = (pos.x * cam.z) + cam.o.x - oX;
 		$(ele).css("top", top).css("left", left).show();
 
-		//var incoming = this.getIncomingUnits(unit);
-		//for (var j = 0; j < incoming.length; j++){
-		//	incoming[j].drawMovePlan();
-		//}
-
 		unit.doSpecificHover();
 	}
 
 	this.resetHover = function(){
-		if (game.flightPath){
-			salvoCtx.clearRect(0, 0, res.x, res.y);
-			game.flightPath = false;
-		}
 		if (game.deploying){
 			game.drawDeploymentZone();
 		}
@@ -1087,17 +1078,6 @@ Game.prototype.getUnitType = function (val){
 			var u = game.getUnitById(aUnit);
 			if (u.ship){
 				u.getSystemByName("Sensor").drawEW();
-			}
-		}
-	}
-
-	this.getIncomingUnits = function(target){
-		var ret = [];
-		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].flight){
-				if (this.ships[i].mission.targetid == target.id){
-					ret.push(this.ships[i]);
-				}
 			}
 		}
 	}
@@ -1498,11 +1478,9 @@ Game.prototype.getUnitType = function (val){
 
 			this.ships[i].animationSetupMove();
 
-			//if (this.ships[i].ship){
-			//	frameMod = window.fps / this.ships[i].getCurrentImpulse();
-			//} else frameMod = window.fps / this.ships[i].actions[this.ships[i].actions.length-1].dist;
-
-			frameMod = 0.1;
+			if (this.ships[i].ship){
+				frameMod = window.fps / this.ships[i].getCurrentImpulse();
+			} else frameMod = window.fps / this.ships[i].actions[this.ships[i].actions.length-1].dist;
 
 			for (var j = 0; j < this.ships[i].actions.length; j++){
 				if (this.ships[i].actions[j].turn == game.turn){
@@ -2499,7 +2477,7 @@ Game.prototype.getUnitType = function (val){
 						} else if (aUnit != $(this).data("id")){ // fireing
 							var ship = game.getUnitById(aUnit);
 							var vessel = game.getUnitById($(this).data("id"));
-							if (vessel){
+							if (ship && vessel){
 								if (vessel.id != ship.id && (vessel.userid != game.userid && vessel.userid != ship.userid)){
 									handleFireClick(ship, vessel);
 								} else vessel.switchDiv();
@@ -2514,7 +2492,9 @@ Game.prototype.getUnitType = function (val){
 					.hover(function(e){
 							var vessel = game.getUnitById($(this).data("id"));
 								vessel.doHighlight();
-								game.doGenericHover(vessel)								
+								if (vessel.highlight){
+									game.doGenericHover(vessel);
+								} else vessel.undoHover();						
 							if (aUnit && aUnit != vessel.id){
 								var	ship = game.getUnitById(aUnit);
 								if (ship.salvo){return;}
@@ -2527,7 +2507,7 @@ Game.prototype.getUnitType = function (val){
 								}
 							} else {
 								game.target = 0;
-								$("#weaponAimTableWrapper").hide()
+								$("#weaponAimTableWrapper").hide();
 							}
 						}
 					)

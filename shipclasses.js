@@ -281,28 +281,6 @@ function Ship(data){
 		}
 	}
 
-	this.draw = function(){
-		if (!this.doDraw){return;}
-		if (this.isReady()){
-		 	this.drawPositionMarker();
-			this.drawSelf();
-			this.drawEscort();
-		}
-	}
-
-	this.drawEscort = function(){
-		if (!this.cc.length){
-			ctx.restore();
-			return;
-		}
-		//ctx.save();
-		//ctx.translate(this.drawX, this.drawY)
-		//ctx.rotate(this.getDrawFacing() * Math.PI/180);
-		//ctx.drawImage(this.drawImg, -this.drawImg.width/2, -this.drawImg.height/2, this.drawImg.height, this.drawImg.height);
-		ctx.drawImage(this.drawImg, -this.drawImg.width/2, -this.drawImg.height/2, this.drawImg.width, this.drawImg.height);
-		ctx.restore();
-	}
-
 	/*this.drawSelf = function(){
 		//ctx.save();
 		ctx.translate(this.drawX, this.drawY)
@@ -327,40 +305,7 @@ function Ship(data){
 		return this.drawFacing;
 	}
 
-	this.drawPositionMarker = function(){
-		if (!this.doDraw){return;}
-		var c = "";
-		if (this.selected){c = "yellow"}
-		else if (this.friendly){c = "green";}
-		else {c = "red";}
-		this.drawMarker(this.drawX, this.drawY, c, ctx);
-	}
-
-	this.drawPlanMarker = function(){
-		for (var i = this.actions.length-1; i >= 0; i--){
-			if (!this.actions[i].resolved){
-				var c = "green";
-				if (!this.friendly){c = "red";}
-				this.drawMarker(this.actions[i].x, this.actions[i].y, c, planCtx);
-				return;
-			} else return;
-		}
-	}
-
-	this.drawMarker = function(x, y, c, context){
-		context.beginPath();
-		context.arc(x, y, (this.size-2)/2, 0, 2*Math.PI, false);
-		context.closePath();
-		context.lineWidth = 1;
-		context.globalAlpha = 0.8;
-		context.globalCompositeOperation = "source-over";
-		context.strokeStyle = c;
-		context.stroke();
-		context.globalAlpha = 1;
-		context.lineWidth = 1;
-		context.strokeStyle = "black";
-	}
-
+	
 	this.animationSetupMove = function(){
 		this.setPreMovePosition();
 		this.setPreMoveFacing();
@@ -633,6 +578,18 @@ function Ship(data){
 	this.doSpecificHover = function(){
 		this.drawEW();
 		this.drawMovePlan();
+		this.drawIncomingMovePlan();
+	}
+
+	this.drawIncomingMovePlan = function(){
+		for (var i = 0; i < game.ships.length; i++){
+			if (game.ships[i].flight || game.ships[i].salvo){
+				if (game.ships[i].mission.arrived){continue;}
+				if (game.ships[i].mission.targetid == this.id){
+					game.ships[i].drawMovePlan();
+				}
+			}
+		}
 	}
 	
 	this.drawEW = function(){
@@ -2959,12 +2916,17 @@ Ship.prototype.doHighlight = function(){
 	}
 }
 
+Ship.prototype.undoHover = function(){
+	game.resetHover();
+	//salvoCtx.clearRect(0, 0, res.x, res.y);
+	//planCtx.clearRect(0, 0, res.x, res.y);
+}
+
 Ship.prototype.create = function(){
 	this.img = window.shipImages[this.name.toLowerCase()];
 	this.setDrawData();
 	this.setHitTable();
 }
-
 
 Ship.prototype.setImage = function(){
 	var size = this.size;
@@ -2982,10 +2944,59 @@ Ship.prototype.setImage = function(){
 	ctx.setTransform(1,0,0,1,0,0);
 }
 
+Ship.prototype.draw = function(){
+	if (!this.doDraw){return;}
+	if (this.isReady()){
+	 	this.drawPositionMarker();
+		this.drawSelf();
+		this.drawEscort();
+	}
+}
+
 Ship.prototype.drawSelf = function(){
 	ctx.save();
 	ctx.translate(this.drawX, this.drawY)
 	ctx.rotate(this.getDrawFacing() * Math.PI/180);
 	ctx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
 	//ctx.restore();
+}
+
+Ship.prototype.drawEscort = function(){
+	if (this.cc.length){
+		ctx.drawImage(this.drawImg, -this.drawImg.width/2, -this.drawImg.height/2, this.drawImg.width, this.drawImg.height);
+	}
+	ctx.restore();
+}
+
+Ship.prototype.drawPositionMarker = function(){
+	var c = "";
+	if (this.selected){c = "yellow"}
+	else if (this.friendly){c = "green";}
+	else {c = "red";}
+	this.drawMarker(this.drawX, this.drawY, c, ctx);
+}
+
+Ship.prototype.drawPlanMarker = function(){
+	for (var i = this.actions.length-1; i >= 0; i--){
+		if (!this.actions[i].resolved){
+			var c = "green";
+			if (!this.friendly){c = "red";}
+			this.drawMarker(this.actions[i].x, this.actions[i].y, c, planCtx);
+			return;
+		} else return;
+	}
+}
+
+Ship.prototype.drawMarker = function(x, y, c, context){
+	context.beginPath();
+	context.arc(x, y, (this.size-2)/2, 0, 2*Math.PI, false);
+	context.closePath();
+	context.lineWidth = 1;
+	context.globalAlpha = 0.8;
+	context.globalCompositeOperation = "source-over";
+	context.strokeStyle = c;
+	context.stroke();
+	context.globalAlpha = 1;
+	context.lineWidth = 1;
+	context.strokeStyle = "black";
 }

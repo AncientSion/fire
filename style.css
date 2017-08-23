@@ -893,7 +893,7 @@ table, th, tr, td {
 	background-color: red;
 }
 
-.shipDiv.selection {
+.shipDiv.selection, .ammoDiv.selection {
 	border: 2px solid yellow;
 }
 

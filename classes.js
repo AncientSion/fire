@@ -203,10 +203,13 @@ function Warhead(data){
 	this.maxDmg = data.maxDmg;
 	this.shots = data.shots;
 	this.traverse = data.traverse;
+	this.fireOrders = [];
 }
+
 Warhead.prototype.getShots = function(){
 	return 1;
 }
+
 Warhead.prototype.getDisplay = function(){
 	return "Warhead Impact";
 	//return game.getUnitById(this.parentId).display;

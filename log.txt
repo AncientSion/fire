@@ -1,6 +1,15 @@
-3
-3
-2
+4
+4
+4
+4
+4
+4
+4
+4
+4
+4
+4
+4
 2
 DB insertUnits S: 1
 success, got id: 13
@@ -10,6 +19,7 @@ insertMission
 success insertMission
 insertClientActions s: 1
 updateSystemLoad: 0
+3
 doAdvance for game2 from phase -1 to phase 0
 initBallistics
 merging
@@ -34,10 +44,7 @@ getDeployState for 12
 getDeployState for 14
 delving getDeployState for 14
 updateUnitEndState s:4 2/-1
-advancing game state time: 0.121 seconds.
-4
-4
-4
+advancing game state time: 0.077 seconds.
 4
 insertClientActions s: 1
 4
@@ -52,14 +59,14 @@ resolving layer #1
 resolving flight #13
 _____________________
 Flight #13, impulse: 238
-From -470/149 to 173/-425
-Dist 862, angle: 318.24501300359
+From -470/149 to 176/-413
+Dist 857, angle: 318.97774064571
 close in
-adding move to: -292/-9
+adding move to: -290/-7
 resolving layer #2
 createBallisticActions, size: 0
 ball id #14, impulse: 178
-advancing game state time: 0.13 seconds.
+advancing game state time: 0.023 seconds.
 4
 4
 4
@@ -72,17 +79,23 @@ advancing game state time: 0.13 seconds.
 4
 4
 4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
+doAdvance for game2 from phase 2 to phase 3
+specific EW for ship #11, EW from 144.26943699024 to 143.73056300976, dist: 214
+specific EW for ship #12, EW from 347.37813905384 to 344.62186094616, dist: 151
+resolveFireOrder - ID 16, shooter: Artemis #12 vs Omega #11, w: MediumRailGun #8, guns: 1
+doDamage, weapon: MediumRailGun, target: 11/8, totalDmg: 38
+resolveFireOrder - ID 17, shooter: Artemis #12 vs Omega #11, w: HeavyRailGun #9, guns: 1
+doDamage, weapon: HeavyRailGun, target: 11/-1, totalDmg: 64
+resolveFireOrder - ID 18, shooter: Omega #11 vs Artemis #12, w: HeavyLaser #8, guns: 1
+resolveFireOrder - ID 19, shooter: Omega #11 vs Artemis #12, w: HeavyLaser #9, guns: 1
+DB updateFireOrders: 4
+handleBallisticInterception | balls:0, intercepts: 0
+= testCriticals for Omega, #11, turn: 2
+= testCriticals for Flight, #13, turn: 2
+= testCriticals for Artemis, #12, turn: 2
+= testCriticals for Salvo, #14, turn: 2
+ => DB insertDamageEntries: 2
+ => DB insertCritEntries: 1
+handleFiringPhase time: 0.028 seconds.
+advancing game state time: 0.035 seconds.
 4
