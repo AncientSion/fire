@@ -1498,9 +1498,11 @@ Game.prototype.getUnitType = function (val){
 
 			this.ships[i].animationSetupMove();
 
-			if (this.ships[i].ship){
-				frameMod = window.fps / this.ships[i].getCurrentImpulse();
-			} else frameMod = window.fps / this.ships[i].actions[this.ships[i].actions.length-1].dist;
+			//if (this.ships[i].ship){
+			//	frameMod = window.fps / this.ships[i].getCurrentImpulse();
+			//} else frameMod = window.fps / this.ships[i].actions[this.ships[i].actions.length-1].dist;
+
+			frameMod = 0.1;
 
 			for (var j = 0; j < this.ships[i].actions.length; j++){
 				if (this.ships[i].actions[j].turn == game.turn){
@@ -1540,6 +1542,7 @@ Game.prototype.getUnitType = function (val){
 		window.then = Date.now();
 		window.startTime = then;
 
+		console.log("ship moves");
 		this.animShip = 1;
 		this.animFlight = 0;
 		this.animSalvo = 0;
@@ -1575,13 +1578,13 @@ Game.prototype.getUnitType = function (val){
 							if (action.type == "move"){
 								//	console.log(game.ships[i].actions[j].v);
 								game.ships[i].actions[j].v.t[0] += 1;
-								game.ships[i].drawX += action.v.x * 1 / game.ships[i].actions[j].v.t[1];
-								game.ships[i].drawY += action.v.y * 1 / game.ships[i].actions[j].v.t[1];
-								if (game.ships[i].actions[j].v.t[0] >= game.ships[i].actions[j].v.t[1]){
+								game.ships[i].drawX += action.v.x * 1 / action.v.t[1];
+								game.ships[i].drawY += action.v.y * 1 / action.v.t[1];
+								if (game.ships[i].actions[j].v.t[0] >= action.v.t[1]){
 								//	console.log("anim true");
 									game.ships[i].actions[j].animated = true;
-									game.ships[i].drawX = game.ships[i].actions[j].x;
-									game.ships[i].drawY = game.ships[i].actions[j].y;
+									game.ships[i].drawX = action.x;
+									game.ships[i].drawY = action.y;
 								}
 							}
 							else if (action.type == "turn"){
@@ -1620,7 +1623,7 @@ Game.prototype.getUnitType = function (val){
 				if (!done){
 					break;
 				}
-				else if (this.ships[i].flight && this.animFlight || this.ships[i].ship && this.animShip){
+				else if (this.ships[i].ship && this.animShip || this.ships[i].flight && this.animFlight || this.ships[i].salvo && this.animSalvo){
 					for (var j = 0; j < game.ships[i].actions.length; j++){
 						if (game.ships[i].actions[j].turn == game.turn){
 							if (! game.ships[i].actions[j].animated){
@@ -1634,10 +1637,12 @@ Game.prototype.getUnitType = function (val){
 			
 			if (done){
 				if (game.animShip){
+					console.log("flight moves");
 					game.animShip = 0;
 					game.animFlight = 1;
 				}
 				else if (game.animFlight){
+					console.log("salvo moves");
 					game.animFlight = 0;
 					game.animSalvo = 1;
 				}
@@ -2528,32 +2533,6 @@ Game.prototype.getUnitType = function (val){
 					)
 				)
 			}
-		}
-
-		for (var i = 0; i < this.ballistics.length; i++){
-			var name = "friendly";
-			if (this.ballistics[i].userid != game.userid){
-				name = "hostile";
-			}
-			l++;
-			ele.append(
-			($(this.ballistics[i].img.cloneNode(true))
-				.data("id", this.ballistics[i].id))
-				.addClass("size40")
-				.addClass(name)
-				.click(function(e){
-					e.preventDefault(); e.stopPropagation();
-					game.getUnitById($(this).data("id")).select();
-				})
-				.contextmenu(function(e){
-					e.preventDefault(); e.stopPropagation();
-					game.getUnitById($(this).data("id")).select();
-				})
-				.hover(function(e){
-				var vessel = game.getUnitById($(this).data("id"));
-					vessel.doHighlight();
-				})
-			)
 		}
 
 		if (l){

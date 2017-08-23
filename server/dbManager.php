@@ -328,7 +328,6 @@
 			$this->insertSubUnits($units);
 			$this->insertMission($units);
 			$this->insertClientActions($units);
-			$this->updateSystemLoad($units);
 		}
 
 
@@ -388,8 +387,8 @@
 			return true;
 		}
 
-		public function updateSystemLoad($units){
-			Debug::log("updateSystemLoad: ".sizeof($units));
+		public function updateSystemLoad($data){
+			Debug::log("updateSystemLoad: ".sizeof($data));
 			$stmt = $this->connection->prepare("
 				UPDATE loads
 				SET amount = amount - :amount
@@ -398,15 +397,15 @@
 				AND name = :name
 			");
 
-			for ($i = 0; $i < sizeof($units); $i++){
-				if (!isset($units[$i]["launchData"])){continue;}
+			for ($i = 0; $i < sizeof($data); $i++){
+				if (!isset($data[$i]["launchData"])){continue;}
 
-				$stmt->bindParam(":shipid", $units[$i]["launchData"]["shipid"]);
-				$stmt->bindParam(":systemid", $units[$i]["launchData"]["systemid"]);
+				$stmt->bindParam(":shipid", $data[$i]["launchData"]["shipid"]);
+				$stmt->bindParam(":systemid", $data[$i]["launchData"]["systemid"]);
 
-				for ($j = 0; $j < sizeof($units[$i]["launchData"]["loads"]); $j++){
-					$stmt->bindValue(":name", $units[$i]["launchData"]["loads"][$j]["name"]);
-					$stmt->bindValue(":amount", $units[$i]["launchData"]["loads"][$j]["launch"]);
+				for ($j = 0; $j < sizeof($data[$i]["launchData"]["loads"]); $j++){
+					$stmt->bindValue(":name", $data[$i]["launchData"]["loads"][$j]["name"]);
+					$stmt->bindValue(":amount", $data[$i]["launchData"]["loads"][$j]["launch"]);
 					$stmt->execute();
 
 					if ($stmt->errorCode() == 0){
@@ -650,6 +649,7 @@
 			//Debug::log("deployFlights");
 			if (sizeof($flights)){
 				$this->insertUnits($userid, $gameid, $flights);
+				$this->updateSystemLoad($units);
 			}
 			return true;
 		}
@@ -884,7 +884,7 @@
 		}
 
 		public function insertClientActions($units){
-			Debug::log("insertClientActions s: ".$units);
+			Debug::log("insertClientActions s: ".sizeof($units));
 			$stmt = $this->connection->prepare("
 				INSERT INTO actions 
 					(shipid, turn, type, dist, x, y, a, cost, delay, costmod, resolved)

@@ -551,7 +551,7 @@
 			"file": "salvo.js",
 			"settings":
 			{
-				"buffer_size": 15444,
+				"buffer_size": 15479,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -581,6 +581,16 @@
 				"buffer_size": 83541,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Searching 71 files for \"this.create\"\n\nC:\\xampp\\htdocs\\fire\\classes.js:\n  278  \t//this.html = this.type + \": -\" + this.value * 100 + \"%\"; \n  279  \n  280: \tthis.create = function(){\n  281  \t\tvar html = \"\";\n  282  \t\tvar mod = 1;\n  ...\n  366  \n  367  \n  368: \t//this.create();\n  369  }\n  370  \n\nC:\\xampp\\htdocs\\fire\\flights.js:\n  170  \t}\n  171  \n  172: \tthis.createBaseDiv = function(){\n  173  \t\tvar owner = \"friendly\";\n  174  \t\tif (game.phase > -2 && this.userid != game.userid){owner = \"hostile\";}\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  933  \t}\n  934  \t\n  935: \tthis.create = function(){\n  936  \t\t$(\"#phaseSwitchDiv\").show();\n  937  \n  ...\n 2221  \t}\n 2222  \n 2223: \tthis.createCombatLogEntry = function(fire){\n 2224  \t\tif (fire == undefined){return;}\n 2225  \t\tvar shots = 0;\n\nC:\\xampp\\htdocs\\fire\\salvo.js:\n  326  \t}\n  327  \n  328: \tthis.createBaseDiv = function(){\n  329  \t\tvar owner = \"friendly\";\n  330  \t\tif (this.userid != game.userid){owner = \"hostile\";}\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 1868  \t}\n 1869  \t\n 1870: \tthis.createBaseDiv = function(){\n 1871  \t\tvar owner = \"friendly\";\n 1872  \t\tif (game.phase > -2 && this.userid != game.userid){owner = \"hostile\";}\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 2180  \tthis.loadout = 1;\n 2181  \n 2182: \tthis.create(system.loads);\n 2183  }\n 2184  Launcher.prototype = Object.create(Weapon.prototype);\n\n8 matches across 6 files\n\n\nSearching 71 files for \"setPreMovePosition =\"\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 2770  }\n 2771  \n 2772: Ship.prototype.setPreMovePosition = function(){\n 2773  \tthis.drawX = this.x;\n 2774  \tthis.drawY = this.y;\n\n1 match in 1 file\n\n\nSearching 71 files for \"setPostMovePosition\"\n\nC:\\xampp\\htdocs\\fire\\game.php:\n  631  \t\t\t\t\t\t}\n  632  \t\t\t\t\t\tfor (var i = 0; i < game.ballistics.length; i++){\n  633: \t\t\t\t\t\t\tgame.ballistics[i].setPostMovePosition();\n  634  \t\t\t\t\t\t}\n  635  \t\t\t\t\t\tgame.fireResolved();\n  ...\n  642  \t\t\t\t\t\t\tgame.ships[i].deployed = true;\n  643  \t\t\t\t\t\t\tif (game.ships[i].flight){\n  644: \t\t\t\t\t\t\t\tgame.ships[i].setPostMovePosition();\n  645  \t\t\t\t\t\t\t}\n  646  \t\t\t\t\t\t\telse {\n  647: \t\t\t\t\t\t\t\tgame.ships[i].setPostMovePosition();\n  648  \t\t\t\t\t\t\t\tgame.ships[i].setPostMoveFacing();\n  649  \t\t\t\t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n   62  \t\t\t\treturn false;\n   63  \t\t\t}\n   64: \t\t\tele.setPostMovePosition();\n   65  \t\t\treturn true;\n   66  \t\t}\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 2775  }\n 2776  \n 2777: Ship.prototype.setPostMovePosition = function(){\n 2778  \tthis.drawX = this.actions[this.actions.length-1].x;\n 2779  \tthis.drawY = this.actions[this.actions.length-1].y;\n ....\n 2786  \t\n 2787  \tif (game.phase > 1){\n 2788: \t\tthis.setPostMovePosition();\n 2789  \t\tthis.setPostMoveFacing();\n 2790  \t}\n\n6 matches across 3 files\n",
+			"settings":
+			{
+				"buffer_size": 2682,
+				"line_ending": "Windows",
+				"name": "Find Results",
+				"scratch": true
 			}
 		},
 		{
@@ -623,7 +633,7 @@
 			"file": "game.php",
 			"settings":
 			{
-				"buffer_size": 19386,
+				"buffer_size": 19095,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -632,7 +642,7 @@
 			"file": "server/manager.php",
 			"settings":
 			{
-				"buffer_size": 48546,
+				"buffer_size": 48623,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -641,7 +651,7 @@
 			"file": "server/flight.php",
 			"settings":
 			{
-				"buffer_size": 2139,
+				"buffer_size": 1703,
 				"encoding": "UTF-8",
 				"line_ending": "Windows",
 				"name": "<?php"
@@ -814,7 +824,7 @@
 			"file": "server/ship.php",
 			"settings":
 			{
-				"buffer_size": 30829,
+				"buffer_size": 30576,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -823,7 +833,7 @@
 			"file": "server/salvo.php",
 			"settings":
 			{
-				"buffer_size": 6435,
+				"buffer_size": 6846,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -886,7 +896,7 @@
 			"file": "script.js",
 			"settings":
 			{
-				"buffer_size": 16412,
+				"buffer_size": 16444,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -904,7 +914,7 @@
 			"file": "game.js",
 			"settings":
 			{
-				"buffer_size": 70948,
+				"buffer_size": 70326,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -928,10 +938,13 @@
 			}
 		},
 		{
+			"contents": "function Flight(data){\n\tMixed.call(this, data);\n\tthis.flight = 1;\n\tthis.fSize = data.fSize;\n\tthis.ep = data.ep;\n\tthis.mass = data.mass;\n\tthis.baseSize = data.baseSize;\n\tthis.unitSize = data.unitSize;\n\tthis.mission = data.mission || {};\n\tthis.traverse = -3;\n\tthis.patrolFacing = [];\n\tthis.drawImg;\n\tthis.doDraw = 1;\n\n\tthis.setRawImage = function(){\n\t\tthis.img = window.shipImages[this.structures[0].name.toLowerCase() + \"l\"];\n\t\tthis.smallImg = window.shipImages[this.structures[0].name.toLowerCase()];\n\t}\n\n\tthis.setSize = function(){\n\t\tif (!this.mission.arrived){\n\t\t\tthis.setPreMoveSize();\n\t\t}\n\t\telse if (this.mission.arrived < game.turn){\n\t\t\tthis.setPostMoveSize();\n\t\t}\n\t\telse if (this.mission.arrived == game.turn){\n\t\t\tif (game.phase <= 2){\n\t\t\t\tthis.setPreMoveSize();\n\t\t\t} else this.setPostMoveSize();\n\t\t}\n\t}\n\n\tthis.getDamageEntriesByFireId = function(fire){\n\t\tvar dmgs = [];\n\t\tvar lookup = 0;\n\n\t\tfor (var i = 0; i < fire.hits.length; i++){\n\t\t\tlookup += fire.hits[i]\n\t\t}\n\n\t\tif (!lookup){\n\t\t\treturn dmgs;\n\t\t}\n\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tfor (var j = this.structures[i].damages.length-1; j >= 0; j--){\n\t\t\t\tif (this.structures[i].damages[j].fireid == fire.id){\n\t\t\t\t\tdmgs.push(this.structures[i].damages[j]);\n\t\t\t\t\tdmgs[dmgs.length-1].system = this.structures[i].display;\n\t\t\t\t\tlookup--;\n\t\t\t\t\tif (!lookup){return dmgs};\n\t\t\t\t}\n\t\t\t\telse if (this.structures[i].damages[j].turn < fire.turn){\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\treturn dmgs;\n\t}\n\n\tthis.setLayout = function(){\n\t\tvar size = this.fSize;\n\n\t\tvar toDo = Math.min(6, Math.ceil(this.structures.length/2));\n\t\tvar done = 0;\n\n\t\tfor (var i = 0; i < toDo; i++){\n\t\t\tthis.structures[i].layout = {\n\t\t\t\tx: -size/2 - size*i/2,\n\t\t\t\ty: -toDo*size/2 +size*(i)\n \t\t\t};\n\t\t\tthis.structures[toDo*2-(i+1)].layout = {\n\t\t\t\tx: size/2 + size*i/2,\n\t\t\t\ty: -toDo*size/2 +size*(i)\n \t\t\t};\n \t\t\tdone += 2;\n\t\t}\n\n\t\tif (done < this.structures.length){\n\t\t\tfor (var i = 0; i < (this.structures.length-done)/2; i++){\n\t\t\t\tthis.structures[i].layout = {\n\t\t\t\t\tx: -size/2 - size/2*i,\n\t\t\t\t\ty: size/2 + size*i\n\t \t\t\t};\n\t\t\t\tthis.structures[this.structures.length-done/2-(i+1)].layout = {\n\t\t\t\t\tx: size/2 + size/2*i,\n\t\t\t\t\ty: size/2 + size*i\n\t \t\t\t};\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.setMaxMass = function(){\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tif (! this.structures[i].destroyed){\n\t\t\t\tif (this.structures[i].mass > this.mass){\n\t\t\t\t\tthis.mass = this.structures[i].mass; \n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.setImpulse = function(){\n\t\tthis.baseImpulse = Math.floor(Math.pow(this.mass, -1.5)*50000);\n\t\tthis.currentImpulse = this.baseImpulse;\n\t}\n\n\tthis.getEP = function(){\n\t\treturn this.ep;\n\t}\n\n\tthis.getGunOrigin = function(j){\n\t\tfor (var i = j; i < this.structures.length; i++){\n\t\t\tif ( (!this.structures[i].destroyed && !this.structures[i].disabled) || this.structures[i].isDestroyedThisTurn() ) {\n\t\t\t\treturn this.structures[i].layout;\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.getFireDest = function(j){\n\t\tfor (var i = j; i < this.structures.length; i++){\n\t\t\tif (this.structures[i].isDamagedThisTurn()){\n\t\t\t\treturn this.structures[i].layout;\n\t\t\t}\n\t\t}\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tif (this.structures[i].isDestroyedThisTurn()){\n\t\t\t\treturn this.structures[i].layout;\n\t\t\t}\n\t\t}\n\t\treturn false;\n\t}\n\n\t\n\tthis.getPlannedFacing = function(){\n\t\tif (game.phase < 2){\n\t\t\treturn this.facing;\n\t\t\t//return getAngleFromTo(this, this.nextStep);\n\t\t}\n\t\treturn this.actions[this.actions.length-1].a;\n\t}\n\n\tthis.getDrawFacing = function(){\n\t\treturn this.getPlannedFacing();\n\t}\n\t\n\tthis.getBaseImpulse = function(){\n\t\treturn this.baseImpulse;\n\t}\n\n\tthis.hasWeaponsSelected = function(){\t\t\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tfor (var j = 0; j < this.structures[i].systems.length; j++){\n\t\t\t\tif (this.structures[i].systems[j].weapon){\n\t\t\t\t\tif (this.structures[i].systems[j].selected){\n\t\t\t\t\t\treturn true;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\treturn false;\n\t}\n\n\tthis.getNewMission = function(){\n\t\tif (this.mission.turn == game.turn){\n\t\t\treturn this.mission;\n\t\t}\n\t}\n\n\tthis.createBaseDiv = function(){\n\t\tvar owner = \"friendly\";\n\t\tif (game.phase > -2 && this.userid != game.userid){owner = \"hostile\";}\n\t\tvar div = document.createElement(\"div\");\n\t\t\tdiv.className = \"shipDiv \" + owner;\n\t\t\t$(div).data(\"shipId\", this.id);\n\n\t\tvar subDiv = document.createElement(\"div\");\n\t\t\tsubDiv.className = \"header\";\n\t\t\n\t\tvar table = document.createElement(\"table\");\n\t\t\ttable.className = \"general\";\n\n\t\tvar header = \"red\";\n\t\tif (this.friendly){header = \"green\";}\n\n\t\t$(table)\n\t\t\t.append($(\"<tr>\")\n\t\t\t\t.append($(\"<th>\").html(this.name.toUpperCase() + \" #\" + this.id).attr(\"colspan\", 2).addClass(header)))\n\t\t\t.append($(\"<tr>\")\n\t\t\t\t.append($(\"<td>\").html(\"Classification\"))\n\t\t\t\t.append($(\"<td>\").html(game.getUnitType(this.traverse))))\n\t\t\t.append($(\"<tr>\")\n\t\t\t\t.append($(\"<td>\").html(\"Current Impulse\"))\n\t\t\t\t.append($(\"<td>\").html(this.getCurrentImpulse())))\n\t\t\t.append($(\"<tr>\")\n\t\t\t\t.append($(\"<td>\").html(\"Current Mission\"))\n\t\t\t\t.append($(\"<td>\").html(game.getMissionTypeString(this.mission.type))))\n\t\t\t.append($(\"<tr>\")\n\t\t\t\t.append($(\"<td>\").html(\"Mission Target\"))\n\t\t\t\t.append($(\"<td>\").html(game.getMissionTargetString(this.mission))))\n\n\t\tif (this.friendly && game.phase == -1 && this.available < game.turn){\n\t\t\t$(table)\n\t\t\t.append($(\"<tr>\").append(\"<td>\").attr(\"colSpan\", 2).css(\"height\", \"10px\"))\n\t\t\t.append($(\"<tr>\")\n\t\t\t\t.append($(\"<td>\")\n\t\t\t\t\t.attr(\"colSpan\", 2)\n\t\t\t\t\t.css(\"font-size\", \"16px\")\n\t\t\t\t\t.css(\"border\", \"1px solid white\")\n\t\t\t\t\t.html(\"flight From Mission\")\n\t\t\t\t\t.data(\"active\", 0)\n\t\t\t\t\t.data(\"mission\", this.mission.type)\n\t\t\t/*\t\t.click(function(e){\n\t\t\t\t\t\tvar mission = $(this).data(\"mission\");\n\t\t\t\t\t\tif ($(this).data(\"active\") == 0){\n\t\t\t\t\t\t\t$(this).data(\"active\", 1).html(\"Select New Mission\");\n\t\t\t\t\t\t\t//$(this).addClass(\"selected\");\n\t\t\t\t\t\t\t$(this).parent().parent().parent().parent().css(\"height\", \"auto\").end().end()\n\t\t\t\t\t\t\t.find(\"tr\").slice(-3).each(function(i){\n\t\t\t\t\t\t\t\t$(this).removeClass(\"disabled\");\n\t\t\t\t\t\t\t\tif (i == mission-1){\n\t\t\t\t\t\t\t\t\t$(this).addClass(\"selected\");\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t})\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t$(this).data(\"active\", 0).html(\"Disengage From Mission\");\n\t\t\t\t\t\t\t//$(this).removeClass(\"selected\");\n\t\t\t\t\t\t\t$(this).parent().parent().parent().parent().css(\"height\", \"130px\").end().end()\n\t\t\t\t\t\t\t.find(\"tr\").slice(-3).each(function(i){\n\t\t\t\t\t\t\t\t$(this).addClass(\"disabled\");\n\t\t\t\t\t\t\t})\n\t\t\t\t\t\t}\n\t\t\t\t\t})\n\t\t\t*/\n\t\t\t\t\t.click(function(e){\n\t\t\t\t\t\tgame.getUnitById(aUnit).switchMissionMode();\n\t\t\t\t\t})\n\t\t\t\t\t.hover(function(e){\n\t\t\t\t\t\t$(this).toggleClass(\"highlight\");\n\t\t\t\t\t})))\n\t\t\t.append($(\"<tr>\").click(function(){game.mission.set(1, this)}).addClass(\"disabled\").append($(\"<td>\").attr(\"colSpan\", 2).css(\"font-size\", \"14px\").html(\"Patrol Location\")))\n\t\t\t.append($(\"<tr>\").click(function(){game.mission.set(2, this)}).addClass(\"disabled\").append($(\"<td>\").attr(\"colSpan\", 2).css(\"font-size\", \"14px\").html(\"Strike/ Escort Ship\")))\n\t\t\t//.append($(\"<tr>\").click(function(){game.mission.set(3, this)}).addClass(\"disabled\").append($(\"<td>\").attr(\"colSpan\", 2).css(\"font-size\", \"14px\").html(\"Intercept Flight / Salvo\")));\n\t\t}\n\t\t\t\t\n\t\tsubDiv.appendChild(table);\n\t\tdiv.appendChild(subDiv);\n\n\t\tvar maxWidth = 250;\n\t\t$(div).css(\"width\", maxWidth);\n\t\t$(div).find(\".header\").css(\"width\", \"99%\");\n\n\t\t$(this.expandDiv(div))\n\t\t\t.addClass(\"disabled\")\n\t\t\t.drag()\n\t\t\t.find(\".structContainer\")\n\t\t\t\t.contextmenu(function(e){e.stopPropagation;})\n\t\t\t\t//.addClass(\"disabled\")\n\t\t\t\t.end()\n\t\t\t.contextmenu(function(e){\n\t\t\t\t//e.stopImmediatePropagation(); e.preventDefault();\n\t\t\t\tif ($(this).data(\"shipId\") != aUnit){\n\t\t\t\t\t$(this).addClass(\"disabled\");\n\t\t\t\t}\n\t\t\t})\n\n\t\tif (game.phase == 2){\n\t\t\t$(div).find(\".structContainer\").show();\n\t\t}\n\n\t\tthis.element = div;\n\t}\n\n\tthis.expandDiv = function(div){\n\t\tvar structContainer = document.createElement(\"div\");\n\t\t\tstructContainer.className = \"structContainer\";\n\n\t\tdiv.appendChild(structContainer);\n\t\tdocument.body.appendChild(div);\n\n\t\t// OUTER STRUCTS\n\n\t\tmaxWidth = $(div).width();\n\t\tvar x = 15;\n\t\tvar y = 30;\n\t\tvar h = 50;\n\t\tvar w = 50;\n\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\n\t\t\tvar active = true;\n\t\t\tif (this.structures[i].destroyed || this.structures[i].disabled){\n\t\t\t\tactive = false;\n\t\t\t}\n\n\t\t\tvar img = new Image()\n\t\t\t\timg.src = window.shipImages[this.structures[i].name.toLowerCase() + \"l\"].src;\n\n\t\t\t\t$(img)\n\t\t\t\t\t.data(\"shipId\", this.id)\n\t\t\t\t\t.data(\"fighterId\", this.structures[i].id)\n\t\t\t\t\t.addClass(\"size40\")\n\t\t\t\t\t.click(function(e){\n\t\t\t\t\t\te.stopPropagation();\n\t\t\t\t\t\tconsole.log(game.getUnitById($(this).data(\"shipId\")).getSystemById($(this).data(\"fighterId\")));\n\t\t\t\t\t})\n\n\n\t\t\tvar fighterDiv = document.createElement(\"div\");\n\t\t\t\tfighterDiv.className = \"fighterDiv\";\n\t\t\t\tfighterDiv.appendChild(img);\n\n\t\t\tif (!active){\n\t\t\t\tvar overlay = new Image();\n\t\t\t\t$(overlay)\n\t\t\t\t\t.attr(\"src\", \"varIcons/destroyed.png\")\n\t\t\t\t\t.addClass(\"overlay\").addClass(\"size30\")\n\t\t\t\t\t.hover(function(e){\n\t\t\t\t\t\te.stopPropagation();\n\t\t\t\t\t\tvar p = $(this).parent().children()[0];\n\t\t\t\t\t\tgame.getUnitById($(p).data(\"shipId\")).getSystemById($(p).data(\"fighterId\")).hover(e);\n\t\t\t\t\t})\n\t\t\t\tfighterDiv.appendChild(overlay);\n\t\t\t}\n\t\t\telse {\n\t\t\t\t$(img).hover(function(e){\n\t\t\t\t\te.stopPropagation();\n\t\t\t\t\tgame.getUnitById($(this).data(\"shipId\")).getSystemById($(this).data(\"fighterId\")).hover(e);\n\t\t\t\t});\n\t\t\t}\n\n\t\t\tstructContainer.appendChild(fighterDiv);\n\n\t\t\tif (x + 50 + 5 > maxWidth){\n\t\t\t\tx = 15;\n\t\t\t\ty += h*2;\n\t\t\t}\n\n\n\t\t\t$(fighterDiv)\n\t\t\t\t.css(\"left\", x)\n\t\t\t\t.css(\"top\", y)\n\n\t\t\tx += 50 + 5;\n\t\t\tvar wrap = document.createElement(\"div\");\n\t\t\t\twrap.className = \"iconIntegrity\"; wrap.style.height = 12;\n\n\t\t\tvar rem = this.structures[i].getRemainingIntegrity();\n\n\t\t\tvar bgDiv = document.createElement(\"div\");\n\t\t\t\tbgDiv.className = \"integrityAmount\"; bgDiv.style.textAlign = \"center\"; bgDiv.style.fontSize = 12; bgDiv.style.top = 0;\n\t\t\t\tbgDiv.innerHTML = rem + \" / \" + this.structures[i].integrity;\n\t\t\t\twrap.appendChild(bgDiv);\n\n\t\t\tvar lowerDiv = document.createElement(\"div\");\n\t\t\t\tlowerDiv.className = \"integrityNow\"; lowerDiv.style.top = 0; lowerDiv.style.height = \"100%\";\n\t\t\t\tlowerDiv.style.width = rem/this.structures[i].integrity * 100 + \"%\";\n\t\t\t\twrap.appendChild(lowerDiv);\n\t\t\t\t\n\t\t\tvar upperDiv = document.createElement(\"div\");\n\t\t\t\tupperDiv.className = \"integrityFull\"; upperDiv.style.top = 0;\n\t\t\t\twrap.appendChild(upperDiv);\n\n\t\t\tfighterDiv.appendChild(wrap);\n\n\t\t\tif (active){\n\t\t\t\tvar s = 20;\n\t\t\t\t// FIGHTER WEAPONS\n\t\t\t\tfor (var j = 0; j < this.structures[i].systems.length; j++){\n\t\t\t\t\tvar td = this.structures[i].systems[j].getTableData(true);\n\t\t\t\t\t\t$(td.childNodes[0]).attr(\"width\", s).attr(\"height\", s);\n\t\t\t\t\t\tfighterDiv.appendChild(td);\n\t\t\t\t\t\t$(td)\n\t\t\t\t\t\t\t.addClass(\"fighter\")\n\t\t\t\t\t\t\t.css(\"top\", -h -s - 5)\n\t\t\t\t\t\t\t.css(\"left\", w/2 - s/2 +1 )\n\t\t\t\t\t\t\t.data(\"shipId\", this.id)\n\t\t\t\t\t\t\t.click(function(e){\n\t\t\t\t\t\t\t\te.stopPropagation();\n\t\t\t\t\t\t\t\tgame.getUnitById($(this).data(\"shipId\")).getSystemById($(this).data(\"systemId\")).select(e)\n\t\t\t\t\t\t\t})\n\t\t\t\t\t\t\t.contextmenu(function(e){\n\t\t\t\t\t\t\t\te.stopPropagation();\n\t\t\t\t\t\t\t\te.preventDefault();\n\t\t\t\t\t\t\t\tgame.getUnitById($(this).data(\"shipId\")).selectAll(e, $(this).data(\"systemId\"));\n\t\t\t\t\t\t\t});\n\n\t\t\t\t\tif (active){\t\t\t\t\t\n\t\t\t\t\t\t$(td).hover(function(e){\n\t\t\t\t\t\t\te.stopPropagation();\n\t\t\t\t\t\t\t$(\"#systemDetailsDiv\").remove();\n\t\t\t\t\t\t\tgame.getUnitById($(this).data(\"shipId\")).getSystemById($(this).data(\"systemId\")).hover(e)\n\t\t\t\t\t\t})\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\n\t\tvar height = 0;\n\t\t$(structContainer).find(\".fighterDiv\").each(function(){\n\t\t\tvar y = $(this).position().top + $(this).height();\n\t\t\tif (y > height){\n\t\t\t\theight = y;\n\t\t\t}\n\t\t})\n\n\t\t$(structContainer).css(\"height\", height + 20);\n\n\t\t/*var w = $(div).width();\n\t\tvar h = $(div).height();\n\t\tvar left = 50;\n\t\tif (this.facing < 90 || this.facing > 270){\n\t\t\tleft = res.x - w - 50;\n\t\t}\n\n\t\t$(div).css(\"top\", 100).css(\"left\", left);\n\t\t*/return div;\n\t}\n\n\tthis.getAttachment = function(div){\n\t\tvar color = \"red\";\n\n\t\tif (this.friendly){color = \"green\";}\n\t\tvar attachDiv = $(\"<div>\").addClass(\"flightDiv\")\n\t\t\t.append($(\"<div>\").css(\"display\", \"block\").addClass(\"center15 \" + color).html(\"Flight #\" + this.id + (\" (click to select)\")))\n\t\t\t.data(\"id\", this.id)\n\t\t\t.click(function(){\n\t\t\t\tif (aUnit){\n\t\t\t\t\tvar ship = game.getUnitById(aUnit);\n\t\t\t\t\tif (ship.hasWeaponsSelected()){\n\t\t\t\t\t\tvar target = game.getUnitById($(this).data(\"id\"));\n\t\t\t\t\t\tif (ship.userid != target.userid){\n\t\t\t\t\t\t\thandleFireClick(ship, target);\n\t\t\t\t\t\t}\n\t\t\t\t\t} \n\t\t\t\t\telse {\n\t\t\t\t\t\tship.doUnselect();\n\t\t\t\t\t\tship.switchDiv();\n\t\t\t\t\t\tgame.getUnitById($(this).data(\"id\")).select();\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\telse game.getUnitById($(this).data(\"id\")).select();\n\t\t\t\t\n\t\t\t})\n\t\t\t.hover(function(e){\n\t\t\t\tvar vessel = game.getUnitById($(this).data(\"id\"));\n\t\t\t\t\t//vessel.doHighlight();\n\t\t\t\t\t//game.doGenericHover(vessel)\n\t\t\t\tif (aUnit && aUnit != vessel.id){\n\t\t\t\t\tvar\tship = game.getUnitById(aUnit);\n\t\t\t\t\tif (ship.salvo){return;}\n\t\t\t\t\t//var shipLoc = ship.getPlannedPosition();\n\t\t\t\t\t//var facing = ship.getPlannedFacing();\n\t\t\t\t\tif (ship.hasWeaponsSelected()){\n\t\t\t\t\t\tif (ship.id != vessel.id){\n\t\t\t\t\t\t\thandleWeaponAimEvent(ship, vessel, e);\n\t\t\t\t\t\t}\n\t\t\t\t\t} else {\n\t\t\t\t\t\tgame.target = 0;\n\t\t\t\t\t\t$(\"#weaponAimTableWrapper\").hide()\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t})\n\t\t\t\n\n\t\tfor (var j = 0; j < this.structures.length; j++){\n\t\t\tif (this.structures[j].destroyed || this.structures[j].disabled){continue;}\n\t\t\tattachDiv.append($(\"<div>\").append($(\"<img>\").css(\"width\", 34).css(\"height\", 34).attr(\"src\", window.shipImages[this.structures[j].name.toLowerCase() + \"l\"].src)));\n\t\t}\n\n\t\tdiv.append(attachDiv);\n\t\treturn div;\n\t}\n\n\tthis.selectAllA = function(e, id){\n\t\tvar s = this.getSystemById(id);\n\t\tvar w = s.getActiveWeapon();\n\t\tvar name = w.name;\n\t\tvar hasFire = s.hasUnresolvedFireOrder();\n\t\tif (name == \"Hangar\"){return;}\n\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tfor (var j = 0; j < this.structures[i].systems.length; j++){\n\t\t\t\tif (! this.structures[i].systems[j].destroyed){\n\t\t\t\t\tif (this.structures[i].systems[j].getActiveWeapon().name == name){\n\t\t\t\t\t\tif (this.structures[i].systems[j].weapon && this.structures[i].systems[j].hasUnresolvedFireOrder() == hasFire){\n\t\t\t\t\t\t\tthis.structures[i].systems[j].select(e);\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\treturn;\n\t}\n\n\tthis.getBaseHitChance = function(){\n\t\tvar min = 0; var max = 0;\n\t\tvar p = 1.5;\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tif (!this.structures[i].destroyed){\n\t\t\t\tmin = Math.max(min, this.structures[i].mass);\n\t\t\t\tmax = Math.max(max, this.structures[i].mass);\n\t\t\t}\n\t\t}\n\t\tif (min == max){return Math.ceil(min/p)}\n\t\telse return Math.ceil(min/p) + \" - \" + Math.ceil(max/p);\n\t}\n\n\tthis.getHitSectionFromAngle = function(a){\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tif (isInArc(a, this.structures[i].start, this.structures[i].end)){\n\t\t\t\treturn this.structures[i];\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.getHitChanceFromAngle = function(angle){\n\t\treturn Math.ceil(this.getBaseHitChance());\n\t}\n\n\tthis.getWeaponPosition = function(fire){\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tfor (var j = 0; j < this.structures[i].systems.length; j++){\n\t\t\t\tif (this.structures[i].systems[j].id == fire.weaponid){\n\t\t\t\t\treturn {x: this.layout[i].x, y: this.layout[i].y};\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n}\n\nFlight.prototype = Object.create(Mixed.prototype);\n\nFlight.prototype.setTarget = function(){\n\tvar i = this.getCurrentImpulse();\n\tif (this.mission.type == 1){  // patrol goal\n\t\tthis.finalStep = {x: this.mission.x, y: this.mission.y};\n\t\td = getDistance(this, this.finalStep);\n\t\tif (d < i){\n\t\t\tthis.nextStep = this.finalStep;\n\t\t} else this.nextStep = getPointInDirection(i, this.facing, this.x, this.y);\n\t}\n\telse {\n\t\tif (this.mission.type == 2){\n\t\t\tvar target = this.getTarget();\n\t\t\tif (target.ship){\n\t\t\t\tthis.finalStep = target.getPlannedPosition();\n\t\t\t\tvar d = getDistance(this, this.finalStep);\n\t\t\t\tif (d < i){\n\t\t\t\t\tthis.nextStep = this.finalStep;\n\t\t\t\t} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, this.finalStep), this.x, this.y);\n\t\t\t}\n\t\t\telse if (target.flight){\n\t\t\t\tvar i = this.getCurrentImpulse();\n\t\t\t\tvar d;\n\t\t\t\tif (this.mission.type == 2 || this.mission.type == 3){ // strike intercept goal\n\t\t\t\t\tif (target.finalStep == undefined){\n\t\t\t\t\t\ttarget.setTarget();\n\t\t\t\t\t}\n\t\t\t\t\tthis.finalStep = target.nextStep;\n\t\t\t\t\td = getDistance(this, target.nextStep);\n\t\t\t\t\tif (d < i){\n\t\t\t\t\t\tthis.nextStep = target.nextStep;\n\t\t\t\t\t} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, target.nextStep), this.x, this.y);\n\n\t\t\t\t\t//var vector = new Vector(target, target.nextStep);\n\t\t\t\t\t//var speedMod = this.getCurrentImpulse() / target.getCurrentImpulse();\n\t\t\t\t\t//this.finalStep = getIntercept(this, target, vector, speedMod);\n\n\t\t\t\t}\n\n\t\t\t}\n\t\t\telse if (target.salvo){\n\t\t\t}\n\t\t}\n\t}\n\n\tthis.facing = getAngleFromTo(this, this.nextStep);\n}\n\nfunction Fighter(data){\n\tthis.id = data.id;\n\tthis.name = data.name;\n\tthis.display = data.display;\n\tthis.ep = data.ep;\n\tthis.mass = data.mass;\n\tthis.integrity = data.integrity;\n\tthis.value = data.value;\n\tthis.negation = data.negation;\n\tthis.destroyed = data.destroyed;\n\tthis.crits = [];\n\tthis.damages = [];\n\tthis.systems = [];\n\tthis.fighter = true;\n\tthis.highlight = false;\n\tthis.disabled = false;\n\tthis.draw = true;\n\tthis.layout = {};\n\n\tfor (var i = 0; i < data.crits.length; i++){\n\t\tthis.crits.push(new Crit(data.crits[i]))\n\t}\n\t\n\tthis.isDestroyedThisTurn = function(){\n\t\tif (this.disabled){\n\t\t\tfor (var j = this.crits.length-1; j >= 0; j--){\n\t\t\t\tif (this.crits[j].type == \"Disabled\" && this.crits[j].turn == game.turn){\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\telse if (this.destroyed){\n\t\t\tfor (var j = this.damages.length-1; j >= 0; j--){\n\t\t\t\tif (this.damages[j].destroyed == 1 && this.damages[j].turn == game.turn){\n\t\t\t\t\treturn true;\n\t\t\t\t}\n\t\t\t}\t\t\t\t\t\n\t\t}\n\t\treturn false;\n\t}\n\t\n\tthis.isDamagedThisTurn = function(){\n\t\tfor (var i = this.damages.length-1; i >= 0; i--){\n\t\t\tif (this.damages[i].turn == game.turn){\n\t\t\t\treturn true;\n\t\t\t} else if (this.damages[i].turn < game.turn){\n\t\t\t\treturn false;\n\t\t\t}\n\t\t}\t\t\t\t\n\t\treturn false;\n\t}\n\n\tthis.getRemainingIntegrity = function(){\n\t\tvar integrity = this.integrity;\n\t\tfor (var i = 0; i < this.damages.length; i++){\n\t\t\tintegrity -= this.damages[i].structDmg;\n\t\t}\n\t\treturn integrity;\n\t}\n\n\tthis.hover = function(e){\n\t\tif (!this.highlight){\n\t\t\tthis.highlight = true;\n\t\t\tvar ele = this.getDetailsDiv();\n\t\t\t$(document.body).append(ele);\n\t\t\tvar w = $(ele).width();\n\t\t\t$(ele).css(\"left\", e.clientX - w/2).css(\"top\", e.clientY + 40)\n\t\t}\n\t\telse {\n\t\t\tthis.highlight = false;\n\t\t\t$(\"#systemDetailsDiv\").remove();\n\t\t}\n\t}\n\n\tthis.getDetailsDiv = function(){\n\t\tvar div = document.createElement(\"div\");\n\t\t\tdiv.id = \"systemDetailsDiv\";\n\t\t\tdiv.className = this.id + \" flight\";\n\n\t\t\tvar table = $(\"<table>\")\n\t\t\t\t.append($(\"<tr>\").append($(\"<th>\").attr(\"colspan\", 2).html(this.name)))\n\t\t\t\t.append($(\"<tr>\").append($(\"<td>\").html(\"Mass / Turn Delay\").css(\"width\", 120)).append($(\"<td>\").html(this.mass)))\n\t\t\t\t.append($(\"<tr>\").append($(\"<td>\").html(\"Engine Power\")).append($(\"<td>\").html(this.ep)))\n\t\t\t\t.append($(\"<tr>\").append($(\"<td>\").html(\"Frontal Armour\")).append($(\"<td>\").html(this.negation[0])))\n\t\t\t\t.append($(\"<tr>\").append($(\"<td>\").html(\"Side Armour\")).append($(\"<td>\").html(this.negation[1])))\n\t\t\t\t.append($(\"<tr>\").append($(\"<td>\").html(\"Rear Armour\")).append($(\"<td>\").html(this.negation[2])))\n\n\t\tif (this.crits.length){\n\t\t\t\t$(table)\n\t\t\t\t\t.append($(\"<tr>\").append($(\"<td>\").attr(\"colspan\", 2).css(\"fontSize\", 16).css(\"borderBottom\", \"1px solid white\").css(\"borderTop\", \"1px solid white\").html(\"Modifiers\")))\n\n\t\t\tfor (var i = 0; i < this.crits.length; i++){\n\t\t\t\tval = this.crits[i].html;\n\t\t\t\t$(table)\n\t\t\t\t\t.append($(\"<tr>\").append($(\"<td>\").attr(\"colSpan\", 2).addClass(\"negative\").html(val)))\n\t\t\t}\n\t\t}\n\t\t\t\n\t\tdiv.appendChild(table[0]);\n\t\treturn div;\n\t}\n}\n\nFlight.prototype.switchMissionMode = function(){\n\tif (game.mission){this.disableMissionMode();}\n\telse this.enableMissionMode();\n}\n\nFlight.prototype.disableMissionMode = function(){\n\tgame.mission = 0;\n\t$(this.element).find(\".header\").css(\"height\", \"130px\").find(\"tr\").slice(-3)\n\t.each(function(i){\n\t\tif (!i){\n\t\t\t$(this).children()[0].innerHTML = \"Disengage from Mission\";\n\t\t} else $(this).addClass(\"disabled\").removeClass(\"selected\");\n\t});\n}\n\n\nFlight.prototype.enableMissionMode = function(){\n\tgame.mission = new Mission(this);\n\t$(this.element).find(\".header\").css(\"height\", \"auto\").find(\"tr\").slice(-3)\n\t.each(function(i){\n\t\tif (!i){\n\t\t\t$(this).children()[0].innerHTML = \"Select new Mission\";\n\t\t} else $(this).removeClass(\"disabled\");\n\t});\n}\n\nFlight.prototype.getArmourString = function(a){\n\tif (a >= 330 || a <= 30){\n\t\treturn this.structures[0].negation[0];\n\t} else if (a > 150 && a < 210){\n\t\treturn this.structures[0].negation[1];\n\t} else return this.structures[0].negation[2];\n}\n\n\nFlight.prototype.drawMovePlan = function(){\n\tMixed.prototype.drawMovePlan.call(this);\n\tthis.drawMissionArea();\n}\n\nFlight.prototype.drawMissionArea = function(){\n\tif (this.mission.type != 1){\n\t\treturn;\n\t}\n\n\tplanCtx.translate(cam.o.x, cam.o.y);\n\tplanCtx.scale(cam.z, cam.z);\n\tplanCtx.beginPath();\n\tplanCtx.moveTo(origin.x, origin.y);\n\tplanCtx.beginPath();\t\t\t\n\tplanCtx.arc(this.mission.x, this.mission.y, this.size/2, 0, 2*Math.PI, false);\n\tplanCtx.closePath();\n\tplanCtx.fillStyle = \"green\";\n\tplanCtx.globalAlpha = 0.3;\n\tplanCtx.fill();\n\tplanCtx.globalAlpha = 1;\n\tplanCtx.setTransform(1,0,0,1,0,0);\n}\n\nFlight.prototype.getShortInfo = function(){\n\tvar ele = $(\"#shortInfo\");\n\tif (game.phase > -2 && this.userid == game.userid){\n\t\t$(ele).attr(\"class\", \"friendly\");\n\t} else $(ele).attr(\"class\", \"hostile\");\n\n\tvar baseHit = this.getBaseHitChance();\n\tvar impulse = this.getCurrentImpulse();\n\t\n\tvar table = document.createElement(\"table\");\n\t\ttable.insertRow(-1).insertCell(-1).innerHTML = \"Flight #\" + this.id + \" (\" +game.getUnitType(this.traverse) + \")\";\n\t\ttable.insertRow(-1).insertCell(-1).innerHTML =  \"Thrust: \" + impulse + \" (\" + round(impulse / this.getBaseImpulse(), 2) + \")\";\n\t\ttable.insertRow(-1).insertCell(-1).innerHTML = \"Base Hit: \" +  this.getBaseHitChance() + \"% \";\n\t\n\tif (!this.mission.arrived && game.phase < 1 && this.inRange()){\n\t\ttable.insertRow(-1).insertCell(-1).innerHTML = \"<span class='red'>ARRIVAL IMMINENT</span>\";\n\t}\n\n\treturn table;\n}\n\n\nFlight.prototype.getParent = function(){\n\tif (this.cc.length){\n\t\tfor (var j = 0; j < this.cc.length; j++){\n\t\t\tfor (var i = 0; i < game.ships.length; i++){\n\t\t\t\tif (this.cc[j] == game.ships[i].id && game.ships[i].ship){\n\t\t\t\t\treturn game.ships[i];\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\treturn this;\t\n}\n\nFlight.prototype.getTargetPosition = function(){\n\treturn Salvo.prototype.getTargetPosition.call(this);\n}\n\nFlight.prototype.inRange = function(){\n\treturn Salvo.prototype.inRange.call(this);\n}\n\nFlight.prototype.getTarget = function(){\n\treturn game.getUnitById(this.mission.targetid);\t\n}\n\nFlight.prototype.setPreMoveSize = function(){\n\tthis.size = this.baseSize + this.unitSize * this.structures.length-1;\n}\n\nFlight.prototype.setPostMoveSize = function(){\n\tif (this.mission.arrived){\n\t\tif (this.mission.type == 2 || this.mission.type == 3){\n\t\t\tvar s = game.getUnitById(this.mission.targetid).size;\n\t\t\tthis.size = s+30;\n\t\t}\n\t\telse if (this.mission.type == 1){\n\t\t\tthis.size = 1.5*(this.baseSize + this.unitSize * this.structures.length-1);\n\t\t}\n\t}\n\telse this.size = this.baseSize + this.unitSize * this.structures.length-1;\n\n}\n\nFlight.prototype.setPreFireImage = function(){\n\tfor (var i = 0; i < this.structures.length; i++){\n\t\tif (!this.structures[i].draw){\n\t\t\tif (this.structures[i].isDestroyedThisTurn()){\n\t\t\t\tthis.structures[i].draw = true;\n\t\t\t}\n\t\t}\n\t}\n\tthis.setImage();\n}\n\nFlight.prototype.setImage = function(){\n\tif (!this.mission.arrived){\n\t\tthis.setPreMoveImage();\n\t}\n\telse if (this.mission.arrived){\n\t\tif (this.mission.arrived < game.turn){\n\t\t\tthis.setPostMoveImage();\n\t\t} \n\t\telse if (this.mission.arrived == game.turn){\n\t\t\tif (game.phase < 3){\n\t\t\t\tthis.setPreMoveImage();\n\t\t\t} else this.setPostMoveImage();\n\n\t\t}\n\t}\n}\n\nFlight.prototype.setPreMoveImage = function(){\n\tvar t = document.createElement(\"canvas\");\n\t\tt.width = this.size*2;\n\t\tt.height = this.size*2;\n\tvar ctx = t.getContext(\"2d\");\n\n\tvar size = 12;\n\tctx.translate(t.width/2, t.height/2);\n\tctx.rotate((this.getDrawFacing()+90) * (Math.PI/180));\n\n\tfor (var i = 0; i < this.structures.length; i++){\n\t\tif (this.structures[i].draw){\n\t\t\tctx.drawImage(\n\t\t\t\tthis.smallImg,\n\t\t\t\tthis.structures[i].layout.x -size/2,\n\t\t\t\tthis.structures[i].layout.y -size/2,\n\t\t\t\tsize, \n\t\t\t\tsize\n\t\t\t)\n\t\t;}\n\t}\t\n\t//ctx.translate(this.size/2, this.size/2);\n\t//ctx.rotate((this.getDrawFacing()+90) * (Math.PI/180));\n\tctx.setTransform(1,0,0,1,0,0);\n\n\tthis.drawImg = t;\n}\n\nFlight.prototype.setPostMoveImage = function(){\n\tvar size = 12;\n\tvar t = document.createElement(\"canvas\");\n\t\tt.width = this.size;\n\t\tt.height = this.size;\n\tvar ctx = t.getContext(\"2d\");\n\n\tif (this.mission.type == 1){ // patrol\n\t\tctx.translate(this.size/2, this.size/2);\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tif (this.structures[i].draw){\n\t\t\t\tctx.save();\n\t\t\t\tvar ox = range(-this.size/3, this.size/3);\n\t\t\t\tvar oy = range(-this.size/3, this.size/3);\n\n\t\t\t\tctx.translate(ox, oy);\t\t\t\n\t\t\t\tctx.rotate(range(0, 360) * (Math.PI/180));\n\t\t\t\tctx.drawImage(\n\t\t\t\t\tthis.smallImg,\n\t\t\t\t\t0 -size/2,\n\t\t\t\t\t0 -size/2,\n\t\t\t\t\tsize, \n\t\t\t\t\tsize\n\t\t\t\t);\n\t\t\t\tctx.restore();\n\t\t\t}\n\t\t}\n\t}\n\telse if (this.mission.type == 2 || this.mission.type == 3){ // strike escort\n\t\tctx.translate(this.size/2, this.size/2);\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tif (this.structures[i].draw){\n\t\t\t\tctx.save();\t\t\n\t\t\t\tctx.rotate((((360/this.structures.length-1)*i)+this.getDrawFacing()) * (Math.PI/180));\n\t\t\t\tctx.drawImage(\n\t\t\t\t\tthis.smallImg,\n\t\t\t\t\t0 -size/2,\n\t\t\t\t\tthis.size/2 -size/2 -7,\n\t\t\t\t\tsize, \n\t\t\t\t\tsize\n\t\t\t\t);\n\t\t\t\tctx.restore();\n\t\t\t}\n\t\t}\n\t}\n\tctx.setTransform(1,0,0,1,0,0);\n\tthis.drawImg = t;\n\t//console.log(this.drawImg.toDataURL());\n}\n\n\nFlight.prototype.setPostFireImage = function(){\n\tfor (var i = 0; i < this.structures.length; i++){\n\t\tif (this.structures[i].draw && this.structures[i].destroyed || this.structures[i].disabled){\n\t\t\tthis.structures[i].draw = 0;\n\t\t}\n\t}\n\tthis.setImage();\n}\n\nFlight.prototype.setPostMoveFacing = function(){\n\tif (this.mission.arrived){\n\t\tfor (var i = 0; i < this.structures.length; i++){\n\t\t\tthis.patrolFacing.push(range(0, 360));\n\t\t}\n\t}\n}",
 			"file": "flights.js",
+			"file_size": 27331,
+			"file_write_time": 131479716025900187,
 			"settings":
 			{
-				"buffer_size": 26411,
+				"buffer_size": 26039,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -958,7 +971,7 @@
 			"file": "autoload.php",
 			"settings":
 			{
-				"buffer_size": 7220,
+				"buffer_size": 7221,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -967,7 +980,7 @@
 			"file": "log.txt",
 			"settings":
 			{
-				"buffer_size": 1136,
+				"buffer_size": 1342,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -1496,6 +1509,46 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"setPostMovePosition",
+			"setPreMovePosition",
+			"setPostMovePosition",
+			".setdrawdata",
+			"setPreMovePosition =",
+			"setPreMovePosition ?",
+			"setPreMovePosition",
+			"this.drawX =",
+			"this.create",
+			"this.create ",
+			"this.create",
+			"this.create ",
+			"animateunitm",
+			"= 18",
+			"setimage",
+			"insertSubUnits",
+			"insertUnits",
+			"subunits",
+			"updateBallisticFireOrder",
+			"updateSystemLoad",
+			"updatesy",
+			"updateSystemLoad",
+			"remainingDelay ",
+			"setBaseStats",
+			"selectionwrap",
+			"handleFireClick",
+			"setcurrentimpulse",
+			"setCurrentImpulse",
+			"shortinfo",
+			"setCurrentImpulse",
+			"setBaseStats",
+			"setCurrentImpulse",
+			"getRemainingDelay",
+			"getImpulseProfileMod",
+			"setProps",
+			"setMass",
+			"setSize",
+			"getRemainingDelay",
+			"remainingdelay ",
+			"setPreMovePosition",
 			"animateunit",
 			"animateship",
 			"insertclienta",
@@ -1583,47 +1636,7 @@
 			"setlayout",
 			"patrolFacing",
 			"trueSize",
-			"setprops",
-			"setstate",
-			"addSubUnit",
-			"getarmourv",
-			"getarm",
-			"getArmourValue",
-			"systemlo",
-			"updateSystemLoad",
-			"INSERT INTO u",
-			"updateSystemLoad",
-			"initB",
-			"insertSubUnits",
-			"Debug::log($",
-			"debug::log($",
-			"debug::log",
-			"insert into un",
-			"insert into u",
-			"flight",
-			"splice",
-			"initB",
-			"updateSystemLoad",
-			"updatesystem",
-			"insert into u",
-			"initball",
-			"insert into u",
-			"assembleUnits",
-			"launchdata",
-			"update load",
-			"->insertunit",
-			"insertUnits",
-			"insert into u",
-			"initball",
-			"insert into fighters",
-			"insert into u",
-			"initball",
-			"\"ships: ",
-			"ships: ",
-			"insertunits",
-			"insertLoads",
-			"insertUnits",
-			"insert into un"
+			"setprops"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1769,7 +1782,7 @@
 	"groups":
 	[
 		{
-			"selected": 42,
+			"selected": 12,
 			"sheets":
 			[
 				{
@@ -1857,7 +1870,7 @@
 						"translation.y": 1930.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
@@ -1946,7 +1959,7 @@
 						"translation.y": 195.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 27,
 					"type": "text"
 				},
 				{
@@ -2034,7 +2047,7 @@
 						"translation.y": 6907.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 25,
 					"type": "text"
 				},
 				{
@@ -2043,15 +2056,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 15444,
+						"buffer_size": 15479,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								329,
-								329
+								5276,
+								5276
 							]
 						],
 						"settings":
@@ -2060,10 +2073,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2521.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -2151,7 +2164,7 @@
 						"translation.y": 10977.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 23,
 					"type": "text"
 				},
 				{
@@ -2180,7 +2193,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 88,
+					"stack_index": 89,
 					"type": "text"
 				},
 				{
@@ -2196,8 +2209,8 @@
 						"selection":
 						[
 							[
-								56639,
-								56639
+								78239,
+								78258
 							]
 						],
 						"settings":
@@ -2265,14 +2278,116 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 25155.0,
+						"translation.y": 35836.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
 					"buffer": 7,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2682,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										154,
+										165
+									],
+									[
+										258,
+										269
+									],
+									[
+										350,
+										361
+									],
+									[
+										554,
+										565
+									],
+									[
+										658,
+										669
+									],
+									[
+										825,
+										836
+									],
+									[
+										1017,
+										1028
+									],
+									[
+										1239,
+										1250
+									],
+									[
+										1487,
+										1507
+									],
+									[
+										1787,
+										1806
+									],
+									[
+										1980,
+										1999
+									],
+									[
+										2069,
+										2088
+									],
+									[
+										2242,
+										2261
+									],
+									[
+										2376,
+										2395
+									],
+									[
+										2588,
+										2607
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								1794,
+								1794
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 3,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ \t].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 910.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
 					"file": "mathLib.js",
 					"semi_transient": false,
 					"settings":
@@ -2356,11 +2471,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 51,
+					"stack_index": 53,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 9,
 					"file": "global.php",
 					"semi_transient": false,
 					"settings":
@@ -2444,11 +2559,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 31,
+					"stack_index": 34,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 10,
 					"file": "server/math.php",
 					"semi_transient": false,
 					"settings":
@@ -2532,11 +2647,11 @@
 						"translation.y": 7.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 49,
+					"stack_index": 51,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 11,
 					"file": "server/systems/weapons/particle.php",
 					"semi_transient": false,
 					"settings":
@@ -2620,112 +2735,24 @@
 						"translation.y": 338.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 42,
-					"type": "text"
-				},
-				{
-					"buffer": 11,
-					"file": "game.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 19386,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1267,
-								1267
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content"
-							],
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 325.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 23,
+					"stack_index": 44,
 					"type": "text"
 				},
 				{
 					"buffer": 12,
-					"file": "server/manager.php",
+					"file": "game.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 48546,
+						"buffer_size": 19095,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								23243,
-								23243
+								18583,
+								18583
 							]
 						],
 						"settings":
@@ -2793,27 +2820,115 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 10584.0,
+						"translation.y": 10569.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
 					"buffer": 13,
-					"file": "server/flight.php",
+					"file": "server/manager.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2139,
+						"buffer_size": 48623,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								414,
-								414
+								13288,
+								13288
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content"
+							],
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 6205.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "server/flight.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1703,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								909,
+								909
 							]
 						],
 						"settings":
@@ -2885,11 +3000,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
-					"buffer": 14,
+					"buffer": 15,
 					"file": "server/dbManager.php",
 					"semi_transient": false,
 					"settings":
@@ -2901,8 +3016,8 @@
 						"selection":
 						[
 							[
-								23834,
-								23834
+								17484,
+								17484
 							]
 						],
 						"settings":
@@ -2971,14 +3086,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 11377.0,
+						"translation.y": 8281.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
-					"buffer": 15,
+					"buffer": 16,
 					"file": "server/ships/omega.php",
 					"semi_transient": false,
 					"settings":
@@ -3059,14 +3174,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 369.0,
+						"translation.y": 317.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 76,
+					"stack_index": 78,
 					"type": "text"
 				},
 				{
-					"buffer": 16,
+					"buffer": 17,
 					"file": "server/ships/hyperion.php",
 					"semi_transient": false,
 					"settings":
@@ -3150,11 +3265,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 38,
+					"stack_index": 40,
 					"type": "text"
 				},
 				{
-					"buffer": 17,
+					"buffer": 18,
 					"file": "server/ships/saggitarius.php",
 					"semi_transient": false,
 					"settings":
@@ -3179,11 +3294,11 @@
 						"translation.y": 54.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 90,
+					"stack_index": 91,
 					"type": "text"
 				},
 				{
-					"buffer": 18,
+					"buffer": 19,
 					"file": "server/ships/artemis.php",
 					"semi_transient": false,
 					"settings":
@@ -3267,11 +3382,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 43,
+					"stack_index": 45,
 					"type": "text"
 				},
 				{
-					"buffer": 19,
+					"buffer": 20,
 					"file": "server/ships/tethys.php",
 					"semi_transient": false,
 					"settings":
@@ -3296,11 +3411,11 @@
 						"translation.y": 246.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 93,
+					"stack_index": 94,
 					"type": "text"
 				},
 				{
-					"buffer": 20,
+					"buffer": 21,
 					"file": "imageloader.js",
 					"semi_transient": false,
 					"settings":
@@ -3325,11 +3440,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 99,
+					"stack_index": 100,
 					"type": "text"
 				},
 				{
-					"buffer": 21,
+					"buffer": 22,
 					"file": "server/ships/battlecrab.php",
 					"semi_transient": false,
 					"settings":
@@ -3413,11 +3528,11 @@
 						"translation.y": 56.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 89,
+					"stack_index": 90,
 					"type": "text"
 				},
 				{
-					"buffer": 22,
+					"buffer": 23,
 					"file": "server/systems/structure.php",
 					"semi_transient": false,
 					"settings":
@@ -3501,11 +3616,11 @@
 						"translation.y": 212.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 55,
+					"stack_index": 57,
 					"type": "text"
 				},
 				{
-					"buffer": 23,
+					"buffer": 24,
 					"file": "postGameData.php",
 					"semi_transient": false,
 					"settings":
@@ -3517,8 +3632,8 @@
 						"selection":
 						[
 							[
-								2256,
-								2256
+								1289,
+								1289
 							]
 						],
 						"settings":
@@ -3586,14 +3701,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 552.0,
+						"translation.y": 307.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 25,
 					"file": "server/systems/weapons/dual.php",
 					"semi_transient": false,
 					"settings":
@@ -3677,11 +3792,11 @@
 						"translation.y": 198.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 69,
+					"stack_index": 71,
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 26,
 					"file": "cam.js",
 					"semi_transient": false,
 					"settings":
@@ -3765,11 +3880,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 87,
+					"stack_index": 88,
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 27,
 					"file": "server/systems/system.php",
 					"semi_transient": false,
 					"settings":
@@ -3853,11 +3968,11 @@
 						"translation.y": 319.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 52,
+					"stack_index": 54,
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 28,
 					"file": "server/systems/weapon.php",
 					"semi_transient": false,
 					"settings":
@@ -3941,11 +4056,11 @@
 						"translation.y": 65.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 71,
+					"stack_index": 73,
 					"type": "text"
 				},
 				{
-					"buffer": 28,
+					"buffer": 29,
 					"file": "server/systems/nonweapon.php",
 					"semi_transient": false,
 					"settings":
@@ -4029,11 +4144,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 54,
+					"stack_index": 56,
 					"type": "text"
 				},
 				{
-					"buffer": 29,
+					"buffer": 30,
 					"file": "server/systems/weapons/laser.php",
 					"semi_transient": false,
 					"settings":
@@ -4115,14 +4230,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1544.0,
+						"translation.y": 296.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 31,
 					"type": "text"
 				},
 				{
-					"buffer": 30,
+					"buffer": 31,
 					"file": "server/systems/weapons/launcher.php",
 					"semi_transient": false,
 					"settings":
@@ -4206,11 +4321,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
-					"buffer": 31,
+					"buffer": 32,
 					"file": "server/fighter.php",
 					"semi_transient": false,
 					"settings":
@@ -4295,24 +4410,24 @@
 						"translation.y": 315.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 58,
+					"stack_index": 60,
 					"type": "text"
 				},
 				{
-					"buffer": 32,
+					"buffer": 33,
 					"file": "server/ship.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 30829,
+						"buffer_size": 30576,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								817,
-								817
+								8830,
+								8424
 							]
 						],
 						"settings":
@@ -4380,27 +4495,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 156.0,
+						"translation.y": 3731.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
-					"buffer": 33,
+					"buffer": 34,
 					"file": "server/salvo.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6435,
+						"buffer_size": 6846,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								368,
-								368
+								660,
+								660
 							]
 						],
 						"settings":
@@ -4409,14 +4524,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 65.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 34,
+					"buffer": 35,
 					"file": "server/systems/weapons/pulse.php",
 					"semi_transient": false,
 					"settings":
@@ -4500,11 +4615,11 @@
 						"translation.y": 655.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 62,
+					"stack_index": 64,
 					"type": "text"
 				},
 				{
-					"buffer": 35,
+					"buffer": 36,
 					"file": "systems.js",
 					"semi_transient": false,
 					"settings":
@@ -4588,11 +4703,11 @@
 						"translation.y": 34506.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 40,
+					"stack_index": 42,
 					"type": "text"
 				},
 				{
-					"buffer": 36,
+					"buffer": 37,
 					"file": "graphics.js",
 					"semi_transient": false,
 					"settings":
@@ -4677,11 +4792,11 @@
 						"translation.y": 2390.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 68,
+					"stack_index": 70,
 					"type": "text"
 				},
 				{
-					"buffer": 37,
+					"buffer": 38,
 					"file": "server/ships/olympus.php",
 					"semi_transient": false,
 					"settings":
@@ -4765,11 +4880,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 98,
+					"stack_index": 99,
 					"type": "text"
 				},
 				{
-					"buffer": 38,
+					"buffer": 39,
 					"file": "server/debug.php",
 					"semi_transient": false,
 					"settings":
@@ -4852,11 +4967,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 44,
+					"stack_index": 46,
 					"type": "text"
 				},
 				{
-					"buffer": 39,
+					"buffer": 40,
 					"file": "createGame.php",
 					"semi_transient": false,
 					"settings":
@@ -4940,24 +5055,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 97,
+					"stack_index": 98,
 					"type": "text"
 				},
 				{
-					"buffer": 40,
+					"buffer": 41,
 					"file": "script.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 16412,
+						"buffer_size": 16444,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8844,
-								8844
+								14683,
+								14683
 							]
 						],
 						"settings":
@@ -5025,14 +5140,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3972.0,
+						"translation.y": 6898.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 37,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
-					"buffer": 41,
+					"buffer": 42,
 					"file": "lobby.php",
 					"semi_transient": false,
 					"settings":
@@ -5116,24 +5231,24 @@
 						"translation.y": 40.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 32,
+					"stack_index": 35,
 					"type": "text"
 				},
 				{
-					"buffer": 42,
+					"buffer": 43,
 					"file": "game.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 70948,
+						"buffer_size": 70326,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								879,
-								879
+								24134,
+								24134
 							]
 						],
 						"settings":
@@ -5201,14 +5316,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 12254.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 43,
+					"buffer": 44,
 					"file": "shared.js",
 					"semi_transient": false,
 					"settings":
@@ -5293,11 +5408,11 @@
 						"translation.y": 1710.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 39,
+					"stack_index": 41,
 					"type": "text"
 				},
 				{
-					"buffer": 44,
+					"buffer": 45,
 					"file": "server/systems/weapons/plasma.php",
 					"semi_transient": false,
 					"settings":
@@ -5381,24 +5496,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 78,
+					"stack_index": 80,
 					"type": "text"
 				},
 				{
-					"buffer": 45,
+					"buffer": 46,
 					"file": "flights.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 26411,
+						"buffer_size": 26039,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								592,
-								592
+								23370,
+								23370
 							]
 						],
 						"settings":
@@ -5465,15 +5580,15 @@
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.x": 6.0,
+						"translation.y": 10508.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
-					"buffer": 46,
+					"buffer": 47,
 					"file": "server/systems/weapons/ammo.php",
 					"semi_transient": false,
 					"settings":
@@ -5558,7 +5673,7 @@
 						"translation.y": 145.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 77,
+					"stack_index": 79,
 					"type": "text"
 				}
 			]
@@ -5568,7 +5683,7 @@
 			"sheets":
 			[
 				{
-					"buffer": 47,
+					"buffer": 48,
 					"file": "server/ships/avenger.php",
 					"semi_transient": false,
 					"settings":
@@ -5594,24 +5709,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
-					"buffer": 33,
+					"buffer": 34,
 					"file": "server/salvo.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6435,
+						"buffer_size": 6846,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								809,
-								809
+								6842,
+								6842
 							]
 						],
 						"settings":
@@ -5620,14 +5735,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 3003.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 25,
 					"file": "server/systems/weapons/dual.php",
 					"semi_transient": false,
 					"settings":
@@ -5711,24 +5826,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 95,
+					"stack_index": 96,
 					"type": "text"
 				},
 				{
-					"buffer": 32,
+					"buffer": 33,
 					"file": "server/ship.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 30829,
+						"buffer_size": 30576,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6589,
-								6589
+								5392,
+								5392
 							]
 						],
 						"settings":
@@ -5796,14 +5911,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 474.0,
+						"translation.y": 2184.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 28,
 					"file": "server/systems/weapon.php",
 					"semi_transient": false,
 					"settings":
@@ -5887,24 +6002,24 @@
 						"translation.y": 291.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 70,
+					"stack_index": 72,
 					"type": "text"
 				},
 				{
-					"buffer": 48,
+					"buffer": 49,
 					"file": "autoload.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7220,
+						"buffer_size": 7221,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								192,
+								192
 							]
 						],
 						"settings":
@@ -5976,24 +6091,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 80,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
-					"buffer": 49,
+					"buffer": 50,
 					"file": "log.txt",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1136,
+						"buffer_size": 1342,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								213,
-								213
+								254,
+								254
 							]
 						],
 						"settings":
@@ -6004,11 +6119,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 36,
+					"buffer": 37,
 					"file": "graphics.js",
 					"semi_transient": false,
 					"settings":
@@ -6093,11 +6208,11 @@
 						"translation.y": 668.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 46,
+					"stack_index": 48,
 					"type": "text"
 				},
 				{
-					"buffer": 50,
+					"buffer": 51,
 					"file": "server/systems/weapons/em.php",
 					"semi_transient": false,
 					"settings":
@@ -6181,11 +6296,11 @@
 						"translation.y": 574.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 30,
+					"stack_index": 33,
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 27,
 					"file": "server/systems/system.php",
 					"semi_transient": false,
 					"settings":
@@ -6269,7 +6384,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 45,
+					"stack_index": 47,
 					"type": "text"
 				},
 				{
@@ -6357,11 +6472,11 @@
 						"translation.y": 6730.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 24,
 					"type": "text"
 				},
 				{
-					"buffer": 35,
+					"buffer": 36,
 					"file": "systems.js",
 					"semi_transient": false,
 					"settings":
@@ -6445,11 +6560,11 @@
 						"translation.y": 35231.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 47,
+					"stack_index": 49,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 8,
 					"file": "mathLib.js",
 					"semi_transient": false,
 					"settings":
@@ -6533,11 +6648,11 @@
 						"translation.y": 1713.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 57,
+					"stack_index": 59,
 					"type": "text"
 				},
 				{
-					"buffer": 51,
+					"buffer": 52,
 					"file": "server/ships/altarian.php",
 					"semi_transient": false,
 					"settings":
@@ -6562,11 +6677,11 @@
 						"translation.y": 213.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 41,
+					"stack_index": 43,
 					"type": "text"
 				},
 				{
-					"buffer": 52,
+					"buffer": 53,
 					"file": "server/systems/weapons/area.php",
 					"semi_transient": false,
 					"settings":
@@ -6591,11 +6706,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 60,
+					"stack_index": 62,
 					"type": "text"
 				},
 				{
-					"buffer": 14,
+					"buffer": 15,
 					"file": "server/dbManager.php",
 					"semi_transient": false,
 					"settings":
@@ -6607,8 +6722,8 @@
 						"selection":
 						[
 							[
-								23600,
-								23600
+								10217,
+								10217
 							]
 						],
 						"settings":
@@ -6677,14 +6792,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 11338.0,
+						"translation.y": 4827.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 53,
+					"buffer": 54,
 					"file": "server/ships/darkner.php",
 					"semi_transient": false,
 					"settings":
@@ -6709,11 +6824,11 @@
 						"translation.y": 65.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 61,
+					"stack_index": 63,
 					"type": "text"
 				},
 				{
-					"buffer": 36,
+					"buffer": 37,
 					"file": "graphics.js",
 					"semi_transient": false,
 					"settings":
@@ -6798,7 +6913,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 94,
+					"stack_index": 95,
 					"type": "text"
 				},
 				{
@@ -6886,11 +7001,11 @@
 						"translation.y": 4842.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 83,
+					"stack_index": 84,
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 26,
 					"file": "cam.js",
 					"semi_transient": false,
 					"settings":
@@ -6974,24 +7089,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 85,
+					"stack_index": 86,
 					"type": "text"
 				},
 				{
-					"buffer": 42,
+					"buffer": 43,
 					"file": "game.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 70948,
+						"buffer_size": 70326,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								39622,
-								39622
+								42434,
+								42434
 							]
 						],
 						"settings":
@@ -7060,14 +7175,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 19358.0,
+						"translation.y": 20942.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 43,
+					"buffer": 44,
 					"file": "shared.js",
 					"semi_transient": false,
 					"settings":
@@ -7152,7 +7267,7 @@
 						"translation.y": 2067.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 32,
 					"type": "text"
 				},
 				{
@@ -7161,15 +7276,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 15444,
+						"buffer_size": 15479,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3387,
-								3396
+								12513,
+								12513
 							]
 						],
 						"settings":
@@ -7177,15 +7292,15 @@
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 6.0,
-						"translation.y": 2085.0,
+						"translation.x": 0.0,
+						"translation.y": 6153.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 54,
+					"buffer": 55,
 					"file": "gameSetup.php",
 					"semi_transient": false,
 					"settings":
@@ -7269,11 +7384,11 @@
 						"translation.y": 5806.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 34,
+					"stack_index": 37,
 					"type": "text"
 				},
 				{
-					"buffer": 55,
+					"buffer": 56,
 					"file": "server/ships/tinashi.php",
 					"semi_transient": false,
 					"settings":
@@ -7298,11 +7413,11 @@
 						"translation.y": 216.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 66,
+					"stack_index": 68,
 					"type": "text"
 				},
 				{
-					"buffer": 56,
+					"buffer": 57,
 					"file": "server/ships/sharlin.php",
 					"semi_transient": false,
 					"settings":
@@ -7327,11 +7442,11 @@
 						"translation.y": 735.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 92,
+					"stack_index": 93,
 					"type": "text"
 				},
 				{
-					"buffer": 57,
+					"buffer": 58,
 					"file": "server/ships/whitestar.php",
 					"semi_transient": false,
 					"settings":
@@ -7415,11 +7530,11 @@
 						"translation.y": 220.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 81,
+					"stack_index": 82,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 10,
 					"file": "server/math.php",
 					"semi_transient": false,
 					"settings":
@@ -7503,7 +7618,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 64,
+					"stack_index": 66,
 					"type": "text"
 				},
 				{
@@ -7592,11 +7707,11 @@
 						"translation.y": 814.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 48,
+					"stack_index": 50,
 					"type": "text"
 				},
 				{
-					"buffer": 58,
+					"buffer": 59,
 					"file": "server/ships/primus.php",
 					"semi_transient": false,
 					"settings":
@@ -7680,16 +7795,16 @@
 						"translation.y": 183.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 59,
+					"stack_index": 61,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 12,
 					"file": "game.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 19386,
+						"buffer_size": 19095,
 						"regions":
 						{
 						},
@@ -7768,11 +7883,11 @@
 						"translation.y": 25.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 50,
+					"stack_index": 52,
 					"type": "text"
 				},
 				{
-					"buffer": 59,
+					"buffer": 60,
 					"file": "server/ships/demos.php",
 					"semi_transient": false,
 					"settings":
@@ -7856,11 +7971,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 30,
 					"type": "text"
 				},
 				{
-					"buffer": 60,
+					"buffer": 61,
 					"file": "server/ships/vorchan.php",
 					"semi_transient": false,
 					"settings":
@@ -7944,11 +8059,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 36,
+					"stack_index": 39,
 					"type": "text"
 				},
 				{
-					"buffer": 61,
+					"buffer": 62,
 					"file": "server/ships/haven.php",
 					"semi_transient": false,
 					"settings":
@@ -7973,11 +8088,11 @@
 						"translation.y": 182.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 91,
+					"stack_index": 92,
 					"type": "text"
 				},
 				{
-					"buffer": 62,
+					"buffer": 63,
 					"file": "server/systems/weapons/linked.php",
 					"semi_transient": false,
 					"settings":
@@ -8061,24 +8176,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 84,
+					"stack_index": 85,
 					"type": "text"
 				},
 				{
-					"buffer": 45,
+					"buffer": 46,
 					"file": "flights.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 26411,
+						"buffer_size": 26039,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7205,
-								7205
+								23212,
+								23212
 							]
 						],
 						"settings":
@@ -8145,28 +8260,28 @@
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 10.0,
-						"translation.y": 3602.0,
+						"translation.x": 0.0,
+						"translation.y": 10239.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 14,
 					"file": "server/flight.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2139,
+						"buffer_size": 1703,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								472,
-								472
+								909,
+								909
 							]
 						],
 						"settings":
@@ -8235,14 +8350,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 65.0,
+						"translation.y": 104.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
-					"buffer": 46,
+					"buffer": 47,
 					"file": "server/systems/weapons/ammo.php",
 					"semi_transient": false,
 					"settings":
@@ -8327,11 +8442,11 @@
 						"translation.y": 22.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 72,
+					"stack_index": 74,
 					"type": "text"
 				},
 				{
-					"buffer": 31,
+					"buffer": 32,
 					"file": "server/fighter.php",
 					"semi_transient": false,
 					"settings":
@@ -8416,7 +8531,7 @@
 						"translation.y": 79.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 86,
+					"stack_index": 87,
 					"type": "text"
 				},
 				{
@@ -8504,11 +8619,11 @@
 						"translation.y": 1509.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 33,
+					"stack_index": 36,
 					"type": "text"
 				},
 				{
-					"buffer": 22,
+					"buffer": 23,
 					"file": "server/systems/structure.php",
 					"semi_transient": false,
 					"settings":
@@ -8592,11 +8707,11 @@
 						"translation.y": 39.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 35,
+					"stack_index": 38,
 					"type": "text"
 				},
 				{
-					"buffer": 63,
+					"buffer": 64,
 					"file": "getGameData.php",
 					"semi_transient": false,
 					"settings":
@@ -8680,24 +8795,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 96,
+					"stack_index": 97,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 13,
 					"file": "server/manager.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 48546,
+						"buffer_size": 48623,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								24793,
-								24800
+								24870,
+								24877
 							]
 						],
 						"settings":
@@ -8768,11 +8883,11 @@
 						"translation.y": 15129.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
-					"buffer": 64,
+					"buffer": 65,
 					"file": "shiptest.php",
 					"semi_transient": false,
 					"settings":
@@ -8797,11 +8912,11 @@
 						"translation.y": 30.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 56,
+					"stack_index": 58,
 					"type": "text"
 				},
 				{
-					"buffer": 65,
+					"buffer": 66,
 					"file": "combattest.php",
 					"semi_transient": false,
 					"settings":
@@ -8826,11 +8941,11 @@
 						"translation.y": 95.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 75,
+					"stack_index": 77,
 					"type": "text"
 				},
 				{
-					"buffer": 66,
+					"buffer": 67,
 					"file": "server/ships/gquan.php",
 					"semi_transient": false,
 					"settings":
@@ -8855,11 +8970,11 @@
 						"translation.y": 45.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 65,
+					"stack_index": 67,
 					"type": "text"
 				},
 				{
-					"buffer": 67,
+					"buffer": 68,
 					"file": "index.php",
 					"semi_transient": false,
 					"settings":
@@ -8943,11 +9058,11 @@
 						"translation.y": 436.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 101,
+					"stack_index": 102,
 					"type": "text"
 				},
 				{
-					"buffer": 30,
+					"buffer": 31,
 					"file": "server/systems/weapons/launcher.php",
 					"semi_transient": false,
 					"settings":
@@ -9031,11 +9146,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 74,
+					"stack_index": 76,
 					"type": "text"
 				},
 				{
-					"buffer": 68,
+					"buffer": 69,
 					"file": "balltest.php",
 					"semi_transient": false,
 					"settings":
@@ -9060,11 +9175,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 100,
+					"stack_index": 101,
 					"type": "text"
 				},
 				{
-					"buffer": 69,
+					"buffer": 70,
 					"file": "systemtest.php",
 					"semi_transient": false,
 					"settings":
@@ -9089,11 +9204,11 @@
 						"translation.y": 48.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 73,
+					"stack_index": 75,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 11,
 					"file": "server/systems/weapons/particle.php",
 					"semi_transient": false,
 					"settings":
@@ -9177,11 +9292,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 53,
+					"stack_index": 55,
 					"type": "text"
 				},
 				{
-					"buffer": 29,
+					"buffer": 30,
 					"file": "server/systems/weapons/laser.php",
 					"semi_transient": false,
 					"settings":
@@ -9266,11 +9381,11 @@
 						"translation.y": 240.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 67,
+					"stack_index": 69,
 					"type": "text"
 				},
 				{
-					"buffer": 34,
+					"buffer": 35,
 					"file": "server/systems/weapons/pulse.php",
 					"semi_transient": false,
 					"settings":
@@ -9354,11 +9469,11 @@
 						"translation.y": 228.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 79,
+					"stack_index": 81,
 					"type": "text"
 				},
 				{
-					"buffer": 44,
+					"buffer": 45,
 					"file": "server/systems/weapons/plasma.php",
 					"semi_transient": false,
 					"settings":
@@ -9383,11 +9498,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 82,
+					"stack_index": 83,
 					"type": "text"
 				},
 				{
-					"buffer": 70,
+					"buffer": 71,
 					"file": "server/systems/weapons/matter.php",
 					"semi_transient": false,
 					"settings":
@@ -9471,7 +9586,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 63,
+					"stack_index": 65,
 					"type": "text"
 				}
 			]
@@ -9505,7 +9620,7 @@
 		"cols":
 		[
 			0.0,
-			0.420719969424,
+			0.325318831125,
 			1.0
 		],
 		"rows":
@@ -9533,60 +9648,72 @@
 		"selected_items":
 		[
 			[
-				"game",
-				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
-				"db",
-				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
-			],
-			[
-				"ma",
-				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
-			],
-			[
-				"log",
-				"C:\\xampp\\htdocs\\fire\\log.txt"
-			],
-			[
-				"pos",
-				"C:\\xampp\\htdocs\\fire\\postGameData.php"
-			],
-			[
-				"lo",
-				"C:\\xampp\\htdocs\\fire\\log.txt"
-			],
-			[
-				"post",
-				"C:\\xampp\\htdocs\\fire\\postGameData.php"
-			],
-			[
-				"aja",
-				"C:\\xampp\\htdocs\\fire\\ajax.js"
-			],
-			[
-				"man",
-				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
-			],
-			[
 				"game.js",
 				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
-				"style",
-				"C:\\xampp\\htdocs\\fire\\style.css"
 			],
 			[
 				"fl",
 				"C:\\xampp\\htdocs\\fire\\flights.js"
 			],
 			[
+				"sal",
+				"C:\\xampp\\htdocs\\fire\\salvo.js"
+			],
+			[
+				"gam",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
 				"sh",
 				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
 			],
 			[
-				"sal",
-				"C:\\xampp\\htdocs\\fire\\salvo.js"
+				"log",
+				"C:\\xampp\\htdocs\\fire\\log.txt"
+			],
+			[
+				"db",
+				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
+			],
+			[
+				"man",
+				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
+			],
+			[
+				"pos",
+				"C:\\xampp\\htdocs\\fire\\postGameData.php"
+			],
+			[
+				"post",
+				"C:\\xampp\\htdocs\\fire\\postGameData.php"
+			],
+			[
+				"auto",
+				"C:\\xampp\\htdocs\\fire\\autoload.php"
+			],
+			[
+				"mana",
+				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
+			],
+			[
+				"game",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
+				"ma",
+				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
+			],
+			[
+				"lo",
+				"C:\\xampp\\htdocs\\fire\\log.txt"
+			],
+			[
+				"aja",
+				"C:\\xampp\\htdocs\\fire\\ajax.js"
+			],
+			[
+				"style",
+				"C:\\xampp\\htdocs\\fire\\style.css"
 			],
 			[
 				"clas",
@@ -9599,14 +9726,6 @@
 			[
 				"f",
 				"C:\\xampp\\htdocs\\fire\\flights.js"
-			],
-			[
-				"mana",
-				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
-			],
-			[
-				"gam",
-				"C:\\xampp\\htdocs\\fire\\game.php"
 			],
 			[
 				"dem",
@@ -10039,10 +10158,6 @@
 			[
 				"sah",
 				"C:\\xampp\\htdocs\\fire\\shared.js"
-			],
-			[
-				"cls",
-				"C:\\xampp\\htdocs\\fire\\classes.js"
 			]
 		],
 		"width": 0.0
@@ -10073,7 +10188,7 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 124.0,
+	"side_bar_width": 169.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

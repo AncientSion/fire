@@ -391,7 +391,7 @@ function Salvo(data){
 				td.className = "iconContainer"; 
 				$(td).data("id", this.structures[i].id);
 				td.addEventListener("click", function(){
-					console.log(game.getUnitByid(aUnit).getSystemById($(this).data("id")));
+					console.log(game.getUnitById(aUnit).getSystemById($(this).data("id")));
 				})
 
 				if (this.structures[i].destroyed || this.structures[i].disabled){
@@ -477,28 +477,8 @@ function Salvo(data){
 		}
 	}
 
-	this.setPostMovePosition = function(){
-		this.x = this.actions[this.actions.length-1].x;
-		this.y = this.actions[this.actions.length-1].y;
-	}
-
 	this.getHitChanceFromAngle = function(){
 		return Math.floor(Math.sqrt(this.structures[0].mass) * 15);
-	}
-
-	this.getPlannedFacing = function(){
-		return this.facing;
-	}
-
-	this.getBaseOffsetPos = function(){
-		if (this.actions.length){
-			for (var i = this.actions.length-1; i >= 0; i--){
-				if (this.actions[i].resolved == 1){
-					return {x: this.actions[i].x, y: this.actions[i].y};
-				}
-			}
-		}
-		return {x: this.x, y: this.y};
 	}
 
 	this.getTrajectoryStart = function(){
@@ -600,4 +580,26 @@ Salvo.prototype.isReady = function(){
 
 Salvo.prototype.setRawImage = function(){
 	this.img = window.ballImages[this.structures[0].name.toLowerCase()].cloneNode(true);
+}
+
+Salvo.prototype.setImage = function(){
+	var t = document.createElement("canvas");
+		t.width = this.size*2;
+		t.height = this.size*2;
+	var ctx = t.getContext("2d");
+
+	ctx.translate(t.width/2, t.height/2);
+	ctx.rotate((this.getDrawFacing()+90) * (Math.PI/180));
+	ctx.drawImage(
+		this.img,
+		0 -this.size/2,
+		0 -this.size/2,
+		this.size, 
+		this.size
+	)
+	//ctx.translate(this.size/2, this.size/2);
+	//ctx.rotate((this.getDrawFacing()+90) * (Math.PI/180));
+	ctx.setTransform(1,0,0,1,0,0);
+
+	this.drawImg = t;
 }

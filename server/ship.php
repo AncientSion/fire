@@ -181,11 +181,6 @@ class Ship {
 	public function hideActions(){;
 		for ($i = sizeof($this->actions)-1; $i >= 0; $i--){
 			if (!$this->actions[$i]->resolved){
-				/*switch($this->actions[$i]->type){
-					case "turn": $this->remainingDelay -= $this->actions[$i]->delay; break;
-					case "speedChange": $this->currentImpulse -= $this->getImpulseStep()*$this->actions[$i]->dist; break;
-					default: break;
-				}*/
 				array_splice($this->actions, $i, 1);
 			}
 		}

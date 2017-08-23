@@ -1,6 +1,6 @@
 <?php
 
-class Flight extends Mini {
+class Flight extends Mixed {
 	public $flight = true;
 	public $unitType = "Flight";
 	public $name = "Flight";
@@ -14,16 +14,6 @@ class Flight extends Mini {
 
 	function __construct($id, $userid, $available, $status, $destroyed){		
         parent::__construct($id, $userid, $available, $status, $destroyed);
-	}
-
-	public function setProps($turn){
-		$this->cost = static::$value;
-		$this->setSize();
-		$this->setMass();
-		$this->setCurrentImpulse($turn);
-		$this->setRemainingImpulse($turn);
-		$this->setRemainingDelay($turn);
-		$this->setBaseStats();
 	}
 
 	public function setBaseStats(){
@@ -44,14 +34,6 @@ class Flight extends Mini {
 	public function setCurrentImpulse($turn){
 		$this->baseImpulse = floor(pow($this->mass, -1.5) * 65000);
 		$this->currentImpulse = $this->baseImpulse;
-	}
-
-	public function setEP(){
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if (!$this->structures[$i]->destroyed){
-				$this->ep = min($this->ep, $this->structures[$i]->ep);
-			}
-		}
 	}
 
 	public function setSize(){

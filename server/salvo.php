@@ -1,6 +1,6 @@
 <?php
 
-class Mini extends Ship {
+class Mixed extends Ship {
 	public $ship = false;
 	public $primary = false;
 	public $baseImpulse;
@@ -15,6 +15,19 @@ class Mini extends Ship {
 		$this->available = $available;
 		$this->status = $status;
 		$this->destroyed = $destroyed;
+	}
+
+	public function setProps($turn){
+		$this->setSize();
+		$this->setMass();
+		$this->setCurrentImpulse($turn);
+		$this->setRemainingImpulse($turn);
+		$this->setRemainingDelay($turn);
+		$this->setBaseStats();
+	}	
+
+	public function setRemainingDelay($turn){
+		$this->remainingDelay = 0;
 	}
 
 	public function setState($turn){
@@ -198,7 +211,7 @@ class Mini extends Ship {
 	}
 }
 
-class Salvo extends Mini {
+class Salvo extends Mixed {
 	public $name = "Salvo";
 	public $unitType = "Salvo";
 	public $salvo = true;
@@ -208,8 +221,23 @@ class Salvo extends Mini {
         parent::__construct($id, $userid, $available, $status, $destroyed);
 	}
 
+	public function setBaseStats(){
+		$this->baseHitChance = 0;
+		$this->baseTurnCost = 0;
+		$this->baseTurnDelay = 0;
+		$this->baseImpulseCost = 0;
+	}
+
 	public function getImpulseProfileMod(){
 		return 0;
+	}
+
+	public function setMass(){
+		$this->mass = $this->structures[0]->mass;
+	}
+
+	public function setSize(){
+		$this->size = 18;
 	}
 
 	public function getShots($turn){
@@ -222,13 +250,8 @@ class Salvo extends Mini {
 		return $shots;
 	}
 
-	public function setProps($turn){
-		//$this->baseHitChance = $this->structures[0]->getSubHitChance();
-		$this->baseImpulse = ceil(pow($this->structures[0]->mass, -0.75)*250);
-		$this->setCurrentImpulse($turn);
-	}
-
 	public function setCurrentImpulse($turn){
+		$this->baseImpulse = ceil(pow($this->mass, -0.75)*250);
 		$this->currentImpulse = $this->baseImpulse * ($turn - $this->available +2);
 	}
 	

@@ -12,7 +12,7 @@ spl_autoload_register(
                 'light' => '/server/ship.php',
                 'superlight' => '/server/ship.php',
 
-                'mini' => '/server/salvo.php',
+                'mixed' => '/server/salvo.php',
 
                 'salvo' => '/server/salvo.php',
 

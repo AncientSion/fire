@@ -450,7 +450,7 @@ class Manager {
 	}
 
 	public function initBallistics(){
-		//Debug::log("initBallistics");
+		Debug::log("initBallistics");
 		$fires = DBManager::app()->getUnresolvedFireOrders($this->gameid, $this->turn);
 		usort($fires, function($a, $b){
 			return $a->shooterid - $b->shooterid;
@@ -468,7 +468,12 @@ class Manager {
 				continue;
 			}
 			$name = $launcher->getAmmo()->name;
-			$adjust[] = array("shipid" => $shooter->id, "systemid" => $launcher->id, "name" => $name, "amount" => $fires[$i]->shots);
+			$adjust[] = array(
+				"launchData" => array("shipid" => $shooter->id, "systemid" => $launcher->id, 
+					"loads" => array(0 => array("name" => $name, "launch" => $fires[$i]->shots)
+					)
+				)
+			);
 
 			for ($j = 0; $j < sizeof($units); $j++){
 				if ($units[$j]["userid"] == $shooter->userid && $units[$j]["mission"]["targetid"] == $fires[$i]->targetid && $units[$j]["launchData"]["loads"][0]["name"] == $name){

@@ -1,4 +1,4 @@
-"<?php
+<?php
 
 include_once 'global.php';
 
@@ -624,14 +624,6 @@ echo "</script>";
 						for (var i = 0; i < game.fireOrders.length; i++){
 							game.createCombatLogEntry(game.fireOrders[i]);
 						}
-						for (var i = 0; i < animate.ballAnims.length; i++){
-							for (var j = animate.ballAnims[i].anims.length-1; j >= 0; j--){
-								animate.doLog(i, j);
-							}
-						}
-						for (var i = 0; i < game.ballistics.length; i++){
-							game.ballistics[i].setPostMovePosition();
-						}
 						game.fireResolved();
 					}
 				}
@@ -640,12 +632,12 @@ echo "</script>";
 						window.cancelAnimationFrame(anim);
 						for (var i = 0; i < game.ships.length; i++){
 							game.ships[i].deployed = true;
-							if (game.ships[i].flight){
+							if (game.ships[i].ship){
 								game.ships[i].setPostMovePosition();
+								game.ships[i].setPostMoveFacing();
 							}
 							else {
 								game.ships[i].setPostMovePosition();
-								game.ships[i].setPostMoveFacing();
 							}
 						}
 					}

@@ -547,6 +547,8 @@ function canvasMouseClick(e){
 function handleFireClick(ship, vessel){
 	if (vessel){
 		if (vessel.id != ship.id && (vessel.userid != game.userid && vessel.userid != ship.userid)){
+			
+			if (ship.salvo){return;}
 			if (ship.flight && !game.isCloseCombat(ship, vessel)){return;}
 			
 			if (ship.hasWeaponsSelected()){
