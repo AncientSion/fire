@@ -14,6 +14,10 @@ Mixed.prototype.canDeploy = function(){
 	return false;
 }
 
+Mixed.prototype.getPowerOrders = function(){
+	return [];
+}
+
 Mixed.prototype.hasHangarSelected = function(){
 	return false;
 }

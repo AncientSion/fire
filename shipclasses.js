@@ -2648,45 +2648,45 @@ function Ship(data){
 			}
 		}
 	}
+}
 
-	this.getFireOrders = function(){
-		var fires = [];
-		for (var i = 0; i < this.structures.length; i++){
-			for (var j = 0; j < this.structures[i].systems.length; j++){
-				for (var k = this.structures[i].systems[j].fireOrders.length-1; k >= 0; k--){
-					if (this.structures[i].systems[j].fireOrders[k].id == 0){
-						fires.push(this.structures[i].systems[j].fireOrders[k]);
-					} else break;
+Ship.prototype.getFireOrders = function(){
+	var fires = [];
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].systems.length; j++){
+			for (var k = this.structures[i].systems[j].fireOrders.length-1; k >= 0; k--){
+				if (this.structures[i].systems[j].fireOrders[k].id == 0){
+					fires.push(this.structures[i].systems[j].fireOrders[k]);
+				} else break;
+			}
+		}
+	}
+	return fires;
+}
+
+Ship.prototype.getEWSettings = function(){
+	return this.getSystemByName("Sensor").getEW();
+}
+
+Ship.prototype.getPowerOrders = function(){
+	var powers = [];
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].systems.length; j++){
+			for (var k = 0; k < this.structures[i].systems[j].powers.length; k++){
+				if (this.structures[i].systems[j].powers[k].new){
+					powers.push(this.structures[i].systems[j].powers[k]);
 				}
 			}
 		}
-		return fires;
 	}
-
-	this.getEWSettings = function(){
-		return this.getSystemByName("Sensor").getEW();
-	}
-
-	this.getPowerOrders = function(){
-		var powers = [];
-		for (var i = 0; i < this.structures.length; i++){
-			for (var j = 0; j < this.structures[i].systems.length; j++){
-				for (var k = 0; k < this.structures[i].systems[j].powers.length; k++){
-					if (this.structures[i].systems[j].powers[k].new){
-						powers.push(this.structures[i].systems[j].powers[k]);
-					}
-				}
+	for (var i = 0; i < this.primary.systems.length; i++){
+		for (var j = 0; j < this.primary.systems[i].powers.length; j++){
+			if (this.primary.systems[i].powers[j].new){
+				powers.push(this.primary.systems[i].powers[j]);
 			}
 		}
-		for (var i = 0; i < this.primary.systems.length; i++){
-			for (var j = 0; j < this.primary.systems[i].powers.length; j++){
-				if (this.primary.systems[i].powers[j].new){
-					powers.push(this.primary.systems[i].powers[j]);
-				}
-			}
-		}
-		return powers;
 	}
+	return powers;
 }
 
 Ship.prototype.switchDiv = function(){
