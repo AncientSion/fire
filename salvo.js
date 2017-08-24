@@ -252,6 +252,61 @@ function Salvo(data){
 		for (var i = 0; i < this.structures.length; i++){
 			this.layout.push({x: range(-14, 14)});
 		}
+	}	
+
+	this.getAttachment = function(div){
+		var color = "red";
+
+		if (this.friendly){color = "green";}
+		var attachDiv = $("<div>").addClass("flightDiv")
+			.append($("<div>").css("display", "block").addClass("center15 " + color).html("Flight #" + this.id + (" (click to select)")))
+			.data("id", this.id)
+			.click(function(){
+				if (aUnit){
+					var ship = game.getUnitById(aUnit);
+					if (ship.hasWeaponsSelected()){
+						var target = game.getUnitById($(this).data("id"));
+						if (ship.userid != target.userid){
+							handleFireClick(ship, target);
+						}
+					} 
+					else {
+						ship.doUnselect();
+						ship.switchDiv();
+						game.getUnitById($(this).data("id")).select();
+					}
+				}
+				else game.getUnitById($(this).data("id")).select();
+				
+			})
+			.hover(function(e){
+				var vessel = game.getUnitById($(this).data("id"));
+					//vessel.doHighlight();
+					//game.doGenericHover(vessel)
+				if (aUnit && aUnit != vessel.id){
+					var	ship = game.getUnitById(aUnit);
+					if (ship.salvo){return;}
+					//var shipLoc = ship.getPlannedPosition();
+					//var facing = ship.getPlannedFacing();
+					if (ship.hasWeaponsSelected()){
+						if (ship.id != vessel.id){
+							handleWeaponAimEvent(ship, vessel, e);
+						}
+					} else {
+						game.target = 0;
+						$("#weaponAimTableWrapper").hide()
+					}
+				}
+			})
+			
+
+		for (var j = 0; j < this.structures.length; j++){
+			//if (this.structures[j].destroyed || this.structures[j].disabled){continue;}
+			//attachDiv.append($("<div>").append($("<img>").css("width", 34).css("height", 34).attr("src", window.shipImages[this.structures[j].name.toLowerCase() + "l"].src)));
+		}
+
+		div.append(attachDiv);
+		return div;
 	}
 
 	this.getDamageEntriesByFireId = function(fire){

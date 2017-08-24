@@ -354,7 +354,7 @@ class Manager {
 		switch ($this->phase){
 			case -1; // from deploy to move
 				$this->handleDeploymentPhase();
-				$this->startShipMovementPhase();
+				$this->startMovementPhase();
 				break;
 			case 0; // ship moves
 				$this->handleMovementPhase();
@@ -565,7 +565,7 @@ class Manager {
 		}
 	}
 
-	public function startShipMovementPhase(){
+	public function startMovementPhase(){
 		//Debug::log("startShipMovementPhase");
 		$dbManager = DBManager::app();
 		$this->phase = 0;
@@ -605,14 +605,14 @@ class Manager {
 
 	public function handleMovementPhase(){
 		Debug::log("handleShipMovementPhase");
-		$this->resolveShipMovement();
-		$this->resolveFlightMovement();
-		$this->resolveSalvoMovement();
+		$this->handleShipMovement();
+		$this->handleFlightMovement();
+		$this->handleSalvoMovement();
 	}
 
 
-	public function resolveShipMovement(){
-		//Debug::log("resolveUnitMovement");
+	public function handleShipMovement(){
+		Debug::log("handleShipMovement");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->ship){
 				for ($j = sizeof($this->ships[$i]->actions)-1; $j >= 0; $j--){
@@ -625,8 +625,8 @@ class Manager {
 		DBManager::app()->resolveUnitMovementDB($this->ships);
 	}
 
-	public function resolveFlightMovement(){
-		Debug::log("resolveFlightMovement");
+	public function handleFlightMovement(){
+		Debug::log("handleFlightMovement");
 		$missions = array();
 		$stack = array(array(), array(), array());
 		$flights = array();
@@ -637,37 +637,37 @@ class Manager {
 
 	
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->flight){
-				if ($this->ships[$i]->mission->arrived){ // already at target location
-					if ($this->ships[$i]->mission->type == 2){ // strike
-						$t = $this->getUnitById($this->ships[$i]->mission->targetid);
-						$tPos = $t->getCurrentPosition();
-						$dist = Math::getDist2($this->ships[$i]->getCurrentPosition(), $tPos);
-						$angle = Math::getAngle2($this->ships[$i]->getCurrentPosition(), $tPos);
-						$move = new Action(-1, $this->turn,	"move",	$dist, $tPos->x, $tPos->y, $angle, 0, 0, 0, 0);
-						$this->ships[$i]->actions[] = $move;
-						Debug::log("STATIC STRIKE #".$this->ships[$i]->id.", adding move to: ".$move->x."/".$move->y);
-						$flights[] = $this->ships[$i];
-					} 
-					else {
-						$tPos = $this->ships[$i]->getCurrentPosition(); // Patrol
-						$move = new Action(-1, $this->turn,	"move",	0, $tPos->x, $tPos->y, 0, 0, 0, 0, 0);
-						$this->ships[$i]->actions[] = $move;
-						Debug::log("STATIC PATROL #".$this->ships[$i]->id.", adding move to: ".$move->x."/".$move->y);
-						$flights[] = $this->ships[$i];
+			if (!$this->ships[$i]->flight){continue;}
+
+			if ($this->ships[$i]->mission->arrived){ // already at target location
+				if ($this->ships[$i]->mission->type == 2){ // strike
+					$t = $this->getUnitById($this->ships[$i]->mission->targetid);
+					$tPos = $t->getCurrentPosition();
+					$dist = Math::getDist2($this->ships[$i]->getCurrentPosition(), $tPos);
+					$angle = Math::getAngle2($this->ships[$i]->getCurrentPosition(), $tPos);
+					$move = new Action(-1, $this->turn,	"move",	$dist, $tPos->x, $tPos->y, $angle, 0, 0, 0, 0);
+					$this->ships[$i]->actions[] = $move;
+					Debug::log("STATIC STRIKE #".$this->ships[$i]->id.", adding move to: ".$move->x."/".$move->y);
+					$flights[] = $this->ships[$i];
+				} 
+				else {
+					$tPos = $this->ships[$i]->getCurrentPosition(); // Patrol
+					$move = new Action(-1, $this->turn,	"move",	0, $tPos->x, $tPos->y, 0, 0, 0, 0, 0);
+					$this->ships[$i]->actions[] = $move;
+					Debug::log("STATIC PATROL #".$this->ships[$i]->id.", adding move to: ".$move->x."/".$move->y);
+					$flights[] = $this->ships[$i];
+				}
+			}
+			else { // on way
+				if ($this->ships[$i]->mission->type == 2){ // strike
+					$target = $this->getUnitById($this->ships[$i]->mission->targetid);
+					if ($target->ship){
+						$stack[1][] = $this->ships[$i];
 					}
 				}
-				else { // on way
-					if ($this->ships[$i]->mission->type == 2){ // strike
-						$target = $this->getUnitById($this->ships[$i]->mission->targetid);
-						if ($target->ship){
-							$stack[1][] = $this->ships[$i];
-						}
-					}
-					else { // patrol
-						$stack[0][] = $this->ships[$i];
-						continue;
-					}
+				else { // patrol
+					$stack[0][] = $this->ships[$i];
+					continue;
 				}
 			}
 		}
@@ -751,8 +751,8 @@ class Manager {
 		});
 	}
 
-	public function createBallisticActions(){
-		Debug::log("createBallisticActions, size: ".sizeof($this->ballistics));
+	public function handleSalvoMovement(){
+		Debug::log("handleSalvoMovement");
 
 		$salvo = array();
 		for ($i = sizeof($this->ships)-1; $i >= 0; $i--){
@@ -764,7 +764,7 @@ class Manager {
 				$a = Math::getAngle($sPos->x, $sPos->y, $tPos->x, $tPos->y);
 
 				$impulse = $this->ships[$i]->getCurrentImpulse();
-				Debug::log("ball id #".$this->ships[$i]->id.", impulse: ".$impulse);
+				Debug::log("Salvo id #".$this->ships[$i]->id.", impulse: ".$impulse);
 	  			// MOVE ($turn, $type, $dist, $x, $y, $a, $cost, $delay, $costmod, $resolved){
 				
 				if ($impulse >= $dist){ // IMPACT VECTOR

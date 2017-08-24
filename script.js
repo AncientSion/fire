@@ -500,25 +500,21 @@ function firePhase(e){
 
 function dmgPhase(e){
 	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
-	var ship;
+	var unit;
 	var index;
 	if (aUnit){
-		ship = game.getUnitById(aUnit);
+		unit = game.getUnitById(aUnit);
 		var clickShip = game.getUnitByClick(pos);
-		if (ship == clickShip){
-			ship.select();
+		if (unit == clickShip){
+			unit.select();
 		} else if (clickShip){
 			clickShip.switchDiv();
 		}
 	}
 	else {
-		ammo = game.getAmmoByClick(pos);
-		ship = game.getUnitByClick(pos);		
-		if (ammo){
-			ammo.select(e);
-		}
-		else if (ship){
-			ship.select(e);
+		unit = game.getUnitByClick(pos);		
+		if (unit){
+			unit.select(e);
 		}
 	}
 }

@@ -5,7 +5,7 @@ class Launcher extends Weapon {
 	public $animation = "projectile";
 	public $priority = 8;
 	public $loads = array();
-	public $reload = 2;
+	public $reload = 3;
 	public $ammo;
 	public $mass = 22;
 	public $capacity = array();

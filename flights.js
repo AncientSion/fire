@@ -790,8 +790,6 @@ Flight.prototype.getTarget = function(){
 	return game.getUnitById(this.mission.targetid);	
 }
 
-
-
 Flight.prototype.setPreMoveSize = function(){
 	this.size = this.baseSize + this.unitSize * this.structures.length-1;
 }
@@ -808,21 +806,6 @@ Flight.prototype.setPostMoveSize = function(){
 	}
 	else this.size = this.baseSize + this.unitSize * this.structures.length-1;
 
-}
-
-Flight.prototype.setDrawData = function(){
-	if (this.available > game.turn || !this.available || game.turn == 1 && game.phase == -1){
-		return;
-	}
-
-	if (game.phase > 1){
-		this.drawX = this.actions[this.actions.length-1].x;
-		this.drawY = this.actions[this.actions.length-1].y;
-	}
-	else {
-		this.drawX = this.x;
-		this.drawY = this.y;
-	}
 }
 
 Flight.prototype.setPreFireImage = function(){
