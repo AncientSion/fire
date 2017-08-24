@@ -129,17 +129,16 @@ function Ship(data){
 		mouseCtx.closePath();
 		mouseCtx.fillStyle = "red";
 		mouseCtx.fill();
-*/
+	*/
 		this.drawMarker(0, 0, "yellow", mouseCtx);
 		//mouseCtx.globalAlpha = 1;
-		mouseCtx.rotate(this.getDrawFacing * Math.PI/180);
+		mouseCtx.rotate(this.getDrawFacing() * Math.PI/180);
 		mouseCtx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
 
 		mouseCtx.setTransform(1,0,0,1,0,0);
 		//mouseCtx.globalAlpha = 1;
 
 	}
-
 
 	this.detachFlight = function(id){
 		for (var i = this.cc.length-1; i >= 0; i--){
@@ -226,7 +225,7 @@ function Ship(data){
 					//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
 					friendly[i].layout =  getPointInDirection(size/2+tresh - fSize/2, a+drawFacing, 0, 0);
 					ctx.translate(pos.x, +pos.y);
-					ctx.rotate(a*(Math.PI/180));
+					ctx.rotate((a-90)*(Math.PI/180));
 					ctx.drawImage(
 						window.shipImages[friendly[i].name.toLowerCase()],
 						-fSize/2,
@@ -234,7 +233,7 @@ function Ship(data){
 						fSize, 
 						fSize
 					);
-					ctx.rotate(-a*(Math.PI/180));
+					ctx.rotate(-((a-90)*(Math.PI/180)));
 					ctx.translate(-pos.x, -pos.y);
 
 				}
@@ -259,7 +258,7 @@ function Ship(data){
 					//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
 					hostile[i].layout =  getPointInDirection(size/2+tresh - fSize/2, a+drawFacing, 0, 0);
 					ctx.translate(pos.x, +pos.y);
-					ctx.rotate(a*(Math.PI/180));
+					ctx.rotate((a-90)*(Math.PI/180));
 					ctx.drawImage(
 						window.shipImages[hostile[i].name.toLowerCase()],
 						-fSize/2,
@@ -267,7 +266,7 @@ function Ship(data){
 						fSize, 
 						fSize
 					);
-					ctx.rotate(-a*(Math.PI/180));
+					ctx.rotate(-((a-90)*(Math.PI/180)));
 					ctx.translate(-pos.x, -pos.y);
 
 				}
@@ -289,21 +288,6 @@ function Ship(data){
 		ctx.translate(-this.drawX, -this.drawY);
 		//ctx.restore();
 	}*/
-
-	this.getPlannedFacing = function(){
-		var angle = 0;
-
-		for (var i = 0; i < this.actions.length; i++){
-			if (this.actions[i].type == "turn"){
-				angle += this.actions[i].a;
-			}
-		}
-		return this.facing + angle;
-	}
-
-	this.getDrawFacing = function(){
-		return this.drawFacing;
-	}
 
 	
 	this.animationSetupMove = function(){
@@ -2225,17 +2209,18 @@ function Ship(data){
 
 		$(structContainer).css("height", Math.max($(primaryDiv).position().top + $(primaryDiv).height(), height) + 20);
 
-/*		var w = $(div).width();
+		/*
+		var w = $(div).width();
 		var h = $(div).height();
 		var left = 50;
 		if (this.facing < 90 || this.facing > 270){
-			left = res.x - w - 50;
+		left = res.x - w - 50;
 		}
 		var x = this.x +cam.o.x - w/2;
 		var y = this.y +cam.o.y + 150;
 
 		$(div).css("left", x).css("top", y);
-*/	
+		*/	
 
 		this.getAttachDivs();
 		return div;
@@ -2245,7 +2230,7 @@ function Ship(data){
 		if (this.cc.length){
 			var ccContainer = $("<div>").addClass("ccContainer")
 				.append(($("<div>").addClass("general")
-					.append($("<span>").addClass("center15").html("Local Flights"))));
+					.append($("<span>").addClass("center15").html("Local Units"))));
 
 			var attach = [];
 			for (var i = 0; i < this.cc.length; i++){
@@ -2854,7 +2839,12 @@ Ship.prototype.isReady = function(){
 }
 
 
+Ship.prototype.setTarget = function(){
+	return;
+}
+
 Ship.prototype.select = function(){
+
 	if (!this.selected){
 		this.doSelect();
 	} else this.switchDiv();
@@ -2999,4 +2989,19 @@ Ship.prototype.drawMarker = function(x, y, c, context){
 	context.globalAlpha = 1;
 	context.lineWidth = 1;
 	context.strokeStyle = "black";
+}
+
+Ship.prototype.getPlannedFacing = function(){
+	var angle = 0;
+
+	for (var i = 0; i < this.actions.length; i++){
+		if (this.actions[i].type == "turn"){
+			angle += this.actions[i].a;
+		}
+	}
+	return this.facing + angle;
+}
+
+Ship.prototype.getDrawFacing = function(){
+	return this.drawFacing;
 }

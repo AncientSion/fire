@@ -74,6 +74,7 @@ echo "</script>";
 	<script src='mathLib.js'></script>	
 	<script src='shared.js'></script>
 	<script src='shipclasses.js'></script>
+	<script src='mixed.js'></script>
 	<script src='salvo.js'></script>
 	<script src='flights.js'></script>
 	<script src='classes.js'></script>

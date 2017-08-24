@@ -1,6 +1,5 @@
 
 window.shipImages = {};
-window.ballImages = {};
 window.factionImages = {};
 
 window.preload = function(){
@@ -10,21 +9,21 @@ window.preload = function(){
 }
 
 window.preLoadBallistics = function(){
-	window.ballImages.hasta = new Image();
-	window.ballImages.hasta.src = "ballIcons/hasta.png";
-	window.ballImages.javelin = new Image();
-	window.ballImages.javelin.src = "ballIcons/hasta.png";
-	window.ballImages.triarii = new Image();
-	window.ballImages.triarii.src = "ballIcons/hasta.png";
+	window.shipImages.hasta = new Image();
+	window.shipImages.hasta.src = "ballIcons/hasta.png";
+	window.shipImages.javelin = new Image();
+	window.shipImages.javelin.src = "ballIcons/hasta.png";
+	window.shipImages.triarii = new Image();
+	window.shipImages.triarii.src = "ballIcons/hasta.png";
 
-	window.ballImages.patriot = new Image();
-	window.ballImages.patriot.src = "ballIcons/patriot.png";
-	window.ballImages.naga = new Image();
-	window.ballImages.naga.src = "ballIcons/naga.png";
-	window.ballImages.cyclops = new Image();
-	window.ballImages.cyclops.src = "ballIcons/cyclops.png";
-	window.ballImages.titan = new Image();
-	window.ballImages.titan.src = "ballIcons/titan.png";
+	window.shipImages.patriot = new Image();
+	window.shipImages.patriot.src = "ballIcons/patriot.png";
+	window.shipImages.naga = new Image();
+	window.shipImages.naga.src = "ballIcons/naga.png";
+	window.shipImages.cyclops = new Image();
+	window.shipImages.cyclops.src = "ballIcons/cyclops.png";
+	window.shipImages.titan = new Image();
+	window.shipImages.titan.src = "ballIcons/titan.png";
 }
 
 

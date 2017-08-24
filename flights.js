@@ -12,11 +12,6 @@ function Flight(data){
 	this.drawImg;
 	this.doDraw = 1;
 
-	this.setRawImage = function(){
-		this.img = window.shipImages[this.structures[0].name.toLowerCase() + "l"];
-		this.smallImg = window.shipImages[this.structures[0].name.toLowerCase()];
-	}
-
 	this.setSize = function(){
 		if (!this.mission.arrived){
 			this.setPreMoveSize();
@@ -131,24 +126,6 @@ function Flight(data){
 		}
 		return false;
 	}
-
-	
-	this.getPlannedFacing = function(){
-		if (game.phase < 2){
-			return this.facing;
-			//return getAngleFromTo(this, this.nextStep);
-		}
-		return this.actions[this.actions.length-1].a;
-	}
-
-	this.getDrawFacing = function(){
-		return this.getPlannedFacing();
-	}
-	
-	this.getBaseImpulse = function(){
-		return this.baseImpulse;
-	}
-
 	this.hasWeaponsSelected = function(){		
 		for (var i = 0; i < this.structures.length; i++){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
@@ -424,7 +401,7 @@ function Flight(data){
 		var color = "red";
 
 		if (this.friendly){color = "green";}
-		var attachDiv = $("<div>").addClass("flightDiv")
+		var attachDiv = $("<div>").addClass("attachDiv")
 			.append($("<div>").css("display", "block").addClass("center15 " + color).html("Flight #" + this.id + (" (click to select)")))
 			.data("id", this.id)
 			.click(function(){
@@ -452,8 +429,6 @@ function Flight(data){
 				if (aUnit && aUnit != vessel.id){
 					var	ship = game.getUnitById(aUnit);
 					if (ship.salvo){return;}
-					//var shipLoc = ship.getPlannedPosition();
-					//var facing = ship.getPlannedFacing();
 					if (ship.hasWeaponsSelected()){
 						if (ship.id != vessel.id){
 							handleWeaponAimEvent(ship, vessel, e);
@@ -753,7 +728,7 @@ Flight.prototype.getShortInfo = function(){
 	var impulse = this.getCurrentImpulse();
 	
 	var table = document.createElement("table");
-		table.insertRow(-1).insertCell(-1).innerHTML = "Flight #" + this.id + " (" +game.getUnitType(this.traverse) + ")";
+		table.insertRow(-1).insertCell(-1).innerHTML = "Flight #" + this.id;
 		table.insertRow(-1).insertCell(-1).innerHTML =  "Thrust: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")";
 		table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit: " +  this.getBaseHitChance() + "% ";
 	
@@ -762,20 +737,6 @@ Flight.prototype.getShortInfo = function(){
 	}
 
 	return table;
-}
-
-
-Flight.prototype.getParent = function(){
-	if (this.cc.length){
-		for (var j = 0; j < this.cc.length; j++){
-			for (var i = 0; i < game.ships.length; i++){
-				if (this.cc[j] == game.ships[i].id && game.ships[i].ship){
-					return game.ships[i];
-				}
-			}
-		}
-	}
-	return this;	
 }
 
 Flight.prototype.getTargetPosition = function(){
@@ -892,12 +853,12 @@ Flight.prototype.setPostMoveImage = function(){
 			}
 		}
 	}
-	else if (this.mission.type == 2 || this.mission.type == 3){ // strike escort
+	else if (this.mission.type == 2){ // strike escort
 		ctx.translate(this.size/2, this.size/2);
 		for (var i = 0; i < this.structures.length; i++){
 			if (this.structures[i].draw){
 				ctx.save();		
-				ctx.rotate((((360/this.structures.length-1)*i)+this.getDrawFacing()) * (Math.PI/180));
+				//ctx.rotate((((360/this.structures.length-1)*i)+this.getDrawFacing()) * (Math.PI/180));
 				ctx.drawImage(
 					this.smallImg,
 					0 -size/2,
@@ -930,4 +891,9 @@ Flight.prototype.setPostMoveFacing = function(){
 			this.patrolFacing.push(range(0, 360));
 		}
 	}
+}
+
+Flight.prototype.setRawImage = function(){
+	this.img = window.shipImages[this.structures[0].name.toLowerCase() + "l"];
+	this.smallImg = window.shipImages[this.structures[0].name.toLowerCase()];
 }

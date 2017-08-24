@@ -600,7 +600,7 @@ function Game(data, userid){
 			//	img.className = "img80";
 			//	img.src = window.reinforcements[i].img.src;
 
-			//td.appendChild(window.ballImages[this.name.toLowerCase()].cloneNode(true))
+			//td.appendChild(window.shipImages[this.name.toLowerCase()].cloneNode(true))
 
 
 			$(ele).find("span").html("Deploy Ship").end().find(".img").html("").append($(window.shipImages[unit.name.toLowerCase()].cloneNode(true)).addClass("img80"));
@@ -965,8 +965,10 @@ Game.prototype.getUnitType = function (val){
 
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].createBaseDiv();
+			this.ships[i].setTarget();
+			this.ships[i].setImage();
+
 			if (this.ships[i].ship){this.ships[i].setEscortImage();}
-			else this.ships[i].setTarget();
 		}
 
 		for (var i = 0; i < this.reinforcements.length; i++){

@@ -1345,7 +1345,7 @@ Weapon.prototype.select = function(e){
 	}
 	else {
 		unit = game.getUnitById(this.parentId);
-		if (unit.flight && !unit.cc.length || unit.hasSystemSelected("Sensor")){
+		if (unit.flight && !unit.cc.length || unit.ship && unit.hasSystemSelected("Sensor")){
 			return false;
 		}
 		else if (this.getLoadLevel() >= 1){
@@ -1420,7 +1420,7 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
 	$(table).append($("<tr>").append($("<td>").html("Weapon Type")).append($("<td>").html(this.type)));
 
-	if (!(game.getUnitById(aUnit).flight)){
+	if (!(game.getUnitById(this.parentId).flight)){
 		$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
 		$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
 		$(table).append($("<tr>").append($("<td>").html("Base Power Req")).append($("<td>").html(this.getPowerReq())));

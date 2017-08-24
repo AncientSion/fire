@@ -571,17 +571,16 @@ table, th, tr, td {
 	border: 1px solid white;
 }
 
-.flightDiv {
+.attachDiv {
 	width: 99%;
 	display: inline-block;
 	margin-top: 8px;
 	margin-bottom: 8px;
 }
 
-.flightDiv div {
+.attachDiv div {
 	display: inline-block;
 }
-
 
 .center15 {
 	font-size: 15;
@@ -1235,7 +1234,7 @@ table, th, tr, td {
 	color: white;
 	background-color: black;
 	border-radius: 5px;
-	width: 135px;
+	width: 140px;
 }
 
 #weaponAimTableWrapper {
