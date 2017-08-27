@@ -6,12 +6,6 @@ function Salvo(data){
 		this.size = 18;
 	}
 
-	this.setLayout = function(){
-		for (var i = 0; i < this.structures.length; i++){
-			this.layout.push({x: range(-14, 14)});
-		}
-	}	
-
 	this.getAttachment = function(div){
 		var color = "red";
 
@@ -66,34 +60,6 @@ function Salvo(data){
 		return div;
 	}
 
-	this.getDamageEntriesByFireId = function(fire){
-		var dmgs = [];
-		var lookup = 0;
-
-		for (var i = 0; i < fire.hits.length; i++){
-			lookup += fire.hits[i]
-		}
-
-		if (!lookup){
-			return dmgs;
-		}
-
-		for (var i = 0; i < this.structures.length; i++){
-			for (var j = this.structures[i].damages.length-1; j >= 0; j--){
-				if (this.structures[i].damages[j].fireid == fire.id){
-					dmgs.push(this.structures[i].damages[j]);
-					dmgs[dmgs.length-1].system = "Missile";
-					lookup--;
-					if (!lookup){return dmgs};
-				}
-				else if (this.structures[i].damages[j].turn < fire.turn){
-					break;
-				}
-			}
-		}
-		return dmgs;
-	}
-
 	this.getDamage = function(){
 		var min = this.getMinDmg();
 		var max = this.getMaxDmg();
@@ -107,11 +73,11 @@ function Salvo(data){
 	}
 
 	this.getMinDmg = function(){
-		return this.structures[0].minDmg;
+		return this.structures[0].systems[0].minDmg;
 	}
 
 	this.getMaxDmg = function(){
-		return this.structures[0].maxDmg;
+		return this.structures[0].systems[0].maxDmg;
 	}
 
 	this.getCurrentImpulse = function(){
@@ -290,14 +256,6 @@ function Salvo(data){
 		}
 	}
 
-	this.getHitChanceFromAngle = function(){
-		return Math.floor(Math.sqrt(this.structures[0].mass) * 15);
-	}
-
-	this.getTrajectoryStart = function(){
-		return {x: this.x, y: this.y};
-	}
-
 	this.getFiringPosition = function(){
 		return new Point(
 			this.x + range(this.size * 0.3 * -1, this.size * 0.3),
@@ -305,20 +263,6 @@ function Salvo(data){
 		)
 	}
 
-	this.getTargettingPos = function(){
-		if (this.actions[this.actions.length-1].type == "impact"){
-			return new Point(
-				this.actions[this.actions.length-2].x + range(-10, 10),
-				this.actions[this.actions.length-2].y + range(-10, 10)
-			)	
-		}
-		else {
-			return new Point(
-				this.actions[this.actions.length-1].x + range(-10, 10),
-				this.actions[this.actions.length-1].y + range(-10, 10)
-			)
-		}
-	}
 }
 
 Salvo.prototype = Object.create(Mixed.prototype);
@@ -334,9 +278,9 @@ Salvo.prototype.getShortInfo = function(){
 	} else $(ele).attr("class", "hostile");
 
 	var table = document.createElement("table");
-		table.insertRow(-1).insertCell(-1).innerHTML = "Salvo #" + this.id + " (" + this.structures.length + "x" + this.structures[0].name + ")";
+		table.insertRow(-1).insertCell(-1).innerHTML = "Salvo #" + this.id + " (" + this.structures.length + "x " + this.structures[0].name + ")";
 		table.insertRow(-1).insertCell(-1).innerHTML =  "Thrust: " + this.getCurrentImpulse();
-		table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit: " + this.getHitChanceFromAngle() + "%";
+		table.insertRow(-1).insertCell(-1).innerHTML = this.getStringHitChance();
 
 	if (!this.mission.arrived && game.phase < 1 && this.inRange()){
 		table.insertRow(-1).insertCell(-1).innerHTML = "<span class='red'>ARRIVAL IMMINENT</span>";
@@ -370,3 +314,9 @@ Salvo.prototype.setImage = function(){
 Salvo.prototype.setRawImage = function(){
 	this.img = window.shipImages[this.structures[0].name.toLowerCase()].cloneNode(true);
 }
+
+Salvo.prototype.setLayout = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		this.structures[i].layout = {x: range(-10, 10), y: range(-10, 10)};
+	}
+}	

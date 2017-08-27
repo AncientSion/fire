@@ -176,38 +176,35 @@ function initiateSalvo(data){
 			salvo.structures[j].systems.push(new Crit(data.structures[j].crits[k]));
 		}
 	}
-	salvo.create();
+
 	return salvo;
 }
 
 
 function initiateFlight(data){
+	//return
 
 	var flight = new Flight(data);
 
 	for (var j = 0; j < data.structures.length; j++){
-		var struct = new Fighter(data.structures[j]);
-
-		if (data.structures[j].damages.length){
-			for (var k = 0; k < data.structures[j].damages.length; k++){
-				struct.damages.push(new Damage(data.structures[j].damages[k]));
-			}
-		}
+		flight.structures.push(new Fighter(data.structures[j]));
 
 		for (var k = 0; k < data.structures[j].systems.length; k++){
-			var system = new window[data.structures[j].systems[k].type](data.structures[j].systems[k]);				
-			if (system.fireOrders){
-				for (var l = 0; l < data.structures[j].systems[k].fireOrders.length; l++){
-					system.fireOrders.push(new FireOrder(data.structures[j].systems[k].fireOrders[l]));
-				}
+			var system = new window[data.structures[j].systems[k].type](data.structures[j].systems[k]);
+			for (var l = 0; l < data.structures[j].systems[k].fireOrders.length; l++){
+				system.fireOrders.push(new FireOrder(data.structures[j].systems[k].fireOrders[l]));
 			}
 			system.setState();
-			struct.systems.push(system);
+			flight.structures[j].systems.push(system);
 		}
-		flight.structures.push(struct);
-	}
 
+		for (var k = 0; k < data.structures[j].crits.length; k++){
+			flight.structures[j].systems.push(new Crit(data.structures[j].crits[k]));
+		}
+
+	}
 	return flight;
+	
 }
 
 function initiateShip(data){
@@ -247,10 +244,8 @@ function initiateShip(data){
 			if (system){
 				system.setMount(struct.remainingNegation);
 				
-				if (system.fireOrders){
-					for (var l = 0; l < data.structures[j].systems[k].fireOrders.length; l++){
-						system.fireOrders.push(new FireOrder(data.structures[j].systems[k].fireOrders[l]));
-					}
+				for (var l = 0; l < data.structures[j].systems[k].fireOrders.length; l++){
+					system.fireOrders.push(new FireOrder(data.structures[j].systems[k].fireOrders[l]));
 				}
 
 				for (var l = 0; l < data.structures[j].systems[k].damages.length; l++){

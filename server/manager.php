@@ -82,7 +82,6 @@ class Manager {
 		//$this->setShipLocks($this->getUnitById(2)); return;
 
 		//$this->deploy();();
-		Debug::log(sizeof($this->ships));
 
 		return array(
 			"id" => $this->gameid,
@@ -195,7 +194,6 @@ class Manager {
 	}
 
 	public function getShipData(){
-		//Debug::log("ships: ".sizeof($this->ships));
 		for ($i = sizeof($this->ships)-1; $i >= 0; $i--){
 			if ($this->ships[$i]->userid != $this->userid){
 				if ($this->ships[$i]->flight && $this->ships[$i]->available == $this->turn && !$this->ships[$i]->actions[0]->resolved){
@@ -205,9 +203,6 @@ class Manager {
 					$this->ships[$i]->hideActions();
 				}
 			}
-			//if ($this->ships[$i]->id == 11){
-			//	Debug::log("11: ".$this->ships[$i]->currentImpulse);
-			//}
 		}
 
 		switch ($this->phase){
@@ -657,6 +652,10 @@ class Manager {
 					Debug::log("STATIC PATROL #".$this->ships[$i]->id.", adding move to: ".$move->x."/".$move->y);
 					$units[] = $this->ships[$i];
 				}
+
+				$this->ships[$i]->mission->x = $tPos->x;
+				$this->ships[$i]->mission->y = $tPos->y;
+				$missions[] = $this->ships[$i]->mission;
 			}
 			else { // on way
 				if ($this->ships[$i]->mission->type == 2){ // strike
@@ -688,11 +687,13 @@ class Manager {
 				$tPos;
 				$dist;
 				$angle;
-				if ($stack[$i][$j]->mission->type == 1){ // patrol
-					$tPos = new Point($stack[$i][$j]->mission->x, $stack[$i][$j]->mission->y);
+				if ($stack[$i][$j]->mission->type == 1){
+					$tPos = new Point($stack[$i][$j]->mission->x, $stack[$i][$j]->mission->y); // patrol
 				}
-				else $tPos = $this->getUnitById($stack[$i][$j]->mission->targetid)->getCurrentPosition(); // strike / intercept
+				else $tPos = $this->getUnitById($stack[$i][$j]->mission->targetid)->getCurrentPosition(); // strike / int
 
+				$stack[$i][$k]->mission->x = $tPos->x;
+				$stack[$i][$k]->mission->y = $tPos->y;
 				$dist = Math::getDist2($origin, $tPos);
 				$angle = Math::getAngle2($origin, $tPos);
 
@@ -707,10 +708,9 @@ class Manager {
 				else {
 					Debug::log("arrival");
 					$stack[$i][$j]->mission->arrived = $this->turn;
-					$missions[] = $stack[$i][$j]->mission;
 				}
-
-
+				
+				$missions[] = $stack[$i][$j]->mission;
 				$stack[$i][$j]->facing = $angle;
 				$move = new Action(-1, $this->turn,	"move",	$dist, $tPos->x, $tPos->y,
 				$angle, 0, 0, 0, 0);

@@ -12,12 +12,6 @@ spl_autoload_register(
                 'light' => '/server/ship.php',
                 'superlight' => '/server/ship.php',
 
-                'mixed' => '/server/salvo.php',
-
-                'salvo' => '/server/salvo.php',
-
-                'missle ' =>  '/server/ammo.php',
-
                 'warhead' => '/server/systems/weapons/ammo.php',
                 'hasta' => '/server/systems/weapons/ammo.php',
                 'javelin' => '/server/systems/weapons/ammo.php',
@@ -27,9 +21,14 @@ spl_autoload_register(
                 'cyclops' => '/server/systems/weapons/ammo.php',
                 'titan' => '/server/systems/weapons/ammo.php',
 
-                'flight' => '/server/flight.php',
+                'mixed' => '/server/mixed.php',
 
+                'salvo' => '/server/salvo.php',
+                'missle ' =>  '/server/ammo.php',
+
+                'flight' => '/server/flight.php',
                 'fighter' => '/server/fighter.php',
+                
                 'aurora' => '/server/fighter.php',
                 'thunderbolt' => '/server/fighter.php',
                 'nial' => '/server/fighter.php',

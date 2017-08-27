@@ -1,543 +1,96 @@
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-2
-DB insertUnits S: 1
-success, got id: 13
-insertSubUnits
-success insertSubUnits
-insertMission
-success insertMission
-insertClientActions s: 1
-updateSystemLoad: 0
-3
-doAdvance for game2 from phase -1 to phase 0
-initBallistics
-merging
-DB insertUnits S: 1
-success, got id: 14
-insertSubUnits
-success insertSubUnits
-insertMission
-success insertMission
-insertClientActions s: 1
-DB updateBallisticFireOrder, s: 2
-updateSystemLoad: 2
-success updateSystemLoad
-success updateSystemLoad
-resolveDeployActions s: 2
-handleJumpActions
-assembleEndStates
-getDeployState for 11
-getDeployState for 13
-delving getDeployState for 13
-getDeployState for 12
-getDeployState for 14
-delving getDeployState for 14
-updateUnitEndState s:4 2/-1
-advancing game state time: 0.077 seconds.
-4
-insertClientActions s: 1
-4
-insertClientActions s: 1
-doAdvance for game2 from phase 0 to phase 1
-handleShipMovementPhase
-resolveUnitMovementDB
-resolveFlightMovement
-layer 0 -> patrol target, layer 1 => strike
-resolving layer #0
-resolving layer #1
-resolving flight #13
-_____________________
-Flight #13, impulse: 238
-From -470/149 to 176/-413
-Dist 857, angle: 318.97774064571
-close in
-adding move to: -290/-7
-resolving layer #2
-createBallisticActions, size: 0
-ball id #14, impulse: 178
-advancing game state time: 0.023 seconds.
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-doAdvance for game2 from phase 2 to phase 3
-specific EW for ship #11, EW from 144.26943699024 to 143.73056300976, dist: 214
-specific EW for ship #12, EW from 347.37813905384 to 344.62186094616, dist: 151
-resolveFireOrder - ID 16, shooter: Artemis #12 vs Omega #11, w: MediumRailGun #8, guns: 1
-doDamage, weapon: MediumRailGun, target: 11/8, totalDmg: 38
-resolveFireOrder - ID 17, shooter: Artemis #12 vs Omega #11, w: HeavyRailGun #9, guns: 1
-doDamage, weapon: HeavyRailGun, target: 11/-1, totalDmg: 64
-resolveFireOrder - ID 18, shooter: Omega #11 vs Artemis #12, w: HeavyLaser #8, guns: 1
-resolveFireOrder - ID 19, shooter: Omega #11 vs Artemis #12, w: HeavyLaser #9, guns: 1
-DB updateFireOrders: 4
-handleBallisticInterception | balls:0, intercepts: 0
-= testCriticals for Omega, #11, turn: 2
-= testCriticals for Flight, #13, turn: 2
-= testCriticals for Artemis, #12, turn: 2
-= testCriticals for Salvo, #14, turn: 2
- => DB insertDamageEntries: 2
- => DB insertCritEntries: 1
-handleFiringPhase time: 0.028 seconds.
-advancing game state time: 0.035 seconds.
-4
-4
-insertClientActions s: 1
-4
-insertClientActions s: 1
-doAdvance for game2 from phase 0 to phase 1
-handleShipMovementPhase
-resolveUnitMovementDB
-resolveFlightMovement
-layer 0 -> patrol target, layer 1 => strike
-resolving layer #0
-resolving layer #1
-resolving flight #13
-_____________________
-Flight #13, impulse: 238
-From -282/3 to 97/-215
-Dist 438, angle: 330.09257792062
-close in
-adding move to: -76/-116
-resolving layer #2
-createBallisticActions, size: 0
-ball id #14, impulse: 267
-advancing game state time: 0.15 seconds.
-4
-4
-doAdvance for game2 from phase 2 to phase 3
-specific EW for ship #11, EW from 151.26943699024 to 150.73056300976, dist: 214
-specific EW for ship #12, EW from 96.18939021294 to 145.81060978706, dist: 563
-resolveFireOrder - ID 16, shooter: Artemis #12 vs Omega #11, w: MediumRailGun #8, guns: 1
-doDamage, weapon: MediumRailGun, target: 11/12, totalDmg: 34
-doDamage, weapon: MediumRailGun, target: 11/-1, totalDmg: 31
-resolveFireOrder - ID 17, shooter: Artemis #12 vs Omega #11, w: HeavyRailGun #9, guns: 1
-doDamage, weapon: HeavyRailGun, target: 11/-1, totalDmg: 64
-doDamage, weapon: HeavyRailGun, target: 11/9, totalDmg: 62
- => OK ship target system Dual #9 was destroyed, rem: 50, doing: 50, OK for: 4 dmg
-resolveFireOrder - ID 18, shooter: Artemis #12 vs Omega #11, w: LightPulse #12, guns: 1
-fireid: 18, doDamage, weapon: LightPulse, target: 11, hits: 4
-resolveFireOrder - ID 19, shooter: Artemis #12 vs Omega #11, w: LightPulse #13, guns: 1
-fireid: 19, doDamage, weapon: LightPulse, target: 11, hits: 5
-resolveFireOrder - ID 20, shooter: Omega #11 vs Artemis #12, w: HeavyLaser #8, guns: 1
-doDamage, weapon: HeavyLaser, target: 12/-1: Main Structure
-hitting:  Primary  Primary  Primary 
-resolveFireOrder - ID 21, shooter: Omega #11 vs Artemis #12, w: HeavyLaser #9, guns: 1
-DB updateFireOrders: 6
-handleBallisticInterception | balls:0, intercepts: 0
-= testCriticals for Omega, #11, turn: 3
-= testCriticals for Flight, #13, turn: 3
-= testCriticals for Artemis, #12, turn: 3
-= testCriticals for Salvo, #14, turn: 3
- => DB insertDamageEntries: 9
- => DB insertCritEntries: 1
-handleFiringPhase time: 0.173 seconds.
-advancing game state time: 0.181 seconds.
-4
-4
-4
-4
-doAdvance for game2 from phase 3 to phase 4
-assembleEndStates
-updateUnitEndState s:4 3/3
-endTurn
-resolveDeployActions s: 0
-destroyUnitsDB
-insertReinforcements: 1
-insertReinforcements: 1
-advancing game state time: 0.184 seconds.
-4
-4
-4
-4
-doAdvance for game2 from phase -1 to phase 0
-initBallistics
-resolveDeployActions s: 0
-handleJumpActions
-assembleEndStates
-getDeployState for 11
-getDeployState for 13
-getDeployState for 12
-getDeployState for 14
-updateUnitEndState s:4 4/-1
-advancing game state time: 0.006 seconds.
-4
-insertClientActions s: 1
-4
-4
-4
-insertClientActions s: 1
-doAdvance for game2 from phase 0 to phase 1
-handleShipMovementPhase
-handleShipMovement
-resolveUnitMovementDB
-handleFlightMovement
-layer 0 -> patrol target, layer 1 => strike
-resolving layer #0
-resolving layer #1
-resolving flight #13
-_____________________
-Flight #13, impulse: 238
-From -76/-116 to -43/-101
-Dist 37, angle: 24.443954780417
-arrival
-adding move to: -43/-101
-resolving layer #2
-updateMissionState
-handleSalvoMovement
-Salvo id #14, impulse: 356
-advancing game state time: 0.151 seconds.
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-doAdvance for game2 from phase 3 to phase 4
-assembleEndStates
-updateUnitEndState s:4 2/3
-endTurn
-resolveDeployActions s: 0
-destroyUnitsDB
-insertReinforcements: 1
-insertReinforcements: 1
-advancing game state time: 0.062 seconds.
-4
-4
-4
-doAdvance for game2 from phase -1 to phase 0
-initBallistics
-resolveDeployActions s: 0
-handleJumpActions
-assembleEndStates
-getDeployState for 11
-getDeployState for 13
-getDeployState for 12
-getDeployState for 14
-updateUnitEndState s:4 3/-1
-advancing game state time: 0.009 seconds.
-4
-insertClientActions s: 1
-4
-insertClientActions s: 1
-doAdvance for game2 from phase 0 to phase 1
-handleShipMovementPhase
-handleShipMovement
-resolveUnitMovementDB
-handleFlightMovement
-layer 0 -> patrol target, layer 1 => strike
-resolving layer #0
-resolving layer #1
-resolving flight #13
-_____________________
-Flight #13, impulse: 238
-From -290/-7 to 1/-373
-Dist 468, angle: 308.48757697071
-close in
-adding move to: -142/-193
-resolving layer #2
-handleSalvoMovement
-Salvo id #14, impulse: 267
-advancing game state time: 0.024 seconds.
-4
-4
-doAdvance for game2 from phase 2 to phase 3
-specific EW for ship #11, EW from 114.26943699024 to 113.73056300976, dist: 214
-specific EW for ship #12, EW from 317.37813905384 to 314.62186094616, dist: 151
-resolveFireOrder - ID 20, shooter: Artemis #12 vs Omega #11, w: LightPulse #16, guns: 1
-fireid: 20, doDamage, weapon: LightPulse, target: 11, hits: 3
-resolveFireOrder - ID 21, shooter: Artemis #12 vs Omega #11, w: LightPulse #17, guns: 1
-DB updateFireOrders: 2
-handleBallisticInterception | balls:0, intercepts: 0
-= testCriticals for Omega, #11, turn: 3
-= testCriticals for Flight, #13, turn: 3
-= testCriticals for Artemis, #12, turn: 3
-= testCriticals for Salvo, #14, turn: 3
- => DB insertDamageEntries: 1
- => DB insertCritEntries: 0
-handleFiringPhase time: 0.037 seconds.
-advancing game state time: 0.054 seconds.
-4
-4
-doAdvance for game2 from phase 3 to phase 4
-assembleEndStates
-updateUnitEndState s:4 3/3
-endTurn
-resolveDeployActions s: 0
-destroyUnitsDB
-insertReinforcements: 1
-advancing game state time: 0.043 seconds.
-4
-4
-doAdvance for game2 from phase -1 to phase 0
-initBallistics
-resolveDeployActions s: 0
-handleJumpActions
-assembleEndStates
-getDeployState for 11
-getDeployState for 13
-getDeployState for 12
-getDeployState for 14
-updateUnitEndState s:4 4/-1
-advancing game state time: 0.011 seconds.
-4
-4
-4
-insertClientActions s: 1
-4
-insertClientActions s: 1
-doAdvance for game2 from phase 0 to phase 1
-handleShipMovementPhase
-handleShipMovement
-resolveUnitMovementDB
-handleFlightMovement
-layer 0 -> patrol target, layer 1 => strike
-resolving layer #0
-resolving layer #1
-resolving flight #13
-_____________________
-Flight #13, impulse: 238
-From -142/-193 to -151/-281
-Dist 89, angle: 264.16050768848
-arrival
-adding move to: -151/-281
-resolving layer #2
-updateMissionState
-handleSalvoMovement
-layer 1 => strike
-resolving layer #0
-resolving layer #1
-resolving salvo #14
-_____________________
-Salvo #14, impulse: 356
-From -9/-175 to -247/-147
-Dist 240, angle: 173.29016319224
-arrival
-adding move to: -247/-147
-resolving layer #2
-updateMissionState
-advancing game state time: 0.047 seconds.
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
 doAdvance for game2 from phase 2 to phase 3
 specific EW for ship #11, EW from 96.269436990237 to 95.730563009763, dist: 214
-specific EW for ship #12, EW from 292.37813905384 to 289.62186094616, dist: 151
-resolveFireOrder - ID 26, shooter: Omega #11 vs Artemis #12, w: HeavyLaser #11, guns: 1
-doDamage, weapon: HeavyLaser, target: 12/-1: Main Structure
-hitting:  Primary  Primary  Primary 
-resolveFireOrder - ID 27, shooter: Omega #11 vs Artemis #12, w: HeavyLaser #12, guns: 1
-doDamage, weapon: HeavyLaser, target: 12/-1: Main Structure
-hitting:  Sensor  Primary  Primary 
-resolveFireOrder - ID 28, shooter: Omega #11 vs Artemis #12, w: LightPulse #14, guns: 1
-fireid: 28, doDamage, weapon: LightPulse, target: 12, hits: 5
-resolveFireOrder - ID 29, shooter: Omega #11 vs Artemis #12, w: LightPulse #15, guns: 1
-fireid: 29, doDamage, weapon: LightPulse, target: 12, hits: 3
-resolveFireOrder - ID 30, shooter: Omega #11 vs Artemis #12, w: LightPulse #16, guns: 1
-fireid: 30, doDamage, weapon: LightPulse, target: 12, hits: 5
-resolveFireOrder - ID 31, shooter: Omega #11 vs Artemis #12, w: LightPulse #17, guns: 1
-fireid: 31, doDamage, weapon: LightPulse, target: 12, hits: 3
-resolveFireOrder - ID 32, shooter: Omega #11 vs Artemis #12, w: LightPulse #18, guns: 1
-fireid: 32, doDamage, weapon: LightPulse, target: 12, hits: 4
- => target system HeavyRailGun #9 was destroyed, rem: 52, doing: 13, OK for: 39 dmg
-resolveFireOrder - ID 33, shooter: Omega #11 vs Artemis #12, w: LightPulse #19, guns: 1
-fireid: 33, doDamage, weapon: LightPulse, target: 12, hits: 5
+specific EW for ship #12, EW from 287.37813905384 to 284.62186094616, dist: 151
 resolveFireOrder ID 22, shooter: Artemis #12 vs Flight #13, w: LightPulse #12
-fireid: 22, doDamage, weapon: LightPulse, target: 13, hits: 5
- => target system Thunderbolt #23 was destroyed, rem: 31, doing: 12, OK for: 19 dmg
+calculateToHit
+CALCULATE TO HIT - angle: 97, base: 28, trav: 0, total multi: 1.5, dist/range: 0/0, req: 42
+shot #0, req: 42
 resolveFireOrder ID 23, shooter: Artemis #12 vs Flight #13, w: LightPulse #13
-fireid: 23, doDamage, weapon: LightPulse, target: 13, hits: 5
- => target system Thunderbolt #13 was destroyed, rem: 31, doing: 11, OK for: 20 dmg
+calculateToHit
+CALCULATE TO HIT - angle: 190, base: 28, trav: 0, total multi: 1.5, dist/range: 0/0, req: 42
+shot #0, req: 42
+fireid: 23, doDamage, weapon: LightPulse, target: 13, hits: 4
+ => target system Thunderbolt #19 was destroyed, rem: 31, doing: 19, OK for: 12 dmg
 resolveFireOrder ID 24, shooter: Artemis #12 vs Flight #13, w: LightPulse #16
-fireid: 24, doDamage, weapon: LightPulse, target: 13, hits: 3
- => target system Thunderbolt #11 was destroyed, rem: 31, doing: 14, OK for: 17 dmg
+calculateToHit
+CALCULATE TO HIT - angle: 46, base: 28, trav: 0, total multi: 1.5, dist/range: 0/0, req: 42
+shot #0, req: 42
+fireid: 24, doDamage, weapon: LightPulse, target: 13, hits: 4
+ => target system Thunderbolt #3 was destroyed, rem: 31, doing: 16, OK for: 15 dmg
 resolveFireOrder ID 25, shooter: Artemis #12 vs Flight #13, w: LightPulse #17
-fireid: 25, doDamage, weapon: LightPulse, target: 13, hits: 3
- => target system Thunderbolt #17 was destroyed, rem: 31, doing: 12, OK for: 19 dmg
-resolveFireOrder - ID 34, shooter: Flight #13 vs Artemis #12, w: ParticlePulsar #2, guns: 1
+calculateToHit
+CALCULATE TO HIT - angle: 292, base: 28, trav: 0, total multi: 1.5, dist/range: 0/0, req: 42
+shot #0, req: 42
+resolveFireOrder ID 26, shooter: Omega #11 vs Salvo #14, w: LightPulse #14
+calculateToHit
+CALCULATE TO HIT - angle: 233, base: 10, trav: 1, total multi: 1.5, dist/range: 0/0, req: 12
+shot #0, req: 12
+resolveFireOrder ID 27, shooter: Omega #11 vs Salvo #14, w: LightPulse #15
+calculateToHit
+CALCULATE TO HIT - angle: 181, base: 10, trav: 1, total multi: 1.5, dist/range: 0/0, req: 12
+shot #0, req: 12
+resolveFireOrder ID 28, shooter: Omega #11 vs Salvo #14, w: LightPulse #16
+calculateToHit
+CALCULATE TO HIT - angle: 330, base: 10, trav: 1, total multi: 1.5, dist/range: 0/0, req: 12
+shot #0, req: 12
+resolveFireOrder ID 29, shooter: Omega #11 vs Salvo #14, w: LightPulse #17
+calculateToHit
+CALCULATE TO HIT - angle: 287, base: 10, trav: 1, total multi: 1.5, dist/range: 0/0, req: 12
+shot #0, req: 12
+resolveFireOrder ID 30, shooter: Omega #11 vs Salvo #14, w: LightPulse #18
+calculateToHit
+CALCULATE TO HIT - angle: 239, base: 10, trav: 1, total multi: 1.5, dist/range: 0/0, req: 12
+shot #0, req: 12
+resolveFireOrder ID 31, shooter: Omega #11 vs Salvo #14, w: LightPulse #19
+calculateToHit
+CALCULATE TO HIT - angle: 138, base: 10, trav: 1, total multi: 1.5, dist/range: 0/0, req: 12
+shot #0, req: 12
+resolveFireOrder - ID 32, shooter: Flight #13 vs Artemis #12, w: ParticlePulsar #2, guns: 1
+calculateToHit
+CALCULATE TO HIT - angle: 135, base: 76, trav: 0, total multi: 1, dist/range: 0/0, req: 76
+resolveFireOrder - ID 34, shooter: Flight #13 vs Artemis #12, w: ParticlePulsar #6, guns: 1
+calculateToHit
+CALCULATE TO HIT - angle: 48, base: 76.354666666667, trav: 0, total multi: 1, dist/range: 0/0, req: 76.354666666667
 fireid: 34, doDamage, weapon: ParticlePulsar, target: 12, hits: 3
-resolveFireOrder - ID 35, shooter: Flight #13 vs Artemis #12, w: ParticlePulsar #4, guns: 1
-fireid: 35, doDamage, weapon: ParticlePulsar, target: 12, hits: 3
-resolveFireOrder - ID 36, shooter: Flight #13 vs Artemis #12, w: ParticlePulsar #6, guns: 1
+ => target system Dual #13 was destroyed, rem: 28, doing: 10, OK for: 18 dmg
+resolveFireOrder - ID 35, shooter: Flight #13 vs Artemis #12, w: ParticlePulsar #8, guns: 1
+calculateToHit
+CALCULATE TO HIT - angle: 260, base: 80.137777777778, trav: 0, total multi: 1, dist/range: 0/0, req: 80.137777777778
+resolveFireOrder - ID 36, shooter: Flight #13 vs Artemis #12, w: ParticlePulsar #10, guns: 1
+calculateToHit
+CALCULATE TO HIT - angle: 158, base: 73.280888888889, trav: 0, total multi: 1, dist/range: 0/0, req: 73.280888888889
 fireid: 36, doDamage, weapon: ParticlePulsar, target: 12, hits: 3
- => target system Reactor #6 was destroyed, rem: 17, doing: 9, OK for: 8 dmg
-resolveFireOrder - ID 37, shooter: Flight #13 vs Artemis #12, w: ParticlePulsar #8, guns: 1
-resolveFireOrder - ID 38, shooter: Flight #13 vs Artemis #12, w: ParticlePulsar #10, guns: 1
-resolveFireOrder - ID 41, shooter: Flight #13 vs Artemis #12, w: ParticlePulsar #16, guns: 1
-resolveFireOrder - ID 43, shooter: Flight #13 vs Artemis #12, w: ParticlePulsar #20, guns: 1
-resolveFireOrder - ID 44, shooter: Flight #13 vs Artemis #12, w: ParticlePulsar #22, guns: 1
-DB updateFireOrders: 24
+resolveFireOrder - ID 37, shooter: Flight #13 vs Artemis #12, w: ParticlePulsar #12, guns: 1
+calculateToHit
+CALCULATE TO HIT - angle: 208, base: 73.990222222222, trav: 0, total multi: 1, dist/range: 0/0, req: 73.990222222222
+fireid: 37, doDamage, weapon: ParticlePulsar, target: 12, hits: 2
+resolveFireOrder - ID 38, shooter: Flight #13 vs Artemis #12, w: ParticlePulsar #14, guns: 1
+calculateToHit
+CALCULATE TO HIT - angle: 203, base: 73.399111111111, trav: 0, total multi: 1, dist/range: 0/0, req: 73.399111111111
+fireid: 38, doDamage, weapon: ParticlePulsar, target: 12, hits: 3
+resolveFireOrder - ID 39, shooter: Flight #13 vs Artemis #12, w: ParticlePulsar #16, guns: 1
+calculateToHit
+CALCULATE TO HIT - angle: 138, base: 75.645333333333, trav: 0, total multi: 1, dist/range: 0/0, req: 75.645333333333
+fireid: 39, doDamage, weapon: ParticlePulsar, target: 12, hits: 2
+resolveFireOrder - ID 40, shooter: Flight #13 vs Artemis #12, w: ParticlePulsar #18, guns: 1
+calculateToHit
+CALCULATE TO HIT - angle: 95, base: 80.728888888889, trav: 0, total multi: 1, dist/range: 0/0, req: 80.728888888889
+fireid: 40, doDamage, weapon: ParticlePulsar, target: 12, hits: 3
+resolveFireOrder - ID 42, shooter: Flight #13 vs Artemis #12, w: ParticlePulsar #22, guns: 1
+calculateToHit
+CALCULATE TO HIT - angle: 197, base: 72.689777777778, trav: 0, total multi: 1, dist/range: 0/0, req: 72.689777777778
+fireid: 42, doDamage, weapon: ParticlePulsar, target: 12, hits: 3
+resolveFireOrder - ID 43, shooter: Flight #13 vs Artemis #12, w: ParticlePulsar #24, guns: 1
+calculateToHit
+CALCULATE TO HIT - angle: 217, base: 75.054222222222, trav: 0, total multi: 1, dist/range: 0/0, req: 75.054222222222
+fireid: 43, doDamage, weapon: ParticlePulsar, target: 12, hits: 3
+DB updateFireOrders: 22
 handleBallisticInterception | balls:0, intercepts: 0
 = testCriticals for Omega, #11, turn: 4
 = testCriticals for Flight, #13, turn: 4
 = testCriticals for Artemis, #12, turn: 4
 = testCriticals for Salvo, #14, turn: 4
- => DB insertDamageEntries: 19
- => DB insertCritEntries: 1
-handleFiringPhase time: 0.153 seconds.
-advancing game state time: 0.166 seconds.
-4
-4
-4
-4
-4
-4
-4
-4
-4
-4
+ => DB insertDamageEntries: 10
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.185 seconds.
+advancing game state time: 0.199 seconds.

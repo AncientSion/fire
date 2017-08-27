@@ -6,7 +6,7 @@ function Game(data, userid){
 	this.userid = userid;
 	this.turn = data.turn;
 	this.phase = data.phase;
-	this.ships = data.ships;
+	this.ships = data.ships || [];
 	this.reinforcements = data.reinforcements;
 	this.incoming = data.incoming;
 	this.fireOrders = []
@@ -199,9 +199,8 @@ function Game(data, userid){
 		}
 
 		var o = s.getPlannedPosition();
-		var facing = getAngleFromTo(o, dest);
-			s.facing = facing;
-		var p = getPointInDirection(20, facing, o.x, o.y);
+			s.facing = getAngleFromTo(o, dest);
+		var p = getPointInDirection(20, s.facing, o.x, o.y);
 		var mission = {unitid: aUnit, turn: this.turn, type: this.mission.new, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0};
 
 		if (t && o.x == dest.x && o.y == dest.y){
@@ -780,7 +779,7 @@ function Game(data, userid){
 
 	this.movementResolved = function(){
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].flight){
+			if (this.ships[i].flight && this.animFlight || this.ships[i].salvo && this.animSalvo){
 				if (this.ships[i].mission.arrived){
 					if (this.ships[i].mission.type == 1){
 						this.ships[i].setPostMoveSize();
@@ -799,8 +798,7 @@ function Game(data, userid){
 				this.ships[i].setEscortImage();
 			}
 		}
-		game.draw();
-		console.log("movementResolved");
+		//game.draw();
 	}
 
 	this.initDamageControl = function(){
@@ -1439,14 +1437,7 @@ Game.prototype.getUnitType = function (val){
 		if (aUnit){
 			game.getUnitById(aUnit).select();
 		}
-
-	//	this.ships.sort(function(a, b){
-		//	return a.flight-b.flight || a.salvo - b.salvo;
-	//	});
-
-
 		cam.setZoom(1);
-		//cam.setFocus(this.ships[0].x, this.ships[0].y);
 		setFPS(60);
 
 		//console.log("animShip: "+animShip);
@@ -1583,10 +1574,10 @@ Game.prototype.getUnitType = function (val){
 								}
 							}
 
-							for (var k = 0; k < game.ships[i].attachAnims.length; k++){
-								game.ships[i].attachAnims[k].drawX = game.ships[i].drawX;
-								game.ships[i].attachAnims[k].drawY = game.ships[i].drawY;
-							}
+							//for (var k = 0; k < game.ships[i].attachAnims.length; k++){
+							//		game.ships[i].attachAnims[k].drawX = game.ships[i].drawX;
+							//ame.ships[i].attachAnims[k].drawY = game.ships[i].drawY;
+							//}
 							
 							break;
 						}
@@ -1622,6 +1613,7 @@ Game.prototype.getUnitType = function (val){
 					game.animFlight = 1;
 				}
 				else if (game.animFlight){
+					game.movementResolved();
 					console.log("salvo moves");
 					game.animFlight = 0;
 					game.animSalvo = 1;
@@ -1629,6 +1621,8 @@ Game.prototype.getUnitType = function (val){
 				else {
 					window.cancelAnimationFrame(anim);
 					game.movementResolved();
+					game.draw();
+					console.log("movementResolved");
 				}
 			}
 		}
@@ -1640,7 +1634,7 @@ Game.prototype.getUnitType = function (val){
 		this.getResolvingFireOrders();
 		this.getShotDetails();
 		this.getFireAnimationDetails();
-		this.getBallDetails();
+		//this.getBallDetails();
 		this.getShipExplosionDetails();
 
 		$("#combatlogWrapper").show();
@@ -1751,12 +1745,6 @@ Game.prototype.getUnitType = function (val){
 					}
 				);
 				this.fireOrders[i].focus = {x: (a.x + b.x) / 2, y: (a.y + b.y) / 2}
-			}
-
-			if (this.fireOrders[i].target instanceof Salvo){
-				this.fireOrders[i].type = "Intercept";
-				window.animate.intercepts.push(this.fireOrders[i]);
-				this.fireOrders.splice(i, 1);
 			}
 		}
 

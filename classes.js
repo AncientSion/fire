@@ -153,9 +153,6 @@ function FireOrder(data){
 	this.max;
 	this.found = false;
 	this.rolls = [];
-	this.draw = function(){
-		return;
-	}
 
 	if (data.turn < game.turn){return;}
 	if (typeof data.notes === "string"){
@@ -215,59 +212,115 @@ Warhead.prototype.getDisplay = function(){
 	//return game.getUnitById(this.parentId).display;
 }
 
-function Missile(data){
+function Single(data){
 	this.id = data.id;
 	this.parentId = data.parentId;
 	this.name = data.name;
 	this.cost = data.cost;
 	this.display = data.display;
-	this.minDmg = data.minDmg;
-	this.maxDmg = data.maxDmg;
-	this.exploSize = (this.minDmg+this.maxDmg)/20;
-	this.size = data.mass*3;
+	this.ep = data.ep;
 	this.mass = data.mass;
 	this.integrity = data.integrity;
+	this.value = data.value;
 	this.negation = data.negation;
 	this.damages = data.damages || [];
-	this.crits = data.crits;
-	this.destroyed = data.destroyed;
-	this.traverse = data.traverse;
-	this.fireOrders = [];
-	this.systems = [];
 	this.crits = [];
+	this.baseHitChance = data.baseHitChance;
+	this.destroyed = data.destroyed;
+	this.disabled = data.disabled;
+	this.systems = [];
+	this.draw = 1;
+	this.layout = {};
+	this.fighter = 0;
+	this.missile = 0;
+}
 
-	this.getDamage = function(){
-		var min = this.getMinDmg();
-		var max = this.getMaxDmg();
-
-		if (min == max){
-			return min;
+Single.prototype.isDestroyedThisTurn = function(){
+	if (this.disabled){
+		for (var j = this.crits.length-1; j >= 0; j--){
+			if (this.crits[j].type == "Disabled" && this.crits[j].turn == game.turn){
+				return true;
+			}
 		}
-		else {
-			return min + " - " + max;
+	}
+	else if (this.destroyed){
+		for (var j = this.damages.length-1; j >= 0; j--){
+			if (this.damages[j].destroyed == 1 && this.damages[j].turn == game.turn){
+				return true;
+			}
+		}					
+	}
+	return false;
+}
+
+Single.prototype.isDamagedThisTurn = function(){
+	for (var i = this.damages.length-1; i >= 0; i--){
+		if (this.damages[i].turn == game.turn){
+			return true;
+		} else if (this.damages[i].turn < game.turn){
+			return false;
 		}
-	}
+	}				
+	return false;
+}
 
-	this.getMinDmg = function(){
-		return this.minDmg;
+Single.prototype.getRemainingIntegrity = function(){
+	var integrity = this.integrity;
+	for (var i = 0; i < this.damages.length; i++){
+		integrity -= this.damages[i].structDmg;
 	}
+	return integrity;
+}
 
-	this.getMaxDmg = function(){
-		return this.maxDmg;
+Single.prototype.hover = function(e){
+	if (!this.highlight){
+		this.highlight = true;
+		var ele = this.getDetailsDiv();
+		$(document.body).append(ele);
+		var w = $(ele).width();
+		$(ele).css("left", e.clientX - w/2).css("top", e.clientY + 40)
 	}
-
-	this.getRemainingIntegrity = function(){
-		return this.integrity;
-	}
-
-	this.getRemainingIntegrity = function(){
-		var integrity = this.integrity;
-		for (var i = 0; i < this.damages.length; i++){
-			integrity -= this.damages[i].structDmg;
-		}
-		return integrity;
+	else {
+		this.highlight = false;
+		$("#systemDetailsDiv").remove();
 	}
 }
+
+Single.prototype.getDetailsDiv = function(){
+	var div = document.createElement("div");
+		div.id = "systemDetailsDiv";
+		div.className = this.id + " flight";
+
+		var table = $("<table>")
+			.append($("<tr>").append($("<th>").attr("colspan", 2).html(this.name)))
+			.append($("<tr>").append($("<td>").html("Mass / Turn Delay").css("width", 120)).append($("<td>").html(this.mass)))
+			.append($("<tr>").append($("<td>").html("Engine Power")).append($("<td>").html(this.ep)))
+			.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.negation)))
+			//.append($("<tr>").append($("<td>").html("Side Armour")).append($("<td>").html(this.negation[1])))
+			//.append($("<tr>").append($("<td>").html("Rear Armour")).append($("<td>").html(this.negation[2])))
+
+	if (this.crits.length){
+			$(table)
+				.append($("<tr>").append($("<td>").attr("colspan", 2).css("fontSize", 16).css("borderBottom", "1px solid white").css("borderTop", "1px solid white").html("Modifiers")))
+
+		for (var i = 0; i < this.crits.length; i++){
+			val = this.crits[i].html;
+			$(table)
+				.append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("negative").html(val)))
+		}
+	}
+		
+	div.appendChild(table[0]);
+	return div;
+}
+
+function Missile(data){
+	Single.call(this, data);
+	this.traverse = data.traverse;
+}
+Missile.prototype = Object.create(Single.prototype);
+
+
 
 function Crit(data){
 	this.id = data.id;

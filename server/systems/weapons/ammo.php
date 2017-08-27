@@ -39,8 +39,8 @@ class Missile extends Single {
         );
     }
 
-	public function getSubHitChance($fire){
-		return ceil(sqrt($this->mass)*15);
+	public function setBaseStats(){
+		$this->baseHitChance = ceil(sqrt($this->mass)*5);
 	}
 }
 
@@ -68,7 +68,6 @@ class Warhead extends Weapon {
 class Hasta extends Missile {
 	public $name = "Hasta";
 	public $display = "Light Antifighter Missiles";
-	public $type = "explosive";
 	public $minDmg = 23;
 	public $maxDmg = 28;
 	public $mass = 3;
@@ -83,7 +82,6 @@ class Hasta extends Missile {
 class Javelin extends Missile {
 	public $name = "Javelin";
 	public $display = "Multirole Missiles";
-	public $type = "explosive";
 	public $minDmg = 33;
 	public $maxDmg = 45;
 	public $mass = 4;
@@ -98,7 +96,6 @@ class Javelin extends Missile {
 class Triarii extends Missile {
 	public $name = "Triarii";
 	public $display = "Heavy Multirole Missiles";
-	public $type = "explosive";
 	public $minDmg = 41;
 	public $maxDmg = 53;
 	public $mass = 4;
@@ -113,7 +110,6 @@ class Triarii extends Missile {
 class Vanguard extends Missile {
 	public $name = "Vanguard";
 	public $display = "Light Interceptor Missiles";
-	public $type = "explosive";
 	public $minDmg = 9;
 	public $maxDmg = 12;
 	public $mass = 2;
@@ -128,7 +124,6 @@ class Vanguard extends Missile {
 class Naga extends Missile {
 	public $name = "Naga";
 	public $display = "Multirole Missiles";
-	public $type = "explosive";
 	public $minDmg = 33;
 	public $maxDmg = 45;
 	public $mass = 4;
@@ -143,7 +138,6 @@ class Naga extends Missile {
 class Cyclops extends Missile {
 	public $name = "Cyclops";
 	public $display = "Light Antiship Missiles";
-	public $type = "explosive";
 	public $minDmg = 55;
 	public $maxDmg = 76;
 	public $mass = 6;
@@ -158,7 +152,6 @@ class Cyclops extends Missile {
 class Titan extends Missile {
 	public $name = "Titan";
 	public $display = "Heavy Antiship Missiles";
-	public $type = "explosive";
 	public $minDmg = 78;
 	public $maxDmg = 96;
 	public $mass = 8;

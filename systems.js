@@ -1774,6 +1774,7 @@ Pulse.prototype.getAnimation = function(fire){
 	var delay = 80;
 	var shotInterval = 6;
 	var cc = 0;
+	var hit = -1;
 
 	if (game.isCloseCombat(fire.shooter, fire.target)){
 		cc = 1;
@@ -1801,10 +1802,12 @@ Pulse.prototype.getAnimation = function(fire){
 
 		if (fire.hits[j] >= 1){
 			gunHit = true;
+			hit++;
 		}
 
-		if (cc && fire.target.flight){
-			var t = fire.target.getFireDest(j);
+		if (cc && (fire.target.flight || fire.target.salvo)){
+			var t = fire.target.getFireDest(fire, hit);
+			console.log(t);
 			if (gunHit){
 				tx = fire.target.drawX + t.x;
 				ty = fire.target.drawY + t.y;

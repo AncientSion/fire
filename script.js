@@ -153,19 +153,31 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 			var valid = false;
 			var vessel;
 			var section;
+			var angle;
 
 			dist = Math.floor(getDistance(shipLoc, vessel.getPlannedPosition()));
+			
+			if (ship.ship){
+				if (vessel.salvo){
+					angle = getAngleFromTo(vessel.getTrajectory(), shipLoc);
+					angle = addAngle(-ship.getPlannedFacing(), angle);
+				}
+				else {
+					angle = getAngleFromTo(vessel.getPlannedPosition(), shipLoc);
+					angle = addAngle(vessel.getPlannedFacing(), angle);
+				}
+			} else angle = range(0, 359);
+			
+			baseHit = vessel.getAngledHitChance(angle);
 
-			//angle = getAngleFromTo(vessel.getBaseOffsetPos(), shipLoc);
-			//angle = addAngle(vessel.getPlannedFacing(), angle);
-			angle = getAngleFromTo(vessel.getPlannedPosition(), shipLoc);
-			angle = addAngle(vessel.getPlannedFacing(), angle);
-			baseHit = vessel.getHitChanceFromAngle(angle);
-			if (ship.flight && vessel.flight){baseHit *= 2;}
+			if (ship.flight && vessel.flight){
+				baseHit *= 2;
+			}
+
 			impulse = 1 - vessel.getImpulseMod();
 			lock = ship.getOffensiveBonus(vessel);
 			mask = vessel.getDefensiveBonus(ship);
-			//section = vessel.getHitSectionFromAngle(angle);
+			//section = vessel.getAngledHitSection(angle);
 
 			//console.log("armour: "+section.remainingNegation + " / " + section.negation);
 
@@ -234,7 +246,11 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 
 	var validWeapon = false;
 
-	if (vessel){pos = vessel.getPlannedPosition();}
+	if (vessel){
+		if (vessel.salvo){
+			pos = vessel.getTrajectory();
+		} else pos = vessel.getPlannedPosition();
+	}
 	
 	if (!drop){	
 		for (var i = 0; i < ship.structures.length; i++){
@@ -248,22 +264,18 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 					var row = $("<tr>");
 						row.append($("<td>").html(system.display + " #" + ship.structures[i].systems[j].id))
 
-					if (game.isCloseCombat(ship, vessel)){
-						legalTarget = true;
-						inArc = true;
-					}
-					else if (ship.ship && vessel.salvo){
-						if (ship.id != vessel.targetid && !(system instanceof Launcher)){ // ship vs salvo indirect
-							legalTarget = false;
-							msg = "Unable to aquire target (trajectory)";
-						}
-						else if (ship.id == vessel.targetid && getDistance(ship.getPlannedPosition(), vessel) <= ship.size/2){
-							legalTarget = false;
-							msg = "Unable to aquire target (reaction time)";
-						} 
-						else if (system.posIsOnArc(shipLoc, pos, facing)){ // ship vs ship/fighter
+					if (vessel.flight){
+						if (game.isCloseCombat(ship, vessel)){
+							legalTarget = true;
 							inArc = true;
-							validWeapon = true;
+						}
+					}
+					else if (vessel.salvo){
+						if (game.isCloseCombat(ship, vessel)){
+							if (system.posIsOnArc(shipLoc, pos, facing)){ // ship vs salvo
+								inArc = true;
+								validWeapon = true;
+							}
 						}
 					}
 					else if (system.posIsOnArc(shipLoc, pos, facing)){ // ship vs ship/fighter
@@ -565,13 +577,8 @@ function handleFireClick(ship, vessel){
 								}
 
 								if (!validWeapon){
-									if (ship.ship && vessel.salvo){
-										if (ship.id == vessel.targetid && getDistance(ship.getPlannedPosition(), vessel) >= ship.size/2){
-											validWeapon = true;
-										}
-									}
-									else if (ship.flight && vessel.salvo){ // fighter vs salvo
-											validWeapon = true;
+									if (ship.ship && vessel.salvo && ship.id == vessel.mission.targetid){
+										validWeapon = true;
 									}
 								}
 

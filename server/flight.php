@@ -16,13 +16,6 @@ class Flight extends Mixed {
         parent::__construct($id, $userid, $available, $status, $destroyed);
 	}
 
-	public function setBaseStats(){
-		$this->baseHitChance = 0;//ceil(pow($this->mass, 1/3)*5);
-		$this->baseTurnCost = round(pow($this->mass, 1.15)/100, 2);
-		$this->baseTurnDelay = $this->baseTurnCost * 2;
-		$this->baseImpulseCost = round(pow($this->mass, 1.15)/4, 2);
-	}
-
 	public function setMass(){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (!$this->structures[$i]->destroyed){

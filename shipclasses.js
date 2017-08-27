@@ -63,61 +63,6 @@ function Ship(data){
 	this.drawImg;
 	this.doDraw = 1;
 
-	this.getDamageEntriesByFireId = function(fire){
-		var dmgs = [];
-		var lookup = 0;
-
-		for (var i = 0; i < fire.hits.length; i++){
-			lookup += fire.hits[i]
-		}
-
-		if (!lookup){
-			return dmgs;
-		}
-
-		for (var i = this.primary.damages.length-1; i >= 0; i--){
-			if (this.primary.damages[i].fireid == fire.id){					
-				dmgs.push(this.primary.damages[i]);
-				dmgs[dmgs.length-1].system = "Main Structure";
-				lookup--;
-				if (!lookup){return dmgs};
-			}
-			else if (this.primary.damages[i].turn < fire.turn){
-				break;
-			}
-		}
-
-		for (var i = 0; i < this.primary.systems.length; i++){
-			for (var j = this.primary.systems[i].damages.length-1; j >= 0; j--){
-				if (this.primary.systems[i].damages[j].fireid == fire.id){
-					dmgs.push(this.primary.systems[i].damages[j]);
-					dmgs[dmgs.length-1].system = this.primary.systems[i].display
-					lookup--;
-					if (!lookup){return dmgs};
-				}
-				else if (this.primary.systems[i].damages[j].turn < fire.turn){
-					break;
-				}
-			}
-		}
-
-		for (var i = 0; i < this.structures.length; i++){
-			for (var j = 0; j < this.structures[i].systems.length; j++){
-				for (var k = this.structures[i].systems[j].damages.length-1; k >= 0; k--){
-					if (this.structures[i].systems[j].damages[k].fireid == fire.id){
-						dmgs.push(this.structures[i].systems[j].damages[k]);
-						dmgs[dmgs.length-1].system = this.structures[i].systems[j].display
-						lookup--;
-						if (!lookup){return dmgs};
-					} else if (this.structures[i].systems[j].damages[k].turn < fire.turn){
-						break;
-					}
-				}
-			}
-		}
-		return dmgs;
-	}
-
 	this.drawDeploymentPreview = function(pos){
 		mouseCtx.clearRect(0, 0, res.x, res.y);
 		mouseCtx.translate(cam.o.x, cam.o.y)
@@ -174,6 +119,7 @@ function Ship(data){
 			var size = this.size
 			var fSize = 12;
 			var tresh = 10;
+			var drawFacing = this.getDrawFacing();
 
 			var t = document.createElement("canvas");
 				t.width = size*2;
@@ -192,21 +138,22 @@ function Ship(data){
 				for (var i = 0; i < this.cc.length; i++){
 					var attach = game.getUnitById(this.cc[i]);
 					if (attach.doDraw){continue;}
+					if (this.userid == attach.userid){
+						attach.size = (size+tresh);
+					} else attach.size = (size+tresh*2);
 					for (var j = 0; j < attach.structures.length; j++){
 						if (!attach.structures[j].draw){;continue;}
-						if (shipFriendly){
+					//	if (shipFriendly){
 							if (this.userid == attach.userid){
 								friendly.push(attach.structures[j]);
 							} else hostile.push(attach.structures[j]);
-						}
-						else if (this.userid == attach.userid){
-							friendly.push(attach.structures[j]);
-						} else hostile.push(attach.structures[j])
+					//	}
+					//	else if (this.userid == attach.userid){
+					//		friendly.push(attach.structures[j]);
+					//	} else hostile.push(attach.structures[j])
 					}
 				}
 			}
-
-			var drawFacing = this.getDrawFacing();
 
 			if (friendly.length){
 				var color = "green";
@@ -256,7 +203,7 @@ function Ship(data){
 					var pos = getPointInDirection(size/2+tresh - fSize/2, a, 0, 0);
 					//console.log(a); 
 					//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
-					hostile[i].layout =  getPointInDirection(size/2+tresh - fSize/2, a+drawFacing, 0, 0);
+					hostile[i].layout = getPointInDirection(size/2+tresh - fSize/2, a+drawFacing, 0, 0);
 					ctx.translate(pos.x, +pos.y);
 					ctx.rotate((a-90)*(Math.PI/180));
 					ctx.drawImage(
@@ -806,10 +753,6 @@ function Ship(data){
 	this.getImpulseStep = function(){
 		//return 15;
 		return Math.floor(this.getBaseImpulse() / 10);
-	}
-	
-	this.getImpulseMod = function(){
-		return this.getCurrentImpulse() / this.getBaseImpulse();
 	}
 	
 	this.getTurnCost = function(){
@@ -1786,28 +1729,6 @@ function Ship(data){
 		}
 	}
 
-	this.getBaseHitChance = function(){
-		return this.baseHitChance;
-	}
-
-	this.getHitChanceFromAngle = function(angle){
-		var a, b, c, base;
-		
-		while (angle > 90){
-			angle -= 180;
-		}
-		if (angle < 0){
-			angle *= -1;
-		}
-
-		base = this.getBaseHitChance();
-		a = base * this.profile[0];
-		b = base * this.profile[1];
-		sub = ((90 - angle) * a) + ((angle - 0) * b);
-		sub /= (90 - 0);
-		return Math.ceil(sub);
-	}
-	
 	this.createBaseDiv = function(){
 		var owner = "friendly";
 		if (game.phase > -2 && this.userid != game.userid){owner = "hostile";}
@@ -2537,46 +2458,37 @@ function Ship(data){
 
 	//	return isInArc(getCompassHeadingOfPoint(loc, pos, facing), start, end);
 
-	this.getOffensiveBonus = function(t){
-		//return 0
-		var tPos;
-		if (this.flight){return false;}
-		if (t.salvo){
-			if (t.targetid == this.id){
-				if (t.nextStep == t.finalStep){
-					tPos = t.getBaseOffsetPos();
-				} else tPos = t.nextStep;
-			}
-			else return 0;
-		} else tPos = t.getBaseOffsetPos();
-
+	this.getOffensiveBonus = function(target){
+		if (this.flight || this.salvo){return 0;}
 		var sensor = this.getSystemByName("Sensor");
 		var ew = sensor.getEW();
 		if (sensor.disabled || sensor.destroyed || ew.type == 1 || ew.type == 3){return 0;}
 		if (ew.type == 2){return 0.2}
+
+		var tPos = target.getBaseOffsetPos();
 		var origin = this.getBaseOffsetPos();
-		var d = getDistance(origin, tPos);		
-		if (d <= ew.dist || t.salvo && t.nextStep == t.finalStep){
-			if (this.isInEWArc(origin, tPos, sensor, ew)){
-				return 0.5;
-			}
+		var d = getDistance(origin, tPos);
+
+		if (d == 0 && game.isCloseCombat(this, target) && this.isInEWArc(origin, target.getTrajectory(), sensor, ew)){
+			return 0.5;
 		}
-		return 0;
+		else if (d <= ew.dist && this.isInEWArc(origin, tPos, sensor, ew)){
+			return 0.5;
+		}
+		else return 0;
 	}
 
-	this.getDefensiveBonus = function(s){
+	this.getDefensiveBonus = function(shooter){
 		//return 0
-		if (this.flight || s.flight){
-			return 0;
-		}
+		if (this.flight || this.salvo || shooter.flight | shooter.salvo){return 0;}
+
 		var sensor = this.getSystemByName("Sensor");
 		var ew = sensor.getEW();
-
 		if (sensor.disabled || sensor.destroyed || ew.type == 0 || ew.type == 2){return 0;}
 		if (ew.type == 3){return 0.2}
 
 		var origin = this.getBaseOffsetPos();
-		var tPos = s.getBaseOffsetPos();
+		var tPos = shooter.getBaseOffsetPos();
 		var d = getDistance(origin, tPos);
 
 		if (d <= ew.dist){
@@ -2809,14 +2721,18 @@ Ship.prototype.getShortInfo = function(){
 		$(ele).attr("class", "friendly");
 	} else $(ele).attr("class", "hostile");
 
-	var baseHit = this.getBaseHitChance();
 	var impulse = this.getCurrentImpulse();
 
 	var table = document.createElement("table");
 		table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id + " (" +game.getUnitType(this.traverse) + ")";
 		table.insertRow(-1).insertCell(-1).innerHTML =  "Thrust: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")";
-		table.insertRow(-1).insertCell(-1).innerHTML = "Base Hit: " + Math.floor(this.profile[0] * baseHit) + "% - " + Math.floor(this.profile[1] * baseHit) + "%";
+		table.insertRow(-1).insertCell(-1).innerHTML = this.getStringHitChance();
 	return table;
+}
+
+Ship.prototype.getStringHitChance= function(){
+	var baseHit = this.getBaseHitChance();
+	return ("Base Hit: " + Math.floor(this.profile[0] * baseHit) + "% - " + Math.floor(this.profile[1] * baseHit) + "%");
 }
 
 Ship.prototype.getParent = function(){
@@ -3004,4 +2920,87 @@ Ship.prototype.getPlannedFacing = function(){
 
 Ship.prototype.getDrawFacing = function(){
 	return this.drawFacing;
+}
+
+Ship.prototype.getImpulseMod = function(){
+	return this.getCurrentImpulse() / this.getBaseImpulse();
+}
+
+
+Ship.prototype.getBaseHitChance = function(){
+	return this.baseHitChance;
+}
+
+Ship.prototype.getAngledHitChance = function(angle){
+	var a, b, c, base;
+	
+	while (angle > 90){
+		angle -= 180;
+	}
+	if (angle < 0){
+		angle *= -1;
+	}
+
+	base = this.getBaseHitChance();
+	a = base * this.profile[0];
+	b = base * this.profile[1];
+	sub = ((90 - angle) * a) + ((angle - 0) * b);
+	sub /= (90 - 0);
+	return Math.ceil(sub);
+}
+
+
+Ship.prototype.getDamageEntriesByFireId = function(fire){
+	var dmgs = [];
+	var lookup = 0;
+
+	for (var i = 0; i < fire.hits.length; i++){
+		lookup += fire.hits[i]
+	}
+
+	if (!lookup){
+		return dmgs;
+	}
+
+	for (var i = this.primary.damages.length-1; i >= 0; i--){
+		if (this.primary.damages[i].fireid == fire.id){					
+			dmgs.push(this.primary.damages[i]);
+			dmgs[dmgs.length-1].system = "Main Structure";
+			lookup--;
+			if (!lookup){return dmgs};
+		}
+		else if (this.primary.damages[i].turn < fire.turn){
+			break;
+		}
+	}
+
+	for (var i = 0; i < this.primary.systems.length; i++){
+		for (var j = this.primary.systems[i].damages.length-1; j >= 0; j--){
+			if (this.primary.systems[i].damages[j].fireid == fire.id){
+				dmgs.push(this.primary.systems[i].damages[j]);
+				dmgs[dmgs.length-1].system = this.primary.systems[i].display
+				lookup--;
+				if (!lookup){return dmgs};
+			}
+			else if (this.primary.systems[i].damages[j].turn < fire.turn){
+				break;
+			}
+		}
+	}
+
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].systems.length; j++){
+			for (var k = this.structures[i].systems[j].damages.length-1; k >= 0; k--){
+				if (this.structures[i].systems[j].damages[k].fireid == fire.id){
+					dmgs.push(this.structures[i].systems[j].damages[k]);
+					dmgs[dmgs.length-1].system = this.structures[i].systems[j].display
+					lookup--;
+					if (!lookup){return dmgs};
+				} else if (this.structures[i].systems[j].damages[k].turn < fire.turn){
+					break;
+				}
+			}
+		}
+	}
+	return dmgs;
 }

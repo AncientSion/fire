@@ -122,13 +122,32 @@ class Single {
 	public $integrity;
 	public $negation;
 	public $destroyed = 0;
+	public $disabled = 0;
 	public $systems = array();
 	public $damages = array();
 	public $crits = array();
+	public $baseHitChance;
+	public $name;
+	public $display;
+	public $mass;
+	public $value;
+	public $cost;
+	public $start = 0;
+	public $end = 360;
+	public $ep = 0;
 
 	function __construct($id, $parentId){
 		$this->id = $id;
 		$this->parentId = $parentId;
+		$this->setBaseStats();
+	}
+
+	public function setBaseStats(){
+		$this->baseHitChance = ceil(sqrt($this->mass)*5);
+	}
+
+	public function getSubHitChance($fire){
+		return $this->baseHitChance;
 	}
 
 	public function isDestroyed(){
@@ -167,13 +186,6 @@ class Single {
 		}
 	}
 
-	public function getHitAngle($fire){
-		$tPos = $this->getCurrentPosition();
-		$sPos = $fire->shooter->getCurrentPosition();
-		$angle = Math::getAngle($tPos->x, $tPos->y, $sPos->x, $sPos->y);
-		return round(Math::addAngle($this->facing, $angle));
-	}
-	
 	public function testCrit($turn){
 		if ($this->destroyed || empty($this->damages)){
 			return;
@@ -198,6 +210,10 @@ class Single {
 		return array(// attr, %-tresh, duration, modifier
 			array("Disabled", 65, 0, 0)
 		);
+	}
+
+	public function getCurrentNegation(){
+		return $this->negaton;
 	}
 
 	public function determineCrit($old, $new, $turn){

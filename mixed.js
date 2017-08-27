@@ -24,7 +24,6 @@ Mixed.prototype.isReady = function(){
 	return false;
 }
 
-
 Mixed.prototype.getPlannedFacing = function(){
 	if (game.phase < 2){
 		return this.facing;
@@ -82,8 +81,26 @@ Mixed.prototype.doHighlight = function(){
 		ctx.strokeStyle = "white";
 		ctx.stroke();
 		ctx.setTransform(1,0,0,1,0,0);
-		this.drawMovePlan();
+		
+		if (!this.mission.arrived){
+			this.drawMovePlan();
+		} else if (this.salvo){
+			this.drawTrajectory();
+		}
 	}
+}
+
+Mixed.prototype.drawTrajectory = function(){
+	planCtx.globalAlpha = 1;
+	planCtx.translate(cam.o.x, cam.o.y);
+	planCtx.scale(cam.z, cam.z);
+	planCtx.beginPath();
+	planCtx.moveTo(this.x, this.y);
+	planCtx.lineTo(this.mission.x, this.mission.y);
+	planCtx.closePath();
+	planCtx.strokeStyle = "red";
+	planCtx.stroke();
+	planCtx.setTransform(1,0,0,1,0,0);
 }
 
 Mixed.prototype.isDestroyed = function(){
@@ -140,9 +157,6 @@ Mixed.prototype.getImpulseMod = function(){
 }
 
 Mixed.prototype.drawMovePlan = function(){
-	if (this.mission.arrived){
-		return;
-	}
 	var target;
 	var origin = this.getPlannedPosition();
 	if (this.mission.type > 1){
@@ -180,6 +194,54 @@ Mixed.prototype.drawMovePlan = function(){
 	planCtx.setTransform(1,0,0,1,0,0);
 }
 
+Mixed.prototype.getStringHitChance = function(){
+	var min = 0; var max = 0;
+	for (var i = 0; i < this.structures.length; i++){
+		if (!this.structures[i].destroyed){
+			min = Math.max(min, this.structures[i].baseHitChance);
+			max = Math.max(max, this.structures[i].baseHitChance);
+		}
+	}
+	if (min == max){
+		return ("Base Hit: " + min + "%");
+	} else return ("Base Hit: " + min + " - " + max + "%");
+}
+
+Mixed.prototype.getAngledHitSection = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		if (isInArc(a, this.structures[i].start, this.structures[i].end)){
+			return this.structures[i];
+		}
+	}
+}
+
+Mixed.prototype.getAngledHitChance = function(angle){
+	return Math.ceil(this.getBaseHitChance());
+}
+
+Mixed.prototype.getBaseHitChance = function(){
+	var chance = 0;
+	var amount = 0;
+
+	for (var i = 0; i < this.structures.length; i++){
+		if (!this.structures[i].destroyed){
+			amount++;
+			chance += this.structures[i].baseHitChance;
+		}
+	}
+
+	return Math.ceil(chance/amount);
+}
+
+Mixed.prototype.getWeaponPosition = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].systems.length; j++){
+			if (this.structures[i].systems[j].id == fire.weaponid){
+				return {x: this.layout[i].x, y: this.layout[i].y};
+			}
+		}
+	}
+}
 
 Mixed.prototype.getTargetPosition = function(){
 	if (this.mission.targetid){
@@ -196,7 +258,6 @@ Mixed.prototype.inRange = function(){
 Mixed.prototype.getTarget = function(){
 	return game.getUnitById(this.mission.targetid);	
 }
-
 
 Mixed.prototype.setTarget = function(){
 	var i = this.getCurrentImpulse();
@@ -292,4 +353,184 @@ Mixed.prototype.getParent = function(){
 		}
 	}
 	return this;	
+}
+
+Mixed.prototype.setPreFireImage = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		if (!this.structures[i].draw){
+			if (this.structures[i].isDestroyedThisTurn()){
+				this.structures[i].draw = true;
+			}
+		}
+	}
+	this.setImage();
+}
+
+Mixed.prototype.setImage = function(){
+	if (!this.mission.arrived){
+		this.setPreMoveImage();
+	}
+	else if (this.mission.arrived){
+		if (this.mission.arrived < game.turn){
+			this.setPostMoveImage();
+		} 
+		else if (this.mission.arrived == game.turn){
+			if (game.phase < 3){
+				this.setPreMoveImage();
+			} else this.setPostMoveImage();
+
+		}
+	}
+}
+
+Mixed.prototype.setPreMoveImage = function(){
+	var t = document.createElement("canvas");
+		t.width = this.size*2;
+		t.height = this.size*2;
+	var ctx = t.getContext("2d");
+
+	var size = 12;
+	ctx.translate(t.width/2, t.height/2);
+	ctx.rotate((this.getDrawFacing()+90) * (Math.PI/180));
+
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].draw){
+			ctx.drawImage(
+				this.smallImg,
+				this.structures[i].layout.x -size/2,
+				this.structures[i].layout.y -size/2,
+				size, 
+				size
+			)
+		;}
+	}	
+	//ctx.translate(this.size/2, this.size/2);
+	//ctx.rotate((this.getDrawFacing()+90) * (Math.PI/180));
+	ctx.setTransform(1,0,0,1,0,0);
+
+	this.drawImg = t;
+}
+
+Mixed.prototype.setPostMoveImage = function(){
+	var size = 12;
+	var t = document.createElement("canvas");
+		t.width = this.size;
+		t.height = this.size;
+	var ctx = t.getContext("2d");
+
+	if (this.mission.type == 1){ // patrol
+		ctx.translate(this.size/2, this.size/2);
+		for (var i = 0; i < this.structures.length; i++){
+			if (this.structures[i].draw){
+				ctx.save();
+				var ox = range(-this.size/3, this.size/3);
+				var oy = range(-this.size/3, this.size/3);
+
+				ctx.translate(ox, oy);			
+				ctx.rotate(range(0, 360) * (Math.PI/180));
+				ctx.drawImage(
+					this.smallImg,
+					0 -size/2,
+					0 -size/2,
+					size, 
+					size
+				);
+				ctx.restore();
+			}
+		}
+	}
+	else if (this.mission.type == 2){ // strike escort
+		ctx.translate(this.size/2, this.size/2);
+		for (var i = 0; i < this.structures.length; i++){
+			if (this.structures[i].draw){
+				ctx.save();		
+				//ctx.rotate((((360/this.structures.length-1)*i)+this.getDrawFacing()) * (Math.PI/180));
+				ctx.drawImage(
+					this.smallImg,
+					0 -size/2,
+					this.size/2 -size/2 -7,
+					size, 
+					size
+				);
+				ctx.restore();
+			}
+		}
+	}
+	ctx.setTransform(1,0,0,1,0,0);
+	this.drawImg = t;
+	//console.log(this.drawImg.toDataURL());
+}
+
+Mixed.prototype.setPostFireImage = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].draw && this.structures[i].destroyed || this.structures[i].disabled){
+			this.structures[i].draw = 0;
+		}
+	}
+	this.setImage();
+}
+
+Mixed.prototype.getGunOrigin = function(){
+	for (var i = j; i < this.structures.length; i++){
+		if ( (!this.structures[i].destroyed && !this.structures[i].disabled) || this.structures[i].isDestroyedThisTurn() ) {
+			return this.structures[i].layout;
+		}
+	}
+}
+
+Mixed.prototype.getFireDest = function(fire, hit){
+	if (hit < 0){
+		return {x: range(-30, 30), y: range(-30, 30)}
+	}
+	return this.getSystemById(fire.damages[hit].systemid).layout;
+}
+
+Mixed.prototype.getFireDesta = function(gun){
+	var hits = -1;
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].isDamagedThisTurn()){
+			hits++;
+			if (hits == gun){
+				return this.structures[i].layout;
+			}
+		}
+	}
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].isDestroyedThisTurn()){
+			return this.structures[i].layout;
+		}
+	}
+	return false;
+}
+
+Mixed.prototype.getTrajectory = function(gun){
+	return {x: this.x, y: this.y};
+}
+
+Mixed.prototype.getDamageEntriesByFireId = function(fire){
+	var dmgs = [];
+	var lookup = 0;
+
+	for (var i = 0; i < fire.hits.length; i++){
+		lookup += fire.hits[i]
+	}
+
+	if (!lookup){
+		return dmgs;
+	}
+
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = this.structures[i].damages.length-1; j >= 0; j--){
+			if (this.structures[i].damages[j].fireid == fire.id){
+				dmgs.push(this.structures[i].damages[j]);
+				dmgs[dmgs.length-1].system = this.structures[i].display;
+				lookup--;
+				if (!lookup){return dmgs};
+			}
+			else if (this.structures[i].damages[j].turn < fire.turn){
+				break;
+			}
+		}
+	}
+	return dmgs;
 }

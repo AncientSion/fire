@@ -52,15 +52,10 @@ foreach ($manager->playerstatus as $player){
 	}
 }
 
+$data = $manager->getClientData();
 echo "<script>";
-echo "window.game = ".json_encode($manager->getClientData(), JSON_NUMERIC_CHECK).";";
-//echo "window.gd = ".json_encode($manager->game, JSON_NUMERIC_CHECK).";";
-//echo "window.ships = ".json_encode($manager->getShipData($userid), JSON_NUMERIC_CHECK).";";
-echo "window.ballistics = ".json_encode($manager->ballistics, JSON_NUMERIC_CHECK).";";
+echo "window.game = ".json_encode($data, JSON_NUMERIC_CHECK).";";
 echo "window.playerstatus = ".json_encode($manager->playerstatus, JSON_NUMERIC_CHECK).";";
-//echo "window.reinforcements = ".json_encode($reinforcements, JSON_NUMERIC_CHECK).";";
-//echo "window.incoming = ".json_encode($manager->incoming, JSON_NUMERIC_CHECK).";";
-//echo "window.fireOrders = ".json_encode($fireorders, JSON_NUMERIC_CHECK).";";
 echo "</script>";
 
 ?>
@@ -74,10 +69,10 @@ echo "</script>";
 	<script src='mathLib.js'></script>	
 	<script src='shared.js'></script>
 	<script src='shipclasses.js'></script>
+	<script src='classes.js'></script>
 	<script src='mixed.js'></script>
 	<script src='salvo.js'></script>
 	<script src='flights.js'></script>
-	<script src='classes.js'></script>
 	<script src='systems.js'></script>
 	<script src='graphics.js'></script>
 	<script src='cam.js'></script>
@@ -630,19 +625,7 @@ echo "</script>";
 				}
 				else if (e.keyCode == 109){ // m, cancel move animation
 					if (game.phase == 1 || game.phase == 2){
-						window.cancelAnimationFrame(anim);
-						for (var i = 0; i < game.ships.length; i++){
-							game.ships[i].deployed = true;
-							if (game.ships[i].ship){
-								game.ships[i].setPostMovePosition();
-								game.ships[i].setPostMoveFacing();
-							}
-							else {
-								game.ships[i].setPostMovePosition();
-							}
-						}
 					}
-					game.movementResolved();
 				}
 				else if (e.keyCode == 43){ // +
 					if (game.phase == 0 || game.phase == 1){

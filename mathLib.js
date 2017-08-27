@@ -28,10 +28,10 @@ function getAngle(ax, ay, bx, by){
 
 function addAngle(f, a){
 	ret = 360 - f + a;
-	if (ret > 360){
+	while (ret > 360){
 		ret -= 360;
 	}
-	else if (ret < 0){
+	while (ret < 0){
 		ret += 360;
 	}
 	//console.log(ret);

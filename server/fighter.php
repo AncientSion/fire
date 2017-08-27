@@ -1,15 +1,6 @@
 <?php
 
 class Fighter extends Single {
-	public $name;
-	public $display;
-	public $value;
-	public $mass;
-	public $ep;
-	public $negation = array();
-	public $crits = array();
-	public $integrity;
-	public $turns;
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -48,8 +39,8 @@ class Fighter extends Single {
         );
     }
 
-	public function getSubHitChance($fire){
-		return ceil(($this->mass/1.5)*($fire->cc+1));
+	public function setBaseStats(){
+		$this->baseHitChance = ceil($this->mass/1.5);
 	}
 }
 
@@ -61,7 +52,7 @@ class Aurora extends Fighter {
 	public $mass = 38;
 	public $ep = 100;
 	public $integrity = 27;
-	public $negation = array(5, 4, 4);
+	public $negation = 5;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -80,7 +71,7 @@ class Thunderbolt extends Fighter {
 	public $mass = 42;
 	public $ep = 110;
 	public $integrity = 31;
-	public $negation = array(6, 5, 5);
+	public $negation = 6;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -100,7 +91,7 @@ class Nial extends Fighter {
 	public $mass = 36;
 	public $ep = 140;
 	public $integrity = 33;
-	public $negation = array(9, 8, 6);
+	public $negation = 8;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -119,7 +110,7 @@ class Sentri extends Fighter {
 	public $mass = 32;
 	public $ep = 115;
 	public $integrity = 26;
-	public $negation = array(6, 6, 5);
+	public $negation = 6;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -138,7 +129,7 @@ class Sitara extends Fighter {
 	public $mass = 32;
 	public $ep = 105;
 	public $integrity = 24;
-	public $negation = array(5, 4, 4);
+	public $negation = 5;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -157,7 +148,7 @@ class Gorith extends Fighter {
 	public $mass = 30;
 	public $ep = 85;
 	public $integrity = 24;
-	public $negation = array(4, 4, 3);
+	public $negation = 4;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -176,7 +167,7 @@ class Frazi extends Fighter {
 	public $mass = 35;
 	public $ep = 100;
 	public $integrity = 29;
-	public $negation = array(6, 5, 5);
+	public $negation = 6;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
