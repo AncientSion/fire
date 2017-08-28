@@ -155,7 +155,7 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 			var section;
 			var angle;
 
-			dist = Math.floor(getDistance(shipLoc, vessel.getPlannedPosition()));
+			dist = game.getFireDistance(ship, vessel);
 			
 			if (ship.ship){
 				if (vessel.salvo){

@@ -1329,6 +1329,22 @@ Game.prototype.getUnitType = function (val){
 		//console.log(window.reinforcements[i]);
 	}
 
+	this.getFireDistance = function(a, b){
+		if (a.ship && b.ship){
+			return Math.floor(getDistance(a.getPlannedPosition(), b.getPlannedPosition()));
+		}
+		else if (this.isCloseCombat(a, b)){
+			return 0;
+			if (a.ship){
+				return Math.floor(a.size/2);
+			} else if (b.ship){
+				return Math.floor(b.size/2);
+			}
+			else return a.getParent().size/2;
+		}
+		return 666;
+	}
+
 	this.resolveDeployment = function(){
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].deployed = true;

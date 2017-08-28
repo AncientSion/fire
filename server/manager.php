@@ -32,6 +32,9 @@ class Manager {
 	public $userindex = 0;
 	public $flights = array();
 
+	public $flight = 0;
+	public $salvo = 0;
+
 	function __construct($userid = 0, $gameid = 0){
 		//Debug::log("constructing manager ".$userid."/".$gameid);
 		//$this->getMemory();
@@ -601,8 +604,12 @@ class Manager {
 	public function handleMovementPhase(){
 		Debug::log("handleShipMovementPhase");
 		$this->handleShipMovement();
-		$this->handleFlightMovement();
-		$this->handleSalvoMovement();
+		$this->flight = 1;
+		$this->handleMixedMovement();
+		$this->flight = 0;
+		$this->salvo = 1;
+		$this->handleMixedMovement();
+		$this->salvo = 0;
 	}
 
 
@@ -620,8 +627,8 @@ class Manager {
 		DBManager::app()->resolveUnitMovementDB($this->ships);
 	}
 
-	public function handleFlightMovement(){
-		Debug::log("handleFlightMovement");
+	public function handleMixedMovement(){
+		Debug::log("handleMixedMovement");
 		$missions = array();
 		$stack = array(array(), array(), array());
 		$units = array();
@@ -632,7 +639,9 @@ class Manager {
 
 	
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if (!$this->ships[$i]->flight){continue;}
+			if ($this->flight && !$this->ships[$i]->flight || $this->salvo && !$this->ships[$i]->salvo){
+				continue;
+			}
 
 			if ($this->ships[$i]->mission->arrived){ // already at target location
 				if ($this->ships[$i]->mission->type == 2){ // strike
@@ -680,7 +689,7 @@ class Manager {
 		for ($i = 0; $i < sizeof($stack); $i++){
 			Debug::log("resolving layer #".$i);
 			for ($j = 0; $j < sizeof($stack[$i]); $j++){
-				Debug::log("resolving flight #".$stack[$i][$j]->id);
+				Debug::log("resolving mixed #".$stack[$i][$j]->id);
 				Debug::log("_____________________");
 				$origin = $stack[$i][$j]->getCurrentPosition();
 				$impulse = $stack[$i][$j]->getCurrentImpulse();
@@ -692,8 +701,8 @@ class Manager {
 				}
 				else $tPos = $this->getUnitById($stack[$i][$j]->mission->targetid)->getCurrentPosition(); // strike / int
 
-				$stack[$i][$k]->mission->x = $tPos->x;
-				$stack[$i][$k]->mission->y = $tPos->y;
+				$stack[$i][$j]->mission->x = $tPos->x;
+				$stack[$i][$j]->mission->y = $tPos->y;
 				$dist = Math::getDist2($origin, $tPos);
 				$angle = Math::getAngle2($origin, $tPos);
 
@@ -783,6 +792,8 @@ class Manager {
 				$angle;
 				$tPos = $this->getUnitById($stack[$i][$j]->mission->targetid)->getCurrentPosition(); // strike / intercept
 
+				$stack[$i][$j]->mission->x = $tPos->x;
+				$stack[$i][$j]->mission->y = $tPos->y;
 				$dist = Math::getDist2($origin, $tPos);
 				$angle = Math::getAngle2($origin, $tPos);
 
