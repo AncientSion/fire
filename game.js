@@ -807,7 +807,7 @@ function Game(data, userid){
 
 	this.fireResolved = function(){
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].flight){
+			if (!this.ships[i].ship){
 				this.ships[i].setPostFireImage();
 			}
 		}
@@ -1672,7 +1672,7 @@ Game.prototype.getUnitType = function (val){
 
 	this.resetImageData = function(){
 		for (var i = 0; i < this.ships.length; i++){
-			 if (this.ships[i].flight){this.ships[i].setPreFireImage();}
+			 if (!this.ships[i].ship){this.ships[i].setPreFireImage();}
 		}
 		for (var i = 0; i < this.ships.length; i++){
 			 if (this.ships[i].ship){this.ships[i].setEscortImage();}
@@ -1821,7 +1821,7 @@ Game.prototype.getUnitType = function (val){
 						done: false
 				}
 
-				if (game.ships[i].flight){
+				if (!game.ships[i].ship){
 					for (var j = 0; j < game.ships[i].structures.length; j++){
 						if (game.ships[i].structures[j].isDestroyedThisTurn()){
 							anim.anims.push({
@@ -2177,8 +2177,8 @@ Game.prototype.getUnitType = function (val){
 						if (window.animations[i].anims[j].t[0] > 0){
 							drawFighterExplosion(
 								window.animations[i].anims[j].x,
-								window.animations[i].anims[j].y, 
-								window.animations[i].anims[j].s,
+								window.animations[i].anims[j].y,
+								10,
 								window.animations[i].anims[j].t[0],
 								window.animations[i].anims[j].t[1]
 							)

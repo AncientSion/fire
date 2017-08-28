@@ -844,7 +844,10 @@ table, th, tr, td {
 
 .ammoOverlay {
 	position: absolute;
+	height: 40px;
+	width: 40px;
 }
+
 .fighterDiv {
 	position: absolute;
 	color: black;

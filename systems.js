@@ -1806,8 +1806,11 @@ Pulse.prototype.getAnimation = function(fire){
 		}
 
 		if (cc && (fire.target.flight || fire.target.salvo)){
+			if (fire.target.salvo && gunHit){
+				console.log("ding");
+			}
 			var t = fire.target.getFireDest(fire, hit);
-			console.log(t);
+
 			if (gunHit){
 				tx = fire.target.drawX + t.x;
 				ty = fire.target.drawY + t.y;

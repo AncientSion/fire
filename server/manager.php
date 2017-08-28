@@ -923,8 +923,9 @@ class Manager {
 		$this->resolveShipFireOrders();
 		$this->resolveFighterFireOrders();
 		$this->updateFireOrders($this->fires);
+		$this->resolveBallistics();
 
-		$this->handleBallisticInterception();
+	//$this->handleBallisticInterception();
 
 		$this->deleteFireOrders();
 		$this->testCrits();
@@ -1243,6 +1244,27 @@ class Manager {
 								}*/
 							}
 						}
+					}
+				}
+			}
+		}
+	}
+
+	public function resolveBallistics(){
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->salvo){
+				if ($this->ships[$i]->mission->arrived){
+					$target = $this->getUnitById($this->ships[$i]->mission->targetid);
+					$weapon = $this->ships[$i]->structures[0]->systems[0];
+					$shots = 0;
+					for ($j = 0; $j < sizeof($this->ships[$i]->structures); $j++){
+						if (!$this->ships[$i]->structures[$j]->destroyed){
+							$shots++;
+						}
+					}
+
+					if ($shots){
+						Debug::log("Salvo #".$this->ships[$i]->id." attaching: ".$target->name." #".$target->id." with ".$shots."x ".$weapon->name);
 					}
 				}
 			}

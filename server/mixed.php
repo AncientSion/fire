@@ -144,6 +144,10 @@ class Mixed extends Ship {
 		return $this->getStructureById($fire->hitSystem->id)->getRemainingIntegrity();
 	}
 
+	public function getArmourValue($fire, $hitSystem){
+		return $hitSystem->negation;
+	}
+
 	public function isDestroyed(){
 		if ($this->destroyed){
 			//Debug::log(" -> destroyed");

@@ -38,18 +38,5 @@ class Flight extends Mixed {
 		}
 		$this->size = $this->baseSize + $alive*$this->unitSize;
 	}
-
-    public function getArmourValue($fire, $hitSystem){
-    	//Debug::log("getRemainingNegation FLIGHT, angle: ".$fire->angle);
-    	if ($fire->angle >= 330 || $fire->angle <= 30){
-    		return $hitSystem->negation[0];
-    	}
-    	else if (($fire->angle > 30 && $fire->angle < 150) || ($fire->angle > 210 && $fire->angle < 330)){
-    		return $hitSystem->negation[1];
-		}
-		else {
-    		return $hitSystem->negation[2];
-		}
-    }
 }
 ?>
