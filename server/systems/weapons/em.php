@@ -70,7 +70,6 @@ class EMPulseCannon extends EM {
 	public $animColor = "lightBlue";
 	public $projSize = 2;
 	public $projSpeed = 8;
-	public $exploSize = 7;
 	public $reload = 1;
 	public $mass = 14;
 	public $effiency = 2;

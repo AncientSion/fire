@@ -1644,7 +1644,6 @@ Game.prototype.getUnitType = function (val){
 		}
 	}
 
-
 	this.resolveFire = function(){
 		this.resetImageData();
 		this.getResolvingFireOrders();

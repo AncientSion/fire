@@ -954,8 +954,8 @@
 			return true;
 		}
 
-		public function insertFireOrders($gameid, $turn, $fires){
-			//Debug::log("insertFireOrders: ".sizeof($fires));
+		public function insertClientFireOrders($gameid, $turn, $fires){
+			//Debug::log("insertClientFireOrders: ".sizeof($fires));
 			$stmt = $this->connection->prepare("
 				INSERT INTO fireorders 
 					(gameid, turn, shooterid, targetid, weaponid, resolved)
@@ -982,6 +982,39 @@
 			}
 			return true;
 		}
+
+		//return new FireOrder(-1, $gameid, $turn, $this->id, $this->mission->id, $this->structures[0]->systems[0]->id, $this->getShots(), $0, "", 0, 0);
+
+		public function insertServerFireOrder($fires){
+			Debug::log("insertServerFireOrder: ".sizeof($fires));
+			$stmt = $this->connection->prepare("
+				INSERT INTO fireorders 
+					(gameid, turn, shooterid, targetid, weaponid)
+				VALUES
+					(:gameid, :turn, :shooterid, :targetid, :weaponid)
+			");
+
+			$x = 0;
+			$y = 0;
+
+			for ($i = 0; $i < sizeof($fires); $i++){
+				$stmt->bindParam(":gameid", $fires[$i]->gameid);
+				$stmt->bindParam(":turn", $fires[$i]->turn);
+				$stmt->bindParam(":shooterid", $fires[$i]->shooterid);
+				$stmt->bindParam(":targetid", $fires[$i]->targetid);
+				$stmt->bindParam(":weaponid",$fires[$i]->weaponid);
+
+				$stmt->execute();
+
+				if ($stmt->errorCode() == 0){
+					$fires[$i]->id = $this->getLastInsertId();
+					continue;
+				} else return false;
+			}
+			return true;
+		}
+
+
 
 		public function insertEW($data){
 			//Debug::log("insertSensorSettings".sizeof($data));

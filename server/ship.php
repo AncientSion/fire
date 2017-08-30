@@ -125,6 +125,10 @@ class Ship {
 	}
 
 	public function setPosition(){
+		if ($this->salvo){
+			$this->trajectory = new Point($this->x, $this->y);
+		}
+
 		for ($i = sizeof($this->actions)-1; $i >= 0; $i--){
 			if ($this->actions[$i]->resolved){
 				$this->x = $this->actions[$i]->x;
@@ -502,57 +506,29 @@ class Ship {
 		else {
 			$fire->cc = $this->isCloseCombat($fire->shooter->id);
 			$fire->dist = $this->getHitDist($fire);
-			$fire->angle = $this->getHitAngle($fire);
+			$fire->angle = $this->getImpactAngle($fire);
 			$fire->section = $this->getHitSection($fire);
-			$fire->req = $this->calculateToHit($fire);
 
-			$rollIndex = 0;
 			for ($i = 0; $i < $fire->shots; $i++){
-				//Debug::log("gun #".($i+1));
 				$fire->weapon->rollToHit($fire);
-				for ($j = $rollIndex; $j < sizeof($fire->rolls); $j++){
-					if ($fire->rolls[$j] <= $fire->req){
-						//Debug::log("roll: ".$fire->rolls[$j].", req: ".$fire->req.", doing damage");
-						$fire->weapon->doDamage($fire, $fire->rolls[$j], $this->getHitSystem($fire));
-					}
-				}
-				$rollIndex = sizeof($fire->rolls);
 			}
+
+			$this->determineHits($fire);
 			$fire->resolved = 1;
 		}
 	}
 
-	public function resolveBallisticFireOrder($fire){
-		Debug::log("resolveBallisticFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".$fire->weaponid);
+	public function determineHits($fire){
+		$fire->req = $this->calculateToHit($fire);
 
-		if ($this->isDestroyed()){
-			$fire->resolved = -1;
-		}
-		else {
-			$fire->dist = 0;
-			$fire->angle = $this->getBallisticHitAngle($fire);
-			$fire->section = $this->getHitSection($fire);
-			$fire->req = ceil(100 * (1-($fire->weapon->getTraverseMod($fire)*0.2)));
-			$fire->shots = $fire->shooter->getShots($fire->turn);
-
-			$rollIndex = 0;
-			for ($i = 0; $i < $fire->shots; $i++){
-				//Debug::log("gun #".($i+1));
-				$fire->weapon->rollToHit($fire);
-				for ($j = $rollIndex; $j < sizeof($fire->rolls); $j++){
-					if ($fire->rolls[$j] <= $fire->req){
-						//Debug::log("roll: ".$fire->rolls[$j].", req: ".$fire->req.", doing damage");
-						$fire->weapon->doDamage($fire, $fire->rolls[$j], $this->getHitSystem($fire));
-					}
-				}
-				$rollIndex = sizeof($fire->rolls);
+		for ($i = 0; $i < sizeof($fire->rolls); $i++){
+			if ($fire->rolls[$i] <= $fire->req){
+				$fire->weapon->doDamage($fire, $fire->rolls[$i], $this->getHitSystem($fire));
 			}
-			$fire->resolved = 1;
 		}
 	}
 
 	public function calculateToHit($fire){
-		Debug::log("calculateToHit");
 		$multi = 1;
 		$req = 0;
 		
@@ -576,20 +552,6 @@ class Ship {
 
 	public function getArmourValue($fire, $hitSystem){
 		return round($this->getStructureById($fire->section)->getCurrentNegation($fire) * $hitSystem->getArmourMod());
-	}
-
-	public function getHitSection($fire){
-		if ($fire->cc){
-			return $this->structures[mt_rand(0, sizeof($this->structures)-1)]->id;
-		}
-
-		$locs = array();
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if (Math::isInArc($fire->angle, $this->structures[$i]->start, $this->structures[$i]->end)){
-				$locs[] = $this->structures[$i]->id;
-			}
-		}
-		return $locs[mt_rand(0, sizeof($locs)-1)];
 	}
 
 	public function getHitSystem($fire){
@@ -773,7 +735,6 @@ class Ship {
 	}
 
 	public function getHitDist($fire){
-
 		if ($fire->cc){
 			return 0;
 		}
@@ -791,33 +752,40 @@ class Ship {
 		return Math::getDist($tPos->x, $tPos->y, $sPos->x, $sPos->y);
 	}
 
-	public function getHitAngle($fire){
-
+	public function getImpactAngle($fire){
 		if ($fire->cc){
-			return mt_rand(0, 359);
+			$angle = $fire->shooter->getFireAngle($fire);
+			return $angle;
 		}
 		
 		for ($i = 0; $i < sizeof($this->angles); $i++){
 			if ($this->angles[$i][0] == $fire->shooter->id){
-				//Debug::log("pre angle !");
 				return $this->angles[$i][1];
 			}
 		}
 
 		Debug::log("got no ANGLE set on ".$this->id." targeted by #".$fire->shooter->id);
-		
-		$tPos = $this->getCurrentPosition();
-		$sPos = $fire->shooter->getCurrentPosition();
-		$angle = Math::getAngle($tPos->x, $tPos->y, $sPos->x, $sPos->y);
-		return round(Math::addAngle($this->facing, $angle));
 	}
 
-	public function getBallisticHitAngle($fire){
-		$tPos = $this->getCurrentPosition();
-		$sPos = $fire->shooter->getImpactTrajectory();
+	public function getHitSection($fire){
+		if ($fire->cc && $fire->shooter->flight){
+			return $this->structures[mt_rand(0, sizeof($this->structures)-1)]->id;
+		}
 
-		$angle = Math::getAngle($tPos->x, $tPos->y, $sPos->x, $sPos->y);
-		return round(Math::addAngle($this->facing, $angle));
+		$locs = array();
+		$fire->angle = Math::addAngle($this->facing, $fire->angle);
+		//Debug::log("angle: ".$fire->angle.", facing: ".$this->facing." => to adjusted: ".$adjusted);
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if (Math::isInArc($fire->angle, $this->structures[$i]->start, $this->structures[$i]->end)){
+				$locs[] = $this->structures[$i]->id;
+			}
+		}
+		return $locs[mt_rand(0, sizeof($locs)-1)];
+	}
+
+
+	public function getFireAngle($fire){
+		return mt_rand(0, 359);
 	}
 
 	public function testCriticals($turn){

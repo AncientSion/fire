@@ -154,6 +154,7 @@ class FireOrder {
 	public $weapon = false;
 	public $dist = false;
 	public $angle = false;
+	public $singleid = false;
 	//public $loss = false;
 	//public $dmgRoll = false;
 	//public $hitSystem = array();

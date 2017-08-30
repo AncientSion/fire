@@ -5,9 +5,18 @@ class Salvo extends Mixed {
 	public $unitType = "Salvo";
 	public $salvo = true;
 	public $traverse = -4;
+	public $trajectory;
 
 	function __construct($id, $userid, $available, $status, $destroyed){		
         parent::__construct($id, $userid, $available, $status, $destroyed);
+	}
+
+	public function getFireOrder($gameid, $turn, $target){
+		$fire = new FireOrder(-1, $gameid, $turn, $this->id, $this->mission->id, $this->structures[0]->systems[0]->id, 0, 0, "", 0, 0);
+		$fire->weapon = $this->structures[0]->systems[0];
+		$fire->target = $target;
+		$fire->shooter = $this;
+		return $fire;
 	}
 	
 	public function getImpulseProfileMod(){
@@ -39,6 +48,15 @@ class Salvo extends Mixed {
 	
 	public function getCurrentImpulse(){
 		return $this->currentImpulse;
+	}
+
+	public function getFireAngle($fire){
+		$angle = Math::getAngle2($this->actions[0], $this->getTrajectoryStart());
+		return round($angle);
+	}
+
+	public function getTrajectoryStart(){
+		return $this->trajectory;
 	}
 }
 

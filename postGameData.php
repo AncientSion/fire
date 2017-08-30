@@ -54,7 +54,7 @@ if (isset($_POST["type"])) {
 			$dbManager->insertPowers($_POST["gameid"], $_POST["turn"], $_POST["powers"]);
 		}
 		if (isset($_POST["fireOrders"])){
-			$dbManager->insertFireOrders($_POST["gameid"], $_POST["turn"], $_POST["fireOrders"]);
+			$dbManager->insertClientFireOrders($_POST["gameid"], $_POST["turn"], $_POST["fireOrders"]);
 		}
 		if (isset($_POST["ew"])){
 			$dbManager->insertEW($_POST["ew"]);
@@ -73,7 +73,7 @@ if (isset($_POST["type"])) {
 		}
 	}
 	else if ($_POST["type"] == "firing"){
-		if ($dbManager->insertFireOrders($_POST["gameid"], $_POST["turn"], $_POST["fireOrders"])){
+		if ($dbManager->insertClientFireOrders($_POST["gameid"], $_POST["turn"], $_POST["fireOrders"])){
 			if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready")){
 				echo "firing success";
 			}

@@ -364,8 +364,9 @@ class Manager {
 				$this->startFiringPhase();
 				break;
 			case 2; // from fire to resolve fire
-				$this->handleFiringPhase();
-				$this->startDamageControlPhase();
+				if ($this->handleFiringPhase()){
+					$this->startDamageControlPhase();
+				}
 				break;
 			case 3; // from damage control to NEW TURN - deploymnt
 				$this->handleDamageControlPhase();
@@ -917,6 +918,7 @@ class Manager {
 		$time = -microtime(true);
 
 		$this->setupShips();
+		//return false;
 
 		$this->setFireOrderDetails();
 		$this->sortFireOrders();
@@ -996,12 +998,15 @@ class Manager {
 				$this->ships[$i]->distances[] = array($this->ships[$j]->id, $dist);
 				$this->ships[$j]->distances[] = array($this->ships[$i]->id, $dist);
 
-				$this->ships[$i]->angles[] = array($this->ships[$j]->id, round(Math::addAngle($this->ships[$i]->getFacing(), Math::getAngle2($aPos, $bPos))));
-				$this->ships[$j]->angles[] = array($this->ships[$i]->id, round(Math::addAngle($this->ships[$j]->getFacing(), Math::getAngle2($bPos, $aPos))));
+				//$this->ships[$i]->angles[] = array($this->ships[$j]->id, round(Math::addAngle($this->ships[$i]->getFacing(), Math::getAngle2($aPos, $bPos))));
+				//$this->ships[$j]->angles[] = array($this->ships[$i]->id, round(Math::addAngle($this->ships[$j]->getFacing(), Math::getAngle2($bPos, $aPos))));
+
+				$this->ships[$i]->angles[] = array($this->ships[$j]->id, round(Math::getAngle2($aPos, $bPos)));
+				$this->ships[$j]->angles[] = array($this->ships[$i]->id, round(Math::getAngle2($bPos, $aPos)));
 			}
 		}
-		
-		/*for ($i = 0; $i < sizeof($this->ships); $i++){
+		return;
+	for ($i = 0; $i < sizeof($this->ships); $i++){
 				Debug::log("FROM: #".$this->ships[$i]->id);
 			foreach ($this->ships[$i]->angles as $val){
 				Debug::log("--> ANGLE TO: #".$val[0].": ".$val[1]);
@@ -1009,7 +1014,7 @@ class Manager {
 			foreach ($this->ships[$i]->distances as $val){
 				Debug::log("-->  DIST TO: #".$val[0].": ".$val[1]);
 			}
-		}*/
+		}
 	}
 
 	public function setShipLocks($ship){
@@ -1079,30 +1084,6 @@ class Manager {
 							}
 						}
 					}// else Debug::log("out of arc");
-				}
-			}
-
-			for ($i = 0; $i < sizeof($this->ballistics); $i++){
-				if ($ship->userid == $this->ballistics[$i]->userid){continue;}
-				if ($ship->id == $this->ballistics[$i]->targetid){
-					$target;
-					$range = 0;
-
-					if ($this->ballistics[$i]->actions[0]->type == "impact"){
-						$target = $this->ballistics[$i]->getImpactTrajectory();
-						$range = 1;
-					}
-					else {
-						$target = $this->ballistics[$i]->getCurrentPosition();
-						if (Math::getDist2($origin, $target) <= $ew->dist){
-							$range = 1;
-						}
-					}
-
-					if ($range && Math::isInArc(Math::getAngle2($origin, $target), $start, $end)){
-						//Debug::log("locking onto: #".$this->ballistics[$i]->id);
-						$ship->locks[] = array($this->ballistics[$i]->id, 0.5);
-					}
 				}
 			}
 		}
@@ -1251,25 +1232,31 @@ class Manager {
 	}
 
 	public function resolveBallistics(){
+		Debug::log("resolveBallistics");
+		$fires = array();
+
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->salvo){
+			if ($this->ships[$i]->salvo && !$this->ships[$i]->isDestroyed()){
 				if ($this->ships[$i]->mission->arrived){
 					$target = $this->getUnitById($this->ships[$i]->mission->targetid);
-					$weapon = $this->ships[$i]->structures[0]->systems[0];
-					$shots = 0;
-					for ($j = 0; $j < sizeof($this->ships[$i]->structures); $j++){
-						if (!$this->ships[$i]->structures[$j]->destroyed){
-							$shots++;
-						}
-					}
+					$fire = $this->ships[$i]->getFireOrder($this->gameid, $this->turn, $target);
 
-					if ($shots){
-						Debug::log("Salvo #".$this->ships[$i]->id." attaching: ".$target->name." #".$target->id." with ".$shots."x ".$weapon->name);
-					}
+					Debug::log("Salvo #".$this->ships[$i]->id." attaching: ".$fire->target->name." #".$fire->target->id." with ".$fire->shooter->getShots($this->turn)."x ".$fire->weapon->name);
+					$fires[] = $fire;
 				}
 			}
 		}
+
+		if (sizeof($fires)){
+			DBManager::app()->insertServerFireOrder($fires);
+		}
+
+		for ($i = 0; $i < sizeof($fires); $i++){
+			$fires[$i]->target->resolveFireOrder($fires[$i]);
+			//var_export($fires[$i]);
+		}
 	}
+
 
 	public function createInterceptionBallisticAction($ballistic){
 		Debug::log("createInterceptionBallisticAction, size: ".sizeof($ballistic));

@@ -5,7 +5,6 @@ class Weapon extends System {
 	public $minDmg;
 	public $maxDmg;
 	public $accDecay;
-	public $exploSize;
 	public $shots = 1;
 	public $guns = 1;
 	public $reload = 1;

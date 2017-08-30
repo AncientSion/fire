@@ -103,11 +103,32 @@ class Mixed extends Ship {
 		}
 	}
 
+	public function getImpactAngle($fire){
+		if ($fire->cc){
+			if ($this->flight && ($fire->shooter->flight || $fire->shooter->ship)){
+				return $fire->shooter->getFireAngle($fire);
+			}
+			else if ($this->salvo && $fire->shooter->flight){
+				return $fire->shooter->getFireAngle($fire);
+			} else if ($this->salvo && $fire->shooter->ship){
+				return round(Math::getAngle2($fire->shooter->getCurrentPosition(), $this->getTrajectoryStart()));
+			}
+		}
+		
+		for ($i = 0; $i < sizeof($this->angles); $i++){
+			if ($this->angles[$i][0] == $fire->shooter->id){
+				return $this->angles[$i][1];
+			}
+		}
+
+		Debug::log("got no ANGLE set on ".$this->id." targeted by #".$fire->shooter->id);
+	}
+
 	public function addMissionDB($data){
 		$this->mission = new Mission($data);
 	}
 
-	public function resolveFireOrder($fire){
+	public function resolveFireOdrdera($fire){
 		Debug::log("resolveFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
 
 		if ($this->isDestroyed()){
@@ -116,7 +137,7 @@ class Mixed extends Ship {
 		else {
 			$fire->cc = $this->isCloseCombat($fire->shooter->id);
 			$fire->dist = $this->getHitDist($fire);
-			$fire->angle = $this->getHitAngle($fire);
+			$fire->angle = $this->getImpactAngle($fire);
 			$fire->section = $this->getHitSection($fire);
 
 			$rollIndex = 0;
@@ -125,7 +146,6 @@ class Mixed extends Ship {
 				for ($j = $rollIndex; $j < sizeof($fire->rolls); $j++){
 					$fire->hitSystem[] = $this->getHitSystem($fire);
 					$fire->req = $this->calculateToHit($fire);
-					Debug::log("shot #".$i.", req: ".$fire->req);
 					if ($fire->rolls[$j] <= $fire->req){
 						$fire->weapon->doDamage($fire, $fire->rolls[$j], $fire->hitSystem[$j]);
 					}
@@ -135,6 +155,18 @@ class Mixed extends Ship {
 			$fire->resolved = 1;
 		}
 	}
+
+	public function determineHits($fire){
+		for ($i = 0; $i < sizeof($fire->rolls); $i++){
+			$target = $this->getHitSystem($fire);
+			$fire->singleid = $target->id;
+			$fire->req = $this->calculateToHit($fire);
+			if ($fire->rolls[$i] < $fire->req){
+				$fire->weapon->doDamage($fire, $fire->rolls[$i], $target);
+			}
+		}
+	}
+
 
 	public function hasLockOn($id){
 		return false;
@@ -208,7 +240,7 @@ class Mixed extends Ship {
 	}
 
 	public function getHitChance($fire){
-		return ceil($fire->hitSystem[sizeof($fire->hitSystem)-1]->getSubHitChance($fire));
+		return $this->getStructureById($fire->singleid)->getSubHitChance($fire);
 	}
 
 	public function testCriticals($turn){

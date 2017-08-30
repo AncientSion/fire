@@ -38,5 +38,9 @@ class Flight extends Mixed {
 		}
 		$this->size = $this->baseSize + $alive*$this->unitSize;
 	}
+
+	public function getFireAngle($fire){
+		return mt_rand(0, 359);
+	}
 }
 ?>

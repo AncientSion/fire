@@ -31,48 +31,11 @@ class Math {
 		return $rad * (180 / M_PI);
 	}
 
-	static function addAngle($f, $a){ // facing, angle      0 - 160
-	//demos vs sag	   f 60,  a  49  -> 109    -10/350
-	//primus vs omega  f 30,  a -35  -> 354    -60/300
-
-		//360 - f +  a
-		//$a = $a % 360;
+	static function addAngle($f, $a){
 		$ret = 360 - $f + $a;
-		//Debug::log("f: ".$f.", a: ".$a.", ret: ".$ret);
-
 		while ($ret > 360){$ret -= 360;}
-
-		//Debug::log("ding, ".$ret);
-		/*if ($ret >= 360){
-			return $ret - 360;
-		}
-		else*/if ($ret < 0){
-			return $ret + 360;
-		}
-		else return $ret;
-
-
-
-
-		/*if ($f > 180 && $a < 0){
-			$f -= 180; 
-			$a *= 1;
-		}
-
-		if ($a < 0){
-			$f = 360 - $f;
-		}
-		if ($f + $a > 360){
-			$ret = 0 + ($a -(360-$f));
-		}
-		else if ($f + $a < 0){
-			$ret = 360 + ($f + $a);
-		}
-		else {
-			$ret = $f + $a;
-		}
+		while ($ret < 0){$ret += 360;}
 		return $ret;
-		*/
 	}
 	
 	static function isInArc($angle, $start, $end){
