@@ -21,7 +21,6 @@ class Manager {
 	public $ballistics = array();
 	public $gd = array();
 	public $fires = array();
-	public $intercepts = array();
 	public $damages = array();
 	public $crits = array();
 	public $playerstatus = array();
@@ -291,6 +290,7 @@ class Manager {
 		DBManager::app()->getDamages($units);
 		DBManager::app()->getPowers($units);
 		DBManager::app()->getCrits($units);
+		DBManager::app()->getFires($units);
 		DBManager::app()->getActions($units, $this->turn);
 		DBManager::app()->getEW($units, $this->turn);
 		DBManager::app()->getShipLoad($units);
@@ -314,7 +314,7 @@ class Manager {
 		}
 
 		for ($i = 0; $i < sizeof($units); $i++){
-			$units[$i]->addFireDB($this->fires);
+			//$units[$i]->addFireDB($this->fires);
 			$units[$i]->setState($this->turn); //check damage state after dmg is applied
 		}
 
@@ -787,12 +787,8 @@ class Manager {
 		$this->sortFireOrders();
 		$this->resolveShipFireOrders();
 		$this->resolveFighterFireOrders();
-		$this->updateFireOrders($this->fires);
-		$this->resolveBallistics();
-
-	//$this->handleBallisticInterception();
-
-		$this->deleteFireOrders();
+		$this->resolveBallisticFireOrders();
+		$this->cleanFireOrders();
 		$this->testCrits();
 		$this->writeDamageEntries();
 		$this->writeCritEntries();
@@ -986,7 +982,9 @@ class Manager {
 	public function resolveShipFireOrders(){
 		// resolve ship vs ship / fighter
 		for ($i = 0; $i < sizeof($this->fires); $i++){
+			//Debug::log("fire [".$i."]");
 			if (!$this->fires[$i]->resolved){
+				//Debug::log("HANDLING");
 				if ($this->fires[$i]->shooter->flight == false){
 					//var_export($this->fires[$i]->id);
 					$this->fires[$i]->target->resolveFireOrder($this->fires[$i]);
@@ -1090,8 +1088,8 @@ class Manager {
 		}
 	}
 
-	public function resolveBallistics(){
-		Debug::log("resolveBallistics");
+	public function resolveBallisticFireOrders(){
+		Debug::log("resolveBallisticFireOrders");
 		$fires = array();
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -1109,125 +1107,19 @@ class Manager {
 			DBManager::app()->insertServerFireOrder($fires);
 
 			for ($i = 0; $i < sizeof($fires); $i++){
-				$fires[$i]->shots = $fires[$i]->shooter->getShots($this->turn);
 				$fires[$i]->target->resolveFireOrder($fires[$i]);
 				if (sizeof($fires[$i]->damages)){
 					$this->damages = array_merge($this->damages, $fires[$i]->damages);
 				}
 			}
-			$this->updateFireOrders($this->intercepts);
+			$this->fires = array_merge($this->fires, $fires);
 		}
 	}
 
-
-	public function createInterceptionBallisticAction($ballistic){
-		Debug::log("createInterceptionBallisticAction, size: ".sizeof($ballistic));
-
-		if (!$ballistic->isDestroyed()){
-			$interceptStartPos = $ballistic->getCurrentPosition();
-			$interceptRange = $ballistic->getCurrentImpulse();
-			$speedMod = $interceptRange / $ballistic->target->getCurrentImpulse();
-			//Debug::log("own i: ".$interceptRange.", t: ".$ballistic->target->getCurrentImplse();.", r: ".$speedMod);
-			//var_export($ballistic->target->actions);
-			$targetPos = $ballistic->target->getCurrentPosition();
-			$targetMoveVector = new Vector($targetPos, $ballistic->target->actions[sizeof($ballistic->target->actions)-1]);
-			//this.finalStep = getIntercept(this.getPlannedPosition(), target, vector, speedMod);
-			$interceptEndPos = Math::canIntercept($interceptStartPos, $targetPos, $targetMoveVector, $speedMod);
-			if ($interceptEndPos){
-				$interceptDist = Math::getDist2($interceptStartPos, $interceptEndPos);
-				//Debug::log("intercept possible, dist: ".$interceptDist.", my impulse/range: ".$interceptRange.", sMod:".$speedMod);
-				//if ($interceptDist > $interceptRange || $interceptDist / $speedMod > $targetMoveVector->m){
-				if ($interceptDist > $interceptRange){
-					//Debug::log("intercept home in");
-					$a = Math::getAngle($interceptStartPos->x, $interceptStartPos->y, $interceptEndPos->x, $interceptEndPos->y);
-					$iPos = Math::getPointInDirection($interceptRange, $a, $interceptStartPos->x, $interceptStartPos->y);
-					$ballistic->actions[] = new Action(-1, 
-						$this->turn,
-						"move",
-						$interceptRange,
-						$iPos->x,
-						$iPos->y,
-						0, 0, 0, 0, 0
-					);
-				}
-				else if ($interceptDist <= $interceptRange){ // IMPACT VECTOR
-					//Debug::log("intercept impact");
-					$ox = mt_rand(-$ballistic->target->size/7, $ballistic->target->size/7);
-					$oy = mt_rand(-$ballistic->target->size/7, $ballistic->target->size/7);
-					$ballistic->actions[] = new Action(-1, 
-						$this->turn,
-						"impact",
-						$interceptDist,
-						$interceptEndPos->x + $ox,
-						$interceptEndPos->y + $oy,
-						0, 0, 0, 0, 0
-					);
-				}
-				else {
-					Debug::log("somethin went wrong");
-				}
-			}
-			else {
-				Debug::log("intercept impossible yet");
-				$tPos = $ballistic->target->actions[sizeof($ballistic->target->actions)-1];
-				$a = Math::getAngle($interceptStartPos->x, $interceptStartPos->y, $tPos->x, $tPos->y);
-				$iPos = Math::getPointInDirection($interceptRange, $a, $interceptStartPos->x, $interceptStartPos->y);
-				$ballistic->actions[] = new Action(-1, 
-					$this->turn,
-					"move",
-					$interceptRange,
-					$iPos->x,
-					$iPos->y,
-					0, 0, 0, 0, 0
-				);
-			}
-		}
-	}
-
-	public function handleBallisticInterception(){ // all non-salvo versus alvo
-		Debug::log("handleBallisticInterception | balls:".sizeof($this->ballistics).", intercepts: ".sizeof($this->intercepts));
-
-		//sort to shooter, target, id
-		usort($this->intercepts, function($a, $b){
-			if ($a->targetid != $b->targetid){
-				return $a->targetid - $b->targetid;
-			}
-			else return $a->shooterid - $b->shooterid;
-		});
-
-		//foreach ($this->intercepts as $int){Debug::log("int id: ".$int->id.", shooter #".$int->shooterid." versus targetid #".$int->targetid);}
-
-		DBManager::app()->insertServerActions($this->ballistics);
-		
-		for ($i = 0; $i < sizeof($this->ballistics); $i++){
-			$ints = array();
-			$index = 0;
-			for ($j = $index; $j < sizeof($this->intercepts); $j++){
-				if ($this->ballistics[$i]->id == $this->intercepts[$j]->targetid){
-					$ints[] = $this->intercepts[$j];
-				}
-				else if (sizeof($ints)){
-					$index = $j;
-					break;
-				}
-			}
-
-			for ($j = 0; $j < sizeof($ints); $j++){
-				$ints[$j]->shooter = $this->getUnitById($ints[$j]->shooterid);
-				$ints[$j]->weapon = $ints[$j]->shooter->getSystemById($ints[$j]->weaponid);
-				$ints[$j]->target = $this->ballistics[$i];
-				Debug::log("HANDLE INTERCEPT #".$j+1);
-				$ints[$j]->target->resolveFireOrder($ints[$j]);
-				if (sizeof($ints[$j]->damages)){
-					$this->damages = array_merge($this->damages, $ints[$j]->damages);
-				}
-			}
-		}
-		$this->updateFireOrders($this->intercepts);
-	}
-
-	public function deleteFireOrders(){
-		dbManager::app()->deleteUnresolvedFireOrders($this->gameid);
+	public function cleanFireOrders(){
+		Debug::log("cleanFireOrders, fires: ".sizeof($this->fires));
+		DBManager::app()->updateFireOrders($this->fires);
+		DBManager::app()->deleteUnresolvedFireOrders($this->gameid);
 	}
 
 	public function testCrits(){
@@ -1236,12 +1128,6 @@ class Manager {
 		}
 		for ($i = 0; $i < sizeof($this->ballistics); $i++){
 			$this->ballistics[$i]->testCriticals($this->turn);
-		}
-	}
-
-	public function updateFireOrders($fires){
-		if ($fires){
-			DBManager::app()->updateFireOrders($fires);
 		}
 	}
 

@@ -132,6 +132,7 @@ System.prototype.hover = function(e){
 System.prototype.highlightFireOrder = function(){
 	var o = game.getUnitById(this.parentId).getPlannedPosition();
 	var t = game.getUnitById(this.fireOrders[this.fireOrders.length-1].targetid).getPlannedPosition();
+	if (o.x == t.y && o.y == t.y){return;}
 	salvoCtx.translate(cam.o.x, cam.o.y);
 	salvoCtx.scale(cam.z, cam.z)
 	salvoCtx.translate(o.x, o.y);
@@ -1568,6 +1569,72 @@ Weapon.prototype.getDamage = function(){
 	return mod;
 }
 
+
+function Warhead(data){
+	this.id = data.id;
+	this.parentId = data.parentId;
+	this.minDmg = data.minDmg;
+	this.maxDmg = data.maxDmg;
+	this.shots = data.shots;
+	this.traverse = data.traverse;
+	this.fireOrders = [];
+	this.guns = 1;
+	this.animation = "explo";
+	this.exploSize = (this.minDmg + this.maxDmg)/10;
+
+	for (var i = 0; i < data.fireOrders.length; i++){
+		this.fireOrders.push(new FireOrder(data.fireOrders[i]));
+	}
+}
+
+Warhead.prototype.getShots = function(){
+	return 1;
+}
+
+Warhead.prototype.getDisplay = function(){
+	return "Warhead Impact";
+}
+
+Warhead.prototype.getActiveWeapon = function(){
+	return this;
+}
+
+Warhead.prototype.getAnimation = function(fire){
+	//console.log(this.display + " / " + this.projSpeed + " / " + fire.dist);
+	//console.log(fire);
+
+	
+	var allAnims = [];
+	var grouping = 1;
+	var delay = 30;
+	var shotInterval = 10;
+
+	var o = game.getUnitById(this.parentId);
+	var t = game.getUnitById(o.mission.targetid);
+	var d = getDistance(o, t.getPlannedPosition());
+	var a = getAngleFromTo(o, t.getPlannedPosition());
+	
+	for (var j = 0; j < fire.guns; j++){
+		var gunAnims = [];
+
+		for (var k = 0; k < fire.shots; k++){
+			if (fire.hits[j] < k){ //miss
+				continue;
+			}
+
+			var p = getPointInDirection(d - range(15, 30), a + range(-10, 10), o.x, o.y);
+			//var tx = fire.shooter.drawX + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2); // WEAPON origin
+			//var ty = fire.shooter.drawY + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2);
+			var shotAnim = {tx: p.x, ty: p.y, m: 70, n: 0 - ((j / grouping) * delay + k*shotInterval)};
+
+			gunAnims.push(shotAnim);
+		}
+		allAnims.push(gunAnims)
+	}
+	return allAnims;
+}
+
+
 function Particle(system){
 	Weapon.call(this, system);	
 	this.animation = "projectile";
@@ -1806,9 +1873,6 @@ Pulse.prototype.getAnimation = function(fire){
 		}
 
 		if (cc && (fire.target.flight || fire.target.salvo)){
-			if (fire.target.salvo && gunHit){
-				console.log("ding");
-			}
 			var t = fire.target.getFireDest(fire, hit);
 
 			if (gunHit){

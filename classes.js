@@ -193,25 +193,6 @@ function Damage(data){
 	this.system = "";
 }
 
-function Warhead(data){
-	this.id = data.id;
-	this.parentId = data.parentId;
-	this.minDmg = data.minDmg;
-	this.maxDmg = data.maxDmg;
-	this.shots = data.shots;
-	this.traverse = data.traverse;
-	this.fireOrders = [];
-}
-
-Warhead.prototype.getShots = function(){
-	return 1;
-}
-
-Warhead.prototype.getDisplay = function(){
-	return "Warhead Impact";
-	//return game.getUnitById(this.parentId).display;
-}
-
 function Single(data){
 	this.id = data.id;
 	this.parentId = data.parentId;

@@ -325,9 +325,7 @@ class Ship {
 
 	public function addFireDB($fires){
 		for ($i = 0; $i < sizeof($fires); $i++){
-			if ($fires[$i]->shooterid == $this->id){
-				$this->getBaseSystemById($fires[$i]->weaponid)->fireOrders[] = $fires[$i];
-			}
+			$this->getBaseSystemById($fires[$i]->weaponid)->fireOrders[] = $fires[$i];
 		}
 	}
 

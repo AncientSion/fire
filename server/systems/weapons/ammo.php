@@ -10,7 +10,7 @@ class Missile extends Single {
 		parent::__construct($id, $parentId);
 		$this->integrity = $this->mass*3;
 		$this->negation = $this->mass-1;
-		$this->systems[] = new Warhead($this->id, sizeof($this->systems)+1, $this->minDmg, $this->maxDmg, $this->traverse);
+		$this->systems[] = new Warhead($this->parentId, sizeof($this->systems)+1, $this->minDmg, $this->maxDmg, $this->traverse);
 	}
 
 	public function getValidEffects(){

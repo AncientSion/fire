@@ -128,34 +128,6 @@ class Mixed extends Ship {
 		$this->mission = new Mission($data);
 	}
 
-	public function resolveFireOdrdera($fire){
-		Debug::log("resolveFireOrder ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
-
-		if ($this->isDestroyed()){
-			$fire->resolved = -1;
-		}
-		else {
-			$fire->cc = $this->isCloseCombat($fire->shooter->id);
-			$fire->dist = $this->getHitDist($fire);
-			$fire->angle = $this->getImpactAngle($fire);
-			$fire->section = $this->getHitSection($fire);
-
-			$rollIndex = 0;
-			for ($i = 0; $i < $fire->shots; $i++){
-				$fire->weapon->rollToHit($fire);
-				for ($j = $rollIndex; $j < sizeof($fire->rolls); $j++){
-					$fire->hitSystem[] = $this->getHitSystem($fire);
-					$fire->req = $this->calculateToHit($fire);
-					if ($fire->rolls[$j] <= $fire->req){
-						$fire->weapon->doDamage($fire, $fire->rolls[$j], $fire->hitSystem[$j]);
-					}
-				}
-				$rollIndex = sizeof($fire->rolls);
-			}
-			$fire->resolved = 1;
-		}
-	}
-
 	public function determineHits($fire){
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
 			$target = $this->getHitSystem($fire);

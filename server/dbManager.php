@@ -989,9 +989,9 @@
 			Debug::log("insertServerFireOrder: ".sizeof($fires));
 			$stmt = $this->connection->prepare("
 				INSERT INTO fireorders 
-					(gameid, turn, shooterid, targetid, weaponid)
+					(gameid, turn, shooterid, targetid, weaponid, shots)
 				VALUES
-					(:gameid, :turn, :shooterid, :targetid, :weaponid)
+					(:gameid, :turn, :shooterid, :targetid, :weaponid, :shots)
 			");
 
 			$x = 0;
@@ -1003,6 +1003,7 @@
 				$stmt->bindParam(":shooterid", $fires[$i]->shooterid);
 				$stmt->bindParam(":targetid", $fires[$i]->targetid);
 				$stmt->bindParam(":weaponid",$fires[$i]->weaponid);
+				$stmt->bindParam(":shots",$fires[$i]->shots);
 
 				$stmt->execute();
 
@@ -1060,6 +1061,7 @@
 
 		public function updateFireOrders($fires){
 			Debug::log("DB updateFireOrders: ".sizeof($fires));
+			if (!sizeof($fires)){return;}
 			$stmt = $this->connection->prepare("
 				UPDATE fireorders
 				SET
@@ -1073,7 +1075,7 @@
 			");
 
 			for ($i = 0; $i < sizeof($fires); $i++){
-				//ebug::log("fire id: ".$fires[$i]->id);
+				Debug::log("fire id: ".$fires[$i]->id.", resolved: ".$fires[$i]->resolved);
 				$stmt->bindParam(":shots", $fires[$i]->shots);
 				$stmt->bindParam(":req", $fires[$i]->req);
 				$stmt->bindParam(":notes", $fires[$i]->notes);
@@ -1130,9 +1132,6 @@
 				$stmt->execute();
 				$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 				if ($result){
-					if ($units[$i]->id == 11){
-						debug::log("damages: ".sizeof($result));
-					}
 					for ($j = 0; $j < (sizeof($result)); $j++){
 						$dmg = new Damage(
 							$result[$j]["id"],
@@ -1218,7 +1217,42 @@
 
 						$result[$j] = $crit;
 					}
-				$units[$i]->addCritDB($result);
+					$units[$i]->addCritDB($result);
+				}
+			}
+			return true;
+		}	
+
+		public function getFires($units){
+			$stmt = $this->connection->prepare("
+				SELECT * FROM fireorders
+				WHERE shooterid = :shooterid
+			");
+
+			for ($i = 0; $i < sizeof($units); $i++){
+				$stmt->bindParam(":shooterid", $units[$i]->id);
+				$stmt->execute();
+				$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+				if ($result){
+					for ($j = 0; $j < (sizeof($result)); $j++){
+						//var_export($result[$j]);
+						$crit = new FireOrder(
+							$result[$j]["id"],
+							$result[$j]["gameid"],
+							$result[$j]["turn"],
+							$result[$j]["shooterid"],
+							$result[$j]["targetid"],
+							$result[$j]["weaponid"],
+							$result[$j]["shots"],
+							$result[$j]["req"],
+							$result[$j]["notes"],
+							$result[$j]["hits"],
+							$result[$j]["resolved"]
+						);
+
+						$result[$j] = $crit;
+					}
+					$units[$i]->addFireDB($result);
 				}
 			}
 			return true;
@@ -1252,7 +1286,6 @@
 							$result[$j]["costmod"],
 							$result[$j]["resolved"]
 						);
-	//					if ($result[$j]["resolved"]){$units[$i]->facing += $result[$j]["a"];}
 					}
 				}
 			}
