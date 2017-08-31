@@ -1,0 +1,47 @@
+damages: 6
+damages: 6
+doAdvance for game2 from phase 2 to phase 3
+specific EW for ship #11, EW from 121.26943699024 to 120.73056300976, dist: 214
+specific EW for ship #12, EW from 285.37813905384 to 282.62186094616, dist: 151
+resolveFireOrder - ID 24, shooter: Artemis #12 vs Omega #11, w: LightPulse #16, guns: 1
+CALCULATE TO HIT - angle: 329, base: 117.44533333333, trav: 0, total multi: 0.5, dist/range: 158/29, req: 29.722666666667
+resolveFireOrder - ID 25, shooter: Artemis #12 vs Omega #11, w: LightPulse #17, guns: 1
+CALCULATE TO HIT - angle: 329, base: 117.44533333333, trav: 0, total multi: 0.5, dist/range: 158/29, req: 29.722666666667
+resolveFireOrder - ID 26, shooter: Omega #11 vs Artemis #12, w: LightPulse #27, guns: 1
+CALCULATE TO HIT - angle: 346, base: 72.335111111111, trav: 0, total multi: 1, dist/range: 158/29, req: 43.335111111111
+fireid: 26, doDamage, weapon: LightPulse, target: 12, hits: 3
+resolveFireOrder - ID 27, shooter: Omega #11 vs Artemis #12, w: LightPulse #28, guns: 1
+CALCULATE TO HIT - angle: 346, base: 72.335111111111, trav: 0, total multi: 1, dist/range: 158/29, req: 43.335111111111
+fireid: 27, doDamage, weapon: LightPulse, target: 12, hits: 3
+resolveFireOrder - ID 28, shooter: Omega #11 vs Artemis #12, w: LightPulse #29, guns: 1
+CALCULATE TO HIT - angle: 346, base: 72.335111111111, trav: 0, total multi: 1, dist/range: 158/29, req: 43.335111111111
+resolveFireOrder - ID 29, shooter: Omega #11 vs Artemis #12, w: LightPulse #30, guns: 1
+CALCULATE TO HIT - angle: 346, base: 72.335111111111, trav: 0, total multi: 1, dist/range: 158/29, req: 43.335111111111
+fireid: 29, doDamage, weapon: LightPulse, target: 12, hits: 4
+resolveFireOrder - ID 30, shooter: Omega #11 vs Artemis #12, w: LightPulse #31, guns: 1
+CALCULATE TO HIT - angle: 346, base: 72.335111111111, trav: 0, total multi: 1, dist/range: 158/29, req: 43.335111111111
+resolveFireOrder - ID 31, shooter: Omega #11 vs Artemis #12, w: LightPulse #32, guns: 1
+CALCULATE TO HIT - angle: 346, base: 72.335111111111, trav: 0, total multi: 1, dist/range: 158/29, req: 43.335111111111
+resolveFireOrder - ID 22, shooter: Artemis #12 vs Flight #13, w: LightPulse #12, guns: 1
+CALCULATE TO HIT - angle: 239, base: 28, trav: 0, total multi: 1.5, dist/range: 0/0, req: 42
+resolveFireOrder - ID 23, shooter: Artemis #12 vs Flight #13, w: LightPulse #13, guns: 1
+CALCULATE TO HIT - angle: 78, base: 28, trav: 0, total multi: 1.5, dist/range: 0/0, req: 42
+fireid: 23, doDamage, weapon: LightPulse, target: 13, hits: 3
+ => target system Thunderbolt #17 was destroyed, rem: 31, doing: 13, OK for: 18 dmg
+DB updateFireOrders: 10
+resolveBallistics
+insertServerFireOrder: 1
+resolveFireOrder - ID 32, shooter: Salvo #14 vs Omega #11, w: Warhead #2, guns: 4
+doDamage, weapon: Warhead, target: 11/-1, totalDmg: 43
+doDamage, weapon: Warhead, target: 11/-1, totalDmg: 44
+doDamage, weapon: Warhead, target: 11/-1, totalDmg: 44
+doDamage, weapon: Warhead, target: 11/-1, totalDmg: 38
+= testCriticals for Omega, #11, turn: 4
+= testCriticals for Flight, #13, turn: 4
+= testCriticals for Artemis, #12, turn: 4
+= testCriticals for Salvo, #14, turn: 4
+ => DB insertDamageEntries: 8
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.167 seconds.
+advancing game state time: 0.171 seconds.
+damages: 10

@@ -275,8 +275,8 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 							if (system.posIsOnArc(shipLoc, pos, facing)){ // ship vs salvo
 								inArc = true;
 								validWeapon = true;
-							}
-						}
+							} else msg = "Not in weapon arc";
+						} else msg = "Lacking fire resolution";
 					}
 					else if (system.posIsOnArc(shipLoc, pos, facing)){ // ship vs ship/fighter
 						inArc = true;

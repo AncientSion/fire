@@ -1130,6 +1130,9 @@
 				$stmt->execute();
 				$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 				if ($result){
+					if ($units[$i]->id == 11){
+						debug::log("damages: ".sizeof($result));
+					}
 					for ($j = 0; $j < (sizeof($result)); $j++){
 						$dmg = new Damage(
 							$result[$j]["id"],
