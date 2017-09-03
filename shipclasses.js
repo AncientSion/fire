@@ -93,7 +93,7 @@ function Ship(data){
 			}
 		}
 
-		$(this.element).find(".ccContainer").find(".flightDiv").each(function(i){
+		$(this.element).find(".ccContainer").find(".attachDiv").each(function(i){
 			if ($(this).data("id") == id){
 				$(this).remove();
 				return false;
@@ -258,13 +258,6 @@ function Ship(data){
 
 	this.getTurnEndPosition = function(){
 		return this.actions[this.actions.length-1];
-	}
-
-	this.canDeploy = function(){
-		if (this.userid == game.userid && (game.turn == 1 || this.id < 0)){
-			return true;
-		}
-		return false;
 	}
 
 	this.canDeployHere = function(pos){
@@ -693,7 +686,7 @@ function Ship(data){
 		var change = this.getImpulseStep();
 		
 		for (var i = 0; i < this.actions.length; i++){
-			if (this.actions[i].type == "speedChange"){
+			if (this.actions[i].type == "speed"){
 				if (this.actions[i].dist == 1){
 					base += change;
 				}
@@ -713,7 +706,7 @@ function Ship(data){
 		var step = this.getImpulseStep();
 		var amount = 0;
 		for (var i = 0; i < this.actions.length; i++){
-			if (this.actions[i].type != "speedChange"){continue;}
+			if (this.actions[i].type != "speed"){continue;}
 			amount += this.actions[i].dist;
 		}
 		return this.currentImpulse + step*amount;
@@ -752,7 +745,7 @@ function Ship(data){
 
 	this.getImpulseStep = function(){
 		//return 15;
-		return Math.floor(this.getBaseImpulse() / 10);
+		return Math.floor(this.getBaseImpulse() / 7);
 	}
 	
 	this.getTurnCost = function(){
@@ -957,11 +950,11 @@ function Ship(data){
 			if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship)){
 				return true;
 			}
-			else if (this.actions[this.actions.length-1].type == "speedChange" && this.actions[this.actions.length-1].dist == 1){
+			else if (this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == 1){
 				return true;
 			}
 		}
-		else if (this.actions.length && this.actions[this.actions.length-1].type == "speedChange" && this.actions[this.actions.length-1].dist == -1){
+		else if (this.actions.length && this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == -1){
 			return true;
 		}
 	
@@ -974,11 +967,11 @@ function Ship(data){
 			if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship)){
 				return true;
 			}
-			else if (this.actions[this.actions.length-1].type == "speedChange" && this.actions[this.actions.length-1].dist == -1){
+			else if (this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == -1){
 				return true;
 			}
 		}
-		else if (this.actions.length && this.actions[this.actions.length-1].type == "speedChange" && this.actions[this.actions.length-1].dist == 1){
+		else if (this.actions.length && this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == 1){
 			return true;
 		}
 	
@@ -1104,11 +1097,11 @@ function Ship(data){
 
 	this.doIncreaseImpulse = function(){
 		var shipPos = this.getPlannedPosition();
-		if (this.actions.length && this.actions[this.actions.length-1].type == "speedChange" && this.actions[this.actions.length-1].dist == -1){
+		if (this.actions.length && this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == -1){
 			this.actions.splice(this.actions.length-1, 1);
 		}
 		else {
-			var action = new Move(-1, "speedChange", 1, shipPos.x, shipPos.y, false, 0, this.getImpulseChangeCost());
+			var action = new Move(-1, "speed", 1, shipPos.x, shipPos.y, false, 0, this.getImpulseChangeCost());
 			this.actions.push(action);
 		}
 		this.setCurrentImpulse();
@@ -1118,11 +1111,11 @@ function Ship(data){
 
 	this.doDecreaseImpulse = function(){
 		var shipPos = this.getPlannedPosition();
-		if (this.actions.length && this.actions[this.actions.length-1].type == "speedChange" && this.actions[this.actions.length-1].dist == 1){
+		if (this.actions.length && this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == 1){
 			this.actions.splice(this.actions.length-1, 1);
 		}
 		else {
-			var action = new Move(-1, "speedChange", -1, shipPos.x, shipPos.y, false, 0, this.getImpulseChangeCost());
+			var action = new Move(-1, "speed", -1, shipPos.x, shipPos.y, false, 0, this.getImpulseChangeCost());
 			this.actions.push(action);
 		}
 		this.setCurrentImpulse();
@@ -1486,7 +1479,7 @@ function Ship(data){
 	
 	this.undoLastAction = function(pos){
 		var update = false;
-		if (this.actions[this.actions.length-1].type == "speedChange"){
+		if (this.actions[this.actions.length-1].type == "speed"){
 			this.actions[this.actions.length-1].dist *= -1;
 			this.setCurrentImpulse();
 		}
@@ -2470,7 +2463,12 @@ function Ship(data){
 		var d = getDistance(origin, tPos);
 
 		if (d == 0 && game.isCloseCombat(this, target) && this.isInEWArc(origin, target.getTrajectory(), sensor, ew)){
-			return 0.5;
+			if (target.salvo){
+				return 1;
+			}
+			else if (target.flight){
+				return Math.round(0.5 / 180 * (Math.min(180, 20 * Math.pow(sensor.getOutput()/ew.dist, 1.5)))*100)/100;
+			}
 		}
 		else if (d <= ew.dist && this.isInEWArc(origin, tPos, sensor, ew)){
 			return 0.5;
@@ -3003,4 +3001,12 @@ Ship.prototype.getDamageEntriesByFireId = function(fire){
 		}
 	}
 	return dmgs;
+}
+
+
+Ship.prototype.canDeploy = function(){
+	if (this.userid == game.userid && (game.turn == 1 || this.id < 0)){
+		return true;
+	}
+	return false;
 }

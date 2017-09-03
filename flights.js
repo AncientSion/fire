@@ -506,15 +506,6 @@ Flight.prototype.enableMissionMode = function(){
 	});
 }
 
-Flight.prototype.getArmourString = function(a){
-	if (a >= 330 || a <= 30){
-		return this.structures[0].negation[0];
-	} else if (a > 150 && a < 210){
-		return this.structures[0].negation[1];
-	} else return this.structures[0].negation[2];
-}
-
-
 Flight.prototype.drawMovePlan = function(){
 	Mixed.prototype.drawMovePlan.call(this);
 	this.drawMissionArea();

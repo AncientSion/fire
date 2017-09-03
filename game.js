@@ -275,11 +275,13 @@ function Game(data, userid){
 		for (var i = 0; i < this.flightDeploy.loads.length; i++){
 			for (var j = 1; j <= this.flightDeploy.loads[i].launch; j++){
 				var f = new Fighter({id: j, name: this.flightDeploy.loads[i].name, ep: 0, mass: this.flightDeploy.loads[i].mass, integrity: this.flightDeploy.loads[i].integrity, value: 0, negation: 0, crits: 0, destroyed: 0})
+					f.baseHitChance = 0;
 				flight.structures.push(f);
 			}
 		}
 
 		flight.create();
+		flight.setPreMoveImage();
 		flight.createBaseDiv();
 		flight.setTarget();
 		game.ships.push(flight);
@@ -288,48 +290,13 @@ function Game(data, userid){
 		$("#deployOverlay").hide();
 		game.getUnitById(aUnit).getSystemById(this.flightDeploy.id).setFireOrder().select();
 		game.flightDeploy = false;
-		flight.disableMissionMode();
+		//flight.disableMissionMode();
+
+		$(flight.element).css("top", 600).css("left", 0);
 
 		if (t.id == aUnit){
 			game.getUnitById(aUnit).attachFlight(flight.id);
 		}
-		this.draw();
-	}
-
-	this.doDeployFlighta = function(e, pos){
-		var facing = Math.floor(getAngleFromTo(game.getUnitById(aUnit).getPlannedPosition(), {x: pos.x, y: pos.y}))
-
-		//id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available, baseHitChance, baseImpulse
-		var flight = new Flight(
-			{id: this.getUniqueID(), name: "Flight", shipType: "Flight",
-			x: pos.x, y: pos.y, facing: facing, ep: 0, fSize: 20, baseSize: 35, unitSize: 8, userid: this.userid, available: this.turn}
-		);
-
-		flight.deployed = 1;
-		flight.friendly = 1;
-		flight.primary = new Primary(0, flight.id, 0, 0, 0);
-		flight.actions.push(new Move(-1, "deploy", 0, pos.x, pos.y, facing, 0, 0));
-		flight.launchData = {
-			shipid: aUnit,
-			systemid: hangar.id,
-			loads: hangar.loads
-		}
-
-		for (var i = 0; i < hangar.loads.length; i++){
-			for (var j = 1; j <= hangar.loads[i].launch; j++){
-				var f = new Fighter({id: j, name: hangar.loads[i].name, ep: 0, mass: 0, integrity: 0, value: 0, negation: 0, crits: 0, destroyed: 0})
-				flight.structures.push(f);
-			}
-		}
-		flight.size = flight.baseSize + (flight.structures.length-1)*flight.unitSize;
-		flight.create();
-		flight.createBaseDiv();
-		game.ships.push(flight);
-
-		$("#instructWrapper").hide();
-		$("#deployOverlay").hide();
-		game.getUnitById(aUnit).getSystemById(hangar.id).setFireOrder().select(e);
-		game.flightDeploy = false;
 		this.draw();
 	}
 	
@@ -841,21 +808,6 @@ function Game(data, userid){
 				y = 150;
 			}
 		}
-
-		for (var i = 0; i < this.ballistics.length; i++){
-			var ele = $(this.ballistics[i].element);
-			var h = $(ele).height();
-			/*
-			var w = $(ele).width();
-			var h = $(ele).height();
-			var x = this.ships[i].x + cam.o.x + w/2;
-			var y = this.ships[i].y + cam.o.y;
-			*/
-
-			$(ele)
-				.css("left",res.x - 400)
-				.css("top", res.y/2 - h/2 + 200);
-		}
 	}
 
 Game.prototype.getUnitType = function (val){
@@ -997,23 +949,6 @@ Game.prototype.getUnitType = function (val){
 		this.initPhase(this.phase);
 	}
 
-	this.updateInterceptsa = function(){
-		var stack = [];
-
-		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].flight && this.ships[i].mission.type == 2 || this.mission.type == 3 && this.ships[i].mission.targetid == aUnit){
-				this.ships[i].setTarget();
-				if (!this.ships[i].mission.arrived){this.ships[i].setImage();}
-				stack.push(this.ships[i].id);
-			}
-		}	
-
-		for (var i = 0; i < stack.length; i++){
-
-		}
-
-	}
-
 	this.updateIntercepts = function(){
 		var stack = [];
 		for (var i = 0; i < this.ships.length; i++){
@@ -1021,12 +956,6 @@ Game.prototype.getUnitType = function (val){
 				if (this.ships[i].mission.targetid == aUnit){
 					stack.push(this.ships[i]);
 				}
-			}
-		}
-
-		for (var i = 0; i < this.ballistics.length; i++){
-			if (this.ballistics[i].mission.targetid = aUnit){
-				stack.push(this.ballistics[i]);
 			}
 		}
 
@@ -1188,7 +1117,7 @@ Game.prototype.getUnitType = function (val){
 
 	this.drawAllPlans = function(){
 		//if (game.phase < 0 || game.phase > 2){return;}
-		if (aUnit && !game.animating){
+		if (!game.deploying && aUnit && !game.animating){
 			planCtx.clearRect(0, 0, res.x, res.y);
 			for (var i = 0; i < this.ships.length; i++){
 				if (this.ships[i].flight && this.ships[i].mission.arrived){continue;}
@@ -1257,15 +1186,6 @@ Game.prototype.getUnitType = function (val){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].id == id){
 				return this.ships[i];
-			}
-		}
-		return false;
-	}
-
-	this.getUnitById = function(id){
-		for (var i = 0; i < this.ballistics.length; i++){
-			if (this.ballistics[i].id == id){
-				return this.ballistics[i];
 			}
 		}
 		return false;
@@ -1495,7 +1415,7 @@ Game.prototype.getUnitType = function (val){
 				if (this.ships[i].actions[j].turn == game.turn){
 					var action = this.ships[i].actions[j];
 
-					if (action.type == "speedChange" || action.type == "deploy" || action.type == "jump"){
+					if (action.type == "speed" || action.type == "deploy" || action.type == "jump"){
 						this.ships[i].actions[j].animated = 1;
 					}
 					else {

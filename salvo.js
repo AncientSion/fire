@@ -126,7 +126,7 @@ function Salvo(data){
 		var tr = table.insertRow(-1);
 		var td = tr.insertCell(-1);
 			td.className = "subHeader"; td.colSpan = 4;
-			td.innerHTML = "Target: <span class='red size15'>" + target.name + " #" + target.id + "</span>,  distance: " + dist + "px";
+			td.innerHTML = "Target: <span class='red font15'>" + target.name + " #" + target.id + "</span>,  distance: " + dist + "px";
 		div.appendChild(table);
 
 		var table = document.createElement("table");

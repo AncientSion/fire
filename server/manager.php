@@ -842,11 +842,9 @@ class Manager {
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$this->ships[$i]->setFacing();
 			$this->ships[$i]->setPosition();
-			if ($this->ships[$i]->ship){
-				$this->ships[$i]->setupForDamage();
-				$this->setShipLocks($this->ships[$i]);
-			}
-		}
+			$this->ships[$i]->setupForDamage();
+			$this->setShipLocks($this->ships[$i]);
+	}
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$aPos = $this->ships[$i]->getCurrentPosition();
@@ -877,6 +875,8 @@ class Manager {
 	}
 
 	public function setShipLocks($ship){
+		if (!$ship->ship){return;}
+		Debug::log("ew for #".$ship->id);
 		$origin = $ship->getCurrentPosition();
 		$sensor =  $ship->getSystemByName("Sensor");
 		$ew = $sensor->getEW($this->turn);
@@ -913,12 +913,20 @@ class Manager {
 				$skip = 0;
 				if ($this->ships[$i]->id == $ship->id || $ship->userid == $this->ships[$i]->userid){continue;}
 
-				if ($this->ships[$i]->flight && $ew->type == 0){
+				if ($ew->type == 0 && sizeof($ship->cc)){
 					for ($j = 0; $j < sizeof($ship->cc); $j++){
 						if ($ship->cc[$j] == $this->ships[$i]->id){
-							$ship->locks[] = array($this->ships[$i]->id, 0.5);
-							$skip = 1;
-							break;
+							if ($this->ships[$i]->flight){
+								$ship->locks[] = array($this->ships[$i]->id, round((0.5 / 180 * $w)*10)/10);
+								$skip = 1; break;
+							}
+							else if ($this->ships[$i]->salvo){
+								$angle = Math::getAngle2($origin, $this->ships[$i]->getTrajectoryStart());
+								if (Math::isInArc($a, $start, $end)){
+									$ship->locks[] = array($this->ships[$i]->id, 0.5);
+									$skip = 1; break;
+								}
+							}
 						}
 					}
 				}
@@ -945,6 +953,10 @@ class Manager {
 					}// else Debug::log("out of arc");
 				}
 			}
+		}
+
+		foreach ($ship->locks as $entry){
+			Debug::log("lock vs #".$entry[0]." with val: ".$entry[1]);
 		}
 	}
 

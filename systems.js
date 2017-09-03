@@ -46,7 +46,7 @@ System.prototype.attachDetailsMods = function(ele){
 		if (boost){
 			for (var i = 0; i < this.boostEffect.length; i++){
 				if (this.boostEffect[i].type == "Reload" || this.boostEffect[i].type == "Shots"){
-					var html = this.boostEffect[i].type + ": " + this.boostEffect[i].value;
+					var html = this.boostEffect[i].type + ": " + (this.boostEffect[i].value * boost);
 				}		
 				else {
 					var mod = "";
@@ -78,14 +78,11 @@ System.prototype.setState = function(){
 		this.destroyed = true;
 	}
 	else {
-		this.setTimeLoaded();
 		if (game.phase == -1 && game.turn > 1){
 			for (var i = this.powers.length-1; i >= 0; i--){
 				if (this.powers[i].turn == game.turn-1){
-					//if (this.getLoadLevel() >= 1){
-						this.copyPowers();
-						break;
-					//}
+					this.copyPowers();
+					break;
 				}
 				else if (this.powers[i].turn < game.turn -1){
 					break;
@@ -95,6 +92,7 @@ System.prototype.setState = function(){
 		if (this.isUnpowered()){
 			this.disabled = true;
 		}
+		//this.setTimeLoaded();
 	}
 	this.adjustStateByCritical();
 }
@@ -216,7 +214,10 @@ System.prototype.getLoadLevel = function(){
 	else return has/need;
 }
 System.prototype.setTimeLoaded = function(){
-	var turnsLoaded = this.reload
+	if (!this.isPowered()){
+		return 0;
+	}
+	var turnsLoaded = this.reload;
 	var max = this.reload;
 	var boost = this.getBoostEffect("Reload");
 
@@ -231,7 +232,6 @@ System.prototype.setTimeLoaded = function(){
 				if (this.powers[j].turn == i && this.powers[j].type == 1){
 					turnsLoaded++;
 					//console.log("charge ++")
-					break;
 				}
 			}
 		}
@@ -253,6 +253,8 @@ System.prototype.setTimeLoaded = function(){
 		}
 	}
 	this.loaded = turnsLoaded;
+	$(this.element).find(".loadLevel").css("width", this.getLoadLevel() * 100 + "%");
+	$("#systemDetailsDiv").find(".loading").html(this.getTimeLoaded() + " / " + this.reload);
 }
 System.prototype.getTimeLoaded = function(){
 	return this.loaded// - this.getBoostEffect("Reload") * this.getBoostLevel();
@@ -402,13 +404,7 @@ System.prototype.doUnboost = function(){
 	if (this.powers[this.powers.length-1].turn == game.turn){
 		this.powers.splice(this.powers.length-1, 1);	
 	}
-
-	if (this.getBoostEffect("Reload")){
-		this.setTimeLoaded();
-		$(this.element).find(".loadLevel").css("width", this.getLoadLevel() * 100 + "%");
-		$("#systemDetailsDiv").find(".loading").html(this.getTimeLoaded() + " / " + this.reload);
-	}
-	return true;
+	if (this.getBoostEffect("Reload")){this.setTimeLoaded();}
 }
 System.prototype.doBoost = function(){
 	//console.log("boost");
@@ -417,11 +413,7 @@ System.prototype.doBoost = function(){
 		turn: game.turn,type: 1, cost: this.getEffiency(), new: 1
 	})
 
-	if (this.getBoostEffect("Reload")){
-		this.setTimeLoaded();
-		$(this.element).find(".loadLevel").css("width", this.getLoadLevel() * 100 + "%");
-		$("#systemDetailsDiv").find(".loading").html(this.getTimeLoaded() + " / " + this.reload);
-	}
+	if (this.getBoostEffect("Reload")){this.setTimeLoaded();}
 }
 System.prototype.isPowered = function(){
 	if (this.destroyed || this.disabled){
@@ -484,6 +476,7 @@ System.prototype.doPower = function(){
 	if (this.powers.length && this.powers[this.powers.length-1].type == 0){
 		this.powers.splice(this.powers.length-1, 1);
 		this.disabled = 0;
+		this.setTimeLoaded();
 		this.setTableRow();
 		game.getUnitById(this.parentId).updateDivPower(this);
 	}
@@ -638,7 +631,7 @@ System.prototype.getTableData = function(forFighter){
 		} else div.className = "loadLevel";
 	//	if (this.weapon){div.style.width = this.getLoadLevel() * 100 + "%"}
 	//	else {div.style.width = 100 + "%"};
-		div.style.width = this.getLoadLevel() * 100 + "%";
+	//	div.style.width = this.getLoadLevel() * 100 + "%";
 		td.appendChild(div);
 
 	var div = document.createElement("div");
@@ -671,6 +664,7 @@ System.prototype.getTableData = function(forFighter){
 	$(td).data("systemId", this.id);
 	this.element = td;
 
+	this.setTimeLoaded();
 	this.setTableRow();
 	this.setSystemBorder();
 	return this.element;
@@ -2220,7 +2214,6 @@ Dual.prototype.doUnboost = function(){
 		w.powers.splice(w.powers.length-1, 1);
 }
 
-
 Dual.prototype.doBoost = function(){
 	var p = {id: this.powers.length+1,unitid: this.parentId,systemid: this.id,
 				turn: game.turn,type: 1, cost: this.getEffiency(), new: 1};
@@ -2420,7 +2413,7 @@ Launcher.prototype.getTraverseMod = function(target){
 }
 Launcher.prototype.getDmgString = function(){
 	if (this.ammo != undefined){
-		return this.loads[this.ammo].minDmg + " - " + this.loads[this.ammo].maxDmg;
+		return this.loads[this.ammo].systems[0].minDmg + " - " + this.loads[this.ammo].systems[0].maxDmg;
 	} else return "<span class='red'>NO LOADOUT</span>";
 }
 
@@ -2528,7 +2521,7 @@ Launcher.prototype.updateTotals = function(){
 			tr.insertCell(-1).innerHTML = this.launchRate[i];
 			tr.insertCell(-1).innerHTML = this.loads[i].cost;
 		var td = document.createElement("td");
-			td.innerHTML = "<img src='varIcons/plus.png'>"; tr.appendChild(td);
+			td.innerHTML = "<img class='size20' src='varIcons/plus.png'>"; tr.appendChild(td);
 			td.addEventListener("click", function(e){
 				e.preventDefault(); e.stopPropagation();
 				window.game.ships[0].getSystemById($("#weaponLoadoutDiv").data("systemid")).addAmmo(this.parentNode, false);
@@ -2538,7 +2531,7 @@ Launcher.prototype.updateTotals = function(){
 				window.game.ships[0].getSystemById($("#weaponLoadoutDiv").data("systemid")).addAmmo(this.parentNode, true);
 			})
 		var td = document.createElement("td");
-			td.innerHTML = "<img src='varIcons/minus.png'>"; tr.appendChild(td);
+			td.innerHTML = "<img class='size20' src='varIcons/minus.png'>"; tr.appendChild(td);
 			td.addEventListener("click", function(e){
 				e.preventDefault(); e.stopPropagation();
 				window.game.ships[0].getSystemById($("#weaponLoadoutDiv").data("systemid")).removeAmmo(this.parentNode, false);
@@ -2649,9 +2642,9 @@ Hangar.prototype.select = function(e){
 	else if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit){
 		return false;
 	}
-	else if (! this.selected){
-		if (game.getUnitById(aUnit).available < game.turn){
-			if (! ship.hasSystemsSelected()){
+	else if (!this.selected){
+		if (game.phase != -1 || (game.phase == -1 && game.getUnitById(aUnit).available < game.turn)){
+			if (!ship.hasSystemsSelected()){
 				this.selected = true;
 				this.enableHangarDeployment(e);
 				this.drawArc();
@@ -2660,7 +2653,7 @@ Hangar.prototype.select = function(e){
 	}
 	else {
 		this.selected = false;
-		$("#hangarLoadoutDiv").addClass("disabled");
+		$("#hangarLoadoutDiv").find("#missionType").find("tr").removeClass("selected").end().end().addClass("disabled");
 		if (game.flightDeploy){
 			game.flightDeploy = false;
 			$("#deployOverlay").hide();
@@ -2999,7 +2992,7 @@ Hangar.prototype.updateTotals = function(){
 			tr.insertCell(-1).innerHTML = this.loads[i].mass;
 			tr.insertCell(-1).innerHTML = this.loads[i].cost;
 		var td = document.createElement("td");
-			td.innerHTML = "<img src='varIcons/plus.png'>"; tr.appendChild(td);
+			td.innerHTML = "<img class='size20' src='varIcons/plus.png'>"; tr.appendChild(td);
 			td.addEventListener("click", function(e){
 				e.preventDefault(); e.stopPropagation();
 				window.game.ships[0].getSystemById($("#hangarLoadoutDiv").data("systemid")).addFighter(this.parentNode, false);
@@ -3009,7 +3002,7 @@ Hangar.prototype.updateTotals = function(){
 				window.game.ships[0].getSystemById($("#hangarLoadoutDiv").data("systemid")).addFighter(this.parentNode, true);
 			})
 		var td = document.createElement("td");
-			td.innerHTML = "<img src='varIcons/minus.png'>"; tr.appendChild(td);
+			td.innerHTML = "<img class='size20' src='varIcons/minus.png'>"; tr.appendChild(td);
 			td.addEventListener("click", function(e){
 				e.preventDefault(); e.stopPropagation();
 				window.game.ships[0].getSystemById($("#hangarLoadoutDiv").data("systemid")).removeFighter(this.parentNode, false);

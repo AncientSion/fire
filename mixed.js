@@ -156,6 +156,10 @@ Mixed.prototype.getImpulseMod = function(){
 	return 1;
 }
 
+Mixed.prototype.getArmourString = function(a){
+	return this.structures[0].negation;
+}
+
 Mixed.prototype.drawMovePlan = function(){
 	var target;
 	var origin = this.getPlannedPosition();
@@ -483,24 +487,6 @@ Mixed.prototype.getFireDest = function(fire, hit){
 		return {x: range(-30, 30), y: range(-30, 30)}
 	}
 	return this.getSystemById(fire.damages[hit].systemid).layout;
-}
-
-Mixed.prototype.getFireDesta = function(gun){
-	var hits = -1;
-	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].isDamagedThisTurn()){
-			hits++;
-			if (hits == gun){
-				return this.structures[i].layout;
-			}
-		}
-	}
-	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].isDestroyedThisTurn()){
-			return this.structures[i].layout;
-		}
-	}
-	return false;
 }
 
 Mixed.prototype.getTrajectory = function(gun){

@@ -143,7 +143,7 @@ class Ship {
 		//$this->baseHitChance = ceil(pow($this->mass, 0.3)*4)+20;
 		$this->baseTurnCost = round(pow($this->mass, 1.25)/30000, 2);
 		$this->baseTurnDelay = round(pow($this->mass, 0.5)/35, 2);
-		$this->baseImpulseCost = round(pow($this->mass, 1.2)/600, 2);
+		$this->baseImpulseCost = round(pow($this->mass, 1.4)/1500, 2);
 	}
 
 	public function hidePowers($turn){
@@ -208,7 +208,7 @@ class Ship {
 
 		for ($i = 0; $i < sizeof($this->actions); $i++){
 			if (!$this->actions[$i]->resolved){continue;}
-			if ($this->actions[$i]->type == "speedChange"){
+			if ($this->actions[$i]->type == "speed"){
 				//Debug::log("add: ".$$step*$this->actions[$i]->dist);
 				$impulse += $step*$this->actions[$i]->dist;
 			}
@@ -703,7 +703,7 @@ class Ship {
 	}
 
 	public function getImpulseStep(){
-		return floor($this->getBaseImpulse() / 10);
+		return floor($this->getBaseImpulse() / 7);
 	}
 
 	public function getCurrentPosition(){
@@ -979,7 +979,7 @@ class Ship {
 
 
 class UltraHeavy extends Ship {
-	public $baseImpulse = 140;
+	public $baseImpulse = 130;
 	public $traverse = 3;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -995,7 +995,7 @@ class UltraHeavy extends Ship {
 }
 
 class SuperHeavy extends Ship {
-	public $baseImpulse = 155;
+	public $baseImpulse = 140;
 	public $traverse = 2;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -1011,7 +1011,7 @@ class SuperHeavy extends Ship {
 }
 
 class Heavy extends Ship {
-	public $baseImpulse = 170;
+	public $baseImpulse = 150;
 	public $traverse = 1;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -1027,7 +1027,7 @@ class Heavy extends Ship {
 }
 
 class Medium extends Ship {
-	public $baseImpulse = 180;
+	public $baseImpulse = 160;
 	public $traverse = 0;
 
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -1047,7 +1047,7 @@ class Medium extends Ship {
 }
 
 class Light extends Ship {
-	public $baseImpulse = 190;
+	public $baseImpulse = 170;
 	public $traverse = -1;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -1067,7 +1067,7 @@ class Light extends Ship {
 }
 
 class SuperLight extends Ship {
-	public $baseImpulse = 200;
+	public $baseImpulse = 180;
 	public $traverse = -2;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){

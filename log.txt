@@ -1,0 +1,287 @@
+doAdvance for game2 from phase 2 to phase 3
+ew for #11
+specific EW for ship #11, EW from 96.269436990237 to 95.730563009763, dist: 214
+lock vs #12 with val: 0.5
+lock vs #14 with val: 0.5
+ew for #12
+specific EW for ship #12, EW from 317.37813905384 to 314.62186094616, dist: 151
+lock vs #13 with val: 0.5
+resolveFireOrder - ID 22, shooter: Omega #11 vs Artemis #12, w: LightPulse #15, guns: 1
+CALCULATE TO HIT - angle: 334, base: 73.753777777778, trav: 0, total multi: 1.5, dist/range: 200/36, req: 74.630666666667
+fireid: 22, doDamage, weapon: LightPulse, target: 12, hits: 3
+resolveFireOrder - ID 25, shooter: Artemis #12 vs Flight #13, w: LightPulse #12, guns: 1
+CALCULATE TO HIT - angle: 125, base: 21, trav: 0, total multi: 1.5, dist/range: 0/0, req: 31.5
+fireid: 25, doDamage, weapon: LightPulse, target: 13, hits: 3
+ => target system Thunderbolt #15 was destroyed, rem: 31, doing: 12, OK for: 19 dmg
+resolveFireOrder - ID 26, shooter: Artemis #12 vs Flight #13, w: LightPulse #13, guns: 1
+CALCULATE TO HIT - angle: 67, base: 21, trav: 0, total multi: 1.5, dist/range: 0/0, req: 31.5
+fireid: 26, doDamage, weapon: LightPulse, target: 13, hits: 3
+ => target system Thunderbolt #1 was destroyed, rem: 31, doing: 11, OK for: 20 dmg
+resolveFireOrder - ID 27, shooter: Artemis #12 vs Flight #13, w: LightPulse #16, guns: 1
+CALCULATE TO HIT - angle: 316, base: 21, trav: 0, total multi: 1.5, dist/range: 0/0, req: 31.5
+resolveFireOrder - ID 28, shooter: Artemis #12 vs Flight #13, w: LightPulse #17, guns: 1
+CALCULATE TO HIT - angle: 145, base: 21, trav: 0, total multi: 1.5, dist/range: 0/0, req: 31.5
+resolveFireOrder - ID 23, shooter: Omega #11 vs Salvo #14, w: LightPulse #19, guns: 1
+CALCULATE TO HIT - angle: 353, base: 10, trav: 1, total multi: 1.5, dist/range: 0/0, req: 12
+resolveFireOrder - ID 24, shooter: Flight #13 vs Artemis #12, w: ParticlePulsar #24, guns: 1
+CALCULATE TO HIT - angle: 263, base: 80.492444444444, trav: 0, total multi: 1, dist/range: 0/0, req: 80.492444444444
+fireid: 24, doDamage, weapon: ParticlePulsar, target: 12, hits: 3
+resolveBallisticFireOrders
+insertServerFireOrder: 1
+resolveFireOrder - ID 29, shooter: Salvo #14 vs Omega #11, w: Warhead #2, guns: 4
+doDamage, weapon: Warhead, target: 11/-1, totalDmg: 34
+doDamage, weapon: Warhead, target: 11/-1, totalDmg: 35
+doDamage, weapon: Warhead, target: 11/-1, totalDmg: 42
+doDamage, weapon: Warhead, target: 11/-1, totalDmg: 33
+cleanFireOrders, fires: 8
+DB updateFireOrders: 8
+fire id: 22, resolved: 1
+fire id: 24, resolved: 1
+fire id: 25, resolved: 1
+fire id: 26, resolved: 1
+fire id: 27, resolved: 1
+fire id: 28, resolved: 1
+fire id: 23, resolved: 1
+fire id: 29, resolved: 1
+= testCriticals for Omega, #11, turn: 4
+= testCriticals for Flight, #13, turn: 4
+= testCriticals for Artemis, #12, turn: 4
+= testCriticals for Salvo, #14, turn: 4
+ => DB insertDamageEntries: 8
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.048 seconds.
+advancing game state time: 0.06 seconds.
+createPlayerStatus
+DB insertUnits S: 3
+success, got id: 1
+success, got id: 2
+success, got id: 3
+insertSubUnits
+insertMission
+insertClientActions s: 3
+createPlayerStatus
+DB insertUnits S: 4
+success, got id: 4
+success, got id: 5
+success, got id: 6
+success, got id: 7
+insertSubUnits
+insertMission
+insertClientActions s: 4
+insertClientActions s: 4
+insertClientActions s: 3
+doAdvance for game1 from phase -1 to phase 0
+initBallistics
+resolveDeployActions s: 7
+handleJumpActions
+jumpin: #1, class: Artemis, size: 50, sensor: 650, ordered to: -528/-526, shiftPotential: 12.69%
+Artemis, aShift: 13°, pShift: 26px
+--> aShift: -5°, psShift: 24/10 (26px)
+jumpin: #2, class: Hyperion, size: 80, sensor: 700, ordered to: -648/-167, shiftPotential: 18.86%
+Hyperion, aShift: 19°, pShift: 38px
+--> aShift: 9°, psShift: 0/11 (11px)
+jumpin: #3, class: Hyperion, size: 80, sensor: 700, ordered to: -541/433, shiftPotential: 18.86%
+Hyperion, aShift: 19°, pShift: 38px
+--> aShift: -16°, psShift: -29/-4 (30px)
+jumpin: #4, class: Altarian, size: 55, sensor: 750, ordered to: 381/204, shiftPotential: 12.1%
+Altarian, aShift: 13°, pShift: 25px
+--> aShift: -7°, psShift: -9/-24 (26px)
+jumpin: #5, class: Altarian, size: 55, sensor: 750, ordered to: 406/139, shiftPotential: 12.1%
+Altarian, aShift: 13°, pShift: 25px
+--> aShift: 9°, psShift: 18/-6 (19px)
+jumpin: #6, class: Primus, size: 100, sensor: 1050, ordered to: 543/-204, shiftPotential: 15.71%
+Primus, aShift: 16°, pShift: 32px
+--> aShift: 16°, psShift: -7/20 (22px)
+jumpin: #7, class: Vorchan, size: 40, sensor: 500, ordered to: 452/218, shiftPotential: 13.2%
+Vorchan, aShift: 14°, pShift: 27px
+--> aShift: -1°, psShift: -1/5 (6px)
+action size: 2
+assembleEndStates
+getDeployState for 1
+delving getDeployState for 1
+getDeployState for 2
+delving getDeployState for 2
+getDeployState for 3
+delving getDeployState for 3
+getDeployState for 4
+delving getDeployState for 4
+getDeployState for 5
+delving getDeployState for 5
+getDeployState for 6
+delving getDeployState for 6
+getDeployState for 7
+delving getDeployState for 7
+updateUnitEndState s:7 1/-1
+advancing game state time: 0.095 seconds.
+insertClientActions s: 3
+insertClientActions s: 4
+doAdvance for game1 from phase 0 to phase 1
+handleShipMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving layer #2
+handleMixedMovement
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving layer #2
+advancing game state time: 0.035 seconds.
+doAdvance for game1 from phase 2 to phase 3
+ew for #1
+ew for #2
+ew for #3
+ew for #4
+specific EW for ship #4, EW from 147 to 187, dist: 900
+lock vs #3 with val: 0.5
+ew for #5
+specific EW for ship #5, EW from 152 to 192, dist: 900
+lock vs #3 with val: 0.5
+ew for #6
+specific EW for ship #6, EW from 160.89599620667 to 213.10400379333, dist: 1055
+lock vs #1 with val: 0.5
+lock vs #2 with val: 0.5
+ew for #7
+specific EW for ship #7, EW from 36.022672729009 to 33.977327270991, dist: 116
+resolveFireOrder - ID 1, shooter: Primus #6 vs Hyperion #2, w: HeavyIon #8, guns: 1
+CALCULATE TO HIT - angle: 350, base: 92.222222222222, trav: 0, total multi: 1.3, dist/range: 919/74, req: 45.888888888889
+resolveFireOrder - ID 2, shooter: Primus #6 vs Hyperion #2, w: HeavyIon #9, guns: 1
+CALCULATE TO HIT - angle: 350, base: 92.222222222222, trav: 0, total multi: 1.3, dist/range: 919/74, req: 45.888888888889
+doDamage, weapon: HeavyIon, target: 2/10, totalDmg: 56
+doDamage, weapon: HeavyIon, target: 2/9, totalDmg: 63
+ => OK ship target system Dual #9 was destroyed, rem: 28, doing: 28, OK for: 26 dmg
+resolveFireOrder - ID 3, shooter: Primus #6 vs Hyperion #2, w: HeavyIon #10, guns: 1
+CALCULATE TO HIT - angle: 350, base: 92.222222222222, trav: 0, total multi: 1.3, dist/range: 919/74, req: 45.888888888889
+doDamage, weapon: HeavyIon, target: 2/-1, totalDmg: 52
+doDamage, weapon: HeavyIon, target: 2/-1, totalDmg: 59
+resolveFireOrder - ID 4, shooter: Primus #6 vs Hyperion #2, w: HeavyIon #11, guns: 1
+CALCULATE TO HIT - angle: 350, base: 92.222222222222, trav: 0, total multi: 1.3, dist/range: 919/74, req: 45.888888888889
+resolveFireOrder - ID 5, shooter: Primus #6 vs Hyperion #2, w: HeavyIon #24, guns: 1
+CALCULATE TO HIT - angle: 350, base: 92.222222222222, trav: 0, total multi: 1.3, dist/range: 919/74, req: 45.888888888889
+doDamage, weapon: HeavyIon, target: 2/10, totalDmg: 60
+resolveFireOrder - ID 6, shooter: Altarian #4 vs Hyperion #3, w: HeavyIon #9, guns: 1
+CALCULATE TO HIT - angle: 5, base: 91.111111111111, trav: 0, total multi: 1.3, dist/range: 666/54, req: 64.444444444444
+doDamage, weapon: HeavyIon, target: 3/-1, totalDmg: 63
+resolveFireOrder - ID 7, shooter: Altarian #4 vs Hyperion #3, w: MediumSingleIon #18, guns: 1
+CALCULATE TO HIT - angle: 5, base: 91.111111111111, trav: 0, total multi: 1.3, dist/range: 666/80, req: 38.444444444444
+resolveFireOrder - ID 8, shooter: Altarian #4 vs Hyperion #3, w: MediumSingleIon #19, guns: 1
+CALCULATE TO HIT - angle: 5, base: 91.111111111111, trav: 0, total multi: 1.3, dist/range: 666/80, req: 38.444444444444
+doDamage, weapon: MediumSingleIon, target: 3/-1, totalDmg: 37
+resolveFireOrder - ID 9, shooter: Altarian #5 vs Hyperion #3, w: HeavyIon #9, guns: 1
+CALCULATE TO HIT - angle: 1, base: 90.222222222222, trav: 0, total multi: 1.3, dist/range: 736/59, req: 58.288888888889
+doDamage, weapon: HeavyIon, target: 3/-1, totalDmg: 52
+doDamage, weapon: HeavyIon, target: 3/10, totalDmg: 64
+resolveFireOrder - ID 10, shooter: Altarian #5 vs Hyperion #3, w: MediumSingleIon #18, guns: 1
+CALCULATE TO HIT - angle: 1, base: 90.222222222222, trav: 0, total multi: 1.3, dist/range: 736/89, req: 28.288888888889
+resolveFireOrder - ID 11, shooter: Altarian #5 vs Hyperion #3, w: MediumSingleIon #19, guns: 1
+CALCULATE TO HIT - angle: 1, base: 90.222222222222, trav: 0, total multi: 1.3, dist/range: 736/89, req: 28.288888888889
+doDamage, weapon: MediumSingleIon, target: 3/-1, totalDmg: 46
+resolveFireOrder - ID 12, shooter: Hyperion #2 vs Altarian #4, w: HeavyLaser #14, guns: 1
+CALCULATE TO HIT - angle: 37, base: 80.28, trav: 0, total multi: 1, dist/range: 796/48, req: 32.28
+doDamage, weapon: HeavyLaser, target: 4/-1: Main Structure
+hitting:  Primary  Primary  Primary 
+resolveFireOrder - ID 14, shooter: Hyperion #3 vs Altarian #4, w: HeavyLaser #14, guns: 1
+CALCULATE TO HIT - angle: 356, base: 77.31, trav: 0, total multi: 1, dist/range: 666/40, req: 37.31
+resolveFireOrder - ID 13, shooter: Hyperion #2 vs Primus #6, w: HeavyLaser #21, guns: 1
+CALCULATE TO HIT - angle: 348, base: 109.278, trav: 0, total multi: 1.0714285714286, dist/range: 919/56, req: 61.083571428571
+doDamage, weapon: HeavyLaser, target: 6/-1: Main Structure
+hitting:  Primary  Primary  Primary 
+resolveFireOrder - ID 15, shooter: Hyperion #3 vs Primus #6, w: HeavyLaser #21, guns: 1
+CALCULATE TO HIT - angle: 318, base: 116.298, trav: 0, total multi: 1.0714285714286, dist/range: 1026/62, req: 62.605
+doDamage, weapon: HeavyLaser, target: 6/-1: Main Structure
+hitting:  Primary  Primary  Primary 
+resolveFireOrder - ID 16, shooter: Artemis #1 vs Primus #6, w: MediumRailGun #8, guns: 1
+CALCULATE TO HIT - angle: 14, base: 109.746, trav: 0, total multi: 1.0714285714286, dist/range: 822/83, req: 34.585
+doDamage, weapon: MediumRailGun, target: 6/-1, totalDmg: 37
+resolveFireOrder - ID 17, shooter: Artemis #1 vs Primus #6, w: HeavyRailGun #9, guns: 1
+CALCULATE TO HIT - angle: 14, base: 109.746, trav: 0, total multi: 1.0714285714286, dist/range: 822/50, req: 67.585
+doDamage, weapon: HeavyRailGun, target: 6/-1, totalDmg: 59
+doDamage, weapon: HeavyRailGun, target: 6/-1, totalDmg: 71
+resolveFireOrder - ID 18, shooter: Artemis #1 vs Primus #6, w: MediumRailGun #10, guns: 1
+CALCULATE TO HIT - angle: 14, base: 109.746, trav: 0, total multi: 1.0714285714286, dist/range: 822/83, req: 34.585
+doDamage, weapon: MediumRailGun, target: 6/10, totalDmg: 35
+resolveBallisticFireOrders
+cleanFireOrders, fires: 18
+DB updateFireOrders: 18
+= testCriticals for Artemis, #1, turn: 1
+= testCriticals for Hyperion, #2, turn: 1
+= testCriticals for Hyperion, #3, turn: 1
+= testCriticals for Altarian, #4, turn: 1
+= testCriticals for Altarian, #5, turn: 1
+= testCriticals for Primus, #6, turn: 1
+= testCriticals for Vorchan, #7, turn: 1
+ => DB insertDamageEntries: 23
+ => DB insertCritEntries: 1
+handleFiringPhase time: 0.187 seconds.
+advancing game state time: 0.202 seconds.
+doAdvance for game1 from phase 3 to phase 4
+assembleEndStates
+updateUnitEndState s:7 1/3
+endTurn
+resolveDeployActions s: 0
+destroyUnitsDB
+insertReinforcements: 1
+advancing game state time: 0.063 seconds.
+DB insertUnits S: 2
+success, got id: 8
+success, got id: 9
+insertSubUnits
+success insertSubUnits
+success insertSubUnits
+insertMission
+success insertMission
+success insertMission
+insertClientActions s: 2
+updateSystemLoad: 0
+DB insertUnits S: 2
+success, got id: 10
+success, got id: 11
+insertSubUnits
+success insertSubUnits
+success insertSubUnits
+success insertSubUnits
+success insertSubUnits
+insertMission
+success insertMission
+success insertMission
+insertClientActions s: 2
+updateSystemLoad: 0
+doAdvance for game1 from phase -1 to phase 0
+initBallistics
+merging
+DB insertUnits S: 1
+success, got id: 12
+insertSubUnits
+success insertSubUnits
+insertMission
+success insertMission
+insertClientActions s: 1
+DB updateBallisticFireOrder, s: 2
+updateSystemLoad: 2
+success updateSystemLoad
+success updateSystemLoad
+resolveDeployActions s: 5
+handleJumpActions
+assembleEndStates
+getDeployState for 1
+getDeployState for 2
+getDeployState for 3
+getDeployState for 9
+delving getDeployState for 9
+getDeployState for 8
+delving getDeployState for 8
+getDeployState for 10
+delving getDeployState for 10
+getDeployState for 7
+getDeployState for 6
+getDeployState for 5
+getDeployState for 4
+getDeployState for 11
+delving getDeployState for 11
+getDeployState for 12
+delving getDeployState for 12
+updateUnitEndState s:12 2/-1
+advancing game state time: 0.058 seconds.

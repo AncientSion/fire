@@ -95,22 +95,21 @@ else {
 <!DOCTYPE html>
 <html>
 <head>
-	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-	<meta content="utf-8" http-equiv="encoding">
 	<link rel='stylesheet' href='style.css'/>
 	<script src="jquery-2.1.1.min.js"></script>
-	<script src='ajax.js'></script>
+	<script src='mathLib.js'></script>	
 	<script src='shared.js'></script>
-	<script src='mathLib.js'></script>
 	<script src='shipclasses.js'></script>
+	<script src='classes.js'></script>
 	<script src='mixed.js'></script>
 	<script src='salvo.js'></script>
 	<script src='flights.js'></script>
-	<script src='classes.js'></script>
-	<script src='cam.js'></script>
-	<script src='game.js'></script>
 	<script src='systems.js'></script>
+	<script src='graphics.js'></script>
+	<script src='cam.js'></script>
 	<script src='imageloader.js'></script>
+	<script src='game.js'></script>
+	<script src='ajax.js'></script>
 </head>
 	<body style="padding: 20px">
 		<div id ="popupWrapper">

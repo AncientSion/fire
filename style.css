@@ -546,6 +546,16 @@ table, th, tr, td {
 	margin: auto;
 }
 
+.size20 {
+	height: 20px;
+	width: 20px;
+}
+
+.font15 {
+	font-size: 15px;
+}
+
+
 .structContainer {
 	height: 400px;
 	position: relative;
@@ -995,7 +1005,7 @@ table, th, tr, td {
 
 #systemDetailsDiv table {
 	width: 220px;
-	border: 2px solid white;
+	border: 2px solid yellow;
 	border-collapse: collapse;
 }
 
@@ -1208,13 +1218,6 @@ table, th, tr, td {
 	border: 2px solid red;
 }
 
-.size16 {
-	font-size: 16px;
-}
-.size15 {
-	font-size: 15px;
-}
-
 .red {
 	color: #ff3d00;
 }
@@ -1386,11 +1389,6 @@ table, th, tr, td {
 
 #turnMode.on {
 	color: #27e627;
-}
-
-.size20 {
-	height: 20px;
-	width: 20px;
 }
 
 .ep {

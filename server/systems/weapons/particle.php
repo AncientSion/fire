@@ -32,7 +32,7 @@ class LightIon extends Particle {
 
 class MediumSingleIon extends LightIon {
 	public $name = "MediumSingleIon";
-	public $display = "62mm Ion Cannon";
+	public $display = "68mm Ion Emitter";
 	public $minDmg = 33;
 	public $maxDmg = 47;
 	public $accDecay = 120;
@@ -56,7 +56,7 @@ class MediumSingleIon extends LightIon {
 
 class MediumTwinIon extends MediumSingleIon {
 	//public $name = "MediumTwinIon";
-	public $display = "62mm Dual Ion Cannon";
+	public $display = "68mm Dual Ion Cannon";
 	public $shots = 2;
 	public $mass = 21;
 	public $powerReq = 4;
@@ -70,7 +70,7 @@ class MediumTwinIon extends MediumSingleIon {
 
 class HeavyIon extends MediumSingleIon {
 	public $name = "HeavyIon";
-	public $display = "110mm Ion Cannon";
+	public $display = "122mm Ion Burst Cannon";
 	public $minDmg = 49;
 	public $maxDmg = 65;
 	public $accDecay = 80;
@@ -83,7 +83,7 @@ class HeavyIon extends MediumSingleIon {
 	public $powerReq = 6;
 	public $traverse = 1;
 	public $effiency = 4;
-	public $maxBoost = 1;
+	public $maxBoost = 2;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

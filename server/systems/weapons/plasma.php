@@ -36,7 +36,7 @@ class LightPlasma extends Plasma {
 	public $display = "46mm Plasma Gun";
 	public $minDmg = 28;
 	public $maxDmg = 37;
-	public $accDecay = 100;
+	public $accDecay = 150;
 	public $dmgLoss = 9;
 	public $shots = 1;
 	public $animColor = "darkGreen";
@@ -59,7 +59,7 @@ class MediumPlasma extends Plasma {
 	public $display = "78mm Plasma Accelerator";
 	public $minDmg = 63;
 	public $maxDmg = 82;
-	public $accDecay = 100;
+	public $accDecay = 150;
 	public $dmgLoss = 7;
 	public $shots = 1;
 	public $animColor = "darkGreen";
@@ -82,7 +82,7 @@ class HeavyPlasma extends Plasma {
 	public $display = "148mm Plasma Cannon";
 	public $minDmg = 96;
 	public $maxDmg = 128;
-	public $accDecay = 100;
+	public $accDecay = 150;
 	public $dmgLoss = 5;
 	public $shots = 1;
 	public $animColor = "darkGreen";

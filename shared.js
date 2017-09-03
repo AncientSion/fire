@@ -168,13 +168,6 @@ function initiateSalvo(data){
 
 	for (var j = 0; j < data.structures.length; j++){
 		salvo.structures.push(new Missile(data.structures[j]));
-
-		for (var k = 0; k < data.structures[j].systems.length; k++){
-			salvo.structures[j].systems.push(new Warhead(data.structures[j].systems[k]));
-		}
-		for (var k = 0; k < data.structures[j].crits.length; k++){
-			salvo.structures[j].systems.push(new Crit(data.structures[j].crits[k]));
-		}
 	}
 
 	return salvo;

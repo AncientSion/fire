@@ -1075,7 +1075,7 @@
 			");
 
 			for ($i = 0; $i < sizeof($fires); $i++){
-				Debug::log("fire id: ".$fires[$i]->id.", resolved: ".$fires[$i]->resolved);
+				//Debug::log("fire id: ".$fires[$i]->id.", resolved: ".$fires[$i]->resolved);
 				$stmt->bindParam(":shots", $fires[$i]->shots);
 				$stmt->bindParam(":req", $fires[$i]->req);
 				$stmt->bindParam(":notes", $fires[$i]->notes);
@@ -1235,7 +1235,6 @@
 				$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 				if ($result){
 					for ($j = 0; $j < (sizeof($result)); $j++){
-						//var_export($result[$j]);
 						$crit = new FireOrder(
 							$result[$j]["id"],
 							$result[$j]["gameid"],

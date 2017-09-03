@@ -102,6 +102,9 @@ class Mixed extends Ship {
 			}
 		}
 	}
+	public function setupForDamage(){
+		return;
+	}
 
 	public function getImpactAngle($fire){
 		if ($fire->cc){
