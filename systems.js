@@ -31,6 +31,8 @@ function System(system){
 	this.loadout = 0;
 	this.loaded = 0;
 	this.notes = [];
+	this.launcher = 0;
+	this.hangar = 0;
 }
 
 System.prototype.attachDetailsMods = function(ele){
@@ -2241,6 +2243,7 @@ function Launcher(system){
 	this.loads = [];
 	this.ammo = system.ammo;
 	this.loadout = 1;
+	this.launcher = 1;
 
 	this.create(system.loads);
 }
@@ -2588,6 +2591,7 @@ function Hangar(system){
 	this.range = 75;
 	this.loadout = 1;
 	this.mission = 0;
+	this.hangar = 1;
 }
 Hangar.prototype = Object.create(PrimarySystem.prototype);
 

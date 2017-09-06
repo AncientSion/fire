@@ -120,9 +120,10 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 	var targetData2 = $("#game").find("#weaponAimTableWrapper").find("#targetInfo").find("#targetData2");
 	var weaponInfo = $("#game").find("#weaponAimTableWrapper").find("#weaponInfo");
 	var dist;
+	var drop = 0;
 
 	if (ship.flight){
-		var drop = 0;
+		drop = 0;
 		if (vessel && !game.isCloseCombat(ship, vessel)){
 			drop = 1;
 		} else if (!vessel){
@@ -265,7 +266,7 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 						row.append($("<td>").html(system.display + " #" + ship.structures[i].systems[j].id))
 
 					if (vessel.flight){
-						if (game.isCloseCombat(ship, vessel)){
+						if (game.isCloseCombat(ship, vessel) || ship.ship){
 							legalTarget = true;
 							inArc = true;
 						}

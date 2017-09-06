@@ -152,7 +152,7 @@ function Salvo(data){
 			table.style.margin = "auto";
 		var tr = document.createElement("tr");
 
-		var max = Math.min(5, this.structures.length);
+		var max = Math.min(6, this.structures.length);
 
 		var impact = false;
 		if (this.actions.lenght && this.actions[this.actions.length-1].type == "impact"){

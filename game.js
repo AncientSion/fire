@@ -1603,11 +1603,10 @@ Game.prototype.getUnitType = function (val){
 		for (var i = 0; i < this.ships.length; i++){
 			for (var j = 0; j < this.ships[i].structures.length; j++){
 				for (var k = 0; k < this.ships[i].structures[j].systems.length; k++){
-					if (!(this.ships[i].structures[j].systems[k] instanceof Launcher)){
-						for (var l = 0; l < this.ships[i].structures[j].systems[k].fireOrders.length; l++){
-							if (this.ships[i].structures[j].systems[k].fireOrders[l].turn == this.turn){
-								this.fireOrders.push(this.ships[i].structures[j].systems[k].fireOrders[l]);
-							}
+					if (this.ships[i].structures[j].systems[k].launcher || this.ships[i].structures[j].systems[k].hangar){continue;}
+					for (var l = 0; l < this.ships[i].structures[j].systems[k].fireOrders.length; l++){
+						if (this.ships[i].structures[j].systems[k].fireOrders[l].turn == this.turn){
+							this.fireOrders.push(this.ships[i].structures[j].systems[k].fireOrders[l]);
 						}
 					}
 				}

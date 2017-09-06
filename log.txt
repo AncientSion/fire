@@ -285,3 +285,192 @@ getDeployState for 12
 delving getDeployState for 12
 updateUnitEndState s:12 2/-1
 advancing game state time: 0.058 seconds.
+insertClientActions s: 4
+insertClientActions s: 3
+doAdvance for game1 from phase 0 to phase 1
+handleShipMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+STATIC STRIKE #8, adding move to: -288/327
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving mixed #9
+_____________________
+Flight #9, impulse: 256
+From -480/-134 to 155/177
+Dist 708, angle: 26.093939002783
+close in
+adding move to: -250/-21
+resolving mixed #10
+_____________________
+Flight #10, impulse: 331
+From 196/216 to -288/327
+Dist 497, angle: 167.08321893614
+close in
+adding move to: -127/290
+resolving mixed #11
+_____________________
+Flight #11, impulse: 331
+From 247/145 to -288/327
+Dist 566, angle: 161.21236756515
+close in
+adding move to: -66/252
+resolving layer #2
+updateMissionState
+handleMixedMovement
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving mixed #12
+_____________________
+Flight #12, impulse: 178
+From -330/-495 to 155/177
+Dist 829, angle: 54.181029436075
+close in
+adding move to: -226/-351
+resolving layer #2
+updateMissionState
+advancing game state time: 0.062 seconds.
+doAdvance for game1 from phase 2 to phase 3
+ew for #1
+specific EW for ship #1, EW from 355.78807882345 to 38.211921176546, dist: 625
+lock vs #6 with val: 0.5
+ew for #3
+specific EW for ship #3, EW from 316.57572103579 to 3.4242789642102, dist: 630
+lock vs #5 with val: 0.5
+lock vs #4 with val: 0.5
+lock vs #10 with val: 0.5
+lock vs #11 with val: 0.5
+lock vs #7 with val: 0.5
+ew for #2
+specific EW for ship #2, EW from 3.4074032645034 to 50.592596735497, dist: 627
+lock vs #5 with val: 0.5
+lock vs #4 with val: 0.5
+lock vs #11 with val: 0.5
+lock vs #7 with val: 0.5
+ew for #5
+specific EW for ship #5, EW from 145.12215722764 to 216.87784277236, dist: 508
+ew for #6
+specific EW for ship #6, EW from 149.49744436605 to 228.50255563395, dist: 667
+lock vs #1 with val: 0.5
+lock vs #9 with val: 0.5
+lock vs #12 with val: 0.5
+ew for #4
+specific EW for ship #4, EW from 149.89410576226 to 226.10589423774, dist: 488
+ew for #7
+resolveFireOrder - ID 42, shooter: Primus #6 vs Artemis #1, w: HeavyIon #8, guns: 1
+CALCULATE TO HIT - angle: 12, base: 72.098666666667, trav: 1, total multi: 1.5, dist/range: 554/45, req: 41.5184
+doDamage, weapon: HeavyIon, target: 1/5, totalDmg: 65
+doDamage, weapon: HeavyIon, target: 1/-1, totalDmg: 57
+resolveFireOrder - ID 43, shooter: Primus #6 vs Artemis #1, w: HeavyIon #9, guns: 1
+CALCULATE TO HIT - angle: 12, base: 72.098666666667, trav: 1, total multi: 1.5, dist/range: 554/45, req: 41.5184
+doDamage, weapon: HeavyIon, target: 1/-1, totalDmg: 54
+resolveFireOrder - ID 44, shooter: Primus #6 vs Artemis #1, w: HeavyIon #13, guns: 1
+CALCULATE TO HIT - angle: 12, base: 72.098666666667, trav: 1, total multi: 1.5, dist/range: 554/45, req: 41.5184
+doDamage, weapon: HeavyIon, target: 1/-1, totalDmg: 59
+resolveFireOrder - ID 51, shooter: Altarian #4 vs Hyperion #2, w: MediumSingleIon #12, guns: 1
+CALCULATE TO HIT - angle: 10, base: 92.222222222222, trav: 0, total multi: 1, dist/range: 496/60, req: 32.222222222222
+resolveFireOrder - ID 52, shooter: Altarian #4 vs Hyperion #2, w: MediumSingleIon #13, guns: 1
+CALCULATE TO HIT - angle: 10, base: 92.222222222222, trav: 0, total multi: 1, dist/range: 496/60, req: 32.222222222222
+resolveFireOrder - ID 45, shooter: Altarian #5 vs Hyperion #2, w: MediumSingleIon #12, guns: 1
+CALCULATE TO HIT - angle: 2, base: 90.444444444444, trav: 0, total multi: 1, dist/range: 514/62, req: 28.444444444444
+resolveFireOrder - ID 46, shooter: Altarian #5 vs Hyperion #2, w: MediumSingleIon #13, guns: 1
+CALCULATE TO HIT - angle: 2, base: 90.444444444444, trav: 0, total multi: 1, dist/range: 514/62, req: 28.444444444444
+doDamage, weapon: MediumSingleIon, target: 2/10, totalDmg: 39
+resolveFireOrder - ID 49, shooter: Altarian #4 vs Hyperion #3, w: LightIon #8, guns: 1
+CALCULATE TO HIT - angle: 358, base: 90.444444444444, trav: 0, total multi: 1, dist/range: 373/75, req: 15.444444444444
+doDamage, weapon: LightIon, target: 3/-1, totalDmg: 16
+resolveFireOrder - ID 50, shooter: Altarian #4 vs Hyperion #3, w: LightIon #10, guns: 1
+CALCULATE TO HIT - angle: 358, base: 90.444444444444, trav: 0, total multi: 1, dist/range: 373/75, req: 15.444444444444
+doDamage, weapon: LightIon, target: 3/-1, totalDmg: 14
+resolveFireOrder - ID 53, shooter: Altarian #4 vs Hyperion #3, w: MediumSingleIon #18, guns: 1
+CALCULATE TO HIT - angle: 358, base: 90.444444444444, trav: 0, total multi: 1, dist/range: 373/45, req: 45.444444444444
+resolveFireOrder - ID 54, shooter: Altarian #4 vs Hyperion #3, w: MediumSingleIon #19, guns: 1
+CALCULATE TO HIT - angle: 358, base: 90.444444444444, trav: 0, total multi: 1, dist/range: 373/45, req: 45.444444444444
+doDamage, weapon: MediumSingleIon, target: 3/10, totalDmg: 34
+resolveFireOrder - ID 47, shooter: Altarian #5 vs Hyperion #3, w: MediumSingleIon #18, guns: 1
+CALCULATE TO HIT - angle: 354, base: 91.333333333333, trav: 0, total multi: 1, dist/range: 440/53, req: 38.333333333333
+doDamage, weapon: MediumSingleIon, target: 3/-1, totalDmg: 43
+resolveFireOrder - ID 48, shooter: Altarian #5 vs Hyperion #3, w: MediumSingleIon #19, guns: 1
+CALCULATE TO HIT - angle: 354, base: 91.333333333333, trav: 0, total multi: 1, dist/range: 440/53, req: 38.333333333333
+doDamage, weapon: MediumSingleIon, target: 3/-1, totalDmg: 45
+resolveFireOrder - ID 55, shooter: Vorchan #7 vs Hyperion #3, w: MediumSingleIon #8, guns: 1
+CALCULATE TO HIT - angle: 1, base: 90.222222222222, trav: 0, total multi: 1, dist/range: 468/57, req: 33.222222222222
+doDamage, weapon: MediumSingleIon, target: 3/-1, totalDmg: 38
+resolveFireOrder - ID 56, shooter: Vorchan #7 vs Hyperion #3, w: MediumSingleIon #10, guns: 1
+CALCULATE TO HIT - angle: 1, base: 90.222222222222, trav: 0, total multi: 1, dist/range: 468/57, req: 33.222222222222
+doDamage, weapon: MediumSingleIon, target: 3/8, totalDmg: 42
+resolveFireOrder - ID 34, shooter: Hyperion #2 vs Altarian #4, w: LightParticleBeam #11, guns: 1
+CALCULATE TO HIT - angle: 24, base: 79.11, trav: 0, total multi: 1.5, dist/range: 496/60, req: 58.665
+doDamage, weapon: LightParticleBeam, target: 4/-1: Main Structure
+hitting:  Primary 
+resolveFireOrder - ID 36, shooter: Hyperion #2 vs Altarian #4, w: LightParticleBeam #15, guns: 1
+CALCULATE TO HIT - angle: 24, base: 79.11, trav: 0, total multi: 1.5, dist/range: 496/60, req: 58.665
+doDamage, weapon: LightParticleBeam, target: 4/-1: Main Structure
+hitting:  Primary 
+resolveFireOrder - ID 37, shooter: Hyperion #2 vs Altarian #4, w: LightParticleBeam #16, guns: 1
+CALCULATE TO HIT - angle: 24, base: 79.11, trav: 0, total multi: 1.5, dist/range: 496/60, req: 58.665
+doDamage, weapon: LightParticleBeam, target: 4/10: LightIon
+hitting:  Primary 
+resolveFireOrder - ID 26, shooter: Hyperion #3 vs Altarian #4, w: LightParticleBeam #9, guns: 1
+CALCULATE TO HIT - angle: 329, base: 79.74, trav: 0, total multi: 1, dist/range: 373/45, req: 34.74
+doDamage, weapon: LightParticleBeam, target: 4/-1: Main Structure
+hitting:  Primary 
+resolveFireOrder - ID 27, shooter: Hyperion #3 vs Altarian #4, w: LightParticleBeam #11, guns: 1
+CALCULATE TO HIT - angle: 329, base: 79.74, trav: 0, total multi: 1, dist/range: 373/45, req: 34.74
+resolveFireOrder - ID 31, shooter: Hyperion #3 vs Altarian #4, w: LightParticleBeam #22, guns: 1
+CALCULATE TO HIT - angle: 329, base: 79.74, trav: 0, total multi: 1, dist/range: 373/45, req: 34.74
+doDamage, weapon: LightParticleBeam, target: 4/18: MediumSingleIon
+hitting:  Primary 
+resolveFireOrder - ID 32, shooter: Hyperion #3 vs Altarian #4, w: LightParticleBeam #23, guns: 1
+CALCULATE TO HIT - angle: 329, base: 79.74, trav: 0, total multi: 1, dist/range: 373/45, req: 34.74
+resolveFireOrder - ID 33, shooter: Hyperion #2 vs Altarian #4, w: MediumRailGun #8, guns: 1
+CALCULATE TO HIT - angle: 24, base: 79.11, trav: 0, total multi: 1.5, dist/range: 496/50, req: 68.665
+doDamage, weapon: MediumRailGun, target: 4/-1, totalDmg: 36
+doDamage, weapon: MediumRailGun, target: 4/4, totalDmg: 31
+resolveFireOrder - ID 35, shooter: Hyperion #2 vs Altarian #4, w: MediumRailGun #12, guns: 1
+CALCULATE TO HIT - angle: 24, base: 79.11, trav: 0, total multi: 1.5, dist/range: 496/50, req: 68.665
+doDamage, weapon: MediumRailGun, target: 4/-1, totalDmg: 29
+doDamage, weapon: MediumRailGun, target: 4/-1, totalDmg: 37
+resolveFireOrder - ID 25, shooter: Hyperion #3 vs Altarian #4, w: MediumRailGun #8, guns: 1
+CALCULATE TO HIT - angle: 329, base: 79.74, trav: 0, total multi: 1, dist/range: 373/38, req: 41.74
+resolveFireOrder - ID 28, shooter: Hyperion #3 vs Altarian #4, w: MediumRailGun #12, guns: 1
+CALCULATE TO HIT - angle: 329, base: 79.74, trav: 0, total multi: 1, dist/range: 373/38, req: 41.74
+doDamage, weapon: MediumRailGun, target: 4/19, totalDmg: 30
+doDamage, weapon: MediumRailGun, target: 4/5, totalDmg: 38
+resolveFireOrder - ID 38, shooter: Hyperion #2 vs Primus #6, w: LightParticleBeam #22, guns: 1
+CALCULATE TO HIT - angle: 340, base: 111.15, trav: 0, total multi: 1.0714285714286, dist/range: 674/81, req: 38.089285714286
+doDamage, weapon: LightParticleBeam, target: 6/-1: Main Structure
+hitting:  Primary 
+resolveFireOrder - ID 39, shooter: Hyperion #2 vs Primus #6, w: LightParticleBeam #23, guns: 1
+CALCULATE TO HIT - angle: 340, base: 111.15, trav: 0, total multi: 1.0714285714286, dist/range: 674/81, req: 38.089285714286
+resolveFireOrder - ID 40, shooter: Artemis #1 vs Primus #6, w: LightPulse #12, guns: 1
+CALCULATE TO HIT - angle: 21, base: 111.384, trav: 0, total multi: 1.5714285714286, dist/range: 554/100, req: 75.032
+fireid: 40, doDamage, weapon: LightPulse, target: 6, hits: 5
+resolveFireOrder - ID 41, shooter: Artemis #1 vs Primus #6, w: LightPulse #13, guns: 1
+CALCULATE TO HIT - angle: 21, base: 111.384, trav: 0, total multi: 1.5714285714286, dist/range: 554/100, req: 75.032
+resolveFireOrder - ID 29, shooter: Hyperion #3 vs Vorchan #7, w: LightParticleBeam #15, guns: 1
+CALCULATE TO HIT - angle: 5, base: 50.644444444444, trav: 0, total multi: 1.3, dist/range: 468/57, req: 8.8377777777778
+resolveFireOrder - ID 30, shooter: Hyperion #3 vs Vorchan #7, w: LightParticleBeam #16, guns: 1
+CALCULATE TO HIT - angle: 5, base: 50.644444444444, trav: 0, total multi: 1.3, dist/range: 468/57, req: 8.8377777777778
+resolveBallisticFireOrders
+cleanFireOrders, fires: 32
+DB updateFireOrders: 32
+= testCriticals for Artemis, #1, turn: 2
+= testCriticals for Flight, #9, turn: 2
+= testCriticals for Flight, #8, turn: 2
+= testCriticals for Salvo, #12, turn: 2
+= testCriticals for Hyperion, #3, turn: 2
+= testCriticals for Hyperion, #2, turn: 2
+= testCriticals for Altarian, #5, turn: 2
+= testCriticals for Primus, #6, turn: 2
+= testCriticals for Altarian, #4, turn: 2
+= testCriticals for Flight, #10, turn: 2
+= testCriticals for Flight, #11, turn: 2
+= testCriticals for Vorchan, #7, turn: 2
+ => DB insertDamageEntries: 25
+ => DB insertCritEntries: 3
+handleFiringPhase time: 0.217 seconds.
+advancing game state time: 0.226 seconds.
