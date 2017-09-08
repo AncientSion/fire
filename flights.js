@@ -37,6 +37,7 @@ function Flight(data){
 				x: -size/2 - size*i/2,
 				y: -toDo*size/2 +size*(i)
  			};
+ 			//if (this.structures[toDo*2-(i+1)] === undefined){return;}
 			this.structures[toDo*2-(i+1)].layout = {
 				x: size/2 + size*i/2,
 				y: -toDo*size/2 +size*(i)

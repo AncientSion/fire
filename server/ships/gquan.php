@@ -24,25 +24,25 @@ class GQuan extends Heavy {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 800, 22);
-		$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 180);
-		$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 180);
-		$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 180);
-		$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 180);
+		$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 120);
+		$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 120);
+		$right->systems[] = new LightPulse($this->getId(), $this->id, 60, 180);
+		$right->systems[] = new LightPulse($this->getId(), $this->id, 60, 180);
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 21);
-		$aft->systems[] = new LightIon($this->getId(), $this->id, 0, 360);
-		$aft->systems[] = new LightIon($this->getId(), $this->id, 0, 360);
-		$aft->systems[] = new Hangar($this->getId(), $this->id, 0, 360, 600, 9, array("Gorith", "Frazi"));
-		$aft->systems[] = new LightIon($this->getId(), $this->id, 0, 360);
-		$aft->systems[] = new LightIon($this->getId(), $this->id, 0, 360);
+		$aft->systems[] = new LightIon($this->getId(), $this->id, 90, 270);
+		$aft->systems[] = new LightIon($this->getId(), $this->id, 90, 270);
+		$aft->systems[] = new Hangar($this->getId(), $this->id, 0, 360, 600, 8, array("Gorith", "Frazi"));
+		$aft->systems[] = new LightIon($this->getId(), $this->id, 90, 270);
+		$aft->systems[] = new LightIon($this->getId(), $this->id, 90, 270);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 800, 22);
-		$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 360);
-		$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 360);
-		$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 360);
-		$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 360);
+		$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 300);
+		$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 300);
+		$left->systems[] = new LightPulse($this->getId(), $this->id, 240, 360);
+		$left->systems[] = new LightPulse($this->getId(), $this->id, 240, 360);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

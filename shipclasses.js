@@ -1827,7 +1827,6 @@ function Ship(data){
 		structContainer.className = "structContainer";
 		div.appendChild(structContainer);
 
-
 		var noFront = true;
 		var noAft = true;
 		var sides = 0;
@@ -1850,7 +1849,10 @@ function Ship(data){
 		if (this.structures.length <= 4){
 			if (this.structures[1].systems.length > 4){
 				maxWidth = 320;
-			} else maxWidth = 280;
+			}
+			else if (this.structures[1].systems.length  < 4){
+				maxWidth = 280;
+			} else maxWidth = 300;
 		}
 		else {
 			maxWidth = 340;
@@ -1922,7 +1924,10 @@ function Ship(data){
 		var primY = conHeight/2 - h/2 + offsetY
 		$(primaryDiv)
 			.css("left", primX)
-			.css("top", primY)
+			.css("top", primY);
+
+		$(structContainer).append($("<div>").addClass("mainPower").html(this.getSystemByName("Reactor").getOutput()));
+
 
 		// OUTER STRUCTS
 		for (var i = 0; i < this.structures.length; i++){
@@ -2193,7 +2198,8 @@ function Ship(data){
 	this.updateDivPower = function(system){
 		var reactor = this.getSystemByName("Reactor");
 		var s = reactor.getOutput();
-		$(this.getSystemByName("Reactor").element).find(".outputMask").html(reactor.getOutput());
+		$(this.getSystemByName("Reactor").element).find(".outputMask").html(s);
+		$(this.element).find(".mainPower").html(s);
 
 		$(system.element).find(".outputMask").html(system.getOutput());
 		system.update();

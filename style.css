@@ -1222,6 +1222,15 @@ table, th, tr, td {
 	color: #ff3d00;
 }
 
+.mainPower {
+	color: #ff3d00;
+	display: inline-block;
+	font-size: 12px;
+	position: relative;
+	top: 5px;
+	left: 5px;
+}
+
 .green {
 	color: #27e627;
 }

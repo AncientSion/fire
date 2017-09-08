@@ -5,7 +5,7 @@ class Avenger extends Heavy {
 	public $display = "Avenger Heavvy Carrier";
 	public $faction = "Earth Alliance";
 	public $size = 80;
-	public static $value = 450;
+	public static $value = 400;
 	public $profile = array(0.91, 1.09);
 	public $mass = 10250;
 
