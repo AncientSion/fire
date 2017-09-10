@@ -250,7 +250,7 @@ function getRadialGradient(x, y, s){
 	return grad;
 }	
 
-function drawSensorArc(w, d, p, str, len, loc, facing, a, sensor){
+function drawSensorArc(w, d, str, loc, facing, a, sensor){
 	var color = "";
 	var opacity = 0.2;
 	switch (sensor.ew[sensor.ew.length-1].type){

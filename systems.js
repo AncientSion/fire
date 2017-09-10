@@ -1053,7 +1053,7 @@ Sensor.prototype.setState = function(){
 	else if (game.phase == -1){
 		this.setEW({
 			angle: -1,
-			dist: Math.ceil(this.getOutput() / Math.pow(180/20, 1/1.5)),
+			dist: Math.ceil(this.getOutput() / Math.pow(180/game.const.ew.len, 1/game.const.ew.p)),
 			turn: game.turn,
 			unitid: this.parentId,
 			systemid: this.id,
@@ -1077,7 +1077,7 @@ Sensor.prototype.doPower = function(){
 		this.disabled = 0;
 		this.setEW({
 			angle: -1,
-			dist: Math.ceil(this.getOutput() / Math.pow(180/20, 1/1.5)),
+			dist: Math.ceil(this.getOutput() / Math.pow(180/game.const.ew.len, 1/game.const.ew.p)),
 			turn: game.turn,
 			unitid: this.parentId,
 			systemid: this.id,
@@ -1117,17 +1117,14 @@ Sensor.prototype.drawEW = function(){
 		var loc = ship.getPlannedPosition();
 		var ew = this.ew[this.ew.length-1];
 		var str = this.getOutput();
-		var len = 20;
-		var p = 1.5;
 		var facing = ship.getPlannedFacing();
 		var w;
 		if (ew.angle == -1){
 			w = 180;
 		}
-		else {
-			w = Math.min(180, len * Math.pow(str/ew.dist, p));
-		}
-		drawSensorArc(w, ew.dist, p, str, len, loc, facing, ew.angle, this);
+		else w = Math.min(180, game.const.ew.len * Math.pow(str/ew.dist, game.const.ew.p));
+
+		drawSensorArc(w, ew.dist, str, loc, facing, ew.angle, this);
 	}
 }
 
@@ -1178,7 +1175,7 @@ Sensor.prototype.updateEW = function(){
 	var d = 0;
 	var w = 0;
 	if (this.ew[this.ew.length-1].type == 0 || this.ew[this.ew.length-1].type == 1){
-		d = Math.ceil(this.getOutput() / Math.pow(180/20, 1/1.5));
+		d = Math.ceil(this.getOutput() / Math.pow(180/game.const.ew.len, 1/game.const.ew.p));
 		w = this.ew[this.ew.length-1].angle;
 	} else {
 		d = 1000;
@@ -1263,7 +1260,7 @@ Weapon.prototype.getAimData = function(target, final, dist, row){
 	var accLoss = this.getAccuracyLoss(dist);
 
 	if (dmgLoss){
-		row.append($("<td>").html(" -" + dmgLoss + "%"));
+		row.append($("<td>").addClass("red").html(" -" + dmgLoss + "%"));
 	} else {
 		row.append($("<td>").html(""));
 	}
@@ -1284,7 +1281,7 @@ Weapon.prototype.getAimDataTarget = function(target, final, accLoss, row){
 	} else row.append($("<td>").html("-"+ Math.floor(final / 5 * traverseMod) + "% (<span class='red'>" + traverseMod + '</span>)'));
 
 	if (accLoss){
-		row.append($("<td>").html(" -" + accLoss + "%"));
+		row.append($("<td>").addClass("red").html(" -" + accLoss + "%"));
 	} else row.append($("<td>").html(""));
 
 	final = Math.floor(final * (1-(traverseMod*0.2)) - accLoss);
@@ -1296,7 +1293,7 @@ Weapon.prototype.getAimDataTarget = function(target, final, accLoss, row){
 Weapon.prototype.getAimDataLocation = function(accLoss, row){
 		row.append($("<td>").html(""));
 	if (accLoss){
-		row.append($("<td>").html(" -" + accLoss + "%"));
+		row.append($("<td>").addClass("red").html(" -" + accLoss + "%"));
 	} else {			
 		row.append($("<td>").html(""));
 	}

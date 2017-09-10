@@ -493,12 +493,10 @@ function sensorEvent(isClick, ship, loc, facing, d, a){
 	var sensor = ship.getActiveSensor();
 	var str = sensor.getOutput();
 		d = Math.min(str, d);
-	var p = 1.5;
-	var len = 20;
-	var	w = Math.min(180, len * Math.pow(str/d, p));
+	var	w = Math.min(180, game.const.ew.len * Math.pow(str/d, game.const.ew.p));
 	if (w == 180){
 		a = 0;
-		d = str/Math.pow(w/len, 1/p);
+		d = str/Math.pow(w/game.const.ew.len, 1/game.const.ew.p);
 	}
 	//console.log("angle from facing: " + a + ", dist: " + dist + ", strength: "+str + ", FINAL: " + newidth);
 
@@ -512,5 +510,5 @@ function sensorEvent(isClick, ship, loc, facing, d, a){
 			systemid: sensor.id,
 			type: sensor.ew[sensor.ew.length-1].type
 		});
-	} else drawSensorArc(w, d, p, str, len, loc, facing, a, sensor);
+	} else drawSensorArc(w, d, str, loc, facing, a, sensor);
 }

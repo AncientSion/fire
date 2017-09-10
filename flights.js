@@ -27,6 +27,59 @@ function Flight(data){
 	}
 
 	this.setLayout = function(){
+		var size = this.baseSize + this.unitSize * this.structures.length-1;
+		var osx = 7;
+		var osy = 5;
+
+		//var ox;
+		//var oy = -Math.floor(s/2)+10;
+
+		for (var i = 0; i < this.structures.length/3; i++){
+			//console.log("batch " + i)
+			var a = 360/Math.ceil(this.structures.length/3)*i;
+			//console.log(a);
+			var o = getPointInDirection(size/3, a-90, 0, 0);
+
+			for (var j = 0; j < Math.min(this.structures.length-i*3, 3); j++){
+				//console.log("sub " + j)
+				var ox = o.x;
+				var oy = o.y;
+
+				switch (j){
+					case 0: oy -= osy; break;
+					case 1: ox -= osx; oy += osy; break;
+					case 2: ox += osx; oy += osy; break;
+					default: break;
+				}
+				this.structures[(i*3)+j].layout = {x: ox, y: oy};
+				//console.log(this.structures[(i*3)+j].layout);
+			}
+		}
+	}
+
+	this.setLayoutb= function(){
+		var s = this.baseSize + this.unitSize * this.structures.length-1;
+
+		var ox;
+		var oy = -Math.floor(s/2)+10;
+
+		for (var i = 0; i < this.structures.length; i++){
+			//ox = 15*Math.floor((i+1)/2);
+			ox = -5+(10*Math.ceil((i+1)/2))
+
+			if (Math.floor(i % 2)){
+				ox *= -1;
+			}
+
+			if (i / 3 == 1){
+				oy += 10;
+			}
+
+			this.structures[i].layout = {x: ox, y: oy};
+		}
+	}
+
+	this.setLayouta = function(){
 		var size = this.fSize;
 
 		var toDo = Math.min(6, Math.ceil(this.structures.length/2));

@@ -35,6 +35,12 @@ function Game(data, userid){
 	this.animFlight = 0;
 	this.animSalvo = 0;
 	this.mission;
+	this.const = {
+		ew: {
+			len: 15,
+			p: 1.5
+		},
+	}
 
 	this.doDeployShip = function(e, ship, pos){
 		for (var i = 0; i < this.ships.length; i++){

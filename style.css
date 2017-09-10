@@ -1283,7 +1283,8 @@ table, th, tr, td {
 }
 
 .final {
-	font-size: 20px;
+	color: #27e627;
+	font-size: 16px;
 }
 
 #targetInfo th, #weaponInfo th {

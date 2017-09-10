@@ -284,11 +284,11 @@ echo "</script>";
 					</tr>
 					<tr><td colSpan=5 height=10px></td></tr>
 					<tr>
-						<th>Base Hit</th>
+						<th>Base</th>
 						<th>Thrust Mod</th>
 						<th>Lock Mod</th>
 						<th>Mask Mod</th>
-						<th>Final Hit</th>
+						<th>Result</th>
 					</tr>
 					<tr id="targetData2">
 						<td></td>
@@ -304,7 +304,7 @@ echo "</script>";
 						<th width=10%>Dmg</th>
 						<th width=19%>Tracking</th>
 						<th width=12%>Range</th>
-						<th width=12%>End</th>
+						<th width=12%>Final</th>
 					</tr>
 				</table>
 			</div>

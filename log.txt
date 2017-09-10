@@ -1,0 +1,91 @@
+DB insertUnits S: 2
+success, got id: 10
+success, got id: 11
+insertSubUnits
+success insertSubUnits
+success insertSubUnits
+insertMission
+success insertMission
+success insertMission
+insertClientActions s: 2
+updateSystemLoad: 0
+doAdvance for game1 from phase -1 to phase 0
+initBallistics
+DB insertUnits S: 1
+success, got id: 12
+insertSubUnits
+success insertSubUnits
+insertMission
+success insertMission
+insertClientActions s: 1
+DB updateBallisticFireOrder, s: 1
+updateSystemLoad: 1
+success updateSystemLoad
+resolveDeployActions s: 4
+handleJumpActions
+assembleEndStates
+getDeployState for 1
+getDeployState for 10
+delving getDeployState for 10
+getDeployState for 11
+delving getDeployState for 11
+getDeployState for 4
+getDeployState for 3
+getDeployState for 2
+getDeployState for 5
+getDeployState for 7
+getDeployState for 8
+getDeployState for 9
+delving getDeployState for 9
+getDeployState for 6
+getDeployState for 12
+delving getDeployState for 12
+updateUnitEndState s:12 2/-1
+advancing game state time: 0.115 seconds.
+insertClientActions s: 4
+insertClientActions s: 4
+doAdvance for game1 from phase 0 to phase 1
+handleShipMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving mixed #11
+_____________________
+Flight #11, impulse: 256
+From -543/313 to 339/440
+Dist 892, angle: 8.1937542017349
+close in
+adding move to: -290/349
+resolving mixed #10
+_____________________
+Flight #10, impulse: 256
+From -546/303 to 445/-318
+Dist 1170, angle: 327.92710616118
+close in
+adding move to: -329/167
+resolving mixed #9
+_____________________
+Flight #9, impulse: 365
+From 551/-346 to -283/-279
+Dist 837, angle: 175.40696558523
+close in
+adding move to: 187/-317
+resolving layer #2
+updateMissionState
+handleMixedMovement
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving mixed #12
+_____________________
+Flight #12, impulse: 178
+From 424/291 to -283/-279
+Dist 909, angle: 218.87657543126
+close in
+adding move to: 285/179
+resolving layer #2
+updateMissionState
+advancing game state time: 0.13 seconds.

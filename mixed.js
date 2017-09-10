@@ -305,8 +305,10 @@ Mixed.prototype.setTarget = function(){
 }
 
 Mixed.prototype.drawSelf = function(){
-	ctx.translate(this.drawX, this.drawY);
+	ctx.translate(this.drawX, this.drawY)
+	ctx.rotate((this.getDrawFacing()+90) * Math.PI/180);
 	ctx.drawImage(this.drawImg, -this.drawImg.width/2, -this.drawImg.height/2);
+	ctx.rotate(-(this.getDrawFacing()+90) * Math.PI/180);
 	ctx.translate(-this.drawX, -this.drawY);
 }
 
@@ -386,8 +388,42 @@ Mixed.prototype.setImage = function(){
 		}
 	}
 }
-
 Mixed.prototype.setPreMoveImage = function(){
+	var t = document.createElement("canvas");
+		t.width = this.size*2;
+		t.height = this.size*2;
+	var ctx = t.getContext("2d");
+
+	var size = 12;
+	var rot = (this.getDrawFacing()+90) * (Math.PI/180);
+
+	ctx.translate(t.width/2, t.height/2);
+	//ctx.rotate(rot);
+
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].draw){
+			ctx.translate(this.structures[i].layout.x, this.structures[i].layout.y);
+			//ctx.rotate(rot);
+			ctx.drawImage(
+				this.smallImg,
+				0 -size/2,
+				0 -size/2,
+				size, 
+				size
+			)
+			//ctx.rotate(-rot);
+			ctx.translate(-this.structures[i].layout.x, -this.structures[i].layout.y);
+		;}
+	}	
+	//ctx.translate(this.size/2, this.size/2);
+	//ctx.rotate((this.getDrawFacing()+90) * (Math.PI/180));
+	ctx.setTransform(1,0,0,1,0,0);
+
+	this.drawImg = t;
+}
+
+
+Mixed.prototype.setPreMoveImagea = function(){
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
 		t.height = this.size*2;

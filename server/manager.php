@@ -902,7 +902,7 @@ class Manager {
 		}
 		else {
 			$str = $sensor->getOutput($this->turn);
-			$len = 20;
+			$len = 15;
 			$p = 1.5;
 			$w = min(180, $len * pow($str/$ew->dist, $p));
 			$start = Math::addAngle(0 + $w-$ship->getFacing(), $ew->angle);
@@ -1138,9 +1138,6 @@ class Manager {
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$this->ships[$i]->testCriticals($this->turn);
 		}
-		for ($i = 0; $i < sizeof($this->ballistics); $i++){
-			$this->ballistics[$i]->testCriticals($this->turn);
-		}
 	}
 
 	public function writeDamageEntries(){
@@ -1155,15 +1152,11 @@ class Manager {
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$all = array_merge($all, $this->ships[$i]->getNewCrits($this->turn));
 		}
-		for ($i = 0; $i < sizeof($this->ballistics); $i++){
-			$all = array_merge($all, $this->ballistics[$i]->getNewCrits($this->turn));
-		}
 		DBManager::app()->insertCritEntries($all, $this->gameid);
 	}
 
 	public function setUnitStatus(){
 		DBManager::app()->setUnitStatusDB($this->ships);
-		DBManager::app()->setUnitStatusDB($this->ballistics);
 	}
 
 	public function startDamageControlPhase(){
@@ -1183,7 +1176,7 @@ class Manager {
 	}
 
 	public function getId(){
-		return 1 + sizeof($this->ships) + sizeof($this->ballistics);
+		return 1 + sizeof($this->ships);
 	}
 
 	public function getUnitById($id){
