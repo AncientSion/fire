@@ -176,10 +176,9 @@ table, th, tr, td {
 	border: 1px solid white
 }
 
-#deployTable .head, #reinforceTable .head {
+.head {
 	font-size: 18;
-	background-color: lightBlue;
-	color: black;
+	font-weight: bold;
 }
 
 #deployTable tr.selected {
@@ -1156,14 +1155,23 @@ table, th, tr, td {
 	border: 1px solid black;
 }
 
-#confirmOrders {
-	font-size: 16px;
+.popupEntry {
+	width: 160px;
+	margin: auto;
+	margin-top: 6px;
+	margin-bottom: 6px;
+}
+
+.buttonTD {
+	font-size: 18px;
+	font-weight: bold;
 	cursor: pointer;
 	color: black;
 	background-color: lightBlue;
+	border-radius: 3px;
 }
 
-#confirmOrders:hover {
+.buttonTD:hover {
 	background-color: #27e627;
 }
 

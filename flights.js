@@ -189,9 +189,8 @@ function Flight(data){
 			.append($("<tr>")
 				.append($("<td>")
 					.attr("colSpan", 2)
-					.css("font-size", "16px")
-					.css("border", "1px solid white")
-					.html("flight From Mission")
+					.addClass("buttonTD")
+					.html("Disengage From Mission")
 					.data("active", 0)
 					.data("mission", this.mission.type)
 			/*		.click(function(e){

@@ -389,12 +389,7 @@ function Game(data, userid){
 			}
 		}
 		if (data.length){
-			var html = "The following units have only basic sensor settings:";
-			for (var i = 0; i < data.length; i++){
-				html += "<p onclick='game.switchToUnit(" + data[i].id + ")'>" + data[i].name + " #" + data[i].id;
-			}
-			html += "</p><span style='cursor: pointer; padding: 3px; border: 1px solid white; font-size: 24px' onclick='ajax.confirmDeployment(goToLobby)'>Confirm Orders</span>";
-			popup(html);
+			this.clickablePop(data, "The following units have only basic sensor settings:");
 			return true;
 		}
 		return false;
@@ -462,18 +457,22 @@ function Game(data, userid){
 		}
 
 		if (data.length){
-			var html = "The following units have no fireorders:";
-			for (var i = 0; i < data.length; i++){
-				html += "<p onclick='game.switchToUnit(" + data[i].id + ")'>" + data[i].name + " #" + data[i].id;
-			}
-			html += "</p><span style='cursor: pointer; padding: 3px; border: 1px solid white; font-size: 24px' onclick='ajax.confirmFiringOrders(goToLobby)'>Confirm Orders</span>";
-			popup(html);
+			this.clickablePop(data, "The following units have no fireorders:");
 			return true;
 		}
 		return false;
 	}
 
-	this.switchToUnit = function(id){
+	this.clickablePop = function(data, msg){
+		for (var i = 0; i < data.length; i++){
+			msg += "<div class='popupEntry buttonTD' onclick='game.selectFromPopup(" + data[i].id + ")'>" + data[i].name + " #" + data[i].id + "</div>"; 
+		}
+		msg += "</p><div class='popupEntry buttonTD' style='font-size: 20px; width: 200px' onclick='ajax.confirmFiringOrders(goToLobby)'>Confirm Orders </div>";
+		popup(msg);
+	}
+
+	this.selectFromPopup = function(id){
+		$("#popupWrapper").hide();
 		if (aUnit){
 			game.getUnitById(aUnit).doUnselect();
 		}

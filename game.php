@@ -241,14 +241,12 @@ echo "</script>";
 					<tr>
 						<?php 
 							if (!$status){
-								echo '<th colSpan=3 id="confirmOrders" style="background-color: yellow;">Anonymus Mode</th>';
+								echo '<td colSpan=3 class="buttonTD" style="background-color: yellow;">Anonymus Mode</td>';
 							}
 							else if ($status == "ready"){
-								echo '<th colSpan=3 id="confirmOrders" style="background-color: lightGreen;">Waiting for Opponent</th>';
+								echo '<td colSpan=3 class="buttonTD" style="background-color: lightGreen;">Waiting for Opponent</td>';
 							}
-							else {
-								echo '<th colSpan=3 id="confirmOrders" onclick="this.disabled=true;game.endPhase()">Confirm Orders</th>';
-							}
+							else echo '<td colSpan=3 class="buttonTD" style="font-size: 20px" onclick="this.disabled=true;game.endPhase()">Confirm Orders</td>';
 							?>
 					</tr>
 				</table>

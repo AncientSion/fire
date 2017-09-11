@@ -388,6 +388,7 @@ Mixed.prototype.setImage = function(){
 		}
 	}
 }
+
 Mixed.prototype.setPreMoveImage = function(){
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
