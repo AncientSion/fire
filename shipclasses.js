@@ -2793,9 +2793,10 @@ Ship.prototype.doUnselect = function(){
 	else if (game.flightDeploy){game.flightDeploy = false;}
 	else if (game.mission){this.disableMissionMode()}
 	this.unselectSystems();
-	game.setShipTransform();
-	this.drawPositionMarker();
-	game.resetShipTransform();
+	//game.setShipTransform();
+	//this.drawPositionMarker();
+	//game.resetShipTransform();
+	game.redraw();
 	game.drawAllPlans();
 	this.switchDiv();
 	this.unsetMoveMode();
@@ -2879,19 +2880,19 @@ Ship.prototype.drawEscort = function(){
 }
 
 Ship.prototype.drawPositionMarker = function(){
-	var c = "";
-	if (this.selected){c = "yellow"}
-	else if (this.friendly){c = "green";}
-	else {c = "red";}
-	this.drawMarker(this.drawX, this.drawY, c, ctx);
+	var color = "";
+	if (this.selected){color = "yellow"}
+	else if (this.friendly){color = "#27e627";}
+	else {color = "red";}
+	this.drawMarker(this.drawX, this.drawY, color, ctx);
 }
 
 Ship.prototype.drawPlanMarker = function(){
 	for (var i = this.actions.length-1; i >= 0; i--){
 		if (!this.actions[i].resolved){
-			var c = "green";
-			if (!this.friendly){c = "red";}
-			this.drawMarker(this.actions[i].x, this.actions[i].y, c, planCtx);
+			var color = "green";
+			if (!this.friendly){color = "red";}
+			this.drawMarker(this.actions[i].x, this.actions[i].y, color, planCtx);
 			return;
 		} else return;
 	}
@@ -2901,7 +2902,7 @@ Ship.prototype.drawMarker = function(x, y, c, context){
 	context.beginPath();
 	context.arc(x, y, (this.size-2)/2, 0, 2*Math.PI, false);
 	context.closePath();
-	context.lineWidth = 1;
+	context.lineWidth = 1 + Math.floor(this.selected*2);
 	context.globalAlpha = 0.8;
 	context.globalCompositeOperation = "source-over";
 	context.strokeStyle = c;

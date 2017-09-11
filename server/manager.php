@@ -34,6 +34,13 @@ class Manager {
 	public $flight = 0;
 	public $salvo = 0;
 
+	public $const = array(
+		"ew" => array(
+			"p" => 1.5,
+			"len" => 15
+		),
+	);
+
 	function __construct($userid = 0, $gameid = 0){
 		//Debug::log("constructing manager ".$userid."/".$gameid);
 		//$this->getMemory();
@@ -94,7 +101,8 @@ class Manager {
 			"ships" => $this->getShipData(),
 			"reinforcements" => $this->rdyReinforcements,
 			"deploys" => $this->deploys,
-			"incoming" =>$this->incoming
+			"incoming" =>$this->incoming,
+			"const" => $this->const
 		);
 
 	}
@@ -902,8 +910,8 @@ class Manager {
 		}
 		else {
 			$str = $sensor->getOutput($this->turn);
-			$len = 15;
-			$p = 1.5;
+			$len = $this->const["ew"]["len"];
+			$p = $this->const["ew"]["p"];1;
 			$w = min(180, $len * pow($str/$ew->dist, $p));
 			$start = Math::addAngle(0 + $w-$ship->getFacing(), $ew->angle);
 			$end = Math::addAngle(360 - $w-$ship->getFacing(), $ew->angle);

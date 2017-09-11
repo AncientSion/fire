@@ -1278,7 +1278,7 @@ Weapon.prototype.getAimDataTarget = function(target, final, accLoss, row){
 
 	if (!traverseMod){
 		row.append($("<td>").html("<span class='green'>Full Tracking</span>"));
-	} else row.append($("<td>").html("-"+ Math.floor(final / 5 * traverseMod) + "% (<span class='red'>" + traverseMod + '</span>)'));
+	} else row.append($("<td>").html("<span class='red'>-"+ Math.floor(final / 5 * traverseMod) + "% </span> (-" + traverseMod + ")"));
 
 	if (accLoss){
 		row.append($("<td>").addClass("red").html(" -" + accLoss + "%"));
@@ -2304,10 +2304,10 @@ Launcher.prototype.getTraverseRating = function(){
 
 Launcher.prototype.getAimDataTarget = function(target, final, accLoss, row){
 	var traverseMod = this.getTraverseMod(target);
-
+	
 	if (!traverseMod){
 		row.append($("<td>").html("<span class='green'>Full Tracking</span>"));
-	} else row.append($("<td>").html("-"+ Math.floor(final / 5 * traverseMod) + "% (<span class='red'>" + traverseMod + '</span>)'));
+	} else row.append($("<td>").html("<span class='red'>-"+ Math.floor(final / 5 * traverseMod) + "% </span> (-" + traverseMod + ")"))
 
 	if (accLoss){
 		row.append($("<td>").html(" -" + accLoss + "%"));

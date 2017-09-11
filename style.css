@@ -150,7 +150,7 @@ table, th, tr, td {
 	display: inline-block;
 	border: 1px solid white;
 	border-radius: 5px;
-	padding: 5 5 5 5;
+	padding: 3px;
 	z-index: 6;
 	background-color: black;
 	top: 110px;
@@ -533,6 +533,13 @@ table, th, tr, td {
 	height: 60px;
 	margin: auto;
 }
+
+.size45 {
+	width: 45px;
+	height: 45px;
+	margin: auto;
+}
+
 
 .size40 {
 	width: 40px;
@@ -1099,7 +1106,7 @@ table, th, tr, td {
 	color: white;
 	width: 250px;
 	background-color: black;
-	padding: 5px;
+	padding: 3px;
 	border-radius: 5px;
 }
 
@@ -1110,8 +1117,8 @@ table, th, tr, td {
 	border: 1px solid white;
 	color: white;
 	background-color: black;
-	padding: 5px;
-	padding-bottom: 10px;
+	padding: 2px;
+	padding-bottom: 8px;
 	border-radius: 5px;
 }
 
@@ -1150,7 +1157,7 @@ table, th, tr, td {
 }
 
 #confirmOrders {
-	font-size: 20px;
+	font-size: 16px;
 	cursor: pointer;
 	color: black;
 	background-color: lightBlue;

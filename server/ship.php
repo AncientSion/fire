@@ -544,7 +544,7 @@ class Ship {
 		$multi -= $this->getDefensiveBonus($fire->shooter->id);
 
 		$req = ($base * $multi) * (1-($traverse*0.2)) - $range;
-		Debug::log("CALCULATE TO HIT - angle: ".$fire->angle.", base: ".$base.", trav: ".$traverse.", total multi: ".$multi.", dist/range: ".$fire->dist."/".$range.", req: ".$req);
+		//Debug::log("CALCULATE TO HIT - angle: ".$fire->angle.", base: ".$base.", trav: ".$traverse.", total multi: ".$multi.", dist/range: ".$fire->dist."/".$range.", req: ".$req);
 
 		return ceil($req);
 	}

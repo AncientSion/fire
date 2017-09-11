@@ -9,6 +9,7 @@ function Game(data, userid){
 	this.ships = data.ships || [];
 	this.reinforcements = data.reinforcements;
 	this.incoming = data.incoming;
+	this.const = data.const;
 	this.fireOrders = []
 	this.mode = false;
 	this.deploying = false;
@@ -35,12 +36,6 @@ function Game(data, userid){
 	this.animFlight = 0;
 	this.animSalvo = 0;
 	this.mission;
-	this.const = {
-		ew: {
-			len: 15,
-			p: 1.5
-		},
-	}
 
 	this.doDeployShip = function(e, ship, pos){
 		for (var i = 0; i < this.ships.length; i++){
@@ -2174,6 +2169,7 @@ Game.prototype.getUnitType = function (val){
 	this.initSelectionWrapper = function(){
 		var ele = $("#unitGUI");
 		var l = 0;
+		var s = 45;
 
 		this.ships.sort(function(a, b){
 			return a.userid - b.userid || b.cost- a.cost
@@ -2188,8 +2184,8 @@ Game.prototype.getUnitType = function (val){
 				l++;
 
 				if (this.ships[i].ship){
-					className = "rotate270 size40";
-				} else className = "size40";
+					className = "rotate270 size45";
+				} else className = "size45";
 
 
 				ele.append(
@@ -2245,7 +2241,7 @@ Game.prototype.getUnitType = function (val){
 		}
 
 		if (l){
-			ele.width(Math.min(510, l*46)).css("top", 0).css("left", 400).drag();
+			ele.width(Math.min(630, l*(s+3*2))).css("top", 0).css("left", 300)//.drag();
 		} else ele.hide();
 	}
 }

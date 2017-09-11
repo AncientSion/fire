@@ -22,8 +22,8 @@ class Laser extends Weapon {
 	}
 
 	public function doDamage($fire, $roll, $system){
-		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id."/".$system->id.": ".$system->name);
 		$totalDmg = $this->getTotalDamage($fire);
+		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id." for ".$totalDmg." dmg");
 		$print = "hitting: ";
 		if ($totalDmg <= 0){
 			return;
@@ -163,10 +163,10 @@ class SuperHeavyLaser extends Laser {
 	public $name = "SuperHeavyLaser";
 	public $display = "340mm 'Heavy' Laser";
 	public $animColor = "red";
-	public $rakeTime = 100;
+	public $rakeTime = 120;
 	public $beamWidth = 5;
-	public $minDmg = 240;
-	public $maxDmg = 290;
+	public $minDmg = 210;
+	public $maxDmg = 255;
 	public $optRange = 800;
 	public $dmgLoss = 4;
 	public $accDecay = 40;

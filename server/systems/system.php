@@ -180,7 +180,7 @@ class System {
 				$valid[] = $crits[$i];
 			}
 		}
-		Debug::log("determineCrit for ".$this->display." #".$this->id.", dmg: ".$dmg.", possible: ".sizeof($crits).", possible: ".sizeof($valid));
+		Debug::log("determineCrit for ".$this->display." #".$this->id.", dmg: ".$dmg.", possible: ".sizeof($crits).", inRange: ".sizeof($valid));
 
 		for ($i = 0; $i < sizeof($valid); $i++){
 			if (mt_rand(0, 1)){
