@@ -181,6 +181,7 @@ System.prototype.setTableRow = function(){
 		}
 	}
 }
+
 System.prototype.setSystemBorder = function(){
 	var ele = $(this.element);
 	if (this.hasUnresolvedFireOrder()){
@@ -671,9 +672,11 @@ System.prototype.getTableData = function(forFighter){
 	this.setSystemBorder();
 	return this.element;
 }
+
 System.prototype.hasUnresolvedFireOrder = function(){
 	return false;
 }
+
 System.prototype.update = function(){
 	this.updateSystemDetailsDiv();
 	game.getUnitById(this.parentId).updateDiv();
@@ -2614,6 +2617,10 @@ Hangar.prototype.getLoadLevel = function(e){
 	return System.prototype.getLoadLevel.call(this);
 }
 
+Hangar.prototype.hasUnresolvedFireOrder = function(){
+	return Weapon.prototype.hasUnresolvedFireOrder.call(this);
+}
+
 Hangar.prototype.getUpgradeData = function(){
 	return {
 		name: this.display,
@@ -2625,8 +2632,8 @@ Hangar.prototype.getUpgradeData = function(){
 
 Hangar.prototype.setFireOrder = function(targetid){
 	this.fireOrders.push(
-		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: 0, weaponid: this.id, 
-		shots: 0, req: -1, notes: "fighterLaunch", hits: -1, resolved: 1}
+		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, 
+		shots: 0, req: -1, notes: "fighterLaunch", hits: -1, resolved: 0}
 	);
 	return this;
 }
@@ -2676,6 +2683,7 @@ Hangar.prototype.update = function(){
 }
 
 Hangar.prototype.doUndoActions = function(){
+	if (game.phase != -1){return;}
 	for (var i = game.ships.length-1; i >= 0; i--){
 		if (game.ships[i].flight && game.ships[i].actions.length && game.ships[i].available == game.turn){
 			if (game.ships[i].launchData.shipid == this.parentId && game.ships[i].launchData.systemid == this.id){

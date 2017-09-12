@@ -471,7 +471,12 @@ class Manager {
 			$launcher = $shooter->getSystemById($fires[$i]->weaponid);
 			$fires[$i]->shots = $launcher->getShots($this->turn);
 			if (!($launcher instanceof Launcher)){
-				Debug::log("FATAL ERROR, no launcher, fire: ".$fires[$i]->id);
+				Debug::log("Hangar fireorder, resolving: ".$fires[$i]->id);
+				if ($launcher instanceof Hangar){
+					$fires[$i]->resolved = 1;
+					continue;
+				}
+				Debug::log("FATAL ERROR, no launcher/hangar, fire: ".$fires[$i]->id);
 				continue;
 			}
 			$name = $launcher->getAmmo()->name;
@@ -507,9 +512,12 @@ class Manager {
 
 		}
 
+		if (sizeof($fires)){
+			DBManager::app()->updateBallisticFireOrder($fires);
+		}
+
 		if (sizeof($units)){
 			DBManager::app()->insertUnits($this->userid, $this->gameid, $units);
-			DBManager::app()->updateBallisticFireOrder($fires);
 			DBManager::app()->updateSystemLoad($adjust);
 			for ($i = 0; $i < sizeof($units); $i++){
 				$this->ships[] = new Salvo($units[$i]["id"], $units[$i]["userid"], $this->turn, "deployed", 0);

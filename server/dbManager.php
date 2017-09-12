@@ -646,10 +646,10 @@
 		}
 
 		public function deployFlightsDB($userid, $gameid, $flights){
-			//Debug::log("deployFlights");
+			Debug::log("deployFlights ".sizeof($flights));
 			if (sizeof($flights)){
 				$this->insertUnits($userid, $gameid, $flights);
-				$this->updateSystemLoad($units);
+				$this->updateSystemLoad($flights);
 			}
 			return true;
 		}

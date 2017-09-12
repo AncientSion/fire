@@ -1,99 +1,19 @@
-doAdvance for game1 from phase 2 to phase 3
-ew for #1
-lock vs #9 with val: 0.2
-lock vs #8 with val: 0.2
-lock vs #7 with val: 0.2
-lock vs #6 with val: 0.2
-lock vs #5 with val: 0.2
-lock vs #12 with val: 0.2
-ew for #2
-specific EW for ship #2, EW from 324 to 354, dist: 880
-lock vs #7 with val: 0.5
-lock vs #6 with val: 0.5
-lock vs #5 with val: 0.5
-ew for #3
-ew for #4
-ew for #8
-ew for #7
-specific EW for ship #7, EW from 166 to 196, dist: 750
-lock vs #1 with val: 0.5
-lock vs #2 with val: 0.5
-lock vs #10 with val: 0.5
-ew for #6
-specific EW for ship #6, EW from 164 to 194, dist: 825
-lock vs #1 with val: 0.5
-lock vs #2 with val: 0.5
-lock vs #10 with val: 0.5
-ew for #5
-specific EW for ship #5, EW from 150 to 180, dist: 825
-lock vs #3 with val: 0.5
-lock vs #4 with val: 0.5
-resolveFireOrder - ID 25, shooter: GQuan #5 vs Hyperion #2, w: SuperHeavyLaser #9, guns: 1
-resolveFireOrder - ID 26, shooter: GQuan #5 vs Hyperion #2, w: SuperHeavyLaser #10, guns: 1
-SuperHeavyLaser, weapon id: 10, DAMAGE mod: 0.3 (crits: 0, boost: 0.3)
-doDamage, weapon: SuperHeavyLaser, target: 2 for 313 dmg
- => target system Hangar #10 was destroyed, rem: 65, doing: 68, OK for: 3 dmg
-hitting:  Primary  Hangar  Hangar  Primary 
-resolveFireOrder - ID 29, shooter: Altarian #6 vs Hyperion #2, w: HeavyIon #9, guns: 1
-doDamage, weapon: HeavyIon, target: 2/-1, totalDmg: 60
-doDamage, weapon: HeavyIon, target: 2/-1, totalDmg: 64
-resolveFireOrder - ID 30, shooter: Altarian #6 vs Hyperion #2, w: MediumSingleIon #18, guns: 1
-doDamage, weapon: MediumSingleIon, target: 2/-1, totalDmg: 42
-resolveFireOrder - ID 31, shooter: Altarian #6 vs Hyperion #2, w: MediumSingleIon #19, guns: 1
-doDamage, weapon: MediumSingleIon, target: 2/-1, totalDmg: 35
-resolveFireOrder - ID 27, shooter: Altarian #7 vs Hyperion #2, w: MediumSingleIon #18, guns: 1
-doDamage, weapon: MediumSingleIon, target: 2/12, totalDmg: 42
-resolveFireOrder - ID 28, shooter: Altarian #7 vs Hyperion #2, w: MediumSingleIon #19, guns: 1
-doDamage, weapon: MediumSingleIon, target: 2/-1, totalDmg: 33
-resolveFireOrder - ID 17, shooter: Hyperion #2 vs GQuan #5, w: LightParticleBeam #22, guns: 1
-doDamage, weapon: LightParticleBeam, target: 5 for 26 dmg
-hitting:  Primary 
-resolveFireOrder - ID 18, shooter: Hyperion #2 vs GQuan #5, w: LightParticleBeam #23, guns: 1
-doDamage, weapon: LightParticleBeam, target: 5 for 24 dmg
-hitting:  Primary 
-resolveFireOrder - ID 10, shooter: Hyperion #2 vs GQuan #5, w: MediumRailGun #8, guns: 1
-doDamage, weapon: MediumRailGun, target: 5/-1, totalDmg: 34
-doDamage, weapon: MediumRailGun, target: 5/-1, totalDmg: 30
-resolveFireOrder - ID 13, shooter: Hyperion #2 vs GQuan #5, w: MediumRailGun #12, guns: 1
-doDamage, weapon: MediumRailGun, target: 5/-1, totalDmg: 36
-doDamage, weapon: MediumRailGun, target: 5/-1, totalDmg: 34
-resolveFireOrder - ID 19, shooter: Avenger #1 vs Altarian #7, w: LightParticleBeam #8, guns: 1
-resolveFireOrder - ID 20, shooter: Avenger #1 vs Altarian #7, w: LightParticleBeam #9, guns: 1
-resolveFireOrder - ID 21, shooter: Avenger #1 vs Altarian #7, w: LightParticleBeam #11, guns: 1
-resolveFireOrder - ID 22, shooter: Avenger #1 vs Altarian #7, w: LightParticleBeam #12, guns: 1
-resolveFireOrder - ID 23, shooter: Avenger #1 vs Altarian #7, w: LightParticleBeam #15, guns: 1
-doDamage, weapon: LightParticleBeam, target: 7 for 30 dmg
-hitting:  Primary 
-resolveFireOrder - ID 24, shooter: Avenger #1 vs Altarian #7, w: LightParticleBeam #16, guns: 1
-resolveFireOrder - ID 11, shooter: Hyperion #2 vs Altarian #7, w: LightParticleBeam #9, guns: 1
-resolveFireOrder - ID 15, shooter: Hyperion #2 vs Altarian #7, w: LightParticleBeam #15, guns: 1
-doDamage, weapon: LightParticleBeam, target: 7 for 29 dmg
-hitting:  Primary 
-resolveFireOrder - ID 16, shooter: Hyperion #2 vs Altarian #7, w: LightParticleBeam #16, guns: 1
-doDamage, weapon: LightParticleBeam, target: 7 for 28 dmg
-hitting:  Primary 
-resolveFireOrder - ID 14, shooter: Hyperion #2 vs Altarian #7, w: HeavyLaser #14, guns: 1
-HeavyLaser, weapon id: 14, DAMAGE mod: 0.2 (crits: 0, boost: 0.2)
-doDamage, weapon: HeavyLaser, target: 7 for 163 dmg
-hitting:  Primary  Primary  Primary 
-resolveFireOrder - ID 12, shooter: Hyperion #2 vs Altarian #7, w: LightParticleBeam #11, guns: 1
-resolveBallisticFireOrders
-cleanFireOrders, fires: 22
-DB updateFireOrders: 22
-= testCriticals for Avenger, #1, turn: 2
-= testCriticals for Hyperion, #2, turn: 2
-determineCrit for 127mm Rail Gun #12, dmg: 82.5, possible: 3, inRange: 3
-= testCriticals for Tethys, #3, turn: 2
-= testCriticals for Tethys, #4, turn: 2
-= testCriticals for Flight, #11, turn: 2
-= testCriticals for Flight, #10, turn: 2
-= testCriticals for Flight, #9, turn: 2
-= testCriticals for Demos, #8, turn: 2
-= testCriticals for Altarian, #7, turn: 2
-= testCriticals for Altarian, #6, turn: 2
-= testCriticals for GQuan, #5, turn: 2
-= testCriticals for Salvo, #12, turn: 2
- => DB insertDamageEntries: 22
- => DB insertCritEntries: 3
-handleFiringPhase time: 0.159 seconds.
-advancing game state time: 0.166 seconds.
+deployFlights 1
+DB insertUnits S: 1
+success, got id: 13
+insertSubUnits
+success insertSubUnits
+insertMission
+success insertMission
+insertClientActions s: 1
+updateSystemLoad: 1
+success updateSystemLoad
+doAdvance for game1 from phase -1 to phase 0
+initBallistics
+Hangar fireorder, resolving: 32
+DB updateBallisticFireOrder, s: 1
+resolveDeployActions s: 1
+handleJumpActions
+assembleEndStates
+updateUnitEndState s:13 3/-1
+advancing game state time: 0.031 seconds.

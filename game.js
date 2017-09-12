@@ -246,6 +246,7 @@ function Game(data, userid){
 		}
 
 		var s = this.getUnitById(aUnit);
+		var hangar = s.getSystemById(this.flightDeploy.id)
 		var o = s.getPlannedPosition();
 		var facing = getAngleFromTo(o, dest);
 		var p = getPointInDirection(20, facing, o.x, o.y);
@@ -289,7 +290,7 @@ function Game(data, userid){
 
 		$("#instructWrapper").hide();
 		$("#deployOverlay").hide();
-		game.getUnitById(aUnit).getSystemById(this.flightDeploy.id).setFireOrder().select();
+		hangar.setFireOrder(t.id).select();
 		game.flightDeploy = false;
 		//flight.disableMissionMode();
 
@@ -467,8 +468,19 @@ function Game(data, userid){
 		for (var i = 0; i < data.length; i++){
 			msg += "<div class='popupEntry buttonTD' onclick='game.selectFromPopup(" + data[i].id + ")'>" + data[i].name + " #" + data[i].id + "</div>"; 
 		}
-		msg += "</p><div class='popupEntry buttonTD' style='font-size: 20px; width: 200px' onclick='ajax.confirmFiringOrders(goToLobby)'>Confirm Orders </div>";
+		msg += "</p><div class='popupEntry buttonTD' style='font-size: 20px; width: 200px' onclick='game.doConfirmOrders()'>Confirm Orders</div>";
 		popup(msg);
+	}
+
+	this.doConfirmOrders = function(){
+		switch (this.phase){
+			case -1: ajax.confirmDeployment(goToLobby); return;
+			case 0: ajax.confirmMovement(goToLobby); return;
+			case 1: ajax.confirmMovement(goToLobby); return;
+			case 2: ajax.confirmFiringOrders(goToLobby); return;
+			case 3: ajax.confirmDamageControl(goToLobby); return;
+			default: popup("FATAL ERROR - PHASE UNSET"); return;
+		}
 	}
 
 	this.selectFromPopup = function(id){
@@ -484,23 +496,21 @@ function Game(data, userid){
 			if (aUnit){game.getUnitById(aUnit).select();}
 			if (this.phase == -1){
 				if (this.hasInvalidDeploy() || this.hasInvalidPower() || this.hasBasicEW()){return;}
-				else {ajax.confirmDeployment(goToLobby);
-				}
+				else ajax.doConfirmOrders();
 			}
 			else if (this.phase == 0 || this.phase == 1){ // SHIP MOVEMENT
 				if (this.hasOpenMoves()){return;}
-				else ajax.confirmMovement(goToLobby);
+				else ajax.doConfirmOrders();
 			}
 			else if (this.phase == 2){
 				if (this.hasNoFires()){return;}
-				else ajax.confirmFiringOrders(goToLobby);
+				else ajax.doConfirmOrders();
 			}
-			else if (this.phase == 3){ajax.confirmDamageControl(goToLobby);
+			else if (this.phase == 3){
+				ajax.doConfirmOrders();
 			}
 		}
-		else {
-			popup("You have already confirmed your orders");
-		}
+		else popup("You have already confirmed your orders");
 	}
 
 	this.undoDeployment = function(id){
