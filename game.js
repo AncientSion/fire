@@ -1621,6 +1621,7 @@ Game.prototype.getUnitType = function (val){
 			this.fireOrders[i].weapon = this.fireOrders[i].shooter.getSystemById(this.fireOrders[i].weaponid).getActiveWeapon();
 			this.fireOrders[i].hits = [this.fireOrders[i].hits];
 			this.fireOrders[i].damages = this.fireOrders[i].target.getDamageEntriesByFireId(this.fireOrders[i]);
+			this.fireOrders[i].systems.push(this.fireOrders[i].weaponid);
 		}
 
 		for (var i = 0; i < this.fireOrders.length; i++){
@@ -1633,6 +1634,7 @@ Game.prototype.getUnitType = function (val){
 							if (this.fireOrders[i].targetid == this.fireOrders[j].targetid){
 								if (this.fireOrders[i].weapon.name == this.fireOrders[j].weapon.name){
 									this.fireOrders[i].guns += this.fireOrders[j].guns;
+									this.fireOrders[i].systems.push(this.fireOrders[j].weaponid);
 									for (var k = 0; k < this.fireOrders[j].damages.length; k++){
 										this.fireOrders[i].damages.push(this.fireOrders[j].damages[k])
 									}

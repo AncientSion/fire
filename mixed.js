@@ -511,7 +511,7 @@ Mixed.prototype.setPostFireImage = function(){
 	this.setImage();
 }
 
-Mixed.prototype.getGunOrigin = function(){
+Mixed.prototype.getGunOrigin = function(j){
 	for (var i = j; i < this.structures.length; i++){
 		if ( (!this.structures[i].destroyed && !this.structures[i].disabled) || this.structures[i].isDestroyedThisTurn() ) {
 			return this.structures[i].layout;

@@ -3017,3 +3017,15 @@ Ship.prototype.canDeploy = function(){
 	}
 	return false;
 }
+
+Ship.prototype.getGunOrigin = function(id){
+	for (var i = 0; i < this.structures.length; i++){
+		//console.log(this.structures[i].id+ " / " + this.structures[i+1].id)
+		if (i == this.structures.length-1 || this.structures[i].id < id && this.structures[i+1].id > id){
+			//console.log(this.structures[i].getDirection())
+			//console.log("ding");
+			return getPointInDirection(this.size/3 + range(-10, 10), this.structures[i].getDirection() + this.getPlannedFacing() + range(-5, 5), 0, 0);
+		}
+	}
+	return this.getSystemById(id);
+}

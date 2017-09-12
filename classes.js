@@ -153,6 +153,7 @@ function FireOrder(data){
 	this.max;
 	this.found = false;
 	this.rolls = [];
+	this.systems = [];
 
 	if (data.turn < game.turn){return;}
 	if (typeof data.notes === "string"){
