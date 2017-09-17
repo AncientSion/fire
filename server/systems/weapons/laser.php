@@ -98,10 +98,9 @@ class LightLaser extends Laser {
 	public $dmgLoss = 12;
 	public $accDecay = 120;
 	public $shots = 1;
-	public $reload = 1;
+	public $reload = 2;
 	public $powerReq = 3;
 	public $effiency = 2;
-	public $maxBoost = 1;
 	public $rakes = 3;
 	public $mass = 20;
 	public $traverse = -2;
@@ -122,7 +121,7 @@ class MediumLaser extends Laser {
 	public $optRange = 600;
 	public $dmgLoss = 8;
 	public $accDecay = 85;
-	public $reload = 2;
+	public $reload = 3;
 	public $powerReq = 5;
 	public $effiency = 3;
 	public $maxBoost = 1;
@@ -146,7 +145,7 @@ class HeavyLaser extends Laser {
 	public $optRange = 800;
 	public $dmgLoss = 6;
 	public $accDecay = 60;
-	public $reload = 3;
+	public $reload = 4;
 	public $powerReq = 6;
 	public $rakes = 3;
 	public $effiency = 4;
@@ -170,7 +169,7 @@ class SuperHeavyLaser extends Laser {
 	public $optRange = 800;
 	public $dmgLoss = 4;
 	public $accDecay = 40;
-	public $reload = 4;
+	public $reload = 5;
 	public $powerReq = 10;
 	public $rakes = 4;
 	public $effiency = 6;

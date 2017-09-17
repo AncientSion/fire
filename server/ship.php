@@ -128,12 +128,13 @@ class Ship {
 		if ($this->salvo){
 			$this->trajectory = new Point($this->x, $this->y);
 		}
-
-		for ($i = sizeof($this->actions)-1; $i >= 0; $i--){
-			if ($this->actions[$i]->resolved){
-				$this->x = $this->actions[$i]->x;
-				$this->y = $this->actions[$i]->y;
-				return;
+		else {
+			for ($i = sizeof($this->actions)-1; $i >= 0; $i--){
+				if ($this->actions[$i]->resolved){
+					$this->x = $this->actions[$i]->x;
+					$this->y = $this->actions[$i]->y;
+					return;
+				}
 			}
 		}
 	}

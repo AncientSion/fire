@@ -32,7 +32,7 @@ if (isset($_POST["type"])) {
 				else {
 					header("Location: lobby.php");
 				}
-			}
+				}
 		}
 		else echo "Invalid Fleet";
 	}
@@ -48,7 +48,7 @@ if (isset($_POST["type"])) {
 			$dbManager->deployFlightsDB($_POST["userid"], $_POST["gameid"], $_POST["deployedFlights"]);
 		}
 		if (isset($_POST["missions"])){
-			$dbManager->setNewMissions($_POST["missions"]);
+			$dbManager->insertMissions($_POST["missions"]);
 		}
 		if (isset($_POST["powers"])){
 			$dbManager->insertPowers($_POST["gameid"], $_POST["turn"], $_POST["powers"]);

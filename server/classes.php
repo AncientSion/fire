@@ -52,6 +52,7 @@ class Mission {
 	public $x;
 	public $y;
 	public $arrived;
+	public $new = 0;
 
 	function __construct($data){
 		//var_export($data);

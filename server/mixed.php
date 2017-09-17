@@ -127,10 +127,6 @@ class Mixed extends Ship {
 		Debug::log("got no ANGLE set on ".$this->id." targeted by #".$fire->shooter->id);
 	}
 
-	public function addMissionDB($data){
-		$this->mission = new Mission($data);
-	}
-
 	public function determineHits($fire){
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
 			$target = $this->getHitSystem($fire);
@@ -186,7 +182,7 @@ class Mixed extends Ship {
 		return $elements[mt_rand(0, sizeof($elements)-1)];
 	}
 
-	public function addSubUnit($elements){
+	public function addSubUnits($elements){
 		for ($i = 0; $i < sizeof($elements); $i++){
 			for ($j = 1; $j <= $elements[$i]["amount"]; $j++){
 				$this->structures[] = new $elements[$i]["name"](

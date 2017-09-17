@@ -71,7 +71,7 @@ class LightPulse extends Pulse {
 	public $animColor = "brown";
 	public $projSize = 2;
 	public $projSpeed = 10;
-	public $reload = 1;
+	public $reload = 2;
 	public $mass = 12;
 	public $powerReq = 2;
 	public $traverse = -3;
@@ -91,7 +91,7 @@ class MediumPulse extends Pulse {
 	public $animColor = "brown";
 	public $projSize = 3;
 	public $projSpeed = 9;
-	public $reload = 2;
+	public $reload = 3;
 	public $mass = 21;
 	public $powerReq = 3;
 	public $traverse = -1;
@@ -111,7 +111,7 @@ class HeavyPulse extends Pulse {
 	public $animColor = "brown";
 	public $projSize = 4;
 	public $projSpeed = 8;
-	public $reload = 3;
+	public $reload = 4;
 	public $mass = 32;
 	public $powerReq = 5;
 	public $traverse = 1;

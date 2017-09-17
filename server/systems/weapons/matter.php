@@ -30,7 +30,7 @@ class MediumRailGun extends Matter {
 	public $animColor = "grey";
 	public $projSize = 3;
 	public $projSpeed = 13;
-	public $reload = 2;
+	public $reload = 3;
 	public $mass = 20;
 	public $powerReq = 3;
 	public $traverse = -1;
@@ -50,7 +50,7 @@ class HeavyRailGun extends Matter {
 	public $animColor = "grey";
 	public $projSize = 4;
 	public $projSpeed = 10;
-	public $reload = 3;
+	public $reload = 4;
 	public $mass = 26;
 	public $powerReq = 6;
 	public $traverse = 1;

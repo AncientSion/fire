@@ -1620,7 +1620,7 @@ Warhead.prototype.getAnimation = function(fire){
 				continue;
 			}
 
-			var p = getPointInDirection(d - range(15, 30), a + range(-10, 10), o.x, o.y);
+			var p = getPointInDirection(d - range(t.size/3, t.size/2), a + range(-t.size/3, t.size/3), o.x, o.y);
 			//var tx = fire.shooter.drawX + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2); // WEAPON origin
 			//var ty = fire.shooter.drawY + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2);
 			var shotAnim = {tx: p.x, ty: p.y, m: 70, n: 0 - ((j / grouping) * delay + k*shotInterval)};
@@ -2571,6 +2571,7 @@ this.getLoadedAmmo = function(){
 }
 
 Launcher.prototype.getRemainingAmmo = function(){
+	return this.output;
 	var ammo = this.output;
 	for (var i = 0; i < this.fireOrders.length; i++){
 		ammo -= this.fireOrders[i].shots;
@@ -2819,9 +2820,18 @@ Hangar.prototype.showHangarControl = function(){
 					})
 				})
 
+	this.triggerLaunchButton();
+}
+
+Hangar.prototype.triggerLaunchButton = function(){
 	if (this.canLaunchFlight()){
-		$(element).find("input").removeClass("disabled");
-	} else $(element).find("input").addClass("disabled");
+		$("#hangarLoadoutDiv").find(".buttonTD").removeClass("disabled");
+	}
+	else {
+		game.flightDeploy = 0;
+		$("#deployOverlay").hide();
+		$("#hangarLoadoutDiv").find(".buttonTD").addClass("disabled");
+	}
 }
 
 Hangar.prototype.setMission = function(val){
@@ -2834,14 +2844,7 @@ Hangar.prototype.setMission = function(val){
 		}
 	});
 
-	if (this.canLaunchFlight()){
-		$("#hangarLoadoutDiv").find("input").removeClass("disabled");
-	}
-	else {
-		game.flightDeploy = 0;
-		$("#hangarLoadoutDiv").find("input").addClass("disabled");
-		$("#deployOverlay").hide();
-	}
+	this.triggerLaunchButton();
 }
 
 Hangar.prototype.getMission = function(){
@@ -2913,12 +2916,7 @@ Hangar.prototype.alterFlight = function(ele, max){
 		}
 	}
 
-	if (this.canLaunchFlight()){
-		$("#hangarLoadoutDiv").find("input").removeClass("disabled");
-	}
-	else {
-		$("#hangarLoadoutDiv").find("input").addClass("disabled");
-	}
+	this.triggerLaunchButton();
 }
 
 Hangar.prototype.canLaunchFlight = function(){

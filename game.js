@@ -61,7 +61,7 @@ function Game(data, userid){
 		var data = [];
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].flight && this.ships[i].available < game.turn){
-				if (this.ships[i].mission.turn == game.turn){
+				if (this.ships[i].mission.new){
 					data.push(this.ships[i].mission);
 				}
 			}
@@ -166,14 +166,9 @@ function Game(data, userid){
 		}
 		else if (this.shortInfo){
 			t = game.getUnitById(this.shortInfo);
-			if (t){
+			if (t.ship){
 				valid = true;
 				dest = t.getPlannedPosition();
-				if (t.ship){
-					console.log("STRIKE / ESCORT");
-				} else if (t.flight){
-					console.log("INTERCEPT");
-				}
 			}
 		}
 
@@ -202,7 +197,7 @@ function Game(data, userid){
 		var o = s.getPlannedPosition();
 			s.facing = getAngleFromTo(o, dest);
 		var p = getPointInDirection(20, s.facing, o.x, o.y);
-		var mission = {unitid: aUnit, turn: this.turn, type: this.mission.new, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0};
+		var mission = {unitid: aUnit, turn: this.turn, type: this.mission.new, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
 
 		if (t && o.x == dest.x && o.y == dest.y){
 			mission.arrived = game.turn-1;
@@ -218,9 +213,9 @@ function Game(data, userid){
 		}
 
 		s.disableMissionMode();
-		this.mission = 0;
 		game.draw();
-
+		game.drawAllPlans();
+		$("#game").find("#deployOverlay").hide();
 	}
 
 	this.doDeployFlight = function(pos){
@@ -250,7 +245,7 @@ function Game(data, userid){
 		var o = s.getPlannedPosition();
 		var facing = getAngleFromTo(o, dest);
 		var p = getPointInDirection(20, facing, o.x, o.y);
-		var mission = {unitid: aUnit, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0};
+		var mission = {unitid: aUnit, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
 
 		if (t.id == aUnit){
 			p = dest;
@@ -496,18 +491,18 @@ function Game(data, userid){
 			if (aUnit){game.getUnitById(aUnit).select();}
 			if (this.phase == -1){
 				if (this.hasInvalidDeploy() || this.hasInvalidPower() || this.hasBasicEW()){return;}
-				else ajax.doConfirmOrders();
+				else this.doConfirmOrders();
 			}
 			else if (this.phase == 0 || this.phase == 1){ // SHIP MOVEMENT
 				if (this.hasOpenMoves()){return;}
-				else ajax.doConfirmOrders();
+				else this.doConfirmOrders();
 			}
 			else if (this.phase == 2){
 				if (this.hasNoFires()){return;}
-				else ajax.doConfirmOrders();
+				else this.doConfirmOrders();
 			}
 			else if (this.phase == 3){
-				ajax.doConfirmOrders();
+				this.doConfirmOrders();
 			}
 		}
 		else popup("You have already confirmed your orders");
@@ -1272,6 +1267,9 @@ Game.prototype.getUnitType = function (val){
 			}
 			else return a.getParent().size/2;
 		}
+		else if (a.ship){
+			return Math.floor(getDistance(a.getPlannedPosition(), b.getPlannedPosition()));
+		}
 		return 666;
 	}
 
@@ -1688,7 +1686,8 @@ Game.prototype.getUnitType = function (val){
 						y: b.y
 					}
 				);
-				this.fireOrders[i].focus = {x: (a.x + b.x) / 2, y: (a.y + b.y) / 2}
+				//this.fireOrders[i].focus = {x: (a.x + b.x) / 2, y: (a.y + b.y) / 2}
+				//this.fireOrders[i].focus = {x: b.x, y: b.y}
 			}
 		}
 
@@ -1791,48 +1790,55 @@ Game.prototype.getUnitType = function (val){
 			fxCtx.clearRect(0, 0, res.x, res.y);
 
 			for (var i = 0; i  < game.fireOrders.length; i++){ 
-				if (! game.fireOrders[i].animated){
-					//cam.setFocus(game.fireOrders[i].focus.x, game.fireOrders[i].focus.y);
-					for (var j = 0; j < game.fireOrders[i].anim.length; j++){
-						for (var k = 0; k < game.fireOrders[i].anim[j].length; k++){
-							if (game.fireOrders[i].anim[j][k].done){continue;}
-							if (game.fireOrders[i].weapon.animation == "projectile"){
-								if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
-									game.fireOrders[i].anim[j][k].n += 1;
-									if (game.fireOrders[i].anim[j][k].n > 0){ // valid, now animate
-										drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
+				if (!game.fireOrders[i].animated){
+					if (!game.fireOrders[i].animating){
+						game.fireOrders[i].animating = 1;
+						//cam.setFocus(game.fireOrders[i].focus.x, game.fireOrders[i].focus.y);
+						cam.setFocusToUnit(game.fireOrders[i].target);
+						game.draw();
+					}
+					else {
+						for (var j = 0; j < game.fireOrders[i].anim.length; j++){
+							for (var k = 0; k < game.fireOrders[i].anim[j].length; k++){
+								if (game.fireOrders[i].anim[j][k].done){continue;}
+								if (game.fireOrders[i].weapon.animation == "projectile"){
+									if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
+										game.fireOrders[i].anim[j][k].n += 1;
+										if (game.fireOrders[i].anim[j][k].n > 0){ // valid, now animate
+											drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
+										}
 									}
-								}
-								else if (game.fireOrders[i].anim[j][k].h){ // shot animated, does it explode ?
-									game.fireOrders[i].anim[j][k].n += 1;
-									//drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].tx, game.fireOrders[i].anim[j][k].ty, game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m, 30); // EXPLO
-									drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k], 30); // EXPLO
-									if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m+30){
-										game.fireOrders[i].anim[j][k].done = true;
-									}
-								}
-								else {
-									game.fireOrders[i].anim[j][k].done = true;
-								}
-							}
-							else if (game.fireOrders[i].weapon.animation == "beam"){
-								if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
-									game.fireOrders[i].anim[j][k].n += 1;
-									if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
-										drawBeam(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
-										if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
+									else if (game.fireOrders[i].anim[j][k].h){ // shot animated, does it explode ?
+										game.fireOrders[i].anim[j][k].n += 1;
+										//drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].tx, game.fireOrders[i].anim[j][k].ty, game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m, 30); // EXPLO
+										drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k], 30); // EXPLO
+										if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m+30){
 											game.fireOrders[i].anim[j][k].done = true;
 										}
 									}
+									else {
+										game.fireOrders[i].anim[j][k].done = true;
+									}
 								}
-							}
-							else if (game.fireOrders[i].weapon.animation == "explo"){
-								if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
-									game.fireOrders[i].anim[j][k].n += 1;
-									if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
-										drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k], 30); // EXPLO
-										if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
-											game.fireOrders[i].anim[j][k].done = true;
+								else if (game.fireOrders[i].weapon.animation == "beam"){
+									if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
+										game.fireOrders[i].anim[j][k].n += 1;
+										if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
+											drawBeam(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
+											if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
+												game.fireOrders[i].anim[j][k].done = true;
+											}
+										}
+									}
+								}
+								else if (game.fireOrders[i].weapon.animation == "explo"){
+									if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
+										game.fireOrders[i].anim[j][k].n += 1;
+										if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
+											drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k], 30); // EXPLO
+											if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
+												game.fireOrders[i].anim[j][k].done = true;
+											}
 										}
 									}
 								}
@@ -1942,10 +1948,17 @@ Game.prototype.getUnitType = function (val){
 		var struct = 0;
 		var rolls = [];
 		
-		for (var i = 0; i < fire.guns; i++){
-			shots += fire.weapon.getShots();
-			hits += fire.hits[i];
+		if (fire.shooter.salvo){
+			shots = fire.shooter.structures.length;
+			hits = fire.hits.reduce((a, b) => a+b, 0);
 		}
+		else {
+			for (var i = 0; i < fire.guns; i++){
+				shots += fire.weapon.getShots();
+				hits += fire.hits[i];
+			}
+		}
+
 		for (var i = 0; i < fire.damages.length; i++){
 			armour += fire.damages[i].armourDmg;
 			struct += fire.damages[i].overkill;
@@ -1960,8 +1973,8 @@ Game.prototype.getUnitType = function (val){
 		rolls.sort(function(a, b){return a-b});
 
 		if (fire.weapon.linked > 1){
-			shots *= fire.weapon.linked;
-			hits *= fire.weapon.linked;
+		//	shots *= fire.weapon.linked;
+		//	hits *= fire.weapon.linked;
 		}
 		if (fire.weapon.output){
 			hits /= fire.weapon.output;

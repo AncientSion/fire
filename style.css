@@ -1238,9 +1238,9 @@ table, th, tr, td {
 }
 
 .mainPower {
-	color: #ff3d00;
+	color: white;
 	display: inline-block;
-	font-size: 12px;
+	font-size: 16px;
 	position: relative;
 	top: 5px;
 	left: 5px;

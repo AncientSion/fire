@@ -2473,7 +2473,7 @@ function Ship(data){
 				return 1;
 			}
 			else if (target.flight){
-				return Math.round(0.5 / 180 * (Math.min(180, 20 * Math.pow(sensor.getOutput()/ew.dist, 1.5)))*100)/100;
+				return Math.round(0.5 / 180 * (Math.min(180, game.const.ew.len * Math.pow(sensor.getOutput()/ew.dist, game.const.ew.p)))*100)/100;
 			}
 		}
 		else if (d <= ew.dist && this.isInEWArc(origin, tPos, sensor, ew)){
@@ -2505,9 +2505,7 @@ function Ship(data){
 
 	this.isInEWArc = function(origin, target, sensor, ew){		
 		var str = sensor.getOutput();
-		var len = 20;
-		var p = 1.5;
-		var	w = Math.min(180, len * Math.pow(str/ew.dist, p));
+		var	w = Math.min(180, game.const.ew.len * Math.pow(str/ew.dist, game.const.ew.p));
 		var start = addAngle(0 + w, ew.angle);
 		var end = addAngle(360 - w, ew.angle);
 		return isInArc(getCompassHeadingOfPoint(origin,  target, this.getPlannedFacing()), start, end);

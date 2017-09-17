@@ -18,8 +18,24 @@ window.cam = {
 		this.o.y = res.y/2 - y;
 	},
 
+	setFocusToUnit(unit){
+		var pos = unit.getPlannedPosition();
+		this.o.x = res.x/2 - (pos.x*cam.z);
+		this.o.y = res.y/2 - (pos.y*cam.z);
+	},
+
 	setZoom: function(val){
 		this.z = val;
+
+		if (game.phase == 3 && game.animating){
+			for (var i = 0; i < game.fireOrders.length; i++){
+				if (!game.fireOrders[i].animated && game.fireOrders[i].animating){
+					this.setFocusToUnit(game.fireOrders[i].target);
+					game.draw();
+					break;
+				}
+			}
+		}
 		//game.draw();
 	},
 	
@@ -83,7 +99,7 @@ function Mission(unit){
 		//console.log(this.old + " -> " + val);
 		if (this.new){
 			var m = this.new;
-			$(game.getUnitById(this.id).element).find(".header").find("tr").slice(-3).each(function(i){
+			$(game.getUnitById(this.id).element).find(".header").find("tr").slice(-2).each(function(i){
 				if (i == m-1){
 					$(this).removeClass("selected");
 					return false;

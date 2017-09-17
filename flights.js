@@ -28,7 +28,7 @@ function Flight(data){
 
 	this.setLayout = function(){
 		var size = this.baseSize + this.unitSize * this.structures.length-1;
-		var osx = 7;
+		var osx = 7;  
 		var osy = 5;
 
 		//var ox;
@@ -38,7 +38,7 @@ function Flight(data){
 			//console.log("batch " + i)
 			var a = 360/Math.ceil(this.structures.length/3)*i;
 			//console.log(a);
-			var o = getPointInDirection(size/3, a-90, 0, 0);
+			var o = getPointInDirection(size/2 - this.unitSize*3, a-90, 0, 0);
 
 			for (var j = 0; j < Math.min(this.structures.length-i*3, 3); j++){
 				//console.log("sub " + j)
@@ -184,46 +184,35 @@ function Flight(data){
 				.append($("<td>").html(game.getMissionTargetString(this.mission))))
 
 		if (this.friendly && game.phase == -1 && this.available < game.turn){
-			$(table)
-			.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
-			.append($("<tr>")
-				.append($("<td>")
-					.attr("colSpan", 2)
-					.addClass("buttonTD")
-					.html("Disengage From Mission")
-					.data("active", 0)
-					.data("mission", this.mission.type)
-			/*		.click(function(e){
-						var mission = $(this).data("mission");
-						if ($(this).data("active") == 0){
-							$(this).data("active", 1).html("Select New Mission");
-							//$(this).addClass("selected");
-							$(this).parent().parent().parent().parent().css("height", "auto").end().end()
-							.find("tr").slice(-3).each(function(i){
-								$(this).removeClass("disabled");
-								if (i == mission-1){
-									$(this).addClass("selected");
-								}
-							})
-						} else {
-							$(this).data("active", 0).html("Disengage From Mission");
-							//$(this).removeClass("selected");
-							$(this).parent().parent().parent().parent().css("height", "130px").end().end()
-							.find("tr").slice(-3).each(function(i){
-								$(this).addClass("disabled");
-							})
-						}
-					})
-			*/
-					.click(function(e){
-						game.getUnitById(aUnit).switchMissionMode();
-					})
-					.hover(function(e){
-						$(this).toggleClass("highlight");
-					})))
-			.append($("<tr>").click(function(){game.mission.set(1, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Patrol Location")))
-			.append($("<tr>").click(function(){game.mission.set(2, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Strike/ Escort Ship")))
-			//.append($("<tr>").click(function(){game.mission.set(3, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Intercept Flight / Salvo")));
+			var elapsed = game.turn - this.mission.turn;
+			if (elapsed >= 2){
+				$(table)
+				.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
+				.append($("<tr>").addClass("misionSwitch")
+					.append($("<td>")
+						.attr("colSpan", 2)
+						.addClass("buttonTD")
+						.html("Disengage From Mission")
+						.data("active", 0)
+						.data("mission", this.mission.type)
+						.click(function(e){
+							game.getUnitById(aUnit).switchMissionMode();
+						})
+						.hover(function(e){
+							$(this).toggleClass("highlight");
+						})))
+				.append($("<tr>").click(function(){game.mission.set(1, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Patrol Location")))
+				.append($("<tr>").click(function(){game.mission.set(2, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Strike/ Escort Ship")))
+			}
+			else {
+				$(table)
+				.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
+				.append($("<tr>").addClass("misionSwitch")
+					.append($("<td>")
+						.attr("colSpan", 2)
+						.addClass("buttonTD")
+						.html("Adjustment of orders</br> " + (2 - elapsed) + " Turn/s remaining")));
+			}
 		}
 				
 		subDiv.appendChild(table);
@@ -631,12 +620,18 @@ Flight.prototype.setPostMoveSize = function(){
 		}
 	}
 	else this.size = this.baseSize + this.unitSize * this.structures.length-1;
-
 }
-
 
 
 Flight.prototype.setRawImage = function(){
 	this.img = window.shipImages[this.structures[0].name.toLowerCase() + "l"];
 	this.smallImg = window.shipImages[this.structures[0].name.toLowerCase()];
+}
+
+Flight.prototype.switchDiv = function(){
+	if (this.selected){
+		$(this.element).find(".header").find(".general").find(".misionSwitch").removeClass("disabled");
+	} else $(this.element).find(".header").find(".general").find(".misionSwitch").addClass("disabled");
+
+	Ship.prototype.switchDiv.call(this);
 }

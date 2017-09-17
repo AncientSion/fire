@@ -39,10 +39,10 @@ class GQuan extends Heavy {
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 800, 22);
-		$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 300);
-		$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 300);
 		$left->systems[] = new LightPulse($this->getId(), $this->id, 240, 360);
 		$left->systems[] = new LightPulse($this->getId(), $this->id, 240, 360);
+		$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 300);
+		$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 300);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

@@ -13,8 +13,8 @@
 				$user = "aatu"; $pass = "Kiiski";
 				$user = "root"; $pass = "147147";
 				$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$user,$pass);
-				//$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				//$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+				$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 			}
 		}
 		
@@ -281,6 +281,8 @@
 					(:gameid, :userid, :ship, :ball, :name, :status, :available, :destroyed)
 			");
 
+			$missions = array();
+
 			$ship = 0;
 			$ball = 0;
 			$status = "";
@@ -315,6 +317,8 @@
 				
 				if ($stmt->errorCode() == 0){
 					$units[$i]["id"] = $this->getLastInsertId();
+					$units[$i]["mission"]["unitid"] = $units[$i]["id"];
+					$missions[] = $units[$i]["mission"];
 					Debug::log("success, got id: ".$units[$i]["id"]);
 					continue;
 				}
@@ -326,7 +330,7 @@
 			}
 
 			$this->insertSubUnits($units);
-			$this->insertMission($units);
+			$this->insertMissions($missions);
 			$this->insertClientActions($units);
 		}
 
@@ -357,8 +361,8 @@
 			return true;
 		}
 
-		public function insertMission($units){
-			Debug::log("insertMission");
+		public function insertMissions($missions){
+			Debug::log("insertMissions s: ".sizeof($missions));
 			$stmt = $this->connection->prepare("
 				INSERT INTO missions 
 					(unitid, type, turn, targetid, x, y, arrived)
@@ -366,23 +370,23 @@
 					(:unitid, :type, :turn, :targetid, :x, :y, :arrived)
 			");
 
-			$arrived = 0;
+			for ($i = 0; $i < sizeof($missions); $i++){
+				if ($missions[$i]["new"] == 0){continue;}
 
-			for ($i = 0; $i < sizeof($units); $i++){
-				if (!isset($units[$i]["launchData"])){continue;}
-
-				$stmt->bindParam(":unitid", $units[$i]["id"]);
-				$stmt->bindParam(":type", $units[$i]["mission"]["type"]);
-				$stmt->bindParam(":turn", $units[$i]["mission"]["turn"]);
-				$stmt->bindParam(":targetid", $units[$i]["mission"]["targetid"]);
-				$stmt->bindParam(":x", $units[$i]["mission"]["x"]);
-				$stmt->bindParam(":y", $units[$i]["mission"]["y"]);
-				$stmt->bindParam(":arrived", $units[$i]["mission"]["arrived"]);
+				$stmt->bindParam(":unitid", $missions[$i]["unitid"]);
+				$stmt->bindParam(":type", $missions[$i]["type"]);
+				$stmt->bindParam(":turn", $missions[$i]["turn"]);
+				$stmt->bindParam(":targetid", $missions[$i]["targetid"]);
+				$stmt->bindParam(":x", $missions[$i]["x"]);
+				$stmt->bindParam(":y", $missions[$i]["y"]);
+				$stmt->bindParam(":arrived", $missions[$i]["arrived"]);
 				$stmt->execute();
 				
 				if ($stmt->errorCode() == 0){
-					Debug::log("success insertMission");
-				} else Debug::log("error insertMission");
+					Debug::log("success insertMissions");
+				} else {
+					Debug::log("error insertMissions");
+				}
 			}
 			return true;
 		}
@@ -655,6 +659,35 @@
 		}
 
 		public function setNewMissions($data){
+			Debug::log("setNewMission s: ".sizeof($data));
+			$stmt = $this->connection->prepare("
+				UPDATE missions
+				SET type = :type,
+					turn = :turn,
+					targetid = :targetid,
+					x = :x,
+					y = :y,
+					arrived = :arrived
+				WHERE unitid = :unitid
+			");
+
+			for ($i = 0; $i < sizeof($data); $i++){
+				$stmt->bindParam(":type", $data[$i]["type"]);
+				$stmt->bindParam(":turn", $data[$i]["turn"]);
+				$stmt->bindParam(":targetid", $data[$i]["targetid"]);
+				$stmt->bindParam(":x", $data[$i]["x"]);
+				$stmt->bindParam(":y", $data[$i]["y"]);
+				$stmt->bindParam(":arrived", $data[$i]["arrived"]);
+				$stmt->bindParam(":unitid", $data[$i]["unitid"]);
+
+				$stmt->execute();
+				if ($stmt->errorCode() == 0){
+					continue;
+				} else Debug::log("ERROR"); return false;
+			}
+		}
+
+		public function setNewMissionsa($data){
 			Debug::log("setNewMission s: ".sizeof($data));
 			$stmt = $this->connection->prepare("
 				UPDATE missions
@@ -1643,38 +1676,15 @@
 			$stmt = $this->connection->prepare("
 				SELECT * FROM missions
 				WHERE missions.unitid = :id
+				ORDER BY TURN ASC
 			");
 			
 			$stmt->bindParam(":id", $unit["id"]);
 			$stmt->execute();
 					
-			$result = $stmt->fetch(PDO::FETCH_ASSOC);
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			return $result;
 		}
-
-		public function getActiveBallistics($gameid, $turn){
-			//Debug::log("DB getBallistics");	
-			$stmt = $this->connection->prepare("
-				SELECT * from units
-				WHERE gameid = :gameid
-				AND ball > 0
-				AND destroyed = 0
-			");
-
-			$stmt->bindParam(":gameid", $gameid);
-			$stmt->execute();
-
-			$units = $stmt->fetchAll(PDO::FETCH_ASSOC);
-			
-			if ($units){
-				for ($i = 0; $i < sizeof($units); $i++){
-					$units[$i]["mission"] = $this->getMission($units[$i]);
-				}
-			}
-			//Debug::log("getting: ".sizeof($units)." units");
-			return $units;
-		}
-
 		public function getShipLoad($ships){
 			$stmt = $this->connection->prepare("
 				SELECT systemid, name, amount 

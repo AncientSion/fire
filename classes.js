@@ -146,7 +146,7 @@ function FireOrder(data){
 	this.resolved = data.resolved || 0;
 	this.dist;
 	this.guns = 1;
-	this.animated = false;
+	this.animated = 0;
 	this.anim = [];
 	this.damages = [];
 	this.min;
@@ -154,6 +154,7 @@ function FireOrder(data){
 	this.found = false;
 	this.rolls = [];
 	this.systems = [];
+	this.animating = 0;
 
 	if (data.turn < game.turn){return;}
 	if (typeof data.notes === "string"){

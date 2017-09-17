@@ -289,8 +289,8 @@ class Manager {
 			$unit->y = $db[$i]["y"];
 
 			if (!$unit->ship){
-				$unit->addSubUnit($db[$i]["subunits"]);
-				$unit->addMissionDB($db[$i]["mission"]);
+				$unit->addSubUnits($db[$i]["subunits"]);
+				$unit->addMissionDB($db[$i]["mission"], $this->userid, $this->turn, $this->phase);
 			}
 			$units[] = $unit;
 		}
@@ -502,7 +502,7 @@ class Manager {
 			$tPos = $this->getUnitById($fires[$i]->targetid)->getCurrentPosition();
 			$a = Math::getAngle($sPos->x, $sPos->y, $tPos->x, $tPos->y);
 			$devi = Math::getPointInDirection($shooter->size/3, $a, $sPos->x + mt_rand(-10, 10), $sPos->y + mt_rand(-10, 10));
-			$mission = array("type" => 2, "turn" => $this->turn, "targetid" => $fires[$i]->targetid, "x" => $tPos->x, "y" => $tPos->y, "arrived" => 0);
+			$mission = array("type" => 2, "turn" => $this->turn, "targetid" => $fires[$i]->targetid, "x" => $tPos->x, "y" => $tPos->y, "arrived" => 0, "new" => 1);
 			$move = array("turn" => $this->turn, "type" => "deploy", "dist" => 0, "x" => $devi->x, "y" => $devi->y, "a" => $a, "cost" => 0, "delay" => 0, "costmod" => 0, "resolved" => 0);
 			$launchData = array("shipid" => $shooter->id, "systemid" => $launcher->id, "loads" => array(0 => array("launch" => $fires[$i]->shots, "name" => $name)));
 

@@ -266,7 +266,7 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 						row.append($("<td>").html(system.display + " #" + ship.structures[i].systems[j].id))
 
 					if (vessel.flight){
-						if (game.isCloseCombat(ship, vessel) || ship.ship){
+						if (game.isCloseCombat(ship, vessel) || ship.ship && system.posIsOnArc(shipLoc, pos, facing)){
 							legalTarget = true;
 							inArc = true;
 						}

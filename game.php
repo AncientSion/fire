@@ -459,10 +459,10 @@ echo "</script>";
 				</table>
 			</div>
 			<div class="header">
-				<input type="button" class="disabled" value="Launch Flight" onclick='game.enableFlightDeployment()'>
+				<div class="buttonTD disabled" onclick="game.enableFlightDeployment()">Launch Flight</div>
 			</div>
 		</div>
-</body>
+	</body>
 </html>
 
 <?php 

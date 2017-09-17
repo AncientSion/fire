@@ -110,6 +110,9 @@ class Weapon extends System {
 
 	public function getAccuracyLoss($fire){
 		if (!$fire->dist){return 0;}
+		if ($fire->shooter->flight){
+			Debug::log("fire id #".$fire->id." dist: ".$fire->dist);
+		}
 		return ceil($this->accDecay * $fire->weapon->getAccuracyMod($fire) * $fire->dist / 1000);
 	}
 
