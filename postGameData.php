@@ -32,7 +32,7 @@ if (isset($_POST["type"])) {
 				else {
 					header("Location: lobby.php");
 				}
-				}
+			}
 		}
 		else echo "Invalid Fleet";
 	}

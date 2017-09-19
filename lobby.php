@@ -24,13 +24,6 @@ if (isset($_SESSION["userid"])){
 		}
 	}
 
-//	$dbManager->startGame(2);
-
-	//function __construct($id, $userid, $classname, $x, $y, $facing){
-	//$ship = new Omega(1, 1, 5, 5, 100);
-	//echo "<script> var omega = ".json_encode($ship, JSON_NUMERIC_CHECK).";</script>";
-	//son_encode($ship, JSON_NUMERIC_CHECK);
-	
 	$ongoingGames = $dbManager->getMyGames($_SESSION["userid"]);
 	for ($i = 0; $i < sizeof($ongoingGames); $i++){
 		//Debug::log("checking for canAdvance ".$ongoingGames[$i]["id"]);
@@ -41,8 +34,6 @@ if (isset($_SESSION["userid"])){
 			$manager = new Manager($_SESSION["userid"]);
 		}
 	}
-
-	$openGames = $manager->getOpenGames();
 
 	$ongoingGamesElement = "<table>";
 	if ($ongoingGames) {	
@@ -103,6 +94,7 @@ if (isset($_SESSION["userid"])){
 		$ongoingGamesElement .= "<tr><th>no Active Games found</tr></th></table>";
 	}
 
+	$openGames = $manager->getOpenGames();
 	$openGamesElement = "<table>";
 	if ($openGames) {
 		$openGamesElement .= "<tr>";

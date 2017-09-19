@@ -493,10 +493,7 @@
 
 		public function gameIsReady($gameid){
 			$stmt = $this->connection->prepare("
-				SELECT playerstatus.status from playerstatus
-				JOIN games
-				ON games.id = :gameid
-				AND playerstatus.gameid = :gameid
+				SELECT * FROM playerstatus WHERE gameid = :gameid
 			");
 			
 			$stmt->bindParam(":gameid", $gameid);
@@ -504,29 +501,23 @@
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 			if (sizeof($result) > 1){
+				var_export($result);
 				$ready = true;
 
 				foreach ($result as $player){
 					if ($player["status"] != "ready"){
-						$ready = false;
-						break;
+						return false;
 					}
 				}
-
-				if ($ready){
-					return true;
-				}
+				return true;
 			}
-			else {
-				return false;
-			}
+			return false;
 		}
 
 		public function startGame($gameid){
 			
 			$players = $this->getPlayersInGame($gameid);
 			$deploys = array();
-
 
 			for ($i = 0; $i < sizeof($players); $i++){
 				$this->setPlayerstatus($players[$i]["userid"], $gameid, 1, -1, "waiting");

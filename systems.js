@@ -2446,7 +2446,8 @@ Launcher.prototype.setupAmmoLoadout = function(e){
 
 	if ($(div).hasClass("disabled")){
 		$(div).find("#reload").html(this.reload);
-		$(div).data("systemid", this.id).css("top", e.clientY + 30).css("left", e.clientX - 150).removeClass("disabled");
+		//$(div).data("systemid", this.id).css("top", e.clientY + 30).css("left", e.clientX - 150).removeClass("disabled");
+		$(div).data("systemid", this.id).css("left", 800).css("top", 400).removeClass("disabled");
 		this.updateTotals();
 	}
 	else {
@@ -3050,7 +3051,8 @@ Hangar.prototype.setupHangarLoadout = function(e){
 	if ($(div).hasClass("disabled")){
 		$(div).find("#launchRate").html(this.getOutput());
 		$(div).find("#capacity").html(this.output);
-		$(div).data("systemid", this.id).css("top", e.clientY + 30).css("left", e.clientX - 150).removeClass("disabled");
+		//$(div).data("systemid", this.id).css("top", e.clientY + 30).css("left", e.clientX - 150).removeClass("disabled");
+		$(div).data("systemid", this.id).css("left", 800).css("top", 400).removeClass("disabled");
 		this.updateTotals();
 	}
 	else {
