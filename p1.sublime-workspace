@@ -578,29 +578,36 @@
 			"file": "shipclasses.js",
 			"settings":
 			{
-				"buffer_size": 84910,
+				"buffer_size": 84935,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"contents": "Searching 71 files for \"this.create\"\n\nC:\\xampp\\htdocs\\fire\\classes.js:\n  278  \t//this.html = this.type + \": -\" + this.value * 100 + \"%\"; \n  279  \n  280: \tthis.create = function(){\n  281  \t\tvar html = \"\";\n  282  \t\tvar mod = 1;\n  ...\n  366  \n  367  \n  368: \t//this.create();\n  369  }\n  370  \n\nC:\\xampp\\htdocs\\fire\\flights.js:\n  170  \t}\n  171  \n  172: \tthis.createBaseDiv = function(){\n  173  \t\tvar owner = \"friendly\";\n  174  \t\tif (game.phase > -2 && this.userid != game.userid){owner = \"hostile\";}\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  933  \t}\n  934  \t\n  935: \tthis.create = function(){\n  936  \t\t$(\"#phaseSwitchDiv\").show();\n  937  \n  ...\n 2221  \t}\n 2222  \n 2223: \tthis.createCombatLogEntry = function(fire){\n 2224  \t\tif (fire == undefined){return;}\n 2225  \t\tvar shots = 0;\n\nC:\\xampp\\htdocs\\fire\\salvo.js:\n  326  \t}\n  327  \n  328: \tthis.createBaseDiv = function(){\n  329  \t\tvar owner = \"friendly\";\n  330  \t\tif (this.userid != game.userid){owner = \"hostile\";}\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 1868  \t}\n 1869  \t\n 1870: \tthis.createBaseDiv = function(){\n 1871  \t\tvar owner = \"friendly\";\n 1872  \t\tif (game.phase > -2 && this.userid != game.userid){owner = \"hostile\";}\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 2180  \tthis.loadout = 1;\n 2181  \n 2182: \tthis.create(system.loads);\n 2183  }\n 2184  Launcher.prototype = Object.create(Weapon.prototype);\n\n8 matches across 6 files\n\n\nSearching 71 files for \"setPreMovePosition =\"\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 2770  }\n 2771  \n 2772: Ship.prototype.setPreMovePosition = function(){\n 2773  \tthis.drawX = this.x;\n 2774  \tthis.drawY = this.y;\n\n1 match in 1 file\n\n\nSearching 71 files for \"setPostMovePosition\"\n\nC:\\xampp\\htdocs\\fire\\game.php:\n  631  \t\t\t\t\t\t}\n  632  \t\t\t\t\t\tfor (var i = 0; i < game.ballistics.length; i++){\n  633: \t\t\t\t\t\t\tgame.ballistics[i].setPostMovePosition();\n  634  \t\t\t\t\t\t}\n  635  \t\t\t\t\t\tgame.fireResolved();\n  ...\n  642  \t\t\t\t\t\t\tgame.ships[i].deployed = true;\n  643  \t\t\t\t\t\t\tif (game.ships[i].flight){\n  644: \t\t\t\t\t\t\t\tgame.ships[i].setPostMovePosition();\n  645  \t\t\t\t\t\t\t}\n  646  \t\t\t\t\t\t\telse {\n  647: \t\t\t\t\t\t\t\tgame.ships[i].setPostMovePosition();\n  648  \t\t\t\t\t\t\t\tgame.ships[i].setPostMoveFacing();\n  649  \t\t\t\t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n   62  \t\t\t\treturn false;\n   63  \t\t\t}\n   64: \t\t\tele.setPostMovePosition();\n   65  \t\t\treturn true;\n   66  \t\t}\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 2775  }\n 2776  \n 2777: Ship.prototype.setPostMovePosition = function(){\n 2778  \tthis.drawX = this.actions[this.actions.length-1].x;\n 2779  \tthis.drawY = this.actions[this.actions.length-1].y;\n ....\n 2786  \t\n 2787  \tif (game.phase > 1){\n 2788: \t\tthis.setPostMovePosition();\n 2789  \t\tthis.setPostMoveFacing();\n 2790  \t}\n\n6 matches across 3 files\n\n\nSearching 71 files for \"getPowerOrders\"\n\nC:\\xampp\\htdocs\\fire\\ajax.js:\n  111  \t\t\t\t\t}\n  112  \t\t\t\t}\n  113: \t\t\t\tvar power = game.ships[i].getPowerOrders();\n  114  \t\t\t\tfor (var j = 0; j < power.length; j++){\n  115  \t\t\t\t\tpowers.push(power[j]);\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 2668  \t}\n 2669  \n 2670: \tthis.getPowerOrders = function(){\n 2671  \t\tvar powers = [];\n 2672  \t\tfor (var i = 0; i < this.structures.length; i++){\n\n2 matches across 2 files\n\n\nSearching 71 files for \"setPostMoveImage\"\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n  826  \telse if (this.mission.arrived){\n  827  \t\tif (this.mission.arrived < game.turn){\n  828: \t\t\tthis.setPostMoveImage();\n  829  \t\t} \n  830  \t\telse if (this.mission.arrived == game.turn){\n  831  \t\t\tif (game.phase < 3){\n  832  \t\t\t\tthis.setPreMoveImage();\n  833: \t\t\t} else this.setPostMoveImage();\n  834  \n  835  \t\t}\n  ...\n  865  }\n  866  \n  867: Flight.prototype.setPostMoveImage = function(){\n  868  \tvar size = 12;\n  869  \tvar t = document.createElement(\"canvas\");\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  785  \t\t\t\t\tif (this.ships[i].mission.type == 1){\n  786  \t\t\t\t\t\tthis.ships[i].setPostMoveSize();\n  787: \t\t\t\t\t\tthis.ships[i].setPostMoveImage();\n  788  \t\t\t\t\t}\n  789  \t\t\t\t\telse if (this.ships[i].mission.type > 1){\n  ...\n  792  \t\t\t\t}\n  793  \t\t\t\t//this.ships[i].setPostMoveSize();\n  794: \t\t\t\t//this.ships[i].setPostMoveImage();\n  795  \t\t\t}\n  796  \t\t}\n\n5 matches across 2 files\n\n\nSearching 71 files for \"drawX =\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n 1562  \t\t\t\t\t\t\t\t//\tconsole.log(\"anim true\");\n 1563  \t\t\t\t\t\t\t\t\tgame.ships[i].actions[j].animated = true;\n 1564: \t\t\t\t\t\t\t\t\tgame.ships[i].drawX = action.x;\n 1565  \t\t\t\t\t\t\t\t\tgame.ships[i].drawY = action.y;\n 1566  \t\t\t\t\t\t\t\t}\n ....\n 1583  \n 1584  \t\t\t\t\t\t\tfor (var k = 0; k < game.ships[i].attachAnims.length; k++){\n 1585: \t\t\t\t\t\t\t\tgame.ships[i].attachAnims[k].drawX = game.ships[i].drawX;\n 1586  \t\t\t\t\t\t\t\tgame.ships[i].attachAnims[k].drawY = game.ships[i].drawY;\n 1587  \t\t\t\t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n   46  \tthis.deployed;\n   47  \tthis.drawFacing = 0;\n   48: \tthis.drawX = 0;\n   49  \tthis.drawY = 0;\n   50  \n   ..\n  412  \t\t\tthis.x = pos.x;\n  413  \t\t\tthis.y = pos.y;\n  414: \t\t\tthis.drawX = pos.x;\n  415  \t\t\tthis.drawY = pos.y;\n  416  \t\t}\n  ...\n  430  \t\t\tthis.x = pos.x;\n  431  \t\t\tthis.y = pos.y;\n  432: \t\t\tthis.drawX = pos.x;\n  433  \t\t\tthis.drawY = pos.y;\n  434  \n  ...\n 2728  \n 2729  Ship.prototype.setPreMovePosition = function(){\n 2730: \tthis.drawX = this.x;\n 2731  \tthis.drawY = this.y;\n 2732  }\n 2733  \n 2734  Ship.prototype.setPostMovePosition = function(){\n 2735: \tthis.drawX = this.actions[this.actions.length-1].x;\n 2736  \tthis.drawY = this.actions[this.actions.length-1].y;\n 2737  }\n\n7 matches across 2 files\n\n\nSearching 72 files for \"doDraw = 0\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  208  \t\t\tmission.arrived = game.turn-1;\n  209  \t\t\tmission.turn = game.turn-1;\n  210: \t\t\ts.doDraw = 0;\n  211  \t\t\tt.attachFlight(s.id);\n  212  \t\t}\n  ...\n  788  \t\t\t\t\t}\n  789  \t\t\t\t\telse if (this.ships[i].mission.type > 1){\n  790: \t\t\t\t\t\tthis.ships[i].doDraw = 0;\n  791  \t\t\t\t\t}\n  792  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\mixed.js:\n  121  \t\tif (this.mission.type == 1){return;}\n  122  \t\telse if (this.mission.arrived < game.turn){\n  123: \t\t\tthis.doDraw = 0;\n  124  \t\t} else if (game.phase > 2 && this.mission.arrived == game.turn){\n  125: \t\t\tthis.doDraw = 0;\n  126  \t\t}\n  127  \t}\n\n4 matches across 2 files\n\n\nSearching 72 files for \"doDamage, \"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n   14  resolveFireOrder - ID 29, shooter: Omega #11 vs Artemis #12, w: LightPulse #30, guns: 1\n   15  CALCULATE TO HIT - angle: 346, base: 72.335111111111, trav: 0, total multi: 1, dist/range: 158/29, req: 43.335111111111\n   16: fireid: 29, doDamage, weapon: LightPulse, target: 12, hits: 3\n   17  resolveFireOrder - ID 30, shooter: Omega #11 vs Artemis #12, w: LightPulse #31, guns: 1\n   18  CALCULATE TO HIT - angle: 346, base: 72.335111111111, trav: 0, total multi: 1, dist/range: 158/29, req: 43.335111111111\n   ..\n   21  resolveFireOrder - ID 22, shooter: Artemis #12 vs Flight #13, w: LightPulse #12, guns: 1\n   22  CALCULATE TO HIT - angle: 77, base: 28, trav: 0, total multi: 1.5, dist/range: 0/0, req: 42\n   23: fireid: 22, doDamage, weapon: LightPulse, target: 13, hits: 3\n   24   => target system Thunderbolt #15 was destroyed, rem: 31, doing: 14, OK for: 17 dmg\n   25  resolveFireOrder - ID 23, shooter: Artemis #12 vs Flight #13, w: LightPulse #13, guns: 1\n   26  CALCULATE TO HIT - angle: 100, base: 28, trav: 0, total multi: 1.5, dist/range: 0/0, req: 42\n   27: fireid: 23, doDamage, weapon: LightPulse, target: 13, hits: 3\n   28   => target system Thunderbolt #11 was destroyed, rem: 31, doing: 12, OK for: 19 dmg\n   29  DB updateFireOrders: 10\n   ..\n   31  insertServerFireOrder: 1\n   32  resolveFireOrder - ID 32, shooter: Salvo #14 vs Omega #5, w: Warhead #2, guns: 4\n   33: doDamage, weapon: Warhead, target: 11/-1, totalDmg: 45\n   34: doDamage, weapon: Warhead, target: 11/10, totalDmg: 40\n   35: doDamage, weapon: Warhead, target: 11/-1, totalDmg: 43\n   36: doDamage, weapon: Warhead, target: 11/10, totalDmg: 39\n   37  = testCriticals for Omega, #11, turn: 4\n   38  = testCriticals for Flight, #13, turn: 4\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapon.php:\n   80  \t\t$totalDmg = $this->getTotalDamage($fire);\n   81  \t\t$remInt = $system->getRemainingIntegrity();\n   82: \t\tDebug::log(\"doDamage, weapon: \".(get_class($this)).\", target: \".$fire->target->id.\"/\".$system->id.\", totalDmg: \".$totalDmg);\n   83  \n   84  \t\t$negation = $fire->target->getArmourValue($fire, $system);\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\area.php:\n   11  \n   12  \tpublic function doDamage($fire, $roll, $system){\n   13: \t\tDebug::log(\"doDamage, weapon: \".get_class($this).\", target: \".$fire->target->id.\"/\".$system->id);\n   14  \n   15  \t\tif ($system->destroyed){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\em.php:\n   14  \n   15  \tpublic function doDamage($fire, $roll, $system){\n   16: \t\tDebug::log(\"doDamage, weapon: \".get_class($this).\", target: \".$fire->target->id.\"/\".$system->id);\n   17  \n   18  \t\tif ($system->destroyed){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php:\n   23  \n   24  \tpublic function doDamage($fire, $roll, $system){\n   25: \t\tDebug::log(\"doDamage, weapon: \".get_class($this).\", target: \".$fire->target->id.\"/\".$system->id.\": \".$system->name);\n   26  \t\t$totalDmg = $this->getTotalDamage($fire);\n   27  \t\t$print = \"hitting: \";\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php:\n   26  \t\t$fire->hits += $hits;\n   27  \n   28: \t\tDebug::log(\"fireid: \".$fire->id.\", doDamage, weapon: \".get_class($this).\", target: \".$fire->target->id.\", hits: \".$hits);\n   29  \n   30  \n\n12 matches across 6 files\n\n\nSearching 72 files for \"getUnusedPower\"\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 2351  \t\t\telse {\n 2352  \t\t\t\tif (system.getBoostLevel() < system.maxBoost){\n 2353: \t\t\t\t\tvar avail = this.getUnusedPower();\n 2354  \t\t\t\t\tvar need = system.getEffiency();\n 2355  \t\t\t\t\tif (avail >= need){\n ....\n 2360  \t\t}\n 2361  \t\telse if (!(system instanceof Weapon)){\n 2362: \t\t\tif (this.getUnusedPower() >= system.getEffiency()){\n 2363  \t\t\t\treturn true;\n 2364  \t\t\t} else popup(\"You have insufficient power remaining\");\n ....\n 2367  \t}\n 2368  \n 2369: \tthis.getUnusedPower = function(){\n 2370  \t\tfor (var i = 0; i < this.primary.systems.length; i++){\n 2371  \t\t\tif (this.primary.systems[i] instanceof Reactor){\n 2372: \t\t\t\treturn this.primary.systems[i].getUnusedPower();\n 2373  \t\t\t}\n 2374  \t\t}\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  951  Reactor.prototype = Object.create(PrimarySystem.prototype);\n  952  \n  953: Reactor.prototype.getUnusedPower = function(){\n  954  \treturn this.getOutput();\n  955  }\n\n5 matches across 2 files\n\n\nSearching 72 files for \"adjustp\"\n\n0 matches\n\nSearching 72 files for \"adjustd\"\n\nC:\\xampp\\htdocs\\fire\\style.css:\n  280  }\n  281  \n  282: #missionAdjustDiv {\n  283  \tposition: absolute;\n  284  \twidth: 300px;\n  ...\n  289  }\n  290  \n  291: #missionAdjustDiv table {\n  292  \twidth: 100%;\n  293  \tmargin: auto;\n\n2 matches in 1 file\n\n\nSearching 72 files for \"getHitSystem\"\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  522  \t\tfor ($i = 0; $i < sizeof($fire->rolls); $i++){\n  523  \t\t\tif ($fire->rolls[$i] <= $fire->req){\n  524: \t\t\t\t$fire->weapon->doDamage($fire, $fire->rolls[$i], $this->getHitSystem($fire));\n  525  \t\t\t}\n  526  \t\t}\n  ...\n  558  \t}\n  559  \n  560: \tpublic function getHitSystem($fire){\n  561: \t\t//Debug::log(\"getHitSystem \".$this->name);\n  562  \t\t$roll;\n  563  \t\t$current = 0;\n  ...\n  596  \t\t\t}\n  597  \t\t}\n  598: \t\tDebug::log(\"ERROR getHitSystem()\");\n  599  \t}\n  600  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php:\n   31  \t\t$rake = floor($totalDmg / $this->rakes);\n   32  \t\tfor ($j = 0; $j < $this->rakes; $j++){\n   33: \t\t\t$system = $fire->target->getHitSystem($fire);\n   34  \t\t\t$print .= \" \".get_class($system).\" \";\n   35  \t\t\t$destroyed = false;\n\nC:\\xampp\\htdocs\\fire\\shiptest.php:\n   72  \t\t\t\tfor ($j = 0; $j < $shots; $j++){\n   73  \t\t\t//\t\tvar_export($fire);\n   74: \t\t\t\t\t$sys = $ships[$i]->getHitSystem($fire);\n   75  \t\t\t\t\tif ($sys instanceof Hangar){\n   76  \t\t\t\t\t\t$hangar++;\n   ..\n  108  \t\t\t\tfor ($j = 0; $j < $shots; $j++){\n  109  \t\t\t//\t\tvar_export($fire);\n  110: \t\t\t\t\t$sys = $ships[$i]->getHitSystem($fire);\n  111  \t\t\t\t\tif ($sys instanceof Hangar){\n  112  \t\t\t\t\t\t$hangar++;\n\nC:\\xampp\\htdocs\\fire\\test.php:\n   65  \n   66  \t\t\t\t\tfor ($j = 0; $j < 500; $j++){\n   67: \t\t\t\t\t\t$sys = $ships[$i]->getHitSystem($fires[$i]);\n   68  \t\t\t\t\t\tif ($sys instanceof Hangar){\n   69  \t\t\t\t\t\t\t$hangar++;\n\n8 matches across 4 files\n\n\nSearching 72 files for \"determineH\"\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  512  \t\t\t}\n  513  \n  514: \t\t\t$this->determineHits($fire);\n  515  \t\t\t$fire->resolved = 1;\n  516  \t\t}\n  517  \t}\n  518  \n  519: \tpublic function determineHits($fire){\n  520  \t\t$fire->req = $this->calculateToHit($fire);\n  521  \n\n2 matches in 1 file\n\n\nSearching 73 files for \"singleid\"\n\nC:\\xampp\\htdocs\\fire\\server\\classes.php:\n  155  \tpublic $dist = false;\n  156  \tpublic $angle = false;\n  157: \tpublic $singleid = false;\n  158  \t//public $loss = false;\n  159  \t//public $dmgRoll = false;\n\nC:\\xampp\\htdocs\\fire\\server\\mixed.php:\n  135  \t\tfor ($i = 0; $i < sizeof($fire->rolls); $i++){\n  136  \t\t\t$target = $this->getHitSystem($fire);\n  137: \t\t\t$fire->singleid = $target->id;\n  138  \t\t\t$fire->req = $this->calculateToHit($fire);\n  139  \t\t\tif ($fire->rolls[$i] < $fire->req){\n  ...\n  216  \n  217  \tpublic function getHitChance($fire){\n  218: \t\treturn $this->getStructureById($fire->singleid)->getSubHitChance($fire);\n  219  \t}\n  220  \n\n3 matches across 2 files\n\n\nSearching 73 files for \"guns = 1\"\n\nC:\\xampp\\htdocs\\fire\\classes.js:\n  146  \tthis.resolved = data.resolved || 0;\n  147  \tthis.dist;\n  148: \tthis.guns = 1;\n  149  \tthis.animated = false;\n  150  \tthis.anim = [];\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapon.php:\n    7  \tpublic $accDecay;\n    8  \tpublic $shots = 1;\n    9: \tpublic $guns = 1;\n   10  \tpublic $reload = 1;\n   11  \tpublic $powerReq = 2;\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 1572  \tthis.traverse = data.traverse;\n 1573  \tthis.fireOrders = [];\n 1574: \tthis.guns = 1;\n 1575  \tthis.animation = \"explo\";\n 1576  \tthis.exploSize = (this.minDmg + this.maxDmg)/10;\n\n3 matches across 3 files\n\n\nSearching 73 files for \"guns = 2\"\n\nC:\\xampp\\htdocs\\fire\\combattest.php:\n   12  \t\t\t$fire->weapon = $weapon;\n   13  \t\t\t$fire->target = $target;\n   14: \t\t\t$guns = 25;\n   15  \n   16  \t\t\t$totalArmour = 0;\n\n1 match in 1 file\n\n\nSearching 73 files for \"getStructure\"\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n 1025  \t\t\tif (!$this->fires[$i]->resolved){\n 1026  \t\t\t\tif ($this->fires[$i]->shooter->flight){\n 1027: \t\t\t\t\tif ($this->fires[$i]->shooter->getStructureById($this->fires[$i]->weapon->fighterId)->destroyed){\n 1028  \t\t\t\t\t\t$this->fires[$i]->resolved = -1;\n 1029  \t\t\t\t\t}\n ....\n 1070  \t\t\tif (!$this->fires[$i]->resolved){\n 1071  \t\t\t\tif ($this->fires[$i]->shooter->flight == true && $this->fires[$i]->target->flight == false){\n 1072: \t\t\t\t\tif ($this->fires[$i]->shooter->getStructureById($this->fires[$i]->weapon->fighterId)->destroyed){\n 1073  \t\t\t\t\t\tcontinue;\n 1074  \t\t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\mixed.php:\n   58  \t}\n   59  \n   60: \tpublic function getStructureById($id){\n   61  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n   62  \t\t\tif ($this->structures[$i]->id == $id){\n   ..\n  149  \t\n  150  \tpublic function getRemainingIntegrity($fire){\n  151: \t\treturn $this->getStructureById($fire->hitSystem->id)->getRemainingIntegrity();\n  152  \t}\n  153  \n  ...\n  216  \n  217  \tpublic function getHitChance($fire){\n  218: \t\treturn $this->getStructureById($fire->singleid)->getSubHitChance($fire);\n  219  \t}\n  220  \n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  551  \n  552  \tpublic function getArmourElement($fire){\n  553: \t\treturn $this->getStructureById($fire->section);\n  554  \t}\n  555  \n  556  \tpublic function getArmourValue($fire, $hitSystem){\n  557: \t\treturn round($this->getStructureById($fire->section)->getCurrentNegation($fire) * $hitSystem->getArmourMod());\n  558  \t}\n  559  \n  ...\n  566  \t\t$total = $main;\n  567  \n  568: \t\t$struct = $fire->target->getStructureById($fire->section);\n  569  \n  570  \t\tfor ($i = 0; $i < sizeof($struct->systems); $i++){\n  ...\n  811  \t}\n  812  \n  813: \tpublic function getStructureById($id){\n  814  \t\t//Debug::log(\"looking for: \".$id);\n  815  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  ...\n  930  \t}\n  931  \n  932: \tpublic function getStructure(){\n  933  \t\treturn $this->primary->integrity;\n  934  \t}\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  558  \t}\n  559  \n  560: \tthis.getStructureById = function(id){\n  561  \t\tfor (var i = 0; i < this.structures.length; i++){\n  562  \t\t\tif (this.structures[i].id == id){\n\nC:\\xampp\\htdocs\\fire\\test.php:\n   82  \t\t\t\t\t$mass = $ships[$i]->mass;\n   83  \t\t\t\t\t$armour = $ships[$i]->getArmour();\t\t\t\n   84: \t\t\t\t\t$struct = $ships[$i]->getStructure();\n   85  \t\t\t\t\t$negation = array_sum($armour[\"negation\"]) / sizeof($armour[\"negation\"]);\n   86  \n\n12 matches across 5 files\n\n\nSearching 73 files for \"function getStructure\"\n\nC:\\xampp\\htdocs\\fire\\server\\mixed.php:\n   58  \t}\n   59  \n   60: \tpublic function getStructureById($id){\n   61  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n   62  \t\t\tif ($this->structures[$i]->id == $id){\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  811  \t}\n  812  \n  813: \tpublic function getStructureById($id){\n  814  \t\t//Debug::log(\"looking for: \".$id);\n  815  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  ...\n  930  \t}\n  931  \n  932: \tpublic function getStructure(){\n  933  \t\treturn $this->primary->integrity;\n  934  \t}\n\n3 matches across 2 files\n\n\nSearching 73 files for \"function Mis\"\n\nC:\\xampp\\htdocs\\fire\\cam.js:\n   75  }\n   76  \n   77: function Mission(unit){\n   78  \tthis.id = unit.id;\n   79  \tthis.old = unit.mission.type;\n\nC:\\xampp\\htdocs\\fire\\classes.js:\n  297  }\n  298  \n  299: function Missile(data){\n  300  \tSingle.call(this, data);\n  301  \tthis.traverse = data.traverse;\n\n2 matches across 2 files\n\n\nSearching 73 files for \"setNewMissions\"\n\nC:\\xampp\\htdocs\\fire\\postGameData.php:\n   49  \t\t}\n   50  \t\tif (isset($_POST[\"missions\"])){\n   51: \t\t\t$dbManager->setNewMissions($_POST[\"missions\"]);\n   52  \t\t}\n   53  \t\tif (isset($_POST[\"powers\"])){\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n  655  \t\t}\n  656  \n  657: \t\tpublic function setNewMissions($data){\n  658  \t\t\tDebug::log(\"setNewMission s: \".sizeof($data));\n  659  \t\t\t$stmt = $this->connection->prepare(\"\n\n2 matches across 2 files\n\n\nSearching 73 files for \"function Missi\"\n\nC:\\xampp\\htdocs\\fire\\cam.js:\n   75  }\n   76  \n   77: function Mission(unit){\n   78  \tthis.id = unit.id;\n   79  \tthis.old = unit.mission.type;\n\nC:\\xampp\\htdocs\\fire\\classes.js:\n  297  }\n  298  \n  299: function Missile(data){\n  300  \tSingle.call(this, data);\n  301  \tthis.traverse = data.traverse;\n\n2 matches across 2 files\n\n\nSearching 73 files for \"getActiveBallistics\"\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n 1653  \t\t}\n 1654  \n 1655: \t\tpublic function getActiveBallistics($gameid, $turn){\n 1656  \t\t\t//Debug::log(\"DB getBallistics\");\t\n 1657  \t\t\t$stmt = $this->connection->prepare(\"\n\n1 match in 1 file\n\n\nSearching 73 files for \"mission = \"\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n    7  \tthis.baseSize = data.baseSize;\n    8  \tthis.unitSize = data.unitSize;\n    9: \tthis.mission = data.mission || {};\n   10  \tthis.traverse = -3;\n   11  \tthis.patrolFacing = [];\n   ..\n  146  \t}\n  147  \n  148: \tthis.getNewMission = function(){\n  149  \t\tif (this.mission.turn == game.turn){\n  150  \t\t\treturn this.mission;\n  ...\n  195  \t\t\t\t\t.data(\"mission\", this.mission.type)\n  196  \t\t\t/*\t\t.click(function(e){\n  197: \t\t\t\t\t\tvar mission = $(this).data(\"mission\");\n  198  \t\t\t\t\t\tif ($(this).data(\"active\") == 0){\n  199  \t\t\t\t\t\t\t$(this).data(\"active\", 1).html(\"Select New Mission\");\n  ...\n  540  \n  541  Flight.prototype.disableMissionMode = function(){\n  542: \tgame.mission = 0;\n  543  \t$(this.element).find(\".header\").css(\"height\", \"130px\").find(\"tr\").slice(-3)\n  544  \t.each(function(i){\n  ...\n  551  \n  552  Flight.prototype.enableMissionMode = function(){\n  553: \tgame.mission = new Mission(this);\n  554  \t$(this.element).find(\".header\").css(\"height\", \"auto\").find(\"tr\").slice(-3)\n  555  \t.each(function(i){\n\nC:\\xampp\\htdocs\\fire\\game.js:\n   15  \tthis.deploying = false;\n   16  \tthis.flightDeploy = false;\n   17: \tthis.adjustMission = false;\n   18  \tthis.canSubmit = false;\n   19  \tthis.index = 1;\n   ..\n   36  \tthis.animFlight = 0;\n   37  \tthis.animSalvo = 0;\n   38: \tthis.mission = 0;\n   39  \n   40  \tthis.doDeployShip = function(e, ship, pos){\n   ..\n   97  \tthis.enableFlightDeployment = function(){\n   98  \t\tthis.flightDeploy = this.getUnitById(aUnit).getSystemById($(\"#hangarLoadoutDiv\").data(\"systemid\"));\n   99: \t\tvar mission = this.getMissionTypeString(this.flightDeploy.mission);\n  100  \n  101  \t\t$(\"#game\").find(\"#deployOverlay\").find(\"#deployType\").html(\"Select target for </br>\" + mission + \"</br></span>\");\n  ...\n  155  \t}\n  156  \n  157: \tthis.issueMission = function(pos){\n  158  \t\tvar valid = false;\n  159  \t\tvar t = 0;\n  ...\n  197  \t\t\ts.facing = getAngleFromTo(o, dest);\n  198  \t\tvar p = getPointInDirection(20, s.facing, o.x, o.y);\n  199: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.mission.new, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0};\n  200  \n  201  \t\tif (t && o.x == dest.x && o.y == dest.y){\n  ...\n  206  \t\t}\n  207  \t\telse {\n  208: \t\t\ts.mission = mission;\n  209  \t\t\ts.setTarget();\n  210  \t\t\ts.setLayout();\n  ...\n  213  \n  214  \t\ts.disableMissionMode();\n  215: \t\tthis.mission = 0;\n  216  \t\tgame.draw();\n  217  \n  ...\n  245  \t\tvar facing = getAngleFromTo(o, dest);\n  246  \t\tvar p = getPointInDirection(20, facing, o.x, o.y);\n  247: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};\n  248  \n  249  \t\tif (t.id == aUnit){\n\nC:\\xampp\\htdocs\\fire\\mixed.js:\n    3  \tthis.ship = false;\n    4  \tthis.primary = false;\n    5: \tthis.mission = data.mission;\n    6  \tthis.nextStep;\n    7  \tthis.finalStep;\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  503  \t\t\t$a = Math::getAngle($sPos->x, $sPos->y, $tPos->x, $tPos->y);\n  504  \t\t\t$devi = Math::getPointInDirection($shooter->size/3, $a, $sPos->x + mt_rand(-10, 10), $sPos->y + mt_rand(-10, 10));\n  505: \t\t\t$mission = array(\"type\" => 2, \"turn\" => $this->turn, \"targetid\" => $fires[$i]->targetid, \"x\" => $tPos->x, \"y\" => $tPos->y, \"arrived\" => 0);\n  506  \t\t\t$move = array(\"turn\" => $this->turn, \"type\" => \"deploy\", \"dist\" => 0, \"x\" => $devi->x, \"y\" => $devi->y, \"a\" => $a, \"cost\" => 0, \"delay\" => 0, \"costmod\" => 0, \"resolved\" => 0);\n  507  \t\t\t$launchData = array(\"shipid\" => $shooter->id, \"systemid\" => $launcher->id, \"loads\" => array(0 => array(\"launch\" => $fires[$i]->shots, \"name\" => $name)));\n\nC:\\xampp\\htdocs\\fire\\server\\mixed.php:\n    5  \tpublic $primary = false;\n    6  \tpublic $baseImpulse;\n    7: \tpublic $mission = array();\n    8  \tpublic $cost = 0;\n    9  \tpublic $mass = 0;\n   ..\n  129  \n  130  \tpublic function addMissionDB($data){\n  131: \t\t$this->mission = new Mission($data);\n  132  \t}\n  133  \n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 2598  \tthis.range = 75;\n 2599  \tthis.loadout = 1;\n 2600: \tthis.mission = 0;\n 2601  \tthis.hangar = 1;\n 2602  }\n ....\n 2807  \t\ttable.appendChild(tr);\n 2808  \t}\n 2809: \tvar mission = this.getMission();\n 2810  \tvar element = $(\"#hangarLoadoutDiv\");\n 2811  \t\t$(element)\n ....\n 2825  }\n 2826  \n 2827: Hangar.prototype.setMission = function(val){\n 2828: \tthis.mission = val;\n 2829  \n 2830  \t$(\"#game\").find(\"#hangarLoadoutDiv\").find(\"#missionType\").find(\"tr\").each(function(i){\n ....\n 2845  }\n 2846  \n 2847: Hangar.prototype.getMission = function(){\n 2848  \treturn this.mission;\n 2849  }\n\n22 matches across 6 files\n\n\nSearching 73 files for \"getNewMission\"\n\nC:\\xampp\\htdocs\\fire\\ajax.js:\n   83  \t\tvar deployedFlights = [];\n   84  \t\t\tdeployedFlights = game.getDeployedFlights();\n   85: \t\tvar missions = game.getNewMissions();\n   86  \n   87  \t\tvar ew = game.getEWSettings();\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n  146  \t}\n  147  \n  148: \tthis.getNewMission = function(){\n  149  \t\tif (this.mission.turn == game.turn){\n  150  \t\t\treturn this.mission;\n\nC:\\xampp\\htdocs\\fire\\game.js:\n   58  \t}\n   59  \n   60: \tthis.getNewMissions = function(){\n   61  \t\tvar data = [];\n   62  \t\tfor (var i = 0; i < this.ships.length; i++){\n\n3 matches across 3 files\n\n\nSearching 73 files for \"getNewMission\"\n\nC:\\xampp\\htdocs\\fire\\ajax.js:\n   83  \t\tvar deployedFlights = [];\n   84  \t\t\tdeployedFlights = game.getDeployedFlights();\n   85: \t\tvar missions = game.getNewMissions();\n   86  \n   87  \t\tvar ew = game.getEWSettings();\n\nC:\\xampp\\htdocs\\fire\\game.js:\n   58  \t}\n   59  \n   60: \tthis.getNewMissions = function(){\n   61  \t\tvar data = [];\n   62  \t\tfor (var i = 0; i < this.ships.length; i++){\n\n2 matches across 2 files\n\n\nSearching 73 files for \"targetid: \"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  197  \t\t\ts.facing = getAngleFromTo(o, dest);\n  198  \t\tvar p = getPointInDirection(20, s.facing, o.x, o.y);\n  199: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.mission.new, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0};\n  200  \n  201  \t\tif (t && o.x == dest.x && o.y == dest.y){\n  ...\n  245  \t\tvar facing = getAngleFromTo(o, dest);\n  246  \t\tvar p = getPointInDirection(20, facing, o.x, o.y);\n  247: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};\n  248  \n  249  \t\tif (t.id == aUnit){\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  593  \tif (this.odds <= 0){return;}\n  594  \tthis.fireOrders.push(\n  595: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n  596  \t\tshots: 0, req: -1, notes: \"\", hits: -1, resolved: 0}\n  597  \t);\n  ...\n 2028  \n 2029  \tthis.fireOrders.push(\n 2030: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n 2031  \t\tshots: 0, req: -1, notes: \"\", hits: -1, resolved: 0}\n 2032  \t);\n ....\n 2633  Hangar.prototype.setFireOrder = function(targetid){\n 2634  \tthis.fireOrders.push(\n 2635: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n 2636  \t\tshots: 0, req: -1, notes: \"fighterLaunch\", hits: -1, resolved: 0}\n 2637  \t);\n\n5 matches across 2 files\n\n\nSearching 73 files for \"targetid: \"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  197  \t\t\ts.facing = getAngleFromTo(o, dest);\n  198  \t\tvar p = getPointInDirection(20, s.facing, o.x, o.y);\n  199: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.mission.new, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};\n  200  \n  201  \t\tif (t && o.x == dest.x && o.y == dest.y){\n  ...\n  245  \t\tvar facing = getAngleFromTo(o, dest);\n  246  \t\tvar p = getPointInDirection(20, facing, o.x, o.y);\n  247: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};\n  248  \n  249  \t\tif (t.id == aUnit){\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  593  \tif (this.odds <= 0){return;}\n  594  \tthis.fireOrders.push(\n  595: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n  596  \t\tshots: 0, req: -1, notes: \"\", hits: -1, resolved: 0}\n  597  \t);\n  ...\n 2028  \n 2029  \tthis.fireOrders.push(\n 2030: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n 2031  \t\tshots: 0, req: -1, notes: \"\", hits: -1, resolved: 0}\n 2032  \t);\n ....\n 2633  Hangar.prototype.setFireOrder = function(targetid){\n 2634  \tthis.fireOrders.push(\n 2635: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n 2636  \t\tshots: 0, req: -1, notes: \"fighterLaunch\", hits: -1, resolved: 0}\n 2637  \t);\n\n5 matches across 2 files\n\n\nSearching 73 files for \"targetid: \"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  197  \t\t\ts.facing = getAngleFromTo(o, dest);\n  198  \t\tvar p = getPointInDirection(20, s.facing, o.x, o.y);\n  199: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.mission.new, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};\n  200  \n  201  \t\tif (t && o.x == dest.x && o.y == dest.y){\n  ...\n  245  \t\tvar facing = getAngleFromTo(o, dest);\n  246  \t\tvar p = getPointInDirection(20, facing, o.x, o.y);\n  247: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};\n  248  \n  249  \t\tif (t.id == aUnit){\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  593  \tif (this.odds <= 0){return;}\n  594  \tthis.fireOrders.push(\n  595: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n  596  \t\tshots: 0, req: -1, notes: \"\", hits: -1, resolved: 0}\n  597  \t);\n  ...\n 2028  \n 2029  \tthis.fireOrders.push(\n 2030: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n 2031  \t\tshots: 0, req: -1, notes: \"\", hits: -1, resolved: 0}\n 2032  \t);\n ....\n 2633  Hangar.prototype.setFireOrder = function(targetid){\n 2634  \tthis.fireOrders.push(\n 2635: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n 2636  \t\tshots: 0, req: -1, notes: \"fighterLaunch\", hits: -1, resolved: 0}\n 2637  \t);\n\n5 matches across 2 files\n\n\nSearching 73 files for \"targetid: \"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  197  \t\t\ts.facing = getAngleFromTo(o, dest);\n  198  \t\tvar p = getPointInDirection(20, s.facing, o.x, o.y);\n  199: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.mission.new, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};\n  200  \n  201  \t\tif (t && o.x == dest.x && o.y == dest.y){\n  ...\n  245  \t\tvar facing = getAngleFromTo(o, dest);\n  246  \t\tvar p = getPointInDirection(20, facing, o.x, o.y);\n  247: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};\n  248  \n  249  \t\tif (t.id == aUnit){\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  593  \tif (this.odds <= 0){return;}\n  594  \tthis.fireOrders.push(\n  595: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n  596  \t\tshots: 0, req: -1, notes: \"\", hits: -1, resolved: 0}\n  597  \t);\n  ...\n 2028  \n 2029  \tthis.fireOrders.push(\n 2030: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n 2031  \t\tshots: 0, req: -1, notes: \"\", hits: -1, resolved: 0}\n 2032  \t);\n ....\n 2633  Hangar.prototype.setFireOrder = function(targetid){\n 2634  \tthis.fireOrders.push(\n 2635: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n 2636  \t\tshots: 0, req: -1, notes: \"fighterLaunch\", hits: -1, resolved: 0}\n 2637  \t);\n\n5 matches across 2 files\n\n\nSearching 73 files for \"per cycle\"\n\nC:\\xampp\\htdocs\\fire\\game.php:\n  445  \t\t\t</div>\n  446  \t\t\t<div class=\"header\">\n  447: \t\t\t\tCan launch up to <span id=\"launchRate\"></span> units per cycle.\n  448  \t\t\t</div>\n  449  \t\t\t<div class=\"header\">\n\nC:\\xampp\\htdocs\\fire\\gameSetup.php:\n  168  \t\t\t</div>\n  169  \t\t\t<div class=\"header\">\n  170: \t\t\t\tCan launch up to <span id=\"launchRate\"></span> units per cycle.\n  171  \t\t\t</div>\n  172  \t\t\t<div class=\"header\">\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 1438  \t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Thrust\")).append($(\"<td>\").html(this.getBallImpulse())));\n 1439  \t\t\t//$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Launch Rate\")).append($(\"<td>\").html(\"<span class='red' id='detailShots'>\" + this.getOutput() + \"</span> / \" + this.launchRate[this.ammo])));\n 1440: \t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Launch Rate\")).append($(\"<td>\").html(\"Up to <span class='red'>\" + this.launchRate[this.ammo] + \"</span> per cycle\")));\n 1441  \t\t}\n 1442  \t}\n ....\n 3072  \t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Integrity\")).append($(\"<td>\").html(this.getRemainingIntegrity() + \" / \" + this.integrity)));\n 3073  \t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Armour\")).append($(\"<td>\").html(this.getMount())));\n 3074: \t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Launch Rate\")).append($(\"<td>\").html(this.effiency + \" per cycle\")));\n 3075  \t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Base Power Req\")).append($(\"<td>\").html(this.powerReq)));\n 3076  \n\n4 matches across 3 files\n\n\nSearching 73 files for \"startGame\"\n\nC:\\xampp\\htdocs\\fire\\ajax.js:\n  239  \t},\n  240  \n  241: \tstartGame: function(gameid, callback){\n  242  \t\t$.ajax({\n  243  \t\t\ttype: \"POST\",\n\nC:\\xampp\\htdocs\\fire\\lobby.php:\n   25  \t}\n   26  \n   27: //\t$dbManager->startGame(2);\n   28  \n   29  \t//function __construct($id, $userid, $classname, $x, $y, $facing){\n\nC:\\xampp\\htdocs\\fire\\postGameData.php:\n   26  \t\t\tif ($dbManager->processInitialBuy($_POST[\"userid\"], $_POST[\"gameid\"], $_POST[\"ships\"], $rem, $_POST[\"ships\"][0][\"faction\"])) {\n   27  \t\t\t\tif ($dbManager->gameIsReady($_POST[\"gameid\"])) {\n   28: \t\t\t\t\tif ($dbManager->startGame($_POST[\"gameid\"])) {\n   29  \t\t\t\t\t\theader(\"Location: game.php?gameid=\".$_POST[\"gameid\"]);\n   30  \t\t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n  523  \t\t}\n  524  \n  525: \t\tpublic function startGame($gameid){\n  526  \t\t\t\n  527  \t\t\t$players = $this->getPlayersInGame($gameid);\n\n4 matches across 4 files\n\n\nSearching 73 files for \"startGame\"\n\nC:\\xampp\\htdocs\\fire\\ajax.js:\n  239  \t},\n  240  \n  241: \tstartGame: function(gameid, callback){\n  242  \t\t$.ajax({\n  243  \t\t\ttype: \"POST\",\n\nC:\\xampp\\htdocs\\fire\\lobby.php:\n   25  \t}\n   26  \n   27: //\t$dbManager->startGame(2);\n   28  \n   29  \t//function __construct($id, $userid, $classname, $x, $y, $facing){\n\nC:\\xampp\\htdocs\\fire\\postGameData.php:\n   26  \t\t\tif ($dbManager->processInitialBuy($_POST[\"userid\"], $_POST[\"gameid\"], $_POST[\"ships\"], $rem, $_POST[\"ships\"][0][\"faction\"])) {\n   27  \t\t\t\tif ($dbManager->gameIsReady($_POST[\"gameid\"])) {\n   28: \t\t\t\t\tif ($dbManager->startGame($_POST[\"gameid\"])) {\n   29  \t\t\t\t\t\theader(\"Location: game.php?gameid=\".$_POST[\"gameid\"]);\n   30  \t\t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n  523  \t\t}\n  524  \n  525: \t\tpublic function startGame($gameid){\n  526  \t\t\t\n  527  \t\t\t$players = $this->getPlayersInGame($gameid);\n\n4 matches across 4 files\n\n\nSearching 73 files for \"gameIsReady\"\n\nC:\\xampp\\htdocs\\fire\\lobby.php:\n   35  \t\t\t//$manager = new Manager($_SESSION[\"userid\"]);\n   36  \t\t}\n   37: \t\telse if ($dbManager->gameisReady($myGames[$i][\"id\"])){\n   38  \t\t\t$dbmanager->startGame($myGames[$i][\"id\"]);\n   39  \t\t\t$ongoingGames[] = $myGames[$i];\n\nC:\\xampp\\htdocs\\fire\\postGameData.php:\n   25  \t\tif ($rem >= 0){\n   26  \t\t\tif ($dbManager->processInitialBuy($_POST[\"userid\"], $_POST[\"gameid\"], $_POST[\"ships\"], $rem, $_POST[\"ships\"][0][\"faction\"])) {\n   27: \t\t\t\tif ($dbManager->gameIsReady($_POST[\"gameid\"])) {\n   28  \t\t\t\t\tif ($dbManager->startGame($_POST[\"gameid\"])) {\n   29  \t\t\t\t\t\theader(\"Location: game.php?gameid=\".$_POST[\"gameid\"]);\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n  492  \t\t}\n  493  \n  494: \t\tpublic function gameIsReady($gameid){\n  495  \t\t\t$stmt = $this->connection->prepare(\"\n  496  \t\t\t\tSELECT playerstatus.status from playerstatus\n\n3 matches across 3 files\n",
+			"file": "mixed.js",
 			"settings":
 			{
-				"buffer_size": 34588,
+				"buffer_size": 13580,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Searching 71 files for \"this.create\"\n\nC:\\xampp\\htdocs\\fire\\classes.js:\n  278  \t//this.html = this.type + \": -\" + this.value * 100 + \"%\"; \n  279  \n  280: \tthis.create = function(){\n  281  \t\tvar html = \"\";\n  282  \t\tvar mod = 1;\n  ...\n  366  \n  367  \n  368: \t//this.create();\n  369  }\n  370  \n\nC:\\xampp\\htdocs\\fire\\flights.js:\n  170  \t}\n  171  \n  172: \tthis.createBaseDiv = function(){\n  173  \t\tvar owner = \"friendly\";\n  174  \t\tif (game.phase > -2 && this.userid != game.userid){owner = \"hostile\";}\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  933  \t}\n  934  \t\n  935: \tthis.create = function(){\n  936  \t\t$(\"#phaseSwitchDiv\").show();\n  937  \n  ...\n 2221  \t}\n 2222  \n 2223: \tthis.createCombatLogEntry = function(fire){\n 2224  \t\tif (fire == undefined){return;}\n 2225  \t\tvar shots = 0;\n\nC:\\xampp\\htdocs\\fire\\salvo.js:\n  326  \t}\n  327  \n  328: \tthis.createBaseDiv = function(){\n  329  \t\tvar owner = \"friendly\";\n  330  \t\tif (this.userid != game.userid){owner = \"hostile\";}\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 1868  \t}\n 1869  \t\n 1870: \tthis.createBaseDiv = function(){\n 1871  \t\tvar owner = \"friendly\";\n 1872  \t\tif (game.phase > -2 && this.userid != game.userid){owner = \"hostile\";}\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 2180  \tthis.loadout = 1;\n 2181  \n 2182: \tthis.create(system.loads);\n 2183  }\n 2184  Launcher.prototype = Object.create(Weapon.prototype);\n\n8 matches across 6 files\n\n\nSearching 71 files for \"setPreMovePosition =\"\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 2770  }\n 2771  \n 2772: Ship.prototype.setPreMovePosition = function(){\n 2773  \tthis.drawX = this.x;\n 2774  \tthis.drawY = this.y;\n\n1 match in 1 file\n\n\nSearching 71 files for \"setPostMovePosition\"\n\nC:\\xampp\\htdocs\\fire\\game.php:\n  631  \t\t\t\t\t\t}\n  632  \t\t\t\t\t\tfor (var i = 0; i < game.ballistics.length; i++){\n  633: \t\t\t\t\t\t\tgame.ballistics[i].setPostMovePosition();\n  634  \t\t\t\t\t\t}\n  635  \t\t\t\t\t\tgame.fireResolved();\n  ...\n  642  \t\t\t\t\t\t\tgame.ships[i].deployed = true;\n  643  \t\t\t\t\t\t\tif (game.ships[i].flight){\n  644: \t\t\t\t\t\t\t\tgame.ships[i].setPostMovePosition();\n  645  \t\t\t\t\t\t\t}\n  646  \t\t\t\t\t\t\telse {\n  647: \t\t\t\t\t\t\t\tgame.ships[i].setPostMovePosition();\n  648  \t\t\t\t\t\t\t\tgame.ships[i].setPostMoveFacing();\n  649  \t\t\t\t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n   62  \t\t\t\treturn false;\n   63  \t\t\t}\n   64: \t\t\tele.setPostMovePosition();\n   65  \t\t\treturn true;\n   66  \t\t}\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 2775  }\n 2776  \n 2777: Ship.prototype.setPostMovePosition = function(){\n 2778  \tthis.drawX = this.actions[this.actions.length-1].x;\n 2779  \tthis.drawY = this.actions[this.actions.length-1].y;\n ....\n 2786  \t\n 2787  \tif (game.phase > 1){\n 2788: \t\tthis.setPostMovePosition();\n 2789  \t\tthis.setPostMoveFacing();\n 2790  \t}\n\n6 matches across 3 files\n\n\nSearching 71 files for \"getPowerOrders\"\n\nC:\\xampp\\htdocs\\fire\\ajax.js:\n  111  \t\t\t\t\t}\n  112  \t\t\t\t}\n  113: \t\t\t\tvar power = game.ships[i].getPowerOrders();\n  114  \t\t\t\tfor (var j = 0; j < power.length; j++){\n  115  \t\t\t\t\tpowers.push(power[j]);\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 2668  \t}\n 2669  \n 2670: \tthis.getPowerOrders = function(){\n 2671  \t\tvar powers = [];\n 2672  \t\tfor (var i = 0; i < this.structures.length; i++){\n\n2 matches across 2 files\n\n\nSearching 71 files for \"setPostMoveImage\"\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n  826  \telse if (this.mission.arrived){\n  827  \t\tif (this.mission.arrived < game.turn){\n  828: \t\t\tthis.setPostMoveImage();\n  829  \t\t} \n  830  \t\telse if (this.mission.arrived == game.turn){\n  831  \t\t\tif (game.phase < 3){\n  832  \t\t\t\tthis.setPreMoveImage();\n  833: \t\t\t} else this.setPostMoveImage();\n  834  \n  835  \t\t}\n  ...\n  865  }\n  866  \n  867: Flight.prototype.setPostMoveImage = function(){\n  868  \tvar size = 12;\n  869  \tvar t = document.createElement(\"canvas\");\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  785  \t\t\t\t\tif (this.ships[i].mission.type == 1){\n  786  \t\t\t\t\t\tthis.ships[i].setPostMoveSize();\n  787: \t\t\t\t\t\tthis.ships[i].setPostMoveImage();\n  788  \t\t\t\t\t}\n  789  \t\t\t\t\telse if (this.ships[i].mission.type > 1){\n  ...\n  792  \t\t\t\t}\n  793  \t\t\t\t//this.ships[i].setPostMoveSize();\n  794: \t\t\t\t//this.ships[i].setPostMoveImage();\n  795  \t\t\t}\n  796  \t\t}\n\n5 matches across 2 files\n\n\nSearching 71 files for \"drawX =\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n 1562  \t\t\t\t\t\t\t\t//\tconsole.log(\"anim true\");\n 1563  \t\t\t\t\t\t\t\t\tgame.ships[i].actions[j].animated = true;\n 1564: \t\t\t\t\t\t\t\t\tgame.ships[i].drawX = action.x;\n 1565  \t\t\t\t\t\t\t\t\tgame.ships[i].drawY = action.y;\n 1566  \t\t\t\t\t\t\t\t}\n ....\n 1583  \n 1584  \t\t\t\t\t\t\tfor (var k = 0; k < game.ships[i].attachAnims.length; k++){\n 1585: \t\t\t\t\t\t\t\tgame.ships[i].attachAnims[k].drawX = game.ships[i].drawX;\n 1586  \t\t\t\t\t\t\t\tgame.ships[i].attachAnims[k].drawY = game.ships[i].drawY;\n 1587  \t\t\t\t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n   46  \tthis.deployed;\n   47  \tthis.drawFacing = 0;\n   48: \tthis.drawX = 0;\n   49  \tthis.drawY = 0;\n   50  \n   ..\n  412  \t\t\tthis.x = pos.x;\n  413  \t\t\tthis.y = pos.y;\n  414: \t\t\tthis.drawX = pos.x;\n  415  \t\t\tthis.drawY = pos.y;\n  416  \t\t}\n  ...\n  430  \t\t\tthis.x = pos.x;\n  431  \t\t\tthis.y = pos.y;\n  432: \t\t\tthis.drawX = pos.x;\n  433  \t\t\tthis.drawY = pos.y;\n  434  \n  ...\n 2728  \n 2729  Ship.prototype.setPreMovePosition = function(){\n 2730: \tthis.drawX = this.x;\n 2731  \tthis.drawY = this.y;\n 2732  }\n 2733  \n 2734  Ship.prototype.setPostMovePosition = function(){\n 2735: \tthis.drawX = this.actions[this.actions.length-1].x;\n 2736  \tthis.drawY = this.actions[this.actions.length-1].y;\n 2737  }\n\n7 matches across 2 files\n\n\nSearching 72 files for \"doDraw = 0\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  208  \t\t\tmission.arrived = game.turn-1;\n  209  \t\t\tmission.turn = game.turn-1;\n  210: \t\t\ts.doDraw = 0;\n  211  \t\t\tt.attachFlight(s.id);\n  212  \t\t}\n  ...\n  788  \t\t\t\t\t}\n  789  \t\t\t\t\telse if (this.ships[i].mission.type > 1){\n  790: \t\t\t\t\t\tthis.ships[i].doDraw = 0;\n  791  \t\t\t\t\t}\n  792  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\mixed.js:\n  121  \t\tif (this.mission.type == 1){return;}\n  122  \t\telse if (this.mission.arrived < game.turn){\n  123: \t\t\tthis.doDraw = 0;\n  124  \t\t} else if (game.phase > 2 && this.mission.arrived == game.turn){\n  125: \t\t\tthis.doDraw = 0;\n  126  \t\t}\n  127  \t}\n\n4 matches across 2 files\n\n\nSearching 72 files for \"doDamage, \"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n   14  resolveFireOrder - ID 29, shooter: Omega #11 vs Artemis #12, w: LightPulse #30, guns: 1\n   15  CALCULATE TO HIT - angle: 346, base: 72.335111111111, trav: 0, total multi: 1, dist/range: 158/29, req: 43.335111111111\n   16: fireid: 29, doDamage, weapon: LightPulse, target: 12, hits: 3\n   17  resolveFireOrder - ID 30, shooter: Omega #11 vs Artemis #12, w: LightPulse #31, guns: 1\n   18  CALCULATE TO HIT - angle: 346, base: 72.335111111111, trav: 0, total multi: 1, dist/range: 158/29, req: 43.335111111111\n   ..\n   21  resolveFireOrder - ID 22, shooter: Artemis #12 vs Flight #13, w: LightPulse #12, guns: 1\n   22  CALCULATE TO HIT - angle: 77, base: 28, trav: 0, total multi: 1.5, dist/range: 0/0, req: 42\n   23: fireid: 22, doDamage, weapon: LightPulse, target: 13, hits: 3\n   24   => target system Thunderbolt #15 was destroyed, rem: 31, doing: 14, OK for: 17 dmg\n   25  resolveFireOrder - ID 23, shooter: Artemis #12 vs Flight #13, w: LightPulse #13, guns: 1\n   26  CALCULATE TO HIT - angle: 100, base: 28, trav: 0, total multi: 1.5, dist/range: 0/0, req: 42\n   27: fireid: 23, doDamage, weapon: LightPulse, target: 13, hits: 3\n   28   => target system Thunderbolt #11 was destroyed, rem: 31, doing: 12, OK for: 19 dmg\n   29  DB updateFireOrders: 10\n   ..\n   31  insertServerFireOrder: 1\n   32  resolveFireOrder - ID 32, shooter: Salvo #14 vs Omega #5, w: Warhead #2, guns: 4\n   33: doDamage, weapon: Warhead, target: 11/-1, totalDmg: 45\n   34: doDamage, weapon: Warhead, target: 11/10, totalDmg: 40\n   35: doDamage, weapon: Warhead, target: 11/-1, totalDmg: 43\n   36: doDamage, weapon: Warhead, target: 11/10, totalDmg: 39\n   37  = testCriticals for Omega, #11, turn: 4\n   38  = testCriticals for Flight, #13, turn: 4\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapon.php:\n   80  \t\t$totalDmg = $this->getTotalDamage($fire);\n   81  \t\t$remInt = $system->getRemainingIntegrity();\n   82: \t\tDebug::log(\"doDamage, weapon: \".(get_class($this)).\", target: \".$fire->target->id.\"/\".$system->id.\", totalDmg: \".$totalDmg);\n   83  \n   84  \t\t$negation = $fire->target->getArmourValue($fire, $system);\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\area.php:\n   11  \n   12  \tpublic function doDamage($fire, $roll, $system){\n   13: \t\tDebug::log(\"doDamage, weapon: \".get_class($this).\", target: \".$fire->target->id.\"/\".$system->id);\n   14  \n   15  \t\tif ($system->destroyed){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\em.php:\n   14  \n   15  \tpublic function doDamage($fire, $roll, $system){\n   16: \t\tDebug::log(\"doDamage, weapon: \".get_class($this).\", target: \".$fire->target->id.\"/\".$system->id);\n   17  \n   18  \t\tif ($system->destroyed){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php:\n   23  \n   24  \tpublic function doDamage($fire, $roll, $system){\n   25: \t\tDebug::log(\"doDamage, weapon: \".get_class($this).\", target: \".$fire->target->id.\"/\".$system->id.\": \".$system->name);\n   26  \t\t$totalDmg = $this->getTotalDamage($fire);\n   27  \t\t$print = \"hitting: \";\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php:\n   26  \t\t$fire->hits += $hits;\n   27  \n   28: \t\tDebug::log(\"fireid: \".$fire->id.\", doDamage, weapon: \".get_class($this).\", target: \".$fire->target->id.\", hits: \".$hits);\n   29  \n   30  \n\n12 matches across 6 files\n\n\nSearching 72 files for \"getUnusedPower\"\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 2351  \t\t\telse {\n 2352  \t\t\t\tif (system.getBoostLevel() < system.maxBoost){\n 2353: \t\t\t\t\tvar avail = this.getUnusedPower();\n 2354  \t\t\t\t\tvar need = system.getEffiency();\n 2355  \t\t\t\t\tif (avail >= need){\n ....\n 2360  \t\t}\n 2361  \t\telse if (!(system instanceof Weapon)){\n 2362: \t\t\tif (this.getUnusedPower() >= system.getEffiency()){\n 2363  \t\t\t\treturn true;\n 2364  \t\t\t} else popup(\"You have insufficient power remaining\");\n ....\n 2367  \t}\n 2368  \n 2369: \tthis.getUnusedPower = function(){\n 2370  \t\tfor (var i = 0; i < this.primary.systems.length; i++){\n 2371  \t\t\tif (this.primary.systems[i] instanceof Reactor){\n 2372: \t\t\t\treturn this.primary.systems[i].getUnusedPower();\n 2373  \t\t\t}\n 2374  \t\t}\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  951  Reactor.prototype = Object.create(PrimarySystem.prototype);\n  952  \n  953: Reactor.prototype.getUnusedPower = function(){\n  954  \treturn this.getOutput();\n  955  }\n\n5 matches across 2 files\n\n\nSearching 72 files for \"adjustp\"\n\n0 matches\n\nSearching 72 files for \"adjustd\"\n\nC:\\xampp\\htdocs\\fire\\style.css:\n  280  }\n  281  \n  282: #missionAdjustDiv {\n  283  \tposition: absolute;\n  284  \twidth: 300px;\n  ...\n  289  }\n  290  \n  291: #missionAdjustDiv table {\n  292  \twidth: 100%;\n  293  \tmargin: auto;\n\n2 matches in 1 file\n\n\nSearching 72 files for \"getHitSystem\"\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  522  \t\tfor ($i = 0; $i < sizeof($fire->rolls); $i++){\n  523  \t\t\tif ($fire->rolls[$i] <= $fire->req){\n  524: \t\t\t\t$fire->weapon->doDamage($fire, $fire->rolls[$i], $this->getHitSystem($fire));\n  525  \t\t\t}\n  526  \t\t}\n  ...\n  558  \t}\n  559  \n  560: \tpublic function getHitSystem($fire){\n  561: \t\t//Debug::log(\"getHitSystem \".$this->name);\n  562  \t\t$roll;\n  563  \t\t$current = 0;\n  ...\n  596  \t\t\t}\n  597  \t\t}\n  598: \t\tDebug::log(\"ERROR getHitSystem()\");\n  599  \t}\n  600  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php:\n   31  \t\t$rake = floor($totalDmg / $this->rakes);\n   32  \t\tfor ($j = 0; $j < $this->rakes; $j++){\n   33: \t\t\t$system = $fire->target->getHitSystem($fire);\n   34  \t\t\t$print .= \" \".get_class($system).\" \";\n   35  \t\t\t$destroyed = false;\n\nC:\\xampp\\htdocs\\fire\\shiptest.php:\n   72  \t\t\t\tfor ($j = 0; $j < $shots; $j++){\n   73  \t\t\t//\t\tvar_export($fire);\n   74: \t\t\t\t\t$sys = $ships[$i]->getHitSystem($fire);\n   75  \t\t\t\t\tif ($sys instanceof Hangar){\n   76  \t\t\t\t\t\t$hangar++;\n   ..\n  108  \t\t\t\tfor ($j = 0; $j < $shots; $j++){\n  109  \t\t\t//\t\tvar_export($fire);\n  110: \t\t\t\t\t$sys = $ships[$i]->getHitSystem($fire);\n  111  \t\t\t\t\tif ($sys instanceof Hangar){\n  112  \t\t\t\t\t\t$hangar++;\n\nC:\\xampp\\htdocs\\fire\\test.php:\n   65  \n   66  \t\t\t\t\tfor ($j = 0; $j < 500; $j++){\n   67: \t\t\t\t\t\t$sys = $ships[$i]->getHitSystem($fires[$i]);\n   68  \t\t\t\t\t\tif ($sys instanceof Hangar){\n   69  \t\t\t\t\t\t\t$hangar++;\n\n8 matches across 4 files\n\n\nSearching 72 files for \"determineH\"\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  512  \t\t\t}\n  513  \n  514: \t\t\t$this->determineHits($fire);\n  515  \t\t\t$fire->resolved = 1;\n  516  \t\t}\n  517  \t}\n  518  \n  519: \tpublic function determineHits($fire){\n  520  \t\t$fire->req = $this->calculateToHit($fire);\n  521  \n\n2 matches in 1 file\n\n\nSearching 73 files for \"singleid\"\n\nC:\\xampp\\htdocs\\fire\\server\\classes.php:\n  155  \tpublic $dist = false;\n  156  \tpublic $angle = false;\n  157: \tpublic $singleid = false;\n  158  \t//public $loss = false;\n  159  \t//public $dmgRoll = false;\n\nC:\\xampp\\htdocs\\fire\\server\\mixed.php:\n  135  \t\tfor ($i = 0; $i < sizeof($fire->rolls); $i++){\n  136  \t\t\t$target = $this->getHitSystem($fire);\n  137: \t\t\t$fire->singleid = $target->id;\n  138  \t\t\t$fire->req = $this->calculateToHit($fire);\n  139  \t\t\tif ($fire->rolls[$i] < $fire->req){\n  ...\n  216  \n  217  \tpublic function getHitChance($fire){\n  218: \t\treturn $this->getStructureById($fire->singleid)->getSubHitChance($fire);\n  219  \t}\n  220  \n\n3 matches across 2 files\n\n\nSearching 73 files for \"guns = 1\"\n\nC:\\xampp\\htdocs\\fire\\classes.js:\n  146  \tthis.resolved = data.resolved || 0;\n  147  \tthis.dist;\n  148: \tthis.guns = 1;\n  149  \tthis.animated = false;\n  150  \tthis.anim = [];\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapon.php:\n    7  \tpublic $accDecay;\n    8  \tpublic $shots = 1;\n    9: \tpublic $guns = 1;\n   10  \tpublic $reload = 1;\n   11  \tpublic $powerReq = 2;\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 1572  \tthis.traverse = data.traverse;\n 1573  \tthis.fireOrders = [];\n 1574: \tthis.guns = 1;\n 1575  \tthis.animation = \"explo\";\n 1576  \tthis.exploSize = (this.minDmg + this.maxDmg)/10;\n\n3 matches across 3 files\n\n\nSearching 73 files for \"guns = 2\"\n\nC:\\xampp\\htdocs\\fire\\combattest.php:\n   12  \t\t\t$fire->weapon = $weapon;\n   13  \t\t\t$fire->target = $target;\n   14: \t\t\t$guns = 25;\n   15  \n   16  \t\t\t$totalArmour = 0;\n\n1 match in 1 file\n\n\nSearching 73 files for \"getStructure\"\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n 1025  \t\t\tif (!$this->fires[$i]->resolved){\n 1026  \t\t\t\tif ($this->fires[$i]->shooter->flight){\n 1027: \t\t\t\t\tif ($this->fires[$i]->shooter->getStructureById($this->fires[$i]->weapon->fighterId)->destroyed){\n 1028  \t\t\t\t\t\t$this->fires[$i]->resolved = -1;\n 1029  \t\t\t\t\t}\n ....\n 1070  \t\t\tif (!$this->fires[$i]->resolved){\n 1071  \t\t\t\tif ($this->fires[$i]->shooter->flight == true && $this->fires[$i]->target->flight == false){\n 1072: \t\t\t\t\tif ($this->fires[$i]->shooter->getStructureById($this->fires[$i]->weapon->fighterId)->destroyed){\n 1073  \t\t\t\t\t\tcontinue;\n 1074  \t\t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\mixed.php:\n   58  \t}\n   59  \n   60: \tpublic function getStructureById($id){\n   61  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n   62  \t\t\tif ($this->structures[$i]->id == $id){\n   ..\n  149  \t\n  150  \tpublic function getRemainingIntegrity($fire){\n  151: \t\treturn $this->getStructureById($fire->hitSystem->id)->getRemainingIntegrity();\n  152  \t}\n  153  \n  ...\n  216  \n  217  \tpublic function getHitChance($fire){\n  218: \t\treturn $this->getStructureById($fire->singleid)->getSubHitChance($fire);\n  219  \t}\n  220  \n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  551  \n  552  \tpublic function getArmourElement($fire){\n  553: \t\treturn $this->getStructureById($fire->section);\n  554  \t}\n  555  \n  556  \tpublic function getArmourValue($fire, $hitSystem){\n  557: \t\treturn round($this->getStructureById($fire->section)->getCurrentNegation($fire) * $hitSystem->getArmourMod());\n  558  \t}\n  559  \n  ...\n  566  \t\t$total = $main;\n  567  \n  568: \t\t$struct = $fire->target->getStructureById($fire->section);\n  569  \n  570  \t\tfor ($i = 0; $i < sizeof($struct->systems); $i++){\n  ...\n  811  \t}\n  812  \n  813: \tpublic function getStructureById($id){\n  814  \t\t//Debug::log(\"looking for: \".$id);\n  815  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  ...\n  930  \t}\n  931  \n  932: \tpublic function getStructure(){\n  933  \t\treturn $this->primary->integrity;\n  934  \t}\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  558  \t}\n  559  \n  560: \tthis.getStructureById = function(id){\n  561  \t\tfor (var i = 0; i < this.structures.length; i++){\n  562  \t\t\tif (this.structures[i].id == id){\n\nC:\\xampp\\htdocs\\fire\\test.php:\n   82  \t\t\t\t\t$mass = $ships[$i]->mass;\n   83  \t\t\t\t\t$armour = $ships[$i]->getArmour();\t\t\t\n   84: \t\t\t\t\t$struct = $ships[$i]->getStructure();\n   85  \t\t\t\t\t$negation = array_sum($armour[\"negation\"]) / sizeof($armour[\"negation\"]);\n   86  \n\n12 matches across 5 files\n\n\nSearching 73 files for \"function getStructure\"\n\nC:\\xampp\\htdocs\\fire\\server\\mixed.php:\n   58  \t}\n   59  \n   60: \tpublic function getStructureById($id){\n   61  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n   62  \t\t\tif ($this->structures[$i]->id == $id){\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  811  \t}\n  812  \n  813: \tpublic function getStructureById($id){\n  814  \t\t//Debug::log(\"looking for: \".$id);\n  815  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  ...\n  930  \t}\n  931  \n  932: \tpublic function getStructure(){\n  933  \t\treturn $this->primary->integrity;\n  934  \t}\n\n3 matches across 2 files\n\n\nSearching 73 files for \"function Mis\"\n\nC:\\xampp\\htdocs\\fire\\cam.js:\n   75  }\n   76  \n   77: function Mission(unit){\n   78  \tthis.id = unit.id;\n   79  \tthis.old = unit.mission.type;\n\nC:\\xampp\\htdocs\\fire\\classes.js:\n  297  }\n  298  \n  299: function Missile(data){\n  300  \tSingle.call(this, data);\n  301  \tthis.traverse = data.traverse;\n\n2 matches across 2 files\n\n\nSearching 73 files for \"setNewMissions\"\n\nC:\\xampp\\htdocs\\fire\\postGameData.php:\n   49  \t\t}\n   50  \t\tif (isset($_POST[\"missions\"])){\n   51: \t\t\t$dbManager->setNewMissions($_POST[\"missions\"]);\n   52  \t\t}\n   53  \t\tif (isset($_POST[\"powers\"])){\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n  655  \t\t}\n  656  \n  657: \t\tpublic function setNewMissions($data){\n  658  \t\t\tDebug::log(\"setNewMission s: \".sizeof($data));\n  659  \t\t\t$stmt = $this->connection->prepare(\"\n\n2 matches across 2 files\n\n\nSearching 73 files for \"function Missi\"\n\nC:\\xampp\\htdocs\\fire\\cam.js:\n   75  }\n   76  \n   77: function Mission(unit){\n   78  \tthis.id = unit.id;\n   79  \tthis.old = unit.mission.type;\n\nC:\\xampp\\htdocs\\fire\\classes.js:\n  297  }\n  298  \n  299: function Missile(data){\n  300  \tSingle.call(this, data);\n  301  \tthis.traverse = data.traverse;\n\n2 matches across 2 files\n\n\nSearching 73 files for \"getActiveBallistics\"\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n 1653  \t\t}\n 1654  \n 1655: \t\tpublic function getActiveBallistics($gameid, $turn){\n 1656  \t\t\t//Debug::log(\"DB getBallistics\");\t\n 1657  \t\t\t$stmt = $this->connection->prepare(\"\n\n1 match in 1 file\n\n\nSearching 73 files for \"mission = \"\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n    7  \tthis.baseSize = data.baseSize;\n    8  \tthis.unitSize = data.unitSize;\n    9: \tthis.mission = data.mission || {};\n   10  \tthis.traverse = -3;\n   11  \tthis.patrolFacing = [];\n   ..\n  146  \t}\n  147  \n  148: \tthis.getNewMission = function(){\n  149  \t\tif (this.mission.turn == game.turn){\n  150  \t\t\treturn this.mission;\n  ...\n  195  \t\t\t\t\t.data(\"mission\", this.mission.type)\n  196  \t\t\t/*\t\t.click(function(e){\n  197: \t\t\t\t\t\tvar mission = $(this).data(\"mission\");\n  198  \t\t\t\t\t\tif ($(this).data(\"active\") == 0){\n  199  \t\t\t\t\t\t\t$(this).data(\"active\", 1).html(\"Select New Mission\");\n  ...\n  540  \n  541  Flight.prototype.disableMissionMode = function(){\n  542: \tgame.mission = 0;\n  543  \t$(this.element).find(\".header\").css(\"height\", \"130px\").find(\"tr\").slice(-3)\n  544  \t.each(function(i){\n  ...\n  551  \n  552  Flight.prototype.enableMissionMode = function(){\n  553: \tgame.mission = new Mission(this);\n  554  \t$(this.element).find(\".header\").css(\"height\", \"auto\").find(\"tr\").slice(-3)\n  555  \t.each(function(i){\n\nC:\\xampp\\htdocs\\fire\\game.js:\n   15  \tthis.deploying = false;\n   16  \tthis.flightDeploy = false;\n   17: \tthis.adjustMission = false;\n   18  \tthis.canSubmit = false;\n   19  \tthis.index = 1;\n   ..\n   36  \tthis.animFlight = 0;\n   37  \tthis.animSalvo = 0;\n   38: \tthis.mission = 0;\n   39  \n   40  \tthis.doDeployShip = function(e, ship, pos){\n   ..\n   97  \tthis.enableFlightDeployment = function(){\n   98  \t\tthis.flightDeploy = this.getUnitById(aUnit).getSystemById($(\"#hangarLoadoutDiv\").data(\"systemid\"));\n   99: \t\tvar mission = this.getMissionTypeString(this.flightDeploy.mission);\n  100  \n  101  \t\t$(\"#game\").find(\"#deployOverlay\").find(\"#deployType\").html(\"Select target for </br>\" + mission + \"</br></span>\");\n  ...\n  155  \t}\n  156  \n  157: \tthis.issueMission = function(pos){\n  158  \t\tvar valid = false;\n  159  \t\tvar t = 0;\n  ...\n  197  \t\t\ts.facing = getAngleFromTo(o, dest);\n  198  \t\tvar p = getPointInDirection(20, s.facing, o.x, o.y);\n  199: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.mission.new, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0};\n  200  \n  201  \t\tif (t && o.x == dest.x && o.y == dest.y){\n  ...\n  206  \t\t}\n  207  \t\telse {\n  208: \t\t\ts.mission = mission;\n  209  \t\t\ts.setTarget();\n  210  \t\t\ts.setLayout();\n  ...\n  213  \n  214  \t\ts.disableMissionMode();\n  215: \t\tthis.mission = 0;\n  216  \t\tgame.draw();\n  217  \n  ...\n  245  \t\tvar facing = getAngleFromTo(o, dest);\n  246  \t\tvar p = getPointInDirection(20, facing, o.x, o.y);\n  247: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};\n  248  \n  249  \t\tif (t.id == aUnit){\n\nC:\\xampp\\htdocs\\fire\\mixed.js:\n    3  \tthis.ship = false;\n    4  \tthis.primary = false;\n    5: \tthis.mission = data.mission;\n    6  \tthis.nextStep;\n    7  \tthis.finalStep;\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  503  \t\t\t$a = Math::getAngle($sPos->x, $sPos->y, $tPos->x, $tPos->y);\n  504  \t\t\t$devi = Math::getPointInDirection($shooter->size/3, $a, $sPos->x + mt_rand(-10, 10), $sPos->y + mt_rand(-10, 10));\n  505: \t\t\t$mission = array(\"type\" => 2, \"turn\" => $this->turn, \"targetid\" => $fires[$i]->targetid, \"x\" => $tPos->x, \"y\" => $tPos->y, \"arrived\" => 0);\n  506  \t\t\t$move = array(\"turn\" => $this->turn, \"type\" => \"deploy\", \"dist\" => 0, \"x\" => $devi->x, \"y\" => $devi->y, \"a\" => $a, \"cost\" => 0, \"delay\" => 0, \"costmod\" => 0, \"resolved\" => 0);\n  507  \t\t\t$launchData = array(\"shipid\" => $shooter->id, \"systemid\" => $launcher->id, \"loads\" => array(0 => array(\"launch\" => $fires[$i]->shots, \"name\" => $name)));\n\nC:\\xampp\\htdocs\\fire\\server\\mixed.php:\n    5  \tpublic $primary = false;\n    6  \tpublic $baseImpulse;\n    7: \tpublic $mission = array();\n    8  \tpublic $cost = 0;\n    9  \tpublic $mass = 0;\n   ..\n  129  \n  130  \tpublic function addMissionDB($data){\n  131: \t\t$this->mission = new Mission($data);\n  132  \t}\n  133  \n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 2598  \tthis.range = 75;\n 2599  \tthis.loadout = 1;\n 2600: \tthis.mission = 0;\n 2601  \tthis.hangar = 1;\n 2602  }\n ....\n 2807  \t\ttable.appendChild(tr);\n 2808  \t}\n 2809: \tvar mission = this.getMission();\n 2810  \tvar element = $(\"#hangarLoadoutDiv\");\n 2811  \t\t$(element)\n ....\n 2825  }\n 2826  \n 2827: Hangar.prototype.setMission = function(val){\n 2828: \tthis.mission = val;\n 2829  \n 2830  \t$(\"#game\").find(\"#hangarLoadoutDiv\").find(\"#missionType\").find(\"tr\").each(function(i){\n ....\n 2845  }\n 2846  \n 2847: Hangar.prototype.getMission = function(){\n 2848  \treturn this.mission;\n 2849  }\n\n22 matches across 6 files\n\n\nSearching 73 files for \"getNewMission\"\n\nC:\\xampp\\htdocs\\fire\\ajax.js:\n   83  \t\tvar deployedFlights = [];\n   84  \t\t\tdeployedFlights = game.getDeployedFlights();\n   85: \t\tvar missions = game.getNewMissions();\n   86  \n   87  \t\tvar ew = game.getEWSettings();\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n  146  \t}\n  147  \n  148: \tthis.getNewMission = function(){\n  149  \t\tif (this.mission.turn == game.turn){\n  150  \t\t\treturn this.mission;\n\nC:\\xampp\\htdocs\\fire\\game.js:\n   58  \t}\n   59  \n   60: \tthis.getNewMissions = function(){\n   61  \t\tvar data = [];\n   62  \t\tfor (var i = 0; i < this.ships.length; i++){\n\n3 matches across 3 files\n\n\nSearching 73 files for \"getNewMission\"\n\nC:\\xampp\\htdocs\\fire\\ajax.js:\n   83  \t\tvar deployedFlights = [];\n   84  \t\t\tdeployedFlights = game.getDeployedFlights();\n   85: \t\tvar missions = game.getNewMissions();\n   86  \n   87  \t\tvar ew = game.getEWSettings();\n\nC:\\xampp\\htdocs\\fire\\game.js:\n   58  \t}\n   59  \n   60: \tthis.getNewMissions = function(){\n   61  \t\tvar data = [];\n   62  \t\tfor (var i = 0; i < this.ships.length; i++){\n\n2 matches across 2 files\n\n\nSearching 73 files for \"targetid: \"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  197  \t\t\ts.facing = getAngleFromTo(o, dest);\n  198  \t\tvar p = getPointInDirection(20, s.facing, o.x, o.y);\n  199: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.mission.new, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0};\n  200  \n  201  \t\tif (t && o.x == dest.x && o.y == dest.y){\n  ...\n  245  \t\tvar facing = getAngleFromTo(o, dest);\n  246  \t\tvar p = getPointInDirection(20, facing, o.x, o.y);\n  247: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};\n  248  \n  249  \t\tif (t.id == aUnit){\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  593  \tif (this.odds <= 0){return;}\n  594  \tthis.fireOrders.push(\n  595: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n  596  \t\tshots: 0, req: -1, notes: \"\", hits: -1, resolved: 0}\n  597  \t);\n  ...\n 2028  \n 2029  \tthis.fireOrders.push(\n 2030: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n 2031  \t\tshots: 0, req: -1, notes: \"\", hits: -1, resolved: 0}\n 2032  \t);\n ....\n 2633  Hangar.prototype.setFireOrder = function(targetid){\n 2634  \tthis.fireOrders.push(\n 2635: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n 2636  \t\tshots: 0, req: -1, notes: \"fighterLaunch\", hits: -1, resolved: 0}\n 2637  \t);\n\n5 matches across 2 files\n\n\nSearching 73 files for \"targetid: \"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  197  \t\t\ts.facing = getAngleFromTo(o, dest);\n  198  \t\tvar p = getPointInDirection(20, s.facing, o.x, o.y);\n  199: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.mission.new, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};\n  200  \n  201  \t\tif (t && o.x == dest.x && o.y == dest.y){\n  ...\n  245  \t\tvar facing = getAngleFromTo(o, dest);\n  246  \t\tvar p = getPointInDirection(20, facing, o.x, o.y);\n  247: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};\n  248  \n  249  \t\tif (t.id == aUnit){\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  593  \tif (this.odds <= 0){return;}\n  594  \tthis.fireOrders.push(\n  595: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n  596  \t\tshots: 0, req: -1, notes: \"\", hits: -1, resolved: 0}\n  597  \t);\n  ...\n 2028  \n 2029  \tthis.fireOrders.push(\n 2030: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n 2031  \t\tshots: 0, req: -1, notes: \"\", hits: -1, resolved: 0}\n 2032  \t);\n ....\n 2633  Hangar.prototype.setFireOrder = function(targetid){\n 2634  \tthis.fireOrders.push(\n 2635: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n 2636  \t\tshots: 0, req: -1, notes: \"fighterLaunch\", hits: -1, resolved: 0}\n 2637  \t);\n\n5 matches across 2 files\n\n\nSearching 73 files for \"targetid: \"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  197  \t\t\ts.facing = getAngleFromTo(o, dest);\n  198  \t\tvar p = getPointInDirection(20, s.facing, o.x, o.y);\n  199: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.mission.new, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};\n  200  \n  201  \t\tif (t && o.x == dest.x && o.y == dest.y){\n  ...\n  245  \t\tvar facing = getAngleFromTo(o, dest);\n  246  \t\tvar p = getPointInDirection(20, facing, o.x, o.y);\n  247: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};\n  248  \n  249  \t\tif (t.id == aUnit){\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  593  \tif (this.odds <= 0){return;}\n  594  \tthis.fireOrders.push(\n  595: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n  596  \t\tshots: 0, req: -1, notes: \"\", hits: -1, resolved: 0}\n  597  \t);\n  ...\n 2028  \n 2029  \tthis.fireOrders.push(\n 2030: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n 2031  \t\tshots: 0, req: -1, notes: \"\", hits: -1, resolved: 0}\n 2032  \t);\n ....\n 2633  Hangar.prototype.setFireOrder = function(targetid){\n 2634  \tthis.fireOrders.push(\n 2635: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n 2636  \t\tshots: 0, req: -1, notes: \"fighterLaunch\", hits: -1, resolved: 0}\n 2637  \t);\n\n5 matches across 2 files\n\n\nSearching 73 files for \"targetid: \"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  197  \t\t\ts.facing = getAngleFromTo(o, dest);\n  198  \t\tvar p = getPointInDirection(20, s.facing, o.x, o.y);\n  199: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.mission.new, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};\n  200  \n  201  \t\tif (t && o.x == dest.x && o.y == dest.y){\n  ...\n  245  \t\tvar facing = getAngleFromTo(o, dest);\n  246  \t\tvar p = getPointInDirection(20, facing, o.x, o.y);\n  247: \t\tvar mission = {unitid: aUnit, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};\n  248  \n  249  \t\tif (t.id == aUnit){\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  593  \tif (this.odds <= 0){return;}\n  594  \tthis.fireOrders.push(\n  595: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n  596  \t\tshots: 0, req: -1, notes: \"\", hits: -1, resolved: 0}\n  597  \t);\n  ...\n 2028  \n 2029  \tthis.fireOrders.push(\n 2030: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n 2031  \t\tshots: 0, req: -1, notes: \"\", hits: -1, resolved: 0}\n 2032  \t);\n ....\n 2633  Hangar.prototype.setFireOrder = function(targetid){\n 2634  \tthis.fireOrders.push(\n 2635: \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n 2636  \t\tshots: 0, req: -1, notes: \"fighterLaunch\", hits: -1, resolved: 0}\n 2637  \t);\n\n5 matches across 2 files\n\n\nSearching 73 files for \"per cycle\"\n\nC:\\xampp\\htdocs\\fire\\game.php:\n  445  \t\t\t</div>\n  446  \t\t\t<div class=\"header\">\n  447: \t\t\t\tCan launch up to <span id=\"launchRate\"></span> units per cycle.\n  448  \t\t\t</div>\n  449  \t\t\t<div class=\"header\">\n\nC:\\xampp\\htdocs\\fire\\gameSetup.php:\n  168  \t\t\t</div>\n  169  \t\t\t<div class=\"header\">\n  170: \t\t\t\tCan launch up to <span id=\"launchRate\"></span> units per cycle.\n  171  \t\t\t</div>\n  172  \t\t\t<div class=\"header\">\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 1438  \t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Thrust\")).append($(\"<td>\").html(this.getBallImpulse())));\n 1439  \t\t\t//$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Launch Rate\")).append($(\"<td>\").html(\"<span class='red' id='detailShots'>\" + this.getOutput() + \"</span> / \" + this.launchRate[this.ammo])));\n 1440: \t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Launch Rate\")).append($(\"<td>\").html(\"Up to <span class='red'>\" + this.launchRate[this.ammo] + \"</span> per cycle\")));\n 1441  \t\t}\n 1442  \t}\n ....\n 3072  \t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Integrity\")).append($(\"<td>\").html(this.getRemainingIntegrity() + \" / \" + this.integrity)));\n 3073  \t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Armour\")).append($(\"<td>\").html(this.getMount())));\n 3074: \t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Launch Rate\")).append($(\"<td>\").html(this.effiency + \" per cycle\")));\n 3075  \t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Base Power Req\")).append($(\"<td>\").html(this.powerReq)));\n 3076  \n\n4 matches across 3 files\n\n\nSearching 73 files for \"startGame\"\n\nC:\\xampp\\htdocs\\fire\\ajax.js:\n  239  \t},\n  240  \n  241: \tstartGame: function(gameid, callback){\n  242  \t\t$.ajax({\n  243  \t\t\ttype: \"POST\",\n\nC:\\xampp\\htdocs\\fire\\lobby.php:\n   25  \t}\n   26  \n   27: //\t$dbManager->startGame(2);\n   28  \n   29  \t//function __construct($id, $userid, $classname, $x, $y, $facing){\n\nC:\\xampp\\htdocs\\fire\\postGameData.php:\n   26  \t\t\tif ($dbManager->processInitialBuy($_POST[\"userid\"], $_POST[\"gameid\"], $_POST[\"ships\"], $rem, $_POST[\"ships\"][0][\"faction\"])) {\n   27  \t\t\t\tif ($dbManager->gameIsReady($_POST[\"gameid\"])) {\n   28: \t\t\t\t\tif ($dbManager->startGame($_POST[\"gameid\"])) {\n   29  \t\t\t\t\t\theader(\"Location: game.php?gameid=\".$_POST[\"gameid\"]);\n   30  \t\t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n  523  \t\t}\n  524  \n  525: \t\tpublic function startGame($gameid){\n  526  \t\t\t\n  527  \t\t\t$players = $this->getPlayersInGame($gameid);\n\n4 matches across 4 files\n\n\nSearching 73 files for \"startGame\"\n\nC:\\xampp\\htdocs\\fire\\ajax.js:\n  239  \t},\n  240  \n  241: \tstartGame: function(gameid, callback){\n  242  \t\t$.ajax({\n  243  \t\t\ttype: \"POST\",\n\nC:\\xampp\\htdocs\\fire\\lobby.php:\n   25  \t}\n   26  \n   27: //\t$dbManager->startGame(2);\n   28  \n   29  \t//function __construct($id, $userid, $classname, $x, $y, $facing){\n\nC:\\xampp\\htdocs\\fire\\postGameData.php:\n   26  \t\t\tif ($dbManager->processInitialBuy($_POST[\"userid\"], $_POST[\"gameid\"], $_POST[\"ships\"], $rem, $_POST[\"ships\"][0][\"faction\"])) {\n   27  \t\t\t\tif ($dbManager->gameIsReady($_POST[\"gameid\"])) {\n   28: \t\t\t\t\tif ($dbManager->startGame($_POST[\"gameid\"])) {\n   29  \t\t\t\t\t\theader(\"Location: game.php?gameid=\".$_POST[\"gameid\"]);\n   30  \t\t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n  523  \t\t}\n  524  \n  525: \t\tpublic function startGame($gameid){\n  526  \t\t\t\n  527  \t\t\t$players = $this->getPlayersInGame($gameid);\n\n4 matches across 4 files\n\n\nSearching 73 files for \"gameIsReady\"\n\nC:\\xampp\\htdocs\\fire\\lobby.php:\n   35  \t\t\t//$manager = new Manager($_SESSION[\"userid\"]);\n   36  \t\t}\n   37: \t\telse if ($dbManager->gameisReady($myGames[$i][\"id\"])){\n   38  \t\t\t$dbmanager->startGame($myGames[$i][\"id\"]);\n   39  \t\t\t$ongoingGames[] = $myGames[$i];\n\nC:\\xampp\\htdocs\\fire\\postGameData.php:\n   25  \t\tif ($rem >= 0){\n   26  \t\t\tif ($dbManager->processInitialBuy($_POST[\"userid\"], $_POST[\"gameid\"], $_POST[\"ships\"], $rem, $_POST[\"ships\"][0][\"faction\"])) {\n   27: \t\t\t\tif ($dbManager->gameIsReady($_POST[\"gameid\"])) {\n   28  \t\t\t\t\tif ($dbManager->startGame($_POST[\"gameid\"])) {\n   29  \t\t\t\t\t\theader(\"Location: game.php?gameid=\".$_POST[\"gameid\"]);\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n  492  \t\t}\n  493  \n  494: \t\tpublic function gameIsReady($gameid){\n  495  \t\t\t$stmt = $this->connection->prepare(\"\n  496  \t\t\t\tSELECT playerstatus.status from playerstatus\n\n3 matches across 3 files\n\n\nSearching 73 files for \"array_splice\"\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n  672  \t\t\t\t\t\t}\n  673  \n  674: \t\t\t\t\t\tarray_splice($data, $i, 0)\n  675  \t\t\t\t\t}\n  676  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  208  \t\t\tif ($this->ships[$i]->userid != $this->userid){\n  209  \t\t\t\tif ($this->ships[$i]->flight && $this->ships[$i]->available == $this->turn && !$this->ships[$i]->actions[0]->resolved){\n  210: \t\t\t\t\tarray_splice($this->ships, $i, 1);\n  211  \t\t\t\t}\n  212  \t\t\t\telse if ($this->ships[$i]->ship && $this->phase == 0 || $this->ships[$i]->flight && $this->phase == 1){\n  ...\n  239  \t\tfor ($i = sizeof($this->fires)-1; $i >= 0; $i--){\n  240  \t\t\tif ($this->fires[$i]->resolved == 1){\n  241: \t\t\t\tarray_splice($this->fires, $i, 1);\n  242  \t\t\t}\n  243  \t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  153  \t\t\t\tfor ($l = sizeof($this->structures[$j]->systems[$k]->powers)-1; $l >= 0; $l--){\n  154  \t\t\t\t\tif ($this->structures[$j]->systems[$k]->powers[$l]->turn == $turn){\n  155: \t\t\t\t\t\tarray_splice($this->structures[$j]->systems[$k]->powers, $l, 1);\n  156  \t\t\t\t\t} else break;\n  157  \t\t\t\t}\n  ...\n  166  \t\t\tfor ($k = sizeof($this->primary->systems[$j]->powers)-1; $k >= 0; $k--){\n  167  \t\t\t\tif ($this->primary->systems[$j]->powers[$k]->turn == $turn){\n  168: \t\t\t\t\tarray_splice($this->primary->systems[$j]->powers, $k, 1);\n  169  \t\t\t\t} else break;\n  170  \t\t\t}\n  ...\n  177  \t\t\t\tfor ($l = sizeof($this->structures[$j]->systems[$k]->fireOrders)-1; $l >= 0; $l--){\n  178  \t\t\t\t\tif ($this->structures[$j]->systems[$k]->fireOrders[$l]->turn == $turn){\n  179: \t\t\t\t\t\tarray_splice($this->structures[$j]->systems[$k]->fireOrders, $l, 1);\n  180  \t\t\t\t\t} else break;\n  181  \t\t\t\t}\n  ...\n  187  \t\tfor ($i = sizeof($this->actions)-1; $i >= 0; $i--){\n  188  \t\t\tif (!$this->actions[$i]->resolved){\n  189: \t\t\t\tarray_splice($this->actions, $i, 1);\n  190  \t\t\t}\n  191  \t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\nonweapon.php:\n  107  \t\tfor ($k = sizeof($this->ew)-1; $k >= 0; $k--){\n  108  \t\t\tif ($this->ew[$k]->turn == $turn){\n  109: \t\t\t\tarray_splice($this->ew, $k, 1);\n  110  \t\t\t} else break;\n  111  \t\t}\n\n8 matches across 4 files\n\n\nSearching 73 files for \"\"adding\"\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n  654  \t\t\t\t\t\t\t\t\tif ($data[$j][\"launchData\"][\"loads\"][$k][\"launch\"] >= 1){\n  655  \t\t\t\t\t\t\t\t\t\tfor ($l = 0; $l < sizeof($data[$i][\"launchData\"][\"loads\"]); $l++){\n  656: \t\t\t\t\t\t\t\t\t\t\tDebug::log(\"adding\");\n  657  \t\t\t\t\t\t\t\t\t\t\tif ($data[$i][\"launchData\"][\"loads\"][$l][\"name\"] == $data[$j][\"launchData\"][\"loads\"][$k][\"name\"]){\n  658  \t\t\t\t\t\t\t\t\t\t\t\t$data[$i][\"launchData\"][\"loads\"][$l][\"launch\"] += $data[$j][\"launchData\"][\"loads\"][$k][\"launch\"];\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  743  \t\t\t\t$stack[$i][$j]->actions[] = $move;\n  744  \n  745: \t\t\t\tDebug::log(\"adding move to: \".$move->x.\"/\".$move->y);\n  746  \n  747  \t\t\t\t$units[] = $stack[$i][$j];\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  572  \t\t\tif (!$struct->systems[$i]->destroyed){\n  573  \t\t\t\t$total += $struct->systems[$i]->getHitChance();\n  574: \t\t\t\t//Debug::log(\"adding: \".$struct->systems[$i]->name.\" for \".$struct->systems[$i]->getHitChance());\n  575  \t\t\t}\n  576  \t\t}\n\n3 matches across 3 files\n",
+			"settings":
+			{
+				"buffer_size": 37715,
 				"line_ending": "Windows",
 				"name": "Find Results",
 				"scratch": true
 			}
 		},
 		{
-			"contents": "\nfunction getPointInDirection(dis, angle, oX, oY){\n\tvar x = Math.round(oX + dis * Math.cos(angle* Math.PI / 180));\n\tvar y = Math.round(oY + dis * Math.sin(angle* Math.PI / 180));\n\treturn {x:Math.round(x), y:Math.round(y)}; \n} \n \nfunction getDistance(start, end){\n\treturn Math.sqrt((end.x-start.x)*(end.x-start.x) + (end.y-start.y)*(end.y-start.y)); \n}\n\nfunction degreeToRadian(angle){\n\treturn (angle / (180.0 / Math.PI)); \n}\n\nfunction radianToDegree(radian){\n\tvar x = radian * (180.0 / Math.PI);\n\treturn x;\n}\n\nfunction getAngleFromTo(a, b){\n\treturn radianToDegree(Math.atan2(b.y-a.y, b.x-a.x));;\n}\n\nfunction getAngle(ax, ay, bx, by){\n\treturn radianToDegree(Math.atan2(by-ay, bx-ax));;\n} \n\nfunction addAngle(f, a){\n\tret = 360 - f + a;\n\twhile (ret > 360){\n\t\tret -= 360;\n\t}\n\twhile (ret < 0){\n\t\tret += 360;\n\t}\n\t//console.log(ret);\n\treturn ret;\n}\n\n\nfunction addToDirection(current, add){\n    add = add % 360;\n\n\tvar ret = 0;\n\tif (current + add > 360){\n\t\tret =  0+(add-(360-current));\n\t\t\t\n\t}else if (current + add < 0){\n\t\tret = 360 + (current + add);\n\t}else{\t\n\t\tret = current + add;\n\t}\n\n\treturn ret;\n\t}\n\n\n                       //    150     180\nfunction adjustForFacing(facing, angle){\n\t//console.log(arguments)\n\t//console.log(ret);\n\treturn angle - facing;\n\n}\n\t\nfunction isInArc(direction, start, end){\n\t//console.log(\"direction: \"+direction + \" start: \" + start + \" end: \" + end);\t\n\t//direction: 300 start: 360 end: 240\n\t\n\t//$(\"#curArc\").html(\"vector angle, start, end: \" + direction + \" - \" + start + \" - \" + end);\n\t\n\tif (start == end)\n\t\treturn true;\n\t\t\n\tif ((direction == 0 && start == 360) || (direction == 0 && end == 360))\n\t\treturn true;\n\n\tif (start > end){\n\t\treturn (direction >= start || direction <= end);\t\t\t\n\t}\n\telse if (direction >= start && direction <= end){\n\t\treturn true;\n\t}\n\telse {\n\t\treturn false;\n\t}$\n}\n\nfunction getCompassHeadingOfPoint(observer, target, facing){\n\tvar dX = target.x - observer.x;\n\tvar dY = target.y - observer.y;\n\tvar heading = 0.0;\t\t\t\n\tif (dX == 0){\n\t\tif (dY>0){\n\t\t\theading = 180.0;\n\t\t}\n\t\telse{\n\t\t\theading = 0.0;\n\t\t}\t\t\n\t}\n\telse if (dY == 0){\n\t\tif (dX>0){\n\t\t\theading = 90.0;\n\t\t}\n\t\telse{\n\t\t\theading = 270.0;\n\t\t}\n\t}else if (dX>0 && dY<0 ){\n\t\theading = radianToDegree(Math.atan(dX/Math.abs(dY)));\n\t}else if (dX>0 && dY>0 ){\n\t\theading = radianToDegree(Math.atan(dY/dX)) + 90;\n\t}else if (dX<0 && dY>0){\n\t\theading = radianToDegree(Math.atan(Math.abs(dX)/dY)) + 180;\n\t}else if (dX<0 && dY<0){\n\t\theading = radianToDegree(Math.atan(dY/dX)) + 270;\n\t}\n\theading = addToDirection(Math.round(heading), -90);\n\theading = addToDirection(heading, -facing);\n\n\treturn heading;\n}\n\nfunction getIntercept(src, dst, vector, mod){\n\tvar tx = dst.x - src.x;\n\tvar\tty = dst.y - src.y;\n\tvar\ttvx = vector.nx;\n\tvar\ttvy = vector.ny;\n\n\t// Get quadratic equation components\n\tvar a = tvx*tvx + tvy*tvy - mod*mod;\n\tvar b = 2 * (tvx * tx + tvy * ty);\n\tvar c = tx*tx + ty*ty;\n\n\t// Solve quadratic\n\tvar ts = quad(a, b, c); // See quad(), below\n\t// Find smallest positive solution\n\tvar sol = null;\n\n\t//if (src instanceof Ship){console.log(ts);}\n\n\tif (ts) {\n\t\tvar t0 = ts[0], t1 = ts[1];\n\t\tvar t = Math.min(t0, t1);\n\t\tif (t < 0) t = Math.max(t0, t1);    \n\t\tif (t > 0) {\n\t\t\tsol = {\n\t\t\t\tx: dst.x + vector.nx * t,\n\t\t\t\ty: dst.y + vector.ny * t\n\t\t\t};\n\t\t}\n\t}\n\treturn sol;\n}\n\nfunction randomize(pos, x, y){\n\tpos.x += range(-x, x);\n\tpos.y += range(-y, y);\n\treturn pos;\n}\n\nfunction round(val){\n\treturn Math.floor(val * 100) / 100; \n}\n\nfunction getProjIntercept(src, dst, vector, mod){\n\tvar tx = dst.x - src.x;\n\tvar\tty = dst.y - src.y;\n\tvar\ttvx = vector.nx;\n\tvar\ttvy = vector.ny;\n\n\t// Get quadratic equation components\n\tvar a = tvx*tvx + tvy*tvy - mod*mod;\n\tvar b = 2 * (tvx * tx + tvy * ty);\n\tvar c = tx*tx + ty*ty;\n\n\t// Solve quadratic\n\tvar ts = quad(a, b, c); // See quad(), below\n\t// Find smallest positive solution\n\tvar sol = null;\n\n\n\tif (ts) {\n\t\tvar t0 = ts[0], t1 = ts[1];\n\t\t//var t = Math.min(t0, t1);\n\t\tvar t = Math.min(t0, t1);\n\t\t//console.log(ts);\n\t\tif (t < 0) t = Math.max(t0, t1);  \n\t\t//t = range(1, t);\n\n\t\tif (t > 0) {\n\t\t\tsol = {\n\t\t\t\tx: dst.x + vector.nx * t,\n\t\t\t\ty: dst.y + vector.ny * t\n\t\t\t};\n\t\t}\n\t}\n\t//console.log(t);\n\treturn sol;\n}\n\n\nfunction getBeamIntercept(src, dst, vector){\n\tvar tx = dst.x - src.x;\n\tvar\tty = dst.y - src.y;\n\tvar\ttvx = vector.nx;\n\tvar\ttvy = vector.ny;\n\n\t// Get quadratic equation components\n\tvar a = tvx*tvx + tvy*tvy - 25;\n\tvar b = 2 * (tvx * tx + tvy * ty);\n\tvar c = tx*tx + ty*ty;\n\n\t// Solve quadratic\n\tvar ts = quad(a, b, c); // See quad(), below\n\t// Find smallest positive solution\n\tvar sol = null;\n\n\n\tif (ts) {\n\t\tvar t0 = ts[0], t1 = ts[1];\n\t\t//var t = Math.min(t0, t1);\n\t\tvar t = Math.min(t0, t1);\n\t\tif (t < 0) t = Math.max(t0, t1);  \n\t\t//t = range(1, t);\n\n\t\tif (t > 0) {\n\t\t\tsol = {\n\t\t\t\tx: dst.x + vector.nx * t,\n\t\t\t\ty: dst.y + vector.ny * t\n\t\t\t};\n\t\t}\n\t}\n\t//console.log(t);\n\treturn sol;\n}\n\n\n\n\nfunction quad(a,b,c) {\n\tvar sol = null;\n\tif (Math.abs(a) < 1e-6) {\n\t\tif (Math.abs(b) < 1e-6) {\n\t\t\tsol = Math.abs(c) < 1e-6 ? [0,0] : null;\n\t\t} else {\n\t\t\tsol = [-c/b, -c/b];\n\t\t}\n\t} else {\n\t\tvar disc = b*b - 4*a*c;\n\t\tif (disc >= 0) {\n\t\t\tdisc = Math.sqrt(disc);\n\t\t\ta = 2*a;\n\t\t\tsol = [(-b-disc)/a, (-b+disc)/a];\n\t\t}\n\t}\n\treturn sol;\n}\n\t\t\nfunction drawAndRotate(posX, posY, w, h, iw, ih, angle, img){\n\n        var x = Math.round(w/2);\n        var y = Math.round(h/2);\n        var width = iw/2;\n        var height = ih/2;\n\t\t\n\t\tangle = angle + Math.PI / 180; \n\t\t\n\t\tfxCtx.save();\n\t\tfxCtx.translate(x, y);\n\t\t//fxCtx.translate(10, 10);\n\t\tfxCtx.rotate(angle);\n\t\t//fxCtx.arc(0, 0, 10, 0, 2*Math.PI, false);\n\t\t//fxCtx.fill();\n\t\tfxCtx.drawImage(img, 0, 0, width, height);\n\t\tfxCtx.restore();\n}\n\nfunction range(min, max){\n\treturn Math.floor(Math.random() * (max - min + 1)) + min;\n}\n\nfunction drawText(ctx, color, text, size, p){\n\tctx.beginPath();\n\tctx.font = \"bolder \" + size + \"pt Trebuchet MS,Tahoma,Verdana,Arial,sans-serif\";\n\tctx.textAlign = \"center\";\n\tctx.textBaseline = 'middle';\n\tctx.closePath();\n\tctx.fillStyle = color;\n\tctx.fillText(\n\t\t\t\t\ttext,\n\t\t\t\t\tp.x,\n\t\t\t\t\tp.y\n\t\t\t\t\t);\t\n\t\t\t\t\n\tctx.fillStyle = \"black\";\n}\n",
 			"file": "mathLib.js",
-			"file_size": 6311,
-			"file_write_time": 131502790675581366,
 			"settings":
 			{
 				"buffer_size": 6015,
+				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
@@ -665,15 +672,6 @@
 				"encoding": "UTF-8",
 				"line_ending": "Windows",
 				"name": "<?php"
-			}
-		},
-		{
-			"file": "server/dbManager.php",
-			"settings":
-			{
-				"buffer_size": 51050,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
 			}
 		},
 		{
@@ -752,7 +750,7 @@
 			"file": "postGameData.php",
 			"settings":
 			{
-				"buffer_size": 2951,
+				"buffer_size": 2928,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -969,7 +967,7 @@
 			"file": "flights.js",
 			"settings":
 			{
-				"buffer_size": 17975,
+				"buffer_size": 18566,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -993,15 +991,6 @@
 			}
 		},
 		{
-			"file": "mixed.js",
-			"settings":
-			{
-				"buffer_size": 13578,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "autoload.php",
 			"settings":
 			{
@@ -1014,9 +1003,18 @@
 			"file": "log.txt",
 			"settings":
 			{
-				"buffer_size": 4735,
+				"buffer_size": 662,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "server/dbManager.php",
+			"settings":
+			{
+				"buffer_size": 52454,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
 			}
 		},
 		{
@@ -1525,6 +1523,20 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"epButton",
+			"remEP",
+			"initselectionwrapper",
+			"createbasediv",
+			"dodeployflight",
+			"insert:",
+			"\"adding",
+			"$j = $i+1; $j <",
+			"array_splice",
+			"deployflightd",
+			"insertUnits",
+			"updateSystemLoad",
+			"insertUnits",
+			"deployflight",
 			"insertClientActions",
 			"gameIsReady",
 			"canadvance",
@@ -1638,21 +1650,7 @@
 			"insertSubUnits",
 			"insertUnits",
 			"subunits",
-			"updateBallisticFireOrder",
-			"updateSystemLoad",
-			"updatesy",
-			"updateSystemLoad",
-			"remainingDelay ",
-			"setBaseStats",
-			"selectionwrap",
-			"handleFireClick",
-			"setcurrentimpulse",
-			"setCurrentImpulse",
-			"shortinfo",
-			"setCurrentImpulse",
-			"setBaseStats",
-			"setCurrentImpulse",
-			"getRemainingDelay"
+			"updateBallisticFireOrder"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1798,7 +1796,7 @@
 	"groups":
 	[
 		{
-			"selected": 46,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -1886,7 +1884,7 @@
 						"translation.y": 2996.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 24,
 					"type": "text"
 				},
 				{
@@ -1975,7 +1973,7 @@
 						"translation.y": 463.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 23,
+					"stack_index": 30,
 					"type": "text"
 				},
 				{
@@ -2063,7 +2061,7 @@
 						"translation.y": 3862.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 33,
 					"type": "text"
 				},
 				{
@@ -2092,7 +2090,7 @@
 						"translation.y": 3670.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 52,
+					"stack_index": 55,
 					"type": "text"
 				},
 				{
@@ -2108,8 +2106,8 @@
 						"selection":
 						[
 							[
-								3671,
-								3671
+								15679,
+								15687
 							]
 						],
 						"settings":
@@ -2177,10 +2175,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3523.0,
+						"translation.y": 15998.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -2209,7 +2207,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 94,
+					"stack_index": 95,
 					"type": "text"
 				},
 				{
@@ -2218,15 +2216,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 84910,
+						"buffer_size": 84935,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								13815,
+								13811
 							]
 						],
 						"settings":
@@ -2294,18 +2292,47 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 6688.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
 					"buffer": 7,
+					"file": "mixed.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 34588,
+						"buffer_size": 13580,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4252,
+								4252
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2074.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 37715,
 						"regions":
 						{
 							"match":
@@ -2924,6 +2951,50 @@
 									[
 										34437,
 										34448
+									],
+									[
+										34708,
+										34720
+									],
+									[
+										35005,
+										35017
+									],
+									[
+										35292,
+										35304
+									],
+									[
+										35573,
+										35585
+									],
+									[
+										35850,
+										35862
+									],
+									[
+										36143,
+										36155
+									],
+									[
+										36375,
+										36387
+									],
+									[
+										36599,
+										36611
+									],
+									[
+										36958,
+										36965
+									],
+									[
+										37321,
+										37328
+									],
+									[
+										37581,
+										37588
 									]
 								],
 								"scope": ""
@@ -2932,15 +3003,15 @@
 						"selection":
 						[
 							[
-								34192,
-								34192
+								36964,
+								36964
 							]
 						],
 						"settings":
 						{
 							"detect_indentation": false,
 							"line_numbers": false,
-							"output_tag": 33,
+							"output_tag": 35,
 							"result_base_dir": "",
 							"result_file_regex": "^([^ \t].*):$",
 							"result_line_regex": "^ +([0-9]+):",
@@ -2948,14 +3019,14 @@
 							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 16310.0,
+						"translation.y": 22694.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 9,
 					"file": "mathLib.js",
 					"semi_transient": false,
 					"settings":
@@ -2967,8 +3038,8 @@
 						"selection":
 						[
 							[
-								228,
-								228
+								598,
+								598
 							]
 						],
 						"settings":
@@ -3039,11 +3110,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 10,
 					"file": "server/mixed.php",
 					"semi_transient": false,
 					"settings":
@@ -3068,11 +3139,11 @@
 						"translation.y": 1516.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 31,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 11,
 					"file": "global.php",
 					"semi_transient": false,
 					"settings":
@@ -3156,11 +3227,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 60,
+					"stack_index": 62,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 12,
 					"file": "server/math.php",
 					"semi_transient": false,
 					"settings":
@@ -3244,11 +3315,11 @@
 						"translation.y": 7.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 70,
+					"stack_index": 72,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 13,
 					"file": "server/systems/weapons/particle.php",
 					"semi_transient": false,
 					"settings":
@@ -3329,14 +3400,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 288.0,
+						"translation.y": 232.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 64,
+					"stack_index": 66,
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 14,
 					"file": "game.php",
 					"semi_transient": false,
 					"settings":
@@ -3417,14 +3488,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 6040.0,
+						"translation.y": 664.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
-					"buffer": 14,
+					"buffer": 15,
 					"file": "server/manager.php",
 					"semi_transient": false,
 					"settings":
@@ -3436,8 +3507,8 @@
 						"selection":
 						[
 							[
-								9156,
-								9156
+								34260,
+								34260
 							]
 						],
 						"settings":
@@ -3505,14 +3576,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4914.0,
+						"translation.y": 16088.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
-					"buffer": 15,
+					"buffer": 16,
 					"file": "server/flight.php",
 					"semi_transient": false,
 					"settings":
@@ -3524,8 +3595,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								619,
+								619
 							]
 						],
 						"settings":
@@ -3597,96 +3668,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 55,
-					"type": "text"
-				},
-				{
-					"buffer": 16,
-					"file": "server/dbManager.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 51050,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								13593,
-								13593
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content"
-							],
-							"history_list_is_closing": true,
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 7292.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
@@ -3771,10 +3753,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 687.0,
+						"translation.y": 197.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
@@ -3862,7 +3844,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
@@ -3891,7 +3873,7 @@
 						"translation.y": 54.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 96,
+					"stack_index": 97,
 					"type": "text"
 				},
 				{
@@ -3979,7 +3961,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 65,
+					"stack_index": 67,
 					"type": "text"
 				},
 				{
@@ -4008,7 +3990,7 @@
 						"translation.y": 252.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 99,
+					"stack_index": 100,
 					"type": "text"
 				},
 				{
@@ -4037,7 +4019,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 105,
+					"stack_index": 106,
 					"type": "text"
 				},
 				{
@@ -4125,7 +4107,7 @@
 						"translation.y": 56.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 95,
+					"stack_index": 96,
 					"type": "text"
 				},
 				{
@@ -4213,7 +4195,7 @@
 						"translation.y": 161.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 51,
+					"stack_index": 54,
 					"type": "text"
 				},
 				{
@@ -4222,15 +4204,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2951,
+						"buffer_size": 2928,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								679,
-								679
+								763,
+								763
 							]
 						],
 						"settings":
@@ -4298,10 +4280,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 39.0,
+						"translation.y": 182.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -4389,7 +4371,7 @@
 						"translation.y": 204.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 83,
+					"stack_index": 85,
 					"type": "text"
 				},
 				{
@@ -4477,7 +4459,7 @@
 						"translation.y": 863.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 32,
 					"type": "text"
 				},
 				{
@@ -4565,7 +4547,7 @@
 						"translation.y": 168.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 37,
+					"stack_index": 40,
 					"type": "text"
 				},
 				{
@@ -4653,7 +4635,7 @@
 						"translation.y": 952.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 35,
+					"stack_index": 38,
 					"type": "text"
 				},
 				{
@@ -4741,7 +4723,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 39,
+					"stack_index": 42,
 					"type": "text"
 				},
 				{
@@ -4770,7 +4752,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 44,
+					"stack_index": 47,
 					"type": "text"
 				},
 				{
@@ -4858,7 +4840,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 73,
+					"stack_index": 75,
 					"type": "text"
 				},
 				{
@@ -4947,7 +4929,7 @@
 						"translation.y": 112.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 36,
+					"stack_index": 39,
 					"type": "text"
 				},
 				{
@@ -5035,7 +5017,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 57,
+					"stack_index": 59,
 					"type": "text"
 				},
 				{
@@ -5124,7 +5106,7 @@
 						"translation.y": 321.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 76,
+					"stack_index": 78,
 					"type": "text"
 				},
 				{
@@ -5212,7 +5194,7 @@
 						"translation.y": 12796.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 32,
+					"stack_index": 35,
 					"type": "text"
 				},
 				{
@@ -5241,7 +5223,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 50,
+					"stack_index": 53,
 					"type": "text"
 				},
 				{
@@ -5329,7 +5311,7 @@
 						"translation.y": 1809.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 33,
+					"stack_index": 36,
 					"type": "text"
 				},
 				{
@@ -5417,7 +5399,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 38,
+					"stack_index": 41,
 					"type": "text"
 				},
 				{
@@ -5505,7 +5487,7 @@
 						"translation.y": 34023.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 25,
 					"type": "text"
 				},
 				{
@@ -5594,7 +5576,7 @@
 						"translation.y": 3242.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 45,
+					"stack_index": 48,
 					"type": "text"
 				},
 				{
@@ -5682,7 +5664,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 104,
+					"stack_index": 105,
 					"type": "text"
 				},
 				{
@@ -5769,7 +5751,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 66,
+					"stack_index": 68,
 					"type": "text"
 				},
 				{
@@ -5857,7 +5839,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 103,
+					"stack_index": 104,
 					"type": "text"
 				},
 				{
@@ -5945,7 +5927,7 @@
 						"translation.y": 5760.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 34,
 					"type": "text"
 				},
 				{
@@ -6033,7 +6015,7 @@
 						"translation.y": 96.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
@@ -6049,8 +6031,8 @@
 						"selection":
 						[
 							[
-								7265,
-								7265
+								61394,
+								61394
 							]
 						],
 						"settings":
@@ -6118,10 +6100,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3671.0,
+						"translation.y": 31048.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -6210,7 +6192,7 @@
 						"translation.y": 2790.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 47,
+					"stack_index": 50,
 					"type": "text"
 				},
 				{
@@ -6298,7 +6280,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 88,
+					"stack_index": 90,
 					"type": "text"
 				},
 				{
@@ -6307,15 +6289,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 17975,
+						"buffer_size": 18566,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								15914,
+								15914
 							]
 						],
 						"settings":
@@ -6383,10 +6365,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 7320.0,
+						"translation.y": 7581.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -6475,13 +6457,13 @@
 						"translation.y": 151.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 87,
+					"stack_index": 89,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 17,
+			"selected": 38,
 			"sheets":
 			[
 				{
@@ -6511,7 +6493,7 @@
 						"translation.y": 546.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 27,
 					"type": "text"
 				},
 				{
@@ -6540,24 +6522,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 48,
+					"stack_index": 51,
 					"type": "text"
 				},
 				{
-					"buffer": 52,
+					"buffer": 7,
 					"file": "mixed.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 13578,
+						"buffer_size": 13580,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								12364,
-								12364
+								1341,
+								1341
 							]
 						],
 						"settings":
@@ -6566,10 +6548,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 6854.0,
+						"translation.y": 497.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 30,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -6657,7 +6639,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 101,
+					"stack_index": 102,
 					"type": "text"
 				},
 				{
@@ -6745,7 +6727,7 @@
 						"translation.y": 742.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 41,
+					"stack_index": 44,
 					"type": "text"
 				},
 				{
@@ -6833,7 +6815,7 @@
 						"translation.y": 140.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 40,
+					"stack_index": 43,
 					"type": "text"
 				},
 				{
@@ -6918,14 +6900,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 210.0,
+						"translation.y": 154.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
-					"buffer": 53,
+					"buffer": 52,
 					"file": "autoload.php",
 					"semi_transient": false,
 					"settings":
@@ -7010,16 +6992,16 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 56,
+					"stack_index": 58,
 					"type": "text"
 				},
 				{
-					"buffer": 54,
+					"buffer": 53,
 					"file": "log.txt",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4735,
+						"buffer_size": 662,
 						"regions":
 						{
 						},
@@ -7038,7 +7020,96 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 14,
+					"type": "text"
+				},
+				{
+					"buffer": 54,
+					"file": "server/dbManager.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 52454,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								18210,
+								18210
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content"
+							],
+							"history_list_is_closing": true,
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 12726.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -7127,7 +7198,7 @@
 						"translation.y": 719.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 68,
+					"stack_index": 70,
 					"type": "text"
 				},
 				{
@@ -7215,7 +7286,7 @@
 						"translation.y": 605.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 59,
+					"stack_index": 61,
 					"type": "text"
 				},
 				{
@@ -7303,7 +7374,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 67,
+					"stack_index": 69,
 					"type": "text"
 				},
 				{
@@ -7312,15 +7383,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 84910,
+						"buffer_size": 84935,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								84743,
+								84743
 							]
 						],
 						"settings":
@@ -7387,11 +7458,11 @@
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 7.0,
-						"translation.y": 41840.0,
+						"translation.x": 0.0,
+						"translation.y": 41874.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 31,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -7479,11 +7550,11 @@
 						"translation.y": 26975.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 9,
 					"file": "mathLib.js",
 					"semi_transient": false,
 					"settings":
@@ -7567,7 +7638,7 @@
 						"translation.y": 1844.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 75,
+					"stack_index": 77,
 					"type": "text"
 				},
 				{
@@ -7596,7 +7667,7 @@
 						"translation.y": 219.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 63,
+					"stack_index": 65,
 					"type": "text"
 				},
 				{
@@ -7625,24 +7696,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 77,
+					"stack_index": 79,
 					"type": "text"
 				},
 				{
-					"buffer": 16,
+					"buffer": 54,
 					"file": "server/dbManager.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 51050,
+						"buffer_size": 52454,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								13738,
-								13738
+								18287,
+								18287
 							]
 						],
 						"settings":
@@ -7711,10 +7782,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 6886.0,
+						"translation.y": 8780.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
@@ -7743,7 +7814,7 @@
 						"translation.y": 70.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 78,
+					"stack_index": 80,
 					"type": "text"
 				},
 				{
@@ -7832,7 +7903,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 100,
+					"stack_index": 101,
 					"type": "text"
 				},
 				{
@@ -7920,7 +7991,7 @@
 						"translation.y": 5256.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 91,
+					"stack_index": 93,
 					"type": "text"
 				},
 				{
@@ -7936,8 +8007,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								1221,
+								1221
 							]
 						],
 						"settings":
@@ -8005,10 +8076,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 862.0,
+						"translation.y": 959.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -8097,7 +8168,7 @@
 						"translation.y": 22495.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 34,
+					"stack_index": 37,
 					"type": "text"
 				},
 				{
@@ -8186,7 +8257,7 @@
 						"translation.y": 2226.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 58,
+					"stack_index": 60,
 					"type": "text"
 				},
 				{
@@ -8215,7 +8286,7 @@
 						"translation.y": 4494.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 54,
+					"stack_index": 57,
 					"type": "text"
 				},
 				{
@@ -8303,7 +8374,7 @@
 						"translation.y": 6206.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 61,
+					"stack_index": 63,
 					"type": "text"
 				},
 				{
@@ -8332,7 +8403,7 @@
 						"translation.y": 222.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 81,
+					"stack_index": 83,
 					"type": "text"
 				},
 				{
@@ -8361,7 +8432,7 @@
 						"translation.y": 775.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 98,
+					"stack_index": 99,
 					"type": "text"
 				},
 				{
@@ -8449,11 +8520,11 @@
 						"translation.y": 226.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 89,
+					"stack_index": 91,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 12,
 					"file": "server/math.php",
 					"semi_transient": false,
 					"settings":
@@ -8537,7 +8608,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 80,
+					"stack_index": 82,
 					"type": "text"
 				},
 				{
@@ -8626,7 +8697,7 @@
 						"translation.y": 64.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 69,
+					"stack_index": 71,
 					"type": "text"
 				},
 				{
@@ -8642,8 +8713,8 @@
 						"selection":
 						[
 							[
-								611,
-								611
+								1102,
+								1102
 							]
 						],
 						"settings":
@@ -8711,14 +8782,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 133.0,
+						"translation.y": 77.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 14,
 					"file": "game.php",
 					"semi_transient": false,
 					"settings":
@@ -8802,7 +8873,7 @@
 						"translation.y": 25.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 71,
+					"stack_index": 73,
 					"type": "text"
 				},
 				{
@@ -8890,7 +8961,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
@@ -8978,7 +9049,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 62,
+					"stack_index": 64,
 					"type": "text"
 				},
 				{
@@ -9007,7 +9078,7 @@
 						"translation.y": 188.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 97,
+					"stack_index": 98,
 					"type": "text"
 				},
 				{
@@ -9095,7 +9166,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 92,
+					"stack_index": 94,
 					"type": "text"
 				},
 				{
@@ -9104,15 +9175,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 17975,
+						"buffer_size": 18566,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								6449,
+								6449
 							]
 						],
 						"settings":
@@ -9179,15 +9250,15 @@
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 117.0,
-						"translation.y": 2657.0,
+						"translation.x": 0.0,
+						"translation.y": 2544.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 15,
+					"buffer": 16,
 					"file": "server/flight.php",
 					"semi_transient": false,
 					"settings":
@@ -9272,7 +9343,7 @@
 						"translation.y": 54.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 42,
+					"stack_index": 45,
 					"type": "text"
 				},
 				{
@@ -9361,7 +9432,7 @@
 						"translation.y": 22.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 84,
+					"stack_index": 86,
 					"type": "text"
 				},
 				{
@@ -9377,8 +9448,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								3326,
+								3326
 							]
 						],
 						"settings":
@@ -9447,10 +9518,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 85.0,
+						"translation.y": 1360.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 93,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -9538,7 +9609,7 @@
 						"translation.y": 1625.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 49,
+					"stack_index": 52,
 					"type": "text"
 				},
 				{
@@ -9626,11 +9697,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 102,
+					"stack_index": 103,
 					"type": "text"
 				},
 				{
-					"buffer": 14,
+					"buffer": 15,
 					"file": "server/manager.php",
 					"semi_transient": false,
 					"settings":
@@ -9714,7 +9785,7 @@
 						"translation.y": 4528.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 23,
 					"type": "text"
 				},
 				{
@@ -9743,7 +9814,7 @@
 						"translation.y": 30.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 74,
+					"stack_index": 76,
 					"type": "text"
 				},
 				{
@@ -9772,7 +9843,7 @@
 						"translation.y": 100.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 86,
+					"stack_index": 88,
 					"type": "text"
 				},
 				{
@@ -9801,7 +9872,7 @@
 						"translation.y": 73.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 46,
+					"stack_index": 49,
 					"type": "text"
 				},
 				{
@@ -9889,7 +9960,7 @@
 						"translation.y": 385.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 107,
+					"stack_index": 108,
 					"type": "text"
 				},
 				{
@@ -9977,7 +10048,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 53,
+					"stack_index": 56,
 					"type": "text"
 				},
 				{
@@ -10006,7 +10077,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 106,
+					"stack_index": 107,
 					"type": "text"
 				},
 				{
@@ -10035,11 +10106,11 @@
 						"translation.y": 48.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 85,
+					"stack_index": 87,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 13,
 					"file": "server/systems/weapons/particle.php",
 					"semi_transient": false,
 					"settings":
@@ -10123,7 +10194,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 72,
+					"stack_index": 74,
 					"type": "text"
 				},
 				{
@@ -10212,7 +10283,7 @@
 						"translation.y": 138.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 82,
+					"stack_index": 84,
 					"type": "text"
 				},
 				{
@@ -10300,7 +10371,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 43,
+					"stack_index": 46,
 					"type": "text"
 				},
 				{
@@ -10329,7 +10400,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 90,
+					"stack_index": 92,
 					"type": "text"
 				},
 				{
@@ -10417,7 +10488,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 79,
+					"stack_index": 81,
 					"type": "text"
 				}
 			]
@@ -10451,7 +10522,7 @@
 		"cols":
 		[
 			0.0,
-			0.495057689304,
+			0.474027651501,
 			1.0
 		],
 		"rows":
@@ -10479,24 +10550,60 @@
 		"selected_items":
 		[
 			[
-				"lob",
-				"C:\\xampp\\htdocs\\fire\\lobby.php"
+				"style",
+				"C:\\xampp\\htdocs\\fire\\style.css"
 			],
 			[
-				"post",
+				"fl",
+				"C:\\xampp\\htdocs\\fire\\flights.js"
+			],
+			[
+				"sh",
+				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
+			],
+			[
+				"pos",
 				"C:\\xampp\\htdocs\\fire\\postGameData.php"
 			],
 			[
-				"db",
-				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
+				"game.js",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
+				"flig",
+				"C:\\xampp\\htdocs\\fire\\flights.js"
+			],
+			[
+				"pri",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\primus.php"
+			],
+			[
+				"fi",
+				"C:\\xampp\\htdocs\\fire\\server\\fighter.php"
 			],
 			[
 				"log",
 				"C:\\xampp\\htdocs\\fire\\log.txt"
 			],
 			[
-				"pos",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\demos.php"
+				"db",
+				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
+			],
+			[
+				"d",
+				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
+			],
+			[
+				"po",
+				"C:\\xampp\\htdocs\\fire\\postGameData.php"
+			],
+			[
+				"lob",
+				"C:\\xampp\\htdocs\\fire\\lobby.php"
+			],
+			[
+				"post",
+				"C:\\xampp\\htdocs\\fire\\postGameData.php"
 			],
 			[
 				"mana",
@@ -10523,10 +10630,6 @@
 				"C:\\xampp\\htdocs\\fire\\game.js"
 			],
 			[
-				"pri",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\primus.php"
-			],
-			[
 				"ome",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\omega.php"
 			],
@@ -10541,10 +10644,6 @@
 			[
 				"lo",
 				"C:\\xampp\\htdocs\\fire\\lobby.php"
-			],
-			[
-				"fl",
-				"C:\\xampp\\htdocs\\fire\\flights.js"
 			],
 			[
 				"cam",
@@ -10575,10 +10674,6 @@
 				"C:\\xampp\\htdocs\\fire\\systems.js"
 			],
 			[
-				"sh",
-				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
-			],
-			[
 				"str",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\structure.php"
 			],
@@ -10601,10 +10696,6 @@
 			[
 				"st",
 				"C:\\xampp\\htdocs\\fire\\style.css"
-			],
-			[
-				"po",
-				"C:\\xampp\\htdocs\\fire\\postGameData.php"
 			],
 			[
 				"qu",
@@ -10631,10 +10722,6 @@
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapon.php"
 			],
 			[
-				"game.js",
-				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
 				"lau",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php"
 			],
@@ -10647,20 +10734,12 @@
 				"C:\\xampp\\htdocs\\fire\\autoload.php"
 			],
 			[
-				"style",
-				"C:\\xampp\\htdocs\\fire\\style.css"
-			],
-			[
 				"f",
 				"C:\\xampp\\htdocs\\fire\\flights.js"
 			],
 			[
 				"dem",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\demos.php"
-			],
-			[
-				"d",
-				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
 			],
 			[
 				"games",
@@ -10981,14 +11060,6 @@
 			[
 				"fig",
 				"C:\\xampp\\htdocs\\fire\\server\\fighter.php"
-			],
-			[
-				"vorc",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\vorchan.php"
-			],
-			[
-				"weap",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapon.php"
 			]
 		],
 		"width": 0.0
@@ -11011,7 +11082,7 @@
 		],
 		"width": 392.0
 	},
-	"selected_group": 0,
+	"selected_group": 1,
 	"settings":
 	{
 	},

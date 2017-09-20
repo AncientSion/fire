@@ -37,7 +37,6 @@ if (isset($_POST["type"])) {
 		else echo "Invalid Fleet";
 	}
 	else if ($_POST["type"] == "deployment"){
-		//return;
 		if (isset($_POST["initial"])){
 			$dbManager->deployShipsDB($_POST["gameid"], $_POST["initial"]);
 		}
@@ -67,10 +66,7 @@ if (isset($_POST["type"])) {
 			if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready")){
 				echo "movement success";
 			}
-		}
-		else {
-			echo "movement fail";
-		}
+		} else echo "movement fail";
 	}
 	else if ($_POST["type"] == "firing"){
 		if ($dbManager->insertClientFireOrders($_POST["gameid"], $_POST["turn"], $_POST["fireOrders"])){

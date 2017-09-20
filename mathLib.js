@@ -4,7 +4,7 @@ function getPointInDirection(dis, angle, oX, oY){
 	var y = Math.round(oY + dis * Math.sin(angle* Math.PI / 180));
 	return {x:Math.round(x), y:Math.round(y)}; 
 } 
-
+ 
 function getDistance(start, end){
 	return Math.sqrt((end.x-start.x)*(end.x-start.x) + (end.y-start.y)*(end.y-start.y)); 
 }

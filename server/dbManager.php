@@ -319,7 +319,7 @@
 					$units[$i]["id"] = $this->getLastInsertId();
 					$units[$i]["mission"]["unitid"] = $units[$i]["id"];
 					$missions[] = $units[$i]["mission"];
-					Debug::log("success, got id: ".$units[$i]["id"]);
+					//Debug::log("success, got id: ".$units[$i]["id"]);
 					continue;
 				}
 				else {
@@ -412,9 +412,10 @@
 					$stmt->bindValue(":amount", $data[$i]["launchData"]["loads"][$j]["launch"]);
 					$stmt->execute();
 
-					if ($stmt->errorCode() == 0){
-						Debug::log("success updateSystemLoad");
-					} else Debug::log("error updateSystemLoad");
+					if ($stmt->errorCode() != 0){
+						Debug::log("error updateSystemLoad");
+						//Debug::log("success updateSystemLoad");
+					}// else Debug::log("error updateSystemLoad");
 				}
 			}
 			return true;
@@ -640,11 +641,49 @@
 			$this->insertClientActions($ships);
 		}
 
-		public function deployFlightsDB($userid, $gameid, $flights){
-			Debug::log("deployFlights ".sizeof($flights));
-			if (sizeof($flights)){
-				$this->insertUnits($userid, $gameid, $flights);
-				$this->updateSystemLoad($flights);
+		public function deployFlightsDB($userid, $gameid, $data){
+			Debug::log("deployFlights ".sizeof($data));
+
+			if (sizeof($data)){
+				$this->updateSystemLoad($data);
+
+				for ($i = 0; $i < sizeof($data); $i++){
+					for ($j = $i+1; $j < sizeof($data); $j++){
+					//Debug::log("comparing entry ".$i." to entry ".$j);
+						if ($data[$i]["launchData"]["shipid"] == $data[$j]["launchData"]["shipid"]){
+							//Debug::log("same origin");
+							if ($data[$i]["mission"]["targetid"] == $data[$j]["mission"]["targetid"]){
+								//Debug::log("same target");
+								for ($k = 0; $k < sizeof($data[$j]["launchData"]["loads"]); $k++){
+									if ($data[$j]["launchData"]["loads"][$k]["launch"] >= 1){
+										for ($l = 0; $l < sizeof($data[$i]["launchData"]["loads"]); $l++){
+											if ($data[$i]["launchData"]["loads"][$l]["name"] == $data[$j]["launchData"]["loads"][$k]["name"]){
+												//Debug::log("adding");
+												$data[$i]["launchData"]["loads"][$l]["launch"] += $data[$j]["launchData"]["loads"][$k]["launch"];
+												$data[$j]["launchData"]["loads"][$k]["launch"] = 0;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
+				for ($i = sizeof($data)-1; $i >= 0; $i--){
+					$splice = 1;
+					for ($j = 0; $j < sizeof($data[$i]["launchData"]["loads"]); $j++){
+						if ($data[$i]["launchData"]["loads"][$j]["launch"] >= 1){
+							$splice = 0;
+							break 1; 
+						}
+					}
+					if ($splice){
+						array_splice($data, $i, 1);
+					}
+				}
+				//Debug::log("insert :".sizeof($data));
+				$this->insertUnits($userid, $gameid, $data);
 			}
 			return true;
 		}

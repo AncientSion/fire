@@ -244,7 +244,7 @@ function Game(data, userid){
 		var hangar = s.getSystemById(this.flightDeploy.id)
 		var o = s.getPlannedPosition();
 		var facing = getAngleFromTo(o, dest);
-		var p = getPointInDirection(20, facing, o.x, o.y);
+		var p = getPointInDirection(30, facing, o.x, o.y);
 		var mission = {unitid: aUnit, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
 
 		if (t.id == aUnit){

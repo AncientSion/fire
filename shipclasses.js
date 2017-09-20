@@ -816,14 +816,14 @@ function Ship(data){
 		var turnEle = $("#game").find("#epButton")[0];
 		var p1 = getPointInDirection(150/cam.z, addToDirection(angle, 90), center.x, center.y);
 
-
-
 		$(turnEle)
 			.css("left", p1.x * cam.z + cam.o.x - $(turnEle).width()/2)
 			.css("top", p1.y * cam.z + cam.o.y - $(turnEle).height()/2)
 			.removeClass("disabled")
 			.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end()
 			.find("#impulseCost").html(this.getImpulseChangeCost() + " EP");
+
+			console.log("ding");
 	}
 	
 	this.drawMoveArea = function(center, rem){
@@ -2401,16 +2401,6 @@ function Ship(data){
 		planCtx.setTransform(1,0,0,1,0,0);
 	}
 
-	this.resetMoveMode = function(){
-		var turn = game.turnMode;
-		this.unsetMoveMode();
-		this.setMoveMode();
-		if (turn && this.canTurn()){
-			this.switchTurnMode();
-		}
-		this.drawEW();
-	}
-
 	this.setMoveMode = function(){
 		game.mode = 1;
 		turn.set(this);
@@ -3026,4 +3016,14 @@ Ship.prototype.getGunOrigin = function(id){
 		}
 	}
 	return this.getSystemById(id);
+}
+
+Ship.prototype.resetMoveMode = function(){
+	var turn = game.turnMode;
+	this.unsetMoveMode();
+	this.setMoveMode();
+	if (turn && this.canTurn()){
+		this.switchTurnMode();
+	}
+	this.drawEW();
 }

@@ -1,110 +1,28 @@
-insertClientActions s: 3
-insertClientActions s: 4
+deployFlights 2
+updateSystemLoad: 2
+DB insertUnits S: 1
+insertSubUnits
+success insertSubUnits
+success insertSubUnits
+insertMissions s: 1
+success insertMissions
+insertClientActions s: 1
 doAdvance for game1 from phase -1 to phase 0
 initBallistics
-resolveDeployActions s: 7
+merging
+Hangar fireorder, resolving: 10
+Hangar fireorder, resolving: 13
+Hangar fireorder, resolving: 14
+DB updateBallisticFireOrder, s: 5
+DB insertUnits S: 1
+insertSubUnits
+success insertSubUnits
+insertMissions s: 1
+success insertMissions
+insertClientActions s: 1
+updateSystemLoad: 2
+resolveDeployActions s: 3
 handleJumpActions
-jumpin: #1, class: Artemis, size: 50, sensor: 650, ordered to: -486/179, shiftPotential: 12.69%
-Artemis, aShift: 13°, pShift: 26px
---> aShift: 6°, psShift: 14/13 (20px)
-jumpin: #2, class: Omega, size: 100, sensor: 925, ordered to: -527/-497, shiftPotential: 17.84%
-Omega, aShift: 18°, pShift: 36px
---> aShift: -5°, psShift: 13/19 (24px)
-jumpin: #3, class: Tethys, size: 40, sensor: 425, ordered to: -472/-419, shiftPotential: 15.53%
-Tethys, aShift: 16°, pShift: 32px
---> aShift: 8°, psShift: 3/-9 (10px)
-jumpin: #4, class: Primus, size: 100, sensor: 1050, ordered to: 523/-541, shiftPotential: 15.71%
-Primus, aShift: 16°, pShift: 32px
---> aShift: 16°, psShift: 8/-5 (10px)
-jumpin: #5, class: Altarian, size: 55, sensor: 750, ordered to: 599/63, shiftPotential: 12.1%
-Altarian, aShift: 13°, pShift: 25px
---> aShift: 3°, psShift: 23/3 (24px)
-jumpin: #6, class: Altarian, size: 55, sensor: 750, ordered to: 628/116, shiftPotential: 12.1%
-Altarian, aShift: 13°, pShift: 25px
---> aShift: -3°, psShift: 14/19 (24px)
-jumpin: #7, class: Haven, size: 35, sensor: 375, ordered to: 553/-59, shiftPotential: 15.4%
-Haven, aShift: 16°, pShift: 31px
---> aShift: 0°, psShift: -31/-16 (35px)
-action size: 2
 assembleEndStates
-updateUnitEndState s:7 1/-1
-advancing game state time: 0.071 seconds.
-insertClientActions s: 3
-insertClientActions s: 4
-doAdvance for game1 from phase 0 to phase 1
-handleShipMovementPhase
-handleShipMovement
-resolveUnitMovementDB
-handleMixedMovement
-layer 0 -> patrol target, layer 1 => strike
-resolving layer #0
-resolving layer #1
-resolving layer #2
-handleMixedMovement
-layer 0 -> patrol target, layer 1 => strike
-resolving layer #0
-resolving layer #1
-resolving layer #2
-advancing game state time: 0.025 seconds.
-doAdvance for game1 from phase 2 to phase 3
-ew for #1
-ew for #2
-specific EW for ship #2, EW from 346.68122746637 to 23.318772533627, dist: 891
-lock vs #4 with val: 0.5
-lock vs #7 with val: 0.5
-ew for #3
-ew for #4
-specific EW for ship #4, EW from 145.28198792981 to 184.71801207019, dist: 875
-lock vs #2 with val: 0.5
-lock vs #3 with val: 0.5
-ew for #5
-lock vs #1 with val: 0.2
-lock vs #2 with val: 0.2
-lock vs #3 with val: 0.2
-ew for #6
-lock vs #1 with val: 0.2
-lock vs #2 with val: 0.2
-lock vs #3 with val: 0.2
-ew for #7
-specific EW for ship #7, EW from 57.704896645454 to 54.295103354546, dist: 72
-resolveFireOrder - ID 1, shooter: Primus #4 vs Omega #2, w: HeavyIon #8, guns: 1
-doDamage, weapon: HeavyIon, target: 2/12, totalDmg: 51
-doDamage, weapon: HeavyIon, target: 2/-1, totalDmg: 52
-resolveFireOrder - ID 2, shooter: Primus #4 vs Omega #2, w: HeavyIon #9, guns: 1
-doDamage, weapon: HeavyIon, target: 2/-1, totalDmg: 65
-doDamage, weapon: HeavyIon, target: 2/-1, totalDmg: 62
-resolveFireOrder - ID 3, shooter: Primus #4 vs Omega #2, w: HeavyIon #10, guns: 1
-doDamage, weapon: HeavyIon, target: 2/-1, totalDmg: 65
-doDamage, weapon: HeavyIon, target: 2/11, totalDmg: 57
-resolveFireOrder - ID 4, shooter: Primus #4 vs Omega #2, w: HeavyIon #11, guns: 1
-doDamage, weapon: HeavyIon, target: 2/-1, totalDmg: 50
-doDamage, weapon: HeavyIon, target: 2/-1, totalDmg: 58
-resolveFireOrder - ID 5, shooter: Primus #4 vs Omega #2, w: HeavyIon #13, guns: 1
-doDamage, weapon: HeavyIon, target: 2/12, totalDmg: 56
- => OK ship target system Dual #12 was destroyed, rem: 16, doing: 16, OK for: 26 dmg
-doDamage, weapon: HeavyIon, target: 2/-1, totalDmg: 50
-resolveFireOrder - ID 6, shooter: Altarian #5 vs Omega #2, w: HeavyIon #9, guns: 1
-resolveFireOrder - ID 7, shooter: Altarian #6 vs Omega #2, w: HeavyIon #9, guns: 1
-doDamage, weapon: HeavyIon, target: 2/-1, totalDmg: 65
-resolveFireOrder - ID 8, shooter: Omega #2 vs Primus #4, w: HeavyLaser #8, guns: 1
-doDamage, weapon: HeavyLaser, target: 4 for 154 dmg
-hitting:  Primary  Primary  Primary 
-resolveFireOrder - ID 9, shooter: Omega #2 vs Primus #4, w: HeavyLaser #9, guns: 1
-doDamage, weapon: HeavyLaser, target: 4 for 158 dmg
-hitting:  Primary  HeavyIon  Primary 
-resolveBallisticFireOrders
-cleanFireOrders, fires: 9
-DB updateFireOrders: 9
-= testCriticals for Artemis, #1, turn: 1
-= testCriticals for Omega, #2, turn: 1
-determineCrit for Combo System #11, dmg: 84, possible: 3, inRange: 3
-= testCriticals for Tethys, #3, turn: 1
-= testCriticals for Primus, #4, turn: 1
-determineCrit for 122mm Ion Burst Cannon #8, dmg: 60.9375, possible: 3, inRange: 2
-= testCriticals for Altarian, #5, turn: 1
-= testCriticals for Altarian, #6, turn: 1
-= testCriticals for Haven, #7, turn: 1
- => DB insertDamageEntries: 17
- => DB insertCritEntries: 1
-handleFiringPhase time: 0.089 seconds.
-advancing game state time: 0.095 seconds.
+updateUnitEndState s:10 2/-1
+advancing game state time: 0.181 seconds.

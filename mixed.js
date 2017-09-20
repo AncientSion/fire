@@ -171,7 +171,7 @@ Mixed.prototype.drawMovePlan = function(){
 	var dist = getDistance(this.getPlannedPosition(), target);
 	var impulse = this.getCurrentImpulse();
 
-	planCtx.globalAlpha = 1;
+	planCtx.globalAlpha = 0.7;
 	planCtx.translate(cam.o.x, cam.o.y);
 	planCtx.scale(cam.z, cam.z);
 	planCtx.beginPath();

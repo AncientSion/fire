@@ -183,9 +183,9 @@ function Flight(data){
 				.append($("<td>").html("Mission Target"))
 				.append($("<td>").html(game.getMissionTargetString(this.mission))))
 
-		if (this.friendly && game.phase == -1 && this.available < game.turn){
+		//if (this.friendly && game.phase == -1 && this.available < game.turn){
 			var elapsed = game.turn - this.mission.turn;
-			if (elapsed >= 2){
+			if (this.friendly && elapsed >= 2){
 				$(table)
 				.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
 				.append($("<tr>").addClass("misionSwitch")
@@ -197,28 +197,46 @@ function Flight(data){
 						.data("mission", this.mission.type)
 						.click(function(e){
 							game.getUnitById(aUnit).switchMissionMode();
-						})
-						.hover(function(e){
-							$(this).toggleClass("highlight");
 						})))
+					//	.hover(function(e){
+					//		$(this).toggleClass("highlight");
+					//})))
 				.append($("<tr>").click(function(){game.mission.set(1, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Patrol Location")))
 				.append($("<tr>").click(function(){game.mission.set(2, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Strike/ Escort Ship")))
 			}
-			else {
+			else if (this.friendly){
 				$(table)
 				.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
 				.append($("<tr>").addClass("misionSwitch")
 					.append($("<td>")
 						.attr("colSpan", 2)
 						.addClass("buttonTD")
-						.html("Adjustment of orders</br> " + (2 - elapsed) + " Turn/s remaining")));
+						.html("New orders possible in</br> " + (2 - elapsed) + " Turn/s")));
 			}
-		}
+			else if (elapsed >= 2){
+				$(table)
+				.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
+				.append($("<tr>")
+					.append($("<td>")
+						.attr("colSpan", 2)
+						.addClass("buttonTD")
+						.html("Eligible for mission adustment")));
+			}
+			else {
+				$(table)
+				.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
+				.append($("<tr>")
+					.append($("<td>")
+						.attr("colSpan", 2)
+						.addClass("buttonTD")
+						.html("New orders possible in</br> " + (2 - elapsed) + " Turn/s")));
+			}
+		//}
 				
 		subDiv.appendChild(table);
 		div.appendChild(subDiv);
 
-		var maxWidth = 250;
+		var maxWidth = 300;
 		$(div).css("width", maxWidth);
 		$(div).find(".header").css("width", "99%");
 
