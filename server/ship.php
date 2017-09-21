@@ -143,7 +143,8 @@ class Ship {
 		$this->baseHitChance = ceil(pow($this->mass, 1/3)*5);
 		//$this->baseHitChance = ceil(pow($this->mass, 0.3)*4)+20;
 		$this->baseTurnCost = round(pow($this->mass, 1.25)/30000, 2);
-		$this->baseTurnDelay = round(pow($this->mass, 0.5)/35, 2);
+		//$this->baseTurnDelay = round(pow($this->mass, 0.5)/35, 2);
+		$this->baseTurnDelay = round(pow($this->mass, 0.45)/20, 2);
 		$this->baseImpulseCost = round(pow($this->mass, 1.4)/1500, 2);
 	}
 
