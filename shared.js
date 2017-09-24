@@ -192,7 +192,7 @@ function initiateFlight(data){
 		}
 
 		for (var k = 0; k < data.structures[j].crits.length; k++){
-			flight.structures[j].systems.push(new Crit(data.structures[j].crits[k]));
+			flight.structures[j].crits.push(new Crit(data.structures[j].crits[k]));
 		}
 
 	}

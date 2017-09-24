@@ -287,9 +287,8 @@ Single.prototype.getDetailsDiv = function(){
 				.append($("<tr>").append($("<td>").attr("colspan", 2).css("fontSize", 16).css("borderBottom", "1px solid white").css("borderTop", "1px solid white").html("Modifiers")))
 
 		for (var i = 0; i < this.crits.length; i++){
-			val = this.crits[i].html;
 			$(table)
-				.append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("negative").html(val)))
+				.append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("negative").html(this.crits[i].getString())))
 		}
 	}
 		
@@ -399,7 +398,9 @@ function Crit(data){
 		var d = "";
 
 		if (this.type == "Disabled"){
-			return  (this.type + " (Incl. Turn " + (this.turn + this.duration + ")"));
+			if (this.duration){
+				return  (this.type + " (Incl. Turn " + (this.turn + this.duration + ")"));
+			} else return ("Disengaged");
 		}
 		else if (!this.duration){
 			return (this.type + ": -" + (this.value*100) + "%" + " (Permanent)");

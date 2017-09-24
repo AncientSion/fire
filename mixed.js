@@ -170,6 +170,7 @@ Mixed.prototype.drawMovePlan = function(){
 
 	var dist = getDistance(this.getPlannedPosition(), target);
 	var impulse = this.getCurrentImpulse();
+	var color = "red";
 
 	planCtx.globalAlpha = 0.7;
 	planCtx.translate(cam.o.x, cam.o.y);
@@ -177,9 +178,10 @@ Mixed.prototype.drawMovePlan = function(){
 	planCtx.beginPath();
 	planCtx.moveTo(origin.x, origin.y);
 
-	if (impulse < dist){
+	if (impulse < dist){ // does not reach
 		var a = getAngleFromTo(this, target);
 		var step = getPointInDirection(impulse, a, origin.x, origin.y);
+			color = "white";
 
 		planCtx.lineTo(step.x, step.y);
 		planCtx.closePath();
@@ -193,9 +195,11 @@ Mixed.prototype.drawMovePlan = function(){
 
 	planCtx.lineTo(target.x, target.y);
 	planCtx.closePath();
-	planCtx.strokeStyle = "white";
+	planCtx.strokeStyle = color;
 	planCtx.stroke();
-	planCtx.setTransform(1,0,0,1,0,0);
+	planCtx.setTransform(1,0,0,1,0,0);}
+
+	if (this.flight){this.drawMissionArea();
 }
 
 Mixed.prototype.getStringHitChance = function(){
@@ -387,6 +391,10 @@ Mixed.prototype.setImage = function(){
 
 		}
 	}
+}
+
+Mixed.prototype.getLockMultiplier = function(){
+	return 1.0;
 }
 
 Mixed.prototype.setPreMoveImage = function(){

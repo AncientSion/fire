@@ -822,8 +822,6 @@ function Ship(data){
 			.removeClass("disabled")
 			.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end()
 			.find("#impulseCost").html(this.getImpulseChangeCost() + " EP");
-
-			console.log("ding");
 	}
 	
 	this.drawMoveArea = function(center, rem){
@@ -2457,17 +2455,18 @@ function Ship(data){
 		var tPos = target.getBaseOffsetPos();
 		var origin = this.getBaseOffsetPos();
 		var d = getDistance(origin, tPos);
+		var base = target.getLockMultiplier();
 
 		if (d == 0 && game.isCloseCombat(this, target) && this.isInEWArc(origin, target.getTrajectory(), sensor, ew)){
 			if (target.salvo){
-				return 1;
+				return base;
 			}
 			else if (target.flight){
-				return Math.round(0.5 / 180 * (Math.min(180, game.const.ew.len * Math.pow(sensor.getOutput()/ew.dist, game.const.ew.p)))*100)/100;
+				return Math.round(base / 180 * (Math.min(180, game.const.ew.len * Math.pow(sensor.getOutput()/ew.dist, game.const.ew.p)))*100)/100;
 			}
 		}
 		else if (d <= ew.dist && this.isInEWArc(origin, tPos, sensor, ew)){
-			return 0.5;
+			return base;
 		}
 		else return 0;
 	}
@@ -3026,4 +3025,8 @@ Ship.prototype.resetMoveMode = function(){
 		this.switchTurnMode();
 	}
 	this.drawEW();
+}
+
+Ship.prototype.getLockMultiplier = function(){
+	return 0.5;
 }

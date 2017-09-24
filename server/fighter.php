@@ -40,7 +40,7 @@ class Fighter extends Single {
     }
 
 	public function setBaseStats(){
-		$this->baseHitChance = ceil($this->mass/2);
+		$this->baseHitChance = ceil($this->mass/1.5);
 	}
 }
 

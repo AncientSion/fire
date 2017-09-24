@@ -32,8 +32,8 @@ class PrimarySystem extends System {
 
 	public function getValidEffects(){
 		return array(
-			array("Output", 10, 1, 0), // attr, %-tresh, duration, modifier
-			array("Disabled", 60, 1, 0) // attr, %-tresh, duration, modifier
+			array("Disabled", 60, 1, 0), // attr, %-tresh, duration, modifier
+			array("Output", 10, 1, 0) // attr, %-tresh, duration, modifier
 		);
 	}
 }
@@ -82,7 +82,7 @@ class Engine extends PrimarySystem {
 	public $display = "Engine";
 
 	function __construct($id, $parentId, $mass, $output = 0, $destroyed = 0){
-		$this->powerReq = ceil($output / 8);
+		$this->powerReq = ceil($output / 12);
 		$this->boostEffect[] = new Effect("Output", 0.15);
         parent::__construct($id, $parentId, $mass, $output, ceil($this->powerReq/3), $destroyed);
     }

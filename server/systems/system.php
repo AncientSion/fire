@@ -172,15 +172,15 @@ class System {
 
 	public function determineCrit($old, $new, $turn){
 		$dmg = ($new + ($old/2)) / $this->integrity * 100;
-		$crits = $this->getValidEffects();
+		$possible = $this->getValidEffects();
 		$valid = array();
 
-		for ($i = 0; $i < sizeof($crits); $i++){
-			if ($dmg > $crits[$i][1]){
-				$valid[] = $crits[$i];
+		for ($i = 0; $i < sizeof($possible); $i++){
+			if ($dmg > $possible[$i][1]){
+				$valid[] = $possible[$i];
 			}
 		}
-		Debug::log("determineCrit for ".$this->display." #".$this->id.", dmg: ".$dmg.", possible: ".sizeof($crits).", inRange: ".sizeof($valid));
+		Debug::log("determineCrit for ".$this->display." #".$this->id.", dmg: ".$dmg.", possible: ".sizeof($possible).", inRange: ".sizeof($valid));
 
 		for ($i = 0; $i < sizeof($valid); $i++){
 			if (mt_rand(0, 1)){
@@ -196,7 +196,14 @@ class System {
 					$mod = (round($dmg/20)/10);
 
 					if ($this->internal){
-						$duration -= mt_rand(0, 1);
+						$duration += mt_rand(0, 1);
+					}
+
+					for ($i = sizeof($this->critsS); $i >= 0; $i--){
+						if ($this->crits[$i]->turn < $turn){break;}
+						if ($this->crits[$i]->turn == $turn && $this->crits[$i]->type == "Disabled"){
+							$duration += $this->crits[$i]->duration;
+						}
 					}
 				}
 

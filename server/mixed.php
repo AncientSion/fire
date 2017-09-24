@@ -224,6 +224,10 @@ class Mixed extends Ship {
 	public function getMoveState($turn){
 		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x , "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => 0, "angle" => $this->actions[sizeof($this->actions)-1]->a, "thrust" => $this->currentImpulse);
 	}
+
+	public function getLockMultiplier(){
+		return 1.0;
+	}
 }
 
 ?>

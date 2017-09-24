@@ -28,20 +28,15 @@ function Flight(data){
 
 	this.setLayout = function(){
 		var size = this.baseSize + this.unitSize * this.structures.length-1;
-		var osx = 7;  
+		var osx = 7;
 		var osy = 5;
 
-		//var ox;
-		//var oy = -Math.floor(s/2)+10;
-
 		for (var i = 0; i < this.structures.length/3; i++){
-			//console.log("batch " + i)
+
 			var a = 360/Math.ceil(this.structures.length/3)*i;
-			//console.log(a);
-			var o = getPointInDirection(size/2 - this.unitSize*3, a-90, 0, 0);
+			var o = getPointInDirection(size/2 - this.unitSize*4, a-90, 0, 0);
 
 			for (var j = 0; j < Math.min(this.structures.length-i*3, 3); j++){
-				//console.log("sub " + j)
 				var ox = o.x;
 				var oy = o.y;
 
@@ -52,7 +47,6 @@ function Flight(data){
 					default: break;
 				}
 				this.structures[(i*3)+j].layout = {x: ox, y: oy};
-				//console.log(this.structures[(i*3)+j].layout);
 			}
 		}
 	}
@@ -564,11 +558,6 @@ Flight.prototype.enableMissionMode = function(){
 			$(this).children()[0].innerHTML = "Select new Mission";
 		} else $(this).removeClass("disabled");
 	});
-}
-
-Flight.prototype.drawMovePlan = function(){
-	Mixed.prototype.drawMovePlan.call(this);
-	this.drawMissionArea();
 }
 
 Flight.prototype.drawMissionArea = function(){

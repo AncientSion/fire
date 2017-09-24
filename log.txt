@@ -117,3 +117,379 @@ DB updateFireOrders: 14
  => DB insertCritEntries: 0
 handleFiringPhase time: 0.123 seconds.
 advancing game state time: 0.14 seconds.
+doAdvance for game1 from phase 3 to phase 4
+assembleEndStates
+updateUnitEndState s:10 2/3
+endTurn
+resolveDeployActions s: 0
+destroyUnitsDB
+insertReinforcements: 1
+insertReinforcements: 1
+advancing game state time: 0.117 seconds.
+doAdvance for game1 from phase -1 to phase 0
+initBallistics
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+updateUnitEndState s:10 3/-1
+advancing game state time: 0.014 seconds.
+insertClientActions s: 3
+insertClientActions s: 4
+doAdvance for game1 from phase 0 to phase 1
+handleShipMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving mixed #12
+_____________________
+Flight #12, impulse: 217
+From -199/-383 to 171/-64
+Dist 489, angle: 40.766668327349
+close in
+adding move to: -35/-241
+resolving mixed #18
+_____________________
+Flight #18, impulse: 249
+From 241/-404 to -100/-10
+Dist 522, angle: 130.87560623121
+close in
+adding move to: 78/-216
+resolving layer #2
+updateMissionState
+handleMixedMovement
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving mixed #19
+_____________________
+Flight #19, impulse: 267
+From -162/28 to 11/-245
+Dist 324, angle: 302.36242017755
+close in
+adding move to: -19/-198
+resolving layer #2
+updateMissionState
+advancing game state time: 0.049 seconds.
+doAdvance for game1 from phase 2 to phase 3
+ew for #1
+specific EW for ship #1, EW from 227.0932530942 to 308.9067469058, dist: 333
+ew for #3
+specific EW for ship #3, EW from 7.0145477917558 to 46.985452208244, dist: 351
+ew for #2
+specific EW for ship #2, EW from 217.88923014517 to 36.110769854828, dist: 282
+ew for #4
+specific EW for ship #4, EW from 121.48021977658 to 254.51978022342, dist: 389
+ew for #5
+specific EW for ship #5, EW from 116.29896746726 to 217.70103253274, dist: 333
+ew for #7
+specific EW for ship #7, EW from 81.673423007724 to 258.32657699228, dist: 115
+ew for #6
+specific EW for ship #6, EW from 162.6281948421 to 273.3718051579, dist: 314
+resolveFireOrder - ID 47, shooter: Altarian #5 vs Artemis #1, w: MediumSingleIon #18, guns: 1
+doDamage, weapon: MediumSingleIon, target: 1/-1, totalDmg: 37
+doDamage, weapon: MediumSingleIon, target: 1/14, totalDmg: 41
+resolveFireOrder - ID 48, shooter: Altarian #5 vs Artemis #1, w: MediumSingleIon #19, guns: 1
+doDamage, weapon: MediumSingleIon, target: 1/-1, totalDmg: 45
+doDamage, weapon: MediumSingleIon, target: 1/12, totalDmg: 35
+ => OK ship target system Dual #12 was destroyed, rem: 28, doing: 28, OK for: 1 dmg
+resolveFireOrder - ID 49, shooter: Altarian #6 vs Artemis #1, w: MediumSingleIon #18, guns: 1
+doDamage, weapon: MediumSingleIon, target: 1/-1, totalDmg: 34
+doDamage, weapon: MediumSingleIon, target: 1/-1, totalDmg: 44
+resolveFireOrder - ID 50, shooter: Altarian #6 vs Artemis #1, w: MediumSingleIon #19, guns: 1
+doDamage, weapon: MediumSingleIon, target: 1/14, totalDmg: 37
+ => OK ship target system MissileLauncher #14 was destroyed, rem: 12, doing: 12, OK for: 17 dmg
+doDamage, weapon: MediumSingleIon, target: 1/-1, totalDmg: 46
+resolveFireOrder - ID 39, shooter: Primus #4 vs Omega #2, w: HeavyIon #9, guns: 1
+doDamage, weapon: HeavyIon, target: 2/-1, totalDmg: 56
+doDamage, weapon: HeavyIon, target: 2/11, totalDmg: 60
+ => OK ship target system Dual #11 was destroyed, rem: 8, doing: 8, OK for: 39 dmg
+resolveFireOrder - ID 40, shooter: Primus #4 vs Omega #2, w: HeavyIon #10, guns: 1
+doDamage, weapon: HeavyIon, target: 2/-1, totalDmg: 54
+doDamage, weapon: HeavyIon, target: 2/-1, totalDmg: 50
+resolveFireOrder - ID 41, shooter: Primus #4 vs Omega #2, w: LightIon #14, guns: 1
+doDamage, weapon: LightIon, target: 2/10, totalDmg: 18
+doDamage, weapon: LightIon, target: 2/8, totalDmg: 16
+doDamage, weapon: LightIon, target: 2/-1, totalDmg: 16
+doDamage, weapon: LightIon, target: 2/-1, totalDmg: 16
+resolveFireOrder - ID 42, shooter: Primus #4 vs Omega #2, w: LightIon #15, guns: 1
+doDamage, weapon: LightIon, target: 2/10, totalDmg: 15
+doDamage, weapon: LightIon, target: 2/10, totalDmg: 17
+doDamage, weapon: LightIon, target: 2/9, totalDmg: 18
+doDamage, weapon: LightIon, target: 2/-1, totalDmg: 15
+resolveFireOrder - ID 43, shooter: Primus #4 vs Omega #2, w: LightIon #16, guns: 1
+doDamage, weapon: LightIon, target: 2/-1, totalDmg: 16
+doDamage, weapon: LightIon, target: 2/-1, totalDmg: 17
+doDamage, weapon: LightIon, target: 2/-1, totalDmg: 14
+doDamage, weapon: LightIon, target: 2/8, totalDmg: 14
+resolveFireOrder - ID 44, shooter: Primus #4 vs Omega #2, w: LightIon #23, guns: 1
+doDamage, weapon: LightIon, target: 2/-1, totalDmg: 14
+doDamage, weapon: LightIon, target: 2/-1, totalDmg: 15
+doDamage, weapon: LightIon, target: 2/-1, totalDmg: 17
+doDamage, weapon: LightIon, target: 2/-1, totalDmg: 18
+resolveFireOrder - ID 45, shooter: Primus #4 vs Omega #2, w: LightIon #25, guns: 1
+doDamage, weapon: LightIon, target: 2/-1, totalDmg: 18
+doDamage, weapon: LightIon, target: 2/-1, totalDmg: 14
+doDamage, weapon: LightIon, target: 2/-1, totalDmg: 17
+doDamage, weapon: LightIon, target: 2/-1, totalDmg: 16
+resolveFireOrder - ID 46, shooter: Primus #4 vs Omega #2, w: LightIon #26, guns: 1
+doDamage, weapon: LightIon, target: 2/8, totalDmg: 18
+doDamage, weapon: LightIon, target: 2/-1, totalDmg: 17
+doDamage, weapon: LightIon, target: 2/-1, totalDmg: 18
+doDamage, weapon: LightIon, target: 2/-1, totalDmg: 16
+resolveFireOrder - ID 36, shooter: Tethys #3 vs Primus #4, w: LightLaser #8, guns: 1
+doDamage, weapon: LightLaser, target: 4 for 77 dmg
+hitting:  HeavyIon  Primary  Primary 
+resolveFireOrder - ID 37, shooter: Tethys #3 vs Primus #4, w: LightLaser #9, guns: 1
+doDamage, weapon: LightLaser, target: 4 for 82 dmg
+hitting:  Primary  Primary  HeavyIon 
+resolveFireOrder - ID 29, shooter: Omega #2 vs Primus #4, w: LightPulse #26, guns: 1
+resolveFireOrder - ID 30, shooter: Omega #2 vs Primus #4, w: LightPulse #27, guns: 1
+resolveFireOrder - ID 31, shooter: Omega #2 vs Primus #4, w: LightPulse #28, guns: 1
+resolveFireOrder - ID 32, shooter: Omega #2 vs Primus #4, w: LightPulse #29, guns: 1
+resolveFireOrder - ID 33, shooter: Omega #2 vs Primus #4, w: LightPulse #30, guns: 1
+resolveFireOrder - ID 34, shooter: Omega #2 vs Primus #4, w: LightPulse #31, guns: 1
+resolveFireOrder - ID 38, shooter: Tethys #3 vs Primus #4, w: LightPulse #11, guns: 1
+fireid: 38, doDamage, weapon: LightPulse, target: 4, hits: 3
+resolveFireOrder - ID 35, shooter: Artemis #1 vs Altarian #5, w: LightPulse #12, guns: 1
+fireid: 35, doDamage, weapon: LightPulse, target: 5, hits: 4
+resolveFireOrder - ID 51, shooter: Haven #7 vs Flight #12, w: MediumSingleIon #8, guns: 1
+resolveFireOrder - ID 52, shooter: Haven #7 vs Flight #12, w: LightIon #10, guns: 1
+doDamage, weapon: LightIon, target: 12/15, totalDmg: 15
+doDamage, weapon: LightIon, target: 12/19, totalDmg: 16
+resolveFireOrder - ID 54, shooter: Haven #7 vs Flight #12, w: LightIon #13, guns: 1
+doDamage, weapon: LightIon, target: 12/21, totalDmg: 15
+doDamage, weapon: LightIon, target: 12/15, totalDmg: 17
+resolveFireOrder - ID 55, shooter: Haven #7 vs Flight #12, w: LightIon #14, guns: 1
+resolveFireOrder - ID 53, shooter: Haven #7 vs Salvo #19, w: LightIon #11, guns: 1
+doDamage, weapon: LightIon, target: 19/5, totalDmg: 18
+ => overkilling non-ship target system Naga #5 was destroyed, rem: 12, doing: 15
+resolveBallisticFireOrders
+cleanFireOrders, fires: 27
+DB updateFireOrders: 27
+= testCriticals for Artemis, #1, turn: 3
+= testCriticals for Flight, #12, turn: 3
+checking crit for Aurora
+Droput!
+checking crit for Aurora
+checking crit for Aurora
+= testCriticals for Salvo, #19, turn: 3
+= testCriticals for Tethys, #3, turn: 3
+= testCriticals for Omega, #2, turn: 3
+determineCrit for Combo System #8, dmg: 28, possible: 3, inRange: 0
+determineCrit for Combo System #9, dmg: 12, possible: 3, inRange: 0
+determineCrit for Hangar #10, dmg: 6.9069069069069, possible: 0, inRange: 0
+= testCriticals for Primus, #4, turn: 3
+determineCrit for 122mm Ion Burst Cannon #8, dmg: 57.03125, possible: 3, inRange: 2
+determineCrit for 122mm Ion Burst Cannon #10, dmg: 20.3125, possible: 3, inRange: 0
+= testCriticals for Altarian, #5, turn: 3
+= testCriticals for Haven, #7, turn: 3
+= testCriticals for Flight, #18, turn: 3
+= testCriticals for Altarian, #6, turn: 3
+ => DB insertDamageEntries: 49
+ => DB insertCritEntries: 2
+handleFiringPhase time: 0.42 seconds.
+advancing game state time: 0.438 seconds.
+doAdvance for game1 from phase 3 to phase 4
+assembleEndStates
+updateUnitEndState s:10 3/3
+endTurn
+resolveDeployActions s: 0
+destroyUnitsDB
+insertReinforcements: 1
+advancing game state time: 0.138 seconds.
+deployFlights 1
+updateSystemLoad: 1
+DB insertUnits S: 1
+insertSubUnits
+success insertSubUnits
+insertMissions s: 1
+success insertMissions
+insertClientActions s: 1
+doAdvance for game1 from phase -1 to phase 0
+initBallistics
+Hangar fireorder, resolving: 56
+DB updateBallisticFireOrder, s: 1
+resolveDeployActions s: 1
+handleJumpActions
+assembleEndStates
+updateUnitEndState s:11 4/-1
+advancing game state time: 0.028 seconds.
+insertClientActions s: 3
+insertClientActions s: 4
+doAdvance for game1 from phase 0 to phase 1
+handleShipMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving mixed #12
+_____________________
+Flight #12, impulse: 217
+From -35/-241 to 55/-139
+Dist 137, angle: 48.576334374997
+arrival
+adding move to: 55/-139
+resolving mixed #20
+_____________________
+Flight #20, impulse: 217
+From -93/-552 to 50/-428
+Dist 190, angle: 40.929633626775
+arrival
+adding move to: 50/-428
+resolving mixed #18
+_____________________
+Flight #18, impulse: 249
+From 78/-216 to -185/-146
+Dist 273, angle: 165.09570508233
+close in
+adding move to: -163/-152
+resolving layer #2
+updateMissionState
+handleMixedMovement
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving mixed #19
+_____________________
+Flight #19, impulse: 356
+From -19/-198 to 38/-85
+Dist 127, angle: 63.232491080704
+arrival
+adding move to: 38/-85
+resolving layer #2
+updateMissionState
+advancing game state time: 0.081 seconds.
+doAdvance for game1 from phase 2 to phase 3
+ew for #1
+specific EW for ship #1, EW from 330.04973801143 to 85.950261988573, dist: 264
+ew for #3
+specific EW for ship #3, EW from 50.469179113882 to 145.53082088612, dist: 197
+ew for #2
+specific EW for ship #2, EW from 340.38577314196 to 71.61422685804, dist: 485
+ew for #5
+specific EW for ship #5, EW from 33.704896645454 to 30.295103354546, dist: 144
+ew for #4
+specific EW for ship #4, EW from 309.9059648845 to 308.0940351155, dist: 201
+ew for #7
+ew for #6
+specific EW for ship #6, EW from 127.50868625288 to 306.49131374712, dist: 228
+resolveFireOrder - ID 82, shooter: Primus #4 vs Artemis #1, w: HeavyIon #11, guns: 1
+doDamage, weapon: HeavyIon, target: 1/-1, totalDmg: 62
+resolveFireOrder - ID 83, shooter: Primus #4 vs Artemis #1, w: HeavyIon #24, guns: 1
+resolveFireOrder - ID 84, shooter: Altarian #5 vs Flight #12, w: LightIon #8, guns: 1
+doDamage, weapon: LightIon, target: 12/1, totalDmg: 15
+resolveFireOrder - ID 85, shooter: Altarian #5 vs Flight #12, w: LightIon #10, guns: 1
+doDamage, weapon: LightIon, target: 12/23, totalDmg: 15
+doDamage, weapon: LightIon, target: 12/23, totalDmg: 17
+resolveFireOrder - ID 86, shooter: Altarian #5 vs Flight #12, w: MediumSingleIon #14, guns: 1
+doDamage, weapon: MediumSingleIon, target: 12/7, totalDmg: 42
+ => overkilling non-ship target system Aurora #7 was destroyed, rem: 25, doing: 37
+resolveFireOrder - ID 87, shooter: Altarian #5 vs Flight #12, w: MediumSingleIon #20, guns: 1
+doDamage, weapon: MediumSingleIon, target: 12/19, totalDmg: 41
+ => overkilling non-ship target system Aurora #19 was destroyed, rem: 14, doing: 36
+doDamage, weapon: MediumSingleIon, target: 12/23, totalDmg: 42
+ => overkilling non-ship target system Aurora #23 was destroyed, rem: 3, doing: 37
+resolveFireOrder - ID 88, shooter: Altarian #6 vs Flight #12, w: LightIon #8, guns: 1
+doDamage, weapon: LightIon, target: 12/3, totalDmg: 15
+doDamage, weapon: LightIon, target: 12/17, totalDmg: 18
+resolveFireOrder - ID 89, shooter: Altarian #6 vs Flight #12, w: LightIon #10, guns: 1
+doDamage, weapon: LightIon, target: 12/3, totalDmg: 18
+doDamage, weapon: LightIon, target: 12/5, totalDmg: 16
+resolveFireOrder - ID 69, shooter: Flight #20 vs Primus #4, w: LinkedParticleGun #2, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 4/-1, totalDmg: 13
+resolveFireOrder - ID 70, shooter: Flight #20 vs Primus #4, w: LinkedParticleGun #4, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 4/-1, totalDmg: 11
+resolveFireOrder - ID 71, shooter: Flight #20 vs Primus #4, w: LinkedParticleGun #6, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 4/-1, totalDmg: 12
+resolveFireOrder - ID 72, shooter: Flight #20 vs Primus #4, w: LinkedParticleGun #8, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 4/11, totalDmg: 13
+resolveFireOrder - ID 73, shooter: Flight #20 vs Primus #4, w: LinkedParticleGun #10, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 4/-1, totalDmg: 11
+resolveFireOrder - ID 74, shooter: Flight #20 vs Primus #4, w: LinkedParticleGun #12, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 4/21, totalDmg: 10
+resolveFireOrder - ID 75, shooter: Flight #20 vs Primus #4, w: LinkedParticleGun #14, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 4/-1, totalDmg: 12
+resolveFireOrder - ID 76, shooter: Flight #20 vs Primus #4, w: LinkedParticleGun #16, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 4/11, totalDmg: 11
+resolveFireOrder - ID 77, shooter: Flight #20 vs Primus #4, w: LinkedParticleGun #18, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 4/-1, totalDmg: 13
+resolveFireOrder - ID 78, shooter: Flight #20 vs Primus #4, w: LinkedParticleGun #20, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 4/-1, totalDmg: 13
+resolveFireOrder - ID 79, shooter: Flight #20 vs Primus #4, w: LinkedParticleGun #22, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 4/23, totalDmg: 10
+resolveFireOrder - ID 80, shooter: Flight #20 vs Primus #4, w: LinkedParticleGun #24, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 4/-1, totalDmg: 10
+resolveFireOrder - ID 81, shooter: Flight #20 vs Primus #4, w: LinkedParticleGun #26, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 4/-1, totalDmg: 12
+resolveFireOrder - ID 57, shooter: Flight #12 vs Altarian #5, w: LinkedParticleGun #2, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 5/-1, totalDmg: 11
+resolveFireOrder - ID 58, shooter: Flight #12 vs Altarian #5, w: LinkedParticleGun #4, guns: 1
+resolveFireOrder - ID 59, shooter: Flight #12 vs Altarian #5, w: LinkedParticleGun #6, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 5/8, totalDmg: 12
+resolveFireOrder - ID 61, shooter: Flight #12 vs Altarian #5, w: LinkedParticleGun #10, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 5/-1, totalDmg: 12
+resolveFireOrder - ID 62, shooter: Flight #12 vs Altarian #5, w: LinkedParticleGun #12, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 5/-1, totalDmg: 12
+resolveFireOrder - ID 63, shooter: Flight #12 vs Altarian #5, w: LinkedParticleGun #14, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 5/-1, totalDmg: 10
+resolveFireOrder - ID 64, shooter: Flight #12 vs Altarian #5, w: LinkedParticleGun #18, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 5/-1, totalDmg: 11
+resolveFireOrder - ID 66, shooter: Flight #12 vs Altarian #5, w: LinkedParticleGun #22, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 5/-1, totalDmg: 14
+resolveFireOrder - ID 68, shooter: Flight #12 vs Altarian #5, w: LinkedParticleGun #26, guns: 1
+doDamage, weapon: LinkedParticleGun, target: 5/-1, totalDmg: 11
+resolveBallisticFireOrders
+insertServerFireOrder: 1
+resolveFireOrder - ID 90, shooter: Salvo #19 vs Haven #7, w: Warhead #2, guns: 5
+doDamage, weapon: Warhead, target: 7/14, totalDmg: 43
+ => OK ship target system LightIon #14 was destroyed, rem: 26, doing: 26, OK for: 13 dmg
+doDamage, weapon: Warhead, target: 7/5, totalDmg: 42
+doDamage, weapon: Warhead, target: 7/-1, totalDmg: 39
+doDamage, weapon: Warhead, target: 7/-1, totalDmg: 35
+cleanFireOrders, fires: 34
+DB updateFireOrders: 34
+= testCriticals for Artemis, #1, turn: 4
+= testCriticals for Salvo, #19, turn: 4
+= testCriticals for Flight, #12, turn: 4
+checking crit for Aurora
+checking crit for Aurora
+checking crit for Aurora
+checking crit for Aurora
+= testCriticals for Flight, #20, turn: 4
+= testCriticals for Tethys, #3, turn: 4
+= testCriticals for Omega, #2, turn: 4
+= testCriticals for Altarian, #5, turn: 4
+determineCrit for 32mm Ion Bolter Array #8, dmg: 38.461538461538, possible: 3, inRange: 2
+= testCriticals for Primus, #4, turn: 4
+determineCrit for 122mm Ion Burst Cannon #11, dmg: 15.625, possible: 3, inRange: 0
+determineCrit for 68mm Ion Emitter #21, dmg: 12.5, possible: 3, inRange: 0
+determineCrit for 32mm Ion Bolter Array #23, dmg: 7.6923076923077, possible: 3, inRange: 0
+= testCriticals for Haven, #7, turn: 4
+determineCrit for Sensor #5, dmg: 77.5, possible: 2, inRange: 2
+= testCriticals for Flight, #18, turn: 4
+= testCriticals for Altarian, #6, turn: 4
+ => DB insertDamageEntries: 36
+ => DB insertCritEntries: 4
+handleFiringPhase time: 0.295 seconds.
+advancing game state time: 0.312 seconds.
+doAdvance for game1 from phase 3 to phase 4
+assembleEndStates
+updateUnitEndState s:11 4/3
+endTurn
+resolveDeployActions s: 0
+destroyUnitsDB
+insertReinforcements: 1
+insertReinforcements: 1
+advancing game state time: 0.169 seconds.
+doAdvance for game1 from phase -1 to phase 0
+initBallistics
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+updateUnitEndState s:11 5/-1
+advancing game state time: 0.015 seconds.

@@ -977,6 +977,10 @@ class Ship {
 	public function getShipTypeMod(){
 		return 1;
 	}
+
+	public function getLockMultiplier(){
+		return 0.5;
+	}
 }
 
 

@@ -6,8 +6,8 @@ class Flight extends Mixed {
 	public $name = "Flight";
 	public $display = "Flight";
 	public $faction = false;
-	public $baseSize = 30;
-	public $unitSize = 6;
+	public $baseSize = 25;
+	public $unitSize = 4;
 
 	public $fSize = 15;
 	public $traverse = -3;
