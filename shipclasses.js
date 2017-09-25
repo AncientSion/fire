@@ -680,60 +680,6 @@ function Ship(data){
 		return this.baseImpulse;
 	}
 
-	this.getCurrentImpulsea = function(){
-		console.log("a");
-		var base = this.getBaseImpulse();
-		var change = this.getImpulseStep();
-		
-		for (var i = 0; i < this.actions.length; i++){
-			if (this.actions[i].type == "speed"){
-				if (this.actions[i].dist == 1){
-					base += change;
-				}
-				else if (this.actions[i].dist == -1){
-					base -= change;
-				}
-			}
-		}
-		
-		return base;
-	}
-
-	this.getCurrentImpulse = function(){
-		if (game.phase >= 1 && this.ship || game.phase >= 2 && this.flight){
-			return this.currentImpulse;
-		}
-		var step = this.getImpulseStep();
-		var amount = 0;
-		for (var i = 0; i < this.actions.length; i++){
-			if (this.actions[i].type != "speed"){continue;}
-			amount += this.actions[i].dist;
-		}
-		return this.currentImpulse + step*amount;
-	}
-
-	this.setCurrentImpulse = function(){
-		return;
-		var add = this.getImpulseStep() * this.actions[this.actions.length-1].dist
-		this.currentImpulse += add;
-		this.remainingImpulse += add;
-	}
-
-	this.getRemainingImpulse = function(){
-		if (game.phase >= 1 && this.ship || game.phase >= 2 && this.flight){
-			return 0;
-		}
-		var impulse = this.getCurrentImpulse();
-		for (var i = 0; i < this.actions.length; i++){
-			if (this.actions[i].turn == game.turn){
-				if (this.actions[i].type == "move"){
-					impulse -= this.actions[i].dist;
-				}
-			}
-		}
-		return impulse;
-	}
-
 	this.getRemainingImpulses = function(){
 		return this.remainingImpulse;
 	}
@@ -1102,7 +1048,6 @@ function Ship(data){
 			var action = new Move(-1, "speed", 1, shipPos.x, shipPos.y, false, 0, this.getImpulseChangeCost());
 			this.actions.push(action);
 		}
-		this.setCurrentImpulse();
 		this.resetMoveMode();
 		game.drawAllPlans();
 	}
@@ -1116,7 +1061,6 @@ function Ship(data){
 			var action = new Move(-1, "speed", -1, shipPos.x, shipPos.y, false, 0, this.getImpulseChangeCost());
 			this.actions.push(action);
 		}
-		this.setCurrentImpulse();
 		this.resetMoveMode();
 		game.drawAllPlans();
 	}
@@ -1479,7 +1423,6 @@ function Ship(data){
 		var update = false;
 		if (this.actions[this.actions.length-1].type == "speed"){
 			this.actions[this.actions.length-1].dist *= -1;
-			this.setCurrentImpulse();
 		}
 		else if (this.actions[this.actions.length-1].type == "move"){
 			this.setRemainingDelay();
@@ -3029,4 +2972,32 @@ Ship.prototype.resetMoveMode = function(){
 
 Ship.prototype.getLockMultiplier = function(){
 	return 0.5;
+}
+
+Ship.prototype.getCurrentImpulse = function(){
+	if (game.phase >= 1 && this.ship){
+		return this.currentImpulse;
+	}
+	var step = this.getImpulseStep();
+	var amount = 0;
+	for (var i = 0; i < this.actions.length; i++){
+		if (this.actions[i].type != "speed"){continue;}
+		amount += this.actions[i].dist;
+	}
+	return this.currentImpulse + step*amount;
+}
+
+Ship.prototype.getRemainingImpulse = function(){
+	if (game.phase >= 1 && this.ship){
+		return 0;
+	}
+	var impulse = this.getCurrentImpulse();
+	for (var i = 0; i < this.actions.length; i++){
+		if (this.actions[i].turn == game.turn){
+			if (this.actions[i].type == "move"){
+				impulse -= this.actions[i].dist;
+			}
+		}
+	}
+	return impulse;
 }

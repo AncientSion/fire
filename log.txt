@@ -493,3 +493,85 @@ handleJumpActions
 assembleEndStates
 updateUnitEndState s:11 5/-1
 advancing game state time: 0.015 seconds.
+insertClientActions s: 3
+insertClientActions s: 4
+doAdvance for game1 from phase 0 to phase 1
+handleShipMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving mixed #12
+_____________________
+Flight #12, impulse: 119
+From -368/-519 to 304/83
+Dist 903, angle: 41.855042535302
+close in
+adding move to: -279/-440
+resolving mixed #18
+_____________________
+Flight #18, impulse: 137
+From 393/-601 to -166/116
+Dist 910, angle: 127.94131097572
+close in
+adding move to: 309/-493
+resolving layer #2
+updateMissionState
+handleMixedMovement
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving mixed #19
+_____________________
+Flight #19, impulse: 115
+From -310/127 to 215/-245
+Dist 644, angle: 324.67970352628
+close in
+adding move to: -216/61
+resolving layer #2
+updateMissionState
+advancing game state time: 0.144 seconds.
+doAdvance for game1 from phase 2 to phase 3
+ew for #1
+specific EW for ship #1, EW from 337.20412675721 to 12.795873242787, dist: 580
+ew for #3
+ew for #2
+specific EW for ship #2, EW from 323.85096439634 to 22.149035603664, dist: 594
+ew for #4
+specific EW for ship #4, EW from 133.96877703167 to 194.03122296833, dist: 661
+ew for #5
+specific EW for ship #5, EW from 149.79911108387 to 190.20088891613, dist: 615
+ew for #7
+ew for #6
+specific EW for ship #6, EW from 153.32921668868 to 192.67078331132, dist: 626
+resolveFireOrder - ID 15, shooter: Omega #2 vs Primus #4, w: HeavyLaser #11, guns: 1
+HeavyLaser, weapon id: 0, DAMAGE mod: -0.2 (crits: -0.4, boost: 0.2)
+doDamage, weapon: HeavyLaser, target: 4 for 119 dmg
+hitting:  HeavyIon  HeavyIon  Primary 
+resolveFireOrder - ID 16, shooter: Artemis #1 vs Primus #4, w: MediumRailGun #8, guns: 1
+doDamage, weapon: MediumRailGun, target: 4/-1, totalDmg: 38
+doDamage, weapon: MediumRailGun, target: 4/-1, totalDmg: 35
+resolveFireOrder - ID 17, shooter: Artemis #1 vs Primus #4, w: MediumRailGun #10, guns: 1
+doDamage, weapon: MediumRailGun, target: 4/24, totalDmg: 34
+resolveBallisticFireOrders
+cleanFireOrders, fires: 3
+DB updateFireOrders: 3
+= testCriticals for Artemis, #1, turn: 2
+= testCriticals for Flight, #12, turn: 2
+= testCriticals for Salvo, #19, turn: 2
+= testCriticals for Tethys, #3, turn: 2
+= testCriticals for Omega, #2, turn: 2
+= testCriticals for Primus, #4, turn: 2
+determineCrit for 122mm Ion Burst Cannon #9, dmg: 42.1875, possible: 3, inRange: 2
+determineCrit for 122mm Ion Burst Cannon #11, dmg: 42.1875, possible: 3, inRange: 2
+determineCrit for 122mm Ion Burst Cannon #24, dmg: 42.96875, possible: 3, inRange: 2
+= testCriticals for Altarian, #5, turn: 2
+= testCriticals for Haven, #7, turn: 2
+= testCriticals for Flight, #18, turn: 2
+= testCriticals for Altarian, #6, turn: 2
+ => DB insertDamageEntries: 6
+ => DB insertCritEntries: 2
+handleFiringPhase time: 0.151 seconds.
+advancing game state time: 0.158 seconds.

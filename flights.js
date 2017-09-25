@@ -168,8 +168,8 @@ function Flight(data){
 				.append($("<td>").html("Classification"))
 				.append($("<td>").html(game.getUnitType(this.traverse))))
 			.append($("<tr>")
-				.append($("<td>").html("Current Impulse"))
-				.append($("<td>").html(this.getCurrentImpulse())))
+				.append($("<td>").html("Current Thrust"))
+				.append($("<td>").html((this.getCurrentImpulse() + " (max: " + (this.baseImpulse*2) + ")"))))
 			.append($("<tr>")
 				.append($("<td>").html("Current Mission"))
 				.append($("<td>").html(game.getMissionTypeString(this.mission.type))))
@@ -641,4 +641,11 @@ Flight.prototype.switchDiv = function(){
 	} else $(this.element).find(".header").find(".general").find(".misionSwitch").addClass("disabled");
 
 	Ship.prototype.switchDiv.call(this);
+}
+
+Flight.prototype.getCurrentImpulse = function(){
+	//return this.currentImpulse;
+	if (game.phase >= 2){
+		return Math.max(this.baseImpulse *2, this.currentImpulse);
+	} else return this.currentImpulse;
 }

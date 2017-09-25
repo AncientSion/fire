@@ -25,8 +25,12 @@ class Flight extends Mixed {
 	}
 
 	public function setCurrentImpulse($turn){
-		$this->baseImpulse = floor(pow($this->mass, -0.8)*4000);
-		$this->currentImpulse = $this->baseImpulse;
+		//echo get_class($this->mission);
+		//var_export($this->mission);
+		$turns = max(1, $turn - $this->mission->turn);
+		$this->baseImpulse = floor(pow($this->mass, -0.8)*2200);
+		$this->currentImpulse = min($this->baseImpulse * $turns, $this->baseImpulse*2);
+		//$this->currentImpulse = $this->baseImpulse * ($turn - $this->available +2);
 	}
 
 	public function setSize(){

@@ -80,12 +80,6 @@ function Salvo(data){
 		return this.structures[0].systems[0].maxDmg;
 	}
 
-	this.getCurrentImpulse = function(){
-		if (game.phase >= 3){
-			return this.currentImpulse + this.baseImpulse*(1-this.destroyed);
-		} else return this.currentImpulse;
-	}
-
 	this.getTrackingString = function(){
 		var t = this.getTarget().traverse;
 		var html = "";
@@ -319,4 +313,11 @@ Salvo.prototype.setLayout = function(){
 	for (var i = 0; i < this.structures.length; i++){
 		this.structures[i].layout = {x: range(-10, 10), y: range(-10, 10)};
 	}
-}	
+}
+
+Salvo.prototype.getCurrentImpulse = function(){
+	//return this.currentImpulse;
+	if (game.phase >= 2){
+		return this.currentImpulse + this.baseImpulse*(1-this.destroyed);
+	} else return this.currentImpulse;
+}
