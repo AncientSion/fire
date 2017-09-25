@@ -1263,7 +1263,7 @@ table, th, tr, td {
 }
 
 #shortInfo {
-	z-index: 7;
+	z-index: 9;
 	position: absolute;
 	color: white;
 	background-color: black;

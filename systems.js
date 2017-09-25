@@ -35,6 +35,15 @@ function System(system){
 	this.hangar = 0;
 }
 
+System.prototype.hasLoad = function(){
+	for (var i = 0; i < this.loads.length; i++){
+		if (this.loads[i].amount){
+			return true;
+		}
+	}
+	return false;
+}
+
 System.prototype.attachDetailsMods = function(ele){
 	if (this.destroyed){
 		return;
@@ -2487,6 +2496,7 @@ Launcher.prototype.addAmmo = function(ele, all){
 			this.loads[index].amount++;
 		}
 		this.updateTotals();
+		this.canConfirm();
 	}
 }
 
@@ -2501,10 +2511,17 @@ Launcher.prototype.removeAmmo = function(ele, all){
 					this.loads[i].amount -= 1;
 				}
 				this.updateTotals();
+				this.canConfirm();
 				return;
 			}
 		}
 	}
+}
+
+Launcher.prototype.canConfirm = function(){
+	if (this.hasLoad()){
+		$("#weaponLoadoutDiv").find(".buttonTD").removeClass("disabled");
+	} else $("#weaponLoadoutDiv").find(".buttonTD").addClass("disabled");
 }
 
 Launcher.prototype.updateTotals = function(){
@@ -2956,6 +2973,7 @@ Hangar.prototype.addFighter = function(ele, all){
 			if (tMass + this.loads[i].mass <= this.output){
 				this.loads[i].amount += add;
 				this.updateTotals();
+				this.canConfirm();
 				return;
 			}
 			else {
@@ -2975,10 +2993,17 @@ Hangar.prototype.removeFighter = function(ele, all){
 					this.loads[i].amount -= 1;
 				}
 				this.updateTotals();
+				this.canConfirm();
 				return;
 			}
 		}
 	}
+}
+
+Hangar.prototype.canConfirm = function(){
+	if (this.hasLoad()){
+		$("#hangarLoadoutDiv").find(".buttonTD").removeClass("disabled");
+	} else $("#hangarLoadoutDiv").find(".buttonTD").addClass("disabled");
 }
 
 Hangar.prototype.updateTotals = function(){

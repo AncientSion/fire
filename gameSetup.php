@@ -139,8 +139,8 @@ else {
 									0
 								</th>
 							</tr>
-							<tr id="confirmFleet" class="buttonSelection disabled">
-								<th onclick="confirmFleetPurchase()" colSpan=2>
+							<tr>
+								<th class="buttonTD disabled" onclick="confirmFleetPurchase()" colSpan=2>
 									Confirm Fleet Selection
 								</th>
 							</tr>
@@ -174,9 +174,9 @@ else {
 			</div>
 			<table id="hangarTable">
 			</table>
-			<div class="header">
-				<input type="button" value="Confirm Hangar loadout" onclick='confirmSystemLoadout()'>
-			</div>
+			<table style="margin:auto; width: 220px; margin-top: 10px">
+				<tr><td class="buttonTD disabled" onclick='confirmSystemLoadout()'>Confirm Loadout</td></tr>
+			</table>
 		</div>
 		<div id="weaponLoadoutDiv" class="disabled">
 			<div class="header">
@@ -187,9 +187,9 @@ else {
 			</div>
 			<table id="weaponTable">
 			</table>
-			<div class="header">
-				<input type="button" value="Confirm weapon loadout" onclick='confirmSystemLoadout()'>
-			</div>
+			<table style="margin:auto; width: 220px; margin-top: 10px">
+				<tr><td class="buttonTD disabled" onclick='confirmSystemLoadout()'>Confirm Loadout</td></tr>
+			</table>
 		</div>
 	</body>
 </html>
@@ -263,9 +263,9 @@ else {
 
 
 					var tr = table.insertRow(-1);
-						tr.className = "buttonSelection";
 					var button = tr.insertCell(-1);
 						button.innerHTML = "Confirm Ship Selection";
+						button.className = "buttonTD";
 						button.colSpan = 2;
 						$(button).click(function(){
 							window.addShipToFleet();
@@ -277,7 +277,6 @@ else {
 		initPreviewCanvas();
 
 		var icons = [images.earth, images.centauri, images.minbari, images.narn];
-
 		
 
 		var table = document.createElement("table"); 
@@ -377,10 +376,10 @@ else {
 	function canSubmit(){
 		var fleetCost = getFleetCost();
 		if (fleetCost && fleetCost <= window.maxPoints){
-			$("#shipsBoughtTable").find("#confirmFleet").removeClass("disabled");
+			$("#shipsBoughtTable").find(".buttonTD").removeClass("disabled");
 		}
 		else {
-			$("#shipsBoughtTable").find("#confirmFleet").addClass("disabled");
+			$("#shipsBoughtTable").find(".buttonTD").addClass("disabled");
 		}
 		/*if (reinforceFaction.length && fleetCost){
 			$("#confirmFleet").removeClass("disabled");

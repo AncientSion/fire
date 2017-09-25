@@ -524,9 +524,11 @@
 				$this->setPlayerstatus($players[$i]["userid"], $gameid, 1, -1, "waiting");
 				$units = $this->query("SELECT * FROM units WHERE gameid = ".$gameid." AND userid = ".$players[$i]["userid"]);
 				for ($j = 0; $j < sizeof($units); $j++){
+					$unit = new $units[$j]["name"](1, 1, 0, "", 0);
+
 					$x = mt_rand(-700, -400) * (1-$i*2);
 					$y = mt_rand(-600, 600) * (1-$i*2);
-					$s = mt_rand(40, 70);
+					$s = ceil(($unit->size*1.3)/2);
 
 					$deploys[] = array("gameid" => $gameid, "userid" => $players[$i]["userid"], "turn" => 1, "phase" => -1, "x" => $x, "y" => $y, "s" => $s);
 				}
