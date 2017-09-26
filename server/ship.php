@@ -241,7 +241,7 @@ class Ship {
 	}
 
 	public function getDeployState($turn){
-		//Debug::log("getDeployState for ".$this->id);
+		Debug::log("getDeployState for ".$this->id);
 		if ($this->available < $turn){
 			return;
 		}
@@ -266,6 +266,7 @@ class Ship {
 
 
 	public function getMoveState($turn){
+		Debug::log("getMoveState for ".$this->id);
 		$delay = $this->remainingDelay;
 		$angle = $this->facing;
 		for ($i = 0; $i < sizeof($this->actions); $i++){

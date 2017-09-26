@@ -272,7 +272,7 @@
 		}
 
 		public function insertUnits($userid, $gameid, &$units){
-			Debug::log("DB insertUnits S: ".sizeof($units));
+			Debug::log("DB insertUnits: ".sizeof($units));
 
 			$stmt = $this->connection->prepare("
 				INSERT INTO units 
@@ -354,8 +354,8 @@
 					$stmt->execute();
 
 					if ($stmt->errorCode() == 0){
-						Debug::log("success insertSubUnits");
-					} else Debug::log("error insertSubUnits");
+						//Debug::log("success insertSubUnits");
+					} //else Debug::log("error insertSubUnits");
 				}
 			}
 			return true;
@@ -383,10 +383,8 @@
 				$stmt->execute();
 				
 				if ($stmt->errorCode() == 0){
-					Debug::log("success insertMissions");
-				} else {
-					Debug::log("error insertMissions");
-				}
+					//Debug::log("success insertMissions");
+				}// else Debug::log("error insertMissions");
 			}
 			return true;
 		}

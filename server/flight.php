@@ -25,6 +25,7 @@ class Flight extends Mixed {
 	}
 
 	public function setCurrentImpulse($turn){
+		if ($this->available == $turn && !$this->actions[0]->resolved){return;}
 		//echo get_class($this->mission);
 		//var_export($this->mission);
 		$turns = max(1, $turn - $this->mission->turn);

@@ -318,8 +318,14 @@ System.prototype.getBoostDiv = function(){
 			e.stopPropagation();
 			if (game.phase != -1){return;}
 			var data = $(this.parentNode).data();
-			game.getUnitById(data.shipId).getSystemById(data.systemId).plus();
-		});
+			game.getUnitById(data.shipId).getSystemById(data.systemId).plus(false);
+		}).contextmenu(function(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if (game.phase != -1){return;}
+			var data = $(this.parentNode).data();
+			game.getUnitById(data.shipId).getSystemById(data.systemId).plus(true);
+		})
 		div.appendChild(subDiv);
 	var subDiv = document.createElement("div");
 		subDiv.className = "minus";
@@ -329,8 +335,14 @@ System.prototype.getBoostDiv = function(){
 			e.stopPropagation();
 			if (game.phase != -1){return;}
 			var data = $(this.parentNode).data();
-			game.getUnitById(data.shipId).getSystemById(data.systemId).minus();
-		});
+			game.getUnitById(data.shipId).getSystemById(data.systemId).minus(false);
+		}).contextmenu(function(e){
+			e.stopPropagation();
+			e.preventDefault();
+			if (game.phase != -1){return;}
+			var data = $(this.parentNode).data();
+			game.getUnitById(data.shipId).getSystemById(data.systemId).minus(true);
+		})
 		div.appendChild(subDiv);
 	return div;
 }
@@ -461,7 +473,7 @@ System.prototype.forceUnpower = function(){
 		this.powers.splice(this.powers.length-1, 1);
 		this.disabled = 0;
 		this.setTableRow();
-		game.getUnitById(this.parentId).updateDivPower(this);
+		game.getUnitById(this.parentId).updateShipPower(this);
 	}
 }
 System.prototype.doUnpower = function(){
@@ -481,7 +493,7 @@ System.prototype.doUnpower = function(){
 		this.doUndoActions();
 		this.setTableRow();
 		this.setSystemBorder();
-		game.getUnitById(this.parentId).updateDivPower(this);
+		game.getUnitById(this.parentId).updateShipPower(this);
 	}
 }
 System.prototype.doPower = function(){
@@ -490,26 +502,47 @@ System.prototype.doPower = function(){
 		this.disabled = 0;
 		this.setTimeLoaded();
 		this.setTableRow();
-		game.getUnitById(this.parentId).updateDivPower(this);
+		game.getUnitById(this.parentId).updateShipPower(this);
 	}
 }
-System.prototype.plus = function(){
+System.prototype.plus = function(max){
 	var ship = game.getUnitById(this.parentId);
-	if (ship.canBoost(this)){
+	var change = false;
+
+	if (max){
+		while (ship.canBoost(this)){
+			this.doBoost();
+			change = true;
+		}
+ 	   $("#popupWrapper").hide();
+	}
+	else if (ship.canBoost(this)){
 		this.doBoost();
-		ship.updateDivPower(this);
-		return true;
+		change = true;
 	}
-	return false;
+
+	if (change){ship.updateShipPower(this);}
 }
-System.prototype.minus = function(){
-	if (this.canUnboost()){
-		this.doUnboost()
-		game.getUnitById(this.parentId).updateDivPower(this);
-		return true;
+
+System.prototype.minus = function(max){
+	var ship = game.getUnitById(this.parentId);
+	var change = false;
+
+	if (max){
+		while (this.canUnboost()){
+			this.doUnboost();
+			change = true;
+		}
+ 	   $("#popupWrapper").hide();
 	}
-	return false;
+	else if (this.canUnboost()){
+		this.doUnboost();
+		change = true;
+	}
+
+	if (change){ship.updateShipPower(this);}
 }
+
 System.prototype.showOptions = function(){
 	if (this.destroyed || this.locked){return;}
 	var ele = $(this.element);
@@ -1097,7 +1130,7 @@ Sensor.prototype.doPower = function(){
 		})
 		this.drawEW();
 		this.setTableRow();
-		game.getUnitById(this.parentId).updateDivPower(this);
+		game.getUnitById(this.parentId).updateShipPower(this);
 	}
 }
 
@@ -2021,6 +2054,11 @@ function Dual(system){
 }
 Dual.prototype = Object.create(Weapon.prototype);
 
+Dual.prototype.updateSystemDetailsDiv = function(){
+	this.getActiveWeapon().updateSystemDetailsDiv();
+	game.getUnitById(this.parentId).updateDiv();
+}
+
 Dual.prototype.canBeBoosted = function(){
 	for (var i = 0; i < this.weapons.length; i++){
 		if (this.weapons[i].effiency){
@@ -2094,7 +2132,7 @@ Dual.prototype.switchMode = function(id){
 	this.setSystemImage()
 	this.setSystemWindow(id);
 	this.resetDetailsDiv();
-	game.getUnitById(this.parentId).updateDivPower(this);
+	game.getUnitById(this.parentId).updateShipPower(this);
 }
 
 Dual.prototype.setSystemImage = function(){
@@ -2171,11 +2209,6 @@ Dual.prototype.resetDetailsDiv = function(){
 	)
 }
 
-Dual.prototype.update = function(){
-	this.getActiveWeapon().updateSystemDetailsDiv();
-	game.getUnitById(this.parentId).updateDiv();
-}
-
 Dual.prototype.getSystemDetailsDiv = function(){
 	return this.getActiveWeapon().getSystemDetailsDiv();
 }
@@ -2189,6 +2222,18 @@ Dual.prototype.getSystem = function(){
 }
 
 Dual.prototype.getBoostDiv = function(){
+	if (!this.destroyed){
+		for (var i = 0; i < this.weapons.length; i++){
+			if (this.weapons[i].effiency){
+				var div = this.weapons[i].getBoostDiv();
+					$(div).data("systemId", this.id);
+				return div;
+			}
+		}
+	}
+}
+
+Dual.prototype.getBoostDiva = function(){
 	if (!this.destroyed){
 		for (var i = 0; i < this.weapons.length; i++){
 			if (this.weapons[i].effiency){
@@ -2287,7 +2332,7 @@ Launcher.prototype.getBoostDiv = function(){
 }
 
 
-Launcher.prototype.plus = function(){
+Launcher.prototype.plusa = function(max){
 	var ship = game.getUnitById(this.parentId);
 	if (ship.canBoost(this)){
 		this.doBoost();
@@ -2296,7 +2341,7 @@ Launcher.prototype.plus = function(){
 	}
 	return false;
 }
-Launcher.prototype.minus = function(){
+Launcher.prototype.minusa = function(max){
 	if (this.canUnboost()){
 		this.doUnboost()
 		this.updateGUI();
@@ -2439,14 +2484,11 @@ Launcher.prototype.getOutput = function(){
 	return this.shots + this.getBoostLevel();
 }
 
-Launcher.prototype.updateGUI = function(){
+Launcher.prototype.updateSystemDetailsDiv = function(){
 	$("#systemDetailsDiv")
 		.find("#detailsShots").html("<font color='red'>" + this.getOutput() + "</font> - max " + this.effiency)
 			.end()
 		.find("#ammo").html("<font color='red'>" + this.getRemainingAmmo() + "</font> / " + this.getMaxAmmo());
-
-
-	$(this.element).find(".outputMask").html(this.getOutput());
 }
 
 Launcher.prototype.setupAmmoLoadout = function(e){
@@ -2694,10 +2736,6 @@ Hangar.prototype.select = function(e){
 	}
 
 	this.setSystemBorder();
-}
-
-Hangar.prototype.update = function(){
-	game.getUnitById(this.parentId).updateDiv();
 }
 
 Hangar.prototype.doUndoActions = function(){

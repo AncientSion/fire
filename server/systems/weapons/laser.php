@@ -149,7 +149,7 @@ class HeavyLaser extends Laser {
 	public $powerReq = 6;
 	public $rakes = 3;
 	public $effiency = 4;
-	public $maxBoost = 1;
+	public $maxBoost = 2;
 	public $mass = 28;
 	public $traverse = 0;
 

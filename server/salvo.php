@@ -24,6 +24,7 @@ class Salvo extends Mixed {
 	}
 
 	public function setMass(){
+		if (!sizeof($this->structures)){return;}
 		$this->mass = $this->structures[0]->mass;
 	}
 

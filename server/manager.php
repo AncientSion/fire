@@ -458,7 +458,7 @@ class Manager {
 
 	public function initBallistics(){
 		Debug::log("initBallistics");
-		$fires = DBManager::app()->getUnresolvedFireOrders($this->gameid, $this->turn);
+		$fires = DBManager::app()->getUnresolvedFireOrders($this->gameid, $this->turn); // fireorders from deployment -> hangar, launcher
 		usort($fires, function($a, $b){
 			return $a->shooterid - $b->shooterid;
 		});
@@ -466,17 +466,18 @@ class Manager {
 		$adjust = array();
 		$units = array();
 		for ($i = 0; $i < sizeof($fires); $i++){
+			//Debug::log("handling fire #".$i);
 			$skip = 0;
 			$shooter = $this->getUnitById($fires[$i]->shooterid);
 			$launcher = $shooter->getSystemById($fires[$i]->weaponid);
 			$fires[$i]->shots = $launcher->getShots($this->turn);
 			if (!($launcher instanceof Launcher)){
-				Debug::log("Hangar fireorder, resolving: ".$fires[$i]->id);
+				//Debug::log("Hangar fireorder, resolving: ".$fires[$i]->id);
 				if ($launcher instanceof Hangar){
 					$fires[$i]->resolved = 1;
 					continue;
 				}
-				Debug::log("FATAL ERROR, no launcher/hangar, fire: ".$fires[$i]->id);
+				Debug::log("FATAL ERROR, unresolved non-launcher/hangar  fireorder: ".$fires[$i]->id);
 				continue;
 			}
 			$name = $launcher->getAmmo()->name;
@@ -488,19 +489,23 @@ class Manager {
 			);
 
 			for ($j = 0; $j < sizeof($units); $j++){
-				if ($units[$j]["userid"] == $shooter->userid && $units[$j]["mission"]["targetid"] == $fires[$i]->targetid && $units[$j]["launchData"]["loads"][0]["name"] == $name){
+				if ($units[$j]["launchData"]["shipid"] == $shooter->id && $units[$j]["launchData"]["loads"][0]["name"] == $name && $units[$j]["mission"]["targetid"] == $fires[$i]->targetid){
+					//Debug::log("merging");
 					$units[$j]["launchData"]["loads"][0]["launch"] += $fires[$i]->shots;
 					$skip = 1;
-					Debug::log("merging");
 					break;
 				}
 			}
 
-			if ($skip){continue;}
+			if ($skip){
+				Debug::log("skipping");
+				continue;
+			}
 
 			$sPos = $shooter->getCurrentPosition();
 			$tPos = $this->getUnitById($fires[$i]->targetid)->getCurrentPosition();
 			$a = Math::getAngle($sPos->x, $sPos->y, $tPos->x, $tPos->y);
+			//Debug::log("i = ".$i.", shooterid: ".$shooter->id);
 			$devi = Math::getPointInDirection($shooter->size/3, $a, $sPos->x + mt_rand(-10, 10), $sPos->y + mt_rand(-10, 10));
 			$mission = array("type" => 2, "turn" => $this->turn, "targetid" => $fires[$i]->targetid, "x" => $tPos->x, "y" => $tPos->y, "arrived" => 0, "new" => 1);
 			$move = array("turn" => $this->turn, "type" => "deploy", "dist" => 0, "x" => $devi->x, "y" => $devi->y, "a" => $a, "cost" => 0, "delay" => 0, "costmod" => 0, "resolved" => 0);
@@ -521,8 +526,12 @@ class Manager {
 			DBManager::app()->updateSystemLoad($adjust);
 			for ($i = 0; $i < sizeof($units); $i++){
 				$this->ships[] = new Salvo($units[$i]["id"], $units[$i]["userid"], $this->turn, "deployed", 0);
-				$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->turn, "deploy", 0, $devi->x, $devi->y, $a, 0, 0, 0, 0);
-
+				$this->ships[sizeof($this->ships)-1]->setState($this->turn);
+				$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->turn, "deploy", 0, $units[$i]["actions"][0]["x"], $units[$i]["actions"][0]["<"], $a, 0, 0, 0, 0);
+				//echo ("unit #".$units[$i]["id"]);
+				//echo "</br>";
+				//echo "</br>";
+				//var_export($this->ships[sizeof($this->ships)-1]->actions[0]);
 			}
 		}
 

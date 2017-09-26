@@ -2136,7 +2136,8 @@ function Ship(data){
 			.find(".turn").html(this.getImpulseChangeCost() + " EP").end()
 	}
 
-	this.updateDivPower = function(system){
+	this.updateShipPower = function(system){
+
 		var reactor = this.getSystemByName("Reactor");
 		var s = reactor.getOutput();
 		$(this.getSystemByName("Reactor").element).find(".outputMask").html(s);
@@ -2599,7 +2600,6 @@ Ship.prototype.getArmourString = function(a){
 		}
 	}
 }
-
 
 Ship.prototype.drawMovePlan = function(){
 	if (!this.actions.length || this.actions[this.actions.length-1].resolved){
