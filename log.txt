@@ -25,3 +25,42 @@ getDeployState for 5
 getDeployState for 11
 updateUnitEndState s:11 2/-1
 advancing game state time: 0.021 seconds.
+insertClientActions s: 4
+insertClientActions s: 4
+doAdvance for game1 from phase 0 to phase 1
+handleShipMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving layer #2
+handleMixedMovement
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving mixed #10
+_____________________
+Flight #10, impulse: 85
+From -398/-222 to 388/491
+Dist 1062, angle: 42.211947888275
+close in
+adding move to: -335/-165
+resolving mixed #9
+_____________________
+Flight #9, impulse: 85
+From -403/-235 to 260/-439
+Dist 694, angle: 342.89727103095
+close in
+adding move to: -322/-260
+resolving mixed #11
+_____________________
+Flight #11, impulse: 115
+From 386/192 to -268/292
+Dist 662, angle: 171.30651138798
+close in
+adding move to: 272/209
+resolving layer #2
+updateMissionState
+advancing game state time: 0.054 seconds.

@@ -92,7 +92,7 @@ echo "</script>";
 		</div>
 		<div id="game">
 			<div id="phaseSwitchDiv">
-				<div id="phaseSwitchInnerDiv">
+				<div id="phaseSwitchInnerDiv" class="disabled">
 					<div>
 						<?php
 							echo "Turn ".$manager->turn;
@@ -118,8 +118,17 @@ echo "</script>";
 							$hints[] = "Lasers can usually be boosted with extra power for increased damage output.";
 							$hints[] = "Each Pulse weapon will score a fixed base amount of hits. This amount will then be increased further if you scored a good roll on the hit dice.";
 							$hints[] = "Pulse weapons fire a volley of several shots. All shots of a volley hit the same unit (or system). As such, armour is applied for each single hit.";
-							$hints[] = "For the most part, weapons with more than 1 shot will spread all their shots over a target, instead of focusing them on a single fighter or system.";
-							echo $hints[mt_rand(0, sizeof($hints)-1)];
+							$hints[] = "For the most part, weapons with more than 1 shot will spread all their shots over a target, instead of applying all of them on a single fighter or system.";
+							$hints[] = "Once deployed onto the battlezone, fighter flights can only change their objective / orders every other turn.";
+							$hints[] = "After deploying from a hangar (as well as receiving a new order), a fighter flight will reset its thrust and accelerate one turn, accomplashing maximum speed the turn after.";
+							$hints[] = "Missiles and Torpedos increase their thrust linear, becoming more fast every turn without speed being capped.";
+							$hints[] = "A starship's main reactor icon shows the available power (deficit). The same value can also be seen at the top left (in white colro) on the ship layout element";
+							$hints[] = "Each unit is associated with a certain 'size' value, with goes from -4 to 3:</br></br><b>Salvo (-4)</b> - Ballistic Missile/Torpedo barrages</br><b>Flight (-3)</b> - Fighter / Bomber flights of any kind</br><b>Very Light Ship (-2)</b> - Non-military grade Police Cutter, Border Patrol etc.<b></br>Light Ship (-1)</b> - Corvettes , Light Frigates</br><b>Medium Ship (0)</b> - Frigates, Support/Light Destroyers></br><b>Heavy Ship (1)</b> - Main Destroyers, Cruisers</br><b>Super Heavy Ship (2)</b> - Attack/Battle Cruiser, Light Battleships, Support Carriers</br><b>Ultra Heavy Ship (3)</b> - Heavy Battleships, Dreadnaughts, Main Carrier";
+							$hints[] = "Each unit is associated with a certain 'size' value, with goes from -4 to 3:</br>Salvo (-4) - Ballistic Missile/Torpedo barrages</br>Flight (-3) - Fighter / Bomber flights of any kind</br> Very Light Ship (-2) - Non-military grade Police Cutter, Border Patrol etc.</br>Light Ship (-1) - Corvettes , Light Frigates</br>Medium Ship (0) - Frigates, Support/Light Destroyers></br>Heavy Ship (1) - Main Destroyers, Cruisers</br>Super Heavy Ship (2) - Attack/Battle Cruiser, Light Battleships, Support Carriers</br>Ultra Heavy Ship (3) - Heavy Battleships, Dreadnaughts, Main Carrier";
+							$hints[] = "Weapons each have a 'tracking' stat (-4 to 3) that correspond with the 'size' stat of every unit. Thisindicates the weapons ability to track units by size. If a weapon can only track relativly large targets but is trying to aim at say a cutter or fighter, it will come with a harsh penalty, indicated by a loss of accuracy (seen in the overlay).";
+							$hints[] = "Weapons each have a 'tracking' stat (-4 to 3) that correspond with the 'size' stat of every unit. Thisindicates the weapons ability to track units by size. If a weapon can only track relativly large targets but is trying to aim at say a cutter or fighter, it will come with a harsh penalty, indicated by a loss of accuracy (seen in the overlay).";
+							//echo $hints[mt_rand(0, sizeof($hints)-1)];
+							echo $hints[sizeof($hints)-4];
 						?>
 					</div>
 				</div>
