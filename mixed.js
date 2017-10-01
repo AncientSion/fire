@@ -161,9 +161,6 @@ Mixed.prototype.getArmourString = function(a){
 }
 
 Mixed.prototype.drawMovePlan = function(){
-	if (this.id == 10){
-		console.log("ding");
-	}
 	var target;
 	var origin = this.getPlannedPosition();
 	if (this.mission.type > 1){

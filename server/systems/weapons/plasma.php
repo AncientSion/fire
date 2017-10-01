@@ -14,8 +14,9 @@ class Plasma extends Weapon {
 	public function getDmgRangeMod($fire){
 		$mod = $this->getBoostEffect("Damage loss") * $this->getBoostLevel($fire->turn);
 		if ($mod){
-			//Debug::log(get_class($this).", weapon id: ".$this->id.", RANGE DMG mod: ".$mod);
-			return 1-($fire->dist * $this->dmgLoss / 10000)*(1+$mod);
+			$mod = 1-($fire->dist * $this->dmgLoss / 10000)*(1+$mod);
+			Debug::log(get_class($this).", weapon id: ".$this->id.", RANGE DMG mod: ".$mod);
+			return $mod;
 		} else return 1;
 	}
 

@@ -145,7 +145,7 @@ class Ship {
 		$this->baseTurnCost = round(pow($this->mass, 1.25)/22500, 2);
 		//$this->baseTurnDelay = round(pow($this->mass, 0.5)/35, 2);
 		$this->baseTurnDelay = round(pow($this->mass, 0.45)/20, 2);
-		$this->baseImpulseCost = round(pow($this->mass, 1.4)/1500, 2);
+		$this->baseImpulseCost = round(pow($this->mass, 1.4)/1750, 2);
 	}
 
 	public function hidePowers($turn){
@@ -241,7 +241,7 @@ class Ship {
 	}
 
 	public function getDeployState($turn){
-		Debug::log("getDeployState for ".$this->id);
+		//Debug::log("getDeployState for ".$this->id);
 		if ($this->available < $turn){
 			return;
 		}

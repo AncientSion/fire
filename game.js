@@ -98,6 +98,7 @@ function Game(data, userid){
 		this.flightDeploy = this.getUnitById(aUnit).getSystemById($("#hangarLoadoutDiv").data("systemid"));
 		var mission = this.getMissionTypeString(this.flightDeploy.mission);
 
+		instruct("Please select the offensive or defensive target for the flight");
 		$("#game").find("#deployOverlay").find("#deployType").html("Select target for </br>" + mission + "</br></span>");
 	}
 
@@ -283,7 +284,7 @@ function Game(data, userid){
 		flight.setTarget();
 		game.ships.push(flight);
 
-		$("#instructWrapper").hide();
+		this.hideInstruct();
 		$("#deployOverlay").hide();
 		hangar.setFireOrder(t.id).select();
 		game.flightDeploy = false;
@@ -295,6 +296,13 @@ function Game(data, userid){
 			game.getUnitById(aUnit).attachFlight(flight.id);
 		}
 		this.draw();
+	}
+
+	this.hideInstruct = function(){
+		$("#instructWrapper").hide();
+	}
+	
+	this.hidePopup = function(){
 	}
 	
 	this.getDeployedFlights = function(){

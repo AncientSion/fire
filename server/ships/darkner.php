@@ -40,7 +40,7 @@ class Darkner extends Medium {
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 95, 105);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 95);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 95, 800, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 95);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 95, 6);
 	}
 }
 

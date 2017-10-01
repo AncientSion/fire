@@ -126,9 +126,9 @@ echo "</script>";
 							$hints[] = "Each unit is associated with a certain 'size' value, with goes from -4 to 3:</br></br><b>Salvo (-4)</b> - Ballistic Missile/Torpedo barrages</br><b>Flight (-3)</b> - Fighter / Bomber flights of any kind</br><b>Very Light Ship (-2)</b> - Non-military grade Police Cutter, Border Patrol etc.<b></br>Light Ship (-1)</b> - Corvettes , Light Frigates</br><b>Medium Ship (0)</b> - Frigates, Support/Light Destroyers></br><b>Heavy Ship (1)</b> - Main Destroyers, Cruisers</br><b>Super Heavy Ship (2)</b> - Attack/Battle Cruiser, Light Battleships, Support Carriers</br><b>Ultra Heavy Ship (3)</b> - Heavy Battleships, Dreadnaughts, Main Carrier";
 							$hints[] = "Each unit is associated with a certain 'size' value, with goes from -4 to 3:</br>Salvo (-4) - Ballistic Missile/Torpedo barrages</br>Flight (-3) - Fighter / Bomber flights of any kind</br> Very Light Ship (-2) - Non-military grade Police Cutter, Border Patrol etc.</br>Light Ship (-1) - Corvettes , Light Frigates</br>Medium Ship (0) - Frigates, Support/Light Destroyers></br>Heavy Ship (1) - Main Destroyers, Cruisers</br>Super Heavy Ship (2) - Attack/Battle Cruiser, Light Battleships, Support Carriers</br>Ultra Heavy Ship (3) - Heavy Battleships, Dreadnaughts, Main Carrier";
 							$hints[] = "Weapons each have a 'tracking' stat (-4 to 3) that correspond with the 'size' stat of every unit. Thisindicates the weapons ability to track units by size. If a weapon can only track relativly large targets but is trying to aim at say a cutter or fighter, it will come with a harsh penalty, indicated by a loss of accuracy (seen in the overlay).";
-							$hints[] = "Weapons each have a 'tracking' stat (-4 to 3) that correspond with the 'size' stat of every unit. Thisindicates the weapons ability to track units by size. If a weapon can only track relativly large targets but is trying to aim at say a cutter or fighter, it will come with a harsh penalty, indicated by a loss of accuracy (seen in the overlay).";
-							//echo $hints[mt_rand(0, sizeof($hints)-1)];
-							echo $hints[sizeof($hints)-4];
+							$hints[] = "Weapons each have a 'tracking' stat (-4 to 3) that correspond with the 'size' stat of every unit. </br>This indicates the weapons ability to track units by size.</br>If a weapon can only track relativly large targets but is trying to aim at say a cutter or fighter, it will come with a harsh penalty, indicated by a loss of accuracy (seen in the overlay).";
+							echo $hints[mt_rand(0, sizeof($hints)-1)];
+							//echo $hints[sizeof($hints)-4];
 						?>
 					</div>
 				</div>
@@ -197,14 +197,14 @@ echo "</script>";
 			<div id="epButton" class="turnEle ui disabled">
 				<table style="margin:auto; width: 100%;">
 					<tr>
-						<th style="text-align: left">
+						<th style="width: 60%; text-align: left">
 							 Engine Power
 						</th>
 						<th id="remEP" style="text-align: center">
 						</th>
 					</tr>
 					<tr>
-						<th style="text-align: left">
+						<th id="impulseText" style="text-align: left">
 							 Thrust Change 
 						</th>
 						<th id="ImpulseCost" style="text-align: center">

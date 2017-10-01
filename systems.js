@@ -1477,7 +1477,7 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 			$(table).append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.loads[this.ammo].display)));
 			$(table).append($("<tr>").append($("<td>").html("Ammo amount")).append($("<td>").html("<span class='red'>" + this.getRemainingAmmo() + "</span> / " + this.getMaxAmmo()).attr("id", "ammo")));
 			$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + game.getUnitType(this.getTraverseRating()))));
-			$(table).append($("<tr>").append($("<td>").html("Thrust")).append($("<td>").html(this.getBallImpulse())));
+			$(table).append($("<tr>").append($("<td>").html("Thrust")).append($("<td>").html(this.getImpulseString())));
 			//$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("<span class='red' id='detailShots'>" + this.getOutput() + "</span> / " + this.launchRate[this.ammo])));
 			$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("Up to <span class='red'>" + this.launchRate[this.ammo] + "</span> per cycle")));
 		}
@@ -1640,14 +1640,11 @@ Warhead.prototype.getActiveWeapon = function(){
 Warhead.prototype.getAnimation = function(fire){
 	//console.log(this.display + " / " + this.projSpeed + " / " + fire.dist);
 	//console.log(fire);
-
 	
 	var allAnims = [];
 	var grouping = 1;
 	var delay = 30;
 	var shotInterval = 10;
-
-
 
 	var o = game.getUnitById(this.parentId);
 	var t = game.getUnitById(o.mission.targetid);
@@ -2642,10 +2639,8 @@ Launcher.prototype.getMaxAmmo = function(){
 	return this.capacity[this.ammo];
 }
 
-Launcher.prototype.getBallImpulse = function(){
-	var val = Math.ceil(Math.pow(this.loads[this.ammo].mass, -0.75)*300);
-
-	return val*2 + " + " + val + " / Turn";
+Launcher.prototype.getImpulseString = function(){
+	return ("+" + this.loads[this.ammo].baseImpulse + " per Turn");
 }
 
 function Hangar(system){
@@ -2869,10 +2864,12 @@ Hangar.prototype.showHangarControl = function(){
 			.data("systemid", id)
 			.find("#missionType")
 				.find("tr").each(function(i){
-					$(this).off("click");
-					$(this).click(function(){
-						game.getUnitById(aUnit).getSystemById($("#game").find("#hangarLoadoutDiv").data("systemid")).setMission(i);
-					})
+					if (i){
+						$(this).off("click");
+						$(this).click(function(){
+							game.getUnitById(aUnit).getSystemById($("#game").find("#hangarLoadoutDiv").data("systemid")).setMission(i);
+						})
+					}
 				})
 
 	this.triggerLaunchButton();

@@ -117,7 +117,7 @@ function Flight(data){
 	}
 
 	this.setImpulse = function(){
-		this.baseImpulse = Math.floor(Math.pow(this.mass, -1.5)*50000);
+		this.baseImpulse = Math.floor(Math.pow(this.mass, -0.8)*2200);
 		this.currentImpulse = this.baseImpulse;
 	}
 

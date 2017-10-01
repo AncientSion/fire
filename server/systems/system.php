@@ -199,20 +199,17 @@ class System {
 						$duration += mt_rand(0, 1);
 					}
 
-					for ($i = sizeof($this->crits)-1; $i >= 0; $i--){
-						if ($this->crits[$i]->turn < $turn){break;}
-						if ($this->crits[$i]->turn == $turn && $this->crits[$i]->type == "Disabled"){
-							$duration += $this->crits[$i]->duration;
+					for ($j = sizeof($this->crits)-1; $j >= 0; $j--){
+						if ($this->crits[$j]->turn < $turn){break;}
+						if ($this->crits[$j]->turn == $turn && $this->crits[$j]->type == "Disabled"){
+							$duration += $this->crits[$j]->duration;
 						}
 					}
 				}
 
+				//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 				$this->crits[] = new Crit(
-					sizeof($this->crits)+1,
-					$this->parentId, $this->id, $turn,
-					$valid[$i][0], $duration,
-					$mod,
-					1
+					sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $valid[$i][0], $duration, $mod, 1
 				);
 			}
 		}

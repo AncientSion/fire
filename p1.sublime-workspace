@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"getImp",
+				"getImpulseChangeCost"
+			],
+			[
 				"butt",
 				"buttonTD"
 			],
@@ -146,10 +150,6 @@
 			[
 				"bac",
 				"background-color"
-			],
-			[
-				"getImp",
-				"getImpulseStep"
 			],
 			[
 				"ren",
@@ -542,28 +542,28 @@
 			"file": "classes.js",
 			"settings":
 			{
-				"buffer_size": 15647,
+				"buffer_size": 15685,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Searching 73 files for \"new Missile\"\n\nC:\\xampp\\htdocs\\fire\\server\\ships\\artemis.php:\n   26  \t\t$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array(\"LightPulse\", \"LightParticleBeam\"));\n   27  \t\t$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array(\"LightPulse\", \"LightParticleBeam\"));\n   28: \t\t$right->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 120, array(array(\"Naga\", 9, 3), array(\"Cyclops\", 6, 3)));\n   29  \t\t$structs[] = $right;\n   30  \n   ..\n   32  \t\t$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array(\"LightPulse\", \"LightParticleBeam\"));\n   33  \t\t$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array(\"LightPulse\", \"LightParticleBeam\"));\n   34: \t\t$left->systems[] = new MissileLauncher($this->getId(), $this->id, 240, 60, array(array(\"Naga\", 9, 3), array(\"Cyclops\", 6, 3)));\n   35  \t\t$structs[] = $left;\n   36  \n\nC:\\xampp\\htdocs\\fire\\server\\ships\\demos.php:\n   19  \t\t$front = new Structure($this->getId(), $this->id, 300, 60, 400, 18);\n   20  \t\t$front->systems[] = new MediumPlasma($this->getId(), $this->id, 300, 60);\n   21: \t\t$front->systems[] = new MissileLauncher($this->getId(), $this->id, 330, 30,\tarray(array(\"Triarii\", 9, 3), array(\"Javelin\", 9, 3)));\n   22  \t\t$front->systems[] = new MediumPlasma($this->getId(), $this->id, 300, 60);\n   23  \t\t$structs[] = $front;\n\nC:\\xampp\\htdocs\\fire\\server\\ships\\saggitarius.php:\n   19  \t\t$front = new Structure($this->getId(), $this->id, 330, 30, 375, 17);\n   20  \t\t$front->systems[] = new Dual($this->getId(), $this->id, 300, 60, 14, array(\"LightPulse\", \"LightParticleBeam\"));\n   21: \t\t$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60, array(array(\"Cyclops\", 40, 4), array(\"Titan\", 30, 3)));\n   22  \t\t$front->systems[] = new Dual($this->getId(), $this->id, 300, 60, 14, array(\"LightPulse\", \"LightParticleBeam\"));\n   23  \t\t$structs[] = $front;\n   24  \n   25  \t\t$right = new Structure($this->getId(), $this->id, 30, 150, 450, 17);\n   26: \t\t$right->systems[] = new MissileLauncher($this->getId(), $this->id, 0, 180, array(array(\"Naga\", 15, 3), array(\"Cyclops\", 12, 2)));\n   27: \t\t$right->systems[] = new MissileLauncher($this->getId(), $this->id, 0, 180, array(array(\"Naga\", 15, 3), array(\"Cyclops\", 12, 2)));\n   28  \t\t$structs[] = $right;\n   29  \n   ..\n   34  \n   35  \t\t$left = new Structure($this->getId(), $this->id, 210, 330, 450, 17);\n   36: \t\t$left->systems[] = new MissileLauncher($this->getId(), $this->id, 180, 360, array(array(\"Naga\", 15, 3), array(\"Cyclops\", 12, 2)));\n   37: \t\t$left->systems[] = new MissileLauncher($this->getId(), $this->id, 180, 360, array(array(\"Naga\", 15, 3), array(\"Cyclops\", 12, 2)));\n   38  \t\t$structs[] = $left;\n   39  \t\t\n\nC:\\xampp\\htdocs\\fire\\server\\ships\\vorchan.php:\n   19  \t\t$front = new Structure($this->getId(), $this->id, 300, 60, 225, 15);\n   20  \t\t$front->systems[] = new MediumSingleIon($this->getId(), $this->id, 300, 60);\n   21: \t\t$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60,\tarray(array(\"Hasta\", 8, 4), array(\"Vanguard\", 10, 5)));\n   22  \t\t$front->systems[] = new MediumSingleIon($this->getId(), $this->id, 300, 60);\n   23  \t\t$structs[] = $front;\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n  168  \n  169  \tfor (var j = 0; j < data.structures.length; j++){\n  170: \t\tsalvo.structures.push(new Missile(data.structures[j]));\n  171  \t}\n  172  \n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 2312  Launcher.prototype.create = function(loads){\n 2313  \tfor (var i = 0; i < loads.length; i++){\n 2314: \t\tthis.loads.push(new Missile(loads[i]));\n 2315  \t}\n 2316  \tif (game.phase == -2){\n\n11 matches across 6 files\n\n\nSearching 14 files for \"new Missile\"\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n  168  \n  169  \tfor (var j = 0; j < data.structures.length; j++){\n  170: \t\tsalvo.structures.push(new Missile(data.structures[j]));\n  171  \t}\n  172  \n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 2312  Launcher.prototype.create = function(loads){\n 2313  \tfor (var i = 0; i < loads.length; i++){\n 2314: \t\tthis.loads.push(new Missile(loads[i]));\n 2315  \t}\n 2316  \tif (game.phase == -2){\n\n2 matches across 2 files\n\n\nSearching 14 files for \"new Missile\"\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n  168  \n  169  \tfor (var j = 0; j < data.structures.length; j++){\n  170: \t\tsalvo.structures.push(new Missile(data.structures[j]));\n  171  \t}\n  172  \n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 2312  Launcher.prototype.create = function(loads){\n 2313  \tfor (var i = 0; i < loads.length; i++){\n 2314: \t\tthis.loads.push(new Missile(loads[i]));\n 2315  \t}\n 2316  \tif (game.phase == -2){\n\n2 matches across 2 files\n\n\nSearching 14 files for \"getBallImpulse\"\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 1478  \t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Ammo amount\")).append($(\"<td>\").html(\"<span class='red'>\" + this.getRemainingAmmo() + \"</span> / \" + this.getMaxAmmo()).attr(\"id\", \"ammo\")));\n 1479  \t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Tracking\")).append($(\"<td>\").html(this.getTraverseRating() + \" / \" + game.getUnitType(this.getTraverseRating()))));\n 1480: \t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Thrust\")).append($(\"<td>\").html(this.getBallImpulse())));\n 1481  \t\t\t//$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Launch Rate\")).append($(\"<td>\").html(\"<span class='red' id='detailShots'>\" + this.getOutput() + \"</span> / \" + this.launchRate[this.ammo])));\n 1482  \t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Launch Rate\")).append($(\"<td>\").html(\"Up to <span class='red'>\" + this.launchRate[this.ammo] + \"</span> per cycle\")));\n ....\n 2643  }\n 2644  \n 2645: Launcher.prototype.getBallImpulse = function(){\n 2646  \treturn (Math.ceil(Math.pow(this.loads[this.ammo].mass, -0.75)*300);\n 2647  \tvar val = Math.ceil(Math.pow(this.loads[this.ammo].mass, -0.75)*300);\n\n2 matches in 1 file\n\n\nSearching 14 files for \"vectorDiv\"\n\nC:\\xampp\\htdocs\\fire\\graphics.js:\n   13  \t}\n   14  \n   15: \t$(\"#vectorDiv\").html(\"Distance: \" + dist + \" </br>Angle: \" + Math.round(angle))\n   16  \t.css(\"left\", target.x- 45 + \"px\")\n   17  \t.css(\"top\", target.y + 40 + \"px\")\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  977  \n  978  \t\tvar button = $(\"#game\").find(\"#turnButton\");\n  979: \t\tvar vector = $(\"#vectorDiv\")\n  980  \n  981  \t\tif (game.turnMode){\n  ...\n 1546  \t\tvar delay = \"Delay: \" + Math.round(this.getTurnDelay() * a, 2) + \" px\";\n 1547  \n 1548: \t$(\"#vectorDiv\")\n 1549  \t\t.css(\"left\", e.clientX - offset.x - 45 + \"px\")\n 1550  \t\t.css(\"top\", e.clientY - offset.y + 40 + \"px\")\n ....\n 2373  \tthis.unsetMoveMode = function(){\n 2374  \t\tgame.mode = 0;\n 2375: \t\t$(\"#vectorDiv\").addClass(\"disabled\");\n 2376  \t\t$(\"#impulseGUI\").addClass(\"disabled\");\n 2377  \t\t$(\".turnEle\").addClass(\"disabled\");\n\n4 matches across 2 files\n\n\nSearching 14 files for \"impulsec\"\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n   30  \tthis.baseTurnDelay = data.baseTurnDelay || 0;\n   31  \tthis.baseTurnCost = data.baseTurnCost || 0;\n   32: \tthis.baseImpulseCost = data.baseImpulseCost || 0;\n   33  \tthis.currentImpulse = data.currentImpulse || 0;\n   34  \tthis.remainingImpulse = data.remainingImpulse || 0;\n   ..\n  672  \t}\n  673  \t\n  674: \tthis.getImpulseChangeCost = function(){\n  675: \t\tvar cost = Math.round(this.baseImpulseCost*this.getImpulseMod());\t\n  676  \t\treturn cost;\n  677  \t}\n  ...\n  768  \t\t\t.removeClass(\"disabled\")\n  769  \t\t\t.find(\"#remEP\").html(this.getRemainingEP() + \" / \" + this.getEP()).addClass(\"green\").end()\n  770: \t\t\t.find(\"#impulseCost\").html(this.getImpulseChangeCost() + \" EP\");\n  771  \t}\n  772  \t\n  ...\n  891  \t\t\n  892  \tthis.canIncreaseImpulse = function(){\n  893: \t\tif (this.getRemainingEP() >= this.getImpulseChangeCost()){\n  894  \t\t\tif (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship)){\n  895  \t\t\t\treturn true;\n  ...\n  908  \tthis.canDecreaseImpulse = function(){\n  909  \t\tif (this.getCurrentImpulse() <= 0){return false;}\n  910: \t\tif (this.getRemainingEP() >= this.getImpulseChangeCost()){\n  911  \t\t\tif (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship)){\n  912  \t\t\t\treturn true;\n  ...\n 1046  \t\t}\n 1047  \t\telse {\n 1048: \t\t\tvar action = new Move(-1, \"speed\", 1, shipPos.x, shipPos.y, false, 0, this.getImpulseChangeCost());\n 1049  \t\t\tthis.actions.push(action);\n 1050  \t\t}\n ....\n 1059  \t\t}\n 1060  \t\telse {\n 1061: \t\t\tvar action = new Move(-1, \"speed\", -1, shipPos.x, shipPos.y, false, 0, this.getImpulseChangeCost());\n 1062  \t\t\tthis.actions.push(action);\n 1063  \t\t}\n ....\n 1273  \t\tgui.find(\"#baseDelay\").html(round(this.getTurnDelay(), 1));\n 1274  \t\tgui.find(\"#enginePower\").html(this.getRemainingEP() + \" / \" + this.getEP());\n 1275: \t\tgui.find(\"#impulseChange\").html(this.getImpulseChangeCost() + \" EP\");\n 1276  \t\tgui.find(\"#turnCost\").html(\"<span>\" + round(this.getTurnCost(), 1) + \" EP</span>\");\n 1277  \n ....\n 1695  \t\t\t\t.append($(\"<tr>\")\n 1696  \t\t\t\t\t.append($(\"<td>\").html(\"Thrust Change:\"))\n 1697: \t\t\t\t\t.append($(\"<td>\").html(this.getImpulseChangeCost() + \" EP\").addClass(\"change\")))\n 1698  \t\t\t\t.append($(\"<tr>\")\n 1699  \t\t\t\t\t.append($(\"<td>\").html(\"Turn Cost per 1\"))\n ....\n 2133  \t\t\t.find(\".impulse\").html(this.getRemainingImpulse() + \" / \" + this.getCurrentImpulse()).end()\n 2134  \t\t\t.find(\".delay\").html(this.getRemainingDelay())\t\t\n 2135: \t\t\t.find(\".change\").html(this.getImpulseChangeCost() + \" EP\").end()\t\t\t\n 2136: \t\t\t.find(\".turn\").html(this.getImpulseChangeCost() + \" EP\").end()\n 2137  \t}\n 2138  \n\n15 matches in 1 file\n\n\nSearching 14 files for \"add\"\n\nC:\\xampp\\htdocs\\fire\\cam.js:\n  110  \n  111  \t\tthis.new = val;\n  112: \t\t$(ele).addClass(\"selected\");\n  113  \n  114  \t\tif (this.new){\n\nC:\\xampp\\htdocs\\fire\\classes.js:\n  159  \tif (data.turn < game.turn){return;}\n  160  \tif (typeof data.notes === \"string\"){\n  161: \t\tif (!data.notes.length || data.notes == \"add\"){\n  162  \t\t\treturn;\n  163  \t\t}\n  ...\n  289  \t\tfor (var i = 0; i < this.crits.length; i++){\n  290  \t\t\t$(table)\n  291: \t\t\t\t.append($(\"<tr>\").append($(\"<td>\").attr(\"colSpan\", 2).addClass(\"negative\").html(this.crits[i].getString())))\n  292  \t\t}\n  293  \t}\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n  164  \t\t$(table)\n  165  \t\t\t.append($(\"<tr>\")\n  166: \t\t\t\t.append($(\"<th>\").html(this.name.toUpperCase() + \" #\" + this.id).attr(\"colspan\", 2).addClass(header)))\n  167  \t\t\t.append($(\"<tr>\")\n  168  \t\t\t\t.append($(\"<td>\").html(\"Classification\"))\n  ...\n  183  \t\t\t\t$(table)\n  184  \t\t\t\t.append($(\"<tr>\").append(\"<td>\").attr(\"colSpan\", 2).css(\"height\", \"10px\"))\n  185: \t\t\t\t.append($(\"<tr>\").addClass(\"misionSwitch\")\n  186  \t\t\t\t\t.append($(\"<td>\")\n  187  \t\t\t\t\t\t.attr(\"colSpan\", 2)\n  188: \t\t\t\t\t\t.addClass(\"buttonTD\")\n  189  \t\t\t\t\t\t.html(\"Disengage From Mission\")\n  190  \t\t\t\t\t\t.data(\"active\", 0)\n  ...\n  196  \t\t\t\t\t//\t\t$(this).toggleClass(\"highlight\");\n  197  \t\t\t\t\t//})))\n  198: \t\t\t\t.append($(\"<tr>\").click(function(){game.mission.set(1, this)}).addClass(\"disabled\").append($(\"<td>\").attr(\"colSpan\", 2).css(\"font-size\", \"14px\").html(\"Patrol Location\")))\n  199: \t\t\t\t.append($(\"<tr>\").click(function(){game.mission.set(2, this)}).addClass(\"disabled\").append($(\"<td>\").attr(\"colSpan\", 2).css(\"font-size\", \"14px\").html(\"Strike/ Escort Ship\")))\n  200  \t\t\t}\n  201  \t\t\telse if (this.friendly){\n  202  \t\t\t\t$(table)\n  203  \t\t\t\t.append($(\"<tr>\").append(\"<td>\").attr(\"colSpan\", 2).css(\"height\", \"10px\"))\n  204: \t\t\t\t.append($(\"<tr>\").addClass(\"misionSwitch\")\n  205  \t\t\t\t\t.append($(\"<td>\")\n  206  \t\t\t\t\t\t.attr(\"colSpan\", 2)\n  207: \t\t\t\t\t\t.addClass(\"buttonTD\")\n  208  \t\t\t\t\t\t.html(\"New orders possible in</br> \" + (2 - elapsed) + \" Turn/s\")));\n  209  \t\t\t}\n  ...\n  214  \t\t\t\t\t.append($(\"<td>\")\n  215  \t\t\t\t\t\t.attr(\"colSpan\", 2)\n  216: \t\t\t\t\t\t.addClass(\"buttonTD\")\n  217  \t\t\t\t\t\t.html(\"Eligible for mission adustment\")));\n  218  \t\t\t}\n  ...\n  223  \t\t\t\t\t.append($(\"<td>\")\n  224  \t\t\t\t\t\t.attr(\"colSpan\", 2)\n  225: \t\t\t\t\t\t.addClass(\"buttonTD\")\n  226  \t\t\t\t\t\t.html(\"New orders possible in</br> \" + (2 - elapsed) + \" Turn/s\")));\n  227  \t\t\t}\n  ...\n  236  \n  237  \t\t$(this.expandDiv(div))\n  238: \t\t\t.addClass(\"disabled\")\n  239  \t\t\t.drag()\n  240  \t\t\t.find(\".structContainer\")\n  241  \t\t\t\t.contextmenu(function(e){e.stopPropagation;})\n  242: \t\t\t\t//.addClass(\"disabled\")\n  243  \t\t\t\t.end()\n  244  \t\t\t.contextmenu(function(e){\n  245  \t\t\t\t//e.stopImmediatePropagation(); e.preventDefault();\n  246  \t\t\t\tif ($(this).data(\"shipId\") != aUnit){\n  247: \t\t\t\t\t$(this).addClass(\"disabled\");\n  248  \t\t\t\t}\n  249  \t\t\t})\n  ...\n  284  \t\t\t\t\t.data(\"shipId\", this.id)\n  285  \t\t\t\t\t.data(\"fighterId\", this.structures[i].id)\n  286: \t\t\t\t\t.addClass(\"size40\")\n  287  \t\t\t\t\t.click(function(e){\n  288  \t\t\t\t\t\te.stopPropagation();\n  ...\n  299  \t\t\t\t$(overlay)\n  300  \t\t\t\t\t.attr(\"src\", \"varIcons/destroyed.png\")\n  301: \t\t\t\t\t.addClass(\"overlay\").addClass(\"size30\")\n  302  \t\t\t\t\t.hover(function(e){\n  303  \t\t\t\t\t\te.stopPropagation();\n  ...\n  356  \t\t\t\t\t\tfighterDiv.appendChild(td);\n  357  \t\t\t\t\t\t$(td)\n  358: \t\t\t\t\t\t\t.addClass(\"fighter\")\n  359  \t\t\t\t\t\t\t.css(\"top\", -h -s - 5)\n  360  \t\t\t\t\t\t\t.css(\"left\", w/2 - s/2 +1 )\n  ...\n  407  \n  408  \t\tif (this.friendly){color = \"green\";}\n  409: \t\tvar attachDiv = $(\"<div>\").addClass(\"attachDiv\")\n  410: \t\t\t.append($(\"<div>\").css(\"display\", \"block\").addClass(\"center15 \" + color).html(\"Flight #\" + this.id + (\" (click to select)\")))\n  411  \t\t\t.data(\"id\", this.id)\n  412  \t\t\t.click(function(){\n  ...\n  546  \t\tif (!i){\n  547  \t\t\t$(this).children()[0].innerHTML = \"Disengage from Mission\";\n  548: \t\t} else $(this).addClass(\"disabled\").removeClass(\"selected\");\n  549  \t});\n  550  }\n  ...\n  639  \tif (this.selected){\n  640  \t\t$(this.element).find(\".header\").find(\".general\").find(\".misionSwitch\").removeClass(\"disabled\");\n  641: \t} else $(this.element).find(\".header\").find(\".general\").find(\".misionSwitch\").addClass(\"disabled\");\n  642  \n  643  \tShip.prototype.switchDiv.call(this);\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  528  \t\t\t\t$(\"#deployWrapper\").find(\"#reinforceTable\").find(\".requestReinforcements\").each(function(){\n  529  \t\t\t\t\tif ($(this).data(\"id\") == id){\n  530: \t\t\t\t\t\t$(this).addClass(\"selected\");\n  531  \t\t\t\t\t\treturn false;\n  532  \t\t\t\t\t}\n  ...\n  575  \n  576  \n  577: \t\t\t$(ele).find(\"span\").html(\"Deploy Ship\").end().find(\".img\").html(\"\").append($(window.shipImages[unit.name.toLowerCase()].cloneNode(true)).addClass(\"img80\"));\n  578  \t\t}\n  579  \t}\n  ...\n 1506  \t\t\t\t\t\t\t\tvar step = 1;\n 1507  \t\t\t\t\t\t\t\tif (action.a > 0){\n 1508: \t\t\t\t\t\t\t\t\tgame.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, step);\n 1509  \t\t\t\t\t\t\t\t\tgame.ships[i].actions[j].angle -= step;\n 1510  \t\t\t\t\t\t\t\t}\n 1511  \t\t\t\t\t\t\t\telse {\n 1512: \t\t\t\t\t\t\t\t\tgame.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, -step);\n 1513  \t\t\t\t\t\t\t\t\tgame.ships[i].actions[j].angle += step;\n 1514  \t\t\t\t\t\t\t\t}\n ....\n 2026  \n 2027  \t\tif (hits){\n 2028: \t\t\tvar add = this.getDamageDetails(fire);\n 2029  \n 2030: \t\t\t$(\"#combatLog\").find(\"tbody\").append($(add).hide());\n 2031  \t\t\t$(tr).click(function(){\n 2032  \t\t\t\tif ($(this).hasClass(\"selected\")){\n ....\n 2034  \t\t\t\t}\n 2035  \t\t\t\telse {\n 2036: \t\t\t\t\t$(this).addClass(\"selected\").next().show();\n 2037  \t\t\t\t}\n 2038  \t\t\t})\n ....\n 2109  \t\t\t\t\t\t\t\t}\n 2110  \t\t\t\t\t\t\t\telse if (!game.deploying && !game.aUnit && game.getUnitById($(this).data(\"shipid\")).canDeploy()){\n 2111: \t\t\t\t\t\t\t\t\t$(this).addClass(\"selected\");\n 2112  \t\t\t\t\t\t\t\t\tgame.enableDeployment($(this).data(\"shipid\"));\n 2113  \t\t\t\t\t\t\t\t}\n ....\n 2167  \t\t\t\t\telse if (!aUnit){\n 2168  \t\t\t\t\t\tif ($(this).hasClass(\"green\")){\n 2169: \t\t\t\t\t\t\t$(this).addClass(\"selected\");\n 2170  \t\t\t\t\t\t\tgame.enableDeployment($(this).data(\"id\"));\n 2171  \t\t\t\t\t\t}\n 2172  \t\t\t\t\t\telse if (!game.deploying){\n 2173  \t\t\t\t\t\t\tif (!$(this).hasClass(\"green\") && Math.floor(game.reinforcePoints) >= $(this).data(\"cost\") + game.getCurrentReinforceCost()){\n 2174: \t\t\t\t\t\t\t\t$(this).addClass(\"selected\");\n 2175  \t\t\t\t\t\t\t\tgame.enableDeployment($(this).data(\"id\"));\n 2176  \t\t\t\t\t\t\t} else popup(\"You have insufficient Reinforce Points (\"+game.reinforcePoints+\") available.\");\n ....\n 2216  \t\t\t\t($(this.ships[i].img.cloneNode(true))\n 2217  \t\t\t\t\t.data(\"id\", this.ships[i].id))\n 2218: \t\t\t\t\t.addClass(className)\n 2219: \t\t\t\t\t.addClass(name)\n 2220  \t\t\t\t\t.click(function(e){\n 2221  \t\t\t\t\t\te.preventDefault(); e.stopPropagation();\t\t\t\t\t\t\n\nC:\\xampp\\htdocs\\fire\\graphics.js:\n  239  \tvar grad = fxCtx.createRadialGradient(x, y, 0, x, y, s);\n  240  \t\t/*\n  241: \t\tgrad.addColorStop(0, \"white\");\n  242: \t\tgrad.addColorStop(0.3, \"yellow\");\n  243: \t\tgrad.addColorStop(0.8, \"orange\");\n  244: \t\tgrad.addColorStop(1, \"red\");\n  245  \t\t*/\n  246  \n  247: \t\tgrad.addColorStop(0.25, \"red\");\n  248: \t\tgrad.addColorStop(0.4, \"orange\");\n  249: \t\tgrad.addColorStop(1, \"rgba(255,255,0,0)\");\n  250  \treturn grad;\n  251  }\t\n  ...\n  272  \t}\n  273  \telse {\n  274: \t\tvar start = addAngle(0 + w-facing, a);\n  275: \t\tvar end = addAngle(360 - w-facing, a);\n  276  \t\tvar p1 = getPointInDirection(str, start, loc.x, loc.y);\n  277  \t\tvar rad1 = degreeToRadian(start);\n\nC:\\xampp\\htdocs\\fire\\mathLib.js:\n   27  } \n   28  \n   29: function addAngle(f, a){\n   30  \tret = 360 - f + a;\n   31  \twhile (ret > 360){\n   ..\n   40  \n   41  \n   42: function addToDirection(current, add){\n   43:     add = add % 360;\n   44  \n   45  \tvar ret = 0;\n   46: \tif (current + add > 360){\n   47: \t\tret =  0+(add-(360-current));\n   48  \t\t\t\n   49: \t}else if (current + add < 0){\n   50: \t\tret = 360 + (current + add);\n   51  \t}else{\t\n   52: \t\tret = current + add;\n   53  \t}\n   54  \n   ..\n  116  \t\theading = radianToDegree(Math.atan(dY/dX)) + 270;\n  117  \t}\n  118: \theading = addToDirection(Math.round(heading), -90);\n  119: \theading = addToDirection(heading, -facing);\n  120  \n  121  \treturn heading;\n\nC:\\xampp\\htdocs\\fire\\salvo.js:\n   11  \n   12  \t\tif (this.friendly){color = \"green\";}\n   13: \t\tvar attachDiv = $(\"<div>\").addClass(\"attachDiv\")\n   14: \t\t\t.append($(\"<div>\").css(\"display\", \"block\").addClass(\"center15 \" + color)\n   15  \t\t\t\t.html(\"Salvo #\" + this.id + (\" (click to select)\"))\n   16: \t\t\t.append($(\"<div>\").css(\"display\", \"block\").addClass(\"center15 \" + color)\n   17  \t\t\t\t.html(\"Auto-Targetting: \" + this.getTarget().name + \" #\" + this.mission.targetid)))\n   18  \t\t\t.data(\"id\", this.id)\n   ..\n  164  \t\t\t\ttd.className = \"iconContainer\"; \n  165  \t\t\t\t$(td).data(\"id\", this.structures[i].id);\n  166: \t\t\t\ttd.addEventListener(\"click\", function(){\n  167  \t\t\t\t\tconsole.log(game.getUnitById(aUnit).getSystemById($(this).data(\"id\")));\n  168  \t\t\t\t})\n  ...\n  179  \t\t\t\t\t} else img.src = \"varIcons/ammoMiss.png\";\n  180  \t\t\t\t}*/\n  181: \t\t\t\t$(td).append($(this.img.cloneNode(true)).addClass(\"size40\"));\n  182  \n  183  \t\t\ttr1.appendChild(td);\n  ...\n  210  \t\t\te.stopPropagation();\n  211  \t\t//\te.preventDefault();\n  212: \t\t//\t$(this).addClass(\"disabled\");\n  213  \t\t}).drag();\n  214  \t\t\n\nC:\\xampp\\htdocs\\fire\\script.js:\n   62  \n   63  \t/*\n   64: \t$(\"#game\").append($(\"<canvas>\").addClass(\"cache\"));\n   65  \t$(\".cache\").attr(\"id\", \"cache\").drag();\n   66  \tvar ca = $(\"#cache\")[0];\n   ..\n  165  \t\t\t\tif (vessel.salvo){\n  166  \t\t\t\t\tangle = getAngleFromTo(vessel.getTrajectory(), shipLoc);\n  167: \t\t\t\t\tangle = addAngle(-ship.getPlannedFacing(), angle);\n  168  \t\t\t\t}\n  169  \t\t\t\telse {\n  170  \t\t\t\t\tangle = getAngleFromTo(vessel.getPlannedPosition(), shipLoc);\n  171: \t\t\t\t\tangle = addAngle(vessel.getPlannedFacing(), angle);\n  172  \t\t\t\t}\n  173  \t\t\t} else angle = range(0, 359);\n  ...\n  217  \t\t\t\t.append($(\"<td>\").html(lockString))\n  218  \t\t\t\t.append($(\"<td>\").html(maskString))\n  219: \t\t\t\t.append($(\"<td>\").addClass(\"final\").html(final + \"%\"));\n  220  \t\t}\n  221  \t}\n  ...\n  368  \t\t\tvar dist = Math.floor(getDistance(shipLoc, pos));\n  369  \t\t\tvar a = getAngleFromTo(shipLoc, pos);\n  370: \t\t\t\ta = addAngle(facing, a);\n  371  \t\t\tdrawVector(shipLoc, {x: e.clientX - offset.x, y: e.clientY - offset.y}, dist, a);\n  372  \t\t}\n  ...\n  376  \t\t\tshipLoc = ship.getPlannedPosition();\n  377  \t\t\tfacing = ship.getPlannedFacing();\n  378: \t\t\tsensorEvent(false, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), addAngle(facing, getAngleFromTo(shipLoc, pos)));\n  379  \t\t\treturn;\n  380  \t\t}\n  ...\n  404  \tvar facing = ship.getPlannedFacing();\n  405  \tvar shipLoc = ship.getPlannedPosition();\n  406: \tvar a = addAngle(facing, getAngleFromTo(shipLoc, pos));\n  407  \tsensorEvent(true, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), a);\n  408  }\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  371  \t\t\t.find(\"#deployWrapper\").find(\"#reinforceTable\").find(\".requestReinforcements\").each(function(){\n  372  \t\t\tif ($(this).hasClass(\"selected\")){\n  373: \t\t\t\t//$(this).find(\".cost\").addClass(\"green\");\n  374: \t\t\t\t$(this).addClass(\"green\");\n  375  \t\t\t\treturn;\n  376  \t\t\t}\n  ...\n  383  \t\tif (dist <= game.flightDeploy.range){\n  384  \t\t\tvar a = getAngleFromTo( {x: this.x, y: this.y}, {x: pos.x, y: pos.y} );\n  385: \t\t\t\ta = addAngle(this.getDrawFacing(), a);\n  386  \t\t\tif (isInArc(a, game.flightDeploy.start, game.flightDeploy.end)){\n  387  \t\t\t\treturn true;\n  ...\n  659  \tthis.weaponHighlight = function(weapon){\n  660  \t\tif (weapon.highlight){\n  661: \t\t\t$(\"#weaponTable\" + weapon.id).addClass(\"disabled\");\n  662  \t\t\tfxCtx.clearRect(0, 0, res.x, res.y);\t\n  663  \t\t\tweapon.highlight = false;\n  ...\n  752  \t\tvar slipAngle = this.getSlipAngle();\n  753  \n  754: \t\tthis.moveAngles = {start: addAngle(0 + slipAngle, angle), end: addAngle(360 - slipAngle, angle)};\n  755  \t\t//console.log(this.moveAngles);\n  756  \t\tif (slipAngle != 180){\n  ...\n  761  \t\tangle = this.facing\n  762  \t\tvar turnEle = $(\"#game\").find(\"#epButton\")[0];\n  763: \t\tvar p1 = getPointInDirection(150/cam.z, addToDirection(angle, 90), center.x, center.y);\n  764  \n  765  \t\t$(turnEle)\n  ...\n  767  \t\t\t.css(\"top\", p1.y * cam.z + cam.o.y - $(turnEle).height()/2)\n  768  \t\t\t.removeClass(\"disabled\")\n  769: \t\t\t.find(\"#remEP\").html(this.getRemainingEP() + \" / \" + this.getEP()).addClass(\"green\").end()\n  770  \t\t\t.find(\"#impulseCost\").html(this.getImpulseChangeCost() + \" EP\");\n  771  \t}\n  ...\n  981  \t\tif (game.turnMode){\n  982  \t\t\t$(button)\n  983: \t\t\t\t.find(\"#turnMode\").html(\"ON\").addClass(\"on\").end()\n  984  \t\t\t\t//.find(\"#impulseMod\").html(turn.dif).end()\n  985  \t\t\t\t.find(\"#turnCost\").html(round(turn.cost * turn.mod * turn.dif, 2) + \" EP\").end()\n  ...\n 1009  \t\t\t\t.find(\"#turnDelay\").html(\"\").end()\n 1010  \t\t\t\t.find(\"#turnMod\").html(\"\").end()\n 1011: \t\t\t\t.find(\"#shortenTurn\").addClass(\"disabled\");\n 1012  \t\t\t\t$(\"#game\").find(\"#epButton\").find(\"#impulseText\").html(\"Thrust Change\").end().find(\"#impulseCost\").html(this.getImpulseChangeCost());\n 1013: \t\t\t$(vector).addClass(\"disabled\")\n 1014  \t\t}\n 1015  \n ....\n 1189  \t\tvar angle = this.facing;\n 1190  \t\tvar turnEle = $(\"#game\").find(\"#turnButton\")[0];\n 1191: \t\tvar p1 = getPointInDirection(150/cam.z, addToDirection(angle, -90), center.x, center.y);\n 1192  \t\t$(turnEle)\n 1193  \t\t\t.css(\"left\", p1.x * cam.z + cam.o.x - $(turnEle).width()/2)\n ....\n 1203  \t\tvar w = this.getTurnStep();\n 1204  \n 1205: \t\tthis.turnAngles = {start: addAngle(0 + turnAngle, angle), end: addAngle(360 - turnAngle, angle)};\n 1206  \t\t\n 1207  \t\tfor (var j = 1; j >= -1; j = j-2){\n 1208  \t\t\tfor (var i = 1; i <= w; i++){\t\t\t\n 1209  \t\t\t\tvar modAngle = turnAngle * i * j;\n 1210: \t\t\t\tvar newAngle = addToDirection(angle, modAngle);\n 1211  \t\t\t\tvar p = getPointInDirection(Math.max(100, this.getRemainingImpulse()*2), newAngle, center.x, center.y);\n 1212  \t\t\t\tif (turnAngle != 180){\n ....\n 1259  \t\t\tvar oy = p1.y * cam.z + cam.o.y - 15;\n 1260  \t\t\t$(\"#undoLastAction\").css(\"left\", ox).css(\"top\", oy).removeClass(\"disabled\");\n 1261: \t\t} else $(\"#undoLastAction\").addClass(\"disabled\");\n 1262  \n 1263  \n ....\n 1282  \t\t\tvar oy = pPlus.y * cam.z + cam.o.y - 15;\n 1283  \t\t\t$(\"#plusImpulse\").css(\"left\", ox).css(\"top\", oy).removeClass(\"disabled\");\n 1284: \t\t} else $(\"#plusImpulse\").addClass(\"disabled\");\n 1285  \n 1286  \t\tif (this.canDecreaseImpulse()){\n ....\n 1289  \t\t\tvar oy = mMinus.y * cam.z + cam.o.y - 15;\n 1290  \t\t\t$(\"#minusImpulse\").css(\"left\", ox).css(\"top\", oy).removeClass(\"disabled\");\n 1291: \t\t} else $(\"#minusImpulse\").addClass(\"disabled\");\n 1292  \t}\t\n 1293  \n ....\n 1538  \t\tvar max = this.getMaxTurnAngle();\n 1539  \t\tvar a =  getAngleFromTo(o, pos);\n 1540: \t\t\ta = Math.round(addAngle(f, a));\n 1541  \t\tif (a > 180){a = (360-a) *-1;}\n 1542  \t\t\ta = Math.min(Math.abs(a), max);\n ....\n 1582  \t\tvar origin = this.getPlannedPosition();\n 1583  \t\tvar a = getAngleFromTo(origin, dest);\n 1584: \t\t\ta = addAngle(this.getPlannedFacing(), a);\n 1585  \t\tif (a > 180){a -= 360;}\n 1586  \t\tvar max = this.getMaxTurnAngle();\n ....\n 1689  \t\t\t$(table)\n 1690  \t\t\t\t.append($(\"<tr>\")\n 1691: \t\t\t\t\t.append($(\"<th>\").html(this.name.toUpperCase() + \" #\" + this.id).attr(\"colspan\", 2).addClass(header)))\n 1692  \t\t\t\t.append($(\"<tr>\")\n 1693  \t\t\t\t\t.append($(\"<td>\").html(\"Classification\"))\n ....\n 1695  \t\t\t\t.append($(\"<tr>\")\n 1696  \t\t\t\t\t.append($(\"<td>\").html(\"Thrust\"))\n 1697: \t\t\t\t\t.append($(\"<td>\").html(this.getRemainingImpulse() + \" / \" + this.getCurrentImpulse()).addClass(\"Thrust\")))\n 1698  \t\t\t\t.append($(\"<tr>\")\n 1699  \t\t\t\t\t.append($(\"<td>\").html(\"Engine Power:\"))\n 1700: \t\t\t\t\t.append($(\"<td>\").html(this.getRemainingEP() + \" / \" + this.getEP()).addClass(\"ep\")))\n 1701  \t\t\t\t.append($(\"<tr>\")\n 1702  \t\t\t\t\t.append($(\"<td>\").html(\"Thrust Change:\"))\n 1703: \t\t\t\t\t.append($(\"<td>\").html(this.getImpulseChangeCost() + \" EP\").addClass(\"change\")))\n 1704  \t\t\t\t.append($(\"<tr>\")\n 1705  \t\t\t\t\t.append($(\"<td>\").html(\"Turn Cost per 1\"))\n ....\n 1710  \t\t\t\t.append($(\"<tr>\")\n 1711  \t\t\t\t\t.append($(\"<td>\").html(\"Active Turn Delay\"))\n 1712: \t\t\t\t\t.append($(\"<td>\").html(this.getRemainingDelay()).addClass(\"delay\")))\n 1713  \t\t\t\t\n 1714  \t\tsubDiv.appendChild(table);\n ....\n 1716  \n 1717  \t\t$(this.expandDiv(div))\n 1718: \t\t\t.addClass(\"disabled\")\n 1719  \t\t\t.drag()\n 1720  \t\t\t.find(\".structContainer\")\n 1721  \t\t\t\t.contextmenu(function(e){e.stopPropagation;})\n 1722: \t\t\t\t//.addClass(\"disabled\")\n 1723  \t\t\t\t.end()\n 1724  \t\t\t.find(\".header\")\n ....\n 1732  \t\t\t\t\te.stopImmediatePropagation(); e.preventDefault();\n 1733  \t\t\t\t\tif ($(this).parent().data(\"shipId\") != aUnit){\n 1734: \t\t\t\t\t\t$(this).parent().addClass(\"disabled\");\n 1735  \t\t\t\t\t}\n 1736  \t\t\t\t})\n ....\n 1745  \t\t$(div)\n 1746  \t\t.append($(\"<div>\")\n 1747: \t\t\t.addClass(\"iconContainer\")\n 1748: \t\t\t\t.append($(window.shipImages[this.name.toLowerCase()].cloneNode(true)).addClass(\"rotate270\").addClass(\"size90\"))\n 1749  \t\t\t\t.hover(function(e){\n 1750  \t\t\t\t\tif (aUnit){\n ....\n 1874  \t\t\t.css(\"top\", primY);\n 1875  \n 1876: \t\t$(structContainer).append($(\"<div>\").addClass(\"mainPower\").html(this.getSystemByName(\"Reactor\").getOutput()));\n 1877  \n 1878  \n ....\n 2095  \tthis.getAttachDivs = function(){\n 2096  \t\tif (this.cc.length){\n 2097: \t\t\tvar ccContainer = $(\"<div>\").addClass(\"ccContainer\")\n 2098: \t\t\t\t.append(($(\"<div>\").addClass(\"general\")\n 2099: \t\t\t\t\t.append($(\"<span>\").addClass(\"center15\").html(\"Local Units\"))));\n 2100  \n 2101  \t\t\tvar attach = [];\n ....\n 2119  \t\t\tfor (var j = 0; j < this.structures[i].systems.length; j++){\n 2120  \t\t\t\tif (this.structures[i].systems[j].loadout){\n 2121: \t\t\t\t\t$(this.structures[i].systems[j].element).addClass(\"bgYellow\");\n 2122  \t\t\t\t}\n 2123  \t\t\t}\n ....\n 2379  \tthis.unsetMoveMode = function(){\n 2380  \t\tgame.mode = 0;\n 2381: \t\t$(\"#vectorDiv\").addClass(\"disabled\");\n 2382: \t\t$(\"#impulseGUI\").addClass(\"disabled\");\n 2383: \t\t$(\".turnEle\").addClass(\"disabled\");\n 2384: \t\t$(\"#maxVector\").addClass(\"disabled\");\n 2385: \t\t$(\"#maxTurnVector\").addClass(\"disabled\");\n 2386: \t\t$(\"#maxCutVector\").addClass(\"disabled\");\n 2387: \t\t$(\"#plusImpulse\").addClass(\"disabled\");\n 2388: \t\t$(\"#minusImpulse\").addClass(\"disabled\");\n 2389: \t\t$(\"#undoLastAction\").addClass(\"disabled\");\n 2390  \t\tif (game.turnMode){this.switchTurnMode();}\n 2391  \t\tmoveCtx.clearRect(0, 0, res.x, res.y);\n ....\n 2446  \t\tvar str = sensor.getOutput();\n 2447  \t\tvar\tw = Math.min(180, game.const.ew.len * Math.pow(str/ew.dist, game.const.ew.p));\n 2448: \t\tvar start = addAngle(0 + w, ew.angle);\n 2449: \t\tvar end = addAngle(360 - w, ew.angle);\n 2450  \t\treturn isInArc(getCompassHeadingOfPoint(origin,  target, this.getPlannedFacing()), start, end);\n 2451  \t}\n ....\n 2539  \telse {\n 2540  \t\tgame.zIndex--;\n 2541: \t\t$(this.element).addClass(\"disabled\").css(\"zIndex\", 10);\n 2542  \t}\n 2543  }\n ....\n 2737  \tthis.switchDiv();\n 2738  \tthis.unsetMoveMode();\n 2739: \t$(\"#hangarLoadoutDiv\").addClass(\"disabled\");\n 2740  \t$(\"#popupWrapper\").hide()\n 2741  \t$(\"#instructWrapper\").hide()\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n   54  \tvar table;\n   55  \tif (boost || this.crits.length){\n   56: \t\ttable = $(\"<table>\").addClass(\"modifiers\").append($(\"<tr>\").append($(\"<th>\").html(\"Modifiers\").attr(\"colSpan\", 2)));\n   57  \t\tif (boost){\n   58  \t\t\tfor (var i = 0; i < this.boostEffect.length; i++){\n   ..\n   67  \t\t\t\t\tvar html = this.boostEffect[i].type + \": \" + mod + (this.boostEffect[i].value*100 * boost) + \"%\";\n   68  \t\t\t\t}\n   69: \t\t\t\t$(table[0]).append($(\"<tr>\").append($(\"<td>\").html(html).attr(\"colSpan\", 2).addClass(\"positive\")));\n   70  \t\t\t}\n   71  \t\t}\n   ..\n   73  \t\t\tfor (var i = 0; i < this.crits.length; i++){\n   74  \t\t\t\tif (this.crits[i].inEffect()){\n   75: \t\t\t\t\t$(table[0]).append($(\"<tr>\").append($(\"<td>\").html(this.crits[i].getString()).attr(\"colSpan\", 2).addClass(\"negative\")));\n   76  \t\t\t\t}\n   77  \t\t\t}\n   ..\n  161  \tvar ele = $(this.element);\n  162  \tif (this.destroyed){\n  163: \t\tele.addClass(\"destroyed\"); \n  164  \t\treturn;\n  165  \t}\n  ...\n  167  \tif (this.disabled){\n  168  \t\tif (this.highlight){\n  169: \t\t\tele.addClass(\"unpowered\")\n  170  \t\t\t\t.find(\".boostDiv\").hide().end()\n  171  \t\t\t\t.find(\".outputMask\").hide().end()\n  172  \t\t\t\t.find(\".powerDiv\").find(\".power\").show().end().find(\".unpower\").hide().end();\n  173: \t\t} else ele.addClass(\"unpowered\").find(\".outputMask\").hide();\n  174  \t}\n  175  \telse {\n  ...\n  195  \tvar ele = $(this.element);\n  196  \tif (this.hasUnresolvedFireOrder()){\n  197: \t\tele.addClass(\"fireOrder\");\n  198  \t} else ele.removeClass(\"fireOrder\");\n  199  \tif (this.selected){\n  200: \t\tele.addClass(\"selected\");\n  201  \t} else ele.removeClass(\"selected\");\n  202  }\n  ...\n  939  \n  940  \tif (this.output){\n  941: \t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Current Output\")).append($(\"<td>\").addClass(\"output\").html(this.getOutputString())));\n  942  \t}\n  943  \tif (this.powerReq){\n  944: \t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Base Power Req\")).append($(\"<td>\").addClass(\"powerReq\").html(this.getPowerReq())));\n  945  \t}\n  946  \tif (this.effiency){\n  947: \t\t$(table).append($(\"<tr>\").css(\"border-top\", \"2px solid white\").append($(\"<td>\").html(\"Boost Power Cost\")).append($(\"<td>\").addClass(\"powerCost\").html(this.getEffiency())));\n  948  \t\tthis.getBoostEffectElements(table);\n  949  \t}\n  950  \tif (this.modes.length){\n  951: \t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Sensor Mode\")).append($(\"<td>\").addClass(\"sensorMode negative\").html(this.getEWMode())));\n  952  \t}\n  953  \n  ...\n 1306  \n 1307  \tif (dmgLoss){\n 1308: \t\trow.append($(\"<td>\").addClass(\"red\").html(\" -\" + dmgLoss + \"%\"));\n 1309  \t} else {\n 1310  \t\trow.append($(\"<td>\").html(\"\"));\n ....\n 1327  \n 1328  \tif (accLoss){\n 1329: \t\trow.append($(\"<td>\").addClass(\"red\").html(\" -\" + accLoss + \"%\"));\n 1330  \t} else row.append($(\"<td>\").html(\"\"));\n 1331  \n ....\n 1339  \t\trow.append($(\"<td>\").html(\"\"));\n 1340  \tif (accLoss){\n 1341: \t\trow.append($(\"<td>\").addClass(\"red\").html(\" -\" + accLoss + \"%\"));\n 1342  \t} else {\t\t\t\n 1343  \t\trow.append($(\"<td>\").html(\"\"));\n ....\n 1470  \t}\n 1471  \n 1472: \t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Loading\")).append($(\"<td>\").addClass(\"loading\").html(this.getTimeLoaded() + \" / \" + this.reload)));\n 1473  \n 1474  \tif (this instanceof Launcher){\n ....\n 1487  \t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Focus point\")).append($(\"<td>\").html(this.optRange + \"px\")));\n 1488  \t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Damage loss\")).append($(\"<td>\").html(this.getDmgLoss(this.optRange+100) + \"% per 100px\")));\n 1489: \t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Accuracy loss\")).append($(\"<td>\").addClass(\"accuracy\").html(this.getAccuracy() + \"% per 100px\")));\n 1490  \t}\n 1491  \telse {\n ....\n 1510  \t}\n 1511  \n 1512: \t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Damage\")).append($(\"<td>\").addClass(\"damage\").html(this.getDmgString())));\n 1513  \n 1514  \tif (this.notes.length){\n 1515: \t\t$(table).append($(\"<tr>\").addClass(\"notes\").css(\"border-top\", \"2px solid white\").append($(\"<th>\").html(\"Notes\").attr(\"colSpan\", 2)));\n 1516  \t\tfor (var i = 0; i < this.notes.length; i++){\n 1517  \t\t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(this.notes[i]).attr(\"colSpan\", 2)));\n ....\n 1834  \n 1835  \n 1836: \t//grad.addColorStop(1, \"red\");\n 1837: \tgrad.addColorStop(Math.min(1, red), \"red\");\n 1838: \tgrad.addColorStop((Math.min(1, red) + Math.max(0, green))/2, \"yellow\");\n 1839: \tgrad.addColorStop(Math.max(0, green), \"green\");\n 1840: \tgrad.addColorStop(0, \"green\");\n 1841  \t\t\t\n 1842  \treturn grad;\n ....\n 1992  \t\t\t\tty = fire.target.drawY + range(-fire.target.size * 0.45, fire.target.size * 0.45);\n 1993  \t\t\t\ta = getAngleFromTo( {x: tx, y: ty}, {x: fire.target.drawX, y: fire.target.drawY} );\n 1994: \t\t\t\ta = addToDirection(a, range(-10, 10));\n 1995  \t\t\t\ttb = getPointInDirection(fire.weapon.rakeTime/4, a, tx, ty); // BEAM swipe END on HIT\t\n 1996  \t\t\t}\n ....\n 1999  \t\t\t\tty = fire.target.drawY + range(-fire.target.size * 0.7, fire.target.size * 0.7);\n 2000  \t\t\t\ta = getAngleFromTo( {x: tx, y: ty}, {x: fire.target.drawX, y: fire.target.drawY} );\n 2001: \t\t\t\ta = addToDirection(a, range(-40, 40));\n 2002  \t\t\t\ttb = getPointInDirection(fire.weapon.rakeTime/3, a, tx, ty); // BEAM swipe END on MISS\t\n 2003  \t\t\t}\n ....\n 2027  \tif (opt > 1){opt = 1;}\n 2028  \n 2029: \t\tgrad.addColorStop(0, \"red\");\n 2030: \t\tgrad.addColorStop(opt/2, \"yellow\");\n 2031: \t\tgrad.addColorStop(opt, \"green\");\n 2032: \t//\tgrad.addColorStop(this.optRange/res.x*1.5, \"yellow\");\n 2033  \t\n 2034  \t\tif (opt*1.5 > 1){\n 2035: \t\t\tgrad.addColorStop(1, \"yellow\");\n 2036  \t\t}\n 2037  \t\telse {\n 2038: \t\t\tgrad.addColorStop(opt*1.5, \"yellow\");\n 2039  \t\t\tif (opt*2 < 1){\t\n 2040: \t\t\t\tgrad.addColorStop(opt*2, \"red\");\n 2041  \t\t\t}\n 2042  \t\t}\n ....\n 2503  \telse {\n 2504  \t\twindow.game.setShipTotal();\n 2505: \t\t$(div).addClass(\"disabled\");\n 2506  \t}\n 2507  }\n 2508  \n 2509: Launcher.prototype.addAmmo = function(ele, all){\n 2510  \tvar tMass = 0;\n 2511  \tvar tCost = 0;\n 2512: \tvar add = 1;\n 2513  \tvar name = ele.childNodes[0].innerHTML;\n 2514  \tvar sMass = 0;\n 2515  \n 2516: \tvar canAdd = true;\n 2517  \tvar index = 0;\n 2518  \tfor (var i = 0; i < this.loads.length; i++){\n ....\n 2522  \n 2523  \t\tif (this.loads[i].amount > 0 && this.loads[i].name != name){\n 2524: \t\t\tcanAdd = false\n 2525  \t\t\tbreak;\n 2526  \t\t}\n 2527  \t\telse if (this.loads[i].amount == this.capacity[i]){\n 2528: \t\t\tcanAdd = false;\n 2529  \t\t\tbreak;\n 2530  \t\t}\n 2531  \t}\n 2532  \n 2533: \tif (canAdd){\n 2534  \t\tif (all){\n 2535  \t\t\tthis.loads[index].amount = this.capacity[index];\n ....\n 2564  \tif (this.hasLoad()){\n 2565  \t\t$(\"#weaponLoadoutDiv\").find(\".buttonTD\").removeClass(\"disabled\");\n 2566: \t} else $(\"#weaponLoadoutDiv\").find(\".buttonTD\").addClass(\"disabled\");\n 2567  }\n 2568  \n ....\n 2592  \t\tvar td = document.createElement(\"td\");\n 2593  \t\t\ttd.innerHTML = \"<img class='size20' src='varIcons/plus.png'>\"; tr.appendChild(td);\n 2594: \t\t\ttd.addEventListener(\"click\", function(e){\n 2595  \t\t\t\te.preventDefault(); e.stopPropagation();\n 2596: \t\t\t\twindow.game.ships[0].getSystemById($(\"#weaponLoadoutDiv\").data(\"systemid\")).addAmmo(this.parentNode, false);\n 2597  \t\t\t})\n 2598: \t\t\ttd.addEventListener(\"contextmenu\", function(e){\n 2599  \t\t\t\te.preventDefault(); e.stopPropagation();\n 2600: \t\t\t\twindow.game.ships[0].getSystemById($(\"#weaponLoadoutDiv\").data(\"systemid\")).addAmmo(this.parentNode, true);\n 2601  \t\t\t})\n 2602  \t\tvar td = document.createElement(\"td\");\n 2603  \t\t\ttd.innerHTML = \"<img class='size20' src='varIcons/minus.png'>\"; tr.appendChild(td);\n 2604: \t\t\ttd.addEventListener(\"click\", function(e){\n 2605  \t\t\t\te.preventDefault(); e.stopPropagation();\n 2606  \t\t\t\twindow.game.ships[0].getSystemById($(\"#weaponLoadoutDiv\").data(\"systemid\")).removeAmmo(this.parentNode, false);\n 2607  \t\t\t})\n 2608: \t\t\ttd.addEventListener(\"contextmenu\", function(e){\n 2609  \t\t\t\te.preventDefault(); e.stopPropagation();\n 2610  \t\t\t\twindow.game.ships[0].getSystemById($(\"#weaponLoadoutDiv\").data(\"systemid\")).removeAmmo(this.parentNode, true);\n ....\n 2727  \telse {\n 2728  \t\tthis.selected = false;\n 2729: \t\t$(\"#hangarLoadoutDiv\").find(\"#missionType\").find(\"tr\").removeClass(\"selected\").end().end().addClass(\"disabled\");\n 2730  \t\tif (game.flightDeploy){\n 2731  \t\t\tgame.flightDeploy = false;\n ....\n 2812  \t}\n 2813  \telse {\n 2814: \t\t$(div).addClass(\"disabled\");\n 2815  \t}\n 2816  }\n ....\n 2839  \t\t\tvar td = document.createElement(\"td\");\n 2840  \t\t\t\ttd.innerHTML = \"<img height='20px' width='20px' src='varIcons/plus.png'>\"; $(td).data(\"name\", this.loads[i].name).data(\"val\", 1); tr.appendChild(td);\n 2841: \t\t\t\ttd.addEventListener(\"click\", function(){\n 2842  \t\t\t\t\tgame.getUnitById(aUnit).getSystemById(id).alterFlight(this, false);\n 2843  \t\t\t\t});\n 2844: \t\t\t\ttd.addEventListener(\"contextmenu\", function(e){\n 2845  \t\t\t\t\te.preventDefault();\n 2846  \t\t\t\t\tgame.getUnitById(aUnit).getSystemById(id).alterFlight(this, true);\n ....\n 2848  \t\t\tvar td = document.createElement(\"td\");\n 2849  \t\t\t\ttd.innerHTML = \"<img height='20px' width='20px' src='varIcons/minus.png'>\"; $(td).data(\"name\", this.loads[i].name).data(\"val\", -1); tr.appendChild(td);\n 2850: \t\t\t\ttd.addEventListener(\"click\", function(){\n 2851  \t\t\t\t\tgame.getUnitById(aUnit).getSystemById(id).alterFlight(this, false);\n 2852  \t\t\t\t});\n 2853: \t\t\t\ttd.addEventListener(\"contextmenu\", function(e){\n 2854  \t\t\t\t\te.preventDefault();\n 2855  \t\t\t\t\tgame.getUnitById(aUnit).getSystemById(id).alterFlight(this, true);\n ....\n 2884  \t\tgame.flightDeploy = 0;\n 2885  \t\t$(\"#deployOverlay\").hide();\n 2886: \t\t$(\"#hangarLoadoutDiv\").find(\".buttonTD\").addClass(\"disabled\");\n 2887  \t}\n 2888  }\n ....\n 2894  \t\t$(this).removeClass(\"selected\");\n 2895  \t\tif (val == i){\n 2896: \t\t\t$(this).addClass(\"selected\");\n 2897  \t\t}\n 2898  \t});\n ....\n 2931  \tif (game.phase != -1 || !this.canFire()){return false}\n 2932  \tvar name = $(ele).data(\"name\");\n 2933: \tvar add = $(ele).data(\"val\");\n 2934  \tvar launchRate = this.getLaunchRate();\n 2935  \tvar current = 0;\n 2936  \n 2937: \tif (add > 0){\n 2938  \t\tfor (var i = 0; i < this.loads.length; i++){\n 2939  \t\t\tcurrent += this.loads[i].launch;\n 2940  \t\t}\n 2941  \t\tif (max){\n 2942: \t\t\tadd = launchRate - current;\n 2943  \t\t}\n 2944  \t}\n ....\n 2947  \t\t\tfor (var i = 0; i < this.loads.length; i++){\n 2948  \t\t\t\tif (this.loads[i].name == name){\n 2949: \t\t\t\t\tadd = -this.loads[i].launch;\n 2950  \t\t\t\t\tbreak;\n 2951  \t\t\t\t}\n ....\n 2956  \tfor (var i = 0; i < this.loads.length; i++){\n 2957  \t\tif (this.loads[i].name == name){\n 2958: \t\t\tif (add > 0){\n 2959: \t\t\t\tadd = Math.min(add, this.loads[i].amount - this.loads[i].launch);\n 2960: \t\t\t\tif (current + add <= launchRate && this.loads[i].launch + add <= this.loads[i].amount && this.loads[i].launch + add >= 0){\n 2961: \t\t\t\t\tthis.loads[i].launch += add;\n 2962  \t\t\t\t}\n 2963  \t\t\t}\n 2964  \t\t\telse if (this.loads[i].launch > 0){\n 2965: \t\t\t\tthis.loads[i].launch += add;\n 2966  \t\t\t}\n 2967  \t\t\t$(\"#\" + this.loads[i].name + \"Amount\").html(this.loads[i].launch);\n ....\n 2986  }\n 2987  \n 2988: Hangar.prototype.addFighter = function(ele, all){\n 2989  \tvar tMass = 0;\n 2990  \tvar tCost = 0;\n 2991: \tvar add = 1;\n 2992  \tvar name = ele.childNodes[0].innerHTML;\n 2993  \tvar sMass = 0;\n ....\n 3002  \n 3003  \tif (all){\n 3004: \t\tadd = Math.floor((this.output - tMass) / sMass);\n 3005  \t}\n 3006  \n ....\n 3008  \t\tif (this.loads[i].name == name){\n 3009  \t\t\tif (tMass + this.loads[i].mass <= this.output){\n 3010: \t\t\t\tthis.loads[i].amount += add;\n 3011  \t\t\t\tthis.updateTotals();\n 3012  \t\t\t\tthis.canConfirm();\n ....\n 3040  \tif (this.hasLoad()){\n 3041  \t\t$(\"#hangarLoadoutDiv\").find(\".buttonTD\").removeClass(\"disabled\");\n 3042: \t} else $(\"#hangarLoadoutDiv\").find(\".buttonTD\").addClass(\"disabled\");\n 3043  }\n 3044  \n ....\n 3069  \t\tvar td = document.createElement(\"td\");\n 3070  \t\t\ttd.innerHTML = \"<img class='size20' src='varIcons/plus.png'>\"; tr.appendChild(td);\n 3071: \t\t\ttd.addEventListener(\"click\", function(e){\n 3072  \t\t\t\te.preventDefault(); e.stopPropagation();\n 3073: \t\t\t\twindow.game.ships[0].getSystemById($(\"#hangarLoadoutDiv\").data(\"systemid\")).addFighter(this.parentNode, false);\n 3074  \t\t\t})\n 3075: \t\t\ttd.addEventListener(\"contextmenu\", function(e){\n 3076  \t\t\t\te.preventDefault(); e.stopPropagation();\n 3077: \t\t\t\twindow.game.ships[0].getSystemById($(\"#hangarLoadoutDiv\").data(\"systemid\")).addFighter(this.parentNode, true);\n 3078  \t\t\t})\n 3079  \t\tvar td = document.createElement(\"td\");\n 3080  \t\t\ttd.innerHTML = \"<img class='size20' src='varIcons/minus.png'>\"; tr.appendChild(td);\n 3081: \t\t\ttd.addEventListener(\"click\", function(e){\n 3082  \t\t\t\te.preventDefault(); e.stopPropagation();\n 3083  \t\t\t\twindow.game.ships[0].getSystemById($(\"#hangarLoadoutDiv\").data(\"systemid\")).removeFighter(this.parentNode, false);\n 3084  \t\t\t})\n 3085: \t\t\ttd.addEventListener(\"contextmenu\", function(e){\n 3086  \t\t\t\te.preventDefault(); e.stopPropagation();\n 3087  \t\t\t\twindow.game.ships[0].getSystemById($(\"#hangarLoadoutDiv\").data(\"systemid\")).removeFighter(this.parentNode, true);\n ....\n 3118  \telse {\n 3119  \t\twindow.game.setShipTotal();\n 3120: \t\t$(div).addClass(\"disabled\");\n 3121  \t}\n 3122  }\n\n197 matches across 10 files\n\n\nSearching 14 files for \"addClass(\"selected\")\"\n\nC:\\xampp\\htdocs\\fire\\cam.js:\n  110  \n  111  \t\tthis.new = val;\n  112: \t\t$(ele).addClass(\"selected\");\n  113  \n  114  \t\tif (this.new){\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  528  \t\t\t\t$(\"#deployWrapper\").find(\"#reinforceTable\").find(\".requestReinforcements\").each(function(){\n  529  \t\t\t\t\tif ($(this).data(\"id\") == id){\n  530: \t\t\t\t\t\t$(this).addClass(\"selected\");\n  531  \t\t\t\t\t\treturn false;\n  532  \t\t\t\t\t}\n  ...\n 2034  \t\t\t\t}\n 2035  \t\t\t\telse {\n 2036: \t\t\t\t\t$(this).addClass(\"selected\").next().show();\n 2037  \t\t\t\t}\n 2038  \t\t\t})\n ....\n 2109  \t\t\t\t\t\t\t\t}\n 2110  \t\t\t\t\t\t\t\telse if (!game.deploying && !game.aUnit && game.getUnitById($(this).data(\"shipid\")).canDeploy()){\n 2111: \t\t\t\t\t\t\t\t\t$(this).addClass(\"selected\");\n 2112  \t\t\t\t\t\t\t\t\tgame.enableDeployment($(this).data(\"shipid\"));\n 2113  \t\t\t\t\t\t\t\t}\n ....\n 2167  \t\t\t\t\telse if (!aUnit){\n 2168  \t\t\t\t\t\tif ($(this).hasClass(\"green\")){\n 2169: \t\t\t\t\t\t\t$(this).addClass(\"selected\");\n 2170  \t\t\t\t\t\t\tgame.enableDeployment($(this).data(\"id\"));\n 2171  \t\t\t\t\t\t}\n 2172  \t\t\t\t\t\telse if (!game.deploying){\n 2173  \t\t\t\t\t\t\tif (!$(this).hasClass(\"green\") && Math.floor(game.reinforcePoints) >= $(this).data(\"cost\") + game.getCurrentReinforceCost()){\n 2174: \t\t\t\t\t\t\t\t$(this).addClass(\"selected\");\n 2175  \t\t\t\t\t\t\t\tgame.enableDeployment($(this).data(\"id\"));\n 2176  \t\t\t\t\t\t\t} else popup(\"You have insufficient Reinforce Points (\"+game.reinforcePoints+\") available.\");\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  198  \t} else ele.removeClass(\"fireOrder\");\n  199  \tif (this.selected){\n  200: \t\tele.addClass(\"selected\");\n  201  \t} else ele.removeClass(\"selected\");\n  202  }\n  ...\n 2894  \t\t$(this).removeClass(\"selected\");\n 2895  \t\tif (val == i){\n 2896: \t\t\t$(this).addClass(\"selected\");\n 2897  \t\t}\n 2898  \t});\n\n8 matches across 3 files\n\n\nSearching 14 files for \"switchM\"\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n  191  \t\t\t\t\t\t.data(\"mission\", this.mission.type)\n  192  \t\t\t\t\t\t.click(function(e){\n  193: \t\t\t\t\t\t\tgame.getUnitById(aUnit).switchMissionMode();\n  194  \t\t\t\t\t\t})))\n  195  \t\t\t\t\t//\t.hover(function(e){\n  ...\n  535  \t\n  536  \n  537: Flight.prototype.switchMissionMode = function(){\n  538  \tif (game.mission){this.disableMissionMode();}\n  539  \telse this.enableMissionMode();\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 2267  \t}\n 2268  \n 2269: \tthis.switchModeAll = function(id){\n 2270  \t\tvar system = this.getSystemById(id);\n 2271  \t\tvar name = system.getActiveWeapon().name;\n ....\n 2275  \t\t\t\tif (this.structures[i].systems[j].dual && !this.structures[i].systems[j].locked){\n 2276  \t\t\t\t\tif (this.structures[i].systems[j].getActiveWeapon().name == name){\n 2277: \t\t\t\t\t\tthis.structures[i].systems[j].switchMode(id);\n 2278  \t\t\t\t\t}\n 2279  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  405  \t\t\t\te.stopPropagation(); e.preventDefault();\n  406  \t\t\t\tvar data = $(this.parentNode).data();\n  407: \t\t\t\tgame.getUnitById(data.shipId).getSystemById(data.systemId).switchMode();\n  408  \t\t\t})\n  409  \t\t\t.contextmenu(function(e){\n  410  \t\t\t\te.stopPropagation(); e.preventDefault();\n  411  \t\t\t\tvar data = $(this.parentNode).data();\n  412: \t\t\t\tgame.getUnitById(data.shipId).switchModeAll(data.systemId);\n  413  \t\t\t});\n  414  \t\tdiv.appendChild(subDiv);\n  ...\n 1044  Sensor.prototype = Object.create(PrimarySystem.prototype);\n 1045  \n 1046: Sensor.prototype.switchMode = function(id){\n 1047  \tif (this.destroyed || this.disabled || this.locked){return false;}\n 1048  \tthis.used = 1;\n ....\n 2122  }\n 2123  \n 2124: Dual.prototype.switchMode = function(id){\n 2125  \tif (this.destroyed || this.disabled || this.locked){return;}\n 2126  \tthis.resetPowers();\n\n8 matches across 3 files\n\n\nSearching 14 files for \"getDeployState\"\n\n0 matches\n\nSearching 14 files for \"getDeployState\"\n\n0 matches\n\nSearching 73 files for \"getDeployState\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n   12  handleJumpActions\n   13  assembleEndStates\n   14: getDeployState for 1\n   15: getDeployState for 2\n   16: getDeployState for 3\n   17: getDeployState for 4\n   18: getDeployState for 5\n   19: getDeployState for 6\n   20: getDeployState for 7\n   21: getDeployState for 8\n   22: getDeployState for 9\n   23: getDeployState for 10\n   24  updateUnitEndState s:10 2/-1\n   25  advancing game state time: 0.074 seconds.\n   ..\n   37  handleJumpActions\n   38  assembleEndStates\n   39: getDeployState for 1\n   40: getDeployState for 2\n   41: getDeployState for 3\n   42: getDeployState for 4\n   43: getDeployState for 5\n   44: getDeployState for 6\n   45: getDeployState for 7\n   46: getDeployState for 8\n   47: getDeployState for 9\n   48: getDeployState for 10\n   49  updateUnitEndState s:10 2/-1\n   50  advancing game state time: 0.116 seconds.\n   ..\n  167  handleJumpActions\n  168  assembleEndStates\n  169: getDeployState for 1\n  170: getDeployState for 2\n  171: getDeployState for 3\n  172: getDeployState for 4\n  173: getDeployState for 9\n  174: getDeployState for 10\n  175: getDeployState for 8\n  176: getDeployState for 7\n  177: getDeployState for 6\n  178: getDeployState for 5\n  179: getDeployState for 11\n  180: getDeployState for 12\n  181: getDeployState for 13\n  182  updateUnitEndState s:13 3/-1\n  183  advancing game state time: 0.145 seconds.\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  236  \tpublic function getEndState($turn, $phase){\n  237  \t\tif ($phase == -1){\n  238: \t\t\treturn $this->getDeployState($turn);\n  239  \t\t}\n  240  \t\telse return $this->getMoveState($turn);\n  241  \t}\n  242  \n  243: \tpublic function getDeployState($turn){\n  244: \t\tDebug::log(\"getDeployState for \".$this->id);\n  245  \t\tif ($this->available < $turn){\n  246  \t\t\treturn;\n  247  \t\t}\n  248: \t\t//Debug::log(\"delving getDeployState for \".$this->id);\n  249  \t\t$angle = $this->facing;\n  250  \n\n37 matches across 2 files\n\n\nSearching 73 files for \"DAMAGE mod\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n   99  doDamage, weapon: HeavyIon, target: 1/-1, totalDmg: 54\n  100  resolveFireOrder - ID 18, shooter: Omega #1 vs Primus #5, w: HeavyLaser #8, guns: 1\n  101: HeavyLaser, weapon id: 0, DAMAGE mod: 0.2 (crits: 0, boost: 0.2)\n  102  doDamage, weapon: HeavyLaser, target: 5 for 166 dmg\n  103  hitting:  Primary  Primary  Hangar \n  104  resolveFireOrder - ID 19, shooter: Omega #1 vs Primus #5, w: HeavyLaser #9, guns: 1\n  105  weapon id: 0, RANGE LOSS mod: 0.7\n  106: HeavyLaser, weapon id: 0, DAMAGE mod: -0.1 (crits: -0.3, boost: 0.2)\n  107  doDamage, weapon: HeavyLaser, target: 5 for 106 dmg\n  108   => target system LightIon #15 was destroyed, rem: 26, doing: 26, OK for: 0 dmg\n  ...\n  252  specific EW for ship #5, EW from 119.9109857615 to 256.0890142385, dist: 383\n  253  resolveFireOrder - ID 39, shooter: Demos #6 vs Saggitarius #2, w: MediumPlasma #8, guns: 1\n  254: MediumPlasma, weapon id: 8, DAMAGE mod: 0.1 (crits: 0, boost: 0.1)\n  255  doDamage, weapon: MediumPlasma, target: 2/-1, totalDmg: 53\n  256  resolveFireOrder - ID 40, shooter: Demos #6 vs Saggitarius #2, w: MediumPlasma #10, guns: 1\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapon.php:\n  141  \n  142  \t\t$mod = $mod + $crit + $boost;\n  143: \t\tif ($mod != 1){Debug::log(get_class($this).\", weapon id: \".$this->id.\", DAMAGE mod: \".($crit + $boost ).\" (crits: \".$crit.\", boost: \".$boost.\")\");\n  144  \t\t}\n  145  \t\treturn $mod;\n\n4 matches across 2 files\n",
+			"settings":
+			{
+				"buffer_size": 48063,
+				"line_ending": "Windows",
+				"name": "Find Results",
+				"scratch": true
 			}
 		},
 		{
 			"file": "style.css",
 			"settings":
 			{
-				"buffer_size": 20375,
+				"buffer_size": 20551,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"contents": "Searching 73 files for \"shortInfo\"\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n  580  }\n  581  \n  582: Flight.prototype.getShortInfo = function(){\n  583: \tvar ele = $(\"#shortInfo\");\n  584  \tif (game.phase > -2 && this.userid == game.userid){\n  585  \t\t$(ele).attr(\"class\", \"friendly\");\n\nC:\\xampp\\htdocs\\fire\\game.js:\n   27  \tthis.ballistics = [];\n   28  \tthis.antiBallistics = [];\n   29: \tthis.shortInfo = false;\n   30  \tthis.turnMode = 0;\n   31  \tthis.zIndex = 10;\n   ..\n  106  \t\tsalvoCtx.clearRect(0, 0, res.x, res.y);\n  107  \n  108: \t\tif (this.shortInfo){\n  109: \t\t\tthis.getUnitById(this.shortInfo).drawEW();\n  110  \t\t} else if (aUnit){\n  111  \t\t\tthis.getUnitById(aUnit).drawEW();\n  ...\n  165  \t\t\tvalid = true;\n  166  \t\t}\n  167: \t\telse if (this.shortInfo){\n  168: \t\t\tt = game.getUnitById(this.shortInfo);\n  169  \t\t\tif (t.ship){\n  170  \t\t\t\tvalid = true;\n  ...\n  229  \t\t\tvalid = true;\n  230  \t\t}\n  231: \t\telse if (this.shortInfo){\n  232: \t\t\tt = game.getUnitById(this.shortInfo);\n  233  \t\t\tif (t && t.ship){\n  234  \t\t\t\tvalid = true;\n  ...\n  977  \n  978  \tthis.doGenericHover = function(unit){\n  979: \t\tif (unit.id == game.shortInfo){\n  980  \t\t\treturn;\n  981  \t\t}\n  982  \n  983: \t\tgame.shortInfo = unit.id;\n  984  \n  985: \t\tvar ele = $(\"#shortInfo\");\n  986: \t\t$(ele).children().remove().end().append($(unit.getShortInfo()).css(\"width\", \"100%\"));\n  987  \n  988  \t\tvar oX = $(ele).width()/2;\n  ...\n  999  \t\t\tgame.drawDeploymentZone();\n 1000  \t\t}\n 1001: \t\t$(\"#shortInfo\").html(\"\").hide();\n 1002: \t\tif (aUnit != game.shortInfo){\n 1003  \t\t\tsalvoCtx.clearRect(0, 0, res.x, res.y);\n 1004  \t\t}\n ....\n 1006  \t\t\tplanCtx.clearRect(0, 0, res.x, res.y);\n 1007  \t\t}\n 1008: \t\t//this.undrawJumpMarker(game.shortInfo);\n 1009  \t\t\n 1010: \t\tgame.shortInfo = false;\n 1011  \t\tif (aUnit){\n 1012  \t\t\tvar u = game.getUnitById(aUnit);\n ....\n 1083  \t\tmouseCtx.clearRect(0, 0, res.x, res.y)\n 1084  \n 1085: \t\t$(\"#shortInfo\").hide();\n 1086  \n 1087  \t\tif (aUnit){\n\nC:\\xampp\\htdocs\\fire\\game.php:\n  263  \t\t\t\t<canvas id=\"drawCanvas\"></canvas>\n  264  \t\t\t</div>\n  265: \t\t\t<div id=\"shortInfo\" class=\"disabled\">\t\t\t\t\n  266  \t\t\t</div>\n  267  \t\t\t<div id=\"weaponAimTableWrapper\" class=\"disabled\">\n\nC:\\xampp\\htdocs\\fire\\salvo.js:\n  266  }\n  267  \n  268: Salvo.prototype.getShortInfo = function(){\n  269: \tvar ele = $(\"#shortInfo\");\n  270  \tif (this.userid == game.userid){\n  271  \t\t$(ele).attr(\"class\", \"friendly\");\n\nC:\\xampp\\htdocs\\fire\\script.js:\n  343  \tif (unit){\n  344  \t\tgame.doGenericHover(unit);\n  345: \t} else if (game.shortInfo){\n  346  \t\tgame.resetHover()\n  347  \t}\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n   37  window.pickedMoves = [];\n   38  \n   39: window.shortInfo = false;\n   40  window.ballInfo = false;\n   41  \n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 2650  }\n 2651  \n 2652: Ship.prototype.getShortInfo = function(){\n 2653: \tvar ele = $(\"#shortInfo\");\n 2654  \tif (this.userid == game.userid){\n 2655  \t\t$(ele).attr(\"class\", \"friendly\");\n\nC:\\xampp\\htdocs\\fire\\style.css:\n 1263  }\n 1264  \n 1265: #shortInfo {\n 1266  \tz-index: 7;\n 1267  \tposition: absolute;\n\n26 matches across 8 files\n\n\nSearching 73 files for \".plus\"\n\nC:\\xampp\\htdocs\\fire\\style.css:\n 1059  }\n 1060  \n 1061: .plus, .minus, .power, .unpower {\n 1062  \tdisplay: block;\n 1063  \tbackground-color: black;\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  319  \t\t\tif (game.phase != -1){return;}\n  320  \t\t\tvar data = $(this.parentNode).data();\n  321: \t\t\tgame.getUnitById(data.shipId).getSystemById(data.systemId).plus();\n  322  \t\t}).contextmenu(function(e){\n  323  \t\t\te.stopPropagation();\n  ...\n  502  \t}\n  503  }\n  504: System.prototype.plus = function(){\n  505  \tvar ship = game.getUnitById(this.parentId);\n  506  \tif (ship.canBoost(this)){\n  ...\n 2213  \t\t\t\t\t\tif (game.phase != -1){return;}\n 2214  \t\t\t\t\t\tvar data = $(this.parentNode).data();\n 2215: \t\t\t\t\t\tgame.getUnitById(data.shipId).getSystemById(data.systemId).plus();\n 2216  \t\t\t\t\t});\n 2217  \t\t\t\t\tdiv.appendChild(subDiv);\n ....\n 2296  \n 2297  \n 2298: Launcher.prototype.plus = function(){\n 2299  \tvar ship = game.getUnitById(this.parentId);\n 2300  \tif (ship.canBoost(this)){\n\n5 matches across 2 files\n\n\nSearching 73 files for \"updateDivPower\"\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 2137  \t}\n 2138  \n 2139: \tthis.updateDivPower = function(system){\n 2140  \n 2141  \t\tvar reactor = this.getSystemByName(\"Reactor\");\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  474  \t\tthis.disabled = 0;\n  475  \t\tthis.setTableRow();\n  476: \t\tgame.getUnitById(this.parentId).updateDivPower(this);\n  477  \t}\n  478  }\n  ...\n  494  \t\tthis.setTableRow();\n  495  \t\tthis.setSystemBorder();\n  496: \t\tgame.getUnitById(this.parentId).updateDivPower(this);\n  497  \t}\n  498  }\n  ...\n  503  \t\tthis.setTimeLoaded();\n  504  \t\tthis.setTableRow();\n  505: \t\tgame.getUnitById(this.parentId).updateDivPower(this);\n  506  \t}\n  507  }\n  ...\n  521  \t}\n  522  \n  523: \tif (change){ship.updateDivPower(this);}\n  524  }\n  525  \n  ...\n  539  \t}\n  540  \n  541: \tif (change){ship.updateDivPower(this);}\n  542  }\n  543  \n  ...\n 1129  \t\tthis.drawEW();\n 1130  \t\tthis.setTableRow();\n 1131: \t\tgame.getUnitById(this.parentId).updateDivPower(this);\n 1132  \t}\n 1133  }\n ....\n 2131  \tthis.setSystemWindow(id);\n 2132  \tthis.resetDetailsDiv();\n 2133: \tgame.getUnitById(this.parentId).updateDivPower(this);\n 2134  }\n 2135  \n\n8 matches across 2 files\n\n\nSearching 73 files for \"detailsShots\"\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 2485  Launcher.prototype.updateSystemDetailsDiv = function(){\n 2486  \t$(\"#systemDetailsDiv\")\n 2487: \t\t.find(\"#detailsShots\").html(\"<font color='red'>\" + this.getOutput() + \"</font> - max \" + this.effiency)\n 2488  \t\t\t.end()\n 2489  \t\t.find(\"#ammo\").html(\"<font color='red'>\" + this.getRemainingAmmo() + \"</font> / \" + this.getMaxAmmo());\n\n1 match in 1 file\n\n\nSearching 73 files for \"setMass\"\n\nC:\\xampp\\htdocs\\fire\\server\\flight.php:\n   17  \t}\n   18  \n   19: \tpublic function setMass(){\n   20  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n   21  \t\t\tif (!$this->structures[$i]->destroyed){\n\nC:\\xampp\\htdocs\\fire\\server\\mixed.php:\n   20  \tpublic function setProps($turn){\n   21  \t\t$this->setSize();\n   22: \t\t$this->setMass();\n   23  \t\t$this->setCurrentImpulse($turn);\n   24  \t\t$this->setRemainingImpulse($turn);\n\nC:\\xampp\\htdocs\\fire\\server\\salvo.php:\n   24  \t}\n   25  \n   26: \tpublic function setMass(){\n   27  \t\t$this->mass = $this->structures[0]->mass;\n   28  \t}\n\n3 matches across 3 files\n",
-			"settings":
-			{
-				"buffer_size": 6301,
-				"line_ending": "Windows",
-				"name": "Find Results",
-				"scratch": true
 			}
 		},
 		{
@@ -579,7 +579,7 @@
 			"file": "mixed.js",
 			"settings":
 			{
-				"buffer_size": 13791,
+				"buffer_size": 13744,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -588,7 +588,7 @@
 			"file": "shipclasses.js",
 			"settings":
 			{
-				"buffer_size": 84280,
+				"buffer_size": 84780,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -642,7 +642,7 @@
 			"file": "game.php",
 			"settings":
 			{
-				"buffer_size": 18255,
+				"buffer_size": 20988,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -661,7 +661,7 @@
 			"file": "server/ships/darkner.php",
 			"settings":
 			{
-				"buffer_size": 1619,
+				"buffer_size": 1622,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -760,7 +760,7 @@
 			"file": "server/systems/system.php",
 			"settings":
 			{
-				"buffer_size": 5134,
+				"buffer_size": 5185,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -843,7 +843,7 @@
 			"file": "server/ship.php",
 			"settings":
 			{
-				"buffer_size": 29466,
+				"buffer_size": 29468,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -861,7 +861,7 @@
 			"file": "systems.js",
 			"settings":
 			{
-				"buffer_size": 88534,
+				"buffer_size": 88511,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -897,7 +897,7 @@
 			"file": "script.js",
 			"settings":
 			{
-				"buffer_size": 16158,
+				"buffer_size": 16350,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -933,7 +933,7 @@
 			"file": "game.js",
 			"settings":
 			{
-				"buffer_size": 61754,
+				"buffer_size": 61927,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -960,7 +960,7 @@
 			"file": "server/systems/weapons/plasma.php",
 			"settings":
 			{
-				"buffer_size": 3420,
+				"buffer_size": 3434,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -978,7 +978,7 @@
 			"file": "flights.js",
 			"settings":
 			{
-				"buffer_size": 18515,
+				"buffer_size": 18514,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -987,7 +987,7 @@
 			"file": "server/systems/weapons/ammo.php",
 			"settings":
 			{
-				"buffer_size": 3681,
+				"buffer_size": 3739,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -1023,7 +1023,7 @@
 			"file": "log.txt",
 			"settings":
 			{
-				"buffer_size": 627,
+				"buffer_size": 10307,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -1383,13 +1383,15 @@
 	],
 	"find":
 	{
-		"height": 26.0
+		"height": 40.0
 	},
 	"find_in_files":
 	{
-		"height": 104.0,
+		"height": 116.0,
 		"where_history":
 		[
+			"",
+			"*.js",
 			"",
 			"*.js",
 			"*.php",
@@ -1515,8 +1517,6 @@
 			"*.php",
 			"",
 			"*.js",
-			"",
-			"*.js",
 			""
 		]
 	},
@@ -1525,6 +1525,37 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"getDmgRangeMod",
+			"DAMAGE mod",
+			"getDeployState",
+			"instructWrapper",
+			"dodeployFlight",
+			"game.enableFlightDeployment",
+			"game.enableFlightDeployment()",
+			"mousemove",
+			"switchM",
+			"mission",
+			"addClass(\"selected\")",
+			"add",
+			"addClass(\"selected\")",
+			"switchturn",
+			"switchturnmode",
+			"#remEP",
+			"remEP",
+			"impulsec",
+			"vectorDiv",
+			"getBallImpulse",
+			"ballimp",
+			"new Missile",
+			".selected",
+			" - ",
+			" </br></br>",
+			"</br>",
+			"= -2",
+			"phaseswitch",
+			"phaseSwitchDiv",
+			"= res.x",
+			"baseturncost",
 			"initballis",
 			"setState",
 			"setMass",
@@ -1621,38 +1652,7 @@
 			"focus ",
 			"cam.setfocus",
 			"setzoom",
-			"createcombatloge",
-			"guns = ",
-			"combatlogentry",
-			"Trajectory",
-			"getremainingammo",
-			"initbal",
-			"calculate",
-			"calculateo",
-			"calculateot",
-			"this.getFireDistance = functio",
-			"elapsed",
-			"getOffensiveBonus",
-			"insert into actions",
-			"insert into units",
-			"insert into a",
-			"getActiveBallistics",
-			"setmiss",
-			"canLaunchFlight",
-			"game.enableFlightDeployment()",
-			"insertMissions",
-			"insertinto m",
-			"error",
-			"insertmis",
-			"insertMissions",
-			"insertMission",
-			"into miss",
-			"into mi",
-			"deployOverlay",
-			"deployOverlay\n",
-			"ueMission = function(pos)",
-			"-3",
-			"switchdiv"
+			"createcombatloge"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1660,6 +1660,9 @@
 		"regex": false,
 		"replace_history":
 		[
+			"</b> - ",
+			"</br>",
+			"</br></br>",
 			"updateShipPower",
 			"public static $size = ",
 			"selectFromPopup",
@@ -1784,10 +1787,7 @@
 			"moveCtx",
 			"Debug::",
 			"drawEW",
-			"mouse",
-			"loc",
-			"salvoCtx",
-			"salvoPathCtx"
+			"mouse"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -1798,7 +1798,7 @@
 	"groups":
 	[
 		{
-			"selected": 31,
+			"selected": 49,
 			"sheets":
 			[
 				{
@@ -1886,7 +1886,7 @@
 						"translation.y": 1018.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 77,
+					"stack_index": 81,
 					"type": "text"
 				},
 				{
@@ -1902,8 +1902,8 @@
 						"selection":
 						[
 							[
-								741,
-								741
+								4485,
+								4572
 							]
 						],
 						"settings":
@@ -1972,10 +1972,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 122.0,
+						"translation.y": 3542.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 79,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
@@ -1984,15 +1984,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 15647,
+						"buffer_size": 15685,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5393,
-								5393
+								6861,
+								6861
 							]
 						],
 						"settings":
@@ -2059,28 +2059,1230 @@
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 29.0,
-						"translation.y": 4493.0,
+						"translation.x": 0.0,
+						"translation.y": 4925.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 59,
+					"stack_index": 23,
 					"type": "text"
 				},
 				{
 					"buffer": 3,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 48063,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										354,
+										365
+									],
+									[
+										778,
+										789
+									],
+									[
+										1160,
+										1171
+									],
+									[
+										1665,
+										1676
+									],
+									[
+										2043,
+										2054
+									],
+									[
+										2182,
+										2193
+									],
+									[
+										2450,
+										2461
+									],
+									[
+										2590,
+										2601
+									],
+									[
+										2982,
+										2993
+									],
+									[
+										3340,
+										3351
+									],
+									[
+										3551,
+										3562
+									],
+									[
+										3812,
+										3823
+									],
+									[
+										4023,
+										4034
+									],
+									[
+										4283,
+										4294
+									],
+									[
+										4494,
+										4505
+									],
+									[
+										5133,
+										5147
+									],
+									[
+										5584,
+										5598
+									],
+									[
+										5890,
+										5899
+									],
+									[
+										6176,
+										6185
+									],
+									[
+										6332,
+										6341
+									],
+									[
+										6539,
+										6548
+									],
+									[
+										6889,
+										6897
+									],
+									[
+										6912,
+										6920
+									],
+									[
+										7087,
+										7095
+									],
+									[
+										7159,
+										7167
+									],
+									[
+										7387,
+										7395
+									],
+									[
+										7414,
+										7422
+									],
+									[
+										7571,
+										7579
+									],
+									[
+										7884,
+										7892
+									],
+									[
+										8161,
+										8169
+									],
+									[
+										8353,
+										8361
+									],
+									[
+										8604,
+										8612
+									],
+									[
+										8633,
+										8641
+									],
+									[
+										8896,
+										8904
+									],
+									[
+										9237,
+										9245
+									],
+									[
+										9313,
+										9321
+									],
+									[
+										9498,
+										9501
+									],
+									[
+										9725,
+										9728
+									],
+									[
+										9905,
+										9908
+									],
+									[
+										10156,
+										10159
+									],
+									[
+										10397,
+										10400
+									],
+									[
+										10499,
+										10502
+									],
+									[
+										10746,
+										10749
+									],
+									[
+										10928,
+										10931
+									],
+									[
+										11222,
+										11225
+									],
+									[
+										11324,
+										11327
+									],
+									[
+										11522,
+										11525
+									],
+									[
+										11694,
+										11697
+									],
+									[
+										11866,
+										11869
+									],
+									[
+										12012,
+										12015
+									],
+									[
+										12219,
+										12222
+									],
+									[
+										12377,
+										12380
+									],
+									[
+										12554,
+										12557
+									],
+									[
+										12574,
+										12577
+									],
+									[
+										12740,
+										12743
+									],
+									[
+										12935,
+										12938
+									],
+									[
+										13010,
+										13013
+									],
+									[
+										13271,
+										13274
+									],
+									[
+										13563,
+										13566
+									],
+									[
+										13836,
+										13839
+									],
+									[
+										14068,
+										14071
+									],
+									[
+										14221,
+										14224
+									],
+									[
+										14407,
+										14410
+									],
+									[
+										14577,
+										14580
+									],
+									[
+										14669,
+										14672
+									],
+									[
+										14820,
+										14823
+									],
+									[
+										15042,
+										15045
+									],
+									[
+										15247,
+										15250
+									],
+									[
+										15544,
+										15547
+									],
+									[
+										15843,
+										15846
+									],
+									[
+										15876,
+										15879
+									],
+									[
+										16109,
+										16112
+									],
+									[
+										16149,
+										16152
+									],
+									[
+										16192,
+										16195
+									],
+									[
+										16235,
+										16238
+									],
+									[
+										16293,
+										16296
+									],
+									[
+										16334,
+										16337
+									],
+									[
+										16377,
+										16380
+									],
+									[
+										16498,
+										16501
+									],
+									[
+										16544,
+										16547
+									],
+									[
+										16749,
+										16752
+									],
+									[
+										16857,
+										16860
+									],
+									[
+										16881,
+										16884
+									],
+									[
+										16898,
+										16901
+									],
+									[
+										16904,
+										16907
+									],
+									[
+										16966,
+										16969
+									],
+									[
+										16997,
+										17000
+									],
+									[
+										17056,
+										17059
+									],
+									[
+										17098,
+										17101
+									],
+									[
+										17145,
+										17148
+									],
+									[
+										17261,
+										17264
+									],
+									[
+										17321,
+										17324
+									],
+									[
+										17509,
+										17512
+									],
+									[
+										17584,
+										17587
+									],
+									[
+										17730,
+										17733
+									],
+									[
+										18002,
+										18005
+									],
+									[
+										18265,
+										18268
+									],
+									[
+										18414,
+										18417
+									],
+									[
+										18558,
+										18561
+									],
+									[
+										18784,
+										18787
+									],
+									[
+										18952,
+										18955
+									],
+									[
+										19178,
+										19181
+									],
+									[
+										19366,
+										19369
+									],
+									[
+										19678,
+										19681
+									],
+									[
+										19873,
+										19876
+									],
+									[
+										20246,
+										20249
+									],
+									[
+										20284,
+										20287
+									],
+									[
+										20484,
+										20487
+									],
+									[
+										20745,
+										20748
+									],
+									[
+										20946,
+										20949
+									],
+									[
+										20983,
+										20986
+									],
+									[
+										21231,
+										21234
+									],
+									[
+										21495,
+										21498
+									],
+									[
+										21700,
+										21703
+									],
+									[
+										21997,
+										22000
+									],
+									[
+										22184,
+										22187
+									],
+									[
+										22371,
+										22374
+									],
+									[
+										22596,
+										22599
+									],
+									[
+										22633,
+										22636
+									],
+									[
+										22836,
+										22839
+									],
+									[
+										23196,
+										23199
+									],
+									[
+										23409,
+										23412
+									],
+									[
+										23658,
+										23661
+									],
+									[
+										23815,
+										23818
+									],
+									[
+										24030,
+										24033
+									],
+									[
+										24294,
+										24297
+									],
+									[
+										24575,
+										24578
+									],
+									[
+										24759,
+										24762
+									],
+									[
+										24931,
+										24934
+									],
+									[
+										25189,
+										25192
+									],
+									[
+										25314,
+										25317
+									],
+									[
+										25460,
+										25463
+									],
+									[
+										25683,
+										25686
+									],
+									[
+										25794,
+										25797
+									],
+									[
+										25901,
+										25904
+									],
+									[
+										25923,
+										25926
+									],
+									[
+										26088,
+										26091
+									],
+									[
+										26294,
+										26297
+									],
+									[
+										26349,
+										26352
+									],
+									[
+										26401,
+										26404
+									],
+									[
+										26666,
+										26669
+									],
+									[
+										26809,
+										26812
+									],
+									[
+										26857,
+										26860
+									],
+									[
+										26902,
+										26905
+									],
+									[
+										26949,
+										26952
+									],
+									[
+										27000,
+										27003
+									],
+									[
+										27050,
+										27053
+									],
+									[
+										27099,
+										27102
+									],
+									[
+										27149,
+										27152
+									],
+									[
+										27201,
+										27204
+									],
+									[
+										27481,
+										27484
+									],
+									[
+										27527,
+										27530
+									],
+									[
+										27741,
+										27744
+									],
+									[
+										27893,
+										27896
+									],
+									[
+										28110,
+										28113
+									],
+									[
+										28504,
+										28507
+									],
+									[
+										28763,
+										28766
+									],
+									[
+										28895,
+										28898
+									],
+									[
+										29024,
+										29027
+									],
+									[
+										29243,
+										29246
+									],
+									[
+										29416,
+										29419
+									],
+									[
+										29525,
+										29528
+									],
+									[
+										29733,
+										29736
+									],
+									[
+										29915,
+										29918
+									],
+									[
+										30134,
+										30137
+									],
+									[
+										30361,
+										30364
+									],
+									[
+										30503,
+										30506
+									],
+									[
+										30672,
+										30675
+									],
+									[
+										30871,
+										30874
+									],
+									[
+										31086,
+										31089
+									],
+									[
+										31573,
+										31576
+									],
+									[
+										31771,
+										31774
+									],
+									[
+										31894,
+										31897
+									],
+									[
+										32188,
+										32191
+									],
+									[
+										32225,
+										32228
+									],
+									[
+										32277,
+										32280
+									],
+									[
+										32357,
+										32360
+									],
+									[
+										32413,
+										32416
+									],
+									[
+										32681,
+										32684
+									],
+									[
+										33034,
+										33037
+									],
+									[
+										33239,
+										33242
+									],
+									[
+										33277,
+										33280
+									],
+									[
+										33322,
+										33325
+									],
+									[
+										33366,
+										33369
+									],
+									[
+										33466,
+										33469
+									],
+									[
+										33535,
+										33538
+									],
+									[
+										33611,
+										33614
+									],
+									[
+										33736,
+										33739
+									],
+									[
+										33811,
+										33814
+									],
+									[
+										33899,
+										33902
+									],
+									[
+										34002,
+										34005
+									],
+									[
+										34187,
+										34190
+									],
+									[
+										34301,
+										34304
+									],
+									[
+										34375,
+										34378
+									],
+									[
+										34625,
+										34628
+									],
+									[
+										34824,
+										34827
+									],
+									[
+										35002,
+										35005
+									],
+									[
+										35061,
+										35064
+									],
+									[
+										35245,
+										35248
+									],
+									[
+										35445,
+										35448
+									],
+									[
+										35685,
+										35688
+									],
+									[
+										36057,
+										36060
+									],
+									[
+										36196,
+										36199
+									],
+									[
+										36467,
+										36470
+									],
+									[
+										36614,
+										36617
+									],
+									[
+										37002,
+										37005
+									],
+									[
+										37149,
+										37152
+									],
+									[
+										37430,
+										37433
+									],
+									[
+										37561,
+										37564
+									],
+									[
+										37727,
+										37730
+									],
+									[
+										37845,
+										37848
+									],
+									[
+										37992,
+										37995
+									],
+									[
+										38158,
+										38161
+									],
+									[
+										38334,
+										38337
+									],
+									[
+										38355,
+										38358
+									],
+									[
+										38370,
+										38373
+									],
+									[
+										38446,
+										38449
+									],
+									[
+										38490,
+										38493
+									],
+									[
+										38544,
+										38547
+									],
+									[
+										38591,
+										38594
+									],
+									[
+										38702,
+										38705
+									],
+									[
+										38843,
+										38846
+									],
+									[
+										38934,
+										38937
+									],
+									[
+										39055,
+										39058
+									],
+									[
+										39263,
+										39266
+									],
+									[
+										39496,
+										39499
+									],
+									[
+										39695,
+										39698
+									],
+									[
+										39873,
+										39876
+									],
+									[
+										39935,
+										39938
+									],
+									[
+										40119,
+										40122
+									],
+									[
+										40322,
+										40325
+									],
+									[
+										40565,
+										40568
+									],
+									[
+										40861,
+										40864
+									],
+									[
+										41058,
+										41078
+									],
+									[
+										41310,
+										41330
+									],
+									[
+										41430,
+										41450
+									],
+									[
+										41652,
+										41672
+									],
+									[
+										41857,
+										41877
+									],
+									[
+										42154,
+										42174
+									],
+									[
+										42462,
+										42482
+									],
+									[
+										42627,
+										42647
+									],
+									[
+										42887,
+										42894
+									],
+									[
+										43008,
+										43015
+									],
+									[
+										43202,
+										43209
+									],
+									[
+										43550,
+										43557
+									],
+									[
+										43798,
+										43805
+									],
+									[
+										44003,
+										44010
+									],
+									[
+										44185,
+										44192
+									],
+									[
+										44355,
+										44362
+									],
+									[
+										44739,
+										44753
+									],
+									[
+										44767,
+										44781
+									],
+									[
+										44795,
+										44809
+									],
+									[
+										44823,
+										44837
+									],
+									[
+										44851,
+										44865
+									],
+									[
+										44879,
+										44893
+									],
+									[
+										44907,
+										44921
+									],
+									[
+										44935,
+										44949
+									],
+									[
+										44963,
+										44977
+									],
+									[
+										44991,
+										45005
+									],
+									[
+										45161,
+										45175
+									],
+									[
+										45189,
+										45203
+									],
+									[
+										45217,
+										45231
+									],
+									[
+										45245,
+										45259
+									],
+									[
+										45273,
+										45287
+									],
+									[
+										45301,
+										45315
+									],
+									[
+										45329,
+										45343
+									],
+									[
+										45357,
+										45371
+									],
+									[
+										45385,
+										45399
+									],
+									[
+										45413,
+										45427
+									],
+									[
+										45583,
+										45597
+									],
+									[
+										45611,
+										45625
+									],
+									[
+										45639,
+										45653
+									],
+									[
+										45667,
+										45681
+									],
+									[
+										45695,
+										45709
+									],
+									[
+										45723,
+										45737
+									],
+									[
+										45752,
+										45766
+									],
+									[
+										45780,
+										45794
+									],
+									[
+										45808,
+										45822
+									],
+									[
+										45836,
+										45850
+									],
+									[
+										45864,
+										45878
+									],
+									[
+										45893,
+										45907
+									],
+									[
+										45922,
+										45936
+									],
+									[
+										46172,
+										46186
+									],
+									[
+										46297,
+										46311
+									],
+									[
+										46341,
+										46355
+									],
+									[
+										46474,
+										46488
+									],
+									[
+										46830,
+										46840
+									],
+									[
+										47136,
+										47146
+									],
+									[
+										47548,
+										47558
+									],
+									[
+										47929,
+										47939
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								47931,
+								47931
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 13,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ \t].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 22554.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
 					"file": "style.css",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 20375,
+						"buffer_size": 20551,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								16809,
-								16809
+								10872,
+								10872
 							]
 						],
 						"settings":
@@ -2148,224 +3350,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 22266.0,
+						"translation.y": 14185.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 6301,
-						"regions":
-						{
-							"match":
-							{
-								"flags": 112,
-								"regions":
-								[
-									[
-										113,
-										122
-									],
-									[
-										159,
-										168
-									],
-									[
-										383,
-										392
-									],
-									[
-										536,
-										545
-									],
-									[
-										580,
-										589
-									],
-									[
-										737,
-										746
-									],
-									[
-										785,
-										794
-									],
-									[
-										909,
-										918
-									],
-									[
-										957,
-										966
-									],
-									[
-										1111,
-										1120
-									],
-									[
-										1174,
-										1183
-									],
-									[
-										1226,
-										1235
-									],
-									[
-										1298,
-										1307
-									],
-									[
-										1445,
-										1454
-									],
-									[
-										1501,
-										1510
-									],
-									[
-										1678,
-										1687
-									],
-									[
-										1714,
-										1723
-									],
-									[
-										1872,
-										1881
-									],
-									[
-										2034,
-										2043
-									],
-									[
-										2219,
-										2228
-									],
-									[
-										2265,
-										2274
-									],
-									[
-										2474,
-										2483
-									],
-									[
-										2610,
-										2619
-									],
-									[
-										2749,
-										2758
-									],
-									[
-										2795,
-										2804
-									],
-									[
-										2950,
-										2959
-									],
-									[
-										3127,
-										3132
-									],
-									[
-										3409,
-										3414
-									],
-									[
-										3534,
-										3539
-									],
-									[
-										3812,
-										3817
-									],
-									[
-										3921,
-										3926
-									],
-									[
-										4164,
-										4178
-									],
-									[
-										4395,
-										4409
-									],
-									[
-										4545,
-										4559
-									],
-									[
-										4693,
-										4707
-									],
-									[
-										4783,
-										4797
-									],
-									[
-										4872,
-										4886
-									],
-									[
-										5012,
-										5026
-									],
-									[
-										5165,
-										5179
-									],
-									[
-										5415,
-										5427
-									],
-									[
-										5778,
-										5785
-									],
-									[
-										6024,
-										6031
-									],
-									[
-										6203,
-										6210
-									]
-								],
-								"scope": ""
-							}
-						},
-						"selection":
-						[
-							[
-								6029,
-								6029
-							]
-						],
-						"settings":
-						{
-							"detect_indentation": false,
-							"line_numbers": false,
-							"output_tag": 5,
-							"result_base_dir": "",
-							"result_file_regex": "^([^ \t].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 3996.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
@@ -2403,15 +3391,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 13791,
+						"buffer_size": 13744,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3674,
-								3674
+								8245,
+								8245
 							]
 						],
 						"settings":
@@ -2479,10 +3467,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2479.0,
+						"translation.y": 5580.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
@@ -2491,15 +3479,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 84280,
+						"buffer_size": 84780,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								74028,
-								74028
+								44572,
+								44572
 							]
 						],
 						"settings":
@@ -2507,16 +3495,41 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
@@ -2527,50 +3540,25 @@
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
 								"bh_single_quote",
 								"bh_single_quote_center",
 								"bh_single_quote_open",
 								"bh_single_quote_close",
 								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content"
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content"
 							],
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 46455.0,
+						"translation.y": 27469.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
@@ -2655,10 +3643,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4253.0,
+						"translation.y": 4070.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 68,
+					"stack_index": 72,
 					"type": "text"
 				},
 				{
@@ -2831,10 +3819,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 78.0,
+						"translation.y": 93.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 69,
+					"stack_index": 73,
 					"type": "text"
 				},
 				{
@@ -2922,7 +3910,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 72,
+					"stack_index": 76,
 					"type": "text"
 				},
 				{
@@ -3007,7 +3995,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 253.0,
+						"translation.y": 117.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 85,
@@ -3019,15 +4007,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 18255,
+						"buffer_size": 20988,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7467,
-								7467
+								4337,
+								4337
 							]
 						],
 						"settings":
@@ -3035,51 +4023,41 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_single_quote",
 								"bh_single_quote_center",
 								"bh_single_quote_open",
@@ -3089,16 +4067,26 @@
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
-								"bh_angle_content"
+								"bh_angle_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content"
 							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4430.0,
+						"translation.y": 2162.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 23,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -3187,7 +4175,7 @@
 						"translation.y": 402.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 74,
+					"stack_index": 78,
 					"type": "text"
 				},
 				{
@@ -3196,15 +4184,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1619,
+						"buffer_size": 1622,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1186,
+								1187
 							]
 						],
 						"settings":
@@ -3275,7 +4263,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 44,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -3363,7 +4351,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 33,
+					"stack_index": 45,
 					"type": "text"
 				},
 				{
@@ -3379,8 +4367,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								2687,
+								2766
 							]
 						],
 						"settings":
@@ -3448,10 +4436,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 324.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 40,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -3480,7 +4468,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 37,
 					"type": "text"
 				},
 				{
@@ -3568,7 +4556,7 @@
 						"translation.y": 27.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 47,
+					"stack_index": 55,
 					"type": "text"
 				},
 				{
@@ -3584,8 +4572,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								1023,
+								1023
 							]
 						],
 						"settings":
@@ -3653,10 +4641,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 270.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 37,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
@@ -3829,10 +4817,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 56.0,
+						"translation.y": 62.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 45,
+					"stack_index": 30,
 					"type": "text"
 				},
 				{
@@ -3917,10 +4905,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3404.0,
+						"translation.y": 3450.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 54,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
@@ -4096,7 +5084,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 65,
+					"stack_index": 69,
 					"type": "text"
 				},
 				{
@@ -4105,15 +5093,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5134,
+						"buffer_size": 5185,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4171,
-								4171
+								4580,
+								4580
 							]
 						],
 						"settings":
@@ -4121,16 +5109,21 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
@@ -4141,50 +5134,45 @@
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
 								"bh_tag_close",
 								"bh_tag_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
 								"bh_single_quote",
 								"bh_single_quote_center",
 								"bh_single_quote_open",
 								"bh_single_quote_close",
 								"bh_single_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content"
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content"
 							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3139.0,
+						"translation.y": 3054.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 27,
 					"type": "text"
 				},
 				{
@@ -4200,8 +5188,8 @@
 						"selection":
 						[
 							[
-								4498,
-								4498
+								1896,
+								1896
 							]
 						],
 						"settings":
@@ -4269,10 +5257,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2450.0,
+						"translation.y": 722.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 51,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -4357,10 +5345,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 92.0,
+						"translation.y": 20.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 50,
+					"stack_index": 58,
 					"type": "text"
 				},
 				{
@@ -4376,8 +5364,8 @@
 						"selection":
 						[
 							[
-								3979,
-								3981
+								398,
+								398
 							]
 						],
 						"settings":
@@ -4446,10 +5434,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2077.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -4537,7 +5525,7 @@
 						"translation.y": 54.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 41,
 					"type": "text"
 				},
 				{
@@ -4553,8 +5541,8 @@
 						"selection":
 						[
 							[
-								757,
-								757
+								1102,
+								1102
 							]
 						],
 						"settings":
@@ -4622,10 +5610,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 36.0,
+						"translation.y": 388.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 31,
 					"type": "text"
 				},
 				{
@@ -4714,7 +5702,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
@@ -4891,7 +5879,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 34,
 					"type": "text"
 				},
 				{
@@ -4900,15 +5888,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 29466,
+						"buffer_size": 29468,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7404,
-								7404
+								6547,
+								6547
 							]
 						],
 						"settings":
@@ -4976,10 +5964,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4286.0,
+						"translation.y": 3816.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -5067,7 +6055,7 @@
 						"translation.y": 2294.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 71,
+					"stack_index": 75,
 					"type": "text"
 				},
 				{
@@ -5076,15 +6064,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 88534,
+						"buffer_size": 88511,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								15081,
-								15081
+								80883,
+								80878
 							]
 						],
 						"settings":
@@ -5152,10 +6140,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 9015.0,
+						"translation.y": 52154.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
@@ -5244,7 +6232,7 @@
 						"translation.y": 1345.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 67,
+					"stack_index": 71,
 					"type": "text"
 				},
 				{
@@ -5420,7 +6408,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 39,
+					"stack_index": 50,
 					"type": "text"
 				},
 				{
@@ -5517,15 +6505,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 16158,
+						"buffer_size": 16350,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4345,
-								4345
+								9155,
+								9155
 							]
 						],
 						"settings":
@@ -5593,10 +6581,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2693.0,
+						"translation.y": 6074.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 63,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
@@ -5684,7 +6672,7 @@
 						"translation.y": 1734.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 64,
+					"stack_index": 68,
 					"type": "text"
 				},
 				{
@@ -5700,8 +6688,8 @@
 						"selection":
 						[
 							[
-								14768,
-								14768
+								14852,
+								14852
 							]
 						],
 						"settings":
@@ -5769,10 +6757,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 9092.0,
+						"translation.y": 948.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -5858,10 +6846,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5063.0,
+						"translation.y": 1085.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -5870,15 +6858,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 61754,
+						"buffer_size": 61927,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6469,
-								6469
+								5747,
+								5747
 							]
 						],
 						"settings":
@@ -5946,10 +6934,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4205.0,
+						"translation.y": 4670.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
@@ -5965,8 +6953,8 @@
 						"selection":
 						[
 							[
-								7465,
-								7465
+								3449,
+								3449
 							]
 						],
 						"settings":
@@ -6035,10 +7023,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5287.0,
+						"translation.y": 2576.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
@@ -6134,15 +7122,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3420,
+						"buffer_size": 3434,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								700,
-								700
+								673,
+								673
 							]
 						],
 						"settings":
@@ -6213,7 +7201,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 80,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -6301,7 +7289,7 @@
 						"translation.y": 270.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 73,
+					"stack_index": 77,
 					"type": "text"
 				},
 				{
@@ -6310,15 +7298,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 18515,
+						"buffer_size": 18514,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								3181,
+								3181
 							]
 						],
 						"settings":
@@ -6386,10 +7374,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2993.0,
+						"translation.y": 1792.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 78,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -6398,15 +7386,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3681,
+						"buffer_size": 3739,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								516,
-								516
+								733,
+								733
 							]
 						],
 						"settings":
@@ -6475,10 +7463,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 36.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 81,
+					"stack_index": 24,
 					"type": "text"
 				}
 			]
@@ -6529,8 +7517,8 @@
 						"selection":
 						[
 							[
-								828,
-								828
+								638,
+								638
 							]
 						],
 						"settings":
@@ -6601,7 +7589,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 25,
 					"type": "text"
 				},
 				{
@@ -6631,7 +7619,7 @@
 						"translation.y": 92.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 46,
+					"stack_index": 54,
 					"type": "text"
 				},
 				{
@@ -6728,7 +7716,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 29466,
+						"buffer_size": 29468,
 						"regions":
 						{
 						},
@@ -6807,7 +7795,7 @@
 						"translation.y": 560.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 49,
+					"stack_index": 57,
 					"type": "text"
 				},
 				{
@@ -6895,7 +7883,7 @@
 						"translation.y": 272.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 52,
+					"stack_index": 59,
 					"type": "text"
 				},
 				{
@@ -6983,7 +7971,7 @@
 						"translation.y": 2378.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 53,
+					"stack_index": 60,
 					"type": "text"
 				},
 				{
@@ -7072,7 +8060,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 76,
+					"stack_index": 80,
 					"type": "text"
 				},
 				{
@@ -7081,15 +8069,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 627,
+						"buffer_size": 10307,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								7461,
+								7471
 							]
 						],
 						"settings":
@@ -7156,10 +8144,10 @@
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 4266.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -7248,7 +8236,7 @@
 						"translation.y": 526.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 66,
+					"stack_index": 70,
 					"type": "text"
 				},
 				{
@@ -7345,7 +8333,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5134,
+						"buffer_size": 5185,
 						"regions":
 						{
 						},
@@ -7433,15 +8421,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 84280,
+						"buffer_size": 84780,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								65159,
-								65159
+								28704,
+								28704
 							]
 						],
 						"settings":
@@ -7509,10 +8497,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 40837.0,
+						"translation.y": 17648.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
@@ -7521,7 +8509,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 88534,
+						"buffer_size": 88511,
 						"regions":
 						{
 						},
@@ -7597,10 +8585,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 13713.0,
+						"translation.y": 13716.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 35,
 					"type": "text"
 				},
 				{
@@ -7777,7 +8765,7 @@
 						"translation.y": 5135.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 33,
 					"type": "text"
 				},
 				{
@@ -7875,15 +8863,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 15647,
+						"buffer_size": 15685,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9497,
-								9497
+								9535,
+								9535
 							]
 						],
 						"settings":
@@ -7951,10 +8939,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 6649.0,
+						"translation.y": 6667.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 58,
+					"stack_index": 64,
 					"type": "text"
 				},
 				{
@@ -8131,7 +9119,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 55,
+					"stack_index": 61,
 					"type": "text"
 				},
 				{
@@ -8140,15 +9128,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 61754,
+						"buffer_size": 61927,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								47440,
-								47440
+								47613,
+								47613
 							]
 						],
 						"settings":
@@ -8216,10 +9204,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 31853.0,
+						"translation.y": 31961.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 40,
 					"type": "text"
 				},
 				{
@@ -8308,7 +9296,7 @@
 						"translation.y": 2833.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 60,
+					"stack_index": 65,
 					"type": "text"
 				},
 				{
@@ -8317,15 +9305,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 16158,
+						"buffer_size": 16350,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7459,
-								7459
+								7651,
+								7651
 							]
 						],
 						"settings":
@@ -8393,10 +9381,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4491.0,
+						"translation.y": 4545.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 61,
+					"stack_index": 66,
 					"type": "text"
 				},
 				{
@@ -8481,10 +9469,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2812.0,
+						"translation.y": 2926.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 38,
 					"type": "text"
 				},
 				{
@@ -8493,15 +9481,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 13791,
+						"buffer_size": 13744,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9583,
-								9583
+								9536,
+								9536
 							]
 						],
 						"settings":
@@ -8569,10 +9557,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 6875.0,
+						"translation.y": 6824.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 62,
+					"stack_index": 67,
 					"type": "text"
 				},
 				{
@@ -8601,7 +9589,7 @@
 						"translation.y": 180.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 36,
+					"stack_index": 48,
 					"type": "text"
 				},
 				{
@@ -8630,7 +9618,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 38,
+					"stack_index": 49,
 					"type": "text"
 				},
 				{
@@ -8718,7 +9706,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 34,
+					"stack_index": 46,
 					"type": "text"
 				},
 				{
@@ -8983,7 +9971,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 30,
+					"stack_index": 42,
 					"type": "text"
 				},
 				{
@@ -9071,7 +10059,7 @@
 						"translation.y": 30.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 43,
+					"stack_index": 53,
 					"type": "text"
 				},
 				{
@@ -9159,7 +10147,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 35,
+					"stack_index": 47,
 					"type": "text"
 				},
 				{
@@ -9247,7 +10235,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 41,
+					"stack_index": 51,
 					"type": "text"
 				},
 				{
@@ -9335,7 +10323,7 @@
 						"translation.y": 96.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 70,
+					"stack_index": 74,
 					"type": "text"
 				},
 				{
@@ -9344,7 +10332,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 18515,
+						"buffer_size": 18514,
 						"regions":
 						{
 						},
@@ -9423,7 +10411,7 @@
 						"translation.y": 9799.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 56,
+					"stack_index": 62,
 					"type": "text"
 				},
 				{
@@ -9508,7 +10496,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3920.0,
+						"translation.y": 3924.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 92,
@@ -9527,8 +10515,8 @@
 						"selection":
 						[
 							[
-								263,
-								263
+								865,
+								865
 							]
 						],
 						"settings":
@@ -9600,7 +10588,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -9609,7 +10597,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3681,
+						"buffer_size": 3739,
 						"regions":
 						{
 						},
@@ -9689,7 +10677,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 31,
+					"stack_index": 43,
 					"type": "text"
 				},
 				{
@@ -9865,7 +10853,7 @@
 						"translation.y": 3082.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 57,
+					"stack_index": 63,
 					"type": "text"
 				},
 				{
@@ -9954,7 +10942,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 32,
+					"stack_index": 44,
 					"type": "text"
 				},
 				{
@@ -10042,7 +11030,7 @@
 						"translation.y": 25.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 39,
 					"type": "text"
 				},
 				{
@@ -10218,7 +11206,7 @@
 						"translation.y": 62.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 75,
+					"stack_index": 79,
 					"type": "text"
 				},
 				{
@@ -10394,7 +11382,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 48,
+					"stack_index": 56,
 					"type": "text"
 				},
 				{
@@ -10410,8 +11398,8 @@
 						"selection":
 						[
 							[
-								1064,
-								1064
+								1203,
+								1203
 							]
 						],
 						"settings":
@@ -10420,7 +11408,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 324.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 101,
@@ -10508,10 +11496,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 81.0,
+						"translation.y": 96.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 42,
+					"stack_index": 52,
 					"type": "text"
 				},
 				{
@@ -10615,8 +11603,8 @@
 						"selection":
 						[
 							[
-								171,
-								171
+								606,
+								606
 							]
 						],
 						"settings":
@@ -10684,10 +11672,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 108.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
@@ -10834,7 +11822,7 @@
 						"translation.y": 2041.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 36,
 					"type": "text"
 				},
 				{
@@ -10922,7 +11910,7 @@
 						"translation.y": 270.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 32,
 					"type": "text"
 				},
 				{
@@ -11019,15 +12007,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3420,
+						"buffer_size": 3434,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1651,
-								1653
+								1665,
+								1667
 							]
 						],
 						"settings":
@@ -11161,7 +12149,7 @@
 		"cols":
 		[
 			0.0,
-			0.86197111666,
+			0.574732533647,
 			1.0
 		],
 		"rows":
@@ -11189,28 +12177,108 @@
 		"selected_items":
 		[
 			[
-				"sal",
-				"C:\\xampp\\htdocs\\fire\\server\\salvo.php"
+				"we",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapon.php"
 			],
 			[
 				"man",
 				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
 			],
 			[
-				"mix",
-				"C:\\xampp\\htdocs\\fire\\server\\mixed.php"
+				"db",
+				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
 			],
 			[
 				"log",
 				"C:\\xampp\\htdocs\\fire\\log.txt"
 			],
 			[
-				"sh",
-				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
+				"game",
+				"C:\\xampp\\htdocs\\fire\\game.php"
 			],
 			[
-				"db",
-				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
+				"dark",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\darkner.php"
+			],
+			[
+				"hyp",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\hyperion.php"
+			],
+			[
+				"fl",
+				"C:\\xampp\\htdocs\\fire\\server\\flight.php"
+			],
+			[
+				"ga",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
+				"sys",
+				"C:\\xampp\\htdocs\\fire\\systems.js"
+			],
+			[
+				"scr",
+				"C:\\xampp\\htdocs\\fire\\script.js"
+			],
+			[
+				"st",
+				"C:\\xampp\\htdocs\\fire\\style.css"
+			],
+			[
+				"stye",
+				"C:\\xampp\\htdocs\\fire\\style.css"
+			],
+			[
+				"tet",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\tethys.php"
+			],
+			[
+				"sh",
+				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
+			],
+			[
+				"sc",
+				"C:\\xampp\\htdocs\\fire\\script.js"
+			],
+			[
+				"mix",
+				"C:\\xampp\\htdocs\\fire\\mixed.js"
+			],
+			[
+				"clas",
+				"C:\\xampp\\htdocs\\fire\\classes.js"
+			],
+			[
+				"sal",
+				"C:\\xampp\\htdocs\\fire\\server\\salvo.php"
+			],
+			[
+				"amm",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\ammo.php"
+			],
+			[
+				"lau",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php"
+			],
+			[
+				"style",
+				"C:\\xampp\\htdocs\\fire\\style.css"
+			],
+			[
+				"sy",
+				"C:\\xampp\\htdocs\\fire\\systems.js"
+			],
+			[
+				"cla",
+				"C:\\xampp\\htdocs\\fire\\server\\classes.php"
+			],
+			[
+				"gam",
+				"C:\\xampp\\htdocs\\fire\\game.php"
+			],
+			[
+				"ech",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\battlecrab.php"
 			],
 			[
 				"mxi",
@@ -11221,28 +12289,8 @@
 				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
 			],
 			[
-				"sy",
-				"C:\\xampp\\htdocs\\fire\\systems.js"
-			],
-			[
-				"lau",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\launcher.php"
-			],
-			[
 				"las",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php"
-			],
-			[
-				"sys",
-				"C:\\xampp\\htdocs\\fire\\systems.js"
-			],
-			[
-				"fl",
-				"C:\\xampp\\htdocs\\fire\\server\\flight.php"
-			],
-			[
-				"st",
-				"C:\\xampp\\htdocs\\fire\\style.css"
 			],
 			[
 				"sag",
@@ -11257,10 +12305,6 @@
 				"C:\\xampp\\htdocs\\fire\\postGameData.php"
 			],
 			[
-				"style",
-				"C:\\xampp\\htdocs\\fire\\style.css"
-			],
-			[
 				"pri",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\primus.php"
 			],
@@ -11271,10 +12315,6 @@
 			[
 				"ome",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\omega.php"
-			],
-			[
-				"hyp",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\hyperion.php"
 			],
 			[
 				"nonw",
@@ -11289,16 +12329,8 @@
 				"C:\\xampp\\htdocs\\fire\\game.js"
 			],
 			[
-				"game",
-				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
 				"s",
 				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
-			],
-			[
-				"clas",
-				"C:\\xampp\\htdocs\\fire\\classes.js"
 			],
 			[
 				"sha",
@@ -11319,10 +12351,6 @@
 			[
 				"fig",
 				"C:\\xampp\\htdocs\\fire\\server\\fighter.php"
-			],
-			[
-				"scr",
-				"C:\\xampp\\htdocs\\fire\\script.js"
 			],
 			[
 				"dem",
@@ -11351,10 +12379,6 @@
 			[
 				"gra",
 				"C:\\xampp\\htdocs\\fire\\graphics.js"
-			],
-			[
-				"gam",
-				"C:\\xampp\\htdocs\\fire\\game.js"
 			],
 			[
 				"gae",
@@ -11413,10 +12437,6 @@
 				"C:\\xampp\\htdocs\\fire\\postGameData.php"
 			],
 			[
-				"ga",
-				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
 				"p",
 				"C:\\xampp\\htdocs\\fire\\postGameData.php"
 			],
@@ -11427,10 +12447,6 @@
 			[
 				"g",
 				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
-				"sc",
-				"C:\\xampp\\htdocs\\fire\\script.js"
 			],
 			[
 				"po",
@@ -11461,10 +12477,6 @@
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\artemis.php"
 			],
 			[
-				"amm",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\ammo.php"
-			],
-			[
 				"gamej.s",
 				"C:\\xampp\\htdocs\\fire\\game.js"
 			],
@@ -11489,20 +12501,12 @@
 				"C:\\xampp\\htdocs\\fire\\mathLib.js"
 			],
 			[
-				"cla",
-				"C:\\xampp\\htdocs\\fire\\server\\classes.php"
-			],
-			[
 				"mx",
 				"C:\\xampp\\htdocs\\fire\\server\\mixed.php"
 			],
 			[
 				"pla",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php"
-			],
-			[
-				"we",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapon.php"
 			],
 			[
 				"pul",
@@ -11613,10 +12617,6 @@
 				"C:\\xampp\\htdocs\\fire\\game.js"
 			],
 			[
-				"tet",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\tethys.php"
-			],
-			[
 				"plas",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php"
 			],
@@ -11687,18 +12687,6 @@
 			[
 				"dar",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\darkner.php"
-			],
-			[
-				"dark",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\darkner.php"
-			],
-			[
-				"au",
-				"C:\\xampp\\htdocs\\fire\\autoload.php"
-			],
-			[
-				"plasm",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php"
 			]
 		],
 		"width": 0.0

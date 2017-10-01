@@ -986,8 +986,11 @@ function Ship(data){
 				.find("#turnDelay").html(round(turn.delay * turn.mod * turn.dif, 2) + " px").end()
 				.find("#turnMod").html(turn.mod).end()
 				.find("#shortenTurn").removeClass("disabled");
+				//$("#game").find("#epButton").find("tr:nth-child(2)").find("th").first().html("Turn Cost / Rem");
+				$("#game").find("#epButton").find("#impulseText").html("Cost : Rem").end().find("#impulseCost").html("");
 
-			$(vector).empty()
+
+		/*	$(vector).empty()
 				.append($("<table>")
 					.append($("<tr>")
 						.append($("<td>").html("Angle: " + turn.a)))
@@ -995,7 +998,7 @@ function Ship(data){
 						.append($("<td>").html("Cost: " + Math.ceil(turn.cost * turn.a * turn.mod * turn.dif) + " EP")))
 					.append($("<tr>")
 						.append($("<td>").html("Delay: " + Math.ceil(turn.delay * turn.a / turn.mod * turn.dif) + " px"))))
-				.removeClass("disabled");
+				.removeClass("disabled");*/
 			this.drawDelay();
 			this.adjustMaxTurn()
 		}
@@ -1006,12 +1009,10 @@ function Ship(data){
 				.find("#turnDelay").html("").end()
 				.find("#turnMod").html("").end()
 				.find("#shortenTurn").addClass("disabled");
+				$("#game").find("#epButton").find("#impulseText").html("Thrust Change").end().find("#impulseCost").html(this.getImpulseChangeCost());
 			$(vector).addClass("disabled")
 		}
 
-		if (this.flight){
-			$(button).find("#shortenTurn").addClass("disabled");
-		}
 		this.drawEW();
 	}
 
@@ -1540,8 +1541,13 @@ function Ship(data){
 		if (a > 180){a = (360-a) *-1;}
 			a = Math.min(Math.abs(a), max);
 			turn.a = a;
-
 		var c = this.getTurnCost() * a;
+
+		$("#game").find("#epButton").find("#impulseCost").html(Math.ceil(c, 2) + " : " + Math.floor(this.getRemainingEP() - c))
+
+		//gui.find("#impulse").html(this.getRemainingImpulse() + " / " + this.getCurrentImpulse());
+
+	/*	var c = this.getTurnCost() * a;
 		var remEP = "Cost: " + Math.round(c, 2) + " (" + Math.round(this.getRemainingEP() - c) + ") EP";
 		var delay = "Delay: " + Math.round(this.getTurnDelay() * a, 2) + " px";
 
@@ -1556,9 +1562,9 @@ function Ship(data){
 				default: break;
 			}
 		})
+		*/
 
 		this.drawDelay();
-		//if (this.ship){this.drawEW();}
 		this.drawMouseVector(o, t);
 	}
 

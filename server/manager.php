@@ -527,7 +527,7 @@ class Manager {
 			for ($i = 0; $i < sizeof($units); $i++){
 				$this->ships[] = new Salvo($units[$i]["id"], $units[$i]["userid"], $this->turn, "deployed", 0);
 				$this->ships[sizeof($this->ships)-1]->setState($this->turn);
-				$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->turn, "deploy", 0, $units[$i]["actions"][0]["x"], $units[$i]["actions"][0]["<"], $a, 0, 0, 0, 0);
+				$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->turn, "deploy", 0, $units[$i]["actions"][0]["x"], $units[$i]["actions"][0]["y"], $a, 0, 0, 0, 0);
 				//echo ("unit #".$units[$i]["id"]);
 				//echo "</br>";
 				//echo "</br>";

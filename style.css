@@ -190,7 +190,7 @@ table, th, tr, td {
 	color: #ff3d00;
 }
 
-.selected {
+.selectedaa {
 	box-shadow: inset 0 0 0.5em 0.5em #27e627;
 }
 
@@ -803,12 +803,20 @@ table, th, tr, td {
 	background-color: grey;
 }
 
+.system.selectea {
+    box-shadow: inset 0 0 0px 4px #0400ff;
+}
+
+#missionType .selected {
+	box-shadow: inset 0 0 8px 4px yellow
+}
+
 .system.selected {
-    box-shadow: inset 0 0 5px 4px #0400ff;
+    background-color: yellow;
 }
 
 .system.fireOrder {
-    box-shadow: inset 0 0 5px 4px red;
+    box-shadow: inset 0 0 0px 3px red;
 }
 
 .system.hasCritical {

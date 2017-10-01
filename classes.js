@@ -299,6 +299,7 @@ Single.prototype.getDetailsDiv = function(){
 function Missile(data){
 	Single.call(this, data);
 	this.traverse = data.traverse;
+	this.baseImpulse = data.baseImpulse;
 
 	this.create = function(data){
 		for (var k = 0; k < data.systems.length; k++){

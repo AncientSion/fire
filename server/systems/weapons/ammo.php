@@ -41,6 +41,7 @@ class Missile extends Single {
 
 	public function setBaseStats(){
 		$this->baseHitChance = ceil(sqrt($this->mass)*5);
+		$this->baseImpulse = ceil(pow($this->mass, -0.75)*325);
 	}
 }
 

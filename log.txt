@@ -1,30 +1,53 @@
 doAdvance for game1 from phase -1 to phase 0
 initBallistics
 skipping
+skipping
 DB updateBallisticFireOrder, s: 4
-DB insertUnits: 3
+DB insertUnits: 2
 insertSubUnits
-insertMissions s: 3
-insertClientActions s: 3
+insertMissions s: 2
+insertClientActions s: 2
 updateSystemLoad: 4
-doAdvance for game1 from phase -1 to phase 0
-initBallistics
-resolveDeployActions s: 3
+resolveDeployActions s: 2
 handleJumpActions
 assembleEndStates
 getDeployState for 1
 getDeployState for 2
 getDeployState for 3
 getDeployState for 4
-getDeployState for 10
-getDeployState for 9
-getDeployState for 8
-getDeployState for 7
-getDeployState for 6
 getDeployState for 5
-getDeployState for 11
-updateUnitEndState s:11 2/-1
-advancing game state time: 0.021 seconds.
+getDeployState for 6
+getDeployState for 7
+getDeployState for 8
+getDeployState for 9
+getDeployState for 10
+updateUnitEndState s:10 2/-1
+advancing game state time: 0.074 seconds.
+doAdvance for game1 from phase -1 to phase 0
+initBallistics
+skipping
+skipping
+DB updateBallisticFireOrder, s: 4
+DB insertUnits: 2
+insertSubUnits
+insertMissions s: 2
+insertClientActions s: 2
+updateSystemLoad: 4
+resolveDeployActions s: 2
+handleJumpActions
+assembleEndStates
+getDeployState for 1
+getDeployState for 2
+getDeployState for 3
+getDeployState for 4
+getDeployState for 5
+getDeployState for 6
+getDeployState for 7
+getDeployState for 8
+getDeployState for 9
+getDeployState for 10
+updateUnitEndState s:10 2/-1
+advancing game state time: 0.116 seconds.
 insertClientActions s: 4
 insertClientActions s: 4
 doAdvance for game1 from phase 0 to phase 1
@@ -40,27 +63,240 @@ handleMixedMovement
 layer 0 -> patrol target, layer 1 => strike
 resolving layer #0
 resolving layer #1
-resolving mixed #10
-_____________________
-Flight #10, impulse: 85
-From -398/-222 to 388/491
-Dist 1062, angle: 42.211947888275
-close in
-adding move to: -335/-165
 resolving mixed #9
 _____________________
 Flight #9, impulse: 85
-From -403/-235 to 260/-439
-Dist 694, angle: 342.89727103095
+From -399/-224 to 313/633
+Dist 1115, angle: 50.280023550296
 close in
-adding move to: -322/-260
-resolving mixed #11
+adding move to: -345/-159
+resolving mixed #10
 _____________________
-Flight #11, impulse: 115
-From 386/192 to -268/292
-Dist 662, angle: 171.30651138798
+Flight #10, impulse: 115
+From 385/198 to -276/295
+Dist 669, angle: 171.65158286173
 close in
-adding move to: 272/209
+adding move to: 271/215
 resolving layer #2
 updateMissionState
-advancing game state time: 0.054 seconds.
+advancing game state time: 0.035 seconds.
+doAdvance for game1 from phase 2 to phase 3
+ew for #1
+specific EW for ship #1, EW from 358.92124036032 to 55.078759639682, dist: 609
+ew for #2
+ew for #3
+ew for #4
+ew for #8
+specific EW for ship #8, EW from 27.655074360775 to 26.344925639225, dist: 153
+ew for #7
+specific EW for ship #7, EW from 11.704896645454 to 8.2951033545463, dist: 144
+ew for #6
+specific EW for ship #6, EW from 18.704896645454 to 15.295103354546, dist: 144
+ew for #5
+specific EW for ship #5, EW from 338.9059648845 to 337.0940351155, dist: 201
+resolveFireOrder - ID 23, shooter: Primus #5 vs Omega #1, w: HeavyIon #13, guns: 1
+doDamage, weapon: HeavyIon, target: 1/-1, totalDmg: 64
+doDamage, weapon: HeavyIon, target: 1/-1, totalDmg: 54
+resolveFireOrder - ID 18, shooter: Omega #1 vs Primus #5, w: HeavyLaser #8, guns: 1
+HeavyLaser, weapon id: 0, DAMAGE mod: 0.2 (crits: 0, boost: 0.2)
+doDamage, weapon: HeavyLaser, target: 5 for 166 dmg
+hitting:  Primary  Primary  Hangar 
+resolveFireOrder - ID 19, shooter: Omega #1 vs Primus #5, w: HeavyLaser #9, guns: 1
+weapon id: 0, RANGE LOSS mod: 0.7
+HeavyLaser, weapon id: 0, DAMAGE mod: -0.1 (crits: -0.3, boost: 0.2)
+doDamage, weapon: HeavyLaser, target: 5 for 106 dmg
+ => target system LightIon #15 was destroyed, rem: 26, doing: 26, OK for: 0 dmg
+hitting:  Primary  LightIon  Primary 
+resolveFireOrder - ID 20, shooter: Omega #1 vs Primus #5, w: LightPulse #26, guns: 1
+fireid: 20, doDamage, weapon: LightPulse, target: 5, hits: 5
+resolveFireOrder - ID 21, shooter: Omega #1 vs Primus #5, w: LightPulse #27, guns: 1
+fireid: 21, doDamage, weapon: LightPulse, target: 5, hits: 4
+resolveFireOrder - ID 22, shooter: Omega #1 vs Primus #5, w: LightPulse #29, guns: 1
+fireid: 22, doDamage, weapon: LightPulse, target: 5, hits: 3
+resolveBallisticFireOrders
+cleanFireOrders, fires: 6
+DB updateFireOrders: 6
+= testCriticals for Omega, #1, turn: 2
+= testCriticals for Saggitarius, #2, turn: 2
+= testCriticals for Tethys, #3, turn: 2
+= testCriticals for Tethys, #4, turn: 2
+= testCriticals for Salvo, #9, turn: 2
+= testCriticals for Darkner, #8, turn: 2
+= testCriticals for Demos, #7, turn: 2
+= testCriticals for Demos, #6, turn: 2
+= testCriticals for Primus, #5, turn: 2
+determineCrit for 122mm Ion Burst Cannon #13, dmg: 43.75, possible: 3, inRange: 2
+determineCrit for Hangar #17, dmg: 43, possible: 0, inRange: 0
+= testCriticals for Salvo, #10, turn: 2
+ => DB insertDamageEntries: 11
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.083 seconds.
+advancing game state time: 0.092 seconds.
+doAdvance for game1 from phase 3 to phase 4
+assembleEndStates
+getMoveState for 1
+getMoveState for 2
+getMoveState for 3
+getMoveState for 4
+getMoveState for 8
+getMoveState for 7
+getMoveState for 6
+getMoveState for 5
+updateUnitEndState s:10 2/3
+endTurn
+resolveDeployActions s: 0
+destroyUnitsDB
+insertReinforcements: 1
+advancing game state time: 0.051 seconds.
+deployFlights 2
+updateSystemLoad: 2
+DB insertUnits: 1
+insertSubUnits
+insertMissions s: 1
+insertClientActions s: 1
+doAdvance for game1 from phase -1 to phase 0
+initBallistics
+skipping
+DB updateBallisticFireOrder, s: 5
+DB insertUnits: 2
+insertSubUnits
+insertMissions s: 2
+insertClientActions s: 2
+updateSystemLoad: 3
+resolveDeployActions s: 3
+handleJumpActions
+assembleEndStates
+getDeployState for 1
+getDeployState for 2
+getDeployState for 3
+getDeployState for 4
+getDeployState for 9
+getDeployState for 10
+getDeployState for 8
+getDeployState for 7
+getDeployState for 6
+getDeployState for 5
+getDeployState for 11
+getDeployState for 12
+getDeployState for 13
+updateUnitEndState s:13 3/-1
+advancing game state time: 0.145 seconds.
+insertClientActions s: 4
+insertClientActions s: 4
+doAdvance for game1 from phase 0 to phase 1
+handleShipMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving mixed #11
+_____________________
+Flight #11, impulse: 137
+From 207/-323 to -163/-307
+Dist 371, angle: 177.52388732629
+close in
+adding move to: 70/-317
+resolving layer #2
+updateMissionState
+handleMixedMovement
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving mixed #12
+_____________________
+Flight #12, impulse: 85
+From -260/-174 to 191/568
+Dist 869, angle: 58.708066609304
+close in
+adding move to: -216/-101
+resolving mixed #9
+_____________________
+Flight #9, impulse: 170
+From -345/-159 to 191/568
+Dist 904, angle: 53.599521399532
+close in
+adding move to: -244/-22
+resolving mixed #10
+_____________________
+Flight #10, impulse: 230
+From 271/215 to -340/439
+Dist 651, angle: 159.86645197136
+close in
+adding move to: 55/294
+resolving mixed #13
+_____________________
+Flight #13, impulse: 115
+From 303/340 to -340/439
+Dist 651, angle: 171.24714195864
+close in
+adding move to: 189/357
+resolving layer #2
+updateMissionState
+advancing game state time: 0.103 seconds.
+doAdvance for game1 from phase 2 to phase 3
+ew for #1
+specific EW for ship #1, EW from 321.04154258188 to 68.958457418123, dist: 394
+ew for #2
+specific EW for ship #2, EW from 357.88679275024 to 28.113207249761, dist: 597
+ew for #3
+ew for #4
+ew for #8
+specific EW for ship #8, EW from 183.67310954241 to 230.32689045759, dist: 596
+ew for #7
+specific EW for ship #7, EW from 201.7003573684 to 240.2996426316, dist: 634
+ew for #6
+specific EW for ship #6, EW from 202.31064520798 to 251.68935479202, dist: 538
+ew for #5
+specific EW for ship #5, EW from 119.9109857615 to 256.0890142385, dist: 383
+resolveFireOrder - ID 39, shooter: Demos #6 vs Saggitarius #2, w: MediumPlasma #8, guns: 1
+MediumPlasma, weapon id: 8, DAMAGE mod: 0.1 (crits: 0, boost: 0.1)
+doDamage, weapon: MediumPlasma, target: 2/-1, totalDmg: 53
+resolveFireOrder - ID 40, shooter: Demos #6 vs Saggitarius #2, w: MediumPlasma #10, guns: 1
+resolveFireOrder - ID 37, shooter: Primus #5 vs Saggitarius #2, w: HeavyIon #9, guns: 1
+doDamage, weapon: HeavyIon, target: 2/-1, totalDmg: 53
+resolveFireOrder - ID 38, shooter: Primus #5 vs Saggitarius #2, w: HeavyIon #11, guns: 1
+doDamage, weapon: HeavyIon, target: 2/-1, totalDmg: 52
+resolveFireOrder - ID 41, shooter: Demos #6 vs Saggitarius #2, w: MediumSingleIon #12, guns: 1
+doDamage, weapon: MediumSingleIon, target: 2/-1, totalDmg: 39
+doDamage, weapon: MediumSingleIon, target: 2/13, totalDmg: 37
+resolveFireOrder - ID 42, shooter: Demos #6 vs Saggitarius #2, w: MediumSingleIon #15, guns: 1
+doDamage, weapon: MediumSingleIon, target: 2/12, totalDmg: 39
+resolveFireOrder - ID 29, shooter: Omega #1 vs Primus #5, w: LightPulse #14, guns: 1
+resolveFireOrder - ID 30, shooter: Omega #1 vs Primus #5, w: LightPulse #15, guns: 1
+fireid: 30, doDamage, weapon: LightPulse, target: 5, hits: 3
+resolveFireOrder - ID 31, shooter: Omega #1 vs Primus #5, w: LightPulse #16, guns: 1
+resolveFireOrder - ID 32, shooter: Omega #1 vs Primus #5, w: LightPulse #17, guns: 1
+fireid: 32, doDamage, weapon: LightPulse, target: 5, hits: 4
+resolveFireOrder - ID 33, shooter: Omega #1 vs Primus #5, w: LightPulse #18, guns: 1
+fireid: 33, doDamage, weapon: LightPulse, target: 5, hits: 5
+resolveFireOrder - ID 34, shooter: Omega #1 vs Primus #5, w: LightPulse #19, guns: 1
+fireid: 34, doDamage, weapon: LightPulse, target: 5, hits: 3
+resolveFireOrder - ID 35, shooter: Tethys #3 vs Darkner #8, w: LightLaser #8, guns: 1
+doDamage, weapon: LightLaser, target: 8 for 61 dmg
+hitting:  Sensor  Primary  Primary 
+resolveFireOrder - ID 36, shooter: Tethys #3 vs Darkner #8, w: LightLaser #9, guns: 1
+resolveBallisticFireOrders
+cleanFireOrders, fires: 14
+DB updateFireOrders: 14
+= testCriticals for Omega, #1, turn: 3
+= testCriticals for Saggitarius, #2, turn: 3
+= testCriticals for Tethys, #3, turn: 3
+= testCriticals for Tethys, #4, turn: 3
+= testCriticals for Salvo, #12, turn: 3
+= testCriticals for Salvo, #9, turn: 3
+= testCriticals for Flight, #11, turn: 3
+= testCriticals for Salvo, #10, turn: 3
+= testCriticals for Darkner, #8, turn: 3
+determineCrit for Sensor #5, dmg: 4.2105263157895, possible: 2, inRange: 0
+= testCriticals for Demos, #7, turn: 3
+= testCriticals for Demos, #6, turn: 3
+= testCriticals for Primus, #5, turn: 3
+determineCrit for 122mm Ion Burst Cannon #9, dmg: 59.375, possible: 3, inRange: 2
+determineCrit for 122mm Ion Burst Cannon #11, dmg: 31.25, possible: 3, inRange: 2
+= testCriticals for Salvo, #13, turn: 3
+ => DB insertDamageEntries: 13
+ => DB insertCritEntries: 2
+handleFiringPhase time: 0.131 seconds.
+advancing game state time: 0.136 seconds.
