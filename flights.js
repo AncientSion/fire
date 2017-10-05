@@ -182,7 +182,7 @@ function Flight(data){
 			if (this.friendly && elapsed >= 2){
 				$(table)
 				.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
-				.append($("<tr>").addClass("misionSwitch")
+				.append($("<tr>").addClass("missionSwitch")
 					.append($("<td>")
 						.attr("colSpan", 2)
 						.addClass("buttonTD")
@@ -195,13 +195,13 @@ function Flight(data){
 					//	.hover(function(e){
 					//		$(this).toggleClass("highlight");
 					//})))
-				.append($("<tr>").click(function(){game.mission.set(1, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Patrol Location")))
-				.append($("<tr>").click(function(){game.mission.set(2, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Strike/ Escort Ship")))
+				.append($("<tr>").addClass("missionOption").click(function(){game.mission.set(1, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Patrol Location")))
+				.append($("<tr>").addClass("missionOption").click(function(){game.mission.set(2, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Strike/ Escort Ship")))
 			}
 			else if (this.friendly){
 				$(table)
 				.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
-				.append($("<tr>").addClass("misionSwitch")
+				.append($("<tr>").addClass("missionSwitch")
 					.append($("<td>")
 						.attr("colSpan", 2)
 						.addClass("buttonTD")
@@ -637,8 +637,8 @@ Flight.prototype.setRawImage = function(){
 
 Flight.prototype.switchDiv = function(){
 	if (this.selected){
-		$(this.element).find(".header").find(".general").find(".misionSwitch").removeClass("disabled");
-	} else $(this.element).find(".header").find(".general").find(".misionSwitch").addClass("disabled");
+		$(this.element).find(".header").find(".general").find(".missionSwitch").removeClass("disabled");
+	} else $(this.element).find(".header").find(".general").find(".missionSwitch").addClass("disabled");
 
 	Ship.prototype.switchDiv.call(this);
 }

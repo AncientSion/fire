@@ -17,15 +17,15 @@ class Primus extends SuperHeavy {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 1050, 26);
-		$front->systems[] = new HeavyIon($this->getId(), $this->id, 270, 30);
+		$front->systems[] = new LightIon($this->getId(), $this->id, 300, 120);
 		$front->systems[] = new HeavyIon($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new HeavyIon($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new HeavyIon($this->getId(), $this->id, 330, 90);
+		$front->systems[] = new LightIon($this->getId(), $this->id, 240, 60);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 1300, 24);
 		$right->systems[] = new HeavyIon($this->getId(), $this->id, 0, 120);
-		$right->systems[] = new LightIon($this->getId(), $this->id, 300, 180);
+		$right->systems[] = new HeavyIon($this->getId(), $this->id, 0, 120);
 		$right->systems[] = new LightIon($this->getId(), $this->id, 300, 180);
 		$right->systems[] = new LightIon($this->getId(), $this->id, 300, 180);
 		$right->systems[] = new Hangar($this->getId(), $this->id, 30, 90, 300, 9, array("Sentri", "Sitara"));
@@ -38,7 +38,7 @@ class Primus extends SuperHeavy {
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 1300, 24);
-		$left->systems[] = new LightIon($this->getId(), $this->id, 180, 60);
+		$left->systems[] = new HeavyIon($this->getId(), $this->id, 240, 360);
 		$left->systems[] = new HeavyIon($this->getId(), $this->id, 240, 360);
 		$left->systems[] = new LightIon($this->getId(), $this->id, 180, 60);
 		$left->systems[] = new LightIon($this->getId(), $this->id, 180, 60);

@@ -296,6 +296,9 @@ table, th, tr, td {
 	margin: auto;
 }
 
+.missionOption.selected {
+
+}
 #missionType table {
 	margin: auto;
 	margin-top: 20px;
@@ -807,7 +810,7 @@ table, th, tr, td {
     box-shadow: inset 0 0 0px 4px #0400ff;
 }
 
-#missionType .selected {
+#missionType .selected, .missionOption.selected {
 	box-shadow: inset 0 0 8px 4px yellow
 }
 

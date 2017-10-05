@@ -92,8 +92,8 @@ class LightLaser extends Laser {
 	public $animColor = "red";
 	public $rakeTime = 40;
 	public $beamWidth = 2;
-	public $minDmg = 75;
-	public $maxDmg = 100;
+	public $minDmg = 70;
+	public $maxDmg = 90;
 	public $optRange = 350;
 	public $dmgLoss = 12;
 	public $accDecay = 120;

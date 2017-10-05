@@ -631,7 +631,17 @@ echo "</script>";
 					}
 				}
 				else if (e.keyCode == 109){ // m, cancel move animation
-					if (game.phase == 1 || game.phase == 2){
+					if (game.phase == 2){
+						for (var i = 0; i < game.ships.length; i++){
+							game.ships[i].setPostMovePosition();
+						}
+						game.animShip = 1;
+						game.animFlight = 1;
+						game.animSalvo = 1;
+						game.movementResolved();
+						game.animShip = 0;
+						game.animFlight = 0;
+						game.animSalvo = 0;
 					}
 				}
 				else if (e.keyCode == 43){ // +
