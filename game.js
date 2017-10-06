@@ -1957,7 +1957,7 @@ Game.prototype.getUnitType = function (val){
 		var rolls = [];
 		
 		if (fire.shooter.salvo){
-			shots = fire.shooter.structures.length;
+			shots = fire.shooter.getShots();
 			hits = fire.hits.reduce((a, b) => a+b, 0);
 		}
 		else {

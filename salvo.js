@@ -321,3 +321,12 @@ Salvo.prototype.getCurrentImpulse = function(){
 		return this.currentImpulse + this.baseImpulse*(1-this.destroyed);
 	} else return this.currentImpulse;
 }
+Salvo.prototype.getShots = function(){
+	shots = 0;
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].isDestroyedThisTurn()){
+			shots++;
+		}
+	}
+	return shots;
+}

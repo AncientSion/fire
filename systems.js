@@ -1618,7 +1618,7 @@ function Warhead(data){
 	this.fireOrders = [];
 	this.guns = 1;
 	this.animation = "explo";
-	this.exploSize = (this.minDmg + this.maxDmg)/10;
+	this.exploSize = (this.minDmg + this.maxDmg)/20;
 
 	for (var i = 0; i < data.fireOrders.length; i++){
 		this.fireOrders.push(new FireOrder(data.fireOrders[i]));
@@ -1659,7 +1659,8 @@ Warhead.prototype.getAnimation = function(fire){
 				continue;
 			}
 
-			var p = getPointInDirection(d - range(t.size/3, t.size/2), a + range(-t.size/3, t.size/3), o.x, o.y);
+			var p = getPointInDirection(d - range(t.size/4, t.size/3), a + range(-t.size/6, t.size/6), o.x, o.y);
+			//var p = getPointInDirection(d - 50, a, o.x, o.y);
 			//var tx = fire.shooter.drawX + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2); // WEAPON origin
 			//var ty = fire.shooter.drawY + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2);
 			var shotAnim = {tx: p.x, ty: p.y, m: 70, n: 0 - ((j / grouping) * delay + k*shotInterval)};

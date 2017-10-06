@@ -948,7 +948,7 @@ class Manager {
 							}
 							else if ($this->ships[$i]->salvo){
 								$angle = Math::getAngle2($origin, $this->ships[$i]->getTrajectoryStart());
-								if (Math::isInArc($a, $start, $end)){
+								if (Math::isInArc($angle, $start, $end)){
 									$ship->locks[] = array($this->ships[$i]->id, $multi);
 									$skip = 1; break;
 								}

@@ -300,3 +300,117 @@ determineCrit for 122mm Ion Burst Cannon #11, dmg: 31.25, possible: 3, inRange: 
  => DB insertCritEntries: 2
 handleFiringPhase time: 0.131 seconds.
 advancing game state time: 0.136 seconds.
+insertClientActions s: 3
+insertClientActions s: 4
+doAdvance for game1 from phase 0 to phase 1
+handleShipMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving mixed #12
+_____________________
+Flight #12, impulse: 119
+From -206/-346 to -79/-279
+Dist 144, angle: 27.814293855775
+close in
+adding move to: -101/-290
+resolving mixed #20
+_____________________
+Flight #20, impulse: 119
+From -79/-544 to 58/-547
+Dist 138, angle: 358.74554837732
+close in
+adding move to: 40/-547
+resolving mixed #18
+_____________________
+Flight #18, impulse: 137
+From 243/-373 to -10/-458
+Dist 267, angle: 198.57072055816
+close in
+adding move to: 113/-417
+resolving layer #2
+updateMissionState
+handleMixedMovement
+layer 0 -> patrol target, layer 1 => strike
+resolving layer #0
+resolving layer #1
+resolving mixed #19
+_____________________
+Flight #19, impulse: 345
+From -71/-118 to -79/-279
+Dist 162, angle: 267.15534439523
+arrival
+adding move to: -79/-279
+resolving layer #2
+updateMissionState
+advancing game state time: 0.207 seconds.
+doAdvance for game1 from phase 2 to phase 3
+ew for #1
+specific EW for ship #1, EW from 0.55172359674202 to 239.44827640326, dist: 163
+ew for #3
+specific EW for ship #3, EW from 53.504278593937 to 210.49572140606, dist: 141
+ew for #2
+specific EW for ship #2, EW from 129.55551918033 to 26.444480819674, dist: 221
+ew for #5
+specific EW for ship #5, EW from 58.704896645454 to 55.295103354546, dist: 144
+ew for #4
+specific EW for ship #4, EW from 307.9059648845 to 306.0940351155, dist: 201
+ew for #7
+specific EW for ship #7, EW from 34.704896645454 to 31.295103354546, dist: 72
+ew for #6
+specific EW for ship #6, EW from 54.704896645454 to 51.295103354546, dist: 144
+resolveFireOrder - ID 45, shooter: Altarian #5 vs Artemis #1, w: MediumSingleIon #14, guns: 1
+doDamage, weapon: MediumSingleIon, target: 1/18, totalDmg: 41
+resolveFireOrder - ID 46, shooter: Altarian #6 vs Artemis #1, w: MediumSingleIon #14, guns: 1
+doDamage, weapon: MediumSingleIon, target: 1/16, totalDmg: 46
+ => OK ship target system Dual #16 was destroyed, rem: 28, doing: 28, OK for: 12 dmg
+doDamage, weapon: MediumSingleIon, target: 1/-1, totalDmg: 35
+resolveFireOrder - ID 40, shooter: Primus #4 vs Omega #2, w: HeavyIon #9, guns: 1
+resolveFireOrder - ID 41, shooter: Primus #4 vs Omega #2, w: HeavyIon #10, guns: 1
+HeavyIon, weapon id: 10, DAMAGE mod: -0.2 (crits: -0.2, boost: 0)
+doDamage, weapon: HeavyIon, target: 2/-1, totalDmg: 44
+HeavyIon, weapon id: 10, DAMAGE mod: -0.2 (crits: -0.2, boost: 0)
+doDamage, weapon: HeavyIon, target: 2/26, totalDmg: 41
+ => OK ship target system Dual #26 was destroyed, rem: 28, doing: 28, OK for: 5 dmg
+resolveFireOrder - ID 47, shooter: Haven #7 vs Salvo #19, w: LightIon #13, guns: 1
+doDamage, weapon: LightIon, target: 19/9, totalDmg: 18
+ => overkilling non-ship target system Naga #9 was destroyed, rem: 12, doing: 15
+resolveFireOrder - ID 48, shooter: Haven #7 vs Salvo #19, w: LightIon #14, guns: 1
+doDamage, weapon: LightIon, target: 19/5, totalDmg: 15
+ => overkilling non-ship target system Naga #5 was destroyed, rem: 12, doing: 12
+doDamage, weapon: LightIon, target: 19/1, totalDmg: 18
+ => overkilling non-ship target system Naga #1 was destroyed, rem: 12, doing: 15
+resolveFireOrder - ID 42, shooter: Primus #4 vs Flight #20, w: LightIon #15, guns: 1
+doDamage, weapon: LightIon, target: 20/19, totalDmg: 17
+doDamage, weapon: LightIon, target: 20/3, totalDmg: 18
+resolveFireOrder - ID 43, shooter: Primus #4 vs Flight #20, w: LightIon #16, guns: 1
+resolveFireOrder - ID 44, shooter: Primus #4 vs Flight #20, w: LightIon #26, guns: 1
+resolveBallisticFireOrders
+insertServerFireOrder: 1
+resolveFireOrder - ID 49, shooter: Salvo #19 vs Haven #7, w: Warhead #2, guns: 3
+doDamage, weapon: Warhead, target: 7/-1, totalDmg: 43
+doDamage, weapon: Warhead, target: 7/2, totalDmg: 33
+doDamage, weapon: Warhead, target: 7/-1, totalDmg: 35
+cleanFireOrders, fires: 10
+DB updateFireOrders: 10
+= testCriticals for Artemis, #1, turn: 4
+= testCriticals for Salvo, #19, turn: 4
+= testCriticals for Flight, #12, turn: 4
+= testCriticals for Flight, #20, turn: 4
+checking crit for Aurora
+checking crit for Aurora
+= testCriticals for Tethys, #3, turn: 4
+= testCriticals for Omega, #2, turn: 4
+= testCriticals for Altarian, #5, turn: 4
+= testCriticals for Primus, #4, turn: 4
+= testCriticals for Haven, #7, turn: 4
+determineCrit for Bridge #2, dmg: 57.5, possible: 1, inRange: 1
+= testCriticals for Flight, #18, turn: 4
+= testCriticals for Altarian, #6, turn: 4
+ => DB insertDamageEntries: 13
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.174 seconds.
+advancing game state time: 0.21 seconds.
