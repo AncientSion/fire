@@ -404,8 +404,10 @@ function Game(data, userid){
 			if (this.ships[i].userid == this.userid){
 				if ((game.phase == 0 && this.ships[i].ship) || (game.phase == 1 && this.ships[i].flight)){
 					if (this.ships[i].getRemainingImpulse() > 0){
+						if (aUnit){
+							this.getUnitById(aUnit).doUnselect();
+						}
 						popup("You have units with unused Impulse (#" + this.ships[i].id + ")");
-						if (aUnit){this.getUnitById(aUnit).doUnselect();}
 						this.ships[i].select();
 						return true;
 					}
@@ -1586,7 +1588,7 @@ Game.prototype.getUnitType = function (val){
 		this.getShotDetails();
 		this.getFireAnimationDetails();
 		//this.getBallDetails();
-		this.getShipExplosionDetails();
+		this.getUnitExplosionDetails();
 
 		$("#combatlogWrapper").show();
 		setFPS(40);
@@ -1600,7 +1602,7 @@ Game.prototype.getUnitType = function (val){
 		this.drawShips();
 		//this.animateBallistics()
 		this.animateFireOrders();
-		//this.animateShipExplosions()
+		//this.animateUnitExplosions()
 
 		//this.animateFire = true; this.fireResolved();
 	}
@@ -1732,6 +1734,7 @@ Game.prototype.getUnitType = function (val){
 
 		this.fireOrders.sort(function(a, b){
 			return (
+				a.shooter.flight - b.target.ship ||
 				a.shooter.salvo - b.shooter.salvo ||
 				a.shooter.flight - b.shooter.flight ||
 				a.targetid - b.targetid ||
@@ -1746,41 +1749,42 @@ Game.prototype.getUnitType = function (val){
 
     }
 
-	this.getShipExplosionDetails = function(){
+	this.getUnitExplosionDetails = function(){
 		window.animations = [];
 
 		for (var i = 0; i < game.ships.length; i++){
-			if (game.ships[i].deployed){
-				var anim = {
-						anims: [],
-						base: game.ships[i].getPlannedPosition(),
-						done: false
-				}
+			if (!game.ships[i].deployed){continue;}
 
-				if (!game.ships[i].ship){
-					for (var j = 0; j < game.ships[i].structures.length; j++){
-						if (game.ships[i].structures[j].isDestroyedThisTurn()){
-							anim.anims.push({
-								a: game.ships[i].facing+90,
-								id: game.ships[i].id,
-								t: [0-30*anim.anims.length, 70],
-								s: game.ships[i].structures[j].mass / 3,
-								x: game.ships[i].structures[j].layout.x,
-								y: game.ships[i].structures[j].layout.y
-							})
-						}
+			var anim = {
+				anims: [],
+				done: 0,
+				animating: 0,
+				id: game.ships[i].id
+			}
+
+			var base = game.ships[i].getPlannedPosition();
+
+			if (!game.ships[i].ship){
+				for (var j = 0; j < game.ships[i].structures.length; j++){
+					if (game.ships[i].structures[j].isDestroyedThisTurn()){
+						anim.anims.push({
+							a: game.ships[i].facing+90,
+							t: [0-30*anim.anims.length, 70],
+							s: game.ships[i].structures[j].mass / 3,
+							x: base.x + game.ships[i].structures[j].layout.x,
+							y: base.y + game.ships[i].structures[j].layout.y
+						})
 					}
 				}
-				else if (game.ships[i].ship && game.ships[i].isDestroyedThisTurn()){
-					anim.anims.push({
-						a: game.ships[i].facing,
-						id: game.ships[i].id,
-						t: [0, 100],
-						s: game.ships[i].size,
-						x: 0,
-						y: 0
-					})
-				}
+			}
+			else if (game.ships[i].ship && game.ships[i].isDestroyedThisTurn()){
+				anim.anims.push({
+					a: game.ships[i].facing,
+					t: [0, 100],
+					s: game.ships[i].size,
+					x: base.x,
+					y: base.y
+				})
 			}
 		
 			if (anim.anims.length){
@@ -1802,7 +1806,8 @@ Game.prototype.getUnitType = function (val){
 					if (!game.fireOrders[i].animating){
 						game.fireOrders[i].animating = 1;
 						//cam.setFocus(game.fireOrders[i].focus.x, game.fireOrders[i].focus.y);
-						cam.setFocusToUnit(game.fireOrders[i].target);
+						cam.setFireFocus(game.fireOrders[i]);
+						//cam.setFocusToPos(game.fireOrders[i].target);
 						game.draw();
 					}
 					else {
@@ -1887,60 +1892,62 @@ Game.prototype.getUnitType = function (val){
 			if (done){
 				window.cancelAnimationFrame(anim);
 				fxCtx.clearRect(0, 0, res.x, res.y);
-				game.animateShipExplosions();
+				game.animateUnitExplosions();
 			}
 		}
 	}
 
-	this.animateShipExplosions = function(){
-		anim = window.requestAnimationFrame(game.animateShipExplosions.bind(this));
+	this.animateUnitExplosions = function(){
+		anim = window.requestAnimationFrame(game.animateUnitExplosions.bind(this));
 		window.now = Date.now();		
 		window.elapsed = window.now - window.then;
 		if (elapsed > window.fpsInterval){
 			window.then = window.now - (window.elapsed % window.fpsInterval);
 			fxCtx.clearRect(0, 0, res.x, res.y);
-			fxCtx.translate(cam.o.x, cam.o.y);
-			fxCtx.scale(cam.z, cam.z);
 
-			var allDone = true;
+			var allDone = 1;
 			for (var i = 0; i < window.animations.length; i++){
 				if (!window.animations[i].done){
+					if (!window.animations[i].animating){
+						window,animations[i].animating = 1;
+						cam.setFocusToPos(game.getUnitById(window.animations[i].id).getPlannedPosition());
+						game.redraw();
+					}
 
-					fxCtx.translate(window.animations[i].base.x, window.animations[i].base.y);
-					//fxCtx.rotate(window.animations[i].anims[0].a * (Math.PI/180));
-
-					var done = true;
+					var done = 1;
 
 					for (var j = 0; j < window.animations[i].anims.length; j++){
 						if (window.animations[i].anims[j].t[0] < window.animations[i].anims[j].t[1]){
 							window.animations[i].anims[j].t[0]++;
-							done = false;
+							done = 0;
 						}
 
 						if (window.animations[i].anims[j].t[0] > 0){
-							drawFighterExplosion(
+							drawUnitExplosion(
 								window.animations[i].anims[j].x,
 								window.animations[i].anims[j].y,
-								10,
+								window.animations[i].anims[j].s,
 								window.animations[i].anims[j].t[0],
 								window.animations[i].anims[j].t[1]
 							)
 						}
 					}
-					fxCtx.setTransform(1,0,0,1,0,0);
+					//fxCtx.setTransform(1,0,0,1,0,0);
 
 					if (!done){
-						allDone = false;
+						allDone = 0;
 						break;
 					}
-					else window.animations[i].done = true;
+					else {
+						window.animations[i].done = 1;
+						window.animations[i].animating = 0;
+					}
 				}
 			}
 
 
 			if (allDone){
 				window.cancelAnimationFrame(anim);
-				fxCtx.setTransform(1,0,0,1,0,0);
 				fxCtx.clearRect(0, 0, res.x, res.y);
 				game.fireResolved();
 			}

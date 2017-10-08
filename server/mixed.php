@@ -38,11 +38,25 @@ class Mixed extends Ship {
 	}
 
 	public function setState($turn){
+		Debug::log("setState #".$this->id);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$this->structures[$i]->setState($turn);
 		}
 		$this->isDestroyed();
 		$this->setProps($turn);
+	}
+
+	public function isDestroyed(){
+		if ($this->destroyed){
+			return true;
+		}
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if (! $this->structures[$i]->isDestroyed()){
+				return false;
+			}
+		}
+		$this->destroyed = 1;
+		return true;
 	}
 
 	public function getNewCrits($turn){
@@ -151,23 +165,6 @@ class Mixed extends Ship {
 		return $hitSystem->negation;
 	}
 
-	public function isDestroyed(){
-		if ($this->destroyed){
-			//Debug::log(" -> destroyed");
-			return true;
-		}
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if (! $this->structures[$i]->isDestroyed()){
-				//Debug::log(" -> not destroyed");
-				return false;
-			}
-		}
-		//Debug::log(" -> destroyed");
-		$this->destroyed = true;
-		if ($this->flight){$this->status = "destroyed";}
-		return true;
-	}
-
 	public function getHitSection($fire){
 		return 0;
 	}
@@ -227,6 +224,10 @@ class Mixed extends Ship {
 
 	public function getLockMultiplier(){
 		return 1.0;
+	}
+	
+	public function getImpulseProfileMod(){
+		return 0;
 	}
 }
 

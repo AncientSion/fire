@@ -18,10 +18,6 @@ class Salvo extends Mixed {
 		$fire->shooter = $this;
 		return $fire;
 	}
-	
-	public function getImpulseProfileMod(){
-		return 0;
-	}
 
 	public function setMass(){
 		if (!sizeof($this->structures)){return;}

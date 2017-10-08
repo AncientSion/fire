@@ -53,6 +53,18 @@ class Manager {
 		}
 	}
 
+	public function alter(){
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->salvo && sizeof($this->ships[$i]->cc)){
+				Debug::log("ding");
+				$this->ships[$i]->destroyed = 1;
+			}
+		}
+
+		DBManager::app()->destroyUnitsDB($this->ships);
+
+	}
+
 	public function test(){
 		$db = DBManager::app();
 
@@ -312,7 +324,7 @@ class Manager {
 					if ($units[$i]->id != $units[$j]->id){
 						$b = $units[$j]->getCurrentPosition();
 						if ($a->x == $b->x && $a->y == $b->y){
-							//Debug::log("valid: ".$units[$i]->id."/".$units[$j]->id);
+							//Debug::log("valid cc: ".$units[$i]->id."/".$units[$j]->id);
 							$units[$i]->cc[] = $units[$j]->id;
 							$units[$j]->cc[] = $units[$i]->id;
 						}
@@ -817,7 +829,6 @@ class Manager {
 		$this->testCrits();
 		$this->writeDamageEntries();
 		$this->writeCritEntries();
-		$this->setUnitStatus();
 		$time += microtime(true); 
 		Debug::log("handleFiringPhase time: ".round($time, 3)." seconds.");
 		return true;
@@ -839,8 +850,15 @@ class Manager {
 				$data[] = $this->incoming[$i]["id"];
 			}
 		}
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->salvo && $this->ships[$i]->mission->arrived){
+				$this->ships[$i]->destroyed = 1;
+			}
+		}
+
 		DBManager::app()->resolveDeployActions($data);
-		DBManager::app()->destroyUnitsDB(array($this->ships, $this->ballistics));
+		DBManager::app()->destroyUnitsDB($this->ships);
 	}
 
 	public function alterReinforcementPoints(){
@@ -869,7 +887,7 @@ class Manager {
 			$this->ships[$i]->setPosition();
 			$this->ships[$i]->setupForDamage();
 			$this->setShipLocks($this->ships[$i]);
-	}
+		}
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$aPos = $this->ships[$i]->getCurrentPosition();
@@ -888,8 +906,8 @@ class Manager {
 			}
 		}
 		return;
-	for ($i = 0; $i < sizeof($this->ships); $i++){
-				Debug::log("FROM: #".$this->ships[$i]->id);
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			Debug::log("FROM: #".$this->ships[$i]->id);
 			foreach ($this->ships[$i]->angles as $val){
 				Debug::log("--> ANGLE TO: #".$val[0].": ".$val[1]);
 			}
@@ -900,90 +918,109 @@ class Manager {
 	}
 
 	public function setShipLocks($ship){
-		if (!$ship->ship){return;}
-		Debug::log("ew for #".$ship->id);
-		$origin = $ship->getCurrentPosition();
-		$sensor =  $ship->getSystemByName("Sensor");
-		$ew = $sensor->getEW($this->turn);
-		if ($sensor->destroyed || $sensor->disabled  || !$ew){
+		if ($ship->salvo){
 			return;
 		}
-		else if ($ew->type == 2 || $ew->type == 3){
+		else if ($ship->flight){
 			for ($i = 0; $i < sizeof($this->ships); $i++){
 				if ($this->ships[$i]->id == $ship->id || $ship->userid == $this->ships[$i]->userid){continue;}
-				switch ($ew->type){
-					case 2: $ship->locks[] = array($this->ships[$i]->id, 0.2); break;
-					case 3: $ship->masks[] = array($this->ships[$i]->id, 0.2); break;
-				}
-			}	
-
-			for ($i = 0; $i < sizeof($this->ballistics); $i++){
-				if ($this->ballistics[$i]->id == $ship->id || $ship->userid == $this->ballistics[$i]->userid){continue;}
-				switch ($ew->type){
-					case 2: $ship->locks[] = array($this->ballistics[$i]->id, 0.2); break;
-					case 3: $ship->masks[] = array($this->ballistics[$i]->id, 0.2); break;
+				for ($j = 0; $j < sizeof($ship->cc); $j++){
+					if ($ship->cc[$j] == $this->ships[$i]->id){
+						if ($this->ships[$i]->flight || $this->ships[$i]->salvo){
+							Debug::log("adding fighter lock from #".$ship->id." vs #".$this->ships[$i]->id);
+							$ship->locks[] = array($this->ships[$i]->id, 1);
+						}
+					}
 				}
 			}
 		}
-		else {
-			$str = $sensor->getOutput($this->turn);
-			$len = $this->const["ew"]["len"];
-			$p = $this->const["ew"]["p"];
-			$w = min(180, $len * pow($str/$ew->dist, $p));
-			$start = Math::addAngle(0 + $w-$ship->getFacing(), $ew->angle);
-			$end = Math::addAngle(360 - $w-$ship->getFacing(), $ew->angle);
+		else if ($ship->ship){
+			//Debug::log("ew for #".$ship->id);
+			$origin = $ship->getCurrentPosition();
+			$sensor =  $ship->getSystemByName("Sensor");
+			$ew = $sensor->getEW($this->turn);
+			if ($sensor->destroyed || $sensor->disabled  || !$ew){
+				return;
+			}
+			else if ($ew->type == 2 || $ew->type == 3){
+				for ($i = 0; $i < sizeof($this->ships); $i++){
+					if ($this->ships[$i]->id == $ship->id || $ship->userid == $this->ships[$i]->userid){continue;}
+					switch ($ew->type){
+						case 2: $ship->locks[] = array($this->ships[$i]->id, 0.2); break;
+						case 3: $ship->masks[] = array($this->ships[$i]->id, 0.2); break;
+					}
+				}
+			}
+			else {
+				$start;
+				$end;
 
-			Debug::log("specific EW for ship #".$ship->id.", EW from ".$start." to ".$end.", dist: ".$ew->dist);
-			for ($i = 0; $i < sizeof($this->ships); $i++){
-				$multi = $this->ships[$i]->getLockMultiplier();
-				$skip = 0;
-				if ($this->ships[$i]->id == $ship->id || $ship->userid == $this->ships[$i]->userid){continue;}
+				if ($ew->angle == -1){
+					$start = 0;
+					$end = 360;
+					$w = 180;
+				}
+				else {
+					$str = $sensor->getOutput($this->turn);
+					$len = $this->const["ew"]["len"];
+					$p = $this->const["ew"]["p"];
+					$w = min(180, $len * pow($str/$ew->dist, $p));
+					$start = Math::addAngle(0 + $w-$ship->getFacing(), $ew->angle);
+					$end = Math::addAngle(360 - $w-$ship->getFacing(), $ew->angle);
+				}
 
-				if ($ew->type == 0 && sizeof($ship->cc)){ // specific OW versus close combat
-					for ($j = 0; $j < sizeof($ship->cc); $j++){
-						if ($ship->cc[$j] == $this->ships[$i]->id){
-							if ($this->ships[$i]->flight){
-								$ship->locks[] = array($this->ships[$i]->id, round(($multi / 180 * $w)*10)/10);
-								$skip = 1; break;
-							}
-							else if ($this->ships[$i]->salvo){
-								$angle = Math::getAngle2($origin, $this->ships[$i]->getTrajectoryStart());
-								if (Math::isInArc($angle, $start, $end)){
-									$ship->locks[] = array($this->ships[$i]->id, $multi);
+				//Debug::log("specific EW for ship #".$ship->id.", EW from ".$start." to ".$end.", dist: ".$ew->dist);
+				for ($i = 0; $i < sizeof($this->ships); $i++){
+					$multi = $this->ships[$i]->getLockMultiplier();
+					$skip = 0;
+					if ($this->ships[$i]->id == $ship->id || $ship->userid == $this->ships[$i]->userid){continue;}
+
+					if ($ew->type == 0 && sizeof($ship->cc)){ // specific OW versus close combat
+						for ($j = 0; $j < sizeof($ship->cc); $j++){
+							if ($ship->cc[$j] == $this->ships[$i]->id){
+								if ($this->ships[$i]->flight){ // flight
+									$ship->locks[] = array($this->ships[$i]->id, $multi / 180 * $w);
 									$skip = 1; break;
+								}
+								else if ($this->ships[$i]->salvo){ // salvo, in trajectory ?
+									$angle = Math::getAngle2($origin, $this->ships[$i]->getTrajectoryStart());
+									if (Math::isInArc($angle, $start, $end)){
+										$ship->locks[] = array($this->ships[$i]->id, $multi);
+										$skip = 1; break;
+									}
 								}
 							}
 						}
 					}
-				}
 
-				if ($skip){
-					continue;
-				}
+					if ($skip){
+						continue;
+					}
 
-				$dest = $this->ships[$i]->getCurrentPosition();
-				if (Math::getDist2($origin, $dest) <= $ew->dist){
-					$a = Math::getAngle2($origin, $dest);
-					//Debug::log("versus #".$this->ships[$i]->id.", a: ".$a);
-					if (Math::isInArc($a, $start, $end)){
-						if ($ew->type == 0){ // LOCK
-							//Debug::log("locking onto: #".$this->ships[$i]->id);
-							$ship->locks[] = array($this->ships[$i]->id, $multi);
-						}
-						else if ($ew->type == 1){ // MASK
-							if (!$this->ships[$i]->flight){
-								//Debug::log("masking from #".$this->ships[$i]->id);
-								$ship->masks[] = array($this->ships[$i]->id, $multi);
+					$dest = $this->ships[$i]->getCurrentPosition();
+					if (Math::getDist2($origin, $dest) <= $ew->dist){
+						$a = Math::getAngle2($origin, $dest);
+						//Debug::log("versus #".$this->ships[$i]->id.", a: ".$a);
+						if (Math::isInArc($a, $start, $end)){
+							if ($ew->type == 0){ // LOCK
+								//Debug::log("locking onto: #".$this->ships[$i]->id);
+								$ship->locks[] = array($this->ships[$i]->id, $multi);
 							}
-						}
-					}// else Debug::log("out of arc");
+							else if ($ew->type == 1){ // MASK
+								if (!$this->ships[$i]->flight){
+									//Debug::log("masking from #".$this->ships[$i]->id);
+									$ship->masks[] = array($this->ships[$i]->id, $multi);
+								}
+							}
+						}// else Debug::log("out of arc");
+					}
 				}
 			}
-		}
 
-		//foreach ($ship->locks as $entry){
-		//	Debug::log("lock vs #".$entry[0]." with val: ".$entry[1]);
-		//}
+			//foreach ($ship->locks as $entry){
+			//	Debug::log("lock vs #".$entry[0]." with val: ".$entry[1]);
+			//}
+		}
 	}
 
 	public function setFireOrderDetails(){
@@ -1135,7 +1172,6 @@ class Manager {
 				if ($this->ships[$i]->mission->arrived){
 					$target = $this->getUnitById($this->ships[$i]->mission->targetid);
 					$fire = $this->ships[$i]->getFireOrder($this->gameid, $this->turn, $target);
-					//Debug::log("Salvo #".$this->ships[$i]->id." attacking: ".$fire->target->name." #".$fire->target->id." with ".$fire->shooter->getShots($this->turn)."x ".$fire->weapon->name);
 					$fires[] = $fire;
 				}
 			}
@@ -1146,7 +1182,6 @@ class Manager {
 
 			for ($i = 0; $i < sizeof($fires); $i++){
 				$fires[$i]->target->resolveFireOrder($fires[$i]);
-				$fires[$i]->shooter->destroyed = 1;
 				if (sizeof($fires[$i]->damages)){
 					$this->damages = array_merge($this->damages, $fires[$i]->damages);
 				}
@@ -1180,10 +1215,6 @@ class Manager {
 			$all = array_merge($all, $this->ships[$i]->getNewCrits($this->turn));
 		}
 		DBManager::app()->insertCritEntries($all, $this->gameid);
-	}
-
-	public function setUnitStatus(){
-		DBManager::app()->setUnitStatusDB($this->ships);
 	}
 
 	public function startDamageControlPhase(){

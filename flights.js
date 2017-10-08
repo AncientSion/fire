@@ -179,7 +179,8 @@ function Flight(data){
 
 		//if (this.friendly && game.phase == -1 && this.available < game.turn){
 			var elapsed = game.turn - this.mission.turn;
-			if (this.friendly && elapsed >= 2){
+			var need = 3;
+			if (this.friendly && elapsed >= need){
 				$(table)
 				.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
 				.append($("<tr>").addClass("missionSwitch")
@@ -205,9 +206,9 @@ function Flight(data){
 					.append($("<td>")
 						.attr("colSpan", 2)
 						.addClass("buttonTD")
-						.html("New orders possible in</br> " + (2 - elapsed) + " Turn/s")));
+						.html("New orders possible in</br> " + (need - elapsed) + " Turn/s")));
 			}
-			else if (elapsed >= 2){
+			else if (elapsed >= need){
 				$(table)
 				.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
 				.append($("<tr>")
@@ -223,7 +224,7 @@ function Flight(data){
 					.append($("<td>")
 						.attr("colSpan", 2)
 						.addClass("buttonTD")
-						.html("New orders possible in</br> " + (2 - elapsed) + " Turn/s")));
+						.html("New orders possible in</br> " + (need - elapsed) + " Turn/s")));
 			}
 		//}
 				

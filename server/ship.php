@@ -67,8 +67,7 @@ class Ship {
 	public function setState($turn){
 		//Debug::log("setState #".$this->id);
 		if ($this->primary->isDestroyed()){
-			$this->status = "destroyed";
-			$this->destroyed = true;
+			$this->destroyed = 1;
 		}
 
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){ // check primary criticals
@@ -77,7 +76,6 @@ class Ship {
 				case "Reactor":
 					if ($this->primary->systems[$i]->destroyed){
 						$this->destroyed = 1;
-						$this->status = "destroyed";
 					}
 					else if ($this->primary->systems[$i]->disabled){
 						$this->doUnpowerAllSystems($turn);
@@ -266,7 +264,7 @@ class Ship {
 
 
 	public function getMoveState($turn){
-		Debug::log("getMoveState for ".$this->id);
+		//Debug::log("getMoveState for ".$this->id);
 		$delay = $this->remainingDelay;
 		$angle = $this->facing;
 		for ($i = 0; $i < sizeof($this->actions); $i++){

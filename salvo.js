@@ -324,7 +324,7 @@ Salvo.prototype.getCurrentImpulse = function(){
 Salvo.prototype.getShots = function(){
 	shots = 0;
 	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].isDestroyedThisTurn()){
+		if (!this.structures[i].isDestroyedThisTurn()){
 			shots++;
 		}
 	}

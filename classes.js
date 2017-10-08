@@ -193,6 +193,7 @@ function Damage(data){
 	this.destroyed = data.destroyed;
 	this.notes = data.notes;
 	this.system = "";
+	this.loc = {x: 0, y: 0};
 }
 
 function Single(data){
@@ -561,7 +562,7 @@ function Primary(data){
 	this.id = data.id;
 	this.parentId = data.parentId;
 	this.integrity = data.integrity;
-	this.damages = data.damages
+	this.damages = [];
 	this.destroyed = data.destroyed || false;
 	this.highlight = false;	
 	this.systems = [];

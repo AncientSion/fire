@@ -625,7 +625,6 @@
 			$this->deleteReinforcements($delete);
 			$this->addReinforceValue($userid, $gameid, -$cost);
 			$this->insertUnits($userid, $gameid, $ships);
-			$this->insertClientActions($ships);
 		}
 
 		public function deleteReinforcements($units){
@@ -807,29 +806,9 @@
 				}// else var_dump($stmt->errorCode());
 			}	
 			return true;
-	}
-
-		public function setUnitStatusDB($units){
-			//Debug::log("setUnitStatusDB");
-			$stmt = $this->connection->prepare("
-				UPDATE units 
-				SET status = :status
-				WHERE id = :id
-			");
-
-			for ($i = 0; $i < sizeof($units); $i++){
-				$stmt->bindParam(":status", $units[$i]->status);
-				$stmt->bindParam(":id", $units[$i]->id);
-				$stmt->execute();
-
-				if ($stmt->errorCode() == 0){
-					continue;
-				}
-			}
-			return true;
 		}
 
-		public function destroyUnitsDB($array){
+		public function destroyUnitsDB($units){
 			Debug::log("destroyUnitsDB");
 			$stmt = $this->connection->prepare("
 				UPDATE units 
@@ -839,10 +818,10 @@
 					id = :id
 			");
 			
-			for ($i = 0; $i < sizeof($array); $i++){
-				for ($j = 0; $j < sizeof($array[$i]); $j++){
-					$stmt->bindParam(":id", $array[$i][$j]->id);
-					$stmt->bindParam(":destroyed",  $array[$i][$j]->destroyed);
+			for ($i = 0; $i < sizeof($units); $i++){
+				if ($units[$i]->destroyed){
+					$stmt->bindParam(":id", $units[$i]->id);
+					$stmt->bindParam(":destroyed",  $units[$i]->destroyed);
 					$stmt->execute();
 
 					if ($stmt->errorCode() == 0){
@@ -1640,7 +1619,6 @@
 					units.id = actions.shipid	
 				WHERE gameid = :gameid
 				AND available > :turn
-				AND destroyed = 0
 				AND status = 'bought'
 				ORDER BY userid ASC
 			");
@@ -1653,7 +1631,7 @@
 			
 			if ($result){
 				return $result;
-				return $this->getActions($result);
+				//return $this->getActions($result);
 			}
 			else {
 				return false;

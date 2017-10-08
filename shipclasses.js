@@ -48,7 +48,6 @@ function Ship(data){
 	this.drawX = 0;
 	this.drawY = 0;
 
-	this.primary;
 
 	this.highlight = false;
 	this.destroyed = false;
@@ -59,6 +58,7 @@ function Ship(data){
 	this.hitTable;
 	this.img;
 	this.structures = [];
+	this.primary = {};
 	this.flights = [];
 	this.drawImg;
 	this.doDraw = 1;
@@ -116,9 +116,9 @@ function Ship(data){
 
 	this.setEscortImage = function(){
 		if (this.cc.length){
-			var size = this.size
-			var fSize = 12;
-			var tresh = 10;
+			var size = this.size;
+			var fSize = 14;
+			var tresh = 12;
 			var drawFacing = this.getDrawFacing();
 
 			var t = document.createElement("canvas");
@@ -164,7 +164,7 @@ function Ship(data){
 				ctx.closePath();
 				ctx.strokeStyle = color;
 				ctx.stroke();
-				var split = Math.floor(360/friendly.length-1);
+				var split = Math.floor(360/friendly.length+1);
 				for (var i = 0; i < friendly.length; i++){
 					var a =  split*i;
 					var pos = getPointInDirection(size/2+tresh - fSize/2, a, 0, 0);
@@ -197,7 +197,7 @@ function Ship(data){
 				ctx.closePath();
 				ctx.strokeStyle = color;
 				ctx.stroke();
-				var split = Math.floor(360/hostile.length-1);
+				var split = Math.floor(360/hostile.length+1);
 				for (var i = 0; i < hostile.length; i++){
 					var a =  split*i;
 					var pos = getPointInDirection(size/2+tresh - fSize/2, a, 0, 0);
@@ -2396,6 +2396,8 @@ function Ship(data){
 	//	return isInArc(getCompassHeadingOfPoint(loc, pos, facing), start, end);
 
 	this.getOffensiveBonus = function(target){
+		if (this.salvo){return 0;}
+		if (this.flight && (target.flight || target.salvo) && game.isCloseCombat(this, target)){return target.getLockMultiplier();}
 		if (this.flight || this.salvo){return 0;}
 		var sensor = this.getSystemByName("Sensor");
 		var ew = sensor.getEW();
@@ -2412,7 +2414,8 @@ function Ship(data){
 				return base;
 			}
 			else if (target.flight){
-				return Math.round(base / 180 * (Math.min(180, game.const.ew.len * Math.pow(sensor.getOutput()/ew.dist, game.const.ew.p)))*100)/100;
+				if (ew.angle == -1){return base;}
+				else return Math.round(base / 180 * (Math.min(180, game.const.ew.len * Math.pow(sensor.getOutput()/ew.dist, game.const.ew.p)))*100)/100;
 			}
 		}
 		else if (d <= ew.dist && this.isInEWArc(origin, tPos, sensor, ew)){
@@ -2700,7 +2703,6 @@ Ship.prototype.setTarget = function(){
 }
 
 Ship.prototype.select = function(){
-
 	if (!this.selected){
 		this.doSelect();
 	} else this.switchDiv();
@@ -2907,6 +2909,7 @@ Ship.prototype.getDamageEntriesByFireId = function(fire){
 		if (this.primary.damages[i].fireid == fire.id){					
 			dmgs.push(this.primary.damages[i]);
 			dmgs[dmgs.length-1].system = "Main Structure";
+			dmgs[dmgs.length-1].loc = this.getSystemLocation(-1, j);
 			lookup--;
 			if (!lookup){return dmgs};
 		}
@@ -2920,6 +2923,7 @@ Ship.prototype.getDamageEntriesByFireId = function(fire){
 			if (this.primary.systems[i].damages[j].fireid == fire.id){
 				dmgs.push(this.primary.systems[i].damages[j]);
 				dmgs[dmgs.length-1].system = this.primary.systems[i].display
+				dmgs[dmgs.length-1].loc = this.getSystemLocation(-1, j);
 				lookup--;
 				if (!lookup){return dmgs};
 			}
@@ -2935,6 +2939,7 @@ Ship.prototype.getDamageEntriesByFireId = function(fire){
 				if (this.structures[i].systems[j].damages[k].fireid == fire.id){
 					dmgs.push(this.structures[i].systems[j].damages[k]);
 					dmgs[dmgs.length-1].system = this.structures[i].systems[j].display
+					dmgs[dmgs.length-1].loc = this.getSystemLocation(i, j);
 					lookup--;
 					if (!lookup){return dmgs};
 				} else if (this.structures[i].systems[j].damages[k].turn < fire.turn){
@@ -2946,6 +2951,13 @@ Ship.prototype.getDamageEntriesByFireId = function(fire){
 	return dmgs;
 }
 
+Ship.prototype.getSystemLocation = function(i, j){
+	if (i == -1){
+		return getPointInDirection(this.size/5, range(0, 359), 0, 0);
+	}
+
+	return getPointInDirection(this.size/3, this.structures[i].getDirection() + this.getPlannedFacing(), 0, 0);
+}
 
 Ship.prototype.canDeploy = function(){
 	if (this.userid == game.userid && (game.turn == 1 || this.id < 0)){
@@ -3006,4 +3018,11 @@ Ship.prototype.getRemainingImpulse = function(){
 		}
 	}
 	return impulse;
+}
+
+Ship.prototype.getFireDest = function(fire, hit){
+	if (hit < 0){
+		return {x: range(-100, 100), y: range(-100, 100)}
+	}
+	return fire.damages[hit].loc;
 }

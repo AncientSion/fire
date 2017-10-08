@@ -27,6 +27,7 @@ class Plasma extends Weapon {
 
 		$armourDmg = min($totalDmg, $negation)*1.5;
 		$structDmg = min(max(0, $totalDmg - $negation), $totalDmg);
+		Debug::log("Plasma DMG: ".$totalDmg." -> ".$armourDmg."/".$structDmg);
 		
 		return new Divider($shieldDmg * $this->linked, $armourDmg * $this->linked, $structDmg * $this->linked);
 	}

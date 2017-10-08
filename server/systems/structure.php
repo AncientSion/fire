@@ -171,7 +171,6 @@ class Single {
 		return $total;
 	}
 
-
 	function setState($turn){
 		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
 			if ($this->damages[$i]->destroyed){

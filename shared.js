@@ -145,6 +145,8 @@ window.fps;
 window.fpsInterval;
 window.speedMod = 1;
 
+window.hold = 0;
+
 window.startTime, window.now, window.then, window.elapsed;
 
 
@@ -202,9 +204,16 @@ function initiateFlight(data){
 
 function initiateShip(data){
 
+
 	var ship = new Ship(data);
-		ship.hitTable = data.hitTable
+		ship.hitTable = data.hitTable;
 		ship.primary = new Primary(data.primary);
+	for (var i = 0; i < data.primary.damages.length; i++){
+		if (data.primary.damages[i].turn == game.turn){
+			ship.primary.damages.push(new Damage(data.primary.damages[i]));
+		} else ship.primary.damages.push(data.primary.damages[i]);
+	}
+
 	for (var j = 0; j < data.primary.systems.length; j++){
 		var primSystem = new window[data.primary.systems[j].name](data.primary.systems[j]);
 

@@ -142,11 +142,14 @@ function drawExplosion(weapon, anim, frames){  // 150, 150, 30
 	fxCtx.setTransform(1,0,0,1,0,0);
 }
 
-function drawFighterExplosion(x, y, s, now, max){
+function drawUnitExplosion(x, y, s, now, max){
 	var sin = s*0.5*Math.sin(Math.PI*now/max);
 	if (sin < 0){
 		return;
 	}
+
+	fxCtx.translate(cam.o.x, cam.o.y);
+	fxCtx.scale(cam.z, cam.z)
 
 	fxCtx.globalAlpha = 1.5 - (now/max);
 
@@ -155,6 +158,7 @@ function drawFighterExplosion(x, y, s, now, max){
 	fxCtx.beginPath(); fxCtx.arc(x, y, sin/4, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = "rgb(255,0,0)"; fxCtx.fill();
 
 	fxCtx.globalAlpha = 1;
+	fxCtx.setTransform(1,0,0,1,0,0);
 }
 
 function drawBeam(weapon, fire){

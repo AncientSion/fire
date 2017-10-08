@@ -18,8 +18,7 @@ window.cam = {
 		this.o.y = res.y/2 - y;
 	},
 
-	setFocusToUnit(unit){
-		var pos = unit.getPlannedPosition();
+	setFocusToPos(pos){
 		this.o.x = res.x/2 - (pos.x*cam.z);
 		this.o.y = res.y/2 - (pos.y*cam.z);
 	},
@@ -30,7 +29,7 @@ window.cam = {
 		if (game.phase == 3 && game.animating){
 			for (var i = 0; i < game.fireOrders.length; i++){
 				if (!game.fireOrders[i].animated && game.fireOrders[i].animating){
-					this.setFocusToUnit(game.fireOrders[i].target);
+					this.setFocusToPos(game.fireOrders[i].target.getPlannedPosition());
 					game.draw();
 					break;
 				}
@@ -48,7 +47,17 @@ window.cam = {
 		}
 
 		game.redraw();
-	}	
+	},
+
+	setFireFocus: function(fire){
+		if (fire.dist <= 50){
+			this.z = 2;
+		}
+		else this.z = 1;
+
+		this.setFocusToPos(fire.target.getPlannedPosition());
+		//game.draw();
+	}
 }
 
 function Turn(){

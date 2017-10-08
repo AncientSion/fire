@@ -404,7 +404,7 @@ Mixed.prototype.setPreMoveImage = function(){
 	var ctx = t.getContext("2d");
 
 	var size = 12;
-	var rot = (this.getDrawFacing()+90) * (Math.PI/180);
+	var rota = (this.getDrawFacing()+90) * (Math.PI/180);
 
 	ctx.translate(t.width/2, t.height/2);
 	//ctx.rotate(rot);
@@ -488,7 +488,7 @@ Mixed.prototype.setPostMoveImage = function(){
 			}
 		}
 	}
-	else if (this.mission.type == 2){ // strike escort
+	else if (this.mission.type == 5){ // strike escort
 		ctx.translate(this.size/2, this.size/2);
 		for (var i = 0; i < this.structures.length; i++){
 			if (this.structures[i].draw){
