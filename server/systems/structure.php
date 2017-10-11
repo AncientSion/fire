@@ -89,7 +89,7 @@ class Primary {
 		}
 
 		if (!$this->destroyed && $this->remaining < 1){
-			Debug::log("unit #".$this->id." below 0");
+			//Debug::log("primary from units  #".$this->parentId." below 0");
 			$this->destroyed = 1;
 		}
 	}
@@ -217,7 +217,7 @@ class Single {
 
 	public function determineCrit($old, $new, $turn){
 		$dmg = ($old + $new) / $this->integrity * 100;
-		Debug::log("checking crit for ".get_class($this));
+		//Debug::log("checking crit for ".get_class($this));
 		$crits = $this->getValidEffects();
 		$valid = array();
 
@@ -229,7 +229,7 @@ class Single {
 
 		for ($i = 0; $i < sizeof($valid); $i++){
 			if (mt_rand(0, 1)){
-				Debug::log("Droput!");
+				//Debug::log("Droput!");
 				$this->crits[] = new Crit(
 					sizeof($this->crits)+1,
 					$this->parentId, $this->id, $turn,

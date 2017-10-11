@@ -632,7 +632,7 @@
 			"file": "game.php",
 			"settings":
 			{
-				"buffer_size": 22475,
+				"buffer_size": 22517,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -723,7 +723,7 @@
 			"file": "server/systems/structure.php",
 			"settings":
 			{
-				"buffer_size": 5247,
+				"buffer_size": 5272,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -759,7 +759,7 @@
 			"file": "server/systems/weapon.php",
 			"settings":
 			{
-				"buffer_size": 4819,
+				"buffer_size": 4869,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -804,7 +804,7 @@
 			"file": "server/mixed.php",
 			"settings":
 			{
-				"buffer_size": 5985,
+				"buffer_size": 5989,
 				"encoding": "UTF-8",
 				"line_ending": "Windows",
 				"name": "<?php"
@@ -833,7 +833,7 @@
 			"file": "server/ship.php",
 			"settings":
 			{
-				"buffer_size": 29400,
+				"buffer_size": 29618,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -905,7 +905,7 @@
 			"file": "server/manager.php",
 			"settings":
 			{
-				"buffer_size": 42894,
+				"buffer_size": 43426,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1013,16 +1013,16 @@
 			"file": "log.txt",
 			"settings":
 			{
-				"buffer_size": 14615,
+				"buffer_size": 2581,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "Searching 73 files for \"getMoveState\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n   98  doAdvance for game1 from phase 3 to phase 4\n   99  assembleEndStates\n  100: getMoveState for 1\n  101: getMoveState for 2\n  102: getMoveState for 3\n  103: getMoveState for 4\n  104: getMoveState for 8\n  105: getMoveState for 7\n  106: getMoveState for 6\n  107: getMoveState for 5\n  108  updateUnitEndState s:14 6/3\n  109  endTurn\n\nC:\\xampp\\htdocs\\fire\\server\\mixed.php:\n  222  \t}\n  223  \n  224: \tpublic function getMoveState($turn){\n  225  \t\treturn array(\"id\" => $this->id, \"x\" => $this->actions[sizeof($this->actions)-1]->x , \"y\" => $this->actions[sizeof($this->actions)-1]->y, \"delay\" => 0, \"angle\" => $this->actions[sizeof($this->actions)-1]->a, \"thrust\" => $this->currentImpulse);\n  226  \t}\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  238  \t\t\treturn $this->getDeployState($turn);\n  239  \t\t}\n  240: \t\telse return $this->getMoveState($turn);\n  241  \t}\n  242  \n  ...\n  266  \n  267  \n  268: \tpublic function getMoveState($turn){\n  269: \t\tDebug::log(\"getMoveState for \".$this->id);\n  270  \t\t$delay = $this->remainingDelay;\n  271  \t\t$angle = $this->facing;\n\n12 matches across 3 files\n\n\nSearching 73 files for \"destroyed = 1\"\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n   58  \t\t\tif ($this->ships[$i]->salvo && sizeof($this->ships[$i]->cc)){\n   59  \t\t\t\tDebug::log(\"ding\");\n   60: \t\t\t\t$this->ships[$i]->destroyed = 1;\n   61  \t\t\t}\n   62  \t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n   77  \t\t\t\tcase \"Reactor\":\n   78  \t\t\t\t\tif ($this->primary->systems[$i]->destroyed){\n   79: \t\t\t\t\t\t$this->destroyed = 1;\n   80  \t\t\t\t\t\t$this->status = \"destroyed\";\n   81  \t\t\t\t\t}\n   ..\n  387  \t\t\t\t\t\t\t\t\tif (!$this->primary->destroyed && $this->primary->isDestroyed()){\n  388  \t\t\t\t\t\t\t\t\t\tDebug::log(\"destroying unit #\".$this->id);\n  389: \t\t\t\t\t\t\t\t\t\t$this->destroyed = 1;\n  390  \t\t\t\t\t\t\t\t\t}\n  391  \t\t\t\t\t\t\t\t\treturn;\n  ...\n  401  \t\t\t\t\t\t\tif (!$this->primary->destroyed && $this->primary->isDestroyed()){\n  402  \t\t\t\t\t\t\tDebug::log(\"destroying unit #\".$this->id);\n  403: \t\t\t\t\t\t\t$this->destroyed = 1;\n  404  \t\t\t\t\t\t}\n  405  \t\t\t\t\t\treturn;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\structure.php:\n   91  \t\tif (!$this->destroyed && $this->remaining < 1){\n   92  \t\t\tDebug::log(\"unit #\".$this->id.\" below 0\");\n   93: \t\t\t$this->destroyed = 1;\n   94  \t\t}\n   95  \t}\n\n5 matches across 3 files\n\n\n\nSearching 73 files for \"destroyed = 1\"\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n   58  \t\t\tif ($this->ships[$i]->salvo && sizeof($this->ships[$i]->cc)){\n   59  \t\t\t\tDebug::log(\"ding\");\n   60: \t\t\t\t$this->ships[$i]->destroyed = 1;\n   61  \t\t\t}\n   62  \t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n   77  \t\t\t\tcase \"Reactor\":\n   78  \t\t\t\t\tif ($this->primary->systems[$i]->destroyed){\n   79: \t\t\t\t\t\t$this->destroyed = 1;\n   80  \t\t\t\t\t\t$this->status = \"destroyed\";\n   81  \t\t\t\t\t}\n   ..\n  387  \t\t\t\t\t\t\t\t\tif (!$this->primary->destroyed && $this->primary->isDestroyed()){\n  388  \t\t\t\t\t\t\t\t\t\tDebug::log(\"destroying unit #\".$this->id);\n  389: \t\t\t\t\t\t\t\t\t\t$this->destroyed = 1;\n  390  \t\t\t\t\t\t\t\t\t}\n  391  \t\t\t\t\t\t\t\t\treturn;\n  ...\n  401  \t\t\t\t\t\t\tif (!$this->primary->destroyed && $this->primary->isDestroyed()){\n  402  \t\t\t\t\t\t\tDebug::log(\"destroying unit #\".$this->id);\n  403: \t\t\t\t\t\t\t$this->destroyed = 1;\n  404  \t\t\t\t\t\t}\n  405  \t\t\t\t\t\treturn;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\structure.php:\n   91  \t\tif (!$this->destroyed && $this->remaining < 1){\n   92  \t\t\tDebug::log(\"unit #\".$this->id.\" below 0\");\n   93: \t\t\t$this->destroyed = 1;\n   94  \t\t}\n   95  \t}\n\n5 matches across 3 files\n",
+			"contents": "Searching 73 files for \"getMoveState\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n   98  doAdvance for game1 from phase 3 to phase 4\n   99  assembleEndStates\n  100: getMoveState for 1\n  101: getMoveState for 2\n  102: getMoveState for 3\n  103: getMoveState for 4\n  104: getMoveState for 8\n  105: getMoveState for 7\n  106: getMoveState for 6\n  107: getMoveState for 5\n  108  updateUnitEndState s:14 6/3\n  109  endTurn\n\nC:\\xampp\\htdocs\\fire\\server\\mixed.php:\n  222  \t}\n  223  \n  224: \tpublic function getMoveState($turn){\n  225  \t\treturn array(\"id\" => $this->id, \"x\" => $this->actions[sizeof($this->actions)-1]->x , \"y\" => $this->actions[sizeof($this->actions)-1]->y, \"delay\" => 0, \"angle\" => $this->actions[sizeof($this->actions)-1]->a, \"thrust\" => $this->currentImpulse);\n  226  \t}\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  238  \t\t\treturn $this->getDeployState($turn);\n  239  \t\t}\n  240: \t\telse return $this->getMoveState($turn);\n  241  \t}\n  242  \n  ...\n  266  \n  267  \n  268: \tpublic function getMoveState($turn){\n  269: \t\tDebug::log(\"getMoveState for \".$this->id);\n  270  \t\t$delay = $this->remainingDelay;\n  271  \t\t$angle = $this->facing;\n\n12 matches across 3 files\n\n\nSearching 73 files for \"destroyed = 1\"\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n   58  \t\t\tif ($this->ships[$i]->salvo && sizeof($this->ships[$i]->cc)){\n   59  \t\t\t\tDebug::log(\"ding\");\n   60: \t\t\t\t$this->ships[$i]->destroyed = 1;\n   61  \t\t\t}\n   62  \t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n   77  \t\t\t\tcase \"Reactor\":\n   78  \t\t\t\t\tif ($this->primary->systems[$i]->destroyed){\n   79: \t\t\t\t\t\t$this->destroyed = 1;\n   80  \t\t\t\t\t\t$this->status = \"destroyed\";\n   81  \t\t\t\t\t}\n   ..\n  387  \t\t\t\t\t\t\t\t\tif (!$this->primary->destroyed && $this->primary->isDestroyed()){\n  388  \t\t\t\t\t\t\t\t\t\tDebug::log(\"destroying unit #\".$this->id);\n  389: \t\t\t\t\t\t\t\t\t\t$this->destroyed = 1;\n  390  \t\t\t\t\t\t\t\t\t}\n  391  \t\t\t\t\t\t\t\t\treturn;\n  ...\n  401  \t\t\t\t\t\t\tif (!$this->primary->destroyed && $this->primary->isDestroyed()){\n  402  \t\t\t\t\t\t\tDebug::log(\"destroying unit #\".$this->id);\n  403: \t\t\t\t\t\t\t$this->destroyed = 1;\n  404  \t\t\t\t\t\t}\n  405  \t\t\t\t\t\treturn;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\structure.php:\n   91  \t\tif (!$this->destroyed && $this->remaining < 1){\n   92  \t\t\tDebug::log(\"unit #\".$this->id.\" below 0\");\n   93: \t\t\t$this->destroyed = 1;\n   94  \t\t}\n   95  \t}\n\n5 matches across 3 files\n\n\n\nSearching 73 files for \"destroyed = 1\"\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n   58  \t\t\tif ($this->ships[$i]->salvo && sizeof($this->ships[$i]->cc)){\n   59  \t\t\t\tDebug::log(\"ding\");\n   60: \t\t\t\t$this->ships[$i]->destroyed = 1;\n   61  \t\t\t}\n   62  \t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n   77  \t\t\t\tcase \"Reactor\":\n   78  \t\t\t\t\tif ($this->primary->systems[$i]->destroyed){\n   79: \t\t\t\t\t\t$this->destroyed = 1;\n   80  \t\t\t\t\t\t$this->status = \"destroyed\";\n   81  \t\t\t\t\t}\n   ..\n  387  \t\t\t\t\t\t\t\t\tif (!$this->primary->destroyed && $this->primary->isDestroyed()){\n  388  \t\t\t\t\t\t\t\t\t\tDebug::log(\"destroying unit #\".$this->id);\n  389: \t\t\t\t\t\t\t\t\t\t$this->destroyed = 1;\n  390  \t\t\t\t\t\t\t\t\t}\n  391  \t\t\t\t\t\t\t\t\treturn;\n  ...\n  401  \t\t\t\t\t\t\tif (!$this->primary->destroyed && $this->primary->isDestroyed()){\n  402  \t\t\t\t\t\t\tDebug::log(\"destroying unit #\".$this->id);\n  403: \t\t\t\t\t\t\t$this->destroyed = 1;\n  404  \t\t\t\t\t\t}\n  405  \t\t\t\t\t\treturn;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\structure.php:\n   91  \t\tif (!$this->destroyed && $this->remaining < 1){\n   92  \t\t\tDebug::log(\"unit #\".$this->id.\" below 0\");\n   93: \t\t\t$this->destroyed = 1;\n   94  \t\t}\n   95  \t}\n\n5 matches across 3 files\n\n\nSearching 73 files for \"setState\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n    1: setState #16\n    2: setState #14\n    3: setState #12\n    4: setState #17\n    5: setState #11\n    6: setState #18\n    7  doAdvance for game1 from phase 2 to phase 3\n    8  adding fighter lock from #14 vs #11\n    .\n  109  handleFiringPhase time: 0.199 seconds.\n  110  advancing game state time: 0.213 seconds.\n  111: setState #16\n  112: setState #14\n  113: setState #12\n  114: setState #17\n  115: setState #11\n  116: setState #18\n  117: setState #16\n  118: setState #14\n  119: setState #12\n  120: setState #17\n  121: setState #11\n  122: setState #18\n  123: setState #16\n  124: setState #14\n  125: setState #12\n  126: setState #17\n  127: setState #11\n  128: setState #18\n  129: setState #16\n  130: setState #14\n  131: setState #12\n  132: setState #17\n  133: setState #11\n  134: setState #18\n  135  doAdvance for game1 from phase 2 to phase 3\n  136  adding fighter lock from #14 vs #11\n  ...\n  237  handleFiringPhase time: 0.394 seconds.\n  238  advancing game state time: 0.407 seconds.\n  239: setState #16\n  240: setState #14\n  241: setState #12\n  242: setState #17\n  243: setState #11\n  244: setState #18\n  245: setState #16\n  246: setState #14\n  247: setState #12\n  248: setState #17\n  249: setState #11\n  250: setState #18\n  251: setState #16\n  252: setState #14\n  253: setState #12\n  254: setState #17\n  255: setState #11\n  256: setState #18\n  257: setState #16\n  258: setState #14\n  259: setState #12\n  260: setState #17\n  261: setState #11\n  262: setState #18\n  263: setState #16\n  264: setState #14\n  265: setState #12\n  266: setState #17\n  267: setState #11\n  268: setState #18\n  269  doAdvance for game1 from phase 2 to phase 3\n  270  adding fighter lock from #14 vs #11\n  ...\n  332  handleFiringPhase time: 0.229 seconds.\n  333  advancing game state time: 0.249 seconds.\n  334: setState #16\n  335: setState #14\n  336: setState #12\n  337: setState #17\n  338: setState #11\n  339: setState #18\n  340  \n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  336  \t\tfor ($i = 0; $i < sizeof($units); $i++){\n  337  \t\t\t//$units[$i]->addFireDB($this->fires);\n  338: \t\t\t$units[$i]->setState($this->turn); //check damage state after dmg is applied\n  339  \t\t}\n  340  \n  ...\n  539  \t\t\tfor ($i = 0; $i < sizeof($units); $i++){\n  540  \t\t\t\t$this->ships[] = new Salvo($units[$i][\"id\"], $units[$i][\"userid\"], $this->turn, \"deployed\", 0);\n  541: \t\t\t\t$this->ships[sizeof($this->ships)-1]->setState($this->turn);\n  542  \t\t\t\t$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->turn, \"deploy\", 0, $units[$i][\"actions\"][0][\"x\"], $units[$i][\"actions\"][0][\"y\"], $a, 0, 0, 0, 0);\n  543  \t\t\t\t//echo (\"unit #\".$units[$i][\"id\"]);\n  ...\n 1391  \t\t//Debug::log(\"asking for preview of: \".$name);\n 1392  \t\t$ship = new $name(1, 1, 0, \"\", 0);\n 1393: \t\t$ship->setState(0);\n 1394  \t\treturn $ship;\n 1395  \t}\n\nC:\\xampp\\htdocs\\fire\\server\\mixed.php:\n   38  \t}\n   39  \n   40: \tpublic function setState($turn){\n   41: \t\tDebug::log(\"setState #\".$this->id);\n   42  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n   43: \t\t\t$this->structures[$i]->setState($turn);\n   44  \t\t}\n   45  \t\t$this->isDestroyed();\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n   65  \t}\n   66  \n   67: \tpublic function setState($turn){\n   68: \t\t//Debug::log(\"setState #\".$this->id);\n   69  \t\tif ($this->primary->isDestroyed()){\n   70  \t\t\t$this->destroyed = 1;\n   ..\n   72  \n   73  \t\tfor ($i = 0; $i < sizeof($this->primary->systems); $i++){ // check primary criticals\n   74: \t\t\t$this->primary->systems[$i]->setState($turn);\n   75  \t\t\tswitch ($this->primary->systems[$i]->name){\n   76  \t\t\t\tcase \"Reactor\":\n   ..\n   94  \t\t\t$structDmg = 0;\n   95  \t\t\tfor ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){\n   96: \t\t\t\t$this->structures[$i]->systems[$j]->setState($turn); // set system states\n   97  \t\t\t\tfor ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]->damages); $k++){// set armour\n   98  \t\t\t\t\t$armourDmg += $this->structures[$i]->systems[$j]->damages[$k]->armourDmg;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\nonweapon.php:\n  112      }\n  113  \n  114: \tpublic function setState($turn){\n  115: \t\tparent::setState($turn);\n  116  \t\t$this->setEW($turn);\n  117  \t}\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\structure.php:\n  172  \t}\n  173  \n  174: \tfunction setState($turn){\n  175  \t\tfor ($i = sizeof($this->damages)-1; $i >= 0; $i--){\n  176  \t\t\tif ($this->damages[$i]->destroyed){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\system.php:\n   37  \t}\n   38  \n   39: \tpublic function setState($turn){\n   40  \t\t//Debug::log(\"set state system: \".$this->parentId);\n   41  \t\t$this->isDisabled($turn);\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php:\n   22  \t}\n   23  \n   24: \tpublic function setState($turn){\n   25: \t\t//Debug::log(\"setState Dual\");\n   26: \t\tparent::setState($turn);\n   27  \t\t$this->setActiveSystem($turn);\n   28  \t\t$this->setProps();\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n  190  \t\t\t\tsystem.fireOrders.push(new FireOrder(data.structures[j].systems[k].fireOrders[l]));\n  191  \t\t\t}\n  192: \t\t\tsystem.setState();\n  193  \t\t\tflight.structures[j].systems.push(system);\n  194  \t\t}\n  ...\n  230  \t\t}\n  231  \n  232: \t\tprimSystem.setState();\n  233  \t\tship.primary.systems.push(primSystem);\n  234  \t}\n  ...\n  262  \t\t\t\t\tsystem.crits.push(new Crit(data.structures[j].systems[k].crits[l]));\n  263  \t\t\t\t}\n  264: \t\t\t\tsystem.setState();\n  265  \t\t\t\tstruct.systems.push(system);\n  266  \t\t\t}\t\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n   85  }\n   86  \n   87: System.prototype.setState = function(){\n   88  \tif (this.isDestroyed()){\n   89  \t\tthis.destroyed = true;\n   ..\n 1091  }\n 1092  \n 1093: Sensor.prototype.setState = function(){\n 1094: \tPrimarySystem.prototype.setState.call(this);\n 1095  \tif (this.disabled || this.locked){return;}\n 1096  \telse if (game.phase == -1){\n ....\n 2061  }\n 2062  \n 2063: Dual.prototype.setState = function(){\n 2064: \tSystem.prototype.setState.call(this);\n 2065  \tthis.initSubWeapons();\n 2066  \tthis.initMain();\n\n91 matches across 10 files\n\n\nSearching 73 files for \"testCriticals\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n   80  cleanFireOrders, fires: 36\n   81  DB updateFireOrders: 36\n   82: = testCriticals for Omega, #1, turn: 6\n   83: = testCriticals for Saggitarius, #2, turn: 6\n   84: = testCriticals for Tethys, #3, turn: 6\n   85: = testCriticals for Tethys, #4, turn: 6\n   86: = testCriticals for Salvo, #16, turn: 6\n   87: = testCriticals for Flight, #14, turn: 6\n   88  checking crit for Aurora\n   89  Droput!\n   ..\n   92  checking crit for Thunderbolt\n   93  checking crit for Thunderbolt\n   94: = testCriticals for Salvo, #12, turn: 6\n   95: = testCriticals for Salvo, #17, turn: 6\n   96: = testCriticals for Flight, #11, turn: 6\n   97  checking crit for Sentri\n   98  Droput!\n   ..\n  100  Droput!\n  101  checking crit for Sentri\n  102: = testCriticals for Darkner, #8, turn: 6\n  103: = testCriticals for Demos, #7, turn: 6\n  104: = testCriticals for Demos, #6, turn: 6\n  105: = testCriticals for Primus, #5, turn: 6\n  106: = testCriticals for Salvo, #18, turn: 6\n  107   => DB insertDamageEntries: 23\n  108   => DB insertCritEntries: 3\n  ...\n  206  cleanFireOrders, fires: 40\n  207  DB updateFireOrders: 40\n  208: = testCriticals for Omega, #1, turn: 6\n  209: = testCriticals for Saggitarius, #2, turn: 6\n  210: = testCriticals for Tethys, #3, turn: 6\n  211: = testCriticals for Tethys, #4, turn: 6\n  212: = testCriticals for Salvo, #16, turn: 6\n  213: = testCriticals for Flight, #14, turn: 6\n  214  checking crit for Aurora\n  215  checking crit for Aurora\n  ...\n  218  checking crit for Thunderbolt\n  219  checking crit for Thunderbolt\n  220: = testCriticals for Salvo, #12, turn: 6\n  221: = testCriticals for Salvo, #17, turn: 6\n  222: = testCriticals for Flight, #11, turn: 6\n  223  checking crit for Sentri\n  224  checking crit for Sentri\n  ...\n  226  checking crit for Sentri\n  227  checking crit for Sentri\n  228: = testCriticals for Darkner, #8, turn: 6\n  229  determineCrit for 122mm Ion Burst Cannon #13, dmg: 95.3125, possible: 3, inRange: 3\n  230  determineCrit for Bridge #2, dmg: 62.105263157895, possible: 1, inRange: 1\n  231: = testCriticals for Demos, #7, turn: 6\n  232: = testCriticals for Demos, #6, turn: 6\n  233: = testCriticals for Primus, #5, turn: 6\n  234: = testCriticals for Salvo, #18, turn: 6\n  235   => DB insertDamageEntries: 24\n  236   => DB insertCritEntries: 1\n  ...\n  308  cleanFireOrders, fires: 19\n  309  DB updateFireOrders: 19\n  310: = testCriticals for Omega, #1, turn: 6\n  311: = testCriticals for Saggitarius, #2, turn: 6\n  312: = testCriticals for Tethys, #3, turn: 6\n  313: = testCriticals for Tethys, #4, turn: 6\n  314: = testCriticals for Salvo, #16, turn: 6\n  315: = testCriticals for Flight, #14, turn: 6\n  316: = testCriticals for Salvo, #12, turn: 6\n  317: = testCriticals for Salvo, #17, turn: 6\n  318: = testCriticals for Flight, #11, turn: 6\n  319  checking crit for Sentri\n  320  checking crit for Sentri\n  ...\n  322  checking crit for Sentri\n  323  checking crit for Sitara\n  324: = testCriticals for Darkner, #8, turn: 6\n  325  determineCrit for Life Support #4, dmg: 16.842105263158, possible: 2, inRange: 1\n  326: = testCriticals for Demos, #7, turn: 6\n  327: = testCriticals for Demos, #6, turn: 6\n  328: = testCriticals for Primus, #5, turn: 6\n  329: = testCriticals for Salvo, #18, turn: 6\n  330   => DB insertDamageEntries: 17\n  331   => DB insertCritEntries: 2\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n 1205  \tpublic function testCrits(){\n 1206  \t\tfor ($i = 0; $i < sizeof($this->ships); $i++){\n 1207: \t\t\t$this->ships[$i]->testCriticals($this->turn);\n 1208  \t\t}\n 1209  \t}\n\nC:\\xampp\\htdocs\\fire\\server\\mixed.php:\n  212  \t}\n  213  \n  214: \tpublic function testCriticals($turn){\n  215: \t\tDebug::log(\"= testCriticals for \".get_class($this).\", #\".$this->id.\", turn: \".$turn);\n  216  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  217  \t\t\t$this->structures[$i]->testCrit($turn);\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  793  \t}\n  794  \n  795: \tpublic function testCriticals($turn){\n  796: \t\tDebug::log(\"= testCriticals for \".$this->name.\", #\".$this->id.\", turn: \".$turn);\n  797  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  798  \t\t\tfor ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){\n\n47 matches across 4 files\n\n\nSearching 73 files for \"below\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n   32  doDamage, weapon: Warhead, target: 8/13, totalDmg: 63\n   33   => OK ship target system HeavyIon #13 was destroyed, rem: 6, doing: 6, OK for: 54 dmg\n   34: unit #-1 below 0\n   35  cleanFireOrders, fires: 1\n   36  DB updateFireOrders: 1\n   ..\n   41  handleFiringPhase time: 0.037 seconds.\n   42  advancing game state time: 0.058 seconds.\n   43: unit #-1 below 0\n   44  doAdvance for game1 from phase 2 to phase 3\n   45  adding fighter lock from #14 vs #11\n   ..\n   65  doDamage, weapon: Warhead, target: 8/13, totalDmg: 74, remaining: 6\n   66   => OK ship target system HeavyIon #13 was destroyed, rem: 6, doing: 6, OK for: 65 dmg\n   67: unit #-1 below 0\n   68  getHitSystem Darkner\n   69  main: -27\n   ..\n   86  handleFiringPhase time: 0.026 seconds.\n   87  advancing game state time: 0.037 seconds.\n   88: unit #-1 below 0\n   89  \n\nC:\\xampp\\htdocs\\fire\\mathLib.js:\n  134  \n  135  \t// Solve quadratic\n  136: \tvar ts = quad(a, b, c); // See quad(), below\n  137  \t// Find smallest positive solution\n  138  \tvar sol = null;\n  ...\n  176  \n  177  \t// Solve quadratic\n  178: \tvar ts = quad(a, b, c); // See quad(), below\n  179  \t// Find smallest positive solution\n  180  \tvar sol = null;\n  ...\n  213  \n  214  \t// Solve quadratic\n  215: \tvar ts = quad(a, b, c); // See quad(), below\n  216  \t// Find smallest positive solution\n  217  \tvar sol = null;\n\nC:\\xampp\\htdocs\\fire\\server\\math.php:\n  120  \n  121  \t\t// Solve quadratic\n  122: \t\tvar ts = quad(a, b, c); // See quad(), below\n  123  \n  124  \t\t// Find smallest positive solution\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\structure.php:\n   90  \n   91  \t\tif (!$this->destroyed && $this->remaining < 1){\n   92: \t\t\tDebug::log(\"unit #\".$this->id.\" below 0\");\n   93  \t\t\t$this->destroyed = 1;\n   94  \t\t}\n\n9 matches across 4 files\n\n\nSearching 73 files for \"below\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n    9  doDamage, weapon: Warhead, target: 8/-1, totalDmg: 62, remaining: 39\n   10   => OVERKILL ship target system Primary #-1 was destroyed, rem: 39, doing: 39, OK for: 17 dmg\n   11: unit #-1 below 0\n   12  doDamage, weapon: Warhead, target: 8/3, totalDmg: 64, remaining: 95\n   13  doDamage, weapon: Warhead, target: 8/6, totalDmg: 59, remaining: 40\n   ..\n   20  handleFiringPhase time: 0.04 seconds.\n   21  advancing game state time: 0.058 seconds.\n   22: unit #-1 below 0\n   23  \n\nC:\\xampp\\htdocs\\fire\\mathLib.js:\n  134  \n  135  \t// Solve quadratic\n  136: \tvar ts = quad(a, b, c); // See quad(), below\n  137  \t// Find smallest positive solution\n  138  \tvar sol = null;\n  ...\n  176  \n  177  \t// Solve quadratic\n  178: \tvar ts = quad(a, b, c); // See quad(), below\n  179  \t// Find smallest positive solution\n  180  \tvar sol = null;\n  ...\n  213  \n  214  \t// Solve quadratic\n  215: \tvar ts = quad(a, b, c); // See quad(), below\n  216  \t// Find smallest positive solution\n  217  \tvar sol = null;\n\nC:\\xampp\\htdocs\\fire\\server\\math.php:\n  120  \n  121  \t\t// Solve quadratic\n  122: \t\tvar ts = quad(a, b, c); // See quad(), below\n  123  \n  124  \t\t// Find smallest positive solution\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\structure.php:\n   90  \n   91  \t\tif (!$this->destroyed && $this->remaining < 1){\n   92: \t\t\tDebug::log(\"unit #\".$this->id.\" below 0\");\n   93  \t\t\t$this->destroyed = 1;\n   94  \t\t}\n\n7 matches across 4 files\n",
 			"settings":
 			{
-				"buffer_size": 3457,
+				"buffer_size": 16997,
 				"line_ending": "Windows",
 				"name": "Find Results",
 				"scratch": true
@@ -1525,6 +1525,32 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"getHitSystem",
+			"endTurn",
+			"handleDamageControlPhase",
+			"assembleEndStates",
+			"handleDamageControlPhase",
+			"dodam",
+			"determineHits",
+			"rollToHit",
+			"applyd",
+			"applyDamage",
+			"below",
+			"getHitSystem",
+			"testCriticals",
+			"setState",
+			"from units",
+			"from units ",
+			"destroyUnitsDB",
+			"destroyUntisDB",
+			"update units",
+			"update units ",
+			"keydo",
+			"$i+1;",
+			"endTurn",
+			"handleDamageControlPhase",
+			"handledamagec",
+			"cleanFireOrders",
 			"insertUnits",
 			"getActions",
 			"incoming",
@@ -1626,33 +1652,7 @@
 			"switchturn",
 			"switchturnmode",
 			"#remEP",
-			"remEP",
-			"impulsec",
-			"vectorDiv",
-			"getBallImpulse",
-			"ballimp",
-			"new Missile",
-			".selected",
-			" - ",
-			" </br></br>",
-			"</br>",
-			"= -2",
-			"phaseswitch",
-			"phaseSwitchDiv",
-			"= res.x",
-			"baseturncost",
-			"initballis",
-			"setState",
-			"setMass",
-			"initballis",
-			"assembleunits",
-			"initballist",
-			"assembleunits",
-			"initballist",
-			"assembleunits",
-			"insertsubu",
-			"drawself",
-			"canboost "
+			"remEP"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1798,7 +1798,7 @@
 	"groups":
 	[
 		{
-			"selected": 29,
+			"selected": 34,
 			"sheets":
 			[
 				{
@@ -1886,7 +1886,7 @@
 						"translation.y": 1018.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 84,
+					"stack_index": 85,
 					"type": "text"
 				},
 				{
@@ -1975,7 +1975,7 @@
 						"translation.y": 428.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 57,
+					"stack_index": 58,
 					"type": "text"
 				},
 				{
@@ -2063,7 +2063,7 @@
 						"translation.y": 10547.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
@@ -2151,7 +2151,7 @@
 						"translation.y": 14185.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 52,
+					"stack_index": 53,
 					"type": "text"
 				},
 				{
@@ -2268,7 +2268,7 @@
 						"translation.y": 3458.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 31,
+					"stack_index": 35,
 					"type": "text"
 				},
 				{
@@ -2356,7 +2356,7 @@
 						"translation.y": 42686.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 33,
 					"type": "text"
 				},
 				{
@@ -2444,7 +2444,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
@@ -2532,7 +2532,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 97,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -2620,7 +2620,7 @@
 						"translation.y": 93.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 78,
+					"stack_index": 79,
 					"type": "text"
 				},
 				{
@@ -2708,7 +2708,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 81,
+					"stack_index": 82,
 					"type": "text"
 				},
 				{
@@ -2796,7 +2796,7 @@
 						"translation.y": 117.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 87,
+					"stack_index": 88,
 					"type": "text"
 				},
 				{
@@ -2805,15 +2805,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 22475,
+						"buffer_size": 22517,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1080,
-								1080
+								21913,
+								21913
 							]
 						],
 						"settings":
@@ -2881,10 +2881,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 378.0,
+						"translation.y": 12433.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 34,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
@@ -2973,7 +2973,7 @@
 						"translation.y": 402.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 82,
+					"stack_index": 83,
 					"type": "text"
 				},
 				{
@@ -2989,8 +2989,8 @@
 						"selection":
 						[
 							[
-								1173,
-								1177
+								278,
+								278
 							]
 						],
 						"settings":
@@ -3061,7 +3061,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 49,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -3149,7 +3149,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 46,
+					"stack_index": 48,
 					"type": "text"
 				},
 				{
@@ -3234,10 +3234,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 324.0,
+						"translation.y": 252.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 51,
+					"stack_index": 52,
 					"type": "text"
 				},
 				{
@@ -3266,7 +3266,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 61,
+					"stack_index": 62,
 					"type": "text"
 				},
 				{
@@ -3354,7 +3354,7 @@
 						"translation.y": 27.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 73,
+					"stack_index": 74,
 					"type": "text"
 				},
 				{
@@ -3442,7 +3442,7 @@
 						"translation.y": 270.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 53,
+					"stack_index": 54,
 					"type": "text"
 				},
 				{
@@ -3530,7 +3530,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 94,
+					"stack_index": 95,
 					"type": "text"
 				},
 				{
@@ -3618,7 +3618,7 @@
 						"translation.y": 62.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 58,
+					"stack_index": 59,
 					"type": "text"
 				},
 				{
@@ -3627,15 +3627,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5247,
+						"buffer_size": 5272,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3285,
-								3285
+								4981,
+								4981
 							]
 						],
 						"settings":
@@ -3703,10 +3703,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2117.0,
+						"translation.y": 3451.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -3882,7 +3882,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 25,
 					"type": "text"
 				},
 				{
@@ -3970,7 +3970,7 @@
 						"translation.y": 3054.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 56,
+					"stack_index": 57,
 					"type": "text"
 				},
 				{
@@ -3979,15 +3979,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4819,
+						"buffer_size": 4869,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3073,
-								3073
+								3061,
+								3061
 							]
 						],
 						"settings":
@@ -4055,10 +4055,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1440.0,
+						"translation.y": 1201.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 45,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -4146,7 +4146,7 @@
 						"translation.y": 1692.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 37,
+					"stack_index": 40,
 					"type": "text"
 				},
 				{
@@ -4235,7 +4235,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 50,
+					"stack_index": 51,
 					"type": "text"
 				},
 				{
@@ -4251,8 +4251,8 @@
 						"selection":
 						[
 							[
-								1242,
-								1242
+								1466,
+								1466
 							]
 						],
 						"settings":
@@ -4323,7 +4323,7 @@
 						"translation.y": 324.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
@@ -4411,7 +4411,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 31,
 					"type": "text"
 				},
 				{
@@ -4420,15 +4420,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5985,
+						"buffer_size": 5989,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1319,
-								1319
+								1321,
+								1321
 							]
 						],
 						"settings":
@@ -4500,7 +4500,7 @@
 						"translation.y": 418.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
@@ -4589,7 +4589,7 @@
 						"translation.y": 169.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 91,
+					"stack_index": 92,
 					"type": "text"
 				},
 				{
@@ -4677,7 +4677,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 59,
+					"stack_index": 60,
 					"type": "text"
 				},
 				{
@@ -4686,15 +4686,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 29400,
+						"buffer_size": 29618,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1376,
-								1376
+								15168,
+								15168
 							]
 						],
 						"settings":
@@ -4762,10 +4762,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 677.0,
+						"translation.y": 9121.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -4853,7 +4853,7 @@
 						"translation.y": 2294.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 80,
+					"stack_index": 81,
 					"type": "text"
 				},
 				{
@@ -4941,7 +4941,7 @@
 						"translation.y": 33580.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
@@ -5030,7 +5030,7 @@
 						"translation.y": 2602.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 23,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
@@ -5206,7 +5206,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 69,
+					"stack_index": 70,
 					"type": "text"
 				},
 				{
@@ -5294,7 +5294,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 96,
+					"stack_index": 97,
 					"type": "text"
 				},
 				{
@@ -5382,7 +5382,7 @@
 						"translation.y": 1250.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
+					"stack_index": 27,
 					"type": "text"
 				},
 				{
@@ -5470,7 +5470,7 @@
 						"translation.y": 654.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 77,
+					"stack_index": 78,
 					"type": "text"
 				},
 				{
@@ -5479,15 +5479,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 42894,
+						"buffer_size": 43426,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4271,
-								4271
+								25845,
+								25845
 							]
 						],
 						"settings":
@@ -5555,10 +5555,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2875.0,
+						"translation.y": 15367.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -5644,10 +5644,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 10415.0,
+						"translation.y": 713.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
@@ -5735,7 +5735,7 @@
 						"translation.y": 31186.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 23,
 					"type": "text"
 				},
 				{
@@ -5824,7 +5824,7 @@
 						"translation.y": 2306.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 35,
+					"stack_index": 38,
 					"type": "text"
 				},
 				{
@@ -5911,7 +5911,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 95,
+					"stack_index": 96,
 					"type": "text"
 				},
 				{
@@ -5999,7 +5999,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 44,
+					"stack_index": 47,
 					"type": "text"
 				},
 				{
@@ -6087,7 +6087,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 47,
+					"stack_index": 49,
 					"type": "text"
 				},
 				{
@@ -6175,7 +6175,7 @@
 						"translation.y": 2942.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 48,
+					"stack_index": 50,
 					"type": "text"
 				},
 				{
@@ -6264,13 +6264,13 @@
 						"translation.y": 36.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 54,
+					"stack_index": 55,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 16,
+			"selected": 8,
 			"sheets":
 			[
 				{
@@ -6387,7 +6387,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 32,
 					"type": "text"
 				},
 				{
@@ -6417,7 +6417,7 @@
 						"translation.y": 92.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 72,
+					"stack_index": 73,
 					"type": "text"
 				},
 				{
@@ -6514,15 +6514,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 29400,
+						"buffer_size": 29618,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								11069,
-								11069
+								10904,
+								10904
 							]
 						],
 						"settings":
@@ -6590,10 +6590,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 6565.0,
+						"translation.y": 6475.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -6681,7 +6681,7 @@
 						"translation.y": 272.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 75,
+					"stack_index": 76,
 					"type": "text"
 				},
 				{
@@ -6690,15 +6690,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4819,
+						"buffer_size": 4869,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								791,
-								791
+								2842,
+								2842
 							]
 						],
 						"settings":
@@ -6766,10 +6766,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 180.0,
+						"translation.y": 1253.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -6858,7 +6858,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 83,
+					"stack_index": 84,
 					"type": "text"
 				},
 				{
@@ -6867,15 +6867,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 14615,
+						"buffer_size": 2581,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								96,
-								96
+								0,
+								0
 							]
 						],
 						"settings":
@@ -6945,7 +6945,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -6953,7 +6953,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3457,
+						"buffer_size": 16997,
 						"regions":
 						{
 							"match":
@@ -7048,6 +7048,622 @@
 									[
 										3395,
 										3408
+									],
+									[
+										3531,
+										3539
+									],
+									[
+										3551,
+										3559
+									],
+									[
+										3571,
+										3579
+									],
+									[
+										3591,
+										3599
+									],
+									[
+										3611,
+										3619
+									],
+									[
+										3631,
+										3639
+									],
+									[
+										3846,
+										3854
+									],
+									[
+										3866,
+										3874
+									],
+									[
+										3886,
+										3894
+									],
+									[
+										3906,
+										3914
+									],
+									[
+										3926,
+										3934
+									],
+									[
+										3946,
+										3954
+									],
+									[
+										3966,
+										3974
+									],
+									[
+										3986,
+										3994
+									],
+									[
+										4006,
+										4014
+									],
+									[
+										4026,
+										4034
+									],
+									[
+										4046,
+										4054
+									],
+									[
+										4066,
+										4074
+									],
+									[
+										4086,
+										4094
+									],
+									[
+										4106,
+										4114
+									],
+									[
+										4126,
+										4134
+									],
+									[
+										4146,
+										4154
+									],
+									[
+										4166,
+										4174
+									],
+									[
+										4186,
+										4194
+									],
+									[
+										4206,
+										4214
+									],
+									[
+										4226,
+										4234
+									],
+									[
+										4246,
+										4254
+									],
+									[
+										4266,
+										4274
+									],
+									[
+										4286,
+										4294
+									],
+									[
+										4306,
+										4314
+									],
+									[
+										4521,
+										4529
+									],
+									[
+										4541,
+										4549
+									],
+									[
+										4561,
+										4569
+									],
+									[
+										4581,
+										4589
+									],
+									[
+										4601,
+										4609
+									],
+									[
+										4621,
+										4629
+									],
+									[
+										4641,
+										4649
+									],
+									[
+										4661,
+										4669
+									],
+									[
+										4681,
+										4689
+									],
+									[
+										4701,
+										4709
+									],
+									[
+										4721,
+										4729
+									],
+									[
+										4741,
+										4749
+									],
+									[
+										4761,
+										4769
+									],
+									[
+										4781,
+										4789
+									],
+									[
+										4801,
+										4809
+									],
+									[
+										4821,
+										4829
+									],
+									[
+										4841,
+										4849
+									],
+									[
+										4861,
+										4869
+									],
+									[
+										4881,
+										4889
+									],
+									[
+										4901,
+										4909
+									],
+									[
+										4921,
+										4929
+									],
+									[
+										4941,
+										4949
+									],
+									[
+										4961,
+										4969
+									],
+									[
+										4981,
+										4989
+									],
+									[
+										5001,
+										5009
+									],
+									[
+										5021,
+										5029
+									],
+									[
+										5041,
+										5049
+									],
+									[
+										5061,
+										5069
+									],
+									[
+										5081,
+										5089
+									],
+									[
+										5101,
+										5109
+									],
+									[
+										5316,
+										5324
+									],
+									[
+										5336,
+										5344
+									],
+									[
+										5356,
+										5364
+									],
+									[
+										5376,
+										5384
+									],
+									[
+										5396,
+										5404
+									],
+									[
+										5416,
+										5424
+									],
+									[
+										5600,
+										5608
+									],
+									[
+										5897,
+										5905
+									],
+									[
+										6270,
+										6278
+									],
+									[
+										6398,
+										6406
+									],
+									[
+										6436,
+										6444
+									],
+									[
+										6554,
+										6562
+									],
+									[
+										6694,
+										6702
+									],
+									[
+										6734,
+										6742
+									],
+									[
+										6982,
+										6990
+									],
+									[
+										7234,
+										7242
+									],
+									[
+										7557,
+										7565
+									],
+									[
+										7591,
+										7599
+									],
+									[
+										7735,
+										7743
+									],
+									[
+										7950,
+										7958
+									],
+									[
+										8160,
+										8168
+									],
+									[
+										8200,
+										8208
+									],
+									[
+										8234,
+										8242
+									],
+									[
+										8476,
+										8484
+									],
+									[
+										8597,
+										8605
+									],
+									[
+										8785,
+										8793
+									],
+									[
+										8925,
+										8933
+									],
+									[
+										9060,
+										9068
+									],
+									[
+										9115,
+										9123
+									],
+									[
+										9268,
+										9276
+									],
+									[
+										9316,
+										9324
+									],
+									[
+										9567,
+										9580
+									],
+									[
+										9613,
+										9626
+									],
+									[
+										9665,
+										9678
+									],
+									[
+										9712,
+										9725
+									],
+									[
+										9759,
+										9772
+									],
+									[
+										9806,
+										9819
+									],
+									[
+										9981,
+										9994
+									],
+									[
+										10028,
+										10041
+									],
+									[
+										10075,
+										10088
+									],
+									[
+										10223,
+										10236
+									],
+									[
+										10271,
+										10284
+									],
+									[
+										10317,
+										10330
+									],
+									[
+										10363,
+										10376
+									],
+									[
+										10410,
+										10423
+									],
+									[
+										10601,
+										10614
+									],
+									[
+										10647,
+										10660
+									],
+									[
+										10699,
+										10712
+									],
+									[
+										10746,
+										10759
+									],
+									[
+										10793,
+										10806
+									],
+									[
+										10840,
+										10853
+									],
+									[
+										11032,
+										11045
+									],
+									[
+										11079,
+										11092
+									],
+									[
+										11126,
+										11139
+									],
+									[
+										11308,
+										11321
+									],
+									[
+										11529,
+										11542
+									],
+									[
+										11575,
+										11588
+									],
+									[
+										11621,
+										11634
+									],
+									[
+										11668,
+										11681
+									],
+									[
+										11859,
+										11872
+									],
+									[
+										11905,
+										11918
+									],
+									[
+										11957,
+										11970
+									],
+									[
+										12004,
+										12017
+									],
+									[
+										12051,
+										12064
+									],
+									[
+										12098,
+										12111
+									],
+									[
+										12146,
+										12159
+									],
+									[
+										12193,
+										12206
+									],
+									[
+										12240,
+										12253
+									],
+									[
+										12422,
+										12435
+									],
+									[
+										12558,
+										12571
+									],
+									[
+										12604,
+										12617
+									],
+									[
+										12650,
+										12663
+									],
+									[
+										12697,
+										12710
+									],
+									[
+										12971,
+										12984
+									],
+									[
+										13102,
+										13115
+									],
+									[
+										13147,
+										13160
+									],
+									[
+										13411,
+										13424
+									],
+									[
+										13456,
+										13469
+									],
+									[
+										13921,
+										13926
+									],
+									[
+										14109,
+										14114
+									],
+									[
+										14402,
+										14407
+									],
+									[
+										14572,
+										14577
+									],
+									[
+										14704,
+										14709
+									],
+									[
+										14865,
+										14870
+									],
+									[
+										15026,
+										15031
+									],
+									[
+										15222,
+										15227
+									],
+									[
+										15439,
+										15444
+									],
+									[
+										15776,
+										15781
+									],
+									[
+										16050,
+										16055
+									],
+									[
+										16182,
+										16187
+									],
+									[
+										16343,
+										16348
+									],
+									[
+										16504,
+										16509
+									],
+									[
+										16700,
+										16705
+									],
+									[
+										16917,
+										16922
 									]
 								],
 								"scope": ""
@@ -7056,15 +7672,15 @@
 						"selection":
 						[
 							[
-								2708,
-								2708
+								16918,
+								16918
 							]
 						],
 						"settings":
 						{
 							"detect_indentation": false,
 							"line_numbers": false,
-							"output_tag": 3,
+							"output_tag": 7,
 							"result_base_dir": "",
 							"result_file_regex": "^([^ \t].*):$",
 							"result_line_regex": "^ +([0-9]+):",
@@ -7072,10 +7688,10 @@
 							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1422.0,
+						"translation.y": 9054.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -7164,7 +7780,7 @@
 						"translation.y": 1970.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 24,
 					"type": "text"
 				},
 				{
@@ -7428,7 +8044,7 @@
 						"translation.y": 48050.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 32,
+					"stack_index": 36,
 					"type": "text"
 				},
 				{
@@ -7516,7 +8132,7 @@
 						"translation.y": 30500.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
@@ -7604,7 +8220,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 42,
+					"stack_index": 45,
 					"type": "text"
 				},
 				{
@@ -7620,8 +8236,8 @@
 						"selection":
 						[
 							[
-								17142,
-								17142
+								44198,
+								44198
 							]
 						],
 						"settings":
@@ -7629,36 +8245,31 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
 								"bh_default_close",
 								"bh_default_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
@@ -7669,31 +8280,36 @@
 								"bh_tag_open",
 								"bh_tag_close",
 								"bh_tag_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content"
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content"
 							],
 							"history_list_is_closing": true,
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 10795.0,
+						"translation.y": 29173.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
@@ -7782,7 +8398,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 30,
 					"type": "text"
 				},
 				{
@@ -7870,7 +8486,7 @@
 						"translation.y": 9422.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 40,
+					"stack_index": 43,
 					"type": "text"
 				},
 				{
@@ -7959,7 +8575,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 90,
+					"stack_index": 91,
 					"type": "text"
 				},
 				{
@@ -8047,7 +8663,7 @@
 						"translation.y": 306.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
@@ -8135,7 +8751,7 @@
 						"translation.y": 30610.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
@@ -8224,7 +8840,7 @@
 						"translation.y": 3463.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 39,
+					"stack_index": 42,
 					"type": "text"
 				},
 				{
@@ -8312,7 +8928,7 @@
 						"translation.y": 4473.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 76,
+					"stack_index": 77,
 					"type": "text"
 				},
 				{
@@ -8400,7 +9016,7 @@
 						"translation.y": 172.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 43,
+					"stack_index": 46,
 					"type": "text"
 				},
 				{
@@ -8488,7 +9104,7 @@
 						"translation.y": 8900.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 41,
+					"stack_index": 44,
 					"type": "text"
 				},
 				{
@@ -8517,7 +9133,7 @@
 						"translation.y": 180.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 67,
+					"stack_index": 68,
 					"type": "text"
 				},
 				{
@@ -8546,7 +9162,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 68,
+					"stack_index": 69,
 					"type": "text"
 				},
 				{
@@ -8634,7 +9250,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 65,
+					"stack_index": 66,
 					"type": "text"
 				},
 				{
@@ -8722,7 +9338,7 @@
 						"translation.y": 69.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 86,
+					"stack_index": 87,
 					"type": "text"
 				},
 				{
@@ -8811,7 +9427,7 @@
 						"translation.y": 3084.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 92,
+					"stack_index": 93,
 					"type": "text"
 				},
 				{
@@ -8899,7 +9515,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 63,
+					"stack_index": 64,
 					"type": "text"
 				},
 				{
@@ -8987,7 +9603,7 @@
 						"translation.y": 30.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 33,
+					"stack_index": 37,
 					"type": "text"
 				},
 				{
@@ -9075,7 +9691,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 66,
+					"stack_index": 67,
 					"type": "text"
 				},
 				{
@@ -9163,7 +9779,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 70,
+					"stack_index": 71,
 					"type": "text"
 				},
 				{
@@ -9251,7 +9867,7 @@
 						"translation.y": 96.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 79,
+					"stack_index": 80,
 					"type": "text"
 				},
 				{
@@ -9339,7 +9955,7 @@
 						"translation.y": 10497.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 38,
+					"stack_index": 41,
 					"type": "text"
 				},
 				{
@@ -9427,7 +10043,7 @@
 						"translation.y": 5192.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 36,
+					"stack_index": 39,
 					"type": "text"
 				},
 				{
@@ -9516,7 +10132,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 30,
+					"stack_index": 34,
 					"type": "text"
 				},
 				{
@@ -9605,7 +10221,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 64,
+					"stack_index": 65,
 					"type": "text"
 				},
 				{
@@ -9702,15 +10318,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5247,
+						"buffer_size": 5272,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2186,
-								2186
+								1896,
+								1907
 							]
 						],
 						"settings":
@@ -9778,10 +10394,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1127.0,
+						"translation.y": 911.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -9870,7 +10486,7 @@
 						"translation.y": 810.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
@@ -9958,7 +10574,7 @@
 						"translation.y": 25.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 62,
+					"stack_index": 63,
 					"type": "text"
 				},
 				{
@@ -10055,15 +10671,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 42894,
+						"buffer_size": 43426,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1183,
-								1183
+								37642,
+								37642
 							]
 						],
 						"settings":
@@ -10131,10 +10747,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 551.0,
+						"translation.y": 21503.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -10310,7 +10926,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 74,
+					"stack_index": 75,
 					"type": "text"
 				},
 				{
@@ -10427,7 +11043,7 @@
 						"translation.y": 96.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 71,
+					"stack_index": 72,
 					"type": "text"
 				},
 				{
@@ -10515,7 +11131,7 @@
 						"translation.y": 474.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 93,
+					"stack_index": 94,
 					"type": "text"
 				},
 				{
@@ -10603,7 +11219,7 @@
 						"translation.y": 108.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 55,
+					"stack_index": 56,
 					"type": "text"
 				},
 				{
@@ -10750,7 +11366,7 @@
 						"translation.y": 2041.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 60,
+					"stack_index": 61,
 					"type": "text"
 				},
 				{
@@ -10759,15 +11375,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5985,
+						"buffer_size": 5989,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4093,
-								4093
+								5393,
+								5393
 							]
 						],
 						"settings":
@@ -10835,10 +11451,10 @@
 							"syntax": "Packages/PHP/PHP.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2513.0,
+						"translation.y": 3323.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -10926,7 +11542,7 @@
 						"translation.y": 686.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 85,
+					"stack_index": 86,
 					"type": "text"
 				},
 				{
@@ -10955,7 +11571,7 @@
 						"translation.y": 18.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 89,
+					"stack_index": 90,
 					"type": "text"
 				},
 				{
@@ -11043,7 +11659,7 @@
 						"translation.y": 253.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 88,
+					"stack_index": 89,
 					"type": "text"
 				}
 			]
@@ -11077,7 +11693,7 @@
 		"cols":
 		[
 			0.0,
-			0.418095743207,
+			0.510285243847,
 			1.0
 		],
 		"rows":
@@ -11105,20 +11721,56 @@
 		"selected_items":
 		[
 			[
-				"pos",
-				"C:\\xampp\\htdocs\\fire\\postGameData.php"
+				"log",
+				"C:\\xampp\\htdocs\\fire\\log.txt"
+			],
+			[
+				"sh",
+				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
+			],
+			[
+				"struc",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\structure.php"
 			],
 			[
 				"man",
 				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
 			],
 			[
-				"sys",
-				"C:\\xampp\\htdocs\\fire\\systems.js"
+				"wea",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapon.php"
 			],
 			[
-				"log",
+				"we",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapon.php"
+			],
+			[
+				"ship",
+				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
+			],
+			[
+				"lo",
 				"C:\\xampp\\htdocs\\fire\\log.txt"
+			],
+			[
+				"dark",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\darkner.php"
+			],
+			[
+				"mana",
+				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
+			],
+			[
+				"game.php",
+				"C:\\xampp\\htdocs\\fire\\game.php"
+			],
+			[
+				"pos",
+				"C:\\xampp\\htdocs\\fire\\postGameData.php"
+			],
+			[
+				"sys",
+				"C:\\xampp\\htdocs\\fire\\systems.js"
 			],
 			[
 				"mix",
@@ -11131,10 +11783,6 @@
 			[
 				"db",
 				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
-			],
-			[
-				"mana",
-				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
 			],
 			[
 				"game",
@@ -11162,10 +11810,6 @@
 			],
 			[
 				"shi",
-				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
-			],
-			[
-				"sh",
 				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
 			],
 			[
@@ -11217,20 +11861,12 @@
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php"
 			],
 			[
-				"we",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapon.php"
-			],
-			[
 				"de",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\demos.php"
 			],
 			[
 				"plasma",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php"
-			],
-			[
-				"dark",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\darkner.php"
 			],
 			[
 				"hyp",
@@ -11342,10 +11978,6 @@
 			],
 			[
 				"lobb",
-				"C:\\xampp\\htdocs\\fire\\lobby.php"
-			],
-			[
-				"lo",
 				"C:\\xampp\\htdocs\\fire\\lobby.php"
 			],
 			[
@@ -11469,10 +12101,6 @@
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\ammo.php"
 			],
 			[
-				"game.php",
-				"C:\\xampp\\htdocs\\fire\\game.php"
-			],
-			[
 				"str",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\structure.php"
 			],
@@ -11589,10 +12217,6 @@
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php"
 			],
 			[
-				"ship",
-				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
-			],
-			[
 				"deb",
 				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
 			],
@@ -11607,14 +12231,6 @@
 			[
 				"lase",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php"
-			],
-			[
-				"tina",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\tinashi.php"
-			],
-			[
-				"dar",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\darkner.php"
 			]
 		],
 		"width": 0.0

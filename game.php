@@ -637,6 +637,7 @@ echo "</script>";
 					if (game.phase == 2){
 						for (var i = 0; i < game.ships.length; i++){
 							game.ships[i].setPostMovePosition();
+							game.ships[i].setPostMoveFacing();
 						}
 						game.animShip = 1;
 						game.animFlight = 1;

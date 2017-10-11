@@ -852,8 +852,20 @@ class Manager {
 		}
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->salvo && $this->ships[$i]->mission->arrived){
+			if ($this->ships[$i]->salvo && $this->ships[$i]->mission->arrived){ // mark impacted salvo as destroyed
+				//Debug::log("destroying salvo ".$this->ships[$i]->id);
 				$this->ships[$i]->destroyed = 1;
+			}
+			
+			if ($this->ships[$i]->destroyed){
+				//Debug::log("unit #".$this->ships[$i]->id." destroyed, handling");
+				for ($j = 0; $j < sizeof($this->ships); $j++){
+					//Debug::log("comparing to #".$this->ships[$j]->id);
+					if ($this->ships[$j]->salvo && $this->ships[$j]->mission->targetid == $this->ships[$i]->id){
+						//Debug::log("found a salvo with target destroyed");
+						$this->ships[$j]->destroyed = 1;
+					}
+				}
 			}
 		}
 

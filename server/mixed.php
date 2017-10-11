@@ -38,7 +38,7 @@ class Mixed extends Ship {
 	}
 
 	public function setState($turn){
-		Debug::log("setState #".$this->id);
+		//Debug::log("setState #".$this->id);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$this->structures[$i]->setState($turn);
 		}
@@ -212,7 +212,7 @@ class Mixed extends Ship {
 	}
 
 	public function testCriticals($turn){
-		Debug::log("= testCriticals for ".get_class($this).", #".$this->id.", turn: ".$turn);
+		//Debug::log("= testCriticals for ".get_class($this).", #".$this->id.", turn: ".$turn);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$this->structures[$i]->testCrit($turn);
 		}
