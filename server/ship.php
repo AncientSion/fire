@@ -373,6 +373,10 @@ class Ship {
 
 				if ($dmg->systemid == -1){
 					$this->primary->applyDamage($dmg);
+					if ($this->primary->isDestroyed()){
+						//Debug::log("destroying unit #".$this->id);
+						$this->destroyed = 1;
+					}
 					return;
 				}
 				else {
@@ -382,8 +386,8 @@ class Ship {
 								if ($this->structures[$i]->systems[$j]->id == $dmg->systemid){
 									$this->structures[$i]->systems[$j]->applyDamage($dmg);
 									$this->primary->applyDamage($dmg);
-									if (!$this->primary->destroyed && $this->primary->isDestroyed()){
-										Debug::log("destroying unit #".$this->id);
+									if ($this->primary->isDestroyed()){
+										//Debug::log("destroying unit #".$this->id);
 										$this->destroyed = 1;
 									}
 									return;
@@ -396,8 +400,8 @@ class Ship {
 					if ($this->primary->systems[$j]->id == $dmg->systemid){
 						$this->primary->systems[$j]->applyDamage($dmg);
 						$this->primary->applyDamage($dmg);
-							if (!$this->primary->destroyed && $this->primary->isDestroyed()){
-							Debug::log("destroying unit #".$this->id);
+						if ($this->primary->isDestroyed()){
+							//Debug::log("destroying unit #".$this->id);
 							$this->destroyed = 1;
 						}
 						return;
@@ -456,7 +460,7 @@ class Ship {
 			return true;
 		}
 		else if ($this->getSystemByName("Reactor")->destroyed){
-			$this->destroyed = true;
+			$this->destroyed = 1;
 			$this->status = "destroyed";
 			return true;
 		}
@@ -521,7 +525,10 @@ class Ship {
 		$fire->req = $this->calculateToHit($fire);
 
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
-			if ($fire->rolls[$i] <= $fire->req){
+			if ($fire->target->destroyed){
+				Debug::log("aborting shot resolution vs dead target");
+			}
+			else  if ($fire->rolls[$i] <= $fire->req){
 				$fire->weapon->doDamage($fire, $fire->rolls[$i], $this->getHitSystem($fire));
 			}
 		}
@@ -581,7 +588,7 @@ class Ship {
 		//Debug::log("roll: ".$roll);
 		$current += $main;
 		if ($roll <= $current){
-			//Debug::log($roll.", hitting MAIN");
+			//Debug::log($roll.", get primary system");
 			return $this->getPrimaryHitSystem();
 		}
 		else {
@@ -596,7 +603,7 @@ class Ship {
 				}
 			}
 		}
-		Debug::log("ERROR getHitSystem()");
+		//Debug::log("ERROR getHitSystem()");
 	}
 
 	public function getPrimaryHitSystem(){
@@ -616,6 +623,7 @@ class Ship {
 		}
 
 		if (!sizeof($valid)){
+			//Debug::log("hitting main structure");
 			return $this->primary;
 		}
 
@@ -793,7 +801,7 @@ class Ship {
 	}
 
 	public function testCriticals($turn){
-		Debug::log("= testCriticals for ".$this->name.", #".$this->id.", turn: ".$turn);
+		//Debug::log("= testCriticals for ".$this->name.", #".$this->id.", turn: ".$turn);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				$this->structures[$i]->systems[$j]->testCrit($turn);
