@@ -519,9 +519,17 @@ Mixed.prototype.setPostFireImage = function(){
 	this.setImage();
 }
 
-Mixed.prototype.getGunOrigin = function(j){
+Mixed.prototype.getGunOrigina = function(id){
 	for (var i = j; i < this.structures.length; i++){
 		if ( (!this.structures[i].destroyed && !this.structures[i].disabled) || this.structures[i].isDestroyedThisTurn() ) {
+			return this.structures[i].layout;
+		}
+	}
+}
+
+Mixed.prototype.getGunOrigin = function(id){
+	for (i = this.structures.length-1; i >= 0; i--){
+		if (id > this.structures[i].id){
 			return this.structures[i].layout;
 		}
 	}

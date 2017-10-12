@@ -1701,7 +1701,7 @@ Game.prototype.getUnitType = function (val){
 			}
 		}
 
-		for (var i = 0; i < this.fireOrders.length; i++){
+		/*for (var i = 0; i < this.fireOrders.length; i++){
 			if (this.fireOrders[i].shooter.flight){
 				var j = 1;
 				while (this.fireOrders[i].hits[0] > 1){
@@ -1710,7 +1710,7 @@ Game.prototype.getUnitType = function (val){
 					j++;
 				}
 			}
-		}
+		}*/
 	}
 
 	this.getFireAnimationDetails = function(){

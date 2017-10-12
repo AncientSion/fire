@@ -2972,7 +2972,7 @@ Ship.prototype.getGunOrigin = function(id){
 		if (i == this.structures.length-1 || this.structures[i].id < id && this.structures[i+1].id > id){
 			//console.log(this.structures[i].getDirection())
 			//console.log("ding");
-			return getPointInDirection(this.size/3 + range(-10, 10), this.structures[i].getDirection() + this.getPlannedFacing() + range(-5, 5), 0, 0);
+			return getPointInDirection(this.size/4 + range(-10, 10), this.structures[i].getDirection() + this.getPlannedFacing() + range(-5, 5), 0, 0);
 		}
 	}
 	return this.getSystemById(id);
@@ -3022,7 +3022,10 @@ Ship.prototype.getRemainingImpulse = function(){
 
 Ship.prototype.getFireDest = function(fire, isHit, nbrHit){
 	if (!isHit){
-		return {x: range(-100, 100), y: range(-100, 100)}
+		return {
+			x: (this.size/2 + range (0, this.size/4)) * (1-(range(0, 1)*2)),
+			y: (this.size/2 + range (0, this.size/4)) * (1-(range(0, 1)*2))
+		}
 	}
 	return fire.damages[nbrHit].loc;
 }

@@ -1098,7 +1098,8 @@ class Manager {
 			}
 		}
 
-	/*	for ($i = 0; $i < sizeof($this->fires); $i++){
+		/*
+		for ($i = 0; $i < sizeof($this->fires); $i++){
 			if ($this->fires[$i]->resolved || !$this->fires[$i]->shooter->flight){continue;}
 			//Debug::log("comparing :".$this->fires[$i]->id);
 			for ($j = $i+1; $j < sizeof($this->fires); $j++){
@@ -1117,7 +1118,7 @@ class Manager {
 				}
 			}
 		}
-	*/
+		*/
 
 		// fighter vs fighter
 

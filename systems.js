@@ -1262,7 +1262,7 @@ function Weapon(system){
 	this.loaded;
 	this.fireOrders = [];
 	this.mount;
-	this.exploSize = 1+((this.minDmg+this.maxDmg)/30);
+	this.exploSize = 2+((this.minDmg+this.maxDmg)/30);
 	this.odds = 0;
 }
 Weapon.prototype = Object.create(System.prototype);
@@ -1680,26 +1680,30 @@ function Particle(system){
 Particle.prototype = Object.create(Weapon.prototype);
 
 Particle.prototype.getAnimation = function(fire){
-	if (fire.shooter.id == 7 && fire.target.id == 19){
-		console.log("ding");
-	}
-	//console.log(this.display + " / " + this.projSpeed + " / " + fire.dist);
-	//console.log(fire);
-	
 	var allAnims = [];
 	var grouping = 2;
 	var delay = 30;
 	var shotInterval = 6;
 	var cc = 0;
 	var hits = 0;
+	var speed = this.projSpeed;
 
 	if (game.isCloseCombat(fire.shooter, fire.target)){
 		cc = 1;
+		speed /= 4;
+		delay *= 2;
+		shotInterval *= 2;
 	}
-
-	if (fire.shooter.flight){
+	else if (fire.dist < 200){
+		speed /= 2;
+	}
+	else if (fire.shooter.flight){
 		grouping = 1;
 		delay = 8;
+	}
+	else if (cc && fire.shooter.ship){
+		grouping = 1;
+		delay = 50;
 	}
 	else if (this.shots >= 4){
 		shotInterval = 10;
@@ -1715,41 +1719,23 @@ Particle.prototype.getAnimation = function(fire){
 	for (var j = 0; j < fire.guns; j++){
 		var gunAnims = [];
 		var o = fire.shooter.getGunOrigin(fire.systems[j]);
-		var ox;
-		var oy;
+		var ox = fire.shooter.drawX + o.x;
+		var oy = fire.shooter.drawY + o.y;
 		var t = fire.target.getPlannedPosition();
+		var hit = 0;
 
-		if (fire.shooter.flight){
-			ox = fire.shooter.drawX;
-			oy = fire.shooter.drawY;
-		}
-		else {
-			ox = fire.shooter.drawX + o.x;
-			oy = fire.shooter.drawY + o.y;
-		}
-
-		if (cc){
-			tx += range(-fire.target.size/2, fire.target.size/2);
-			ty += range(-fire.target.size/2, fire.target.size/2);
-		}
-		
 		for (var k = 0; k < this.shots; k++){
-			var tx;
-			var ty;
-			var dest;
-			var hit = 0;
-
-
 			if (fire.hits[j] > k){
 				hit = 1;
 				hits++;
 			}
 
-			dest = fire.target.getFireDest(fire, hit, hits-1);
-			tx = t.x + dest.x;
-			ty = t.y + dest.y;
+			var dest = fire.target.getFireDest(fire, hit, hits-1);
+			
+			var tx = t.x + dest.x;
+			var ty = t.y + dest.y;
 
-			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, this.projSpeed, hit);
+			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
 				shotAnim.n = 0 - ((j / grouping) * delay + k*shotInterval);
 
 			gunAnims.push(shotAnim);
@@ -1844,90 +1830,68 @@ Pulse.prototype.getShots = function(){
 }
 	
 Pulse.prototype.getAnimation = function(fire){
-	//console.log(fire);
 	var allAnims = [];
 	var grouping = 2;
-	var delay = 80;
+	var delay = 30;
 	var shotInterval = 6;
 	var cc = 0;
-	var hit = -1;
+	var hits = 0;
+	var speed = this.projSpeed;
+
+	//if (fire.shooter.id == 14 && fire.target.id == 11){
+	//		console.log("ding");
+	//}
 
 	if (game.isCloseCombat(fire.shooter, fire.target)){
 		cc = 1;
+		speed /= 4;
+		delay *= 2;
+		shotInterval *= 2;
 	}
-
-	if (fire.shooter.flight){
+	else if (fire.dist < 200){
+		speed /= 2;
+	}
+	else if (fire.shooter.flight){
 		grouping = 1;
 		delay = 8;
 	}
-	//else if (fire.guns % 3 == 0){
-	//	grouping = 3;
-	//}
-	else if (fire.guns % 2 == 0){
-		grouping = 2;
-	} else grouping = 1;
+	else if (cc && fire.shooter.ship){
+		grouping = 1;
+		delay = 50;
+	}
+	else if (this.shots >= 4){
+		shotInterval = 10;
+		delay = 80;
+		if (fire.guns % 2 == 0){
+			grouping = 2;
+		} else if (fire.guns % 3 == 0){
+			grouping = 3;
+		}
+		else grouping = 1;
+	}
 
 	for (var j = 0; j < fire.guns; j++){
 		var hasHit = 0;
 		var gunAnims = [];
 		var gunDelay = Math.floor(j / grouping) * delay;
 		var o = fire.shooter.getGunOrigin(fire.systems[j]);
-		var ox;
-		var oy;
-		var t;
+		var ox = fire.shooter.drawX + o.x;
+		var oy = fire.shooter.drawY + o.y;
+		var t = fire.target.getPlannedPosition();
 		var min = fire.target.size*0.3;
-
-		if (fire.shooter.flight){
-			ox = fire.shooter.drawX
-			oy = fire.shooter.drawY
-		}
-		else {
-			ox = fire.shooter.drawX + o.x;
-			oy = fire.shooter.drawY + o.y;
-		}
 
 		if (fire.hits[j] >= 1){
 			hasHit = 1;
-			hit++;
+			hits++;
 		}
 
-		if (cc && (fire.target.flight || fire.target.salvo)){
-			t = fire.target.getFireDest(fire, hasHit, hit);
-
-			if (hasHit){
-				tx = fire.target.drawX + t.x;
-				ty = fire.target.drawY + t.y;
-			}
-			else {
-				var devi = getPointInDirection(fire.target.size, range(0, 360), fire.shooter.drawX, fire.shooter.drawY);
-				tx = Math.max(min, Math.abs(range(0, fire.target.size*0.6))) * (-1 + (2*range(0, 1)));
-				ty = Math.max(min, Math.abs(range(0, fire.target.size*0.6))) * (-1 + (2*range(0, 1)));	
-				tx = devi.x;
-				ty = devi.y;	
-			}
-		}
-		else if (hasHit){
-			tx = fire.target.drawX + range(fire.target.size * 0.2 * -1, fire.target.size * 0.2);
-			ty = fire.target.drawY + range(fire.target.size * 0.2 * -1, fire.target.size * 0.2);
-		}
-		else {
-			tx = fire.target.drawX + Math.max(min, Math.abs(range(0, fire.target.size*0.6))) * (-1 + (2*range(0, 1)))
-			ty = fire.target.drawY + Math.max(min, Math.abs(range(0, fire.target.size*0.6))) * (-1 + (2*range(0, 1)))
-		}
-
-		//if (cc){
-		//	tx += range(-fire.target.size/2, fire.target.size/2);
-		//	ty += range(-fire.target.size/2, fire.target.size/2);
-		//}
+		var dest = fire.target.getFireDest(fire, hasHit, hits-1);
+		var tx = t.x + dest.x;
+		var ty = t.y + dest.y;
 
 		for (var k = 0; k < this.basePulses + this.extraPulses; k++){
-			if (!cc && hasHit){
-				tx += range(fire.target.size * -0.07, fire.target.size * 0.07); // salvo hit
-				ty += range(fire.target.size * -0.07, fire.target.size * 0.07);
-			}
-			//console.log("hit: " + (k < fire.hits[j]));
-			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, this.projSpeed, (k < fire.hits[j]));
-				shotAnim.n = 0 - (gunDelay + k*shotInterval);
+			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, (k < fire.hits[j]));
+				shotAnim.n = 0 - ((j / grouping) * delay + k*shotInterval);
 
 			gunAnims.push(shotAnim);
 		}
