@@ -1680,6 +1680,9 @@ function Particle(system){
 Particle.prototype = Object.create(Weapon.prototype);
 
 Particle.prototype.getAnimation = function(fire){
+	if (fire.shooter.id == 7 && fire.target.id == 19){
+		console.log("ding");
+	}
 	//console.log(this.display + " / " + this.projSpeed + " / " + fire.dist);
 	//console.log(fire);
 	
@@ -1688,7 +1691,7 @@ Particle.prototype.getAnimation = function(fire){
 	var delay = 30;
 	var shotInterval = 6;
 	var cc = 0;
-	var hit = -1
+	var hits = 0;
 
 	if (game.isCloseCombat(fire.shooter, fire.target)){
 		cc = 1;
@@ -1734,16 +1737,19 @@ Particle.prototype.getAnimation = function(fire){
 			var tx;
 			var ty;
 			var dest;
+			var hit = 0;
+
 
 			if (fire.hits[j] > k){
-				hit++;
+				hit = 1;
+				hits++;
 			}
 
-			var dest = fire.target.getFireDest(fire, hit);
+			dest = fire.target.getFireDest(fire, hit, hits-1);
 			tx = t.x + dest.x;
 			ty = t.y + dest.y;
 
-			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, this.projSpeed, hit+1);
+			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, this.projSpeed, hit);
 				shotAnim.n = 0 - ((j / grouping) * delay + k*shotInterval);
 
 			gunAnims.push(shotAnim);
@@ -1886,7 +1892,7 @@ Pulse.prototype.getAnimation = function(fire){
 		}
 
 		if (cc && (fire.target.flight || fire.target.salvo)){
-			t = fire.target.getFireDest(fire, hit);
+			t = fire.target.getFireDest(fire, hasHit, hit);
 
 			if (hasHit){
 				tx = fire.target.drawX + t.x;

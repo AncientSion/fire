@@ -1734,7 +1734,7 @@ Game.prototype.getUnitType = function (val){
 
 		this.fireOrders.sort(function(a, b){
 			return (
-				a.shooter.flight - b.target.ship ||
+				//a.shooter.flight - b.target.ship ||
 				a.shooter.salvo - b.shooter.salvo ||
 				a.shooter.flight - b.shooter.flight ||
 				a.targetid - b.targetid ||

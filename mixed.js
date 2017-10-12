@@ -414,7 +414,7 @@ Mixed.prototype.setPreMoveImage = function(){
 			ctx.translate(this.structures[i].layout.x, this.structures[i].layout.y);
 			//ctx.rotate(rot);
 			ctx.drawImage(
-				this.smallImg,
+				window.shipImages[this.structures[i].name.toLowerCase()],
 				0 -size/2,
 				0 -size/2,
 				size, 
@@ -445,7 +445,7 @@ Mixed.prototype.setPreMoveImagea = function(){
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].draw){
 			ctx.drawImage(
-				this.smallImg,
+				window.shipImages[this.structures[i].name.toLowerCase()],
 				this.structures[i].layout.x -size/2,
 				this.structures[i].layout.y -size/2,
 				size, 
@@ -527,11 +527,11 @@ Mixed.prototype.getGunOrigin = function(j){
 	}
 }
 
-Mixed.prototype.getFireDest = function(fire, hit){
-	if (hit < 0){
+Mixed.prototype.getFireDest = function(fire, isHit, nbrHit){
+	if (!isHit){
 		return {x: range(-30, 30), y: range(-30, 30)}
 	}
-	return this.getSystemById(fire.damages[hit].systemid).layout;
+	return this.getSystemById(fire.damages[nbrHit].systemid).layout;
 }
 
 Mixed.prototype.getTrajectory = function(gun){

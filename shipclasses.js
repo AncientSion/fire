@@ -3020,9 +3020,9 @@ Ship.prototype.getRemainingImpulse = function(){
 	return impulse;
 }
 
-Ship.prototype.getFireDest = function(fire, hit){
-	if (hit < 0){
+Ship.prototype.getFireDest = function(fire, isHit, nbrHit){
+	if (!isHit){
 		return {x: range(-100, 100), y: range(-100, 100)}
 	}
-	return fire.damages[hit].loc;
+	return fire.damages[nbrHit].loc;
 }
