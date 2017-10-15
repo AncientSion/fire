@@ -124,10 +124,12 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 	var weaponInfo = $("#game").find("#weaponAimTableWrapper").find("#weaponInfo");
 	var dist;
 	var drop = 0;
+	var cc = game.isCloseCombat(ship, vessel);
+	var pos;
 
 	if (ship.flight){
 		drop = 0;
-		if (vessel && !game.isCloseCombat(ship, vessel)){
+		if (vessel && !cc){
 			drop = 1;
 		} else if (!vessel){
 			drop = 1;
@@ -257,38 +259,41 @@ function handleWeaponAimEvent(ship, vessel, e, pos){
 			for (var j = 0; j < ship.structures[i].systems.length; j++){
 				if (ship.structures[i].systems[j].weapon && ship.structures[i].systems[j].selected){
 					var system = ship.structures[i].systems[j].getSystem();
-					var inArc = false;
-					var legalTarget = true;
+					var inArc = 1;
+					var legalTarget = 1;
 					var msg = "";
 
 					var row = $("<tr>");
 						row.append($("<td>").html(system.display + " #" + ship.structures[i].systems[j].id))
 
-					if (vessel.flight){
-						if (game.isCloseCombat(ship, vessel) || ship.ship && system.posIsOnArc(shipLoc, pos, facing)){
-							legalTarget = true;
-							inArc = true;
+					if (ship.ship){
+						if (cc){
+							if (system instanceof Launcher){
+								legalTarget = 0;
+							}
+							else if (vessel.salvo && !system.posIsOnArc(shipLoc, pos, facing)){
+								legalTarget = 0;
+							}
+						}
+						else if (!system.posIsOnArc(shipLoc, pos, facing)){
+							inArc = 0;
 						}
 					}
-					else if (vessel.salvo){
-						//if (game.isCloseCombat(ship, vessel)){
-							if (system.posIsOnArc(shipLoc, pos, facing)){ // ship vs salvo
-								inArc = true;
-								validWeapon = true;
-							} else msg = "Not in weapon arc";
-						//} else msg = "Lacking fire resolution";
+					else if (ship.flight){
+						if (!cc){
+							legalTarget = 0;
+						}
 					}
-					else if (system.posIsOnArc(shipLoc, pos, facing)){ // ship vs ship/fighter
-						inArc = true;
-						validWeapon = true;
-					}
-					else msg = "Not in weapon arc";
+
+
 
 					if (inArc && legalTarget){
 						system.getAimData(vessel, final, dist, row);
+						system.validTarget = 1;
 					}
 					else {
-						$(row).append($("<td>").html(msg).attr("colspan", 4))
+						$(row).append($("<td>").html("Illegal Target").attr("colspan", 4))
+						system.validTarget = 0;
 					}
 
 					weaponInfo.append(row);
@@ -560,39 +565,11 @@ function handleFireClick(ship, vessel){
 			if (ship.flight && !game.isCloseCombat(ship, vessel)){return;}
 			
 			if (ship.hasWeaponsSelected()){
-				var shipLoc = ship.getPlannedPosition();
-				var facing = ship.getPlannedFacing();
-				var pos = vessel.getBaseOffsetPos();
 				for (var i = 0; i < ship.structures.length; i++){
 					for (var j = ship.structures[i].systems.length-1; j >= 0; j--){
 						if (ship.structures[i].systems[j].selected && ship.structures[i].systems[j].weapon){
 							if (ship.structures[i].systems[j].canFire()){
-								var inArc = false;
-								var validWeapon = false;
-
-								if (ship.ship || ship.flight){
-									if (vessel.ship || vessel.flight){
-										validWeapon = true;
-									}
-								}
-
-								if (!validWeapon){
-									if (ship.ship && vessel.salvo && ship.id == vessel.mission.targetid){
-										validWeapon = true;
-									}
-								}
-
-								if (validWeapon && !inArc){
-									if (game.isCloseCombat(ship, vessel)){
-										legalTarget = true;
-										inArc = true;
-									}
-									else if (ship.structures[i].systems[j].posIsOnArc(shipLoc, pos, facing)){ // ship vs ship/fighter
-										inArc = true;
-									}
-								}
-
-								if (inArc && validWeapon){
+								if (ship.structures[i].systems[j].hasValidTarget()){
 									// FireOrder(id, turn, shooterid, targetid, weaponid, req, notes, hits, resolved){
 									ship.structures[i].systems[j].setFireOrder(vessel.id);
 								}

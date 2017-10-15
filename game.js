@@ -1288,7 +1288,7 @@ Game.prototype.getUnitType = function (val){
 			this.ships[i].deployed = true;
 			if (this.ships[i].available == game.turn){
 				if (this.ships[i].ship){
-					this.ships[i].deployAnim = [0, 5];
+					this.ships[i].deployAnim = [0, 30];
 					this.ships[i].deployed = false;
 				}
 			}

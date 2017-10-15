@@ -33,6 +33,7 @@ function System(system){
 	this.notes = [];
 	this.launcher = 0;
 	this.hangar = 0;
+	this.validTarget = 0;
 }
 
 System.prototype.hasLoad = function(){
@@ -107,12 +108,15 @@ System.prototype.setState = function(){
 	}
 	this.adjustStateByCritical();
 }
+
 System.prototype.getSystem = function(){
 	return this;
 }
+
 System.prototype.getActiveWeapon = function(){
 	return this;
 }
+
 System.prototype.hover = function(e){
 	if (game.flightDeploy){return false;}
 	if (this.highlight){
@@ -637,8 +641,9 @@ System.prototype.setFireOrder = function(targetid){
 		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, 
 		shots: 0, req: -1, notes: "", hits: -1, resolved: 0}
 	);
-	this.selected = false;
-	this.highlight = false;
+	this.selected = 0;
+	this.validTarget = 0;
+	this.highlight = 0;
 	this.setSystemBorder();
 }
 System.prototype.unsetFireOrder = function(){
@@ -1391,6 +1396,7 @@ Weapon.prototype.select = function(e){
 			}
 			if (this.selected){
 				this.selected = false;
+				this.validTarget = 0;
 			}
 			else if(! unit.hasHangarSelected()){
 				this.selected = true;
@@ -1603,6 +1609,12 @@ Weapon.prototype.getDamage = function(){
 		mod += this.getBoostEffect("Damage") * this.getBoostLevel();
 
 	return mod;
+}
+
+Weapon.prototype.hasValidTarget = function(){
+	if (this.getActiveWeapon().validTarget){
+		return true;
+	} return false;
 }
 
 
@@ -2025,8 +2037,9 @@ Dual.prototype.setFireOrder = function(targetid){
 		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, 
 		shots: 0, req: -1, notes: "", hits: -1, resolved: 0}
 	);
-	this.selected = false;
-	this.highlight = false;
+	this.selected = 0;
+	this.highlight = 0;
+	this.validTarget = 0;
 	this.setSystemBorder();
 }
 
@@ -2356,6 +2369,7 @@ Launcher.prototype.select = function(e){
 	if (game.phase == -2){
 		if (this.selected){
 			this.selected = false;
+			this.validTarget = 0;
 		}
 		else {
 			this.selected = true;
@@ -2381,6 +2395,7 @@ Launcher.prototype.select = function(e){
 
 		if (this.selected){
 			this.selected = false;
+			this.validTarget = 0;
 		}
 		else {
 			this.selected = true;
