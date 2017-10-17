@@ -2952,11 +2952,13 @@ Ship.prototype.getDamageEntriesByFireId = function(fire){
 }
 
 Ship.prototype.getSystemLocation = function(i, j){
-	if (i == -1){
-		return getPointInDirection(this.size/5, range(0, 359), 0, 0);
+	if (this.id == 2){
+		console.log("getSystemLocation");
 	}
-
-	return getPointInDirection(this.size/3, this.structures[i].getDirection() + this.getPlannedFacing(), 0, 0);
+	if (i == -1){
+		return getPointInDirection(this.size/6, range(0, 359), 0, 0);
+	}
+	return getPointInDirection(this.size/4, this.structures[i].getDirection() + this.getPlannedFacing(), 0, 0);
 }
 
 Ship.prototype.canDeploy = function(){
@@ -2968,13 +2970,12 @@ Ship.prototype.canDeploy = function(){
 
 Ship.prototype.getGunOrigin = function(id){
 	for (var i = 0; i < this.structures.length; i++){
-		//console.log(this.structures[i].id+ " / " + this.structures[i+1].id)
-		if (i == this.structures.length-1 || this.structures[i].id < id && this.structures[i+1].id > id){
-			//console.log(this.structures[i].getDirection())
-			//console.log("ding");
-			return getPointInDirection(this.size/4 + range(-10, 10), this.structures[i].getDirection() + this.getPlannedFacing() + range(-5, 5), 0, 0);
+		if (i == this.structures.length-1 || id > this.structures[i].id && id < this.structures[i+1].id){
+			var dev = this.size / 4;
+			return getPointInDirection(dev + range (-dev/2, dev/2), (this.structures[i].getDirection() + this.getPlannedFacing()), 0, 0);
 		}
 	}
+	console.log("lacking gun origin");
 	return this.getSystemById(id);
 }
 
@@ -3021,11 +3022,22 @@ Ship.prototype.getRemainingImpulse = function(){
 }
 
 Ship.prototype.getFireDest = function(fire, isHit, nbrHit){
+	if (this.id == 2){
+		console.log("ding");
+	}
 	if (!isHit){
+		return {
+			x: (this.size/2 + (range (0, this.size/6)) * (1-(range(0, 1)*2))),
+			y: (this.size/2 + (range (0, this.size/6)) * (1-(range(0, 1)*2)))
+		}
 		return {
 			x: (this.size/2 + range (0, this.size/4)) * (1-(range(0, 1)*2)),
 			y: (this.size/2 + range (0, this.size/4)) * (1-(range(0, 1)*2))
 		}
 	}
 	return fire.damages[nbrHit].loc;
+}
+
+Ship.prototype.getExplosionSize = function(j){
+	return this.size/2;
 }

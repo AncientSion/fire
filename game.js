@@ -1770,7 +1770,7 @@ Game.prototype.getUnitType = function (val){
 						anim.anims.push({
 							a: game.ships[i].facing+90,
 							t: [0-30*anim.anims.length, 70],
-							s: game.ships[i].structures[j].mass / 3,
+							s: game.ships[i].getExplosionSize(j),
 							x: base.x + game.ships[i].structures[j].layout.x,
 							y: base.y + game.ships[i].structures[j].layout.y
 						})
@@ -1781,7 +1781,7 @@ Game.prototype.getUnitType = function (val){
 				anim.anims.push({
 					a: game.ships[i].facing,
 					t: [0, 100],
-					s: game.ships[i].size,
+					s: game.ships[i].getExplosionSize(0),
 					x: base.x,
 					y: base.y
 				})

@@ -1694,20 +1694,37 @@ Particle.prototype = Object.create(Weapon.prototype);
 Particle.prototype.getAnimation = function(fire){
 	var allAnims = [];
 	var grouping = 2;
+	var speed = this.projSpeed;
 	var delay = 30;
 	var shotInterval = 6;
 	var cc = 0;
 	var hits = 0;
-	var speed = this.projSpeed;
+	var fraction = 1;
 
 	if (game.isCloseCombat(fire.shooter, fire.target)){
+		fraction = 4;
 		cc = 1;
-		speed /= 4;
-		delay *= 2;
-		shotInterval *= 2;
 	}
 	else if (fire.dist < 200){
-		speed /= 2;
+		fraction = Math.min(2, 200 / fire.dist);
+	}
+
+	speed /= fraction;
+	delay *= fraction;
+	shotInterval *= fraction;
+
+	/*if (game.isCloseCombat(fire.shooter, fire.target)){
+		var fraction = 4;
+		cc = 1;
+		speed /= fraction;
+		delay *= fraction;
+		shotInterval *= fraction;
+	}
+	else if (fire.dist < 200){
+		var fraction = Math.min(2, 200 / fire.dist);
+		speed /= fraction;
+		delay *= fraction;
+		shotInterval *= fraction;
 	}
 	else if (fire.shooter.flight){
 		grouping = 1;
@@ -1726,17 +1743,20 @@ Particle.prototype.getAnimation = function(fire){
 			grouping = 3;
 		}
 		else grouping = 1;
-	}
+	}*/
 	
 	for (var j = 0; j < fire.guns; j++){
 		var gunAnims = [];
 		var o = fire.shooter.getGunOrigin(fire.systems[j]);
+		if (fire.shooter.id == 5){
+		//	console.log("ding");
+		}
 		var ox = fire.shooter.drawX + o.x;
 		var oy = fire.shooter.drawY + o.y;
 		var t = fire.target.getPlannedPosition();
-		var hit = 0;
 
 		for (var k = 0; k < this.shots; k++){
+			var hit = 0;
 			if (fire.hits[j] > k){
 				hit = 1;
 				hits++;
@@ -1844,43 +1864,24 @@ Pulse.prototype.getShots = function(){
 Pulse.prototype.getAnimation = function(fire){
 	var allAnims = [];
 	var grouping = 2;
+	var speed = this.projSpeed;
 	var delay = 30;
 	var shotInterval = 6;
 	var cc = 0;
 	var hits = 0;
-	var speed = this.projSpeed;
-
-	//if (fire.shooter.id == 14 && fire.target.id == 11){
-	//		console.log("ding");
-	//}
+	var fraction = 1;
 
 	if (game.isCloseCombat(fire.shooter, fire.target)){
+		fraction = 4;
 		cc = 1;
-		speed /= 4;
-		delay *= 2;
-		shotInterval *= 2;
 	}
 	else if (fire.dist < 200){
-		speed /= 2;
+		fraction = Math.min(2, 200 / fire.dist);
 	}
-	else if (fire.shooter.flight){
-		grouping = 1;
-		delay = 8;
-	}
-	else if (cc && fire.shooter.ship){
-		grouping = 1;
-		delay = 50;
-	}
-	else if (this.shots >= 4){
-		shotInterval = 10;
-		delay = 80;
-		if (fire.guns % 2 == 0){
-			grouping = 2;
-		} else if (fire.guns % 3 == 0){
-			grouping = 3;
-		}
-		else grouping = 1;
-	}
+
+	speed /= fraction;
+	delay *= fraction;
+	shotInterval *= fraction;
 
 	for (var j = 0; j < fire.guns; j++){
 		var hasHit = 0;
