@@ -239,9 +239,9 @@ class Ship {
 	}
 
 	public function getDeployState($turn){
-		Debug::log("getDeployState for ".$this->id);
+		//Debug::log("getDeployState for ".$this->id);
 		if ($this->available < $turn){
-			Debug::log("RETURN");
+	//		Debug::log("RETURN");
 			return;
 		}
 		$angle = $this->facing;
@@ -262,7 +262,7 @@ class Ship {
 			$angle += 360;
 		}
 
-		Debug::log("returning data fro getDeployState");
+		//Debug::log("returning data fro getDeployState");
 		
 		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x , "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $this->remainingDelay, "angle" => $angle, "thrust" => $this->currentImpulse);
 	}

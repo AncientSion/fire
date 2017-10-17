@@ -53,19 +53,38 @@ class Manager {
 		}
 	}
 
-	public function alter(){
-		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->salvo && sizeof($this->ships[$i]->cc)){
-				Debug::log("ding");
-				$this->ships[$i]->destroyed = 1;
-			}
-		}
-
-		DBManager::app()->destroyUnitsDB($this->ships);
-
-	}
 
 	public function test(){
+		$ship = $this->getUnitById(4);
+		$add = 25;
+		$struct = 2;
+
+		Debug::log("determing to hit for ".get_class($ship)." #".$ship->id);
+
+		$total = $ship->primary->getHitChance() + ($add*1.5);
+		$avail = $total;
+
+		for ($i = 0; $i < sizeof($ship->structures[$struct]->systems); $i++){
+			if ($ship->structures[$struct]->systems[$i]->isDestroyed()){continue;}
+			$odd = $ship->structures[$struct]->systems[$i]->getHitChance();
+			$avail += $odd;
+			Debug::log("adding ".get_class($ship->structures[$struct]->systems[$i]).", chance: ".$ship->structures[$struct]->systems[$i]->getHitChance());
+		}
+
+		Debug::log("primary to struct: ".$total." / ".$avail." => ".(round($total/$avail, 2)*100)."%");
+
+		$avail = $total;
+
+		for ($i = 0; $i < sizeof($ship->primary->systems); $i++){
+			$odd = $ship->primary->systems[$i]->getHitChance();
+			$avail += $odd;
+			Debug::log("adding ".get_class($ship->primary->systems[$i]).", chance: ".$ship->primary->systems[$i]->getHitChance());
+		}
+
+
+		Debug::log("main to internal: ".$total." / ".$avail." => ".(round($total/$avail, 2)*100)."%");
+
+		return;
 		$db = DBManager::app();
 
 		$query = array();

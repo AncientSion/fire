@@ -27,14 +27,15 @@ function Flight(data){
 	}
 
 	this.setLayout = function(){
-		var size = this.baseSize + this.unitSize * this.structures.length-1;
+		//var size = this.baseSize + this.unitSize * this.structures.length-1;
+		//size = ths.size
 		var osx = 7;
 		var osy = 5;
 
 		for (var i = 0; i < this.structures.length/3; i++){
 
 			var a = 360/Math.ceil(this.structures.length/3)*i;
-			var o = getPointInDirection(size/2 - this.unitSize*4, a-90, 0, 0);
+			var o = getPointInDirection(this.size/2 - this.unitSize*4, a-90, 0, 0);
 
 			for (var j = 0; j < Math.min(this.structures.length-i*3, 3); j++){
 				var ox = o.x;
@@ -484,10 +485,10 @@ Flight.prototype.setTarget = function(){
 	var i = this.getCurrentImpulse();
 	if (this.mission.type == 1){  // patrol goal
 		this.finalStep = {x: this.mission.x, y: this.mission.y};
-		d = getDistance(this, this.finalStep);
+		var d = getDistance(this, this.finalStep);
 		if (d < i){
 			this.nextStep = this.finalStep;
-		} else this.nextStep = getPointInDirection(i, this.facing, this.x, this.y);
+		} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, this.finalStep), this.x, this.y);
 	}
 	else {
 		if (this.mission.type == 2){
@@ -613,8 +614,18 @@ Flight.prototype.getTarget = function(){
 	return game.getUnitById(this.mission.targetid);	
 }
 
+Flight.prototype.getIntactFighters = function(){
+	var alive = 0;
+	for (var i = 0; i < this.structures.length; i++){
+		if (!this.structures[i].destroyed){
+			alive++;
+		}
+	}
+	return alive;
+}
+
 Flight.prototype.setPreMoveSize = function(){
-	this.size = this.baseSize + this.unitSize * this.structures.length-1;
+	this.size = this.baseSize + this.unitSize * this.getIntactFighters();
 }
 
 Flight.prototype.setPostMoveSize = function(){
@@ -624,10 +635,10 @@ Flight.prototype.setPostMoveSize = function(){
 			this.size = s+30;
 		}
 		else if (this.mission.type == 1){
-			this.size = 1.5*(this.baseSize + this.unitSize * this.structures.length-1);
+			this.size = 1.5*(this.baseSize + this.unitSize * this.getIntactFighters());
 		}
 	}
-	else this.size = this.baseSize + this.unitSize * this.structures.length-1;
+	else this.size = this.baseSize + this.unitSize * this.getIntactFighters();
 }
 
 

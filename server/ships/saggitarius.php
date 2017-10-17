@@ -23,8 +23,8 @@ class Saggitarius extends Medium {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 450, 17);
-		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 0, 180, array(array("Naga", 15, 3), array("Cyclops", 12, 2)));
-		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 0, 180, array(array("Naga", 15, 3), array("Cyclops", 12, 2)));
+		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 0, 120, array(array("Naga", 15, 3), array("Cyclops", 12, 2)));
+		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 0, 120, array(array("Naga", 15, 3), array("Cyclops", 12, 2)));
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 325, 15);
@@ -33,8 +33,8 @@ class Saggitarius extends Medium {
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 450, 17);
-		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 180, 360, array(array("Naga", 15, 3), array("Cyclops", 12, 2)));
-		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 180, 360, array(array("Naga", 15, 3), array("Cyclops", 12, 2)));
+		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 240, 360, array(array("Naga", 15, 3), array("Cyclops", 12, 2)));
+		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 240, 360, array(array("Naga", 15, 3), array("Cyclops", 12, 2)));
 		$structs[] = $left;
 		
 		for ($i = 0; $i < sizeof($structs); $i++){

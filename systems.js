@@ -1706,7 +1706,7 @@ Particle.prototype.getAnimation = function(fire){
 		cc = 1;
 	}
 	else if (fire.dist < 200){
-		fraction = Math.min(2, 200 / fire.dist);
+		fraction = Math.min(3, 200 / fire.dist);
 	}
 
 	speed /= fraction;

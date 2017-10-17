@@ -209,6 +209,7 @@ function Game(data, userid){
 		else {
 			s.mission = mission;
 			s.setTarget();
+			s.setSize();
 			s.setLayout();
 			s.setImage();
 		}
