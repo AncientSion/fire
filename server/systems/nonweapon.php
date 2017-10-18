@@ -33,8 +33,12 @@ class PrimarySystem extends System {
 	public function getValidEffects(){
 		return array(
 			array("Disabled", 60, 1, 0), // attr, %-tresh, duration, modifier
-			array("Output", 10, 1, 0) // attr, %-tresh, duration, modifier
+			array("Output", 5, 0, 0) // attr, %-tresh, duration, modifier
 		);
+	}
+
+	public function getCritModifier($dmg){
+		return min(0.15, round($dmg/5)); // round to 0.xx
 	}
 }
 
@@ -47,9 +51,7 @@ class Bridge extends PrimarySystem {
 	}
 
 	public function getValidEffects(){
-		return array(
-			array("Disabled", 50, 1, 0) // attr, %-tresh, duration, modifier
-		);
+		return array();
 	}
 }
 
@@ -63,17 +65,7 @@ class Reactor extends PrimarySystem {
     }
 
     public function setOutput($add){
-    	//Debug::log("out: ".$this->output.", add: ".$add);
     	$this->output = $this->output + $add;
-    }
-}
-
-class LifeSupport extends PrimarySystem {
-	public $name = "LifeSupport";
-	public $display = "Life Support";
-
-	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
-        parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
     }
 }
 
@@ -96,8 +88,10 @@ class Sensor extends PrimarySystem {
 	function __construct($id, $parentId, $mass, $output = 0, $effiency, $destroyed = 0){
 		$this->powerReq = floor($output/60);
 		$this->boostEffect[] = new Effect("Output", 0.10);
-		$this->modes = array("Lock", "Scramble", "Sweep", "Mask");
-		$this->states = array(0, 0, 0, 0);
+		//$this->modes = array("Lock", "Scramble", "Sweep", "Mask");
+		//$this->states = array(0, 0, 0, 0);
+		$this->modes = array("Lock", "Scramble");
+		$this->states = array(0, 0);
         parent::__construct($id, $parentId, $mass, $output, ceil($this->powerReq/3), $destroyed);
     }
 
@@ -137,6 +131,15 @@ class Sensor extends PrimarySystem {
 		}
 		return false;
 	}
+}
+
+class LifeSupport extends PrimarySystem {
+	public $name = "LifeSupport";
+	public $display = "Life Support";
+
+	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
+        parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
+    }
 }
 
 class Hangar extends Weapon {

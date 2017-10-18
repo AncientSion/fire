@@ -938,7 +938,7 @@ PrimarySystem.prototype.getSystemDetailsDiv = function(){
 	var table = document.createElement("table");
 	
 	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
-	$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
+	$(table).append($("<tr>").append($("<td>").css("width", "60%").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
 
 	if (this.output){
 		$(table).append($("<tr>").append($("<td>").html("Current Output")).append($("<td>").addClass("output").html(this.getOutputString())));
@@ -952,6 +952,7 @@ PrimarySystem.prototype.getSystemDetailsDiv = function(){
 	}
 	if (this.modes.length){
 		$(table).append($("<tr>").append($("<td>").html("Sensor Mode")).append($("<td>").addClass("sensorMode negative").html(this.getEWMode())));
+		$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("sensorEffect").html(this.getEWModeEffect())));
 	}
 
 	div.appendChild(table);
@@ -979,7 +980,7 @@ PrimarySystem.prototype.updateSystemDetailsDiv = function(){
 	})
 
 	if (this instanceof Sensor){
-		$("#systemDetailsDiv").find(".sensorMode").html(this.getEWMode());
+		$("#systemDetailsDiv").find(".sensorMode").html(this.getEWMode()).end().find(".sensorEffect").html(this.getEWModeEffect());
 	}
 	this.attachDetailsMods(ele);
 }
@@ -1092,6 +1093,12 @@ Sensor.prototype.getEWMode = function(){
 		if (this.states[i]){
 			return this.modes[i];
 		}
+	}
+}
+Sensor.prototype.getEWModeEffect = function(){
+	switch (this.ew[this.ew.length-1].type){
+		case 0: return ("Increases chance to hit targets within red sensor arc");
+		case 1: return ("Decreases chance to be hit by starships within blue sensor arc");
 	}
 }
 
@@ -1220,7 +1227,7 @@ Sensor.prototype.hover = function(e){
 }
 
 Sensor.prototype.updateEW = function(){
-	var d = 0;
+	/*var d = 0;
 	var w = 0;
 	if (this.ew[this.ew.length-1].type == 0 || this.ew[this.ew.length-1].type == 1){
 		d = Math.ceil(this.getOutput() / Math.pow(180/game.const.ew.len, 1/game.const.ew.p));
@@ -1233,6 +1240,8 @@ Sensor.prototype.updateEW = function(){
 
 	this.ew[this.ew.length-1].dist = d;
 	this.ew[this.ew.length-1].angle = w;
+	*/
+
 }
 
 Sensor.prototype.doBoost = function(){
@@ -1744,6 +1753,16 @@ Particle.prototype.getAnimation = function(fire){
 		}
 		else grouping = 1;
 	}*/
+
+
+	if (this.shots == 2){
+		//shotInterval = 6;
+		delay = 60;
+	}
+	else if (this.shots == 4){
+		//shotInterval = 10;
+		delay = 80;
+	}
 	
 	for (var j = 0; j < fire.guns; j++){
 		var gunAnims = [];
@@ -1866,7 +1885,7 @@ Pulse.prototype.getAnimation = function(fire){
 	var grouping = 2;
 	var speed = this.projSpeed;
 	var delay = 30;
-	var shotInterval = 6;
+	var shotInterval = 4;
 	var cc = 0;
 	var hits = 0;
 	var fraction = 1;

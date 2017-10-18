@@ -35,6 +35,18 @@ class Weapon extends System {
 		else if ($w <= 360){$this->armourMod = 0.4;}
 	}
 
+	public function getValidEffects(){
+		return array(// attr, %-tresh, duration, modifier
+			array("Disabled", 80, 1, 0),
+			array("Damage", 30, 0, 0),
+			array("Accuracy", 30, 0, 0)
+		);
+	}
+
+	public function getCritModifier($dmg){
+		return min(0.3, (round($dmg/20)/10)); // round to 0.x, half % mod
+	}
+	
 	public function getTraverseMod($fire){
 		//Debug::log("this: ".$this->traverse);
 		//Debug::log("target: ".$fire->target->traverse);
@@ -155,14 +167,6 @@ class Weapon extends System {
 
 	public function getMaxDamage(){
 		return $this->maxDmg;
-	}
-
-	public function getValidEffects(){
-		return array(// attr, %-tresh, duration, modifier
-			array("Disabled", 80, 1, 0),
-			array("Damage", 30, 0, 0),
-			array("Accuracy", 30, 0, 0)
-		);
 	}
 }
 

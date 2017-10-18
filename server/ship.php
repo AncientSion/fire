@@ -581,10 +581,9 @@ class Ship {
 		$struct = $fire->target->getStructureById($fire->section);
 
 		for ($i = 0; $i < sizeof($struct->systems); $i++){
-			if (!$struct->systems[$i]->destroyed){
-				$total += $struct->systems[$i]->getHitChance();
-				//Debug::log("adding: ".$struct->systems[$i]->name." for ".$struct->systems[$i]->getHitChance());
-			}
+			if ($struct->systems[$i]->isDestroyed()){continue;}
+			$total += $struct->systems[$i]->getHitChance();
+			//Debug::log("adding: ".$struct->systems[$i]->name." for ".$struct->systems[$i]->getHitChance());
 		}
 
 		//Debug::log("total: ".$total);

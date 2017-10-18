@@ -4,7 +4,7 @@ class Tethys extends Light {
 	public $name = "Tethys";
 	public $display = "Tethys";
 	public $faction = "Earth Alliance";
-	public $size = 40;
+	public $size = 35;
 	public static $value = 220;
 	public $profile = array(0.95, 1.05);
 	public $mass = 1200;

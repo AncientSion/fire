@@ -3039,5 +3039,5 @@ Ship.prototype.getFireDest = function(fire, isHit, nbrHit){
 }
 
 Ship.prototype.getExplosionSize = function(j){
-	return this.size/2;
+	return this.size;
 }
