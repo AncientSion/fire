@@ -18,7 +18,7 @@ class Saggitarius extends Medium {
 		
 		$front = new Structure($this->getId(), $this->id, 330, 30, 375, 17);
 		$front->systems[] = new Dual($this->getId(), $this->id, 300, 60, 14, array("LightPulse", "LightParticleBeam"));
-		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60, array(array("Cyclops", 40, 4), array("Titan", 30, 3)));
+		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60, array(array("Cyclops", 20, 4), array("Titan", 15, 3)));
 		$front->systems[] = new Dual($this->getId(), $this->id, 300, 60, 14, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $front;
 
@@ -47,7 +47,7 @@ class Saggitarius extends Medium {
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 85);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 85, 100);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 85);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 85, 600, 10);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 85, 650, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 85, -1);
 	}
 }

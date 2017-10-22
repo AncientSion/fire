@@ -1070,20 +1070,18 @@ Sensor.prototype.switchMode = function(id){
 Sensor.prototype.setEWMode = function(){
 	if (this.disabled || game.phase == -2){return "NONE";}
 
+	var d = 0;
+	var w = 0;
+
 	for (var i = 0; i < this.states.length; i++){
 		if (this.states[i]){
 			this.ew[this.ew.length-1].type = i;
+			this.drawEW();
+			//game.drawShipOverlays();
 			break;
 		}
 	}
-
 	this.updateSystemDetailsDiv();
-	this.updateEW();
-	this.drawEW();
-
-	if (i == 2 || i == 3){
-		this.select();
-	}
 }
 
 Sensor.prototype.getEWMode = function(){
@@ -1095,10 +1093,13 @@ Sensor.prototype.getEWMode = function(){
 		}
 	}
 }
+
 Sensor.prototype.getEWModeEffect = function(){
+	if (!this.ew.length){return;}
 	switch (this.ew[this.ew.length-1].type){
-		case 0: return ("Increases chance to hit targets within red sensor arc");
-		case 1: return ("Decreases chance to be hit by starships within blue sensor arc");
+		case 0: return ("Increases chance to hit targets within red sensor arc by " + (game.const.ew.effect[this.ew[this.ew.length-1].type]*100) + "%");
+		case 1: return ("Decreases chance to be hit by starships within blue sensor arc by " + (game.const.ew.effect[this.ew[this.ew.length-1].type]*100) + "%");
+		case 2: return ("Decreases chance to be hit by all starships by " + (game.const.ew.effect[this.ew[this.ew.length-1].type]*100) + "%");
 	}
 }
 
@@ -1144,6 +1145,11 @@ Sensor.prototype.doPower = function(){
 	}
 }
 
+Sensor.prototype.doUnpower = function(){
+	System.prototype.doUnpower.call(this);
+	this.drawEW();
+}
+
 Sensor.prototype.setEW = function(data){
 		for (var i = this.ew.length-1; i >= 0; i--){
 			if (this.ew[i].turn == game.turn){
@@ -1180,6 +1186,8 @@ Sensor.prototype.drawEW = function(){
 		else w = Math.min(180, game.const.ew.len * Math.pow(str/ew.dist, game.const.ew.p));
 
 		drawSensorArc(w, ew.dist, str, loc, facing, ew.angle, this);
+	} else {
+		salvoCtx.clearRect(0, 0, res.x, res.y);
 	}
 }
 
@@ -1216,45 +1224,28 @@ Sensor.prototype.select = function(e){
 Sensor.prototype.hover = function(e){
 	PrimarySystem.prototype.hover.call(this, e);
 	if (game.phase == -2){return;}
-	if (this.highlight){
+	if (this.highlight && aUnit && aUnit != this.parentId){
 		this.drawEW();
 	}
-	else if (this.selected){
-	}
-	else if (game.aShip != this.parentId){
-		mouseCtx.clearRect(0, 0, res.x, res.y);
-	}
-}
-
-Sensor.prototype.updateEW = function(){
-	/*var d = 0;
-	var w = 0;
-	if (this.ew[this.ew.length-1].type == 0 || this.ew[this.ew.length-1].type == 1){
-		d = Math.ceil(this.getOutput() / Math.pow(180/game.const.ew.len, 1/game.const.ew.p));
-		w = this.ew[this.ew.length-1].angle;
-	} else {
-		d = 1000;
-		//d = game.getUnitById(this.parentId).size / 2;
-		w = -1;
-	}
-
-	this.ew[this.ew.length-1].dist = d;
-	this.ew[this.ew.length-1].angle = w;
-	*/
-
 }
 
 Sensor.prototype.doBoost = function(){
 	System.prototype.doBoost.call(this);
 	mouseCtx.clearRect(0, 0, res.x, res.y);
-	this.updateEW();
+	if (this.ew[this.ew.length-1].angle == -1){
+		this.ew[this.ew.length-1].dist = Math.floor(this.ew[this.ew.length-1].dist * 1.1);
+	}
+	//game.drawShipOverlays();
 	this.drawEW();
 }
 
 Sensor.prototype.doUnboost = function(){
 	System.prototype.doUnboost.call(this);
 	mouseCtx.clearRect(0, 0, res.x, res.y);
-	this.updateEW();
+	if (this.ew[this.ew.length-1].angle == -1){
+		this.ew[this.ew.length-1].dist = Math.floor(this.ew[this.ew.length-1].dist / 1.1);
+	}
+	//game.drawShipOverlays();
 	this.drawEW();
 }
 
@@ -1711,8 +1702,10 @@ Particle.prototype.getAnimation = function(fire){
 	var fraction = 1;
 
 	if (game.isCloseCombat(fire.shooter, fire.target)){
-		fraction = 4;
 		cc = 1;
+		if (fire.shooter.flight && fire.target.ship){
+			fraction = 2;
+		} else fraction = 4;
 	}
 	else if (fire.dist < 200){
 		fraction = Math.min(3, 200 / fire.dist);
@@ -1722,45 +1715,10 @@ Particle.prototype.getAnimation = function(fire){
 	delay *= fraction;
 	shotInterval *= fraction;
 
-	/*if (game.isCloseCombat(fire.shooter, fire.target)){
-		var fraction = 4;
-		cc = 1;
-		speed /= fraction;
-		delay *= fraction;
-		shotInterval *= fraction;
-	}
-	else if (fire.dist < 200){
-		var fraction = Math.min(2, 200 / fire.dist);
-		speed /= fraction;
-		delay *= fraction;
-		shotInterval *= fraction;
-	}
-	else if (fire.shooter.flight){
-		grouping = 1;
-		delay = 8;
-	}
-	else if (cc && fire.shooter.ship){
-		grouping = 1;
-		delay = 50;
-	}
-	else if (this.shots >= 4){
-		shotInterval = 10;
-		delay = 80;
-		if (fire.guns % 2 == 0){
-			grouping = 2;
-		} else if (fire.guns % 3 == 0){
-			grouping = 3;
-		}
-		else grouping = 1;
-	}*/
-
-
 	if (this.shots == 2){
-		//shotInterval = 6;
 		delay = 60;
 	}
 	else if (this.shots == 4){
-		//shotInterval = 10;
 		delay = 80;
 	}
 	
@@ -1891,11 +1849,13 @@ Pulse.prototype.getAnimation = function(fire){
 	var fraction = 1;
 
 	if (game.isCloseCombat(fire.shooter, fire.target)){
-		fraction = 4;
 		cc = 1;
+		if (fire.shooter.flight && fire.target.ship){
+			fraction = 2;
+		} else fraction = 4;
 	}
 	else if (fire.dist < 200){
-		fraction = Math.min(2, 200 / fire.dist);
+		fraction = Math.min(3, 200 / fire.dist);
 	}
 
 	speed /= fraction;

@@ -17,6 +17,7 @@ spl_autoload_register(
                 'javelin' => '/server/systems/weapons/ammo.php',
                 'triarii' => '/server/systems/weapons/ammo.php',
                 'vanguard' => '/server/systems/weapons/ammo.php',
+                'needle' => '/server/systems/weapons/ammo.php',
                 'naga' => '/server/systems/weapons/ammo.php',
                 'cyclops' => '/server/systems/weapons/ammo.php',
                 'titan' => '/server/systems/weapons/ammo.php',

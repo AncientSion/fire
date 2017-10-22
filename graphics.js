@@ -255,22 +255,27 @@ function getRadialGradient(x, y, s){
 }	
 
 function drawSensorArc(w, d, str, loc, facing, a, sensor){
+	if (game.sensorMode){
+		salvoCtx.clearRect(0, 0, res.x, res.y);
+	}
+	salvoCtx.translate(cam.o.x, cam.o.y);
+	salvoCtx.scale(cam.z, cam.z);
 	var color = "";
 	var opacity = 0.2;
 	switch (sensor.ew[sensor.ew.length-1].type){
 		case 0: color = "red"; break;
 		case 1: color = "blue"; break;
-		case 2: color = "red"; opacity = 0.1; break;
+		case 2: color = "blue"; opacity = 0.1; break;
 		case 3: color = "blue"; opacity = 0.1; break;
 	}
 
-	salvoCtx.clearRect(0, 0, res.x, res.y);
-	salvoCtx.translate(cam.o.x, cam.o.y);
-	salvoCtx.scale(cam.z, cam.z);
+	//salvoCtx.clearRect(0, 0, res.x, res.y);
+	//salvoCtx.translate(cam.o.x, cam.o.y);
+	//salvoCtx.scale(cam.z, cam.z);
 
 	w = Math.ceil(w);	
 	if (w == 180){
-		salvoCtx.beginPath();			
+		salvoCtx.beginPath();
 		salvoCtx.arc(loc.x, loc.y, d, 0, 2*Math.PI, false);
 		salvoCtx.closePath();
 	}

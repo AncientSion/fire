@@ -17,10 +17,10 @@ class Mixed extends Ship {
 		$this->destroyed = $destroyed;
 	}
 
-	public function setProps($turn){
+	public function setProps($turn, $phase){
 		$this->setSize();
 		$this->setMass();
-		$this->setCurrentImpulse($turn);
+		$this->setCurrentImpulse($turn, $phase);
 		$this->setRemainingImpulse($turn);
 		$this->setRemainingDelay($turn);
 		$this->setBaseStats();
@@ -37,13 +37,13 @@ class Mixed extends Ship {
 		$this->remainingDelay = 0;
 	}
 
-	public function setState($turn){
+	public function setState($turn, $phase){
 		//Debug::log("setState #".$this->id);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$this->structures[$i]->setState($turn);
 		}
 		$this->isDestroyed();
-		$this->setProps($turn);
+		$this->setProps($turn, $phase);
 	}
 
 	public function isDestroyed(){
@@ -224,10 +224,6 @@ class Mixed extends Ship {
 
 	public function getLockMultiplier(){
 		return 1.0;
-	}
-	
-	public function getImpulseProfileMod(){
-		return 0;
 	}
 }
 

@@ -80,6 +80,7 @@ class Action {
 	public $x;
 	public $y;
 	public $resolved;
+	public $manual = 0;
 
 	function __construct($id, $turn, $type, $dist, $x, $y, $a, $cost, $delay, $costmod, $resolved){
 		$this->id = $id;

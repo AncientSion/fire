@@ -4,6 +4,8 @@ window.cam = {
 	scroll: 0,
 	sx: 0,
 	sy: 0,
+	tx: 0,
+	ty: 0,
 	
 	getOffset: function(){
 		return {x: this.o.x * this.z, y: this.o.y * this.z};

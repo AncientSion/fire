@@ -37,8 +37,8 @@ class PrimarySystem extends System {
 		);
 	}
 
-	public function getCritModifier($dmg){
-		return min(0.15, round($dmg/5)); // round to 0.xx
+	public function getCritModMax($dmg){
+		return min(0.15, round($dmg/30)/10); // round to 0.xx
 	}
 }
 
@@ -52,6 +52,10 @@ class Bridge extends PrimarySystem {
 
 	public function getValidEffects(){
 		return array();
+	}
+
+	public function getArmourMod(){
+		return 1.5;
 	}
 }
 

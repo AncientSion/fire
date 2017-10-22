@@ -171,7 +171,7 @@ class System {
 	}
 
 	public function determineCrit($old, $new, $turn){
-		$dmg = ($new + ($old/2)) / $this->integrity * 100;
+		$dmg = round(($new + ($old/2)) / $this->integrity * 100);
 		$possible = $this->getValidEffects();
 		$valid = array();
 
@@ -181,14 +181,14 @@ class System {
 			}
 		}
 
-		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", dmg: ".$dmg.", possible: ".sizeof($possible).", inRange: ".sizeof($valid));
+		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", dmg: ".$dmg."%, possible: ".sizeof($possible).", inRange: ".sizeof($valid));
 
 		for ($i = 0; $i < sizeof($valid); $i++){
 			if (mt_rand(0, 1)){ // if unlucky, create crit
 				$mod = 0;
 				$duration = $valid[$i][2];
 
-				if ($valid[$i][0] != "Disabled" && !mt_rand(0, 2)){ // if perma (not disabled) && 33%, perma into duration 1-2
+				if ($valid[$i][0] != "Disabled" && !mt_rand(0, 2)){ // if -not disabled- && 33%, perma into duration 1-2
 					$duration += mt_rand(1, 2);
 				}
 				else {
@@ -196,7 +196,10 @@ class System {
 				}
 
 				if ($valid[$i][0] != "Disabled"){ // if not disabled, need modifier
-					$mod = $this->getCritModifier($dmg);
+					$mod = $this->getCritModMax($dmg);
+					if ($duration > 0 && $this->internal){
+						$mod *= 2;
+					}
 
 					for ($j = sizeof($this->crits)-1; $j >= 0; $j--){ // if crit doesnt disable, was this disabled this turn ?
 						if ($this->crits[$j]->turn < $turn){break;}

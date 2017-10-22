@@ -69,8 +69,8 @@ class Warhead extends Weapon {
 class Hasta extends Missile {
 	public $name = "Hasta";
 	public $display = "Light Antifighter Missiles";
-	public $minDmg = 23;
-	public $maxDmg = 28;
+	public $minDmg = 20;
+	public $maxDmg = 25;
 	public $mass = 3;
 	public $cost = 6;
 	public $traverse = -3;
@@ -100,7 +100,7 @@ class Triarii extends Missile {
 	public $minDmg = 41;
 	public $maxDmg = 53;
 	public $mass = 4;
-	public $cost = 13;
+	public $cost = 12;
 	public $traverse = -1;
 
 	function __construct($parentId, $id){
@@ -116,6 +116,20 @@ class Vanguard extends Missile {
 	public $mass = 2;
 	public $cost = 6;
 	public $traverse = -4;
+
+	function __construct($parentId, $id){
+		parent::__construct($parentId, $id);
+	}
+}
+
+class Needle extends Missile {
+	public $name = "Needle";
+	public $display = "Antifighter Missiles";
+	public $minDmg = 20;
+	public $maxDmg = 25;
+	public $mass = 3;
+	public $cost = 6;
+	public $traverse = -3;
 
 	function __construct($parentId, $id){
 		parent::__construct($parentId, $id);

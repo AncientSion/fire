@@ -331,13 +331,13 @@ Mixed.prototype.canUndoShortenTurn = function(){
 Mixed.prototype.create = function(){
 	this.setRawImage();
 	this.setStatus();
+	this.setSize();
 	this.setLayout();
 	this.setDrawData();
 	if (this.id < 0){
 		this.setMaxMass();
 		this.setImpulse();
 	}
-	this.setSize();
 }
 
 Mixed.prototype.hasSystemSelected = function(){
@@ -537,7 +537,10 @@ Mixed.prototype.getGunOrigin = function(id){
 
 Mixed.prototype.getFireDest = function(fire, isHit, nbrHit){
 	if (!isHit){
-		return {x: range(-30, 30), y: range(-30, 30)}
+		return {
+			x: range(10, 25) * (1-range(0, 1)*2),
+			y: range(10, 25) * (1-range(0, 1)*2)
+		}
 	}
 	return this.getSystemById(fire.damages[nbrHit].systemid).layout;
 }
@@ -581,4 +584,8 @@ Mixed.prototype.getExplosionSize = function(j){
 	else if (this.salvo){
 		return this.structures[j].mass * 2;
 	}
+}
+
+Mixed.prototype.drawMoveArea = function(){
+	return;
 }

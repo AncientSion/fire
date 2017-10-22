@@ -448,8 +448,12 @@ function handleMouseDown(e){
 
 	if (e.originalEvent.button == 0){
 		if (game.sensorMode){
+			salvoCtx.clearRect(0, 0, res.x, res.y);
 			sensorize(game.getUnitById(aUnit), pos);
 			return;
+		}
+		else if (game.shortInfo && !aUnit){
+			game.getUnitById(game.shortInfo).select();
 		}
 		window.downTime = new Date();
 		cam.scroll = 1;
@@ -501,10 +505,10 @@ function handleMouseOut(e){
 function sensorEvent(isClick, ship, loc, facing, d, a){
 	var sensor = ship.getActiveSensor();
 	var str = sensor.getOutput();
-		d = Math.min(str, d);
-	var	w = Math.min(180, game.const.ew.len * Math.pow(str/d, game.const.ew.p));
+		d = Math.min(str*1.25, d);
+	var	w = Math.min(180, Math.round(game.const.ew.len * Math.pow(str/d, game.const.ew.p)));
 	if (w == 180){
-		a = 0;
+		a = -1;
 		d = str/Math.pow(w/game.const.ew.len, 1/game.const.ew.p);
 	}
 	//console.log("angle from facing: " + a + ", dist: " + dist + ", strength: "+str + ", FINAL: " + newidth);
@@ -519,5 +523,6 @@ function sensorEvent(isClick, ship, loc, facing, d, a){
 			systemid: sensor.id,
 			type: sensor.ew[sensor.ew.length-1].type
 		});
-	} else drawSensorArc(w, d, str, loc, facing, a, sensor);
+	}
+	drawSensorArc(w, d, str, loc, facing, a, sensor);
 }

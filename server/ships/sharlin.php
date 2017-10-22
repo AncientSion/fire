@@ -50,7 +50,7 @@ class Sharlin extends UltraHeavy {
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 0, 180);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 0, 180);
 			$aft->systems[] = new NeutronLaser($this->getId(), $this->id, 120, 240);
-			$aft->systems[] = new Hangar($this->getId(), $this->id, 140, 220, 1200, 12, array("Nial"));
+			$aft->systems[] = new Hangar($this->getId(), $this->id, 140, 220, 1100, 15, array("Nial"));
 			$aft->systems[] = new NeutronLaser($this->getId(), $this->id, 120, 240);
 		$structs[] = $aft;
 	
@@ -62,11 +62,11 @@ class Sharlin extends UltraHeavy {
 
 	public function addPrimary(){
 		//id, $parentId, $integrity, $output = 0, $effiency = 0, $destroyed = 0){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 3200);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 2700);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 225);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 225, 840, 8);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 225);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 225, 1300, 10);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 225, 1100, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 225, +12);
 	}
 }

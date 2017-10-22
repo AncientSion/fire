@@ -420,7 +420,7 @@ else {
 		for (var i = 0; i < window.ships.length; i++){
 			var ship = window.initiateShip(window.ships[i]);
 				ship.facing = -90;
-			ship.actions.push(new Move(-1, "deploy", 0, res.x/2, res.y/2, 270, 0, 0));
+			ship.actions.push(new Move(-1, "deploy", 0, res.x/2, res.y/2, 270, 0, 0, 1, 1, 1));
 		}
 
 		game.ships[0] = ship;

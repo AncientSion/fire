@@ -43,7 +43,7 @@ class MediumSingleIon extends LightIon {
 	public $projSpeed = 6;
 	public $mass = 16;
 	public $powerReq = 3;
-	public $traverse = -2;
+	public $traverse = -1;
 	public $effiency = 3;
 	public $maxBoost = 1;
 

@@ -25,8 +25,7 @@ class Pulse extends Weapon {
 		$hits = $this->basePulses + min($this->extraPulses, floor(($fire->req - $fire->rolls[sizeof($fire->rolls)-1]) / $this->grouping));
 		$fire->hits += $hits;
 
-		Debug::log("fireid: ".$fire->id.", doDamage, weapon: ".get_class($this).", target: ".$fire->target->id.", hits: ".$hits);
-
+		Debug::log("fireid: ".$fire->id.", doDamage, weapon: ".get_class($this)." #".$this->id.", hits: ".$hits.", target: ".$fire->target->id.", armour: ".$negation.", health: ".$remInt);
 
 		for ($i = 0; $i < $hits; $i++){
 			$totalDmg = $this->getTotalDamage($fire);
@@ -39,15 +38,15 @@ class Pulse extends Weapon {
 				$armour += $dmg->armourDmg;
 			}
 			else {
-				$overkill += $dmg->structDmg;	
-				$dmg->structDmg = 0;
+				$overkill += $dmg->structDmg;
+				Debug::log("hit ".($i+1).", adding overkill damage, now: ".$overkill);
 			}		
 
 			if (!$destroyed && $remInt - $struct < 1){
-				$destroyed = true;
-				$name = get_class($system);
+				$destroyed = 1;
 				$overkill = (abs($remInt - $dmg->structDmg));
-				Debug::log(" => target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$overkill." dmg");
+				Debug::log(" => hit:".($i+1).", system was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$overkill." dmg");
+				// overkill takes target system armour, should take overkill-target (main struct) negation ?
 				$dmg->structDmg = $remInt;
 			}
 		}

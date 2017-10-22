@@ -16,22 +16,25 @@ class Artemis extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 450, 20);
+		$front = new Structure($this->getId(), $this->id, 315, 45, 450, 16);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new HeavyRailGun($this->getId(), $this->id, 315, 45);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 375, 16);
+		$right = new Structure($this->getId(), $this->id, 45, 135, 375, 15);
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 120, array(array("Naga", 9, 3), array("Cyclops", 6, 3)));
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 375, 16);
+		$aft = new Structure($this->getId(), $this->id, 135, 225, 240, 13);
+		$aft->systems[] = new MediumRailGun($this->getId(), $this->id, 180, 300);
+		$aft->systems[] = new MediumRailGun($this->getId(), $this->id, 60, 180);
+		$structs[] = $aft;
+
+		$left = new Structure($this->getId(), $this->id, 225, 315, 375, 15);
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 240, 60, array(array("Naga", 9, 3), array("Cyclops", 6, 3)));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -40,7 +43,7 @@ class Artemis extends Medium {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 775);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 725);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 95);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 95, 105);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 95);

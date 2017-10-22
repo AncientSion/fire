@@ -38,7 +38,7 @@ class Salvo extends Mixed {
 		return $shots;
 	}
 
-	public function setCurrentImpulse($turn){
+	public function setCurrentImpulse($turn, $phase){
 		$this->baseImpulse = ceil(pow($this->mass, -0.75)*325);
 		$this->currentImpulse = $this->baseImpulse * min(3, $turn - $this->available +1);
 	}

@@ -37,7 +37,8 @@ class Manager {
 	public $const = array(
 		"ew" => array(
 			"p" => 1.5,
-			"len" => 15
+			"len" => 10, 
+			"effect" => array(0 => 0.5, 1 => 0.5, 2 => 0.25)
 		),
 	);
 
@@ -55,12 +56,41 @@ class Manager {
 
 
 	public function test(){
-		$ship = $this->getUnitById(2);
-		$add = 0;
-		$struct = 2;
+		return;
+		foreach ($this->ships as $ship){
+			Debug::log($ship->id);
+		}
+		Debug::log("====");
+		foreach ($this->incoming as $incoming){
+			Debug::log($incoming["id"]);
+		}
+		return;
+		$ship = $this->getUnitById(1);
+		$add = 200;
+		$struct = 1;
 		$ship->primary->remaining += $add;
+		$ship->structures[$struct]->armourDmg = 0;
+		$ship->structures[$struct]->setNegation($ship->primary->integrity, 0);
 
-		Debug::log("determing to hit for ".get_class($ship)." #".$ship->id);
+		$weapon = new HeavyIon(0,0,0,0,0,0,0);
+		$fire = new FireOrder(0,0,0,0,0,0,0,0,0,0,0,0);
+		$fire->section = $ship->structures[$struct]->id;
+		$fire->weapon = $weapon;
+		$fire->target = $ship;
+		$shots = 50;
+
+		for ($i = 0; $i < sizeof($ship->structures[$struct]->systems); $i++){
+		//	$ship->structures[$struct]->systems[$i]->destroyed = 0;
+		}
+
+		while ($shots > 0){
+			$sys = $fire->target->getHitSystem($fire);
+			Debug::log(get_class($sys).", armourmod: ".$sys->getArmourMod()." => ".$ship->getArmourValue($fire, $sys));
+			$shots--;
+		}
+
+
+		/*Debug::log("determing to hit for ".get_class($ship)." #".$ship->id);
 
 		$total = $ship->primary->getHitChance();
 		$avail = $total;
@@ -87,8 +117,9 @@ class Manager {
 
 		Debug::log("-> main to internal: ".$total." / ".$avail." => ".(round($total/$avail, 2)*100)."%");
 		Debug::log("-> chance to divert to single internal on main hit: ".$ship->primary->systems[$i-1]->getHitChance()." / ".$avail." => ".(round($ship->primary->systems[$i-1]->getHitChance()/$avail, 2)*100)."%");
-
+		*/
 		return;
+		/*	
 		$db = DBManager::app();
 
 		$query = array();
@@ -101,17 +132,16 @@ class Manager {
 			$query[] = "delete from damages where turn = ".$turn;
 			$query[] = "delete from systemcrits where turn = ".$turn;
 
-		/*	
 
 		$query[] = "update playerstatus set phase = 2, status = 'ready' where gameid = ".$id;
 			$query[] = "update games set phase = 2 where id = ".$id;
 			$query[] = "update fireorders set resolved = 0, hits = 0 where gameid = ".$id;
 			$query[] = "delete from damages where turn = ".$turn;
 			$query[] = "delete from systemcrits where turn = ".$turn;
-		*/
 		foreach ($query as $sql){
 			$db->query($sql);
-		}
+		*/
+		
 	}
 
 	public function getClientData(){
@@ -358,7 +388,7 @@ class Manager {
 
 		for ($i = 0; $i < sizeof($units); $i++){
 			//$units[$i]->addFireDB($this->fires);
-			$units[$i]->setState($this->turn); //check damage state after dmg is applied
+			$units[$i]->setState($this->turn, $this->phase); //check damage state after dmg is applied
 		}
 
 		return $units;
@@ -561,7 +591,7 @@ class Manager {
 			DBManager::app()->updateSystemLoad($adjust);
 			for ($i = 0; $i < sizeof($units); $i++){
 				$this->ships[] = new Salvo($units[$i]["id"], $units[$i]["userid"], $this->turn, "deployed", 0);
-				$this->ships[sizeof($this->ships)-1]->setState($this->turn);
+				$this->ships[sizeof($this->ships)-1]->setState($this->turn, $this->phase);
 				$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->turn, "deploy", 0, $units[$i]["actions"][0]["x"], $units[$i]["actions"][0]["y"], $a, 0, 0, 0, 0);
 				//echo ("unit #".$units[$i]["id"]);
 				//echo "</br>";
@@ -569,8 +599,6 @@ class Manager {
 				//var_export($this->ships[sizeof($this->ships)-1]->actions[0]);
 			}
 		}
-
-
 	}
 
 	public function handleDeploymentActions(){
@@ -578,6 +606,7 @@ class Manager {
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->available == $this->turn){
 				if (sizeof($this->ships[$i]->actions) == 1){
+					Debug::log("handleDeploymentActions");
 					$data[] = $this->ships[$i]->id;
 				}
 			}
@@ -822,7 +851,9 @@ class Manager {
 				}
 			}
 		}
+
 		if (sizeof($states)){DBManager::app()->updateUnitEndState($states, $this->turn, $this->phase);}
+		
 	}
 
 	public function startFiringPhase(){
@@ -862,38 +893,23 @@ class Manager {
 		return true;
 	}
 
-
 	public function endTurn(){
 		Debug::log("endTurn");
 		$this->alterReinforcementPoints();
 
-		$data = array();
-		for ($i = 0; $i < sizeof($this->incoming); $i++){
-			if ($this->incoming[$i]["available"] == $this->turn+1){
-				$data[] = $this->incoming[$i]["id"];
-			}
-		}
-
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->salvo && $this->ships[$i]->mission->arrived){ // mark impacted salvo as destroyed
-				//Debug::log("destroying salvo ".$this->ships[$i]->id);
 				$this->ships[$i]->destroyed = 1;
 			}
 			
 			if ($this->ships[$i]->destroyed){
-				//Debug::log("unit #".$this->ships[$i]->id." destroyed, handling");
 				for ($j = 0; $j < sizeof($this->ships); $j++){
-					//Debug::log("comparing to #".$this->ships[$j]->id);
 					if ($this->ships[$j]->salvo && $this->ships[$j]->mission->targetid == $this->ships[$i]->id){
-						//Debug::log("found a salvo with target destroyed");
 						$this->ships[$j]->destroyed = 1;
 					}
 				}
 			}
 		}
-
-		DBManager::app()->resolveDeployActions($data);
-		DBManager::app()->destroyUnitsDB($this->ships);
 	}
 
 	public function alterReinforcementPoints(){
@@ -962,7 +978,7 @@ class Manager {
 				for ($j = 0; $j < sizeof($ship->cc); $j++){
 					if ($ship->cc[$j] == $this->ships[$i]->id){
 						if ($this->ships[$i]->flight || $this->ships[$i]->salvo){
-							Debug::log("adding fighter lock from #".$ship->id." vs #".$this->ships[$i]->id);
+							//Debug::log("adding CC fighter lock from #".$ship->id." vs #".$this->ships[$i]->id);
 							$ship->locks[] = array($this->ships[$i]->id, 1);
 						}
 					}
@@ -981,25 +997,21 @@ class Manager {
 				for ($i = 0; $i < sizeof($this->ships); $i++){
 					if ($this->ships[$i]->id == $ship->id || $ship->userid == $this->ships[$i]->userid){continue;}
 					switch ($ew->type){
-						case 2: $ship->locks[] = array($this->ships[$i]->id, 0.2); break;
-						case 3: $ship->masks[] = array($this->ships[$i]->id, 0.2); break;
+						case 2: $ship->locks[] = array($this->ships[$i]->id, $this->const(["ew"]["effect"][$ew->type])); break;
 					}
 				}
 			}
 			else {
-				$start;
-				$end;
+				$start = 0;
+				$end = 360;
+				$w;
 
 				if ($ew->angle == -1){
-					$start = 0;
-					$end = 360;
 					$w = 180;
 				}
 				else {
 					$str = $sensor->getOutput($this->turn);
-					$len = $this->const["ew"]["len"];
-					$p = $this->const["ew"]["p"];
-					$w = min(180, $len * pow($str/$ew->dist, $p));
+					$w = min(180, $this->const["ew"]["len"] * pow($str/$ew->dist, $this->const["ew"]["p"]));
 					$start = Math::addAngle(0 + $w-$ship->getFacing(), $ew->angle);
 					$end = Math::addAngle(360 - $w-$ship->getFacing(), $ew->angle);
 				}
@@ -1014,12 +1026,16 @@ class Manager {
 						for ($j = 0; $j < sizeof($ship->cc); $j++){
 							if ($ship->cc[$j] == $this->ships[$i]->id){
 								if ($this->ships[$i]->flight){ // flight
-									$ship->locks[] = array($this->ships[$i]->id, $multi / 180 * $w);
+									$multi = $multi / 180 * $w;
+									//Debug::log("adding CC lock from ship #".$ship->id." vs flight# #".$this->ships[$i]->id." for value: ".$multi);
+
+									$ship->locks[] = array($this->ships[$i]->id, $multi);
 									$skip = 1; break;
 								}
 								else if ($this->ships[$i]->salvo){ // salvo, in trajectory ?
 									$angle = Math::getAngle2($origin, $this->ships[$i]->getTrajectoryStart());
 									if (Math::isInArc($angle, $start, $end)){
+										//Debug::log("adding CC lock from ship vs salvo");
 										$ship->locks[] = array($this->ships[$i]->id, $multi);
 										$skip = 1; break;
 									}
@@ -1314,6 +1330,7 @@ class Manager {
 					array("Omega", 8, 2),
 					array("Hyperion", 6, 1),
 					array("Artemis", 5, 0),
+					array("Olympus", 5, 0),
 					array("Tethys", 4, -1)
 				);
 				break;
@@ -1373,6 +1390,7 @@ class Manager {
 					"Hyperion",
 					"Saggitarius",
 					"Artemis",
+					"Olympus",
 					"Tethys"
 				);
 				break;
@@ -1380,8 +1398,8 @@ class Manager {
 				$ships = array(
 					"Primus",
 					"Altarian",
-					"Darkner",
 					"Demos",
+					"Darkner",
 					"Vorchan",
 					"Haven"
 					);
@@ -1420,7 +1438,7 @@ class Manager {
 	public function getPreviewData($name){
 		//Debug::log("asking for preview of: ".$name);
 		$ship = new $name(1, 1, 0, "", 0);
-		$ship->setState(0);
+		$ship->setState(0, 0);
 		return $ship;
 	}
 
@@ -1469,7 +1487,7 @@ class Manager {
 			$ships = array();
 			for ($i = 0; $i < sizeof($data); $i++){
 				$ships[] = new $data[$i](0,0,0,0,0,0);
-				$ships[sizeof($ships)-1]->setProps(0);
+				$ships[sizeof($ships)-1]->setProps(0, 0);
 			}
 			return $ships;
 		}
@@ -1489,7 +1507,7 @@ class Manager {
 		for ($i = 0; $i < sizeof($allShips); $i++){
 			$name = $allShips[$i]["name"];
 			$ship = new $name(0, 0, 0, 0, 0, 0);
-			$ship->setProps(1);
+			$ship->setProps(1, 0);
 			$allShips[$i] = $ship;
 			continue;
 		}

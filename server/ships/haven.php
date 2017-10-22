@@ -20,12 +20,12 @@ class Haven extends SuperLight {
 		$front->systems[] = new MediumSingleIon($this->getId(), $this->id, 240, 120);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 120, 11);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 120, 12);
 		$right->systems[] = new LightIon($this->getId(), $this->id, 300, 180);
 		$right->systems[] = new LightIon($this->getId(), $this->id, 300, 180);
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 120, 11);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 120, 12);
 		$left->systems[] = new LightIon($this->getId(), $this->id, 180, 60);
 		$left->systems[] = new LightIon($this->getId(), $this->id, 180, 60);
 		$structs[] = $left;
@@ -36,11 +36,11 @@ class Haven extends SuperLight {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 280);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 260);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 40);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 40, 22);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 40);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 40, 375, 10);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 40, 550, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 40);
 	}
 }

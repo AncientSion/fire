@@ -51,7 +51,7 @@ class HeavyRailGun extends Matter {
 	public $projSize = 4;
 	public $projSpeed = 10;
 	public $reload = 4;
-	public $mass = 26;
+	public $mass = 28;
 	public $powerReq = 6;
 	public $traverse = 1;
 

@@ -5,7 +5,7 @@ class Olympus extends Medium {
 	public $display = "Olympus";
 	public $faction = "Earth Alliance";
 	public $size = 45;
-	public static $value = 525;
+	public static $value = 410;
 	public $profile = array(0.94, 1.06);
 	public $mass = 2500;
 
@@ -16,16 +16,21 @@ class Olympus extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 350, 17);
-		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
-		//$front->systems[] = new Hangar($this->getId(), $this->id, 330, 30, 400, 12, array("Aurora", "Thunderbolt"));
-		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 350, 14);
+		$front->systems[] = new MediumPulse($this->getId(), $this->id, 240, 360);
+		$front->systems[] = new MediumLaser($this->getId(), $this->id, 330, 30);
+		$front->systems[] = new MediumPulse($this->getId(), $this->id, 0, 120);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 16);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 13);
+		$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 180);
+		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 9, 3), array("Naga", 6, 2)));
+
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 300, 16);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 300, 13);
+		$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 360);
+		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 9, 3), array("Naga", 6, 2)));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -34,12 +39,12 @@ class Olympus extends Medium {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1000);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 40);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 40, 75);
-		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 40);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 40, 500, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 40);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 550);
+		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 70);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, 70, 82);
+		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 70);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 70, 600, 10);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 70);
 	}
 }
 

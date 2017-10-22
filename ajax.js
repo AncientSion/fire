@@ -87,11 +87,12 @@ window.ajax = {
 		var ew = game.getEWSettings();
 
 		for (var i = 0; i < game.ships.length; i++){
-			if (game.ships[i].flight){continue;}
+			if (!game.ships[i].ship){continue;}
 			var ship;
 			if (game.ships[i].userid == game.userid){
 				for (var j = 0; j < game.ships[i].actions.length; j++){
-					if (game.ships[i].actions[j].type == "deploy" && game.ships[i].actions[j].turn == game.turn){
+					//if (game.ships[i].actions[j].type == "deploy" && game.ships[i].actions[j].turn == game.turn){
+					if (game.ships[i].actions[j].manual){
 						if (game.ships[i].available == game.turn){
 							ship = {
 								actions: [ game.ships[i].actions[j] ],

@@ -52,7 +52,7 @@ foreach ($manager->playerstatus as $player){
 	}
 }
 
-//$manager->test();
+$manager->test();
 $data = $manager->getClientData();
 echo "<script>";
 echo "window.game = ".json_encode($data, JSON_NUMERIC_CHECK).";";
@@ -498,7 +498,6 @@ echo "</script>";
 	$(document).ready(function(){
 		window.res.x = window.innerWidth-1;
 		window.res.y = window.innerHeight-1;
-		//$("#reinforceTable").hide();
 		$("#mouseCanvas").on("mouseleave", function(){
 			$("#weaponAimTableWrapper").hide();
 		})
@@ -606,7 +605,16 @@ echo "</script>";
 	function initiateKeyDowns(){
 		$(this).keypress(function(e){
 			if (game){
-				if (e.keyCode == 32){ // space - dist logger
+				if (e.keyCode == 113){ // alt - show all sensor
+					if (!game.animating && !game.sensorMode){
+						var old = game.phase;
+						game.phase = -1;
+						game.drawShipOverlays();
+						game.phase = old;
+					}
+				//console.log(game.vector);
+				}
+				else if (e.keyCode == 32){ // space - dist logger
 					if (game.vector){
 						game.vector = false;
 						$("#vectorDiv").addClass("disabled");
@@ -630,6 +638,12 @@ echo "</script>";
 						})
 						for (var i = 0; i < game.fireOrders.length; i++){
 							game.createCombatLogEntry(game.fireOrders[i]);
+						}
+
+						game.getUnitExplosionDetails();
+						for (var i = 0; i < window.animations.length; i++){
+							window.animations[i].done = 1;
+							game.createMiscLogEntry(i);
 						}
 						game.fireResolved();
 					}

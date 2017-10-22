@@ -16,17 +16,17 @@ class Tethys extends Light {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 250, 14);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 250, 12);
 		$front->systems[] = new LightLaser($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new LightLaser($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 200, 12);
-		$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 180);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 200, 10);
+		$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 120);
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 200, 12);
-		$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 360);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 200, 10);
+		$left->systems[] = new LightPulse($this->getId(), $this->id, 240, 360);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -39,7 +39,7 @@ class Tethys extends Light {
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 55);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 55, 32);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 55);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 55, 425, 10);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 55, 500, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 55);
 	}
 }

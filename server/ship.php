@@ -64,7 +64,7 @@ class Ship {
 		return $this->index;
 	}
 
-	public function setState($turn){
+	public function setState($turn, $phase){
 		//Debug::log("setState #".$this->id);
 		if ($this->primary->isDestroyed()){
 			$this->destroyed = 1;
@@ -108,15 +108,15 @@ class Ship {
 			$this->structures[$i]->setNegation($this->primary->integrity, 0);
 		}
 
-		$this->setProps($turn);
+		$this->setProps($turn, $phase);
 
 		return true;
 	}
 
-	public function setProps($turn){
+	public function setProps($turn, $phase){
 		//Debug::log("setProps #".$this->id);
 		$this->cost = static::$value;
-		$this->setCurrentImpulse($turn);
+		$this->setCurrentImpulse($turn, $phase);
 		$this->setRemainingImpulse($turn);
 		$this->setRemainingDelay($turn);
 		$this->setBaseStats();
@@ -143,7 +143,7 @@ class Ship {
 		$this->baseTurnCost = round(pow($this->mass, 1.25)/22500, 2);
 		//$this->baseTurnDelay = round(pow($this->mass, 0.5)/35, 2);
 		$this->baseTurnDelay = round(pow($this->mass, 0.45)/20, 2);
-		$this->baseImpulseCost = round(pow($this->mass, 1.4)/1750, 2);
+		$this->baseImpulseCost = round(pow($this->mass, 1.4)/2000, 2);
 	}
 
 	public function hidePowers($turn){
@@ -194,7 +194,7 @@ class Ship {
 		return $this->baseImpulse;
 	}
 
-	public function setCurrentImpulse($turn){
+	public function setCurrentImpulse($turn, $phase){
 		//if (!$this->flight){return;}
 		//Debug::log("id: ".$this->id);
 		$impulse = $this->currentImpulse;
@@ -239,19 +239,20 @@ class Ship {
 	}
 
 	public function getDeployState($turn){
-		//Debug::log("getDeployState for ".$this->id);
 		if ($this->available < $turn){
 	//		Debug::log("RETURN");
 			return;
 		}
 		$angle = $this->facing;
 
+		Debug::log("getDeployState for ".$this->id." current facing ".$this->facing);
 		for ($i = 0; $i < sizeof($this->actions); $i++){
 			if ($this->actions[$i]->turn < $turn){continue;}
 			if ($turn == 1 && $this->actions[$i]->type == "deploy"){
 				$angle += $this->actions[$i]->a;
 			}
-			else if ($turn == $this->available && ($this->actions[$i]->type == "deploy" || $this->actions[$i]->type == "jump")){
+			else if ($turn == $this->available && $this->actions[$i]->type == "jump"){
+				Debug::log("adding ".$this->actions[$i]->a);
 				$angle += $this->actions[$i]->a;
 			}
 		}
@@ -263,6 +264,7 @@ class Ship {
 		}
 
 		//Debug::log("returning data fro getDeployState");
+		Debug::log("returning total angle: ".$angle);
 		
 		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x , "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $this->remainingDelay, "angle" => $angle, "thrust" => $this->currentImpulse);
 	}
@@ -550,13 +552,17 @@ class Ship {
 		
 		$base = $this->getHitChance($fire);
 		$traverse = $fire->weapon->getTraverseMod($fire);
+		$traverse = 1-($traverse*0.2);
 		$range = $fire->weapon->getAccuracyLoss($fire);
 
 		$multi += $fire->shooter->getOffensiveBonus($this->id);
-		$multi += $this->getImpulseProfileMod();
+		//Debug::log($multi);
+		$multi += $this->getImpulseProfileMod($fire);
+		//Debug::log($multi);
 		$multi -= $this->getDefensiveBonus($fire->shooter->id);
+		//Debug::log($multi);
 
-		$req = ($base * $multi) * (1-($traverse*0.2)) - $range;
+		$req = $base * $multi * $traverse - $range;
 		//Debug::log("CALCULATE TO HIT - angle: ".$fire->angle.", base: ".$base.", trav: ".$traverse.", total multi: ".$multi.", dist/range: ".$fire->dist."/".$range.", req: ".$req);
 
 		return ceil($req);
@@ -581,7 +587,7 @@ class Ship {
 		$struct = $fire->target->getStructureById($fire->section);
 
 		for ($i = 0; $i < sizeof($struct->systems); $i++){
-			if ($struct->systems[$i]->isDestroyed()){continue;}
+			if ($struct->systems[$i]->destroyed){continue;}
 			$total += $struct->systems[$i]->getHitChance();
 			//Debug::log("adding: ".$struct->systems[$i]->name." for ".$struct->systems[$i]->getHitChance());
 		}
@@ -687,7 +693,12 @@ class Ship {
 		return $this->baseHitChance;
 	}
 
-	public function getImpulseProfileMod(){
+	public function getImpulseProfileMod($fire){
+		if (!$fire->shooter->ship || !$fire->target->ship){
+			//Debug::log("shooter or target is NOT A SHIP -> no impulse mod");
+			return 0;
+		}
+
 		$now = $this->getCurrentImpulse();
 		$stock = $this->getBaseImpulse();
 
@@ -1090,7 +1101,7 @@ class SuperLight extends Ship {
 	function __construct($id, $userid, $available, $status, $destroyed){
         parent::__construct($id, $userid, $available, $status, $destroyed);
 		$this->hitTable = array(
-			"Bridge" => 1,
+			"Bridge" => 0.85,
 			"Engine" => 1,
 			"LifeSupport" => 1,
 			"Sensor" => 1,

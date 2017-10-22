@@ -277,7 +277,7 @@ Salvo.prototype.getShortInfo = function(){
 		table.insertRow(-1).insertCell(-1).innerHTML = this.getStringHitChance();
 
 	if (!this.mission.arrived && game.phase < 1 && this.inRange()){
-		table.insertRow(-1).insertCell(-1).innerHTML = "<span class='red'>ARRIVAL IMMINENT</span>";
+		table.insertRow(-1).insertCell(-1).innerHTML = "<span class='red'>contact imminent</span>";
 	}
 
 	return table;

@@ -524,11 +524,29 @@
 				for ($j = 0; $j < sizeof($units); $j++){
 					$unit = new $units[$j]["name"](1, 1, 0, "", 0);
 
-					$x = mt_rand(-700, -400) * (1-$i*2);
-					$y = mt_rand(-600, 600) * (1-$i*2);
-					$s = ceil(($unit->size*1.3)/2);
+					$do = 1;
 
-					$deploys[] = array("gameid" => $gameid, "userid" => $players[$i]["userid"], "turn" => 1, "phase" => -1, "x" => $x, "y" => $y, "s" => $s);
+					while ($do){
+						$valid = 1;
+						$x = mt_rand(-700, -400) * (1-$i*2);
+						$y = mt_rand(-600, 600) * (1-$i*2);
+						$s = ceil(($unit->size*1.3)/2);
+
+						for ($k = 0; $k < sizeof($deploys); $k++){
+							$d = Math::getDist($deploys[$k]["x"], $deploys[$k]["y"], $x, $y);
+							$min = $deploys[$k]["s"] + $s;
+							Debug::log("d is".$d." min is ".$min);
+							if ($d < $min){
+								$valid = 0;
+								break;
+							}
+						}
+
+						if ($valid){
+							$do = 0;
+							$deploys[] = array("gameid" => $gameid, "userid" => $players[$i]["userid"], "turn" => 1, "phase" => -1, "x" => $x, "y" => $y, "s" => $s);
+						} else Debug::log("redoing!");
+					}
 				}
 			}
 			

@@ -43,7 +43,7 @@ class Weapon extends System {
 		);
 	}
 
-	public function getCritModifier($dmg){
+	public function getCritModMax($dmg){
 		return min(0.3, (round($dmg/20)/10)); // round to 0.x, half % mod
 	}
 	

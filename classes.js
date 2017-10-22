@@ -7,7 +7,7 @@ function Point(x, y){
 	}
 }
 
-function Move(id, type, dist, x, y, a, delay, cost, costmod, resolved){
+function Move(id, type, dist, x, y, a, delay, cost, costmod, manual, resolved){
 	this.id = id;
 	this.turn = game.turn;
 	this.type = type;
@@ -15,12 +15,13 @@ function Move(id, type, dist, x, y, a, delay, cost, costmod, resolved){
 	this.x = x;
 	this.y = y;
 	this.a = a;
+	this.delay = delay;
+	this.cost = cost;
+	this.costmod = costmod;
+	this.manual = manual;
+	this.resolved = resolved;
 	this.animated = false
 	this.s = false;
-	this.cost = cost || 0;
-	this.delay = delay || 0;
-	this.costmod = costmod || 1;
-	this.resolved = resolved || 0;
 }
 
 function BallVector(a, b, s, h){
