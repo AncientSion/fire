@@ -11,5 +11,5 @@
 	//require_once('autoload.php');
 	//require_once("server\classes.php");
 	//require_once("server\math.php");
-	session_start();
+	//session_start();
 ?>
