@@ -12,7 +12,6 @@ if (isset($_POST["username"]) && isset($_POST["password"])){
 		$dbManager = DBManager::app();
 		$data = $dbManager->validateLogin($_POST["username"], $_POST["password"]);
 		if ($data){
-			session_start();
 			$_SESSION["userid"] = $data["id"];
 			$_SESSION["access"] = $data["access"];
 			header("Location: lobby.php");	
