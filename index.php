@@ -1,6 +1,6 @@
 <?php
 include(dirname(__FILE__) . "/autoload.php");
-session_start();
+//session_start();
 
 if (isset($_SESSION["userid"]) && $_SESSION["userid"] != false){
 	header("Location: lobby.php");
@@ -12,6 +12,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])){
 		$dbManager = DBManager::app();
 		$data = $dbManager->validateLogin($_POST["username"], $_POST["password"]);
 		if ($data){
+			session_start();
 			$_SESSION["userid"] = $data["id"];
 			$_SESSION["access"] = $data["access"];
 			header("Location: lobby.php");	
@@ -30,7 +31,7 @@ else if (isset($_POST["newUsername"]) && isset($_POST["newPassword"])){
 		$dbManager->registerAccount($_POST["newUsername"], $_POST["newPassword"]);
 	}
 	else {
-		echo "Please enter valid registratin data";	
+		echo "Please enter valid registration data";	
 	}
 }
 
