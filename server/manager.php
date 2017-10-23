@@ -997,7 +997,7 @@ class Manager {
 				for ($i = 0; $i < sizeof($this->ships); $i++){
 					if ($this->ships[$i]->id == $ship->id || $ship->userid == $this->ships[$i]->userid){continue;}
 					switch ($ew->type){
-						case 2: $ship->locks[] = array($this->ships[$i]->id, $this->const(["ew"]["effect"][$ew->type])); break;
+						case 2: $ship->locks[] = array($this->ships[$i]->id, $this->const["ew"]["effect"][$ew->type]); break;
 					}
 				}
 			}
