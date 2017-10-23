@@ -435,8 +435,13 @@ function deployPhase(e){
 	}
 	else if (!game.deploying){
 		if (aUnit){
-			if (game.sensorMode){
-				sensorize(game.getUnitById(aUnit), pos);
+			unit = game.getUnitById(aUnit);
+			if (unit.canDeploy()){
+				game.enableDeployment(unit.id);
+				return;
+			}
+			else if (game.sensorMode){
+				sensorize(unit, pos);
 				return;
 			}
 			firePhase(e);

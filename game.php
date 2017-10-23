@@ -605,12 +605,10 @@ echo "</script>";
 	function initiateKeyDowns(){
 		$(this).keypress(function(e){
 			if (game){
-				if (e.keyCode == 113){ // alt - show all sensor
+				if (e.keyCode == 113){ // q - show all sensor
 					if (!game.animating && !game.sensorMode){
-						var old = game.phase;
-						game.phase = -1;
-						game.drawShipOverlays();
-						game.phase = old;
+						//game.drawShipOverlays();
+						game.drawAllSensorSettings();
 					}
 				//console.log(game.vector);
 				}

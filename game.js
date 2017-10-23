@@ -1082,10 +1082,10 @@ Game.prototype.getUnitType = function (val){
 
 	this.drawMixedMoves = function(){
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].flight && this.ships[i].mission.arrived){continue;}
-			else if (!this.ships[i].ship){
+			//if (this.ships[i].flight && this.ships[i].mission.arrived){continue;}
+			//else if (!this.ships[i].ship){
 				this.ships[i].drawMovePlan();
-			}
+			//}
 		}
 	}
 
@@ -1112,6 +1112,74 @@ Game.prototype.getUnitType = function (val){
 				}
 			}
 		}
+	}
+
+	this.drawAllSensorSettings = function(){
+		planCtx.clearRect(0, 0, res.x, res.y);
+
+		for (var i = 0; i < this.ships.length; i++){
+			if (!this.ships[i].ship || !this.ships[i].friendly || !this.ships[i].deployed){continue;}
+			
+			var sensor = this.ships[i].getSystemByName("Sensor");
+			if (!sensor.ew.length){continue;}
+			var loc = this.ships[i].getPlannedPosition();
+			var facing = this.ships[i].getPlannedFacing();
+			var ew = sensor.ew[sensor.ew.length-1];
+			var str = sensor.getOutput();
+			var d = ew.dist;
+			var a = ew.angle;
+			var w;
+			if (ew.angle == -1){
+				w = 180;
+			}
+			else w = Math.min(180, game.const.ew.len * Math.pow(str/ew.dist, game.const.ew.p));
+
+			drawCtx.translate(cam.o.x, cam.o.y)
+			drawCtx.scale(cam.z, cam.z)
+			drawCtx.beginPath();
+			var color = "";
+			var opacity = 1;
+			switch (sensor.ew[sensor.ew.length-1].type){
+				case 0: color = "red"; break;
+				case 1: color = "blue"; break;
+				case 2: color = "blue"; opacity = 0.1; break;
+				case 3: color = "blue"; opacity = 0.1; break;
+			}
+
+			//salvoCtx.clearRect(0, 0, res.x, res.y);
+			//salvoCtx.translate(cam.o.x, cam.o.y);
+			//salvoCtx.scale(cam.z, cam.z);
+
+			w = Math.ceil(w);	
+			if (w == 180){
+				drawCtx.beginPath();
+				drawCtx.arc(loc.x, loc.y, d, 0, 2*Math.PI, false);
+				drawCtx.closePath();
+			}
+			else {
+				var start = addAngle(0 + w-facing, a);
+				var end = addAngle(360 - w-facing, a);
+				var p1 = getPointInDirection(str, start, loc.x, loc.y);
+				var rad1 = degreeToRadian(start);
+				var rad2 = degreeToRadian(end);
+				drawCtx.beginPath();			
+				drawCtx.moveTo(loc.x, loc.y);
+				drawCtx.lineTo(p1.x, p1.y); 
+				drawCtx.arc(loc.x, loc.y, d, rad1, rad2, false);
+				drawCtx.closePath();
+			}
+
+			drawCtx.fillStyle = color;
+			drawCtx.fill();
+			drawCtx.setTransform(1,0,0,1,0,0);
+		};
+
+		salvoCtx.clearRect(0, 0, res.x, res.y);
+		salvoCtx.globalAlpha = 0.2;
+		salvoCtx.drawImage(drawCanvas, 0, 0);
+		salvoCtx.globalAlpha = 1;
+		drawCtx.clearRect(0, 0, res.x, res.y);
+		return;
 	}
 
 	this.setShipTransform = function(){

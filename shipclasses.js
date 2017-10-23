@@ -2866,7 +2866,7 @@ Ship.prototype.drawMoveArea = function(){
 	this.setMoveAngles();
 
 	if (this.moveAngles.start + this.moveAngles.end == 360){
-		return;
+		//return;
 	}
 
 	var center = this.getPlannedPosition();	
