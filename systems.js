@@ -2654,7 +2654,7 @@ Hangar.prototype.select = function(e){
 	var selected = false;
 	var ship = game.getUnitById(parentId);
 
-	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit){
+	if (this.destroyed || this.disabled || this.locked || (game.phase != -2 && this.parentId != aUnit)){
 		return false;
 	}
 	else if (!this.selected && game.getUnitById(this.parentId).userid == game.userid && !ship.hasSystemsSelected()){
