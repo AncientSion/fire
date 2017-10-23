@@ -2444,7 +2444,6 @@ Launcher.prototype.updateSystemDetailsDiv = function(){
 
 Launcher.prototype.setupAmmoLoadout = function(e){
 	var div = document.getElementById("weaponLoadoutDiv");
-
 	if ($(div).hasClass("disabled")){
 		$(div).find("#reload").html(this.reload);
 		//$(div).data("systemid", this.id).css("top", e.clientY + 30).css("left", e.clientX - 150).removeClass("disabled");
@@ -2654,13 +2653,19 @@ Hangar.prototype.select = function(e){
 	var selected = false;
 	var ship = game.getUnitById(parentId);
 
-	if (this.destroyed || this.disabled || this.locked || (game.phase != -2 && this.parentId != aUnit)){
+	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit){
 		return false;
+	}
+	else if (game.phase == -2){
+		if (this.selected){
+			this.selected = false;
+		} else this.selected = true;
+		this.setupHangarLoadout(e);
 	}
 	else if (!this.selected && game.getUnitById(this.parentId).userid == game.userid && !ship.hasSystemsSelected()){
 		this.selected = true;
 		this.enableHangarDeployment(e);
-	}	
+	}
 	else {
 		this.selected = false;
 		$("#hangarLoadoutDiv").find("#missionType").find("tr").removeClass("selected").end().end().addClass("disabled");
@@ -2748,7 +2753,7 @@ Hangar.prototype.enableHangarDeployment = function(e){
 		$(div).addClass("disabled");
 	}
 
-	if (game.phase != -1 || game.phase == -1 && game.getUnitById(this.parentId).available == game.turn){
+	if (game.phase > -1 || game.phase == -1 && game.getUnitById(this.parentId).available == game.turn){
 		$(div).find("#missionType").hide();
 	} else $(div).find("#missionType").show();
 }
@@ -2865,7 +2870,7 @@ Hangar.prototype.doLaunchFlight = function(){
 }
 
 Hangar.prototype.alterFlight = function(ele, max){
-	if (game.phase != -1 || !this.canFire()){return false}
+	if (game.phase >= 0 || !this.canFire()){return false}
 	var name = $(ele).data("name");
 	var add = $(ele).data("val");
 	var launchRate = this.getLaunchRate();

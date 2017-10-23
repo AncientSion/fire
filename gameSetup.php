@@ -23,6 +23,7 @@ if (isset($_SESSION["userid"])){
 	echo "window.players = ".json_encode($players).";";
 	echo "window.factions = ".json_encode($manager->getFactions()).";";
 	echo "window.maxPoints = ".$game["pv"].";";
+	echo "window.userid = ".$playerid.";";
 	echo "</script>";
 	$joined = false;
 	$ready = false;
@@ -209,11 +210,13 @@ else {
 		else if (window.joined){
 			window.turn = new Turn();
 			window.preview = true;
+			window.aUnit = 1;
 			window.game = {
 				turn: 0,
 			 	phase: -2,
 				ships: [],				
 				shipsBought: [],
+				userid: window.userid,
 
 				getUnitById: function(id){	
 					return this.ships[0];
