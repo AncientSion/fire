@@ -500,20 +500,24 @@
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 			if (sizeof($result) > 1){
-				var_export($result);
+				//var_export($result);
 				$ready = true;
 
 				foreach ($result as $player){
 					if ($player["status"] != "ready"){
+						Debug::log("Game #".$gameid." is not ready !");
 						return false;
 					}
 				}
+				Debug::log("Game #".$gameid." is ready !");
 				return true;
 			}
+			Debug::log("Game #".$gameid." is not ready !");
 			return false;
 		}
 
 		public function startGame($gameid){
+			Debug::log("Starting game #".$gameid);
 			
 			$players = $this->getPlayersInGame($gameid);
 			$deploys = array();
