@@ -180,7 +180,7 @@ function Flight(data){
 
 		//if (this.friendly && game.phase == -1 && this.available < game.turn){
 			var elapsed = game.turn - this.mission.turn;
-			var need = 3;
+			var need = 0;
 			if (this.friendly && elapsed >= need){
 				$(table)
 				.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
