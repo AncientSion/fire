@@ -96,7 +96,7 @@ if (isset($_SESSION["userid"])){
 
 	$openGames = $manager->getOpenGames();
 
-	for ($i = 0; $i < sizeof($openGames); $i++){
+	/*for ($i = 0; $i < sizeof($openGames); $i++){
 		if ($openGames[$i]["id"] == 1){
 			if ($dbManager->gameIsReady($openGames[$i]["id"])){
 				if ($dbManager->startGame($openGames[$i]["id"])){
@@ -104,7 +104,7 @@ if (isset($_SESSION["userid"])){
 				}
 			}
 		}
-	}
+	}*/
 	
 	$openGamesElement = "<table>";
 	if ($openGames) {
