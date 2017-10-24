@@ -733,6 +733,8 @@ class Manager {
 				continue;
 			}
 
+			Debug::log("handling mixed #".$this->ships[$i]->id);
+
 			if ($this->ships[$i]->mission->arrived){ // already at target location
 				if ($this->ships[$i]->mission->type == 2){ // strike
 					$t = $this->getUnitById($this->ships[$i]->mission->targetid);
@@ -741,14 +743,14 @@ class Manager {
 					$angle = Math::getAngle2($this->ships[$i]->getCurrentPosition(), $tPos);
 					$move = new Action(-1, $this->turn,	"move",	$dist, $tPos->x, $tPos->y, $angle, 0, 0, 0, 0);
 					$this->ships[$i]->actions[] = $move;
-					Debug::log("STATIC STRIKE #".$this->ships[$i]->id.", adding move to: ".$move->x."/".$move->y);
+					Debug::log("STRIKE #".$this->ships[$i]->id.", adding move to: ".$move->x."/".$move->y);
 					$units[] = $this->ships[$i];
 				} 
 				else {
 					$tPos = $this->ships[$i]->getCurrentPosition(); // Patrol
 					$move = new Action(-1, $this->turn,	"move",	0, $tPos->x, $tPos->y, 0, 0, 0, 0, 0);
 					$this->ships[$i]->actions[] = $move;
-					Debug::log("STATIC PATROL #".$this->ships[$i]->id.", adding move to: ".$move->x."/".$move->y);
+					Debug::log("PATROL #".$this->ships[$i]->id.", adding move to: ".$move->x."/".$move->y);
 					$units[] = $this->ships[$i];
 				}
 
@@ -760,8 +762,13 @@ class Manager {
 				if ($this->ships[$i]->mission->type == 2){ // strike
 					$target = $this->getUnitById($this->ships[$i]->mission->targetid);
 					if ($target->ship){
+						Debug::log("STRIKE advance vs ship");
 						$stack[1][] = $this->ships[$i];
 					}
+					else {
+						Debug::log("STRIKE advance vs mixed");
+						$stack[2][] = $this->ships[$i];
+					} 
 				}
 				else { // patrol
 					$stack[0][] = $this->ships[$i];
