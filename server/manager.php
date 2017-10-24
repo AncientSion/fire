@@ -900,6 +900,7 @@ class Manager {
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->salvo && $this->ships[$i]->mission->arrived){ // mark impacted salvo as destroyed
 				$this->ships[$i]->destroyed = 1;
+				Debug::log("marking salvo #".$this->ships[$i]->id." as destroyed");
 			}
 			
 			if ($this->ships[$i]->destroyed){
@@ -910,6 +911,8 @@ class Manager {
 				}
 			}
 		}
+
+		DBManager::app()->destroyUnitsDB($this->ships);
 	}
 
 	public function alterReinforcementPoints(){
@@ -1294,11 +1297,6 @@ class Manager {
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->id == $id){
 				return $this->ships[$i];
-			}
-		}
-		for ($i = 0; $i < sizeof($this->ballistics); $i++){
-			if ($this->ballistics[$i]->id == $id){
-				return $this->ballistics[$i];
 			}
 		}
 	}
