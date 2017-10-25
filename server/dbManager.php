@@ -11,7 +11,7 @@
 
 			if ($this->connection === null){
 				$user = "aatu"; $pass = "Kiiski";
-				//$user = "root"; $pass = "147147";
+				$user = "root"; $pass = "147147";
 				$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$user,$pass);
 				$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -33,6 +33,30 @@
 			$stmt = $this->connection->prepare($sql);
 			$stmt->execute();
 			return $stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+
+		public function insertChatMsg($post){
+			$time = time();
+
+			$sql = "INSERT INTO chat VALUES (0, '".$post["username"]."', ".$post["userid"].", '".$post["msg"]."', ".$time.")"; 
+			$this->query($sql);
+		}
+
+		public function getFullChat(){
+			$time = time();
+			$stmt = $this->connection->prepare("
+				SELECT * FROM chat
+			");
+
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+			return $result;
+
+		}
+
+		public function getNewChat(){
+
 		}
 
 		public function delete($sql){

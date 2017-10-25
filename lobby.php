@@ -3,10 +3,14 @@
 include_once 'global.php';
 
 if (isset($_SESSION["userid"])){
-
 	$manager = new Manager($_SESSION["userid"]);
+	$username = $manager->getUsername();
 	$dbManager = DBManager::app();
 
+	echo "<script>";
+	echo "window.userid = ".$_SESSION["userid"].";";
+	echo "window.username = '".$username."';";
+	echo "</script";
 	if (isset($_POST["gameName"]) && isset($_POST["pointValue"]) && isset($_POST["reinforceValue"])){
 		if ( $_POST["gameName"] != "" && $_POST["pointValue"] != "" && $_POST["reinforceValue"] != ""){
 			if (ctype_digit($_POST["pointValue"]) && ctype_digit($_POST["reinforceValue"])){
@@ -182,13 +186,27 @@ else {
 				<span>
 					<?php
 						if (isset($_SESSION["userid"])){
-							echo "<font color='red'>Welcome, ".$manager->getUsername().", your player ID: ".$_SESSION['userid']."</font>";
-						} else echo "erro2,2,2,";
+							echo "<font color='red'>Welcome, ".$username.", your player ID: ".$_SESSION['userid']."</font>";
+						} else echo "error, no userid,";
 					?>
 				</span>
 			</div>
 			<div class="lobbyDiv">
 				<?php echo $ongoingGamesElement; ?>
+			</div>
+			<div class ="chatWrapper">
+				<div class ="chatBox">
+					<?php
+						$chat = DBManager::app()->getFullChat();
+						for ($i = 0; $i < sizeof($chat); $i++){
+							echo "<span>".$chat[$i]["username"].": ".$chat[$i]["msg"]."</span></br>";
+						}
+					?>
+				</div>
+				<div class ="sendWrapper">
+					<input id="msg" type="form" style="width:88%">
+					<input type="button" value="send" onclick="ajax.doChat()">
+				</div>
 			</div>
 			<div class="lobbyDiv">
 				<?php echo $openGamesElement; ?>
@@ -231,6 +249,11 @@ else {
 
 <script>
 	$(document).ready(function(){
+
+		var timeStamp = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now();	
+
+		console.log(timeStamp, Date.now());
+
 		var buttons = $(".link");
 		//console.log(buttons);
 		$(buttons[0]).click(function(){
@@ -239,6 +262,14 @@ else {
 		$(buttons[1]).click(function(){
 			window.location = "logout.php"
 		})
+
+
+		var checkChat = setInterval(function(){
+			console.log(Date.now());
+			}, 
+		7000);
+
+
 	})
 
 </script>

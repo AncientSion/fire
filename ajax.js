@@ -41,6 +41,28 @@ window.ajax = {
 		});
 	},
 
+	doChat: function(){
+		var msg = $(".chatWrapper").find(".sendWrapper").find("#msg").val();
+		if (msg.length < 3){return;}
+
+		$.ajax({
+			type: "POST",
+			url: "postGameData.php",
+			datatype: "json",
+			data: {
+					type: "chat",
+					username: username,
+					userid: userid,
+					msg: msg,
+					},
+			success: function(ret){
+				console.log(ret);
+				$(".chatWrapper").find(".sendWrapper").find("#msg").val("");
+			},
+			error: ajax.error,
+		});
+	},
+
 	confirmFleetPurchase: function(userid, gameid, ships, callback){
 
 		for (var i = 0; i < ships.length; i++){
