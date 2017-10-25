@@ -36,9 +36,11 @@
 		}
 
 		public function insertChatMsg($post){
-			Debug::log("insert timestamp ".$post["time"]);
+			//Debug::log("insert timestamp ".$post["time"]);
 			$sql = "INSERT INTO chat VALUES (0, '".$post["username"]."', ".$post["userid"].", '".$post["msg"]."', ".$post["time"].")"; 
-			$this->query($sql);
+
+			$this->connection->query($sql);
+			//$this->query($sql);
 		}
 
 		public function getFullChat(){
