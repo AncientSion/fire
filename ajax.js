@@ -54,6 +54,7 @@ window.ajax = {
 					username: username,
 					userid: userid,
 					msg: msg,
+					time: Math.round(Date.now()/1000),
 					},
 			success: function(ret){
 				console.log(ret);
@@ -63,8 +64,38 @@ window.ajax = {
 		});
 	},
 
-	confirmFleetPurchase: function(userid, gameid, ships, callback){
+	getChat: function(){
+		$.ajax({
+			type: "GET",
+			url: "getGameData.php",
+			datatype: "json",
+			data: {
+					type: "chat",
+					time: window.time
+					},
+			success: function(ret){
+				var data = JSON.parse(ret);
+				if (!data.length){
+					return;
+				}
+				else {
+					window.time = Date.now()/1000;
+					var chat = $(".chatWrapper").find(".chatBox");
+					for (var i = 0; i < data.length; i++){
+						var t = new Date(data[i]["time"]*1000);
+						var s = t.toLocaleTimeString();
+						chat.append($("<span>").html((s+" - "+data[i].username+": "+data[i].msg))).append("</br>");
+					}
 
+					chat.scrollTop(function(){return this.scrollHeight});
+
+				}
+			},
+			error: ajax.error,
+		});
+	},
+
+	confirmFleetPurchase: function(userid, gameid, ships, callback){
 		for (var i = 0; i < ships.length; i++){
 			if (ships[i].upgrades.length == 0){
 				delete ships[i].upgrades;

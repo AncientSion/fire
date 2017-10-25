@@ -1530,15 +1530,16 @@ table, th, tr, td {
 .chatBox {
 	border: 1px solid white;
 	width: 90%;
-	height: 100px;
 	margin: auto;
 	color: white;
-	padding: 5px;
+	padding: 1px;
+    max-height:100px;
+    overflow:auto;
 }
 
 .sendWrapper {
 	text-align: center;
-	width: 670px;
+	width: 400px;
 	margin: auto;
 }
 

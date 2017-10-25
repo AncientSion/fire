@@ -8,7 +8,10 @@ $gameid = $_SESSION["gameid"];
 	
 
 if (isset($_GET["type"])){
-	if ($_GET["type"] == "status"){
+	if ($_GET["type"] == "chat"){
+		echo JSON_encode($dbManager->getNewChat($_GET["time"]));
+	}
+	else if ($_GET["type"] == "status"){
 		$status = $dbManager->getGameStatus(
 											$_GET["gameid"],
 											$_GET["userid"],

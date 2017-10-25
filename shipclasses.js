@@ -858,17 +858,18 @@ function Ship(data){
 		var button = $("#game").find("#turnButton");
 		var vector = $("#vectorDiv")
 
-		if (game.turnMode){
 			$(button)
 				.find("#turnMode").html("ON").addClass("on").end()
 				//.find("#impulseMod").html(turn.dif).end()
 				.find("#turnCost").html(round(turn.cost * turn.mod * turn.dif, 2) + " EP").end()
 				.find("#turnDelay").html(round(turn.delay * turn.mod * turn.dif, 2) + " px").end()
 				.find("#turnMod").html(turn.mod).end()
+
+		if (game.turnMode){
+			$(button)
 				.find("#shortenTurn").removeClass("disabled");
 				//$("#game").find("#epButton").find("tr:nth-child(2)").find("th").first().html("Turn Cost / Rem");
 				$("#game").find("#epButton").find("#impulseText").html("Cost : Rem").end().find("#impulseCost").html("");
-
 
 		/*	$(vector).empty()
 				.append($("<table>")
@@ -885,9 +886,9 @@ function Ship(data){
 		else {
 			$(button)
 				.find("#turnMode").html("OFF").removeClass("on").end()
-				.find("#turnCost").html("").end()
-				.find("#turnDelay").html("").end()
-				.find("#turnMod").html("").end()
+				//.find("#turnCost").html("").end()
+				//.find("#turnDelay").html("").end()
+				//.find("#turnMod").html("").end()
 				.find("#shortenTurn").addClass("disabled");
 				$("#game").find("#epButton").find("#impulseText").html("Thrust Change").end().find("#impulseCost").html(this.getImpulseChangeCost());
 			$(vector).addClass("disabled")
@@ -2169,6 +2170,7 @@ function Ship(data){
 	this.setMoveMode = function(){
 		game.mode = 1;
 		turn.set(this);
+		this.setTurnData();
 		this.setMoveTranslation();
 		this.drawTurnGUI();		
 		//this.drawMoveArea();

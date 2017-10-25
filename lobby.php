@@ -199,13 +199,14 @@ else {
 					<?php
 						$chat = DBManager::app()->getFullChat();
 						for ($i = 0; $i < sizeof($chat); $i++){
-							echo "<span>".$chat[$i]["username"].": ".$chat[$i]["msg"]."</span></br>";
+							echo "<span>".date("G:i:s", $chat[$i]["time"])." - ".$chat[$i]["username"].": ".$chat[$i]["msg"]."</span></br>";
+							//echo "<span>".$chat[$i]["time"]." - ".$chat[$i]["username"].": ".$chat[$i]["msg"]."</span></br>";
 						}
 					?>
 				</div>
 				<div class ="sendWrapper">
-					<input id="msg" type="form" style="width:88%">
-					<input type="button" value="send" onclick="ajax.doChat()">
+					<input id="msg" placeholder ="chat here" type="form" style="width:88%">
+					<!--<input type="button" value="send" onclick="ajax.doChat()">-->
 				</div>
 			</div>
 			<div class="lobbyDiv">
@@ -250,9 +251,6 @@ else {
 <script>
 	$(document).ready(function(){
 
-		var timeStamp = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now();	
-
-		console.log(timeStamp, Date.now());
 
 		var buttons = $(".link");
 		//console.log(buttons);
@@ -263,13 +261,22 @@ else {
 			window.location = "logout.php"
 		})
 
-
-		var checkChat = setInterval(function(){
-			console.log(Date.now());
-			}, 
-		7000);
-
+		initChat();
 
 	})
 
+	function initChat(){
+		window.time = Date.now()/1000;
+
+		$(this).keypress(function(e){
+			if (e.keyCode == 13){ajax.doChat();}
+		})
+
+		$(".chatWrapper").find(".chatBox").scrollTop(function(){return this.scrollHeight});
+		var checkChat = setInterval(function(){
+				ajax.getChat();
+				}, 
+		7000);
+
+	}
 </script>

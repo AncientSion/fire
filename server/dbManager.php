@@ -11,7 +11,7 @@
 
 			if ($this->connection === null){
 				$user = "aatu"; $pass = "Kiiski";
-				$user = "root"; $pass = "147147";
+				//$user = "root"; $pass = "147147";
 				$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$user,$pass);
 				$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -36,9 +36,8 @@
 		}
 
 		public function insertChatMsg($post){
-			$time = time();
-
-			$sql = "INSERT INTO chat VALUES (0, '".$post["username"]."', ".$post["userid"].", '".$post["msg"]."', ".$time.")"; 
+			Debug::log("insert timestamp ".$post["time"]);
+			$sql = "INSERT INTO chat VALUES (0, '".$post["username"]."', ".$post["userid"].", '".$post["msg"]."', ".$post["time"].")"; 
 			$this->query($sql);
 		}
 
@@ -55,8 +54,21 @@
 
 		}
 
-		public function getNewChat(){
+		public function getNewChat($time){
+			//$sTime = time();
 
+			$stmt = $this->connection->prepare("
+				SELECT * FROM chat WHERE time > :time
+			");
+
+			$stmt->bindParam(":time", $time);
+			$stmt->execute();
+
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+			//Debug::log("timestamp ".$result[0]["time"]." to ".date("h:i:s", $result[0]["time"]));
+			//return "hello";
+			return $result;
 		}
 
 		public function delete($sql){
