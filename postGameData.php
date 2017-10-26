@@ -6,11 +6,10 @@ $manager;
 $dbManager;
 
 if (isset($_POST["type"])) {
-	if (isset($_POST["type"])){
+	if ($_POST["type"] == "chat"){
 		DBManager::app()->insertChatMsg($_POST);
 		return true;
 	}
-	return;
 
 	$manager = new Manager($_POST["userid"], $_POST["gameid"]);
 	$dbManager = DBManager::app($_POST["userid"]);
