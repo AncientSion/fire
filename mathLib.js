@@ -38,7 +38,6 @@ function addAngle(f, a){
 	return ret;
 }
 
-
 function addToDirection(current, add){
     add = add % 360;
 
@@ -53,8 +52,16 @@ function addToDirection(current, add){
 	}
 
 	return ret;
-	}
+}
 
+function rotate(cx, cy, v, angle) {
+	var radians = (Math.PI / 180) * angle;
+		cos = Math.cos(radians);
+		sin = Math.sin(radians);
+		nx = (cos * (v.x - cx)) - (sin * (v.y - cy)) + cx;
+		ny = (cos * (v.y - cy)) + (sin * (v.x - cx)) + cy;
+	return {x: nx, y: ny};
+}
 
                        //    150     180
 function adjustForFacing(facing, angle){

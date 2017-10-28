@@ -1201,6 +1201,19 @@ table, th, tr, td {
 	background-color: #27e627;
 }
 
+.missionButton {
+	font-size: 18px;
+	font-weight: bold;
+	color: black;
+	background-color: lightBlue;
+	border-radius: 3px;
+}
+
+.missionButton.active:hover {
+	cursor: pointer;
+	background-color: #27e627;
+}
+
 #combatlogWrapper, #deployLogWrapper {
 	position: absolute;
 	top: 110px;

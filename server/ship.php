@@ -232,27 +232,28 @@ class Ship {
 	}
 
 	public function getEndState($turn, $phase){
+		//Debug::log("getEndState #".$this->id);
 		if ($phase == -1){
-			return $this->getDeployState($turn);
+			if ($this->available == $turn){
+				return $this->getDeployState($turn);
+			}
 		}
-		else return $this->getMoveState($turn);
+		else {
+			return $this->getMoveState($turn);
+		}
 	}
 
 	public function getDeployState($turn){
-		if ($this->available < $turn){
-	//		Debug::log("RETURN");
-			return;
-		}
 		$angle = $this->facing;
 
-		Debug::log("getDeployState for ".$this->id." current facing ".$this->facing);
+		Debug::log("getDeployState for ".get_class($this)." #".$this->id." current facing ".$this->facing);
 		for ($i = 0; $i < sizeof($this->actions); $i++){
 			if ($this->actions[$i]->turn < $turn){continue;}
 			if ($turn == 1 && $this->actions[$i]->type == "deploy"){
 				$angle += $this->actions[$i]->a;
 			}
 			else if ($turn == $this->available && $this->actions[$i]->type == "jump"){
-				Debug::log("adding ".$this->actions[$i]->a);
+				//Debug::log("adding ".$this->actions[$i]->a);
 				$angle += $this->actions[$i]->a;
 			}
 		}
@@ -264,14 +265,14 @@ class Ship {
 		}
 
 		//Debug::log("returning data fro getDeployState");
-		Debug::log("returning total angle: ".$angle);
+		//Debug::log("returning total angle: ".$angle);
 		
 		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x , "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $this->remainingDelay, "angle" => $angle, "thrust" => $this->currentImpulse);
 	}
 
 
 	public function getMoveState($turn){
-		//Debug::log("getMoveState for ".$this->id);
+		Debug::log("getMoveState for ".$this->id);
 		$delay = $this->remainingDelay;
 		$angle = $this->facing;
 		for ($i = 0; $i < sizeof($this->actions); $i++){

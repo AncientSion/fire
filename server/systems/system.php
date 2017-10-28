@@ -184,7 +184,34 @@ class System {
 		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", dmg: ".$dmg."%, possible: ".sizeof($possible).", inRange: ".sizeof($valid));
 
 		for ($i = 0; $i < sizeof($valid); $i++){
-			if (mt_rand(0, 1)){ // if unlucky, create crit
+			if ($this->internal && $dmg > 50 || !$this->internal && $dmg > 75 || mt_rand(0, 1)){
+				$mod = $this->getCritModMax($dmg);
+				if ($mod < 0.05){continue;}
+				$duration = 0;
+
+				//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
+				$this->crits[] = new Crit(
+					sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $valid[$i][0], $duration, $mod, 1
+				);
+			}
+		}
+	}
+
+	public function adetermineCrit($old, $new, $turn){
+		$dmg = round(($new + ($old/2)) / $this->integrity * 100);
+		$possible = $this->getValidEffects();
+		$valid = array();
+
+		for ($i = 0; $i < sizeof($possible); $i++){
+			if ($dmg > $possible[$i][1]){
+				$valid[] = $possible[$i];
+			}
+		}
+
+		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", dmg: ".$dmg."%, possible: ".sizeof($possible).", inRange: ".sizeof($valid));
+
+		for ($i = 0; $i < sizeof($valid); $i++){
+			if ($this->internal && $dmg > 50 || !$this->internal && $dmg > 75 || mt_rand(0, 1)){ // 50 % damage hit on internal, always crit - else 50 % chance to skip
 				$mod = 0;
 				$duration = $valid[$i][2];
 

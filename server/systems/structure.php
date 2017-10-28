@@ -207,7 +207,7 @@ class Single {
 
 	public function getValidEffects(){
 		return array(// attr, %-tresh, duration, modifier
-			array("Disabled", 65, 0, 0)
+			array("Disabled", 75, 0, 0)
 		);
 	}
 
@@ -227,17 +227,16 @@ class Single {
 			}
 		}
 
-		for ($i = 0; $i < sizeof($valid); $i++){
-			if (mt_rand(0, 1)){
-				//Debug::log("Droput!");
+		if (sizeof($valid)){
+			if ($dmg > $valid[0][1] && mt_rand(0, floor($dmg)) > $valid[0][1]/2) {
+				Debug::log("Droput!");
 				$this->crits[] = new Crit(
 					sizeof($this->crits)+1,
 					$this->parentId, $this->id, $turn,
-					$valid[$i][0], $valid[$i][2],
+					$valid[0][0], $valid[0][2],
 					0,
 					1
 				);
-				return;
 			}
 		}
 	}

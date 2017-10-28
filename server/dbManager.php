@@ -36,11 +36,9 @@
 		}
 
 		public function insertChatMsg($post){
-			//Debug::log("insert timestamp ".$post["time"]);
 			$sql = "INSERT INTO chat VALUES (0, '".$post["username"]."', ".$post["userid"].", '".$post["msg"]."', ".$post["time"].")"; 
 
 			$this->connection->query($sql);
-			//$this->query($sql);
 		}
 
 		public function getFullChat(){
@@ -53,12 +51,9 @@
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 			return $result;
-
 		}
 
 		public function getNewChat($time){
-			//$sTime = time();
-
 			$stmt = $this->connection->prepare("
 				SELECT * FROM chat WHERE time > :time
 			");
@@ -67,9 +62,6 @@
 			$stmt->execute();
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-			//Debug::log("timestamp ".$result[0]["time"]." to ".date("h:i:s", $result[0]["time"]));
-			//return "hello";
 			return $result;
 		}
 
@@ -776,35 +768,6 @@
 			}
 		}
 
-		public function setNewMissionsa($data){
-			Debug::log("setNewMission s: ".sizeof($data));
-			$stmt = $this->connection->prepare("
-				UPDATE missions
-				SET type = :type,
-					turn = :turn,
-					targetid = :targetid,
-					x = :x,
-					y = :y,
-					arrived = :arrived
-				WHERE unitid = :unitid
-			");
-
-			for ($i = 0; $i < sizeof($data); $i++){
-				$stmt->bindParam(":type", $data[$i]["type"]);
-				$stmt->bindParam(":turn", $data[$i]["turn"]);
-				$stmt->bindParam(":targetid", $data[$i]["targetid"]);
-				$stmt->bindParam(":x", $data[$i]["x"]);
-				$stmt->bindParam(":y", $data[$i]["y"]);
-				$stmt->bindParam(":arrived", $data[$i]["arrived"]);
-				$stmt->bindParam(":unitid", $data[$i]["unitid"]);
-
-				$stmt->execute();
-				if ($stmt->errorCode() == 0){
-					continue;
-				} else Debug::log("ERROR"); return false;
-			}
-		}
-
 		public function updateMissionState($data){
 			Debug::log("updateMissionState");
 			$stmt = $this->connection->prepare("
@@ -834,8 +797,27 @@
 			}
 		}
 
+		public function updateUnitImpulse($data){
+			$stmt = $this->connection->prepare("
+				UPDATE units
+					thrust = :thrust
+				WHERE id = :id
+			");
+
+			for ($i = 0; $i < sizeof($data); $i++){
+				$stmt->bindParam(":thrust", $data[$i]->currentImpulse);
+				$stmt->bindParam(":id", $data[$i]->id);
+				$stmt->execute();
+
+				if ($stmt->errorCode() == 0){
+					continue;
+				}// else var_dump($stmt->errorCode());
+			}	
+			return true;
+		}
+
 		public function updateUnitEndState($states, $turn, $phase){
-			Debug::log("updateUnitEndState s:".sizeof($states)." ".$turn."/".$phase);
+			//Debug::log("updateUnitEndState s:".sizeof($states)." ".$turn."/".$phase);
 			$stmt = $this->connection->prepare("
 				UPDATE units
 				SET x = :x,

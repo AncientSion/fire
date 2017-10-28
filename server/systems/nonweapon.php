@@ -38,7 +38,7 @@ class PrimarySystem extends System {
 	}
 
 	public function getCritModMax($dmg){
-		return min(0.15, round($dmg/30)/10); // round to 0.xx
+		return min(0.15, round($dmg/30)/10); // round to 0.05
 	}
 }
 
@@ -151,7 +151,7 @@ class Hangar extends Weapon {
 	public $name = "Hangar";
 	public $display = "Hangar";
 	public $loads = array();
-	public $reload = 2;
+	public $reload = 1;
 	public $utility = 1;
 
 	function __construct($id, $parentId, $start, $end, $output, $effiency, $loads, $destroyed = false){

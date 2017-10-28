@@ -56,23 +56,23 @@ class Manager {
 
 
 	public function test(){
-		return;
+		/*return;
 		foreach ($this->ships as $ship){
 			Debug::log($ship->id);
 		}
 		Debug::log("====");
 		foreach ($this->incoming as $incoming){
 			Debug::log($incoming["id"]);
-		}
+		}*/
 		return;
-		$ship = $this->getUnitById(1);
-		$add = 200;
-		$struct = 1;
+		$ship = $this->getUnitById(3);
+		$add = 82;
+		$struct = 2;
 		$ship->primary->remaining += $add;
 		$ship->structures[$struct]->armourDmg = 0;
 		$ship->structures[$struct]->setNegation($ship->primary->integrity, 0);
 
-		$weapon = new HeavyIon(0,0,0,0,0,0,0);
+		$weapon = new MediumSingleIon(0,0,0,0,0,0,0);
 		$fire = new FireOrder(0,0,0,0,0,0,0,0,0,0,0,0);
 		$fire->section = $ship->structures[$struct]->id;
 		$fire->weapon = $weapon;
@@ -85,12 +85,13 @@ class Manager {
 
 		while ($shots > 0){
 			$sys = $fire->target->getHitSystem($fire);
-			Debug::log(get_class($sys).", armourmod: ".$sys->getArmourMod()." => ".$ship->getArmourValue($fire, $sys));
+			//Debug::log(get_class($sys).", armourmod: ".$sys->getArmourMod()." => ".$ship->getArmourValue($fire, $sys));
 			$shots--;
 		}
 
+		$ship->primary->remaining -= $add;
 
-		/*Debug::log("determing to hit for ".get_class($ship)." #".$ship->id);
+		Debug::log("determing to hit for ".get_class($ship)." #".$ship->id);
 
 		$total = $ship->primary->getHitChance();
 		$avail = $total;
@@ -117,7 +118,7 @@ class Manager {
 
 		Debug::log("-> main to internal: ".$total." / ".$avail." => ".(round($total/$avail, 2)*100)."%");
 		Debug::log("-> chance to divert to single internal on main hit: ".$ship->primary->systems[$i-1]->getHitChance()." / ".$avail." => ".(round($ship->primary->systems[$i-1]->getHitChance()/$avail, 2)*100)."%");
-		*/
+		
 		return;
 		/*	
 		$db = DBManager::app();
@@ -591,12 +592,9 @@ class Manager {
 			DBManager::app()->updateSystemLoad($adjust);
 			for ($i = 0; $i < sizeof($units); $i++){
 				$this->ships[] = new Salvo($units[$i]["id"], $units[$i]["userid"], $this->turn, "deployed", 0);
+				if ($this->ships[sizeof($this->ships)-1]->destroyed){"dis salvo is estroyed";}
 				$this->ships[sizeof($this->ships)-1]->setState($this->turn, $this->phase);
 				$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->turn, "deploy", 0, $units[$i]["actions"][0]["x"], $units[$i]["actions"][0]["y"], $a, 0, 0, 0, 0);
-				//echo ("unit #".$units[$i]["id"]);
-				//echo "</br>";
-				//echo "</br>";
-				//var_export($this->ships[sizeof($this->ships)-1]->actions[0]);
 			}
 		}
 	}
@@ -606,7 +604,7 @@ class Manager {
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->available == $this->turn){
 				if (sizeof($this->ships[$i]->actions) == 1){
-					Debug::log("handleDeploymentActions");
+					Debug::log("handleDeploymentActions #".$this->ships[$i]->id);
 					$data[] = $this->ships[$i]->id;
 				}
 			}
@@ -692,7 +690,7 @@ class Manager {
 	}
 
 	public function handleMovementPhase(){
-		Debug::log("handleShipMovementPhase");
+		Debug::log("handleMovementPhase");
 		$this->handleShipMovement();
 		$this->flight = 1;
 		$this->handleMixedMovement();
@@ -748,9 +746,9 @@ class Manager {
 				} 
 				else {
 					$tPos = $this->ships[$i]->getCurrentPosition(); // Patrol
-					$move = new Action(-1, $this->turn,	"move",	0, $tPos->x, $tPos->y, 0, 0, 0, 0, 0);
+					$move = new Action(-1, $this->turn,	"patrol",	0, $tPos->x, $tPos->y, 0, 0, 0, 0, 0);
 					$this->ships[$i]->actions[] = $move;
-					Debug::log("PATROL #".$this->ships[$i]->id.", adding move to: ".$move->x."/".$move->y);
+					Debug::log("PATROL #".$this->ships[$i]->id.", adding patrol: ".$move->x."/".$move->y);
 					$units[] = $this->ships[$i];
 				}
 
@@ -841,6 +839,9 @@ class Manager {
 		Debug::log("assembleEndStates");
 		$states = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
+			//Debug::log("#".$this->ships[$i]->id);
+			//if ($this->ships[$i]->destroyed){continue;}
+			//if ($this->ships[$i]->destroyed){Debug::log("im destroyed!");}
 			$states[] = $this->ships[$i]->getEndState($this->turn, $this->phase);
 		}
 
@@ -896,18 +897,30 @@ class Manager {
 	}
 	
 	public function handleDamageControlPhase(){
-		$this->assembleEndStates();
 		return true;
 	}
 
 	public function endTurn(){
 		Debug::log("endTurn");
+		$this->freeFlights();
+		$this->setUnitStatus();
+		$this->assembleEndStates();
 		$this->alterReinforcementPoints();
+	}
 
+	public function alterReinforcementPoints(){
+		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+			DBManager::app()->addReinforceValue($this->playerstatus[$i]["userid"], $this->gameid, $this->reinforce);
+		};
+	}
+
+	public function setUnitStatus(){
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->salvo && $this->ships[$i]->mission->arrived){ // mark impacted salvo as destroyed
 				$this->ships[$i]->destroyed = 1;
-				Debug::log("marking salvo #".$this->ships[$i]->id." as destroyed");
+			}
+			else if ($this->ships[$i]->flight && $this->ships[$i]->isDestroyed()){
+				$this->ships[$i]->destroyed = 1;
 			}
 			
 			if ($this->ships[$i]->destroyed){
@@ -922,10 +935,24 @@ class Manager {
 		DBManager::app()->destroyUnitsDB($this->ships);
 	}
 
-	public function alterReinforcementPoints(){
-		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-			DBManager::app()->addReinforceValue($this->playerstatus[$i]["userid"], $this->gameid, $this->reinforce);
-		};
+	public function freeFlights(){
+		Debug::log("free flight");
+
+		$data = array();
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->flight && $this->ships[$i]->mission->arrived && $this->ships[$i]->mission->type == 2){
+				if ($this->getUnitById($this->ships[$i]->mission->targetid)->destroyed){
+					$this->ships[$i]->mission->type = 1;
+					$this->ships[$i]->mission->turn = $this->turn - 2;
+					$this->ships[$i]->mission->targetid = 0;
+					$this->ships[$i]->setCurrentImpulse($this->turn, $this->phase);
+					$data[] = $this->ships[$i]->mission;
+				}
+			}
+		}
+
+		if (sizeof($data)){DBManager::app()->updateMissionState($data);}
 	}
 
 	public function startNewTurn(){
@@ -939,7 +966,6 @@ class Manager {
 		//Debug::log("startDeploymentPhase");
 		$this->pickReinforcements();
 		$this->updatePlayerStatus("waiting");
-		return;
 	}
 
 	public function setupShips(){

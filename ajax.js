@@ -79,16 +79,18 @@ window.ajax = {
 					return;
 				}
 				else {
-					window.time = Date.now()/1000;
 					var chat = $(".chatWrapper").find(".chatBox");
-					for (var i = 0; i < data.length; i++){
-						var t = new Date(data[i]["time"]*1000);
-						var s = t.toLocaleTimeString();
-						chat.append($("<span>").html((s+" - "+data[i].username+": "+data[i].msg))).append("</br>");
+					if (data.length){
+						for (var i = 0; i < data.length; i++){
+							var t = new Date(data[i]["time"]*1000);
+							var s = t.toLocaleTimeString();
+							chat.append($("<span>").html((s+" - "+data[i].username+": "+data[i].msg))).append("</br>");
+						}
+
+						window.time = data[data.length-1]["time"];
+
+						chat.scrollTop(function(){return this.scrollHeight});
 					}
-
-					chat.scrollTop(function(){return this.scrollHeight});
-
 				}
 			},
 			error: ajax.error,

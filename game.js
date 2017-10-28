@@ -169,7 +169,7 @@ function Game(data, userid){
 			t = game.getUnitById(this.shortInfo);
 			if (t.ship){
 				valid = true;
-				dest = t.getPlannedPosition();
+				dest = t.getPlannedPos();
 			}
 		}
 
@@ -195,9 +195,7 @@ function Game(data, userid){
 			}
 		}
 
-		var o = s.getPlannedPosition();
-			s.facing = getAngleFromTo(o, dest);
-		var p = getPointInDirection(20, s.facing, o.x, o.y);
+		var o = s.getPlannedPos();
 		var mission = {unitid: aUnit, turn: this.turn, type: this.mission.new, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
 
 		if (t && o.x == dest.x && o.y == dest.y){
@@ -208,6 +206,7 @@ function Game(data, userid){
 		}
 		else {
 			s.mission = mission;
+			s.facing = getAngleFromTo(o, dest);
 			s.setTarget();
 			s.setSize();
 			s.setLayout();
@@ -234,7 +233,7 @@ function Game(data, userid){
 			t = game.getUnitById(this.shortInfo);
 			if (t && t.ship){
 				valid = true;
-				dest = t.getPlannedPosition();
+				dest = t.getPlannedPos();
 			}
 		}
 
@@ -244,7 +243,7 @@ function Game(data, userid){
 
 		var s = this.getUnitById(aUnit);
 		var hangar = s.getSystemById(this.flightDeploy.id)
-		var o = s.getPlannedPosition();
+		var o = s.getPlannedPos();
 		var facing = getAngleFromTo(o, dest);
 		var p = getPointInDirection(s.size/2, facing, o.x, o.y);
 		var mission = {unitid: aUnit, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
@@ -409,6 +408,7 @@ function Game(data, userid){
 							this.getUnitById(aUnit).doUnselect();
 						}
 						popup("You have units with unused Impulse (#" + this.ships[i].id + ")");
+						this.ships[i].doHover();
 						this.ships[i].select();
 						return true;
 					}
@@ -700,14 +700,6 @@ function Game(data, userid){
 		}
 	}
 
-	this.drawSelf = function(){
-		ctx.save();
-		ctx.translate(this.x, this.y)
-		ctx.rotate(this.facing * Math.PI/180);
-		ctx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
-		ctx.restore();
-	}
-
 	this.drawJumpMarker = function(id){
 		var s = game.getUnitById(id);
 		if (s.userid != this.userid && game.phase == 0){return;}
@@ -777,9 +769,9 @@ function Game(data, userid){
 			}
 		}
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].ship){
+			//if (this.ships[i].ship){
 				this.ships[i].setEscortImage();
-			}
+			//}
 		}
 		//game.draw();
 	}
@@ -930,11 +922,10 @@ Game.prototype.getUnitType = function (val){
 		}
 
 		for (var i = 0; i < this.ships.length; i++){
+			this.ships[i].setDrawData();
 			this.ships[i].createBaseDiv();
 			this.ships[i].setTarget();
-			this.ships[i].setImage();
-
-			if (this.ships[i].ship){this.ships[i].setEscortImage();}
+			this.ships[i].setImage();this.ships[i].setEscortImage();
 		}
 
 		for (var i = 0; i < this.reinforcements.length; i++){
@@ -1040,10 +1031,8 @@ Game.prototype.getUnitType = function (val){
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		
 		this.drawShips();
-
-		if (game.flightDeploy){
-			game.flightDeploy.drawArc();
-		} else if (game.deploying){
+		
+		if (game.deploying){
 			game.drawDeploymentZone();
 		}
 	}
@@ -1122,7 +1111,7 @@ Game.prototype.getUnitType = function (val){
 			
 			var sensor = this.ships[i].getSystemByName("Sensor");
 			if (!sensor.ew.length){continue;}
-			var loc = this.ships[i].getPlannedPosition();
+			var loc = this.ships[i].getPlannedPos();
 			var facing = this.ships[i].getPlannedFacing();
 			var ew = sensor.ew[sensor.ew.length-1];
 			var str = sensor.getOutput();
@@ -1307,7 +1296,7 @@ Game.prototype.getUnitType = function (val){
 
 	this.getFireDistance = function(a, b){
 		if (a.ship && b.ship){
-			return Math.floor(getDistance(a.getPlannedPosition(), b.getPlannedPosition()));
+			return Math.floor(getDistance(a.getPlannedPos(), b.getPlannedPos()));
 		}
 		else if (this.isCloseCombat(a, b)){
 			return 0;
@@ -1319,7 +1308,7 @@ Game.prototype.getUnitType = function (val){
 			else return a.getParent().size/2;
 		}
 		else if (a.ship){
-			return Math.floor(getDistance(a.getPlannedPosition(), b.getPlannedPosition()));
+			return Math.floor(getDistance(a.getPlannedPos(), b.getPlannedPos()));
 		}
 		return 666;
 	}
@@ -1455,10 +1444,17 @@ Game.prototype.getUnitType = function (val){
 				continue;
 			}
 
-			if (this.ships[i].ship && this.ships[i].cc.length){
-				for (var j = 0; j < this.ships[i].cc.length; j++){
+			if (this.ships[i].cc.length){
+				if (this.ships[i].ship){
+					for (var j = 0; j < this.ships[i].cc.length; j++){
+						var attach = this.getUnitById(this.ships[i].cc[j]);
+						if (attach.mission.arrived < game.turn){
+							this.ships[i].attachAnims.push(attach);
+						}
+					}
+				} else if (this.ships[i].flight){
 					var attach = this.getUnitById(this.ships[i].cc[j]);
-					if (attach.mission.arrived < game.turn){
+					if (attach.salvo){
 						this.ships[i].attachAnims.push(attach);
 					}
 				}
@@ -1513,6 +1509,7 @@ Game.prototype.getUnitType = function (val){
 		this.animFlight = 0;
 		this.animSalvo = 0;
 		game.animateUnitMovement();
+		cam.setFocus(0, -700);
 	}
 
 
@@ -1567,6 +1564,9 @@ Game.prototype.getUnitType = function (val){
 								if (game.ships[i].actions[j].angle == 0){
 									game.ships[i].actions[j].animated = true;
 								}
+							}
+							else if (action.type == "patrol"){
+								game.ships[i].actions[j].animated = true;
 							}
 
 							//for (var k = 0; k < game.ships[i].attachAnims.length; k++){
@@ -1628,7 +1628,6 @@ Game.prototype.getUnitType = function (val){
 		this.getResolvingFireOrders();
 		this.getShotDetails();
 		this.getFireAnimationDetails();
-		//this.getBallDetails();
 		this.getUnitExplosionDetails();
 
 		$("#combatlogWrapper").show();
@@ -1641,11 +1640,7 @@ Game.prototype.getUnitType = function (val){
 
 		this.animateFire = true;
 		this.drawShips();
-		//this.animateBallistics()
 		this.animateFireOrders();
-		//this.animateUnitExplosions()
-
-		//this.animateFire = true; this.fireResolved();
 	}
 
 	this.resetImageData = function(){
@@ -1809,19 +1804,22 @@ Game.prototype.getUnitType = function (val){
 				html: ""
 			}
 
-			var base = game.ships[i].getPlannedPosition();
+			var base = game.ships[i].getPlannedPos();
 
 			if (!game.ships[i].ship){
 				var counter = 0;
+				var rota = game.ships[i].getDrawFacing()+90;
 				for (var j = 0; j < game.ships[i].structures.length; j++){
 					if (game.ships[i].structures[j].isDestroyedThisTurn()){
 						counter++;
+
+						var pos = rotate(0, 0,game.ships[i].structures[j].layout, rota);
 						anim.anims.push({
 							a: game.ships[i].facing+90,
 							t: [0-30*anim.anims.length, 70],
 							s: game.ships[i].getExplosionSize(j),
-							x: base.x + game.ships[i].structures[j].layout.x,
-							y: base.y + game.ships[i].structures[j].layout.y
+							x: base.x + pos.x,
+							y: base.y + pos.y
 						})
 					}
 				}
@@ -1867,8 +1865,9 @@ Game.prototype.getUnitType = function (val){
 					}
 					else {
 						for (var j = 0; j < game.fireOrders[i].anim.length; j++){
-							for (var k = 0; k < game.fireOrders[i].anim[j].length; k++){
+							for (var k = 0; k < game.fireOrders[i].anim[j].length; k++){								
 								if (game.fireOrders[i].anim[j][k].done){continue;}
+
 								if (game.fireOrders[i].weapon.animation == "projectile"){
 									if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
 										game.fireOrders[i].anim[j][k].n += 1;
@@ -1965,7 +1964,7 @@ Game.prototype.getUnitType = function (val){
 				if (!window.animations[i].done){
 					if (!window.animations[i].animating){
 						window,animations[i].animating = 1;
-						cam.setFocusToPos(game.getUnitById(window.animations[i].id).getPlannedPosition());
+						cam.setFocusToPos(game.getUnitById(window.animations[i].id).getPlannedPos());
 						game.redraw();
 					}
 
@@ -2293,9 +2292,8 @@ Game.prototype.getUnitType = function (val){
 					className = "rotate270 size45";
 				} else className = "size45";
 
-
 				ele.append(
-				($(this.ships[i].img.cloneNode(true))
+				($(this.ships[i].getBaseImage().cloneNode(true))
 					.data("id", this.ships[i].id))
 					.addClass(className)
 					.addClass(name)
@@ -2329,7 +2327,7 @@ Game.prototype.getUnitType = function (val){
 							if (aUnit && aUnit != vessel.id){
 								var	ship = game.getUnitById(aUnit);
 								if (ship.salvo){return;}
-								var shipLoc = ship.getPlannedPosition();
+								var shipLoc = ship.getPlannedPos();
 								var facing = ship.getPlannedFacing();
 								if (ship.hasWeaponsSelected()){
 									if (ship.id != vessel.id){
@@ -2361,7 +2359,7 @@ Game.prototype.posIsOccupied = function(ship, pos){
 	if (ship.ship){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].ship && this.ships[i].id != ship.id && this.ships[i].userid == ship.userid){ // different ship, different owners
-				var step = this.ships[i].getPlannedPosition();
+				var step = this.ships[i].getPlannedPos();
 
 				if (!this.ships[i].getRemainingImpulse() && getDistance(pos, step) <= 0.66*(this.ships[i].size/2 + ship.size/2)){
 				popup("The selected position is too close to the position or planned position of vessel (#"+this.ships[i].id+")");
@@ -2373,7 +2371,7 @@ Game.prototype.posIsOccupied = function(ship, pos){
 	else {
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].id != ship.id && (this.ships[i].ship || this.ships[i].userid == ship.userid)){ // different ship, different owners
-				var step = this.ships[i].getPlannedPosition();
+				var step = this.ships[i].getPlannedPos();
 
 				if ((this.ships[i].ship || !step.resolved) && getDistance(pos, step) <= 0.66*(this.ships[i].size/2 + ship.size/2)){
 				popup("The selected position is too close to the position or planned position of a vessel (#"+this.ships[i].id+" - " + this.ships[i].name +")");

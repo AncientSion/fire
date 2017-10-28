@@ -6,60 +6,6 @@ function Salvo(data){
 		this.size = 18;
 	}
 
-	this.getAttachment = function(div){
-		var color = "red";
-
-		if (this.friendly){color = "green";}
-		var attachDiv = $("<div>").addClass("attachDiv")
-			.append($("<div>").css("display", "block").addClass("center15 " + color)
-				.html("Salvo #" + this.id + (" (click to select)"))
-			.append($("<div>").css("display", "block").addClass("center15 " + color)
-				.html("Auto-Targetting: " + this.getTarget().name + " #" + this.mission.targetid)))
-			.data("id", this.id)
-			.click(function(){
-				if (aUnit){
-					var ship = game.getUnitById(aUnit);
-					if (ship.hasWeaponsSelected()){
-						var target = game.getUnitById($(this).data("id"));
-						if (ship.userid != target.userid){
-							handleFireClick(ship, target);
-						}
-					} 
-					else {
-						ship.doUnselect();
-						ship.switchDiv();
-						game.getUnitById($(this).data("id")).select();
-					}
-				}
-				else game.getUnitById($(this).data("id")).select();
-				
-			})
-			.hover(function(e){
-				var vessel = game.getUnitById($(this).data("id"));
-				if (aUnit && aUnit != vessel.id){
-					var	ship = game.getUnitById(aUnit);
-					if (ship.salvo){return;}
-					if (ship.hasWeaponsSelected()){
-						if (ship.id != vessel.id){
-							handleWeaponAimEvent(ship, vessel, e);
-						}
-					} else {
-						game.target = 0;
-						$("#weaponAimTableWrapper").hide()
-					}
-				}
-			})
-			
-
-		for (var j = 0; j < this.structures.length; j++){
-			if (this.structures[j].destroyed || this.structures[j].disabled){continue;}
-			attachDiv.append($("<div>").append($("<img>").css("width", 34).css("height", 34).attr("src", window.shipImages[this.structures[j].name.toLowerCase()].src)));
-		}
-
-		div.append(attachDiv);
-		return div;
-	}
-
 	this.getDamage = function(){
 		var min = this.getMinDmg();
 		var max = this.getMaxDmg();
@@ -95,125 +41,6 @@ function Salvo(data){
 	
 	this.getDefensiveBonus = function(s){
 		return 0;
-	}
-
-	this.createBaseDiv = function(){
-		var owner = "friendly";
-		if (this.userid != game.userid){owner = "hostile";}
-		var div = document.createElement("div");
-			div.className = "ammoDiv " + owner + " disabled";
-			$(div).data("ammoId", this.id);
-		
-		var table = document.createElement("table");
-			table.style.width = "95%"
-
-		var tr = table.insertRow(-1);
-		var td = tr.insertCell(-1); td.className = "header";	
-			td.innerHTML = this.structures.length + "x '" + this.structures[0].name + "' #" + this.id; td.colSpan = 4;
-
-		var tr = table.insertRow(-1);
-		var td = tr.insertCell(-1); td.className = "subHeader";
-			td.innerHTML = this.structures[0].display; td.colSpan = 4;
-
-		var target = this.getTarget();
-		var dist = Math.ceil(getDistance(this.getPlannedPosition(), target.getPlannedPosition()));
-		var tr = table.insertRow(-1);
-		var td = tr.insertCell(-1);
-			td.className = "subHeader"; td.colSpan = 4;
-			td.innerHTML = "Target: <span class='red font15'>" + target.name + " #" + target.id + "</span>,  distance: " + dist + "px";
-		div.appendChild(table);
-
-		var table = document.createElement("table");
-			table.style.width = "95%"; table.style.marginTop = "10px";
-    	$(table)
-			.append($("<tr>")
-	    		.append($("<th>").html("Thrust / Accel"))
-	    		.append($("<th>").html("Armour"))
-	    		.append($("<th>").html("Damage"))
-	    		.append($("<th>").html("Tracking up to"))
-			)
-			.append($("<tr>")
-	    		.append($("<td>").html(this.getCurrentImpulse() + " (+" + Math.floor(this.getBaseImpulse()) + " per Turn)"))
-	    		.append($("<td>").html(this.structures[0].negation))
-	    		.append($("<td>").html(this.getDamage()))
-	    		.append($("<td>").html(this.getTrackingString()))
-			)
-
-		div.appendChild(table);
-
-		var table = document.createElement("table");
-			table.style.borderCollapse = "collapse";
-			table.style.margin = "auto";
-		var tr = document.createElement("tr");
-
-		var max = Math.min(6, this.structures.length);
-
-		var impact = false;
-		if (this.actions.lenght && this.actions[this.actions.length-1].type == "impact"){
-			impact = true;
-		}
-
-		for (var i = 0; i < this.structures.length; i++){
-			if (i % max === 0){
-			    var tbody = table.appendChild(document.createElement("tbody"));
-			    var tr1 = tbody.insertRow(-1);
-			    var tr2 = tbody.insertRow(-1);
-			}
-
-			var td = document.createElement("td");
-				td.className = "iconContainer"; 
-				$(td).data("id", this.structures[i].id);
-				td.addEventListener("click", function(){
-					console.log(game.getUnitById(aUnit).getSystemById($(this).data("id")));
-				})
-
-				if (this.structures[i].destroyed || this.structures[i].disabled){
-				var img = new Image();
-					img.className = "ammoOverlay";
-					img.src = "varIcons/destroyed.png";
-					td.appendChild(img);
-				}
-				/*else if (impact){
-					if (true){
-						img.src = "varIcons/ammoHit.png";
-					} else img.src = "varIcons/ammoMiss.png";
-				}*/
-				$(td).append($(this.img.cloneNode(true)).addClass("size40"));
-
-			tr1.appendChild(td);
-
-			var td = document.createElement("td");
-				td.className = "iconIntegrity";
-
-			var rem = this.structures[i].getRemainingIntegrity();
-
-			var bgDiv = document.createElement("div");
-				bgDiv.className = "integrityAmount"; bgDiv.style.top = 2;
-				bgDiv.style.fontSize = "12px";
-				bgDiv.innerHTML = rem + " / " + this.structures[i].integrity;
-				td.appendChild(bgDiv);
-
-			var lowerDiv = document.createElement("div");
-				lowerDiv.className = "integrityNow"; lowerDiv.style.top = 0; lowerDiv.style.height = "100%";
-				lowerDiv.style.width = rem/this.structures[i].integrity * 100 + "%";
-				td.appendChild(lowerDiv);
-				
-			var upperDiv = document.createElement("div");
-				upperDiv.className = "integrityFull"; upperDiv.style.top = 0;
-				td.appendChild(upperDiv);
-
-			tr2.appendChild(td);
-		}
-		div.appendChild(table);
-
-		$(div).contextmenu(function(e){
-			e.stopPropagation();
-		//	e.preventDefault();
-		//	$(this).addClass("disabled");
-		}).drag();
-		
-		this.element = div;
-		document.getElementById("game").appendChild(div);
 	}
 
 	this.setDisplay = function(){
@@ -256,10 +83,183 @@ function Salvo(data){
 			this.y + range(this.size * 0.3 * -1, this.size * 0.3)
 		)
 	}
-
 }
 
 Salvo.prototype = Object.create(Mixed.prototype);
+
+Salvo.prototype.createBaseDiv = function(){
+	var owner = "friendly";
+	if (this.userid != game.userid){owner = "hostile";}
+	var div = document.createElement("div");
+		div.className = "ammoDiv " + owner + " disabled";
+		$(div).data("ammoId", this.id);
+	
+	this.element = div;
+	
+	var table = document.createElement("table");
+		table.style.width = "95%"
+
+	var tr = table.insertRow(-1);
+	var td = tr.insertCell(-1); td.className = "header";	
+		td.innerHTML = this.structures.length + "x '" + this.structures[0].name + "' #" + this.id; td.colSpan = 4;
+
+	var tr = table.insertRow(-1);
+	var td = tr.insertCell(-1); td.className = "subHeader";
+		td.innerHTML = this.structures[0].display; td.colSpan = 4;
+
+	var target = this.getTarget();
+	var dist = Math.ceil(getDistance(this.getPlannedPos(), target.getPlannedPos()));
+	var tr = table.insertRow(-1);
+	var td = tr.insertCell(-1);
+		td.className = "subHeader"; td.colSpan = 4;
+		td.innerHTML = "Target: <span class='red font15'>" + target.name + " #" + target.id + "</span>,  distance: " + dist + "px";
+	div.appendChild(table);
+
+	var table = document.createElement("table");
+		table.style.width = "95%"; table.style.marginTop = "10px";
+	$(table)
+		.append($("<tr>")
+    		.append($("<th>").html("Thrust / Accel"))
+    		.append($("<th>").html("Armour"))
+    		.append($("<th>").html("Damage"))
+    		.append($("<th>").html("Tracking up to"))
+		)
+		.append($("<tr>")
+    		.append($("<td>").html(this.getCurrentImpulse() + " (+" + Math.floor(this.getBaseImpulse()) + " per Turn)"))
+    		.append($("<td>").html(this.structures[0].negation))
+    		.append($("<td>").html(this.getDamage()))
+    		.append($("<td>").html(this.getTrackingString()))
+		)
+
+	div.appendChild(table);
+
+	var table = document.createElement("table");
+		table.style.borderCollapse = "collapse";
+		table.style.margin = "auto";
+	var tr = document.createElement("tr");
+
+	var max = Math.min(6, this.structures.length);
+
+	var impact = false;
+	if (this.actions.lenght && this.actions[this.actions.length-1].type == "impact"){
+		impact = true;
+	}
+
+	for (var i = 0; i < this.structures.length; i++){
+		if (i % max === 0){
+		    var tbody = table.appendChild(document.createElement("tbody"));
+		    var tr1 = tbody.insertRow(-1);
+		    var tr2 = tbody.insertRow(-1);
+		}
+
+		var td = document.createElement("td");
+			td.className = "iconContainer"; 
+			$(td).data("id", this.structures[i].id);
+			td.addEventListener("click", function(){
+				console.log(game.getUnitById(aUnit).getSystemById($(this).data("id")));
+			})
+
+			if (this.structures[i].destroyed || this.structures[i].disabled){
+			var img = new Image();
+				img.className = "ammoOverlay";
+				img.src = "varIcons/destroyed.png";
+				td.appendChild(img);
+			}
+			/*else if (impact){
+				if (true){
+					img.src = "varIcons/ammoHit.png";
+				} else img.src = "varIcons/ammoMiss.png";
+			}*/
+			$(td).append($(this.img.cloneNode(true)).addClass("size40"));
+
+		tr1.appendChild(td);
+
+		var td = document.createElement("td");
+			td.className = "iconIntegrity";
+
+		var rem = this.structures[i].getRemainingIntegrity();
+
+		var bgDiv = document.createElement("div");
+			bgDiv.className = "integrityAmount"; bgDiv.style.top = 2;
+			bgDiv.style.fontSize = "12px";
+			bgDiv.innerHTML = rem + " / " + this.structures[i].integrity;
+			td.appendChild(bgDiv);
+
+		var lowerDiv = document.createElement("div");
+			lowerDiv.className = "integrityNow"; lowerDiv.style.top = 0; lowerDiv.style.height = "100%";
+			lowerDiv.style.width = rem/this.structures[i].integrity * 100 + "%";
+			td.appendChild(lowerDiv);
+			
+		var upperDiv = document.createElement("div");
+			upperDiv.className = "integrityFull"; upperDiv.style.top = 0;
+			td.appendChild(upperDiv);
+
+		tr2.appendChild(td);
+	}
+	div.appendChild(table);
+
+	$(div).contextmenu(function(e){
+		e.stopPropagation();
+	//	e.preventDefault();
+	//	$(this).addClass("disabled");
+	}).drag();
+
+	document.getElementById("game").appendChild(div);
+}
+
+Salvo.prototype.supplyAttachDiv = function(div){
+	var color = "red";
+
+	if (this.friendly){color = "green";}
+	var attachDiv = $("<div>").addClass("attachDiv")
+		.append($("<div>").css("display", "block").addClass("center15 " + color)
+			.html("Salvo #" + this.id + (" (click to select)"))
+		.append($("<div>").css("display", "block").addClass("center15 " + color)
+			.html("Auto-Targetting: " + this.getTarget().name + " #" + this.mission.targetid)))
+		.data("id", this.id)
+		.click(function(){
+			if (aUnit){
+				var ship = game.getUnitById(aUnit);
+				if (ship.hasWeaponsSelected()){
+					var target = game.getUnitById($(this).data("id"));
+					if (ship.userid != target.userid){
+						handleFireClick(ship, target);
+					}
+				} 
+				else {
+					ship.doUnselect();
+					ship.switchDiv();
+					game.getUnitById($(this).data("id")).select();
+				}
+			}
+			else game.getUnitById($(this).data("id")).select();
+			
+		})
+		.hover(function(e){
+			var vessel = game.getUnitById($(this).data("id"));
+			if (aUnit && aUnit != vessel.id){
+				var	ship = game.getUnitById(aUnit);
+				if (ship.salvo){return;}
+				if (ship.hasWeaponsSelected()){
+					if (ship.id != vessel.id){
+						handleWeaponAimEvent(ship, vessel, e);
+					}
+				} else {
+					game.target = 0;
+					$("#weaponAimTableWrapper").hide()
+				}
+			}
+		})
+		
+
+	for (var j = 0; j < this.structures.length; j++){
+		if (this.structures[j].destroyed || this.structures[j].disabled){continue;}
+		attachDiv.append($("<div>").append($("<img>").css("width", 34).css("height", 34).attr("src", window.shipImages[this.structures[j].name.toLowerCase()].src)));
+	}
+
+	div.append(attachDiv);
+	return div;
+}
 
 Salvo.prototype.getArmourString = function(a){
 	return this.structures[0].negation;
@@ -284,6 +284,7 @@ Salvo.prototype.getShortInfo = function(){
 }
 
 Salvo.prototype.setImage = function(){
+	return;
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
 		t.height = this.size*2;
@@ -321,6 +322,7 @@ Salvo.prototype.getCurrentImpulse = function(){
 		return this.currentImpulse + this.baseImpulse*(1-this.destroyed);
 	} else return this.currentImpulse;
 }
+
 Salvo.prototype.getShots = function(){
 	shots = 0;
 	for (var i = 0; i < this.structures.length; i++){

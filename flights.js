@@ -1,3 +1,11 @@
+function Fighter(data){
+	Single.call(this, data);
+	this.fighter = 1;
+}
+Fighter.prototype = Object.create(Single.prototype);
+
+
+
 function Flight(data){
 	Mixed.call(this, data);
 	this.flight = 1;
@@ -8,533 +16,421 @@ function Flight(data){
 	this.unitSize = data.unitSize;
 	this.mission = data.mission || {};
 	this.traverse = -3;
-	this.patrolFacing = [];
 	this.drawImg;
 	this.doDraw = 1;
-
-	this.setSize = function(){
-		if (!this.mission.arrived){
-			this.setPreMoveSize();
-		}
-		else if (this.mission.arrived < game.turn){
-			this.setPostMoveSize();
-		}
-		else if (this.mission.arrived == game.turn){
-			if (game.phase <= 2){
-				this.setPreMoveSize();
-			} else this.setPostMoveSize();
-		}
-	}
-
-	this.setLayout = function(){
-		//var size = this.baseSize + this.unitSize * this.structures.length-1;
-		//size = ths.size
-		var osx = 7;
-		var osy = 5;
-
-		for (var i = 0; i < this.structures.length/3; i++){
-
-			var a = 360/Math.ceil(this.structures.length/3)*i;
-			var o = getPointInDirection(this.size/2 - this.unitSize*4, a-90, 0, 0);
-
-			for (var j = 0; j < Math.min(this.structures.length-i*3, 3); j++){
-				var ox = o.x;
-				var oy = o.y;
-
-				switch (j){
-					case 0: oy -= osy; break;
-					case 1: ox -= osx; oy += osy; break;
-					case 2: ox += osx; oy += osy; break;
-					default: break;
-				}
-				this.structures[(i*3)+j].layout = {x: ox, y: oy};
-			}
-		}
-	}
-
-	this.setLayoutb= function(){
-		var s = this.baseSize + this.unitSize * this.structures.length-1;
-
-		var ox;
-		var oy = -Math.floor(s/2)+10;
-
-		for (var i = 0; i < this.structures.length; i++){
-			//ox = 15*Math.floor((i+1)/2);
-			ox = -5+(10*Math.ceil((i+1)/2))
-
-			if (Math.floor(i % 2)){
-				ox *= -1;
-			}
-
-			if (i / 3 == 1){
-				oy += 10;
-			}
-
-			this.structures[i].layout = {x: ox, y: oy};
-		}
-	}
-
-	this.setLayouta = function(){
-		var size = this.fSize;
-
-		var toDo = Math.min(6, Math.ceil(this.structures.length/2));
-		var done = 0;
-
-		for (var i = 0; i < toDo; i++){
-			this.structures[i].layout = {
-				x: -size/2 - size*i/2,
-				y: -toDo*size/2 +size*(i)
- 			};
- 			//if (this.structures[toDo*2-(i+1)] === undefined){return;}
-			this.structures[toDo*2-(i+1)].layout = {
-				x: size/2 + size*i/2,
-				y: -toDo*size/2 +size*(i)
- 			};
- 			done += 2;
-		}
-
-		if (done < this.structures.length){
-			for (var i = 0; i < (this.structures.length-done)/2; i++){
-				this.structures[i].layout = {
-					x: -size/2 - size/2*i,
-					y: size/2 + size*i
-	 			};
-				this.structures[this.structures.length-done/2-(i+1)].layout = {
-					x: size/2 + size/2*i,
-					y: size/2 + size*i
-	 			};
-			}
-		}
-	}
-
-	this.setMaxMass = function(){
-		for (var i = 0; i < this.structures.length; i++){
-			if (! this.structures[i].destroyed){
-				if (this.structures[i].mass > this.mass){
-					this.mass = this.structures[i].mass; 
-				}
-			}
-		}
-	}
-
-	this.setImpulse = function(){
-		this.baseImpulse = Math.floor(Math.pow(this.mass, -0.8)*2200);
-		this.currentImpulse = this.baseImpulse;
-	}
-
-	this.getEP = function(){
-		return this.ep;
-	}
-	
-	this.hasWeaponsSelected = function(){		
-		for (var i = 0; i < this.structures.length; i++){
-			for (var j = 0; j < this.structures[i].systems.length; j++){
-				if (this.structures[i].systems[j].weapon){
-					if (this.structures[i].systems[j].selected){
-						return true;
-					}
-				}
-			}
-		}
-
-		return false;
-	}
-
-	this.getNewMission = function(){
-		if (this.mission.turn == game.turn){
-			return this.mission;
-		}
-	}
-
-	this.createBaseDiv = function(){
-		var owner = "friendly";
-		if (game.phase > -2 && this.userid != game.userid){owner = "hostile";}
-		var div = document.createElement("div");
-			div.className = "shipDiv " + owner;
-			$(div).data("shipId", this.id);
-
-		var subDiv = document.createElement("div");
-			subDiv.className = "header";
-		
-		var table = document.createElement("table");
-			table.className = "general";
-
-		var header = "red";
-		if (this.friendly){header = "green";}
-
-		$(table)
-			.append($("<tr>")
-				.append($("<th>").html(this.name.toUpperCase() + " #" + this.id).attr("colspan", 2).addClass(header)))
-			.append($("<tr>")
-				.append($("<td>").html("Classification"))
-				.append($("<td>").html(game.getUnitType(this.traverse))))
-			.append($("<tr>")
-				.append($("<td>").html("Current Thrust"))
-				.append($("<td>").html((this.getCurrentImpulse() + " (max: " + (this.baseImpulse*2) + ")"))))
-			.append($("<tr>")
-				.append($("<td>").html("Current Mission"))
-				.append($("<td>").html(game.getMissionTypeString(this.mission.type))))
-			.append($("<tr>")
-				.append($("<td>").html("Mission Target"))
-				.append($("<td>").html(game.getMissionTargetString(this.mission))))
-
-		//if (this.friendly && game.phase == -1 && this.available < game.turn){
-			var elapsed = game.turn - this.mission.turn;
-			var need = 0;
-			if (this.friendly && elapsed >= need){
-				$(table)
-				.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
-				.append($("<tr>").addClass("missionSwitch")
-					.append($("<td>")
-						.attr("colSpan", 2)
-						.addClass("buttonTD")
-						.html("Disengage From Mission")
-						.data("active", 0)
-						.data("mission", this.mission.type)
-						.click(function(e){
-							game.getUnitById(aUnit).switchMissionMode();
-						})))
-					//	.hover(function(e){
-					//		$(this).toggleClass("highlight");
-					//})))
-				.append($("<tr>").addClass("missionOption").click(function(){game.mission.set(1, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Patrol Location")))
-				.append($("<tr>").addClass("missionOption").click(function(){game.mission.set(2, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Strike/ Escort Ship")))
-			}
-			else if (this.friendly){
-				$(table)
-				.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
-				.append($("<tr>").addClass("missionSwitch")
-					.append($("<td>")
-						.attr("colSpan", 2)
-						.addClass("buttonTD")
-						.html("New orders possible in</br> " + (need - elapsed) + " Turn/s")));
-			}
-			else if (elapsed >= need){
-				$(table)
-				.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
-				.append($("<tr>")
-					.append($("<td>")
-						.attr("colSpan", 2)
-						.addClass("buttonTD")
-						.html("Eligible for mission adustment")));
-			}
-			else {
-				$(table)
-				.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
-				.append($("<tr>")
-					.append($("<td>")
-						.attr("colSpan", 2)
-						.addClass("buttonTD")
-						.html("New orders possible in</br> " + (need - elapsed) + " Turn/s")));
-			}
-		//}
-				
-		subDiv.appendChild(table);
-		div.appendChild(subDiv);
-
-		var maxWidth = 300;
-		$(div).css("width", maxWidth);
-		$(div).find(".header").css("width", "99%");
-
-		$(this.expandDiv(div))
-			.addClass("disabled")
-			.drag()
-			.find(".structContainer")
-				.contextmenu(function(e){e.stopPropagation;})
-				//.addClass("disabled")
-				.end()
-			.contextmenu(function(e){
-				//e.stopImmediatePropagation(); e.preventDefault();
-				if ($(this).data("shipId") != aUnit){
-					$(this).addClass("disabled");
-				}
-			})
-
-		if (game.phase == 2){
-			$(div).find(".structContainer").show();
-		}
-
-		this.element = div;
-	}
-
-	this.expandDiv = function(div){
-		var structContainer = document.createElement("div");
-			structContainer.className = "structContainer";
-
-		div.appendChild(structContainer);
-		document.body.appendChild(div);
-
-		// OUTER STRUCTS
-
-		maxWidth = $(div).width();
-		var x = 15;
-		var y = 30;
-		var h = 50;
-		var w = 50;
-
-		for (var i = 0; i < this.structures.length; i++){
-
-			var active = true;
-			if (this.structures[i].destroyed || this.structures[i].disabled){
-				active = false;
-			}
-
-			var img = new Image()
-				img.src = window.shipImages[this.structures[i].name.toLowerCase() + "l"].src;
-
-				$(img)
-					.data("shipId", this.id)
-					.data("fighterId", this.structures[i].id)
-					.addClass("size40")
-					.click(function(e){
-						e.stopPropagation();
-						console.log(game.getUnitById($(this).data("shipId")).getSystemById($(this).data("fighterId")));
-					})
-
-
-			var fighterDiv = document.createElement("div");
-				fighterDiv.className = "fighterDiv";
-				fighterDiv.appendChild(img);
-
-			if (!active){
-				var overlay = new Image();
-				$(overlay)
-					.attr("src", "varIcons/destroyed.png")
-					.addClass("overlay").addClass("size30")
-					.hover(function(e){
-						e.stopPropagation();
-						var p = $(this).parent().children()[0];
-						game.getUnitById($(p).data("shipId")).getSystemById($(p).data("fighterId")).hover(e);
-					})
-				fighterDiv.appendChild(overlay);
-			}
-			else {
-				$(img).hover(function(e){
-					e.stopPropagation();
-					game.getUnitById($(this).data("shipId")).getSystemById($(this).data("fighterId")).hover(e);
-				});
-			}
-
-			structContainer.appendChild(fighterDiv);
-
-			if (x + 50 + 5 > maxWidth){
-				x = 15;
-				y += h*2;
-			}
-
-
-			$(fighterDiv)
-				.css("left", x)
-				.css("top", y)
-
-			x += 50 + 5;
-			var wrap = document.createElement("div");
-				wrap.className = "iconIntegrity"; wrap.style.height = 12;
-
-			var rem = this.structures[i].getRemainingIntegrity();
-
-			var bgDiv = document.createElement("div");
-				bgDiv.className = "integrityAmount"; bgDiv.style.textAlign = "center"; bgDiv.style.fontSize = 12; bgDiv.style.top = 0;
-				bgDiv.innerHTML = rem + " / " + this.structures[i].integrity;
-				wrap.appendChild(bgDiv);
-
-			var lowerDiv = document.createElement("div");
-				lowerDiv.className = "integrityNow"; lowerDiv.style.top = 0; lowerDiv.style.height = "100%";
-				lowerDiv.style.width = rem/this.structures[i].integrity * 100 + "%";
-				wrap.appendChild(lowerDiv);
-				
-			var upperDiv = document.createElement("div");
-				upperDiv.className = "integrityFull"; upperDiv.style.top = 0;
-				wrap.appendChild(upperDiv);
-
-			fighterDiv.appendChild(wrap);
-
-			if (active){
-				var s = 20;
-				// FIGHTER WEAPONS
-				for (var j = 0; j < this.structures[i].systems.length; j++){
-					var td = this.structures[i].systems[j].getTableData(true);
-						$(td.childNodes[0]).attr("width", s).attr("height", s);
-						fighterDiv.appendChild(td);
-						$(td)
-							.addClass("fighter")
-							.css("top", -h -s - 5)
-							.css("left", w/2 - s/2 +1 )
-							.data("shipId", this.id)
-							.click(function(e){
-								e.stopPropagation();
-								game.getUnitById($(this).data("shipId")).getSystemById($(this).data("systemId")).select(e)
-							})
-							.contextmenu(function(e){
-								e.stopPropagation();
-								e.preventDefault();
-								game.getUnitById($(this).data("shipId")).selectAll(e, $(this).data("systemId"));
-							});
-
-					if (active){					
-						$(td).hover(function(e){
-							e.stopPropagation();
-							$("#systemDetailsDiv").remove();
-							game.getUnitById($(this).data("shipId")).getSystemById($(this).data("systemId")).hover(e)
-						})
-					}
-				}
-			}
-		}
-
-
-		var height = 0;
-		$(structContainer).find(".fighterDiv").each(function(){
-			var y = $(this).position().top + $(this).height();
-			if (y > height){
-				height = y;
-			}
-		})
-
-		$(structContainer).css("height", height + 20);
-
-		/*var w = $(div).width();
-		var h = $(div).height();
-		var left = 50;
-		if (this.facing < 90 || this.facing > 270){
-			left = res.x - w - 50;
-		}
-
-		$(div).css("top", 100).css("left", left);
-		*/return div;
-	}
-
-	this.getAttachment = function(div){
-		var color = "red";
-
-		if (this.friendly){color = "green";}
-		var attachDiv = $("<div>").addClass("attachDiv")
-			.append($("<div>").css("display", "block").addClass("center15 " + color).html("Flight #" + this.id + (" (click to select)")))
-			.data("id", this.id)
-			.click(function(){
-				if (aUnit){
-					var ship = game.getUnitById(aUnit);
-					if (ship.hasWeaponsSelected()){
-						var target = game.getUnitById($(this).data("id"));
-						if (ship.userid != target.userid){
-							handleFireClick(ship, target);
-						}
-					} 
-					else {
-						ship.doUnselect();
-						ship.switchDiv();
-						game.getUnitById($(this).data("id")).select();
-					}
-				}
-				else game.getUnitById($(this).data("id")).select();
-				
-			})
-			.hover(function(e){
-				var vessel = game.getUnitById($(this).data("id"));
-					//vessel.doHighlight();
-					//game.handleHoverEvent(vessel)
-				if (aUnit && aUnit != vessel.id){
-					var	ship = game.getUnitById(aUnit);
-					if (ship.salvo){return;}
-					if (ship.hasWeaponsSelected()){
-						if (ship.id != vessel.id){
-							handleWeaponAimEvent(ship, vessel, e);
-						}
-					} else {
-						game.target = 0;
-						$("#weaponAimTableWrapper").hide()
-					}
-				}
-			})
-			
-
-		for (var j = 0; j < this.structures.length; j++){
-			if (this.structures[j].destroyed || this.structures[j].disabled){continue;}
-			attachDiv.append($("<div>").append($("<img>").css("width", 34).css("height", 34).attr("src", window.shipImages[this.structures[j].name.toLowerCase() + "l"].src)));
-		}
-
-		div.append(attachDiv);
-		return div;
-	}
-
-	this.selectAllA = function(e, id){
-		var s = this.getSystemById(id);
-		var w = s.getActiveWeapon();
-		var name = w.name;
-		var hasFire = s.hasUnresolvedFireOrder();
-		if (name == "Hangar"){return;}
-
-		for (var i = 0; i < this.structures.length; i++){
-			for (var j = 0; j < this.structures[i].systems.length; j++){
-				if (! this.structures[i].systems[j].destroyed){
-					if (this.structures[i].systems[j].getActiveWeapon().name == name){
-						if (this.structures[i].systems[j].weapon && this.structures[i].systems[j].hasUnresolvedFireOrder() == hasFire){
-							this.structures[i].systems[j].select(e);
-						}
-					}
-				}
-			}
-		}
-		return;
-	}
 }
 
 Flight.prototype = Object.create(Mixed.prototype);
 
-Flight.prototype.setTarget = function(){
-	var i = this.getCurrentImpulse();
-	if (this.mission.type == 1){  // patrol goal
-		this.finalStep = {x: this.mission.x, y: this.mission.y};
-		var d = getDistance(this, this.finalStep);
-		if (d < i){
-			this.nextStep = this.finalStep;
-		} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, this.finalStep), this.x, this.y);
+Flight.prototype.setSize = function(){
+	if (!this.mission.arrived){
+		this.setPreMoveSize();
 	}
-	else {
-		if (this.mission.type == 2){
-			var target = this.getTarget();
-			if (target.ship){
-				this.finalStep = target.getPlannedPosition();
-				var d = getDistance(this, this.finalStep);
-				if (d < i){
-					this.nextStep = this.finalStep;
-				} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, this.finalStep), this.x, this.y);
+	else if (this.mission.arrived < game.turn){
+		this.setPostMoveSize();
+	}
+	else if (this.mission.arrived == game.turn){
+		if (game.phase <= 2){
+			this.setPreMoveSize();
+		} else this.setPostMoveSize();
+	}
+}
+
+Flight.prototype.setLayout = function(){
+	if (this.mission.type == 1 && this.mission.arrived == game.turn && game.phase >= 2){
+		this.setPatrolLayout();
+		return;
+	}
+	if (this.mission.type == 1 && this.mission.arrived < game.turn){
+		this.setPatrolLayout();
+		return;
+	}
+
+	var osx = 7;
+	var osy = 5;
+
+	for (var i = 0; i < this.structures.length/3; i++){
+
+		var a = 360/Math.ceil(this.structures.length/3)*i;
+		var o = getPointInDirection(this.size/2 - this.unitSize*4, a-90, 0, 0);
+
+		for (var j = 0; j < Math.min(this.structures.length-i*3, 3); j++){
+			var ox = o.x;
+			var oy = o.y;
+
+			switch (j){
+				case 0: oy -= osy; break;
+				case 1: ox -= osx; oy += osy; break;
+				case 2: ox += osx; oy += osy; break;
+				default: break;
 			}
-			else if (target.flight){
-				var i = this.getCurrentImpulse();
-				var d;
-				if (this.mission.type == 2 || this.mission.type == 3){ // strike intercept goal
-					if (target.finalStep == undefined){
-						target.setTarget();
-					}
-					this.finalStep = target.nextStep;
-					d = getDistance(this, target.nextStep);
-					if (d < i){
-						this.nextStep = target.nextStep;
-					} else this.nextStep = getPointInDirection(i, getAngleFromTo(this, target.nextStep), this.x, this.y);
+			this.structures[(i*3)+j].layout = {x: ox, y: oy};
+		}
+	}
+}
 
-					//var vector = new Vector(target, target.nextStep);
-					//var speedMod = this.getCurrentImpulse() / target.getCurrentImpulse();
-					//this.finalStep = getIntercept(this, target, vector, speedMod);
+Flight.prototype.setPatrolLayout = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		var p = getPointInDirection(range(0, this.size/3), range(0, 360), 0, 0);
+		this.structures[i].layout.x = p.x;
+		this.structures[i].layout.y = p.y;
+		//this.structures[i].layout.x = Math.round(range(-this.size/3, this.size/3));
+		//this.structures[i].layout.y = Math.round(range(-this.size/3, this.size/3));
+	}
+}
 
+Flight.prototype.setMaxMass = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		if (! this.structures[i].destroyed){
+			if (this.structures[i].mass > this.mass){
+				this.mass = this.structures[i].mass; 
+			}
+		}
+	}
+}
+
+Flight.prototype.setImpulse = function(){
+	this.baseImpulse = Math.floor(Math.pow(this.mass, -0.8)*2200);
+	this.currentImpulse = this.baseImpulse;
+}
+
+Flight.prototype.getEP = function(){
+	return this.ep;
+}
+
+Flight.prototype.hasWeaponsSelected = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].systems.length; j++){
+			if (this.structures[i].systems[j].weapon){
+				if (this.structures[i].systems[j].selected){
+					return true;
 				}
-
-			}
-			else if (target.salvo){
 			}
 		}
 	}
 
-	this.facing = getAngleFromTo(this, this.nextStep);
+	return false;
 }
 
-function Fighter(data){
-	Single.call(this, data);
-	this.fighter = 1;
+Flight.prototype.getNewMission = function(){
+	if (this.mission.turn == game.turn){
+		return this.mission;
+	}
 }
-Fighter.prototype = Object.create(Single.prototype);
 
+Flight.prototype.createBaseDiv = function(){
+	var owner = "friendly";
+	if (game.phase > -2 && this.userid != game.userid){owner = "hostile";}
+	var div = document.createElement("div");
+		div.className = "shipDiv " + owner;
+		$(div).data("shipId", this.id);
+
+	this.element = div;
+
+	var subDiv = document.createElement("div");
+		subDiv.className = "header";
 	
+	var table = document.createElement("table");
+		table.className = "general";
+
+	var header = "red";
+	if (this.friendly){header = "green";}
+
+	$(table)
+		.append($("<tr>")
+			.append($("<th>").html(this.name.toUpperCase() + " #" + this.id).attr("colspan", 2).addClass(header)))
+		.append($("<tr>")
+			.append($("<td>").html("Classification"))
+			.append($("<td>").html(game.getUnitType(this.traverse))))
+		.append($("<tr>")
+			.append($("<td>").html("Current Thrust"))
+			.append($("<td>").html((this.getCurrentImpulse() + " (max: " + (this.baseImpulse*2) + ")"))))
+		.append($("<tr>")
+			.append($("<td>").html("Current Mission"))
+			.append($("<td>").html(game.getMissionTypeString(this.mission.type))))
+		.append($("<tr>")
+			.append($("<td>").html("Mission Target"))
+			.append($("<td>").html(game.getMissionTargetString(this.mission))))
+
+	//if (this.friendly && game.phase == -1 && this.available < game.turn){
+		var need = 3;
+		var elapsed = game.turn - this.mission.turn;
+		if (this.friendly && elapsed >= need && game.phase == -1){
+			$(table)
+			.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
+			.append($("<tr>").addClass("missionSwitch")
+				.append($("<td>")
+					.attr("colSpan", 2)
+					.addClass("missionButton active")
+					.html("Disengage From Mission")
+					.data("active", 0)
+					.data("mission", this.mission.type)
+					.data("shipid", this.id)
+					.click(function(e){
+						if (aUnit == $(this).data("shipid")){
+							game.getUnitById(aUnit).switchMissionMode();
+						}
+					})))
+			.append($("<tr>").addClass("missionOption").click(function(){game.mission.set(1, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Patrol Location")))
+			.append($("<tr>").addClass("missionOption").click(function(){game.mission.set(2, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Strike/ Escort Ship")))
+		}
+		else {
+			var text = "";
+
+			if (elapsed < need){
+				if (game.turn != -1){
+					//text = "New orders possible in</br> " + (need - elapsed) + " Turn/s";
+					text = "Orders in: "+(need-elapsed)+" turn/s";
+				} else text = "Orders in: "+(need-elapsed)+" turn/s";
+			}
+			else if (game.phase != -1){
+				text = "Orders: -DEPLOYMENT PHASE-";
+			}
+			else if (!this.friendly){
+				text = "New orders possible";
+			}
+
+			$(table)
+			.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
+			.append($("<tr>").addClass("missionSwitch")
+				.append($("<td>")
+					.attr("colSpan", 2)
+					.addClass("missionButton")
+					.html(text)));
+
+
+		}
+	//}
+			
+	subDiv.appendChild(table);
+	div.appendChild(subDiv);
+
+	var maxWidth = 300;
+	$(div).css("width", maxWidth);
+	$(div).find(".header").css("width", "99%");
+
+	$(this.expandDiv(div))
+		.addClass("disabled")
+		.drag()
+		.find(".structContainer")
+			.contextmenu(function(e){e.stopPropagation;})
+			//.addClass("disabled")
+			.end()
+		.contextmenu(function(e){
+			//e.stopImmediatePropagation(); e.preventDefault();
+			if ($(this).data("shipId") != aUnit){
+				$(this).addClass("disabled");
+			}
+		})
+
+	if (game.phase == 2){
+		$(div).find(".structContainer").show();
+	}
+}
+
+Flight.prototype.expandDiv = function(div){
+	var structContainer = document.createElement("div");
+		structContainer.className = "structContainer";
+
+		div.appendChild(structContainer);
+	document.body.appendChild(div);
+
+	// OUTER STRUCTS
+
+	maxWidth = $(div).width();
+	var x = 15;
+	var y = 30;
+	var h = 50;
+	var w = 50;
+
+	for (var i = 0; i < this.structures.length; i++){
+
+		var active = true;
+		if (this.structures[i].destroyed || this.structures[i].disabled){
+			active = false;
+		}
+
+		var img = new Image()
+			img.src = window.shipImages[this.structures[i].name.toLowerCase() + "l"].src;
+
+			$(img)
+				.data("shipId", this.id)
+				.data("fighterId", this.structures[i].id)
+				.addClass("size40")
+				.click(function(e){
+					e.stopPropagation();
+					console.log(game.getUnitById($(this).data("shipId")).getSystemById($(this).data("fighterId")));
+				})
+
+
+		var fighterDiv = document.createElement("div");
+			fighterDiv.className = "fighterDiv";
+			fighterDiv.appendChild(img);
+
+		if (!active){
+			var overlay = new Image();
+			$(overlay)
+				.attr("src", "varIcons/destroyed.png")
+				.addClass("overlay").addClass("size30")
+				.hover(function(e){
+					e.stopPropagation();
+					var p = $(this).parent().children()[0];
+					game.getUnitById($(p).data("shipId")).getSystemById($(p).data("fighterId")).hover(e);
+				})
+			fighterDiv.appendChild(overlay);
+		}
+		else {
+			$(img).hover(function(e){
+				e.stopPropagation();
+				game.getUnitById($(this).data("shipId")).getSystemById($(this).data("fighterId")).hover(e);
+			});
+		}
+
+		structContainer.appendChild(fighterDiv);
+
+		if (x + 50 + 5 > maxWidth){
+			x = 15;
+			y += h*2;
+		}
+
+
+		$(fighterDiv)
+			.css("left", x)
+			.css("top", y)
+
+		x += 50 + 5;
+		var wrap = document.createElement("div");
+			wrap.className = "iconIntegrity"; wrap.style.height = 12;
+
+		var rem = this.structures[i].getRemainingIntegrity();
+
+		var bgDiv = document.createElement("div");
+			bgDiv.className = "integrityAmount"; bgDiv.style.textAlign = "center"; bgDiv.style.fontSize = 12; bgDiv.style.top = 0;
+			bgDiv.innerHTML = rem + " / " + this.structures[i].integrity;
+			wrap.appendChild(bgDiv);
+
+		var lowerDiv = document.createElement("div");
+			lowerDiv.className = "integrityNow"; lowerDiv.style.top = 0; lowerDiv.style.height = "100%";
+			lowerDiv.style.width = rem/this.structures[i].integrity * 100 + "%";
+			wrap.appendChild(lowerDiv);
+			
+		var upperDiv = document.createElement("div");
+			upperDiv.className = "integrityFull"; upperDiv.style.top = 0;
+			wrap.appendChild(upperDiv);
+
+		fighterDiv.appendChild(wrap);
+
+		if (active){
+			var s = 20;
+			// FIGHTER WEAPONS
+			for (var j = 0; j < this.structures[i].systems.length; j++){
+				var td = this.structures[i].systems[j].getTableData(true);
+					$(td.childNodes[0]).attr("width", s).attr("height", s);
+					fighterDiv.appendChild(td);
+					$(td)
+						.addClass("fighter")
+						.css("top", -h -s - 5)
+						.css("left", w/2 - s/2 +1 )
+						.data("shipId", this.id)
+						.click(function(e){
+							e.stopPropagation();
+							game.getUnitById($(this).data("shipId")).getSystemById($(this).data("systemId")).select(e)
+						})
+						.contextmenu(function(e){
+							e.stopPropagation();
+							e.preventDefault();
+							game.getUnitById($(this).data("shipId")).selectAll(e, $(this).data("systemId"));
+						});
+
+				if (active){					
+					$(td).hover(function(e){
+						e.stopPropagation();
+						$("#systemDetailsDiv").remove();
+						game.getUnitById($(this).data("shipId")).getSystemById($(this).data("systemId")).hover(e)
+					})
+				}
+			}
+		}
+	}
+
+
+	var height = 0;
+	$(structContainer).find(".fighterDiv").each(function(){
+		var y = $(this).position().top + $(this).height();
+		if (y > height){
+			height = y;
+		}
+	})
+
+	$(structContainer).css("height", height + 20);
+
+	/*var w = $(div).width();
+	var h = $(div).height();
+	var left = 50;
+	if (this.facing < 90 || this.facing > 270){
+		left = res.x - w - 50;
+	}
+
+	$(div).css("top", 100).css("left", left);
+	*/
+
+	this.getAttachDivs();
+	return div;
+}
+
+Flight.prototype.supplyAttachDiv = function(div){
+	var color = "red";
+
+	if (this.friendly){color = "green";}
+	var attachDiv = $("<div>").addClass("attachDiv")
+		.append($("<div>").css("display", "block").addClass("center15 " + color).html("Flight #" + this.id + (" (click to select)")))
+		.data("id", this.id)
+		.click(function(){
+			if (aUnit){
+				var ship = game.getUnitById(aUnit);
+				if (ship.hasWeaponsSelected()){
+					var target = game.getUnitById($(this).data("id"));
+					if (ship.userid != target.userid){
+						handleFireClick(ship, target);
+					}
+				} 
+				else {
+					ship.doUnselect();
+					ship.switchDiv();
+					game.getUnitById($(this).data("id")).select();
+				}
+			}
+			else game.getUnitById($(this).data("id")).select();
+			
+		})
+		.hover(function(e){
+			var vessel = game.getUnitById($(this).data("id"));
+				//vessel.doHighlight();
+				//game.handleHoverEvent(vessel)
+			if (aUnit && aUnit != vessel.id){
+				var	ship = game.getUnitById(aUnit);
+				if (ship.salvo){return;}
+				if (ship.hasWeaponsSelected()){
+					if (ship.id != vessel.id){
+						handleWeaponAimEvent(ship, vessel, e);
+					}
+				} else {
+					game.target = 0;
+					$("#weaponAimTableWrapper").hide()
+				}
+			}
+		})
+		
+
+	for (var j = 0; j < this.structures.length; j++){
+		if (this.structures[j].destroyed || this.structures[j].disabled){continue;}
+		attachDiv.append($("<div>").append($("<img>").css("width", 34).css("height", 34).attr("src", window.shipImages[this.structures[j].name.toLowerCase() + "l"].src)));
+	}
+
+	div.append(attachDiv);
+	return div;
+}
+
 
 Flight.prototype.switchMissionMode = function(){
 	if (game.mission){this.disableMissionMode();}
@@ -610,10 +506,6 @@ Flight.prototype.inRange = function(){
 	return Salvo.prototype.inRange.call(this);
 }
 
-Flight.prototype.getTarget = function(){
-	return game.getUnitById(this.mission.targetid);	
-}
-
 Flight.prototype.getIntactFighters = function(){
 	var alive = 0;
 	for (var i = 0; i < this.structures.length; i++){
@@ -641,7 +533,6 @@ Flight.prototype.setPostMoveSize = function(){
 	else this.size = this.baseSize + this.unitSize * this.getIntactFighters();
 }
 
-
 Flight.prototype.setRawImage = function(){
 	this.img = window.shipImages[this.structures[0].name.toLowerCase() + "l"];
 	this.smallImg = window.shipImages[this.structures[0].name.toLowerCase()];
@@ -656,8 +547,12 @@ Flight.prototype.switchDiv = function(){
 }
 
 Flight.prototype.getCurrentImpulse = function(){
-	//return this.currentImpulse;
+	return this.currentImpulse;
 	if (game.phase >= 2){
 		return Math.max(this.baseImpulse *2, this.currentImpulse);
 	} else return this.currentImpulse;
 }
+
+
+
+

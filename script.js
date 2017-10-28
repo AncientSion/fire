@@ -117,7 +117,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	//	return;
 	//}
 
-	var shooterLoc = shooter.getPlannedPosition();
+	var shooterLoc = shooter.getPlannedPos();
 	var facing = shooter.getPlannedFacing();					
 	var targetData1 = $("#game").find("#weaponAimTableWrapper").find("#targetInfo").find("#targetData1");
 	var targetData2 = $("#game").find("#weaponAimTableWrapper").find("#targetInfo").find("#targetData2");
@@ -169,7 +169,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 					angle = addAngle(-shooter.getPlannedFacing(), angle);
 				}
 				else {
-					angle = getAngleFromTo(target.getPlannedPosition(), shooterLoc);
+					angle = getAngleFromTo(target.getPlannedPos(), shooterLoc);
 					angle = addAngle(target.getPlannedFacing(), angle);
 				}
 			} else angle = range(0, 359);
@@ -225,9 +225,9 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	else {
 		game.target = 0;
 		if (target){
-			pos = target.getPlannedPosition();
+			pos = target.getPlannedPos();
 		}
-		dist = Math.round(getDistance(shooter.getPlannedPosition(), pos));
+		dist = Math.round(getDistance(shooter.getPlannedPos(), pos));
 		targetData1
 		.empty()
 		.append($("<td>").html(""))
@@ -256,7 +256,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	if (target){
 		if (target.salvo){
 			pos = target.getTrajectory();
-		} else pos = target.getPlannedPosition();
+		} else pos = target.getPlannedPos();
 	}
 	
 	if (!drop){	
@@ -369,7 +369,7 @@ function canvasMouseMove(e){
 		var facing;
 
 		if (game.vector){
-				shipLoc = ship.getPlannedPosition();
+				shipLoc = ship.getPlannedPos();
 				facing = ship.getPlannedFacing();
 			var dist = Math.floor(getDistance(shipLoc, pos));
 			var a = getAngleFromTo(shipLoc, pos);
@@ -379,13 +379,13 @@ function canvasMouseMove(e){
 
 		if (ship.salvo){return}
 		else if (game.sensorMode){
-			shipLoc = ship.getPlannedPosition();
+			shipLoc = ship.getPlannedPos();
 			facing = ship.getPlannedFacing();
 			sensorEvent(false, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), addAngle(facing, getAngleFromTo(shipLoc, pos)));
 			return;
 		}
 		else if (game.turnMode){
-			shipLoc = ship.getPlannedPosition();
+			shipLoc = ship.getPlannedPos();
 			facing = ship.getPlannedFacing();
 			ship.handleTurning(e, shipLoc, facing, pos);
 		}
@@ -408,7 +408,7 @@ function canvasMouseMove(e){
 
 function sensorize(ship, pos){
 	var facing = ship.getPlannedFacing();
-	var shipLoc = ship.getPlannedPosition();
+	var shipLoc = ship.getPlannedPos();
 	var a = addAngle(facing, getAngleFromTo(shipLoc, pos));
 	sensorEvent(true, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), a);
 }
@@ -472,8 +472,8 @@ function movePhase(e){
 				if (game.turnMode){
 					unit.handleTurnAttempt(pos);
 				}
-				else if (isInArc(getCompassHeadingOfPoint(unit.getPlannedPosition(), pos, 0), unit.moveAngles.start, unit.moveAngles.end)){ //check if clicked to move in movement arc
-					var dist = Math.floor(getDistance(unit.getPlannedPosition(), pos));
+				else if (isInArc(getCompassHeadingOfPoint(unit.getPlannedPos(), pos, 0), unit.moveAngles.start, unit.moveAngles.end)){ //check if clicked to move in movement arc
+					var dist = Math.floor(getDistance(unit.getPlannedPos(), pos));
 					if (dist < unit.getRemainingImpulse()){
 						unit.issueMove(pos, dist);
 					}

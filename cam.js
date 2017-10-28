@@ -31,7 +31,7 @@ window.cam = {
 		if (game.phase == 3 && game.animating){
 			for (var i = 0; i < game.fireOrders.length; i++){
 				if (!game.fireOrders[i].animated && game.fireOrders[i].animating){
-					this.setFocusToPos(game.fireOrders[i].target.getPlannedPosition());
+					this.setFocusToPos(game.fireOrders[i].target.getPlannedPos());
 					game.draw();
 					break;
 				}
@@ -57,7 +57,7 @@ window.cam = {
 		}
 		else this.z = 1;
 
-		this.setFocusToPos(fire.target.getPlannedPosition());
+		this.setFocusToPos(fire.target.getPlannedPos());
 		//game.draw();
 	}
 }

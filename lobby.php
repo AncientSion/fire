@@ -10,7 +10,7 @@ if (isset($_SESSION["userid"])){
 	echo "<script>";
 	echo "window.userid = ".$_SESSION["userid"].";";
 	echo "window.username = '".$username."';";
-	echo "</script";
+	echo "</script>";
 	if (isset($_POST["gameName"]) && isset($_POST["pointValue"]) && isset($_POST["reinforceValue"])){
 		if ( $_POST["gameName"] != "" && $_POST["pointValue"] != "" && $_POST["reinforceValue"] != ""){
 			if (ctype_digit($_POST["pointValue"]) && ctype_digit($_POST["reinforceValue"])){
@@ -198,9 +198,11 @@ else {
 				<div class ="chatBox">
 					<?php
 						$chat = DBManager::app()->getFullChat();
-						for ($i = 0; $i < sizeof($chat); $i++){
-							echo "<span>".date("G:i:s", $chat[$i]["time"])." - ".$chat[$i]["username"].": ".$chat[$i]["msg"]."</span></br>";
-							//echo "<span>".$chat[$i]["time"]." - ".$chat[$i]["username"].": ".$chat[$i]["msg"]."</span></br>";
+						if (sizeof($chat)){
+							for ($i = 0; $i < sizeof($chat); $i++){
+								echo "<span>".date("G:i:s", $chat[$i]["time"])." - ".$chat[$i]["username"].": ".$chat[$i]["msg"]."</span></br>";
+							}
+							echo "<script>window.time = ".$chat[sizeof($chat)-1]["time"].";</script>";
 						}
 					?>
 				</div>
@@ -266,12 +268,10 @@ else {
 	})
 
 	function initChat(){
-		window.time = Date.now()/1000;
-
 		$(this).keypress(function(e){
 			if (e.keyCode == 13){ajax.doChat();}
 		})
-
+		
 		$(".chatWrapper").find(".chatBox").scrollTop(function(){return this.scrollHeight});
 		var checkChat = setInterval(function(){
 				ajax.getChat();

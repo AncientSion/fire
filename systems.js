@@ -143,8 +143,8 @@ System.prototype.hover = function(e){
 }
 
 System.prototype.highlightFireOrder = function(){
-	var o = game.getUnitById(this.parentId).getPlannedPosition();
-	var t = game.getUnitById(this.fireOrders[this.fireOrders.length-1].targetid).getPlannedPosition();
+	var o = game.getUnitById(this.parentId).getPlannedPos();
+	var t = game.getUnitById(this.fireOrders[this.fireOrders.length-1].targetid).getPlannedPos();
 	if (o.x == t.y && o.y == t.y){return;}
 	salvoCtx.translate(cam.o.x, cam.o.y);
 	salvoCtx.scale(cam.z, cam.z)
@@ -501,7 +501,7 @@ System.prototype.doUnpower = function(){
 	}
 }
 System.prototype.doPower = function(){
-	if (this.powers.length && this.powers[this.powers.length-1].type == 0){
+	if (this.powers.length && this.powers[this.powers.length-1].turn == game.turn && this.powers[this.powers.length-1].type == 0){
 		this.powers.splice(this.powers.length-1, 1);
 		this.disabled = 0;
 		this.setTimeLoaded();
@@ -897,12 +897,18 @@ PrimarySystem.prototype.getLoadLevel = function(){
 }
 
 PrimarySystem.prototype.getOutput = function(){
+	var output;
+	var mod;
+
 	if (this.disabled || this.destroyed){
-		return 0;
+		output = 0;
+		mod = 0;
+	}
+	else {
+		output = this.output + this.getExtraOutput();
+		mod = this.getOutputCrits();
 	}
 
-	var mod = this.getOutputCrits();
-	var output = this.output + this.getExtraOutput();
 	var usage = this.getOutputUsage();
 
 	return Math.floor(output * (1-mod) - usage);
@@ -1128,7 +1134,7 @@ Sensor.prototype.doUndoActions = function(){
 }
 
 Sensor.prototype.doPower = function(){
-	if (this.powers.length && this.powers[this.powers.length-1].type == 0){
+	if (this.powers.length && this.powers[this.powers.length-1].turn == game.turn && this.powers[this.powers.length-1].type == 0){
 		this.powers.splice(this.powers.length-1, 1);
 		this.disabled = 0;
 		this.setEW({
@@ -1175,7 +1181,7 @@ Sensor.prototype.getEW = function(data){
 Sensor.prototype.drawEW = function(){
 	if (this.ew.length && this.ew[this.ew.length-1].turn == game.turn){
 		var ship = game.getUnitById(this.parentId);
-		var loc = ship.getPlannedPosition();
+		var loc = ship.getPlannedPos();
 		var ew = this.ew[this.ew.length-1];
 		var str = this.getOutput();
 		var facing = ship.getPlannedFacing();
@@ -1632,7 +1638,7 @@ function Warhead(data){
 	this.fireOrders = [];
 	this.guns = 1;
 	this.animation = "explo";
-	this.exploSize = (this.minDmg + this.maxDmg)/18;
+	this.exploSize = (this.minDmg + this.maxDmg)/15;
 
 	for (var i = 0; i < data.fireOrders.length; i++){
 		this.fireOrders.push(new FireOrder(data.fireOrders[i]));
@@ -1659,12 +1665,13 @@ Warhead.prototype.getAnimation = function(fire){
 	var grouping = 1;
 	var delay = 30;
 	var shotInterval = 10;
+	var hits = 0;
 
 	var o = game.getUnitById(this.parentId);
 	var t = game.getUnitById(o.mission.targetid);
-	var p = t.getPlannedPosition();
-	//var d = getDistance(o, t.getPlannedPosition());
-	var a = getAngleFromTo(t.getPlannedPosition(), o);
+	var p = t.getPlannedPos();
+	//var d = getDistance(o, t.getPlannedPos());
+	var a = getAngleFromTo(t.getPlannedPos(), o);
 	
 	for (var j = 0; j < fire.guns; j++){
 		var gunAnims = [];
@@ -1672,11 +1679,17 @@ Warhead.prototype.getAnimation = function(fire){
 		for (var k = 0; k < fire.shots; k++){
 			if (fire.hits[j] < k){ //miss
 				continue;
-			}
+			} else hits++;
 
 			var traj = getPointInDirection(t.size/4, a, p.x, p.y);
 			var tx = traj.x + range(-t.size/7, t.size/7);
 			var ty = traj.y + range(-t.size/7, t.size/7);
+
+			if (fire.target.flight){
+				var t = fire.target.getFireDest(fire, fire.hits[j] >= k, hits-1);
+					tx = p.x + t.x;
+					ty = p.y + t.y;
+			}
 			var shotAnim = {tx: tx, ty: ty, m: 70, n: 0 - ((j / grouping) * delay + k*shotInterval)};
 
 			gunAnims.push(shotAnim);
@@ -1709,7 +1722,7 @@ Particle.prototype.getAnimation = function(fire){
 		cc = 1;
 		if (fire.shooter.flight && fire.target.ship){
 			fraction = 2;
-		} else fraction = 4;
+		} else fraction = 3;
 	}
 	else if (fire.dist < 200){
 		fraction = Math.min(3, 200 / fire.dist);
@@ -1737,7 +1750,7 @@ Particle.prototype.getAnimation = function(fire){
 		}
 		var ox = fire.shooter.drawX + o.x;
 		var oy = fire.shooter.drawY + o.y;
-		var t = fire.target.getPlannedPosition();
+		var t = fire.target.getPlannedPos();
 
 		for (var k = 0; k < this.shots; k++){
 			var hit = 0;
@@ -1796,7 +1809,7 @@ Plasma.prototype.redrawAxis = function(){
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z);
 	$(fxCanvas).css("opacity", 0.3);
-	this.drawArc(game.getUnitById(this.parentId).getPlannedFacing(),  game.getUnitById(this.parentId).getPlannedPosition());
+	this.drawArc(game.getUnitById(this.parentId).getPlannedFacing(),  game.getUnitById(this.parentId).getPlannedPos());
 	fxCtx.setTransform(1, 0, 0, 1, 0, 0);
 }
 
@@ -1859,7 +1872,7 @@ Pulse.prototype.getAnimation = function(fire){
 		cc = 1;
 		if (fire.shooter.flight && fire.target.ship){
 			fraction = 2;
-		} else fraction = 4;
+		} else fraction = 3;
 	}
 	else if (fire.dist < 200){
 		fraction = Math.min(3, 200 / fire.dist);
@@ -1876,7 +1889,7 @@ Pulse.prototype.getAnimation = function(fire){
 		var o = fire.shooter.getGunOrigin(fire.systems[j]);
 		var ox = fire.shooter.drawX + o.x;
 		var oy = fire.shooter.drawY + o.y;
-		var t = fire.target.getPlannedPosition();
+		var t = fire.target.getPlannedPos();
 		var min = fire.target.size*0.3;
 
 		if (fire.hits[j] >= 1){
