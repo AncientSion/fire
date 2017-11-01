@@ -72,7 +72,7 @@ class Manager {
 		$ship->structures[$struct]->armourDmg = 0;
 		$ship->structures[$struct]->setNegation($ship->primary->integrity, 0);
 
-		$weapon = new MediumSingleIon(0,0,0,0,0,0,0);
+		$weapon = new MediumIon(0,0,0,0,0,0,0);
 		$fire = new FireOrder(0,0,0,0,0,0,0,0,0,0,0,0);
 		$fire->section = $ship->structures[$struct]->id;
 		$fire->weapon = $weapon;
@@ -888,7 +888,7 @@ class Manager {
 		$this->resolveFighterFireOrders();
 		$this->resolveBallisticFireOrders();
 		$this->cleanFireOrders();
-		$this->testCrits();
+		$this->testUnitCrits();
 		$this->writeDamageEntries();
 		$this->writeCritEntries();
 		$time += microtime(true); 
@@ -973,7 +973,7 @@ class Manager {
 			$this->ships[$i]->setFacing();
 			$this->ships[$i]->setPosition();
 			$this->ships[$i]->setupForDamage();
-			$this->setShipLocks($this->ships[$i]);
+			$this->setupShipLocks($this->ships[$i]);
 		}
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -1004,7 +1004,7 @@ class Manager {
 		}
 	}
 
-	public function setShipLocks($ship){
+	public function setupShipLocks($ship){
 		if ($ship->salvo){
 			return;
 		}
@@ -1284,9 +1284,12 @@ class Manager {
 		DBManager::app()->deleteUnresolvedFireOrders($this->gameid);
 	}
 
-	public function testCrits(){
+	public function testUnitCrits(){
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			$this->ships[$i]->testCriticals($this->turn);
+			if ($this->ships[$i]->damaged){
+				$this->ships[$i]->testForCrits($this->turn);
+			} 
+			//else Debug::log("skipping undamaged unit #".$this->ships[$i]->id." for crit testing!");
 		}
 	}
 
@@ -1300,6 +1303,7 @@ class Manager {
 		//Debug::log("writeCritEntries");
 		$all = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->destroyed && $this->ships[$i]->ship){continue;}
 			$all = array_merge($all, $this->ships[$i]->getNewCrits($this->turn));
 		}
 		DBManager::app()->insertCritEntries($all, $this->gameid);

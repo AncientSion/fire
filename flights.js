@@ -79,6 +79,12 @@ Flight.prototype.setPatrolLayout = function(){
 	}
 }
 
+Flight.prototype.drawSelf = function(){
+	ctx.translate(this.drawX, this.drawY);
+	ctx.rotate((this.getDrawFacing() + (!this.ship*90)) * Math.PI/180);
+	ctx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
+}
+
 Flight.prototype.setMaxMass = function(){
 	for (var i = 0; i < this.structures.length; i++){
 		if (! this.structures[i].destroyed){

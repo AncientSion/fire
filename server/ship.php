@@ -46,6 +46,7 @@ class Ship {
 	public $baseImpulseCost;
 	public $hitTable;
 	public $cc = array();
+	public $damaged = 0;
 
 	function __construct($id, $userid, $available, $status, $destroyed){
 		$this->id = $id;
@@ -138,10 +139,8 @@ class Ship {
 	}
 
 	public function setBaseStats(){
-		$this->baseHitChance = ceil(pow($this->mass, 1/3)*5);
-		//$this->baseHitChance = ceil(pow($this->mass, 0.3)*4)+20;
+		$this->baseHitChance = ceil(pow($this->mass, 0.4)*1.5)+20;
 		$this->baseTurnCost = round(pow($this->mass, 1.25)/22500, 2);
-		//$this->baseTurnDelay = round(pow($this->mass, 0.5)/35, 2);
 		$this->baseTurnDelay = round(pow($this->mass, 0.45)/20, 2);
 		$this->baseImpulseCost = round(pow($this->mass, 1.4)/2000, 2);
 	}
@@ -375,12 +374,14 @@ class Ship {
 	}
 
 	public function applyDamage($dmg){
+		$this->damaged = 1;
+
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($dmg->structureid == $this->structures[$i]->id){
 				$this->structures[$i]->armourDmg += $dmg->armourDmg;
 
 				if ($dmg->systemid == -1){
-					$this->primary->applyDamage($dmg);
+					$this->primary->addDamage($dmg);
 					if ($this->primary->isDestroyed()){
 						//Debug::log("destroying unit #".$this->id);
 						$this->destroyed = 1;
@@ -392,8 +393,8 @@ class Ship {
 						if ($this->structures[$i]->id == $dmg->structureid){
 							for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 								if ($this->structures[$i]->systems[$j]->id == $dmg->systemid){
-									$this->structures[$i]->systems[$j]->applyDamage($dmg);
-									$this->primary->applyDamage($dmg);
+									$this->structures[$i]->systems[$j]->addDamage($dmg);
+									$this->primary->addDamage($dmg);
 									if ($this->primary->isDestroyed()){
 										//Debug::log("destroying unit #".$this->id);
 										$this->destroyed = 1;
@@ -406,8 +407,8 @@ class Ship {
 				}
 				for ($j = 0; $j < sizeof($this->primary->systems); $j++){
 					if ($this->primary->systems[$j]->id == $dmg->systemid){
-						$this->primary->systems[$j]->applyDamage($dmg);
-						$this->primary->applyDamage($dmg);
+						$this->primary->systems[$j]->addDamage($dmg);
+						$this->primary->addDamage($dmg);
 						if ($this->primary->isDestroyed()){
 							//Debug::log("destroying unit #".$this->id);
 							$this->destroyed = 1;
@@ -816,15 +817,38 @@ class Ship {
 		return mt_rand(0, 359);
 	}
 
-	public function testCriticals($turn){
-		//Debug::log("= testCriticals for ".$this->name.", #".$this->id.", turn: ".$turn);
+	public function testForCrits($turn){
+		//Debug::log("= testForCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
+
+		$spike = 0;
+
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				$this->structures[$i]->systems[$j]->testCrit($turn);
+				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
+				if (!$this->structures[$i]->systems[$j]->damaged){continue;}
+
+				$this->structures[$i]->systems[$j]->testCrit($turn, 0);
+				if (mt_rand(1, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn, 0)){
+					$spike += $this->structures[$i]->systems[$j]->getPowerUsage($turn);
+				}
 			}
 		}
+
 		for ($j = 0; $j < sizeof($this->primary->systems); $j++){
-			$this->primary->systems[$j]->testCrit($turn);
+			if ($this->primary->systems[$j]->destroyed){continue;}
+			if (!$this->primary->systems[$j]->damaged){continue;}
+
+			$this->primary->systems[$j]->testCrit($turn, 0);
+		}
+
+
+		if ($spike){
+			//Debug::log("potential total power spike for unit #".$this->id.": ".$spike);
+			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
+				if ($this->primary->systems[$j]->name == "Reactor"){
+					$this->primary->systems[$j]->applyPowerSpike($turn, $spike);
+				}
+			}
 		}
 	}
 
@@ -974,19 +998,22 @@ class Ship {
 
 	public function getNewCrits($turn){
 		$crits = array();
+		if (!$this->damaged){return $crits;}
+
+		for ($k = 0; $k < sizeof($this->primary->systems); $k++){
+			for ($l = 0; $l < sizeof($this->primary->systems[$k]->crits); $l++){
+				if ($this->primary->systems[$k]->crits[$l]->new){
+					$crits[] = $this->primary->systems[$k]->crits[$l];
+				}// else break;
+			}
+		}
+
 		for ($j = 0; $j < sizeof($this->structures); $j++){
 			for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
 				for ($l = 0; $l < sizeof($this->structures[$j]->systems[$k]->crits); $l++){
-					if ($this->structures[$j]->systems[$k]->crits[$l]->turn == $turn){
+					if ($this->structures[$j]->systems[$k]->crits[$l]->new){
 						$crits[] = $this->structures[$j]->systems[$k]->crits[$l];
-					}
-				}
-			}
-		}
-		for ($k = 0; $k < sizeof($this->primary->systems); $k++){
-			for ($l = 0; $l < sizeof($this->primary->systems[$k]->crits); $l++){
-				if ($this->primary->systems[$k]->crits[$l]->turn == $turn){
-					$crits[] = $this->primary->systems[$k]->crits[$l];
+					}// else break;
 				}
 			}
 		}

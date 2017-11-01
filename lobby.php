@@ -162,7 +162,7 @@ if (isset($_SESSION["userid"])){
 		$openGamesElement .= "</table>";
 	}
 	else {
-		$openGamesElement .= "<tr><td>no Open Games found</tr></td></table>";
+		$openGamesElement .= "<tr><th>no Open Games found</tr></th></table>";
 	}
 }
 else {
@@ -198,12 +198,17 @@ else {
 				<div class ="chatBox">
 					<?php
 						$chat = DBManager::app()->getFullChat();
+						$last = 0;
 						if (sizeof($chat)){
 							for ($i = 0; $i < sizeof($chat); $i++){
 								echo "<span>".date("G:i:s", $chat[$i]["time"])." - ".$chat[$i]["username"].": ".$chat[$i]["msg"]."</span></br>";
 							}
-							echo "<script>window.time = ".$chat[sizeof($chat)-1]["time"].";</script>";
-						}
+							$last = $chat[sizeof($chat)-1]["time"];
+						}// else $last = 1;
+
+						echo "<script>window.time = ".$last.";</script>";
+						//var_export($last);
+
 					?>
 				</div>
 				<div class ="sendWrapper">

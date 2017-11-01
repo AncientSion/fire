@@ -605,10 +605,16 @@ echo "</script>";
 	function initiateKeyDowns(){
 		$(this).keypress(function(e){
 			if (game){
-				if (e.keyCode == 113){ // q - show all sensor
+				if (e.keyCode == 113){ // q - show friendly sensor
 					if (!game.animating && !game.sensorMode){
 						//game.drawShipOverlays();
-						game.drawAllSensorSettings();
+						game.drawAllSensorSettings(1);
+					}
+				}
+				else if (e.keyCode == 119){ // q - show hostile sensor
+					if (!game.animating && !game.sensorMode){
+						//game.drawShipOverlays();
+						game.drawAllSensorSettings(0);
 					}
 				//console.log(game.vector);
 				}
@@ -630,7 +636,7 @@ echo "</script>";
 						window.cancelAnimationFrame(anim);
 						fxCtx.clearRect(0, 0, res.x, res.y);
 						$("#combatLog").find("tr").each(function(i){
-							if (i >= 2){
+							if (i){
 								$(this).remove()
 							}
 						})

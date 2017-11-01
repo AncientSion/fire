@@ -32,8 +32,8 @@ class Flight extends Mixed {
 			$elapsed = $turn - $this->mission->turn + ($phase > 1);
 		}
 
-		$this->baseImpulse = floor(pow($this->mass, -0.8)*2200);
-		$this->currentImpulse = min($this->baseImpulse * (1+$elapsed), $this->baseImpulse*2);
+		$this->baseImpulse = floor(pow($this->mass, -0.8)*2200); // bout 125 to 150
+		$this->currentImpulse = min($this->baseImpulse * (1+$elapsed), $this->baseImpulse*3);
 	}
 
 	public function setSize(){

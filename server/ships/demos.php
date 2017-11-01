@@ -23,12 +23,12 @@ class Demos extends Medium {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 15);
-		$right->systems[] = new MediumSingleIon($this->getId(), $this->id, 300, 120);
+		$right->systems[] = new MediumIon($this->getId(), $this->id, 300, 120);
 		$right->systems[] = new LightIon($this->getId(), $this->id, 300, 180);
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 15);
-		$left->systems[] = new MediumSingleIon($this->getId(), $this->id, 240, 60);
+		$left->systems[] = new MediumIon($this->getId(), $this->id, 240, 60);
 		$left->systems[] = new LightIon($this->getId(), $this->id, 180, 60);
 		$structs[] = $left;
 

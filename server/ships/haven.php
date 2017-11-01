@@ -17,7 +17,7 @@ class Haven extends SuperLight {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 130, 13);
-		$front->systems[] = new MediumSingleIon($this->getId(), $this->id, 240, 120);
+		$front->systems[] = new MediumIon($this->getId(), $this->id, 240, 120);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 120, 12);

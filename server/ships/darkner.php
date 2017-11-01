@@ -6,7 +6,7 @@ class Darkner extends Light {
 	public $faction = "Centauri Republic";
 	public $size = 50;
 	public static $value = 420;
-	public $profile = array(0.95, 1.05);
+	public $profile = array(0.93, 1.07);
 	public $mass = 2000;
 
 	function __construct($id, $userid, $available, $status, $destroyed){		

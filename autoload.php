@@ -102,7 +102,7 @@ spl_autoload_register(
 
                 'particle' => '/server/systems/weapons/particle.php',
                 'lightion' => '/server/systems/weapons/particle.php',
-                'mediumsingleion' => '/server/systems/weapons/particle.php',
+                'mediumion' => '/server/systems/weapons/particle.php',
                 'mediumtwinion' => '/server/systems/weapons/particle.php',
                 'heavyion' => '/server/systems/weapons/particle.php',
                 'fusioncannon' => '/server/systems/weapons/particle.php',

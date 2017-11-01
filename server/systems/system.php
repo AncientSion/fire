@@ -25,6 +25,7 @@ class System {
 	public $modes = array();
 	public $armourMod;
 	public $internal = 0;
+	public $damaged = 0;
 
 	function __construct($id, $parentId, $output = 0, $destroyed = 0){
 		$this->id = $id;
@@ -73,9 +74,22 @@ class System {
 	}
 
 	public function doUnpower($turn){
-		$this->powers[] = new Power(0, $this->parentId, $this->id, $turn, 0, 0, 1);
+		// ($id, $unitid, $systemid, $turn, $type, $cost){
+		$this->powers[] = new Power(0, $this->parentId, $this->id, $turn, 0, 0);
 		$this->disabled = 1;
 	}
+
+	public function isDestroyedThisTurn($turn){
+		if ($this->destroyed){return false;}
+		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
+			if ($this->damages[$i]->turn == $turn){
+				return true;
+			} else if ($this->damages[$i]->turn < $turn){
+				return false;
+			}
+		}
+		return false;
+	}	
 
 	public function isDestroyed(){
 		if ($this->destroyed){return true;}
@@ -138,6 +152,21 @@ class System {
 		return $boost;
 	}
 
+	public function getPowerUsage($turn){
+		$usage = $this->powerReq;
+
+		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
+			if ($this->powers[$i]->turn == $turn){
+				switch ($this->powers[$i]->type){
+					case 0: return 0; break;
+					case 1: $usage += $this->effieny; break;
+					default: continue;
+				}
+			} else return $usage;
+		}
+		return $usage;
+	}
+
 	public function getRemainingIntegrity(){
 		$rem = $this->integrity;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
@@ -150,11 +179,7 @@ class System {
 		return $this->mass*7;
 	}
 
-	public function testCrit($turn){
-		if ($this->destroyed || empty($this->damages)){
-			return;
-		}
-
+	public function testCrit($turn, $extra){
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			if ($this->damages[$i]->turn > $turn){
@@ -170,81 +195,41 @@ class System {
 		}
 	}
 
+	public function getValidEffects(){
+		return array(// attr, %-tresh, duration, modifier
+			array("Disabled", 80, 1, 0),
+			array("Damage", 40, 0, 0),
+			array("Accuracy", 40, 0, 0)
+		);
+	}
+
 	public function determineCrit($old, $new, $turn){
 		$dmg = round(($new + ($old/2)) / $this->integrity * 100);
 		$possible = $this->getValidEffects();
-		$valid = array();
+
+
+		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", dmg: ".$dmg."%");
+
+		$mod = $this->getCritModMax($dmg);
+		if ($mod < 0.05){return;}
 
 		for ($i = 0; $i < sizeof($possible); $i++){
-			if ($dmg > $possible[$i][1]){
-				$valid[] = $possible[$i];
-			}
-		}
+			if (mt_rand(0, 1)){continue;}
+			if ($dmg + mt_rand(-10, 10) < $possible[$i][0]){continue;}
+			$duration = $possible[$i][2];
+			if ($duration && $dmg > 90 && mt_rand(0, 1)){$duration += 1;}
 
-		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", dmg: ".$dmg."%, possible: ".sizeof($possible).", inRange: ".sizeof($valid));
+			//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
+			$this->crits[] = new Crit(
+				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $possible[$i][0], $duration, $mod, 1
+			);
+			Debug::log("applying crit: ".$this->crits[sizeof($this->crits)-1]->type." / ".$this->crits[sizeof($this->crits)-1]->value);
 
-		for ($i = 0; $i < sizeof($valid); $i++){
-			if ($this->internal && $dmg > 50 || !$this->internal && $dmg > 75 || mt_rand(0, 1)){
-				$mod = $this->getCritModMax($dmg);
-				if ($mod < 0.05){continue;}
-				$duration = 0;
-
-				//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
-				$this->crits[] = new Crit(
-					sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $valid[$i][0], $duration, $mod, 1
-				);
-			}
 		}
 	}
 
-	public function adetermineCrit($old, $new, $turn){
-		$dmg = round(($new + ($old/2)) / $this->integrity * 100);
-		$possible = $this->getValidEffects();
-		$valid = array();
-
-		for ($i = 0; $i < sizeof($possible); $i++){
-			if ($dmg > $possible[$i][1]){
-				$valid[] = $possible[$i];
-			}
-		}
-
-		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", dmg: ".$dmg."%, possible: ".sizeof($possible).", inRange: ".sizeof($valid));
-
-		for ($i = 0; $i < sizeof($valid); $i++){
-			if ($this->internal && $dmg > 50 || !$this->internal && $dmg > 75 || mt_rand(0, 1)){ // 50 % damage hit on internal, always crit - else 50 % chance to skip
-				$mod = 0;
-				$duration = $valid[$i][2];
-
-				if ($valid[$i][0] != "Disabled" && !mt_rand(0, 2)){ // if -not disabled- && 33%, perma into duration 1-2
-					$duration += mt_rand(1, 2);
-				}
-				else {
-					$duration += mt_rand(0, 1); // if duration, 50 % to add a turn
-				}
-
-				if ($valid[$i][0] != "Disabled"){ // if not disabled, need modifier
-					$mod = $this->getCritModMax($dmg);
-					if ($duration > 0 && $this->internal){
-						$mod *= 2;
-					}
-
-					for ($j = sizeof($this->crits)-1; $j >= 0; $j--){ // if crit doesnt disable, was this disabled this turn ?
-						if ($this->crits[$j]->turn < $turn){break;}
-						if ($this->crits[$j]->turn == $turn && $this->crits[$j]->type == "Disabled"){
-							$duration += $this->crits[$j]->duration;
-						}
-					}
-				}
-
-				//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
-				$this->crits[] = new Crit(
-					sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $valid[$i][0], $duration, $mod, 1
-				);
-			}
-		}
-	}
-
-	public function applyDamage($dmg){
+	public function addDamage($dmg){
+		$this->damaged = 1;
 		$this->damages[] = $dmg;
 		if ($dmg->destroyed){
 			$this->destroyed = true;

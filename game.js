@@ -104,6 +104,7 @@ function Game(data, userid){
 
 	this.handleFlightDeployMove = function(e, pos, unit){
 
+		/*
 		salvoCtx.clearRect(0, 0, res.x, res.y);
 
 		if (this.shortInfo){
@@ -111,6 +112,7 @@ function Game(data, userid){
 		} else if (aUnit){
 			this.getUnitById(aUnit).drawEW();
 		}
+		*/
 
 		var valid = false;
 		if (this.flightDeploy.mission == 1){ // patrol
@@ -279,6 +281,7 @@ function Game(data, userid){
 		}
 
 		flight.create();
+		flight.setPreMovePosition();
 		flight.setPreMoveImage();
 		flight.createBaseDiv();
 		flight.setTarget();
@@ -1103,11 +1106,11 @@ Game.prototype.getUnitType = function (val){
 		}
 	}
 
-	this.drawAllSensorSettings = function(){
-		planCtx.clearRect(0, 0, res.x, res.y);
-
+	this.drawAllSensorSettings = function(friendly){
+		salvoCtx.clearRect(0, 0, res.x, res.y);
 		for (var i = 0; i < this.ships.length; i++){
-			if (!this.ships[i].ship || !this.ships[i].friendly || !this.ships[i].deployed){continue;}
+			if (!this.ships[i].ship || !this.ships[i].deployed){continue;}
+			if (this.ships[i].friendly != friendly){continue;}
 			
 			var sensor = this.ships[i].getSystemByName("Sensor");
 			if (!sensor.ew.length){continue;}
@@ -1123,9 +1126,9 @@ Game.prototype.getUnitType = function (val){
 			}
 			else w = Math.min(180, game.const.ew.len * Math.pow(str/ew.dist, game.const.ew.p));
 
-			drawCtx.translate(cam.o.x, cam.o.y)
-			drawCtx.scale(cam.z, cam.z)
-			drawCtx.beginPath();
+			salvoCtx.translate(cam.o.x, cam.o.y)
+			salvoCtx.scale(cam.z, cam.z)
+			salvoCtx.beginPath();
 			var color = "";
 			var opacity = 1;
 			switch (sensor.ew[sensor.ew.length-1].type){
@@ -1141,9 +1144,9 @@ Game.prototype.getUnitType = function (val){
 
 			w = Math.ceil(w);	
 			if (w == 180){
-				drawCtx.beginPath();
-				drawCtx.arc(loc.x, loc.y, d, 0, 2*Math.PI, false);
-				drawCtx.closePath();
+				salvoCtx.beginPath();
+				salvoCtx.arc(loc.x, loc.y, d, 0, 2*Math.PI, false);
+				salvoCtx.closePath();
 			}
 			else {
 				var start = addAngle(0 + w-facing, a);
@@ -1151,24 +1154,28 @@ Game.prototype.getUnitType = function (val){
 				var p1 = getPointInDirection(str, start, loc.x, loc.y);
 				var rad1 = degreeToRadian(start);
 				var rad2 = degreeToRadian(end);
-				drawCtx.beginPath();			
-				drawCtx.moveTo(loc.x, loc.y);
-				drawCtx.lineTo(p1.x, p1.y); 
-				drawCtx.arc(loc.x, loc.y, d, rad1, rad2, false);
-				drawCtx.closePath();
+				salvoCtx.beginPath();			
+				salvoCtx.moveTo(loc.x, loc.y);
+				salvoCtx.lineTo(p1.x, p1.y); 
+				salvoCtx.arc(loc.x, loc.y, d, rad1, rad2, false);
+				salvoCtx.closePath();
 			}
 
-			drawCtx.fillStyle = color;
-			drawCtx.fill();
-			drawCtx.setTransform(1,0,0,1,0,0);
+			//drawCtx.strokeStyle = "white";
+			//drawCtx.lineWidth = 1;
+			//drawCtx.stroke();
+			salvoCtx.fillStyle = color;
+			salvoCtx.globalAlpha = 0.2;
+			salvoCtx.fill();
+			salvoCtx.setTransform(1,0,0,1,0,0);
 		};
 
-		salvoCtx.clearRect(0, 0, res.x, res.y);
+	/*	salvoCtx.clearRect(0, 0, res.x, res.y);
 		salvoCtx.globalAlpha = 0.2;
 		salvoCtx.drawImage(drawCanvas, 0, 0);
 		salvoCtx.globalAlpha = 1;
 		drawCtx.clearRect(0, 0, res.x, res.y);
-		return;
+	*/	return;
 	}
 
 	this.setShipTransform = function(){
@@ -1421,12 +1428,46 @@ Game.prototype.getUnitType = function (val){
 		if (aUnit){
 			game.getUnitById(aUnit).select();
 		}
+
+		this.animShip = 1;
+		this.animFlight = 0;
+		this.animSalvo = 0;
+		this.setUnitMovementFocus();
+		this.setUnitMoveDetails();
+		this.animateUnitMovement();
+	}
+
+	this.setUnitMovementFocus = function(){
+		window.then = Date.now();
+		window.startTime = then;
 		cam.setZoom(1);
 		setFPS(60);
 
-		//console.log("animShip: "+animShip);
-		//console.log("animFlight: "+animFlight);
+		var minX = 0;
+		var minY = 0;
+		var maxX = 0;
+		var maxY = 0;
+		var amount = 0;
+		var endX = 0;
+		var endY = 0;
 
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].ship){
+				minX = Math.min(minX, this.ships[i].x);
+				minY = Math.min(minY, this.ships[i].y);
+				maxX = Math.max(maxX, this.ships[i].x);
+				maxY = Math.max(maxY, this.ships[i].y);
+			}
+		}
+
+		endX = (minX + maxX) / 2;
+		endY = (minY + maxY) / 2;
+
+		cam.setFocusToPos({x: endX, y: endY});
+
+	}
+
+	this.setUnitMoveDetails = function(){
 		var toDo;
 		for (var i = 0; i < this.ships.length; i++){
 			var frameMod;
@@ -1500,16 +1541,6 @@ Game.prototype.getUnitType = function (val){
 				}
 			}
 		}
-
-		window.then = Date.now();
-		window.startTime = then;
-
-		console.log("ship moves");
-		this.animShip = 1;
-		this.animFlight = 0;
-		this.animSalvo = 0;
-		game.animateUnitMovement();
-		cam.setFocus(0, -700);
 	}
 
 

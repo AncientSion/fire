@@ -227,7 +227,7 @@ class Crit {
 	public $type;
 	public $duration;
 	public $value;
-	public $new;
+	public $new = 0;
 	
 	function __construct($id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 		$this->id = $id;

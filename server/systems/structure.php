@@ -79,7 +79,7 @@ class Primary {
 		return false;
 	}
 
-	public function applyDamage($dmg){
+	public function addDamage($dmg){
 		//debug::log($this->remaining);
 		$this->remaining -= $dmg->overkill;
 
@@ -185,7 +185,7 @@ class Single {
 		}
 	}
 
-	public function testCrit($turn){
+	public function testCrit($turn, $extra){
 		if ($this->destroyed || empty($this->damages)){
 			return;
 		}

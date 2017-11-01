@@ -61,9 +61,11 @@ class Mixed extends Ship {
 
 	public function getNewCrits($turn){
 		$crits = array();
+		if (!$this->damaged){return $crits;}
+
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->crits); $j++){
-				if ($this->structures[$i]->crits[$j]->turn == $turn){
+				if ($this->structures[$i]->crits[$j]->new){
 					$crits[] = $this->structures[$i]->crits[$j];
 				}
 			}
@@ -106,6 +108,7 @@ class Mixed extends Ship {
 	}
 
 	public function applyDamage($dmg){
+		$this->damaged = 1;
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->id == $dmg->systemid){
 				$this->structures[$i]->damages[] = $dmg;
@@ -211,10 +214,10 @@ class Mixed extends Ship {
 		return $this->getStructureById($fire->singleid)->getSubHitChance($fire);
 	}
 
-	public function testCriticals($turn){
-		//Debug::log("= testCriticals for ".get_class($this).", #".$this->id.", turn: ".$turn);
+	public function testForCrits($turn){
+		//Debug::log("= testForCrits for ".get_class($this).", #".$this->id.", turn: ".$turn);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			$this->structures[$i]->testCrit($turn);
+			$this->structures[$i]->testCrit($turn, 0);
 		}
 	}
 

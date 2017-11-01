@@ -31,7 +31,7 @@ class Laser extends Weapon {
 		$rake = floor($totalDmg / $this->rakes);
 		for ($j = 0; $j < $this->rakes; $j++){
 			$system = $fire->target->getHitSystem($fire);
-			$print .= " ".get_class($system)." ";
+			$print .= " ".get_class($system)." for ".$rake;
 			$destroyed = false;
 			$remInt = $system->getRemainingIntegrity();
 			$negation = $fire->target->getArmourValue($fire, $system);
@@ -68,7 +68,7 @@ class LightParticleBeam extends Laser {
 	public $minDmg = 27;
 	public $maxDmg = 34;
 	public $optRange = 600;
-	public $dmgLoss = 8;
+	public $dmgLoss = 4;
 	public $accDecay = 120;
 	public $shots = 1;
 	public $reload = 1;
@@ -95,7 +95,7 @@ class LightLaser extends Laser {
 	public $minDmg = 65;
 	public $maxDmg = 80;
 	public $optRange = 350;
-	public $dmgLoss = 12;
+	public $dmgLoss = 6;
 	public $accDecay = 120;
 	public $shots = 1;
 	public $reload = 2;
@@ -120,8 +120,8 @@ class MediumLaser extends Laser {
 	public $minDmg = 90;
 	public $maxDmg = 125;
 	public $optRange = 600;
-	public $dmgLoss = 8;
-	public $accDecay = 85;
+	public $dmgLoss = 4;
+	public $accDecay = 9;
 	public $reload = 3;
 	public $powerReq = 5;
 	public $effiency = 3;
@@ -144,7 +144,7 @@ class HeavyLaser extends Laser {
 	public $minDmg = 145;
 	public $maxDmg = 180;
 	public $optRange = 800;
-	public $dmgLoss = 6;
+	public $dmgLoss = 2;
 	public $accDecay = 60;
 	public $reload = 4;
 	public $powerReq = 6;

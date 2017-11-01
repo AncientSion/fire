@@ -911,7 +911,7 @@ PrimarySystem.prototype.getOutput = function(){
 
 	var usage = this.getOutputUsage();
 
-	return Math.floor(output * (1-mod) - usage);
+	return Math.floor(output * (1-mod)) - usage;
 }
 
 PrimarySystem.prototype.getOutputUsage = function(){
@@ -930,7 +930,7 @@ PrimarySystem.prototype.getOutputCrits = function(){
 
 PrimarySystem.prototype.getOutputString = function(){
 	var effect = 1-this.getOutputCrits();
-	return Math.floor(this.output*effect) + " + " + Math.floor(this.getExtraOutput()*effect);
+	return this.output + " + " + Math.floor(this.getExtraOutput()*effect) + " - " + Math.ceil(this.output*(1-effect));
 }
 
 PrimarySystem.prototype.getBoostCostIncrease = function(){
@@ -1067,6 +1067,7 @@ Sensor.prototype.switchMode = function(id){
 			} else index++;
 
 			this.states[index] = 1;
+			salvoCtx.clearRect(0, 0, res.x, res.y);
 			this.setEWMode()
 			return;
 		}

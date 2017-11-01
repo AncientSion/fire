@@ -30,15 +30,31 @@ class PrimarySystem extends System {
 		return round($this->output * $mod);
 	}
 
-	public function getValidEffects(){
-		return array(
-			array("Disabled", 60, 1, 0), // attr, %-tresh, duration, modifier
-			array("Output", 5, 0, 0) // attr, %-tresh, duration, modifier
-		);
-	}
-
 	public function getCritModMax($dmg){
 		return min(0.15, round($dmg/30)/10); // round to 0.05
+	}
+
+	public function determineCrit($old, $new, $turn){
+		$dmg = round($new / $this->integrity * 100);
+		//$possible = $this->getValidEffects();
+
+		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", dmg: ".$dmg);
+
+		if ($dmg > 50 && mt_rand(0, 1)){
+			Debug::log("critical hit, disabling primary system ".get_class($this));
+			$this->crits[] = new Crit(
+				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 1, 0, 1
+			);
+		}
+
+		$mod = $this->getCritModMax($dmg);
+		if ($mod < 0.05){return;}
+		if (mt_rand(0, 100) > ($new + $old/2)*3){return;}
+
+		//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
+		$this->crits[] = new Crit(
+			sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Output", 0, $mod, 1
+		);
 	}
 }
 
@@ -71,6 +87,16 @@ class Reactor extends PrimarySystem {
     public function setOutput($add){
     	$this->output = $this->output + $add;
     }
+
+	public function applyPowerSpike($spike, $turn){
+		//Debug::log("applyPowerSpike, crit length: ".sizeof($this->crits));
+		$mod = round($spike / $this->output, 2);
+		//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
+		$this->crits[] = new Crit(sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Output", 0, $mod, 1);	
+
+		//Debug::log("applied power spike, crit length: ".sizeof($this->crits));
+
+	}
 }
 
 class Engine extends PrimarySystem {
