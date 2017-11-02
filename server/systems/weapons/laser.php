@@ -69,7 +69,7 @@ class LightParticleBeam extends Laser {
 	public $maxDmg = 34;
 	public $optRange = 600;
 	public $dmgLoss = 4;
-	public $accDecay = 120;
+	public $accDecay = 110;
 	public $shots = 1;
 	public $reload = 1;
 	public $powerReq = 2;
@@ -96,7 +96,7 @@ class LightLaser extends Laser {
 	public $maxDmg = 80;
 	public $optRange = 350;
 	public $dmgLoss = 6;
-	public $accDecay = 120;
+	public $accDecay = 110;
 	public $shots = 1;
 	public $reload = 2;
 	public $powerReq = 3;
@@ -121,7 +121,7 @@ class MediumLaser extends Laser {
 	public $maxDmg = 125;
 	public $optRange = 600;
 	public $dmgLoss = 4;
-	public $accDecay = 9;
+	public $accDecay = 90;
 	public $reload = 3;
 	public $powerReq = 5;
 	public $effiency = 3;

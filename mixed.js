@@ -55,28 +55,7 @@ Mixed.prototype.resetMoveMode = function(){
 	return;
 }
 
-Mixed.prototype.doHighlight = function(){
-	if (this.highlight){
-		this.highlight = false;
-		game.draw();
-	}	
-	else {
-		this.highlight = true;
-		ctx.translate(cam.o.x, cam.o.y);
-		ctx.scale(cam.z, cam.z);
-		ctx.beginPath();
-		ctx.arc(this.drawX, this.drawY, this.size/2, 0, 2*Math.PI, false);
-		ctx.closePath();
-		ctx.lineWidth = 3;
-		ctx.globalAlpha = 1;
-		ctx.strokeStyle = "white";
-		ctx.stroke();
-		ctx.setTransform(1,0,0,1,0,0);
 
-		this.drawMovePlan();
-		this.drawTrajectory();
-	}
-}
 
 Mixed.prototype.getPostMovePos = function(){
 	return this.nextStep;
@@ -126,7 +105,6 @@ Mixed.prototype.drawMovePlan = function(){
 	if (this.flight){this.drawMissionArea();
 }
 
-
 Mixed.prototype.drawTrajectory = function(){
 	if (!this.salvo || !this.mission.arrived){return;}
 	planCtx.globalAlpha = 1;
@@ -174,6 +152,9 @@ Mixed.prototype.setStatus = function(){
 
 	if (this.mission.arrived){
 		if (this.mission.type == 1){return;}
+		else if (this.id < 0 && this.mission.arrived){
+			this.doDraw = 0;
+		}
 		else if (this.mission.arrived < game.turn){
 			this.doDraw = 0;
 		} else if (game.phase > 2 && this.mission.arrived == game.turn){

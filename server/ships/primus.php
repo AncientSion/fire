@@ -50,7 +50,7 @@ class Primus extends SuperHeavy {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1600);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1350);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 160);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 160, 500);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 160);

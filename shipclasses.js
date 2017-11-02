@@ -1764,6 +1764,7 @@ Ship.prototype.getArmourString = function(a){
 }
 
 Ship.prototype.drawMovePlan = function(){
+	//console.log("draw moves for #" + this.id);
 	if (!this.actions.length || this.actions[this.actions.length-1].resolved){
 		return;
 	}
@@ -1902,9 +1903,14 @@ Ship.prototype.doUnselect = function(){
 Ship.prototype.doHighlight = function(){
 	if (this.highlight){
 		this.highlight = false;
+	//	ctx.translate(cam.o.x, cam.o.y);
+	//	ctx.scale(cam.z, cam.z);
+	//	this.drawPositionMarker();
+	//	ctx.setTransform(1,0,0,1,0,0);
 		game.draw();
 	}	
 	else {
+		//console.log("highlight on");
 		this.highlight = true;
 		ctx.translate(cam.o.x, cam.o.y);
 		ctx.scale(cam.z, cam.z);
@@ -1916,13 +1922,14 @@ Ship.prototype.doHighlight = function(){
 		ctx.strokeStyle = "white";
 		ctx.stroke();
 		ctx.setTransform(1,0,0,1,0,0);
+
+		this.drawMovePlan();
+		this.drawTrajectory();
 	}
 }
 
-Ship.prototype.undoHover = function(){
-	game.resetHover();
-	//salvoCtx.clearRect(0, 0, res.x, res.y);
-	//planCtx.clearRect(0, 0, res.x, res.y);
+Ship.prototype.drawTrajectory = function(){
+	return;
 }
 
 Ship.prototype.create = function(){
@@ -2809,9 +2816,9 @@ Ship.prototype.getAttachDivs = function(){
 			for (var i = 0; i < attach.length; i++){
 				if (attach[i].ship){continue;}
 
-				if (this.flight){
-					console.log("ding");
-				}
+				//if (this.flight){
+				//	console.log("ding");
+				//}
 				ccContainer = attach[i].supplyAttachDiv(ccContainer);
 			}
 
@@ -2882,6 +2889,7 @@ Ship.prototype.attachFlight = function(id){
 
 Ship.prototype.setEscortImage = function(){
 	if (this.cc.length){
+		//if (this.id == 10){console.log("ding")}
 		var size = this.size;
 		var fSize = 14;
 		var tresh = 12;
@@ -2903,10 +2911,15 @@ Ship.prototype.setEscortImage = function(){
 			var hostile = [];
 			for (var i = 0; i < this.cc.length; i++){
 				var attach = game.getUnitById(this.cc[i]);
-				if (attach.doDraw){continue;}
+
+				if (attach.doDraw){continue;} // possibly attachement is being drawn, hence not attached to this
+				if (attach.flight && this.flight){continue;}
+
+
+
 				if (this.userid == attach.userid){
-					attach.size = (size+tresh);
-				} else attach.size = (size+tresh*2);
+					attach.size = size+tresh*2;
+				} else attach.size = size+tresh*2;
 				for (var j = 0; j < attach.structures.length; j++){
 					if (!attach.structures[j].draw){;continue;}
 					if (this.userid == attach.userid){
@@ -2917,21 +2930,23 @@ Ship.prototype.setEscortImage = function(){
 		}
 
 		if (friendly.length){
-			var color = "green";
+			var color = "#27e627";
 			if (!shipFriendly){color = "red";}
 			ctx.translate(t.width/2, t.height/2);
+			ctx.globalAlpha = 0.8;
 			ctx.beginPath();
 			ctx.arc(0, 0, size/2 + tresh, 0, 2*Math.PI);
 			ctx.closePath();
 			ctx.strokeStyle = color;
 			ctx.stroke();
+			ctx.globalAlpha = 1;
 			var split = Math.floor(360/friendly.length+1);
 			for (var i = 0; i < friendly.length; i++){
 				var a =  split*i;
-				var pos = getPointInDirection(size/2+tresh - fSize/2, a, 0, 0);
+				var pos = getPointInDirection(size/2+tresh - fSize/2 +1, a, 0, 0);
 				//console.log(a); 
 				//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
-				friendly[i].layout =  getPointInDirection(size/2+tresh - fSize/2, a+drawFacing, 0, 0);
+				friendly[i].layout = getPointInDirection(size/2+tresh - fSize/2, a+drawFacing, 0, 0);
 				ctx.translate(pos.x, +pos.y);
 				ctx.rotate((a+90)*(Math.PI/180));
 				ctx.drawImage(
@@ -2951,17 +2966,19 @@ Ship.prototype.setEscortImage = function(){
 
 		if (hostile.length){
 			var color = "red";
-			if (!shipFriendly){color = "green";}
+			if (!shipFriendly){color = "#27e627";}
 			ctx.translate(t.width/2, t.height/2);
+			ctx.globalAlpha = 0.8;
 			ctx.beginPath();
 			ctx.arc(0, 0, size/2 + tresh, 0, 2*Math.PI);
 			ctx.closePath();
 			ctx.strokeStyle = color;
 			ctx.stroke();
+			ctx.globalAlpha = 1;
 			var split = Math.floor(360/hostile.length+1);
 			for (var i = 0; i < hostile.length; i++){
 				var a =  split*i;
-				var pos = getPointInDirection(size/2+tresh - fSize/2, a, 0, 0);
+				var pos = getPointInDirection(size/2+tresh - fSize/2 +1, a, 0, 0);
 				//console.log(a); 
 				//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
 				hostile[i].layout = getPointInDirection(size/2+tresh - fSize/2, a+drawFacing, 0, 0);

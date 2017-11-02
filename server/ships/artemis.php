@@ -43,7 +43,7 @@ class Artemis extends Medium {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 725);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 650);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 95);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 95, 105);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 95);

@@ -43,7 +43,7 @@ class Saggitarius extends Medium {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 950);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 800);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 85);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 85, 100);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 85);

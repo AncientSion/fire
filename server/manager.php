@@ -731,7 +731,7 @@ class Manager {
 				continue;
 			}
 
-			Debug::log("handling mixed #".$this->ships[$i]->id);
+			Debug::log(" ==== handling mixed #".$this->ships[$i]->id);
 
 			if ($this->ships[$i]->mission->arrived){ // already at target location
 				if ($this->ships[$i]->mission->type == 2){ // strike
@@ -760,11 +760,11 @@ class Manager {
 				if ($this->ships[$i]->mission->type == 2){ // strike
 					$target = $this->getUnitById($this->ships[$i]->mission->targetid);
 					if ($target->ship){
-						Debug::log("STRIKE advance vs ship");
+						Debug::log("STRIKE #".$this->ships[$i]->id." advance vs ship");
 						$stack[1][] = $this->ships[$i];
 					}
 					else {
-						Debug::log("STRIKE advance vs mixed");
+						Debug::log("STRIKE #".$this->ships[$i]->id." advance vs mixed");
 						$stack[2][] = $this->ships[$i];
 					} 
 				}
@@ -780,9 +780,9 @@ class Manager {
 			$units = array();
 		}
 
-		Debug::log("layer 0 -> patrol target, layer 1 => strike");
+		Debug::log("RESOLVING (layer 0 -> patrol target, layer 1 => strike)");
 		for ($i = 0; $i < sizeof($stack); $i++){
-			Debug::log("resolving layer #".$i);
+			Debug::log("resolving stack #".$i);
 			for ($j = 0; $j < sizeof($stack[$i]); $j++){
 				Debug::log("resolving mixed #".$stack[$i][$j]->id);
 				Debug::log("_____________________");
@@ -801,9 +801,9 @@ class Manager {
 				$dist = Math::getDist2($origin, $tPos);
 				$angle = Math::getAngle2($origin, $tPos);
 
-				Debug::log("Flight #".$stack[$i][$j]->id.", impulse: ".$impulse);
-				Debug::log("From ".$origin->x."/".$origin->y." to ".$tPos->x."/".$tPos->y);
-				Debug::log("Dist ".$dist.", angle: ".$angle);
+				//Debug::log("Flight #".$stack[$i][$j]->id.", impulse: ".$impulse);
+				//Debug::log("From ".$origin->x."/".$origin->y." to ".$tPos->x."/".$tPos->y);
+				//Debug::log("Dist ".$dist.", angle: ".$angle);
 
 				if ($impulse <= $dist){
 					Debug::log("close in");
@@ -820,7 +820,7 @@ class Manager {
 				$angle, 0, 0, 0, 0);
 				$stack[$i][$j]->actions[] = $move;
 
-				Debug::log("adding move to: ".$move->x."/".$move->y);
+				//Debug::log("adding move to: ".$move->x."/".$move->y);
 
 				$units[] = $stack[$i][$j];
 			}

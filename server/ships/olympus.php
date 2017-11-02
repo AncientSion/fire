@@ -39,7 +39,7 @@ class Olympus extends Medium {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 550);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 500);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 70);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 70, 82);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 70);

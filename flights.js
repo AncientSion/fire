@@ -150,7 +150,7 @@ Flight.prototype.createBaseDiv = function(){
 			.append($("<td>").html(game.getUnitType(this.traverse))))
 		.append($("<tr>")
 			.append($("<td>").html("Current Thrust"))
-			.append($("<td>").html((this.getCurrentImpulse() + " (max: " + (this.baseImpulse*2) + ")"))))
+			.append($("<td>").html((this.getCurrentImpulse() + " (max: " + (this.baseImpulse*3) + ")"))))
 		.append($("<tr>")
 			.append($("<td>").html("Current Mission"))
 			.append($("<td>").html(game.getMissionTypeString(this.mission.type))))
@@ -159,7 +159,7 @@ Flight.prototype.createBaseDiv = function(){
 			.append($("<td>").html(game.getMissionTargetString(this.mission))))
 
 	//if (this.friendly && game.phase == -1 && this.available < game.turn){
-		var need = 3;
+		var need = 1;
 		var elapsed = game.turn - this.mission.turn;
 		if (this.friendly && elapsed >= need && game.phase == -1){
 			$(table)

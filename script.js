@@ -356,10 +356,10 @@ function canvasMouseMove(e){
 	}
 
 	if (game.flightDeploy){
-		game.handleFlightDeployMove(e, pos, unit)
+		game.handleFlightDeployMouseMove(e, pos, unit)
 	}
 	else if (game.mission && game.mission.new){
-		game.handleFlightDeployMove(e, pos, unit)
+		game.handleFlightDeployMouseMove(e, pos, unit)
 	}
 	 
 	if (aUnit){

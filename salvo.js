@@ -235,21 +235,28 @@ Salvo.prototype.supplyAttachDiv = function(div){
 			else game.getUnitById($(this).data("id")).select();
 			
 		})
-		.hover(function(e){
-			var vessel = game.getUnitById($(this).data("id"));
-			if (aUnit && aUnit != vessel.id){
-				var	ship = game.getUnitById(aUnit);
-				if (ship.salvo){return;}
-				if (ship.hasWeaponsSelected()){
-					if (ship.id != vessel.id){
+		.hover(
+			function(e){
+				var vessel = game.getUnitById($(this).data("id"));
+				vessel.doHighlight();
+				if (aUnit && aUnit != vessel.id){
+					var	ship = game.getUnitById(aUnit);
+					if (ship.salvo){return;}
+					else if (ship.hasWeaponsSelected() && ship.id != vessel.id){
 						handleWeaponAimEvent(ship, vessel, e);
 					}
-				} else {
-					game.target = 0;
-					$("#weaponAimTableWrapper").hide()
+					else {
+						game.target = 0;
+						$("#weaponAimTableWrapper").hide()
+					}
 				}
+			},
+			function(e){
+				var vessel = game.getUnitById($(this).data("id"));
+					vessel.highlight = 0;
+				game.redraw();
 			}
-		})
+		)
 		
 
 	for (var j = 0; j < this.structures.length; j++){

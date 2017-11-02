@@ -139,7 +139,7 @@ class Ship {
 	}
 
 	public function setBaseStats(){
-		$this->baseHitChance = ceil(pow($this->mass, 0.4)*1.5)+20;
+		$this->baseHitChance = ceil(pow($this->mass, 0.4)*1.5)+30;
 		$this->baseTurnCost = round(pow($this->mass, 1.25)/22500, 2);
 		$this->baseTurnDelay = round(pow($this->mass, 0.45)/20, 2);
 		$this->baseImpulseCost = round(pow($this->mass, 1.4)/2000, 2);
@@ -271,7 +271,7 @@ class Ship {
 
 
 	public function getMoveState($turn){
-		Debug::log("getMoveState for ".$this->id);
+		//Debug::log("getMoveState for ".$this->id);
 		$delay = $this->remainingDelay;
 		$angle = $this->facing;
 		for ($i = 0; $i < sizeof($this->actions); $i++){

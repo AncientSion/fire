@@ -15,7 +15,7 @@ class LightIon extends Particle {
 	public $display = "32mm Ion Bolter Array";
 	public $minDmg = 14;
 	public $maxDmg = 18;
-	public $accDecay = 200;
+	public $accDecay = 180;
 	public $shots = 4;
 	public $animColor = "orange";
 	public $projSize = 2;
@@ -38,7 +38,7 @@ class MediumIon extends LightIon {
 	public $display = "68mm Ion Emitter";
 	public $minDmg = 33;
 	public $maxDmg = 47;
-	public $accDecay = 140;
+	public $accDecay = 120;
 	public $shots = 2;
 	public $animColor = "orange";
 	public $reload = 3;
@@ -73,7 +73,7 @@ class HeavyIon extends MediumIon {
 	public $display = "122mm Ion Burst Cannon";
 	public $minDmg = 49;
 	public $maxDmg = 65;
-	public $accDecay = 80;
+	public $accDecay = 90;
 	public $shots = 2;
 	public $animColor = "orange";
 	public $reload = 4;

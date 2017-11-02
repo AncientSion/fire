@@ -36,7 +36,7 @@ class Haven extends SuperLight {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 260);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 230);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 40);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 40, 28);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 40);

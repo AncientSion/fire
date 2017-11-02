@@ -102,18 +102,7 @@ function Game(data, userid){
 		$("#game").find("#deployOverlay").find("#deployType").html("Select target for </br>" + mission + "</br></span>");
 	}
 
-	this.handleFlightDeployMove = function(e, pos, unit){
-
-		/*
-		salvoCtx.clearRect(0, 0, res.x, res.y);
-
-		if (this.shortInfo){
-			this.getUnitById(this.shortInfo).drawEW();
-		} else if (aUnit){
-			this.getUnitById(aUnit).drawEW();
-		}
-		*/
-
+	this.handleFlightDeployMouseMove = function(e, pos, unit){
 		var valid = false;
 		if (this.flightDeploy.mission == 1){ // patrol
 			valid = true;
@@ -124,6 +113,7 @@ function Game(data, userid){
 			s = 35 + s*8;
 			s = Math.floor(s/2);
 
+			salvoCtx.clearRect(0, 0, res.x, res.y);
 			salvoCtx.translate(cam.o.x, cam.o.y);
 			salvoCtx.scale(cam.z, cam.z);
 			salvoCtx.translate(pos.x, pos.y);
@@ -252,7 +242,7 @@ function Game(data, userid){
 
 		if (t.id == aUnit){
 			p = dest;
-			mission.arrived = 1;
+			mission.arrived = 1//game.turn;
 		}
 
 		var flight = new Flight(
@@ -928,7 +918,8 @@ Game.prototype.getUnitType = function (val){
 			this.ships[i].setDrawData();
 			this.ships[i].createBaseDiv();
 			this.ships[i].setTarget();
-			this.ships[i].setImage();this.ships[i].setEscortImage();
+			this.ships[i].setImage();
+			this.ships[i].setEscortImage();
 		}
 
 		for (var i = 0; i < this.reinforcements.length; i++){
@@ -1004,6 +995,7 @@ Game.prototype.getUnitType = function (val){
 	}
 
 	this.resetHover = function(){
+
 		if (game.deploying){
 			game.drawDeploymentZone();
 		}
@@ -1337,23 +1329,13 @@ Game.prototype.getUnitType = function (val){
 		cam.setZoom(0.7);
 		this.animating = 1;
 		this.animateDeployment();
-		//this.logDeployment();
-	}
 
-	this.logDeployment = function(){
 		$("#combatlogWrapper")
 		.show()
 		.find(".combatLogHeader").html("Deployment Log").end()
 		.find("#combatLog").children().children().remove();
 
-		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].available == game.turn){
-				if (this.ships[i].flight){
-					$("#combatLog").find("tbody").append($("<tr>")
-						.append($("<td>").html("Flight #" + this.ships[i].id + " is deployed")));
-				}
-			}
-		}
+		//this.logDeployment();
 	}
 
 	this.animateDeployment = function(){
@@ -1386,7 +1368,7 @@ Game.prototype.getUnitType = function (val){
 					if (fraction >= 1){
 						game.ships[i].deployed = true;
 						game.ships[i].drawSelf();
-						//game.logDeployment(i);
+						//game.createDeployLogEntry(i);
 					}
 					else {
 						var sin = Math.sin(Math.PI*fraction);
@@ -1421,6 +1403,7 @@ Game.prototype.getUnitType = function (val){
 	this.deployDone = function(){
 		game.animating = 0;
 		game.draw();
+		game.createFlightDeployEntries();
 		console.log("deployDone");
 	}
 
@@ -1822,9 +1805,9 @@ Game.prototype.getUnitType = function (val){
 		for (var i = 0; i < game.ships.length; i++){
 			if (!game.ships[i].deployed){continue;}
 
-			var type = "#ff3d00";
+			var color = "#ff3d00";
 			if (game.ships[i].friendly){
-				type = "#27e627";
+				color = "#27e627";
 			}
 
 			var anim = {
@@ -1854,7 +1837,7 @@ Game.prototype.getUnitType = function (val){
 						})
 					}
 				}
-				anim.html += "A total of <font color='" + type + "'>" + counter + "</font> elements from <font color='" + type + "'>Unit #" + anim.id + "</font> were destroyed or disengaged";
+				anim.html += "A total of <font color='" + color + "'>" + counter + "</font> elements from <font color='" + color + "'>Unit #" + anim.id + "</font> were destroyed or disengaged";
 			}
 			else if (game.ships[i].ship && game.ships[i].isDestroyedThisTurn()){
 				anim.html += "<font color='" + type + "'>Unit #" + anim.id + "</font> ";
@@ -2048,7 +2031,38 @@ Game.prototype.getUnitType = function (val){
 					var data = $(this).data();
 					game.getUnitById($(this).data("shipid")).doHighlight()
 				}));
-				
+	}
+
+	this.createFlightDeployEntries = function(){
+
+		var color = "#ff3d00";
+		var html = "";
+
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].available == game.turn){
+				if (this.ships[i].flight){
+					if (this.ships.friendly){
+						color = "#27e627";
+					}
+					html = "<span><font color='" + color + "'>Flight #" + this.ships[i].id + "</font> was deployed</span>";
+
+					$("#combatLog").find("tbody").append($("<tr>")
+						.append($("<td>").html(html))
+						.data("shipid", this.ships[i].id)
+						.hover(
+							function(){
+							var data = $(this).data();
+							game.getUnitById($(this).data("shipid")).doHighlight()
+							},
+							function(){
+								var data = $(this).data();
+								game.getUnitById($(this).data("shipid")).highlight = 0;
+								game.redraw();
+							}
+						));
+				}
+			}
+		}
 	}
 
 	this.createCombatLogEntry = function(fire){
@@ -2349,12 +2363,11 @@ Game.prototype.getUnitType = function (val){
 						var unit = game.getUnitById($(this).data("id"));
 						if (aUnit != unit.id){unit.switchDiv();}
 					})
-					.hover(function(e){
+					.hover(
+						function(e){
 							var vessel = game.getUnitById($(this).data("id"));
 								vessel.doHighlight();
-								if (vessel.highlight){
-									game.handleHoverEvent(vessel);
-								} else vessel.undoHover();						
+							if (vessel.highlight){game.handleHoverEvent(vessel);}						
 							if (aUnit && aUnit != vessel.id){
 								var	ship = game.getUnitById(aUnit);
 								if (ship.salvo){return;}
@@ -2369,6 +2382,11 @@ Game.prototype.getUnitType = function (val){
 								game.target = 0;
 								$("#weaponAimTableWrapper").hide();
 							}
+						},
+						function(e){
+							var vessel = game.getUnitById($(this).data("id"));
+								vessel.doHighlight();
+							game.resetHover();
 						}
 					)
 				)

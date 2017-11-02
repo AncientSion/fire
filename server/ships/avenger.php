@@ -56,7 +56,7 @@ class Avenger extends Heavy {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1400);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1200);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 125);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 125, 240, 10);
 		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 125);

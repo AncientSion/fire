@@ -159,7 +159,7 @@ class System {
 			if ($this->powers[$i]->turn == $turn){
 				switch ($this->powers[$i]->type){
 					case 0: return 0; break;
-					case 1: $usage += $this->effieny; break;
+					case 1: $usage += $this->effiency; break;
 					default: continue;
 				}
 			} else return $usage;
