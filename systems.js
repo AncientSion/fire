@@ -34,6 +34,7 @@ function System(system){
 	this.launcher = 0;
 	this.hangar = 0;
 	this.validTarget = 0;
+	this.internal = system.internal;
 }
 
 System.prototype.hasLoad = function(){
@@ -113,7 +114,7 @@ System.prototype.getSystem = function(){
 	return this;
 }
 
-System.prototype.getActiveWeapon = function(){
+System.prototype.getActiveSystem = function(){
 	return this;
 }
 
@@ -179,9 +180,13 @@ System.prototype.setTableRow = function(){
 	else {
 		if (this.highlight){
 			ele.removeClass("unpowered")
-				.find(".boostDiv").show().end()
+			.find(".powerDiv").find(".power").hide().end().find(".unpower").show().end();
+
+			if (this.getActiveSystem().canBeBoosted()){
+				ele
 				.find(".outputMask").show().end()
-				.find(".powerDiv").find(".power").hide().end().find(".unpower").show().end();
+				.find(".boostDiv").show().end()
+			}
 		} else ele.removeClass("unpowered").find(".outputMask").show();
 	}
 
@@ -701,13 +706,17 @@ System.prototype.getTableData = function(forFighter){
 			td.appendChild(div);
 
 		if (!this.destroyed){
-			if (this instanceof PrimarySystem || this.canBeBoosted()){
+			//if (this instanceof PrimarySystem || this.canBeBoosted()){
 				var outputDiv = document.createElement("div");
 					outputDiv.className = "outputMask";
 					//output.innerHTML = "<span>" + this.outputp + "</span>";
-					outputDiv.innerHTML = this.getOutput();
+					if (this.internal || this.getActiveSystem().canBeBoosted()){
+						outputDiv.innerHTML = this.getOutput();
+					}
+					else  $(outputDiv).hide();
+						//console.log(this.getActiveSystem());
 					td.appendChild(outputDiv);
-			}
+			//}
 		}
 	}
 
@@ -1623,7 +1632,7 @@ Weapon.prototype.getDamage = function(){
 }
 
 Weapon.prototype.hasValidTarget = function(){
-	if (this.getActiveWeapon().validTarget){
+	if (this.getActiveSystem().validTarget){
 		return true;
 	} return false;
 }
@@ -1652,10 +1661,6 @@ Warhead.prototype.getShots = function(){
 
 Warhead.prototype.getDisplay = function(){
 	return "Warhead Impact";
-}
-
-Warhead.prototype.getActiveWeapon = function(){
-	return this;
 }
 
 Warhead.prototype.getAnimation = function(fire){
@@ -2017,21 +2022,12 @@ function Dual(system){
 Dual.prototype = Object.create(Weapon.prototype);
 
 Dual.prototype.updateSystemDetailsDiv = function(){
-	this.getActiveWeapon().updateSystemDetailsDiv();
+	this.getActiveSystem().updateSystemDetailsDiv();
 	game.getUnitById(this.parentId).updateDiv();
 }
 
-Dual.prototype.canBeBoosted = function(){
-	for (var i = 0; i < this.weapons.length; i++){
-		if (this.weapons[i].effiency){
-			return 1;
-		}
-	}
-	return 0;
-}
-
 Dual.prototype.setFireOrder = function(targetid){
-	var w = this.getActiveWeapon();
+	var w = this.getActiveSystem();
 	if (w.odds <= 0){return;}
 
 	this.fireOrders.push(
@@ -2051,7 +2047,7 @@ Dual.prototype.setState = function(){
 }
 
 Dual.prototype.getImageName = function(){
-	return this.getActiveWeapon().name;
+	return this.getActiveSystem().name;
 }
 
 Dual.prototype.initSubWeapons = function(){
@@ -2070,7 +2066,7 @@ Dual.prototype.initSubWeapons = function(){
 }
 
 Dual.prototype.initMain = function(){
-	var w = this.getActiveWeapon();
+	var w = this.getActiveSystem();
 	for (var i = 0; i < this.states.length; i++){
 		if (this.states[i]){
 			for (var j = 0; j < this.powers.length; j++){
@@ -2173,15 +2169,15 @@ Dual.prototype.resetDetailsDiv = function(){
 }
 
 Dual.prototype.getSystemDetailsDiv = function(){
-	return this.getActiveWeapon().getSystemDetailsDiv();
+	return this.getActiveSystem().getSystemDetailsDiv();
 }
 
 Dual.prototype.drawArc = function(facing, pos){
-	this.getActiveWeapon().drawArc(facing, pos);
+	this.getActiveSystem().drawArc(facing, pos);
 }
 
 Dual.prototype.getSystem = function(){
-	return this.getActiveWeapon();
+	return this.getActiveSystem();
 }
 
 Dual.prototype.getBoostDiv = function(){
@@ -2235,7 +2231,7 @@ Dual.prototype.getBoostDiva = function(){
 
 Dual.prototype.doUnboost = function(){
 	this.powers.splice(this.powers.length-1, 1);
-	var w = this.getActiveWeapon();
+	var w = this.getActiveSystem();
 		w.powers.splice(w.powers.length-1, 1);
 }
 
@@ -2243,10 +2239,10 @@ Dual.prototype.doBoost = function(){
 	var p = {id: this.powers.length+1,unitid: this.parentId,systemid: this.id,
 				turn: game.turn,type: 1, cost: this.getEffiency(), new: 1};
 	this.powers.push(p);
-	this.getActiveWeapon().powers.push(p);
+	this.getActiveSystem().powers.push(p);
 }
 
-Dual.prototype.getActiveWeapon = function(){
+Dual.prototype.getActiveSystem = function(){
 	for (var i = 0; i < this.states.length; i++){
 		if (this.states[i]){return this.weapons[i];}
 	}

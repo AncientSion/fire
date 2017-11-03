@@ -1368,7 +1368,7 @@ function Ship(data){
 
 	this.selectAll = function(e, id){
 		var s = this.getSystemById(id);
-		var w = s.getActiveWeapon();
+		var w = s.getActiveSystem();
 		var name = w.name;
 		var hasFire = s.hasUnresolvedFireOrder();
 		if (name == "Hangar"){return;}
@@ -1376,7 +1376,7 @@ function Ship(data){
 		for (var i = 0; i < this.structures.length; i++){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
 				if (! this.structures[i].systems[j].destroyed){
-					if (this.structures[i].systems[j].getActiveWeapon().name == name){
+					if (this.structures[i].systems[j].getActiveSystem().name == name){
 						if (this.structures[i].systems[j].weapon && this.structures[i].systems[j].hasUnresolvedFireOrder() == hasFire){
 							this.structures[i].systems[j].select(e);
 						}
@@ -1390,12 +1390,12 @@ function Ship(data){
 	this.doUnpowerAll = function(id){
 		var system = this.getSystemById(id);
 			$(system.element).find(".powerDiv").find(".unpower").hide().end().find(".power").show();
-		var name = system.getActiveWeapon().name;
+		var name = system.getActiveSystem().name;
 
 		for (var i = 0; i < this.structures.length; i++){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
 				if (this.structures[i].systems[j].isPowered()){
-					if (this.structures[i].systems[j].getActiveWeapon().name == name){
+					if (this.structures[i].systems[j].getActiveSystem().name == name){
 						this.structures[i].systems[j].doUnpower();
 					}
 				}
@@ -1406,12 +1406,12 @@ function Ship(data){
 	this.doPowerAll = function(id){
 		var system = this.getSystemById(id);
 			$(system.element).find(".powerDiv").find(".power").hide().end().find(".unpower").show();
-		var name = system.getActiveWeapon().name;
+		var name = system.getActiveSystem().name;
 
 		for (var i = 0; i < this.structures.length; i++){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
 				if (!this.structures[i].systems[j].isPowered()){
-					if (this.structures[i].systems[j].getActiveWeapon().name == name){
+					if (this.structures[i].systems[j].getActiveSystem().name == name){
 						this.structures[i].systems[j].doPower();
 					}
 				}
@@ -1421,12 +1421,12 @@ function Ship(data){
 
 	this.switchModeAll = function(id){
 		var system = this.getSystemById(id);
-		var name = system.getActiveWeapon().name;
+		var name = system.getActiveSystem().name;
 
 		for (var i = 0; i < this.structures.length; i++){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
 				if (this.structures[i].systems[j].dual && !this.structures[i].systems[j].locked){
-					if (this.structures[i].systems[j].getActiveWeapon().name == name){
+					if (this.structures[i].systems[j].getActiveSystem().name == name){
 						this.structures[i].systems[j].switchMode(id);
 					}
 				}
