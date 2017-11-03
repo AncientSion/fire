@@ -54,8 +54,9 @@ foreach ($manager->playerstatus as $player){
 
 $manager->test();
 $data = $manager->getClientData();
+$post = json_encode($data, JSON_NUMERIC_CHECK);
 echo "<script>";
-echo "window.game = ".json_encode($data, JSON_NUMERIC_CHECK).";";
+echo "window.game = ".$post.";";
 echo "window.playerstatus = ".json_encode($manager->playerstatus, JSON_NUMERIC_CHECK).";";
 echo "</script>";
 
