@@ -23,7 +23,8 @@ class Pulse extends Weapon {
 		$negation = $fire->target->getArmourValue($fire, $system);
 
 		$hits = $this->basePulses + min($this->extraPulses, floor(($fire->req - $fire->rolls[sizeof($fire->rolls)-1]) / $this->grouping));
-		$fire->hits += $hits;
+
+		$fire->hits++;
 
 		Debug::log("fireid: ".$fire->id.", doDamage, weapon: ".get_class($this)." #".$this->id.", hits: ".$hits.", target: ".$fire->target->id.", armour: ".$negation.", health: ".$remInt);
 
@@ -39,30 +40,30 @@ class Pulse extends Weapon {
 			}
 			else {
 				$overkill += $dmg->structDmg;
-				Debug::log("hit ".($i+1).", adding overkill damage, now: ".$overkill);
+				Debug::log("hit ".($i+1).", adding damage to overkill which is at: ".$overkill." pts");
 			}		
 
 			if (!$destroyed && $remInt - $struct < 1){
 				$destroyed = 1;
 				$overkill = (abs($remInt - $dmg->structDmg));
-				Debug::log(" => hit:".($i+1).", system was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$overkill." dmg");
+				Debug::log(" => hit:".($i+1).", system was destroyed, HP: ".$remInt.", doing: ".$struct.", OK for: ".$overkill." dmg");
 				// overkill takes target system armour, should take overkill-target (main struct) negation ?
 				$dmg->structDmg = $remInt;
 			}
 		}
 
-		$dmg = new Damage(
+		$entry = new Damage(
 			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
 			$total, $shield, $struct, $armour, $overkill, $negation, $destroyed, $dmg->notes, 1
 		);
-		$fire->damages[] = $dmg;
-		$fire->target->applyDamage($dmg);
+		$fire->damages[] = $entry;
+		$fire->target->applyDamage($entry);
 	}
 }
 
 class LightPulse extends Pulse {
 	public $name = "LightPulse";
-	public $display = "36mm Pulse Cannon";
+	public $display = "35mm Pulse Cannon";
 	public $minDmg = 16;
 	public $maxDmg = 20;
 	public $accDecay = 160;
@@ -82,7 +83,7 @@ class LightPulse extends Pulse {
 
 class MediumPulse extends Pulse {
 	public $name = "MediumPulse";
-	public $display = "66mm Pulse Cannon";
+	public $display = "60mm Pulse Cannon";
 	public $minDmg = 25;
 	public $maxDmg = 32;
 	public $accDecay = 120;

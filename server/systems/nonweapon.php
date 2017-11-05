@@ -55,6 +55,7 @@ class PrimarySystem extends System {
 		$this->crits[] = new Crit(
 			sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Output", 0, $mod, 1
 		);
+		Debug::log("applying crit: ".$this->crits[sizeof($this->crits)-1]->type." / ".$this->crits[sizeof($this->crits)-1]->value);
 	}
 }
 
@@ -70,8 +71,8 @@ class Bridge extends PrimarySystem {
 		return array();
 	}
 
-	public function getArmourMod(){
-		return 1.5;
+	public function setArmourMod(){
+		$this->armourMod = 1.5;
 	}
 }
 
@@ -88,13 +89,11 @@ class Reactor extends PrimarySystem {
     	$this->output = $this->output + $add;
     }
 
-	public function applyPowerSpike($spike, $turn){
-		//Debug::log("applyPowerSpike, crit length: ".sizeof($this->crits));
+	public function applyPowerSpike($turn, $spike){
+		Debug::log("applyPowerSpike to #".$this->id.", spike: ".$spike);
 		$mod = round($spike / $this->output, 2);
-		//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
+		//d, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 		$this->crits[] = new Crit(sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Output", 0, $mod, 1);	
-
-		//Debug::log("applied power spike, crit length: ".sizeof($this->crits));
 
 	}
 }

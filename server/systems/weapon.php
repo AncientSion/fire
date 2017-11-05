@@ -44,18 +44,6 @@ class Weapon extends System {
 		//Debug::log("target: ".$fire->target->traverse);
 		return max(0, $this->traverse - $fire->target->traverse);
 	}
-
-	public function rollToHit($fire){
-		//Debug::log("rollToHit shots: ".$this->getShots($fire->turn));
-		for ($i = 0; $i < $this->getShots($fire->turn); $i++){
-			//Debug::log("shot: ".($i+1));
-			$roll = mt_rand(1, 100);
-			$fire->rolls[] = $roll;
-			$fire->notes .= $roll." ";
-		}
-		return true;
-	}
-
 	public function determineDamage($totalDmg, $negation){
 		$shieldDmg = 0;
 		$armourDmg = 0;
@@ -104,12 +92,12 @@ class Weapon extends System {
 			}
 		}
 
-		$dmg = new Damage(
+		$entry = new Damage(
 			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
 			$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $overkill, $negation, $destroyed, $dmg->notes, 1
 		);
-		$fire->damages[] = $dmg;
-		$fire->target->applyDamage($dmg);	
+		$fire->damages[] = $entry;
+		$fire->target->applyDamage($entry);	
 	}
 
 	public function getAccuracyLoss($fire){

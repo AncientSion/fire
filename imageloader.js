@@ -16,14 +16,16 @@ window.preLoadBallistics = function(){
 	window.shipImages.triarii = new Image();
 	window.shipImages.triarii.src = "ballIcons/hasta.png";
 
-	window.shipImages.patriot = new Image();
-	window.shipImages.patriot.src = "ballIcons/patriot.png";
+	window.shipImages.vanguard = new Image();
+	window.shipImages.vanguard.src = "ballIcons/hasta.png";
+	window.shipImages.needle = new Image();
+	window.shipImages.needle.src = "ballIcons/hasta.png";
 	window.shipImages.naga = new Image();
-	window.shipImages.naga.src = "ballIcons/naga.png";
+	window.shipImages.naga.src = "ballIcons/hasta.png";
 	window.shipImages.cyclops = new Image();
-	window.shipImages.cyclops.src = "ballIcons/cyclops.png";
+	window.shipImages.cyclops.src = "ballIcons/hasta.png";
 	window.shipImages.titan = new Image();
-	window.shipImages.titan.src = "ballIcons/titan.png";
+	window.shipImages.titan.src = "ballIcons/hasta.png";
 }
 
 

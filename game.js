@@ -487,7 +487,9 @@ function Game(data, userid){
 		if (aUnit){
 			game.getUnitById(aUnit).doUnselect();
 		}
-		game.getUnitById(id).select();
+		var ship = game.getUnitById(id);
+			ship.doHover();
+			ship.doSeelct();
 	}
 
 	this.endPhase = function(){
@@ -1687,15 +1689,13 @@ Game.prototype.getUnitType = function (val){
 			this.fireOrders[i].target = game.getUnitById(this.fireOrders[i].targetid);
 			this.fireOrders[i].shooter = game.getUnitById(this.fireOrders[i].shooterid);
 			this.fireOrders[i].weapon = this.fireOrders[i].shooter.getSystemById(this.fireOrders[i].weaponid).getActiveSystem();
-			this.fireOrders[i].hits = [this.fireOrders[i].hits];
+			//this.fireOrders[i].hits = [this.fireOrders[i].hits];
 			this.fireOrders[i].damages = this.fireOrders[i].target.getDamageEntriesByFireId(this.fireOrders[i]);
 			this.fireOrders[i].systems.push(this.fireOrders[i].weaponid);
 		}
 
 		for (var i = 0; i < this.fireOrders.length; i++){
 			if (this.fireOrders[i].guns){
-				this.fireOrders[i].min = this.fireOrders[i].req;
-				this.fireOrders[i].max = this.fireOrders[i].req;
 				for (var j = i+1; j < this.fireOrders.length; j++){
 					if (this.fireOrders[j].guns){
 						if (this.fireOrders[i].shooterid == this.fireOrders[j].shooterid){
@@ -1709,12 +1709,17 @@ Game.prototype.getUnitType = function (val){
 									this.fireOrders[i].hits.push(this.fireOrders[j].hits[0]);
 									this.fireOrders[j].guns = 0;
 
+									this.fireOrders[i].req.push(this.fireOrders[j].req[0]);
+
+									/*
 									if (this.fireOrders[j].req > this.fireOrders[i].max){
 										this.fireOrders[i].max = this.fireOrders[j].req;
 									}
 									else if (this.fireOrders[j].req != -1 && this.fireOrders[j].req < this.fireOrders[i].min){
 										this.fireOrders[i].min = this.fireOrders[j].req;
 									}
+									*/
+
 									for (var l = 0; l < this.fireOrders[j].rolls.length; l++){
 										this.fireOrders[i].rolls.push(this.fireOrders[j].rolls[l]);
 									}
@@ -1729,7 +1734,7 @@ Game.prototype.getUnitType = function (val){
 
 		//console.log(this.fireOrders);
 		for (var i = this.fireOrders.length-1; i >= 0; i--){
-				this.fireOrders[i].type = "Regular Fire";
+				this.fireOrders[i].type = "Regular";
 			if (! this.fireOrders[i].guns){
 				this.fireOrders.splice(i, 1);
 				continue;
@@ -2072,7 +2077,8 @@ Game.prototype.getUnitType = function (val){
 		var armour = 0;
 		var system = 0;
 		var struct = 0;
-		var rolls = [];
+		//var rolls = fire.rolls.slice();
+		var req = fire.req.slice();
 		
 		if (fire.shooter.salvo){
 			shots = fire.shooter.getShots();
@@ -2089,27 +2095,20 @@ Game.prototype.getUnitType = function (val){
 			armour += fire.damages[i].armourDmg;
 			struct += fire.damages[i].overkill;
 
-			if (fire.damages[i].system == "Main Structure"){
+			if (fire.damages[i].systemid == -1){
 				struct += fire.damages[i].structDmg;
 			} else system += fire.damages[i].structDmg;
-
-			rolls.push(fire.damages[i].roll);
 		}
 
-		rolls.sort(function(a, b){return a-b});
+		//rolls.sort(function(a, b){return a-b});
+		req.sort(function(a, b){return a-b});
 
-		if (fire.weapon.linked > 1){
-		//	shots *= fire.weapon.linked;
-		//	hits *= fire.weapon.linked;
-		}
-		if (fire.weapon.output){
-			hits /= fire.weapon.output;
-		}
 
-		var chance = ""
-		if (fire.min != fire.max){
-			chance = fire.min + " - " + fire.max;
-		} else chance = fire.req;
+		var chance = req[0];
+		if (req.length > 1 && req[0] != req[req.length-1]){
+			chance = req[0] + " - " + req[req.length-1] + " %";
+		} else chance + " %";
+
 
 		var tr = document.createElement("tr");
 
@@ -2144,7 +2143,7 @@ Game.prototype.getUnitType = function (val){
 		}
 		else {
 			tr.insertCell(-1).innerHTML = armour;
-			tr.insertCell(-1).innerHTML = system;
+			tr.insertCell(-1).innerHTML = system ? system : "";
 			tr.insertCell(-1).innerHTML = struct;
 		}
 

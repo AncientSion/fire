@@ -80,9 +80,9 @@ class System {
 	}
 
 	public function isDestroyedThisTurn($turn){
-		if ($this->destroyed){return false;}
+		if (!$this->destroyed){return false;}
 		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
-			if ($this->damages[$i]->turn == $turn){
+			if ($this->damages[$i]->destroyed && $this->damages[$i]->turn == $turn){
 				return true;
 			} else if ($this->damages[$i]->turn < $turn){
 				return false;
@@ -198,8 +198,8 @@ class System {
 	public function getValidEffects(){
 		return array(// attr, %-tresh, duration, modifier
 			array("Disabled", 80, 1, 0),
-			array("Damage", 40, 0, 0),
-			array("Accuracy", 40, 0, 0)
+			array("Damage", 30, 0, 0),
+			array("Accuracy", 30, 0, 0)
 		);
 	}
 
@@ -215,7 +215,7 @@ class System {
 
 		for ($i = 0; $i < sizeof($possible); $i++){
 			if (mt_rand(0, 1)){continue;}
-			if ($dmg + mt_rand(-10, 10) < $possible[$i][0]){continue;}
+			if ($dmg + mt_rand(-10, 10) < $possible[$i][1]){continue;}
 			$duration = $possible[$i][2];
 			if ($duration && $dmg > 90 && mt_rand(0, 1)){$duration += 1;}
 

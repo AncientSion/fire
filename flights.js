@@ -16,8 +16,6 @@ function Flight(data){
 	this.unitSize = data.unitSize;
 	this.mission = data.mission || {};
 	this.traverse = -3;
-	this.drawImg;
-	this.doDraw = 1;
 }
 
 Flight.prototype = Object.create(Mixed.prototype);
@@ -393,16 +391,16 @@ Flight.prototype.supplyAttachDiv = function(div){
 		.data("id", this.id)
 		.click(function(){
 			if (aUnit){
-				var ship = game.getUnitById(aUnit);
-				if (ship.hasWeaponsSelected()){
+				var shooter = game.getUnitById(aUnit);
+				if (shooter.hasWeaponsSelected()){
 					var target = game.getUnitById($(this).data("id"));
-					if (ship.userid != target.userid){
-						handleFireClick(ship, target);
+					if (shooter.userid != target.userid){
+						handleFireClick(shooter, target);
 					}
 				} 
 				else {
-					ship.doUnselect();
-					ship.switchDiv();
+					shooter.doUnselect();
+					shooter.switchDiv();
 					game.getUnitById($(this).data("id")).select();
 				}
 			}
@@ -414,11 +412,11 @@ Flight.prototype.supplyAttachDiv = function(div){
 				//vessel.doHighlight();
 				//game.handleHoverEvent(vessel)
 			if (aUnit && aUnit != vessel.id){
-				var	ship = game.getUnitById(aUnit);
-				if (ship.salvo){return;}
-				if (ship.hasWeaponsSelected()){
-					if (ship.id != vessel.id){
-						handleWeaponAimEvent(ship, vessel, e);
+				var	shooter = game.getUnitById(aUnit);
+				if (shooter.salvo){return;}
+				if (shooter.hasWeaponsSelected()){
+					if (shooter.id != vessel.id){
+						handleWeaponAimEvent(shooter, vessel, e);
 					}
 				} else {
 					game.target = 0;

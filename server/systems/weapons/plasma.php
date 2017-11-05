@@ -6,9 +6,8 @@ class Plasma extends Weapon {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $destroyed = 0){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-		$this->boostEffect[] = new Effect("Damage loss", -0.25);
+		$this->boostEffect[] = new Effect("Damage loss", -0.2);
 		$this->boostEffect[] = new Effect("Damage", 0.1);
-
 	}
 	
 	public function getDmgRangeMod($fire){
@@ -25,9 +24,13 @@ class Plasma extends Weapon {
 		$armourDmg = 0;
 		$structDmg = 0;
 
-		$armourDmg = min($totalDmg, $negation)*1.5;
-		$structDmg = min(max(0, $totalDmg - $negation), $totalDmg);
-		Debug::log("Plasma DMG: ".$totalDmg." -> ".$armourDmg."/".$structDmg);
+		$armourDmg = round(min($totalDmg, $negation));
+		$structDmg = round($totalDmg - $armourDmg);
+		$armourDmg += $this->melt;
+
+		//$armourDmg = ceil(min($totalDmg, $negation)*1.5);
+		//$structDmg = min(max(0, $totalDmg - $negation), $totalDmg);
+		//Debug::log("Plasma DMG: ".$totalDmg.": negation: ".$negation." - DOING ".$structDmg."/".$armourDmg);
 		
 		return new Divider($shieldDmg * $this->linked, $armourDmg * $this->linked, $structDmg * $this->linked);
 	}
@@ -36,9 +39,9 @@ class Plasma extends Weapon {
 class LightPlasma extends Plasma {
 	public $name = "LightPlasma";
 	public $display = "46mm Plasma Gun";
-	public $minDmg = 28;
-	public $maxDmg = 37;
-	public $accDecay = 110;
+	public $minDmg = 34;
+	public $maxDmg = 47;
+	public $accDecay = 120;
 	public $dmgLoss = 14;
 	public $shots = 1;
 	public $animColor = "darkGreen";
@@ -50,6 +53,7 @@ class LightPlasma extends Plasma {
 	public $powerReq = 3;
 	public $maxBoost = 1;
 	public $effiency = 2;
+	public $melt = 20;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -59,9 +63,9 @@ class LightPlasma extends Plasma {
 class MediumPlasma extends Plasma {
 	public $name = "MediumPlasma";
 	public $display = "78mm Plasma Accelerator";
-	public $minDmg = 63;
-	public $maxDmg = 82;
-	public $accDecay = 110;
+	public $minDmg = 51;
+	public $maxDmg = 69;
+	public $accDecay = 120;
 	public $dmgLoss = 10;
 	public $shots = 1;
 	public $animColor = "darkGreen";
@@ -69,10 +73,11 @@ class MediumPlasma extends Plasma {
 	public $projSpeed = 6;
 	public $reload = 2;
 	public $mass = 24;
-	public $traverse = 0;
+	public $traverse = -1;
 	public $powerReq = 4;
 	public $maxBoost = 2;
-	public $effiency = 2;
+	public $effiency = 3;
+	public $melt = 30;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -82,9 +87,9 @@ class MediumPlasma extends Plasma {
 class HeavyPlasma extends Plasma {
 	public $name = "HeavyPlasma";
 	public $display = "148mm Plasma Cannon";
-	public $minDmg = 96;
-	public $maxDmg = 128;
-	public $accDecay = 110;
+	public $minDmg = 75;
+	public $maxDmg = 98;
+	public $accDecay = 120;
 	public $dmgLoss = 6;
 	public $shots = 1;
 	public $animColor = "darkGreen";
@@ -95,7 +100,8 @@ class HeavyPlasma extends Plasma {
 	public $traverse = 1;
 	public $powerReq = 6;
 	public $maxBoost = 3;
-	public $effiency = 3;
+	public $effiency = 4;
+	public $melt = 40;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

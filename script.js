@@ -413,8 +413,7 @@ function sensorize(ship, pos){
 	sensorEvent(true, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), a);
 }
 
-function deployPhase(e){
-	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
+function deployPhase(e, pos){
 	var unit;
 	var ammo;
 	var index;
@@ -444,7 +443,7 @@ function deployPhase(e){
 				sensorize(unit, pos);
 				return;
 			}
-			firePhase(e);
+			firePhase(e, pos, unit);
 		}
 		else {
 			unit = game.getUnitByClick(pos);
@@ -458,79 +457,48 @@ function deployPhase(e){
 	}
 }
 
-function movePhase(e){	
-	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
-	var unit;
-	var index;
-	if (aUnit){
-		unit = game.getUnitById(aUnit);
-		if (unit.flight && game.phase == 0 || unit.ship && game.phase == 1){
-			return;
-		}
-		else {
-			if (game.mode == 1){ //no active weapon but ship active -> MOVE MODE
-				if (game.turnMode){
-					unit.handleTurnAttempt(pos);
-				}
-				else if (isInArc(getCompassHeadingOfPoint(unit.getPlannedPos(), pos, 0), unit.moveAngles.start, unit.moveAngles.end)){ //check if clicked to move in movement arc
-					var dist = Math.floor(getDistance(unit.getPlannedPos(), pos));
-					if (dist < unit.getRemainingImpulse()){
-						unit.issueMove(pos, dist);
-					}
+function movePhase(e, pos, unit){
+	if (unit){
+		if (game.mode == 1){ //no active weapon but ship active -> MOVE MODE
+			if (game.turnMode){
+				unit.handleTurnAttempt(pos);
+			}
+			else if (isInArc(getCompassHeadingOfPoint(unit.getPlannedPos(), pos, 0), unit.moveAngles.start, unit.moveAngles.end)){ //check if clicked to move in movement arc
+				var dist = Math.floor(getDistance(unit.getPlannedPos(), pos));
+				if (dist < unit.getRemainingImpulse()){
+					unit.issueMove(pos, dist);
 				}
 			}
 		}
 	}
 	else {
 		unit = game.getUnitByClick(pos);	
-		if (unit){
-			unit.select(e);
-			return;
-		}
+		if (unit){unit.select();}
 	}
 }
 
-window.getBearing = function(shooter, target){
-	var tStart = target.getTurnStartPosition();
-	var tEnd = target.getTurnfinalStepition();
-	var tFaceStart = tStart.a;
-	var tFaceEnd = target.facing;
-	var tFacePro = tFaceEnd - tFaceStart;
+function firePhase(e, pos, unit){
+	var target;
 
-	var startBearing = getAngleFromTo(shooter.getTurnfinalStepition(), tStart)
-	var endBearing = getAngleFromTo(shooter.getTurnfinalStepition(), tEnd)
-	var aDif = endBearing - startBearing;
-
-	return;
-}
-
-function firePhase(e){
-	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
-	var ship;
-	var index;
-	var vessel;
-
-	if (! aUnit){
-		ship = game.getUnitByClick(pos);
-		if (ship){ship.select();}
+	if (unit){
+		target = game.getUnitByClick(pos);
+		if (target){
+			if (target.id != unit.id && (target.userid != game.userid && target.userid != unit.userid)){
+				handleFireClick(unit, target);
+			} else target.switchDiv();
+		}
 	}
 	else {
-		vessel = game.getUnitByClick(pos);
-		ship = game.getUnitById(aUnit)
-		if (vessel){
-			if (vessel.id != ship.id && (vessel.userid != game.userid && vessel.userid != ship.userid)){
-				handleFireClick(ship, vessel);
-			} else vessel.switchDiv();
-		}
+		unit = game.getUnitByClick(pos);
+		if (unit){unit.select();}
 	}
 }
 
-function dmgPhase(e){
+function dmgPhase(e, pos, unit){
 	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
-	var unit;
 	var index;
-	if (aUnit){
-		unit = game.getUnitById(aUnit);
+
+	if (unit){
 		var clickShip = game.getUnitByClick(pos);
 		if (unit == clickShip){
 			unit.select();
@@ -539,31 +507,8 @@ function dmgPhase(e){
 		}
 	}
 	else {
-		unit = game.getUnitByClick(pos);		
-		if (unit){
-			unit.select(e);
-		}
-	}
-}
-
-function canvasMouseClick(e){
-	//var rect = this.getBoundingClientRect();
-	//var pos = new Point(e.clientX - rect.left, e.clientY - rect.top);
-	var gamepos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
-	//console.log("canvas pos " + pos.x + " / " + pos.y);
-	console.log("game pos " + gamepos.x	+ " / " + gamepos.y);
-	
-	switch (game.phase){
-		case -1:
-			deployPhase(e); break;
-		case 0: 
-			movePhase(e); break;
-		case 1: 
-			movePhase(e); break;
-		case 2: 
-			firePhase(e); break;
-		case 3: 
-			dmgPhase(e); break;
+		unit = game.getUnitByClick(pos);	
+		if (unit){unit.select();}
 	}
 }
 

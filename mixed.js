@@ -32,6 +32,10 @@ Mixed.prototype.getPlannedFacing = function(){
 	return this.actions[this.actions.length-1].a;
 }
 
+Mixed.prototype.getDrawFacing = function(){
+	return this.facing;
+}
+
 Mixed.prototype.canDeploy = function(){
 	return false;
 }
@@ -147,18 +151,6 @@ Mixed.prototype.setStatus = function(){
 			for (var k = 0; k < this.structures[i].systems.length; k++){
 				this.structures[i].systems[k].disabled = true;
 			}
-		}
-	}
-
-	if (this.mission.arrived){
-		if (this.mission.type == 1){return;}
-		else if (this.id < 0 && this.mission.arrived){
-			this.doDraw = 0;
-		}
-		else if (this.mission.arrived < game.turn){
-			this.doDraw = 0;
-		} else if (game.phase > 2 && this.mission.arrived == game.turn){
-			this.doDraw = 0;
 		}
 	}
 }
@@ -305,10 +297,6 @@ Mixed.prototype.setPostMoveFacing = function(){
 	}
 }
 
-Mixed.prototype.getDrawFacing = function(){
-	return this.facing;
-}
-
 Mixed.prototype.canShortenTurn = function(){
 	return false;
 }
@@ -317,9 +305,23 @@ Mixed.prototype.canUndoShortenTurn = function(){
 	return false;
 }
 
+Mixed.prototype.setDrawStatus = function(){
+	if (this.mission.arrived){
+		if (this.mission.type == 1){return;}
+		else if (this.id < 0 && this.mission.arrived){
+			this.doDraw = 0;
+		}
+		else if (this.mission.arrived < game.turn){
+			this.doDraw = 0;
+		} else if (game.phase > 2 && this.mission.arrived == game.turn){
+			this.doDraw = 0;
+		}
+	}
+}
 Mixed.prototype.create = function(){
 	this.setRawImage();
 	this.setStatus();
+	this.setDrawStatus()
 	this.setSize();
 	this.setLayout();
 	//this.setDrawData();

@@ -805,7 +805,7 @@ class Manager {
 				//Debug::log("From ".$origin->x."/".$origin->y." to ".$tPos->x."/".$tPos->y);
 				//Debug::log("Dist ".$dist.", angle: ".$angle);
 
-				if ($impulse <= $dist){
+				if ($impulse < $dist){
 					Debug::log("close in");
 					$tPos = Math::getPointInDirection($impulse, $angle, $origin->x, $origin->y);
 				}
@@ -1116,8 +1116,7 @@ class Manager {
 			//var_export($this->fires[$i]); echo "</br></br>";
 			$this->fires[$i]->shooter = $this->getUnitById($this->fires[$i]->shooterid);
 			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystemById($this->fires[$i]->weaponid);
-			//$this->fires[$i]->shots = $this->fires[$i]->weapon->getShots($this->turn);
-			$this->fires[$i]->shots = 1;
+			$this->fires[$i]->shots = $this->fires[$i]->weapon->getShots($this->turn);
 			$this->fires[$i]->target = $this->getUnitById($this->fires[$i]->targetid);
 			//var_export($this->fires[$i]->weapon); echo "</br></br>";
 			//var_export($this->fires[$i]->weapon->getBoostLevel($this->turn)); echo "</br></br>";

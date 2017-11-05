@@ -326,7 +326,7 @@ echo "</script>";
 				</div>
 				<table id="combatLog">
 					<tr>
-						<th width=110px>Type</th>
+						<th width=70px>Type</th>
 						<th width=105px>Shooter</th>
 						<th width=105px>Target</th>
 						<th width=160px>Weapon</th>

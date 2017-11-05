@@ -515,7 +515,7 @@ function Ship(data){
 
 	this.getImpulseStep = function(){
 		//return 15;
-		return Math.floor(this.getBaseImpulse() / 7);
+		return Math.floor(this.getBaseImpulse() / 8);
 	}
 	
 	this.getTurnCost = function(){
@@ -898,7 +898,7 @@ function Ship(data){
 			for (var i = 1; i <= w; i++){			
 				var modAngle = turnAngle * i * j;
 				var newAngle = addToDirection(angle, modAngle);
-				var p = getPointInDirection(Math.min(this.getBaseImpulse(), this.getRemainingImpulse()*2), newAngle, center.x, center.y);
+				var p = getPointInDirection(Math.max(this.getBaseImpulse(), this.getRemainingImpulse()*2), newAngle, center.x, center.y);
 				if (turnAngle != 180){
 					moveCtx.beginPath();
 					moveCtx.moveTo(center.x, center.y);
@@ -2435,19 +2435,19 @@ Ship.prototype.expandDiv = function(div){
 			.append($(window.shipImages[this.name.toLowerCase()].cloneNode(true)).addClass("rotate270").addClass("size90"))
 			.hover(function(e){
 				if (aUnit){
-					var ship = game.getUnitById(aUnit);
+					var shooter = game.getUnitById(aUnit);
 					var target = game.getUnitById($(this).parent().data("shipId"));
-					if (ship.id != target.id && ship.hasWeaponsSelected()){
-						handleWeaponAimEvent(ship, target, e);
+					if (shooter.id != target.id && shooter.hasWeaponsSelected()){
+						handleWeaponAimEvent(shooter, target, e);
 					}
 				}
 			}).
 			click(function(e){
-				var ship = game.getUnitById(aUnit);
+				var shooter = game.getUnitById(aUnit);
 				var target = game.getUnitById($(this).parent().data("shipId"));
-				if (target){
-					if (target.id != ship.id && (target.userid != game.userid && target.userid != ship.userid)){
-						handleFireClick(ship, target);
+				if (shooter && target){
+					if (target.id != shooter.id && (target.userid != game.userid && target.userid != shooter.userid)){
+						handleFireClick(shooter, target);
 					} else target.switchDiv();
 				}
 			}));

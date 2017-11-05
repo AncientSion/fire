@@ -142,7 +142,7 @@ class Ship {
 		$this->baseHitChance = ceil(pow($this->mass, 0.4)*1.5)+30;
 		$this->baseTurnCost = round(pow($this->mass, 1.25)/22500, 2);
 		$this->baseTurnDelay = round(pow($this->mass, 0.45)/20, 2);
-		$this->baseImpulseCost = round(pow($this->mass, 1.4)/2000, 2);
+		$this->baseImpulseCost = round(pow($this->mass, 1.4)/3000, 2);
 	}
 
 	public function hidePowers($turn){
@@ -245,7 +245,6 @@ class Ship {
 	public function getDeployState($turn){
 		$angle = $this->facing;
 
-		Debug::log("getDeployState for ".get_class($this)." #".$this->id." current facing ".$this->facing);
 		for ($i = 0; $i < sizeof($this->actions); $i++){
 			if ($this->actions[$i]->turn < $turn){continue;}
 			if ($turn == 1 && $this->actions[$i]->type == "deploy"){
@@ -265,6 +264,7 @@ class Ship {
 
 		//Debug::log("returning data fro getDeployState");
 		//Debug::log("returning total angle: ".$angle);
+		Debug::log("getDeployState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$angle);
 		
 		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x , "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $this->remainingDelay, "angle" => $angle, "thrust" => $this->currentImpulse);
 	}
@@ -286,14 +286,14 @@ class Ship {
 
 		if ($angle > 360){
 			$angle -= 360;
-		} else if ($angle < 0){
+		}
+		else if ($angle < 0){
 			$angle += 360;
 		}
 
-		//if (sizeof($this->actions)){
-			return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "angle" => $angle, "thrust" => $this->currentImpulse);
-		//} else 
-		///	return array("id" => $this->id, "x" => $this->x, "y" => $this->y, "delay" => $delay, "angle" => $angle, "thrust" => $this->currentImpulse);
+		//Debug::log("getMoveState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$angle);
+
+		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "angle" => $angle, "thrust" => $this->currentImpulse);
 	}
 
 	public function setRemainingDelay($turn){
@@ -510,7 +510,7 @@ class Ship {
 	}
 
 	public function resolveFireOrder($fire){
-		Debug::log("resolveFireOrder - ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", guns: ".$fire->shots);
+		Debug::log("resolveFireOrder - ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots);
 
 		if ($this->isDestroyed()){
 			$fire->resolved = -1;
@@ -521,21 +521,29 @@ class Ship {
 			$fire->angle = $this->getImpactAngle($fire);
 			$fire->section = $this->getHitSection($fire);
 
-			for ($i = 0; $i < $fire->shots; $i++){
-				$fire->weapon->rollToHit($fire);
-			}
-
+			$this->rollToHit($fire);
 			$this->determineHits($fire);
+
 			$fire->resolved = 1;
 		}
 	}
+
+	public function rollToHit($fire){
+		for ($i = 0; $i < $fire->shots; $i++){
+			$roll = mt_rand(1, 100);
+			$fire->rolls[] = $roll;
+			$fire->notes .= $roll." ";
+		}
+		return true;
+	}
+
 
 	public function determineHits($fire){
 		$fire->req = $this->calculateToHit($fire);
 
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
 			if ($fire->target->destroyed){
-				Debug::log("aborting shot resolution vs dead target");
+				Debug::log("aborting shot resolution vs dead target #".$this->id);
 			}
 			else  if ($fire->rolls[$i] <= $fire->req){
 				$fire->weapon->doDamage($fire, $fire->rolls[$i], $this->getHitSystem($fire));
@@ -729,7 +737,7 @@ class Ship {
 	}
 
 	public function getImpulseStep(){
-		return floor($this->getBaseImpulse() / 7);
+		return floor($this->getBaseImpulse() / 8);
 	}
 
 	public function getCurrentPosition(){
@@ -824,13 +832,16 @@ class Ship {
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
 				if (!$this->structures[$i]->systems[$j]->damaged){continue;}
-
-				$this->structures[$i]->systems[$j]->testCrit($turn, 0);
-				if (mt_rand(1, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn, 0)){
-					$spike += $this->structures[$i]->systems[$j]->getPowerUsage($turn);
+				if ($this->structures[$i]->systems[$j]->destroyed){
+					if (mt_rand(1, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn, 0)){
+						Debug::log("adding spike #".$this->id."/".$this->structures[$i]->systems[$j]->id);
+						$spike += $this->structures[$i]->systems[$j]->getPowerUsage($turn);
+					}
 				}
+
+				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
+				$this->structures[$i]->systems[$j]->testCrit($turn, 0);
 			}
 		}
 
@@ -843,7 +854,7 @@ class Ship {
 
 
 		if ($spike){
-			//Debug::log("potential total power spike for unit #".$this->id.": ".$spike);
+			Debug::log("potential total power spike for unit #".$this->id.": ".$spike);
 			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
 				if ($this->primary->systems[$j]->name == "Reactor"){
 					$this->primary->systems[$j]->applyPowerSpike($turn, $spike);

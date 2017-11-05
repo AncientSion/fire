@@ -4,7 +4,7 @@ class Mixed extends Ship {
 	public $ship = false;
 	public $primary = false;
 	public $baseImpulse;
-	public $mission = array();
+	public $mission;
 	public $cost = 0;
 	public $mass = 0;
 	public $profile = 0;
@@ -146,6 +146,9 @@ class Mixed extends Ship {
 
 	public function determineHits($fire){
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
+			if ($fire->target->destroyed){
+				Debug::log("aborting shot resolution vs dead target #".$this->id);
+			}
 			$target = $this->getHitSystem($fire);
 			$fire->singleid = $target->id;
 			$fire->req = $this->calculateToHit($fire);
@@ -221,12 +224,28 @@ class Mixed extends Ship {
 		}
 	}
 
-	public function getMoveState($turn){
-		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x , "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => 0, "angle" => $this->actions[sizeof($this->actions)-1]->a, "thrust" => $this->currentImpulse);
-	}
-
 	public function getLockMultiplier(){
 		return 1.0;
+	}
+
+	public function getDeployState($turn){
+		return $this->getMoveState($turn);
+	}
+
+	public function getMoveState($turn){
+		Debug::log("getMoveState for ".$this->id);
+		$angle = $this->actions[sizeof($this->actions)-1]->a;
+
+		if ($angle > 360){
+			$angle -= 360;
+		}
+		else if ($angle < 0){
+			$angle += 360;
+		}
+
+		//Debug::log("getMoveState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$angle);
+
+		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $this->remainingDelay, "angle" => $angle, "thrust" => $this->currentImpulse);
 	}
 }
 

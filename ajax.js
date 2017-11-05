@@ -266,7 +266,7 @@ window.ajax = {
 					phase: game.phase,
 					fireOrders: fireOrders
 					},
-			success: callback,
+			//success: callback,
 			error: ajax.error,
 		});
 	},

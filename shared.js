@@ -444,8 +444,14 @@ $('#myElement').on('mousedown', function() {
 function handleMouseDown(e){
 	e.preventDefault();
 	e.stopPropagation();
+	var unit;
 	var rect = this.getBoundingClientRect();
-	var pos = new Point(e.clientX - rect.left, e.clientY - rect.top).getOffset();
+	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
+	console.log("game pos " + pos.x	+ " / " + pos.y);
+
+	if (aUnit){
+		unit = game.getUnitById(aUnit);
+	}
 
 	if (e.originalEvent.button == 0){
 		if (game.sensorMode){
@@ -453,13 +459,21 @@ function handleMouseDown(e){
 			sensorize(game.getUnitById(aUnit), pos);
 			return;
 		}
-		else if (game.shortInfo && !aUnit){
-			game.getUnitById(game.shortInfo).select();
-		}
 		window.downTime = new Date();
 		cam.scroll = 1;
 		cam.sx = e.clientX;
 		cam.sy = e.clientY;
+
+		switch (game.phase){
+			case -1:
+				deployPhase(e, pos); break;
+			case 0: 
+				movePhase(e, pos, unit); break;
+			case 2: 
+				firePhase(e, pos, unit); break;
+			case 3: 
+				dmgPhase(e, pos, unit); break;
+		}
 	}
 	else if (e.originalEvent.button == 2){
 		if (game.deploying){
@@ -471,16 +485,18 @@ function handleMouseDown(e){
 				}
 			})
 		}
-		unit = game.getUnitByClick(pos);
-		if (unit){
-			if (aUnit == unit.id){
+
+		var clickUnit = game.getUnitByClick(pos);
+		if (clickUnit){
+			if (unit && unit.id == clickUnit.id){
 				game.getUnitById(aUnit).doUnselect();
-			} else unit.switchDiv();
+			}
+			else clickUnit.switchDiv();
 		}
-		else if (aUnit){
+		else if (unit){
 			if (game.turnMode){
-				game.getUnitById(aUnit).switchTurnMode();
-			} else game.getUnitById(aUnit).doUnselect();
+				unit.switchTurnMode();
+			} else unit.doUnselect();
 		}
 	}
 }
@@ -488,12 +504,13 @@ function handleMouseDown(e){
 function handleMouseUp(e){
 	e.preventDefault();
 	e.stopPropagation();
-	if (e.originalEvent.button == 0){
+
+	/*if (e.originalEvent.button == 0){
 		var t = (new Date().getTime() - window.downTime.getTime());
 		if (t < 166){
 			canvasMouseClick(e);
 		}
-	}
+	}*/
 	cam.scroll = 0;
 }
 

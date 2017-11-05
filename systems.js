@@ -552,6 +552,15 @@ System.prototype.minus = function(max){
 	if (change){ship.updateShipPower(this);}
 }
 
+System.prototype.canChangeMode = function(){
+	if (!(Object.keys(this.modes).length)){
+		return false;
+	}
+	else if (this.getLoadLevel() >= 1){
+		return true;
+	} else return false;
+}
+
 System.prototype.showOptions = function(){
 	if (this.destroyed || this.locked){return;}
 	var ele = $(this.element);
@@ -564,7 +573,7 @@ System.prototype.showOptions = function(){
 	if (game.phase == -1){
 		if (game.getUnitById(this.parentId).userid == game.userid){
 			var boost = this.effiency;
-			var canModeChange = Object.keys(this.modes).length;
+			var canModeChange = this.canChangeMode();
 			var canPower = this.canPower();
 			var canUnpower = this.canUnpower();
 			if (canPower){
@@ -1488,7 +1497,7 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 		$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
 		$(table).append($("<tr>").append($("<td>").html("Base Power Req")).append($("<td>").html(this.getPowerReq())));
 		if (this.boostEffect.length && !(this instanceof Launcher)){
-			$(table).append($("<tr>").css("border-top", "2px solid white").append($("<td>").html("Boost Power Cost")).append($("<td>").html(this.getEffiency())));
+			$(table).append($("<tr>").css("border-top", "2px solid white").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerCost").html(this.getEffiency() + " (max: " + this.maxBoost + ")")));
 			this.getBoostEffectElements(table);
 		}
 	}
@@ -1659,6 +1668,10 @@ Warhead.prototype.getShots = function(){
 	return 1;
 }
 
+Warhead.prototype.getActiveSystem = function(){
+	return this;
+}
+
 Warhead.prototype.getDisplay = function(){
 	return "Warhead Impact";
 }
@@ -1727,7 +1740,7 @@ Particle.prototype.getAnimation = function(fire){
 	if (game.isCloseCombat(fire.shooter, fire.target)){
 		cc = 1;
 		if (fire.shooter.flight && fire.target.ship){
-			fraction = 2;
+			fraction = 1.5;
 		} else fraction = 3;
 	}
 	else if (fire.dist < 200){
@@ -1789,7 +1802,8 @@ Matter.prototype = Object.create(Particle.prototype);
 function Plasma(system){
 	Particle.call(this, system);
 	this.dmgLoss = system.dmgLoss;
-	this.notes = ["Damage to Armour + 50%"];
+	this.melt = system.melt;
+	this.notes = ["Adds flat <span class='bold green'>" + this.melt + "</span> damage to armour"];
 }
 Plasma.prototype = Object.create(Particle.prototype);
 
@@ -1861,6 +1875,7 @@ function Pulse(system){
 Pulse.prototype = Object.create(Particle.prototype);
 
 Pulse.prototype.getShots = function(){
+	return this.shots;
 	return this.basePulses + this.extraPulses;
 }
 	
@@ -1896,19 +1911,22 @@ Pulse.prototype.getAnimation = function(fire){
 		var ox = fire.shooter.drawX + o.x;
 		var oy = fire.shooter.drawY + o.y;
 		var t = fire.target.getPlannedPos();
-		var min = fire.target.size*0.3;
 
-		if (fire.hits[j] >= 1){
+		if (fire.hits[j]){
 			hasHit = 1;
 			hits++;
+			//hits += this.basePulses + Math.floor((fire.req[j] - fire.rolls[j]) / this.grouping);
 		}
 
 		var dest = fire.target.getFireDest(fire, hasHit, hits-1);
 		var tx = t.x + dest.x;
 		var ty = t.y + dest.y;
 
-		for (var k = 0; k < this.basePulses + this.extraPulses; k++){
-			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, (k < fire.hits[j]));
+		var subHits = hasHit * this.basePulses + Math.floor((fire.req[j] - fire.rolls[j]) / this.grouping);
+
+		for (var k = 0; k < (this.basePulses + this.extraPulses); k++){
+			var devi = {x: range(-2, 2), y: range(-2, 2)};
+			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx + devi.x, y: ty + devi.y}, speed, (k <= subHits));
 				shotAnim.n = 0 - ((j / grouping) * delay + k*shotInterval);
 
 			gunAnims.push(shotAnim);

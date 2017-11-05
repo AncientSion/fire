@@ -18,7 +18,13 @@ class Laser extends Weapon {
 			$dist = $this->optRange - $dist;
 		}
 		else $dist = $dist - $this->optRange;
-		return 1-($dist * $this->dmgLoss / 10000);
+
+		$mod = 1-($dist * $this->dmgLoss / 10000);
+
+		Debug::log(get_class($this).", weapon id: ".$this->id.", RANGE DMG mod: ".$mod);
+
+
+		return $mod;
 	}
 
 	public function doDamage($fire, $roll, $system){
@@ -29,6 +35,8 @@ class Laser extends Weapon {
 			return;
 		}
 		$rake = floor($totalDmg / $this->rakes);
+		$fire->hits++;
+			
 		for ($j = 0; $j < $this->rakes; $j++){
 			$system = $fire->target->getHitSystem($fire);
 			$print .= " ".get_class($system)." for ".$rake;
@@ -46,13 +54,12 @@ class Laser extends Weapon {
 				$dmg->structDmg = $remInt;
 			}
 
-			$dmg = new Damage(
+			$entry = new Damage(
 				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
 				$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $overkill, $negation, $destroyed, $dmg->notes, 1
 			);
-			$fire->hits++;
-			$fire->damages[] = $dmg;
-			$fire->target->applyDamage($dmg);
+			$fire->damages[] = $entry;
+			$fire->target->applyDamage($entry);
 
 		}
 		Debug::log($print);

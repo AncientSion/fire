@@ -135,15 +135,18 @@ function Marker(shooterid, targetid, systemid, turn){
 }
 
 function FireOrder(data){
+	if (data.id == 29){
+		console.log("ding");
+	}
 	this.id = data.id || -1;
 	this.turn = data.turn || game.turn;
 	this.shooterid = data.shooterid || -1;
 	this.targetid = data.targetid || -1;
 	this.weaponid = data.weaponid || -1;
 	this.shots = data.shots || 0;
-	this.req = data.req || 0;
+	this.req = [data.req];
 	this.notes = data.notes || "";
-	this.hits = data.hits || 0;
+	this.hits = [data.hits] || 0;
 	this.resolved = data.resolved || 0;
 	this.dist;
 	this.guns = 1;
