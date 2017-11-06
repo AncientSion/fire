@@ -1333,6 +1333,7 @@ Game.prototype.getUnitType = function (val){
 		this.animateDeployment();
 
 		$("#combatlogWrapper")
+		.width(250)
 		.show()
 		.find(".combatLogHeader").html("Deployment Log").end()
 		.find("#combatLog").children().children().remove();
@@ -2046,7 +2047,7 @@ Game.prototype.getUnitType = function (val){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].available == game.turn){
 				if (this.ships[i].flight){
-					if (this.ships.friendly){
+					if (this.ships[i].friendly){
 						color = "#27e627";
 					}
 					html = "<span><font color='" + color + "'>Flight #" + this.ships[i].id + "</font> was deployed</span>";
@@ -2318,7 +2319,7 @@ Game.prototype.getUnitType = function (val){
 	this.initSelectionWrapper = function(){
 		var ele = $("#unitGUI");
 		var l = 0;
-		var s = 45;
+		var s = 35;
 
 		this.ships.sort(function(a, b){
 			return a.userid - b.userid || b.cost- a.cost
@@ -2333,8 +2334,8 @@ Game.prototype.getUnitType = function (val){
 				l++;
 
 				if (this.ships[i].ship){
-					className = "rotate270 size45";
-				} else className = "size45";
+					className = "rotate270 size" + s;
+				} else className = "size" + s;
 
 				ele.append(
 				($(this.ships[i].getBaseImage().cloneNode(true))
@@ -2393,7 +2394,9 @@ Game.prototype.getUnitType = function (val){
 		}
 
 		if (l){
-			ele.width(Math.min(630, l*(s+3*2))).css("top", 0).css("left", 300)//.drag();
+			var w = l*(s+3*2);
+
+			ele.width(Math.min(600, w)).css("top", 0).css("left", 300)//.drag();
 		} else ele.hide();
 	}
 }

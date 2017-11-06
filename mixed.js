@@ -389,10 +389,10 @@ Mixed.prototype.getLockMultiplier = function(){
 }
 
 Mixed.prototype.setPreMoveImage = function(){
-	var size = 13;
+	var size = 36;
 	var t = document.createElement("canvas");
-		t.width = this.size;
-		t.height = this.size;
+		t.width = 200;
+		t.height = 200;
 	var ctx = t.getContext("2d");
 
 	ctx.translate(t.width/2, t.height/2);
@@ -416,10 +416,11 @@ Mixed.prototype.setPreMoveImage = function(){
 }
 
 Mixed.prototype.setPostMoveImage = function(){
-	var size = 13;
+	return;
+	var size = 24;
 	var t = document.createElement("canvas");
-		t.width = this.size;
-		t.height = this.size;
+		t.width = 200;
+		t.height = 200;
 	var ctx = t.getContext("2d");
 
 	if (this.mission.type == 1){ // patrol

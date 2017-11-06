@@ -550,6 +550,11 @@ table, th, tr, td {
 	margin: auto;
 }
 
+.size35 {
+	width: 35px;
+	height: 35px;
+	margin: auto;
+}
 
 .size40 {
 	width: 40px;
@@ -1143,7 +1148,6 @@ table, th, tr, td {
 	color: white;
 	background-color: black;
 	padding: 2px;
-	padding-bottom: 8px;
 	border-radius: 5px;
 }
 

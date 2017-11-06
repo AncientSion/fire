@@ -139,13 +139,13 @@ echo "</script>";
 				</div>
 			</div>
 			<div id="plusImpulse" class="ui">
-				<img src="varIcons/plus.png" style="width: 30px; height: 30px">
+				<img src="varIcons/plus.png" style="width: 20px; height: 20px">
 			</div>
 			<div id="minusImpulse" class="ui">
-				<img src="varIcons/minus.png" style="width: 30px; height: 30px">
+				<img src="varIcons/minus.png" style="width: 20px; height: 20px">
 			</div>
 			<div id="undoLastAction" class="ui">
-				<img src="varIcons/destroyed.png" style="width: 30px; height: 30px">
+				<img src="varIcons/destroyed.png" style="width: 20px; height: 20px">
 			</div>
 			<div id="turnButton" class="turnEle ui disabled">
 				<table class="doTurn" style="margin:auto; width: 100%;">

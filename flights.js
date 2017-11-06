@@ -44,13 +44,13 @@ Flight.prototype.setLayout = function(){
 		return;
 	}
 
-	var osx = 7;
-	var osy = 5;
+	var osx = 18;
+	var osy = 16;
 
 	for (var i = 0; i < this.structures.length/3; i++){
 
 		var a = 360/Math.ceil(this.structures.length/3)*i;
-		var o = getPointInDirection(this.size/2 - this.unitSize*4, a-90, 0, 0);
+		var o = getPointInDirection(0 + this.unitSize*14, a-90, 0, 0);
 
 		for (var j = 0; j < Math.min(this.structures.length-i*3, 3); j++){
 			var ox = o.x;
@@ -80,7 +80,8 @@ Flight.prototype.setPatrolLayout = function(){
 Flight.prototype.drawSelf = function(){
 	ctx.translate(this.drawX, this.drawY);
 	ctx.rotate((this.getDrawFacing() + (!this.ship*90)) * Math.PI/180);
-	ctx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
+	var s = this.size;
+	ctx.drawImage(this.img, -s/2, -s/2, s, s)
 }
 
 Flight.prototype.setMaxMass = function(){
