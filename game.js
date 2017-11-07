@@ -1691,7 +1691,7 @@ Game.prototype.getUnitType = function (val){
 			this.fireOrders[i].shooter = game.getUnitById(this.fireOrders[i].shooterid);
 			this.fireOrders[i].weapon = this.fireOrders[i].shooter.getSystemById(this.fireOrders[i].weaponid).getActiveSystem();
 			//this.fireOrders[i].hits = [this.fireOrders[i].hits];
-			this.fireOrders[i].damages = this.fireOrders[i].target.getDamageEntriesByFireId(this.fireOrders[i]);
+			this.fireOrders[i].damages = this.fireOrders[i].target.getDmgByFire(this.fireOrders[i]);
 			this.fireOrders[i].systems.push(this.fireOrders[i].weaponid);
 		}
 

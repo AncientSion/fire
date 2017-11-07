@@ -1301,6 +1301,10 @@ function Weapon(system){
 }
 Weapon.prototype = Object.create(System.prototype);
 
+Weapon.prototype.getDmgsPerShot = function(){
+	return 1;
+}
+
 Weapon.prototype.hasFireOrder = function(){
 	for (var i = this.fireOrders.length-1; i >= 0; i--){
 		if (this.fireOrders[i].turn == game.turn){
@@ -1808,7 +1812,7 @@ function Plasma(system){
 	Particle.call(this, system);
 	this.dmgLoss = system.dmgLoss;
 	this.melt = system.melt;
-	this.notes = ["<span class='bold green'>" + this.melt + "% of </span> of total damage added to armour"];
+	this.notes = ["<span class='bold green'>" + this.melt + "%</span> of total damage added to armour"];
 }
 Plasma.prototype = Object.create(Particle.prototype);
 
@@ -1953,6 +1957,10 @@ function Laser(system){
 	this.notes = ["Damage is evently split into <span class='green'>" + this.output + "</span> rake(s)"];
 }
 Laser.prototype = Object.create(Weapon.prototype);
+
+Laser.prototype.getDmgsPerShot = function(){
+	return this.output;
+}
 
 Laser.prototype.getAnimation = function(fire){
 	allAnims = [];

@@ -321,10 +321,10 @@ function Ship(data){
 		if (this.ship){
 			this.setMoveTranslation();
 			this.drawVectorIndicator();
+			this.drawMoveArea();
 			this.drawTurnArcs();
-			if (game.phase < 2){
-				this.drawMoveArea();
-			}
+			//if (game.phase < 2){
+			//}
 			this.resetMoveTranslation();
 		}
 		this.drawMovePlan();
@@ -785,15 +785,32 @@ function Ship(data){
 				.data("shipid", this.id)
 				.data("dist", rem)
 				//.html("<div style='margin-left: 4px; margin-top: 7px'>"+rem+"<div>")
-				.html("<div>"+rem+"<div>")
+				.html("<div>"+rem+"</div>")
 				.css("left", left)
 				.css("top", top)
 				.removeClass("disabled");
 		}
-		if (delay > 0){
-			if (rem >= delay){
-				ele = document.getElementById("maxTurnVector");
-				var p = getPointInDirection(rem + 60, angle, center.x, center.y);
+
+		if (delay && rem >= delay){
+			ele = document.getElementById("maxTurnVector");
+			var p = getPointInDirection(rem + 60, angle, center.x, center.y);
+			var left = p.x  * cam.z  + cam.o.x - $(ele).width()/2;
+			var top = p.y * cam.z  + cam.o.y - $(ele).height()/2;
+
+			$(ele)
+				.data("shipid", this.id)
+				.data("dist", delay)
+				.html("<div>"+delay+"<div>")
+				.css("left", left)
+				.css("top", top)
+				.removeClass("disabled");
+
+			if (this.canMaxCut()){
+
+				delay = Math.ceil(delay/2);
+
+				ele = document.getElementById("maxCutVector");
+				var p = getPointInDirection(rem + 30, angle, center.x, center.y);
 				var left = p.x  * cam.z  + cam.o.x - $(ele).width()/2;
 				var top = p.y * cam.z  + cam.o.y - $(ele).height()/2;
 
@@ -804,24 +821,6 @@ function Ship(data){
 					.css("left", left)
 					.css("top", top)
 					.removeClass("disabled");
-
-				if (this.canMaxCut()){
-
-					delay = Math.ceil(delay/2);
-
-					ele = document.getElementById("maxCutVector");
-					var p = getPointInDirection(rem + 30, angle, center.x, center.y);
-					var left = p.x  * cam.z  + cam.o.x - $(ele).width()/2;
-					var top = p.y * cam.z  + cam.o.y - $(ele).height()/2;
-
-					$(ele)
-						.data("shipid", this.id)
-						.data("dist", delay)
-						.html("<div>"+delay+"<div>")
-						.css("left", left)
-						.css("top", top)
-						.removeClass("disabled");
-				}
 			}
 		}
 	}
@@ -1957,12 +1956,14 @@ Ship.prototype.setImage = function(){
 }
 
 Ship.prototype.draw = function(){
-	if (!this.doDraw){return;}
-	if (this.isReady()){
-	 	this.drawPositionMarker();
-		this.drawSelf();
-		this.drawEscort();
+	if (this.doDraw){
+		if (this.isReady()){
+		 	this.drawPositionMarker();
+			this.drawSelf();
+			this.drawEscort();
+		}
 	}
+	else this.drawPositionMarker();
 }
 
 Ship.prototype.drawSelf = function(){
@@ -2060,12 +2061,13 @@ Ship.prototype.getAngledHitChance = function(angle){
 }
 
 
-Ship.prototype.getDamageEntriesByFireId = function(fire){
+Ship.prototype.getDmgByFire = function(fire){
+	//console.log(fire.hits);
 	var dmgs = [];
 	var lookup = 0;
 
 	for (var i = 0; i < fire.hits.length; i++){
-		lookup += fire.hits[i]
+		lookup += fire.hits[i] * fire.weapon.getDmgsPerShot();
 	}
 
 	if (!lookup){
@@ -2895,7 +2897,6 @@ Ship.prototype.attachFlight = function(id){
 
 Ship.prototype.setEscortImage = function(){
 	if (this.cc.length){
-		//if (this.id == 10){console.log("ding")}
 		var size = this.size;
 		var fSize = 26;
 		var tresh = fSize-2;
@@ -2913,6 +2914,8 @@ Ship.prototype.setEscortImage = function(){
 		}
 
 		if (this.cc.length){
+			var friendlies = [];
+			var hostiles = [];
 			var friendly = [];
 			var hostile = [];
 			for (var i = 0; i < this.cc.length; i++){
@@ -2922,8 +2925,9 @@ Ship.prototype.setEscortImage = function(){
 				if (attach.flight && this.flight){continue;}
 
 				if (this.userid == attach.userid){
-					attach.size = size;
-				} else attach.size = size;
+					friendlies.push(attach);
+				}
+				else hostiles.push(attach);
 				for (var j = 0; j < attach.structures.length; j++){
 					if (!attach.structures[j].draw){;continue;}
 					if (this.userid == attach.userid){
@@ -2934,10 +2938,14 @@ Ship.prototype.setEscortImage = function(){
 		}
 
 		if (friendly.length){
+
+			for (var i = 0; i < friendlies.length; i++){
+				friendlies[i].size = size + tresh;
+			}
+
+			/*
 			var color = "#27e627";
 			if (!shipFriendly){color = "red";}
-			ctx.translate(t.width/2, t.height/2);
-			
 			ctx.globalAlpha = 0.8;
 			ctx.beginPath();
 			ctx.arc(0, 0, size + tresh, 0, 2*Math.PI);
@@ -2945,8 +2953,9 @@ Ship.prototype.setEscortImage = function(){
 			ctx.strokeStyle = color;
 			ctx.stroke();
 			ctx.globalAlpha = 1;
-
+			*/
 			//var rota = range(0, 360);
+			ctx.translate(t.width/2, t.height/2);
 			
 			var split = Math.floor(360/friendly.length+1);
 
@@ -2978,10 +2987,14 @@ Ship.prototype.setEscortImage = function(){
 		}
 
 		if (hostile.length){
+
+			for (var i = 0; i < hostiles.length; i++){
+				hostiles[i].size = size + tresh;
+			}
+
+			/*	
 			var color = "red";
 			if (!shipFriendly){color = "#27e627";}
-			ctx.translate(t.width/2, t.height/2);
-			
 			ctx.globalAlpha = 0.8;
 			ctx.beginPath();
 			ctx.arc(0, 0, size + tresh, 0, 2*Math.PI);
@@ -2989,7 +3002,8 @@ Ship.prototype.setEscortImage = function(){
 			ctx.strokeStyle = color;
 			ctx.stroke();
 			ctx.globalAlpha = 1;
-			
+			*/
+			ctx.translate(t.width/2, t.height/2);
 			var split = Math.floor(360/hostile.length+1)
 
 			for (var i = 0; i < hostile.length; i++){

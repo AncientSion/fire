@@ -30,7 +30,7 @@ class Laser extends Weapon {
 	public function doDamage($fire, $roll, $system){
 		$totalDmg = $this->getTotalDamage($fire);
 		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id." for ".$totalDmg." dmg");
-		$print = "hitting: ";
+		$print = "hitting --- ";
 		if ($totalDmg <= 0){
 			return;
 		}
@@ -39,7 +39,7 @@ class Laser extends Weapon {
 			
 		for ($j = 0; $j < $this->rakes; $j++){
 			$system = $fire->target->getHitSystem($fire);
-			$print .= " ".get_class($system)." for ".$rake;
+			$print .= " ".get_class($system).": ".$rake."dmg, ";
 			$destroyed = false;
 			$remInt = $system->getRemainingIntegrity();
 			$negation = $fire->target->getArmourValue($fire, $system);
