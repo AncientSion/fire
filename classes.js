@@ -135,9 +135,6 @@ function Marker(shooterid, targetid, systemid, turn){
 }
 
 function FireOrder(data){
-	if (data.id == 29){
-		console.log("ding");
-	}
 	this.id = data.id || -1;
 	this.turn = data.turn || game.turn;
 	this.shooterid = data.shooterid || -1;

@@ -487,6 +487,7 @@ Mixed.prototype.getFireDest = function(fire, isHit, nbrHit){
 			y: range(10, 25) * (1-range(0, 1)*2)
 		}
 	}
+	return this.getSystemById(fire.damages[nbrHit].systemid).layout
 	return rotate(0, 0, this.getSystemById(fire.damages[nbrHit].systemid).layout, this.getDrawFacing()+90);
 }
 

@@ -1728,6 +1728,7 @@ function Particle(system){
 Particle.prototype = Object.create(Weapon.prototype);
 
 Particle.prototype.getAnimation = function(fire){
+
 	var allAnims = [];
 	var grouping = 2;
 	var speed = this.projSpeed;
@@ -1736,6 +1737,13 @@ Particle.prototype.getAnimation = function(fire){
 	var cc = 0;
 	var hits = 0;
 	var fraction = 1;
+
+	if (this.shots == 2){
+		delay = 60;
+	}
+	else if (this.shots == 4){
+		delay = 80;
+	}
 
 	if (game.isCloseCombat(fire.shooter, fire.target)){
 		cc = 1;
@@ -1753,13 +1761,6 @@ Particle.prototype.getAnimation = function(fire){
 	speed /= fraction;
 	delay *= fraction;
 	shotInterval *= fraction;
-
-	if (this.shots == 2){
-		delay = 60;
-	}
-	else if (this.shots == 4){
-		delay = 80;
-	}
 	
 	for (var j = 0; j < fire.guns; j++){
 		var gunAnims = [];
@@ -1776,6 +1777,10 @@ Particle.prototype.getAnimation = function(fire){
 			if (fire.hits[j] > k){
 				hit = 1;
 				hits++;
+			}
+			
+			if (this.id == 10 && this.parentId == 7){
+				console.log("ding");
 			}
 
 			var dest = fire.target.getFireDest(fire, hit, hits-1);
@@ -1803,7 +1808,7 @@ function Plasma(system){
 	Particle.call(this, system);
 	this.dmgLoss = system.dmgLoss;
 	this.melt = system.melt;
-	this.notes = ["Adds flat <span class='bold green'>" + this.melt + "</span> damage to armour"];
+	this.notes = ["<span class='bold green'>" + this.melt + "% of </span> of total damage added to armour"];
 }
 Plasma.prototype = Object.create(Particle.prototype);
 

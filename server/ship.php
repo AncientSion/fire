@@ -769,6 +769,8 @@ class Ship {
 		} else if ($this->facing < 0){
 			$this->facing += 360;
 		}
+		
+		//Debug::log("setting facing for: #".$this->id.": ".$thia->facing);
 	}
 
 	public function getHitDist($fire){

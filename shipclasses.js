@@ -11,6 +11,7 @@ function Ship(data){
 	this.mass = data.mass;
 	this.cost = data.cost;
 	this.profile = data.profile;
+	this.size = Math.floor(data.size/2);
 	this.size = data.size;
 	this.userid = data.userid;
 	this.shipType = data.shipType;
@@ -1972,8 +1973,12 @@ Ship.prototype.drawSelf = function(){
 
 Ship.prototype.drawEscort = function(){
 	if (this.cc.length && this.drawImg != undefined){
-		var s = this.size;
-		ctx.drawImage(this.drawImg, -s, -s, s*2, s*2);
+		//var s = this.size;
+		var s = this.drawImg.width/2;
+		//var s = 100;
+		//var s = this.size * 1.5
+		//var s = this.size*2;
+		ctx.drawImage(this.drawImg, -s/2, -s/2, s, s);
 	}
 	ctx.rotate(-(this.getDrawFacing() + (!this.ship*90)) * Math.PI/180);
 	ctx.translate(-this.drawX, -this.drawY);
@@ -2892,13 +2897,13 @@ Ship.prototype.setEscortImage = function(){
 	if (this.cc.length){
 		//if (this.id == 10){console.log("ding")}
 		var size = this.size;
-		var fSize = 24;
-		var tresh = 20;
+		var fSize = 26;
+		var tresh = fSize-2;
 		var drawFacing = this.getDrawFacing();
 
 		var t = document.createElement("canvas");
-			t.width = 200;
-			t.height = 200;			
+			t.width = 250;
+			t.height = 250;			
 		var ctx = t.getContext("2d");
 		var shipFriendly = true;
 		var flightFriendly = true;
@@ -2947,29 +2952,29 @@ Ship.prototype.setEscortImage = function(){
 
 			//ctx.rotate(rota*(Math.PI/180));
 			for (var i = 0; i < friendly.length; i++){
-				var a =  split*i;
+				var a = split*i + drawFacing;
 				var p = size+tresh - fSize/2;
-				var pos = getPointInDirection(p, a, 0, 0);
+				var drawPos = getPointInDirection(p, a, 0, 0);
+				var aPos = getPointInDirection(p/2, a + drawFacing, 0, 0);
 				//console.log(a); 
 				//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
-				friendly[i].layout = getPointInDirection(pos, a+drawFacing, 0, 0);
-				ctx.translate(pos.x, +pos.y);
+				friendly[i].layout = aPos;
+				ctx.translate(drawPos.x, drawPos.y);
 				ctx.rotate((a+90)*(Math.PI/180));
 				ctx.drawImage(
-					window.shipImages[friendly[i].name.toLowerCase()],
+					window.shipImages[friendly[i].name.toLowerCase() +"l"],
 					-fSize/2,
 					-fSize/2,
 					fSize, 
 					fSize
 				);
 				ctx.rotate(-((a+90)*(Math.PI/180)));
-				ctx.translate(-pos.x, -pos.y);
+				ctx.translate(-drawPos.x, -drawPos.y);
 
 			}
 			//ctx.rotate(-rota*(Math.PI/180));
 			ctx.translate(-t.width/2, -t.height/2);
 			tresh *= 2
-			tresh += 4;
 		}
 
 		if (hostile.length){
@@ -2985,25 +2990,27 @@ Ship.prototype.setEscortImage = function(){
 			ctx.stroke();
 			ctx.globalAlpha = 1;
 			
-			var split = Math.floor(360/hostile.length+1);
+			var split = Math.floor(360/hostile.length+1)
+
 			for (var i = 0; i < hostile.length; i++){
-				var a =  split*i;
+				var a = split*i + drawFacing;
 				var p = size+tresh - fSize/2;
-				var pos = getPointInDirection(p, a, 0, 0);
+				var drawPos = getPointInDirection(p, a, 0, 0);
+				var aPos = getPointInDirection(p/2, a + drawFacing, 0, 0);
 				//console.log(a); 
 				//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
-				hostile[i].layout = getPointInDirection(pos, a+drawFacing, 0, 0);
-				ctx.translate(pos.x, +pos.y);
+				hostile[i].layout = aPos;
+				ctx.translate(drawPos.x, drawPos.y);
 				ctx.rotate((a-90)*(Math.PI/180));
 				ctx.drawImage(
-					window.shipImages[hostile[i].name.toLowerCase()],
+					window.shipImages[hostile[i].name.toLowerCase() + "l"],
 					-fSize/2,
 					-fSize/2,
 					fSize, 
 					fSize
 				);
 				ctx.rotate(-((a-90)*(Math.PI/180)));
-				ctx.translate(-pos.x, -pos.y);
+				ctx.translate(-drawPos.x, -drawPos.y);
 
 			}
 			ctx.translate(-t.width/2, -t.height/2);
@@ -3018,5 +3025,5 @@ Ship.prototype.setEscortImage = function(){
 
 Ship.prototype.animationSetupMove = function(){
 	this.setPreMovePosition();
-	this.setPreMoveFacing();
+	if (this.ship){this.setPreMoveFacing();}
 }	

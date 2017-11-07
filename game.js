@@ -489,7 +489,7 @@ function Game(data, userid){
 		}
 		var ship = game.getUnitById(id);
 			ship.doHover();
-			ship.doSeelct();
+			ship.doSelect();
 	}
 
 	this.endPhase = function(){
@@ -1833,13 +1833,13 @@ Game.prototype.getUnitType = function (val){
 					if (game.ships[i].structures[j].isDestroyedThisTurn()){
 						counter++;
 
-						var pos = rotate(0, 0,game.ships[i].structures[j].layout, rota);
+						//var pos = rotate(0, 0,game.ships[i].structures[j].layout, rota);
 						anim.anims.push({
-							a: game.ships[i].facing+90,
+							a: game.ships[i].facing,
 							t: [0-30*anim.anims.length, 70],
 							s: game.ships[i].getExplosionSize(j),
-							x: base.x + pos.x,
-							y: base.y + pos.y
+							x: base.x + game.ships[i].structures[j].layout.x,
+							y: base.y + game.ships[i].structures[j].layout.y
 						})
 					}
 				}

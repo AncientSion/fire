@@ -4,7 +4,7 @@ class Vorchan extends Light {
 	public $name = "Vorchan";
 	public $display = "Vorchan";
 	public $faction = "Centauri Republic";
-	public $size = 40;
+	public $size = 35;
 	public static $value = 360;
 	public $profile = array(0.95, 1.05);
 	public $mass = 1150;
