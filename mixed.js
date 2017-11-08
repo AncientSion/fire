@@ -24,6 +24,10 @@ Mixed.prototype.isReady = function(){
 	return false;
 }
 
+Mixed.prototype.getNextPosition = function(){
+	return this.nextStep;
+}
+
 Mixed.prototype.getPlannedFacing = function(){
 	if (game.phase < 2){
 		return this.facing;
@@ -71,7 +75,7 @@ Mixed.prototype.drawMovePlan = function(){
 	var origin = this.getPlannedPos();
 	if (this.mission.type > 1){
 		//target = this.getTarget().getPostMovePos();
-		target = this.getTarget().getPlannedPos();
+		target = this.getTarget().getNextPosition();
 	} else target = {x: this.mission.x, y: this.mission.y};
 
 
@@ -233,7 +237,7 @@ Mixed.prototype.inRange = function(){
 }
 
 Mixed.prototype.getTarget = function(){
-	return game.getUnitById(this.mission.targetid);	
+	return game.getUnit(this.mission.targetid);	
 }
 
 Mixed.prototype.setTarget = function(){

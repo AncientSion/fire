@@ -519,86 +519,86 @@ echo "</script>";
 
 		$("#plusImpulse")
 		.click(function(){
-			game.getUnitById(aUnit).doIncreaseImpulse();
+			game.getUnit(aUnit).doIncreaseImpulse();
 		});
 
 		$("#minusImpulse")
 		.click(function(){
-			game.getUnitById(aUnit).doDecreaseImpulse();
+			game.getUnit(aUnit).doDecreaseImpulse();
 		});
 
 		$("#undoLastAction")
 		.click(function(){
-			game.getUnitById(aUnit).undoLastAction()
+			game.getUnit(aUnit).undoLastAction()
 		});
 
 		$(".doTurn")
 		.click(function(){
 			//console.log("issueTurn")
-		//	game.getUnitById($(this).data("shipid")).issueTurn($(this).data("a"))
-		//	game.getUnitById($(this).data("shipid")).switchTurnMode();
+		//	game.getUnit($(this).data("shipid")).issueTurn($(this).data("a"))
+		//	game.getUnit($(this).data("shipid")).switchTurnMode();
 
 		})
 		$("#turnButton")
 		.click(function(){
-			game.getUnitById(aUnit).switchTurnMode();
+			game.getUnit(aUnit).switchTurnMode();
 		})
 
 		$(".doShortenTurn")
 		.click(function(e){
 			e.stopPropagation();
-			game.getUnitById(aUnit).doShortenTurn(false)
+			game.getUnit(aUnit).doShortenTurn(false)
 		})
 		.contextmenu(function(e){
 			e.stopPropagation();
 			e.preventDefault();
-			game.getUnitById(aUnit).doShortenTurn(true)
+			game.getUnit(aUnit).doShortenTurn(true)
 		})
 
 		$(".doUndoShortenTurn")
 		.click(function(e){
 			e.stopPropagation();
-			game.getUnitById(aUnit).doUndoShortenTurn(false)
+			game.getUnit(aUnit).doUndoShortenTurn(false)
 		})
 		.contextmenu(function(e){
 			e.stopPropagation();
 			e.preventDefault();
-			game.getUnitById(aUnit).doUndoShortenTurn(true)
+			game.getUnit(aUnit).doUndoShortenTurn(true)
 		})
 
 	/*	$("#maxVector")
 		.click(function(){
 			//console.log("maxVector")
-			game.getUnitById($(this).data("shipid")).moveToMaxVector();
+			game.getUnit($(this).data("shipid")).moveToMaxVector();
 		})
 
 		$("#maxTurnVector")
 		.click(function(){
 			//console.log("maxTurnVector")
-			game.getUnitById($(this).data("shipid")).moveToMaxTurnVector();
+			game.getUnit($(this).data("shipid")).moveToMaxTurnVector();
 		})
 
 		$("#maxCutVector")
 		.click(function(){
 			//console.log("maxTurnVector")
-			game.getUnitById($(this).data("shipid")).moveToMaxCutVector();
+			game.getUnit($(this).data("shipid")).moveToMaxCutVector();
 		})
 	*/
 	
 		$("#maxCutVector")
 		.click(function(){
 			//console.log("maxVector")
-			game.getUnitById($(this).data("shipid")).moveInVector($(this).data("dist"));
+			game.getUnit($(this).data("shipid")).moveInVector($(this).data("dist"));
 		})	
 		$("#maxTurnVector")
 		.click(function(){
 			//console.log("maxVector")
-			game.getUnitById($(this).data("shipid")).moveInVector($(this).data("dist"));
+			game.getUnit($(this).data("shipid")).moveInVector($(this).data("dist"));
 		})	
 		$("#maxVector")
 		.click(function(){
 			//console.log("maxVector")
-			game.getUnitById($(this).data("shipid")).moveInVector($(this).data("dist"));
+			game.getUnit($(this).data("shipid")).moveInVector($(this).data("dist"));
 		})
 	})
 
@@ -671,14 +671,14 @@ echo "</script>";
 				else if (e.keyCode == 43){ // +
 					if (game.phase == 0 || game.phase == 1){
 						if (game.turnMode){
-							game.getUnitById(aUnit).doShortenTurn(false);
+							game.getUnit(aUnit).doShortenTurn(false);
 						}
 					}
 				}
 				else if (e.keyCode == 45){ // *
 					if (game.phase == 0 || game.phase == 1){
 						if (game.turnMode){
-							game.getUnitById(aUnit).doUndoShortenTurn(false);
+							game.getUnit(aUnit).doUndoShortenTurn(false);
 						}
 					}
 				}

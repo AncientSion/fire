@@ -115,7 +115,7 @@ function Mission(unit){
 		//console.log(this.old + " -> " + val);
 		if (this.new){
 			var m = this.new;
-			$(game.getUnitById(this.id).element).find(".header").find("tr").slice(-2).each(function(i){
+			$(game.getUnit(this.id).element).find(".header").find("tr").slice(-2).each(function(i){
 				if (i == m-1){
 					$(this).removeClass("selected");
 					return false;

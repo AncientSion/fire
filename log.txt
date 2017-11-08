@@ -1,119 +1,148 @@
 doAdvance for game1 from phase 2 to phase 3
 resolveFireOrder - ID 91, shooter: Altarian #8 vs Hyperion #2, w: MediumIon #14, shots: 2
-doDamage, weapon: MediumIon, target: 2/-1/Primary, totalDmg: 37, remaining: 888
-doDamage, weapon: MediumIon, target: 2/-1/Primary, totalDmg: 44, remaining: 868
+doDamage, weapon: MediumIon, target: 2/-1/Primary, totalDmg: 36, remaining: 888
+doDamage, weapon: MediumIon, target: 2/-1/Primary, totalDmg: 34, remaining: 869
 resolveFireOrder - ID 101, shooter: Darkner #5 vs Olympus #3, w: LightIon #11, shots: 4
-doDamage, weapon: LightIon, target: 3/16/MissileLauncher, totalDmg: 18, remaining: 44
-doDamage, weapon: LightIon, target: 3/-1/Primary, totalDmg: 17, remaining: 500
+doDamage, weapon: LightIon, target: 3/-1/Primary, totalDmg: 18, remaining: 500
 resolveFireOrder - ID 102, shooter: Darkner #5 vs Olympus #3, w: LightIon #13, shots: 4
-doDamage, weapon: LightIon, target: 3/15/LightPulse, totalDmg: 18, remaining: 24
+doDamage, weapon: LightIon, target: 3/-1/Primary, totalDmg: 16, remaining: 495
+doDamage, weapon: LightIon, target: 3/-1/Primary, totalDmg: 16, remaining: 491
 resolveFireOrder - ID 99, shooter: Darkner #6 vs Olympus #3, w: LightIon #11, shots: 4
-doDamage, weapon: LightIon, target: 3/-1/Primary, totalDmg: 14, remaining: 495
-doDamage, weapon: LightIon, target: 3/-1/Primary, totalDmg: 16, remaining: 492
+doDamage, weapon: LightIon, target: 3/-1/Primary, totalDmg: 16, remaining: 486
+doDamage, weapon: LightIon, target: 3/16/MissileLauncher, totalDmg: 14, remaining: 44
+doDamage, weapon: LightIon, target: 3/5/Sensor, totalDmg: 16, remaining: 70
+doDamage, weapon: LightIon, target: 3/-1/Primary, totalDmg: 16, remaining: 481
 resolveFireOrder - ID 100, shooter: Darkner #6 vs Olympus #3, w: LightIon #13, shots: 4
-doDamage, weapon: LightIon, target: 3/-1/Primary, totalDmg: 18, remaining: 487
-doDamage, weapon: LightIon, target: 3/-1/Primary, totalDmg: 14, remaining: 479
-doDamage, weapon: LightIon, target: 3/-1/Primary, totalDmg: 16, remaining: 475
+doDamage, weapon: LightIon, target: 3/16/MissileLauncher, totalDmg: 17, remaining: 36
+doDamage, weapon: LightIon, target: 3/-1/Primary, totalDmg: 16, remaining: 474
+doDamage, weapon: LightIon, target: 3/5/Sensor, totalDmg: 16, remaining: 64
+doDamage, weapon: LightIon, target: 3/-1/Primary, totalDmg: 15, remaining: 467
 resolveFireOrder - ID 68, shooter: Tethys #4 vs Vorchan #9, w: LightLaser #8, shots: 1
+LightLaser, weapon id: 8, RANGE DMG mod: 0.9238
+doDamage, weapon: LightLaser, target: 9 for 66 dmg
+hitting ---  LightPlasma: 22dmg,  Primpikeary: 22dmg,  Primary: 22dmg, 
 resolveFireOrder - ID 69, shooter: Tethys #4 vs Vorchan #9, w: LightLaser #9, shots: 1
-LightLaser, weapon id: 9, DAMAGE mod: 0.2 (crits: 0, boost: 0.2)
-LightLaser, weapon id: 9, RANGE DMG mod: 0.9238
-doDamage, weapon: LightLaser, target: 9 for 88 dmg
- => target system LightPlasma #14 was destroyed, rem: 12, doing: 25, OK for: 13 dmg
-hitting:  Primary for 29 LightPlasma for 29 LightPlasma for 29
 resolveFireOrder - ID 95, shooter: Altarian #7 vs Flight #10, w: LightIon #10, shots: 4
-doDamage, weapon: LightIon, target: 10/15/Aurora, totalDmg: 18, remaining: 25
-doDamage, weapon: LightIon, target: 10/19/Aurora, totalDmg: 15, remaining: 25
-doDamage, weapon: LightIon, target: 10/9/Aurora, totalDmg: 15, remaining: 25
-doDamage, weapon: LightIon, target: 10/15/Aurora, totalDmg: 15, remaining: 12
+doDamage, weapon: LightIon, target: 10/19/Aurora, totalDmg: 17, remaining: 25
+doDamage, weapon: LightIon, target: 10/17/Aurora, totalDmg: 15, remaining: 25
 resolveFireOrder - ID 96, shooter: Altarian #7 vs Flight #10, w: MediumIon #18, shots: 2
-doDamage, weapon: MediumIon, target: 10/5/Aurora, totalDmg: 39, remaining: 25
- => OVERKILL non-ship target system Aurora #5 was destroyed, rem: 25, doing: 34
+doDamage, weapon: MediumIon, target: 10/7/Aurora, totalDmg: 35, remaining: 25
+ => OVERKILL non-ship target system Aurora #7 was destroyed, rem: 25, doing: 30
+doDamage, weapon: MediumIon, target: 10/9/Aurora, totalDmg: 34, remaining: 25
+ => OVERKILL non-ship target system Aurora #9 was destroyed, rem: 25, doing: 29
 resolveFireOrder - ID 97, shooter: Altarian #7 vs Flight #10, w: MediumIon #19, shots: 2
-doDamage, weapon: MediumIon, target: 10/17/Aurora, totalDmg: 41, remaining: 25
- => OVERKILL non-ship target system Aurora #17 was destroyed, rem: 25, doing: 36
+doDamage, weapon: MediumIon, target: 10/11/Aurora, totalDmg: 32, remaining: 25
+ => OVERKILL non-ship target system Aurora #11 was destroyed, rem: 25, doing: 27
 resolveFireOrder - ID 98, shooter: Altarian #7 vs Flight #10, w: MediumIon #20, shots: 2
 resolveFireOrder - ID 90, shooter: Altarian #8 vs Flight #11, w: LightIon #10, shots: 4
+doDamage, weapon: LightIon, target: 11/5/Aurora, totalDmg: 15, remaining: 25
+doDamage, weapon: LightIon, target: 11/1/Aurora, totalDmg: 17, remaining: 25
+doDamage, weapon: LightIon, target: 11/5/Aurora, totalDmg: 15, remaining: 15
 resolveFireOrder - ID 92, shooter: Altarian #8 vs Flight #11, w: MediumIon #18, shots: 2
-doDamage, weapon: MediumIon, target: 11/13/Aurora, totalDmg: 39, remaining: 25
- => OVERKILL non-ship target system Aurora #13 was destroyed, rem: 25, doing: 34
 resolveFireOrder - ID 93, shooter: Altarian #8 vs Flight #11, w: MediumIon #19, shots: 2
-doDamage, weapon: MediumIon, target: 11/7/Aurora, totalDmg: 41, remaining: 25
- => OVERKILL non-ship target system Aurora #7 was destroyed, rem: 25, doing: 36
+doDamage, weapon: MediumIon, target: 11/5/Aurora, totalDmg: 32, remaining: 5
+ => OVERKILL non-ship target system Aurora #5 was destroyed, rem: 5, doing: 27
 resolveFireOrder - ID 94, shooter: Altarian #8 vs Flight #11, w: MediumIon #20, shots: 2
+doDamage, weapon: MediumIon, target: 11/13/Aurora, totalDmg: 31, remaining: 25
+ => OVERKILL non-ship target system Aurora #13 was destroyed, rem: 25, doing: 26
 resolveFireOrder - ID 64, shooter: Hyperion #2 vs Flight #14, w: MediumRailGun #8, shots: 2
-doDamage, weapon: MediumRailGun, target: 14/15/Sitara, totalDmg: 37, remaining: 22
- => OVERKILL non-ship target system Sitara #15 was destroyed, rem: 22, doing: 34.5
+doDamage, weapon: MediumRailGun, target: 14/11/Sentri, totalDmg: 32, remaining: 24
+ => OVERKILL non-ship target system Sentri #11 was destroyed, rem: 24, doing: 29
 resolveFireOrder - ID 65, shooter: Hyperion #2 vs Flight #14, w: MediumRailGun #12, shots: 2
 resolveFireOrder - ID 66, shooter: Hyperion #2 vs Flight #14, w: LightPulse #15, shots: 1
-fireid: 66, doDamage, weapon: LightPulse #0, hits: 3, target: 14, armour: 6, health: 24
- => hit:2, system was destroyed, HP: 24, doing: 28, OK for: 10 dmg
-hit 3, adding damage to overkill which is at: 23 pts
 resolveFireOrder - ID 67, shooter: Hyperion #2 vs Flight #14, w: LightPulse #16, shots: 1
+fireid: 67, doDamage, weapon: LightPulse #0, hits: 3, target: 14, armour: 6, health: 24
+ => hit:2, system was destroyed, HP: 24, doing: 27, OK for: 10 dmg
+hit 3, adding damage to overkill which is at: 21 pts
 resolveFireOrder - ID 111, shooter: Flight #13 vs Flight #10, w: LinkedParticleGun #2, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 10/11/Aurora, totalDmg: 13, remaining: 25
 resolveFireOrder - ID 112, shooter: Flight #13 vs Flight #10, w: LinkedParticleGun #4, shots: 1
 resolveFireOrder - ID 113, shooter: Flight #13 vs Flight #10, w: LinkedParticleGun #6, shots: 1
 resolveFireOrder - ID 114, shooter: Flight #13 vs Flight #10, w: LinkedParticleGun #8, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 10/9/Aurora, totalDmg: 14, remaining: 15
- => OVERKILL non-ship target system Aurora #9 was destroyed, rem: 15, doing: 18
+doDamage, weapon: LinkedParticleGun, target: 10/19/Aurora, totalDmg: 10, remaining: 13
 resolveFireOrder - ID 115, shooter: Flight #13 vs Flight #10, w: LinkedParticleGun #10, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 10/15/Aurora, totalDmg: 12, remaining: 2
- => OVERKILL non-ship target system Aurora #15 was destroyed, rem: 2, doing: 14
 resolveFireOrder - ID 116, shooter: Flight #13 vs Flight #10, w: LinkedParticleGun #12, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 10/19/Aurora, totalDmg: 13, remaining: 15
- => OVERKILL non-ship target system Aurora #19 was destroyed, rem: 15, doing: 16
 resolveFireOrder - ID 117, shooter: Flight #13 vs Flight #10, w: IonBolt #14, shots: 1
 resolveFireOrder - ID 118, shooter: Flight #13 vs Flight #10, w: IonBolt #16, shots: 1
 resolveFireOrder - ID 80, shooter: Flight #10 vs Flight #13, w: LinkedParticleGun #2, shots: 1
 resolveFireOrder - ID 81, shooter: Flight #10 vs Flight #13, w: LinkedParticleGun #4, shots: 1
 doDamage, weapon: LinkedParticleGun, target: 13/1/Sentri, totalDmg: 12, remaining: 24
-resolveFireOrder - ID 83, shooter: Flight #10 vs Flight #13, w: LinkedParticleGun #8, shots: 1
-resolveFireOrder - ID 84, shooter: Flight #10 vs Flight #13, w: LinkedParticleGun #10, shots: 1
+resolveFireOrder - ID 82, shooter: Flight #10 vs Flight #13, w: LinkedParticleGun #6, shots: 1
 doDamage, weapon: LinkedParticleGun, target: 13/3/Sentri, totalDmg: 12, remaining: 24
-resolveFireOrder - ID 85, shooter: Flight #10 vs Flight #13, w: LinkedParticleGun #12, shots: 1
 resolveFireOrder - ID 86, shooter: Flight #10 vs Flight #13, w: LinkedParticleGun #14, shots: 1
 resolveFireOrder - ID 87, shooter: Flight #10 vs Flight #13, w: LinkedParticleGun #16, shots: 1
+resolveFireOrder - ID 88, shooter: Flight #10 vs Flight #13, w: LinkedParticleGun #18, shots: 1
 resolveFireOrder - ID 89, shooter: Flight #10 vs Flight #13, w: LinkedParticleGun #20, shots: 1
 doDamage, weapon: LinkedParticleGun, target: 13/3/Sentri, totalDmg: 13, remaining: 12
  => OVERKILL non-ship target system Sentri #3 was destroyed, rem: 12, doing: 14
-resolveFireOrder - ID 103, shooter: Flight #14 vs Hyperion #2, w: LinkedParticleGun #2, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 2/-1/Primary, totalDmg: 13, remaining: 840
+resolveFireOrder - ID 104, shooter: Flight #14 vs Hyperion #2, w: LinkedParticleGun #4, shots: 1
 resolveFireOrder - ID 105, shooter: Flight #14 vs Hyperion #2, w: LinkedParticleGun #6, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 2/5/Sensor, totalDmg: 11, remaining: 115
+doDamage, weapon: LinkedParticleGun, target: 2/-1/Primary, totalDmg: 12, remaining: 851
 resolveFireOrder - ID 106, shooter: Flight #14 vs Hyperion #2, w: LinkedParticleGun #8, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 2/-1/Primary, totalDmg: 14, remaining: 840
+doDamage, weapon: LinkedParticleGun, target: 2/18/HeavyLaser, totalDmg: 11, remaining: 56
 resolveFireOrder - ID 107, shooter: Flight #14 vs Hyperion #2, w: LinkedParticleGun #10, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 2/11/Dual, totalDmg: 11, remaining: 28
-resolveFireOrder - ID 108, shooter: Flight #14 vs Hyperion #2, w: LinkedParticleGun #12, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 2/-1/Primary, totalDmg: 12, remaining: 840
+doDamage, weapon: LinkedParticleGun, target: 2/-1/Primary, totalDmg: 14, remaining: 851
 resolveFireOrder - ID 109, shooter: Flight #14 vs Hyperion #2, w: IonBolt #14, shots: 1
-doDamage, weapon: IonBolt, target: 2/-1/Primary, totalDmg: 35, remaining: 840
+doDamage, weapon: IonBolt, target: 2/-1/Primary, totalDmg: 33, remaining: 851
+resolveFireOrder - ID 110, shooter: Flight #14 vs Hyperion #2, w: IonBolt #16, shots: 1
+doDamage, weapon: IonBolt, target: 2/9/Dual, totalDmg: 30, remaining: 28
 resolveFireOrder - ID 70, shooter: Flight #11 vs Altarian #8, w: LinkedParticleGun #2, shots: 1
 resolveFireOrder - ID 71, shooter: Flight #11 vs Altarian #8, w: LinkedParticleGun #4, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 8/-1/Primary, totalDmg: 12, remaining: 516
-resolveFireOrder - ID 72, shooter: Flight #11 vs Altarian #8, w: LinkedParticleGun #6, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 8/-1/Primary, totalDmg: 11, remaining: 516
+resolveFireOrder - ID 73, shooter: Flight #11 vs Altarian #8, w: LinkedParticleGun #8, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 8/10/LightIon, totalDmg: 15, remaining: 26
 resolveFireOrder - ID 74, shooter: Flight #11 vs Altarian #8, w: LinkedParticleGun #10, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 8/4/LifeSupport, totalDmg: 13, remaining: 100
 resolveFireOrder - ID 75, shooter: Flight #11 vs Altarian #8, w: LinkedParticleGun #12, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 8/16/Hangar, totalDmg: 15, remaining: 86
+doDamage, weapon: LinkedParticleGun, target: 8/18/MediumIon, totalDmg: 14, remaining: 32
 resolveFireOrder - ID 77, shooter: Flight #11 vs Altarian #8, w: LinkedParticleGun #16, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 8/5/Sensor, totalDmg: 11, remaining: 100
 resolveFireOrder - ID 78, shooter: Flight #11 vs Altarian #8, w: LinkedParticleGun #18, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 8/-1/Primary, totalDmg: 15, remaining: 510
 resolveFireOrder - ID 79, shooter: Flight #11 vs Altarian #8, w: LinkedParticleGun #20, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 8/-1/Primary, totalDmg: 14, remaining: 516
 resolveBallisticFireOrders
 cleanFireOrders, fires: 55
 DB updateFireOrders: 55
-determineCrit for Combo System #11 on unit #2, dmg: 36%
-applying crit: Damage / 0.2
-applying crit: Accuracy / 0.2
-determineCrit for 35mm Pulse Cannon #15 on unit #3, dmg: 54%
+determineCrit for Combo System #9 on unit #2, dmg: 82%
 applying crit: Damage / 0.3
-determineCrit for Missile Launcher #16 on unit #3, dmg: 23%
-adding spike #9/14
-potential total power spike for unit #9: 3
-applyPowerSpike to #6, spike: 3
-determineCrit for Hangar #16 on unit #8, dmg: 16%
- => DB insertDamageEntries: 39
- => DB insertCritEntries: 4
-handleFiringPhase time: 0.457 seconds.
-advancing game state time: 0.461 seconds.
+determineCrit for Missile Launcher #16 on unit #3, dmg: 45%
+determineCrit for Sensor #5 on unit #3, dmg: 20
+Droput!
+determineCrit for 46mm Plasma Gun #14 on unit #9, dmg: 47%
+applying crit: Damage / 0.2
+determineCrit for 32mm Ion Bolter Array #10 on unit #8, dmg: 69%
+determineCrit for 68mm Ion Emitter #18 on unit #8, dmg: 25%
+ => DB insertDamageEntries: 43
+ => DB insertCritEntries: 3
+handleFiringPhase time: 0.391 seconds.
+advancing game state time: 0.394 seconds.
+doAdvance for game1 from phase 3 to phase 4
+endTurn
+free flight
+destroyUnitsDB
+assembleEndStates
+getMoveState for 11
+getMoveState for 10
+getMoveState for 13
+getMoveState for 14
+insertReinforcements: 1
+insertReinforcements: 1
+advancing game state time: 0.249 seconds.
+insertMissions s: 1
+insertMissions s: 1
+doAdvance for game1 from phase -1 to phase 0
+initBallistics
+skipping
+DB updateBallisticFireOrder, s: 3
+DB insertUnits: 2
+insertSubUnits
+insertMissions s: 2
+insertClientActions s: 2
+updateSystemLoad: 3
+handleDeploymentActions #15
+handleDeploymentActions #16
+resolveDeployActions s: 2
+handleJumpActions
+assembleEndStates
+getMoveState for 15
+getMoveState for 16
+advancing game state time: 0.367 seconds.

@@ -156,7 +156,7 @@ Salvo.prototype.createBaseDiv = function(){
 			td.className = "iconContainer"; 
 			$(td).data("id", this.structures[i].id);
 			td.addEventListener("click", function(){
-				console.log(game.getUnitById(aUnit).getSystemById($(this).data("id")));
+				console.log(game.getUnit(aUnit).getSystemById($(this).data("id")));
 			})
 
 			if (this.structures[i].destroyed || this.structures[i].disabled){
@@ -219,9 +219,9 @@ Salvo.prototype.supplyAttachDiv = function(div){
 		.data("id", this.id)
 		.click(function(){
 			if (aUnit){
-				var ship = game.getUnitById(aUnit);
+				var ship = game.getUnit(aUnit);
 				if (ship.hasWeaponsSelected()){
-					var target = game.getUnitById($(this).data("id"));
+					var target = game.getUnit($(this).data("id"));
 					if (ship.userid != target.userid){
 						handleFireClick(ship, target);
 					}
@@ -229,18 +229,18 @@ Salvo.prototype.supplyAttachDiv = function(div){
 				else {
 					ship.doUnselect();
 					ship.switchDiv();
-					game.getUnitById($(this).data("id")).select();
+					game.getUnit($(this).data("id")).select();
 				}
 			}
-			else game.getUnitById($(this).data("id")).select();
+			else game.getUnit($(this).data("id")).select();
 			
 		})
 		.hover(
 			function(e){
-				var vessel = game.getUnitById($(this).data("id"));
+				var vessel = game.getUnit($(this).data("id"));
 				vessel.doHighlight();
 				if (aUnit && aUnit != vessel.id){
-					var	ship = game.getUnitById(aUnit);
+					var	ship = game.getUnit(aUnit);
 					if (ship.salvo){return;}
 					else if (ship.hasWeaponsSelected() && ship.id != vessel.id){
 						handleWeaponAimEvent(ship, vessel, e);
@@ -252,7 +252,7 @@ Salvo.prototype.supplyAttachDiv = function(div){
 				}
 			},
 			function(e){
-				var vessel = game.getUnitById($(this).data("id"));
+				var vessel = game.getUnit($(this).data("id"));
 					vessel.highlight = 0;
 				game.redraw();
 			}

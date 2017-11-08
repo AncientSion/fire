@@ -95,9 +95,9 @@ function mouseCanvasZoom(e){
 function mouseCanvasScroll(e){
 	e.preventDefault();return;
 	if (aUnit && game.turnMode){
-		game.getUnitById(aUnit).switchTurnMode();
+		game.getUnit(aUnit).switchTurnMode();
 	} else if (aUnit){
-		game.getUnitById(aUnit).doUnselect();
+		game.getUnit(aUnit).doUnselect();
 	} else {
 		return;
 		var rect = this.getBoundingClientRect();
@@ -363,7 +363,7 @@ function canvasMouseMove(e){
 	}
 	 
 	if (aUnit){
-		var ship = game.getUnitById(aUnit);
+		var ship = game.getUnit(aUnit);
 		if (!ship){return;}
 		var shipLoc;
 		var facing;
@@ -418,7 +418,7 @@ function deployPhase(e, pos){
 	var ammo;
 	var index;
 	if (game.deploying){
-		unit = game.getUnitById(game.deploying); // ship deploy
+		unit = game.getUnit(game.deploying); // ship deploy
 		if (game.turnMode){
 			unit.handleTurnAttempt(pos);
 		}
@@ -434,7 +434,7 @@ function deployPhase(e, pos){
 	}
 	else if (!game.deploying){
 		if (aUnit){
-			unit = game.getUnitById(aUnit);
+			unit = game.getUnit(aUnit);
 			if (unit.canDeploy()){
 				game.enableDeployment(unit.id);
 				return;

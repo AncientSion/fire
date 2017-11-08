@@ -472,18 +472,18 @@ function Structure(data){
 			function(e){
 				var shipId = $(this).data("shipId");
 				var systemId = $(this).data("systemId");
-				game.getUnitById(shipId).getSystemById(systemId).hover(e);
+				game.getUnit(shipId).getSystemById(systemId).hover(e);
 			},
 			function(e){
 				var shipId = $(this).data("shipId");
 				var systemId = $(this).data("systemId");
-				game.getUnitById(shipId).getSystemById(systemId).hover(e);
+				game.getUnit(shipId).getSystemById(systemId).hover(e);
 			}
 		)
 		$(td).click(function(e){
 			var shipId = $(this).data("shipId");
 			var systemId = $(this).data("systemId");
-			console.log(game.getUnitById(shipId).getSystemById(systemId));
+			console.log(game.getUnit(shipId).getSystemById(systemId));
 		})
 
 		tr.appendChild(td);
@@ -517,7 +517,7 @@ function Structure(data){
 			this.highlight = false;
 			fxCtx.clearRect(0, 0, res.x, res.y);
 			$("#systemDetailsDiv").remove();
-			game.getUnitById(this.parentId).highlightAllSelectedWeapons();
+			game.getUnit(this.parentId).highlightAllSelectedWeapons();
 		}
 		else {
 			this.highlight = true;
@@ -527,7 +527,7 @@ function Structure(data){
 	}
 
 	this.showHitAxis = function(){
-		game.getUnitById(this.parentId).drawSystemAxis(this);
+		game.getUnit(this.parentId).drawSystemAxis(this);
 	}
 
 	this.showInfoDiv = function(e){
@@ -595,14 +595,14 @@ function Primary(data){
 			function(e){
 				var shipId = $(this).data("shipId");
 				var systemId = $(this).data("systemId");
-				game.getUnitById(shipId).primary.hover(e);
+				game.getUnit(shipId).primary.hover(e);
 			}
 		)
 		$(td).click(function(e){
 			var shipId = $(this).data("shipId");
 			var systemId = $(this).data("systemId");
-			console.log(game.getUnitById(shipId).primary);
-			//game.getUnitById(shipId).primary.scan();
+			console.log(game.getUnit(shipId).primary);
+			//game.getUnit(shipId).primary.scan();
 		})
 
 			tr.appendChild(td);

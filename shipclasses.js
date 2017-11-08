@@ -1349,18 +1349,18 @@ function Ship(data){
 		$(td).hover(
 			function(e){
 				e.stopPropagation();
-				game.getUnitById($(this).data("shipId")).getSystemById($(this).data("systemId")).hover(e);
+				game.getUnit($(this).data("shipId")).getSystemById($(this).data("systemId")).hover(e);
 			}
 		).click(
 			function(e){
 				e.stopPropagation();
-				game.getUnitById($(this).data("shipId")).getSystemById($(this).data("systemId")).select(e);
+				game.getUnit($(this).data("shipId")).getSystemById($(this).data("systemId")).select(e);
 			}
 		).
 		contextmenu(
 			function(e){
 				e.preventDefault();
-				game.getUnitById($(this).data("shipId")).selectAll(e, $(this).data("systemId"));
+				game.getUnit($(this).data("shipId")).selectAll(e, $(this).data("systemId"));
 			}
 		);
 		return td;
@@ -2334,6 +2334,10 @@ Ship.prototype.setRemainingDelay = function(){
 	}
 }
 
+Ship.prototype.getNextPosition = function(){
+	return this.getPlannedPos();
+}
+
 Ship.prototype.getPlannedPos = function(){
 	if (this.actions.length){
 		return new Point(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y);
@@ -2443,16 +2447,16 @@ Ship.prototype.expandDiv = function(div){
 			.append($(window.shipImages[this.name.toLowerCase()].cloneNode(true)).addClass("rotate270").addClass("size90"))
 			.hover(function(e){
 				if (aUnit){
-					var shooter = game.getUnitById(aUnit);
-					var target = game.getUnitById($(this).parent().data("shipId"));
+					var shooter = game.getUnit(aUnit);
+					var target = game.getUnit($(this).parent().data("shipId"));
 					if (shooter.id != target.id && shooter.hasWeaponsSelected()){
 						handleWeaponAimEvent(shooter, target, e);
 					}
 				}
 			}).
 			click(function(e){
-				var shooter = game.getUnitById(aUnit);
-				var target = game.getUnitById($(this).parent().data("shipId"));
+				var shooter = game.getUnit(aUnit);
+				var target = game.getUnit($(this).parent().data("shipId"));
 				if (shooter && target){
 					if (target.id != shooter.id && (target.userid != game.userid && target.userid != shooter.userid)){
 						handleFireClick(shooter, target);
@@ -2800,7 +2804,7 @@ Ship.prototype.getAttachDivs = function(){
 		var valid = this.ship;
 
 		for (var i = 0; i < this.cc.length; i++){
-			attach.push(game.getUnitById(this.cc[i]));
+			attach.push(game.getUnit(this.cc[i]));
 		}
 
 		if (!valid){
@@ -2886,7 +2890,7 @@ Ship.prototype.detachFlight = function(id){
 }
 
 Ship.prototype.attachFlight = function(id){
-	var attach = game.getUnitById(id);
+	var attach = game.getUnit(id);
 	this.cc.push(attach.id);
 	$(this.element).find(".ccContainer").remove();
 	this.getAttachDivs();
@@ -2919,7 +2923,7 @@ Ship.prototype.setEscortImage = function(){
 			var friendly = [];
 			var hostile = [];
 			for (var i = 0; i < this.cc.length; i++){
-				var attach = game.getUnitById(this.cc[i]);
+				var attach = game.getUnit(this.cc[i]);
 
 				if (attach.doDraw){continue;} // possibly attachement is being drawn, hence not attached to this
 				if (attach.flight && this.flight){continue;}

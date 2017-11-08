@@ -65,7 +65,7 @@ class Manager {
 			Debug::log($incoming["id"]);
 		}*/
 		return;
-		$ship = $this->getUnitById(3);
+		$ship = $this->getUnit(3);
 		$add = 82;
 		$struct = 2;
 		$ship->primary->remaining += $add;
@@ -152,9 +152,9 @@ class Manager {
 		//$this->initiateDogfights();
 		//$this->createDogfightFires();
 
-	 	//var_dump($this->getUnitById(12)->getEndState(1));
+	 	//var_dump($this->getUnit(12)->getEndState(1));
 
-		//$this->setShipLocks($this->getUnitById(2)); return;
+		//$this->setShipLocks($this->getUnit(2)); return;
 
 		//$this->deploy();();
 
@@ -534,7 +534,7 @@ class Manager {
 		for ($i = 0; $i < sizeof($fires); $i++){
 			//Debug::log("handling fire #".$i);
 			$skip = 0;
-			$shooter = $this->getUnitById($fires[$i]->shooterid);
+			$shooter = $this->getUnit($fires[$i]->shooterid);
 			$launcher = $shooter->getSystemById($fires[$i]->weaponid);
 			$fires[$i]->shots = $launcher->getShots($this->turn);
 			if (!($launcher instanceof Launcher)){
@@ -569,7 +569,7 @@ class Manager {
 			}
 
 			$sPos = $shooter->getCurrentPosition();
-			$tPos = $this->getUnitById($fires[$i]->targetid)->getCurrentPosition();
+			$tPos = $this->getUnit($fires[$i]->targetid)->getCurrentPosition();
 			$a = Math::getAngle($sPos->x, $sPos->y, $tPos->x, $tPos->y);
 			//Debug::log("i = ".$i.", shooterid: ".$shooter->id);
 			$devi = Math::getPointInDirection($shooter->size/3, $a, $sPos->x + mt_rand(-10, 10), $sPos->y + mt_rand(-10, 10));
@@ -735,7 +735,7 @@ class Manager {
 
 			if ($this->ships[$i]->mission->arrived){ // already at target location
 				if ($this->ships[$i]->mission->type == 2){ // strike
-					$t = $this->getUnitById($this->ships[$i]->mission->targetid);
+					$t = $this->getUnit($this->ships[$i]->mission->targetid);
 					$tPos = $t->getCurrentPosition();
 					$dist = Math::getDist2($this->ships[$i]->getCurrentPosition(), $tPos);
 					$angle = Math::getAngle2($this->ships[$i]->getCurrentPosition(), $tPos);
@@ -758,7 +758,7 @@ class Manager {
 			}
 			else { // on way
 				if ($this->ships[$i]->mission->type == 2){ // strike
-					$target = $this->getUnitById($this->ships[$i]->mission->targetid);
+					$target = $this->getUnit($this->ships[$i]->mission->targetid);
 					if ($target->ship){
 						Debug::log("STRIKE #".$this->ships[$i]->id." advance vs ship");
 						$stack[1][] = $this->ships[$i];
@@ -794,7 +794,7 @@ class Manager {
 				if ($stack[$i][$j]->mission->type == 1){
 					$tPos = new Point($stack[$i][$j]->mission->x, $stack[$i][$j]->mission->y); // patrol
 				}
-				else $tPos = $this->getUnitById($stack[$i][$j]->mission->targetid)->getCurrentPosition(); // strike / int
+				else $tPos = $this->getUnit($stack[$i][$j]->mission->targetid)->getCurrentPosition(); // strike / int
 
 				$stack[$i][$j]->mission->x = $tPos->x;
 				$stack[$i][$j]->mission->y = $tPos->y;
@@ -936,13 +936,13 @@ class Manager {
 	}
 
 	public function freeFlights(){
-		Debug::log("free flight");
 
 		$data = array();
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->flight && $this->ships[$i]->mission->arrived && $this->ships[$i]->mission->type == 2){
-				if ($this->getUnitById($this->ships[$i]->mission->targetid)->destroyed){
+				if ($this->getUnit($this->ships[$i]->mission->targetid)->destroyed){
+				Debug::log("freeeing flight #".$this->ships[$i]->id." from mission");
 					$this->ships[$i]->mission->type = 1;
 					$this->ships[$i]->mission->turn = $this->turn - 2;
 					$this->ships[$i]->mission->targetid = 0;
@@ -1114,10 +1114,10 @@ class Manager {
 		for ($i = sizeof($this->fires)-1; $i >= 0; $i--){
 			//echo "fire: ".$this->fires[$i]->id; echo "</br></br>";
 			//var_export($this->fires[$i]); echo "</br></br>";
-			$this->fires[$i]->shooter = $this->getUnitById($this->fires[$i]->shooterid);
+			$this->fires[$i]->shooter = $this->getUnit($this->fires[$i]->shooterid);
 			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystemById($this->fires[$i]->weaponid);
 			$this->fires[$i]->shots = $this->fires[$i]->weapon->getShots($this->turn);
-			$this->fires[$i]->target = $this->getUnitById($this->fires[$i]->targetid);
+			$this->fires[$i]->target = $this->getUnit($this->fires[$i]->targetid);
 			//var_export($this->fires[$i]->weapon); echo "</br></br>";
 			//var_export($this->fires[$i]->weapon->getBoostLevel($this->turn)); echo "</br></br>";
 		}
@@ -1257,7 +1257,7 @@ class Manager {
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->salvo && !$this->ships[$i]->isDestroyed()){
 				if ($this->ships[$i]->mission->arrived){
-					$target = $this->getUnitById($this->ships[$i]->mission->targetid);
+					$target = $this->getUnit($this->ships[$i]->mission->targetid);
 					$fire = $this->ships[$i]->getFireOrder($this->gameid, $this->turn, $target);
 					$fires[] = $fire;
 				}
@@ -1328,7 +1328,7 @@ class Manager {
 		return 1 + sizeof($this->ships);
 	}
 
-	public function getUnitById($id){
+	public function getUnit($id){
 		//Debug::log("looking for unit :".$unitid);
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->id == $id){

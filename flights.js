@@ -157,8 +157,54 @@ Flight.prototype.createBaseDiv = function(){
 			.append($("<td>").html("Mission Target"))
 			.append($("<td>").html(game.getMissionTargetString(this.mission))))
 
-	//if (this.friendly && game.phase == -1 && this.available < game.turn){
-		var need = 1;
+
+		if (this.friendly && game.phase == -1){
+			$(table)
+			.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
+			.append($("<tr>").addClass("missionSwitch")
+				.append($("<td>")
+					.attr("colSpan", 2)
+					.addClass("missionButton active")
+					.html("Disengage From Mission")
+					.data("active", 0)
+					.data("mission", this.mission.type)
+					.data("shipid", this.id)
+					.click(function(e){
+						if (aUnit == $(this).data("shipid")){
+							game.getUnit(aUnit).switchMissionMode();
+						}
+					})))
+			.append($("<tr>").addClass("missionOption").click(function(){game.mission.set(1, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Patrol Location")))
+			.append($("<tr>").addClass("missionOption").click(function(){game.mission.set(2, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Strike/ Escort Ship")))
+		}
+		else {
+			if (game.phase != -1){
+				text = "Orders: -DEPLOYMENT PHASE-";
+			}
+			else if (!this.friendly){
+				text = "New orders possible";
+			}
+
+			$(table)
+			.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
+			.append($("<tr>").addClass("missionSwitch")
+				.append($("<td>")
+					.attr("colSpan", 2)
+					.addClass("missionButton")
+					.html(text)));
+		}
+
+
+
+
+
+
+
+
+
+
+		/*
+		var need = 3;
 		var elapsed = game.turn - this.mission.turn;
 		if (this.friendly && elapsed >= need && game.phase == -1){
 			$(table)
@@ -173,7 +219,7 @@ Flight.prototype.createBaseDiv = function(){
 					.data("shipid", this.id)
 					.click(function(e){
 						if (aUnit == $(this).data("shipid")){
-							game.getUnitById(aUnit).switchMissionMode();
+							game.getUnit(aUnit).switchMissionMode();
 						}
 					})))
 			.append($("<tr>").addClass("missionOption").click(function(){game.mission.set(1, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Patrol Location")))
@@ -202,10 +248,8 @@ Flight.prototype.createBaseDiv = function(){
 					.attr("colSpan", 2)
 					.addClass("missionButton")
 					.html(text)));
-
-
 		}
-	//}
+		*/
 			
 	subDiv.appendChild(table);
 	div.appendChild(subDiv);
@@ -264,7 +308,7 @@ Flight.prototype.expandDiv = function(div){
 				.addClass("size40")
 				.click(function(e){
 					e.stopPropagation();
-					console.log(game.getUnitById($(this).data("shipId")).getSystemById($(this).data("fighterId")));
+					console.log(game.getUnit($(this).data("shipId")).getSystemById($(this).data("fighterId")));
 				})
 
 
@@ -280,14 +324,14 @@ Flight.prototype.expandDiv = function(div){
 				.hover(function(e){
 					e.stopPropagation();
 					var p = $(this).parent().children()[0];
-					game.getUnitById($(p).data("shipId")).getSystemById($(p).data("fighterId")).hover(e);
+					game.getUnit($(p).data("shipId")).getSystemById($(p).data("fighterId")).hover(e);
 				})
 			fighterDiv.appendChild(overlay);
 		}
 		else {
 			$(img).hover(function(e){
 				e.stopPropagation();
-				game.getUnitById($(this).data("shipId")).getSystemById($(this).data("fighterId")).hover(e);
+				game.getUnit($(this).data("shipId")).getSystemById($(this).data("fighterId")).hover(e);
 			});
 		}
 
@@ -339,19 +383,19 @@ Flight.prototype.expandDiv = function(div){
 						.data("shipId", this.id)
 						.click(function(e){
 							e.stopPropagation();
-							game.getUnitById($(this).data("shipId")).getSystemById($(this).data("systemId")).select(e)
+							game.getUnit($(this).data("shipId")).getSystemById($(this).data("systemId")).select(e)
 						})
 						.contextmenu(function(e){
 							e.stopPropagation();
 							e.preventDefault();
-							game.getUnitById($(this).data("shipId")).selectAll(e, $(this).data("systemId"));
+							game.getUnit($(this).data("shipId")).selectAll(e, $(this).data("systemId"));
 						});
 
 				if (active){					
 					$(td).hover(function(e){
 						e.stopPropagation();
 						$("#systemDetailsDiv").remove();
-						game.getUnitById($(this).data("shipId")).getSystemById($(this).data("systemId")).hover(e)
+						game.getUnit($(this).data("shipId")).getSystemById($(this).data("systemId")).hover(e)
 					})
 				}
 			}
@@ -392,9 +436,9 @@ Flight.prototype.supplyAttachDiv = function(div){
 		.data("id", this.id)
 		.click(function(){
 			if (aUnit){
-				var shooter = game.getUnitById(aUnit);
+				var shooter = game.getUnit(aUnit);
 				if (shooter.hasWeaponsSelected()){
-					var target = game.getUnitById($(this).data("id"));
+					var target = game.getUnit($(this).data("id"));
 					if (shooter.userid != target.userid){
 						handleFireClick(shooter, target);
 					}
@@ -402,18 +446,18 @@ Flight.prototype.supplyAttachDiv = function(div){
 				else {
 					shooter.doUnselect();
 					shooter.switchDiv();
-					game.getUnitById($(this).data("id")).select();
+					game.getUnit($(this).data("id")).select();
 				}
 			}
-			else game.getUnitById($(this).data("id")).select();
+			else game.getUnit($(this).data("id")).select();
 			
 		})
 		.hover(function(e){
-			var vessel = game.getUnitById($(this).data("id"));
+			var vessel = game.getUnit($(this).data("id"));
 				//vessel.doHighlight();
 				//game.handleHoverEvent(vessel)
 			if (aUnit && aUnit != vessel.id){
-				var	shooter = game.getUnitById(aUnit);
+				var	shooter = game.getUnit(aUnit);
 				if (shooter.salvo){return;}
 				if (shooter.hasWeaponsSelected()){
 					if (shooter.id != vessel.id){
@@ -528,7 +572,7 @@ Flight.prototype.setPreMoveSize = function(){
 Flight.prototype.setPostMoveSize = function(){
 	if (this.mission.arrived){
 		if (this.mission.type == 2 || this.mission.type == 3){
-			var s = game.getUnitById(this.mission.targetid).size;
+			var s = game.getUnit(this.mission.targetid).size;
 			this.size = s+30;
 		}
 		else if (this.mission.type == 1){

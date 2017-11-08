@@ -316,7 +316,7 @@ function processEcho(echo){
 }
 
 function launchFlight(e){
-	game.getUnitById(aUnit).getSystemById(e.data.systemid).doLaunchFlight();
+	game.getUnit(aUnit).getSystemById(e.data.systemid).doLaunchFlight();
 }
 
 function redirect(url){
@@ -450,13 +450,13 @@ function handleMouseDown(e){
 	console.log("game pos " + pos.x	+ " / " + pos.y);
 
 	if (aUnit){
-		unit = game.getUnitById(aUnit);
+		unit = game.getUnit(aUnit);
 	}
 
 	if (e.originalEvent.button == 0){
 		if (game.sensorMode){
 			salvoCtx.clearRect(0, 0, res.x, res.y);
-			sensorize(game.getUnitById(aUnit), pos);
+			sensorize(game.getUnit(aUnit), pos);
 			return;
 		}
 		window.downTime = new Date();
@@ -489,7 +489,7 @@ function handleMouseDown(e){
 		var clickUnit = game.getUnitByClick(pos);
 		if (clickUnit){
 			if (unit && unit.id == clickUnit.id){
-				game.getUnitById(aUnit).doUnselect();
+				game.getUnit(aUnit).doUnselect();
 			}
 			else clickUnit.switchDiv();
 		}

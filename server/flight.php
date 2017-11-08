@@ -30,7 +30,10 @@ class Flight extends Mixed {
 		if (!isset($this->mission)){return;}
 
 		$elapsed = 0;
-		if ($this->mission->type > 1 || !$this->mission->arrived){
+		if ($this->mission->arrived){
+			$elapsed = 0;
+		}
+		else if ($this->mission->type > 1 || !$this->mission->arrived){
 			$elapsed = $turn - $this->mission->turn + ($phase > 1);
 		}
 

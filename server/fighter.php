@@ -136,7 +136,7 @@ class Sitara extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new IonBolt(sizeof($this->systems), $this->id, $this->parentId, 1, 1, 28, 35, 0, 360);
+		$this->systems[] = new IonBolt(sizeof($this->systems), $this->id, $this->parentId, 1, 1, 34, 42, 0, 360);
 	}
 }
 
