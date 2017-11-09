@@ -1551,7 +1551,7 @@ function Ship(data){
 	this.getOffensiveBonus = function(target){
 		if (this.flight && target.flight){return target.getLockMultiplier();} // flight vs flight = close combat = bonus
 		if (this.flight && target.salvo && this.mission.type == 1 && this.mission.arrived){return target.getLockMultiplier();} // patrol flight vs salvo
-		if (this.flight && target.salvo && salvo.mssion.targetid != this.id){return target.getLockMultiplier();} // "escorting" flight vs salvo
+		if (this.flight && target.salvo && salvo.mssion.targetid != this.id){return target.getLockMultiplier();} // "<esc></esc>orting" flight vs salvo
 		if (this.flight || this.salvo){return 0;} //
 		var sensor = this.getSystemByName("Sensor");
 		var ew = sensor.getEW();
@@ -1956,14 +1956,14 @@ Ship.prototype.setImage = function(){
 }
 
 Ship.prototype.draw = function(){
-	if (this.doDraw){
-		if (this.isReady()){
-		 	this.drawPositionMarker();
-			this.drawSelf();
-			this.drawEscort();
-		}
+	if (!this.doDraw){return;}
+
+	if (this.isReady()){
+	 	this.drawPositionMarker();
+		this.drawSelf();
+		this.drawEscort();
 	}
-	else this.drawPositionMarker();
+	//else this.drawPositionMarker();
 }
 
 Ship.prototype.drawSelf = function(){
@@ -2900,145 +2900,148 @@ Ship.prototype.attachFlight = function(id){
 }
 
 Ship.prototype.setEscortImage = function(){
-	if (this.cc.length){
-		var size = this.size;
-		var fSize = 26;
-		var tresh = fSize-2;
-		var drawFacing = this.getDrawFacing();
+	if (!this.cc.length){return};
 
-		var t = document.createElement("canvas");
-			t.width = 250;
-			t.height = 250;			
-		var ctx = t.getContext("2d");
-		var shipFriendly = true;
-		var flightFriendly = true;
+	var size = this.size;
+	var fSize = 26;
+	var tresh = fSize-2;
+	var drawFacing = this.getDrawFacing();
 
-		if (this.userid != game.userid){
-			shipFriendly = false;
-		}
+	var t = document.createElement("canvas");
+		t.width = 250;
+		t.height = 250;			
+	var ctx = t.getContext("2d");
+	var shipFriendly = true;
+	var flightFriendly = true;
 
-		if (this.cc.length){
-			var friendlies = [];
-			var hostiles = [];
-			var friendly = [];
-			var hostile = [];
-			for (var i = 0; i < this.cc.length; i++){
-				var attach = game.getUnit(this.cc[i]);
-
-				if (attach.doDraw){continue;} // possibly attachement is being drawn, hence not attached to this
-				if (attach.flight && this.flight){continue;}
-
-				if (this.userid == attach.userid){
-					friendlies.push(attach);
-				}
-				else hostiles.push(attach);
-				for (var j = 0; j < attach.structures.length; j++){
-					if (!attach.structures[j].draw){;continue;}
-					if (this.userid == attach.userid){
-						friendly.push(attach.structures[j]);
-					} else hostile.push(attach.structures[j]);
-				}
-			}
-		}
-
-		if (friendly.length){
-
-			for (var i = 0; i < friendlies.length; i++){
-				friendlies[i].size = size + tresh;
-			}
-
-			/*
-			var color = "#27e627";
-			if (!shipFriendly){color = "red";}
-			ctx.globalAlpha = 0.8;
-			ctx.beginPath();
-			ctx.arc(0, 0, size + tresh, 0, 2*Math.PI);
-			ctx.closePath();
-			ctx.strokeStyle = color;
-			ctx.stroke();
-			ctx.globalAlpha = 1;
-			*/
-			//var rota = range(0, 360);
-			ctx.translate(t.width/2, t.height/2);
-			
-			var split = Math.floor(360/friendly.length+1);
-
-			//ctx.rotate(rota*(Math.PI/180));
-			for (var i = 0; i < friendly.length; i++){
-				var a = split*i + drawFacing;
-				var p = size+tresh - fSize/2;
-				var drawPos = getPointInDirection(p, a, 0, 0);
-				var aPos = getPointInDirection(p/2, a + drawFacing, 0, 0);
-				//console.log(a); 
-				//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
-				friendly[i].layout = aPos;
-				ctx.translate(drawPos.x, drawPos.y);
-				ctx.rotate((a+90)*(Math.PI/180));
-				ctx.drawImage(
-					window.shipImages[friendly[i].name.toLowerCase() +"l"],
-					-fSize/2,
-					-fSize/2,
-					fSize, 
-					fSize
-				);
-				ctx.rotate(-((a+90)*(Math.PI/180)));
-				ctx.translate(-drawPos.x, -drawPos.y);
-
-			}
-			//ctx.rotate(-rota*(Math.PI/180));
-			ctx.translate(-t.width/2, -t.height/2);
-			tresh *= 2
-		}
-
-		if (hostile.length){
-
-			for (var i = 0; i < hostiles.length; i++){
-				hostiles[i].size = size + tresh;
-			}
-
-			/*	
-			var color = "red";
-			if (!shipFriendly){color = "#27e627";}
-			ctx.globalAlpha = 0.8;
-			ctx.beginPath();
-			ctx.arc(0, 0, size + tresh, 0, 2*Math.PI);
-			ctx.closePath();
-			ctx.strokeStyle = color;
-			ctx.stroke();
-			ctx.globalAlpha = 1;
-			*/
-			ctx.translate(t.width/2, t.height/2);
-			var split = Math.floor(360/hostile.length+1)
-
-			for (var i = 0; i < hostile.length; i++){
-				var a = split*i + drawFacing;
-				var p = size+tresh - fSize/2;
-				var drawPos = getPointInDirection(p, a, 0, 0);
-				var aPos = getPointInDirection(p/2, a + drawFacing, 0, 0);
-				//console.log(a); 
-				//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
-				hostile[i].layout = aPos;
-				ctx.translate(drawPos.x, drawPos.y);
-				ctx.rotate((a-90)*(Math.PI/180));
-				ctx.drawImage(
-					window.shipImages[hostile[i].name.toLowerCase() + "l"],
-					-fSize/2,
-					-fSize/2,
-					fSize, 
-					fSize
-				);
-				ctx.rotate(-((a-90)*(Math.PI/180)));
-				ctx.translate(-drawPos.x, -drawPos.y);
-
-			}
-			ctx.translate(-t.width/2, -t.height/2);
-		}
-
-		this.drawImg = t;
-
-		//console.log(this.drawImg.toDataURL());
-		ctx.setTransform(1,0,0,1,0,0);
+	if (this.userid != game.userid){
+		shipFriendly = false;
 	}
+
+	var friendlies = [];
+	var hostiles = [];
+	var friendly = [];
+	var hostile = [];
+	if (this.id == 16){console.log("ding");}
+
+	for (var i = 0; i < this.cc.length; i++){
+		var attach = game.getUnit(this.cc[i]);
+
+		if (attach.doDraw){continue;} // possibly attachement is being drawn, hence not attached to this
+		if (attach.flight && this.flight){continue;}
+		if (this.salvo && this.mission.arrived && this.mission.targetid == attach.id){continue;}
+
+		if (this.userid == attach.userid){
+			friendlies.push(attach);
+		}
+		else hostiles.push(attach);
+		for (var j = 0; j < attach.structures.length; j++){
+			if (!attach.structures[j].draw){;continue;}
+			if (this.userid == attach.userid){
+				friendly.push(attach.structures[j]);
+			} else hostile.push(attach.structures[j]);
+		}
+	}
+
+	if (friendly.length){
+		for (var i = 0; i < friendlies.length; i++){
+			friendlies[i].size = size + tresh;
+		}
+		
+		var color = "#27e627";
+		if (!shipFriendly){color = "red";}
+
+		ctx.translate(t.width/2, t.height/2);
+		ctx.globalAlpha = 0.8;
+		ctx.beginPath();
+		ctx.arc(0, 0, size + tresh, 0, 2*Math.PI);
+		ctx.closePath();
+		ctx.strokeStyle = color;
+		ctx.lineWidth = 2;
+		ctx.stroke();
+		ctx.globalAlpha = 1;
+		ctx.lineWidth = 1;
+		
+		//var rota = range(0, 360);
+		
+		var split = Math.floor(360/friendly.length+1);
+
+		//ctx.rotate(rota*(Math.PI/180));
+		for (var i = 0; i < friendly.length; i++){
+			var a = split*i + drawFacing;
+			var p = size+tresh - fSize/2;
+			var drawPos = getPointInDirection(p, a, 0, 0);
+			var aPos = getPointInDirection(p/2, a + drawFacing, 0, 0);
+			//console.log(a); 
+			//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
+			friendly[i].layout = aPos;
+			ctx.translate(drawPos.x, drawPos.y);
+			ctx.rotate((a+90)*(Math.PI/180));
+			ctx.drawImage(
+				window.shipImages[friendly[i].name.toLowerCase()],
+				-fSize/2,
+				-fSize/2,
+				fSize, 
+				fSize
+			);
+			ctx.rotate(-((a+90)*(Math.PI/180)));
+			ctx.translate(-drawPos.x, -drawPos.y);
+
+		}
+		//ctx.rotate(-rota*(Math.PI/180));
+		ctx.translate(-t.width/2, -t.height/2);
+		tresh *= 2
+	}
+
+	if (hostile.length){
+		for (var i = 0; i < hostiles.length; i++){
+			hostiles[i].size = size + tresh;
+		}
+			
+		var color = "red";
+		if (!shipFriendly){color = "#27e627";}
+
+		ctx.translate(t.width/2, t.height/2);
+		ctx.globalAlpha = 0.8;
+		ctx.beginPath();
+		ctx.arc(0, 0, size + tresh, 0, 2*Math.PI);
+		ctx.closePath();
+		ctx.strokeStyle = color;
+		ctx.lineWidth = 2;
+		ctx.stroke();
+		ctx.globalAlpha = 1;
+		ctx.lineWidth = 1;
+		
+		var split = Math.floor(360/hostile.length+1)
+
+		for (var i = 0; i < hostile.length; i++){
+			var a = split*i + drawFacing;
+			var p = size+tresh - fSize/2;
+			var drawPos = getPointInDirection(p, a, 0, 0);
+			var aPos = getPointInDirection(p/2, a + drawFacing, 0, 0);
+			//console.log(a); 
+			//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
+			hostile[i].layout = aPos;
+			ctx.translate(drawPos.x, drawPos.y);
+			ctx.rotate((a-90)*(Math.PI/180));
+			ctx.drawImage(
+				window.shipImages[hostile[i].name.toLowerCase()],
+				-fSize/2,
+				-fSize/2,
+				fSize, 
+				fSize
+			);
+			ctx.rotate(-((a-90)*(Math.PI/180)));
+			ctx.translate(-drawPos.x, -drawPos.y);
+
+		}
+		ctx.translate(-t.width/2, -t.height/2);
+	}
+
+	this.drawImg = t;
+
+	//console.log(this.drawImg.toDataURL());
+	ctx.setTransform(1,0,0,1,0,0);
 }
 
 Ship.prototype.animationSetupMove = function(){

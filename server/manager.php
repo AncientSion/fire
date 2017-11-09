@@ -233,6 +233,7 @@ class Manager {
 		$this->fires = $db->getAllFireOrders($this->gameid);
 
 		$this->ships = $this->assembleUnits();
+		$this->setCC();
 		//Debug::log("ships: ".sizeof($this->ships));
 		//$this->ballistics = $this->assembleBallistics();
 
@@ -371,21 +372,6 @@ class Manager {
 		DBManager::app()->getDogfights($units);
 
 
-		if ($this->turn > 1){
-			for ($i = 0; $i < sizeof($units); $i++){
-				$a = $units[$i]->getCurrentPosition();
-				for ($j = $i+1; $j < sizeof($units); $j++){
-					if ($units[$i]->id != $units[$j]->id){
-						$b = $units[$j]->getCurrentPosition();
-						if ($a->x == $b->x && $a->y == $b->y){
-							//Debug::log("valid cc: ".$units[$i]->id."/".$units[$j]->id);
-							$units[$i]->cc[] = $units[$j]->id;
-							$units[$j]->cc[] = $units[$i]->id;
-						}
-					}
-				}
-			}
-		}
 
 		for ($i = 0; $i < sizeof($units); $i++){
 			//$units[$i]->addFireDB($this->fires);
@@ -393,6 +379,25 @@ class Manager {
 		}
 
 		return $units;
+	}
+
+	public function setCC(){
+		if ($this->turn < 2){return;}
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if (!$this->ships[$i]->canCC($this->turn)){continue;}
+			$a = $this->ships[$i]->getCurrentPosition();
+			for ($j = $i+1; $j < sizeof($this->ships); $j++){
+				if (!$this->ships[$j]->canCC($this->turn)){continue;}
+				if ($this->ships[$i]->id != $this->ships[$j]->id){
+					$b = $this->ships[$j]->getCurrentPosition();
+					if ($a->x == $b->x && $a->y == $b->y){
+						$this->ships[$i]->cc[] = $this->ships[$j]->id;
+						$this->ships[$j]->cc[] = $this->ships[$i]->id;
+					}
+				}
+			}
+		}
 	}
 
 	public function canAdvance($gameid){
@@ -733,7 +738,14 @@ class Manager {
 
 			Debug::log(" ==== handling mixed #".$this->ships[$i]->id);
 
-			if ($this->ships[$i]->mission->arrived){ // already at target location
+			if (!$this->ships[$i]->mission->arrived && $this->ships[$i]->available < $this->turn && $this->ships[$i]->mission->turn == $this->turn){
+				Debug::log("SKIPPING flight in delay mode, mission start turn: ".$this->ships[$i]->mission->turn);
+				$tPos = $this->ships[$i]->getCurrentPosition(); // Patrol
+				$move = new Action(-1, $this->turn,	"patrol",	0, $tPos->x, $tPos->y, 0, 0, 0, 0, 0);
+				$this->ships[$i]->actions[] = $move;
+				$units[] = $this->ships[$i];
+			}
+			else if ($this->ships[$i]->mission->arrived){ // already at target location
 				if ($this->ships[$i]->mission->type == 2){ // strike
 					$t = $this->getUnit($this->ships[$i]->mission->targetid);
 					$tPos = $t->getCurrentPosition();

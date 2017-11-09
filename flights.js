@@ -35,11 +35,15 @@ Flight.prototype.setSize = function(){
 }
 
 Flight.prototype.setLayout = function(){
-	if (this.mission.type == 1 && this.mission.arrived == game.turn && game.phase >= 2){
+	if (!this.mission.arrived && this.available < this.mission.turn && this.mission.turn == game.turn){ // delay
 		this.setPatrolLayout();
 		return;
 	}
-	if (this.mission.type == 1 && this.mission.arrived < game.turn){
+	if (this.mission.type == 1 && this.mission.arrived == game.turn && game.phase >= 2){ // has arrived on loc this t.
+		this.setPatrolLayout();
+		return;
+	}
+	if (this.mission.type == 1 && this.mission.arrived < game.turn){ // has arrived earlier
 		this.setPatrolLayout();
 		return;
 	}
@@ -64,16 +68,6 @@ Flight.prototype.setLayout = function(){
 			}
 			this.structures[(i*3)+j].layout = {x: ox, y: oy};
 		}
-	}
-}
-
-Flight.prototype.setPatrolLayout = function(){
-	for (var i = 0; i < this.structures.length; i++){
-		var p = getPointInDirection(range(0, this.size/3), range(0, 360), 0, 0);
-		this.structures[i].layout.x = p.x;
-		this.structures[i].layout.y = p.y;
-		//this.structures[i].layout.x = Math.round(range(-this.size/3, this.size/3));
-		//this.structures[i].layout.y = Math.round(range(-this.size/3, this.size/3));
 	}
 }
 
@@ -123,6 +117,38 @@ Flight.prototype.getNewMission = function(){
 	}
 }
 
+Flight.prototype.setImage = function(){
+	if (!this.mission.arrived && this.available < this.mission.turn && this.mission.turn == game.turn){
+		this.setPatrolImage();
+		return;
+	}
+	if (this.mission.type == 1 && this.mission.arrived == game.turn && game.phase >= 2){
+		this.setPatrolImage();
+		return;
+	}
+	if (this.mission.type == 1 && this.mission.arrived < game.turn){
+		this.setPatrolImage();
+		return;
+	}
+
+
+	if (!this.mission.arrived){
+		this.setPreMoveImage();
+	}	
+	else if (this.mission.arrived){
+		if (this.mission.arrived < game.turn){
+			this.setPostMoveImage();
+		} 
+		else if (this.mission.arrived == game.turn){
+			if (game.phase < 3){
+				this.setPreMoveImage();
+			} else this.setPostMoveImage();
+
+		}
+	}
+}
+
+
 Flight.prototype.createBaseDiv = function(){
 	var owner = "friendly";
 	if (game.phase > -2 && this.userid != game.userid){owner = "hostile";}
@@ -152,10 +178,13 @@ Flight.prototype.createBaseDiv = function(){
 			.append($("<td>").html((this.getCurrentImpulse() + " (max: " + (this.baseImpulse*3) + ")"))))
 		.append($("<tr>")
 			.append($("<td>").html("Current Mission"))
-			.append($("<td>").html(game.getMissionTypeString(this.mission.type))))
+			.append($("<td>").addClass("missionType").html(game.getMissionTypeString(this.mission.type))))
 		.append($("<tr>")
 			.append($("<td>").html("Mission Target"))
-			.append($("<td>").html(game.getMissionTargetString(this.mission))))
+			.append($("<td>").addClass("missionTarget").html(game.getMissionTargetString(this.mission))))
+		.append($("<tr>")
+			.append($("<td>").html("Mission Start"))
+			.append($("<td>").addClass("missionTurn").html("Turn " + this.mission.turn)))
 
 
 		if (this.friendly && game.phase == -1){
@@ -300,7 +329,7 @@ Flight.prototype.expandDiv = function(div){
 		}
 
 		var img = new Image()
-			img.src = window.shipImages[this.structures[i].name.toLowerCase() + "l"].src;
+			img.src = window.shipImages[this.structures[i].name.toLowerCase()].src;
 
 			$(img)
 				.data("shipId", this.id)
@@ -452,28 +481,33 @@ Flight.prototype.supplyAttachDiv = function(div){
 			else game.getUnit($(this).data("id")).select();
 			
 		})
-		.hover(function(e){
-			var vessel = game.getUnit($(this).data("id"));
-				//vessel.doHighlight();
-				//game.handleHoverEvent(vessel)
-			if (aUnit && aUnit != vessel.id){
-				var	shooter = game.getUnit(aUnit);
-				if (shooter.salvo){return;}
-				if (shooter.hasWeaponsSelected()){
-					if (shooter.id != vessel.id){
-						handleWeaponAimEvent(shooter, vessel, e);
+		.hover(
+			function(e){
+				var vessel = game.getUnit($(this).data("id"));
+				vessel.doHighlight();
+				if (aUnit && aUnit != vessel.id){
+					var	ship = game.getUnit(aUnit);
+					if (ship.salvo){return;}
+					else if (ship.hasWeaponsSelected() && ship.id != vessel.id){
+						handleWeaponAimEvent(ship, vessel, e);
 					}
-				} else {
-					game.target = 0;
-					$("#weaponAimTableWrapper").hide()
+					else {
+						game.target = 0;
+						$("#weaponAimTableWrapper").hide()
+					}
 				}
+			},
+			function(e){
+				var vessel = game.getUnit($(this).data("id"));
+					vessel.highlight = 0;
+				game.redraw();
 			}
-		})
+		)
 		
 
 	for (var j = 0; j < this.structures.length; j++){
 		if (this.structures[j].destroyed || this.structures[j].disabled){continue;}
-		attachDiv.append($("<div>").append($("<img>").css("width", 34).css("height", 34).attr("src", window.shipImages[this.structures[j].name.toLowerCase() + "l"].src)));
+		attachDiv.append($("<div>").append($("<img>").css("width", 34).css("height", 34).attr("src", window.shipImages[this.structures[j].name.toLowerCase()].src)));
 	}
 
 	div.append(attachDiv);
@@ -583,7 +617,7 @@ Flight.prototype.setPostMoveSize = function(){
 }
 
 Flight.prototype.setRawImage = function(){
-	this.img = window.shipImages[this.structures[0].name.toLowerCase() + "l"];
+	this.img = window.shipImages[this.structures[0].name.toLowerCase()];
 	this.smallImg = window.shipImages[this.structures[0].name.toLowerCase()];
 }
 

@@ -86,38 +86,24 @@ window.preloadShips = function(){
 
 	window.shipImages.aurora = new Image();
 	window.shipImages.aurora.src = "shipIcons/aurora.png";
-	window.shipImages.auroral = new Image();
-	window.shipImages.auroral.src = "shipIcons/auroral.png";
 
 	window.shipImages.thunderbolt = new Image();
 	window.shipImages.thunderbolt.src = "shipIcons/thunderbolt.png";
-	window.shipImages.thunderboltl = new Image();
-	window.shipImages.thunderboltl.src = "shipIcons/thunderboltl.png";
 
 	window.shipImages.sitara = new Image();
 	window.shipImages.sitara.src = "shipIcons/sitara.png";
-	window.shipImages.sitaral = new Image();
-	window.shipImages.sitaral.src = "shipIcons/sitaral.png";
 
 	window.shipImages.sentri = new Image();
 	window.shipImages.sentri.src = "shipIcons/sentri.png";
-	window.shipImages.sentril = new Image();
-	window.shipImages.sentril.src = "shipIcons/sentril.png";
 
 	window.shipImages.nial = new Image();
 	window.shipImages.nial.src = "shipIcons/nial.png";
-	window.shipImages.niall = new Image();
-	window.shipImages.niall.src = "shipIcons/niall.png";
 
 	window.shipImages.gorith = new Image();
 	window.shipImages.gorith.src = "shipIcons/gorith.png";
-	window.shipImages.gorithl = new Image();
-	window.shipImages.gorithl.src = "shipIcons/gorithl.png";
 
 	window.shipImages.frazi = new Image();
 	window.shipImages.frazi.src = "shipIcons/frazi.png";
-	window.shipImages.frazil = new Image();
-	window.shipImages.frazil.src = "shipIcons/frazil.png";
 }
 
 window.preLoadFactions = function(){

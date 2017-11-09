@@ -25,8 +25,8 @@ class Plasma extends Weapon {
 		$structDmg = 0;
 
 		$armourDmg = round(min($totalDmg, $negation));
+		$armourDmg += floor($totalDmg / 100 * $this->melt);
 		$structDmg = round($totalDmg - $armourDmg);
-		$armourDmg += $this->melt;
 
 		//$armourDmg = ceil(min($totalDmg, $negation)*1.5);
 		//$structDmg = min(max(0, $totalDmg - $negation), $totalDmg);
@@ -53,7 +53,7 @@ class LightPlasma extends Plasma {
 	public $powerReq = 3;
 	public $maxBoost = 1;
 	public $effiency = 2;
-	public $melt = 20;
+	public $melt = 50;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -77,7 +77,6 @@ class MediumPlasma extends Plasma {
 	public $powerReq = 4;
 	public $maxBoost = 2;
 	public $effiency = 3;
-	public $melt = 30;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -101,7 +100,6 @@ class HeavyPlasma extends Plasma {
 	public $powerReq = 6;
 	public $maxBoost = 3;
 	public $effiency = 4;
-	public $melt = 40;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

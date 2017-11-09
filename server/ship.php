@@ -145,6 +145,14 @@ class Ship {
 		$this->baseImpulseCost = round(pow($this->mass, 1.4)/3000, 2);
 	}
 
+	public function getImpulseStep(){
+		return floor($this->getBaseImpulse() / 8);
+	}
+
+	public function canCC($turn){
+		return true;
+	}
+
 	public function hidePowers($turn){
 		for ($j = 0; $j < sizeof($this->structures); $j++){
 			for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
@@ -734,10 +742,6 @@ class Ship {
 				return $this->masks[$i][1];
 			}
 		} return 0;
-	}
-
-	public function getImpulseStep(){
-		return floor($this->getBaseImpulse() / 8);
 	}
 
 	public function getCurrentPosition(){

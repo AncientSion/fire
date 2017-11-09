@@ -30,15 +30,12 @@ class Flight extends Mixed {
 		if (!isset($this->mission)){return;}
 
 		$elapsed = 0;
-		if ($this->mission->arrived){
-			$elapsed = 0;
-		}
-		else if ($this->mission->type > 1 || !$this->mission->arrived){
+		if ($this->mission->type > 1 || !$this->mission->arrived){
 			$elapsed = $turn - $this->mission->turn + ($phase > 1);
 		}
 
-		$this->baseImpulse = floor(pow($this->mass, -0.7)*1250); // bout 125 to 150
-		$this->currentImpulse = min($this->baseImpulse * (1+$elapsed), $this->baseImpulse*3);
+		$this->baseImpulse = floor(pow($this->mass, -0.8)*1750); // bout 125 to 150
+		$this->currentImpulse = min($this->baseImpulse * (0+$elapsed), $this->baseImpulse*3);
 	}
 
 	public function setSize(){

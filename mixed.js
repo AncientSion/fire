@@ -268,7 +268,7 @@ Mixed.prototype.setTarget = function(){
 					target.setTarget();
 				}
 				this.finalStep = target.nextStep;
-				//this.facing = getAngleFromTo(p, this.finalStep);
+				this.facing = getAngleFromTo(p, target.getPlannedPos());
 				d = getDistance(p, target.nextStep);
 				if (d < i){
 					this.nextStep = target.nextStep;
@@ -348,16 +348,23 @@ Mixed.prototype.getSystemById = function(){
 }
 
 Mixed.prototype.getParent = function(){
-	if (this.cc.length){
-		for (var j = 0; j < this.cc.length; j++){
-			for (var i = 0; i < game.ships.length; i++){
-				if (this.cc[j] == game.ships[i].id && (game.ships[i].ship || game.ships[i].flight && this.salvo)){
-					return game.ships[i];
-				}
+	if (!this.cc.length){return this;}
+
+	for (var j = 0; j < this.cc.length; j++){
+		for (var i = 0; i < game.ships.length; i++){
+			if (game.ships[i].ship && game.ships[i].id == this.cc[j]){
+				return game.ships[i];
 			}
 		}
 	}
-	return this;	
+	
+	for (var j = 0; j < this.cc.length; j++){
+		for (var i = 0; i < game.ships.length; i++){
+			if (this.salvo && game.ships[i].id == this.cc[j]){
+				return game.ships[i];
+			}
+		}
+	}
 }
 
 Mixed.prototype.setPreFireImage = function(){
@@ -371,26 +378,49 @@ Mixed.prototype.setPreFireImage = function(){
 	this.setImage();
 }
 
-Mixed.prototype.setImage = function(){
-	if (!this.mission.arrived){
-		this.setPreMoveImage();
-	}
-	else if (this.mission.arrived){
-		if (this.mission.arrived < game.turn){
-			this.setPostMoveImage();
-		} 
-		else if (this.mission.arrived == game.turn){
-			if (game.phase < 3){
-				this.setPreMoveImage();
-			} else this.setPostMoveImage();
-
-		}
-	}
-}
-
 Mixed.prototype.getLockMultiplier = function(){
 	return 1.0;
 }
+
+Mixed.prototype.setPatrolLayout = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		var p = getPointInDirection(range(0, this.size*1.5), range(0, 360), 0, 0);
+		this.structures[i].layout.x = p.x;
+		this.structures[i].layout.y = p.y;
+		//this.structures[i].layout.x = Math.round(range(-this.size/3, this.size/3));
+		//this.structures[i].layout.y = Math.round(range(-this.size/3, this.size/3));
+	}
+}
+
+Mixed.prototype.setPatrolImage = function(){
+	var size = 36;
+	var t = document.createElement("canvas");
+		t.width = 200;
+		t.height = 200;
+	var ctx = t.getContext("2d");
+		ctx.translate(t.width/2, t.height/2);
+
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].draw){
+			ctx.translate(this.structures[i].layout.x, this.structures[i].layout.y);
+			ctx.rotate((360/this.structures.length*i) * (Math.PI/180));
+			ctx.drawImage(
+				window.shipImages[this.structures[i].name.toLowerCase()],
+				0 -size/2,
+				0 -size/2,
+				size, 
+				size
+			);
+			ctx.rotate(-(360/this.structures.length*i) * (Math.PI/180));
+			ctx.translate(-this.structures[i].layout.x, -this.structures[i].layout.y);
+		}
+	}
+
+	ctx.translate(-t.width/2, -t.height/2);
+	this.img = t;
+	//console.log(this.img.toDataURL());
+}
+
 
 Mixed.prototype.setPreMoveImage = function(){
 	var size = 36;
@@ -420,7 +450,6 @@ Mixed.prototype.setPreMoveImage = function(){
 }
 
 Mixed.prototype.setPostMoveImage = function(){
-	return;
 	var size = 24;
 	var t = document.createElement("canvas");
 		t.width = 200;

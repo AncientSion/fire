@@ -236,7 +236,7 @@ window.ajax = {
 					phase: game.phase,
 					ships: myShips
 				},
-			success: callback,
+			//success: callback,
 			error: ajax.error,
 		});
 	},

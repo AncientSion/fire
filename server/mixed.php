@@ -59,6 +59,12 @@ class Mixed extends Ship {
 		return true;
 	}
 
+	public function canCC($turn){
+		if (isset($this->mission) && $this->mission->turn < $turn){
+			return true;
+		} return false;
+	}
+
 	public function getNewCrits($turn){
 		$crits = array();
 		if (!$this->damaged){return $crits;}
