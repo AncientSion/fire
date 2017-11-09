@@ -26,12 +26,12 @@ class Plasma extends Weapon {
 		$structDmg = 0;
 
 		$armourDmg = round(min($totalDmg, $negation));
-		$armourDmg += floor($totalDmg / 100 * $this->melt);
 		$structDmg = round($totalDmg - $armourDmg);
+		$armourDmg += floor($totalDmg / 100 * $this->melt);
 
 		//$armourDmg = ceil(min($totalDmg, $negation)*1.5);
 		//$structDmg = min(max(0, $totalDmg - $negation), $totalDmg);
-		//Debug::log("Plasma DMG: ".$totalDmg.": negation: ".$negation." - DOING ".$structDmg."/".$armourDmg);
+		Debug::log("Plasma DMG: ".$totalDmg.": negation: ".$negation." - DOING ".$armourDmg."/".$structDmg);
 		
 		return new Divider($shieldDmg * $this->linked, $armourDmg * $this->linked, $structDmg * $this->linked);
 	}

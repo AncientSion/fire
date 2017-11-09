@@ -840,7 +840,7 @@ class Ship {
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if (!$this->structures[$i]->systems[$j]->damaged){continue;}
 				if ($this->structures[$i]->systems[$j]->destroyed){
-					if (mt_rand(1, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn, 0)){
+					if (mt_rand(0, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn, 0)){
 						Debug::log("adding spike #".$this->id."/".$this->structures[$i]->systems[$j]->id);
 						$spike += $this->structures[$i]->systems[$j]->getPowerUsage($turn);
 					}

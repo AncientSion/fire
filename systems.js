@@ -1435,7 +1435,7 @@ Weapon.prototype.select = function(e){
 				this.selected = false;
 				this.validTarget = 0;
 			}
-			else if(! unit.hasHangarSelected()){
+			else if(!unit.hasHangarSelected()){
 				this.selected = true;
 			}
 		}
@@ -1740,7 +1740,7 @@ Particle.prototype.getAnimation = function(fire){
 	var grouping = 2;
 	var speed = this.projSpeed;
 	var delay = 30;
-	var shotInterval = 6;
+	var shotInterval = 10;
 	var cc = 0;
 	var hits = 0;
 	var fraction = 1;
@@ -2728,7 +2728,12 @@ Hangar.prototype.select = function(e){
 	}
 	else {
 		this.selected = false;
-		$("#hangarLoadoutDiv").find("#missionType").find("tr").removeClass("selected").end().end().addClass("disabled");
+		$("#hangarLoadoutDiv")
+		.find("#missionType")
+		.find("tr").removeClass("selected").end().end()
+		.find(".buttonTD").addClass("disabled").end().end()
+		.addClass("disabled")
+
 		if (game.flightDeploy){
 			game.flightDeploy = false;
 			$("#deployOverlay").hide();

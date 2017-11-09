@@ -1624,14 +1624,15 @@ function Ship(data){
 	this.unselectSystems = function(){
 		fxCtx.clearRect(0, 0, res.x, res.y);
 		$("#weaponAimTableWrapper").hide();
-		var buttons = $(this.element).find(".system.selected").each(function(){
-			$(this).removeClass("selected");
-		});	
+	//	var buttons = $(this.element).find(".system.selected").each(function(){
+	//		$(this).removeClass("selected");
+	//	});	
 
 		for (var i = 0; i < this.structures.length; i++){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
-				this.structures[i].systems[j].highlight = false;
-				this.structures[i].systems[j].selected = false;
+				if (this.structures[i].systems[j].selected){
+					this.structures[i].systems[j].select();
+				}
 			}
 		}
 		
@@ -1879,13 +1880,13 @@ Ship.prototype.doSelect = function(){
 }
 
 Ship.prototype.doUnselect = function(){
+	this.unselectSystems();
 	aUnit = false;
 	this.selected = false;
 	this.setUnitGUI();
 	if (game.deploying){game.disableDeployment();}
 	else if (game.flightDeploy){game.flightDeploy = false;}
 	else if (game.mission){this.disableMissionMode()}
-	this.unselectSystems();
 	//game.setShipTransform();
 	//this.drawPositionMarker();
 	//game.resetShipTransform();
@@ -2078,7 +2079,7 @@ Ship.prototype.getDmgByFire = function(fire){
 		if (this.primary.damages[i].fireid == fire.id){					
 			dmgs.push(this.primary.damages[i]);
 			dmgs[dmgs.length-1].system = "Main Structure";
-			dmgs[dmgs.length-1].loc = this.getSystemLocation(-1, j);
+			dmgs[dmgs.length-1].loc = this.getSystemLocation(-1);
 			lookup--;
 			if (!lookup){return dmgs};
 		}
@@ -2092,7 +2093,7 @@ Ship.prototype.getDmgByFire = function(fire){
 			if (this.primary.systems[i].damages[j].fireid == fire.id){
 				dmgs.push(this.primary.systems[i].damages[j]);
 				dmgs[dmgs.length-1].system = this.primary.systems[i].display
-				dmgs[dmgs.length-1].loc = this.getSystemLocation(-1, j);
+				dmgs[dmgs.length-1].loc = this.getSystemLocation(-1);
 				lookup--;
 				if (!lookup){return dmgs};
 			}
@@ -2108,7 +2109,7 @@ Ship.prototype.getDmgByFire = function(fire){
 				if (this.structures[i].systems[j].damages[k].fireid == fire.id){
 					dmgs.push(this.structures[i].systems[j].damages[k]);
 					dmgs[dmgs.length-1].system = this.structures[i].systems[j].display
-					dmgs[dmgs.length-1].loc = this.getSystemLocation(i, j);
+					dmgs[dmgs.length-1].loc = this.getSystemLocation(i);
 					lookup--;
 					if (!lookup){return dmgs};
 				} else if (this.structures[i].systems[j].damages[k].turn < fire.turn){
@@ -2120,10 +2121,9 @@ Ship.prototype.getDmgByFire = function(fire){
 	return dmgs;
 }
 
-Ship.prototype.getSystemLocation = function(i, j){
+Ship.prototype.getSystemLocation = function(i){
 	if (i == -1){
 		return getPointInDirection(this.size/6, this.getDrawFacing()+range(0, 359), 0, 0);
-		return getPointInDirection(100, this.getDrawFacing()+0, 0, 0);
 	}
 	return getPointInDirection(this.size/4, this.structures[i].getDirection() + this.getDrawFacing(), 0, 0);
 }
@@ -2660,7 +2660,7 @@ Ship.prototype.expandDiv = function(div){
 				td.colSpan = colWidth;
 				td = this.attachEvent(td);
 
-			if (game.turn == 1 || this.id > 0){
+			if (this.id > 0 || game.turn == 1){
 				var boostDiv = this.structures[i].systems[j].getBoostDiv();
 				if (boostDiv){td.appendChild(boostDiv)};
 
@@ -2742,6 +2742,7 @@ Ship.prototype.expandDiv = function(div){
 			if (!noAft && this.structures[i].systems.length <= 3){
 				offsetY += 10;
 			} else if (fill){
+				offsetY -= 10;
 				$(primaryDiv).css("top", (primY + 20));
 			}
 		}

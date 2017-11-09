@@ -15,7 +15,7 @@ window.mouseCanvas;
 window.mouseCtx;
 window.cache;
 window.downTime = 0;
-window.timout = 0;
+window.hold = 0;
 window.translate = 0;
 
 function doSort(a, b){

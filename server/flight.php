@@ -24,19 +24,21 @@ class Flight extends Mixed {
 		}
 	}
 
-	public function setCurrentImpulse($turn, $phase){
+	public function setCurrentImpulse($t, $p){
 		$this->baseImpulse = floor(pow($this->mass, -0.8)*1750);
 		if (!isset($this->mission)){return;}
 
 		$elapsed = 0;
-		if ($this->available == $turn){
-			$elapsed = 1;
+
+		if ($this->available == $this->mission->turn){
+			$elapsed++;
 		}
-		else if ($this->mission->type > 1 || !$this->mission->arrived){
-			$elapsed = $turn - $this->mission->turn;
+		
+		if ($this->mission->type > 1 || !$this->mission->arrived){
+			$elapsed += $t - $this->mission->turn;
 		}
 
-		$this->currentImpulse = $this->baseImpulse * min(3, $elapsed + ($phase > 1));
+		$this->currentImpulse = $this->baseImpulse * min(3, $elapsed + ($p > 1));
 	}
 
 	public function setSize(){
@@ -46,7 +48,7 @@ class Flight extends Mixed {
 				$alive++;
 			}
 		}
-		$this->size = $this->baseSize + $alive*$this->unitSize;
+		$this->size = $this->baseSize + $this->unitSize * $alive;
 	}
 
 	public function getFireAngle($fire){

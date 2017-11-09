@@ -19,7 +19,7 @@ class LightIon extends Particle {
 	public $shots = 4;
 	public $animColor = "orange";
 	public $projSize = 2;
-	public $projSpeed = 8;
+	public $projSpeed = 7;
 	public $reload = 2;
 	public $mass = 13;
 	public $powerReq = 2;

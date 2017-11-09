@@ -382,7 +382,7 @@ class Manager {
 	}
 
 	public function setCC(){
-		if ($this->turn < 2){return;}
+		if ($this->turn == 1){return;}
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if (!$this->ships[$i]->canCC($this->turn)){continue;}

@@ -455,7 +455,7 @@ echo "</script>";
 			<div id="vectorDiv" class="disabled"></div>
 			<div id="hangarLoadoutDiv" class="disabled">
 			<div class="header">
-				Assemble and launch a flight
+				<span>Assemble and launch a flight</span>
 			</div>
 			<div class="header">
 				Can launch up to <span id="launchRate"></span> units per cycle.
@@ -502,13 +502,12 @@ echo "</script>";
 		$("#mouseCanvas").on("mouseleave", function(){
 			$("#weaponAimTableWrapper").hide();
 		})
-		$("#combatLog").contextmenu(function(e){
-			e.stopPropagation();
-		})
-		$("#combatlogWrapper").contextmenu(function(e){
-			e.preventDefault(); e.stopPropagation();
-			$(this).find("#combatLog").toggleClass("disabled");
-		})
+
+		$("#combatlogWrapper")
+			.find("#combatLog")
+				.contextmenu(function(e){
+					e.preventDefault(); e.stopPropagation();
+				})
 
 		window.initiateKeyDowns();
 
@@ -639,7 +638,7 @@ echo "</script>";
 							}
 						})
 						for (var i = 0; i < game.fireOrders.length; i++){
-							game.createCombatLogEntry(game.fireOrders[i]);
+							game.createCombatLogEntry(i);
 						}
 
 						game.getUnitExplosionDetails();

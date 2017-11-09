@@ -60,7 +60,7 @@ class Mixed extends Ship {
 	}
 
 	public function canCC($turn){
-		if (isset($this->mission) && $this->mission->turn < $turn){
+		if (isset($this->mission)){
 			return true;
 		} return false;
 	}
