@@ -910,6 +910,10 @@ table, th, tr, td {
 	left: 10;
 }
 
+.font13 {
+	font-size: 13px;
+}
+
 .size30 {
 	width: 30px;
 	height: 30px;
