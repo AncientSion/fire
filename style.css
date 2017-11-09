@@ -662,6 +662,10 @@ table, th, tr, td {
 	height: 100%;
 }
 
+.struct div.integrityAmount.font13 {
+	font-size: 13px;
+}
+
 .struct div.integrityNow {
 	position: absolute;
 	left: 0;
@@ -671,7 +675,6 @@ table, th, tr, td {
 	background-color: blue;
 	height: 100%;
 }
-
 .primaryTable div.integrityNow {
 	background-color: green;
 }
@@ -908,10 +911,6 @@ table, th, tr, td {
 	position: absolute;
 	top: 5;
 	left: 10;
-}
-
-.font13 {
-	font-size: 13px;
 }
 
 .size30 {
