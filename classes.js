@@ -578,7 +578,7 @@ function Primary(data){
 		var span = document.createElement("div");
 			span.className = "integrityAmount";
 			if (this.integrity > 999){
-				span.className += " font13";
+				span.className += " font15";
 			}
 			span.innerHTML = this.remaining + " / " + this.integrity;
 			td.appendChild(span);
