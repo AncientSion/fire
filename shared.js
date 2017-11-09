@@ -349,38 +349,9 @@ $(document).ready(function(){
     $("#weaponLoadoutDiv").drag()
 });
 
+//window.dragging = false;
 
-var selected = null, // Object of the element to be moved
-    x_pos = 0, y_pos = 0, // Stores x & y coordinates of the mouse pointer
-    x_elem = 0, y_elem = 0; // Stores top, left values (edge) of the element
 
-// Will be called when user starts dragging an element
-function _drag_init(elem) {
-    // Store the object of the element which needs to be moved
-    selected = elem;
-    x_elem = x_pos - selected.offsetLeft;
-    y_elem = y_pos - selected.offsetTop;
-}
-
-// Will be called when user dragging an element
-function _move_elem(e) {
-    x_pos = document.all ? window.event.clientX : e.pageX;
-    y_pos = document.all ? window.event.clientY : e.pageY;
-    if (selected !== null) {
-        selected.style.left = (x_pos - x_elem) + 'px';
-        selected.style.top = (y_pos - y_elem) + 'px';
-    }
-}
-
-// Destroy the object when we are done
-function _destroy() {
-    selected = null;
-}
-
-document.onmousemove = _move_elem;
-document.onmouseup = _destroy;
-
-// Draggable plugin
 (function($) {
     $.fn.drag = function(options) {
         options = $.extend({
@@ -397,50 +368,39 @@ document.onmouseup = _destroy;
 
         $handle
             .css('cursor', options.cursor)
-            .on("mousedown", function(e) {
-                var x = $drag.offset().left - e.pageX,
-                    y = $drag.offset().top - e.pageY,
-                    z = $drag.css('z-index');
+            .on("mousedown", function(e){
+
+                e.preventDefault();
+                e.stopPropagation();
+
+                var x = $drag.offset().left - e.pageX;
+                var y = $drag.offset().top - e.pageY;
+                   // z = $drag.css('z-index');
 
                 $(document.documentElement)
-                    .on('mousemove.drag', function(e) {
+                    .on('mousemove.drag', function(e){
                         $drag.offset({
                             left: x + e.pageX,
                             top: y + e.pageY
                         });
                     })
-                    .one('mouseup', function() {
-                        $(this).off('mousemove.drag');
-                        $drag.css('z-index', z);
-                    });
-
-                // disable selection
-                e.preventDefault();
-                e.stopPropagation();
+                    .on('mouseup', function(e){
+                    	$(this).off('mousemove.drag');
+                    })
+            })
+            .on("mouseleave", function(e){
+            	$(document.documentElement).off("mousemove.drag");
             });
             return this;
     };
 })(jQuery);
-
-
 
 function reOffset(){
 	var s = mouseCanvas.getBoundingClientRect();
 	offset.x = s.left;
 	offset.y = s.top;        
 }
-/*
-var hold
 
-var timeoutId = 0;
-
-$('#myElement').on('mousedown', function() {
-    timeoutId = setTimeout(myFunction, 1000);
-}).on('mouseup mouseleave', function() {
-    clearTimeout(timeoutId);
-});
-
-*/
 function handleMouseDown(e){
 	e.preventDefault();
 	e.stopPropagation();

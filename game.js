@@ -858,66 +858,6 @@ function Game(data, userid){
 		this.draw();
 		console.log("fireResolved");
 	}
-
-	this.setShipDivds = function(){
-		var x = 50;
-		var y = 200;
-		for (var i = 0; i < this.ships.length; i++){
-			var ele = $(this.ships[i].element);
-			var w = $(ele).width();
-			var h = $(ele).height();
-
-
-			x += 40;
-			y += 50;
-
-			$(ele)
-				.css("left", x)
-				.css("top", y);
-
-			if (i == 5){
-				x = 370;
-				y = 150;
-			}
-		}
-	}
-
-	this.setShipDivs = function(){
-		var x = 10;
-		var y = 400;
-		for (var i = 0; i < this.ships.length; i++){
-			$(this.ships[i].element)
-				.css("left", x)
-				.css("top", y);
-			x+= 25;
-			y+= 25;
-		}
-	}
-
-Game.prototype.getUnitType = function (val){
-	switch (val){
-		case 3: return "Ultra Heavy";
-		case 2: return "Super Heavy";
-		case 1: return "Heavy";
-		case 0: return "Medium";
-		case -1: return "Light";
-		case -2: return "SuperLight";
-		case -3: return "Flight";
-		case -4: return "Salvo";
-	}
-}
-/*		var w = $(div).width();
-		var h = $(div).height();
-		var left = 50;
-		if (this.facing < 90 || this.facing > 270){
-			left = res.x - w - 50;
-		}
-		var x = this.x +cam.o.x - w/2;
-		var y = this.y +cam.o.y + 150;
-
-		$(div).css("left", x).css("top", y);
-	}*/
-
 	
 	this.initPhase = function(n){
 		this.setShipDivs();
@@ -1007,7 +947,8 @@ Game.prototype.getUnitType = function (val){
 
 		for (var i = 0; i < this.reinforcements.length; i++){
 			this.reinforcements[i] = window.initiateShip(this.reinforcements[i]);
-			this.reinforcements[i].create(); this.reinforcements[i].createBaseDiv();
+			this.reinforcements[i].create();
+			this.reinforcements[i].createBaseDiv();
 			this.reinforcements[i].friendly = 1;
 			this.reinforcements[i].deployed = 0;
 		}
@@ -1452,7 +1393,6 @@ Game.prototype.getUnitType = function (val){
 					if (fraction >= 1){
 						game.ships[i].deployed = true;
 						game.ships[i].drawSelf();
-						//game.createDeployLogEntry(i);
 					}
 					else {
 						var sin = Math.sin(Math.PI*fraction);
@@ -1505,6 +1445,11 @@ Game.prototype.getUnitType = function (val){
 	}
 
 	this.setUnitMovementFocus = function(){
+
+		$("#game")
+			.find("#reinforce").data("on", 0).end()
+			.find("#deployWrapper").hide();
+
 		window.then = Date.now();
 		window.startTime = then;
 		cam.setZoom(1);
@@ -1515,8 +1460,6 @@ Game.prototype.getUnitType = function (val){
 		var maxX = 0;
 		var maxY = 0;
 		var amount = 0;
-		var endX = 0;
-		var endY = 0;
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].ship){
@@ -1527,8 +1470,18 @@ Game.prototype.getUnitType = function (val){
 			}
 		}
 
-		endX = (minX + maxX) / 2;
-		endY = (minY + maxY) / 2;
+		var endX = (minX + maxX) / 2;
+		var endY = (minY + maxY) / 2;
+
+		var distX = maxX - minX;
+		var distY = maxY - minY;
+
+		if (distX > res.x){
+			cam.setZoom(res.x/distX / 1.3);
+		} else if (distX > res.y){
+			cam.setZoom(res.y/distY / 1.3);
+		}
+
 
 		cam.setFocusToPos({x: endX, y: endY});
 
@@ -2122,37 +2075,41 @@ Game.prototype.getUnitType = function (val){
 
 	this.createDeployEntries = function(){
 
-		var color = "#ff3d00";
-		var html = "";
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].available == game.turn){
+				var html = "";
+				var color = "#ff3d00";
+				if (this.ships[i].friendly){
+					color = "#27e627";
+				}
+
 				if (this.ships[i].flight || this.ships[i].salvo){
-					if (this.ships[i].friendly){
-						color = "#27e627";
-					}
 					if (this.ships[i].flight){
 						html = "<span><font color='" + color + "'>Flight #" + this.ships[i].id + "</font> was deployed (" + this.ships[i].structures.length + " units).</span>";
 					}
 					else if (this.ships[i].salvo){
 						html = "<span><font color='" + color + "'>Salvo #" + this.ships[i].id + "</font> was launched (" + this.ships[i].structures.length +" units).</span>";
 					}
-
-					$("#combatLog").find("tbody").append($("<tr>")
-						.append($("<td>").html(html))
-						.data("shipid", this.ships[i].id)
-						.hover(
-							function(){
-								var data = $(this).data();
-								game.getUnit($(this).data("shipid")).doHighlight()
-							},
-							function(){
-								var data = $(this).data();
-								game.getUnit($(this).data("shipid")).highlight = 0;
-								game.redraw();
-							}
-						));
 				}
+				else {
+					html = "<span><font color='" + color + "'>Starship #" + this.ships[i].id + "</font> did jump into local space.</span>";
+				}
+
+				$("#combatLog").find("tbody").append($("<tr>")
+					.append($("<td>").html(html))
+					.data("shipid", this.ships[i].id)
+					.hover(
+						function(){
+							var data = $(this).data();
+							game.getUnit($(this).data("shipid")).doHighlight()
+						},
+						function(){
+							var data = $(this).data();
+							game.getUnit($(this).data("shipid")).highlight = 0;
+							game.redraw();
+						}
+					));
 			}
 		}
 	}
@@ -2351,11 +2308,11 @@ Game.prototype.getUnitType = function (val){
 				e.stopPropagation();
 				if (!$(this).data("on")){
 					$(this).data("on", 1);
-					$("#deployWrapper").show();
+					$("#game").find("#deployWrapper").show();
 				}
 				else {
 					$(this).data("on", 0);
-					$("#deployWrapper").hide();
+					$("#game").find("#deployWrapper").hide();
 					if (game.phase == -1){
 						$("#deployWrapper").find("#reinforceTable").find(".selected").each(function(){
 							$(this).removeClass("selected");
@@ -2487,9 +2444,6 @@ Game.prototype.getUnitType = function (val){
 	}
 }
 
-
-
-
 Game.prototype.posIsOccupied = function(ship, pos){
 	var dist = getDistance(ship, step) 
 	if (ship.getRemainingImpulse()){return false;}
@@ -2540,12 +2494,40 @@ Game.prototype.getUnitByClick = function(pos){
 			}
 		}
 	}
-	//return false;
 
 	if (!pick){
 		return false;
 	}
 	return this.getUnit(pick).getParent();
+}
 
-	//					return this.ships[i].getParent();
+
+Game.prototype.setShipDivs = function(val){
+	var x = 10;
+	var y = 200;
+	for (var i = 0; i < this.ships.length; i++){
+		$(this.ships[i].element)
+			.css("left", x)
+			.css("top", y);
+		x += 25;
+		y += 25;
+
+		if (y + 600 > res.y){
+			y = 200;
+			x += 100;
+		}
+	}
+}
+
+Game.prototype.getUnitType = function(val){
+	switch (val){
+		case 3: return "Ultra Heavy";
+		case 2: return "Super Heavy";
+		case 1: return "Heavy";
+		case 0: return "Medium";
+		case -1: return "Light";
+		case -2: return "SuperLight";
+		case -3: return "Flight";
+		case -4: return "Salvo";
+	}
 }

@@ -47,7 +47,7 @@ class Altarian extends Medium {
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 700);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 100);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 100, 150);
-		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 100);
+		//$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 100);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 100, 750, 10);
 		//$this->primary->systems[] = new Sensor($this->getId(), $this->id, 90, 750, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 100);

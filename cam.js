@@ -60,6 +60,9 @@ window.cam = {
 		if (fire.dist <= 50){
 			this.z = 2;
 		}
+		else if (fire.dist > res.x / 2 || fire.dist > res.y){
+			this.z = Math.floor( (res.x / 2) / fire.dist * 10)/10;
+		}
 		else this.z = 1;
 
 		this.setFocusToPos(fire.target.getPlannedPos());

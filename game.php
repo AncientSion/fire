@@ -512,10 +512,7 @@ echo "</script>";
 
 		window.initiateKeyDowns();
 
-		document.getElementById("combatlogWrapper").onmousedown = function(){
-		    _drag_init(this);
-		    return false;
-		};
+		$("#combatlogWrapper").drag();
 
 		$("#plusImpulse")
 		.click(function(){

@@ -218,7 +218,7 @@ else {
 				shipsBought: [],
 				userid: window.userid,
 
-				getUnitById: function(id){	
+				getUnit: function(id){	
 					return this.ships[0];
 				},
 				getUnitType: function(val){

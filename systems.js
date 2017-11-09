@@ -311,14 +311,14 @@ System.prototype.getBoostEffectElements = function(table){
 	$(table).find("tr").last().css("border-bottom", "2px solid white");
 }
 
-
 System.prototype.getBoostDiv = function(){
 	if (this.destroyed || !this.effiency){return};
 	if (this.boostEffect.length == 1 && this.boostEffect[0].type == "Reload" && this.getLoadLevel() == 1){return;}
 	var div = document.createElement("div");
-		div.className = "boostDiv disabled";
-		$(div).data("shipId", this.parentId);
-		$(div).data("systemId", this.id);
+		$(div).addClass("boostDiv").hide()
+		.data("shipId", this.parentId)
+		.data("systemId", this.id);
+
 	var subDiv = document.createElement("div");
 		subDiv.className = "plus";
 		subDiv.innerHTML = "<img src='varIcons/plus.png'</img>";
@@ -355,12 +355,14 @@ System.prototype.getBoostDiv = function(){
 		div.appendChild(subDiv);
 	return div;
 }
+
 System.prototype.getPowerDiv = function(){
 	if (this.destroyed || !this.powerReq){return};
 	var div = document.createElement("div");
-		div.className = "powerDiv";
-		$(div).data("shipId", this.parentId);
-		$(div).data("systemId", this.id);
+		$(div).addClass("powerDiv")
+		.data("shipId", this.parentId)
+		.data("systemId", this.id);
+
 	var subDiv = document.createElement("div");
 		subDiv.className = "power disabled";
 		subDiv.innerHTML = "<img src='varIcons/power.png'</img>";
@@ -402,9 +404,10 @@ System.prototype.getPowerDiv = function(){
 System.prototype.getModeDiv = function(){
 	if (this.destroyed || !Object.keys(this.modes).length){return;}
 	var div = document.createElement("div");
-		div.className = "modeDiv disabled";
-		$(div).data("shipId", this.parentId);
-		$(div).data("systemId", this.id);
+		$(div).addClass("modeDiv").hide()
+		.data("shipId", this.parentId)
+		.data("systemId", this.id);
+
 	var subDiv = document.createElement("div");
 		subDiv.className = "mode";
 		subDiv.innerHTML = "<img src='varIcons/mode.png'</img>";
@@ -685,6 +688,7 @@ System.prototype.getTableData = function(forFighter){
 	var file = "sysIcons/" + this.getImageName();
 	if (forFighter){file += this.linked;}
 	else {img.className = "sysIcon";}
+	
 		file += ".png";
 		img.src = file;
 	td.appendChild(img);
@@ -1549,9 +1553,9 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDmgString())));
 
 	if (this.notes.length){
-		$(table).append($("<tr>").addClass("notes").css("border-top", "2px solid white").append($("<th>").html("Notes").attr("colSpan", 2)));
+		$(table).append($("<tr>").addClass("notesHeader").css("border-top", "2px solid white").append($("<th>").html("Notes").attr("colSpan", 2)));
 		for (var i = 0; i < this.notes.length; i++){
-			$(table).append($("<tr>").append($("<td>").html(this.notes[i]).attr("colSpan", 2)));
+			$(table).append($("<tr>").append($("<td>").addClass("notesEntry").html(this.notes[i]).attr("colSpan", 2)));
 		}
 	}
 
@@ -1817,7 +1821,7 @@ function Plasma(system){
 	Particle.call(this, system);
 	this.dmgLoss = system.dmgLoss;
 	this.melt = system.melt;
-	this.notes = ["<span class='bold green'>" + this.melt + "%</span> of total damage added to armour"];
+	this.notes = ["<span class='bold green'>" + this.melt + "%</span> of total damage is added as additional damage to armour"];
 }
 Plasma.prototype = Object.create(Particle.prototype);
 
@@ -2590,6 +2594,7 @@ Launcher.prototype.updateTotals = function(){
 
 	for (var i = 0; i < this.loads.length; i++){
 		var tr = table.insertRow(-1);
+		console.log(this.loads[i]);
 			tr.insertCell(-1).innerHTML = this.loads[i].name;
 			tr.insertCell(-1).innerHTML = this.loads[i].display;
 			tr.insertCell(-1).innerHTML = this.launchRate[i];

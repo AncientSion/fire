@@ -18,19 +18,19 @@ class Olympus extends Medium {
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 350, 14);
 		$front->systems[] = new MediumPulse($this->getId(), $this->id, 240, 360);
-		$front->systems[] = new MediumLaser($this->getId(), $this->id, 330, 30);
+		$front->systems[] = new MediumLaser($this->getId(), $this->id, 315, 45);
 		$front->systems[] = new MediumPulse($this->getId(), $this->id, 0, 120);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 13);
 		$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 180);
-		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 9, 3), array("Naga", 6, 2)));
+		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Naga", 6, 2)));
 
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 300, 13);
 		$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 360);
-		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 9, 3), array("Naga", 6, 2)));
+		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Naga", 6, 2)));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -42,7 +42,7 @@ class Olympus extends Medium {
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 500);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 70);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 70, 82);
-		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 70);
+		//$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 70);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 70, 600, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 70);
 	}

@@ -17,9 +17,9 @@ class Demos extends Medium {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 17);
-		$front->systems[] = new MediumPlasma($this->getId(), $this->id, 330, 30);
+		$front->systems[] = new MediumPlasma($this->getId(), $this->id, 315, 45);
 		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60,	array(array("Triarii", 9, 3), array("Javelin", 9, 3)));
-		$front->systems[] = new MediumPlasma($this->getId(), $this->id, 330, 30);
+		$front->systems[] = new MediumPlasma($this->getId(), $this->id, 315, 45);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 15);
@@ -41,7 +41,7 @@ class Demos extends Medium {
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 575);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 90);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 90, 120);
-		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 90);
+		//$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 90);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 90, 750, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 90);
 	}

@@ -63,7 +63,9 @@ Mixed.prototype.resetMoveMode = function(){
 	return;
 }
 
-
+Mixed.prototype.getCurrentImpulse = function(){
+	return this.currentImpulse;
+}
 
 Mixed.prototype.getPostMovePos = function(){
 	return this.nextStep;
@@ -428,8 +430,7 @@ Mixed.prototype.setPreMoveImage = function(){
 		t.width = 200;
 		t.height = 200;
 	var ctx = t.getContext("2d");
-
-	ctx.translate(t.width/2, t.height/2);
+		ctx.translate(t.width/2, t.height/2);
 
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].draw){
@@ -450,14 +451,14 @@ Mixed.prototype.setPreMoveImage = function(){
 }
 
 Mixed.prototype.setPostMoveImage = function(){
-	var size = 24;
+	var size = 36;
 	var t = document.createElement("canvas");
 		t.width = 200;
 		t.height = 200;
 	var ctx = t.getContext("2d");
+		ctx.translate(t.width/2, t.height/2);
 
 	if (this.mission.type == 1){ // patrol
-		ctx.translate(this.size/2, this.size/2);
 		for (var i = 0; i < this.structures.length; i++){
 			if (this.structures[i].draw){
 				ctx.save();
@@ -475,7 +476,6 @@ Mixed.prototype.setPostMoveImage = function(){
 		}
 	}
 	else if (this.mission.type == 6){ // strike escort
-		ctx.translate(this.size/2, this.size/2);
 		for (var i = 0; i < this.structures.length; i++){
 			if (this.structures[i].draw){
 				ctx.save();

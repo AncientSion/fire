@@ -76,7 +76,7 @@ class LightParticleBeam extends Laser {
 	public $maxDmg = 34;
 	public $optRange = 600;
 	public $dmgLoss = 4;
-	public $accDecay = 110;
+	public $accDecay = 120;
 	public $shots = 1;
 	public $reload = 2;
 	public $powerReq = 2;

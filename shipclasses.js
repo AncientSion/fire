@@ -2518,7 +2518,7 @@ Ship.prototype.expandDiv = function(div){
 		primaryTable.appendChild(this.primary.getTableRow());
 
 		var systems = 0;
-		var max = 3;
+		var max = 2;
 		primaryTable.childNodes[0].childNodes[0].colSpan = max;
 
 		for (var i = 0; i < this.primary.systems.length; i++){
@@ -2529,7 +2529,7 @@ Ship.prototype.expandDiv = function(div){
 			var td = this.primary.systems[i].getTableData(false);
 				td = this.attachEvent(td);
 
-			if (game.turn == 1 || this.id > 0){
+			if (this.id > 0 | game.turn == 1){
 				var boostDiv = this.primary.systems[i].getBoostDiv();
 				if (boostDiv){td.appendChild(boostDiv)};
 

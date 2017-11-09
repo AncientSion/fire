@@ -54,7 +54,7 @@ class GQuan extends Heavy {
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1300);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 140);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 140, 300);
-		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 140);
+		//$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 140);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 140, 750, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 140);
 	}

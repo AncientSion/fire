@@ -54,7 +54,7 @@ Flight.prototype.setLayout = function(){
 	for (var i = 0; i < this.structures.length/3; i++){
 
 		var a = 360/Math.ceil(this.structures.length/3)*i;
-		var o = getPointInDirection(0 + this.unitSize*14, a-90, 0, 0);
+		var o = getPointInDirection(0 + this.unitSize*15, a-90, 0, 0);
 
 		for (var j = 0; j < Math.min(this.structures.length-i*3, 3); j++){
 			var ox = o.x;
@@ -628,14 +628,3 @@ Flight.prototype.switchDiv = function(){
 
 	Ship.prototype.switchDiv.call(this);
 }
-
-Flight.prototype.getCurrentImpulse = function(){
-	return this.currentImpulse;
-	if (game.phase >= 2){
-		return Math.max(this.baseImpulse *2, this.currentImpulse);
-	} else return this.currentImpulse;
-}
-
-
-
-

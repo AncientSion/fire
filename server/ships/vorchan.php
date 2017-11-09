@@ -17,17 +17,16 @@ class Vorchan extends Light {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 225, 14);
-		$front->systems[] = new MediumIon($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60,	array(array("Hasta", 8, 4), array("Vanguard", 10, 5)));
+		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60,	array(array("Hasta", 8, 4)));
 		$front->systems[] = new MediumIon($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 170, 13);
-		$right->systems[] = new LightPlasma($this->getId(), $this->id, 300, 120);
+		$right->systems[] = new LightPlasma($this->getId(), $this->id, 330, 30);
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 170, 13);
-		$left->systems[] = new LightPlasma($this->getId(), $this->id, 240, 60);
+		$left->systems[] = new LightPlasma($this->getId(), $this->id, 330, 30);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -39,7 +38,7 @@ class Vorchan extends Light {
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 340);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 45);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 45, 46);
-		$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 45);
+		//$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 45);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 45, 650, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 45);
 	}

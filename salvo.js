@@ -323,13 +323,6 @@ Salvo.prototype.setLayout = function(){
 	}
 }
 
-Salvo.prototype.getCurrentImpulse = function(){
-	//return this.currentImpulse;
-	if (game.phase >= 2){
-		return this.currentImpulse + this.baseImpulse*(1-this.destroyed);
-	} else return this.currentImpulse;
-}
-
 Salvo.prototype.getShots = function(){
 	shots = 0;
 	for (var i = 0; i < this.structures.length; i++){
