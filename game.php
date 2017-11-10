@@ -507,7 +507,11 @@ echo "</script>";
 			.find("#combatLog")
 				.contextmenu(function(e){
 					e.preventDefault(); e.stopPropagation();
-				})
+				}).end()
+				.find(".combatLogHeader").contextmenu(function(e){
+					e.preventDefault(); e.stopPropagation();
+					$(this).parent().find("#combatLog").toggleClass("disabled");
+				});
 
 		window.initiateKeyDowns();
 

@@ -1868,13 +1868,18 @@ function Game(data, userid){
 					if (game.ships[i].structures[j].isDestroyedThisTurn()){
 						counter++;
 
-						//var pos = rotate(0, 0,game.ships[i].structures[j].layout, rota);
+						var t = game.ships[i].structures[j].layout;
+						var x = t.x / 200 * game.ships[i].size;
+						var y = t.y / 200 * game.ships[i].size;
+						var real = rotate(0, 0, {x: x, y: y}, rota);
+
+						//var real = rotate(0, 0,game.ships[i].structures[j].layout, rota);
 						anim.anims.push({
-							a: game.ships[i].facing,
+							//a: game.ships[i].facing,
 							t: [0-30*anim.anims.length, 70],
 							s: game.ships[i].getExplosionSize(j),
-							x: base.x + game.ships[i].structures[j].layout.x,
-							y: base.y + game.ships[i].structures[j].layout.y
+							x: base.x + real.x,
+							y: base.y + real.y
 						})
 					}
 				}
@@ -1887,7 +1892,7 @@ function Game(data, userid){
 				}
 				else anim.html +=  " suffered catastrophic hull damage and was destroyed.";
 				anim.anims.push({
-					a: game.ships[i].facing,
+					//a: game.ships[i].facing,
 					t: [0, 100],
 					s: game.ships[i].getExplosionSize(0),
 					x: base.x,

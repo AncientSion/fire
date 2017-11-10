@@ -1953,7 +1953,7 @@ Pulse.prototype.getAnimation = function(fire){
 
 		for (var k = 0; k < (this.basePulses + this.extraPulses); k++){
 			var devi = {x: range(-2, 2), y: range(-2, 2)};
-			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx + devi.x, y: ty + devi.y}, speed, (k <= subHits));
+			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx + devi.x, y: ty + devi.y}, speed, (k < subHits));
 				shotAnim.n = 0 - ((j / grouping) * delay + k*shotInterval);
 
 			gunAnims.push(shotAnim);

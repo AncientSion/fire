@@ -445,7 +445,7 @@ Mixed.prototype.setPreMoveImage = function(){
 			ctx.translate(-this.structures[i].layout.x, -this.structures[i].layout.y);
 		;}
 	}	
-	ctx.setTransform(1,0,0,1,0,0);
+		ctx.translate(-t.width/2, -t.height/2);
 
 	this.img = t;
 }
@@ -520,8 +520,11 @@ Mixed.prototype.getFireDest = function(fire, isHit, nbrHit){
 			y: range(10, 25) * (1-range(0, 1)*2)
 		}
 	}
-	return this.getSystemById(fire.damages[nbrHit].systemid).layout
-	return rotate(0, 0, this.getSystemById(fire.damages[nbrHit].systemid).layout, this.getDrawFacing()+90);
+	//return this.getSystemById(fire.damages[nbrHit].systemid).layout
+	var t = this.getSystemById(fire.damages[nbrHit].systemid).layout;
+	var x = t.x / 200 * this.size
+	var y = t.y / 200 * this.size
+	return rotate(0, 0, {x: x, y: y}, this.getDrawFacing()+90);
 }
 
 Mixed.prototype.getTrajectory = function(gun){
