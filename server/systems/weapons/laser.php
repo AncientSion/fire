@@ -84,7 +84,7 @@ class LightParticleBeam extends Laser {
 	public $maxBoost = 1;
 	public $rakes = 1;
 	public $mass = 20;
-	public $traverse = -2;
+	public $traverse = -3;
 	public $priority = 2.5;
 	
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
@@ -99,11 +99,11 @@ class LightLaser extends Laser {
 	public $animColor = "red";
 	public $rakeTime = 40;
 	public $beamWidth = 2;
-	public $minDmg = 65;
+	public $minDmg = 60;
 	public $maxDmg = 80;
 	public $optRange = 350;
 	public $dmgLoss = 6;
-	public $accDecay = 110;
+	public $accDecay = 120;
 	public $shots = 1;
 	public $reload = 2;
 	public $powerReq = 3;

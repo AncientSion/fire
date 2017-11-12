@@ -35,6 +35,7 @@ function System(system){
 	this.hangar = 0;
 	this.validTarget = 0;
 	this.internal = system.internal;
+	this.tiny = system.tiny;
 }
 
 System.prototype.hasLoad = function(){
@@ -126,6 +127,7 @@ System.prototype.hover = function(e){
 		this.hideOptions();
 		if (this.hasUnresolvedFireOrder()){
 			salvoCtx.clearRect(0, 0, res.x, res.y);
+			if (aUnit){game.getUnit(aUnit).drawEW();}
 		}
 	}
 	else {
@@ -191,6 +193,7 @@ System.prototype.setTableRow = function(){
 	}
 
 	if (Object.keys(this.modes).length){
+		if (this.getLoadLevel() != 1){return;}
 		if (this.highlight && this.disabled){
 			ele.find(".modeDiv").hide()
 		}
@@ -1585,6 +1588,8 @@ Weapon.prototype.updateSystemDetailsDiv = function(){
 }
 
 Weapon.prototype.drawArc = function(facing, pos){
+	if (game.animating){return;}
+	if (this.tiny){return;}
 	for (var i = 0; i < this.arc.length; i++){
 		var p1 = getPointInDirection(1200, this.arc[i][0] + facing, pos.x, pos.y);
 		var p2 = getPointInDirection(1200, this.arc[i][1] + facing, pos.x, pos.y)
@@ -1676,6 +1681,10 @@ Warhead.prototype.getShots = function(){
 	return 1;
 }
 
+Warhead.prototype.getDmgsPerShot = function(){
+	return 1;
+}
+
 Warhead.prototype.getActiveSystem = function(){
 	return this;
 }
@@ -1704,16 +1713,18 @@ Warhead.prototype.getAnimation = function(fire){
 		var gunAnims = [];
 
 		for (var k = 0; k < fire.shots; k++){
-			if (fire.hits[j] < k){ //miss
-				continue;
-			} else hits++;
+			var hit = 0;
+			if (fire.hits[j] > k){
+				hit = 1;
+				hits++;
+			} else continue;
 
 			var traj = getPointInDirection(t.size/4, a, p.x, p.y);
 			var tx = traj.x + range(-t.size/7, t.size/7);
 			var ty = traj.y + range(-t.size/7, t.size/7);
 
 			if (fire.target.flight){
-				var t = fire.target.getFireDest(fire, fire.hits[j] >= k, hits-1);
+				var t = fire.target.getFireDest(fire, hit, hits-1);
 					tx = p.x + t.x;
 					ty = p.y + t.y;
 			}
@@ -1778,9 +1789,7 @@ Particle.prototype.getAnimation = function(fire){
 	for (var j = 0; j < fire.guns; j++){
 		var gunAnims = [];
 		var o = fire.shooter.getGunOrigin(fire.systems[j]);
-		if (fire.shooter.id == 5){
-		//	console.log("ding");
-		}
+
 		var ox = fire.shooter.drawX + o.x;
 		var oy = fire.shooter.drawY + o.y;
 		var t = fire.target.getPlannedPos();
@@ -1792,10 +1801,6 @@ Particle.prototype.getAnimation = function(fire){
 				hits++;
 			}
 			
-			if (this.id == 10 && this.parentId == 7){
-				console.log("ding");
-			}
-
 			var dest = fire.target.getFireDest(fire, hit, hits-1);
 			
 			var tx = t.x + dest.x;
@@ -2681,6 +2686,10 @@ Hangar.prototype.hover = function(e){
 	else fxCtx.clearRect(0, 0, res.x, res.y); 
 }
 
+Hangar.prototype.highlightFireOrder = function(e){
+	return;
+}
+
 Hangar.prototype.getLoadLevel = function(e){
 	return System.prototype.getLoadLevel.call(this);
 }
@@ -2729,10 +2738,10 @@ Hangar.prototype.select = function(e){
 	else {
 		this.selected = false;
 		$("#hangarLoadoutDiv")
+		.addClass("disabled")
 		.find("#missionType")
 		.find("tr").removeClass("selected").end().end()
 		.find(".buttonTD").addClass("disabled").end().end()
-		.addClass("disabled")
 
 		if (game.flightDeploy){
 			game.flightDeploy = false;

@@ -24,6 +24,35 @@ function doSort(a, b){
 	} else return 0;
 }
 
+function initChat(){
+	
+	$(".chatWrapper").find(".chatBox").scrollTop(function(){return this.scrollHeight});
+	var checkChat = setInterval(
+		function(){
+			ajax.getChat();
+		},
+	7000);
+
+	if (window.game){
+		$chat = $(".chatWrapper");
+		var w = $chat.width();
+		var h = $chat.height();
+
+		$chat.css("top", res.y - h-3).css("left", 3).removeClass("disabled").data("on", 1)
+			.contextmenu(function(e){
+				e.preventDefault(); e.stopPropagation();
+				if ($(this).data("on")){
+					$(this).css("width", 150).data("on", 0);
+				} else $(this).css("width", 600).data("on", 1);
+
+		})
+	}
+	//	return;
+	$(this).keypress(function(e){
+		if (e.keyCode == 13){ajax.doChat();} // enter
+	})
+}
+
 window.shipImages = {};
 window.images = {};
 

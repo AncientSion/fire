@@ -49,9 +49,9 @@ class Aurora extends Fighter {
 	public $display = "Aurora";
 	public $faction = "Earth Alliance";
 	public $value = 29;
-	public $mass = 38;
+	public $mass = 36;
 	public $ep = 100;
-	public $integrity = 25;
+	public $integrity = 26;
 	public $negation = 5;
 
 	function __construct($id, $parentId){
@@ -68,7 +68,7 @@ class Thunderbolt extends Fighter {
 	public $display = "Thunderbolt";
 	public $faction = "Earth Alliance";
 	public $value = 32;
-	public $mass = 42;
+	public $mass = 40;
 	public $ep = 110;
 	public $integrity = 29;
 	public $negation = 6;
@@ -83,31 +83,12 @@ class Thunderbolt extends Fighter {
 	}
 }
 
-class Nial extends Fighter {
-	public $name = "Nial";
-	public $display = "Nial";
-	public $faction = "Minbari Federation";
-	public $value = 44;
-	public $mass = 36;
-	public $ep = 140;
-	public $integrity = 31;
-	public $negation = 8;
-
-	function __construct($id, $parentId){
-		parent::__construct($id, $parentId);
-	}
-
-	public function addSystems(){
-		$this->systems[] = new LinkedNeutronRepeater(sizeof($this->systems), $this->id, $this->parentId, 1, 3, 14, 18, 0, 360);
-	}
-}
-
 class Sentri extends Fighter {
 	public $name = "Sentri";
 	public $display = "Sentri";
 	public $faction = "Centauri Republic";
 	public $value = 28;
-	public $mass = 32;
+	public $mass = 34;
 	public $ep = 115;
 	public $integrity = 24;
 	public $negation = 6;
@@ -126,17 +107,36 @@ class Sitara extends Fighter {
 	public $display = "Sitara";
 	public $faction = "Centauri Republic";
 	public $value = 24;
-	public $mass = 32;
+	public $mass = 38;
 	public $ep = 105;
-	public $integrity = 22;
-	public $negation = 5;
+	public $integrity = 26;
+	public $negation = 4;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
 	}
 
 	public function addSystems(){
-		$this->systems[] = new IonBolt(sizeof($this->systems), $this->id, $this->parentId, 1, 1, 34, 42, 0, 360);
+		$this->systems[] = new IonBolt(sizeof($this->systems), $this->id, $this->parentId, 1, 1, 36, 44, 0, 360);
+	}
+}
+
+class Nial extends Fighter {
+	public $name = "Nial";
+	public $display = "Nial";
+	public $faction = "Minbari Federation";
+	public $value = 45;
+	public $mass = 30;
+	public $ep = 140;
+	public $integrity = 32;
+	public $negation = 8;
+
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
+	}
+
+	public function addSystems(){
+		$this->systems[] = new LinkedNeutronRepeater(sizeof($this->systems), $this->id, $this->parentId, 1, 3, 14, 18, 0, 360);
 	}
 }
 
@@ -145,7 +145,7 @@ class Gorith extends Fighter {
 	public $display = "Gorith";
 	public $faction = "Narn Regime";
 	public $value = 22;
-	public $mass = 30;
+	public $mass = 34;
 	public $ep = 85;
 	public $integrity = 22;
 	public $negation = 4;
@@ -164,7 +164,7 @@ class Frazi extends Fighter {
 	public $display = "Frazi";
 	public $faction = "Narn Regime";
 	public $value = 32;
-	public $mass = 35;
+	public $mass = 36;
 	public $ep = 100;
 	public $integrity = 27;
 	public $negation = 6;

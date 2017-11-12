@@ -179,6 +179,7 @@ else {
 	<link rel='stylesheet' href='style.css'/>
 	<script src="jquery-2.1.1.min.js"></script>
 	<script src='ajax.js'></script>
+	<script src='shared.js'></script>
 </head>
 	<body>
 		<div style>
@@ -194,7 +195,7 @@ else {
 			<div class="lobbyDiv">
 				<?php echo $ongoingGamesElement; ?>
 			</div>
-			<div class ="chatWrapper">
+			<div class ="chatWrapper" style="position: absolute; left: 100px; top: 395px">
 				<div class ="chatBox">
 					<?php
 						$chat = DBManager::app()->getFullChat();
@@ -212,8 +213,7 @@ else {
 					?>
 				</div>
 				<div class ="sendWrapper">
-					<input id="msg" placeholder ="chat here" type="form" style="width:88%">
-					<!--<input type="button" value="send" onclick="ajax.doChat()">-->
+					<input id="msg" placeholder ="chat here" type="text">
 				</div>
 			</div>
 			<div class="lobbyDiv">
@@ -221,31 +221,31 @@ else {
 			</div>
 			<div class="link">
 				Create a new Game
-			</div>
-			<div id="createGame" class="disabled">
-				<form method="post">
-					<table style="width: 100%; margin: auto" >
-						<tr>
-							<td>
-								<input type="form" style="text-align: center" value='myGame' placeholder="Game Name" name="gameName"></input>		
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<input type="form" style="text-align: center" placeholder="Point Value" name="pointValue"></input>		
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<input type="form" style="text-align: center" placeholder="Reinforce / Turn" name="reinforceValue"></input>		
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<input type="submit" style="width: 100%" value="Confirm and Forward"></input>	
-							</td>
-						</tr>
-					</table>
+				<div id="createGame" class="disabled">
+					<form method="post">
+						<table style="margin: auto" >
+							<tr>
+								<td>
+									<input type="form" style="text-align: center" value='myGame' placeholder="Game Name" name="gameName"></input>		
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="form" style="text-align: center" placeholder="Point Value" name="pointValue"></input>		
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="form" style="text-align: center" placeholder="Reinforce / Turn" name="reinforceValue"></input>		
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="submit" style="width: 100%" value="Confirm and Forward"></input>	
+								</td>
+							</tr>
+						</table>
+				</div>
 			</div>
 			<div class="link">
 				Logout
@@ -257,8 +257,6 @@ else {
 
 <script>
 	$(document).ready(function(){
-
-
 		var buttons = $(".link");
 		//console.log(buttons);
 		$(buttons[0]).click(function(){
@@ -267,21 +265,20 @@ else {
 		$(buttons[1]).click(function(){
 			window.location = "logout.php"
 		})
-
-		initChat();
-
-	})
-
-	function initChat(){
-		$(this).keypress(function(e){
-			if (e.keyCode == 13){ajax.doChat();}
+		$("#createGame").click(function(e){
+			e.stopPropagation();
 		})
-		
+
 		$(".chatWrapper").find(".chatBox").scrollTop(function(){return this.scrollHeight});
-		var checkChat = setInterval(function(){
+		var checkChat = setInterval(
+			function(){
 				ajax.getChat();
-				}, 
+			},
 		7000);
 
-	}
+		$(this).keypress(function(e){
+			if (e.keyCode == 13){ajax.doChat();} // enter
+		})
+
+	})
 </script>

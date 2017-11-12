@@ -99,7 +99,7 @@ class Primary {
 	}
 
 	public function getHitChance(){
-		return $this->remaining*1.5;
+		return $this->remaining*1.25;
 	}
 
 
@@ -229,7 +229,7 @@ class Single {
 
 		if (sizeof($valid)){
 			if ($dmg > $valid[0][1] && mt_rand(0, floor($dmg)) > $valid[0][1]/2) {
-				Debug::log("Droput!");
+				Debug::log("Dropout - dmg: ".$dmg.", tresh: ".$valid[0][1].", mt_rand(0, ".floor($dmg).") > ".$valid[0][1]/2);
 				$this->crits[] = new Crit(
 					sizeof($this->crits)+1,
 					$this->parentId, $this->id, $turn,

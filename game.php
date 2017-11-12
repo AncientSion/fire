@@ -93,7 +93,7 @@ echo "</script>";
 			</div>
 		</div>
 		<div id="game">
-			<div id="phaseSwitchDiv">
+			<div id="phaseSwitchDiv" style="width: 100%; height: 100%">
 				<div id="phaseSwitchInnerDiv" class="disabled">
 					<div>
 						<?php
@@ -128,7 +128,7 @@ echo "</script>";
 							$hints[] = "Having an active sensor lock (red circle overlay) increases the chance to hit a starship by 50 %. This bonus is doubled (to 100%) when targeting a locked Flight or Salvo. To be counted as 'active', the target must be within your sensor arc (red circle overlay)";
 							$hints[] = "Having a active sensor scramble (blue circle overlay), will decrease your starships chance to be hit by 50 %. To be counted as 'active', the ship firing at you need to be within your sensor arc (blue circle overlay).";
 							$hints[] = "A starship's main reactor icon shows the available power (deficit). The same value can also be seen at the top left (in white colro) on the ship layout element";
-							$hints[] = "Each unit is associated with a certain 'size' value, with goes from -4 to 3:</br></br><b>Salvo (-4)</b> - Ballistic Missile/Torpedo barrages</br><b>Flight (-3)</b> - Fighter / Bomber flights of any kind</br><b>Very Light Ship (-2)</b> - Non-military grade Police Cutter, Border Patrol etc.<b></br>Light Ship (-1)</b> - Corvettes , Light Frigates</br><b>Medium Ship (0)</b> - Frigates, Support/Light Destroyers></br><b>Heavy Ship (1)</b> - Main Destroyers, Cruisers</br><b>Super Heavy Ship (2)</b> - Attack/Battle Cruiser, Light Battleships, Support Carriers</br><b>Ultra Heavy Ship (3)</b> - Heavy Battleships, Dreadnaughts, Main Carrier";
+							$hints[] = "Each unit is associated with a certain 'size' value, with goes from -5 to 3:</br></br><b>Salvo (-5)</b> - Ballistic Missile/Torpedo barrages</br><b>Flight (-4)</b> - Fighter / Bomber flights of any kind</br><b>Very Light Ship (-2)</b> - Non-military grade Police Cutter, Border Patrol etc.<b></br>Light Ship (-1)</b> - Corvettes , Light Frigates</br><b>Medium Ship (0)</b> - Frigates, Support/Light Destroyers></br><b>Heavy Ship (1)</b> - Main Destroyers, Cruisers</br><b>Super Heavy Ship (2)</b> - Attack/Battle Cruiser, Light Battleships, Support Carriers</br><b>Ultra Heavy Ship (3)</b> - Heavy Battleships, Dreadnaughts, Main Carrier";
 							$hints[] = "Each unit is associated with a certain 'size' value, with goes from -4 to 3:</br>Salvo (-4) - Ballistic Missile/Torpedo barrages</br>Flight (-3) - Fighter / Bomber flights of any kind</br> Very Light Ship (-2) - Non-military grade Police Cutter, Border Patrol etc.</br>Light Ship (-1) - Corvettes , Light Frigates</br>Medium Ship (0) - Frigates, Support/Light Destroyers></br>Heavy Ship (1) - Main Destroyers, Cruisers</br>Super Heavy Ship (2) - Attack/Battle Cruiser, Light Battleships, Support Carriers</br>Ultra Heavy Ship (3) - Heavy Battleships, Dreadnaughts, Main Carrier";
 							$hints[] = "Weapons each have a 'tracking' stat (-4 to 3) that correspond with the 'size' stat of every unit. Thisindicates the weapons ability to track units by size. If a weapon can only track relativly large targets but is trying to aim at say a cutter or fighter, it will come with a harsh penalty, indicated by a loss of accuracy (seen in the overlay).";
 							$hints[] = "Weapons each have a 'tracking' stat (-4 to 3) that correspond with the 'size' stat of every unit. </br>This indicates the weapons ability to track units by size.</br>If a weapon can only track relativly large targets but is trying to aim at say a cutter or fighter, it will come with a harsh penalty, indicated by a loss of accuracy (seen in the overlay).";
@@ -138,308 +138,330 @@ echo "</script>";
 					</div>
 				</div>
 			</div>
-			<div id="plusImpulse" class="ui">
-				<img src="varIcons/plus.png" style="width: 25px; height: 25px">
-			</div>
-			<div id="minusImpulse" class="ui">
-				<img src="varIcons/minus.png" style="width: 25px; height: 25px">
-			</div>
-			<div id="undoLastAction" class="ui">
-				<img src="varIcons/destroyed.png" style="width: 25px; height: 25px">
-			</div>
-			<div id="turnButton" class="turnEle ui disabled">
-				<table class="doTurn" style="margin:auto; width: 100%;">
-					<tr>
-						<th style="text-align: left">
-							 Turning
-						</th>
-						<th id="turnMode" style="text-align: center">
-							 OFF
-						</th>
-					</tr>
-					<tr>
-						<th style="text-align: left">
-							 Speed
-						</th>
-						<th id="impulseMod" style="text-align: center">
-						</th>
-					</tr>
-					<tr>
-						<th style="text-align: left">
-							Cost / 1
-						</th>
-						<th id="turnCost" style="width: 55px, text-align: center">
-						</th>
-					</tr>
-					<tr>
-						<th style="text-align: left">
-							Delay / 1
-						</th>
-						<th id="turnDelay" style="width: 55px; text-align: center">
-						</th>
-					</tr>
-					<tr>
-						<th style="text-align: left">
-							EP Mod
-						</th>
-						<th id="turnMod" style="width: 55px; text-align: center">
-						</th>
-					</tr>
-					<tr id="shortenTurn" class="disabled">
-						<td>
-							<div class="doShortenTurn">
-								<img class="size20" src="varIcons/plusWhite.png">
-							</div>
-						</td>
-						<td>
-							<div class="doUndoShortenTurn">
-								<img class="size20" src="varIcons/minusWhite.png">
-							</div>
-						</td>
-					</tr>
-				</table>
-			</div>
-			<div id="epButton" class="turnEle ui disabled">
-				<table style="margin:auto; width: 100%;">
-					<tr>
-						<th style="width: 60%; text-align: left">
-							 Engine Power
-						</th>
-						<th id="remEP" style="text-align: center">
-						</th>
-					</tr>
-					<tr>
-						<th id="impulseText" style="text-align: left">
-							 Thrust Change 
-						</th>
-						<th id="ImpulseCost" style="text-align: center">
-						</th>
-					</tr>
-				</table>
-			</div>
-			<div id="maxCutVector" class="ui disabled">
-				<div></div>
-			</div>
-			<div id="maxTurnVector" class="ui disabled">
-				<div></div>
-			</div>
-			<div id="maxVector" class="ui disabled">
-				<div></div>
-			</div>
-			<div id="upperGUI">
-				<table id="overview">
-					<tr>
-						<th width="10%">
-							Turn
-						</th>
-						<th width="55%">
-							Phase
-						</th>
-						<th width="35%">
-							Reinforce
-						</th>
-					</tr>
-					<tr>
-						<td>
-							<?php echo $manager->turn; ?>
-						</td>
-						<td>
-							<?php echo $phase; ?>
-						</td>
-						<td id="reinforce">
-							<?php
-								echo $manager->value;
-							?>
-						</td>
-					</tr>
-					<tr>
-						<?php 
-							if (!$status){
-								echo '<td colSpan=3 class="buttonTD" style="background-color: yellow;">Anonymus Mode</td>';
-							}
-							else if ($status == "ready"){
-								echo '<td colSpan=3 class="buttonTD" style="background-color: lightGreen;">Waiting for Opponent</td>';
-							}
-							else echo '<td colSpan=3 class="buttonTD" style="font-size: 20px" onclick="this.disabled=true;game.endPhase()">Confirm Orders</td>';
-							?>
-					</tr>
-				</table>
-			</div>
-			<div id="unitGUI">
-			</div>
-			<div id="canvasDiv">
-				<canvas id="canvas"></canvas>
-				<canvas id="fxCanvas"></canvas>
-				<canvas id="planCanvas"></canvas>
-				<canvas id="moveCanvas"></canvas>
-				<canvas id="salvoCanvas"></canvas>
-				<canvas id="mouseCanvas"></canvas>
-				<canvas id="drawCanvas"></canvas>
-			</div>
-			<div id="shortInfo" class="disabled">				
-			</div>
-			<div id="weaponAimTableWrapper" class="disabled">
-				<table id="targetInfo">
-					<tr>
-						<th width=20%>Target</th>
-						<th width=20%>Type</th>
-						<th width=20%>Armour</th>
-						<th width=20%></th>
-						<th width=20%>Dist</th>
-					</tr>
-					<tr id="targetData1">
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr><td colSpan=5 height=10px></td></tr>
-					<tr>
-						<th>Base</th>
-						<th>Thrust Mod</th>
-						<th>Lock Mod</th>
-						<th>Mask Mod</th>
-						<th>Result</th>
-					</tr>
-					<tr id="targetData2">
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-				</table>
-				<table id="weaponInfo">
-					<tr>
-						<th width=47%>Weapon</th>
-						<th width=10%>Dmg</th>
-						<th width=19%>Tracking</th>
-						<th width=12%>Range</th>
-						<th width=12%>Final</th>
-					</tr>
-				</table>
-			</div>
-			<div id="combatlogWrapper" class="disabled">
-				<div class="combatLogHeader">
-					Combat Log
-				</div>
-				<table id="combatLog">
-					<tr>
-						<th width=70px>Type</th>
-						<th width=105px>Shooter</th>
-						<th width=105px>Target</th>
-						<th width=160px>Weapon</th>
-						<th width=60px>Chance</th>
-						<th width=60px>Hits</th>
-						<th width=70px>Armour</th>
-						<th width=70px>System</th>
-						<th width=70px>Hull</th>
-					</tr>
-				</table>
-			</div>
-			<div id="deployLogWrapper" class="disabled">
-				<table id="deloyLog">
-					<tr>
-						<th width=100%>val</th>
-					</tr>
-				</table>
-			</div>
-			<div id="deployWrapper" class="disabled">
-				<table id="deployTable">
-					<tr>
-						<th class="head" colSpan=3>
-							Incoming Units
-						</th>
-					</tr>
-					<tr>
-						<th  width="50%" colSpan="2">
-							Class
-						</th>
-						<th colSpan=2 width="20%" >
-							ETA
-						</th>
-					</tr>
-					<?php
-						foreach ($manager->ships as $ship){
-							if ($ship->ship && $manager->phase < 1 && $ship->userid == $manager->userid && $ship->available == $manager->turn){
-								echo "<tr class='deployNow ".$ship->id."'</td>";
-								echo "<td><img class='img50' src=shipIcons/".strtolower($ship->name).".png></td>";
-								echo "<td class='green font20'>".$ship->name."</td>";
-								echo "<td class='green font20'> NOW </td>";
-								echo "</tr>";
-							}							
-							else if ($ship->ship && $manager->phase < 1 && $ship->userid != $manager->userid && $ship->available == $manager->turn){
-								if ($manager->phase == -1){
-									echo "<tr class='deployNow ".$ship->id."'</td>";
-									echo "<td><img class='img50' src=varIcons/vortex.png></td>";
-									echo "<td class='red font20'>Unknown</td>";
-									echo "<td class='red font20'> NOW </td>";
-									echo "</tr>";
-								}
-								else if ($manager->phase == 0){
-									echo "<tr class='deployNow ".$ship->id."'</td>";
-									echo "<td><img class='img50' src=shipIcons/".strtolower($ship->name).".png></td>";
-									echo "<td class='red font20'>".$ship->name."</td>";
-									echo "<td class='red font20'> NOW </td>";
-									echo "</tr>";
-								}
-							}
+		</div>
+		<div class ="chatWrapper disabled">
+			<div class ="chatBox">
+				<?php
+					$chat = DBManager::app()->getFullChat();
+					$last = 0;
+					if (sizeof($chat)){
+						for ($i = 0; $i < sizeof($chat); $i++){
+							echo "<span>".date("G:i:s", $chat[$i]["time"])." - ".$chat[$i]["username"].": ".$chat[$i]["msg"]."</span></br>";
 						}
-						for ($i = 0; $i < sizeof($manager->incoming); $i++){
-							if ($manager->incoming[$i]["userid"] == $manager->userid){
-								$val = "deployLater ".$manager->incoming[$i]["id"];
-								echo "<tr class='".$val."'</td>";
-								echo "<td><img class='img50' src=shipIcons/".strtolower($manager->incoming[$i]["name"]).".png></td>";
-								echo "<td class='green font20'>".$manager->incoming[$i]["name"]."</td>";
-								$rem = $manager->incoming[$i]["available"] - $manager->turn;
-								if ($rem == 1){
-									echo "<td class='font20'>1 Turn</td></tr>";
-								} else echo "<td class='font20'>".$rem." Turns</td></tr>";
-							}
-							else if ($manager->incoming[$i]["userid"] != $manager->userid && $manager->incoming[$i]["available"] == $manager->turn+1){
-								$val = "deployLater ".$manager->incoming[$i]["id"];
-								echo "<tr class='".$val."'</td>";
+						$last = $chat[sizeof($chat)-1]["time"];
+					}// else $last = 1;
+
+					echo "<script>window.time = ".$last.";</script>";
+					//var_export($last);
+
+				?>
+			</div>
+			<div class ="sendWrapper">
+				<input id="msg" placeholder ="chat here" type="text">
+			</div>
+		</div>
+		<div id="plusImpulse" class="ui disabled">
+			<img src="varIcons/plus.png" style="width: 25px; height: 25px">
+		</div>
+		<div id="minusImpulse" class="ui disabled">
+			<img src="varIcons/minus.png" style="width: 25px; height: 25px">
+		</div>
+		<div id="undoLastAction" class="ui disabled">
+			<img src="varIcons/destroyed.png" style="width: 25px; height: 25px">
+		</div>
+		<div id="turnButton" class="turnEle ui disabled">
+			<table class="doTurn" style="margin:auto; width: 100%;">
+				<tr>
+					<th style="text-align: left">
+						 Turning
+					</th>
+					<th id="turnMode" style="text-align: center">
+						 OFF
+					</th>
+				</tr>
+				<tr>
+					<th style="text-align: left">
+						 Speed
+					</th>
+					<th id="impulseMod" style="text-align: center">
+					</th>
+				</tr>
+				<tr>
+					<th style="text-align: left">
+						Cost / 1
+					</th>
+					<th id="turnCost" style="width: 55px, text-align: center">
+					</th>
+				</tr>
+				<tr>
+					<th style="text-align: left">
+						Delay / 1
+					</th>
+					<th id="turnDelay" style="width: 55px; text-align: center">
+					</th>
+				</tr>
+				<tr>
+					<th style="text-align: left">
+						EP Mod
+					</th>
+					<th id="turnMod" style="width: 55px; text-align: center">
+					</th>
+				</tr>
+				<tr id="shortenTurn" class="disabled">
+					<td>
+						<div class="doShortenTurn">
+							<img class="size20" src="varIcons/plusWhite.png">
+						</div>
+					</td>
+					<td>
+						<div class="doUndoShortenTurn">
+							<img class="size20" src="varIcons/minusWhite.png">
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="epButton" class="turnEle ui disabled">
+			<table style="margin:auto; width: 100%;">
+				<tr>
+					<th style="width: 60%; text-align: left">
+						 Engine Power
+					</th>
+					<th id="remEP" style="text-align: center">
+					</th>
+				</tr>
+				<tr>
+					<th id="impulseText" style="text-align: left">
+						 Thrust Change 
+					</th>
+					<th id="ImpulseCost" style="text-align: center">
+					</th>
+				</tr>
+			</table>
+		</div>
+		<div id="maxCutVector" class="ui disabled">
+			<div></div>
+		</div>
+		<div id="maxTurnVector" class="ui disabled">
+			<div></div>
+		</div>
+		<div id="maxVector" class="ui disabled">
+			<div></div>
+		</div>
+		<div id="upperGUI" class="disabled">
+			<table id="overview">
+				<tr>
+					<th width="10%">
+						Turn
+					</th>
+					<th width="55%">
+						Phase
+					</th>
+					<th width="35%">
+						Reinforce
+					</th>
+				</tr>
+				<tr>
+					<td>
+						<?php echo $manager->turn; ?>
+					</td>
+					<td>
+						<?php echo $phase; ?>
+					</td>
+					<td id="reinforce">
+						<?php
+							echo $manager->value;
+						?>
+					</td>
+				</tr>
+				<tr>
+					<?php 
+						if (!$status){
+							echo '<td colSpan=3 class="buttonTD" style="background-color: yellow;">Anonymus Mode</td>';
+						}
+						else if ($status == "ready"){
+							echo '<td colSpan=3 class="buttonTD" style="background-color: lightGreen;">Waiting for Opponent</td>';
+						}
+						else echo '<td colSpan=3 class="buttonTD" style="font-size: 20px" onclick="this.disabled=true;game.endPhase()">Confirm Orders</td>';
+						?>
+				</tr>
+			</table>
+		</div>
+		<div id="unitGUI">
+		</div>
+		<div id="canvasDiv" class="disabled">
+			<canvas id="canvas"></canvas>
+			<canvas id="fxCanvas"></canvas>
+			<canvas id="planCanvas"></canvas>
+			<canvas id="moveCanvas"></canvas>
+			<canvas id="salvoCanvas"></canvas>
+			<canvas id="mouseCanvas"></canvas>
+			<canvas id="drawCanvas"></canvas>
+		</div>
+		<div id="shortInfo" class="disabled">				
+		</div>
+		<div id="weaponAimTableWrapper" class="disabled">
+			<table id="targetInfo">
+				<tr>
+					<th width=20%>Target</th>
+					<th width=20%>Type</th>
+					<th width=20%>Armour</th>
+					<th width=20%></th>
+					<th width=20%>Dist</th>
+				</tr>
+				<tr id="targetData1">
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr><td colSpan=5 height=10px></td></tr>
+				<tr>
+					<th>Base</th>
+					<th>Thrust Mod</th>
+					<th>Lock Mod</th>
+					<th>Mask Mod</th>
+					<th>Result</th>
+				</tr>
+				<tr id="targetData2">
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</table>
+			<table id="weaponInfo">
+				<tr>
+					<th width=47%>Weapon</th>
+					<th width=10%>Dmg</th>
+					<th width=19%>Tracking</th>
+					<th width=12%>Range</th>
+					<th width=12%>Final</th>
+				</tr>
+			</table>
+		</div>
+		<div id="combatlogWrapper" class="disabled">
+			<div class="combatLogHeader">
+				Combat Log
+			</div>
+			<table id="combatLog">
+				<tr>
+					<th width=70px>Type</th>
+					<th width=105px>Shooter</th>
+					<th width=105px>Target</th>
+					<th width=160px>Weapon</th>
+					<th width=60px>Chance</th>
+					<th width=60px>Hits</th>
+					<th width=70px>Armour</th>
+					<th width=70px>System</th>
+					<th width=70px>Hull</th>
+				</tr>
+			</table>
+		</div>
+		<div id="deployLogWrapper" class="disabled">
+			<table id="deloyLog">
+				<tr>
+					<th width=100%>val</th>
+				</tr>
+			</table>
+		</div>
+		<div id="deployWrapper" class="disabled">
+			<table id="deployTable">
+				<tr>
+					<th class="head" colSpan=3>
+						Incoming Units
+					</th>
+				</tr>
+				<tr>
+					<th  width="50%" colSpan="2">
+						Class
+					</th>
+					<th colSpan=2 width="20%" >
+						ETA
+					</th>
+				</tr>
+				<?php
+					foreach ($manager->ships as $ship){
+						if ($ship->ship && $manager->phase < 1 && $ship->userid == $manager->userid && $ship->available == $manager->turn){
+							echo "<tr class='deployNow ".$ship->id."'</td>";
+							echo "<td><img class='img50' src=shipIcons/".strtolower($ship->name).".png></td>";
+							echo "<td class='green font20'>".$ship->name."</td>";
+							echo "<td class='green font20'> NOW </td>";
+							echo "</tr>";
+						}							
+						else if ($ship->ship && $manager->phase < 1 && $ship->userid != $manager->userid && $ship->available == $manager->turn){
+							if ($manager->phase == -1){
+								echo "<tr class='deployNow ".$ship->id."'</td>";
 								echo "<td><img class='img50' src=varIcons/vortex.png></td>";
 								echo "<td class='red font20'>Unknown</td>";
-								echo "<td class='font20'>1 Turn</td></tr>";
+								echo "<td class='red font20'> NOW </td>";
+								echo "</tr>";
+							}
+							else if ($manager->phase == 0){
+								echo "<tr class='deployNow ".$ship->id."'</td>";
+								echo "<td><img class='img50' src=shipIcons/".strtolower($ship->name).".png></td>";
+								echo "<td class='red font20'>".$ship->name."</td>";
+								echo "<td class='red font20'> NOW </td>";
+								echo "</tr>";
 							}
 						}
-					?>
-				</table>
-				<table id="reinforceTable">
-					<tr>
-						<th class="head" colSpan=4>
-							Reinforcements
-						</th>
-					</tr>
-					<tr>
-						<th  width="50%" colSpan="2">
-							Class
-						</th>
-						<th  width="30%" >
-							ETA
-						</th>
-						<th  width="20%" >
-							Cost
-						</th>
-					</tr>
-					<?php
-						if (sizeof($manager->rdyReinforcements)){
-							//echo "<script>console.log(window.reinforcements)</script>";
-							foreach ($manager->rdyReinforcements as $ship){
-									if ($ship->userid != $manager->userid){continue;}
-									echo "<tr class='requestReinforcements'>";
-									echo "<td><img class='img50' src=shipIcons/".strtolower($ship->name).".png></td>";
-									echo "<td>".$ship->name."</td>";
-									echo "<td>".($ship->available - $manager->turn)." turn/s</td>";
-									echo "<td class='cost'>".$ship->cost."</td>";
-									echo "</tr>";
-								}
+					}
+					for ($i = 0; $i < sizeof($manager->incoming); $i++){
+						if ($manager->incoming[$i]["userid"] == $manager->userid){
+							$val = "deployLater ".$manager->incoming[$i]["id"];
+							echo "<tr class='".$val."'</td>";
+							echo "<td><img class='img50' src=shipIcons/".strtolower($manager->incoming[$i]["name"]).".png></td>";
+							echo "<td class='green font20'>".$manager->incoming[$i]["name"]."</td>";
+							$rem = $manager->incoming[$i]["available"] - $manager->turn;
+							if ($rem == 1){
+								echo "<td class='font20'>1 Turn</td></tr>";
+							} else echo "<td class='font20'>".$rem." Turns</td></tr>";
+						}
+						else if ($manager->incoming[$i]["userid"] != $manager->userid && $manager->incoming[$i]["available"] == $manager->turn+1){
+							$val = "deployLater ".$manager->incoming[$i]["id"];
+							echo "<tr class='".$val."'</td>";
+							echo "<td><img class='img50' src=varIcons/vortex.png></td>";
+							echo "<td class='red font20'>Unknown</td>";
+							echo "<td class='font20'>1 Turn</td></tr>";
+						}
+					}
+				?>
+			</table>
+			<table id="reinforceTable">
+				<tr>
+					<th class="head" colSpan=4>
+						Reinforcements
+					</th>
+				</tr>
+				<tr>
+					<th  width="50%" colSpan="2">
+						Class
+					</th>
+					<th  width="30%" >
+						ETA
+					</th>
+					<th  width="20%" >
+						Cost
+					</th>
+				</tr>
+				<?php
+					if (sizeof($manager->rdyReinforcements)){
+						//echo "<script>console.log(window.reinforcements)</script>";
+						foreach ($manager->rdyReinforcements as $ship){
+								if ($ship->userid != $manager->userid){continue;}
+								echo "<tr class='requestReinforcements'>";
+								echo "<td><img class='img50' src=shipIcons/".strtolower($ship->name).".png></td>";
+								echo "<td>".$ship->name."</td>";
+								echo "<td>".($ship->available - $manager->turn)." turn/s</td>";
+								echo "<td class='cost'>".$ship->cost."</td>";
+								echo "</tr>";
+							}
 
-							echo "<tr>";
-							echo "<td style='border: none; background-color: black;'></td>";
-							echo "<td style='border: none; background-color: black;'></td>";
+						echo "<tr>";
+						echo "<td style='border: none; background-color: black;'></td>";
+						echo "<td style='border: none; background-color: black;'></td>";
 							echo "<td style='padding: 5px; font-size: 12px'> Total Cost</td>";
 							echo "<td style='padding: 5px; font-size: 15px' id='totalRequestCost'>0</td>";
 							echo "</tr>";
@@ -499,6 +521,15 @@ echo "</script>";
 	$(document).ready(function(){
 		window.res.x = window.innerWidth-1;
 		window.res.y = window.innerHeight-1;
+
+		window.initiateKeyDowns();
+	})
+
+	function showUI(){
+
+
+
+		
 		$("#mouseCanvas").on("mouseleave", function(){
 			$("#weaponAimTableWrapper").hide();
 		})
@@ -513,32 +544,34 @@ echo "</script>";
 					$(this).parent().find("#combatLog").toggleClass("disabled");
 				});
 
-		window.initiateKeyDowns();
-
 		$("#combatlogWrapper").drag();
 
-		$("#plusImpulse")
+		$("#upperGUI").removeClass("disabled")
+		$("#canvasDiv").removeClass("disabled")
+
+		$("#plusImpulse").removeClass("disabled")
 		.click(function(){
 			game.getUnit(aUnit).doIncreaseImpulse();
 		});
 
-		$("#minusImpulse")
+		$("#minusImpulse").removeClass("disabled")
 		.click(function(){
 			game.getUnit(aUnit).doDecreaseImpulse();
 		});
 
-		$("#undoLastAction")
+		$("#undoLastAction").removeClass("disabled")
 		.click(function(){
 			game.getUnit(aUnit).undoLastAction()
 		});
 
-		$(".doTurn")
+	/*	$(".doTurn")
 		.click(function(){
 			//console.log("issueTurn")
 		//	game.getUnit($(this).data("shipid")).issueTurn($(this).data("a"))
 		//	game.getUnit($(this).data("shipid")).switchTurnMode();
 
 		})
+	*/
 		$("#turnButton")
 		.click(function(){
 			game.getUnit(aUnit).switchTurnMode();
@@ -565,25 +598,6 @@ echo "</script>";
 			e.preventDefault();
 			game.getUnit(aUnit).doUndoShortenTurn(true)
 		})
-
-	/*	$("#maxVector")
-		.click(function(){
-			//console.log("maxVector")
-			game.getUnit($(this).data("shipid")).moveToMaxVector();
-		})
-
-		$("#maxTurnVector")
-		.click(function(){
-			//console.log("maxTurnVector")
-			game.getUnit($(this).data("shipid")).moveToMaxTurnVector();
-		})
-
-		$("#maxCutVector")
-		.click(function(){
-			//console.log("maxTurnVector")
-			game.getUnit($(this).data("shipid")).moveToMaxCutVector();
-		})
-	*/
 	
 		$("#maxCutVector")
 		.click(function(){
@@ -600,10 +614,10 @@ echo "</script>";
 			//console.log("maxVector")
 			game.getUnit($(this).data("shipid")).moveInVector($(this).data("dist"));
 		})
-	})
-
+	}
 
 	function initiateKeyDowns(){
+		//return;
 		$(this).keypress(function(e){
 			if (game){
 				if (e.keyCode == 113){ // q - show friendly sensor
@@ -632,8 +646,8 @@ echo "</script>";
 				//console.log(game.vector);
 				}
 				else if (e.keyCode == 102){ // f, cancel fire animation
-					if (game.animateFire){
-						game.animateFire = false;
+					if (game.phase == 3 && game.animating){
+						game.animating = false;
 						window.cancelAnimationFrame(anim);
 						fxCtx.clearRect(0, 0, res.x, res.y);
 						$("#combatLog").find("tr").each(function(i){
@@ -642,6 +656,7 @@ echo "</script>";
 							}
 						})
 						for (var i = 0; i < game.fireOrders.length; i++){
+							game.fireOrders[i].animated = 1;
 							game.createCombatLogEntry(i);
 						}
 

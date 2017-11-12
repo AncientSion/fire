@@ -10,7 +10,7 @@ class Flight extends Mixed {
 	public $unitSize = 4;
 
 	public $fSize = 15;
-	public $traverse = -3;
+	public $traverse = -4;
 
 	function __construct($id, $userid, $available, $status, $destroyed){		
         parent::__construct($id, $userid, $available, $status, $destroyed);
@@ -34,8 +34,9 @@ class Flight extends Mixed {
 			$elapsed++;
 		}
 		
-		if ($this->mission->type > 1 || !$this->mission->arrived){
-			$elapsed += $t - $this->mission->turn;
+		//if ($this->mission->type > 1 || !$this->mission->arrived){
+		else if (!$this->mission->arrived){
+			$elapsed += 0.5 + $t - $this->mission->turn;
 		}
 
 		$this->currentImpulse = $this->baseImpulse * min(3, $elapsed + ($p > 1));

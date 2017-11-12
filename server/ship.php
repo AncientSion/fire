@@ -126,6 +126,7 @@ class Ship {
 	public function setPosition(){
 		if ($this->salvo){
 			$this->trajectory = new Point($this->x, $this->y);
+			//Debug::log("setting trajectory for #".$this->id.": ".$this->x."/".$this->y);
 		}
 		else {
 			for ($i = sizeof($this->actions)-1; $i >= 0; $i--){

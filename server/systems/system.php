@@ -26,6 +26,7 @@ class System {
 	public $armourMod;
 	public $internal = 0;
 	public $damaged = 0;
+	public $tiny = 0;
 
 	function __construct($id, $parentId, $output = 0, $destroyed = 0){
 		$this->id = $id;
@@ -176,7 +177,7 @@ class System {
 	}
 
 	public function getHitChance(){
-		return $this->mass*7;
+		return $this->mass*8;
 	}
 
 	public function testCrit($turn, $extra){

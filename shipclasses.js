@@ -1551,7 +1551,7 @@ function Ship(data){
 	this.getOffensiveBonus = function(target){
 		if (this.flight && target.flight){return target.getLockMultiplier();} // flight vs flight = close combat = bonus
 		if (this.flight && target.salvo && this.mission.type == 1 && this.mission.arrived){return target.getLockMultiplier();} // patrol flight vs salvo
-		if (this.flight && target.salvo && salvo.mssion.targetid != this.id){return target.getLockMultiplier();} // "<esc></esc>orting" flight vs salvo
+		if (this.flight && target.salvo && target.mission.targetid != this.id){return target.getLockMultiplier();} // "<esc></esc>orting" flight vs salvo
 		if (this.flight || this.salvo){return 0;} //
 		var sensor = this.getSystemByName("Sensor");
 		var ew = sensor.getEW();
@@ -1858,6 +1858,7 @@ Ship.prototype.setTarget = function(){
 }
 
 Ship.prototype.select = function(){
+	if (game.animating){return;}
 	if (!this.selected){
 		this.doSelect();
 	} else this.switchDiv();
@@ -1957,19 +1958,21 @@ Ship.prototype.setImage = function(){
 }
 
 Ship.prototype.draw = function(){
-	if (!this.doDraw){return;}
+	if (!this.doDraw){
+		//this.drawPositionMarker();
+		return;
+	}
 
 	if (this.isReady()){
 	 	this.drawPositionMarker();
 		this.drawSelf();
 		this.drawEscort();
 	}
-	//else this.drawPositionMarker();
 }
 
 Ship.prototype.drawSelf = function(){
 	ctx.translate(this.drawX, this.drawY);
-	ctx.rotate((this.getDrawFacing() + (!this.ship*90)) * Math.PI/180);
+	ctx.rotate(this.getDrawFacing() * Math.PI/180);
 	ctx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
 }
 
@@ -1982,7 +1985,7 @@ Ship.prototype.drawEscort = function(){
 		//var s = this.size*2;
 		ctx.drawImage(this.drawImg, -s/2, -s/2, s, s);
 	}
-	ctx.rotate(-(this.getDrawFacing() + (!this.ship*90)) * Math.PI/180);
+	ctx.rotate(-this.getDrawFacing() * Math.PI/180);
 	ctx.translate(-this.drawX, -this.drawY);
 }
 
@@ -2901,12 +2904,14 @@ Ship.prototype.attachFlight = function(id){
 }
 
 Ship.prototype.setEscortImage = function(){
+	//console.log("setEscortImge for #" + this.id);
 	if (!this.cc.length){return};
 
 	var size = this.size;
 	var fSize = 26;
 	var tresh = fSize-2;
-	var drawFacing = this.getDrawFacing();
+	var drawFacing = this.getDrawFacing() / 2;
+	//var drawFacing = 0;
 
 	var t = document.createElement("canvas");
 		t.width = 250;
@@ -2923,7 +2928,6 @@ Ship.prototype.setEscortImage = function(){
 	var hostiles = [];
 	var friendly = [];
 	var hostile = [];
-	if (this.id == 16){console.log("ding");}
 
 	for (var i = 0; i < this.cc.length; i++){
 		var attach = game.getUnit(this.cc[i]);
@@ -2970,12 +2974,11 @@ Ship.prototype.setEscortImage = function(){
 		//ctx.rotate(rota*(Math.PI/180));
 		for (var i = 0; i < friendly.length; i++){
 			var a = split*i + drawFacing;
-			var p = size+tresh - fSize/2;
-			var drawPos = getPointInDirection(p, a, 0, 0);
-			var aPos = getPointInDirection(p/2, a + drawFacing, 0, 0);
+			var drawPos = getPointInDirection(size+tresh - fSize/2, a, 0, 0);
+			//var aPos = getPointInDirection(size/2+tresh - fSize/2, a, 0, 0);
 			//console.log(a); 
 			//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
-			friendly[i].layout = aPos;
+			friendly[i].layout = drawPos;
 			ctx.translate(drawPos.x, drawPos.y);
 			ctx.rotate((a+90)*(Math.PI/180));
 			ctx.drawImage(
@@ -3017,12 +3020,11 @@ Ship.prototype.setEscortImage = function(){
 
 		for (var i = 0; i < hostile.length; i++){
 			var a = split*i + drawFacing;
-			var p = size+tresh - fSize/2;
-			var drawPos = getPointInDirection(p, a, 0, 0);
-			var aPos = getPointInDirection(p/2, a + drawFacing, 0, 0);
+			var drawPos = getPointInDirection(size+tresh - fSize/2, a, 0, 0);
+			//var aPos = getPointInDirection(size/2+tresh - fSize/2, a, 0, 0);
 			//console.log(a); 
 			//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
-			hostile[i].layout = aPos;
+			hostile[i].layout = drawPos;
 			ctx.translate(drawPos.x, drawPos.y);
 			ctx.rotate((a-90)*(Math.PI/180));
 			ctx.drawImage(
@@ -3040,8 +3042,6 @@ Ship.prototype.setEscortImage = function(){
 	}
 
 	this.drawImg = t;
-
-	//console.log(this.drawImg.toDataURL());
 	ctx.setTransform(1,0,0,1,0,0);
 }
 

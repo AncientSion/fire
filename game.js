@@ -36,6 +36,7 @@ function Game(data, userid){
 	this.animFlight = 0;
 	this.animSalvo = 0;
 	this.mission;
+	window.username = data.username;
 
 	this.doDeployShip = function(e, ship, pos){
 		for (var i = 0; i < this.ships.length; i++){
@@ -217,7 +218,6 @@ function Game(data, userid){
 		var dest;
 
 		if (this.mission.new == 1){
-			console.log("PATROL");
 			dest = pos;		
 			valid = true;
 		}
@@ -268,6 +268,7 @@ function Game(data, userid){
 		else {
 			s.mission = mission;
 			s.facing = getAngleFromTo(o, dest);
+			s.setSpeed();
 			s.setTarget();
 			s.setSize();
 			s.setLayout();
@@ -856,6 +857,7 @@ function Game(data, userid){
 			}
 		}
 		this.draw();
+		this.animating = 0;
 		console.log("fireResolved");
 	}
 	
@@ -1689,9 +1691,8 @@ function Game(data, userid){
 		fxCtx.clearRect(0, 0, res.x, res.y);
 		ctx.clearRect(0, 0, res.x, res.y);
 
-		this.animateFire = true;
 		this.drawShips();
-		//this.animateFireOrders();
+		this.animating = 1;
 		this.animateAllFireOrders();
 	}
 
@@ -1700,7 +1701,7 @@ function Game(data, userid){
 			 if (!this.ships[i].ship){this.ships[i].setPreFireImage();}
 		}
 		for (var i = 0; i < this.ships.length; i++){
-			 if (this.ships[i].ship){this.ships[i].setEscortImage();}
+			 if (!this.ships[i].salvo){this.ships[i].setEscortImage();}
 		}
 	}
 
@@ -1868,10 +1869,7 @@ function Game(data, userid){
 					if (game.ships[i].structures[j].isDestroyedThisTurn()){
 						counter++;
 
-						var t = game.ships[i].structures[j].layout;
-						var x = t.x / 200 * game.ships[i].size;
-						var y = t.y / 200 * game.ships[i].size;
-						var real = rotate(0, 0, {x: x, y: y}, rota);
+						var real = game.ships[i].getUnitPosition(j);
 
 						//var real = rotate(0, 0,game.ships[i].structures[j].layout, rota);
 						anim.anims.push({
@@ -1907,6 +1905,7 @@ function Game(data, userid){
 	}
 
 	this.animateAllFireOrders = function(){
+		//this.animateUnitExplosions(); return;
 		for (var i = 0; i < this.fireOrders.length; i++){
 			if (!this.fireOrders[i].animated){
 				this.createCombatLogEntry(i);
@@ -2029,7 +2028,7 @@ function Game(data, userid){
 					if (!game.fireOrders[i].animating){
 						game.fireOrders[i].animating = 1;
 						//cam.setFocus(game.fireOrders[i].focus.x, game.fireOrders[i].focus.y);
-						cam.setFireFocus(game.fireOrders[i]);
+						cam.setFocusToPos(game.fireOrders[i]);
 						//cam.setFocusToPos(game.fireOrders[i].target);
 						game.draw();
 					}
@@ -2281,7 +2280,7 @@ function Game(data, userid){
 					}
 				}
 
-				//game.fireOrders[i].damages = game.fireOrders[i].target.getDmgByFire(game.fireOrders[i]);
+				game.redraw();
 				game.fireOrders[i].anim = game.fireOrders[i].weapon.getAnimation(game.fireOrders[i]);
 				game.animateSingleFireOrder(i, 0)
 			})

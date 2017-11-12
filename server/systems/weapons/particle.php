@@ -23,7 +23,7 @@ class LightIon extends Particle {
 	public $reload = 2;
 	public $mass = 13;
 	public $powerReq = 2;
-	public $traverse = -4;
+	public $traverse = -5;
 	public $effiency = 3;
 	public $maxBoost = 1;
 	

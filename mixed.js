@@ -29,6 +29,7 @@ Mixed.prototype.getNextPosition = function(){
 }
 
 Mixed.prototype.getPlannedFacing = function(){
+	return this.facing;
 	if (game.phase < 2){
 		return this.facing;
 		//return getAngleFromTo(this, this.nextStep);
@@ -37,7 +38,7 @@ Mixed.prototype.getPlannedFacing = function(){
 }
 
 Mixed.prototype.getDrawFacing = function(){
-	return this.facing;
+	return this.facing+90;
 }
 
 Mixed.prototype.canDeploy = function(){
@@ -270,7 +271,8 @@ Mixed.prototype.setTarget = function(){
 					target.setTarget();
 				}
 				this.finalStep = target.nextStep;
-				this.facing = getAngleFromTo(p, target.getPlannedPos());
+				//this.facing = getAngleFromTo(p, target.getPlannedPos());
+				this.facing = getAngleFromTo(this, this.finalStep);
 				d = getDistance(p, target.nextStep);
 				if (d < i){
 					this.nextStep = target.nextStep;
@@ -367,6 +369,8 @@ Mixed.prototype.getParent = function(){
 			}
 		}
 	}
+
+	return this;
 }
 
 Mixed.prototype.setPreFireImage = function(){
@@ -465,25 +469,9 @@ Mixed.prototype.setPostMoveImage = function(){
 				ctx.translate(this.structures[i].layout.x, this.structures[i].layout.y);
 				ctx.rotate((360/this.structures.length*i) * (Math.PI/180));
 				ctx.drawImage(
-					this.smallImg,
+				window.shipImages[this.structures[i].name.toLowerCase()],
 					0 -size/2,
 					0 -size/2,
-					size, 
-					size
-				);
-				ctx.restore();
-			}
-		}
-	}
-	else if (this.mission.type == 6){ // strike escort
-		for (var i = 0; i < this.structures.length; i++){
-			if (this.structures[i].draw){
-				ctx.save();
-				//ctx.rotate((((360/this.structures.length-1)*i)+this.getDrawFacing()) * (Math.PI/180));
-				ctx.drawImage(
-					this.smallImg,
-					0 -size/2,
-					this.size/2 -size/2 -7,
 					size, 
 					size
 				);
@@ -506,10 +494,38 @@ Mixed.prototype.setPostFireImage = function(){
 }
 
 Mixed.prototype.getGunOrigin = function(id){
+	if (this.id == 24){
+		console.log("ding");
+	}
 	for (i = this.structures.length-1; i >= 0; i--){
 		if (id > this.structures[i].id){
-			return this.structures[i].layout;
+			return this.getUnitPosition(i);
+			//return this.structures[i].layout;
+			var t = this.structures[i].layout;
+			var x = t.x * 0.5;
+			var y = t.y * 0.5;
+		var x = t.x * (this.size / 200);
+		var y = t.y * (this.size / 200);
+			return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
+			return rotate(0, 0, {x: x, y: y}, this.getDrawFacing()+90);
 		}
+	}
+}
+
+Mixed.prototype.getUnitPosition = function(j){
+	if (this.mission.arrived && this.mission.type != 1){
+		var x = this.structures[j].layout.x * 0.5;
+		var y = this.structures[j].layout.y * 0.5;
+		//console.log("#" + this.id);
+		//console.log(this.structures[j].layout);
+		return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
+	}
+	else {
+		var x = this.structures[j].layout.x * (this.size / 200);
+		var y = this.structures[j].layout.y * (this.size / 200);
+		//console.log("#" + this.id);
+		//console.log(this.structures[j].layout);
+		return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing()+90);
 	}
 }
 
@@ -521,10 +537,21 @@ Mixed.prototype.getFireDest = function(fire, isHit, nbrHit){
 		}
 	}
 	//return this.getSystemById(fire.damages[nbrHit].systemid).layout
+
 	var t = this.getSystemById(fire.damages[nbrHit].systemid).layout;
-	var x = t.x / 200 * this.size
-	var y = t.y / 200 * this.size
-	return rotate(0, 0, {x: x, y: y}, this.getDrawFacing()+90);
+
+	if (this.mission.arrived){
+		var x = t.x * 0.5;
+		var y = t.y * 0.5;
+		//var x = t.x;
+		//var y = t.y;
+		return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
+	}
+	else {
+		var x = t.x * (this.size / 200);
+		var y = t.y * (this.size / 200);
+		return rotate(0, 0, {x: x, y: y}, this.getDrawFacing()+90);
+	}
 }
 
 Mixed.prototype.getTrajectory = function(gun){
@@ -532,6 +559,37 @@ Mixed.prototype.getTrajectory = function(gun){
 }
 
 Mixed.prototype.getDmgByFire = function(fire){
+	if (fire.shooter.salvo && this.id == 25){
+		return this.getNew(fire);
+	}
+	var dmgs = [];
+	var lookup = 0;
+
+	for (var i = 0; i < fire.hits.length; i++){
+		lookup += fire.hits[i]
+	}
+
+	if (!lookup){
+		return dmgs;
+	}
+
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = this.structures[i].damages.length-1; j >= 0; j--){
+			if (this.structures[i].damages[j].fireid == fire.id){
+				dmgs.push(this.structures[i].damages[j]);
+				dmgs[dmgs.length-1].system = this.structures[i].display;
+				lookup--;
+				if (!lookup){return dmgs};
+			}
+			else if (this.structures[i].damages[j].turn < fire.turn){
+				break;
+			}
+		}
+	}
+	return dmgs;
+}
+
+Mixed.prototype.getNew = function(fire){
 	var dmgs = [];
 	var lookup = 0;
 

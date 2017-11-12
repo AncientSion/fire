@@ -43,7 +43,8 @@ window.ajax = {
 
 	doChat: function(){
 		var msg = $(".chatWrapper").find(".sendWrapper").find("#msg").val();
-		if (msg.length < 3){return;}
+		if (!msg.length || (msg.length == 2 && msg.substring(0, 1) == '"' && msg.substring(1, 2) == '"')){return;}
+
 
 		$.ajax({
 			type: "POST",

@@ -64,10 +64,10 @@ class Manager {
 		foreach ($this->incoming as $incoming){
 			Debug::log($incoming["id"]);
 		}*/
-		return;
-		$ship = $this->getUnit(3);
-		$add = 82;
-		$struct = 2;
+		///return;
+		$ship = $this->getUnit(20);
+		$add = 200;
+		$struct = 1;
 		$ship->primary->remaining += $add;
 		$ship->structures[$struct]->armourDmg = 0;
 		$ship->structures[$struct]->setNegation($ship->primary->integrity, 0);
@@ -77,19 +77,19 @@ class Manager {
 		$fire->section = $ship->structures[$struct]->id;
 		$fire->weapon = $weapon;
 		$fire->target = $ship;
-		$shots = 50;
+		$shots = 0;
 
 		for ($i = 0; $i < sizeof($ship->structures[$struct]->systems); $i++){
-		//	$ship->structures[$struct]->systems[$i]->destroyed = 0;
+			$ship->structures[$struct]->systems[$i]->destroyed = 0;
 		}
 
-		while ($shots > 0){
+		while ($shots){
 			$sys = $fire->target->getHitSystem($fire);
-			//Debug::log(get_class($sys).", armourmod: ".$sys->getArmourMod()." => ".$ship->getArmourValue($fire, $sys));
+			Debug::log(get_class($sys).", armourmod: ".$sys->getArmourMod()." => ".$ship->getArmourValue($fire, $sys));
 			$shots--;
 		}
 
-		$ship->primary->remaining -= $add;
+		//$ship->primary->remaining -= $add;
 
 		Debug::log("determing to hit for ".get_class($ship)." #".$ship->id);
 
@@ -168,7 +168,8 @@ class Manager {
 			"reinforcements" => $this->rdyReinforcements,
 			"deploys" => $this->deploys,
 			"incoming" =>$this->incoming,
-			"const" => $this->const
+			"const" => $this->const,
+			"username" => $this->getUsername()
 		);
 
 	}
@@ -738,14 +739,15 @@ class Manager {
 
 			Debug::log(" ==== handling mixed #".$this->ships[$i]->id);
 
-			if (!$this->ships[$i]->mission->arrived && $this->ships[$i]->available < $this->turn && $this->ships[$i]->mission->turn == $this->turn){
+			/*if (!$this->ships[$i]->mission->arrived && $this->ships[$i]->available < $this->turn && $this->ships[$i]->mission->turn == $this->turn){
 				Debug::log("SKIPPING flight in delay mode, mission start turn: ".$this->ships[$i]->mission->turn);
 				$tPos = $this->ships[$i]->getCurrentPosition(); // Patrol
-				$move = new Action(-1, $this->turn,	"patrol",	0, $tPos->x, $tPos->y, 0, 0, 0, 0, 0);
+				$angle = Math::getAngle2($tPos, $this->ships[$i]->mission);
+				$move = new Action(-1, $this->turn,	"patrol",	0, $tPos->x, $tPos->y, $angle, 0, 0, 0, 0);
 				$this->ships[$i]->actions[] = $move;
 				$units[] = $this->ships[$i];
 			}
-			else if ($this->ships[$i]->mission->arrived){ // already at target location
+			else*/ if ($this->ships[$i]->mission->arrived){ // already at target location
 				if ($this->ships[$i]->mission->type == 2){ // strike
 					$t = $this->getUnit($this->ships[$i]->mission->targetid);
 					$tPos = $t->getCurrentPosition();
@@ -828,8 +830,7 @@ class Manager {
 				
 				$missions[] = $stack[$i][$j]->mission;
 				$stack[$i][$j]->facing = $angle;
-				$move = new Action(-1, $this->turn,	"move",	$dist, $tPos->x, $tPos->y,
-				$angle, 0, 0, 0, 0);
+				$move = new Action(-1, $this->turn,	"move",	$dist, $tPos->x, $tPos->y, $angle, 0, 0, 0, 0);
 				$stack[$i][$j]->actions[] = $move;
 
 				//Debug::log("adding move to: ".$move->x."/".$move->y);
@@ -982,10 +983,10 @@ class Manager {
 
 	public function setupShips(){
 		for ($i = 0; $i < sizeof($this->ships); $i++){
+			//Debug::log("setupship #".$this->ships[$i]->id);
 			$this->ships[$i]->setFacing();
 			$this->ships[$i]->setPosition();
 			$this->ships[$i]->setupForDamage();
-			$this->setupShipLocks($this->ships[$i]);
 		}
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -1004,7 +1005,12 @@ class Manager {
 				$this->ships[$j]->angles[] = array($this->ships[$i]->id, round(Math::getAngle2($bPos, $aPos)));
 			}
 		}
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			$this->setupShipLocks($this->ships[$i]);
+		}
 		return;
+
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			Debug::log("FROM: #".$this->ships[$i]->id);
 			foreach ($this->ships[$i]->angles as $val){
@@ -1027,7 +1033,7 @@ class Manager {
 					if ($ship->cc[$j] == $this->ships[$i]->id){
 						if ($this->ships[$i]->flight || $this->ships[$i]->salvo){
 							//Debug::log("adding CC fighter lock from #".$ship->id." vs #".$this->ships[$i]->id);
-							$ship->locks[] = array($this->ships[$i]->id, 1);
+							$ship->locks[] = array($this->ships[$i]->id, $this->ships[$i]->getLockMultiplier());
 						}
 					}
 				}

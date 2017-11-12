@@ -236,8 +236,8 @@ table, th, tr, td {
 
 .link {
 	border: 1px solid white;
-	margin: auto;
-	margin-top: 100px;
+	margin-top: 50px;
+	margin-left: 750px;
 	font-size: 20px;
 	width: 200px;
 	text-align: center;
@@ -254,7 +254,6 @@ table, th, tr, td {
 
 #createGame {
 	border: 1px solid white;
-	margin: auto;
 	width: 200px;
 	text-align: center;
 	background: black;
@@ -390,6 +389,7 @@ table, th, tr, td {
 .lobbyDiv {
 	text-align: center;
 	margin: auto;
+	margin-left: 300px;
 	margin-top: 40px;
 	width: 700px;
 }
@@ -1163,6 +1163,10 @@ table, th, tr, td {
 	border-radius: 5px;
 }
 
+#upperGUI.disabled{
+	display: none;
+}
+
 #unitGUI {
 	display: inline-block;
 	position: absolute;
@@ -1562,26 +1566,31 @@ table, th, tr, td {
 }
 
 .chatWrapper {
-	margin: auto;
-	margin-top: 30px;
-	width: 730px;
+	z-index: 10;
+	position: absolute;
+	width: 600px;
 }
 
 .chatBox {
 	border: 1px solid white;
-	width: 90%;
+	width: 100%;
 	margin: auto;
 	color: white;
 	padding: 1px;
 	height: 100px;
     max-height:100px;
     overflow:auto;
+	background-color: black;
 }
 
 .sendWrapper {
 	text-align: center;
-	width: 400px;
+	width: 100%;
 	margin: auto;
+}
+
+#msg {
+	width: 100%;
 }
 
 .inputText {

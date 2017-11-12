@@ -40,8 +40,8 @@ class Plasma extends Weapon {
 class LightPlasma extends Plasma {
 	public $name = "LightPlasma";
 	public $display = "46mm Plasma Gun";
-	public $minDmg = 34;
-	public $maxDmg = 47;
+	public $minDmg = 33;
+	public $maxDmg = 46;
 	public $accDecay = 120;
 	public $dmgLoss = 14;
 	public $shots = 1;
@@ -51,7 +51,7 @@ class LightPlasma extends Plasma {
 	public $reload = 2;
 	public $mass = 18;
 	public $traverse = -2;
-	public $powerReq = 3;
+	public $powerReq = 4;
 	public $maxBoost = 1;
 	public $effiency = 2;
 
@@ -63,8 +63,8 @@ class LightPlasma extends Plasma {
 class MediumPlasma extends Plasma {
 	public $name = "MediumPlasma";
 	public $display = "78mm Plasma Accelerator";
-	public $minDmg = 51;
-	public $maxDmg = 69;
+	public $minDmg = 48;
+	public $maxDmg = 66;
 	public $accDecay = 120;
 	public $dmgLoss = 10;
 	public $shots = 1;
@@ -74,7 +74,7 @@ class MediumPlasma extends Plasma {
 	public $reload = 2;
 	public $mass = 24;
 	public $traverse = -1;
-	public $powerReq = 4;
+	public $powerReq = 6;
 	public $maxBoost = 2;
 	public $effiency = 3;
 
@@ -97,9 +97,9 @@ class HeavyPlasma extends Plasma {
 	public $reload = 3;
 	public $mass = 32;
 	public $traverse = 1;
-	public $powerReq = 6;
+	public $powerReq = 9;
 	public $maxBoost = 3;
-	public $effiency = 4;
+	public $effiency = 3;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

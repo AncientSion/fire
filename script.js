@@ -18,7 +18,7 @@ function init(){
 
 
 	//$(document).contextmenu(function(e){e.stopPropagation(); e.preventDefault(); });
-	$(document).mousedown(function(e){e.stopPropagation(); e.preventDefault(); });
+	//$(document).mousedown(function(e){e.stopPropagation(); e.preventDefault(); });
 
 	var canv = document.getElementsByTagName("canvas");
 	
@@ -36,7 +36,8 @@ function init(){
 	var h = $("#phaseSwitchInnerDiv").height();
 	var w = $("#phaseSwitchInnerDiv").width();
 	$("#phaseSwitchInnerDiv").css("top", res.y/2 - h).css("left", res.x/2 - w/2).removeClass("disabled");
-	
+
+
 	canvas = canv[0];
 	ctx = canvas.getContext("2d");
 
@@ -59,6 +60,8 @@ function init(){
 	drawCanvas.style.zIndex = 0;
 	drawCtx = drawCanvas.getContext("2d");
 
+	showUI();
+
 
 	/*
 	$("#game").append($("<canvas>").addClass("cache"));
@@ -73,6 +76,7 @@ function init(){
 	turn = new Turn();
 	game = new Game(game, userid);
 	game.create();
+	initChat();
 
 	console.timeEnd("time");
 }

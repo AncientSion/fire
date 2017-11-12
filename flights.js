@@ -35,15 +35,15 @@ Flight.prototype.setSize = function(){
 }
 
 Flight.prototype.setLayout = function(){
-	if (!this.mission.arrived && this.available < this.mission.turn && this.mission.turn == game.turn){ // delay
-		this.setPatrolLayout();
-		return;
-	}
+	//if (!this.mission.arrived && this.available < this.mission.turn && this.mission.turn == game.turn){ // delay
+	//	this.setPatrolLayout();
+	//		return;
+	//	}
 	if (this.mission.type == 1 && this.mission.arrived == game.turn && game.phase >= 2){ // has arrived on loc this t.
 		this.setPatrolLayout();
 		return;
 	}
-	if (this.mission.type == 1 && this.mission.arrived < game.turn){ // has arrived earlier
+	if (this.mission.type == 1 && this.mission.arrived && this.mission.arrived < game.turn){ // has arrived earlier
 		this.setPatrolLayout();
 		return;
 	}
@@ -69,13 +69,6 @@ Flight.prototype.setLayout = function(){
 			this.structures[(i*3)+j].layout = {x: ox, y: oy};
 		}
 	}
-}
-
-Flight.prototype.drawSelf = function(){
-	ctx.translate(this.drawX, this.drawY);
-	ctx.rotate((this.getDrawFacing() + (!this.ship*90)) * Math.PI/180);
-	var s = this.size;
-	ctx.drawImage(this.img, -s/2, -s/2, s, s)
 }
 
 Flight.prototype.setMaxMass = function(){
@@ -111,6 +104,12 @@ Flight.prototype.hasWeaponsSelected = function(){
 	return false;
 }
 
+Flight.prototype.setSpeed = function(){
+	if (this.mission.turn == game.turn){
+		this.currentImpulse = 0;
+	}
+}
+
 Flight.prototype.getNewMission = function(){
 	if (this.mission.turn == game.turn){
 		return this.mission;
@@ -118,6 +117,7 @@ Flight.prototype.getNewMission = function(){
 }
 
 Flight.prototype.setImage = function(){
+	/*if (this.id == 24){console.log("ding")}
 	if (!this.mission.arrived && this.available < this.mission.turn && this.mission.turn == game.turn){
 		this.setPatrolImage();
 		return;
@@ -126,10 +126,10 @@ Flight.prototype.setImage = function(){
 		this.setPatrolImage();
 		return;
 	}
-	if (this.mission.type == 1 && this.mission.arrived < game.turn){
+	if (this.mission.type == 1 && this.mission.arrived && this.mission.arrived < game.turn){
 		this.setPatrolImage();
 		return;
-	}
+	}*/
 
 
 	if (!this.mission.arrived){
@@ -143,7 +143,6 @@ Flight.prototype.setImage = function(){
 			if (game.phase < 3){
 				this.setPreMoveImage();
 			} else this.setPostMoveImage();
-
 		}
 	}
 }
@@ -222,14 +221,6 @@ Flight.prototype.createBaseDiv = function(){
 					.addClass("missionButton")
 					.html(text)));
 		}
-
-
-
-
-
-
-
-
 
 
 		/*
@@ -617,8 +608,8 @@ Flight.prototype.setPostMoveSize = function(){
 }
 
 Flight.prototype.setRawImage = function(){
-	this.img = window.shipImages[this.structures[0].name.toLowerCase()];
-	this.smallImg = window.shipImages[this.structures[0].name.toLowerCase()];
+//	this.img = window.shipImages[this.structures[0].name.toLowerCase()];
+//	this.smallImg = window.shipImages[this.structures[0].name.toLowerCase()];
 }
 
 Flight.prototype.switchDiv = function(){

@@ -204,7 +204,8 @@ Salvo.prototype.createBaseDiv = function(){
 	//	$(this).addClass("disabled");
 	}).drag();
 
-	document.getElementById("game").appendChild(div);
+	document.body.appendChild(div);
+	//document.getElementById("game").appendChild(div);
 }
 
 Salvo.prototype.supplyAttachDiv = function(div){
