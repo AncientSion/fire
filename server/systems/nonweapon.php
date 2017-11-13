@@ -90,9 +90,9 @@ class Reactor extends PrimarySystem {
     }
 
 	public function applyPowerSpike($turn, $spike){
-		Debug::log("applyPowerSpike to #".$this->id.", spike: ".$spike);
 		$mod = floor($spike / $this->output, 2);
 		//d, $shipid, $systemid, $turn, $type, $duration, $value, $new){
+		Debug::log("applyPowerSpike to #".$this->id.", spike: ".$spike.", output: ".$this->output."/ mod: ".$mod);
 		$this->crits[] = new Crit(sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Output", 0, $mod, 1);	
 
 	}
@@ -178,13 +178,15 @@ class Hangar extends Weapon {
 	public $loads = array();
 	public $reload = 1;
 	public $utility = 1;
+	public $limit;
 
-	function __construct($id, $parentId, $start, $end, $output, $effiency, $loads, $destroyed = false){
+	function __construct($id, $parentId, $start, $end, $output, $effiency, $loads, $limit, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
 		$this->powerReq = floor($effiency/3);
 		$this->effiency = $effiency;
 		$this->mass = $output;
 		$this->integrity = floor($output / 3);
+		$this->limit = $limit;
 
 		for ($i = 0; $i < sizeof($loads); $i++){
 			$fighter = new $loads[$i](0,0);

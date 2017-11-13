@@ -570,19 +570,21 @@ function Ship(data){
 		return this.slipAngle;
 	}
 
-	this.drawTurnGUI = function(){
-		var angle = this.facing;
-		var turnEle = $("#game").find("#epButton")[0];
-		var p1 = getPointInDirection(150/cam.z, addToDirection(this.facing, 90), this.x, this.y);
+	this.drawTurnUI = function(){
+		//var center = this.getPlannedPos();
+		//var angle = this.getPlannedFacing();
 
+		var center = {x: this.x, y: this.y};
+		var angle = this.facing;
+		var turnEle = $("#turnButton")[0];
+		var p1 = getPointInDirection(150/cam.z, addToDirection(angle, -90), center.x, center.y);
 		$(turnEle)
+			.removeClass("disabled")
 			.css("left", p1.x * cam.z + cam.o.x - $(turnEle).width()/2)
 			.css("top", p1.y * cam.z + cam.o.y - $(turnEle).height()/2)
-			.removeClass("disabled")
+			.find("#impulseMod").html("x " +turn.dif).end()
 			.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end()
-			.find("#impulseCost").html(this.getImpulseChangeCost() + " EP");
 	}
-
 		
 	this.canIncreaseImpulse = function(){
 		if (this.getRemainingEP() >= this.getImpulseChangeCost()){
@@ -670,7 +672,7 @@ function Ship(data){
 	this.setTurnData = function(){
 		//console.log(turn);
 
-		var button = $("#game").find("#turnButton");
+		var button = $("#turnButton");
 		var vector = $("#vectorDiv")
 
 			$(button)
@@ -684,7 +686,7 @@ function Ship(data){
 			$(button)
 				.find("#shortenTurn").removeClass("disabled");
 				//$("#game").find("#epButton").find("tr:nth-child(2)").find("th").first().html("Turn Cost / Rem");
-				$("#game").find("#epButton").find("#impulseText").html("Cost : Rem").end().find("#impulseCost").html("");
+				$("#epButton").find("#impulseText").html("Cost : Rem").end().find("#impulseCost").html("");
 
 		/*	$(vector).empty()
 				.append($("<table>")
@@ -705,7 +707,7 @@ function Ship(data){
 				//.find("#turnDelay").html("").end()
 				//.find("#turnMod").html("").end()
 				.find("#shortenTurn").addClass("disabled");
-				$("#game").find("#epButton").find("#impulseText").html("Thrust Change").end().find("#impulseCost").html(this.getImpulseChangeCost());
+				$("#epButton").find("#impulseText").html("Thrust Change").end().find("#impulseCost").html(this.getImpulseChangeCost());
 			$(vector).addClass("disabled")
 		}
 
@@ -869,21 +871,6 @@ function Ship(data){
 		var c = this.getTurnCost();
 
 		return Math.min(limit, Math.floor(ep/c));
-	}
-
-	this.drawTurnUI = function(){
-		//var center = this.getPlannedPos();
-		//var angle = this.getPlannedFacing();
-
-		var center = {x: this.x, y: this.y};
-		var angle = this.facing;
-		var turnEle = $("#game").find("#turnButton")[0];
-		var p1 = getPointInDirection(150/cam.z, addToDirection(angle, -90), center.x, center.y);
-		$(turnEle)
-			.css("left", p1.x * cam.z + cam.o.x - $(turnEle).width()/2)
-			.css("top", p1.y * cam.z + cam.o.y - $(turnEle).height()/2)
-			.removeClass("disabled")
-			.find("#impulseMod").html("x " +turn.dif).end();
 	}
 
 	this.drawTurnArcs = function(){
@@ -1412,7 +1399,9 @@ function Ship(data){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
 				if (!this.structures[i].systems[j].isPowered()){
 					if (this.structures[i].systems[j].getActiveSystem().name == name){
+						//this.structures[i].systems[j].highlight = 1;
 						this.structures[i].systems[j].doPower();
+						//this.structures[i].systems[j].highlight = 0;
 					}
 				}
 			}
@@ -1507,7 +1496,7 @@ function Ship(data){
 		turn.set(this);
 		this.setTurnData();
 		this.setMoveTranslation();
-		this.drawTurnGUI();		
+		//this.drawTurnGUI();		
 		//this.drawMoveArea();
 		//this.drawVectorIndicator();
 
@@ -1858,7 +1847,7 @@ Ship.prototype.setTarget = function(){
 }
 
 Ship.prototype.select = function(){
-	if (game.animating){return;}
+	//if (game.animating){return;}
 	if (!this.selected){
 		this.doSelect();
 	} else this.switchDiv();

@@ -2743,3 +2743,207 @@ createPlayerStatus
 deleting game
 DELETE FROM games WHERE id = 1
 createPlayerStatus
+createPlayerStatus
+DB insertUnits: 2
+insertSubUnits
+insertMissions s: 2
+insertClientActions s: 2
+Game #2 is not ready !
+DB insertUnits: 2
+insertSubUnits
+insertMissions s: 2
+insertClientActions s: 2
+Game #2 is ready !
+Starting game #2
+d is911 min is 98
+d is1239 min is 130
+d is1130 min is 98
+d is1162 min is 98
+d is1413 min is 66
+d is503 min is 98
+insertClientActions s: 2
+insertClientActions s: 2
+doAdvance for game2 from phase -1 to phase 0
+initBallistics
+handleDeploymentActions #3
+handleDeploymentActions #4
+handleDeploymentActions #1
+handleDeploymentActions #2
+resolveDeployActions s: 4
+handleJumpActions
+jumpin: #3, class: Omega, size: 100, sensor: 800, ordered to: 463/-13, shiftPotential: 20.63%
+Omega, aShift: 21°, pShift: 42px
+--> aShift: -14°, psShift: -16/29 (34px)
+jumpin: #4, class: Artemis, size: 50, sensor: 650, ordered to: 547/483, shiftPotential: 12.69%
+Artemis, aShift: 13°, pShift: 26px
+--> aShift: -6°, psShift: -2/-21 (22px)
+jumpin: #1, class: Omega, size: 100, sensor: 800, ordered to: -597/593, shiftPotential: 20.63%
+Omega, aShift: 21°, pShift: 42px
+--> aShift: 3°, psShift: 5/-16 (17px)
+jumpin: #2, class: Artemis, size: 50, sensor: 650, ordered to: -612/-328, shiftPotential: 12.69%
+Artemis, aShift: 13°, pShift: 26px
+--> aShift: -3°, psShift: 23/-13 (27px)
+action size: 2
+assembleEndStates
+getDeployState for Omega #3 current facing 0, now: 166
+getDeployState for Artemis #4 current facing 0, now: 174
+getDeployState for Omega #1 current facing 0, now: 3
+getDeployState for Artemis #2 current facing 0, now: 357
+advancing game state time: 0.049 seconds.
+insertClientActions s: 2
+insertClientActions s: 2
+doAdvance for game2 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+RESOLVING (layer 0 -> patrol target, layer 1 => strike)
+resolving stack #0
+resolving stack #1
+resolving stack #2
+handleMixedMovement
+RESOLVING (layer 0 -> patrol target, layer 1 => strike)
+resolving stack #0
+resolving stack #1
+resolving stack #2
+advancing game state time: 0.028 seconds.
+doAdvance for game2 from phase 2 to phase 3
+resolveFireOrder - ID 6, shooter: Omega #3 vs Omega #1, w: HeavyLaser #7, shots: 1
+resolveFireOrder - ID 7, shooter: Omega #3 vs Omega #1, w: HeavyLaser #8, shots: 1
+resolveFireOrder - ID 8, shooter: Artemis #4 vs Omega #1, w: MediumRailGun #7, shots: 2
+resolveFireOrder - ID 9, shooter: Artemis #4 vs Omega #1, w: HeavyRailGun #8, shots: 2
+doDamage, weapon: HeavyRailGun, target: 1/-1/Primary, totalDmg: 56, remaining: 1700
+resolveFireOrder - ID 10, shooter: Artemis #4 vs Omega #1, w: MediumRailGun #9, shots: 2
+resolveFireOrder - ID 1, shooter: Omega #1 vs Omega #3, w: HeavyLaser #7, shots: 1
+resolveFireOrder - ID 2, shooter: Omega #1 vs Omega #3, w: HeavyLaser #8, shots: 1
+HeavyLaser, weapon id: 0, RANGE DMG mod: 0.9782
+doDamage, weapon: HeavyLaser, target: 3 for 176 dmg
+hitting ---  Primary: 58dmg,  Primary: 58dmg,  Primary: 58dmg, 
+resolveFireOrder - ID 3, shooter: Artemis #2 vs Omega #3, w: MediumRailGun #7, shots: 2
+resolveFireOrder - ID 4, shooter: Artemis #2 vs Omega #3, w: HeavyRailGun #8, shots: 2
+doDamage, weapon: HeavyRailGun, target: 3/17/Dual, totalDmg: 63, remaining: 28
+ => OVERKILL ship target system Dual #17 was destroyed, rem: 28, doing: 28, OK for: 31 dmg
+resolveFireOrder - ID 5, shooter: Artemis #2 vs Omega #3, w: MediumRailGun #9, shots: 2
+resolveBallisticFireOrders
+cleanFireOrders, fires: 10
+DB updateFireOrders: 10
+adding spike #3/17
+potential total power spike for unit #3: 2
+applyPowerSpike to #5, spike: 2
+ => DB insertDamageEntries: 5
+ => DB insertCritEntries: 1
+handleFiringPhase time: 0.043 seconds.
+advancing game state time: 0.051 seconds.
+doAdvance for game2 from phase 3 to phase 4
+endTurn
+destroyUnitsDB
+assembleEndStates
+advancing game state time: 0.03 seconds.
+deployFlights 1
+updateSystemLoad: 1
+DB insertUnits: 1
+insertSubUnits
+insertMissions s: 1
+insertClientActions s: 1
+deployFlights 1
+updateSystemLoad: 1
+DB insertUnits: 1
+insertSubUnits
+insertMissions s: 1
+insertClientActions s: 1
+doAdvance for game2 from phase -1 to phase 0
+initBallistics
+DB updateBallisticFireOrder, s: 2
+handleDeploymentActions #6
+handleDeploymentActions #5
+resolveDeployActions s: 2
+handleJumpActions
+assembleEndStates
+getMoveState for 6
+getMoveState for 5
+advancing game state time: 0.054 seconds.
+insertClientActions s: 2
+insertClientActions s: 2
+doAdvance for game2 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+ ==== handling mixed #6
+STRIKE #6 advance vs ship
+ ==== handling mixed #5
+STRIKE #5 advance vs ship
+RESOLVING (layer 0 -> patrol target, layer 1 => strike)
+resolving stack #0
+resolving stack #1
+resolving mixed #6
+_____________________
+close in
+resolving mixed #5
+_____________________
+close in
+resolving stack #2
+updateMissionState
+handleMixedMovement
+RESOLVING (layer 0 -> patrol target, layer 1 => strike)
+resolving stack #0
+resolving stack #1
+resolving stack #2
+advancing game state time: 0.048 seconds.
+doAdvance for game2 from phase 2 to phase 3
+resolveFireOrder - ID 13, shooter: Omega #3 vs Artemis #2, w: HeavyLaser #10, shots: 1
+HeavyLaser, weapon id: 0, RANGE DMG mod: 0.9538
+doDamage, weapon: HeavyLaser, target: 2 for 169 dmg
+hitting ---  Primary: 56dmg,  Primary: 56dmg,  Primary: 56dmg, 
+resolveFireOrder - ID 14, shooter: Omega #3 vs Artemis #2, w: HeavyLaser #11, shots: 1
+resolveFireOrder - ID 15, shooter: Omega #1 vs Omega #3, w: HeavyLaser #10, shots: 1
+resolveFireOrder - ID 16, shooter: Omega #1 vs Omega #3, w: HeavyLaser #11, shots: 1
+resolveBallisticFireOrders
+cleanFireOrders, fires: 4
+DB updateFireOrders: 4
+ => DB insertDamageEntries: 3
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.027 seconds.
+advancing game state time: 0.04 seconds.
+doAdvance for game2 from phase 3 to phase 4
+endTurn
+destroyUnitsDB
+assembleEndStates
+getMoveState for 6
+getMoveState for 5
+insertReinforcements: 1
+advancing game state time: 0.034 seconds.
+doAdvance for game2 from phase -1 to phase 0
+initBallistics
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+advancing game state time: 0.017 seconds.
+insertClientActions s: 2
+insertClientActions s: 2
+doAdvance for game2 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+ ==== handling mixed #6
+STRIKE #6 advance vs ship
+ ==== handling mixed #5
+STRIKE #5 advance vs ship
+RESOLVING (layer 0 -> patrol target, layer 1 => strike)
+resolving stack #0
+resolving stack #1
+resolving mixed #6
+_____________________
+close in
+resolving mixed #5
+_____________________
+close in
+resolving stack #2
+updateMissionState
+handleMixedMovement
+RESOLVING (layer 0 -> patrol target, layer 1 => strike)
+resolving stack #0
+resolving stack #1
+resolving stack #2
+advancing game state time: 0.058 seconds.

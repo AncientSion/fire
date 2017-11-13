@@ -100,7 +100,7 @@ function Game(data, userid){
 		var mission = this.getMissionTypeString(this.flightDeploy.mission);
 
 		instruct("Please select the offensive or defensive target for the flight");
-		$("#game").find("#deployOverlay").find("#deployType").html("Select target for </br>" + mission + "</br></span>");
+		$("#deployOverlay").find("#deployType").html("Select target for </br>" + mission + "</br></span>");
 	}
 
 	this.handleFlightDeployMouseMove = function(e, pos, unit){
@@ -2206,7 +2206,7 @@ function Game(data, userid){
 					}
 				}
 				else {
-					html = "<span><font color='" + color + "'>Starship #" + this.ships[i].id + "</font> did jump into local space.</span>";
+					html = "<span><font color='" + color + "'>" + this.ships[i].name + " #" + this.ships[i].id + "</font> did jump into local space.</span>";
 				}
 
 				$("#combatLog").find("tbody").append($("<tr>")

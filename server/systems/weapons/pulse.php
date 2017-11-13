@@ -93,7 +93,7 @@ class MediumPulse extends Pulse {
 	public $projSpeed = 9;
 	public $reload = 3;
 	public $mass = 21;
-	public $powerReq = 3;
+	public $powerReq = 4;
 	public $traverse = -1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){

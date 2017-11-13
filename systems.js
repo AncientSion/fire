@@ -185,11 +185,14 @@ System.prototype.setTableRow = function(){
 			.find(".powerDiv").find(".power").hide().end().find(".unpower").show().end();
 
 			if (this.getActiveSystem().canBeBoosted()){
-				ele
-				.find(".outputMask").show().end()
-				.find(".boostDiv").show().end()
+				ele.find(".boostDiv").show().end()
 			}
 		} else ele.removeClass("unpowered").find(".outputMask").show();
+
+		if (this.getActiveSystem().canBeBoosted()){
+			ele.find(".outputMask").show().end();
+		}
+		else ele.find(".outputMask").hide().end();
 	}
 
 	if (Object.keys(this.modes).length){
@@ -681,7 +684,7 @@ System.prototype.getImageName = function(){
 	return this.name;
 }
 System.prototype.canBeBoosted = function(){
-	return this.effiency;
+	return (this.effiency || this.output);
 }
 System.prototype.getTableData = function(forFighter){
 	var td = document.createElement("td");
@@ -1045,9 +1048,9 @@ Reactor.prototype.getOutputUsage  = function(){
 		}
 	}
 	for (var i = 0; i < ship.primary.systems.length; i++){
-		//if (ship.primary.systems[i].isPowered()){
+		if (ship.primary.systems[i].isPowered()){
 			use += ship.primary.systems[i].getCurrentPowerUsage();
-		//}
+		}
 	}
 	return use;
 }
@@ -2672,6 +2675,7 @@ function Hangar(system){
 	this.loadout = 1;
 	this.mission = 0;
 	this.hangar = 1;
+	this.capacity = system.limit;
 }
 Hangar.prototype = Object.create(PrimarySystem.prototype);
 
@@ -2737,6 +2741,7 @@ Hangar.prototype.select = function(e){
 	}
 	else {
 		this.selected = false;
+		this.mission = 0;
 		$("#hangarLoadoutDiv")
 		.addClass("disabled")
 		.find("#missionType")
@@ -2884,7 +2889,7 @@ Hangar.prototype.showHangarControl = function(){
 					if (i){
 						$(this).off("click");
 						$(this).click(function(){
-							game.getUnit(aUnit).getSystemById($("#game").find("#hangarLoadoutDiv").data("systemid")).setMission(i);
+							game.getUnit(aUnit).getSystemById($("#hangarLoadoutDiv").data("systemid")).setMission(i);
 						})
 					}
 				})
@@ -2906,7 +2911,7 @@ Hangar.prototype.triggerLaunchButton = function(){
 Hangar.prototype.setMission = function(val){
 	this.mission = val;
 
-	$("#game").find("#hangarLoadoutDiv").find("#missionType").find("tr").each(function(i){
+	$("#hangarLoadoutDiv").find("#missionType").find("tr").each(function(i){
 		$(this).removeClass("selected");
 		if (val == i){
 			$(this).addClass("selected");
@@ -3007,6 +3012,37 @@ Hangar.prototype.addFighter = function(ele, all){
 	var add = 1;
 	var name = ele.childNodes[0].innerHTML;
 	var sMass = 0;
+	var current = 0;
+	var max = this.capacity;
+
+	for (var i = 0; i < this.loads.length; i++){
+		tCost += this.loads[i].amount * this.loads[i].cost;
+		current += this.loads[i].amount;
+	}
+
+	if (current == max){
+		popup("Insufficient Hangar Space available");
+		return;
+	}
+	else if (all){
+		add = max - current;
+	}
+
+	for (var i = 0; i < this.loads.length; i++){
+		if (this.loads[i].name == name){
+			if (this.loads[i].name == name){
+				this.loads[i].amount += add;
+				this.updateTotals();
+				this.canConfirm();
+				return;
+			}
+			else {
+				popup("Insufficient Hangar Space available");
+				return;
+			}
+		}
+	}
+
 
 	for (var i = 0; i < this.loads.length; i++){
 		tMass += this.loads[i].amount * this.loads[i].mass;
@@ -3019,6 +3055,7 @@ Hangar.prototype.addFighter = function(ele, all){
 	if (all){
 		add = Math.floor((this.output - tMass) / sMass);
 	}
+
 
 	for (var i = 0; i < this.loads.length; i++){
 		if (this.loads[i].name == name){

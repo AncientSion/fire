@@ -114,7 +114,7 @@ function mouseCanvasScroll(e){
 function handleWeaponAimEvent(shooter, target, e, pos){
 
 	if (shooter.userid == target.userid){
-		$("#game").find("#weaponAimTableWrapper").hide();
+		$("#weaponAimTableWrapper").hide();
 		return;
 	}
 	//else if (shooter.flight && !game.isCloseCombat(shooter, target)){
@@ -123,9 +123,9 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 
 	var shooterLoc = shooter.getPlannedPos();
 	var facing = shooter.getPlannedFacing();					
-	var targetData1 = $("#game").find("#weaponAimTableWrapper").find("#targetInfo").find("#targetData1");
-	var targetData2 = $("#game").find("#weaponAimTableWrapper").find("#targetInfo").find("#targetData2");
-	var weaponInfo = $("#game").find("#weaponAimTableWrapper").find("#weaponInfo");
+	var targetData1 = $("#weaponAimTableWrapper").find("#targetInfo").find("#targetData1");
+	var targetData2 = $("#weaponAimTableWrapper").find("#targetInfo").find("#targetData2");
+	var weaponInfo = $("#weaponAimTableWrapper").find("#weaponInfo");
 	var dist;
 	var drop = 0;
 	var cc = game.isCloseCombat(shooter, target);
@@ -400,7 +400,7 @@ function canvasMouseMove(e){
 	else if (game.deploying){					
 		var ele = $("#deployOverlay");
 		var w = $(ele).width()/2;
-		var top = (e.clientY)  + 40;
+		var top = (e.clientY)  + 80;
 		var left = (e.clientX) - w;
 		$(ele).css("top", top).css("left", left).show();
 		game.getDeployingUnit().drawDeploymentPreview(pos);

@@ -624,8 +624,9 @@ table, th, tr, td {
 }
 
 .structTable td, .structTable th, .primaryTable td, .primaryTable th {
-	border: 1px solid white;
+
 }
+
 .structTable td.emptySystem {
 	border: none;
 }
@@ -653,7 +654,7 @@ table, th, tr, td {
 
 .struct div.integrityAmount {
 	position: absolute;
-	top: 3;
+	top: 0;
 	z-index: 2;
 	font-size: 16px;
 	color: white;
@@ -672,11 +673,12 @@ table, th, tr, td {
 	top: 0;
 	bottom: 0;
 	z-index: 1;
-	background-color: blue;
+	background-color: rgb(109, 118, 162);
 	height: 100%;
 }
-.primaryTable div.integrityNow {
-	background-color: green;
+
+.system.integrityNow {
+	background-color: #607D8B;
 }
 
 .primaryTable .system div.integrityNow {
@@ -689,6 +691,14 @@ table, th, tr, td {
 
 .primaryTable .system div.outputMask {
 	top: 13px;
+}
+
+.primaryTable .struct .integrityNow, .integrityNow {
+	background-color: green;
+}
+
+.system .integrityNow {
+	border-top: 1px solid black;
 }
 
 .struct div.integrityFull {
@@ -718,7 +728,6 @@ table, th, tr, td {
 	top: 20;
 	bottom: 0;
 	z-index: 1;
-	background-color: green;
 }
 
 .integrityFull {
@@ -736,7 +745,7 @@ table, th, tr, td {
 	left: 0;
 	top: 0;
 	bottom: 0;
-	background-color: rgb(0, 220, 255);
+	background-color: rgb(0, 149, 255);
 	z-index: -1;
 }
 
@@ -753,7 +762,7 @@ table, th, tr, td {
 .outputMask {
 	margin: auto;
 	position: absolute;
-	top: 4px;
+	top: 5px;
 	width: 100%;
 	font-size: 14px;
 	color: #ff3b00;
@@ -761,7 +770,6 @@ table, th, tr, td {
 	vertical-align: middle;
 	display: table-cell;
 }
-
 
 .exposed {
 	background-color: rgb(255, 177, 0);
@@ -797,6 +805,11 @@ table, th, tr, td {
 	height: 18px;
 }
 
+.struct {
+	border-top: 4px solid black;
+	border-bottom: 4px solid black;
+}
+
 .structTable .boostDiv img, .structTable .powerDiv img, .structTable .modeDiv img {
 	width: 100%;
 	height: 100%;
@@ -826,20 +839,20 @@ table, th, tr, td {
 	background-color: grey;
 }
 
-.system.selectea {
-    box-shadow: inset 0 0 0px 4px #0400ff;
-}
-
-#missionType .selected, .missionOption.selected {
-	box-shadow: inset 0 0 8px 4px yellow
+.system.selecteda {
+    background-color: yellow;
 }
 
 .system.selected {
-    background-color: yellow;
+    box-shadow: inset 0 0 0px 3px yellow;
 }
 
 .system.fireOrder {
     box-shadow: inset 0 0 0px 3px red;
+}
+
+#missionType .selected, .missionOption.selected {
+	box-shadow: inset 0 0 8px 4px yellow
 }
 
 .system.hasCritical {

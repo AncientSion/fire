@@ -56,14 +56,14 @@ class Manager {
 
 
 	public function test(){
-		/*return;
+		return;
 		foreach ($this->ships as $ship){
 			Debug::log($ship->id);
 		}
 		Debug::log("====");
 		foreach ($this->incoming as $incoming){
 			Debug::log($incoming["id"]);
-		}*/
+		}
 		///return;
 		$ship = $this->getUnit(20);
 		$add = 200;
