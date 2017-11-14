@@ -18,7 +18,7 @@ function Ship(data){
 	this.available = data.available;
 	this.baseHitChance = data.baseHitChance || 0;
 	this.baseImpulse = data.baseImpulse || 0;
-	this.traverse = data.traverse
+	this.traverse = data.traverse;
 	this.status = data.status;
 	this.actions = data.actions || [];
 	this.cc = data.cc || [];

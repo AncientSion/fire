@@ -522,6 +522,7 @@ class Ship {
 		Debug::log("resolveFireOrder - ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots);
 
 		if ($this->isDestroyed()){
+			Debug::log("ERROR - resolveFireOrder isDestroyed()");
 			$fire->resolved = -1;
 		}
 		else {
@@ -545,7 +546,6 @@ class Ship {
 		}
 		return true;
 	}
-
 
 	public function determineHits($fire){
 		$fire->req = $this->calculateToHit($fire);
@@ -585,6 +585,10 @@ class Ship {
 		//Debug::log("CALCULATE TO HIT - angle: ".$fire->angle.", base: ".$base.", trav: ".$traverse.", total multi: ".$multi.", dist/range: ".$fire->dist."/".$range.", req: ".$req);
 
 		return ceil($req);
+	}
+
+	public function getOverKillSystem($fire){
+		return true;
 	}
 
 	public function getArmourElement($fire){

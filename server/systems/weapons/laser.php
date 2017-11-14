@@ -29,22 +29,27 @@ class Laser extends Weapon {
 
 	public function doDamage($fire, $roll, $system){
 		$totalDmg = $this->getTotalDamage($fire);
-		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id." for ".$totalDmg." dmg");
+		$overkill = 0;
+		$okSystem = 0;
+		$hitting = 1;
+
 		$print = "hitting --- ";
 		if ($totalDmg <= 0){
 			return;
 		}
 		$rake = floor($totalDmg / $this->rakes);
 		$fire->hits++;
-			
-		for ($j = 0; $j < $this->rakes; $j++){
+		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id." for ".$totalDmg." dmg");
+
+		$rakes = $this->rakes;
+
+		while ($hitting){
 			$system = $fire->target->getHitSystem($fire);
 			$print .= " ".get_class($system).": ".$rake."dmg, ";
 			$destroyed = false;
 			$remInt = $system->getRemainingIntegrity();
 			$negation = $fire->target->getArmourValue($fire, $system);
 			$dmg = $this->determineDamage($rake, $negation);
-			$overkill = 0;
 
 			if ($remInt - $dmg->structDmg < 1){
 				$destroyed = true;
@@ -60,6 +65,11 @@ class Laser extends Weapon {
 			);
 			$fire->damages[] = $entry;
 			$fire->target->applyDamage($entry);
+
+			if ($fire->shooter->ship){
+				Debug::log("laser versus non-ship, stopping after initial hit");
+				$hitting = 0;
+			}
 
 		}
 		Debug::log($print);
@@ -111,7 +121,7 @@ class LightLaser extends Laser {
 	public $maxBoost = 1;
 	public $rakes = 3;
 	public $mass = 20;
-	public $traverse = -2;
+	public $traverse = -4;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

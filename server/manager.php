@@ -1184,6 +1184,7 @@ class Manager {
 			if (!$this->fires[$i]->resolved){
 				if ($this->fires[$i]->shooter->flight){
 					if ($this->fires[$i]->shooter->getStructureById($this->fires[$i]->weapon->fighterId)->destroyed){
+						Debug::log("AAA skipping fireorder due to destroyed single shooter");
 						$this->fires[$i]->resolved = -1;
 					}
 				}
@@ -1230,6 +1231,8 @@ class Manager {
 			if (!$this->fires[$i]->resolved){
 				if ($this->fires[$i]->shooter->flight == true && $this->fires[$i]->target->flight == false){
 					if ($this->fires[$i]->shooter->getStructureById($this->fires[$i]->weapon->fighterId)->destroyed){
+						Debug::log("BBB skipping fireorder due to destroyed single shooter");
+						$this->fires[$i]->resolved = -1;
 						continue;
 					}
 					$this->fires[$i]->target->resolveFireOrder($this->fires[$i]);

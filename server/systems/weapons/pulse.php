@@ -13,14 +13,18 @@ class Pulse extends Weapon {
 	}
 	
 	public function doDamage($fire, $roll, $system){		
-		$destroyed = false;
+		$destroyed = 0;
 		$total = 0;
 		$shield = 0;
 		$struct = 0;
 		$armour = 0;
-		$overkill = 0;
-		$remInt = $system->getRemainingIntegrity();
+		$totalDmg = $this->getTotalDamage($fire);
 		$negation = $fire->target->getArmourValue($fire, $system);
+		$remInt = $system->getRemainingIntegrity();
+		$dmg = $this->determineDamage($totalDmg, $negation);
+
+		$overkill = 0;
+		$okSystem = 0;
 
 		$hits = $this->basePulses + min($this->extraPulses, floor(($fire->req - $fire->rolls[sizeof($fire->rolls)-1]) / $this->grouping));
 
@@ -29,26 +33,30 @@ class Pulse extends Weapon {
 		Debug::log("fireid: ".$fire->id.", doDamage, weapon: ".get_class($this)." #".$this->id.", hits: ".$hits.", target: ".$fire->target->id.", armour: ".$negation.", health: ".$remInt);
 
 		for ($i = 0; $i < $hits; $i++){
-			$totalDmg = $this->getTotalDamage($fire);
-			//Debug::log("hit: ".($i+1).", doing dmg for: ".$totalDmg);
-			$dmg = $this->determineDamage($totalDmg, $negation);
-
-			if (!$destroyed){
-				$total += $totalDmg;
-				$struct += $dmg->structDmg;
-				$armour += $dmg->armourDmg;
-			}
-			else {
+			if ($destroyed){
 				$overkill += $dmg->structDmg;
 				Debug::log("hit ".($i+1).", adding damage to overkill which is at: ".$overkill." pts");
-			}		
-
-			if (!$destroyed && $remInt - $struct < 1){
+			}
+			else if ($remInt - $dmg->structDmg < 1){
 				$destroyed = 1;
-				$overkill = (abs($remInt - $dmg->structDmg));
-				Debug::log(" => hit:".($i+1).", system was destroyed, HP: ".$remInt.", doing: ".$struct.", OK for: ".$overkill." dmg");
-				// overkill takes target system armour, should take overkill-target (main struct) negation ?
-				$dmg->structDmg = $remInt;
+				$name = get_class($system);
+				$okSystem = $fire->target->getOverKillSystem($fire);
+
+				if ($okSystem){
+					$overkill = abs($remInt - $dmg->structDmg);
+					$dmg->structDmg = $remInt;
+					Debug::log(" => OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$overkill." dmg");
+				}
+				else {
+					Debug::log(" => DESTROYING non-ship target system");
+					break;
+				}
+			}
+			else {
+				$total += $totalDmg;
+				$struct += $dmg->structDmg;
+				$remInt -= $dmg->structDmg;
+				$armour += $dmg->armourDmg;
 			}
 		}
 
@@ -71,7 +79,7 @@ class LightPulse extends Pulse {
 	public $animColor = "brown";
 	public $projSize = 2;
 	public $projSpeed = 10;
-	public $reload = 2;
+	public $reload = 1;
 	public $mass = 12;
 	public $powerReq = 2;
 	public $traverse = -4;

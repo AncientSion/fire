@@ -15,7 +15,6 @@ function Flight(data){
 	this.baseSize = data.baseSize;
 	this.unitSize = data.unitSize;
 	this.mission = data.mission || {};
-	this.traverse = -3;
 }
 
 Flight.prototype = Object.create(Mixed.prototype);
@@ -106,8 +105,8 @@ Flight.prototype.hasWeaponsSelected = function(){
 
 Flight.prototype.setSpeed = function(){
 	if (this.mission.turn == game.turn){
-		this.currentImpulse = 0;
-	}
+		this.currentImpulse = this.baseImpulse * 0.5;
+	} 
 }
 
 Flight.prototype.getNewMission = function(){

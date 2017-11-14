@@ -32,11 +32,11 @@ class Flight extends Mixed {
 
 		if ($this->available == $this->mission->turn){
 			$elapsed++;
-		}
+		} else $elapsed += 0.5;
 		
 		//if ($this->mission->type > 1 || !$this->mission->arrived){
-		else if (!$this->mission->arrived){
-			$elapsed += 0.5 + $t - $this->mission->turn;
+		if (!$this->mission->arrived){
+			$elapsed += $t - $this->mission->turn;
 		}
 
 		$this->currentImpulse = $this->baseImpulse * min(3, $elapsed + ($p > 1));

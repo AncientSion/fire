@@ -20,7 +20,7 @@ class Hyperion extends Heavy {
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new Dual($this->getId(), $this->id, 240, 120, 14, array("LightPulse", "LightParticleBeam"));
 		//$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 35, array("HeavyLaser", "HeavyPulse"));
-		$front->systems[] = new Hangar($this->getId(), $this->id, 330, 30, 400, 10, array("Aurora"));
+		$front->systems[] = new Hangar($this->getId(), $this->id, 330, 30, 400, 10, array("Aurora"), 10);
 		$front->systems[] = new Dual($this->getId(), $this->id, 240, 120, 14, array("LightPulse", "LightParticleBeam"));
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;

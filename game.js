@@ -2652,7 +2652,7 @@ Game.prototype.getUnitType = function(val){
 		case 0: return "Medium";
 		case -1: return "Light";
 		case -2: return "SuperLight";
-		case -3: return "Flight";
-		case -4: return "Salvo";
+		case -4: return "Flight";
+		case -5: return "Salvo";
 	}
 }

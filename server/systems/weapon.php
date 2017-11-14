@@ -68,27 +68,32 @@ class Weapon extends System {
 	}
 
 	public function doDamage($fire, $roll, $system){
-		$destroyed = false;
+		$destroyed = 0;
 		$totalDmg = $this->getTotalDamage($fire);
 		$remInt = $system->getRemainingIntegrity();
-		Debug::log("doDamage, weapon: ".(get_class($this)).", target: ".$fire->target->id."/".$system->id."/".get_class($system).", totalDmg: ".$totalDmg.", remaining: ".$remInt);
 
 		$negation = $fire->target->getArmourValue($fire, $system);
 		$dmg = $this->determineDamage($totalDmg, $negation);
+
 		$overkill = 0;
+		$okSystem = 0;
 
 		$fire->hits++;
 
+		Debug::log("doDamage, weapon: ".(get_class($this)).", target: ".$fire->target->id."/".$system->id."/".get_class($system).", totalDmg: ".$totalDmg.", remaining: ".$remInt);
+
 		if ($remInt - $dmg->structDmg < 1){
-			$destroyed = true;
+			$destroyed = 1;
 			$name = get_class($system);
-			if ($fire->target->ship){
+			$okSystem = $fire->target->getOverKillSystem($fire);
+
+			if ($okSystem){
 				$overkill = abs($remInt - $dmg->structDmg);
 				$dmg->structDmg = $remInt;
 				Debug::log(" => OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$overkill." dmg");
 			}
 			else {
-				Debug::log(" => OVERKILL non-ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg);
+				Debug::log(" => destroying non-ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg);
 			}
 		}
 

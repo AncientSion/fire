@@ -60,7 +60,7 @@ class Mixed extends Ship {
 	}
 
 	public function canCC($turn){
-		if (isset($this->mission)){
+		if (isset($this->mission) && $this->mission->arrived){
 			return true;
 		} return false;
 	}
@@ -77,6 +77,10 @@ class Mixed extends Ship {
 			}
 		}
 		return $crits;
+	}
+
+	public function getOverKillSystem($fire){
+		return false;
 	}
 
 	public function getStructureById($id){
