@@ -747,7 +747,9 @@ class Manager {
 				$this->ships[$i]->actions[] = $move;
 				$units[] = $this->ships[$i];
 			}
-			else*/ if ($this->ships[$i]->mission->arrived){ // already at target location
+			else*/
+
+			if ($this->ships[$i]->mission->arrived){ // already at target location
 				if ($this->ships[$i]->mission->type == 2){ // strike
 					$t = $this->getUnit($this->ships[$i]->mission->targetid);
 					$tPos = $t->getCurrentPosition();
@@ -794,9 +796,9 @@ class Manager {
 			$units = array();
 		}
 
-		Debug::log("RESOLVING (layer 0 -> patrol target, layer 1 => strike)");
+		Debug::log("Begin Stack Resolution)");
 		for ($i = 0; $i < sizeof($stack); $i++){
-			Debug::log("resolving stack #".$i);
+			Debug::log("resolving stack level ".$i);
 			for ($j = 0; $j < sizeof($stack[$i]); $j++){
 				Debug::log("resolving mixed #".$stack[$i][$j]->id);
 				Debug::log("_____________________");

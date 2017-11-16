@@ -36,6 +36,7 @@ function Game(data, userid){
 	this.animFlight = 0;
 	this.animSalvo = 0;
 	this.mission;
+	this.timeout = 0;
 	window.username = data.username;
 
 	this.doDeployShip = function(e, ship, pos){
@@ -148,70 +149,6 @@ function Game(data, userid){
 		*/return;
 	}
 
-	this.issueMissionOLD = function(pos){
-		var valid = false;
-		var t = 0;
-		var dest;
-
-		if (this.mission.new == 1){
-			console.log("PATROL");
-			dest = pos;		
-			valid = true;
-		}
-		else if (this.shortInfo){
-			t = game.getUnit(this.shortInfo);
-			if (t.ship){
-				valid = true;
-				dest = t.getPlannedPos();
-			}
-		}
-
-		if (!valid){
-			return false;
-		}
-
-		var s = this.getUnit(aUnit);
-		if (s.cc.length){
-			var free = 0;
-			for (var i = 0; i < this.ships.length; i++){
-				if (this.ships[i].ship){
-					for (var j = 0; j < s.cc.length; j++){
-						if (s.cc[j] == this.ships[i].id){
-							this.ships[i].detachFlight(s.id);
-							free = 1;
-							s.doDraw = 1;
-							break;
-						}
-					}
-					if (free){break;}
-				}
-			}
-		}
-
-		var o = s.getPlannedPos();
-		var mission = {unitid: aUnit, turn: this.turn, type: this.mission.new, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
-
-		if (t && o.x == dest.x && o.y == dest.y){
-			mission.arrived = game.turn-1;
-			mission.turn = game.turn-1;
-			s.doDraw = 0;
-			t.attachFlight(s.id);
-		}
-		else {
-			s.mission = mission;
-			s.facing = getAngleFromTo(o, dest);
-			s.setTarget();
-			s.setSize();
-			s.setLayout();
-			s.setImage();
-		}
-
-		s.disableMissionMode();
-		game.draw();
-		game.drawShipOverlays();
-		$("#game").find("#deployOverlay").hide();
-	}
-
 	this.issueMission = function(pos){
 		var valid = false;
 		var t = 0;
@@ -223,7 +160,7 @@ function Game(data, userid){
 		}
 		else if (this.shortInfo){
 			t = game.getUnit(this.shortInfo);
-			if (t.ship){
+			if (t.ship || (!t.friendly && t.flight)){
 				valid = true;
 				dest = t.getPlannedPos();
 			}
@@ -278,7 +215,7 @@ function Game(data, userid){
 		s.disableMissionMode();
 		game.draw();
 		game.drawShipOverlays();
-		$("#game").find("#deployOverlay").hide();
+		$("#deployOverlay").hide();
 	}
 
 	this.doDeployFlight = function(pos){
@@ -293,7 +230,7 @@ function Game(data, userid){
 		}
 		else if (this.shortInfo){
 			t = game.getUnit(this.shortInfo);
-			if (t && t.ship){
+			if (t && (t.ship || (!t.friendly && t.flight))){
 				valid = true;
 				dest = t.getPlannedPos();
 			}
@@ -820,6 +757,7 @@ function Game(data, userid){
 	this.movementResolved = function(){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].flight && this.animFlight || this.ships[i].salvo && this.animSalvo){
+				this.ships[i].setPostMoveFacing();
 				if (this.ships[i].mission.arrived){
 					if (this.ships[i].mission.type == 1){
 						this.ships[i].setPostMoveSize();
@@ -829,16 +767,11 @@ function Game(data, userid){
 						this.ships[i].doDraw = 0;
 					}
 				}
-				//this.ships[i].setPostMoveSize();
-				//this.ships[i].setPostMoveImage();
 			}
 		}
 		for (var i = 0; i < this.ships.length; i++){
-			//if (this.ships[i].ship){
 				this.ships[i].setEscortImage();
-			//}
 		}
-		//game.draw();
 	}
 
 	this.initDamageControl = function(){
@@ -940,9 +873,9 @@ function Game(data, userid){
 		}
 
 		for (var i = 0; i < this.ships.length; i++){
+			this.ships[i].setTarget();
 			this.ships[i].setDrawData();
 			this.ships[i].createBaseDiv();
-			this.ships[i].setTarget();
 			this.ships[i].setImage();
 			this.ships[i].setEscortImage();
 		}
@@ -1455,7 +1388,7 @@ function Game(data, userid){
 		window.then = Date.now();
 		window.startTime = then;
 		cam.setZoom(1);
-		setFPS(60);
+		setFPS(90);
 
 		var minX = 0;
 		var minY = 0;
@@ -1655,24 +1588,34 @@ function Game(data, userid){
 			}
 			
 			if (done){
-				if (game.animShip){
-					console.log("flight moves");
-					game.animShip = 0;
-					game.animFlight = 1;
-				}
-				else if (game.animFlight){
-					game.movementResolved();
-					console.log("salvo moves");
-					game.animFlight = 0;
-					game.animSalvo = 1;
-				}
-				else {
-					window.cancelAnimationFrame(anim);
-					game.movementResolved();
-					game.draw();
-					console.log("movementResolved");
-				}
+				window.cancelAnimationFrame(anim);
+				game.finishMoveSubPhase();
 			}
+		}
+	}
+
+	this.finishMoveSubPhase = function(){
+		if (game.animShip){
+			console.log("ship done -> flight moves");
+			game.timeout = setTimeout(function(){
+				game.animShip = 0;
+				game.animFlight = 1;
+				game.animateUnitMovement();
+			}, 1000);
+		}
+		else if (game.animFlight){
+			console.log("flight done -> salvo moves");
+			game.timeout = setTimeout(function(){
+				game.movementResolved();
+				game.animFlight = 0;
+				game.animSalvo = 1;
+				game.animateUnitMovement();
+			}, 1000);
+		}
+		else {
+			console.log("movementResolved");
+			game.movementResolved();
+			game.draw();
 		}
 	}
 
@@ -2008,7 +1951,7 @@ function Game(data, userid){
 			game.fireOrders[i].animated = allAnimated;
 
 			if (goOn){
-				window.hold = setTimeout(function(){
+				game.timeout = setTimeout(function(){
 					game.animateAllFireOrders();
 				}, 1500);
 			}

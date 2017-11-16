@@ -571,14 +571,6 @@ Flight.prototype.getShortInfo = function(){
 	return table;
 }
 
-Flight.prototype.getTargetPosition = function(){
-	return Salvo.prototype.getTargetPosition.call(this);
-}
-
-Flight.prototype.inRange = function(){
-	return Salvo.prototype.inRange.call(this);
-}
-
 Flight.prototype.getIntactFighters = function(){
 	var alive = 0;
 	for (var i = 0; i < this.structures.length; i++){

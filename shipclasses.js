@@ -1725,7 +1725,7 @@ Ship.prototype.setDrawData = function(){
 		return;
 	}
 	
-	if (game.phase > 1){
+	if (game.phase > 2){
 		this.setPostMovePosition();
 		this.setPostMoveFacing();
 	}
@@ -2896,23 +2896,6 @@ Ship.prototype.setEscortImage = function(){
 	//console.log("setEscortImge for #" + this.id);
 	if (!this.cc.length){return};
 
-	var size = this.size;
-	var fSize = 26;
-	var tresh = fSize-2;
-	var drawFacing = this.getDrawFacing() / 2;
-	//var drawFacing = 0;
-
-	var t = document.createElement("canvas");
-		t.width = 250;
-		t.height = 250;			
-	var ctx = t.getContext("2d");
-	var shipFriendly = true;
-	var flightFriendly = true;
-
-	if (this.userid != game.userid){
-		shipFriendly = false;
-	}
-
 	var friendlies = [];
 	var hostiles = [];
 	var friendly = [];
@@ -2922,7 +2905,7 @@ Ship.prototype.setEscortImage = function(){
 		var attach = game.getUnit(this.cc[i]);
 
 		if (attach.doDraw){continue;} // possibly attachement is being drawn, hence not attached to this
-		if (attach.flight && this.flight){continue;}
+		if (this.flight && this.mission.arrived){continue;}
 		if (this.salvo && this.mission.arrived && this.mission.targetid == attach.id){continue;}
 
 		if (this.userid == attach.userid){
@@ -2935,6 +2918,24 @@ Ship.prototype.setEscortImage = function(){
 				friendly.push(attach.structures[j]);
 			} else hostile.push(attach.structures[j]);
 		}
+	}
+
+	if (!friendlies.length && !hostiles.length){return;}
+
+	var size = this.size;
+	var fSize = 26;
+	var tresh = fSize-2;
+	var drawFacing = this.getDrawFacing() / 2;
+
+	var t = document.createElement("canvas");
+		t.width = 250;
+		t.height = 250;			
+	var ctx = t.getContext("2d");
+	var shipFriendly = true;
+	var flightFriendly = true;
+
+	if (this.userid != game.userid){
+		shipFriendly = false;
 	}
 
 	if (friendly.length){
@@ -3036,5 +3037,5 @@ Ship.prototype.setEscortImage = function(){
 
 Ship.prototype.animationSetupMove = function(){
 	this.setPreMovePosition();
-	if (this.ship){this.setPreMoveFacing();}
+	this.setPreMoveFacing();
 }	

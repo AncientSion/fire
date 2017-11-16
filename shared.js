@@ -175,8 +175,6 @@ window.fps;
 window.fpsInterval;
 window.speedMod = 1;
 
-window.hold = 0;
-
 window.startTime, window.now, window.then, window.elapsed;
 
 

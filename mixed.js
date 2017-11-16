@@ -93,7 +93,7 @@ Mixed.prototype.drawMovePlan = function(){
 	planCtx.moveTo(origin.x, origin.y);
 
 	if (impulse < dist){ // does not reach
-		var a = getAngleFromTo(this, target);
+		var a = getAngleFromTo(origin, target);
 		var step = getPointInDirection(impulse, a, origin.x, origin.y);
 			color = "white";
 
@@ -272,11 +272,11 @@ Mixed.prototype.setTarget = function(){
 				}
 				this.finalStep = target.nextStep;
 				//this.facing = getAngleFromTo(p, target.getPlannedPos());
-				this.facing = getAngleFromTo(this, this.finalStep);
-				d = getDistance(p, target.nextStep);
+				this.facing = getAngleFromTo(p, this.finalStep);
+				d = getDistance(p, this.finalStep);
 				if (d < i){
 					this.nextStep = target.nextStep;
-				} else this.nextStep = getPointInDirection(i, getAngleFromTo(p, target.nextStep), p.x, p.y);
+				} else this.nextStep = getPointInDirection(i, getAngleFromTo(p, this.finalStep), p.x, p.y);
 			}
 			else if (target.salvo){
 			}
@@ -292,17 +292,24 @@ Ship.prototype.getBaseImage = function(){
 }
 
 Mixed.prototype.setPreMoveFacing = function(){
+	console.log("setPreMoveFacing");
 	//if (this.salvo){console.log("setPreMoveFacing");}
-	if (this.mission.turn == game.turn){
-		this.facing = getAngleFromTo(this.getPlannedPos(), this.getTargetPosition());
+	//if (this.mission.turn == game.turn){
+	//	this.facing = getAngleFromTo(this.getPlannedPos(), this.getTargetPosition());
+	//}
+
+	if (this.actions.length){
+		this.facing = getAngleFromTo(this, this.actions[this.actions.length-1]);
 	}
+	else this.facing = getAngleFromTo(this.getPlannedPos(), this.nextStep);
 }
 
 Mixed.prototype.setPostMoveFacing = function(){
+	console.log("setPostMoveFacing");
 	//if (this.salvo){console.log("setPostMoveFacing");}
-	if (this.mission.turn == game.turn){
-		this.facing = getAngleFromTo(this.getPlannedPos(), this.getTargetPosition());
-	}
+	//if (this.mission.turn == game.turn){
+		this.facing = getAngleFromTo(this.getPlannedPos(), this.finalStep);
+	//}
 }
 
 Mixed.prototype.canShortenTurn = function(){

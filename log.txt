@@ -1,62 +1,114 @@
-doAdvance for game2 from phase 2 to phase 3
-resolveFireOrder - ID 86, shooter: Artemis #4 vs Flight #5, w: LightLaser #8, shots: 1
-resolveFireOrder - ID 87, shooter: Artemis #4 vs Flight #5, w: LightPulse #12, shots: 1
-fireid: 87, doDamage, weapon: LightPulse #0, hits: 4, target: 5, armour: 6, health: 15
- => DESTROYING non-ship target system
-resolveFireOrder - ID 88, shooter: Artemis #4 vs Flight #5, w: LightPulse #17, shots: 1
-fireid: 88, doDamage, weapon: LightPulse #0, hits: 4, target: 5, armour: 5, health: 26
- => DESTROYING non-ship target system
-resolveFireOrder - ID 89, shooter: Artemis #4 vs Flight #5, w: LightPulse #18, shots: 1
-fireid: 89, doDamage, weapon: LightPulse #0, hits: 4, target: 5, armour: 5, health: 10
- => DESTROYING non-ship target system
-AAA skipping fireorder due to destroyed single shooter
-AAA skipping fireorder due to destroyed single shooter
-AAA skipping fireorder due to destroyed single shooter
-resolveFireOrder - ID 90, shooter: Flight #6 vs Flight #5, w: LinkedParticleGun #2, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 5/5/Aurora, totalDmg: 12, remaining: 26
-resolveFireOrder - ID 91, shooter: Flight #6 vs Flight #5, w: LinkedParticleGun #4, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 5/5/Aurora, totalDmg: 11, remaining: 12
- => destroying non-ship target system Aurora #5 was destroyed, rem: 12, doing: 12
-resolveFireOrder - ID 92, shooter: Flight #6 vs Flight #5, w: LinkedParticleGun #6, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 5/27/Aurora, totalDmg: 13, remaining: 26
-resolveFireOrder - ID 93, shooter: Flight #6 vs Flight #5, w: LinkedParticleGun #8, shots: 1
-resolveFireOrder - ID 94, shooter: Flight #6 vs Flight #5, w: LinkedParticleGun #10, shots: 1
-resolveFireOrder - ID 95, shooter: Flight #6 vs Flight #5, w: LinkedParticleGun #12, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 5/25/Aurora, totalDmg: 14, remaining: 26
-resolveFireOrder - ID 96, shooter: Flight #6 vs Flight #5, w: LinkedParticleGun #14, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 5/7/Aurora, totalDmg: 12, remaining: 26
-resolveFireOrder - ID 97, shooter: Flight #6 vs Flight #5, w: LinkedParticleGun #16, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 5/25/Aurora, totalDmg: 11, remaining: 8
- => destroying non-ship target system Aurora #25 was destroyed, rem: 8, doing: 12
-resolveFireOrder - ID 98, shooter: Flight #6 vs Flight #5, w: LinkedParticleGun #18, shots: 1
-resolveFireOrder - ID 99, shooter: Flight #6 vs Flight #5, w: LinkedParticleGun #20, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 5/3/Aurora, totalDmg: 14, remaining: 26
-resolveFireOrder - ID 100, shooter: Flight #6 vs Flight #5, w: LinkedParticleGun #22, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 5/21/Aurora, totalDmg: 15, remaining: 10
- => destroying non-ship target system Aurora #21 was destroyed, rem: 10, doing: 20
-resolveFireOrder - ID 101, shooter: Flight #6 vs Flight #5, w: LinkedParticleGun #24, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 5/31/Thunderbolt, totalDmg: 11, remaining: 29
-resolveFireOrder - ID 102, shooter: Flight #6 vs Flight #5, w: LinkedParticleGun #26, shots: 1
-resolveFireOrder - ID 103, shooter: Flight #6 vs Flight #5, w: LinkedParticleGun #28, shots: 1
-resolveFireOrder - ID 114, shooter: Flight #5 vs Artemis #4, w: ParticlePulsar #32, shots: 1
-resolveFireOrder - ID 104, shooter: Flight #5 vs Artemis #4, w: LinkedParticleGun #4, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 4/-1/Primary, totalDmg: 12, remaining: 618
-BBB skipping fireorder due to destroyed single shooter
-resolveFireOrder - ID 106, shooter: Flight #5 vs Artemis #4, w: LinkedParticleGun #8, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 4/-1/Primary, totalDmg: 11, remaining: 616
-resolveFireOrder - ID 108, shooter: Flight #5 vs Artemis #4, w: LinkedParticleGun #20, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 4/-1/Primary, totalDmg: 12, remaining: 616
-BBB skipping fireorder due to destroyed single shooter
-BBB skipping fireorder due to destroyed single shooter
-resolveFireOrder - ID 112, shooter: Flight #5 vs Artemis #4, w: LinkedParticleGun #28, shots: 1
-doDamage, weapon: LinkedParticleGun, target: 4/8/LightLaser, totalDmg: 15, remaining: 30
+insertClientActions s: 3
+insertClientActions s: 3
+doAdvance for game3 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+ ==== handling mixed #15
+STRIKE #15 advance vs ship
+ ==== handling mixed #14
+STRIKE #14 advance vs ship
+ ==== handling mixed #16
+STRIKE #16 advance vs mixed
+ ==== handling mixed #17
+STRIKE #17 advance vs mixed
+Begin Stack Resolution)
+resolving stack level 0
+resolving stack level 1
+resolving mixed #15
+_____________________
+close in
+resolving mixed #14
+_____________________
+close in
+resolving stack level 2
+resolving mixed #16
+_____________________
+close in
+resolving mixed #17
+_____________________
+close in
+updateMissionState
+handleMixedMovement
+Begin Stack Resolution)
+resolving stack level 0
+resolving stack level 1
+resolving stack level 2
+advancing game state time: 0.108 seconds.
+doAdvance for game3 from phase 2 to phase 3
 resolveBallisticFireOrders
-cleanFireOrders, fires: 29
-DB updateFireOrders: 29
-determineCrit for 88mm 'Light' Laser #8 on unit #4, dmg: 58%
-applying crit: Damage / 0.3
-applying crit: Accuracy / 0.3
- => DB insertDamageEntries: 16
- => DB insertCritEntries: 2
-handleFiringPhase time: 0.187 seconds.
-advancing game state time: 0.204 seconds.
+cleanFireOrders, fires: 0
+DB updateFireOrders: 0
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.002 seconds.
+advancing game state time: 0.013 seconds.
+doAdvance for game3 from phase 3 to phase 4
+endTurn
+destroyUnitsDB
+assembleEndStates
+getMoveState for 15
+getMoveState for 14
+getMoveState for 16
+getMoveState for 17
+insertReinforcements: 1
+advancing game state time: 0.072 seconds.
+deployFlights 1
+updateSystemLoad: 1
+DB insertUnits: 1
+insertSubUnits
+insertMissions s: 1
+insertClientActions s: 1
+insertMissions s: 1
+doAdvance for game3 from phase -1 to phase 0
+initBallistics
+DB updateBallisticFireOrder, s: 1
+handleDeploymentActions #18
+resolveDeployActions s: 1
+handleJumpActions
+assembleEndStates
+getMoveState for 18
+advancing game state time: 0.033 seconds.
+insertClientActions s: 3
+insertClientActions s: 3
+doAdvance for game3 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+ ==== handling mixed #15
+STRIKE #15 advance vs ship
+ ==== handling mixed #14
+STRIKE #14 advance vs ship
+ ==== handling mixed #18
+STRIKE #18 advance vs ship
+ ==== handling mixed #16
+STRIKE #16 advance vs mixed
+ ==== handling mixed #17
+STRIKE #17 advance vs mixed
+Begin Stack Resolution)
+resolving stack level 0
+resolving stack level 1
+resolving mixed #15
+_____________________
+close in
+resolving mixed #14
+_____________________
+close in
+resolving mixed #18
+_____________________
+close in
+resolving stack level 2
+resolving mixed #16
+_____________________
+close in
+resolving mixed #17
+_____________________
+arrival
+updateMissionState
+handleMixedMovement
+Begin Stack Resolution)
+resolving stack level 0
+resolving stack level 1
+resolving stack level 2
+advancing game state time: 0.14 seconds.
