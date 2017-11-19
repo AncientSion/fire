@@ -434,7 +434,7 @@ function Ship(data){
 		fxCtx.translate(cam.o.x, cam.o.y);
 		fxCtx.scale(cam.z, cam.z);
 
-		$(fxCanvas).css("opacity", 0.3);
+		//$(fxCanvas).css("opacity", 1);
 		var angle = this.getPlannedFacing();
 		var pos = this.getPlannedPos();
 
@@ -447,38 +447,6 @@ function Ship(data){
 				}
 			}
 		}
-		fxCtx.setTransform(1,0,0,1,0,0);
-	}
-
-	this.drawSystemAxis = function(system){
-		var color = "";
-		var alpha = 0;
-
-		fxCtx.clearRect(0, 0, res.x, res.y);
-		fxCtx.translate(cam.o.x, cam.o.y);
-		fxCtx.scale(cam.z, cam.z);
-
-		var angle = this.getPlannedFacing();
-		var pos = this.getPlannedPos();
-		var p1 = getPointInDirection(system.range || res.x, system.start + angle, pos.x, pos.y);
-		var p2 = getPointInDirection(system.range || res.y, system.end + angle, pos.x, pos.y)
-		var dist = getDistance( {x: pos.x, y: pos.y}, p1);
-		var rad1 = degreeToRadian(system.start + angle);
-		var rad2 = degreeToRadian(system.end + angle);
-		
-		fxCtx.beginPath();			
-		fxCtx.moveTo(pos.x, pos.y);
-		fxCtx.arc(pos.x, pos.y, dist, rad1, rad2, false);
-		fxCtx.closePath();
-		switch (system.name){
-			case "Hangar": color = "white"; opacity = 0.7; break;
-			case "Structure": color = "lightBlue"; opacity = 0.7; break;
-		}	
-		fxCtx.globalAlpha = opacity;
-		fxCtx.fillStyle = color;
-		fxCtx.fill();
-		fxCtx.globalAlpha = 1;
-
 		fxCtx.setTransform(1,0,0,1,0,0);
 	}
 	
@@ -1283,14 +1251,15 @@ function Ship(data){
 	}
 
 	this.updateShipPower = function(system){
-
 		var reactor = this.getSystemByName("Reactor");
 		var s = reactor.getOutput();
-		$(this.getSystemByName("Reactor").element).find(".outputMask").html(s);
-		$(this.element).find(".mainPower").html(s);
-
-		$(system.element).find(".outputMask").html(system.getOutput());
+		$(reactor.element).find(".outputMask").html(s);
+		$(this.element).find(".mainPower").html(s).end();
 		system.update();
+
+		if (system instanceof Engine){
+			$(this.element).find(".ep").html(this.getRemainingEP() + " / " + this.getEP()).end();
+		}
 	}
 
 	this.updateNonPowerOutput = function(system){
@@ -1535,59 +1504,6 @@ function Ship(data){
 		salvoCtx.clearRect(0, 0, res.x, res.y);
 	}
 
-	//	return isInArc(getCompassHeadingOfPoint(loc, pos, facing), start, end);
-
-	this.getOffensiveBonus = function(target){
-		if (this.flight && target.flight){return target.getLockMultiplier();} // flight vs flight = close combat = bonus
-		if (this.flight && target.salvo && this.mission.type == 1 && this.mission.arrived){return target.getLockMultiplier();} // patrol flight vs salvo
-		if (this.flight && target.salvo && target.mission.targetid != this.id){return target.getLockMultiplier();} // "<esc></esc>orting" flight vs salvo
-		if (this.flight || this.salvo){return 0;} //
-		var sensor = this.getSystemByName("Sensor");
-		var ew = sensor.getEW();
-		if (sensor.disabled || sensor.destroyed || ew.type == 1 || ew.type == 3){return 0;}
-		if (ew.type == 2){return 0.2}
-
-		var tPos = target.getBaseOffsetPos();
-		var origin = this.getBaseOffsetPos();
-		var d = getDistance(origin, tPos);
-		var base = target.getLockMultiplier();
-
-		if (d == 0 && game.isCloseCombat(this, target) && this.isInEWArc(origin, target.getTrajectory(), sensor, ew)){
-			if (target.salvo){
-				return base;
-			}
-			else if (target.flight){
-				if (ew.angle == -1){return base;}
-				else return Math.round(base / 180 * (Math.min(180, game.const.ew.len * Math.pow(sensor.getOutput()/ew.dist, game.const.ew.p)))*100)/100;
-			}
-		}
-		else if (d <= ew.dist && this.isInEWArc(origin, tPos, sensor, ew)){
-			return base;
-		}
-		else return 0;
-	}
-
-	this.getDefensiveBonus = function(shooter){
-		//return 0
-		if (this.flight || this.salvo || shooter.flight | shooter.salvo){return 0;}
-
-		var sensor = this.getSystemByName("Sensor");
-		var ew = sensor.getEW();
-		if (sensor.disabled || sensor.destroyed || ew.type == 0 || ew.type == 2){return 0;}
-		if (ew.type == 3){return 0.2}
-
-		var origin = this.getBaseOffsetPos();
-		var tPos = shooter.getBaseOffsetPos();
-		var d = getDistance(origin, tPos);
-
-		if (d <= ew.dist){
-			if (this.isInEWArc(origin, tPos, sensor, ew)){
-				return 0.5;
-			}
-		}
-		return false;
-	}
-
 	this.isInEWArc = function(origin, target, sensor, ew){		
 		var str = sensor.getOutput();
 		var	w = Math.min(180, game.const.ew.len * Math.pow(str/ew.dist, game.const.ew.p));
@@ -1656,7 +1572,12 @@ Ship.prototype.getEWSettings = function(){
 Ship.prototype.getPowerOrders = function(){
 	var powers = [];
 	for (var i = 0; i < this.structures.length; i++){
-		for (var j = 0; j < this.structures[i].systems.length; j++){
+		for (var k = 0; k < this.structures[i].powers.length; k++){
+			if (this.structures[i].powers[k].new){
+				powers.push(this.structures[i].powers[k]);
+			}
+		}
+		for (var j = 0; j < this.structures[i].powers.length; j++){
 			for (var k = 0; k < this.structures[i].systems[j].powers.length; k++){
 				if (this.structures[i].systems[j].powers[k].new){
 					powers.push(this.structures[i].systems[j].powers[k]);
@@ -1748,7 +1669,8 @@ Ship.prototype.setUnitGUI = function(){
 Ship.prototype.getArmourString = function(a){
 	for (var i = 0; i < this.structures.length; i++){
 		if (isInArc(a, this.structures[i].start, this.structures[i].end)){
-			return (this.structures[i].remainingNegation + " / " + this.structures[i].negation);
+			return (this.structures[i].getArmourString());
+			//return (this.structures[i].remainingNegation + " / " + this.structures[i].negation);
 		}
 	}
 }
@@ -2507,7 +2429,7 @@ Ship.prototype.expandDiv = function(div){
 		primaryDiv.className = "primaryDiv";
 	var primaryTable = document.createElement("table");
 		primaryTable.className = "PrimaryTable";
-		primaryTable.appendChild(this.primary.getTableRow());
+		primaryTable.appendChild(this.primary.getTableData());
 
 		var systems = 0;
 		var max = 2;
@@ -2576,7 +2498,16 @@ Ship.prototype.expandDiv = function(div){
 		var structTable = document.createElement("table");
 			structTable.className = "structTable";
 
-		structTable.appendChild(this.structures[i].getTableRow());
+		var armourEle = this.structures[i].getTableData();
+
+		if ((this.id > 0 || game.turn == 1) && this.structures[i].effiency){
+			{armourEle.appendChild(this.structures[i].getBoostDiv())};
+		}
+
+		var tr = document.createElement("tr");
+			tr.appendChild(armourEle);
+		structTable.appendChild(tr);
+
 
 		var col = 0;
 		var colWidth = 1;
@@ -2619,7 +2550,7 @@ Ship.prototype.expandDiv = function(div){
 			}
 		}
 
-		var fill = 0;
+		var fill = 0; // front / aft, make a wider system in a single row
 		if (a == 0 || a == 180){
 			if (this.structures[i].systems.length == 1 || this.structures[i].systems.length == 2 && this.structures[i].systems[0].name != this.structures[i].systems[1].name){
 				max = 3;
@@ -2627,11 +2558,14 @@ Ship.prototype.expandDiv = function(div){
 			}
 		}
 
-		if (max == 1 && !fill){
-			structTable.childNodes[0].childNodes[0].style.height = "62px";
+		if (max == 1 && !fill){ // if only one column, make it bigger (armour string)
+			if (this.structures[i].getBoostEffect("Armour")){
+				structTable.childNodes[0].childNodes[0].style.width = "40px";
+				structTable.childNodes[0].childNodes[0].style.height = "45px";
+			} else structTable.childNodes[0].childNodes[0].style.height = "62px";
 		}
 		else {
-			structTable.childNodes[0].childNodes[0].style.height = "23px";
+			structTable.childNodes[0].childNodes[0].style.height = "25px";
 		}
 
 		for (var j = 0; j < this.structures[i].systems.length; j++){
@@ -2692,7 +2626,7 @@ Ship.prototype.expandDiv = function(div){
 					maxRow = col;
 				}
 				col = 0;
-				$(structTable).find(".struct").attr("colSpan", maxRow);
+				$(structTable).find(".armour").attr("colSpan", maxRow);
 			}
 		}
 
@@ -2844,19 +2778,11 @@ Ship.prototype.previewSetup = function(){
 }
 
 Ship.prototype.updateDiv = function(){
-	var divs = document.getElementsByClassName("shipDiv");
-	for (var i = 0; i < divs.length; i++){
-		if ($(divs[i]).data("shipId") == this.id){
-			var divs = divs[i];
-			break;
-		}
-	}
-	
-	$(divs)
+	$(this.element)
 		.find(".pos").html(this.x + " / " + this.y).end()
 		.find(".thrust").html(this.getRemainingImpulse() + " / " + this.getCurrentImpulse()).end()
-		.find(".ep").html(this.getRemainingEP() + " / " + this.getEP()).end()
-		.find(".delay").html(this.getRemainingDelay())		
+		//.find(".ep").html(this.getRemainingEP() + " / " + this.getEP()).end()
+		.find(".delay").html(this.getRemainingDelay()).end()
 		.find(".change").html(this.getImpulseChangeCost() + " EP").end()			
 		.find(".turn").html(this.getImpulseChangeCost() + " EP").end()
 }
@@ -2890,6 +2816,16 @@ Ship.prototype.attachFlight = function(id){
 	this.setEscortImage();
 	attach.cc.push(this.id);
 	game.draw();
+}
+
+Ship.prototype.setPostFireImage = function(){
+	if (this.ship){return;}
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].draw && (this.structures[i].destroyed || this.structures[i].disabled)){
+			this.structures[i].draw = 0;
+		}
+	}
+	this.setImage();
 }
 
 Ship.prototype.setEscortImage = function(){
@@ -3039,3 +2975,50 @@ Ship.prototype.animationSetupMove = function(){
 	this.setPreMovePosition();
 	this.setPreMoveFacing();
 }	
+
+
+Ship.prototype.getOffensiveBonus = function(target){
+	var sensor = this.getSystemByName("Sensor");
+	var ew = sensor.getEW();
+	if (sensor.disabled || sensor.destroyed || ew.type == 1 || ew.type == 3){return 0;}
+	if (ew.type == 2){return 0.2}
+
+	var tPos = target.getBaseOffsetPos();
+	var origin = this.getBaseOffsetPos();
+	var d = getDistance(origin, tPos);
+	var base = target.getLockMultiplier();
+
+	if (d == 0 && game.isCloseCombat(this, target) && this.isInEWArc(origin, target.getTrajectory(), sensor, ew)){
+		if (target.salvo){
+			return base;
+		}
+		else if (target.flight){
+			if (ew.angle == -1){return base;}
+			else return Math.round(base / 180 * (Math.min(180, game.const.ew.len * Math.pow(sensor.getOutput()/ew.dist, game.const.ew.p)))*100)/100;
+		}
+	}
+	else if (d <= ew.dist && this.isInEWArc(origin, tPos, sensor, ew)){
+		return base;
+	}
+	else return 0;
+}
+
+Ship.prototype.getDefensiveBonus = function(shooter){
+	if (this.flight || this.salvo || shooter.flight | shooter.salvo){return 0;}
+
+	var sensor = this.getSystemByName("Sensor");
+	var ew = sensor.getEW();
+	if (sensor.disabled || sensor.destroyed || ew.type == 0 || ew.type == 2){return 0;}
+	if (ew.type == 3){return 0.2}
+
+	var origin = this.getBaseOffsetPos();
+	var tPos = shooter.getBaseOffsetPos();
+	var d = getDistance(origin, tPos);
+
+	if (d <= ew.dist){
+		if (this.isInEWArc(origin, tPos, sensor, ew)){
+			return 0.5;
+		}
+	}
+	return false;
+}

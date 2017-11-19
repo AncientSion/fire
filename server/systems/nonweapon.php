@@ -90,9 +90,9 @@ class Reactor extends PrimarySystem {
     }
 
 	public function applyPowerSpike($turn, $spike){
-		$mod = floor(($spike / $this->output)*100);
+		$mod = (floor(($spike / $this->output)*100))/100;
 		//d, $shipid, $systemid, $turn, $type, $duration, $value, $new){
-		Debug::log("applyPowerSpike to #".$this->id.", spike: ".$spike.", output: ".$this->output."/ mod: ".$mod);
+		Debug::log("applyPowerSpike to #".$this->parentId.", spike: ".$spike.", output: ".$this->output."/ mod: ".$mod);
 		$this->crits[] = new Crit(sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Output", 0, $mod, 1);	
 
 	}

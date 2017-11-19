@@ -386,24 +386,24 @@ echo "</script>";
 					foreach ($manager->ships as $ship){
 						if ($ship->ship && $manager->phase < 1 && $ship->userid == $manager->userid && $ship->available == $manager->turn){
 							echo "<tr class='deployNow ".$ship->id."'</td>";
-							echo "<td><img class='img50' src=shipIcons/".strtolower($ship->name).".png></td>";
-							echo "<td class='green font20'>".$ship->name."</td>";
-							echo "<td class='green font20'> NOW </td>";
+							echo "<td><img class='img40' src=shipIcons/".strtolower($ship->name).".png></td>";
+							echo "<td class='green font14'>".$ship->name."</td>";
+							echo "<td class='green font14'> NOW </td>";
 							echo "</tr>";
 						}							
 						else if ($ship->ship && $manager->phase < 1 && $ship->userid != $manager->userid && $ship->available == $manager->turn){
 							if ($manager->phase == -1){
 								echo "<tr class='deployNow ".$ship->id."'</td>";
-								echo "<td><img class='img50' src=varIcons/vortex.png></td>";
-								echo "<td class='red font20'>Unknown</td>";
-								echo "<td class='red font20'> NOW </td>";
+								echo "<td><img class='img40' src=varIcons/vortex.png></td>";
+								echo "<td class='red font14'>Unknown</td>";
+								echo "<td class='red font14'> NOW </td>";
 								echo "</tr>";
 							}
 							else if ($manager->phase == 0){
 								echo "<tr class='deployNow ".$ship->id."'</td>";
-								echo "<td><img class='img50' src=shipIcons/".strtolower($ship->name).".png></td>";
-								echo "<td class='red font20'>".$ship->name."</td>";
-								echo "<td class='red font20'> NOW </td>";
+								echo "<td><img class='img40' src=shipIcons/".strtolower($ship->name).".png></td>";
+								echo "<td class='red font14'>".$ship->name."</td>";
+								echo "<td class='red font14'> NOW </td>";
 								echo "</tr>";
 							}
 						}
@@ -412,19 +412,19 @@ echo "</script>";
 						if ($manager->incoming[$i]["userid"] == $manager->userid){
 							$val = "deployLater ".$manager->incoming[$i]["id"];
 							echo "<tr class='".$val."'</td>";
-							echo "<td><img class='img50' src=shipIcons/".strtolower($manager->incoming[$i]["name"]).".png></td>";
-							echo "<td class='green font20'>".$manager->incoming[$i]["name"]."</td>";
+							echo "<td><img class='img40' src=shipIcons/".strtolower($manager->incoming[$i]["name"]).".png></td>";
+							echo "<td class='green font14'>".$manager->incoming[$i]["name"]."</td>";
 							$rem = $manager->incoming[$i]["available"] - $manager->turn;
 							if ($rem == 1){
-								echo "<td class='font20'>1 Turn</td></tr>";
-							} else echo "<td class='font20'>".$rem." Turns</td></tr>";
+								echo "<td class='font14'>1 Turn</td></tr>";
+							} else echo "<td class='font14'>".$rem." Turns</td></tr>";
 						}
 						else if ($manager->incoming[$i]["userid"] != $manager->userid && $manager->incoming[$i]["available"] == $manager->turn+1){
 							$val = "deployLater ".$manager->incoming[$i]["id"];
 							echo "<tr class='".$val."'</td>";
-							echo "<td><img class='img50' src=varIcons/vortex.png></td>";
-							echo "<td class='red font20'>Unknown</td>";
-							echo "<td class='font20'>1 Turn</td></tr>";
+							echo "<td><img class='img40' src=varIcons/vortex.png></td>";
+							echo "<td class='red font14'>Unknown</td>";
+							echo "<td class='font14'>1 Turn</td></tr>";
 						}
 					}
 				?>
@@ -452,7 +452,7 @@ echo "</script>";
 						foreach ($manager->rdyReinforcements as $ship){
 								if ($ship->userid != $manager->userid){continue;}
 								echo "<tr class='requestReinforcements'>";
-								echo "<td><img class='img50' src=shipIcons/".strtolower($ship->name).".png></td>";
+								echo "<td><img class='img40' src=shipIcons/".strtolower($ship->name).".png></td>";
 								echo "<td>".$ship->name."</td>";
 								echo "<td>".($ship->available - $manager->turn)." turn/s</td>";
 								echo "<td class='cost'>".$ship->cost."</td>";
@@ -483,7 +483,7 @@ echo "</script>";
 				Can launch up to <span id="launchRate"></span> units per cycle.
 			</div>
 			<div class="header">
-				Has a capacity of <span id="capacity"></span> tons
+				Sufficient space for <span id="capacity"></span> units.
 			</div>
 			<table id="hangarTable">
 			</table>
@@ -526,9 +526,6 @@ echo "</script>";
 	})
 
 	function showUI(){
-
-
-
 		
 		$("#mouseCanvas").on("mouseleave", function(){
 			$("#weaponAimTableWrapper").hide();

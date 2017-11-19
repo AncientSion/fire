@@ -780,22 +780,24 @@ function Game(data, userid){
 
 	this.fireResolved = function(){
 		for (var i = 0; i < this.ships.length; i++){
-			if (!this.ships[i].ship){
+			//if (!this.ships[i].ship){
 				this.ships[i].setPostFireImage();
-			}
+			//}
 		}
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].ship){
+			//if (this.ships[i].ship){
 				this.ships[i].setEscortImage();
-			}
+			//}
 		}
 		this.draw();
 		this.animating = 0;
+		$(fxCanvas).css("opacity", 0.3);
 		console.log("fireResolved");
 	}
 	
 	this.initPhase = function(n){
 		this.setShipDivs();
+		$(fxCanvas).css("opacity", 0.3);
 
 		if (n == -1){
 			this.phase = n;
@@ -833,6 +835,7 @@ function Game(data, userid){
 			this.phase = n;
 				//game.draw();
 				$("#phaseSwitchDiv").click(function(){
+				$(fxCanvas).css("opacity", 1);
 					game.initDamageControl();
 					$(this).hide()
 					//$(this).fadeOut(200);
@@ -1380,10 +1383,7 @@ function Game(data, userid){
 	}
 
 	this.setUnitMovementFocus = function(){
-
-		$("#game")
-			.find("#reinforce").data("on", 0).end()
-			.find("#deployWrapper").hide();
+		$("#deployWrapper").hide();
 
 		window.then = Date.now();
 		window.startTime = then;
@@ -2376,11 +2376,11 @@ function Game(data, userid){
 				e.stopPropagation();
 				if (!$(this).data("on")){
 					$(this).data("on", 1);
-					$("#game").find("#deployWrapper").show();
+					$("#deployWrapper").show();
 				}
 				else {
 					$(this).data("on", 0);
-					$("#game").find("#deployWrapper").hide();
+					$("#deployWrapper").hide();
 					if (game.phase == -1){
 						$("#deployWrapper").find("#reinforceTable").find(".selected").each(function(){
 							$(this).removeClass("selected");

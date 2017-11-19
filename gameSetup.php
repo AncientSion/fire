@@ -171,7 +171,7 @@ else {
 				Can launch up to <span id="launchRate"></span> units per cycle.
 			</div>
 			<div class="header">
-				Has a capacity of <span id="capacity"></span> tons
+				Sufficient space for <span id="capacity"></span> units.
 			</div>
 			<table id="hangarTable">
 			</table>

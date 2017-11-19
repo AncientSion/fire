@@ -13,6 +13,9 @@ class Structure {
 	public $parentPow;
 	public $systems = array();
 	public $damages = array();
+	public $powers = array();
+	public $effiency = 0;
+	public $boostEffect = array();
 
 	function __construct($id, $parentId, $start, $end, $integrity, $negation, $destroyed = false){
 		$this->id = $id;
@@ -38,15 +41,19 @@ class Structure {
 	}
 
 	public function setNegation($main, $armourDmg){
-		$p = 2.5;
+		$p = 1.5;
 		$this->parentPow = round(pow($main, $p));
 		$this->parentIntegrity = $main;
 		$this->armourDmg += $armourDmg;
 		$this->remainingNegation = round((pow($main - $this->armourDmg, $p) / $this->parentPow) * $this->negation);
+
+		if ($this->parentId == 11 && $this->id == 10){
+		//	Debug::log($)
+		}
 	}
 
 	public function getCurrentNegation(){
-		$p = 2.5;
+		$p = 1.5;
 		return round(pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow * $this->negation);
 	}
 }
@@ -99,7 +106,7 @@ class Primary {
 	}
 
 	public function getHitChance(){
-		return $this->remaining*1.25;
+		return $this->remaining*1.33;
 	}
 
 
@@ -207,7 +214,7 @@ class Single {
 
 	public function getValidEffects(){
 		return array(// attr, %-tresh, duration, modifier
-			array("Disabled", 75, 0, 0)
+			array("Disabled", 70, 0, 0)
 		);
 	}
 
@@ -228,8 +235,9 @@ class Single {
 		}
 
 		if (sizeof($valid)){
-			if ($dmg > $valid[0][1] && mt_rand(0, floor($dmg)) > $valid[0][1]/2) {
-				Debug::log("Dropout - dmg: ".$dmg.", tresh: ".$valid[0][1].", mt_rand(0, ".floor($dmg).") > ".$valid[0][1]/2);
+			$mod = mt_rand(0, floor($dmg));
+			if ($mod > $valid[0][1]/2) { // above tresh && mt_rand(0, dmg) > tresh/2
+				Debug::log("Dropout - dmg: ".$dmg.", tresh: ".$valid[0][1].", mt_rand(0, ".floor($dmg).") = ".$mod.", > ".$valid[0][1]/2);
 				$this->crits[] = new Crit(
 					sizeof($this->crits)+1,
 					$this->parentId, $this->id, $turn,

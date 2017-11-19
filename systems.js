@@ -283,9 +283,11 @@ System.prototype.setTimeLoaded = function(){
 	$(this.element).find(".loadLevel").css("width", this.getLoadLevel() * 100 + "%");
 	$("#systemDetailsDiv").find(".loading").html(this.getTimeLoaded() + " / " + this.reload);
 }
+
 System.prototype.getTimeLoaded = function(){
 	return this.loaded// - this.getBoostEffect("Reload") * this.getBoostLevel();
 }
+
 System.prototype.getBoostLevel = function(){
 	var level = 0;
 	for (var i = this.powers.length-1; i >= 0; i--){
@@ -298,6 +300,7 @@ System.prototype.getBoostLevel = function(){
 	}
 	return level;
 }
+
 System.prototype.getBoostEffectElements = function(table){
 
 	for (var i = 0; i < this.boostEffect.length; i++){
@@ -319,11 +322,11 @@ System.prototype.getBoostEffectElements = function(table){
 
 System.prototype.getBoostDiv = function(){
 	if (this.destroyed || !this.effiency){return};
-	if (this.boostEffect.length == 1 && this.boostEffect[0].type == "Reload" && this.getLoadLevel() == 1){return;}
+	//if (this.boostEffect.length == 1 && this.boostEffect[0].type == "Reload" && this.getLoadLevel() == 1){return;}
 	var div = document.createElement("div");
 		$(div).addClass("boostDiv").hide()
-		.data("shipId", this.parentId)
-		.data("systemId", this.id);
+			.data("shipId", this.parentId)
+			.data("systemId", this.id);
 
 	var subDiv = document.createElement("div");
 		subDiv.className = "plus";
@@ -442,12 +445,14 @@ System.prototype.canUnboost = function(){
 	}
 	return false;
 }
+
 System.prototype.doUnboost = function(){
 	if (this.powers[this.powers.length-1].turn == game.turn){
 		this.powers.splice(this.powers.length-1, 1);	
 	}
 	if (this.getBoostEffect("Reload")){this.setTimeLoaded();}
 }
+
 System.prototype.doBoost = function(){
 	//console.log("boost");
 	this.powers.push({
@@ -514,6 +519,7 @@ System.prototype.doUnpower = function(){
 		game.getUnit(this.parentId).updateShipPower(this);
 	}
 }
+
 System.prototype.doPower = function(){
 	if (this.powers.length && this.powers[this.powers.length-1].turn == game.turn && this.powers[this.powers.length-1].type == 0){
 		this.powers.splice(this.powers.length-1, 1);
@@ -523,6 +529,7 @@ System.prototype.doPower = function(){
 		game.getUnit(this.parentId).updateShipPower(this);
 	}
 }
+
 System.prototype.plus = function(max){
 	var ship = game.getUnit(this.parentId);
 	var change = false;
@@ -571,57 +578,46 @@ System.prototype.canChangeMode = function(){
 }
 
 System.prototype.showOptions = function(){
-	if (this.destroyed || this.locked){return;}
+	if (game.phase != -1 || game.getUnit(this.parentId).userid != game.userid || this.destroyed || this.locked){return;}
+
 	var ele = $(this.element);
-	
-	/*if (game.phase == -2 &&
-		if (Object.keys(this.modes).length){
-			ele.find(".modeDiv").show();
-		}
-	}*/
-	if (game.phase == -1){
-		if (game.getUnit(this.parentId).userid == game.userid){
-			var boost = this.effiency;
-			var canModeChange = this.canChangeMode();
-			var canPower = this.canPower();
-			var canUnpower = this.canUnpower();
-			if (canPower){
+	var boost = this.effiency;
+	var canModeChange = this.canChangeMode();
+	var canPower = this.canPower();
+	var canUnpower = this.canUnpower();
+
+	if (canPower){
+		boost = false;
+		canModeChange = false;
+	}
+	else if (boost){
+		if (this.getLoadLevel() != 1){
+			if (!this.getBoostEffect("Reload")){
 				boost = false;
 				canModeChange = false;
 			}
-			else if (boost){
-				if (this.getLoadLevel() != 1){
-					if (!this.getBoostEffect("Reload")){
-						boost = false;
-						canModeChange = false;
-					}
-				}
-			}
-
-			if (boost){
-				ele.find(".boostDiv").show();
-			}
-			if (canModeChange){
-				ele.find(".modeDiv").show();
-			}
-			if (canPower){
-				ele.find(".powerDiv").find(".power").show();
-			}
-			else if (canUnpower){
-				ele.find(".powerDiv").find(".unpower").show();
-			}
+		} else if (this.getBoostEffect("Reload")){
+			boost = false;
 		}
 	}
-	/*else if (game.phase == 2){
-		if (Object.keys(this.modes).length){
-			$(ele).find(".boostDiv").show().end().find(".modeDiv").show().end().find(".powerDiv").show();
-		}
-	}*/
+
+	if (boost){
+		ele.find(".boostDiv").show();
+	}
+	if (canModeChange){
+		ele.find(".modeDiv").show();
+	}
+	if (canPower){
+		ele.find(".powerDiv").find(".power").show();
+	}
+	else if (canUnpower){
+			ele.find(".powerDiv").find(".unpower").show();
+	}
 }
 
 System.prototype.hideOptions = function(){
 
-	if (this.destroyed){return;}
+	if (this.destroyed || this.locked || game.getUnit(this.parentId).userid != game.userid){return;}
 	var ele = $(this.element);
 
 	if (game.phase == -2){
@@ -630,26 +626,20 @@ System.prototype.hideOptions = function(){
 		}
 	}
 	if (game.phase == -1){
-		if (game.getUnit(this.parentId).userid == game.userid){
-			var boost = this.effiency;
-			var canPower = this.canPower();
-			var canUnpower = this.canUnpower();
+		var boost = this.effiency;
+		var canPower = this.canPower();
+		var canUnpower = this.canUnpower();
 
-			if (boost || canPower || canUnpower){
-				$(ele)
-					.find(".boostDiv").hide().end()
-					.find(".modeDiv").hide().end()
-					.find(".powerDiv").children().hide();
-				return;
-			}
+		if (boost || canPower || canUnpower){
+			$(ele)
+				.find(".boostDiv").hide().end()
+				.find(".modeDiv").hide().end()
+				.find(".powerDiv").children().hide();
+			return;
 		}
 	}
-	/*else if (game.phase == 2){
-		if (Object.keys(this.modes).length){
-			$(ele).find(".boostDiv").hide().end().find(".modeDiv").hide().end().find(".powerDiv").hide();
-		}
-	}*/
 }
+
 System.prototype.showInfoDiv = function(e){
 	$(document.body).append(
 		$(this.getSystemDetailsDiv())
@@ -658,6 +648,7 @@ System.prototype.showInfoDiv = function(e){
 		)
 	return;
 }
+
 System.prototype.setFireOrder = function(targetid){
 	if (this.odds <= 0){return;}
 	this.fireOrders.push(
@@ -669,6 +660,7 @@ System.prototype.setFireOrder = function(targetid){
 	this.highlight = 0;
 	this.setSystemBorder();
 }
+
 System.prototype.unsetFireOrder = function(){
 	for (var i = this.fireOrders.length-1; i >= 0; i--){
 		if (this.fireOrders[i].turn == game.turn){
@@ -677,15 +669,19 @@ System.prototype.unsetFireOrder = function(){
 	}
 	this.setSystemBorder();
 }
+
 System.prototype.hideInfoDiv = function(){
 	$("#systemDetailsDiv").remove();
 }
+
 System.prototype.getImageName = function(){
 	return this.name;
 }
+
 System.prototype.canBeBoosted = function(){
 	return (this.effiency || this.output);
 }
+
 System.prototype.getTableData = function(forFighter){
 	var td = document.createElement("td");
 		td.className = "system";
@@ -703,9 +699,6 @@ System.prototype.getTableData = function(forFighter){
 		if (this instanceof PrimarySystem && this.exposed){
 			div.className = "loadLevel exposed";
 		} else div.className = "loadLevel";
-	//	if (this.weapon){div.style.width = this.getLoadLevel() * 100 + "%"}
-	//	else {div.style.width = 100 + "%"};
-	//	div.style.width = this.getLoadLevel() * 100 + "%";
 		td.appendChild(div);
 
 	var div = document.createElement("div");
@@ -725,15 +718,12 @@ System.prototype.getTableData = function(forFighter){
 			td.appendChild(div);
 
 		if (!this.destroyed){
-			//if (this instanceof PrimarySystem || this.canBeBoosted()){
 				var outputDiv = document.createElement("div");
 					outputDiv.className = "outputMask";
-					//output.innerHTML = "<span>" + this.outputp + "</span>";
 					if (this.internal || this.getActiveSystem().canBeBoosted()){
 						outputDiv.innerHTML = this.getOutput();
 					}
 					else  $(outputDiv).hide();
-						//console.log(this.getActiveSystem());
 					td.appendChild(outputDiv);
 			//}
 		}
@@ -754,7 +744,7 @@ System.prototype.hasUnresolvedFireOrder = function(){
 
 System.prototype.update = function(){
 	this.updateSystemDetailsDiv();
-	game.getUnit(this.parentId).updateDiv();
+	$(this.element).find(".outputMask").html(this.getOutput());
 }
 
 System.prototype.getRemainingIntegrity = function(){
@@ -851,7 +841,7 @@ System.prototype.getPowerReq = function(){
 }
 
 System.prototype.getCurrentPowerUsage = function(){
-	var usage = this.powerReq;
+	var usage = this.powerReq || 0;
 	for (var i = this.powers.length-1; i >= 0; i--){
 		if (this.powers[i].turn == game.turn && this.powers[i].type > 0){
 			usage += this.powers[i].cost;
@@ -877,6 +867,27 @@ System.prototype.getBoostEffect = function(val){
 		}
 	}
 	return 0;
+}
+
+System.prototype.drawArc = function(facing, pos){
+	if (game.animating){return;}
+	if (this.tiny){return;}
+	for (var i = 0; i < this.arc.length; i++){
+		var p1 = getPointInDirection(1200, this.arc[i][0] + facing, pos.x, pos.y);
+		var p2 = getPointInDirection(1200, this.arc[i][1] + facing, pos.x, pos.y)
+		var dist = getDistance( {x: pos.x, y: pos.y}, p1);
+		var rad1 = degreeToRadian(this.arc[i][0] + facing);
+		var rad2 = degreeToRadian(this.arc[i][1] + facing);
+
+		fxCtx.globalAlpha = 1;
+		fxCtx.beginPath();			
+		fxCtx.moveTo(pos.x, pos.y);
+		fxCtx.arc(pos.x, pos.y, dist, rad1, rad2, false);
+		fxCtx.closePath();		
+		fxCtx.fillStyle = this.getFillStyle(pos.x, pos.y, dist);
+		fxCtx.fill();
+		fxCtx.globalAlpha = 1;
+	}
 }
 
 
@@ -958,11 +969,11 @@ PrimarySystem.prototype.getOutputCrits = function(){
 
 PrimarySystem.prototype.getOutputString = function(){
 	var effect = 1-this.getOutputCrits();
-	return this.output + " + " + Math.floor(this.getExtraOutput()*effect) + " - " + Math.ceil(this.output*(1-effect));
+	return this.output + " + " + Math.floor(this.getExtraOutput()*effect) + " - " + this.output*Math.round((1-effect)*100)/100;
 }
 
 PrimarySystem.prototype.getBoostCostIncrease = function(){
-	return 0.3;
+	return 0.35;
 }
 
 PrimarySystem.prototype.getSystemDetailsDiv = function(){
@@ -1041,6 +1052,7 @@ Reactor.prototype.getOutputUsage  = function(){
 	var use = 0;
 	var ship = game.getUnit(this.parentId);
 	for (var i = 0; i < ship.structures.length; i++){
+		use += ship.structures[i].getCurrentPowerUsage();
 		for (var j = 0; j < ship.structures[i].systems.length; j++){
 			if (ship.structures[i].systems[j].isPowered()){
 				use += ship.structures[i].systems[j].getCurrentPowerUsage();
@@ -1590,27 +1602,6 @@ Weapon.prototype.updateSystemDetailsDiv = function(){
 	this.attachDetailsMods(ele);
 }
 
-Weapon.prototype.drawArc = function(facing, pos){
-	if (game.animating){return;}
-	if (this.tiny){return;}
-	for (var i = 0; i < this.arc.length; i++){
-		var p1 = getPointInDirection(1200, this.arc[i][0] + facing, pos.x, pos.y);
-		var p2 = getPointInDirection(1200, this.arc[i][1] + facing, pos.x, pos.y)
-		var dist = getDistance( {x: pos.x, y: pos.y}, p1);
-		var rad1 = degreeToRadian(this.arc[i][0] + facing);
-		var rad2 = degreeToRadian(this.arc[i][1] + facing);
-
-		fxCtx.globalAlpha = 0.7;
-		fxCtx.beginPath();			
-		fxCtx.moveTo(pos.x, pos.y);
-		fxCtx.arc(pos.x, pos.y, dist, rad1, rad2, false);
-		fxCtx.closePath();		
-		fxCtx.fillStyle = this.getFillStyle(pos.x, pos.y, dist);
-		fxCtx.fill();
-		fxCtx.globalAlpha = 1;
-	}
-}
-
 Weapon.prototype.getAccuracyLoss = function(dist){		
 	return Math.ceil(this.getAccuracy()/100 * dist);
 }
@@ -1834,27 +1825,24 @@ function Plasma(system){
 Plasma.prototype = Object.create(Particle.prototype);
 
 Plasma.prototype.doBoost = function(){
-	this.powers.push({
-		id: this.powers.length+1, unitid: this.parentId, systemid: this.id,
-		turn: game.turn,type: 1, cost: this.getEffiency(), new: 1
-	})
+	System.prototype.doBoost.call(this);
 	if (this.selected || this.highlight){
-		this.redrawAxis();
+		this.redrawArc();
 	}
 }
 
 Plasma.prototype.doUnboost = function(){
-	this.powers.splice(this.powers.length-1, 1);
+	System.prototype.doBoost.call(this);
 	if (this.selected || this.highlight){
-		this.redrawAxis();
+		this.redrawArc();
 	}
 }
 
-Plasma.prototype.redrawAxis = function(){
+Plasma.prototype.redrawArc = function(){
 	fxCtx.clearRect(0, 0, res.x, res.y);
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z);
-	$(fxCanvas).css("opacity", 0.3);
+	//$(fxCanvas).css("opacity", 0.3);
 	this.drawArc(game.getUnit(this.parentId).getPlannedFacing(),  game.getUnit(this.parentId).getPlannedPos());
 	fxCtx.setTransform(1, 0, 0, 1, 0, 0);
 }
@@ -2681,6 +2669,7 @@ Hangar.prototype = Object.create(PrimarySystem.prototype);
 
 Hangar.prototype.hover = function(e){
 	System.prototype.hover.call(this, e);
+	return;
 	if (game.getUnit(this.parentId).hasWeaponsSelected()){
 		return;
 	}
@@ -2817,7 +2806,7 @@ Hangar.prototype.drawArc = function(){
 Hangar.prototype.enableHangarDeployment = function(e){
 	var div = document.getElementById("hangarLoadoutDiv");
 		$("#launchRate").html(this.getLaunchRate());
-		$("#capacity").html(this.output);
+		$("#capacity").html(this.capacity);
 	this.unsetFireOrder();
 	this.doUndoActions();
 	this.showHangarControl(e);
@@ -2942,8 +2931,8 @@ Hangar.prototype.doLaunchFlight = function(){
 		}
 	}
 	instruct("Select a deployment point. The flight's facing will be projected onwards the launching vessel.");
-	this.drawArc();
-	moveCtx.clearRect(0, 0, res.x, res.y);
+	//this.drawArc();
+	//moveCtx.clearRect(0, 0, res.x, res.y);
 	game.setupDeploymentDiv();
 	game.flightDeploy = this;
 }
@@ -3163,7 +3152,7 @@ Hangar.prototype.setupHangarLoadout = function(e){
 	var div = document.getElementById("hangarLoadoutDiv");
 	if ($(div).hasClass("disabled")){
 		$(div).find("#launchRate").html(this.getOutput());
-		$(div).find("#capacity").html(this.output);
+		$(div).find("#capacity").html(this.capacity);
 		//$(div).data("systemid", this.id).css("top", e.clientY + 30).css("left", e.clientX - 150).removeClass("disabled");
 		$(div).data("systemid", this.id).css("left", 800).css("top", 400).removeClass("disabled");
 		this.updateTotals();
@@ -3183,7 +3172,7 @@ Hangar.prototype.getSystemDetailsDiv = function(){
 	var th = document.createElement("th");
 		th.colSpan = 2; th.innerHTML = this.display; th.style.width = "40%"; tr.appendChild(th); table.appendChild(tr);
 
-	$(table).append($("<tr>").append($("<td>").html("Mass Capacity")).append($("<td>").html(this.output + " metric tons")));
+	//$(table).append($("<tr>").append($("<td>").html("Mass Capacity")).append($("<td>").html(this.output + " metric tons")));
 	$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
 	$(table).append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.getMount())));
 	$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html(this.effiency + " per cycle")));

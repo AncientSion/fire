@@ -292,7 +292,7 @@ Ship.prototype.getBaseImage = function(){
 }
 
 Mixed.prototype.setPreMoveFacing = function(){
-	console.log("setPreMoveFacing");
+	///console.log("setPreMoveFacing");
 	//if (this.salvo){console.log("setPreMoveFacing");}
 	//if (this.mission.turn == game.turn){
 	//	this.facing = getAngleFromTo(this.getPlannedPos(), this.getTargetPosition());
@@ -305,7 +305,7 @@ Mixed.prototype.setPreMoveFacing = function(){
 }
 
 Mixed.prototype.setPostMoveFacing = function(){
-	console.log("setPostMoveFacing");
+	//console.log("setPostMoveFacing");
 	//if (this.salvo){console.log("setPostMoveFacing");}
 	//if (this.mission.turn == game.turn){
 		this.facing = getAngleFromTo(this.getPlannedPos(), this.finalStep);
@@ -314,6 +314,19 @@ Mixed.prototype.setPostMoveFacing = function(){
 
 Mixed.prototype.canShortenTurn = function(){
 	return false;
+}
+
+Mixed.prototype.getOffensiveBonus = function(target){
+	if (target.flight){
+		if (this.mission.arrived && this.mission.targetid == target.id){ // intercept
+			return target.getLockMultiplier();
+		}
+	}
+	else if (target.salvo){
+		if (this.mission.type == 1 && this.mission.arrived){return target.getLockMultiplier();} // patrol flight vs salvo
+		if (target.mission.targetid != this.id){return target.getLockMultiplier();} // escorting" flight vs salvo
+	}
+	else return 0;
 }
 
 Mixed.prototype.canUndoShortenTurn = function(){
@@ -361,6 +374,9 @@ Mixed.prototype.getSystemById = function(){
 Mixed.prototype.getParent = function(){
 	if (!this.cc.length){return this;}
 
+	var valid = [];
+
+	// look for SHIP parent
 	for (var j = 0; j < this.cc.length; j++){
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].ship && game.ships[i].id == this.cc[j]){
@@ -368,10 +384,22 @@ Mixed.prototype.getParent = function(){
 			}
 		}
 	}
-	
+
+	// maybe im a salvo hitting a flight ?
+	if (this.salvo){
+		for (var j = 0; j < this.cc.length; j++){
+			for (var i = 0; i < game.ships.length; i++){
+				if (game.ships[i].id == this.cc[j]){
+					return game.ships[i];
+				}
+			}
+		}
+	}
+
+	// so its flight on flight
 	for (var j = 0; j < this.cc.length; j++){
 		for (var i = 0; i < game.ships.length; i++){
-			if (this.salvo && game.ships[i].id == this.cc[j]){
+			if (game.ships[i].friendly && game.ships[i].id == this.cc[j]){
 				return game.ships[i];
 			}
 		}
@@ -491,19 +519,7 @@ Mixed.prototype.setPostMoveImage = function(){
 	//console.log(this.drawImg.toDataURL());
 }
 
-Mixed.prototype.setPostFireImage = function(){
-	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].draw && this.structures[i].destroyed || this.structures[i].disabled){
-			this.structures[i].draw = 0;
-		}
-	}
-	this.setImage();
-}
-
 Mixed.prototype.getGunOrigin = function(id){
-	if (this.id == 24){
-		console.log("ding");
-	}
 	for (i = this.structures.length-1; i >= 0; i--){
 		if (id > this.structures[i].id){
 			return this.getUnitPosition(i);
@@ -532,7 +548,7 @@ Mixed.prototype.getUnitPosition = function(j){
 		var y = this.structures[j].layout.y * (this.size / 200);
 		//console.log("#" + this.id);
 		//console.log(this.structures[j].layout);
-		return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing()+90);
+		return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
 	}
 }
 
@@ -557,7 +573,7 @@ Mixed.prototype.getFireDest = function(fire, isHit, nbrHit){
 	else {
 		var x = t.x * (this.size / 200);
 		var y = t.y * (this.size / 200);
-		return rotate(0, 0, {x: x, y: y}, this.getDrawFacing()+90);
+		return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());
 	}
 }
 

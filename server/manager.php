@@ -1033,9 +1033,15 @@ class Manager {
 				if ($this->ships[$i]->id == $ship->id || $ship->userid == $this->ships[$i]->userid){continue;}
 				for ($j = 0; $j < sizeof($ship->cc); $j++){
 					if ($ship->cc[$j] == $this->ships[$i]->id){
-						if ($this->ships[$i]->flight || $this->ships[$i]->salvo){
-							//Debug::log("adding CC fighter lock from #".$ship->id." vs #".$this->ships[$i]->id);
-							$ship->locks[] = array($this->ships[$i]->id, $this->ships[$i]->getLockMultiplier());
+						if ($this->ships[$i]->salvo){ // if flight in patrol vs salvo || flight in escort duty vs salvo
+							if ($ship->mission->type == 1 && $ship->mission->arrived || ($this->ships[$i]->mission->targetid != $ship->id)){
+								$ship->locks[] = array($this->ships[$i]->id, $this->ships[$i]->getLockMultiplier());
+							}
+						}
+						else if ($this->ships[$i]->flight){
+							if ($ship->mission->arrived && $ship->mission->targetid == $this->ships[$i]->id){
+								$ship->locks[] = array($this->ships[$i]->id, $this->ships[$i]->getLockMultiplier());
+							}
 						}
 					}
 				}

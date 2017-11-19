@@ -142,7 +142,7 @@ class Ship {
 	public function setBaseStats(){
 		$this->baseHitChance = ceil(pow($this->mass, 0.4)*1.5)+30;
 		$this->baseTurnCost = round(pow($this->mass, 1.25)/22500, 2);
-		$this->baseTurnDelay = round(pow($this->mass, 0.45)/18, 2);
+		$this->baseTurnDelay = round(pow($this->mass, 0.45)/18, 2) * $this->getBaseImpulse() / 130;
 		$this->baseImpulseCost = round(pow($this->mass, 1.2)/600, 2);
 	}
 
@@ -846,7 +846,7 @@ class Ship {
 				if (!$this->structures[$i]->systems[$j]->damaged){continue;}
 				if ($this->structures[$i]->systems[$j]->destroyed){
 					if (mt_rand(0, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn, 0)){
-						Debug::log("adding spike #".$this->id."/".$this->structures[$i]->systems[$j]->id);
+						//Debug::log("adding spike #".$this->id."/".$this->structures[$i]->systems[$j]->id);
 						$spike += $this->structures[$i]->systems[$j]->getPowerUsage($turn);
 					}
 				}
@@ -1073,7 +1073,7 @@ class UltraHeavy extends Ship {
 }
 
 class SuperHeavy extends Ship {
-	public $baseImpulse = 140;
+	public $baseImpulse = 145;
 	public $traverse = 2;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -1089,7 +1089,7 @@ class SuperHeavy extends Ship {
 }
 
 class Heavy extends Ship {
-	public $baseImpulse = 150;
+	public $baseImpulse = 160;
 	public $traverse = 1;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -1105,7 +1105,7 @@ class Heavy extends Ship {
 }
 
 class Medium extends Ship {
-	public $baseImpulse = 160;
+	public $baseImpulse = 175;
 	public $traverse = 0;
 
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -1125,7 +1125,7 @@ class Medium extends Ship {
 }
 
 class Light extends Ship {
-	public $baseImpulse = 170;
+	public $baseImpulse = 190;
 	public $traverse = -1;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){
@@ -1145,7 +1145,7 @@ class Light extends Ship {
 }
 
 class SuperLight extends Ship {
-	public $baseImpulse = 180;
+	public $baseImpulse = 200;
 	public $traverse = -2;
 	
 	function __construct($id, $userid, $available, $status, $destroyed){

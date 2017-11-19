@@ -31,7 +31,7 @@ class Laser extends Weapon {
 		$totalDmg = $this->getTotalDamage($fire);
 		$overkill = 0;
 		$okSystem = 0;
-		$hitting = 1;
+		$rakes = $this->rakes;
 
 		$print = "hitting --- ";
 		if ($totalDmg <= 0){
@@ -41,9 +41,7 @@ class Laser extends Weapon {
 		$fire->hits++;
 		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id." for ".$totalDmg." dmg");
 
-		$rakes = $this->rakes;
-
-		while ($hitting){
+		while ($rakes){
 			$system = $fire->target->getHitSystem($fire);
 			$print .= " ".get_class($system).": ".$rake."dmg, ";
 			$destroyed = false;
@@ -66,10 +64,10 @@ class Laser extends Weapon {
 			$fire->damages[] = $entry;
 			$fire->target->applyDamage($entry);
 
-			if ($fire->shooter->ship){
+			if (!$fire->target->ship){
 				Debug::log("laser versus non-ship, stopping after initial hit");
-				$hitting = 0;
-			}
+				$rakes = 0;
+			} else $rakes--;
 
 		}
 		Debug::log($print);

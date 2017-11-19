@@ -278,7 +278,7 @@ Single.prototype.getDetailsDiv = function(){
 
 		var table = $("<table>")
 			.append($("<tr>").append($("<th>").attr("colspan", 2).html(this.name)))
-			.append($("<tr>").append($("<td>").html("Mass / Turn Delay").css("width", 120)).append($("<td>").html(this.mass)))
+			.append($("<tr>").append($("<td>").html("Mass").css("width", 120)).append($("<td>").html(this.mass)))
 			.append($("<tr>").append($("<td>").html("Engine Power")).append($("<td>").html(this.ep)))
 			.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.negation)))
 			//.append($("<tr>").append($("<td>").html("Side Armour")).append($("<td>").html(this.negation[1])))
@@ -434,126 +434,257 @@ function Structure(data){
 	this.end = data.end;
 	this.negation = data.negation;
 	this.remainingNegation = data.remainingNegation;
-	//this.armourDmg = data.armourDmg;
 	this.destroyed = data.destroyed || false;
 	this.highlight = false;
 	this.systems = [];
 	this.damages = [];
+	this.powers = data.powers;
 	this.direction;
+	this.element;
+	this.effiency = data.effiency;
+	this.boostEffect = data.boostEffect;
+}
 
-	this.getRemainingNegation = function(){
-		return this.remainingNegation;
+Structure.prototype.getRemainingNegation = function(){
+	return this.remainingNegation;
+}
+
+Structure.prototype.getArmourString = function(){
+	if (this.boostEffect.length){
+		return this.remainingNegation + "<span style='color: #27e627; font-size: 16px'>+" + (3 + this.getBoostEffect("Armour") * this.getBoostLevel()) + "</span> / " + this.negation;
+	}
+	return this.remainingNegation + " / " + this.negation;
+}
+
+Structure.prototype.getDirection = function(){
+	var a = this.start;
+	var b = this.end;
+
+	if (a == 0 && b == 360){
+		return 0;
+	}
+	else if (a > b){
+	   c = a + b;
+	}
+	else {
+	   c = (a + b) / 2;
 	}
 
-	this.getTableRow = function(){
-		var tr = document.createElement("tr");
-		var td = document.createElement("td");
-			td.className = "struct";
+	if (a > 90 && b < -90 && a+b == 0){
+		c = 180;
+	}
 
-		var rem = this.getRemainingNegation();
+	return c;
+}
 
-		var span = document.createElement("div");
-			span.className = "integrityAmount";
-			span.innerHTML = rem + " / " + this.negation;
-			td.appendChild(span);
+Structure.prototype.getTableData = function(){
+	var td = document.createElement("td");
+		td.className = "armour";
 
-		var lowerDiv = document.createElement("div");
-			lowerDiv.className = "integrityNow";
-			lowerDiv.style.width =  rem/this.negation * 100 + "%";
-			td.appendChild(lowerDiv);
-			
-		var upperDiv = document.createElement("div");
-			upperDiv.className = "integrityFull";
-			td.appendChild(upperDiv);
+	var span = document.createElement("div");
+		span.className = "integrityAmount font16";
+		span.innerHTML = this.getArmourString();
+		td.appendChild(span);
 
-		$(td).data("shipId", this.parentId);
-		$(td).data("systemId", this.id);
-		$(td).hover(
-			function(e){
-				var shipId = $(this).data("shipId");
-				var systemId = $(this).data("systemId");
-				game.getUnit(shipId).getSystemById(systemId).hover(e);
-			},
-			function(e){
-				var shipId = $(this).data("shipId");
-				var systemId = $(this).data("systemId");
-				game.getUnit(shipId).getSystemById(systemId).hover(e);
-			}
-		)
-		$(td).click(function(e){
+	var lowerDiv = document.createElement("div");
+		lowerDiv.className = "integrityNow";
+		lowerDiv.style.width =  this.getRemainingNegation()/this.negation * 100 + "%";
+		td.appendChild(lowerDiv);
+		
+	var upperDiv = document.createElement("div");
+		upperDiv.className = "integrityFull";
+		td.appendChild(upperDiv);
+
+	$(td).data("shipId", this.parentId);
+	$(td).data("systemId", this.id);
+	$(td).hover(
+		function(e){
 			var shipId = $(this).data("shipId");
 			var systemId = $(this).data("systemId");
-			console.log(game.getUnit(shipId).getSystemById(systemId));
-		})
+			game.getUnit(shipId).getSystemById(systemId).hover(e);
+		},
+		function(e){
+			var shipId = $(this).data("shipId");
+			var systemId = $(this).data("systemId");
+			game.getUnit(shipId).getSystemById(systemId).hover(e);
+		}
+	)
+	$(td).click(function(e){
+		var shipId = $(this).data("shipId");
+		var systemId = $(this).data("systemId");
+		console.log(game.getUnit(shipId).getSystemById(systemId));
+	})
 
-		tr.appendChild(td);
-		return tr;
+	this.element = td;
+
+	return td;
+}
+
+Structure.prototype.hover = function(e){
+	if (game.flightDeploy){return false;}
+	if (this.highlight){
+		this.highlight = false;
+		fxCtx.clearRect(0, 0, res.x, res.y);
+		this.hideInfoDiv();
+		this.hideOptions();
+		game.getUnit(this.parentId).highlightAllSelectedWeapons();
 	}
-
-	this.getDirection = function(){
-		var a = this.start;
-		var b = this.end;
-
-		if (a == 0 && b == 360){
-			return 0;
-		}
-		else if (a > b){
-		   c = a + b;
-		}
-		else {
-		   c = (a + b) / 2;
-		}
-
-		if (a > 90 && b < -90 && a+b == 0){
-			c = 180;
-		}
-
-		return c;
+	else {
+		this.highlight = true;
+		this.drawArc();
+		this.showInfoDiv(e);
+		this.showOptions();
 	}
+}
 
-	this.hover = function(e){
-		if (game.flightDeploy){return false;}
-		if (this.highlight){
-			this.highlight = false;
-			fxCtx.clearRect(0, 0, res.x, res.y);
-			$("#systemDetailsDiv").remove();
-			game.getUnit(this.parentId).highlightAllSelectedWeapons();
-		}
-		else {
-			this.highlight = true;
-			this.showHitAxis();
-			this.showInfoDiv(e);
-		}
+Structure.prototype.showOptions = function(){
+	if (this.locked || game.phase != -1 || game.getUnit(this.parentId).userid != game.userid ){return;}
+
+	var ele = $(this.element);
+	var boost = this.effiency;
+
+	if (boost){
+		ele.find(".boostDiv").show();
 	}
+}
 
-	this.showHitAxis = function(){
-		game.getUnit(this.parentId).drawSystemAxis(this);
+Structure.prototype.hideOptions = function(){
+	if (this.locked || game.phase != -1 || game.getUnit(this.parentId).userid != game.userid ){return;}
+	var ele = $(this.element);
+
+	if (game.phase == -1 && this.effiency){
+			$(ele) .find(".boostDiv").hide().end();
 	}
+}
 
-	this.showInfoDiv = function(e){
-		$(document.body).append(
-			$(this.getSystemDetailsDiv())
-				.css("left", e.clientX - 90)
-				.css("top", e.clientY + 40)			)
-	}
+Structure.prototype.showInfoDiv = function(e){
+	$(document.body).append(
+		$(this.getSystemDetailsDiv())
+			.css("left", e.clientX - 90)
+			.css("top", e.clientY + 40)
+		)
+}
 
-	this.getSystemDetailsDiv = function(){
-		return $("<div>").attr("id", "systemDetailsDiv")
-			.append($("<table>")
+Structure.prototype.hideInfoDiv = function(e){
+	$("#systemDetailsDiv").remove();
+}
+
+Structure.prototype.getSystemDetailsDiv = function(){
+	var div = $("<div>").attr("id", "systemDetailsDiv")
+
+	var table = $("<table>")
+		.append($("<tr>")
+			.append($("<th>").html("Outer Armour").attr("colSpan", 2)))
+		.append($("<tr>")
+			.append($("<td>").html("Armour Strength"))
+			.append($("<td>").html(this.getRemainingNegation() + " / " + this.negation)));
+
+	if (this.boostEffect.length){
+		var boost = this.getBoostEffect("Armour");
+		if (boost){
+			table.append($("<tr>")
+					.append($("<th>").html("EA Energy Web").attr("colSpan", 2)))
 				.append($("<tr>")
-					.append($("<th>").html("Outer Armour").attr("colSpan", 2)))
-				.append($("<tr>").attr("colSpan", 2)
-					.append($("<td>").html("Strength"))
-					.append($("<td>").html(this.getRemainingNegation() + " / " + this.negation))));
+					.append($("<td>").html("Current Extra Armour"))
+					.append($("<td>").html(3 + this.getBoostLevel()).addClass("boostEffect")))
+				.append($("<tr>")
+					.append($("<td>").html("Boost Power Cost"))
+					.append($("<td>").html(this.getEffiency()).addClass("powerCost")));
+		}
 	}
 
-	this.getRemainingIntegrity = function(){
-		var integrity = this.integrity;
-		for (var i = 0; i < this.damages.length; i++){
-			integrity -= this.damages[i].armourDmg;
-		}
-		return Math.floor(integrity);
+	return div.append(table);
+}
+
+Structure.prototype.update = function(){
+	this.updateSystemDetailsDiv();
+	//$(this.element).find(".outputMask").html(this.getOutput());
+}
+
+Structure.prototype.updateSystemDetailsDiv = function(){
+	$("#systemDetailsDiv")
+		.find(".boostEffect").html(3 + this.getBoostEffect("Armour") * this.getBoostLevel()).end()
+		.find(".powerCost").html(this.getEffiency());
+	$(this.element).find(".integrityAmount").html(this.getArmourString());
+}
+
+Structure.prototype.getCurrentPowerUsage = function(){
+	return System.prototype.getCurrentPowerUsage.call(this);
+}
+
+Structure.prototype.getEffiency = function(){
+	return System.prototype.getEffiency.call(this);
+}
+
+Structure.prototype.getBoostCostIncrease = function(){
+	return 0.5;
+}
+
+Structure.prototype.getBoostLevel = function(){
+	return System.prototype.getBoostLevel.call(this);
+}
+
+Structure.prototype.plus = function(){
+	return System.prototype.plus.call(this);
+}
+
+Structure.prototype.minus = function(){
+	return System.prototype.minus.call(this);
+}
+
+Structure.prototype.doBoost = function(){
+	return System.prototype.doBoost.call(this);
+}
+
+Structure.prototype.canUnboost = function(){
+	return System.prototype.canUnboost.call(this);
+}
+
+Structure.prototype.doUnboost = function(){
+	return System.prototype.doUnboost.call(this);
+}
+
+Structure.prototype.getBoostEffect = function(val){
+	return System.prototype.getBoostEffect.call(this, val);
+}
+
+Structure.prototype.getRemainingIntegrity = function(){
+	var integrity = this.integrity;
+	for (var i = 0; i < this.damages.length; i++){
+		integrity -= this.damages[i].armourDmg;
 	}
+	return Math.floor(integrity);
+}
+
+Structure.prototype.drawArc = function(){
+	if (game.animating){return;}
+	if (this.tiny){return;}
+
+	fxCtx.clearRect(0, 0, res.x, res.y);
+	fxCtx.translate(cam.o.x, cam.o.y);
+	fxCtx.scale(cam.z, cam.z);
+
+	var facing = game.getUnit(this.parentId).getPlannedFacing()
+	var pos = game.getUnit(this.parentId).getPlannedPos()
+	var p1 = getPointInDirection(1000, this.start + facing, pos.x, pos.y);
+	var p2 = getPointInDirection(1000, this.end + facing, pos.x, pos.y)
+	var dist = getDistance( {x: pos.x, y: pos.y}, p1);
+	var rad1 = degreeToRadian(this.start + facing);
+	var rad2 = degreeToRadian(this.end + facing);
+
+	fxCtx.globalAlpha = 1;
+	fxCtx.beginPath();			
+	fxCtx.moveTo(pos.x, pos.y);
+	fxCtx.arc(pos.x, pos.y, dist, rad1, rad2, false);
+	fxCtx.closePath();		
+	fxCtx.fillStyle = "white";
+	fxCtx.fill();
+	fxCtx.globalAlpha = 1;
+	fxCtx.setTransform(1, 0, 0, 1, 0, 0);
+}
+
+Structure.prototype.getBoostDiv = function(){
+	return System.prototype.getBoostDiv.call(this);
 }
 
 
@@ -568,8 +699,9 @@ function Primary(data){
 	this.highlight = false;	
 	this.systems = [];
 	this.remaining = data.remaining;
+	this.element;
 	
-	this.getTableRow = function(){
+	this.getTableData = function(){
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
 			td.className = "struct";
@@ -579,7 +711,7 @@ function Primary(data){
 			span.className = "integrityAmount";
 			if (this.integrity > 999){
 				span.className += " font15";
-			}
+			} else span.className += " font18";
 			span.innerHTML = this.remaining + " / " + this.integrity;
 			td.appendChild(span);
 
@@ -610,6 +742,7 @@ function Primary(data){
 
 			tr.appendChild(td);
 			
+		this.element = tr;
 		return tr;
 	}
 

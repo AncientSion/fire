@@ -1,13 +1,4 @@
-body {
-	color: white;
-	background-color: black;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
+
 
 .hinter {
 	font-size: 50px;
@@ -81,6 +72,11 @@ body {
 .img30 {
 	width: 30px;
 	height: 30px;
+}
+
+.img40 {
+	width: 40px;
+	height: 40px;
 }
 
 .img50 {
@@ -160,7 +156,7 @@ table, th, tr, td {
 	z-index: 6;
 	background-color: black;
 	top: 80px;
-	width: 250px;
+	width: 200px;
 }
 
 #deployWrapper.disabled  {
@@ -388,10 +384,6 @@ table, th, tr, td {
 	color: white;
 }
 
-.font20 {
-	font-size: 18px;
-}
-
 .lobbyDiv {
 	text-align: center;
 	margin: auto;
@@ -579,10 +571,29 @@ table, th, tr, td {
 	width: 20px;
 }
 
+.font12 {
+	font-size: 12px;
+}
+
+.font14 {
+	font-size: 14px;
+}
+
 .font15 {
 	font-size: 15px;
 }
 
+.font16 {
+	font-size: 16px;
+}
+
+.font18 {
+	font-size: 18px;
+}
+
+.font20 {
+	font-size: 20px;
+}
 
 .structContainer {
 	height: 400px;
@@ -637,17 +648,8 @@ table, th, tr, td {
 	border: none;
 }
 
-.struct {
-	height: 42px;
-	font-size: 16px;
-}
-
 .primaryTable {
 	margin: auto;
-}
-
-.primaryTable .struct {
-	height: 25px;
 }
 
 .primaryTable td {
@@ -658,22 +660,11 @@ table, th, tr, td {
 	background-color: lightBlue;
 }
 
-.struct div.integrityAmount {
-	position: absolute;
-	top: 0;
-	z-index: 2;
-	font-size: 16px;
-	color: white;
-	margin: auto;
-	width: 100%;
-	height: 100%;
+.primaryTable .struct {
+	height: 35px;
 }
 
-.struct div.integrityAmount.font15 {
-	font-size: 15px;
-}
-
-.struct div.integrityNow {
+.struct div.integrityNow, .armour div.integrityNow  {
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -707,25 +698,35 @@ table, th, tr, td {
 	border-top: 1px solid black;
 }
 
-.struct div.integrityFull {
+div.integrityAmount {
 	position: absolute;
-	left: 0;
-	top: 0;
-	bottom: 0;
-	background-color: red;
-	z-index: 0;
+	z-index: 2;
+	color: white;
+	margin: auto;
 	width: 100%;
 	height: 100%;
 }
 
-.integrityAmount {
+.armour div.integrityAmount {
+	top: 0;
+}
+
+.struct div.integrityAmount {
+	top: 4;
+}
+
+div.integrityFull {
 	position: absolute;
-	top: 20;
-	z-index: 2;
-	font-size: 16px;
-	color: white;
-	margin: auto;
+	left: 0;
+	bottom: 0;
+	background-color: red;
+	z-index: 0;
 	width: 100%;
+	top: 0;
+}
+
+.system div.integrityFull {
+	top: 20;
 }
 
 .integrityNow {
@@ -734,16 +735,6 @@ table, th, tr, td {
 	top: 20;
 	bottom: 0;
 	z-index: 1;
-}
-
-.integrityFull {
-	position: absolute;
-	left: 0;
-	top: 20;
-	bottom: 0;
-	background-color: red;
-	z-index: 0;
-	width: 100%;
 }
 
 .loadLevel {
@@ -811,7 +802,7 @@ table, th, tr, td {
 	height: 18px;
 }
 
-.struct {
+.struct, .armour {
 	border-top: 4px solid black;
 	border-bottom: 4px solid black;
 }
@@ -1086,25 +1077,29 @@ table, th, tr, td {
 	font-size: 14px;
 }
 
-#systemDetailsDiv th, #systemDetailsDiv td {
-	background: black;
-	color: white;
-}
-
-#systemDetailsDiv td.negative {
-	font-size: 12px;
+.negative {
 	color: #ff3d00;
 }
 
-#systemDetailsDiv td.positive {
-	font-size: 12px;
+.positive {
 	color: #27e627;
+}
+
+#systemDetailsDiv th, #systemDetailsDiv td {
+	background: black;
 }
 
 .structTable .boostDiv {
 	z-index: 15;
 	position: absolute;
 	top: -4px;
+	left: -15px;
+}
+
+.armour .boostDiv {
+	z-index: 15;
+	position: absolute;
+	top: -8px;
 	left: -15px;
 }
 
@@ -1615,4 +1610,15 @@ table, th, tr, td {
 .inputText {
 	text-align: center;
 	padding: 5px;
+}
+
+body {
+	color: white;
+	background-color: black;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

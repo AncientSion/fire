@@ -569,7 +569,7 @@
 						for ($k = 0; $k < sizeof($deploys); $k++){
 							$d = Math::getDist($deploys[$k]["x"], $deploys[$k]["y"], $x, $y);
 							$min = $deploys[$k]["s"] + $s;
-							Debug::log("d is".$d." min is ".$min);
+							//Debug::log("d is".$d." min is ".$min);
 							if ($d < $min){
 								$valid = 0;
 								break;
@@ -579,7 +579,7 @@
 						if ($valid){
 							$do = 0;
 							$deploys[] = array("gameid" => $gameid, "userid" => $players[$i]["userid"], "turn" => 1, "phase" => -1, "x" => $x, "y" => $y, "s" => $s);
-						} else Debug::log("redoing!");
+						}//else Debug::log("redoing!");
 					}
 				}
 			}
