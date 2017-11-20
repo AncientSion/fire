@@ -119,7 +119,7 @@ class LightLaser extends Laser {
 	public $beamWidth = 2;
 	public $minDmg = 60;
 	public $maxDmg = 80;
-	public $optRange = 350;
+	public $optRange = 250;
 	public $dmgLoss = 4;
 	public $accDecay = 120;
 	public $shots = 1;
@@ -144,7 +144,7 @@ class MediumLaser extends Laser {
 	public $beamWidth = 3;
 	public $minDmg = 90;
 	public $maxDmg = 125;
-	public $optRange = 600;
+	public $optRange = 450;
 	public $dmgLoss = 4;
 	public $accDecay = 90;
 	public $reload = 3;
@@ -168,7 +168,7 @@ class HeavyLaser extends Laser {
 	public $beamWidth = 4;
 	public $minDmg = 145;
 	public $maxDmg = 180;
-	public $optRange = 800;
+	public $optRange = 650;
 	public $dmgLoss = 4;
 	public $accDecay = 60;
 	public $reload = 4;

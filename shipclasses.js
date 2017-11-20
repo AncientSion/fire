@@ -2338,7 +2338,7 @@ Ship.prototype.createBaseDiv = function(){
 	div.appendChild(subDiv);
 
 	$(this.expandDiv(div))
-		.addClass("disabled")
+		//.addClass("disabled")
 		.drag()
 		.find(".structContainer")
 			.contextmenu(function(e){e.stopPropagation;})
@@ -2504,9 +2504,12 @@ Ship.prototype.expandDiv = function(div){
 
 		var structDiv = document.createElement("div");
 			structDiv.className = "structDiv";
+		structContainer.appendChild(structDiv);
 			
 		var structTable = document.createElement("table");
 			structTable.className = "structTable";
+		structDiv.appendChild(structTable);
+
 
 		var armourEle = this.structures[i].getTableData();
 
@@ -2581,6 +2584,7 @@ Ship.prototype.expandDiv = function(div){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			if (col == 0){
 				tr = document.createElement("tr");
+				//structTable.appendChild(tr);
 				if (this.structures[i].systems.length - j != max){
 					if ((this.structures[i].systems.length - j) *2 == max){
 						colWidth = 2;
@@ -2596,48 +2600,41 @@ Ship.prototype.expandDiv = function(div){
 				td.colSpan = colWidth;
 				td = this.attachEvent(td);
 
+			col++;
+			tr.appendChild(td);
+
 			if (this.id > 0 || game.turn == 1){
 				var boostDiv = this.structures[i].systems[j].getBoostDiv();
-				if (boostDiv){td.appendChild(boostDiv)};
+				if (boostDiv){td.appendChild(boostDiv);}
 
 				var powerDiv = this.structures[i].systems[j].getPowerDiv();
 				if (powerDiv){
-					powerDiv.style.left = colWidth * 24 + "px";
-					td.appendChild(powerDiv);
-				}
+					//console.log($(powerDiv).width());
+					td.appendChild(powerDiv);}
 
 				var modeDiv = this.structures[i].systems[j].getModeDiv();
-				if (modeDiv){
-					td.appendChild(modeDiv);
-				}
+				if (modeDiv){td.appendChild(modeDiv);}
 			}
 
 			if (this.structures[i].systems[j].dual && !this.structures[i].systems[j].effiency){
 				$(td).find(".outputMask").hide();
 			}
 
-			col++;
-			tr.appendChild(td);
-
 			if (fill){
 				tr.insertCell(-1).className ="emptySystem"; col++;
 			}
 
-			if (col == max){
+			if (col == max || j == this.structures[i].systems.length-1){
 				structTable.appendChild(tr);
 				if (maxRow < col){
 					maxRow = col;
 				}
 				col = 0;
 			}
-			if (j == this.structures[i].systems.length-1){
-				structTable.appendChild(tr);
-				if (maxRow < col){
-					maxRow = col;
-				}
-				col = 0;
-				$(structTable).find(".armour").attr("colSpan", maxRow);
-			}
+
+			$(structTable).find(".armour").attr("colSpan", maxRow);
+
+
 		}
 
 		if (!this.structures[i].systems.length){
@@ -2645,9 +2642,6 @@ Ship.prototype.expandDiv = function(div){
 				structTable.childNodes[0].childNodes[0].style.width = "23px";
 			}
 		}
-
-		structDiv.appendChild(structTable);
-		structContainer.appendChild(structDiv);
 
 		var offsetX = 0;
 		var offsetY = -20;
@@ -2731,6 +2725,25 @@ Ship.prototype.expandDiv = function(div){
 	*/	
 
 	this.getAttachDivs();
+
+	//if (this.id == 10){
+		for (var i = 0; i < this.structures.length; i++){
+			for (var j = 0; j < this.structures[i].systems.length; j++){
+				var s = $(this.structures[i].systems[j].element)
+				var w = s.width();
+				var h = s.height();
+
+				s
+				.find(".boostDiv").css("left", -14).css("top", -4).end()
+				.find(".powerDiv").css("left", w-2).css("top", -4).end()
+				.find(".modeDiv").css("left", w/2 - 9).css("top", h);
+
+			}
+		}
+		//console.log($(this.structures[3].systems[0].element).width());
+	//}
+
+	$(div).addClass("disabled");
 	return div;
 }
 

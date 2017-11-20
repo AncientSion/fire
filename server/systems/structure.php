@@ -62,7 +62,7 @@ class Structure {
 		if (!sizeof($this->boostEffect)){return;}
 		$this->bonusNegation = $this->getBoostEffect("Armour") * $this->getBoostLevel($turn);
 
-		Debug::log("Bonus Negation for #".$this->parentId."/".$this->id.": ".$this->bonusNegation);
+		//Debug::log("Bonus Negation for #".$this->parentId."/".$this->id.": ".$this->bonusNegation);
 	}
 
 	public function getBoostEffect($type){

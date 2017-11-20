@@ -244,7 +244,7 @@ class Mixed extends Ship {
 	}
 
 	public function getMoveState($turn){
-		Debug::log("getMoveState for ".$this->id);
+		//Debug::log("getMoveState for ".$this->id);
 		$angle = $this->actions[sizeof($this->actions)-1]->a;
 
 		if ($angle > 360){

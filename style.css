@@ -1092,8 +1092,6 @@ div.integrityFull {
 .structTable .boostDiv {
 	z-index: 15;
 	position: absolute;
-	top: -4px;
-	left: -15px;
 }
 
 .armour .boostDiv {
@@ -1133,7 +1131,6 @@ div.integrityFull {
 .structTable .powerDiv {
 	z-index: 15;
 	position: absolute;
-	top: -4px;
 }
 
 .primaryTable .powerDiv {
@@ -1154,8 +1151,6 @@ div.integrityFull {
 .structTable .modeDiv {
 	z-index: 15;
 	position: absolute;
-	top: 24px;
-	left: 4px;
 }
 
 .primaryTable .modeDiv {

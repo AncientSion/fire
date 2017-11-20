@@ -30,12 +30,12 @@ class Pulse extends Weapon {
 
 		$fire->hits++;
 
-		Debug::log("fireid: ".$fire->id.", doDamage, weapon: ".get_class($this)." #".$this->id.", hits: ".$hits.", target: ".$fire->target->id.", armour: ".$negation.", health: ".$remInt);
+		Debug::log("fireid: ".$fire->id.", doDamage, weapon: ".get_class($this)." #".$this->id.", target: ".$fire->target->id.", doing: ".$totalDmg." * ".$hits.", armour: ".$negation.", remaining: ".$remInt);
 
 		for ($i = 0; $i < $hits; $i++){
 			if ($destroyed){
 				$overkill += $dmg->structDmg;
-				Debug::log("hit ".($i+1).", adding damage to overkill which is at: ".$overkill." pts");
+				Debug::log(" => hit ".($i+1).", adding ".$dmg->structDmg." to overkill which is now: ".$overkill." pts");
 			}
 			else if ($remInt - $dmg->structDmg < 1){
 				$destroyed = 1;
@@ -44,8 +44,8 @@ class Pulse extends Weapon {
 
 				if ($okSystem){
 					$overkill = abs($remInt - $dmg->structDmg);
-					$dmg->structDmg = $remInt;
-					Debug::log(" => OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$overkill." dmg");
+					Debug::log(" => hit ".($i+1)." OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$overkill." dmg");
+					$dmg->structDmg += $remInt;
 				}
 				else {
 					Debug::log(" => DESTROYING non-ship target system");
