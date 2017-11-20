@@ -130,7 +130,7 @@ class Power {
 		$this->unitid = $unitid;
 		$this->systemid = $systemid;
 		$this->turn = $turn;
-		$this->type = $type;
+		$this->type = $type; // 1 boost, 0 unpower, .-1 dualsystem mode
 		$this->cost = $cost;
 		$this->new = 0;
 	}

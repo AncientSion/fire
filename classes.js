@@ -451,7 +451,7 @@ Structure.prototype.getRemainingNegation = function(){
 
 Structure.prototype.getArmourString = function(){
 	if (this.boostEffect.length){
-		return this.remainingNegation + "<span style='color: #27e627; font-size: 16px'>+" + (3 + this.getBoostEffect("Armour") * this.getBoostLevel()) + "</span> / " + this.negation;
+		return this.remainingNegation + "<span style='color: #27e627; font-size: 16px'>+" + (this.getBoostEffect("Armour") * this.getBoostLevel()) + "</span> / " + this.negation;
 	}
 	return this.remainingNegation + " / " + this.negation;
 }
@@ -586,7 +586,7 @@ Structure.prototype.getSystemDetailsDiv = function(){
 					.append($("<th>").html("EA Energy Web").attr("colSpan", 2)))
 				.append($("<tr>")
 					.append($("<td>").html("Current Extra Armour"))
-					.append($("<td>").html(3 + this.getBoostLevel()).addClass("boostEffect")))
+					.append($("<td>").html(this.getBoostEffect("Armour") * this.getBoostLevel()).addClass("boostEffect")))
 				.append($("<tr>")
 					.append($("<td>").html("Boost Power Cost"))
 					.append($("<td>").html(this.getEffiency()).addClass("powerCost")));
@@ -603,7 +603,7 @@ Structure.prototype.update = function(){
 
 Structure.prototype.updateSystemDetailsDiv = function(){
 	$("#systemDetailsDiv")
-		.find(".boostEffect").html(3 + this.getBoostEffect("Armour") * this.getBoostLevel()).end()
+		.find(".boostEffect").html(this.getBoostEffect("Armour") * this.getBoostLevel()).end()
 		.find(".powerCost").html(this.getEffiency());
 	$(this.element).find(".integrityAmount").html(this.getArmourString());
 }

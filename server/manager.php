@@ -988,7 +988,7 @@ class Manager {
 			//Debug::log("setupship #".$this->ships[$i]->id);
 			$this->ships[$i]->setFacing();
 			$this->ships[$i]->setPosition();
-			$this->ships[$i]->setupForDamage();
+			$this->ships[$i]->setupForDamage($this->turn);
 		}
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){

@@ -354,6 +354,7 @@ class Ship {
 
 	public function addPowerDB($powers){
 		for ($i = 0; $i < sizeof($powers); $i++){
+			//Debug::log("adding entry");
 			$this->getBaseSystemById($powers[$i]->systemid)->addPowerEntry($powers[$i]);
 		}
 	}
@@ -378,8 +379,12 @@ class Ship {
 		return true;
 	}
 
-	public function setupForDamage(){
+	public function setupForDamage($turn){
 		$this->primary->setRemainingIntegrity();
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			$this->structures[$i]->setBonusNegation($turn);
+		}
 	}
 
 	public function applyDamage($dmg){
@@ -892,7 +897,7 @@ class Ship {
 	}
 
 	public function getBaseSystemById($id){
-		//echo $id."</br>";
+		//Debug::log("looking for id ".$id);
 		if ($this->ship){
 			for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 				if ($this->primary->systems[$i]->id == $id){
@@ -901,6 +906,9 @@ class Ship {
 			}
 		}
 		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($this->structures[$i]->id == $id){
+				return $this->structures[$i];
+			}
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if ($this->structures[$i]->systems[$j]->id == $id){
 					return $this->structures[$i]->systems[$j];

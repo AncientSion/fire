@@ -1234,12 +1234,9 @@ function Game(data, userid){
 	this.getCurrentReinforceCost = function(){
 		var cost = 0;
 
-		$(".requestReinforcements").each(function(i){
-			$(this)
-			if ($(this).hasClass("green")){
-				cost += $(this).data("cost");
-			}
-		});
+		$("#deployWrapper").find("#reinforceTable").find(".selected").each(function(i){
+			cost += $(this).data("cost");
+		})
 
 		return cost;
 	}

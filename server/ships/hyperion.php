@@ -16,7 +16,7 @@ class Hyperion extends Heavy {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 18);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 17);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new Dual($this->getId(), $this->id, 240, 120, 14, array("LightPulse", "LightParticleBeam"));
 		//$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 35, array("HeavyLaser", "HeavyPulse"));
@@ -46,7 +46,7 @@ class Hyperion extends Heavy {
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 2);
-			$this->structures[sizeof($this->structures)-1]->effiency = 6;
+			$this->structures[sizeof($this->structures)-1]->effiency = 4;
 		}
 	}
 
@@ -56,7 +56,7 @@ class Hyperion extends Heavy {
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 115, 240);
 		//$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 115);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 115, 700, 15);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 115);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 115, 6);
 	}
 }
 

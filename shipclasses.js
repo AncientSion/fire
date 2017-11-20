@@ -210,15 +210,17 @@ function Ship(data){
 		}
 		this.select();
 
-		$("#game")
-			.find("#deployOverlay").hide().end()
-			.find("#deployWrapper").find("#reinforceTable").find(".requestReinforcements").each(function(){
-			if ($(this).hasClass("selected")){
-				//$(this).find(".cost").addClass("green");
-				$(this).addClass("green");
-				return;
-			}
-		}).end().find("#totalRequestCost").html(game.getCurrentReinforceCost());
+		$("#deployOverlay").hide();
+		$("#deployWrapper")
+				.find("#reinforceTable").find(".requestReinforcements").each(function(){
+				if ($(this).hasClass("selected")){
+					//$(this).find(".cost").addClass("green");
+					$(this).addClass("green");
+					return;
+				}
+			}).end()
+			.find("#totalRequestCost").html(game.getCurrentReinforceCost());
+
 		game.redraw();
 	}
 
@@ -1577,7 +1579,7 @@ Ship.prototype.getPowerOrders = function(){
 				powers.push(this.structures[i].powers[k]);
 			}
 		}
-		for (var j = 0; j < this.structures[i].powers.length; j++){
+		for (var j = 0; j < this.structures[i].systems.length; j++){
 			for (var k = 0; k < this.structures[i].systems[j].powers.length; k++){
 				if (this.structures[i].systems[j].powers[k].new){
 					powers.push(this.structures[i].systems[j].powers[k]);
@@ -1645,14 +1647,22 @@ Ship.prototype.setDrawData = function(){
 	if (this.available > game.turn || !this.available || game.turn == 1 && game.phase == -1){
 		return;
 	}
+
+	//console.log(this.id);
 	
 	if (game.phase > 2){
 		this.setPostMovePosition();
 		this.setPostMoveFacing();
 	}
-	else {
+	else if (game.phase == 1){
 		this.setPreMovePosition();
 		this.setPreMoveFacing();
+	}
+	else {
+		this.setPreMovePosition();
+		if (this.ship){
+			this.setPreMoveFacing();
+		}
 	}
 }
 
@@ -2558,7 +2568,7 @@ Ship.prototype.expandDiv = function(div){
 			}
 		}
 
-		if (max == 1 && !fill){ // if only one column, make it bigger (armour string)
+		if (max == 1 && !fill || max == 2){ // if only one column, make it bigger (armour string)
 			if (this.structures[i].getBoostEffect("Armour")){
 				structTable.childNodes[0].childNodes[0].style.width = "40px";
 				structTable.childNodes[0].childNodes[0].style.height = "45px";

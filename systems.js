@@ -1851,15 +1851,11 @@ Plasma.prototype.getFillStyle = function(x, y, dist){
 	var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);
 	var loss = this.dmgLoss * this.getRangeDmgMod();
 
-	//7 loss, dist 800
-
-	//66 / 7 
-
-	var red = 0.66;
+	var red = 0.5;
 		red = red/loss*10000/dist;
-	var yellow = 0.4;
+	var yellow = 0.3;
 		yellow = yellow/loss*10000/dist;
-	var green = 0.2;
+	var green = 0.1;
 		green = green/loss*10000/dist;
 
 

@@ -32,6 +32,7 @@ class Laser extends Weapon {
 		$overkill = 0;
 		$okSystem = 0;
 		$rakes = $this->rakes;
+		$systems = array();
 
 		$print = "hitting --- ";
 		if ($totalDmg <= 0){
@@ -43,6 +44,15 @@ class Laser extends Weapon {
 
 		while ($rakes){
 			$system = $fire->target->getHitSystem($fire);
+
+			for ($i = 0; $i < sizeof($systems); $i++){
+				if ($systems[$i] == $system->id){
+					$system = $fire->target->primary;
+					Debug::log("Laser DOUBLE HIT, switching to PRIMARY");
+				}
+			}
+			if (!get_class($system) == "Primary"){$systems[] = $system->id;
+			}
 			$print .= " ".get_class($system).": ".$rake."dmg, ";
 			$destroyed = false;
 			$remInt = $system->getRemainingIntegrity();
@@ -110,7 +120,7 @@ class LightLaser extends Laser {
 	public $minDmg = 60;
 	public $maxDmg = 80;
 	public $optRange = 350;
-	public $dmgLoss = 6;
+	public $dmgLoss = 4;
 	public $accDecay = 120;
 	public $shots = 1;
 	public $reload = 2;
@@ -159,7 +169,7 @@ class HeavyLaser extends Laser {
 	public $minDmg = 145;
 	public $maxDmg = 180;
 	public $optRange = 800;
-	public $dmgLoss = 2;
+	public $dmgLoss = 4;
 	public $accDecay = 60;
 	public $reload = 4;
 	public $powerReq = 6;

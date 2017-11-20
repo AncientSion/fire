@@ -79,7 +79,7 @@ class LightPulse extends Pulse {
 	public $animColor = "brown";
 	public $projSize = 2;
 	public $projSpeed = 10;
-	public $reload = 1;
+	public $reload = 2;
 	public $mass = 12;
 	public $powerReq = 2;
 	public $traverse = -4;

@@ -16,6 +16,7 @@ class Structure {
 	public $powers = array();
 	public $effiency = 0;
 	public $boostEffect = array();
+	public $bonusNegation = 0;
 
 	function __construct($id, $parentId, $start, $end, $integrity, $negation, $destroyed = false){
 		$this->id = $id;
@@ -40,21 +41,52 @@ class Structure {
 		return false;
 	}
 
+	public function addPowerEntry($power){
+		$this->powers[] = $power;
+	}
+
 	public function setNegation($main, $armourDmg){
 		$p = 1.5;
 		$this->parentPow = round(pow($main, $p));
 		$this->parentIntegrity = $main;
 		$this->armourDmg += $armourDmg;
 		$this->remainingNegation = round((pow($main - $this->armourDmg, $p) / $this->parentPow) * $this->negation);
-
-		if ($this->parentId == 11 && $this->id == 10){
-		//	Debug::log($)
-		}
 	}
 
 	public function getCurrentNegation(){
 		$p = 1.5;
-		return round(pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow * $this->negation);
+		return round(pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow * $this->negation) + $this->bonusNegation;
+	}
+
+	public function setBonusNegation($turn){
+		if (!sizeof($this->boostEffect)){return;}
+		$this->bonusNegation = $this->getBoostEffect("Armour") * $this->getBoostLevel($turn);
+
+		Debug::log("Bonus Negation for #".$this->parentId."/".$this->id.": ".$this->bonusNegation);
+	}
+
+	public function getBoostEffect($type){
+		for ($i = 0; $i < sizeof($this->boostEffect); $i++){
+			if ($this->boostEffect[$i]->type == $type){
+				return $this->boostEffect[$i]->value;
+			}
+		}
+		return 0;
+	}
+
+	public function getBoostLevel($turn){
+		$boost = 0;
+		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
+			if ($this->powers[$i]->turn == $turn){
+				switch ($this->powers[$i]->type){
+					case 1: 
+					$boost++;
+					break;
+				}
+			}
+			else break;
+		}
+		return $boost;
 	}
 }
 
@@ -106,7 +138,7 @@ class Primary {
 	}
 
 	public function getHitChance(){
-		return $this->remaining*1.33;
+		return $this->remaining*1.4;
 	}
 
 
@@ -220,6 +252,10 @@ class Single {
 
 	public function getCurrentNegation(){
 		return $this->negaton;
+	}
+
+	public function setBonusNegation($turn){
+		return;
 	}
 
 	public function determineCrit($old, $new, $turn){

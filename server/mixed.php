@@ -130,7 +130,7 @@ class Mixed extends Ship {
 			}
 		}
 	}
-	public function setupForDamage(){
+	public function setupForDamage($turn){
 		return;
 	}
 

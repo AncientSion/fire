@@ -30,13 +30,13 @@ class Weapon extends System {
 
 	public function setArmourMod(){
 		$w = $this->getArcWidth();
-		if ($w <= 60){$this->armourMod = 0.7;}
-		else if ($w <= 120){$this->armourMod = 0.55;}
-		else if ($w <= 360){$this->armourMod = 0.4;}
+		if ($w <= 60){$this->armourMod = 0.75;}
+		else if ($w <= 120){$this->armourMod = 0.6;}
+		else if ($w <= 360){$this->armourMod = 0.45;}
 	}
 
 	public function getCritModMax($dmg){
-		return min(0.3, (round($dmg/20)/10)); // round to 0.x, half % mod
+		return min(0.3, (round($dmg/20)/10)) - (mt_rand(0, 1) * 0.1); // round to 0.x, half % mod, 0.1 variance
 	}
 	
 	public function getTraverseMod($fire){
@@ -80,7 +80,7 @@ class Weapon extends System {
 
 		$fire->hits++;
 
-		Debug::log("doDamage, weapon: ".(get_class($this)).", target: ".$fire->target->id."/".$system->id."/".get_class($system).", totalDmg: ".$totalDmg.", remaining: ".$remInt);
+		Debug::log("doDamage, weapon: ".(get_class($this)).", target: ".$fire->target->id."/".$system->id."/".get_class($system).", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation);
 
 		if ($remInt - $dmg->structDmg < 1){
 			$destroyed = 1;
