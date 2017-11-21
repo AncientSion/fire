@@ -2577,6 +2577,9 @@ Game.prototype.setShipDivs = function(val){
 		x += 25;
 		y += 25;
 
+		//console.log(this.ships[i].id);
+		//console.log(x, y);
+
 		if (y + 600 > res.y){
 			y = 200;
 			x += 100;

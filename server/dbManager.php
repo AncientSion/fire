@@ -481,7 +481,7 @@
 			return true;
 		}
 
-		public function insertServerActions($units){
+		public function insertServerActions($data){
 			//Debug::log("DB insertServerActions s: ".sizeof($units));
 			$stmt = $this->connection->prepare("
 				INSERT INTO actions 
@@ -490,30 +490,25 @@
 					(:shipid, :turn, :type, :dist, :x, :y, :a, :cost, :delay, :costmod, :resolved)
 			");
 
-			for ($i = 0; $i < sizeof($units); $i++){
-				for ($j = 0; $j < sizeof($units[$i]->actions); $j++){
-					if ($units[$i]->actions[$j]->resolved == 0){
-						//Debug::log("Insert Action for unit: ".$units[$i]->id);
-						$units[$i]->actions[$j]->resolved = 1;
-						
-						$stmt->bindParam(":shipid", $units[$i]->id);
-						$stmt->bindParam(":turn", $units[$i]->actions[$j]->turn);
-						$stmt->bindParam(":type", $units[$i]->actions[$j]->type);
-						$stmt->bindParam(":dist", $units[$i]->actions[$j]->dist);
-						$stmt->bindParam(":x", $units[$i]->actions[$j]->x);
-						$stmt->bindParam(":y", $units[$i]->actions[$j]->y);
-						$stmt->bindParam(":a", $units[$i]->actions[$j]->a);
-						$stmt->bindParam(":cost", $units[$i]->actions[$j]->cost);
-						$stmt->bindParam(":delay", $units[$i]->actions[$j]->delay);
-						$stmt->bindParam(":costmod", $units[$i]->actions[$j]->costmod);
-						$stmt->bindParam(":resolved",$units[$i]->actions[$j]->resolved);
-						$stmt->execute();		
-						if ($stmt->errorCode() == 0){
-							continue;
-						}
-						else {
-							return false;
-						}
+			for ($j = 0; $j < sizeof($data); $j++){
+				if ($data[$j]->new){
+					$stmt->bindParam(":shipid", $data[$j]->shipid);
+					$stmt->bindParam(":turn", $data[$j]->turn);
+					$stmt->bindParam(":type", $data[$j]->type);
+					$stmt->bindParam(":dist", $data[$j]->dist);
+					$stmt->bindParam(":x", $data[$j]->x);
+					$stmt->bindParam(":y", $data[$j]->y);
+					$stmt->bindParam(":a", $data[$j]->a);
+					$stmt->bindParam(":cost", $data[$j]->cost);
+					$stmt->bindParam(":delay", $data[$j]->delay);
+					$stmt->bindParam(":costmod", $data[$j]->costmod);
+					$stmt->bindParam(":resolved", $data[$j]->resolved);
+					$stmt->execute();		
+					if ($stmt->errorCode() == 0){
+						continue;
+					}
+					else {
+						return false;
 					}
 				}
 			}
@@ -1356,8 +1351,9 @@
 
 				if ($result){
 					for ($j = 0; $j < sizeof($result); $j++){
-						$units[$i]->actions[] = new Action(
+						$data[] = new Action(
 							$result[$j]["id"],
+							$result[$j]["shipid"],
 							$result[$j]["turn"],
 							$result[$j]["type"],
 							$result[$j]["dist"],
@@ -1367,7 +1363,8 @@
 							$result[$j]["cost"],
 							$result[$j]["delay"],
 							$result[$j]["costmod"],
-							$result[$j]["resolved"]
+							$result[$j]["resolved"],
+							0
 						);
 					}
 				}

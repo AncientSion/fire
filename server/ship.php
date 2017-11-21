@@ -47,6 +47,7 @@ class Ship {
 	public $hitTable;
 	public $cc = array();
 	public $damaged = 0;
+	public $moveSet = 0;
 
 	function __construct($id, $userid, $available, $status, $destroyed){
 		$this->id = $id;

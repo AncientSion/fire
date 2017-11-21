@@ -1,0 +1,24 @@
+insertClientActions s: 3
+doAdvance for game3 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+Handling mixed #15
+STRIKE
+close in
+Handling mixed #14
+STRIKE
+arrival
+Handling mixed #18
+STRIKE
+close in
+Handling mixed #16
+STRIKE
+close in
+Handling mixed #17
+STRIKE
+drag
+handleMixedMovement
+updateMissionState
+advancing game state time: 0.139 seconds.

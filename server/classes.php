@@ -74,16 +74,19 @@ class HitTable {
 }
 class Action {
 	public $id;
+	public $shipid = 0;
 	public $turn;
 	public $type;
 	public $dist;
 	public $x;
 	public $y;
 	public $resolved;
+	public $new;
 	public $manual = 0;
 
-	function __construct($id, $turn, $type, $dist, $x, $y, $a, $cost, $delay, $costmod, $resolved){
+	function __construct($id, $shipid, $turn, $type, $dist, $x, $y, $a, $cost, $delay, $costmod, $resolved, $new){
 		$this->id = $id;
+		$this->shipid = $shipid;
 		$this->turn = $turn;
 		$this->type = $type;
 		$this->dist = $dist;
@@ -94,6 +97,7 @@ class Action {
 		$this->delay = $delay;
 		$this->costmod = $costmod;
 		$this->resolved = $resolved;
+		$this->new = $new;
 	}
 }
 

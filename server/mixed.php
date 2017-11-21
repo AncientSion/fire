@@ -134,6 +134,78 @@ class Mixed extends Ship {
 		return;
 	}
 
+	public function setMove(&$gd){
+		$t = $gd->getUnit($this->mission->targetid);
+
+		if (!$t->moveSet){$t->setMove($gd);}
+
+		Debug::log("Handling mixed #".$this->id);
+
+		$tPos;
+		$dist;
+		$angle;
+		$type = "move";
+
+		if ($this->mission->type == 1){ // PATROL
+			Debug::log("PATROL");
+			if ($this->mission->arrived){
+				$tPos = $t->getCurrentPosition();
+				$type = "patrol";
+				$angle = -1;
+				Debug::log("drag");
+			}
+			else {
+				$origin = $this->getCurrentPosition();
+				$impulse = $this->getCurrentImpulse();
+				$dist = Math::getDist2($origin, $this->mission);
+				$angle = Math::getAngle2($origin, $this->mission);
+
+				if ($impulse < $dist){
+					Debug::log("close in");
+					$tPos = Math::getPointInDirection($impulse, $angle, $origin->x, $origin->y);
+				}
+				else {
+					Debug::log("arrival");
+					$this->mission->arrived = $gd->turn;
+					$tPos = new Point($this->mission->x, $this->mission->y);
+				}
+			}
+		}
+		else if ($this->mission->type == 2){ // STRIKE
+			Debug::log("STRIKE");
+			if ($this->mission->arrived){ // get ship last position as move goal
+				$tPos = $t->getCurrentPosition();
+				$dist = Math::getDist2($this->getCurrentPosition(), $tPos);
+				$angle = Math::getAngle2($this->getCurrentPosition(), $tPos);
+				Debug::log("drag");
+			}
+			else {
+				$tPos = $gd->getUnit($this->mission->targetid)->getCurrentPosition();
+				$origin = $this->getCurrentPosition();
+				$impulse = $this->getCurrentImpulse();
+				$dist = Math::getDist2($origin, $tPos);
+				$angle = Math::getAngle2($origin, $tPos);
+
+				$this->mission->x = $tPos->x;
+				$this->mission->y = $tPos->y;
+
+				if ($impulse < $dist){
+					Debug::log("close in");
+					$tPos = Math::getPointInDirection($impulse, $angle, $origin->x, $origin->y);
+				}
+				else {
+					Debug::log("arrival");
+					$this->mission->arrived = $gd->turn;
+				}
+			}
+		}
+
+		//$this->facing = $angle;
+		$move = new Action(-1, $this->id, $gd->turn, $type, $dist, $tPos->x, $tPos->y, $angle, 0, 0, 0, 1, 1);
+		$this->actions[] = $move;
+		$this->moveSet = 1;
+	}
+
 	public function getImpactAngle($fire){
 		if ($fire->cc){
 			if ($this->flight && ($fire->shooter->flight || $fire->shooter->ship)){
