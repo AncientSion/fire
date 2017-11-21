@@ -74,7 +74,7 @@ class HitTable {
 }
 class Action {
 	public $id;
-	public $shipid = 0;
+	public $shipid;
 	public $turn;
 	public $type;
 	public $dist;

@@ -200,8 +200,8 @@ class Mixed extends Ship {
 			}
 		}
 
-		//$this->facing = $angle;
 		$move = new Action(-1, $this->id, $gd->turn, $type, $dist, $tPos->x, $tPos->y, $angle, 0, 0, 0, 1, 1);
+		Debug::log("adding move to target #".$t->id." => ".$move->x."/".$move->y);
 		$this->actions[] = $move;
 		$this->moveSet = 1;
 	}

@@ -769,8 +769,39 @@ function Game(data, userid){
 				}
 			}
 		}
+		
 		for (var i = 0; i < this.ships.length; i++){
-				this.ships[i].setEscortImage();
+			if (this.ships[i].flight && this.animFlight || this.ships[i].salvo && this.animSalvo){
+				var a = this.ships[i].getPlannedPos();
+
+				for (var j = 0; j < this.ships.length; j++){
+					if (this.ships[i].id == this.ships[j].id){continue;}
+					var double = 0;
+					for (var k = 0; k < this.ships[i].cc.length; k++){
+						if (this.ships[i].cc[k] == this.ships[j].id){
+							double = 1; break;
+						}
+					}
+
+					if (double){continue;}
+
+					var b = this.ships[j].getPlannedPos();
+					if (a.x == b.x && a.y == b.y){
+						this.ships[i].cc.push(this.ships[j].id);
+						this.ships[j].cc.push(this.ships[i].id);
+					}
+				}
+			}
+		}
+
+		for (var i = 0; i < this.ships.length; i++){
+			this.ships[i].setEscortImage();
+		}
+
+		if (!game.animShip && !game.animFlight && !game.animSalvo){
+			for (var i = 0; i < this.ships.length; i++){
+				this.ships[i].getAttachDivs();
+			}
 		}
 	}
 
@@ -880,6 +911,11 @@ function Game(data, userid){
 			this.ships[i].setDrawData();
 			this.ships[i].createBaseDiv();
 			this.ships[i].setImage();
+		}
+
+		this.setCC();
+
+		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].setEscortImage();
 		}
 
@@ -910,6 +946,37 @@ function Game(data, userid){
 		this.canSubmit = canSubmit;
 		cam.setFocus(0, 0);
 		this.initPhase(this.phase);
+	}
+
+	this.setCC = function(){
+		 if (game.phase < 2 || game.phase > 2){
+		 	this.setlastPosCC();
+		 }
+		 else this.setPreMoveCC();
+	}
+
+	this.setlastPosCC = function(){
+		for (var i = 0; i < this.ships.length; i++){
+			var a = this.ships[i].getPlannedPos();
+			for (var j = i+1; j < this.ships.length; j++){
+				var b = this.ships[j].getPlannedPos();
+				if (a.x == b.x && a.y == b.y){
+					this.ships[i].cc.push(this.ships[j].id);
+					this.ships[j].cc.push(this.ships[i].id);
+				}
+			}
+		}
+	}
+
+	this.setPreMoveCC = function(){
+		for (var i = 0; i < this.ships.length; i++){
+			for (var j = i+1; j < this.ships.length; j++){
+				if (this.ships[i].x == this.ships[j].x && this.ships[i].y == this.ships[j].y){
+					this.ships[i].cc.push(this.ships[j].id);
+					this.ships[j].cc.push(this.ships[i].id);
+				}
+			}
+		}
 	}
 
 	this.updateIntercepts = function(){

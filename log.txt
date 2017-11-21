@@ -7,18 +7,23 @@ handleMixedMovement
 Handling mixed #15
 STRIKE
 close in
+adding move to target #8 => -107/-32
 Handling mixed #14
 STRIKE
 arrival
+adding move to target #11 => 339/137
 Handling mixed #18
 STRIKE
 close in
+adding move to target #12 => 77/316
 Handling mixed #16
 STRIKE
-close in
+arrival
+adding move to target #15 => -107/-32
 Handling mixed #17
 STRIKE
 drag
+adding move to target #14 => 339/137
 handleMixedMovement
 updateMissionState
-advancing game state time: 0.139 seconds.
+advancing game state time: 0.045 seconds.

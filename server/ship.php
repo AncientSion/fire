@@ -151,10 +151,6 @@ class Ship {
 		return floor($this->getBaseImpulse() / 8);
 	}
 
-	public function canCC($turn){
-		return true;
-	}
-
 	public function hidePowers($turn){
 		for ($j = 0; $j < sizeof($this->structures); $j++){
 			for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){

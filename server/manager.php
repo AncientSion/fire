@@ -386,10 +386,8 @@ class Manager {
 		if ($this->turn == 1){return;}
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if (!$this->ships[$i]->canCC($this->turn)){continue;}
 			$a = $this->ships[$i]->getCurrentPosition();
 			for ($j = $i+1; $j < sizeof($this->ships); $j++){
-				if (!$this->ships[$j]->canCC($this->turn)){continue;}
 				if ($this->ships[$i]->id != $this->ships[$j]->id){
 					$b = $this->ships[$j]->getCurrentPosition();
 					if ($a->x == $b->x && $a->y == $b->y){
@@ -1231,6 +1229,7 @@ class Manager {
 				return $this->ships[$i];
 			}
 		}
+		return 0;
 	}
 
 	public function getFactions(){

@@ -1350,8 +1350,10 @@
 				$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 				if ($result){
+					//Debug::log("fetching actions for #".$units[$i]->id." and turn ".$turn);
 					for ($j = 0; $j < sizeof($result); $j++){
-						$data[] = new Action(
+						//Debug::log("result #".$j);
+						$units[$i]->actions[] = new Action(
 							$result[$j]["id"],
 							$result[$j]["shipid"],
 							$result[$j]["turn"],
