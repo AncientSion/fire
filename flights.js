@@ -442,7 +442,6 @@ Flight.prototype.expandDiv = function(div){
 	$(div).css("top", 100).css("left", left);
 	*/
 
-	this.getAttachDivs();
 	return div;
 }
 

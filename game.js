@@ -172,19 +172,12 @@ function Game(data, userid){
 
 		var s = this.getUnit(aUnit);
 		if (s.cc.length){
-			var free = 0;
-			for (var i = 0; i < this.ships.length; i++){
-				if (this.ships[i].ship){
-					for (var j = 0; j < s.cc.length; j++){
-						if (s.cc[j] == this.ships[i].id){
-							this.ships[i].detachFlight(s.id);
-							free = 1;
-							s.doDraw = 1;
-							break;
-						}
-					}
-					if (free){break;}
-				}
+			s.doDraw = 1;
+			for (var i = s.cc.length-1; i >= 0; i--){
+				var attach = this.getUnit(s.cc[i]);
+				if (!attach.ship && attach.mission.targetid == s.id){continue;} // skip CC targeting this
+				attach.detachFlight(s.id);
+				s.cc.splice(i, 1);
 			}
 		}
 
@@ -212,6 +205,7 @@ function Game(data, userid){
 			s.setImage();
 		}
 
+		s.setEscortImage();
 		s.disableMissionMode();
 		game.draw();
 		game.drawShipOverlays();
@@ -906,14 +900,15 @@ function Game(data, userid){
 			this.ships[i].create();
 		}
 
+		this.setCC();
+
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].setTarget();
 			this.ships[i].setDrawData();
 			this.ships[i].createBaseDiv();
 			this.ships[i].setImage();
+			this.ships[i].getAttachDivs();
 		}
-
-		this.setCC();
 
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].setEscortImage();

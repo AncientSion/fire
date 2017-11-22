@@ -802,7 +802,6 @@ class Manager {
 
 	public function endTurn(){
 		Debug::log("endTurn");
-		$this->freeFlights();
 		$this->setUnitStatus();
 		$this->assembleEndStates();
 		$this->alterReinforcementPoints();

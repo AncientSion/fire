@@ -11,11 +11,11 @@ adding move to target #8 => -107/-32
 Handling mixed #14
 STRIKE
 arrival
-adding move to target #11 => 339/137
+adding move to target #11 => 404/156
 Handling mixed #18
 STRIKE
-close in
-adding move to target #12 => 77/316
+arrival
+adding move to target #12 => 74/357
 Handling mixed #16
 STRIKE
 arrival
@@ -23,7 +23,115 @@ adding move to target #15 => -107/-32
 Handling mixed #17
 STRIKE
 drag
-adding move to target #14 => 339/137
+adding move to target #14 => 404/156
 handleMixedMovement
 updateMissionState
-advancing game state time: 0.045 seconds.
+advancing game state time: 0.139 seconds.
+doAdvance for game3 from phase 2 to phase 3
+resolveFireOrder - ID 169, shooter: Altarian #11 vs Flight #14, w: LightIon #7, shots: 4
+doDamage, weapon: LightIon, target: 14/5/Aurora, totalDmg: 15, remaining: 26, armour: 4
+doDamage, weapon: LightIon, target: 14/13/Aurora, totalDmg: 15, remaining: 26, armour: 4
+resolveFireOrder - ID 170, shooter: Altarian #11 vs Flight #14, w: LightIon #9, shots: 4
+doDamage, weapon: LightIon, target: 14/11/Aurora, totalDmg: 17, remaining: 26, armour: 4
+doDamage, weapon: LightIon, target: 14/17/Aurora, totalDmg: 12, remaining: 26, armour: 4
+resolveFireOrder - ID 165, shooter: Altarian #12 vs Flight #18, w: LightIon #7, shots: 4
+doDamage, weapon: LightIon, target: 18/17/Aurora, totalDmg: 15, remaining: 26, armour: 4
+resolveFireOrder - ID 166, shooter: Altarian #12 vs Flight #18, w: LightIon #9, shots: 4
+doDamage, weapon: LightIon, target: 18/1/Aurora, totalDmg: 12, remaining: 26, armour: 4
+resolveFireOrder - ID 167, shooter: Altarian #12 vs Flight #18, w: MediumIon #13, shots: 2
+resolveFireOrder - ID 168, shooter: Altarian #12 vs Flight #18, w: MediumIon #19, shots: 2
+resolveFireOrder - ID 179, shooter: Flight #17 vs Flight #14, w: LinkedParticleGun #2, shots: 1
+resolveFireOrder - ID 180, shooter: Flight #17 vs Flight #14, w: LinkedParticleGun #4, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 14/17/Aurora, totalDmg: 14, remaining: 18, armour: 4
+ => destroying non-ship target system Aurora #17 was destroyed, rem: 18, doing: 20
+resolveFireOrder - ID 181, shooter: Flight #17 vs Flight #14, w: LinkedParticleGun #6, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 14/1/Aurora, totalDmg: 12, remaining: 26, armour: 4
+resolveFireOrder - ID 182, shooter: Flight #17 vs Flight #14, w: LinkedParticleGun #8, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 14/11/Aurora, totalDmg: 10, remaining: 13, armour: 4
+resolveFireOrder - ID 183, shooter: Flight #17 vs Flight #14, w: LinkedParticleGun #10, shots: 1
+resolveFireOrder - ID 184, shooter: Flight #17 vs Flight #14, w: LinkedParticleGun #12, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 14/13/Aurora, totalDmg: 13, remaining: 15, armour: 4
+ => destroying non-ship target system Aurora #13 was destroyed, rem: 15, doing: 18
+resolveFireOrder - ID 185, shooter: Flight #17 vs Flight #14, w: LinkedParticleGun #14, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 14/19/Aurora, totalDmg: 11, remaining: 26, armour: 4
+resolveFireOrder - ID 186, shooter: Flight #17 vs Flight #14, w: LinkedParticleGun #16, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 14/7/Aurora, totalDmg: 14, remaining: 26, armour: 4
+resolveFireOrder - ID 171, shooter: Flight #16 vs Flight #15, w: LinkedParticleGun #2, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 15/3/Aurora, totalDmg: 10, remaining: 26, armour: 4
+resolveFireOrder - ID 172, shooter: Flight #16 vs Flight #15, w: LinkedParticleGun #4, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 15/13/Aurora, totalDmg: 10, remaining: 26, armour: 4
+resolveFireOrder - ID 173, shooter: Flight #16 vs Flight #15, w: LinkedParticleGun #6, shots: 1
+resolveFireOrder - ID 174, shooter: Flight #16 vs Flight #15, w: LinkedParticleGun #8, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 15/13/Aurora, totalDmg: 14, remaining: 14, armour: 4
+ => destroying non-ship target system Aurora #13 was destroyed, rem: 14, doing: 20
+resolveFireOrder - ID 175, shooter: Flight #16 vs Flight #15, w: LinkedParticleGun #10, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 15/3/Aurora, totalDmg: 13, remaining: 14, armour: 4
+ => destroying non-ship target system Aurora #3 was destroyed, rem: 14, doing: 18
+resolveFireOrder - ID 176, shooter: Flight #16 vs Flight #15, w: LinkedParticleGun #12, shots: 1
+resolveFireOrder - ID 177, shooter: Flight #16 vs Flight #15, w: LinkedParticleGun #14, shots: 1
+resolveFireOrder - ID 178, shooter: Flight #16 vs Flight #15, w: LinkedParticleGun #16, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 15/19/Aurora, totalDmg: 11, remaining: 26, armour: 4
+resolveFireOrder - ID 205, shooter: Flight #15 vs Flight #16, w: LinkedParticleGun #2, shots: 1
+resolveFireOrder - ID 206, shooter: Flight #15 vs Flight #16, w: LinkedParticleGun #4, shots: 1
+resolveFireOrder - ID 207, shooter: Flight #15 vs Flight #16, w: LinkedParticleGun #6, shots: 1
+resolveFireOrder - ID 208, shooter: Flight #15 vs Flight #16, w: LinkedParticleGun #8, shots: 1
+resolveFireOrder - ID 209, shooter: Flight #15 vs Flight #16, w: LinkedParticleGun #10, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 16/5/Sentri, totalDmg: 15, remaining: 24, armour: 5
+resolveFireOrder - ID 210, shooter: Flight #15 vs Flight #16, w: LinkedParticleGun #12, shots: 1
+resolveFireOrder - ID 211, shooter: Flight #15 vs Flight #16, w: LinkedParticleGun #14, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 16/9/Sentri, totalDmg: 15, remaining: 24, armour: 5
+resolveFireOrder - ID 212, shooter: Flight #15 vs Flight #16, w: LinkedParticleGun #16, shots: 1
+resolveFireOrder - ID 213, shooter: Flight #15 vs Flight #16, w: LinkedParticleGun #18, shots: 1
+resolveFireOrder - ID 214, shooter: Flight #15 vs Flight #16, w: LinkedParticleGun #20, shots: 1
+resolveFireOrder - ID 197, shooter: Flight #14 vs Altarian #11, w: LinkedParticleGun #2, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 11/-1/Primary, totalDmg: 12, remaining: 516, armour: 13
+resolveFireOrder - ID 198, shooter: Flight #14 vs Altarian #11, w: LinkedParticleGun #4, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 11/18/MediumIon, totalDmg: 14, remaining: 36, armour: 11
+resolveFireOrder - ID 199, shooter: Flight #14 vs Altarian #11, w: LinkedParticleGun #6, shots: 1
+resolveFireOrder - ID 200, shooter: Flight #14 vs Altarian #11, w: LinkedParticleGun #8, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 11/-1/Primary, totalDmg: 12, remaining: 516, armour: 12
+resolveFireOrder - ID 201, shooter: Flight #14 vs Altarian #11, w: LinkedParticleGun #12, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 11/4/Sensor, totalDmg: 14, remaining: 100, armour: 16
+BBB skipping fireorder due to destroyed single shooter
+BBB skipping fireorder due to destroyed single shooter
+resolveFireOrder - ID 204, shooter: Flight #14 vs Altarian #11, w: LinkedParticleGun #20, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 11/5/Reactor, totalDmg: 16, remaining: 100, armour: 19
+resolveFireOrder - ID 187, shooter: Flight #18 vs Altarian #12, w: LinkedParticleGun #2, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 12/-1/Primary, totalDmg: 15, remaining: 626, armour: 16
+resolveFireOrder - ID 188, shooter: Flight #18 vs Altarian #12, w: LinkedParticleGun #4, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 12/-1/Primary, totalDmg: 16, remaining: 626, armour: 18
+resolveFireOrder - ID 189, shooter: Flight #18 vs Altarian #12, w: LinkedParticleGun #6, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 12/-1/Primary, totalDmg: 14, remaining: 626, armour: 15
+resolveFireOrder - ID 190, shooter: Flight #18 vs Altarian #12, w: LinkedParticleGun #8, shots: 1
+resolveFireOrder - ID 191, shooter: Flight #18 vs Altarian #12, w: LinkedParticleGun #10, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 12/-1/Primary, totalDmg: 13, remaining: 626, armour: 15
+resolveFireOrder - ID 192, shooter: Flight #18 vs Altarian #12, w: LinkedParticleGun #12, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 12/-1/Primary, totalDmg: 16, remaining: 626, armour: 18
+resolveFireOrder - ID 193, shooter: Flight #18 vs Altarian #12, w: LinkedParticleGun #14, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 12/-1/Primary, totalDmg: 16, remaining: 626, armour: 17
+resolveFireOrder - ID 194, shooter: Flight #18 vs Altarian #12, w: LinkedParticleGun #16, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 12/-1/Primary, totalDmg: 13, remaining: 626, armour: 17
+resolveFireOrder - ID 195, shooter: Flight #18 vs Altarian #12, w: LinkedParticleGun #18, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 12/9/LightIon, totalDmg: 13, remaining: 26, armour: 7
+resolveFireOrder - ID 196, shooter: Flight #18 vs Altarian #12, w: LinkedParticleGun #20, shots: 1
+doDamage, weapon: LinkedParticleGun, target: 12/-1/Primary, totalDmg: 14, remaining: 626, armour: 14
+resolveBallisticFireOrders
+cleanFireOrders, fires: 50
+DB updateFireOrders: 50
+Dropout - dmg: 76.923076923077, tresh: 70, mt_rand(0, 76) = 41, > 35
+Dropout - dmg: 96.153846153846, tresh: 70, mt_rand(0, 96) = 90, > 35
+determineCrit for 32mm Ion Bolter Array #9 on unit #12, dmg: 46%
+applying crit: Damage / 0.1
+determineCrit for 68mm Ion Emitter #18 on unit #11, dmg: 17%
+Dropout - dmg: 83.333333333333, tresh: 70, mt_rand(0, 83) = 49, > 35
+ => DB insertDamageEntries: 33
+ => DB insertCritEntries: 4
+handleFiringPhase time: 0.63 seconds.
+advancing game state time: 0.751 seconds.
+doAdvance for game3 from phase 3 to phase 4
+endTurn
+doAdvance for game3 from phase 3 to phase 4
+endTurn
+destroyUnitsDB
+assembleEndStates
+advancing game state time: 0.399 seconds.

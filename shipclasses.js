@@ -2725,7 +2725,6 @@ Ship.prototype.expandDiv = function(div){
 	$(div).css("left", x).css("top", y);
 	*/	
 
-	this.getAttachDivs();
 
 	//if (this.id == 10){
 		for (var i = 0; i < this.structures.length; i++){
@@ -2813,13 +2812,20 @@ Ship.prototype.updateDiv = function(){
 		.find(".turn").html(this.getImpulseChangeCost() + " EP").end()
 }
 
-
-
 Ship.prototype.detachFlight = function(id){
 	for (var i = this.cc.length-1; i >= 0; i--){
 		if (this.cc[i] == id){
 			this.cc.splice(i, 1);
-			break;
+		} else {
+			var attach = game.getUnit(this.cc[i]);
+			if (!attach.ship && attach.mission.targetid != this.id){
+				this.cc.splice(i, 1);
+				for (var j = attach.cc.length-1; j >= 0; j--){
+					if (attach.cc[j] == this.id){
+						attach.cc.splice(j, 1);
+					}
+				}
+			}
 		}
 	}
 
@@ -2831,7 +2837,6 @@ Ship.prototype.detachFlight = function(id){
 	});
 
 	this.setEscortImage();
-	game.draw();
 }
 
 Ship.prototype.attachFlight = function(id){
@@ -2880,12 +2885,12 @@ Ship.prototype.setEscortImage = function(){
 		}
 	}
 
-	if (!friendlies.length && !hostiles.length){return;}
+	if (!friendlies.length && !hostiles.length){this.drawImg = 0; return;}
 
 	var size = this.size;
-	var fSize = 26;
+	var fSize = 20;
 	var tresh = fSize-2;
-	var drawFacing = this.getDrawFacing() / 2;
+	var drawFacing = 0; this.getDrawFacing() / 2;
 
 	var t = document.createElement("canvas");
 		t.width = 250;
