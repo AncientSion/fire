@@ -79,7 +79,7 @@ Flight.prototype.setMaxMass = function(){
 }
 
 Flight.prototype.setImpulse = function(){
-	this.baseImpulse = Math.floor(Math.pow(this.mass, -0.8)*2200);
+	this.baseImpulse = Math.floor(Math.pow(this.mass, -0.8)*1750);
 	this.currentImpulse = this.baseImpulse;
 }
 
@@ -103,8 +103,8 @@ Flight.prototype.hasWeaponsSelected = function(){
 
 Flight.prototype.setSpeed = function(){
 	if (this.mission.turn == game.turn){
-		this.currentImpulse = this.baseImpulse * 0.5;
-	} 
+		this.currentImpulse = Math.floor(this.baseImpulse * 0.5);
+	} else this.currentImpulse = Math.floor(this.baseImpulse * (game.turn - this.mission.turn + 0.5));
 }
 
 Flight.prototype.getNewMission = function(){

@@ -358,6 +358,7 @@ class Manager {
 
 			if (!$unit->ship){
 				$unit->addSubUnits($db[$i]["subunits"]);
+				//var_export($db[$i]["mission"]);
 				$unit->addMissionDB($db[$i]["mission"], $this->userid, $this->turn, $this->phase);
 			}
 			$units[] = $unit;
@@ -724,12 +725,8 @@ class Manager {
 		Debug::log("handleMixedMovement");
 	
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->moveSet){
-				continue;
-			}
-			else if ($this->flight && !$this->ships[$i]->flight || $this->salvo && !$this->ships[$i]->salvo){
-				continue;
-			}
+			if ($this->ships[$i]->moveSet){continue;}
+			else if ($this->flight && !$this->ships[$i]->flight || $this->salvo && !$this->ships[$i]->salvo){continue;}
 
 			$this->ships[$i]->setMove($this);
 		}

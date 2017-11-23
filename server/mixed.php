@@ -4,10 +4,10 @@ class Mixed extends Ship {
 	public $ship = false;
 	public $primary = false;
 	public $baseImpulse;
-	public $mission;
 	public $cost = 0;
 	public $mass = 0;
 	public $profile = 0;
+	public $mission = array();
 
 	function __construct($id, $userid, $available, $status, $destroyed){
 		$this->id = $id;

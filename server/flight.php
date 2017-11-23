@@ -25,6 +25,7 @@ class Flight extends Mixed {
 	}
 
 	public function setCurrentImpulse($t, $p){
+		//Debug::log("setCurrentImpulse #".$this->id);
 		$this->baseImpulse = floor(pow($this->mass, -0.8)*1750);
 		if (!isset($this->mission)){return;}
 
@@ -35,11 +36,12 @@ class Flight extends Mixed {
 		} else $elapsed += 0.5;
 		
 		//if ($this->mission->type > 1 || !$this->mission->arrived){
+		//var_export($this->mission);
 		if (!$this->mission->arrived){
 			$elapsed += $t - $this->mission->turn;
 		}
 
-		$this->currentImpulse = $this->baseImpulse * min(3, $elapsed + ($p > 1));
+		$this->currentImpulse = floor($this->baseImpulse * min(3, $elapsed + ($p > 1)));
 	}
 
 	public function setSize(){
@@ -63,10 +65,10 @@ class Flight extends Mixed {
 		}
 		else if ($phase == -1){
 			for ($i = sizeof($data)-1; $i >= 0; $i--){
-				if ($data[$i]["turn"] < $turn){
+				//if ($data[$i]["turn"] < $turn){
 					$this->mission = new Mission($data[$i]);
 					return;
-				}
+				//}
 			}
 		} else $this->mission = new Mission($data[sizeof($data)-1]);
 

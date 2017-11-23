@@ -61,7 +61,6 @@ function Ship(data){
 	this.img;
 	this.structures = [];
 	this.primary = {};
-	this.flights = [];
 	this.drawImg;
 	this.doDraw = 1;
 
@@ -2838,13 +2837,8 @@ Ship.prototype.detachFlight = function(id){
 			this.cc.splice(i, 1);
 		} else {
 			var attach = game.getUnit(this.cc[i]);
-			if (!attach.ship && attach.mission.targetid != this.id){
+			if (!attach.ship && attach.mission.targetid == id){
 				this.cc.splice(i, 1);
-				for (var j = attach.cc.length-1; j >= 0; j--){
-					if (attach.cc[j] == this.id){
-						attach.cc.splice(j, 1);
-					}
-				}
 			}
 		}
 	}
@@ -2881,15 +2875,19 @@ Ship.prototype.setPostFireImage = function(){
 }
 
 Ship.prototype.setEscortImage = function(){
+	//console.log(this.id);
 
 	var friendlies = [];
 	var hostiles = [];
 	var friendly = [];
 	var hostile = [];
 
+	var hasShip = 0;
+
 	for (var i = 0; i < this.cc.length; i++){
 		var attach = game.getUnit(this.cc[i]);
 
+		if (attach.ship){hasShip = 1; break;}
 		if (attach.doDraw){continue;} // possibly attachement is being drawn, hence not attached to this
 		//if (!attach.ship && attach.mission.targetid != this.id){continue;}
 		if (this.salvo && this.mission.arrived && this.mission.targetid == attach.id){continue;}
@@ -2907,7 +2905,9 @@ Ship.prototype.setEscortImage = function(){
 	}
 
 
-	if (!friendlies.length && !hostiles.length){return;}
+	if (!this.ship && hasShip || !friendlies.length && !hostiles.length){return;}
+
+	//console.log(this.id);
 
 	var size = this.size;
 	var fSize = 20;
