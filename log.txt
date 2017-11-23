@@ -327,3 +327,256 @@ resolveDeployActions s: 0
 handleJumpActions
 assembleEndStates
 advancing game state time: 0.017 seconds.
+insertClientActions s: 3
+doAdvance for game3 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+Handling mixed #15
+STRIKE
+close in
+adding move to target #8 => -107/-32
+Handling mixed #14
+STRIKE
+arrival
+adding move to target #11 => 339/137
+Handling mixed #18
+STRIKE
+close in
+adding move to target #12 => 77/316
+Handling mixed #16
+STRIKE
+arrival
+adding move to target #15 => -107/-32
+Handling mixed #17
+STRIKE
+drag
+adding move to target #14 => 339/137
+handleMixedMovement
+updateMissionState
+advancing game state time: 0.088 seconds.
+doAdvance for game3 from phase 2 to phase 3
+resolveBallisticFireOrders
+cleanFireOrders, fires: 0
+DB updateFireOrders: 0
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.003 seconds.
+advancing game state time: 0.007 seconds.
+doAdvance for game3 from phase 3 to phase 4
+endTurn
+destroyUnitsDB
+assembleEndStates
+insertReinforcements: 1
+insertReinforcements: 1
+advancing game state time: 0.099 seconds.
+doAdvance for game3 from phase -1 to phase 0
+initBallistics
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+advancing game state time: 0.005 seconds.
+insertClientActions s: 3
+insertClientActions s: 3
+doAdvance for game3 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+Handling mixed #15
+STRIKE
+arrival
+adding move to target #8 => 56/-73
+Handling mixed #14
+STRIKE
+drag
+adding move to target #11 => 332/197
+Handling mixed #18
+STRIKE
+arrival
+adding move to target #12 => 51/280
+Handling mixed #16
+STRIKE
+drag
+adding move to target #15 => 56/-73
+Handling mixed #17
+STRIKE
+drag
+adding move to target #14 => 332/197
+handleMixedMovement
+updateMissionState
+advancing game state time: 0.185 seconds.
+insertMissions s: 2
+doAdvance for game3 from phase -1 to phase 0
+initBallistics
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+advancing game state time: 0.007 seconds.
+insertClientActions s: 3
+insertClientActions s: 3
+doAdvance for game3 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+Handling mixed #15
+STRIKE
+close in
+adding move to target #10 => -97/17
+Handling mixed #14
+STRIKE
+close in
+adding move to target #9 => 290/128
+Handling mixed #18
+STRIKE
+arrival
+adding move to target #12 => 51/280
+Handling mixed #16
+STRIKE
+drag
+adding move to target #15 => -97/17
+Handling mixed #17
+STRIKE
+drag
+adding move to target #14 => 290/128
+handleMixedMovement
+updateMissionState
+advancing game state time: 0.136 seconds.
+doAdvance for game3 from phase 2 to phase 3
+resolveBallisticFireOrders
+cleanFireOrders, fires: 0
+DB updateFireOrders: 0
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.015 seconds.
+advancing game state time: 0.088 seconds.
+doAdvance for game3 from phase 3 to phase 4
+endTurn
+destroyUnitsDB
+assembleEndStates
+insertReinforcements: 1
+advancing game state time: 0.194 seconds.
+deployFlights 1
+updateSystemLoad: 1
+DB insertUnits: 1
+insertSubUnits
+insertMissions s: 1
+insertClientActions s: 1
+insertMissions s: 1
+doAdvance for game3 from phase -1 to phase 0
+initBallistics
+DB updateBallisticFireOrder, s: 1
+handleDeploymentActions #19
+resolveDeployActions s: 1
+handleJumpActions
+assembleEndStates
+advancing game state time: 0.051 seconds.
+insertClientActions s: 3
+insertClientActions s: 3
+doAdvance for game3 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+Handling mixed #18
+STRIKE
+drag
+adding move to target #12 => -28/265
+Handling mixed #15
+STRIKE
+close in
+adding move to target #10 => -2/131
+Handling mixed #14
+STRIKE
+arrival
+adding move to target #9 => 185/53
+Handling mixed #16
+STRIKE
+drag
+adding move to target #15 => -2/131
+Handling mixed #17
+STRIKE
+close in
+adding move to target #11 => 312/178
+Handling mixed #19
+STRIKE
+close in
+adding move to target #10 => 85/332
+handleMixedMovement
+updateMissionState
+advancing game state time: 0.17 seconds.
+doAdvance for game3 from phase 2 to phase 3
+resolveBallisticFireOrders
+cleanFireOrders, fires: 0
+DB updateFireOrders: 0
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.003 seconds.
+advancing game state time: 0.065 seconds.
+doAdvance for game3 from phase 3 to phase 4
+endTurn
+destroyUnitsDB
+assembleEndStates
+insertReinforcements: 1
+insertReinforcements: 1
+advancing game state time: 0.38 seconds.
+insertMissions s: 1
+doAdvance for game3 from phase -1 to phase 0
+initBallistics
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+advancing game state time: 0.093 seconds.
+insertClientActions s: 3
+insertClientActions s: 3
+doAdvance for game3 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+Handling mixed #18
+STRIKE
+drag
+adding move to target #12 => -107/250
+Handling mixed #15
+STRIKE
+arrival
+adding move to target #10 => 111/127
+Handling mixed #17
+STRIKE
+arrival
+adding move to target #11 => 306/295
+Handling mixed #14
+STRIKE
+close in
+adding move to target #17 => 207/97
+Handling mixed #16
+STRIKE
+drag
+adding move to target #15 => 111/127
+Handling mixed #19
+STRIKE
+arrival
+adding move to target #10 => 111/127
+handleMixedMovement
+updateMissionState
+advancing game state time: 0.136 seconds.
+doAdvance for game3 from phase 2 to phase 3
+resolveBallisticFireOrders
+cleanFireOrders, fires: 0
+DB updateFireOrders: 0
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.003 seconds.
+advancing game state time: 0.01 seconds.
+doAdvance for game3 from phase 3 to phase 4
+endTurn
+destroyUnitsDB
+assembleEndStates
+advancing game state time: 0.208 seconds.
+insertMissions s: 2
+insertMissions s: 1
+doAdvance for game3 from phase -1 to phase 0
+initBallistics
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+advancing game state time: 0.006 seconds.

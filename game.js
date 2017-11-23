@@ -225,7 +225,7 @@ function Game(data, userid){
 			mission.arrived = game.turn-1;
 			mission.turn = game.turn-1;
 			s.doDraw = 0;
-			t.attachFlight(s);
+			t.getParent().attachFlight(s);
 		}
 		else {
 			//s.mission = mission;
@@ -989,30 +989,73 @@ function Game(data, userid){
 		else if (game.phase == 1){
 			this.setPreMoveCC();
 		}
+		else if (game.phase == 2){
+			this.setPreMoveCC();
+		}
 	}
 
+	this.setPreMoveCC = function(){
+		for (var i = 0; i < this.ships.length; i++){
+			for (var j = i+1; j < this.ships.length; j++){
+				if (this.ships[i].x == this.ships[j].x && this.ships[i].y == this.ships[j].y){
+					if (this.ships[j].ship && !this.ships[i].ship && !this.ships[i].mission.arrived){continue;}
+					if (this.ships[i].ship && !this.ships[j].ship && !this.ships[j].mission.arrived){continue;}
+					this.ships[i].cc.push(this.ships[j].id);
+					this.ships[j].cc.push(this.ships[i].id);
+				}
+			}
+		}
+	}
+	
 	this.setPostDeployCC = function(){
+
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].flight){
 				if (this.ships[i].mission.arrived){
 					var t = this.getUnit(this.ships[i].mission.targetid);
-					this.ships[i].cc.push(t.id);
-					t.cc.push(this.ships[i].id);
+						t.cc.push(this.ships[i].id);
+						this.ships[i].cc.push(t.id);
 				}
 			}
 		}
 
 
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].flight && !this.ships[i].mission.arrived){
+			for (var j = i+1; j < this.ships.length; j++){
+				if (this.ships[i].cc.length){
+					for (var k = 0; k < this.ships[i].cc.length; k++){
+						if (this.ships[i].cc[k] == this.ships[j].id){
+							this.ships[i].cc = [...new Set([...this.ships[i].cc ,...this.ships[j].cc])]
+							this.ships[j].cc = [...new Set([...this.ships[j].cc ,...this.ships[i].cc])]
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		for (var i = 0; i < this.ships.length; i++){
+			for (var j = this.ships[i].cc.length-1; j >= 0; j--){
+				if (this.ships[i].cc[j] == this.ships[i].id){
+					this.ships[i].cc.splice(j, 1);
+				}
+			}
+		}
+
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].flight){
 				var a = this.ships[i].getDrawPos();
+
 				for (var j = 0; j < this.ships.length; j++){
 					if (this.ships[i].id == this.ships[j].id){continue;}
 					var b = this.ships[j].getDrawPos();
-
 					if (a.x == b.x && a.y == b.y){
-						this.ships[i].doOffset();
-						if (!this.ships[i].ship){
+						console.log (this.ships[i].id + " / " + this.ships[j].id);
+						if (this.ships[j].ship){
+							this.ships[i].doOffset();
+						}
+						else if (this.ships[i].draw){
+							this.ships[i].doOffset();
 							this.ships[j].doOffset();
 						}
 					}
@@ -1052,16 +1095,6 @@ function Game(data, userid){
 		}
 	}
 
-	this.setPreMoveCC = function(){
-		for (var i = 0; i < this.ships.length; i++){
-			for (var j = i+1; j < this.ships.length; j++){
-				if (this.ships[i].x == this.ships[j].x && this.ships[i].y == this.ships[j].y){
-					this.ships[i].cc.push(this.ships[j].id);
-					this.ships[j].cc.push(this.ships[i].id);
-				}
-			}
-		}
-	}
 	this.getCCUnits = function(){
 
 	}
@@ -2742,7 +2775,10 @@ function Game(data, userid){
 							var ship = game.getUnit(aUnit);
 							var vessel = game.getUnit($(this).data("id"));
 							if (ship && vessel){
-								if (vessel.id != ship.id && (vessel.userid != game.userid && vessel.userid != ship.userid)){
+								if (game.mission && game.mission.new){
+									game.issueMission();
+								}
+								else if (vessel.id != ship.id && (vessel.userid != game.userid && vessel.userid != ship.userid)){
 									handleFireClick(ship, vessel);
 								} else vessel.switchDiv();
 							}

@@ -2757,10 +2757,16 @@ Ship.prototype.doOffset = function(){
 	if (!this.doDraw){return;}
 	var o = this.getPlannedPos();
 	var a = getAngleFromTo(o, this.getTarget().getPlannedPos());
-	var p = getPointInDirection(this.size/3, a, o.x, o.y);
+	var p = getPointInDirection(Math.max(25, this.size/3), a, o.x, o.y);
 
 	this.drawX = p.x;
 	this.drawY = p.y;
+
+	for (var i = 0; i < this.cc.length; i++){
+		var s = game.getUnit(this.cc[i]);
+			s.drawX = p.x;
+			s.drawY = p.y;
+	}
 }
 
 Ship.prototype.getAttachDivs = function(){

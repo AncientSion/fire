@@ -267,7 +267,29 @@ Mixed.prototype.setTarget = function(){
 				} else this.nextStep = getPointInDirection(i, getAngleFromTo(p, this.finalStep), p.x, p.y);
 			}
 			else if (target.flight){
-				if (target.finalStep == undefined){
+				if (target.mission.targetid == this.id){
+				/*	target.finalStep = this.getPlannedPos();
+					target.facing = getAngleFromTo(target.getPlannedPos(), target.finalStep);
+					this.finalStep = target.getPlannedPos();
+					this.facing = getAngleFromTo(p, target.finalStep);
+
+					d = getDistance(target.finalStep, this.finalStep);
+
+					this.nextStep = getPointInDirection(Math.min(d, i), this.facing, p.x, p.y);
+					var tPos = target.getPlannedPos();
+					target.nextStep = getPointInDirection(Math.min(d, target.getCurrentImpulse()), target.facing, tPos.x, tPos.y);
+					return;
+				*/
+					this.finalStep = target.getPlannedPos();
+					this.facing = getAngleFromTo(p, this.finalStep);
+
+					d = getDistance(p, this.finalStep);
+
+					this.nextStep = getPointInDirection(Math.min(d, i), this.facing, p.x, p.y);
+					return;
+				
+				}
+				else if (target.finalStep == undefined){
 					target.setTarget();
 				}
 				this.finalStep = target.nextStep;
