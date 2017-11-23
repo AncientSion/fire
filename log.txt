@@ -135,3 +135,195 @@ endTurn
 destroyUnitsDB
 assembleEndStates
 advancing game state time: 0.399 seconds.
+insertClientActions s: 3
+doAdvance for game3 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+Handling mixed #15
+STRIKE
+close in
+adding move to target #8 => -107/-32
+Handling mixed #14
+STRIKE
+arrival
+adding move to target #11 => 339/137
+Handling mixed #18
+STRIKE
+close in
+adding move to target #12 => 67/295
+Handling mixed #16
+STRIKE
+arrival
+adding move to target #15 => -107/-32
+Handling mixed #17
+STRIKE
+drag
+adding move to target #14 => 339/137
+handleMixedMovement
+updateMissionState
+advancing game state time: 0.072 seconds.
+doAdvance for game3 from phase 2 to phase 3
+resolveBallisticFireOrders
+cleanFireOrders, fires: 0
+DB updateFireOrders: 0
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.003 seconds.
+advancing game state time: 0.016 seconds.
+doAdvance for game3 from phase 3 to phase 4
+endTurn
+destroyUnitsDB
+assembleEndStates
+advancing game state time: 0.043 seconds.
+insertMissions s: 2
+doAdvance for game3 from phase -1 to phase 0
+initBallistics
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+advancing game state time: 0.02 seconds.
+insertClientActions s: 3
+doAdvance for game3 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+Handling mixed #15
+STRIKE
+close in
+adding move to target #8 => -107/-32
+Handling mixed #14
+STRIKE
+arrival
+adding move to target #11 => 339/137
+Handling mixed #18
+STRIKE
+close in
+adding move to target #12 => 77/316
+Handling mixed #16
+STRIKE
+arrival
+adding move to target #15 => -107/-32
+Handling mixed #17
+STRIKE
+drag
+adding move to target #14 => 339/137
+handleMixedMovement
+updateMissionState
+advancing game state time: 0.071 seconds.
+doAdvance for game3 from phase 2 to phase 3
+resolveBallisticFireOrders
+cleanFireOrders, fires: 0
+DB updateFireOrders: 0
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.002 seconds.
+advancing game state time: 0.012 seconds.
+doAdvance for game3 from phase 3 to phase 4
+endTurn
+destroyUnitsDB
+assembleEndStates
+advancing game state time: 0.081 seconds.
+insertMissions s: 2
+insertMissions s: 1
+doAdvance for game3 from phase -1 to phase 0
+initBallistics
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+advancing game state time: 0.008 seconds.
+insertClientActions s: 3
+doAdvance for game3 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+Handling mixed #15
+STRIKE
+close in
+adding move to target #8 => -107/-32
+Handling mixed #14
+STRIKE
+arrival
+adding move to target #11 => 339/137
+Handling mixed #18
+STRIKE
+close in
+adding move to target #12 => 77/316
+Handling mixed #16
+STRIKE
+arrival
+adding move to target #15 => -107/-32
+Handling mixed #17
+STRIKE
+drag
+adding move to target #14 => 339/137
+handleMixedMovement
+updateMissionState
+advancing game state time: 0.096 seconds.
+doAdvance for game3 from phase 2 to phase 3
+resolveBallisticFireOrders
+cleanFireOrders, fires: 0
+DB updateFireOrders: 0
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.002 seconds.
+advancing game state time: 0.013 seconds.
+doAdvance for game3 from phase 3 to phase 4
+endTurn
+destroyUnitsDB
+assembleEndStates
+insertReinforcements: 1
+insertReinforcements: 1
+advancing game state time: 0.05 seconds.
+insertMissions s: 2
+doAdvance for game3 from phase -1 to phase 0
+initBallistics
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+advancing game state time: 0.018 seconds.
+insertMissions s: 2
+doAdvance for game3 from phase -1 to phase 0
+initBallistics
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+advancing game state time: 0.02 seconds.
+insertClientActions s: 3
+insertClientActions s: 3
+doAdvance for game3 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+Handling mixed #15
+STRIKE
+close in
+adding move to target #10 => -92/15
+Handling mixed #14
+STRIKE
+close in
+adding move to target #9 => 290/136
+Handling mixed #18
+STRIKE
+arrival
+adding move to target #12 => 51/280
+Handling mixed #16
+STRIKE
+drag
+adding move to target #15 => -92/15
+Handling mixed #17
+STRIKE
+drag
+adding move to target #14 => 290/136
+handleMixedMovement
+updateMissionState
+advancing game state time: 0.08 seconds.
+insertMissions s: 1
+insertMissions s: 2
+doAdvance for game3 from phase -1 to phase 0
+initBallistics
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+advancing game state time: 0.017 seconds.

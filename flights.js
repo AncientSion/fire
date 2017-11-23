@@ -10,11 +10,9 @@ function Flight(data){
 	Mixed.call(this, data);
 	this.flight = 1;
 	this.fSize = data.fSize;
-	this.ep = data.ep;
-	this.mass = data.mass;
 	this.baseSize = data.baseSize;
 	this.unitSize = data.unitSize;
-	this.mission = data.mission || {};
+	this.oldMission = data.mission;
 }
 
 Flight.prototype = Object.create(Mixed.prototype);

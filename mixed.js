@@ -1,8 +1,8 @@
 function Mixed(data){
 	Ship.call(this, data);
-	this.ship = false;
+	this.ship = 0;
 	this.primary = false;
-	this.mission = data.mission;
+	this.mission = data.mission || {};
 	this.nextStep;
 	this.finalStep;
 	this.layout = [];
@@ -234,7 +234,7 @@ Mixed.prototype.getTargetPosition = function(){
 }
 
 Mixed.prototype.inRange = function(){
-	if (getDistance(this.getTargetPosition(), this.getBaseOffsetPos()) <= this.getCurrentImpulse()){
+	if (getDistance(this.getTargetPosition(), this.getPlannedPos()) <= this.getCurrentImpulse()){
 		return true;
 	} else return false;
 }

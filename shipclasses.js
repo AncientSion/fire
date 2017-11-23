@@ -121,7 +121,7 @@ function Ship(data){
 				if (getDistance(game.deploys[i], pos) + this.size/2 < game.deploys[i].s){
 					for (var j = 0; j < game.ships.length; j++){
 						if (game.ships[j].deployed && game.ships[j].id != this.id && game.ships[j].userid == this.userid){ // different ship, different owners
-							var step = game.ships[j].getBaseOffsetPos();
+							var step = game.ships[j].getGamePos();
 							if (getDistance(pos, step) <= (game.ships[j].size/2 + this.size/2)){
 							popup("The selected position is too close to the position or planned position of vessel (#"+game.ships[i].id+")");
 								return false;
@@ -159,7 +159,7 @@ function Ship(data){
 		if (valid){
 			for (var i = 0; i < game.ships.length; i++){
 				if (game.ships[i].deployed && game.ships[i].id != this.id && game.ships[i].userid == this.userid){ // different ship, different owners
-					var step = game.ships[i].getBaseOffsetPos();
+					var step = game.ships[i].getGamePos();
 					if (getDistance(pos, step) <= (game.ships[i].size/2 + size/2)){
 					popup("The selected position is too close to the position or planned position of vessel (#"+game.ships[i].id+")");
 						return false;
@@ -235,17 +235,6 @@ function Ship(data){
 			}
 		}
 		return false;
-	}
-	
-	this.getBaseOffsetPos = function(){
-		if (this.actions.length){
-			for (var i = this.actions.length-1; i >= 0; i--){
-				if (this.actions[i].resolved == 1){
-					return {x: this.actions[i].x, y: this.actions[i].y};
-				}
-			}
-		}
-		return {x: this.x, y: this.y};
 	}
 
 	this.setHitTable = function(){
@@ -519,7 +508,7 @@ function Ship(data){
 
 	this.drawArcIndicator = function(){
 		return;
-		var shipPos = this.getBaseOffsetPos();
+		var shipPos = this.getGamePos();
 		var angle = this.getPlannedFacing();
 
 		var p1 = getPointInDirection(80, 90+angle, shipPos.x, shipPos.y);
@@ -1706,7 +1695,7 @@ Ship.prototype.drawMovePlan = function(){
 				planCtx.beginPath();
 				
 				if (i == 0){
-					var p = this.getBaseOffsetPos();
+					var p = this.getGamePos();
 					planCtx.moveTo(p.x, p.y);
 				}
 				else {
@@ -1788,6 +1777,7 @@ Ship.prototype.select = function(){
 
 Ship.prototype.doSelect = function(){
 	console.log(this);
+	console.log(this.cc);
 	aUnit = this.id;
 	this.selected = true;
 	this.setUnitGUI();
@@ -2269,6 +2259,21 @@ Ship.prototype.getPlannedPos = function(){
 	}
 	return new Point(this.x, this.y);
 }
+	
+Ship.prototype.getGamePos = function(){
+	if (this.actions.length){
+		for (var i = this.actions.length-1; i >= 0; i--){
+			if (this.actions[i].resolved == 1){
+				return {x: this.actions[i].x, y: this.actions[i].y};
+			}
+		}
+	}
+	return {x: this.x, y: this.y};
+}
+
+Ship.prototype.getDrawPos = function(){
+	return {x: this.drawX, y: this.drawY};
+}
 
 Ship.prototype.getWeaponPosition = function(){
 	for (var i = 0; i < this.structures.length; i++){
@@ -2747,10 +2752,19 @@ Ship.prototype.expandDiv = function(div){
 	return div;
 }
 
+Ship.prototype.doOffset = function(){
+	if (this.ship){return;}
+	if (!this.doDraw){return;}
+	var o = this.getPlannedPos();
+	var a = getAngleFromTo(o, this.getTarget().getPlannedPos());
+	var p = getPointInDirection(this.size/3, a, o.x, o.y);
+
+	this.drawX = p.x;
+	this.drawY = p.y;
+}
+
 Ship.prototype.getAttachDivs = function(){
 	if (this.cc.length){
-		if (this.id == 15){console.log("15")}
-
 		$(this.element).find(".ccContainer").remove();
 		var attach = [];
 		var valid = this.ship;
@@ -2830,22 +2844,23 @@ Ship.prototype.detachFlight = function(id){
 	}
 
 	$(this.element).find(".ccContainer").find(".attachDiv").each(function(i){
-		if ($(this).data("id") == id){
-			$(this).remove();
-			return false;
-		}
+		$(this).remove();
 	});
 
+	this.getAttachDivs();
 	this.setEscortImage();
 }
 
-Ship.prototype.attachFlight = function(id){
-	var attach = game.getUnit(id);
-	this.cc.push(attach.id);
+Ship.prototype.attachFlight = function(unit){
 	$(this.element).find(".ccContainer").remove();
+	this.cc.push(unit.id);
+	for (var i = 0; i < unit.cc.length; i++){
+		this.cc.push(unit.cc[i]);
+	}
+	unit.cc.push(this.id);
 	this.getAttachDivs();
 	this.setEscortImage();
-	attach.cc.push(this.id);
+
 	game.draw();
 }
 
@@ -2885,7 +2900,8 @@ Ship.prototype.setEscortImage = function(){
 		}
 	}
 
-	if (!friendlies.length && !hostiles.length){this.drawImg = 0; return;}
+
+	if (!friendlies.length && !hostiles.length){return;}
 
 	var size = this.size;
 	var fSize = 20;
@@ -3012,8 +3028,8 @@ Ship.prototype.getOffensiveBonus = function(target){
 	if (sensor.disabled || sensor.destroyed || ew.type == 1 || ew.type == 3){return 0;}
 	if (ew.type == 2){return 0.2}
 
-	var tPos = target.getBaseOffsetPos();
-	var origin = this.getBaseOffsetPos();
+	var tPos = target.getGamePos();
+	var origin = this.getGamePos();
 	var d = getDistance(origin, tPos);
 	var base = target.getLockMultiplier();
 
@@ -3040,8 +3056,8 @@ Ship.prototype.getDefensiveBonus = function(shooter){
 	if (sensor.disabled || sensor.destroyed || ew.type == 0 || ew.type == 2){return 0;}
 	if (ew.type == 3){return 0.2}
 
-	var origin = this.getBaseOffsetPos();
-	var tPos = shooter.getBaseOffsetPos();
+	var origin = this.getGamePos();
+	var tPos = shooter.getGamePos();
 	var d = getDistance(origin, tPos);
 
 	if (d <= ew.dist){
