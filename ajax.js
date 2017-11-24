@@ -66,7 +66,7 @@ window.ajax = {
 	},
 
 	getChat: function(){
-		return;
+		//return;
 		$.ajax({
 			type: "GET",
 			url: "getGameData.php",
