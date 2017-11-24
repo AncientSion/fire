@@ -79,7 +79,7 @@ class Thunderbolt extends Fighter {
 
 	public function addSystems(){
 			//t($id, $fighterId, $parentId, $shots, $minDmg, $maxDmg, $start, $end){
-		$this->systems[] = new ParticlePulsar(sizeof($this->systems), $this->id, $this->parentId, 3, 11, 15, 0, 360);
+		$this->systems[] = new ParticlePulsar(sizeof($this->systems), $this->id, $this->parentId, 3, 12, 16, 0, 360);
 	}
 }
 

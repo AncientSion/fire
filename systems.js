@@ -1832,7 +1832,7 @@ Plasma.prototype.doBoost = function(){
 }
 
 Plasma.prototype.doUnboost = function(){
-	System.prototype.doBoost.call(this);
+	System.prototype.doUnboost.call(this);
 	if (this.selected || this.highlight){
 		this.redrawArc();
 	}
@@ -2377,7 +2377,7 @@ Launcher.prototype.getAimDataTarget = function(target, final, accLoss, row){
 	} else row.append($("<td>").html(""));
 
 
-	final = Math.floor(100 * (1-(traverseMod*0.2)) - accLoss);
+	final = Math.floor(90 * (1-(traverseMod*0.2)) - accLoss);
 	this.odds = final;
 
 	row.append($("<td>").html(final + "%"));

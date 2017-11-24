@@ -5,7 +5,7 @@ class Sharlin extends UltraHeavy {
 	public $display = "Sharlin";
 	public $faction = "Minbari Federation";
 	public $size = 120;
-	public static $value = 200;
+	public static $value = 2000;
 	public $profile = array(0.90, 1.1);
 	public $mass = 20000;
 
@@ -50,7 +50,7 @@ class Sharlin extends UltraHeavy {
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 0, 180);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 0, 180);
 			$aft->systems[] = new NeutronLaser($this->getId(), $this->id, 120, 240);
-			$aft->systems[] = new Hangar($this->getId(), $this->id, 140, 220, 1100, 15, array("Nial"));
+			$aft->systems[] = new Hangar($this->getId(), $this->id, 140, 220, 1100, 12, array("Nial"), 24);
 			$aft->systems[] = new NeutronLaser($this->getId(), $this->id, 120, 240);
 		$structs[] = $aft;
 	

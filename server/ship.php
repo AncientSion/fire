@@ -570,7 +570,7 @@ class Ship {
 	public function calculateToHit($fire){
 
 		if ($fire->shooter->salvo){
-			return ceil(100 * (1-($fire->weapon->getTraverseMod($fire)*0.2)));
+			return ceil(90 * (1-($fire->weapon->getTraverseMod($fire)*0.2)));
 		}
 
 		$multi = 1;

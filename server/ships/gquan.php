@@ -33,7 +33,7 @@ class GQuan extends Heavy {
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 21);
 		$aft->systems[] = new LightIon($this->getId(), $this->id, 90, 270);
 		$aft->systems[] = new LightIon($this->getId(), $this->id, 90, 270);
-		$aft->systems[] = new Hangar($this->getId(), $this->id, 0, 360, 600, 8, array("Gorith", "Frazi"));
+		$aft->systems[] = new Hangar($this->getId(), $this->id, 0, 360, 600, 9, array("Gorith", "Frazi"), 9);
 		$aft->systems[] = new LightIon($this->getId(), $this->id, 90, 270);
 		$aft->systems[] = new LightIon($this->getId(), $this->id, 90, 270);
 		$structs[] = $aft;

@@ -73,7 +73,7 @@ class Hasta extends Missile {
 	public $maxDmg = 24;
 	public $mass = 3;
 	public $cost = 6;
-	public $traverse = -3;
+	public $traverse = -4;
 
 	function __construct($parentId, $id){
 		parent::__construct($parentId, $id);
@@ -115,7 +115,7 @@ class Vanguard extends Missile {
 	public $maxDmg = 12;
 	public $mass = 2;
 	public $cost = 6;
-	public $traverse = -4;
+	public $traverse = -5;
 
 	function __construct($parentId, $id){
 		parent::__construct($parentId, $id);
@@ -129,7 +129,7 @@ class Needle extends Missile {
 	public $maxDmg = 24;
 	public $mass = 3;
 	public $cost = 6;
-	public $traverse = -3;
+	public $traverse = -4;
 
 	function __construct($parentId, $id){
 		parent::__construct($parentId, $id);
