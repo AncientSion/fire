@@ -321,6 +321,11 @@ class Ship {
 		$chunk = array();
 		$chunk[] = $dbLoad[0];
 
+		//if (get_class($this) == "Demos"){
+		//	var_export($dbload);
+		//	$this->getSystemById($chunk[sizeof($chunk)-1]["systemid"])->adjustLoad($chunk);
+		//}
+
 		for ($i = 1; $i < sizeof($dbLoad); $i++){
 			if ($dbLoad[$i]["systemid"] != $chunk[sizeof($chunk)-1]["systemid"]){
 				$this->getSystemById($chunk[sizeof($chunk)-1]["systemid"])->adjustLoad($chunk);

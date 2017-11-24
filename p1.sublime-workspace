@@ -941,8 +941,7 @@
 			"file": "game.js",
 			"settings":
 			{
-				"buffer_size": 83819,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -968,8 +967,7 @@
 			"file": "flights.js",
 			"settings":
 			{
-				"buffer_size": 17371,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -977,8 +975,7 @@
 			"file": "server/systems/weapons/ammo.php",
 			"settings":
 			{
-				"buffer_size": 4030,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -986,8 +983,7 @@
 			"file": "server/ships/avenger.php",
 			"settings":
 			{
-				"buffer_size": 3648,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -995,8 +991,7 @@
 			"file": "autoload.php",
 			"settings":
 			{
-				"buffer_size": 7294,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1004,8 +999,7 @@
 			"file": "log.txt",
 			"settings":
 			{
-				"buffer_size": 19864,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1022,8 +1016,7 @@
 			"file": "server/ships/altarian.php",
 			"settings":
 			{
-				"buffer_size": 2271,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1031,8 +1024,7 @@
 			"file": "server/ships/darkner.php",
 			"settings":
 			{
-				"buffer_size": 1617,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1040,8 +1032,7 @@
 			"file": "gameSetup.php",
 			"settings":
 			{
-				"buffer_size": 17237,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1049,8 +1040,7 @@
 			"file": "server/ships/tinashi.php",
 			"settings":
 			{
-				"buffer_size": 2321,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1058,8 +1048,7 @@
 			"file": "server/ships/sharlin.php",
 			"settings":
 			{
-				"buffer_size": 3653,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1067,8 +1056,7 @@
 			"file": "server/ships/whitestar.php",
 			"settings":
 			{
-				"buffer_size": 1773,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1076,8 +1064,7 @@
 			"file": "server/ships/primus.php",
 			"settings":
 			{
-				"buffer_size": 2658,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1085,8 +1072,7 @@
 			"file": "server/ships/demos.php",
 			"settings":
 			{
-				"buffer_size": 1898,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1094,8 +1080,7 @@
 			"file": "server/ships/vorchan.php",
 			"settings":
 			{
-				"buffer_size": 1654,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1103,8 +1088,7 @@
 			"file": "server/ships/haven.php",
 			"settings":
 			{
-				"buffer_size": 1539,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1112,8 +1096,7 @@
 			"file": "server/systems/weapons/linked.php",
 			"settings":
 			{
-				"buffer_size": 3158,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1121,8 +1104,7 @@
 			"file": "getGameData.php",
 			"settings":
 			{
-				"buffer_size": 761,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1130,8 +1112,7 @@
 			"file": "shiptest.php",
 			"settings":
 			{
-				"buffer_size": 6815,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1139,17 +1120,15 @@
 			"file": "combattest.php",
 			"settings":
 			{
-				"buffer_size": 2850,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
+				"buffer_size": 0,
+				"line_ending": "Windows"
 			}
 		},
 		{
 			"file": "server/ships/gquan.php",
 			"settings":
 			{
-				"buffer_size": 2690,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1157,8 +1136,7 @@
 			"file": "index.php",
 			"settings":
 			{
-				"buffer_size": 2382,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1166,8 +1144,7 @@
 			"file": "balltest.php",
 			"settings":
 			{
-				"buffer_size": 1297,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1175,8 +1152,7 @@
 			"file": "systemtest.php",
 			"settings":
 			{
-				"buffer_size": 3559,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -1184,8 +1160,7 @@
 			"file": "server/systems/weapons/matter.php",
 			"settings":
 			{
-				"buffer_size": 2261,
-				"encoding": "UTF-8",
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		}
@@ -7967,7 +7942,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 83819,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -8043,7 +8018,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 13678.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 5,
@@ -8232,7 +8207,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 17371,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -8308,7 +8283,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5992.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 11,
@@ -8320,7 +8295,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4030,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -8397,7 +8372,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 151.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 103,
@@ -8415,15 +8390,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3648,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1996,
-								1996
+								0,
+								0
 							]
 						],
 						"settings":
@@ -8433,7 +8408,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 574.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 44,
@@ -8855,15 +8830,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7294,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								491,
-								491
+								0,
+								0
 							]
 						],
 						"settings":
@@ -8944,7 +8919,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 19864,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -9678,7 +9653,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2271,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -9695,7 +9670,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 211.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 52,
@@ -9825,7 +9800,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1617,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -9842,7 +9817,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 70.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 71,
@@ -10119,7 +10094,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 83819,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -10196,7 +10171,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 10993.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 7,
@@ -10326,15 +10301,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 17237,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4843,
-								4843
+								0,
+								0
 							]
 						],
 						"settings":
@@ -10402,7 +10377,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3025.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 47,
@@ -10414,7 +10389,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2321,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -10431,7 +10406,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 222.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 67,
@@ -10443,7 +10418,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3653,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -10460,7 +10435,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 379.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 49,
@@ -10472,15 +10447,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1773,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								460,
-								460
+								0,
+								0
 							]
 						],
 						"settings":
@@ -10548,7 +10523,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 128.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 65,
@@ -10737,15 +10712,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2658,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1015,
-								1015
+								0,
+								0
 							]
 						],
 						"settings":
@@ -10813,7 +10788,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 84.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 35,
@@ -10913,15 +10888,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1898,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								447,
-								447
+								0,
+								0
 							]
 						],
 						"settings":
@@ -11001,15 +10976,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1654,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								614,
-								625
+								0,
+								0
 							]
 						],
 						"settings":
@@ -11089,15 +11064,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1539,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								466,
-								467
+								0,
+								0
 							]
 						],
 						"settings":
@@ -11118,7 +11093,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3158,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -11194,7 +11169,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 285.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 77,
@@ -11206,7 +11181,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 17371,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -11282,7 +11257,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 509.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 53,
@@ -11383,15 +11358,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4030,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								516,
-								516
+								0,
+								0
 							]
 						],
 						"settings":
@@ -11649,7 +11624,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 761,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -11825,7 +11800,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6815,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -11842,7 +11817,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 30.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 99,
@@ -11854,36 +11829,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2850,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2685,
-								2685
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 100.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 102,
-					"type": "text"
-				},
-				{
-					"buffer": 69,
-					"file": "server/ships/gquan.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2690,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -11900,7 +11846,36 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 141.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 102,
+					"type": "text"
+				},
+				{
+					"buffer": 69,
+					"file": "server/ships/gquan.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 50,
@@ -11912,15 +11887,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2382,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1020,
-								1020
+								0,
+								0
 							]
 						],
 						"settings":
@@ -11988,7 +11963,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 329.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 21,
@@ -12088,15 +12063,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1297,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								198,
-								198
+								0,
+								0
 							]
 						],
 						"settings":
@@ -12117,7 +12092,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3559,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -12134,7 +12109,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 51.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 78,
@@ -12440,7 +12415,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2261,
+						"buffer_size": 0,
 						"regions":
 						{
 						},

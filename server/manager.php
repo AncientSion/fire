@@ -646,7 +646,7 @@ class Manager {
 
 				$this->ships[$i]->actions[0]->resolved = 1;
 				$this->ships[$i]->actions[] = new Action(-1, $this->ships[$i]->id, $this->turn, "jump", $dist, $order->x + $xShift, $order->y + $yShift, $aShift, 0, 0, 0, 1, 1);
-				$new[] = $this->ships[$i]->actions[sizeof($this->ships[$i])-1];
+				$new[] = $this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1];
 			}
 		}
 
