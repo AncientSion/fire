@@ -4,6 +4,10 @@ $(window).on("load", function() {
 });
 
 function init(){
+	console.time("time");
+	window.res.x = window.innerWidth-1;
+	window.res.y = window.innerHeight-1;
+
 	$("#mouseCanvas").mousemove(canvasMouseMove);
 	$("#mouseCanvas").bind('wheel', mouseCanvasZoom);
 	$("#mouseCanvas").contextmenu(function(e){e.preventDefault(); e.stopPropagation();});
@@ -12,16 +16,7 @@ function init(){
 	$("#mouseCanvas").mouseup(function(e){handleMouseUp(e);});
 	$("#mouseCanvas").mouseout(function(e){handleMouseOut(e);});
 
-	//reOffset();
-	//window.onscroll=function(e){ reOffset(); }
-	//window.onresize=function(e){ reOffset(); }
-
-
-	//$(document).contextmenu(function(e){e.stopPropagation(); e.preventDefault(); });
-	//$(document).mousedown(function(e){e.stopPropagation(); e.preventDefault(); });
-
 	var canv = document.getElementsByTagName("canvas");
-	
 
 	for (var i = 0; i < canv.length; i++){
 		canv[i].width = res.x;
@@ -61,22 +56,13 @@ function init(){
 	drawCtx = drawCanvas.getContext("2d");
 
 	showUI();
+	window.initChat();
 
+	window.initiateKeyDowns();
 
-	/*
-	$("#game").append($("<canvas>").addClass("cache"));
-	$(".cache").attr("id", "cache").drag();
-	var ca = $("#cache")[0];
-	cache = $(".cache")[0].getContext("2d");
-	ca.width = 100; ca.height = 100;
-	ca.style.width = 100; ca.style.height = 100;
-	*/
-
-	console.time("time");
 	turn = new Turn();
 	game = new Game(game, userid);
 	game.create();
-	initChat();
 
 	console.timeEnd("time");
 }

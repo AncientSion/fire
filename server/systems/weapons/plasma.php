@@ -20,20 +20,26 @@ class Plasma extends Weapon {
 		} else return 1;
 	}
 
-	public function determineDamage($totalDmg, $negation){ // 20, 35
+
+	public function determineDamage($totalDmg, $negation){
 		$shieldDmg = 0;
 		$armourDmg = 0;
 		$structDmg = 0;
+		$notes = "";
 
-		$armourDmg = round(min($totalDmg, $negation));
-		$structDmg = round($totalDmg - $armourDmg);
-		$armourDmg += floor($totalDmg / 100 * $this->melt);
+		if ($totalDmg <= array_sum($negation)){ 
+			$notes = "p block";
+			$armourDmg = round($totalDmg);
+		}
+		else {
+			$notes = "pen";
+			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
+			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
+			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
+			$armourDmg += floor($totalDmg / 100 * $this->melt);
+		}
 
-		//$armourDmg = ceil(min($totalDmg, $negation)*1.5);
-		//$structDmg = min(max(0, $totalDmg - $negation), $totalDmg);
-		Debug::log("Plasma DMG: ".$totalDmg.": negation: ".$negation." - DOING ".$armourDmg."/".$structDmg);
-		
-		return new Divider($shieldDmg * $this->linked, $armourDmg * $this->linked, $structDmg * $this->linked);
+		return new Divider($shieldDmg * $this->linked, $armourDmg * $this->linked, $structDmg * $this->linked, $notes);
 	}
 }
 

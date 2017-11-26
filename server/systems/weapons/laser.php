@@ -39,7 +39,6 @@ class Laser extends Weapon {
 			return;
 		}
 		$rake = floor($totalDmg / $this->rakes);
-		$fire->hits++;
 		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id." for ".$totalDmg." dmg");
 
 		while ($rakes){
@@ -51,33 +50,38 @@ class Laser extends Weapon {
 					Debug::log("Laser DOUBLE HIT, switching to PRIMARY");
 				}
 			}
-			if (!get_class($system) == "Primary"){$systems[] = $system->id;
-			}
+			if (!get_class($system) == "Primary"){$systems[] = $system->id;}
+
 			$print .= " ".get_class($system).": ".$rake."dmg, ";
-			$destroyed = false;
+			$destroyed = 0;
 			$remInt = $system->getRemainingIntegrity();
-			$negation = $fire->target->getArmourValue($fire, $system);
+			$negation = $fire->target->getArmour($fire, $system);
+
 			$dmg = $this->determineDamage($rake, $negation);
+			$rakes--;
 
 			if ($remInt - $dmg->structDmg < 1){
-				$destroyed = true;
+				$destroyed = 1;
 				$name = get_class($system);
-				$overkill = (abs($remInt - $dmg->structDmg));
-				Debug::log(" => target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$overkill." dmg");
-				$dmg->structDmg = $remInt;
+				$okSystem = $fire->target->getOverKillSystem($fire);
+
+				if ($okSystem){
+					$overkill = abs($remInt - $dmg->structDmg);
+					$dmg->structDmg = $remInt;
+					Debug::log(" => OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$overkill." dmg");
+				}
+				else {
+					Debug::log(" => destroying non-ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg);
+					$rakes = 0;
+				}
 			}
 
 			$entry = new Damage(
 				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
-				$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $overkill, $negation, $destroyed, $dmg->notes, 1
+				$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $overkill, $negation["stock"], $destroyed, $dmg->notes, 1
 			);
 			$fire->damages[] = $entry;
 			$fire->target->applyDamage($entry);
-
-			if (!$fire->target->ship){
-				Debug::log("laser versus non-ship, stopping after initial hit");
-				$rakes = 0;
-			} else $rakes--;
 
 		}
 		Debug::log($print);
@@ -92,7 +96,7 @@ class LightParticleBeam extends Laser {
 	public $beamWidth = 1;
 	public $minDmg = 27;
 	public $maxDmg = 34;
-	public $optRange = 600;
+	public $optRange = 400;
 	public $dmgLoss = 4;
 	public $accDecay = 120;
 	public $shots = 1;
@@ -102,12 +106,11 @@ class LightParticleBeam extends Laser {
 	public $maxBoost = 1;
 	public $rakes = 1;
 	public $mass = 20;
-	public $traverse = -3;
+	public $traverse = -2;
 	public $priority = 2.5;
 	
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-		$this->boostEffect[] = new Effect("Accuracy", 0.20);
 	}
 }
 
@@ -168,8 +171,8 @@ class HeavyLaser extends Laser {
 	public $beamWidth = 4;
 	public $minDmg = 145;
 	public $maxDmg = 180;
-	public $optRange = 650;
-	public $dmgLoss = 4;
+	public $optRange = 700;
+	public $dmgLoss = 3;
 	public $accDecay = 60;
 	public $reload = 4;
 	public $powerReq = 6;
@@ -193,7 +196,7 @@ class SuperHeavyLaser extends Laser {
 	public $minDmg = 210;
 	public $maxDmg = 255;
 	public $optRange = 800;
-	public $dmgLoss = 4;
+	public $dmgLoss = 2;
 	public $accDecay = 40;
 	public $reload = 5;
 	public $powerReq = 10;

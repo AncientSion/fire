@@ -25,8 +25,9 @@ function doSort(a, b){
 }
 
 function initChat(){
+	console.log("initChat");
 	
-	$(".chatWrapper").find(".chatBox").scrollTop(function(){return this.scrollHeight});
+	$(".chatWrapper").removeClass("disabled").find(".chatBox").scrollTop(function(){return this.scrollHeight});
 	var checkChat = setInterval(
 		function(){
 			ajax.getChat();
@@ -38,14 +39,20 @@ function initChat(){
 		var w = $chat.width();
 		var h = $chat.height();
 
-		$chat.css("top", res.y - h-3).css("left", 3).removeClass("disabled").data("on", 1)
+		$chat
+			.css("top", res.y - h-3)
+			.css("left", 3)
+			.data("s", 1)
 			.contextmenu(function(e){
 				e.preventDefault(); e.stopPropagation();
-				if ($(this).data("on")){
-					$(this).css("width", 150).data("on", 0);
-				} else $(this).css("width", 600).data("on", 1);
-
-		})
+				if ($(this).data("s") == 0){
+					$(this).data("s", 1).css("width", 600);
+				}
+				else if ($(this).data("s") == 1){
+					$(this).data("s", 2).css("width", Math.min(res.x - 50, 1000));
+				}
+				else $(this).data("s", 0).css("width", 150);
+			}).drag();
 	}
 	//	return;
 	$(this).keypress(function(e){
@@ -171,8 +178,7 @@ function Animate(){
 
 window.animate = new Animate();
 
-window.fps;
-window.fpsInterval;
+window.fpsTicks;
 window.speedMod = 1;
 
 window.startTime, window.now, window.then, window.elapsed;
@@ -181,8 +187,7 @@ window.startTime, window.now, window.then, window.elapsed;
 window.iterator = 0;
 
 function setFPS(fps){
-	window.fps = fps;
-	window.fpsInterval = 1000 / window.fps;
+	window.fpsTicks = 1000 / fps;
 }
 
 function initiateUnit(data){

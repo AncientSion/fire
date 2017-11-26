@@ -1,0 +1,131 @@
+insertMissions s: 1
+insertMissions s: 1
+doAdvance for game6 from phase -1 to phase 0
+initBallistics
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+advancing game state time: 0.013 seconds.
+insertClientActions s: 1
+insertClientActions s: 1
+doAdvance for game6 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+Handling mixed #35
+STRIKE
+close in
+adding move to target #33 => 36/-349
+Handling mixed #36
+STRIKE
+close in
+adding move to target #33 => 30/-361
+Handling mixed #37
+STRIKE
+drag
+adding move to target #35 => 36/-349
+handleMixedMovement
+updateMissionState
+advancing game state time: 0.081 seconds.
+doAdvance for game6 from phase 2 to phase 3
+resolveFireOrder - ID 259, shooter: Flight #37 vs Flight #35, w: LinkedParticleGun #2, shots: 1
+resolveFireOrder - ID 260, shooter: Flight #37 vs Flight #35, w: LinkedParticleGun #4, shots: 1
+doDamage, weapon: LinkedParticleGun, target #35/7/Aurora, totalDmg: 10, remaining: 26, armour: 4+0
+resolveFireOrder - ID 261, shooter: Flight #37 vs Flight #35, w: LinkedParticleGun #6, shots: 1
+doDamage, weapon: LinkedParticleGun, target #35/5/Aurora, totalDmg: 14, remaining: 26, armour: 4+0
+resolveFireOrder - ID 262, shooter: Flight #37 vs Flight #35, w: LinkedParticleGun #8, shots: 1
+doDamage, weapon: LinkedParticleGun, target #35/17/Aurora, totalDmg: 14, remaining: 26, armour: 4+0
+resolveFireOrder - ID 263, shooter: Flight #37 vs Flight #35, w: LinkedParticleGun #10, shots: 1
+resolveFireOrder - ID 264, shooter: Flight #37 vs Flight #35, w: LinkedParticleGun #12, shots: 1
+resolveFireOrder - ID 265, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #4, shots: 1
+doDamage, weapon: LinkedParticleGun, target #37/11/Sentri, totalDmg: 14, remaining: 24, armour: 5+0
+resolveFireOrder - ID 266, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #6, shots: 1
+resolveFireOrder - ID 267, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #8, shots: 1
+resolveFireOrder - ID 268, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #10, shots: 1
+resolveFireOrder - ID 269, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #12, shots: 1
+resolveFireOrder - ID 270, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #14, shots: 1
+resolveFireOrder - ID 271, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #16, shots: 1
+doDamage, weapon: LinkedParticleGun, target #37/1/Sentri, totalDmg: 14, remaining: 24, armour: 5+0
+resolveFireOrder - ID 272, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #18, shots: 1
+resolveFireOrder - ID 273, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #20, shots: 1
+resolveFireOrder - ID 274, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #22, shots: 1
+resolveFireOrder - ID 275, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #24, shots: 1
+resolveFireOrder - ID 276, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #26, shots: 1
+resolveFireOrder - ID 277, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #28, shots: 1
+doDamage, weapon: LinkedParticleGun, target #37/1/Sentri, totalDmg: 16, remaining: 6, armour: 5+0
+ => destroying non-ship target system Sentri #1 was destroyed, rem: 6, doing: 22
+resolveBallisticFireOrders
+cleanFireOrders, fires: 19
+DB updateFireOrders: 19
+Dropout - dmg: 76.923076923077, tresh: 70, mt_rand(0, 76) = 54, > 35
+Dropout - dmg: 76.923076923077, tresh: 70, mt_rand(0, 76) = 51, > 35
+Dropout - dmg: 75, tresh: 70, mt_rand(0, 75) = 49, > 35
+ => DB insertDamageEntries: 6
+ => DB insertCritEntries: 3
+handleFiringPhase time: 0.149 seconds.
+advancing game state time: 0.168 seconds.
+doAdvance for game6 from phase 3 to phase 4
+endTurn
+destroyUnitsDB
+assembleEndStates
+insertReinforcements: 1
+advancing game state time: 0.08 seconds.
+insertMissions s: 1
+doAdvance for game6 from phase -1 to phase 0
+initBallistics
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+advancing game state time: 0.016 seconds.
+insertClientActions s: 1
+insertClientActions s: 1
+doAdvance for game6 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+Handling mixed #35
+STRIKE
+target did reach first us, patrol
+adding move to target #37 => 36/-349
+Handling mixed #36
+STRIKE
+close in
+adding move to target #33 => -92/-455
+Handling mixed #37
+STRIKE
+adding move to target #35 => 36/-349
+handleMixedMovement
+updateMissionState
+advancing game state time: 0.044 seconds.
+doAdvance for game6 from phase 2 to phase 3
+resolveFireOrder - ID 278, shooter: Flight #37 vs Flight #35, w: LinkedParticleGun #4, shots: 1
+resolveFireOrder - ID 279, shooter: Flight #37 vs Flight #35, w: LinkedParticleGun #6, shots: 1
+resolveFireOrder - ID 280, shooter: Flight #37 vs Flight #35, w: LinkedParticleGun #8, shots: 1
+resolveFireOrder - ID 281, shooter: Flight #37 vs Flight #35, w: LinkedParticleGun #10, shots: 1
+resolveFireOrder - ID 282, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #4, shots: 1
+doDamage, weapon: LinkedParticleGun, target #37/3/Sentri, totalDmg: 16, remaining: 24, armour: 5+0
+resolveFireOrder - ID 283, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #8, shots: 1
+resolveFireOrder - ID 284, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #10, shots: 1
+resolveFireOrder - ID 285, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #12, shots: 1
+resolveFireOrder - ID 286, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #14, shots: 1
+doDamage, weapon: LinkedParticleGun, target #37/5/Sentri, totalDmg: 14, remaining: 24, armour: 5+0
+resolveFireOrder - ID 287, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #16, shots: 1
+resolveFireOrder - ID 288, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #20, shots: 1
+resolveFireOrder - ID 289, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #22, shots: 1
+doDamage, weapon: LinkedParticleGun, target #37/7/Sentri, totalDmg: 16, remaining: 24, armour: 5+0
+resolveFireOrder - ID 290, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #24, shots: 1
+resolveFireOrder - ID 291, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #26, shots: 1
+resolveFireOrder - ID 292, shooter: Flight #35 vs Flight #37, w: LinkedParticleGun #28, shots: 1
+doDamage, weapon: LinkedParticleGun, target #37/9/Sentri, totalDmg: 16, remaining: 24, armour: 5+0
+resolveBallisticFireOrders
+cleanFireOrders, fires: 15
+DB updateFireOrders: 15
+Dropout - dmg: 91.666666666667, tresh: 70, mt_rand(0, 91) = 40, > 35
+Dropout - dmg: 91.666666666667, tresh: 70, mt_rand(0, 91) = 69, > 35
+Dropout - dmg: 91.666666666667, tresh: 70, mt_rand(0, 91) = 72, > 35
+ => DB insertDamageEntries: 4
+ => DB insertCritEntries: 3
+handleFiringPhase time: 0.094 seconds.
+advancing game state time: 0.104 seconds.

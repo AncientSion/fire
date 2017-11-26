@@ -47,12 +47,6 @@ window.cam = {
 		else {
 			this.z = Math.max(0.4, this.z - 0.2);
 		}
-
-		//for (var i = 0; i < game.ships.length; i++){
-		//	if (game.ships[i].ship){
-		//		game.ships[i].setEscortImage();
-		//	}
-		//}
 		game.redraw();
 	},
 

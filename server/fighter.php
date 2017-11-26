@@ -128,7 +128,7 @@ class Nial extends Fighter {
 	public $value = 45;
 	public $mass = 30;
 	public $ep = 140;
-	public $integrity = 32;
+	public $integrity = 33;
 	public $negation = 7;
 
 	function __construct($id, $parentId){

@@ -7,7 +7,7 @@ class Olympus extends Medium {
 	public $size = 45;
 	public static $value = 410;
 	public $profile = array(0.94, 1.06);
-	public $mass = 2500;
+	public $mass = 25000;
 
 	function __construct($id, $userid, $available, $status, $destroyed){		
         parent::__construct($id, $userid, $available, $status, $destroyed);

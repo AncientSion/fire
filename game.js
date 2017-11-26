@@ -181,6 +181,7 @@ function Game(data, userid){
 			s.doDraw = 1;
 			for (var i = s.cc.length-1; i >= 0; i--){
 				var attach = this.getUnit(s.cc[i]);
+				//if (attach.doDraw){attach.doDraw = 0;} // so dogfight flights gets attached following this;
 				if (!attach.ship && attach.mission.targetid == s.id){continue;} // skip CC targeting this
 				attach.detachFlight(s.id);
 				s.cc.splice(i, 1);
@@ -218,7 +219,7 @@ function Game(data, userid){
 
 		s.mission = mission;
 
-		if (t && o.x == dest.x && o.y == dest.y){
+		if (t && t.ship && o.x == dest.x && o.y == dest.y){
 			mission.arrived = game.turn-1;
 			mission.turn = game.turn-1;
 			s.doDraw = 0;
@@ -229,15 +230,16 @@ function Game(data, userid){
 			s.facing = a;
 			s.setSpeed();
 			s.setTarget();
-			s.setSize();
 			s.setLayout();
+			s.setSize();
+			s.img = undefined;
 			s.setImage();
 		}
 
 		s.drawX = p.x;
 		s.drawY = p.y;
 		s.getAttachDivs();
-		s.setEscortImage();
+		s.setSupportImage();
 		s.disableMissionMode();
 		game.updateSingleIntercept(s);
 		game.draw();
@@ -806,41 +808,13 @@ function Game(data, userid){
 			}
 		}
 		
-		/*for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].flight && this.animFlight || this.ships[i].salvo && this.animSalvo){
-				var a = this.ships[i].getPlannedPos();
-
-				for (var j = 0; j < this.ships.length; j++){
-					if (this.ships[i].id == this.ships[j].id){continue;}
-					var double = 0;
-					for (var k = 0; k < this.ships[i].cc.length; k++){
-						if (this.ships[i].cc[k] == this.ships[j].id){
-							double = 1; break;
-						}
-					}
-
-					if (double){continue;}
-
-					var b = this.ships[j].getPlannedPos();
-					if (a.x == b.x && a.y == b.y){
-						this.ships[i].cc.push(this.ships[j].id);
-						this.ships[j].cc.push(this.ships[i].id);
-					}
-				}
-			}
-		}
-
-		for (var i = 0; i < this.ships.length; i++){
-			this.ships[i].setEscortImage();
-		}*/
-
 		if (!game.animShip && !game.animFlight && game.animSalvo){
 			for (var i = 0; i < this.ships.length; i++){
 				this.ships[i].cc = [];
 			}
 			game.setlastPosCC()
 			for (var i = 0; i < this.ships.length; i++){
-				this.ships[i].setEscortImage();
+				this.ships[i].setSupportImage();
 			}
 			for (var i = 0; i < this.ships.length; i++){
 				this.ships[i].getAttachDivs();
@@ -856,11 +830,12 @@ function Game(data, userid){
 		for (var i = 0; i < this.ships.length; i++){
 			//if (!this.ships[i].ship){
 				this.ships[i].setPostFireImage();
+				this.ships[i].setSize();
 			//}
 		}
 		for (var i = 0; i < this.ships.length; i++){
 			//if (this.ships[i].ship){
-				this.ships[i].setEscortImage();
+				this.ships[i].setSupportImage();
 			//}
 		}
 		this.draw();
@@ -955,14 +930,13 @@ function Game(data, userid){
 			this.ships[i].setDrawData();
 		}
 
-		//this.setAllOffset();
 		this.setCC();
 
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].createBaseDiv();
 			this.ships[i].setImage();
 			this.ships[i].getAttachDivs();
-			this.ships[i].setEscortImage();
+			this.ships[i].setSupportImage();
 		}
 
 		for (var i = 0; i < this.reinforcements.length; i++){
@@ -1134,6 +1108,7 @@ function Game(data, userid){
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].flight){
+				//var doOffset = 0;
 				var a = this.ships[i].getDrawPos();
 
 				for (var j = 0; j < this.ships.length; j++){
@@ -1144,10 +1119,10 @@ function Game(data, userid){
 						if (this.ships[j].ship){
 							this.ships[i].doOffset();
 						}
-						else if (this.ships[i].draw){
-							this.ships[i].doOffset();
-							this.ships[j].doOffset();
-						}
+					//	else if (this.ships[i].draw){
+						//	this.ships[i].doOffset();
+					//		this.ships[j].doOffset();
+					//	}
 					}
 				}
 			}
@@ -1706,8 +1681,8 @@ function Game(data, userid){
 		anim = window.requestAnimationFrame(game.animateDeployment.bind(this));
 		window.now = Date.now();		
 		window.elapsed = window.now - window.then;
-		if (elapsed > window.fpsInterval){
-			window.then = window.now - (window.elapsed % window.fpsInterval);
+		if (elapsed > window.fpsTicks){
+			window.then = window.now - (window.elapsed % window.fpsTicks);
 			ctx.clearRect(0, 0, res.x, res.y);
 
 			var doing = 0;
@@ -1860,9 +1835,9 @@ function Game(data, userid){
 			this.ships[i].animationSetupMove();
 
 			if (this.ships[i].ship){
-				frameMod = window.fps / this.ships[i].getCurrentImpulse();
-			} else frameMod = window.fps / this.ships[i].actions[this.ships[i].actions.length-1].dist;
-
+				frameMod = 1000 / window.fpsTicks / this.ships[i].getCurrentImpulse();
+			} else frameMod = 1000 / window.fpsTicks / this.ships[i].actions[this.ships[i].actions.length-1].dist;
+			//frameMod = 1;
 			for (var j = 0; j < this.ships[i].actions.length; j++){
 				if (this.ships[i].actions[j].turn == game.turn){
 					var action = this.ships[i].actions[j];
@@ -1899,16 +1874,13 @@ function Game(data, userid){
 		}
 	}
 
-
 	this.animateUnitMovement = function(){
 		anim = window.requestAnimationFrame(game.animateUnitMovement.bind(this));
 		window.now = Date.now();		
 		window.elapsed = window.now - window.then;
-		if (elapsed > window.fpsInterval){
-			//console.log("DRAW");
-			//frameCounter++;
-			//console.log(frameCounter);
-			window.then = window.now - (window.elapsed % window.fpsInterval);
+		if (elapsed < window.fpsTicks){}
+		else {
+			window.then = window.now - (window.elapsed % window.fpsTicks);
 			fxCtx.clearRect(0, 0, res.x, res.y);
 			ctx.clearRect(0, 0, res.x, res.y);
 
@@ -2046,7 +2018,7 @@ function Game(data, userid){
 			 if (!this.ships[i].ship){this.ships[i].setPreFireImage();}
 		}
 		for (var i = 0; i < this.ships.length; i++){
-			 if (!this.ships[i].salvo){this.ships[i].setEscortImage();}
+			 if (!this.ships[i].salvo){this.ships[i].setSupportImage();}
 		}
 	}
 
@@ -2274,9 +2246,9 @@ function Game(data, userid){
 		anim = window.requestAnimationFrame(game.animateSingleFireOrder.bind(this, i, goOn));
 		window.now = Date.now();		
 		window.elapsed = window.now - window.then;
-		if (elapsed <= window.fpsInterval){return;}
+		if (elapsed <= window.fpsTicks){return;}
 
-		window.then = window.now - (window.elapsed % window.fpsInterval);
+		window.then = window.now - (window.elapsed % window.fpsTicks);
 		fxCtx.clearRect(0, 0, res.x, res.y);
 
 		if (!game.fireOrders[i].animating){
@@ -2364,8 +2336,8 @@ function Game(data, userid){
 		anim = window.requestAnimationFrame(game.animateFireOrders.bind(this));
 		window.now = Date.now();		
 		window.elapsed = window.now - window.then;
-		if (elapsed > window.fpsInterval){
-			window.then = window.now - (window.elapsed % window.fpsInterval);
+		if (elapsed > window.fpsTicks){
+			window.then = window.now - (window.elapsed % window.fpsTicks);
 			fxCtx.clearRect(0, 0, res.x, res.y);
 
 			for (var i = 0; i  < game.fireOrders.length; i++){ 
@@ -2469,8 +2441,8 @@ function Game(data, userid){
 		anim = window.requestAnimationFrame(game.animateUnitExplosions.bind(this));
 		window.now = Date.now();		
 		window.elapsed = window.now - window.then;
-		if (elapsed > window.fpsInterval){
-			window.then = window.now - (window.elapsed % window.fpsInterval);
+		if (elapsed > window.fpsTicks){
+			window.then = window.now - (window.elapsed % window.fpsTicks);
 			fxCtx.clearRect(0, 0, res.x, res.y);
 
 			var allDone = 1;
@@ -2915,8 +2887,8 @@ function Game(data, userid){
 		if (l){
 			var w = l*(s+3*2);
 
-			ele.width(Math.min(575, w)).css("top", 0).css("left", 300)//.drag();
-		} else ele.hide();
+			ele.width(Math.min(575, w)).css("top", 0).css("left", 300).removeClass("disabled");
+		}
 	}
 }
 

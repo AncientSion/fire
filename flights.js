@@ -18,20 +18,19 @@ function Flight(data){
 Flight.prototype = Object.create(Mixed.prototype);
 
 Flight.prototype.setSize = function(){
-	if (!this.mission.arrived){
-		this.setPreMoveSize();
+	console.log("setSize #" + this.id);
+	var max = 0;
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].destroyed){continue;}
+		max = Math.max(max, Math.abs(this.structures[i].layout.x));
+		max = Math.max(max, Math.abs(this.structures[i].layout.y));
 	}
-	else if (this.mission.arrived < game.turn){
-		this.setPostMoveSize();
-	}
-	else if (this.mission.arrived == game.turn){
-		if (game.phase <= 2){
-			this.setPreMoveSize();
-		} else this.setPostMoveSize();
-	}
+	this.size = max + 20;
 }
 
 Flight.prototype.setLayout = function(){
+	console.log("setLayout #" + this.id);
+	//console.log(this.size);
 	//if (!this.mission.arrived && this.available < this.mission.turn && this.mission.turn == game.turn){ // delay
 	//	this.setPatrolLayout();
 	//		return;
@@ -45,13 +44,24 @@ Flight.prototype.setLayout = function(){
 		return;
 	}
 
-	var osx = 18;
-	var osy = 16;
+	var osx = 16;
+	var osy = 12;
+
+	var num = Math.ceil(this.structures.length/3);
+
+	//this.size = num*10;
+
+	var reach = 15;
+	if (this.structures.length > 9){
+		reach += (this.structures.length -9) *8
+	}
+
 
 	for (var i = 0; i < this.structures.length/3; i++){
 
 		var a = 360/Math.ceil(this.structures.length/3)*i;
-		var o = getPointInDirection(0 + this.unitSize*15, a-90, 0, 0);
+		//var o = getPointInDirection(0 + this.unitSize*15, a-90, 0, 0);
+		var o = getPointInDirection(reach, a-90, 0, 0);
 
 		for (var j = 0; j < Math.min(this.structures.length-i*3, 3); j++){
 			var ox = o.x;
@@ -79,7 +89,7 @@ Flight.prototype.setMaxMass = function(){
 }
 
 Flight.prototype.setImpulse = function(){
-	this.baseImpulse = Math.floor(Math.pow(this.mass, -0.8)*1750);
+	this.baseImpulse = Math.floor(Math.pow(this.mass, 2.5)*600000);
 	this.currentImpulse = this.baseImpulse;
 }
 
@@ -114,6 +124,7 @@ Flight.prototype.getNewMission = function(){
 }
 
 Flight.prototype.setImage = function(){
+	console.log("setImage #" + this.id);
 	/*if (this.id == 24){console.log("ding")}
 	if (!this.mission.arrived && this.available < this.mission.turn && this.mission.turn == game.turn){
 		this.setPatrolImage();
@@ -578,6 +589,16 @@ Flight.prototype.getIntactFighters = function(){
 	return alive;
 }
 
+Flight.prototype.setSizea = function(){
+	var max = 0;
+
+	for (var i = 0; i < this.structures.length; i++){
+		max = Math.max(Math.abs(max, this.structures[i].layout.x));
+	}
+
+	console.log(max*2);
+}
+
 Flight.prototype.setPreMoveSize = function(){
 	this.size = this.baseSize + this.unitSize * this.getIntactFighters();
 }
@@ -585,19 +606,19 @@ Flight.prototype.setPreMoveSize = function(){
 Flight.prototype.setPostMoveSize = function(){
 	if (this.mission.arrived){
 		if (this.mission.type == 2 || this.mission.type == 3){
-			var s = game.getUnit(this.mission.targetid).size;
-			this.size = s+30;
+			//var s = game.getUnit(this.mission.targetid).size;
+			//this.size = s+30;
 		}
 		else if (this.mission.type == 1){
-			this.size = 1.5*(this.baseSize + this.unitSize * this.getIntactFighters());
+			//this.size = 1.5*(this.baseSize + this.unitSize * this.getIntactFighters());
 		}
 	}
 	else this.size = this.baseSize + this.unitSize * this.getIntactFighters();
 }
 
 Flight.prototype.setRawImage = function(){
-//	this.img = window.shipImages[this.structures[0].name.toLowerCase()];
-//	this.smallImg = window.shipImages[this.structures[0].name.toLowerCase()];
+	//	this.img = window.shipImages[this.structures[0].name.toLowerCase()];
+	//	this.smallImg = window.shipImages[this.structures[0].name.toLowerCase()];
 }
 
 Flight.prototype.switchDiv = function(){

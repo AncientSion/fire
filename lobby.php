@@ -195,9 +195,49 @@ else {
 			<div class="lobbyDiv">
 				<?php echo $ongoingGamesElement; ?>
 			</div>
-			<div class ="chatWrapper" style="position: absolute; left: 100px; top: 395px">
+			<div id="openGames" class="lobbyDiv">
+				<?php echo $openGamesElement; ?>
+			</div>
+			<div class="lobbyDiv">
+				<div class="link">
+					Create a new Game
+					<div id="createGame" class="disabled">
+						<form method="post">
+							<table style="margin: auto" >
+								<tr>
+									<td>
+										<input type="form" style="text-align: center" value='myGame' placeholder="Game Name" name="gameName"></input>		
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<input type="form" style="text-align: center" placeholder="Point Value" name="pointValue"></input>		
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<input type="form" style="text-align: center" placeholder="Reinforce / Turn" name="reinforceValue"></input>		
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<input type="submit" style="width: 100%" value="Confirm and Forward"></input>	
+									</td>
+								</tr>
+							</table>
+					</div>
+				</div>
+			</div>
+			<div class="lobbyDiv">
+				<div class="link">
+					Logout
+				</div>
+			</div>
+			<div class="chatWrapper">
 				<div class ="chatBox">
 					<?php
+						DBManager::app()->purgeChat();
+						
 						$chat = DBManager::app()->getFullChat();
 						$last = 0;
 						if (sizeof($chat)){
@@ -215,40 +255,6 @@ else {
 				<div class ="sendWrapper">
 					<input id="msg" placeholder ="chat here" type="text">
 				</div>
-			</div>
-			<div class="lobbyDiv">
-				<?php echo $openGamesElement; ?>
-			</div>
-			<div class="link">
-				Create a new Game
-				<div id="createGame" class="disabled">
-					<form method="post">
-						<table style="margin: auto" >
-							<tr>
-								<td>
-									<input type="form" style="text-align: center" value='myGame' placeholder="Game Name" name="gameName"></input>		
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<input type="form" style="text-align: center" placeholder="Point Value" name="pointValue"></input>		
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<input type="form" style="text-align: center" placeholder="Reinforce / Turn" name="reinforceValue"></input>		
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<input type="submit" style="width: 100%" value="Confirm and Forward"></input>	
-								</td>
-							</tr>
-						</table>
-				</div>
-			</div>
-			<div class="link">
-				Logout
 			</div>
 		</div>
 	</body>
@@ -269,7 +275,10 @@ else {
 			e.stopPropagation();
 		})
 
-		$(".chatWrapper").find(".chatBox").scrollTop(function(){return this.scrollHeight});
+		//var p = $("#openGames").position().top;
+		//var h = $("#openGames").height();
+
+		$(".chatWrapper").css("position", "relative").css("display", "inline-block").css("width", 700).css("margin-left", 100).css("margin-top", 20).find(".chatBox").scrollTop(function(){return this.scrollHeight}).end();
 		var checkChat = setInterval(
 			function(){
 				ajax.getChat();

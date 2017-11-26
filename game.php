@@ -53,8 +53,8 @@ foreach ($manager->playerstatus as $player){
 }
 
 $manager->test();
-$data = $manager->getClientData();
-$post = json_encode($data, JSON_NUMERIC_CHECK);
+$post = json_encode($manager->getClientData(), JSON_NUMERIC_CHECK);
+//var_export($manager->getUnit(36)->structures[1]->crits);
 echo "<script>";
 echo "window.game = ".$post.";";
 echo "window.playerstatus = ".json_encode($manager->playerstatus, JSON_NUMERIC_CHECK).";";
@@ -139,8 +139,8 @@ echo "</script>";
 				</div>
 			</div>
 		</div>
-		<div class ="chatWrapper disabled">
-			<div class ="chatBox">
+		<div class="chatWrapper disabled">
+			<div class="chatBox">
 				<?php
 					$chat = DBManager::app()->getFullChat();
 					$last = 0;
@@ -156,7 +156,7 @@ echo "</script>";
 
 				?>
 			</div>
-			<div class ="sendWrapper">
+			<div class="sendWrapper">
 				<input id="msg" placeholder ="chat here" type="text">
 			</div>
 		</div>
@@ -263,10 +263,12 @@ echo "</script>";
 				</tr>
 				<tr>
 					<td>
-						<?php echo $manager->turn; ?>
+						<?php echo $manager->turn;
+						?>
 					</td>
 					<td>
-						<?php echo $phase; ?>
+						<?php echo $phase;
+						?>
 					</td>
 					<td id="reinforce">
 						<?php
@@ -283,12 +285,15 @@ echo "</script>";
 							echo '<td colSpan=3 class="buttonTD" style="background-color: lightGreen;">Waiting for Opponent</td>';
 						}
 						else echo '<td colSpan=3 class="buttonTD" style="font-size: 20px" onclick="this.disabled=true;game.endPhase()">Confirm Orders</td>';
-						?>
+					?>
 				</tr>
 			</table>
 		</div>
-		<div id="unitGUI">
+
+
+		<div id="unitGUI" class="disabled">
 		</div>
+
 		<div id="canvasDiv" class="disabled">
 			<canvas id="canvas"></canvas>
 			<canvas id="fxCanvas"></canvas>
@@ -298,8 +303,11 @@ echo "</script>";
 			<canvas id="mouseCanvas"></canvas>
 			<canvas id="drawCanvas"></canvas>
 		</div>
-		<div id="shortInfo" class="disabled">				
+		<div id="shortInfo" class="disabled">
 		</div>
+
+
+
 		<div id="weaponAimTableWrapper" class="disabled">
 			<table id="targetInfo">
 				<tr>
@@ -342,6 +350,8 @@ echo "</script>";
 				</tr>
 			</table>
 		</div>
+
+
 		<div id="combatlogWrapper" class="disabled">
 			<div class="combatLogHeader">
 				Combat Log
@@ -378,7 +388,7 @@ echo "</script>";
 					<th  width="50%" colSpan="2">
 						Class
 					</th>
-					<th colSpan=2 width="20%" >
+					<th colSpan=2 width="20%">
 						ETA
 					</th>
 				</tr>
@@ -517,13 +527,6 @@ echo "</script>";
 			error: ajax.error,
 		});
 	}
-
-	$(document).ready(function(){
-		window.res.x = window.innerWidth-1;
-		window.res.y = window.innerHeight-1;
-
-		window.initiateKeyDowns();
-	})
 
 	function showUI(){
 		
@@ -667,18 +670,34 @@ echo "</script>";
 				}
 				else if (e.keyCode == 109){ // m, cancel move animation
 					if (game.phase == 2){
+						//setFPS(150);
+						window.cancelAnimationFrame(anim);
 						for (var i = 0; i < game.ships.length; i++){
 							game.ships[i].setPostMovePosition();
 							game.ships[i].setPostMoveFacing();
+
+							if (game.ships[i].ship){continue;}
+
+							if (game.ships[i].mission.arrived){
+								if (game.ships[i].mission.type == 1){
+									game.ships[i].setPostMoveSize();
+									game.ships[i].setPostMoveImage();
+								}
+								else if (game.ships[i].mission.type > 1){
+									game.ships[i].doDraw = 0;
+								}
+							}
 						}
-						game.animShip = 1;
-						game.animFlight = 1;
-						game.animSalvo = 1;
-						game.movementResolved();
-						game.animShip = 0;
-						game.animFlight = 0;
-						game.animSalvo = 0;
+
+						game.setlastPosCC()
+						for (var i = 0; i < game.ships.length; i++){
+							game.ships[i].setSupportImage();
+						}
+						for (var i = 0; i < game.ships.length; i++){
+							game.ships[i].getAttachDivs();
+						}
 					}
+					game.draw();
 				}
 				else if (e.keyCode == 43){ // +
 					if (game.phase == 0 || game.phase == 1){

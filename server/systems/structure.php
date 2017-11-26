@@ -55,7 +55,7 @@ class Structure {
 
 	public function getCurrentNegation(){
 		$p = 1.5;
-		return round(pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow * $this->negation) + $this->bonusNegation;
+		return round(pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow * $this->negation);
 	}
 
 	public function setBonusNegation($turn){
@@ -63,6 +63,13 @@ class Structure {
 		$this->bonusNegation = $this->getBoostEffect("Armour") * $this->getBoostLevel($turn);
 
 		//Debug::log("Bonus Negation for #".$this->parentId."/".$this->id.": ".$this->bonusNegation);
+	}
+
+	public function getArmourValue($system){
+		return array(
+			"stock" => round($this->getCurrentNegation() * $system->getArmourMod()),
+			"bonus" => round($this->bonusNegation * $system->getArmourMod())
+		);
 	}
 
 	public function getBoostEffect($type){

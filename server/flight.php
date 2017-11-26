@@ -6,8 +6,8 @@ class Flight extends Mixed {
 	public $name = "Flight";
 	public $display = "Flight";
 	public $faction = false;
-	public $baseSize = 25;
-	public $unitSize = 4;
+	public $baseSize = 30;
+	public $unitSize = 5;
 
 	public $fSize = 15;
 	public $traverse = -4;
@@ -26,7 +26,7 @@ class Flight extends Mixed {
 
 	public function setCurrentImpulse($t, $p){
 		//Debug::log("setCurrentImpulse #".$this->id);
-		$this->baseImpulse = floor(pow($this->mass, -0.8)*1750);
+		$this->baseImpulse = floor(pow($this->mass, -2.5)*600000);
 		if (!isset($this->mission)){return;}
 
 		$elapsed = 0;

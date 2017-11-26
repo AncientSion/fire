@@ -44,20 +44,23 @@ class Weapon extends System {
 		//Debug::log("target: ".$fire->target->traverse);
 		return max(0, $this->traverse - $fire->target->traverse);
 	}
+	
 	public function determineDamage($totalDmg, $negation){
 		$shieldDmg = 0;
 		$armourDmg = 0;
 		$structDmg = 0;
 		$notes = "";
 
-		if ($totalDmg <= $negation){ 
+		if ($totalDmg <= array_sum($negation)){ 
 			$notes = "block";
-			$armourDmg = round($totalDmg/2);
+			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
+			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"])/2);
 		}
 		else {
 			$notes = "pen";
-			$armourDmg = round(min($totalDmg, $negation));
-			$structDmg = round($totalDmg - $armourDmg);
+			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
+			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
+			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
 		}
 
 		return new Divider($shieldDmg * $this->linked, $armourDmg * $this->linked, $structDmg * $this->linked, $notes);
@@ -70,17 +73,14 @@ class Weapon extends System {
 	public function doDamage($fire, $roll, $system){
 		$destroyed = 0;
 		$totalDmg = $this->getTotalDamage($fire);
-		$remInt = $system->getRemainingIntegrity();
-
-		$negation = $fire->target->getArmourValue($fire, $system);
-		$dmg = $this->determineDamage($totalDmg, $negation);
-
 		$overkill = 0;
 		$okSystem = 0;
+		$remInt = $system->getRemainingIntegrity();
+		
+		$negation = $fire->target->getArmour($fire, $system);
+		$dmg = $this->determineDamage($totalDmg, $negation);
 
-		$fire->hits++;
-
-		Debug::log("doDamage, weapon: ".(get_class($this)).", target: ".$fire->target->id."/".$system->id."/".get_class($system).", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation);
+		Debug::log("doDamage, weapon: ".(get_class($this)).", target #".$fire->target->id."/".$system->id."/".get_class($system).", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
 
 		if ($remInt - $dmg->structDmg < 1){
 			$destroyed = 1;
@@ -99,7 +99,7 @@ class Weapon extends System {
 
 		$entry = new Damage(
 			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
-			$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $overkill, $negation, $destroyed, $dmg->notes, 1
+			$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $overkill, $negation["stock"], $destroyed, $dmg->notes, 1
 		);
 		$fire->damages[] = $entry;
 		$fire->target->applyDamage($entry);	

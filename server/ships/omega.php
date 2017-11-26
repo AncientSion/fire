@@ -6,8 +6,8 @@ class Omega extends SuperHeavy {
 	public $faction = "Earth Alliance";
 	public $size = 100;
 	public static $value = 1200;
-	public $profile = array(0.91, 1.09);
-	public $mass = 14500;
+	public $profile = array(0.93, 1.07);
+	public $mass = 14000;
 
 	function __construct($id, $userid, $available, $status, $destroyed){
         parent::__construct($id, $userid, $available, $status, $destroyed);

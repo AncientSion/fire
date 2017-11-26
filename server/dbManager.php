@@ -10,8 +10,8 @@
 		function __construct(){
 
 			if ($this->connection === null){
-				$user = "aatu"; $pass = "Kiiski";
-				//$user = "root"; $pass = "147147";
+				//$user = "aatu"; $pass = "Kiiski";
+				$user = "root"; $pass = "147147";
 				$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$user,$pass);
 				$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -36,13 +36,28 @@
 		}
 
 		public function insertChatMsg($post){
-			$sql = "INSERT INTO chat VALUES (0, '".$post["username"]."', ".$post["userid"].", '".$post["msg"]."', ".$post["time"].")"; 
+			$msg = str_replace("'", " ", $post["msg"]);
+
+			$sql = "INSERT INTO chat VALUES (0, '".$post["username"]."', ".$post["userid"].", '".$msg."', ".$post["time"].")"; 
 
 			$this->connection->query($sql);
 		}
 
+		public function purgeChat(){
+			$time = time();
+			$tresh = $time - (24 * 60 * 60);
+
+			$stmt = $this->connection->prepare("
+				DELETE FROM chat WHERE time < :tresh"
+			);
+
+			$stmt->bindParam(":tresh", $tresh);
+			$stmt->execute();
+		}
+
 		public function getFullChat(){
 			$time = time();
+
 			$stmt = $this->connection->prepare("
 				SELECT * FROM chat
 			");
@@ -1474,8 +1489,7 @@
 					if ($stmt->errorCode() == 0){
 						continue;
 					}
-					else
-					var_export($crits[$i]); return false;
+					else return false;
 				}
 			}
 

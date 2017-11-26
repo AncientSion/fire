@@ -77,7 +77,7 @@ class Mixed extends Ship {
 		return false;
 	}
 
-	public function getStructureById($id){
+	public function getStruct($id){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->id == $id){
 				return $this->structures[$i];
@@ -128,15 +128,11 @@ class Mixed extends Ship {
 	}
 
 	public function setMove(&$gd){
-		$t = $gd->getUnit($this->mission->targetid);
-
-		if (!$t->moveSet){$t->setMove($gd);}
-
 		Debug::log("Handling mixed #".$this->id);
 
 		$tPos;
-		$dist;
-		$angle;
+		$dist = 0;
+		$angle = -1;
 		$type = "move";
 
 		if ($this->mission->type == 1){ // PATROL
@@ -144,7 +140,6 @@ class Mixed extends Ship {
 			if ($this->mission->arrived){
 				$tPos = $t->getCurrentPosition();
 				$type = "patrol";
-				$angle = -1;
 				Debug::log("drag");
 			}
 			else {
@@ -166,29 +161,72 @@ class Mixed extends Ship {
 		}
 		else if ($this->mission->type == 2){ // STRIKE
 			Debug::log("STRIKE");
-			if ($this->mission->arrived){ // get ship last position as move goal
-				$tPos = $t->getCurrentPosition();
-				$dist = Math::getDist2($this->getCurrentPosition(), $tPos);
-				$angle = Math::getAngle2($this->getCurrentPosition(), $tPos);
-				Debug::log("drag");
+			
+			$t = $gd->getUnit($this->mission->targetid);
+
+			if (!$t->ship && $t->mission->targetid == $this->id){ // direct targetting
+				if ($this->mission->arrived){ // at target, circle patrol
+					$tPos = $this->getCurrentPosition();
+					$type = "patrol";
+				}
+				else { // on way to intercepting flight
+					if (!$t->moveSet && mt_rand(0, 1)){
+						Debug::log("priority achieved: ".$this->id);
+						$this->moveSet = 1;
+						$t->setMove($gd);
+					}
+
+					$tPos = $t->getCurrentPosition();
+					$origin = $this->getCurrentPosition();
+					$impulse = $this->getCurrentImpulse();
+					$dist = Math::getDist2($origin, $tPos);
+					$angle = Math::getAngle2($origin, $tPos);
+
+					$this->mission->x = $tPos->x;
+					$this->mission->y = $tPos->y;
+
+					if ($dist == 0){
+						$type = "patrol";
+						Debug::log("target did reach first us, patrol");
+						$this->mission->arrived = $gd->turn;
+					}
+					else  if ($impulse < $dist){
+						Debug::log("close in");
+						$tPos = Math::getPointInDirection($impulse, $angle, $origin->x, $origin->y);
+					}
+					else {
+						Debug::log("move arrival");
+						$this->mission->arrived = $gd->turn;
+					}
+				}
 			}
-			else {
-				$tPos = $gd->getUnit($this->mission->targetid)->getCurrentPosition();
-				$origin = $this->getCurrentPosition();
-				$impulse = $this->getCurrentImpulse();
-				$dist = Math::getDist2($origin, $tPos);
-				$angle = Math::getAngle2($origin, $tPos);
+			else { // "normal" stack resolution
+				if (!$t->moveSet){$t->setMove($gd);}
 
-				$this->mission->x = $tPos->x;
-				$this->mission->y = $tPos->y;
-
-				if ($impulse < $dist){
-					Debug::log("close in");
-					$tPos = Math::getPointInDirection($impulse, $angle, $origin->x, $origin->y);
+				if ($this->mission->arrived){ // get ship last position as move goal
+					$tPos = $t->getCurrentPosition();
+					$dist = Math::getDist2($this->getCurrentPosition(), $tPos);
+					$angle = Math::getAngle2($this->getCurrentPosition(), $tPos);
+					Debug::log("drag");
 				}
 				else {
-					Debug::log("arrival");
-					$this->mission->arrived = $gd->turn;
+					$tPos = $t->getCurrentPosition();
+					$origin = $this->getCurrentPosition();
+					$impulse = $this->getCurrentImpulse();
+					$dist = Math::getDist2($origin, $tPos);
+					$angle = Math::getAngle2($origin, $tPos);
+
+					$this->mission->x = $tPos->x;
+					$this->mission->y = $tPos->y;
+
+					if ($impulse < $dist){
+						Debug::log("close in");
+						$tPos = Math::getPointInDirection($impulse, $angle, $origin->x, $origin->y);
+					}
+					else {
+						Debug::log("arrival");
+						$this->mission->arrived = $gd->turn;
+					}
 				}
 			}
 		}
@@ -229,6 +267,7 @@ class Mixed extends Ship {
 			$fire->singleid = $target->id;
 			$fire->req = $this->calculateToHit($fire);
 			if ($fire->rolls[$i] < $fire->req){
+				$fire->hits++;
 				$fire->weapon->doDamage($fire, $fire->rolls[$i], $target);
 			}
 		}
@@ -240,15 +279,16 @@ class Mixed extends Ship {
 	}
 	
 	public function getRemainingIntegrity($fire){
-		return $this->getStructureById($fire->hitSystem->id)->getRemainingIntegrity();
+		return $this->getStruct($fire->hitSystem->id)->getRemainingIntegrity();
 	}
 
-	public function getArmourValue($fire, $hitSystem){
-		return $hitSystem->negation;
+
+	public function getArmour($fire, $system){
+		return array("stock" => $system->negation, "bonus" => 0);
 	}
 
 	public function getHitSection($fire){
-		return 0;
+		return $this->getHitSystem($fire)->id;
 	}
 	
 	public function getHitSystem($fire){
@@ -290,7 +330,7 @@ class Mixed extends Ship {
 	}
 
 	public function getHitChance($fire){
-		return $this->getStructureById($fire->singleid)->getSubHitChance($fire);
+		return $this->getStruct($fire->singleid)->getSubHitChance($fire);
 	}
 
 	public function testForCrits($turn){

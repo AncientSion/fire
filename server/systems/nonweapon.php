@@ -176,7 +176,7 @@ class Hangar extends Weapon {
 	public $name = "Hangar";
 	public $display = "Hangar";
 	public $loads = array();
-	public $reload = 1;
+	public $reload = 2;
 	public $utility = 1;
 	public $limit;
 

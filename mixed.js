@@ -74,15 +74,17 @@ Mixed.prototype.getPostMovePos = function(){
 
 Mixed.prototype.drawMovePlan = function(){
 	if (this.mission.arrived){return;}
-	var target;
+	var target = this.getTarget();
+	var tPos;
 	var origin = this.getPlannedPos();
 	if (this.mission.type > 1){
-		//target = this.getTarget().getPostMovePos();
-		target = this.getTarget().getNextPosition();
-	} else target = {x: this.mission.x, y: this.mission.y};
+		tPos = target.getNextPosition();
+		if (tPos.x == origin.x && tPos.y == origin.y){
+			tPos = target.getPlannedPos();
+		}
+	} else tPos = {x: this.mission.x, y: this.mission.y};
 
-
-	var dist = getDistance(origin, target);
+	var dist = getDistance(origin, tPos);
 	var impulse = this.getCurrentImpulse();
 	var color = "red";
 
@@ -93,7 +95,7 @@ Mixed.prototype.drawMovePlan = function(){
 	planCtx.moveTo(origin.x, origin.y);
 
 	if (impulse < dist){ // does not reach
-		var a = getAngleFromTo(origin, target);
+		var a = getAngleFromTo(origin, tPos);
 		var step = getPointInDirection(impulse, a, origin.x, origin.y);
 			color = "white";
 
@@ -107,7 +109,7 @@ Mixed.prototype.drawMovePlan = function(){
 		planCtx.moveTo(step.x, step.y);
 	}
 
-	planCtx.lineTo(target.x, target.y);
+	planCtx.lineTo(tPos.x, tPos.y);
 	planCtx.closePath();
 	planCtx.strokeStyle = color;
 	planCtx.stroke();
@@ -140,6 +142,7 @@ Mixed.prototype.isDestroyed = function(){
 }
 
 Mixed.prototype.setStatus = function(){
+	//	console.log("setStatus")
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].crits.length; j++){
 			if (this.structures[i].crits[j].type == "Disabled"){
@@ -356,9 +359,10 @@ Mixed.prototype.canUndoShortenTurn = function(){
 }
 
 Mixed.prototype.setDrawStatus = function(){
+	if (this.mission.type == 1){return;}
+
 	if (this.mission.arrived){
-		if (this.mission.type == 1){return;}
-		else if (this.id < 0 && this.mission.arrived){
+		if (this.id < 0 && this.mission.arrived){
 			this.doDraw = 0;
 		}
 		else if (this.mission.arrived < game.turn){
@@ -372,8 +376,8 @@ Mixed.prototype.create = function(){
 	this.setRawImage();
 	this.setStatus();
 	this.setDrawStatus()
-	this.setSize();
 	this.setLayout();
+	this.setSize();
 	//this.setDrawData();
 	if (this.id < 0){
 		this.setMaxMass();
@@ -431,6 +435,7 @@ Mixed.prototype.getParent = function(){
 }
 
 Mixed.prototype.setPreFireImage = function(){
+	//	console.log("setPreFireImage");
 	for (var i = 0; i < this.structures.length; i++){
 		if (!this.structures[i].draw){
 			if (this.structures[i].isDestroyedThisTurn()){
@@ -438,6 +443,7 @@ Mixed.prototype.setPreFireImage = function(){
 			}
 		}
 	}
+	this.img = undefined;
 	this.setImage();
 }
 
@@ -447,7 +453,7 @@ Mixed.prototype.getLockMultiplier = function(){
 
 Mixed.prototype.setPatrolLayout = function(){
 	for (var i = 0; i < this.structures.length; i++){
-		var p = getPointInDirection(range(0, this.size*1.5), range(0, 360), 0, 0);
+		var p = getPointInDirection(range(0, this.size*1), range(0, 360), 0, 0);
 		this.structures[i].layout.x = p.x;
 		this.structures[i].layout.y = p.y;
 		//this.structures[i].layout.x = Math.round(range(-this.size/3, this.size/3));
@@ -456,10 +462,11 @@ Mixed.prototype.setPatrolLayout = function(){
 }
 
 Mixed.prototype.setPatrolImage = function(){
-	var size = 36;
+	console.log("setPatrolImage " + this.id);
+	var size = 26;
 	var t = document.createElement("canvas");
-		t.width = 200;
-		t.height = 200;
+		t.width = this.size*2;
+		t.height = this.size*2;
 	var ctx = t.getContext("2d");
 		ctx.translate(t.width/2, t.height/2);
 
@@ -486,15 +493,18 @@ Mixed.prototype.setPatrolImage = function(){
 
 
 Mixed.prototype.setPreMoveImage = function(){
-	var size = 36;
+	if (this.img != undefined){return;}
+	//console.log("setPreMoveImage " + this.id);
+	var size = 26;
 	var t = document.createElement("canvas");
-		t.width = 200;
-		t.height = 200;
+		t.width = this.size*2;
+		t.height = this.size*2;
 	var ctx = t.getContext("2d");
 		ctx.translate(t.width/2, t.height/2);
 
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].draw){
+			//console.log(this.structures[i].layout);
 			ctx.translate(this.structures[i].layout.x, this.structures[i].layout.y);
 			ctx.drawImage(
 				window.shipImages[this.structures[i].name.toLowerCase()],
@@ -509,13 +519,21 @@ Mixed.prototype.setPreMoveImage = function(){
 		ctx.translate(-t.width/2, -t.height/2);
 
 	this.img = t;
+	//console.log(this.img.toDataURL());
 }
 
 Mixed.prototype.setPostMoveImage = function(){
-	var size = 36;
+	if (this.img != undefined){return;}
+	if (this.mission.type == 2){
+		this.setPatrolLayout();
+		this.setPatrolImage();
+		return;
+	}
+	//console.log("setPostMoveImage " + this.id);
+	var size = 26;
 	var t = document.createElement("canvas");
-		t.width = 200;
-		t.height = 200;
+		t.width = this.size*2;
+		t.height = this.size*2;
 	var ctx = t.getContext("2d");
 		ctx.translate(t.width/2, t.height/2);
 
@@ -541,18 +559,10 @@ Mixed.prototype.setPostMoveImage = function(){
 	//console.log(this.drawImg.toDataURL());
 }
 
-Mixed.prototype.getGunOrigin = function(id){
+Mixed.prototype.getWeaponOrigin = function(id){
 	for (i = this.structures.length-1; i >= 0; i--){
 		if (id > this.structures[i].id){
 			return this.getUnitPosition(i);
-			//return this.structures[i].layout;
-			var t = this.structures[i].layout;
-			var x = t.x * 0.5;
-			var y = t.y * 0.5;
-		var x = t.x * (this.size / 200);
-		var y = t.y * (this.size / 200);
-			return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
-			return rotate(0, 0, {x: x, y: y}, this.getDrawFacing()+90);
 		}
 	}
 }
@@ -566,8 +576,10 @@ Mixed.prototype.getUnitPosition = function(j){
 		return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
 	}
 	else {
-		var x = this.structures[j].layout.x * (this.size / 200);
-		var y = this.structures[j].layout.y * (this.size / 200);
+		var x = this.structures[j].layout.x * (this.size / 100);
+		var y = this.structures[j].layout.y * (this.size / 100);
+		var x = this.structures[j].layout.x * 0.5;
+		var y = this.structures[j].layout.y * 0.5;
 		//console.log("#" + this.id);
 		//console.log(this.structures[j].layout);
 		return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
@@ -593,8 +605,12 @@ Mixed.prototype.getFireDest = function(fire, isHit, nbrHit){
 		return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
 	}
 	else {
-		var x = t.x * (this.size / 200);
-		var y = t.y * (this.size / 200);
+		//var x = t.x * (this.size / 200);
+		//var y = t.y * (this.size / 200);
+		var x = t.x * (this.size / 100);
+		var y = t.y * (this.size / 100);
+		var x = t.x * 0.5;
+		var y = t.y * 0.5;
 		return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());
 	}
 }

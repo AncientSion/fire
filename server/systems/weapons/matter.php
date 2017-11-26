@@ -13,9 +13,18 @@ class Matter extends Weapon {
 		$shieldDmg = 0;
 		$armourDmg = 0;
 		$structDmg = 0;
+		$notes = "";
 
-		$armourDmg = $negation / 2;
-		$structDmg = $totalDmg - $armourDmg;
+		if ($totalDmg <= array_sum($negation)){ 
+			$notes = "M block";
+			$armourDmg = round($totalDmg/2);
+		}
+		else {
+			$notes = "M pen";
+			$shieldDmg = round(min($totalDmg, $negation["bonus"]/2));
+			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]/2));
+			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
+		}
 		
 		return new Divider($shieldDmg * $this->linked, $armourDmg * $this->linked, $structDmg * $this->linked);
 	}

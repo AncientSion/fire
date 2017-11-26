@@ -121,27 +121,33 @@ System.prototype.getActiveSystem = function(){
 
 System.prototype.hover = function(e){
 	if (game.flightDeploy){return false;}
+
+	var p = game.getUnit(this.parentId);
+
 	if (this.highlight){
 		this.highlight = false;
 		this.hideInfoDiv(e);
 		this.hideOptions();
+		p.highlightAllSelectedWeapons();
 		if (this.hasUnresolvedFireOrder()){
 			salvoCtx.clearRect(0, 0, res.x, res.y);
-			if (aUnit){game.getUnit(aUnit).drawEW();}
+			p.drawEW();
 		}
 	}
 	else {
 		this.highlight = true;
 		this.showInfoDiv(e);
 		this.showOptions();
+		if (p.ship){
+			fxCtx.clearRect(0, 0, res.x, res.y);
+			fxCtx.translate(cam.o.x, cam.o.y);
+			fxCtx.scale(cam.z, cam.z);
+			this.drawArc(p.getPlannedFacing(), p.getPlannedPos());
+			fxCtx.setTransform(1,0,0,1,0,0);
+		}
 		if (this.hasUnresolvedFireOrder()){
 			this.highlightFireOrder();
 		}
-	}
-
-	var p = game.getUnit(this.parentId);
-	if (p.ship && !p.hasHangarSelected()){
-		p.highlightAllSelectedWeapons();
 	}
 }
 
@@ -596,8 +602,8 @@ System.prototype.showOptions = function(){
 				boost = false;
 				canModeChange = false;
 			}
-		} else if (this.getBoostEffect("Reload")){
-			boost = false;
+		//} else if (this.getBoostEffect("Reload")){
+		//	boost = false;
 		}
 	}
 
@@ -1782,7 +1788,7 @@ Particle.prototype.getAnimation = function(fire){
 	
 	for (var j = 0; j < fire.guns; j++){
 		var gunAnims = [];
-		var o = fire.shooter.getGunOrigin(fire.systems[j]);
+		var o = fire.shooter.getWeaponOrigin(fire.systems[j]);
 
 		var ox = fire.shooter.drawX + o.x;
 		var oy = fire.shooter.drawY + o.y;
@@ -1926,7 +1932,7 @@ Pulse.prototype.getAnimation = function(fire){
 		var hasHit = 0;
 		var gunAnims = [];
 		var gunDelay = Math.floor(j / grouping) * delay;
-		var o = fire.shooter.getGunOrigin(fire.systems[j]);
+		var o = fire.shooter.getWeaponOrigin(fire.systems[j]);
 		var ox = fire.shooter.drawX + o.x;
 		var oy = fire.shooter.drawY + o.y;
 		var t = fire.target.getPlannedPos();
@@ -1984,7 +1990,7 @@ Laser.prototype.getAnimation = function(fire){
 	
 	for (var j = 0; j < fire.guns; j++){
 		var gunAnims = [];
-		var o = fire.shooter.getGunOrigin(fire.systems[j]);
+		var o = fire.shooter.getWeaponOrigin(fire.systems[j]);
 		//console.log(o.display);
 		
 		for (var k = 0; k < this.shots; k++){
@@ -2366,6 +2372,7 @@ Launcher.prototype.getTraverseRating = function(){
 }
 
 Launcher.prototype.getAimDataTarget = function(target, final, accLoss, row){
+	var final = 90;
 	var traverseMod = this.getTraverseMod(target);
 	
 	if (!traverseMod){
@@ -2377,7 +2384,7 @@ Launcher.prototype.getAimDataTarget = function(target, final, accLoss, row){
 	} else row.append($("<td>").html(""));
 
 
-	final = Math.floor(90 * (1-(traverseMod*0.2)) - accLoss);
+	final = Math.floor(final * (1-(traverseMod*0.2)) - accLoss);
 	this.odds = final;
 
 	row.append($("<td>").html(final + "%"));

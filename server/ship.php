@@ -562,6 +562,7 @@ class Ship {
 				Debug::log("aborting shot resolution vs dead target #".$this->id);
 			}
 			else  if ($fire->rolls[$i] <= $fire->req){
+				$fire->hits++;
 				$fire->weapon->doDamage($fire, $fire->rolls[$i], $this->getHitSystem($fire));
 			}
 		}
@@ -594,16 +595,12 @@ class Ship {
 		return ceil($req);
 	}
 
+	public function getArmour($fire, $system){
+		return $this->getStruct($fire->section)->getArmourValue($system);
+	}
+
 	public function getOverKillSystem($fire){
 		return true;
-	}
-
-	public function getArmourElement($fire){
-		return $this->getStructureById($fire->section);
-	}
-
-	public function getArmourValue($fire, $hitSystem){
-		return round($this->getStructureById($fire->section)->getCurrentNegation($fire) * $hitSystem->getArmourMod());
 	}
 
 	public function getHitSystem($fire){
@@ -614,7 +611,7 @@ class Ship {
 		//Debug::log("main: ".$main);
 		$total = $main;
 
-		$struct = $fire->target->getStructureById($fire->section);
+		$struct = $fire->target->getStruct($fire->section);
 
 		for ($i = 0; $i < sizeof($struct->systems); $i++){
 			if ($struct->systems[$i]->destroyed){continue;}
@@ -888,7 +885,7 @@ class Ship {
 		$this->systems[] = $obj;
 	}
 
-	public function getStructureById($id){
+	public function getStruct($id){
 		//Debug::log("looking for: ".$id);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			//Debug::log("now: ".$this->structures[$i]->id);
@@ -995,7 +992,7 @@ class Ship {
 		return $mass;
 	}
 
-	public function getArmour(){
+	public function getArmourLog(){
 		$data = array(
 			"integrity" => 0,
 			"negation" => array()

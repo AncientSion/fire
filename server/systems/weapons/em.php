@@ -20,7 +20,8 @@ class EM extends Weapon {
 			return;
 		}
 		$totalDmg = $this->getTotalDamage($fire);
-		$negation = $fire->target->getArmourValue($fire, $system);
+		$negation = $fire->target->getArmour($fire, $system);
+
 
 		$effect = false;
 

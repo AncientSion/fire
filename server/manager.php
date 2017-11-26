@@ -799,9 +799,29 @@ class Manager {
 
 	public function endTurn(){
 		Debug::log("endTurn");
+		$this->freeFlights();
 		$this->setUnitStatus();
 		$this->assembleEndStates();
 		$this->alterReinforcementPoints();
+	}
+
+
+	
+	public function freeFlights(){
+		$data = array();
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->flight && $this->ships[$i]->mission->arrived && $this->ships[$i]->mission->type == 2){
+				if ($this->getUnit($this->ships[$i]->mission->targetid)->destroyed){
+				Debug::log("freeeing flight #".$this->ships[$i]->id." from mission");
+					$this->ships[$i]->mission->type = 1;
+					$this->ships[$i]->mission->turn = $this->turn - 2;
+					$this->ships[$i]->mission->targetid = 0;
+					$this->ships[$i]->setCurrentImpulse($this->turn, $this->phase);
+					$data[] = $this->ships[$i]->mission;
+				}
+			}
+		}
+		if (sizeof($data)){DBManager::app()->updateMissionState($data);}
 	}
 
 	public function alterReinforcementPoints(){
@@ -890,17 +910,20 @@ class Manager {
 			return;
 		}
 		else if ($ship->flight){
+			//Debug::log("setupShipLocks Flight #".$shi->id);
 			for ($i = 0; $i < sizeof($this->ships); $i++){
 				if ($this->ships[$i]->id == $ship->id || $ship->userid == $this->ships[$i]->userid){continue;}
 				for ($j = 0; $j < sizeof($ship->cc); $j++){
 					if ($ship->cc[$j] == $this->ships[$i]->id){
+						//Debug::log("CC entry #".$this->ships[$i]->id);
 						if ($this->ships[$i]->salvo){ // if flight in patrol vs salvo || flight in escort duty vs salvo
 							if ($ship->mission->type == 1 && $ship->mission->arrived || ($this->ships[$i]->mission->targetid != $ship->id)){
 								$ship->locks[] = array($this->ships[$i]->id, $this->ships[$i]->getLockMultiplier());
 							}
 						}
-						else if ($this->ships[$i]->flight){
-							if ($ship->mission->arrived && $ship->mission->targetid == $this->ships[$i]->id){
+						else if ($this->ships[$i]->flight){ 
+							//Debug::log("checking vs flight #".$this->ships[$i]->id);
+							if ($ship->mission->arrived && $ship->mission->targetid == $this->ships[$i]->id){ // mission target lock
 								$ship->locks[] = array($this->ships[$i]->id, $this->ships[$i]->getLockMultiplier());
 							}
 						}
@@ -1052,7 +1075,7 @@ class Manager {
 		for ($i = sizeof($this->fires)-1; $i >= 0; $i--){
 			if (!$this->fires[$i]->resolved){
 				if ($this->fires[$i]->shooter->flight){
-					if ($this->fires[$i]->shooter->getStructureById($this->fires[$i]->weapon->fighterId)->destroyed){
+					if ($this->fires[$i]->shooter->getStruct($this->fires[$i]->weapon->fighterId)->destroyed){
 						Debug::log("AAA skipping fireorder due to destroyed single shooter");
 						$this->fires[$i]->resolved = -1;
 					}
@@ -1099,7 +1122,7 @@ class Manager {
 		for ($i = 0; $i < sizeof($this->fires); $i++){
 			if (!$this->fires[$i]->resolved){
 				if ($this->fires[$i]->shooter->flight == true && $this->fires[$i]->target->flight == false){
-					if ($this->fires[$i]->shooter->getStructureById($this->fires[$i]->weapon->fighterId)->destroyed){
+					if ($this->fires[$i]->shooter->getStruct($this->fires[$i]->weapon->fighterId)->destroyed){
 						Debug::log("BBB skipping fireorder due to destroyed single shooter");
 						$this->fires[$i]->resolved = -1;
 						continue;

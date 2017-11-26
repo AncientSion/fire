@@ -542,7 +542,7 @@ function Ship(data){
 			.css("left", p1.x * cam.z + cam.o.x - $(turnEle).width()/2)
 			.css("top", p1.y * cam.z + cam.o.y - $(turnEle).height()/2)
 			.find("#impulseMod").html("x " +turn.dif).end()
-			.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end()
+			//.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end()
 	}
 		
 	this.canIncreaseImpulse = function(){
@@ -644,8 +644,9 @@ function Ship(data){
 		if (game.turnMode){
 			$(button)
 				.find("#shortenTurn").removeClass("disabled");
-				//$("#game").find("#epButton").find("tr:nth-child(2)").find("th").first().html("Turn Cost / Rem");
-				$("#epButton").find("#impulseText").html("Cost : Rem").end().find("#impulseCost").html("");
+				$("#epButton")
+				.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end()
+				.find("#impulseText").html("Cost : Rem").end().find("#impulseCost").html("");
 
 		/*	$(vector).empty()
 				.append($("<table>")
@@ -666,7 +667,9 @@ function Ship(data){
 				//.find("#turnDelay").html("").end()
 				//.find("#turnMod").html("").end()
 				.find("#shortenTurn").addClass("disabled");
-				$("#epButton").find("#impulseText").html("Thrust Change").end().find("#impulseCost").html(this.getImpulseChangeCost());
+				$("#epButton")
+				.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end()
+				.find("#impulseText").html("Cost : Rem").end().find("#impulseCost").html("");
 			$(vector).addClass("disabled")
 		}
 
@@ -1135,10 +1138,12 @@ function Ship(data){
 			turn.reset();
 			game.turnMode = 0;
 			mouseCtx.clearRect(0, 0, res.x, res.y);
+			$("#epButton").addClass("disabled");
 		}	
 		else {
 			game.turnMode = 1;
 			turn.set(this);
+			$("#epButton").removeClass("disabled");
 		}
 		this.setTurnData();
 	}
@@ -1153,7 +1158,7 @@ function Ship(data){
 			turn.a = a;
 		var c = this.getTurnCost() * a;
 
-		$("#game").find("#epButton").find("#impulseCost").html(Math.ceil(c, 2) + " : " + Math.floor(this.getRemainingEP() - c))
+		$("#epButton").css("top", t.y + 50).css("left", t.x - 70).find("#impulseCost").html(Math.ceil(c, 2) + " : " + Math.floor(this.getRemainingEP() - c))
 
 		//gui.find("#impulse").html(this.getRemainingImpulse() + " / " + this.getCurrentImpulse());
 
@@ -1232,7 +1237,7 @@ function Ship(data){
 			);
 			this.setRemainingDelay();
 			//console.log(this.actions[this.actions.length-1]);
-			$("#game").find("#turnButton")
+			$("#turnButton")
 				.find("#turnCost").html("").end()
 				.find("#turnDelay").html("");
 			//this.setMoveMode();
@@ -1884,16 +1889,13 @@ Ship.prototype.draw = function(){
 Ship.prototype.drawSelf = function(){
 	ctx.translate(this.drawX, this.drawY);
 	ctx.rotate(this.getDrawFacing() * Math.PI/180);
+
 	ctx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
 }
 
 Ship.prototype.drawEscort = function(){
 	if (this.cc.length && this.drawImg != undefined){
-		//var s = this.size;
 		var s = this.drawImg.width/2;
-		//var s = 100;
-		//var s = this.size * 1.5
-		//var s = this.size*2;
 		ctx.drawImage(this.drawImg, -s/2, -s/2, s, s);
 	}
 	ctx.rotate(-this.getDrawFacing() * Math.PI/180);
@@ -2049,11 +2051,11 @@ Ship.prototype.canDeploy = function(){
 	return false;
 }
 
-Ship.prototype.getGunOrigin = function(id){
+Ship.prototype.getWeaponOrigin = function(id){
 	for (var i = 0; i < this.structures.length; i++){
 		if (i == this.structures.length-1 || id > this.structures[i].id && id < this.structures[i+1].id){
-			var dev = this.size / 4;
-			return getPointInDirection(dev + range (-dev/1.5, dev/1.5), (this.structures[i].getDirection() + this.getDrawFacing()), 0, 0);
+			var dev = this.size / 6;
+			return getPointInDirection(this.size/3 + range (-dev, dev), (this.structures[i].getDirection() + this.getDrawFacing()), 0, 0);
 		}
 	}
 	console.log("lacking gun origin");
@@ -2279,7 +2281,7 @@ Ship.prototype.getWeaponPosition = function(){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			if (this.structures[i].systems[j].id == fire.weaponid){
 				var a = range(this.structures[i].start, this.structures[i].end);
-				return getPointInDirection(range(0, size / 4), a, 0, 0);
+				return getPointInDirection(range(-size/3, size / 3), a, 0, 0);
 			}
 		}
 	}
@@ -2848,7 +2850,7 @@ Ship.prototype.detachFlight = function(id){
 	});
 
 	this.getAttachDivs();
-	this.setEscortImage();
+	this.setSupportImage();
 }
 
 Ship.prototype.attachFlight = function(unit){
@@ -2859,24 +2861,29 @@ Ship.prototype.attachFlight = function(unit){
 	}
 	unit.cc.push(this.id);
 	this.getAttachDivs();
-	this.setEscortImage();
+	this.setSupportImage();
 
 	game.draw();
 }
 
+Ship.prototype.setSize = function(){
+	return;
+}
+
 Ship.prototype.setPostFireImage = function(){
 	if (this.ship){return;}
+	console.log("setPostFireImage");
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].draw && (this.structures[i].destroyed || this.structures[i].disabled)){
 			this.structures[i].draw = 0;
 		}
 	}
+	this.img = undefined;
 	this.setImage();
 }
 
-Ship.prototype.setEscortImage = function(){
-	//console.log(this.id);
 
+Ship.prototype.setSupportImage = function(){
 	var friendlies = [];
 	var hostiles = [];
 	var friendly = [];
@@ -2891,6 +2898,7 @@ Ship.prototype.setEscortImage = function(){
 		if (attach.doDraw){continue;} // possibly attachement is being drawn, hence not attached to this
 		//if (!attach.ship && attach.mission.targetid != this.id){continue;}
 		if (this.salvo && this.mission.arrived && this.mission.targetid == attach.id){continue;}
+		if (this.flight && attach.flight && attach.userid == this.userid){continue;}
 
 		if (this.userid == attach.userid){
 			friendlies.push(attach);
@@ -2904,19 +2912,45 @@ Ship.prototype.setEscortImage = function(){
 		}
 	}
 
+	if (!friendlies.length && !hostiles.length){return;}
+	else if (!this.ship && hasShip){return;} // this is no ship, but there is a ship centerpoint in this CC
 
-	if (!this.ship && hasShip || !friendlies.length && !hostiles.length){return;}
 
-	//console.log(this.id);
+	if (this.ship){
+		this.setEscortImage(friendly, friendlies, hostile, hostiles);
+	}
+	else {
+		for (var i = 0; i < hostiles.length; i++){
+			if (hostiles[i].mission.targetid == this.id && this.mission.targetid == hostiles[i].id){
+				this.setDogFightImage(hostiles[i]);
+				this.setPatrolLayout();
+				this.setPatrolImage();
+				return;
+			}
+		}
+		this.setEscortImage(friendly, friendlies, hostile, hostiles);
+	}
+}
+
+
+Ship.prototype.setDogFightImage = function(data){
+	console.log("setDogFightImage " + this.id);
+	data.doDraw = 1;
+	data.setPatrolLayout();
+	data.setPatrolImage();
+}
+
+Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles){
+	console.log("setEscortImage #" + this.id);
 
 	var size = this.size;
-	var fSize = 20;
+	var fSize = 26;
 	var tresh = fSize-2;
 	var drawFacing = 0; this.getDrawFacing() / 2;
 
 	var t = document.createElement("canvas");
-		t.width = 250;
-		t.height = 250;			
+		t.width = 300;
+		t.height = 300;			
 	var ctx = t.getContext("2d");
 	var shipFriendly = true;
 	var flightFriendly = true;
