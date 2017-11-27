@@ -129,3 +129,60 @@ Dropout - dmg: 91.666666666667, tresh: 70, mt_rand(0, 91) = 72, > 35
  => DB insertCritEntries: 3
 handleFiringPhase time: 0.094 seconds.
 advancing game state time: 0.104 seconds.
+insertClientActions s: 1
+insertClientActions s: 1
+doAdvance for game4 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+handleMixedMovement
+updateMissionState
+advancing game state time: 0.125 seconds.
+doAdvance for game4 from phase 2 to phase 3
+resolveBallisticFireOrders
+cleanFireOrders, fires: 0
+DB updateFireOrders: 0
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.002 seconds.
+advancing game state time: 0.083 seconds.
+doAdvance for game4 from phase 3 to phase 4
+endTurn
+destroyUnitsDB
+assembleEndStates
+insertReinforcements: 1
+advancing game state time: 0.174 seconds.
+doAdvance for game4 from phase -1 to phase 0
+initBallistics
+DB updateBallisticFireOrder, s: 1
+DB insertUnits: 1
+insertSubUnits
+insertMissions s: 1
+insertClientActions s: 1
+updateSystemLoad: 1
+handleDeploymentActions #26
+resolveDeployActions s: 1
+handleJumpActions
+assembleEndStates
+advancing game state time: 0.154 seconds.
+insertClientActions s: 1
+insertClientActions s: 1
+doAdvance for game4 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+handleMixedMovement
+Handling mixed #26
+STRIKE
+close in
+adding move to target #21 => -273/-151
+updateMissionState
+advancing game state time: 0.195 seconds.
+doAdvance for game4 from phase 2 to phase 3
+resolveBallisticFireOrders
+cleanFireOrders, fires: 0
+DB updateFireOrders: 0
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.003 seconds.
+advancing game state time: 0.008 seconds.

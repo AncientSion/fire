@@ -232,8 +232,7 @@ function Game(data, userid){
 			s.setTarget();
 			s.setLayout();
 			s.setSize();
-			s.img = undefined;
-			s.setImage();
+			s.resetImage();
 		}
 
 		s.drawX = p.x;
@@ -895,6 +894,7 @@ function Game(data, userid){
 	
 	this.create = function(){
 		$("#phaseSwitchDiv").show();
+		console.log("game.create");
 
 		//this.ships.sort(function(a, b){
 			//return a.ship-b.ship || a.flight - b.flight || a.salvo - b.salvo;

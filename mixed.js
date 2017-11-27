@@ -443,8 +443,7 @@ Mixed.prototype.setPreFireImage = function(){
 			}
 		}
 	}
-	this.img = undefined;
-	this.setImage();
+	this.resetImage();
 }
 
 Mixed.prototype.getLockMultiplier = function(){

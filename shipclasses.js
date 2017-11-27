@@ -2878,10 +2878,14 @@ Ship.prototype.setPostFireImage = function(){
 			this.structures[i].draw = 0;
 		}
 	}
+	this.resetImage();
+}
+
+Ship.prototype.resetImage = function(){
+	if (this.salvo){return;}
 	this.img = undefined;
 	this.setImage();
 }
-
 
 Ship.prototype.setSupportImage = function(){
 	var friendlies = [];

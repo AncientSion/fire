@@ -292,7 +292,7 @@ Salvo.prototype.getShortInfo = function(){
 }
 
 Salvo.prototype.setImage = function(){
-	return;
+	//return;
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
 		t.height = this.size*2;
@@ -311,7 +311,8 @@ Salvo.prototype.setImage = function(){
 	//ctx.rotate((this.getDrawFacing()+90) * (Math.PI/180));
 	ctx.setTransform(1,0,0,1,0,0);
 
-	this.drawImg = t;
+	//this.drawImg = t;
+	this.img = t;
 }
 
 Salvo.prototype.setRawImage = function(){
