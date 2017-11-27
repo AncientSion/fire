@@ -100,7 +100,6 @@ class ParticlePulsar extends FighterPulse {
 	public $display = "Particle Pulsar";
 	public $animColor = "blue";
 	public $shots = 1;
-	public $traverse = -3;
 	public $basePulses = 2;
 	public $extraPulses = 1;
 	public $grouping = 20;
