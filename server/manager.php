@@ -158,6 +158,15 @@ class Manager {
 
 		//$this->deploy();();
 
+
+
+		foreach ($this->ships as $ship){
+			echo "</br>".$ship->id."</br>";
+			$data = json_encode($ship, JSON_NUMERIC_CHECK);
+		}
+
+		return array();
+
 		return array(
 			"id" => $this->gameid,
 			"name" => $this->name,
