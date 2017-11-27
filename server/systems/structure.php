@@ -145,7 +145,7 @@ class Primary {
 	}
 
 	public function getHitChance(){
-		return $this->remaining*1.4;
+		return $this->remaining;//*1.4;
 	}
 
 

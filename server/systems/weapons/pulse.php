@@ -27,20 +27,25 @@ class Pulse extends Weapon {
 		$struct = 0;
 		$armour = 0;
 
+		$name = get_class($system);
+
 		$hits = $this->basePulses + min($this->extraPulses, floor(($fire->req - $fire->rolls[sizeof($fire->rolls)-1]) / $this->grouping));
 
-		Debug::log("fireid: ".$fire->id.", doDamage, weapon: ".get_class($this)." #".$this->id.", target: ".$fire->target->id.", doing: ".$totalDmg." * ".$hits." hits, remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
+		Debug::log("fire #".$fire->id.", doDamage, weapon: ".(get_class($this)).", target #".$fire->target->id."/".$system->id."/".$name.", hits: ".$hits.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
+
+
 
 		for ($i = 0; $i < $hits; $i++){
-			Debug::log("adding hit ".$i);
 
 			if ($destroyed){
 				$total += $totalDmg;
 				$overkill += $dmg->structDmg;
 				$armour += $dmg->armourDmg;
-					Debug::log(" => hit ".($i+1).", adding ".$dmg->structDmg." to overkill which is now: ".$overkill." pts");
+				Debug::log(" => hit ".($i+1).", adding ".$dmg->structDmg."/".$dmg->armourDmg." to overkill which is now: ".$overkill." pts");
+				continue;
 			}
 			else {
+				Debug::log("adding hit ".($i+1);
 				$total += $totalDmg;
 				$struct += $dmg->structDmg;
 				$armour += $dmg->armourDmg;
@@ -48,13 +53,13 @@ class Pulse extends Weapon {
 
 			if ($struct >= $remInt){
 				$destroyed = 1;
-				$name = get_class($system);
 				$okSystem = $fire->target->getOverKillSystem($fire);
 
 				if ($okSystem){
-					$overkill = abs($remInt - $dmg->structDmg);
-					Debug::log(" => hit ".($i+1)." OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$overkill." dmg");
-					$struct += $remInt;
+					//$overkill = abs($remInt - $dmg->structDmg);
+					$overkill = abs($remInt - $struct);
+					Debug::log(" => hit ".($i+1)." DESTROYING ship target system ".$name." #".$system->id.", rem: ".$remInt.", doing TOTAL: ".$struct."/".$armour.", OK for: ".$overkill." dmg");
+					//$struct += $remInt;
 				}
 				else {
 					Debug::log(" => DESTROYING non-ship target system");

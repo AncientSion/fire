@@ -36,6 +36,7 @@
 		}
 
 		public function insertChatMsg($post){
+			//$time = time();
 			$msg = str_replace("'", " ", $post["msg"]);
 
 			$sql = "INSERT INTO chat VALUES (0, '".$post["username"]."', ".$post["userid"].", '".$msg."', ".$post["time"].")"; 

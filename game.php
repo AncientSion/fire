@@ -620,96 +620,103 @@ echo "</script>";
 		//return;
 		$(this).keypress(function(e){
 			if (game){
-				if (e.keyCode == 113){ // q - show friendly sensor
-					if (!game.animating && !game.sensorMode){
-						//game.drawShipOverlays();
-						game.drawAllSensorSettings(1);
+				if ($(":focus").attr("id") == ("msg")){
+					if (e.keyCode == 13){
+						ajax.doChat();
 					}
 				}
-				else if (e.keyCode == 119){ // q - show hostile sensor
-					if (!game.animating && !game.sensorMode){
-						//game.drawShipOverlays();
-						game.drawAllSensorSettings(0);
-					}
-				//console.log(game.vector);
-				}
-				else if (e.keyCode == 32){ // space - dist logger
-					if (game.vector){
-						game.vector = false;
-						$("#vectorDiv").addClass("disabled");
-						mouseCtx.clearRect(0, 0, res.x, res.y);
-					}
-					else {
-						game.vector = true;
-						$("#vectorDiv").removeClass("disabled");
-					}
-				//console.log(game.vector);
-				}
-				else if (e.keyCode == 102){ // f, cancel fire animation
-					if (game.phase == 3 && game.animating){
-						game.animating = false;
-						window.cancelAnimationFrame(anim);
-						fxCtx.clearRect(0, 0, res.x, res.y);
-						$("#combatLog").find("tr").each(function(i){
-							if (i){
-								$(this).remove()
-							}
-						})
-						for (var i = 0; i < game.fireOrders.length; i++){
-							game.fireOrders[i].animated = 1;
-							game.createCombatLogEntry(i);
+				else {
+					if (e.keyCode == 113){ // q - show friendly sensor
+						if (!game.animating && !game.sensorMode){
+							//game.drawShipOverlays();
+							game.drawAllSensorSettings(1);
 						}
-
-						game.getUnitExplosionDetails();
-						for (var i = 0; i < window.animations.length; i++){
-							window.animations[i].done = 1;
-							game.createMiscLogEntry(i);
-						}
-						game.fireResolved();
 					}
-				}
-				else if (e.keyCode == 109){ // m, cancel move animation
-					if (game.phase == 2){
-						//setFPS(150);
-						window.cancelAnimationFrame(anim);
-						for (var i = 0; i < game.ships.length; i++){
-							game.ships[i].setPostMovePosition();
-							game.ships[i].setPostMoveFacing();
-
-							if (game.ships[i].ship){continue;}
-
-							if (game.ships[i].mission.arrived){
-								if (game.ships[i].mission.type == 1){
-									game.ships[i].setPostMoveSize();
-									game.ships[i].setPostMoveImage();
+					else if (e.keyCode == 119){ // q - show hostile sensor
+						if (!game.animating && !game.sensorMode){
+							//game.drawShipOverlays();
+							game.drawAllSensorSettings(0);
+						}
+					//console.log(game.vector);
+					}
+					else if (e.keyCode == 32){ // space - dist logger
+						if (game.vector){
+							game.vector = false;
+							$("#vectorDiv").addClass("disabled");
+							mouseCtx.clearRect(0, 0, res.x, res.y);
+						}
+						else {
+							game.vector = true;
+							$("#vectorDiv").removeClass("disabled");
+						}
+					//console.log(game.vector);
+					}
+					else if (e.keyCode == 102){ // f, cancel fire animation
+						if (game.phase == 3 && game.animating){
+							game.animating = false;
+							window.cancelAnimationFrame(anim);
+							fxCtx.clearRect(0, 0, res.x, res.y);
+							$("#combatLog").find("tr").each(function(i){
+								if (i){
+									$(this).remove()
 								}
-								else if (game.ships[i].mission.type > 1){
-									game.ships[i].doDraw = 0;
+							})
+							for (var i = 0; i < game.fireOrders.length; i++){
+								game.fireOrders[i].animated = 1;
+								game.createCombatLogEntry(i);
+							}
+
+							game.getUnitExplosionDetails();
+							for (var i = 0; i < window.animations.length; i++){
+								window.animations[i].done = 1;
+								game.createMiscLogEntry(i);
+							}
+							game.fireResolved();
+						}
+					}
+					else if (e.keyCode == 109){ // m, cancel move animation
+						if (game.phase == 2){
+							//setFPS(150);
+							window.cancelAnimationFrame(anim);
+							for (var i = 0; i < game.ships.length; i++){
+								game.ships[i].setPostMovePosition();
+								game.ships[i].setPostMoveFacing();
+
+								if (game.ships[i].ship){continue;}
+
+								if (game.ships[i].mission.arrived){
+									if (game.ships[i].mission.type == 1){
+										game.ships[i].setPostMoveSize();
+										game.ships[i].setPostMoveImage();
+									}
+									else if (game.ships[i].mission.type > 1){
+										game.ships[i].doDraw = 0;
+									}
 								}
 							}
-						}
 
-						game.setlastPosCC()
-						for (var i = 0; i < game.ships.length; i++){
-							game.ships[i].setSupportImage();
+							game.setlastPosCC()
+							for (var i = 0; i < game.ships.length; i++){
+								game.ships[i].setSupportImage();
+							}
+							for (var i = 0; i < game.ships.length; i++){
+								game.ships[i].getAttachDivs();
+							}
 						}
-						for (var i = 0; i < game.ships.length; i++){
-							game.ships[i].getAttachDivs();
+						game.draw();
+					}
+					else if (e.keyCode == 43){ // +
+						if (game.phase == 0 || game.phase == 1){
+							if (game.turnMode){
+								game.getUnit(aUnit).doShortenTurn(false);
+							}
 						}
 					}
-					game.draw();
-				}
-				else if (e.keyCode == 43){ // +
-					if (game.phase == 0 || game.phase == 1){
-						if (game.turnMode){
-							game.getUnit(aUnit).doShortenTurn(false);
-						}
-					}
-				}
-				else if (e.keyCode == 45){ // *
-					if (game.phase == 0 || game.phase == 1){
-						if (game.turnMode){
-							game.getUnit(aUnit).doUndoShortenTurn(false);
+					else if (e.keyCode == 45){ // *
+						if (game.phase == 0 || game.phase == 1){
+							if (game.turnMode){
+								game.getUnit(aUnit).doUndoShortenTurn(false);
+							}
 						}
 					}
 				}

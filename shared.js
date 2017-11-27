@@ -441,6 +441,8 @@ function handleMouseDown(e){
 	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
 	console.log("game pos " + pos.x	+ " / " + pos.y);
 
+	$(":focus").blur();
+
 	if (aUnit){
 		unit = game.getUnit(aUnit);
 	}
