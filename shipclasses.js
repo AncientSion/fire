@@ -2827,7 +2827,7 @@ Ship.prototype.updateDiv = function(){
 	$(this.element)
 		.find(".pos").html(this.x + " / " + this.y).end()
 		.find(".thrust").html(this.getRemainingImpulse() + " / " + this.getCurrentImpulse()).end()
-		//.find(".ep").html(this.getRemainingEP() + " / " + this.getEP()).end()
+		.find(".ep").html(this.getRemainingEP() + " / " + this.getEP()).end()
 		.find(".delay").html(this.getRemainingDelay()).end()
 		.find(".change").html(this.getImpulseChangeCost() + " EP").end()			
 		.find(".turn").html(this.getImpulseChangeCost() + " EP").end()
