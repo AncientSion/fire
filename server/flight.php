@@ -26,7 +26,7 @@ class Flight extends Mixed {
 
 	public function setCurrentImpulse($t, $p){
 		//Debug::log("setCurrentImpulse #".$this->id);
-		if (!$this->mass){$this->baseImpulse = 0; $this->currentImpulse = 0;}
+		if (!$this->mass){$this->baseImpulse = 0; $this->currentImpulse = 0; return;}
 		$this->baseImpulse = floor(pow($this->mass, -2.5)*600000);
 		if (!isset($this->mission)){return;}
 
