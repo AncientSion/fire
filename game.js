@@ -219,10 +219,12 @@ function Game(data, userid){
 
 		s.mission = mission;
 
-		if (t && t.ship && o.x == dest.x && o.y == dest.y){
+		if (t && t instanceof Ship && o.x == dest.x && o.y == dest.y){
 			mission.arrived = game.turn-1;
 			mission.turn = game.turn-1;
-			s.doDraw = 0;
+			if (t.ship){
+				s.doDraw = 0;
+			}
 			t.getParent().attachFlight(s);
 		}
 		else {
