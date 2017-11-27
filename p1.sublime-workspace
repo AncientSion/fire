@@ -905,7 +905,7 @@
 			"file": "server/debug.php",
 			"settings":
 			{
-				"buffer_size": 700,
+				"buffer_size": 702,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -7614,15 +7614,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 700,
+						"buffer_size": 702,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								56,
-								56
+								123,
+								123
 							]
 						],
 						"settings":
@@ -7694,7 +7694,7 @@
 						"translation.y": 7.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -9816,7 +9816,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -13113,7 +13113,7 @@
 		],
 		"width": 392.0
 	},
-	"selected_group": 1,
+	"selected_group": 0,
 	"settings":
 	{
 	},
