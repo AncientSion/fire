@@ -45,7 +45,7 @@ class Pulse extends Weapon {
 				continue;
 			}
 			else {
-				Debug::log("adding hit ".($i+1);
+				Debug::log("adding hit ".($i+1));
 				$total += $totalDmg;
 				$struct += $dmg->structDmg;
 				$armour += $dmg->armourDmg;
