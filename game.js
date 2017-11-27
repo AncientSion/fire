@@ -182,6 +182,7 @@ function Game(data, userid){
 			for (var i = s.cc.length-1; i >= 0; i--){
 				var attach = this.getUnit(s.cc[i]);
 				//if (attach.doDraw){attach.doDraw = 0;} // so dogfight flights gets attached following this;
+				if (!attach.ship && attach.mission.targetid == s.id && t.id == attach.id){attach.doDraw = 1;} // skip CC targeting this
 				if (!attach.ship && attach.mission.targetid == s.id){continue;} // skip CC targeting this
 				attach.detachFlight(s.id);
 				s.cc.splice(i, 1);
@@ -288,7 +289,7 @@ function Game(data, userid){
 
 		if (t.id == aUnit){
 			p = dest;
-			mission.arrived = 1//game.turn;
+			mission.arrived = 1 //game.turn;
 		}
 
 		var flight = new Flight(

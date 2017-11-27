@@ -18,7 +18,7 @@ function Flight(data){
 Flight.prototype = Object.create(Mixed.prototype);
 
 Flight.prototype.setSize = function(){
-	console.log("setSize #" + this.id);
+	//console.log("setSize #" + this.id);
 	var max = 0;
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].destroyed){continue;}
@@ -29,7 +29,7 @@ Flight.prototype.setSize = function(){
 }
 
 Flight.prototype.setLayout = function(){
-	console.log("setLayout #" + this.id);
+	//console.log("setLayout #" + this.id);
 	//console.log(this.size);
 	//if (!this.mission.arrived && this.available < this.mission.turn && this.mission.turn == game.turn){ // delay
 	//	this.setPatrolLayout();
@@ -47,15 +47,11 @@ Flight.prototype.setLayout = function(){
 	var osx = 16;
 	var osy = 12;
 
-	var num = Math.ceil(this.structures.length/3);
+	//var num = Math.ceil(this.structures.length/3);
 
 	//this.size = num*10;
 
-	var reach = 15;
-	if (this.structures.length > 9){
-		reach += (this.structures.length -9) *8
-	}
-
+	var reach = 15 + Math.max(0, (Math.floor(this.structures.length-3)/3)*12);
 
 	for (var i = 0; i < this.structures.length/3; i++){
 
@@ -89,7 +85,7 @@ Flight.prototype.setMaxMass = function(){
 }
 
 Flight.prototype.setImpulse = function(){
-	this.baseImpulse = Math.floor(Math.pow(this.mass, 2.5)*600000);
+	this.baseImpulse = Math.floor(Math.pow(this.mass, -2.5)*600000);
 	this.currentImpulse = this.baseImpulse;
 }
 
@@ -182,7 +178,7 @@ Flight.prototype.createBaseDiv = function(){
 			.append($("<td>").html(game.getUnitType(this.traverse))))
 		.append($("<tr>")
 			.append($("<td>").html("Current Thrust"))
-			.append($("<td>").html((this.getCurrentImpulse() + " (max: " + (this.baseImpulse*3) + ")"))))
+			.append($("<td>").html((this.getCurrentImpulse() + " (max: " + (this.baseImpulse*4) + ")"))))
 		.append($("<tr>")
 			.append($("<td>").html("Current Mission"))
 			.append($("<td>").addClass("missionType").html(game.getMissionTypeString(this.mission.type))))
@@ -587,16 +583,6 @@ Flight.prototype.getIntactFighters = function(){
 		}
 	}
 	return alive;
-}
-
-Flight.prototype.setSizea = function(){
-	var max = 0;
-
-	for (var i = 0; i < this.structures.length; i++){
-		max = Math.max(Math.abs(max, this.structures[i].layout.x));
-	}
-
-	console.log(max*2);
 }
 
 Flight.prototype.setPreMoveSize = function(){

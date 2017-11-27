@@ -2938,14 +2938,14 @@ Ship.prototype.setSupportImage = function(){
 
 
 Ship.prototype.setDogFightImage = function(data){
-	console.log("setDogFightImage " + this.id);
+	//console.log("setDogFightImage " + this.id);
 	data.doDraw = 1;
 	data.setPatrolLayout();
 	data.setPatrolImage();
 }
 
 Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles){
-	console.log("setEscortImage #" + this.id);
+	//console.log("setEscortImage #" + this.id);
 
 	var size = this.size;
 	var fSize = 26;
