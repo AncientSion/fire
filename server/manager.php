@@ -163,6 +163,9 @@ class Manager {
 		foreach ($this->ships as $ship){
 			echo "</br>".$ship->id."</br>";
 			$data = json_encode($ship, JSON_NUMERIC_CHECK);
+			if ($ship->id == 9){
+				var_export($ship);
+			}
 		}
 
 		return array();
