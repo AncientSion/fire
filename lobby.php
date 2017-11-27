@@ -225,6 +225,7 @@ else {
 									</td>
 								</tr>
 							</table>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -234,7 +235,7 @@ else {
 				</div>
 			</div>
 			<div class="chatWrapper">
-				<div class ="chatBox">
+				<div class="chatBox">
 					<?php
 						DBManager::app()->purgeChat();
 						
@@ -284,10 +285,14 @@ else {
 				ajax.getChat();
 			},
 		7000);
-
+	
 		$(this).keypress(function(e){
-			if (e.keyCode == 13){ajax.doChat();} // enter
-		})
-
+			if (e.keyCode == 13){ // enter
+				if ($(":focus").attr("id") == ("msg")){
+					ajax.doChat();
+				}
+			}
+		});
+	
 	})
 </script>

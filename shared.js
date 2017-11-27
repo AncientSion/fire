@@ -52,7 +52,7 @@ function initChat(){
 					$(this).data("s", 2).css("width", Math.min(res.x - 50, 1000));
 				}
 				else $(this).data("s", 0).css("width", 150);
-			}).drag();
+			})//.drag();
 	}
 	//	return;
 	$(this).keypress(function(e){

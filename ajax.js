@@ -45,6 +45,7 @@ window.ajax = {
 		var msg = $(".chatWrapper").find(".sendWrapper").find("#msg").val();
 		if (!msg.length || (msg.length == 2 && msg.substring(0, 1) == '"' && msg.substring(1, 2) == '"')){return;}
 
+		$(".chatWrapper").find(".sendWrapper").find("#msg").val("");
 
 		$.ajax({
 			type: "POST",
@@ -59,7 +60,6 @@ window.ajax = {
 					},
 			success: function(ret){
 				console.log(ret);
-				$(".chatWrapper").find(".sendWrapper").find("#msg").val("");
 			},
 			error: ajax.error,
 		});
