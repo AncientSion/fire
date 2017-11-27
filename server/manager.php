@@ -160,7 +160,7 @@ class Manager {
 
 
 
-		foreach ($this->ships as $ship){
+		/*foreach ($this->ships as $ship){
 			echo "</br>".$ship->id."</br>";
 			$data = json_encode($ship, JSON_NUMERIC_CHECK);
 			if ($ship->id == 9){
@@ -169,7 +169,7 @@ class Manager {
 		}
 
 		return array();
-
+		*/
 		return array(
 			"id" => $this->gameid,
 			"name" => $this->name,
