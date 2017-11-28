@@ -615,11 +615,14 @@ echo "</script>";
 			game.getUnit($(this).data("shipid")).moveInVector($(this).data("dist"));
 		})
 	}
-
+	
 	function initiateKeyDowns(){
-		//return;
 		$(this).keypress(function(e){
-			if (game){
+			if ($(":focus").attr("id") == ("msg")){
+				if (e.keyCode == 13){ajax.doChat();}
+				else return;
+			}
+			else if (game){
 				if (e.keyCode == 113){ // q - show friendly sensor
 					if (!game.animating && !game.sensorMode){
 						//game.drawShipOverlays();
@@ -631,7 +634,6 @@ echo "</script>";
 						//game.drawShipOverlays();
 						game.drawAllSensorSettings(0);
 					}
-				//console.log(game.vector);
 				}
 				else if (e.keyCode == 32){ // space - dist logger
 					if (game.vector){
@@ -643,7 +645,6 @@ echo "</script>";
 						game.vector = true;
 						$("#vectorDiv").removeClass("disabled");
 					}
-				//console.log(game.vector);
 				}
 				else if (e.keyCode == 102){ // f, cancel fire animation
 					if (game.phase == 3 && game.animating){
@@ -670,7 +671,6 @@ echo "</script>";
 				}
 				else if (e.keyCode == 109){ // m, cancel move animation
 					if (game.phase == 2){
-						//setFPS(150);
 						window.cancelAnimationFrame(anim);
 						for (var i = 0; i < game.ships.length; i++){
 							game.ships[i].setPostMovePosition();

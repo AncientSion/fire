@@ -53,11 +53,7 @@ function initChat(){
 				}
 				else $(this).data("s", 0).css("width", 150);
 			})//.drag();
-	}
-	//	return;
-	$(this).keypress(function(e){
-		if (e.keyCode == 13){ajax.doChat();} // enter
-	})
+		}
 }
 
 window.shipImages = {};
