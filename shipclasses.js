@@ -2854,14 +2854,6 @@ Ship.prototype.detachFlight = function(id){
 }
 
 Ship.prototype.attachFlight = function(unit){
-	if (this.id == unit.id){return;}
-	for (var i = 0; i < this.cc.length; i++){
-		if (this.cc[i] == unit.id){
-			game.draw();
-			return;
-		}
-	}
-
 	$(this.element).find(".ccContainer").remove();
 	this.cc.push(unit.id);
 	for (var i = 0; i < unit.cc.length; i++){
@@ -2869,9 +2861,6 @@ Ship.prototype.attachFlight = function(unit){
 	}
 	unit.cc.push(this.id);
 	this.getAttachDivs();
-	this.setSupportImage();
-
-	game.draw();
 }
 
 Ship.prototype.setSize = function(){

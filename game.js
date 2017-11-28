@@ -226,7 +226,11 @@ function Game(data, userid){
 			if (t.ship){
 				s.doDraw = 0;
 			}
-			t.getParent().attachFlight(s);
+			var p = t.getParent();
+			if (p.id != s.id){
+				p.attachFlight(s);
+				p.setSupportImage(s);
+			}
 		}
 		else {
 			//s.mission = mission;
@@ -235,13 +239,13 @@ function Game(data, userid){
 			s.setTarget();
 			s.setLayout();
 			s.setSize();
+			s.resetImage();
 		}
 
 		s.drawX = p.x;
 		s.drawY = p.y;
+		s,setSupportImage();
 		s.getAttachDivs();
-		s.resetImage();
-		s.setSupportImage();
 		s.disableMissionMode();
 		game.updateSingleIntercept(s);
 		game.draw();
