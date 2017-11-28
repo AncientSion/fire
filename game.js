@@ -244,7 +244,7 @@ function Game(data, userid){
 
 		s.drawX = p.x;
 		s.drawY = p.y;
-		s,setSupportImage();
+		s.setSupportImage();
 		s.getAttachDivs();
 		s.disableMissionMode();
 		game.updateSingleIntercept(s);
