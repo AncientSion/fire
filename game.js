@@ -235,12 +235,12 @@ function Game(data, userid){
 			s.setTarget();
 			s.setLayout();
 			s.setSize();
-			s.resetImage();
 		}
 
 		s.drawX = p.x;
 		s.drawY = p.y;
 		s.getAttachDivs();
+		s.resetImage();
 		s.setSupportImage();
 		s.disableMissionMode();
 		game.updateSingleIntercept(s);
@@ -334,6 +334,7 @@ function Game(data, userid){
 
 		if (t.id == aUnit){
 			game.getUnit(aUnit).attachFlight(flight);
+			game.getUnit(aUnit).setSupportImage();
 		}
 		this.draw();
 	}

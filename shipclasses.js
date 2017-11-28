@@ -2857,7 +2857,6 @@ Ship.prototype.attachFlight = function(unit){
 	if (this.id == unit.id){return;}
 	for (var i = 0; i < this.cc.length; i++){
 		if (this.cc[i] == unit.id){
-			this.setSupportImage();
 			game.draw();
 			return;
 		}
