@@ -279,7 +279,7 @@ class Single {
 
 		if (sizeof($valid)){
 			$mod = mt_rand(0, floor($dmg));
-			if ($mod > $valid[0][1]/2 { // above tresh && mt_rand(0, dmg) > tresh/2
+			if ($mod > $valid[0][1]/2) { // above tresh && mt_rand(0, dmg) > tresh/2
 				Debug::log("Dropout - dmg: ".$dmg.", tresh: ".$valid[0][1].", mt_rand(0, ".floor($dmg).") = ".$mod.", > ".$valid[0][1]/2);
 				$this->crits[] = new Crit(
 					sizeof($this->crits)+1,
