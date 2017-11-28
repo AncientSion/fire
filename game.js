@@ -190,7 +190,7 @@ function Game(data, userid){
 		}
 
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].id == s.id || !this.ships[i].doDraw){continue;}
+			if (this.ships[i].id == s.id || !this.ships[i].doDraw || !this.ships[i].ship){continue;}
 			var shipPos = this.ships[i].getDrawPos();
 			if (s.x == shipPos.x && s.y && shipPos.y){
 				doOffset = 1;

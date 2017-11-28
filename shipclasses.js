@@ -2913,8 +2913,8 @@ Ship.prototype.setSupportImage = function(){
 		}
 	}
 
-	if (!friendlies.length && !hostiles.length){return;}
-	else if (!this.ship && hasShip){return;} // this is no ship, but there is a ship centerpoint in this CC
+	if (!friendlies.length && !hostiles.length){this.drawImg = undefined; return;}
+	else if (!this.ship && hasShip){this.drawImg = undefined; return;} // this is no ship, but there is a ship centerpoint in this CC
 
 
 	if (this.ship){
