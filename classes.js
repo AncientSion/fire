@@ -192,7 +192,7 @@ function Damage(data){
 	this.overkill = data.overkill;
 	this.negation = data.negation;
 	this.destroyed = data.destroyed;
-	this.notes = data.notes;
+	this.notes = data.notes.slice(0, data.notes.length-1).split(";");
 	this.system = "";
 	this.loc = {x: 0, y: 0};
 }
@@ -406,8 +406,8 @@ function Crit(data){
 			} else return ("Disengaged");
 		}
 		else if (!this.duration){
-			return (this.type + ": -" + (this.value*100) + "%" + " (Permanent)");
-		} else return (this.type + ": -" + (this.value*100) + "%" + " (Incl. Turn " + (this.turn + this.duration + ")"));
+			return (this.type + ": -" + (this.value) + "%" + " (Permanent)");
+		} else return (this.type + ": -" + (this.value) + "%" + " (Incl. Turn " + (this.turn + this.duration + ")"));
 	}
 
 	this.inEffect = function(){

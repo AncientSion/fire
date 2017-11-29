@@ -67,7 +67,7 @@ System.prototype.attachDetailsMods = function(ele){
 					if (this.boostEffect[i].value > 0 && this.boostEffect[i].value){
 						mod = "+";
 					}
-					var html = this.boostEffect[i].type + ": " + mod + (this.boostEffect[i].value*100 * boost) + "%";
+					var html = this.boostEffect[i].type + ": " + mod + (this.boostEffect[i].value * boost) + "%";
 				}
 				$(table[0]).append($("<tr>").append($("<td>").html(html).attr("colSpan", 2).addClass("positive")));
 			}
@@ -951,12 +951,12 @@ PrimarySystem.prototype.getOutput = function(){
 	}
 	else {
 		output = this.output + this.getExtraOutput();
-		mod = this.getOutputCrits();
+		mod = this.getOutputReduction();
 	}
 
 	var usage = this.getOutputUsage();
 
-	return Math.floor(output * (1-mod)) - usage;
+	return output - mod - usage;
 }
 
 PrimarySystem.prototype.getOutputUsage = function(){
@@ -967,15 +967,22 @@ PrimarySystem.prototype.getOutputCrits = function(){
 	var mod = 0;
 	for (var i = 0; i < this.crits.length; i++){
 		if (this.crits[i].inEffect()){
-			mod += this.crits[i].value;
+			mod -= this.crits[i].value;
 		}
 	}
 	return mod;
 }
 
+System.prototype.getOutputReduction = function(){
+	var mod = this.getOutputCrits();
+
+	if (!mod){return 0;}
+	else return Math.abs(Math.round(this.output / 100 * mod));
+}
+
 PrimarySystem.prototype.getOutputString = function(){
-	var effect = 1-this.getOutputCrits();
-	return this.output + " + " + Math.floor(this.getExtraOutput()*effect) + " - " + this.output*Math.round((1-effect)*100)/100;
+	var effect = 100-this.getOutputCrits();
+	return this.output + " + " + Math.floor(this.getExtraOutput()*effect) + " - " + this.getOutputReduction();
 }
 
 PrimarySystem.prototype.getBoostCostIncrease = function(){
@@ -1343,12 +1350,12 @@ Weapon.prototype.hasFireOrder = function(){
 }
 
 Weapon.prototype.getRangeDmgMod = function(){
-	var mod = 1;
+	var mod = 100;
 	if (this instanceof Laser || this instanceof Plasma){
 		mod += this.getCritEffect("Damage loss");
 		mod += this.getBoostEffect("Damage loss") * this.getBoostLevel();
 	}
-	return mod;
+	return mod / 100;
 }
 	
 Weapon.prototype.getDmgLoss = function(dist){
@@ -1630,11 +1637,11 @@ Weapon.prototype.getCritEffect = function(value){
 }
 
 Weapon.prototype.getAccuracy = function(){
-	var mod = 1;
+	var mod = 100;
 		mod += this.getCritEffect("Accuracy");
 		mod -= this.getBoostEffect("Accuracy") * this.getBoostLevel();
 
-	return Math.round(this.accDecay * mod);
+	return Math.round(this.accDecay * mod / 100);
 }
 
 Weapon.prototype.getDmgString = function(){
@@ -1646,11 +1653,11 @@ Weapon.prototype.getDmgString = function(){
 }
 
 Weapon.prototype.getDamage = function(){
-	var mod = 1;
+	var mod = 100;
 		mod -= this.getCritEffect("Damage");
 		mod += this.getBoostEffect("Damage") * this.getBoostLevel();
 
-	return mod;
+	return mod / 100;
 }
 
 Weapon.prototype.hasValidTarget = function(){

@@ -9,7 +9,7 @@ class Laser extends Weapon {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $destroyed = 0){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-		$this->boostEffect[] = new Effect("Damage", 0.20);
+		$this->boostEffect[] = new Effect("Damage", 20);
 	}
 	
 	public function getDmgRangeMod($fire){
@@ -20,10 +20,7 @@ class Laser extends Weapon {
 		else $dist = $dist - $this->optRange;
 
 		$mod = 1-($dist * $this->dmgLoss / 10000);
-
 		Debug::log(get_class($this).", weapon id: ".$this->id.", RANGE DMG mod: ".$mod);
-
-
 		return $mod;
 	}
 
@@ -39,7 +36,7 @@ class Laser extends Weapon {
 			return;
 		}
 		$rake = floor($totalDmg / $this->rakes);
-		Debug::log("doDamage, weapon: ".get_class($this).", target: ".$fire->target->id." for ".$totalDmg." dmg");
+		Debug::log("fire #".$fire->id.", doDamage, weapon: ".get_class($this).", target: ".$fire->target->id." for ".$totalDmg." dmg");
 
 		while ($rakes){
 			$system = $fire->target->getHitSystem($fire);
@@ -52,7 +49,7 @@ class Laser extends Weapon {
 			}
 			if (!get_class($system) == "Primary"){$systems[] = $system->id;}
 
-			$print .= " ".get_class($system).": ".$rake."dmg, ";
+			$print .= " ".get_class($system).": ".$rake." dmg, ";
 			$destroyed = 0;
 			$remInt = $system->getRemainingIntegrity();
 			$negation = $fire->target->getArmour($fire, $system);
@@ -80,7 +77,6 @@ class Laser extends Weapon {
 				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
 				$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $overkill, $negation["stock"], $destroyed, $dmg->notes, 1
 			);
-			$fire->damages[] = $entry;
 			$fire->target->applyDamage($entry);
 
 		}

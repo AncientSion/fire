@@ -161,7 +161,6 @@ class FireOrder {
 	public $dist = false;
 	public $angle = false;
 	public $singleid = false;
-	public $damages = array();
 
 	function __construct($id, $gameid, $turn, $shooterid, $targetid, $weaponid, $shots, $req, $notes, $hits, $resolved){
 		$this->id = $id;

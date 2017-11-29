@@ -16,17 +16,17 @@ class Matter extends Weapon {
 		$notes = "";
 
 		if ($totalDmg <= array_sum($negation)){ 
-			$notes = "M block";
+			$notes = "mBlock:";
 			$armourDmg = round($totalDmg/2);
 		}
 		else {
-			$notes = "M pen";
+			$notes = "mPen;";
 			$shieldDmg = round(min($totalDmg, $negation["bonus"]/2));
 			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]/2));
 			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
 		}
 		
-		return new Divider($shieldDmg * $this->linked, $armourDmg * $this->linked, $structDmg * $this->linked);
+		return new Divider($shieldDmg * $this->linked, $armourDmg * $this->linked, $structDmg * $this->linked, $notes);
 	}
 }
 class MediumRailGun extends Matter {

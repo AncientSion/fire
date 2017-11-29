@@ -849,9 +849,10 @@ class Ship {
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if (!$this->structures[$i]->systems[$j]->damaged){continue;}
 				if ($this->structures[$i]->systems[$j]->destroyed){
-					if (mt_rand(0, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn, 0)){
+					if (mt_rand(1, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn, 0)){
 						//Debug::log("adding spike #".$this->id."/".$this->structures[$i]->systems[$j]->id);
 						$spike += $this->structures[$i]->systems[$j]->getPowerUsage($turn);
+						$this->structures[$i]->systems[$j]->damages[sizeof($this->structures[$i]->systems[$j]->damages)-1]->notes .= "p;";
 					}
 				}
 
@@ -1047,6 +1048,43 @@ class Ship {
 			}
 		}
 		return $crits;
+	}
+
+	public function getNewDamages($turn){
+		$dmgs = array();
+		if (!$this->damaged){return $dmgs;}
+
+		if ($this->ship){
+			if (sizeof($this->primary->damages)){
+				for ($i = 0; $i < sizeof($this->primary->damages); $i++){
+					if ($this->primary->damages[$i]->new){
+						$dmgs[] = $this->primary->damages[$i];
+					}
+				}
+			}
+
+			for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+				if (!$this->primary->systems[$i]->damaged){continue;}
+				for ($j = 0; $j < sizeof($this->primary->systems[$i]->damages); $j++){
+					if ($this->primary->systems[$i]->damages[$j]->new){
+						$dmgs[] = $this->primary->systems[$i]->damages[$j];
+					}
+				}
+			}
+		}
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				if (!$this->structures[$i]->systems[$j]->damaged){continue;}
+				for ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]->damages); $k++){
+					if ($this->structures[$i]->systems[$j]->damages[$k]->new){
+						Debug::log("notes: ".$this->structures[$i]->systems[$j]->damages[$k]->notes);
+						$dmgs[] = $this->structures[$i]->systems[$j]->damages[$k];
+					}
+				}
+			}
+		}
+		return $dmgs;
 	}
 
 	public function getHitTreshold($system){

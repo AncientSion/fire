@@ -2209,7 +2209,7 @@ function Game(data, userid){
 				anim.html += "A total of <font color='" + color + "'>" + counter + "</font> elements from <font color='" + color + "'>Unit #" + anim.id + "</font> were destroyed or disengaged";
 			}
 			else if (game.ships[i].ship && game.ships[i].isDestroyedThisTurn()){
-				anim.html += "<font color='" + type + "'>Unit #" + anim.id + "</font> ";
+				anim.html += "<font color='" + color + "'>Unit #" + anim.id + "</font> ";
 				if (game.ships[i].getSystemByName("Reactor").destroyed){
 					anim.html +=  " suffered critical reactor damage and was destroyed.";
 				}

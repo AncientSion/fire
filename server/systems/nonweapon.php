@@ -31,7 +31,7 @@ class PrimarySystem extends System {
 	}
 
 	public function getCritModMax($dmg){
-		return min(0.15, round($dmg/30)/10); // round to 0.05
+		return min(15, round($dmg/30)*10); // round to 0.05
 	}
 
 	public function determineCrit($old, $new, $turn){
@@ -48,7 +48,7 @@ class PrimarySystem extends System {
 		}
 
 		$mod = $this->getCritModMax($dmg);
-		if ($mod < 0.05){return;}
+		if ($mod < 5){return;}
 		if (mt_rand(0, 100) > ($new + $old/2)*3){return;}
 
 		//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
@@ -90,7 +90,7 @@ class Reactor extends PrimarySystem {
     }
 
 	public function applyPowerSpike($turn, $spike){
-		$mod = (floor(($spike / $this->output)*100))/100;
+		$mod = round(($spike / $this->output *100), 2);
 		//d, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 		Debug::log("applyPowerSpike to #".$this->parentId.", spike: ".$spike.", output: ".$this->output."/ mod: ".$mod);
 		$this->crits[] = new Crit(sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Output", 0, $mod, 1);	

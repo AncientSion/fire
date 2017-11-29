@@ -36,7 +36,7 @@ class Weapon extends System {
 	}
 
 	public function getCritModMax($dmg){
-		return min(0.3, (round($dmg/20)/10)) - (mt_rand(0, 1) * 0.1); // round to 0.x, half % mod, 0.1 variance
+		return min(30, (round($dmg/20)*10)) - (mt_rand(0, 1) * 10); // round to 0.x, half % mod, 0.1 variance
 	}
 	
 	public function getTraverseMod($fire){
@@ -52,12 +52,12 @@ class Weapon extends System {
 		$notes = "";
 
 		if ($totalDmg <= array_sum($negation)){ 
-			$notes = "block";
+			$notes = "wBlock;";
 			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
 			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"])/2);
 		}
 		else {
-			$notes = "pen";
+			$notes = "wPen;";
 			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
 			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
 			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
@@ -80,7 +80,7 @@ class Weapon extends System {
 		$negation = $fire->target->getArmour($fire, $system);
 		$dmg = $this->determineDamage($totalDmg, $negation);
 
-		Debug::log("doDamage, weapon: ".(get_class($this)).", target #".$fire->target->id."/".$system->id."/".get_class($system).", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
+		Debug::log("fire #".$fire->id.", doDamage, weapon: ".(get_class($this)).", target #".$fire->target->id."/".$system->id."/".get_class($system).", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
 
 		if ($remInt - $dmg->structDmg < 1){
 			$destroyed = 1;
@@ -101,7 +101,6 @@ class Weapon extends System {
 			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
 			$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $overkill, $negation["stock"], $destroyed, $dmg->notes, 1
 		);
-		$fire->damages[] = $entry;
 		$fire->target->applyDamage($entry);	
 	}
 
@@ -114,12 +113,12 @@ class Weapon extends System {
 	}
 
 	public function getAccuracyMod($fire){
-		$mod = 1;
+		$mod = 100;
 		$mod += $this->getCritMod("Accuracy", $fire->turn);
 		$mod -= $this->getBoostEffect("Accuracy")* $this->getBoostLevel($fire->turn);
 
 		if ($mod != 1){Debug::log("weapon id: ".$this->id.", RANGE LOSS mod: ".$mod);}
-		return $mod;
+		return $mod / 100;
 	}
 
 	public function getDmgRangeMod($fire){
@@ -131,15 +130,14 @@ class Weapon extends System {
 	}
 
 	public function getDamageMod($fire){
-		$mod = 1;
+		$mod = 100;
 
 		$crit = $this->getCritMod("Damage", $fire->turn);
 		$boost = $this->getBoostEffect("Damage") * $this->getBoostLevel($fire->turn);
 
 		$mod = $mod + $crit + $boost;
-		if ($mod != 1){Debug::log(get_class($this).", weapon id: ".$this->id.", DAMAGE mod: ".($crit + $boost )." (crits: ".$crit.", boost: ".$boost.")");
-		}
-		return $mod;
+		if ($mod != 1){Debug::log(get_class($this).", weapon id: ".$this->id.", DAMAGE mod: ".($crit + $boost )." (crits: ".$crit.", boost: ".$boost.")");}
+		return $mod / 100;
 	}
 
 	public function getShots($turn){

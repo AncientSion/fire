@@ -1,4 +1,4 @@
-	<?php
+<?php
 
 	include_once 'global.php';
 
@@ -11,7 +11,7 @@
 
 			if ($this->connection === null){
 				$user = "aatu"; $pass = "Kiiski";
-				//$user = "root"; $pass = "147147";
+				$user = "root"; $pass = "147147";
 				$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$user,$pass);
 				$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -573,8 +573,11 @@
 
 					while ($do){
 						$valid = 1;
-						$x = mt_rand(-700, -400) * (1-$i*2);
-						$y = mt_rand(-600, 600) * (1-$i*2);
+						$width = 300;
+						$height = 600;
+						$dist = 400;
+						$x = mt_rand(-($dist+$width), -$dist) * (1-$i*2);
+						$y = mt_rand(-$height, $height) * (1-$i*2);
 						$s = ceil(($unit->size*1.3)/2);
 
 						for ($k = 0; $k < sizeof($deploys); $k++){

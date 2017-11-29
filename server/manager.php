@@ -21,8 +21,6 @@ class Manager {
 	public $ballistics = array();
 	public $gd = array();
 	public $fires = array();
-	public $damages = array();
-	public $crits = array();
 	public $playerstatus = array();
 	public $reinforcements = array();
 	public $rdyReinforcements = array();
@@ -256,9 +254,6 @@ class Manager {
 		$this->incoming = $db->getIncomingShips($this->gameid, $this->turn);
 		
 		$this->deleteResolvedFireOrders();
-
-		$this->damages = array();
-		$this->crits = array();
 	}
 
 	public function setUserIndex(){
@@ -816,8 +811,6 @@ class Manager {
 		$this->assembleEndStates();
 		$this->alterReinforcementPoints();
 	}
-
-
 	
 	public function freeFlights(){
 		$data = array();
@@ -1071,9 +1064,6 @@ class Manager {
 				if ($this->fires[$i]->shooter->flight == false){
 					//var_export($this->fires[$i]->id);
 					$this->fires[$i]->target->resolveFireOrder($this->fires[$i]);
-					if (sizeof($this->fires[$i]->damages)){
-						$this->damages = array_merge($this->damages, $this->fires[$i]->damages);
-					}
 				}
 			}
 		}
@@ -1123,9 +1113,6 @@ class Manager {
 			if (!$this->fires[$i]->resolved){
 				if ($this->fires[$i]->shooter->flight && $this->fires[$i]->target->flight){
 					$this->fires[$i]->target->resolveFireOrder($this->fires[$i]);
-					if (sizeof($this->fires[$i]->damages)){
-						$this->damages = array_merge($this->damages, $this->fires[$i]->damages);
-					}
 				}
 			}
 		}
@@ -1140,10 +1127,6 @@ class Manager {
 						continue;
 					}
 					$this->fires[$i]->target->resolveFireOrder($this->fires[$i]);
-					//Debug::log("resolving fire id: ".$this->fires[$i]->id);
-					if (sizeof($this->fires[$i]->damages)){
-						$this->damages = array_merge($this->damages, $this->fires[$i]->damages);
-					}
 				}
 			}
 		}
@@ -1194,9 +1177,6 @@ class Manager {
 
 			for ($i = 0; $i < sizeof($fires); $i++){
 				$fires[$i]->target->resolveFireOrder($fires[$i]);
-				if (sizeof($fires[$i]->damages)){
-					$this->damages = array_merge($this->damages, $fires[$i]->damages);
-				}
 			}
 			$this->fires = array_merge($this->fires, $fires);
 		}
@@ -1218,8 +1198,15 @@ class Manager {
 	}
 
 	public function writeDamageEntries(){
-		if (sizeof($this->damages)){
-			DBManager::app()->insertDamageEntries($this->damages);
+		$data = array();
+
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			$data = array_merge($data, $this->ships[$i]->getNewDamages($this->turn));
+		}
+
+		if (sizeof($data)){
+			DBManager::app()->insertDamageEntries($data);
 		}
 	}
 

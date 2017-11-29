@@ -126,7 +126,7 @@ class Primary {
 	}
 
 	public function addDamage($dmg){
-		//debug::log($this->remaining);
+		$this->damaged = 1;
 		$this->remaining -= $dmg->overkill;
 
 		if ($dmg->systemid == -1){
@@ -135,7 +135,6 @@ class Primary {
 		}
 
 		if (!$this->destroyed && $this->remaining < 1){
-			//Debug::log("primary from units  #".$this->parentId." below 0");
 			$this->destroyed = 1;
 		}
 	}

@@ -33,8 +33,6 @@ class Pulse extends Weapon {
 
 		Debug::log("fire #".$fire->id.", doDamage, weapon: ".(get_class($this)).", target #".$fire->target->id."/".$system->id."/".$name.", hits: ".$hits.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
 
-
-
 		for ($i = 0; $i < $hits; $i++){
 
 			if ($destroyed){
@@ -45,7 +43,7 @@ class Pulse extends Weapon {
 				continue;
 			}
 			else {
-				Debug::log("adding hit ".($i+1));
+				//Debug::log("adding hit ".($i+1));
 				$total += $totalDmg;
 				$struct += $dmg->structDmg;
 				$armour += $dmg->armourDmg;
@@ -58,6 +56,7 @@ class Pulse extends Weapon {
 				if ($okSystem){
 					//$overkill = abs($remInt - $dmg->structDmg);
 					$overkill = abs($remInt - $struct);
+					$struct -= $overkill;
 					Debug::log(" => hit ".($i+1)." DESTROYING ship target system ".$name." #".$system->id.", rem: ".$remInt.", doing TOTAL: ".$struct."/".$armour.", OK for: ".$overkill." dmg");
 					//$struct += $remInt;
 				}
@@ -72,7 +71,6 @@ class Pulse extends Weapon {
 			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
 			$total, $shield, $struct, $armour, $overkill, $negation["stock"], $destroyed, $dmg->notes, 1
 		);
-		$fire->damages[] = $entry;
 		$fire->target->applyDamage($entry);
 	}
 }
