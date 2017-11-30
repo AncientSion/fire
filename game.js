@@ -2665,26 +2665,33 @@ function Game(data, userid){
 			td.colSpan = 9;
 
 		var dmgs = {};
-		var kills = {};
 
 		for (var i = 0; i < fire.damages.length; i++){
 			if (dmgs.hasOwnProperty(fire.damages[i].system)){
 				dmgs[fire.damages[i].system][0]++
 			}
 			else {
-				dmgs[fire.damages[i].system] = [1, 0];
+				dmgs[fire.damages[i].system] = [1, 0, 0]; // new system entry
 			}
 			if (fire.damages[i].destroyed){
-				dmgs[fire.damages[i].system][1]++;
+				dmgs[fire.damages[i].system][1]++; // destroy
+			}
+			if (fire.damages[i].notes[fire.damages[i].notes.length-1] == "p"){
+				dmgs[fire.damages[i].system][2]++; // pLoss
 			}
 		}
 
 		for (var i in dmgs){
 			td.innerHTML += dmgs[i][0] + "x " + i;
 			if (dmgs[i][1]){
-				td.innerHTML += " (" + dmgs[i][1] + ")"
+				td.innerHTML += " (" + dmgs[i][1];
+				if (dmgs[i][2]){
+					td.innerHTML += "/" + dmgs[i][2] + ")"
+				}
+				else td.innerHTML += ")";
 			}
-			td.innerHTML += "; "
+
+			td.innerHTML += "; ";
 		}
 
 		return details;

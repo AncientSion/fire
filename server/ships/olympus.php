@@ -48,6 +48,21 @@ class Olympus extends Medium {
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 70, 600, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 70, 3);
 	}
+
+	static function getKit(){
+		return array(
+			array(
+				"id" => 12,
+				"name" => "Port Missile Launcher",
+				"options" => array(array(), array("Naga", 8))
+			),
+			array(
+				"id" => 15,
+				"name" => "Starboard Missile Launcher",
+				"options" => array(array(), array("Naga", 8))
+			)
+		);
+	}
 }
 
 ?>

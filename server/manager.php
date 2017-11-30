@@ -145,6 +145,9 @@ class Manager {
 
 	public function getClientData(){
 
+		$this->pickReinforcements();
+		return;
+
 		//$this->handleFighterMovementPhaseNew(); return;
 		//$this->test(); return;
 		//$this->initiateDogfights();
@@ -480,6 +483,68 @@ class Manager {
 	}
 
 	public function pickReinforcements(){
+		if ($this->turn < 2){return;}
+
+		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+			$avail = 0;
+			for ($j = 0; $j < sizeof($this->reinforcements); $j++){
+				if ($this->reinforcements[$j]["userid"] == $this->playerstatus[$i]["userid"]){
+					$avail++;
+				}
+			}
+
+			if ($avail >= 4){
+				continue;
+			}
+
+
+			$picks = array();
+
+			if (mt_rand(1, 1)){
+				$valid = $this->getReinforcementShips($this->playerstatus[$i]["faction"]);
+				//var_export($valid);
+				for ($i = 0; $i  < sizeof($valid); $i++){
+					//echo $valid[$i]["name"];
+					$options = $valid[$i]["name"]::getKit();
+					var_export($options);
+				}
+			}
+
+			return;
+
+
+
+
+			$now = 0;
+			$max = 1;
+			if (!$max){continue;}
+			$validShips = $this->getReinforcementShips($this->playerstatus[$i]["faction"]);
+			//$validShips = array_merge($validShips, $this->getFlights());
+			//$validShips = $this->getFlights();
+
+			for ($j = 0; $j < $max; $j++){
+				$pick = $validShips[mt_rand(0, sizeof($validShips)-1)];
+				$roll = mt_rand(1, 10);
+
+				if ($roll >= $pick["weight"]){
+					$now++;
+					$pick["eta"] += mt_rand(3, 4);
+					$pick["eta"] = max(2, $pick["eta"]);
+					$pick["value"] = ceil($pick["value"] * (mt_rand(8, 12))/10);
+					$picks[] = $pick;
+
+					if ($now == $max){
+						break;
+					}
+				}
+			}
+			if (sizeof($picks)){
+				DBManager::app()->insertReinforcements($this->gameid, $this->playerstatus[$i]["userid"], $picks);
+			}
+		}
+	}
+
+	public function pickReinforcementas(){
 		if ($this->turn < 2){return;}
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
@@ -1270,6 +1335,26 @@ class Manager {
 		//Debug::log("getShipsForFaction");
 		$ships = array();
 		$data = array();
+
+		$ships = array(
+			array("Omega", 5),
+			array("Olympus", 3)
+		);
+
+		for ($i = 0; $i < sizeof($ships); $i++){
+			$name = $ships[$i][0];
+			$ship = array(
+				"name" => $ships[$i][0],
+				"eta" => $ships[$i][1]
+			);
+			$data[] = $ship;
+		}
+
+		return $data;
+
+
+
+
 
 		switch ($faction){
 			case "Earth Alliance";

@@ -1292,8 +1292,8 @@ div.integrityFull {
 }
 
 #combatLog .selected {
-	background-color: white;
-	color: black;
+	background-color: #8a8a8a;
+	color: white;
 	box-shadow: none;
 	border: 1px solid black;
 	border-left: 1px solid white;
