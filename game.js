@@ -2816,8 +2816,9 @@ function Game(data, userid){
 		})
 	}
 
-	this.initSelectionWrapper = function(){
+	this.initSelectionWrapper = function(){		
 		var ele = $("#unitGUI");
+		//	ele.remove() $("#deployWrapper").remove();return;
 		var l = 0;
 		var s = 35;
 

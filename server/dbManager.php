@@ -208,12 +208,14 @@
 		public function getAllReinforcements($gameid, $userid){
 			//Debug::log("getAvailableReinforcements");
 			$stmt = $this->connection->prepare("
-				SELECT * FROM reinforcements 
+				SELECT * FROM units 
 				WHERE gameid = :gameid
+				AND status = :status
 			");
 
+			$status = "reinforce";
 			$stmt->bindParam(":gameid", $gameid);
-			//$stmt->bindParam(":userid", $userid);
+			$stmt->bindParam(":status", $status);
 
 			$stmt->execute();
 
@@ -224,30 +226,42 @@
 			} else return null;
 		}
 
-		public function insertReinforcements($gameid, $userid, $ships){
-			Debug::log("insertReinforcements: ".sizeof($ships));
+		public function insertReinforcements($gameid, $data){
+			//Debug::log("insertReinforcements: ".sizeof($data));
 			$stmt = $this->connection->prepare("
-				INSERT INTO reinforcements
-					(gameid, userid, name, eta, cost)
+				INSERT INTO units 
+					(gameid, userid, ship, ball, name, status, available, destroyed, angle)
 				VALUES
-					(:gameid, :userid, :name, :eta, :cost)
+					(:gameid, :userid, :ship, :ball, :name, :status, :available, :destroyed, :angle)
 			");
 
-			for ($i = 0; $i < sizeof($ships); $i++){
+			$ship = 1;
+			$ball = 0;
+			$status = "reinforce";
+			$destroyed = 0;
+
+
+			for ($i = 0; $i < sizeof($data); $i++){
 				$stmt->bindParam(":gameid", $gameid);
-				$stmt->bindParam(":userid", $userid);
-				$stmt->bindParam(":name", $ships[$i]["name"]);
-				$stmt->bindParam(":eta", $ships[$i]["eta"]);
-				$stmt->bindParam(":cost", $ships[$i]["value"]);
+				$stmt->bindParam(":userid", $data[$i]["userid"]);
+				$stmt->bindParam(":ship", $ship);
+				$stmt->bindParam(":ball", $ball);
+				$stmt->bindParam(":name", $data[$i]["name"]);
+				$stmt->bindParam(":status", $status);
+				$stmt->bindValue(":available", $data[$i]["eta"]);
+				$stmt->bindParam(":destroyed", $destroyed);
+				$stmt->bindParam(":angle", $data[$i]["cost"]);
 				$stmt->execute();
-				
+
 				if ($stmt->errorCode() == 0){
+					$data[$i]["id"] = $this->getLastInsertId();
 					continue;
-				}
-				else {
-					return $stmt->errorCode();
-				}
+				} else Debug::log("insertReinforcements ERROR");
 			}
+
+			//return;
+
+			$this->insertServerLoads($data[0]["userid"], $gameid, $data);
 
 			return true;
 		}
@@ -436,7 +450,7 @@
 		}
 
 		public function updateSystemLoad($data){
-			Debug::log("updateSystemLoad: ".sizeof($data));
+			//Debug::log("updateSystemLoad: ".sizeof($data));
 			$stmt = $this->connection->prepare("
 				UPDATE loads
 				SET amount = amount - :amount
@@ -466,6 +480,7 @@
 		}
 
 		public function insertLoads($userid, $gameid, &$units){
+			//Debug::log("insertLoads: ".sizeof($units));
 			$stmt = $this->connection->prepare("
 				INSERT INTO loads 
 					(shipid, systemid, name, amount)
@@ -489,6 +504,40 @@
 							else {
 								return false;
 							}
+						}
+					}
+				}
+			}
+
+			return true;
+		}	
+
+		public function insertServerLoads($userid, $gameid, $units){
+			//Debug::log("insertLoads: ".sizeof($units));
+			$stmt = $this->connection->prepare("
+				INSERT INTO loads 
+					(shipid, systemid, name, amount)
+				VALUES
+					(:shipid, :systemid, :name, :amount)
+			");
+
+			for ($i = 0; $i < sizeof($units); $i++){
+				for ($j = 0; $j < sizeof($units[$i]["upgrades"]); $j++){
+
+					if (!$units[$i]["upgrades"][$j]["active"]){continue;}
+
+					for ($k = 0; $k < sizeof($units[$i]["upgrades"][$j]["loads"]); $k++){
+						$stmt->bindParam(":shipid", $units[$i]["id"]);
+						$stmt->bindParam(":systemid", $units[$i]["upgrades"][$j]["loads"][$k]["systemid"]);
+						$stmt->bindParam(":name", $units[$i]["upgrades"][$j]["loads"][$k]["name"]);
+						$stmt->bindParam(":amount", $units[$i]["upgrades"][$j]["loads"][$k]["amount"]);
+
+						$stmt->execute();
+						if ($stmt->errorCode() == 0){
+							continue;
+						}
+						else {
+							return false;
 						}
 					}
 				}
@@ -666,31 +715,42 @@
 		}
 
 		public function requestShipsDB($userid, $gameid, $turn, $picks){
-			//Debug::log("requestShipsDB, s: ".sizeof($picks));
-			$avail = $this->getAllReinforcements($gameid, $userid);
-			$delete = array();
-			//Debug::log("a: ".sizeof($avail));
-			$ships = array();
+			Debug::log("requestShipsDB, s: ".sizeof($picks).", turn: ".$turn);
+
 			$cost = 0;
 
+			$stmt = $this->connection->prepare("
+				UPDATE units
+				SET status = :status,
+					available = :available,
+					angle = :angle
+				WHERE id = :id
+			");
+
 			for ($i = 0; $i < sizeof($picks); $i++){
-				for ($j = 0; $j < sizeof($avail); $j++){
-					//Debug::log("s: ".$ships[$i]["id"]." vs ".$avail[$j]["id"]);
-					if (abs($picks[$i]["id"]) == $avail[$j]["id"]){
-						$picks[$i]["actions"][0]["turn"] += $avail[$j]["eta"];
-						$avail[$j]["actions"] = $picks[$i]["actions"];
-						$avail[$j]["turn"] = $turn;
-						$cost += $avail[$j]["cost"];
-						$ships[] = $avail[$j];
-						$delete[] = $avail[$j];
-						break;
-					}
+				$status = "bought";
+				$angle = 0;
+				$picks[$i]["actions"][0]["turn"] = $picks[$i]["available"];
+				$cost += $picks[$i]["cost"];
+
+				Debug::log("id: ".$picks[$i]["id"]);
+
+				$stmt->bindParam("id", $picks[$i]["id"]);
+				$stmt->bindParam("status", $status);
+				$stmt->bindParam("available", $picks[$i]["available"]);
+				$stmt->bindParam("angle", $angle);
+
+				$stmt->execute();
+				if ($stmt->errorCode == 0){
+					continue;
 				}
+				else Debug::log("ERROR requestShipsDB");
+
 			}
 
-			$this->deleteReinforcements($delete);
 			$this->addReinforceValue($userid, $gameid, -$cost);
-			$this->insertUnits($userid, $gameid, $ships);
+			$this->insertClientActions($picks);
+			//$this->insertUnits($userid, $gameid, $ships);
 		}
 
 		public function deleteReinforcements($units){
@@ -887,98 +947,6 @@
 			}
 
 			return;
-		}
-
-		public function insertDogfights($gameid, $turn, $dogfights){
-			Debug::log("insertDogfights");
-			$stmt = $this->connection->prepare("
-				INSERT INTO dogfights 
-					(gameid, turn, a, b)
-				VALUES
-					(:gameid, :turn, :a, :b)
-			");
-
-			for ($i = 0; $i < sizeof($dogfights); $i++){
-				$stmt->bindParam(":gameid", $gameid);
-				$stmt->bindParam(":turn", $turn);
-				$stmt->bindParam(":a", $dogfights[$i][0]);
-				$stmt->bindParam(":b", $dogfights[$i][1]);
-				$stmt->execute();
-
-				if ($stmt->errorCode() == 0){
-					continue;
-				}
-			}
-			return true;
-		}
-
-		public function getDogfights($units){
-			$stmt = $this->connection->prepare("
-				SELECT * FROM dogfights
-				WHERE a = :a
-				OR b = :b
-			");
-
-			for ($i = 0; $i < sizeof($units); $i++){
-				if ($units[$i]->flight){
-					$stmt->bindParam(":a", $units[$i]->id);
-					$stmt->bindParam(":b", $units[$i]->id);
-					$stmt->execute();
-					$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-					if ($result){
-						for ($j = 0; $j < sizeof($result); $j++){
-							if ($result[$j]["a"] == $units[$i]->id){
-								$units[$i]->dogfights[] = $result[$j]["b"];
-							}
-							else {
-								$units[$i]->dogfights[] = $result[$j]["a"];
-							}
-						}
-					}
-				}
-			}
-			return true;
-		}
-
-
-		public function deleteDogfightKill($data, $gameid){
-			Debug::log("deleteDogfightKill: ".sizeof($data));
-			$stmt = $this->connection->prepare("
-				DELETE FROM dogfights
-				WHERE 
-					gameid = :gameid
-				AND
-					a = :a
-				OR 
-					b = :b
-			");
-
-			for ($i = 0; $i < sizeof($data); $i++){
-				$stmt->bindParam(":gameid", $gameid);
-				$stmt->bindParam(":a", $data[$i]);
-				$stmt->bindParam(":b", $data[$i]);
-				$stmt->execute();
-			}
-		}	
-
-		public function deleteDogfightRange($data, $gameid){
-			Debug::log("deleteDogfightRange: ".sizeof($data));
-			$stmt = $this->connection->prepare("
-				DELETE FROM dogfights
-				WHERE 
-					gameid = :gameid
-				AND
-					a = :a
-				AND 
-					b = :b
-			");
-
-			for ($i = 0; $i < sizeof($data); $i++){
-				$stmt->bindParam(":gameid", $gameid);
-				$stmt->bindParam(":a", $data[$i]["a"]);
-				$stmt->bindParam(":b", $data[$i]["b"]);
-				$stmt->execute();
-			}
 		}
 
 		public function insertClientActions($units){
@@ -1752,6 +1720,7 @@
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			return $result;
 		}
+
 		public function getShipLoad($ships){
 			$stmt = $this->connection->prepare("
 				SELECT systemid, name, amount 
@@ -1765,7 +1734,7 @@
 				$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 				if ($result){
-					$ships[$i]->addFighterLoad($result);
+					$ships[$i]->addLoadout($result);
 				}
 			}
 			return true;

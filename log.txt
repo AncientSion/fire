@@ -1,0 +1,61 @@
+requestShipsDB, s: 1, turn: 2
+id: 104
+insertClientActions s: 1
+doAdvance for game1 from phase -1 to phase 0
+initBallistics
+handleDeploymentActions #102
+handleDeploymentActions #103
+resolveDeployActions s: 2
+handleJumpActions
+jumpin: #102, class: Omega, size: 100, sensor: 800, ordered to: -388/-397, shiftPotential: 62.5%
+Omega, aShift: 63°, pShift: 125px
+--> aShift: 46°, psShift: -57/-10 (58px)
+jumpin: #103, class: Olympus, size: 45, sensor: 600, ordered to: 202/-249, shiftPotential: 37.5%
+Olympus, aShift: 38°, pShift: 75px
+--> aShift: -18°, psShift: -2/-38 (39px)
+assembleEndStates
+getDeployState for Omega #102 current facing 0, now: 46
+getDeployState for Olympus #103 current facing 0, now: 342
+advancing game state time: 0.055 seconds.
+requestShipsDB, s: 2, turn: 2
+id: 102
+id: 103
+insertClientActions s: 2
+requestShipsDB, s: 1, turn: 2
+id: 104
+insertClientActions s: 1
+doAdvance for game1 from phase -1 to phase 0
+initBallistics
+resolveDeployActions s: 0
+handleJumpActions
+assembleEndStates
+advancing game state time: 0.019 seconds.
+insertClientActions s: 1
+insertClientActions s: 1
+doAdvance for game1 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+handleMixedMovement
+updateMissionState
+advancing game state time: 0.032 seconds.
+doAdvance for game1 from phase 2 to phase 3
+resolveBallisticFireOrders
+cleanFireOrders, fires: 0
+DB updateFireOrders: 0
+notes: wPen;p;
+notes: wPen;
+notes: wPen;p;
+notes: mPen;p;
+notes: mPen;
+notes: wPen;p;
+ => DB insertDamageEntries: 6
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.03 seconds.
+advancing game state time: 0.041 seconds.
+doAdvance for game1 from phase 3 to phase 4
+endTurn
+destroyUnitsDB
+assembleEndStates
+advancing game state time: 0.103 seconds.

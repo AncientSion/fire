@@ -16,11 +16,11 @@ class Matter extends Weapon {
 		$notes = "";
 
 		if ($totalDmg <= array_sum($negation)){ 
-			$notes = "mBlock:";
+			$notes = "block;";
 			$armourDmg = round($totalDmg/2);
 		}
 		else {
-			$notes = "mPen;";
+			$notes = "pen;";
 			$shieldDmg = round(min($totalDmg, $negation["bonus"]/2));
 			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]/2));
 			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);

@@ -51,18 +51,37 @@ class Olympus extends Medium {
 
 	static function getKit(){
 		return array(
-			array(
-				"id" => 12,
-				"name" => "Port Missile Launcher",
-				"options" => array(array(), array("Naga", 8))
-			),
-			array(
-				"id" => 15,
-				"name" => "Starboard Missile Launcher",
-				"options" => array(array(), array("Naga", 8))
-			)
-		);
-	}
+					"id" => 0,
+					"name" => "",
+					"cost" => static::$value,
+					"eta" => 3,
+					"gameid" => 0,
+					"userid" => 0,
+					"upgrades" => 
+						array(
+							array(
+								"active" => 0,
+								"chance" => 50,
+								"cost" => 200,
+								"loads" => 
+									array(
+										array(
+											"systemid" => 12,
+											"display" => "Port Missile Launcher",
+											"name" => "Naga",
+											"amount" => 6
+										),
+										array(
+											"systemid" => 15,
+											"display" => "Starboard Missile Launcher",
+											"name" => "Naga",
+											"amount" => 6
+										)
+								)
+							)
+						)
+				);
+		}
 }
 
 ?>

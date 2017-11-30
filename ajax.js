@@ -161,8 +161,9 @@ window.ajax = {
 						else {
 							ship = {
 								actions: [ game.ships[i].actions[j] ],
-								id: game.ships[i].id,
-								status: "request"
+								id: game.ships[i].id * -1,
+								status: "request",
+								available: game.ships[i].available
 							};
 							reinforce.push(ship);
 						}

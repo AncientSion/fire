@@ -81,14 +81,47 @@ class Omega extends SuperHeavy {
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 180, 10);
 	}
 
+
 	static function getKit(){
 		return array(
-			array(
-				"id" => 9,
-				"name" => "Front Main Hangar",
-				"options" => array(array(), array("Aurora", 14), array("Thunderbolt", 14))
-			)
-		);
+					"id" => 0,
+					"name" => "",
+					"cost" => static::$value,
+					"eta" => 3,
+					"gameid" => 0,
+					"userid" => 0,
+					"upgrades" => 
+						array(
+							array(
+								"active" => 0,
+								"chance" => 40,
+								"cost" => 500,
+								"loads" =>
+									array(
+										array(
+											"systemid" => 9,
+											"display" => "Front Main Hangar",
+											"name" => "Aurora",
+											"amount" => 14
+										),
+								)
+							),
+							array(
+								"active" => 0,
+								"chance" => 40,
+								"cost" => 500,
+								"loads" =>
+									array(
+										array(
+											"systemid" => 9,
+											"display" => "Front Main Hangar",
+											"name" => "Thunderbolt",
+											"amount" => 14
+										),
+									)
+							)
+					)
+				);
 	}
 }
 

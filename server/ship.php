@@ -317,7 +317,7 @@ class Ship {
 		$this->remainingDelay = $delay;
 	}
 
-	public function addFighterLoad($dbLoad){ // [4, 17, 17]
+	public function addLoadout($dbLoad){ // [4, 17, 17]
 		$chunk = array();
 		$chunk[] = $dbLoad[0];
 
@@ -1077,10 +1077,8 @@ class Ship {
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if (!$this->structures[$i]->systems[$j]->damaged){continue;}
 				for ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]->damages); $k++){
-					if ($this->structures[$i]->systems[$j]->damages[$k]->new){
-						Debug::log("notes: ".$this->structures[$i]->systems[$j]->damages[$k]->notes);
-						$dmgs[] = $this->structures[$i]->systems[$j]->damages[$k];
-					}
+					Debug::log("notes: ".$this->structures[$i]->systems[$j]->damages[$k]->notes);
+					$dmgs[] = $this->structures[$i]->systems[$j]->damages[$k];
 				}
 			}
 		}

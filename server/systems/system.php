@@ -212,7 +212,7 @@ class System {
 		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", dmg: ".$dmg."%");
 
 		$mod = $this->getCritModMax($dmg);
-		if ($mod < 0.05){return;}
+		if ($mod < 5){return;}
 
 		for ($i = 0; $i < sizeof($possible); $i++){
 			if (mt_rand(0, 1)){continue;}

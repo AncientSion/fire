@@ -52,12 +52,12 @@ class Weapon extends System {
 		$notes = "";
 
 		if ($totalDmg <= array_sum($negation)){ 
-			$notes = "wBlock;";
+			$notes = "block;";
 			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
 			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"])/2);
 		}
 		else {
-			$notes = "wPen;";
+			$notes = "pen;";
 			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
 			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
 			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
