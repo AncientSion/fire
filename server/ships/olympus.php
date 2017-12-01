@@ -7,7 +7,7 @@ class Olympus extends Medium {
 	public $size = 45;
 	public static $value = 410;
 	public $profile = array(0.94, 1.06);
-	public $mass = 25000;
+	public $mass = 2500;
 
 	function __construct($id, $userid, $available, $status, $destroyed){		
         parent::__construct($id, $userid, $available, $status, $destroyed);
@@ -24,13 +24,13 @@ class Olympus extends Medium {
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 10);
 		$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 180);
-		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Naga", 6, 2)));
+		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 6, 3), array("Naga", 6, 2)));
 
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 300, 10);
 		$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 360);
-		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Naga", 6, 2)));
+		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 6, 3), array("Naga", 6, 2)));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -62,7 +62,8 @@ class Olympus extends Medium {
 							array(
 								"active" => 0,
 								"chance" => 50,
-								"cost" => 200,
+								"cost" => 120,
+								"name" => "Patrol Outfit",
 								"loads" => 
 									array(
 										array(
@@ -75,6 +76,27 @@ class Olympus extends Medium {
 											"systemid" => 15,
 											"display" => "Starboard Missile Launcher",
 											"name" => "Naga",
+											"amount" => 6
+										)
+								)
+							),
+							array(
+								"active" => 0,
+								"chance" => 20,
+								"cost" => 70,
+								"name" => "Escort Outfit",
+								"loads" => 
+									array(
+										array(
+											"systemid" => 12,
+											"display" => "Port Missile Launcher",
+											"name" => "Needle",
+											"amount" => 6
+										),
+										array(
+											"systemid" => 15,
+											"display" => "Starboard Missile Launcher",
+											"name" => "Needle",
 											"amount" => 6
 										)
 								)

@@ -31,7 +31,7 @@ class PrimarySystem extends System {
 	}
 
 	public function getCritModMax($dmg){
-		return min(15, round($dmg/30)*10); // round to 0.05
+		return min(25, round($dmg/30)*10); // round to 5
 	}
 
 	public function determineCrit($old, $new, $turn){
@@ -40,7 +40,7 @@ class PrimarySystem extends System {
 
 		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", dmg: ".$dmg);
 
-		if ($dmg > 50 && mt_rand(0, 1)){
+		if ($dmg > 50 && mt_rand(0, 100) < $dmg){
 			Debug::log("critical hit, disabling primary system ".get_class($this));
 			$this->crits[] = new Crit(
 				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 1, 0, 1
@@ -49,7 +49,7 @@ class PrimarySystem extends System {
 
 		$mod = $this->getCritModMax($dmg);
 		if ($mod < 5){return;}
-		if (mt_rand(0, 100) > ($new + $old/2)*3){return;}
+		if (mt_rand(0, 100) < ($new + $old/2)*2){return;}
 
 		//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 		$this->crits[] = new Crit(
@@ -104,7 +104,7 @@ class Engine extends PrimarySystem {
 
 	function __construct($id, $parentId, $mass, $output = 0, $destroyed = 0){
 		$this->powerReq = ceil($output / 20);
-		$this->boostEffect[] = new Effect("Output", 0.08);
+		$this->boostEffect[] = new Effect("Output", 12);
         parent::__construct($id, $parentId, $mass, $output, ceil($this->powerReq/3), $destroyed);
     }
 }
@@ -116,7 +116,7 @@ class Sensor extends PrimarySystem {
 
 	function __construct($id, $parentId, $mass, $output = 0, $effiency, $destroyed = 0){
 		$this->powerReq = floor($output/60);
-		$this->boostEffect[] = new Effect("Output", 0.10);
+		$this->boostEffect[] = new Effect("Output", 10);
 		//$this->modes = array("Lock", "Scramble", "Sweep", "Mask");
 		//$this->states = array(0, 0, 0, 0);
 		$this->modes = array("Lock", "Scramble");

@@ -5,7 +5,6 @@ class Ship {
 	public $facing = 0;
 	public $x;
 	public $y;
-	public $unitType = "Ship";
 	public $userid;
 	public $available;
 	public $status;
@@ -18,8 +17,9 @@ class Ship {
 	public $remainingDelay;
 	public $baseImpulse;
 
-	public $name;
-	public $faction;
+	public $name = "";
+	public $display = "";
+	public $faction = "";
 	public $size;
 	public static $value;
 	public $cost;
@@ -142,8 +142,8 @@ class Ship {
 
 	public function setBaseStats(){
 		$this->baseHitChance = ceil(pow($this->mass, 0.4)*1.5)+30;
-		$this->baseTurnCost = round(pow($this->mass, 1.25)/22500, 2);
-		$this->baseTurnDelay = round(pow($this->mass, 0.45)/18, 2) * $this->getBaseImpulse() / 130;
+		$this->baseTurnCost = round(pow($this->mass, 1.25)/25000, 2);
+		$this->baseTurnDelay = round(pow($this->mass, 0.45)/16, 2) * $this->getBaseImpulse() / 130;
 		$this->baseImpulseCost = round(pow($this->mass, 1.2)/600, 2);
 	}
 
@@ -485,6 +485,11 @@ class Ship {
 			return true;
 		}
 		else if ($this->getSystemByName("Reactor")->destroyed){
+			$this->destroyed = 1;
+			$this->status = "destroyed";
+			return true;
+		}
+		else if ($this->getSystemByName("Bridge")->destroyed){
 			$this->destroyed = 1;
 			$this->status = "destroyed";
 			return true;

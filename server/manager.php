@@ -145,6 +145,7 @@ class Manager {
 
 	public function getClientData(){
 		//$this->pickReinforcements();
+		//$this->deleteReinforcements();
 		//return;
 
 		//$this->handleFighterMovementPhaseNew(); return;
@@ -514,18 +515,44 @@ class Manager {
 		}
 	}
 
+	public function deleteReinforcements(){
+		$data = array();
+
+		for ($i = 0; $i < sizeof($this->reinforcements); $i++){
+			$passed = $this->turn - $this->reinforcements[$i]["turn"];
+			$passed = 6; // 2 - 2 = 0
+			if (mt_rand(3, 5) <= $passed){
+				$data[] = $this->reinforcements[$i]["id"];
+			}
+		}
+
+		if (sizeof($data)){
+			DBManager::app()->deleteReinforcements($data);
+		}
+	}
+
 	public function pickReinforcements(){
 		if ($this->turn < 2){return;}
 
 		$picks = array();
 
 		for ($k = 0; $k < sizeof($this->playerstatus); $k++){
+
+			$avail = 0;
+
+			for ($i = 0; $i < sizeof($this->reinforcements); $i++){
+				if ($this->reinforcements[$i]["userid"] == $this->playerstatus[$k]["userid"]){
+					$avail++;
+				}
+			}
+
 			$ships = $this->getReinforcementShips($this->playerstatus[$k]["faction"]);
 			for ($i = 0; $i  < sizeof($ships); $i++){
 				if (mt_rand(0,1)){continue;}
 
 				$data = $ships[$i]["name"]::getKit();
 				$data["name"] = $ships[$i]["name"];
+				$data["turn"] = $this->turn;
 				$data["userid"] = $this->playerstatus[$k]["userid"];
 				//echo "available kits for ".$data[$i]["name"].": ".sizeof($data["upgrades"])."</br></br>";
 
@@ -958,6 +985,7 @@ class Manager {
 
 	public function startDeploymentPhase(){
 		//Debug::log("startDeploymentPhase");
+		$this->deleteReinforcements();
 		$this->pickReinforcements();
 		$this->updatePlayerStatus("waiting");
 	}

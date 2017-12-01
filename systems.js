@@ -318,7 +318,7 @@ System.prototype.getBoostEffectElements = function(table){
 			if (this.boostEffect[i].value > 0 && this.boostEffect[i].value < 1){
 				mod = "+";
 			}
-			var html = this.boostEffect[i].type + ": " + mod + (this.boostEffect[i].value*100) + "%";
+			var html = this.boostEffect[i].type + ": " + mod + (this.boostEffect[i].value) + "%";
 		}
 		$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).html(html)));
 	}
@@ -839,7 +839,7 @@ System.prototype.getExtraOutput = function(){
 			}
 		}
 	}
-	return Math.floor(extra);
+	return Math.floor(extra/100);
 }
 
 System.prototype.getPowerReq = function(){
@@ -981,8 +981,8 @@ System.prototype.getOutputReduction = function(){
 }
 
 PrimarySystem.prototype.getOutputString = function(){
-	var effect = 100-this.getOutputCrits();
-	return this.output + " + " + Math.floor(this.getExtraOutput()*effect) + " - " + this.getOutputReduction();
+	var effect = 100  + this.getOutputCrits();
+	return this.output + " + " + Math.floor(this.getExtraOutput()/100*effect) + " - " + this.getOutputReduction();
 }
 
 PrimarySystem.prototype.getBoostCostIncrease = function(){

@@ -1783,8 +1783,8 @@ function Game(data, userid){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].ship){
 				minX = Math.min(minX, this.ships[i].x);
-				minY = Math.min(minY, this.ships[i].y);
 				maxX = Math.max(maxX, this.ships[i].x);
+				minY = Math.min(minY, this.ships[i].y);
 				maxY = Math.max(maxY, this.ships[i].y);
 			}
 		}
@@ -1797,7 +1797,7 @@ function Game(data, userid){
 
 		if (distX > res.x){
 			cam.setZoom(res.x/distX / 1.3);
-		} else if (distX > res.y){
+		} else if (distY > res.y){
 			cam.setZoom(res.y/distY / 1.3);
 		}
 

@@ -186,12 +186,12 @@ function setFPS(fps){
 	window.fpsTicks = 1000 / fps;
 }
 
+
+
 function initiateUnit(data){
-	switch (data.unitType){
-		case "Ship": return window.initiateShip(data);
-		case "Flight": return window.initiateFlight(data);
-		case "Salvo": return window.initiateSalvo(data);
-	}
+	if (data.ship){return window.initiateShip(data);}
+	else if (data.flight){return window.initiateFlight(data);}
+	else if (data.salvo){return window.initiateSalvo(data);}
 }
 
 function initiateSalvo(data){

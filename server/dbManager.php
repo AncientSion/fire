@@ -230,15 +230,16 @@
 			//Debug::log("insertReinforcements: ".sizeof($data));
 			$stmt = $this->connection->prepare("
 				INSERT INTO units 
-					(gameid, userid, ship, ball, name, status, available, destroyed, angle)
+					(gameid, userid, ship, ball, name, status, available, destroyed, angle, turn, phase)
 				VALUES
-					(:gameid, :userid, :ship, :ball, :name, :status, :available, :destroyed, :angle)
+					(:gameid, :userid, :ship, :ball, :name, :status, :available, :destroyed, :angle, :turn, :phase)
 			");
 
 			$ship = 1;
 			$ball = 0;
 			$status = "reinforce";
 			$destroyed = 0;
+			$phase = -2;
 
 
 			for ($i = 0; $i < sizeof($data); $i++){
@@ -251,6 +252,8 @@
 				$stmt->bindValue(":available", $data[$i]["eta"]);
 				$stmt->bindParam(":destroyed", $destroyed);
 				$stmt->bindParam(":angle", $data[$i]["cost"]);
+				$stmt->bindParam(":turn", $data[$i]["turn"]);
+				$stmt->bindParam(":phase", $phase);
 				$stmt->execute();
 
 				if ($stmt->errorCode() == 0){
@@ -622,9 +625,9 @@
 
 					while ($do){
 						$valid = 1;
-						$width = 300;
+						$width = 100;
 						$height = 600;
-						$dist = 400;
+						$dist = 600;
 						$x = mt_rand(-($dist+$width), -$dist) * (1-$i*2);
 						$y = mt_rand(-$height, $height) * (1-$i*2);
 						$s = ceil(($unit->size*1.3)/2);
@@ -723,22 +726,28 @@
 				UPDATE units
 				SET status = :status,
 					available = :available,
-					angle = :angle
+					angle = :angle,
+					turn = :turn,
+					phase = :phase
 				WHERE id = :id
 			");
 
 			for ($i = 0; $i < sizeof($picks); $i++){
 				$status = "bought";
 				$angle = 0;
+				$turn = 0;
 				$picks[$i]["actions"][0]["turn"] = $picks[$i]["available"];
 				$cost += $picks[$i]["cost"];
+				$phase = -1;
 
 				Debug::log("id: ".$picks[$i]["id"]);
 
-				$stmt->bindParam("id", $picks[$i]["id"]);
-				$stmt->bindParam("status", $status);
-				$stmt->bindParam("available", $picks[$i]["available"]);
-				$stmt->bindParam("angle", $angle);
+				$stmt->bindParam(":id", $picks[$i]["id"]);
+				$stmt->bindParam(":status", $status);
+				$stmt->bindParam(":available", $picks[$i]["available"]);
+				$stmt->bindParam(":angle", $angle);
+				$stmt->bindParam(":turn", $turn);
+				$stmt->bindParam(":phase", $phase);
 
 				$stmt->execute();
 				if ($stmt->errorCode == 0){
@@ -753,11 +762,27 @@
 			//$this->insertUnits($userid, $gameid, $ships);
 		}
 
-		public function deleteReinforcements($units){
-			for ($i = 0; $i < sizeof($units); $i++){
-				$sql = "DELETE FROM reinforcements WHERE id = ".$units[$i]["id"];
-				$this->delete($sql);
+		public function deleteReinforcements($data){
+
+			$stmt = $this->connection->prepare("
+				DELETE FROM units WHERE id = :id
+			");
+
+			for ($i = 0; $i < sizeof($data); $i++){
+				$stmt->bindParam(":id", $data[$i]);
+				$stmt->execute();
 			}
+
+			$stmt = $this->connection->prepare("
+				DELETE FROM loads WHERE shipid = :shipid
+			");
+
+			for ($i = 0; $i < sizeof($data); $i++){
+				$stmt->bindParam(":shipid", $data[$i]);
+				$stmt->execute();
+			}
+
+			return;
 		}
 
 		public function deployShipsDB($gameid, $ships){
@@ -1672,6 +1697,7 @@
 				WHERE gameid = :gameid
 				AND destroyed = 0
 				AND available <= :turn
+				AND phase > -2
 				ORDER BY userid ASC
 			");
 			

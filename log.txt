@@ -1,36 +1,18 @@
-requestShipsDB, s: 1, turn: 2
-id: 104
-insertClientActions s: 1
 doAdvance for game1 from phase -1 to phase 0
 initBallistics
-handleDeploymentActions #102
-handleDeploymentActions #103
+skipping
+DB updateBallisticFireOrder, s: 3
+DB insertUnits: 2
+insertSubUnits
+insertMissions s: 2
+insertClientActions s: 2
+handleDeploymentActions #22
+handleDeploymentActions #23
 resolveDeployActions s: 2
 handleJumpActions
-jumpin: #102, class: Omega, size: 100, sensor: 800, ordered to: -388/-397, shiftPotential: 62.5%
-Omega, aShift: 63°, pShift: 125px
---> aShift: 46°, psShift: -57/-10 (58px)
-jumpin: #103, class: Olympus, size: 45, sensor: 600, ordered to: 202/-249, shiftPotential: 37.5%
-Olympus, aShift: 38°, pShift: 75px
---> aShift: -18°, psShift: -2/-38 (39px)
 assembleEndStates
-getDeployState for Omega #102 current facing 0, now: 46
-getDeployState for Olympus #103 current facing 0, now: 342
-advancing game state time: 0.055 seconds.
-requestShipsDB, s: 2, turn: 2
-id: 102
-id: 103
+advancing game state time: 0.198 seconds.
 insertClientActions s: 2
-requestShipsDB, s: 1, turn: 2
-id: 104
-insertClientActions s: 1
-doAdvance for game1 from phase -1 to phase 0
-initBallistics
-resolveDeployActions s: 0
-handleJumpActions
-assembleEndStates
-advancing game state time: 0.019 seconds.
-insertClientActions s: 1
 insertClientActions s: 1
 doAdvance for game1 from phase 0 to phase 1
 handleMovementPhase
@@ -38,24 +20,37 @@ handleShipMovement
 resolveUnitMovementDB
 handleMixedMovement
 handleMixedMovement
+Handling mixed #22
+STRIKE
+close in
+adding move to target #3 => -288/333
+Handling mixed #23
+STRIKE
+close in
+adding move to target #3 => -347/150
 updateMissionState
-advancing game state time: 0.032 seconds.
+advancing game state time: 0.074 seconds.
 doAdvance for game1 from phase 2 to phase 3
+resolveFireOrder - ID 8, shooter: Olympus #1 vs Sharlin #3, w: MediumLaser #8, shots: 1
+weapon id: 8, RANGE LOSS mod: 100
+resolveFireOrder - ID 9, shooter: Olympus #2 vs Sharlin #3, w: MediumLaser #8, shots: 1
+weapon id: 8, RANGE LOSS mod: 100
+MediumLaser, weapon id: 8, DAMAGE mod: 0 (crits: 0, boost: 0)
+MediumLaser, weapon id: 8, RANGE DMG mod: 0.898
+fire #9, doDamage, weapon: MediumLaser, target: 3 for 103 dmg
+hitting ---  Primary: 34 dmg,  FusionCannon: 34 dmg,  Primary: 34 dmg, 
 resolveBallisticFireOrders
-cleanFireOrders, fires: 0
-DB updateFireOrders: 0
-notes: wPen;p;
-notes: wPen;
-notes: wPen;p;
-notes: mPen;p;
-notes: mPen;
-notes: wPen;p;
- => DB insertDamageEntries: 6
- => DB insertCritEntries: 0
-handleFiringPhase time: 0.03 seconds.
-advancing game state time: 0.041 seconds.
+cleanFireOrders, fires: 2
+DB updateFireOrders: 2
+determineCrit for 42mm Fusion Cannon #25 on unit #3, dmg: 31%
+applying crit: Damage / 10
+notes: pen;
+ => DB insertDamageEntries: 3
+ => DB insertCritEntries: 1
+handleFiringPhase time: 0.082 seconds.
+advancing game state time: 0.102 seconds.
 doAdvance for game1 from phase 3 to phase 4
 endTurn
 destroyUnitsDB
 assembleEndStates
-advancing game state time: 0.103 seconds.
+advancing game state time: 0.12 seconds.

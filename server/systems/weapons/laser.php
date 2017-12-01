@@ -216,8 +216,8 @@ class NeutronLaser extends Laser {
 	public $beamWidth = 2;
 	public $minDmg = 95;
 	public $maxDmg = 130;
-	public $optRange = 1000;
-	public $dmgLoss = 3;
+	public $optRange = 800;
+	public $dmgLoss = 2;
 	public $accDecay = 50;
 	public $shots = 1;
 	public $reload = 2;
