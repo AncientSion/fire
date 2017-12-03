@@ -180,6 +180,7 @@ class Single {
 	public $start = 0;
 	public $end = 360;
 	public $ep = 0;
+	public $damaged = 0;
 
 	function __construct($id, $parentId){
 		$this->id = $id;
@@ -206,6 +207,14 @@ class Single {
 			}
 		}
 		return false;
+	}
+
+	public function addDamage($dmg){
+		$this->damaged = 1;
+		$this->damages[] = $dmg;
+		if ($dmg->destroyed){
+			$this->destroyed = true;
+		}
 	}
 
 	public function getRemainingIntegrity(){

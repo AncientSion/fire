@@ -4,13 +4,13 @@ class Darkner extends Light {
 	public $name = "Darkner";
 	public $display = "Darkner";
 	public $faction = "Centauri Republic";
-	public $size = 50;
+	public $size =  50;
 	public static $value = 420;
 	public $profile = array(0.93, 1.07);
 	public $mass = 2000;
 
-	function __construct($id, $userid, $available, $status, $destroyed){		
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
 	}
 
 	public function addStructures(){

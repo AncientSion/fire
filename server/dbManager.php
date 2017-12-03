@@ -223,16 +223,16 @@
 
 			if ($result){
 				return $result;
-			} else return null;
+			}
 		}
 
 		public function insertReinforcements($gameid, $data){
 			//Debug::log("insertReinforcements: ".sizeof($data));
 			$stmt = $this->connection->prepare("
 				INSERT INTO units 
-					(gameid, userid, ship, ball, name, status, available, destroyed, angle, turn, phase)
+					(gameid, userid, ship, ball, name, display, status, available, destroyed, facing, turn, phase)
 				VALUES
-					(:gameid, :userid, :ship, :ball, :name, :status, :available, :destroyed, :angle, :turn, :phase)
+					(:gameid, :userid, :ship, :ball, :name, :display, :status, :available, :destroyed, :facing, :turn, :phase)
 			");
 
 			$ship = 1;
@@ -248,10 +248,11 @@
 				$stmt->bindParam(":ship", $ship);
 				$stmt->bindParam(":ball", $ball);
 				$stmt->bindParam(":name", $data[$i]["name"]);
+				$stmt->bindParam(":display", $data[$i]["display"]);
 				$stmt->bindParam(":status", $status);
 				$stmt->bindValue(":available", $data[$i]["eta"]);
 				$stmt->bindParam(":destroyed", $destroyed);
-				$stmt->bindParam(":angle", $data[$i]["cost"]);
+				$stmt->bindParam(":facing", $data[$i]["cost"]);
 				$stmt->bindParam(":turn", $data[$i]["turn"]);
 				$stmt->bindParam(":phase", $phase);
 				$stmt->execute();
@@ -726,7 +727,7 @@
 				UPDATE units
 				SET status = :status,
 					available = :available,
-					angle = :angle,
+					facing = :facing,
 					turn = :turn,
 					phase = :phase
 				WHERE id = :id
@@ -734,7 +735,7 @@
 
 			for ($i = 0; $i < sizeof($picks); $i++){
 				$status = "bought";
-				$angle = 0;
+				$facing = 0;
 				$turn = 0;
 				$picks[$i]["actions"][0]["turn"] = $picks[$i]["available"];
 				$cost += $picks[$i]["cost"];
@@ -745,7 +746,7 @@
 				$stmt->bindParam(":id", $picks[$i]["id"]);
 				$stmt->bindParam(":status", $status);
 				$stmt->bindParam(":available", $picks[$i]["available"]);
-				$stmt->bindParam(":angle", $angle);
+				$stmt->bindParam(":facing", $facing);
 				$stmt->bindParam(":turn", $turn);
 				$stmt->bindParam(":phase", $phase);
 
@@ -763,6 +764,7 @@
 		}
 
 		public function deleteReinforcements($data){
+			Debug::log("deleteReinforcements: ".sizeof($data));
 
 			$stmt = $this->connection->prepare("
 				DELETE FROM units WHERE id = :id
@@ -896,32 +898,13 @@
 			}
 		}
 
-		public function updateUnitImpulse($data){
-			$stmt = $this->connection->prepare("
-				UPDATE units
-					thrust = :thrust
-				WHERE id = :id
-			");
-
-			for ($i = 0; $i < sizeof($data); $i++){
-				$stmt->bindParam(":thrust", $data[$i]->currentImpulse);
-				$stmt->bindParam(":id", $data[$i]->id);
-				$stmt->execute();
-
-				if ($stmt->errorCode() == 0){
-					continue;
-				}// else var_dump($stmt->errorCode());
-			}	
-			return true;
-		}
-
 		public function updateUnitEndState($states, $turn, $phase){
 			//Debug::log("updateUnitEndState s:".sizeof($states)." ".$turn."/".$phase);
 			$stmt = $this->connection->prepare("
 				UPDATE units
 				SET x = :x,
 					y = :y,
-					angle = :angle,
+					facing = :facing,
 					delay = :delay,
 					thrust = :thrust,
 					turn = :turn,
@@ -934,7 +917,7 @@
 
 				$stmt->bindParam(":x", $states[$i]["x"]);
 				$stmt->bindParam(":y", $states[$i]["y"]);
-				$stmt->bindParam(":angle", $states[$i]["angle"]);
+				$stmt->bindParam(":facing", $states[$i]["facing"]);
 				$stmt->bindParam(":delay", $states[$i]["delay"]);
 				$stmt->bindParam(":thrust", $states[$i]["thrust"]);
 				$stmt->bindParam(":turn", $turn);
@@ -975,7 +958,7 @@
 		}
 
 		public function insertClientActions($units){
-			Debug::log("insertClientActions s: ".sizeof($units));
+			//Debug::log("insertClientActions s: ".sizeof($units));
 			$stmt = $this->connection->prepare("
 				INSERT INTO actions 
 					(shipid, turn, type, dist, x, y, a, cost, delay, costmod, resolved)
@@ -1562,7 +1545,7 @@
 		}
 
 		public function addReinforceValue($userid, $gameid, $add){
-			//Debug::log("addReinforceValue: ".$add);
+			Debug::log("addReinforceValue: ".$add);
 			$stmt = $this->connection->prepare("
 				UPDATE playerstatus 
 				SET	value = value + :add
@@ -1656,15 +1639,6 @@
 		}
 
 		public function getIncomingShips($gameid, $turn){
-		/*	$stmt = $this->connection->prepare("
-				SELECT * FROM units
-				WHERE gameid = :gameid
-				AND available > :turn
-				AND destroyed = 0
-				AND status = 'bought'
-				ORDER BY userid ASC
-			");
-		*/
 			$stmt = $this->connection->prepare("
 				SELECT units.id, units.userid, units.available, units.name, actions.x, actions.y, actions.a FROM units
 				INNER JOIN actions ON

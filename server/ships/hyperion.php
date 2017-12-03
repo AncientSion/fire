@@ -4,13 +4,13 @@ class Hyperion extends Heavy {
 	public $name = "Hyperion";
 	public $display = "Hyperion Light Cruiser";
 	public $faction = "Earth Alliance";
-	public $size = 80;
+	public $size =  80;
 	public static $value = 850;
 	public $profile = array(0.93, 1.07);
-	public $mass = 48000;
+	public $mass = 8000;
 
-	function __construct($id, $userid, $available, $status, $destroyed){
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
 	}
 
 	public function addStructures(){
@@ -19,7 +19,6 @@ class Hyperion extends Heavy {
 		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 17);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new Dual($this->getId(), $this->id, 240, 120, 14, array("LightPulse", "LightParticleBeam"));
-		//$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 35, array("HeavyLaser", "HeavyPulse"));
 		$front->systems[] = new Hangar($this->getId(), $this->id, 330, 30, 400, 10, array("Aurora"), 10);
 		$front->systems[] = new Dual($this->getId(), $this->id, 240, 120, 14, array("LightPulse", "LightParticleBeam"));
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
@@ -54,9 +53,37 @@ class Hyperion extends Heavy {
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1000);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 115);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 115, 240);
-		//$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 115);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 115, 700, 15);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 115, 6);
+	}
+
+
+	static function getKit(){
+		return array(
+			"id" => 0,
+			"name" => "",
+			"cost" => static::$value,
+			"gameid" => 0,
+			"userid" => 0,
+			"upgrades" => 
+			array(
+				array(
+					"active" => 0,
+					"chance" => 65,
+					"name" => "Patrol (Aurora) Outfit",
+					"cost" => 300,
+					"loads" =>
+					array(
+						array(
+							"systemid" => 9,
+							"display" => "Front Main Hangar",
+							"name" => "Aurora",
+							"amount" => 8
+						),
+					)
+				),
+			)
+		);
 	}
 }
 

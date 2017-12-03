@@ -16,23 +16,18 @@
 #popupWrapper {
 	display: none;
 	position: absolute;
-	left: 500px;
-	top: 300px;
+	left: 400px;
+	top: 200px;
 	background-color: black;
 	border-radius: 5px;
 	border: 5px solid red;
-	padding: 20px;
-	width: 400px;
+	padding: 10px;
 	z-index: 20;
 }
 
 #popupText {
 	margin: auto;
 	text-align: center;
-	width: 90%;
-	left: 500px;
-	top: 500px;
-	background-color: black;
 	border-radius: 5px;
 	color: white;
 	font-size: 20px;
@@ -41,24 +36,18 @@
 #instructWrapper {
 	display: none;
 	position: absolute;
-	left: 500px;
-	top: 300px;
+	left: 400px;
+	top: 500px;
 	background-color: black;
 	border-radius: 5px;
 	border: 5px solid #27e627;
-	padding: 20px;
-	width: 400px;
-	height: 70px;
+	padding: 10px;
 	z-index: 20;
 }
 
 #instructText {
 	margin: auto;
 	text-align: center;
-	width: 80%;
-	left: 500px;
-	top: 500px;
-	background-color: black;
 	border-radius: 5px;
 	color: white;
 	font-size: 20px;

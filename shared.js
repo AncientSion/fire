@@ -397,7 +397,7 @@ $(document).ready(function(){
         $handle
             .css('cursor', options.cursor)
             .on("mousedown", function(e){
-
+            	if (e.button == 2){return;}
                 e.preventDefault();
                 e.stopPropagation();
 
@@ -513,7 +513,7 @@ function handleMouseOut(e){
 function sensorEvent(isClick, ship, loc, facing, d, a){
 	var sensor = ship.getActiveSensor();
 	var str = sensor.getOutput();
-		d = Math.min(str*1.25, d);
+		d = Math.min(str*2, d);
 	var	w = Math.min(180, Math.round(game.const.ew.len * Math.pow(str/d, game.const.ew.p)));
 	if (w == 180){
 		a = -1;

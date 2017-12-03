@@ -4,13 +4,13 @@ class Artemis extends Medium {
 	public $name = "Artemis";
 	public $display = "Artemis";
 	public $faction = "Earth Alliance";
-	public $size = 50;
+	public $size =  50;
 	public static $value = 490;
 	public $profile = array(0.93, 1.07);
 	public $mass = 3500;
 
-	function __construct($id, $userid, $available, $status, $destroyed){		
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
 	}
 
 	public function addStructures(){
@@ -18,7 +18,7 @@ class Artemis extends Medium {
 
 		$front = new Structure($this->getId(), $this->id, 315, 45, 450, 13);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new LightLaser($this->getId(), $this->id, 315, 45);
+		$front->systems[] = new HeavyRailGun($this->getId(), $this->id, 315, 45);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 

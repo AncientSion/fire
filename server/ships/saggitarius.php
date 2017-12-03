@@ -4,13 +4,13 @@ class Saggitarius extends Medium {
 	public $name = "Saggitarius";
 	public $display = "Saggitarius Missile Destroyer";
 	public $faction = "Earth Alliance";
-	public $size = 60;
+	public $size =  60;
 	public static $value = 400;
 	public $profile = array(0.90, 1.10);
 	public $mass = 4500;
 
-	function __construct($id, $userid, $available, $status, $destroyed){
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
 	}
 
 	public function addStructures(){

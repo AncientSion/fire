@@ -4,13 +4,13 @@ class Haven extends SuperLight {
 	public $name = "Haven";
 	public $display = "Haven";
 	public $faction = "Centauri Republic";
-	public $size = 35;
+	public $size =  35;
 	public static $value = 240;
 	public $profile = array(0.9, 1.1);
 	public $mass = 750;
 
-	function __construct($id, $userid, $available, $status, $destroyed){
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
 	}
 
 	public function addStructures(){

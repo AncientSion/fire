@@ -4,13 +4,13 @@ class WhiteStar extends Light {
 	public $name = "WhiteStar";
 	public $display = "White Star";
 	public $faction = "Minbari Federation";
-	public $size = 50;
+	public $size =  50;
 	public static $value = 600;
 	public $profile = array(0.95, 1.05);
 	public $mass = 2500;
 
-	function __construct($id, $userid, $available, $status, $destroyed){		
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
 	}
 
 	public function addStructures(){

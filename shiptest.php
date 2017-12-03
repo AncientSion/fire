@@ -38,7 +38,6 @@
 				$ep = $ships[$i]->getEP();
 
 				echo "<table class='unitTest'><tr><th colSpan=2 style='width: 80%'>".$ships[$i]->name."</th></tr>";
-				echo "<tr><td colSpan=2>".($ships[$i]->shipType)."</td></tr>";
 				echo "<tr><td style='text-align: left'>Mass</td><td style='text-align: right'>".($mass)."</td></tr>";
 				echo "<tr><td style='text-align: left'>Main HP</td><td style='text-align: right'>".($ships[$i]->primary->integrity)."</td></tr>";
 				echo "<tr><td style='text-align: left'>Total Extra Internal HP </td><td style='text-align: right'>".($ships[$i]->getInternals())."</td></tr>";

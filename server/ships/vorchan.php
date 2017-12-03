@@ -4,13 +4,13 @@ class Vorchan extends Light {
 	public $name = "Vorchan";
 	public $display = "Vorchan";
 	public $faction = "Centauri Republic";
-	public $size = 35;
+	public $size =  35;
 	public static $value = 360;
 	public $profile = array(0.95, 1.05);
 	public $mass = 1150;
 
-	function __construct($id, $userid, $available, $status, $destroyed){
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
 	}
 
 	public function addStructures(){
@@ -38,9 +38,36 @@ class Vorchan extends Light {
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 340);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 45);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 45, 46);
-		//$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 45);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 45, 650, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 45);
+	}
+
+	static function getKit(){
+		return array(
+			"id" => 0,
+			"name" => "",
+			"cost" => static::$value,
+			"gameid" => 0,
+			"userid" => 0,
+			"upgrades" => 
+			array(
+				array(
+					"active" => 0,
+					"chance" => 80,
+					"cost" => 60,
+					"name" => "Standard Outfit",
+					"loads" => 
+					array(
+						array(
+							"systemid" => 7,
+							"display" => "Front Missile Launcher",
+							"name" => "Hasta",
+							"amount" => 5
+						)
+					)
+				)
+			)
+		);
 	}
 }
 

@@ -4,13 +4,13 @@ class Sharlin extends UltraHeavy {
 	public $name = "Sharlin";
 	public $display = "Sharlin";
 	public $faction = "Minbari Federation";
-	public $size = 120;
+	public $size =  120;
 	public static $value = 2000;
 	public $profile = array(0.90, 1.1);
 	public $mass = 20000;
 
-	function __construct($id, $userid, $available, $status, $destroyed){
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
 	}
 
 	public function addStructures(){

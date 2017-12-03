@@ -12,8 +12,8 @@ class Flight extends Mixed {
 	public $fSize = 15;
 	public $traverse = -4;
 
-	function __construct($id, $userid, $available, $status, $destroyed){		
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
 	}
 
 	public function setMass(){

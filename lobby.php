@@ -211,12 +211,12 @@ else {
 								</tr>
 								<tr>
 									<td>
-										<input type="form" style="text-align: center" placeholder="Point Value" name="pointValue"></input>		
+										<input type="form" style="text-align: center" value='3000' placeholder="Point Value" name="pointValue"></input>		
 									</td>
 								</tr>
 								<tr>
 									<td>
-										<input type="form" style="text-align: center" placeholder="Reinforce / Turn" name="reinforceValue"></input>		
+										<input type="form" style="text-align: center" value ='100' placeholder="Reinforce / Turn" name="reinforceValue"></input>		
 									</td>
 								</tr>
 								<tr>

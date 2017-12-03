@@ -286,7 +286,7 @@ Flight.prototype.createBaseDiv = function(){
 		.addClass("disabled")
 		.drag()
 		.find(".structContainer")
-			.contextmenu(function(e){e.stopPropagation;})
+			.contextmenu(function(e){e.stopPropagation(); e.preventDefault()})
 			//.addClass("disabled")
 			.end()
 		.contextmenu(function(e){

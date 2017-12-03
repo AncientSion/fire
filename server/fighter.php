@@ -67,7 +67,7 @@ class Thunderbolt extends Fighter {
 	public $name = "Thunderbolt";
 	public $display = "Thunderbolt";
 	public $faction = "Earth Alliance";
-	public $value = 32;
+	public $value = 36;
 	public $mass = 40;
 	public $ep = 110;
 	public $integrity = 29;
@@ -87,7 +87,7 @@ class Sentri extends Fighter {
 	public $name = "Sentri";
 	public $display = "Sentri";
 	public $faction = "Centauri Republic";
-	public $value = 25;
+	public $value = 28;
 	public $mass = 32;
 	public $ep = 115;
 	public $integrity = 24;

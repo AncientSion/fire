@@ -463,7 +463,7 @@ echo "</script>";
 								if ($ship->userid != $manager->userid){continue;}
 								echo "<tr class='requestReinforcements'>";
 								echo "<td><img class='img40' src=shipIcons/".strtolower($ship->name).".png></td>";
-								echo "<td>".$ship->name."</td>";
+								echo "<td>".$ship->name."</br>".$ship->notes."</td>";
 								echo "<td>".($ship->available - $manager->turn)." turn/s</td>";
 								echo "<td class='cost'>".$ship->cost."</td>";
 								echo "</tr>";

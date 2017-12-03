@@ -4,13 +4,13 @@ class Tinashi extends Medium {
 	public $name = "Tinashi";
 	public $display = "Tinashi";
 	public $faction = "Minbari Federation";
-	public $size = 70;
+	public $size =  70;
 	public static $value = 875;
 	public $profile = array(0.9, 1.1);
 	public $mass = 4250;
 
-	function __construct($id, $userid, $available, $status, $destroyed){		
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
 	}
 
 	public function addStructures(){

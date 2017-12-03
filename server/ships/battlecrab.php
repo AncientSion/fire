@@ -4,13 +4,13 @@ class BattleCrab extends SuperHeavy {
 	public $name = "BattleCrab";
 	public $display = "Battlecrab";
 	public $faction = "The Shadows";
-	public $size = 100;
+	public $size =  100;
 	public static $value = 1200;
 	public $profile = array(0.88, 1.12);
 	public $mass = 14500;
 
-	function __construct($id, $userid, $available, $status, $destroyed){
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
 	}
 
 	public function addStructures(){

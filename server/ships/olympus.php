@@ -4,13 +4,13 @@ class Olympus extends Medium {
 	public $name = "Olympus";
 	public $display = "Olympus";
 	public $faction = "Earth Alliance";
-	public $size = 45;
+	public $size =  45;
 	public static $value = 410;
 	public $profile = array(0.94, 1.06);
 	public $mass = 2500;
 
-	function __construct($id, $userid, $available, $status, $destroyed){		
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
 	}
 
 	public function addStructures(){
@@ -51,59 +51,58 @@ class Olympus extends Medium {
 
 	static function getKit(){
 		return array(
-					"id" => 0,
-					"name" => "",
-					"cost" => static::$value,
-					"eta" => 3,
-					"gameid" => 0,
-					"userid" => 0,
-					"upgrades" => 
+			"id" => 0,
+			"name" => "",
+			"cost" => static::$value,
+			"gameid" => 0,
+			"userid" => 0,
+			"upgrades" => 
+			array(
+				array(
+					"active" => 0,
+					"chance" => 60,
+					"cost" => 120,
+					"name" => "Patrol Outfit",
+					"loads" => 
+					array(
 						array(
-							array(
-								"active" => 0,
-								"chance" => 50,
-								"cost" => 120,
-								"name" => "Patrol Outfit",
-								"loads" => 
-									array(
-										array(
-											"systemid" => 12,
-											"display" => "Port Missile Launcher",
-											"name" => "Naga",
-											"amount" => 6
-										),
-										array(
-											"systemid" => 15,
-											"display" => "Starboard Missile Launcher",
-											"name" => "Naga",
-											"amount" => 6
-										)
-								)
-							),
-							array(
-								"active" => 0,
-								"chance" => 20,
-								"cost" => 70,
-								"name" => "Escort Outfit",
-								"loads" => 
-									array(
-										array(
-											"systemid" => 12,
-											"display" => "Port Missile Launcher",
-											"name" => "Needle",
-											"amount" => 6
-										),
-										array(
-											"systemid" => 15,
-											"display" => "Starboard Missile Launcher",
-											"name" => "Needle",
-											"amount" => 6
-										)
-								)
-							)
+							"systemid" => 12,
+							"display" => "Port Missile Launcher",
+							"name" => "Naga",
+							"amount" => 6
+						),
+						array(
+							"systemid" => 15,
+							"display" => "Starboard Missile Launcher",
+							"name" => "Naga",
+							"amount" => 6
 						)
-				);
-		}
+					)
+				),
+				array(
+					"active" => 0,
+					"chance" => 30,
+					"cost" => 70,
+					"name" => "Escort Outfit",
+					"loads" => 
+					array(
+						array(
+							"systemid" => 12,
+							"display" => "Port Missile Launcher",
+							"name" => "Needle",
+							"amount" => 6
+						),
+						array(
+							"systemid" => 15,
+							"display" => "Starboard Missile Launcher",
+							"name" => "Needle",
+							"amount" => 6
+						)
+					)
+				)
+			)
+		);
+	}
 }
 
 ?>

@@ -38,7 +38,7 @@ class PrimarySystem extends System {
 		$dmg = round($new / $this->integrity * 100);
 		//$possible = $this->getValidEffects();
 
-		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", dmg: ".$dmg);
+		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", newDmg: ".$dmg.", old: ".$old);
 
 		if ($dmg > 50 && mt_rand(0, 100) < $dmg){
 			Debug::log("critical hit, disabling primary system ".get_class($this));

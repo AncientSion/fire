@@ -9,12 +9,18 @@ class Mixed extends Ship {
 	public $profile = 0;
 	public $mission = array();
 
-	function __construct($id, $userid, $available, $status, $destroyed){
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
 		$this->id = $id;
 		$this->userid = $userid;
 		$this->available = $available;
 		$this->status = $status;
 		$this->destroyed = $destroyed;
+		$this->x = $x;
+		$this->y = $y;
+		$this->facing = $facing;
+		$this->remainingDelay = $delay;
+		$this->currentImpulse = $thrust;
+		$this->notes = $notes;
 	}
 
 	public function setProps($turn, $phase){
@@ -59,6 +65,21 @@ class Mixed extends Ship {
 		return true;
 	}
 
+	public function getNewDamages($turn){
+		$dmgs = array();
+		if (!$this->damaged){return $dmgs;}
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if (!$this->structures[$i]->damaged){continue;}
+			for ($j = 0; $j < sizeof($this->structures[$i]->damages); $j++){
+				if ($this->structures[$i]->damages[$j]->new){
+					$dmgs[] = $this->structures[$i]->damages[$j];
+				}
+			}
+		}
+		return $dmgs;
+	}
+
 	public function getNewCrits($turn){
 		$crits = array();
 		if (!$this->damaged){return $crits;}
@@ -77,26 +98,27 @@ class Mixed extends Ship {
 		return false;
 	}
 
+	public function hidePowers($turn){
+		for ($j = 0; $j < sizeof($this->structures); $j++){
+			for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
+				for ($l = sizeof($this->structures[$j]->systems[$k]->powers)-1; $l >= 0; $l--){
+					if ($this->structures[$j]->systems[$k]->powers[$l]->turn == $turn){
+						if ($this->structures[$j]->systems[$k]->powers[$l]->type == 0){
+							$this->structures[$j]->systems[$k]->disabled = 0;
+						}
+						array_splice($this->structures[$j]->systems[$k]->powers, $l, 1);
+					} else break;
+				}
+			}
+		}
+	}
+
 	public function getStruct($id){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->id == $id){
 				return $this->structures[$i];
 			}
 		}
-	}
-
-	public function addDamageDB($damages){
-		for ($j = 0; $j < sizeof($damages); $j++){
-			if ($this->id == $damages[$j]->shipid){
-				for ($k = 0; $k < sizeof($this->structures); $k++){
-					if ($this->structures[$k]->id == $damages[$j]->systemid){
-						$this->structures[$k]->damages[] = $damages[$j];
-						break;
-					}
-				}
-			}
-		}
-		return true;
 	}
 
 	public function addCritDB($crits){
@@ -115,13 +137,11 @@ class Mixed extends Ship {
 		$this->damaged = 1;
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->id == $dmg->systemid){
-				$this->structures[$i]->damages[] = $dmg;
-				if ($dmg->destroyed){
-					$this->structures[$i]->destroyed = true;
-				}
+				$this->structures[$i]->addDamage($dmg);
 				return;
 			}
 		}
+		Debug::log("UNABLE TO APPLY DMG on #".$this->id);
 	}
 	public function setupForDamage($turn){
 		return;
@@ -350,18 +370,18 @@ class Mixed extends Ship {
 
 	public function getMoveState($turn){
 		//Debug::log("getMoveState for ".$this->id);
-		$angle = $this->actions[sizeof($this->actions)-1]->a;
+		$facing = $this->actions[sizeof($this->actions)-1]->a;
 
-		if ($angle > 360){
-			$angle -= 360;
+		if ($facing > 360){
+			$facing -= 360;
 		}
-		else if ($angle < 0){
-			$angle += 360;
+		else if ($facing < 0){
+			$facing += 360;
 		}
 
 		//Debug::log("getMoveState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$angle);
 
-		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $this->remainingDelay, "angle" => $angle, "thrust" => $this->currentImpulse);
+		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $this->remainingDelay, "facing" => $facing, "thrust" => $this->currentImpulse);
 	}
 }
 

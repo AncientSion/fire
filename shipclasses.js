@@ -1,9 +1,10 @@
 function Ship(data){
-	//id, name, shipType, x, y, facing, faction, mass, cost, profile, size, userid, available, baseHitChance, baseImpulse
+	//id, name, x, y, facing, faction, mass, cost, profile, size, userid, available, baseHitChance, baseImpulse
 
 	this.id = data.id;
 	this.name = data.name;
-	this.shipType = data.shipType;
+	this.display = data.display;
+	this.notes = data.notes;
 	this.x = data.x || 0;
 	this.y = data.y || 0;
 	this.facing = data.facing || 0;
@@ -14,14 +15,12 @@ function Ship(data){
 	this.size = Math.floor(data.size/2);
 	this.size = data.size;
 	this.userid = data.userid;
-	this.shipType = data.shipType;
 	this.available = data.available;
 	this.baseHitChance = data.baseHitChance || 0;
 	this.baseImpulse = data.baseImpulse || 0;
 	this.traverse = data.traverse;
 	this.status = data.status;
 	this.actions = data.actions || [];
-	//his.cc = data.cc || [];
 	this.cc = [];
 	this.mapSelect = 1;
 
@@ -1633,6 +1632,7 @@ Ship.prototype.setPreMovePosition = function(){
 }
 
 Ship.prototype.setPostMovePosition = function(){
+	//this.setPreMovePosition(); return;
 	this.drawX = this.actions[this.actions.length-1].x;
 	this.drawY = this.actions[this.actions.length-1].y;
 }
@@ -2348,7 +2348,7 @@ Ship.prototype.createBaseDiv = function(){
 		//.addClass("disabled")
 		.drag()
 		.find(".structContainer")
-			.contextmenu(function(e){e.stopPropagation;})
+			.contextmenu(function(e){e.stopPropagation(); e.preventDefault()})
 			.end()
 		.find(".header")
 			.contextmenu(function(e){

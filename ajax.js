@@ -1,5 +1,24 @@
 window.ajax = {
 
+	getGameData: function(gameid, userid){
+		$.ajax({
+			type: "GET",
+			url: "game.php",
+			datatype: "json",
+			data: {
+					type: "gamedata",
+					gameid: gameid,
+					userid: userid
+					},
+			success: function(data){
+				console.log("success");
+				game = new Game(data, userid);
+				game.create();
+			},
+			error: ajax.error,
+		});
+	},
+
 	createGame: function(name, callback){
 		$.ajax({
 			type: "POST",

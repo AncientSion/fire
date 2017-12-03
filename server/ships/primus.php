@@ -4,13 +4,13 @@ class Primus extends SuperHeavy {
 	public $name = "Primus";
 	public $display = "Primus";
 	public $faction = "Centauri Republic";
-	public $size = 100;
+	public $size =  100;
 	public static $value = 1080;
 	public $profile = array(0.92, 1.08);
 	public $mass = 12500;
 
-	function __construct($id, $userid, $available, $status, $destroyed){
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
 	}
 
 	public function addStructures(){
@@ -53,10 +53,62 @@ class Primus extends SuperHeavy {
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1350);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 160);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 160, 500);
-		//$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 160);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 160, 900, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 160);
     }
+
+	static function getKit(){
+		return array(
+			"id" => 0,
+			"name" => "",
+			"cost" => static::$value,
+			"gameid" => 0,
+			"userid" => 0,
+			"upgrades" => 
+			array(
+				array(
+					"active" => 0,
+					"chance" => 40,
+					"name" => "Patrol (Sentri) Outfit",
+					"cost" => 275,
+					"loads" =>
+					array(
+						array(
+							"systemid" => 16,
+							"name" => "Sentri",
+							"amount" => 5
+						),
+						array(
+							"systemid" => 25,
+							"name" => "Sentri",
+							"amount" => 5
+						),
+					)
+				),
+				array(
+					"active" => 0,
+					"chance" => 20,
+					"name" => "War (Combined) Outfit",
+					"cost" => 450,
+					"loads" =>
+					array(
+						array(
+							"systemid" => 16,
+							"name" => "Sentri",
+							"amount" => 9
+						),
+						array(
+							"systemid" => 25,
+							"name" => "Sitara",
+							"amount" => 9
+						),
+					)
+				),
+			)
+		);
+	}
+
+
 }
 
 ?>

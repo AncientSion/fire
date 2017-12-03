@@ -222,7 +222,7 @@ function Game(data, userid){
 
 		if (t && t instanceof Ship && o.x == dest.x && o.y == dest.y){
 			mission.arrived = game.turn-1;
-			mission.turn = game.turn-1;
+			//mission.turn = game.turn-1;
 			if (t.ship){
 				s.doDraw = 0;
 			}
@@ -297,7 +297,7 @@ function Game(data, userid){
 		}
 
 		var flight = new Flight(
-			{id: -this.ships.length-20, name: "Flight", shipType: "Flight", mission: mission,
+			{id: -this.ships.length-20, name: "Flight", mission: mission,
 			x: p.x, y: p.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, currentImpulse: 0, fSize: 15, baseSize: 25, unitSize: 4, userid: this.userid, available: this.turn}
 		);
 
@@ -816,9 +816,6 @@ function Game(data, userid){
 		}
 		
 		if (!game.animShip && !game.animFlight && game.animSalvo){
-			for (var i = 0; i < this.ships.length; i++){
-				this.ships[i].cc = [];
-			}
 			game.setlastPosCC()
 			for (var i = 0; i < this.ships.length; i++){
 				this.ships[i].setSupportImage();
@@ -1138,22 +1135,9 @@ function Game(data, userid){
 	}
 
 	this.setlastPosCC = function(){
-		/*
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].ship){continue;}
-			var a = this.ships[i].getPlannedPos();
-			for (var j = i+1; j < this.ships.length; j++){
-				if (this.ships[j].ship){continue;}
-				var b = this.ships[j].getPlannedPos();
-
-				if (a.x == b.x && a.y == b.y){
-					this.ships[i].cc.push(this.ships[j].id);
-					this.ships[j].cc.push(this.ships[i].id);
-				}
-			}
+			this.ships[i].cc = [];
 		}
-		return;
-		*/
 
 		for (var i = 0; i < this.ships.length; i++){
 			var a = this.ships[i].getDrawPos();

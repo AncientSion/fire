@@ -4,13 +4,13 @@ class Altarian extends Medium {
 	public $name = "Altarian";
 	public $display = "Altarian";
 	public $faction = "Centauri Republic";
-	public $size = 55;
+	public $size =  55;
 	public static $value = 525;
 	public $profile = array(0.93, 1.07);
 	public $mass = 4250;
 
-	function __construct($id, $userid, $available, $status, $destroyed){		
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
 	}
 
 	public function addStructures(){
@@ -47,10 +47,57 @@ class Altarian extends Medium {
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 700);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 100);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 100, 150);
-		//$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 100);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 100, 750, 10);
-		//$this->primary->systems[] = new Sensor($this->getId(), $this->id, 90, 750, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 100);
+	}
+
+	static function getKit(){
+		return array(
+			"id" => 0,
+			"name" => "",
+			"cost" => static::$value,
+			"gameid" => 0,
+			"userid" => 0,
+			"upgrades" => 
+			array(
+				array(
+					"active" => 0,
+					"chance" => 40,
+					"name" => "Patrol (Sentri) Outfit",
+					"cost" => 175,
+					"loads" =>
+					array(
+						array(
+							"systemid" => 15,
+							"display" => "Aft Main Hangar",
+							"name" => "Sentri",
+							"amount" => 8
+						),
+					)
+				),
+				array(
+					"active" => 0,
+					"chance" => 20,
+					"name" => "Raid (Sentri/Sitara) Outfit",
+					"cost" => 175,
+					"loads" =>
+					array(
+						array(
+							"systemid" => 15,
+							"display" => "Aft Main Hangar",
+							"name" => "Sentri",
+							"amount" => 8
+						),
+						array(
+							"systemid" => 15,
+							"display" => "Aft Main Hangar",
+							"name" => "Sitara",
+							"amount" => 2
+						),
+					)
+				),
+			)
+		);
 	}
 }
 

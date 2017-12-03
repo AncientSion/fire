@@ -69,7 +69,7 @@ class Pulse extends Weapon {
 
 		$entry = new Damage(
 			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
-			$total, $shield, $struct, $armour, $overkill, $negation["stock"], $destroyed, $dmg->notes, 1
+			$total, $shield, $struct, $armour, $overkill, array_sum($negation), $destroyed, $dmg->notes, 1
 		);
 		$fire->target->applyDamage($entry);
 	}

@@ -11,6 +11,9 @@ if (isset($_GET["type"])){
 	if ($_GET["type"] == "chat"){
 		echo JSON_encode($dbManager->getNewChat($_GET["time"]));
 	}
+	else if ($_GET["type"] == "gamedata"){
+		echo JSON_encode($manager->getClientData(), JSON_NUMERIC_CHECK);
+	}
 	else if ($_GET["type"] == "status"){
 		$status = $dbManager->getGameStatus(
 											$_GET["gameid"],

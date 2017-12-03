@@ -20,6 +20,7 @@ class Ship {
 	public $name = "";
 	public $display = "";
 	public $faction = "";
+	public $notes = "";
 	public $size;
 	public static $value;
 	public $cost;
@@ -49,12 +50,18 @@ class Ship {
 	public $damaged = 0;
 	public $moveSet = 0;
 
-	function __construct($id, $userid, $available, $status, $destroyed){
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
 		$this->id = $id;
 		$this->userid = $userid;
 		$this->available = $available;
 		$this->status = $status;
 		$this->destroyed = $destroyed;
+		$this->x = $x;
+		$this->y = $y;
+		$this->facing = $facing;
+		$this->remainingDelay = $delay;
+		$this->currentImpulse = $thrust;
+		$this->notes = $notes;
 
 		$this->addPrimary();
 		$this->addStructures();
@@ -148,14 +155,22 @@ class Ship {
 	}
 
 	public function getImpulseStep(){
-		return floor($this->getBaseImpulse() / 8);
+			return floor($this->getBaseImpulse() / 8);
 	}
 
 	public function hidePowers($turn){
 		for ($j = 0; $j < sizeof($this->structures); $j++){
+			for ($k = sizeof($this->structures[$j]->powers)-1; $k >= 0; $k--){
+				if ($this->structures[$j]->powers[$k]->turn == $turn){
+					array_splice($this->structures[$j]->powers, $k, 1);
+				} else break;
+			}
 			for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
 				for ($l = sizeof($this->structures[$j]->systems[$k]->powers)-1; $l >= 0; $l--){
 					if ($this->structures[$j]->systems[$k]->powers[$l]->turn == $turn){
+						if ($this->structures[$j]->systems[$k]->powers[$l]->type == 0){
+							$this->structures[$j]->systems[$k]->disabled = 0;
+						}
 						array_splice($this->structures[$j]->systems[$k]->powers, $l, 1);
 					} else break;
 				}
@@ -249,57 +264,57 @@ class Ship {
 	}
 
 	public function getDeployState($turn){
-		$angle = $this->facing;
+		$facing = $this->facing;
 
 		for ($i = 0; $i < sizeof($this->actions); $i++){
 			if ($this->actions[$i]->turn < $turn){continue;}
 			if ($turn == 1 && $this->actions[$i]->type == "deploy"){
-				$angle += $this->actions[$i]->a;
+				$facing += $this->actions[$i]->a;
 			}
 			else if ($turn == $this->available && $this->actions[$i]->type == "jump"){
 				//Debug::log("adding ".$this->actions[$i]->a);
-				$angle += $this->actions[$i]->a;
+				$facing += $this->actions[$i]->a;
 			}
 		}
 
-		if ($angle > 360){
-			$angle -= 360;
-		} else if ($angle < 0){
-			$angle += 360;
+		if ($facing > 360){
+			$facing -= 360;
+		} else if ($facing < 0){
+			$facing += 360;
 		}
 
 		//Debug::log("returning data fro getDeployState");
 		//Debug::log("returning total angle: ".$angle);
-		Debug::log("getDeployState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$angle);
+		//Debug::log("getDeployState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$facing);
 		
-		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x , "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $this->remainingDelay, "angle" => $angle, "thrust" => $this->currentImpulse);
+		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x , "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $this->remainingDelay, "facing" => $facing, "thrust" => $this->currentImpulse);
 	}
 
 
 	public function getMoveState($turn){
 		//Debug::log("getMoveState for ".$this->id);
 		$delay = $this->remainingDelay;
-		$angle = $this->facing;
+		$facing = $this->facing;
 		for ($i = 0; $i < sizeof($this->actions); $i++){
 			if ($this->actions[$i]->turn < $turn){continue;}
 			if ($delay && $this->actions[$i]->type == "move"){
 				$delay = max(0, $delay - $this->actions[$i]->dist);
 			} else if ($this->actions[$i]->type == "turn"){
 				$delay += $this->actions[$i]->delay;
-				$angle += $this->actions[$i]->a;
+				$facing += $this->actions[$i]->a;
 			}
 		}
 
-		if ($angle > 360){
-			$angle -= 360;
+		if ($facing > 360){
+			$facing -= 360;
 		}
-		else if ($angle < 0){
-			$angle += 360;
+		else if ($facing < 0){
+			$facing += 360;
 		}
 
-		//Debug::log("getMoveState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$angle);
+		//Debug::log("getMoveState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$facing);
 
-		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "angle" => $angle, "thrust" => $this->currentImpulse);
+		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "facing" => $facing, "thrust" => $this->currentImpulse);
 	}
 
 	public function setRemainingDelay($turn){
@@ -554,7 +569,7 @@ class Ship {
 		for ($i = 0; $i < $fire->shots; $i++){
 			$roll = mt_rand(1, 100);
 			$fire->rolls[] = $roll;
-			$fire->notes .= $roll." ";
+			$fire->notes .= $roll.";";
 		}
 		return true;
 	}
@@ -854,7 +869,7 @@ class Ship {
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if (!$this->structures[$i]->systems[$j]->damaged){continue;}
 				if ($this->structures[$i]->systems[$j]->destroyed){
-					if (mt_rand(1, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn, 0)){
+					if (mt_rand(0, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn, 0)){
 						//Debug::log("adding spike #".$this->id."/".$this->structures[$i]->systems[$j]->id);
 						$spike += $this->structures[$i]->systems[$j]->getPowerUsage($turn);
 						$this->structures[$i]->systems[$j]->damages[sizeof($this->structures[$i]->systems[$j]->damages)-1]->notes .= "p;";
@@ -1059,21 +1074,19 @@ class Ship {
 		$dmgs = array();
 		if (!$this->damaged){return $dmgs;}
 
-		if ($this->ship){
-			if (sizeof($this->primary->damages)){
-				for ($i = 0; $i < sizeof($this->primary->damages); $i++){
-					if ($this->primary->damages[$i]->new){
-						$dmgs[] = $this->primary->damages[$i];
-					}
+		if ($this->primary->damages){
+			for ($i = 0; $i < sizeof($this->primary->damages); $i++){
+				if ($this->primary->damages[$i]->new){
+					$dmgs[] = $this->primary->damages[$i];
 				}
 			}
-
-			for ($i = 0; $i < sizeof($this->primary->systems); $i++){
-				if (!$this->primary->systems[$i]->damaged){continue;}
-				for ($j = 0; $j < sizeof($this->primary->systems[$i]->damages); $j++){
-					if ($this->primary->systems[$i]->damages[$j]->new){
-						$dmgs[] = $this->primary->systems[$i]->damages[$j];
-					}
+		}
+		
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+			if (!$this->primary->systems[$i]->damaged){continue;}
+			for ($j = 0; $j < sizeof($this->primary->systems[$i]->damages); $j++){
+				if ($this->primary->systems[$i]->damages[$j]->new){
+					$dmgs[] = $this->primary->systems[$i]->damages[$j];
 				}
 			}
 		}
@@ -1082,8 +1095,9 @@ class Ship {
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if (!$this->structures[$i]->systems[$j]->damaged){continue;}
 				for ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]->damages); $k++){
-					Debug::log("notes: ".$this->structures[$i]->systems[$j]->damages[$k]->notes);
-					$dmgs[] = $this->structures[$i]->systems[$j]->damages[$k];
+					if ($this->structures[$i]->systems[$j]->damages[$k]->new){
+						$dmgs[] = $this->structures[$i]->systems[$j]->damages[$k];
+					}
 				}
 			}
 		}
@@ -1101,6 +1115,19 @@ class Ship {
 	public function getLockMultiplier(){
 		return 0.5;
 	}
+
+	static function getKit(){
+	return array(
+		"id" => 0,
+		"name" => "",
+		"cost" => static::$value,
+		"gameid" => 0,
+		"userid" => 0,
+		"upgrades" => 
+			array(
+			)
+		);
+	}
 }
 
 
@@ -1108,8 +1135,9 @@ class UltraHeavy extends Ship {
 	public $baseImpulse = 130;
 	public $traverse = 3;
 	
-	function __construct($id, $userid, $available, $status, $destroyed){
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
+
 		$this->hitTable = array(
 			"Bridge" => 0.25,
 			"Engine" => 0.4,
@@ -1124,8 +1152,9 @@ class SuperHeavy extends Ship {
 	public $baseImpulse = 145;
 	public $traverse = 2;
 	
-	function __construct($id, $userid, $available, $status, $destroyed){
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
+
 		$this->hitTable = array(
 			"Bridge" => 0.5,
 			"Engine" => 0.55,
@@ -1140,8 +1169,9 @@ class Heavy extends Ship {
 	public $baseImpulse = 160;
 	public $traverse = 1;
 	
-	function __construct($id, $userid, $available, $status, $destroyed){
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
+
 		$this->hitTable = array(
 			"Bridge" => 0.55,
 			"Engine" => 0.65,
@@ -1156,8 +1186,9 @@ class Medium extends Ship {
 	public $baseImpulse = 175;
 	public $traverse = 0;
 
-	function __construct($id, $userid, $available, $status, $destroyed){
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
+
 		$this->hitTable = array(
 			"Bridge" => 0.65,
 			"Engine" => 0.7,
@@ -1176,8 +1207,9 @@ class Light extends Ship {
 	public $baseImpulse = 190;
 	public $traverse = -1;
 	
-	function __construct($id, $userid, $available, $status, $destroyed){
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
+
 		$this->hitTable = array(
 			"Bridge" => 0.7,
 			"Engine" => 0.8,
@@ -1196,8 +1228,9 @@ class SuperLight extends Ship {
 	public $baseImpulse = 200;
 	public $traverse = -2;
 	
-	function __construct($id, $userid, $available, $status, $destroyed){
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
+
 		$this->hitTable = array(
 			"Bridge" => 0.85,
 			"Engine" => 1,

@@ -153,26 +153,9 @@ function FireOrder(data){
 	this.min;
 	this.max;
 	this.found = false;
-	this.rolls = [];
+	this.rolls = data.notes.slice(0, data.notes.length-1).split(";").map(Number);
 	this.systems = [];
 	this.animating = 0;
-
-	if (data.turn < game.turn){return;}
-	if (typeof data.notes === "string"){
-		if (!data.notes.length || data.notes == "add"){
-			return;
-		}
-		else if (data.notes[0] == " "){
-			data.notes = data.notes.slice(1, data.notes.length);
-		}
-		else if (data.notes[data.notes.length-1] == " "){
-			data.notes = data.notes.slice(0, data.notes.length-1);
-		}
-
-		this.rolls = data.notes.split(' ').map(Number);
-	} else this.rolls.push(data.notes);
-	//console.log(this.rolls);
-
 }
 
 function Damage(data){

@@ -4,13 +4,13 @@ class GQuan extends Heavy {
 	public $name = "GQuan";
 	public $display = "GQuan";
 	public $faction = "Narn Regime";
-	public $size = 80;
+	public $size =  80;
 	public static $value = 875;
 	public $profile = array(0.95, 1.05);
 	public $mass = 8750;
 
-	function __construct($id, $userid, $available, $status, $destroyed){
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
 	}
 
 	public function addStructures(){

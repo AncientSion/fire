@@ -4,13 +4,13 @@ class Demos extends Medium {
 	public $name = "Demos";
 	public $display = "Demos";
 	public $faction = "Centauri Republic";
-	public $size = 50;
+	public $size =  50;
 	public static $value = 450;
 	public $profile = array(0.92, 1.08);
 	public $mass = 3000;
 
-	function __construct($id, $userid, $available, $status, $destroyed){		
-        parent::__construct($id, $userid, $available, $status, $destroyed);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
 	}
 
 	public function addStructures(){
@@ -41,9 +41,36 @@ class Demos extends Medium {
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 575);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 90);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, 90, 120);
-		//$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 90);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 90, 750, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 90);
+	}
+
+	static function getKit(){
+		return array(
+			"id" => 0,
+			"name" => "",
+			"cost" => static::$value,
+			"gameid" => 0,
+			"userid" => 0,
+			"upgrades" => 
+			array(
+				array(
+					"active" => 0,
+					"chance" => 80,
+					"cost" => 60,
+					"name" => "Standard Outfit",
+					"loads" => 
+					array(
+						array(
+							"systemid" => 8,
+							"display" => "Front Missile Launcher",
+							"name" => "Javelin",
+							"amount" => 6
+						)
+					)
+				)
+			)
+		);
 	}
 }
 
