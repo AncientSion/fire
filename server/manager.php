@@ -1069,7 +1069,7 @@ class Manager {
 					$end = Math::addAngle(360 - $w-$ship->getFacing(), $ew->angle);
 				}
 
-				Debug::log("specific EW for ship #".$ship->id."w: ".$w.", facing: ".$ship->getFacing().", EW from ".$start." to ".$end.", dist: ".$ew->dist);
+				Debug::log("specific EW for ship #".$ship->id.", str: ".$str.", facing: ".$ship->getFacing().", w: ".$w.", EW from ".$start." to ".$end.", dist: ".$ew->dist);
 				for ($i = 0; $i < sizeof($this->ships); $i++){
 					$multi = $this->ships[$i]->getLockMultiplier();
 					$skip = 0;

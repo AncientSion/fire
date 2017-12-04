@@ -22,12 +22,12 @@ class PrimarySystem extends System {
 			return 0;
 		}
 
-		$mod = 1;
+		$mod = 100;
 		$mod += $this->getBoostEffect("Output") * $this->getBoostLevel($turn);
 		$mod -= $this->getCritMod("Output", $turn);
 
 		//Debug::log("ship: #".$this->parentId.", output: ".floor($this->output*$mod));
-		return round($this->output * $mod);
+		return round($this->output * $mod/100);
 	}
 
 	public function getCritModMax($dmg){
