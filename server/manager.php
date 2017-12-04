@@ -1117,7 +1117,7 @@ class Manager {
 								}
 							}
 						} else Debug::log("out of arc");
-					} else ("out of dist: ".(Math::getDist2($origin, $dest))." EW: ".$$ew->dist);
+					} else ("out of dist: ".(Math::getDist2($origin, $dest))." EW: ".$ew->dist);
 				}
 			}
 
