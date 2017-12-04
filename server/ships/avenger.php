@@ -7,7 +7,7 @@ class Avenger extends Heavy {
 	public $size =  80;
 	public static $value = 400;
 	public $profile = array(0.91, 1.09);
-	public $mass = 10250;
+	public $mass = 1250;
 
 	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
         parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);

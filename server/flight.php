@@ -60,19 +60,16 @@ class Flight extends Mixed {
 	}
 
 	public function addMissionDB($data, $userid, $turn, $phase){
-		//Debug::log("flight #".$this->id.", data :".sizeof($data));
 		if ($this->userid == $userid){
 			$this->mission = new Mission($data[sizeof($data)-1]);
 		}
 		else if ($phase == -1){
 			for ($i = sizeof($data)-1; $i >= 0; $i--){
-				//if ($data[$i]["turn"] < $turn){
-					$this->mission = new Mission($data[$i]);
-					return;
-				//}
+				if ($data[$i]["turn"] == $turn){continue;}
+				$this->mission = new Mission($data[$i]);
+				return;
 			}
 		} else $this->mission = new Mission($data[sizeof($data)-1]);
-
 	}
 }
 ?>
