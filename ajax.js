@@ -182,7 +182,8 @@ window.ajax = {
 								actions: [ game.ships[i].actions[j] ],
 								id: game.ships[i].id * -1,
 								status: "request",
-								available: game.ships[i].available
+								available: game.ships[i].available,
+								cost: game.ships[i].cost
 							};
 							reinforce.push(ship);
 						}

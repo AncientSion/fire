@@ -192,7 +192,7 @@ function Ship(data){
 			facing = 0 + (180 * (index % 2));
 			this.actions.push(new Move(-1, "deploy", 0, pos.x, pos.y, facing, 0, 0, 1, 1, 0));
 			this.deployed = true;
-			this.facing = facing;
+			//this.facing = facing;
 			this.drawFacing = facing;
 			this.x = pos.x;
 			this.y = pos.y;
@@ -1216,7 +1216,7 @@ function Ship(data){
 			} else if (this.actions[0].a < 0){this.actions[0].a += 360;}
 			console.log(this.actions[0].a);
 			this.drawFacing = this.actions[0].a;
-			this.facing = this.actions[0].a;
+			//this.facing = this.actions[0].a;
 			game.redraw()
 		}
 		else {
@@ -1606,23 +1606,22 @@ Ship.prototype.switchDiv = function(){
 }
 
 Ship.prototype.setPreMoveFacing = function(){
-	if (this.actions.length && this.actions[0].type == "deploy"){
-		this.drawFacing = 0;
-		for (var i = 0; i < Math.min(this.actions.length, 2); i++){
-			this.drawFacing += this.actions[i].a;
+	this.drawFacing = this.facing;
+	if (this.available == game.turn){
+		for (var i = 0; i < this.actions.length; i++){
+			if (this.actions[i].type == "deploy" || this.actions[i].type == "jump"){
+				this.drawFacing += this.actions[i].a;
+			}
 		}
-	}
-	else {
-		this.drawFacing = this.facing;
 	}
 }
 
 Ship.prototype.setPostMoveFacing = function(){
 	this.drawFacing = this.facing;
 	for (var i = 0; i < this.actions.length; i++){
-		if (this.actions[i].type == "turn"){
+		//if (this.actions[i].type == "turn"){
 			this.drawFacing += this.actions[i].a;
-		}
+		//}
 	}
 }
 
@@ -1939,9 +1938,7 @@ Ship.prototype.getPlannedFacing = function(){
 	var angle = 0;
 
 	for (var i = 0; i < this.actions.length; i++){
-		if (this.actions[i].type == "turn"){
-			angle += this.actions[i].a;
-		}
+		angle += this.actions[i].a;
 	}
 	return this.facing + angle;
 }

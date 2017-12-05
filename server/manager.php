@@ -475,7 +475,8 @@ class Manager {
 
 		for ($i = 0; $i < sizeof($this->reinforcements); $i++){
 			$passed = $this->turn - $this->reinforcements[$i]["turn"]; // 1
-			$odds = 0;
+			if ($passed < 2){continue;}
+			$odds = 20;
 			$roll = mt_rand(0, 100);
 			if ($roll <= $passed * $odds){
 				Debug::log("roll: ".$roll.", odds: ".$passed * $odds.", DELETING");
@@ -489,7 +490,7 @@ class Manager {
 	}
 
 	public function pickReinforcements(){
-		if ($this->turn < 5){return;}
+		if ($this->turn < 1){return;}
 		else
 
 		Debug::log("pickReinforcements");
@@ -625,7 +626,7 @@ class Manager {
 		$this->initBallistics();
 		$this->handleDeploymentActions();
 		$this->handleJumpActions();
-		$this->assembleEndStates();
+		$this->assembleDeployState();
 		DBManager::app()->deleteEmptyLoads($this->gameid);
 	}
 
@@ -831,6 +832,21 @@ class Manager {
 
 			$this->ships[$i]->setMove($this);
 		}
+
+	public function assemblDeployStates(){
+		Debug::log("assembleEndStates");
+		$states = array();
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->available == $this->turn){
+				$states[] = array(
+					"id" => $this->ships[$i]->id,
+					"x" => $this->ships[$i]->actions[0]->x,
+					"y" => $this->ships[$i]->actions[0]->y
+				);
+		}
+
+		if (sizeof($states)){DBManager::app()->updateUnitEndState($states, $this->turn, $this->phase);}
+		
 	}
 
 	public function assembleEndStates(){
@@ -1061,15 +1077,17 @@ class Manager {
 
 				if ($ew->angle == -1){
 					$w = 180;
+					Debug::log("specific EW for ship #".$ship->id.", 360 arc");
 				}
 				else {
 					$str = $sensor->getOutput($this->turn);
 					$w = min(180, $this->const["ew"]["len"] * pow($str/$ew->dist, $this->const["ew"]["p"]));
 					$start = Math::addAngle(0 + $w-$ship->getFacing(), $ew->angle);
 					$end = Math::addAngle(360 - $w-$ship->getFacing(), $ew->angle);
+					Debug::log("specific EW for ship #".$ship->id.", str: ".$str.", facing: ".$ship->getFacing().", w: ".$w.", EW from ".$start." to ".$end.", dist: ".$ew->dist);
+
 				}
 
-				Debug::log("specific EW for ship #".$ship->id.", str: ".$str.", facing: ".$ship->getFacing().", w: ".$w.", EW from ".$start." to ".$end.", dist: ".$ew->dist);
 				for ($i = 0; $i < sizeof($this->ships); $i++){
 					$multi = $this->ships[$i]->getLockMultiplier();
 					$skip = 0;
@@ -1389,7 +1407,7 @@ class Manager {
 					array("Altarian", 10, 3),
 					array("Darkner", 10, 2),
 					array("Demos", 10, 2),
-					array("Vorchan", 2),
+					array("Vorchan", 8, 2),
 					array("Haven", 8, 2),
 					);
 				break;

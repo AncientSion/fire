@@ -10,8 +10,8 @@
 		function __construct(){
 
 			if ($this->connection === null){
-				$user = "aatu"; $pass = "Kiiski";
-				//$user = "root"; $pass = "147147";
+				//$user = "aatu"; $pass = "Kiiski";
+				$user = "root"; $pass = "147147";
 				$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$user,$pass);
 				$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -735,13 +735,13 @@
 
 			for ($i = 0; $i < sizeof($picks); $i++){
 				$status = "bought";
-				$facing = 0;
+				$facing = $picks[$i]["actions"][0]["a"];
 				$turn = 0;
 				$picks[$i]["actions"][0]["turn"] = $picks[$i]["available"];
 				$cost += $picks[$i]["cost"];
 				$phase = -1;
 
-				Debug::log("id: ".$picks[$i]["id"]);
+				//Debug::log("id: ".$picks[$i]["id"].", cost: ".$cost);
 
 				$stmt->bindParam(":id", $picks[$i]["id"]);
 				$stmt->bindParam(":status", $status);
@@ -1545,7 +1545,7 @@
 		}
 
 		public function addReinforceValue($userid, $gameid, $add){
-			Debug::log("addReinforceValue: ".$add);
+			//Debug::log("addReinforceValue: ".$add);
 			$stmt = $this->connection->prepare("
 				UPDATE playerstatus 
 				SET	value = value + :add

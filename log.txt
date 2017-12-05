@@ -1,0 +1,71 @@
+doAdvance for game1 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+handleMixedMovement
+updateMissionState
+advancing game state time: 0.121 seconds.
+doAdvance for game1 from phase 2 to phase 3
+specific EW for ship #1, 360 arc
+specific EW for ship #2, 360 arc
+resolveBallisticFireOrders
+cleanFireOrders, fires: 0
+DB updateFireOrders: 0
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.003 seconds.
+advancing game state time: 0.007 seconds.
+doAdvance for game1 from phase 3 to phase 4
+endTurn
+destroyUnitsDB
+assembleEndStates
+pickReinforcements
+total: 41, roll: 29, picking: Olympus
+adding outfit: Patrol Outfit
+total: 54, roll: 11, picking: Altarian
+advancing game state time: 0.16 seconds.
+createPlayerStatus
+DB insertUnits: 1
+insertSubUnits
+insertMissions s: 1
+Game #1 is not ready !
+createPlayerStatus
+DB insertUnits: 1
+insertSubUnits
+insertMissions s: 1
+Game #1 is ready !
+Starting game #1
+doAdvance for game1 from phase -1 to phase 0
+initBallistics
+resolveDeployActions s: 2
+handleJumpActions
+jumpin: #1, class: Vorchan, size: 35, sensor: 650, ordered to: -652/-352, shiftPotential: 8.88%
+Vorchan, aShift: 9°, pShift: 18px
+--> aShift: 5°, psShift: -18/-11 (22px)
+jumpin: #2, class: Saggitarius, size: 60, sensor: 650, ordered to: 629/79, shiftPotential: 15.23%
+Saggitarius, aShift: 16°, pShift: 31px
+--> aShift: -1°, psShift: 9/-5 (11px)
+assembleEndStates
+advancing game state time: 0.055 seconds.
+createPlayerStatus
+DB insertUnits: 1
+insertSubUnits
+insertMissions s: 1
+Game #1 is not ready !
+createPlayerStatus
+DB insertUnits: 1
+insertSubUnits
+insertMissions s: 1
+Game #1 is ready !
+Starting game #1
+doAdvance for game1 from phase -1 to phase 0
+initBallistics
+resolveDeployActions s: 2
+handleJumpActions
+jumpin: #1, class: Artemis, size: 50, sensor: 650, ordered to: -674/-168, shiftPotential: 12.69%
+Artemis, aShift: 13°, pShift: 26px
+--> aShift: 12°, psShift: -16/-24 (29px)
+jumpin: #2, class: Olympus, size: 45, sensor: 600, ordered to: 631/410, shiftPotential: 12.38%
+Olympus, aShift: 13°, pShift: 25px
+--> aShift: 11°, psShift: -16/-11 (20px)
+advancing game state time: 0.119 seconds.
