@@ -62,7 +62,7 @@ class Vorchan extends Light {
 							"systemid" => 7,
 							"display" => "Front Missile Launcher",
 							"name" => "Hasta",
-							"amount" => 5
+							"amount" => 6
 						)
 					)
 				)

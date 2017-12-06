@@ -151,7 +151,7 @@ class Ship {
 		$this->baseHitChance = ceil(pow($this->mass, 0.4)*1.5)+30;
 		$this->baseTurnCost = round(pow($this->mass, 1.25)/25000, 2);
 		$this->baseTurnDelay = round(pow($this->mass, 0.45)/16, 2) * $this->getBaseImpulse() / 130;
-		$this->baseImpulseCost = round(pow($this->mass, 1.2)/600, 2);
+		$this->baseImpulseCost = round(pow($this->mass, 1.25)/600, 2);
 	}
 
 	public function getImpulseStep(){
@@ -251,7 +251,7 @@ class Ship {
 		}
 	}
 
-	public function getEndState($turn, $phase){
+	public function getEndState($turn){
 		//Debug::log("getMoveState for ".$this->id);
 		$delay = $this->remainingDelay;
 		$facing = $this->facing;
@@ -756,9 +756,9 @@ class Ship {
 
 	public function setFacing(){
 		for ($i = 0; $i < sizeof($this->actions); $i++){
-			if ($this->actions[$i]->type == "turn"){
+			//if ($this->actions[$i]->type == "turn"){
 				$this->facing += $this->actions[$i]->a;
-			}
+			//}
 		}
 
 		if ($this->facing > 360){

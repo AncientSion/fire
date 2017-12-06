@@ -186,7 +186,7 @@ function Ship(data){
 			var index;
 			for (var i = 0; i < playerstatus.length; i++){
 				if (playerstatus[i].userid == this.userid){
-					index = i % 2;
+					index = i % 2; break;
 				}
 			}
 			facing = 0 + (180 * (index % 2));
@@ -533,7 +533,7 @@ function Ship(data){
 		//var angle = this.getPlannedFacing();
 
 		var center = {x: this.x, y: this.y};
-		var angle = this.facing;
+		var angle = this.getDrawFacing();
 		var turnEle = $("#turnButton")[0];
 		var p1 = getPointInDirection(150/cam.z, addToDirection(angle, -90), center.x, center.y);
 		$(turnEle)
@@ -1751,7 +1751,6 @@ Ship.prototype.getParent = function(){
 	return this;
 }
 
-
 Ship.prototype.isReady = function(){
 	if (this.available < game.turn){
 		return true;
@@ -1853,6 +1852,13 @@ Ship.prototype.create = function(){
 	this.img = window.shipImages[this.name.toLowerCase()];
 	//this.setDrawData();
 	this.setHitTable();
+
+	if (game.turn > 1 && game.phase == -1 &&this.available == game.turn){
+		this.x = this.actions[0].x;
+		this.y = this.actions[0].y;
+		this.drawX = this.actions[0].x;
+		this.drawY = this.actions[0].y;
+	}
 }
 
 Ship.prototype.setImage = function(){
@@ -2038,7 +2044,10 @@ Ship.prototype.getSystemLocation = function(i){
 	if (i == -1){
 		return getPointInDirection(this.size/6, this.getDrawFacing()+range(0, 359), 0, 0);
 	}
-	return getPointInDirection(this.size/4, this.structures[i].getDirection() + this.getDrawFacing(), 0, 0);
+	var p = getPointInDirection(this.size/4, this.structures[i].getDirection() + this.getDrawFacing(), 0, 0);
+		p.x += range(-5, 5);
+		p.y += range(-5, 5);
+	return p;
 }
 
 Ship.prototype.canDeploy = function(){
@@ -2896,7 +2905,7 @@ Ship.prototype.setSupportImage = function(){
 		if (attach.doDraw){continue;} // possibly attachement is being drawn, hence not attached to this
 		//if (!attach.ship && attach.mission.targetid != this.id){continue;}
 		if (this.salvo && this.mission.arrived && this.mission.targetid == attach.id){continue;}
-		if (this.flight && attach.flight && attach.userid == this.userid){continue;}
+		if (this.flight && attach.flight && attach.userid == this.userid && attach.mission.targetid != this.id){continue;}
 
 		if (this.userid == attach.userid){
 			friendlies.push(attach);

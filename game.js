@@ -253,15 +253,6 @@ function Game(data, userid){
 		$("#deployOverlay").hide();
 	}
 
-	this.updateSingleIntercept = function(update){
-		for (var i = 0; i < game.ships.length; i++){
-			if (game.ships[i].ship){continue;}
-			if (game.ships[i].mission.targetid == update.id){
-				game.ships[i].setTarget();
-			}
-		}
-	}
-
 	this.doDeployFlight = function(pos){
 		var valid = false;
 		var t = 0;
@@ -274,7 +265,8 @@ function Game(data, userid){
 		}
 		else if (this.shortInfo){
 			t = game.getUnit(this.shortInfo);
-			if (t && (t.ship || (!t.friendly && t.flight))){
+			 //(t && (t.ship || (!t.friendly && t.flight))){
+			if (t && (!t.salvo)){
 				valid = true;
 				dest = t.getPlannedPos();
 			}
@@ -289,9 +281,15 @@ function Game(data, userid){
 		var o = s.getPlannedPos();
 		var facing = getAngleFromTo(o, dest);
 		var p = getPointInDirection(s.size/2, facing, o.x, o.y);
-		var mission = {id: -1, unitid: aUnit, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
+		var mission = {id: -1, unitid: -this.ships.length-20, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
 
-		if (t.id == aUnit){
+		var immediate = 0;
+
+		if (t.id == aUnit || t.id < 0 && t.flight && t.launchData.shipid == aUnit){
+			immediate = 1;
+		}
+
+		if (immediate){
 			p = dest;
 			mission.arrived = 1 //game.turn;
 		}
@@ -336,11 +334,20 @@ function Game(data, userid){
 
 		$(flight.element).css("top", 600).css("left", 0);
 
-		if (t.id == aUnit){
-			game.getUnit(aUnit).attachFlight(flight);
-			game.getUnit(aUnit).setSupportImage();
+		if (immediate){
+			game.getUnit(t.id).attachFlight(flight);
+			game.getUnit(t.id).setSupportImage();
 		}
 		this.draw();
+	}
+
+	this.updateSingleIntercept = function(update){
+		for (var i = 0; i < game.ships.length; i++){
+			if (game.ships[i].ship){continue;}
+			if (game.ships[i].mission.targetid == update.id){
+				game.ships[i].setTarget();
+			}
+		}
 	}
 
 	this.hideInstruct = function(){
@@ -356,6 +363,8 @@ function Game(data, userid){
 			if (this.ships[i].userid == this.userid){
 				if (this.ships[i].flight && this.ships[i].available == this.turn){
 					var flight = {
+						clientId: this.ships[i].id,
+						serverId: 0,
 						type: "Flight",
 						name: "Flight",
 						mission: this.ships[i].mission,
@@ -612,9 +621,7 @@ function Game(data, userid){
 		planCtx.clearRect(0, 0, res.x, res.y);
 		mouseCtx.clearRect(0, 0, res.x, res.y);
 		$("#deployOverlay").hide();
-		if (aUnit){
-			game.getUnit(aUnit).doUnselect();
-		}
+		//if (aUnit){game.getUnit(aUnit).doUnselect();}
 		game.draw();
 	}
 
@@ -929,13 +936,12 @@ function Game(data, userid){
 			this.ships[i].create();
 		}
 
+		this.setCC();
 
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].setTarget();
 			this.ships[i].setDrawData();
 		}
-
-		this.setCC();
 
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].createBaseDiv();
@@ -1140,9 +1146,9 @@ function Game(data, userid){
 		}
 
 		for (var i = 0; i < this.ships.length; i++){
-			var a = this.ships[i].getDrawPos();
+			var a = this.ships[i].getPlannedPos();
 			for (var j = i+1; j < this.ships.length; j++){
-				var b = this.ships[j].getDrawPos();
+				var b = this.ships[j].getPlannedPos();
 				if (a.x == b.x && a.y == b.y){
 					//if (this.ships[i].ship && !this.ships[j].ship && this.ships[j].mission.targetid != this.ships[i].id){continue;}
 					this.ships[i].cc.push(this.ships[j].id);
@@ -1751,8 +1757,6 @@ function Game(data, userid){
 	}
 
 	this.setUnitMovementFocus = function(){
-		$("#deployWrapper").hide();
-
 		window.then = Date.now();
 		window.startTime = then;
 		cam.setZoom(1);

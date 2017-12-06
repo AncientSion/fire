@@ -10,8 +10,8 @@
 		function __construct(){
 
 			if ($this->connection === null){
-				//$user = "aatu"; $pass = "Kiiski";
-				$user = "root"; $pass = "147147";
+				$user = "aatu"; $pass = "Kiiski";
+				//$user = "root"; $pass = "147147";
 				$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$user,$pass);
 				$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -347,12 +347,12 @@
 
 			$missions = array();
 
-			$ship = 0;
-			$ball = 0;
-			$status = "";
-			$destroyed = 0;
-
 			for ($i = 0; $i < sizeof($units); $i++){
+				$ship = 0;
+				$ball = 0;
+				$status = "";
+				$destroyed = 0;
+
 				if ($units[$i]["type"] == "Flight"){
 					$status = "deployed";
 				}
@@ -380,15 +380,27 @@
 				$stmt->execute();
 				
 				if ($stmt->errorCode() == 0){
-					$units[$i]["id"] = $this->getLastInsertId();
-					$units[$i]["mission"]["unitid"] = $units[$i]["id"];
-					$missions[] = $units[$i]["mission"];
-					//Debug::log("success, got id: ".$units[$i]["id"]);
+					$id = $this->getLastInsertId();
+					$units[$i]["id"] = $id;
+					$units[$i]["mission"]["unitid"] = $id;
+
+					if (!$flight){ // salvo or flight launched, negative id on client yet
+						//Debug::log("no ship, self clientId: ".$units[$i]["clientId"]);
+						for ($j = 0; $j < sizeof($units); $j++){
+							//Debug::log("comparing to: ".$units[$j]["clientId"]);
+							if (isset($units[$j]["mission"]) && $units[$j]["mission"]["targetid"] == $units[$i]["clientId"]){
+								$units[$j]["mission"]["targetid"] = $id;
+								Debug::log("adjusting mission id!");
+								break;
+							}
+						}
+						$missions[] = $units[$i]["mission"];
+					}
 					continue;
 				}
 				else {
 					Debug::log($stmt->errorCode());
-					Debug::log("error");
+					Debug::log("ERROR insertUnits");
 					return false;
 				}
 			}
@@ -727,7 +739,7 @@
 				UPDATE units
 				SET status = :status,
 					available = :available,
-					facing = :facing,
+					facing = 0,
 					turn = :turn,
 					phase = :phase
 				WHERE id = :id
@@ -735,7 +747,6 @@
 
 			for ($i = 0; $i < sizeof($picks); $i++){
 				$status = "bought";
-				$facing = $picks[$i]["actions"][0]["a"];
 				$turn = 0;
 				$picks[$i]["actions"][0]["turn"] = $picks[$i]["available"];
 				$cost += $picks[$i]["cost"];
@@ -746,7 +757,6 @@
 				$stmt->bindParam(":id", $picks[$i]["id"]);
 				$stmt->bindParam(":status", $status);
 				$stmt->bindParam(":available", $picks[$i]["available"]);
-				$stmt->bindParam(":facing", $facing);
 				$stmt->bindParam(":turn", $turn);
 				$stmt->bindParam(":phase", $phase);
 
@@ -793,7 +803,7 @@
 			$this->insertClientActions($ships);
 		}
 
-		public function deployFlightsDB($userid, $gameid, $data){
+		public function deployFlightsDB($userid, $gameid, &$data){
 			Debug::log("deployFlights ".sizeof($data));
 
 			if (sizeof($data)){
@@ -801,16 +811,12 @@
 
 				for ($i = 0; $i < sizeof($data); $i++){
 					for ($j = $i+1; $j < sizeof($data); $j++){
-					//Debug::log("comparing entry ".$i." to entry ".$j);
-						if ($data[$i]["launchData"]["shipid"] == $data[$j]["launchData"]["shipid"]){
-							//Debug::log("same origin");
-							if ($data[$i]["mission"]["targetid"] == $data[$j]["mission"]["targetid"]){
-								//Debug::log("same target");
+						if ($data[$i]["launchData"]["shipid"] == $data[$j]["launchData"]["shipid"]){ // same origin
+							if ($data[$i]["mission"]["targetid"] == $data[$j]["mission"]["targetid"]){ // same target
 								for ($k = 0; $k < sizeof($data[$j]["launchData"]["loads"]); $k++){
 									if ($data[$j]["launchData"]["loads"][$k]["launch"] >= 1){
 										for ($l = 0; $l < sizeof($data[$i]["launchData"]["loads"]); $l++){
-											if ($data[$i]["launchData"]["loads"][$l]["name"] == $data[$j]["launchData"]["loads"][$k]["name"]){
-												//Debug::log("adding");
+											if ($data[$i]["launchData"]["loads"][$l]["name"] == $data[$j]["launchData"]["loads"][$k]["name"]){ // same type
 												$data[$i]["launchData"]["loads"][$l]["launch"] += $data[$j]["launchData"]["loads"][$k]["launch"];
 												$data[$j]["launchData"]["loads"][$k]["launch"] = 0;
 											}
@@ -898,8 +904,8 @@
 			}
 		}
 
-		public function updateUnitEndState($states, $turn, $phase){
-			//Debug::log("updateUnitEndState s:".sizeof($states)." ".$turn."/".$phase);
+		public function updateUnitState($states, $turn, $phase){
+			Debug::log("updateUnitState s:".sizeof($states)." ".$turn."/".$phase);
 			$stmt = $this->connection->prepare("
 				UPDATE units
 				SET x = :x,

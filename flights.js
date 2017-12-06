@@ -455,7 +455,7 @@ Flight.prototype.supplyAttachDiv = function(div){
 
 	if (this.friendly){color = "green";}
 	var attachDiv = $("<div>").addClass("attachDiv")
-		.append($("<div>").css("display", "block").addClass("center15 " + color).html("Flight #" + this.id + (" (click to select)")))
+		.append($("<div>").css("display", "block").addClass("center15 " + color).html("Flight #" + this.id + (" (click to select)") + "   Target: #" + this.mission.targetid))
 		.data("id", this.id)
 		.click(function(){
 			if (aUnit){

@@ -1727,8 +1727,8 @@ Warhead.prototype.getAnimation = function(fire){
 			} else continue;
 
 			var traj = getPointInDirection(t.size/4, a, p.x, p.y);
-			var tx = traj.x + range(-t.size/7, t.size/7);
-			var ty = traj.y + range(-t.size/7, t.size/7);
+			var tx = traj.x + range(-t.size/6, t.size/6);
+			var ty = traj.y + range(-t.size/6, t.size/6);
 
 			if (fire.target.flight){
 				var t = fire.target.getFireDest(fire, hit, hits-1);
@@ -2831,7 +2831,8 @@ Hangar.prototype.enableHangarDeployment = function(e){
 		$(div).addClass("disabled");
 	}
 
-	if (game.phase > -1 || game.phase == -1 && game.getUnit(this.parentId).available == game.turn){
+	
+	if (game.phase != -1 || this.parentId < 0 || game.getUnit(this.parentId).available == game.turn){
 		$(div).find("#missionType").hide();
 	} else $(div).find("#missionType").show();
 }

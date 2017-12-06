@@ -342,14 +342,18 @@ Mixed.prototype.canShortenTurn = function(){
 }
 
 Mixed.prototype.getOffensiveBonus = function(target){
+	if (!this.mission.arrived){return 0;}
+
 	if (target.flight){
-		if (this.mission.arrived && this.mission.targetid == target.id){ // intercept
+		if (this.mission.targetid == target.id){ // intercept
+			return target.getLockMultiplier();
+		} else if (target.mission.targetid == this.mission.targetid && this.userid == this.getTarget().userid){ // flight escorting flight vs enemy flight
 			return target.getLockMultiplier();
 		}
 	}
 	else if (target.salvo){
-		if (this.mission.type == 1 && this.mission.arrived){return target.getLockMultiplier();} // patrol flight vs salvo
-		if (target.mission.targetid != this.id){return target.getLockMultiplier();} // escorting" flight vs salvo
+		if (this.mission.type == 1){return target.getLockMultiplier();} // patrol flight vs salvo
+		else if (target.mission.targetid != this.id){return target.getLockMultiplier();} // escorting" flight vs salvo
 	}
 	else return 0;
 }

@@ -422,8 +422,7 @@ else {
 
 		for (var i = 0; i < window.ships.length; i++){
 			var ship = window.initiateShip(window.ships[i]);
-				ship.facing = -90;
-			ship.actions.push(new Move(-1, "deploy", 0, res.x/2, res.y/2, 270, 0, 0, 1, 1, 1));
+			ship.actions.push(new Move(-1, "deploy", 0, res.x/2, res.y/2, 0, 0, 0, 1, 1, 1));
 		}
 
 		game.ships[0] = ship;
@@ -532,7 +531,7 @@ else {
 		window.shipCtx.clearRect(0, 0, res.x, res.y);
 		window.shipCtx.save();
 		window.shipCtx.translate(res.x/2, res.y/2);
-		window.shipCtx.rotate(-90*(Math.PI/180));
+		window.shipCtx.rotate(game.ships[0].getPlannedFacing()*(Math.PI/180));
 		var size = shipCanvas.width/4;
 		window.shipCtx.drawImage(game.ships[0].img, -size, -size, size*2, size*2);
 		window.shipCtx.restore();

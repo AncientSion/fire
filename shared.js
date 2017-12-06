@@ -430,6 +430,7 @@ function reOffset(){
 }
 
 function handleMouseDown(e){
+	//console.log("handleMouseDown");
 	e.preventDefault();
 	e.stopPropagation();
 	var unit;
