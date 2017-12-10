@@ -104,6 +104,8 @@ function Ship(data){
 	}
 
 	this.canDeployHere = function(pos){
+		return true;
+		
 		//console.log(pos);
 		var valid = false;
 

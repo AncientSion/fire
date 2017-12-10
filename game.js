@@ -707,6 +707,14 @@ function Game(data, userid){
 	}
 
 	this.drawDeploymentZone = function(){
+		drawCtx.translate(cam.o.x, cam.o.y)
+		drawCtx.scale(cam.z, cam.z)
+		drawCtx.beginPath();
+		drawCtx.arc(0, 0, 750, 0, 2*Math.PI);
+		drawCtx.fillStyle = "green";
+		drawCtx.fill();
+		drawCtx.setTransform(1,0,0,1,0,0);
+			
 
 		//drawCtx.globalAlpha = 0.3;
 		if (game.turn >= 2){
@@ -736,22 +744,6 @@ function Game(data, userid){
 		planCtx.globalAlpha = 0.3;
 		planCtx.drawImage(drawCanvas, 0, 0);
 		drawCtx.clearRect(0, 0, res.x, res.y);
-		return;
-
-
-		planCtx.clearRect(0, 0, res.x, res.y);
-		planCtx.globalAlpha = 0.3;
-		for (var i = 0; i < this.deployArea.length; i++){
-			planCtx.translate(cam.o.x, cam.o.y)
-			planCtx.scale(cam.z, cam.z)
-			planCtx.beginPath();
-			planCtx.rect(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].w, this.deployArea[i].h);
-			planCtx.closePath();
-			planCtx.fillStyle = this.deployArea[i].c;
-			planCtx.fill();
-			planCtx.setTransform(1,0,0,1,0,0);
-		}
-		planCtx.globalAlpha = 1;
 		return;
 	}
 
