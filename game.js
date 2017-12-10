@@ -708,12 +708,12 @@ function Game(data, userid){
 
 	this.drawDeploymentZone = function(){
 
-		for (var i = 0; i < game.deploys.length; i++){
+		for (var i = 0; i < this.deployArea.length; i++){
 			drawCtx.translate(cam.o.x, cam.o.y)
 			drawCtx.scale(cam.z, cam.z)
 			drawCtx.beginPath();
-			drawCtx.rect(this.deploys[i].x, this.deploys[i].y, this.deploys[i].w, this.deploys[i].h);
-			drawCtx.fillStyle = this.deploys[i].c;
+			drawCtx.rect(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].w, this.deployArea[i].h);
+			drawCtx.fillStyle = this.deployArea[i].c;
 			drawCtx.fill();
 			drawCtx.setTransform(1,0,0,1,0,0);
 			
@@ -722,7 +722,7 @@ function Game(data, userid){
 			planCtx.drawImage(drawCanvas, 0, 0);
 			drawCtx.clearRect(0, 0, res.x, res.y);
 		}
-		
+
 		return;
 
 
