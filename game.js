@@ -708,20 +708,35 @@ function Game(data, userid){
 
 	this.drawDeploymentZone = function(){
 
-		planCtx.clearRect(0, 0, res.x, res.y);
-		for (var i = 0; i < this.deployArea.length; i++){
-			drawCtx.translate(cam.o.x, cam.o.y)
-			drawCtx.scale(cam.z, cam.z)
-			drawCtx.beginPath();
-			drawCtx.rect(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].w, this.deployArea[i].h);
-			drawCtx.fillStyle = this.deployArea[i].c;
-			drawCtx.fill();
-			drawCtx.setTransform(1,0,0,1,0,0);
-			
-			planCtx.globalAlpha = 0.3;
-			planCtx.drawImage(drawCanvas, 0, 0);
-			drawCtx.clearRect(0, 0, res.x, res.y);
+		if (game.turn == 1){
+			for (var i = 0; i < this.deployArea.length; i++){
+				drawCtx.translate(cam.o.x, cam.o.y)
+				drawCtx.scale(cam.z, cam.z)
+				drawCtx.beginPath();
+				drawCtx.rect(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].w, this.deployArea[i].h);
+				drawCtx.fillStyle = this.deployArea[i].c;
+				drawCtx.fill();
+				drawCtx.setTransform(1,0,0,1,0,0);
+			}
 		}
+		else {
+			for (var i = 0; i < this.deploys.length; i++){
+				drawCtx.translate(cam.o.x, cam.o.y)
+				drawCtx.scale(cam.z, cam.z)
+				drawCtx.beginPath();
+				drawCtx.arc(this.deploys[i].x, this.deploys[i].y, this.deploys[i].s, 0, 2*Math.PI);
+				if (this.deploys[i].userid == this.userid){
+					drawCtx.fillStyle = "green";
+				} else drawCtx.fillStyle = "red";
+				drawCtx.fill();
+				drawCtx.setTransform(1,0,0,1,0,0);
+			};
+		}
+
+		planCtx.clearRect(0, 0, res.x, res.y);
+		planCtx.globalAlpha = 0.3;
+		planCtx.drawImage(drawCanvas, 0, 0);
+		drawCtx.clearRect(0, 0, res.x, res.y);
 
 		return;
 

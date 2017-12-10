@@ -162,7 +162,7 @@ function Ship(data){
 			for (var i = 0; i < game.ships.length; i++){
 				if (game.ships[i].deployed && game.ships[i].id != this.id && game.ships[i].userid == this.userid){ // different ship, different owners
 					var step = game.ships[i].getGamePos();
-					if (getDistance(pos, step) <= (game.ships[i].size/2 + size/2)){
+					if (getDistance(pos, step) <= (game.ships[i].size/2 + this.size/2)){
 					popup("The selected position is too close to the position or planned position of vessel (#"+game.ships[i].id+")");
 						return false;
 					}
