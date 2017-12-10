@@ -720,12 +720,12 @@ function Game(data, userid){
 			}
 		}
 		else {
-			for (var i = 0; i < this.deploys.length; i++){
+			for (var i = 0; i < this.deployArea.length; i++){
 				drawCtx.translate(cam.o.x, cam.o.y)
 				drawCtx.scale(cam.z, cam.z)
 				drawCtx.beginPath();
-				drawCtx.arc(this.deploys[i].x, this.deploys[i].y, this.deploys[i].s, 0, 2*Math.PI);
-				if (this.deploys[i].userid == this.userid){
+				drawCtx.arc(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].s, 0, 2*Math.PI);
+				if (this.deployArea[i].userid == this.userid){
 					drawCtx.fillStyle = "green";
 				} else drawCtx.fillStyle = "red";
 				drawCtx.fill();
