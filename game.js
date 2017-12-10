@@ -699,7 +699,7 @@ function Game(data, userid){
 				id: this.userid,
 				x: 0,
 				y: 0,
-				s: 750
+				s: 750,
 				c: "green"
 			});
 		}
