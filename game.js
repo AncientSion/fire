@@ -697,10 +697,10 @@ function Game(data, userid){
 		else {
 			this.deployArea.push({
 				id: this.userid,
-				x: -700,
-				y: -1000,
-				w: 1600,
-				h: 1600,
+				x: 0,
+				y: 0,
+				w: 750,
+				h: 750,
 				c: "green"
 			});
 		}
@@ -724,7 +724,7 @@ function Game(data, userid){
 				drawCtx.translate(cam.o.x, cam.o.y)
 				drawCtx.scale(cam.z, cam.z)
 				drawCtx.beginPath();
-				drawCtx.arc(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].s, 0, 2*Math.PI);
+				drawCtx.arc(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].w, 0, 2*Math.PI);
 				if (this.deployArea[i].userid == this.userid){
 					drawCtx.fillStyle = "green";
 				} else drawCtx.fillStyle = "red";
