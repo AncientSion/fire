@@ -632,7 +632,7 @@ function Game(data, userid){
 			if (this.reinforcements[i].id == id){
 				this.deploying = id;
 				this.setupDeploymentDiv(this.reinforcements[i])
-			//	this.setupDeploymentZone();
+				this.setupDeploymentZone();
 				this.drawDeploymentZone();
 				return;
 			}
