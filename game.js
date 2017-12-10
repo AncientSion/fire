@@ -708,6 +708,7 @@ function Game(data, userid){
 
 	this.drawDeploymentZone = function(){
 
+		planCtx.clearRect(0, 0, res.x, res.y);
 		for (var i = 0; i < this.deployArea.length; i++){
 			drawCtx.translate(cam.o.x, cam.o.y)
 			drawCtx.scale(cam.z, cam.z)
@@ -717,7 +718,6 @@ function Game(data, userid){
 			drawCtx.fill();
 			drawCtx.setTransform(1,0,0,1,0,0);
 			
-			planCtx.clearRect(0, 0, res.x, res.y);
 			planCtx.globalAlpha = 0.3;
 			planCtx.drawImage(drawCanvas, 0, 0);
 			drawCtx.clearRect(0, 0, res.x, res.y);
