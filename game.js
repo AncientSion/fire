@@ -725,9 +725,7 @@ function Game(data, userid){
 				drawCtx.scale(cam.z, cam.z)
 				drawCtx.beginPath();
 				drawCtx.arc(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].w, 0, 2*Math.PI);
-				if (this.deployArea[i].userid == this.userid){
-					drawCtx.fillStyle = "green";
-				} else drawCtx.fillStyle = "red";
+				drawCtx.fillStyle = this.deployArea[i].c;
 				drawCtx.fill();
 				drawCtx.setTransform(1,0,0,1,0,0);
 			};
