@@ -5,7 +5,7 @@ class Haven extends SuperLight {
 	public $display = "Haven";
 	public $faction = "Centauri Republic";
 	public $size =  35;
-	public static $value = 240;
+	public static $value = 220;
 	public $profile = array(0.9, 1.1);
 	public $mass = 750;
 
@@ -34,12 +34,11 @@ class Haven extends SuperLight {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 230);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 40);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 40, 28);
-		//$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 40);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 40, 550, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 40);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 225);
+		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(40, 2));
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(40, 2), 28);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(40, 2), 550, 10);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(40, 2));
 	}
 }
 

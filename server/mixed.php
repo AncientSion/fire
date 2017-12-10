@@ -138,11 +138,21 @@ class Mixed extends Ship {
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->id == $dmg->systemid){
 				$this->structures[$i]->addDamage($dmg);
+
+				if ($dmg->destroyed){
+					for ($j = 0; $j < sizeof($this->structures); $j++){
+						if (!$this->structures[$j]->destroyed){
+							return;
+						}
+					}
+					$this->destroyed = 1;
+				}
 				return;
 			}
 		}
 		Debug::log("UNABLE TO APPLY DMG on #".$this->id);
 	}
+
 	public function setupForDamage($turn){
 		return;
 	}
@@ -158,7 +168,7 @@ class Mixed extends Ship {
 		if ($this->mission->type == 1){ // PATROL
 			Debug::log("PATROL");
 			if ($this->mission->arrived){
-				$tPos = $t->getCurrentPosition();
+				$tPos = $this->getCurrentPosition();
 				$type = "patrol";
 				Debug::log("drag");
 			}
@@ -217,6 +227,10 @@ class Mixed extends Ship {
 					else {
 						Debug::log("move arrival");
 						$this->mission->arrived = $gd->turn;
+						if ($t->mission->targetid == $this->id){
+							Debug::log("so enemy arrived, too !");
+							$t->mission->arrived = $gd->turn;
+						}
 					}
 				}
 			}
@@ -252,7 +266,7 @@ class Mixed extends Ship {
 		}
 
 		$move = new Action(-1, $this->id, $gd->turn, $type, $dist, $tPos->x, $tPos->y, $angle, 0, 0, 0, 1, 1);
-		Debug::log("adding move to target #".$t->id." => ".$move->x."/".$move->y);
+		Debug::log("adding move to => ".$move->x."/".$move->y);
 		$this->actions[] = $move;
 		$this->moveSet = 1;
 	}

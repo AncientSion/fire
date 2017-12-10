@@ -5,22 +5,32 @@ class PrimarySystem extends System {
 	public $display = "PrimarySystem";
 	public $powerReq = 0;
 	public $internal = 1;
-	
-	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
+
+	function __construct($id, $parentId, $subs, $output = 0, $effiency = 0, $destroyed = 0){
 		parent::__construct($id, $parentId, $output, $destroyed);
-		$this->mass = $mass;
-		$this->integrity = $mass;
+		//$this->maxDmg = round($subs[0] / $subs[1]);
+		$this->maxDmg = 25;
+		$this->mass = $subs[0];
+		$this->integrity = $subs[0];
 		$this->effiency = $effiency;
+
 	}
 
 	public function getHitChance(){
 		return $this->mass;
 	}
 
-	public function getOutput($turn){
-		if ($this->disabled || $this->destroyed){
-			return 0;
+	public function setMaxDmg($fire, $dmg){
+		if ($dmg->structDmg > $this->maxDmg){
+			$dmg->overkill += $dmg->structDmg - $this->maxDmg;
+			$dmg->structDmg  = $this->maxDmg;
+			$dmg->notes .= "c;";
 		}
+		return $dmg;
+	}
+
+	public function getOutput($turn){
+		if ($this->disabled || $this->destroyed){return 0;}
 
 		$mod = 100;
 		$mod += $this->getBoostEffect("Output") * $this->getBoostLevel($turn);
@@ -31,44 +41,50 @@ class PrimarySystem extends System {
 	}
 
 	public function getCritModMax($dmg){
-		return min(25, round($dmg/30)*10); // round to 5
+		return min(25, round($dmg/30)*10);
 	}
 
+	public function getValidEffects(){
+		return array(
+			array("Output", 0, 0, 0)
+		);
+	}
+
+
 	public function determineCrit($old, $new, $turn){
-		$dmg = round($new / $this->integrity * 100);
-		//$possible = $this->getValidEffects();
+		$new = round($new / $this->integrity * 100);
+		$old = round($old / $this->integrity * 100);
+		$possible = $this->getValidEffects();
 
-		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", newDmg: ".$dmg.", old: ".$old);
+		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", new: ".$new.", old: ".$old);
 
-		if ($dmg > 50 && mt_rand(0, 100) < $dmg){
-			Debug::log("critical hit, disabling primary system ".get_class($this));
+		$mod = $this->getCritModMax($new + $old);
+		//if ($mod < 5){Debug::log("mod < 5: ".$mod.", droppiong"); return;}
+
+		$tresh =  ($new + $old/2)*2;
+
+		for ($i = 0; $i < sizeof($possible); $i++){
+			$roll = mt_rand(0, 100);
+			if ($roll > $tresh){Debug::log(" NO CRIT - roll: ".$roll. ", tresh: ".$tresh); continue;}
+
+			//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 			$this->crits[] = new Crit(
-				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 1, 0, 1
+				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $possible[$i][0], 0, $mod, 1
 			);
 		}
-
-		$mod = $this->getCritModMax($dmg);
-		if ($mod < 5){return;}
-		if (mt_rand(0, 100) < ($new + $old/2)*2){return;}
-
-		//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
-		$this->crits[] = new Crit(
-			sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Output", 0, $mod, 1
-		);
-		Debug::log("applying crit: ".$this->crits[sizeof($this->crits)-1]->type." / ".$this->crits[sizeof($this->crits)-1]->value);
 	}
 }
 
 class Bridge extends PrimarySystem {
 	public $name = "Bridge";
-	public $display = "Bridge";
+	public $display = "Command & Control";
 
 	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
         parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
 	}
 
-	public function getValidEffects(){
-		return array();
+	public function determineCrit($old, $new, $turn){
+		return;
 	}
 
 	public function setArmourMod(){
@@ -78,7 +94,7 @@ class Bridge extends PrimarySystem {
 
 class Reactor extends PrimarySystem {
 	public $name = "Reactor";
-	public $display = "Reactor";
+	public $display = "Energy Gen & Power Grid";
 	public $powerReq = 0;
 
 	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
@@ -89,10 +105,10 @@ class Reactor extends PrimarySystem {
     	$this->output = $this->output + $add;
     }
 
-	public function applyPowerSpike($turn, $spike){
-		$mod = round(($spike / $this->output *100), 2);
+	public function applyPowerSpike($turn, $overload){
+		$mod = round(($overload / $this->output *100), 2);
 		//d, $shipid, $systemid, $turn, $type, $duration, $value, $new){
-		Debug::log("applyPowerSpike to #".$this->parentId.", spike: ".$spike.", output: ".$this->output."/ mod: ".$mod);
+		Debug::log("applyPowerSpike to #".$this->parentId.", spike: ".$overload.", output: ".$this->output."/ mod: ".$mod);
 		$this->crits[] = new Crit(sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Output", 0, $mod, 1);	
 
 	}
@@ -100,7 +116,7 @@ class Reactor extends PrimarySystem {
 
 class Engine extends PrimarySystem {
 	public $name = "Engine";
-	public $display = "Engine";
+	public $display = "Engine & Drive";
 
 	function __construct($id, $parentId, $mass, $output = 0, $destroyed = 0){
 		$this->powerReq = ceil($output / 20);
@@ -111,7 +127,7 @@ class Engine extends PrimarySystem {
 
 class Sensor extends PrimarySystem {
 	public $name = "Sensor";
-	public $display = "Sensor";
+	public $display = "Sensor & Scanner Tech";
 	public $ew = array();
 
 	function __construct($id, $parentId, $mass, $output = 0, $effiency, $destroyed = 0){
@@ -162,15 +178,6 @@ class Sensor extends PrimarySystem {
 	}
 }
 
-class LifeSupport extends PrimarySystem {
-	public $name = "LifeSupport";
-	public $display = "Life Support";
-
-	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
-        parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
-    }
-}
-
 class Hangar extends Weapon {
 	public $type = "Hangar";
 	public $name = "Hangar";
@@ -178,15 +185,17 @@ class Hangar extends Weapon {
 	public $loads = array();
 	public $reload = 2;
 	public $utility = 1;
-	public $limit;
+	public $capacity;
+	public $launchRate;
 
-	function __construct($id, $parentId, $start, $end, $output, $effiency, $loads, $limit, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-		$this->powerReq = floor($effiency/3);
-		$this->effiency = $effiency;
-		$this->mass = $output;
-		$this->integrity = floor($output / 3);
-		$this->limit = $limit;
+	function __construct($id, $parentId, $launchRate, $loads, $capacity, $destroyed = false){
+		parent::__construct($id, $parentId, 0, $destroyed);
+		$this->launchRate = $launchRate;
+		$this->capacity = $capacity;
+		$this->powerReq = floor($launchRate/3);
+		$this->mass = $capacity*5;
+		$this->integrity = $this->mass *2;
+
 
 		for ($i = 0; $i < sizeof($loads); $i++){
 			$fighter = new $loads[$i](0,0);

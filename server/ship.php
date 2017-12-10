@@ -150,7 +150,7 @@ class Ship {
 	public function setBaseStats(){
 		$this->baseHitChance = ceil(pow($this->mass, 0.4)*1.5)+30;
 		$this->baseTurnCost = round(pow($this->mass, 1.25)/25000, 2);
-		$this->baseTurnDelay = round(pow($this->mass, 0.45)/16, 2) * $this->getBaseImpulse() / 130;
+		$this->baseTurnDelay = round(pow($this->mass, 0.45)/18, 2) * $this->getBaseImpulse() / 130;
 		$this->baseImpulseCost = round(pow($this->mass, 1.25)/600, 2);
 	}
 
@@ -514,7 +514,7 @@ class Ship {
 
 		if ($this->isDestroyed()){
 			Debug::log("ERROR - resolveFireOrder isDestroyed()");
-			$fire->resolved = -1;
+			$fire->resolved = 1;
 		}
 		else {
 			$fire->cc = $this->isCloseCombat($fire->shooter->id);
@@ -553,6 +553,7 @@ class Ship {
 	}
 
 	public function calculateToHit($fire){
+		//return 100;
 
 		if ($fire->shooter->salvo){
 			return ceil(90 * (1-($fire->weapon->getTraverseMod($fire)*0.2)));
@@ -588,6 +589,7 @@ class Ship {
 	}
 
 	public function getHitSystem($fire){
+		//return $this->getPrimaryHitSystem();
 		//Debug::log("getHitSystem ".$this->name);
 		$roll;
 		$current = 0;
@@ -632,7 +634,7 @@ class Ship {
 		$current = 0;
 		$total = $this->primary->getHitChance();
 		$fraction = round($this->primary->remaining / $this->primary->integrity, 3);
-		//Debug::log("fraction:".$fraction);
+		//Debug::log("main: ".$total.", @ ".$fraction);
 		$valid = array();
 
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
@@ -655,7 +657,7 @@ class Ship {
 		}
 		$roll = mt_rand(0, $total);
 		$current += $this->primary->getHitChance();
-		//Debug::log("roll: ".$roll);
+		//Debug::log("roll: ".$roll.", all: ".$total);
 
 		if ($roll <= $current){
 			//Debug::log("current: ".$current.", hitting main structure");
@@ -667,7 +669,7 @@ class Ship {
 				$current += $valid[$i]->getHitChance();
 				//Debug::log("current: ".$current);
 				if ($roll <= $current){
-					//Debug::log("non primary HIT --- ".$valid[$i]->name." #".$valid[$i]->id);
+					//Debug::log("non main structure HIT --- ".$valid[$i]->name." #".$valid[$i]->id.", odds: ".$valid[$i]->getHitChance()."/".$total);
 					return $valid[$i];
 				}
 			}
@@ -781,7 +783,7 @@ class Ship {
 			}
 		}
 
-		Debug::log("got no DIST set on ".$this->id." targeted by #".$fire->shooter->id);
+		Debug::log("ERROR got no DIST set on ".$this->id." targeted by #".$fire->shooter->id);
 		
 		$tPos = $this->getCurrentPosition();
 		$sPos = $fire->shooter->getCurrentPosition();
@@ -827,16 +829,17 @@ class Ship {
 	public function testForCrits($turn){
 		//Debug::log("= testForCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
 
-		$spike = 0;
+		$all = 0;
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if (!$this->structures[$i]->systems[$j]->damaged){continue;}
 				if ($this->structures[$i]->systems[$j]->destroyed){
 					if (mt_rand(0, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn, 0)){
-						//Debug::log("adding spike #".$this->id."/".$this->structures[$i]->systems[$j]->id);
-						$spike += $this->structures[$i]->systems[$j]->getPowerUsage($turn);
-						$this->structures[$i]->systems[$j]->damages[sizeof($this->structures[$i]->systems[$j]->damages)-1]->notes .= "p;";
+
+						$overload = $this->structures[$i]->systems[$j]->getPowerUsage($turn);
+						$all += $overload;
+						$this->structures[$i]->systems[$j]->damages[sizeof($this->structures[$i]->systems[$j]->damages)-1]->notes .= "o".$overload.";";
 					}
 				}
 
@@ -853,11 +856,12 @@ class Ship {
 		}
 
 
-		if ($spike){
-			Debug::log("potential total power spike for unit #".$this->id.": ".$spike);
+		if ($all){
+			Debug::log("potential total power spike for unit #".$this->id.": ".$all);
 			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
 				if ($this->primary->systems[$j]->name == "Reactor"){
-					$this->primary->systems[$j]->applyPowerSpike($turn, $spike);
+					$this->primary->systems[$j]->applyPowerSpike($turn, $all);
+					return;
 				}
 			}
 		}
@@ -1103,11 +1107,10 @@ class UltraHeavy extends Ship {
         parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
 
 		$this->hitTable = array(
-			"Bridge" => 0.25,
-			"Engine" => 0.4,
-			"LifeSupport" => 0.6,
-			"Sensor" => 0.7,
-			"Reactor" => 0.6
+			"Bridge" => 0.35,
+			"Engine" => 0.85,
+			"Sensor" => 0.9,
+			"Reactor" => 0.75
 		);
 	}
 }
@@ -1121,10 +1124,9 @@ class SuperHeavy extends Ship {
 
 		$this->hitTable = array(
 			"Bridge" => 0.5,
-			"Engine" => 0.55,
-			"LifeSupport" => 0.6,
-			"Sensor" => 0.8,
-			"Reactor" => 0.75
+			"Engine" => 0.85,
+			"Sensor" => 0.9,
+			"Reactor" => 0.7
 		);
 	}
 }
@@ -1138,10 +1140,9 @@ class Heavy extends Ship {
 
 		$this->hitTable = array(
 			"Bridge" => 0.55,
-			"Engine" => 0.65,
-			"LifeSupport" => 0.7,
-			"Sensor" => 0.85,
-			"Reactor" => 0.8
+			"Engine" => 0.8,
+			"Sensor" => 0.9,
+			"Reactor" => 0.65
 		);
 	}
 }
@@ -1155,10 +1156,9 @@ class Medium extends Ship {
 
 		$this->hitTable = array(
 			"Bridge" => 0.65,
-			"Engine" => 0.7,
-			"LifeSupport" => 0.8,
+			"Engine" => 0.8,
 			"Sensor" => 1,
-			"Reactor" => 0.8
+			"Reactor" => 0.7
 		);
 	}
 
@@ -1175,11 +1175,10 @@ class Light extends Ship {
         parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
 
 		$this->hitTable = array(
-			"Bridge" => 0.7,
+			"Bridge" => 0.5,
 			"Engine" => 0.8,
-			"LifeSupport" => 1,
 			"Sensor" => 1,
-			"Reactor" => 0.8
+			"Reactor" => 0.7
 		);
 	}
 
@@ -1198,7 +1197,6 @@ class SuperLight extends Ship {
 		$this->hitTable = array(
 			"Bridge" => 0.85,
 			"Engine" => 1,
-			"LifeSupport" => 1,
 			"Sensor" => 1,
 			"Reactor" => 0.9
 		);

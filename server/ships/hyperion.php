@@ -19,7 +19,7 @@ class Hyperion extends Heavy {
 		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 17);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new Dual($this->getId(), $this->id, 240, 120, 14, array("LightPulse", "LightParticleBeam"));
-		$front->systems[] = new Hangar($this->getId(), $this->id, 330, 30, 400, 10, array("Aurora"), 10);
+		$front->systems[] = new Hangar($this->getId(), $this->id, 10, array("Aurora"), 10);
 		$front->systems[] = new Dual($this->getId(), $this->id, 240, 120, 14, array("LightPulse", "LightParticleBeam"));
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
@@ -51,10 +51,10 @@ class Hyperion extends Heavy {
 
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1000);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 115);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 115, 240);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 115, 700, 15);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 115, 6);
+		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(115, 4));
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(115, 4), 240);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(115, 4), 700, 15);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(115, 4), 6);
 	}
 
 

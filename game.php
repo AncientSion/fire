@@ -357,17 +357,21 @@ echo "</script>";
 				Combat Log
 			</div>
 			<table id="combatLog">
-				<tr>
-					<th width=70px>Type</th>
-					<th width=105px>Shooter</th>
-					<th width=105px>Target</th>
-					<th width=160px>Weapon</th>
-					<th width=60px>Chance</th>
-					<th width=60px>Hits</th>
-					<th width=70px>Armour</th>
-					<th width=70px>System</th>
-					<th width=70px>Hull</th>
-				</tr>
+				<thead>
+					<tr>
+						<th width=70px>Type</th>
+						<th width=105px>Shooter</th>
+						<th width=105px>Target</th>
+						<th width=160px>Weapon</th>
+						<th width=60px>Chance</th>
+						<th width=60px>Hits</th>
+						<th width=70px>Armour</th>
+						<th width=70px>System</th>
+						<th width=70px>Hull</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
 			</table>
 		</div>
 		<div id="deployLogWrapper" class="disabled">
@@ -500,8 +504,8 @@ echo "</script>";
 			<div id ="missionType">
 				<table style="border: 1px solid white">
 					<tr><th colSpan=3>Select Mission Type</th></tr>
-					<tr><td></td><td width=70%>Patrol Location</td><td></td></tr>
-					<tr><td></td><td>Strike Ship / Escort Ship</td><td></td></tr>
+					<tr><td></td><td width=70%>Patrol location</td><td></td></tr>
+					<tr><td></td><td>Strike / Escort / Intercept unit</td><td></td></tr>
 				</table>
 			</div>
 			<div class="header">
@@ -672,32 +676,10 @@ echo "</script>";
 				else if (e.keyCode == 109){ // m, cancel move animation
 					if (game.phase == 2){
 						window.cancelAnimationFrame(anim);
-						for (var i = 0; i < game.ships.length; i++){
-							game.ships[i].setPostMovePosition();
-							game.ships[i].setPostMoveFacing();
-
-							if (game.ships[i].ship){continue;}
-
-							if (game.ships[i].mission.arrived){
-								if (game.ships[i].mission.type == 1){
-									game.ships[i].setPostMoveSize();
-									game.ships[i].setPostMoveImage();
-								}
-								else if (game.ships[i].mission.type > 1){
-									game.ships[i].doDraw = 0;
-								}
-							}
-						}
-
-						game.setlastPosCC()
-						for (var i = 0; i < game.ships.length; i++){
-							game.ships[i].setSupportImage();
-						}
-						for (var i = 0; i < game.ships.length; i++){
-							game.ships[i].getAttachDivs();
-						}
+						game.animFlight = 1; game.animSalvo = 1;
+						game.endMoveSubPhase();
+						game.movementResolved();
 					}
-					game.draw();
 				}
 				else if (e.keyCode == 43){ // +
 					if (game.phase == 0 || game.phase == 1){

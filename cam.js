@@ -125,7 +125,8 @@ function Mission(unit){
 		$(ele).addClass("selected");
 
 		if (this.new){
-			$("#deployOverlay").find("#deployType").html("Select target for </br>" +  game.getMissionTypeString(val) + "</br></span>");
+			$("#deployOverlay").find("#deployType").html("Select target</span>");
+			//$("#deployOverlay").find("#deployType").html("Select target for </br>" +  game.getMissionTypeString(val) + "</br></span>");
 		}
 	
 	}

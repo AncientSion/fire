@@ -19,7 +19,7 @@ class Omega extends SuperHeavy {
 		$front = new Structure($this->getId(), $this->id, 330, 30, 1200, 19);
 		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 25, array("HeavyLaser", "HeavyPulse"));
 		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 25, array("HeavyLaser", "HeavyPulse"));
-		$front->systems[] = new Hangar($this->getId(), $this->id, 330, 30, 1100, 14, array("Aurora", "Thunderbolt"), 28);
+		$front->systems[] = new Hangar($this->getId(), $this->id, 14, array("Aurora", "Thunderbolt"), 28);
 		$front->systems[] = new Dual($this->getId(), $this->id, 0, 60, 25, array("HeavyLaser", "HeavyPulse"));
 		$front->systems[] = new Dual($this->getId(), $this->id, 0, 60, 25, array("HeavyLaser", "HeavyPulse"));
 		$structs[] = $front;
@@ -57,13 +57,12 @@ class Omega extends SuperHeavy {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1700);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 180);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 180, 480, 10);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 180, 800, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 180, 10);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1600);
+		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(180, 4));
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(180, 4), 480, 10);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(180, 4), 800, 10);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(180, 4), 10);
 	}
-
 
 	static function getKit(){
 		return array(

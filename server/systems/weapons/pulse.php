@@ -16,7 +16,6 @@ class Pulse extends Weapon {
 		$destroyed = 0;
 		$totalDmg = $this->getTotalDamage($fire);
 		$remInt = $system->getRemainingIntegrity();
-		$overkill = 0;
 		$okSystem = 0;
 
 		$negation = $fire->target->getArmour($fire, $system);
@@ -37,9 +36,9 @@ class Pulse extends Weapon {
 
 			if ($destroyed){
 				$total += $totalDmg;
-				$overkill += $dmg->structDmg;
+				$dmg->overkill += $dmg->structDmg;
 				$armour += $dmg->armourDmg;
-				Debug::log(" => hit ".($i+1).", adding ".$dmg->structDmg."/".$dmg->armourDmg." to overkill which is now: ".$overkill." pts");
+				Debug::log(" => hit ".($i+1).", adding ".$dmg->structDmg."/".$dmg->armourDmg." to overkill which is now: ".$dmg->overkill." pts");
 				continue;
 			}
 			else {
@@ -54,10 +53,10 @@ class Pulse extends Weapon {
 				$okSystem = $fire->target->getOverKillSystem($fire);
 
 				if ($okSystem){
-					//$overkill = abs($remInt - $dmg->structDmg);
-					$overkill = abs($remInt - $struct);
-					$struct -= $overkill;
-					Debug::log(" => hit ".($i+1)." DESTROYING ship target system ".$name." #".$system->id.", rem: ".$remInt.", doing TOTAL: ".$struct."/".$armour.", OK for: ".$overkill." dmg");
+					//$dmg->overkill += abs($remInt - $dmg->structDmg);
+					$dmg->overkill += abs($remInt - $struct);
+					$struct -= $dmg->overkill;
+					Debug::log(" => hit ".($i+1)." DESTROYING ship target system ".$name." #".$system->id.", rem: ".$remInt.", doing TOTAL: ".$struct."/".$armour.", OK for: ".$dmg->overkill." dmg");
 					//$struct += $remInt;
 				}
 				else {
@@ -67,9 +66,15 @@ class Pulse extends Weapon {
 			}
 		}
 
+		$dmg->structDmg = $struct;
+		$dmg->armourDmg = $armour;
+		$dmg->shieldDmg = $shield;
+
+		$dmg = $system->setMaxDmg($fire, $dmg);
+
 		$entry = new Damage(
 			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
-			$total, $shield, $struct, $armour, $overkill, array_sum($negation), $destroyed, $dmg->notes, 1
+			$total, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
 		);
 		$fire->target->applyDamage($entry);
 	}

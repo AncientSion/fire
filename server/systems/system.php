@@ -10,9 +10,9 @@ class System {
 	public $locked = 0;
 	public $dual = 0;
 	public $powerReq = 1;
-	public $output;
-	public $name;
-	public $display;
+	public $output = 0;
+	public $name = "";
+	public $display = "";
 	public $damages = array();
 	public $powers = array();
 	public $crits = array();
@@ -23,10 +23,14 @@ class System {
 	public $mass;
 	public $boostEffect = array();
 	public $modes = array();
-	public $armourMod;
+	public $armourMod = 1;
 	public $internal = 0;
 	public $damaged = 0;
 	public $tiny = 0;
+	public $accDeay = 0;
+	public $minDmg = 0;
+	public $maxDmg = 0;
+	public $priority = 0;
 
 	function __construct($id, $parentId, $output = 0, $destroyed = 0){
 		$this->id = $id;
@@ -107,10 +111,12 @@ class System {
 		if (!sizeof($this->crits)){
 			return false;
 		}
-		else if ($this->crits[sizeof($this->crits)-1]->type == "disabled"){
-			if ($turn <= $this->crits[sizeof($this->crits)-1]->turn + $this->crits[sizeof($this->crits)-1]->duration){
-				$this->disabled = true;
-				return true;
+		for ($i = sizeof($this->crits)-1; $i >= 0; $i--){
+			if ($this->crits[$i]->type == "Disabled"){
+				if ($turn <= $this->crits[$i]->turn + $this->crits[$i]->duration){
+					$this->disabled = true;
+					return true;
+				}
 			}
 		}
 		return false;
@@ -176,8 +182,12 @@ class System {
 		return $rem;
 	}
 
+	public function setMaxDmg($fire, $dmg){
+		return  $dmg;
+	}
+
 	public function getHitChance(){
-		return $this->mass*8;
+		return $this->mass*6;
 	}
 
 	public function testCrit($turn, $extra){
@@ -198,34 +208,38 @@ class System {
 
 	public function getValidEffects(){
 		return array(// attr, %-tresh, duration, modifier
-			array("Disabled", 80, 1, 0),
 			array("Damage", 30, 0, 0),
 			array("Accuracy", 30, 0, 0)
 		);
 	}
 
 	public function determineCrit($old, $new, $turn){
-		$dmg = round(($new + ($old/2)) / $this->integrity * 100);
+		$new = round($new / $this->integrity * 100);
+		$old = round($old / $this->integrity * 100);
 		$possible = $this->getValidEffects();
 
+		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", new: ".$new.", old: ".$old);
 
-		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", dmg: ".$dmg."%");
+		if ($new > 80 && mt_rand(0, 100) < $new){
+			Debug::log("critical hit, disabling system ".get_class($this));
+			$this->crits[] = new Crit(
+				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 1, 0, 1
+			);
+		}
 
-		$mod = $this->getCritModMax($dmg);
+		$mod = $this->getCritModMax($new + $old);
 		if ($mod < 5){return;}
 
+		$tresh =  ($new + $old/2);
+
 		for ($i = 0; $i < sizeof($possible); $i++){
-			if (mt_rand(0, 1)){continue;}
-			if ($dmg + mt_rand(-10, 10) < $possible[$i][1]){continue;}
-			$duration = $possible[$i][2];
-			if ($duration && $dmg > 90 && mt_rand(0, 1)){$duration += 1;}
+			$roll = mt_rand(0, 100);
+			if ($roll > $tresh){Debug::log(" NO CRIT - roll: ".$roll. ", tresh: ".$tresh); continue;}
 
 			//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 			$this->crits[] = new Crit(
-				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $possible[$i][0], $duration, $mod, 1
+				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $possible[$i][0], 0, $mod, 1
 			);
-			Debug::log("applying crit: ".$this->crits[sizeof($this->crits)-1]->type." / ".$this->crits[sizeof($this->crits)-1]->value);
-
 		}
 	}
 

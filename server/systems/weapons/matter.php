@@ -16,11 +16,11 @@ class Matter extends Weapon {
 		$notes = "";
 
 		if ($totalDmg <= array_sum($negation)){ 
-			$notes = "block;";
+			$notes = "b;";
 			$armourDmg = round($totalDmg/2);
 		}
 		else {
-			$notes = "pen;";
+			$notes = "p;";
 			$shieldDmg = round(min($totalDmg, $negation["bonus"]/2));
 			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]/2));
 			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
@@ -54,7 +54,7 @@ class HeavyRailGun extends Matter {
 	public $display = "203mm Rail Gun";
 	public $minDmg = 65;
 	public $maxDmg = 65;
-	public $accDecay = 60;
+	public $accDecay = 80;
 	public $shots = 2;
 	public $animColor = "grey";
 	public $projSize = 4;

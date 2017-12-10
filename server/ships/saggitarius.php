@@ -40,17 +40,16 @@ class Saggitarius extends Medium {
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 2);
-			$this->structures[sizeof($this->structures)-1]->effiency = 6;
+			$this->structures[sizeof($this->structures)-1]->effiency = 3;
 		}
 	}
 
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 800);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 85);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 85, 100);
-		//$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 85);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 85, 650, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 85, -1);
+		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(95, 3));
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(95, 3), 100);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(95, 3), 650, 10);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(95, 3), 6);
 	}
 }
 

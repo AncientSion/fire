@@ -33,7 +33,7 @@ class GQuan extends Heavy {
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 21);
 		$aft->systems[] = new LightIon($this->getId(), $this->id, 90, 270);
 		$aft->systems[] = new LightIon($this->getId(), $this->id, 90, 270);
-		$aft->systems[] = new Hangar($this->getId(), $this->id, 0, 360, 600, 9, array("Gorith", "Frazi"), 9);
+		$aft->systems[] = new Hangar($this->getId(), $this->id, 9, array("Gorith", "Frazi"), 9);
 		$aft->systems[] = new LightIon($this->getId(), $this->id, 90, 270);
 		$aft->systems[] = new LightIon($this->getId(), $this->id, 90, 270);
 		$structs[] = $aft;
@@ -52,11 +52,10 @@ class GQuan extends Heavy {
 
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1300);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 140);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 140, 300);
-		//$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 140);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 140, 750, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 140);
+		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(140, 4));
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(140, 4), 300);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(140, 4), 750, 10);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(140, 4));
 	}
 }
 

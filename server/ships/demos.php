@@ -4,7 +4,7 @@ class Demos extends Medium {
 	public $name = "Demos";
 	public $display = "Demos";
 	public $faction = "Centauri Republic";
-	public $size =  50;
+	public $size =  45;
 	public static $value = 450;
 	public $profile = array(0.92, 1.08);
 	public $mass = 3000;
@@ -39,10 +39,10 @@ class Demos extends Medium {
 
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 575);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 90);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 90, 120);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 90, 750, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 90);
+		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(90, 3));
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(90, 3), 120);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(90, 3), 750, 10);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(90, 3));
 	}
 
 	static function getKit(){

@@ -2,7 +2,7 @@
 
 class Dual extends Weapon {
 	public $type = "Dual";
-	public $display = "Combo System";
+	public $display = "";
 	public $modes = array();
 	public $states = array();
 	public $weapons = array();
@@ -18,7 +18,11 @@ class Dual extends Weapon {
 			$this->modes[] = $modes[$i];
 			$this->weapons[] = new $modes[$i]($i, $parentId, $start, $end, 0, 0);
 			$this->powerReq = max($this->powerReq, $this->weapons[$i]->powerReq);
+
+			$this->display .= $this->weapons[$i]->display." / ";
 		}
+
+		$this->display = substr($this->display, 0, strlen($this->display)-3);
 	}
 
 	public function setState($turn){

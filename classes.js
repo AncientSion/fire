@@ -291,7 +291,7 @@ function Missile(data){
 			this.systems.push(new Warhead(data.systems[k]));
 		}
 		for (var k = 0; k < data.crits.length; k++){
-			this.systems.push(new Crit(data.crits[k]));
+			this.crits.push(new Crit(data.crits[k]));
 		}
 	}
 
@@ -300,8 +300,6 @@ function Missile(data){
 
 }
 Missile.prototype = Object.create(Single.prototype);
-
-
 
 function Crit(data){
 	this.id = data.id;

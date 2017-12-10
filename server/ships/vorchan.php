@@ -35,11 +35,11 @@ class Vorchan extends Light {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 340);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 45);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 45, 46);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 45, 650, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 45);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 325);
+		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(45, 3));
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(45, 3), 46);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(45, 3), 650, 10);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(45, 3));
 	}
 
 	static function getKit(){

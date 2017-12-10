@@ -382,16 +382,19 @@
 				if ($stmt->errorCode() == 0){
 					$id = $this->getLastInsertId();
 					$units[$i]["id"] = $id;
-					$units[$i]["mission"]["unitid"] = $id;
 
-					if (!$flight){ // salvo or flight launched, negative id on client yet
-						//Debug::log("no ship, self clientId: ".$units[$i]["clientId"]);
-						for ($j = 0; $j < sizeof($units); $j++){
-							//Debug::log("comparing to: ".$units[$j]["clientId"]);
-							if (isset($units[$j]["mission"]) && $units[$j]["mission"]["targetid"] == $units[$i]["clientId"]){
-								$units[$j]["mission"]["targetid"] = $id;
-								Debug::log("adjusting mission id!");
-								break;
+					if (!$ship){
+						$units[$i]["mission"]["unitid"] = $id;
+
+						if ($flight){ // salvo or flight launched, negative id on client yet
+							//Debug::log("no ship, self clientId: ".$units[$i]["clientId"]);
+							for ($j = 0; $j < sizeof($units); $j++){
+								//Debug::log("comparing to: ".$units[$j]["clientId"]);
+								if (isset($units[$j]["mission"]) && $units[$j]["mission"]["targetid"] == $units[$i]["clientId"]){
+									$units[$j]["mission"]["targetid"] = $id;
+									Debug::log("adjusting mission id!");
+									break;
+								}
 							}
 						}
 						$missions[] = $units[$i]["mission"];
@@ -640,6 +643,7 @@
 						$valid = 1;
 						$width = 100;
 						$height = 600;
+						//$dist = 400;
 						$dist = 600;
 						$x = mt_rand(-($dist+$width), -$dist) * (1-$i*2);
 						$y = mt_rand(-$height, $height) * (1-$i*2);

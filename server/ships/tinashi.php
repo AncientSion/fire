@@ -44,13 +44,11 @@ class Tinashi extends Medium {
 	}
 
 	public function addPrimary(){
-		//id, $parentId, $integrity, $output = 0, $effiency = 0, $destroyed = 0){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 825);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 95);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 95, 110);
-		//$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 95);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 95, 800, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 95, +4);
+		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(95, 3));
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(95, 3), 110);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(95, 3), 800, 10);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(95, 3), +4);
 	}
 }
 

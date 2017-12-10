@@ -59,12 +59,8 @@ class Launcher extends Weapon {
 		else $this->armourMod =  0.3;
 	}
 
-	public function getValidEffects(){
-		return array(// attr, %-tresh, duration, modifier
-			array("Disabled", 80, 1, 0),
-			array("Damage", 30, 0, 0),
-			array("Accuracy", 30, 0, 0)
-		);
+	public function determineCrit($old, $new, $turn){
+		return;
 	}
 
 }

@@ -28,52 +28,6 @@ Flight.prototype.setSize = function(){
 	this.size = max + 20;
 }
 
-Flight.prototype.setLayout = function(){
-	//console.log("setLayout #" + this.id);
-	//console.log(this.size);
-	//if (!this.mission.arrived && this.available < this.mission.turn && this.mission.turn == game.turn){ // delay
-	//	this.setPatrolLayout();
-	//		return;
-	//	}
-	if (this.mission.type == 1 && this.mission.arrived == game.turn && game.phase >= 2){ // has arrived on loc this t.
-		this.setPatrolLayout();
-		return;
-	}
-	if (this.mission.type == 1 && this.mission.arrived && this.mission.arrived < game.turn){ // has arrived earlier
-		this.setPatrolLayout();
-		return;
-	}
-
-	var osx = 16;
-	var osy = 12;
-
-	//var num = Math.ceil(this.structures.length/3);
-
-	//this.size = num*10;
-
-	var reach = 15 + Math.max(0, (Math.floor(this.structures.length-3)/3)*12);
-
-	for (var i = 0; i < this.structures.length/3; i++){
-
-		var a = 360/Math.ceil(this.structures.length/3)*i;
-		//var o = getPointInDirection(0 + this.unitSize*15, a-90, 0, 0);
-		var o = getPointInDirection(reach, a-90, 0, 0);
-
-		for (var j = 0; j < Math.min(this.structures.length-i*3, 3); j++){
-			var ox = o.x;
-			var oy = o.y;
-
-			switch (j){
-				case 0: oy -= osy; break;
-				case 1: ox -= osx; oy += osy; break;
-				case 2: ox += osx; oy += osy; break;
-				default: break;
-			}
-			this.structures[(i*3)+j].layout = {x: ox, y: oy};
-		}
-	}
-}
-
 Flight.prototype.setMaxMass = function(){
 	for (var i = 0; i < this.structures.length; i++){
 		if (! this.structures[i].destroyed){
@@ -120,21 +74,7 @@ Flight.prototype.getNewMission = function(){
 }
 
 Flight.prototype.setImage = function(){
-	console.log("setImage #" + this.id);
-	/*if (this.id == 24){console.log("ding")}
-	if (!this.mission.arrived && this.available < this.mission.turn && this.mission.turn == game.turn){
-		this.setPatrolImage();
-		return;
-	}
-	if (this.mission.type == 1 && this.mission.arrived == game.turn && game.phase >= 2){
-		this.setPatrolImage();
-		return;
-	}
-	if (this.mission.type == 1 && this.mission.arrived && this.mission.arrived < game.turn){
-		this.setPatrolImage();
-		return;
-	}*/
-
+	//console.log("setImage #" + this.id);
 
 	if (!this.mission.arrived){
 		this.setPreMoveImage();
@@ -181,7 +121,7 @@ Flight.prototype.createBaseDiv = function(){
 			.append($("<td>").html((this.getCurrentImpulse() + " (max: " + (this.baseImpulse*4) + ")"))))
 		.append($("<tr>")
 			.append($("<td>").html("Current Mission"))
-			.append($("<td>").addClass("missionType").html(game.getMissionTypeString(this.mission.type))))
+			.append($("<td>").addClass("missionType").html(game.getMissionTypeString(this, this.getTarget()))))
 		.append($("<tr>")
 			.append($("<td>").html("Mission Target"))
 			.append($("<td>").addClass("missionTarget").html(game.getMissionTargetString(this.mission))))
@@ -206,8 +146,8 @@ Flight.prototype.createBaseDiv = function(){
 							game.getUnit(aUnit).switchMissionMode();
 						}
 					})))
-			.append($("<tr>").addClass("missionOption").click(function(){game.mission.set(1, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Patrol Location")))
-			.append($("<tr>").addClass("missionOption").click(function(){game.mission.set(2, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Strike/ Escort Ship")))
+			.append($("<tr>").addClass("missionOption").click(function(){game.mission.set(1, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Patrol location")))
+			.append($("<tr>").addClass("missionOption").click(function(){game.mission.set(2, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Strike / Escort / Intercept unit")))
 		}
 		else {
 			if (game.phase != -1){
@@ -453,9 +393,10 @@ Flight.prototype.expandDiv = function(div){
 Flight.prototype.supplyAttachDiv = function(div){
 	var color = "red";
 
+	var target = this.getTarget();
 	if (this.friendly){color = "green";}
 	var attachDiv = $("<div>").addClass("attachDiv")
-		.append($("<div>").css("display", "block").addClass("center15 " + color).html("Flight #" + this.id + (" (click to select)") + "   Target: #" + this.mission.targetid))
+		.append($("<div>").css("display", "block").addClass("center15 " + color).html("Flight #" + this.id + "________Target: " + target.name + " #" + target.id))
 		.data("id", this.id)
 		.click(function(){
 			if (aUnit){
@@ -564,7 +505,7 @@ Flight.prototype.getShortInfo = function(){
 	var impulse = this.getCurrentImpulse();
 	
 	var table = document.createElement("table");
-		table.insertRow(-1).insertCell(-1).innerHTML = "Flight #" + this.id;
+		table.insertRow(-1).insertCell(-1).innerHTML = "Flight #" + this.id + " (" + game.getMissionTypeString(this, this.getTarget()) + ")";
 		table.insertRow(-1).insertCell(-1).innerHTML =  "Thrust: " + this.getCurrentImpulse();
 		table.insertRow(-1).insertCell(-1).innerHTML =this.getStringHitChance();
 	

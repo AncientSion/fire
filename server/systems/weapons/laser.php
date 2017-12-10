@@ -26,7 +26,6 @@ class Laser extends Weapon {
 
 	public function doDamage($fire, $roll, $system){
 		$totalDmg = $this->getTotalDamage($fire);
-		$overkill = 0;
 		$okSystem = 0;
 		$rakes = $this->rakes;
 		$systems = array();
@@ -55,6 +54,7 @@ class Laser extends Weapon {
 			$negation = $fire->target->getArmour($fire, $system);
 
 			$dmg = $this->determineDamage($rake, $negation);
+			$dmg = $system->setMaxDmg($fire, $dmg);
 			$rakes--;
 
 			if ($remInt - $dmg->structDmg < 1){
@@ -63,9 +63,9 @@ class Laser extends Weapon {
 				$okSystem = $fire->target->getOverKillSystem($fire);
 
 				if ($okSystem){
-					$overkill = abs($remInt - $dmg->structDmg);
+					$dmg->overkill += abs($remInt - $dmg->structDmg);
 					$dmg->structDmg = $remInt;
-					Debug::log(" => OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$overkill." dmg");
+					Debug::log(" => OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$dmg->overkill." dmg");
 				}
 				else {
 					Debug::log(" => destroying non-ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg);
@@ -75,7 +75,7 @@ class Laser extends Weapon {
 
 			$entry = new Damage(
 				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
-				$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $overkill, array_sum($negation), $destroyed, $dmg->notes, 1
+				$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
 			);
 			$fire->target->applyDamage($entry);
 
@@ -86,7 +86,7 @@ class Laser extends Weapon {
 
 class LightParticleBeam extends Laser {
 	public $name = "LightParticleBeam";
-	public $display = "38mm Particle Beam";
+	public $display = "35mm Particle Beam";
 	public $animColor = "blue";
 	public $rakeTime = 22;
 	public $beamWidth = 1;

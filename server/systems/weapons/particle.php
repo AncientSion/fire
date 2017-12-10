@@ -19,7 +19,7 @@ class LightIon extends Particle {
 	public $shots = 4;
 	public $animColor = "orange";
 	public $projSize = 2;
-	public $projSpeed = 7;
+	public $projSpeed = 8;
 	public $reload = 2;
 	public $mass = 13;
 	public $powerReq = 2;
@@ -43,7 +43,7 @@ class MediumIon extends LightIon {
 	public $animColor = "orange";
 	public $reload = 3;
 	public $projSize = 3;
-	public $projSpeed = 6;
+	public $projSpeed = 7;
 	public $mass = 18;
 	public $powerReq = 3;
 	public $traverse = -2;
@@ -54,31 +54,17 @@ class MediumIon extends LightIon {
 	}
 }
 
-class MediumTwinIon extends MediumIon {
-	//public $name = "MediumTwinIon";
-	public $display = "68mm Dual Ion Cannon";
-	public $shots = 2;
-	public $mass = 21;
-	public $powerReq = 4;
-	public $effiency = 4;
-	public $maxBoost = 1;
-
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-	}
-}
-
 class HeavyIon extends MediumIon {
 	public $name = "HeavyIon";
 	public $display = "122mm Ion Burst Cannon";
-	public $minDmg = 52;
-	public $maxDmg = 68;
-	public $accDecay = 90;
+	public $minDmg = 48;
+	public $maxDmg = 62;
+	public $accDecay = 80;
 	public $shots = 2;
 	public $animColor = "orange";
 	public $reload = 4;
 	public $projSize = 4;
-	public $projSpeed = 5;
+	public $projSpeed = 6;
 	public $mass = 32;
 	public $powerReq = 6;
 	public $traverse = 1;

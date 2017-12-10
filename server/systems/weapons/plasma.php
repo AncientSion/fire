@@ -28,11 +28,11 @@ class Plasma extends Weapon {
 		$notes = "";
 
 		if ($totalDmg <= array_sum($negation)){ 
-			$notes = "block;";
+			$notes = "b;";
 			$armourDmg = round($totalDmg);
 		}
 		else {
-			$notes = "pen;";
+			$notes = "p;";
 			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
 			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
 			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);

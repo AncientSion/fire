@@ -239,7 +239,8 @@ Salvo.prototype.supplyAttachDiv = function(div){
 		.hover(
 			function(e){
 				var vessel = game.getUnit($(this).data("id"));
-				vessel.doHighlight();
+					vessel.doHighlight();
+					vessel.drawTrajectory();
 				if (aUnit && aUnit != vessel.id){
 					var	ship = game.getUnit(aUnit);
 					if (ship.salvo){return;}
@@ -271,6 +272,9 @@ Salvo.prototype.supplyAttachDiv = function(div){
 
 Salvo.prototype.getArmourString = function(a){
 	return this.structures[0].negation;
+}
+Salvo.prototype.setPostMoveSize = function(){
+	return;
 }
 
 Salvo.prototype.getShortInfo = function(){
@@ -317,12 +321,6 @@ Salvo.prototype.setImage = function(){
 
 Salvo.prototype.setRawImage = function(){
 	this.img = window.shipImages[this.structures[0].name.toLowerCase()].cloneNode(true);
-}
-
-Salvo.prototype.setLayout = function(){
-	for (var i = 0; i < this.structures.length; i++){
-		this.structures[i].layout = {x: range(-10, 10), y: range(-10, 10)};
-	}
 }
 
 Salvo.prototype.getShots = function(){

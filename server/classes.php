@@ -255,6 +255,7 @@ class Divider {
 	public $armourDmg;
 	public $structDmg;
 	public $notes;
+	public $overkill = 0;
 
 	function __construct($shieldDmg, $armourDmg, $structDmg, $notes = ""){
 		$this->shieldDmg = $shieldDmg;

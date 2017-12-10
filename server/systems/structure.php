@@ -130,8 +130,9 @@ class Primary {
 		$this->remaining -= $dmg->overkill;
 
 		if ($dmg->systemid == -1){
+			$dmg->overkill += $dmg->structDmg;
+			$dmg->structDmg = 0;
 			$this->damages[] = $dmg;
-			$this->remaining -= $dmg->structDmg;
 		}
 
 		if (!$this->destroyed && $this->remaining < 1){
@@ -144,9 +145,13 @@ class Primary {
 	}
 
 	public function getHitChance(){
-		return $this->remaining;//*1.4;
+		//return 200;
+		return floor($this->remaining *1.4);
 	}
 
+	public function setMaxDmg($fire, $dmg){
+		return  $dmg;
+	}
 
 	public function setRemainingIntegrity(){
 		$rem = $this->integrity;
@@ -194,6 +199,10 @@ class Single {
 
 	public function getSubHitChance($fire){
 		return $this->baseHitChance;
+	}
+
+	public function setMaxDmg($fire, $dmg){
+		return  $dmg;
 	}
 
 	public function isDestroyed(){

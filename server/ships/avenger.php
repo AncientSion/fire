@@ -24,13 +24,13 @@ class Avenger extends Heavy {
 		$rightTop = new Structure($this->getId(), $this->id, 30, 90, 800, 15);
 		$rightTop->systems[] = new Dual($this->getId(), $this->id, 330, 150, 14, array("LightPulse", "LightParticleBeam"));
 		$rightTop->systems[] = new Dual($this->getId(), $this->id, 330, 150, 14, array("LightPulse", "LightParticleBeam"));
-		$rightTop->systems[] = new Hangar($this->getId(), $this->id, 30, 150, 800, 9, array("Aurora"), 18);
+		$rightTop->systems[] = new Hangar($this->getId(), $this->id, 9, array("Aurora"), 18);
 		$structs[] = $rightTop;
 
 		$rightBottomm = new Structure($this->getId(), $this->id, 90, 150, 800, 14);
 		$rightBottomm->systems[] = new Dual($this->getId(), $this->id, 30, 210, 14, array("LightPulse", "LightParticleBeam"));
 		$rightBottomm->systems[] = new Dual($this->getId(), $this->id, 30, 210, 14, array("LightPulse", "LightParticleBeam"));
-		$rightBottomm->systems[] = new Hangar($this->getId(), $this->id, 45, 150, 800, 9, array("Aurora"), 18);
+		$rightBottomm->systems[] = new Hangar($this->getId(), $this->id, 9, array("Aurora"), 18);
 		$structs[] = $rightBottomm;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 12);
@@ -41,13 +41,13 @@ class Avenger extends Heavy {
 		$leftBottom = new Structure($this->getId(), $this->id, 210, 270, 800, 14);
 		$leftBottom->systems[] = new Dual($this->getId(), $this->id, 150, 330, 14, array("LightPulse", "LightParticleBeam"));
 		$leftBottom->systems[] = new Dual($this->getId(), $this->id, 150, 330, 14, array("LightPulse", "LightParticleBeam"));
-		$leftBottom->systems[] = new Hangar($this->getId(), $this->id, 210, 330, 800, 9, array("Aurora"), 18);
+		$leftBottom->systems[] = new Hangar($this->getId(), $this->id, 9, array("Aurora"), 18);
 		$structs[] = $leftBottom;
 
 		$leftTop = new Structure($this->getId(), $this->id, 270, 330, 800, 16);
 		$leftTop->systems[] = new Dual($this->getId(), $this->id, 210, 30, 14, array("LightPulse", "LightParticleBeam"));
 		$leftTop->systems[] = new Dual($this->getId(), $this->id, 210, 30, 14, array("LightPulse", "LightParticleBeam"));
-		$leftTop->systems[] = new Hangar($this->getId(), $this->id, 210, 330, 800, 9, array("Aurora"), 18);
+		$leftTop->systems[] = new Hangar($this->getId(), $this->id, 9, array("Aurora"), 18);
 		$structs[] = $leftTop;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -59,11 +59,10 @@ class Avenger extends Heavy {
 
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1200);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, 125);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, 125, 240, 10);
-		//$this->primary->systems[] = new Lifesupport($this->getId(), $this->id, 125);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 125, 650, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 125, 12);
+		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(140, 4));
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(140, 4), 240, 10);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(140, 4), 650, 10);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(140, 4), 12);
 	}
 
 	static function getKit(){

@@ -6,7 +6,7 @@ class Linked extends Weapon {
 	public $reload = 1;
 	public $priority = 10;
 	public $traverse = -5;
-	public $accDecay = 500;
+	public $accDecay = 0;
 	public $tiny = 1;
 
 	function __construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end){

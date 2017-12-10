@@ -2,15 +2,11 @@
 
 class Weapon extends System {
 	public $weapon = 1;
-	public $minDmg;
-	public $maxDmg;
-	public $accDecay;
 	public $shots = 1;
 	public $guns = 1;
 	public $reload = 1;
 	public $powerReq = 2;
 	public $fireOrders = array();
-	public $priority;
 	public $traverse = 0;
 	public $projSize = 10;
 	public $projSpeed = 5;
@@ -52,12 +48,12 @@ class Weapon extends System {
 		$notes = "";
 
 		if ($totalDmg <= array_sum($negation)){ 
-			$notes = "block;";
+			$notes = "b;";
 			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
 			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"])/2);
 		}
 		else {
-			$notes = "pen;";
+			$notes = "p;";
 			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
 			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
 			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
@@ -73,12 +69,12 @@ class Weapon extends System {
 	public function doDamage($fire, $roll, $system){
 		$destroyed = 0;
 		$totalDmg = $this->getTotalDamage($fire);
-		$overkill = 0;
 		$okSystem = 0;
 		$remInt = $system->getRemainingIntegrity();
 		
 		$negation = $fire->target->getArmour($fire, $system);
 		$dmg = $this->determineDamage($totalDmg, $negation);
+		$dmg = $system->setMaxDmg($fire, $dmg);
 
 		Debug::log("fire #".$fire->id.", doDamage, weapon: ".(get_class($this)).", target #".$fire->target->id."/".$system->id."/".get_class($system).", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
 
@@ -88,9 +84,9 @@ class Weapon extends System {
 			$okSystem = $fire->target->getOverKillSystem($fire);
 
 			if ($okSystem){
-				$overkill = abs($remInt - $dmg->structDmg);
+				$dmg->overkill += abs($remInt - $dmg->structDmg);
 				$dmg->structDmg = $remInt;
-				Debug::log(" => OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$overkill." dmg");
+				Debug::log(" => OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$dmg->overkill." dmg");
 			}
 			else {
 				Debug::log(" => destroying non-ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg);
@@ -99,16 +95,13 @@ class Weapon extends System {
 
 		$entry = new Damage(
 			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
-			$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $overkill, array_sum($negation), $destroyed, $dmg->notes, 1
+			$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
 		);
 		$fire->target->applyDamage($entry);	
 	}
 
 	public function getAccuracyLoss($fire){
 		if (!$fire->dist){return 0;}
-		if ($fire->shooter->flight){
-			//Debug::log("fire id #".$fire->id." dist: ".$fire->dist);
-		}
 		return ceil($this->accDecay * $fire->weapon->getAccuracyMod($fire) * $fire->dist / 1000);
 	}
 
@@ -117,7 +110,7 @@ class Weapon extends System {
 		$mod += $this->getCritMod("Accuracy", $fire->turn);
 		$mod -= $this->getBoostEffect("Accuracy")* $this->getBoostLevel($fire->turn);
 
-		if ($mod != 1){Debug::log("weapon id: ".$this->id.", RANGE LOSS mod: ".$mod);}
+		//if ($mod != 1){Debug::log("weapon id: ".$this->id.", RANGE LOSS mod: ".$mod);}
 		return $mod / 100;
 	}
 
@@ -136,7 +129,7 @@ class Weapon extends System {
 		$boost = $this->getBoostEffect("Damage") * $this->getBoostLevel($fire->turn);
 
 		$mod = $mod + $crit + $boost;
-		if ($mod != 1){Debug::log(get_class($this).", weapon id: ".$this->id.", DAMAGE mod: ".($crit + $boost )." (crits: ".$crit.", boost: ".$boost.")");}
+		//if ($mod != 1){Debug::log(get_class($this).", weapon id: ".$this->id.", DAMAGE mod: ".($crit + $boost )." (crits: ".$crit.", boost: ".$boost.")");}
 		return $mod / 100;
 	}
 

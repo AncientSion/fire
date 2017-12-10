@@ -405,10 +405,9 @@ class Manager {
 		$this->getGeneralData();
 		$this->getGameData();
 	}
+
 	public function doAdvancea(){
 		Debug::log("doAdvance for game".$this->gameid." from phase ".$this->phase." to phase ".($this->phase+1));
-		//return;
-		$time = -microtime(true);
 
 		if ($this->phase == -1){
 			$this->handleDeploymentPhase();
@@ -421,8 +420,6 @@ class Manager {
 			$this->startDeploymentPhase();
 		}
 
-		$time += microtime(true); 
-		Debug::log("advancing game state time: ".round($time, 3)." seconds.");
 		return true;
 	}
 
@@ -461,6 +458,7 @@ class Manager {
 
 		$time += microtime(true); 
 		Debug::log("advancing game state time: ".round($time, 3)." seconds.");
+		$this->getMemory();
 		return true;
 	}
 
@@ -631,7 +629,7 @@ class Manager {
 
 	public function initBallistics(){
 		Debug::log("initBallistics");
-		$fires = DBManager::app()->getUnresolvedFireOrders($this->gameid, $this->turn); // fireorders from deployment -> hangar, launcher
+		$fires = DBManager::app()->getUnresolvedFireOrders($this->gameid, $this->turn); // fireorders from deploy -> hangar, launcher
 		usort($fires, function($a, $b){
 			return $a->shooterid - $b->shooterid;
 		});
@@ -913,7 +911,7 @@ class Manager {
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->flight && $this->ships[$i]->mission->arrived && $this->ships[$i]->mission->type == 2){
 				if ($this->getUnit($this->ships[$i]->mission->targetid)->destroyed){
-				Debug::log("freeeing flight #".$this->ships[$i]->id." from mission");
+					Debug::log("freeeing flight #".$this->ships[$i]->id." from mission");
 					$this->ships[$i]->mission->type = 1;
 					$this->ships[$i]->mission->turn = $this->turn - 2;
 					$this->ships[$i]->mission->targetid = 0;
@@ -981,20 +979,22 @@ class Manager {
 			$this->ships[$i]->setupForDamage($this->turn);
 		}
 
+		//set dist and angle for each ship to speed up fire resolution
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$aPos = $this->ships[$i]->getCurrentPosition();
 			for ($j = $i+1; $j < sizeof($this->ships); $j++){
 				if ($this->ships[$i]->userid == $this->ships[$j]->userid){continue;}
 				$bPos = $this->ships[$j]->getCurrentPosition();
 				$dist = Math::getDist2($aPos, $bPos);
+				
 				$this->ships[$i]->distances[] = array($this->ships[$j]->id, $dist);
 				$this->ships[$j]->distances[] = array($this->ships[$i]->id, $dist);
 
-				//$this->ships[$i]->angles[] = array($this->ships[$j]->id, round(Math::addAngle($this->ships[$i]->getFacing(), Math::getAngle2($aPos, $bPos))));
-				//$this->ships[$j]->angles[] = array($this->ships[$i]->id, round(Math::addAngle($this->ships[$j]->getFacing(), Math::getAngle2($bPos, $aPos))));
-
 				$this->ships[$i]->angles[] = array($this->ships[$j]->id, round(Math::getAngle2($aPos, $bPos)));
 				$this->ships[$j]->angles[] = array($this->ships[$i]->id, round(Math::getAngle2($bPos, $aPos)));
+
+				//$this->ships[$i]->angles[] = array($this->ships[$j]->id, round(Math::addAngle($this->ships[$i]->getFacing(), Math::getAngle2($aPos, $bPos))));
+				//$this->ships[$j]->angles[] = array($this->ships[$i]->id, round(Math::addAngle($this->ships[$j]->getFacing(), Math::getAngle2($bPos, $aPos))));
 			}
 		}
 
@@ -1437,6 +1437,7 @@ class Manager {
 				break;
 			case "Centauri Republic";
 				$ships = array(
+					"Octurion",
 					"Primus",
 					"Altarian",
 					"Demos",
