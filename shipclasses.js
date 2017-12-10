@@ -137,42 +137,63 @@ function Ship(data){
 		*/
 
 
+		if (game.turn == 1){
 
-		for (var i = 0; i < game.deployArea.length; i++){
-			if (game.deployArea[i].id != game.userid){continue;}
-			if (game.deployArea[i].x > 0){
-				if (pos.x >= game.deployArea[i].x && pos.x <= game.deployArea[i].x + game.deployArea[i].w){
+			for (var i = 0; i < game.deployArea.length; i++){
+				if (game.deployArea[i].id != game.userid){continue;}
+				if (game.deployArea[i].x > 0){
+					if (pos.x >= game.deployArea[i].x && pos.x <= game.deployArea[i].x + game.deployArea[i].w){
+						if (pos.y >= game.deployArea[i].y && pos.y <= game.deployArea[i].y + game.deployArea[i].h){
+							valid = true; break;
+						}
+					}
+				}
+				else if (pos.x <= game.deployArea[i].x && pos.x >= game.deployArea[i].x + game.deployArea[i].w){
 					if (pos.y >= game.deployArea[i].y && pos.y <= game.deployArea[i].y + game.deployArea[i].h){
 						valid = true; break;
 					}
 				}
-			}
-			else if (pos.x <= game.deployArea[i].x && pos.x >= game.deployArea[i].x + game.deployArea[i].w){
-				if (pos.y >= game.deployArea[i].y && pos.y <= game.deployArea[i].y + game.deployArea[i].h){
-					valid = true; break;
-				}
-			}
-			else if (pos.x > game.deployArea[i].x && pos.x < game.deployArea[i].x + game.deployArea[i].w){
-				if (pos.y > game.deployArea[i].y && pos.y < game.deployArea[i].y + game.deployArea[i].h){
-					valid = true; break;
-				}
-			}
-		}
-		if (valid){
-			for (var i = 0; i < game.ships.length; i++){
-				if (game.ships[i].deployed && game.ships[i].id != this.id && game.ships[i].userid == this.userid){ // different ship, different owners
-					var step = game.ships[i].getGamePos();
-					if (getDistance(pos, step) <= (game.ships[i].size/2 + this.size/2)){
-					popup("The selected position is too close to the position or planned position of vessel (#"+game.ships[i].id+")");
-						return false;
+				else if (pos.x > game.deployArea[i].x && pos.x < game.deployArea[i].x + game.deployArea[i].w){
+					if (pos.y > game.deployArea[i].y && pos.y < game.deployArea[i].y + game.deployArea[i].h){
+						valid = true; break;
 					}
 				}
 			}
-			return true;
+			if (valid){
+				for (var i = 0; i < game.ships.length; i++){
+					if (game.ships[i].deployed && game.ships[i].id != this.id && game.ships[i].userid == this.userid){ // different ship, different owners
+						var step = game.ships[i].getGamePos();
+						if (getDistance(pos, step) <= (game.ships[i].size/2 + this.size/2)){
+						popup("The selected position is too close to the position or planned position of vessel (#"+game.ships[i].id+")");
+							return false;
+						}
+					}
+				}
+				return true;
+			}
+
+			return false;
 		}
+		else {
+			for (var i = 0; i < game.deploys.length; i++){
+				if (game.deploys[i].userid != this.userid){continue;}
 
-		return false;
+				if (getDistance(game.deploys[i], pos) + this.size/2 < game.deploys[i].s){
+					for (var j = 0; j < game.ships.length; j++){
+						if (game.ships[j].deployed && game.ships[j].id != this.id && game.ships[j].userid == this.userid){ // different ship, different owners
+							var step = game.ships[j].getGamePos();
+							if (getDistance(pos, step) <= (game.ships[j].size/2 + this.size/2)){
+							popup("The selected position is too close to the position or planned position of vessel (#"+game.ships[i].id+")");
+								return false;
+							}
+						}
+					}
+					return true;
+				}
+			}
 
+			return false;
+		}
 	}
 
 	this.doDeploy = function(pos){
