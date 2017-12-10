@@ -488,7 +488,7 @@ class Manager {
 	}
 
 	public function pickReinforcements(){
-		if ($this->turn < 5){return;}
+		//if ($this->turn < 5){return;}
 
 		Debug::log("pickReinforcements");
 		$picks = array();
@@ -523,7 +523,7 @@ class Manager {
 				$data["display"] = "";
 				$data["turn"] = $this->turn;
 				$data["userid"] = $this->playerstatus[$k]["userid"];
-				$data["eta"] = $ships[$i][2];
+				$data["eta"] = 1; //$ships[$i][2];
 				//echo "available kits for ".$data[$i]["name"].": ".sizeof($data["upgrades"])."</br></br>";
 
 				//$totalOdds = 0;

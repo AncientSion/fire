@@ -697,8 +697,8 @@ function Game(data, userid){
 		else {
 			this.deployArea.push({
 				id: this.userid,
-				x: -800,
-				y: -800,
+				x: -700,
+				y: -1000,
 				w: 1600,
 				h: 1600,
 				c: "green"
