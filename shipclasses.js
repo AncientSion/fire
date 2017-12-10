@@ -104,11 +104,11 @@ function Ship(data){
 	}
 
 	this.canDeployHere = function(pos){
-		return true;
 		
 		//console.log(pos);
-		var valid = false;
-
+		var valid = false;		
+		
+		/*
 		if (game.turn >= 2){
 			if (getDistance({x: 0, y: 0}, pos) >= 750){
 				return false;
@@ -134,6 +134,8 @@ function Ship(data){
 
 			return false;
 		}
+		*/
+
 
 
 		for (var i = 0; i < game.deployArea.length; i++){

@@ -598,13 +598,25 @@ function Game(data, userid){
 		}
 	}
 
+	this.disableDeployment = function(){
+		this.deploying = false;
+		this.deployArea = [];
+		this.deployBlock = false;
+		moveCtx.clearRect(0, 0, res.x, res.y);
+		planCtx.clearRect(0, 0, res.x, res.y);
+		mouseCtx.clearRect(0, 0, res.x, res.y);
+		$("#deployOverlay").hide();
+		//if (aUnit){game.getUnit(aUnit).doUnselect();}
+		game.draw();
+	}
+
 	this.enableDeployment = function(id){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].id == id){
 				this.deploying = id;
 				//if (this.ships[i].actions.length){this.ships[i].doSelect();}
 				this.setupDeploymentDiv(this.ships[i])
-			//	this.setupDeploymentZone();
+				this.setupDeploymentZone();
 				this.drawDeploymentZone();
 				$("#deployWrapper").find("#reinforceTable").find(".requestReinforcements").each(function(){
 					if ($(this).data("id") == id){
@@ -625,18 +637,6 @@ function Game(data, userid){
 				return;
 			}
 		}
-	}
-
-	this.disableDeployment = function(){
-		this.deploying = false;
-		this.deployArea = [];
-		this.deployBlock = false;
-		moveCtx.clearRect(0, 0, res.x, res.y);
-		planCtx.clearRect(0, 0, res.x, res.y);
-		mouseCtx.clearRect(0, 0, res.x, res.y);
-		$("#deployOverlay").hide();
-		//if (aUnit){game.getUnit(aUnit).doUnselect();}
-		game.draw();
 	}
 
 	this.setupDeploymentDiv = function(unit){
@@ -707,14 +707,24 @@ function Game(data, userid){
 	}
 
 	this.drawDeploymentZone = function(){
-		drawCtx.translate(cam.o.x, cam.o.y)
-		drawCtx.scale(cam.z, cam.z)
-		drawCtx.beginPath();
-		drawCtx.arc(0, 0, 750, 0, 2*Math.PI);
-		drawCtx.fillStyle = "green";
-		drawCtx.fill();
-		drawCtx.setTransform(1,0,0,1,0,0);
+
+		for (var i = 0; i < game.deploys.length; i++){
+			drawCtx.translate(cam.o.x, cam.o.y)
+			drawCtx.scale(cam.z, cam.z)
+			drawCtx.beginPath();
+			drawCtx.rect(this.deploys[i].x, this.deploys[i].y, this.deploys[i].w, this.deploys[i].h);
+			drawCtx.fillStyle = this.deploys[i].c;
+			drawCtx.fill();
+			drawCtx.setTransform(1,0,0,1,0,0);
 			
+			planCtx.clearRect(0, 0, res.x, res.y);
+			planCtx.globalAlpha = 0.3;
+			planCtx.drawImage(drawCanvas, 0, 0);
+			drawCtx.clearRect(0, 0, res.x, res.y);
+		}
+		
+		return;
+
 
 		//drawCtx.globalAlpha = 0.3;
 		if (game.turn >= 2){
