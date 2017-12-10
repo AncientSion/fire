@@ -176,7 +176,7 @@ function Ship(data){
 		}
 		else {
 			for (var i = 0; i < game.deployArea.length; i++){
-				if (game.deploys[i].userid != this.userid){continue;}
+				if (game.deployArea[i].userid != this.userid){continue;}
 
 				if (getDistance(game.deploys[i], pos) < game.deploys[i].s){
 					return true;
