@@ -699,8 +699,7 @@ function Game(data, userid){
 				id: this.userid,
 				x: 0,
 				y: 0,
-				w: 750,
-				h: 750,
+				s: 750
 				c: "green"
 			});
 		}
@@ -724,7 +723,7 @@ function Game(data, userid){
 				drawCtx.translate(cam.o.x, cam.o.y)
 				drawCtx.scale(cam.z, cam.z)
 				drawCtx.beginPath();
-				drawCtx.arc(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].w, 0, 2*Math.PI);
+				drawCtx.arc(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].s, 0, 2*Math.PI);
 				drawCtx.fillStyle = this.deployArea[i].c;
 				drawCtx.fill();
 				drawCtx.setTransform(1,0,0,1,0,0);

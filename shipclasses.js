@@ -175,19 +175,10 @@ function Ship(data){
 			return false;
 		}
 		else {
-			for (var i = 0; i < game.deploys.length; i++){
+			for (var i = 0; i < game.deployArea.length; i++){
 				if (game.deploys[i].userid != this.userid){continue;}
 
-				if (getDistance(game.deploys[i], pos) + this.size/2 < game.deploys[i].s){
-					for (var j = 0; j < game.ships.length; j++){
-						if (game.ships[j].deployed && game.ships[j].id != this.id && game.ships[j].userid == this.userid){ // different ship, different owners
-							var step = game.ships[j].getGamePos();
-							if (getDistance(pos, step) <= (game.ships[j].size/2 + this.size/2)){
-							popup("The selected position is too close to the position or planned position of vessel (#"+game.ships[i].id+")");
-								return false;
-							}
-						}
-					}
+				if (getDistance(game.deploys[i], pos) < game.deploys[i].s){
 					return true;
 				}
 			}
