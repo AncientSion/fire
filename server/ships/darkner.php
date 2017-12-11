@@ -35,7 +35,7 @@ class Darkner extends Light {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 500);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 425);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(60, 3));
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(60, 3), 70);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(60, 3), 750, 10);

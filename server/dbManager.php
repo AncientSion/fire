@@ -386,7 +386,7 @@
 					if (!$ship){
 						$units[$i]["mission"]["unitid"] = $id;
 
-						if ($flight){ // salvo or flight launched, negative id on client yet
+						if (!$ball){ // salvo or flight launched, negative id on client yet
 							//Debug::log("no ship, self clientId: ".$units[$i]["clientId"]);
 							for ($j = 0; $j < sizeof($units); $j++){
 								//Debug::log("comparing to: ".$units[$j]["clientId"]);

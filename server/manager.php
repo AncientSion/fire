@@ -488,7 +488,7 @@ class Manager {
 	}
 
 	public function pickReinforcements(){
-		//if ($this->turn < 5){return;}
+		if ($this->turn < 5){return;}
 
 		Debug::log("pickReinforcements");
 		$picks = array();

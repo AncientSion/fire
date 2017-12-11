@@ -12,12 +12,12 @@ class Plasma extends Weapon {
 	}
 	
 	public function getDmgRangeMod($fire){
-		$mod = $this->getBoostEffect("Damage loss") * $this->getBoostLevel($fire->turn);
-		if ($mod){
-			$mod = 1-($fire->dist * $this->dmgLoss / 10000);
-			Debug::log(get_class($this).", weapon id: ".$this->id.", RANGE DMG mod: ".$mod);
-			return $mod;
-		} else return 1;
+		$boost = $this->getBoostEffect("Damage loss") * $this->getBoostLevel($fire->turn);
+		$mod = 1 - $boost;
+		$mod *= $fire->dist * $this->dmgLoss / 10000;
+
+		Debug::log(get_class($this).", weapon id: ".$this->id.", RANGE DMG MOD: ".$mod);
+		return $mod;
 	}
 
 
@@ -28,11 +28,11 @@ class Plasma extends Weapon {
 		$notes = "";
 
 		if ($totalDmg <= array_sum($negation)){ 
-			$notes = "b;";
+			$notes = "block;";
 			$armourDmg = round($totalDmg);
 		}
 		else {
-			$notes = "p;";
+			$notes = "pen;";
 			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
 			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
 			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
