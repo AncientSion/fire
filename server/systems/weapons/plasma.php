@@ -12,12 +12,11 @@ class Plasma extends Weapon {
 	}
 	
 	public function getDmgRangeMod($fire){
-		$boost = $this->getBoostEffect("Damage loss") * $this->getBoostLevel($fire->turn);
-		$mod = 1 - $boost;
-		$mod *= $fire->dist * $this->dmgLoss / 10000;
+		$boost = (100 + ($this->getBoostEffect("Damage loss") * $this->getBoostLevel($fire->turn))) / 100;
+		$loss = $fire->dist * ($this->dmgLoss * $boost) / 10000;
 
-		Debug::log(get_class($this).", weapon id: ".$this->id.", RANGE DMG MOD: ".$mod);
-		return $mod;
+		Debug::log(get_class($this).", weapon id: ".$this->id.", boost: ".$boost.", final multi: ".(1-$loss));
+		return 1-$loss;
 	}
 
 
@@ -48,13 +47,13 @@ class LightPlasma extends Plasma {
 	public $display = "46mm Plasma Gun";
 	public $minDmg = 33;
 	public $maxDmg = 46;
-	public $accDecay = 120;
-	public $dmgLoss = 14;
+	public $accDecay = 1;
+	public $dmgLoss = 6;
 	public $shots = 1;
 	public $animColor = "darkGreen";
 	public $projSize = 2.5;
 	public $projSpeed = 8;
-	public $reload = 2;
+	public $reload = 1;
 	public $mass = 18;
 	public $traverse = -2;
 	public $powerReq = 4;
