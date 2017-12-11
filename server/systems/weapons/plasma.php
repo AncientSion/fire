@@ -47,8 +47,8 @@ class LightPlasma extends Plasma {
 	public $display = "46mm Plasma Gun";
 	public $minDmg = 33;
 	public $maxDmg = 46;
-	public $accDecay = 1;
-	public $dmgLoss = 6;
+	public $accDecay = 120;
+	public $dmgLoss = 14;
 	public $shots = 1;
 	public $animColor = "darkGreen";
 	public $projSize = 2.5;
