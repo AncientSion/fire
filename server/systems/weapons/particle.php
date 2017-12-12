@@ -59,7 +59,7 @@ class HeavyIon extends MediumIon {
 	public $display = "122mm Ion Burst Cannon";
 	public $minDmg = 48;
 	public $maxDmg = 62;
-	public $accDecay = 4;
+	public $accDecay = 90;
 	public $shots = 2;
 	public $animColor = "orange";
 	public $reload = 4;

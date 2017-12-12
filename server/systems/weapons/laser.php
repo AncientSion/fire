@@ -161,7 +161,7 @@ class MediumLaser extends Laser {
 
 class HeavyLaser extends Laser {
 	public $name = "HeavyLaser";
-	public $display = "215mm Pulse Laser";
+	public $display = "215mm 'Heavy' Laser";
 	public $animColor = "red";
 	public $rakeTime = 70;
 	public $beamWidth = 4;
@@ -169,7 +169,7 @@ class HeavyLaser extends Laser {
 	public $maxDmg = 180;
 	public $optRange = 700;
 	public $dmgLoss = 3;
-	public $accDecay = 6;
+	public $accDecay = 60;
 	public $reload = 4;
 	public $powerReq = 6;
 	public $rakes = 3;
@@ -185,7 +185,7 @@ class HeavyLaser extends Laser {
 
 class SuperHeavyLaser extends Laser {
 	public $name = "SuperHeavyLaser";
-	public $display = "340mm 'Heavy' Laser";
+	public $display = "340mm 'Super-Heavy' Laser";
 	public $animColor = "red";
 	public $rakeTime = 120;
 	public $beamWidth = 5;
