@@ -650,7 +650,7 @@
 			"file": "server/manager.php",
 			"settings":
 			{
-				"buffer_size": 45971,
+				"buffer_size": 45933,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -869,7 +869,7 @@
 			"file": "server/ship.php",
 			"settings":
 			{
-				"buffer_size": 33118,
+				"buffer_size": 33160,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -964,11 +964,13 @@
 			}
 		},
 		{
+			"contents": "<?php\n\nclass Plasma extends Weapon {\n\tpublic $type = \"Plasma\";\n\tpublic $priority = 6;\n\tpublic $melt = 50;\n\n\tfunction __construct($id, $parentId, $start, $end, $output = 0, $effiency, $destroyed = 0){\n        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);\n\t\t$this->boostEffect[] = new Effect(\"Damage loss\", -20);\n\t\t$this->boostEffect[] = new Effect(\"Damage\", 10);\n\t}\n\t\n\tpublic function getDmgRangeMod($fire){\n\t\t$boost = $this->getBoostEffect(\"Damage loss\") * $this->getBoostLevel($fire->turn);\n\t\t$mod = 1 - $boost;\n\t\t$mod *= $fire->dist * $this->dmgLoss / 10000;\n\n\t\tDebug::log(get_class($this).\", weapon id: \".$this->id.\", RANGE DMG MOD: \".$mod);\n\t\treturn $mod;\n\t}\n\n\tpublic function determineDamage($totalDmg, $negation){\n\t\t$shieldDmg = 0;\n\t\t$armourDmg = 0;\n\t\t$structDmg = 0;\n\t\t$notes = \"\";\n\n\t\tif ($totalDmg <= array_sum($negation)){ \n\t\t\t$notes = \"block;\";\n\t\t\t$armourDmg = round($totalDmg);\n\t\t}\n\t\telse {\n\t\t\t$notes = \"pen;\";\n\t\t\t$shieldDmg = round(min($totalDmg, $negation[\"bonus\"]));\n\t\t\t$armourDmg = round(min($totalDmg-$shieldDmg, $negation[\"stock\"]));\n\t\t\t$structDmg = round($totalDmg - $shieldDmg - $armourDmg);\n\t\t\t$armourDmg += floor($totalDmg / 100 * $this->melt);\n\t\t}\n\n\t\treturn new Divider($shieldDmg * $this->linked, $armourDmg * $this->linked, $structDmg * $this->linked, $notes);\n\t}\n}\n\nclass LightPlasma extends Plasma {\n\tpublic $name = \"LightPlasma\";\n\tpublic $display = \"46mm Plasma Gun\";\n\tpublic $minDmg = 33;\n\tpublic $maxDmg = 46;\n\tpublic $accDecay = 120;\n\tpublic $dmgLoss = 14;\n\tpublic $shots = 1;\n\tpublic $animColor = \"darkGreen\";\n\tpublic $projSize = 2.5;\n\tpublic $projSpeed = 8;\n\tpublic $reload = 2;\n\tpublic $mass = 18;\n\tpublic $traverse = -2;\n\tpublic $powerReq = 4;\n\tpublic $maxBoost = 1;\n\tpublic $effiency = 2;\n\n\tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);\n\t}\n}\n\nclass MediumPlasma extends Plasma {\n\tpublic $name = \"MediumPlasma\";\n\tpublic $display = \"78mm Plasma Accelerator\";\n\tpublic $minDmg = 48;\n\tpublic $maxDmg = 66;\n\tpublic $accDecay = 120;\n\tpublic $dmgLoss = 10;\n\tpublic $shots = 1;\n\tpublic $animColor = \"darkGreen\";\n\tpublic $projSize = 3;\n\tpublic $projSpeed = 6;\n\tpublic $reload = 2;\n\tpublic $mass = 24;\n\tpublic $traverse = -1;\n\tpublic $powerReq = 6;\n\tpublic $maxBoost = 2;\n\tpublic $effiency = 3;\n\n\tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);\n\t}\n}\n\nclass HeavyPlasma extends Plasma {\n\tpublic $name = \"HeavyPlasma\";\n\tpublic $display = \"148mm Plasma Cannon\";\n\tpublic $minDmg = 75;\n\tpublic $maxDmg = 98;\n\tpublic $accDecay = 120;\n\tpublic $dmgLoss = 6;\n\tpublic $shots = 1;\n\tpublic $animColor = \"darkGreen\";\n\tpublic $projSize = 4;\n\tpublic $projSpeed = 5;\n\tpublic $reload = 3;\n\tpublic $mass = 32;\n\tpublic $traverse = 1;\n\tpublic $powerReq = 9;\n\tpublic $maxBoost = 3;\n\tpublic $effiency = 3;\n\n\tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);\n\t}\n}\n\nclass PlasmaShotgun extends Plasma {\n\tpublic $name = \"PlasmaShotgun\";\n\tpublic $display = \"6x36mm Plasma Shotgun\";\n\tpublic $minDmg = 22;\n\tpublic $maxDmg = 28;\n\tpublic $accDecay = 120;\n\tpublic $dmgLoss = 16;\n\tpublic $shots = 1;\n\tpublic $animColor = \"darkGreen\";\n\tpublic $projSize = 3;\n\tpublic $projSpeed = 4;\n\tpublic $reload = 2;\n\tpublic $mass = 25;\n\tpublic $traverse = 0;\n\tpublic $powerReq = 6;\n\n\tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);\n\t}\n}\n\n?>",
 			"file": "server/systems/weapons/plasma.php",
+			"file_size": 3848,
+			"file_write_time": 131574774015477210,
 			"settings":
 			{
-				"buffer_size": 3713,
-				"encoding": "UTF-8",
+				"buffer_size": 3712,
 				"line_ending": "Windows"
 			}
 		},
@@ -1510,6 +1512,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"pickrei",
+			"pickreii",
+			"pickreiin",
 			"pickre",
 			"getDmgRangeMod",
 			"389",
@@ -1634,10 +1639,7 @@
 			"100",
 			"otype.doUnbo",
 			"w Actio",
-			"insertServerActions",
-			"jumpa",
-			"addstruct",
-			"MediumPlasma"
+			"insertServerActions"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1783,7 +1785,7 @@
 	"groups":
 	[
 		{
-			"selected": 50,
+			"selected": 38,
 			"sheets":
 			[
 				{
@@ -2077,7 +2079,7 @@
 						"translation.y": 3620.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
@@ -2282,7 +2284,7 @@
 						"translation.y": 2171.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
@@ -2311,7 +2313,7 @@
 						"translation.y": 3853.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
@@ -2399,7 +2401,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
+					"stack_index": 23,
 					"type": "text"
 				},
 				{
@@ -2428,7 +2430,7 @@
 						"translation.y": 4460.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
@@ -2789,15 +2791,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 45971,
+						"buffer_size": 45933,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								24801,
-								24801
+								14002,
+								14002
 							]
 						],
 						"settings":
@@ -2865,10 +2867,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 11185.0,
+						"translation.y": 6440.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -3250,7 +3252,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -3676,8 +3678,8 @@
 						"selection":
 						[
 							[
-								8840,
-								8841
+								19907,
+								19911
 							]
 						],
 						"settings":
@@ -3746,10 +3748,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4412.0,
+						"translation.y": 9352.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 23,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -5383,7 +5385,7 @@
 						"translation.y": 1288.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -5588,7 +5590,7 @@
 						"translation.y": 325.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
@@ -5677,7 +5679,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -5863,15 +5865,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 33118,
+						"buffer_size": 33160,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7592,
-								7592
+								19301,
+								19301
 							]
 						],
 						"settings":
@@ -5939,10 +5941,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3225.0,
+						"translation.y": 8481.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -6413,7 +6415,7 @@
 						"translation.y": 7.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -6677,7 +6679,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -6851,7 +6853,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 6396.0,
+						"translation.y": 6375.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 34,
@@ -6863,15 +6865,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3713,
+						"buffer_size": 3712,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								685,
-								685
+								576,
+								576
 							]
 						],
 						"settings":
@@ -6942,7 +6944,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -7310,7 +7312,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 33118,
+						"buffer_size": 33160,
 						"regions":
 						{
 						},
@@ -7477,7 +7479,7 @@
 						"translation.y": 1353.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -7654,7 +7656,7 @@
 						"translation.y": 317.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
@@ -7691,15 +7693,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 45971,
+						"buffer_size": 45933,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								13684,
-								13684
+								13651,
+								13651
 							]
 						],
 						"settings":
@@ -7770,7 +7772,7 @@
 						"translation.y": 6297.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
@@ -8622,7 +8624,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -8651,7 +8653,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
@@ -9974,7 +9976,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
@@ -11120,7 +11122,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -11217,7 +11219,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3713,
+						"buffer_size": 3712,
 						"regions":
 						{
 						},
@@ -11237,7 +11239,7 @@
 						"translation.y": 78.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
@@ -11387,6 +11389,18 @@
 		"selected_items":
 		[
 			[
+				"sh",
+				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
+			],
+			[
+				"man",
+				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
+			],
+			[
+				"db",
+				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
+			],
+			[
 				"log",
 				"C:\\xampp\\htdocs\\fire\\log.txt"
 			],
@@ -11397,10 +11411,6 @@
 			[
 				"deb",
 				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
-			],
-			[
-				"db",
-				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
 			],
 			[
 				"we",
@@ -11423,20 +11433,12 @@
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\vorchan.php"
 			],
 			[
-				"man",
-				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
-			],
-			[
 				"au",
 				"C:\\xampp\\htdocs\\fire\\autoload.php"
 			],
 			[
 				"nopn",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\nonweapon.php"
-			],
-			[
-				"sh",
-				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
 			],
 			[
 				"d",
