@@ -40,10 +40,6 @@ class PrimarySystem extends System {
 		return round($this->output * $mod/100);
 	}
 
-	public function getCritModMax($dmg){
-		return min(25, round($dmg/30)*10);
-	}
-
 	public function getValidEffects(){
 		return array(
 			array("Output", 0, 0, 0)
@@ -60,18 +56,25 @@ class PrimarySystem extends System {
 
 		$mod = $this->getCritModMax($new + $old);
 		//if ($mod < 5){Debug::log("mod < 5: ".$mod.", droppiong"); return;}
+		if ($mod){Debug::log("no positive mod possobile, DONE!"); return;}
 
 		$tresh =  ($new + $old/2)*2;
+
 
 		for ($i = 0; $i < sizeof($possible); $i++){
 			$roll = mt_rand(0, 100);
 			if ($roll > $tresh){Debug::log(" NO CRIT - roll: ".$roll. ", tresh: ".$tresh); continue;}
+			Debug::log("CRIT: ".$mod.", roll: ".$roll.", tresh: ".$tresh);
 
 			//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 			$this->crits[] = new Crit(
 				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $possible[$i][0], 0, $mod, 1
 			);
 		}
+	}
+
+	public function getCritModMax($dmg){
+		return min(25, round($dmg/30)*10);
 	}
 }
 

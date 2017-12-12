@@ -36,6 +36,7 @@ function System(system){
 	this.validTarget = 0;
 	this.internal = system.internal;
 	this.tiny = system.tiny;
+	this.img;
 }
 
 System.prototype.getResolvingFireOrders = function(){
@@ -1259,16 +1260,73 @@ Sensor.prototype.drawEW = function(){
 		var str = this.getOutput();
 		var facing = ship.getPlannedFacing();
 		var w;
-		if (ew.angle == -1){
-			w = 180;
-		}
+		if (ew.angle == -1){w = 180;}
 		else w = Math.min(180, game.const.ew.len * Math.pow(str/ew.dist, game.const.ew.p));
 
 		drawSensorArc(w, ew.dist, str, loc, facing, ew.angle, this);
-	} else {
-		salvoCtx.clearRect(0, 0, res.x, res.y);
-	}
+	} else salvoCtx.clearRect(0, 0, res.x, res.y);
 }
+
+Sensor.prototype.drawTempEW = function(){
+	var ship = game.getUnit(this.parentId);
+	var loc = {x: 0, y: 0}
+	var ew = this.ew[this.ew.length-1];
+	var str = this.getOutput();
+	var facing = ship.getPlannedFacing();
+	var w;
+	if (ew.angle == -1){w = 180;}
+	else w = Math.min(180, game.const.ew.len * Math.pow(str/ew.dist, game.const.ew.p));
+
+	//drawSensorArc(w, ew.dist, str, loc, facing, ew.angle, this);
+
+	var t = document.createElement("canvas");
+		t.width = ew.dist*2;
+		t.height = ew.dist*2;		
+	var ctx = t.getContext("2d");
+		ctx.translate(t.width/2, t.height/2);
+		ctx.globalAlpha = 0.8;
+		var color = "";
+		var opacity = 0.2;
+
+		switch (this.ew[this.ew.length-1].type){
+			case 0: color = "red"; break;
+			case 1: color = "blue"; break;
+		}
+
+		//salvoCtx.clearRect(0, 0, res.x, res.y);
+		//salvoCtx.translate(cam.o.x, cam.o.y);
+		//salvoCtx.scale(cam.z, cam.z);
+
+		w = Math.ceil(w);	
+		if (w == 180){
+			ctx.beginPath();
+			ctx.arc(loc.x, loc.y, ew.dist, 0, 2*Math.PI, false);
+			ctx.closePath();
+		}
+		else {
+			var start = addAngle(0 + w-facing, ew.angle);
+			var end = addAngle(360 - w-facing, ew.angle);
+			var p1 = getPointInDirection(str, start, loc.x, loc.y);
+			var rad1 = degreeToRadian(start);
+			var rad2 = degreeToRadian(end);
+			ctx.beginPath();			
+			ctx.moveTo(loc.x, loc.y);
+			ctx.lineTo(p1.x, p1.y); 
+			ctx.arc(loc.x, loc.y, ew.dist, rad1, rad2, false);
+			ctx.closePath();
+		}
+
+		ctx.globalAlpha = opacity;
+		ctx.fillStyle = color;
+		ctx.fill();
+		ctx.globalAlpha = 1;
+		ctx.setTransform(1,0,0,1,0,0);
+
+		this.img = t;
+}
+
+
+
 
 Sensor.prototype.select = function(e){
 	console.log(this);

@@ -1379,17 +1379,17 @@ class Manager {
 		switch ($faction){
 			case "Earth Alliance";
 				$ships = array(
-					array("Omega", 4, 3),
+					array("Omega", 4, 4),
 					array("Hyperion", 8, 3),
 					array("Avenger", 3, 3),
-					array("Artemis", 10, 2),
+					array("Artemis", 10, 3),
 					array("Olympus", 10, 2),
 					array("Tethys", 6, 2)
 				);
 				break;
 			case "Centauri Republic";
 				$ships = array(
-					array("Primus", 8, 3),
+					array("Primus", 8, 4),
 					array("Altarian", 10, 3),
 					array("Darkner", 10, 2),
 					array("Demos", 10, 2),
@@ -1399,8 +1399,8 @@ class Manager {
 				break;
 			case "Minbari Federation";
 				$ships = array(
-					array("Sharlin", 8, 3),
-					array("Tinashi", 4, 2),
+					array("Sharlin", 8, 4),
+					array("Tinashi", 4, 3),
 					array("WhiteStar", 5, 2),
 				);
 				break;

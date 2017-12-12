@@ -106,6 +106,7 @@ spl_autoload_register(
                 'mediumion' => '/server/systems/weapons/particle.php',
                 'mediumtwinion' => '/server/systems/weapons/particle.php',
                 'heavyion' => '/server/systems/weapons/particle.php',
+                'superheavyion' => '/server/systems/weapons/particle.php',
                 'fusioncannon' => '/server/systems/weapons/particle.php',
 
                 'em' => '/server/systems/weapons/em.php',

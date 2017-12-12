@@ -271,9 +271,7 @@ function Ship(data){
 	}
 
 	this.isDestroyedThisTurn = function(){
-		if (this.primary.destroyed){
-			return true;
-		} else if (this.getSystemByName("Reactor").destroyed){
+		if (this.destroyed || this.primary.destroyed || this.getSystemByName("Reactor").destroyed){
 			return true;
 		}
 		return false;
@@ -1020,15 +1018,28 @@ function Ship(data){
 		if (game.turnMode){
 			turn.reset();
 			game.turnMode = 0;
+			this.setTempEW();
+			this.drawEW();
 			mouseCtx.clearRect(0, 0, res.x, res.y);
 			$("#epButton").addClass("disabled");
 		}	
 		else {
 			game.turnMode = 1;
+			this.setTempEW();
 			turn.set(this);
 			$("#epButton").removeClass("disabled");
 		}
 		this.setTurnData();
+	}
+
+	this.setTempEW = function(){;
+		if (game.turnMode){
+			this.getSystemByName("Sensor").drawTempEW(drawCtx);
+		}
+		else {
+			salvoCtx.clearRect(0, 0, res.x, res.y);
+			this.getSystemByName("Sensor").img = undefined;
+		}
 	}
 
 	this.handleTurning = function(e, o, f, pos){
@@ -1036,31 +1047,26 @@ function Ship(data){
 		var max = this.getMaxTurnAngle();
 		var a =  getAngleFromTo(o, pos);
 			a = Math.round(addAngle(f, a));
+
 		if (a > 180){a = (360-a) *-1;}
-			a = Math.min(Math.abs(a), max);
-			turn.a = a;
+
+		//console.log(a)
+		if (a < -max){a = -max;}
+		else if (a > max){a = max;}
+
+		var img = this.getSystemByName("Sensor").img;
+		salvoCtx.clearRect(0, 0, res.x, res.y);
+		salvoCtx.translate(cam.o.x, cam.o.y);
+		salvoCtx.scale(cam.z, cam.z);
+		salvoCtx.translate(o.x, o.y);
+		salvoCtx.rotate(a * Math.PI/180);
+		salvoCtx.drawImage(img, -img.width/2 , -img.height/2, img.width, img.height);
+		salvoCtx.setTransform(1, 0, 0, 1, 0, 0);
+
+		a = Math.min(Math.abs(a), max);
+		turn.a = a;
 		var c = this.getTurnCost() * a;
-
-		$("#epButton").css("top", t.y + 50).css("left", t.x - 70).find("#impulseCost").html(Math.ceil(c, 2) + " : " + Math.floor(this.getRemainingEP() - c))
-
-		//gui.find("#impulse").html(this.getRemainingImpulse() + " / " + this.getCurrentImpulse());
-
-	/*	var c = this.getTurnCost() * a;
-		var remEP = "Cost: " + Math.round(c, 2) + " (" + Math.round(this.getRemainingEP() - c) + ") EP";
-		var delay = "Delay: " + Math.round(this.getTurnDelay() * a, 2) + " px";
-
-	$("#vectorDiv")
-		.css("left", e.clientX - offset.x - 45 + "px")
-		.css("top", e.clientY - offset.y + 40 + "px")
-		.find("tr").each(function(i){
-			switch (i){
-				case 0: $(this).html("Angle: " + a); break;
-				case 1: $(this).html(remEP); break;
-				case 2: $(this).html(delay); break;
-				default: break;
-			}
-		})
-		*/
+		$("#epButton").css("top", t.y + 75).css("left", t.x - 70).find("#impulseCost").html(Math.ceil(c, 2) + " : " + Math.floor(this.getRemainingEP() - c));
 
 		this.drawDelay();
 		this.drawMouseVector(o, t);

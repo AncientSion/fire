@@ -17,19 +17,19 @@ class Octurion extends UltraHeavy {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 324, 36, 1050, 26);
+		$front->systems[] = new MediumIon($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new MediumIon($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new MediumIon($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new MediumIon($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new MediumIon($this->getId(), $this->id, 240, 360);
-		$front->systems[] = new HeavyIon($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new HeavyIon($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new MediumIon($this->getId(), $this->id, 0, 120);
-		$front->systems[] = new MediumIon($this->getId(), $this->id, 240, 360);
-		$front->systems[] = new HeavyIon($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new HeavyIon($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new SuperHeavyIon($this->getId(), $this->id, 315, 45);
+		$front->systems[] = new SuperHeavyIon($this->getId(), $this->id, 315, 45);
 		$front->systems[] = new MediumIon($this->getId(), $this->id, 0, 120);
 		$structs[] = $front;
 
 		$rightTop = new Structure($this->getId(), $this->id, 36, 108, 800, 24);
-		$rightTop->systems[] = new HeavyIon($this->getId(), $this->id, 30, 150);
-		$rightTop->systems[] = new HeavyIon($this->getId(), $this->id, 30, 150);
+		$rightTop->systems[] = new SuperHeavyIon($this->getId(), $this->id, 45, 135);
+		$rightTop->systems[] = new SuperHeavyIon($this->getId(), $this->id, 45, 135);
 		$rightTop->systems[] = new MediumIon($this->getId(), $this->id, 30, 150);
 		$rightTop->systems[] = new MediumIon($this->getId(), $this->id, 30, 150);
 		$rightTop->systems[] = new LightIon($this->getId(), $this->id, 342, 162);
@@ -49,8 +49,8 @@ class Octurion extends UltraHeavy {
 		$structs[] = $leftBottom;
 
 		$leftTop = new Structure($this->getId(), $this->id, 250, 324, 800, 24);
-		$leftTop->systems[] = new HeavyIon($this->getId(), $this->id, 210, 330);
-		$leftTop->systems[] = new HeavyIon($this->getId(), $this->id, 210, 330);
+		$leftTop->systems[] = new SuperHeavyIon($this->getId(), $this->id, 225, 315);
+		$leftTop->systems[] = new SuperHeavyIon($this->getId(), $this->id, 225, 315);
 		$leftTop->systems[] = new MediumIon($this->getId(), $this->id, 210, 330);
 		$leftTop->systems[] = new MediumIon($this->getId(), $this->id, 210, 330);
 		$leftTop->systems[] = new LightIon($this->getId(), $this->id, 198, 18);
