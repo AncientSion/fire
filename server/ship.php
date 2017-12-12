@@ -635,7 +635,7 @@ class Ship {
 		$current = 0;
 		$total = $this->primary->getHitChance();
 		$fraction = round($this->primary->remaining / $this->primary->integrity, 3);
-		Debug::log("main: ".$total.", @ ".$fraction);
+		Debug::log("main: ".$total."/".$this->primary->integrity." => ".$fraction. " %");
 		$valid = array();
 
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
@@ -661,7 +661,7 @@ class Ship {
 		//Debug::log("roll: ".$roll.", all: ".$total);
 
 		if ($roll <= $current){
-			Debug::log("current: ".$current.", hitting main structure");
+			Debug::log("roll:".$roll.", current: ".$current.", HITTING main structure");
 			return $this->primary;
 		}
 		else {
@@ -670,7 +670,7 @@ class Ship {
 				$current += $valid[$i]->getHitChance();
 				//Debug::log("current: ".$current);
 				if ($roll <= $current){
-					Debug::log("non main structure HIT --- ".$valid[$i]->name." #".$valid[$i]->id.", odds: ".$valid[$i]->getHitChance()."/".$total);
+					Debug::log("roll .".$roll.", current: ".$current.", HITTING non main structure HIT --- ".$valid[$i]->name." #".$valid[$i]->id.", odds: ".$valid[$i]->getHitChance()."/".$total);
 					return $valid[$i];
 				}
 			}

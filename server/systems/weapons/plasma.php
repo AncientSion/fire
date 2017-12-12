@@ -20,7 +20,6 @@ class Plasma extends Weapon {
 		return $mod;
 	}
 
-
 	public function determineDamage($totalDmg, $negation){
 		$shieldDmg = 0;
 		$armourDmg = 0;

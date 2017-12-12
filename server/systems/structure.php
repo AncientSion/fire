@@ -126,14 +126,14 @@ class Primary {
 	}
 
 	public function addDamage($dmg){
-		$this->damaged = 1;
-		$this->remaining -= $dmg->overkill;
-
 		if ($dmg->systemid == -1){
 			$dmg->overkill += $dmg->structDmg;
 			$dmg->structDmg = 0;
 			$this->damages[] = $dmg;
 		}
+
+		$this->damaged = 1;
+		$this->remaining -= $dmg->overkill;
 
 		if (!$this->destroyed && $this->remaining < 1){
 			$this->destroyed = 1;
@@ -156,7 +156,7 @@ class Primary {
 	public function setRemainingIntegrity(){
 		$rem = $this->integrity;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
-			$rem -= $this->damages[$i]->structDmg;
+			$rem -= $this->damages[$i]->overkill;
 		}
 		$this->remaining = $rem;
 	}

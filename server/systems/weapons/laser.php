@@ -169,7 +169,7 @@ class HeavyLaser extends Laser {
 	public $maxDmg = 180;
 	public $optRange = 700;
 	public $dmgLoss = 3;
-	public $accDecay = 60;
+	public $accDecay = 6;
 	public $reload = 4;
 	public $powerReq = 6;
 	public $rakes = 3;

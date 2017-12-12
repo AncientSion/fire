@@ -94,7 +94,7 @@ class Bridge extends PrimarySystem {
 
 class Reactor extends PrimarySystem {
 	public $name = "Reactor";
-	public $display = "Energy Gen & Power Grid";
+	public $display = "Reactor & Power Grid";
 	public $powerReq = 0;
 
 	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
@@ -127,7 +127,7 @@ class Engine extends PrimarySystem {
 
 class Sensor extends PrimarySystem {
 	public $name = "Sensor";
-	public $display = "Sensor & Scanner Tech";
+	public $display = "Sensor & Analyzing";
 	public $ew = array();
 
 	function __construct($id, $parentId, $mass, $output = 0, $effiency, $destroyed = 0){
