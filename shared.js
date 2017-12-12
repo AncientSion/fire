@@ -43,15 +43,21 @@ function initChat(){
 			.css("top", res.y - h-3)
 			.css("left", 3)
 			.data("s", 1)
+			.data("pos", res.y - h-3)
 			.contextmenu(function(e){
 				e.preventDefault(); e.stopPropagation();
 				if ($(this).data("s") == 0){
 					$(this).data("s", 1).css("width", 600);
 				}
 				else if ($(this).data("s") == 1){
-					$(this).data("s", 2).css("width", Math.min(res.x - 50, 1000));
+					$(this).data("s", 2).css("width", Math.min(res.x - 50, 1000)).css("top", 500).css("height", 500)
+						.find(".chatBox").css("height", 300).css("max-height", 300);
 				}
-				else $(this).data("s", 0).css("width", 150);
+				else {
+					$(this).data("s", 0).css("width", 150).css("top", $(this).data("pos")).css("height", 100)
+						.find(".chatBox").css("height", 100).css("max-height", 100)
+							.scrollTop(function(){return this.scrollHeight});
+				}
 			})//.drag();
 		}
 }

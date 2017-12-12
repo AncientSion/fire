@@ -4,7 +4,7 @@ class Darkner extends Light {
 	public $name = "Darkner";
 	public $display = "Darkner";
 	public $faction = "Centauri Republic";
-	public $size =  50;
+	public $size =  45;
 	public static $value = 420;
 	public $profile = array(0.93, 1.07);
 	public $mass = 2000;
