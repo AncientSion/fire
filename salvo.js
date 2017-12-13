@@ -332,3 +332,7 @@ Salvo.prototype.getShots = function(){
 	}
 	return shots;
 }
+
+Salvo.prototype.getLockMultiplier = function(){
+	return 1.0;
+}

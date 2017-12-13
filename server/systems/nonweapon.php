@@ -56,7 +56,7 @@ class PrimarySystem extends System {
 
 		$mod = $this->getCritModMax($new + $old);
 		//if ($mod < 5){Debug::log("mod < 5: ".$mod.", droppiong"); return;}
-		if ($mod){Debug::log("no positive mod possobile, DONE!"); return;}
+		if (!$mod){Debug::log("no positive mod possobile, DONE!"); return;}
 
 		$tresh =  ($new + $old/2)*2;
 

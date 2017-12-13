@@ -62,6 +62,10 @@ class Salvo extends Mixed {
 	public function addMissionDB($data, $userid, $turn, $phase){
 		$this->mission = new Mission($data[sizeof($data)-1]);
 	}
+
+	public function getLockMultiplier(){
+		return 1;
+	}
 }
 
 ?>

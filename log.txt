@@ -1,0 +1,34 @@
+createPlayerStatus
+DB insertUnits: 1
+insertSubUnits
+insertMissions s: 0
+Game #2 is not ready !
+createPlayerStatus
+DB insertUnits: 1
+insertSubUnits
+insertMissions s: 0
+Game #2 is ready !
+Starting game #2
+doAdvance for game2 from phase -1 to phase 0
+initBallistics
+resolveDeployActions s: 2
+handleJumpActions
+jumpin: #6, class: Demos, size: 45, sensor: 750, ordered to: -647/-73, shiftPotential: 9.9%
+Demos, aShift: 10°, pShift: 20px
+--> aShift: -2°, psShift: 18/-6 (19px)
+jumpin: #7, class: Altarian, size: 55, sensor: 750, ordered to: 639/-15, shiftPotential: 12.1%
+Altarian, aShift: 13°, pShift: 25px
+--> aShift: 8°, psShift: -2/-9 (10px)
+assemblDeployStates
+updateUnitState s:2 1/-1
+advancing game state time: 0.108 seconds.
+2 mb
+doAdvance for game2 from phase 0 to phase 1
+handleMovementPhase
+handleShipMovement
+resolveUnitMovementDB
+handleMixedMovement
+handleMixedMovement
+updateMissionState
+advancing game state time: 0.073 seconds.
+2 mb

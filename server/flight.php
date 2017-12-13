@@ -71,5 +71,9 @@ class Flight extends Mixed {
 			}
 		} else $this->mission = new Mission($data[sizeof($data)-1]);
 	}
+
+	public function getLockMultiplier(){
+		return 1.5;
+	}
 }
 ?>

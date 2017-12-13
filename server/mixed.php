@@ -374,10 +374,6 @@ class Mixed extends Ship {
 		}
 	}
 
-	public function getLockMultiplier(){
-		return 1.0;
-	}
-
 	public function getEndState($turn){
 		//Debug::log("getMoveState for ".$this->id);
 		$facing = $this->actions[sizeof($this->actions)-1]->a;

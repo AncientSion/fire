@@ -443,10 +443,6 @@ Mixed.prototype.setPreFireImage = function(){
 	this.resetImage();
 }
 
-Mixed.prototype.getLockMultiplier = function(){
-	return 1.0;
-}
-
 Mixed.prototype.setLayout = function(){
 	if (!this.mission.arrived){
 		this.setBaseLayout();

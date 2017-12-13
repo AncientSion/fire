@@ -1397,13 +1397,6 @@ function Ship(data){
 		return isInArc(getCompassHeadingOfPoint(origin,  target, this.getPlannedFacing()), start, end);
 	}
 
-	this.getLockString = function(lock){
-		if (lock){
-			return "<span class='green'>Active Lock (x 1.5)</span>";
-		}
-		return "<span class='red'>No Sensor Lock</span>";
-	}
-
 	this.canSetSensor = function(sensor){
 		if (this.flight || this.salvo){return false;}
 		if (sensor.selected && !sensor.locked){

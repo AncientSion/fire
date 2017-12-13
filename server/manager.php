@@ -1063,14 +1063,14 @@ class Manager {
 
 				if ($ew->angle == -1){
 					$w = 180;
-					Debug::log("specific EW for ship #".$s->id.", 360 arc");
+					//Debug::log("specific EW for ship #".$s->id.", 360 arc");
 				}
 				else {
 					$str = $sensor->getOutput($this->turn);
 					$w = min(180, $this->const["ew"]["len"] * pow($str/$ew->dist, $this->const["ew"]["p"]));
 					$start = Math::addAngle(0 + $w-$s->getFacing(), $ew->angle);
 					$end = Math::addAngle(360 - $w-$s->getFacing(), $ew->angle);
-					Debug::log("specific EW for ship #".$s->id.", str: ".$str.", facing: ".$s->getFacing().", w: ".$w.", EW from ".$start." to ".$end.", dist: ".$ew->dist);
+					//Debug::log("specific EW for ship #".$s->id.", str: ".$str.", facing: ".$s->getFacing().", w: ".$w.", EW from ".$start." to ".$end.", dist: ".$ew->dist);
 
 				}
 
@@ -1108,20 +1108,20 @@ class Manager {
 					$dest = $this->ships[$i]->getCurrentPosition();
 					if (Math::getDist2($origin, $dest) <= $ew->dist){
 						$a = Math::getAngle2($origin, $dest);
-						Debug::log("versus #".$this->ships[$i]->id.", a: ".$a);
+						//Debug::log("versus #".$this->ships[$i]->id.", a: ".$a);
 						if (Math::isInArc($a, $start, $end)){
 							if ($ew->type == 0){ // LOCK
-								Debug::log("locking onto: #".$this->ships[$i]->id);
+									Debug::log("locking on #".$this->ships[$i]->id." for value: ".$mulit);
 								$s->locks[] = array($this->ships[$i]->id, $multi);
 							}
 							else if ($ew->type == 1){ // MASK
 								if (!$this->ships[$i]->flight){
-									Debug::log("masking from #".$this->ships[$i]->id);
+									Debug::log("masking from #".$this->ships[$i]->id." for value: ".$mulit);
 									$s->masks[] = array($this->ships[$i]->id, $multi);
 								}
 							}
-						} else Debug::log("out of arc");
-					} else ("out of dist: ".(Math::getDist2($origin, $dest))." EW: ".$ew->dist);
+						}// else Debug::log("out of arc");
+					}// else ("out of dist: ".(Math::getDist2($origin, $dest))." EW: ".$ew->dist);
 				}
 			}
 
