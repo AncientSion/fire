@@ -66,6 +66,14 @@ class Salvo extends Mixed {
 	public function getLockMultiplier(){
 		return 1;
 	}
+
+	public function getLockEffect($target){
+		return 0;
+	}
+
+	public function getMaskEffect($shooter){
+		return 0;
+	}
 }
 
 ?>

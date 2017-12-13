@@ -1015,25 +1015,24 @@ class Manager {
 
 	public function setLocks($s){
 		if ($s->salvo){
-			return;
 		}
 		else if ($s->flight && $s->mission->arrived){
-			//Debug::log("setLocks Flight #".$shi->id);
+			Debug::log("setLocks for FLIGHT #".$s->id);
 			for ($i = 0; $i < sizeof($this->ships); $i++){
 				if ($this->ships[$i]->id == $s->id || $s->userid == $this->ships[$i]->userid){continue;}
 				for ($j = 0; $j < sizeof($s->cc); $j++){
 					if ($s->cc[$j] == $this->ships[$i]->id){
 						if ($this->ships[$i]->flight){
 							if ($s->mission->targetid == $this->ships[$i]->id){ // mission direct target lock
-								$s->locks[] = array($this->ships[$i]->id, $this->ships[$i]->getLockMultiplier());
+								$s->locks[] = array($this->ships[$i]->id, $s->getLockEffect($this->ships[$i]));
 							}
 							else if ($s->mission->targetid == $this->ships[$i]->mission->targetid && $s->userid == $this->getUnit($s->mission->targetid)->userid){ //escorting flight
-								$s->locks[] = array($this->ships[$i]->id, $this->ships[$i]->getLockMultiplier());
+								$s->locks[] = array($this->ships[$i]->id, $s->getLockEffect($this->ships[$i]));
 							}
 						}
 						else if ($this->ships[$i]->salvo){ // if flight in patrol vs salvo || flight in escort duty vs salvo
 							if ($s->mission->type == 1 || $this->ships[$i]->mission->targetid != $s->id){
-								$s->locks[] = array($this->ships[$i]->id, $this->ships[$i]->getLockMultiplier());
+								$s->locks[] = array($this->ships[$i]->id, $s->getLockEffect($this->ships[$i]));
 							}
 						}
 					}
@@ -1041,7 +1040,7 @@ class Manager {
 			}
 		}
 		else if ($s->ship){
-			//Debug::log("ew for #".$s->id);
+			Debug::log("ew for #".$s->id);
 			$origin = $s->getCurrentPosition();
 			$sensor =  $s->getSystemByName("Sensor");
 			$ew = $sensor->getEW($this->turn);
@@ -1071,31 +1070,41 @@ class Manager {
 					$start = Math::addAngle(0 + $w-$s->getFacing(), $ew->angle);
 					$end = Math::addAngle(360 - $w-$s->getFacing(), $ew->angle);
 					//Debug::log("specific EW for ship #".$s->id.", str: ".$str.", facing: ".$s->getFacing().", w: ".$w.", EW from ".$start." to ".$end.", dist: ".$ew->dist);
-
 				}
 
 				for ($i = 0; $i < sizeof($this->ships); $i++){
-					$multi = $this->ships[$i]->getLockMultiplier();
 					$skip = 0;
 					if ($this->ships[$i]->id == $s->id || $s->userid == $this->ships[$i]->userid){continue;}
 
-					if ($ew->type == 0 && sizeof($s->cc)){ // specific OW versus close combat
-						for ($j = 0; $j < sizeof($s->cc); $j++){
-							if ($s->cc[$j] == $this->ships[$i]->id){
-								if ($this->ships[$i]->flight){ // flight
-									$multi = $multi / 180 * $w;
-									//Debug::log("adding CC lock from ship #".$s->id." vs flight# #".$this->ships[$i]->id." for value: ".$multi);
+					if (sizeof($s->cc)){
+						if ($ew->type == 0){ // specific OW versus close combat
+							for ($j = 0; $j < sizeof($s->cc); $j++){
+								if ($s->cc[$j] == $this->ships[$i]->id){
+									if ($this->ships[$i]->flight){ // flight
+										$multi = $s->getLockEffect($this->ships[$i]) / 180 * $w;
+										Debug::log("adding CC lock from ship #".$s->id." vs flight# #".$this->ships[$i]->id." for value: ".$multi);
 
-									$s->locks[] = array($this->ships[$i]->id, $multi);
-									$skip = 1; break;
-								}
-								else if ($this->ships[$i]->salvo){ // salvo, in trajectory ?
-									$angle = Math::getAngle2($origin, $this->ships[$i]->getTrajectoryStart());
-									if (Math::isInArc($angle, $start, $end)){
-										//Debug::log("adding CC lock from ship vs salvo");
 										$s->locks[] = array($this->ships[$i]->id, $multi);
 										$skip = 1; break;
 									}
+									else if ($this->ships[$i]->salvo){ // salvo, in trajectory ?
+										$angle = Math::getAngle2($origin, $this->ships[$i]->getTrajectoryStart());
+										if (Math::isInArc($angle, $start, $end)){
+											Debug::log("adding CC lock from ship vs salvo");
+											$s->locks[] = array($this->ships[$i]->id, $s->getLockEffect($this->ships[$i]));
+											$skip = 1; break;
+										}
+									}
+								}
+							}
+						}
+						else if ($ew->type == 1){ // ship MASK in cc, only working against salvo ATM
+							if ($this->ships[$i]->salvo){ // salvo, in trajectory ?
+								$angle = Math::getAngle2($origin, $this->ships[$i]->getTrajectoryStart());
+								if (Math::isInArc($angle, $start, $end)){
+									Debug::log("adding CC mask from ship vs salvo");
+									$s->masks[] = array($this->ships[$i]->id, $s->getMaskEffect($this->ships[$i]));
+									$skip = 1; break;
 								}
 							}
 						}
@@ -1111,17 +1120,17 @@ class Manager {
 						//Debug::log("versus #".$this->ships[$i]->id.", a: ".$a);
 						if (Math::isInArc($a, $start, $end)){
 							if ($ew->type == 0){ // LOCK
-									Debug::log("locking on #".$this->ships[$i]->id." for value: ".$mulit);
-								$s->locks[] = array($this->ships[$i]->id, $multi);
+								$s->locks[] = array($this->ships[$i]->id, $s->getLockEffect($this->ships[$i]));
+								Debug::log("locking on #".$this->ships[$i]->id." for value: ".$s->locks[sizeof($s->locks)-1][1]);
 							}
 							else if ($ew->type == 1){ // MASK
-								if (!$this->ships[$i]->flight){
-									Debug::log("masking from #".$this->ships[$i]->id." for value: ".$mulit);
-									$s->masks[] = array($this->ships[$i]->id, $multi);
+								if ($this->ships[$i]->ship){
+									$s->masks[] = array($this->ships[$i]->id, $s->getMaskEffect($this->ships[$i]));
+									Debug::log("masking from #".$this->ships[$i]->id." for value: ".$s->masks[sizeof($s->masks)-1][1]);
 								}
 							}
-						}// else Debug::log("out of arc");
-					}// else ("out of dist: ".(Math::getDist2($origin, $dest))." EW: ".$ew->dist);
+						} else Debug::log("out of arc");
+					} else ("out of dist: ".(Math::getDist2($origin, $dest))." EW: ".$ew->dist);
 				}
 			}
 

@@ -556,7 +556,10 @@ class Ship {
 		//return 100;
 
 		if ($fire->shooter->salvo){
-			return ceil(90 * (1-($fire->weapon->getTraverseMod($fire)*0.2)));
+			$base = 90;
+			$mask = $this->getDefensiveBonus($fire->shooter->id);
+			$traverse = $fire->weapon->getTraverseMod($fire)*0.2;
+			return ceil(90 * (1-$mask) * (1-$traverse));
 		}
 
 		$multi = 1;
@@ -705,6 +708,30 @@ class Ship {
 
 	public function getBaseHitChance(){
 		return $this->baseHitChance;
+	}
+
+	public function getLockEffect($target){
+		if ($target->ship){
+			return 0.5 + (0.05 * $this->traverse);
+		}
+		else if ($target->flight){
+			return 1.5;
+		}
+		else if ($target->salvo){
+			return 1;
+		}
+	}
+
+	public function getMaskEffect($target){
+		if ($target->ship){
+			return 0.5 + (0.05 * $this->traverse);
+		}
+		else if ($target->flight){
+			return 0;
+		}
+		else if ($target->salvo){
+			return 0.33;
+		}
 	}
 
 	public function getImpulseProfileMod($fire){

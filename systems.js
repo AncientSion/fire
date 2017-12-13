@@ -2514,7 +2514,7 @@ Launcher.prototype.select = function(e){
 		this.setSystemBorder();
 		this.setupAmmoLoadout(e);
 	}
-	else if (game.phase != -1 || this.getOutput() == 0 || game.getUnitById(this.parentId).available == game.turn){
+	else if (game.phase != -1 || this.getOutput() == 0 || game.getUnit(this.parentId).available == game.turn){
 		return false;
 	}
 	

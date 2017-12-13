@@ -52,7 +52,7 @@ class LightPlasma extends Plasma {
 	public $animColor = "darkGreen";
 	public $projSize = 2.5;
 	public $projSpeed = 8;
-	public $reload = 1;
+	public $reload = 2;
 	public $mass = 18;
 	public $traverse = -2;
 	public $powerReq = 4;

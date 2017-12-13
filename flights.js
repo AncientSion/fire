@@ -556,6 +556,3 @@ Flight.prototype.switchDiv = function(){
 	Ship.prototype.switchDiv.call(this);
 }
 
-Flight.prototype.getLockMultiplier = function(){
-	return 1.5;
-}

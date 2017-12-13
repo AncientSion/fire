@@ -38,10 +38,6 @@ function Salvo(data){
 		
 		return html + " (" + Math.floor(100-d*20) + "%)</span>";
 	}
-	
-	this.getDefensiveBonus = function(s){
-		return 0;
-	}
 
 	this.setDisplay = function(){
 		this.display = this.structures[0].display;
@@ -212,6 +208,8 @@ Salvo.prototype.supplyAttachDiv = function(div){
 	var color = "red";
 
 	if (this.friendly){color = "green";}
+
+		console.log(this.getTarget().getMaskEffect(this))
 	var attachDiv = $("<div>").addClass("attachDiv")
 		.append($("<div>").css("display", "block").addClass("center15 " + color)
 			.html("Salvo #" + this.id + (" (click to select)"))
@@ -331,8 +329,4 @@ Salvo.prototype.getShots = function(){
 		}
 	}
 	return shots;
-}
-
-Salvo.prototype.getLockMultiplier = function(){
-	return 1.0;
 }

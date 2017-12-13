@@ -345,23 +345,38 @@ Mixed.prototype.setPostMoveFacing = function(){
 
 Mixed.prototype.canShortenTurn = function(){
 	return false;
-}
+}	
 
-Mixed.prototype.getOffensiveBonus = function(target){
+Mixed.prototype.getLockEffect = function(target){
 	if (!this.mission.arrived){return 0;}
+
+	var multi = 0;
+	if (target.ship){
+		return multi;
+	}
+	else if (target.flight){
+		multi = 1;
+	}
+	else if (target.salvo){
+		multi = 1;
+	}	
 
 	if (target.flight){
 		if (this.mission.targetid == target.id){ // intercept
-			return target.getLockMultiplier();
+			return multi;
 		} else if (target.mission.targetid == this.mission.targetid && this.userid == this.getTarget().userid){ // flight escorting flight vs enemy flight
-			return target.getLockMultiplier();
+			return multi;
 		}
 	}
 	else if (target.salvo){
-		if (this.mission.type == 1){return target.getLockMultiplier();} // patrol flight vs salvo
-		else if (target.mission.targetid != this.id){return target.getLockMultiplier();} // escorting" flight vs salvo
+		if (this.mission.type == 1){return multi;} // patrol flight vs salvo
+		else if (target.mission.targetid != this.id){return multi;} // escorting" flight vs salvo
 	}
 	else return 0;
+}
+
+Mixed.prototype.getMaskEffect = function(){
+	return 0;
 }
 
 Mixed.prototype.canUndoShortenTurn = function(){

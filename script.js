@@ -167,8 +167,8 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			baseHit = target.getAngledHitChance(angle);
 
 			impulse = 1 - target.getImpulseMod();
-			lock = shooter.getOffensiveBonus(target);
-			mask = target.getDefensiveBonus(shooter);
+			lock = shooter.getLockEffect(target);
+			mask = target.getMaskEffect(shooter);
 			//section = target.getAngledHitSection(angle);
 
 			//console.log("armour: "+section.remainingNegation + " / " + section.negation);

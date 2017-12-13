@@ -72,8 +72,21 @@ class Flight extends Mixed {
 		} else $this->mission = new Mission($data[sizeof($data)-1]);
 	}
 
-	public function getLockMultiplier(){
-		return 1.5;
+	public function getLockEffect($target){
+		if ($target->ship){
+			return 0;
+		}
+		else if ($target->flight){
+			return 1;
+		}
+		else if ($target->salvo){
+			return 1;
+		}
+	}
+
+	public function getMaskEffect($shooter){
+		return 0;
 	}
 }
+
 ?>

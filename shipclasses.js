@@ -1953,10 +1953,6 @@ Ship.prototype.resetMoveMode = function(){
 	}
 }
 
-Ship.prototype.getLockMultiplier = function(){
-	return 0.5;
-}
-
 Ship.prototype.getCurrentImpulse = function(){
 	if (game.phase >= 1 && this.ship){
 		return this.currentImpulse;
@@ -2952,53 +2948,76 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 Ship.prototype.animationSetupMove = function(){
 	this.setPreMovePosition();
 	this.setPreMoveFacing();
-}	
+}
 
-
-Ship.prototype.getOffensiveBonus = function(target){
+Ship.prototype.getLockEffect = function(target){
 	var sensor = this.getSystemByName("Sensor");
 	var ew = sensor.getEW();
-	if (sensor.disabled || sensor.destroyed || ew.type == 1 || ew.type == 3){return 0;}
-	if (ew.type == 2){return 0.2}
+	if (sensor.disabled || sensor.destroyed || ew.type == 1){return 0;}
 
 	var tPos = target.getGamePos();
 	var origin = this.getGamePos();
 	var d = getDistance(origin, tPos);
-	var base = target.getLockMultiplier();
+	var multi = 0;
+
+	if (target.ship){
+		multi = 0.5;
+		multi += (multi / 10 * this.traverse);
+	}
+	else if (target.flight){
+		multi = 1.5;
+	}
+	else if (target.salvo){
+		multi = 1;
+	}	
 
 	if (d == 0 && game.isCloseCombat(this, target) && this.isInEWArc(origin, target.getTrajectory(), sensor, ew)){
 		if (target.salvo){
-			return base;
+			return multi;
 		}
 		else if (target.flight){
-			if (ew.angle == -1){return base;}
-			else return Math.round(base / 180 * (Math.min(180, game.const.ew.len * Math.pow(sensor.getOutput()/ew.dist, game.const.ew.p)))*100)/100;
+			if (ew.angle == -1){return multi;}
+			else return Math.round(multi / 180 * (Math.min(180, game.const.ew.len * Math.pow(sensor.getOutput()/ew.dist, game.const.ew.p)))*100)/100;
 		}
 	}
 	else if (d <= ew.dist && this.isInEWArc(origin, tPos, sensor, ew)){
-		return base;
+		return multi;
 	}
 	else return 0;
 }
 
-Ship.prototype.getDefensiveBonus = function(shooter){
+Ship.prototype.getMaskEffect = function(shooter){
 	if (this.flight || this.salvo || shooter.flight | shooter.salvo){return 0;}
 
 	var sensor = this.getSystemByName("Sensor");
 	var ew = sensor.getEW();
-	if (sensor.disabled || sensor.destroyed || ew.type == 0 || ew.type == 2){return 0;}
-	if (ew.type == 3){return 0.2}
+	if (sensor.disabled || sensor.destroyed || ew.type == 0){return 0;}
 
-	var origin = this.getGamePos();
 	var tPos = shooter.getGamePos();
+	var origin = this.getGamePos();
 	var d = getDistance(origin, tPos);
+	var multi = 0;
 
-	if (d <= ew.dist){
-		if (this.isInEWArc(origin, tPos, sensor, ew)){
-			return 0.5;
+	if (shooter.ship){
+		multi = 0.5;
+		multi += (multi / 10 * this.traverse);
+	}
+	else if (shooter.flight){
+		return 0;
+	}
+	else if (shooter.salvo){
+		multi = 0.33;
+	}	
+
+	if (d == 0 && game.isCloseCombat(this, shooter) && this.isInEWArc(origin, shooter.getTrajectory(), sensor, ew)){
+		if (shooter.salvo){
+			return multi;
 		}
 	}
-	return false;
+	else if (d <= ew.dist && this.isInEWArc(origin, tPos, sensor, ew)){
+		return multi;
+	}
+	else return 0;
 }
 
 
