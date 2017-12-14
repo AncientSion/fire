@@ -37,6 +37,7 @@ function Game(data, userid){
 	this.animSalvo = 0;
 	this.mission;
 	this.timeout = 0;
+	this.canConfirm = 0;
 	window.username = data.username;
 
 	this.doDeployShip = function(e, ship, pos){
@@ -547,6 +548,8 @@ function Game(data, userid){
 	}
 
 	this.doConfirmOrders = function(){
+		if (!this.canConfirm){return;}
+		this.canConfirm = 0;
 		switch (this.phase){
 			case -1: ajax.confirmDeployment(goToLobby); return;
 			case 0: ajax.confirmMovement(goToLobby); return;
@@ -784,7 +787,7 @@ function Game(data, userid){
 
 	this.drawJumpMarker = function(id){
 		var s = game.getUnit(id);
-		if (s.userid != this.userid && game.phase == 0){return;}
+		//if (s.userid != this.userid && game.phase == 0){return;}
 		if (game.turn == 1 && game.phase == -1){return;}
 		this.setShipTransform();
 		var size;
@@ -1568,17 +1571,6 @@ function Game(data, userid){
 		})
 
 		return cost;
-	}
-
-	this.showReinforcementsPreview = function(id){
-		found = 0;
-		for (var i = 0; i < this.reinforcements.length; i++){
-			if (this.reinforcements[i].id == id){
-				found = i;
-				break;
-			}
-		}
-		//console.log(window.reinforcements[i]);
 	}
 
 	this.getFireDistance = function(a, b){

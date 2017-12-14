@@ -1254,6 +1254,8 @@ div.integrityFull {
 	border-radius: 5px;
 	border: 1px solid white;
 	background-color: black;
+    max-height:200px;
+    overflow:auto;
 }
 
 #combatlogWrapper disabled, #deployLogWrapper disabled {
@@ -1565,7 +1567,7 @@ div.integrityFull {
 }
 
 .chatWrapper {
-	z-index: 100;
+	z-index: 19;
 	position: absolute;
 	width: 600px;
 }

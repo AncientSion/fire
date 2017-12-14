@@ -62,6 +62,10 @@ function initChat(){
 		}
 }
 
+function initLog(){
+	$("#combatLogWrapper").find("#combatlog").scrollTop(function(){console.log("ding"); return this.scrollHeight});
+}
+
 window.shipImages = {};
 window.images = {};
 

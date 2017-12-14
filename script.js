@@ -57,6 +57,7 @@ function init(){
 
 	showUI();
 	window.initChat();
+	window.initLog();
 
 	window.initiateKeyDowns();
 

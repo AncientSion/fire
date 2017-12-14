@@ -146,7 +146,10 @@ class Primary {
 
 	public function getHitChance(){
 		//return 200;
-		return floor($this->remaining *1.4);
+		return ($this->integrity * 0.75);
+		//return max($this->remaining *1.4, $this->integrity *0.2);
+		//return floor($this->integrity  * 0.75);
+		//return floor($this->remaining *1.4);
 	}
 
 	public function setMaxDmg($fire, $dmg){

@@ -1017,7 +1017,7 @@ class Manager {
 		if ($s->salvo){
 		}
 		else if ($s->flight && $s->mission->arrived){
-			Debug::log("setLocks for FLIGHT #".$s->id);
+			//Debug::log("setLocks for FLIGHT #".$s->id);
 			for ($i = 0; $i < sizeof($this->ships); $i++){
 				if ($this->ships[$i]->id == $s->id || $s->userid == $this->ships[$i]->userid){continue;}
 				for ($j = 0; $j < sizeof($s->cc); $j++){
@@ -1040,7 +1040,7 @@ class Manager {
 			}
 		}
 		else if ($s->ship){
-			Debug::log("ew for #".$s->id);
+			//Debug::log("ew for #".$s->id);
 			$origin = $s->getCurrentPosition();
 			$sensor =  $s->getSystemByName("Sensor");
 			$ew = $sensor->getEW($this->turn);

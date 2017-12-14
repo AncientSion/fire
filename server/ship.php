@@ -553,7 +553,7 @@ class Ship {
 	}
 
 	public function calculateToHit($fire){
-		//return 100;
+		return 100;
 
 		if ($fire->shooter->salvo){
 			$base = 90;
@@ -571,11 +571,11 @@ class Ship {
 		$range = $fire->weapon->getAccuracyLoss($fire);
 
 		$multi += $fire->shooter->getOffensiveBonus($this->id);
-		//Debug::log($multi);
+		Debug::log($multi);
 		$multi += $this->getImpulseProfileMod($fire);
-		//Debug::log($multi);
+		Debug::log($multi);
 		$multi -= $this->getDefensiveBonus($fire->shooter->id);
-		//Debug::log($multi);
+		Debug::log($multi);
 
 		$req = $base * $multi * $traverse - $range;
 		//Debug::log("CALCULATE TO HIT - angle: ".$fire->angle.", base: ".$base.", trav: ".$traverse.", total multi: ".$multi.", dist/range: ".$fire->dist."/".$range.", req: ".$req);
