@@ -153,9 +153,9 @@ class Naga extends Missile {
 class Cyclops extends Missile {
 	public $name = "Cyclops";
 	public $display = "Light Antiship Missiles";
-	public $minDmg = 55;
-	public $maxDmg = 76;
-	public $mass = 6;
+	public $minDmg = 50;
+	public $maxDmg = 68;
+	public $mass = 5;
 	public $cost = 14;
 	public $traverse = 0;
 
@@ -167,9 +167,9 @@ class Cyclops extends Missile {
 class Titan extends Missile {
 	public $name = "Titan";
 	public $display = "Heavy Antiship Missiles";
-	public $minDmg = 78;
-	public $maxDmg = 96;
-	public $mass = 8;
+	public $minDmg = 74;
+	public $maxDmg = 92;
+	public $mass = 7;
 	public $cost = 16;
 	public $traverse = 1;
 

@@ -77,10 +77,10 @@ window.ajax = {
 					msg: msg,
 					time: Math.round(Date.now()/1000),
 					},
-			success: function(ret){
-				console.log(ret);
-			},
-			error: ajax.error,
+			//success: function(ret){
+			//	console.log(ret);
+			//},
+			//error: ajax.error,
 		});
 	},
 

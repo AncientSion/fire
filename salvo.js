@@ -196,8 +196,10 @@ Salvo.prototype.createBaseDiv = function(){
 
 	$(div).contextmenu(function(e){
 		e.stopPropagation();
-	//	e.preventDefault();
-	//	$(this).addClass("disabled");
+		e.preventDefault();
+		if (!aUnit ||aUnit != $(this).data("ammoId")){
+			$(this).addClass("disabled");
+		};
 	}).drag();
 
 	document.body.appendChild(div);

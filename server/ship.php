@@ -553,7 +553,7 @@ class Ship {
 	}
 
 	public function calculateToHit($fire){
-		return 100;
+		//return 100;
 
 		if ($fire->shooter->salvo){
 			$base = 90;

@@ -27,7 +27,7 @@ function doSort(a, b){
 function initChat(){
 	console.log("initChat");
 	
-	$(".chatWrapper").removeClass("disabled").find(".chatBox").scrollTop(function(){return this.scrollHeight});
+	$(".chatWrapper").removeClass("disabled").find(".chatBox").scrollTop(function(){console.log("ding");return this.scrollHeight});
 	var checkChat = setInterval(
 		function(){
 			ajax.getChat();
@@ -60,10 +60,6 @@ function initChat(){
 				}
 			})//.drag();
 		}
-}
-
-function initLog(){
-	$("#combatLogWrapper").find("#combatlog").scrollTop(function(){console.log("ding"); return this.scrollHeight});
 }
 
 window.shipImages = {};
@@ -535,7 +531,7 @@ function sensorEvent(isClick, ship, loc, facing, d, a){
 	if (isClick && ship.canSetSensor(sensor)){
 		//console.log("setting sensor to w: "+w*2+", dist: "+d+", angle: "+a);
 		sensor.setEW({
-			angle: Math.floor(a),
+			angle: a,
 			dist: Math.floor(d),
 			turn: game.turn,
 			unitid: ship.id,

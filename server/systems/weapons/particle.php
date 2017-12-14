@@ -56,7 +56,7 @@ class MediumIon extends LightIon {
 
 class HeavyIon extends MediumIon {
 	public $name = "HeavyIon";
-	public $display = "122mm Ion Burst Cannon";
+	public $display = "122mm Ion Cannon";
 	public $minDmg = 48;
 	public $maxDmg = 62;
 	public $accDecay = 90;
@@ -77,16 +77,16 @@ class HeavyIon extends MediumIon {
 
 class SuperHeavyIon extends HeavyIon {
 	public $name = "SuperHeavyIon";
-	public $display = "145mm Ion 'Obliteration' Cannon";
+	public $display = "145mm Ion 'Emperor' Cannon";
 	public $minDmg = 66;
 	public $maxDmg = 88;
-	public $accDecay = 80;
+	public $accDecay = 70;
 	public $shots = 3;
 	public $animColor = "orange";
 	public $reload = 6;
 	public $projSize = 4;
 	public $projSpeed = 6;
-	public $mass = 46;
+	public $mass = 42;
 	public $powerReq = 8;
 	public $traverse = 1;
 	public $effiency = 4;

@@ -1046,7 +1046,7 @@ function Ship(data){
 		var t = {x: e.clientX - offset.x, y: e.clientY - offset.y};
 		var max = this.getMaxTurnAngle();
 		var a =  getAngleFromTo(o, pos);
-			a = Math.round(addAngle(f, a));
+			a = (addAngle(f, a));
 
 		if (a > 180){a = (360-a) *-1;}
 

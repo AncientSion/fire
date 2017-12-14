@@ -350,16 +350,14 @@ echo "</script>";
 				</tr>
 			</table>
 		</div>
-
-
 		<div id="combatlogWrapper" class="disabled">
-			<div class="combatLogHeader">
-				Combat Log
-			</div>
-			<table id="combatLog">
+			<table class="combatLogHeader">
 				<thead>
 					<tr>
-						<th width=70px>Type</th>
+						<th style="border-bottom: 1px solid white;" colSpan=9>Combat Log</th>
+					</tr>
+					<tr>
+						<th style="border-left: 1px solid white;" width=70px>Type</th>
 						<th width=105px>Shooter</th>
 						<th width=105px>Target</th>
 						<th width=160px>Weapon</th>
@@ -367,12 +365,27 @@ echo "</script>";
 						<th width=60px>Hits</th>
 						<th width=70px>Armour</th>
 						<th width=70px>System</th>
-						<th width=70px>Hull</th>
+						<th style="border-right: 1px solid white" width=70px>Hull</th>
 					</tr>
 				</thead>
-				<tbody>
-				</tbody>
 			</table>
+			<div id="combatlogInnerWrapper">
+				<table id="combatLog">
+					<tbody>
+						<tr style="height: 2px">
+							<th width=70px></th>
+							<th width=105px></th>
+							<th width=105px></th>
+							<th width=160px></th>
+							<th width=60px></th>
+							<th width=60px></th>
+							<th width=70px></th>
+							<th width=70px></th>
+							<th width=70px></th>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 		<div id="deployLogWrapper" class="disabled">
 			<table id="deloyLog">

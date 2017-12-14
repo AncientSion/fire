@@ -1297,7 +1297,7 @@ Sensor.prototype.drawTempEW = function(){
 		//salvoCtx.translate(cam.o.x, cam.o.y);
 		//salvoCtx.scale(cam.z, cam.z);
 
-		w = Math.ceil(w);	
+		//w = Math.ceil(w);	
 		if (w == 180){
 			ctx.beginPath();
 			ctx.arc(loc.x, loc.y, ew.dist, 0, 2*Math.PI, false);
@@ -1306,6 +1306,7 @@ Sensor.prototype.drawTempEW = function(){
 		else {
 			var start = addAngle(0 + w-facing, ew.angle);
 			var end = addAngle(360 - w-facing, ew.angle);
+		console.log(start, end);
 			var p1 = getPointInDirection(str, start, loc.x, loc.y);
 			var rad1 = degreeToRadian(start);
 			var rad2 = degreeToRadian(end);

@@ -37,7 +37,7 @@ function Game(data, userid){
 	this.animSalvo = 0;
 	this.mission;
 	this.timeout = 0;
-	this.canConfirm = 0;
+	this.canConfirm = 1;
 	window.username = data.username;
 
 	this.doDeployShip = function(e, ship, pos){
@@ -1609,14 +1609,6 @@ function Game(data, userid){
 		cam.setZoom(0.7);
 		this.animating = 1;
 		this.animateDeployment();
-
-		$("#combatlogWrapper")
-		.width(350)
-		.show()
-		.find(".combatLogHeader").html("Deployment Log").end()
-		.find("#combatLog").children().children().remove();
-
-		//this.logDeployment();
 	}
 
 	this.animateDeployment = function(){
@@ -2192,6 +2184,8 @@ function Game(data, userid){
 		.find("tbody")
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 9).html("Fire Order Resolution concluded")));
+
+		$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 	}
 
 	this.animateSingleFireOrder = function(i, goOn){
@@ -2458,6 +2452,15 @@ function Game(data, userid){
 	}
 
 	this.createDeployEntries = function(){
+		$("#combatlogWrapper")
+		.width(350)
+		.css("top", 75).css("left", 250)
+		.show()
+		.find(".combatLogHeader").html("Deployment Log").end()
+		.find("#combatLog").children().children().remove();
+
+		var show = 0;
+
 		for (var i = 0; i < this.ships.length; i++){
 			var html = "";
 			var color = "#ff3d00";
@@ -2467,6 +2470,7 @@ function Game(data, userid){
 			}
 
 			if (this.ships[i].available == game.turn){
+				show = 1;
 				if (this.ships[i].ship){
 					html = "<span><font color='" + color + "'>" + this.ships[i].name + " #" + this.ships[i].id + "</font> did jump into local space.</span>";
 				}
@@ -2481,6 +2485,7 @@ function Game(data, userid){
 				if (this.ships[i].flight){
 					var t = this.ships[i].getTarget();
 					if (!t){continue;}
+					show = 1;
 					var eColor = "#ff3d00";
 					if (t.friendly){eColor = "#27e627"}
 					html = "<span><font color='" + color + "'>Flight #" + this.ships[i].id + "</font> was issued a new mission target (<span><font color='" + eColor + "'>" + t.name + " #" + t.id + "</span></font>).";
@@ -2504,6 +2509,19 @@ function Game(data, userid){
 							game.redraw();
 						}
 					)
+				);
+		}
+
+		if (!show){
+			$("#combatLog").find("tbody")
+				.append($("<tr>")
+					.append($("<td>").html("No noteworthy events."))
+				);
+		}
+		else {
+			$("#combatLog").find("tbody")
+				.append($("<tr>")
+					.append($("<td>").html("Deployment concluded."))
 				);
 		}
 	}
@@ -2675,6 +2693,8 @@ function Game(data, userid){
 				$(log).append(sub);
 			}
 		}
+
+		$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 	}
 
 	this.initDeploymentWrapper = function(){
@@ -2877,7 +2897,7 @@ function Game(data, userid){
 		if (l){
 			var w = l*(s+3*2);
 
-			ele.width(Math.min(575, w)).css("top", 0).css("left", 300).removeClass("disabled");
+			ele.width(Math.min(575, w)).css("top", 0).css("left", 225).removeClass("disabled");
 		}
 	}
 }
@@ -2958,6 +2978,10 @@ Game.prototype.setShipDivs = function(val){
 		if (y + 600 > res.y){
 			y = 200;
 			x += 100;
+		}
+		else if (x + 400 > res.x){
+			y =+ 200;
+			x = 10;
 		}
 	}
 }
