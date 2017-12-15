@@ -1637,6 +1637,7 @@
 		}
 
 		public function getGameDetails($gameid){
+			Debug::log($gameid);
 
 			$stmt = $this->connection->prepare("
 				SELECT * FROM games WHERE id = :id

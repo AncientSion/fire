@@ -30,7 +30,7 @@ function initChat(){
 	$(".chatWrapper").removeClass("disabled").find(".chatBox").scrollTop(function(){console.log("ding");return this.scrollHeight});
 	var checkChat = setInterval(
 		function(){
-			ajax.getChat();
+			ajax.checkChat();
 		},
 	7000);
 
@@ -50,16 +50,25 @@ function initChat(){
 					$(this).data("s", 1).css("width", 600);
 				}
 				else if ($(this).data("s") == 1){
-					$(this).data("s", 2).css("width", Math.min(res.x - 50, 1000)).css("top", 500).css("height", 500)
+					$(this).data("s", 2).css("width", Math.min(res.x - 50, 1000))
 						.find(".chatBox").css("height", 300).css("max-height", 300);
 				}
 				else {
-					$(this).data("s", 0).css("width", 150).css("top", $(this).data("pos")).css("height", 100)
+					$(this).data("s", 0).css("width", 150)
 						.find(".chatBox").css("height", 100).css("max-height", 100)
 							.scrollTop(function(){return this.scrollHeight});
 				}
-			})//.drag();
+			}).drag();
 		}
+}
+
+function getPhaseString(val){
+	switch (val){
+		case -1: return "Deployment / Initial";
+		case 0: return "Unit Movement";
+		case 2: return "Firing Orders";
+		case 3: return "Damage Control";
+	}
 }
 
 window.shipImages = {};
@@ -349,10 +358,6 @@ function processEcho(echo){
 	}
 }
 
-function launchFlight(e){
-	game.getUnit(aUnit).getSystemById(e.data.systemid).doLaunchFlight();
-}
-
 function redirect(url){
 	console.log("redirect");
 	setTimeout(function(){
@@ -367,24 +372,6 @@ function popup(text){
 function instruct(text){
     $("#instructWrapper").show().find("#instructText").html(text);
 }
-
-$(document).ready(function(){
-    $("#popupWrapper").contextmenu(function(e){
-        e.preventDefault();
-        e.stopPropagation();
-        $(this).hide();
-	});
-    $("#instructWrapper").contextmenu(function(e){
-        e.preventDefault();
-        e.stopPropagation();
-        $(this).hide();
-	});
-    $("#hangarLoadoutDiv").drag()
-    $("#weaponLoadoutDiv").drag()
-});
-
-//window.dragging = false;
-
 
 (function($) {
     $.fn.drag = function(options) {

@@ -7,7 +7,6 @@ $time = -microtime(true);
 
 $gameid = $_GET["gameid"];
 $userid;
-$phase;
 
 if (isset($_SESSION["userid"])) {
 	$userid = $_SESSION["userid"];
@@ -20,31 +19,10 @@ if ($manager->status == "active"){
 	header("Location: lobby.php");
 }
 
-
 echo "<script> window.gameid = ".$gameid."; window.userid = ".$userid.";</script>";
 
-
-switch ($manager->phase){
-	case -1:
-		$phase = "Deployment / Initial";
-		break;
-	case 0:
-		$phase = "Capital Movement";
-		break;
-	case 1:
-		$phase = "Flight Movement";
-		break;
-	case 2:
-		$phase = "Firing Orders";
-		break;
-	case 3:
-		$phase = "Damage Control";
-		break;
-	default:
-		break;
-}
-
 $status = 0;
+$phase = getPhaseString($manager->phase);
 
 foreach ($manager->playerstatus as $player){
 	if ($player["userid"] == $userid){
@@ -546,7 +524,6 @@ echo "</script>";
 	}
 
 	function showUI(){
-		
 		$("#mouseCanvas").on("mouseleave", function(){
 			$("#weaponAimTableWrapper").hide();
 		})
@@ -631,7 +608,28 @@ echo "</script>";
 			//console.log("maxVector")
 			game.getUnit($(this).data("shipid")).moveInVector($(this).data("dist"));
 		})
-	}
+
+		$("#popupWrapper")
+			.css("left", res.x / 2 - 300)
+			.css("top", res.y / 2 - 300)
+			.contextmenu(function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				$(this).hide();
+			});
+
+		$("#instructWrapper")
+			.css("left", res.x / 2 - 300)
+			.css("top", res.y / 2 - 300)
+			.contextmenu(function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				$(this).hide();
+			});
+	
+		$("#hangarLoadoutDiv").drag()
+		$("#weaponLoadoutDiv").drag()
+}
 	
 	function initiateKeyDowns(){
 		$(this).keypress(function(e){

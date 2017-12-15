@@ -14,13 +14,22 @@ if (isset($_GET["type"])){
 	else if ($_GET["type"] == "gamedata"){
 		echo JSON_encode($manager->getClientData(), JSON_NUMERIC_CHECK);
 	}
-	else if ($_GET["type"] == "status"){
-		$status = $dbManager->getGameStatus(
-											$_GET["gameid"],
-											$_GET["userid"],
-											$_GET["currentTurn"]
-										);
-		echo JSON_encode($status);
+	else if ($_GET["type"] == "gameState"){
+		$return = array();
+		for ($i = 0; $i < sizeof($_GET["data"]); $i++){
+			$gd = $dbManager->getGameDetails($_GET["data"][$i][0]);
+
+			if ($gd["turn"] != $_GET["data"][$i][1]){
+				$_GET["data"][$i][1] = $gd["turn"];
+				$return[] = $_GET["data"][$i];
+			}
+			else if ($gd["phase"] != $_GET["data"][$i][2]){
+				$_GET["data"][$i][2] = $gd["phase"];
+				$return[] = $_GET["data"][$i];
+			}
+		}
+
+		echo json_encode($return, JSON_NUMERIC_CHECK);
 	}
 	else if ($_GET["type"] == "shiplist"){
 		$ships = $manager->getShipsForFaction($_GET["faction"]);
@@ -36,3 +45,5 @@ if (isset($_GET["type"])){
 
 
 ?>
+
+

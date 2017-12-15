@@ -3,13 +3,21 @@
 	error_reporting(E_ALL);
 	
 	-include(dirname(__FILE__) . "/autoload.php");
-	//include(dirname(__FILE__) . "\server\classes.php");
-	//include(dirname(__FILE__) . "\server\math.php");
-	//include(dirname(__FILE__) . "\server\debug.php");
-	//include(dirname(__FILE__) . "\server\classes.php");
-
-	//require_once('autoload.php');
-	//require_once("server\classes.php");
-	//require_once("server\math.php");
 	session_start();
+
+
+	function getPhaseString($phase){
+		switch ($phase){
+			case -1:
+				return "Deployment / Initial";
+			case 0:
+				return "Unit Movement";
+			case 2:
+				return "Firing Orders";
+			case 3:
+				return "Damage Control";
+			default:
+				return "ERROR";
+		}
+	}
 ?>

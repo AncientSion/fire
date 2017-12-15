@@ -7,10 +7,6 @@ if (isset($_SESSION["userid"])){
 	$username = $manager->getUsername();
 	$dbManager = DBManager::app();
 
-	echo "<script>";
-	echo "window.userid = ".$_SESSION["userid"].";";
-	echo "window.username = '".$username."';";
-	echo "</script>";
 	if (isset($_POST["gameName"]) && isset($_POST["pointValue"]) && isset($_POST["reinforceValue"])){
 		if ( $_POST["gameName"] != "" && $_POST["pointValue"] != "" && $_POST["reinforceValue"] != ""){
 			if (ctype_digit($_POST["pointValue"]) && ctype_digit($_POST["reinforceValue"])){
@@ -29,17 +25,24 @@ if (isset($_SESSION["userid"])){
 	}
 
 	$ongoingGames = $dbManager->getMyGames($_SESSION["userid"]);
+	$update = 0;
 	for ($i = 0; $i < sizeof($ongoingGames); $i++){
-		//Debug::log("checking for canAdvance ".$ongoingGames[$i]["id"]);
 		if ($manager->canAdvance($ongoingGames[$i]["id"])){
-			//Debug::log("can!, now preparing");
 			$manager->prepareAdvance($ongoingGames[$i]["id"]);
-			$manager->doAdvance();
-			$manager = new Manager($_SESSION["userid"]);
+			if ($manager->doAdvance()){
+				$update = 1;
+			}
 		}
 	}
 
-	$ongoingGamesElement = "<table>";
+	if ($update){
+		$ongoingGames = $dbManager->getMyGames($_SESSION["userid"]);
+	}
+
+	$check = array();
+
+	$ongoingGamesElement = "<table id='activeGames'>";
+
 	if ($ongoingGames) {	
 		$ongoingGamesElement .= "<tr>";
 		$ongoingGamesElement .= "<th colSpan = 4>My Ongoing Games</th>";
@@ -53,24 +56,9 @@ if (isset($_SESSION["userid"])){
 		$ongoingGamesElement .= "</tr>";
 		
 		foreach ($ongoingGames as $game){
-			$phase = "";
-
-			switch ($game["phase"]){
-				case -1:
-					$phase = "Deployment / Initial"; break;
-				case 0:
-					$phase = "Capital Movement"; break;
-				case 1:
-					$phase = "Flight Movement"; break;
-				case 2:
-					$phase = "Firing"; break;
-				case 3:
-					$phase = "Damage Control"; break;
-				default:
-					break;
-			}
+			$phase = getPhaseString($game["phase"]);
 			
-			$ongoingGamesElement .= "<tr>";
+			$ongoingGamesElement .= "<tr id=".$game['id'].">";
 			$ongoingGamesElement .= "<td>";
 			$ongoingGamesElement .= "<a href=game.php?gameid=".$game['id'].">";
 			$ongoingGamesElement .= "<font color='darkcyan'>".$game["name"]."</font>";
@@ -83,10 +71,11 @@ if (isset($_SESSION["userid"])){
 			$status = $game["playerstatus"];
 			$td;
 			if ($status == "waiting"){
-				$td = "<td style='color: white; background-color: #ff3d00'>Awaiting Orders</td>";
+				$td = "<td class='waiting'>Awaiting Orders</td>";
 			}
 			else {
-				$td = "<td style='color: white; background-color: green'>Waiting for Opponent</td>";
+				$td = "<td class='ready'>Waiting for Opponent</td>";
+				$check[] = array($game["id"], $game["turn"], $game["phase"]);
 			}
 			$ongoingGamesElement .= $td;
 			$ongoingGamesElement .= "</tr>";
@@ -130,7 +119,7 @@ if (isset($_SESSION["userid"])){
 		//$players = 0;
 		//$players = $dbManager->getAmountOfPlayersInGame($game["id"]);
 
-			$openGamesElement .= "<tr>";
+			$openGamesElement .= "<tr id=".$game['id'].">";
 			$openGamesElement .= "<td width='40%'>";
 			$openGamesElement .= "<a href=gameSetup.php?gameid=".$game['id'].">";
 			$openGamesElement .= "<font color='darkcyan'>".$game["name"]."</font>";
@@ -170,8 +159,14 @@ else {
 }
 
 
-
 ?>
+<script>
+window.userid = <?php echo json_encode($_SESSION["userid"], JSON_NUMERIC_CHECK); ?>;
+window.username = <?php echo json_encode($username); ?>;
+window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
+</script>
+
+
 
 <!DOCTYPE html>
 <html>
@@ -182,6 +177,10 @@ else {
 	<script src='shared.js'></script>
 </head>
 	<body>
+		<div id="instructWrapper">
+			<div id="instructText">
+			</div>
+		</div>
 		<div style>
 			<div class="lobbyDiv">
 				<span>
@@ -265,7 +264,7 @@ else {
 <script>
 	$(document).ready(function(){
 		var buttons = $(".link");
-		//console.log(buttons);
+
 		$(buttons[0]).click(function(){
 			$("#createGame").toggleClass("disabled");
 		})
@@ -276,16 +275,24 @@ else {
 			e.stopPropagation();
 		})
 
-		//var p = $("#openGames").position().top;
-		//var h = $("#openGames").height();
-
 		$(".chatWrapper").css("position", "relative").css("display", "inline-block").css("width", 700).css("margin-left", 100).css("margin-top", 20).find(".chatBox").scrollTop(function(){return this.scrollHeight}).end();
+		
 		var checkChat = setInterval(
 			function(){
-				ajax.getChat();
+				ajax.checkChat();
+				ajax.checkGameState();
 			},
 		7000);
-	
+
+		$("#instructWrapper")
+			.css("left", 225)
+			.css("top", 500)
+			.contextmenu(function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				$(this).hide();
+			})
+
 		$(this).keypress(function(e){
 			if (e.keyCode == 13){ // enter
 				if ($(":focus").attr("id") == ("msg")){

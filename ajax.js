@@ -84,7 +84,7 @@ window.ajax = {
 		});
 	},
 
-	getChat: function(){
+	checkChat: function(){
 		//return;
 		$.ajax({
 			type: "GET",
@@ -115,6 +115,69 @@ window.ajax = {
 				}
 			},
 			error: ajax.error,
+		});
+	},
+
+	checkGameState: function(){
+		if (!window.check.length){return;}
+
+		$.ajax({
+			type: "GET",
+			url: "getGameData.php",
+			datatype: "json",
+			data: {
+					type: "gameState",
+					time: window.time,
+					data: window.check
+					},
+			success: function(ret){
+				console.log("return");
+				var data = JSON.parse(ret);
+				if (!data.length){
+					//console.log("no change")
+				}
+				else {
+					for (var i = 0; i < window.check.length; i++){
+						for (var j = 0; j < data.length; j++){
+							if (window.check[i][0] == data[j][0]){
+								var change = 0;
+								if (window.check[i][1] != data[j][1]){ // TURN
+									change = 1;
+									$("#activeGames").find("#" + data[j][0]).children().each(function(i){
+										if (i == 1){
+											$(this).html(data[j][1]);
+										}
+										else if (i == 2){
+											$(this).html(getPhaseString(-1));
+										}
+										else if (i == 3){
+											$(this).html("Awaiting Orders").removeClass("ready").addClass("waiting");
+										}
+									})
+								}
+								else if (window.check[i][2] != data[j][2]){ // PHASE
+									change = 1;
+									$("#activeGames").find("#" + data[j][0]).children().each(function(i){
+										if (i == 2){
+											$(this).html(getPhaseString(data[j][2]));
+										}
+										else if (i == 3){
+											$(this).html("Awaiting Orders").removeClass("ready").addClass("waiting");
+										}
+									})
+								}
+
+								if (change){
+									window.check[i][1] = data[j][1];
+									window.check[i][2] = data[j][2];
+									instruct("One of your ongoing games awaits new orders.");
+								}
+							}
+						}
+					}
+				}
+			},
+			error: function(){console.log("error checkGameState")},
 		});
 	},
 
@@ -310,11 +373,6 @@ window.ajax = {
 			success: callback,
 			error: ajax.error,
 		});
-	},
-
-	checkGameState: function(callback){
-		console.log("ding");
-		callback();
 	},
 
 	startGame: function(gameid, callback){

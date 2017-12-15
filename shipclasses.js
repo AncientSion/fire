@@ -1043,6 +1043,7 @@ function Ship(data){
 	}
 
 	this.handleTurning = function(e, o, f, pos){
+
 		var t = {x: e.clientX - offset.x, y: e.clientY - offset.y};
 		var max = this.getMaxTurnAngle();
 		var a =  getAngleFromTo(o, pos);
@@ -1055,13 +1056,15 @@ function Ship(data){
 		else if (a > max){a = max;}
 
 		var img = this.getSystemByName("Sensor").img;
-		salvoCtx.clearRect(0, 0, res.x, res.y);
-		salvoCtx.translate(cam.o.x, cam.o.y);
-		salvoCtx.scale(cam.z, cam.z);
-		salvoCtx.translate(o.x, o.y);
-		salvoCtx.rotate(a * Math.PI/180);
-		salvoCtx.drawImage(img, -img.width/2 , -img.height/2, img.width, img.height);
-		salvoCtx.setTransform(1, 0, 0, 1, 0, 0);
+		if (img != undefined){
+			salvoCtx.clearRect(0, 0, res.x, res.y);
+			salvoCtx.translate(cam.o.x, cam.o.y);
+			salvoCtx.scale(cam.z, cam.z);
+			salvoCtx.translate(o.x, o.y);
+			salvoCtx.rotate(a * Math.PI/180);
+			salvoCtx.drawImage(img, -img.width/2 , -img.height/2, img.width, img.height);
+			salvoCtx.setTransform(1, 0, 0, 1, 0, 0);
+		}
 
 		a = Math.min(Math.abs(a), max);
 		turn.a = a;

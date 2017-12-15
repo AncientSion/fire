@@ -384,14 +384,16 @@ class Manager {
 
 	public function canAdvance($gameid){
 		//Debug::log("canAdvance?");
-		$this->playerstatus = DBManager::app()->getPlayerStatus($gameid);
 		if ($this->status == "open"){
 			return false;
 		}
-		else if (sizeof($this->playerstatus) >= 2){
-			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-				if ($this->playerstatus[$i]["status"] == "waiting"){
-					return false;
+		else {
+			$this->playerstatus = DBManager::app()->getPlayerStatus($gameid);
+			if (sizeof($this->playerstatus) >= 2){
+				for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+					if ($this->playerstatus[$i]["status"] == "waiting"){
+						return false;
+					}
 				}
 			}
 		}

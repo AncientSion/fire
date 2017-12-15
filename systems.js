@@ -1268,6 +1268,7 @@ Sensor.prototype.drawEW = function(){
 }
 
 Sensor.prototype.drawTempEW = function(){
+	if (!this.isPowered()){return;}
 	var ship = game.getUnit(this.parentId);
 	var loc = {x: 0, y: 0}
 	var ew = this.ew[this.ew.length-1];
