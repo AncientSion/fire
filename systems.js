@@ -1236,6 +1236,7 @@ Sensor.prototype.setEW = function(data){
 				this.ew.splice(i, 1);
 			} else break;
 		}
+		//console.log(data);
 		this.ew.push(data);
 		if (this.selected){
 			this.select();
@@ -1250,6 +1251,7 @@ Sensor.prototype.getEW = function(data){
 			return this.ew[i];
 		}
 	}
+	return false;
 }
 
 Sensor.prototype.drawEW = function(){
@@ -1307,7 +1309,7 @@ Sensor.prototype.drawTempEW = function(){
 		else {
 			var start = addAngle(0 + w-facing, ew.angle);
 			var end = addAngle(360 - w-facing, ew.angle);
-		console.log(start, end);
+			//console.log(start, end);
 			var p1 = getPointInDirection(str, start, loc.x, loc.y);
 			var rad1 = degreeToRadian(start);
 			var rad2 = degreeToRadian(end);
@@ -1326,9 +1328,6 @@ Sensor.prototype.drawTempEW = function(){
 
 		this.img = t;
 }
-
-
-
 
 Sensor.prototype.select = function(e){
 	console.log(this);
@@ -1529,7 +1528,27 @@ Weapon.prototype.select = function(e){
 	console.log(this);
 	var unit;
 
-	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || this.parentId < 0){
+	if (game.sensorMode){
+		var sensor = game.getUnit(this.parentId).getActiveSensor();
+		var str = sensor.getOutput();
+		var center = this.getArcCenter();
+		var	w = this.getArcWidth() /2;
+		if (w == 180){a = -1;}
+		var d = str/Math.pow(w/game.const.ew.len, 1/game.const.ew.p);
+
+		sensor.setEW({
+			angle: center,
+			dist: Math.floor(d),
+			turn: game.turn,
+			unitid: this.parentId,
+			systemid: sensor.id,
+			type: sensor.ew[sensor.ew.length-1].type
+		});
+		salvoCtx.clearRect(0, 0, res.x, res.y);
+		game.getUnit(this.parentId).drawEW();
+		return;
+	}
+	else if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || this.parentId < 0){
 		return false;
 	}
 	else {
@@ -1564,34 +1583,35 @@ Weapon.prototype.select = function(e){
 	}
 }
 
-Weapon.prototype.getArcWidth = function(){
-	var w = 0;
+Weapon.prototype.getArcCenter = function(){
+	var w = (this.arc[0][0] + this.arc[0][1]) / 2;
 
-	if (this.arc[0][0] < this.arc[0][1]){
-		w = this.arc[0][1] - this.arc[0][0];
+	if (w == 180){ 
+		if (this.arc[0][1] < this.arc[0][0]){
+			return 0;
+		}
 	}
-	else if (this.arc[0][0] > this.arc[0][1]){
-		w = 360 - this.arc[0][0] + this.arc[0][1];
-	}
-
 	return w;
 }
 
-Weapon.prototype.setMount = function(amount){
-	if (game.getUnit(aUnit) instanceof Flight){
-		this.negation = 0;
+Weapon.prototype.getArcWidth = function(){
+	if (this.arc[0][0] < this.arc[0][1]){
+		return this.arc[0][1] - this.arc[0][0];
 	}
+	else if (this.arc[0][0] > this.arc[0][1]){
+		return 360 - this.arc[0][0] + this.arc[0][1];
+	}
+}
 
+Weapon.prototype.setMount = function(amount){
+	this.armour = Math.floor(amount * this.armourMod);
 	var w = this.getArcWidth();
 
-	if (w <= 60){
-		this.mount = "Fixed";
-	} else if (w < 120){
-		this.mount = "Embedded";
-	} else {
-		this.mount = "Turret";
+	switch (this.armourMod){
+		case 0.75: this.mount = "Fixed"; return;
+		case 0.6: this.mount = "Embedded"; return;
+		case 0.45: this.mount = "Turret"; return;
 	}
-	this.armour = Math.floor(amount * this.armourMod);
 }
 
 Weapon.prototype.getTraverseMod = function(target){
@@ -1974,6 +1994,77 @@ function EM(system){
 	this.notes = ["Does no actual damage", "Cause effects if it penetrates Armour"];
 }
 EM.prototype = Object.create(Particle.prototype);
+
+
+EM.prototype.getAnimation = function(fire){
+	var allAnims = [];
+	var grouping = 2;
+	var speed = this.projSpeed;
+	var delay = 30;
+	var shotInterval = 10;
+	var cc = 0;
+	var hits = 0;
+	var fraction = 1;
+
+	if (this.shots == 2){
+		delay = 60;
+	}
+	else if (this.shots == 4){
+		delay = 80;
+	}
+
+	if (game.isCloseCombat(fire.shooter, fire.target)){
+		cc = 1;
+		if (fire.shooter.ship){
+			fraction = 2;
+		}
+		else if (fire.shooter.flight && fire.target.ship){
+			fraction = 1.5;
+		} 
+		else if (fire.shooter.flight){
+			fraction = 1.5;
+		}
+	}
+	else if (fire.dist < 200){
+		fraction = Math.min(3, 200 / fire.dist);
+	}
+	else if (fire.dist > 600){
+		fraction = Math.max(0.5, 600 / fire.dist);
+	}
+
+	speed /= fraction;
+	delay *= fraction;
+	shotInterval *= fraction;
+	
+	for (var j = 0; j < fire.guns; j++){
+		var gunAnims = [];
+		var o = fire.shooter.getWeaponOrigin(fire.systems[j]);
+
+		var ox = fire.shooter.drawX + o.x;
+		var oy = fire.shooter.drawY + o.y;
+		var t = fire.target.getPlannedPos();
+
+		for (var k = 0; k < this.shots; k++){
+			var hit = 0;
+			if (fire.hits[j] > k){
+				hit = 1;
+				hits++;
+			}
+			
+			var dest = fire.target.getPlannedPos();
+			
+			var tx = t.x + dest.x;
+			var ty = t.y + dest.y;
+
+			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
+				shotAnim.n = 0 - ((j / grouping) * delay + k*shotInterval);
+
+			gunAnims.push(shotAnim);
+		}
+		allAnims.push(gunAnims)
+	}
+	return allAnims;
+}
 
 function Pulse(system){
 	Particle.call(this, system);
@@ -2634,7 +2725,12 @@ Launcher.prototype.addAmmo = function(ele, all){
 
 	if (canAdd){
 		if (all){
-			this.loads[index].amount = this.capacity[index];
+			//this.loads[index].amount = this.capacity[index];
+			var rate = this.launchRate[index];
+			var multi = this.loads[index].amount / rate;
+			if (multi % 1 == 0){multi++;}
+			else multi = Math.ceil(multi);
+			this.loads[index].amount = rate * multi
 		}
 		else {
 			this.loads[index].amount++;
@@ -2649,7 +2745,11 @@ Launcher.prototype.removeAmmo = function(ele, all){
 		if (this.loads[i].name == ele.childNodes[0].innerHTML){
 			if (this.loads[i].amount >= 1){
 				if (all){
-					this.loads[i].amount = 0;
+					var rate = this.launchRate[index];
+					var multi = this.loads[index].amount / rate;
+					if (multi % 1 == 0){multi--;}
+					else multi = Math.floor(multi);
+					this.loads[index].amount = rate * multi
 				}
 				else {
 					this.loads[i].amount -= 1;
@@ -3112,7 +3212,10 @@ Hangar.prototype.addFighter = function(ele, all){
 		return;
 	}
 	else if (all){
-		add = max - current;
+		var multi = current / this.launchRate;
+		if (multi % 1 == 0){multi++;}
+		else multi = Math.ceil(multi);
+		add = Math.min(max, (this.launchRate * multi - current))
 	}
 
 	for (var i = 0; i < this.loads.length; i++){
@@ -3190,14 +3293,14 @@ Hangar.prototype.updateTotals = function(){
 		table.innerHTML = "";
 
 		var tr = document.createElement("tr");
-		var th = document.createElement("th"); th.innerHTML = "Class"; tr.appendChild(th)
-		var th = document.createElement("th"); th.innerHTML = "Mass"; th.width = "40px"; tr.appendChild(th)
-		var th = document.createElement("th"); th.innerHTML = "Cost"; th.width = "40px"; tr.appendChild(th)
-		var th = document.createElement("th"); th.innerHTML = ""; tr.appendChild(th)
-		var th = document.createElement("th"); th.innerHTML = ""; tr.appendChild(th)
-		var th = document.createElement("th"); th.innerHTML = "Amount"; th.width = "70px"; tr.appendChild(th)
-		var th = document.createElement("th"); th.innerHTML = "Total Mass"; th.width = "70px"; tr.appendChild(th)
-		var th = document.createElement("th"); th.innerHTML = "Total Cost"; th.width = "70px"; tr.appendChild(th)
+		var th = document.createElement("th"); th.innerHTML = "Class"; tr.appendChild(th);
+		var th = document.createElement("th"); th.innerHTML = "Mass"; th.width = "40px"; tr.appendChild(th);
+		var th = document.createElement("th"); th.innerHTML = "Cost"; th.width = "40px"; tr.appendChild(th);
+		var th = document.createElement("th"); th.innerHTML = ""; tr.appendChild(th);
+		var th = document.createElement("th"); th.innerHTML = ""; tr.appendChild(th);
+		var th = document.createElement("th"); th.innerHTML = "Amount"; th.width = "70px"; tr.appendChild(th);
+		//var th = document.createElement("th"); th.innerHTML = "Total Mass"; th.width = "70px"; tr.appendChild(th);
+		var th = document.createElement("th"); th.innerHTML = "Total Cost"; th.width = "70px"; tr.appendChild(th);
 		table.appendChild(tr);
 
 
@@ -3227,11 +3330,11 @@ Hangar.prototype.updateTotals = function(){
 				window.game.ships[0].getSystemById($("#hangarLoadoutDiv").data("systemid")).removeFighter(this.parentNode, true);
 			})
 
-			amount += this.loads[i].amount
-			tMass += this.loads[i].amount * this.loads[i].mass
-			tCost += this.loads[i].amount * this.loads[i].cost
-			tr.insertCell(-1).innerHTML = this.loads[i].amount
-			tr.insertCell(-1).innerHTML = this.loads[i].amount * this.loads[i].mass
+			amount += this.loads[i].amount;
+			//tMass += this.loads[i].amount * this.loads[i].mass;
+			tCost += this.loads[i].amount * this.loads[i].cost;
+			tr.insertCell(-1).innerHTML = this.loads[i].amount;
+			//tr.insertCell(-1).innerHTML = this.loads[i].amount * this.loads[i].mass
 			tr.insertCell(-1).innerHTML = this.loads[i].amount * this.loads[i].cost
 	}
 
@@ -3240,7 +3343,7 @@ Hangar.prototype.updateTotals = function(){
 		th.innerHTML = "Grand Total";
 		th.colSpan = 5;
 	var th = document.createElement("th"); th.innerHTML = amount; tr.appendChild(th);
-	var th = document.createElement("th"); th.innerHTML = tMass; tr.appendChild(th);
+	//var th = document.createElement("th"); th.innerHTML = tMass; tr.appendChild(th);
 	var th = document.createElement("th"); th.innerHTML = tCost; tr.appendChild(th);
 	table.appendChild(tr);
 	this.totalCost = tCost;

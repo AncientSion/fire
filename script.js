@@ -151,8 +151,8 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			var section;
 			var angle;
 
+			//dist = Math.max(50, game.getFireDistance(shooter, target));
 			dist = game.getFireDistance(shooter, target);
-			
 			if (shooter.ship){
 				if (target.salvo){
 					angle = getAngleFromTo(target.getTrajectory(), shooterLoc);

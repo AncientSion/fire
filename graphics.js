@@ -271,7 +271,8 @@ function drawSensorArc(w, d, str, loc, facing, a, sensor){
 	//salvoCtx.translate(cam.o.x, cam.o.y);
 	//salvoCtx.scale(cam.z, cam.z);
 
-	w = Math.ceil(w);	
+	//w = Math.ceil(w);	
+	//console.log(w);
 	if (w == 180){
 		salvoCtx.beginPath();
 		salvoCtx.arc(loc.x, loc.y, d, 0, 2*Math.PI, false);

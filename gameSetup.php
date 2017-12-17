@@ -202,6 +202,14 @@ else {
 		$("#confirmFleet").hover(function(){
 			$(this).toggleClass("selectionHighlight");
 		});
+		$("#popupWrapper")
+			.css("left", 700)
+			.css("top", 300)
+			.contextmenu(function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				$(this).hide();
+			});
 
 		if (window.ready){
 			$("#shipsBoughtTable").hide();

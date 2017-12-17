@@ -407,7 +407,13 @@ function Game(data, userid){
 		var ret = [];
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].ship && this.ships[i].userid == this.userid){
-				ret.push(this.ships[i].getEWSettings());
+				var sensor = this.ships[i].getSystemByName("Sensor");
+				for (var j = 0; j < sensor.ew.length; j++){
+					if (sensor.ew[j].turn == this.turn){
+						ret.push(sensor.ew[j]);
+						break;
+					}
+				}
 			}
 		}
 		return ret;
@@ -2208,7 +2214,26 @@ function Game(data, userid){
 			for (var k = 0; k < game.fireOrders[i].anim[j].length; k++){								
 				if (game.fireOrders[i].anim[j][k].done){continue;}
 
-				if (game.fireOrders[i].weapon.animation == "projectile"){
+				if (game.fireOrders[i].weapon.animation == "em"){
+					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
+						game.fireOrders[i].anim[j][k].n += 1;
+						if (game.fireOrders[i].anim[j][k].n > 0){ // valid, now animate
+							drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
+						}
+					}
+					else if (game.fireOrders[i].anim[j][k].h){ // shot animated, does it explode ?
+						game.fireOrders[i].anim[j][k].n += 1;
+						//drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].tx, game.fireOrders[i].anim[j][k].ty, game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m, 30); // EXPLO
+						drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k], 30); // EXPLO
+						if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m+30){
+							game.fireOrders[i].anim[j][k].done = true;
+						}
+					}
+					else {
+						game.fireOrders[i].anim[j][k].done = true;
+					}
+				}
+				else if (game.fireOrders[i].weapon.animation == "projectile"){
 					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
 						game.fireOrders[i].anim[j][k].n += 1;
 						if (game.fireOrders[i].anim[j][k].n > 0){ // valid, now animate
@@ -2274,111 +2299,6 @@ function Game(data, userid){
 				game.timeout = setTimeout(function(){
 					game.animateAllFireOrders();
 				}, 1500);
-			}
-		}
-	}
-
-	this.animateFireOrdersa = function(){
-		anim = window.requestAnimationFrame(game.animateFireOrders.bind(this));
-		window.now = Date.now();		
-		window.elapsed = window.now - window.then;
-		if (elapsed > window.fpsTicks){
-			window.then = window.now - (window.elapsed % window.fpsTicks);
-			fxCtx.clearRect(0, 0, res.x, res.y);
-
-			for (var i = 0; i  < game.fireOrders.length; i++){ 
-				if (!game.fireOrders[i].animated){
-					if (!game.fireOrders[i].animating){
-						game.fireOrders[i].animating = 1;
-						//cam.setFocus(game.fireOrders[i].focus.x, game.fireOrders[i].focus.y);
-						cam.setFocusToPos(game.fireOrders[i]);
-						//cam.setFocusToPos(game.fireOrders[i].target);
-						game.draw();
-					}
-					else {
-						for (var j = 0; j < game.fireOrders[i].anim.length; j++){
-							for (var k = 0; k < game.fireOrders[i].anim[j].length; k++){								
-								if (game.fireOrders[i].anim[j][k].done){continue;}
-
-								if (game.fireOrders[i].weapon.animation == "projectile"){
-									if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
-										game.fireOrders[i].anim[j][k].n += 1;
-										if (game.fireOrders[i].anim[j][k].n > 0){ // valid, now animate
-											drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
-										}
-									}
-									else if (game.fireOrders[i].anim[j][k].h){ // shot animated, does it explode ?
-										game.fireOrders[i].anim[j][k].n += 1;
-										//drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].tx, game.fireOrders[i].anim[j][k].ty, game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m, 30); // EXPLO
-										drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k], 30); // EXPLO
-										if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m+30){
-											game.fireOrders[i].anim[j][k].done = true;
-										}
-									}
-									else {
-										game.fireOrders[i].anim[j][k].done = true;
-									}
-								}
-								else if (game.fireOrders[i].weapon.animation == "beam"){
-									if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
-										game.fireOrders[i].anim[j][k].n += 1;
-										if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
-											drawBeam(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
-											if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
-												game.fireOrders[i].anim[j][k].done = true;
-											}
-										}
-									}
-								}
-								else if (game.fireOrders[i].weapon.animation == "explo"){
-									if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
-										game.fireOrders[i].anim[j][k].n += 1;
-										if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
-											drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k], 30); // EXPLO
-											if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
-												game.fireOrders[i].anim[j][k].done = true;
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					
-					var allAnimated = true;
-					for (var j = 0; j < game.fireOrders[i].anim.length; j++){
-						for (var k = 0; k < game.fireOrders[i].anim[j].length; k++){
-							if (! game.fireOrders[i].anim[j][k].done){
-								allAnimated = false;
-								break;
-							}
-						}
-						if (!allAnimated){
-							break;
-						}
-					}
-					
-					if (allAnimated){
-						game.fireOrders[i].animated = allAnimated;
-						game.createCombatLogEntry(game.fireOrders[i]);
-					}
-				
-					break;
-				}
-			}
-			
-			var done = true
-			
-			for (var i = 0; i  < game.fireOrders.length; i++){
-				if (! game.fireOrders[i].animated){
-					done = false;
-				}
-			}
-
-			if (done){
-				window.cancelAnimationFrame(anim);
-				fxCtx.clearRect(0, 0, res.x, res.y);
-				game.animateUnitExplosions();
 			}
 		}
 	}

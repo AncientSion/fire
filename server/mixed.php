@@ -299,7 +299,7 @@ class Mixed extends Ship {
 			}
 			$target = $this->getHitSystem($fire);
 			$fire->singleid = $target->id;
-			$fire->req = $this->calculateToHit($fire);
+			$fire->req = $fire->shooter->calculateToHit($fire);
 			if ($fire->rolls[$i] < $fire->req){
 				$fire->hits++;
 				$fire->weapon->doDamage($fire, $fire->rolls[$i], $target);
@@ -365,6 +365,10 @@ class Mixed extends Ship {
 
 	public function getHitChance($fire){
 		return $this->getStruct($fire->singleid)->getSubHitChance($fire);
+	}
+
+	public function setImpulseProfileMod(){
+		$this->impulseHitMod = 0;
 	}
 
 	public function testForCrits($turn){

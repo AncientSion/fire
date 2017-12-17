@@ -9,7 +9,7 @@
 	function getPhaseString($phase){
 		switch ($phase){
 			case -1:
-				return "Deployment / Initial";
+				return "Initial Orders";
 			case 0:
 				return "Unit Movement";
 			case 2:

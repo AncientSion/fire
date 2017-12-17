@@ -425,7 +425,7 @@ class Manager {
 	}
 
 	public function doAdvance(){
-		Debug::log("doAdvance for game".$this->gameid." from phase ".$this->phase." to phase ".($this->phase+1));
+		Debug::log("****************************************** doAdvance for game".$this->gameid." from phase ".$this->phase." to phase ".($this->phase+1));
 		//return;
 		$time = -microtime(true);
 
@@ -458,7 +458,7 @@ class Manager {
 		}
 
 		$time += microtime(true); 
-		Debug::log("advancing game state time: ".round($time, 3)." seconds.");
+		Debug::log("TIME: ".round($time, 3)." seconds.");
 		$this->getMemory();
 		return true;
 	}
@@ -502,8 +502,11 @@ class Manager {
 					$avail++;
 				}
 			}
-			if ($avail > 3){if (mt_rand(0, 1)){continue;}}
-			else if ($this->turn > 13){if (mt_rand(0, $this->turn -12)){continue;}}
+
+			Debug::log("player: ".$this->userid." has ".$this->reinforce." available");
+
+			if ($avail > 3){if (mt_rand(0, 1)){continue;}} // cap max amount
+			else if ($this->turn > 13){if (mt_rand(0, $this->turn -12)){continue;}} // slow down post T 13
 
 			$ships = $this->getReinforcementShips($this->playerstatus[$k]["faction"]);
 			$total = 0;
@@ -517,7 +520,7 @@ class Manager {
 
 				if ($roll > $current){continue;}
 
-				Debug::log("total: ".$total.", roll: ".$roll.", picking: ".$ships[$i][0]);
+				//Debug::log("total: ".$total.", roll: ".$roll.", picking: ".$ships[$i][0]);
 
 				$data = $ships[$i][0]::getKit();
 				$data["name"] = $ships[$i][0];
@@ -545,7 +548,7 @@ class Manager {
 						$data["upgrades"][$j]["active"] = 1;
 						$data["cost"] += $data["upgrades"][$j]["cost"];
 						$data["display"] = $data["upgrades"][$j]["name"];
-						Debug::log("adding outfit: ".$data["upgrades"][$j]["name"]);
+						//Debug::log("adding outfit: ".$data["upgrades"][$j]["name"]);
 						break;
 
 
@@ -912,7 +915,7 @@ class Manager {
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->flight && $this->ships[$i]->mission->arrived && $this->ships[$i]->mission->type == 2){
 				if ($this->getUnit($this->ships[$i]->mission->targetid)->destroyed){
-					Debug::log("freeeing flight #".$this->ships[$i]->id." from mission");
+					//Debug::log("freeeing flight #".$this->ships[$i]->id." from mission");
 					$this->ships[$i]->mission->type = 1;
 					$this->ships[$i]->mission->turn = $this->turn - 2;
 					$this->ships[$i]->mission->targetid = 0;
@@ -926,11 +929,6 @@ class Manager {
 
 	public function alterReinforcementPoints(){
 		$mod = 100;
-
-		if ($this->turn > 15){return;}
-		else if ($this->turn > 10){
-			$mod -= ($this->turn - 10) * 20;
-		}
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			DBManager::app()->addReinforceValue($this->playerstatus[$i]["userid"], $this->gameid, floor($this->reinforce/100*$mod));
@@ -960,7 +958,7 @@ class Manager {
 
 	public function startNewTurn(){
 		//Debug::log("startNewTurn");
-		$this->turn = $this->turn+1;
+		$this->turn++;
 		$this->phase = -1;
 		DBManager::app()->setGameTurnPhase($this->gameid, $this->turn, $this->phase);
 	}
@@ -977,6 +975,7 @@ class Manager {
 			//Debug::log("setupship #".$this->ships[$i]->id);
 			$this->ships[$i]->setFacing();
 			$this->ships[$i]->setPosition();
+			$this->ships[$i]->setImpulseProfileMod();
 			$this->ships[$i]->setupForDamage($this->turn);
 		}
 
@@ -1024,7 +1023,13 @@ class Manager {
 				if ($this->ships[$i]->id == $s->id || $s->userid == $this->ships[$i]->userid){continue;}
 				for ($j = 0; $j < sizeof($s->cc); $j++){
 					if ($s->cc[$j] == $this->ships[$i]->id){
-						if ($this->ships[$i]->flight){
+						if ($this->ships[$i]->ship){
+							if ($this->ships[$i]->ship && $s->mission->targetid == $this->ships[$i]->id){ // strike fighter evades shots from its target (ship)
+								$s->masks[] = array($this->ships[$i]->id, $s->getMaskEffect($this->ships[$i]));
+								//Debug::log("setting flight mask vs ship target");
+							}
+						}
+						else if ($this->ships[$i]->flight){
 							if ($s->mission->targetid == $this->ships[$i]->id){ // mission direct target lock
 								$s->locks[] = array($this->ships[$i]->id, $s->getLockEffect($this->ships[$i]));
 							}
@@ -1084,7 +1089,7 @@ class Manager {
 								if ($s->cc[$j] == $this->ships[$i]->id){
 									if ($this->ships[$i]->flight){ // flight
 										$multi = $s->getLockEffect($this->ships[$i]) / 180 * $w;
-										Debug::log("adding CC lock from ship #".$s->id." vs flight# #".$this->ships[$i]->id." for value: ".$multi);
+										//Debug::log("adding CC lock from ship #".$s->id." vs flight# #".$this->ships[$i]->id." for value: ".$multi);
 
 										$s->locks[] = array($this->ships[$i]->id, $multi);
 										$skip = 1; break;
@@ -1092,7 +1097,7 @@ class Manager {
 									else if ($this->ships[$i]->salvo){ // salvo, in trajectory ?
 										$angle = Math::getAngle2($origin, $this->ships[$i]->getTrajectoryStart());
 										if (Math::isInArc($angle, $start, $end)){
-											Debug::log("adding CC lock from ship vs salvo");
+											//Debug::log("adding CC lock from ship vs salvo");
 											$s->locks[] = array($this->ships[$i]->id, $s->getLockEffect($this->ships[$i]));
 											$skip = 1; break;
 										}
@@ -1104,7 +1109,7 @@ class Manager {
 							if ($this->ships[$i]->salvo){ // salvo, in trajectory ?
 								$angle = Math::getAngle2($origin, $this->ships[$i]->getTrajectoryStart());
 								if (Math::isInArc($angle, $start, $end)){
-									Debug::log("adding CC mask from ship vs salvo");
+									//Debug::log("adding CC mask from ship vs salvo");
 									$s->masks[] = array($this->ships[$i]->id, $s->getMaskEffect($this->ships[$i]));
 									$skip = 1; break;
 								}
@@ -1123,16 +1128,16 @@ class Manager {
 						if (Math::isInArc($a, $start, $end)){
 							if ($ew->type == 0){ // LOCK
 								$s->locks[] = array($this->ships[$i]->id, $s->getLockEffect($this->ships[$i]));
-								Debug::log("locking on #".$this->ships[$i]->id." for value: ".$s->locks[sizeof($s->locks)-1][1]);
+								//Debug::log("locking on #".$this->ships[$i]->id." for value: ".$s->locks[sizeof($s->locks)-1][1]);
 							}
 							else if ($ew->type == 1){ // MASK
 								if ($this->ships[$i]->ship){
 									$s->masks[] = array($this->ships[$i]->id, $s->getMaskEffect($this->ships[$i]));
-									Debug::log("masking from #".$this->ships[$i]->id." for value: ".$s->masks[sizeof($s->masks)-1][1]);
+									//Debug::log("masking from #".$this->ships[$i]->id." for value: ".$s->masks[sizeof($s->masks)-1][1]);
 								}
 							}
-						} else Debug::log("out of arc");
-					} else ("out of dist: ".(Math::getDist2($origin, $dest))." EW: ".$ew->dist);
+						}// else Debug::log("out of arc");
+					}// else ("out of dist: ".(Math::getDist2($origin, $dest))." EW: ".$ew->dist);
 				}
 			}
 

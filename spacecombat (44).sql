@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 04. Dez 2017 um 11:24
+-- Erstellungszeit: 17. Dez 2017 um 20:36
 -- Server-Version: 10.1.16-MariaDB
 -- PHP-Version: 7.0.9
 
@@ -240,7 +240,7 @@ CREATE TABLE `sensors` (
   `unitid` int(5) DEFAULT NULL,
   `systemid` int(5) DEFAULT NULL,
   `turn` int(3) DEFAULT NULL,
-  `angle` int(3) DEFAULT NULL,
+  `angle` decimal(5,2) DEFAULT NULL,
   `dist` int(4) DEFAULT NULL,
   `type` int(3) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -312,16 +312,6 @@ CREATE TABLE `users` (
   `password` varchar(255) DEFAULT NULL,
   `access` int(3) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Daten für Tabelle `users`
---
-
-INSERT INTO `users` (`id`, `username`, `password`, `access`) VALUES
-(1, 'Chris', '1', 1),
-(2, '1', '1', 1),
-(3, 'cdfdf', '147147', 0),
-(4, '4', '777', 0);
 
 --
 -- Indizes der exportierten Tabellen
@@ -517,7 +507,7 @@ ALTER TABLE `units`
 -- AUTO_INCREMENT für Tabelle `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

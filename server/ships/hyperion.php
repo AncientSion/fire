@@ -16,7 +16,7 @@ class Hyperion extends Heavy {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 17);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 19);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new Dual($this->getId(), $this->id, 240, 120, 14, array("LightPulse", "LightParticleBeam"));
 		$front->systems[] = new Hangar($this->getId(), $this->id, 10, array("Aurora"), 10);
@@ -24,19 +24,19 @@ class Hyperion extends Heavy {
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 30, 150, 800, 16);
+		$right = new Structure($this->getId(), $this->id, 30, 150, 800, 18);
 		$right->systems[] = new HeavyLaser($this->getId(), $this->id, 0, 60);
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 14);
+		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 16);
 		$aft->systems[] = new HeavyLaser($this->getId(), $this->id, 180, 240);
 		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
 		$aft->systems[] = new HeavyLaser($this->getId(), $this->id, 120, 180);
 		$structs[] = $aft;
 
-		$left = new Structure($this->getId(), $this->id, 210, 330, 800, 16);
+		$left = new Structure($this->getId(), $this->id, 210, 330, 800, 18);
 		$left->systems[] = new HeavyLaser($this->getId(), $this->id, 300, 360);
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
@@ -44,8 +44,8 @@ class Hyperion extends Heavy {
 
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
-			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 2);
-			$this->structures[sizeof($this->structures)-1]->effiency = 4;
+			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
+			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse + 4;
 		}
 	}
 

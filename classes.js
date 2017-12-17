@@ -262,7 +262,7 @@ Single.prototype.getDetailsDiv = function(){
 		var table = $("<table>")
 			.append($("<tr>").append($("<th>").attr("colspan", 2).html(this.name)))
 			.append($("<tr>").append($("<td>").html("Mass").css("width", 120)).append($("<td>").html(this.mass)))
-			.append($("<tr>").append($("<td>").html("Engine Power")).append($("<td>").html(this.ep)))
+			//.append($("<tr>").append($("<td>").html("Engine Power")).append($("<td>").html(this.ep)))
 			.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.negation)))
 			//.append($("<tr>").append($("<td>").html("Side Armour")).append($("<td>").html(this.negation[1])))
 			//.append($("<tr>").append($("<td>").html("Rear Armour")).append($("<td>").html(this.negation[2])))
@@ -283,6 +283,7 @@ Single.prototype.getDetailsDiv = function(){
 
 function Missile(data){
 	Single.call(this, data);
+	this.missile = 1;
 	this.traverse = data.traverse;
 	this.baseImpulse = data.baseImpulse;
 

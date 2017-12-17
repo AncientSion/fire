@@ -64,10 +64,11 @@ function initChat(){
 
 function getPhaseString(val){
 	switch (val){
-		case -1: return "Deployment / Initial";
+		case -1: return "Initial Orders";
 		case 0: return "Unit Movement";
 		case 2: return "Firing Orders";
 		case 3: return "Damage Control";
+		default: return "ERROR";
 	}
 }
 
@@ -429,7 +430,7 @@ function handleMouseDown(e){
 	var unit;
 	var rect = this.getBoundingClientRect();
 	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
-	console.log("game pos " + pos.x	+ " / " + pos.y);
+	//console.log("game pos " + pos.x	+ " / " + pos.y);
 
 	$(":focus").blur();
 
@@ -508,11 +509,14 @@ function sensorEvent(isClick, ship, loc, facing, d, a){
 	var sensor = ship.getActiveSensor();
 	var str = sensor.getOutput();
 		d = Math.min(str*2, d);
-	var	w = Math.min(180, Math.round(game.const.ew.len * Math.pow(str/d, game.const.ew.p)));
+	var	w = Math.min(180, round(game.const.ew.len * Math.pow(str/d, game.const.ew.p), 2));
 	if (w == 180){
 		a = -1;
 		d = str/Math.pow(w/game.const.ew.len, 1/game.const.ew.p);
 	}
+
+	//console.log(w);
+	//console.log(Math.floor(d));
 	//console.log("angle from facing: " + a + ", dist: " + dist + ", strength: "+str + ", FINAL: " + newidth);
 
 	if (isClick && ship.canSetSensor(sensor)){

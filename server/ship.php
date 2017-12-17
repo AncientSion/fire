@@ -16,6 +16,7 @@ class Ship {
 	public $remainingImpulse;
 	public $remainingDelay;
 	public $baseImpulse;
+	public $impulseHitMod = 0;
 
 	public $name = "";
 	public $display = "";
@@ -539,11 +540,11 @@ class Ship {
 	}
 
 	public function determineHits($fire){
-		$fire->req = $this->calculateToHit($fire);
+		$fire->req = $fire->shooter->calculateToHit($fire);
 
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
 			if ($fire->target->destroyed){
-				Debug::log("aborting shot resolution vs dead target #".$this->id);
+				Debug::log("ERROR aborting shot resolution vs dead target #".$this->id);
 			}
 			else  if ($fire->rolls[$i] <= $fire->req){
 				$fire->hits++;
@@ -553,29 +554,16 @@ class Ship {
 	}
 
 	public function calculateToHit($fire){
-		//return 100;
-
-		if ($fire->shooter->salvo){
-			$base = 90;
-			$mask = $this->getDefensiveBonus($fire->shooter->id);
-			$traverse = $fire->weapon->getTraverseMod($fire)*0.2;
-			return ceil(90 * (1-$mask) * (1-$traverse));
-		}
-
 		$multi = 1;
 		$req = 0;
 		
-		$base = $this->getHitChance($fire);
-		$traverse = $fire->weapon->getTraverseMod($fire);
-		$traverse = 1-($traverse*0.2);
+		$base = $fire->target->getHitChance($fire);
+		$traverse = 1-($fire->weapon->getTraverseMod($fire) * 0.2);
 		$range = $fire->weapon->getAccuracyLoss($fire);
 
-		$multi += $fire->shooter->getOffensiveBonus($this->id);
-		Debug::log($multi);
-		$multi += $this->getImpulseProfileMod($fire);
-		Debug::log($multi);
-		$multi -= $this->getDefensiveBonus($fire->shooter->id);
-		Debug::log($multi);
+		$multi += $this->getOffensiveBonus($fire->target->id); //Debug::log($multi);
+		$multi -= $fire->target->getDefensiveBonus($this->id); //Debug::log($multi);
+		$multi += $fire->target->getImpulseProfileMod($fire); //Debug::log($multi);
 
 		$req = $base * $multi * $traverse - $range;
 		//Debug::log("CALCULATE TO HIT - angle: ".$fire->angle.", base: ".$base.", trav: ".$traverse.", total multi: ".$multi.", dist/range: ".$fire->dist."/".$range.", req: ".$req);
@@ -638,7 +626,6 @@ class Ship {
 		$current = 0;
 		$total = $this->primary->getHitChance();
 		$fraction = round($this->primary->remaining / $this->primary->integrity, 3);
-		Debug::log("main: ".$total."/".$this->primary->integrity." => ".$fraction. " %");
 		$valid = array();
 
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
@@ -650,8 +637,11 @@ class Ship {
 		}
 
 		if (!sizeof($valid)){
-			Debug::log("hitting main structure");
+			Debug::log("hitting main structure due to lack of exposed internals");
 			return $this->primary;
+		}
+		else {
+			Debug::log("main: ".$total."/".$this->primary->integrity." => ".$fraction. " %, unlocked internals: ".sizeof($valid));
 		}
 
 		//Debug::log("valid:".sizeof($valid));
@@ -664,7 +654,7 @@ class Ship {
 		//Debug::log("roll: ".$roll.", all: ".$total);
 
 		if ($roll <= $current){
-			Debug::log("roll ".$roll.", current ".$current.", HITTING main structure");
+			Debug::log("roll ".$roll.", total: ".$total.", current ".$current.", HITTING main structure");
 			return $this->primary;
 		}
 		else {
@@ -673,7 +663,7 @@ class Ship {
 				$current += $valid[$i]->getHitChance();
 				//Debug::log("current: ".$current);
 				if ($roll <= $current){
-					Debug::log("roll ".$roll.", current ".$current.", HITTING non main structure HIT --- ".$valid[$i]->name." #".$valid[$i]->id.", odds: ".$valid[$i]->getHitChance()."/".$total);
+					Debug::log("roll ".$roll.", total:".$total.", current ".$current.", HITTING INTERNAL ".$valid[$i]->name." #".$valid[$i]->id.", odds: ".$valid[$i]->getHitChance()."/".$total);
 					return $valid[$i];
 				}
 			}
@@ -733,22 +723,21 @@ class Ship {
 			return 0.33;
 		}
 	}
-
-	public function getImpulseProfileMod($fire){
-		if (!$fire->shooter->ship || !$fire->target->ship){
-			//Debug::log("shooter or target is NOT A SHIP -> no impulse mod");
-			return 0;
-		}
-
+	public function setImpulseProfileMod(){
 		$now = $this->getCurrentImpulse();
 		$stock = $this->getBaseImpulse();
 
 		$ratio = $now/$stock;
-		if ($ratio == 1){
-			return 0;
-		} else return (1-$ratio)/2;
+		if ($ratio != 1){
+			$this->impulseHitMod =  (1-$ratio)/2;
+		}
+		return;
 
 		//return 1+((($this->getBaseImpulse() / $this->getCurrentImpulse())-1)/2);
+	}
+
+	public function getImpulseProfileMod(){
+		return $this->impulseHitMod;
 	}
 
 	public function getOffensiveBonus($id){
@@ -820,8 +809,7 @@ class Ship {
 
 	public function getImpactAngle($fire){
 		if ($fire->cc){
-			$angle = $fire->shooter->getFireAngle($fire);
-			return $angle;
+			return $fire->shooter->getFireAngle($fire);
 		}
 		
 		for ($i = 0; $i < sizeof($this->angles); $i++){
@@ -1130,6 +1118,7 @@ class Ship {
 class UltraHeavy extends Ship {
 	public $baseImpulse = 130;
 	public $traverse = 3;
+	public $slipAngle = 15;
 	
 	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
         parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
@@ -1146,6 +1135,7 @@ class UltraHeavy extends Ship {
 class SuperHeavy extends Ship {
 	public $baseImpulse = 145;
 	public $traverse = 2;
+	public $slipAngle = 17;
 	
 	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
         parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
@@ -1162,6 +1152,7 @@ class SuperHeavy extends Ship {
 class Heavy extends Ship {
 	public $baseImpulse = 160;
 	public $traverse = 1;
+	public $slipAngle = 19;
 	
 	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
         parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
@@ -1178,6 +1169,7 @@ class Heavy extends Ship {
 class Medium extends Ship {
 	public $baseImpulse = 175;
 	public $traverse = 0;
+	public $slipAngle = 21;
 
 	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
         parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
@@ -1198,6 +1190,7 @@ class Medium extends Ship {
 class Light extends Ship {
 	public $baseImpulse = 190;
 	public $traverse = -1;
+	public $slipAngle = 23;
 	
 	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
         parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
@@ -1218,6 +1211,7 @@ class Light extends Ship {
 class SuperLight extends Ship {
 	public $baseImpulse = 200;
 	public $traverse = -2;
+	public $slipAngle = 25;
 	
 	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
         parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);

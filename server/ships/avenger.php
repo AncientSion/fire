@@ -24,13 +24,13 @@ class Avenger extends Heavy {
 		$rightTop = new Structure($this->getId(), $this->id, 30, 90, 800, 15);
 		$rightTop->systems[] = new Dual($this->getId(), $this->id, 330, 150, 14, array("LightPulse", "LightParticleBeam"));
 		$rightTop->systems[] = new Dual($this->getId(), $this->id, 330, 150, 14, array("LightPulse", "LightParticleBeam"));
-		$rightTop->systems[] = new Hangar($this->getId(), $this->id, 9, array("Aurora"), 18);
+		$rightTop->systems[] = new Hangar($this->getId(), $this->id, 8, array("Aurora"), 16);
 		$structs[] = $rightTop;
 
 		$rightBottomm = new Structure($this->getId(), $this->id, 90, 150, 800, 14);
 		$rightBottomm->systems[] = new Dual($this->getId(), $this->id, 30, 210, 14, array("LightPulse", "LightParticleBeam"));
 		$rightBottomm->systems[] = new Dual($this->getId(), $this->id, 30, 210, 14, array("LightPulse", "LightParticleBeam"));
-		$rightBottomm->systems[] = new Hangar($this->getId(), $this->id, 9, array("Aurora"), 18);
+		$rightBottomm->systems[] = new Hangar($this->getId(), $this->id, 8, array("Aurora"), 16);
 		$structs[] = $rightBottomm;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 12);
@@ -41,19 +41,19 @@ class Avenger extends Heavy {
 		$leftBottom = new Structure($this->getId(), $this->id, 210, 270, 800, 14);
 		$leftBottom->systems[] = new Dual($this->getId(), $this->id, 150, 330, 14, array("LightPulse", "LightParticleBeam"));
 		$leftBottom->systems[] = new Dual($this->getId(), $this->id, 150, 330, 14, array("LightPulse", "LightParticleBeam"));
-		$leftBottom->systems[] = new Hangar($this->getId(), $this->id, 9, array("Aurora"), 18);
+		$leftBottom->systems[] = new Hangar($this->getId(), $this->id, 8, array("Aurora"), 16);
 		$structs[] = $leftBottom;
 
 		$leftTop = new Structure($this->getId(), $this->id, 270, 330, 800, 16);
 		$leftTop->systems[] = new Dual($this->getId(), $this->id, 210, 30, 14, array("LightPulse", "LightParticleBeam"));
 		$leftTop->systems[] = new Dual($this->getId(), $this->id, 210, 30, 14, array("LightPulse", "LightParticleBeam"));
-		$leftTop->systems[] = new Hangar($this->getId(), $this->id, 9, array("Aurora"), 18);
+		$leftTop->systems[] = new Hangar($this->getId(), $this->id, 8, array("Aurora"), 16);
 		$structs[] = $leftTop;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
-			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 2);
-			$this->structures[sizeof($this->structures)-1]->effiency = 6;
+			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
+			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse + 3;
 		}
 	}
 
@@ -78,28 +78,28 @@ class Avenger extends Heavy {
 					"active" => 0,
 					"chance" => 50,
 					"name" => "Patrol (Half Load) Outfit",
-					"cost" => 1000,
+					"cost" => 750,
 					"loads" =>
 					array(
 						array(
 							"systemid" => 12,
 							"name" => "Aurora",
-							"amount" => 9
+							"amount" => 8
 						),
 						array(
 							"systemid" => 16,
 							"name" => "Aurora",
-							"amount" => 9
+							"amount" => 8
 						),
 						array(
 							"systemid" => 23,
 							"name" => "Aurora",
-							"amount" => 9
+							"amount" => 8
 						),
 						array(
 							"systemid" => 27,
 							"name" => "Aurora",
-							"amount" => 9
+							"amount" => 8
 						)
 					)
 				),
@@ -107,28 +107,28 @@ class Avenger extends Heavy {
 					"active" => 0,
 					"chance" => 50,
 					"name" => "Assault (Full Load) Oufit",
-					"cost" => 2000,
+					"cost" => 1800,
 					"loads" =>
 					array(
 						array(
 							"systemid" => 12,
 							"name" => "Aurora",
-							"amount" => 18
+							"amount" => 16
 						),
 						array(
 							"systemid" => 16,
 							"name" => "Aurora",
-							"amount" => 18
+							"amount" => 16
 						),
 						array(
 							"systemid" => 23,
 							"name" => "Aurora",
-							"amount" => 18
+							"amount" => 16
 						),
 						array(
 							"systemid" => 27,
 							"name" => "Aurora",
-							"amount" => 18
+							"amount" => 16
 						)
 					)
 				)

@@ -63,6 +63,13 @@ class Salvo extends Mixed {
 		$this->mission = new Mission($data[sizeof($data)-1]);
 	}
 
+	public function calculateToHit($fire){
+		$base = 90;
+		$mask = $fire->target->getDefensiveBonus($this->id);
+		$traverse = $fire->weapon->getTraverseMod($fire)*0.2;
+		return ceil(90 * (1-$mask) * (1-$traverse));
+	}
+
 	public function getLockMultiplier(){
 		return 1;
 	}

@@ -11,7 +11,7 @@
 
 			if ($this->connection === null){
 				$user = "aatu"; $pass = "Kiiski";
-				$user = "root"; $pass = "147147";
+				//$user = "root"; $pass = "147147";
 				$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$user,$pass);
 				$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -314,9 +314,9 @@
 				$sql = "(SELECT * FROM playerstatus where gameid = ".$gameid.")";
 				$result = $this->query($sql);
 				if (!sizeof($result)){
-					Debug::log("deleting game");
+					//Debug::log("deleting game");
 					$sql = "DELETE FROM games WHERE id = ".$gameid;
-					Debug::log($sql);
+					//Debug::log($sql);
 					$this->query($sql);
 				}
 				return true;
@@ -1637,7 +1637,7 @@
 		}
 
 		public function getGameDetails($gameid){
-			Debug::log($gameid);
+			//Debug::log($gameid);
 
 			$stmt = $this->connection->prepare("
 				SELECT * FROM games WHERE id = :id

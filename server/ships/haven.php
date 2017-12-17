@@ -35,10 +35,10 @@ class Haven extends SuperLight {
 
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 225);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(40, 2));
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(40, 2), 28);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(40, 2), 550, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(40, 2));
+		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(35, 2));
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(35, 2), 28);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(35, 2), 550, 10);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(35, 2));
 	}
 }
 

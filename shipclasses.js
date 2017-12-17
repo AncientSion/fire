@@ -361,12 +361,12 @@ function Ship(data){
 	
 	this.getTurnCost = function(){
 		if (game.phase == -2){
-			return this.baseTurnDelay*this.getImpulseMod() / this.getTurnMod();
+			return round(this.baseTurnDelay*this.getImpulseMod() / this.getTurnMod(), 2);
 		}
 		if (this.actions.length && (this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0)){
 			return 0;
 		}
-		else return this.baseTurnCost*this.getImpulseMod() * this.getTurnMod();
+		else return round(this.baseTurnCost*this.getImpulseMod() * this.getTurnMod(), 2);
 		//else return this.baseTurnCost; //Math.pow(this.mass, 1.25)/10000;
 		//else return Math.found((Math.pow(this.mass, 1.56) / 10000) *  this.getImpulseMod());
 	}
@@ -377,13 +377,13 @@ function Ship(data){
 	
 	this.getTurnDelay = function(){
 		if (game.phase == -2){
-			return this.baseTurnDelay*this.getImpulseMod() / this.getTurnMod();
+			return round(this.baseTurnDelay*this.getImpulseMod() / this.getTurnMod());
 		}
 		if (this.actions.length && this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0){
 			return 0;
 		}
-		else return this.baseTurnDelay*this.getImpulseMod() / this.getTurnMod();
-		//else return round(this.getBaseTurnDelay() * this.getImpulseMod(), 2);
+		else return round(this.baseTurnDelay*this.getImpulseMod() / (1+((this.getTurnMod()-1)*3)), 2);
+		//else return round(this.baseTurnDelay*this.getImpulseMod() / this.getTurnMod());
 	}
 
 	this.drawArcIndicator = function(){
@@ -515,12 +515,13 @@ function Ship(data){
 		var button = $("#turnButton");
 		var vector = $("#vectorDiv")
 
-			$(button)
-				.find("#turnMode").html("ON").addClass("on").end()
-				//.find("#impulseMod").html(turn.dif).end()
-				.find("#turnCost").html(round(turn.cost * turn.mod * turn.dif, 2) + " EP").end()
-				.find("#turnDelay").html(round(turn.delay * turn.mod * turn.dif, 2) + " px").end()
-				.find("#turnMod").html(turn.mod).end()
+		$(button)
+			.find("#turnMode").html("ON").addClass("on").end()
+			//.find("#turnCost").html(round(turn.cost * turn.mod * turn.dif, 2) + " EP").end()
+			//.find("#turnDelay").html(round(turn.delay * turn.mod * turn.dif, 2) + " px").end()
+			.find("#turnCost").html(this.getTurnCost() + " EP").end()
+			.find("#turnDelay").html(this.getTurnDelay() + " px").end()
+			.find("#turnMod").html(turn.mod).end()
 
 		if (game.turnMode){
 			$(button)
@@ -529,26 +530,14 @@ function Ship(data){
 				.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end()
 				.find("#impulseText").html("Cost : Rem").end().find("#impulseCost").html("");
 
-		/*	$(vector).empty()
-				.append($("<table>")
-					.append($("<tr>")
-						.append($("<td>").html("Angle: " + turn.a)))
-					.append($("<tr>")
-						.append($("<td>").html("Cost: " + Math.ceil(turn.cost * turn.a * turn.mod * turn.dif) + " EP")))
-					.append($("<tr>")
-						.append($("<td>").html("Delay: " + Math.ceil(turn.delay * turn.a / turn.mod * turn.dif) + " px"))))
-				.removeClass("disabled");*/
 			this.drawDelay();
 			this.adjustMaxTurn()
 		}
 		else {
 			$(button)
 				.find("#turnMode").html("OFF").removeClass("on").end()
-				//.find("#turnCost").html("").end()
-				//.find("#turnDelay").html("").end()
-				//.find("#turnMod").html("").end()
 				.find("#shortenTurn").addClass("disabled");
-				$("#epButton")
+			$("#epButton")
 				.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end()
 				.find("#impulseText").html("Cost : Rem").end().find("#impulseCost").html("");
 			$(vector).addClass("disabled")
@@ -751,7 +740,7 @@ function Ship(data){
 		else if (this.actions.length == 1){
 			mouseCtx.clearRect(0, 0, res.x, res.y);
 		}
-		var delay = turn.a * turn.delay / turn.mod * turn.dif;
+		var delay = turn.a * this.getTurnDelay();
 		if (delay){
 			var angle = this.getPlannedFacing();
 			var center = this.getPlannedPos();
@@ -837,7 +826,7 @@ function Ship(data){
 	}
 
 	this.autoShortenTurn = function(){
-		if (this.flight){return;}
+		if (!this.ship){return;}
 		var impulse = this.getCurrentImpulse();
 		var delay = this.getRemainingDelay();
 		var move = this.getLastTurn();
@@ -862,43 +851,9 @@ function Ship(data){
 				}
 			}
 		}
-
-
 
 		move.cost = Math.round(move.cost);
 		move.delay = Math.round(move.delay);
-		this.setTurnData();
-
-	}
-
-	this.autoShortenTurna= function(){
-		if (this.flight){return;}
-		var impulse = this.getCurrentImpulse();
-		var delay = this.getRemainingDelay();
-		var move = this.getLastTurn();
-
-		if (!impulse && delay){
-			while (this.canShortenOldTurn(move)){
-				move.cost = Math.ceil(move.cost / move.costmod * (move.costmod + turn.step));
-				move.delay = Math.ceil(move.delay * move.costmod / (move.costmod + turn.step));
-				move.costmod = round(move.costmod + turn.step, 1);
-				//console.log(move.cost, move.delay, move.costmod);
-			}
-		}
-		else if (impulse && delay){
-			while (this.canShortenOldTurn(move)){
-				delay -= move.delay;
-				move.cost = Math.ceil(move.cost / move.costmod * (move.costmod + turn.step));
-				move.delay = Math.ceil(move.delay * move.costmod / (move.costmod + turn.step));
-				move.costmod = round(move.costmod + turn.step, 1);
-				delay += move.delay;
-				if (delay <= 0){
-					break;
-				}
-			}
-		}
-
-
 		this.setTurnData();
 
 	}
@@ -916,9 +871,9 @@ function Ship(data){
 	this.getShortenOldTurnCost = function(move){
 		var c = this.getTurnCost();
 		var a = Math.abs(move.a);
-		return Math.ceil((c * a * (move.costmod + 0.1)) - (c * a * move.costmod));
-		return Math.ceil(this.getTurnCost() * Math.abs(move.a) * (move.costmod + 0.1)) - move.cost;
-		return (this.getTurnCost() / move.costmod * (move.costmod + 0.1)) * Math.abs(move.a) - move.cost;
+		return Math.ceil((c * a * (move.costmod + turn.step)) - (c * a * move.costmod));
+		return Math.ceil(this.getTurnCost() * Math.abs(move.a) * (move.costmod + turn.step)) - move.cost;
+		return (this.getTurnCost() / move.costmod * (move.costmod + turn.step)) * Math.abs(move.a) - move.cost;
 
 		//return b * a * (m+s) * turn.a * (1+turn.step));
 	}
@@ -1204,7 +1159,7 @@ function Ship(data){
 		contextmenu(
 			function(e){
 				e.preventDefault();
-				game.getUnit($(this).data("shipId")).selectAll(e, $(this).data("systemId"));
+				if (!game.sensorMode){game.getUnit($(this).data("shipId")).selectAll(e, $(this).data("systemId"));}
 			}
 		);
 		return td;
@@ -1446,10 +1401,6 @@ Ship.prototype.getFireOrders = function(){
 	return fires;
 }
 
-Ship.prototype.getEWSettings = function(){
-	return this.getSystemByName("Sensor").getEW();
-}
-
 Ship.prototype.getPowerOrders = function(){
 	var powers = [];
 	for (var i = 0; i < this.structures.length; i++){
@@ -1665,7 +1616,7 @@ Ship.prototype.select = function(){
 
 Ship.prototype.doSelect = function(){
 	console.log(this);
-	console.log(this.cc);
+	//console.log(this.cc);
 	aUnit = this.id;
 	this.selected = true;
 	this.setUnitGUI();
@@ -2451,11 +2402,18 @@ Ship.prototype.expandDiv = function(div){
 			}
 		}
 
-		var fill = 0; // front / aft, make a wider system in a single row
+		//max = Math.min(max, this.structures[i].systems.length)
+
+		var outerFill = 0; // front / aft, make a wider system in a single row
+		var innerFill = 0;
 		if (a == 0 || a == 180){
-			if (this.structures[i].systems.length == 1 || this.structures[i].systems.length == 2 && this.structures[i].systems[0].name != this.structures[i].systems[1].name){
+			if (this.structures[i].getBoostEffect("Armour") && this.structures[i].systems.length < 3){
+				max = 2;
+				innerFill = 1;
+			}
+			else if (this.structures[i].systems.length == 1 || this.structures[i].systems.length == 2 && this.structures[i].systems[0].name != this.structures[i].systems[1].name){
 				max = 3;
-				fill = 1;
+				outerFill = 1;
 			}
 		}
 
@@ -2468,7 +2426,7 @@ Ship.prototype.expandDiv = function(div){
 				structTable.childNodes[0].childNodes[0].style.height = "60px";
 			}
 		}
-		else if (max == 2){
+		else if (max == 2 && !innerFill){
 			if (this.structures[i].getBoostEffect("Armour")){
 				structTable.childNodes[0].childNodes[0].style.height = "45px";
 			} 
@@ -2491,7 +2449,10 @@ Ship.prototype.expandDiv = function(div){
 				}
 			}
 
-			if (fill){
+			if (outerFill){
+				tr.insertCell(-1).className ="emptySystem"; col++;
+			}
+			else if (innerFill && (j == Math.floor(this.structures[i].systems.length / 2))){
 				tr.insertCell(-1).className ="emptySystem"; col++;
 			}
 
@@ -2519,7 +2480,7 @@ Ship.prototype.expandDiv = function(div){
 				$(td).find(".outputMask").hide();
 			}
 
-			if (fill){
+			if (outerFill){
 				tr.insertCell(-1).className ="emptySystem"; col++;
 			}
 
@@ -2573,7 +2534,7 @@ Ship.prototype.expandDiv = function(div){
 		if (a == 0){
 			if (!noAft && this.structures[i].systems.length <= 3){
 				offsetY += 10;
-			} else if (fill){
+			} else if (outerFill){
 				offsetY -= 10;
 				$(primaryDiv).css("top", (primY + 20));
 			}

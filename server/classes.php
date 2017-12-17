@@ -109,6 +109,7 @@ class EW {
 	public $angle;
 	public $dist;
 	public $type;
+	
 	function __construct($id, $unitid, $systemid, $turn, $angle, $dist, $type){
 		$this->id = $id;
 		$this->unitid = $unitid;

@@ -42,11 +42,11 @@ class Laser extends Weapon {
 
 			for ($i = 0; $i < sizeof($systems); $i++){
 				if ($systems[$i] == $system->id){
-					$system = $fire->target->primary;
 					Debug::log("Laser DOUBLE HIT, switching to PRIMARY");
+					$system = $fire->target->primary;
 				}
 			}
-			if (!get_class($system) == "Primary"){$systems[] = $system->id;}
+			if ($system->id >= 0){$systems[] = $system->id;}
 
 			$print .= " ".get_class($system).": ".$rake." dmg, ";
 			$destroyed = 0;

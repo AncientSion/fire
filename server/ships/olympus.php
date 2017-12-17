@@ -16,27 +16,27 @@ class Olympus extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 350, 11);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 350, 13);
 		$front->systems[] = new MediumPulse($this->getId(), $this->id, 240, 360);
 		$front->systems[] = new MediumLaser($this->getId(), $this->id, 315, 45);
 		$front->systems[] = new MediumPulse($this->getId(), $this->id, 0, 120);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 10);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 11);
 		$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 180);
 		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 6, 3), array("Naga", 6, 2)));
 
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 300, 10);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 300, 11);
 		$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 360);
 		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 6, 3), array("Naga", 6, 2)));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
-			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 2);
-			$this->structures[sizeof($this->structures)-1]->effiency = 3;
+			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
+			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse + 4;
 		}
 	}
 

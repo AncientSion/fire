@@ -68,7 +68,7 @@ class Warhead extends Weapon {
 
 class Hasta extends Missile {
 	public $name = "Hasta";
-	public $display = "Light Antifighter Missiles";
+	public $display = "Light Anti-Fighter Missiles";
 	public $minDmg = 18;
 	public $maxDmg = 24;
 	public $mass = 3;
@@ -124,7 +124,7 @@ class Vanguard extends Missile {
 
 class Needle extends Missile {
 	public $name = "Needle";
-	public $display = "Antifighter Missiles";
+	public $display = "Light Anti-Fighter Missiles";
 	public $minDmg = 18;
 	public $maxDmg = 24;
 	public $mass = 3;
@@ -167,8 +167,8 @@ class Cyclops extends Missile {
 class Titan extends Missile {
 	public $name = "Titan";
 	public $display = "Heavy Antiship Missiles";
-	public $minDmg = 74;
-	public $maxDmg = 92;
+	public $minDmg = 70;
+	public $maxDmg = 88;
 	public $mass = 7;
 	public $cost = 16;
 	public $traverse = 1;

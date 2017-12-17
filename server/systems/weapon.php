@@ -18,10 +18,8 @@ class Weapon extends System {
 	}
 
 	public function getArcWidth(){
-		$w = 0;
-		if ($this->start < $this->end){ $w = $this->end - $this->start;}
-		else if ($this->start > $this->end){ $w += 360 - $this->start; $w += $this->end;}		
-		return $w;
+		if ($this->start < $this->end){ return $this->end - $this->start;}
+		else if ($this->start > $this->end){ return 360 - $this->start + $this->end;}	
 	}
 
 	public function setArmourMod(){

@@ -2,14 +2,14 @@
 
 class EM extends Weapon {
 	public $type = "EM";
-	public $animation = "beam";
+	public $animation = "em";
 	public $beamWidth;
 	public $priority = 12;
 	public $rakes;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $destroyed = 0){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-		$this->boostEffect[] = new Effect("Damage", 0.20);
+		$this->boostEffect[] = new Effect("Damage", 20);
 	}
 
 	public function doDamage($fire, $roll, $system){
@@ -25,18 +25,18 @@ class EM extends Weapon {
 
 		$effect = false;
 
-		$print = ("doing: ".$totalDmg." vs negation: ".$negation. " - ");
-		if ($totalDmg > $negation *2){
+		$print = ("doing: ".$totalDmg." vs negation: ".array_sum($negation));
+		if ($totalDmg > array_sum($negation) *2){
 			$effect = true;
-			$print .= ("dmg > neg*2");
+			$print .= (", dmg > neg*2");
 		}
-		else if ($totalDmg > $negation && !mt_rand(0, 1)){
+		else if ($totalDmg > array_sum($negation) && !mt_rand(0, 1)){
 			$effect = true;
-			$print .= ("dmg > neg and 50 %");
+			$print .= (", dmg > neg and 50 %");
 		}
-		else if ($totalDmg > $negation/2 && !mt_rand(0, 4)){
+		else if ($totalDmg > array_sum($negation)/2 && !mt_rand(0, 4)){
 			$effect = true;
-			$print .= ("dmg > neg/2 and 33%");
+			$print .= (", dmg > neg/2 and 33%");
 		}
 		else {
 			//$print .= ("dmg < neg/2 - deflected");
@@ -64,11 +64,11 @@ class EM extends Weapon {
 class EMPulseCannon extends EM {
 	public $name = "EMPulseCannon";
 	public $display = "EM Pulse Cannon";
-	public $minDmg = 6;
-	public $maxDmg = 9;
+	public $minDmg = 5;
+	public $maxDmg = 8;
 	public $accDecay = 200;
 	public $shots = 5;
-	public $animColor = "lightBlue";
+	public $animColor = "darkBlue";
 	public $projSize = 2;
 	public $projSpeed = 8;
 	public $reload = 1;

@@ -16,31 +16,31 @@ class Artemis extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 315, 45, 450, 13);
+		$front = new Structure($this->getId(), $this->id, 315, 45, 450, 14);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new HeavyRailGun($this->getId(), $this->id, 315, 45);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 45, 135, 375, 12);
+		$right = new Structure($this->getId(), $this->id, 45, 135, 375, 13);
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 135, 225, 240, 10);
+		$aft = new Structure($this->getId(), $this->id, 135, 225, 240, 12);
 		$aft->systems[] = new MediumRailGun($this->getId(), $this->id, 180, 300);
 		$aft->systems[] = new MediumRailGun($this->getId(), $this->id, 60, 180);
 		$structs[] = $aft;
 
-		$left = new Structure($this->getId(), $this->id, 225, 315, 375, 12);
+		$left = new Structure($this->getId(), $this->id, 225, 315, 375, 13);
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
-			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 2);
-			$this->structures[sizeof($this->structures)-1]->effiency = 3;
+			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
+			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse + 4;
 		}
 	}
 

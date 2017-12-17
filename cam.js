@@ -70,7 +70,7 @@ function Turn(){
 	this.mod;
 	this.cost;
 	this.delay;
-	this.step = 0.1;
+	this.step = 0.2;
 	this.max;
 	this.dif
 
