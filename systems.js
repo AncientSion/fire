@@ -274,6 +274,7 @@ System.prototype.setTimeLoaded = function(){
 			//console.log("++")
 			turnsLoaded++;
 		}
+
 		if (boost){
 			for (var j = 0; j < this.powers.length; j++){
 				if (this.powers[j].turn == i && this.powers[j].type == 1){
@@ -292,6 +293,16 @@ System.prototype.setTimeLoaded = function(){
 		if (turnsLoaded){
 			for (var j = 0; j < this.powers.length; j++){
 				if (this.powers[j].turn == i && this.powers[j].type == 0){
+					//console.log("disabled")
+					turnsLoaded = 0;
+					break;
+				}
+			}
+			for (var j = 0; j < this.crits.length; j++){
+				if (this.crits[j].type == "Disabled" && this.id == 11){
+					//console.log("ding");
+				}
+				if (this.crits[j].turn + this.crits[j].duration <= i && this.crits[j].type == "Disabled"){
 					//console.log("disabled")
 					turnsLoaded = 0;
 					break;

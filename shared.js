@@ -58,7 +58,7 @@ function initChat(){
 						.find(".chatBox").css("height", 100).css("max-height", 100)
 							.scrollTop(function(){return this.scrollHeight});
 				}
-			}).drag();
+			})//.drag();
 		}
 }
 
