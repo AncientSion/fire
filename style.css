@@ -584,6 +584,11 @@ table, th, tr, td {
 	border: 1px solid white;
 }
 
+.structContainer.squad {
+	height: 300px;
+	width: 400px;
+}
+
 .structDiv, .primaryDiv {
 	display: inline-block;
 	position: absolute;

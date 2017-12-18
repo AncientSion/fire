@@ -29,6 +29,7 @@ class Ship {
 	public $ship = true;
 	public $flight = false;
 	public $salvo = false;
+	public $squad = false;
 	public $traverse;
 	public $mass = 0;
 	public $profile = array();
@@ -1184,48 +1185,6 @@ class Medium extends Ship {
 
 	public function getShipTypeMod(){
 		return 1.15;
-	}
-}
-
-class Light extends Ship {
-	public $baseImpulse = 190;
-	public $traverse = -1;
-	public $slipAngle = 23;
-	
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
-        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
-
-		$this->hitTable = array(
-			"Bridge" => 0.5,
-			"Engine" => 0.8,
-			"Sensor" => 1,
-			"Reactor" => 0.7
-		);
-	}
-
-	public function getShipTypeMod(){
-		return 1.3;
-	}
-}
-
-class SuperLight extends Ship {
-	public $baseImpulse = 200;
-	public $traverse = -2;
-	public $slipAngle = 25;
-	
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
-        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
-
-		$this->hitTable = array(
-			"Bridge" => 0.85,
-			"Engine" => 1,
-			"Sensor" => 1,
-			"Reactor" => 0.9
-		);
-	}	
-
-	public function getShipTypeMod(){
-		return 1.45;
 	}
 }
 

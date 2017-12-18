@@ -1435,42 +1435,58 @@ class Manager {
 
 	public function getShipsForFaction($faction){
 		//Debug::log("getShipsForFaction");
-		$ships = array();
-		$data = array();
+		$ships = array(array(), array());
+		$return = array(array(), array());
 
 		switch ($faction){
 			case "Earth Alliance";
 				$ships = array(
-					"Omega",
-					"Avenger",
-					"Hyperion",
-					"Saggitarius",
-					"Artemis",
-					"Olympus",
-					"Tethys"
+					array(
+						"Omega",
+						"Avenger",
+						"Hyperion",
+						"Saggitarius",
+						"Artemis"
+					),
+					array(
+						//"Olympus",
+						"Tethyss"
+					)
 				);
 				break;
 			case "Centauri Republic";
 				$ships = array(
-					"Octurion",
-					"Primus",
-					"Altarian",
-					"Demos",
-					"Darkner",
-					"Vorchan",
-					"Haven"
-					);
+					array(
+						"Octurion",
+						"Primus",
+						"Altarian",
+						"Demos",
+						"Darkner",
+						"Vorchan",
+						"Haven"
+					),
+					array(
+					)
+				);
 				break;
 			case "Minbari Federation";
 				$ships = array(
+					array(
 					"Sharlin",
 					"Tinashi",
 					"WhiteStar",
+					),
+					array(
+					)
 				);
 				break;
 			case "Narn Regime";
 				$ships = array(
+					array(
 					"GQuan"
+					),
+					array(
+					)
 				);
 				break;
 			default:
@@ -1479,17 +1495,27 @@ class Manager {
 
 		$ship;
 
-		for ($i = 0; $i < sizeof($ships); $i++){
-			$name = $ships[$i];
+		for ($i = 0; $i < sizeof($ships[0]); $i++){
+			$name = $ships[0][$i];
 			$ship = array(
-				"name" => $ships[$i],
+				"name" => $ships[0][$i],
 				"value" => $name::$value,
 				"eta" => 0
 			);
-			$data[] = $ship;
+			$return[0][] = $ship;
 		}
 
-		return $data;
+		for ($j = 0; $j < sizeof($ships[1]); $j++){
+			$name = $ships[1][$j];
+			$ship = array(
+				"name" => $ships[1][$j],
+				"value" => $name::$value,
+				"eta" => 0
+			);
+			$return[1][] = $ship;
+		}
+
+		return $return;
 	}
 
 	public function getPreviewData($name){

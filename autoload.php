@@ -9,8 +9,10 @@ spl_autoload_register(
                 'ultraheavy' => '/server/ship.php',
                 'heavy' => '/server/ship.php',
                 'medium' => '/server/ship.php',
-                'light' => '/server/ship.php',
-                'superlight' => '/server/ship.php',
+
+                'sqaddie' => '/server/mixed.php',
+                'light' => '/server/mixed.php',
+                'superlight' => '/server/mixed.php',
 
                 'warhead' => '/server/systems/weapons/ammo.php',
                 'hasta' => '/server/systems/weapons/ammo.php',
@@ -57,6 +59,7 @@ spl_autoload_register(
                 'artemis' => '/server/ships/artemis.php',
                 'olympus' => '/server/ships/olympus.php',
                 'tethys' => '/server/ships/tethys.php',
+                'tethyss' => '/server/ships/tethyss.php',
 
                 'gquan' => '/server/ships/gquan.php',
 

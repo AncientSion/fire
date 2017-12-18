@@ -242,7 +242,7 @@ else {
 					}
 				},
 
-				setShipTotal: function(){
+				setUnitTotal: function(){
 					game.ships[0].totalCost = game.ships[0].cost;
 					game.ships[0].upgrades = [];
 
@@ -404,8 +404,44 @@ else {
 		ajax.confirmFleetPurchase(playerid, gameid, window.game.shipsBought, redirect);
 	}
 
-	function requestShipData(name){
-		//		console.log("requestShipData");
+	function requestSquadron(){
+
+		//$ship = new $name(1, 1, 0, "", 0, 0, 0, 270, 0, 0, "");
+		//function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+
+
+		$(".shipDiv").remove();
+		$("#hangarLoadoutDiv").addClass("disabled");
+		$("#weaponLoadoutDiv").addClass("disabled");
+		$("#hangarTable").html("");
+		var data = {id: 1, $userid: 1, available: 0, display: "Squad", notes: "", faction: "Faction", mass: 0, cost: 0, profile: 0, size: 50, traverse: -1}
+		var ship = new Squadron(data);
+			ship.actions.push(new Move(-1, "deploy", 0, res.x/2, res.y/2, 0, 0, 0, 1, 1, 1));
+			ship.create();
+		game.ships[0] = ship;
+		ship.create();
+
+		$("#game").removeClass("disabled");
+		ship.createBaseDiv();
+		ship.previewSetup();
+		$(".shipDiv")
+			.css("left", "460px").css("top", "220px").removeClass("disabled")
+			.find(".structContainer").show();
+		drawShipPreview();
+
+		var div = document.createElement("div");
+			div.style.border = "1px solid white";
+		var table = document.createElement("table");		
+			table.id = "totalShipCost";
+
+		div.appendChild(table);
+
+		game.ships[0].element.appendChild(div);
+		window.game.setUnitTotal();
+	}
+
+	function requestSquadUnit(name){
+		//console.log("requestSingleUnitData");
 		$.ajax({
 			type: "GET",
 			url: "getGameData.php",
@@ -414,7 +450,31 @@ else {
 					type: "shipdata",
 					name: name,
 					},
-			success: showShipDiv,		
+			success: addSquadronUnit,
+			error: ajax.error,
+		});
+	}
+
+	function addSquadronUnit(data){
+		var squaddie = new Squaddie(JSON.parse(data));
+		console.log(squaddie);
+
+		if (game.ships[0].squad){
+			game.ships[0].addSubElement(squaddie);
+		}
+	}
+
+	function requestSingleUnitData(name){
+		//console.log("requestSingleUnitData");
+		$.ajax({
+			type: "GET",
+			url: "getGameData.php",
+			datatype: "json",
+			data: {
+					type: "shipdata",
+					name: name,
+					},
+			success: showShipDiv,
 			error: ajax.error,
 		});
 	}
@@ -450,8 +510,8 @@ else {
 
 		div.appendChild(table);
 
-		document.getElementsByClassName("shipDiv")[0].appendChild(div);
-		window.game.setShipTotal();
+		game.ships[0].element.appendChild(div);
+		window.game.setUnitTotal();
 	}
 
 
@@ -536,6 +596,7 @@ else {
 	}
 
 	function drawShipPreview(){
+		if (game.ships[0].img == undefined){return;}
 		window.shipCtx.clearRect(0, 0, res.x, res.y);
 		window.shipCtx.save();
 		window.shipCtx.translate(res.x/2, res.y/2);
@@ -569,33 +630,37 @@ else {
 		}
 	}
 
-	function showShipList(shiplist, ele){
-		if (shiplist){
-			shiplist = JSON.parse(shiplist);
+	function showShipList(data, ele){
+		if (data){
+			data = JSON.parse(data);
 		} else return;
 
 		var row = $(ele).data("row");
 
 		if (!$(ele).data("avail")){
-			for (var i = 0; i < shiplist.length; i++){
+			for (var i = 0; i < data[0].length; i++){
 				var subTr = document.createElement("tr")
 					$(subTr).hover(function(){
 						$(this).toggleClass("highlight");
 					})
 
 					var subTd = subTr.insertCell(-1);
-						subTd.innerHTML = shiplist[i]["name"];
+						subTd.innerHTML = data[0][i]["name"];
 
 					var subTd = subTr.insertCell(-1);
-						subTd.innerHTML = shiplist[i]["value"];
+						subTd.innerHTML = data[0][i]["value"];
 
 					var subTd = subTr.insertCell(-1);	
 						subTd.innerHTML = "Add to fleet";
-						$(subTd).data("name", shiplist[i]["name"]).data("value", shiplist[i]["value"])
+
+						$(subTd)
+							.data("name", data[0][i]["name"])
+							.data("value", data[0][i]["value"])
 							.hover(function(){
 								$(this).toggleClass("selectionHighlight");
-							}).click(function(){
-								requestShipData(this.parentNode.childNodes[0].innerHTML);
+							})
+							.click(function(){
+								requestSingleUnitData(this.parentNode.childNodes[0].innerHTML);
 							})
 						subTr.appendChild(subTd); 
 
@@ -605,7 +670,58 @@ else {
 
 				$(ele).data("avail", true);
 			}
-		}
+
+			$(ele.parentNode.childNodes[(row*2)+2].childNodes[0].childNodes[0]).append($("<tr>")
+				.hover(function(){
+					$(this).toggleClass("highlight");
+				})
+				.append($("<td>").html("Mixed Squadron"))
+				.append($("<td>").html("VARIABLE"))
+				.append($("<td>").html("Add to fleet")
+					.data("name", "mixed")
+					.data("value", 0)
+					.hover(function(){
+						$(this).toggleClass("selectionHighlight");
+					}).click(function(){
+						requestSquadron();
+					})
+				)
+			)
+
+			for (var i = 0; i < data[1].length; i++){
+				var subTr = document.createElement("tr")
+					$(subTr).hover(function(){
+						$(this).toggleClass("highlight");
+					})
+
+					var subTd = subTr.insertCell(-1);
+						subTd.innerHTML = data[1][i]["name"];
+
+					var subTd = subTr.insertCell(-1);
+						subTd.innerHTML = data[1][i]["value"];
+
+					var subTd = subTr.insertCell(-1);	
+						subTd.innerHTML = "Add to fleet";
+
+						$(subTd)
+							.data("name", data[1][i]["name"])
+							.data("value", data[1][i]["value"])
+							.hover(function(){
+								$(this).toggleClass("selectionHighlight");
+							})
+							.click(function(){
+								requestSquadUnit(this.parentNode.childNodes[0].innerHTML);
+							})
+						subTr.appendChild(subTd); 
+
+					//	subTable.appendChild(subTr);
+
+					ele.parentNode.childNodes[(row*2)+2].childNodes[0].childNodes[0].appendChild(subTr);
+
+				$(ele).data("avail", true);
+			}
+
+	}
 
 
 		$(ele.parentNode.childNodes[(row*2)+2]).slideToggle(0);

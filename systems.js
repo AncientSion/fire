@@ -2705,7 +2705,7 @@ Launcher.prototype.setupAmmoLoadout = function(e){
 		this.updateTotals();
 	}
 	else {
-		window.game.setShipTotal();
+		window.game.setUnitTotal();
 		$(div).addClass("disabled");
 	}
 }
@@ -2798,7 +2798,7 @@ Launcher.prototype.updateTotals = function(){
 
 	for (var i = 0; i < this.loads.length; i++){
 		var tr = table.insertRow(-1);
-		console.log(this.loads[i]);
+		//console.log(this.loads[i]);
 			tr.insertCell(-1).innerHTML = this.loads[i].name;
 			tr.insertCell(-1).innerHTML = this.loads[i].display;
 			tr.insertCell(-1).innerHTML = this.launchRate[i];
@@ -3370,7 +3370,7 @@ Hangar.prototype.setupHangarLoadout = function(e){
 		this.updateTotals();
 	}
 	else {
-		window.game.setShipTotal();
+		window.game.setUnitTotal();
 		$(div).addClass("disabled");
 	}
 }

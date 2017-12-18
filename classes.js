@@ -201,6 +201,7 @@ function Single(data){
 	this.layout = {};
 	this.fighter = 0;
 	this.missile = 0;
+	this.squaddie = 0;
 }
 
 Single.prototype.isDestroyedThisTurn = function(){
@@ -281,26 +282,84 @@ Single.prototype.getDetailsDiv = function(){
 	return div;
 }
 
+
+function Squaddie(data){
+	this.id = data.id;
+	this.parentId = data.parentId;
+	this.name = data.name;
+	this.display = data.display;
+	this.mass = data.mass;
+	this.cost = data.cost;
+	this.profile = data.profile;
+	this.userid = data.userid;
+	this.baseHitChance = data.baseHitChance;
+	this.baseImpulse = data.baseImpulse;
+	this.traverse = data.traverse;
+	this.status = data.status;
+	this.actions = data.actions || [];
+	this.mapSelect = 1;
+	this.slipAngle = data.slipAngle;
+	this.squaddie = 1;
+	this.primary = data.primary;
+	this.systems = data.systems;
+	this.element;
+	this.layout = {};
+	this.img;
+
+	this.create();
+}
+
+Squaddie.prototype = Object.create(Single.prototype);
+
+Squaddie.prototype.create = function(data){
+	this.img = window.shipImages[this.name.toLowerCase()];
+	this.setElement();
+}
+
+Squaddie.prototype.setElement = function(){
+	var div = document.createElement("div");
+		div.style.width = "50px";
+		div.style.height = "50px";
+		//div.style.position = "relative";
+		div.style.position = "absolute";
+		div.style.borderColor = "1px solid red";
+		div.style.backgroundColor = "white";
+	this.element = div;
+}
+
+
+
+
+
+
+
+
+
+
 function Missile(data){
 	Single.call(this, data);
 	this.missile = 1;
 	this.traverse = data.traverse;
 	this.baseImpulse = data.baseImpulse;
 
-	this.create = function(data){
-		for (var k = 0; k < data.systems.length; k++){
-			this.systems.push(new Warhead(data.systems[k]));
-		}
-		for (var k = 0; k < data.crits.length; k++){
-			this.crits.push(new Crit(data.crits[k]));
-		}
-	}
-
 	this.create(data);
-
-
 }
+
+
+
+
+
+
 Missile.prototype = Object.create(Single.prototype);
+
+Missile.prototype.create = function(data){
+	for (var k = 0; k < data.systems.length; k++){
+		this.systems.push(new Warhead(data.systems[k]));
+	}
+	for (var k = 0; k < data.crits.length; k++){
+		this.crits.push(new Crit(data.crits[k]));
+	}
+}
 
 function Crit(data){
 	this.id = data.id;

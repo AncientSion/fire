@@ -183,7 +183,7 @@ class Single {
 	public $name;
 	public $display;
 	public $mass;
-	public $value;
+	public static $value;
 	public $cost;
 	public $start = 0;
 	public $end = 360;

@@ -22,3 +22,4 @@ assembleEndStates
 updateUnitState s:5 3/3
 TIME: 0.093 seconds.
 4 mb
+createPlayerStatus

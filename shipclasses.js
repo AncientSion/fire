@@ -42,6 +42,7 @@ function Ship(data){
 	this.ship = data.ship;
 	this.flight = data.flight;
 	this.salvo = data.salvo;
+	this.squad = data.squad;
 
 	this.friendly;
 	this.deployed;
@@ -460,7 +461,7 @@ function Ship(data){
 	}
 
 	this.getShortenTurnCost = function(){
-		return this.getTurnCost() / turn.mod * (turn.mod + 0.1) * turn.a;
+		return this.getTurnCost() / turn.mod * (turn.mod + turn.step) * turn.a;
 
 		//return b * a * (m+s) * turn.a * (1+turn.step));
 	}

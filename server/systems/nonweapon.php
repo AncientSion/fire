@@ -205,7 +205,7 @@ class Hangar extends Weapon {
 			$this->loads[] = array(
 				"name" => $loads[$i],
 				"amount" => 0,
-				"cost" => $fighter->value,
+				"cost" => $fighter::$value,
 				"mass" => $fighter->mass,
 				"integrity" => $fighter->integrity,
 				"launch" => 0

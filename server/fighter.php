@@ -26,7 +26,7 @@ class Fighter extends Single {
         	"id" => $this->id,
         	"name" => $this->name,
         	"faction" => $this->faction,
-        	"value" => $this->value,
+        	"value" => static::$value,
         	"mass" => $this->mass,
         	"integrity" => $this->integrity,
         	"ep" => $this->ep,
@@ -48,7 +48,7 @@ class Aurora extends Fighter {
 	public $name = "Aurora";
 	public $display = "Aurora";
 	public $faction = "Earth Alliance";
-	public $value = 29;
+	public static $value =  29;
 	public $mass = 36;
 	public $ep = 100;
 	public $integrity = 26;
@@ -67,7 +67,7 @@ class Thunderbolt extends Fighter {
 	public $name = "Thunderbolt";
 	public $display = "Thunderbolt";
 	public $faction = "Earth Alliance";
-	public $value = 36;
+	public static $value =  36;
 	public $mass = 40;
 	public $ep = 110;
 	public $integrity = 29;
@@ -87,7 +87,7 @@ class Sentri extends Fighter {
 	public $name = "Sentri";
 	public $display = "Sentri";
 	public $faction = "Centauri Republic";
-	public $value = 28;
+	public static $value =  28;
 	public $mass = 32;
 	public $ep = 115;
 	public $integrity = 24;
@@ -106,7 +106,7 @@ class Sitara extends Fighter {
 	public $name = "Sitara";
 	public $display = "Sitara";
 	public $faction = "Centauri Republic";
-	public $value = 24;
+	public static $value =  24;
 	public $mass = 36;
 	public $ep = 105;
 	public $integrity = 26;
@@ -125,7 +125,7 @@ class Nial extends Fighter {
 	public $name = "Nial";
 	public $display = "Nial";
 	public $faction = "Minbari Federation";
-	public $value = 45;
+	public static $value =  45;
 	public $mass = 30;
 	public $ep = 140;
 	public $integrity = 33;
@@ -144,7 +144,7 @@ class Gorith extends Fighter {
 	public $name = "Gorith";
 	public $display = "Gorith";
 	public $faction = "Narn Regime";
-	public $value = 22;
+	public static $value =  22;
 	public $mass = 34;
 	public $ep = 85;
 	public $integrity = 22;
@@ -163,7 +163,7 @@ class Frazi extends Fighter {
 	public $name = "Frazi";
 	public $display = "Frazi";
 	public $faction = "Narn Regime";
-	public $value = 32;
+	public static $value =  32;
 	public $mass = 36;
 	public $ep = 100;
 	public $integrity = 27;
