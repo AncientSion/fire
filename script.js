@@ -287,7 +287,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 						system.validTarget = 1;
 					}
 					else {
-						$(row).append($("<td>").html("Illegal Target").attr("colspan", 4))
+						$(row).append($("<td>").html("Illegal Target").attr("colSpan", 4))
 						system.validTarget = 0;
 					}
 

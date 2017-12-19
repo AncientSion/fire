@@ -153,8 +153,8 @@ class Sensor extends PrimarySystem {
 		}
     }
 
-	public function setState($turn){
-		parent::setState($turn);
+	public function setState($turn, $phase){
+		parent::setState($turn, $phase);
 		$this->setEW($turn);
 	}
 

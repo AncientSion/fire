@@ -243,13 +243,64 @@ function initiateFlight(data){
 		}
 
 	}
-	return flight;
-	
+	return flight;	
+}
+
+function initiateSquaddie(data){
+	var unit = new Squaddie(data);	
+		unit.primary = new Core(data.primary);
+
+	for (var i = 0; i < data.primary.damages.length; i++){
+		if (data.primary.damages[i].turn == game.turn){
+			ship.primary.damages.push(new Damage(data.primary.damages[i]));
+		} else ship.primary.damages.push(data.primary.damages[i]);
+	}
+
+	for (var j = 0; j < data.primary.systems.length; j++){
+		var primSystem = new window[data.primary.systems[j].name](data.primary.systems[j]);
+
+		for (var l = 0; l < data.primary.systems[j].damages.length; l++){
+			primSystem.damages.push(new Damage(data.primary.systems[j].damages[l]));
+		}
+
+		for (var l = 0; l < data.primary.systems[j].powers.length; l++){
+			primSystem.powers.push(new Power(data.primary.systems[j].powers[l]));
+		}
+
+		for (var l = 0; l < data.primary.systems[j].crits.length; l++){
+			primSystem.crits.push(new Crit(data.primary.systems[j].crits[l]));
+		}
+
+		primSystem.setState();
+		unit.primary.systems.push(primSystem);
+	}
+
+	for (var j = 0; j < data.structures.length; j++){
+		var struct = new Section(data.structures[j]);
+
+		for (var k = 0; k < data.structures[j].systems.length; k++){
+			var system = new window[data.structures[j].systems[k].type](data.structures[j].systems[k]);				
+			for (var l = 0; l < data.structures[j].systems[k].fireOrders.length; l++){
+				system.fireOrders.push(new FireOrder(data.structures[j].systems[k].fireOrders[l]));
+			}
+			for (var l = 0; l < data.structures[j].systems[k].damages.length; l++){
+				system.damages.push(new Damage(data.structures[j].systems[k].damages[l]));
+			}
+			for (var l = 0; l < data.structures[j].systems[k].powers.length; l++){
+				system.powers.push(new Power(data.structures[j].systems[k].powers[l]));
+			}
+			for (var l = 0; l < data.structures[j].systems[k].crits.length; l++){
+				system.crits.push(new Crit(data.structures[j].systems[k].crits[l]));
+			}
+			system.setState();
+			struct.systems.push(system);
+		}
+		unit.structures.push(struct);
+	}
+	return unit;
 }
 
 function initiateShip(data){
-
-
 	var ship = new Ship(data);
 		ship.hitTable = data.hitTable;
 		ship.primary = new Primary(data.primary);

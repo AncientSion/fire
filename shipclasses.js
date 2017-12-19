@@ -50,7 +50,6 @@ function Ship(data){
 	this.drawX = 0;
 	this.drawY = 0;
 
-
 	this.highlight = false;
 	this.destroyed = false;
 	this.disabled = data.disabled;
@@ -2151,7 +2150,7 @@ Ship.prototype.createBaseDiv = function(){
 
 		$(table)
 			.append($("<tr>")
-				.append($("<th>").html(this.name.toUpperCase() + " #" + this.id).attr("colspan", 2).addClass(header)))
+				.append($("<th>").html(this.name.toUpperCase() + " #" + this.id).attr("colSpan", 2).addClass(header)))
 			.append($("<tr>")
 				.append($("<td>").html("Classification"))
 				.append($("<td>").html(game.getUnitType(this.traverse))))
@@ -2293,7 +2292,7 @@ Ship.prototype.expandDiv = function(div){
 			var td = this.primary.systems[i].getTableData(false);
 				td = this.attachEvent(td);
 
-			if (this.id > 0 | game.turn == 1){
+			if (this.id > 0 || game.turn == 1){
 				var boostDiv = this.primary.systems[i].getBoostDiv();
 				if (boostDiv){td.appendChild(boostDiv)};
 

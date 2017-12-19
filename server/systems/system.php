@@ -42,7 +42,7 @@ class System {
 		$this->setArmourMod();
 	}
 
-	public function setState($turn){
+	public function setState($turn, $phase){
 		//Debug::log("set state system: ".$this->parentId);
 		$this->isDisabled($turn);
 		$this->isDestroyed();

@@ -75,14 +75,14 @@ class Ship {
 		return $this->index;
 	}
 
-	public function setState($turn, $phase){
-		//Debug::log("setState #".$this->id);
+	public function setUnitState($turn, $phase){
+		//Debug::log("setUnitState #".$this->id);
 		if ($this->primary->isDestroyed()){
 			$this->destroyed = 1;
 		}
 
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){ // check primary criticals
-			$this->primary->systems[$i]->setState($turn);
+			$this->primary->systems[$i]->setState($turn, $phase);
 			switch ($this->primary->systems[$i]->name){
 				case "Reactor":
 					if ($this->primary->systems[$i]->destroyed){
@@ -104,7 +104,7 @@ class Ship {
 			$armourDmg = 0;
 			$structDmg = 0;
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				$this->structures[$i]->systems[$j]->setState($turn); // set system states
+				$this->structures[$i]->systems[$j]->setState($turn, $phase); // set system states
 				for ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]->damages); $k++){// set armour
 					$armourDmg += $this->structures[$i]->systems[$j]->damages[$k]->armourDmg;
 					$structDmg += $this->structures[$i]->systems[$j]->damages[$k]->structDmg;

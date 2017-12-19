@@ -32,9 +32,11 @@ class Squaddie extends Single {
 	public $damaged = 0;
 	
 	function __construct($id, $parentId){
-		parent::__construct($id, $parentId);
+		$this->id = $id;
+		$this->parentId = $parentId;
+		$this->setBaseStats();
 		$this->addPrimary();
-		$this->addSystems();
+		$this->addStructures();
 	}
 
 	public function setBaseStats(){
@@ -42,6 +44,30 @@ class Squaddie extends Single {
 		$this->baseTurnCost = 0;
 		$this->baseTurnDelay = 0;
 		$this->baseImpulseCost = 0;
+	}
+
+	public function setUnitState($turn, $phase){
+		if ($this->primary->isDestroyed()){
+			$this->destroyed = 1;
+		}
+
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){ // check primary criticals
+			$this->primary->systems[$i]->setState($turn, $phase);
+		}
+
+		$this->primary->setNegation();
+		/*for ($i = 0; $i < sizeof($this->structures); $i++){ // 
+			$armourDmg = 0;
+			$structDmg = 0;
+			for ($j = 0; $j < sizeof($this->primary->damages); $j++){
+				if ($this->primary->damages[$j]->structureid == $this->structures[$i]->id){
+					$armourDmg += $this->primary->damages[$j]->armourDmg;
+					$structDmg += $this->primary->damages[$j]->structDmg;
+				}
+			}
+		}
+		*/
+		return true;
 	}
 }
 
@@ -55,8 +81,6 @@ class Light extends Squaddie {
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->addPrimary();
-		$this->addSystems();
 	}
 
 	function getId(){
@@ -85,12 +109,6 @@ class SuperLight extends Squaddie {
 		return 1.45;
 	}
 }
-
-
-
-
-
-
 
 
 class Mixed extends Ship {
@@ -136,10 +154,10 @@ class Mixed extends Ship {
 		$this->remainingDelay = 0;
 	}
 
-	public function setState($turn, $phase){
-		//Debug::log("setState #".$this->id);
+	public function setUnitState($turn, $phase){
+		//Debug::log("setUnitState #".$this->id);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			$this->structures[$i]->setState($turn);
+			$this->structures[$i]->setUnitState($turn, $phase);
 		}
 		$this->isDestroyed();
 		$this->setProps($turn, $phase);

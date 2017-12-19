@@ -359,7 +359,7 @@ class Manager {
 
 		for ($i = 0; $i < sizeof($units); $i++){
 			//$units[$i]->addFireDB($this->fires);
-			$units[$i]->setState($this->turn, $this->phase); //check damage state after dmg is applied
+			$units[$i]->setUnitState($this->turn, $this->phase); //check damage state after dmg is applied
 		}
 
 		return $units;
@@ -702,7 +702,7 @@ class Manager {
 			for ($i = 0; $i < sizeof($units); $i++){
 				$this->ships[] = new Salvo($units[$i]["id"], $units[$i]["userid"], $this->turn, "deployed", 0, 0, 0, 0, 0, 0, "");
 
-				$this->ships[sizeof($this->ships)-1]->setState($this->turn, $this->phase);
+				$this->ships[sizeof($this->ships)-1]->setUnitState($this->turn, $this->phase);
 				$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->ships[$i]->id, $this->turn, "deploy", 0, $units[$i]["actions"][0]["x"], $units[$i]["actions"][0]["y"], $a, 0, 0, 0, 1, 1);
 			}
 		}
@@ -1521,7 +1521,7 @@ class Manager {
 	public function getPreviewData($name){
 		//Debug::log("asking for preview of: ".$name);
 		$ship = new $name(1, 1, 0, "", 0, 0, 0, 270, 0, 0, "");
-		$ship->setState(0, 0);
+		$ship->setUnitState(0, 0);
 		return $ship;
 	}
 

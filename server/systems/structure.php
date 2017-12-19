@@ -1,4 +1,18 @@
 <?php
+
+class Section {
+	public $start = 0;
+	public $end = 0;
+	public $systems = [];
+	public $parentId;
+
+	function __construct($start, $end){
+		$this->start = $start;
+		$this->end = $end;
+	}
+
+}
+
 class Structure {
 	public $id;
 	public $parentId;
@@ -169,6 +183,59 @@ class Primary {
 	}
 }
 
+class Core extends Primary {
+	public $name = "Core";
+	public $id;
+	public $parentId;
+	public $start;
+	public $end;	
+	public $destroyed = false;
+	public $systems = array();
+	public $damages = array();
+	public $powers = array();
+	public $boostEffect = array();
+	public $integrity;
+	public $remaining;
+	public $negation;
+	public $remainingNegation = 0;
+	public $armourDmg = 0;
+	public $parentPow;
+	public $effiency = 0;
+	public $bonusNegation = 0;
+
+
+	function __construct($id, $parentId, $start, $end, $integrity, $negation, $destroyed = false){
+		parent::__construct($id, $parentId, $start, $end, $integrity, $destroyed);
+		$this->negation = $negation;
+	}
+
+	public function setNegation(){
+		$p = 1.5;
+		$this->parentPow = round(pow($this->integrity, $p));
+		$this->remainingNegation = round((pow($this->integrity - $this->armourDmg, $p) / $this->parentPow) * $this->negation);
+	}
+
+	public function getCurrentNegation(){
+		$p = 1.5;
+		return round(pow($this->integrity - $this->armourDmg, $p) / $this->parentPow * $this->negation);
+	}
+
+	public function setBonusNegation($turn){
+		if (!sizeof($this->boostEffect)){return;}
+		$this->bonusNegation = $this->getBoostEffect("Armour") * $this->getBoostLevel($turn);
+
+		//Debug::log("Bonus Negation for #".$this->parentId."/".$this->id.": ".$this->bonusNegation);
+	}
+
+	public function getArmourValue($system){
+		return array(
+			"stock" => round($this->getCurrentNegation() * $system->getArmourMod()),
+			"bonus" => round($this->bonusNegation * $system->getArmourMod())
+		);
+	}
+}
+
+
 class Single {
 	public $id;
 	public $parentId;
@@ -237,7 +304,7 @@ class Single {
 		return $total;
 	}
 
-	function setState($turn){
+	public function setUnitState($turn, $phase){
 		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
 			if ($this->damages[$i]->destroyed){
 				$this->destroyed = true;

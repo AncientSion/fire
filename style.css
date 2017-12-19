@@ -575,6 +575,13 @@ table, th, tr, td {
 	font-size: 20px;
 }
 
+.unitContainer {
+	position: absolute;
+	border: 1px solid red;
+	width: 150px;
+	height: 150px;
+}
+
 .structContainer {
 	height: 400px;
 	position: relative;
@@ -647,6 +654,10 @@ table, th, tr, td {
 
 .primaryTable .struct {
 	height: 35px;
+}
+
+.primaryTable .armour {
+	height: 25px;
 }
 
 .struct div.integrityNow, .armour div.integrityNow  {

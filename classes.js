@@ -261,7 +261,7 @@ Single.prototype.getDetailsDiv = function(){
 		div.className = this.id + " flight";
 
 		var table = $("<table>")
-			.append($("<tr>").append($("<th>").attr("colspan", 2).html(this.name)))
+			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.name)))
 			.append($("<tr>").append($("<td>").html("Mass").css("width", 120)).append($("<td>").html(this.mass)))
 			//.append($("<tr>").append($("<td>").html("Engine Power")).append($("<td>").html(this.ep)))
 			.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.negation)))
@@ -270,7 +270,7 @@ Single.prototype.getDetailsDiv = function(){
 
 	if (this.crits.length){
 			$(table)
-				.append($("<tr>").append($("<td>").attr("colspan", 2).css("fontSize", 16).css("borderBottom", "1px solid white").css("borderTop", "1px solid white").html("Modifiers")))
+				.append($("<tr>").append($("<td>").attr("colSpan", 2).css("fontSize", 16).css("borderBottom", "1px solid white").css("borderTop", "1px solid white").html("Modifiers")))
 
 		for (var i = 0; i < this.crits.length; i++){
 			$(table)
@@ -282,60 +282,6 @@ Single.prototype.getDetailsDiv = function(){
 	return div;
 }
 
-
-function Squaddie(data){
-	this.id = data.id;
-	this.parentId = data.parentId;
-	this.name = data.name;
-	this.display = data.display;
-	this.mass = data.mass;
-	this.cost = data.cost;
-	this.profile = data.profile;
-	this.userid = data.userid;
-	this.baseHitChance = data.baseHitChance;
-	this.baseImpulse = data.baseImpulse;
-	this.traverse = data.traverse;
-	this.status = data.status;
-	this.actions = data.actions || [];
-	this.mapSelect = 1;
-	this.slipAngle = data.slipAngle;
-	this.squaddie = 1;
-	this.primary = data.primary;
-	this.systems = data.systems;
-	this.element;
-	this.layout = {};
-	this.img;
-
-	this.create();
-}
-
-Squaddie.prototype = Object.create(Single.prototype);
-
-Squaddie.prototype.create = function(data){
-	this.img = window.shipImages[this.name.toLowerCase()];
-	this.setElement();
-}
-
-Squaddie.prototype.setElement = function(){
-	var div = document.createElement("div");
-		div.style.width = "50px";
-		div.style.height = "50px";
-		//div.style.position = "relative";
-		div.style.position = "absolute";
-		div.style.borderColor = "1px solid red";
-		div.style.backgroundColor = "white";
-	this.element = div;
-}
-
-
-
-
-
-
-
-
-
-
 function Missile(data){
 	Single.call(this, data);
 	this.missile = 1;
@@ -344,11 +290,6 @@ function Missile(data){
 
 	this.create(data);
 }
-
-
-
-
-
 
 Missile.prototype = Object.create(Single.prototype);
 
@@ -728,6 +669,130 @@ Structure.prototype.getBoostDiv = function(){
 	return System.prototype.getBoostDiv.call(this);
 }
 
+function Section(data){
+	this.start = data.start;
+	this.end = data.end;
+	this.systems = [];
+}
+
+function Core(data){
+	this.name = "Core";
+	this.display = "Core";
+	this.id = data.id;
+	this.parentId = data.parentId;
+	this.integrity = data.integrity;
+	this.remaining = data.remaining;
+	this.negation = data.negation;
+	this.remainingNegation = data.remainingNegation;
+	this.damages = [];
+	this.destroyed = data.destroyed || false;
+	this.highlight = false;	
+	this.systems = [];
+	this.coreElement;
+	this.armourElement;
+}
+
+Core.prototype.getRemainingNegation = function(){
+	return this.remainingNegation;
+}
+
+Core.prototype.getArmourString = function(){
+	return this.remainingNegation + " / " + this.negation;
+}
+
+Core.prototype.getCoreData = function(){
+	var tr = document.createElement("tr");
+	var td = document.createElement("td");
+		td.className = "struct"; td.colSpan = 3;
+
+	var span = document.createElement("div");
+		span.className = "integrityAmount";
+		span.className += " font15";
+		span.innerHTML = this.remaining + " / " + this.integrity;
+		td.appendChild(span);
+
+	var lowerDiv = document.createElement("div");
+		lowerDiv.className = "integrityNow";
+		lowerDiv.style.width =  this.remaining/this.integrity * 100 + "%";
+		td.appendChild(lowerDiv);
+		
+	var upperDiv = document.createElement("div");
+		upperDiv.className = "integrityFull";
+		td.appendChild(upperDiv);
+
+	$(td).data("shipId", this.parentId);
+	$(td).data("systemId", this.id);
+	$(td).hover(
+		function(e){
+			var shipId = $(this).data("shipId");
+			var systemId = $(this).data("systemId");
+			console.log("unit #" + shipId);
+			console.log("system #" + systemId);
+			return;
+			game.getUnit(shipId).primary.hover(e);
+		},
+		function(e){
+			return;
+			var shipId = $(this).data("shipId");
+			var systemId = $(this).data("systemId");
+			game.getUnit(shipId).getSystemById(systemId).hover(e);
+		}
+	)
+	$(td).click(function(e){
+		console.log("click");
+	})
+
+	tr.appendChild(td);	
+	this.coreElement = tr;
+	return tr;
+}
+
+Core.prototype.getArmourData = function(){
+	var tr = document.createElement("tr");
+	var td = document.createElement("td");
+		td.className = "armour"; td.colSpan = 3;
+
+	var span = document.createElement("div");
+		span.className = "integrityAmount font16";
+		span.innerHTML = this.getArmourString();
+		td.appendChild(span);
+
+	var lowerDiv = document.createElement("div");
+		lowerDiv.className = "integrityNow";
+		lowerDiv.style.width =  this.getRemainingNegation()/this.negation * 100 + "%";
+		td.appendChild(lowerDiv);
+		
+	var upperDiv = document.createElement("div");
+		upperDiv.className = "integrityFull";
+		td.appendChild(upperDiv);
+
+	$(td).data("shipId", this.parentId);
+	$(td).data("systemId", this.id);
+	$(td).hover(
+		function(e){
+			var shipId = $(this).data("shipId");
+			var systemId = $(this).data("systemId");
+			console.log("unit #" + shipId);
+			console.log("system #" + systemId);
+			return;
+			game.getUnit(shipId).primary.hover(e);
+		},
+		function(e){
+			return;
+			var shipId = $(this).data("shipId");
+			var systemId = $(this).data("systemId");
+			game.getUnit(shipId).getSystemById(systemId).hover(e);
+		}
+	)
+	$(td).click(function(e){
+		console.log("click");
+	})
+
+	tr.appendChild(td);
+	this.armourElement = tr;
+	return tr;
+}
+
 
 function Primary(data){
 	this.name = "Primary";
@@ -746,7 +811,7 @@ function Primary(data){
 		var tr = document.createElement("tr");
 		var td = document.createElement("td");
 			td.className = "struct";
-			td.colSpan = 2;
+			//td.colSpan = 2;
 
 		var span = document.createElement("div");
 			span.className = "integrityAmount";

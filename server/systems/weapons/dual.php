@@ -25,9 +25,9 @@ class Dual extends Weapon {
 		$this->display = substr($this->display, 0, strlen($this->display)-3);
 	}
 
-	public function setState($turn){
+	public function setState($turn, $phase){
 		//Debug::log("setState Dual");
-		parent::setState($turn);
+		parent::setState($turn, $phase);
 		$this->setActiveSystem($turn);
 		$this->setProps();
 

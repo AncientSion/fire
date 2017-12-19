@@ -131,7 +131,9 @@ spl_autoload_register(
                 'particlepulsar' => '/server/systems/weapons/linked.php',
 
                 'structure' => '/server/systems/structure.php',
+                'section' => '/server/systems/structure.php',
                 'primary' => '/server/systems/structure.php',
+                'core' => '/server/systems/structure.php',
                 'single' => '/server/systems/structure.php',
 
                 'debug' => '/server/debug.php',

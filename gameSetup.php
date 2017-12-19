@@ -103,6 +103,7 @@ else {
 	<script src='shipclasses.js'></script>
 	<script src='classes.js'></script>
 	<script src='mixed.js'></script>
+	<script src='squadron.js'></script>
 	<script src='salvo.js'></script>
 	<script src='flights.js'></script>
 	<script src='systems.js'></script>
@@ -405,11 +406,6 @@ else {
 	}
 
 	function requestSquadron(){
-
-		//$ship = new $name(1, 1, 0, "", 0, 0, 0, 270, 0, 0, "");
-		//function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
-
-
 		$(".shipDiv").remove();
 		$("#hangarLoadoutDiv").addClass("disabled");
 		$("#weaponLoadoutDiv").addClass("disabled");
@@ -456,12 +452,15 @@ else {
 	}
 
 	function addSquadronUnit(data){
-		var squaddie = new Squaddie(JSON.parse(data));
-		console.log(squaddie);
+		if (!game.ships[0].squad){return;}
+		else if (game.ships[0].structures.length >= 3){return;}
 
-		if (game.ships[0].squad){
-			game.ships[0].addSubElement(squaddie);
-		}
+		var sub = window.initiateSquaddie(JSON.parse(data));
+			sub.create();
+			sub.id = game.ships[0].structures.length+1;
+			sub.primary.parentId = sub.id;
+			console.log(sub.id);
+		game.ships[0].addSubElement(sub);
 	}
 
 	function requestSingleUnitData(name){
