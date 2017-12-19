@@ -24,6 +24,8 @@ function Ship(data){
 	this.cc = [];
 	this.mapSelect = 1;
 
+	this.totalCost = 0;
+
 	this.slipAngle = data.slipAngle || 0;
 	this.turnAngle = data.turnAngle || 0;
 	this.turnStep = data.turnStep || 0;
@@ -3122,3 +3124,5 @@ Ship.prototype.weaponHighlight = function(weapon){
 		weapon.drawArc(angle, shipPos);
 	}
 }
+
+

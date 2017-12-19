@@ -3,8 +3,8 @@ function Mixed(data){
 	this.ship = 0;
 	this.primary = false;
 	this.mission = data.mission || {};
-	this.nextStep;
-	this.finalStep;
+	this.nextStep = {};
+	this.finalStep = {};
 	this.layout = [];
 }
 
@@ -745,3 +745,202 @@ Mixed.prototype.drawMoveArea = function(){
 }
 
 
+
+
+function Squadron(data){
+	Ship.call(this, data);
+	this.squad = 1;
+	this.ship = 0;
+}
+Squadron.prototype = Object.create(Ship.prototype);
+
+
+Squadron.prototype.create = function(){
+	if (game.turn > 1 && game.phase == -1 &&this.available == game.turn){
+		this.x = this.actions[0].x;
+		this.y = this.actions[0].y;
+		this.drawX = this.actions[0].x;
+		this.drawY = this.actions[0].y;
+	}
+}
+
+Squadron.prototype.getStructureById = function(id){
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].id == id){
+			return this.structures[i];
+		}
+	}
+}
+
+Squadron.prototype.previewSetup = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].systems.length; j++){
+			if (this.structures[i].systems[j].loadout){
+				$(this.structures[i].systems[j].element).addClass("bgYellow");
+			}
+		}
+	}
+}
+
+Squadron.prototype.addSubElement = function(unit){
+	this.structures.push(unit);
+	this.setLayout();
+
+	$(this.element).find(".structContainer").append(unit.element);
+	var w = $($(this.element).find(".structContainer")).width();
+	var h = $($(this.element).find(".structContainer")).height();
+
+	for (var i = 0; i < this.structures.length; i++){
+		var subW = $(this.structures[i].element).width();
+		var subH = $(this.structures[i].element).height();
+		$(this.structures[i].element)
+			.css("left", this.structures[i].layout.x + w/2 - subW/2)
+			.css("top", this.structures[i].layout.y + h/2 - subH/2)
+	}
+
+	this.structures[this.structures.length-1].expandElement();
+	//console.log(w, h, subW, subH);
+	//console.log(unit.layout.x + w/2 - subW/2)
+	//console.log(unit.layout.x + w/2 - subW/2)
+}
+
+Squadron.prototype.removeSubElement = function(id){
+	for (var i = this.structures.length-1; i >= 0; i--){
+		if (this.structures[i].id == id){
+			$(this.element).find(".unitContainer").each(function(){
+				if ($(this).data("subId") == id){
+					$(this).remove(); return;
+				}
+			})
+			this.structures.splice(i, 1);
+			break;
+		}
+	}
+	this.setLayout();
+
+	//$(this.element).find(".structContainer").append(unit.element);
+	var w = $($(this.element).find(".structContainer")).width();
+	var h = $($(this.element).find(".structContainer")).height();
+
+	for (var i = 0; i < this.structures.length; i++){
+		var subW = $(this.structures[i].element).width();
+		var subH = $(this.structures[i].element).height();
+		$(this.structures[i].element)
+			.css("left", this.structures[i].layout.x + w/2 - subW/2)
+			.css("top", this.structures[i].layout.y + h/2 - subH/2)
+	}
+
+	//this.structures[this.structures.length-1].expandElement();
+	//console.log(w, h, subW, subH);
+	//console.log(unit.layout.x + w/2 - subW/2)
+	//console.log(unit.layout.x + w/2 - subW/2)
+}
+
+
+
+
+Squadron.prototype.setLayout = function(){
+	if (this.structures.length == 1){
+		for (var i = 0; i < this.structures.length; i++){
+			this.structures[i].layout = {x: 0, y: 0};
+		}
+	}
+	else if (this.structures.length == 2){
+		for (var i = 0; i < this.structures.length; i++){
+			this.structures[i].layout = {x: -100 + (i*200), y: 0};
+		}
+	}
+	else if (this.structures.length == 3){
+		for (var i = 0; i < this.structures.length; i++){
+			var a = 360 / 3 * i;
+			var o = getPointInDirection(115, a-90, 0, 0);
+			this.structures[i].layout = {x: o.x, y: o.y + 30};
+		}
+	}
+}
+
+Squadron.prototype.createBaseDiv = function(){
+	var owner = "friendly";
+	if (game.phase > -2 && this.userid != game.userid){owner = "hostile";}
+	var div = document.createElement("div");
+		div.className = "shipDiv " + owner;
+		$(div).data("shipId", this.id);
+
+	this.element = div;
+
+	var subDiv = document.createElement("div");
+		subDiv.className = "header";
+	
+	var table = document.createElement("table");
+		table.className = "general";
+
+	var header = "red";
+	if (this.friendly){header = "green";}
+
+		$(table)
+			.append($("<tr>")
+				.append($("<th>").html("BNAME").attr("colSpan", 2).addClass(header)))
+			
+	subDiv.appendChild(table);
+	div.appendChild(subDiv);
+
+	$(this.expandDiv(div))
+		//.addClass("disabled")
+		.drag()
+		.find(".structContainer")
+			.contextmenu(function(e){e.stopPropagation(); e.preventDefault()})
+			.end()
+		.find(".header")
+			.contextmenu(function(e){
+				e.stopImmediatePropagation(); e.preventDefault();
+				$(this).parent().find($(".structContainer")).toggle();
+			})
+			.end()
+		.find(".iconContainer")
+			.contextmenu(function(e){
+				e.stopImmediatePropagation(); e.preventDefault();
+				if ($(this).parent().data("shipId") != aUnit){
+					game.zIndex--;
+					$(this).parent().addClass("disabled");
+				}
+			})
+
+
+	if (game.phase == 2){
+		$(div).find(".structContainer").show();
+	}
+}
+
+Squadron.prototype.expandDiv = function(div){
+	$(div)
+	.append($("<div>")
+		.addClass("iconContainer")
+			//.append($(window.shipImages[this.name.toLowerCase()].cloneNode(true)).addClass("rotate270").addClass("size90"))
+			.hover(function(e){
+				if (aUnit){
+					var shooter = game.getUnit(aUnit);
+					var target = game.getUnit($(this).parent().data("shipId"));
+					if (shooter.id != target.id && shooter.hasWeaponsSelected()){
+						handleWeaponAimEvent(shooter, target, e);
+					}
+				}
+			}).
+			click(function(e){
+				var shooter = game.getUnit(aUnit);
+				var target = game.getUnit($(this).parent().data("shipId"));
+				if (shooter && target){
+					if (target.id != shooter.id && (target.userid != game.userid && target.userid != shooter.userid)){
+						handleFireClick(shooter, target);
+					} else target.switchDiv();
+				}
+			}));
+			
+		
+	//document.getElementById("game").appendChild(div);
+	document.body.appendChild(div);
+	$(div).css("position", "absolute").css("top", 300);
+
+	structContainer = document.createElement("div");
+	structContainer.className = "structContainer squad";
+	div.appendChild(structContainer);
+}

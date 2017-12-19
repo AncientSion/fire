@@ -1,0 +1,5 @@
+DB insertUnits: 2
+insertSubUnits
+insertMissions s: 0
+Game #1 is not ready !
+createPlayerStatus

@@ -152,7 +152,7 @@ System.prototype.hover = function(e){
 		this.highlight = true;
 		this.showInfoDiv(e);
 		this.showOptions();
-		if (p.ship){
+		if (p.ship || p.squad){
 			fxCtx.clearRect(0, 0, res.x, res.y);
 			fxCtx.translate(cam.o.x, cam.o.y);
 			fxCtx.scale(cam.z, cam.z);
@@ -762,6 +762,56 @@ System.prototype.getTableData = function(forFighter){
 
 	$(td).data("systemId", this.id);
 	this.element = td;
+
+	this.setTimeLoaded();
+	this.setTableRow();
+	this.setSystemBorder();
+	return this.element;
+}
+
+System.prototype.getDiv = function(){
+	var returnDiv = document.createElement("div");
+		returnDiv.className = "system";
+	var file = "sysIcons/" + this.getImageName() + ".png";
+
+	var img = new Image();
+		img.className = "sysIcon";
+		img.src = file;
+		img.style.top = "10px";
+	returnDiv.appendChild(img);
+
+
+	var div = document.createElement("div");
+		div.className = "loadLevel";
+		returnDiv.appendChild(div);
+
+	var div = document.createElement("div");
+		div.className = "bgloadlevel";
+		returnDiv.appendChild(div);
+
+	/*
+	var lowerDiv = document.createElement("div");
+		lowerDiv.className = "integrityNow";
+		lowerDiv.style.width = this.getRemainingIntegrity() /  this.integrity * 100 + "%";
+		returnDiv.appendChild(lowerDiv);
+
+	var div = document.createElement("div");
+		div.className = "integrityFull";
+		returnDiv.appendChild(div);
+	*/
+	if (!this.destroyed){
+		var outputDiv = document.createElement("div");
+			outputDiv.className = "outputMask";
+		if (this.internal || this.getActiveSystem().canBeBoosted()){
+			outputDiv.innerHTML = this.getOutput();
+		}
+		else $(outputDiv).hide();
+		returnDiv.appendChild(outputDiv);
+	}	
+	
+
+	$(returnDiv).data("systemId", this.id);
+	this.element = returnDiv;
 
 	this.setTimeLoaded();
 	this.setTableRow();
@@ -1641,7 +1691,7 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
 	$(table).append($("<tr>").append($("<td>").html("Weapon Type")).append($("<td>").html(this.type)));
 
-	if (!(game.getUnit(this.parentId).flight)){
+	if ((game.getUnit(this.parentId).ship)){
 		$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
 		$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
 		$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));

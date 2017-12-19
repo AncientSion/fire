@@ -918,6 +918,7 @@ class Manager {
 					//Debug::log("freeeing flight #".$this->ships[$i]->id." from mission");
 					$this->ships[$i]->mission->type = 1;
 					$this->ships[$i]->mission->turn = $this->turn - 2;
+					$this->ships[$i]->mission->arrived = $this->turn - 1;
 					$this->ships[$i]->mission->targetid = 0;
 					$this->ships[$i]->setCurrentImpulse($this->turn, $this->phase);
 					$data[] = $this->ships[$i]->mission;
@@ -928,6 +929,7 @@ class Manager {
 	}
 
 	public function alterReinforcementPoints(){
+		if ($this->turn > 16){return;}
 		$mod = 100;
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
@@ -1450,6 +1452,7 @@ class Manager {
 					),
 					array(
 						//"Olympus",
+						"Vorchans",
 						"Tethyss"
 					)
 				);

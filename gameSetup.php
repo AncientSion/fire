@@ -103,7 +103,6 @@ else {
 	<script src='shipclasses.js'></script>
 	<script src='classes.js'></script>
 	<script src='mixed.js'></script>
-	<script src='squadron.js'></script>
 	<script src='salvo.js'></script>
 	<script src='flights.js'></script>
 	<script src='systems.js'></script>
@@ -227,6 +226,19 @@ else {
 				shipsBought: [],
 				userid: window.userid,
 
+
+				getUnitName: function(){
+					if (this.ships[0].ship){
+						return this.ships[0].name;
+					} else return "Squadron";
+				},
+
+				getUnitClass: function(){
+					if (this.ships[0].ship){
+						return "Ship";
+					} else return "Squadron";
+				},
+
 				getUnit: function(id){	
 					return this.ships[0];
 				},
@@ -244,52 +256,87 @@ else {
 				},
 
 				setUnitTotal: function(){
-					game.ships[0].totalCost = game.ships[0].cost;
-					game.ships[0].upgrades = [];
-
-					for (var i = 0; i < game.ships[0].structures.length; i++){
-						for (var j = 0; j < game.ships[0].structures[i].systems.length; j++){
-							if (game.ships[0].structures[i].systems[j].totalCost > 0){
-								game.ships[0].upgrades.push(game.ships[0].structures[i].systems[j].getUpgradeData());
-							}
-						}
-					}
-
 					var table = document.getElementById("totalShipCost");
 						table.innerHTML = "";
+					game.ships[0].totalCost = game.ships[0].cost;
 
-					var tr = table.insertRow(-1);
-						tr.insertCell(-1).innerHTML = "Base Ship Cost";
-						tr.insertCell(-1).innerHTML = game.ships[0].cost;
 
-					for (var i = 0; i < game.ships[0].upgrades.length; i++){
+					if (game.ships[0].ship){
+						game.ships[0].upgrades = [];
+
+						for (var i = 0; i < game.ships[0].structures.length; i++){
+							for (var j = 0; j < game.ships[0].structures[i].systems.length; j++){
+								if (game.ships[0].structures[i].systems[j].totalCost > 0){
+									game.ships[0].upgrades.push(game.ships[0].structures[i].systems[j].getUpgradeData());
+								}
+							}
+						}
 						var tr = table.insertRow(-1);
-							tr.insertCell(-1).innerHTML = game.ships[0].upgrades[i].name
-							tr.insertCell(-1).innerHTML = game.ships[0].upgrades[i].cost;
-							game.ships[0].totalCost += game.ships[0].upgrades[i].cost;
+							tr.insertCell(-1).innerHTML = "Base Ship Cost";
+							tr.insertCell(-1).innerHTML = game.ships[0].cost;
+
+						for (var i = 0; i < game.ships[0].upgrades.length; i++){
+							var tr = table.insertRow(-1);
+								tr.insertCell(-1).innerHTML = game.ships[0].upgrades[i].name
+								tr.insertCell(-1).innerHTML = game.ships[0].upgrades[i].cost;
+								game.ships[0].totalCost += game.ships[0].upgrades[i].cost;
+						}
+
+						var tr = table.insertRow(-1);
+							tr.insertCell(-1).innerHTML = "Total Cost";
+							tr.insertCell(-1).innerHTML = game.ships[0].totalCost;
+
+
+						var tr = table.insertRow(-1);
+						var button = tr.insertCell(-1);
+							button.innerHTML = "Confirm Ship Selection";
+							button.className = "buttonTD";
+							button.colSpan = 2;
+							$(button).click(function(){
+								window.addShipToFleet();
+							});
 					}
+					else {
+						var tr = table.insertRow(-1);
+							tr.insertCell(-1).innerHTML = "Squadron Cost";
+							tr.insertCell(-1).innerHTML = "";
 
-					var tr = table.insertRow(-1);
-						tr.insertCell(-1).innerHTML = "Total Cost";
-						tr.insertCell(-1).innerHTML = game.ships[0].totalCost;
+						for (var i = 0; i < game.ships[0].structures.length; i++){
+							var tr = table.insertRow(-1);
+								$(tr)
+									.data("subId", game.ships[0].structures[i].id)
+									.contextmenu(function(e){
+										e.preventDefault();
+										e.stopPropagation();
+										game.ships[0].removeSubElement($(this).data("subId"));
+										game.setUnitTotal();
+									})
+								tr.insertCell(-1).innerHTML = game.ships[0].structures[i].display;
+								tr.insertCell(-1).innerHTML = game.ships[0].structures[i].cost;
+								game.ships[0].totalCost += game.ships[0].structures[i].cost;
+						}
+
+						var tr = table.insertRow(-1);
+							tr.insertCell(-1).innerHTML = "Total Cost";
+							tr.insertCell(-1).innerHTML = game.ships[0].totalCost;
 
 
-					var tr = table.insertRow(-1);
-					var button = tr.insertCell(-1);
-						button.innerHTML = "Confirm Ship Selection";
-						button.className = "buttonTD";
-						button.colSpan = 2;
-						$(button).click(function(){
-							window.addShipToFleet();
-						});
+						var tr = table.insertRow(-1);
+						var button = tr.insertCell(-1);
+							button.innerHTML = "Confirm Ship Selection";
+							button.className = "buttonTD";
+							button.colSpan = 2;
+							$(button).click(function(){
+								window.addShipToFleet();
+							});
 					}
+			}
 		}
 
 		window.res = {x:200, y: 200};
 		initPreviewCanvas();
 
-		var icons = [images.earth, images.centauri, images.minbari, images.narn];
-		
+		var icons = [images.earth, images.centauri, images.minbari, images.narn];		
 
 		var table = document.createElement("table"); 
 			table.className = "factionUpperTable";
@@ -410,12 +457,12 @@ else {
 		$("#hangarLoadoutDiv").addClass("disabled");
 		$("#weaponLoadoutDiv").addClass("disabled");
 		$("#hangarTable").html("");
-		var data = {id: 1, $userid: 1, available: 0, display: "Squad", notes: "", faction: "Faction", mass: 0, cost: 0, profile: 0, size: 50, traverse: -1}
+		var data = {id: 1, userid: 1, available: 0, display: "Squad", notes: "", faction: "Faction", mass: 0, cost: 0, profile: 0, size: 50, traverse: -1}
 		var ship = new Squadron(data);
-			ship.actions.push(new Move(-1, "deploy", 0, res.x/2, res.y/2, 0, 0, 0, 1, 1, 1));
+			ship.actions.push(new Move(-1, "deploy", 0, res.x/2, res.y/2, 270, 0, 0, 1, 1, 1));
 			ship.create();
 		game.ships[0] = ship;
-		ship.create();
+		//ship.create();
 
 		$("#game").removeClass("disabled");
 		ship.createBaseDiv();
@@ -446,21 +493,21 @@ else {
 					type: "shipdata",
 					name: name,
 					},
-			success: addSquadronUnit,
+			success: addUnitToSquadron,
 			error: ajax.error,
 		});
 	}
 
-	function addSquadronUnit(data){
-		if (!game.ships[0].squad){return;}
+	function addUnitToSquadron(data){
+		if (game.ships[0] == undefined || !game.ships[0].squad){return;}
 		else if (game.ships[0].structures.length >= 3){return;}
 
 		var sub = window.initiateSquaddie(JSON.parse(data));
-			sub.create();
 			sub.id = game.ships[0].structures.length+1;
+			sub.create();
 			sub.primary.parentId = sub.id;
-			console.log(sub.id);
 		game.ships[0].addSubElement(sub);
+		window.game.setUnitTotal();
 	}
 
 	function requestSingleUnitData(name){
@@ -513,7 +560,6 @@ else {
 		window.game.setUnitTotal();
 	}
 
-
 	function addShipToFleet(){
 
 		var cur = Math.floor($("#totalFleetCost").html());
@@ -523,8 +569,8 @@ else {
 		if (cur + add <= max){
 
 			var ship = {
-				name: game.ships[0].name,
-				type: "Ship",
+				type: game.getUnitClass(),
+				name: game.getUnitName(),
 				faction: game.ships[0].faction,
 				value: game.ships[0].totalCost,
 				purchaseId: window.game.shipsBought.length,
@@ -545,7 +591,7 @@ else {
 				})
 
 			var td = tr.insertCell(-1)
-				td.innerHTML = ship.name;
+				td.innerHTML = game.getUnitName()
 			var td = tr.insertCell(-1)
 				td.innerHTML = ship.value;
 			tr.appendChild(td);
@@ -719,8 +765,7 @@ else {
 
 				$(ele).data("avail", true);
 			}
-
-	}
+		}
 
 
 		$(ele.parentNode.childNodes[(row*2)+2]).slideToggle(0);
