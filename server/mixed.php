@@ -1,116 +1,5 @@
 <?php
 
-class Squaddie extends Single {
-	public $id;
-	public $parentId;
-	public $integrity;
-
-	public $negation;
-	public $destroyed = 0;
-	public $disabled = 0;
-	public $systems = array();
-	public $damages = array();
-	public $crits = array();
-
-	public $baseHitChance;
-	public $baseTurnCost;
-	public $baseTurnDelay;
-	public $baseImpulseCost;
-
-
-	public $name;
-	public $display;
-	public $faction = "";
-	public $size = 0;
-	public static $value;
-	public $cost;
-	public $profile = array();
-	public $mass = 0;
-	public $start = 0;
-	public $end = 360;
-	public $ep = 0;
-	public $damaged = 0;
-	
-	function __construct($id, $parentId){
-		$this->id = $id;
-		$this->parentId = $parentId;
-		$this->setBaseStats();
-		$this->addPrimary();
-		$this->addStructures();
-	}
-
-	public function setBaseStats(){
-		$this->baseHitChance = 0;
-		$this->baseTurnCost = 0;
-		$this->baseTurnDelay = 0;
-		$this->baseImpulseCost = 0;
-	}
-
-	public function setUnitState($turn, $phase){
-		if ($this->primary->isDestroyed()){
-			$this->destroyed = 1;
-		}
-
-		for ($i = 0; $i < sizeof($this->primary->systems); $i++){ // check primary criticals
-			$this->primary->systems[$i]->setState($turn, $phase);
-		}
-
-		$this->primary->setNegation();
-		/*for ($i = 0; $i < sizeof($this->structures); $i++){ // 
-			$armourDmg = 0;
-			$structDmg = 0;
-			for ($j = 0; $j < sizeof($this->primary->damages); $j++){
-				if ($this->primary->damages[$j]->structureid == $this->structures[$i]->id){
-					$armourDmg += $this->primary->damages[$j]->armourDmg;
-					$structDmg += $this->primary->damages[$j]->structDmg;
-				}
-			}
-		}
-		*/
-		return true;
-	}
-}
-
-class Light extends Squaddie {
-	public $baseImpulse = 190;
-	public $traverse = -1;
-	public $slipAngle = 23;
-
-	public $index = 0;
-
-	
-	function __construct($id, $parentId){
-		parent::__construct($id, $parentId);
-	}
-
-	function getId(){
-		$this->index++;
-		return $this->index;
-	}
-}
-
-class SuperLight extends Squaddie {
-	public $baseImpulse = 200;
-	public $traverse = -2;
-	public $slipAngle = 25;
-	
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
-        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
-
-		$this->hitTable = array(
-			"Bridge" => 0.85,
-			"Engine" => 1,
-			"Sensor" => 1,
-			"Reactor" => 0.9
-		);
-	}	
-
-	public function getShipTypeMod(){
-		return 1.45;
-	}
-}
-
-
 class Mixed extends Ship {
 	public $ship = false;
 	public $primary = false;
@@ -155,7 +44,7 @@ class Mixed extends Ship {
 	}
 
 	public function setUnitState($turn, $phase){
-		//Debug::log("setUnitState #".$this->id);
+		Debug::log("MIXED setUnitState #".$this->id);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$this->structures[$i]->setUnitState($turn, $phase);
 		}

@@ -799,7 +799,7 @@ System.prototype.getDiv = function(){
 		div.className = "integrityFull";
 		returnDiv.appendChild(div);
 	*/
-	if (!this.destroyed){
+	if (0){
 		var outputDiv = document.createElement("div");
 			outputDiv.className = "outputMask";
 		if (this.internal || this.getActiveSystem().canBeBoosted()){
@@ -1691,7 +1691,7 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
 	$(table).append($("<tr>").append($("<td>").html("Weapon Type")).append($("<td>").html(this.type)));
 
-	if ((game.getUnit(this.parentId).ship)){
+	if ((game.getUnit($(this.element).data()).ship)){
 		$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
 		$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
 		$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));

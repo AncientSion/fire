@@ -7,6 +7,14 @@ if (isset($_SESSION["userid"])){
 	$username = $manager->getUsername();
 	$dbManager = DBManager::app();
 
+
+	$id = 1;
+	if ($dbManager->gameIsReady($id)) {
+		if ($dbManager->startGame($id)) {
+			Debug::log("STARTED");
+		}
+	}
+
 	if (isset($_POST["gameName"]) && isset($_POST["pointValue"]) && isset($_POST["reinforceValue"])){
 		if ( $_POST["gameName"] != "" && $_POST["pointValue"] != "" && $_POST["reinforceValue"] != ""){
 			if (ctype_digit($_POST["pointValue"]) && ctype_digit($_POST["reinforceValue"])){

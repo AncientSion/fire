@@ -10,8 +10,8 @@ class Vorchans extends Light {
 	public $profile = array(0.95, 1.05);
 	public $mass = 1150;
 
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
-        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
+	function __construct($id, $userid){
+		parent::__construct($id, $userid);
 	}
 
 	public function addPrimary(){

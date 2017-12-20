@@ -305,6 +305,7 @@ class Single {
 	}
 
 	public function setUnitState($turn, $phase){
+		Debug::log("SINGLE setUnitState");
 		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
 			if ($this->damages[$i]->destroyed){
 				$this->destroyed = true;

@@ -322,7 +322,7 @@ class Manager {
 
 
 	public function assembleUnits(){
-		//Debug::log("assembleUnits");
+		Debug::log("assembleUnits");
 		$db =  DBManager::app()->getActiveUnits($this->gameid, $this->turn); 
 		$units = array();
 
@@ -343,8 +343,10 @@ class Manager {
 
 			if (!$unit->ship){
 				$unit->addSubUnits($db[$i]["subunits"]);
-				//var_export($db[$i]["mission"]);
-				$unit->addMissionDB($db[$i]["mission"], $this->userid, $this->turn, $this->phase);
+
+				if (!$unit->squad){
+					$unit->addMissionDB($db[$i]["mission"], $this->userid, $this->turn, $this->phase);
+				}
 			}
 			$units[] = $unit;
 		}
@@ -358,6 +360,7 @@ class Manager {
 		DBManager::app()->getShipLoad($units);
 
 		for ($i = 0; $i < sizeof($units); $i++){
+			//Debug::log("manager setUnitState #".$units[$i]->id);
 			//$units[$i]->addFireDB($this->fires);
 			$units[$i]->setUnitState($this->turn, $this->phase); //check damage state after dmg is applied
 		}

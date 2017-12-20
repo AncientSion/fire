@@ -53,6 +53,7 @@ echo "</script>";
 	<script src='mixed.js'></script>
 	<script src='salvo.js'></script>
 	<script src='flights.js'></script>
+	<script src='squadron.js'></script>
 	<script src='systems.js'></script>
 	<script src='graphics.js'></script>
 	<script src='cam.js'></script>
@@ -389,7 +390,7 @@ echo "</script>";
 				</tr>
 				<?php
 					foreach ($manager->ships as $ship){
-						if ($ship->ship && $manager->phase < 1 && $ship->userid == $manager->userid && $ship->available == $manager->turn){
+						if (($ship->ship || $ship->squad) && $manager->phase < 1 && $ship->userid == $manager->userid && $ship->available == $manager->turn){
 							echo "<tr class='deployNow ".$ship->id."'</td>";
 							echo "<td><img class='img40' src=shipIcons/".strtolower($ship->name).".png></td>";
 							echo "<td class='green font14'>".$ship->name."</td>";

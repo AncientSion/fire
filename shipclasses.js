@@ -3125,4 +3125,16 @@ Ship.prototype.weaponHighlight = function(weapon){
 	}
 }
 
+Ship.prototype.setBuyData = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].systems.length; j++){
+			if (this.structures[i].systems[j].totalCost > 0){
+				this.upgrades.push(this.structures[i].systems[j].getUpgradeData());
+			}
+		}
+	}
+}
 
+Ship.prototype.getLaunchData = function(){
+	return [];
+}

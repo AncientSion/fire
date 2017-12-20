@@ -983,6 +983,7 @@ function Game(data, userid){
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].createBaseDiv();
 			this.ships[i].setImage();
+			if (game.turn == 1 && game.phase == -1){continue;}
 			this.ships[i].getAttachDivs();
 			this.ships[i].setSupportImage();
 		}

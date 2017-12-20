@@ -1,5 +1,9 @@
-DB insertUnits: 2
-insertSubUnits
-insertMissions s: 0
-Game #1 is not ready !
-createPlayerStatus
+assembleUnits
+SQUADRON addSubUnits 2
+  construct Squaddie 1/2
+  construct Squaddie 2/2
+SHIP setUnitState #1
+SQUADRON setUnitState SquadDisplay #2
+  setUnitState Vorchan #1
+  setUnitState Tethys #2
+SHIP setUnitState #3

@@ -206,26 +206,22 @@ function setFPS(fps){
 
 function initiateUnit(data){
 	if (data.ship){return window.initiateShip(data);}
+	else if (data.squad){return window.initiateSquadron(data);}
 	else if (data.flight){return window.initiateFlight(data);}
 	else if (data.salvo){return window.initiateSalvo(data);}
 }
 
 function initiateSalvo(data){
 	var salvo = new Salvo(data);
-
 	for (var j = 0; j < data.structures.length; j++){
 		salvo.structures.push(new Missile(data.structures[j]));
 	}
-
 	return salvo;
 }
 
 
 function initiateFlight(data){
-	//return
-
 	var flight = new Flight(data);
-
 	for (var j = 0; j < data.structures.length; j++){
 		flight.structures.push(new Fighter(data.structures[j]));
 
@@ -241,9 +237,19 @@ function initiateFlight(data){
 		for (var k = 0; k < data.structures[j].crits.length; k++){
 			flight.structures[j].crits.push(new Crit(data.structures[j].crits[k]));
 		}
-
 	}
 	return flight;	
+}
+
+function initiateSquadron(data){
+	var squadron = new Squadron(data);
+	for (var i = 0; i < data.structures.length; i++){
+		var sub = initiateSquaddie(data.structures[i]);
+			sub.create()
+		squadron.structures.push(sub)
+		//squadron.addSubElement(sub);
+	}
+	return squadron;
 }
 
 function initiateSquaddie(data){

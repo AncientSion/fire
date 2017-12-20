@@ -413,7 +413,6 @@
 			$this->insertClientActions($units);
 		}
 
-
 		public function insertSubUnits($units){
 			Debug::log("insertSubUnits");
 			$stmt = $this->connection->prepare("
@@ -424,8 +423,9 @@
 			");
 
 			for ($i = 0; $i < sizeof($units); $i++){
-				if (!isset($units[$i]["launchData"])){continue;}
+				if (!isset($units[$i]["launchData"]) || !(sizeof($units[$i]["launchData"]))){Debug::log("skipping"); continue;}
 
+				Debug::log("in");
 				$stmt->bindParam(":unitid", $units[$i]["id"]);
 				for ($j = 0; $j < sizeof($units[$i]["launchData"]["loads"]); $j++){
 					$stmt->bindValue(":amount", $units[$i]["launchData"]["loads"][$j]["launch"]);
@@ -628,46 +628,7 @@
 		public function startGame($gameid){
 			Debug::log("Starting game #".$gameid);
 			
-			$players = $this->getPlayersInGame($gameid);
-			$deploys = array();
-
-			for ($i = 0; $i < sizeof($players); $i++){
-				$this->setPlayerstatus($players[$i]["userid"], $gameid, 1, -1, "waiting");
-				$units = $this->query("SELECT * FROM units WHERE gameid = ".$gameid." AND userid = ".$players[$i]["userid"]);
-				for ($j = 0; $j < sizeof($units); $j++){
-					$unit = new $units[$j]["name"](1, 1, 0, "", 0);
-
-					$do = 1;
-
-					while ($do){
-						$valid = 1;
-						$width = 100;
-						$height = 600;
-						//$dist = 400;
-						$dist = 600;
-						$x = mt_rand(-($dist+$width), -$dist) * (1-$i*2);
-						$y = mt_rand(-$height, $height) * (1-$i*2);
-						$s = ceil(($unit->size*1.3)/2);
-
-						for ($k = 0; $k < sizeof($deploys); $k++){
-							$d = Math::getDist($deploys[$k]["x"], $deploys[$k]["y"], $x, $y);
-							$min = $deploys[$k]["s"] + $s;
-							//Debug::log("d is".$d." min is ".$min);
-							if ($d < $min){
-								$valid = 0;
-								break;
-							}
-						}
-
-						if ($valid){
-							$do = 0;
-							$deploys[] = array("gameid" => $gameid, "userid" => $players[$i]["userid"], "turn" => 1, "phase" => -1, "x" => $x, "y" => $y, "s" => $s);
-						}//else Debug::log("redoing!");
-					}
-				}
-			}
-			
-			$this->insertDeployArea($deploys);
+			//$this->insertDeployArea($deploys);
 
 			$stmt = $this->connection->prepare("
 				UPDATE games 
@@ -688,6 +649,49 @@
 			$stmt->execute();
 
 			if ($stmt->errorCode() == 0){
+				Debug::log("game ready, adjusting player");
+
+			
+				$players = $this->getPlayersInGame($gameid);
+				$deploys = array();
+
+				for ($i = 0; $i < sizeof($players); $i++){
+					$this->setPlayerstatus($players[$i]["userid"], $gameid, 1, -1, "waiting");
+					//$units = $this->query("SELECT * FROM units WHERE gameid = ".$gameid." AND userid = ".$players[$i]["userid"]);
+
+					/*for ($j = 0; $j < sizeof($units); $j++){
+						$unit = new $units[$j]["name"](1, 1, 0, "", 0);
+
+						$do = 1;
+
+						while ($do){
+							$valid = 1;
+							$width = 100;
+							$height = 600;
+							//$dist = 400;
+							$dist = 600;
+							$x = mt_rand(-($dist+$width), -$dist) * (1-$i*2);
+							$y = mt_rand(-$height, $height) * (1-$i*2);
+							$s = ceil(($unit->size*1.3)/2);
+
+							for ($k = 0; $k < sizeof($deploys); $k++){
+								$d = Math::getDist($deploys[$k]["x"], $deploys[$k]["y"], $x, $y);
+								$min = $deploys[$k]["s"] + $s;
+								//Debug::log("d is".$d." min is ".$min);
+								if ($d < $min){
+									$valid = 0;
+									break;
+								}
+							}
+
+							if ($valid){
+								$do = 0;
+								$deploys[] = array("gameid" => $gameid, "userid" => $players[$i]["userid"], "turn" => 1, "phase" => -1, "x" => $x, "y" => $y, "s" => $s);
+							}//else Debug::log("redoing!");
+						}
+					}
+					*/
+				}
 				return true;
 			}
 			else return false;
@@ -1528,7 +1532,7 @@
 			$stmt->execute();
 
 			if ($stmt->errorCode() == 0){
-				//Debug::log("game ".$gameid.",user ".$userid." adjusting to turn/phase/status ".$turn." ".$phase." ".$status);
+				Debug::log("game ".$gameid.",user ".$userid." adjusting to turn/phase/status ".$turn." ".$phase." ".$status);
 				return true;
 			} else return false;
 		}
@@ -1694,7 +1698,7 @@
 			
 			if ($units){
 				for ($i = 0; $i < sizeof($units); $i++){
-					if ($units[$i]["name"] == "Flight" || $units[$i]["ball"]){
+					if ($units[$i]["name"] == "Flight" || $units[$i]["name"] == "Squadron" || $units[$i]["ball"]){
 						$units[$i]["subunits"] = $this->getSubUnits($units[$i]);
 						$units[$i]["mission"] = $this->getMission($units[$i]);
 					}

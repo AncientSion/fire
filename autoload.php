@@ -10,9 +10,6 @@ spl_autoload_register(
                 'heavy' => '/server/ship.php',
                 'medium' => '/server/ship.php',
 
-                'sqaddie' => '/server/mixed.php',
-                'light' => '/server/mixed.php',
-                'superlight' => '/server/mixed.php',
 
                 'warhead' => '/server/systems/weapons/ammo.php',
                 'hasta' => '/server/systems/weapons/ammo.php',
@@ -31,6 +28,11 @@ spl_autoload_register(
 
                 'flight' => '/server/flight.php',
                 'fighter' => '/server/fighter.php',
+
+                'squadron' => '/server/squadron.php',                
+                'squaddie' => '/server/squadron.php',
+                'light' => '/server/squadron.php',
+                'superlight' => '/server/squadron.php',
                 
                 'aurora' => '/server/fighter.php',
                 'thunderbolt' => '/server/fighter.php',

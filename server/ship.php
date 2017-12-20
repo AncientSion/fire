@@ -30,7 +30,7 @@ class Ship {
 	public $flight = false;
 	public $salvo = false;
 	public $squad = false;
-	public $traverse;
+	public $traverse = 0;
 	public $mass = 0;
 	public $profile = array();
 	public $index = 0;
@@ -76,7 +76,7 @@ class Ship {
 	}
 
 	public function setUnitState($turn, $phase){
-		//Debug::log("setUnitState #".$this->id);
+		Debug::log("SHIP setUnitState #".$this->id);
 		if ($this->primary->isDestroyed()){
 			$this->destroyed = 1;
 		}

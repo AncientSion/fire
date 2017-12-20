@@ -105,6 +105,7 @@ else {
 	<script src='mixed.js'></script>
 	<script src='salvo.js'></script>
 	<script src='flights.js'></script>
+	<script src='squadron.js'></script>
 	<script src='systems.js'></script>
 	<script src='graphics.js'></script>
 	<script src='cam.js'></script>
@@ -259,25 +260,30 @@ else {
 					var table = document.getElementById("totalShipCost");
 						table.innerHTML = "";
 					game.ships[0].totalCost = game.ships[0].cost;
+					game.ships[0].upgrades = [];
+					game.ships[0].setBuyData();
 
 
 					if (game.ships[0].ship){
-						game.ships[0].upgrades = [];
-
-						for (var i = 0; i < game.ships[0].structures.length; i++){
-							for (var j = 0; j < game.ships[0].structures[i].systems.length; j++){
-								if (game.ships[0].structures[i].systems[j].totalCost > 0){
-									game.ships[0].upgrades.push(game.ships[0].structures[i].systems[j].getUpgradeData());
-								}
-							}
-						}
 						var tr = table.insertRow(-1);
 							tr.insertCell(-1).innerHTML = "Base Ship Cost";
 							tr.insertCell(-1).innerHTML = game.ships[0].cost;
 
 						for (var i = 0; i < game.ships[0].upgrades.length; i++){
 							var tr = table.insertRow(-1);
-								tr.insertCell(-1).innerHTML = game.ships[0].upgrades[i].name
+								$(tr)
+								.data("systemId", game.ships[0].upgrades[i].systemid)
+								.contextmenu(function(e){
+									return;
+									e.preventDefault(); e.stopPropagation();
+									for (var j = game.ships[0].upgrades.length-1; j >= 0; j--){
+										if (game.ships[0].upgrades[j].systemid == $(this).data("systemId")){
+											game.ships[0].upgrades.splice(j, 1);
+											game.setUnitTotal(); return;
+										}
+									}
+								})
+								tr.insertCell(-1).innerHTML = game.ships[0].upgrades[i].name + " #" + game.ships[0].structures[i].id
 								tr.insertCell(-1).innerHTML = game.ships[0].upgrades[i].cost;
 								game.ships[0].totalCost += game.ships[0].upgrades[i].cost;
 						}
@@ -293,7 +299,7 @@ else {
 							button.className = "buttonTD";
 							button.colSpan = 2;
 							$(button).click(function(){
-								window.addShipToFleet();
+								window.addUnitToFleet();
 							});
 					}
 					else {
@@ -308,10 +314,11 @@ else {
 									.contextmenu(function(e){
 										e.preventDefault();
 										e.stopPropagation();
+										return;
 										game.ships[0].removeSubElement($(this).data("subId"));
 										game.setUnitTotal();
 									})
-								tr.insertCell(-1).innerHTML = game.ships[0].structures[i].display;
+								tr.insertCell(-1).innerHTML = game.ships[0].structures[i].display + " #" + game.ships[0].structures[i].id;
 								tr.insertCell(-1).innerHTML = game.ships[0].structures[i].cost;
 								game.ships[0].totalCost += game.ships[0].structures[i].cost;
 						}
@@ -327,7 +334,7 @@ else {
 							button.className = "buttonTD";
 							button.colSpan = 2;
 							$(button).click(function(){
-								window.addShipToFleet();
+								window.addUnitToFleet();
 							});
 					}
 			}
@@ -503,10 +510,15 @@ else {
 		else if (game.ships[0].structures.length >= 3){return;}
 
 		var sub = window.initiateSquaddie(JSON.parse(data));
-			sub.id = game.ships[0].structures.length+1;
 			sub.create();
 			sub.primary.parentId = sub.id;
-		game.ships[0].addSubElement(sub);
+
+		game.ships[0].structures.push(sub);
+		game.ships[0].setLayout();
+		game.ships[0].setSubElements();
+		sub.expandElement();
+
+		//game.ships[0].addSubElement(sub);
 		window.game.setUnitTotal();
 	}
 
@@ -560,7 +572,7 @@ else {
 		window.game.setUnitTotal();
 	}
 
-	function addShipToFleet(){
+	function addUnitToFleet(){
 
 		var cur = Math.floor($("#totalFleetCost").html());
 		var add = game.ships[0].totalCost;
@@ -576,7 +588,8 @@ else {
 				purchaseId: window.game.shipsBought.length,
 				upgrades: game.ships[0].upgrades,
 				turn: 1,
-				eta: 0
+				eta: 0,
+				launchData: game.ships[0].getLaunchData()
 			}
 
 			window.game.shipsBought.push(ship);

@@ -183,7 +183,7 @@ window.ajax = {
 
 	confirmFleetPurchase: function(userid, gameid, ships, callback){
 		for (var i = 0; i < ships.length; i++){
-			if (ships[i].upgrades.length == 0){
+			if (ships[i].upgrades.length == 0 || ships[i].name == "Squadron"){
 				delete ships[i].upgrades;
 			}
 			else {
