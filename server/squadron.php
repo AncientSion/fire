@@ -3,8 +3,10 @@
 class Squadron extends Ship {
 	public $ship = false;
 	public $squad = true;
-	public $name = "SquadName";
-	public $display = "SquadDisplay";
+	public $name = "Squadron";
+	public $display = "Squadron";
+
+	public $baseEP = 0;
 
 	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
 		$this->id = $id;
@@ -18,10 +20,10 @@ class Squadron extends Ship {
 		$this->remainingDelay = $delay;
 		$this->currentImpulse = $thrust;
 		$this->notes = $notes;
+
+		$this->primary = new Shared();
+		$this->primary->systems[] = new Sensor(0, $this->id, array(90, 3), 750, 10);
 	}
-
-
-
 
 	/*
 	public function addSubUnits($elements){
@@ -40,7 +42,6 @@ class Squadron extends Ship {
 	}*/
 
 	
-
 	public function addSubUnits($elements){
 		Debug::log("SQUADRON addSubUnits ".sizeof($elements));
 
@@ -65,6 +66,32 @@ class Squadron extends Ship {
 		$this->setProps($turn, $phase);
 
 		return true;
+	}
+
+	public function setBaseStats(){
+		$this->baseHitChance = 50;
+		$this->baseTurnCost = 50;
+		$this->baseTurnDelay = 50;
+		$this->baseImpulseCost = 50;
+
+		$this->baseEP = 50;
+		$this->size = 40 + sizeof($this->structures)*20;
+	}	
+
+
+	public function hidePowers($turn){
+		for ($j = 0; $j < sizeof($this->structures); $j++){
+			for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
+				for ($l = sizeof($this->structures[$j]->systems[$k]->powers)-1; $l >= 0; $l--){
+					if ($this->structures[$j]->systems[$k]->powers[$l]->turn == $turn){
+						if ($this->structures[$j]->systems[$k]->powers[$l]->type == 0){
+							$this->structures[$j]->systems[$k]->disabled = 0;
+						}
+						array_splice($this->structures[$j]->systems[$k]->powers, $l, 1);
+					} else break;
+				}
+			}
+		}
 	}
 }
 
@@ -153,6 +180,7 @@ class Light extends Squaddie {
 	public $baseImpulse = 190;
 	public $traverse = -1;
 	public $slipAngle = 23;
+	public $size = 50;
 
 	
 	function __construct($id, $parentId){
@@ -164,6 +192,7 @@ class SuperLight extends Squaddie {
 	public $baseImpulse = 200;
 	public $traverse = -2;
 	public $slipAngle = 25;
+	public $size = 40;
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

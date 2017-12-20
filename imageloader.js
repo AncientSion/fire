@@ -30,6 +30,9 @@ window.preLoadBallistics = function(){
 
 
 window.preloadShips = function(){
+	window.shipImages.squadron = new Image();
+	window.shipImages.squadron.src = "shipIcons/squadron.png";
+
 	window.shipImages.battlecrab = new Image();
 	window.shipImages.battlecrab.src = "shipIcons/omega.png";
 

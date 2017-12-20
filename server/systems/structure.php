@@ -235,6 +235,10 @@ class Core extends Primary {
 	}
 }
 
+class Shared {
+	public $systems = array();
+}
+
 
 class Single {
 	public $id;

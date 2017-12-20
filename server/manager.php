@@ -1454,9 +1454,8 @@ class Manager {
 						"Artemis"
 					),
 					array(
-						//"Olympus",
-						"Vorchans",
-						"Tethyss"
+						"Vorchan",
+						"Tethys"
 					)
 				);
 				break;
@@ -1472,6 +1471,8 @@ class Manager {
 						"Haven"
 					),
 					array(
+						"Vorchan",
+						"Tethys"
 					)
 				);
 				break;

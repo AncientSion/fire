@@ -243,6 +243,9 @@ function initiateFlight(data){
 
 function initiateSquadron(data){
 	var squadron = new Squadron(data);
+	for (var j = 0; j < data.primary.systems.length; j++){
+		squadron.primary.systems.push(new window[data.primary.systems[j].name](data.primary.systems[j]));
+	}
 	for (var i = 0; i < data.structures.length; i++){
 		var sub = initiateSquaddie(data.structures[i]);
 			sub.create()

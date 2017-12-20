@@ -1,7 +1,7 @@
 <?php
 
-class Tethyss extends Light {
-	public $name = "Tethyss";
+class Tethys extends Light {
+	public $name = "Tethys";
 	public $display = "Tethys";
 	public $faction = "Earth Alliance";
 	public $size =  35;

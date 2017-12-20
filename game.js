@@ -651,18 +651,11 @@ function Game(data, userid){
 	this.setupDeploymentDiv = function(unit){
 		var ele = ("#deployOverlay");
 		if (game.flightDeploy){
-			//img.src = game.getUnit(game.flightDeploy).img.src;
 			$(ele).find("span").html("Deploy Flight").end().find(".img").html("");
 		}
 		else if (game.deploying){
-			//var img = new Image();
-			//	img.className = "img80";
-			//	img.src = window.reinforcements[i].img.src;
-
-			//td.appendChild(window.shipImages[this.name.toLowerCase()].cloneNode(true))
-
-
-			$(ele).find("span").html("Deploy Ship").end().find(".img").html("").append($(window.shipImages[unit.name.toLowerCase()].cloneNode(true)).addClass("img80"));
+			var img = unit.getDeployImg();
+			$(ele).find("span").html("Deploy Ship").end().find(".img").html("").append($(img).addClass("img80"));
 		}
 	}
 
@@ -1042,15 +1035,15 @@ function Game(data, userid){
 	}
 
 	this.setCC = function(){
-		//return;
-		//this.setPreMoveCC(); return;
-		if (game.phase == -1 || game.phase > 2){
+		if (this.turn == 1 && this.phase == -1){return;}
+
+		if (this.phase == -1 || this.phase > 2){
 		 	this.setlastPosCC();
 		}
-		else if (game.phase == 0){
+		else if (this.phase == 0){
 			this.setPostDeployCC();
 		}
-		else if (game.phase == 2){
+		else if (this.phase == 2){
 			this.setPreMoveCC();
 		}
 	}

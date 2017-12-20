@@ -44,7 +44,6 @@ spl_autoload_register(
 
                 'haven' => '/server/ships/haven.php',
                 'vorchan' => '/server/ships/vorchan.php',
-                'vorchans' => '/server/ships/vorchans.php',
                 'darkner' => '/server/ships/darkner.php',
                 'altarian' => '/server/ships/altarian.php',
                 'demos' => '/server/ships/demos.php',
@@ -62,7 +61,6 @@ spl_autoload_register(
                 'artemis' => '/server/ships/artemis.php',
                 'olympus' => '/server/ships/olympus.php',
                 'tethys' => '/server/ships/tethys.php',
-                'tethyss' => '/server/ships/tethyss.php',
 
                 'gquan' => '/server/ships/gquan.php',
 
@@ -137,6 +135,7 @@ spl_autoload_register(
                 'section' => '/server/systems/structure.php',
                 'primary' => '/server/systems/structure.php',
                 'core' => '/server/systems/structure.php',
+                'shared' => '/server/systems/structure.php',
                 'single' => '/server/systems/structure.php',
 
                 'debug' => '/server/debug.php',

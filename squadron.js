@@ -1,6 +1,7 @@
 function Squaddie(data){
 	Single.call(this, data);
 	this.structures = [];
+	this.size = data.size;
 }
 
 Squaddie.prototype = Object.create(Single.prototype);
@@ -52,7 +53,6 @@ Squaddie.prototype.expandElement = function(){
 	$(pDiv)
 		.css("left", primPosX)
 		.css("top", primPosY)
-
 
 	for (var i = 0; i < this.structures.length; i++){
 		var a = this.structures[i].getDirection();
@@ -141,10 +141,27 @@ Squaddie.prototype.getUpgradeData = function(){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function Squadron(data){
 	Ship.call(this, data);
 	this.squad = 1;
 	this.ship = 0;
+	this.primary = {systems: []};
+
+	this.baseEP = data.baseEP;
 }
 Squadron.prototype = Object.create(Ship.prototype);
 
@@ -155,6 +172,58 @@ Squadron.prototype.create = function(){
 		this.y = this.actions[0].y;
 		this.drawX = this.actions[0].x;
 		this.drawY = this.actions[0].y;
+	}
+}
+
+Squadron.prototype.setImage = function(){
+	var t = document.createElement("canvas");
+		t.width = this.size*2;
+		t.height = this.size*2;
+	var ctx = t.getContext("2d");
+		ctx.translate(t.width/2, t.height/2);
+
+	for (var i = 0; i < this.structures.length; i++){
+		if (!this.structures[i].draw){continue;}
+
+		ctx.translate(this.structures[i].layout.x/2, this.structures[i].layout.y/2);
+		ctx.rotate(-90 * (Math.PI/180))
+		ctx.drawImage(
+			window.shipImages[this.structures[i].name.toLowerCase()],
+			0 -this.structures[i].size/2,
+			0 -this.structures[i].size/2,
+			this.structures[i].size, 
+			this.structures[i].size
+		)
+		ctx.rotate(+90 * (Math.PI/180))
+		ctx.translate(-this.structures[i].layout.x/2, -this.structures[i].layout.y/2);
+	}		
+	ctx.setTransform(1,0,0,1,0,0);
+	this.img = t;
+	//console.log(this.img.toDataURL());
+}
+
+Squadron.prototype.getDrawFacing = function(){
+	return this.drawFacing+90;
+}
+
+Squadron.prototype.setLayout = function(){
+	if (!this.structures.length){return;}
+	else if (this.structures.length == 1){
+		for (var i = 0; i < this.structures.length; i++){
+			this.structures[i].layout = {x: 0, y: 0};
+		}
+	}
+	else if (this.structures.length == 2){
+		for (var i = 0; i < this.structures.length; i++){
+			this.structures[i].layout = {x: -100 + (i*200), y: 0};
+		}
+	}
+	else if (this.structures.length == 3){
+		for (var i = 0; i < this.structures.length; i++){
+			var a = 360 / 3 * i;
+			var o = getPointInDirection(115, a-90, 0, 0);
+			this.structures[i].layout = {x: o.x, y: o.y + 30};
+		}
 	}
 }
 
@@ -283,32 +352,13 @@ Squadron.prototype.createBaseDiv = function(){
 	}
 
 	if (this.structures.length){
+		$(div).removeClass("disabled");
 		this.setLayout();
 		this.setSubElements();
 		for (var i = 0; i < this.structures.length; i++){
 			this.structures[i].expandElement();
 		}
-	}
-}
-
-Squadron.prototype.setLayout = function(){
-	if (!this.structures.length){return;}
-	else if (this.structures.length == 1){
-		for (var i = 0; i < this.structures.length; i++){
-			this.structures[i].layout = {x: 0, y: 0};
-		}
-	}
-	else if (this.structures.length == 2){
-		for (var i = 0; i < this.structures.length; i++){
-			this.structures[i].layout = {x: -100 + (i*200), y: 0};
-		}
-	}
-	else if (this.structures.length == 3){
-		for (var i = 0; i < this.structures.length; i++){
-			var a = 360 / 3 * i;
-			var o = getPointInDirection(115, a-90, 0, 0);
-			this.structures[i].layout = {x: o.x, y: o.y + 30};
-		}
+		$(div).addClass("disabled");
 	}
 }
 
@@ -382,8 +432,27 @@ Squadron.prototype.getLaunchData = function(){
 }
 
 
+Squadron.prototype.getDeployImg = function(){
+	return window.shipImages[this.name.toLowerCase()].cloneNode(true);
+}
 
-	//for ($j = 0; $j < sizeof($units[$i]["launchData"]["loads"]); $j++){
-	//	$stmt->bindValue(":amount", $units[$i]["launchData"]["loads"][$j]["launch"]);
-	//	$stmt->bindValue(":name", $units[$i]["launchData"]["loads"][$j]["name"]);
-	//	$stmt->execute();
+
+Squadron.prototype.getEP = function(){
+	return this.baseEP;
+}
+
+Squadron.prototype.checkSensorHighlight = function(){
+	console.log("checkSensorHighlight")
+	return Ship.prototype.checkSensorHighlight.call(this);
+}
+
+Squadron.prototype.setTempEW = function(){
+	console.log("setTempEW")
+	return Ship.prototype.setTempEW.call(this);
+}
+
+
+Squadron.prototype.drawEW = function(){
+	console.log("drawEW")
+	return Ship.prototype.drawEW.call(this);
+}

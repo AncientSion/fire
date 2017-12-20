@@ -180,128 +180,6 @@ function Damage(data){
 	this.loc = {x: 0, y: 0};
 }
 
-function Single(data){
-	this.id = data.id;
-	this.parentId = data.parentId;
-	this.name = data.name;
-	this.cost = data.cost;
-	this.display = data.display;
-	this.ep = data.ep;
-	this.mass = data.mass;
-	this.integrity = data.integrity;
-	this.value = data.value;
-	this.negation = data.negation;
-	this.damages = data.damages || [];
-	this.crits = [];
-	this.baseHitChance = data.baseHitChance;
-	this.destroyed = data.destroyed;
-	this.disabled = data.disabled;
-	this.systems = [];
-	this.draw = 1;
-	this.layout = {};
-	this.fighter = 0;
-	this.missile = 0;
-	this.squaddie = 0;
-}
-
-Single.prototype.isDestroyedThisTurn = function(){
-	if (this.disabled){
-		for (var j = this.crits.length-1; j >= 0; j--){
-			if (this.crits[j].type == "Disabled" && this.crits[j].turn == game.turn){
-				return true;
-			}
-		}
-	}
-	else if (this.destroyed){
-		for (var j = this.damages.length-1; j >= 0; j--){
-			if (this.damages[j].destroyed == 1 && this.damages[j].turn == game.turn){
-				return true;
-			}
-		}					
-	}
-	return false;
-}
-
-Single.prototype.isDamagedThisTurn = function(){
-	for (var i = this.damages.length-1; i >= 0; i--){
-		if (this.damages[i].turn == game.turn){
-			return true;
-		} else if (this.damages[i].turn < game.turn){
-			return false;
-		}
-	}				
-	return false;
-}
-
-Single.prototype.getRemainingIntegrity = function(){
-	var integrity = this.integrity;
-	for (var i = 0; i < this.damages.length; i++){
-		integrity -= this.damages[i].structDmg;
-	}
-	return integrity;
-}
-
-Single.prototype.hover = function(e){
-	if (!this.highlight){
-		this.highlight = true;
-		var ele = this.getDetailsDiv();
-		$(document.body).append(ele);
-		var w = $(ele).width();
-		$(ele).css("left", e.clientX - w/2).css("top", e.clientY + 40)
-	}
-	else {
-		this.highlight = false;
-		$("#systemDetailsDiv").remove();
-	}
-}
-
-Single.prototype.getDetailsDiv = function(){
-	var div = document.createElement("div");
-		div.id = "systemDetailsDiv";
-		div.className = this.id + " flight";
-
-		var table = $("<table>")
-			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.name)))
-			.append($("<tr>").append($("<td>").html("Mass").css("width", 120)).append($("<td>").html(this.mass)))
-			//.append($("<tr>").append($("<td>").html("Engine Power")).append($("<td>").html(this.ep)))
-			.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.negation)))
-			//.append($("<tr>").append($("<td>").html("Side Armour")).append($("<td>").html(this.negation[1])))
-			//.append($("<tr>").append($("<td>").html("Rear Armour")).append($("<td>").html(this.negation[2])))
-
-	if (this.crits.length){
-			$(table)
-				.append($("<tr>").append($("<td>").attr("colSpan", 2).css("fontSize", 16).css("borderBottom", "1px solid white").css("borderTop", "1px solid white").html("Modifiers")))
-
-		for (var i = 0; i < this.crits.length; i++){
-			$(table)
-				.append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("negative").html(this.crits[i].getString())))
-		}
-	}
-		
-	div.appendChild(table[0]);
-	return div;
-}
-
-function Missile(data){
-	Single.call(this, data);
-	this.missile = 1;
-	this.traverse = data.traverse;
-	this.baseImpulse = data.baseImpulse;
-
-	this.create(data);
-}
-
-Missile.prototype = Object.create(Single.prototype);
-
-Missile.prototype.create = function(data){
-	for (var k = 0; k < data.systems.length; k++){
-		this.systems.push(new Warhead(data.systems[k]));
-	}
-	for (var k = 0; k < data.crits.length; k++){
-		this.crits.push(new Crit(data.crits[k]));
-	}
-}
-
 function Crit(data){
 	this.id = data.id;
 	this.shipid = data.shipid;
@@ -669,14 +547,118 @@ Structure.prototype.getBoostDiv = function(){
 	return System.prototype.getBoostDiv.call(this);
 }
 
-function Section(data){
-	this.start = data.start;
-	this.end = data.end;
+
+
+
+
+
+
+
+
+
+function Primary(data){
+	this.name = "Primary";
+	this.display = "Primary";
+	this.id = data.id;
+	this.parentId = data.parentId;
+	this.integrity = data.integrity;
+	this.damages = [];
+	this.destroyed = data.destroyed || false;
+	this.highlight = false;	
 	this.systems = [];
+	this.remaining = data.remaining;
+	this.element;
+}
+	
+Primary.prototype.getTableData = function(){
+	var tr = document.createElement("tr");
+	var td = document.createElement("td");
+		td.className = "struct";
+		//td.colSpan = 2;
+
+	var span = document.createElement("div");
+		span.className = "integrityAmount";
+		if (this.integrity > 999){
+			span.className += " font15";
+		} else span.className += " font18";
+		span.innerHTML = this.remaining + " / " + this.integrity;
+		td.appendChild(span);
+
+	var lowerDiv = document.createElement("div");
+		lowerDiv.className = "integrityNow";
+		lowerDiv.style.width =  this.remaining/this.integrity * 100 + "%";
+		td.appendChild(lowerDiv);
+		
+	var upperDiv = document.createElement("div");
+		upperDiv.className = "integrityFull";
+		td.appendChild(upperDiv);
+
+	$(td).data("shipId", this.parentId);
+	$(td).data("systemId", this.id);
+	$(td).hover(
+		function(e){
+			var shipId = $(this).data("shipId");
+			var systemId = $(this).data("systemId");
+			game.getUnit(shipId).primary.hover(e);
+		}
+	)
+	$(td).click(function(e){
+		var shipId = $(this).data("shipId");
+		var systemId = $(this).data("systemId");
+		console.log(game.getUnit(shipId).primary);
+		//game.getUnit(shipId).primary.scan();
+	})
+
+		tr.appendChild(td);
+		
+	this.element = tr;
+	return tr;
 }
 
-Section.prototype.getDirection = function(){
-	return Structure.prototype.getDirection.call(this);
+Primary.prototype.setRemainingIntegrity = function(){		
+	this.remaining = this.getRemainingIntegrity();
+}
+
+Primary.prototype.hover = function(e){
+	if (game.flightDeploy){return false;}
+	if (this.highlight){
+		this.highlight = false;
+		$("#systemDetailsDiv").remove();
+	}
+	else {
+		this.highlight = true;
+		this.showInfoDiv(e);
+	}
+}	
+
+Primary.prototype.showInfoDiv = function(e){
+	$(document.body).append(
+		$(this.getSystemDetailsDiv())
+			.css("left", e.clientX - 90)
+			.css("top", e.clientY + 40)
+		)
+}
+
+Primary.prototype.getSystemDetailsDiv = function(){
+	return $("<div>").attr("id", "systemDetailsDiv")
+		.append($("<table>")
+			.append($("<tr>")
+				.append($("<th>").html("Main Structure").attr("colSpan", 2)))
+			.append($("<tr>").attr("colSpan", 2)
+				.append($("<td>").html("Strength"))
+				.append($("<td>").html(this.remaining + " / " + this.integrity))));
+}
+
+
+Primary.prototype.getRemainingIntegrity = function(){
+	var integrity = this.integrity;
+	for (var i = 0; i < this.damages.length; i++){
+		integrity -= this.damages[i].structDmg;
+		if (this.damages[i].overkill){
+			console.log("dnig");
+		}
+	}
+	return integrity;
 }
 
 
@@ -756,107 +738,153 @@ Core.prototype.getArmourData = function(){
 }
 
 
-function Primary(data){
-	this.name = "Primary";
-	this.display = "Primary";
+
+
+
+
+
+
+
+
+function Section(data){
+	this.start = data.start;
+	this.end = data.end;
+	this.systems = [];
+}
+
+Section.prototype.getDirection = function(){
+	return Structure.prototype.getDirection.call(this);
+}
+
+
+
+
+
+
+
+function Single(data){
 	this.id = data.id;
 	this.parentId = data.parentId;
+	this.name = data.name;
+	this.cost = data.cost;
+	this.display = data.display;
+	this.ep = data.ep;
+	this.mass = data.mass;
 	this.integrity = data.integrity;
-	this.damages = [];
-	this.destroyed = data.destroyed || false;
-	this.highlight = false;	
+	this.value = data.value;
+	this.negation = data.negation;
+	this.damages = data.damages || [];
+	this.crits = [];
+	this.baseHitChance = data.baseHitChance;
+	this.destroyed = data.destroyed;
+	this.disabled = data.disabled;
 	this.systems = [];
-	this.remaining = data.remaining;
-	this.element;
-	
-	this.getTableData = function(){
-		var tr = document.createElement("tr");
-		var td = document.createElement("td");
-			td.className = "struct";
-			//td.colSpan = 2;
+	this.draw = 1;
+	this.layout = {};
+	this.fighter = 0;
+	this.missile = 0;
+	this.squaddie = 0;
+}
 
-		var span = document.createElement("div");
-			span.className = "integrityAmount";
-			if (this.integrity > 999){
-				span.className += " font15";
-			} else span.className += " font18";
-			span.innerHTML = this.remaining + " / " + this.integrity;
-			td.appendChild(span);
-
-		var lowerDiv = document.createElement("div");
-			lowerDiv.className = "integrityNow";
-			lowerDiv.style.width =  this.remaining/this.integrity * 100 + "%";
-			td.appendChild(lowerDiv);
-			
-		var upperDiv = document.createElement("div");
-			upperDiv.className = "integrityFull";
-			td.appendChild(upperDiv);
-
-		$(td).data("shipId", this.parentId);
-		$(td).data("systemId", this.id);
-		$(td).hover(
-			function(e){
-				var shipId = $(this).data("shipId");
-				var systemId = $(this).data("systemId");
-				game.getUnit(shipId).primary.hover(e);
-			}
-		)
-		$(td).click(function(e){
-			var shipId = $(this).data("shipId");
-			var systemId = $(this).data("systemId");
-			console.log(game.getUnit(shipId).primary);
-			//game.getUnit(shipId).primary.scan();
-		})
-
-			tr.appendChild(td);
-			
-		this.element = tr;
-		return tr;
-	}
-
-	this.setRemainingIntegrity = function(){		
-		this.remaining = this.getRemainingIntegrity();
-	}
-
-	this.hover = function(e){
-		if (game.flightDeploy){return false;}
-		if (this.highlight){
-			this.highlight = false;
-			$("#systemDetailsDiv").remove();
-		}
-		else {
-			this.highlight = true;
-			this.showInfoDiv(e);
-		}
-	}	
-
-	this.showInfoDiv = function(e){
-		$(document.body).append(
-			$(this.getSystemDetailsDiv())
-				.css("left", e.clientX - 90)
-				.css("top", e.clientY + 40)
-			)
-	}
-
-	this.getSystemDetailsDiv = function(){
-		return $("<div>").attr("id", "systemDetailsDiv")
-			.append($("<table>")
-				.append($("<tr>")
-					.append($("<th>").html("Main Structure").attr("colSpan", 2)))
-				.append($("<tr>").attr("colSpan", 2)
-					.append($("<td>").html("Strength"))
-					.append($("<td>").html(this.remaining + " / " + this.integrity))));
-	}
-
-
-	this.getRemainingIntegrity = function(){
-		var integrity = this.integrity;
-		for (var i = 0; i < this.damages.length; i++){
-			integrity -= this.damages[i].structDmg;
-			if (this.damages[i].overkill){
-				console.log("dnig");
+Single.prototype.isDestroyedThisTurn = function(){
+	if (this.disabled){
+		for (var j = this.crits.length-1; j >= 0; j--){
+			if (this.crits[j].type == "Disabled" && this.crits[j].turn == game.turn){
+				return true;
 			}
 		}
-		return integrity;
+	}
+	else if (this.destroyed){
+		for (var j = this.damages.length-1; j >= 0; j--){
+			if (this.damages[j].destroyed == 1 && this.damages[j].turn == game.turn){
+				return true;
+			}
+		}					
+	}
+	return false;
+}
+
+Single.prototype.isDamagedThisTurn = function(){
+	for (var i = this.damages.length-1; i >= 0; i--){
+		if (this.damages[i].turn == game.turn){
+			return true;
+		} else if (this.damages[i].turn < game.turn){
+			return false;
+		}
+	}				
+	return false;
+}
+
+Single.prototype.getRemainingIntegrity = function(){
+	var integrity = this.integrity;
+	for (var i = 0; i < this.damages.length; i++){
+		integrity -= this.damages[i].structDmg;
+	}
+	return integrity;
+}
+
+Single.prototype.hover = function(e){
+	if (!this.highlight){
+		this.highlight = true;
+		var ele = this.getDetailsDiv();
+		$(document.body).append(ele);
+		var w = $(ele).width();
+		$(ele).css("left", e.clientX - w/2).css("top", e.clientY + 40)
+	}
+	else {
+		this.highlight = false;
+		$("#systemDetailsDiv").remove();
+	}
+}
+
+Single.prototype.getDetailsDiv = function(){
+	var div = document.createElement("div");
+		div.id = "systemDetailsDiv";
+		div.className = this.id + " flight";
+
+		var table = $("<table>")
+			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.name)))
+			.append($("<tr>").append($("<td>").html("Mass").css("width", 120)).append($("<td>").html(this.mass)))
+			//.append($("<tr>").append($("<td>").html("Engine Power")).append($("<td>").html(this.ep)))
+			.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.negation)))
+			//.append($("<tr>").append($("<td>").html("Side Armour")).append($("<td>").html(this.negation[1])))
+			//.append($("<tr>").append($("<td>").html("Rear Armour")).append($("<td>").html(this.negation[2])))
+
+	if (this.crits.length){
+			$(table)
+				.append($("<tr>").append($("<td>").attr("colSpan", 2).css("fontSize", 16).css("borderBottom", "1px solid white").css("borderTop", "1px solid white").html("Modifiers")))
+
+		for (var i = 0; i < this.crits.length; i++){
+			$(table)
+				.append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("negative").html(this.crits[i].getString())))
+		}
+	}
+		
+	div.appendChild(table[0]);
+	return div;
+}
+
+
+
+
+
+
+function Missile(data){
+	Single.call(this, data);
+	this.missile = 1;
+	this.traverse = data.traverse;
+	this.baseImpulse = data.baseImpulse;
+
+	this.create(data);
+}
+
+Missile.prototype = Object.create(Single.prototype);
+
+Missile.prototype.create = function(data){
+	for (var k = 0; k < data.systems.length; k++){
+		this.systems.push(new Warhead(data.systems[k]));
+	}
+	for (var k = 0; k < data.crits.length; k++){
+		this.crits.push(new Crit(data.crits[k]));
 	}
 }

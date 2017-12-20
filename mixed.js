@@ -744,4 +744,6 @@ Mixed.prototype.drawMoveArea = function(){
 	return;
 }
 
-
+Mixed.prototype.checkSensorHighlight = function(){
+	return;
+}
