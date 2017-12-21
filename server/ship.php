@@ -125,12 +125,12 @@ class Ship {
 	}
 
 	public function setProps($turn, $phase){
-		//Debug::log("setProps #".$this->id);
+		Debug::log("setProps ".get_class($this)." #".$this->id);
 		$this->cost = static::$value;
+		$this->setBaseStats();
 		$this->setCurrentImpulse($turn, $phase);
 		$this->setRemainingImpulse($turn);
 		$this->setRemainingDelay($turn);
-		$this->setBaseStats();
 	}
 
 	public function setPosition(){
@@ -217,25 +217,18 @@ class Ship {
 	}
 
 	public function setCurrentImpulse($turn, $phase){
-		//if (!$this->flight){return;}
-		//Debug::log("id: ".$this->id);
 		$impulse = $this->currentImpulse;
-		//Debug::log("c ".$this->currentImpulse);
 		if ($turn == $this->available){
-			//Debug::log("launchTurn");
 			$impulse = $this->getBaseImpulse();
 		}
 		$step = $this->getImpulseStep();
-			//Debug::log("step: ".$step);
 
 		for ($i = 0; $i < sizeof($this->actions); $i++){
 			if (!$this->actions[$i]->resolved){continue;}
 			if ($this->actions[$i]->type == "speed"){
-				//Debug::log("add: ".$$step*$this->actions[$i]->dist);
 				$impulse += $step*$this->actions[$i]->dist;
 			}
 		}
-		//Debug::log("end: ".$this->currentImpulse);
 		$this->currentImpulse = $impulse;
 	}
 

@@ -406,7 +406,7 @@ function Game(data, userid){
 	this.getEWSettings = function(){
 		var ret = [];
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].ship && this.ships[i].userid == this.userid){
+			if ((this.ships[i].ship || this.ships[i].squad) && this.ships[i].userid == this.userid){
 				var sensor = this.ships[i].getSystemByName("Sensor");
 				for (var j = 0; j < sensor.ew.length; j++){
 					if (sensor.ew[j].turn == this.turn){
@@ -456,7 +456,7 @@ function Game(data, userid){
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid == this.userid && this.ships[i].available <= game.turn){
-				if (this.ships[i].ship){
+				if (this.ships[i].ship || this.ships[i].salvo){
 					for (var j = 0; j < this.ships[i].primary.systems.length; j++){
 						if (this.ships[i].primary.systems[j].name == "Sensor" && !this.ships[i].primary.systems[j].disabled && !this.ships[i].primary.systems[j].destroyed){
 							if (!this.ships[i].primary.systems[j].used){
@@ -1342,7 +1342,7 @@ function Game(data, userid){
 				}
 				unit.resetMoveMode();
 
-				if (unit.ship){
+				if (unit.ship || unit.squad){
 					unit.getSystemByName("Sensor").drawEW();
 					unit.setMoveTranslation();
 					unit.drawMoveArea();
@@ -1596,7 +1596,7 @@ function Game(data, userid){
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].deployed = true;
 			if (this.ships[i].available == game.turn){
-				if (this.ships[i].ship){
+				if (this.ships[i].ship || this.ships[i].squad){
 					this.ships[i].deployAnim = [0, 30];
 					this.ships[i].deployed = false;
 				}
@@ -2385,7 +2385,7 @@ function Game(data, userid){
 
 			if (this.ships[i].available == game.turn){
 				show = 1;
-				if (this.ships[i].ship){
+				if (this.ships[i].ship || this.ships[i].squad){
 					html = "<span><font color='" + color + "'>" + this.ships[i].name + " #" + this.ships[i].id + "</font> did jump into local space.</span>";
 				}
 				else if (this.ships[i].flight){

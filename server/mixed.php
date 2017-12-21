@@ -24,12 +24,12 @@ class Mixed extends Ship {
 	}
 
 	public function setProps($turn, $phase){
+		$this->setBaseStats();
 		$this->setSize();
 		$this->setMass();
 		$this->setCurrentImpulse($turn, $phase);
 		$this->setRemainingImpulse($turn);
 		$this->setRemainingDelay($turn);
-		$this->setBaseStats();
 	}	
 
 	public function setBaseStats(){

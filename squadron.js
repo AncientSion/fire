@@ -105,12 +105,12 @@ Squaddie.prototype.attachEvent = function(ele){
 	.hover(
 		function(e){
 			e.stopPropagation();
-			game.getUnit($(this).data("shipId")).getStructureById($(this).data("subId")).getSystemById($(this).data("systemId")).hover(e);
+			game.getUnit($(this).data("shipId")).getSystemById($(this).data("systemId")).hover(e);
 		}
 	).click(
 		function(e){
 			e.stopPropagation();
-			game.getUnit($(this).data("shipId")).getStructureById($(this).data("subId")).getSystemById($(this).data("systemId")).select(e);
+			game.getUnit($(this).data("shipId")).getSystemById($(this).data("systemId")).select(e);
 		}
 	).
 	contextmenu(
@@ -120,19 +120,6 @@ Squaddie.prototype.attachEvent = function(ele){
 		}
 	);
 	return ele;
-}
-
-Squaddie.prototype.getSystemById = function(id){
-	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].id == id){
-			return this.structures[i];
-		}
-		for (var j = 0; j < this.structures[i].systems.length; j++){
-			if (this.structures[i].systems[j].id == id){
-				return this.structures[i].systems[j];
-			}
-		}
-	}
 }
 
 Squaddie.prototype.getUpgradeData = function(){
@@ -211,11 +198,13 @@ Squadron.prototype.setLayout = function(){
 	else if (this.structures.length == 1){
 		for (var i = 0; i < this.structures.length; i++){
 			this.structures[i].layout = {x: 0, y: 0};
+			$(this.element).find(".structContainer").css("height", 200);
 		}
 	}
 	else if (this.structures.length == 2){
 		for (var i = 0; i < this.structures.length; i++){
 			this.structures[i].layout = {x: -100 + (i*200), y: 0};
+			$(this.element).find(".structContainer").css("height", 200);
 		}
 	}
 	else if (this.structures.length == 3){
@@ -223,6 +212,7 @@ Squadron.prototype.setLayout = function(){
 			var a = 360 / 3 * i;
 			var o = getPointInDirection(115, a-90, 0, 0);
 			this.structures[i].layout = {x: o.x, y: o.y + 30};
+			$(this.element).find(".structContainer").css("height", 350);
 		}
 	}
 }
@@ -259,7 +249,7 @@ Squadron.prototype.addSubElement = function(unit){
 		var subH = $(this.structures[i].element).height();
 		$(this.structures[i].element)
 			.css("left", this.structures[i].layout.x + w/2 - subW/2)
-			.css("top", this.structures[i].layout.y + h/2 - subH/2)
+			.css("top", this.structures[i].layout.y + h/2 - subH/2 +10)
 	}
 
 	this.structures[this.structures.length-1].expandElement();
@@ -292,7 +282,7 @@ Squadron.prototype.removeSubElement = function(id){
 		var subH = $(this.structures[i].element).height();
 		$(this.structures[i].element)
 			.css("left", this.structures[i].layout.x + w/2 - subW/2)
-			.css("top", this.structures[i].layout.y + h/2 - subH/2)
+			.css("top", this.structures[i].layout.y + h/2 - subH/2 +10)
 	}
 
 	//this.structures[this.structures.length-1].expandElement();
@@ -320,7 +310,7 @@ Squadron.prototype.createBaseDiv = function(){
 	if (this.friendly){header = "green";}
 		$(table)
 			.append($("<tr>")
-				.append($("<th>").html("BNAME").attr("colSpan", 2).addClass(header)))
+				.append($("<th>").html("Squadron #" + this.id).attr("colSpan", 2).addClass(header)))
 			
 	subDiv.appendChild(table);
 	div.appendChild(subDiv);
@@ -372,7 +362,7 @@ Squadron.prototype.setSubElements = function(){
 		var subH = $(this.structures[i].element).height();
 		$(this.structures[i].element)
 			.css("left", this.structures[i].layout.x + w/2 - subW/2)
-			.css("top", this.structures[i].layout.y + h/2 - subH/2)
+			.css("top", this.structures[i].layout.y + h/2 - subH/2 + 10)
 	}
 }
 
@@ -451,8 +441,57 @@ Squadron.prototype.setTempEW = function(){
 	return Ship.prototype.setTempEW.call(this);
 }
 
-
 Squadron.prototype.drawEW = function(){
 	console.log("drawEW")
 	return Ship.prototype.drawEW.call(this);
+}
+
+Squadron.prototype.getSystemById = function(id){
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].id == id){
+			return this.structures[i];
+		}
+		for (var j = 0; j < this.structures[i].structures.length; j++){
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (this.structures[i].structures[j].systems[k].id == id){
+					return this.structures[i].structures[j].systems[k];
+				}
+			}
+		}
+	}
+}
+
+Squadron.prototype.drawTurnUI = function(){
+	var center = {x: this.x, y: this.y};
+	var angle = this.getDrawFacing();
+	var turnEle = $("#turnButton")[0];
+	var p1 = getPointInDirection(150/cam.z, addToDirection(angle, 0), center.x, center.y);
+	$(turnEle)
+		.removeClass("disabled")
+		.css("left", p1.x * cam.z + cam.o.x - $(turnEle).width()/2)
+		.css("top", p1.y * cam.z + cam.o.y - $(turnEle).height()/2)
+		.find("#impulseMod").html("").end()
+		//.find("#turnMod").html("").end()
+		//.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end()
+}
+
+Squadron.prototype.getShortInfo = function(){
+	var ele = $("#shortInfo");
+	if (this.userid == game.userid){
+		$(ele).attr("class", "friendly");
+	} else $(ele).attr("class", "hostile");
+
+	var impulse = this.getCurrentImpulse();
+
+	var table = document.createElement("table");
+		table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id + " (" +game.getUnitType(this.traverse) + ")";
+		table.insertRow(-1).insertCell(-1).innerHTML =  "Thrust: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")";
+		table.insertRow(-1).insertCell(-1).innerHTML = this.getStringHitChance();
+	return table;
+}
+
+Squadron.prototype.getStringHitChance = function(){
+	return Mixed.prototype.getStringHitChance.call(this);
+	//var baseHit = this.getBaseHitChance();
+	//return ("Base Hit: " + Math.floor(this.profile[0] * baseHit) + "% - " + Math.floor(this.profile[1] * baseHit) + "%");
 }

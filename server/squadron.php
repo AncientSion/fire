@@ -41,6 +41,12 @@ class Squadron extends Ship {
 		return true;
 	}*/
 
+	public function getId(){
+		if (!sizeof($this->structures)){
+			return 1;
+		}
+		return ($this->structures[sizeof($this->structures)-1]->index+1);
+	}
 	
 	public function addSubUnits($elements){
 		Debug::log("SQUADRON addSubUnits ".sizeof($elements));
@@ -59,6 +65,10 @@ class Squadron extends Ship {
 	public function setUnitState($turn, $phase){
 		Debug::log("SQUADRON setUnitState ".$this->display." #".$this->id);
 
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+			$this->primary->systems[$i]->setState($turn, $phase);
+		}
+
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$this->structures[$i]->setUnitState($turn, $phase);
 		}
@@ -69,12 +79,14 @@ class Squadron extends Ship {
 	}
 
 	public function setBaseStats(){
+		Debug::log("setBaseStats");
 		$this->baseHitChance = 50;
-		$this->baseTurnCost = 50;
-		$this->baseTurnDelay = 50;
-		$this->baseImpulseCost = 50;
+		$this->baseTurnCost = 5;
+		$this->baseTurnDelay = 5;
+		$this->baseImpulseCost = 5;
+		$this->baseImpulse = 180;
 
-		$this->baseEP = 50;
+		$this->baseEP = 100;
 		$this->size = 40 + sizeof($this->structures)*20;
 	}	
 
@@ -130,9 +142,11 @@ class Squaddie extends Single {
 
 	
 	function __construct($id, $parentId){
-		Debug::log("  construct Squaddie ".$id."/".$parentId);
+		//Debug::log("  construct Squaddie ".$id."/".$parentId);
 		$this->id = $id;
 		$this->parentId = $parentId;
+
+		$this->index = $this->id;
 		$this->setBaseStats();
 		$this->addPrimary();
 		$this->addStructures();
@@ -140,14 +154,15 @@ class Squaddie extends Single {
 
 	public function getId(){
 		$this->index++;
+		//Debug::log("returning id " . $this->index);
 		return $this->index;
 	}
 
 	public function setBaseStats(){
-		$this->baseHitChance = 0;
-		$this->baseTurnCost = 0;
-		$this->baseTurnDelay = 0;
-		$this->baseImpulseCost = 0;
+		$this->baseHitChance = floor($this->mass/50);
+		$this->baseTurnCost = floor($this->mass/50);
+		$this->baseTurnDelay = floor($this->mass/50);
+		$this->baseImpulseCost = floor($this->mass/50);
 	}
 
 	public function setUnitState($turn, $phase){

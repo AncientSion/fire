@@ -316,7 +316,7 @@ Mixed.prototype.setTarget = function(){
 }
 
 Ship.prototype.getBaseImage = function(){
-	if (this.ship){
+	if (this.ship || this.squad){
 		return window.shipImages[this.name.toLowerCase()];
 	}
 	else return window.shipImages[this.structures[0].name.toLowerCase()];

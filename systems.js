@@ -153,6 +153,7 @@ System.prototype.hover = function(e){
 		this.showInfoDiv(e);
 		this.showOptions();
 		if (p.ship || p.squad){
+			console.log(this.parentId);
 			fxCtx.clearRect(0, 0, res.x, res.y);
 			fxCtx.translate(cam.o.x, cam.o.y);
 			fxCtx.scale(cam.z, cam.z);

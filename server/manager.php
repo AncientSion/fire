@@ -626,7 +626,7 @@ class Manager {
 	}
 	
 	public function handleDeploymentPhase(){
-		//Debug::log("handleDeploymentPhase");
+		Debug::log("handleDeploymentPhase");
 		$this->initBallistics();
 		$this->handleDeploymentActions();
 		$this->handleJumpActions();

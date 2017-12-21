@@ -226,7 +226,7 @@ window.ajax = {
 		var ew = game.getEWSettings();
 
 		for (var i = 0; i < game.ships.length; i++){
-			if (!game.ships[i].ship){continue;}
+			if (game.ships[i].flight || game.ships[i].salvo){continue;}
 			var ship;
 			if (game.ships[i].userid == game.userid){
 				for (var j = 0; j < game.ships[i].actions.length; j++){
@@ -252,9 +252,11 @@ window.ajax = {
 						}
 					}
 				}
-				var power = game.ships[i].getPowerOrders();
-				for (var j = 0; j < power.length; j++){
-					powers.push(power[j]);
+				if (game.ships[i].ship){
+					var power = game.ships[i].getPowerOrders();
+					for (var j = 0; j < power.length; j++){
+						powers.push(power[j]);
+					}
 				}
 			}
 

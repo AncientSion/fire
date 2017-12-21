@@ -7,7 +7,7 @@ class Tethys extends Light {
 	public static $value =  260;
 	public $cost = 260;
 	public $profile = array(0.95, 1.05);
-	public $mass = 1200;
+	public $mass = 1500;
 
 	function __construct($id, $parentId){
         parent::__construct($id, $parentId);
@@ -25,16 +25,16 @@ class Tethys extends Light {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new LightLaser($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new LightLaser($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new LightLaser($this->getId(), $this->parentId, 300, 60);
+		$front->systems[] = new LightLaser($this->getId(), $this->parentId, 300, 60);
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 120);
+		$right->systems[] = new LightPulse($this->getId(), $this->parentId, 0, 120);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new LightPulse($this->getId(), $this->id, 240, 360);
+		$left->systems[] = new LightPulse($this->getId(), $this->parentId, 240, 360);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

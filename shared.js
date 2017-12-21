@@ -244,7 +244,9 @@ function initiateFlight(data){
 function initiateSquadron(data){
 	var squadron = new Squadron(data);
 	for (var j = 0; j < data.primary.systems.length; j++){
-		squadron.primary.systems.push(new window[data.primary.systems[j].name](data.primary.systems[j]));
+		var primSystem = new window[data.primary.systems[j].name](data.primary.systems[j]);
+			primSystem.setState();
+		squadron.primary.systems.push(primSystem);
 	}
 	for (var i = 0; i < data.structures.length; i++){
 		var sub = initiateSquaddie(data.structures[i]);
