@@ -679,7 +679,7 @@ function Game(data, userid){
 
 				if (window.playerstatus[i].userid == this.userid){
 					var id = this.userid;
-					var color = "green";
+					var color = "blue";
 				}
 				else {
 					var id = 0;
@@ -702,13 +702,12 @@ function Game(data, userid){
 				x: 0,
 				y: 0,
 				s: 750,
-				c: "green"
+				c: "blue"
 			});
 		}
 	}
 
 	this.drawDeploymentZone = function(){
-
 		if (game.turn == 1){
 			for (var i = 0; i < this.deployArea.length; i++){
 				drawCtx.translate(cam.o.x, cam.o.y)

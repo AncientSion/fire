@@ -315,8 +315,6 @@ else {
 										e.preventDefault();
 										e.stopPropagation();
 										return;
-										game.ships[0].removeSubElement($(this).data("subId"));
-										game.setUnitTotal();
 									})
 								tr.insertCell(-1).innerHTML = game.ships[0].structures[i].display + " #" + game.ships[0].structures[i].id;
 								tr.insertCell(-1).innerHTML = game.ships[0].structures[i].cost;
@@ -518,7 +516,6 @@ else {
 		game.ships[0].setSubElements();
 		sub.expandElement();
 
-		//game.ships[0].addSubElement(sub);
 		window.game.setUnitTotal();
 	}
 

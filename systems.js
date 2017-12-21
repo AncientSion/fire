@@ -1634,7 +1634,7 @@ Weapon.prototype.select = function(e){
 		this.setSystemBorder();
 	}
 
-	if (unit.ship && unit.hasWeaponsSelected()){
+	if ((unit.ship || unit.squad) && unit.hasWeaponsSelected()){
 		game.mode = 2;
 		unit.highlightAllSelectedWeapons();
 	}

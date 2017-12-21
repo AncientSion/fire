@@ -877,7 +877,7 @@ Ship.prototype.unselectSystems = function(){
 		}
 	}
 	
-	if (this.ship || this.squad){
+	if (this.ship){
 		for (var i = 0; i < this.primary.systems.length; i++){
 			if (this.primary.systems[i].selected){
 				this.primary.systems[i].select();
@@ -1115,19 +1115,15 @@ Ship.prototype.select = function(){
 
 Ship.prototype.doSelect = function(){
 	console.log(this);
-	//console.log(this.cc);
 	aUnit = this.id;
 	this.selected = true;
 	this.setUnitGUI();
-	//game.drawShipOverlays();
 	game.setShipTransform();
 	this.drawPositionMarker();
 	game.resetShipTransform();
 	this.switchDiv();
 	game.drawMixedMoves();
 	if (this.ship || this.squad){this.setMoveMode();}
-
-	//console.log(this.getRemainingEP() / this.baseTurnCost)
 }
 
 Ship.prototype.doUnselect = function(){
@@ -2867,7 +2863,7 @@ Ship.prototype.doUndoShortenTurn = function(max){
 }
 
 Ship.prototype.setTurnData = function(){
-	console.log("setTurnData");
+	//console.log("setTurnData");
 	var button = $("#turnButton");
 	var vector = $("#vectorDiv")
 

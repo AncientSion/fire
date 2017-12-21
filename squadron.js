@@ -48,7 +48,8 @@ Squaddie.prototype.expandElement = function(){
 	var pHeight = $(pDiv).height();
 
 	var primPosX = cWidth/2 - pWidth/2;
-	var primPosY = cHeight/2 - pHeight/2;
+	var primPosY = cHeight/2 - pHeight/2 + 15;
+
 
 	$(pDiv)
 		.css("left", primPosX)
@@ -56,7 +57,7 @@ Squaddie.prototype.expandElement = function(){
 
 	for (var i = 0; i < this.structures.length; i++){
 		var a = this.structures[i].getDirection();
-		var p = getPointInDirection(pWidth -10, a-90, primPosX, primPosY);
+		var p = getPointInDirection(pWidth - 30, a-90, primPosX, primPosY);
 		var s = 24;
 
 		var oX = 0;
@@ -88,7 +89,7 @@ Squaddie.prototype.expandElement = function(){
 			.append(
 				$(ele)
 					.css("left", p.x - s/2 + pWidth/2 + oX)
-					.css("top", p.y - s/2 + pWidth/2 + 10 + oY)
+					.css("top", p.y - s/2 + pWidth/2 + oY)
 				)
 
 			if (oX){oX += shiftX + space +1;}
@@ -211,7 +212,7 @@ Squadron.prototype.setLayout = function(){
 		for (var i = 0; i < this.structures.length; i++){
 			var a = 360 / 3 * i;
 			var o = getPointInDirection(115, a-90, 0, 0);
-			this.structures[i].layout = {x: o.x, y: o.y + 30};
+			this.structures[i].layout = {x: o.x, y: o.y};
 			$(this.element).find(".structContainer").css("height", 350);
 		}
 	}
@@ -233,62 +234,6 @@ Squadron.prototype.previewSetup = function(){
 			}
 		}
 	}
-}
-
-Squadron.prototype.addSubElement = function(unit){
-	console.log("adding unit " + unit.id + ", length: " + this.structures.length);
-	this.structures.push(unit);
-	this.setLayout();
-
-	$(this.element).find(".structContainer").append(unit.element);
-	var w = $($(this.element).find(".structContainer")).width();
-	var h = $($(this.element).find(".structContainer")).height();
-
-	for (var i = 0; i < this.structures.length; i++){
-		var subW = $(this.structures[i].element).width();
-		var subH = $(this.structures[i].element).height();
-		$(this.structures[i].element)
-			.css("left", this.structures[i].layout.x + w/2 - subW/2)
-			.css("top", this.structures[i].layout.y + h/2 - subH/2 +10)
-	}
-
-	this.structures[this.structures.length-1].expandElement();
-	//console.log(w, h, subW, subH);
-	//console.log(unit.layout.x + w/2 - subW/2)
-	//console.log(unit.layout.x + w/2 - subW/2)
-}
-
-Squadron.prototype.removeSubElement = function(id){
-	console.log("deleting id " + id);
-	for (var i = this.structures.length-1; i >= 0; i--){
-		if (this.structures[i].id == id){
-			$(this.element).find(".unitContainer").each(function(){
-				if ($(this).data("subId") == id){
-					$(this).remove(); return;
-				}
-			})
-			this.structures.splice(i, 1);
-			break;
-		}
-	}
-	this.setLayout();
-
-	//$(this.element).find(".structContainer").append(unit.element);
-	var w = $($(this.element).find(".structContainer")).width();
-	var h = $($(this.element).find(".structContainer")).height();
-
-	for (var i = 0; i < this.structures.length; i++){
-		var subW = $(this.structures[i].element).width();
-		var subH = $(this.structures[i].element).height();
-		$(this.structures[i].element)
-			.css("left", this.structures[i].layout.x + w/2 - subW/2)
-			.css("top", this.structures[i].layout.y + h/2 - subH/2 +10)
-	}
-
-	//this.structures[this.structures.length-1].expandElement();
-	//console.log(w, h, subW, subH);
-	//console.log(unit.layout.x + w/2 - subW/2)
-	//console.log(unit.layout.x + w/2 - subW/2)
 }
 
 Squadron.prototype.createBaseDiv = function(){
@@ -356,13 +301,16 @@ Squadron.prototype.setSubElements = function(){
 	var w = $($(this.element).find(".structContainer")).width();
 	var h = $($(this.element).find(".structContainer")).height();
 
+	var offset = 0;
+	if (this.structures.length == 3){offset = 30;}
+
 	for (var i = 0; i < this.structures.length; i++){
 		$(this.element).find(".structContainer").append(this.structures[i].element);
 		var subW = $(this.structures[i].element).width();
 		var subH = $(this.structures[i].element).height();
 		$(this.structures[i].element)
 			.css("left", this.structures[i].layout.x + w/2 - subW/2)
-			.css("top", this.structures[i].layout.y + h/2 - subH/2 + 10)
+			.css("top", this.structures[i].layout.y + h/2 - subH/2 + offset)
 	}
 }
 
@@ -432,33 +380,18 @@ Squadron.prototype.getEP = function(){
 }
 
 Squadron.prototype.checkSensorHighlight = function(){
-	console.log("checkSensorHighlight")
+	//console.log("checkSensorHighlight")
 	return Ship.prototype.checkSensorHighlight.call(this);
 }
 
 Squadron.prototype.setTempEW = function(){
-	console.log("setTempEW")
+	//console.log("setTempEW")
 	return Ship.prototype.setTempEW.call(this);
 }
 
 Squadron.prototype.drawEW = function(){
-	console.log("drawEW")
+	//console.log("drawEW")
 	return Ship.prototype.drawEW.call(this);
-}
-
-Squadron.prototype.getSystemById = function(id){
-	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].id == id){
-			return this.structures[i];
-		}
-		for (var j = 0; j < this.structures[i].structures.length; j++){
-			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
-				if (this.structures[i].structures[j].systems[k].id == id){
-					return this.structures[i].structures[j].systems[k];
-				}
-			}
-		}
-	}
 }
 
 Squadron.prototype.drawTurnUI = function(){
@@ -494,4 +427,115 @@ Squadron.prototype.getStringHitChance = function(){
 	return Mixed.prototype.getStringHitChance.call(this);
 	//var baseHit = this.getBaseHitChance();
 	//return ("Base Hit: " + Math.floor(this.profile[0] * baseHit) + "% - " + Math.floor(this.profile[1] * baseHit) + "%");
+}
+
+Squadron.prototype.hasHangarSelected = function(){		
+	return false;
+}
+
+Squadron.prototype.getSystemById = function(id){
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].id == id){
+			return this.structures[i];
+		}
+		for (var j = 0; j < this.structures[i].structures.length; j++){
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (this.structures[i].structures[j].systems[k].id == id){
+					return this.structures[i].structures[j].systems[k];
+				}
+			}
+		}
+	}
+}
+
+Squadron.prototype.hasSystemsSelected = function(){	
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].structures.length; j++){
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (this.structures[i].structures[j].systems[k].selected){return true;}
+			}
+		}
+	}
+	return false;
+}
+
+Squadron.prototype.hasWeaponsSelected = function(){		
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].structures.length; j++){
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (this.structures[i].structures[j].systems[k].selected){
+					if (this.structures[i].structures[j].systems[k].weapon){
+						return true;
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+
+Squadron.prototype.unselectSystems = function(){
+	fxCtx.clearRect(0, 0, res.x, res.y);
+	$("#weaponAimTableWrapper").hide();
+
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].structures.length; j++){
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (this.structures[i].structures[j].systems[k].selected){
+					this.structures[i].structures[j].systems[k].select()
+				}
+			}
+		}
+	}
+	for (var i = 0; i < this.primary.systems.length; i++){
+		if (this.primary.systems[i].selected){
+			this.primary.systems[i].select();
+		}
+	}
+}
+
+Squadron.prototype.getFireOrders = function(){
+	var fires = [];
+
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].structures.length; j++){
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				for (var l = this.structures[i].structures[j].systems[k].fireOrders.length-1; l >= 0; l--){
+					if (!this.structures[i].structures[j].systems[k].fireOrders[l].id){
+						fires.push(this.structures[i].structures[j].systems[k].fireOrders[l]);
+					} else break;
+				}
+			}
+		}
+	}
+
+	return fires;
+}
+
+
+Squadron.prototype.highlightAllSelectedWeapons = function(){
+	console.log("Squadron highlightAllSelectedWeapons");
+	//mouseCtx.clearRect(0, 0, res.x, res.y);
+	fxCtx.clearRect(0, 0, res.x, res.y);
+	fxCtx.translate(cam.o.x, cam.o.y);
+	fxCtx.scale(cam.z, cam.z);
+
+	//$(fxCanvas).css("opacity", 1);
+	var angle = this.getPlannedFacing();
+	var pos = this.getPlannedPos();
+
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].structures.length; j++){
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (this.structures[i].structures[j].systems[k].weapon){
+					if (this.structures[i].structures[j].systems[k].highlight || this.structures[i].structures[j].systems[k].selected){
+						if (this.structures[i].structures[j].systems[k].weapon){
+							this.structures[i].structures[j].systems[k].drawArc(angle, pos);
+						}
+					}
+				}
+			}
+		}
+	}
+	fxCtx.setTransform(1,0,0,1,0,0);
 }
