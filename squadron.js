@@ -394,6 +394,16 @@ Squadron.prototype.drawEW = function(){
 	return Ship.prototype.drawEW.call(this);
 }
 
+Squadron.prototype.drawImpulseUI = function(){
+	if (this.canUndoLastAction()){
+		var center = {x: this.x, y: this.y};
+		var p1 = getPointInDirection(this.size/2 + 10 + 15, this.getDrawFacing() + 180, center.x, center.y);
+		var ox = p1.x * cam.z + cam.o.x - 15;
+		var oy = p1.y * cam.z + cam.o.y - 15;
+		$("#undoLastAction").css("left", ox).css("top", oy).removeClass("disabled");
+	} else $("#undoLastAction").addClass("disabled");
+}	
+
 Squadron.prototype.drawTurnUI = function(){
 	var center = {x: this.x, y: this.y};
 	var angle = this.getDrawFacing();

@@ -195,7 +195,7 @@ class Light extends Squaddie {
 	public $baseImpulse = 190;
 	public $traverse = -1;
 	public $slipAngle = 23;
-	public $size = 50;
+	public $size = 60;
 
 	
 	function __construct($id, $parentId){
@@ -207,7 +207,7 @@ class SuperLight extends Squaddie {
 	public $baseImpulse = 200;
 	public $traverse = -2;
 	public $slipAngle = 25;
-	public $size = 40;
+	public $size = 50;
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

@@ -1391,7 +1391,7 @@
 			");
 
 			for ($i = 0; $i < sizeof($units); $i++){
-				if (!$units[$i]->ship){continue;}
+				if (!$units[$i]->ship && !$units[$i]->squad){continue;}
 				$stmt->bindParam(":unitid", $units[$i]->id);
 				$stmt->bindParam(":turn", $turn);
 				$stmt->execute();

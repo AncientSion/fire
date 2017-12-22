@@ -1019,7 +1019,7 @@ Ship.prototype.drawMovePlan = function(){
 	if (!this.actions.length || this.actions[this.actions.length-1].resolved){
 		return;
 	}
-	else if (this.ship && game.phase == 0 || this.flight && game.phase == 1){
+	else {
 	//else if (true){
 		this.setMoveTranslation();
 

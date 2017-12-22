@@ -747,3 +747,7 @@ Mixed.prototype.drawMoveArea = function(){
 Mixed.prototype.checkSensorHighlight = function(){
 	return;
 }
+
+Mixed.prototype.highlightAllSelectedWeapons = function(){
+	return;
+}

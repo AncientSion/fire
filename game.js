@@ -456,7 +456,7 @@ function Game(data, userid){
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid == this.userid && this.ships[i].available <= game.turn){
-				if (this.ships[i].ship || this.ships[i].salvo){
+				if (this.ships[i].ship || this.ships[i].squad){
 					for (var j = 0; j < this.ships[i].primary.systems.length; j++){
 						if (this.ships[i].primary.systems[j].name == "Sensor" && !this.ships[i].primary.systems[j].disabled && !this.ships[i].primary.systems[j].destroyed){
 							if (!this.ships[i].primary.systems[j].used){
@@ -845,7 +845,7 @@ function Game(data, userid){
 					this.ships[i].setPostMoveSize();
 					this.ships[i].setPostMoveImage();
 				}
-			} else if (this.ships[i].ship && this.animShip){
+			} else if ((this.ships[i].ship || this.ships[i].squad) && this.animShip){
 				this.ships[i].setPostMovePosition();
 				this.ships[i].setPostMoveFacing();
 			}
@@ -1081,7 +1081,7 @@ function Game(data, userid){
 		}
 
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].ship){continue;}
+			if (this.ships[i].ship || this.ships[i].squad){continue;}
 			if (this.ships[i].cc.length){continue;}
 
 			for (var j = 0; j < this.ships.length; j++){
@@ -1236,7 +1236,8 @@ function Game(data, userid){
 	this.updateIntercepts = function(targetId){
 		var stack = [];
 		for (var i = 0; i < this.ships.length; i++){
-			if (!this.ships[i].ship && (this.ships[i].mission.type == 2 || this.ships[i].mission.type == 3)){
+			if (this.ships[i].ship || this.ships[i].squad){continue;}
+			if (this.ships[i].mission.type == 2 || this.ships[i].mission.type == 3){
 				if (this.ships[i].mission.targetid == targetId){
 					stack.push(this.ships[i]);
 				}
@@ -1245,7 +1246,8 @@ function Game(data, userid){
 
 		for (var i = 0; i < stack.length; i++){
 			for (var j = 0; j < this.ships.length; j++){
-				if (!this.ships[j].ship && (this.ships[j].mission.type == 2 || this.ships[j].mission.type == 3)){
+				if (this.ships[i].ship || this.ships[i].squad){continue;}
+				if (this.ships[j].mission.type == 2 || this.ships[j].mission.type == 3){
 					if (this.ships[j].mission.targetid == stack[i].id){
 						stack.push(this.ships[j]);
 					}
@@ -1704,7 +1706,7 @@ function Game(data, userid){
 		var amount = 0;
 
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].ship){
+			if (this.ships[i].ships || this.ships[i].squad){
 				minX = Math.min(minX, this.ships[i].x);
 				maxX = Math.max(maxX, this.ships[i].x);
 				minY = Math.min(minY, this.ships[i].y);
@@ -1748,7 +1750,7 @@ function Game(data, userid){
 			}
 
 			if (this.ships[i].cc.length){
-				if (this.ships[i].ship){
+				if (this.ships[i].ship || this,ships[i].squad){
 					for (var j = 0; j < this.ships[i].cc.length; j++){
 						var attach = this.getUnit(this.ships[i].cc[j]);
 						if (attach.mission.arrived < game.turn){
@@ -1765,7 +1767,7 @@ function Game(data, userid){
 
 			this.ships[i].animationSetupMove();
 
-			if (this.ships[i].ship){
+			if (this.ships[i].ship || this,ships[i].squad){
 				frameMod = 1000 / window.fpsTicks / this.ships[i].getCurrentImpulse();
 			} else frameMod = 1000 / window.fpsTicks / this.ships[i].actions[this.ships[i].actions.length-1].dist;
 			//frameMod = 1;
@@ -1820,7 +1822,7 @@ function Game(data, userid){
 		
 			for (var i = 0; i < game.ships.length; i++){
 				if (game.ships[i].deployed){
-					if (this.ships[i].ship && !this.animShip || this.ships[i].flight && !this.animFlight || this.ships[i].salvo && !this.animSalvo){
+					if ((this.ships[i].ship || this.ships[i].squad) && !this.animShip || this.ships[i].flight && !this.animFlight || this.ships[i].salvo && !this.animSalvo){
 						game.ships[i].draw();
 						continue;
 					}
@@ -1879,7 +1881,7 @@ function Game(data, userid){
 				if (!done){
 					break;
 				}
-				else if (this.ships[i].ship && this.animShip || this.ships[i].flight && this.animFlight || this.ships[i].salvo && this.animSalvo){
+				else if ((this.ships[i].ship || this.ships[i].squad) && this.animShip || this.ships[i].flight && this.animFlight || this.ships[i].salvo && this.animSalvo){
 					for (var j = 0; j < game.ships[i].actions.length; j++){
 						if (game.ships[i].actions[j].turn == game.turn){
 							if (! game.ships[i].actions[j].animated){

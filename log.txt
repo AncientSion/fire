@@ -1032,3 +1032,427 @@ SQUADRON setUnitState Squadron #3
   setUnitState Vorchan #14
 setProps Squadron #3
 setBaseStats
+Game #1 is not ready !
+Game #1 is not ready !
+assembleUnits
+SQUADRON addSubUnits 2
+SHIP setUnitState #3
+setProps Avenger #3
+SQUADRON setUnitState Squadron #4
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #4
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SHIP setUnitState #3
+setProps Avenger #3
+SQUADRON setUnitState Squadron #4
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #4
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SHIP setUnitState #3
+setProps Avenger #3
+SQUADRON setUnitState Squadron #4
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #4
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SHIP setUnitState #3
+setProps Avenger #3
+SQUADRON setUnitState Squadron #4
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #4
+setBaseStats
+game 2,user 1 adjusting to turn/phase/status 1 0 ready
+Game #1 is not ready !
+assembleUnits
+SQUADRON addSubUnits 2
+SHIP setUnitState #3
+setProps Avenger #3
+SQUADRON setUnitState Squadron #4
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #4
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SHIP setUnitState #3
+setProps Avenger #3
+SQUADRON setUnitState Squadron #4
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #4
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SHIP setUnitState #3
+setProps Avenger #3
+SQUADRON setUnitState Squadron #4
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #4
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SHIP setUnitState #3
+setProps Avenger #3
+SQUADRON setUnitState Squadron #4
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #4
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SHIP setUnitState #1
+setProps Saggitarius #1
+SQUADRON setUnitState Squadron #2
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #2
+setBaseStats
+Game #1 is not ready !
+assembleUnits
+SQUADRON addSubUnits 2
+SHIP setUnitState #3
+setProps Avenger #3
+SQUADRON setUnitState Squadron #4
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #4
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SHIP setUnitState #3
+setProps Avenger #3
+SQUADRON setUnitState Squadron #4
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #4
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SHIP setUnitState #3
+setProps Avenger #3
+SQUADRON setUnitState Squadron #4
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #4
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SHIP setUnitState #3
+setProps Avenger #3
+SQUADRON setUnitState Squadron #4
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #4
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SHIP setUnitState #3
+setProps Avenger #3
+SQUADRON setUnitState Squadron #4
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #4
+setBaseStats
+Game #1 is not ready !
+Game #1 is not ready !
+createPlayerStatus
+  setUnitState Vorchan #1
+  setUnitState Vorchan #1
+  setUnitState Vorchan #1
+DB insertUnits: 1
+insertSubUnits
+in
+insertMissions s: 0
+game 3,user 2 adjusting to turn/phase/status -1 -1 ready
+Game #3 is not ready !
+Game #1 is not ready !
+Game #1 is not ready !
+Game #1 is not ready !
+createPlayerStatus
+  setUnitState Vorchan #1
+  setUnitState Tethys #1
+  setUnitState Vorchan #1
+  setUnitState Tethys #1
+SHIP setUnitState #1
+setProps Hyperion #1
+DB insertUnits: 2
+insertSubUnits
+in
+skipping
+insertMissions s: 0
+game 3,user 1 adjusting to turn/phase/status -1 -1 ready
+Game #3 is ready !
+Starting game #3
+game ready, adjusting player
+game 3,user 1 adjusting to turn/phase/status 1 -1 waiting
+game 3,user 2 adjusting to turn/phase/status 1 -1 waiting
+assembleUnits
+SQUADRON addSubUnits 2
+SQUADRON addSubUnits 3
+SQUADRON setUnitState Squadron #6
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #6
+setBaseStats
+SHIP setUnitState #7
+setProps Hyperion #7
+SQUADRON setUnitState Squadron #5
+  setUnitState Vorchan #1
+  setUnitState Vorchan #8
+  setUnitState Vorchan #15
+setProps Squadron #5
+setBaseStats
+Game #1 is not ready !
+assembleUnits
+SQUADRON addSubUnits 2
+SQUADRON addSubUnits 3
+SQUADRON setUnitState Squadron #6
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #6
+setBaseStats
+SHIP setUnitState #7
+setProps Hyperion #7
+SQUADRON setUnitState Squadron #5
+  setUnitState Vorchan #1
+  setUnitState Vorchan #8
+  setUnitState Vorchan #15
+setProps Squadron #5
+setBaseStats
+game 3,user 1 adjusting to turn/phase/status 1 -1 ready
+Game #1 is not ready !
+assembleUnits
+SQUADRON addSubUnits 2
+SQUADRON addSubUnits 3
+SQUADRON setUnitState Squadron #6
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #6
+setBaseStats
+SHIP setUnitState #7
+setProps Hyperion #7
+SQUADRON setUnitState Squadron #5
+  setUnitState Vorchan #1
+  setUnitState Vorchan #8
+  setUnitState Vorchan #15
+setProps Squadron #5
+setBaseStats
+game 3,user 2 adjusting to turn/phase/status 1 -1 ready
+Game #1 is not ready !
+assembleUnits
+SQUADRON addSubUnits 2
+SQUADRON addSubUnits 3
+SQUADRON setUnitState Squadron #6
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #6
+setBaseStats
+SHIP setUnitState #7
+setProps Hyperion #7
+SQUADRON setUnitState Squadron #5
+  setUnitState Vorchan #1
+  setUnitState Vorchan #8
+  setUnitState Vorchan #15
+setProps Squadron #5
+setBaseStats
+****************************************** doAdvance for game3 from phase -1 to phase 0
+handleDeploymentPhase
+initBallistics
+resolveDeployActions s: 3
+handleJumpActions
+jumpin: #7, class: Hyperion, size: 80, sensor: 700, ordered to: 663/140, shiftPotential: 18.86%
+Hyperion, aShift: 19°, pShift: 38px
+--> aShift: 9°, psShift: 4/37 (38px)
+assemblDeployStates
+updateUnitState s:3 1/-1
+game 3,user 2 adjusting to turn/phase/status 1 0 waiting
+game 3,user 1 adjusting to turn/phase/status 1 0 waiting
+TIME: 0.013 seconds.
+4 mb
+Game #1 is not ready !
+assembleUnits
+SQUADRON addSubUnits 2
+SQUADRON addSubUnits 3
+SQUADRON setUnitState Squadron #6
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #6
+setBaseStats
+SHIP setUnitState #7
+setProps Hyperion #7
+SQUADRON setUnitState Squadron #5
+  setUnitState Vorchan #1
+  setUnitState Vorchan #8
+  setUnitState Vorchan #15
+setProps Squadron #5
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SQUADRON addSubUnits 3
+SQUADRON setUnitState Squadron #6
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #6
+setBaseStats
+SHIP setUnitState #7
+setProps Hyperion #7
+SQUADRON setUnitState Squadron #5
+  setUnitState Vorchan #1
+  setUnitState Vorchan #8
+  setUnitState Vorchan #15
+setProps Squadron #5
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SQUADRON addSubUnits 3
+SQUADRON setUnitState Squadron #6
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #6
+setBaseStats
+SHIP setUnitState #7
+setProps Hyperion #7
+SQUADRON setUnitState Squadron #5
+  setUnitState Vorchan #1
+  setUnitState Vorchan #8
+  setUnitState Vorchan #15
+setProps Squadron #5
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SQUADRON addSubUnits 3
+SQUADRON setUnitState Squadron #6
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #6
+setBaseStats
+SHIP setUnitState #7
+setProps Hyperion #7
+SQUADRON setUnitState Squadron #5
+  setUnitState Vorchan #1
+  setUnitState Vorchan #8
+  setUnitState Vorchan #15
+setProps Squadron #5
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SQUADRON addSubUnits 3
+SQUADRON setUnitState Squadron #6
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #6
+setBaseStats
+SHIP setUnitState #7
+setProps Hyperion #7
+SQUADRON setUnitState Squadron #5
+  setUnitState Vorchan #1
+  setUnitState Vorchan #8
+  setUnitState Vorchan #15
+setProps Squadron #5
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SQUADRON addSubUnits 3
+SQUADRON setUnitState Squadron #6
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #6
+setBaseStats
+SHIP setUnitState #7
+setProps Hyperion #7
+SQUADRON setUnitState Squadron #5
+  setUnitState Vorchan #1
+  setUnitState Vorchan #8
+  setUnitState Vorchan #15
+setProps Squadron #5
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SQUADRON addSubUnits 3
+SQUADRON setUnitState Squadron #6
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #6
+setBaseStats
+SHIP setUnitState #7
+setProps Hyperion #7
+SQUADRON setUnitState Squadron #5
+  setUnitState Vorchan #1
+  setUnitState Vorchan #8
+  setUnitState Vorchan #15
+setProps Squadron #5
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SQUADRON addSubUnits 3
+SQUADRON setUnitState Squadron #6
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #6
+setBaseStats
+SHIP setUnitState #7
+setProps Hyperion #7
+SQUADRON setUnitState Squadron #5
+  setUnitState Vorchan #1
+  setUnitState Vorchan #8
+  setUnitState Vorchan #15
+setProps Squadron #5
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SQUADRON addSubUnits 3
+SQUADRON setUnitState Squadron #6
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #6
+setBaseStats
+SHIP setUnitState #7
+setProps Hyperion #7
+SQUADRON setUnitState Squadron #5
+  setUnitState Vorchan #1
+  setUnitState Vorchan #8
+  setUnitState Vorchan #15
+setProps Squadron #5
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SQUADRON addSubUnits 3
+SQUADRON setUnitState Squadron #6
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #6
+setBaseStats
+SHIP setUnitState #7
+setProps Hyperion #7
+SQUADRON setUnitState Squadron #5
+  setUnitState Vorchan #1
+  setUnitState Vorchan #8
+  setUnitState Vorchan #15
+setProps Squadron #5
+setBaseStats
+assembleUnits
+SQUADRON addSubUnits 2
+SQUADRON addSubUnits 3
+SQUADRON setUnitState Squadron #6
+  setUnitState Vorchan #1
+  setUnitState Tethys #8
+setProps Squadron #6
+setBaseStats
+SHIP setUnitState #7
+setProps Hyperion #7
+SQUADRON setUnitState Squadron #5
+  setUnitState Vorchan #1
+  setUnitState Vorchan #8
+  setUnitState Vorchan #15
+setProps Squadron #5
+setBaseStats
