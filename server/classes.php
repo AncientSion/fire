@@ -34,12 +34,14 @@ class Vector {
 }
 
 class Effect {
-	public $type;
-	public $value;
+	public $type = "";
+	public $value = 0;
+	public $effiency = 0;
 
-	function __construct($type, $value){
+	function __construct($type, $value, $effiency = 0){
 		$this->type = $type;
 		$this->value = $value;
+		$this->effiency = $effiency;
 	}
 }
 

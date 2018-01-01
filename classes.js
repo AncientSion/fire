@@ -189,74 +189,6 @@ function Crit(data){
 	this.duration = data.duration;
 	this.value = data.value;
 
-	//this.html = this.type + ": -" + this.value * 100 + "%"; 
-
-	this.create = function(){
-		var html = "";
-		var mod = 1;
-		if (this.duration > 0){
-			html = "Turn " + (this.turn + this.duration) +": ";
-		} else html = "Permanent: ";
-
-		switch (this.type){
-			case "range1":
-				html += "Accuracy loss x 1.1"; break;
-			case "damage1":
-				html += "Damage x 0.9"; break;
-			case "range2":
-				html += "Accuracy loss x 1.2"; break;
-			case "damage2":
-				html += "Damage x 0.8"; break;
-			case "disabled":
-				html += "Disabled"; break;
-			case "drain1":
-				html += "Output -1"; break;
-			case "drain":
-				html += "Disabled"; break;
-			case "launch1":
-				html += "Launch Rate x 0.85";
-				mod *= 0.85; break;
-			case "launch2":
-				html += "Launch Rate x 0.7";
-				mod *= 0.7; break;
-			case "launch3":
-				html += "Launch Rate x 0.55";
-				mod *= 0.55; break;
-			case "bridge_accu-10":
-				html += "Weapon to hit x 0.9"; break;
-			case "bridge_nomove":
-				html += "Unable to manover"; break;
-			case "bridge_disabled1":
-				html += "Unable to manover or fire."; break;
-			case "output_0.95":
-				html += "Output x 0.95";
-				mod *= 0.9; break;
-			case "output_0.9":
-				html += "Output x 0.9";
-				mod *= 0.9; break;
-			case "output_0.85":
-				html += "Output x 0.85";
-				mod *= 0.85; break;
-			case "output_0.8":
-				html += "Output x 0.8";
-				mod *= 0.8; break;
-			case "output_0.7":
-				html += "Output x 0.7";
-				mod *= 0.7; break;
-			case "output_0.5":
-				html += "Output x 0.5";
-				mod *= 0.5; break;
-			case "output_0":
-				html += "Disabled";
-				mod *= 0; break;
-			default: 
-				html += this.type; break;
-		}
-
-		this.html = html;
-		this.outputMod = mod;
-	}
-
 	this.getString = function(){
 		var d = "";
 
@@ -287,6 +219,8 @@ function Crit(data){
 function Structure(data){
 	this.name = "Structure";
 	this.display = "Structure";
+	this.type = data.type;
+	this.parentIntegrity = data.parentIntegrity;
 	this.armourDmg = data.armourDmg;
 	this.id = data.id;
 	this.parentId = data.parentId;
@@ -316,27 +250,6 @@ Structure.prototype.getArmourString = function(){
 	return this.remainingNegation + " / " + this.negation;
 }
 
-Structure.prototype.getDirection = function(){
-	var a = this.start;
-	var b = this.end;
-
-	if (a == 0 && b == 360){
-		return 0;
-	}
-	else if (a > b){
-	   c = a + b;
-	}
-	else {
-	   c = (a + b) / 2;
-	}
-
-	if (a > 90 && b < -90 && a+b == 0){
-		c = 180;
-	}
-
-	return c;
-}
-
 Structure.prototype.getTableData = function(){
 	var td = document.createElement("td");
 		td.className = "armour";
@@ -355,28 +268,25 @@ Structure.prototype.getTableData = function(){
 		upperDiv.className = "integrityFull";
 		td.appendChild(upperDiv);
 
-	$(td).data("shipId", this.parentId);
-	$(td).data("systemId", this.id);
-	$(td).hover(
-		function(e){
+
+
+	$(td)
+		.data("shipId", this.parentId)
+		.data("systemId", this.id)
+		.hover(
+			function(e){
+				var shipId = $(this).data("shipId");
+				var systemId = $(this).data("systemId");
+				game.getUnit(shipId).getSystemById(systemId).hover(e);
+			}
+		)
+		.click(function(e){
 			var shipId = $(this).data("shipId");
 			var systemId = $(this).data("systemId");
-			game.getUnit(shipId).getSystemById(systemId).hover(e);
-		},
-		function(e){
-			var shipId = $(this).data("shipId");
-			var systemId = $(this).data("systemId");
-			game.getUnit(shipId).getSystemById(systemId).hover(e);
-		}
-	)
-	$(td).click(function(e){
-		var shipId = $(this).data("shipId");
-		var systemId = $(this).data("systemId");
 		console.log(game.getUnit(shipId).getSystemById(systemId));
-	})
+		})
 
 	this.element = td;
-
 	return td;
 }
 
@@ -398,23 +308,13 @@ Structure.prototype.hover = function(e){
 }
 
 Structure.prototype.showOptions = function(){
-	if (this.locked || game.phase != -1 || game.getUnit(this.parentId).userid != game.userid ){return;}
-
-	var ele = $(this.element);
-	var boost = this.effiency;
-
-	if (boost){
-		ele.find(".boostDiv").show();
-	}
+	if (this.locked || game.phase != -1 || !this.effiency || game.getUnit(this.parentId).userid != game.userid ){return;}
+	$(this.element).find(".boostDiv").show();
 }
 
 Structure.prototype.hideOptions = function(){
-	if (this.locked || game.phase != -1 || game.getUnit(this.parentId).userid != game.userid ){return;}
-	var ele = $(this.element);
-
-	if (game.phase == -1 && this.effiency){
-			$(ele) .find(".boostDiv").hide().end();
-	}
+	if (this.locked || game.phase != -1 || !this.effiency || game.getUnit(this.parentId).userid != game.userid ){return;}
+	$(this.element).find(".boostDiv").hide();
 }
 
 Structure.prototype.showInfoDiv = function(e){
@@ -434,10 +334,13 @@ Structure.prototype.getSystemDetailsDiv = function(){
 
 	var table = $("<table>")
 		.append($("<tr>")
-			.append($("<th>").html("Outer Armour").attr("colSpan", 2)))
+			.append($("<th>").html(this.type + " Armour Plating").attr("colSpan", 2)))
 		.append($("<tr>")
 			.append($("<td>").html("Armour Strength"))
-			.append($("<td>").html(this.getRemainingNegation() + " / " + this.negation)));
+			.append($("<td>").html(this.getRemainingNegation() + " / " + this.negation)))
+		.append($("<tr>")
+			.append($("<td>").html("Relative Strength"))
+			.append($("<td>").html(((this.parentIntegrity - this.armourDmg) + " / " + this.parentIntegrity))))
 
 	if (this.boostEffect.length){
 		var boost = this.getBoostEffect("Armour");
@@ -485,11 +388,11 @@ Structure.prototype.getBoostLevel = function(){
 }
 
 Structure.prototype.plus = function(){
-	return System.prototype.plus.call(this);
+	return System.prototype.plus.call(this, false);
 }
 
 Structure.prototype.minus = function(){
-	return System.prototype.minus.call(this);
+	return System.prototype.minus.call(this, false);
 }
 
 Structure.prototype.doBoost = function(){
@@ -518,7 +421,7 @@ Structure.prototype.getRemainingIntegrity = function(){
 
 Structure.prototype.drawArc = function(){
 	if (game.animating){return;}
-	if (this.tiny){return;}
+	if (game.getUnit(this.parentId).squad){return;}
 
 	fxCtx.clearRect(0, 0, res.x, res.y);
 	fxCtx.translate(cam.o.x, cam.o.y);
@@ -546,8 +449,6 @@ Structure.prototype.drawArc = function(){
 Structure.prototype.getBoostDiv = function(){
 	return System.prototype.getBoostDiv.call(this);
 }
-
-
 
 
 
@@ -593,24 +494,23 @@ Primary.prototype.getTableData = function(){
 		upperDiv.className = "integrityFull";
 		td.appendChild(upperDiv);
 
-	$(td).data("shipId", this.parentId);
-	$(td).data("systemId", this.id);
-	$(td).hover(
-		function(e){
+	$(td)
+		.data("shipId", this.parentId)
+		.data("systemId", this.id)
+		.hover(
+			function(e){
+				var shipId = $(this).data("shipId");
+				var systemId = $(this).data("systemId");
+				game.getUnit(shipId).primary.hover(e);
+			}
+		)
+		.click(function(e){
 			var shipId = $(this).data("shipId");
 			var systemId = $(this).data("systemId");
-			game.getUnit(shipId).primary.hover(e);
-		}
-	)
-	$(td).click(function(e){
-		var shipId = $(this).data("shipId");
-		var systemId = $(this).data("systemId");
-		console.log(game.getUnit(shipId).primary);
-		//game.getUnit(shipId).primary.scan();
-	})
+			console.log(game.getUnit(shipId).primary);
+		})
 
-		tr.appendChild(td);
-		
+	tr.appendChild(td);
 	this.element = tr;
 	return tr;
 }
@@ -644,7 +544,7 @@ Primary.prototype.getSystemDetailsDiv = function(){
 		.append($("<table>")
 			.append($("<tr>")
 				.append($("<th>").html("Main Structure").attr("colSpan", 2)))
-			.append($("<tr>").attr("colSpan", 2)
+			.append($("<tr>")
 				.append($("<td>").html("Strength"))
 				.append($("<td>").html(this.remaining + " / " + this.integrity))));
 }
@@ -661,119 +561,26 @@ Primary.prototype.getRemainingIntegrity = function(){
 	return integrity;
 }
 
-
-
-function Core(data){
-	this.name = "Core";
-	this.display = "Core";
-	this.id = data.id;
-	this.parentId = data.parentId;
-	this.integrity = data.integrity;
-	this.remaining = data.remaining;
-	this.negation = data.negation;
-	this.remainingNegation = data.remainingNegation;
-	this.damages = [];
-	this.destroyed = data.destroyed || false;
-	this.highlight = false;	
-	this.systems = [];
-	this.coreElement;
-	this.armourElement;
-}
-
-Core.prototype.getRemainingNegation = function(){
-	return this.remainingNegation;
-}
-
-Core.prototype.getArmourString = function(){
-	return this.remainingNegation + " / " + this.negation;
-}
-
-Core.prototype.getCoreData = function(){
-	var tr = document.createElement("tr");
-	var td = document.createElement("td");
-		td.className = "struct"; td.colSpan = 3;
-
-	var span = document.createElement("div");
-		span.className = "integrityAmount";
-		span.className += " font15";
-		span.innerHTML = this.remaining + " / " + this.integrity;
-		td.appendChild(span);
-
-	var lowerDiv = document.createElement("div");
-		lowerDiv.className = "integrityNow";
-		lowerDiv.style.width =  this.remaining/this.integrity * 100 + "%";
-		td.appendChild(lowerDiv);
-		
-	var upperDiv = document.createElement("div");
-		upperDiv.className = "integrityFull";
-		td.appendChild(upperDiv);
-
-	tr.appendChild(td);	
-	this.coreElement = tr;
-	return tr;
-}
-
-Core.prototype.getArmourData = function(){
-	var tr = document.createElement("tr");
-	var td = document.createElement("td");
-		td.className = "armour"; td.colSpan = 3;
-
-	var span = document.createElement("div");
-		span.className = "integrityAmount font16";
-		span.innerHTML = this.getArmourString();
-		td.appendChild(span);
-
-	var lowerDiv = document.createElement("div");
-		lowerDiv.className = "integrityNow";
-		lowerDiv.style.width =  this.getRemainingNegation()/this.negation * 100 + "%";
-		td.appendChild(lowerDiv);
-		
-	var upperDiv = document.createElement("div");
-		upperDiv.className = "integrityFull";
-		td.appendChild(upperDiv);
-
-	tr.appendChild(td);
-	this.armourElement = tr;
-	return tr;
-}
-
-
-
-
-
-
-
-
-
-
 function Section(data){
 	this.start = data.start;
 	this.end = data.end;
 	this.systems = [];
 }
 
-Section.prototype.getDirection = function(){
-	return Structure.prototype.getDirection.call(this);
-}
-
-
-
-
-
-
-
 function Single(data){
 	this.id = data.id;
 	this.parentId = data.parentId;
 	this.name = data.name;
-	this.cost = data.cost;
 	this.display = data.display;
+	this.role = data.role;
+	this.cost = data.cost;
 	this.ep = data.ep;
 	this.mass = data.mass;
+	this.remaining = data.remaining;
 	this.integrity = data.integrity;
 	this.value = data.value;
 	this.negation = data.negation;
-	this.damages = data.damages || [];
+	this.damages = [];
 	this.crits = [];
 	this.baseHitChance = data.baseHitChance;
 	this.destroyed = data.destroyed;
@@ -869,6 +676,7 @@ Single.prototype.getDetailsDiv = function(){
 
 
 
+
 function Missile(data){
 	Single.call(this, data);
 	this.missile = 1;
@@ -883,6 +691,9 @@ Missile.prototype = Object.create(Single.prototype);
 Missile.prototype.create = function(data){
 	for (var k = 0; k < data.systems.length; k++){
 		this.systems.push(new Warhead(data.systems[k]));
+	}
+	for (var k = 0; k < data.damages.length; k++){
+		this.damages.push(new Warhead(data.damages[k]));
 	}
 	for (var k = 0; k < data.crits.length; k++){
 		this.crits.push(new Crit(data.crits[k]));

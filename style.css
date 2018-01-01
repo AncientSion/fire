@@ -305,6 +305,13 @@ table, th, tr, td {
 	font-size: 14px;
 }
 
+#reinforceFaction {
+	width: 100%;
+	font-size: 20px;
+	border: 1px solid white;
+	margin-top: 20px;
+}
+
 #shipsBoughtTable {
 	width: 300px;
 	display: inline-block;
@@ -339,20 +346,24 @@ table, th, tr, td {
 	border: 1px solid white;
 }
 
+.factionUpperTable td {
+	text-align: center;
+}
+
 .factionUpperTable td.selected {
 	background-color: lightBlue;
 }
 
-.factionclassnameTable {
+.factionSubTable {
 	margin: auto;
 	width: 95%;
 	border-collapse: collapse;
 	border: 1px solid white;
 }
-.factionclassnameTable tr {
+.factionSubTable tr {
 }
 
-.factionclassnameTable td {
+.factionSubTable td {
 	text-align: center;
 }
 
@@ -508,23 +519,14 @@ table, th, tr, td {
 	-webkit-transform: rotate(270deg);
 	-ms-transform: rotate(270deg);
 }
-
-.size90 {
-	width: 90px;
-	height: 90px;
-	margin: auto;
-	margin-top: 10px;
+.size20 {
+	height: 20px;
+	width: 20px;
 }
 
-.size60 {
-	width: 60px;
-	height: 60px;
-	margin: auto;
-}
-
-.size45 {
-	width: 45px;
-	height: 45px;
+.size30 {
+	width: 30px;
+	height: 30px;
 	margin: auto;
 }
 
@@ -540,15 +542,42 @@ table, th, tr, td {
 	margin: auto;
 }
 
-.size30 {
-	width: 30px;
-	height: 30px;
+.size45 {
+	width: 45px;
+	height: 45px;
 	margin: auto;
 }
 
-.size20 {
-	height: 20px;
-	width: 20px;
+.size70 {
+	width: 60px;
+	height: 60px;
+	margin: auto;
+}
+
+.size90 {
+	width: 90px;
+	height: 90px;
+	margin: auto;
+	margin-top: 10px;
+}
+
+.size90 {
+	width: 90px;
+	height: 90px;
+	margin: auto;
+	margin-top: 10px;
+}
+
+.size100 {
+	width: 100px;
+	height: 100px;
+	margin: auto;
+}
+
+.size120 {
+	width: 120px;
+	height: 120px;
+	margin: auto;
 }
 
 .font12 {
@@ -582,27 +611,56 @@ table, th, tr, td {
 	border: 1px solid white;
 }
 
-.unitContainer .primaryTable .system img {
+.unitContainer .boostDiv img, .unitContainer .powerDiv img{
 	color: black;
-	width: 30px;
-	height: 30px;
+	width: 100%;
+	height: 100%;
 }
 
 .unitContainer .primaryDiv {
-	width: 100px;
-	height: 100px;
-}
-
-.unitContainer .primaryDiv {
+	width: 80px;
+	height: 80px;
 	border: none;
 }
 
+.squad .outputMask {
+	margin: auto;
+	width: 100%;
+	font-size: 14px;
+	color: #ff3b00;
+	text-align: center;
+	vertical-align: middle;
+	display: table-cell;
+}
+
 .unitContainer .primaryDiv .primaryTable {
-	border: 1px solid white;
+	width: 100%;
 }
 
 .unitContainer .primaryTable .struct {
-	height: 30px;
+	height: 25px;
+}
+
+.unitContainer .boostDiv {
+	z-index: 15;
+	position: absolute;
+	left: -21px;
+	top: -5px;
+}
+
+.unitContainer .powerDiv {
+	z-index: 15;
+	position: absolute;
+	left: 21px;
+	top: -5px;
+}
+
+.unitContainer .plus, .unitContainer .minus, .unitContainer .power, .unitContainer .unpower {
+	display: block;
+	background-color: black;
+	border: 1px solid red;
+	width: 18px;
+	height: 18px;
 }
 
 .structContainer {
@@ -615,7 +673,7 @@ table, th, tr, td {
 }
 
 .structContainer.squad {
-	width: 400px;
+	width: 382px;
 }
 
 .structDiv, .primaryDiv {
@@ -741,6 +799,10 @@ div.integrityAmount {
 	top: 4;
 }
 
+.unitContainer .struct div.integrityAmount {
+	top: 0;
+}
+
 div.integrityFull {
 	position: absolute;
 	left: 0;
@@ -782,7 +844,7 @@ div.integrityFull {
 	width: 100%;
 }
 
-.outputMask {
+.structDiv .outputMask, .primaryDiv .outputMask {
 	margin: auto;
 	position: absolute;
 	top: 5px;
@@ -995,6 +1057,13 @@ div.integrityFull {
 	border: 1px solid white;
 }
 
+.shipdiv .mainDiv {
+	display: inline-block;
+	height: 200px;
+	width: 100%;
+	margin: auto;
+}
+
 .shipDiv .general {
 	width: 100%;
 	color: white;
@@ -1014,6 +1083,52 @@ div.integrityFull {
 	float: right;
 	display: inline-block;
 	height: 130px;
+	border: 1px solid white;
+}
+
+.topDiv {
+	display: inline-flex;
+}
+
+.shipDiv.squad .header {
+	display: inline-block;
+	width: 180px;
+	height: 120px;
+	margin: auto;
+	padding: 0 0 0 0;
+	border: 1px solid white;
+}
+
+.shipDiv.squad .coreContainer {
+	width: 100px;
+	border-top: 1px solid white;
+	border-bottom: 1px solid white;
+}
+
+.shipDiv.squad .iconContainer {
+	width: 100px;
+	border-top: 1px solid white;
+	border-bottom: 1px solid white;
+}
+
+.coreContainer  .system {
+	width: 30px;
+	height: 30px;
+}
+
+.coreContainer  .system img {
+	width: 30px;
+	height: 30px;
+}
+
+.coreContainer  .mode img {
+	width: 20px;
+	height: 20px;
+}
+
+.shipDiv.squad .iconContainer {
+	display: inline-block;
+	height: 120px;
 	border: 1px solid white;
 }
 
@@ -1089,13 +1204,13 @@ div.integrityFull {
 
 #systemDetailsDiv table {
 	width: 220px;
-	border: 2px solid yellow;
+	border: 3px solid #5874ff;
 	border-collapse: collapse;
 }
 
 #systemDetailsDiv.flight table {
 	width: 180px;
-	border: 2px solid white;
+	border: 3px solid #5874ff;
 	border-collapse: collapse;
 }
 
@@ -1120,10 +1235,17 @@ div.integrityFull {
 	position: absolute;
 }
 
-.armour .boostDiv {
+.shipDiv .armour .boostDiv {
 	z-index: 15;
 	position: absolute;
 	top: -8px;
+	left: -15px;
+}
+
+.shipDiv .squad .armour .boostDiv {
+	z-index: 15;
+	position: absolute;
+	top: -12px;
 	left: -15px;
 }
 
@@ -1355,13 +1477,22 @@ div.integrityFull {
 	color: #ff3d00;
 }
 
-.mainPower {
+.structContainer .mainPower {
 	color: white;
 	display: inline-block;
 	font-size: 16px;
 	position: relative;
 	top: 5px;
 	left: 5px;
+}
+
+.unitContainer .mainPower {
+	color: white;
+	display: inline-block;
+	font-size: 16px;
+	position: relative;
+	top: 3px;
+	left: 3px;
 }
 
 .green {

@@ -1,10 +1,6 @@
 <?php
 
 class Missile extends Single {
-	public $negation;
-	public $cost;
-	public $start = 0;
-	public $end = 360;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

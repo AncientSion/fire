@@ -153,7 +153,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 
 			//dist = Math.max(50, game.getFireDistance(shooter, target));
 			dist = game.getFireDistance(shooter, target);
-			if (shooter.ship){
+			if (shooter.ship || shooter.squad){
 				if (target.salvo){
 					angle = getAngleFromTo(target.getTrajectory(), shooterLoc);
 					angle = addAngle(-shooter.getPlannedFacing(), angle);
@@ -200,7 +200,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 				.append($("<td>").html(target.name + " #" + target.id))
 				.append($("<td>").html(game.getUnitType(target.traverse) + " (" + target.traverse + ")"))
 				.append($("<td>").html(target.getArmourString(angle)))
-				.append($("<td>").html(""))
+				.append($("<td>").html(target.getSectionString(angle)))
 				.append($("<td>").html(dist));
 
 			targetData2
@@ -248,52 +248,53 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			pos = target.getTrajectory();
 		} else pos = target.getPlannedPos();
 	}
+
+
+
 	
 	if (!drop){	
-		for (var i = 0; i < shooter.structures.length; i++){
-			for (var j = 0; j < shooter.structures[i].systems.length; j++){
-				if (shooter.structures[i].systems[j].weapon && shooter.structures[i].systems[j].selected){
-					var system = shooter.structures[i].systems[j].getSystem();
-					var inArc = 1;
-					var legalTarget = 1;
-					var msg = "";
+		var active = shooter.getSelectedWeapons();
 
-					var row = $("<tr>");
-						row.append($("<td>").html(system.display + " #" + shooter.structures[i].systems[j].id))
+		for (var i = 0; i < active.length; i++){
+			var system = active[i].getSystem();
+			var inArc = 1;
+			var legalTarget = 1;
+			var msg = "";
 
-					if (shooter.ship){
-						if (cc){
-							if (system instanceof Launcher){
-								legalTarget = 0;
-							}
-							else if (target.salvo && !system.posIsOnArc(shooterLoc, pos, facing)){
-								legalTarget = 0;
-							}
-						}
-						else if (!system.posIsOnArc(shooterLoc, pos, facing)){
-							inArc = 0;
-						}
+			var row = $("<tr>");
+				row.append($("<td>").html(system.getDisplay() + " #" +active[i].id))
+
+			if (shooter.ship || shooter.squad){
+				if (cc){
+					if (system instanceof Launcher){
+						legalTarget = 0;
 					}
-					else if (shooter.flight){
-						if (!cc){
-							legalTarget = 0;
-						}
+					else if (target.salvo && !system.posIsOnArc(shooterLoc, pos, facing)){
+						legalTarget = 0;
 					}
-
-
-
-					if (inArc && legalTarget){
-						system.getAimData(target, final, dist, row);
-						system.validTarget = 1;
-					}
-					else {
-						$(row).append($("<td>").html("Illegal Target").attr("colSpan", 4))
-						system.validTarget = 0;
-					}
-
-					weaponInfo.append(row);
+				}
+				else if (!system.posIsOnArc(shooterLoc, pos, facing)){
+					inArc = 0;
 				}
 			}
+			else if (shooter.flight){
+				if (!cc){
+					legalTarget = 0;
+				}
+			}
+
+
+
+			if (inArc && legalTarget){
+				system.getAimData(target, final, dist, row);
+				system.validTarget = 1;
+			}
+			else {
+				$(row).append($("<td>").html("Illegal Target").attr("colSpan", 4))
+				system.validTarget = 0;
+			}
+
+			weaponInfo.append(row);
 		}
 	}
 				
@@ -502,33 +503,46 @@ function dmgPhase(e, pos, unit){
 	}
 }
 
-function handleFireClick(ship, vessel){
-	if (vessel){
-		if (vessel.id != ship.id && (vessel.userid != game.userid && vessel.userid != ship.userid)){
+function handleFireClick(shooter, target){
+	if (target){
+		if (target.id != shooter.id && (target.userid != game.userid && target.userid != shooter.userid)){
 			
-			if (ship.salvo){return;}
-			if (ship.flight && !game.isCloseCombat(ship, vessel)){return;}
+			if (shooter.salvo){return;}
+			if (shooter.flight && !game.isCloseCombat(shooter, target)){return;}
 			
-			if (ship.hasWeaponsSelected()){
-				for (var i = 0; i < ship.structures.length; i++){
-					for (var j = ship.structures[i].systems.length-1; j >= 0; j--){
-						if (ship.structures[i].systems[j].selected && ship.structures[i].systems[j].weapon){
-							if (ship.structures[i].systems[j].canFire()){
-								if (ship.structures[i].systems[j].hasValidTarget()){
+			if (shooter.hasWeaponsSelected()){
+				var active = shooter.getSelectedWeapons();
+
+				for (var i = 0; i < active.length; i++){
+					if (active[i].canFire()){
+						if (active[i].hasValidTarget()){
+							// FireOrder(id, turn, shooterid, targetid, weaponid, req, notes, hits, resolved){
+							active[i].setFireOrder(target.id);
+						}
+					}
+				}
+
+				/*
+				for (var i = 0; i < shooter.structures.length; i++){
+					for (var j = shooter.structures[i].systems.length-1; j >= 0; j--){
+						if (shooter.structures[i].systems[j].selected && shooter.structures[i].systems[j].weapon){
+							if (shooter.structures[i].systems[j].canFire()){
+								if (shooter.structures[i].systems[j].hasValidTarget()){
 									// FireOrder(id, turn, shooterid, targetid, weaponid, req, notes, hits, resolved){
-									ship.structures[i].systems[j].setFireOrder(vessel.id);
+									shooter.structures[i].systems[j].setFireOrder(target.id);
 								}
 							}
 						}
 					}
 				}
+				*/
 			}
 
 			$("#weaponAimTableWrapper").hide()
-			ship.highlightAllSelectedWeapons();
+			shooter.highlightAllSelectedWeapons();
 			//game.draw();
 		}
-		else vessel.switchDiv();
+		else target.switchDiv();
 	}
 }
 

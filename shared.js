@@ -25,9 +25,7 @@ function doSort(a, b){
 }
 
 function initChat(){
-	console.log("initChat");
-	
-	$(".chatWrapper").removeClass("disabled").find(".chatBox").scrollTop(function(){console.log("ding");return this.scrollHeight});
+	$(".chatWrapper").removeClass("disabled").find(".chatBox").scrollTop(function(){return this.scrollHeight});
 	var checkChat = setInterval(
 		function(){
 			ajax.checkChat();
@@ -188,7 +186,7 @@ function Animate(){
 	}
 }
 
-window.animate = new Animate();
+//window.animate = new Animate();
 
 window.fpsTicks;
 window.speedMod = 1;
@@ -213,8 +211,8 @@ function initiateUnit(data){
 
 function initiateSalvo(data){
 	var salvo = new Salvo(data);
-	for (var j = 0; j < data.structures.length; j++){
-		salvo.structures.push(new Missile(data.structures[j]));
+	for (var i = 0; i < data.structures.length; i++){
+		salvo.structures.push(new Missile(data.structures[i]));
 	}
 	return salvo;
 }
@@ -232,10 +230,6 @@ function initiateFlight(data){
 			}
 			system.setState();
 			flight.structures[j].systems.push(system);
-		}
-
-		for (var k = 0; k < data.structures[j].crits.length; k++){
-			flight.structures[j].crits.push(new Crit(data.structures[j].crits[k]));
 		}
 	}
 	return flight;	
@@ -258,32 +252,12 @@ function initiateSquadron(data){
 }
 
 function initiateSquaddie(data){
-	var unit = new Squaddie(data);	
-		unit.primary = new Core(data.primary);
+	var unit = new Squaddie(data);
 
-	for (var i = 0; i < data.primary.damages.length; i++){
-		if (data.primary.damages[i].turn == game.turn){
-			ship.primary.damages.push(new Damage(data.primary.damages[i]));
-		} else ship.primary.damages.push(data.primary.damages[i]);
-	}
-
-	for (var j = 0; j < data.primary.systems.length; j++){
-		var primSystem = new window[data.primary.systems[j].name](data.primary.systems[j]);
-
-		for (var l = 0; l < data.primary.systems[j].damages.length; l++){
-			primSystem.damages.push(new Damage(data.primary.systems[j].damages[l]));
-		}
-
-		for (var l = 0; l < data.primary.systems[j].powers.length; l++){
-			primSystem.powers.push(new Power(data.primary.systems[j].powers[l]));
-		}
-
-		for (var l = 0; l < data.primary.systems[j].crits.length; l++){
-			primSystem.crits.push(new Crit(data.primary.systems[j].crits[l]));
-		}
-
-		primSystem.setState();
-		unit.primary.systems.push(primSystem);
+	for (var i = 0; i < data.damages.length; i++){
+		if (data.damages[i].turn == game.turn){
+			unit.damages.push(new Damage(data.damages[i]));
+		} else unit.damages.push(data.damages[i]);
 	}
 
 	for (var j = 0; j < data.structures.length; j++){
@@ -492,7 +466,7 @@ function handleMouseDown(e){
 	var unit;
 	var rect = this.getBoundingClientRect();
 	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
-	//console.log("game pos " + pos.x	+ " / " + pos.y);
+	console.log("game pos " + pos.x	+ " / " + pos.y);
 
 	$(":focus").blur();
 
@@ -568,7 +542,7 @@ function handleMouseOut(e){
 }
 
 function sensorEvent(isClick, ship, loc, facing, d, a){
-	var sensor = ship.getActiveSensor();
+	var sensor = ship.getSystemByName("Sensor");
 	var str = sensor.getOutput();
 		d = Math.min(str*2, d);
 	var	w = Math.min(180, round(game.const.ew.len * Math.pow(str/d, game.const.ew.p), 2));

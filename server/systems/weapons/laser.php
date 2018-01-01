@@ -46,7 +46,7 @@ class Laser extends Weapon {
 					$system = $fire->target->primary;
 				}
 			}
-			if ($system->id >= 0){$systems[] = $system->id;}
+			if ($fire->target->ship && $system->id >1){$systems[] = $system->id;}
 
 			$print .= " ".get_class($system).": ".$rake." dmg, ";
 			$destroyed = 0;
@@ -90,8 +90,8 @@ class LightParticleBeam extends Laser {
 	public $animColor = "blue";
 	public $rakeTime = 22;
 	public $beamWidth = 1;
-	public $minDmg = 27;
-	public $maxDmg = 34;
+	public $minDmg = 29;
+	public $maxDmg = 36;
 	public $optRange = 400;
 	public $dmgLoss = 4;
 	public $accDecay = 120;

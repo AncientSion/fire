@@ -36,8 +36,8 @@ if (isset($_GET["type"])){
 		echo json_encode($ships);
 	}
 	else if ($_GET["type"] == "shipdata"){
-		$ship = $manager->getPreviewData($_GET["name"]);
-		echo json_encode($ship);
+		$unit = $manager->getPreviewData($_GET);
+		echo json_encode($unit, JSON_NUMERIC_CHECK);
 	}
 }
 	

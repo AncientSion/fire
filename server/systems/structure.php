@@ -1,18 +1,5 @@
 <?php
 
-class Section {
-	public $start = 0;
-	public $end = 0;
-	public $systems = [];
-	public $parentId;
-
-	function __construct($start, $end){
-		$this->start = $start;
-		$this->end = $end;
-	}
-
-}
-
 class Structure {
 	public $id;
 	public $parentId;
@@ -20,26 +7,28 @@ class Structure {
 	public $end;
 	public $integrity;
 	public $negation;
+	public $type;
 	public $destroyed = false;
 	public $remainingNegation = 0;
 	public $armourDmg = 0;
-	public $parentIntegrity;
+	public $parentIntegrity = 0;
 	public $parentPow;
 	public $systems = array();
 	public $damages = array();
 	public $powers = array();
-	public $effiency = 0;
 	public $boostEffect = array();
+	public $effiency = 0;
 	public $bonusNegation = 0;
 
-	function __construct($id, $parentId, $start, $end, $integrity, $negation, $destroyed = false){
+	function __construct($id, $parentId, $start, $end, $integrity, $negation){
 		$this->id = $id;
 		$this->parentId = $parentId;
 		$this->start = $start;
 		$this->end = $end;
-		$this->negation = $negation;
-		$this->destroyed = $destroyed;
 		$this->integrity = $integrity;
+		$this->negation = $negation;
+
+		$this->setName();
 	}
 
 	public function isDestroyed(){
@@ -60,11 +49,12 @@ class Structure {
 	}
 
 	public function setNegation($main, $armourDmg){
+		$this->parentIntegrity = round($main*3 / 360) * Math::getArcWidth($this);
+
 		$p = 1.5;
-		$this->parentPow = round(pow($main, $p));
-		$this->parentIntegrity = $main;
+		$this->parentPow = round(pow($this->parentIntegrity, $p));
 		$this->armourDmg += $armourDmg;
-		$this->remainingNegation = round((pow($main - $this->armourDmg, $p) / $this->parentPow) * $this->negation);
+		$this->remainingNegation = round((pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow) * $this->negation);
 	}
 
 	public function getCurrentNegation(){
@@ -75,11 +65,11 @@ class Structure {
 	public function setBonusNegation($turn){
 		if (!sizeof($this->boostEffect)){return;}
 		$this->bonusNegation = $this->getBoostEffect("Armour") * $this->getBoostLevel($turn);
-
-		//Debug::log("Bonus Negation for #".$this->parentId."/".$this->id.": ".$this->bonusNegation);
+		//Debug::log("setBonusNegation: ".$this->bonusNegation."/".$this->getBoostEffect("Armour")."/".$this->getBoostLevel($turn));
 	}
 
 	public function getArmourValue($system){
+		//Debug::log("get armour for ".$system->name." - ".$this->getCurrentNegation());
 		return array(
 			"stock" => round($this->getCurrentNegation() * $system->getArmourMod()),
 			"bonus" => round($this->bonusNegation * $system->getArmourMod())
@@ -109,6 +99,30 @@ class Structure {
 		}
 		return $boost;
 	}
+
+	public function setName(){
+		$this->type = $this->getName();
+	}
+
+	public function getName(){
+		$a = Math::getArcDir($this);
+
+		switch ($a){
+			case 0: return "Bow";
+			case 360: return "Bow";
+			case 78: return "Main Starboard";
+			case 90: return "Starboard";
+			case 150: return "Rear Starboard";
+			case 222: return "Rear Port";
+			case 282: return "Main Port";
+			case 270: return "Port";
+			case 180: return "Rear";
+		}
+	}
+}
+
+class Shared {
+	public $systems = array();
 }
 
 class Primary {
@@ -121,10 +135,11 @@ class Primary {
 	public $destroyed = false;
 	public $systems = array();
 	public $damages = array();
-	public $remaining;
+	public $remaining = 0;
+	public $damaged = 0;
 
-	function __construct($id, $parentId, $start, $end, $integrity, $destroyed = false){
-		$this->id = -1;
+	function __construct($id, $parentId, $start, $end, $integrity){
+		$this->id = $id;
 		$this->parentId = $parentId;
 		$this->start = $start;
 		$this->end = $end;
@@ -140,13 +155,14 @@ class Primary {
 	}
 
 	public function addDamage($dmg){
-		if ($dmg->systemid == -1){
+		if ($dmg->new){$this->damaged = 1;}
+
+		if ($dmg->systemid == 1){
 			$dmg->overkill += $dmg->structDmg;
 			$dmg->structDmg = 0;
 			$this->damages[] = $dmg;
 		}
 
-		$this->damaged = 1;
 		$this->remaining -= $dmg->overkill;
 
 		if (!$this->destroyed && $this->remaining < 1){
@@ -159,23 +175,13 @@ class Primary {
 	}
 
 	public function getHitChance(){
-		//return 200;
 		return ($this->integrity * 0.75);
 		//return max($this->remaining *1.4, $this->integrity *0.2);
-		//return floor($this->integrity  * 0.75);
 		//return floor($this->remaining *1.4);
 	}
 
 	public function setMaxDmg($fire, $dmg){
-		return  $dmg;
-	}
-
-	public function setRemainingIntegrity(){
-		$rem = $this->integrity;
-		for ($i = 0; $i < sizeof($this->damages); $i++){
-			$rem -= $this->damages[$i]->overkill;
-		}
-		$this->remaining = $rem;
+		return $dmg;
 	}
 
 	public function getRemainingIntegrity(){
@@ -183,83 +189,29 @@ class Primary {
 	}
 }
 
-class Core extends Primary {
-	public $name = "Core";
-	public $id;
-	public $parentId;
-	public $start;
-	public $end;	
-	public $destroyed = false;
-	public $systems = array();
-	public $damages = array();
-	public $powers = array();
-	public $boostEffect = array();
-	public $integrity;
-	public $remaining;
-	public $negation;
-	public $remainingNegation = 0;
-	public $armourDmg = 0;
-	public $parentPow;
-	public $effiency = 0;
-	public $bonusNegation = 0;
-
-
-	function __construct($id, $parentId, $start, $end, $integrity, $negation, $destroyed = false){
-		parent::__construct($id, $parentId, $start, $end, $integrity, $destroyed);
-		$this->negation = $negation;
-	}
-
-	public function setNegation(){
-		$p = 1.5;
-		$this->parentPow = round(pow($this->integrity, $p));
-		$this->remainingNegation = round((pow($this->integrity - $this->armourDmg, $p) / $this->parentPow) * $this->negation);
-	}
-
-	public function getCurrentNegation(){
-		$p = 1.5;
-		return round(pow($this->integrity - $this->armourDmg, $p) / $this->parentPow * $this->negation);
-	}
-
-	public function setBonusNegation($turn){
-		if (!sizeof($this->boostEffect)){return;}
-		$this->bonusNegation = $this->getBoostEffect("Armour") * $this->getBoostLevel($turn);
-
-		//Debug::log("Bonus Negation for #".$this->parentId."/".$this->id.": ".$this->bonusNegation);
-	}
-
-	public function getArmourValue($system){
-		return array(
-			"stock" => round($this->getCurrentNegation() * $system->getArmourMod()),
-			"bonus" => round($this->bonusNegation * $system->getArmourMod())
-		);
-	}
-}
-
-class Shared {
-	public $systems = array();
-}
-
-
 class Single {
-	public $id;
-	public $parentId;
-	public $integrity;
-	public $negation;
+	public $id = 0;
+	public $parentId = 0;
+	public $integritx = 0;
+	public $negation = 0;
 	public $destroyed = 0;
 	public $disabled = 0;
 	public $systems = array();
 	public $damages = array();
 	public $crits = array();
-	public $baseHitChance;
-	public $name;
-	public $display;
-	public $mass;
+	public $baseHitChance = 0;
+	public $name = "";
+	public $display = "";
+	public $role = "";
+	public $mass = 0;
 	public static $value;
-	public $cost;
+	public $cost = 0;
 	public $start = 0;
 	public $end = 360;
-	public $ep = 0;
+	public $remaining = 0;
 	public $damaged = 0;
+	
+	public $index = 0;
 
 	function __construct($id, $parentId){
 		$this->id = $id;
@@ -293,8 +245,11 @@ class Single {
 	}
 
 	public function addDamage($dmg){
-		$this->damaged = 1;
+		if ($dmg->new){$this->damaged = 1;}
+
+		$this->remaining -= $dmg->structDmg;
 		$this->damages[] = $dmg;
+		
 		if ($dmg->destroyed){
 			$this->destroyed = true;
 		}
@@ -309,7 +264,6 @@ class Single {
 	}
 
 	public function setUnitState($turn, $phase){
-		Debug::log("SINGLE setUnitState");
 		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
 			if ($this->damages[$i]->destroyed){
 				$this->destroyed = true;
@@ -324,16 +278,9 @@ class Single {
 	}
 
 	public function testCrit($turn, $extra){
-		if ($this->destroyed || empty($this->damages)){
-			return;
-		}
-
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
-			if ($this->damages[$i]->turn > $turn){
-				break;
-			}
-			else if ($this->damages[$i]->turn == $turn){
+			if ($this->damages[$i]->turn == $turn){
 				$new += $this->damages[$i]->structDmg;
 			} else $old += $this->damages[$i]->structDmg;
 		}
@@ -384,4 +331,23 @@ class Single {
 		}
 	}
 }
+
+
+
+
+
+
+class Section {
+	public $start = 0;
+	public $end = 0;
+	public $systems = [];
+	public $parentId;
+
+	function __construct($start, $end){
+		$this->start = $start;
+		$this->end = $end;
+	}
+}
+
+
 ?>

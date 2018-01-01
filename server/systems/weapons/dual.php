@@ -7,6 +7,7 @@ class Dual extends Weapon {
 	public $states = array();
 	public $weapons = array();
 	public $dual = 1;
+	public $dualParent = 0;
 	public $powerReq = 0;
 
 	function __construct($id, $parentId, $start, $end, $mass, $modes, $destroyed = 0){
@@ -17,6 +18,7 @@ class Dual extends Weapon {
 			$this->states[] = 0;
 			$this->modes[] = $modes[$i];
 			$this->weapons[] = new $modes[$i]($i, $parentId, $start, $end, 0, 0);
+			$this->weapons[sizeof($this->weapons)-1]->dualParent = $this->id;
 			$this->powerReq = max($this->powerReq, $this->weapons[$i]->powerReq);
 
 			$this->display .= $this->weapons[$i]->display." / ";
@@ -51,7 +53,7 @@ class Dual extends Weapon {
 	}
 
 	public function getActiveSystem(){
-		//echo "getActiveSystem ".$this->parentId."/".$this->id."</br>";
+		//echo "</br>getActiveSystem ".$this->parentId."/".$this->id."</br>";
 		//var_export($this->states); echo "<br><br>";
 		//var_export($this->powers);echo "<br><br>";
 		for ($i = 0; $i < sizeof($this->states); $i++){
@@ -60,7 +62,8 @@ class Dual extends Weapon {
 				return $this->weapons[$i];
 			}
 		}
-		Debug::log("ERROR - ".$this->parentId."/".$this->id." CANT RETURN ACTIVE WEAPON");
+		return $this->weapons[0];
+		//Debug::log("ERROR - ".$this->parentId."/".$this->id." CANT RETURN ACTIVE WEAPON");
 	}
 
 	public function setProps(){
@@ -72,23 +75,6 @@ class Dual extends Weapon {
 				return;
 			}
 		}
-	}
-}
-
-class DualPulseIon extends Weapon {
-	public $type = "Dual";
-	public $name = "";
-	public $display = "";
-	public $modes = array("LightPulse", "LightParticleBeam", "HeavyLaser");
-	public $states = array(0, 0, 0);
-	public $weapons = array();
-	public $mass = 15;
-
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = 0){
-		for ($i = 0; $i < sizeof($this->modes); $i++){
-        	$this->weapons[] = new $this->modes[$i]($id, $parentId, $start, $end, 0, 0);
-		}
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
 	}
 }
 

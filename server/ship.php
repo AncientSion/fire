@@ -42,7 +42,7 @@ class Ship {
 	public $angles = array();
 
 	public $turnAngle = 30;
-	public $slipAngle = 20;
+	public $slipAngle = 0;
 	public $turnStep = 1;
 	public $baseTurnCost;
 	public $baseTurnDelay;
@@ -76,7 +76,7 @@ class Ship {
 	}
 
 	public function setUnitState($turn, $phase){
-		Debug::log("SHIP setUnitState #".$this->id);
+		//Debug::log("ship setUnitState");
 		if ($this->primary->isDestroyed()){
 			$this->destroyed = 1;
 		}
@@ -125,7 +125,7 @@ class Ship {
 	}
 
 	public function setProps($turn, $phase){
-		Debug::log("setProps ".get_class($this)." #".$this->id);
+		//Debug::log("setProps ".get_class($this)." #".$this->id);
 		$this->cost = static::$value;
 		$this->setBaseStats();
 		$this->setCurrentImpulse($turn, $phase);
@@ -152,7 +152,7 @@ class Ship {
 	public function setBaseStats(){
 		$this->baseHitChance = ceil(pow($this->mass, 0.4)*1.5)+30;
 		$this->baseTurnCost = round(pow($this->mass, 1.25)/25000, 2);
-		$this->baseTurnDelay = round(pow($this->mass, 0.45)/18, 2) * $this->getBaseImpulse() / 130;
+		$this->baseTurnDelay = round(pow($this->mass, 0.45)/18, 2);
 		$this->baseImpulseCost = round(pow($this->mass, 1.25)/600, 2);
 	}
 
@@ -178,7 +178,7 @@ class Ship {
 				}
 			}
 		}
-		if (!$this->ship){return;}
+		//if (!$this->ship){return;}
 
 		for ($j = 0; $j < sizeof($this->primary->systems); $j++){
 			if ($this->primary->systems[$j]->name == "Sensor"){
@@ -203,7 +203,7 @@ class Ship {
 			}
 		}
 	}
-
+	
 	public function hideActions(){;
 		for ($i = sizeof($this->actions)-1; $i >= 0; $i--){
 			if (!$this->actions[$i]->resolved){
@@ -318,20 +318,20 @@ class Ship {
 
 	public function addFireDB($fires){
 		for ($i = 0; $i < sizeof($fires); $i++){
-			$this->getBaseSystemById($fires[$i]->weaponid)->fireOrders[] = $fires[$i];
+			$this->getSystemById($fires[$i]->weaponid)->fireOrders[] = $fires[$i];
+		}
+	}
+
+	public function addPowerDB($powers){
+		for ($i = 0; $i < sizeof($powers); $i++){
+			//echo ($this->id.", ".get_class($this).", ".$powers[$i]->unitid."/".$powers[$i]->systemid);
+			$this->getSystemById($powers[$i]->systemid)->addPowerEntry($powers[$i]);
 		}
 	}
 
 	public function addDamageDB($damages){
 		for ($i = 0; $i < sizeof($damages); $i++){
 			$this->applyDamage($damages[$i]);
-		}
-	}
-
-	public function addPowerDB($powers){
-		for ($i = 0; $i < sizeof($powers); $i++){
-			//Debug::log("adding entry");
-			$this->getBaseSystemById($powers[$i]->systemid)->addPowerEntry($powers[$i]);
 		}
 	}
 
@@ -355,22 +355,14 @@ class Ship {
 		return true;
 	}
 
-	public function setupForDamage($turn){
-		$this->primary->setRemainingIntegrity();
-
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			$this->structures[$i]->setBonusNegation($turn);
-		}
-	}
-
 	public function applyDamage($dmg){
-		$this->damaged = 1;
+		if ($dmg->new){$this->damaged = 1;}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($dmg->structureid == $this->structures[$i]->id){
 				$this->structures[$i]->armourDmg += $dmg->armourDmg;
 
-				if ($dmg->systemid == -1){
+				if ($dmg->systemid == 1){
 					$this->primary->addDamage($dmg);
 					if ($this->primary->isDestroyed()){
 						//Debug::log("destroying unit #".$this->id);
@@ -447,10 +439,12 @@ class Ship {
 	}
 
 	public function getRemainingIntegrity($fire){
+		Debug::log("ship getRemainingIntegrity, rem: ".$this->primary->remaining);
 		$total = $this->primary->integrity;
 		for ($i = 0; $i < sizeof($this->primary->damages); $i++){
 			$total = $total - $this->primary->damages[$i]->structDmg;
 		}
+		Debug::log("total: ".$total);
 		return $total;
 	}
 
@@ -504,8 +498,8 @@ class Ship {
 		return array($main, $int, $guns, $hangar);
 	}
 
-	public function resolveFireOrder($fire){
-		Debug::log("resolveFireOrder - ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($fire->target)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots);
+	public function resolveFireOrder($fire){ // target
+		Debug::log("resolveFireOrder - ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots);
 
 		if ($this->isDestroyed()){
 			Debug::log("ERROR - resolveFireOrder isDestroyed()");
@@ -533,11 +527,11 @@ class Ship {
 		return true;
 	}
 
-	public function determineHits($fire){
+	public function determineHits($fire){ // target
 		$fire->req = $fire->shooter->calculateToHit($fire);
 
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
-			if ($fire->target->destroyed){
+			if ($this->destroyed){
 				Debug::log("ERROR aborting shot resolution vs dead target #".$this->id);
 			}
 			else  if ($fire->rolls[$i] <= $fire->req){
@@ -547,7 +541,7 @@ class Ship {
 		}
 	}
 
-	public function calculateToHit($fire){
+	public function calculateToHit($fire){ // shooter
 		$multi = 1;
 		$req = 0;
 		
@@ -695,7 +689,7 @@ class Ship {
 	}
 
 	public function getLockEffect($target){
-		if ($target->ship){
+		if ($target->ship || $target->squad){
 			return 0.5 + (0.05 * $this->traverse);
 		}
 		else if ($target->flight){
@@ -707,7 +701,7 @@ class Ship {
 	}
 
 	public function getMaskEffect($target){
-		if ($target->ship){
+		if ($target->ship || $target->squad){
 			return 0.5 + (0.05 * $this->traverse);
 		}
 		else if ($target->flight){
@@ -885,57 +879,17 @@ class Ship {
 	}
 
 	public function getStruct($id){
-		//Debug::log("looking for: ".$id);
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			//Debug::log("now: ".$this->structures[$i]->id);
+		//Debug::log("getStruct looking for: ".$id);
+		for ($i = 0; $i < sizeof($this->structures); $i++){;
 			if ($this->structures[$i]->id == $id){
 				return $this->structures[$i];
-			}
-		}
-	}
-
-	public function getBaseSystemById($id){
-		//Debug::log("looking for id ".$id);
-		if ($this->ship){
-			for ($i = 0; $i < sizeof($this->primary->systems); $i++){
-				if ($this->primary->systems[$i]->id == $id){
-					return $this->primary->systems[$i];
-				}
-			}
-		}
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->id == $id){
-				return $this->structures[$i];
-			}
-			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				if ($this->structures[$i]->systems[$j]->id == $id){
-					return $this->structures[$i]->systems[$j];
-				}
-			}
-		}
-	}
-
-	public function getSystemByStructure($id, $systemid){
-		if ($id == -1){
-			for ($i = 0; $i < sizeof($this->primary->systems); $i++){
-				if ($this->primary->systems[$i]->id == $systemid){
-					return $this->primary->systems[$i];
-				}
-			}
-		}
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->id == $id){
-				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-					if ($this->structures[$i]->systems[$j]->id == $systemid){
-						return $this->structures[$i]->systems[$j];
-					}
-				}
 			}
 		}
 	}
 
 	public function getSystemById($id){
-		if ($id == -1){
+		//Debug::log("ship getSystemById looking for: ".$id);
+		if ($id == 1){
 			return $this->primary;
 		}
 		else {
@@ -945,13 +899,18 @@ class Ship {
 				}
 			}
 			for ($i = 0; $i < sizeof($this->structures); $i++){
+				if ($this->structures[$i]->id == $id){
+					return $this->structures[$i];
+				}
 				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 					if ($this->structures[$i]->systems[$j]->id == $id){
+						//Debug::log("ding");
 						return $this->structures[$i]->systems[$j]->getActiveSystem();
 					}
 				}
 			}
 		}
+		echo ("ERROR ship getSystemById: ".$id." on unit #".$this->id."/".$this->display);
 	}
 
 	public function getSystemByName($name){
@@ -1016,12 +975,6 @@ class Ship {
 				return $this->primary->systems[$j]->output;
 			}
 		}
-	}
-
-	public function getActiveLocks($turn){
-		$sensor = $this->getSystemByName("Sensor");
-		$str = $sensor->getOutput($turn);
-		$ew = $sensor->ew[sizeof($sensor->ew)-1];
 	}
 
 	public function getNewCrits($turn){
@@ -1105,6 +1058,22 @@ class Ship {
 			array(
 			)
 		);
+	}
+
+	public function setExtraNegation($turn){
+		if ($this->salvo){return;}
+		else if ($this->flight){return;}
+		else if ($this->ship){
+			for ($i = 0; $i < sizeof($this->structures); $i++){
+				$this->structures[$i]->setBonusNegation($turn);
+			}
+		}
+		else if ($this->squad){
+			for ($i = 0; $i < sizeof($this->structures); $i++){
+				if ($this->structures[$i]->disabled || $this->structures[$i]->destroyed){continue;}
+				$this->structures[$i]->setBonusNegation($turn);
+			}
+		}
 	}
 }
 

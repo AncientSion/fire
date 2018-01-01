@@ -7,8 +7,8 @@ class Plasma extends Weapon {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $destroyed = 0){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-		$this->boostEffect[] = new Effect("Damage loss", -20);
-		$this->boostEffect[] = new Effect("Damage", 10);
+		$this->boostEffect[] = new Effect("Damage loss", -25);
+		$this->boostEffect[] = new Effect("Damage", 15);
 	}
 	
 	public function getDmgRangeMod($fire){
@@ -47,7 +47,7 @@ class LightPlasma extends Plasma {
 	public $minDmg = 33;
 	public $maxDmg = 46;
 	public $accDecay = 120;
-	public $dmgLoss = 14;
+	public $dmgLoss = 12;
 	public $shots = 1;
 	public $animColor = "darkGreen";
 	public $projSize = 2.5;
@@ -55,7 +55,7 @@ class LightPlasma extends Plasma {
 	public $reload = 2;
 	public $mass = 18;
 	public $traverse = -2;
-	public $powerReq = 4;
+	public $powerReq = 3;
 	public $maxBoost = 1;
 	public $effiency = 2;
 
@@ -70,7 +70,7 @@ class MediumPlasma extends Plasma {
 	public $minDmg = 48;
 	public $maxDmg = 66;
 	public $accDecay = 120;
-	public $dmgLoss = 10;
+	public $dmgLoss = 9;
 	public $shots = 1;
 	public $animColor = "darkGreen";
 	public $projSize = 3;
@@ -78,7 +78,7 @@ class MediumPlasma extends Plasma {
 	public $reload = 2;
 	public $mass = 24;
 	public $traverse = -1;
-	public $powerReq = 6;
+	public $powerReq = 5;
 	public $maxBoost = 2;
 	public $effiency = 3;
 

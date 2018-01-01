@@ -93,8 +93,10 @@ class Flight extends Mixed {
 		return ceil($req);
 	}
 
+
+
 	public function getLockEffect($target){
-		if ($target->ship){
+		if ($target->ship || $target->squad){
 			return 0;
 		}
 		else if ($target->flight){
@@ -106,7 +108,7 @@ class Flight extends Mixed {
 	}
 
 	public function getMaskEffect($shooter){
-		if ($shooter->ship){
+		if ($shooter->ship || $shoter->squad){
 			return 0.5;
 		}
 	}

@@ -1,8 +1,22 @@
 function Fighter(data){
 	Single.call(this, data);
 	this.fighter = 1;
+	this.traverse = data.traverse;
+	this.baseImpulse = data.baseImpulse;
+	this.create(data);
 }
 Fighter.prototype = Object.create(Single.prototype);
+
+Fighter.prototype.create = function(data){
+	for (var k = 0; k < data.damages.length; k++){
+		this.damages.push(new Warhead(data.damages[k]));
+	}
+	for (var k = 0; k < data.crits.length; k++){
+		this.crits.push(new Crit(data.crits[k]));
+	}
+}
+
+
 
 
 
@@ -507,7 +521,7 @@ Flight.prototype.getShortInfo = function(){
 	var table = document.createElement("table");
 		table.insertRow(-1).insertCell(-1).innerHTML = "Flight #" + this.id + " (" + game.getMissionTypeString(this, this.getTarget()) + ")";
 		table.insertRow(-1).insertCell(-1).innerHTML =  "Thrust: " + this.getCurrentImpulse();
-		table.insertRow(-1).insertCell(-1).innerHTML =this.getStringHitChance();
+		table.insertRow(-1).insertCell(-1).innerHTML = this.getStringHitChance();
 	
 	if (!this.mission.arrived && game.phase < 1 && this.inRange()){
 		table.insertRow(-1).insertCell(-1).innerHTML = "<span class='red'>contact imminent</span>";
@@ -556,3 +570,37 @@ Flight.prototype.switchDiv = function(){
 	Ship.prototype.switchDiv.call(this);
 }
 
+Flight.prototype.hasNoFireOrders = function(){
+	if (!this.cc.length){
+		return false;
+	}
+	else {
+		var check = 0;
+		for (var i = 0; i < this.cc.length; i++){
+			if (game.getUnit(this.cc[i]).userid != this.userid){
+				check = true;
+				break;
+			}
+		}
+	}
+
+	if (check){
+		for (var j = 0; j < this.structures.length; j++){
+			for (var k = 0; k < this.structures[j].systems.length; k++){
+				if (this.structures[j].systems[k].weapon &&  this.structures[j].systems[k].getLoadLevel() >= 1){
+					if (this.structures[j].systems[k].hasFireOrder()){
+						return false;
+					}
+				}
+			}
+		}
+	}
+	return true;
+}
+
+Flight.prototype.createDeployEntry = function(){
+	var color = "#ff3d00";
+	if (this.friendly){color = "#27e627";}
+	var html = "<span><font color='" + color + "'>Flight #" + this.id + "</font> is being deployed (" + this.structures.length + " units).</span>";
+	this.finishDeployLogEntry(html);
+}

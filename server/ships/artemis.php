@@ -40,7 +40,7 @@ class Artemis extends Medium {
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
-			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse + 4;
+			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse + 3;
 		}
 	}
 

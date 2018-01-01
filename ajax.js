@@ -208,6 +208,7 @@ window.ajax = {
 					turn: game.turn,
 					phase: game.phase,
 					ships: ships,
+					faction: game.faction
 					},
 			success: callback,
 			error: ajax.error,
@@ -252,7 +253,7 @@ window.ajax = {
 						}
 					}
 				}
-				if (game.ships[i].ship){
+				if (game.ships[i].ship || game.ships[i].squad){
 					var power = game.ships[i].getPowerOrders();
 					for (var j = 0; j < power.length; j++){
 						powers.push(power[j]);
@@ -297,19 +298,17 @@ window.ajax = {
 		var myShips = [];
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid == game.userid){
-				if (game.phase == 0 && game.ships[i].ship || game.phase == 1 && game.ships[i].flight){
-					var ship = {
-						id: game.ships[i].id,
-						actions: []
-					}
-					for (var j = 0; j < game.ships[i].actions.length; j++){
-						if (!game.ships[i].actions[j].resolved){
-							ship.actions.push(game.ships[i].actions[j]);
-						}
-					}
-
-					myShips.push(ship);
+				var ship = {
+					id: game.ships[i].id,
+					actions: []
 				}
+				for (var j = 0; j < game.ships[i].actions.length; j++){
+					if (!game.ships[i].actions[j].resolved){
+						ship.actions.push(game.ships[i].actions[j]);
+					}
+				}
+
+				myShips.push(ship);
 			}
 		}
 		$.ajax({

@@ -37,7 +37,6 @@ echo "<script>";
 echo "window.game = ".$post.";";
 echo "window.playerstatus = ".json_encode($manager->playerstatus, JSON_NUMERIC_CHECK).";";
 echo "</script>";
-
 ?>
 
 
@@ -293,7 +292,7 @@ echo "</script>";
 					<th width=20%>Target</th>
 					<th width=20%>Type</th>
 					<th width=20%>Armour</th>
-					<th width=20%></th>
+					<th width=20%>Section</th>
 					<th width=20%>Dist</th>
 				</tr>
 				<tr id="targetData1">
@@ -389,6 +388,7 @@ echo "</script>";
 					</th>
 				</tr>
 				<?php
+					/*
 					foreach ($manager->ships as $ship){
 						if (($ship->ship || $ship->squad) && $manager->phase < 1 && $ship->userid == $manager->userid && $ship->available == $manager->turn){
 							echo "<tr class='deployNow ".$ship->id."'</td>";
@@ -397,21 +397,18 @@ echo "</script>";
 							echo "<td class='green font14'> NOW </td>";
 							echo "</tr>";
 						}							
-						else if ($ship->ship && $manager->phase < 1 && $ship->userid != $manager->userid && $ship->available == $manager->turn){
+						else if (($ship->ship || $ship->squad) && $manager->phase < 1 && $ship->userid != $manager->userid && $ship->available == $manager->turn){
+							echo "<tr class='deployNow ".$ship->id."'</td>";
 							if ($manager->phase == -1){
-								echo "<tr class='deployNow ".$ship->id."'</td>";
 								echo "<td><img class='img40' src=varIcons/vortex.png></td>";
 								echo "<td class='red font14'>Unknown</td>";
-								echo "<td class='red font14'> NOW </td>";
-								echo "</tr>";
 							}
 							else if ($manager->phase == 0){
-								echo "<tr class='deployNow ".$ship->id."'</td>";
 								echo "<td><img class='img40' src=shipIcons/".strtolower($ship->name).".png></td>";
 								echo "<td class='red font14'>".$ship->name."</td>";
-								echo "<td class='red font14'> NOW </td>";
-								echo "</tr>";
 							}
+							echo "<td class='red font14'> NOW </td>";
+							echo "</tr>";
 						}
 					}
 					for ($i = 0; $i < sizeof($manager->incoming); $i++){
@@ -432,7 +429,10 @@ echo "</script>";
 							echo "<td class='red font14'>Unknown</td>";
 							echo "<td class='font14'>1 Turn</td></tr>";
 						}
+
 					}
+					*/
+					
 				?>
 			</table>
 			<table id="reinforceTable">

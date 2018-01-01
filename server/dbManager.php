@@ -414,7 +414,7 @@
 		}
 
 		public function insertSubUnits($units){
-			Debug::log("insertSubUnits");
+			//Debug::log("insertSubUnits");
 			$stmt = $this->connection->prepare("
 				INSERT INTO subunits 
 					(unitid, amount, name)
@@ -423,9 +423,7 @@
 			");
 
 			for ($i = 0; $i < sizeof($units); $i++){
-				if (!isset($units[$i]["launchData"]) || !(sizeof($units[$i]["launchData"]))){Debug::log("skipping"); continue;}
-
-				Debug::log("in");
+				if (!isset($units[$i]["launchData"]) || !(sizeof($units[$i]["launchData"]))){continue;}
 				$stmt->bindParam(":unitid", $units[$i]["id"]);
 				for ($j = 0; $j < sizeof($units[$i]["launchData"]["loads"]); $j++){
 					$stmt->bindValue(":amount", $units[$i]["launchData"]["loads"][$j]["launch"]);
@@ -1346,6 +1344,7 @@
 		}	
 
 		public function getActions($units, $turn){
+			//Debug::log("getActions for turn ".$turn);
 			$stmt = $this->connection->prepare("
 				SELECT * FROM actions
 				WHERE shipid = :shipid
@@ -1359,7 +1358,7 @@
 				$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 				if ($result){
-					//Debug::log("fetching actions for #".$units[$i]->id." and turn ".$turn);
+					//Debug::log("fetching actions for #".$units[$i]->id);
 					for ($j = 0; $j < sizeof($result); $j++){
 						//Debug::log("result #".$j);
 						$units[$i]->actions[] = new Action(
@@ -1532,7 +1531,7 @@
 			$stmt->execute();
 
 			if ($stmt->errorCode() == 0){
-				Debug::log("game ".$gameid.",user ".$userid." adjusting to turn/phase/status ".$turn." ".$phase." ".$status);
+				Debug::log("game ".$gameid.", user ".$userid." --- adjusting to turn/phase/status ".$turn."/".$phase."/".$status);
 				return true;
 			} else return false;
 		}

@@ -105,6 +105,20 @@ class Math {
 		return $sol;
 	}
 
+	static function getArcWidth($system){
+		if ($system->start < $system->end){ return $system->end - $system->start;}
+		else if ($system->start > $system->end){ return 360 - $system->start + $system->end;}	
+	}
+
+	static function getArcDir($system){
+		if ($system->start == 0 && $system->end == 360){
+			return 0;
+		}
+		else if ($system->start > $system->end){
+			return $system->start + $system->end;
+		}
+		else return ($system->start + $system->end) / 2;
+	}
 
 /*
 	function getIntercept(src, dst, v){

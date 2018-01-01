@@ -51,7 +51,7 @@ window.cam = {
 	},
 
 	setFireFocus: function(fire){
-		if (fire.dist <= 50){
+		if (fire.dist <= 100){
 			this.z = 2;
 		}
 		else if (fire.dist > res.x / 2 || fire.dist > res.y){
@@ -59,6 +59,7 @@ window.cam = {
 		}
 		else this.z = 1;
 
+		this.setFocusToPos(fire.target.getPlannedPos());
 		this.setFocusToPos(fire.target.getPlannedPos());
 		//game.draw();
 	}

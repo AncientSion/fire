@@ -21,7 +21,7 @@ class LightIon extends Particle {
 	public $projSize = 2;
 	public $projSpeed = 8;
 	public $reload = 2;
-	public $mass = 13;
+	public $mass = 14;
 	public $powerReq = 2;
 	public $traverse = -5;
 	public $effiency = 3;
@@ -77,9 +77,9 @@ class HeavyIon extends MediumIon {
 
 class SuperHeavyIon extends HeavyIon {
 	public $name = "SuperHeavyIon";
-	public $display = "145mm Ion 'Emperor' Cannon";
-	public $minDmg = 66;
-	public $maxDmg = 88;
+	public $display = "138mm Ion 'Emperor' Cannon";
+	public $minDmg = 54;
+	public $maxDmg = 70;
 	public $accDecay = 70;
 	public $shots = 3;
 	public $animColor = "orange";

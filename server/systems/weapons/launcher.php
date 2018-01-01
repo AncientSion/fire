@@ -13,6 +13,7 @@ class Launcher extends Weapon {
 	public $powerReq = 2;
 	public $effiency = 1;
 	public $shots = 0;
+	public $accDecay = 0;
 
 	function __construct($id, $parentId, $start, $end, $loads, $destroyed = false){
 		for ($i = 0; $i < sizeof($loads); $i++){
@@ -52,8 +53,7 @@ class Launcher extends Weapon {
 	}
 
 	public function setArmourMod(){
-		$w = $this->getArcWidth();
-
+		$w = Math::getArcWidth($this);
 		if ($w <= 120){$this->armourMod = 0.8;}
 		else if ($w <= 180){$this->armourMod =  0.6;}
 		else $this->armourMod =  0.3;

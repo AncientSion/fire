@@ -61,6 +61,7 @@ spl_autoload_register(
                 'artemis' => '/server/ships/artemis.php',
                 'olympus' => '/server/ships/olympus.php',
                 'tethys' => '/server/ships/tethys.php',
+                'crius' => '/server/ships/crius.php',
 
                 'gquan' => '/server/ships/gquan.php',
 
@@ -106,9 +107,9 @@ spl_autoload_register(
                 'fusionpulsar' => '/server/systems/weapons/pulse.php',
 
                 'particle' => '/server/systems/weapons/particle.php',
+                'superlightion' => '/server/systems/weapons/particle.php',
                 'lightion' => '/server/systems/weapons/particle.php',
                 'mediumion' => '/server/systems/weapons/particle.php',
-                'mediumtwinion' => '/server/systems/weapons/particle.php',
                 'heavyion' => '/server/systems/weapons/particle.php',
                 'superheavyion' => '/server/systems/weapons/particle.php',
                 'fusioncannon' => '/server/systems/weapons/particle.php',
@@ -134,7 +135,6 @@ spl_autoload_register(
                 'structure' => '/server/systems/structure.php',
                 'section' => '/server/systems/structure.php',
                 'primary' => '/server/systems/structure.php',
-                'core' => '/server/systems/structure.php',
                 'shared' => '/server/systems/structure.php',
                 'single' => '/server/systems/structure.php',
 

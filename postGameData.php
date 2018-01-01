@@ -28,7 +28,7 @@ if (isset($_POST["type"])) {
 	else if ($_POST["type"] == "buyInitialFleet") {
 		$rem = $manager->validateFleetCost($_POST["ships"]);
 		if ($rem >= 0){
-			if ($dbManager->processInitialBuy($_POST["userid"], $_POST["gameid"], $_POST["ships"], $rem, $_POST["ships"][0]["faction"])) {
+			if ($dbManager->processInitialBuy($_POST["userid"], $_POST["gameid"], $_POST["ships"], $rem, $_POST["faction"])){
 				if ($dbManager->gameIsReady($_POST["gameid"])) {
 					if ($dbManager->startGame($_POST["gameid"])) {
 						header("Location: game.php?gameid=".$_POST["gameid"]);
@@ -42,6 +42,7 @@ if (isset($_POST["type"])) {
 		else echo "Invalid Fleet";
 	}
 	else if ($_POST["type"] == "deployment"){
+		//return;
 		if (isset($_POST["initial"])){
 			$dbManager->deployShipsDB($_POST["gameid"], $_POST["initial"]);
 		}
@@ -75,6 +76,7 @@ if (isset($_POST["type"])) {
 	}
 	else if ($_POST["type"] == "firing"){
 		if ($dbManager->insertClientFireOrders($_POST["gameid"], $_POST["turn"], $_POST["fireOrders"])){
+			//return;
 			if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready")){
 				echo "firing success";
 			}

@@ -136,10 +136,10 @@ Salvo.prototype.createBaseDiv = function(){
 
 	var max = Math.min(6, this.structures.length);
 
-	var impact = false;
-	if (this.actions.lenght && this.actions[this.actions.length-1].type == "impact"){
+	/*var impact = false;
+	if (this.actions.length && this.actions[this.actions.length-1].type == "impact"){
 		impact = true;
-	}
+	}*/
 
 	for (var i = 0; i < this.structures.length; i++){
 		if (i % max === 0){
@@ -156,17 +156,17 @@ Salvo.prototype.createBaseDiv = function(){
 			})
 
 			if (this.structures[i].destroyed || this.structures[i].disabled){
-			var img = new Image();
-				img.className = "ammoOverlay";
-				img.src = "varIcons/destroyed.png";
-				td.appendChild(img);
+				var img = new Image();
+					img.className = "ammoOverlay";
+					img.src = "varIcons/destroyed.png";
+					td.appendChild(img);
 			}
 			/*else if (impact){
 				if (true){
 					img.src = "varIcons/ammoHit.png";
 				} else img.src = "varIcons/ammoMiss.png";
 			}*/
-			$(td).append($(this.img.cloneNode(true)).addClass("size40"));
+			$(td).append($(this.getBaseImage().cloneNode(true)).addClass("size40"));
 
 		tr1.appendChild(td);
 
@@ -331,4 +331,16 @@ Salvo.prototype.getShots = function(){
 		}
 	}
 	return shots;
+}
+
+Salvo.prototype.hasNoFireOrders = function(){
+	return false;
+}
+
+Salvo.prototype.createDeployEntry = function(){
+	var color = "#ff3d00";
+	if (this.friendly){color = "#27e627";}
+	var html = "<span><font color='" + color + "'>Salvo #" + this.id + "</font> is launched (" + this.structures.length + " units).</span>";
+	this.finishDeployLogEntry(html);
+
 }

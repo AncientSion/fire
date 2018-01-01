@@ -54,6 +54,9 @@ window.preloadShips = function(){
 	window.shipImages.olympus = new Image();
 	window.shipImages.olympus.src = "shipIcons/olympus.png";
 
+	window.shipImages.crius = new Image();
+	window.shipImages.crius.src = "shipIcons/crius.png";
+
 	window.shipImages.tethys = new Image();
 	window.shipImages.tethys.src = "shipIcons/tethys.png";
 

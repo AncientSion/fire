@@ -10,20 +10,6 @@ function Mixed(data){
 
 Mixed.prototype = Object.create(Ship.prototype);
 
-Mixed.prototype.isReady = function(){
-	if (this.available < game.turn){
-		return true;
-	}
-	else if (this.available == game.turn && !(game.phase == 0 && game.animating && !this.deployed)){
-		if (this.userid == game.userid && this.actions.length || game.phase >= 0){
-			return true;
-		}
-	} else if (this.available > game.turn && this.actions.length == 1 && !this.actions[0].resolved){
-		return true;
-	}
-	return false;
-}
-
 Mixed.prototype.getNextPosition = function(){
 	return this.nextStep;
 }
@@ -188,10 +174,10 @@ Mixed.prototype.getArmourString = function(a){
 }
 
 Mixed.prototype.getStringHitChance = function(){
-	var min = 0; var max = 0;
+	var min = 1000; var max = 0;
 	for (var i = 0; i < this.structures.length; i++){
 		if (!this.structures[i].destroyed){
-			min = Math.max(min, this.structures[i].baseHitChance);
+			min = Math.min(min, this.structures[i].baseHitChance);
 			max = Math.max(max, this.structures[i].baseHitChance);
 		}
 	}
@@ -217,10 +203,9 @@ Mixed.prototype.getBaseHitChance = function(){
 	var amount = 0;
 
 	for (var i = 0; i < this.structures.length; i++){
-		if (!this.structures[i].destroyed){
-			amount++;
-			chance += this.structures[i].baseHitChance;
-		}
+		if (this.structures[i].destroyed){continue;}
+		amount++;
+		chance += this.structures[i].baseHitChance;
 	}
 
 	return Math.ceil(chance/amount);
@@ -267,7 +252,7 @@ Mixed.prototype.setTarget = function(){
 	else {
 		if (this.mission.type == 2){
 			var target = this.getTarget();
-			if (target.ship){
+			if (target.ship || target.squad){
 				this.finalStep = target.getPlannedPos();
 				this.facing = getAngleFromTo(this, this.finalStep);
 				d = getDistance(p, this.finalStep);
@@ -313,13 +298,6 @@ Mixed.prototype.setTarget = function(){
 			}
 		}
 	}
-}
-
-Ship.prototype.getBaseImage = function(){
-	if (this.ship || this.squad){
-		return window.shipImages[this.name.toLowerCase()];
-	}
-	else return window.shipImages[this.structures[0].name.toLowerCase()];
 }
 
 Mixed.prototype.setPreMoveFacing = function(){
@@ -557,7 +535,7 @@ Mixed.prototype.setPatrolImage = function(){
 }
 
 Mixed.prototype.setPreMoveImage = function(){
-	console.log("setPreMoveImage " + this.id);
+	//console.log("setPreMoveImage " + this.id);
 	var size = 26;
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
@@ -624,31 +602,25 @@ Mixed.prototype.getUnitPosition = function(j){
 	if (this.mission.arrived && this.mission.type != 1){
 		var x = this.structures[j].layout.x * 0.5;
 		var y = this.structures[j].layout.y * 0.5;
-		//console.log("#" + this.id);
-		//console.log(this.structures[j].layout);
 		return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
 	}
 	else {
-		var x = this.structures[j].layout.x * (this.size / 100);
-		var y = this.structures[j].layout.y * (this.size / 100);
 		var x = this.structures[j].layout.x * 0.5;
 		var y = this.structures[j].layout.y * 0.5;
-		//console.log("#" + this.id);
-		//console.log(this.structures[j].layout);
 		return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
 	}
 }
 
-Mixed.prototype.getFireDest = function(fire, isHit, nbrHit){
+Mixed.prototype.getFireDest = function(fire, isHit, num){
 	if (!isHit){
 		return {
 			x: range(10, 25) * (1-range(0, 1)*2),
 			y: range(10, 25) * (1-range(0, 1)*2)
 		}
 	}
-	//return this.getSystemById(fire.damages[nbrHit].systemid).layout
+	//return this.getSystemById(fire.damages[num].systemid).layout
 
-	var t = this.getSystemById(fire.damages[nbrHit].systemid).layout;
+	var t = this.getSystemById(fire.damages[num].systemid).layout;
 
 	if (this.mission.arrived){
 		var x = t.x * 0.5;
@@ -673,37 +645,6 @@ Mixed.prototype.getTrajectory = function(gun){
 }
 
 Mixed.prototype.getDmgByFire = function(fire){
-	if (fire.shooter.salvo && this.id == 25){
-		return this.getNew(fire);
-	}
-	var dmgs = [];
-	var lookup = 0;
-
-	for (var i = 0; i < fire.hits.length; i++){
-		lookup += fire.hits[i]
-	}
-
-	if (!lookup){
-		return dmgs;
-	}
-
-	for (var i = 0; i < this.structures.length; i++){
-		for (var j = this.structures[i].damages.length-1; j >= 0; j--){
-			if (this.structures[i].damages[j].fireid == fire.id){
-				dmgs.push(this.structures[i].damages[j]);
-				dmgs[dmgs.length-1].system = this.structures[i].display;
-				lookup--;
-				if (!lookup){return dmgs};
-			}
-			else if (this.structures[i].damages[j].turn < fire.turn){
-				break;
-			}
-		}
-	}
-	return dmgs;
-}
-
-Mixed.prototype.getNew = function(fire){
 	var dmgs = [];
 	var lookup = 0;
 
@@ -750,4 +691,12 @@ Mixed.prototype.checkSensorHighlight = function(){
 
 Mixed.prototype.highlightAllSelectedWeapons = function(){
 	return;
+}
+
+Mixed.prototype.getSectionString = function(angle){
+	return "";
+}
+
+Mixed.prototype.getBaseImage = function(){
+	return window.shipImages[this.structures[0].name.toLowerCase()];
 }

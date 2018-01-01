@@ -52,7 +52,7 @@ class PrimarySystem extends System {
 		$old = round($old / $this->integrity * 100);
 		$possible = $this->getValidEffects();
 
-		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", new: ".$new.", old: ".$old);
+		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", newDmg: ".$new.", oldDmg: ".$old);
 
 		$mod = $this->getCritModMax($new + $old);
 		//if ($mod < 5){Debug::log("mod < 5: ".$mod.", droppiong"); return;}
@@ -84,10 +84,6 @@ class Bridge extends PrimarySystem {
 
 	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
         parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
-	}
-
-	public function determineCrit($old, $new, $turn){
-		return;
 	}
 
 	public function setArmourMod(){

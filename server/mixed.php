@@ -44,7 +44,7 @@ class Mixed extends Ship {
 	}
 
 	public function setUnitState($turn, $phase){
-		Debug::log("MIXED setUnitState #".$this->id);
+		//Debug::log("MIXED setUnitState #".$this->id);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$this->structures[$i]->setUnitState($turn, $phase);
 		}
@@ -113,14 +113,6 @@ class Mixed extends Ship {
 		}
 	}
 
-	public function getStruct($id){
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->id == $id){
-				return $this->structures[$i];
-			}
-		}
-	}
-
 	public function addCritDB($crits){
 		for ($j = 0; $j < sizeof($crits); $j++){
 			for ($k = 0; $k < sizeof($this->structures); $k++){
@@ -134,7 +126,7 @@ class Mixed extends Ship {
 	}
 
 	public function applyDamage($dmg){
-		$this->damaged = 1;
+		if ($dmg->new){$this->damaged = 1;}
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->id == $dmg->systemid){
 				$this->structures[$i]->addDamage($dmg);
@@ -151,10 +143,6 @@ class Mixed extends Ship {
 			}
 		}
 		Debug::log("UNABLE TO APPLY DMG on #".$this->id);
-	}
-
-	public function setupForDamage($turn){
-		return;
 	}
 
 	public function setMove(&$gd){
@@ -194,7 +182,7 @@ class Mixed extends Ship {
 			
 			$t = $gd->getUnit($this->mission->targetid);
 
-			if (!$t->ship && $t->mission->targetid == $this->id){ // direct targetting
+			if (!($t->ship || $t->squad) && $t->mission->targetid == $this->id){ // direct targetting
 				if ($this->mission->arrived){ // at target, circle patrol
 					$tPos = $this->getCurrentPosition();
 					$type = "patrol";
@@ -266,19 +254,19 @@ class Mixed extends Ship {
 		}
 
 		$move = new Action(-1, $this->id, $gd->turn, $type, $dist, $tPos->x, $tPos->y, $angle, 0, 0, 0, 1, 1);
-		Debug::log("adding move to => ".$move->x."/".$move->y);
+		//Debug::log("adding move to => ".$move->x."/".$move->y);
 		$this->actions[] = $move;
 		$this->moveSet = 1;
 	}
 
 	public function getImpactAngle($fire){
 		if ($fire->cc){
-			if ($this->flight && ($fire->shooter->flight || $fire->shooter->ship)){
+			if ($this->flight && ($fire->shooter->flight || $fire->shooter->ship || $fire->shooter->squad)){
 				return $fire->shooter->getFireAngle($fire);
 			}
 			else if ($this->salvo && $fire->shooter->flight){
 				return $fire->shooter->getFireAngle($fire);
-			} else if ($this->salvo && $fire->shooter->ship){
+			} else if ($this->salvo && ($fire->shooter->ship || $fire->shooter->squad)){
 				return round(Math::getAngle2($fire->shooter->getCurrentPosition(), $this->getTrajectoryStart()));
 			}
 		}
@@ -316,12 +304,13 @@ class Mixed extends Ship {
 		return $this->getStruct($fire->hitSystem->id)->getRemainingIntegrity();
 	}
 
-
 	public function getArmour($fire, $system){
 		return array("stock" => $system->negation, "bonus" => 0);
 	}
 
 	public function getHitSection($fire){
+		Debug::log("Mixed getHitSection");
+		return 0;
 		return $this->getHitSystem($fire)->id;
 	}
 	
@@ -338,10 +327,7 @@ class Mixed extends Ship {
 	public function addSubUnits($elements){
 		for ($i = 0; $i < sizeof($elements); $i++){
 			for ($j = 1; $j <= $elements[$i]["amount"]; $j++){
-				$this->structures[] = new $elements[$i]["name"](
-					$this->getId(),
-					$this->id
-				);
+				$this->structures[] = new $elements[$i]["name"]($this->getId(), $this->id);
 				for ($k = 0; $k < sizeof($this->structures[sizeof($this->structures)-1]->systems); $k++){
 					$this->structures[sizeof($this->structures)-1]->systems[$k]->id = $this->getId();
 				}

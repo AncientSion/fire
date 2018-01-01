@@ -193,10 +193,7 @@ class System {
 	public function testCrit($turn, $extra){
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
-			if ($this->damages[$i]->turn > $turn){
-				break;
-			}
-			else if ($this->damages[$i]->turn == $turn){
+			if ($this->damages[$i]->turn == $turn){
 				$new += $this->damages[$i]->structDmg;
 			} else $old += $this->damages[$i]->structDmg;
 		}
@@ -244,7 +241,7 @@ class System {
 	}
 
 	public function addDamage($dmg){
-		$this->damaged = 1;
+		if ($dmg->new){$this->damaged = 1;}
 		$this->damages[] = $dmg;
 		if ($dmg->destroyed){
 			$this->destroyed = true;

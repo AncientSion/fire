@@ -17,13 +17,8 @@ class Weapon extends System {
         parent::__construct($id, $parentId, $output, $destroyed);
 	}
 
-	public function getArcWidth(){
-		if ($this->start < $this->end){ return $this->end - $this->start;}
-		else if ($this->start > $this->end){ return 360 - $this->start + $this->end;}	
-	}
-
 	public function setArmourMod(){
-		$w = $this->getArcWidth();
+   		$w = Math::getArcWidth($this);
 		if ($w <= 60){$this->armourMod = 0.75;}
 		else if ($w <= 120){$this->armourMod = 0.6;}
 		else if ($w <= 360){$this->armourMod = 0.45;}
@@ -65,12 +60,14 @@ class Weapon extends System {
 	}
 
 	public function doDamage($fire, $roll, $system){
+		//Debug::log("hitting: ".get_class($system));
 		$destroyed = 0;
 		$totalDmg = $this->getTotalDamage($fire);
 		$okSystem = 0;
 		$remInt = $system->getRemainingIntegrity();
 		
 		$negation = $fire->target->getArmour($fire, $system);
+		
 		$dmg = $this->determineDamage($totalDmg, $negation);
 		$dmg = $system->setMaxDmg($fire, $dmg);
 
@@ -108,7 +105,7 @@ class Weapon extends System {
 		$mod += $this->getCritMod("Accuracy", $fire->turn);
 		$mod -= $this->getBoostEffect("Accuracy")* $this->getBoostLevel($fire->turn);
 
-		//if ($mod != 1){Debug::log("weapon id: ".$this->id.", RANGE LOSS mod: ".$mod);}
+		//if ($mod != 100){Debug::log("weapon id: ".$this->id.", RANGE LOSS mod: ".$mod);}
 		return $mod / 100;
 	}
 

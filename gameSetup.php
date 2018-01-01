@@ -125,8 +125,8 @@ else {
 						<?php echo $element; ?>
 					</div>
 				</td>
-				<td style="vertical-align: top;">
-					<div style="margin: auto; margin-left: 30px;">
+				<td style="vertical-align: top; padding-left: 30px">
+					<div>
 						<table id ="shipsBoughtTable">
 							<tr>
 								<th colSpan=2 style="width: 300px; font-size: 20px">
@@ -148,6 +148,7 @@ else {
 							</tr>
 						</table>
 					</div>
+					<div id="reinforceFaction" class="disabled"></div>
 				</td>
 			</tr>
 		</table>
@@ -220,26 +221,23 @@ else {
 			window.turn = new Turn();
 			window.preview = true;
 			window.aUnit = 1;
+			window.res = {x: 200, y: 200};
 			window.game = {
 				turn: 0,
 			 	phase: -2,
 				ships: [],				
 				shipsBought: [],
 				userid: window.userid,
-
+				faction: "",
 
 				getUnitName: function(){
 					if (this.ships[0].ship){
 						return this.ships[0].name;
 					} else return "Squadron";
 				},
-
 				getUnitClass: function(){
-					if (this.ships[0].ship){
-						return "Ship";
-					} else return "Squadron";
-				},
-
+					if (this.ships[0].ship){return "Ship";
+					} else return "Squadron";},
 				getUnit: function(id){	
 					return this.ships[0];
 				},
@@ -262,7 +260,6 @@ else {
 					game.ships[0].totalCost = game.ships[0].cost;
 					game.ships[0].upgrades = [];
 					game.ships[0].setBuyData();
-
 
 					if (game.ships[0].ship){
 						var tr = table.insertRow(-1);
@@ -335,12 +332,16 @@ else {
 								window.addUnitToFleet();
 							});
 					}
+				}
 			}
-		}
 
-		window.res = {x:200, y: 200};
-		initPreviewCanvas();
+			initPreviewCanvas();
+			initFactionTable();
+		} else $("#game").hide();
+	})
 
+
+	function initFactionTable(){
 		var icons = [images.earth, images.centauri, images.minbari, images.narn];		
 
 		var table = document.createElement("table"); 
@@ -352,71 +353,81 @@ else {
 			th.innerHTML = "Assemble Your Fleet"; tr.appendChild(th); table.appendChild(tr);
 
 		for (var i = 0; i < factions.length; i++){
-			var tr = document.createElement("tr");
-				$(tr).data("row", i);
-				$(tr).data("faction", factions[i]);
-				$(tr).data("avail", false);
-				$(tr).mouseenter(function(){
-					$(this).addClass("highlight");
-				}).mouseleave(function(){
-					$(this).removeClass("highlight");
-				});
-				$(tr).click(function(){
-					requestShipsForFaction($(this).data("faction"), this, showShipList);
-				});
-
-			var td = document.createElement("td");
-				td.style.textAlign = "center";
-				td.appendChild(icons[i]); tr.appendChild(td);
-			var td = document.createElement("td");
-				td.style.textAlign = "center";
-				td.style.fontSize = "20px";
-				td.innerHTML = factions[i];
-				td.style.width = "40%"; tr.appendChild(td);
-			var td = document.createElement("td");
-				td.style.textAlign = "center";
-				td.innerHTML = '<img src="' + icons[i].src + '"></img>' ; tr.appendChild(td);
-
-				table.appendChild(tr);
-
-
-			var tr = document.createElement("tr");
-				tr.style.display = "none";
-			var td = document.createElement("td");
-				td.colSpan = 3;
-			var subTable = document.createElement("table");
-				subTable.className = "factionclassnameTable";
-
-			var subTr = document.createElement("tr");
-					subTh = document.createElement("th");
-					subTh.style.width = "200px";
-					subTh.style.fontSize = "16px";
-					subTh.innerHTML = "Class";
-				subTr.appendChild(subTh);
-					subTh = document.createElement("th");
-					subTh.style.width = "70px";
-					subTh.style.fontSize = "16px";
-					subTh.innerHTML = "Cost";
-				subTr.appendChild(subTh);
-					subTh = document.createElement("th");
-					subTh.style.fontSize = "16px";
-				subTr.appendChild(subTh);
-
-				subTable.appendChild(subTr);
-				td.appendChild(subTable); 
-				tr.appendChild(td);
-
-				table.appendChild(tr);
-			}
-
+			$(table)
+				.append(
+					$("<tr>")
+						.data("row", i)
+						.data("faction", i)
+						.data("set", 0)
+						.hover(function(){
+							$(this).toggleClass("highlight");
+						})
+						.click(function(){
+							if ($(this).data("set") == 1){
+								showShipList($(this));
+							}
+							else {
+								requestShipsForFaction(this, buildShipList);
+							}
+						})
+						.contextmenu(function(e){
+							e.stopPropagation(); e.preventDefault();
+							setReinforceFaction(this);
+						})
+						.append(
+							$("<td>")
+							.append(
+								$(icons[i]))
+						)
+						.append(
+							$("<td>")
+							.css("fontSize", 20)
+							.css("width", "40%")
+							.html(factions[i])
+						)
+						.append(
+							$("<td>")
+							.html('<img src="' + icons[i].src + '"></img>')
+						)
+					)
+				.append(
+					$("<tr>")
+						.addClass("disabled")
+						.append(
+							$("<td>")
+							.attr("colSpan", 3)
+							.append(
+								$("<table>")
+									.addClass("factionSubTable ")
+									.attr("id", i)
+									.append(
+										$("<tr>")
+											.append($("<th>")
+												.css("width", 200)
+												.css("fontSize", 16)
+												.html("Class")
+											)
+											.append($("<th>")
+												.css("width", 70)
+												.css("fontSize", 16)
+												.html("Cost")
+											)
+											.append($("<th>")
+												.css("fontSize", 16)
+												.html("")
+											)
+										)
+									)
+								)
+							)
 			$("#factionDiv").append(table);
 		}
-		else {
-			$("#game").hide();
-		}
+	}
 
-	});
-
+	function setReinforceFaction(ele){
+		game.faction = factions[$(ele).data("faction")];
+		$("#reinforceFaction").removeClass("disabled").html("Reinforcements:</br>" + game.faction);
+	}
 
 	function getFleetCost(){
 		var cost = 0;
@@ -442,81 +453,14 @@ else {
 		if (fleetCost && fleetCost <= window.maxPoints){
 			$("#shipsBoughtTable").find(".buttonTD").removeClass("disabled");
 		}
-		else {
-			$("#shipsBoughtTable").find(".buttonTD").addClass("disabled");
-		}
-		/*if (reinforceFaction.length && fleetCost){
-			$("#confirmFleet").removeClass("disabled");
-		}
-		else {
-			$("#confirmFleet").addClass("disabled");
-		}*/
+		else {$("#shipsBoughtTable").find(".buttonTD").addClass("disabled");}
 	}
 
 	function confirmFleetPurchase(){
-		ajax.confirmFleetPurchase(playerid, gameid, window.game.shipsBought, redirect);
-	}
-
-	function requestSquadron(){
-		$(".shipDiv").remove();
-		$("#hangarLoadoutDiv").addClass("disabled");
-		$("#weaponLoadoutDiv").addClass("disabled");
-		$("#hangarTable").html("");
-		var data = {id: 1, userid: 1, available: 0, display: "Squad", notes: "", faction: "Faction", mass: 0, cost: 0, profile: 0, size: 50, traverse: -1}
-		var ship = new Squadron(data);
-			ship.actions.push(new Move(-1, "deploy", 0, res.x/2, res.y/2, 270, 0, 0, 1, 1, 1));
-			ship.create();
-		game.ships[0] = ship;
-		//ship.create();
-
-		$("#game").removeClass("disabled");
-		ship.createBaseDiv();
-		ship.previewSetup();
-		$(".shipDiv")
-			.css("left", "460px").css("top", "220px").removeClass("disabled")
-			.find(".structContainer").show();
-		drawShipPreview();
-
-		var div = document.createElement("div");
-			div.style.border = "1px solid white";
-		var table = document.createElement("table");		
-			table.id = "totalShipCost";
-
-		div.appendChild(table);
-
-		game.ships[0].element.appendChild(div);
-		window.game.setUnitTotal();
-	}
-
-	function requestSquadUnit(name){
-		//console.log("requestSingleUnitData");
-		$.ajax({
-			type: "GET",
-			url: "getGameData.php",
-			datatype: "json",
-			data: {
-					type: "shipdata",
-					name: name,
-					},
-			success: addUnitToSquadron,
-			error: ajax.error,
-		});
-	}
-
-	function addUnitToSquadron(data){
-		if (game.ships[0] == undefined || !game.ships[0].squad){return;}
-		else if (game.ships[0].structures.length >= 3){return;}
-
-		var sub = window.initiateSquaddie(JSON.parse(data));
-			sub.create();
-			sub.primary.parentId = sub.id;
-
-		game.ships[0].structures.push(sub);
-		game.ships[0].setLayout();
-		game.ships[0].setSubElements();
-		sub.expandElement();
-
-		window.game.setUnitTotal();
+		if (game.faction.length > 2){
+			ajax.confirmFleetPurchase(playerid, gameid, window.game.shipsBought, redirect);
+		}
+		else popup("Please also pick your reinforcement faction </br>(right click the faction name on the left menu).");
 	}
 
 	function requestSingleUnitData(name){
@@ -527,6 +471,8 @@ else {
 			datatype: "json",
 			data: {
 					type: "shipdata",
+					unit: "ship",
+					index: 0,
 					name: name,
 					},
 			success: showShipDiv,
@@ -534,29 +480,43 @@ else {
 		});
 	}
 
-	function showShipDiv(data){
-		window.ships = [];
+	function requestSquadUnit(name){
+		if (!(game.ships[0] instanceof Ship) || !game.ships[0].squad){return;}
+		$.ajax({
+			type: "GET",
+			url: "getGameData.php",
+			datatype: "json",
+			data: {
+					type: "shipdata",
+					unit: "squaddie",
+					index: game.ships[0].index,
+					name: name,
+					},
+			success: addUnitToSquadron,
+			error: ajax.error,
+		});
+	}
 
-		window.ships[0] = JSON.parse(data);
+	function showShipDiv(data){
 		$(".shipDiv").remove();
 		$("#hangarLoadoutDiv").addClass("disabled");
 		$("#weaponLoadoutDiv").addClass("disabled");
 		$("#hangarTable").html("");
 
-		for (var i = 0; i < window.ships.length; i++){
-			var ship = window.initiateShip(window.ships[i]);
-			ship.actions.push(new Move(-1, "deploy", 0, res.x/2, res.y/2, 0, 0, 0, 1, 1, 1));
-		}
+		var ship = window.initiateUnit(JSON.parse(data));
+			game.ships[0] = ship;
 
-		game.ships[0] = ship;
-		ship.create();
-		$("#game").removeClass("disabled");
-		ship.createBaseDiv();
-		ship.previewSetup();
+			ship.actions.push(new Move(-1, "deploy", 0, res.x/2, res.y/2, 0, 0, 0, 1, 1, 1));
+			ship.create();
+			ship.setImage();
+			ship.createBaseDiv();
+			ship.previewSetup();
+			drawShipPreview();
+
+		$("#game").show();
 		$(".shipDiv")
 			.css("left", "460px").css("top", "220px").removeClass("disabled")
 			.find(".structContainer").show();
-		drawShipPreview();
 
 		var div = document.createElement("div");
 			div.style.border = "1px solid white";
@@ -567,16 +527,36 @@ else {
 
 		game.ships[0].element.appendChild(div);
 		window.game.setUnitTotal();
+
 	}
 
-	function addUnitToFleet(){
+	function addUnitToSquadron(data){
+		if (game.ships[0] == undefined || !game.ships[0].squad){return;}
+		else if (game.ships[0].structures.length >= 4){return;}
 
+		var sub = window.initiateSquaddie(JSON.parse(data));
+			sub.create();
+
+		game.ships[0].structures.push(sub);
+		game.ships[0].index = sub.index;
+		game.ships[0].setLayout();
+		game.ships[0].setSubElements();
+		game.ships[0].setStats()
+		sub.expandElement();
+
+		window.game.setUnitTotal();
+	}
+
+
+	function addUnitToFleet(){
 		var cur = Math.floor($("#totalFleetCost").html());
 		var add = game.ships[0].totalCost;
 		var max = window.maxPoints;
 
-		if (cur + add <= max){
-
+		if (game.ships[0].squad && game.ships[0].structures.length < 2){
+			popup("A squadron needs to include at least 2 units.");
+		}
+		else if (cur + add <= max){
 			var ship = {
 				type: game.getUnitClass(),
 				name: game.getUnitName(),
@@ -634,13 +614,12 @@ else {
 	}
 
 	function initPreviewCanvas(){
-
-		var canva = document.getElementsByTagName("canvas");
-		for (var i = 0; i < canva.length; i++){
-			canva[i].width = res.x;
-			canva[i].height = res.y;
-			canva[i].style.width = res.x;
-			canva[i].style.height = res.y;
+		var c = document.getElementsByTagName("canvas");
+		for (var i = 0; i < c.length; i++){
+			c[i].width = res.x;
+			c[i].height = res.y;
+			c[i].style.width = res.x;
+			c[i].style.height = res.y;
 		}
 
 		window.fxCanvas = document.getElementById("fxCanvas");
@@ -651,155 +630,100 @@ else {
 	}
 
 	function drawShipPreview(){
-		if (game.ships[0].img == undefined){return;}
 		window.shipCtx.clearRect(0, 0, res.x, res.y);
 		window.shipCtx.save();
 		window.shipCtx.translate(res.x/2, res.y/2);
 		window.shipCtx.rotate(game.ships[0].getPlannedFacing()*(Math.PI/180));
 		var size = shipCanvas.width/4;
-		window.shipCtx.drawImage(game.ships[0].img, -size, -size, size*2, size*2);
+		window.shipCtx.drawImage(game.ships[0].getBaseImage(), -size, -size, size*2, size*2);
 		window.shipCtx.restore();
 	}
 
-	function requestShipsForFaction(faction, ele, callback){
-		if (!$(ele).data("avail")){
-			$.ajax({
-				type: "GET",
-				url: "getGameData.php",
-				datatype: "json",
-				data: {
-						type: "shiplist",
-						faction: faction
-						},
-				success: function(data){
-							callback(data, ele)
-						},
-				error: ajax.error,
-			});
-		}
-		else {
-			$(ele.parentNode.childNodes[($(ele).data("row")*2)+2]).slideToggle(0);
-			var t = $(".factionUpperTable").position();
-			var h =  $(".factionUpperTable").height();
-			$("#game").css("top", t.top+h+20);
-		}
+	function requestShipsForFaction(ele, callback){
+		var ele = ele;
+		$.ajax({
+			type: "GET",
+			url: "getGameData.php",
+			datatype: "json",
+			data: {
+					type: "shiplist",
+					faction: factions[$(ele).data("faction")]
+					},
+			ele: ele,
+			success: function(data){callback(data, this.ele)},
+			error: ajax.error,
+		});
 	}
 
-	function showShipList(data, ele){
-		if (data){
-			data = JSON.parse(data);
-		} else return;
+	function buildShipList(data, ele){
+		var t = $("#factionDiv").find("#" + $(ele).data("faction"))
+		data = JSON.parse(data);
+		$(ele).data("set", 1);
 
-		var row = $(ele).data("row");
-
-		if (!$(ele).data("avail")){
-			for (var i = 0; i < data[0].length; i++){
-				var subTr = document.createElement("tr")
-					$(subTr).hover(function(){
+		for (var i = 0; i < data[0].length; i++){
+			$(t).append(
+				$("<tr>")
+					.hover(function(){
 						$(this).toggleClass("highlight");
 					})
+					.append($("<td>").html(data[0][i]["name"]))
+					.append($("<td>").html(data[0][i]["value"]))
+					.append(
+						$("<td>").html("Add to Fleet")
+						.data("name", data[0][i]["name"])
+						.data("value", data[0][i]["value"])
+						.hover(function(){$(this).toggleClass("selectionHighlight");})
+						.click(function(){requestSingleUnitData($(this).data("name"));})
+					)
+				)
+		}
 
-					var subTd = subTr.insertCell(-1);
-						subTd.innerHTML = data[0][i]["name"];
-
-					var subTd = subTr.insertCell(-1);
-						subTd.innerHTML = data[0][i]["value"];
-
-					var subTd = subTr.insertCell(-1);	
-						subTd.innerHTML = "Add to fleet";
-
-						$(subTd)
-							.data("name", data[0][i]["name"])
-							.data("value", data[0][i]["value"])
-							.hover(function(){
-								$(this).toggleClass("selectionHighlight");
-							})
-							.click(function(){
-								requestSingleUnitData(this.parentNode.childNodes[0].innerHTML);
-							})
-						subTr.appendChild(subTd); 
-
-					//	subTable.appendChild(subTr);
-
-					ele.parentNode.childNodes[(row*2)+2].childNodes[0].childNodes[0].appendChild(subTr);
-
-				$(ele).data("avail", true);
-			}
-
-			$(ele.parentNode.childNodes[(row*2)+2].childNodes[0].childNodes[0]).append($("<tr>")
+		$(t).append(
+			$("<tr>")
 				.hover(function(){
 					$(this).toggleClass("highlight");
 				})
-				.append($("<td>").html("Mixed Squadron"))
+				.append($("<td>").html("Squadron"))
 				.append($("<td>").html("VARIABLE"))
-				.append($("<td>").html("Add to fleet")
+				.append($("<td>").html("Add to Fleet")
 					.data("name", "mixed")
 					.data("value", 0)
 					.hover(function(){
 						$(this).toggleClass("selectionHighlight");
 					}).click(function(){
-						requestSquadron();
+						requestSingleUnitData(this.parentNode.childNodes[0].innerHTML);
+						//requestSquadron();
 					})
 				)
-			)
+		)
 
-			for (var i = 0; i < data[1].length; i++){
-				var subTr = document.createElement("tr")
-					$(subTr).hover(function(){
+		for (var i = 0; i < data[1].length; i++){
+			$(t).append(
+				$("<tr>")
+					.hover(function(){
 						$(this).toggleClass("highlight");
 					})
-
-					var subTd = subTr.insertCell(-1);
-						subTd.innerHTML = data[1][i]["name"];
-
-					var subTd = subTr.insertCell(-1);
-						subTd.innerHTML = data[1][i]["value"];
-
-					var subTd = subTr.insertCell(-1);	
-						subTd.innerHTML = "Add to fleet";
-
-						$(subTd)
-							.data("name", data[1][i]["name"])
-							.data("value", data[1][i]["value"])
-							.hover(function(){
-								$(this).toggleClass("selectionHighlight");
-							})
-							.click(function(){
-								requestSquadUnit(this.parentNode.childNodes[0].innerHTML);
-							})
-						subTr.appendChild(subTd); 
-
-					//	subTable.appendChild(subTr);
-
-					ele.parentNode.childNodes[(row*2)+2].childNodes[0].childNodes[0].appendChild(subTr);
-
-				$(ele).data("avail", true);
-			}
+					.append($("<td>").html(data[1][i]["name"]))
+					.append($("<td>").html(data[1][i]["value"]))
+					.append(
+						$("<td>").html("Add to Squadron")
+						.data("name", data[1][i]["name"])
+						.data("value", data[1][i]["value"])
+						.hover(function(){$(this).toggleClass("selectionHighlight");})
+						.click(function(){requestSquadUnit($(this).data("name"));})
+					)
+				)
 		}
+		showShipList(ele);
+	}
 
-
-		$(ele.parentNode.childNodes[(row*2)+2]).slideToggle(0);
+	function showShipList(ele){
+		$(ele).next().toggleClass("disabled");
+		//return;
 
 		var t = $(".factionUpperTable").position();
 		var h =  $(".factionUpperTable").height();
 		$("#game").css("top", t.top+h+20);
-
-	}
-
-	function selectReinforcementFaction(faction){
-		reinforceFaction.push(faction);
-		canSubmit();
-		return;
-	}
-
-	function unselectReinforcementFaction(faction){
-		for (var i = reinforceFaction.length; i >= 0; i--){
-			if (reinforceFaction[i] == faction){
-				reinforceFaction.splice(i, 1);
-				canSubmit();
-				return;
-			}
-		}
 	}
 
 	function joinGame(){

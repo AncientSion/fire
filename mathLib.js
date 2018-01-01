@@ -242,9 +242,6 @@ function getBeamIntercept(src, dst, vector){
 	return sol;
 }
 
-
-
-
 function quad(a,b,c) {
 	var sol = null;
 	if (Math.abs(a) < 1e-6) {
@@ -301,4 +298,19 @@ function drawText(ctx, color, text, size, p){
 					);	
 				
 	ctx.fillStyle = "black";
+}
+
+
+function getArcDir(element){
+	if (element.start == 0 &&element.end == 360){
+		return 0;
+	}
+	else if (element.start > element.end){
+	   return element.start + element.end;
+	}
+	else {
+	   return (element.start + element.end) / 2;
+	}
+
+	console.log("getArcDir ERROR");
 }
