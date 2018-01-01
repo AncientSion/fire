@@ -450,7 +450,6 @@ class Squaddie extends Single {
 
 class Light extends Squaddie {
 	public $baseImpulse = 190;
-	public $traverse = -1;
 	public $size = 60;
 	public $slipAngle = 25;
 	public $turnAngle = 40;
@@ -460,12 +459,9 @@ class Light extends Squaddie {
 	}
 }
 
-class SuperLight extends Squaddie {
+class SuperLight extends Light {
 	public $baseImpulse = 200;
-	public $traverse = -2;
 	public $size = 50;
-	public $slipAngle = 25;
-	public $turnAngle = 35;
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

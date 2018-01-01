@@ -102,7 +102,7 @@ class LightParticleBeam extends Laser {
 	public $maxBoost = 1;
 	public $rakes = 1;
 	public $mass = 20;
-	public $traverse = -2;
+	public $traverse = -1;
 	public $priority = 2.5;
 	
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
@@ -128,7 +128,7 @@ class LightLaser extends Laser {
 	public $maxBoost = 1;
 	public $rakes = 3;
 	public $mass = 20;
-	public $traverse = -4;
+	public $traverse = -3;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

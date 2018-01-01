@@ -90,9 +90,6 @@ Squaddie.prototype.getSystemDetailsDiv = function(){
 }
 
 Squaddie.prototype.expandElement = function(){
-
-	//var core = this.attachEvent(this.systems[0].getTableData(false));
-
 	var pDiv = $("<div>")
 		.addClass("primaryDiv")
 	var cTable = $("<table>")
@@ -482,8 +479,8 @@ Squadron.prototype.create = function(){
 	}
 	if (!this.structures.length){
 		this.currentImpulse = 0;
-		this.systems[0].output = 0;
-		this.systems[1].output = 0;
+		this.primary.systems[0].output = 0;
+		this.primary.systems[1].output = 0;
 	}
 }
 
@@ -508,7 +505,7 @@ Squadron.prototype.setLayout = function(){
 	else {
 		for (var i = 0; i < this.structures.length; i++){
 			var a = -45*(this.structures.length == 4) + -90*(this.structures.length == 2) + 360 /  this.structures.length * i;
-			var o = getPointInDirection(115 + (-20*(this.structures.length == 2)), a-90, 0, 0);
+			var o = getPointInDirection(115 + (-20*(this.structures.length == 2)) +(10*(this.structures.length == 4)), a-90, 0, 0);
 
 			minX = Math.min(minX, o.x);
 			maxX = Math.max(maxX, o.x);
@@ -1098,11 +1095,11 @@ Squadron.prototype.setStats = function(){
 		this.baseTurnDelay = Math.max(this.baseTurnDelay, this.structures[i].baseTurnDelay);
 		this.baseImpulseCost = Math.max(this.baseImpulseCost, this.structures[i].baseImpulseCost);
 		this.baseImpulse = Math.min(this.baseImpulse, this.structures[i].baseImpulse);
-		this.systems[0].output = Math.max(this.systems[0].output, this.structures[i].ew);
-		this.systems[0].update();
-		if (this.systems[1].output == 0){this.systems[1].output = this.structures[i].ep;}
-		else this.systems[1].output = Math.min(this.systems[1].output, this.structures[i].ep);
-		this.systems[1].update();
+		this.primary.systems[0].output = Math.max(this.primary.systems[0].output, this.structures[i].ew);
+		this.primary.systems[0].update();
+		if (this.primary.systems[1].output == 0){this.primary.systems[1].output = this.structures[i].ep;}
+		else this.primary.systems[1].output = Math.min(this.primary.systems[1].output, this.structures[i].ep);
+		this.primary.systems[1].update();
 	}
 
 	var a = this.baseImpulseCost;

@@ -76,7 +76,7 @@ class EMPulseCannon extends EM {
 	public $effiency = 2;
 	public $maxBoost = 3;
 	public $powerReq = 4;
-	public $traverse = -4;
+	public $traverse = -3;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

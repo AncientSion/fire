@@ -10,7 +10,7 @@ class Flight extends Mixed {
 	public $unitSize = 5;
 
 	public $fSize = 15;
-	public $traverse = -4;
+	public $traverse = -3;
 
 	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
         parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);

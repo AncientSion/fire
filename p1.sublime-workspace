@@ -866,10 +866,10 @@
 			}
 		},
 		{
-			"contents": "Searching 76 files for \"Error sh\"\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  908  \t\t\t}\n  909  \t\t}\n  910: \t\techo (\"ERROR ship getSystemById: \".$id.\" on unit #\".$this->id.\"/\".$this->display);\n  911  \t}\n  912  \n\n1 match in 1 file\n\n\nSearching 76 files for \"setUnitState\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  906  \t\t\tvar ship = window.initiateUnit(this.ships[i]);\n  907  \n  908: \t\t\t\tship.setUnitState();\n  909  \t\t\tvar deployed = 0;\n  910  \t\t\tvar friendly = 0;\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  363  \n  364  \t\tfor ($i = 0; $i < sizeof($units); $i++){\n  365: \t\t\t//Debug::log(\"manager setUnitState #\".$units[$i]->id);\n  366  \t\t\t//$units[$i]->addFireDB($this->fires);\n  367: \t\t\t$units[$i]->setUnitState($this->turn, $this->phase);\n  368  \t\t}\n  369  \n  ...\n  708  \t\t\t\t$this->ships[] = new Salvo($units[$i][\"id\"], $units[$i][\"userid\"], $this->turn, \"deployed\", 0, 0, 0, 0, 0, 0, \"\");\n  709  \n  710: \t\t\t\t$this->ships[sizeof($this->ships)-1]->setUnitState($this->turn, $this->phase);\n  711  \t\t\t\t$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->ships[$i]->id, $this->turn, \"deploy\", 0, $units[$i][\"actions\"][0][\"x\"], $units[$i][\"actions\"][0][\"y\"], $a, 0, 0, 0, 1, 1);\n  712  \t\t\t}\n  ...\n 1529  \n 1530  \t\t\n 1531: \t\t$unit->setUnitState(0, 0);\n 1532  \t\treturn $unit;\n 1533  \t}\n\nC:\\xampp\\htdocs\\fire\\server\\mixed.php:\n   44  \t}\n   45  \n   46: \tpublic function setUnitState($turn, $phase){\n   47: \t\tDebug::log(\"MIXED setUnitState #\".$this->id);\n   48  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n   49: \t\t\t$this->structures[$i]->setUnitState($turn, $phase);\n   50  \t\t}\n   51  \t\t$this->isDestroyed();\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n   76  \t}\n   77  \n   78: \tpublic function setUnitState($turn, $phase){\n   79: \t\t//Debug::log(\"ship setUnitState\");\n   80  \t\tif ($this->primary->isDestroyed()){\n   81  \t\t\t$this->destroyed = 1;\n\nC:\\xampp\\htdocs\\fire\\server\\squadron.php:\n   43  \t}\n   44  \n   45: \tpublic function setUnitState($turn, $phase){\n   46: \t\t//Debug::log(\"SQUADRON setUnitState \".$this->display.\" #\".$this->id);\n   47  \n   48  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n   49: \t\t\t$this->structures[$i]->setUnitState($turn, $phase);\n   50  \t\t}\n   51  \n   ..\n  333  \t}\n  334  \n  335: \tpublic function setUnitState($turn, $phase){\n  336: \t\t//Debug::log(\"  setUnitState \".$this->display.\" #\".$this->id);\n  337  \t\tif ($this->isDestroyed()){\n  338  \t\t\t$this->destroyed = 1;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\structure.php:\n  260  \t}\n  261  \n  262: \tpublic function setUnitState($turn, $phase){\n  263: \t\tDebug::log(\"SINGLE setUnitState\");\n  264  \t\tfor ($i = sizeof($this->damages)-1; $i >= 0; $i--){\n  265  \t\t\tif ($this->damages[$i]->destroyed){\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 1118  }\n 1119  \n 1120: Ship.prototype.setUnitState = function(){\n 1121  \tconsole.log(\"ding\");\n 1122  \tif (this.userid == game.userid){\n\n18 matches across 7 files\n\n\nSearching 76 files for \"setUnitState\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  906  \t\t\tvar ship = window.initiateUnit(this.ships[i]);\n  907  \n  908: \t\t\t\tship.setUnitState();\n  909  \t\t\tvar deployed = 0;\n  910  \t\t\tvar friendly = 0;\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  363  \n  364  \t\tfor ($i = 0; $i < sizeof($units); $i++){\n  365: \t\t\t//Debug::log(\"manager setUnitState #\".$units[$i]->id);\n  366  \t\t\t//$units[$i]->addFireDB($this->fires);\n  367: \t\t\t$units[$i]->setUnitState($this->turn, $this->phase);\n  368  \t\t}\n  369  \n  ...\n  708  \t\t\t\t$this->ships[] = new Salvo($units[$i][\"id\"], $units[$i][\"userid\"], $this->turn, \"deployed\", 0, 0, 0, 0, 0, 0, \"\");\n  709  \n  710: \t\t\t\t$this->ships[sizeof($this->ships)-1]->setUnitState($this->turn, $this->phase);\n  711  \t\t\t\t$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->ships[$i]->id, $this->turn, \"deploy\", 0, $units[$i][\"actions\"][0][\"x\"], $units[$i][\"actions\"][0][\"y\"], $a, 0, 0, 0, 1, 1);\n  712  \t\t\t}\n  ...\n 1529  \n 1530  \t\t\n 1531: \t\t$unit->setUnitState(0, 0);\n 1532  \t\treturn $unit;\n 1533  \t}\n\nC:\\xampp\\htdocs\\fire\\server\\mixed.php:\n   44  \t}\n   45  \n   46: \tpublic function setUnitState($turn, $phase){\n   47: \t\tDebug::log(\"MIXED setUnitState #\".$this->id);\n   48  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n   49: \t\t\t$this->structures[$i]->setUnitState($turn, $phase);\n   50  \t\t}\n   51  \t\t$this->isDestroyed();\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n   76  \t}\n   77  \n   78: \tpublic function setUnitState($turn, $phase){\n   79: \t\t//Debug::log(\"ship setUnitState\");\n   80  \t\tif ($this->primary->isDestroyed()){\n   81  \t\t\t$this->destroyed = 1;\n\nC:\\xampp\\htdocs\\fire\\server\\squadron.php:\n   43  \t}\n   44  \n   45: \tpublic function setUnitState($turn, $phase){\n   46: \t\t//Debug::log(\"SQUADRON setUnitState \".$this->display.\" #\".$this->id);\n   47  \n   48  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n   49: \t\t\t$this->structures[$i]->setUnitState($turn, $phase);\n   50  \t\t}\n   51  \n   ..\n  333  \t}\n  334  \n  335: \tpublic function setUnitState($turn, $phase){\n  336: \t\t//Debug::log(\"  setUnitState \".$this->display.\" #\".$this->id);\n  337  \t\tif ($this->isDestroyed()){\n  338  \t\t\t$this->destroyed = 1;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\structure.php:\n  260  \t}\n  261  \n  262: \tpublic function setUnitState($turn, $phase){\n  263: \t\tDebug::log(\"SINGLE setUnitState\");\n  264  \t\tfor ($i = sizeof($this->damages)-1; $i >= 0; $i--){\n  265  \t\t\tif ($this->damages[$i]->destroyed){\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 1118  }\n 1119  \n 1120: Ship.prototype.setUnitState = function(){\n 1121  \tconsole.log(\"ding\");\n 1122  \tif (this.userid == game.userid){\n\n18 matches across 7 files\n\n\nSearching 15 files for \"setUnitState\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  906  \t\t\tvar ship = window.initiateUnit(this.ships[i]);\n  907  \n  908: \t\t\t\tship.setUnitState();\n  909  \t\t\tvar deployed = 0;\n  910  \t\t\tvar friendly = 0;\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 1118  }\n 1119  \n 1120: Ship.prototype.setUnitState = function(){\n 1121  \tconsole.log(\"ding\");\n 1122  \tif (this.userid == game.userid){\n\n2 matches across 2 files\n\n\nSearching 15 files for \"deployed = 0\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  935  \t\t\tthis.reinforcements[i].createBaseDiv();\n  936  \t\t\tthis.reinforcements[i].friendly = 1;\n  937: \t\t\tthis.reinforcements[i].deployed = 0;\n  938  \t\t}\n  939  \n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n   49  \n   50  \tthis.friendly = 0;\n   51: \tthis.deployed = 0;\n   52  \tthis.isReady = 0;\n   53  \tthis.drawFacing = 0;\n\n2 matches across 2 files\n\n\nSearching 15 files for \"Salvo.prototype.createDeployEntry = function(){\n\"\n\nC:\\xampp\\htdocs\\fire\\salvo.js:\n  338  }\n  339  \n  340: Salvo.prototype.createDeployEntry = function(){\n  341: \tvar color = \"#ff3d00\";\n  342  \tif (this.friendly){color = \"#27e627\";}\n  343  \tvar html = \"<span><font color='\" + color + \"'>Salvo #\" + this.ships[i].id + \"</font> is launched (\" + this.ships[i].structures.length + \" units).</span>\";\n\n1 match in 1 file\n\n\nSearching 15 files for \"setImage\"\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n   88  }\n   89  \n   90: Flight.prototype.setImage = function(){\n   91: \t//console.log(\"setImage #\" + this.id);\n   92  \n   93  \tif (!this.mission.arrived){\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  254  \t\ts.setLayout();\n  255  \t\ts.setSize();\n  256: \t\ts.resetImage();\n  257  \t\ts.drawX = p.x;\n  258  \t\ts.drawY = p.y;\n  ...\n  923  \n  924  \t\tfor (var i = 0; i < this.ships.length; i++){\n  925: \t\t\tthis.ships[i].setImage();\n  926  \t\t\tthis.ships[i].createBaseDiv();\n  927  \t\t\tif (game.turn == 1 && game.phase == -1){continue;}\n  ...\n  932  \t\tfor (var i = 0; i < this.reinforcements.length; i++){\n  933  \t\t\tthis.reinforcements[i] = window.initiateUnit(this.reinforcements[i]);\n  934: \t\t\tthis.reinforcements[i].setImage();\n  935  \t\t\tthis.reinforcements[i].createBaseDiv();\n  936  \t\t\tthis.reinforcements[i].friendly = 1;\n  ...\n 1208  \t\t\tstack[i].setTarget();\n 1209  \t\t\tif (stack[i].mission.arrived){continue;}\n 1210: \t\t\tstack[i].setImage();\n 1211  \t\t}\n 1212  \n ....\n 1550  \n 1551  \tthis.resolveFire = function(){\n 1552: \t\tthis.resetImageData();\n 1553  \t\tthis.getResolvingFireOrders();\n 1554  \t\tthis.getShotDetails();\n ....\n 1569  \t}\n 1570  \n 1571: \tthis.resetImageData = function(){\n 1572: \t\tconsole.log(\"resetImageData\");\n 1573  \t\tfor (var i = 0; i < this.ships.length; i++){\n 1574  \t\t\t if (!this.ships[i].ship && !this.ships[i].squad){this.ships[i].setPreFireImage();}\n\nC:\\xampp\\htdocs\\fire\\mixed.js:\n  437  \t\t}\n  438  \t}\n  439: \tthis.resetImage();\n  440  }\n  441  \n\nC:\\xampp\\htdocs\\fire\\salvo.js:\n  296  }\n  297  \n  298: Salvo.prototype.setImage = function(){\n  299  \t//return;\n  300  \tvar t = document.createElement(\"canvas\");\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 1237  }\n 1238  \n 1239: Ship.prototype.setImage = function(){\n 1240: \tconsole.log(\"Ship setImage\");\n 1241  \tthis.img = window.shipImages[this.name.toLowerCase()];\n 1242  \treturn;\n ....\n 2318  \t\t}\n 2319  \t}\n 2320: \tthis.resetImage();\n 2321  }\n 2322  \n 2323: Ship.prototype.resetImage = function(){\n 2324  \tif (this.salvo){return;}\n 2325  \tthis.img = undefined;\n 2326: \tthis.setImage();\n 2327  }\n 2328  \n\nC:\\xampp\\htdocs\\fire\\squadron.js:\n 1032  }\n 1033  \n 1034: Squadron.prototype.setImage = function(){\n 1035: \tconsole.log(\"Squad setImage\");\n 1036  \tvar t = document.createElement(\"canvas\");\n 1037  \t\tt.width = this.size*2;\n\n18 matches across 6 files\n\n\nSearching 15 files for \"\"error\"\"\n\nC:\\xampp\\htdocs\\fire\\ajax.js:\n  416  \t\n  417  \terror: function(data){\n  418: \t\tconsole.log(\"error\");\n  419  \t},\n  420  \t\n\nC:\\xampp\\htdocs\\fire\\game.js:\n   93  \t\t}\n   94  \n   95: \t\treturn \"ERROR\";\n   96  \n   97  \n   ..\n   99  \t\t\tcase 1: return \"PATROL\";\n  100  \t\t\tcase 2: return \"STRIKE / ESCORT\";\n  101: \t\t\tdefault: return \"ERROR\";\n  102  \t\t}\n  103  \t}\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n   67  \t\tcase 2: return \"Firing Orders\";\n   68  \t\tcase 3: return \"Damage Control\";\n   69: \t\tdefault: return \"ERROR\";\n   70  \t}\n   71  }\n\n4 matches across 3 files\n\n\nSearching 15 files for \"\"error\"\"\n\nC:\\xampp\\htdocs\\fire\\ajax.js:\n  416  \t\n  417  \terror: function(data){\n  418: \t\tconsole.log(\"error\");\n  419  \t},\n  420  \t\n\nC:\\xampp\\htdocs\\fire\\game.js:\n   93  \t\t}\n   94  \n   95: \t\treturn \"ERROR\";\n   96  \n   97  \n   ..\n   99  \t\t\tcase 1: return \"PATROL\";\n  100  \t\t\tcase 2: return \"STRIKE / ESCORT\";\n  101: \t\t\tdefault: return \"ERROR\";\n  102  \t\t}\n  103  \t}\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n   67  \t\tcase 2: return \"Firing Orders\";\n   68  \t\tcase 3: return \"Damage Control\";\n   69: \t\tdefault: return \"ERROR\";\n   70  \t}\n   71  }\n\n4 matches across 3 files\n\n\nSearching 15 files for \"no dmg, \"\n\n0 matches\n\nSearching 15 files for \"\"no dmg, \"\n\n0 matches\n\nSearching 15 files for \"return.\"\"\n\n0 matches\n\nSearching 76 files for \"return.\"\"\n\nC:\\xampp\\htdocs\\fire\\server\\squadron.php:\n  194  \tpublic function getNewCrits($turn){\n  195  \t\t$crits = array();\n  196: \t\tif (!$this->damaged){Debug::log(\"no dmg, return.\"); return $crits;}\n  197  \n  198  \t\t/*for ($k = 0; $k < sizeof($this->systems); $k++){\n\n1 match in 1 file\n",
+			"contents": "Searching 76 files for \"Error sh\"\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  908  \t\t\t}\n  909  \t\t}\n  910: \t\techo (\"ERROR ship getSystemById: \".$id.\" on unit #\".$this->id.\"/\".$this->display);\n  911  \t}\n  912  \n\n1 match in 1 file\n\n\nSearching 76 files for \"setUnitState\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  906  \t\t\tvar ship = window.initiateUnit(this.ships[i]);\n  907  \n  908: \t\t\t\tship.setUnitState();\n  909  \t\t\tvar deployed = 0;\n  910  \t\t\tvar friendly = 0;\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  363  \n  364  \t\tfor ($i = 0; $i < sizeof($units); $i++){\n  365: \t\t\t//Debug::log(\"manager setUnitState #\".$units[$i]->id);\n  366  \t\t\t//$units[$i]->addFireDB($this->fires);\n  367: \t\t\t$units[$i]->setUnitState($this->turn, $this->phase);\n  368  \t\t}\n  369  \n  ...\n  708  \t\t\t\t$this->ships[] = new Salvo($units[$i][\"id\"], $units[$i][\"userid\"], $this->turn, \"deployed\", 0, 0, 0, 0, 0, 0, \"\");\n  709  \n  710: \t\t\t\t$this->ships[sizeof($this->ships)-1]->setUnitState($this->turn, $this->phase);\n  711  \t\t\t\t$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->ships[$i]->id, $this->turn, \"deploy\", 0, $units[$i][\"actions\"][0][\"x\"], $units[$i][\"actions\"][0][\"y\"], $a, 0, 0, 0, 1, 1);\n  712  \t\t\t}\n  ...\n 1529  \n 1530  \t\t\n 1531: \t\t$unit->setUnitState(0, 0);\n 1532  \t\treturn $unit;\n 1533  \t}\n\nC:\\xampp\\htdocs\\fire\\server\\mixed.php:\n   44  \t}\n   45  \n   46: \tpublic function setUnitState($turn, $phase){\n   47: \t\tDebug::log(\"MIXED setUnitState #\".$this->id);\n   48  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n   49: \t\t\t$this->structures[$i]->setUnitState($turn, $phase);\n   50  \t\t}\n   51  \t\t$this->isDestroyed();\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n   76  \t}\n   77  \n   78: \tpublic function setUnitState($turn, $phase){\n   79: \t\t//Debug::log(\"ship setUnitState\");\n   80  \t\tif ($this->primary->isDestroyed()){\n   81  \t\t\t$this->destroyed = 1;\n\nC:\\xampp\\htdocs\\fire\\server\\squadron.php:\n   43  \t}\n   44  \n   45: \tpublic function setUnitState($turn, $phase){\n   46: \t\t//Debug::log(\"SQUADRON setUnitState \".$this->display.\" #\".$this->id);\n   47  \n   48  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n   49: \t\t\t$this->structures[$i]->setUnitState($turn, $phase);\n   50  \t\t}\n   51  \n   ..\n  333  \t}\n  334  \n  335: \tpublic function setUnitState($turn, $phase){\n  336: \t\t//Debug::log(\"  setUnitState \".$this->display.\" #\".$this->id);\n  337  \t\tif ($this->isDestroyed()){\n  338  \t\t\t$this->destroyed = 1;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\structure.php:\n  260  \t}\n  261  \n  262: \tpublic function setUnitState($turn, $phase){\n  263: \t\tDebug::log(\"SINGLE setUnitState\");\n  264  \t\tfor ($i = sizeof($this->damages)-1; $i >= 0; $i--){\n  265  \t\t\tif ($this->damages[$i]->destroyed){\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 1118  }\n 1119  \n 1120: Ship.prototype.setUnitState = function(){\n 1121  \tconsole.log(\"ding\");\n 1122  \tif (this.userid == game.userid){\n\n18 matches across 7 files\n\n\nSearching 76 files for \"setUnitState\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  906  \t\t\tvar ship = window.initiateUnit(this.ships[i]);\n  907  \n  908: \t\t\t\tship.setUnitState();\n  909  \t\t\tvar deployed = 0;\n  910  \t\t\tvar friendly = 0;\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  363  \n  364  \t\tfor ($i = 0; $i < sizeof($units); $i++){\n  365: \t\t\t//Debug::log(\"manager setUnitState #\".$units[$i]->id);\n  366  \t\t\t//$units[$i]->addFireDB($this->fires);\n  367: \t\t\t$units[$i]->setUnitState($this->turn, $this->phase);\n  368  \t\t}\n  369  \n  ...\n  708  \t\t\t\t$this->ships[] = new Salvo($units[$i][\"id\"], $units[$i][\"userid\"], $this->turn, \"deployed\", 0, 0, 0, 0, 0, 0, \"\");\n  709  \n  710: \t\t\t\t$this->ships[sizeof($this->ships)-1]->setUnitState($this->turn, $this->phase);\n  711  \t\t\t\t$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->ships[$i]->id, $this->turn, \"deploy\", 0, $units[$i][\"actions\"][0][\"x\"], $units[$i][\"actions\"][0][\"y\"], $a, 0, 0, 0, 1, 1);\n  712  \t\t\t}\n  ...\n 1529  \n 1530  \t\t\n 1531: \t\t$unit->setUnitState(0, 0);\n 1532  \t\treturn $unit;\n 1533  \t}\n\nC:\\xampp\\htdocs\\fire\\server\\mixed.php:\n   44  \t}\n   45  \n   46: \tpublic function setUnitState($turn, $phase){\n   47: \t\tDebug::log(\"MIXED setUnitState #\".$this->id);\n   48  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n   49: \t\t\t$this->structures[$i]->setUnitState($turn, $phase);\n   50  \t\t}\n   51  \t\t$this->isDestroyed();\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n   76  \t}\n   77  \n   78: \tpublic function setUnitState($turn, $phase){\n   79: \t\t//Debug::log(\"ship setUnitState\");\n   80  \t\tif ($this->primary->isDestroyed()){\n   81  \t\t\t$this->destroyed = 1;\n\nC:\\xampp\\htdocs\\fire\\server\\squadron.php:\n   43  \t}\n   44  \n   45: \tpublic function setUnitState($turn, $phase){\n   46: \t\t//Debug::log(\"SQUADRON setUnitState \".$this->display.\" #\".$this->id);\n   47  \n   48  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n   49: \t\t\t$this->structures[$i]->setUnitState($turn, $phase);\n   50  \t\t}\n   51  \n   ..\n  333  \t}\n  334  \n  335: \tpublic function setUnitState($turn, $phase){\n  336: \t\t//Debug::log(\"  setUnitState \".$this->display.\" #\".$this->id);\n  337  \t\tif ($this->isDestroyed()){\n  338  \t\t\t$this->destroyed = 1;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\structure.php:\n  260  \t}\n  261  \n  262: \tpublic function setUnitState($turn, $phase){\n  263: \t\tDebug::log(\"SINGLE setUnitState\");\n  264  \t\tfor ($i = sizeof($this->damages)-1; $i >= 0; $i--){\n  265  \t\t\tif ($this->damages[$i]->destroyed){\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 1118  }\n 1119  \n 1120: Ship.prototype.setUnitState = function(){\n 1121  \tconsole.log(\"ding\");\n 1122  \tif (this.userid == game.userid){\n\n18 matches across 7 files\n\n\nSearching 15 files for \"setUnitState\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  906  \t\t\tvar ship = window.initiateUnit(this.ships[i]);\n  907  \n  908: \t\t\t\tship.setUnitState();\n  909  \t\t\tvar deployed = 0;\n  910  \t\t\tvar friendly = 0;\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 1118  }\n 1119  \n 1120: Ship.prototype.setUnitState = function(){\n 1121  \tconsole.log(\"ding\");\n 1122  \tif (this.userid == game.userid){\n\n2 matches across 2 files\n\n\nSearching 15 files for \"deployed = 0\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  935  \t\t\tthis.reinforcements[i].createBaseDiv();\n  936  \t\t\tthis.reinforcements[i].friendly = 1;\n  937: \t\t\tthis.reinforcements[i].deployed = 0;\n  938  \t\t}\n  939  \n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n   49  \n   50  \tthis.friendly = 0;\n   51: \tthis.deployed = 0;\n   52  \tthis.isReady = 0;\n   53  \tthis.drawFacing = 0;\n\n2 matches across 2 files\n\n\nSearching 15 files for \"Salvo.prototype.createDeployEntry = function(){\n\"\n\nC:\\xampp\\htdocs\\fire\\salvo.js:\n  338  }\n  339  \n  340: Salvo.prototype.createDeployEntry = function(){\n  341: \tvar color = \"#ff3d00\";\n  342  \tif (this.friendly){color = \"#27e627\";}\n  343  \tvar html = \"<span><font color='\" + color + \"'>Salvo #\" + this.ships[i].id + \"</font> is launched (\" + this.ships[i].structures.length + \" units).</span>\";\n\n1 match in 1 file\n\n\nSearching 15 files for \"setImage\"\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n   88  }\n   89  \n   90: Flight.prototype.setImage = function(){\n   91: \t//console.log(\"setImage #\" + this.id);\n   92  \n   93  \tif (!this.mission.arrived){\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  254  \t\ts.setLayout();\n  255  \t\ts.setSize();\n  256: \t\ts.resetImage();\n  257  \t\ts.drawX = p.x;\n  258  \t\ts.drawY = p.y;\n  ...\n  923  \n  924  \t\tfor (var i = 0; i < this.ships.length; i++){\n  925: \t\t\tthis.ships[i].setImage();\n  926  \t\t\tthis.ships[i].createBaseDiv();\n  927  \t\t\tif (game.turn == 1 && game.phase == -1){continue;}\n  ...\n  932  \t\tfor (var i = 0; i < this.reinforcements.length; i++){\n  933  \t\t\tthis.reinforcements[i] = window.initiateUnit(this.reinforcements[i]);\n  934: \t\t\tthis.reinforcements[i].setImage();\n  935  \t\t\tthis.reinforcements[i].createBaseDiv();\n  936  \t\t\tthis.reinforcements[i].friendly = 1;\n  ...\n 1208  \t\t\tstack[i].setTarget();\n 1209  \t\t\tif (stack[i].mission.arrived){continue;}\n 1210: \t\t\tstack[i].setImage();\n 1211  \t\t}\n 1212  \n ....\n 1550  \n 1551  \tthis.resolveFire = function(){\n 1552: \t\tthis.resetImageData();\n 1553  \t\tthis.getResolvingFireOrders();\n 1554  \t\tthis.getShotDetails();\n ....\n 1569  \t}\n 1570  \n 1571: \tthis.resetImageData = function(){\n 1572: \t\tconsole.log(\"resetImageData\");\n 1573  \t\tfor (var i = 0; i < this.ships.length; i++){\n 1574  \t\t\t if (!this.ships[i].ship && !this.ships[i].squad){this.ships[i].setPreFireImage();}\n\nC:\\xampp\\htdocs\\fire\\mixed.js:\n  437  \t\t}\n  438  \t}\n  439: \tthis.resetImage();\n  440  }\n  441  \n\nC:\\xampp\\htdocs\\fire\\salvo.js:\n  296  }\n  297  \n  298: Salvo.prototype.setImage = function(){\n  299  \t//return;\n  300  \tvar t = document.createElement(\"canvas\");\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 1237  }\n 1238  \n 1239: Ship.prototype.setImage = function(){\n 1240: \tconsole.log(\"Ship setImage\");\n 1241  \tthis.img = window.shipImages[this.name.toLowerCase()];\n 1242  \treturn;\n ....\n 2318  \t\t}\n 2319  \t}\n 2320: \tthis.resetImage();\n 2321  }\n 2322  \n 2323: Ship.prototype.resetImage = function(){\n 2324  \tif (this.salvo){return;}\n 2325  \tthis.img = undefined;\n 2326: \tthis.setImage();\n 2327  }\n 2328  \n\nC:\\xampp\\htdocs\\fire\\squadron.js:\n 1032  }\n 1033  \n 1034: Squadron.prototype.setImage = function(){\n 1035: \tconsole.log(\"Squad setImage\");\n 1036  \tvar t = document.createElement(\"canvas\");\n 1037  \t\tt.width = this.size*2;\n\n18 matches across 6 files\n\n\nSearching 15 files for \"\"error\"\"\n\nC:\\xampp\\htdocs\\fire\\ajax.js:\n  416  \t\n  417  \terror: function(data){\n  418: \t\tconsole.log(\"error\");\n  419  \t},\n  420  \t\n\nC:\\xampp\\htdocs\\fire\\game.js:\n   93  \t\t}\n   94  \n   95: \t\treturn \"ERROR\";\n   96  \n   97  \n   ..\n   99  \t\t\tcase 1: return \"PATROL\";\n  100  \t\t\tcase 2: return \"STRIKE / ESCORT\";\n  101: \t\t\tdefault: return \"ERROR\";\n  102  \t\t}\n  103  \t}\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n   67  \t\tcase 2: return \"Firing Orders\";\n   68  \t\tcase 3: return \"Damage Control\";\n   69: \t\tdefault: return \"ERROR\";\n   70  \t}\n   71  }\n\n4 matches across 3 files\n\n\nSearching 15 files for \"\"error\"\"\n\nC:\\xampp\\htdocs\\fire\\ajax.js:\n  416  \t\n  417  \terror: function(data){\n  418: \t\tconsole.log(\"error\");\n  419  \t},\n  420  \t\n\nC:\\xampp\\htdocs\\fire\\game.js:\n   93  \t\t}\n   94  \n   95: \t\treturn \"ERROR\";\n   96  \n   97  \n   ..\n   99  \t\t\tcase 1: return \"PATROL\";\n  100  \t\t\tcase 2: return \"STRIKE / ESCORT\";\n  101: \t\t\tdefault: return \"ERROR\";\n  102  \t\t}\n  103  \t}\n\nC:\\xampp\\htdocs\\fire\\shared.js:\n   67  \t\tcase 2: return \"Firing Orders\";\n   68  \t\tcase 3: return \"Damage Control\";\n   69: \t\tdefault: return \"ERROR\";\n   70  \t}\n   71  }\n\n4 matches across 3 files\n\n\nSearching 15 files for \"no dmg, \"\n\n0 matches\n\nSearching 15 files for \"\"no dmg, \"\n\n0 matches\n\nSearching 15 files for \"return.\"\"\n\n0 matches\n\nSearching 76 files for \"return.\"\"\n\nC:\\xampp\\htdocs\\fire\\server\\squadron.php:\n  194  \tpublic function getNewCrits($turn){\n  195  \t\t$crits = array();\n  196: \t\tif (!$this->damaged){Debug::log(\"no dmg, return.\"); return $crits;}\n  197  \n  198  \t\t/*for ($k = 0; $k < sizeof($this->systems); $k++){\n\n1 match in 1 file\n\n\nSearching 76 files for \"= -5\"\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\ammo.php:\n  112  \tpublic $mass = 2;\n  113  \tpublic $cost = 6;\n  114: \tpublic $traverse = -5;\n  115  \n  116  \tfunction __construct($parentId, $id){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\linked.php:\n    6  \tpublic $reload = 1;\n    7  \tpublic $priority = 10;\n    8: \tpublic $traverse = -5;\n    9  \tpublic $accDecay = 0;\n   10  \tpublic $tiny = 1;\n   ..\n   85  \tpublic $projSpeed = 7;\n   86  \tpublic $projSize = 1.5;\n   87: \tpublic $traverse = -5;\n   88  \n   89  \tfunction __construct($id, $fighterId, $parentId, $volley, $minDmg, $maxDmg, $start, $end){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php:\n   24  \tpublic $mass = 14;\n   25  \tpublic $powerReq = 2;\n   26: \tpublic $traverse = -5;\n   27  \tpublic $effiency = 3;\n   28  \tpublic $maxBoost = 1;\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 1902  \t// PRIMARY OFFSET\n 1903  \tvar offsetX = 0;\n 1904: \tvar offsetY = -50;\n 1905  \tif (noFront){\n 1906  \t\toffsetY -= 40;\n\n5 matches across 4 files\n\n\nSearching 76 files for \"= -4\"\n\nC:\\xampp\\htdocs\\fire\\server\\salvo.php:\n    5  \tpublic $unitType = \"Salvo\";\n    6  \tpublic $salvo = true;\n    7: \tpublic $traverse = -4;\n    8  \tpublic $trajectory;\n    9  \n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\ammo.php:\n   70  \tpublic $mass = 3;\n   71  \tpublic $cost = 6;\n   72: \tpublic $traverse = -4;\n   73  \n   74  \tfunction __construct($parentId, $id){\n   ..\n  126  \tpublic $mass = 3;\n  127  \tpublic $cost = 6;\n  128: \tpublic $traverse = -4;\n  129  \n  130  \tfunction __construct($parentId, $id){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\area.php:\n   33  \tpublic $mass = 14;\n   34  \tpublic $powerReq = 4;\n   35: \tpublic $traverse = -4;\n   36  \n   37  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\em.php:\n   77  \tpublic $maxBoost = 3;\n   78  \tpublic $powerReq = 4;\n   79: \tpublic $traverse = -4;\n   80  \n   81  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php:\n  129  \tpublic $rakes = 3;\n  130  \tpublic $mass = 20;\n  131: \tpublic $traverse = -4;\n  132  \n  133  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php:\n   94  \tpublic $mass = 12;\n   95  \tpublic $powerReq = 2;\n   96: \tpublic $traverse = -4;\n   97  \n   98  \tfunction __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){\n\nC:\\xampp\\htdocs\\fire\\squadron.js:\n  505  \telse {\n  506  \t\tfor (var i = 0; i < this.structures.length; i++){\n  507: \t\t\tvar a = -45*(this.structures.length == 4) + -90*(this.structures.length == 2) + 360 /  this.structures.length * i;\n  508  \t\t\tvar o = getPointInDirection(115 + (-20*(this.structures.length == 2)), a-90, 0, 0);\n  509  \n\n8 matches across 7 files\n\n\nSearching 76 files for \"public $traverse = -2\"\n\nC:\\xampp\\htdocs\\fire\\server\\squadron.php:\n  463  class SuperLight extends Squaddie {\n  464  \tpublic $baseImpulse = 200;\n  465: \tpublic $traverse = -2;\n  466  \tpublic $size = 50;\n  467  \tpublic $slipAngle = 25;\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\laser.php:\n  103  \tpublic $rakes = 1;\n  104  \tpublic $mass = 20;\n  105: \tpublic $traverse = -2;\n  106  \tpublic $priority = 2.5;\n  107  \t\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\plasma.php:\n   55  \tpublic $reload = 2;\n   56  \tpublic $mass = 18;\n   57: \tpublic $traverse = -2;\n   58  \tpublic $powerReq = 3;\n   59  \tpublic $maxBoost = 1;\n\n3 matches across 3 files\n",
 			"settings":
 			{
-				"buffer_size": 10812,
+				"buffer_size": 14390,
 				"line_ending": "Windows",
 				"name": "Find Results",
 				"scratch": true
@@ -879,7 +879,7 @@
 			"file": "server/squadron.php",
 			"settings":
 			{
-				"buffer_size": 13020,
+				"buffer_size": 12919,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -888,7 +888,7 @@
 			"file": "squadron.js",
 			"settings":
 			{
-				"buffer_size": 34685,
+				"buffer_size": 34694,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1410,7 +1410,7 @@
 	],
 	"find":
 	{
-		"height": 40.0
+		"height": 23.0
 	},
 	"find_in_files":
 	{
@@ -1552,6 +1552,13 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"public $traverse = -2",
+			"public $traverse = -4",
+			"= -4",
+			"= -5",
+			"systems.",
+			"this.systems",
+			"this.systems[",
 			"getRemainingImpulse ",
 			"hasOpenMoves",
 			"doConfirmOrders",
@@ -1672,14 +1679,7 @@
 			"create ",
 			"canBeBoosted ",
 			"canBeBoosted",
-			"setBaseStats",
-			"clientSetup",
-			"systems[0]",
-			"requestship",
-			"setStats",
-			"setBases",
-			"\".outputMask\")",
-			"\".outputDiv\")"
+			"setBaseStats"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1687,6 +1687,8 @@
 		"regex": false,
 		"replace_history":
 		[
+			"public $traverse = -1",
+			"public $traverse = -3",
 			"facing",
 			"facingfacing",
 			"facing",
@@ -1812,9 +1814,7 @@
 			"$this->ships",
 			"getDmgByFire",
 			"Main Hull",
-			"handleFlightDeployMouseMove",
-			"salvoCtx",
-			"testForCrits"
+			"handleFlightDeployMouseMove"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -1825,7 +1825,7 @@
 	"groups":
 	[
 		{
-			"selected": 5,
+			"selected": 39,
 			"sheets":
 			[
 				{
@@ -1913,7 +1913,7 @@
 						"translation.y": 2014.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 73,
+					"stack_index": 80,
 					"type": "text"
 				},
 				{
@@ -2002,7 +2002,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 37,
 					"type": "text"
 				},
 				{
@@ -2090,7 +2090,7 @@
 						"translation.y": 6826.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 43,
+					"stack_index": 52,
 					"type": "text"
 				},
 				{
@@ -2178,7 +2178,7 @@
 						"translation.y": 8224.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 47,
+					"stack_index": 56,
 					"type": "text"
 				},
 				{
@@ -2223,8 +2223,8 @@
 						"selection":
 						[
 							[
-								6249,
-								6249
+								6849,
+								6849
 							]
 						],
 						"settings":
@@ -2232,61 +2232,61 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
 								"bh_regex_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
 								"bh_tag_close",
 								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
-								"bh_square_content"
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
 							],
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"translate_tabs_to_spaces": false
@@ -2295,7 +2295,7 @@
 						"translation.y": 3206.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
@@ -2383,7 +2383,7 @@
 						"translation.y": 791.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 31,
 					"type": "text"
 				},
 				{
@@ -2471,7 +2471,7 @@
 						"translation.y": 41491.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
@@ -2487,8 +2487,8 @@
 						"selection":
 						[
 							[
-								2651,
-								2651
+								3291,
+								3291
 							]
 						],
 						"settings":
@@ -2496,41 +2496,31 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
 								"bh_round",
 								"bh_round_center",
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
@@ -2541,25 +2531,35 @@
 								"bh_tag_open",
 								"bh_tag_close",
 								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content"
+								"bh_unmatched_content"
 							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 23.0,
+						"translation.y": 1035.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 76,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -2647,7 +2647,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 98,
+					"stack_index": 101,
 					"type": "text"
 				},
 				{
@@ -2735,7 +2735,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 96,
+					"stack_index": 99,
 					"type": "text"
 				},
 				{
@@ -2823,7 +2823,7 @@
 						"translation.y": 13424.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
@@ -2911,7 +2911,7 @@
 						"translation.y": 314.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 87,
+					"stack_index": 92,
 					"type": "text"
 				},
 				{
@@ -2927,8 +2927,8 @@
 						"selection":
 						[
 							[
-								1039,
-								1039
+								1293,
+								1293
 							]
 						],
 						"settings":
@@ -2936,21 +2936,46 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
 								"bh_regex_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
@@ -2961,45 +2986,20 @@
 								"bh_single_quote_open",
 								"bh_single_quote_close",
 								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
+								"bh_unmatched_content"
 							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 78.0,
+						"translation.y": 26.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 59,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -3087,7 +3087,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 89,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -3176,7 +3176,7 @@
 						"translation.y": 446.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 95,
+					"stack_index": 98,
 					"type": "text"
 				},
 				{
@@ -3264,7 +3264,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 77,
+					"stack_index": 83,
 					"type": "text"
 				},
 				{
@@ -3352,7 +3352,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 82,
+					"stack_index": 88,
 					"type": "text"
 				},
 				{
@@ -3382,7 +3382,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 80,
+					"stack_index": 86,
 					"type": "text"
 				},
 				{
@@ -3470,7 +3470,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 107,
+					"stack_index": 109,
 					"type": "text"
 				},
 				{
@@ -3558,7 +3558,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 34,
+					"stack_index": 44,
 					"type": "text"
 				},
 				{
@@ -3646,7 +3646,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 81,
+					"stack_index": 87,
 					"type": "text"
 				},
 				{
@@ -3734,7 +3734,7 @@
 						"translation.y": 117.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 55,
+					"stack_index": 64,
 					"type": "text"
 				},
 				{
@@ -3822,7 +3822,7 @@
 						"translation.y": 62.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 114,
+					"stack_index": 116,
 					"type": "text"
 				},
 				{
@@ -3910,7 +3910,7 @@
 						"translation.y": 1119.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 23,
 					"type": "text"
 				},
 				{
@@ -3998,7 +3998,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 46,
+					"stack_index": 55,
 					"type": "text"
 				},
 				{
@@ -4086,7 +4086,7 @@
 						"translation.y": 144.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 56,
+					"stack_index": 65,
 					"type": "text"
 				},
 				{
@@ -4174,7 +4174,7 @@
 						"translation.y": 123.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 50,
+					"stack_index": 59,
 					"type": "text"
 				},
 				{
@@ -4262,7 +4262,7 @@
 						"translation.y": 611.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 71,
+					"stack_index": 78,
 					"type": "text"
 				},
 				{
@@ -4350,7 +4350,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
@@ -4438,7 +4438,7 @@
 						"translation.y": 424.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
@@ -4527,7 +4527,7 @@
 						"translation.y": 1066.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 36,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -4612,10 +4612,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 390.0,
+						"translation.y": 338.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 35,
 					"type": "text"
 				},
 				{
@@ -4703,7 +4703,7 @@
 						"translation.y": 323.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 94,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -4792,7 +4792,7 @@
 						"translation.y": 99.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
@@ -4881,7 +4881,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 91,
+					"stack_index": 95,
 					"type": "text"
 				},
 				{
@@ -4969,7 +4969,7 @@
 						"translation.y": 3487.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
+					"stack_index": 33,
 					"type": "text"
 				},
 				{
@@ -5057,7 +5057,7 @@
 						"translation.y": 2049.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 25,
 					"type": "text"
 				},
 				{
@@ -5065,7 +5065,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10812,
+						"buffer_size": 14390,
 						"regions":
 						{
 							"match":
@@ -5348,6 +5348,70 @@
 									[
 										10698,
 										10706
+									],
+									[
+										10976,
+										10980
+									],
+									[
+										11177,
+										11181
+									],
+									[
+										11333,
+										11337
+									],
+									[
+										11587,
+										11591
+									],
+									[
+										11762,
+										11766
+									],
+									[
+										12004,
+										12008
+									],
+									[
+										12178,
+										12182
+									],
+									[
+										12321,
+										12325
+									],
+									[
+										12518,
+										12522
+									],
+									[
+										12763,
+										12767
+									],
+									[
+										13005,
+										13009
+									],
+									[
+										13250,
+										13254
+									],
+									[
+										13482,
+										13486
+									],
+									[
+										13897,
+										13918
+									],
+									[
+										14097,
+										14118
+									],
+									[
+										14281,
+										14302
 									]
 								],
 								"scope": ""
@@ -5356,15 +5420,74 @@
 						"selection":
 						[
 							[
-								10701,
-								10701
+								13721,
+								13721
 							]
 						],
 						"settings":
 						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
 							"detect_indentation": false,
 							"line_numbers": false,
-							"output_tag": 13,
+							"output_tag": 16,
 							"result_base_dir": "",
 							"result_file_regex": "^([^ \t].*):$",
 							"result_line_regex": "^ +([0-9]+):",
@@ -5372,10 +5495,10 @@
 							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 5226.0,
+						"translation.y": 6579.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -5384,15 +5507,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 13020,
+						"buffer_size": 12919,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4133,
-								4133
+								680,
+								680
 							]
 						],
 						"settings":
@@ -5400,70 +5523,70 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
 								"bh_round",
 								"bh_round_center",
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
 								"bh_default_close",
 								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
-								"bh_square_content"
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
 							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1100.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -5472,15 +5595,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 34685,
+						"buffer_size": 34694,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								34685,
-								34685
+								2447,
+								2447
 							]
 						],
 						"settings":
@@ -5493,21 +5616,26 @@
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
 								"bh_regex_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
@@ -5518,40 +5646,35 @@
 								"bh_tag_open",
 								"bh_tag_close",
 								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content"
+								"bh_unmatched_content"
 							],
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 15704.0,
+						"translation.y": 840.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
@@ -5567,8 +5690,8 @@
 						"selection":
 						[
 							[
-								2122,
-								2122
+								654,
+								654
 							]
 						],
 						"settings":
@@ -5581,65 +5704,65 @@
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
 								"bh_round",
 								"bh_round_center",
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content"
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
 							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 904.0,
+						"translation.y": 20.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 104,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -5668,7 +5791,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 115,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -5756,7 +5879,7 @@
 						"translation.y": 8933.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 27,
 					"type": "text"
 				},
 				{
@@ -5845,7 +5968,7 @@
 						"translation.y": 2949.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 99,
+					"stack_index": 102,
 					"type": "text"
 				},
 				{
@@ -5933,7 +6056,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 83,
+					"stack_index": 89,
 					"type": "text"
 				},
 				{
@@ -6021,7 +6144,7 @@
 						"translation.y": 3063.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 38,
+					"stack_index": 47,
 					"type": "text"
 				},
 				{
@@ -6109,7 +6232,7 @@
 						"translation.y": 156.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 36,
 					"type": "text"
 				},
 				{
@@ -6198,7 +6321,7 @@
 						"translation.y": 240.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 48,
+					"stack_index": 57,
 					"type": "text"
 				},
 				{
@@ -6286,7 +6409,7 @@
 						"translation.y": 5761.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
@@ -6375,7 +6498,7 @@
 						"translation.y": 510.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 32,
 					"type": "text"
 				},
 				{
@@ -6464,7 +6587,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 39,
 					"type": "text"
 				},
 				{
@@ -6480,8 +6603,8 @@
 						"selection":
 						[
 							[
-								1305,
-								1305
+								845,
+								845
 							]
 						],
 						"settings":
@@ -6489,61 +6612,61 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
 								"bh_double_quote_close",
 								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
 							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
@@ -6552,7 +6675,7 @@
 						"translation.y": 39.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 70,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -6640,7 +6763,7 @@
 						"translation.y": 8237.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
@@ -6728,7 +6851,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 97,
+					"stack_index": 100,
 					"type": "text"
 				},
 				{
@@ -6817,13 +6940,13 @@
 						"translation.y": 40.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 118,
+					"stack_index": 10,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 13,
+			"selected": 46,
 			"sheets":
 			[
 				{
@@ -6852,7 +6975,7 @@
 						"translation.y": 34.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 112,
+					"stack_index": 114,
 					"type": "text"
 				},
 				{
@@ -6868,8 +6991,8 @@
 						"selection":
 						[
 							[
-								1756,
-								1756
+								134,
+								134
 							]
 						],
 						"settings":
@@ -6877,21 +7000,46 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
 								"bh_regex_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
@@ -6902,45 +7050,20 @@
 								"bh_single_quote_open",
 								"bh_single_quote_close",
 								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
+								"bh_unmatched_content"
 							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 327.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 85,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -7028,7 +7151,7 @@
 						"translation.y": 5141.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 49,
+					"stack_index": 58,
 					"type": "text"
 				},
 				{
@@ -7116,7 +7239,7 @@
 						"translation.y": 4.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 45,
+					"stack_index": 54,
 					"type": "text"
 				},
 				{
@@ -7204,7 +7327,7 @@
 						"translation.y": 1.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 23,
+					"stack_index": 34,
 					"type": "text"
 				},
 				{
@@ -7292,7 +7415,7 @@
 						"translation.y": 612.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 63,
+					"stack_index": 71,
 					"type": "text"
 				},
 				{
@@ -7380,7 +7503,7 @@
 						"translation.y": 56.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 101,
+					"stack_index": 104,
 					"type": "text"
 				},
 				{
@@ -7468,7 +7591,7 @@
 						"translation.y": 246.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 60,
+					"stack_index": 68,
 					"type": "text"
 				},
 				{
@@ -7557,7 +7680,7 @@
 						"translation.y": 2738.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
@@ -7646,7 +7769,7 @@
 						"translation.y": 1399.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 24,
 					"type": "text"
 				},
 				{
@@ -7735,7 +7858,7 @@
 						"translation.y": 585.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 90,
+					"stack_index": 94,
 					"type": "text"
 				},
 				{
@@ -7823,7 +7946,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 93,
+					"stack_index": 97,
 					"type": "text"
 				},
 				{
@@ -7911,7 +8034,7 @@
 						"translation.y": 2224.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 64,
+					"stack_index": 72,
 					"type": "text"
 				},
 				{
@@ -7936,21 +8059,46 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
 								"bh_regex_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
@@ -7961,36 +8109,11 @@
 								"bh_single_quote_open",
 								"bh_single_quote_close",
 								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
+								"bh_unmatched_content"
 							],
 							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"translate_tabs_to_spaces": false
@@ -7999,7 +8122,7 @@
 						"translation.y": 19229.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
@@ -8008,15 +8131,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 34685,
+						"buffer_size": 34694,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								19407,
-								19407
+								19352,
+								19352
 							]
 						],
 						"settings":
@@ -8084,10 +8207,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 9225.0,
+						"translation.y": 9186.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
@@ -8175,7 +8298,7 @@
 						"translation.y": 10479.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 52,
+					"stack_index": 61,
 					"type": "text"
 				},
 				{
@@ -8263,7 +8386,7 @@
 						"translation.y": 3651.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 78,
+					"stack_index": 84,
 					"type": "text"
 				},
 				{
@@ -8352,7 +8475,7 @@
 						"translation.y": 968.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 51,
+					"stack_index": 60,
 					"type": "text"
 				},
 				{
@@ -8441,7 +8564,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 117,
+					"stack_index": 118,
 					"type": "text"
 				},
 				{
@@ -8529,7 +8652,7 @@
 						"translation.y": 8052.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 54,
+					"stack_index": 63,
 					"type": "text"
 				},
 				{
@@ -8618,7 +8741,7 @@
 						"translation.y": 1.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 108,
+					"stack_index": 110,
 					"type": "text"
 				},
 				{
@@ -8706,7 +8829,7 @@
 						"translation.y": 234.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 92,
+					"stack_index": 96,
 					"type": "text"
 				},
 				{
@@ -8794,7 +8917,7 @@
 						"translation.y": 11406.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 30,
+					"stack_index": 41,
 					"type": "text"
 				},
 				{
@@ -8882,7 +9005,7 @@
 						"translation.y": 2175.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 84,
+					"stack_index": 90,
 					"type": "text"
 				},
 				{
@@ -8970,7 +9093,7 @@
 						"translation.y": 226.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 75,
+					"stack_index": 82,
 					"type": "text"
 				},
 				{
@@ -9058,7 +9181,7 @@
 						"translation.y": 280.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 53,
+					"stack_index": 62,
 					"type": "text"
 				},
 				{
@@ -9146,7 +9269,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 31,
+					"stack_index": 42,
 					"type": "text"
 				},
 				{
@@ -9175,7 +9298,7 @@
 						"translation.y": 234.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 105,
+					"stack_index": 107,
 					"type": "text"
 				},
 				{
@@ -9204,7 +9327,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 110,
+					"stack_index": 112,
 					"type": "text"
 				},
 				{
@@ -9292,7 +9415,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 109,
+					"stack_index": 111,
 					"type": "text"
 				},
 				{
@@ -9380,7 +9503,7 @@
 						"translation.y": 954.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 79,
+					"stack_index": 85,
 					"type": "text"
 				},
 				{
@@ -9469,7 +9592,7 @@
 						"translation.y": 248.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 61,
+					"stack_index": 69,
 					"type": "text"
 				},
 				{
@@ -9557,7 +9680,7 @@
 						"translation.y": 52.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 68,
+					"stack_index": 76,
 					"type": "text"
 				},
 				{
@@ -9645,7 +9768,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 69,
+					"stack_index": 77,
 					"type": "text"
 				},
 				{
@@ -9733,7 +9856,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 67,
+					"stack_index": 75,
 					"type": "text"
 				},
 				{
@@ -9822,7 +9945,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 30,
 					"type": "text"
 				},
 				{
@@ -9910,7 +10033,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 40,
+					"stack_index": 49,
 					"type": "text"
 				},
 				{
@@ -9998,7 +10121,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 35,
+					"stack_index": 45,
 					"type": "text"
 				},
 				{
@@ -10086,7 +10209,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 58,
+					"stack_index": 67,
 					"type": "text"
 				},
 				{
@@ -10115,7 +10238,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 42,
+					"stack_index": 51,
 					"type": "text"
 				},
 				{
@@ -10203,7 +10326,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 41,
+					"stack_index": 50,
 					"type": "text"
 				},
 				{
@@ -10291,7 +10414,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 40,
 					"type": "text"
 				},
 				{
@@ -10379,7 +10502,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 38,
 					"type": "text"
 				},
 				{
@@ -10467,7 +10590,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 113,
+					"stack_index": 115,
 					"type": "text"
 				},
 				{
@@ -10555,7 +10678,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 32,
+					"stack_index": 43,
 					"type": "text"
 				},
 				{
@@ -10643,7 +10766,7 @@
 						"translation.y": 3339.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 86,
+					"stack_index": 91,
 					"type": "text"
 				},
 				{
@@ -10659,8 +10782,8 @@
 						"selection":
 						[
 							[
-								2090,
-								2090
+								262,
+								262
 							]
 						],
 						"settings":
@@ -10669,21 +10792,46 @@
 							"auto_name": "<?php",
 							"bh_regions":
 							[
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
 								"bh_regex_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
@@ -10694,45 +10842,20 @@
 								"bh_single_quote_open",
 								"bh_single_quote_close",
 								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
+								"bh_unmatched_content"
 							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 41.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 33,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -10821,7 +10944,7 @@
 						"translation.y": 507.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 37,
+					"stack_index": 46,
 					"type": "text"
 				},
 				{
@@ -10909,7 +11032,7 @@
 						"translation.y": 602.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 100,
+					"stack_index": 103,
 					"type": "text"
 				},
 				{
@@ -10997,7 +11120,7 @@
 						"translation.y": 3212.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 62,
+					"stack_index": 70,
 					"type": "text"
 				},
 				{
@@ -11086,7 +11209,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 44,
+					"stack_index": 53,
 					"type": "text"
 				},
 				{
@@ -11174,7 +11297,7 @@
 						"translation.y": 49.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 65,
+					"stack_index": 73,
 					"type": "text"
 				},
 				{
@@ -11262,7 +11385,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 74,
+					"stack_index": 81,
 					"type": "text"
 				},
 				{
@@ -11350,7 +11473,7 @@
 						"translation.y": 29.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 88,
+					"stack_index": 93,
 					"type": "text"
 				},
 				{
@@ -11438,7 +11561,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 116,
+					"stack_index": 117,
 					"type": "text"
 				},
 				{
@@ -11526,7 +11649,7 @@
 						"translation.y": 28.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 39,
+					"stack_index": 48,
 					"type": "text"
 				},
 				{
@@ -11555,7 +11678,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 106,
+					"stack_index": 108,
 					"type": "text"
 				},
 				{
@@ -11643,7 +11766,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 66,
+					"stack_index": 74,
 					"type": "text"
 				},
 				{
@@ -11732,7 +11855,7 @@
 						"translation.y": 103.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 72,
+					"stack_index": 79,
 					"type": "text"
 				},
 				{
@@ -11820,7 +11943,7 @@
 						"translation.y": 339.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 57,
+					"stack_index": 66,
 					"type": "text"
 				},
 				{
@@ -11829,7 +11952,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 13020,
+						"buffer_size": 12919,
 						"regions":
 						{
 						},
@@ -11908,7 +12031,7 @@
 						"translation.y": 781.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
@@ -11996,7 +12119,7 @@
 						"translation.y": 286.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 111,
+					"stack_index": 113,
 					"type": "text"
 				},
 				{
@@ -12084,7 +12207,7 @@
 						"translation.y": 195.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 102,
+					"stack_index": 105,
 					"type": "text"
 				},
 				{
@@ -12172,7 +12295,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 103,
+					"stack_index": 106,
 					"type": "text"
 				}
 			]
@@ -12224,7 +12347,7 @@
 	"project": "p1.sublime-project",
 	"replace":
 	{
-		"height": 72.0
+		"height": 42.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -12234,12 +12357,36 @@
 		"selected_items":
 		[
 			[
-				"mix",
-				"C:\\xampp\\htdocs\\fire\\mixed.js"
+				"sq",
+				"C:\\xampp\\htdocs\\fire\\server\\squadron.php"
 			],
 			[
-				"sq",
-				"C:\\xampp\\htdocs\\fire\\squadron.js"
+				"pa",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php"
+			],
+			[
+				"fl",
+				"C:\\xampp\\htdocs\\fire\\server\\flight.php"
+			],
+			[
+				"puls",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
+			],
+			[
+				"sal",
+				"C:\\xampp\\htdocs\\fire\\server\\salvo.php"
+			],
+			[
+				"flig",
+				"C:\\xampp\\htdocs\\fire\\server\\flight.php"
+			],
+			[
+				"games",
+				"C:\\xampp\\htdocs\\fire\\gameSetup.php"
+			],
+			[
+				"mix",
+				"C:\\xampp\\htdocs\\fire\\mixed.js"
 			],
 			[
 				"game",
@@ -12298,16 +12445,8 @@
 				"C:\\xampp\\htdocs\\fire\\game.js"
 			],
 			[
-				"fl",
-				"C:\\xampp\\htdocs\\fire\\flights.js"
-			],
-			[
 				"game.js",
 				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
-				"sal",
-				"C:\\xampp\\htdocs\\fire\\salvo.js"
 			],
 			[
 				"pos",
@@ -12452,10 +12591,6 @@
 			[
 				"dark",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\darkner.php"
-			],
-			[
-				"games",
-				"C:\\xampp\\htdocs\\fire\\gameSetup.php"
 			],
 			[
 				"game.s",
@@ -12732,18 +12867,6 @@
 			[
 				"em",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\em.php"
-			],
-			[
-				"av",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\avenger.php"
-			],
-			[
-				"gameset",
-				"C:\\xampp\\htdocs\\fire\\gameSetup.php"
-			],
-			[
-				"lgo",
-				"C:\\xampp\\htdocs\\fire\\log.txt"
 			]
 		],
 		"width": 0.0

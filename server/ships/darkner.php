@@ -3,7 +3,7 @@
 class Darkner extends Light {
 	public $name = "Darkner";
 	public $display = "Darkner";
-	public $role = "Long-"
+	public $role = "Long-range Support Frigate";
 	public $faction = "Centauri Republic";
 	public static $value =  370;
 	public $cost = 370;

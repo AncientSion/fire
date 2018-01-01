@@ -4,7 +4,7 @@ class Salvo extends Mixed {
 	public $name = "Salvo";
 	public $unitType = "Salvo";
 	public $salvo = true;
-	public $traverse = -5;
+	public $traverse = -4;
 	public $trajectory;
 
 	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){

@@ -23,7 +23,7 @@ class LightIon extends Particle {
 	public $reload = 2;
 	public $mass = 14;
 	public $powerReq = 2;
-	public $traverse = -5;
+	public $traverse = -4;
 	public $effiency = 3;
 	public $maxBoost = 1;
 	
@@ -46,7 +46,7 @@ class MediumIon extends LightIon {
 	public $projSpeed = 7;
 	public $mass = 18;
 	public $powerReq = 3;
-	public $traverse = -2;
+	public $traverse = -1;
 	public $effiency = 3;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){

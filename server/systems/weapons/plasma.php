@@ -54,7 +54,7 @@ class LightPlasma extends Plasma {
 	public $projSpeed = 8;
 	public $reload = 2;
 	public $mass = 18;
-	public $traverse = -2;
+	public $traverse = -1;
 	public $powerReq = 3;
 	public $maxBoost = 1;
 	public $effiency = 2;

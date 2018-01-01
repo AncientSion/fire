@@ -242,16 +242,7 @@ else {
 					return this.ships[0];
 				},
 				getUnitType: function(val){
-					switch (val){
-						case 3: return "Ultra Heavy";
-						case 2: return "Super Heavy";
-						case 1: return "Heavy";
-						case 0: return "Medium";
-						case -1: return "Light";
-						case -2: return "SuperLight";
-						case -4: return "Flight";
-						case -5: return "Salvo";
-					}
+					return Game.prototype.getUnitType.call(this, val);
 				},
 
 				setUnitTotal: function(){

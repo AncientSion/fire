@@ -2557,10 +2557,9 @@ Game.prototype.getUnitType = function(val){
 		case 2: return "Super Heavy";
 		case 1: return "Heavy";
 		case 0: return "Medium";
-		case -1: return "Light";
-		case -2: return "SuperLight";
-		case -4: return "Flight";
-		case -5: return "Salvo";
+		case -1: return "Light Squadron";
+		case -3: return "Flight";
+		case -4: return "Salvo";
 	}
 }
 
