@@ -120,9 +120,15 @@ class Manager {
 		return;
 	}
 
+	public function crits(){
+		$crits = $this->getUnit(8)->getNewCrits($this->turn);
+		Debug::log("size ".sizeof($crits));
+	}
+
 	public function getClientData(){
 		//$this->deleteReinforcements();
 		//return;
+		//$this->crits();
 
 		return array(
 			"id" => $this->gameid,
@@ -406,13 +412,14 @@ class Manager {
 	}
 
 	public function prepareAdvance($gameid){
-		Debug::log("prepareAdvance + get data");
+		Debug::log("prepareAdvance");
 		$this->gameid = $gameid;
 		$this->getGeneralData();
 		$this->getGameData();
 	}
 
 	public function doAdvancea(){
+		return;
 		Debug::log("doAdvance for game #".$this->gameid." from phase ".$this->phase." to phase ".($this->phase+1));
 
 		if ($this->phase == -1){
@@ -893,10 +900,10 @@ class Manager {
 		$this->resolveShipFireOrders();
 		$this->resolveFighterFireOrders();
 		$this->resolveBallisticFireOrders();
-		$this->cleanFireOrders();
 		$this->testUnitCrits();
-		$this->writeDamageEntries();
-		$this->writeCritEntries();
+
+		$this->handleFiringData();
+
 		$time += microtime(true); 
 		Debug::log("handleFiringPhase time: ".round($time, 3)." seconds.");
 		return true;
@@ -1305,42 +1312,41 @@ class Manager {
 		}
 	}
 
-	public function cleanFireOrders(){
-		Debug::log("cleanFireOrders, fires: ".sizeof($this->fires));
-		DBManager::app()->updateFireOrders($this->fires);
-		DBManager::app()->deleteUnresolvedFireOrders($this->gameid);
-	}
-
 	public function testUnitCrits(){
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->damaged){
 				Debug::log("testUnitCrits #".$this->ships[$i]->id);
 				$this->ships[$i]->testForCrits($this->turn);
 			} 
-			//else Debug::log("skipping undamaged unit #".$this->ships[$i]->id." for crit testing!");
 		}
 	}
 
-	public function writeDamageEntries(){
-		$data = array();
+	public function handleFiringData(){
+		$newDmgs = $this->getAllNewDamages();
+		$newCrits = $this->getAllNewCrits();
 
+		DBManager::app()->updateFireOrders($this->fires);
+		DBManager::app()->insertDamageEntries($newDmgs);
+		DBManager::app()->insertCritEntries($newCrits);
+	}
+
+	public function getAllNewDamages(){
+		//Debug::log("getAllNewDamages");
+		$dmgs = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			$data = array_merge($data, $this->ships[$i]->getNewDamages($this->turn));
+			$dmgs = array_merge($dmgs, $this->ships[$i]->getNewDamages($this->turn));
 		}
-
-		if (sizeof($data)){
-			DBManager::app()->insertDamageEntries($data);
-		}
+		return $dmgs;
 	}
 
-	public function writeCritEntries(){
-		//Debug::log("writeCritEntries");
-		$all = array();
+	public function getAllNewCrits(){
+		//Debug::log("getAllNewCrits");
+		$crits = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->destroyed && ($this->ships[$i]->ship || $this->ships[$i]->squad)){continue;}
-			$all = array_merge($all, $this->ships[$i]->getNewCrits($this->turn));
+			$crits = array_merge($crits, $this->ships[$i]->getNewCrits($this->turn));
 		}
-		DBManager::app()->insertCritEntries($all, $this->gameid);
+		return $crits;
 	}
 
 	public function startDamageControlPhase(){

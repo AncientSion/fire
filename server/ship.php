@@ -336,20 +336,33 @@ class Ship {
 	}
 
 	public function addCritDB($crits){
-		for ($j = 0; $j < sizeof($crits); $j++){
-			for ($k = 0; $k < sizeof($this->structures); $k++){
-				for ($l = 0; $l < sizeof($this->structures[$k]->systems); $l++){
-					if ($this->structures[$k]->systems[$l]->id == $crits[$j]->systemid){
-						$this->structures[$k]->systems[$l]->crits[] = $crits[$j];
+		for ($i = 0; $i < sizeof($crits); $i++){
+			$found = 0;
+
+			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
+				if ($this->primary->systems[$j]->id == $crits[$i]->systemid){
+					$this->primary->systems[$j]->crits[] = $crits[$i];
+					$found = 1;
+					break;
+				}
+			}
+
+			if ($found){
+				continue;
+			}
+
+			for ($j = 0; $j < sizeof($this->structures); $j++){
+				for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
+					if ($this->structures[$j]->systems[$k]->id == $crits[$i]->systemid){
+						$this->structures[$j]->systems[$k]->crits[] = $crits[$i];
+						$found = 1;
 						break 2;
 					}
 				}
 			}
-			for ($k = 0; $k < sizeof($this->primary->systems); $k++){
-				if ($this->primary->systems[$k]->id == $crits[$j]->systemid){
-					$this->primary->systems[$k]->crits[] = $crits[$j];
-					break;
-				}
+
+			if (!$found){
+				Debug::log("ERROR unable to apply ship crit id: ".$crits[$i]->id);
 			}
 		}
 		return true;

@@ -2106,7 +2106,7 @@ function Game(data, userid){
 
 			for (var i in dmgs){
 				dmgs[i][0] = dmgs[i][0] ? "Kills: "  + dmgs[i][0] : "" 
-				dmgs[i][1] = dmgs[i][1] ? "Overload: "  + dmgs[i][1] : "" 
+				dmgs[i][1] = dmgs[i][1] ? "Overl.: "  + dmgs[i][1] : "" 
 			}
 
 			//var rolls =  fire.rolls.slice().sort(function(a, b){return a > b || a == b || a < b;});

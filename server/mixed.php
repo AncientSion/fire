@@ -101,12 +101,12 @@ class Mixed extends Ship {
 	public function hidePowers($turn){
 		for ($j = 0; $j < sizeof($this->structures); $j++){
 			for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
-				for ($l = sizeof($this->structures[$j]->systems[$k]->powers)-1; $l >= 0; $l--){
-					if ($this->structures[$j]->systems[$k]->powers[$l]->turn == $turn){
-						if ($this->structures[$j]->systems[$k]->powers[$l]->type == 0){
-							$this->structures[$j]->systems[$k]->disabled = 0;
+				for ($l = sizeof($this->structures[$j]->systems[$j]->powers)-1; $l >= 0; $l--){
+					if ($this->structures[$j]->systems[$j]->powers[$l]->turn == $turn){
+						if ($this->structures[$j]->systems[$j]->powers[$l]->type == 0){
+							$this->structures[$j]->systems[$j]->disabled = 0;
 						}
-						array_splice($this->structures[$j]->systems[$k]->powers, $l, 1);
+						array_splice($this->structures[$j]->systems[$j]->powers, $l, 1);
 					} else break;
 				}
 			}
@@ -116,8 +116,8 @@ class Mixed extends Ship {
 	public function addCritDB($crits){
 		for ($j = 0; $j < sizeof($crits); $j++){
 			for ($k = 0; $k < sizeof($this->structures); $k++){
-				if ($this->structures[$k]->id == $crits[$j]->systemid){
-					$this->structures[$k]->crits[] = $crits[$j];
+				if ($this->structures[$j]->id == $crits[$i]->systemid){
+					$this->structures[$j]->crits[] = $crits[$i];
 					break;
 				}
 			}
@@ -328,9 +328,7 @@ class Mixed extends Ship {
 		for ($i = 0; $i < sizeof($elements); $i++){
 			for ($j = 1; $j <= $elements[$i]["amount"]; $j++){
 				$this->structures[] = new $elements[$i]["name"]($this->getId(), $this->id);
-				for ($k = 0; $k < sizeof($this->structures[sizeof($this->structures)-1]->systems); $k++){
-					$this->structures[sizeof($this->structures)-1]->systems[$k]->id = $this->getId();
-				}
+				$this->index = $this->structures[sizeof($this->structures)-1]->index;
 			}
 		}
 		return true;

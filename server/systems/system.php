@@ -218,7 +218,7 @@ class System {
 		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", new: ".$new.", old: ".$old);
 
 		if ($new > 80 && mt_rand(0, 100) < $new){
-			Debug::log("critical hit, disabling system ".get_class($this));
+			Debug::log(" ====> critical hit, disabling system ".get_class($this));
 			$this->crits[] = new Crit(
 				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 1, 0, 1
 			);

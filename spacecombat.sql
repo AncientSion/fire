@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 01. Jan 2018 um 21:02
+-- Erstellungszeit: 02. Jan 2018 um 10:29
 -- Server-Version: 10.1.16-MariaDB
 -- PHP-Version: 7.0.9
 
@@ -138,7 +138,8 @@ INSERT INTO `actions` (`id`, `shipid`, `turn`, `type`, `dist`, `x`, `y`, `a`, `c
 (90, 8, 3, 'turn', 0, 100, -182, -32, 20, 11, 2, 1),
 (91, 12, 3, 'move', 580, -214, -29, 334, 0, 0, 0, 1),
 (92, 10, 3, 'move', 441, 210, 447, 169, 0, 0, 0, 1),
-(93, 11, 3, 'move', 495, 261, 427, 167, 0, 0, 0, 1);
+(93, 11, 3, 'move', 495, 261, 427, 167, 0, 0, 0, 1),
+(94, 9, 3, 'move', 200, 250, 100, 191, 0, 0, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -153,6 +154,13 @@ CREATE TABLE `chat` (
   `msg` varchar(255) DEFAULT NULL,
   `time` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `chat`
+--
+
+INSERT INTO `chat` (`id`, `username`, `userid`, `msg`, `time`) VALUES
+(1, 'Chris', 1, 'kkkkkkkkkkkk', 1514884163);
 
 -- --------------------------------------------------------
 
@@ -253,7 +261,39 @@ INSERT INTO `fireorders` (`id`, `gameid`, `turn`, `shooterid`, `targetid`, `x`, 
 (7, 1, 2, 7, 2, 0, 0, 19, 2, 25, '66;88;', 0, 1),
 (8, 1, 2, 6, 2, 0, 0, 17, 2, 20, '52;36;', 0, 1),
 (9, 1, 2, 6, 2, 0, 0, 18, 2, 20, '58;92;', 0, 1),
-(10, 1, 2, 6, 2, 0, 0, 19, 2, 20, '95;16;', 1, 1);
+(10, 1, 2, 6, 2, 0, 0, 19, 2, 20, '95;16;', 1, 1),
+(11, 1, 3, 3, 6, 0, 0, 7, 0, 0, '', 0, 0),
+(12, 1, 3, 3, 6, 0, 0, 8, 0, 0, '', 0, 0),
+(13, 1, 3, 3, 6, 0, 0, 9, 0, 0, '', 0, 0),
+(14, 1, 3, 3, 6, 0, 0, 11, 0, 0, '', 0, 0),
+(15, 1, 3, 3, 6, 0, 0, 12, 0, 0, '', 0, 0),
+(16, 1, 3, 2, 6, 0, 0, 7, 0, 0, '', 0, 0),
+(17, 1, 3, 2, 6, 0, 0, 8, 0, 0, '', 0, 0),
+(18, 1, 3, 2, 6, 0, 0, 9, 0, 0, '', 0, 0),
+(19, 1, 3, 2, 6, 0, 0, 11, 0, 0, '', 0, 0),
+(20, 1, 3, 2, 6, 0, 0, 12, 0, 0, '', 0, 0),
+(21, 1, 3, 1, 6, 0, 0, 8, 0, 0, '', 0, 0),
+(22, 1, 3, 1, 6, 0, 0, 9, 0, 0, '', 0, 0),
+(23, 1, 3, 5, 7, 0, 0, 5, 0, 0, '', 0, 0),
+(24, 1, 3, 5, 7, 0, 0, 7, 0, 0, '', 0, 0),
+(25, 1, 3, 5, 7, 0, 0, 10, 0, 0, '', 0, 0),
+(26, 1, 3, 5, 7, 0, 0, 11, 0, 0, '', 0, 0),
+(27, 1, 3, 5, 7, 0, 0, 12, 0, 0, '', 0, 0),
+(28, 1, 3, 5, 7, 0, 0, 14, 0, 0, '', 0, 0),
+(29, 1, 3, 5, 7, 0, 0, 15, 0, 0, '', 0, 0),
+(30, 1, 3, 5, 7, 0, 0, 16, 0, 0, '', 0, 0),
+(31, 1, 3, 4, 8, 0, 0, 5, 0, 0, '', 0, 0),
+(32, 1, 3, 4, 8, 0, 0, 7, 0, 0, '', 0, 0),
+(33, 1, 3, 4, 8, 0, 0, 11, 0, 0, '', 0, 0),
+(34, 1, 3, 4, 8, 0, 0, 13, 0, 0, '', 0, 0),
+(35, 1, 3, 7, 3, 0, 0, 8, 0, 0, '', 0, 0),
+(36, 1, 3, 7, 3, 0, 0, 11, 0, 0, '', 0, 0),
+(37, 1, 3, 7, 3, 0, 0, 12, 0, 0, '', 0, 0),
+(38, 1, 3, 6, 3, 0, 0, 8, 0, 0, '', 0, 0),
+(39, 1, 3, 6, 3, 0, 0, 11, 0, 0, '', 0, 0),
+(40, 1, 3, 6, 3, 0, 0, 12, 0, 0, '', 0, 0),
+(41, 1, 3, 8, 4, 0, 0, 4, 0, 0, '', 0, 0),
+(42, 1, 3, 8, 4, 0, 0, 8, 0, 0, '', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -348,8 +388,8 @@ CREATE TABLE `playerstatus` (
 --
 
 INSERT INTO `playerstatus` (`id`, `userid`, `gameid`, `turn`, `phase`, `faction`, `value`, `status`) VALUES
-(1, 1, 1, 3, 2, 'Earth Alliance', 310, 'waiting'),
-(2, 2, 1, 3, 2, 'Centauri Republic', 558, 'waiting');
+(1, 1, 1, 3, 2, 'Earth Alliance', 310, 'ready'),
+(2, 2, 1, 3, 2, 'Centauri Republic', 558, 'ready');
 
 -- --------------------------------------------------------
 
@@ -733,12 +773,12 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT für Tabelle `actions`
 --
 ALTER TABLE `actions`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 --
 -- AUTO_INCREMENT für Tabelle `chat`
 --
 ALTER TABLE `chat`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT für Tabelle `damages`
 --
@@ -758,7 +798,7 @@ ALTER TABLE `dogfights`
 -- AUTO_INCREMENT für Tabelle `fireorders`
 --
 ALTER TABLE `fireorders`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 --
 -- AUTO_INCREMENT für Tabelle `games`
 --

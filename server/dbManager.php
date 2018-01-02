@@ -1127,24 +1127,6 @@
 			return true;
 		}
 
-		public function deleteUnresolvedFireOrders($gameid){
-			$stmt = $this->connection->prepare("
-				DELETE FROM fireorders
-				WHERE gameid = :gameid
-				AND resolved = :resolved
-			");
-
-			$resolved = -1;
-
-			$stmt->bindParam(":gameid", $gameid);
-			$stmt->bindParam(":resolved", $resolved);
-			$stmt->execute();
-
-			if ($stmt->errorCode() == 0){
-				return true;
-			} else return false;
-		}
-
 		public function updateFireOrders($fires){
 			Debug::log("DB updateFireOrders: ".sizeof($fires));
 			if (!sizeof($fires)){return;}
@@ -1457,9 +1439,7 @@
 			return true;
 		}
 
-
-
-		public function insertCritEntries($crits, $gameid){
+		public function insertCritEntries($crits){
 			Debug::log(" => DB insertCritEntries: ".sizeof($crits));
 			
 			$stmt = $this->connection->prepare("
@@ -1606,8 +1586,6 @@
 			$result = $this->query($sql);		
 			return $result[0]["username"];
 		}
-		
-
 		public function getCurrentTurn($gameid){
 
 			$sql = "(SELECT turn FROM games WHERE id = ".$gameid.")";

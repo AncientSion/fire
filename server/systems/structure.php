@@ -215,8 +215,14 @@ class Single {
 
 	function __construct($id, $parentId){
 		$this->id = $id;
+		$this->index = $this->id;
 		$this->parentId = $parentId;
 		$this->setBaseStats();
+	}
+
+	public function getId(){
+		$this->index++;
+		return $this->index;
 	}
 
 	public function setBaseStats(){
@@ -319,7 +325,7 @@ class Single {
 		if (sizeof($valid)){
 			$mod = mt_rand(0, floor($dmg));
 			if ($mod > $valid[0][1]/2) { // above tresh && mt_rand(0, dmg) > tresh/2
-				Debug::log("Dropout - dmg: ".$dmg.", tresh: ".$valid[0][1].", mt_rand(0, ".floor($dmg).") = ".$mod.", > ".$valid[0][1]/2);
+				Debug::log(" ====>  DROPOUTdmg: ".$dmg.", tresh: ".$valid[0][1].", mt_rand(0, ".floor($dmg).") = ".$mod.", > ".$valid[0][1]/2);
 				$this->crits[] = new Crit(
 					sizeof($this->crits)+1,
 					$this->parentId, $this->id, $turn,

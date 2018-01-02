@@ -145,11 +145,10 @@ class Squadron extends Ship {
 	}
 
 	public function isDestroyed(){
-		if ($this->destroyed){
-			return true;
-		}
+		if ($this->destroyed){return true;}
+
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if (! $this->structures[$i]->isDestroyed()){
+			if (!$this->structures[$i]->isDestroyed()){
 				return false;
 			}
 		}
@@ -170,31 +169,48 @@ class Squadron extends Ship {
 
 			$this->structures[$i]->testCrit($turn, 0);
 		}
+	}	
+
+	public function addCritDB($crits){
+		for ($i = 0; $i < sizeof($crits); $i++){
+			$found = 0;
+
+			for ($j = 0; $j < sizeof($this->structures); $j++){
+				if ($crits[$i]->systemid == $this->structures[$j]->id){
+					$this->structures[$j]->crits[] = $crits[$i];
+					$found = 1;
+					break;
+				}
+
+				for ($k = 0; $k < sizeof($this->structures[$j]->structures); $k++){
+					for ($l = 0; $l < sizeof($this->structures[$j]->structures[$k]->systems); $l++){
+						//Debug::log("system id: ".$this->structures[$j]->structures[$k]->systems[$l]->id);
+						if ($this->structures[$j]->structures[$k]->systems[$l]->id == $crits[$i]->systemid){
+							$this->structures[$j]->structures[$k]->systems[$l]->crits[] = $crits[$i];
+							$found = 1;
+							break 3;
+						}
+					}
+				}
+				if ($found){
+					continue;
+				}
+			}
+
+			if (!$found){
+				Debug::log("ERROR unable to apply sqwuad crit id: ".$crits[$i]->id);
+			}
+		}
+		return true;
 	}
 
 	public function getNewCrits($turn){
 		$crits = array();
-		if (!$this->damaged){Debug::log("no dmg, return."); return $crits;}
-
-		/*for ($k = 0; $k < sizeof($this->primary->systems); $k++){
-			for ($l = 0; $l < sizeof($this->systems[$k]->crits); $l++){
-				if ($this->systems[$k]->crits[$l]->new){
-					$crits[] = $this->systems[$k]->crits[$l];
-				}// else break;
-			}
-		}*/
+		if (!$this->damaged){return $crits;}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (!$this->structures[$i]->damaged){continue;}
-
-			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				for ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]->crits); $k++){
-					if ($this->structures[$i]->systems[$j]->crits[$k]->new){
-						Debug::log("found new crit");
-						$crits[] = $this->structures[$i]->systems[$j]->crits[$k];
-					}
-				}
-			}
+			$crits = array_merge($crits, $this->structures[$i]->getNewCrits($turn));
 		}
 		return $crits;
 	}
@@ -220,7 +236,7 @@ class Squadron extends Ship {
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($dmg->systemid == $this->structures[$i]->id){
 
-				if ($dmg->new && $dmg->overkill){
+				if ($dmg->new){
 					$this->damaged = 1;
 					$this->structures[$i]->damaged = 1;
 				}
@@ -236,7 +252,7 @@ class Squadron extends Ship {
 	public function getSystemByName($name){
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 			if ($this->primary->systems[$i]->name == $name){
-				return $this->systems[$i];
+				return $this->primary->systems[$i];
 			}
 		}
 	}
@@ -293,11 +309,6 @@ class Squaddie extends Single {
 			}
 		}
 		$this->power += $need;
-	}
-
-	public function getId(){
-		$this->index++;
-		return $this->index;
 	}
 
 	public function setBaseStats(){
@@ -363,6 +374,21 @@ class Squaddie extends Single {
 		return 1;;
 	}
 
+	public function getNewCrits($turn){
+		$crits = array();
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				for ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]->crits); $k++){
+					if ($this->structures[$i]->systems[$j]->crits[$k]->new){
+						$crits[] = $this->structures[$i]->systems[$j]->crits[$k];
+					}
+				}
+			}
+		}
+		return $crits;
+	}
+
 	public function testCrit($turn, $extra){
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
@@ -373,7 +399,7 @@ class Squaddie extends Single {
 
 		if ($new){
 			$this->determineCrit($old, $new, $turn);
-		}
+		}// else Debug::log("skipping sub #".$this->id.", no structDmg!");
 	}
 
 	public function getValidEffects(){
@@ -383,47 +409,22 @@ class Squaddie extends Single {
 	}
 
 	public function determineCrit($old, $new, $turn){
-		$dmg = round(($old/2 + $new) / $this->integrity * 100);
-		Debug::log("determineCrit for ".$this->name.", new: ".$new."/".$old.", total: ".$dmg." %");
-		if (!$dmg){return;}
+		$dmg = round(($old + $new) / $this->integrity * 100);
+		$tresh = round(($old/2 + $new) / $this->integrity * 100);
+		$duration = 1;
+		Debug::log(" => determineCrit for ".$this->name.", new: ".$new."/".$old.", dmg: ".$dmg, "trigger: ".$tresh." %");
+		if (!$tresh){return;}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				$roll = mt_rand(0, 100);
-				if ($roll < $dmg){
-					Debug::log("applying crit to squaddie sub system, roll: ".$roll);
+				//if ($roll > $tresh){Debug::log(" ====> NO CRIT - roll: ".$roll. ", tresh: ".$tresh); continue;}
+				//else {
+					Debug::log(" ====> applying crit to squaddie sub system #".$this->structures[$i]->systems[$j]->id.", roll: ".$roll);
 					$this->structures[$i]->systems[$j]->crits[] = new Crit(
-						0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn, "Disabled", 0, 0, 1
+						0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn, "Disabled", $duration, 0, 1
 					);
-				}// else Debug::log("bad roll: ".$roll);
-			}
-		}
-
-		return;
-
-
-
-
-		$crits = $this->getValidEffects();
-		$valid = array();
-
-		for ($i = 0; $i < sizeof($crits); $i++){
-			if ($dmg > $crits[$i][1]){
-				$valid[] = $crits[$i];
-			}
-		}
-
-		if (sizeof($valid)){
-			$mod = mt_rand(0, floor($dmg));
-			if ($mod > $valid[0][1]/2) { // above tresh && mt_rand(0, dmg) > tresh/2
-				Debug::log("Dropout - dmg: ".$dmg.", tresh: ".$valid[0][1].", mt_rand(0, ".floor($dmg).") = ".$mod.", > ".$valid[0][1]/2);
-				$this->crits[] = new Crit(
-					sizeof($this->crits)+1,
-					$this->parentId, $this->id, $turn,
-					$valid[0][0], $valid[0][2],
-					0,
-					1
-				);
+				//}// else Debug::log("bad roll: ".$roll);
 			}
 		}
 	}
