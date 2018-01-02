@@ -1,1 +1,2 @@
 game 1, user 2 --- adjusting to turn/phase/status 4/2/ready
+createPlayerStatus

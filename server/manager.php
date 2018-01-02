@@ -1467,6 +1467,7 @@ class Manager {
 						"Demos",
 					),
 					array(
+						"Vorchar",
 						"Vorchan",
 						"Darkner",
 						"Haven",
