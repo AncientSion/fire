@@ -44,6 +44,7 @@ spl_autoload_register(
 
                 'haven' => '/server/ships/haven.php',
                 'vorchan' => '/server/ships/vorchan.php',
+                'vorchar' => '/server/ships/vorchar.php',
                 'darkner' => '/server/ships/darkner.php',
                 'altarian' => '/server/ships/altarian.php',
                 'demos' => '/server/ships/demos.php',

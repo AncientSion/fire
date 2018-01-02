@@ -700,3 +700,7 @@ Mixed.prototype.getSectionString = function(angle){
 Mixed.prototype.getBaseImage = function(){
 	return window.shipImages[this.structures[0].name.toLowerCase()];
 }
+
+Mixed.prototype.getRemainingImpulse = function(){
+	return 0;
+}

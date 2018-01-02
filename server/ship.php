@@ -626,7 +626,7 @@ class Ship {
 		$roll;
 		$current = 0;
 		$total = $this->primary->getHitChance();
-		$fraction = round($this->primary->remaining / $this->primary->integrity, 3);
+		$fraction = round($this->primary->remaining / $this->primary->integrity, 2);
 		$valid = array();
 
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
@@ -642,7 +642,7 @@ class Ship {
 			return $this->primary;
 		}
 		else {
-			Debug::log("main: ".$total."/".$this->primary->integrity." => ".$fraction. " %, unlocked internals: ".sizeof($valid));
+			Debug::log("main: ".$this->primary->remaining."/".$this->primary->integrity." => ".$fraction. " %, unlocked internals: ".sizeof($valid));
 		}
 
 		//Debug::log("valid:".sizeof($valid));
@@ -1153,7 +1153,7 @@ class Medium extends Ship {
 		$this->hitTable = array(
 			"Bridge" => 0.65,
 			"Engine" => 0.8,
-			"Sensor" => 1,
+			"Sensor" => 0.95,
 			"Reactor" => 0.7
 		);
 	}

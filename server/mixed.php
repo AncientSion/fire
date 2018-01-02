@@ -98,21 +98,6 @@ class Mixed extends Ship {
 		return false;
 	}
 
-	public function hidePowers($turn){
-		for ($j = 0; $j < sizeof($this->structures); $j++){
-			for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
-				for ($l = sizeof($this->structures[$j]->systems[$j]->powers)-1; $l >= 0; $l--){
-					if ($this->structures[$j]->systems[$j]->powers[$l]->turn == $turn){
-						if ($this->structures[$j]->systems[$j]->powers[$l]->type == 0){
-							$this->structures[$j]->systems[$j]->disabled = 0;
-						}
-						array_splice($this->structures[$j]->systems[$j]->powers, $l, 1);
-					} else break;
-				}
-			}
-		}
-	}
-
 	public function addCritDB($crits){
 		for ($j = 0; $j < sizeof($crits); $j++){
 			for ($k = 0; $k < sizeof($this->structures); $k++){
@@ -123,6 +108,10 @@ class Mixed extends Ship {
 			}
 		}
 		return true;
+	}
+
+	public function hidePowers($turn){
+		return;
 	}
 
 	public function applyDamage($dmg){

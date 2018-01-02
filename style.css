@@ -485,6 +485,7 @@ table, th, tr, td {
 #fxCanvas {
 	display: inline-block;
 	position: absolute;
+	opacity: 0.3;
 }
 #fxCanvas.disabled {
 	display: none;
@@ -630,7 +631,7 @@ table, th, tr, td {
 	color: #ff3b00;
 	text-align: center;
 	vertical-align: middle;
-	display: table-cell;
+	display: block;
 }
 
 .unitContainer .primaryDiv .primaryTable {

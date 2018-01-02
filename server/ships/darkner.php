@@ -11,7 +11,7 @@ class Darkner extends Light {
 
 	public $integrity = 550;
 	public $ep = 45;
-	public $ew = 600;
+	public $ew = 575;
 	public $power = 4;
 	public $negation = 14;
 

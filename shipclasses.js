@@ -341,16 +341,13 @@ Ship.prototype.getSelectedWeapons = function(){
 }
 
 Ship.prototype.doHover = function(){
-	if (!game.sensorMode){
-		this.drawEW();
-	}
+	if (!game.sensorMode){this.drawEW();}
+
 	if (this.ship || this.squad){
 		this.setMoveTranslation();
 		this.drawVectorIndicator();
 		this.drawMoveArea();
 		this.drawTurnArcs();
-		//if (game.phase < 2){
-		//}
 		this.resetMoveTranslation();
 	}
 	this.drawMovePlan();
@@ -1506,7 +1503,7 @@ Ship.prototype.getCurrentImpulse = function(){
 }
 
 Ship.prototype.getRemainingImpulse = function(){
-	if (game.phase >= 1 && (this.ship || this.squad)){return 0;}	
+	if (game.phase >= 1){return 0;}	
 	var impulse = this.getCurrentImpulse();
 	for (var i = 0; i < this.actions.length; i++){
 		if (this.actions[i].turn == game.turn){
@@ -1539,12 +1536,7 @@ Ship.prototype.setMoveAngles = function(){
 }
 
 Ship.prototype.drawMoveArea = function(){
-	//moveCtx.clearRect(0, 0, res.x, res.y);
 	this.setMoveAngles();
-
-	if (this.moveAngles.start + this.moveAngles.end == 360){
-		//return;
-	}
 
 	var center = this.getPlannedPos();	
 	var rem = this.getRemainingImpulse();

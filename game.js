@@ -824,7 +824,7 @@ function Game(data, userid){
 		this.draw();
 	}
 
-	this.initDamageControl = function(){
+	this.initDamageControl = function(){		
 		this.resolveFire();
 	}
 
@@ -844,7 +844,7 @@ function Game(data, userid){
 	
 	this.initPhase = function(n){
 		this.setShipDivs();
-		$(fxCanvas).css("opacity", 0.3);
+		//$(fxCanvas).css("opacity", 0.3);
 
 		if (n == -1){
 			this.phase = n;
@@ -882,7 +882,7 @@ function Game(data, userid){
 			this.phase = n;
 				//game.draw();
 				$("#phaseSwitchDiv").click(function(){
-				$(fxCanvas).css("opacity", 1);
+				//$(fxCanvas).css("opacity", 1);
 					game.initDamageControl();
 					$(this).hide()
 					//$(this).fadeOut(200);
@@ -1557,7 +1557,8 @@ function Game(data, userid){
 		setFPS(40);
 		window.then = Date.now();
 		window.startTime = then;
-		
+
+		$(fxCanvas).css("opacity", 1);
 		fxCtx.clearRect(0, 0, res.x, res.y);
 		ctx.clearRect(0, 0, res.x, res.y);
 
@@ -1898,6 +1899,9 @@ function Game(data, userid){
 					game.animateAllFireOrders();
 				}, 1500);
 			}
+			else {
+				$(fxCanvas).css("opacity", 0.3)
+			}
 		}
 	}
 
@@ -2029,6 +2033,7 @@ function Game(data, userid){
 
 				game.redraw();
 				game.fireOrders[i].anim = game.fireOrders[i].weapon.getAnimation(game.fireOrders[i]);
+				$(fxCanvas).css("opacity", 1);
 				game.animateSingleFireOrder(i, 0)
 			})
 			.hover(function(){
@@ -2557,7 +2562,7 @@ Game.prototype.getUnitType = function(val){
 		case 2: return "Super Heavy";
 		case 1: return "Heavy";
 		case 0: return "Medium";
-		case -1: return "Light Squadron";
+		case -1: return "Squadron";
 		case -3: return "Flight";
 		case -4: return "Salvo";
 	}

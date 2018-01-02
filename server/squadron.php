@@ -92,6 +92,21 @@ class Squadron extends Ship {
 		}
 	}
 
+	public function hidePowers($turn){
+		for ($j = 0; $j < sizeof($this->structures); $j++){
+			for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
+				for ($l = sizeof($this->structures[$j]->systems[$j]->powers)-1; $l >= 0; $l--){
+					if ($this->structures[$j]->systems[$j]->powers[$l]->turn == $turn){
+						if ($this->structures[$j]->systems[$j]->powers[$l]->type == 0){
+							$this->structures[$j]->systems[$j]->disabled = 0;
+						}
+						array_splice($this->structures[$j]->systems[$j]->powers, $l, 1);
+					} else break;
+				}
+			}
+		}
+	}
+
 	public function getSystemById($id){
 		//Debug::log("Squadron getSystemById #".$id);
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
@@ -349,12 +364,13 @@ class Squaddie extends Single {
 	}
 
 	public function setNegation($main, $armourDmg){
+		$p = 1.5;
+
 		$this->parentIntegrity = round($main*1.5);
 
-		$p = 1.5;
-		$this->parentPow = round(pow($main*1.5, $p));
+		$this->parentPow = round(pow($this->parentIntegrity, $p));
 		$this->armourDmg += $armourDmg;
-		$this->remainingNegation = round((pow($main*1.5 - $this->armourDmg, $p) / $this->parentPow) * $this->negation);
+		$this->remainingNegation = round((pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow) * $this->negation);
 	}
 
 	public function getCurrentNegation(){
@@ -403,28 +419,52 @@ class Squaddie extends Single {
 	}
 
 	public function getValidEffects(){
-		return array(// attr, %-tresh, duration, modifier
-			array("Disabled", 70, 0, 0)
+		return array( // type, min, max, dura
+			array("Damage", 10, 50, 0, 0.00),
+			array("Accuracy", 10, 50, 0, 0.00),
+			array("Disabled", 50, 80, 1, 0.00),
+			array("Destroyed", 70, 100, 0, 0.00)
 		);
 	}
 
 	public function determineCrit($old, $new, $turn){
 		$dmg = round(($old + $new) / $this->integrity * 100);
 		$tresh = round(($old/2 + $new) / $this->integrity * 100);
-		$duration = 1;
-		Debug::log(" => determineCrit for ".$this->name.", new: ".$new."/".$old.", dmg: ".$dmg, "trigger: ".$tresh." %");
+		$effect;
+
+		Debug::log(" => determineCrit for ".$this->name.", new: ".$new."/".$old.", dmg: ".$dmg.", trigger: ".$tresh." %");
 		if (!$tresh){return;}
+
+		$effects = $this->getValidEffects();
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				$roll = mt_rand(0, 100);
-				//if ($roll > $tresh){Debug::log(" ====> NO CRIT - roll: ".$roll. ", tresh: ".$tresh); continue;}
-				//else {
-					Debug::log(" ====> applying crit to squaddie sub system #".$this->structures[$i]->systems[$j]->id.", roll: ".$roll);
+				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
+				else if ($roll > $tresh){continue;}
+
+				Debug::log(" ====> crit to squaddie sub system #".$this->structures[$i]->systems[$j]->id.", roll: ".$roll);
+
+				for ($j = sizeof($effects)-1; $j >= 0; $j--){
+					if ($dmg < $effects[$i][1]){continue;}
+					else if ($dmg > $effects[$i][2]){continue;}
+
+					$subRoll = mt_rand(0, 100);
+
+					if ($subRoll > $dmg){continue;}
+					else {$effect = $effects[$i];}
+
+
+					$effect[4] = $this->structures[$i]->systems[$j]->getCritModMax($new + $old);
+					break;
+				}
+
+				if (isset($effect)){
 					$this->structures[$i]->systems[$j]->crits[] = new Crit(
-						0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn, "Disabled", $duration, 0, 1
+						0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn, $effect[0], $effect[3], $effect[4], 1
 					);
-				//}// else Debug::log("bad roll: ".$roll);
+				}
+
 			}
 		}
 	}

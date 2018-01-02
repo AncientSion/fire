@@ -78,6 +78,9 @@ window.preloadShips = function(){
 	window.shipImages.darkner = new Image();
 	window.shipImages.darkner.src = "shipIcons/darkner.png";
 
+	window.shipImages.vorchar = new Image();
+	window.shipImages.vorchar.src = "shipIcons/vorchar.png";
+
 	window.shipImages.vorchan = new Image();
 	window.shipImages.vorchan.src = "shipIcons/vorchan.png";
 

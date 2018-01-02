@@ -52,14 +52,13 @@ class PrimarySystem extends System {
 		$old = round($old / $this->integrity * 100);
 		$possible = $this->getValidEffects();
 
-		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", newDmg: ".$new.", oldDmg: ".$old);
+		//Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", newDmg: ".$new.", oldDmg: ".$old);
 
 		$mod = $this->getCritModMax($new + $old);
 		//if ($mod < 5){Debug::log("mod < 5: ".$mod.", droppiong"); return;}
-		if (!$mod){Debug::log("no positive mod possobile, DONE!"); return;}
+		if (!$mod){return;}
 
 		$tresh =  ($new + $old/2)*2;
-
 
 		for ($i = 0; $i < sizeof($possible); $i++){
 			$roll = mt_rand(0, 100);

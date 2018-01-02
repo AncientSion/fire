@@ -516,8 +516,8 @@ Squadron.prototype.setLayout = function(){
 		}
 
 		w = Math.abs(minX) + Math.abs(maxX) + s/2;
-		h = Math.abs(minY) + Math.abs(maxY) + s;
 	}
+		h = Math.abs(minY) + Math.abs(maxY) + s;
 
 
 	$(this.element).find(".structContainer").css("height", h +20);
@@ -1221,8 +1221,4 @@ Squadron.prototype.getBaseImage = function(){
 	var img = new Image();
 		img.src = this.img.toDataURL();
 	return img;
-}
-
-Squadron.prototype.getRemainingImpulse = function(){
-	return 0;
 }
