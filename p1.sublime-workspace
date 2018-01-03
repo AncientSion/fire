@@ -532,7 +532,7 @@
 			"file": "server/classes.php",
 			"settings":
 			{
-				"buffer_size": 5605,
+				"buffer_size": 5610,
 				"encoding": "UTF-8",
 				"line_ending": "Windows",
 				"name": "<?php"
@@ -596,7 +596,7 @@
 			"file": "gameSetup.php",
 			"settings":
 			{
-				"buffer_size": 19843,
+				"buffer_size": 19848,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -885,10 +885,10 @@
 			}
 		},
 		{
-			"contents": "Searching 78 files for \"weapona\"\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n  439  \t\t\t\t\tif (ship.salvo){return;}\n  440  \t\t\t\t\telse if (ship.hasWeaponsSelected() && ship.id != vessel.id){\n  441: \t\t\t\t\t\thandleWeaponAimEvent(ship, vessel, e);\n  442  \t\t\t\t\t}\n  443  \t\t\t\t\telse {\n  444  \t\t\t\t\t\tgame.target = 0;\n  445: \t\t\t\t\t\t$(\"#weaponAimTableWrapper\").hide()\n  446  \t\t\t\t\t}\n  447  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\game.js:\n 2459  \t\t\t\t\t\t\t\tif (ship.hasWeaponsSelected()){\n 2460  \t\t\t\t\t\t\t\t\tif (ship.id != vessel.id){\n 2461: \t\t\t\t\t\t\t\t\t\thandleWeaponAimEvent(ship, vessel, e);\n 2462: \t\t\t\t\t\t\t\t\t}// else $(\"#weaponAimTableWrapper\").hide();\n 2463  \t\t\t\t\t\t\t\t}\n 2464  \t\t\t\t\t\t\t} else {\n 2465  \t\t\t\t\t\t\t\tgame.target = 0;\n 2466: \t\t\t\t\t\t\t\t$(\"#weaponAimTableWrapper\").hide();\n 2467  \t\t\t\t\t\t\t}\n 2468  \t\t\t\t\t\t},\n\nC:\\xampp\\htdocs\\fire\\game.php:\n  288  \n  289  \n  290: \t\t<div id=\"weaponAimTableWrapper\" class=\"disabled\">\n  291  \t\t\t<table id=\"targetInfo\">\n  292  \t\t\t\t<tr>\n  ...\n  528  \tfunction showUI(){\n  529  \t\t$(\"#mouseCanvas\").on(\"mouseleave\", function(){\n  530: \t\t\t$(\"#weaponAimTableWrapper\").hide();\n  531  \t\t})\n  532  \n\nC:\\xampp\\htdocs\\fire\\salvo.js:\n  246  \t\t\t\t\tif (ship.salvo){return;}\n  247  \t\t\t\t\telse if (ship.hasWeaponsSelected() && ship.id != vessel.id){\n  248: \t\t\t\t\t\thandleWeaponAimEvent(ship, vessel, e);\n  249  \t\t\t\t\t}\n  250  \t\t\t\t\telse {\n  251  \t\t\t\t\t\tgame.target = 0;\n  252: \t\t\t\t\t\t$(\"#weaponAimTableWrapper\").hide()\n  253  \t\t\t\t\t}\n  254  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\script.js:\n   98  }\n   99  \n  100: function handleWeaponAimEvent(shooter, target, e, pos){\n  101  \n  102  \tif (shooter.userid == target.userid){\n  103: \t\t$(\"#weaponAimTableWrapper\").hide();\n  104  \t\treturn;\n  105  \t}\n  ...\n  110  \tvar shooterLoc = shooter.getPlannedPos();\n  111  \tvar facing = shooter.getPlannedFacing();\t\t\t\t\t\n  112: \tvar targetData1 = $(\"#weaponAimTableWrapper\").find(\"#targetInfo\").find(\"#targetData1\");\n  113: \tvar targetData2 = $(\"#weaponAimTableWrapper\").find(\"#targetInfo\").find(\"#targetData2\");\n  114: \tvar weaponInfo = $(\"#weaponAimTableWrapper\").find(\"#weaponInfo\");\n  115  \tvar dist;\n  116  \tvar drop = 0;\n  ...\n  299  \t}\n  300  \t\t\t\t\n  301: \tvar ele = $(\"#weaponAimTableWrapper\");\n  302  \tvar w = $(ele).width()/2;\n  303  \tvar top = (e.clientY) + 100;\n  ...\n  382  \t\t}\n  383  \t\telse if (ship.hasWeaponsSelected()){\n  384: \t\t\thandleWeaponAimEvent(ship, unit, e, pos);\n  385  \t\t}\n  386  \t}\n  ...\n  539  \t\t\t}\n  540  \n  541: \t\t\t$(\"#weaponAimTableWrapper\").hide()\n  542  \t\t\tshooter.highlightAllSelectedWeapons();\n  543  \t\t\t//game.draw();\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  887  Ship.prototype.unselectSystems = function(){\n  888  \tfxCtx.clearRect(0, 0, res.x, res.y);\n  889: \t$(\"#weaponAimTableWrapper\").hide();\n  890  \n  891  \tfor (var i = 0; i < this.structures.length; i++){\n  ...\n 1799  \t\t\t\t\tvar target = game.getUnit($(this).parent().data(\"shipId\"));\n 1800  \t\t\t\t\tif (shooter.id != target.id && shooter.hasWeaponsSelected()){\n 1801: \t\t\t\t\t\thandleWeaponAimEvent(shooter, target, e);\n 1802  \t\t\t\t\t}\n 1803  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\squadron.js:\n  669  \t\t\t\t\t\t\tvar target = game.getUnit($(this).parent().parent().data(\"shipId\"));\n  670  \t\t\t\t\t\t\tif (shooter.id != target.id && shooter.hasWeaponsSelected()){\n  671: \t\t\t\t\t\t\t\thandleWeaponAimEvent(shooter, target, e);\n  672  \t\t\t\t\t\t\t}\n  673  \t\t\t\t\t\t}\n  ...\n  877  Squadron.prototype.unselectSystems = function(){\n  878  \tfxCtx.clearRect(0, 0, res.x, res.y);\n  879: \t$(\"#weaponAimTableWrapper\").hide();\n  880  \n  881  \tfor (var i = 0; i < this.structures.length; i++){\n\nC:\\xampp\\htdocs\\fire\\style.css:\n 1517  }\n 1518  \n 1519: #weaponAimTableWrapper {\n 1520  \tbackground-color: black;\n 1521  \tborder-radius: 5px;\n ....\n 1527  }\n 1528  \n 1529: #weaponAimTableWrapper.disabled {\n 1530  \tdisplay: none;\n 1531  }\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 1657  \t}\n 1658  \telse {\n 1659: \t\t$(\"#weaponAimTableWrapper\").hide();\n 1660  \t\tgame.mode = 1;\n 1661  \t\tfxCtx.clearRect(0, 0, res.x, res.y);\n ....\n 2739  \t}\n 2740  \telse {\n 2741: \t\t$(\"#weaponAimTableWrapper\").hide();\n 2742  \t\tgame.mode = 1;\n 2743  \t\tfxCtx.clearRect(0, 0, res.x, res.y);\n\n25 matches across 9 files\n\n\nSearching 78 files for \"weaponA\"\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n  439  \t\t\t\t\tif (ship.salvo){return;}\n  440  \t\t\t\t\telse if (ship.hasWeaponsSelected() && ship.id != vessel.id){\n  441: \t\t\t\t\t\thandleWeaponAimEvent(ship, vessel, e);\n  442  \t\t\t\t\t}\n  443  \t\t\t\t\telse {\n  444  \t\t\t\t\t\tgame.target = 0;\n  445: \t\t\t\t\t\t$(\"#weaponAimTableWrapper\").hide()\n  446  \t\t\t\t\t}\n  447  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\game.js:\n 2459  \t\t\t\t\t\t\t\tif (ship.hasWeaponsSelected()){\n 2460  \t\t\t\t\t\t\t\t\tif (ship.id != vessel.id){\n 2461: \t\t\t\t\t\t\t\t\t\thandleWeaponAimEvent(ship, vessel, e);\n 2462: \t\t\t\t\t\t\t\t\t}// else $(\"#weaponAimTableWrapper\").hide();\n 2463  \t\t\t\t\t\t\t\t}\n 2464  \t\t\t\t\t\t\t} else {\n 2465  \t\t\t\t\t\t\t\tgame.target = 0;\n 2466: \t\t\t\t\t\t\t\t$(\"#weaponAimTableWrapper\").hide();\n 2467  \t\t\t\t\t\t\t}\n 2468  \t\t\t\t\t\t},\n\nC:\\xampp\\htdocs\\fire\\game.php:\n  288  \n  289  \n  290: \t\t<div id=\"weaponAimTableWrapper\" class=\"disabled\">\n  291  \t\t\t<table id=\"targetInfo\">\n  292  \t\t\t\t<tr>\n  ...\n  528  \tfunction showUI(){\n  529  \t\t$(\"#mouseCanvas\").on(\"mouseleave\", function(){\n  530: \t\t\t$(\"#weaponAimTableWrapper\").hide();\n  531  \t\t})\n  532  \n\nC:\\xampp\\htdocs\\fire\\salvo.js:\n  246  \t\t\t\t\tif (ship.salvo){return;}\n  247  \t\t\t\t\telse if (ship.hasWeaponsSelected() && ship.id != vessel.id){\n  248: \t\t\t\t\t\thandleWeaponAimEvent(ship, vessel, e);\n  249  \t\t\t\t\t}\n  250  \t\t\t\t\telse {\n  251  \t\t\t\t\t\tgame.target = 0;\n  252: \t\t\t\t\t\t$(\"#weaponAimTableWrapper\").hide()\n  253  \t\t\t\t\t}\n  254  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\script.js:\n   98  }\n   99  \n  100: function handleWeaponAimEvent(shooter, target, e, pos){\n  101  \n  102  \tif (shooter.userid == target.userid){\n  103: \t\t$(\"#weaponAimTableWrapper\").hide();\n  104  \t\treturn;\n  105  \t}\n  ...\n  110  \tvar shooterLoc = shooter.getPlannedPos();\n  111  \tvar facing = shooter.getPlannedFacing();\t\t\t\t\t\n  112: \tvar targetData1 = $(\"#weaponAimTableWrapper\").find(\"#targetInfo\").find(\"#targetData1\");\n  113: \tvar targetData2 = $(\"#weaponAimTableWrapper\").find(\"#targetInfo\").find(\"#targetData2\");\n  114: \tvar weaponInfo = $(\"#weaponAimTableWrapper\").find(\"#weaponInfo\");\n  115  \tvar dist;\n  116  \tvar drop = 0;\n  ...\n  299  \t}\n  300  \t\t\t\t\n  301: \tvar ele = $(\"#weaponAimTableWrapper\");\n  302  \tvar w = $(ele).width()/2;\n  303  \tvar top = (e.clientY) + 100;\n  ...\n  382  \t\t}\n  383  \t\telse if (ship.hasWeaponsSelected()){\n  384: \t\t\thandleWeaponAimEvent(ship, unit, e, pos);\n  385  \t\t}\n  386  \t}\n  ...\n  539  \t\t\t}\n  540  \n  541: \t\t\t$(\"#weaponAimTableWrapper\").hide()\n  542  \t\t\tshooter.highlightAllSelectedWeapons();\n  543  \t\t\t//game.draw();\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  887  Ship.prototype.unselectSystems = function(){\n  888  \tfxCtx.clearRect(0, 0, res.x, res.y);\n  889: \t$(\"#weaponAimTableWrapper\").hide();\n  890  \n  891  \tfor (var i = 0; i < this.structures.length; i++){\n  ...\n 1799  \t\t\t\t\tvar target = game.getUnit($(this).parent().data(\"shipId\"));\n 1800  \t\t\t\t\tif (shooter.id != target.id && shooter.hasWeaponsSelected()){\n 1801: \t\t\t\t\t\thandleWeaponAimEvent(shooter, target, e);\n 1802  \t\t\t\t\t}\n 1803  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\squadron.js:\n  669  \t\t\t\t\t\t\tvar target = game.getUnit($(this).parent().parent().data(\"shipId\"));\n  670  \t\t\t\t\t\t\tif (shooter.id != target.id && shooter.hasWeaponsSelected()){\n  671: \t\t\t\t\t\t\t\thandleWeaponAimEvent(shooter, target, e);\n  672  \t\t\t\t\t\t\t}\n  673  \t\t\t\t\t\t}\n  ...\n  877  Squadron.prototype.unselectSystems = function(){\n  878  \tfxCtx.clearRect(0, 0, res.x, res.y);\n  879: \t$(\"#weaponAimTableWrapper\").hide();\n  880  \n  881  \tfor (var i = 0; i < this.structures.length; i++){\n\nC:\\xampp\\htdocs\\fire\\style.css:\n 1517  }\n 1518  \n 1519: #weaponAimTableWrapper {\n 1520  \tbackground-color: black;\n 1521  \tborder-radius: 5px;\n ....\n 1527  }\n 1528  \n 1529: #weaponAimTableWrapper.disabled {\n 1530  \tdisplay: none;\n 1531  }\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 1657  \t}\n 1658  \telse {\n 1659: \t\t$(\"#weaponAimTableWrapper\").hide();\n 1660  \t\tgame.mode = 1;\n 1661  \t\tfxCtx.clearRect(0, 0, res.x, res.y);\n ....\n 2739  \t}\n 2740  \telse {\n 2741: \t\t$(\"#weaponAimTableWrapper\").hide();\n 2742  \t\tgame.mode = 1;\n 2743  \t\tfxCtx.clearRect(0, 0, res.x, res.y);\n\n25 matches across 9 files\n\n\nSearching 78 files for \"setFire\"\n\nC:\\xampp\\htdocs\\fire\\cam.js:\n   51  \t},\n   52  \n   53: \tsetFireFocus: function(fire){\n   54  \t\tif (fire.dist <= 100){\n   55  \t\t\tthis.z = 2;\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  350  \t\tthis.hideInstruct();\n  351  \t\t$(\"#deployOverlay\").hide();\n  352: \t\thangar.setFireOrder(t.id).select();\n  353  \t\tgame.flightDeploy = false;\n  354  \t\t//flight.disableMissionMode();\n  ...\n 1805  \t\tif (!game.fireOrders[i].animating){\n 1806  \t\t\tgame.fireOrders[i].animating = 1;\n 1807: \t\t\tcam.setFireFocus(game.fireOrders[i]);\n 1808  \t\t\tgame.draw();\n 1809  \t\t\treturn;\n\nC:\\xampp\\htdocs\\fire\\script.js:\n  515  \t\t\t\t\t\tif (active[i].hasValidTarget()){\n  516  \t\t\t\t\t\t\t// FireOrder(id, turn, shooterid, targetid, weaponid, req, notes, hits, resolved){\n  517: \t\t\t\t\t\t\tactive[i].setFireOrder(target.id);\n  518  \t\t\t\t\t\t}\n  519  \t\t\t\t\t}\n  ...\n  527  \t\t\t\t\t\t\t\tif (shooter.structures[i].systems[j].hasValidTarget()){\n  528  \t\t\t\t\t\t\t\t\t// FireOrder(id, turn, shooterid, targetid, weaponid, req, notes, hits, resolved){\n  529: \t\t\t\t\t\t\t\t\tshooter.structures[i].systems[j].setFireOrder(target.id);\n  530  \t\t\t\t\t\t\t\t}\n  531  \t\t\t\t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  896  \t\t//return false;\n  897  \n  898: \t\t$this->setFireOrderDetails();\n  899  \t\t$this->sortFireOrders();\n  900  \t\t$this->resolveShipFireOrders();\n  ...\n 1158  \t}\n 1159  \n 1160: \tpublic function setFireOrderDetails(){\n 1161  \t\tfor ($i = sizeof($this->fires)-1; $i >= 0; $i--){\n 1162: \t\t\t//Debug::log(\"setFireOrderDetails fire #\".$i);\n 1163  \t\t\t//echo \"fire: \".$this->fires[$i]->id; echo \"</br></br>\";\n 1164  \t\t\t//var_export($this->fires[$i]); echo \"</br></br>\";\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  685  }\n  686  \n  687: System.prototype.setFireOrder = function(targetid){\n  688  \tif (this.odds <= 0){return;}\n  689  \tthis.fireOrders.push(\n  ...\n  697  }\n  698  \n  699: System.prototype.unsetFireOrder = function(){\n  700  \tfor (var i = this.fireOrders.length-1; i >= 0; i--){\n  701  \t\tif (this.fireOrders[i].turn == game.turn){\n  ...\n 1638  \t\telse if (this.getLoadLevel() >= 1){\n 1639  \t\t\tif (this.hasUnresolvedFireOrder()){\n 1640: \t\t\t\tthis.unsetFireOrder();\n 1641  \t\t\t}\n 1642  \t\t\tif (this.selected){\n ....\n 2346  }\n 2347  \n 2348: Dual.prototype.setFireOrder = function(targetid){\n 2349  \tvar w = this.getActiveSystem();\n 2350  \tif (w.odds <= 0){return;}\n ....\n 2718  \telse if (this.canFire()){\n 2719  \t\tif (this.hasUnresolvedFireOrder()){\n 2720: \t\t\tthis.unsetFireOrder();\n 2721  \t\t}\n 2722  \n ....\n 2996  }\n 2997  \n 2998: Hangar.prototype.setFireOrder = function(targetid){\n 2999  \tthis.fireOrders.push(\n 3000  \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n ....\n 3104  \t\t$(\"#launchRate\").html(this.getLaunchRate());\n 3105  \t\t$(\"#capacity\").html(this.capacity);\n 3106: \tthis.unsetFireOrder();\n 3107  \tthis.doUndoActions();\n 3108  \tthis.showHangarControl(e);\n ....\n 3219  \t\t\t\t\tif (game.ships[i].launchData.shipid == window.aUnit && game.ships[i].launchData.systemid == this.id){\n 3220  \t\t\t\t\t\t//console.log(\"splice\");\n 3221: \t\t\t\t\t\t//this.unsetFireOrder();\n 3222  \t\t\t\t\t\tgame.ships.splice(i, 1);\n 3223  \t\t\t\t\t\tgame.draw();\n\n16 matches across 5 files\n\n\nSearching 78 files for \"setFireo\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  350  \t\tthis.hideInstruct();\n  351  \t\t$(\"#deployOverlay\").hide();\n  352: \t\thangar.setFireOrder(t.id).select();\n  353  \t\tgame.flightDeploy = false;\n  354  \t\t//flight.disableMissionMode();\n\nC:\\xampp\\htdocs\\fire\\script.js:\n  515  \t\t\t\t\t\tif (active[i].hasValidTarget()){\n  516  \t\t\t\t\t\t\t// FireOrder(id, turn, shooterid, targetid, weaponid, req, notes, hits, resolved){\n  517: \t\t\t\t\t\t\tactive[i].setFireOrder(target.id);\n  518  \t\t\t\t\t\t}\n  519  \t\t\t\t\t}\n  ...\n  527  \t\t\t\t\t\t\t\tif (shooter.structures[i].systems[j].hasValidTarget()){\n  528  \t\t\t\t\t\t\t\t\t// FireOrder(id, turn, shooterid, targetid, weaponid, req, notes, hits, resolved){\n  529: \t\t\t\t\t\t\t\t\tshooter.structures[i].systems[j].setFireOrder(target.id);\n  530  \t\t\t\t\t\t\t\t}\n  531  \t\t\t\t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  896  \t\t//return false;\n  897  \n  898: \t\t$this->setFireOrderDetails();\n  899  \t\t$this->sortFireOrders();\n  900  \t\t$this->resolveShipFireOrders();\n  ...\n 1158  \t}\n 1159  \n 1160: \tpublic function setFireOrderDetails(){\n 1161  \t\tfor ($i = sizeof($this->fires)-1; $i >= 0; $i--){\n 1162: \t\t\t//Debug::log(\"setFireOrderDetails fire #\".$i);\n 1163  \t\t\t//echo \"fire: \".$this->fires[$i]->id; echo \"</br></br>\";\n 1164  \t\t\t//var_export($this->fires[$i]); echo \"</br></br>\";\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  685  }\n  686  \n  687: System.prototype.setFireOrder = function(targetid){\n  688  \tif (this.odds <= 0){return;}\n  689  \tthis.fireOrders.push(\n  ...\n  697  }\n  698  \n  699: System.prototype.unsetFireOrder = function(){\n  700  \tfor (var i = this.fireOrders.length-1; i >= 0; i--){\n  701  \t\tif (this.fireOrders[i].turn == game.turn){\n  ...\n 1638  \t\telse if (this.getLoadLevel() >= 1){\n 1639  \t\t\tif (this.hasUnresolvedFireOrder()){\n 1640: \t\t\t\tthis.unsetFireOrder();\n 1641  \t\t\t}\n 1642  \t\t\tif (this.selected){\n ....\n 2346  }\n 2347  \n 2348: Dual.prototype.setFireOrder = function(targetid){\n 2349  \tvar w = this.getActiveSystem();\n 2350  \tif (w.odds <= 0){return;}\n ....\n 2718  \telse if (this.canFire()){\n 2719  \t\tif (this.hasUnresolvedFireOrder()){\n 2720: \t\t\tthis.unsetFireOrder();\n 2721  \t\t}\n 2722  \n ....\n 2996  }\n 2997  \n 2998: Hangar.prototype.setFireOrder = function(targetid){\n 2999  \tthis.fireOrders.push(\n 3000  \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n ....\n 3104  \t\t$(\"#launchRate\").html(this.getLaunchRate());\n 3105  \t\t$(\"#capacity\").html(this.capacity);\n 3106: \tthis.unsetFireOrder();\n 3107  \tthis.doUndoActions();\n 3108  \tthis.showHangarControl(e);\n ....\n 3219  \t\t\t\t\tif (game.ships[i].launchData.shipid == window.aUnit && game.ships[i].launchData.systemid == this.id){\n 3220  \t\t\t\t\t\t//console.log(\"splice\");\n 3221: \t\t\t\t\t\t//this.unsetFireOrder();\n 3222  \t\t\t\t\t\tgame.ships.splice(i, 1);\n 3223  \t\t\t\t\t\tgame.draw();\n\n14 matches across 4 files\n\n\nSearching 15 files for \"getRemainingIntegrity\"\n\nC:\\xampp\\htdocs\\fire\\classes.js:\n  412  }\n  413  \n  414: Structure.prototype.getRemainingIntegrity = function(){\n  415  \tvar integrity = this.integrity;\n  416  \tfor (var i = 0; i < this.damages.length; i++){\n  ...\n  517  \n  518  Primary.prototype.setRemainingIntegrity = function(){\t\t\n  519: \tthis.remaining = this.getRemainingIntegrity();\n  520  }\n  521  \n  ...\n  551  \n  552  \n  553: Primary.prototype.getRemainingIntegrity = function(){\n  554  \tvar integrity = this.integrity;\n  555  \tfor (var i = 0; i < this.damages.length; i++){\n  ...\n  623  }\n  624  \n  625: Single.prototype.getRemainingIntegrity = function(){\n  626  \tvar integrity = this.integrity;\n  627  \tfor (var i = 0; i < this.damages.length; i++){\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n  330  \t\t\twrap.className = \"iconIntegrity\"; wrap.style.height = 12;\n  331  \n  332: \t\tvar rem = this.structures[i].getRemainingIntegrity();\n  333  \n  334  \t\tvar bgDiv = document.createElement(\"div\");\n\nC:\\xampp\\htdocs\\fire\\salvo.js:\n  174  \t\t\ttd.className = \"iconIntegrity\";\n  175  \n  176: \t\tvar rem = this.structures[i].getRemainingIntegrity();\n  177  \n  178  \t\tvar bgDiv = document.createElement(\"div\");\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  751  \t\tvar lowerDiv = document.createElement(\"div\");\n  752  \t\t\tlowerDiv.className = \"integrityNow\";\n  753: \t\t\tlowerDiv.style.width = this.getRemainingIntegrity() /  this.integrity * 100 + \"%\";\n  754  \t\t\ttd.appendChild(lowerDiv);\n  755  \n  ...\n  802  \tvar lowerDiv = document.createElement(\"div\");\n  803  \t\tlowerDiv.className = \"integrityNow\";\n  804: \t\tlowerDiv.style.width = this.getRemainingIntegrity() /  this.integrity * 100 + \"%\";\n  805  \t\treturnDiv.appendChild(lowerDiv);\n  806  \n  ...\n  834  }\n  835  \n  836: System.prototype.getRemainingIntegrity = function(){\n  837  \tvar dmg = 0;\n  838  \tfor (var i = 0; i < this.damages.length; i++){\n  ...\n 1092  \t}\n 1093  \telse if (unit.ship){\n 1094: \t\t$(table).append($(\"<tr>\").append($(\"<td>\").css(\"width\", \"60%\").html(\"Integrity\")).append($(\"<td>\").html(this.getRemainingIntegrity() + \" / \" + this.integrity)));\n 1095  \t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Max Damage per hit\")).append($(\"<td>\").html(this.maxDmg)));\n 1096  \n ....\n 1712  \t//if (game.getUnit($(this.element).data(\"shipId\")).ship){\n 1713  \tif (game.getUnit(this.parentId).ship){\n 1714: \t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Integrity\")).append($(\"<td>\").html(this.getRemainingIntegrity() + \" / \" + this.integrity)));\n 1715  \t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Mount / Armour\")).append($(\"<td>\").html(this.getMount())));\n 1716  \t}\n ....\n 3473  \t\tth.colSpan = 2; th.innerHTML = this.display; th.style.width = \"40%\"; tr.appendChild(th); table.appendChild(tr);\n 3474  \n 3475: \t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Integrity\")).append($(\"<td>\").html(this.getRemainingIntegrity() + \" / \" + this.integrity)));\n 3476  \t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Armour\")).append($(\"<td>\").html(this.getMount())));\n 3477  \t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Capacity\")).append($(\"<td>\").html(\"up to \" + this.capacity + \" units\")));\n\n12 matches across 4 files\n\n\nSearching 15 files for \"subunit \"\n\n0 matches\n\nSearching 78 files for \"subunit \"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n   49  testCrit for: Tethys, new: 53, turn: 5, size: 3\n   50   => SQUAD determineCrit for Tethys, Dmg: 53/0, dmg%: 12 %, trigger: 12 %\n   51: subunit 2 not damaged!\n   52: subunit 0 not damaged!\n   53: subunit 3 not damaged!\n   54: subunit 6 not damaged!\n   55: subunit 7 not damaged!\n   56  DB updateFireOrders: 24\n   57   => DB insertDamageEntries: 10\n\nC:\\xampp\\htdocs\\fire\\server\\mixed.php:\n  361  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  362  \t\t\tif ($this->structures[$i]->destroyed){continue;}\n  363: \t\t\telse if (!$this->structures[$i]->damaged){Debug::log(\"subunit \".$i.\" not damaged!\"); continue;}\n  364  \n  365  \t\t\t$this->structures[$i]->testCrit($turn, 0);\n\nC:\\xampp\\htdocs\\fire\\server\\squadron.php:\n  194  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  195  \t\t\tif ($this->structures[$i]->destroyed){continue;}\n  196: \t\t\telse if (!$this->structures[$i]->damaged){Debug::log(\"subunit \".$i.\" not damaged!\"); continue;}\n  197  \n  198  \t\t\t$this->structures[$i]->testCrit($turn, 0);\n\n7 matches across 3 files\n",
+			"contents": "Searching 78 files for \"weapona\"\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n  439  \t\t\t\t\tif (ship.salvo){return;}\n  440  \t\t\t\t\telse if (ship.hasWeaponsSelected() && ship.id != vessel.id){\n  441: \t\t\t\t\t\thandleWeaponAimEvent(ship, vessel, e);\n  442  \t\t\t\t\t}\n  443  \t\t\t\t\telse {\n  444  \t\t\t\t\t\tgame.target = 0;\n  445: \t\t\t\t\t\t$(\"#weaponAimTableWrapper\").hide()\n  446  \t\t\t\t\t}\n  447  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\game.js:\n 2459  \t\t\t\t\t\t\t\tif (ship.hasWeaponsSelected()){\n 2460  \t\t\t\t\t\t\t\t\tif (ship.id != vessel.id){\n 2461: \t\t\t\t\t\t\t\t\t\thandleWeaponAimEvent(ship, vessel, e);\n 2462: \t\t\t\t\t\t\t\t\t}// else $(\"#weaponAimTableWrapper\").hide();\n 2463  \t\t\t\t\t\t\t\t}\n 2464  \t\t\t\t\t\t\t} else {\n 2465  \t\t\t\t\t\t\t\tgame.target = 0;\n 2466: \t\t\t\t\t\t\t\t$(\"#weaponAimTableWrapper\").hide();\n 2467  \t\t\t\t\t\t\t}\n 2468  \t\t\t\t\t\t},\n\nC:\\xampp\\htdocs\\fire\\game.php:\n  288  \n  289  \n  290: \t\t<div id=\"weaponAimTableWrapper\" class=\"disabled\">\n  291  \t\t\t<table id=\"targetInfo\">\n  292  \t\t\t\t<tr>\n  ...\n  528  \tfunction showUI(){\n  529  \t\t$(\"#mouseCanvas\").on(\"mouseleave\", function(){\n  530: \t\t\t$(\"#weaponAimTableWrapper\").hide();\n  531  \t\t})\n  532  \n\nC:\\xampp\\htdocs\\fire\\salvo.js:\n  246  \t\t\t\t\tif (ship.salvo){return;}\n  247  \t\t\t\t\telse if (ship.hasWeaponsSelected() && ship.id != vessel.id){\n  248: \t\t\t\t\t\thandleWeaponAimEvent(ship, vessel, e);\n  249  \t\t\t\t\t}\n  250  \t\t\t\t\telse {\n  251  \t\t\t\t\t\tgame.target = 0;\n  252: \t\t\t\t\t\t$(\"#weaponAimTableWrapper\").hide()\n  253  \t\t\t\t\t}\n  254  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\script.js:\n   98  }\n   99  \n  100: function handleWeaponAimEvent(shooter, target, e, pos){\n  101  \n  102  \tif (shooter.userid == target.userid){\n  103: \t\t$(\"#weaponAimTableWrapper\").hide();\n  104  \t\treturn;\n  105  \t}\n  ...\n  110  \tvar shooterLoc = shooter.getPlannedPos();\n  111  \tvar facing = shooter.getPlannedFacing();\t\t\t\t\t\n  112: \tvar targetData1 = $(\"#weaponAimTableWrapper\").find(\"#targetInfo\").find(\"#targetData1\");\n  113: \tvar targetData2 = $(\"#weaponAimTableWrapper\").find(\"#targetInfo\").find(\"#targetData2\");\n  114: \tvar weaponInfo = $(\"#weaponAimTableWrapper\").find(\"#weaponInfo\");\n  115  \tvar dist;\n  116  \tvar drop = 0;\n  ...\n  299  \t}\n  300  \t\t\t\t\n  301: \tvar ele = $(\"#weaponAimTableWrapper\");\n  302  \tvar w = $(ele).width()/2;\n  303  \tvar top = (e.clientY) + 100;\n  ...\n  382  \t\t}\n  383  \t\telse if (ship.hasWeaponsSelected()){\n  384: \t\t\thandleWeaponAimEvent(ship, unit, e, pos);\n  385  \t\t}\n  386  \t}\n  ...\n  539  \t\t\t}\n  540  \n  541: \t\t\t$(\"#weaponAimTableWrapper\").hide()\n  542  \t\t\tshooter.highlightAllSelectedWeapons();\n  543  \t\t\t//game.draw();\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  887  Ship.prototype.unselectSystems = function(){\n  888  \tfxCtx.clearRect(0, 0, res.x, res.y);\n  889: \t$(\"#weaponAimTableWrapper\").hide();\n  890  \n  891  \tfor (var i = 0; i < this.structures.length; i++){\n  ...\n 1799  \t\t\t\t\tvar target = game.getUnit($(this).parent().data(\"shipId\"));\n 1800  \t\t\t\t\tif (shooter.id != target.id && shooter.hasWeaponsSelected()){\n 1801: \t\t\t\t\t\thandleWeaponAimEvent(shooter, target, e);\n 1802  \t\t\t\t\t}\n 1803  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\squadron.js:\n  669  \t\t\t\t\t\t\tvar target = game.getUnit($(this).parent().parent().data(\"shipId\"));\n  670  \t\t\t\t\t\t\tif (shooter.id != target.id && shooter.hasWeaponsSelected()){\n  671: \t\t\t\t\t\t\t\thandleWeaponAimEvent(shooter, target, e);\n  672  \t\t\t\t\t\t\t}\n  673  \t\t\t\t\t\t}\n  ...\n  877  Squadron.prototype.unselectSystems = function(){\n  878  \tfxCtx.clearRect(0, 0, res.x, res.y);\n  879: \t$(\"#weaponAimTableWrapper\").hide();\n  880  \n  881  \tfor (var i = 0; i < this.structures.length; i++){\n\nC:\\xampp\\htdocs\\fire\\style.css:\n 1517  }\n 1518  \n 1519: #weaponAimTableWrapper {\n 1520  \tbackground-color: black;\n 1521  \tborder-radius: 5px;\n ....\n 1527  }\n 1528  \n 1529: #weaponAimTableWrapper.disabled {\n 1530  \tdisplay: none;\n 1531  }\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 1657  \t}\n 1658  \telse {\n 1659: \t\t$(\"#weaponAimTableWrapper\").hide();\n 1660  \t\tgame.mode = 1;\n 1661  \t\tfxCtx.clearRect(0, 0, res.x, res.y);\n ....\n 2739  \t}\n 2740  \telse {\n 2741: \t\t$(\"#weaponAimTableWrapper\").hide();\n 2742  \t\tgame.mode = 1;\n 2743  \t\tfxCtx.clearRect(0, 0, res.x, res.y);\n\n25 matches across 9 files\n\n\nSearching 78 files for \"weaponA\"\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n  439  \t\t\t\t\tif (ship.salvo){return;}\n  440  \t\t\t\t\telse if (ship.hasWeaponsSelected() && ship.id != vessel.id){\n  441: \t\t\t\t\t\thandleWeaponAimEvent(ship, vessel, e);\n  442  \t\t\t\t\t}\n  443  \t\t\t\t\telse {\n  444  \t\t\t\t\t\tgame.target = 0;\n  445: \t\t\t\t\t\t$(\"#weaponAimTableWrapper\").hide()\n  446  \t\t\t\t\t}\n  447  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\game.js:\n 2459  \t\t\t\t\t\t\t\tif (ship.hasWeaponsSelected()){\n 2460  \t\t\t\t\t\t\t\t\tif (ship.id != vessel.id){\n 2461: \t\t\t\t\t\t\t\t\t\thandleWeaponAimEvent(ship, vessel, e);\n 2462: \t\t\t\t\t\t\t\t\t}// else $(\"#weaponAimTableWrapper\").hide();\n 2463  \t\t\t\t\t\t\t\t}\n 2464  \t\t\t\t\t\t\t} else {\n 2465  \t\t\t\t\t\t\t\tgame.target = 0;\n 2466: \t\t\t\t\t\t\t\t$(\"#weaponAimTableWrapper\").hide();\n 2467  \t\t\t\t\t\t\t}\n 2468  \t\t\t\t\t\t},\n\nC:\\xampp\\htdocs\\fire\\game.php:\n  288  \n  289  \n  290: \t\t<div id=\"weaponAimTableWrapper\" class=\"disabled\">\n  291  \t\t\t<table id=\"targetInfo\">\n  292  \t\t\t\t<tr>\n  ...\n  528  \tfunction showUI(){\n  529  \t\t$(\"#mouseCanvas\").on(\"mouseleave\", function(){\n  530: \t\t\t$(\"#weaponAimTableWrapper\").hide();\n  531  \t\t})\n  532  \n\nC:\\xampp\\htdocs\\fire\\salvo.js:\n  246  \t\t\t\t\tif (ship.salvo){return;}\n  247  \t\t\t\t\telse if (ship.hasWeaponsSelected() && ship.id != vessel.id){\n  248: \t\t\t\t\t\thandleWeaponAimEvent(ship, vessel, e);\n  249  \t\t\t\t\t}\n  250  \t\t\t\t\telse {\n  251  \t\t\t\t\t\tgame.target = 0;\n  252: \t\t\t\t\t\t$(\"#weaponAimTableWrapper\").hide()\n  253  \t\t\t\t\t}\n  254  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\script.js:\n   98  }\n   99  \n  100: function handleWeaponAimEvent(shooter, target, e, pos){\n  101  \n  102  \tif (shooter.userid == target.userid){\n  103: \t\t$(\"#weaponAimTableWrapper\").hide();\n  104  \t\treturn;\n  105  \t}\n  ...\n  110  \tvar shooterLoc = shooter.getPlannedPos();\n  111  \tvar facing = shooter.getPlannedFacing();\t\t\t\t\t\n  112: \tvar targetData1 = $(\"#weaponAimTableWrapper\").find(\"#targetInfo\").find(\"#targetData1\");\n  113: \tvar targetData2 = $(\"#weaponAimTableWrapper\").find(\"#targetInfo\").find(\"#targetData2\");\n  114: \tvar weaponInfo = $(\"#weaponAimTableWrapper\").find(\"#weaponInfo\");\n  115  \tvar dist;\n  116  \tvar drop = 0;\n  ...\n  299  \t}\n  300  \t\t\t\t\n  301: \tvar ele = $(\"#weaponAimTableWrapper\");\n  302  \tvar w = $(ele).width()/2;\n  303  \tvar top = (e.clientY) + 100;\n  ...\n  382  \t\t}\n  383  \t\telse if (ship.hasWeaponsSelected()){\n  384: \t\t\thandleWeaponAimEvent(ship, unit, e, pos);\n  385  \t\t}\n  386  \t}\n  ...\n  539  \t\t\t}\n  540  \n  541: \t\t\t$(\"#weaponAimTableWrapper\").hide()\n  542  \t\t\tshooter.highlightAllSelectedWeapons();\n  543  \t\t\t//game.draw();\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  887  Ship.prototype.unselectSystems = function(){\n  888  \tfxCtx.clearRect(0, 0, res.x, res.y);\n  889: \t$(\"#weaponAimTableWrapper\").hide();\n  890  \n  891  \tfor (var i = 0; i < this.structures.length; i++){\n  ...\n 1799  \t\t\t\t\tvar target = game.getUnit($(this).parent().data(\"shipId\"));\n 1800  \t\t\t\t\tif (shooter.id != target.id && shooter.hasWeaponsSelected()){\n 1801: \t\t\t\t\t\thandleWeaponAimEvent(shooter, target, e);\n 1802  \t\t\t\t\t}\n 1803  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\squadron.js:\n  669  \t\t\t\t\t\t\tvar target = game.getUnit($(this).parent().parent().data(\"shipId\"));\n  670  \t\t\t\t\t\t\tif (shooter.id != target.id && shooter.hasWeaponsSelected()){\n  671: \t\t\t\t\t\t\t\thandleWeaponAimEvent(shooter, target, e);\n  672  \t\t\t\t\t\t\t}\n  673  \t\t\t\t\t\t}\n  ...\n  877  Squadron.prototype.unselectSystems = function(){\n  878  \tfxCtx.clearRect(0, 0, res.x, res.y);\n  879: \t$(\"#weaponAimTableWrapper\").hide();\n  880  \n  881  \tfor (var i = 0; i < this.structures.length; i++){\n\nC:\\xampp\\htdocs\\fire\\style.css:\n 1517  }\n 1518  \n 1519: #weaponAimTableWrapper {\n 1520  \tbackground-color: black;\n 1521  \tborder-radius: 5px;\n ....\n 1527  }\n 1528  \n 1529: #weaponAimTableWrapper.disabled {\n 1530  \tdisplay: none;\n 1531  }\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n 1657  \t}\n 1658  \telse {\n 1659: \t\t$(\"#weaponAimTableWrapper\").hide();\n 1660  \t\tgame.mode = 1;\n 1661  \t\tfxCtx.clearRect(0, 0, res.x, res.y);\n ....\n 2739  \t}\n 2740  \telse {\n 2741: \t\t$(\"#weaponAimTableWrapper\").hide();\n 2742  \t\tgame.mode = 1;\n 2743  \t\tfxCtx.clearRect(0, 0, res.x, res.y);\n\n25 matches across 9 files\n\n\nSearching 78 files for \"setFire\"\n\nC:\\xampp\\htdocs\\fire\\cam.js:\n   51  \t},\n   52  \n   53: \tsetFireFocus: function(fire){\n   54  \t\tif (fire.dist <= 100){\n   55  \t\t\tthis.z = 2;\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  350  \t\tthis.hideInstruct();\n  351  \t\t$(\"#deployOverlay\").hide();\n  352: \t\thangar.setFireOrder(t.id).select();\n  353  \t\tgame.flightDeploy = false;\n  354  \t\t//flight.disableMissionMode();\n  ...\n 1805  \t\tif (!game.fireOrders[i].animating){\n 1806  \t\t\tgame.fireOrders[i].animating = 1;\n 1807: \t\t\tcam.setFireFocus(game.fireOrders[i]);\n 1808  \t\t\tgame.draw();\n 1809  \t\t\treturn;\n\nC:\\xampp\\htdocs\\fire\\script.js:\n  515  \t\t\t\t\t\tif (active[i].hasValidTarget()){\n  516  \t\t\t\t\t\t\t// FireOrder(id, turn, shooterid, targetid, weaponid, req, notes, hits, resolved){\n  517: \t\t\t\t\t\t\tactive[i].setFireOrder(target.id);\n  518  \t\t\t\t\t\t}\n  519  \t\t\t\t\t}\n  ...\n  527  \t\t\t\t\t\t\t\tif (shooter.structures[i].systems[j].hasValidTarget()){\n  528  \t\t\t\t\t\t\t\t\t// FireOrder(id, turn, shooterid, targetid, weaponid, req, notes, hits, resolved){\n  529: \t\t\t\t\t\t\t\t\tshooter.structures[i].systems[j].setFireOrder(target.id);\n  530  \t\t\t\t\t\t\t\t}\n  531  \t\t\t\t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  896  \t\t//return false;\n  897  \n  898: \t\t$this->setFireOrderDetails();\n  899  \t\t$this->sortFireOrders();\n  900  \t\t$this->resolveShipFireOrders();\n  ...\n 1158  \t}\n 1159  \n 1160: \tpublic function setFireOrderDetails(){\n 1161  \t\tfor ($i = sizeof($this->fires)-1; $i >= 0; $i--){\n 1162: \t\t\t//Debug::log(\"setFireOrderDetails fire #\".$i);\n 1163  \t\t\t//echo \"fire: \".$this->fires[$i]->id; echo \"</br></br>\";\n 1164  \t\t\t//var_export($this->fires[$i]); echo \"</br></br>\";\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  685  }\n  686  \n  687: System.prototype.setFireOrder = function(targetid){\n  688  \tif (this.odds <= 0){return;}\n  689  \tthis.fireOrders.push(\n  ...\n  697  }\n  698  \n  699: System.prototype.unsetFireOrder = function(){\n  700  \tfor (var i = this.fireOrders.length-1; i >= 0; i--){\n  701  \t\tif (this.fireOrders[i].turn == game.turn){\n  ...\n 1638  \t\telse if (this.getLoadLevel() >= 1){\n 1639  \t\t\tif (this.hasUnresolvedFireOrder()){\n 1640: \t\t\t\tthis.unsetFireOrder();\n 1641  \t\t\t}\n 1642  \t\t\tif (this.selected){\n ....\n 2346  }\n 2347  \n 2348: Dual.prototype.setFireOrder = function(targetid){\n 2349  \tvar w = this.getActiveSystem();\n 2350  \tif (w.odds <= 0){return;}\n ....\n 2718  \telse if (this.canFire()){\n 2719  \t\tif (this.hasUnresolvedFireOrder()){\n 2720: \t\t\tthis.unsetFireOrder();\n 2721  \t\t}\n 2722  \n ....\n 2996  }\n 2997  \n 2998: Hangar.prototype.setFireOrder = function(targetid){\n 2999  \tthis.fireOrders.push(\n 3000  \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n ....\n 3104  \t\t$(\"#launchRate\").html(this.getLaunchRate());\n 3105  \t\t$(\"#capacity\").html(this.capacity);\n 3106: \tthis.unsetFireOrder();\n 3107  \tthis.doUndoActions();\n 3108  \tthis.showHangarControl(e);\n ....\n 3219  \t\t\t\t\tif (game.ships[i].launchData.shipid == window.aUnit && game.ships[i].launchData.systemid == this.id){\n 3220  \t\t\t\t\t\t//console.log(\"splice\");\n 3221: \t\t\t\t\t\t//this.unsetFireOrder();\n 3222  \t\t\t\t\t\tgame.ships.splice(i, 1);\n 3223  \t\t\t\t\t\tgame.draw();\n\n16 matches across 5 files\n\n\nSearching 78 files for \"setFireo\"\n\nC:\\xampp\\htdocs\\fire\\game.js:\n  350  \t\tthis.hideInstruct();\n  351  \t\t$(\"#deployOverlay\").hide();\n  352: \t\thangar.setFireOrder(t.id).select();\n  353  \t\tgame.flightDeploy = false;\n  354  \t\t//flight.disableMissionMode();\n\nC:\\xampp\\htdocs\\fire\\script.js:\n  515  \t\t\t\t\t\tif (active[i].hasValidTarget()){\n  516  \t\t\t\t\t\t\t// FireOrder(id, turn, shooterid, targetid, weaponid, req, notes, hits, resolved){\n  517: \t\t\t\t\t\t\tactive[i].setFireOrder(target.id);\n  518  \t\t\t\t\t\t}\n  519  \t\t\t\t\t}\n  ...\n  527  \t\t\t\t\t\t\t\tif (shooter.structures[i].systems[j].hasValidTarget()){\n  528  \t\t\t\t\t\t\t\t\t// FireOrder(id, turn, shooterid, targetid, weaponid, req, notes, hits, resolved){\n  529: \t\t\t\t\t\t\t\t\tshooter.structures[i].systems[j].setFireOrder(target.id);\n  530  \t\t\t\t\t\t\t\t}\n  531  \t\t\t\t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  896  \t\t//return false;\n  897  \n  898: \t\t$this->setFireOrderDetails();\n  899  \t\t$this->sortFireOrders();\n  900  \t\t$this->resolveShipFireOrders();\n  ...\n 1158  \t}\n 1159  \n 1160: \tpublic function setFireOrderDetails(){\n 1161  \t\tfor ($i = sizeof($this->fires)-1; $i >= 0; $i--){\n 1162: \t\t\t//Debug::log(\"setFireOrderDetails fire #\".$i);\n 1163  \t\t\t//echo \"fire: \".$this->fires[$i]->id; echo \"</br></br>\";\n 1164  \t\t\t//var_export($this->fires[$i]); echo \"</br></br>\";\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  685  }\n  686  \n  687: System.prototype.setFireOrder = function(targetid){\n  688  \tif (this.odds <= 0){return;}\n  689  \tthis.fireOrders.push(\n  ...\n  697  }\n  698  \n  699: System.prototype.unsetFireOrder = function(){\n  700  \tfor (var i = this.fireOrders.length-1; i >= 0; i--){\n  701  \t\tif (this.fireOrders[i].turn == game.turn){\n  ...\n 1638  \t\telse if (this.getLoadLevel() >= 1){\n 1639  \t\t\tif (this.hasUnresolvedFireOrder()){\n 1640: \t\t\t\tthis.unsetFireOrder();\n 1641  \t\t\t}\n 1642  \t\t\tif (this.selected){\n ....\n 2346  }\n 2347  \n 2348: Dual.prototype.setFireOrder = function(targetid){\n 2349  \tvar w = this.getActiveSystem();\n 2350  \tif (w.odds <= 0){return;}\n ....\n 2718  \telse if (this.canFire()){\n 2719  \t\tif (this.hasUnresolvedFireOrder()){\n 2720: \t\t\tthis.unsetFireOrder();\n 2721  \t\t}\n 2722  \n ....\n 2996  }\n 2997  \n 2998: Hangar.prototype.setFireOrder = function(targetid){\n 2999  \tthis.fireOrders.push(\n 3000  \t\t{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, \n ....\n 3104  \t\t$(\"#launchRate\").html(this.getLaunchRate());\n 3105  \t\t$(\"#capacity\").html(this.capacity);\n 3106: \tthis.unsetFireOrder();\n 3107  \tthis.doUndoActions();\n 3108  \tthis.showHangarControl(e);\n ....\n 3219  \t\t\t\t\tif (game.ships[i].launchData.shipid == window.aUnit && game.ships[i].launchData.systemid == this.id){\n 3220  \t\t\t\t\t\t//console.log(\"splice\");\n 3221: \t\t\t\t\t\t//this.unsetFireOrder();\n 3222  \t\t\t\t\t\tgame.ships.splice(i, 1);\n 3223  \t\t\t\t\t\tgame.draw();\n\n14 matches across 4 files\n\n\nSearching 15 files for \"getRemainingIntegrity\"\n\nC:\\xampp\\htdocs\\fire\\classes.js:\n  412  }\n  413  \n  414: Structure.prototype.getRemainingIntegrity = function(){\n  415  \tvar integrity = this.integrity;\n  416  \tfor (var i = 0; i < this.damages.length; i++){\n  ...\n  517  \n  518  Primary.prototype.setRemainingIntegrity = function(){\t\t\n  519: \tthis.remaining = this.getRemainingIntegrity();\n  520  }\n  521  \n  ...\n  551  \n  552  \n  553: Primary.prototype.getRemainingIntegrity = function(){\n  554  \tvar integrity = this.integrity;\n  555  \tfor (var i = 0; i < this.damages.length; i++){\n  ...\n  623  }\n  624  \n  625: Single.prototype.getRemainingIntegrity = function(){\n  626  \tvar integrity = this.integrity;\n  627  \tfor (var i = 0; i < this.damages.length; i++){\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n  330  \t\t\twrap.className = \"iconIntegrity\"; wrap.style.height = 12;\n  331  \n  332: \t\tvar rem = this.structures[i].getRemainingIntegrity();\n  333  \n  334  \t\tvar bgDiv = document.createElement(\"div\");\n\nC:\\xampp\\htdocs\\fire\\salvo.js:\n  174  \t\t\ttd.className = \"iconIntegrity\";\n  175  \n  176: \t\tvar rem = this.structures[i].getRemainingIntegrity();\n  177  \n  178  \t\tvar bgDiv = document.createElement(\"div\");\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  751  \t\tvar lowerDiv = document.createElement(\"div\");\n  752  \t\t\tlowerDiv.className = \"integrityNow\";\n  753: \t\t\tlowerDiv.style.width = this.getRemainingIntegrity() /  this.integrity * 100 + \"%\";\n  754  \t\t\ttd.appendChild(lowerDiv);\n  755  \n  ...\n  802  \tvar lowerDiv = document.createElement(\"div\");\n  803  \t\tlowerDiv.className = \"integrityNow\";\n  804: \t\tlowerDiv.style.width = this.getRemainingIntegrity() /  this.integrity * 100 + \"%\";\n  805  \t\treturnDiv.appendChild(lowerDiv);\n  806  \n  ...\n  834  }\n  835  \n  836: System.prototype.getRemainingIntegrity = function(){\n  837  \tvar dmg = 0;\n  838  \tfor (var i = 0; i < this.damages.length; i++){\n  ...\n 1092  \t}\n 1093  \telse if (unit.ship){\n 1094: \t\t$(table).append($(\"<tr>\").append($(\"<td>\").css(\"width\", \"60%\").html(\"Integrity\")).append($(\"<td>\").html(this.getRemainingIntegrity() + \" / \" + this.integrity)));\n 1095  \t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Max Damage per hit\")).append($(\"<td>\").html(this.maxDmg)));\n 1096  \n ....\n 1712  \t//if (game.getUnit($(this.element).data(\"shipId\")).ship){\n 1713  \tif (game.getUnit(this.parentId).ship){\n 1714: \t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Integrity\")).append($(\"<td>\").html(this.getRemainingIntegrity() + \" / \" + this.integrity)));\n 1715  \t\t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Mount / Armour\")).append($(\"<td>\").html(this.getMount())));\n 1716  \t}\n ....\n 3473  \t\tth.colSpan = 2; th.innerHTML = this.display; th.style.width = \"40%\"; tr.appendChild(th); table.appendChild(tr);\n 3474  \n 3475: \t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Integrity\")).append($(\"<td>\").html(this.getRemainingIntegrity() + \" / \" + this.integrity)));\n 3476  \t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Armour\")).append($(\"<td>\").html(this.getMount())));\n 3477  \t$(table).append($(\"<tr>\").append($(\"<td>\").html(\"Capacity\")).append($(\"<td>\").html(\"up to \" + this.capacity + \" units\")));\n\n12 matches across 4 files\n\n\nSearching 15 files for \"subunit \"\n\n0 matches\n\nSearching 78 files for \"subunit \"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n   49  testCrit for: Tethys, new: 53, turn: 5, size: 3\n   50   => SQUAD determineCrit for Tethys, Dmg: 53/0, dmg%: 12 %, trigger: 12 %\n   51: subunit 2 not damaged!\n   52: subunit 0 not damaged!\n   53: subunit 3 not damaged!\n   54: subunit 6 not damaged!\n   55: subunit 7 not damaged!\n   56  DB updateFireOrders: 24\n   57   => DB insertDamageEntries: 10\n\nC:\\xampp\\htdocs\\fire\\server\\mixed.php:\n  361  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  362  \t\t\tif ($this->structures[$i]->destroyed){continue;}\n  363: \t\t\telse if (!$this->structures[$i]->damaged){Debug::log(\"subunit \".$i.\" not damaged!\"); continue;}\n  364  \n  365  \t\t\t$this->structures[$i]->testCrit($turn, 0);\n\nC:\\xampp\\htdocs\\fire\\server\\squadron.php:\n  194  \t\tfor ($i = 0; $i < sizeof($this->structures); $i++){\n  195  \t\t\tif ($this->structures[$i]->destroyed){continue;}\n  196: \t\t\telse if (!$this->structures[$i]->damaged){Debug::log(\"subunit \".$i.\" not damaged!\"); continue;}\n  197  \n  198  \t\t\t$this->structures[$i]->testCrit($turn, 0);\n\n7 matches across 3 files\n\n\nSearching 61 files for \"= []\"\n\nC:\\xampp\\htdocs\\fire\\gameSetup.php:\n  250  \t\t\t\t\t\ttable.innerHTML = \"\";\n  251  \t\t\t\t\tgame.ships[0].totalCost = game.ships[0].cost;\n  252: \t\t\t\t\tgame.ships[0].upgrades = [];\n  253  \t\t\t\t\tgame.ships[0].setBuyData();\n  254  \n\nC:\\xampp\\htdocs\\fire\\server\\classes.php:\n   12  \tpublic $start = 0;\n   13  \tpublic $end = 0;\n   14: \tpublic $systems = [];\n   15  \tpublic $parentId;\n   16  \n\n2 matches across 2 files\n",
 			"settings":
 			{
-				"buffer_size": 18401,
+				"buffer_size": 18836,
 				"line_ending": "Windows",
 				"name": "Find Results",
 				"scratch": true
@@ -1429,13 +1429,14 @@
 	],
 	"find":
 	{
-		"height": 40.0
+		"height": 23.0
 	},
 	"find_in_files":
 	{
 		"height": 104.0,
 		"where_history":
 		[
+			"*.php",
 			"",
 			"*.js",
 			"",
@@ -1562,8 +1563,7 @@
 			"",
 			"this.turnAngles = {}",
 			"",
-			"*.php",
-			""
+			"*.php"
 		]
 	},
 	"find_state":
@@ -1571,6 +1571,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"= [];",
+			"= []",
 			"jump",
 			"subunit ",
 			"shooter",
@@ -1696,9 +1698,7 @@
 			"var max = this.getEffiency();",
 			"canboost",
 			"canboost ",
-			"ototype.geteff",
-			"ototype.geff",
-			"ototype.getoutput"
+			"ototype.geteff"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1706,6 +1706,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"= array();",
 			"& (fire.target.ship || fire.target.squad)){",
 			"(fire.shooter.ship || fire.shooter.squad){",
 			"(fire.shooter.ship || fire.shooter.squad",
@@ -1832,8 +1833,7 @@
 			"$negation = $fire->target->getStructureById($fire->section)->getArmourValue($system);\n",
 			">getArmourValue($system);",
 			"unit.",
-			"getGamePos",
-			"getTableData"
+			"getGamePos"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -1844,7 +1844,7 @@
 	"groups":
 	[
 		{
-			"selected": 52,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -1941,15 +1941,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5605,
+						"buffer_size": 5610,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								63,
-								63
+								193,
+								165
 							]
 						],
 						"settings":
@@ -1958,41 +1958,51 @@
 							"auto_name": "<?php",
 							"bh_regions":
 							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
@@ -2002,17 +2012,7 @@
 								"bh_single_quote_center",
 								"bh_single_quote_open",
 								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content"
+								"bh_single_quote_content"
 							],
 							"syntax": "Packages/PHP/PHP.sublime-syntax",
 							"translate_tabs_to_spaces": false
@@ -2021,7 +2021,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 37,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -2109,7 +2109,7 @@
 						"translation.y": 7642.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
@@ -2197,7 +2197,7 @@
 						"translation.y": 8578.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 32,
+					"stack_index": 34,
 					"type": "text"
 				},
 				{
@@ -2314,7 +2314,7 @@
 						"translation.y": 3853.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 33,
+					"stack_index": 35,
 					"type": "text"
 				},
 				{
@@ -2402,7 +2402,7 @@
 						"translation.y": 6154.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 31,
+					"stack_index": 33,
 					"type": "text"
 				},
 				{
@@ -2490,7 +2490,7 @@
 						"translation.y": 22937.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 30,
 					"type": "text"
 				},
 				{
@@ -2499,7 +2499,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 19843,
+						"buffer_size": 19848,
 						"regions":
 						{
 						},
@@ -2578,7 +2578,7 @@
 						"translation.y": 2887.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 50,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -2842,7 +2842,7 @@
 						"translation.y": 9319.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -3195,7 +3195,7 @@
 						"translation.y": 992.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
@@ -3753,7 +3753,7 @@
 						"translation.y": 583.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 47,
+					"stack_index": 48,
 					"type": "text"
 				},
 				{
@@ -3929,7 +3929,7 @@
 						"translation.y": 1181.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 38,
+					"stack_index": 39,
 					"type": "text"
 				},
 				{
@@ -3958,7 +3958,7 @@
 						"translation.y": 303.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
@@ -4222,7 +4222,7 @@
 						"translation.y": 2006.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 35,
+					"stack_index": 37,
 					"type": "text"
 				},
 				{
@@ -4310,7 +4310,7 @@
 						"translation.y": 741.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 42,
+					"stack_index": 43,
 					"type": "text"
 				},
 				{
@@ -4486,7 +4486,7 @@
 						"translation.y": 313.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 39,
+					"stack_index": 40,
 					"type": "text"
 				},
 				{
@@ -4840,7 +4840,7 @@
 						"translation.y": 4255.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -5105,7 +5105,7 @@
 						"translation.y": 7564.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 31,
 					"type": "text"
 				},
 				{
@@ -5193,7 +5193,7 @@
 						"translation.y": 5172.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
@@ -5201,7 +5201,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 18401,
+						"buffer_size": 18836,
 						"regions":
 						{
 							"match":
@@ -5604,6 +5604,14 @@
 									[
 										18272,
 										18280
+									],
+									[
+										18598,
+										18602
+									],
+									[
+										18770,
+										18774
 									]
 								],
 								"scope": ""
@@ -5612,15 +5620,74 @@
 						"selection":
 						[
 							[
-								17946,
-								17946
+								18403,
+								18403
 							]
 						],
 						"settings":
 						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
 							"detect_indentation": false,
 							"line_numbers": false,
-							"output_tag": 7,
+							"output_tag": 8,
 							"result_base_dir": "",
 							"result_file_regex": "^([^ \t].*):$",
 							"result_line_regex": "^ +([0-9]+):",
@@ -5628,10 +5695,10 @@
 							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 7228.0,
+						"translation.y": 7601.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -5719,7 +5786,7 @@
 						"translation.y": 9222.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
@@ -5807,7 +5874,7 @@
 						"translation.y": 371.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
@@ -5924,7 +5991,7 @@
 						"translation.y": 25355.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 23,
 					"type": "text"
 				},
 				{
@@ -6013,7 +6080,7 @@
 						"translation.y": 1178.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 48,
+					"stack_index": 49,
 					"type": "text"
 				},
 				{
@@ -6189,7 +6256,7 @@
 						"translation.y": 6056.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 30,
+					"stack_index": 32,
 					"type": "text"
 				},
 				{
@@ -6454,7 +6521,7 @@
 						"translation.y": 26200.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
@@ -6543,7 +6610,7 @@
 						"translation.y": 2780.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 23,
+					"stack_index": 25,
 					"type": "text"
 				},
 				{
@@ -6559,8 +6626,8 @@
 						"selection":
 						[
 							[
-								56,
-								56
+								708,
+								708
 							]
 						],
 						"settings":
@@ -6568,56 +6635,56 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
 								"bh_tag_close",
 								"bh_tag_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
 								"bh_single_quote",
 								"bh_single_quote_center",
 								"bh_single_quote_open",
@@ -6632,7 +6699,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -7196,7 +7263,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 45,
+					"stack_index": 46,
 					"type": "text"
 				},
 				{
@@ -7372,7 +7439,7 @@
 						"translation.y": 4366.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 34,
+					"stack_index": 36,
 					"type": "text"
 				},
 				{
@@ -7636,7 +7703,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 43,
+					"stack_index": 44,
 					"type": "text"
 				},
 				{
@@ -7814,7 +7881,7 @@
 						"translation.y": 1168.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 36,
+					"stack_index": 38,
 					"type": "text"
 				},
 				{
@@ -8079,7 +8146,7 @@
 						"translation.y": 2484.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 49,
+					"stack_index": 50,
 					"type": "text"
 				},
 				{
@@ -8167,7 +8234,7 @@
 						"translation.y": 22956.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 27,
 					"type": "text"
 				},
 				{
@@ -8255,7 +8322,7 @@
 						"translation.y": 7356.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
@@ -8520,7 +8587,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -8962,7 +9029,7 @@
 						"translation.y": 32872.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 46,
+					"stack_index": 47,
 					"type": "text"
 				},
 				{
@@ -9147,15 +9214,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 19843,
+						"buffer_size": 19848,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								14548,
-								14548
+								14553,
+								14553
 							]
 						],
 						"settings":
@@ -9314,7 +9381,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
@@ -9557,15 +9624,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5605,
+						"buffer_size": 5610,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4619,
-								4619
+								4624,
+								4624
 							]
 						],
 						"settings":
@@ -9990,7 +10057,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -10019,7 +10086,7 @@
 						"translation.y": 680.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
@@ -10048,7 +10115,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -10136,7 +10203,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -10400,7 +10467,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -10488,7 +10555,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 44,
+					"stack_index": 45,
 					"type": "text"
 				},
 				{
@@ -10576,7 +10643,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -10664,7 +10731,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -10840,7 +10907,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
+					"stack_index": 24,
 					"type": "text"
 				},
 				{
@@ -11106,7 +11173,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
@@ -11282,7 +11349,7 @@
 						"translation.y": 2448.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 40,
+					"stack_index": 41,
 					"type": "text"
 				},
 				{
@@ -11459,7 +11526,7 @@
 						"translation.y": 49.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 41,
+					"stack_index": 42,
 					"type": "text"
 				},
 				{
@@ -12105,7 +12172,7 @@
 						"translation.y": 1265.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
@@ -12193,7 +12260,7 @@
 						"translation.y": 4970.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
@@ -12519,6 +12586,10 @@
 		"selected_items":
 		[
 			[
+				"clas",
+				"C:\\xampp\\htdocs\\fire\\server\\classes.php"
+			],
+			[
 				"de",
 				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
 			],
@@ -12821,10 +12892,6 @@
 			[
 				"oct",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\Octurion.php"
-			],
-			[
-				"clas",
-				"C:\\xampp\\htdocs\\fire\\classes.js"
 			],
 			[
 				"shared",

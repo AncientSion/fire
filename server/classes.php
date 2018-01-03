@@ -11,7 +11,7 @@ class Shared {
 class Section {
 	public $start = 0;
 	public $end = 0;
-	public $systems = [];
+	public $systems = array();
 	public $parentId;
 
 	function __construct($start, $end){
