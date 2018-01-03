@@ -62,8 +62,8 @@ class PrimarySystem extends System {
 
 		for ($i = 0; $i < sizeof($possible); $i++){
 			$roll = mt_rand(0, 100);
-			if ($roll > $tresh){Debug::log(" NO CRIT - roll: ".$roll. ", tresh: ".$tresh); continue;}
-			Debug::log("CRIT: ".$mod.", roll: ".$roll.", tresh: ".$tresh);
+			if ($roll > $tresh){/*Debug::log(" NO CRIT - roll: ".$roll. ", tresh: ".$tresh);*/ continue;}
+			//Debug::log("CRIT: ".$mod.", roll: ".$roll.", tresh: ".$tresh);
 
 			//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 			$this->crits[] = new Crit(

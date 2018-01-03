@@ -9,7 +9,7 @@ Fighter.prototype = Object.create(Single.prototype);
 
 Fighter.prototype.create = function(data){
 	for (var k = 0; k < data.damages.length; k++){
-		this.damages.push(new Warhead(data.damages[k]));
+		this.damages.push(new Damage(data.damages[k]));
 	}
 	for (var k = 0; k < data.crits.length; k++){
 		this.crits.push(new Crit(data.crits[k]));

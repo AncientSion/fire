@@ -622,7 +622,7 @@ class Ship {
 	}
 
 	public function getPrimaryHitSystem(){
-		Debug::log("getPrimaryHitSystem: #".$this->id);
+		//Debug::log("getPrimaryHitSystem: #".$this->id);
 		$roll;
 		$current = 0;
 		$total = $this->primary->getHitChance();
@@ -638,12 +638,12 @@ class Ship {
 		}
 
 		if (!sizeof($valid)){
-			Debug::log("hitting main structure due to lack of exposed internals");
+			//Debug::log("hitting main structure due to lack of exposed internals");
 			return $this->primary;
 		}
-		else {
-			Debug::log("main: ".$this->primary->remaining."/".$this->primary->integrity." => ".$fraction. " %, unlocked internals: ".sizeof($valid));
-		}
+		//else {
+		//	Debug::log("main: ".$this->primary->remaining."/".$this->primary->integrity." => ".$fraction. " %, unlocked internals: ".sizeof($valid));
+		//}
 
 		//Debug::log("valid:".sizeof($valid));
 
@@ -655,7 +655,7 @@ class Ship {
 		//Debug::log("roll: ".$roll.", all: ".$total);
 
 		if ($roll <= $current){
-			Debug::log("roll ".$roll.", total: ".$total.", current ".$current.", HITTING main structure");
+			//Debug::log("roll ".$roll.", total: ".$total.", current ".$current.", HITTING main structure");
 			return $this->primary;
 		}
 		else {
@@ -664,7 +664,7 @@ class Ship {
 				$current += $valid[$i]->getHitChance();
 				//Debug::log("current: ".$current);
 				if ($roll <= $current){
-					Debug::log("roll ".$roll.", total:".$total.", current ".$current.", HITTING INTERNAL ".$valid[$i]->name." #".$valid[$i]->id.", odds: ".$valid[$i]->getHitChance()."/".$total);
+					//Debug::log("roll ".$roll.", total:".$total.", current ".$current.", HITTING INTERNAL ".$valid[$i]->name." #".$valid[$i]->id.", odds: ".$valid[$i]->getHitChance()."/".$total);
 					return $valid[$i];
 				}
 			}
@@ -1073,17 +1073,11 @@ class Ship {
 		);
 	}
 
-	public function setExtraNegation($turn){
+	public function setBonusNegation($turn){
 		if ($this->salvo){return;}
 		else if ($this->flight){return;}
-		else if ($this->ship){
+		else {
 			for ($i = 0; $i < sizeof($this->structures); $i++){
-				$this->structures[$i]->setBonusNegation($turn);
-			}
-		}
-		else if ($this->squad){
-			for ($i = 0; $i < sizeof($this->structures); $i++){
-				if ($this->structures[$i]->disabled || $this->structures[$i]->destroyed){continue;}
 				$this->structures[$i]->setBonusNegation($turn);
 			}
 		}

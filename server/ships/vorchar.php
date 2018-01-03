@@ -9,7 +9,7 @@ class Vorchar extends Light {
 	public $cost = 320;
 	public $mass = 1100;
 
-	public $integrity = 400;
+	public $integrity = 350;
 	public $ep = 40;
 	public $ew = 650;
 	public $power = 0;

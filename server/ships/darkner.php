@@ -9,7 +9,7 @@ class Darkner extends Light {
 	public $cost = 370;
 	public $mass = 1400;
 
-	public $integrity = 550;
+	public $integrity = 475;
 	public $ep = 45;
 	public $ew = 575;
 	public $power = 4;
@@ -23,8 +23,8 @@ class Darkner extends Light {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new HeavyIon($this->getId(), $this->id, 330, 30);
-		$front->systems[] = new HeavyIon($this->getId(), $this->id, 330, 30);
+		$front->systems[] = new HeavyIon($this->getId(), $this->parentId, 330, 30);
+		$front->systems[] = new HeavyIon($this->getId(), $this->parentId, 330, 30);
 		$structs[] = $front;
 
 		/*$right = new Section(60, 180);

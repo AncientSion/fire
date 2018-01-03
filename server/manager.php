@@ -988,7 +988,7 @@ class Manager {
 			$this->ships[$i]->setFacing();
 			$this->ships[$i]->setPosition();
 			$this->ships[$i]->setImpulseProfileMod();
-			$this->ships[$i]->setExtraNegation($this->turn);
+			$this->ships[$i]->setBonusNegation($this->turn);
 		}
 
 		//set dist and angle for each ship to speed up fire resolution

@@ -108,7 +108,7 @@ class Flight extends Mixed {
 	}
 
 	public function getMaskEffect($shooter){
-		if ($shooter->ship || $shoter->squad){
+		if ($shooter->ship || $shooter->squad){
 			return 0.5;
 		}
 	}

@@ -623,6 +623,7 @@ Single.prototype.isDamagedThisTurn = function(){
 }
 
 Single.prototype.getRemainingIntegrity = function(){
+	return this.remaining;
 	var integrity = this.integrity;
 	for (var i = 0; i < this.damages.length; i++){
 		integrity -= this.damages[i].structDmg;

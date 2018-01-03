@@ -38,7 +38,7 @@ class Pulse extends Weapon {
 				$total += $totalDmg;
 				$dmg->overkill += $dmg->structDmg;
 				$armour += $dmg->armourDmg;
-				Debug::log(" => hit ".($i+1).", adding ".$dmg->structDmg."/".$dmg->armourDmg." to overkill which is now: ".$dmg->overkill." pts");
+				//Debug::log(" => hit ".($i+1).", adding ".$dmg->structDmg."/".$dmg->armourDmg." to overkill which is now: ".$dmg->overkill." pts");
 				continue;
 			}
 			else {
@@ -60,7 +60,7 @@ class Pulse extends Weapon {
 					//$struct += $remInt;
 				}
 				else {
-					Debug::log(" => DESTROYING non-ship target system");
+					//Debug::log(" => DESTROYING non-ship target system");
 					break;
 				}
 			}

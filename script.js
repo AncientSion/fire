@@ -248,9 +248,6 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			pos = target.getTrajectory();
 		} else pos = target.getPlannedPos();
 	}
-
-
-
 	
 	if (!drop){	
 		var active = shooter.getSelectedWeapons();

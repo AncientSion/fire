@@ -115,9 +115,18 @@ class Mixed extends Ship {
 	}
 
 	public function applyDamage($dmg){
-		if ($dmg->new){$this->damaged = 1;}
+		if ($dmg->new){
+			$dmg->overkill += $dmg->structDmg;
+			$dmg->structDmg = 0;
+		}
+
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->id == $dmg->systemid){
+			if ($dmg->systemid == $this->structures[$i]->id){
+				if ($dmg->new){
+					$this->damaged = 1;
+					$this->structures[$i]->damaged = 1;
+				}
+
 				$this->structures[$i]->addDamage($dmg);
 
 				if ($dmg->destroyed){
@@ -131,7 +140,8 @@ class Mixed extends Ship {
 				return;
 			}
 		}
-		Debug::log("UNABLE TO APPLY DMG on #".$this->id);
+
+		Debug::log("WARNING couldnt apply damage #".$dmg->id.", looking for unit #".$dmg->shipid."/".$dmg->systemid);
 	}
 
 	public function setMove(&$gd){
@@ -347,11 +357,14 @@ class Mixed extends Ship {
 	}
 
 	public function testForCrits($turn){
-		//Debug::log("= testForCrits for ".get_class($this).", #".$this->id.", turn: ".$turn);
+
 		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($this->structures[$i]->destroyed){continue;}
+			else if (!$this->structures[$i]->damaged){/*Debug::log("subunit ".$i." not damaged!");*/ continue;}
+
 			$this->structures[$i]->testCrit($turn, 0);
 		}
-	}
+	}	
 
 	public function getEndState($turn){
 		//Debug::log("getMoveState for ".$this->id);

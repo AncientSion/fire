@@ -125,23 +125,10 @@ class System {
 	public function getBoostEffect($type){
 		for ($i = 0; $i < sizeof($this->boostEffect); $i++){
 			if ($this->boostEffect[$i]->type == $type){
-				//Debug::log("return:".$this->boostEffect[$i]->value/100);
 				return $this->boostEffect[$i]->value;
 			}
 		}
 		return 0;
-	}
-
-	public function getCritMod($type, $turn){
-		$mod = 0;
-		for ($i = 0; $i < sizeof($this->crits); $i++){
-			switch ($this->crits[$i]->type){
-				case $type: 
-					$mod = $mod - $this->crits[$i]->value; break;
-				default: break;
-			}
-		}
-		return $mod;
 	}
 
 	public function getBoostLevel($turn){
@@ -159,6 +146,18 @@ class System {
 		return $boost;
 	}
 
+
+	public function getCritMod($type, $turn){
+		$mod = 0;
+		for ($i = 0; $i < sizeof($this->crits); $i++){
+			switch ($this->crits[$i]->type){
+				case $type: 
+					$mod = $mod - $this->crits[$i]->value; break;
+				default: break;
+			}
+		}
+		return $mod;
+	}
 	public function getPowerUsage($turn){
 		$usage = $this->powerReq;
 
@@ -213,7 +212,7 @@ class System {
 	public function determineCrit($old, $new, $turn){
 		$new = round($new / $this->integrity * 100);
 		$old = round($old / $this->integrity * 100);
-		$possible = $this->getValidEffects();
+		$effects = $this->getValidEffects();
 
 		//Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", new: ".$new.", old: ".$old);
 
@@ -229,13 +228,13 @@ class System {
 
 		$tresh =  ($new + $old/2);
 
-		for ($i = 0; $i < sizeof($possible); $i++){
+		for ($i = 0; $i < sizeof($effects); $i++){
 			$roll = mt_rand(0, 100);
-			if ($roll > $tresh){Debug::log(" NO CRIT - roll: ".$roll. ", tresh: ".$tresh); continue;}
+			if ($roll > $tresh){/*Debug::log(" NO CRIT - roll: ".$roll. ", tresh: ".$tresh);*/ continue;}
 
 			//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 			$this->crits[] = new Crit(
-				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $possible[$i][0], 0, $mod, 1
+				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $effects[$i][0], 0,  ($mod * (1 + ($i * 0.5))), 1
 			);
 		}
 	}

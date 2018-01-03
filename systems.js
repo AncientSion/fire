@@ -1963,10 +1963,10 @@ Particle.prototype.getAnimation = function(fire){
 
 	if (game.isCloseCombat(fire.shooter, fire.target)){
 		cc = 1;
-		if (fire.shooter.ship){
+		if (fire.shooter.ship || fire.shooter.squad){
 			fraction = 2;
 		}
-		else if (fire.shooter.flight && fire.target.ship){
+		else if (fire.shooter.flight && (fire.target.ship || fire.target.squad)){
 			fraction = 1.5;
 		} 
 		else if (fire.shooter.flight){
@@ -2099,10 +2099,10 @@ EM.prototype.getAnimation = function(fire){
 
 	if (game.isCloseCombat(fire.shooter, fire.target)){
 		cc = 1;
-		if (fire.shooter.ship){
+		if (fire.shooter.ship || fire.shooter.squad){
 			fraction = 2;
 		}
-		else if (fire.shooter.flight && fire.target.ship){
+		else if (fire.shooter.flight && (fire.target.ship || fire.target.squad)){
 			fraction = 1.5;
 		} 
 		else if (fire.shooter.flight){
@@ -2176,10 +2176,10 @@ Pulse.prototype.getAnimation = function(fire){
 
 	if (game.isCloseCombat(fire.shooter, fire.target)){
 		cc = 1;
-		if (fire.shooter.ship){
+		if (fire.shooter.ship || fire.shooter.squad){
 			fraction = 2;
 		}
-		else if (fire.shooter.flight && fire.target.ship){
+		else if (fire.shooter.flight && (fire.target.ship || fire.target.squad)){
 			fraction = 1.5;
 		} 
 		else if (fire.shooter.flight){

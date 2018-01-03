@@ -106,7 +106,7 @@ Mixed.prototype.drawMovePlan = function(){
 
 Mixed.prototype.drawTargetMovePlan = function(){
 	var t = this.getTarget();
-	if (!t || t.ship){return;}
+	if (!t || t.ship || t.squad){return;}
 	t.drawMovePlan();
 }
 
@@ -329,7 +329,7 @@ Mixed.prototype.getLockEffect = function(target){
 	if (!this.mission.arrived){return 0;}
 
 	var multi = 0;
-	if (target.ship){
+	if (target.ship || target.squad){
 		return multi;
 	}
 	else if (target.flight){
@@ -398,7 +398,7 @@ Mixed.prototype.getParent = function(){
 	// look for SHIP parent
 	for (var j = 0; j < this.cc.length; j++){
 		for (var i = 0; i < game.ships.length; i++){
-			if (game.ships[i].ship && game.ships[i].id == this.cc[j]){
+			if ((game.ships[i].ship || game.ships[i].squad) && game.ships[i].id == this.cc[j]){
 				return game.ships[i];
 			}
 		}
@@ -456,7 +456,7 @@ Mixed.prototype.setLayout = function(){
 			var roam = 1;
 			for (var i = 0; i < this.cc.length; i++){
 				var u = game.getUnit(this.cc[i]);
-				if (u.ship){roam = 0; break;}
+				if (u.ship || u.squad){roam = 0; break;}
 			}
 			if (roam){this.setPatrolLayout();}
 		}
@@ -611,16 +611,24 @@ Mixed.prototype.getUnitPosition = function(j){
 	}
 }
 
-Mixed.prototype.getFireDest = function(fire, isHit, num){
-	if (!isHit){
-		return {
-			x: range(10, 25) * (1-range(0, 1)*2),
-			y: range(10, 25) * (1-range(0, 1)*2)
-		}
-	}
-	//return this.getSystemById(fire.damages[num].systemid).layout
+Mixed.prototype.getRandomUnitPos = function(){
+	var t = this.structures[range(0, this.structures.length-1)].layout;
+		//t.x += range(10, 20) * (1-(range(0, 1)*2));
+		//t.y += range(10, 20) * (1-(range(0, 1)*2));
+		t.x += range(-30, 30)
+		t.y += range(-30, 30)
+	return t;
+}
 
-	var t = this.getSystemById(fire.damages[num].systemid).layout;
+Mixed.prototype.getFireDest = function(fire, isHit, num){
+	var t;
+
+	if (!isHit){
+		t = this.getRandomUnitPos();
+	}
+	else {
+		t = this.getSystemById(fire.damages[num].systemid).layout;
+	}
 
 	if (this.mission.arrived){
 		var x = t.x * 0.5;

@@ -10,7 +10,7 @@ class Haven extends SuperLight {
 	public $cost = 250;
 	public $mass = 900;
 
-	public $integrity = 350;
+	public $integrity = 300;
 	public $ep = 40;
 	public $ew = 500;
 	public $power = 0;

@@ -193,7 +193,7 @@ class Squadron extends Ship {
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed){continue;}
-			if (!$this->structures[$i]->damaged){/*Debug::log("subunit ".$i." not damaged!");*/continue;}
+			else if (!$this->structures[$i]->damaged){Debug::log("subunit ".$i." not damaged!"); continue;}
 
 			$this->structures[$i]->testCrit($turn, 0);
 		}
@@ -269,14 +269,11 @@ class Squadron extends Ship {
 				$this->structures[$i]->addDamage($dmg);
 
 				if ($dmg->destroyed){
-					//Debug::log("dmg->destroyed");
 					for ($j = 0; $j < sizeof($this->structures); $j++){
 						if (!$this->structures[$j]->destroyed){
-							//Debug::log("one unit still alive");
 							return;
 						}
 					}
-					//Debug::log("destroying squadron");
 					$this->destroyed = 1;
 				}
 				return;
@@ -313,8 +310,6 @@ class Squaddie extends Single {
 	public $ep = 0;
 	public $ew = 0;
 	public $power = 0;
-	public $remaining = 0;
-	public $negation = 0;
 
 	public $powers = array();
 	public $boostEffect = array();
@@ -322,20 +317,11 @@ class Squaddie extends Single {
 
 	public $bonusNegation = 0;
 	public $remainingNegation = 0;
-	public $armourDmg = 0;
 	public $parentIntegrity = 0;
 	public $parentPow;
 	
 	function __construct($id, $parentId){
-		$this->id = $id;
-		$this->parentId = $parentId;
-
-		$this->remaining = $this->integrity;
-		$this->index = $this->id;
-
-		$this->setBaseStats(0, 0);
-		$this->addStructures();
-		$this->setPowerOutput();
+		parent::__construct($id, $parentId);
 	}
 
 	public function setPowerOutput(){
@@ -380,10 +366,6 @@ class Squaddie extends Single {
 		return false;
 	}
 
-	public function getRemainingIntegrity(){
-		return $this->remaining;
-	}
-
 	public function setNegation($main, $armourDmg){
 		$p = 1.5;
 
@@ -391,7 +373,6 @@ class Squaddie extends Single {
 
 		$this->parentPow = round(pow($this->parentIntegrity, $p));
 		$this->armourDmg += $armourDmg;
-		//$this->armourDmg = 0;
 		$this->remainingNegation = round((pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow) * $this->negation);
 	}
 
@@ -401,15 +382,14 @@ class Squaddie extends Single {
 	}
 	
 	public function getArmourValue($system){
-		//Debug::log("get armour for ".$system->name." - ".$this->getCurrentNegation());
 		return array(
 			"stock" => round($this->getCurrentNegation() * $system->getArmourMod()),
-			"bonus" => round($this->bonusNegation * $system->getArmourMod())
+			"bonus" => round($this->getBonusNegation() * $system->getArmourMod())
 		);
 	}
 
 	public function getArmourMod(){
-		return 1;;
+		return 1;
 	}
 
 	public function getNewCrits($turn){
@@ -426,24 +406,12 @@ class Squaddie extends Single {
 		}
 		return $crits;
 	}
-
-	public function testCrit($turn, $extra){
-		$old = 0; $new = 0;
-		for ($i = 0; $i < sizeof($this->damages); $i++){
-			if ($this->damages[$i]->turn == $turn){
-				$new += $this->damages[$i]->overkill;
-			} else $old += $this->damages[$i]->overkill;
-		}
-
-		if ($new){
-			$this->determineCrit($old, $new, $turn);
-		}// else Debug::log("skipping sub #".$this->id.", no structDmg!");
-	}
-
 	public function getValidEffects(){
 		return array( // type, min, max, dura
 			array("Damage", 20, 0, 0.00),
 			array("Accuracy", 20, 0, 0.00),
+			array("Disabled", 0, 1, 0.00),
+			array("Destroyed", 0, 0, 0.00),
 		);
 	}	
 
@@ -456,7 +424,7 @@ class Squaddie extends Single {
 		$tresh = round(($old/2 + $new) / $this->integrity * 100);
 		$effect;
 
-		Debug::log(" => determineCrit for ".$this->name.", Dmg: ".$new."/".$old.", dmg%: ".$dmg." %, trigger: ".$tresh." %");
+		Debug::log(" => SQUAD determineCrit for ".$this->name.", Dmg: ".$new."/".$old.", dmg%: ".$dmg." %, trigger: ".$tresh." %");
 
 		$effects = $this->getValidEffects();
 
@@ -464,9 +432,10 @@ class Squaddie extends Single {
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if ($this->structures[$i]->systems[$j]->destroyed || mt_rand(0, 100) > $tresh){continue;}
 
-				$pick = mt_rand(0, 1);
+				$pick = min(sizeof($effects), mt_rand(0, 1 + sizeof($this->structures[$i]->systems[$j]->crits)));
+
 				$effect = $effects[$pick];
-				$effect[4] = $this->getCritModMax($new + $old) * (1 + ($pick * 0.5));
+				if ($pick < 2){$effect[4] = $this->getCritModMax($new + $old) * (1 + ($pick * 0.5));}
 
 				$this->structures[$i]->systems[$j]->crits[] = new Crit(
 					0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn,
@@ -476,26 +445,36 @@ class Squaddie extends Single {
 		}
 	}
 
-	public function addDamage($dmg){
-		$this->armourDmg += $dmg->armourDmg;
-		$this->remaining -= $dmg->overkill;
-	/*	if ($this->parentId == 4){
-			var_export($dmg);
-			echo "</br>";
-		}
-	*/	$this->damages[] = $dmg;
-
-		if (!$this->destroyed && $this->remaining < 1){
-			$this->destroyed = 1;
-		}
-	}
-
 	public function getName(){
 		return "Main";
 	}
 
 	public function addPowerEntry($power){
 		$this->powers[] = $power;
+	}	
+
+	public function getBoostEffect($type){
+		for ($i = 0; $i < sizeof($this->boostEffect); $i++){
+			if ($this->boostEffect[$i]->type == $type){
+				return $this->boostEffect[$i]->value;
+			}
+		}
+		return 0;
+	}
+
+	public function getBoostLevel($turn){
+		$boost = 0;
+		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
+			if ($this->powers[$i]->turn == $turn){
+				switch ($this->powers[$i]->type){
+					case 1: 
+					$boost++;
+					break;
+				}
+			}
+			else break;
+		}
+		return $boost;
 	}
 
 }

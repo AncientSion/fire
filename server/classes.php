@@ -2,6 +2,24 @@
 
 error_reporting(E_ALL); ini_set('display_errors', '1');
 
+
+
+class Shared {
+	public $systems = array();
+}
+
+class Section {
+	public $start = 0;
+	public $end = 0;
+	public $systems = [];
+	public $parentId;
+
+	function __construct($start, $end){
+		$this->start = $start;
+		$this->end = $end;
+	}
+}
+
 class Point {
 	public $x;
 	public $y;

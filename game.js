@@ -1897,7 +1897,7 @@ function Game(data, userid){
 			if (goOn){
 				game.timeout = setTimeout(function(){
 					game.animateAllFireOrders();
-				}, 1500);
+				}, 1000);
 			}
 			else {
 				$(fxCanvas).css("opacity", 0.3)

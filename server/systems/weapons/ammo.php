@@ -3,9 +3,10 @@
 class Missile extends Single {
 
 	function __construct($id, $parentId){
-		parent::__construct($id, $parentId);
 		$this->integrity = $this->mass*3;
 		$this->negation = $this->mass-1;
+
+		parent::__construct($id, $parentId);
 		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->minDmg, $this->maxDmg, $this->traverse);
 	}
 

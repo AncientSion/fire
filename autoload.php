@@ -134,13 +134,14 @@ spl_autoload_register(
                 'particlepulsar' => '/server/systems/weapons/linked.php',
 
                 'structure' => '/server/systems/structure.php',
-                'section' => '/server/systems/structure.php',
                 'primary' => '/server/systems/structure.php',
-                'shared' => '/server/systems/structure.php',
-                'single' => '/server/systems/structure.php',
+                'single' => '/server/systems/single.php',
 
                 'debug' => '/server/debug.php',
                 'math' => '/server/math.php',
+                
+                'section' => '/server/classes.php',
+                'shared' => '/server/classes.php',
                 'point' => '/server/classes.php',
                 'vector' => '/server/classes.php',
                 'action' => '/server/classes.php',
