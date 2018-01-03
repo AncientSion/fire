@@ -218,7 +218,7 @@ class Single {
 		$this->id = $id;
 		$this->index = $this->id;
 		$this->parentId = $parentId;
-		$this->setBaseStats();
+		$this->setBaseStats(0, 0);
 	}
 
 	public function getId(){
@@ -226,7 +226,7 @@ class Single {
 		return $this->index;
 	}
 
-	public function setBaseStats(){
+	public function setBaseStats($phase, $turn){
 		$this->baseHitChance = ceil(sqrt($this->mass)*5);
 	}
 
@@ -246,10 +246,23 @@ class Single {
 			if ($this->damages[$i]->destroyed){
 				$this->destroyed = true;
 				return true;
-			}
+			} else return false;
 		}
 		return false;
 	}
+
+	public function isDestroyedThisTurn($turn){
+		if (!$this->destroyed){return false;}
+		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
+			if ($this->damages[$i]->destroyed && $this->damages[$i]->turn == $turn){
+				return true;
+			} else if ($this->damages[$i]->turn < $turn){
+				return false;
+			}
+		}
+		return false;
+	}	
+
 
 	public function addDamage($dmg){
 		if ($dmg->new){$this->damaged = 1;}
@@ -263,11 +276,7 @@ class Single {
 	}
 
 	public function getRemainingIntegrity(){
-		$total = $this->integrity;
-		for ($i = 0; $i < sizeof($this->damages); $i++){
-			$total -= $this->damages[$i]->structDmg;
-		}
-		return $total;
+		return $this->remaining;
 	}
 
 	public function setUnitState($turn, $phase){

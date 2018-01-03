@@ -1155,7 +1155,7 @@ Squadron.prototype.getDmgByFire = function(fire){
 		for (var j = this.structures[i].damages.length-1; j >= 0; j--){
 			if (this.structures[i].damages[j].fireid == fire.id){
 				dmgs.push(this.structures[i].damages[j]);
-				dmgs[dmgs.length-1].system = this.structures[i].display;
+				dmgs[dmgs.length-1].system = (this.structures[i].display + " #" + (i+1));
 				lookup--;
 				if (!lookup){return dmgs};
 			}
@@ -1221,4 +1221,13 @@ Squadron.prototype.getBaseImage = function(){
 	var img = new Image();
 		img.src = this.img.toDataURL();
 	return img;
+}
+
+Squadron.prototype.isDestroyed = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		if (!this.structures[i].destroyed){
+			return false;
+		}
+	}
+	return true;
 }

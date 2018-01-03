@@ -127,7 +127,7 @@ class Ship {
 	public function setProps($turn, $phase){
 		//Debug::log("setProps ".get_class($this)." #".$this->id);
 		$this->cost = static::$value;
-		$this->setBaseStats();
+		$this->setBaseStats($phase, $turn);
 		$this->setCurrentImpulse($turn, $phase);
 		$this->setRemainingImpulse($turn);
 		$this->setRemainingDelay($turn);
@@ -149,7 +149,7 @@ class Ship {
 		}
 	}
 
-	public function setBaseStats(){
+	public function setBaseStats($phase, $turn){
 		$this->baseHitChance = ceil(pow($this->mass, 0.4)*1.5)+30;
 		$this->baseTurnCost = round(pow($this->mass, 1.25)/25000, 2);
 		$this->baseTurnDelay = round(pow($this->mass, 0.45)/18, 2);
@@ -515,7 +515,7 @@ class Ship {
 		Debug::log("resolveFireOrder - ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots);
 
 		if ($this->isDestroyed()){
-			Debug::log("ERROR - resolveFireOrder isDestroyed()");
+			Debug::log("STOP - resolveFireOrder ".get_class($this)." isDestroyed() = true");
 			$fire->resolved = 1;
 		}
 		else {

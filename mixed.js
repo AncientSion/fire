@@ -672,15 +672,6 @@ Mixed.prototype.getDmgByFire = function(fire){
 	return dmgs;
 }
 
-Mixed.prototype.getExplosionSize = function(j){
-	if (this.flight){
-		return this.structures[j].mass / 3;
-	}
-	else if (this.salvo){
-		return this.structures[j].mass * 2;
-	}
-}
-
 Mixed.prototype.drawMoveArea = function(){
 	return;
 }

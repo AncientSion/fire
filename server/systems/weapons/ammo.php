@@ -6,7 +6,7 @@ class Missile extends Single {
 		parent::__construct($id, $parentId);
 		$this->integrity = $this->mass*3;
 		$this->negation = $this->mass-1;
-		$this->systems[] = new Warhead($this->parentId, sizeof($this->systems)+1, $this->minDmg, $this->maxDmg, $this->traverse);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->minDmg, $this->maxDmg, $this->traverse);
 	}
 
 	public function getValidEffects(){
@@ -35,7 +35,7 @@ class Missile extends Single {
         );
     }
 
-	public function setBaseStats(){
+	public function setBaseStats($phase, $turn){
 		$this->baseHitChance = ceil(sqrt($this->mass)*5);
 		$this->baseImpulse = ceil(pow($this->mass, -0.75)*325);
 	}
@@ -45,12 +45,18 @@ class Warhead extends Weapon {
 	public $priority = 10;
 	public $type = "explosive";
 
-	function __construct($parentId, $id, $minDmg, $maxDmg, $traverse){
-		$this->parentId = $parentId;
+	function __construct($id, $parentId, $minDmg, $maxDmg, $traverse){
 		$this->id = $id;
+		$this->parentId = $parentId;
 		$this->minDmg = $minDmg;
 		$this->maxDmg = $maxDmg;
 		$this->traverse = $traverse;
+	}
+
+	public function doDamagef($fire, $roll, $system){
+		Debug::log("DO_DAMAGE BALLISTIC fireorder, target: ".get_class($system)." #".$system->id);
+
+		parent::doDamage($fire, $roll, $system);
 	}
 
 	public function getAccuracyLoss($dist){
@@ -71,8 +77,8 @@ class Hasta extends Missile {
 	public $cost = 6;
 	public $traverse = -3;
 
-	function __construct($parentId, $id){
-		parent::__construct($parentId, $id);
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
 	}
 }
 
@@ -85,8 +91,8 @@ class Javelin extends Missile {
 	public $cost = 10;
 	public $traverse = -1;
 
-	function __construct($parentId, $id){
-		parent::__construct($parentId, $id);
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
 	}
 }
 
@@ -99,8 +105,8 @@ class Triarii extends Missile {
 	public $cost = 12;
 	public $traverse = -1;
 
-	function __construct($parentId, $id){
-		parent::__construct($parentId, $id);
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
 	}
 }
 
@@ -113,8 +119,8 @@ class Vanguard extends Missile {
 	public $cost = 6;
 	public $traverse = -5;
 
-	function __construct($parentId, $id){
-		parent::__construct($parentId, $id);
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
 	}
 }
 
@@ -127,8 +133,8 @@ class Needle extends Missile {
 	public $cost = 6;
 	public $traverse = -3;
 
-	function __construct($parentId, $id){
-		parent::__construct($parentId, $id);
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
 	}
 }
 
@@ -141,8 +147,8 @@ class Naga extends Missile {
 	public $cost = 10;
 	public $traverse = -1;
 
-	function __construct($parentId, $id){
-		parent::__construct($parentId, $id);
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
 	}
 }
 
@@ -155,8 +161,8 @@ class Cyclops extends Missile {
 	public $cost = 14;
 	public $traverse = 0;
 
-	function __construct($parentId, $id){
-		parent::__construct($parentId, $id);
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
 	}
 }
 
@@ -169,8 +175,8 @@ class Titan extends Missile {
 	public $cost = 16;
 	public $traverse = 1;
 
-	function __construct($parentId, $id){
-		parent::__construct($parentId, $id);
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
 	}
 }
 

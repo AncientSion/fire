@@ -24,7 +24,7 @@ class Mixed extends Ship {
 	}
 
 	public function setProps($turn, $phase){
-		$this->setBaseStats();
+		$this->setBaseStats($phase, $turn);
 		$this->setSize();
 		$this->setMass();
 		$this->setCurrentImpulse($turn, $phase);
@@ -32,7 +32,7 @@ class Mixed extends Ship {
 		$this->setRemainingDelay($turn);
 	}	
 
-	public function setBaseStats(){
+	public function setBaseStats($phase, $turn){
 		$this->baseHitChance = 0;
 		$this->baseTurnCost = 0;
 		$this->baseTurnDelay = 0;
@@ -271,15 +271,17 @@ class Mixed extends Ship {
 
 	public function determineHits($fire){
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
-			if ($fire->target->destroyed){
+			if ($this->destroyed){
 				Debug::log("aborting shot resolution vs dead target #".$this->id);
 			}
-			$target = $this->getHitSystem($fire);
-			$fire->singleid = $target->id;
-			$fire->req = $fire->shooter->calculateToHit($fire);
-			if ($fire->rolls[$i] < $fire->req){
-				$fire->hits++;
-				$fire->weapon->doDamage($fire, $fire->rolls[$i], $target);
+			else {
+				$target = $this->getHitSystem($fire);
+				$fire->singleid = $target->id;
+				$fire->req = $fire->shooter->calculateToHit($fire);
+				if ($fire->rolls[$i] < $fire->req){
+					$fire->hits++;
+					$fire->weapon->doDamage($fire, $fire->rolls[$i], $target);
+				}
 			}
 		}
 	}

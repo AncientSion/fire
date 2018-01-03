@@ -247,8 +247,6 @@ class Manager {
 			}
 		}
 
-		
-
 		switch ($this->phase){
 			case -1: 
 				for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -271,6 +269,8 @@ class Manager {
 				} break;
 			default: break;
 		}
+
+		//Debug::log(sizeof($this->ships));
 
 		return $this->ships;
 	}
@@ -1315,7 +1315,7 @@ class Manager {
 	public function testUnitCrits(){
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->damaged){
-				Debug::log("testUnitCrits #".$this->ships[$i]->id);
+				//Debug::log("testUnitCrits #".$this->ships[$i]->id);
 				$this->ships[$i]->testForCrits($this->turn);
 			} 
 		}

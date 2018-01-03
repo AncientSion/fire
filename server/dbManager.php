@@ -945,7 +945,7 @@
 		}
 
 		public function destroyUnitsDB($units){
-			Debug::log("destroyUnitsDB");
+			//Debug::log("destroyUnitsDB");
 			$stmt = $this->connection->prepare("
 				UPDATE units 
 				SET 
@@ -955,6 +955,7 @@
 			");
 			
 			for ($i = 0; $i < sizeof($units); $i++){
+				//Debug::log("unit #".$units[$i]->id." destroyed: ".$units[$i]->destroyed);
 				if ($units[$i]->destroyed){
 					$stmt->bindParam(":id", $units[$i]->id);
 					$stmt->bindParam(":destroyed",  $units[$i]->destroyed);

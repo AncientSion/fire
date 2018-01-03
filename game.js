@@ -1963,14 +1963,23 @@ function Game(data, userid){
 	}
 
 	this.createMiscLogEntry = function(i){
-		$("#combatLog").find("tbody").append(
-			$("<tr>")
-				.append($("<td>").attr("colSpan", 9).css("font-size", 14).html(window.animations[i].html))
-				.data("shipid", window.animations[i].id)
-				.hover(function(){
-					var data = $(this).data();
-					game.getUnit($(this).data("shipid")).doHighlight()
-				}));
+		$("#combatLog")
+			.find("tbody")
+				.append(
+				$("<tr>")
+					.append($("<td>").attr("colSpan", 9).css("font-size", 14).html(window.animations[i].html))
+					.data("shipid", window.animations[i].id)
+					.hover(
+						function(){
+						var data = $(this).data();
+						game.getUnit($(this).data("shipid")).doHighlight()
+						}
+					)
+				)
+
+			
+		$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+
 	}
 
 	this.createCombatLogEntry = function(i){
@@ -2058,7 +2067,10 @@ function Game(data, userid){
 						for (var i = startRow; i <= endRow; i++){
 							$(rows[i]).show().addClass("selected");
 						}
-					}
+					}	
+
+					//$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+
 				//}
 			})
 			.append($("<td>").html(fire.type))

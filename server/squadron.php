@@ -59,13 +59,17 @@ class Squadron extends Ship {
 		return true;
 	}
 
-	public function setBaseStats(){
+	public function setBaseStats($phase, $turn){
 		//Debug::log("setBaseStats #".$this->id);
 
 		$this->size = 40 + sizeof($this->structures)*20;
 
+		$alive = 0;
+
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->destroyed || $this->structures[$i]->disabled){continue;}
+			if (($this->structures[$i]->destroyed && !$this->structures[$i]->isDestroyedThisTurn($turn)) || $this->structures[$i]->disabled){continue;}
+
+			$alive = 1;
 			$this->baseTurnCost = max($this->baseTurnCost, $this->structures[$i]->baseTurnCost);
 			$this->baseTurnDelay = max($this->baseTurnDelay, $this->structures[$i]->baseTurnDelay);
 			$this->baseImpulseCost = max($this->baseImpulseCost, $this->structures[$i]->baseImpulseCost);
@@ -75,6 +79,13 @@ class Squadron extends Ship {
 
 			$this->primary->systems[0]->output = max($this->primary->systems[0]->output, $this->structures[$i]->ew);
 			$this->primary->systems[1]->output = min($this->primary->systems[1]->output, $this->structures[$i]->ep);
+		}
+
+		if (!$alive){
+			$this->primary->systems[1]->output = 0;
+			$this->baseImpulseCost = 0;
+			$this->slipAngle = 0;
+			$this->turnAngle = 0;
 		}
 	}	
 
@@ -131,16 +142,17 @@ class Squadron extends Ship {
 
 	public function determineHits($fire){
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
-			if ($fire->target->destroyed){
+			if ($this->destroyed){
 				Debug::log("aborting shot resolution vs dead target #".$this->id);
 			}
-			$target = $this->getHitSystem($fire);
-			$fire->singleid = $target->id;
-			$fire->req = $fire->shooter->calculateToHit($fire);
-			if ($fire->rolls[$i] < $fire->req){
-				//Debug::log("hit");
-				$fire->hits++;
-				$fire->weapon->doDamage($fire, $fire->rolls[$i], $target);
+			else {
+				$target = $this->getHitSystem($fire);
+				$fire->singleid = $target->id;
+				$fire->req = $fire->shooter->calculateToHit($fire);
+				if ($fire->rolls[$i] < $fire->req){
+					$fire->hits++;
+					$fire->weapon->doDamage($fire, $fire->rolls[$i], $target);
+				}
 			}
 		}
 	}
@@ -164,9 +176,11 @@ class Squadron extends Ship {
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (!$this->structures[$i]->isDestroyed()){
+				//Debug::log("nope, unit ".$i." / ".$this->structures[$i]->name." still alive");
 				return false;
 			}
 		}
+		Debug::log("setting squadron to destroyed");
 		$this->destroyed = 1;
 		return true;
 	}
@@ -176,11 +190,10 @@ class Squadron extends Ship {
 	}
 
 	public function testForCrits($turn){
-		Debug::log("= testForCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed){continue;}
-			if (!$this->structures[$i]->damaged){Debug::log("subunit ".$i." not damaged!"); continue;}
+			if (!$this->structures[$i]->damaged){/*Debug::log("subunit ".$i." not damaged!");*/continue;}
 
 			$this->structures[$i]->testCrit($turn, 0);
 		}
@@ -207,14 +220,10 @@ class Squadron extends Ship {
 						}
 					}
 				}
-				if ($found){
-					continue;
-				}
+				if ($found){continue;}
 			}
 
-			if (!$found){
-				Debug::log("ERROR unable to apply sqwuad crit id: ".$crits[$i]->id);
-			}
+			if (!$found){Debug::log("ERROR unable to apply sqwuad crit id: ".$crits[$i]->id);}
 		}
 		return true;
 	}
@@ -245,18 +254,31 @@ class Squadron extends Ship {
 	}
 
 	public function applyDamage($dmg){
-		$dmg->overkill += $dmg->structDmg;
-		$dmg->structDmg = 0;
+		if ($dmg->new){
+			$dmg->overkill += $dmg->structDmg;
+			$dmg->structDmg = 0;
+		}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($dmg->systemid == $this->structures[$i]->id){
-
 				if ($dmg->new){
 					$this->damaged = 1;
 					$this->structures[$i]->damaged = 1;
 				}
 
 				$this->structures[$i]->addDamage($dmg);
+
+				if ($dmg->destroyed){
+					//Debug::log("dmg->destroyed");
+					for ($j = 0; $j < sizeof($this->structures); $j++){
+						if (!$this->structures[$j]->destroyed){
+							//Debug::log("one unit still alive");
+							return;
+						}
+					}
+					//Debug::log("destroying squadron");
+					$this->destroyed = 1;
+				}
 				return;
 			}
 		}
@@ -311,7 +333,7 @@ class Squaddie extends Single {
 		$this->remaining = $this->integrity;
 		$this->index = $this->id;
 
-		$this->setBaseStats();
+		$this->setBaseStats(0, 0);
 		$this->addStructures();
 		$this->setPowerOutput();
 	}
@@ -326,7 +348,7 @@ class Squaddie extends Single {
 		$this->power += $need;
 	}
 
-	public function setBaseStats(){
+	public function setBaseStats($phase, $turn){
 		$this->baseHitChance = ceil(pow($this->mass, 0.4)*1.5)+30;
 		$this->baseTurnCost = round(pow($this->mass, 1.25)/25000, 2);
 		$this->baseTurnDelay = round(pow($this->mass, 0.45)/18, 2);
@@ -334,7 +356,6 @@ class Squaddie extends Single {
 	}
 
 	public function setUnitState($turn, $phase){
-		//Debug::log("  setUnitState ".$this->display." #".$this->id);
 		if ($this->isDestroyed()){
 			$this->destroyed = 1;
 		}
@@ -370,6 +391,7 @@ class Squaddie extends Single {
 
 		$this->parentPow = round(pow($this->parentIntegrity, $p));
 		$this->armourDmg += $armourDmg;
+		//$this->armourDmg = 0;
 		$this->remainingNegation = round((pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow) * $this->negation);
 	}
 
@@ -420,11 +442,13 @@ class Squaddie extends Single {
 
 	public function getValidEffects(){
 		return array( // type, min, max, dura
-			array("Damage", 10, 50, 0, 0.00),
-			array("Accuracy", 10, 50, 0, 0.00),
-			array("Disabled", 50, 80, 1, 0.00),
-			array("Destroyed", 70, 100, 0, 0.00)
+			array("Damage", 20, 0, 0.00),
+			array("Accuracy", 20, 0, 0.00),
 		);
+	}	
+
+	public function getCritModMax($dmg){
+		return min(20, (round($dmg/20)*10));// - (mt_rand(0, 1) * 10); // round to 0.x, half % mod, 0.1 variance
 	}
 
 	public function determineCrit($old, $new, $turn){
@@ -432,39 +456,22 @@ class Squaddie extends Single {
 		$tresh = round(($old/2 + $new) / $this->integrity * 100);
 		$effect;
 
-		Debug::log(" => determineCrit for ".$this->name.", new: ".$new."/".$old.", dmg: ".$dmg.", trigger: ".$tresh." %");
-		if (!$tresh){return;}
+		Debug::log(" => determineCrit for ".$this->name.", Dmg: ".$new."/".$old.", dmg%: ".$dmg." %, trigger: ".$tresh." %");
 
 		$effects = $this->getValidEffects();
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				$roll = mt_rand(0, 100);
-				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
-				else if ($roll > $tresh){continue;}
+				if ($this->structures[$i]->systems[$j]->destroyed || mt_rand(0, 100) > $tresh){continue;}
 
-				Debug::log(" ====> crit to squaddie sub system #".$this->structures[$i]->systems[$j]->id.", roll: ".$roll);
+				$pick = mt_rand(0, 1);
+				$effect = $effects[$pick];
+				$effect[4] = $this->getCritModMax($new + $old) * (1 + ($pick * 0.5));
 
-				for ($j = sizeof($effects)-1; $j >= 0; $j--){
-					if ($dmg < $effects[$i][1]){continue;}
-					else if ($dmg > $effects[$i][2]){continue;}
-
-					$subRoll = mt_rand(0, 100);
-
-					if ($subRoll > $dmg){continue;}
-					else {$effect = $effects[$i];}
-
-
-					$effect[4] = $this->structures[$i]->systems[$j]->getCritModMax($new + $old);
-					break;
-				}
-
-				if (isset($effect)){
-					$this->structures[$i]->systems[$j]->crits[] = new Crit(
-						0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn, $effect[0], $effect[3], $effect[4], 1
-					);
-				}
-
+				$this->structures[$i]->systems[$j]->crits[] = new Crit(
+					0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn,
+					$effect[0], $effect[3], $effect[4], 1
+				);
 			}
 		}
 	}
@@ -472,7 +479,11 @@ class Squaddie extends Single {
 	public function addDamage($dmg){
 		$this->armourDmg += $dmg->armourDmg;
 		$this->remaining -= $dmg->overkill;
-		$this->damages[] = $dmg;
+	/*	if ($this->parentId == 4){
+			var_export($dmg);
+			echo "</br>";
+		}
+	*/	$this->damages[] = $dmg;
 
 		if (!$this->destroyed && $this->remaining < 1){
 			$this->destroyed = 1;

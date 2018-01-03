@@ -341,13 +341,17 @@ Ship.prototype.getSelectedWeapons = function(){
 }
 
 Ship.prototype.doHover = function(){
-	if (!game.sensorMode){this.drawEW();}
+	if (!game.sensorMode){this.drawEW();}	
 
 	if (this.ship || this.squad){
 		this.setMoveTranslation();
 		this.drawVectorIndicator();
-		this.drawMoveArea();
-		this.drawTurnArcs();
+
+		if (!this.isDestroyed()){
+			this.drawMoveArea();
+			this.drawTurnArcs();
+		}
+		
 		this.resetMoveTranslation();
 	}
 	this.drawMovePlan();
@@ -1526,7 +1530,13 @@ Ship.prototype.getFireDest = function(fire, isHit, num){
 }
 
 Ship.prototype.getExplosionSize = function(j){
-	return this.size;
+}
+
+Ship.prototype.getExplosionSize = function(j){
+	if (this.ship){return this.size;}
+	else if (this.squad){return this.structures[j].size/2;}
+	else if (this.flight){return this.structures[j].mass / 3;}
+	else if (this.salvo){return this.structures[j].mass * 2;}
 }
 
 Ship.prototype.setMoveAngles = function(){

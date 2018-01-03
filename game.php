@@ -1,42 +1,43 @@
 <?php
 
-include_once 'global.php';
+	include_once 'global.php';
 
-$time = -microtime(true);
+	$time = -microtime(true);
 
 
-$gameid = $_GET["gameid"];
-$userid;
+	$gameid = $_GET["gameid"];
+	$userid;
 
-if (isset($_SESSION["userid"])) {
-	$userid = $_SESSION["userid"];
-} else $userid = 0;
+	if (isset($_SESSION["userid"])) {
+		$userid = $_SESSION["userid"];
+	} else $userid = 0;
 
-$manager = new Manager($userid, $gameid);
-if ($manager->status == "active"){
-	$manager->getGameData();
-} else {
-	header("Location: lobby.php");
-}
-
-echo "<script> window.gameid = ".$gameid."; window.userid = ".$userid.";</script>";
-
-$status = 0;
-$phase = getPhaseString($manager->phase);
-
-foreach ($manager->playerstatus as $player){
-	if ($player["userid"] == $userid){
-		$status = $player["status"];
+	$manager = new Manager($userid, $gameid);
+	if ($manager->status == "active"){
+		$manager->getGameData();
+	} else {
+		header("Location: lobby.php");
 	}
-}
 
-$manager->test();
-$post = json_encode($manager->getClientData(), JSON_NUMERIC_CHECK);
-//var_export($manager->getUnit(36)->structures[1]->crits);
-echo "<script>";
-echo "window.game = ".$post.";";
-echo "window.playerstatus = ".json_encode($manager->playerstatus, JSON_NUMERIC_CHECK).";";
-echo "</script>";
+	echo "<script> window.gameid = ".$gameid."; window.userid = ".$userid.";</script>";
+
+	$status = 0;
+	$phase = getPhaseString($manager->phase);
+	$post;
+
+	foreach ($manager->playerstatus as $player){
+		if ($player["userid"] == $userid){
+			$status = $player["status"];
+		}
+	}
+
+	//$manager->test();
+	$post = json_encode($manager->getClientData(), JSON_NUMERIC_CHECK);
+
+	echo "<script>";
+	echo "window.game = ".$post.";";
+	echo "window.playerstatus = ".json_encode($manager->playerstatus, JSON_NUMERIC_CHECK).";";
+	echo "</script>";
 ?>
 
 
@@ -676,6 +677,8 @@ echo "</script>";
 							game.fireOrders[i].animated = 1;
 							game.createCombatLogEntry(i);
 						}
+
+						game.createFireFinalEntry();
 
 						game.getUnitExplosionDetails();
 						for (var i = 0; i < window.animations.length; i++){
