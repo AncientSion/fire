@@ -744,52 +744,6 @@ function Game(data, userid){
 		}
 	}
 
-	this.drawJumpMarker = function(id){
-		var s = game.getUnit(id);
-		//if (s.userid != this.userid && game.phase == 0){return;}
-		if (game.turn == 1 && game.phase == -1){return;}
-		this.setShipTransform();
-		var size;
-
-		if (s.userid == this.userid){
-			size = s.size || 40;
-		} else size = 100;
-
-		ctx.beginPath();
-		if (s instanceof Ship){
-			ctx.arc(s.actions[0].x, s.actions[0].y, size/2, 0, 2*Math.PI, false);
-		} else ctx.arc(s.x, s.y, size/2, 0, 2*Math.PI, false);
-		ctx.closePath();
-		ctx.strokeStyle = "white";
-		ctx.fillStyle = "blue";
-		ctx.globalAlpha = 0.3;
-		ctx.fill();
-		ctx.lineWidth = 2;
-		ctx.globalAlpha = 1;
-		ctx.stroke();
-		ctx.lineWidth = 1;
-		ctx.strokeStyle = "black";
-
-		/*if (s instanceof Ship && s.userid == this.userid){
-			ctx.save();
-			ctx.translate(s.actions[0].x, s.actions[0].y);
-			ctx.rotate(s.actions[0].a * Math.PI/180);
-			ctx.drawImage(s.getBaseImage(), -size/2, -size/2, size, size);
-			ctx.restore();
-		}
-		else if (s.userid == this.userid){
-			ctx.save();
-			ctx.translate(s.x, s.y);
-			ctx.rotate(s.a * Math.PI/180);
-			ctx.drawImage(window.shipImages[s.name.toLowerCase()], -size/2, -size/2, size, size);
-			ctx.restore();
-		}
-
-		ctx.strokeStyle = "black";
-		*/
-		ctx.setTransform(1,0,0,1,0,0);
-		this.resetShipTransform();
-	}
 
 	this.initDeployment = function(){
 		cam.setZoom(0.6);
@@ -2215,6 +2169,10 @@ function Game(data, userid){
 					if (this.ships[i].friendly){
 						wrapper
 						.append($("<tr>").addClass("deployNow")
+							.hover(
+								function(){game.drawJumpMarker($(this).data("shipid"))},
+								function(){game.draw();}
+							)
 							.data("shipid", this.ships[i].id)
 							.append($("<td>")
 								.append($(this.ships[i].getBaseImage().cloneNode(true))
@@ -2235,6 +2193,10 @@ function Game(data, userid){
 						wrapper
 						.append($("<tr>").addClass("deployNow")
 							.data("shipid", this.ships[i].id)
+							.hover(
+								function(){game.drawJumpMarker($(this).data("shipid"))},
+								function(){game.draw();}
+							)
 							.append($("<td>")
 								.append($("<img>")
 									.addClass("size40")
@@ -2289,12 +2251,22 @@ function Game(data, userid){
 			}
 		}
 
-
-
 		for (var i = 0; i < this.incoming.length; i++){
+			var html = "";
+			var eta = this.incoming[i].available - game.turn;
+
 			if (this.incoming[i].userid === game.userid){
+				if (eta == 0){
+					html = "NOW";
+				} else html = (eta + " Turn/s");
+
 				wrapper
 				.append($("<tr>").addClass("deployNow")
+					.data("shipid", this.incoming[i].id)
+					.hover(
+						function(){game.drawJumpMarker($(this).data("shipid"))},
+						function(){game.draw();}
+					)
 					.append($("<td>")
 						.append($(window.shipImages[this.incoming[i].name.toLowerCase()].cloneNode(true))
 							.addClass("size40")
@@ -2306,13 +2278,22 @@ function Game(data, userid){
 					)
 					.append($("<td>")
 						.addClass("green font14")
-						.html((this.incoming[i].available - game.turn) + " Turn/s")
+						.html(html)
 					)
 				)
 			}
 			else {
+				if (eta == 0){
+					html = "NOW";
+				} else html = "1 Turn";
+
 				wrapper
 				.append($("<tr>").addClass("deployNow")
+					.data("shipid", this.incoming[i].id)
+					.hover(
+						function(){game.drawJumpMarker($(this).data("shipid"))},
+						function(){game.draw();}
+					)
 					.append($("<td>")
 						.append($("<img>")
 							.addClass("size40")
@@ -2321,11 +2302,11 @@ function Game(data, userid){
 					)
 					.append($("<td>")
 						.addClass("red font14")
-						.html("Unknown")
+						.html("???")
 					)
 					.append($("<td>")
 						.addClass("red font14")
-						.html("INCOMING")
+						.html(html)
 					)
 				)
 			}
@@ -2684,37 +2665,6 @@ Game.prototype.resetShipTransform = function(){
 	ctx.setTransform(1,0,0,1,0,0);
 }
 
-Game.prototype.undrawJumpMarker = function(id){
-	this.setShipTransform();
-
-	var s = game.getUnit(id);
-
-	ctx.beginPath();	
-	ctx.arc(s.actions[0].x, s.actions[0].y, s.size/2, 0, 2*Math.PI, false);
-	ctx.closePath();		
-	ctx.globalCompositeOperation = "destination-out";	
-	ctx.fill();
-
-	ctx.beginPath();	
-	ctx.arc(s.actions[0].x, s.actions[0].y, s.size/2, 0, 2*Math.PI, false);
-	ctx.closePath();
-	ctx.lineWidth = 2;
-	ctx.globalAlpha = 1;
-	ctx.globalCompositeOperation = "source-over";
-	ctx.strokeStyle = "green";
-	ctx.stroke();
-	ctx.lineWidth = 1;
-	ctx.strokeStyle = "black";
-
-	ctx.save();
-	ctx.translate(s.actions[0].x, s.actions[0].y);
-	ctx.rotate(s.actions[0].a * Math.PI/180);
-	ctx.drawImage(window.shipImages[s.name.toLowerCase()], -s.size/2, -s.size/2, s.size, s.size);
-	ctx.restore();
-
-	this.resetShipTransform();
-}
-
 Game.prototype.drawShips = function(){
 	this.setShipTransform();
 	for (var i = 0; i < this.ships.length; i++){
@@ -2919,4 +2869,98 @@ Game.prototype.resolveUnitMovement = function(){
 	this.setUnitMovementFocus();
 	this.setUnitMovementDetails();
 	this.animateUnitMovement();
+}
+
+
+Game.prototype.drawJumpMarker = function(id){
+	var s = game.getUnit(id);
+	//if (s.userid != this.userid && game.phase == 0){return;}
+	if (game.turn == 1 && game.phase == -1){return;}
+	this.setShipTransform();
+	var size = 50;
+
+	ctx.beginPath();
+	
+	ctx.arc(s.actions[0].x, s.actions[0].y, size/2, 0, 2*Math.PI, false);
+
+	ctx.closePath();
+	ctx.strokeStyle = "yellow";
+	ctx.fillStyle = "blue";
+	ctx.globalAlpha = 0.3;
+	ctx.fill();
+	ctx.lineWidth = 2;
+	ctx.globalAlpha = 1;
+	ctx.stroke();
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = "black";
+
+	if (s.userid == game.userid){
+		if (game.phase == -1){
+			var p = getPointInDirection(100, s.actions[0].a, s.actions[0].x, s.actions[0].y);
+			ctx.moveTo(s.x, s.y);
+			ctx.lineTo(p.x, p.y);
+			ctx.closePath();
+			ctx.strokeStyle = "white";
+			ctx.stroke();
+		}
+		else {
+			var p = getPointInDirection(100, s.actions[0].a, s.actions[0].x, s.actions[0].y);
+			ctx.moveTo(s.actions[0].x, s.actions[0].y);
+			ctx.lineTo(p.x, p.y);
+			ctx.closePath();
+			ctx.strokeStyle = "white";
+			ctx.stroke();
+		}
+	}
+
+	/*if (s instanceof Ship && s.userid == this.userid){
+		ctx.save();
+		ctx.translate(s.actions[0].x, s.actions[0].y);
+		ctx.rotate(s.actions[0].a * Math.PI/180);
+		ctx.drawImage(s.getBaseImage(), -size/2, -size/2, size, size);
+		ctx.restore();
+	}
+	else if (s.userid == this.userid){
+		ctx.save();
+		ctx.translate(s.x, s.y);
+		ctx.rotate(s.a * Math.PI/180);
+		ctx.drawImage(window.shipImages[s.name.toLowerCase()], -size/2, -size/2, size, size);
+		ctx.restore();
+	}
+
+	ctx.strokeStyle = "black";
+	*/
+	ctx.setTransform(1,0,0,1,0,0);
+	this.resetShipTransform();
+}
+
+Game.prototype.undrawJumpMarker = function(id){
+	this.setShipTransform();
+
+	var s = game.getUnit(id);
+
+	ctx.beginPath();	
+	ctx.arc(s.actions[0].x, s.actions[0].y, s.size/2, 0, 2*Math.PI, false);
+	ctx.closePath();		
+	ctx.globalCompositeOperation = "destination-out";	
+	ctx.fill();
+
+	ctx.beginPath();	
+	ctx.arc(s.actions[0].x, s.actions[0].y, s.size/2, 0, 2*Math.PI, false);
+	ctx.closePath();
+	ctx.lineWidth = 2;
+	ctx.globalAlpha = 1;
+	ctx.globalCompositeOperation = "source-over";
+	ctx.strokeStyle = "green";
+	ctx.stroke();
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = "black";
+
+	ctx.save();
+	ctx.translate(s.actions[0].x, s.actions[0].y);
+	ctx.rotate(s.actions[0].a * Math.PI/180);
+	ctx.drawImage(window.shipImages[s.name.toLowerCase()], -s.size/2, -s.size/2, s.size, s.size);
+	ctx.restore();
+
+	this.resetShipTransform();
 }

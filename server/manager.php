@@ -238,11 +238,25 @@ class Manager {
 		}
 	}
 
+	public function shiftToInComing($unit){
+		$this->incoming[] = array(
+						"id" => $unit->id, "userid" => $unit->userid, "available" => $unit->available, "name" => $unit->name,
+							"x" => $unit->actions[0]->x, "y" => $unit->actions[0]->y, "a" => $unit->actions[0]->a
+						);
+	}
+
 	public function getShipData(){
+
 		for ($i = sizeof($this->ships)-1; $i >= 0; $i--){
 			if ($this->ships[$i]->userid != $this->userid){
-				if ($this->ships[$i]->flight && $this->ships[$i]->available == $this->turn && !$this->ships[$i]->actions[0]->resolved){
-					array_splice($this->ships, $i, 1);
+				if ($this->ships[$i]->available == $this->turn && !$this->ships[$i]->actions[0]->resolved){
+					if ($this->ships[$i]->flight){
+						array_splice($this->ships, $i, 1);
+					}
+					else if ($this->turn > 1 && $this->phase == -1){
+						$this->shiftToInComing($this->ships[$i]);
+						array_splice($this->ships, $i, 1);
+					}
 				}
 			}
 		}
@@ -282,6 +296,11 @@ class Manager {
 					array_splice($this->incoming, $i, 1);
 				}
 			}
+		}
+
+		for ($i = sizeof($this->incoming)-1; $i >= 0; $i--){
+			$this->incoming[$i]["actions"] = array(array("x" => $this->incoming[$i]["x"], "y" => $this->incoming[$i]["y"], "a" => $this->incoming[$i]["a"]));
+
 		}	
 		return $this->incoming;	
 	}

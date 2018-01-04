@@ -1134,6 +1134,9 @@ Ship.prototype.setUnitState = function(){
 	if (this.available < game.turn){
 		this.isReady = 1;
 	}
+	else if (this.available == game.turn && game.turn > 1){
+		this.isReady = 1;
+	}
 	else if (this.available == game.turn && game.phase > 0){
 		this.isReady = 1;
 	}
@@ -1251,6 +1254,7 @@ Ship.prototype.finishDeployLogEntry = function(html){
 			.hover(
 				function(){
 					var data = $(this).data();
+					game.drawJumpMarker(data.shipid);
 					game.getUnit($(this).data("shipid")).doHighlight()
 				},
 				function(){
