@@ -126,7 +126,7 @@ class Ship {
 
 	public function setStructureState($turn, $phase){
 		$main = $this->primary->integrity;
-		$multi = $this->getArmourMultiplier();
+		$multi = $this->getArmourMultiplier() + 0.5;
 		$elements = sizeof($this->structures);
 		$each = $main * $multi / $elements;
 
