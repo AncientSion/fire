@@ -456,7 +456,8 @@ function Game(data, userid){
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].flight || this.ships[i].salvo || this.ships[i].userid != this.userid){continue;}
-
+			if (this.ships[i].available > game.turn){continue;}
+			
 			if (this.ships[i].hasBasicEW()){
 				data.push(this.ships[i]);
 			}
@@ -2305,7 +2306,7 @@ function Game(data, userid){
 					)
 					.append($("<td>")
 						.addClass("green font14")
-						.html("INCOMING")
+						.html((this.incoming[i].available - game.turn) + " Turn/s")
 					)
 				)
 			}
@@ -2329,9 +2330,6 @@ function Game(data, userid){
 				)
 			}
 		}
-
-
-			
 	}
 
 	this.initReinforcementWrapper = function(){

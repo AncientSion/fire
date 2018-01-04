@@ -139,7 +139,7 @@ class Manager {
 			"ships" => $this->getShipData(),
 			"reinforcements" => $this->rdyReinforcements,
 			"deploys" => $this->deploys,
-			"incoming" =>$this->incoming,
+			"incoming" =>$this->getIncomingData(),
 			"const" => $this->const,
 			"username" => $this->getUsername()
 		);
@@ -273,6 +273,17 @@ class Manager {
 		//Debug::log(sizeof($this->ships));
 
 		return $this->ships;
+	}
+
+	public function getIncomingData(){
+		for ($i = sizeof($this->incoming)-1; $i >= 0; $i--){
+			if ($this->incoming[$i]["userid"] != $this->userid){
+				if ($this->incoming[$i]["available"] > $this->turn + 1){
+					array_splice($this->incoming, $i, 1);
+				}
+			}
+		}	
+		return $this->incoming;	
 	}
 
 	public function deleteResolvedFireOrders(){

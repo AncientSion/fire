@@ -660,7 +660,7 @@
 			"file": "server/manager.php",
 			"settings":
 			{
-				"buffer_size": 47846,
+				"buffer_size": 48153,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -761,7 +761,7 @@
 			"file": "server/systems/structure.php",
 			"settings":
 			{
-				"buffer_size": 4205,
+				"buffer_size": 4246,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -779,7 +779,7 @@
 			"file": "server/dbManager.php",
 			"settings":
 			{
-				"buffer_size": 52835,
+				"buffer_size": 52831,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -879,7 +879,7 @@
 			"file": "server/ship.php",
 			"settings":
 			{
-				"buffer_size": 32101,
+				"buffer_size": 32487,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -978,7 +978,7 @@
 			"file": "game.js",
 			"settings":
 			{
-				"buffer_size": 79732,
+				"buffer_size": 79844,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1041,7 +1041,7 @@
 			"file": "log.txt",
 			"settings":
 			{
-				"buffer_size": 0,
+				"buffer_size": 1107,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -1543,6 +1543,13 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"getincoming",
+			"getShipData",
+			"getclientdata",
+			"$this->incoming",
+			"incoming",
+			"toLowerCase",
+			"deploywrapper",
 			"\"adding\"",
 			"\"adding",
 			"\"ding",
@@ -1663,14 +1670,7 @@
 			"getGeneralData",
 			"prepareAdvance",
 			"getGeneralData",
-			"prepareAdvance",
-			"$k",
-			"deleteUnresolvedFireOrders",
-			"updateFireOrders",
-			"cleanFireOrders",
-			"testUnitCrits",
-			"testUnitCrits#",
-			"handleFiringData"
+			"prepareAdvance"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1816,7 +1816,7 @@
 	"groups":
 	[
 		{
-			"selected": 47,
+			"selected": 15,
 			"sheets":
 			[
 				{
@@ -1904,7 +1904,7 @@
 						"translation.y": 1063.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 37,
+					"stack_index": 38,
 					"type": "text"
 				},
 				{
@@ -1993,7 +1993,7 @@
 						"translation.y": 478.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 31,
+					"stack_index": 32,
 					"type": "text"
 				},
 				{
@@ -2081,7 +2081,7 @@
 						"translation.y": 7356.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 32,
+					"stack_index": 33,
 					"type": "text"
 				},
 				{
@@ -2110,7 +2110,7 @@
 						"translation.y": 3648.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 67,
+					"stack_index": 68,
 					"type": "text"
 				},
 				{
@@ -2198,7 +2198,7 @@
 						"translation.y": 7371.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 52,
+					"stack_index": 53,
 					"type": "text"
 				},
 				{
@@ -2315,7 +2315,7 @@
 						"translation.y": 16112.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 24,
 					"type": "text"
 				},
 				{
@@ -2344,7 +2344,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
@@ -2432,7 +2432,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 65,
+					"stack_index": 66,
 					"type": "text"
 				},
 				{
@@ -2461,7 +2461,7 @@
 						"translation.y": 1121.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 39,
+					"stack_index": 40,
 					"type": "text"
 				},
 				{
@@ -2477,8 +2477,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								10496,
+								10496
 							]
 						],
 						"settings":
@@ -2488,10 +2488,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3069.0,
+						"translation.y": 5423.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -2579,7 +2579,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 72,
+					"stack_index": 73,
 					"type": "text"
 				},
 				{
@@ -2667,7 +2667,7 @@
 						"translation.y": 7.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 74,
+					"stack_index": 75,
 					"type": "text"
 				},
 				{
@@ -2755,7 +2755,7 @@
 						"translation.y": 196.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 75,
+					"stack_index": 76,
 					"type": "text"
 				},
 				{
@@ -2771,8 +2771,8 @@
 						"selection":
 						[
 							[
-								14151,
-								14151
+								674,
+								687
 							]
 						],
 						"settings":
@@ -2840,10 +2840,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5370.0,
+						"translation.y": 27.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -2852,15 +2852,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 47846,
+						"buffer_size": 48153,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2378,
-								2378
+								7566,
+								7566
 							]
 						],
 						"settings":
@@ -2928,10 +2928,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 907.0,
+						"translation.y": 3212.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -3829,7 +3829,7 @@
 						"translation.y": 18161.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
@@ -3918,7 +3918,7 @@
 						"translation.y": 663.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 76,
+					"stack_index": 77,
 					"type": "text"
 				},
 				{
@@ -4211,7 +4211,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 83,
+					"stack_index": 84,
 					"type": "text"
 				},
 				{
@@ -4240,7 +4240,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 46,
+					"stack_index": 47,
 					"type": "text"
 				},
 				{
@@ -4328,7 +4328,7 @@
 						"translation.y": 10496.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 38,
+					"stack_index": 39,
 					"type": "text"
 				},
 				{
@@ -4445,7 +4445,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 78,
+					"stack_index": 79,
 					"type": "text"
 				},
 				{
@@ -4454,15 +4454,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4205,
+						"buffer_size": 4246,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1162,
+								1162
 							]
 						],
 						"settings":
@@ -4530,10 +4530,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2499.0,
+						"translation.y": 218.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -4621,7 +4621,7 @@
 						"translation.y": 29.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 59,
+					"stack_index": 60,
 					"type": "text"
 				},
 				{
@@ -4630,15 +4630,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 52835,
+						"buffer_size": 52831,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								233,
-								233
+								229,
+								229
 							]
 						],
 						"settings":
@@ -4710,7 +4710,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
@@ -4798,7 +4798,7 @@
 						"translation.y": 273.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
@@ -4974,7 +4974,7 @@
 						"translation.y": 309.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
@@ -5062,7 +5062,7 @@
 						"translation.y": 790.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 40,
+					"stack_index": 41,
 					"type": "text"
 				},
 				{
@@ -5267,7 +5267,7 @@
 						"translation.y": 1621.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 54,
+					"stack_index": 55,
 					"type": "text"
 				},
 				{
@@ -5356,7 +5356,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 81,
+					"stack_index": 82,
 					"type": "text"
 				},
 				{
@@ -5533,7 +5533,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 64,
+					"stack_index": 65,
 					"type": "text"
 				},
 				{
@@ -5542,15 +5542,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 32101,
+						"buffer_size": 32487,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9132,
-								9132
+								4018,
+								4018
 							]
 						],
 						"settings":
@@ -5618,7 +5618,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3758.0,
+						"translation.y": 1314.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 7,
@@ -5650,7 +5650,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 44,
+					"stack_index": 45,
 					"type": "text"
 				},
 				{
@@ -5659,7 +5659,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4205,
+						"buffer_size": 4246,
 						"regions":
 						{
 						},
@@ -5738,7 +5738,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 63,
+					"stack_index": 64,
 					"type": "text"
 				},
 				{
@@ -5826,7 +5826,7 @@
 						"translation.y": 742.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
@@ -6003,7 +6003,7 @@
 						"translation.y": 5482.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 45,
+					"stack_index": 46,
 					"type": "text"
 				},
 				{
@@ -6029,10 +6029,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 15190.0,
+						"translation.y": 15156.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 34,
+					"stack_index": 35,
 					"type": "text"
 				},
 				{
@@ -6136,8 +6136,8 @@
 						"selection":
 						[
 							[
-								56,
-								56
+								704,
+								704
 							]
 						],
 						"settings":
@@ -6209,7 +6209,7 @@
 						"translation.y": 7.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -6385,7 +6385,7 @@
 						"translation.y": 429.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 66,
+					"stack_index": 67,
 					"type": "text"
 				},
 				{
@@ -6473,7 +6473,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 60,
+					"stack_index": 61,
 					"type": "text"
 				},
 				{
@@ -6482,15 +6482,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 79732,
+						"buffer_size": 79844,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								78606,
-								78606
+								11716,
+								11716
 							]
 						],
 						"settings":
@@ -6558,10 +6558,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 36834.0,
+						"translation.y": 5638.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -6650,7 +6650,7 @@
 						"translation.y": 3011.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 58,
+					"stack_index": 59,
 					"type": "text"
 				},
 				{
@@ -6738,7 +6738,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 82,
+					"stack_index": 83,
 					"type": "text"
 				},
 				{
@@ -6826,7 +6826,7 @@
 						"translation.y": 7415.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 25,
 					"type": "text"
 				},
 				{
@@ -6915,13 +6915,13 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 43,
+					"stack_index": 44,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 8,
+			"selected": 22,
 			"sheets":
 			[
 				{
@@ -6951,7 +6951,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 51,
+					"stack_index": 52,
 					"type": "text"
 				},
 				{
@@ -7009,7 +7009,7 @@
 						"translation.y": 8838.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 23,
 					"type": "text"
 				},
 				{
@@ -7097,7 +7097,7 @@
 						"translation.y": 309.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
@@ -7106,15 +7106,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 32101,
+						"buffer_size": 32487,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9413,
-								9413
+								9799,
+								9799
 							]
 						],
 						"settings":
@@ -7185,7 +7185,7 @@
 						"translation.y": 3871.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
@@ -7270,10 +7270,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 478.0,
+						"translation.y": 62.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 36,
+					"stack_index": 37,
 					"type": "text"
 				},
 				{
@@ -7361,7 +7361,7 @@
 						"translation.y": 210.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 73,
+					"stack_index": 74,
 					"type": "text"
 				},
 				{
@@ -7450,7 +7450,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 57,
+					"stack_index": 58,
 					"type": "text"
 				},
 				{
@@ -7459,7 +7459,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 0,
+						"buffer_size": 1107,
 						"regions":
 						{
 						},
@@ -7480,7 +7480,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -7496,8 +7496,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								10739,
+								10739
 							]
 						],
 						"settings":
@@ -7506,10 +7506,10 @@
 							"syntax": "Packages/PHP/PHP.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 4469.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -7538,7 +7538,7 @@
 						"translation.y": 23.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 30,
 					"type": "text"
 				},
 				{
@@ -7547,15 +7547,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 47846,
+						"buffer_size": 48153,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								5678,
+								5686
 							]
 						],
 						"settings":
@@ -7623,10 +7623,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1368.0,
+						"translation.y": 2445.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -7803,7 +7803,7 @@
 						"translation.y": 3156.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 77,
+					"stack_index": 78,
 					"type": "text"
 				},
 				{
@@ -7979,7 +7979,7 @@
 						"translation.y": 2568.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 42,
+					"stack_index": 43,
 					"type": "text"
 				},
 				{
@@ -7988,15 +7988,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4205,
+						"buffer_size": 4246,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1037,
+								1037
 							]
 						],
 						"settings":
@@ -8064,10 +8064,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 254.0,
+						"translation.y": 195.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -8155,7 +8155,7 @@
 						"translation.y": 36916.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
@@ -8243,7 +8243,7 @@
 						"translation.y": 10092.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 48,
+					"stack_index": 49,
 					"type": "text"
 				},
 				{
@@ -8360,7 +8360,7 @@
 						"translation.y": 19.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 50,
+					"stack_index": 51,
 					"type": "text"
 				},
 				{
@@ -8398,15 +8398,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 52835,
+						"buffer_size": 52831,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								36147,
-								36147
+								45038,
+								45038
 							]
 						],
 						"settings":
@@ -8475,10 +8475,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 17096.0,
+						"translation.y": 23804.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -8507,7 +8507,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 84,
+					"stack_index": 85,
 					"type": "text"
 				},
 				{
@@ -8596,7 +8596,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 69,
+					"stack_index": 70,
 					"type": "text"
 				},
 				{
@@ -8625,7 +8625,7 @@
 						"translation.y": 2149.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 47,
+					"stack_index": 48,
 					"type": "text"
 				},
 				{
@@ -8713,7 +8713,7 @@
 						"translation.y": 6877.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 61,
+					"stack_index": 62,
 					"type": "text"
 				},
 				{
@@ -8810,15 +8810,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 79732,
+						"buffer_size": 79844,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								66164,
-								66164
+								66276,
+								66276
 							]
 						],
 						"settings":
@@ -8887,10 +8887,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 30715.0,
+						"translation.y": 30689.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 23,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
@@ -8979,7 +8979,7 @@
 						"translation.y": 2790.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 53,
+					"stack_index": 54,
 					"type": "text"
 				},
 				{
@@ -9067,7 +9067,7 @@
 						"translation.y": 4897.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 41,
+					"stack_index": 42,
 					"type": "text"
 				},
 				{
@@ -9184,7 +9184,7 @@
 						"translation.y": 6652.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 55,
+					"stack_index": 56,
 					"type": "text"
 				},
 				{
@@ -9507,7 +9507,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 33,
+					"stack_index": 34,
 					"type": "text"
 				},
 				{
@@ -9523,8 +9523,8 @@
 						"selection":
 						[
 							[
-								1499,
-								1499
+								627,
+								627
 							]
 						],
 						"settings":
@@ -9592,10 +9592,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 338.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 86,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -9611,8 +9611,8 @@
 						"selection":
 						[
 							[
-								708,
-								708
+								352,
+								352
 							]
 						],
 						"settings":
@@ -9624,7 +9624,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
@@ -9712,7 +9712,7 @@
 						"translation.y": 4200.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
+					"stack_index": 27,
 					"type": "text"
 				},
 				{
@@ -9888,7 +9888,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
@@ -10093,7 +10093,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 70,
+					"stack_index": 71,
 					"type": "text"
 				},
 				{
@@ -10182,7 +10182,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 35,
+					"stack_index": 36,
 					"type": "text"
 				},
 				{
@@ -10271,7 +10271,7 @@
 						"translation.y": 585.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
@@ -10360,7 +10360,7 @@
 						"translation.y": 845.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 30,
+					"stack_index": 31,
 					"type": "text"
 				},
 				{
@@ -10448,7 +10448,7 @@
 						"translation.y": 1752.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 71,
+					"stack_index": 72,
 					"type": "text"
 				},
 				{
@@ -10536,7 +10536,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 56,
+					"stack_index": 57,
 					"type": "text"
 				},
 				{
@@ -10594,7 +10594,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 62,
+					"stack_index": 63,
 					"type": "text"
 				},
 				{
@@ -10623,7 +10623,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 68,
+					"stack_index": 69,
 					"type": "text"
 				},
 				{
@@ -10942,10 +10942,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 165.0,
+						"translation.y": 113.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 49,
+					"stack_index": 50,
 					"type": "text"
 				},
 				{
@@ -11034,7 +11034,7 @@
 						"translation.y": 2145.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 80,
+					"stack_index": 81,
 					"type": "text"
 				},
 				{
@@ -11151,7 +11151,7 @@
 						"translation.y": 78.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 85,
+					"stack_index": 86,
 					"type": "text"
 				},
 				{
@@ -11239,7 +11239,7 @@
 						"translation.y": 273.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 79,
+					"stack_index": 80,
 					"type": "text"
 				}
 			]
@@ -11273,7 +11273,7 @@
 		"cols":
 		[
 			0.0,
-			0.547153809612,
+			0.66942455197,
 			1.0
 		],
 		"rows":
@@ -11301,32 +11301,64 @@
 		"selected_items":
 		[
 			[
-				"d",
-				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
-			],
-			[
 				"db",
 				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
-			],
-			[
-				"du",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php"
-			],
-			[
-				"sh",
-				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
-			],
-			[
-				"dual",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php"
 			],
 			[
 				"man",
 				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
 			],
 			[
+				"game.",
+				"C:\\xampp\\htdocs\\fire\\game.php"
+			],
+			[
+				"game",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
+				"de",
+				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
+			],
+			[
+				"game.js",
+				"C:\\xampp\\htdocs\\fire\\game.js"
+			],
+			[
+				"sq",
+				"C:\\xampp\\htdocs\\fire\\server\\squadron.php"
+			],
+			[
+				"sh",
+				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
+			],
+			[
 				"log",
 				"C:\\xampp\\htdocs\\fire\\log.txt"
+			],
+			[
+				"st",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\structure.php"
+			],
+			[
+				"pri",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\primus.php"
+			],
+			[
+				"cr",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\crius.php"
+			],
+			[
+				"d",
+				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
+			],
+			[
+				"du",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php"
+			],
+			[
+				"dual",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\dual.php"
 			],
 			[
 				"sy",
@@ -11341,16 +11373,8 @@
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\pulse.php"
 			],
 			[
-				"cr",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\crius.php"
-			],
-			[
 				"cvo",
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\vorchan.php"
-			],
-			[
-				"game",
-				"C:\\xampp\\htdocs\\fire\\game.js"
 			],
 			[
 				"mix",
@@ -11365,28 +11389,12 @@
 				"C:\\xampp\\htdocs\\fire\\game.php"
 			],
 			[
-				"game.",
-				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
-				"game.js",
-				"C:\\xampp\\htdocs\\fire\\game.js"
-			],
-			[
 				"deb",
 				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
 			],
 			[
-				"sq",
-				"C:\\xampp\\htdocs\\fire\\server\\squadron.php"
-			],
-			[
 				"amm",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\ammo.php"
-			],
-			[
-				"st",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\structure.php"
 			],
 			[
 				"clas",
@@ -11503,10 +11511,6 @@
 			[
 				"sha",
 				"C:\\xampp\\htdocs\\fire\\shared.js"
-			],
-			[
-				"de",
-				"C:\\xampp\\htdocs\\fire\\server\\debug.php"
 			],
 			[
 				"auto",
@@ -11659,10 +11663,6 @@
 			[
 				"nono",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\nonweapon.php"
-			],
-			[
-				"pri",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\primus.php"
 			],
 			[
 				"av",

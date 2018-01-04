@@ -6,3 +6,32 @@
 499.8175
 499.8175
 499.8175
+game 2, user 1 --- adjusting to turn/phase/status 4/3/ready
+game 2, user 2 --- adjusting to turn/phase/status 4/3/ready
+prepareAdvance
+****************************************** doAdvance for game2 from phase 3 to phase 4
+endTurn
+assembleEndStates
+updateUnitState s:6 4/3
+pickReinforcements
+player: 2 has 100 available
+player: 2 has 100 available
+game 2, user 1 --- adjusting to turn/phase/status 5/-1/waiting
+game 2, user 2 --- adjusting to turn/phase/status 5/-1/waiting
+TIME: 0.166 seconds.
+4 mb
+requestShipsDB, s: 1, turn: 5
+game 2, user 2 --- adjusting to turn/phase/status 5/-1/ready
+requestShipsDB, s: 1, turn: 5
+game 2, user 1 --- adjusting to turn/phase/status 5/-1/ready
+prepareAdvance
+****************************************** doAdvance for game2 from phase -1 to phase 0
+handleDeploymentPhase
+initBallistics
+resolveDeployActions s: 0
+handleJumpActions
+assemblDeployStates
+game 2, user 1 --- adjusting to turn/phase/status 5/0/waiting
+game 2, user 2 --- adjusting to turn/phase/status 5/0/waiting
+TIME: 0.009 seconds.
+4 mb
