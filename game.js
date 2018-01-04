@@ -2291,7 +2291,7 @@ function Game(data, userid){
 
 
 		for (var i = 0; i < this.incoming.length; i++){
-			if (this.incoming[i].friendly){
+			if (this.incoming[i].userid === game.userrid){
 				wrapper
 				.append($("<tr>").addClass("deployNow")
 					.append($("<td>")
@@ -2309,7 +2309,7 @@ function Game(data, userid){
 					)
 				)
 			}
-			else if (!this.incoming[i].friendly){
+			else {
 				wrapper
 				.append($("<tr>").addClass("deployNow")
 					.append($("<td>")
