@@ -2291,7 +2291,7 @@ function Game(data, userid){
 
 
 		for (var i = 0; i < this.incoming.length; i++){
-			if (this.incoming[i].userid === game.userrid){
+			if (this.incoming[i].userid === game.userid){
 				wrapper
 				.append($("<tr>").addClass("deployNow")
 					.append($("<td>")
