@@ -436,6 +436,7 @@ class Squaddie extends Single {
 
 				$effect = $effects[$pick];
 				if ($pick < 2){$effect[4] = $this->getCritModMax($new + $old) * (1 + ($pick * 0.5));}
+				if (!$effect[$4]){continue;}
 
 				$this->structures[$i]->systems[$j]->crits[] = new Crit(
 					0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn,

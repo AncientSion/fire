@@ -35,3 +35,4 @@ game 2, user 1 --- adjusting to turn/phase/status 5/0/waiting
 game 2, user 2 --- adjusting to turn/phase/status 5/0/waiting
 TIME: 0.009 seconds.
 4 mb
+game 1, user 1 --- adjusting to turn/phase/status 9/-1/ready
