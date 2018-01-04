@@ -318,12 +318,14 @@ class Ship {
 
 	public function addFireDB($fires){
 		for ($i = 0; $i < sizeof($fires); $i++){
+			//Debug::log("FIRE trying to find ".$fires[$i]->weaponid);
 			$this->getSystemById($fires[$i]->weaponid)->fireOrders[] = $fires[$i];
 		}
 	}
 
 	public function addPowerDB($powers){
 		for ($i = 0; $i < sizeof($powers); $i++){
+			//if ($this->id == 15 && $powers[$i]->systemid == 14){Debug::log("adding");}
 			//echo ($this->id.", ".get_class($this).", ".$powers[$i]->unitid."/".$powers[$i]->systemid);
 			$this->getSystemById($powers[$i]->systemid)->addPowerEntry($powers[$i]);
 		}
@@ -901,7 +903,7 @@ class Ship {
 	}
 
 	public function getSystemById($id){
-		//Debug::log("ship getSystemById looking for: ".$id);
+		//if ($id == 14){Debug::log("ship getSystemById looking for: ".$id);}
 		if ($id == 1){
 			return $this->primary;
 		}
@@ -917,7 +919,7 @@ class Ship {
 				}
 				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 					if ($this->structures[$i]->systems[$j]->id == $id){
-						//Debug::log("ding");
+						//if ($id == 14){Debug::log("ding");}
 						return $this->structures[$i]->systems[$j]->getActiveSystem();
 					}
 				}

@@ -38,6 +38,9 @@ class Dual extends Weapon {
 
 	public function setActiveSystem($turn){
 		//Debug::log("setActiveSystem");
+		//if ($this->parentId == 15 && $this->id == 14){
+		//	Debug::log("setActiveSystempowers: ".sizeof($this->powers));
+		//}
 		for ($i = sizeof($this->powers)-1; $i >= 0; $i--){
 			if ($this->powers[$i]->type < 0){
 				if ($this->powers[$i]->turn == $turn || $this->powers[$i]->turn == $turn-1){
@@ -53,17 +56,21 @@ class Dual extends Weapon {
 	}
 
 	public function getActiveSystem(){
-		//echo "</br>getActiveSystem ".$this->parentId."/".$this->id."</br>";
-		//var_export($this->states); echo "<br><br>";
-		//var_export($this->powers);echo "<br><br>";
+		//if ($this->parentId == 15 && $this->id == 14){
+		//	Debug::log("getActiveSystem: ".sizeof($this->powers));
+			//	echo "</br>getActiveSystem ".$this->parentId."/".$this->id."</br>";
+			//var_export($this->states); echo "<br><br>";
+			//	var_export($this->powers); echo "<br><br>";
+			//Debug::log("powers: ".sizeof($this->powers));
+		//}
 		for ($i = 0; $i < sizeof($this->states); $i++){
 			if ($this->states[$i]){
 				//echo "returning </br>";
 				return $this->weapons[$i];
 			}
 		}
-		return $this->weapons[0];
-		//Debug::log("ERROR - ".$this->parentId."/".$this->id." CANT RETURN ACTIVE WEAPON");
+		//Debug::log("ERROR - ".$this->parentId."/".$this->id." CANT RETURN ACTIVE WEAPON, return DUAL");
+		return $this;
 	}
 
 	public function setProps(){

@@ -9,7 +9,7 @@ class Crius extends Light {
 	public $cost = 300;
 	public $mass = 1400;
 
-	public $integrity = 525;
+	public $integrity = 450;
 	public $ep = 42;
 	public $ew = 525;
 	public $power = 2;

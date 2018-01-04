@@ -326,7 +326,7 @@ function Game(data, userid){
 				var f = new Fighter(
 					{
 						id: j, name: this.flightDeploy.loads[i].name, ep: 0, mass: this.flightDeploy.loads[i].mass, integrity: this.flightDeploy.loads[i].integrity,
-						value: 0, negation: 0, crits: 0, destroyed: 0, damages: [], crits: []
+						remaining: this.flightDeploy.loads[i].integrity, value: 0, negation: 0, crits: 0, destroyed: 0, damages: [], crits: []
 					}
 				)
 
@@ -2833,6 +2833,7 @@ Game.prototype.resolveDeployment = function(){
 		.append($("<tr>")
 			.append($("<td>").html("No noteworthy events."))
 		);
+
 		game.draw();
 	}
 	else {
@@ -2902,6 +2903,9 @@ Game.prototype.deployDone = function(){
 				.append($("<td>").html("Deployment concluded."))
 			);
 		}
+
+		$("#unitGUI").empty();
+		this.initSelectionWrapper();
 
 	console.log("deployDone");
 }

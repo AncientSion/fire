@@ -2859,7 +2859,7 @@ Ship.prototype.drawTurnUI = function(){
 	
 Ship.prototype.canIncreaseImpulse = function(){
 	if (this.getRemainingEP() >= this.getImpulseChangeCost()){
-		if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship)){
+		if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship + this.squad)){
 			return true;
 		}
 		else if (this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == 1){
@@ -2876,7 +2876,7 @@ Ship.prototype.canIncreaseImpulse = function(){
 Ship.prototype.canDecreaseImpulse = function(){
 	if (this.getCurrentImpulse() <= 0){return false;}
 	if (this.getRemainingEP() >= this.getImpulseChangeCost()){
-		if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship)){
+		if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship + this.squad)){
 			return true;
 		}
 		else if (this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == -1){

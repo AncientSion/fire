@@ -3,8 +3,8 @@ function Mixed(data){
 	this.ship = 0;
 	this.primary = false;
 	this.mission = data.mission || {};
-	this.nextStep = {};
-	this.finalStep = {};
+	this.nextStep;
+	this.finalStep;
 	this.layout = [];
 }
 
@@ -702,4 +702,35 @@ Mixed.prototype.getBaseImage = function(){
 
 Mixed.prototype.getRemainingImpulse = function(){
 	return 0;
+}
+
+Mixed.prototype.animateSelfDeployment = function(){
+	this.deployAnim[0] = this.deployAnim[1];
+
+
+	if (this.deployAnim[0] == this.deployAnim[1]){
+		this.deployed = 1;
+		this.isReady = 1;
+		this.drawSelf();
+		ctx.rotate(-this.getDrawFacing() * Math.PI/180);
+		ctx.translate(-this.drawX, -this.drawY);
+		this.createDeployEntry();
+		return;
+	}
+
+	this.deployAnim[0] += 1;
+
+	var fraction = this.deployAnim[0] / this.deployAnim[1];
+	var sin = Math.sin(Math.PI*fraction);
+
+	drawCircle(this.drawX, this.drawY, this.size*0.55*sin, "source-over", "blue");
+	drawCircle(this.drawX, this.drawY, this.size*0.2*sin/2, "lighter", "lightBlue");
+
+	if (fraction >= 0.3){
+		ctx.globalAlpha = fraction;
+		this.drawSelf();
+		ctx.globalAlpha = 1;
+		ctx.rotate(-this.getDrawFacing() * Math.PI/180);
+		ctx.translate(-this.drawX, -this.drawY);
+	}
 }

@@ -54,6 +54,7 @@ class System {
 	}
 
 	public function addPowerEntry($power){
+		//if ($this->parentId == 15 && $this->id == 14){Debug::log("adding");}
 		$this->powers[] = $power;
 	}
 
