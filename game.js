@@ -2295,7 +2295,7 @@ function Game(data, userid){
 				wrapper
 				.append($("<tr>").addClass("deployNow")
 					.append($("<td>")
-						.append($(this.incoming[i].getBaseImage().cloneNode(true))
+						.append($(window.shipImages[this.incoming[i].toLowerCase()].cloneNode(true))
 							.addClass("size40")
 						)
 					)
