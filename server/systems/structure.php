@@ -50,8 +50,9 @@ class Structure {
 
 	public function setNegation($main, $armourDmg){
 		$p = 1.5;
-		
-		$this->parentIntegrity = round($main*3 / 360) * Math::getArcWidth($this);
+
+		//$this->parentIntegrity = round($main*3 / 360) * Math::getArcWidth($this);
+		$this->parentIntegrity = round($main);
 
 		$this->parentPow = round(pow($this->parentIntegrity, $p));
 		$this->armourDmg += $armourDmg;

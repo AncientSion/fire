@@ -439,7 +439,7 @@ class Squaddie extends Single {
 
 				$this->structures[$i]->systems[$j]->crits[] = new Crit(
 					0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn,
-					$effect[0], $effect[3], $effect[4], 1
+					$effect[0], $effect[2], $effect[3], 1
 				);
 			}
 		}

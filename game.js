@@ -2291,17 +2291,17 @@ function Game(data, userid){
 
 
 		for (var i = 0; i < this.incoming.length; i++){
-			if (this.ships[i].friendly){
+			if (this.incoming[i].friendly){
 				wrapper
 				.append($("<tr>").addClass("deployNow")
 					.append($("<td>")
-						.append($(this.ships[i].getBaseImage().cloneNode(true))
+						.append($(this.incoming[i].getBaseImage().cloneNode(true))
 							.addClass("size40")
 						)
 					)
 					.append($("<td>")
 						.addClass("green font14")
-						.html(this.ships[i].name)
+						.html(this.incoming[i].name)
 					)
 					.append($("<td>")
 						.addClass("green font14")
@@ -2309,7 +2309,7 @@ function Game(data, userid){
 					)
 				)
 			}
-			else if (!this.ships[i].friendly){
+			else if (!this.incoming[i].friendly){
 				wrapper
 				.append($("<tr>").addClass("deployNow")
 					.append($("<td>")

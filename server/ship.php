@@ -116,12 +116,27 @@ class Ship {
 					$structDmg += $this->primary->damages[$j]->structDmg;
 				}
 			}
-			$this->structures[$i]->setNegation($this->primary->integrity, 0);
 		}
 
+		$this->setStructureState($turn, $phase);
 		$this->setProps($turn, $phase);
 
 		return true;
+	}
+
+	public function setStructureState($turn, $phase){
+		$main = $this->primary->integrity;
+		$multi = $this->getArmourMultiplier();
+		$elements = sizeof($this->structures);
+		$each = $main * $multi / $elements;
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){ // 
+			$this->structures[$i]->setNegation($each, 0);
+		}
+	}
+
+	public function getArmourMultiplier(){
+		return pow(1.3, $this->traverse+4);
 	}
 
 	public function setProps($turn, $phase){
