@@ -173,7 +173,7 @@ function Game(data, userid){
 			valid = true;
 		}
 		else if (this.shortInfo){
-			t = game.getUnit(this.shortInfo);
+			t = this.getUnit(this.shortInfo);
 			if (!t.salvo){
 				valid = true;
 				dest = t.getPlannedPos();
@@ -228,13 +228,13 @@ function Game(data, userid){
 		s.mission = mission;
 
 		$(s.element).find(".header")
-			.find(".missionType").html(game.getMissionTypeString(s, s.getTarget())).end()
-			.find(".missionTarget").html(game.getMissionTargetString(mission)).end()
+			.find(".missionType").html(this.getMissionTypeString(s, s.getTarget())).end()
+			.find(".missionTarget").html(this.getMissionTargetString(mission)).end()
 			.find(".missionTurn").html("Turn " + mission.turn).end();
 
 
 		if (t && t instanceof Ship && o.x == dest.x && o.y == dest.y){
-			mission.arrived = game.turn-1;
+			mission.arrived = this.turn-1;
 			if (t.ship){
 				s.doDraw = 0;
 			}
@@ -259,9 +259,9 @@ function Game(data, userid){
 		s.setSupportImage();
 		s.getAttachDivs();
 		s.disableMissionMode();
-		game.updateSingleIntercept(s);
-		game.redraw();
-		//game.drawShipOverlays();
+		this.updateSingleIntercept(s);
+		this.redraw();
+		//this.drawShipOverlays();
 		$("#deployOverlay").hide();
 	}
 
@@ -276,7 +276,7 @@ function Game(data, userid){
 			valid = true;
 		}
 		else if (this.shortInfo){
-			t = game.getUnit(this.shortInfo);
+			t = this.getUnit(this.shortInfo);
 			 //(t && (t.ship || (!t.friendly && t.flight))){
 			if (t && (!t.salvo)){
 				valid = true;
@@ -303,7 +303,7 @@ function Game(data, userid){
 
 		if (immediate){
 			p = dest;
-			mission.arrived = 1 //game.turn;
+			mission.arrived = 1 //this.turn;
 		}
 
 		var flight = new Flight(
@@ -345,28 +345,28 @@ function Game(data, userid){
 		flight.setPreMovePosition();
 		flight.setPreMoveImage();
 		flight.createBaseDiv();
-		game.ships.push(flight);
+		this.ships.push(flight);
 
 		this.hideInstruct();
 		$("#deployOverlay").hide();
 		hangar.setFireOrder(t.id).select();
-		game.flightDeploy = false;
+		this.flightDeploy = false;
 		//flight.disableMissionMode();
 
 		$(flight.element).css("top", 600).css("left", 0);
 
 		if (immediate){
-			game.getUnit(t.id).attachFlight(flight);
-			game.getUnit(t.id).setSupportImage();
+			this.getUnit(t.id).attachFlight(flight);
+			this.getUnit(t.id).setSupportImage();
 		}
 		this.draw();
 	}
 
 	this.updateSingleIntercept = function(update){
-		for (var i = 0; i < game.ships.length; i++){
-			if (game.ships[i].ship){continue;}
-			if (game.ships[i].mission.targetid == update.id){
-				game.ships[i].setTarget();
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].ship || this.ships[i].squad){continue;}
+			if (this.ships[i].mission.targetid == update.id){
+				this.ships[i].setTarget();
 			}
 		}
 	}
@@ -776,6 +776,12 @@ function Game(data, userid){
 			this.ships[i].setSupportImage();
 			this.ships[i].getAttachDivs();
 		}
+
+		$("#combatLog").find("tbody")
+			.append($("<tr>")
+				.append($("<td>").html("Movement Resolution concluded."))
+			);
+
 		this.draw();
 	}
 
@@ -955,7 +961,7 @@ function Game(data, userid){
 			if (!this.ships[i].ship && !this.ships[i].squad){continue;}
 
 			for (var j = 0; j < this.ships.length; j++){
-				if (this.ships[i].ship || this.ships[i].squad){continue;}
+				if (this.ships[j].ship || this.ships[j].squad){continue;}
 
 				if (this.ships[j].mission.targetid == this.ships[i].id && this.ships[j].mission.arrived && this.ships[j].mission.arrived < game.turn){
 					this.ships[i].cc.push(this.ships[j].id);
@@ -963,7 +969,6 @@ function Game(data, userid){
 				}
 			}
 		}
-
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (!this.ships[i].ship && !this.ships[i].squad){continue;}
@@ -991,43 +996,6 @@ function Game(data, userid){
 				if (this.ships[j].cc.length){continue;}
 
 				if (this.ships[j].mission.targetid == this.ships[i].id && this.ships[j].mission.arrived && this.ships[j].mission.arrived < game.turn){
-					this.ships[i].cc.push(this.ships[j].id);
-					this.ships[j].cc.push(this.ships[i].id);
-				}
-			}
-		}
-	}
-
-	this.setPreMoveCCa = function(){
-		for (var i = 0; i < this.ships.length; i++){
-			for (var j = i+1; j < this.ships.length; j++){
-				if (this.ships[i].x == this.ships[j].x && this.ships[i].y == this.ships[j].y){
-					if (!this.ships[i].ship && this.ships[j].ship && !this.ships[i].mission.arrived){continue;}
-					if (!this.ships[j].ship && this.ships[i].ship && !this.ships[j].mission.arrived){continue;}
-
-
-
-					if (!this.ships[i].ship && this.ships[j].ship && this.ships[i].mission.arrived && this.ships[i].mission.targetid != this.ships[j].id){
-						var skip = 1;
-						for (var k = 0; k < this.ships.length; k++){
-							if (k == i || k == j){continue;}
-							if (this.ships[k].x == this.ships[i].x && this.ships[k].x == this.ships[i].y){
-								skip = 0; break;
-							}
-						}
-						if (skip){continue;}
-					}
-
-
-
-				//	if (!this.ships[i].ship && this.ships[j].ship && this.ships[i].mission.arrived && this.ships[i].mission.targetid != this.ships[j].id){continue;}
-				//	if (!this.ships[j].ship && this.ships[i].ship && this.ships[j].mission.arrived && this.ships[j].mission.targetid != this.ships[i].id){continue;}
-
-
-
-
-					if (!this.ships[i].ship && !this.ships[j].ship && !this.ships[i].mission.arrived && this.ships[j].mission.targetid != this.ships[i].id){continue;}
-					if (!this.ships[j].ship && !this.ships[i].ship && !this.ships[j].mission.arrived && this.ships[i].mission.targetid != this.ships[j].id){continue;}
 					this.ships[i].cc.push(this.ships[j].id);
 					this.ships[j].cc.push(this.ships[i].id);
 				}
@@ -1478,7 +1446,7 @@ function Game(data, userid){
 	}
 
 	this.finishMoveSubPhase = function(){
-		var time = 750;
+		var time = 500;
 		if (game.animShip){
 			console.log("ship done -> flight moves");
 			game.timeout = setTimeout(function(){
@@ -1525,7 +1493,7 @@ function Game(data, userid){
 	this.resetImageData = function(){
 		console.log("resetImageData");
 		for (var i = 0; i < this.ships.length; i++){
-			 if (!this.ships[i].ship && !this.ships[i].squad){this.ships[i].setPreFireImage();}
+			 if (!this.ships[i].ship){this.ships[i].setPreFireImage();}
 		}
 		for (var i = 0; i < this.ships.length; i++){
 			 if (!this.ships[i].salvo){this.ships[i].setSupportImage();}
@@ -2170,7 +2138,7 @@ function Game(data, userid){
 						wrapper
 						.append($("<tr>").addClass("deployNow")
 							.hover(
-								function(){game.drawJumpMarker($(this).data("shipid"))},
+								function(){game.drawDeployMarker($(this).data("shipid"))},
 								function(){game.draw();}
 							)
 							.data("shipid", this.ships[i].id)
@@ -2194,7 +2162,7 @@ function Game(data, userid){
 						.append($("<tr>").addClass("deployNow")
 							.data("shipid", this.ships[i].id)
 							.hover(
-								function(){game.drawJumpMarker($(this).data("shipid"))},
+								function(){game.drawDeployMarker($(this).data("shipid"))},
 								function(){game.draw();}
 							)
 							.append($("<td>")
@@ -2239,7 +2207,7 @@ function Game(data, userid){
 						})	
 					$(this).hover(
 						function(e){
-							game.drawJumpMarker($(this).data("shipid"));
+							game.drawDeployMarker($(this).data("shipid"));
 							//console.log("hoverIn");
 						},
 						function(e){
@@ -2264,7 +2232,7 @@ function Game(data, userid){
 				.append($("<tr>").addClass("deployNow")
 					.data("shipid", this.incoming[i].id)
 					.hover(
-						function(){game.drawJumpMarker($(this).data("shipid"))},
+						function(){game.drawDeployMarker($(this).data("shipid"))},
 						function(){game.draw();}
 					)
 					.append($("<td>")
@@ -2291,7 +2259,7 @@ function Game(data, userid){
 				.append($("<tr>").addClass("deployNow")
 					.data("shipid", this.incoming[i].id)
 					.hover(
-						function(){game.drawJumpMarker($(this).data("shipid"))},
+						function(){game.drawDeployMarker($(this).data("shipid"))},
 						function(){game.draw();}
 					)
 					.append($("<td>")
@@ -2848,7 +2816,7 @@ Game.prototype.deployDone = function(){
 	if (hasEvent){
 		$("#combatLog").find("tbody")
 			.append($("<tr>")
-				.append($("<td>").html("Deployment concluded."))
+				.append($("<td>").html("Deployment Resolution concluded."))
 			);
 		}
 
@@ -2866,21 +2834,37 @@ Game.prototype.resolveUnitMovement = function(){
 	this.animShip = 1;
 	this.animFlight = 0;
 	this.animSalvo = 0;
+
+	$("#combatlogWrapper")
+	.width(350)
+	.css("top", 75).css("left", 250)
+	.show()
+	.find(".combatLogHeader").html("Movement Log").end()
+	.find("#combatLog").children().children().remove();
+
 	this.setUnitMovementFocus();
 	this.setUnitMovementDetails();
 	this.animateUnitMovement();
 }
 
-
-Game.prototype.drawJumpMarker = function(id){
+Game.prototype.drawDeployMarker = function(id){
 	var s = game.getUnit(id);
-	//if (s.userid != this.userid && game.phase == 0){return;}
+
+	if (s.ship || s.squad){
+		this.drawJumpMarker(s);
+	}
+}
+
+Game.prototype.drawJumpMarker = function(s){
+
 	if (game.turn == 1 && game.phase == -1){return;}
 	this.setShipTransform();
 	var size = 50;
 
 	ctx.beginPath();
 	
+
+	if (s.ship || s.squad){}
 	ctx.arc(s.actions[0].x, s.actions[0].y, size/2, 0, 2*Math.PI, false);
 
 	ctx.closePath();

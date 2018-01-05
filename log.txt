@@ -1,38 +1,60 @@
-928.2325
-928.2325
-928.2325
-928.2325
-499.8175
-499.8175
-499.8175
-499.8175
-game 2, user 1 --- adjusting to turn/phase/status 4/3/ready
-game 2, user 2 --- adjusting to turn/phase/status 4/3/ready
+game 2, user 1 --- adjusting to turn/phase/status 10/2/ready
+game 2, user 2 --- adjusting to turn/phase/status 10/2/ready
+prepareAdvance
+****************************************** doAdvance for game2 from phase 2 to phase 3
+resolveFireOrder - ID 76, shooter: Squadron #16 vs Flight #19, w: LightPulse #11, shots: 1
+Mixed getHitSection
+resolveFireOrder - ID 77, shooter: Squadron #16 vs Flight #19, w: LightPulse #12, shots: 1
+Mixed getHitSection
+fire #77, doDamage, weapon: LightPulse, target #19/3/Sentri, hits: 3, totalDmg: 17, remaining: 24, armour: 5+0
+resolveFireOrder - ID 78, shooter: Squadron #16 vs Flight #19, w: LightPulse #13, shots: 1
+Mixed getHitSection
+fire #78, doDamage, weapon: LightPulse, target #19/7/Sentri, hits: 4, totalDmg: 18, remaining: 24, armour: 5+0
+resolveFireOrder - ID 79, shooter: Squadron #16 vs Flight #19, w: LightPulse #14, shots: 1
+Mixed getHitSection
+resolveBallisticFireOrders
+DB updateFireOrders: 4
+ => DB insertDamageEntries: 2
+ => DB insertCritEntries: 0
+handleFiringPhase time: 0.014 seconds.
+game 2, user 1 --- adjusting to turn/phase/status 10/3/waiting
+game 2, user 2 --- adjusting to turn/phase/status 10/3/waiting
+TIME: 0.021 seconds.
+2 mb
+game 2, user 2 --- adjusting to turn/phase/status 10/3/ready
+game 2, user 1 --- adjusting to turn/phase/status 10/3/ready
 prepareAdvance
 ****************************************** doAdvance for game2 from phase 3 to phase 4
 endTurn
 assembleEndStates
-updateUnitState s:6 4/3
+updateUnitState s:10 10/3
+roll: 75, odds: 100, DELETING
+roll: 68, odds: 80, DELETING
+roll: 43, odds: 60, DELETING
+roll: 34, odds: 40, DELETING
+deleteReinforcements: 4
 pickReinforcements
-player: 2 has 100 available
-player: 2 has 100 available
-game 2, user 1 --- adjusting to turn/phase/status 5/-1/waiting
-game 2, user 2 --- adjusting to turn/phase/status 5/-1/waiting
-TIME: 0.166 seconds.
+player: 1 has 100 available
+player: 1 has 100 available
+game 2, user 1 --- adjusting to turn/phase/status 11/-1/waiting
+game 2, user 2 --- adjusting to turn/phase/status 11/-1/waiting
+TIME: 0.221 seconds.
 4 mb
-requestShipsDB, s: 1, turn: 5
-game 2, user 2 --- adjusting to turn/phase/status 5/-1/ready
-requestShipsDB, s: 1, turn: 5
-game 2, user 1 --- adjusting to turn/phase/status 5/-1/ready
+game 2, user 2 --- adjusting to turn/phase/status 11/-1/ready
+game 2, user 1 --- adjusting to turn/phase/status 11/-1/ready
 prepareAdvance
 ****************************************** doAdvance for game2 from phase -1 to phase 0
 handleDeploymentPhase
-initBallistics
 resolveDeployActions s: 0
 handleJumpActions
+initBallistics
+skipping
+DB updateBallisticFireOrder, s: 2
+DB insertUnits: 1
+insertMissions s: 1
 assemblDeployStates
-game 2, user 1 --- adjusting to turn/phase/status 5/0/waiting
-game 2, user 2 --- adjusting to turn/phase/status 5/0/waiting
-TIME: 0.009 seconds.
+updateUnitState s:1 11/-1
+game 2, user 1 --- adjusting to turn/phase/status 11/0/waiting
+game 2, user 2 --- adjusting to turn/phase/status 11/0/waiting
+TIME: 0.086 seconds.
 4 mb
-game 1, user 1 --- adjusting to turn/phase/status 9/-1/ready

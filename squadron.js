@@ -384,6 +384,15 @@ Squaddie.prototype.armourOut = function(e){
 	$(this.armourElement).find(".boostDiv").hide();
 }
 
+Squaddie.prototype.doDestroy = function(){
+	this.draw = 0;
+	for (var i = 0; i < this.structures.length; i++){
+		for (var k = 0; k < this.structures[i].systems.length; k++){
+			this.structures[i].systems[k].destroyed = true;
+		}
+	}
+}
+
 Squaddie.prototype.drawArc = function(){
 	return;
 }
@@ -482,6 +491,29 @@ Squadron.prototype.create = function(){
 		this.primary.systems[0].output = 0;
 		this.primary.systems[1].output = 0;
 	}
+
+	this.setStatus();
+}
+
+Squadron.prototype.setStatus = function(){
+	console.log("setStatus CREATE")
+	for (var i = 0; i < this.structures.length; i++){
+		if (this.structures[i].destroyed){
+			this.structures[i].doDestroy();
+		}
+	}
+}
+
+Squadron.prototype.setPreFireImage = function(){
+	console.log("Squadron setPreFireImage");
+	for (var i = 0; i < this.structures.length; i++){
+		if (!this.structures[i].draw){
+			if (this.structures[i].isDestroyedThisTurn()){
+				this.structures[i].draw = true;
+			}
+		}
+	}
+	this.resetImage();
 }
 
 Squadron.prototype.getDrawFacing = function(){

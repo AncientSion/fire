@@ -761,7 +761,7 @@ System.prototype.getTableData = function(forFighter){
 				var outputDiv = document.createElement("div");
 					outputDiv.className = "outputMask";
 					if (this.internal || this.getActiveSystem().canBeBoosted()){
-						outputDiv.innerHTML = this.getOutput();
+						outputDiv.innerHTML = this.getActualOutput();
 					}
 					else $(outputDiv).hide();
 					td.appendChild(outputDiv);
@@ -776,6 +776,10 @@ System.prototype.getTableData = function(forFighter){
 	this.setTableRow();
 	this.setSystemBorder();
 	return this.element;
+}
+
+System.prototype.getActualOutput = function(){
+	return this.getOutput();
 }
 
 System.prototype.getDiv = function(){
@@ -1084,6 +1088,7 @@ PrimarySystem.prototype.getSystemDetailsDiv = function(){
 	if (unit.squad){
 		if (this.output){
 			$(table).append($("<tr>").append($("<td>").html("Current Output")).append($("<td>").addClass("output").html(this.getOutputString())));
+			$(table).append($("<tr>").append($("<td>").html("Turn ° ability")).append($("<td>").addClass("turn").html(this.getTurnString())));
 		}
 		if (this.modes.length){
 			$(table).append($("<tr>").append($("<td>").html("Sensor Mode")).append($("<td>").addClass("sensorMode negative").html(this.getEWMode())));
@@ -1096,6 +1101,9 @@ PrimarySystem.prototype.getSystemDetailsDiv = function(){
 
 		if (this.output){
 			$(table).append($("<tr>").append($("<td>").html("Current Output")).append($("<td>").addClass("output").html(this.getOutputString())));
+			if (this instanceof Engine){
+				$(table).append($("<tr>").append($("<td>").html("Turn Degree Sum")).append($("<td>").addClass("turn").html(this.getTurnAbility())));
+			}
 		}
 		if (this.powerReq){
 			$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
@@ -1140,6 +1148,24 @@ PrimarySystem.prototype.updateSystemDetailsDiv = function(){
 	this.attachDetailsMods(ele);
 }
 
+function Engine(system){
+	PrimarySystem.call(this, system);
+}
+Engine.prototype = Object.create(PrimarySystem.prototype);
+
+Engine.prototype.getPowerDiv = function(){
+	return;
+}
+
+Engine.prototype.getTurnAbility = function(){
+	return Math.floor(this.getOutput() / game.getUnit(this.parentId).baseTurnCost);
+}
+
+Engine.prototype.getActualOutput = function(){
+	var total = this.getTurnAbility();
+
+	return ((total - this.getOutputUsage()) + "/" + total);
+}
 
 function Bridge(system){
 	PrimarySystem.call(this, system);
@@ -1175,15 +1201,6 @@ Reactor.prototype.getOutputUsage  = function(){
 		}
 	}
 	return use;
-}
-
-function Engine(system){
-	PrimarySystem.call(this, system);
-}
-Engine.prototype = Object.create(PrimarySystem.prototype);
-
-Engine.prototype.getPowerDiv = function(){
-	return;
 }
 				
 function LifeSupport(system){
@@ -2693,6 +2710,9 @@ Launcher.prototype.getEffiency = function(){
 
 Launcher.prototype.select = function(e){
 	console.log(this);
+
+	if (this.destroyed || this.disabled || this.locked){return false;}
+
 	if (game.phase == -2){
 		if (this.selected){
 			this.selected = false;
@@ -2704,18 +2724,14 @@ Launcher.prototype.select = function(e){
 		this.setSystemBorder();
 		this.setupAmmoLoadout(e);
 	}
-	else if (game.phase != -1 || this.getOutput() == 0 || game.getUnit(this.parentId).available == game.turn){
+	else if (game.phase != -1 || this.getOutput() == 0){
 		return false;
 	}
 	
 	var id = this.id;
 	var parentId = this.parentId;
 	var selected = false;
-
-	if (this.destroyed || this.disabled || this.locked){
-		return false;
-	}
-	else if (this.canFire()){
+	if (this.canFire()){
 		if (this.hasUnresolvedFireOrder()){
 			this.unsetFireOrder();
 		}

@@ -238,13 +238,6 @@ class Manager {
 		}
 	}
 
-	public function shiftToInComing($unit){
-		$this->incoming[] = array(
-						"id" => $unit->id, "userid" => $unit->userid, "available" => $unit->available, "name" => $unit->name,
-							"x" => $unit->actions[0]->x, "y" => $unit->actions[0]->y, "a" => $unit->actions[0]->a
-						);
-	}
-
 	public function getShipData(){
 
 		for ($i = sizeof($this->ships)-1; $i >= 0; $i--){
@@ -254,7 +247,7 @@ class Manager {
 						array_splice($this->ships, $i, 1);
 					}
 					else if ($this->turn > 1 && $this->phase == -1){
-						$this->shiftToInComing($this->ships[$i]);
+						$this->shiftToIncoming($this->ships[$i]);
 						array_splice($this->ships, $i, 1);
 					}
 				}
@@ -289,7 +282,15 @@ class Manager {
 		return $this->ships;
 	}
 
+	public function shiftToIncoming($unit){
+		$this->incoming[] = array(
+						"id" => $unit->id, "userid" => $unit->userid, "available" => $unit->available, "name" => $unit->name,
+							"x" => $unit->actions[0]->x, "y" => $unit->actions[0]->y, "a" => $unit->actions[0]->a
+						);
+	}
+
 	public function getIncomingData(){
+		//Debug::log(sizeof($this->incoming));
 		for ($i = sizeof($this->incoming)-1; $i >= 0; $i--){
 			if ($this->incoming[$i]["userid"] != $this->userid){
 				if ($this->incoming[$i]["available"] > $this->turn + 1){
@@ -666,11 +667,61 @@ class Manager {
 	
 	public function handleDeploymentPhase(){
 		Debug::log("handleDeploymentPhase");
-		$this->initBallistics();
 		$this->handleDeploymentActions();
 		$this->handleJumpActions();
+		$this->initBallistics();
 		$this->assemblDeployStates();
 		DBManager::app()->deleteEmptyLoads($this->gameid);
+	}
+
+	public function handleDeploymentActions(){
+		$data = array();
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->available == $this->turn){
+				if (sizeof($this->ships[$i]->actions) == 1){
+					$data[] = $this->ships[$i]->id;
+				}
+			}
+		}
+
+		DBManager::app()->resolveDeployActions($data);
+	}
+
+	public function handleJumpActions(){
+		Debug::log("handleJumpActions");
+		$new = array();
+
+		$mod = 1;
+		if ($this->turn == 1){
+			$mod = 0.33;
+		}
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if (($this->ships[$i]->ship || $this->ships[$i]->squad) && $this->ships[$i]->available == $this->turn){
+				$order = $this->ships[$i]->actions[0];
+				$output = $this->ships[$i]->getSystemByName("Sensor")->output;
+				$shift = round($this->ships[$i]->size / $output*500*$mod, 2);
+				$aShift = ceil($shift);
+				$pShift = ceil($shift*2);
+				Debug::log("jumpin: #".$this->ships[$i]->id.", class: ".$this->ships[$i]->name.", size: ".$this->ships[$i]->size.", sensor: ".$output.", ordered to: ".$order->x."/".$order->y.", shiftPotential: ".$shift."%");
+				Debug::log($this->ships[$i]->name.", aShift: ".$aShift."°, pShift: ".$pShift."px");
+
+				$aShift = mt_rand(-$aShift, $aShift);
+				$xShift = mt_rand(-$pShift, $pShift);
+				$yShift = mt_rand(-$pShift, $pShift);
+				$dist = Math::getDist($order->x, $order->y, $order->x + $xShift, $order->y + $yShift);
+
+				Debug::log("--> aShift: ".$aShift."°, psShift: ".$xShift."/".$yShift." (".$dist."px)");
+
+				$this->ships[$i]->actions[0]->resolved = 1;
+				$this->ships[$i]->actions[] = new Action(-1, $this->ships[$i]->id, $this->turn, "jump", $dist, $order->x + $xShift, $order->y + $yShift, $aShift, 0, 0, 0, 1, 1);
+				$new[] = $this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1];
+			}
+		}
+
+		if (sizeof($new)){
+			DBManager::app()->insertServerActions($new);
+		}
 	}
 
 	public function initBallistics(){
@@ -747,56 +798,6 @@ class Manager {
 				$this->ships[sizeof($this->ships)-1]->setUnitState($this->turn, $this->phase);
 				$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->ships[$i]->id, $this->turn, "deploy", 0, $units[$i]["actions"][0]["x"], $units[$i]["actions"][0]["y"], $a, 0, 0, 0, 1, 1);
 			}
-		}
-	}
-
-	public function handleDeploymentActions(){
-		$data = array();
-		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->available == $this->turn){
-				if (sizeof($this->ships[$i]->actions) == 1){
-					$data[] = $this->ships[$i]->id;
-				}
-			}
-		}
-
-		DBManager::app()->resolveDeployActions($data);
-	}
-
-	public function handleJumpActions(){
-		Debug::log("handleJumpActions");
-		$new = array();
-
-		$mod = 1;
-		if ($this->turn == 1){
-			$mod = 0.33;
-		}
-
-		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if (($this->ships[$i]->ship || $this->ships[$i]->squad) && $this->ships[$i]->available == $this->turn){
-				$order = $this->ships[$i]->actions[0];
-				$output = $this->ships[$i]->getSystemByName("Sensor")->output;
-				$shift = round($this->ships[$i]->size / $output*500*$mod, 2);
-				$aShift = ceil($shift);
-				$pShift = ceil($shift*2);
-				Debug::log("jumpin: #".$this->ships[$i]->id.", class: ".$this->ships[$i]->name.", size: ".$this->ships[$i]->size.", sensor: ".$output.", ordered to: ".$order->x."/".$order->y.", shiftPotential: ".$shift."%");
-				Debug::log($this->ships[$i]->name.", aShift: ".$aShift."°, pShift: ".$pShift."px");
-
-				$aShift = mt_rand(-$aShift, $aShift);
-				$xShift = mt_rand(-$pShift, $pShift);
-				$yShift = mt_rand(-$pShift, $pShift);
-				$dist = Math::getDist($order->x, $order->y, $order->x + $xShift, $order->y + $yShift);
-
-				Debug::log("--> aShift: ".$aShift."°, psShift: ".$xShift."/".$yShift." (".$dist."px)");
-
-				$this->ships[$i]->actions[0]->resolved = 1;
-				$this->ships[$i]->actions[] = new Action(-1, $this->ships[$i]->id, $this->turn, "jump", $dist, $order->x + $xShift, $order->y + $yShift, $aShift, 0, 0, 0, 1, 1);
-				$new[] = $this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1];
-			}
-		}
-
-		if (sizeof($new)){
-			DBManager::app()->insertServerActions($new);
 		}
 	}
 

@@ -1254,7 +1254,7 @@ Ship.prototype.finishDeployLogEntry = function(html){
 			.hover(
 				function(){
 					var data = $(this).data();
-					game.drawJumpMarker(data.shipid);
+					game.drawDeployMarker(data.shipid);
 					game.getUnit($(this).data("shipid")).doHighlight()
 				},
 				function(){
@@ -2317,8 +2317,8 @@ Ship.prototype.attachFlight = function(unit){
 }
 
 Ship.prototype.setPostFireImage = function(){
-	if (this.ship || this.squad){return;}
-	console.log("setPostFireImage");
+	if (this.ship){return;}
+
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].draw && (this.structures[i].destroyed || this.structures[i].disabled)){
 			this.structures[i].draw = 0;

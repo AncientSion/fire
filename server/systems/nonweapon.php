@@ -121,6 +121,10 @@ class Engine extends PrimarySystem {
 		$this->boostEffect[] = new Effect("Output", 12);
         parent::__construct($id, $parentId, $mass, $output, ceil($this->powerReq/3), $destroyed);
     }
+
+	public function setOutput($cost){
+		$this->output = ceil($this->output * $cost);
+	}
 }
 
 class Sensor extends PrimarySystem {

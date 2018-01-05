@@ -67,7 +67,6 @@ class Ship {
 
 		$this->addPrimary();
 		$this->addStructures();
-		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq());
 	}
 
 	public function getId(){
@@ -77,6 +76,9 @@ class Ship {
 
 	public function setUnitState($turn, $phase){
 		//Debug::log("ship setUnitState");
+
+		$this->setBaseStats($turn, $phase);
+		
 		if ($this->primary->isDestroyed()){
 			$this->destroyed = 1;
 		}
@@ -99,6 +101,9 @@ class Ship {
 					break;
 			}
 		}
+
+		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq());
+		$this->getSystemByName("Engine")->setOutput($this->baseTurnCost);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){ // 
 			$armourDmg = 0;
@@ -142,7 +147,6 @@ class Ship {
 	public function setProps($turn, $phase){
 		//Debug::log("setProps ".get_class($this)." #".$this->id);
 		$this->cost = static::$value;
-		$this->setBaseStats($phase, $turn);
 		$this->setCurrentImpulse($turn, $phase);
 		$this->setRemainingImpulse($turn);
 		$this->setRemainingDelay($turn);

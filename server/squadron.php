@@ -14,21 +14,17 @@ class Squadron extends Ship {
 	public $traverse = -1;
 
 	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
-		$this->id = $id;
-		$this->userid = $userid;
-		$this->available = $available;
-		$this->status = $status;
-		$this->destroyed = $destroyed;
-		$this->x = $x;
-		$this->y = $y;
-		$this->facing = $facing;
-		$this->remainingDelay = $delay;
-		$this->currentImpulse = $thrust;
-		$this->notes = $notes;
+		parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
+	}
 
+	public function addPrimary(){
 		$this->primary = new Shared();
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(0, 0), 0, 0);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(0, 0), 1000, 0);
+	}
+	
+	public function addStructures(){
+		return;
 	}
 	
 	public function addSubUnits($elements){
@@ -46,6 +42,7 @@ class Squadron extends Ship {
 	public function setUnitState($turn, $phase){
 		//Debug::log("SQUADRON setUnitState ".$this->display." #".$this->id);
 
+
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$this->structures[$i]->setUnitState($turn, $phase);
 		}
@@ -54,6 +51,7 @@ class Squadron extends Ship {
 			$this->primary->systems[$i]->setState($turn, $phase);
 		}
 
+		$this->setBaseStats($turn, $phase);
 		$this->setProps($turn, $phase);
 
 		return true;
