@@ -118,7 +118,7 @@ class Vanguard extends Missile {
 	public $maxDmg = 12;
 	public $mass = 2;
 	public $cost = 6;
-	public $traverse = -5;
+	public $traverse = -4;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

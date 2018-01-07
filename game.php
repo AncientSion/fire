@@ -165,16 +165,19 @@
 					<th id="impulseMod" style="text-align: center">
 					</th>
 				</tr>
+			<!---
 				<tr>
 					<th style="text-align: left">
-						Cost / 1
+						Cost / 1°
 					</th>
 					<th id="turnCost" style="width: 55px, text-align: center">
 					</th>
 				</tr>
+			-->
+
 				<tr>
 					<th style="text-align: left">
-						Delay / 1
+						Delay / 1°
 					</th>
 					<th id="turnDelay" style="width: 55px; text-align: center">
 					</th>
@@ -186,10 +189,12 @@
 					<th id="turnMod" style="width: 55px; text-align: center">
 					</th>
 				</tr>
+				
+			<!---
 				<tr id="shortenTurn" class="disabled">
 					<td>
 						<div class="doShortenTurn">
-							<img class="size20" src="varIcons/plusWhite.png">
+				s			<img class="size20" src="varIcons/plusWhite.png">
 						</div>
 					</td>
 					<td>
@@ -198,13 +203,14 @@
 						</div>
 					</td>
 				</tr>
+			-->
 			</table>
 		</div>
 		<div id="epButton" class="turnEle ui disabled">
 			<table style="margin:auto; width: 100%;">
 				<tr>
 					<th style="width: 60%; text-align: left">
-						 Engine Power
+						 Turn Ability 
 					</th>
 					<th id="remEP" style="text-align: center">
 					</th>

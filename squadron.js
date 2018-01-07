@@ -164,7 +164,7 @@ Squaddie.prototype.expandElement = function(){
 		else {
 			if (this.structures[i].systems.length > 1){
 				oY = -s*this.structures[i].systems.length + space;
-			}
+			} else oY = -pHeight / 4;
 		}
 
 		for (var j = 0; j < this.structures[i].systems.length; j++){
@@ -217,7 +217,12 @@ Squaddie.prototype.attachEvent = function(ele){
 }
 
 Squaddie.prototype.getUpgradeData = function(){
-	return {name: this.display, cost: this.cost};
+	return {
+		"name": this.display,
+		"systemid": this.id,
+		"cost": this.cost,
+		"loads": []
+	};
 }
 
 Squaddie.prototype.canBoost = function(system){
@@ -555,16 +560,6 @@ Squadron.prototype.setLayout = function(){
 	$(this.element).find(".structContainer").css("height", h +20);
 }
 
-Squadron.prototype.previewSetup = function(){
-	for (var i = 0; i < this.structures.length; i++){
-		for (var j = 0; j < this.structures[i].systems.length; j++){
-			if (this.structures[i].systems[j].loadout){
-				$(this.structures[i].systems[j].element).addClass("bgYellow");
-			}
-		}
-	}
-}
-
 Squadron.prototype.createBaseDiv = function(){
 	var owner = "friendly";
 	if (game.phase > -2 && this.userid != game.userid){owner = "hostile";}
@@ -585,28 +580,32 @@ Squadron.prototype.createBaseDiv = function(){
 	var headerC = "red";
 	if (this.friendly){headerC = "green";}
 
-		$(table)
-			.addClass("general")
-			.append($("<tr>")
-				.append($("<th>").html("Squadron #" + this.id).attr("colSpan", 2).addClass(headerC)))
-			.append($("<tr>")
-			.append($("<td>").html("Thrust").css("width", "60%"))
-				.append($("<td>").html(this.getRemainingImpulse() + " / " + this.getCurrentImpulse()).addClass("Thrust")))
-			.append($("<tr>")
-				.append($("<td>").html("Engine Power:"))
-				.append($("<td>").html(this.getRemainingEP() + " / " + this.getEP()).addClass("ep")))
-			.append($("<tr>")
-				.append($("<td>").html("Thrust Change:"))
-				.append($("<td>").html(this.getImpulseChangeCost() + " EP").addClass("change")))
-			.append($("<tr>")
-				.append($("<td>").html("Turn Cost per 1"))
-				.append($("<td>").html(round(this.getTurnCost(), 2) + " EP")))
-			.append($("<tr>")
-				.append($("<td>").html("Turn Delay per 1"))
-				.append($("<td>").html(round(this.getTurnDelay(), 2) + " px")))
-			.append($("<tr>")
-				.append($("<td>").html("Active Turn Delay"))
-				.append($("<td>").html(this.getRemainingDelay()).addClass("delay")))
+	$(table)
+		.append($("<tr>")
+			.append($("<th>").html("Squadron #" + this.id).attr("colSpan", 2).addClass(headerC)))
+		.append($("<tr>")
+			.append($("<td>").html("Classification").css("width", "60%"))
+			.append($("<td>").html(game.getUnitType(this.traverse) + " (" + this.traverse + ")")))
+		.append($("<tr>")
+			.append($("<td>").html("Thrust"))
+			.append($("<td>").html(this.getRemainingImpulse() + " / " + this.getCurrentImpulse()).addClass("Thrust")))
+		.append($("<tr>")
+			//.append($("<td>").html("Engine Power:"))
+			//.append($("<td>").html(this.getRemainingEP() + " / " + this.getEP()).addClass("ep")))
+			.append($("<td>").html("Turn Ability"))
+			.append($("<td>").html(this.getRemainingEP() + " / " + this.getEP()).addClass("ep")))
+		.append($("<tr>")
+			.append($("<td>").html("Thrust Change:"))
+			.append($("<td>").html(this.getImpulseChangeCost() + " EP").addClass("change")))
+		//.append($("<tr>")
+		//	.append($("<td>").html("Turn Cost per 1"))
+		//	.append($("<td>").html(round(this.getTurnCost(), 2) + " EP")))
+		.append($("<tr>")
+			.append($("<td>").html("Turn Delay / 1"))
+			.append($("<td>").html(round(this.getTurnDelay(), 2) + " px")))
+		.append($("<tr>")
+			.append($("<td>").html("Active Delay"))
+			.append($("<td>").html(this.getRemainingDelay()).addClass("delay")))
 			
 	subDiv.appendChild(table);
 	topDiv.appendChild(subDiv)
@@ -693,7 +692,9 @@ Squadron.prototype.expandDiv = function(div){
 				.addClass("coreContainer"))
 			.append($("<div>")
 				.addClass("iconContainer")					
-					.append($(this.getBaseImage()).css("width", "100%").css("height", "100%"))
+					.append(
+						$(this.getBaseImage()).css("width", "100%").css("margin-top", 20)
+					)
 					.data("shipId", this.id)
 					.hover(function(e){
 						if (aUnit){
@@ -727,12 +728,6 @@ Squadron.prototype.expandDiv = function(div){
 	$(div).addClass("disabled");
 	return div;
 
-}
-
-Squadron.prototype.setBuyData = function(){
-	for (var i = 0; i < this.structures.length; i++){
-		this.upgrades.push(this.structures[i].getUpgradeData());
-	}
 }
 
 Squadron.prototype.getLaunchData = function(){
@@ -1262,4 +1257,44 @@ Squadron.prototype.isDestroyed = function(){
 		}
 	}
 	return true;
+}
+
+Squadron.prototype.doConfirmSystemLoadout = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].structures.length; j++){
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (this.structures[i].structures[j].systems[k].selected){
+					this.structures[i].structures[j].systems[k].select();
+					return;
+				}
+			}
+		}
+	}
+}
+
+Squadron.prototype.setBuyData = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		this.upgrades.push(this.structures[i].getUpgradeData());
+		for (var j = 0; j < this.structures[i].structures.length; j++){
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (this.structures[i].structures[j].systems[k].totalCost > 0){
+					this.upgrades.push(this.structures[i].structures[j].systems[k].getUpgradeData());
+				}
+			}
+		}
+	}
+}
+
+Squadron.prototype.previewSetup = function(){
+	return;
+}
+
+Squaddie.prototype.previewSetup = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].systems.length; j++){
+			if (this.structures[i].systems[j].loadout){
+				$(this.structures[i].systems[j].element).addClass("bgYellow");
+			}
+		}
+	}
 }

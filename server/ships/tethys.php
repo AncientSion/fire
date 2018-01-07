@@ -10,8 +10,8 @@ class Tethys extends Light {
 	public $mass = 1100;
 
 	public $integrity = 400;
-	public $ep = 40;
-	public $ew = 450;
+	public $ep = 100;
+	public $ew = 425;
 	public $power = 2;
 	public $negation = 12;
 

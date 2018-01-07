@@ -59,7 +59,7 @@ class Omega extends SuperHeavy {
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1600);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(180, 4));
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(180, 4), 480, 10);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(180, 4), 60, 10);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(180, 4), 800, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(180, 4), 10);
 	}

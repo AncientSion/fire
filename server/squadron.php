@@ -5,12 +5,13 @@ class Squadron extends Ship {
 	public $squad = true;
 	public $name = "Squadron";
 	public $display = "Squadron";
+	public static $value = 0;
 	public $baseTurnCost = 0;
 	public $baseTurnDelay = 0;
 	public $baseImpulseCost = 0;
 	public $baseImpulse = 1000;
 	public $slipAngle = 1000;
-	public $turnAngle = 1000;
+	//public $turnAngle = 30;
 	public $traverse = -1;
 
 	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
@@ -68,12 +69,13 @@ class Squadron extends Ship {
 			if (($this->structures[$i]->destroyed && !$this->structures[$i]->isDestroyedThisTurn($turn)) || $this->structures[$i]->disabled){continue;}
 
 			$alive = 1;
-			$this->baseTurnCost = max($this->baseTurnCost, $this->structures[$i]->baseTurnCost);
+			//$this->baseTurnCost = max($this->baseTurnCost, $this->structures[$i]->baseTurnCost);
 			$this->baseTurnDelay = max($this->baseTurnDelay, $this->structures[$i]->baseTurnDelay);
 			$this->baseImpulseCost = max($this->baseImpulseCost, $this->structures[$i]->baseImpulseCost);
 			$this->baseImpulse = min($this->baseImpulse, $this->structures[$i]->baseImpulse);
 			$this->slipAngle = min($this->slipAngle, $this->structures[$i]->slipAngle);
-			$this->turnAngle = min($this->turnAngle, $this->structures[$i]->turnAngle);
+			//$this->turnAngle = min($this->turnAngle, $this->structures[$i]->turnAngle);
+
 
 			$this->primary->systems[0]->output = max($this->primary->systems[0]->output, $this->structures[$i]->ew);
 			$this->primary->systems[1]->output = min($this->primary->systems[1]->output, $this->structures[$i]->ep);
@@ -147,7 +149,7 @@ class Squadron extends Ship {
 				$target = $this->getHitSystem($fire);
 				$fire->singleid = $target->id;
 				$fire->req = $fire->shooter->calculateToHit($fire);
-				if ($fire->rolls[$i] < $fire->req){
+				if ($fire->rolls[$i] <= $fire->req){
 					$fire->hits++;
 					$fire->weapon->doDamage($fire, $fire->rolls[$i], $target);
 				}
@@ -334,20 +336,18 @@ class Squaddie extends Single {
 
 	public function setBaseStats($phase, $turn){
 		$this->baseHitChance = ceil(pow($this->mass, 0.4)*1.5)+30;
-		$this->baseTurnCost = round(pow($this->mass, 1.25)/25000, 2);
+		//$this->baseTurnCost = round(pow($this->mass, 1.25)/25000, 2);
 		$this->baseTurnDelay = round(pow($this->mass, 0.45)/18, 2);
-		$this->baseImpulseCost = round(pow($this->mass, 1.25)/700, 2);
+		$this->baseImpulseCost = 30;
+		//$this->baseImpulseCost = round(pow($this->mass, 1.25)/700, 2);
+
+		//$this->ep = ceil($this->ep * $this->baseTurnCost);
 	}
 
 	public function setUnitState($turn, $phase){
 		if ($this->isDestroyed()){
 			$this->destroyed = 1;
 		}
-
-		for ($i = 0; $i < sizeof($this->systems); $i++){ // check primary criticals
-			$this->systems[$i]->setState($turn, $phase);
-		}
-
 		$this->setNegation($this->integrity, 0);
 		return true;
 	}
@@ -406,40 +406,45 @@ class Squaddie extends Single {
 	}
 	public function getValidEffects(){
 		return array( // type, min, max, dura
-			array("Damage", 20, 0, 0.00),
-			array("Accuracy", 20, 0, 0.00),
-			array("Disabled", 0, 1, 0.00),
-			array("Destroyed", 0, 0, 0.00),
+			array("Damage", 20, 0, 25),
+			array("Disabled", 70, 1, 0.00),
+			array("Destroyed", 80, 0, 0.00),
 		);
 	}	
 
 	public function getCritModMax($dmg){
-		return min(20, (round($dmg/20)*10));// - (mt_rand(0, 1) * 10); // round to 0.x, half % mod, 0.1 variance
+		return min(20, (round($dmg/20)*10));
 	}
 
 	public function determineCrit($old, $new, $turn){
-		$dmg = round(($old + $new) / $this->integrity * 100);
-		$tresh = round(($old/2 + $new) / $this->integrity * 100);
-		$effect;
+		$dmg =  round(($new + $old/2) / $this->integrity * 100);
+		$effects = $this->getValidEffects();
 
-		Debug::log(" => SQUAD determineCrit for ".$this->name.", Dmg: ".$new."/".$old.", dmg%: ".$dmg." %, trigger: ".$tresh." %");
+		//Debug::log(" => SQUAD determineCrit #".$this->parentId."/".$this->id." for ".$this->name.", Dmg: ".$dmg." %");
 
 		$effects = $this->getValidEffects();
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				if ($this->structures[$i]->systems[$j]->destroyed || mt_rand(0, 100) > $tresh){continue;}
+				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
 
-				$pick = min(sizeof($effects), mt_rand(0, 1 + sizeof($this->structures[$i]->systems[$j]->crits)));
+				$roll = mt_rand(0, 90);
 
-				$effect = $effects[$pick];
-				if ($pick < 2){$effect[4] = $this->getCritModMax($new + $old) * (1 + ($pick * 0.5));}
-				if (!$effect[4]){continue;}
+				if ($roll > $dmg){continue;}
 
-				$this->structures[$i]->systems[$j]->crits[] = new Crit(
-					0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn,
-					$effect[0], $effect[2], $effect[3], 1
-				);
+				$roll = mt_rand(0, 40) + $dmg;
+				//Debug::log("roll: ".$roll);
+
+				for ($k = sizeof($effects)-1; $k >= 0; $k--){
+					if ($roll >= $effects[$k][1]){
+						//Debug::log("crit");
+						$this->structures[$i]->systems[$j]->crits[] = new Crit(
+							0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn,
+							 $effects[$k][0],  $effects[$k][2],  $effects[$k][3], 1
+						);
+						break 2;
+					}
+				}
 			}
 		}
 	}
@@ -482,7 +487,6 @@ class Light extends Squaddie {
 	public $baseImpulse = 190;
 	public $size = 60;
 	public $slipAngle = 25;
-	public $turnAngle = 40;
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

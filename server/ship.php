@@ -103,7 +103,7 @@ class Ship {
 		}
 
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq());
-		$this->getSystemByName("Engine")->setOutput($this->baseTurnCost);
+	///	$this->getSystemByName("Engine")->setOutput($this->baseTurnCost);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){ // 
 			$armourDmg = 0;
@@ -170,13 +170,14 @@ class Ship {
 
 	public function setBaseStats($phase, $turn){
 		$this->baseHitChance = ceil(pow($this->mass, 0.4)*1.5)+30;
-		$this->baseTurnCost = round(pow($this->mass, 1.25)/25000, 2);
+		//$this->baseTurnCost = round(pow($this->mass, 1.25)/25000, 2);
 		$this->baseTurnDelay = round(pow($this->mass, 0.45)/18, 2);
-		$this->baseImpulseCost = round(pow($this->mass, 1.25)/600, 2);
+		//$this->baseImpulseCost = round(pow($this->mass, 1.25)/2400, 2);
+		$this->baseImpulseCost = 30;
 	}
 
 	public function getImpulseStep(){
-			return floor($this->getBaseImpulse() / 8);
+			return floor($this->getBaseImpulse() / 7);
 	}
 
 	public function hidePowers($turn){
@@ -576,6 +577,7 @@ class Ship {
 	}
 
 	public function calculateToHit($fire){ // shooter
+		return 100;
 		$multi = 1;
 		$req = 0;
 		

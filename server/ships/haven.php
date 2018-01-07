@@ -5,14 +5,13 @@ class Haven extends SuperLight {
 	public $display = "Haven";
 	public $role = "Police Cutter";
 	public $faction = "Centauri Republic";
-	public $size =  40;
 	public static $value =  250;
 	public $cost = 250;
 	public $mass = 900;
 
 	public $integrity = 300;
-	public $ep = 40;
-	public $ew = 500;
+	public $ep = 135;
+	public $ew = 450;
 	public $power = 0;
 	public $negation = 13;
 

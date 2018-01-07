@@ -288,7 +288,7 @@ class Mixed extends Ship {
 				$target = $this->getHitSystem($fire);
 				$fire->singleid = $target->id;
 				$fire->req = $fire->shooter->calculateToHit($fire);
-				if ($fire->rolls[$i] < $fire->req){
+				if ($fire->rolls[$i] <= $fire->req){
 					$fire->hits++;
 					$fire->weapon->doDamage($fire, $fire->rolls[$i], $target);
 				}

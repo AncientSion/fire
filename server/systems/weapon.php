@@ -25,7 +25,7 @@ class Weapon extends System {
 	}
 
 	public function getCritModMax($dmg){
-		return min(20, (round($dmg/20)*10)) - (mt_rand(0, 1) * 10); // round to 0.x, half % mod, 0.1 variance
+		return min(20, (round($dmg/20)*10));
 	}
 	
 	public function getTraverseMod($fire){

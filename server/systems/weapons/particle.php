@@ -38,7 +38,7 @@ class MediumIon extends LightIon {
 	public $display = "68mm Ion Emitter";
 	public $minDmg = 30;
 	public $maxDmg = 38;
-	public $accDecay = -100;
+	public $accDecay = 120;
 	public $shots = 1;
 	public $animColor = "orange";
 	public $reload = 3;

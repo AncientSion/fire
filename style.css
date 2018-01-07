@@ -372,6 +372,10 @@ table, th, tr, td {
 	color: black;
 }
 
+.rowHighlight {
+	border: 1px solid yellow;
+}
+
 .fontHighlight {
 	background-color: red;
 	color: white;
@@ -558,15 +562,6 @@ table, th, tr, td {
 .size90 {
 	width: 90px;
 	height: 90px;
-	margin: auto;
-	margin-top: 10px;
-}
-
-.size90 {
-	width: 90px;
-	height: 90px;
-	margin: auto;
-	margin-top: 10px;
 }
 
 .size100 {
@@ -610,6 +605,14 @@ table, th, tr, td {
 	width: 160px;
 	height: 160px;
 	border: 1px solid white;
+}
+
+.unitContainer.borderHighlight {
+    box-shadow: inset 0 0 0px 3px yellow;
+}
+
+.system.borderHighlight {
+    box-shadow: inset 0 0 0px 3px yellow;
 }
 
 .unitContainer .boostDiv img, .unitContainer .powerDiv img{
@@ -674,7 +677,7 @@ table, th, tr, td {
 }
 
 .structContainer.squad {
-	width: 382px;
+	width: 390px;
 }
 
 .structDiv, .primaryDiv {
@@ -1048,15 +1051,6 @@ div.integrityFull {
 	border: 2px solid yellow;
 }
 
-.shipdiv .header {
-	display: inline-block;
-	width: 180px;
-	height: 130px;
-	margin: auto;
-	padding: 0 0 0 0;
-	border: 1px solid white;
-}
-
 .shipdiv .mainDiv {
 	display: inline-block;
 	height: 200px;
@@ -1079,36 +1073,32 @@ div.integrityFull {
 	margin: top: 10px;
 }
 
-.shipDiv .iconContainer {
-	float: right;
-	display: inline-block;
-	height: 130px;
-	border: 1px solid white;
-}
-
 .topDiv {
 	display: inline-flex;
 }
 
-.shipDiv.squad .header {
+.topDiv table {
+	width: 100%;
+}
+
+.shipDiv .header {
 	display: inline-block;
-	width: 180px;
-	height: 120px;
+	width: 190px;
 	margin: auto;
 	padding: 0 0 0 0;
 	border: 1px solid white;
 }
 
-.shipDiv.squad .coreContainer {
+.shipDiv .coreContainer {
+	display: inline-block;
 	width: 100px;
 	border-top: 1px solid white;
 	border-bottom: 1px solid white;
 }
 
-.shipDiv.squad .iconContainer {
+.shipDiv .iconContainer {
 	width: 100px;
-	border-top: 1px solid white;
-	border-bottom: 1px solid white;
+	border: 1px solid white;
 }
 
 .coreContainer  .system {
@@ -1124,12 +1114,6 @@ div.integrityFull {
 .coreContainer  .mode img {
 	width: 20px;
 	height: 20px;
-}
-
-.shipDiv.squad .iconContainer {
-	display: inline-block;
-	height: 120px;
-	border: 1px solid white;
 }
 
 .shipDiv .structure {
@@ -1500,7 +1484,7 @@ div.integrityFull {
 }
 
 .bgYellow {
-	background: yellow;
+	background: #ce1dae;
 }
 
 .disabled {

@@ -47,7 +47,7 @@ class Artemis extends Medium {
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 650);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(80, 3));
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(80, 3), 105);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(80, 3), 80);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(80, 3), 650, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(80, 3), 4);
 	}

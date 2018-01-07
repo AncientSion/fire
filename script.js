@@ -518,21 +518,6 @@ function handleFireClick(shooter, target){
 						}
 					}
 				}
-
-				/*
-				for (var i = 0; i < shooter.structures.length; i++){
-					for (var j = shooter.structures[i].systems.length-1; j >= 0; j--){
-						if (shooter.structures[i].systems[j].selected && shooter.structures[i].systems[j].weapon){
-							if (shooter.structures[i].systems[j].canFire()){
-								if (shooter.structures[i].systems[j].hasValidTarget()){
-									// FireOrder(id, turn, shooterid, targetid, weaponid, req, notes, hits, resolved){
-									shooter.structures[i].systems[j].setFireOrder(target.id);
-								}
-							}
-						}
-					}
-				}
-				*/
 			}
 
 			$("#weaponAimTableWrapper").hide()

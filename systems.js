@@ -106,6 +106,8 @@ System.prototype.getDisplay = function(){
 }
 
 System.prototype.setState = function(){
+	this.adjustStateByCritical();
+	
 	if (this.isDestroyed()){
 		this.destroyed = true;
 	}
@@ -126,7 +128,6 @@ System.prototype.setState = function(){
 		}
 		//this.setTimeLoaded();
 	}
-	this.adjustStateByCritical();
 }
 
 System.prototype.getSystem = function(){
@@ -879,8 +880,10 @@ System.prototype.adjustStateByCritical = function(){
 		if (this.crits[i].inEffect()){
 			switch (this.crits[i].type){
 				case "Disabled":
-					console.log("DISABLED STATE");
 					this.disabled = true;
+					break;
+				case "Destroyed":
+					this.destroyed = true;
 					break;
 				default:
 					continue;
@@ -1088,7 +1091,6 @@ PrimarySystem.prototype.getSystemDetailsDiv = function(){
 	if (unit.squad){
 		if (this.output){
 			$(table).append($("<tr>").append($("<td>").html("Current Output")).append($("<td>").addClass("output").html(this.getOutputString())));
-			$(table).append($("<tr>").append($("<td>").html("Turn ° ability")).append($("<td>").addClass("turn").html(this.getTurnString())));
 		}
 		if (this.modes.length){
 			$(table).append($("<tr>").append($("<td>").html("Sensor Mode")).append($("<td>").addClass("sensorMode negative").html(this.getEWMode())));
@@ -1101,9 +1103,6 @@ PrimarySystem.prototype.getSystemDetailsDiv = function(){
 
 		if (this.output){
 			$(table).append($("<tr>").append($("<td>").html("Current Output")).append($("<td>").addClass("output").html(this.getOutputString())));
-			if (this instanceof Engine){
-				$(table).append($("<tr>").append($("<td>").html("Turn Degree Sum")).append($("<td>").addClass("turn").html(this.getTurnAbility())));
-			}
 		}
 		if (this.powerReq){
 			$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
@@ -1155,16 +1154,6 @@ Engine.prototype = Object.create(PrimarySystem.prototype);
 
 Engine.prototype.getPowerDiv = function(){
 	return;
-}
-
-Engine.prototype.getTurnAbility = function(){
-	return Math.floor(this.getOutput() / game.getUnit(this.parentId).baseTurnCost);
-}
-
-Engine.prototype.getActualOutput = function(){
-	var total = this.getTurnAbility();
-
-	return ((total - this.getOutputUsage()) + "/" + total);
 }
 
 function Bridge(system){
@@ -1280,7 +1269,7 @@ Sensor.prototype.getEWModeEffect = function(){
 }
 
 Sensor.prototype.setState = function(){
-	PrimarySystem.prototype.setState.call(this);
+	System.prototype.setState.call(this);
 	if (this.disabled || this.locked){return;}
 	else if (game.phase == -1){
 		this.setEW({
@@ -1576,6 +1565,7 @@ Weapon.prototype.getAimDataTarget = function(target, final, accLoss, row){
 
 	final = Math.floor(final * (1-(traverseMod*0.2)) - accLoss);
 	this.odds = final;
+	this.odds = 1;
 
 	row.append($("<td>").html(final + "%"));
 }
@@ -2693,7 +2683,12 @@ Launcher.prototype.getUpgradeData = function(){
 	var loads = [];
 	for (var i = 0; i < this.loads.length; i++){
 		if (this.loads[i].amount > 0){
-			loads.push({"amount": this.loads[i].amount, "cost": this.loads[i].cost, name: this.loads[i].name});
+			loads.push(
+				{
+				"amount": this.loads[i].amount,
+				"cost": this.loads[i].cost,
+				"name": this.loads[i].name}
+				);
 		}
 	}
 
@@ -2860,11 +2855,11 @@ Launcher.prototype.removeAmmo = function(ele, all){
 		if (this.loads[i].name == ele.childNodes[0].innerHTML){
 			if (this.loads[i].amount >= 1){
 				if (all){
-					var rate = this.launchRate[index];
-					var multi = this.loads[index].amount / rate;
+					var rate = this.launchRate[i];
+					var multi = this.loads[i].amount / rate;
 					if (multi % 1 == 0){multi--;}
 					else multi = Math.floor(multi);
-					this.loads[index].amount = rate * multi
+					this.loads[i].amount = rate * multi
 				}
 				else {
 					this.loads[i].amount -= 1;
@@ -3004,10 +2999,10 @@ Hangar.prototype.hasUnresolvedFireOrder = function(){
 
 Hangar.prototype.getUpgradeData = function(){
 	return {
-		name: this.display,
-		systemid: this.id,
-		cost: this.totalCost,
-		loads: this.loads
+		"name": this.display,
+		"systemid": this.id,
+		"cost": this.totalCost,
+		"loads": this.loads
 	}
 }
 

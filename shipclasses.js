@@ -26,6 +26,7 @@ function Ship(data){
 	this.index = 0;
 
 	this.totalCost = 0;
+	this.upgrades = [];
 
 	this.slipAngle = data.slipAngle || 0;
 	this.turnAngle = data.turnAngle || 0;
@@ -377,20 +378,19 @@ Ship.prototype.setRemainingImpulse = function(){
 }
 
 Ship.prototype.getImpulseStep = function(){
-	//return 15;
-	return Math.floor(this.getBaseImpulse() / 8);
+	return Math.floor(this.getBaseImpulse() / 7);
 }
 
 Ship.prototype.getTurnCost = function(){
 	if (game.phase == -2){
+		return 1;
 		return round(this.baseTurnDelay*this.getImpulseMod() / this.getTurnMod(), 2);
 	}
 	if (this.actions.length && (this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0)){
 		return 0;
 	}
-	else return round(this.baseTurnCost*this.getImpulseMod() * this.getTurnMod(), 2);
-	//else return this.baseTurnCost; //Math.pow(this.mass, 1.25)/10000;
-	//else return Math.found((Math.pow(this.mass, 1.56) / 10000) *  this.getImpulseMod());
+	//else round(this.baseTurnCost*this.getImpulseMod() * this.getTurnMod(), 2);
+	else return round(1*this.getImpulseMod() * this.getTurnMod(), 2);
 }
 
 Ship.prototype.getTurnMod = function(){
@@ -1728,45 +1728,49 @@ Ship.prototype.createBaseDiv = function(){
 
 	this.element = div;
 
+	var topDiv = document.createElement("div");
+		topDiv.className = "topDiv";
+
 	var subDiv = document.createElement("div");
 		subDiv.className = "header";
 	
 	var table = document.createElement("table");
-		table.className = "general";
 
-	var header = "red";
-	if (this.friendly){header = "green";}
+	var headerC = "red";
+	if (this.friendly){headerC = "green";}
 
 	$(table)
 		.append($("<tr>")
-			.append($("<th>").html(this.name.toUpperCase() + " #" + this.id).attr("colSpan", 2).addClass(header)))
+			.append($("<th>").html(this.name.toUpperCase() + " #" + this.id).attr("colSpan", 2).addClass(headerC)))
 		.append($("<tr>")
-			.append($("<td>").html("Classification"))
-			.append($("<td>").html(game.getUnitType(this.traverse))))
+			.append($("<td>").html("Classification").css("width", "60%"))
+			.append($("<td>").html(game.getUnitType(this.traverse) + " (" + this.traverse + ")")))
 		.append($("<tr>")
 			.append($("<td>").html("Thrust"))
 			.append($("<td>").html(this.getRemainingImpulse() + " / " + this.getCurrentImpulse()).addClass("Thrust")))
 		.append($("<tr>")
-			.append($("<td>").html("Engine Power:"))
+			//.append($("<td>").html("Engine Power:"))
+			//.append($("<td>").html(this.getRemainingEP() + " / " + this.getEP()).addClass("ep")))
+			.append($("<td>").html("Turn Ability"))
 			.append($("<td>").html(this.getRemainingEP() + " / " + this.getEP()).addClass("ep")))
 		.append($("<tr>")
 			.append($("<td>").html("Thrust Change:"))
 			.append($("<td>").html(this.getImpulseChangeCost() + " EP").addClass("change")))
+		//.append($("<tr>")
+		//	.append($("<td>").html("Turn Cost per 1"))
+		//	.append($("<td>").html(round(this.getTurnCost(), 2) + " EP")))
 		.append($("<tr>")
-			.append($("<td>").html("Turn Cost per 1"))
-			.append($("<td>").html(round(this.getTurnCost(), 2) + " EP")))
-		.append($("<tr>")
-			.append($("<td>").html("Turn Delay per 1"))
+			.append($("<td>").html("Turn Delay / 1"))
 			.append($("<td>").html(round(this.getTurnDelay(), 2) + " px")))
 		.append($("<tr>")
-			.append($("<td>").html("Active Turn Delay"))
+			.append($("<td>").html("Active Delay"))
 			.append($("<td>").html(this.getRemainingDelay()).addClass("delay")))
-			
+
 	subDiv.appendChild(table);
-	div.appendChild(subDiv);
+	topDiv.appendChild(subDiv)
+	div.appendChild(topDiv);
 
 	$(this.expandDiv(div))
-		//.addClass("disabled")
 		.drag()
 		.find(".structContainer")
 			.contextmenu(function(e){e.stopPropagation(); e.preventDefault()})
@@ -1780,9 +1784,9 @@ Ship.prototype.createBaseDiv = function(){
 		.find(".iconContainer")
 			.contextmenu(function(e){
 				e.stopImmediatePropagation(); e.preventDefault();
-				if ($(this).parent().data("shipId") != aUnit){
+				if ($(this).parent().parent().data("shipId") != aUnit){
 					game.zIndex--;
-					$(this).parent().addClass("disabled");
+					$(this).parent().parent().addClass("disabled");
 				}
 			})
 
@@ -1793,14 +1797,18 @@ Ship.prototype.createBaseDiv = function(){
 }
 
 Ship.prototype.expandDiv = function(div){
+
 	$(div)
+	.find(".topDiv")
 	.append($("<div>")
 		.addClass("iconContainer")
-			.append($(window.shipImages[this.name.toLowerCase()].cloneNode(true)).addClass("rotate270").addClass("size90"))
+			.append(
+			//	$(this.getBaseImage().cloneNode(true)).addClass("size90").addClass("rotate270").css("margin-top", 20)
+			)
 			.hover(function(e){
 				if (aUnit){
 					var shooter = game.getUnit(aUnit);
-					var target = game.getUnit($(this).parent().data("shipId"));
+					var target = game.getUnit($(this).parent().parent().data("shipId"));
 					if (shooter.id != target.id && shooter.hasWeaponsSelected()){
 						handleWeaponAimEvent(shooter, target, e);
 					}
@@ -1808,18 +1816,18 @@ Ship.prototype.expandDiv = function(div){
 			}).
 			click(function(e){
 				var shooter = game.getUnit(aUnit);
-				var target = game.getUnit($(this).parent().data("shipId"));
+				var target = game.getUnit($(this).parent().parent().data("shipId"));
 				if (shooter && target){
 					if (target.id != shooter.id && (target.userid != game.userid && target.userid != shooter.userid)){
 						handleFireClick(shooter, target);
 					} else target.switchDiv();
 				}
 			}));
-			
-		
-	//document.getElementById("game").appendChild(div);
+
+
 	document.body.appendChild(div);
-	$(div).css("position", "absolute").css("top", 300);
+	
+	//$(div).css("position", "absolute").css("top", 300);
 
 	structContainer = document.createElement("div");
 	structContainer.className = "structContainer";
@@ -1828,6 +1836,7 @@ Ship.prototype.expandDiv = function(div){
 	var noFront = true;
 	var noAft = true;
 	var sides = 0;
+	var widen = 0;
 
 	for (var i = 0; i < this.structures.length; i++){
 		this.structures[i].direction = getArcDir(this.structures[i]);
@@ -1843,20 +1852,18 @@ Ship.prototype.expandDiv = function(div){
 	}
 	sides /= 2;
 
-	var maxWidth = 0;
-	if (this.structures.length <= 4){
-		if (this.structures[1].systems.length > 4){
-			maxWidth = 320;
-		}
-		else if (this.structures[1].systems.length  < 4){
-			maxWidth = 280;
-		} else maxWidth = 300;
+	// siden for very wide ship windows
+	if (this.structures.length > 4){
+		widen = 330;
+	} else if (this.structures[this.structures.length-1].systems.length > 4){
+		widen = 310;
+		
 	}
-	else {
-		maxWidth = 340;
-	}
+	if (widen){$(div).css("width", widen);}
 
-	$(div).css("width", maxWidth);
+
+
+
 
 
 	var conWidth = $(structContainer).width();
@@ -2194,6 +2201,23 @@ Ship.prototype.expandDiv = function(div){
 		}
 		//console.log($(this.structures[3].systems[0].element).width());
 	//}
+
+
+	var con = $(div).find(".topDiv").find(".iconContainer")
+	var leftWidth = $(div).find(".header").width()
+	if (widen){$(con).css("width", widen-leftWidth-4)}
+	var conW = con.width()
+	var conH = con.height();
+
+	//var goal = Math.min(conW, conH)*0.8;
+	var goal = conW * 0.8;
+		
+	$(con).append(
+		$(this.getBaseImage().cloneNode(true)).addClass("rotate270").css("width", goal).css("height", goal).css("margin-left", (conW - goal)/2).css("margin-top", (conH - goal)/2)
+	)
+
+
+
 
 	$(div).addClass("disabled");
 	return div;
@@ -2950,13 +2974,13 @@ Ship.prototype.setTurnData = function(){
 	var vector = $("#vectorDiv")
 
 	$(button)
-		.find("#turnMode").html("ON").addClass("on").end()		.find("#turnCost").html(this.getTurnCost() + " EP").end()
+		.find("#turnMode").html("ON").addClass("on").end().find("#turnCost").html(this.getTurnCost()).end()
 		.find("#turnDelay").html(this.getTurnDelay() + " px").end()
 		.find("#turnMod").html(turn.mod).end()
 
 	if (game.turnMode){
 		$(button)
-			.find("#shortenTurn").removeClass("disabled");
+			//.find("#shortenTurn").removeClass("disabled");
 			$("#epButton")
 			.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end()
 			.find("#impulseText").html("Cost : Rem").end().find("#impulseCost").html("");
@@ -2967,7 +2991,7 @@ Ship.prototype.setTurnData = function(){
 	else {
 		$(button)
 			.find("#turnMode").html("OFF").removeClass("on").end()
-			.find("#shortenTurn").addClass("disabled");
+			//.find("#shortenTurn").addClass("disabled");
 		$("#epButton")
 			.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end()
 			.find("#impulseText").html("Cost : Rem").end().find("#impulseCost").html("");
@@ -3235,4 +3259,15 @@ Ship.prototype.hasBasicEW = function(){
 	var sensor = this.getSystemByName("Sensor");
 	if (sensor.disabled || sensor.destroyed || sensor.used){return false;}
 	return true;
+}
+
+Ship.prototype.doConfirmSystemLoadout = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].systems.length; j++){
+			if (this.structures[i].systems[j].selected){
+				this.structures[i].systems[j].select();
+				return;
+			}
+		}
+	}
 }

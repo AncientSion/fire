@@ -239,6 +239,7 @@ class Manager {
 	}
 
 	public function getShipData(){
+		if ($this->turn == 1 && $this->phase == -1){return $this->ships;}
 
 		for ($i = sizeof($this->ships)-1; $i >= 0; $i--){
 			if ($this->ships[$i]->userid != $this->userid){
@@ -1451,7 +1452,6 @@ class Manager {
 				$ships = array(
 					array("Sharlin", 8, 4),
 					array("Tinashi", 4, 3),
-					array("WhiteStar", 5, 2),
 				);
 				break;
 			case "Narn Regime";
@@ -1510,9 +1510,9 @@ class Manager {
 					array(
 					"Sharlin",
 					"Tinashi",
-					"WhiteStar",
 					),
 					array(
+					"WhiteStar",
 					)
 				);
 				break;

@@ -129,7 +129,7 @@ Flight.prototype.createBaseDiv = function(){
 			.append($("<th>").html(this.name.toUpperCase() + " #" + this.id).attr("colSpan", 2).addClass(header)))
 		.append($("<tr>")
 			.append($("<td>").html("Classification"))
-			.append($("<td>").html(game.getUnitType(this.traverse))))
+			.append($("<td>").html(game.getUnitType(this.traverse) + " (" + this.traverse + ")")))
 		.append($("<tr>")
 			.append($("<td>").html("Current Thrust"))
 			.append($("<td>").html((this.getCurrentImpulse() + " (max: " + (this.baseImpulse*4) + ")"))))

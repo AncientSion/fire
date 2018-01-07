@@ -629,7 +629,7 @@ function Game(data, userid){
 				var step;
 				var h = 800;
 				var w = 200;
-				var x = 600;
+				var x = 300;
 				var y = h/2;
 
 				if (i % 2 == 0){
@@ -1657,17 +1657,17 @@ function Game(data, userid){
 				for (var j = 0; j < game.ships[i].structures.length; j++){
 					if (game.ships[i].structures[j].isDestroyedThisTurn()){
 						counter++;
-
 						var real = game.ships[i].getUnitPosition(j);
 
-						//var real = rotate(0, 0,game.ships[i].structures[j].layout, rota);
-						anim.anims.push({
-							//a: game.ships[i].facing,
-							t: [0-30*anim.anims.length, 70],
-							s: game.ships[i].getExplosionSize(j),
-							x: base.x + real.x,
-							y: base.y + real.y
-						})
+						for (var k = 0; k < 5; k++){
+							anim.anims.push({
+								t: [0 - 30*anim.anims.length - j*20, 70],
+								t: [0 - range(0, 15), 70],
+								s: game.ships[i].getExplosionSize(j) + range(-30, 10),
+								x: base.x + real.x + (range(-1, 1) * range(0, game.ships[i].size / 10)),
+								y: base.y + real.y + (range(-1, 1) * range(0, game.ships[i].size / 10)),
+							});
+						}
 					}
 				}
 				anim.html += "A total of <font color='" + color + "'>" + counter + "</font> elements from <font color='" + color + "'>Unit #" + anim.id + "</font> were destroyed or disengaged";
@@ -1678,13 +1678,15 @@ function Game(data, userid){
 					anim.html +=  " suffered critical reactor damage and was destroyed.";
 				}
 				else anim.html +=  " suffered catastrophic hull damage and was destroyed.";
-				anim.anims.push({
-					//a: game.ships[i].facing,
-					t: [0, 100],
-					s: game.ships[i].getExplosionSize(0),
-					x: base.x,
-					y: base.y
-				})
+
+				for (var j = 0; j < 5; j++){
+					anim.anims.push({
+						t: [0 - j-20, 100],
+						s: game.ships[i].getExplosionSize(0) + range(-30, 10),
+						x: base.x + (range(-1, 1) * range(0, game.ships[i].size / 10)),
+						y: base.y + (range(-1, 1) * range(0, game.ships[i].size / 10)),
+					})
+				}
 			}
 		
 			if (anim.anims.length){
@@ -2053,7 +2055,10 @@ function Game(data, userid){
 			let rolls = fire.rolls.slice().sort((a, b) => a-b);
 			var rollString = "";
 			for (var i = 0; i < rolls.length; i++){
-				rollString += rolls[i];
+				if (rolls[i] <= req[i]){
+					rollString += "<u>" + rolls[i] + "</u>";
+				} else rollString += rolls[i];
+
 				rollString += " / ";
 			}
 
@@ -2814,14 +2819,15 @@ Game.prototype.deployDone = function(){
 	}
 
 	if (hasEvent){
-		$("#combatLog").find("tbody")
-			.append($("<tr>")
-				.append($("<td>").html("Deployment Resolution concluded."))
-			);
-		}
-
-		$("#unitGUI").empty();
-		this.initSelectionWrapper();
+		timeout = setTimeout(function(){
+			$("#combatLog").find("tbody")
+				.append($("<tr>")
+					.append($("<td>").html("Deployment Resolution concluded."))
+				);
+			$("#unitGUI").empty();
+			game.initSelectionWrapper();
+		})
+	}
 
 	console.log("deployDone");
 }
@@ -2850,7 +2856,8 @@ Game.prototype.resolveUnitMovement = function(){
 Game.prototype.drawDeployMarker = function(id){
 	var s = game.getUnit(id);
 
-	if (s.ship || s.squad){
+	if (s.salvo || s.flight){return;}
+	if (s.ship || s.squad || s.available >= game.turn){
 		this.drawJumpMarker(s);
 	}
 }

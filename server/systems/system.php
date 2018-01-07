@@ -230,8 +230,7 @@ class System {
 		$tresh =  ($new + $old/2);
 
 		for ($i = 0; $i < sizeof($effects); $i++){
-			$roll = mt_rand(0, 100);
-			if ($roll > $tresh){/*Debug::log(" NO CRIT - roll: ".$roll. ", tresh: ".$tresh);*/ continue;}
+			if (mt_rand(0, 100) > $tresh){/*Debug::log(" NO CRIT - roll: ".$roll. ", tresh: ".$tresh);*/ continue;}
 
 			//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 			$this->crits[] = new Crit(

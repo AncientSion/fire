@@ -10,8 +10,8 @@ class Vorchan extends Light {
 	public $mass = 1250;
 
 	public $integrity = 425;
-	public $ep = 50;
-	public $ew = 575;
+	public $ep = 120;
+	public $ew = 550;
 	public $power = 1;
 	public $negation = 15;
 
@@ -23,7 +23,8 @@ class Vorchan extends Light {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new MediumIon($this->getId(), $this->parentId, 300, 60);
+		//$front->systems[] = new MediumIon($this->getId(), $this->parentId, 300, 60);	
+		$front->systems[] = new MissileLauncher($this->getId(), $this->parentId, 300, 60, array(array("Triarii", 9, 3), array("Javelin", 9, 3)));
 		$structs[] = $front;
 
 		$right = new Section(60, 180);

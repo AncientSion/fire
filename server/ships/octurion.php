@@ -71,7 +71,7 @@ class Octurion extends UltraHeavy {
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 2100);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(250, 5));
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(250, 5), 750);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(250, 5), 55);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(250, 5), 1100, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(250, 5));
     }

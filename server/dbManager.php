@@ -497,7 +497,7 @@
 		}
 
 		public function insertLoads($userid, $gameid, &$units){
-			//Debug::log("insertLoads: ".sizeof($units));
+			Debug::log("insertLoads: ".sizeof($units));
 			$stmt = $this->connection->prepare("
 				INSERT INTO loads 
 					(shipid, systemid, name, amount)
@@ -506,21 +506,25 @@
 			");
 
 			for ($i = 0; $i < sizeof($units); $i++){
-				if (isset($units[$i]["upgrades"])){
-					for ($j = 0; $j < sizeof($units[$i]["upgrades"]); $j++){
-						for ($k = 0; $k < sizeof($units[$i]["upgrades"][$j]["loads"]); $k++){
-							$stmt->bindParam(":shipid", $units[$i]["id"]);
-							$stmt->bindParam(":systemid", $units[$i]["upgrades"][$j]["systemid"]);
-							$stmt->bindParam(":name", $units[$i]["upgrades"][$j]["loads"][$k]["name"]);
-							$stmt->bindParam(":amount", $units[$i]["upgrades"][$j]["loads"][$k]["amount"]);
+				Debug::log("units ".$i);
+				if (!isset($units[$i]["upgrades"]) || sizeof($units[$i]["upgrades"]) == 0){Debug::log("continue"); continue;}
 
-							$stmt->execute();
-							if ($stmt->errorCode() == 0){
-								continue;
-							}
-							else {
-								return false;
-							}
+				for ($j = 0; $j < sizeof($units[$i]["upgrades"]); $j++){
+				Debug::log("upgrades ".$j);
+					
+					for ($k = 0; $k < sizeof($units[$i]["upgrades"][$j]["loads"]); $k++){
+				Debug::log("loads ".$k);
+						$stmt->bindParam(":shipid", $units[$i]["id"]);
+						$stmt->bindParam(":systemid", $units[$i]["upgrades"][$j]["systemid"]);
+						$stmt->bindParam(":name", $units[$i]["upgrades"][$j]["loads"][$k]["name"]);
+						$stmt->bindParam(":amount", $units[$i]["upgrades"][$j]["loads"][$k]["amount"]);
+
+						$stmt->execute();
+						if ($stmt->errorCode() == 0){
+							continue;
+						}
+						else {
+							return false;
 						}
 					}
 				}
@@ -815,6 +819,7 @@
 			if (sizeof($data)){
 				$this->updateSystemLoad($data);
 
+				/*
 				for ($i = 0; $i < sizeof($data); $i++){
 					for ($j = $i+1; $j < sizeof($data); $j++){
 						if ($data[$i]["launchData"]["shipid"] == $data[$j]["launchData"]["shipid"]){ // same origin
@@ -833,6 +838,7 @@
 						}
 					}
 				}
+				*/
 
 				for ($i = sizeof($data)-1; $i >= 0; $i--){
 					$splice = 1;

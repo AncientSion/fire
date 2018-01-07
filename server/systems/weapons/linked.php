@@ -5,7 +5,7 @@ class Linked extends Weapon {
 	public $projSize = 2;
 	public $reload = 1;
 	public $priority = 10;
-	public $traverse = -5;
+	public $traverse = -4;
 	public $accDecay = 0;
 	public $tiny = 1;
 
@@ -84,7 +84,7 @@ class FighterPulse extends Pulse {
 	public $animation = "projectile";
 	public $projSpeed = 7;
 	public $projSize = 1.5;
-	public $traverse = -5;
+	public $traverse = -4;
 
 	function __construct($id, $fighterId, $parentId, $volley, $minDmg, $maxDmg, $start, $end){
 		parent::__construct($id, $parentId, $start, $end, 0, 0);

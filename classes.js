@@ -190,16 +190,12 @@ function Crit(data){
 	this.value = data.value;
 
 	this.getString = function(){
-		var d = "";
-
 		if (this.type == "Disabled"){
-			if (this.duration){
-				return  (this.type + " (Incl. Turn " + (this.turn + this.duration + ")"));
-			} else return ("Disengaged");
+			if (this.duration){return (this.type + " (Incl. Turn " + (this.turn + this.duration) + ")" + " (T " + this.turn + ")");
+			} return this.type + " (T " + this.turn + ")";
 		}
-		else if (!this.duration){
-			return (this.type + ": -" + (this.value) + "%" + " (Permanent)");
-		} else return (this.type + ": -" + (this.value) + "%" + " (Incl. Turn " + (this.turn + this.duration + ")"));
+		else if (this.type == "Destroyed"){return this.type + " (T " + this.turn + ")";}
+		else return (this.type + " -" + (this.value) + "% (T " + this.turn + ")");
 	}
 
 	this.inEffect = function(){

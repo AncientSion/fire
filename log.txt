@@ -1,60 +1,116 @@
-game 2, user 1 --- adjusting to turn/phase/status 10/2/ready
-game 2, user 2 --- adjusting to turn/phase/status 10/2/ready
+game 1, user 2 --- adjusting to turn/phase/status 1/2/ready
 prepareAdvance
-****************************************** doAdvance for game2 from phase 2 to phase 3
-resolveFireOrder - ID 76, shooter: Squadron #16 vs Flight #19, w: LightPulse #11, shots: 1
-Mixed getHitSection
-resolveFireOrder - ID 77, shooter: Squadron #16 vs Flight #19, w: LightPulse #12, shots: 1
-Mixed getHitSection
-fire #77, doDamage, weapon: LightPulse, target #19/3/Sentri, hits: 3, totalDmg: 17, remaining: 24, armour: 5+0
-resolveFireOrder - ID 78, shooter: Squadron #16 vs Flight #19, w: LightPulse #13, shots: 1
-Mixed getHitSection
-fire #78, doDamage, weapon: LightPulse, target #19/7/Sentri, hits: 4, totalDmg: 18, remaining: 24, armour: 5+0
-resolveFireOrder - ID 79, shooter: Squadron #16 vs Flight #19, w: LightPulse #14, shots: 1
-Mixed getHitSection
+****************************************** doAdvance for game1 from phase 2 to phase 3
+resolveFireOrder - ID 32, shooter: Squadron #6 vs Hyperion #1, w: LightPlasma #11, shots: 1
+LightPlasma, weapon id: 11, boost: 1, final multi: 0.6028
+fire #32, doDamage, weapon: LightPlasma, target #1/9/Hangar, totalDmg: 22, remaining: 100, armour: 10+0
+resolveFireOrder - ID 33, shooter: Squadron #6 vs Hyperion #1, w: LightPlasma #12, shots: 1
+LightPlasma, weapon id: 12, boost: 1, final multi: 0.6028
+fire #33, doDamage, weapon: LightPlasma, target #1/1/Primary, totalDmg: 24, remaining: 1000, armour: 18+0
+resolveFireOrder - ID 34, shooter: Squadron #6 vs Hyperion #1, w: LightPlasma #15, shots: 1
+LightPlasma, weapon id: 15, boost: 1, final multi: 0.6028
+fire #34, doDamage, weapon: LightPlasma, target #1/11/MediumRailGun, totalDmg: 25, remaining: 40, armour: 11+0
+resolveFireOrder - ID 35, shooter: Squadron #6 vs Hyperion #1, w: LightPlasma #16, shots: 1
+LightPlasma, weapon id: 16, boost: 1, final multi: 0.6028
+fire #35, doDamage, weapon: LightPlasma, target #1/1/Primary, totalDmg: 21, remaining: 994, armour: 17+0
+resolveFireOrder - ID 22, shooter: Squadron #4 vs Hyperion #1, w: LightPulse #8, shots: 1
+fire #22, doDamage, weapon: LightPulse, target #1/1/Primary, hits: 4, totalDmg: 18, remaining: 990, armour: 18+0
+resolveFireOrder - ID 25, shooter: Squadron #4 vs Hyperion #1, w: LightPulse #14, shots: 1
+fire #25, doDamage, weapon: LightPulse, target #1/1/Primary, hits: 4, totalDmg: 16, remaining: 990, armour: 17+0
+resolveFireOrder - ID 30, shooter: Squadron #6 vs Hyperion #1, w: LightPulse #5, shots: 1
+fire #30, doDamage, weapon: LightPulse, target #1/1/Primary, hits: 4, totalDmg: 17, remaining: 990, armour: 16+0
+resolveFireOrder - ID 31, shooter: Squadron #6 vs Hyperion #1, w: LightPulse #7, shots: 1
+fire #31, doDamage, weapon: LightPulse, target #1/8/Dual, hits: 4, totalDmg: 19, remaining: 28, armour: 7+0
+ => hit 3 DESTROYING ship target system Dual #8, rem: 28, doing TOTAL: 28/21, OK for: 8 dmg
+resolveFireOrder - ID 26, shooter: Squadron #5 vs Hyperion #2, w: MediumIon #4, shots: 1
+fire #26, doDamage, weapon: MediumIon, target #2/1/Primary, totalDmg: 36, remaining: 1000, armour: 19+0
+resolveFireOrder - ID 27, shooter: Squadron #5 vs Hyperion #2, w: MediumIon #5, shots: 1
+fire #27, doDamage, weapon: MediumIon, target #2/1/Primary, totalDmg: 34, remaining: 983, armour: 18+0
+resolveFireOrder - ID 28, shooter: Squadron #5 vs Hyperion #2, w: MediumIon #7, shots: 1
+fire #28, doDamage, weapon: MediumIon, target #2/1/Primary, totalDmg: 37, remaining: 967, armour: 18+0
+resolveFireOrder - ID 29, shooter: Squadron #5 vs Hyperion #2, w: MediumIon #8, shots: 1
+fire #29, doDamage, weapon: MediumIon, target #2/1/Primary, totalDmg: 36, remaining: 948, armour: 18+0
+resolveFireOrder - ID 20, shooter: Squadron #4 vs Altarian #3, w: LightPulse #5, shots: 1
+fire #20, doDamage, weapon: LightPulse, target #3/1/Primary, hits: 5, totalDmg: 17, remaining: 700, armour: 18+0
+resolveFireOrder - ID 21, shooter: Squadron #4 vs Altarian #3, w: LightPulse #7, shots: 1
+fire #21, doDamage, weapon: LightPulse, target #3/8/HeavyIon, hits: 3, totalDmg: 16, remaining: 64, armour: 10+0
+resolveFireOrder - ID 23, shooter: Squadron #4 vs Altarian #3, w: LightPulse #11, shots: 1
+fire #23, doDamage, weapon: LightPulse, target #3/8/HeavyIon, hits: 3, totalDmg: 16, remaining: 46, armour: 9+0
+resolveFireOrder - ID 24, shooter: Squadron #4 vs Altarian #3, w: LightPulse #13, shots: 1
+fire #24, doDamage, weapon: LightPulse, target #3/1/Primary, hits: 3, totalDmg: 17, remaining: 700, armour: 14+0
+resolveFireOrder - ID 15, shooter: Altarian #3 vs Squadron #4, w: LightIon #7, shots: 4
+fire #15, doDamage, weapon: LightIon, target #4/9/Crius, totalDmg: 14, remaining: 500, armour: 13+0
+fire #15, doDamage, weapon: LightIon, target #4/3/Crius, totalDmg: 17, remaining: 500, armour: 13+0
+fire #15, doDamage, weapon: LightIon, target #4/9/Crius, totalDmg: 17, remaining: 499, armour: 13+0
+fire #15, doDamage, weapon: LightIon, target #4/3/Crius, totalDmg: 16, remaining: 496, armour: 13+0
+resolveFireOrder - ID 16, shooter: Altarian #3 vs Squadron #4, w: HeavyIon #8, shots: 2
+fire #16, doDamage, weapon: HeavyIon, target #4/3/Crius, totalDmg: 48, remaining: 493, armour: 12+0
+fire #16, doDamage, weapon: HeavyIon, target #4/3/Crius, totalDmg: 56, remaining: 457, armour: 12+0
+resolveFireOrder - ID 17, shooter: Altarian #3 vs Squadron #4, w: LightIon #9, shots: 4
+fire #17, doDamage, weapon: LightIon, target #4/9/Crius, totalDmg: 13, remaining: 495, armour: 12+0
+fire #17, doDamage, weapon: LightIon, target #4/3/Crius, totalDmg: 14, remaining: 413, armour: 12+0
+fire #17, doDamage, weapon: LightIon, target #4/3/Crius, totalDmg: 16, remaining: 411, armour: 11+0
+fire #17, doDamage, weapon: LightIon, target #4/3/Crius, totalDmg: 17, remaining: 406, armour: 11+0
+resolveFireOrder - ID 18, shooter: Altarian #3 vs Squadron #4, w: MediumIon #11, shots: 1
+fire #18, doDamage, weapon: MediumIon, target #4/9/Crius, totalDmg: 35, remaining: 494, armour: 12+0
+resolveFireOrder - ID 19, shooter: Altarian #3 vs Squadron #4, w: MediumIon #12, shots: 1
+fire #19, doDamage, weapon: MediumIon, target #4/3/Crius, totalDmg: 38, remaining: 400, armour: 11+0
+resolveFireOrder - ID 12, shooter: Hyperion #2 vs Squadron #5, w: HeavyLaser #21, shots: 1
+HeavyLaser, weapon id: 21, RANGE DMG mod: 0.9082
+fire #12, doDamage, weapon: HeavyLaser, target: 5 for 160 dmg
+hitting ---  Darkner: 53 dmg,  Darkner: 53 dmg,  Darkner: 53 dmg, 
+resolveFireOrder - ID 8, shooter: Hyperion #2 vs Squadron #5, w: MediumRailGun #7, shots: 2
+fire #8, doDamage, weapon: MediumRailGun, target #5/3/Darkner, totalDmg: 36, remaining: 475, armour: 14+0
+fire #8, doDamage, weapon: MediumRailGun, target #5/3/Darkner, totalDmg: 36, remaining: 446, armour: 14+0
+resolveFireOrder - ID 11, shooter: Hyperion #2 vs Squadron #5, w: MediumRailGun #11, shots: 2
+fire #11, doDamage, weapon: MediumRailGun, target #5/3/Darkner, totalDmg: 36, remaining: 417, armour: 14+0
+fire #11, doDamage, weapon: MediumRailGun, target #5/6/Darkner, totalDmg: 36, remaining: 357, armour: 13+0
+resolveFireOrder - ID 9, shooter: Hyperion #2 vs Squadron #5, w: LightPulse #8, shots: 1
+fire #9, doDamage, weapon: LightPulse, target #5/3/Darkner, hits: 5, totalDmg: 18, remaining: 388, armour: 13+0
+resolveFireOrder - ID 10, shooter: Hyperion #2 vs Squadron #5, w: LightPulse #10, shots: 1
+fire #10, doDamage, weapon: LightPulse, target #5/6/Darkner, hits: 4, totalDmg: 15, remaining: 328, armour: 13+0
+resolveFireOrder - ID 13, shooter: Hyperion #2 vs Squadron #5, w: LightPulse #22, shots: 1
+fire #13, doDamage, weapon: LightPulse, target #5/6/Darkner, hits: 5, totalDmg: 15, remaining: 320, armour: 11+0
+resolveFireOrder - ID 14, shooter: Hyperion #2 vs Squadron #5, w: LightPulse #23, shots: 1
+fire #14, doDamage, weapon: LightPulse, target #5/6/Darkner, hits: 3, totalDmg: 15, remaining: 300, armour: 10+0
+resolveFireOrder - ID 5, shooter: Hyperion #1 vs Squadron #6, w: HeavyLaser #13, shots: 1
+HeavyLaser, weapon id: 13, RANGE DMG mod: 0.8893
+fire #5, doDamage, weapon: HeavyLaser, target: 6 for 129 dmg
+hitting ---  Crius: 43 dmg,  Vorchan: 43 dmg,  Vorchan: 43 dmg, 
+resolveFireOrder - ID 1, shooter: Hyperion #1 vs Squadron #6, w: MediumRailGun #7, shots: 2
+fire #1, doDamage, weapon: MediumRailGun, target #6/13/Vorchan, totalDmg: 36, remaining: 397, armour: 14+0
+fire #1, doDamage, weapon: MediumRailGun, target #6/9/Vorchan, totalDmg: 36, remaining: 397, armour: 14+0
+resolveFireOrder - ID 4, shooter: Hyperion #1 vs Squadron #6, w: MediumRailGun #11, shots: 2
+fire #4, doDamage, weapon: MediumRailGun, target #6/13/Vorchan, totalDmg: 36, remaining: 368, armour: 14+0
+fire #4, doDamage, weapon: MediumRailGun, target #6/3/Crius, totalDmg: 36, remaining: 470, armour: 13+0
+resolveFireOrder - ID 2, shooter: Hyperion #1 vs Squadron #6, w: LightPulse #8, shots: 1
+fire #2, doDamage, weapon: LightPulse, target #6/3/Crius, hits: 5, totalDmg: 19, remaining: 441, armour: 12+0
+resolveFireOrder - ID 3, shooter: Hyperion #1 vs Squadron #6, w: LightPulse #10, shots: 1
+fire #3, doDamage, weapon: LightPulse, target #6/9/Vorchan, hits: 4, totalDmg: 15, remaining: 368, armour: 14+0
+resolveFireOrder - ID 6, shooter: Hyperion #1 vs Squadron #6, w: LightPulse #14, shots: 1
+fire #6, doDamage, weapon: LightPulse, target #6/9/Vorchan, hits: 4, totalDmg: 18, remaining: 364, armour: 12+0
+resolveFireOrder - ID 7, shooter: Hyperion #1 vs Squadron #6, w: LightPulse #15, shots: 1
+fire #7, doDamage, weapon: LightPulse, target #6/9/Vorchan, hits: 4, totalDmg: 15, remaining: 340, armour: 11+0
 resolveBallisticFireOrders
-DB updateFireOrders: 4
- => DB insertDamageEntries: 2
- => DB insertCritEntries: 0
-handleFiringPhase time: 0.014 seconds.
-game 2, user 1 --- adjusting to turn/phase/status 10/3/waiting
-game 2, user 2 --- adjusting to turn/phase/status 10/3/waiting
-TIME: 0.021 seconds.
-2 mb
-game 2, user 2 --- adjusting to turn/phase/status 10/3/ready
-game 2, user 1 --- adjusting to turn/phase/status 10/3/ready
-prepareAdvance
-****************************************** doAdvance for game2 from phase 3 to phase 4
-endTurn
-assembleEndStates
-updateUnitState s:10 10/3
-roll: 75, odds: 100, DELETING
-roll: 68, odds: 80, DELETING
-roll: 43, odds: 60, DELETING
-roll: 34, odds: 40, DELETING
-deleteReinforcements: 4
-pickReinforcements
-player: 1 has 100 available
-player: 1 has 100 available
-game 2, user 1 --- adjusting to turn/phase/status 11/-1/waiting
-game 2, user 2 --- adjusting to turn/phase/status 11/-1/waiting
-TIME: 0.221 seconds.
-4 mb
-game 2, user 2 --- adjusting to turn/phase/status 11/-1/ready
-game 2, user 1 --- adjusting to turn/phase/status 11/-1/ready
-prepareAdvance
-****************************************** doAdvance for game2 from phase -1 to phase 0
-handleDeploymentPhase
-resolveDeployActions s: 0
-handleJumpActions
-initBallistics
-skipping
-DB updateBallisticFireOrder, s: 2
-DB insertUnits: 1
-insertMissions s: 1
-assemblDeployStates
-updateUnitState s:1 11/-1
-game 2, user 1 --- adjusting to turn/phase/status 11/0/waiting
-game 2, user 2 --- adjusting to turn/phase/status 11/0/waiting
-TIME: 0.086 seconds.
+testCrit for: Crius
+testCrit for: Crius, new: 127, turn: 1, size: 8
+testCrit for: Crius
+testCrit for: Crius, new: 29, turn: 1, size: 4
+testCrit for: Darkner
+testCrit for: Darkner, new: 112, turn: 1, size: 4
+testCrit for: Darkner
+testCrit for: Darkner, new: 190, turn: 1, size: 7
+testCrit for: Crius
+testCrit for: Crius, new: 94, turn: 1, size: 3
+testCrit for: Vorchan
+testCrit for: Vorchan, new: 101, turn: 1, size: 5
+testCrit for: Vorchan
+testCrit for: Vorchan, new: 86, turn: 1, size: 3
+DB updateFireOrders: 35
+ => DB insertDamageEntries: 50
+ => DB insertCritEntries: 6
+handleFiringPhase time: 0.537 seconds.
+game 1, user 1 --- adjusting to turn/phase/status 1/3/waiting
+game 1, user 2 --- adjusting to turn/phase/status 1/3/waiting
+TIME: 0.549 seconds.
 4 mb
