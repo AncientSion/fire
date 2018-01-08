@@ -5,7 +5,7 @@ class Olympus extends Medium {
 	public $display = "Olympus";
 	public $faction = "Earth Alliance";
 	public $size =  45;
-	public static $value = 410;
+	public static $value = 400;
 	public $profile = array(0.94, 1.06);
 	public $mass = 2500;
 

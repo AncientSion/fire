@@ -11,9 +11,10 @@ function Squaddie(data){
 	this.effiency = data.effiency;
 	this.parentIntegrity = data.parentIntegrity;
 	this.armourDmg = data.armourDmg;
+	this.slots = data.slots;
+	this.powers = data.powers;
 	this.armourElement;
-	this.powers = data.powers
-	this.type = "Main "
+	this.type = "Main ";
 
 	this.baseTurnCost = data.baseTurnCost;
 	this.baseTurnDelay = data.baseTurnDelay;
@@ -480,7 +481,9 @@ function Squadron(data){
 	this.ship = 0;
 	this.index = 2;
 	this.primary = {"systems": []};
+	this.slots = data.slots;
 }
+
 Squadron.prototype = Object.create(Ship.prototype);
 
 
@@ -1117,7 +1120,9 @@ Squadron.prototype.getWeaponOrigin = function(id){
 }
 
 Squadron.prototype.setStats = function(){
+	this.slots[0] = 0;
 	for (var i = 0; i < this.structures.length; i++){
+		this.slots[0] += this.structures[i].slots;
 		this.baseTurnCost = Math.max(this.baseTurnCost, this.structures[i].baseTurnCost);
 		this.baseTurnDelay = Math.max(this.baseTurnDelay, this.structures[i].baseTurnDelay);
 		this.baseImpulseCost = Math.max(this.baseImpulseCost, this.structures[i].baseImpulseCost);
@@ -1171,7 +1176,7 @@ Squadron.prototype.getDmgByFire = function(fire){
 	var lookup = 0;
 
 	for (var i = 0; i < fire.hits.length; i++){
-		lookup += fire.hits[i]
+		lookup += fire.hits[i] * fire.weapon.getDmgsPerShot(fire);
 	}
 
 	if (!lookup){

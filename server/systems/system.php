@@ -183,7 +183,7 @@ class System {
 	}
 
 	public function setMaxDmg($fire, $dmg){
-		return  $dmg;
+		return $dmg;
 	}
 
 	public function getHitChance(){
@@ -234,7 +234,7 @@ class System {
 
 			//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 			$this->crits[] = new Crit(
-				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $effects[$i][0], 0,  ($mod * (1 + ($i * 0.5))), 1
+				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $effects[$i][0], 0,  ($mod * (1 + $i)), 1
 			);
 		}
 	}

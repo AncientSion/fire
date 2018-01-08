@@ -1191,11 +1191,12 @@ class Manager {
 
 	public function setFireOrderDetails(){
 		for ($i = sizeof($this->fires)-1; $i >= 0; $i--){
-			//Debug::log("setFireOrderDetails fire #".$i);
+			//Debug::log("setFireOrderDetails fire #".$this->fires[$i]->id);
 			//echo "fire: ".$this->fires[$i]->id; echo "</br></br>";
 			//var_export($this->fires[$i]); echo "</br></br>";
 			$this->fires[$i]->shooter = $this->getUnit($this->fires[$i]->shooterid);
 			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystemById($this->fires[$i]->weaponid);
+			//echo get_class($this->fires[$i]->weapon); echo "</br></br>";
 			$this->fires[$i]->shots = $this->fires[$i]->weapon->getShots($this->turn);
 			$this->fires[$i]->target = $this->getUnit($this->fires[$i]->targetid);
 			//var_export($this->fires[$i]->weapon); echo "</br></br>";
@@ -1546,6 +1547,7 @@ class Manager {
 			$ship = array(
 				"name" => $ships[1][$j],
 				"value" => $name::$value,
+				"slots" => $name::$space,
 				"eta" => 0
 			);
 			$return[1][] = $ship;

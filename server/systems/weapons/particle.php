@@ -4,6 +4,7 @@ class Particle extends Weapon {
 	public $type = "Particle";
 	public $animation = "projectile";
 	public $priority = 10;
+	public $particle = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

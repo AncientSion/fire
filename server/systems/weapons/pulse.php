@@ -7,6 +7,7 @@ class Pulse extends Weapon {
 	public $basePulses = 3;
 	public $extraPulses = 2;
 	public $grouping = 30;
+	public $pulse = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

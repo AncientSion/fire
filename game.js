@@ -584,8 +584,12 @@ function Game(data, userid){
 	this.enableDeployment = function(id){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].id == id){
+				var index;
+				for (var j = 0; j < playerstatus.length; j++){
+					if (playerstatus[j].userid == this.userid){this.ships[i].drawFacing = 0 + (180 * (j % 2 % 2)); break;}
+				}
+
 				this.deploying = id;
-				//if (this.ships[i].actions.length){this.ships[i].doSelect();}
 				this.setupDeploymentDiv(this.ships[i])
 				this.setupDeploymentZone();
 				this.drawDeploymentZone();

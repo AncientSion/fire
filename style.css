@@ -313,13 +313,21 @@ table, th, tr, td {
 }
 
 #shipsBoughtTable {
-	width: 300px;
+	width: 350px;
 	display: inline-block;
 	vertical-align: top;
 	margin: 0 0 0 0;
 	border-collapse: collapse;
 	border: 1px solid white;
 }
+
+#shipsBoughtTable th {
+	font-size: 20px;
+}
+#shipsBoughtTable td {
+	font-size: 14px;
+}
+
 
 #shipsBoughtTable tr.selected {
 	background-color: lightBlue;

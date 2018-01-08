@@ -4,6 +4,7 @@ class Plasma extends Weapon {
 	public $type = "Plasma";
 	public $priority = 6;
 	public $melt = 50;
+	public $plasma = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $destroyed = 0){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

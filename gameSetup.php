@@ -127,17 +127,17 @@ else {
 				</td>
 				<td style="vertical-align: top; padding-left: 30px">
 					<div>
-						<table id ="shipsBoughtTable">
+						<table id="shipsBoughtTable">
 							<tr>
-								<th colSpan=2 style="width: 300px; font-size: 20px">
+								<th colSpan=2 style="width: 350px">
 									Current Fleet Selection
 								</th>
 							</tr>
 							<tr>
-								<th style="font-size: 14px;">
+								<th>
 									Total Fleet Cost:
 								</th>
-								<th id="totalFleetCost" style="font-size: 14px; width:50px">
+								<th id="totalFleetCost" style="width:50px">
 									0
 								</th>
 							</tr>
@@ -231,9 +231,10 @@ else {
 				faction: "",
 
 				getUnitName: function(){
-					if (this.ships[0].ship){
-						return this.ships[0].name;
-					} else return "Squadron";
+					if (this.ships[0].ship){return this.ships[0].name;
+					} else var html = "Squadron (";
+					for (var i = 0; i < this.ships[0].structures.length; i++){html +=  this.ships[0].structures[i].name + "/";}
+					return html.substr(0, html.length-1) + ")";
 				},
 				getUnitClass: function(){
 					if (this.ships[0].ship){return "Ship";
@@ -440,8 +441,13 @@ else {
 		});
 	}
 
-	function requestSquadUnit(name){
+	function requestSquadUnit(ele){
 		if (!(game.ships[0] instanceof Ship) || !game.ships[0].squad){return;}
+		else if (game.ships[0] == undefined || !game.ships[0].squad){return;}
+		else if (game.ships[0].structures.length >= 4){popup("A squadron can only contain up to 4 units.");return;}
+		else if (game.ships[0].slots[0] + $(ele).data("slots") > game.ships[0].slots[1]){
+			popup("A squadron has a maximum Command Value of " + game.ships[0].slots[1]+".</br>Adding another " + $(ele).data("name") + " would bring the required Command Value to " + (game.ships[0].slots[0] + $(ele).data("slots"))) ;return;}
+
 		$.ajax({
 			type: "GET",
 			url: "getGameData.php",
@@ -450,7 +456,7 @@ else {
 					type: "shipdata",
 					unit: "squaddie",
 					index: game.ships[0].index,
-					name: name,
+					name: $(ele).data("name"),
 					},
 			success: addUnitToSquadron,
 			error: ajax.error,
@@ -491,8 +497,6 @@ else {
 	}
 
 	function addUnitToSquadron(data){
-		if (game.ships[0] == undefined || !game.ships[0].squad){return;}
-		else if (game.ships[0].structures.length >= 4){return;}
 
 		var sub = window.initiateSquaddie(JSON.parse(data));
 			sub.create();
@@ -626,6 +630,7 @@ else {
 		data = JSON.parse(data);
 		$(ele).data("set", 1);
 
+		// capitals
 		for (var i = 0; i < data[0].length; i++){
 			$(t).append(
 				$("<tr>")
@@ -644,39 +649,40 @@ else {
 				)
 		}
 
+		/// squadron
 		$(t).append(
 			$("<tr>")
 				.hover(function(){
 					$(this).toggleClass("highlight");
 				})
-				.append($("<td>").html("Squadron"))
+				.append($("<td>").html("Squadron  " + "   (up to 14 CP)"))
 				.append($("<td>").html("VARIABLE"))
 				.append($("<td>").html("Add to Fleet")
-					.data("name", "mixed")
+					.data("name", "Squadron")
 					.data("value", 0)
 					.hover(function(){
 						$(this).toggleClass("selectionHighlight");
-					}).click(function(){
-						requestSingleUnitData(this.parentNode.childNodes[0].innerHTML);
-						//requestSquadron();
 					})
+					.click(function(){requestSingleUnitData($(this).data("name"));})
 				)
 		)
 
+		//squaddie
 		for (var i = 0; i < data[1].length; i++){
 			$(t).append(
 				$("<tr>")
 					.hover(function(){
 						$(this).toggleClass("highlight");
 					})
-					.append($("<td>").html(data[1][i]["name"]))
+					.append($("<td>").html(data[1][i]["name"] + " (" + data[1][i]["slots"]+" CP)"))
 					.append($("<td>").html(data[1][i]["value"]))
 					.append(
 						$("<td>").html("Add to Squadron")
 						.data("name", data[1][i]["name"])
 						.data("value", data[1][i]["value"])
+						.data("slots", data[1][i]["slots"])
 						.hover(function(){$(this).toggleClass("selectionHighlight");})
-						.click(function(){requestSquadUnit($(this).data("name"));})
+						.click(function(){requestSquadUnit($(this))})
 					)
 				)
 		}

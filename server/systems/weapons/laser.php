@@ -6,6 +6,7 @@ class Laser extends Weapon {
 	public $beamWidth;
 	public $priority = 2;
 	public $rakes;
+	public $laser = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $destroyed = 0){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -28,34 +29,32 @@ class Laser extends Weapon {
 		$totalDmg = $this->getTotalDamage($fire);
 		$okSystem = 0;
 		$rakes = $this->rakes;
+		$counter = 1 + (($rakes -1) * $fire->target instanceof Mixed);
 		$systems = array();
 
 		$print = "hitting --- ";
-		if ($totalDmg <= 0){
-			return;
-		}
+		if ($totalDmg <= 0){return;}
+			
 		$rake = floor($totalDmg / $this->rakes);
 		Debug::log("fire #".$fire->id.", doDamage, weapon: ".get_class($this).", target: ".$fire->target->id." for ".$totalDmg." dmg");
 
 		while ($rakes){
-			$system = $fire->target->getHitSystem($fire);
+			if ($fire->target->ship){$system = $fire->target->getHitSystem($fire);}
 
 			for ($i = 0; $i < sizeof($systems); $i++){
-				if ($systems[$i] == $system->id){
-					Debug::log("Laser DOUBLE HIT, switching to PRIMARY");
-					$system = $fire->target->primary;
-				}
+				if ($systems[$i] == $system->id){Debug::log("Laser DOUBLE HIT, switching to PRIMARY");$system = $fire->target->primary;}
 			}
 			if ($fire->target->ship && $system->id >1){$systems[] = $system->id;}
 
-			$print .= " ".get_class($system).": ".$rake." dmg, ";
+			$print .= " ".get_class($system)."/".$system->id.": ".$rake." dmg, ";
 			$destroyed = 0;
 			$remInt = $system->getRemainingIntegrity();
 			$negation = $fire->target->getArmour($fire, $system);
 
 			$dmg = $this->determineDamage($rake, $negation);
 			$dmg = $system->setMaxDmg($fire, $dmg);
-			$rakes--;
+			
+			$rakes -= $counter;
 
 			if ($remInt - $dmg->structDmg < 1){
 				$destroyed = 1;
@@ -88,7 +87,7 @@ class LightParticleBeam extends Laser {
 	public $name = "LightParticleBeam";
 	public $display = "35mm Particle Beam";
 	public $animColor = "blue";
-	public $rakeTime = 22;
+	public $rakeTime = 25;
 	public $beamWidth = 1;
 	public $minDmg = 29;
 	public $maxDmg = 36;
@@ -114,7 +113,7 @@ class LightLaser extends Laser {
 	public $name = "LightLaser";
 	public $display = "88mm 'Light' Laser";
 	public $animColor = "red";
-	public $rakeTime = 40;
+	public $rakeTime = 50;
 	public $beamWidth = 2;
 	public $minDmg = 60;
 	public $maxDmg = 80;
@@ -139,7 +138,7 @@ class MediumLaser extends Laser {
 	public $name = "MediumLaser";
 	public $display = "164mm 'Medium' Laser";
 	public $animColor = "red";
-	public $rakeTime = 55;
+	public $rakeTime = 60;
 	public $beamWidth = 3;
 	public $minDmg = 90;
 	public $maxDmg = 125;

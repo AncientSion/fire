@@ -657,7 +657,7 @@ Mixed.prototype.getDmgByFire = function(fire){
 	var lookup = 0;
 
 	for (var i = 0; i < fire.hits.length; i++){
-		lookup += fire.hits[i]
+		lookup += fire.hits[i] * fire.weapon.getDmgsPerShot(fire);
 	}
 
 	if (!lookup){

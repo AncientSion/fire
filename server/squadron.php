@@ -11,8 +11,10 @@ class Squadron extends Ship {
 	public $baseImpulseCost = 0;
 	public $baseImpulse = 1000;
 	public $slipAngle = 1000;
-	//public $turnAngle = 30;
+	public $turnangle = 40;
 	public $traverse = -1;
+	public static $space;
+	public $slots = array(0, 14);
 
 	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
 		parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
@@ -35,6 +37,7 @@ class Squadron extends Ship {
 			for ($j = 1; $j <= $elements[$i]["amount"]; $j++){
 				$this->structures[] = new $elements[$i]["name"]($this->getId(), $this->id);
 				$this->index = $this->structures[sizeof($this->structures)-1]->index;
+				$this->slots[0] += $this->structures[sizeof($this->structures)-1]->slots;
 			}
 		}
 		return true;
@@ -162,6 +165,9 @@ class Squadron extends Ship {
 	}
 	
 	public function getHitSystem($fire){
+	//	if ($fire->weapon->laser && 
+
+
 		$elements = array();
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (!$this->structures[$i]->destroyed){
@@ -319,6 +325,8 @@ class Squaddie extends Single {
 	public $remainingNegation = 0;
 	public $parentIntegrity = 0;
 	public $parentPow;
+
+	public $slots = 0;
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -430,10 +438,10 @@ class Squaddie extends Single {
 
 				$roll = mt_rand(0, 90);
 
-				if ($roll > $dmg){continue;}
+				if ($roll > $dmg){/*Debug::log("rolled above damage on 0-90"); */continue;}
 
 				$roll = mt_rand(0, 40) + $dmg;
-				//Debug::log("roll: ".$roll);
+				//Debug::log("in crit, determine effect roll: ".$roll);
 
 				for ($k = sizeof($effects)-1; $k >= 0; $k--){
 					if ($roll >= $effects[$k][1]){
@@ -487,18 +495,22 @@ class Light extends Squaddie {
 	public $baseImpulse = 190;
 	public $size = 60;
 	public $slipAngle = 25;
+	public static $space = 4;
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
+		$this->slots = static::$space;
 	}
 }
 
 class SuperLight extends Light {
 	public $baseImpulse = 200;
 	public $size = 50;
+	public static $space = 3;
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
+		$this->slots = static::$space;
 	}
 }
 

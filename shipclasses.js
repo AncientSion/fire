@@ -74,15 +74,9 @@ Ship.prototype.drawDeploymentPreview = function(pos){
 	mouseCtx.translate(cam.o.x, cam.o.y)
 	mouseCtx.scale(cam.z, cam.z)
 	mouseCtx.translate(pos.x, pos.y);
-	/*mouseCtx.globalAlpha = 0.3;
-	mouseCtx.beginPath();
-	mouseCtx.arc(0, 0, size*1, 0, 2*Math.PI, false);
-	mouseCtx.closePath();
-	mouseCtx.fillStyle = "red";
-	mouseCtx.fill();
-*/
+
 	this.drawMarker(0, 0, "yellow", mouseCtx);
-	//mouseCtx.globalAlpha = 1;
+	
 	mouseCtx.rotate(this.getDrawFacing() * Math.PI/180);
 	mouseCtx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
 
@@ -204,19 +198,9 @@ Ship.prototype.doDeploy = function(pos){
 		this.drawY = pos.y;
 	}
 	else {
-		var facing = 0;
-		var index;
-		for (var i = 0; i < playerstatus.length; i++){
-			if (playerstatus[i].userid == this.userid){
-				index = i % 2; break;
-			}
-		}
-		facing = 0 + (180 * (index % 2));
-		this.actions.push(new Move(-1, "deploy", 0, pos.x, pos.y, facing, 0, 0, 1, 1, 0));
+		this.actions.push(new Move(-1, "deploy", 0, pos.x, pos.y, this.drawFacing, 0, 0, 1, 1, 0));
 		this.deployed = 1;
 		this.isReady = 1;
-		//this.facing = facing;
-		this.drawFacing = facing;
 		this.x = pos.x;
 		this.y = pos.y;
 		this.drawX = pos.x;
@@ -1409,7 +1393,7 @@ Ship.prototype.getDmgByFire = function(fire){
 	var lookup = 0;
 
 	for (var i = 0; i < fire.hits.length; i++){
-		lookup += fire.hits[i] * fire.weapon.getDmgsPerShot();
+		lookup += fire.hits[i] * fire.weapon.getDmgsPerShot(fire);
 	}
 
 	if (!lookup){

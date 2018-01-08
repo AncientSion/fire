@@ -12,7 +12,7 @@ class Vorchan extends Light {
 	public $integrity = 425;
 	public $ep = 120;
 	public $ew = 550;
-	public $power = 1;
+	public $power = 2;
 	public $negation = 15;
 
 	function __construct($id, $userid){
@@ -23,8 +23,7 @@ class Vorchan extends Light {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		//$front->systems[] = new MediumIon($this->getId(), $this->parentId, 300, 60);	
-		$front->systems[] = new MissileLauncher($this->getId(), $this->parentId, 300, 60, array(array("Triarii", 9, 3), array("Javelin", 9, 3)));
+		$front->systems[] = new MissileLauncher($this->getId(), $this->parentId, 300, 60, array(array("Javelin", 4, 2), array("Hasta", 6, 3)));
 		$structs[] = $front;
 
 		$right = new Section(60, 180);

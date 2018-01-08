@@ -11,6 +11,11 @@ class Weapon extends System {
 	public $projSize = 10;
 	public $projSpeed = 5;
 
+	public $particle = 0;
+	public $laser = 0;
+	public $plasma = 0;
+	public $pulse = 0;
+
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
 		$this->start = $start;
 		$this->end = $end;

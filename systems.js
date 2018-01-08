@@ -1499,7 +1499,7 @@ function Weapon(system){
 }
 Weapon.prototype = Object.create(System.prototype);
 
-Weapon.prototype.getDmgsPerShot = function(){
+Weapon.prototype.getDmgsPerShot = function(fire){
 	return 1;
 }
 
@@ -1878,7 +1878,7 @@ Warhead.prototype.getShots = function(){
 	return 1;
 }
 
-Warhead.prototype.getDmgsPerShot = function(){
+Warhead.prototype.getDmgsPerShot = function(fire){
 	return 1;
 }
 
@@ -1956,6 +1956,7 @@ Particle.prototype.getAnimation = function(fire){
 	var cc = 0;
 	var hits = 0;
 	var fraction = 1;
+	var t = fire.target.getPlannedPos();
 
 	if (this.shots == 2){
 		delay = 60;
@@ -1997,7 +1998,6 @@ Particle.prototype.getAnimation = function(fire){
 
 		var ox = fire.shooter.drawX + o.x;
 		var oy = fire.shooter.drawY + o.y;
-		var t = fire.target.getPlannedPos();
 
 		for (var k = 0; k < this.shots; k++){
 			var hit = 0;
@@ -2250,18 +2250,27 @@ function Laser(system){
 }
 Laser.prototype = Object.create(Weapon.prototype);
 
-Laser.prototype.getDmgsPerShot = function(){
-	return this.output;
+Laser.prototype.getDmgsPerShot = function(fire){
+	if (fire.target.ship){return this.output;}
+	if (fire.target.squad){return this.output;}
+	return 1;
 }
 
 Laser.prototype.getAnimation = function(fire){
-	allAnims = [];
+	var allAnims = [];
 	var grouping = 1;
 	var delay = 30;
 	var shotInterval = 15;
+	var cc = 0;
+	var hits = 0;
+	var fraction = 1;
+	var t = fire.target.getPlannedPos();
 
 	if (fire.guns >= 6){
 		delay = 15;
+	}
+	else if (fire.shooter.squad){
+		delay = 20;
 	}
 	
 	for (var j = 0; j < fire.guns; j++){
@@ -2271,18 +2280,36 @@ Laser.prototype.getAnimation = function(fire){
 		
 		for (var k = 0; k < this.shots; k++){
 			var tx; var ty; var tb; var a;
-			var hit = false;
+			var hit = 0;
 
 			if (fire.hits[j] > k){
-				hit = true;
+				hit = 1;
+				hits++
 			}	
 
+			
+			/*
 			if (hit){ // shot hit
 				tx = fire.target.drawX + range(-fire.target.size * 0.45, fire.target.size * 0.45); // BEAM swipe begin on HIT
 				ty = fire.target.drawY + range(-fire.target.size * 0.45, fire.target.size * 0.45);
 				a = getAngleFromTo( {x: tx, y: ty}, {x: fire.target.drawX, y: fire.target.drawY} );
 				a = addToDirection(a, range(-10, 10));
 				tb = getPointInDirection(fire.weapon.rakeTime/4, a, tx, ty); // BEAM swipe END on HIT	
+			}
+			*/
+			if (hit){ // shot hit
+				var dest = fire.target.getFireDest(fire, hit, hits-1);
+
+				if (range(0, 1)){ // swipe outwards
+					tx = t.x + dest.x;
+					ty = t.y + dest.y;
+					tb = getPointInDirection(fire.target.size/4, range(0, 360), tx, ty);
+				}
+				else { // sweipe inwards
+					tx = t.x + dest.x + (range(-20, 20));
+					ty = t.y + dest.y + (range(-20, 20));
+					tb = {x:  t.x + dest.x + range(-10, 10), y: t.y + dest.y + range(-10, 10)}
+				}
 			}
 			else { // shot miss
 				tx = fire.target.drawX + range(-fire.target.size * 0.7, fire.target.size * 0.7); // BEAM swipe begin on MISS
