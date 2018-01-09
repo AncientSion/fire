@@ -224,6 +224,7 @@ function Structure(data){
 	this.end = data.end;
 	this.negation = data.negation;
 	this.remainingNegation = data.remainingNegation;
+	this.mirror = data.mirror;
 	this.destroyed = data.destroyed || false;
 	this.highlight = false;
 	this.systems = [];
@@ -287,17 +288,19 @@ Structure.prototype.getTableData = function(){
 }
 
 Structure.prototype.hover = function(e){
+	var p = game.getUnit(this.parentId);
+
 	if (game.flightDeploy){return false;}
 	if (this.highlight){
 		this.highlight = false;
 		fxCtx.clearRect(0, 0, res.x, res.y);
 		this.hideInfoDiv();
 		this.hideOptions();
-		game.getUnit(this.parentId).highlightAllSelectedWeapons();
+		p.highlightAllSelectedWeapons();
 	}
 	else {
 		this.highlight = true;
-		this.drawArc();
+		this.drawStructArc(p.getPlannedFacing(), p.rolled, p.getPlannedPos());
 		this.showInfoDiv(e);
 		this.showOptions();
 	}
@@ -415,21 +418,23 @@ Structure.prototype.getRemainingIntegrity = function(){
 	return Math.floor(integrity);
 }
 
-Structure.prototype.drawArc = function(){
+Structure.prototype.drawStructArc = function(facing, rolled, pos){
 	if (game.animating){return;}
-	if (game.getUnit(this.parentId).squad){return;}
 
 	fxCtx.clearRect(0, 0, res.x, res.y);
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z);
 
-	var facing = game.getUnit(this.parentId).getPlannedFacing()
-	var pos = game.getUnit(this.parentId).getPlannedPos()
-	var p1 = getPointInDirection(1000, this.start + facing, pos.x, pos.y);
-	var p2 = getPointInDirection(1000, this.end + facing, pos.x, pos.y)
+	var dir = getArcDir(this);
+	if (dir == 0 || dir == 360 || dir == 180){
+		rolled = 0;
+	}
+
+	var p1 = getPointInDirection(1000, this.start + facing + (rolled*180), pos.x, pos.y);
+	var p2 = getPointInDirection(1000, this.end + facing + (rolled*180), pos.x, pos.y)
 	var dist = getDistance( {x: pos.x, y: pos.y}, p1);
-	var rad1 = degreeToRadian(this.start + facing);
-	var rad2 = degreeToRadian(this.end + facing);
+	var rad1 = degreeToRadian(this.start + facing + (rolled*180));
+	var rad2 = degreeToRadian(this.end + facing + (rolled*180));
 
 	fxCtx.globalAlpha = 1;
 	fxCtx.beginPath();			

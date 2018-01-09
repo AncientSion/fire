@@ -145,8 +145,11 @@
 		<div id="minusImpulse" class="ui disabled">
 			<img src="varIcons/minus.png" style="width: 25px; height: 25px">
 		</div>
-		<div id="undoLastAction" class="ui disabled">
+		<div id="doUndoLastAction" class="ui disabled">
 			<img src="varIcons/destroyed.png" style="width: 25px; height: 25px">
+		</div>
+		<div id="roll" class="ui disabled">
+			<img src="varIcons/mode.png" style="width: 25px; height: 25px">
 		</div>
 		<div id="turnButton" class="turnEle ui disabled">
 			<table class="doTurn" style="margin:auto; width: 100%;">
@@ -551,6 +554,17 @@
 		$("#upperGUI").removeClass("disabled")
 		$("#canvasDiv").removeClass("disabled")
 
+		$("#roll").removeClass("disabled")
+		.click(function(){
+			game.getUnit(aUnit).doRoll()
+		});
+
+		$("#doUndoLastAction").removeClass("disabled")
+		.click(function(){
+			game.getUnit(aUnit).doUndoLastAction()
+		});
+
+
 		$("#plusImpulse").removeClass("disabled")
 		.click(function(){
 			game.getUnit(aUnit).doIncreaseImpulse();
@@ -560,12 +574,6 @@
 		.click(function(){
 			game.getUnit(aUnit).doDecreaseImpulse();
 		});
-
-		$("#undoLastAction").removeClass("disabled")
-		.click(function(){
-			game.getUnit(aUnit).undoLastAction()
-		});
-
 	/*	$(".doTurn")
 		.click(function(){
 			//console.log("issueTurn")

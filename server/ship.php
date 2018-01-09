@@ -105,10 +105,16 @@ class Ship {
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq());
 	///	$this->getSystemByName("Engine")->setOutput($this->baseTurnCost);
 
-		for ($i = 0; $i < sizeof($this->structures); $i++){ // 
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			$dir = Math::getArcDir($this->structures[$i]);
+			$mirror = 1;
+			if ($dir == 0 || $dir == 180 || $dir == 360){$mirror = 0;}
+			$this->structures[$i]->mirror = $mirror;
+
 			$armourDmg = 0;
 			$structDmg = 0;
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				$this->structures[$i]->systems[$j]->mirror = $mirror;
 				$this->structures[$i]->systems[$j]->setState($turn, $phase); // set system states
 				for ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]->damages); $k++){// set armour
 					$armourDmg += $this->structures[$i]->systems[$j]->damages[$k]->armourDmg;

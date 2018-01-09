@@ -232,6 +232,11 @@ else {
 
 				getUnitName: function(){
 					if (this.ships[0].ship){return this.ships[0].name;
+					} else return "Squadron";
+				},
+				
+				getUnitDisplay: function(){
+					if (this.ships[0].ship){return this.ships[0].name;
 					} else var html = "Squadron (";
 					for (var i = 0; i < this.ships[0].structures.length; i++){html +=  this.ships[0].structures[i].name + "/";}
 					return html.substr(0, html.length-1) + ")";
@@ -363,19 +368,12 @@ else {
 									.attr("id", i)
 									.append(
 										$("<tr>")
-											.append($("<th>")
-												.css("width", 200)
-												.css("fontSize", 16)
-												.html("Class")
-											)
-											.append($("<th>")
-												.css("width", 70)
-												.css("fontSize", 16)
-												.html("Cost")
-											)
-											.append($("<th>")
-												.css("fontSize", 16)
-												.html("")
+											.append($("<th>").css("width", 130).html("Class"))
+											.append($("<th>").html(""))
+											.append($("<th>").css("width", 90).html("Mobility"))
+											.append($("<th>").css("width", 80).html("Sensor"))
+											.append($("<th>").css("width", 50).html("Cost"))
+											.append($("<th>").css("width", 100).html("")
 											)
 										)
 									)
@@ -445,8 +443,8 @@ else {
 		if (!(game.ships[0] instanceof Ship) || !game.ships[0].squad){return;}
 		else if (game.ships[0] == undefined || !game.ships[0].squad){return;}
 		else if (game.ships[0].structures.length >= 4){popup("A squadron can only contain up to 4 units.");return;}
-		else if (game.ships[0].slots[0] + $(ele).data("slots") > game.ships[0].slots[1]){
-			popup("A squadron has a maximum Command Value of " + game.ships[0].slots[1]+".</br>Adding another " + $(ele).data("name") + " would bring the required Command Value to " + (game.ships[0].slots[0] + $(ele).data("slots"))) ;return;}
+		else if (game.ships[0].slots[0] + $(ele).data("space") > game.ships[0].slots[1]){
+			popup("A squadron has a maximum Command Value of " + game.ships[0].slots[1]+".</br>Adding another " + $(ele).data("name") + " would bring the required Command Value to " + (game.ships[0].slots[0] + $(ele).data("space"))) ;return;}
 
 		$.ajax({
 			type: "GET",
@@ -531,6 +529,7 @@ else {
 		var ship = {
 			type: game.getUnitClass(),
 			name: game.getUnitName(),
+			display: game.getUnitDisplay(),
 			faction: game.ships[0].faction,
 			value: game.ships[0].totalCost,
 			purchaseId: window.game.shipsBought.length,
@@ -553,7 +552,7 @@ else {
 			})
 
 		var td = tr.insertCell(-1)
-			td.innerHTML = game.getUnitName()
+			td.innerHTML = ship.display;
 		var td = tr.insertCell(-1)
 			td.innerHTML = ship.value;
 		tr.appendChild(td);
@@ -638,9 +637,12 @@ else {
 						$(this).toggleClass("highlight");
 					})
 					.append($("<td>").html(data[0][i]["name"]))
+					.append($("<td>").html(""))
+					.append($("<td>").html(""))
+					.append($("<td>").html(""))
 					.append($("<td>").html(data[0][i]["value"]))
 					.append(
-						$("<td>").html("Add to Fleet")
+						$("<td>").html("Add Unit")
 						.data("name", data[0][i]["name"])
 						.data("value", data[0][i]["value"])
 						.hover(function(){$(this).toggleClass("selectionHighlight");})
@@ -655,9 +657,13 @@ else {
 				.hover(function(){
 					$(this).toggleClass("highlight");
 				})
-				.append($("<td>").html("Squadron  " + "   (up to 14 CP)"))
-				.append($("<td>").html("VARIABLE"))
-				.append($("<td>").html("Add to Fleet")
+				.css("border", "1px solid")
+				.append($("<td>").html("Squadron"))
+				.append($("<td>").html("14"))
+				.append($("<td>").html(""))
+				.append($("<td>").html(""))
+				.append($("<td>").html(""))
+				.append($("<td>").html("Add Unit")
 					.data("name", "Squadron")
 					.data("value", 0)
 					.hover(function(){
@@ -674,13 +680,16 @@ else {
 					.hover(function(){
 						$(this).toggleClass("highlight");
 					})
-					.append($("<td>").html(data[1][i]["name"] + " (" + data[1][i]["slots"]+" CP)"))
+					.append($("<td>").html(data[1][i]["name"]))
+					.append($("<td>").html(data[1][i]["space"]))
+					.append($("<td>").html(data[1][i]["ep"]))
+					.append($("<td>").html(data[1][i]["ew"]))
 					.append($("<td>").html(data[1][i]["value"]))
 					.append(
-						$("<td>").html("Add to Squadron")
+						$("<td>").html("Add Unit")
 						.data("name", data[1][i]["name"])
 						.data("value", data[1][i]["value"])
-						.data("slots", data[1][i]["slots"])
+						.data("space", data[1][i]["space"])
 						.hover(function(){$(this).toggleClass("selectionHighlight");})
 						.click(function(){requestSquadUnit($(this))})
 					)

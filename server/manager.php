@@ -1543,11 +1543,14 @@ class Manager {
 		}
 
 		for ($j = 0; $j < sizeof($ships[1]); $j++){
-			$name = $ships[1][$j];
+			$unit = new $ships[1][$j](1, 1);
+
 			$ship = array(
-				"name" => $ships[1][$j],
-				"value" => $name::$value,
-				"slots" => $name::$space,
+				"name" => $unit->name,
+				"value" => $unit->cost,
+				"ep" => $unit->ep,
+				"ew" => $unit->ew,
+				"space" => $unit->space,
 				"eta" => 0
 			);
 			$return[1][] = $ship;

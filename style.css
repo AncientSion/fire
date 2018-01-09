@@ -371,6 +371,10 @@ table, th, tr, td {
 .factionSubTable tr {
 }
 
+.factionSubTable th {
+	font-size: 16px;
+	text-align: center;
+}
 .factionSubTable td {
 	text-align: center;
 }
@@ -1618,19 +1622,10 @@ div.integrityFull {
 #plusImpulse, #minusImpulse {
 }
 
-#plusImpulse:hover, #minusImpulse:hover, #undoLastAction:hover {
-	background-color: white;
-}
-
 .opaque {
 	opacity: 0.2;
 }
 
-#undoLastAction {
-	color: black;
-	background-color: black;
-	z-index: 7;
-}
 
 #turnButton, #epButton {
 	color: white;
@@ -1668,6 +1663,10 @@ div.integrityFull {
 	background-color: black;
 	z-index: 8;
 	border-radius: 5px;
+}
+
+.ui:hover {
+	background-color: white;
 }
 
 .ui.disabled {

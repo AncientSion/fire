@@ -37,7 +37,7 @@ class Squadron extends Ship {
 			for ($j = 1; $j <= $elements[$i]["amount"]; $j++){
 				$this->structures[] = new $elements[$i]["name"]($this->getId(), $this->id);
 				$this->index = $this->structures[sizeof($this->structures)-1]->index;
-				$this->slots[0] += $this->structures[sizeof($this->structures)-1]->slots;
+				$this->slots[0] += $this->structures[sizeof($this->structures)-1]->space;
 			}
 		}
 		return true;
@@ -373,7 +373,7 @@ class Squaddie extends Single {
 	}
 
 	public function setNegation($main, $armourDmg){
-		$p = 1.5;
+		$p = 1.25;
 
 		$this->parentIntegrity = round($main*1.5);
 
@@ -383,7 +383,7 @@ class Squaddie extends Single {
 	}
 
 	public function getCurrentNegation(){
-		$p = 1.5;
+		$p = 1.25;
 		return round(pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow * $this->negation);
 	}
 	
@@ -495,22 +495,20 @@ class Light extends Squaddie {
 	public $baseImpulse = 190;
 	public $size = 60;
 	public $slipAngle = 25;
-	public static $space = 4;
+	public $space = 4;
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->slots = static::$space;
 	}
 }
 
 class SuperLight extends Light {
 	public $baseImpulse = 200;
 	public $size = 50;
-	public static $space = 3;
+	public $space = 3;
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->slots = static::$space;
 	}
 }
 

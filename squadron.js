@@ -11,7 +11,7 @@ function Squaddie(data){
 	this.effiency = data.effiency;
 	this.parentIntegrity = data.parentIntegrity;
 	this.armourDmg = data.armourDmg;
-	this.slots = data.slots;
+	this.space = data.space;
 	this.powers = data.powers;
 	this.armourElement;
 	this.type = "Main ";
@@ -399,9 +399,10 @@ Squaddie.prototype.doDestroy = function(){
 	}
 }
 
-Squaddie.prototype.drawArc = function(){
+Squaddie.prototype.drawSystemArc = function(){
 	return;
 }
+
 Squaddie.prototype.getRemainingNegation = function(){
 	return Structure.prototype.getRemainingNegation.call(this);
 }
@@ -587,7 +588,7 @@ Squadron.prototype.createBaseDiv = function(){
 		.append($("<tr>")
 			.append($("<th>").html("Squadron #" + this.id).attr("colSpan", 2).addClass(headerC)))
 		.append($("<tr>")
-			.append($("<td>").html("Classification").css("width", "60%"))
+			.append($("<td>").html("Classification").css("width", "50%"))
 			.append($("<td>").html(game.getUnitType(this.traverse) + " (" + this.traverse + ")")))
 		.append($("<tr>")
 			.append($("<td>").html("Thrust"))
@@ -769,11 +770,11 @@ Squadron.prototype.drawImpulseUI = function(){
 	var center = {x: this.drawX, y: this.drawY};
 	var p1 = getPointInDirection(this.size/2 + 10 + 15, facing + 90, center.x, center.y);
 
-	if (this.canUndoLastAction()){
+	if (this.candoUndoLastAction()){
 		var ox = p1.x * cam.z + cam.o.x - 15;
 		var oy = p1.y * cam.z + cam.o.y - 15;
-		$("#undoLastAction").css("left", ox).css("top", oy).removeClass("disabled");
-	} else $("#undoLastAction").addClass("disabled");
+		$("#doUndoLastAction").css("left", ox).css("top", oy).removeClass("disabled");
+	} else $("#doUndoLastAction").addClass("disabled");
 
 	if (this.disabled){return;}			
 
@@ -981,7 +982,7 @@ Squadron.prototype.highlightAllSelectedWeapons = function(){
 				if (this.structures[i].structures[j].systems[k].weapon){
 					if (this.structures[i].structures[j].systems[k].highlight || this.structures[i].structures[j].systems[k].selected){
 						if (this.structures[i].structures[j].systems[k].weapon){
-							this.structures[i].structures[j].systems[k].drawArc(angle, pos);
+							this.structures[i].structures[j].systems[k].drawSystemArc(angle, this.rolled, pos);
 						}
 					}
 				}
@@ -1122,7 +1123,7 @@ Squadron.prototype.getWeaponOrigin = function(id){
 Squadron.prototype.setStats = function(){
 	this.slots[0] = 0;
 	for (var i = 0; i < this.structures.length; i++){
-		this.slots[0] += this.structures[i].slots;
+		this.slots[0] += this.structures[i].space;
 		this.baseTurnCost = Math.max(this.baseTurnCost, this.structures[i].baseTurnCost);
 		this.baseTurnDelay = Math.max(this.baseTurnDelay, this.structures[i].baseTurnDelay);
 		this.baseImpulseCost = Math.max(this.baseImpulseCost, this.structures[i].baseImpulseCost);

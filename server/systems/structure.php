@@ -19,6 +19,7 @@ class Structure {
 	public $boostEffect = array();
 	public $effiency = 0;
 	public $bonusNegation = 0;
+	public $mirror = 0;
 
 	function __construct($id, $parentId, $start, $end, $integrity, $negation){
 		$this->id = $id;
@@ -49,7 +50,7 @@ class Structure {
 	}
 
 	public function setNegation($main, $armourDmg){
-		$p = 1.5;
+		$p = 1.25;
 
 		//$this->parentIntegrity = round($main*3 / 360) * Math::getArcWidth($this);
 		$this->parentIntegrity = round($main);
@@ -60,7 +61,7 @@ class Structure {
 	}
 
 	public function getCurrentNegation(){
-		$p = 1.5;
+		$p = 1.25;
 		return round(pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow * $this->negation);
 	}
 

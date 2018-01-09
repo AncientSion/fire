@@ -12,6 +12,7 @@ function System(system){
 	this.armourMod = system.armourMod;
 	this.disabled = system.disabled;
 	this.locked = system.locked;
+	this.mirror = system.mirror;
 	this.crits = [];
 	this.damages = [];
 	this.detailsTable = false;
@@ -161,7 +162,7 @@ System.prototype.hover = function(e){
 			fxCtx.clearRect(0, 0, res.x, res.y);
 			fxCtx.translate(cam.o.x, cam.o.y);
 			fxCtx.scale(cam.z, cam.z);
-			this.drawArc(p.getPlannedFacing(), p.getPlannedPos());
+			this.drawSystemArc(p.getPlannedFacing(), p.rolled, p.getPlannedPos());
 			fxCtx.setTransform(1,0,0,1,0,0);
 		}
 		if (this.hasUnresolvedFireOrder()){
@@ -966,15 +967,15 @@ System.prototype.getBoostEffect = function(val){
 	return 0;
 }
 
-System.prototype.drawArc = function(facing, pos){
-	if (game.animating){return;}
-	if (this.tiny){return;}
+System.prototype.drawSystemArc = function(facing, rolled, pos){
+	if (game.animating ||  this.tiny){return;}
+
 	for (var i = 0; i < this.arc.length; i++){
-		var p1 = getPointInDirection(1200, this.arc[i][0] + facing, pos.x, pos.y);
-		var p2 = getPointInDirection(1200, this.arc[i][1] + facing, pos.x, pos.y)
+		var p1 = getPointInDirection(1200, this.arc[i][0] + facing + (rolled*180), pos.x, pos.y);
+		var p2 = getPointInDirection(1200, this.arc[i][1] + facing + (rolled*180), pos.x, pos.y)
 		var dist = getDistance( {x: pos.x, y: pos.y}, p1);
-		var rad1 = degreeToRadian(this.arc[i][0] + facing);
-		var rad2 = degreeToRadian(this.arc[i][1] + facing);
+		var rad1 = degreeToRadian(this.arc[i][0] + facing + (rolled*180));
+		var rad2 = degreeToRadian(this.arc[i][1] + facing + (rolled*180));
 
 		fxCtx.globalAlpha = 1;
 		fxCtx.beginPath();			
@@ -2038,23 +2039,23 @@ Plasma.prototype = Object.create(Particle.prototype);
 Plasma.prototype.doBoost = function(){
 	System.prototype.doBoost.call(this);
 	if (this.selected || this.highlight){
-		this.redrawArc();
+		this.redrawSystemArc();
 	}
 }
 
 Plasma.prototype.doUnboost = function(){
 	System.prototype.doUnboost.call(this);
 	if (this.selected || this.highlight){
-		this.redrawArc();
+		this.redrawSystemArc();
 	}
 }
 
-Plasma.prototype.redrawArc = function(){
+Plasma.prototype.redrawSystemArc = function(){
 	fxCtx.clearRect(0, 0, res.x, res.y);
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z);
 	//$(fxCanvas).css("opacity", 0.3);
-	this.drawArc(game.getUnit(this.parentId).getPlannedFacing(),  game.getUnit(this.parentId).getPlannedPos());
+	this.drawSystemArc(game.getUnit(this.parentId).getPlannedFacing(),  game.getUnit(this.parentId).getPlannedPos());
 	fxCtx.setTransform(1, 0, 0, 1, 0, 0);
 }
 
@@ -2514,7 +2515,6 @@ Dual.prototype.setSystemWindow = function(id){
 }
 
 Dual.prototype.resetDetailsDiv = function(){
-	var old = $("#systemDetailsDiv");
 	var y = $(old).css("top")
 	var x = $(old).css("left")
 		old.remove();
@@ -2530,8 +2530,8 @@ Dual.prototype.getSystemDetailsDiv = function(){
 	return this.getActiveSystem().getSystemDetailsDiv();
 }
 
-Dual.prototype.drawArc = function(facing, pos){
-	this.getActiveSystem().drawArc(facing, pos);
+Dual.prototype.drawSystemArc = function(facing, rolled, pos){
+	this.getActiveSystem().drawSystemArc(facing, rolled, pos);
 }
 
 Dual.prototype.getSystem = function(){
@@ -3002,14 +3002,6 @@ Hangar.prototype = Object.create(PrimarySystem.prototype);
 
 Hangar.prototype.hover = function(e){
 	System.prototype.hover.call(this, e);
-	return;
-	if (game.getUnit(this.parentId).hasWeaponsSelected()){
-		return;
-	}
-	else if (this.highlight){
-		this.drawArc();
-	}
-	else fxCtx.clearRect(0, 0, res.x, res.y); 
 }
 
 Hangar.prototype.highlightFireOrder = function(e){
@@ -3133,7 +3125,7 @@ Hangar.prototype.getLaunchRate = function(){
 	return Math.ceil(rate * mod);
 }
 
-Hangar.prototype.drawArc = function(){
+Hangar.prototype.drawSystemArc = function(){
 	return;
 }
 
@@ -3255,8 +3247,6 @@ Hangar.prototype.doLaunchFlight = function(){
 			if (game.ships[i].flight && game.ships[i].available == game.turn){
 				if (!game.ships[i].actions[0].resolved){
 					if (game.ships[i].launchData.shipid == window.aUnit && game.ships[i].launchData.systemid == this.id){
-						//console.log("splice");
-						//this.unsetFireOrder();
 						game.ships.splice(i, 1);
 						game.draw();
 						break;
@@ -3266,8 +3256,6 @@ Hangar.prototype.doLaunchFlight = function(){
 		}
 	}
 	instruct("Select a deployment point. The flight's facing will be projected onwards the launching vessel.");
-	//this.drawArc();
-	//moveCtx.clearRect(0, 0, res.x, res.y);
 	game.setupDeploymentDiv();
 	game.flightDeploy = this;
 }
