@@ -1,4 +1,6 @@
-dir: 360
-dir: 90
-dir: 180
-dir: 270
+rolled: 1
+rolled: 0
+rolled: 1
+rolled: 0
+rolled: 1
+rolled: 0

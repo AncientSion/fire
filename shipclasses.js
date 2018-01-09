@@ -20,6 +20,7 @@ function Ship(data){
 	this.baseImpulse = data.baseImpulse || 0;
 	this.traverse = data.traverse;
 	this.status = data.status;
+	this.rolled = data.rolled;
 	this.actions = data.actions || [];
 	this.cc = [];
 	this.mapSelect = 1;
@@ -67,8 +68,6 @@ function Ship(data){
 	this.primary = {};
 	this.drawImg;
 	this.doDraw = 1;
-
-	this.rolled = 0;
 }
 
 Ship.prototype.drawDeploymentPreview = function(pos){
@@ -437,7 +436,7 @@ Ship.prototype.drawImpulseUI = function(){
 		$("#roll").css("left", ox).css("top", oy).removeClass("disabled");
 	} else $("#roll").addClass("disabled");
 
-	if (this.candoUndoLastAction()){
+	if (this.canUndoLastAction()){
 		var ox = p1.x * cam.z + cam.o.x - 15;
 		var oy = p1.y * cam.z + cam.o.y - 15;
 		$("#doUndoLastAction").css("left", ox).css("top", oy).removeClass("disabled");
@@ -537,7 +536,7 @@ Ship.prototype.getLastTurn = function(){
 	return false;
 }
 
-Ship.prototype.candoUndoLastAction = function(){
+Ship.prototype.canUndoLastAction = function(){
 	if (this.actions.length){
 		if (this.actions[this.actions.length-1].resolved == 0){
 			if (this.actions[this.actions.length-1].type != "deploy"){
@@ -556,7 +555,8 @@ Ship.prototype.doUndoLastAction = function(pos){
 		this.actions[this.actions.length-1].dist *= -1;
 	}
 	else if (this.actions[this.actions.length-1].type == "roll"){
-		this.rolled = 0;
+		this.rolled = !this.rolled;
+		$(this.element).find(".notes").html("").hide();
 	}
 	else if (this.actions[this.actions.length-1].type == "move"){
 		this.setRemainingDelay();
@@ -1106,7 +1106,8 @@ Ship.prototype.getShortInfo = function(){
 	var impulse = this.getCurrentImpulse();
 
 	var table = document.createElement("table");
-		table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id + " (" +game.getUnitType(this.traverse) + ")";
+		table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id + " ("+this.traverse+")";
+		if (this.rolled){table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>!-ROLLED-!</span>";}
 		table.insertRow(-1).insertCell(-1).innerHTML =  "Thrust: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")";
 		table.insertRow(-1).insertCell(-1).innerHTML = this.getStringHitChance();
 	return table;
@@ -3037,7 +3038,8 @@ Ship.prototype.canDoAnotherTurn = function(){
 Ship.prototype.doRoll = function(){
 	var shipPos = this.getPlannedPos();
 	this.actions.push(new Move(-1, "roll", 1, shipPos.x, shipPos.y, 0, 0, this.getRollCost(), 1, 1, 0));
-	this.rolled = 1;
+	this.rolled = !this.rolled;
+	$(this.element).find(".notes").html("ROLLED").show();
 
 	this.resetMoveMode();
 	game.redraw();
@@ -3291,3 +3293,29 @@ Ship.prototype.doConfirmSystemLoadout = function(){
 		}
 	}
 }
+
+
+Ship.prototype.posIsOnSystemArc = function(origin, target, facing, system){
+	for (var i = 0; i < system.arc.length; i++){
+		var	start;
+		var	end;
+
+		if (this.rolled){
+			if (system.arc[i][0] < system.arc[i][1]){
+				start = 360 - system.arc[i][1];
+				end = 360 - system.arc[i][0];
+			}
+			else {
+				end = 360 - system.arc[i][0];
+				start = 360 - system.arc[i][1];
+			}
+		}
+		else {
+			start = system.arc[i][0];
+			end = system.arc[i][1];
+		}
+
+		return isInArc(getCompassHeadingOfPoint(origin, target, facing), start, end);
+	}
+}
+

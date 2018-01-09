@@ -302,7 +302,7 @@ function drawText(ctx, color, text, size, p){
 
 
 function getArcDir(element){
-	if (element.start == 0 &&element.end == 360){
+	if (element.start == 0 && element.end == 360){
 		return 0;
 	}
 	else if (element.start > element.end){

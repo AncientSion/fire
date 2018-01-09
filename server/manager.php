@@ -378,6 +378,7 @@ class Manager {
 				$db[$i]["facing"],
 				$db[$i]["delay"],
 				$db[$i]["thrust"],
+				$db[$i]["rolled"],
 				$db[$i]["display"]
 			);
 
@@ -889,7 +890,8 @@ class Manager {
 					"y" => $this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1]->y,
 					"facing" => 0,
 					"delay" => 0, 
-					"thrust" => $this->ships[$i]->getCurrentImpulse()
+					"thrust" => $this->ships[$i]->getCurrentImpulse(),
+					"rolled" => $this->ships[$i]->rolled
 				);
 			}
 		}
@@ -1563,7 +1565,7 @@ class Manager {
 		//Debug::log("asking for preview of: ".$get["name"].", index: ".$get["index"]);
 		$unit;
 		if ($get["unit"] == "ship"){
-			$unit = new $get["name"](1, 1, 0, "", 0, 0, 0, 270, 0, 0, "");
+			$unit = new $get["name"](1, 1, 0, "", 0, 0, 0, 270, 0, 0, 0, "");
 		}
 		elseif ($get["unit"] == "squaddie"){
 			$unit = new $get["name"]($get["index"]+1, 1);

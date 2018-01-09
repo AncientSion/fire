@@ -970,12 +970,37 @@ System.prototype.getBoostEffect = function(val){
 System.prototype.drawSystemArc = function(facing, rolled, pos){
 	if (game.animating ||  this.tiny){return;}
 
+	/*if (rolled){
+			var d = this.getArcCenter();
+			var w = this.getArcWidth();
+			var inverse = 0 - d;
+			if (start < end){start = inverse - w/2;end = inverse + w/2;}
+			else {start = inverse + w/2;end = inverse - w/2;}
+		}*/
 	for (var i = 0; i < this.arc.length; i++){
-		var p1 = getPointInDirection(1200, this.arc[i][0] + facing + (rolled*180), pos.x, pos.y);
-		var p2 = getPointInDirection(1200, this.arc[i][1] + facing + (rolled*180), pos.x, pos.y)
+		var	start;
+		var	end;
+
+		if (rolled){
+			if (this.arc[i][0] < this.arc[i][1]){
+				start = 360 - this.arc[i][1];
+				end = 360 - this.arc[i][0];
+			}
+			else {
+				end = 360 - this.arc[i][0];
+				start = 360 - this.arc[i][1];
+			}
+		}
+		else {
+			start = this.arc[i][0];
+			end = this.arc[i][1];
+		}
+
+		var p1 = getPointInDirection(1200, start+facing, pos.x, pos.y);
+		var p2 = getPointInDirection(1200, end+facing, pos.x, pos.y)
 		var dist = getDistance( {x: pos.x, y: pos.y}, p1);
-		var rad1 = degreeToRadian(this.arc[i][0] + facing + (rolled*180));
-		var rad2 = degreeToRadian(this.arc[i][1] + facing + (rolled*180));
+		var rad1 = degreeToRadian(start+facing);
+		var rad2 = degreeToRadian(end+facing);
 
 		fxCtx.globalAlpha = 1;
 		fxCtx.beginPath();			

@@ -9,8 +9,8 @@ class Omega extends SuperHeavy {
 	public $profile = array(0.93, 1.07);
 	public $mass = 14000;
 
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
-        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolled, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolled, $notes);
 	}
 
 	public function addStructures(){
@@ -34,10 +34,10 @@ class Omega extends SuperHeavy {
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 1050, 17);
-		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
-		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
-		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
-		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
+		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 180, 240);
+		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 180, 240);
+		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 180);
+		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 180);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 1500, 19);

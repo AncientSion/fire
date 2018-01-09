@@ -425,16 +425,30 @@ Structure.prototype.drawStructArc = function(facing, rolled, pos){
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z);
 
-	var dir = getArcDir(this);
-	if (dir == 0 || dir == 360 || dir == 180){
-		rolled = 0;
+
+	var	start;
+	var	end;
+
+	if (rolled && this.rollAffected()){
+		if (this.start < this.end){
+			start = 360 - this.end;
+			end = 360 - this.start;
+		}
+		else {
+			end = 360 - this.start;
+			start = 360 - this.end;
+		}
+	}
+	else {
+		start = this.start;
+		end = this.end;
 	}
 
-	var p1 = getPointInDirection(1000, this.start + facing + (rolled*180), pos.x, pos.y);
-	var p2 = getPointInDirection(1000, this.end + facing + (rolled*180), pos.x, pos.y)
+	var p1 = getPointInDirection(1000, start + facing, pos.x, pos.y);
+	var p2 = getPointInDirection(1000, end + facing, pos.x, pos.y)
 	var dist = getDistance( {x: pos.x, y: pos.y}, p1);
-	var rad1 = degreeToRadian(this.start + facing + (rolled*180));
-	var rad2 = degreeToRadian(this.end + facing + (rolled*180));
+	var rad1 = degreeToRadian(start + facing);
+	var rad2 = degreeToRadian(end + facing);
 
 	fxCtx.globalAlpha = 1;
 	fxCtx.beginPath();			
@@ -452,8 +466,15 @@ Structure.prototype.getBoostDiv = function(){
 }
 
 
+Structure.prototype.rollAffected = function(){
+	return this.mirror;
 
+	var dir = getArcDir(this);
 
+	if (dir == 0 || dir == 180 || dir == 360){
+		return false;
+	} return true;
+}
 
 
 

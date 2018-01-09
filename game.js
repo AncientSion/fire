@@ -1324,7 +1324,7 @@ function Game(data, userid){
 				if (this.ships[i].actions[j].turn == game.turn){
 					var action = this.ships[i].actions[j];
 
-					if (action.type == "speed" || action.type == "deploy" || action.type == "jump"){
+					if (action.type == "speed" || action.type == "roll" || action.type == "deploy" || action.type == "jump"){
 						this.ships[i].actions[j].animated = 1;
 					}
 					else {
@@ -1335,9 +1335,7 @@ function Game(data, userid){
 									v.t = [0, action.dist * frameMod];
 								this.ships[i].actions[j].v = v;
 							}
-							else if (action.type == "turn"){
-								this.ships[i].actions[j].angle = this.ships[i].actions[j].a;
-							}
+							else if (action.type == "turn"){this.ships[i].actions[j].angle = this.ships[i].actions[j].a;}
 						}
 						else {
 							if (action.type == "move"){

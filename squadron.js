@@ -660,6 +660,12 @@ Squadron.prototype.createBaseDiv = function(){
 		}
 	//}
 
+	$(this.element)
+		.find(".coreContainer")
+			.append($("<div>")
+				.addClass("notes")
+				.hide())
+
 	if (this.structures.length){
 		$(div).removeClass("disabled");
 		this.setLayout();
@@ -766,17 +772,25 @@ Squadron.prototype.drawEW = function(){
 }
 
 Squadron.prototype.drawImpulseUI = function(){
+	if (this.disabled){return;}	
+
 	var facing = this.getDrawFacing();
 	var center = {x: this.drawX, y: this.drawY};
 	var p1 = getPointInDirection(this.size/2 + 10 + 15, facing + 90, center.x, center.y);
 
-	if (this.candoUndoLastAction()){
+	if (this.canRoll()){
+		var roll = getPointInDirection(50, facing+90, p1.x, p1.y);
+		var ox = roll.x * cam.z + cam.o.x - 15;
+		var oy = roll.y * cam.z + cam.o.y - 15;
+		$("#roll").css("left", ox).css("top", oy).removeClass("disabled");
+	} else $("#roll").addClass("disabled");
+
+	if (this.canUndoLastAction()){
 		var ox = p1.x * cam.z + cam.o.x - 15;
 		var oy = p1.y * cam.z + cam.o.y - 15;
 		$("#doUndoLastAction").css("left", ox).css("top", oy).removeClass("disabled");
 	} else $("#doUndoLastAction").addClass("disabled");
-
-	if (this.disabled){return;}			
+		
 
 	if (this.canIncreaseImpulse()){
 		var pPlus = getPointInDirection(50, facing, p1.x, p1.y);
@@ -807,7 +821,7 @@ Squadron.prototype.drawTurnUI = function(){
 		//.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end()
 }
 
-Squadron.prototype.getShortInfo = function(){
+Squadron.prototype.getShortInfoa = function(){
 	var ele = $("#shortInfo");
 	if (this.userid == game.userid){
 		$(ele).attr("class", "friendly");

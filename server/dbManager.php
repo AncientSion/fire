@@ -925,6 +925,7 @@
 					facing = :facing,
 					delay = :delay,
 					thrust = :thrust,
+					rolled = :rolled,
 					turn = :turn,
 					phase = :phase
 				WHERE id = :id
@@ -938,6 +939,7 @@
 				$stmt->bindParam(":facing", $states[$i]["facing"]);
 				$stmt->bindParam(":delay", $states[$i]["delay"]);
 				$stmt->bindParam(":thrust", $states[$i]["thrust"]);
+				$stmt->bindParam(":rolled", $states[$i]["rolled"]);
 				$stmt->bindParam(":turn", $turn);
 				$stmt->bindParam(":phase", $phase);
 				$stmt->bindParam(":id",  $states[$i]["id"]);
