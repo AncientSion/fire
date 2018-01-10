@@ -125,7 +125,7 @@ class Single {
 	}
 
 	public function testCrit($turn, $extra){
-		Debug::log("testCrit for: ".get_class($this));
+		//Debug::log("testCrit for: ".get_class($this));
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			if ($this->damages[$i]->turn == $turn){
@@ -133,7 +133,7 @@ class Single {
 			} else $old += $this->damages[$i]->overkill;
 		}
 
-		Debug::log("testCrit for: ".get_class($this).", new: ".$new.", turn: ".$turn.", size: ".sizeof($this->damages));
+		//Debug::log("testCrit for: ".get_class($this).", new: ".$new.", turn: ".$turn.", size: ".sizeof($this->damages));
 		if ($new){
 			$this->determineCrit($old, $new, $turn);
 		}

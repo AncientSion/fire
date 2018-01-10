@@ -119,6 +119,16 @@ class Math {
 		else return ($system->start + $system->end) / 2;
 	}
 
+	static function getRolledArc($a, $b){
+		$start = 360 - $b;
+		$end = 360 - $a;
+	}
+
+	static function getMirrorAngle($a){
+		return 360 - $a;
+	}
+
+
 /*
 	function getIntercept(src, dst, v){
 		var tx = dst.x - src.x;

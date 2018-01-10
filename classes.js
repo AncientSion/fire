@@ -429,15 +429,9 @@ Structure.prototype.drawStructArc = function(facing, rolled, pos){
 	var	start;
 	var	end;
 
-	if (rolled && this.rollAffected()){
-		if (this.start < this.end){
-			start = 360 - this.end;
-			end = 360 - this.start;
-		}
-		else {
-			end = 360 - this.start;
-			start = 360 - this.end;
-		}
+	if (rolled){
+		start = 360 - this.end;
+		end = 360 - this.start;
 	}
 	else {
 		start = this.start;
@@ -466,15 +460,6 @@ Structure.prototype.getBoostDiv = function(){
 }
 
 
-Structure.prototype.rollAffected = function(){
-	return this.mirror;
-
-	var dir = getArcDir(this);
-
-	if (dir == 0 || dir == 180 || dir == 360){
-		return false;
-	} return true;
-}
 
 
 

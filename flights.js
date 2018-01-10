@@ -599,8 +599,7 @@ Flight.prototype.hasNoFireOrders = function(){
 }
 
 Flight.prototype.createDeployEntry = function(){
-	var color = "#ff3d00";
-	if (this.friendly){color = "#27e627";}
-	var html = "<span><font color='" + color + "'>Flight #" + this.id + "</font> is being deployed (" + this.structures.length + " units).</span>";
-	this.finishDeployLogEntry(html);
+	this.attachLogEntry(
+		"<span><font color='" + this.getColorCode() + "'>Flight #" + this.id + "</font> is being deployed (" + this.structures.length + " units).</span>"
+	);
 }

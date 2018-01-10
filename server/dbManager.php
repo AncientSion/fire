@@ -932,7 +932,7 @@
 			");
 
 			for ($i = 0; $i < sizeof($states); $i++){
-				//foreach ($states[$i] as $key => $value){Debug::log($key." / ".$value);}
+				foreach ($states[$i] as $key => $value){Debug::log($key." / ".$value);}
 
 				$stmt->bindParam(":x", $states[$i]["x"]);
 				$stmt->bindParam(":y", $states[$i]["y"]);

@@ -321,7 +321,7 @@ class Ship {
 		$this->remainingDelay = $delay;
 	}
 
-	public function setRolLState($turn, $phase){
+	public function setRollState($turn, $phase){
 		for ($i = 0; $i < sizeof($this->actions); $i++){
 			if ($this->actions[$i]->type == "roll"){
 				$this->rolling = 1;
@@ -864,8 +864,13 @@ class Ship {
 	}
 
 	public function getHitSection($fire){
+			Debug::log("firing angle: ".$fire->angle);
 		if ($fire->cc && $fire->shooter->flight){
 			return $this->structures[mt_rand(0, sizeof($this->structures)-1)]->id;
+		}
+		else if ($this->rolled){
+			$fire->angle = Math::getMirrorAngle($fire->angle);
+			Debug::log("new angle: ".$fire->angle);
 		}
 
 		$locs = array();

@@ -1108,14 +1108,19 @@ div.integrityFull {
 	border-bottom: 1px solid white;
 }
 
-.shipDiv.squad .notes {
+
+.shipDiv .notes {
 	display: inline-block;
 	position: relative;
-	margin-top: 100px;
+	margin-top: 10px;
 	width: 100%;
 	font-size: 18px;
 	text-align: center;
 	color: yellow;
+}
+
+.shipDiv.squad .notes {
+	margin-top: 100px;
 }
 
 .shipDiv .iconContainer {

@@ -748,12 +748,18 @@ function Game(data, userid){
 		}
 	}
 
-
 	this.initDeployment = function(){
 		cam.setZoom(0.6);
-		game.draw();
-		//cam.setFocus()
+		this.draw();
 		$("#deployWrapper").removeClass("disabled");
+		$("#combatlogWrapper")
+			.width(350)
+			.css("top", 75).css("left", 250)
+			.show()
+			.find(".combatLogHeader").html("Tactical Log").end()
+			.find("#combatLog").children().children().remove();
+			
+		this.createDeployStartEntries();
 	}
 
 	this.endMoveSubPhase = function(){
@@ -861,7 +867,7 @@ function Game(data, userid){
 	
 	this.create = function(){
 		$("#phaseSwitchDiv").show();
-		console.log("game.create");
+		//console.log("game.create");
 
 		//this.ships.sort(function(a, b){
 			//return a.ship-b.ship || a.flight - b.flight || a.salvo - b.salvo;
@@ -1458,6 +1464,7 @@ function Game(data, userid){
 		var time = 500;
 		if (game.animShip){
 			console.log("ship done -> flight moves");
+			game.createMoveEndEntries();
 			game.timeout = setTimeout(function(){
 				game.animShip = 0; game.animFlight = 1;
 				game.animateUnitMovement();
@@ -1475,6 +1482,42 @@ function Game(data, userid){
 			game.endMoveSubPhase();
 			game.animFlight = 0; game.animSalvo = 0;
 			game.movementResolved();
+		}
+	}
+
+	this.createDeployStartEntries = function(){
+		var show = 0;
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].isRolling()){
+				show = 1;
+				this.ships[i].createMoveStartEntry();
+			}
+		}
+
+		if (!show){
+			$("#combatLog").show().find("tbody")
+			.append($("<tr>")
+				.append($("<td>").html("No Data at this time available."))
+			);
+		}
+		else {
+			$("#combatLog").show().find("tbody")
+		}
+	}
+
+	this.createMoveStartEntries = function(){
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].hasFinishedRolling()){
+				this.ships[i].createMoveStartEntry();
+			}
+		}
+	}
+
+	this.createMoveEndEntries = function(){
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].hasFinishedRolling()){
+				this.ships[i].createMoveEndEntry();
+			}
 		}
 	}
 
@@ -2738,7 +2781,7 @@ Game.prototype.getFireDistance = function(a, b){
 Game.prototype.resolveDeployment = function(){
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships[i].deployed = true;
-		if (this.ships[i].available == game.turn){
+		if (this.ships[i].available == this.turn){
 			this.ships[i].deployAnim = [0, 30];
 			this.ships[i].deployed = false;
 		}
@@ -2751,20 +2794,22 @@ Game.prototype.resolveDeployment = function(){
 	.find(".combatLogHeader").html("Deployment Log").end()
 	.find("#combatLog").children().children().remove();
 
-	var hasEvent = 0;
+	var show = 0;
 
 	for (var i = 0; i < this.ships.length; i++){
-		if (this.ships[i].available == game.turn){hasEvent = 1; break;
-		} else if (this.ships[i].flight && this.ships[i].mission.turn == game.turn){hasEvent = 1; break;}
+		if (this.ships[i].available == this.turn){show = 1; break;
+		} else if (this.ships[i].flight && this.ships[i].mission.turn == this.turn){show = 1; break;}
 	}
 
-	if (!hasEvent){
+	if (!show){
 		$("#combatLog").find("tbody")
 		.append($("<tr>")
-			.append($("<td>").html("No noteworthy events."))
+			.append($("<td>").html("Hyperspace is stable."))
 		);
 
-		game.draw();
+
+		this.createMoveStartEntries();
+		this.draw();
 	}
 	else {
 		setFPS(30);
@@ -2804,6 +2849,7 @@ Game.prototype.animateDeployment = function(){
 				this.ships[i].animateSelfDeployment();
 				doing = 1;
 				done = 0;
+				if (this.ships[i].deployed){this.ships[i].createDeployEntry();}
 			}
 		}
 
@@ -2837,6 +2883,8 @@ Game.prototype.deployDone = function(){
 			game.initSelectionWrapper();
 		})
 	}
+
+	this.createMoveStartEntries();
 
 	console.log("deployDone");
 }

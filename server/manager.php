@@ -933,7 +933,7 @@ class Manager {
 	public function endTurn(){
 		Debug::log("endTurn");
 		$this->freeFlights();
-		$this->setRollState();
+		$this->setUnitRollState();
 		$this->setUnitStatus();
 		$this->assembleEndStates();
 		$this->alterReinforcementPoints();
@@ -957,7 +957,7 @@ class Manager {
 		if (sizeof($data)){DBManager::app()->updateMissionState($data);}
 	}
 
-	public function setRollState(){
+	public function setUnitRollState(){
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->flight || $this->ships[$i]->salvo){continue;}
 

@@ -982,20 +982,14 @@ System.prototype.drawSystemArc = function(facing, rolled, pos){
 		var	end;
 
 		if (rolled){
-			if (this.arc[i][0] < this.arc[i][1]){
-				start = 360 - this.arc[i][1];
-				end = 360 - this.arc[i][0];
-			}
-			else {
-				end = 360 - this.arc[i][0];
-				start = 360 - this.arc[i][1];
-			}
+			start = 360 - this.arc[i][1];
+			end = 360 - this.arc[i][0];
 		}
 		else {
 			start = this.arc[i][0];
 			end = this.arc[i][1];
 		}
-
+		
 		var p1 = getPointInDirection(1200, start+facing, pos.x, pos.y);
 		var p2 = getPointInDirection(1200, end+facing, pos.x, pos.y)
 		var dist = getDistance( {x: pos.x, y: pos.y}, p1);

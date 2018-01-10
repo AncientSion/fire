@@ -262,22 +262,21 @@ function quad(a,b,c) {
 }
 		
 function drawAndRotate(posX, posY, w, h, iw, ih, angle, img){
-
-        var x = Math.round(w/2);
-        var y = Math.round(h/2);
-        var width = iw/2;
-        var height = ih/2;
-		
-		angle = angle + Math.PI / 180; 
-		
-		fxCtx.save();
-		fxCtx.translate(x, y);
-		//fxCtx.translate(10, 10);
-		fxCtx.rotate(angle);
-		//fxCtx.arc(0, 0, 10, 0, 2*Math.PI, false);
-		//fxCtx.fill();
-		fxCtx.drawImage(img, 0, 0, width, height);
-		fxCtx.restore();
+    var x = Math.round(w/2);
+    var y = Math.round(h/2);
+    var width = iw/2;
+    var height = ih/2;
+	
+	angle = angle + Math.PI / 180; 
+	
+	fxCtx.save();
+	fxCtx.translate(x, y);
+	//fxCtx.translate(10, 10);
+	fxCtx.rotate(angle);
+	//fxCtx.arc(0, 0, 10, 0, 2*Math.PI, false);
+	//fxCtx.fill();
+	fxCtx.drawImage(img, 0, 0, width, height);
+	fxCtx.restore();
 }
 
 function range(min, max){
@@ -299,7 +298,6 @@ function drawText(ctx, color, text, size, p){
 				
 	ctx.fillStyle = "black";
 }
-
 
 function getArcDir(element){
 	if (element.start == 0 && element.end == 360){

@@ -505,7 +505,7 @@ Squadron.prototype.create = function(){
 }
 
 Squadron.prototype.setStatus = function(){
-	console.log("setStatus CREATE")
+	//console.log("setStatus CREATE")
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].destroyed){
 			this.structures[i].doDestroy();
@@ -514,7 +514,7 @@ Squadron.prototype.setStatus = function(){
 }
 
 Squadron.prototype.setPreFireImage = function(){
-	console.log("Squadron setPreFireImage");
+	//console.log("Squadron setPreFireImage");
 	for (var i = 0; i < this.structures.length; i++){
 		if (!this.structures[i].draw){
 			if (this.structures[i].isDestroyedThisTurn()){
@@ -643,28 +643,36 @@ Squadron.prototype.createBaseDiv = function(){
 	var w = $(this.element).find(".coreContainer").width();
 	var h = $(this.element).find(".coreContainer").height();
 
-	//if (game.phase > -2){
-		for (var i = 0; i < this.primary.systems.length; i++){
+	for (var i = 0; i < this.primary.systems.length; i++){
 
-			var div = this.primary.systems[i].getDiv();
-				div = this.attachEvent(div);
+		var div = this.primary.systems[i].getDiv();
+			div = this.attachEvent(div);
 
-			if (game.turn > 0){
-				var modeDiv = this.primary.systems[i].getModeDiv();
-				if (modeDiv){
-					div.appendChild(modeDiv);
-				}
+		if (game.turn > 0){
+			var modeDiv = this.primary.systems[i].getModeDiv();
+			if (modeDiv){
+				div.appendChild(modeDiv);
 			}
-			$(this.element).find(".coreContainer").append(div)
-			$(div).css("margin-top", 20).css("margin-left", 10 + (i*50));
 		}
-	//}
+		$(this.element).find(".coreContainer").append(div)
+		$(div).css("margin-top", 20).css("margin-left", 10 + (i*50));
+	}
 
+
+	// notes
 	$(this.element)
 		.find(".coreContainer")
 			.append($("<div>")
 				.addClass("notes")
 				.hide())
+	//rolling ?
+	if (this.rolled){
+		$(this.element).find(".notes").html("ROLLED").show();
+	}
+	else if (this.rolling){
+		$(this.element).find(".notes").html("ROLLING").show();
+	}
+
 
 	if (this.structures.length){
 		$(div).removeClass("disabled");
