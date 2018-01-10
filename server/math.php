@@ -104,7 +104,6 @@ class Math {
 		}
 		return $sol;
 	}
-
 	static function getArcWidth($system){
 		if ($system->start < $system->end){ return $system->end - $system->start;}
 		else if ($system->start > $system->end){ return 360 - $system->start + $system->end;}	

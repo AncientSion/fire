@@ -199,7 +199,7 @@ class Squadron extends Ship {
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed){continue;}
-			else if (!$this->structures[$i]->damaged){Debug::log("subunit ".$i." not damaged!"); continue;}
+			else if (!$this->structures[$i]->damaged){/*Debug::log("subunit ".$i." not damaged!");*/ continue;}
 
 			$this->structures[$i]->testCrit($turn, 0);
 		}

@@ -776,12 +776,15 @@ function Game(data, userid){
 	this.movementResolved = function(){	
 		console.log("movementResolved");	
 		game.setlastPosCC()
+
+		var table = $("#combatLog").find("tbody");
+
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].setSupportImage();
 			this.ships[i].getAttachDivs();
 		}
 
-		$("#combatLog").find("tbody")
+		$(table)
 			.append($("<tr>")
 				.append($("<td>").html("Movement Resolution concluded."))
 			);
@@ -1324,7 +1327,7 @@ function Game(data, userid){
 				if (this.ships[i].actions[j].turn == game.turn){
 					var action = this.ships[i].actions[j];
 
-					if (action.type == "speed" || action.type == "roll" || action.type == "deploy" || action.type == "jump"){
+					if (action.type == "speed" || action.type == "deploy" || action.type == "jump"){
 						this.ships[i].actions[j].animated = 1;
 					}
 					else {
@@ -1403,6 +1406,10 @@ function Game(data, userid){
 								if (game.ships[i].actions[j].angle == 0){
 									game.ships[i].actions[j].animated = true;
 								}
+							}
+							else if (action.type == "roll"){
+								game.ships[i].actions[j].animated = true;
+								game.ships[i].createActionEntry(action);
 							}
 							else if (action.type == "patrol"){
 								game.ships[i].actions[j].animated = true;

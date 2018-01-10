@@ -451,26 +451,9 @@ class Manager {
 		$this->getGameData();
 	}
 
-	public function doAdvancea(){
-		return;
-		Debug::log("doAdvance for game #".$this->gameid." from phase ".$this->phase." to phase ".($this->phase+1));
-
-		if ($this->phase == -1){
-			$this->handleDeploymentPhase();
-			$this->startMovementPhase();
-			$this->handleMovementPhase();
-			$this->startDamageControlPhase();
-			$this->handleDamageControlPhase();
-			$this->endTurn();
-			$this->startNewTurn();
-			$this->startDeploymentPhase();
-		}
-
-		return true;
-	}
 
 	public function doAdvance(){
-		Debug::log("****************************************** doAdvance for game".$this->gameid." from phase ".$this->phase." to phase ".($this->phase+1));
+		Debug::log("********************* doAdvance for game".$this->gameid." from phase ".$this->phase." to phase ".($this->phase+1));
 		//return;
 		$time = -microtime(true);
 
@@ -950,6 +933,7 @@ class Manager {
 	public function endTurn(){
 		Debug::log("endTurn");
 		$this->freeFlights();
+		$this->setRollState();
 		$this->setUnitStatus();
 		$this->assembleEndStates();
 		$this->alterReinforcementPoints();
@@ -971,6 +955,19 @@ class Manager {
 			}
 		}
 		if (sizeof($data)){DBManager::app()->updateMissionState($data);}
+	}
+
+	public function setRollState(){
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->flight || $this->ships[$i]->salvo){continue;}
+
+			for ($j = 0; $j < sizeof($this->ships[$i]->actions); $j++){
+				if ($this->ships[$i]->actions[$j]->type == "roll"){
+					$this->ships[$i]->rolled = $this->turn;
+					break;
+				}
+			}
+		}
 	}
 
 	public function alterReinforcementPoints(){

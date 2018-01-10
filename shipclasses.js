@@ -20,6 +20,7 @@ function Ship(data){
 	this.baseImpulse = data.baseImpulse || 0;
 	this.traverse = data.traverse;
 	this.status = data.status;
+	this.rolling = data.rolling;
 	this.rolled = data.rolled;
 	this.actions = data.actions || [];
 	this.cc = [];
@@ -555,7 +556,7 @@ Ship.prototype.doUndoLastAction = function(pos){
 		this.actions[this.actions.length-1].dist *= -1;
 	}
 	else if (this.actions[this.actions.length-1].type == "roll"){
-		this.rolled = !this.rolled;
+		this.rolling = !this.rolling;
 		$(this.element).find(".notes").html("").hide();
 	}
 	else if (this.actions[this.actions.length-1].type == "move"){
@@ -1107,6 +1108,7 @@ Ship.prototype.getShortInfo = function(){
 
 	var table = document.createElement("table");
 		table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id + " ("+this.traverse+")";
+		if (this.rolling){table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>!-ROLLING-!</span>";}
 		if (this.rolled){table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>!-ROLLED-!</span>";}
 		table.insertRow(-1).insertCell(-1).innerHTML =  "Thrust: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")";
 		table.insertRow(-1).insertCell(-1).innerHTML = this.getStringHitChance();
@@ -1250,6 +1252,13 @@ Ship.prototype.setImage = function(){
 	return;
 }
 
+Ship.prototype.createActionEntry = function(move){
+	$("#combatLog").find("tbody").append($("<tr>")
+		.append($("<td>")
+			.html("<font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> is initiating a roll manover")));
+							
+}
+
 Ship.prototype.finishDeployLogEntry = function(html){
 	$("#combatLog").find("tbody")
 		.append($("<tr>")
@@ -1270,10 +1279,13 @@ Ship.prototype.finishDeployLogEntry = function(html){
 		);
 }
 
+Ship.prototype.getCodeColor = function(){
+	if (this.friendly){return "#27e627"}
+	else return "#ff3d00";
+}
+
 Ship.prototype.createDeployEntry = function(){
-	var color = "#ff3d00";
-	if (this.friendly){color = "#27e627";}
-	var html = "<span><font color='" + color + "'>" + this.name + " #" + this.id + "</font> jumps into local space.</span>";
+	var html = "<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> jumps into local space.</span>";
 	this.finishDeployLogEntry(html);
 }
 
@@ -1320,8 +1332,7 @@ Ship.prototype.draw = function(){
 Ship.prototype.drawPositionMarker = function(){
 	var color = "";
 	if (this.selected){color = "yellow"}
-	else if (this.friendly){color = "#27e627";}
-	else {color = "red";}
+	else color = this.getCodeColor();
 	this.drawMarker(this.drawX, this.drawY, color, ctx);
 }
 
@@ -1806,9 +1817,6 @@ Ship.prototype.expandDiv = function(div){
 	.find(".topDiv")
 	.append($("<div>")
 		.addClass("iconContainer")
-			.append(
-			//	$(this.getBaseImage().cloneNode(true)).addClass("size90").addClass("rotate270").css("margin-top", 20)
-			)
 			.hover(function(e){
 				if (aUnit){
 					var shooter = game.getUnit(aUnit);
@@ -2217,7 +2225,12 @@ Ship.prototype.expandDiv = function(div){
 	var goal = conW * 0.8;
 		
 	$(con).append(
-		$(this.getBaseImage().cloneNode(true)).addClass("rotate270").css("width", goal).css("height", goal).css("margin-left", (conW - goal)/2).css("margin-top", (conH - goal)/2)
+		$(this.getBaseImage().cloneNode(true))
+			.addClass("rotate270")
+			.css("width", goal)
+			.css("height", goal)
+			.css("margin-left", (conW - goal)/2)
+			.css("margin-top", (conH - goal)/2)
 	)
 
 
@@ -3038,8 +3051,8 @@ Ship.prototype.canDoAnotherTurn = function(){
 Ship.prototype.doRoll = function(){
 	var shipPos = this.getPlannedPos();
 	this.actions.push(new Move(-1, "roll", 1, shipPos.x, shipPos.y, 0, 0, this.getRollCost(), 1, 1, 0));
-	this.rolled = !this.rolled;
-	$(this.element).find(".notes").html("ROLLED").show();
+	this.rolling = !this.rolling;
+	$(this.element).find(".notes").html("ROLLING").show();
 
 	this.resetMoveMode();
 	game.redraw();

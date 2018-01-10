@@ -1,6 +1,11 @@
-rolled: 1
-rolled: 0
-rolled: 1
-rolled: 0
-rolled: 1
-rolled: 0
+game 1, user 2 --- adjusting to turn/phase/status 2/3/ready
+game 1, user 1 --- adjusting to turn/phase/status 2/3/ready
+prepareAdvance
+********************* doAdvance for game1 from phase 3 to phase 4
+endTurn
+assembleEndStates
+updateUnitState s:2 2/3
+game 1, user 1 --- adjusting to turn/phase/status 3/-1/waiting
+game 1, user 2 --- adjusting to turn/phase/status 3/-1/waiting
+TIME: 0.066 seconds.
+2 mb

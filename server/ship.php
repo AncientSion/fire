@@ -14,6 +14,7 @@ class Ship {
 	public $baseHitChance;
 	public $remainingDelay;
 	public $currentImpulse;
+	public $rolling = 0;
 	public $rolled = 0;
 	public $remainingImpulse;
 	public $baseImpulse;
@@ -67,7 +68,6 @@ class Ship {
 		$this->rolled = $rolled;
 		$this->notes = $notes;
 
-		Debug::log("rolled: ".$rolled);
 		$this->addPrimary();
 		$this->addStructures();
 	}
@@ -324,8 +324,7 @@ class Ship {
 	public function setRolLState($turn, $phase){
 		for ($i = 0; $i < sizeof($this->actions); $i++){
 			if ($this->actions[$i]->type == "roll"){
-				Debug::log("ding");
-				$this->rolled = !$this->rolled;
+				$this->rolling = 1;
 			}
 		}
 	}
