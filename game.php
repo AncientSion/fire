@@ -184,6 +184,7 @@
 					<th id="turnDelay" style="width: 55px; text-align: center">
 					</th>
 				</tr>
+			<!---
 				<tr>
 					<th style="text-align: left">
 						EP Mod
@@ -192,7 +193,6 @@
 					</th>
 				</tr>
 				
-			<!---
 				<tr id="shortenTurn" class="disabled">
 					<td>
 						<div class="doShortenTurn">

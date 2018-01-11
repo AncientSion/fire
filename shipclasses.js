@@ -439,8 +439,9 @@ Ship.prototype.doesContinueRolling = function(){
 		for (var i = 0; i < this.actions.length; i++){
 			if (this.actions[i].type == "roll"){return false;}
 		}
+		return true;
 	}
-	return true;
+	return false;
 }
 
 Ship.prototype.drawImpulseUI = function(){
@@ -1811,8 +1812,8 @@ Ship.prototype.createBaseDiv = function(){
 			.append($("<td>").html("Turn Ability"))
 			.append($("<td>").html(this.getRemainingEP() + " / " + this.getEP()).addClass("ep")))
 		.append($("<tr>")
-			.append($("<td>").html("Thrust Change:"))
-			.append($("<td>").html(this.getImpulseChangeCost() + " EP").addClass("change")))
+			.append($("<td>").html("Thrust & Roll"))
+			.append($("<td>").html(this.getImpulseChangeCost() + " & " + this.getRollCost()).addClass("change")))
 		//.append($("<tr>")
 		//	.append($("<td>").html("Turn Cost per 1"))
 		//	.append($("<td>").html(round(this.getTurnCost(), 2) + " EP")))
@@ -2382,7 +2383,7 @@ Ship.prototype.updateDiv = function(){
 		.find(".thrust").html(this.getRemainingImpulse() + " / " + this.getCurrentImpulse()).end()
 		.find(".ep").html(this.getRemainingEP() + " / " + this.getEP()).end()
 		.find(".delay").html(this.getRemainingDelay()).end()
-		.find(".change").html(this.getImpulseChangeCost() + " EP").end()			
+		.find(".change").html(this.getImpulseChangeCost() + " & " + this.getRollCost()).end()			
 		.find(".turn").html(this.getImpulseChangeCost() + " EP").end()
 }
 
@@ -2971,6 +2972,11 @@ Ship.prototype.issuedRollThisTurn = function(){
 Ship.prototype.canRoll = function(){
 	if (this.getRemainingEP() >= this.getRollCost()){
 		if (this.issuedRollThisTurn()){return false;}
+		else {
+			for (var i = 0; i < this.actions.length; i++){
+				if (this.actions[i].type != "speed" && this.actions[i].type != "turn"){return false;}
+			}
+		}
 		return true;
 	}
 	return false;
@@ -2994,7 +3000,6 @@ Ship.prototype.canIncreaseImpulse = function(){
 }
 
 Ship.prototype.canDecreaseImpulse = function(){
-	//if (this.isRolling()){return false;}
 	if (this.getCurrentImpulse() <= 0){return false;}
 	else if (this.getRemainingEP() >= this.getImpulseChangeCost()){
 		if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship + this.squad)){

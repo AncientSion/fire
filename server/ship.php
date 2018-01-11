@@ -79,7 +79,7 @@ class Ship {
 	}
 
 	public function setUnitState($turn, $phase){
-		//Debug::log("ship setUnitState");
+		//Debug::log("ship setUnitState #".$this->id."/".$this->display);
 
 		$this->setBaseStats($turn, $phase);
 		
@@ -107,7 +107,6 @@ class Ship {
 		}
 
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq());
-	///	$this->getSystemByName("Engine")->setOutput($this->baseTurnCost);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$dir = Math::getArcDir($this->structures[$i]);
@@ -118,7 +117,6 @@ class Ship {
 			$armourDmg = 0;
 			$structDmg = 0;
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				//$this->structures[$i]->systems[$j]->mirror = $mirror;
 				$this->structures[$i]->systems[$j]->setState($turn, $phase); // set system states
 				for ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]->damages); $k++){// set armour
 					$armourDmg += $this->structures[$i]->systems[$j]->damages[$k]->armourDmg;
@@ -180,11 +178,9 @@ class Ship {
 	}
 
 	public function setBaseStats($phase, $turn){
-		$this->baseHitChance = ceil(pow($this->mass, 0.4)*1.5)+30;
-		//$this->baseTurnCost = round(pow($this->mass, 1.25)/25000, 2);
-		$this->baseTurnDelay = round(pow($this->mass, 0.45)/18, 2);
-		$this->baseImpulseCost = round(pow($this->mass, 1.25)/2400, 2);
-		//$this->baseImpulseCost = 30;
+		$this->baseHitChance = Math::getBaseHitChance($this->mass);
+		$this->baseTurnDelay = Math::getBaseTurnDelay($this->mass);
+		//$this->baseImpulseCost = Math::getBaseImpulseCost($this->mass);
 	}
 
 	public function getImpulseStep(){
@@ -852,9 +848,7 @@ class Ship {
 	}
 
 	public function getImpactAngle($fire){
-		if ($fire->cc){
-			return $fire->shooter->getFireAngle($fire);
-		}
+		if ($fire->cc){return $fire->shooter->getFireAngle($fire);}
 		
 		for ($i = 0; $i < sizeof($this->angles); $i++){
 			if ($this->angles[$i][0] == $fire->shooter->id){
@@ -866,18 +860,12 @@ class Ship {
 	}
 
 	public function getHitSection($fire){
-			Debug::log("firing angle: ".$fire->angle);
-		if ($fire->cc && $fire->shooter->flight){
-			return $this->structures[mt_rand(0, sizeof($this->structures)-1)]->id;
-		}
-		else if ($this->rolled){
-			$fire->angle = Math::getMirrorAngle($fire->angle);
-			Debug::log("new angle: ".$fire->angle);
-		}
+		if ($fire->cc && $fire->shooter->flight){return $this->structures[mt_rand(0, sizeof($this->structures)-1)]->id;}
+		$fire->angle = Math::addAngle($this->facing, $fire->angle);
+		if ($this->rolled){$fire->angle = Math::getMirrorAngle($fire->angle);}
 
 		$locs = array();
-		$fire->angle = Math::addAngle($this->facing, $fire->angle);
-		//Debug::log("angle: ".$fire->angle.", facing: ".$this->facing." => to adjusted: ".$adjusted);
+		//Debug::log("facing: ".$this->facing." => to adjusted: ".$fire->angle);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (Math::isInArc($fire->angle, $this->structures[$i]->start, $this->structures[$i]->end)){
 				$locs[] = $this->structures[$i]->id;
@@ -1132,62 +1120,11 @@ class Ship {
 	}
 }
 
-
-class UltraHeavy extends Ship {
-	public $baseImpulse = 130;
-	public $traverse = 3;
-	public $slipAngle = 15;
-	
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
-
-		$this->hitTable = array(
-			"Bridge" => 0.35,
-			"Engine" => 0.85,
-			"Sensor" => 0.9,
-			"Reactor" => 0.75
-		);
-	}
-}
-
-class SuperHeavy extends Ship {
-	public $baseImpulse = 145;
-	public $traverse = 2;
-	public $slipAngle = 17;
-	
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
-
-		$this->hitTable = array(
-			"Bridge" => 0.5,
-			"Engine" => 0.85,
-			"Sensor" => 0.9,
-			"Reactor" => 0.7
-		);
-	}
-}
-
-class Heavy extends Ship {
-	public $baseImpulse = 160;
-	public $traverse = 1;
-	public $slipAngle = 19;
-	
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
-
-		$this->hitTable = array(
-			"Bridge" => 0.55,
-			"Engine" => 0.8,
-			"Sensor" => 0.9,
-			"Reactor" => 0.65
-		);
-	}
-}
-
 class Medium extends Ship {
 	public $baseImpulse = 175;
 	public $traverse = 0;
-	public $slipAngle = 21;
+	public $slipAngle = 20;
+	public $baseImpulseCost = 30;
 
 	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
@@ -1202,6 +1139,60 @@ class Medium extends Ship {
 
 	public function getShipTypeMod(){
 		return 1.15;
+	}
+}
+
+class Heavy extends Ship {
+	public $baseImpulse = 160;
+	public $traverse = 1;
+	public $slipAngle = 20;
+	public $baseImpulseCost = 25;
+	
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+
+		$this->hitTable = array(
+			"Bridge" => 0.55,
+			"Engine" => 0.8,
+			"Sensor" => 0.9,
+			"Reactor" => 0.65
+		);
+	}
+}
+
+class SuperHeavy extends Ship {
+	public $baseImpulse = 145;
+	public $traverse = 2;
+	public $slipAngle = 20;
+	public $baseImpulseCost = 20;
+	
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+
+		$this->hitTable = array(
+			"Bridge" => 0.5,
+			"Engine" => 0.85,
+			"Sensor" => 0.9,
+			"Reactor" => 0.7
+		);
+	}
+}
+
+class UltraHeavy extends Ship {
+	public $baseImpulse = 130;
+	public $traverse = 3;
+	public $slipAngle = 20;
+	public $baseImpulseCost = 15;
+	
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
+        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+
+		$this->hitTable = array(
+			"Bridge" => 0.35,
+			"Engine" => 0.85,
+			"Sensor" => 0.9,
+			"Reactor" => 0.75
+		);
 	}
 }
 

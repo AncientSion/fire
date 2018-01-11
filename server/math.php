@@ -128,6 +128,19 @@ class Math {
 		return 360 - $a;
 	}
 
+	static function getBaseHitChance($mass){
+		return ceil(pow($mass, 0.4)*1.5)+30;
+	}
+
+	static function getBaseTurnDelay($mass){
+		return round(pow($mass, 0.45)/18, 2);
+	}
+
+	static function getBaseImpulseCost($mass){
+		return round(pow($mass, 1.05)/200, 2);
+	}
+
+
 
 /*
 	function getIntercept(src, dst, v){

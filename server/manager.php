@@ -338,11 +338,14 @@ class Manager {
 					0,
 					$this->reinforcements[$i]["delay"],
 					$this->reinforcements[$i]["thrust"],
+					$this->reinforcements[$i]["rolling"],
+					$this->reinforcements[$i]["rolled"],
 					$this->reinforcements[$i]["display"]
 				);
 
 				$s->cost = $this->reinforcements[$i]["facing"];
 				$s->currentImpulse = $s->baseImpulse;
+				$s->getSystemByName("Reactor")->setOutput($s->getPowerReq());
 
 				for ($j = 0; $j < sizeof($s->structures); $j++){
 					$s->structures[$j]->remainingNegation = $s->structures[$j]->negation;
@@ -1026,7 +1029,6 @@ class Manager {
 			for ($j = $i+1; $j < sizeof($this->ships); $j++){
 				if ($this->ships[$i]->userid == $this->ships[$j]->userid){continue;}
 				$bPos = $this->ships[$j]->getCurrentPosition();
-				//Debug::log("POSITION #".$this->ships[$j]->id.": ".$bPos->x."/".$bPos->y);
 				$dist = Math::getDist2($aPos, $bPos);
 				
 				$this->ships[$i]->distances[] = array($this->ships[$j]->id, $dist);
@@ -1041,12 +1043,13 @@ class Manager {
 		}
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			$this->setLocks($this->ships[$i]);
+			$this->setLocks($this->ships[$i]); 
 		}
 		return;
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			Debug::log("FROM: #".$this->ships[$i]->id);
+			$aPos = $this->ships[$i]->getCurrentPosition();
+			Debug::log("POSITION #".$this->ships[$i]->id.": ".$aPos->x."/".$aPos->y);
 			foreach ($this->ships[$i]->angles as $val){
 				Debug::log("--> ANGLE TO: #".$val[0].": ".$val[1]);
 			}

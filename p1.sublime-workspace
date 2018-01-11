@@ -551,7 +551,7 @@
 			"file": "style.css",
 			"settings":
 			{
-				"buffer_size": 24632,
+				"buffer_size": 24619,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -587,7 +587,7 @@
 			"file": "shipclasses.js",
 			"settings":
 			{
-				"buffer_size": 92297,
+				"buffer_size": 93081,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -623,7 +623,7 @@
 			"file": "server/manager.php",
 			"settings":
 			{
-				"buffer_size": 49030,
+				"buffer_size": 49157,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -632,7 +632,7 @@
 			"file": "server/math.php",
 			"settings":
 			{
-				"buffer_size": 3792,
+				"buffer_size": 4053,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -659,7 +659,7 @@
 			"file": "server/flight.php",
 			"settings":
 			{
-				"buffer_size": 3112,
+				"buffer_size": 3132,
 				"encoding": "UTF-8",
 				"line_ending": "Windows",
 				"name": "<?php"
@@ -669,7 +669,7 @@
 			"file": "server/ships/omega.php",
 			"settings":
 			{
-				"buffer_size": 5066,
+				"buffer_size": 5086,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -678,7 +678,7 @@
 			"file": "server/ships/hyperion.php",
 			"settings":
 			{
-				"buffer_size": 3437,
+				"buffer_size": 3457,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -687,7 +687,7 @@
 			"file": "server/ships/avenger.php",
 			"settings":
 			{
-				"buffer_size": 4924,
+				"buffer_size": 4944,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -705,7 +705,7 @@
 			"file": "server/ships/saggitarius.php",
 			"settings":
 			{
-				"buffer_size": 2787,
+				"buffer_size": 2807,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -714,7 +714,7 @@
 			"file": "server/ships/artemis.php",
 			"settings":
 			{
-				"buffer_size": 2485,
+				"buffer_size": 2505,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -723,7 +723,7 @@
 			"file": "server/ships/olympus.php",
 			"settings":
 			{
-				"buffer_size": 3232,
+				"buffer_size": 3252,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -741,7 +741,7 @@
 			"file": "server/ships/battlecrab.php",
 			"settings":
 			{
-				"buffer_size": 1789,
+				"buffer_size": 1809,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -814,7 +814,7 @@
 			"file": "server/systems/nonweapon.php",
 			"settings":
 			{
-				"buffer_size": 6514,
+				"buffer_size": 6513,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -841,7 +841,7 @@
 			"file": "server/salvo.php",
 			"settings":
 			{
-				"buffer_size": 2146,
+				"buffer_size": 2166,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -850,7 +850,7 @@
 			"file": "server/mixed.php",
 			"settings":
 			{
-				"buffer_size": 10514,
+				"buffer_size": 10543,
 				"encoding": "UTF-8",
 				"line_ending": "Windows",
 				"name": "<?php"
@@ -879,7 +879,7 @@
 			"file": "server/ship.php",
 			"settings":
 			{
-				"buffer_size": 33410,
+				"buffer_size": 33444,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -888,7 +888,7 @@
 			"file": "server/squadron.php",
 			"settings":
 			{
-				"buffer_size": 14311,
+				"buffer_size": 14242,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -897,7 +897,7 @@
 			"file": "squadron.js",
 			"settings":
 			{
-				"buffer_size": 37452,
+				"buffer_size": 37332,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -957,16 +957,6 @@
 			}
 		},
 		{
-			"contents": "Searching 78 files for \"dron.prototype.setS\"\n\nC:\\xampp\\htdocs\\fire\\squadron.js:\n  505  }\n  506  \n  507: Squadron.prototype.setStatus = function(){\n  508  \tconsole.log(\"setStatus CREATE\")\n  509  \tfor (var i = 0; i < this.structures.length; i++){\n  ...\n  686  }\n  687  \n  688: Squadron.prototype.setSubElements = function(){\n  689  \tvar w = $($(this.element).find(\".structContainer\")).width();\n  690  \tvar h = $($(this.element).find(\".structContainer\")).height();\n  ...\n 1143  }\n 1144  \n 1145: Squadron.prototype.setStats = function(){\n 1146  \tthis.slots[0] = 0;\n 1147  \tfor (var i = 0; i < this.structures.length; i++){\n\n3 matches in 1 file\n\n\nSearching 78 files for \"finishDeployLogEntry\"\n\nC:\\xampp\\htdocs\\fire\\flights.js:\n  603  \tif (this.friendly){color = \"#27e627\";}\n  604  \tvar html = \"<span><font color='\" + color + \"'>Flight #\" + this.id + \"</font> is being deployed (\" + this.structures.length + \" units).</span>\";\n  605: \tthis.finishDeployLogEntry(html);\n  606  }\n\nC:\\xampp\\htdocs\\fire\\salvo.js:\n  342  \tif (this.friendly){color = \"#27e627\";}\n  343  \tvar html = \"<span><font color='\" + color + \"'>Salvo #\" + this.id + \"</font> is launched (\" + this.structures.length + \" units).</span>\";\n  344: \tthis.finishDeployLogEntry(html);\n  345  \n  346  }\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n 1287  }\n 1288  \n 1289: Ship.prototype.finishDeployLogEntry = function(html){\n 1290  \t$(\"#combatLog\").find(\"tbody\")\n 1291  \t\t.append($(\"<tr>\")\n ....\n 1309  Ship.prototype.createDeployEntry = function(){\n 1310  \tvar html = \"<span><font color='\" + this.getCodeColor() + \"'>\" + this.name + \" #\" + this.id + \"</font> jumps into local space.</span>\";\n 1311: \tthis.finishDeployLogEntry(html);\n 1312  }\n 1313  \n 1314  Ship.prototype.createMoveStartEntry = function(){\n 1315  \tvar html = \"<span><font color='\" + this.getCodeColor() + \"'>\" + this.name + \" #\" + this.id + \"</font> Is still executing its roll manover.</span>\";\n 1316: \tthis.finishDeployLogEntry(html);\n 1317  }\n 1318  \n 1319  Ship.prototype.createMoveEndEntry = function(){\n 1320  \tvar html = \"<span><font color='\" + this.getCodeColor() + \"'>\" + this.name + \" #\" + this.id + \"</font> has finished its roll manover.</span>\";\n 1321: \tthis.finishDeployLogEntry(html);\n 1322  }\n 1323  \n\n6 matches across 3 files\n\n\nSearching 78 files for \"testCrit for:\"\n\nC:\\xampp\\htdocs\\fire\\log.txt:\n   10  fire #3, doDamage, weapon: LightPulse, target #2/1/Primary, hits: 3, totalDmg: 16, remaining: 650, armour: 14+0\n   11  resolveBallisticFireOrders\n   12: testCrit for: Crius\n   13: testCrit for: Crius, new: 10, turn: 2, size: 1\n   14: testCrit for: Crius\n   15: testCrit for: Crius, new: 16, turn: 2, size: 1\n   16  DB updateFireOrders: 3\n   17   => DB insertDamageEntries: 3\n\nC:\\xampp\\htdocs\\fire\\server\\systems\\single.php:\n  126  \n  127  \tpublic function testCrit($turn, $extra){\n  128: \t\tDebug::log(\"testCrit for: \".get_class($this));\n  129  \t\t$old = 0; $new = 0;\n  130  \t\tfor ($i = 0; $i < sizeof($this->damages); $i++){\n  ...\n  134  \t\t}\n  135  \n  136: \t\tDebug::log(\"testCrit for: \".get_class($this).\", new: \".$new.\", turn: \".$turn.\", size: \".sizeof($this->damages));\n  137  \t\tif ($new){\n  138  \t\t\t$this->determineCrit($old, $new, $turn);\n\n6 matches across 2 files\n\n\nSearching 61 files for \"rolled = \"\n\nC:\\xampp\\htdocs\\fire\\server\\dbManager.php:\n  926  \t\t\t\t\tdelay = :delay,\n  927  \t\t\t\t\tthrust = :thrust,\n  928: \t\t\t\t\trolled = :rolled,\n  929  \t\t\t\t\tturn = :turn,\n  930  \t\t\t\t\tphase = :phase\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  964  \t\t\tfor ($j = 0; $j < sizeof($this->ships[$i]->actions); $j++){\n  965  \t\t\t\tif ($this->ships[$i]->actions[$j]->type == \"roll\"){\n  966: \t\t\t\t\t$this->ships[$i]->rolled = $this->turn;\n  967  \t\t\t\t\tbreak;\n  968  \t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n   16  \tpublic $currentImpulse;\n   17  \tpublic $rolling = 0;\n   18: \tpublic $rolled = 0;\n   19  \tpublic $remainingImpulse;\n   20  \tpublic $baseImpulse;\n   ..\n   66  \t\t$this->remainingDelay = $delay;\n   67  \t\t$this->currentImpulse = $thrust;\n   68: \t\t$this->rolled = $rolled;\n   69  \t\t$this->notes = $notes;\n   70  \n\n4 matches across 3 files\n\n\nSearching 61 files for \"setRolLState\"\n\nC:\\xampp\\htdocs\\fire\\server\\manager.php:\n  934  \t\tDebug::log(\"endTurn\");\n  935  \t\t$this->freeFlights();\n  936: \t\t$this->setRollState();\n  937  \t\t$this->setUnitStatus();\n  938  \t\t$this->assembleEndStates();\n  ...\n  958  \t}\n  959  \n  960: \tpublic function setRollState(){\n  961  \t\tfor ($i = 0; $i < sizeof($this->ships); $i++){\n  962  \t\t\tif ($this->ships[$i]->flight || $this->ships[$i]->salvo){continue;}\n\nC:\\xampp\\htdocs\\fire\\server\\ship.php:\n  160  \t\t$this->setRemainingImpulse($turn);\n  161  \t\t$this->setRemainingDelay($turn);\n  162: \t\t$this->setRollState($turn, $phase);\n  163  \t}\n  164  \n  ...\n  322  \t}\n  323  \n  324: \tpublic function setRolLState($turn, $phase){\n  325  \t\tfor ($i = 0; $i < sizeof($this->actions); $i++){\n  326  \t\t\tif ($this->actions[$i]->type == \"roll\"){\n\n4 matches across 2 files\n\n\nSearching 61 files for \"drawSystemArc\"\n\n0 matches\n\nSearching 61 files for \"drawSystemArc\"\n\n0 matches\n\nSearching 78 files for \"drawSystemArc\"\n\nC:\\xampp\\htdocs\\fire\\shipclasses.js:\n  400  }\n  401  \n  402: Ship.prototype.drawSystemArcIndicator = function(){\n  403  \treturn;\n  404  \tvar shipPos = this.getGamePos();\n  ...\n 2751  \t\t\tif (this.structures[i].systems[j].weapon){\n 2752  \t\t\t\tif (this.structures[i].systems[j].highlight || this.structures[i].systems[j].selected){\n 2753: \t\t\t\t\tthis.structures[i].systems[j].drawSystemArc(angle, this.rolled, pos);\n 2754  \t\t\t\t}\n 2755  \t\t\t}\n ....\n 2772  \t\t\tif (this.structures[i].systems[j].weapon){\n 2773  \t\t\t\tif (this.structures[i].systems[j].highlight || this.structures[i].systems[j].selected){\n 2774: \t\t\t\t\tthis.structures[i].systems[j].drawSystemArc(angle, this.rolled, pos);\n 2775  \t\t\t\t}\n 2776  \t\t\t}\n ....\n 2791  \t\tvar shipPos = this.getPlannedPos();\n 2792  \t\tweapon.highlight = true;\t\t\n 2793: \t\tweapon.drawSystemArc(angle, this.rolled, shipPos);\n 2794  \t}\n 2795  }\n\nC:\\xampp\\htdocs\\fire\\squadron.js:\n  400  }\n  401  \n  402: Squaddie.prototype.drawSystemArc = function(){\n  403  \treturn;\n  404  }\n  ...\n 1005  \t\t\t\t\tif (this.structures[i].structures[j].systems[k].highlight || this.structures[i].structures[j].systems[k].selected){\n 1006  \t\t\t\t\t\tif (this.structures[i].structures[j].systems[k].weapon){\n 1007: \t\t\t\t\t\t\tthis.structures[i].structures[j].systems[k].drawSystemArc(angle, this.rolled, pos);\n 1008  \t\t\t\t\t\t}\n 1009  \t\t\t\t\t}\n\nC:\\xampp\\htdocs\\fire\\systems.js:\n  163  \t\t\tfxCtx.translate(cam.o.x, cam.o.y);\n  164  \t\t\tfxCtx.scale(cam.z, cam.z);\n  165: \t\t\tthis.drawSystemArc(p.getPlannedFacing(), p.rolled, p.getPlannedPos());\n  166  \t\t\tfxCtx.setTransform(1,0,0,1,0,0);\n  167  \t\t}\n  ...\n  968  }\n  969  \n  970: System.prototype.drawSystemArc = function(facing, rolled, pos){\n  971  \tif (game.animating ||  this.tiny){return;}\n  972  \n  ...\n 2055  \tSystem.prototype.doBoost.call(this);\n 2056  \tif (this.selected || this.highlight){\n 2057: \t\tthis.redrawSystemArc();\n 2058  \t}\n 2059  }\n ....\n 2062  \tSystem.prototype.doUnboost.call(this);\n 2063  \tif (this.selected || this.highlight){\n 2064: \t\tthis.redrawSystemArc();\n 2065  \t}\n 2066  }\n 2067  \n 2068: Plasma.prototype.redrawSystemArc = function(){\n 2069  \tfxCtx.clearRect(0, 0, res.x, res.y);\n 2070  \tfxCtx.translate(cam.o.x, cam.o.y);\n 2071  \tfxCtx.scale(cam.z, cam.z);\n 2072  \t//$(fxCanvas).css(\"opacity\", 0.3);\n 2073: \tthis.drawSystemArc(game.getUnit(this.parentId).getPlannedFacing(),  game.getUnit(this.parentId).getPlannedPos());\n 2074  \tfxCtx.setTransform(1, 0, 0, 1, 0, 0);\n 2075  }\n ....\n 2546  }\n 2547  \n 2548: Dual.prototype.drawSystemArc = function(facing, rolled, pos){\n 2549: \tthis.getActiveSystem().drawSystemArc(facing, rolled, pos);\n 2550  }\n 2551  \n ....\n 3141  }\n 3142  \n 3143: Hangar.prototype.drawSystemArc = function(){\n 3144  \treturn;\n 3145  }\n\n15 matches across 3 files\n",
-			"settings":
-			{
-				"buffer_size": 7792,
-				"line_ending": "Windows",
-				"name": "Find Results",
-				"scratch": true
-			}
-		},
-		{
 			"file": "lobby.php",
 			"settings":
 			{
@@ -979,7 +969,7 @@
 			"file": "server/dbManager.php",
 			"settings":
 			{
-				"buffer_size": 53089,
+				"buffer_size": 53174,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -988,7 +978,7 @@
 			"file": "game.js",
 			"settings":
 			{
-				"buffer_size": 81606,
+				"buffer_size": 81410,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1060,7 +1050,7 @@
 			"file": "server/ships/sharlin.php",
 			"settings":
 			{
-				"buffer_size": 3626,
+				"buffer_size": 3646,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1069,7 +1059,7 @@
 			"file": "server/ships/tinashi.php",
 			"settings":
 			{
-				"buffer_size": 2305,
+				"buffer_size": 2325,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1087,7 +1077,7 @@
 			"file": "server/ships/gquan.php",
 			"settings":
 			{
-				"buffer_size": 2742,
+				"buffer_size": 2762,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1105,7 +1095,7 @@
 			"file": "server/ships/primus.php",
 			"settings":
 			{
-				"buffer_size": 3563,
+				"buffer_size": 3583,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1140,7 +1130,7 @@
 			"file": "server/ships/altarian.php",
 			"settings":
 			{
-				"buffer_size": 3126,
+				"buffer_size": 3146,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1149,7 +1139,7 @@
 			"file": "server/ships/demos.php",
 			"settings":
 			{
-				"buffer_size": 2427,
+				"buffer_size": 2447,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -1570,6 +1560,24 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"getPowerReq",
+			"setBaseStats",
+			"slipangle",
+			"slipangle ",
+			"candecreaseim",
+			"resolvefire",
+			"setpos",
+			"continuei",
+			"baseimpulsecost ",
+			"etBaseImpulseChost",
+			"baseturncost",
+			"\"roll\"",
+			"\"Roll\"",
+			"\"Roll",
+			"stat",
+			"setBaseStats",
+			"baseimpulse",
+			"thrust c",
 			"createDeployStartEntries",
 			"createdeploys",
 			"\"deploy",
@@ -1679,25 +1687,7 @@
 			"12",
 			"slots",
 			"slots ",
-			"setLayout",
-			"addUnitToSquadron",
-			"requestSquadUnit",
-			"requestsq",
-			"static",
-			"squaddie",
-			"requestsqu",
-			"addUnitToSquadron",
-			"addunittos",
-			"\n\tthis.slots = data.slots;",
-			"shipsforfactio",
-			"requestSingleUnitData",
-			"showshipdi",
-			"addunittofleet",
-			"requestShipsForFaction",
-			"determinecrit",
-			"setremainin",
-			"deployarea",
-			"width "
+			"setLayout"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1705,6 +1695,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"etBaseImpulseCost",
 			"setRollState",
 			"creatMoveEndEntry",
 			"creatMoveStartEntry",
@@ -1831,8 +1822,7 @@
 			"public $size = ",
 			"public static $size = ",
 			"\tfunction __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){\n        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);\n\t}",
-			"\tfunction __construct($id, $userid, $available, $status, $destroyed){\n",
-			"\tfunction __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){\n        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes);\n\t}"
+			"\tfunction __construct($id, $userid, $available, $status, $destroyed){\n"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -1843,7 +1833,7 @@
 	"groups":
 	[
 		{
-			"selected": 51,
+			"selected": 32,
 			"sheets":
 			[
 				{
@@ -1931,7 +1921,7 @@
 						"translation.y": 2322.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 78,
+					"stack_index": 79,
 					"type": "text"
 				},
 				{
@@ -2108,7 +2098,7 @@
 						"translation.y": 6078.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
@@ -2117,15 +2107,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 24632,
+						"buffer_size": 24619,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								14919,
-								14919
+								0,
+								0
 							]
 						],
 						"settings":
@@ -2196,7 +2186,7 @@
 						"translation.y": 16196.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 31,
+					"stack_index": 35,
 					"type": "text"
 				},
 				{
@@ -2284,7 +2274,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 68,
+					"stack_index": 69,
 					"type": "text"
 				},
 				{
@@ -2372,7 +2362,7 @@
 						"translation.y": 4445.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 50,
+					"stack_index": 51,
 					"type": "text"
 				},
 				{
@@ -2460,7 +2450,7 @@
 						"translation.y": 7100.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 85,
+					"stack_index": 86,
 					"type": "text"
 				},
 				{
@@ -2469,15 +2459,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 92297,
+						"buffer_size": 93081,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								11201,
-								11201
+								11274,
+								11284
 							]
 						],
 						"settings":
@@ -2545,10 +2535,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5983.0,
+						"translation.y": 5918.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -2636,7 +2626,7 @@
 						"translation.y": 223.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 81,
+					"stack_index": 82,
 					"type": "text"
 				},
 				{
@@ -2724,7 +2714,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 113,
+					"stack_index": 112,
 					"type": "text"
 				},
 				{
@@ -2812,7 +2802,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 111,
+					"stack_index": 110,
 					"type": "text"
 				},
 				{
@@ -2821,15 +2811,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 49030,
+						"buffer_size": 49157,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								26233,
-								26233
+								9387,
+								9387
 							]
 						],
 						"settings":
@@ -2897,10 +2887,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 13046.0,
+						"translation.y": 4645.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -2909,15 +2899,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3792,
+						"buffer_size": 4053,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2661,
-								2661
+								3003,
+								3003
 							]
 						],
 						"settings":
@@ -2985,10 +2975,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1341.0,
+						"translation.y": 1510.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 23,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
@@ -3076,7 +3066,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 59,
+					"stack_index": 60,
 					"type": "text"
 				},
 				{
@@ -3173,7 +3163,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3112,
+						"buffer_size": 3132,
 						"regions":
 						{
 						},
@@ -3253,7 +3243,7 @@
 						"translation.y": 1104.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 49,
+					"stack_index": 50,
 					"type": "text"
 				},
 				{
@@ -3262,15 +3252,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5066,
+						"buffer_size": 5086,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5066,
-								5066
+								0,
+								0
 							]
 						],
 						"settings":
@@ -3341,7 +3331,7 @@
 						"translation.y": 1566.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 34,
+					"stack_index": 37,
 					"type": "text"
 				},
 				{
@@ -3350,7 +3340,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3437,
+						"buffer_size": 3457,
 						"regions":
 						{
 						},
@@ -3429,7 +3419,7 @@
 						"translation.y": 155.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 41,
+					"stack_index": 44,
 					"type": "text"
 				},
 				{
@@ -3438,7 +3428,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4924,
+						"buffer_size": 4944,
 						"regions":
 						{
 						},
@@ -3517,7 +3507,7 @@
 						"translation.y": 186.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 45,
+					"stack_index": 47,
 					"type": "text"
 				},
 				{
@@ -3605,7 +3595,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 65,
+					"stack_index": 66,
 					"type": "text"
 				},
 				{
@@ -3614,15 +3604,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2787,
+						"buffer_size": 2807,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								272,
-								272
+								0,
+								0
 							]
 						],
 						"settings":
@@ -3693,7 +3683,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 38,
+					"stack_index": 41,
 					"type": "text"
 				},
 				{
@@ -3702,15 +3692,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2485,
+						"buffer_size": 2505,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1585,
-								1585
+								0,
+								0
 							]
 						],
 						"settings":
@@ -3781,7 +3771,7 @@
 						"translation.y": 13.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 30,
+					"stack_index": 34,
 					"type": "text"
 				},
 				{
@@ -3790,15 +3780,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3232,
+						"buffer_size": 3252,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								179,
-								179
+								0,
+								0
 							]
 						],
 						"settings":
@@ -3869,7 +3859,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 40,
+					"stack_index": 43,
 					"type": "text"
 				},
 				{
@@ -3966,7 +3956,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1789,
+						"buffer_size": 1809,
 						"regions":
 						{
 						},
@@ -4045,7 +4035,7 @@
 						"translation.y": 62.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 44,
+					"stack_index": 46,
 					"type": "text"
 				},
 				{
@@ -4133,7 +4123,7 @@
 						"translation.y": 108.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 69,
+					"stack_index": 70,
 					"type": "text"
 				},
 				{
@@ -4221,7 +4211,7 @@
 						"translation.y": 1596.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
@@ -4237,8 +4227,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								1115,
+								1115
 							]
 						],
 						"settings":
@@ -4309,7 +4299,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 103,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -4485,7 +4475,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 54,
+					"stack_index": 55,
 					"type": "text"
 				},
 				{
@@ -4573,7 +4563,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 60,
+					"stack_index": 61,
 					"type": "text"
 				},
 				{
@@ -4670,15 +4660,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6514,
+						"buffer_size": 6513,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								3628,
+								3628
 							]
 						],
 						"settings":
@@ -4746,10 +4736,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1157.0,
+						"translation.y": 1470.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 86,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -4838,7 +4828,7 @@
 						"translation.y": 186.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 51,
+					"stack_index": 52,
 					"type": "text"
 				},
 				{
@@ -4926,7 +4916,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 71,
+					"stack_index": 72,
 					"type": "text"
 				},
 				{
@@ -4935,15 +4925,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2146,
+						"buffer_size": 2166,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								447,
+								450
 							]
 						],
 						"settings":
@@ -5011,10 +5001,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 335.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 48,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -5023,15 +5013,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10514,
+						"buffer_size": 10543,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								295,
-								295
+								0,
+								0
 							]
 						],
 						"settings":
@@ -5103,7 +5093,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 35,
+					"stack_index": 38,
 					"type": "text"
 				},
 				{
@@ -5192,7 +5182,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 109,
+					"stack_index": 108,
 					"type": "text"
 				},
 				{
@@ -5289,15 +5279,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 33410,
+						"buffer_size": 33444,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7954,
-								7965
+								31991,
+								31991
 							]
 						],
 						"settings":
@@ -5365,10 +5355,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4061.0,
+						"translation.y": 17145.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -5377,15 +5367,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 14311,
+						"buffer_size": 14242,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6647,
-								6655
+								30,
+								32
 							]
 						],
 						"settings":
@@ -5453,10 +5443,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2516.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
@@ -5465,15 +5455,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 37452,
+						"buffer_size": 37332,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								10638,
-								10638
+								0,
+								0
 							]
 						],
 						"settings":
@@ -5544,7 +5534,7 @@
 						"translation.y": 5541.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 25,
 					"type": "text"
 				},
 				{
@@ -5632,7 +5622,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 58,
+					"stack_index": 59,
 					"type": "text"
 				},
 				{
@@ -5749,7 +5739,7 @@
 						"translation.y": 46723.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
@@ -5926,7 +5916,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 106,
+					"stack_index": 105,
 					"type": "text"
 				},
 				{
@@ -5942,8 +5932,8 @@
 						"selection":
 						[
 							[
-								4870,
-								4870
+								4382,
+								4382
 							]
 						],
 						"settings":
@@ -6014,264 +6004,11 @@
 						"translation.y": 2118.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
 					"buffer": 48,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7792,
-						"regions":
-						{
-							"match":
-							{
-								"flags": 112,
-								"regions":
-								[
-									[
-										108,
-										127
-									],
-									[
-										279,
-										298
-									],
-									[
-										496,
-										515
-									],
-									[
-										934,
-										954
-									],
-									[
-										1208,
-										1228
-									],
-									[
-										1330,
-										1350
-									],
-									[
-										1650,
-										1670
-									],
-									[
-										1921,
-										1941
-									],
-									[
-										2184,
-										2204
-									],
-									[
-										2487,
-										2500
-									],
-									[
-										2514,
-										2527
-									],
-									[
-										2568,
-										2581
-									],
-									[
-										2595,
-										2608
-									],
-									[
-										2836,
-										2849
-									],
-									[
-										3004,
-										3017
-									],
-									[
-										3353,
-										3362
-									],
-									[
-										3629,
-										3638
-									],
-									[
-										3799,
-										3808
-									],
-									[
-										3979,
-										3988
-									],
-									[
-										4224,
-										4236
-									],
-									[
-										4358,
-										4370
-									],
-									[
-										4649,
-										4661
-									],
-									[
-										4744,
-										4756
-									],
-									[
-										5128,
-										5141
-									],
-									[
-										5422,
-										5435
-									],
-									[
-										5687,
-										5700
-									],
-									[
-										5855,
-										5868
-									],
-									[
-										5996,
-										6009
-									],
-									[
-										6311,
-										6324
-									],
-									[
-										6511,
-										6524
-									],
-									[
-										6678,
-										6691
-									],
-									[
-										6897,
-										6910
-									],
-									[
-										7048,
-										7061
-									],
-									[
-										7118,
-										7131
-									],
-									[
-										7325,
-										7338
-									],
-									[
-										7534,
-										7547
-									],
-									[
-										7612,
-										7625
-									],
-									[
-										7712,
-										7725
-									]
-								],
-								"scope": ""
-							}
-						},
-						"selection":
-						[
-							[
-								5697,
-								5697
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content"
-							],
-							"detect_indentation": false,
-							"line_numbers": false,
-							"output_tag": 8,
-							"result_base_dir": "",
-							"result_file_regex": "^([^ \t].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 2460.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 12,
-					"type": "text"
-				},
-				{
-					"buffer": 49,
 					"file": "lobby.php",
 					"semi_transient": false,
 					"settings":
@@ -6359,12 +6096,12 @@
 					"type": "text"
 				},
 				{
-					"buffer": 50,
+					"buffer": 49,
 					"file": "server/dbManager.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 53089,
+						"buffer_size": 53174,
 						"regions":
 						{
 						},
@@ -6441,27 +6178,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 560.0,
+						"translation.y": 125.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 70,
+					"stack_index": 71,
 					"type": "text"
 				},
 				{
-					"buffer": 51,
+					"buffer": 50,
 					"file": "game.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 81606,
+						"buffer_size": 81410,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								76873,
-								76873
+								76835,
+								76835
 							]
 						],
 						"settings":
@@ -6532,11 +6269,11 @@
 						"translation.y": 41673.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
-					"buffer": 52,
+					"buffer": 51,
 					"file": "shared.js",
 					"semi_transient": false,
 					"settings":
@@ -6621,11 +6358,11 @@
 						"translation.y": 5535.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 63,
+					"stack_index": 64,
 					"type": "text"
 				},
 				{
-					"buffer": 53,
+					"buffer": 52,
 					"file": "server/debug.php",
 					"semi_transient": false,
 					"settings":
@@ -6710,11 +6447,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 30,
 					"type": "text"
 				},
 				{
-					"buffer": 54,
+					"buffer": 53,
 					"file": "server/systems/weapons/plasma.php",
 					"semi_transient": false,
 					"settings":
@@ -6798,11 +6535,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 57,
+					"stack_index": 58,
 					"type": "text"
 				},
 				{
-					"buffer": 55,
+					"buffer": 54,
 					"file": "game.php",
 					"semi_transient": false,
 					"settings":
@@ -6814,8 +6551,8 @@
 						"selection":
 						[
 							[
-								642,
-								642
+								9745,
+								9745
 							]
 						],
 						"settings":
@@ -6883,14 +6620,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 150.0,
+						"translation.y": 3075.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
-					"buffer": 56,
+					"buffer": 55,
 					"file": "server/systems/weapons/matter.php",
 					"semi_transient": false,
 					"settings":
@@ -6974,11 +6711,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 112,
+					"stack_index": 111,
 					"type": "text"
 				},
 				{
-					"buffer": 57,
+					"buffer": 56,
 					"file": "server/systems/weapons/ammo.php",
 					"semi_transient": false,
 					"settings":
@@ -7063,13 +6800,13 @@
 						"translation.y": 40.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 84,
+					"stack_index": 85,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 35,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -7098,7 +6835,7 @@
 						"translation.y": 34.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 120,
+					"stack_index": 119,
 					"type": "text"
 				},
 				{
@@ -7107,7 +6844,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2146,
+						"buffer_size": 2166,
 						"regions":
 						{
 						},
@@ -7195,15 +6932,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 49030,
+						"buffer_size": 49157,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								27932,
-								27932
+								0,
+								0
 							]
 						],
 						"settings":
@@ -7274,7 +7011,7 @@
 						"translation.y": 14076.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
@@ -7371,15 +7108,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 33410,
+						"buffer_size": 33444,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								24036,
-								24036
+								2709,
+								2709
 							]
 						],
 						"settings":
@@ -7447,10 +7184,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 12276.0,
+						"translation.y": 1215.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 21,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -7459,7 +7196,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6514,
+						"buffer_size": 6513,
 						"regions":
 						{
 						},
@@ -7538,11 +7275,11 @@
 						"translation.y": 194.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 74,
+					"stack_index": 75,
 					"type": "text"
 				},
 				{
-					"buffer": 49,
+					"buffer": 48,
 					"file": "lobby.php",
 					"semi_transient": false,
 					"settings":
@@ -7626,7 +7363,7 @@
 						"translation.y": 56.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 115,
+					"stack_index": 114,
 					"type": "text"
 				},
 				{
@@ -7714,11 +7451,11 @@
 						"translation.y": 246.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 73,
+					"stack_index": 74,
 					"type": "text"
 				},
 				{
-					"buffer": 52,
+					"buffer": 51,
 					"file": "shared.js",
 					"semi_transient": false,
 					"settings":
@@ -7807,7 +7544,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 58,
+					"buffer": 57,
 					"file": "autoload.php",
 					"semi_transient": false,
 					"settings":
@@ -7892,7 +7629,7 @@
 						"translation.y": 78.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 33,
 					"type": "text"
 				},
 				{
@@ -7981,7 +7718,7 @@
 						"translation.y": 675.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 108,
+					"stack_index": 107,
 					"type": "text"
 				},
 				{
@@ -8069,7 +7806,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 33,
+					"stack_index": 36,
 					"type": "text"
 				},
 				{
@@ -8157,7 +7894,7 @@
 						"translation.y": 2177.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 52,
+					"stack_index": 53,
 					"type": "text"
 				},
 				{
@@ -8166,15 +7903,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 92297,
+						"buffer_size": 93081,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								36122,
-								36142
+								11502,
+								11502
 							]
 						],
 						"settings":
@@ -8242,10 +7979,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 19293.0,
+						"translation.y": 6198.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
@@ -8254,15 +7991,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 37452,
+						"buffer_size": 37332,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								16783,
-								16783
+								14431,
+								14431
 							]
 						],
 						"settings":
@@ -8330,10 +8067,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 9528.0,
+						"translation.y": 8483.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 32,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
@@ -8421,7 +8158,7 @@
 						"translation.y": 14313.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 23,
 					"type": "text"
 				},
 				{
@@ -8437,8 +8174,8 @@
 						"selection":
 						[
 							[
-								5911,
-								5911
+								698,
+								698
 							]
 						],
 						"settings":
@@ -8506,27 +8243,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3748.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 50,
+					"buffer": 49,
 					"file": "server/dbManager.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 53089,
+						"buffer_size": 53174,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								25336,
-								25336
+								0,
+								0
 							]
 						],
 						"settings":
@@ -8595,10 +8332,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 13631.0,
+						"translation.y": 701.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 27,
 					"type": "text"
 				},
 				{
@@ -8687,7 +8424,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 122,
+					"stack_index": 121,
 					"type": "text"
 				},
 				{
@@ -8775,16 +8512,16 @@
 						"translation.y": 6498.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 24,
 					"type": "text"
 				},
 				{
-					"buffer": 50,
+					"buffer": 49,
 					"file": "server/dbManager.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 53089,
+						"buffer_size": 53174,
 						"regions":
 						{
 						},
@@ -8864,7 +8601,7 @@
 						"translation.y": 6925.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 80,
+					"stack_index": 81,
 					"type": "text"
 				},
 				{
@@ -8952,24 +8689,24 @@
 						"translation.y": 270.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 110,
+					"stack_index": 109,
 					"type": "text"
 				},
 				{
-					"buffer": 51,
+					"buffer": 50,
 					"file": "game.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 81606,
+						"buffer_size": 81410,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								19318,
-								19318
+								37191,
+								37191
 							]
 						],
 						"settings":
@@ -9037,10 +8774,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 11028.0,
+						"translation.y": 20573.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
@@ -9128,11 +8865,11 @@
 						"translation.y": 3363.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 32,
 					"type": "text"
 				},
 				{
-					"buffer": 55,
+					"buffer": 54,
 					"file": "game.php",
 					"semi_transient": false,
 					"settings":
@@ -9213,10 +8950,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 328.0,
+						"translation.y": 268.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
@@ -9304,7 +9041,7 @@
 						"translation.y": 2917.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 62,
+					"stack_index": 63,
 					"type": "text"
 				},
 				{
@@ -9392,16 +9129,16 @@
 						"translation.y": 9270.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 53,
+					"stack_index": 54,
 					"type": "text"
 				},
 				{
-					"buffer": 59,
+					"buffer": 58,
 					"file": "server/ships/sharlin.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3626,
+						"buffer_size": 3646,
 						"regions":
 						{
 						},
@@ -9480,24 +9217,24 @@
 						"translation.y": 389.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 37,
+					"stack_index": 40,
 					"type": "text"
 				},
 				{
-					"buffer": 60,
+					"buffer": 59,
 					"file": "server/ships/tinashi.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2305,
+						"buffer_size": 2325,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								553,
-								553
+								0,
+								0
 							]
 						],
 						"settings":
@@ -9568,11 +9305,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 36,
+					"stack_index": 39,
 					"type": "text"
 				},
 				{
-					"buffer": 61,
+					"buffer": 60,
 					"file": "server/ships/whitestar.php",
 					"semi_transient": false,
 					"settings":
@@ -9656,7 +9393,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 82,
+					"stack_index": 83,
 					"type": "text"
 				},
 				{
@@ -9665,15 +9402,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3792,
+						"buffer_size": 4053,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2790,
-								2790
+								390,
+								390
 							]
 						],
 						"settings":
@@ -9741,10 +9478,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1620.0,
+						"translation.y": 55.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -9833,16 +9570,16 @@
 						"translation.y": 3089.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 77,
+					"stack_index": 78,
 					"type": "text"
 				},
 				{
-					"buffer": 62,
+					"buffer": 61,
 					"file": "server/ships/gquan.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2742,
+						"buffer_size": 2762,
 						"regions":
 						{
 						},
@@ -9921,11 +9658,11 @@
 						"translation.y": 52.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 42,
+					"stack_index": 45,
 					"type": "text"
 				},
 				{
-					"buffer": 63,
+					"buffer": 62,
 					"file": "server/ships/Octurion.php",
 					"semi_transient": false,
 					"settings":
@@ -10009,24 +9746,24 @@
 						"translation.y": 238.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 47,
+					"stack_index": 49,
 					"type": "text"
 				},
 				{
-					"buffer": 64,
+					"buffer": 63,
 					"file": "server/ships/primus.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3563,
+						"buffer_size": 3583,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								501,
-								268
+								0,
+								0
 							]
 						],
 						"settings":
@@ -10097,11 +9834,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 39,
+					"stack_index": 42,
 					"type": "text"
 				},
 				{
-					"buffer": 65,
+					"buffer": 64,
 					"file": "log.txt",
 					"semi_transient": false,
 					"settings":
@@ -10186,7 +9923,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -10215,11 +9952,11 @@
 						"translation.y": 1708.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 75,
+					"stack_index": 76,
 					"type": "text"
 				},
 				{
-					"buffer": 66,
+					"buffer": 65,
 					"file": "server/ships/vorchar.php",
 					"semi_transient": false,
 					"settings":
@@ -10303,11 +10040,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 64,
+					"stack_index": 65,
 					"type": "text"
 				},
 				{
-					"buffer": 67,
+					"buffer": 66,
 					"file": "server/ships/darkner.php",
 					"semi_transient": false,
 					"settings":
@@ -10391,24 +10128,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 56,
+					"stack_index": 57,
 					"type": "text"
 				},
 				{
-					"buffer": 68,
+					"buffer": 67,
 					"file": "server/ships/altarian.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3126,
+						"buffer_size": 3146,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1364,
-								1364
+								0,
+								0
 							]
 						],
 						"settings":
@@ -10479,24 +10216,24 @@
 						"translation.y": 165.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 46,
+					"stack_index": 48,
 					"type": "text"
 				},
 				{
-					"buffer": 69,
+					"buffer": 68,
 					"file": "server/ships/demos.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2427,
+						"buffer_size": 2447,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								568,
+								568
 							]
 						],
 						"settings":
@@ -10567,11 +10304,11 @@
 						"translation.y": 26.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 43,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 70,
+					"buffer": 69,
 					"file": "server/ships/tethys.php",
 					"semi_transient": false,
 					"settings":
@@ -10655,11 +10392,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 67,
+					"stack_index": 68,
 					"type": "text"
 				},
 				{
-					"buffer": 71,
+					"buffer": 70,
 					"file": "server/ships/crius.php",
 					"semi_transient": false,
 					"settings":
@@ -10743,11 +10480,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 66,
+					"stack_index": 67,
 					"type": "text"
 				},
 				{
-					"buffer": 72,
+					"buffer": 71,
 					"file": "server/ships/haven.php",
 					"semi_transient": false,
 					"settings":
@@ -10831,11 +10568,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 72,
+					"stack_index": 73,
 					"type": "text"
 				},
 				{
-					"buffer": 73,
+					"buffer": 72,
 					"file": "server/systems/weapons/linked.php",
 					"semi_transient": false,
 					"settings":
@@ -10919,7 +10656,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 83,
+					"stack_index": 84,
 					"type": "text"
 				},
 				{
@@ -11007,7 +10744,7 @@
 						"translation.y": 8533.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
@@ -11095,7 +10832,7 @@
 						"translation.y": 3498.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 31,
 					"type": "text"
 				},
 				{
@@ -11104,7 +10841,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3112,
+						"buffer_size": 3132,
 						"regions":
 						{
 						},
@@ -11188,7 +10925,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 57,
+					"buffer": 56,
 					"file": "server/systems/weapons/ammo.php",
 					"semi_transient": false,
 					"settings":
@@ -11361,7 +11098,7 @@
 						"translation.y": 694.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 114,
+					"stack_index": 113,
 					"type": "text"
 				},
 				{
@@ -11626,11 +11363,11 @@
 						"translation.y": 49.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 79,
+					"stack_index": 80,
 					"type": "text"
 				},
 				{
-					"buffer": 74,
+					"buffer": 73,
 					"file": "getGameData.php",
 					"semi_transient": false,
 					"settings":
@@ -11714,11 +11451,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 105,
+					"stack_index": 104,
 					"type": "text"
 				},
 				{
-					"buffer": 75,
+					"buffer": 74,
 					"file": "shiptest.php",
 					"semi_transient": false,
 					"settings":
@@ -11802,11 +11539,11 @@
 						"translation.y": 29.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 107,
+					"stack_index": 106,
 					"type": "text"
 				},
 				{
-					"buffer": 76,
+					"buffer": 75,
 					"file": "index.php",
 					"semi_transient": false,
 					"settings":
@@ -11890,7 +11627,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 121,
+					"stack_index": 120,
 					"type": "text"
 				},
 				{
@@ -11978,11 +11715,11 @@
 						"translation.y": 350.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 76,
+					"stack_index": 77,
 					"type": "text"
 				},
 				{
-					"buffer": 77,
+					"buffer": 76,
 					"file": "balltest.php",
 					"semi_transient": false,
 					"settings":
@@ -12007,11 +11744,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 118,
+					"stack_index": 117,
 					"type": "text"
 				},
 				{
-					"buffer": 78,
+					"buffer": 77,
 					"file": "systemtest.php",
 					"semi_transient": false,
 					"settings":
@@ -12095,7 +11832,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 104,
+					"stack_index": 103,
 					"type": "text"
 				},
 				{
@@ -12184,7 +11921,7 @@
 						"translation.y": 51.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 55,
+					"stack_index": 56,
 					"type": "text"
 				},
 				{
@@ -12193,15 +11930,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10514,
+						"buffer_size": 10543,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8473,
-								8473
+								0,
+								0
 							]
 						],
 						"settings":
@@ -12272,7 +12009,7 @@
 						"translation.y": 4054.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 61,
+					"stack_index": 62,
 					"type": "text"
 				},
 				{
@@ -12281,15 +12018,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 14311,
+						"buffer_size": 14242,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								954,
-								954
+								13494,
+								13494
 							]
 						],
 						"settings":
@@ -12357,10 +12094,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 7041.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -12448,11 +12185,11 @@
 						"translation.y": 30.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 119,
+					"stack_index": 118,
 					"type": "text"
 				},
 				{
-					"buffer": 54,
+					"buffer": 53,
 					"file": "server/systems/weapons/plasma.php",
 					"semi_transient": false,
 					"settings":
@@ -12536,11 +12273,11 @@
 						"translation.y": 207.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 116,
+					"stack_index": 115,
 					"type": "text"
 				},
 				{
-					"buffer": 56,
+					"buffer": 55,
 					"file": "server/systems/weapons/matter.php",
 					"semi_transient": false,
 					"settings":
@@ -12624,7 +12361,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 117,
+					"stack_index": 116,
 					"type": "text"
 				}
 			]
@@ -12658,7 +12395,7 @@
 		"cols":
 		[
 			0.0,
-			0.647856912546,
+			0.596696121488,
 			1.0
 		],
 		"rows":
@@ -12676,7 +12413,7 @@
 	"project": "p1.sublime-project",
 	"replace":
 	{
-		"height": 72.0
+		"height": 42.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -12686,8 +12423,36 @@
 		"selected_items":
 		[
 			[
+				"non",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\nonweapon.php"
+			],
+			[
+				"man",
+				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
+			],
+			[
+				"sh",
+				"C:\\xampp\\htdocs\\fire\\server\\ship.php"
+			],
+			[
 				"log",
 				"C:\\xampp\\htdocs\\fire\\log.txt"
+			],
+			[
+				"dem",
+				"C:\\xampp\\htdocs\\fire\\server\\ships\\demos.php"
+			],
+			[
+				"sq",
+				"C:\\xampp\\htdocs\\fire\\server\\squadron.php"
+			],
+			[
+				"nonw",
+				"C:\\xampp\\htdocs\\fire\\server\\systems\\nonweapon.php"
+			],
+			[
+				"sal",
+				"C:\\xampp\\htdocs\\fire\\server\\salvo.php"
 			],
 			[
 				"game.js",
@@ -12695,11 +12460,11 @@
 			],
 			[
 				"game",
-				"C:\\xampp\\htdocs\\fire\\game.js"
+				"C:\\xampp\\htdocs\\fire\\game.php"
 			],
 			[
-				"sh",
-				"C:\\xampp\\htdocs\\fire\\shipclasses.js"
+				"math",
+				"C:\\xampp\\htdocs\\fire\\server\\math.php"
 			],
 			[
 				"sys",
@@ -12710,20 +12475,8 @@
 				"C:\\xampp\\htdocs\\fire\\classes.js"
 			],
 			[
-				"man",
-				"C:\\xampp\\htdocs\\fire\\server\\manager.php"
-			],
-			[
 				"db",
 				"C:\\xampp\\htdocs\\fire\\server\\dbManager.php"
-			],
-			[
-				"sq",
-				"C:\\xampp\\htdocs\\fire\\server\\squadron.php"
-			],
-			[
-				"math",
-				"C:\\xampp\\htdocs\\fire\\server\\math.php"
 			],
 			[
 				"csh",
@@ -12902,10 +12655,6 @@
 				"C:\\xampp\\htdocs\\fire\\squadron.js"
 			],
 			[
-				"dem",
-				"C:\\xampp\\htdocs\\fire\\server\\ships\\demos.php"
-			],
-			[
 				"game.s",
 				"C:\\xampp\\htdocs\\fire\\gameSetup.php"
 			],
@@ -12970,10 +12719,6 @@
 				"C:\\xampp\\htdocs\\fire\\server\\ships\\hyperion.php"
 			],
 			[
-				"nonw",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\nonweapon.php"
-			],
-			[
 				"ga",
 				"C:\\xampp\\htdocs\\fire\\game.js"
 			],
@@ -13014,10 +12759,6 @@
 				"C:\\xampp\\htdocs\\fire\\autoload.php"
 			],
 			[
-				"non",
-				"C:\\xampp\\htdocs\\fire\\server\\systems\\nonweapon.php"
-			],
-			[
 				"og",
 				"C:\\xampp\\htdocs\\fire\\postGameData.php"
 			],
@@ -13040,10 +12781,6 @@
 			[
 				"pa",
 				"C:\\xampp\\htdocs\\fire\\server\\systems\\weapons\\particle.php"
-			],
-			[
-				"sal",
-				"C:\\xampp\\htdocs\\fire\\server\\salvo.php"
 			],
 			[
 				"flig",
@@ -13218,7 +12955,7 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 1,
+	"selected_group": 0,
 	"settings":
 	{
 	},

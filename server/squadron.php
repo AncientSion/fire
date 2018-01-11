@@ -61,7 +61,7 @@ class Squadron extends Ship {
 		return true;
 	}
 
-	public function setBaseStats($phase, $turn){
+	public function setBaseStats($turn, $phase){
 		//Debug::log("setBaseStats #".$this->id);
 
 		$this->size = 40 + sizeof($this->structures)*20;
@@ -343,14 +343,9 @@ class Squaddie extends Single {
 	}
 
 	public function setBaseStats($phase, $turn){
-		$this->baseHitChance = ceil(pow($this->mass, 0.4)*1.5)+30;
-		//$this->baseTurnCost = round(pow($this->mass, 1.25)/25000, 2);
-		$this->baseTurnDelay = round(pow($this->mass, 0.45)/18, 2);
-		$this->baseImpulseCost = round(pow($this->mass, 1.25)/2400, 2);
-		//$this->baseImpulseCost = 30;
-		//$this->baseImpulseCost = round(pow($this->mass, 1.25)/700, 2);
-
-		//$this->ep = ceil($this->ep * $this->baseTurnCost);
+		$this->baseHitChance = Math::getBaseHitChance($this->mass);
+		$this->baseTurnDelay = Math::getBaseTurnDelay($this->mass);
+		//$this->baseImpulseCost = Math::getBaseImpulseCost($this->mass);
 	}
 
 	public function setUnitState($turn, $phase){
@@ -496,6 +491,7 @@ class Light extends Squaddie {
 	public $baseImpulse = 190;
 	public $size = 60;
 	public $slipAngle = 25;
+	public $baseImpulseCost = 35;
 	public $space = 4;
 	
 	function __construct($id, $parentId){
@@ -506,6 +502,7 @@ class Light extends Squaddie {
 class SuperLight extends Light {
 	public $baseImpulse = 200;
 	public $size = 50;
+	public $baseImpulseCost = 40;
 	public $space = 3;
 	
 	function __construct($id, $parentId){
