@@ -16,8 +16,8 @@ class Squadron extends Ship {
 	public static $space;
 	public $slots = array(0, 14);
 
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolled, $notes){
-		parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolled, $notes);
+	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
+		parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 	}
 
 	public function addPrimary(){
@@ -346,7 +346,8 @@ class Squaddie extends Single {
 		$this->baseHitChance = ceil(pow($this->mass, 0.4)*1.5)+30;
 		//$this->baseTurnCost = round(pow($this->mass, 1.25)/25000, 2);
 		$this->baseTurnDelay = round(pow($this->mass, 0.45)/18, 2);
-		$this->baseImpulseCost = 30;
+		$this->baseImpulseCost = round(pow($this->mass, 1.25)/2400, 2);
+		//$this->baseImpulseCost = 30;
 		//$this->baseImpulseCost = round(pow($this->mass, 1.25)/700, 2);
 
 		//$this->ep = ceil($this->ep * $this->baseTurnCost);

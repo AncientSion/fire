@@ -347,6 +347,7 @@ Ship.prototype.doHover = function(){
 }
 
 Ship.prototype.getRollCost = function(){
+	return Math.ceil(this.getImpulseChangeCost()*2);
 	return Math.ceil(this.getSystemByName("Engine").output * 0.75)*(1-(1-this.getImpulseMod())/2);
 	return 1;
 }
@@ -430,13 +431,16 @@ Ship.prototype.isRolled = function(){
 
 Ship.prototype.isRolling = function(){
 	if (this.rolling){return true;}
-	else if (this.rolled == game.turn -1 && game.phase == -1){return true;}
 	return false;
 }
 
-Ship.prototype.hasFinishedRolling = function(){
-	if (this.rolled && this.rolled == game.turn -1){return true;}
-	return false;
+Ship.prototype.doesContinueRolling = function(){
+	if (this.rolling){
+		for (var i = 0; i < this.actions.length; i++){
+			if (this.actions[i].type == "roll"){return false;}
+		}
+	}
+	return true;
 }
 
 Ship.prototype.drawImpulseUI = function(){
@@ -571,9 +575,7 @@ Ship.prototype.doUndoLastAction = function(pos){
 	}
 	else if (this.actions[this.actions.length-1].type == "roll"){
 		this.rolling = !this.rolling;
-		var html = "";
-		//if (this.rolled){html = "ROLLED"}
-		$(this.element).find(".notes").html(html).hide();
+		this.setRollState();
 	}
 	else if (this.actions[this.actions.length-1].type == "move"){
 		this.setRemainingDelay();
@@ -1141,8 +1143,8 @@ Ship.prototype.getShortInfo = function(){
 
 	var table = document.createElement("table");
 		table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id + " ("+this.traverse+")";
-		if (this.rolling){table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>!-ROLLING-!</span>";}
-		if (this.rolled){table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>!-ROLLED-!</span>";}
+		if (this.isRolled()){table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>!-ROLLED-!</span>";}
+		if (this.isRolling()){table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>!-ROLLING-!</span>";}
 		table.insertRow(-1).insertCell(-1).innerHTML =  "Thrust: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")";
 		table.insertRow(-1).insertCell(-1).innerHTML = this.getStringHitChance();
 	return table;
@@ -1315,15 +1317,21 @@ Ship.prototype.createDeployEntry = function(){
 }
 
 Ship.prototype.createMoveStartEntry = function(){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> Is finishing its roll, unable to manover at this time.</span>");
+	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> has completed a full roll but is still rolling.</span>");
 }
 
 Ship.prototype.createActionEntry = function(move){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> is initiating a roll manover.</span>");							
+	if (this.isRolling()){
+		this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> is beginning a roll manover.</span>");							
+	} else this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> has canceled its ongoing roll manover.</span>");							
+}
+
+Ship.prototype.createStillRollingEntry = function(){
+	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> is continueing its roll manover.</span>");							
 }
 
 Ship.prototype.createMoveEndEntry = function(){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> has finished its roll manover.</span>")
+	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> has completed a full roll.</span>")
 }
 
 Ship.prototype.animateSelfDeployment = function(){
@@ -1541,10 +1549,9 @@ Ship.prototype.getWeaponOrigin = function(id){
 }
 
 Ship.prototype.resetMoveMode = function(){
-	var turn = game.turnMode;
 	this.unsetMoveMode();
 	this.setMoveMode();
-	if (turn && this.canTurn()){
+	if (game.turnMode && this.canTurn()){
 		this.switchTurnMode();
 	}
 }
@@ -2272,16 +2279,24 @@ Ship.prototype.expandDiv = function(div){
 				.hide())
 
 	//rolling ?
-	if (this.rolled){
-		$(this.element).find(".notes").html("ROLLED").show();
-	}
-	else if (this.rolling){
-		$(this.element).find(".notes").html("ROLLING").show();
-	}
+
+	this.setRollState();
 
 
 	$(div).addClass("disabled");
 	return div;
+}
+
+Ship.prototype.setRollState = function(){
+	$(this.element).find(".notes").children().remove();
+	if (this.isRolled()){this.addNoteEntry("ROLLED");}
+	if (this.isRolling()){this.addNoteEntry("ROLLING");}
+}
+
+Ship.prototype.addNoteEntry = function(html){
+	$(this.element).find(".notes")
+		.show()
+		.append($("<span>").html(html+"</br>"));
 }
 
 Ship.prototype.doOffset = function(){
@@ -2946,19 +2961,24 @@ Ship.prototype.drawTurnUI = function(){
 		//.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end()
 }
 
+Ship.prototype.issuedRollThisTurn = function(){
+	for (var i = 0; i < this.actions.length; i++){
+		if (this.actions[i].turn == game.turn && this.actions[i].type == "roll"){return true;}
+	}
+	return false;
+}
+
 Ship.prototype.canRoll = function(){
-	if (this.isRolling()){return false;}
 	if (this.getRemainingEP() >= this.getRollCost()){
-		if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship + this.squad)){
-			return true;
-		}
+		if (this.issuedRollThisTurn()){return false;}
+		return true;
 	}
 	return false;
 }
 	
 Ship.prototype.canIncreaseImpulse = function(){
-	if (this.isRolling()){return false;}
-	else if (this.getRemainingEP() >= this.getImpulseChangeCost()){
+	//if (this.isRolling()){return false;}
+	if (this.getRemainingEP() >= this.getImpulseChangeCost()){
 		if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship + this.squad)){
 			return true;
 		}
@@ -2974,8 +2994,8 @@ Ship.prototype.canIncreaseImpulse = function(){
 }
 
 Ship.prototype.canDecreaseImpulse = function(){
-	if (this.isRolling()){return false;}
-	else if (this.getCurrentImpulse() <= 0){return false;}
+	//if (this.isRolling()){return false;}
+	if (this.getCurrentImpulse() <= 0){return false;}
 	else if (this.getRemainingEP() >= this.getImpulseChangeCost()){
 		if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship + this.squad)){
 			return true;
@@ -3099,8 +3119,7 @@ Ship.prototype.doRoll = function(){
 	var shipPos = this.getPlannedPos();
 	this.actions.push(new Move(-1, "roll", 1, shipPos.x, shipPos.y, 0, 0, this.getRollCost(), 1, 1, 0));
 	this.rolling = !this.rolling;
-	$(this.element).find(".notes").html("ROLLING").show();
-
+	this.setRollState();
 	this.resetMoveMode();
 	game.redraw();
 }

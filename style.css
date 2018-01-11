@@ -1120,7 +1120,7 @@ div.integrityFull {
 }
 
 .shipDiv.squad .notes {
-	margin-top: 100px;
+	margin-top: 80px;
 }
 
 .shipDiv .iconContainer {
@@ -1645,10 +1645,7 @@ div.integrityFull {
 	opacity: 0.2;
 }
 
-
-#turnButton, #epButton {
-	color: white;
-	border-radius: 5px;
+#turnButton {
 	width: 120px;
 }
 
@@ -1686,6 +1683,10 @@ div.integrityFull {
 
 .ui:hover {
 	background-color: white;
+}
+
+.ui table:hover {
+	color: black;
 }
 
 .ui.disabled {

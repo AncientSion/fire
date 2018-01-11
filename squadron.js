@@ -665,13 +665,9 @@ Squadron.prototype.createBaseDiv = function(){
 			.append($("<div>")
 				.addClass("notes")
 				.hide())
+
 	//rolling ?
-	if (this.rolled){
-		$(this.element).find(".notes").html("ROLLED").show();
-	}
-	else if (this.rolling){
-		$(this.element).find(".notes").html("ROLLING").show();
-	}
+	this.setRollState();
 
 
 	if (this.structures.length){

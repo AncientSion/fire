@@ -40,7 +40,7 @@ class MediumIon extends LightIon {
 	public $minDmg = 30;
 	public $maxDmg = 38;
 	public $accDecay = 120;
-	public $shots = 1;
+	public $shots = 2;
 	public $animColor = "orange";
 	public $reload = 3;
 	public $projSize = 3;

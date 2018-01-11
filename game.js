@@ -752,6 +752,8 @@ function Game(data, userid){
 		cam.setZoom(0.6);
 		this.draw();
 		$("#deployWrapper").removeClass("disabled");
+
+		if (game.turn == 1){return;}
 		$("#combatlogWrapper")
 			.width(350)
 			.css("top", 75).css("left", 250)
@@ -1392,10 +1394,10 @@ function Game(data, userid){
 								game.ships[i].drawX += action.v.x * 1 / action.v.t[1];
 								game.ships[i].drawY += action.v.y * 1 / action.v.t[1];
 								if (game.ships[i].actions[j].v.t[0] >= action.v.t[1]){
-								//	console.log("anim true");
 									game.ships[i].actions[j].animated = true;
 									game.ships[i].drawX = action.x;
 									game.ships[i].drawY = action.y;
+									if (game.ships[i].doesContinueRolling()){game.ships[i].createStillRollingEntry()}
 								}
 							}
 							else if (action.type == "turn"){
@@ -1506,19 +1508,9 @@ function Game(data, userid){
 	}
 
 	this.createMoveStartEntries = function(){
-		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].hasFinishedRolling()){
-				this.ships[i].createMoveStartEntry();
-			}
-		}
 	}
 
 	this.createMoveEndEntries = function(){
-		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].hasFinishedRolling()){
-				this.ships[i].createMoveEndEntry();
-			}
-		}
 	}
 
 	this.resolveFire = function(){

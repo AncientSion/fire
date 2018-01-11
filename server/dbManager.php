@@ -925,6 +925,7 @@
 					facing = :facing,
 					delay = :delay,
 					thrust = :thrust,
+					rolling = :rolling,
 					rolled = :rolled,
 					turn = :turn,
 					phase = :phase
@@ -932,13 +933,14 @@
 			");
 
 			for ($i = 0; $i < sizeof($states); $i++){
-				foreach ($states[$i] as $key => $value){Debug::log($key." / ".$value);}
+				//foreach ($states[$i] as $key => $value){Debug::log($key." / ".$value);}
 
 				$stmt->bindParam(":x", $states[$i]["x"]);
 				$stmt->bindParam(":y", $states[$i]["y"]);
 				$stmt->bindParam(":facing", $states[$i]["facing"]);
 				$stmt->bindParam(":delay", $states[$i]["delay"]);
 				$stmt->bindParam(":thrust", $states[$i]["thrust"]);
+				$stmt->bindParam(":rolling", $states[$i]["rolling"]);
 				$stmt->bindParam(":rolled", $states[$i]["rolled"]);
 				$stmt->bindParam(":turn", $turn);
 				$stmt->bindParam(":phase", $phase);
