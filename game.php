@@ -31,8 +31,8 @@
 		}
 	}
 
-	//$manager->test();
-	$post = json_encode($manager->getClientData(), JSON_NUMERIC_CHECK);
+	$manager->test();
+	//$post = json_encode($manager->getClientData(), JSON_NUMERIC_CHECK);
 	echo "<script>";
 	echo "window.game = ".$post.";";
 	echo "window.playerstatus = ".json_encode($manager->playerstatus, JSON_NUMERIC_CHECK).";";

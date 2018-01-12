@@ -600,6 +600,6 @@ Flight.prototype.hasNoFireOrders = function(){
 
 Flight.prototype.createDeployEntry = function(){
 	this.attachLogEntry(
-		"<span><font color='" + this.getColorCode() + "'>Flight #" + this.id + "</font> is being deployed (" + this.structures.length + " units).</span>"
+		"<span><font color='" + this.getCodeColor()() + "'>Flight #" + this.id + "</font> is being deployed (" + this.structures.length + " units).</span>"
 	);
 }
