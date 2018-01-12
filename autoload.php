@@ -10,7 +10,6 @@ spl_autoload_register(
                 'heavy' => '/server/ship.php',
                 'medium' => '/server/ship.php',
 
-
                 'warhead' => '/server/systems/weapons/ammo.php',
                 'hasta' => '/server/systems/weapons/ammo.php',
                 'javelin' => '/server/systems/weapons/ammo.php',

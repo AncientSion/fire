@@ -117,13 +117,13 @@ class Engine extends PrimarySystem {
 	public $display = "Engine & Drive";
 
 	function __construct($id, $parentId, $mass, $output = 0, $destroyed = 0){
-		$this->powerReq = ceil($output / 4);
-		$this->boostEffect[] = new Effect("Output", 15);
-        parent::__construct($id, $parentId, $mass, $output, ceil($this->powerReq/5), $destroyed);
+        parent::__construct($id, $parentId, $mass, $output, 0, $destroyed);
     }
 
-	public function setOutput($cost){
-		$this->output = ceil($this->output * $cost);
+	public function setPowerReq($mass){
+		$this->powerReq = ceil($this->output * Math::getBaseTurnCost($mass));
+		$this->boostEffect[] = new Effect("Output", 15);
+		$this->effiency = ceil($this->powerReq/5);
 	}
 }
 

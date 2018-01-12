@@ -136,6 +136,10 @@ class Math {
 		return round(pow($mass, 0.45)/18, 2);
 	}
 
+	static function getBaseTurnCost($mass){
+		return round(pow($mass, 1.25)/200000, 2);
+	}
+
 	static function getBaseImpulseCost($mass){
 		return round(pow($mass, 1.05)/200, 2);
 	}

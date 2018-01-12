@@ -11,7 +11,7 @@ class Vorchar extends Light {
 
 	public $integrity = 400;
 	public $ep = 120;
-	public $ew = 675;
+	public $ew = 700;
 	public $power = 0;
 	public $negation = 12;
 

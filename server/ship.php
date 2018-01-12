@@ -106,6 +106,7 @@ class Ship {
 			}
 		}
 
+		$this->getSystemByName("Engine")->setPowerReq($this->mass);
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq());
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
