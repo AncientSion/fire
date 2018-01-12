@@ -54,7 +54,7 @@ class Manager {
 
 
 	public function test(){
-		$this->setShips();
+		$this->setupShips();
 		$this->setLocks();
 		return;
 		foreach ($this->ships as $ship){
