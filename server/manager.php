@@ -1038,23 +1038,23 @@ class Manager {
 
 				$this->ships[$i]->angles[] = array($this->ships[$j]->id, round(Math::getAngle2($aPos, $bPos)));
 				$this->ships[$j]->angles[] = array($this->ships[$i]->id, round(Math::getAngle2($bPos, $aPos)));
-
-				//$this->ships[$i]->angles[] = array($this->ships[$j]->id, round(Math::addAngle($this->ships[$i]->getFacing(), Math::getAngle2($aPos, $bPos))));
-				//$this->ships[$j]->angles[] = array($this->ships[$i]->id, round(Math::addAngle($this->ships[$j]->getFacing(), Math::getAngle2($bPos, $aPos))));
 			}
 		}
+
+		/*
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			$aPos = $this->ships[$i]->getCurrentPosition();
+			Debug::log("POSITION #".$this->ships[$i]->id.": ".$aPos->x."/".$aPos->y);
+			foreach ($this->ships[$i]->angles as $val){Debug::log("--> ANGLE TO: #".$val[0].": ".$val[1]);}
+			foreach ($this->ships[$i]->distances as $val){Debug::log("-->  DIST TO: #".$val[0].": ".$val[1]);}
+		}
+		*/
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$this->setLocks($this->ships[$i]); 
 		}
 		//return;
 
-		for ($i = 0; $i < sizeof($this->ships); $i++){
-			$aPos = $this->ships[$i]->getCurrentPosition();
-			Debug::log("POSITION #".$this->ships[$i]->id.": ".$aPos->x."/".$aPos->y);
-			foreach ($this->ships[$i]->angles as $val){Debug::log("--> ANGLE TO: #".$val[0].": ".$val[1]);}
-			//foreach ($this->ships[$i]->distances as $val){Debug::log("-->  DIST TO: #".$val[0].": ".$val[1]);}
-		}
 	}
 
 	public function setLocks($s){
