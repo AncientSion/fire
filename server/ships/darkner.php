@@ -27,7 +27,7 @@ class Darkner extends Light {
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new MediumIon($this->getId(), $this->parentId, 0, 12);
+		$right->systems[] = new MediumIon($this->getId(), $this->parentId, 0, 120);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);

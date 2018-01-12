@@ -1131,7 +1131,7 @@ function Game(data, userid){
 
 		for (var i = 0; i < stack.length; i++){
 			for (var j = 0; j < this.ships.length; j++){
-				if (this.ships[i].ship || this.ships[i].squad){continue;}
+				if (this.ships[j].ship || this.ships[j].squad){continue;}
 				if (this.ships[j].mission.type == 2 || this.ships[j].mission.type == 3){
 					if (this.ships[j].mission.targetid == stack[i].id){
 						stack.push(this.ships[j]);
