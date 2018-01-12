@@ -122,7 +122,7 @@ function getCompassHeadingOfPoint(observer, target, facing){
 	}else if (dX<0 && dY<0){
 		heading = radianToDegree(Math.atan(dY/dX)) + 270;
 	}
-	heading = addToDirection(Math.round(heading), -90);
+	heading = addToDirection(heading, -90);
 	heading = addToDirection(heading, -facing);
 
 	return heading;
