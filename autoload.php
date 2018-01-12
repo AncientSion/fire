@@ -74,6 +74,7 @@ spl_autoload_register(
                 'reactor' => '/server/systems/nonweapon.php',
                 'lifesupport' => '/server/systems/nonweapon.php',
                 'sensor' => '/server/systems/nonweapon.php',
+                'cyber' => '/server/systems/nonweapon.php',
                 'hangar' => '/server/systems/nonweapon.php',
 
                 'dual' => '/server/systems/weapons/dual.php',

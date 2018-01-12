@@ -135,8 +135,6 @@ class Sensor extends PrimarySystem {
 	function __construct($id, $parentId, $mass, $output = 0, $effiency, $destroyed = 0){
 		$this->powerReq = floor($output/60);
 		$this->boostEffect[] = new Effect("Output", 10);
-		//$this->modes = array("Lock", "Scramble", "Sweep", "Mask");
-		//$this->states = array(0, 0, 0, 0);
 		$this->modes = array("Lock", "Scramble");
 		$this->states = array(0, 0);
         parent::__construct($id, $parentId, $mass, $output, ceil($this->powerReq/3), $destroyed);
@@ -178,6 +176,16 @@ class Sensor extends PrimarySystem {
 		}
 		return false;
 	}
+}
+
+class Cyber extends Sensor {
+	public $name = "Cyber";
+	public $display = "Cyber Warfare";
+	public $ew = array();
+
+	function __construct($id, $parentId, $mass, $output = 0, $effiency, $destroyed = 0){
+        parent::__construct($id, $parentId, $mass, $output, ceil($this->powerReq/3), $destroyed);
+    }
 }
 
 class Hangar extends Weapon {

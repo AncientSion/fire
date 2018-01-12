@@ -1229,6 +1229,15 @@ function Sensor(system){
 }
 Sensor.prototype = Object.create(PrimarySystem.prototype);
 
+function Cyber(system){
+	Sensor.call(this, system)
+	this.ew = system.ew;
+	this.modes = system.modes;
+	this.states = system.states;
+	this.used = 0;
+}
+Cyber.prototype = Object.create(Sensor.prototype);
+
 Sensor.prototype.switchMode = function(id){
 	if (this.destroyed || this.disabled || this.locked){return false;}
 	this.used = 1;
