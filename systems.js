@@ -2082,8 +2082,9 @@ Plasma.prototype.redrawSystemArc = function(){
 	fxCtx.clearRect(0, 0, res.x, res.y);
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z);
-	//$(fxCanvas).css("opacity", 0.3);
-	this.drawSystemArc(game.getUnit(this.parentId).getPlannedFacing(),  game.getUnit(this.parentId).getPlannedPos());
+
+	var p = game.getUnit(this.parentId);
+	this.drawSystemArc(p.getPlannedFacing(), p.rolled, p.getPlannedPos());
 	fxCtx.setTransform(1, 0, 0, 1, 0, 0);
 }
 
