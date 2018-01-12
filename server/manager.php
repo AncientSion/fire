@@ -1119,7 +1119,7 @@ class Manager {
 					$w = min(180, $this->const["ew"]["len"] * pow($str/$ew->dist, $this->const["ew"]["p"]));
 					$start = Math::addAngle(0 + $w-$s->getFacing(), $ew->angle);
 					$end = Math::addAngle(360 - $w-$s->getFacing(), $ew->angle);
-					//Debug::log("specific EW for ship #".$s->id.", str: ".$str.", facing: ".$s->getFacing().", w: ".$w.", EW from ".$start." to ".$end.", dist: ".$ew->dist);
+					Debug::log("specific EW for ship #".$s->id.", str: ".$str.", facing: ".$s->getFacing().", w: ".$w.", EW from ".$start." to ".$end.", dist: ".$ew->dist);
 				}
 
 				for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -1169,7 +1169,7 @@ class Manager {
 						if (Math::isInArc($a, $start, $end)){
 							if ($ew->type == 0){ // LOCK
 								$s->locks[] = array($this->ships[$i]->id, $s->getLockEffect($this->ships[$i]));
-								//Debug::log("locking on #".$this->ships[$i]->id." for value: ".$s->locks[sizeof($s->locks)-1][1]);
+								Debug::log("locking on #".$this->ships[$i]->id." for value: ".$s->locks[sizeof($s->locks)-1][1]);
 							}
 							else if ($ew->type == 1){ // MASK
 								if ($this->ships[$i]->ship || $this->ships[$i]->squad){
