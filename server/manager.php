@@ -782,7 +782,7 @@ class Manager {
 			DBManager::app()->insertUnits($this->userid, $this->gameid, $units);
 			DBManager::app()->updateSystemLoad($adjust);
 			for ($i = 0; $i < sizeof($units); $i++){
-				$this->ships[] = new Salvo($units[$i]["id"], $units[$i]["userid"], $this->turn, "deployed", 0, 0, 0, 0, 0, 0, "");
+				$this->ships[] = new Salvo($units[$i]["id"], $units[$i]["userid"], $this->turn, "deployed", 0, 0, 0, 0, 0, 0, 0, 0, "");
 
 				$this->ships[sizeof($this->ships)-1]->setUnitState($this->turn, $this->phase);
 				$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->ships[$i]->id, $this->turn, "deploy", 0, $units[$i]["actions"][0]["x"], $units[$i]["actions"][0]["y"], $a, 0, 0, 0, 1, 1);
