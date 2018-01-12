@@ -55,7 +55,7 @@ class Manager {
 
 	public function test(){
 		$this->setupShips();
-		$this->setLocks();
+		//$this->setLocks();
 		return;
 		foreach ($this->ships as $ship){
 			Debug::log($ship->id);
@@ -1052,12 +1052,8 @@ class Manager {
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$aPos = $this->ships[$i]->getCurrentPosition();
 			Debug::log("POSITION #".$this->ships[$i]->id.": ".$aPos->x."/".$aPos->y);
-			foreach ($this->ships[$i]->angles as $val){
-				Debug::log("--> ANGLE TO: #".$val[0].": ".$val[1]);
-			}
-			foreach ($this->ships[$i]->distances as $val){
-				Debug::log("-->  DIST TO: #".$val[0].": ".$val[1]);
-			}
+			foreach ($this->ships[$i]->angles as $val){Debug::log("--> ANGLE TO: #".$val[0].": ".$val[1]);}
+			//foreach ($this->ships[$i]->distances as $val){Debug::log("-->  DIST TO: #".$val[0].": ".$val[1]);}
 		}
 	}
 
