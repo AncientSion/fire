@@ -557,11 +557,6 @@ Flight.prototype.setPostMoveSize = function(){
 	else this.size = this.baseSize + this.unitSize * this.getIntactFighters();
 }
 
-Flight.prototype.setRawImage = function(){
-	//	this.img = graphics.images[this.structures[0].name.toLowerCase()];
-	//	this.smallImg = graphics.images[this.structures[0].name.toLowerCase()];
-}
-
 Flight.prototype.switchDiv = function(){
 	if (this.selected){
 		$(this.element).find(".header").find(".general").find(".missionSwitch").removeClass("disabled");

@@ -296,7 +296,6 @@ Salvo.prototype.getShortInfo = function(){
 }
 
 Salvo.prototype.setImage = function(){
-	//return;
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
 		t.height = this.size*2;
@@ -317,10 +316,6 @@ Salvo.prototype.setImage = function(){
 
 	//this.drawImg = t;
 	this.img = t;
-}
-
-Salvo.prototype.setRawImage = function(){
-	this.img = graphics.images[this.structures[0].name.toLowerCase()].cloneNode(true);
 }
 
 Salvo.prototype.getShots = function(){
