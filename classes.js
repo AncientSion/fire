@@ -587,11 +587,13 @@ function Single(data){
 	this.integrity = data.integrity;
 	this.value = data.value;
 	this.negation = data.negation;
-	this.damages = [];
-	this.crits = [];
 	this.baseHitChance = data.baseHitChance;
 	this.destroyed = data.destroyed;
 	this.disabled = data.disabled;
+	this.traverse = data.traverse;
+	this.baseImpulse = data.baseImpulse;
+	this.damages = [];
+	this.crits = [];
 	this.systems = [];
 	this.draw = 1;
 	this.layout = {};
@@ -688,9 +690,7 @@ Single.prototype.getDetailsDiv = function(){
 function Missile(data){
 	Single.call(this, data);
 	this.missile = 1;
-	this.traverse = data.traverse;
-	this.baseImpulse = data.baseImpulse;
-
+	
 	this.create(data);
 }
 
@@ -701,7 +701,7 @@ Missile.prototype.create = function(data){
 		this.systems.push(new Warhead(data.systems[k]));
 	}
 	for (var k = 0; k < data.damages.length; k++){
-		this.damages.push(new Warhead(data.damages[k]));
+		this.damages.push(new Damage(data.damages[k]));
 	}
 	for (var k = 0; k < data.crits.length; k++){
 		this.crits.push(new Crit(data.crits[k]));

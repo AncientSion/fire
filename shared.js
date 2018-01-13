@@ -222,15 +222,6 @@ function initiateFlight(data){
 	var flight = new Flight(data);
 	for (var j = 0; j < data.structures.length; j++){
 		flight.structures.push(new Fighter(data.structures[j]));
-
-		for (var k = 0; k < data.structures[j].systems.length; k++){
-			var system = new window[data.structures[j].systems[k].type](data.structures[j].systems[k]);
-			for (var l = 0; l < data.structures[j].systems[k].fireOrders.length; l++){
-				system.fireOrders.push(new FireOrder(data.structures[j].systems[k].fireOrders[l]));
-			}
-			system.setState();
-			flight.structures[j].systems.push(system);
-		}
 	}
 	return flight;	
 }

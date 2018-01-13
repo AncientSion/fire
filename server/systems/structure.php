@@ -117,9 +117,11 @@ class Structure {
 			case 360: return "Bow";
 			case 78: return "Main Starboard";
 			case 90: return "Starboard";
+			case 120: return "Starboard";
 			case 150: return "Rear Starboard";
 			case 222: return "Rear Port";
 			case 282: return "Main Port";
+			case 240: return "Port";
 			case 270: return "Port";
 			case 180: return "Rear";
 		}

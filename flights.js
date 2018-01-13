@@ -1,8 +1,7 @@
 function Fighter(data){
 	Single.call(this, data);
 	this.fighter = 1;
-	this.traverse = data.traverse;
-	this.baseImpulse = data.baseImpulse;
+
 	this.create(data);
 }
 Fighter.prototype = Object.create(Single.prototype);
@@ -13,6 +12,14 @@ Fighter.prototype.create = function(data){
 	}
 	for (var k = 0; k < data.crits.length; k++){
 		this.crits.push(new Crit(data.crits[k]));
+	}
+	for (var k = 0; k < data.systems.length; k++){
+		var system = new window[data.systems[k].type](data.systems[k]);
+		for (var l = 0; l < data.systems[k].fireOrders.length; l++){
+			system.fireOrders.push(new FireOrder(data.systems[k].fireOrders[l]));
+		}
+		system.setState();
+		this.systems.push(system);
 	}
 }
 

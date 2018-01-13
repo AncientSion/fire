@@ -12,6 +12,7 @@ class Single {
 	public $systems = array();
 	public $damages = array();
 	public $crits = array();
+	public $baseImpulse = 0;
 	public $baseHitChance = 0;
 	public $name = "";
 	public $display = "";
