@@ -36,10 +36,6 @@ Squaddie.prototype.setElement = function(){
 		.data("systemId", this.id);
 }
 
-Squaddie.prototype.getBaseImage = function(){
-	return window.shipImages[this.name.toLowerCase()];	
-}
-
 Squaddie.prototype.hover = function(e){
 	if (game.flightDeploy){return false;}
 
@@ -526,7 +522,7 @@ Squadron.prototype.setPreFireImage = function(){
 }
 
 Squadron.prototype.getDrawFacing = function(){
-	return this.drawFacing+90;
+	return this.drawFacing;
 }
 
 Squadron.prototype.setLayout = function(){
@@ -553,7 +549,10 @@ Squadron.prototype.setLayout = function(){
 			minY = Math.min(minY, o.y);
 			maxY = Math.max(maxY, o.y);
 
+			o = rotate(0, 0, o, 90);
+
 			this.structures[i].layout = {x: o.x, y: o.y};
+
 		}
 
 		w = Math.abs(minX) + Math.abs(maxX) + s/2;
@@ -685,6 +684,7 @@ Squadron.prototype.setSubElements = function(){
 	var w = $($(this.element).find(".structContainer")).width();
 	var h = $($(this.element).find(".structContainer")).height();
 
+
 	var offset = 0;
 	if (this.structures.length == 3){offset = 30;}
 
@@ -692,9 +692,11 @@ Squadron.prototype.setSubElements = function(){
 		$(this.element).find(".structContainer").append(this.structures[i].element);
 		var subW = $(this.structures[i].element).width();
 		var subH = $(this.structures[i].element).height();
+		var pos = rotate(0, 0, this.structures[i].layout, -90);
+
 		$(this.structures[i].element)
-			.css("left", this.structures[i].layout.x + w/2 - subW/2)
-			.css("top", this.structures[i].layout.y + h/2 - subH/2 + offset)
+			.css("left", pos.x + w/2 - subW/2)
+			.css("top", pos.y + h/2 - subH/2 + offset)
 	}
 }
 
@@ -707,7 +709,7 @@ Squadron.prototype.expandDiv = function(div){
 			.append($("<div>")
 				.addClass("iconContainer")					
 					.append(
-						$(this.getBaseImage()).css("width", "100%").css("margin-top", 20)
+						$(this.getBaseImage()).addClass("rotate270").css("width", "100%").css("margin-top", 20)
 					)
 					.data("shipId", this.id)
 					.hover(function(e){
@@ -753,7 +755,8 @@ Squadron.prototype.getLaunchData = function(){
 }
 
 Squadron.prototype.getDeployImg = function(){
-	return window.shipImages[this.name.toLowerCase()].cloneNode(true);
+	return false;
+	return graphics.images[this.name.toLowerCase()].cloneNode(true);
 }
 
 Squadron.prototype.getEP = function(){
@@ -775,55 +778,6 @@ Squadron.prototype.drawEW = function(){
 	return Ship.prototype.drawEW.call(this);
 }
 
-Squadron.prototype.drawImpulseUI = function(){
-	if (this.disabled){return;}	
-
-	var facing = this.getDrawFacing();
-	var center = {x: this.drawX, y: this.drawY};
-	var p1 = getPointInDirection(this.size/2 + 10 + 15, facing + 90, center.x, center.y);
-
-	if (this.canRoll()){
-		var roll = getPointInDirection(50, facing+90, p1.x, p1.y);
-		var ox = roll.x * cam.z + cam.o.x - 15;
-		var oy = roll.y * cam.z + cam.o.y - 15;
-		$("#roll").css("left", ox).css("top", oy).removeClass("disabled");
-	} else $("#roll").addClass("disabled");
-
-	if (this.canUndoLastAction()){
-		var ox = p1.x * cam.z + cam.o.x - 15;
-		var oy = p1.y * cam.z + cam.o.y - 15;
-		$("#doUndoLastAction").css("left", ox).css("top", oy).removeClass("disabled");
-	} else $("#doUndoLastAction").addClass("disabled");
-		
-
-	if (this.canIncreaseImpulse()){
-		var pPlus = getPointInDirection(50, facing, p1.x, p1.y);
-		var ox = pPlus.x * cam.z + cam.o.x - 15;
-		var oy = pPlus.y * cam.z + cam.o.y - 15;
-		$("#plusImpulse").css("left", ox).css("top", oy).removeClass("disabled");
-	} else $("#plusImpulse").addClass("disabled");
-
-	if (this.canDecreaseImpulse()){
-		var mMinus = getPointInDirection(50, facing -180, p1.x, p1.y);
-		var ox = mMinus.x * cam.z + cam.o.x - 15;
-		var oy = mMinus.y * cam.z + cam.o.y - 15;
-		$("#minusImpulse").css("left", ox).css("top", oy).removeClass("disabled");
-	} else $("#minusImpulse").addClass("disabled");
-}
-
-Squadron.prototype.drawTurnUI = function(){
-	var center = {x: this.x, y: this.y};
-	var angle = this.getDrawFacing();
-	var turnEle = $("#turnButton")[0];
-	var p1 = getPointInDirection(150/cam.z, addToDirection(angle, 0), center.x, center.y);
-	$(turnEle)
-		.removeClass("disabled")
-		.css("left", p1.x * cam.z + cam.o.x - $(turnEle).width()/2)
-		.css("top", p1.y * cam.z + cam.o.y - $(turnEle).height()/2)
-		.find("#impulseMod").html("").end()
-		//.find("#turnMod").html("").end()
-		//.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end()
-}
 
 Squadron.prototype.getShortInfoa = function(){
 	var ele = $("#shortInfo");
@@ -1105,15 +1059,15 @@ Squadron.prototype.setImage = function(){
 		if (!this.structures[i].draw){continue;}
 
 		ctx.translate(this.structures[i].layout.x/2, this.structures[i].layout.y/2);
-		ctx.rotate(-90 * (Math.PI/180))
+		//ctx.rotate(-90 * (Math.PI/180))
 		ctx.drawImage(
-			window.shipImages[this.structures[i].name.toLowerCase()],
+			graphics.images[this.structures[i].name.toLowerCase()],
 			0 -this.structures[i].size/2,
 			0 -this.structures[i].size/2,
 			this.structures[i].size, 
 			this.structures[i].size
 		)
-		ctx.rotate(+90 * (Math.PI/180))
+		//ctx.rotate(+90 * (Math.PI/180))
 		ctx.translate(-this.structures[i].layout.x/2, -this.structures[i].layout.y/2);
 	}		
 	ctx.setTransform(1,0,0,1,0,0);

@@ -70,9 +70,6 @@ function getPhaseString(val){
 	}
 }
 
-window.shipImages = {};
-window.images = {};
-
 window.multi = 1;
 
 window.anim = false;

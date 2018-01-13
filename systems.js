@@ -1950,8 +1950,8 @@ Warhead.prototype.getAnimation = function(fire){
 			} else continue;
 
 			var traj = getPointInDirection(t.size/4, a, p.x, p.y);
-			var tx = traj.x + range(-t.size/6, t.size/6);
-			var ty = traj.y + range(-t.size/6, t.size/6);
+			var tx = traj.x + range(-t.size/8, t.size/8);
+			var ty = traj.y + range(-t.size/8, t.size/8);
 
 			if (fire.target.flight){
 				var t = fire.target.getFireDest(fire, hit, hits-1);

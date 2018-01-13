@@ -602,6 +602,10 @@ function Single(data){
 	this.squaddie = 0;
 }
 
+Single.prototype.getBaseImage = function(){
+	return graphics.images[this.name.toLowerCase()];	
+}
+
 Single.prototype.isDestroyedThisTurn = function(){
 	if (this.disabled){
 		for (var j = this.crits.length-1; j >= 0; j--){

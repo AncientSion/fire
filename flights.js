@@ -263,11 +263,9 @@ Flight.prototype.createBaseDiv = function(){
 }
 
 Flight.prototype.expandDiv = function(div){
-	var structContainer = document.createElement("div");
-		structContainer.className = "structContainer";
-
-		div.appendChild(structContainer);
-	document.body.appendChild(div);
+	var structContainer = $("<div>").addClass("structContainer");
+	$(div).append(structContainer);
+	$(document.body).append(div);
 
 	// OUTER STRUCTS
 
@@ -284,22 +282,17 @@ Flight.prototype.expandDiv = function(div){
 			active = false;
 		}
 
-		var img = new Image()
-			img.src = window.shipImages[this.structures[i].name.toLowerCase()].src;
-
-			$(img)
+		var img = $(this.structures[i].getBaseImage().cloneNode(true))
 				.data("shipId", this.id)
 				.data("fighterId", this.structures[i].id)
-				.addClass("size40")
+				.addClass("rotate270 size40")
 				.click(function(e){
 					e.stopPropagation();
 					console.log(game.getUnit($(this).data("shipId")).getSystemById($(this).data("fighterId")));
 				})
 
 
-		var fighterDiv = document.createElement("div");
-			fighterDiv.className = "fighterDiv";
-			fighterDiv.appendChild(img);
+		var fighterDiv = $("<div>").addClass("fighterDiv").append(img)
 
 		if (!active){
 			var overlay = new Image();
@@ -311,7 +304,7 @@ Flight.prototype.expandDiv = function(div){
 					var p = $(this).parent().children()[0];
 					game.getUnit($(p).data("shipId")).getSystemById($(p).data("fighterId")).hover(e);
 				})
-			fighterDiv.appendChild(overlay);
+			fighterDiv.append(overlay);
 		}
 		else {
 			$(img).hover(function(e){
@@ -320,7 +313,7 @@ Flight.prototype.expandDiv = function(div){
 			});
 		}
 
-		structContainer.appendChild(fighterDiv);
+		structContainer.append(fighterDiv);
 
 		if (x + 50 + 5 > maxWidth){
 			x = 15;
@@ -352,7 +345,7 @@ Flight.prototype.expandDiv = function(div){
 			upperDiv.className = "integrityFull"; upperDiv.style.top = 0;
 			wrap.appendChild(upperDiv);
 
-		fighterDiv.appendChild(wrap);
+		fighterDiv.append(wrap);
 
 		if (active){
 			var s = 20;
@@ -360,7 +353,7 @@ Flight.prototype.expandDiv = function(div){
 			for (var j = 0; j < this.structures[i].systems.length; j++){
 				var td = this.structures[i].systems[j].getTableData(true);
 					$(td.childNodes[0]).attr("width", s).attr("height", s);
-					fighterDiv.appendChild(td);
+					fighterDiv.append(td);
 					$(td)
 						.addClass("fighter")
 						.css("top", -h -s - 5)
@@ -463,7 +456,7 @@ Flight.prototype.supplyAttachDiv = function(div){
 
 	for (var j = 0; j < this.structures.length; j++){
 		if (this.structures[j].destroyed || this.structures[j].disabled){continue;}
-		attachDiv.append($("<div>").append($("<img>").css("width", 34).css("height", 34).attr("src", window.shipImages[this.structures[j].name.toLowerCase()].src)));
+		attachDiv.append($("<div>").append($("<img>").css("width", 34).css("height", 34).attr("src", graphics.images[this.structures[j].name.toLowerCase()].src)));
 	}
 
 	div.append(attachDiv);
@@ -565,8 +558,8 @@ Flight.prototype.setPostMoveSize = function(){
 }
 
 Flight.prototype.setRawImage = function(){
-	//	this.img = window.shipImages[this.structures[0].name.toLowerCase()];
-	//	this.smallImg = window.shipImages[this.structures[0].name.toLowerCase()];
+	//	this.img = graphics.images[this.structures[0].name.toLowerCase()];
+	//	this.smallImg = graphics.images[this.structures[0].name.toLowerCase()];
 }
 
 Flight.prototype.switchDiv = function(){
@@ -607,6 +600,6 @@ Flight.prototype.hasNoFireOrders = function(){
 
 Flight.prototype.createDeployEntry = function(){
 	this.attachLogEntry(
-		"<span><font color='" + this.getCodeColor()() + "'>Flight #" + this.id + "</font> is being deployed (" + this.structures.length + " units).</span>"
+		"<span><font color='" + this.getCodeColor()+ "'>Flight #" + this.id + "</font> is being deployed (" + this.structures.length + " units).</span>"
 	);
 }

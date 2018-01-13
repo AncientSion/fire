@@ -1,3 +1,117 @@
+window.graphics = {
+
+	images: [],
+
+	preload: function(){
+		this.preLoadBallistics();
+		this.preloadShips();
+		this.preLoadFactions();
+	},
+
+	preLoadBallistics: function(){
+		this.images.missile = new Image();
+		this.images.missile.src = "shipIcons/missile.png";
+
+	},
+
+	preloadShips: function(){
+		this.images.battlecrab = new Image();
+		this.images.battlecrab.src = "shipIcons/omega.png";
+
+		this.images.omega = new Image();
+		this.images.omega.src = "shipIcons/omega.png";
+
+		this.images.avenger = new Image();
+		this.images.avenger.src = "shipIcons/avenger.png";
+
+		this.images.hyperion = new Image();
+		this.images.hyperion.src = "shipIcons/hyperion.png";
+
+		this.images.saggitarius = new Image();
+		this.images.saggitarius.src = "shipIcons/saggitarius.png";
+
+		this.images.artemis = new Image();
+		this.images.artemis.src = "shipIcons/artemis.png";
+
+		this.images.olympus = new Image();
+		this.images.olympus.src = "shipIcons/olympus.png";
+
+		this.images.crius = new Image();
+		this.images.crius.src = "shipIcons/crius.png";
+
+		this.images.tethys = new Image();
+		this.images.tethys.src = "shipIcons/tethys.png";
+
+		this.images.gquan = new Image();
+		this.images.gquan.src = "shipIcons/gquan.png";
+
+		this.images.primus = new Image();
+		this.images.primus.src = "shipIcons/primus.png";
+
+		this.images.octurion = new Image();
+		this.images.octurion.src = "shipIcons/octurion.png";
+
+		this.images.altarian = new Image();
+		this.images.altarian.src = "shipIcons/altarian.png";
+
+		this.images.demos = new Image();
+		this.images.demos.src = "shipIcons/demos.png";
+
+		this.images.darkner = new Image();
+		this.images.darkner.src = "shipIcons/darkner.png";
+
+		this.images.vorchar = new Image();
+		this.images.vorchar.src = "shipIcons/vorchar.png";
+
+		this.images.vorchan = new Image();
+		this.images.vorchan.src = "shipIcons/vorchan.png";
+
+		this.images.haven = new Image();
+		this.images.haven.src = "shipIcons/haven.png";
+
+		this.images.sharlin = new Image();
+		this.images.sharlin.src = "shipIcons/sharlin.png";
+
+		this.images.tinashi = new Image();
+		this.images.tinashi.src = "shipIcons/tinashi.png";
+
+		this.images.whitestar = new Image();
+		this.images.whitestar.src = "shipIcons/whitestar.png";
+
+		this.images.aurora = new Image();
+		this.images.aurora.src = "shipIcons/aurora.png";
+
+		this.images.thunderbolt = new Image();
+		this.images.thunderbolt.src = "shipIcons/thunderbolt.png";
+
+		this.images.sitara = new Image();
+		this.images.sitara.src = "shipIcons/sitara.png";
+
+		this.images.sentri = new Image();
+		this.images.sentri.src = "shipIcons/sentri.png";
+
+		this.images.nial = new Image();
+		this.images.nial.src = "shipIcons/nial.png";
+
+		this.images.gorith = new Image();
+		this.images.gorith.src = "shipIcons/gorith.png";
+
+		this.images.frazi = new Image();
+		this.images.frazi.src = "shipIcons/frazi.png";
+	},
+
+	preLoadFactions: function(){
+		this.images.earth = new Image();
+		this.images.earth.src = "factionIcons/earth.png";
+		this.images.centauri = new Image();
+		this.images.centauri.src = "factionIcons/centauri.png";
+		this.images.minbari = new Image();
+		this.images.minbari.src = "factionIcons/minbari.png";
+		this.images.narn = new Image();
+		this.images.narn.src = "factionIcons/narn.png";
+	}
+}
+
 function drawVector(origin, target, dist, angle){
 	mouseCtx.clearRect(0, 0, res.x, res.y);
 	mouseCtx.beginPath();

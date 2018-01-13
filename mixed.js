@@ -24,7 +24,7 @@ Mixed.prototype.getPlannedFacing = function(){
 }
 
 Mixed.prototype.getDrawFacing = function(){
-	return this.facing+90;
+	return this.facing;
 }
 
 Mixed.prototype.canDeploy = function(){
@@ -477,7 +477,7 @@ Mixed.prototype.setBaseLayout = function(){
 
 		var a = 360/Math.ceil(this.structures.length/3)*i;
 		//var o = getPointInDirection(0 + this.unitSize*15, a-90, 0, 0);
-		var o = getPointInDirection(reach, a-90, 0, 0);
+		var o = getPointInDirection(reach, a, 0, 0);
 
 		for (var j = 0; j < Math.min(this.structures.length-i*3, 3); j++){
 			var ox = o.x;
@@ -518,7 +518,7 @@ Mixed.prototype.setPatrolImage = function(){
 			ctx.translate(this.structures[i].layout.x, this.structures[i].layout.y);
 			ctx.rotate((360/this.structures.length*i) * (Math.PI/180));
 			ctx.drawImage(
-				window.shipImages[this.structures[i].name.toLowerCase()],
+				raphics.images[this.structures[i].name.toLowerCase()],
 				0 -size/2,
 				0 -size/2,
 				size, 
@@ -548,7 +548,7 @@ Mixed.prototype.setPreMoveImage = function(){
 
 		ctx.translate(this.structures[i].layout.x, this.structures[i].layout.y);
 		ctx.drawImage(
-			window.shipImages[this.structures[i].name.toLowerCase()],
+			graphics.images[this.structures[i].name.toLowerCase()],
 			0 -size/2,
 			0 -size/2,
 			size, 
@@ -577,7 +577,7 @@ Mixed.prototype.setPostMoveImage = function(){
 		ctx.translate(this.structures[i].layout.x, this.structures[i].layout.y);
 		ctx.rotate((360/this.structures.length*i) * (Math.PI/180));
 		ctx.drawImage(
-		window.shipImages[this.structures[i].name.toLowerCase()],
+		raphics.images[this.structures[i].name.toLowerCase()],
 			0 -size/2,
 			0 -size/2,
 			size, 
@@ -697,7 +697,7 @@ Mixed.prototype.getSectionString = function(angle){
 }
 
 Mixed.prototype.getBaseImage = function(){
-	return window.shipImages[this.structures[0].name.toLowerCase()];
+	return graphics.images[this.structures[0].name.toLowerCase()];
 }
 
 Mixed.prototype.getRemainingImpulse = function(){
@@ -706,7 +706,6 @@ Mixed.prototype.getRemainingImpulse = function(){
 
 Mixed.prototype.animateSelfDeployment = function(){
 	this.deployAnim[0] = this.deployAnim[1];
-
 
 	if (this.deployAnim[0] == this.deployAnim[1]){
 		this.deployed = 1;

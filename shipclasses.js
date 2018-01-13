@@ -1284,7 +1284,7 @@ Ship.prototype.setLayout = function(){
 
 Ship.prototype.setImage = function(){
 	//console.log("Ship setImage");
-	this.img = window.shipImages[this.name.toLowerCase()];
+	this.img = graphics.images[this.name.toLowerCase()];
 	return;
 }
 
@@ -2432,7 +2432,7 @@ Ship.prototype.resetImage = function(){
 }
 
 Ship.prototype.getBaseImage = function(){
-	return window.shipImages[this.name.toLowerCase()];
+	return graphics.images[this.name.toLowerCase()];
 }
 
 Ship.prototype.setDogFightImage = function(){
@@ -2538,7 +2538,7 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 			ctx.translate(drawPos.x, drawPos.y);
 			ctx.rotate((a+90)*(Math.PI/180));
 			ctx.drawImage(
-				window.shipImages[friendly[i].name.toLowerCase()],
+				raphics.images[friendly[i].name.toLowerCase()],
 				-fSize/2,
 				-fSize/2,
 				fSize, 
@@ -2584,7 +2584,7 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 			ctx.translate(drawPos.x, drawPos.y);
 			ctx.rotate((a-90)*(Math.PI/180));
 			ctx.drawImage(
-				window.shipImages[hostile[i].name.toLowerCase()],
+				raphics.images[hostile[i].name.toLowerCase()],
 				-fSize/2,
 				-fSize/2,
 				fSize, 
@@ -2822,7 +2822,7 @@ Ship.prototype.getLaunchData = function(){
 }
 
 Ship.prototype.getDeployImg = function(){
-	return window.shipImages[this.name.toLowerCase()].cloneNode(true);
+	return graphics.images[this.name.toLowerCase()].cloneNode(true);
 }
 
 Ship.prototype.updateShipPower = function(system){

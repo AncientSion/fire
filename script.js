@@ -1,4 +1,4 @@
-window.preload();
+graphics.preload();
 $(window).on("load", function() {
 	init();
 });

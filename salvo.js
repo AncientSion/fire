@@ -263,7 +263,7 @@ Salvo.prototype.supplyAttachDiv = function(div){
 
 	for (var j = 0; j < this.structures.length; j++){
 		if (this.structures[j].destroyed || this.structures[j].disabled){continue;}
-		attachDiv.append($("<div>").append($("<img>").css("width", 34).css("height", 34).attr("src", window.shipImages[this.structures[j].name.toLowerCase()].src)));
+		attachDiv.append($("<div>").append($("<img>").css("width", 34).css("height", 34).attr("src", graphics.images[this.structures[j].name.toLowerCase()].src)));
 	}
 
 	div.append(attachDiv);
@@ -320,7 +320,7 @@ Salvo.prototype.setImage = function(){
 }
 
 Salvo.prototype.setRawImage = function(){
-	this.img = window.shipImages[this.structures[0].name.toLowerCase()].cloneNode(true);
+	this.img = graphics.images[this.structures[0].name.toLowerCase()].cloneNode(true);
 }
 
 Salvo.prototype.getShots = function(){
@@ -338,5 +338,5 @@ Salvo.prototype.hasNoFireOrders = function(){
 }
 
 Salvo.prototype.createDeployEntry = function(){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor()() + "'>Salvo #" + this.id + "</font> is launched (" + this.structures.length + " units).</span>");
+	this.attachLogEntry("<span><font color='" + this.getCodeColor()+ "'>Salvo #" + this.id + "</font> is launched (" + this.structures.length + " units).</span>");
 }

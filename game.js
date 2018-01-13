@@ -1,4 +1,3 @@
-
 function Game(data, userid){
 	this.id = data.id;
 	this.name = data.name;
@@ -326,7 +325,7 @@ function Game(data, userid){
 				var f = new Fighter(
 					{
 						id: j, name: this.flightDeploy.loads[i].name, ep: 0, mass: this.flightDeploy.loads[i].mass, integrity: this.flightDeploy.loads[i].integrity,
-						remaining: this.flightDeploy.loads[i].integrity, value: 0, negation: 0, crits: 0, destroyed: 0, damages: [], crits: []
+						remaining: this.flightDeploy.loads[i].integrity, value: 0, negation: 0, crits: 0, destroyed: 0, damages: [], crits: [], systems: []
 					}
 				)
 
@@ -2292,7 +2291,7 @@ function Game(data, userid){
 						function(){game.draw();}
 					)
 					.append($("<td>")
-						.append($(window.shipImages[this.incoming[i].name.toLowerCase()].cloneNode(true))
+						.append($(raphics.images[this.incoming[i].name.toLowerCase()].cloneNode(true))
 							.addClass("size40")
 						)
 					)
@@ -2400,6 +2399,7 @@ function Game(data, userid){
 		//	ele.remove() $("#deployWrapper").remove();return;
 		var l = 0;
 		var s = 40;
+		var className = "rotate270 size" + s
 
 		this.ships.sort(function(a, b){
 			return a.userid - b.userid || b.cost- a.cost
@@ -2412,10 +2412,6 @@ function Game(data, userid){
 					name = "hostile";
 				}
 				l++;
-
-				if (this.ships[i].ship){
-					className = "rotate270 size" + s;
-				} else className = "size" + s;
 
 				ele.append(
 				($(this.ships[i].getBaseImage().cloneNode(true))
@@ -2848,7 +2844,6 @@ Game.prototype.animateDeployment = function(){
 				this.ships[i].animateSelfDeployment();
 				doing = 1;
 				done = 0;
-				if (this.ships[i].deployed){this.ships[i].createDeployEntry();}
 			}
 		}
 
@@ -2971,7 +2966,7 @@ Game.prototype.drawJumpMarker = function(s){
 		ctx.save();
 		ctx.translate(s.x, s.y);
 		ctx.rotate(s.a * Math.PI/180);
-		ctx.drawImage(window.shipImages[s.name.toLowerCase()], -size/2, -size/2, size, size);
+		ctx.drawImage(raphics.images[s.name.toLowerCase()], -size/2, -size/2, size, size);
 		ctx.restore();
 	}
 
@@ -3006,7 +3001,7 @@ Game.prototype.undrawJumpMarker = function(id){
 	ctx.save();
 	ctx.translate(s.actions[0].x, s.actions[0].y);
 	ctx.rotate(s.actions[0].a * Math.PI/180);
-	ctx.drawImage(window.shipImages[s.name.toLowerCase()], -s.size/2, -s.size/2, s.size, s.size);
+	ctx.drawImage(raphics.images[s.name.toLowerCase()], -s.size/2, -s.size/2, s.size, s.size);
 	ctx.restore();
 
 	this.resetShipTransform();

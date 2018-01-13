@@ -198,7 +198,7 @@ else {
 </html>
 
 <script>
-	window.preload();
+	graphics.preload();
 
 	$(document).ready(function(){
 		$("#confirmFleet").hover(function(){
@@ -308,7 +308,7 @@ else {
 
 
 	function initFactionTable(){
-		var icons = [images.earth, images.centauri, images.minbari, images.narn];		
+		var icons = [graphics.images.earth, graphics.images.centauri, graphics.images.minbari, graphics.images.narn];		
 
 		var table = document.createElement("table"); 
 			table.className = "factionUpperTable";
