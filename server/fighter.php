@@ -25,6 +25,7 @@ class Fighter extends Single {
 		return array(
         	"id" => $this->id,
         	"name" => $this->name,
+        	"display" => $this->display,
         	"faction" => $this->faction,
         	"value" => static::$value,
         	"mass" => $this->mass,
