@@ -696,7 +696,7 @@ Mixed.prototype.getSectionString = function(angle){
 }
 
 Mixed.prototype.getBaseImage = function(){
-	return graphics.images[this.structures[0].name.toLowerCase()];
+	return this.structures[0].getBaseImage();
 }
 
 Mixed.prototype.getRemainingImpulse = function(){

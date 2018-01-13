@@ -166,7 +166,7 @@ Salvo.prototype.createBaseDiv = function(){
 					img.src = "varIcons/ammoHit.png";
 				} else img.src = "varIcons/ammoMiss.png";
 			}*/
-			$(td).append($(this.getBaseImage().cloneNode(true)).addClass("size40"));
+			$(td).append($(this.structures[i].getBaseImage().cloneNode(true)).addClass("size40"));
 
 		tr1.appendChild(td);
 
