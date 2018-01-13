@@ -309,7 +309,7 @@ Salvo.prototype.setImage = function(){
 	ctx.translate(t.width/2, t.height/2);
 	//ctx.rotate((this.getDrawFacing()+90) * (Math.PI/180));
 	ctx.drawImage(
-		this.img,
+		this.structures[0].getBaseImage(),
 		0 -this.size/2,
 		0 -this.size/2,
 		this.size, 
