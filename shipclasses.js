@@ -2538,7 +2538,7 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 			ctx.translate(drawPos.x, drawPos.y);
 			ctx.rotate((a+90)*(Math.PI/180));
 			ctx.drawImage(
-				raphics.images[friendly[i].name.toLowerCase()],
+				graphics.images[friendly[i].name.toLowerCase()],
 				-fSize/2,
 				-fSize/2,
 				fSize, 
@@ -2584,7 +2584,7 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 			ctx.translate(drawPos.x, drawPos.y);
 			ctx.rotate((a-90)*(Math.PI/180));
 			ctx.drawImage(
-				raphics.images[hostile[i].name.toLowerCase()],
+				graphics.images[hostile[i].name.toLowerCase()],
 				-fSize/2,
 				-fSize/2,
 				fSize, 
