@@ -452,11 +452,16 @@ Flight.prototype.supplyAttachDiv = function(div){
 				game.redraw();
 			}
 		)
-		
 
 	for (var j = 0; j < this.structures.length; j++){
 		if (this.structures[j].destroyed || this.structures[j].disabled){continue;}
-		attachDiv.append($("<div>").append($("<img>").css("width", 34).css("height", 34).attr("src", graphics.images[this.structures[j].name.toLowerCase()].src)));
+		attachDiv.append($("<div>")
+			.append($(this.structures[j].getBaseImage().cloneNode(true))
+				.addClass("rotate270")
+				.css("width", 34)
+				.css("height", 34)
+			)
+		)
 	}
 
 	div.append(attachDiv);

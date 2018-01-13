@@ -166,7 +166,7 @@ Salvo.prototype.createBaseDiv = function(){
 					img.src = "varIcons/ammoHit.png";
 				} else img.src = "varIcons/ammoMiss.png";
 			}*/
-			$(td).append($(this.structures[i].getBaseImage().cloneNode(true)).addClass("size40"));
+			$(td).append($(this.structures[i].getBaseImage().cloneNode(true)).addClass("rotate270 size40"));
 
 		tr1.appendChild(td);
 
@@ -208,10 +208,10 @@ Salvo.prototype.createBaseDiv = function(){
 
 Salvo.prototype.supplyAttachDiv = function(div){
 	var color = "red";
-
 	if (this.friendly){color = "green";}
 
-		console.log(this.getTarget().getMaskEffect(this))
+	console.log(this.getTarget().getMaskEffect(this))
+
 	var attachDiv = $("<div>").addClass("attachDiv")
 		.append($("<div>").css("display", "block").addClass("center15 " + color)
 			.html("Salvo #" + this.id + (" (click to select)"))
@@ -265,6 +265,7 @@ Salvo.prototype.supplyAttachDiv = function(div){
 		if (this.structures[j].destroyed || this.structures[j].disabled){continue;}
 		attachDiv.append($("<div>")
 			.append($(this.structures[j].getBaseImage().cloneNode(true))
+				.addClass("rotate270")
 				.css("width", 34)
 				.css("height", 34)
 			)

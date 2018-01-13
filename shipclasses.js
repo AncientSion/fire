@@ -2536,7 +2536,7 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 			//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
 			friendly[i].layout = drawPos;
 			ctx.translate(drawPos.x, drawPos.y);
-			ctx.rotate((a+90)*(Math.PI/180));
+			ctx.rotate((a)*(Math.PI/180));
 			ctx.drawImage(
 				friendly[i].getBaseImage(),
 				-fSize/2,
@@ -2544,7 +2544,7 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 				fSize, 
 				fSize
 			);
-			ctx.rotate(-((a+90)*(Math.PI/180)));
+			ctx.rotate(-((a)*(Math.PI/180)));
 			ctx.translate(-drawPos.x, -drawPos.y);
 
 		}
@@ -2582,7 +2582,7 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 			//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
 			hostile[i].layout = drawPos;
 			ctx.translate(drawPos.x, drawPos.y);
-			ctx.rotate((a-90)*(Math.PI/180));
+			ctx.rotate((a-180)*(Math.PI/180));
 			ctx.drawImage(
 				hostile[i].getBaseImage(),
 				-fSize/2,
@@ -2590,7 +2590,7 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 				fSize, 
 				fSize
 			);
-			ctx.rotate(-((a-90)*(Math.PI/180)));
+			ctx.rotate(-((a-180)*(Math.PI/180)));
 			ctx.translate(-drawPos.x, -drawPos.y);
 
 		}

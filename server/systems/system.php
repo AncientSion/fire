@@ -27,7 +27,7 @@ class System {
 	public $internal = 0;
 	public $damaged = 0;
 	public $tiny = 0;
-	public $accDeay = 0;
+	public $accDecay = 0;
 	public $minDmg = 0;
 	public $maxDmg = 0;
 	public $priority = 0;

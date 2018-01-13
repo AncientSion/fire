@@ -97,7 +97,7 @@ class Squadron extends Ship {
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->structures); $j++){
 				for ($k = 0; $k < sizeof($this->structures[$i]->structures[$j]->systems); $k++){
-					for ($l = 0; $l < sizeof($this->structures[$i]->structures[$j]->systems[$k]->fireOrders); $l++){
+					for ($l = sizeof($this->structures[$i]->structures[$j]->systems[$k]->fireOrders)-1; $l >= 0; $l--){
 						if ($this->structures[$i]->structures[$j]->systems[$k]->fireOrders[$l]->turn == $turn){
 							array_splice($this->structures[$i]->structures[$j]->systems[$k]->fireOrders, $l, 1);
 						} else break;
