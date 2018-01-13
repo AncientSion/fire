@@ -711,3 +711,8 @@ Missile.prototype.create = function(data){
 		this.crits.push(new Crit(data.crits[k]));
 	}
 }
+
+Missile.prototype.getBaseImage = function(){
+	return graphics.images["missile"];	
+}
+
