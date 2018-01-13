@@ -1703,7 +1703,14 @@ function Game(data, userid){
 						counter++;
 						var real = game.ships[i].getUnitPosition(j);
 
-						for (var k = 0; k < 5; k++){
+						anim.anims.push({
+							t: [0 - j*30, 60],
+							s: game.ships[i].getExplosionSize(j),
+							x: base.x + real.x,
+							y: base.y + real.y,
+						});
+
+						/*for (var k = 0; k < 5; k++){
 							anim.anims.push({
 								t: [0 - 30*anim.anims.length - j*20, 70],
 								t: [0 - range(0, 15), 70],
@@ -1711,7 +1718,7 @@ function Game(data, userid){
 								x: base.x + real.x + (range(-1, 1) * range(0, game.ships[i].size / 10)),
 								y: base.y + real.y + (range(-1, 1) * range(0, game.ships[i].size / 10)),
 							});
-						}
+						}*/
 					}
 				}
 				anim.html += "A total of <font color='" + color + "'>" + counter + "</font> elements from <font color='" + color + "'>Unit #" + anim.id + "</font> were destroyed or disengaged";

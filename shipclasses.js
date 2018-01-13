@@ -1592,9 +1592,6 @@ Ship.prototype.getFireDest = function(fire, isHit, num){
 }
 
 Ship.prototype.getExplosionSize = function(j){
-}
-
-Ship.prototype.getExplosionSize = function(j){
 	if (this.ship){return this.size;}
 	else if (this.squad){return this.structures[j].size/2;}
 	else if (this.flight){return this.structures[j].mass / 3;}
