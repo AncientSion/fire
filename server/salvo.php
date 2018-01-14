@@ -39,7 +39,7 @@ class Salvo extends Mixed {
 	}
 
 	public function setCurrentImpulse($turn, $phase){
-		$this->baseImpulse = ceil(pow($this->mass, -0.75)*325);
+		$this->baseImpulse = ceil(pow($this->mass, -0.75)*32500);
 
 		$elapsed = 1 + $turn - $this->available;
 
@@ -64,6 +64,7 @@ class Salvo extends Mixed {
 	}
 
 	public function calculateToHit($fire){
+		return 100;
 		$base = 90;
 		$mask = $fire->target->getDefensiveBonus($this->id);
 		$traverse = $fire->weapon->getTraverseMod($fire)*0.2;

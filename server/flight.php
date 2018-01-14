@@ -73,6 +73,7 @@ class Flight extends Mixed {
 	}
 
 	public function calculateToHit($fire){
+		return 100;
 		$multi = 1;
 		$req = 0;
 		

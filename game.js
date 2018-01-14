@@ -1703,7 +1703,7 @@ function Game(data, userid){
 						var real = game.ships[i].getUnitPosition(j);
 
 						anim.anims.push({
-							t: [0 - j*30, 60],
+							t: [0 - counter*20, 40],
 							s: game.ships[i].getExplosionSize(j),
 							x: base.x + real.x,
 							y: base.y + real.y,

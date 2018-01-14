@@ -1061,7 +1061,7 @@ Squadron.prototype.setImage = function(){
 		ctx.translate(this.structures[i].layout.x/2, this.structures[i].layout.y/2);
 		//ctx.rotate(-90 * (Math.PI/180))
 		ctx.drawImage(
-			graphics.images[this.structures[i].name.toLowerCase()],
+			this.structures[i].getBaseImage(),
 			0 -this.structures[i].size/2,
 			0 -this.structures[i].size/2,
 			this.structures[i].size, 

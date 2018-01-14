@@ -27,7 +27,7 @@ class Vorchar extends Light {
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new LightIon($this->getId(), $this->parentId, 300, 180);
+		$left->systems[] = new LightIon($this->getId(), $this->parentId, 200, 180);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

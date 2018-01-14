@@ -517,7 +517,7 @@ Mixed.prototype.setPatrolImage = function(){
 			ctx.translate(this.structures[i].layout.x, this.structures[i].layout.y);
 			ctx.rotate((360/this.structures.length*i) * (Math.PI/180));
 			ctx.drawImage(
-				graphics.images[this.structures[i].name.toLowerCase()],
+				this.structures[i].getBaseImage(),
 				0 -size/2,
 				0 -size/2,
 				size, 
@@ -547,7 +547,7 @@ Mixed.prototype.setPreMoveImage = function(){
 
 		ctx.translate(this.structures[i].layout.x, this.structures[i].layout.y);
 		ctx.drawImage(
-			graphics.images[this.structures[i].name.toLowerCase()],
+			this.structures[i].getBaseImage(),
 			0 -size/2,
 			0 -size/2,
 			size, 
@@ -576,7 +576,7 @@ Mixed.prototype.setPostMoveImage = function(){
 		ctx.translate(this.structures[i].layout.x, this.structures[i].layout.y);
 		ctx.rotate((360/this.structures.length*i) * (Math.PI/180));
 		ctx.drawImage(
-		graphics.images[this.structures[i].name.toLowerCase()],
+		this.structures[i].getBaseImage(),
 			0 -size/2,
 			0 -size/2,
 			size, 

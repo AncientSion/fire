@@ -1342,6 +1342,7 @@ Ship.prototype.animateSelfDeployment = function(){
 		this.drawSelf();
 		ctx.rotate(-this.getDrawFacing() * Math.PI/180);
 		ctx.translate(-this.drawX, -this.drawY);
+		this.createDeployEntry();
 		return;
 	}
 
@@ -2349,16 +2350,16 @@ Ship.prototype.getAttachDivs = function(){
 				return b.friendly - a.friendly;
 			});
 
+			var pWidth = $(this.element).width();
+			//console.log(pWidth);
+
 			for (var i = 0; i < attach.length; i++){
 				if (attach[i].ship || attach[i].squad){continue;}
 
-				//if (this.flight){
-				//	console.log("ding");
-				//}
 				ccContainer = attach[i].supplyAttachDiv(ccContainer);
 			}
 
-			$(this.element).append(ccContainer);
+			$(this.element).append($(ccContainer).css("width", pWidth));
 		}
 
 	}
