@@ -10,8 +10,8 @@
 		function __construct(){
 
 			if ($this->connection === null){
-				$user = "aatu"; $pass = "Kiiski";
-				//$user = "root"; $pass = "147147";
+				//$user = "aatu"; $pass = "Kiiski";
+				$user = "root"; $pass = "147147";
 				$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$user,$pass);
 				$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -1391,7 +1391,7 @@
 
 				if ($result){
 					for ($j = 0; $j < sizeof($result); $j++){
-						$units[$i]->getSystemById($result[$j]["systemid"])->ew[] = new EW(
+						$units[$i]->getSystem($result[$j]["systemid"])->ew[] = new EW(
 							$result[$j]["id"],
 							$result[$j]["unitid"],
 							$result[$j]["systemid"],

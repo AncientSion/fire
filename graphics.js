@@ -47,6 +47,9 @@ window.graphics = {
 
 		this.images.primus = new Image();
 		this.images.primus.src = "shipIcons/primus.png";
+		
+		this.images.tech = new Image();
+		this.images.tech.src = "shipIcons/primus.png";
 
 		this.images.octurion = new Image();
 		this.images.octurion.src = "shipIcons/octurion.png";

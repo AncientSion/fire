@@ -278,7 +278,7 @@ else {
 								.data("systemid", game.ships[0].upgrades[i].systemid)
 								.hover(function(){
 									$(this).toggleClass("rowHighlight");
-									$(game.getUnit(0).getSystemById($(this).data("systemid")).element).toggleClass("borderHighlight");
+									$(game.getUnit(0).getSystem($(this).data("systemid")).element).toggleClass("borderHighlight");
 								})
 	
 

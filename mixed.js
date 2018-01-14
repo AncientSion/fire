@@ -376,7 +376,7 @@ Mixed.prototype.hasSystemSelected = function(){
 	return false;
 }
 
-Mixed.prototype.getSystemById = function(id){
+Mixed.prototype.getSystem = function(id){
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].id == id){
 			return this.structures[i];
@@ -387,6 +387,10 @@ Mixed.prototype.getSystemById = function(id){
 			}
 		}
 	}
+}
+
+Mixed.prototype.getSystemByName = function(name){
+	return false;
 }
 
 Mixed.prototype.getParent = function(){
@@ -626,7 +630,7 @@ Mixed.prototype.getFireDest = function(fire, isHit, num){
 		t = this.getRandomUnitPos();
 	}
 	else {
-		t = this.getSystemById(fire.damages[num].systemid).layout;
+		t = this.getSystem(fire.damages[num].systemid).layout;
 	}
 
 	if (this.mission.arrived){

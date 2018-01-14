@@ -133,8 +133,8 @@ class Squadron extends Ship {
 		}
 	}
 
-	public function getSystemById($id){
-		//Debug::log("Squadron getSystemById #".$id);
+	public function getSystem($id){
+		//Debug::log("Squadron getSystem #".$id);
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 			if ($this->primary->systems[$i]->id == $id){
 				return $this->primary->systems[$i];
@@ -152,7 +152,7 @@ class Squadron extends Ship {
 				}
 			}
 		}
-		//Debug::log("ERROR squadron getSystemById: ".$id);
+		//Debug::log("ERROR squadron getSystem: ".$id);
 	}
 
 	public function determineHits($fire){

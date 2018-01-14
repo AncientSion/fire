@@ -152,7 +152,7 @@ Salvo.prototype.createBaseDiv = function(){
 			td.className = "iconContainer"; 
 			$(td).data("id", this.structures[i].id);
 			td.addEventListener("click", function(){
-				console.log(game.getUnit(aUnit).getSystemById($(this).data("id")));
+				console.log(game.getUnit(aUnit).getSystem($(this).data("id")));
 			})
 
 			if (this.structures[i].destroyed || this.structures[i].disabled){

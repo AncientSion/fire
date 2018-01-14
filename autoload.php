@@ -48,6 +48,7 @@ spl_autoload_register(
                 'altarian' => '/server/ships/altarian.php',
                 'demos' => '/server/ships/demos.php',
                 'primus' => '/server/ships/primus.php',
+                'tech' => '/server/ships/tech.php',
                 'octurion' => '/server/ships/octurion.php',
 
                 'sharlin' => '/server/ships/sharlin.php',

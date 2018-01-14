@@ -335,7 +335,7 @@ class Mixed extends Ship {
 		return true;
 	}
 
-	public function getSystemById($id){
+	public function getSystem($id){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->id == $id){
 				return $this->structures[$i];

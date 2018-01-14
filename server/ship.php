@@ -334,12 +334,12 @@ class Ship {
 
 		//if (get_class($this) == "Demos"){
 		//	var_export($dbload);
-		//	$this->getSystemById($chunk[sizeof($chunk)-1]["systemid"])->adjustLoad($chunk);
+		//	$this->getSystem($chunk[sizeof($chunk)-1]["systemid"])->adjustLoad($chunk);
 		//}
 
 		for ($i = 1; $i < sizeof($dbLoad); $i++){
 			if ($dbLoad[$i]["systemid"] != $chunk[sizeof($chunk)-1]["systemid"]){
-				$this->getSystemById($chunk[sizeof($chunk)-1]["systemid"])->adjustLoad($chunk);
+				$this->getSystem($chunk[sizeof($chunk)-1]["systemid"])->adjustLoad($chunk);
 				$chunk = array();
 				$chunk[] = $dbLoad[$i];
 			}
@@ -348,7 +348,7 @@ class Ship {
 			}
 		}
 
-		$this->getSystemById($chunk[sizeof($chunk)-1]["systemid"])->adjustLoad($chunk);
+		$this->getSystem($chunk[sizeof($chunk)-1]["systemid"])->adjustLoad($chunk);
 
 		return true;
 	}
@@ -356,7 +356,7 @@ class Ship {
 	public function addFireDB($fires){
 		for ($i = 0; $i < sizeof($fires); $i++){
 			//Debug::log("FIRE trying to find ".$fires[$i]->weaponid);
-			$this->getSystemById($fires[$i]->weaponid)->fireOrders[] = $fires[$i];
+			$this->getSystem($fires[$i]->weaponid)->fireOrders[] = $fires[$i];
 		}
 	}
 
@@ -364,7 +364,7 @@ class Ship {
 		for ($i = 0; $i < sizeof($powers); $i++){
 			//if ($this->id == 15 && $powers[$i]->systemid == 14){Debug::log("adding");}
 			//echo ($this->id.", ".get_class($this).", ".$powers[$i]->unitid."/".$powers[$i]->systemid);
-			$this->getSystemById($powers[$i]->systemid)->addPowerEntry($powers[$i]);
+			$this->getSystem($powers[$i]->systemid)->addPowerEntry($powers[$i]);
 		}
 	}
 
@@ -937,8 +937,8 @@ class Ship {
 		}
 	}
 
-	public function getSystemById($id){
-		//if ($id == 14){Debug::log("ship getSystemById looking for: ".$id);}
+	public function getSystem($id){
+		//if ($id == 14){Debug::log("ship getSystem looking for: ".$id);}
 		if ($id == 1){
 			return $this->primary;
 		}
@@ -960,7 +960,7 @@ class Ship {
 				}
 			}
 		}
-		echo ("ERROR ship getSystemById: ".$id." on unit #".$this->id."/".$this->display);
+		echo ("ERROR ship getSystem: ".$id." on unit #".$this->id."/".$this->display);
 	}
 
 	public function getSystemByName($name){

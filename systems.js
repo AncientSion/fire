@@ -373,13 +373,13 @@ System.prototype.getBoostDiv = function(){
 			e.stopPropagation();
 			if (game.phase != -1){return;}
 			var data = $(this.parentNode).data();
-			game.getUnit(data.shipId).getSystemById(data.systemId).plus(false);
+			game.getUnit(data.shipId).getSystem(data.systemId).plus(false);
 		}).contextmenu(function(e){
 			e.stopPropagation();
 			e.preventDefault();
 			if (game.phase != -1){return;}
 			var data = $(this.parentNode).data();
-			game.getUnit(data.shipId).getSystemById(data.systemId).plus(true);
+			game.getUnit(data.shipId).getSystem(data.systemId).plus(true);
 		})
 		div.appendChild(subDiv);
 	var subDiv = document.createElement("div");
@@ -390,13 +390,13 @@ System.prototype.getBoostDiv = function(){
 			e.stopPropagation();
 			if (game.phase != -1){return;}
 			var data = $(this.parentNode).data();
-			game.getUnit(data.shipId).getSystemById(data.systemId).minus(false);
+			game.getUnit(data.shipId).getSystem(data.systemId).minus(false);
 		}).contextmenu(function(e){
 			e.stopPropagation();
 			e.preventDefault();
 			if (game.phase != -1){return;}
 			var data = $(this.parentNode).data();
-			game.getUnit(data.shipId).getSystemById(data.systemId).minus(true);
+			game.getUnit(data.shipId).getSystem(data.systemId).minus(true);
 		})
 		div.appendChild(subDiv);
 	return div;
@@ -419,7 +419,7 @@ System.prototype.getPowerDiv = function(){
 				e.stopPropagation();
 				if (game.phase != -1){return;}
 				var data = $(this.parentNode).data();
-				game.getUnit(data.shipId).getSystemById(data.systemId).doPower();
+				game.getUnit(data.shipId).getSystem(data.systemId).doPower();
 			})
 			.contextmenu(function(e){
 				e.stopPropagation(); e.preventDefault();
@@ -438,7 +438,7 @@ System.prototype.getPowerDiv = function(){
 				e.stopPropagation();
 				if (game.phase != -1){return;}
 				var data = $(this.parentNode).data();
-				game.getUnit(data.shipId).getSystemById(data.systemId).doUnpower();
+				game.getUnit(data.shipId).getSystem(data.systemId).doUnpower();
 			})
 			.contextmenu(function(e){
 				e.stopPropagation(); e.preventDefault();
@@ -465,7 +465,7 @@ System.prototype.getModeDiv = function(){
 			.click(function(e){
 				e.stopPropagation(); e.preventDefault();
 				var data = $(this.parentNode).data();
-				game.getUnit(data.shipId).getSystemById(data.systemId).switchMode();
+				game.getUnit(data.shipId).getSystem(data.systemId).switchMode();
 			})
 			.contextmenu(function(e){
 				e.stopPropagation(); e.preventDefault();
@@ -2595,7 +2595,7 @@ Dual.prototype.getBoostDiva = function(){
 						e.stopPropagation();
 						if (game.phase != -1){return;}
 						var data = $(this.parentNode).data();
-						game.getUnit(data.shipId).getSystemById(data.systemId).plus();
+						game.getUnit(data.shipId).getSystem(data.systemId).plus();
 					});
 					div.appendChild(subDiv);
 				var subDiv = document.createElement("div");
@@ -2606,7 +2606,7 @@ Dual.prototype.getBoostDiva = function(){
 						e.stopPropagation();
 						if (game.phase != -1){return;}
 						var data = $(this.parentNode).data();
-						game.getUnit(data.shipId).getSystemById(data.systemId).minus();
+						game.getUnit(data.shipId).getSystem(data.systemId).minus();
 					});
 				div.appendChild(subDiv);	
 				return div;
@@ -2962,21 +2962,21 @@ Launcher.prototype.updateTotals = function(){
 			td.innerHTML = "<img class='size20' src='varIcons/plus.png'>"; tr.appendChild(td);
 			td.addEventListener("click", function(e){
 				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystemById($("#weaponLoadoutDiv").data("systemid")).addAmmo(this.parentNode, false);
+				window.game.ships[0].getSystem($("#weaponLoadoutDiv").data("systemid")).addAmmo(this.parentNode, false);
 			})
 			td.addEventListener("contextmenu", function(e){
 				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystemById($("#weaponLoadoutDiv").data("systemid")).addAmmo(this.parentNode, true);
+				window.game.ships[0].getSystem($("#weaponLoadoutDiv").data("systemid")).addAmmo(this.parentNode, true);
 			})
 		var td = document.createElement("td");
 			td.innerHTML = "<img class='size20' src='varIcons/minus.png'>"; tr.appendChild(td);
 			td.addEventListener("click", function(e){
 				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystemById($("#weaponLoadoutDiv").data("systemid")).removeAmmo(this.parentNode, false);
+				window.game.ships[0].getSystem($("#weaponLoadoutDiv").data("systemid")).removeAmmo(this.parentNode, false);
 			})
 			td.addEventListener("contextmenu", function(e){
 				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystemById($("#weaponLoadoutDiv").data("systemid")).removeAmmo(this.parentNode, true);
+				window.game.ships[0].getSystem($("#weaponLoadoutDiv").data("systemid")).removeAmmo(this.parentNode, true);
 			})
 
 			amount += this.loads[i].amount
@@ -3203,20 +3203,20 @@ Hangar.prototype.showHangarControl = function(){
 			var td = document.createElement("td");
 				td.innerHTML = "<img height='20px' width='20px' src='varIcons/plus.png'>"; $(td).data("name", this.loads[i].name).data("val", 1); tr.appendChild(td);
 				td.addEventListener("click", function(){
-					game.getUnit(aUnit).getSystemById(id).alterFlight(this, false);
+					game.getUnit(aUnit).getSystem(id).alterFlight(this, false);
 				});
 				td.addEventListener("contextmenu", function(e){
 					e.preventDefault();
-					game.getUnit(aUnit).getSystemById(id).alterFlight(this, true);
+					game.getUnit(aUnit).getSystem(id).alterFlight(this, true);
 				});
 			var td = document.createElement("td");
 				td.innerHTML = "<img height='20px' width='20px' src='varIcons/minus.png'>"; $(td).data("name", this.loads[i].name).data("val", -1); tr.appendChild(td);
 				td.addEventListener("click", function(){
-					game.getUnit(aUnit).getSystemById(id).alterFlight(this, false);
+					game.getUnit(aUnit).getSystem(id).alterFlight(this, false);
 				});
 				td.addEventListener("contextmenu", function(e){
 					e.preventDefault();
-					game.getUnit(aUnit).getSystemById(id).alterFlight(this, true);
+					game.getUnit(aUnit).getSystem(id).alterFlight(this, true);
 				});
 			var td = document.createElement("td");
 				td.id = this.loads[i].name + "Amount";
@@ -3234,7 +3234,7 @@ Hangar.prototype.showHangarControl = function(){
 					if (i){
 						$(this).off("click");
 						$(this).click(function(){
-							game.getUnit(aUnit).getSystemById($("#hangarLoadoutDiv").data("systemid")).setMission(i);
+							game.getUnit(aUnit).getSystem($("#hangarLoadoutDiv").data("systemid")).setMission(i);
 						})
 					}
 				})
@@ -3467,21 +3467,21 @@ Hangar.prototype.updateTotals = function(){
 			td.innerHTML = "<img class='size20' src='varIcons/plus.png'>"; tr.appendChild(td);
 			td.addEventListener("click", function(e){
 				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystemById($("#hangarLoadoutDiv").data("systemid")).addFighter(this.parentNode, false);
+				window.game.ships[0].getSystem($("#hangarLoadoutDiv").data("systemid")).addFighter(this.parentNode, false);
 			})
 			td.addEventListener("contextmenu", function(e){
 				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystemById($("#hangarLoadoutDiv").data("systemid")).addFighter(this.parentNode, true);
+				window.game.ships[0].getSystem($("#hangarLoadoutDiv").data("systemid")).addFighter(this.parentNode, true);
 			})
 		var td = document.createElement("td");
 			td.innerHTML = "<img class='size20' src='varIcons/minus.png'>"; tr.appendChild(td);
 			td.addEventListener("click", function(e){
 				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystemById($("#hangarLoadoutDiv").data("systemid")).removeFighter(this.parentNode, false);
+				window.game.ships[0].getSystem($("#hangarLoadoutDiv").data("systemid")).removeFighter(this.parentNode, false);
 			})
 			td.addEventListener("contextmenu", function(e){
 				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystemById($("#hangarLoadoutDiv").data("systemid")).removeFighter(this.parentNode, true);
+				window.game.ships[0].getSystem($("#hangarLoadoutDiv").data("systemid")).removeFighter(this.parentNode, true);
 			})
 
 			amount += this.loads[i].amount;

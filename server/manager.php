@@ -728,7 +728,7 @@ class Manager {
 			//Debug::log("handling fire #".$i);
 			$skip = 0;
 			$shooter = $this->getUnit($fires[$i]->shooterid);
-			$launcher = $shooter->getSystemById($fires[$i]->weaponid);
+			$launcher = $shooter->getSystem($fires[$i]->weaponid);
 			$fires[$i]->shots = $launcher->getShots($this->turn);
 			if (!($launcher instanceof Launcher)){
 				//Debug::log("Hangar fireorder, resolving: ".$fires[$i]->id);
@@ -1192,7 +1192,7 @@ class Manager {
 			//echo "fire: ".$this->fires[$i]->id; echo "</br></br>";
 			//var_export($this->fires[$i]); echo "</br></br>";
 			$this->fires[$i]->shooter = $this->getUnit($this->fires[$i]->shooterid);
-			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystemById($this->fires[$i]->weaponid);
+			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystem($this->fires[$i]->weaponid);
 			//echo get_class($this->fires[$i]->weapon); echo "</br></br>";
 			$this->fires[$i]->shots = $this->fires[$i]->weapon->getShots($this->turn);
 			$this->fires[$i]->target = $this->getUnit($this->fires[$i]->targetid);
@@ -1425,46 +1425,6 @@ class Manager {
 		));
 	}
 
-	public function getReinforcementShips($faction){
-		//Debug::log("getShipsForFaction");
-		$ships = array();
-
-		switch ($faction){
-			case "Earth Alliance";
-				$ships = array(
-					array("Omega", 4, 4),
-					array("Hyperion", 8, 3),
-					array("Avenger", 3, 3),
-					array("Artemis", 10, 3),
-					array("Olympus", 10, 2),
-				);
-				break;
-			case "Centauri Republic";
-				$ships = array(
-					array("Primus", 8, 4),
-					array("Altarian", 10, 3),
-					array("Demos", 10, 2),
-					);
-				break;
-			case "Minbari Federation";
-				$ships = array(
-					array("Sharlin", 8, 4),
-					array("Tinashi", 4, 3),
-				);
-				break;
-			case "Narn Regime";
-				$ships = array(
-					array("GQuan", 6, 2)
-				);
-				break;
-			default:
-				break;
-		}
-
-		return $ships;
-
-	}
-
 	public function getShipsForFaction($faction){
 		//Debug::log("getShipsForFaction");
 		$ships = array(array(), array());
@@ -1492,6 +1452,7 @@ class Manager {
 					array(
 						"Octurion",
 						"Primus",
+						//"Tech",
 						"Altarian",
 						"Demos",
 					),
@@ -1556,6 +1517,46 @@ class Manager {
 		return $return;
 	}
 
+
+	public function getReinforcementShips($faction){
+		//Debug::log("getShipsForFaction");
+		$ships = array();
+
+		switch ($faction){
+			case "Earth Alliance";
+				$ships = array(
+					array("Omega", 4, 4),
+					array("Hyperion", 8, 3),
+					array("Avenger", 3, 3),
+					array("Artemis", 10, 3),
+					array("Olympus", 10, 2),
+				);
+				break;
+			case "Centauri Republic";
+				$ships = array(
+					array("Primus", 8, 4),
+					array("Altarian", 10, 3),
+					array("Demos", 10, 2),
+					);
+				break;
+			case "Minbari Federation";
+				$ships = array(
+					array("Sharlin", 8, 4),
+					array("Tinashi", 4, 3),
+				);
+				break;
+			case "Narn Regime";
+				$ships = array(
+					array("GQuan", 6, 2)
+				);
+				break;
+			default:
+				break;
+		}
+
+		return $ships;
+
+	}
 	public function getPreviewData($get){
 		//Debug::log("asking for preview of: ".$get["name"].", index: ".$get["index"]);
 		$unit;

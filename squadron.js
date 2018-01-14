@@ -101,14 +101,14 @@ Squaddie.prototype.expandElement = function(){
 						var data = $(this).closest(".unitContainer").data();
 						var	shipId = data.shipId;
 						var systemId = data.systemId;
-						console.log(game.getUnit(shipId).getSystemById(systemId));
+						console.log(game.getUnit(shipId).getSystem(systemId));
 					})
 					.hover(
 						function(e){
 						var data = $(this).closest(".unitContainer").data();
 						var	shipId = data.shipId;
 						var systemId = data.systemId;
-							game.getUnit(shipId).getSystemById(systemId).hover(e);
+							game.getUnit(shipId).getSystem(systemId).hover(e);
 						}
 					)
 				)
@@ -196,12 +196,12 @@ Squaddie.prototype.attachEvent = function(ele){
 	.hover(
 		function(e){
 			e.stopPropagation();
-			game.getUnit($(this).data("shipId")).getSystemById($(this).data("systemId")).hover(e);
+			game.getUnit($(this).data("shipId")).getSystem($(this).data("systemId")).hover(e);
 		}
 	).click(
 		function(e){
 			e.stopPropagation();
-			game.getUnit($(this).data("shipId")).getSystemById($(this).data("systemId")).select(e);
+			game.getUnit($(this).data("shipId")).getSystem($(this).data("systemId")).select(e);
 		}
 	).
 	contextmenu(
@@ -259,7 +259,7 @@ Squaddie.prototype.updateSystemDetailsDiv = function(){
 }
 
 Squaddie.prototype.doUnpowerAll = function(id){
-	var system = this.getSystemById(id);
+	var system = this.getSystem(id);
 		$(system.element).find(".powerDiv").find(".unpower").hide().end().find(".power").show();
 	var name = system.getActiveSystem().name;
 
@@ -275,7 +275,7 @@ Squaddie.prototype.doUnpowerAll = function(id){
 }
 
 Squaddie.prototype.doPowerAll = function(id){
-	var system = this.getSystemById(id);
+	var system = this.getSystem(id);
 		$(system.element).find(".powerDiv").find(".power").hide().end().find(".unpower").show();
 	var name = system.getActiveSystem().name;
 
@@ -292,7 +292,7 @@ Squaddie.prototype.doPowerAll = function(id){
 	}
 }
 
-Squaddie.prototype.getSystemById = function(id){
+Squaddie.prototype.getSystem = function(id){
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			if (this.structures[i].systems[j].id == id){
@@ -355,11 +355,11 @@ Squaddie.prototype.getArmourData = function(){
 		.hover(
 			function(e){
 				var data = $(this).closest(".unitContainer").data();
-				game.getUnit(data.shipId).getSystemById(data.systemId).armourIn(e);
+				game.getUnit(data.shipId).getSystem(data.systemId).armourIn(e);
 			},
 			function(e){
 				var data = $(this).closest(".unitContainer").data();
-				game.getUnit(data.shipId).getSystemById(data.systemId).armourOut(e);
+				game.getUnit(data.shipId).getSystem(data.systemId).armourOut(e);
 			}
 		)
 	}
@@ -812,7 +812,7 @@ Squadron.prototype.getSystemByName = function(name){
 	}
 }
 
-Squadron.prototype.getSystemById = function(id){
+Squadron.prototype.getSystem = function(id){
 	for (var i = 0; i < this.primary.systems.length; i++){
 		if (this.primary.systems[i].id == id){
 			return this.primary.systems[i];
@@ -992,7 +992,7 @@ Squadron.prototype.getBaseHitChance = function(){
 }
 
 Squadron.prototype.selectAll = function(e, id){
-	var s = this.getSystemById(id);
+	var s = this.getSystem(id);
 	if (!s.weapon){return;}
 	var w = s.getActiveSystem();
 	var name = w.name;
@@ -1138,7 +1138,7 @@ Squadron.prototype.getFireDest = function(fire, isHit, num){
 			y: range(10, 25) * (1-range(0, 1)*2)
 		}
 	}
-	var t = this.getSystemById(fire.damages[num].systemid).layout;
+	var t = this.getSystem(fire.damages[num].systemid).layout;
 	var x = t.x/2 * 0.5 + range(-8, 8);
 	var y = t.y/2 * 0.5 + range(-8, 8);
 	return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());

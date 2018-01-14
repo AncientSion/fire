@@ -1,8 +1,8 @@
 <?php
 
-class Primus extends SuperHeavy {
-	public $name = "Primus";
-	public $display = "Primus";
+class Tech extends SuperHeavy {
+	public $name = "Tech";
+	public $display = "Tech";
 	public $faction = "Centauri Republic";
 	public $size =  100;
 	public static $value = 1080;
@@ -31,7 +31,7 @@ class Primus extends SuperHeavy {
 		$right->systems[] = new Hangar($this->getId(), $this->id, 9, array("Sentri", "Sitara"), 9);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 150, 210, 900, 19);
+		$aft = new Structure($this->getId(), $this->id, 150, 210, 900, 29);
 		$aft->systems[] = new MediumIon($this->getId(), $this->id, 120, 240);
 		$aft->systems[] = new MediumIon($this->getId(), $this->id, 120, 240);
 		$structs[] = $aft;
@@ -53,7 +53,7 @@ class Primus extends SuperHeavy {
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1300);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(160, 4));
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(160, 4), 65);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(160, 4), 900, 10);
+		$this->primary->systems[] = new Cyber($this->getId(), $this->id, array(160, 4), 900, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(160, 4));
     }
 

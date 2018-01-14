@@ -274,13 +274,13 @@ Structure.prototype.getTableData = function(){
 			function(e){
 				var shipId = $(this).data("shipId");
 				var systemId = $(this).data("systemId");
-				game.getUnit(shipId).getSystemById(systemId).hover(e);
+				game.getUnit(shipId).getSystem(systemId).hover(e);
 			}
 		)
 		.click(function(e){
 			var shipId = $(this).data("shipId");
 			var systemId = $(this).data("systemId");
-		console.log(game.getUnit(shipId).getSystemById(systemId));
+		console.log(game.getUnit(shipId).getSystem(systemId));
 		})
 
 	this.element = td;

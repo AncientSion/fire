@@ -764,7 +764,7 @@ Ship.prototype.issueTurn = function(a){
 }
 
 Ship.prototype.switchModeAll = function(id){
-	var system = this.getSystemById(id);
+	var system = this.getSystem(id);
 	var name = system.getActiveSystem().name;
 
 	for (var i = 0; i < this.structures.length; i++){
@@ -1547,7 +1547,7 @@ Ship.prototype.getWeaponOrigin = function(id){
 		}
 	}
 	console.log("lacking gun origin");
-	return this.getSystemById(id);
+	return this.getSystem(id);
 }
 
 Ship.prototype.resetMoveMode = function(){
@@ -2551,7 +2551,7 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 		}
 		//ctx.rotate(-rota*(Math.PI/180));
 		ctx.translate(-t.width/2, -t.height/2);
-		tresh *= 2
+		tresh *= 2;
 	}
 
 	if (hostile.length){
@@ -2694,9 +2694,8 @@ Ship.prototype.drawIncomingMovePlan = function(){
 }
 
 Ship.prototype.drawEW = function(){
-	if (this.ship || this.squad){
-		this.getSystemByName("Sensor").drawEW();
-	}
+	var s = this.getSystemByName("Sensor");
+	if (s){s.drawEW();}
 }
 
 Ship.prototype.drawMoveLength = function(){
@@ -2734,7 +2733,7 @@ Ship.prototype.hasSystemSelected = function(name){
 	return false;
 }
 
-Ship.prototype.getSystemById = function(id){
+Ship.prototype.getSystem = function(id){
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].id == id){
 			return this.structures[i];
@@ -2872,12 +2871,12 @@ Ship.prototype.attachEvent = function(td){
 	$(td).hover(
 		function(e){
 			e.stopPropagation();
-			game.getUnit($(this).data("shipId")).getSystemById($(this).data("systemId")).hover(e);
+			game.getUnit($(this).data("shipId")).getSystem($(this).data("systemId")).hover(e);
 		}
 	).click(
 		function(e){
 			e.stopPropagation();
-			game.getUnit($(this).data("shipId")).getSystemById($(this).data("systemId")).select(e);
+			game.getUnit($(this).data("shipId")).getSystem($(this).data("systemId")).select(e);
 		}
 	).
 	contextmenu(
@@ -2890,7 +2889,7 @@ Ship.prototype.attachEvent = function(td){
 }
 
 Ship.prototype.selectAll = function(e, id){
-	var s = this.getSystemById(id);
+	var s = this.getSystem(id);
 	if (!s.weapon){return;}
 	var w = s.getActiveSystem();
 	var name = w.name;
@@ -2911,7 +2910,7 @@ Ship.prototype.selectAll = function(e, id){
 }
 
 Ship.prototype.doUnpowerAll = function(id){
-	var system = this.getSystemById(id);
+	var system = this.getSystem(id);
 		$(system.element).find(".powerDiv").find(".unpower").hide().end().find(".power").show();
 	var name = system.getActiveSystem().name;
 
@@ -2927,7 +2926,7 @@ Ship.prototype.doUnpowerAll = function(id){
 }
 
 Ship.prototype.doPowerAll = function(id){
-	var system = this.getSystemById(id);
+	var system = this.getSystem(id);
 		$(system.element).find(".powerDiv").find(".power").hide().end().find(".unpower").show();
 	var name = system.getActiveSystem().name;
 

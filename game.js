@@ -110,7 +110,7 @@ function Game(data, userid){
 	}
 
 	this.enableFlightDeployment = function(){
-		this.flightDeploy = this.getUnit(aUnit).getSystemById($("#hangarLoadoutDiv").data("systemid"));
+		this.flightDeploy = this.getUnit(aUnit).getSystem($("#hangarLoadoutDiv").data("systemid"));
 		//var mission = this.getMissionTypeString(this.flightDeploy.mission);
 
 		instruct("Please select the offensive or defensive target for the flight");
@@ -288,7 +288,7 @@ function Game(data, userid){
 		}
 
 		var s = this.getUnit(aUnit);
-		var hangar = s.getSystemById(this.flightDeploy.id)
+		var hangar = s.getSystem(this.flightDeploy.id)
 		var o = s.getPlannedPos();
 		var facing = getAngleFromTo(o, dest);
 		var p = getPointInDirection(s.size/2, facing, o.x, o.y);
@@ -1189,8 +1189,9 @@ function Game(data, userid){
 
 		if (aUnit != game.shortInfo){
 			var u = game.getUnit(aUnit);
+
 			if (u.ship || u.squad){
-				u.getSystemByName("Sensor").drawEW();
+				u.drawEW();
 				u.setMoveTranslation();
 				u.drawMoveArea();
 				u.drawVectorIndicator();
@@ -1228,7 +1229,7 @@ function Game(data, userid){
 				unit.resetMoveMode();
 
 				if (unit.ship || unit.squad){
-					unit.getSystemByName("Sensor").drawEW();
+					unit.drawEW();
 					unit.setMoveTranslation();
 					unit.drawMoveArea();
 					unit.drawVectorIndicator();
@@ -1557,7 +1558,7 @@ function Game(data, userid){
 		for (var i = 0; i < this.fireOrders.length; i++){
 			this.fireOrders[i].target = game.getUnit(this.fireOrders[i].targetid);
 			this.fireOrders[i].shooter = game.getUnit(this.fireOrders[i].shooterid);
-			this.fireOrders[i].weapon = this.fireOrders[i].shooter.getSystemById(this.fireOrders[i].weaponid).getActiveSystem();
+			this.fireOrders[i].weapon = this.fireOrders[i].shooter.getSystem(this.fireOrders[i].weaponid).getActiveSystem();
 			this.fireOrders[i].damages = this.fireOrders[i].target.getDmgByFire(this.fireOrders[i]);
 			this.fireOrders[i].systems.push(this.fireOrders[i].weaponid);
 		}
