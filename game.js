@@ -194,8 +194,8 @@ function Game(data, userid){
 			s.doDraw = 1;
 			for (var i = s.cc.length-1; i >= 0; i--){
 				var attach = this.getUnit(s.cc[i]);
-				if (!attach.ship && attach.mission.targetid == s.id && t.id == attach.id){attach.doDraw = 1;} // skip CC targeting this
-				if (!attach.ship && attach.mission.targetid == s.id){continue;} // skip CC targeting this
+				if ( (attach.flight || attach.salvo) && attach.mission.targetid == s.id && t.id == attach.id){attach.doDraw = 1;} // skip CC targeting this
+				if ( (attach.flight || attach.salvo) && attach.mission.targetid == s.id){continue;} // skip CC targeting this
 				attach.detachFlight(s.id);
 				s.cc.splice(i, 1);
 			}

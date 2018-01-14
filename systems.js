@@ -1619,7 +1619,7 @@ Weapon.prototype.doUndoActions = function(){
 }
 
 Weapon.prototype.getShots = function(){
-	return this.shots;
+	return this.shots / this.linked;
 }
 
 Weapon.prototype.posIsOnArc = function(loc, pos, facing){

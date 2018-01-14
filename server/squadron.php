@@ -119,6 +119,12 @@ class Squadron extends Ship {
 					} else break;
 				}
 			}
+		}	
+
+		for ($j = 0; $j < sizeof($this->systems); $j++){
+			if ($this->systems[$j]->name == "Sensor"){
+				$this->systems[$j]->hideEW($turn);
+			}
 		}
 	}
 
