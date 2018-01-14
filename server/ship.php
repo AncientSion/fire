@@ -594,7 +594,7 @@ class Ship {
 	}
 
 	public function calculateToHit($fire){ // shooter
-		return 100;
+		//return 100;
 		$multi = 1;
 		$req = 0;
 		
