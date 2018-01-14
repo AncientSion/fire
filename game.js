@@ -2291,7 +2291,7 @@ function Game(data, userid){
 						function(){game.draw();}
 					)
 					.append($("<td>")
-						.append($(raphics.images[this.incoming[i].name.toLowerCase()].cloneNode(true))
+						.append($(graphics.images[this.incoming[i].name.toLowerCase()].cloneNode(true))
 							.addClass("size40")
 						)
 					)
@@ -2966,7 +2966,7 @@ Game.prototype.drawJumpMarker = function(s){
 		ctx.save();
 		ctx.translate(s.x, s.y);
 		ctx.rotate(s.a * Math.PI/180);
-		ctx.drawImage(raphics.images[s.name.toLowerCase()], -size/2, -size/2, size, size);
+		ctx.drawImage(graphics.images[s.name.toLowerCase()], -size/2, -size/2, size, size);
 		ctx.restore();
 	}
 
@@ -3001,7 +3001,7 @@ Game.prototype.undrawJumpMarker = function(id){
 	ctx.save();
 	ctx.translate(s.actions[0].x, s.actions[0].y);
 	ctx.rotate(s.actions[0].a * Math.PI/180);
-	ctx.drawImage(raphics.images[s.name.toLowerCase()], -s.size/2, -s.size/2, s.size, s.size);
+	ctx.drawImage(graphics.images[s.name.toLowerCase()], -s.size/2, -s.size/2, s.size, s.size);
 	ctx.restore();
 
 	this.resetShipTransform();
