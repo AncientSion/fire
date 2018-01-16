@@ -59,7 +59,7 @@ class Salvo extends Mixed {
 		return $this->trajectory;
 	}
 
-	public function addMissionDB($data, $userid, $turn, $phase){
+	public function addMission($data, $userid, $turn, $phase){
 		$this->mission = new Mission($data[sizeof($data)-1]);
 	}
 

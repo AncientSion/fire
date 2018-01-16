@@ -65,7 +65,7 @@ class Avenger extends Heavy {
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(140, 4), 12);
 	}
 
-	static function getKit(){
+	static function getKit($faction){
 		return array(
 			"id" => 0,
 			"name" => "",
@@ -77,7 +77,7 @@ class Avenger extends Heavy {
 				array(
 					"active" => 0,
 					"chance" => 50,
-					"name" => "Patrol (Half Load) Outfit",
+					"name" => "PATROL (Half Load) Outfit",
 					"cost" => 750,
 					"loads" =>
 					array(
@@ -106,7 +106,7 @@ class Avenger extends Heavy {
 				array(
 					"active" => 0,
 					"chance" => 50,
-					"name" => "Assault (Full Load) Oufit",
+					"name" => "ASSAULT (Full Load) Oufit",
 					"cost" => 1800,
 					"loads" =>
 					array(

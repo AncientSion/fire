@@ -45,7 +45,7 @@ class Demos extends Medium {
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(90, 3));
 	}
 
-	static function getKit(){
+	static function getKit($faction){
 		return array(
 			"id" => 0,
 			"name" => "",

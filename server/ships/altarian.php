@@ -51,7 +51,7 @@ class Altarian extends Medium {
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(90, 3));
 	}
 
-	static function getKit(){
+	static function getKit($faction){
 		return array(
 			"id" => 0,
 			"name" => "",
@@ -63,7 +63,7 @@ class Altarian extends Medium {
 				array(
 					"active" => 0,
 					"chance" => 40,
-					"name" => "Patrol (Sentri) Outfit",
+					"name" => "PATROL (Sentri) Outfit",
 					"cost" => 175,
 					"loads" =>
 					array(

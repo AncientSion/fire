@@ -10,8 +10,8 @@
 		function __construct(){
 
 			if ($this->connection === null){
-				$user = "aatu"; $pass = "Kiiski";
-				//$user = "root"; $pass = "147147";
+				//$user = "aatu"; $pass = "Kiiski";
+				$user = "root"; $pass = "147147";
 				$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$user,$pass);
 				$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -219,55 +219,17 @@
 
 			$stmt->execute();
 
-			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			$units = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-			if ($result){
-				return $result;
+			if ($units){
+				for ($i = 0; $i < sizeof($units); $i++){
+					if ($units[$i]["name"] == "Flight" || $units[$i]["name"] == "Squadron" || $units[$i]["ball"]){
+						$units[$i]["subunits"] = $this->getSubUnits($units[$i]);
+					}
+				}
 			}
-		}
-
-		public function insertReinforcements($gameid, $data){
-			//Debug::log("insertReinforcements: ".sizeof($data));
-			$stmt = $this->connection->prepare("
-				INSERT INTO units 
-					(gameid, userid, ship, ball, name, display, status, available, destroyed, facing, turn, phase)
-				VALUES
-					(:gameid, :userid, :ship, :ball, :name, :display, :status, :available, :destroyed, :facing, :turn, :phase)
-			");
-
-			$ship = 1;
-			$ball = 0;
-			$status = "reinforce";
-			$destroyed = 0;
-			$phase = -2;
-
-
-			for ($i = 0; $i < sizeof($data); $i++){
-				$stmt->bindParam(":gameid", $gameid);
-				$stmt->bindParam(":userid", $data[$i]["userid"]);
-				$stmt->bindParam(":ship", $ship);
-				$stmt->bindParam(":ball", $ball);
-				$stmt->bindParam(":name", $data[$i]["name"]);
-				$stmt->bindParam(":display", $data[$i]["display"]);
-				$stmt->bindParam(":status", $status);
-				$stmt->bindValue(":available", $data[$i]["eta"]);
-				$stmt->bindParam(":destroyed", $destroyed);
-				$stmt->bindParam(":facing", $data[$i]["cost"]);
-				$stmt->bindParam(":turn", $data[$i]["turn"]);
-				$stmt->bindParam(":phase", $phase);
-				$stmt->execute();
-
-				if ($stmt->errorCode() == 0){
-					$data[$i]["id"] = $this->getLastInsertId();
-					continue;
-				} else Debug::log("insertReinforcements ERROR");
-			}
-
-			//return;
-
-			$this->insertServerLoads($data[0]["userid"], $gameid, $data);
-
-			return true;
+			//Debug::log("getting: ".sizeof($units)." units");
+			return $units;
 		}
 		
 		public function createNewGame($name, $pv, $rv){
@@ -413,31 +375,6 @@
 			$this->insertClientActions($units);
 		}
 
-		public function insertSubUnits($units){
-			//Debug::log("insertSubUnits");
-			$stmt = $this->connection->prepare("
-				INSERT INTO subunits 
-					(unitid, amount, name)
-				VALUES
-					(:unitid, :amount, :name)
-			");
-
-			for ($i = 0; $i < sizeof($units); $i++){
-				if (!isset($units[$i]["launchData"]) || !(sizeof($units[$i]["launchData"]))){continue;}
-				$stmt->bindParam(":unitid", $units[$i]["id"]);
-				for ($j = 0; $j < sizeof($units[$i]["launchData"]["loads"]); $j++){
-					$stmt->bindValue(":amount", $units[$i]["launchData"]["loads"][$j]["launch"]);
-					$stmt->bindValue(":name", $units[$i]["launchData"]["loads"][$j]["name"]);
-					$stmt->execute();
-
-					if ($stmt->errorCode() == 0){
-						//Debug::log("success insertSubUnits");
-					} //else Debug::log("error insertSubUnits");
-				}
-			}
-			return true;
-		}
-
 		public function insertMissions($missions){
 			Debug::log("insertMissions s: ".sizeof($missions));
 			$stmt = $this->connection->prepare("
@@ -506,14 +443,14 @@
 			");
 
 			for ($i = 0; $i < sizeof($units); $i++){
-				Debug::log("units ".$i);
+			Debug::log("units ".$i);
 				if (!isset($units[$i]["upgrades"]) || sizeof($units[$i]["upgrades"]) == 0){Debug::log("continue"); continue;}
 
 				for ($j = 0; $j < sizeof($units[$i]["upgrades"]); $j++){
 				Debug::log("upgrades ".$j);
 					
 					for ($k = 0; $k < sizeof($units[$i]["upgrades"][$j]["loads"]); $k++){
-				Debug::log("loads ".$k);
+					Debug::log("loads ".$k);
 						$stmt->bindParam(":shipid", $units[$i]["id"]);
 						$stmt->bindParam(":systemid", $units[$i]["upgrades"][$j]["systemid"]);
 						$stmt->bindParam(":name", $units[$i]["upgrades"][$j]["loads"][$k]["name"]);
@@ -533,7 +470,75 @@
 			return true;
 		}	
 
-		public function insertServerLoads($userid, $gameid, $units){
+		public function insertReinforcements($gameid, $data){
+			Debug::log("insertReinforcements: ".sizeof($data));
+			$stmt = $this->connection->prepare("
+				INSERT INTO units 
+					(gameid, userid, ship, ball, name, display, status, available, destroyed, facing, turn, phase)
+				VALUES
+					(:gameid, :userid, :ship, :ball, :name, :display, :status, :available, :destroyed, :facing, :turn, :phase)
+			");
+
+			$ship = 1;
+			$ball = 0;
+			$status = "reinforce";
+			$destroyed = 0;
+			$phase = -2;
+
+
+			for ($i = 0; $i < sizeof($data); $i++){
+				$stmt->bindParam(":gameid", $gameid);
+				$stmt->bindParam(":userid", $data[$i]["userid"]);
+				$stmt->bindParam(":ship", $ship);
+				$stmt->bindParam(":ball", $ball);
+				$stmt->bindParam(":name", $data[$i]["name"]);
+				$stmt->bindParam(":display", $data[$i]["display"]);
+				$stmt->bindParam(":status", $status);
+				$stmt->bindValue(":available", $data[$i]["eta"]);
+				$stmt->bindParam(":destroyed", $destroyed);
+				$stmt->bindParam(":facing", $data[$i]["cost"]);
+				$stmt->bindParam(":turn", $data[$i]["turn"]);
+				$stmt->bindParam(":phase", $phase);
+				$stmt->execute();
+
+				if ($stmt->errorCode() == 0){
+					$data[$i]["id"] = $this->getLastInsertId();
+					continue;
+				} else Debug::log("insertReinforcements ERROR");
+			}
+
+			$this->insertSubUnits($data);
+			$this->insertServerLoads($data);
+			return true;
+		}
+
+		public function insertSubUnits($units){
+			//Debug::log("insertSubUnits");
+			$stmt = $this->connection->prepare("
+				INSERT INTO subunits 
+					(unitid, amount, name)
+				VALUES
+					(:unitid, :amount, :name)
+			");
+
+			for ($i = 0; $i < sizeof($units); $i++){
+				if (!isset($units[$i]["launchData"]) || !(sizeof($units[$i]["launchData"]))){continue;}
+				$stmt->bindParam(":unitid", $units[$i]["id"]);
+				
+								for ($j = 0; $j < sizeof($units[$i]["launchData"]["loads"]); $j++){
+					$stmt->bindValue(":amount", $units[$i]["launchData"]["loads"][$j]["launch"]);
+					$stmt->bindValue(":name", $units[$i]["launchData"]["loads"][$j]["name"]);
+					$stmt->execute();
+
+					if ($stmt->errorCode() == 0){
+						//Debug::log("success insertSubUnits");
+					} //else Debug::log("error insertSubUnits");
+				}
+			}
+			return true;
+		}
+
+		public function insertServerLoads($units){
 			//Debug::log("insertLoads: ".sizeof($units));
 			$stmt = $this->connection->prepare("
 				INSERT INTO loads 
@@ -544,9 +549,6 @@
 
 			for ($i = 0; $i < sizeof($units); $i++){
 				for ($j = 0; $j < sizeof($units[$i]["upgrades"]); $j++){
-
-					if (!$units[$i]["upgrades"][$j]["active"]){continue;}
-
 					for ($k = 0; $k < sizeof($units[$i]["upgrades"][$j]["loads"]); $k++){
 						$stmt->bindParam(":shipid", $units[$i]["id"]);
 						$stmt->bindParam(":systemid", $units[$i]["upgrades"][$j]["loads"][$k]["systemid"]);
@@ -789,7 +791,6 @@
 			$stmt = $this->connection->prepare("
 				DELETE FROM units WHERE id = :id
 			");
-
 			for ($i = 0; $i < sizeof($data); $i++){
 				$stmt->bindParam(":id", $data[$i]);
 				$stmt->execute();
@@ -801,6 +802,15 @@
 
 			for ($i = 0; $i < sizeof($data); $i++){
 				$stmt->bindParam(":shipid", $data[$i]);
+				$stmt->execute();
+			}
+
+			$stmt = $this->connection->prepare("
+				DELETE FROM subunits WHERE unitid = :unitid
+			");
+
+			for ($i = 0; $i < sizeof($data); $i++){
+				$stmt->bindParam(":unitid", $data[$i]);
 				$stmt->execute();
 			}
 

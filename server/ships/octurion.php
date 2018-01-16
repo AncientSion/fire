@@ -76,7 +76,7 @@ class Octurion extends UltraHeavy {
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(250, 5));
     }
 
-	static function getKit(){
+	static function getKit($faction){
 		return array();
 		return array(
 			"id" => 0,
@@ -89,7 +89,7 @@ class Octurion extends UltraHeavy {
 				array(
 					"active" => 0,
 					"chance" => 40,
-					"name" => "Patrol (Sentri) Outfit",
+					"name" => "PATROL (Sentri) Outfit",
 					"cost" => 275,
 					"loads" =>
 					array(
@@ -108,7 +108,7 @@ class Octurion extends UltraHeavy {
 				array(
 					"active" => 0,
 					"chance" => 20,
-					"name" => "War (Combined) Outfit",
+					"name" => "WAR (Combined) Outfit",
 					"cost" => 450,
 					"loads" =>
 					array(

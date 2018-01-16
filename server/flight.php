@@ -59,7 +59,7 @@ class Flight extends Mixed {
 		return mt_rand(0, 359);
 	}
 
-	public function addMissionDB($data, $userid, $turn, $phase){
+	public function addMission($data, $userid, $turn, $phase){
 		if ($this->userid == $userid){
 			$this->mission = new Mission($data[sizeof($data)-1]);
 		}

@@ -299,46 +299,41 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	$(ele).css("top", top).css("left", left).show();
 }
 
+function handleScroll(e){
+	// get the current mouse position
+	var mouseX = e.clientX;
+	var mouseY = e.clientY;
+	// dx & dy are the distance the mouse has moved since
+	// the last mousemove event
+	var dx = mouseX- cam.sx;
+	var dy = mouseY- cam.sy;
+
+	if (dx != 0 || dy != 0){
+		// reset the vars for next mousemove
+		cam.sx = mouseX;
+		cam.sy = mouseY;
+
+		// accumulate the net panning done
+		cam.o.x += dx;
+		cam.o.y += dy;
+		//console.log(dx, dy);
+		game.redraw();
+	}
+}
+
 function canvasMouseMove(e){
 	e.preventDefault();
 	e.stopPropagation();
 
 	window.iterator++;
-	if (window.iterator < 2){
-		return;
-	}
-	window.iterator = 0;
+	if (window.iterator < 2){return;}
+	else window.iterator = 0;
 
-	if (cam.scroll){
-		// get the current mouse position
-		var mouseX = e.clientX;
-		var mouseY = e.clientY;
-		// dx & dy are the distance the mouse has moved since
-		// the last mousemove event
-		var dx = mouseX- cam.sx;
-		var dy = mouseY- cam.sy;
-
-		if (dx != 0 || dy != 0){
-			// reset the vars for next mousemove
-			cam.sx = mouseX;
-			cam.sy = mouseY;
-
-			// accumulate the net panning done
-			cam.o.x += dx;
-			cam.o.y += dy;
-			//console.log(dx, dy);
-			game.redraw();
-		}
-	}
+	if (cam.scroll){handleScroll(e);}
 
 	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
 	//$("#currentPos").html(pos.x + " / " + pos.y + "____" + cam.o.x + " / " + cam.o.y+ "___" + (pos.x-cam.o.x) + " / " + (pos.y-cam.o.y));
 	var unit = game.getUnitByClick(pos);
-	if (unit){
-		game.handleHoverEvent(unit);
-	} else if (game.shortInfo){
-		game.resetHover()
-	}
 
 	if (game.flightDeploy){
 		game.handleFlightDeployMouseMove(e, pos, unit)
@@ -350,28 +345,22 @@ function canvasMouseMove(e){
 	if (aUnit){
 		var ship = game.getUnit(aUnit);
 		if (!ship){return;}
-		var shipLoc;
-		var facing;
+
+		var shipLoc = ship.getPlannedPos();
+		var	facing = ship.getPlannedFacing();
 
 		if (game.vector){
-				shipLoc = ship.getPlannedPos();
-				facing = ship.getPlannedFacing();
 			var dist = Math.floor(getDistance(shipLoc, pos));
 			var a = getAngleFromTo(shipLoc, pos);
 				a = addAngle(facing, a);
 			drawVector(shipLoc, {x: e.clientX - offset.x, y: e.clientY - offset.y}, dist, a);
 		}
 
-		if (ship.salvo){return}
+		if (ship.salvo){return;}
 		else if (game.sensorMode){
-			shipLoc = ship.getPlannedPos();
-			facing = ship.getPlannedFacing();
 			sensorEvent(false, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), addAngle(facing, getAngleFromTo(shipLoc, pos)));
-			return;
 		}
 		else if (game.turnMode){
-			shipLoc = ship.getPlannedPos();
-			facing = ship.getPlannedFacing();
 			ship.handleTurning(e, shipLoc, facing, pos);
 		}
 		else if (ship.hasWeaponsSelected()){
@@ -389,6 +378,9 @@ function canvasMouseMove(e){
 	else if (!game.deploying){
 		$("#deployOverlay").hide();
 	}
+
+	if (unit){game.handleHoverEvent(unit);
+	} else if (game.shortInfo){game.resetHover(e, shipLoc, facing, pos);}
 }
 
 function sensorize(ship, pos){

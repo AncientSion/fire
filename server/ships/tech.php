@@ -53,11 +53,11 @@ class Tech extends SuperHeavy {
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1300);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(160, 4));
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(160, 4), 65);
-		$this->primary->systems[] = new Cyber($this->getId(), $this->id, array(160, 4), 900, 10);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(160, 4), 900, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(160, 4));
     }
 
-	static function getKit(){
+	static function getKit($faction){
 		return array(
 			"id" => 0,
 			"name" => "",
@@ -69,7 +69,7 @@ class Tech extends SuperHeavy {
 				array(
 					"active" => 0,
 					"chance" => 40,
-					"name" => "Patrol (Sentri) Outfit",
+					"name" => "PATROL (Sentri) Outfit",
 					"cost" => 275,
 					"loads" =>
 					array(
@@ -88,7 +88,7 @@ class Tech extends SuperHeavy {
 				array(
 					"active" => 0,
 					"chance" => 20,
-					"name" => "War (Combined) Outfit",
+					"name" => "WAR (Combined) Outfit",
 					"cost" => 450,
 					"loads" =>
 					array(

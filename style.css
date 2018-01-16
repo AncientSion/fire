@@ -139,7 +139,7 @@ table, th, tr, td {
 	z-index: 6;
 	background-color: black;
 	top: 80px;
-	width: 200px;
+	width: 230px;
 }
 
 #deployWrapper.disabled  {

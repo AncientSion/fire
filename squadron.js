@@ -595,7 +595,7 @@ Squadron.prototype.createBaseDiv = function(){
 		.append($("<tr>")
 			//.append($("<td>").html("Engine Power:"))
 			//.append($("<td>").html(this.getRemainingEP() + " / " + this.getEP()).addClass("ep")))
-			.append($("<td>").html("Turn Ability"))
+			.append($("<td>").html("Eff. Turn Ability"))
 			.append($("<td>").html(this.getRemainingEP() + " / " + this.getEP()).addClass("ep")))
 		.append($("<tr>")
 			.append($("<td>").html("Thrust & Roll"))
@@ -766,11 +766,6 @@ Squadron.prototype.getEP = function(){
 Squadron.prototype.checkSensorHighlight = function(){
 	//console.log("checkSensorHighlight")
 	return Ship.prototype.checkSensorHighlight.call(this);
-}
-
-Squadron.prototype.setTempEW = function(){
-	//console.log("setTempEW")
-	return Ship.prototype.setTempEW.call(this);
 }
 
 Squadron.prototype.drawEW = function(){

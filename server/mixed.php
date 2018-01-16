@@ -99,10 +99,10 @@ class Mixed extends Ship {
 	}
 
 	public function addCritDB($crits){
-		for ($j = 0; $j < sizeof($crits); $j++){
-			for ($k = 0; $k < sizeof($this->structures); $k++){
-				if ($this->structures[$j]->id == $crits[$i]->systemid){
-					$this->structures[$j]->crits[] = $crits[$i];
+		for ($i = 0; $i < sizeof($crits); $i++){
+			for ($j = 0; $j < sizeof($this->structures); $j++){
+				if ($this->structures[$i]->id == $crits[$i]->systemid){
+					$this->structures[$i]->crits[] = $crits[$i];
 					break;
 				}
 			}

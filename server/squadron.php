@@ -20,6 +20,26 @@ class Squadron extends Ship {
 		parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 	}
 
+	static function getKit($faction){
+		return array(
+			"id" => 0,
+			"name" => "",
+			"cost" => static::$value,
+			"gameid" => 0,
+			"userid" => 0,
+			"upgrades" => static::getSubUnits($faction),
+			"launchData" => array(),
+		);
+	}
+
+	static function getSubUnits($faction){
+		switch ($faction){
+			case "Earth Alliance": return Builder::getEA();
+			case "Centauri Republic": return Builder::getCR();
+			default: return array();
+		}
+	}
+
 	public function addPrimary(){
 		$this->primary = new Shared();
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(0, 0), 0, 0);
@@ -43,6 +63,21 @@ class Squadron extends Ship {
 		return true;
 	}
 
+	public function setPreviewState($turn, $phase){
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			$this->structures[$i]->setUnitState($turn, $phase);
+		}
+
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+			$this->primary->systems[$i]->setState($turn, $phase);
+		}
+
+		$this->getSystemByName("Engine")->setPowerReq(0);
+		$this->setBaseStats($turn, $phase);
+		$this->setProps($turn, $phase);
+		$this->currentImpulse = $this->baseImpulse;
+	}
+	
 	public function setUnitState($turn, $phase){
 		//Debug::log("SQUADRON setUnitState ".$this->display." #".$this->id);
 
@@ -108,26 +143,26 @@ class Squadron extends Ship {
 	}
 
 	public function hidePowers($turn){
-		for ($j = 0; $j < sizeof($this->structures); $j++){
-			for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
-				for ($l = sizeof($this->structures[$j]->systems[$j]->powers)-1; $l >= 0; $l--){
-					if ($this->structures[$j]->systems[$j]->powers[$l]->turn == $turn){
-						if ($this->structures[$j]->systems[$j]->powers[$l]->type == 0){
-							$this->structures[$j]->systems[$j]->disabled = 0;
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				for ($k = sizeof($this->structures[$i]->systems[$j]->powers)-1; $k >= 0; $k--){
+					if ($this->structures[$i]->systems[$j]->powers[$k]->turn == $turn){
+						if ($this->structures[$i]->systems[$j]->powers[$k]->type == 0){
+							$this->structures[$i]->systems[$j]->disabled = 0;
 						}
-						array_splice($this->structures[$j]->systems[$j]->powers, $l, 1);
+						array_splice($this->structures[$i]->systems[$j]->powers, $k, 1);
 					} else break;
 				}
 			}
 		}	
 
-		for ($j = 0; $j < sizeof($this->primary->systems); $j++){
-			if ($this->primary->systems[$j]->name == "Sensor"){
-				$this->primary->systems[$j]->hideEW($turn);
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+			if ($this->primary->systems[$i]->name == "Sensor"){
+				$this->primary->systems[$i]->hideEW($turn);
 			}
-			for ($k = sizeof($this->primary->systems[$j]->powers)-1; $k >= 0; $k--){
-				if ($this->primary->systems[$j]->powers[$k]->turn == $turn){
-					array_splice($this->primary->systems[$j]->powers, $k, 1);
+			for ($j = sizeof($this->primary->systems[$i]->powers)-1; $j >= 0; $j--){
+				if ($this->primary->systems[$i]->powers[$j]->turn == $turn){
+					array_splice($this->primary->systems[$i]->powers, $j, 1);
 				} else break;
 			}
 		}
@@ -448,7 +483,7 @@ class Squaddie extends Single {
 
 				if ($roll > $dmg){/*Debug::log("rolled above damage on 0-90"); */continue;}
 
-				$roll = mt_rand(0, 40) + $dmg;
+				$roll = mt_rand(0, 20) + $dmg + sizeof($this->structures[$i]->systems[$j]->crits)*20;
 				//Debug::log("in crit, determine effect roll: ".$roll);
 
 				for ($k = sizeof($effects)-1; $k >= 0; $k--){

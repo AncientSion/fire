@@ -48,7 +48,7 @@ class Olympus extends Medium {
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(70, 3), 3);
 	}
 
-	static function getKit(){
+	static function getKit($faction){
 		return array(
 			"id" => 0,
 			"name" => "",
@@ -60,21 +60,21 @@ class Olympus extends Medium {
 				array(
 					"active" => 0,
 					"chance" => 60,
-					"cost" => 120,
-					"name" => "Patrol Outfit",
+					"cost" => 80,
+					"name" => "PATROL Outfit",
 					"loads" => 
 					array(
 						array(
 							"systemid" => 12,
 							"display" => "Port Missile Launcher",
 							"name" => "Naga",
-							"amount" => 6
+							"amount" => 4
 						),
 						array(
 							"systemid" => 15,
 							"display" => "Starboard Missile Launcher",
 							"name" => "Naga",
-							"amount" => 6
+							"amount" => 4
 						)
 					)
 				),
@@ -82,7 +82,7 @@ class Olympus extends Medium {
 					"active" => 0,
 					"chance" => 30,
 					"cost" => 70,
-					"name" => "Escort Outfit",
+					"name" => "ESCORT Outfit",
 					"loads" => 
 					array(
 						array(

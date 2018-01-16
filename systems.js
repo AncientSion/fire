@@ -267,9 +267,10 @@ System.prototype.getLoadLevel = function(){
 	else return has/need;
 }
 System.prototype.setTimeLoaded = function(){
-	if (!this.isPowered()){
-		return 0;
-	}
+	if (this.id == 18 && this.parentId == 5){console.log("ding");}
+
+	if (!this.isPowered()){this.loaded = 0; return;}
+
 	var turnsLoaded = this.reload;
 	var max = this.reload;
 	var boost = this.getBoostEffect("Reload");
@@ -284,7 +285,7 @@ System.prototype.setTimeLoaded = function(){
 		if (boost){
 			for (var j = 0; j < this.powers.length; j++){
 				if (this.powers[j].turn == i && this.powers[j].type == 1){
-					turnsLoaded++;
+					turnsLoaded += -boost;
 					//console.log("charge ++")
 				}
 			}
@@ -305,10 +306,8 @@ System.prototype.setTimeLoaded = function(){
 				}
 			}
 			for (var j = 0; j < this.crits.length; j++){
-				if (this.crits[j].type == "Disabled" && this.id == 11){
-					//console.log("ding");
-				}
-				if (this.crits[j].turn + this.crits[j].duration <= i && this.crits[j].type == "Disabled"){
+				if (i <= this.crits[j].turn + this.crits[j].duration && this.crits[j].type == "Disabled"){
+				//if (this.crits[j].turn + this.crits[j].duration <= i && this.crits[j].type == "Disabled"){
 					//console.log("disabled")
 					turnsLoaded = 0;
 					break;
@@ -475,6 +474,17 @@ System.prototype.getModeDiv = function(){
 		div.appendChild(subDiv);
 	return div;
 }
+
+System.prototype.getPowerOrders = function(){
+	var powers  = [];
+	for (var i = 0; i < this.powers.length; i++){
+		if (this.powers[i].new){
+			powers.push(this.powers[i]);
+		}
+	}
+	return powers;
+}
+
 System.prototype.canUnboost = function(){
 	if (this.powers.length){
 		if (this.powers[this.powers.length-1].turn == game.turn){
@@ -1025,6 +1035,10 @@ System.prototype.getBoostCostIncrease = function(){
 	return 0;
 }
 
+PrimarySystem.prototype.setTimeLoaded = function(){
+	this.loaded = 1;
+	$(this.element).find(".loadLevel").css("width", this.getLoadLevel() * 100 + "%");
+}
 
 PrimarySystem.prototype.hover = function(e){
 	if (game.flightDeploy){return false;}
@@ -1252,7 +1266,6 @@ Sensor.prototype.switchMode = function(id){
 			} else index++;
 
 			this.states[index] = 1;
-			salvoCtx.clearRect(0, 0, res.x, res.y);
 			this.setEWMode()
 			return;
 		}
@@ -1268,8 +1281,9 @@ Sensor.prototype.setEWMode = function(){
 	for (var i = 0; i < this.states.length; i++){
 		if (this.states[i]){
 			this.ew[this.ew.length-1].type = i;
+			this.setTempEW();
+			salvoCtx.clearRect(0, 0, res.x, res.y);
 			this.drawEW();
-			//game.drawShipOverlays();
 			break;
 		}
 	}
@@ -1299,8 +1313,7 @@ Sensor.prototype.getEWModeEffect = function(){
 
 Sensor.prototype.setState = function(){
 	System.prototype.setState.call(this);
-	if (this.disabled || this.locked){return;}
-	else if (game.phase == -1){
+	if (game.phase == -1){
 		this.setEW({
 			angle: -1,
 			dist: Math.ceil(this.getOutput() / Math.pow(180/game.const.ew.len, 1/game.const.ew.p)),
@@ -1333,6 +1346,7 @@ Sensor.prototype.doPower = function(){
 			systemid: this.id,
 			type: 0
 		})
+		this.setTempEW();
 		this.drawEW();
 		this.setTableRow();
 		game.getUnit(this.parentId).updateShipPower(this);
@@ -1350,11 +1364,9 @@ Sensor.prototype.setEW = function(data){
 				this.ew.splice(i, 1);
 			} else break;
 		}
-		//console.log(data);
 		this.ew.push(data);
 		if (this.selected){
 			this.select();
-		//	this.drawEW();
 		}
 		return;
 }
@@ -1369,7 +1381,15 @@ Sensor.prototype.getEW = function(data){
 }
 
 Sensor.prototype.drawEW = function(){
-	if (this.ew.length && this.ew[this.ew.length-1].turn == game.turn){
+	if (!this.ew.length){
+		return;
+	}
+	else if (this.img == undefined){
+
+		console.log("NO EW DEFINED!");
+		this.setTempEW();
+		this.drawEW();
+		/*
 		var ship = game.getUnit(this.parentId);
 		var loc = ship.getPlannedPos();
 		var ew = this.ew[this.ew.length-1];
@@ -1380,11 +1400,25 @@ Sensor.prototype.drawEW = function(){
 		else w = Math.min(180, game.const.ew.len * Math.pow(str/ew.dist, game.const.ew.p));
 
 		drawSensorArc(w, ew.dist, str, loc, facing, ew.angle, this);
-	} else salvoCtx.clearRect(0, 0, res.x, res.y);
+		*/
+	}
+	else {
+		var ship = game.getUnit(this.parentId);
+		var loc = ship.getPlannedPos();
+
+		salvoCtx.translate(cam.o.x, cam.o.y);
+		salvoCtx.scale(cam.z, cam.z);
+		salvoCtx.translate(loc.x, loc.y);
+		//salvoCtx.rotate(a * Math.PI/180);
+		salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height);
+		salvoCtx.setTransform(1,0,0,1,0,0);
+	}
 }
 
-Sensor.prototype.drawTempEW = function(){
+Sensor.prototype.setTempEW = function(){
+	if (game.phase == -2){return;}
 	if (!this.isPowered()){return;}
+	if (!this.ew.length){return;}
 	var ship = game.getUnit(this.parentId);
 	var loc = {x: 0, y: 0}
 	var ew = this.ew[this.ew.length-1];
@@ -1462,13 +1496,13 @@ Sensor.prototype.select = function(e){
 		unit = game.getUnit(parentId);
 		if (unit.hasWeaponsSelected()){
 			return;
-		}
+		} else if (!unit.friendly){return;}
 		else {
 			this.selected = true;
 			game.sensorMode = 1;
 			this.used = 1;
 			this.setSystemBorder();
-			this.drawEW();
+			//this.drawEW();
 		}
 	}
 }
@@ -1489,6 +1523,7 @@ Sensor.prototype.doBoost = function(){
 	}
 	//game.drawShipOverlays();
 	game.sensorMode = 1;
+	this.setTempEW();
 	this.drawEW();
 	game.sensorMode = 0;
 }
@@ -1501,6 +1536,7 @@ Sensor.prototype.doUnboost = function(){
 	}
 	//game.drawShipOverlays();
 	game.sensorMode = 1;
+	this.setTempEW();
 	this.drawEW();
 	game.sensorMode = 0;
 }
@@ -1594,7 +1630,7 @@ Weapon.prototype.getAimDataTarget = function(target, final, accLoss, row){
 
 	final = Math.floor(final * (1-(traverseMod*0.2)) - accLoss);
 	this.odds = final;
-	this.odds = 1;
+	//this.odds = 1;
 
 	row.append($("<td>").html(final + "%"));
 }
@@ -2544,6 +2580,7 @@ Dual.prototype.setSystemWindow = function(id){
 }
 
 Dual.prototype.resetDetailsDiv = function(){
+	var old = $("#systemDetailsDiv");
 	var y = $(old).css("top")
 	var x = $(old).css("left")
 		old.remove();
@@ -2664,7 +2701,7 @@ Launcher.prototype.create = function(loads){
 			this.loads[i].amount = 0;
 		}
 	}
-	else if (this.ammo  == false || this.getRemainingAmmo() == 0){
+	else if (this.getRemainingAmmo() == 0){
 		this.shots = 0;
 		this.forceUnpower();
 	}
@@ -2675,6 +2712,21 @@ Launcher.prototype.create = function(loads){
 
 Launcher.prototype.getDisplay = function(){
 	return (this.display + " (" + this.loads[this.ammo].name +")");
+}
+
+Launcher.prototype.getPowerOrders = function(){
+	var fired = this.hasUnresolvedFireOrder();
+	var powers  = [];
+	for (var i = 0; i < this.powers.length; i++){
+		if (this.powers[i].new){
+			if (this.powers[i].type == 1 && fired){
+				powers.push(this.powers[i]);
+			} else if (this.powers[i].type == 0){
+				powers.push(this.powers[i]);
+			}
+		}
+	}
+	return powers;
 }
 
 Launcher.prototype.setBaseOutput = function(){
@@ -2688,6 +2740,14 @@ Launcher.prototype.setBaseOutput = function(){
 	}
 
 	this.update();
+}
+
+Launcher.prototype.getRemainingAmmo = function(){
+	return this.output;
+}
+
+Launcher.prototype.getMaxAmmo = function(){
+	return this.capacity[this.ammo];
 }
 
 Launcher.prototype.getBoostDiv = function(){
@@ -2995,22 +3055,6 @@ Launcher.prototype.updateTotals = function(){
 	this.totalCost = tCost;
 }
 
-this.getLoadedAmmo = function(){
-}
-
-Launcher.prototype.getRemainingAmmo = function(){
-	return this.output;
-	var ammo = this.output;
-	for (var i = 0; i < this.fireOrders.length; i++){
-		ammo -= this.fireOrders[i].shots;
-	}
-	return ammo;
-}
-
-Launcher.prototype.getMaxAmmo = function(){
-	return this.capacity[this.ammo];
-}
-
 Launcher.prototype.getImpulseString = function(){
 	return ("+" + this.loads[this.ammo].baseImpulse + " per Turn");
 }
@@ -3028,6 +3072,10 @@ function Hangar(system){
 	this.hangar = 1;
 }
 Hangar.prototype = Object.create(PrimarySystem.prototype);
+
+Hangar.prototype.setTimeLoaded = function(){
+	return System.prototype.setTimeLoaded.call(this)
+}
 
 Hangar.prototype.hover = function(e){
 	System.prototype.hover.call(this, e);

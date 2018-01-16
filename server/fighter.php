@@ -49,7 +49,7 @@ class Aurora extends Fighter {
 	public $name = "Aurora";
 	public $display = "Aurora";
 	public $faction = "Earth Alliance";
-	public static $value =  29;
+	public static $value =  28;
 	public $mass = 36;
 	public $ep = 100;
 	public $integrity = 26;

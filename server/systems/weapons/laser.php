@@ -113,7 +113,7 @@ class LightLaser extends Laser {
 	public $name = "LightLaser";
 	public $display = "88mm 'Light' Laser";
 	public $animColor = "red";
-	public $rakeTime = 50;
+	public $rakeTime = 40;
 	public $beamWidth = 2;
 	public $minDmg = 60;
 	public $maxDmg = 80;

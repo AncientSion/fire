@@ -54,6 +54,9 @@ class Manager {
 
 
 	public function test(){
+		$this->deleteAllReinforcements();
+		$this->pickReinforcements();
+		return;
 		$this->setupShips();
 		//$this->setLocks();
 		return;
@@ -329,7 +332,7 @@ class Manager {
 
 		for ($i = 0; $i < sizeof($this->reinforcements); $i++){
 			if ($this->reinforcements[$i]["userid"] == $this->userid){
-				$s = new $this->reinforcements[$i]["name"](
+				$unit = new $this->reinforcements[$i]["name"](
 					-$this->reinforcements[$i]["id"],
 					$this->reinforcements[$i]["userid"],
 					$this->turn + $this->reinforcements[$i]["available"],
@@ -345,24 +348,18 @@ class Manager {
 					$this->reinforcements[$i]["display"]
 				);
 
-				$s->cost = $this->reinforcements[$i]["facing"];
-				$s->currentImpulse = $s->baseImpulse;
-				$s->getSystemByName("Reactor")->setOutput($s->getPowerReq());
+				if (!$unit->ship){$unit->addSubUnits($this->reinforcements[$i]["subunits"]);}
 
-				for ($j = 0; $j < sizeof($s->structures); $j++){
-					$s->structures[$j]->remainingNegation = $s->structures[$j]->negation;
-				}
-				$data[] = $s;
+				$unit->setPreviewState($this->turn, $this->phase);	
+				$unit->cost = $this->reinforcements[$i]["facing"];
+				$data[] = $unit;
 			}
 		}
 
-		for ($i = 0; $i < sizeof($data); $i++){
-			$data[$i]->id *= -1;
-		}
+		for ($i = 0; $i < sizeof($data); $i++){$data[$i]->id *= -1;}
 		DBManager::app()->getShipLoad($data);
-		for ($i = 0; $i < sizeof($data); $i++){
-			$data[$i]->id *= -1;
-		}
+		for ($i = 0; $i < sizeof($data); $i++){$data[$i]->id *= -1;}
+
 		return $data;
 	}
 
@@ -388,13 +385,9 @@ class Manager {
 				$db[$i]["display"]
 			);
 
-			if (!$unit->ship){
-				$unit->addSubUnits($db[$i]["subunits"]);
+			if (isset($db[$i]["subunits"])){$unit->addSubUnits($db[$i]["subunits"]);}
+			if (isset($db[$i]["mission"])){$unit->addMission($db[$i]["mission"], $this->userid, $this->turn, $this->phase);}
 
-				if (!$unit->squad){
-					$unit->addMissionDB($db[$i]["mission"], $this->userid, $this->turn, $this->phase);
-				}
-			}
 			$units[] = $unit;
 		}
 
@@ -503,6 +496,18 @@ class Manager {
 		}
 	}
 
+	public function deleteAllReinforcements(){
+		$data = array();
+
+		for ($i = 0; $i < sizeof($this->reinforcements); $i++){
+			$data[] = $this->reinforcements[$i]["id"];
+		}
+
+		if (sizeof($data)){
+			DBManager::app()->deleteReinforcements($data);
+		}
+	}
+
 	public function deleteReinforcements(){
 		$data = array();
 
@@ -523,97 +528,16 @@ class Manager {
 	}
 
 	public function pickReinforcements(){
-		if ($this->turn < 5){return;}
-
-		Debug::log("pickReinforcements");
+		//if ($this->turn < 5){return;}
+		//return;
+		//Debug::log("pickReinforcements");
 		$picks = array();
 
-		for ($k = 0; $k < sizeof($this->playerstatus); $k++){
-
-			$avail = 0;
-			for ($i = 0; $i < sizeof($this->reinforcements); $i++){
-				if ($this->reinforcements[$i]["userid"] == $this->playerstatus[$k]["userid"]){
-					$avail++;
-				}
-			}
-
-			Debug::log("player: ".$this->userid." has ".$this->reinforce." available");
-
-			if ($avail > 3){if (mt_rand(0, 1)){continue;}} // cap max amount
-			else if ($this->turn > 13){if (mt_rand(0, $this->turn -12)){continue;}} // slow down post T 13
-
-			$ships = $this->getReinforcementShips($this->playerstatus[$k]["faction"]);
-			$total = 0;
-			$current = 0;
-			foreach ($ships as $ship){$total += $ship[1];}
-
-			$roll = mt_rand(0, $total);
-
-			for ($i = 0; $i  < sizeof($ships); $i++){
-				$current += $ships[$i][1];
-
-				if ($roll > $current){continue;}
-
-				//Debug::log("total: ".$total.", roll: ".$roll.", picking: ".$ships[$i][0]);
-
-				$data = $ships[$i][0]::getKit();
-				$data["name"] = $ships[$i][0];
-				$data["display"] = "";
-				$data["turn"] = $this->turn;
-				$data["userid"] = $this->playerstatus[$k]["userid"];
-				$data["eta"] = $ships[$i][2];
-				//echo "available kits for ".$data[$i]["name"].": ".sizeof($data["upgrades"])."</br></br>";
-
-				//$totalOdds = 0;
-
-				//for ($j = 0; $j < sizeof($data["upgrades"]); $j++){
-				//	$totalOdds += $data["upgrades"][$j]["chance"];
-				//}
-
-				for ($j = 0; $j < sizeof($data["upgrades"]); $j++){
-					//echo "--OPTION #".$j."-- cost ".$data["upgrades"][$j]["cost"]."-- chance ".$data["upgrades"][$j]["chance"]."</br>";
-
-					if (mt_rand(0, 100) < $data["upgrades"][$j]["chance"]){
-						//echo "picking kit: #".$j."</br>";
-						//var_export($data["upgrades"][$j]);
-						//echo "</br>";
-						//echo "Total Cost: ".$data["cost"];
-
-						$data["upgrades"][$j]["active"] = 1;
-						$data["cost"] += $data["upgrades"][$j]["cost"];
-						$data["display"] = $data["upgrades"][$j]["name"];
-						//Debug::log("adding outfit: ".$data["upgrades"][$j]["name"]);
-						break;
-
-
-					}
-					//for ($k = 0; $k < sizeof($data["upgrades"][$j]["kit"]); $k++){
-						//var_export($data["upgrades"][$j]["kit"][$k]); echo "</br>";
-					//}
-				}
-				//echo "</br></br>";
-				$picks[] = $data;
-				break;
-			}
-
-
-			//foreach ($picks as $ship){
-			//	var_export($ship);
-			//	echo "</br></br>";
-			//}
-
-			//return;
-		}
-
-		if (sizeof($picks)){
-			DBManager::app()->insertReinforcements($this->gameid, $picks);
-		}
-	}
-
-	public function pickReinforcementas(){
-		if ($this->turn < 2){return;}
-
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+			$data = array();
+
+			$faction = $this->playerstatus[$i]["faction"];
+
 			$avail = 0;
 			for ($j = 0; $j < sizeof($this->reinforcements); $j++){
 				if ($this->reinforcements[$j]["userid"] == $this->playerstatus[$i]["userid"]){
@@ -621,38 +545,85 @@ class Manager {
 				}
 			}
 
-			if ($avail >= 4){
-				continue;
-			}
 
+			$add = 3;
 
-			$picks = array();
-			$now = 0;
-			$max = 1;
-			if (!$max){continue;}
-			$validShips = $this->getReinforcementShips($this->playerstatus[$i]["faction"]);
-			//$validShips = array_merge($validShips, $this->getFlights());
-			//$validShips = $this->getFlights();
+			while ($add){
+				//Debug::log("player: ".$this->playerstatus[$i]["userid"]." has ".$this->playerstatus[$i]["value"]." available");
 
-			for ($j = 0; $j < $max; $j++){
-				$pick = $validShips[mt_rand(0, sizeof($validShips)-1)];
-				$roll = mt_rand(1, 10);
+				if ($avail > 4){if (mt_rand(0, 1)){continue;}} // cap max amount
+				else if ($this->turn > 13){if (mt_rand(0, $this->turn -12)){continue;}} // slow down post T 13
 
-				if ($roll >= $pick["weight"]){
-					$now++;
-					$pick["eta"] += mt_rand(3, 4);
-					$pick["eta"] = max(2, $pick["eta"]);
-					$pick["value"] = ceil($pick["value"] * (mt_rand(8, 12))/10);
-					$picks[] = $pick;
+				$entries = $this->getReinforcements($faction);
 
-					if ($now == $max){
-						break;
+				$total = 0;
+				$current = 0;
+				
+				foreach ($entries as $entry){$total += $entry[1];}
+
+				$roll = mt_rand(0, $total);
+
+				foreach ($entries as $entry){
+					$current += $entry[1];
+					if ($roll > $current){continue;}
+					//Debug::log("total: ".$total.", roll: ".$roll.", picking: ".$entry[0]);
+					//echo "</br>picking: ".$entry[0]."</br>";
+					$data = $entry[0]::getKit($faction);
+					$data["name"] = $entry[0];
+					$data["display"] = "";
+					$data["turn"] = $this->turn;
+					$data["userid"] = $this->playerstatus[$i]["userid"];
+					$data["eta"] = $entry[2];
+
+					if (sizeof($data["upgrades"])){
+						//Debug::log("available kits for ".$data["name"].": ".sizeof($data["upgrades"]));
+						$subTotal = 0;
+
+						for ($j = 0; $j < sizeof($data["upgrades"]); $j++){
+							$subTotal += $data["upgrades"][$j]["chance"];
+						}
+
+						$subRoll = mt_rand(0, $subTotal);
+						$subCurrent = 0;
+
+						for ($j = 0; $j < sizeof($data["upgrades"]); $j++){
+							$subCurrent += $data["upgrades"][$j]["chance"];
+							if ($subRoll > $subCurrent){continue;}
+
+							$data["upgrades"][$j]["active"] = 1;
+
+							if (isset($data["launchData"])){ // convert squadron data
+								$data["launchData"] = $data["upgrades"][$j]["launchData"];
+								unset($data["upgrades"][$j]["launchData"]);
+							}
+							//echo "roll: ".$subRoll.", subTotal: ".$subTotal.", current: ".$subCurrent.", picking upgrade: ".$j."</br>";
+
+							$data["cost"] += $data["upgrades"][$j]["cost"];
+							$data["display"] = $data["upgrades"][$j]["name"];
+							break;
+						}
+
+						for ($j = sizeof($data["upgrades"])-1; $j >= 0; $j--){
+							if ($data["upgrades"][$j]["active"] == 0){
+								array_splice($data["upgrades"], $j, 1);
+							}
+						}
 					}
+					$picks[] = $data;
+					$add--;
+					break;
 				}
 			}
-			if (sizeof($picks)){
-				DBManager::app()->insertReinforcements($this->gameid, $this->playerstatus[$i]["userid"], $picks);
+		}
+
+		for ($i = 0; $i < sizeof($picks); $i++){
+			if ($picks[$i]["eta"] > 3){
+				$picks[$i]["cost"] *= (10 - ($picks[$i]["eta"] - 3))/10;
 			}
+		}
+
+		if (sizeof($picks)){
+			DBManager::app()->insertReinforcements($this->gameid, $picks);
 		}
 	}
 	
@@ -730,6 +701,8 @@ class Manager {
 			$shooter = $this->getUnit($fires[$i]->shooterid);
 			$launcher = $shooter->getSystem($fires[$i]->weaponid);
 			$fires[$i]->shots = $launcher->getShots($this->turn);
+
+			Debug::log($shooter->name." #".$shooter->id." firing ".$fires[$i]->shots);
 			if (!($launcher instanceof Launcher)){
 				//Debug::log("Hangar fireorder, resolving: ".$fires[$i]->id);
 				if ($launcher instanceof Hangar){
@@ -757,7 +730,7 @@ class Manager {
 			}
 
 			if ($skip){
-				Debug::log("skipping");
+				//Debug::log("skipping");
 				continue;
 			}
 
@@ -1090,7 +1063,7 @@ class Manager {
 			}
 		}
 		else if ($s->ship || $s->squad){
-			Debug::log("ew for #".$s->id);
+			//Debug::log("ew for #".$s->id);
 			$origin = $s->getCurrentPosition();
 			$sensor =  $s->getSystemByName("Sensor");
 			$ew = $sensor->getEW($this->turn);
@@ -1119,7 +1092,7 @@ class Manager {
 					$w = min(180, $this->const["ew"]["len"] * pow($str/$ew->dist, $this->const["ew"]["p"]));
 					$start = Math::addAngle(0 + $w-$s->getFacing(), $ew->angle);
 					$end = Math::addAngle(360 - $w-$s->getFacing(), $ew->angle);
-					Debug::log("specific EW for ship #".$s->id.", str: ".$str.", facing: ".$s->getFacing().", w: ".$w.", EW from ".$start." to ".$end.", dist: ".$ew->dist);
+					//Debug::log("specific EW for ship #".$s->id.", str: ".$str.", facing: ".$s->getFacing().", w: ".$w.", EW from ".$start." to ".$end.", dist: ".$ew->dist);
 				}
 
 				for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -1169,12 +1142,12 @@ class Manager {
 						if (Math::isInArc($a, $start, $end)){
 							if ($ew->type == 0){ // LOCK
 								$s->locks[] = array($this->ships[$i]->id, $s->getLockEffect($this->ships[$i]));
-								Debug::log("locking on #".$this->ships[$i]->id." for value: ".$s->locks[sizeof($s->locks)-1][1]);
+								//Debug::log("locking on #".$this->ships[$i]->id." for value: ".$s->locks[sizeof($s->locks)-1][1]);
 							}
 							else if ($ew->type == 1){ // MASK
 								if ($this->ships[$i]->ship || $this->ships[$i]->squad){
 									$s->masks[] = array($this->ships[$i]->id, $s->getMaskEffect($this->ships[$i]));
-									Debug::log("masking from #".$this->ships[$i]->id." for value: ".$s->masks[sizeof($s->masks)-1][1]);
+									//Debug::log("masking from #".$this->ships[$i]->id." for value: ".$s->masks[sizeof($s->masks)-1][1]);
 								}
 							}
 						}// else Debug::log("out of arc");
@@ -1238,7 +1211,7 @@ class Manager {
 				if ($this->fires[$i]->shooter->flight){
 					if ($this->fires[$i]->shooter->getStruct($this->fires[$i]->weapon->fighterId)->destroyed){
 						Debug::log("AAA skipping fireorder due to destroyed single shooter");
-						$this->fires[$i]->resolved = -1;
+						$this->fires[$i]->resolved = 1;
 					}
 				}
 			}
@@ -1282,7 +1255,7 @@ class Manager {
 				if ($this->fires[$i]->shooter->flight == true && $this->fires[$i]->target->flight == false){
 					if ($this->fires[$i]->shooter->getStruct($this->fires[$i]->weapon->fighterId)->destroyed){
 						Debug::log("BBB skipping fireorder due to destroyed single shooter");
-						$this->fires[$i]->resolved = -1;
+						$this->fires[$i]->resolved = 1;
 						continue;
 					}
 					$this->fires[$i]->target->resolveFireOrder($this->fires[$i]);
@@ -1517,27 +1490,28 @@ class Manager {
 		return $return;
 	}
 
-
-	public function getReinforcementShips($faction){
+	public function getReinforcements($faction){
 		//Debug::log("getShipsForFaction");
 		$ships = array();
 
 		switch ($faction){
 			case "Earth Alliance";
 				$ships = array(
-					array("Omega", 4, 4),
-					array("Hyperion", 8, 3),
-					array("Avenger", 3, 3),
+					array("Omega", 4, 6),
+					array("Hyperion", 7, 5),
+					array("Avenger", 2, 5),
 					array("Artemis", 10, 3),
-					array("Olympus", 10, 2),
+					array("Olympus", 10, 3),
+					array("Squadron", 15, 2),
 				);
 				break;
 			case "Centauri Republic";
 				$ships = array(
-					array("Primus", 8, 4),
+					array("Primus", 6, 6),
 					array("Altarian", 10, 3),
-					array("Demos", 10, 2),
-					);
+					array("Demos", 10, 3),
+					array("Squadron", 15, 2),
+				);
 				break;
 			case "Minbari Federation";
 				$ships = array(
@@ -1549,6 +1523,7 @@ class Manager {
 				$ships = array(
 					array("GQuan", 6, 2)
 				);
+
 				break;
 			default:
 				break;

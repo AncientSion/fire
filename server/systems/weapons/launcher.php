@@ -6,7 +6,7 @@ class Launcher extends Weapon {
 	public $priority = 8;
 	public $loads = array();
 	public $reload = 3;
-	public $ammo;
+	public $ammo = 0;
 	public $mass = 22;
 	public $capacity = array();
 	public $launchRate = array();
@@ -43,12 +43,9 @@ class Launcher extends Weapon {
 				if ($dbLoad[$i]["name"] == $this->loads[$j]->name){
 					$this->ammo = $j;
 					$this->output = $dbLoad[$i]["amount"];
-					break;
+					return;
 				}
 			}
-		//$this->loads = array();
-		//$this->ammo = new $dbLoad[0]["name"]($this->id, 0);
-		//$this->ammo->output = $dbLoad[0]["amount"];
 		}
 	}
 

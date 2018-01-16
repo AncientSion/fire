@@ -64,7 +64,7 @@ class Omega extends SuperHeavy {
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(180, 4), 10);
 	}
 
-	static function getKit(){
+	static function getKit($faction){
 		return array(
 			"id" => 0,
 			"name" => "",
@@ -90,7 +90,7 @@ class Omega extends SuperHeavy {
 				array(
 					"active" => 0,
 					"chance" => 30,
-					"name" => "Patrol (Thunderbolt) Outfit",
+					"name" => "Patrol (T-Bolt) Outfit",
 					"cost" => 450,
 					"loads" =>
 					array(
@@ -118,7 +118,7 @@ class Omega extends SuperHeavy {
 				array(
 					"active" => 0,
 					"chance" => 10,
-					"name" => "War (Thunderbolt) Outfit",
+					"name" => "War (T-Bolt) Outfit",
 					"cost" => 900,
 					"loads" =>
 					array(

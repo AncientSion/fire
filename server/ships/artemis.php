@@ -17,9 +17,9 @@ class Artemis extends Medium {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 315, 45, 450, 14);
-		$front->systems[] = new LightLaser($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new HeavyRailGun($this->getId(), $this->id, 315, 45);
-		$front->systems[] = new MediumLaser($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 45, 135, 375, 13);

@@ -555,6 +555,7 @@ function sensorEvent(isClick, ship, loc, facing, d, a){
 			systemid: sensor.id,
 			type: sensor.ew[sensor.ew.length-1].type
 		});
+		sensor.setTempEW();
 	}
 	drawSensorArc(w, d, str, loc, facing, a, sensor);
 }

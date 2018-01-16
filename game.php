@@ -31,7 +31,7 @@
 		}
 	}
 
-	//$manager->test();
+	$manager->test();
 	$post = json_encode($manager->getClientData(), JSON_NUMERIC_CHECK);
 	echo "<script>";
 	echo "window.game = ".$post.";";
@@ -212,14 +212,14 @@
 			<table style="margin:auto; width: 100%;">
 				<tr>
 					<th style="width: 60%; text-align: left">
-						 Turn Ability 
+						 Eff. Turn Ability 
 					</th>
 					<th id="remEP" style="text-align: center">
 					</th>
 				</tr>
 				<tr>
 					<th id="impulseText" style="text-align: left">
-						 Thrust Change 
+						 Cost : Rem 
 					</th>
 					<th id="ImpulseCost" style="text-align: center">
 					</th>
@@ -277,7 +277,6 @@
 			</table>
 		</div>
 
-
 		<div id="unitGUI" class="disabled">
 		</div>
 
@@ -292,8 +291,6 @@
 		</div>
 		<div id="shortInfo" class="disabled">
 		</div>
-
-
 
 		<div id="weaponAimTableWrapper" class="disabled">
 			<table id="targetInfo">
@@ -451,13 +448,13 @@
 					</th>
 				</tr>
 				<tr>
-					<th  width="50%" colSpan="2">
+					<th  width="65%" colSpan="2">
 						Class
 					</th>
-					<th  width="30%" >
+					<th  width="17%" >
 						ETA
 					</th>
-					<th  width="20%" >
+					<th  width="18%" >
 						Cost
 					</th>
 				</tr>
@@ -467,18 +464,16 @@
 						foreach ($manager->rdyReinforcements as $ship){
 								if ($ship->userid != $manager->userid){continue;}
 								echo "<tr class='requestReinforcements'>";
-								echo "<td><img class='img40' src=shipIcons/".strtolower($ship->name).".png></td>";
+								echo "<td><img class='img50' src=shipIcons/".strtolower($ship->name).".png></td>";
 								echo "<td>".$ship->name."</br>".$ship->notes."</td>";
-								echo "<td>".($ship->available - $manager->turn)." turn/s</td>";
+								echo "<td>".($ship->available - $manager->turn)."</td>";
 								echo "<td class='cost'>".$ship->cost."</td>";
 								echo "</tr>";
 							}
 
 						echo "<tr>";
-						echo "<td style='border: none; background-color: black;'></td>";
-						echo "<td style='border: none; background-color: black;'></td>";
-							echo "<td style='padding: 5px; font-size: 12px'> Total Cost</td>";
-							echo "<td style='padding: 5px; font-size: 15px' id='totalRequestCost'>0</td>";
+							echo "<td colSpan= 3; style='padding: 5px; font-size: 16px'> Total Cost</td>";
+							echo "<td style='padding: 5px; font-size: 14px' id='totalRequestCost'>0</td>";
 							echo "</tr>";
 						}
 					?>
@@ -653,7 +648,11 @@
 				else return;
 			}
 			else if (game){
-				if (e.keyCode == 113){ // q - show friendly sensor
+				if (e.keyCode == 32){ // space - disable unit circle
+					game.drawCircle = !game.drawCircle;
+					game.redraw();
+				}
+				else if (e.keyCode == 113){ // q - show friendly sensor
 					if (!game.animating && !game.sensorMode){
 						//game.drawShipOverlays();
 						game.drawAllSensorSettings(1);
@@ -707,20 +706,6 @@
 						game.animFlight = 1; game.animSalvo = 1;
 						game.endMoveSubPhase();
 						game.movementResolved();
-					}
-				}
-				else if (e.keyCode == 43){ // +
-					if (game.phase == 0 || game.phase == 1){
-						if (game.turnMode){
-							game.getUnit(aUnit).doShortenTurn(false);
-						}
-					}
-				}
-				else if (e.keyCode == 45){ // *
-					if (game.phase == 0 || game.phase == 1){
-						if (game.turnMode){
-							game.getUnit(aUnit).doUndoShortenTurn(false);
-						}
 					}
 				}
 			}

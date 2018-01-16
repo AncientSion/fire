@@ -328,7 +328,7 @@ Ship.prototype.getSelectedWeapons = function(){
 }
 
 Ship.prototype.doHover = function(){
-	if (!game.sensorMode){this.drawEW();}	
+	this.drawEW()	
 
 	if (this.ship || this.squad){
 		this.setMoveTranslation();
@@ -382,7 +382,10 @@ Ship.prototype.getTurnCost = function(){
 		return 0;
 	}
 	//else round(this.baseTurnCost*this.getImpulseMod() * this.getTurnMod(), 2);
-	else return round(1*this.getImpulseMod() * this.getTurnMod(), 2);
+	else {
+		return 1;
+		return round(1*this.getImpulseMod() * this.getTurnMod(), 2);
+	}
 }
 
 Ship.prototype.getTurnMod = function(){
@@ -571,6 +574,7 @@ Ship.prototype.canUndoLastAction = function(){
 
 Ship.prototype.doUndoLastAction = function(pos){
 	var update = false;
+	var setEW = false;
 	if (this.actions[this.actions.length-1].type == "speed"){
 		this.actions[this.actions.length-1].dist *= -1;
 	}
@@ -587,10 +591,12 @@ Ship.prototype.doUndoLastAction = function(pos){
 	else if (this.actions[this.actions.length-1].type == "turn"){
 		this.actions[this.actions.length-1].delay *= -1;
 		this.setRemainingDelay();
+		setEW = true;
 	}
 
 	this.actions.splice(this.actions.length-1, 1);
 	if (update){game.updateIntercepts(this.id);}
+	if (setEW){this.getSystemByName("Sensor").setTempEW();}
 	if (game.turnMode){this.switchTurnMode();}
 	this.turnAngles = {}
 	game.redraw();
@@ -644,28 +650,17 @@ Ship.prototype.switchTurnMode = function(){
 	if (game.turnMode){
 		turn.reset();
 		game.turnMode = 0;
-		this.setTempEW();
+		salvoCtx.clearRect(0, 0, res.x, res.y);
 		this.drawEW();
 		mouseCtx.clearRect(0, 0, res.x, res.y);
 		$("#epButton").addClass("disabled");
 	}	
 	else {
 		game.turnMode = 1;
-		this.setTempEW();
 		turn.set(this);
 		$("#epButton").removeClass("disabled");
 	}
 	this.setTurnData();
-}
-
-Ship.prototype.setTempEW = function(){;
-	if (game.turnMode){
-		this.getSystemByName("Sensor").drawTempEW(drawCtx);
-	}
-	else {
-		salvoCtx.clearRect(0, 0, res.x, res.y);
-		this.getSystemByName("Sensor").img = undefined;
-	}
 }
 
 Ship.prototype.handleTurning = function(e, o, f, pos){
@@ -676,7 +671,6 @@ Ship.prototype.handleTurning = function(e, o, f, pos){
 
 	if (a > 180){a = (360-a) *-1;}
 
-	//console.log(a)
 	if (a < -max){a = -max;}
 	else if (a > max){a = max;}
 
@@ -688,16 +682,20 @@ Ship.prototype.handleTurning = function(e, o, f, pos){
 		salvoCtx.translate(o.x, o.y);
 		salvoCtx.rotate(a * Math.PI/180);
 		salvoCtx.drawImage(img, -img.width/2 , -img.height/2, img.width, img.height);
-		salvoCtx.setTransform(1, 0, 0, 1, 0, 0);
+		salvoCtx.setTransform(1,0,0,1,0,0);
 	}
 
 	a = Math.min(Math.abs(a), max);
 	turn.a = a;
 	var c = this.getTurnCost() * a;
-	$("#epButton").css("top", t.y + 75).css("left", t.x - 70).find("#impulseCost").html(Math.ceil(c, 2) + " : " + Math.floor(this.getRemainingEP() - c));
+	$("#epButton").css("top", t.y + 25).css("left", t.x - 180).find("#impulseCost").html(Math.ceil(c, 2) + " : " + Math.floor(this.getRemainingEP() - c));
 
 	this.drawDelay();
 	this.drawMouseVector(o, t);
+
+	if (game.shortInfo){
+		game.getUnit(game.shortInfo).drawEW();
+	}
 }
 
 Ship.prototype.drawMouseVector = function(o, t){
@@ -732,10 +730,7 @@ Ship.prototype.issueTurn = function(a){
 		if (this.actions[0].a > 360){
 			this.actions[0].a -= 360;
 		} else if (this.actions[0].a < 0){this.actions[0].a += 360;}
-		console.log(this.actions[0].a);
 		this.drawFacing = this.actions[0].a;
-		//this.facing = this.actions[0].a;
-		game.redraw()
 	}
 	else {
 		var o = this.getPlannedPos();
@@ -753,14 +748,13 @@ Ship.prototype.issueTurn = function(a){
 			)
 		);
 		this.setRemainingDelay();
-		//console.log(this.actions[this.actions.length-1]);
 		$("#turnButton")
 			.find("#turnCost").html("").end()
 			.find("#turnDelay").html("");
-		//this.setMoveMode();
-		game.redraw();
-		//game.drawShipOverlays();
 	}
+
+	this.getSystemByName("Sensor").setTempEW();
+	game.redraw();
 }
 
 Ship.prototype.switchModeAll = function(id){
@@ -850,9 +844,6 @@ Ship.prototype.setMoveMode = function(){
 	turn.set(this);
 	this.setTurnData();
 	this.setMoveTranslation();
-	//this.drawTurnGUI();		
-	//this.drawMoveArea();
-	//this.drawVectorIndicator();
 
 
 	if (game.phase == -1 && (this.available == game.turn && game.turn == 1|| this.id < 0)){
@@ -951,11 +942,7 @@ Ship.prototype.getPowerOrders = function(){
 			}
 		}
 		for (var j = 0; j < this.structures[i].systems.length; j++){
-			for (var k = 0; k < this.structures[i].systems[j].powers.length; k++){
-				if (this.structures[i].systems[j].powers[k].new){
-					powers.push(this.structures[i].systems[j].powers[k]);
-				}
-			}
+			powers = powers.concat(this.structures[i].systems[j].getPowerOrders());
 		}
 	}
 	for (var i = 0; i < this.primary.systems.length; i++){
@@ -1283,7 +1270,6 @@ Ship.prototype.setLayout = function(){
 }
 
 Ship.prototype.setImage = function(){
-	//console.log("Ship setImage");
 	this.img = graphics.images[this.name.toLowerCase()];
 	return;
 }
@@ -1375,6 +1361,7 @@ Ship.prototype.draw = function(){
 }
 
 Ship.prototype.drawPositionMarker = function(){
+	if (!game.drawCircle){return;}
 	var color = "";
 	if (this.selected){color = "yellow"}
 	else color = this.getCodeColor();
@@ -1551,9 +1538,11 @@ Ship.prototype.getWeaponOrigin = function(id){
 }
 
 Ship.prototype.resetMoveMode = function(){
+	var turnMode = game.turnMode;
+
 	this.unsetMoveMode();
 	this.setMoveMode();
-	if (game.turnMode && this.canTurn()){
+	if (turnMode && this.canTurn()){
 		this.switchTurnMode();
 	}
 }
@@ -1682,7 +1671,7 @@ Ship.prototype.getEP = function(){
 		}
 	}
 
-	return ep;
+	return Math.floor(ep / this.getImpulseMod());
 }
 
 Ship.prototype.getRemainingEP = function(){
@@ -1807,7 +1796,7 @@ Ship.prototype.createBaseDiv = function(){
 		.append($("<tr>")
 			//.append($("<td>").html("Engine Power:"))
 			//.append($("<td>").html(this.getRemainingEP() + " / " + this.getEP()).addClass("ep")))
-			.append($("<td>").html("Turn Ability"))
+			.append($("<td>").html("Eff. Turn Ability"))
 			.append($("<td>").html(this.getRemainingEP() + " / " + this.getEP()).addClass("ep")))
 		.append($("<tr>")
 			.append($("<td>").html("Thrust & Roll"))
@@ -1821,6 +1810,8 @@ Ship.prototype.createBaseDiv = function(){
 		.append($("<tr>")
 			.append($("<td>").html("Active Delay"))
 			.append($("<td>").html(this.getRemainingDelay()).addClass("delay")))
+
+		console.log($(table).find(".ep").html());
 
 	subDiv.appendChild(table);
 	topDiv.appendChild(subDiv)
@@ -2997,7 +2988,7 @@ Ship.prototype.canIncreaseImpulse = function(){
 }
 
 Ship.prototype.canDecreaseImpulse = function(){
-	if (this.getCurrentImpulse() <= 0){return false;}
+	if (this.getCurrentImpulse() <= 30){return false;}
 	else if (this.getRemainingEP() >= this.getImpulseChangeCost()){
 		if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship + this.squad)){
 			return true;
@@ -3078,7 +3069,7 @@ Ship.prototype.setTurnData = function(){
 			//.find("#shortenTurn").removeClass("disabled");
 			$("#epButton")
 			.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end()
-			.find("#impulseText").html("Cost : Rem").end().find("#impulseCost").html("");
+			.find("#impulseText").find("#impulseCost").html("");
 
 		this.drawDelay();
 		this.adjustMaxTurn()
@@ -3088,8 +3079,8 @@ Ship.prototype.setTurnData = function(){
 			.find("#turnMode").html("OFF").removeClass("on").end()
 			//.find("#shortenTurn").addClass("disabled");
 		$("#epButton")
-			.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end()
-			.find("#impulseText").html("Cost : Rem").end().find("#impulseCost").html("");
+			.find("#remEP").html(this.getRemainingEP () + " / " + this.getRemainingEP()).addClass("green").end()
+			.find("#impulseText").find("#impulseCost").html("");
 		$(vector).addClass("disabled")
 	}
 

@@ -39,7 +39,7 @@ class Vorchan extends Light {
 		}
 	}
 
-	static function getKit(){
+	static function getKit($faction){
 		return array(
 			"id" => 0,
 			"name" => "",

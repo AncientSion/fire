@@ -18,6 +18,9 @@ window.graphics = {
 		this.images.battlecrab = new Image();
 		this.images.battlecrab.src = "shipIcons/omega.png";
 
+		this.images.squadron = new Image();
+		this.images.squadron.src = "shipIcons/squadron.png";
+
 		this.images.omega = new Image();
 		this.images.omega.src = "shipIcons/omega.png";
 

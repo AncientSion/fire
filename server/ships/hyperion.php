@@ -57,7 +57,7 @@ class Hyperion extends Heavy {
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(115, 4), 6);
 	}
 
-	static function getKit(){
+	static function getKit($faction){
 		return array(
 			"id" => 0,
 			"name" => "",
@@ -69,7 +69,7 @@ class Hyperion extends Heavy {
 				array(
 					"active" => 0,
 					"chance" => 65,
-					"name" => "Patrol (Aurora) Outfit",
+					"name" => "PATROL (Aurora) Outfit",
 					"cost" => 300,
 					"loads" =>
 					array(

@@ -3,7 +3,7 @@
 class Crius extends Light {
 	public $name = "Crius";
 	public $display = "Crius";
-	public $role = "Escort / Patrol Corvette";
+	public $role = "ESCORT / Patrol Corvette";
 	public $faction = "Earth Alliance";
 	public static $value =  280;
 	public $cost = 280;

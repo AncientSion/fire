@@ -78,8 +78,17 @@ class Ship {
 		return $this->index;
 	}
 
+	public function setPreviewState($turn, $phase){
+		$this->currentImpulse = $this->baseImpulse;
+		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq());
+
+		for ($j = 0; $j < sizeof($this->structures); $j++){
+			$this->structures[$j]->remainingNegation = $this->structures[$j]->negation;
+		}
+	}
+
 	public function setUnitState($turn, $phase){
-		//Debug::log("ship setUnitState #".$this->id."/".$this->display);
+		Debug::log("ship setUnitState #".$this->id."/".$this->display);
 
 		$this->setBaseStats($turn, $phase);
 		
@@ -189,43 +198,43 @@ class Ship {
 	}
 
 	public function hidePowers($turn){
-		for ($j = 0; $j < sizeof($this->structures); $j++){
-			for ($k = sizeof($this->structures[$j]->powers)-1; $k >= 0; $k--){
-				if ($this->structures[$j]->powers[$k]->turn == $turn){
-					array_splice($this->structures[$j]->powers, $k, 1);
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			for ($j = sizeof($this->structures[$i]->powers)-1; $j >= 0; $j--){
+				if ($this->structures[$i]->powers[$j]->turn == $turn){
+					array_splice($this->structures[$i]->powers, $j, 1);
 				} else break;
 			}
-			for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
-				for ($l = sizeof($this->structures[$j]->systems[$k]->powers)-1; $l >= 0; $l--){
-					if ($this->structures[$j]->systems[$k]->powers[$l]->turn == $turn){
-						if ($this->structures[$j]->systems[$k]->powers[$l]->type == 0){
-							$this->structures[$j]->systems[$k]->disabled = 0;
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				for ($k = sizeof($this->structures[$i]->systems[$j]->powers)-1; $k >= 0; $k--){
+					if ($this->structures[$i]->systems[$j]->powers[$k]->turn == $turn){
+						if ($this->structures[$i]->systems[$j]->powers[$k]->type == 0){
+							$this->structures[$i]->systems[$j]->disabled = 0;
 						}
-						array_splice($this->structures[$j]->systems[$k]->powers, $l, 1);
+						array_splice($this->structures[$i]->systems[$j]->powers, $k, 1);
 					} else break;
 				}
 			}
 		}
 		//if (!$this->ship){return;}
 
-		for ($j = 0; $j < sizeof($this->primary->systems); $j++){
-			if ($this->primary->systems[$j]->name == "Sensor"){
-				$this->primary->systems[$j]->hideEW($turn);
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+			if ($this->primary->systems[$i]->name == "Sensor"){
+				$this->primary->systems[$i]->hideEW($turn);
 			}
-			for ($k = sizeof($this->primary->systems[$j]->powers)-1; $k >= 0; $k--){
-				if ($this->primary->systems[$j]->powers[$k]->turn == $turn){
-					array_splice($this->primary->systems[$j]->powers, $k, 1);
+			for ($j = sizeof($this->primary->systems[$i]->powers)-1; $j >= 0; $j--){
+				if ($this->primary->systems[$i]->powers[$j]->turn == $turn){
+					array_splice($this->primary->systems[$i]->powers, $j, 1);
 				} else break;
 			}
 		}
 	}
 
 	public function hideFireOrders($turn){
-		for ($j = 0; $j < sizeof($this->structures); $j++){
-			for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
-				for ($l = sizeof($this->structures[$j]->systems[$k]->fireOrders)-1; $l >= 0; $l--){
-					if ($this->structures[$j]->systems[$k]->fireOrders[$l]->turn == $turn){
-						array_splice($this->structures[$j]->systems[$k]->fireOrders, $l, 1);
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			for ($k = 0; $k < sizeof($this->structures[$i]->systems); $k++){
+				for ($l = sizeof($this->structures[$i]->systems[$k]->fireOrders)-1; $l >= 0; $l--){
+					if ($this->structures[$i]->systems[$k]->fireOrders[$l]->turn == $turn){
+						array_splice($this->structures[$i]->systems[$k]->fireOrders, $l, 1);
 					} else break;
 				}
 			}
@@ -1097,7 +1106,7 @@ class Ship {
 		return 0.5;
 	}
 
-	static function getKit(){
+	static function getKit($faction){
 	return array(
 		"id" => 0,
 		"name" => "",
@@ -1118,6 +1127,14 @@ class Ship {
 				$this->structures[$i]->setBonusNegation($turn);
 			}
 		}
+	}
+
+	public function addSubUnits($elements){
+		return;
+	}
+
+	public function addMission($data, $userid, $turn, $phase){
+		return;
 	}
 }
 
