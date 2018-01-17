@@ -88,7 +88,7 @@ class Ship {
 	}
 
 	public function setUnitState($turn, $phase){
-		Debug::log("ship setUnitState #".$this->id."/".$this->display);
+		//Debug::log("ship setUnitState #".$this->id."/".$this->display);
 
 		$this->setBaseStats($turn, $phase);
 		

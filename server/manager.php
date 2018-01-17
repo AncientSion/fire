@@ -54,11 +54,6 @@ class Manager {
 
 
 	public function test(){
-		$this->deleteAllReinforcements();
-		$this->pickReinforcements();
-		return;
-		$this->setupShips();
-		//$this->setLocks();
 		return;
 		foreach ($this->ships as $ship){
 			Debug::log($ship->id);
@@ -526,7 +521,7 @@ class Manager {
 			DBManager::app()->deleteReinforcements($data);
 		}
 	}
-
+	
 	public function pickReinforcements(){
 		//if ($this->turn < 5){return;}
 		//return;
@@ -538,21 +533,22 @@ class Manager {
 
 			$faction = $this->playerstatus[$i]["faction"];
 
+			/*
 			$avail = 0;
 			for ($j = 0; $j < sizeof($this->reinforcements); $j++){
 				if ($this->reinforcements[$j]["userid"] == $this->playerstatus[$i]["userid"]){
 					$avail++;
 				}
 			}
+			*/
 
-
-			$add = 3;
+			$add = 12;
 
 			while ($add){
 				//Debug::log("player: ".$this->playerstatus[$i]["userid"]." has ".$this->playerstatus[$i]["value"]." available");
 
-				if ($avail > 4){if (mt_rand(0, 1)){continue;}} // cap max amount
-				else if ($this->turn > 13){if (mt_rand(0, $this->turn -12)){continue;}} // slow down post T 13
+				//if ($avail > 4){if (mt_rand(0, 1)){continue;}} // cap max amount
+				//else if ($this->turn > 13){if (mt_rand(0, $this->turn -12)){continue;}} // slow down post T 13
 
 				$entries = $this->getReinforcements($faction);
 
@@ -916,7 +912,7 @@ class Manager {
 		$this->setUnitRollState();
 		$this->setUnitStatus();
 		$this->assembleEndStates();
-		$this->alterReinforcementPoints();
+		if ($this->turn == 11){$this->deleteAllReinforcements();}
 	}
 	
 	public function freeFlights(){
@@ -942,6 +938,14 @@ class Manager {
 			if ($this->ships[$i]->flight || $this->ships[$i]->salvo){continue;}
 
 			if ($this->ships[$i]->rolling){$this->ships[$i]->rolled = !$this->ships[$i]->rolled;}
+		}
+	}
+
+	public function alterOneTimeReinforce(){
+		if ($this->turn == 11){
+			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+				DBManager::app()->addReinforceValue($this->playerstatus[$i]["userid"], $this->gameid, floor($this->reinforce));
+			};
 		}
 	}
 
@@ -983,8 +987,7 @@ class Manager {
 	}
 
 	public function startDeploymentPhase(){
-		//Debug::log("startDeploymentPhase");
-		$this->deleteReinforcements();
+		$this->alterOneTimeReinforce();
 		$this->pickReinforcements();
 		$this->updatePlayerStatus("waiting");
 	}
@@ -1497,9 +1500,9 @@ class Manager {
 		switch ($faction){
 			case "Earth Alliance";
 				$ships = array(
-					array("Omega", 4, 6),
+					array("Omega", 5, 6),
 					array("Hyperion", 7, 5),
-					array("Avenger", 2, 5),
+					array("Avenger", 3, 5),
 					array("Artemis", 10, 3),
 					array("Olympus", 10, 3),
 					array("Squadron", 15, 2),
@@ -1507,7 +1510,7 @@ class Manager {
 				break;
 			case "Centauri Republic";
 				$ships = array(
-					array("Primus", 6, 6),
+					array("Primus", 5, 6),
 					array("Altarian", 10, 3),
 					array("Demos", 10, 3),
 					array("Squadron", 15, 2),

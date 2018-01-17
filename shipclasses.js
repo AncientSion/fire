@@ -1005,6 +1005,9 @@ Ship.prototype.setPreMovePosition = function(){
 Ship.prototype.setPostMovePosition = function(){
 	//console.log("setPostMovePosition");
 	//this.setPreMovePosition(); return;
+	if (!this.actions.length){
+		this.actions.push(new Move(0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+	}
 	this.drawX = this.actions[this.actions.length-1].x;
 	this.drawY = this.actions[this.actions.length-1].y;
 }

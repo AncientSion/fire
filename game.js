@@ -570,6 +570,7 @@ function Game(data, userid){
 	}
 
 	this.disableDeployment = function(){
+		if (aUnit){game.getUnit(aUnit).select();}
 		this.deploying = false;
 		this.deployArea = [];
 		this.deployBlock = false;
