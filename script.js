@@ -367,19 +367,14 @@ function canvasMouseMove(e){
 			handleWeaponAimEvent(ship, unit, e, pos);
 		}
 	}
-	else if (game.deploying){					
-		var ele = $("#deployOverlay");
-		var w = $(ele).width()/2;
-		var top = (e.clientY)  + 80;
-		var left = (e.clientX) - w;
-		$(ele).css("top", top).css("left", left).show();
-		game.getDeployingUnit().drawDeploymentPreview(pos);
+	else if (game.deploying){
+		game.getDeployingUnit().drawDeploymentPreview(e, pos);
 	}
 	else if (!game.deploying){
 		$("#deployOverlay").hide();
 	}
 
-	if (unit){game.handleHoverEvent(unit);
+	if (unit){game.handleHoverEvent(e, 1, unit);
 	} else if (game.shortInfo){game.resetHover(e, shipLoc, facing, pos);}
 }
 

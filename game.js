@@ -1146,17 +1146,12 @@ function Game(data, userid){
 			stack[i].setImage();
 		}
 
-		if (stack.length){
-			game.redraw();
-		}
+		if (stack.length){game.redraw();}
 	}
 
-	this.handleHoverEvent = function(unit){
-		if (unit.id == game.shortInfo){
-			return;
-		} else if (game.shortInfo && game.shortInfo != unit.id){
-			game.redraw();
-		}
+	this.handleHoverEvent = function(e, onMap, unit){
+		if (unit.id == game.shortInfo){return;}
+		else if (game.shortInfo && game.shortInfo != unit.id){game.redraw();}
 
 		game.shortInfo = unit.id;
 
@@ -1164,14 +1159,24 @@ function Game(data, userid){
 		$(ele).children().remove().end().append($(unit.getShortInfo()).css("width", "100%"));
 
 		var oX = $(ele).width()/2;
-		var pos = unit.getDrawPos();
-		var top = (pos.y * cam.z) + cam.o.y + 60;
-		var left = (pos.x * cam.z) + cam.o.x - oX;
-		$(ele).css("top", top).css("left", left).show();
+		var pos;
+		var top;
+		var left;
 
-		if (unit.id != aUnit){
-			unit.doHover();
+		if (onMap){ 
+			pos = unit.getDrawPos();
+			left = (pos.x * cam.z) + cam.o.x - oX;
+			top = (pos.y * cam.z) + cam.o.y + 60;
 		}
+		else {
+			pos = {x: e.clientX, y: e.clientY};
+			left = pos.x - oX;
+			top = pos.y + 30;
+		}
+
+		$(ele).css("left", left).css("top", top).show();
+
+		if (unit.id != aUnit){unit.doHover();}
 	}
 
 	this.resetHover = function(e, loc, facing, pos){
@@ -2452,7 +2457,7 @@ function Game(data, userid){
 						function(e){
 							var vessel = game.getUnit($(this).data("id"));
 								vessel.doHighlight();
-							if (vessel.highlight){game.handleHoverEvent(vessel);}						
+							if (vessel.highlight){game.handleHoverEvent(e, 0, vessel);}						
 							if (aUnit && aUnit != vessel.id){
 								var	ship = game.getUnit(aUnit);
 								if (ship.salvo){return;}

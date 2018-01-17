@@ -71,7 +71,13 @@ function Ship(data){
 	this.doDraw = 1;
 }
 
-Ship.prototype.drawDeploymentPreview = function(pos){
+Ship.prototype.drawDeploymentPreview = function(e, pos){
+	var ele = $("#deployOverlay");
+	var w = $(ele).width()/2;
+	var top = (e.clientY)  + 80;
+	var left = (e.clientX) - w;
+	$(ele).css("top", top).css("left", left).show();
+
 	mouseCtx.clearRect(0, 0, res.x, res.y);
 	mouseCtx.translate(cam.o.x, cam.o.y)
 	mouseCtx.scale(cam.z, cam.z)

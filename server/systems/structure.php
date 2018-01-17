@@ -146,8 +146,8 @@ class Primary {
 		$this->parentId = $parentId;
 		$this->start = $start;
 		$this->end = $end;
-		$this->integrity = $integrity;
-		$this->remaining = $integrity;
+		$this->integrity = floor($integrity*0.85);
+		$this->remaining = floor($integrity*0.85);
 	}
 
 	public function isDestroyed(){

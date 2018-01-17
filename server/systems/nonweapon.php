@@ -11,7 +11,7 @@ class PrimarySystem extends System {
 		//$this->maxDmg = round($subs[0] / $subs[1]);
 		$this->maxDmg = 25;
 		$this->mass = $subs[0];
-		$this->integrity = $subs[0];
+		$this->integrity = floor($subs[0]*0.85);
 		$this->effiency = $effiency;
 
 	}
