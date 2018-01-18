@@ -194,7 +194,7 @@ class Ship {
 	}
 
 	public function getImpulseStep(){
-			return floor($this->getBaseImpulse() / 7);
+			return floor($this->getBaseImpulse() / 8);
 	}
 
 	public function hidePowers($turn){

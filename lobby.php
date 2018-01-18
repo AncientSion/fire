@@ -215,7 +215,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 								</tr>
 								<tr>
 									<td>
-										<input type="form" style="text-align: center" value ='100' placeholder="Reinforce / Turn" name="reinforceValue"></input>		
+										<input type="form" style="text-align: center" value ='1500' placeholder="Reinforce / Turn" name="reinforceValue"></input>		
 									</td>
 								</tr>
 								<tr>

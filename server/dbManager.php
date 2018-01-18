@@ -1065,9 +1065,9 @@
 			//Debug::log("insertClientFireOrders: ".sizeof($fires));
 			$stmt = $this->connection->prepare("
 				INSERT INTO fireorders 
-					(gameid, turn, shooterid, targetid, weaponid, resolved)
+					(gameid, turn, shooterid, targetid, x, y, weaponid, resolved)
 				VALUES
-					(:gameid, :turn, :shooterid, :targetid, :weaponid, :resolved)
+					(:gameid, :turn, :shooterid, :targetid, :x, :y, :weaponid, :resolved)
 			");
 
 			$x = 0;
@@ -1078,6 +1078,8 @@
 				$stmt->bindParam(":turn", $turn);
 				$stmt->bindParam(":shooterid", $fires[$i]["shooterid"]);
 				$stmt->bindParam(":targetid", $fires[$i]["targetid"]);
+				$stmt->bindParam(":x", $fires[$i]["x"]);
+				$stmt->bindParam(":y", $fires[$i]["y"]);
 				$stmt->bindParam(":weaponid", $fires[$i]["weaponid"]);
 				$stmt->bindParam(":resolved", $fires[$i]["resolved"]);
 
@@ -1090,15 +1092,13 @@
 			return true;
 		}
 
-		//return new FireOrder(-1, $gameid, $turn, $this->id, $this->mission->id, $this->structures[0]->systems[0]->id, $this->getShots(), $0, "", 0, 0);
-
 		public function insertServerFireOrder($fires){
 			Debug::log("insertServerFireOrder: ".sizeof($fires));
 			$stmt = $this->connection->prepare("
 				INSERT INTO fireorders 
-					(gameid, turn, shooterid, targetid, weaponid, shots)
+					(gameid, turn, shooterid, targetid, x, y, weaponid, resolved)
 				VALUES
-					(:gameid, :turn, :shooterid, :targetid, :weaponid, :shots)
+					(:gameid, :turn, :shooterid, :targetid, :x, :y, :weaponid, :resolved)
 			");
 
 			$x = 0;
@@ -1109,6 +1109,8 @@
 				$stmt->bindParam(":turn", $fires[$i]->turn);
 				$stmt->bindParam(":shooterid", $fires[$i]->shooterid);
 				$stmt->bindParam(":targetid", $fires[$i]->targetid);
+				$stmt->bindParam(":x", $fires[$i]->x);
+				$stmt->bindParam(":y", $fires[$i]->y);
 				$stmt->bindParam(":weaponid",$fires[$i]->weaponid);
 				$stmt->bindParam(":shots",$fires[$i]->shots);
 
@@ -1330,6 +1332,8 @@
 							$result[$j]["turn"],
 							$result[$j]["shooterid"],
 							$result[$j]["targetid"],
+							$result[$j]["x"],
+							$result[$j]["y"],
 							$result[$j]["weaponid"],
 							$result[$j]["shots"],
 							$result[$j]["req"],

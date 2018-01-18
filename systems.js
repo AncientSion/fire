@@ -1020,6 +1020,9 @@ System.prototype.drawSystemArc = function(facing, rolled, pos){
 	}
 }
 
+System.prototype.hasEvent = function(){
+	return false;
+}
 
 function PrimarySystem(system){
 	System.call(this, system);
@@ -1963,6 +1966,12 @@ Area.prototype.setFireOrder = function(targetid, pos){
 	this.setSystemBorder();
 }
 
+Area.prototype.unsetFireOrder = function(){
+	salvoCtx.clearRect(0, 0, res.x, res.y);
+	game.getUnit(this.parentId).drawEW();
+	System.prototype.unsetFireOrder.call(this);
+}
+
 Area.prototype.highlightFireOrder = function(){
 	var o = game.getUnit(this.parentId).getPlannedPos();
 	var t = this.fireOrders[this.fireOrders.length-1];
@@ -1992,6 +2001,47 @@ Area.prototype.highlightFireOrder = function(){
 	salvoCtx.fillStyle = "white";
 	salvoCtx.globalAlpha = 1;
 	salvoCtx.setTransform(1, 0, 0, 1, 0, 0);
+}
+
+Area.prototype.highlightEvent = function(){
+	var o = game.getUnit(this.parentId);
+	var t = this.fireOrders[this.fireOrders.length-1];
+	if (o.x == t.y && o.y == t.y){return;}
+	ctx.translate(cam.o.x, cam.o.y);
+	ctx.scale(cam.z, cam.z)
+	ctx.translate(o.x, o.y);
+
+	ctx.beginPath();
+	ctx.moveTo(0, 0);
+	ctx.translate(-o.x + t.x, -o.y + t.y);
+	ctx.lineTo(0, 0);
+	ctx.closePath();
+	ctx.globalAlpha = 0.3;
+	ctx.strokeStyle = "white";
+	ctx.lineWidth = 1;
+	ctx.stroke();
+	ctx.lineWidth = 1;
+
+	ctx.beginPath();
+	ctx.arc(0, 0, this.aoe, 0, 2*Math.PI, false);
+	ctx.closePath();
+
+	ctx.globalAlpha = 0.2;
+	ctx.fillStyle = "red";
+	ctx.fill();
+
+	ctx.fillStyle = "white";
+	ctx.globalAlpha = 1;
+	ctx.setTransform(1, 0, 0, 1, 0, 0);
+}
+
+Area.prototype.hasEvent = function(){
+	for (var i = this.fireOrders.length-1; i >= 0; i--){
+		if (this.fireOrders[i].turn == game.turn){
+			return true;
+		}
+	}
+	return false;
 }
 
 function Warhead(data){

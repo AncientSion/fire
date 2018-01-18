@@ -36,8 +36,9 @@ function Game(data, userid){
 	this.animSalvo = 0;
 	this.mission;
 	this.timeout = 0;
-	this.canConfirm = 1;;
+	this.canConfirm = 1;
 	this.drawCircle = 1;
+	this.events = [];
 	window.username = data.username;
 
 	this.doDeployShip = function(e, ship, pos){
@@ -928,9 +929,17 @@ function Game(data, userid){
 		this.initDeploymentWrapper();
 		this.initReinforcementWrapper();
 		this.initSelectionWrapper();
+		this.initEvents();
 		this.canSubmit = canSubmit;
 		cam.setFocus(0, 0);
 		this.initPhase(this.phase);
+	}
+
+	this.initEvents = function(){
+		for (var i = 0; i < this.ships.length; i++){
+			this.events = this.events.concat(this.ships[i].getEvents());
+		}
+
 	}
 
 	this.setDrawOffset = function(){
@@ -1176,7 +1185,7 @@ function Game(data, userid){
 			}
 		}
 
-		//$("#weaponAimTableWrapper").hide()
+		$("#weaponAimTableWrapper").hide()
 		shooter.highlightAllSelectedWeapons();
 	}
 
@@ -1244,6 +1253,7 @@ function Game(data, userid){
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		
 		this.drawShips();
+		this.drawEvents()
 		
 		if (this.deploying){
 			this.drawDeploymentZone();
@@ -2728,6 +2738,12 @@ Game.prototype.drawShips = function(){
 		this.ships[i].draw();
 	}
 	this.resetShipTransform();
+}
+
+Game.prototype.drawEvents = function(){
+	for (var i = 0; i < this.events.length; i++){
+		this.events[i].highlightEvent();
+	}
 }
 
 Game.prototype.drawOtherShips = function(id){

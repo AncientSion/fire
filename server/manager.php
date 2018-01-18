@@ -628,7 +628,7 @@ class Manager {
 		Debug::log("handleDeploymentPhase");
 		$this->handleDeploymentActions();
 		$this->handleJumpActions();
-		$this->initBallistics();
+		$this->handleInitialFireOrders();
 		$this->assemblDeployStates();
 		DBManager::app()->deleteEmptyLoads($this->gameid);
 	}
@@ -683,42 +683,59 @@ class Manager {
 		}
 	}
 
-	public function initBallistics(){
-		Debug::log("initBallistics");
-		$fires = DBManager::app()->getUnresolvedFireOrders($this->gameid, $this->turn); // fireorders from deploy -> hangar, launcher
+	public function handleInitialFireOrders(){
+		Debug::log("handleInitialFireOrders");
+		$fires = DBManager::app()->getUnresolvedFireOrders($this->gameid, $this->turn);	
+
 		usort($fires, function($a, $b){
 			return $a->shooterid - $b->shooterid;
 		});
+
+		if (sizeof($fires)){
+			for ($i = 0; $i < sizeof($fires); $i++){
+				$fires[$i]->shooter = $this->getUnit($fires[$i]->shooterid);
+				$fires[$i]->weapon = $fires[$i]->shooter->getSystem($fires[$i]->weaponid);
+			}
+
+			$this->handleDeployFireOrders($fires);
+			$this->handleBallisticFireOrders($fires);
+			DBManager::app()->updateBallisticFireOrder($fires);
+		}
+	}
+
+	public function handleDeployFireOrders(){
+		Debug::log("handleDeployFireOrders");
+		for ($i = 0; $i < sizeof($fires); $i++){
+			if ($fires[$i]->weapon instanceof Hangar){
+				$fire->resolved = 1;
+			}
+		}
+	}
+
+	public function handleBallisticFireOrders(){
+		Debug::log("handleBallisticFireOrders");
 
 		$adjust = array();
 		$units = array();
 		for ($i = 0; $i < sizeof($fires); $i++){
 			//Debug::log("handling fire #".$i);
 			$skip = 0;
-			$shooter = $this->getUnit($fires[$i]->shooterid);
-			$launcher = $shooter->getSystem($fires[$i]->weaponid);
-			$fires[$i]->shots = $launcher->getShots($this->turn);
 
-			Debug::log($shooter->name." #".$shooter->id." firing ".$fires[$i]->shots);
-			if (!($launcher instanceof Launcher)){
-				//Debug::log("Hangar fireorder, resolving: ".$fires[$i]->id);
-				if ($launcher instanceof Hangar){
-					$fires[$i]->resolved = 1;
-					continue;
-				}
-				Debug::log("FATAL ERROR, unresolved non-launcher/hangar  fireorder: ".$fires[$i]->id);
-				continue;
-			}
-			$name = $launcher->getAmmo()->name;
+			if ($fires[$i]->weapon instanceof Launcher){
+				$fires[$i]->shots = $fires[$i]->weapon->getShots($this->turn);
+				$fire->resolved = 1;
+			} else continue;
+
+			$name = $fires[$i]->weapo->getAmmo()->name;
 			$adjust[] = array(
-				"launchData" => array("shipid" => $shooter->id, "systemid" => $launcher->id, 
+				"launchData" => array("shipid" => $fires[$i]->shooterid, "systemid" => $fires[$i]->weaponid, 
 					"loads" => array(0 => array("name" => $name, "launch" => $fires[$i]->shots)
 					)
 				)
 			);
 
 			for ($j = 0; $j < sizeof($units); $j++){
-				if ($units[$j]["launchData"]["shipid"] == $shooter->id && $units[$j]["launchData"]["loads"][0]["name"] == $name && $units[$j]["mission"]["targetid"] == $fires[$i]->targetid){
+				if ($units[$j]["launchData"]["shipid"] == $fires[$i]->shooterid && $units[$j]["launchData"]["loads"][0]["name"] == $name && $units[$j]["mission"]["targetid"] == $fires[$i]->targetid){
 					//Debug::log("merging");
 					$units[$j]["launchData"]["loads"][0]["launch"] += $fires[$i]->shots;
 					$skip = 1;
@@ -727,27 +744,22 @@ class Manager {
 			}
 
 			if ($skip){
-				//Debug::log("skipping");
 				continue;
 			}
 
-			$sPos = $shooter->getCurrentPosition();
+			$sPos = $fires[$i]->shooter->getCurrentPosition();
 			$tPos = $this->getUnit($fires[$i]->targetid)->getCurrentPosition();
 			$a = Math::getAngle($sPos->x, $sPos->y, $tPos->x, $tPos->y);
 			//Debug::log("i = ".$i.", shooterid: ".$shooter->id);
-			$devi = Math::getPointInDirection($shooter->size/3, $a, $sPos->x + mt_rand(-10, 10), $sPos->y + mt_rand(-10, 10));
+			$devi = Math::getPointInDirection($fires[$i]->shooter->size/3, $a, $sPos->x + mt_rand(-10, 10), $sPos->y + mt_rand(-10, 10));
 			$mission = array("type" => 2, "turn" => $this->turn, "targetid" => $fires[$i]->targetid, "x" => $tPos->x, "y" => $tPos->y, "arrived" => 0, "new" => 1);
 			$move = array("turn" => $this->turn, "type" => "deploy", "dist" => 0, "x" => $devi->x, "y" => $devi->y, "a" => $a, "cost" => 0, "delay" => 0, "costmod" => 0, "resolved" => 0);
-			$launchData = array("shipid" => $shooter->id, "systemid" => $launcher->id, "loads" => array(0 => array("launch" => $fires[$i]->shots, "name" => $name)));
+			$launchData = array("shipid" => $fires[$i]->shooter->id, "systemid" => $fires[$i]->weapon->id, "loads" => array(0 => array("launch" => $fires[$i]->shots, "name" => $name)));
 
-			$units[] = array("gameid" => $this->gameid, "userid" => $shooter->userid, "type" => "Salvo", "name" => "Salvo", "turn" => $this->turn, "eta" => 0,
+			$units[] = array("gameid" => $this->gameid, "userid" => $fires[$i]->shooter->userid, "type" => "Salvo", "name" => "Salvo", "turn" => $this->turn, "eta" => 0,
 				"mission" => $mission, "actions" => array($move), "launchData" => $launchData);
 
 
-		}
-
-		if (sizeof($fires)){
-			DBManager::app()->updateBallisticFireOrder($fires);
 		}
 
 		if (sizeof($units)){
@@ -1635,6 +1647,8 @@ class Manager {
 			$data["turn"],
 			$data["shooterid"],
 			$data["targetid"],
+			$data["x"],
+			$data["y"],
 			$data["weaponid"],
 			$data["shots"],
 			$data["req"],

@@ -359,7 +359,8 @@ Ship.prototype.getRollCost = function(){
 }
 
 Ship.prototype.getImpulseChangeCost = function(){
-	return Math.round(this.baseImpulseCost*(1-(1-this.getImpulseMod())/2));
+	//return Math.round(this.baseImpulseCost*(1-(1-this.getImpulseMod())/2));
+	return Math.floor(this.baseImpulseCost*(1-(1-this.getImpulseMod())/2) / this.getBaseEP() * this.getEP());
 }
 
 Ship.prototype.getBaseImpulse = function(){
@@ -376,7 +377,7 @@ Ship.prototype.setRemainingImpulse = function(){
 }
 
 Ship.prototype.getImpulseStep = function(){
-	return Math.floor(this.getBaseImpulse() / 7);
+	return Math.floor(this.getBaseImpulse() / 8);
 }
 
 Ship.prototype.getTurnCost = function(){
@@ -1671,7 +1672,7 @@ Ship.prototype.drawMoveArcs = function(center, rem){
 	}
 }
 
-Ship.prototype.getEP = function(){
+Ship.prototype.getBaseEP = function(){
 	var ep = 0;
 
 	for (var i = 0; i < this.primary.systems.length; i++){
@@ -1679,8 +1680,11 @@ Ship.prototype.getEP = function(){
 			ep += this.primary.systems[i].getOutput();
 		}
 	}
+	return ep;
+}
 
-	return Math.floor(ep / this.getImpulseMod());
+Ship.prototype.getEP = function(){
+	return Math.floor(this.getBaseEP() / this.getImpulseMod());
 }
 
 Ship.prototype.getRemainingEP = function(){
@@ -3397,3 +3401,14 @@ Ship.prototype.posIsOnSystemArc = function(origin, target, facing, system){
 	}
 }
 
+Ship.prototype.getEvents = function(){
+	var data = [];
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].systems.length; j++){
+			if (this.structures[i].systems[j].hasEvent()){
+				data.push(this.structures[i].systems[j]);
+			}
+		}
+	}
+	return data;
+}

@@ -12,7 +12,7 @@ class Salvo extends Mixed {
 	}
 
 	public function getFireOrder($gameid, $turn, $target){
-		$fire = new FireOrder(-1, $gameid, $turn, $this->id, $target->id, $this->structures[0]->systems[0]->id, $this->getShots($turn), 0, 0, "", 0, 0);
+		$fire = new FireOrder(-1, $gameid, $turn, $this->id, $target->id, 0, 0, $this->structures[0]->systems[0]->id, $this->getShots($turn), 0, 0, "", 0, 0);
 		$fire->weapon = $this->structures[0]->systems[0];
 		$fire->target = $target;
 		$fire->shooter = $this;

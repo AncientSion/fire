@@ -167,6 +167,8 @@ class FireOrder {
 	public $turn;
 	public $shooterid;
 	public $targetid;
+	public $x;
+	public $y;
 	public $weaponid;
 	public $shots;
 	public $req;
