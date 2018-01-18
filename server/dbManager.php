@@ -11,8 +11,8 @@
 
 			if ($this->connection === null){
 				//$user = "aatu"; $pass = "Kiiski";
-				$user = "root"; $pass = "147147";
-				$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$user,$pass);
+				$data = Debug::db();
+				$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$data[0],$data[1]);
 				$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 			}
