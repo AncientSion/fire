@@ -1147,14 +1147,44 @@ function Game(data, userid){
 			stack[i].setImage();
 		}
 
-		if (stack.length){game.redraw();}
+		if (stack.length){this.redraw();}
+	}
+
+	this.handleFireClick = function(pos, shooter, targetid){
+		if (!shooter.hasWeaponsSelected()){return;}
+
+		var active = shooter.getSelectedWeapons();
+		var hostileUnit = 0;
+		var target;
+
+		if (targetid){target = this.getUnit(targetid);}
+		else target = this.getUnitByClick(pos);
+
+		if (target){targetid = target.id;}
+
+		if (target && shooter.id != target.id && (target.userid != this.userid && target.userid != shooter.userid)){
+			hostileUnit = 1;
+		}
+
+		if (shooter.flight && hostileUnit && !this.isCloseCombat(shooter, target)){return;}
+
+		for (var i = 0; i < active.length; i++){
+			if (active[i].hasValidTarget && active[i].canFire()){
+				if (active[i].freeAim == 0 && hostileUnit == 1 || active[i].freeAim == 1 && hostileUnit == 0){
+					active[i].setFireOrder(targetid, pos);
+				}
+			}
+		}
+
+		//$("#weaponAimTableWrapper").hide()
+		shooter.highlightAllSelectedWeapons();
 	}
 
 	this.handleHoverEvent = function(e, onMap, unit){
-		if (unit.id == game.shortInfo){return;}
-		else if (game.shortInfo && game.shortInfo != unit.id){game.redraw();}
+		if (unit.id == this.shortInfo){return;}
+		else if (this.shortInfo && this.shortInfo != unit.id){this.redraw();}
 
-		game.shortInfo = unit.id;
+		this.shortInfo = unit.id;
 
 		var ele = $("#shortInfo");
 		$(ele).children().remove().end().append($(unit.getShortInfo()).css("width", "100%"));
@@ -1183,9 +1213,9 @@ function Game(data, userid){
 	this.resetHover = function(e, loc, facing, pos){
 		$("#shortInfo").html("").hide();
 
-		if (game.deploying){game.drawDeploymentZone();}
+		if (this.deploying){game.drawDeploymentZone();}
 
-		if (aUnit != game.shortInfo){
+		if (aUnit != this.shortInfo){
 			salvoCtx.clearRect(0, 0, res.x, res.y);
 			moveCtx.clearRect(0, 0, res.x, res.y);
 		}
@@ -1193,11 +1223,11 @@ function Game(data, userid){
 			planCtx.clearRect(0, 0, res.x, res.y);
 		}
 
-		if (aUnit != game.shortInfo){
-			var u = game.getUnit(aUnit);
+		if (aUnit != this.shortInfo){
+			var u = this.getUnit(aUnit);
 
 			if (u.ship || u.squad){
-				if (game.turnMode){u.handleTurning(e, loc, facing, pos);}
+				if (this.turnMode){u.handleTurning(e, loc, facing, pos);}
 				else u.drawEW();
 				
 				u.setMoveTranslation();
@@ -1207,7 +1237,7 @@ function Game(data, userid){
 				u.resetMoveTranslation();
 			}
 		}
-		game.shortInfo = false;
+		this.shortInfo = false;
 	}
 	
 	this.draw = function(){
@@ -1215,8 +1245,8 @@ function Game(data, userid){
 		
 		this.drawShips();
 		
-		if (game.deploying){
-			game.drawDeploymentZone();
+		if (this.deploying){
+			this.drawDeploymentZone();
 		}
 	}
 
@@ -1229,7 +1259,7 @@ function Game(data, userid){
 		$("#shortInfo").hide();
 
 		if (aUnit){
-			var unit = game.getUnit(aUnit);
+			var unit = this.getUnit(aUnit);
 			if (!unit.salvo){
 				if (unit.hasWeaponsSelected()){
 					unit.highlightAllSelectedWeapons();
@@ -1248,7 +1278,7 @@ function Game(data, userid){
 			}
 			this.drawMixedMoves();
 		}
-		game.draw();
+		this.draw();
 		//game.drawShipOverlays();
 	}
 
@@ -2443,9 +2473,7 @@ function Game(data, userid){
 								else if (game.flightDeploy){
 									game.doDeployFlight();
 								}
-								else if (vessel.id != ship.id && (vessel.userid != game.userid && vessel.userid != ship.userid)){
-									handleFireClick(ship, vessel);
-								} else vessel.switchDiv();
+								else firePhase({x: 0, y: 0}, ship, vessel.id);
 							}
 						}
 					})

@@ -56,7 +56,6 @@
 	<script src='systems.js'></script>
 	<script src='graphics.js'></script>
 	<script src='cam.js'></script>
-	<script src='imageloader.js'></script>
 	<script src='game.js'></script>
 	<script src='ajax.js'></script>
 	<script src='script.js'></script>
@@ -472,8 +471,8 @@
 							}
 
 						echo "<tr>";
-							echo "<td colSpan= 3; style='padding: 5px; font-size: 16px'> Total Cost</td>";
-							echo "<td style='padding: 5px; font-size: 14px' id='totalRequestCost'>0</td>";
+							echo "<th colSpan=2 style='padding: 5px'>Total Cost</th>";
+							echo "<th colSpan=2 id='totalRequestCost'>0</th>";
 							echo "</tr>";
 						}
 					?>
@@ -648,7 +647,7 @@
 				else return;
 			}
 			else if (game){
-				if (e.keyCode == 32){ // space - disable unit circle
+				if (e.keyCode == 101){ // e - disable unit circle
 					game.drawCircle = !game.drawCircle;
 					game.redraw();
 				}
@@ -658,7 +657,7 @@
 						game.drawAllSensorSettings(1);
 					}
 				}
-				else if (e.keyCode == 119){ // q - show hostile sensor
+				else if (e.keyCode == 119){ // w - show hostile sensor
 					if (!game.animating && !game.sensorMode){
 						//game.drawShipOverlays();
 						game.drawAllSensorSettings(0);

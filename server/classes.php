@@ -183,12 +183,14 @@ class FireOrder {
 	public $angle = false;
 	public $singleid = false;
 
-	function __construct($id, $gameid, $turn, $shooterid, $targetid, $weaponid, $shots, $req, $notes, $hits, $resolved){
+	function __construct($id, $gameid, $turn, $shooterid, $targetid, $x,$y, $weaponid, $shots, $req, $notes, $hits, $resolved){
 		$this->id = $id;
 		$this->gameid = $gameid;
 		$this->turn = $turn;
 		$this->shooterid = $shooterid;
 		$this->targetid = $targetid;
+		$this->x = $x;
+		$this->y = $y;
 		$this->weaponid = $weaponid;
 		$this->shots = $shots;
 		$this->req = $req;

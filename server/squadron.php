@@ -377,6 +377,7 @@ class Squaddie extends Single {
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
+		$this->integrity = floor($this->integrity * 0.8);
 	}
 
 	public function setPowerOutput(){

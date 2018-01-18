@@ -197,6 +197,7 @@ class Hangar extends Weapon {
 	public $utility = 1;
 	public $capacity;
 	public $launchRate;
+	public $usage = -1;
 
 	function __construct($id, $parentId, $launchRate, $loads, $capacity, $destroyed = false){
 		parent::__construct($id, $parentId, 0, $destroyed);

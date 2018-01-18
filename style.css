@@ -1429,6 +1429,12 @@ div.integrityFull {
 	background-color: black;
 }
 
+#totalRequestCost {
+	padding: 5px;
+	font-size: 14px;
+	color: green;
+}
+
 #combatlogWrapper disabled, #deployLogWrapper disabled {
 	display: none;
 }

@@ -1,5 +1,0 @@
-delete from damages where turn = 4;
-update fireorders set resolved = 0, notes = "", req = 0, hits = 0, shots = 0 where turn = 4;
-update playerstatus set phase = 4, status = "ready" where turn = 4;
-update games set phase = 2 where turn = 4;
-delete from systemcrits where turn = 4;

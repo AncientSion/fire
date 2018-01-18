@@ -1871,9 +1871,7 @@ Ship.prototype.expandDiv = function(div){
 				var shooter = game.getUnit(aUnit);
 				var target = game.getUnit($(this).parent().parent().data("shipId"));
 				if (shooter && target){
-					if (target.id != shooter.id && (target.userid != game.userid && target.userid != shooter.userid)){
-						handleFireClick(shooter, target);
-					} else target.switchDiv();
+					firePhase({x: 0, y: 0}, shooter, target.id);
 				}
 			}));
 

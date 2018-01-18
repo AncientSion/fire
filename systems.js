@@ -38,6 +38,8 @@ function System(system){
 	this.internal = system.internal;
 	this.tiny = system.tiny;
 	this.img;
+	this.usage = system.usage;
+	this.freeAim = system.freeAim;
 }
 
 System.prototype.getDisplay = function(){
@@ -178,11 +180,13 @@ System.prototype.highlightFireOrder = function(){
 	salvoCtx.translate(cam.o.x, cam.o.y);
 	salvoCtx.scale(cam.z, cam.z)
 	salvoCtx.translate(o.x, o.y);
+
 	salvoCtx.beginPath();
 	salvoCtx.moveTo(0, 0);
 	salvoCtx.translate(-o.x + t.x, -o.y + t.y);
 	salvoCtx.lineTo(0, 0);
 	salvoCtx.closePath();
+
 	salvoCtx.strokeStyle = "white";
 	salvoCtx.lineWidth = 2;
 	salvoCtx.stroke();
@@ -246,10 +250,7 @@ System.prototype.canFire = function(){
 	if (this.destroyed || this.disabled || this.locked){
 		return false;
 	}
-	else if (game.phase == -2){
-		return false;
-	}
-	if (this instanceof Launcher && game.phase == -1 || this instanceof Hangar && game.phase == -1 || this instanceof Weapon && game.phase == 2){
+	else if (this.usage == game.phase){
 		if (this.getLoadLevel() >= 1){
 			return true;
 		}
@@ -267,7 +268,6 @@ System.prototype.getLoadLevel = function(){
 	else return has/need;
 }
 System.prototype.setTimeLoaded = function(){
-	if (this.id == 18 && this.parentId == 5){console.log("ding");}
 
 	if (!this.isPowered()){this.loaded = 0; return;}
 
@@ -696,10 +696,10 @@ System.prototype.showInfoDiv = function(e){
 	return;
 }
 
-System.prototype.setFireOrder = function(targetid){
+System.prototype.setFireOrder = function(targetid, pos){
 	if (this.odds <= 0){return;}
 	this.fireOrders.push(
-		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, 
+		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, x: pos.x, y: pos.y, weaponid: this.id, 
 		shots: 0, req: -1, notes: "", hits: -1, resolved: 0}
 	);
 	this.selected = 0;
@@ -866,6 +866,7 @@ System.prototype.isDestroyed = function(){
 		}
 	}
 }
+
 System.prototype.copyPowers = function(){
 	var copy = [];
 
@@ -902,12 +903,13 @@ System.prototype.adjustStateByCritical = function(){
 		}
 	}
 }
+
 System.prototype.getMount = function(){
-	//if (game.getUnit(aUnit) instanceof Flight){return false;}
 	if (this.mount.length){
 		return this.mount + " / " + this.armour;
 	} else return this.armour;
 }
+
 System.prototype.getOutput = function(){
 	var output = 0;
 	for (var i = this.powers.length-1; i >= 0; i--){
@@ -918,6 +920,7 @@ System.prototype.getOutput = function(){
 	}
 	return output;
 }
+
 System.prototype.getExtraOutput = function(){
 	var extra = 0;
 	var boost = 0;
@@ -1347,6 +1350,7 @@ Sensor.prototype.doPower = function(){
 			type: 0
 		})
 		this.setTempEW();
+		salvoCtx.clearRect(0, 0, res.x, res.y);
 		this.drawEW();
 		this.setTableRow();
 		game.getUnit(this.parentId).updateShipPower(this);
@@ -1355,6 +1359,7 @@ Sensor.prototype.doPower = function(){
 
 Sensor.prototype.doUnpower = function(){
 	System.prototype.doUnpower.call(this);
+	salvoCtx.clearRect(0, 0, res.x, res.y);
 	this.drawEW();
 }
 
@@ -1524,6 +1529,7 @@ Sensor.prototype.doBoost = function(){
 	//game.drawShipOverlays();
 	game.sensorMode = 1;
 	this.setTempEW();
+	salvoCtx.clearRect(0, 0, res.x, res.y);
 	this.drawEW();
 	game.sensorMode = 0;
 }
@@ -1537,6 +1543,7 @@ Sensor.prototype.doUnboost = function(){
 	//game.drawShipOverlays();
 	game.sensorMode = 1;
 	this.setTempEW();
+	salvoCtx.clearRect(0, 0, res.x, res.y);
 	this.drawEW();
 	game.sensorMode = 0;
 }
@@ -1629,8 +1636,8 @@ Weapon.prototype.getAimDataTarget = function(target, final, accLoss, row){
 	} else row.append($("<td>").html(""));
 
 	final = Math.floor(final * (1-(traverseMod*0.2)) - accLoss);
+	this.validTarget = 1;
 	this.odds = final;
-	//this.odds = 1;
 
 	row.append($("<td>").html(final + "%"));
 }
@@ -1921,6 +1928,71 @@ Weapon.prototype.hasValidTarget = function(){
 	} return false;
 }
 
+function Area(system){
+	Weapon.call(this, system);
+	this.aoe = system.aoe;
+}
+Area.prototype = Object.create(Weapon.prototype);
+
+
+Area.prototype.getAimData = function(target, final, dist, row){
+	if (target){
+		row
+		.append($("<td>").attr("colSpan", 4).html("<span>Unable to target mobile object.</span>"))
+		this.odds = 0;
+	}
+	else {
+		row
+		.append($("<td>"))
+		.append($("<td>").attr("colSpan", 2).html("</span>Maximal deviation:</span>"))
+		.append($("<td>").attr("colSpan", 1).html(Math.floor(dist/10 * this.accDecay) + "<span> px</span>"));
+		this.validTarget = 1;
+		this.odds = 1;
+	}
+}
+
+Area.prototype.setFireOrder = function(targetid, pos){
+	if (this.odds <= 0){return;}
+	this.fireOrders.push(
+		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, x: pos.x, y: pos.y, weaponid: this.id, 
+		shots: 0, req: -1, notes: "", hits: -1, resolved: 0}
+	);
+	this.selected = 0;
+	this.validTarget = 0;
+	this.highlight = 0;
+	this.setSystemBorder();
+}
+
+Area.prototype.highlightFireOrder = function(){
+	var o = game.getUnit(this.parentId).getPlannedPos();
+	var t = this.fireOrders[this.fireOrders.length-1];
+	if (o.x == t.y && o.y == t.y){return;}
+	salvoCtx.translate(cam.o.x, cam.o.y);
+	salvoCtx.scale(cam.z, cam.z)
+	salvoCtx.translate(o.x, o.y);
+
+	salvoCtx.beginPath();
+	salvoCtx.moveTo(0, 0);
+	salvoCtx.translate(-o.x + t.x, -o.y + t.y);
+	salvoCtx.lineTo(0, 0);
+	salvoCtx.closePath();
+	salvoCtx.strokeStyle = "white";
+	salvoCtx.lineWidth = 2;
+	salvoCtx.stroke();
+	salvoCtx.lineWidth = 1;
+
+	salvoCtx.beginPath();
+	salvoCtx.arc(0, 0, this.aoe, 0, 2*Math.PI, false);
+	salvoCtx.closePath();
+
+	salvoCtx.fillStyle = "red";
+	salvoCtx.globalAlpha = 0.3;
+	salvoCtx.fill();
+
+	salvoCtx.fillStyle = "white";
+	salvoCtx.globalAlpha = 1;
+	salvoCtx.setTransform(1, 0, 0, 1, 0, 0);
+}
 
 function Warhead(data){
 	this.id = data.id;
@@ -2445,18 +2517,9 @@ Dual.prototype.updateSystemDetailsDiv = function(){
 	//game.getUnit(this.parentId).updateDiv();
 }
 
-Dual.prototype.setFireOrder = function(targetid){
-	var w = this.getActiveSystem();
-	if (w.odds <= 0){return;}
-
-	this.fireOrders.push(
-		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, 
-		shots: 0, req: -1, notes: "", hits: -1, resolved: 0}
-	);
-	this.selected = 0;
-	this.highlight = 0;
-	this.validTarget = 0;
-	this.setSystemBorder();
+Dual.prototype.setFireOrder = function(targetid, pos){
+	this.odds = this.getActiveSystem().odds;
+	return System.prototype.setFireOrder.call(this, targetid, pos);
 }
 
 Dual.prototype.setState = function(){
@@ -2872,9 +2935,8 @@ Launcher.prototype.select = function(e){
 }
 
 Launcher.prototype.setMount = function(amount){
-	if (game.getUnit(aUnit) instanceof Flight){
-		this.negation = 0;
-	}
+	if (game.getUnit(aUnit) instanceof Flight){this.negation = 0;}
+
 	var w = this.getArcWidth();
 
 	if (w <= 60){
@@ -3102,9 +3164,9 @@ Hangar.prototype.getUpgradeData = function(){
 	}
 }
 
-Hangar.prototype.setFireOrder = function(targetid){
+Hangar.prototype.setFireOrder = function(targetid, pos){
 	this.fireOrders.push(
-		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, weaponid: this.id, 
+		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, x: pos.x, y: pos.y, weaponid: this.id, 
 		shots: 0, req: -1, notes: "fighterLaunch", hits: -1, resolved: 0}
 	);
 	return this;
@@ -3180,9 +3242,6 @@ Hangar.prototype.getBoostDiv = function(){
 }
 
 Hangar.prototype.setMount = function(amount){
-	if (game.getUnit(aUnit) instanceof Flight){
-		return false;
-	}
 	this.mount = ""
 	this.armour =  Math.floor(amount * this.armourMod);
 }

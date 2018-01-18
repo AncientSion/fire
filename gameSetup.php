@@ -109,7 +109,6 @@ else {
 	<script src='systems.js'></script>
 	<script src='graphics.js'></script>
 	<script src='cam.js'></script>
-	<script src='imageloader.js'></script>
 	<script src='game.js'></script>
 	<script src='ajax.js'></script>
 </head>
@@ -178,7 +177,7 @@ else {
 			<table id="hangarTable">
 			</table>
 			<table style="margin:auto; width: 220px; margin-top: 10px">
-				<tr><td class="buttonTD disabled" onclick='confirmSystemLoadout()'>Confirm Loadout</td></tr>
+				<tr><td class="buttonTD disabled" onclick='game.confirmSystemLoadout()'>Confirm Loadout</td></tr>
 			</table>
 		</div>
 		<div id="weaponLoadoutDiv" class="disabled">
@@ -191,7 +190,7 @@ else {
 			<table id="weaponTable">
 			</table>
 			<table style="margin:auto; width: 220px; margin-top: 10px">
-				<tr><td class="buttonTD disabled" onclick='confirmSystemLoadout()'>Confirm Loadout</td></tr>
+				<tr><td class="buttonTD disabled" onclick='game.confirmSystemLoadout()'>Confirm Loadout</td></tr>
 			</table>
 		</div>
 	</body>
@@ -249,6 +248,31 @@ else {
 				},
 				getUnitType: function(val){
 					return Game.prototype.getUnitType.call(this, val);
+				},
+
+				setReinforceFaction: function(faction){
+					game.faction = factions;
+					$("#reinforceFaction").removeClass("disabled").html("Reinforcements:</br>" + faction);
+				},
+				
+				getFleetCost: function(){
+					var cost = 0;
+					for (var i = 0; i < window.game.shipsBought.length; i++){
+						cost += window.game.shipsBought[i].value;
+					}
+					return cost;
+				},
+
+				confirmSystemLoadout: function(){
+					game.ships[0].doConfirmSystemLoadout();
+				},
+
+				canSubmit: function(){
+					var fleetCost = game.getFleetCost();
+					if (fleetCost && fleetCost <= window.maxPoints){
+						$("#shipsBoughtTable").find(".buttonTD").removeClass("disabled");
+					}
+					else {$("#shipsBoughtTable").find(".buttonTD").addClass("disabled");}
 				},
 
 				setUnitTotal: function(){
@@ -338,7 +362,7 @@ else {
 						})
 						.contextmenu(function(e){
 							e.stopPropagation(); e.preventDefault();
-							setReinforceFaction(this);
+							game.setReinforceFaction($(this).data("faction"));
 						})
 						.append(
 							$("<td>")
@@ -381,31 +405,6 @@ else {
 							)
 			$("#factionDiv").append(table);
 		}
-	}
-
-	function setReinforceFaction(ele){
-		game.faction = factions[$(ele).data("faction")];
-		$("#reinforceFaction").removeClass("disabled").html("Reinforcements:</br>" + game.faction);
-	}
-
-	function getFleetCost(){
-		var cost = 0;
-		for (var i = 0; i < window.game.shipsBought.length; i++){
-			cost += window.game.shipsBought[i].value;
-		}
-		return cost;
-	}
-
-	function confirmSystemLoadout(){
-		game.ships[0].doConfirmSystemLoadout();
-	}
-
-	function canSubmit(){
-		var fleetCost = getFleetCost();
-		if (fleetCost && fleetCost <= window.maxPoints){
-			$("#shipsBoughtTable").find(".buttonTD").removeClass("disabled");
-		}
-		else {$("#shipsBoughtTable").find(".buttonTD").addClass("disabled");}
 	}
 
 	function confirmFleetPurchase(){
@@ -559,14 +558,15 @@ else {
 
 		var target = document.getElementById("totalFleetCost");
 			target.parentNode.parentNode.insertBefore(tr, target.parentNode);
-			$(target).html(getFleetCost());
+			$(target).html(game.getFleetCost());
 
 		$(".shipDiv").remove();
 		$("#game").addClass("disabled");
 		$("#hangarLoadoutDiv").addClass("disabled");
 		$("#hangarTable").html("");
+		if (game.faction == ""){game.setReinforceFaction(game.ships[0].faction);}
 		game.ships[0] = undefined;
-		canSubmit();
+		game.canSubmit();
 	}
 
 	function removeShipFromFleet(ele){
@@ -577,8 +577,8 @@ else {
 				break;
 			}
 		}
-		$("#totalFleetCost").html(getFleetCost());
-		canSubmit();
+		$("#totalFleetCost").html(game.getFleetCost());
+		game.canSubmit();
 	}
 	
 

@@ -417,9 +417,7 @@ Flight.prototype.supplyAttachDiv = function(div){
 				var shooter = game.getUnit(aUnit);
 				if (shooter.hasWeaponsSelected()){
 					var target = game.getUnit($(this).data("id"));
-					if (shooter.userid != target.userid){
-						handleFireClick(shooter, target);
-					}
+					firePhase({x: 0, y: 0}, shooter, target.id);
 				} 
 				else {
 					shooter.doUnselect();

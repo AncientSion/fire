@@ -116,6 +116,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	var drop = 0;
 	var cc = game.isCloseCombat(shooter, target);
 	var pos;
+	var final = 0;
 
 	if (shooter.flight){
 		drop = 0;
@@ -145,7 +146,6 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			var lockString = "";// = "<span class ='red'>0.0</span>";
 			var mask;
 			var maskString = "";// = "<span class ='green'>0.0</span>";
-			var final;
 			var valid = false;
 			var target;
 			var section;
@@ -277,11 +277,8 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 				}
 			}
 
-
-
 			if (inArc && legalTarget){
 				system.getAimData(target, final, dist, row);
-				system.validTarget = 1;
 			}
 			else {
 				$(row).append($("<td>").html("Illegal Target").attr("colSpan", 4))
@@ -385,7 +382,7 @@ function sensorize(ship, pos){
 	sensorEvent(true, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), a);
 }
 
-function deployPhase(e, pos){
+function deployPhase(e, pos, unit){
 	var unit;
 	var ammo;
 	var index;
@@ -415,7 +412,7 @@ function deployPhase(e, pos){
 				sensorize(unit, pos);
 				return;
 			}
-			firePhase(e, pos, unit);
+			else firePhase(pos, unit, 0);
 		}
 		else {
 			unit = game.getUnitByClick(pos);
@@ -449,21 +446,12 @@ function movePhase(e, pos, unit){
 	}
 }
 
-function firePhase(e, pos, unit){
-	var target;
-
+function firePhase(pos, unit, targetid){
 	if (unit){
-		target = game.getUnitByClick(pos);
-		if (target){
-			if (target.id != unit.id && (target.userid != game.userid && target.userid != unit.userid)){
-				handleFireClick(unit, target);
-			} else target.switchDiv();
-		}
+		game.handleFireClick(pos, unit, targetid);
 	}
-	else {
-		unit = game.getUnitByClick(pos);
-		if (unit){unit.select();}
-	}
+	else unit = game.getUnitByClick(pos);
+	if (unit){unit.select();}
 }
 
 function dmgPhase(e, pos, unit){
@@ -481,34 +469,6 @@ function dmgPhase(e, pos, unit){
 	else {
 		unit = game.getUnitByClick(pos);	
 		if (unit){unit.select();}
-	}
-}
-
-function handleFireClick(shooter, target){
-	if (target){
-		if (target.id != shooter.id && (target.userid != game.userid && target.userid != shooter.userid)){
-			
-			if (shooter.salvo){return;}
-			if (shooter.flight && !game.isCloseCombat(shooter, target)){return;}
-			
-			if (shooter.hasWeaponsSelected()){
-				var active = shooter.getSelectedWeapons();
-
-				for (var i = 0; i < active.length; i++){
-					if (active[i].canFire()){
-						if (active[i].hasValidTarget()){
-							// FireOrder(id, turn, shooterid, targetid, weaponid, req, notes, hits, resolved){
-							active[i].setFireOrder(target.id);
-						}
-					}
-				}
-			}
-
-			$("#weaponAimTableWrapper").hide()
-			shooter.highlightAllSelectedWeapons();
-			//game.draw();
-		}
-		else target.switchDiv();
 	}
 }
 

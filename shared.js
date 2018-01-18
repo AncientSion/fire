@@ -453,23 +453,17 @@ function handleMouseDown(e){
 	//console.log("handleMouseDown");
 	e.preventDefault();
 	e.stopPropagation();
-	var unit;
 	var rect = this.getBoundingClientRect();
 	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
 	console.log("game pos " + pos.x	+ " / " + pos.y);
 
+	var unit;	
+	if (aUnit){unit = game.getUnit(aUnit);}
+
 	$(":focus").blur();
 
-	if (aUnit){
-		unit = game.getUnit(aUnit);
-	}
-
 	if (e.originalEvent.button == 0){
-		if (game.sensorMode){
-			salvoCtx.clearRect(0, 0, res.x, res.y);
-			sensorize(game.getUnit(aUnit), pos);
-			return;
-		}
+
 		window.downTime = new Date();
 		cam.scroll = 1;
 		cam.sx = e.clientX;
@@ -481,7 +475,7 @@ function handleMouseDown(e){
 			case 0: 
 				movePhase(e, pos, unit); break;
 			case 2: 
-				firePhase(e, pos, unit); break;
+				firePhase(pos, unit, 0); break;
 			case 3: 
 				dmgPhase(e, pos, unit); break;
 		}
@@ -555,6 +549,7 @@ function sensorEvent(isClick, ship, loc, facing, d, a){
 			systemid: sensor.id,
 			type: sensor.ew[sensor.ew.length-1].type
 		});
+		salvoCtx.clearRect(0, 0, res.x, res.y);
 		sensor.setTempEW();
 	}
 	drawSensorArc(w, d, str, loc, facing, a, sensor);

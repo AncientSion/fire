@@ -14,6 +14,7 @@ class Launcher extends Weapon {
 	public $effiency = 1;
 	public $shots = 0;
 	public $accDecay = 0;
+	public $usage = -1;
 
 	function __construct($id, $parentId, $start, $end, $loads, $destroyed = false){
 		for ($i = 0; $i < sizeof($loads); $i++){

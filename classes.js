@@ -139,6 +139,8 @@ function FireOrder(data){
 	this.turn = data.turn || game.turn;
 	this.shooterid = data.shooterid || -1;
 	this.targetid = data.targetid || -1;
+	this.x = data.x || 0;
+	this.y = data.y || 0;
 	this.weaponid = data.weaponid || -1;
 	this.shots = data.shots || 0;
 	this.req = [data.req];

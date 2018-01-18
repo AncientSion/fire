@@ -16,6 +16,8 @@ class Weapon extends System {
 	public $plasma = 0;
 	public $pulse = 0;
 
+	public $usage = 2;
+
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
 		$this->start = $start;
 		$this->end = $end;

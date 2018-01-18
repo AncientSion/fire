@@ -31,7 +31,8 @@ class System {
 	public $minDmg = 0;
 	public $maxDmg = 0;
 	public $priority = 0;
-	public $mirror = 0;
+	public $usage = -3;
+	public $freeAim = 0;
 
 	function __construct($id, $parentId, $output = 0, $destroyed = 0){
 		$this->id = $id;

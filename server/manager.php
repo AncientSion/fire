@@ -523,6 +523,7 @@ class Manager {
 	}
 	
 	public function pickReinforcements(){
+		if ($this->turn != 11){return;}
 		//if ($this->turn < 5){return;}
 		//return;
 		//Debug::log("pickReinforcements");
