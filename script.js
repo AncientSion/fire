@@ -248,6 +248,19 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	
 	if (!drop){	
 		var active = shooter.getSelectedWeapons();
+		var onlyArea = 1;
+
+		for (var i = 0; i < active.length; i++){
+			if (active[i].type != "Area"){onlyArea = 0;}
+		}
+
+		if (onlyArea){
+			salvoCtx.clearRect(0, 0, res.x, res.y);
+			for (var i = 0; i < active.length; i++){
+				active[i].handleAimEvent(shooterLoc, pos);
+			}
+			shooter.drawEW();
+		}
 
 		for (var i = 0; i < active.length; i++){
 			var system = active[i].getSystem();
@@ -388,7 +401,10 @@ function deployPhase(e, pos, unit){
 	var index;
 	if (game.deploying){
 		unit = game.getUnit(game.deploying); // ship deploy
-		if (game.turnMode){
+		if (game.sensorMode){
+			sensorize(unit, pos);
+		}
+		else if (game.turnMode){
 			unit.handleTurnAttempt(pos);
 		}
 		else if (unit.canDeployHere(pos)){
@@ -406,11 +422,9 @@ function deployPhase(e, pos, unit){
 			unit = game.getUnit(aUnit);
 			if (unit.canDeploy()){
 				game.enableDeployment(unit.id);
-				return;
 			}
 			else if (game.sensorMode){
 				sensorize(unit, pos);
-				return;
 			}
 			else firePhase(pos, unit, 0);
 		}

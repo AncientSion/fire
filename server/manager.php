@@ -703,7 +703,7 @@ class Manager {
 		}
 	}
 
-	public function handleDeployFireOrders(){
+	public function handleDeployFireOrders($fires){
 		Debug::log("handleDeployFireOrders");
 		for ($i = 0; $i < sizeof($fires); $i++){
 			if ($fires[$i]->weapon instanceof Hangar){
@@ -712,7 +712,7 @@ class Manager {
 		}
 	}
 
-	public function handleBallisticFireOrders(){
+	public function handleBallisticFireOrders($fires){
 		Debug::log("handleBallisticFireOrders");
 
 		$adjust = array();

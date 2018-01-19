@@ -334,7 +334,7 @@ Ship.prototype.getSelectedWeapons = function(){
 }
 
 Ship.prototype.doHover = function(){
-	this.drawEW()	
+	this.drawEW();
 
 	if (this.ship || this.squad){
 		this.setMoveTranslation();
@@ -1219,7 +1219,6 @@ Ship.prototype.doUnselect = function(){
 	//game.setShipTransform();
 	//this.drawPositionMarker();
 	//game.resetShipTransform();
-	game.redraw();
 	//game.drawShipOverlays();
 	this.switchDiv();
 	this.unsetMoveMode();
@@ -1228,6 +1227,7 @@ Ship.prototype.doUnselect = function(){
 	$("#instructWrapper").hide()
 	$("#systemDetailsDiv").remove();
 	mouseCtx.clearRect(0, 0, res.x, res.y);
+	game.redraw();
 }
 
 Ship.prototype.doHighlight = function(){
@@ -2698,27 +2698,6 @@ Ship.prototype.drawIncomingMovePlan = function(){
 Ship.prototype.drawEW = function(){
 	var s = this.getSystemByName("Sensor");
 	if (s){s.drawEW();}
-}
-
-Ship.prototype.drawMoveLength = function(){
-	if (this.selected){return;}
-	mouseCtx.translate(cam.o.x, cam.o.y);
-	mouseCtx.scale(cam.z, cam.z);
-
-	var center = this.getPlannedPos();
-	var angle = this.getPlannedFacing();
-	var p = getPointInDirection(this.getCurrentImpulse(), angle, center.x, center.y);
-	
-	mouseCtx.beginPath();			
-	mouseCtx.moveTo(center.x, center.y);
-	mouseCtx.lineTo(p.x, p.y);
-	mouseCtx.closePath();
-	mouseCtx.lineWidth = .5;
-	mouseCtx.strokeStyle = "white";
-	mouseCtx.stroke();
-	mouseCtx.strokeStyle = "black";
-
-	mouseCtx.setTransform(1,0,0,1,0,0);
 }
 
 Ship.prototype.checkSensorHighlight = function(){

@@ -939,7 +939,21 @@ function Game(data, userid){
 		for (var i = 0; i < this.ships.length; i++){
 			this.events = this.events.concat(this.ships[i].getEvents());
 		}
+	}
 
+	this.addEvent = function(system){
+		this.events.push(system);
+		game.redraw();
+	}
+
+	this.removeEvent = function(system){
+		for (var i = this.events.length-1; i >= 0; i--){
+			if (this.events[i].id == system.id && this.events[i].parentId == system.parentId){
+				this.events.splice(i, 1);
+				game.redraw();
+				return;
+			}
+		}
 	}
 
 	this.setDrawOffset = function(){
@@ -1237,7 +1251,7 @@ function Game(data, userid){
 
 			if (u.ship || u.squad){
 				if (this.turnMode){u.handleTurning(e, loc, facing, pos);}
-				else u.drawEW();
+				else u.drawEW(); this.drawEvents();
 				
 				u.setMoveTranslation();
 				u.drawMoveArea();
@@ -1253,7 +1267,7 @@ function Game(data, userid){
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		
 		this.drawShips();
-		this.drawEvents()
+		this.drawEvents();
 		
 		if (this.deploying){
 			this.drawDeploymentZone();

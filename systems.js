@@ -154,6 +154,7 @@ System.prototype.hover = function(e){
 		if (this.hasUnresolvedFireOrder()){
 			salvoCtx.clearRect(0, 0, res.x, res.y);
 			p.drawEW();
+			game.drawEvents();
 		}
 	}
 	else {
@@ -712,9 +713,10 @@ System.prototype.unsetFireOrder = function(){
 	for (var i = this.fireOrders.length-1; i >= 0; i--){
 		if (this.fireOrders[i].turn == game.turn){
 			this.fireOrders.splice(i, 1);
+			this.setSystemBorder();
+			return;
 		}
 	}
-	this.setSystemBorder();
 }
 
 System.prototype.hideInfoDiv = function(){
@@ -1657,11 +1659,7 @@ Weapon.prototype.getAimDataLocation = function(accLoss, row){
 }
 
 Weapon.prototype.doUndoActions = function(){
-	for (var i = this.fireOrders.length-1; i >= 0; i--){
-		if (this.fireOrders[i].turn == game.turn){
-			this.fireOrders.splice(i, 1);
-		}
-	}
+	this.unsetFireOrder();
 }
 
 Weapon.prototype.getShots = function(){
@@ -1964,18 +1962,29 @@ Area.prototype.setFireOrder = function(targetid, pos){
 	this.validTarget = 0;
 	this.highlight = 0;
 	this.setSystemBorder();
+	game.addEvent(this);
 }
 
 Area.prototype.unsetFireOrder = function(){
-	salvoCtx.clearRect(0, 0, res.x, res.y);
-	game.getUnit(this.parentId).drawEW();
 	System.prototype.unsetFireOrder.call(this);
+	game.removeEvent(this);
+}
+
+Area.prototype.handleAimEvent = function(origin, target){
+	this.drawAreaWeapon(origin, target);
 }
 
 Area.prototype.highlightFireOrder = function(){
-	var o = game.getUnit(this.parentId).getPlannedPos();
+	return;
+}
+
+Area.prototype.highlightEvent = function(){
+	var o = game.getUnit(this.parentId);
 	var t = this.fireOrders[this.fireOrders.length-1];
-	if (o.x == t.y && o.y == t.y){return;}
+	this.drawAreaWeapon(o, t);
+}
+
+Area.prototype.drawAreaWeapon = function(o, t){
 	salvoCtx.translate(cam.o.x, cam.o.y);
 	salvoCtx.scale(cam.z, cam.z)
 	salvoCtx.translate(o.x, o.y);
@@ -1985,8 +1994,9 @@ Area.prototype.highlightFireOrder = function(){
 	salvoCtx.translate(-o.x + t.x, -o.y + t.y);
 	salvoCtx.lineTo(0, 0);
 	salvoCtx.closePath();
+	salvoCtx.globalAlpha = 0.3;
 	salvoCtx.strokeStyle = "white";
-	salvoCtx.lineWidth = 2;
+	salvoCtx.lineWidth = 1;
 	salvoCtx.stroke();
 	salvoCtx.lineWidth = 1;
 
@@ -1994,45 +2004,13 @@ Area.prototype.highlightFireOrder = function(){
 	salvoCtx.arc(0, 0, this.aoe, 0, 2*Math.PI, false);
 	salvoCtx.closePath();
 
+	salvoCtx.globalAlpha = 0.2;
 	salvoCtx.fillStyle = "red";
-	salvoCtx.globalAlpha = 0.3;
 	salvoCtx.fill();
 
 	salvoCtx.fillStyle = "white";
 	salvoCtx.globalAlpha = 1;
 	salvoCtx.setTransform(1, 0, 0, 1, 0, 0);
-}
-
-Area.prototype.highlightEvent = function(){
-	var o = game.getUnit(this.parentId);
-	var t = this.fireOrders[this.fireOrders.length-1];
-	if (o.x == t.y && o.y == t.y){return;}
-	ctx.translate(cam.o.x, cam.o.y);
-	ctx.scale(cam.z, cam.z)
-	ctx.translate(o.x, o.y);
-
-	ctx.beginPath();
-	ctx.moveTo(0, 0);
-	ctx.translate(-o.x + t.x, -o.y + t.y);
-	ctx.lineTo(0, 0);
-	ctx.closePath();
-	ctx.globalAlpha = 0.3;
-	ctx.strokeStyle = "white";
-	ctx.lineWidth = 1;
-	ctx.stroke();
-	ctx.lineWidth = 1;
-
-	ctx.beginPath();
-	ctx.arc(0, 0, this.aoe, 0, 2*Math.PI, false);
-	ctx.closePath();
-
-	ctx.globalAlpha = 0.2;
-	ctx.fillStyle = "red";
-	ctx.fill();
-
-	ctx.fillStyle = "white";
-	ctx.globalAlpha = 1;
-	ctx.setTransform(1, 0, 0, 1, 0, 0);
 }
 
 Area.prototype.hasEvent = function(){
@@ -2794,7 +2772,6 @@ function Launcher(system){
 
 	this.capacity = system.capacity;
 	this.launchRate = system.launchRate;
-	this.type = "Ballistic";
 	this.animation = "ballistic";
 	this.loads = [];
 	this.ammo = system.ammo;
