@@ -707,7 +707,7 @@ Mixed.prototype.getRemainingImpulse = function(){
 	return 0;
 }
 
-Mixed.prototype.animateSelfDeployment = function(){
+Mixed.prototype.animateSelfJumpIn = function(){
 	this.deployAnim[0] = this.deployAnim[1];
 
 	if (this.deployAnim[0] == this.deployAnim[1]){

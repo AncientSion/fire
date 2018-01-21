@@ -361,6 +361,17 @@ window.ajax = {
 	},
 
 	confirmDamageControl: function(callback){
+	
+		var data = [];
+
+		for (var i = 0; i < game.ships.length; i++){
+			if (game.ships[i].userid == game.userid){
+				if (game.ships[i].status == "jumpOut"){
+					data.push({id: game.ships[i].id, status: "jumpOut"});
+				}
+			}
+		}
+
 		$.ajax({
 			type: "POST",
 			url: "postGameData.php",
@@ -371,7 +382,7 @@ window.ajax = {
 					userid: game.userid,
 					turn: game.turn,
 					phase: game.phase,
-					orders: false
+					data: data
 					},
 			success: callback,
 			error: ajax.error,

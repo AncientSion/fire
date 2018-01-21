@@ -229,11 +229,11 @@ class Ship {
 		}
 	}
 
-	public function hideFireOrders($turn){
+	public function hideFireOrders($turn, $phase){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($k = 0; $k < sizeof($this->structures[$i]->systems); $k++){
 				for ($l = sizeof($this->structures[$i]->systems[$k]->fireOrders)-1; $l >= 0; $l--){
-					if ($this->structures[$i]->systems[$k]->fireOrders[$l]->turn == $turn){
+					if ($this->structures[$i]->systems[$k]->fireOrders[$l]->turn == $turn && $this->structures[$i]->systems[$k]->usage == $phase){
 						array_splice($this->structures[$i]->systems[$k]->fireOrders, $l, 1);
 					} else break;
 				}
@@ -297,7 +297,7 @@ class Ship {
 				$facing += $this->actions[$i]->a;
 			} else if ($this->actions[$i]->type == "deploy"){
 				$facing += $this->actions[$i]->a;
-			} else if ($this->actions[$i]->type == "jump"){
+			} else if ($this->actions[$i]->type == "jumpIn"){
 				$facing += $this->actions[$i]->a;
 			}
 		}
@@ -364,7 +364,7 @@ class Ship {
 
 	public function addFireDB($fires){
 		for ($i = 0; $i < sizeof($fires); $i++){
-			//Debug::log("FIRE trying to find ".$fires[$i]->weaponid);
+			//Debug::log("FIRE trying to add fire to ".$fires[$i]->weaponid ." on ".$this->id);
 			$this->getSystem($fires[$i]->weaponid)->fireOrders[] = $fires[$i];
 		}
 	}
@@ -536,27 +536,19 @@ class Ship {
 		return false;
 	}
 
-	public function getTotalMass(){
-		$data = array();
+	public function resolveAreaFireOrder($fire){
+		$fire->section = $this->getHitSection($fire);		
 
-		$hangar = 0;
-		$main = $this->primary->integrity;
-		$guns = 0;
-		$int = 0;
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($this->structures[$i]->id != $fire->section){continue;}
+			Debug::log("resolveAreaFireOrder on self: ".get_class($this).", hitting struct ".$i);
 
-		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
-			$int += $this->primary->systems[$i]->mass;
-		}
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
 
-		foreach ($this->structures as $struct){
-			foreach ($struct->systems as $sys){
-				if ($sys->utility){
-					$hangar += $sys->mass;
-				} else $guns += $sys->mass;
+				$fire->weapon->doDamage($fire, 0, $this->structures[$i]->systems[$j]);
 			}
 		}
-
-		return array($main, $int, $guns, $hangar);
 	}
 
 	public function resolveFireOrder($fire){ // target
@@ -814,11 +806,7 @@ class Ship {
 		}
 		return new Point($this->x, $this->y);
 	}
-
-	public function getLatestPosition(){
-		return $this->actions[sizeof($this->actions)-1];
-	}
-
+	
 	public function getFacing(){
 		return $this->facing;
 	}
@@ -867,6 +855,14 @@ class Ship {
 		}
 
 		Debug::log("got no ANGLE set on ".$this->id." targeted by #".$fire->shooter->id);
+	}
+
+	public function getCurrentFacing(){
+		$facing = $this->facing;
+		for ($i = 0; $i < sizeof($this->actions); $i++){
+			$facing += $this->actions[$i]->a;
+		}
+		return $facing;
 	}
 
 	public function getHitSection($fire){
@@ -1142,7 +1138,7 @@ class Medium extends Ship {
 	public $baseImpulse = 175;
 	public $traverse = 0;
 	public $slipAngle = 20;
-	public $baseImpulseCost = 30;
+	public $baseImpulseCost = 40;
 
 	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
@@ -1164,7 +1160,7 @@ class Heavy extends Ship {
 	public $baseImpulse = 160;
 	public $traverse = 1;
 	public $slipAngle = 20;
-	public $baseImpulseCost = 25;
+	public $baseImpulseCost = 45;
 	
 	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
@@ -1182,7 +1178,7 @@ class SuperHeavy extends Ship {
 	public $baseImpulse = 145;
 	public $traverse = 2;
 	public $slipAngle = 20;
-	public $baseImpulseCost = 20;
+	public $baseImpulseCost = 50;
 	
 	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
@@ -1200,7 +1196,7 @@ class UltraHeavy extends Ship {
 	public $baseImpulse = 130;
 	public $traverse = 3;
 	public $slipAngle = 20;
-	public $baseImpulseCost = 15;
+	public $baseImpulseCost = 55;
 	
 	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);

@@ -2,7 +2,8 @@
 
 class Dual extends Weapon {
 	public $type = "Dual";
-	public $display = "";
+	public $name = "Dual";
+	public $display = "Dual";
 	public $modes = array();
 	public $states = array();
 	public $weapons = array();

@@ -501,7 +501,7 @@ table, th, tr, td {
 #fxCanvas {
 	display: inline-block;
 	position: absolute;
-	opacity: 0.3;
+	opacity: 0.25;
 }
 #fxCanvas.disabled {
 	display: none;
@@ -647,6 +647,16 @@ table, th, tr, td {
 	text-align: center;
 	vertical-align: middle;
 	display: block;
+}
+
+.squad .outputMaskTop {
+	top: -50px;
+	width: 100%;
+	font-size: 14px;
+	color: #ff3b00;
+	text-align: center;
+	vertical-align: middle;
+	position: relative;
 }
 
 .unitContainer .primaryDiv .primaryTable {
@@ -1087,10 +1097,22 @@ div.integrityFull {
 
 .topDiv {
 	display: inline-flex;
+	height: 140px;
+}
+
+.topdiv>div {
+	height: 100%;
 }
 
 .topDiv table {
 	width: 100%;
+}
+
+.squad .topDiv .modeDiv {
+	display: inline-block;
+	position: relative;
+	top: -20px;
+	left: 4px;
 }
 
 .shipDiv .header {
@@ -1108,7 +1130,6 @@ div.integrityFull {
 	border-bottom: 1px solid white;
 }
 
-
 .shipDiv .notes {
 	display: inline-block;
 	position: relative;
@@ -1120,7 +1141,6 @@ div.integrityFull {
 }
 
 .shipDiv.squad .notes {
-	margin-top: 80px;
 }
 
 .shipDiv .iconContainer {

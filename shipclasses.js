@@ -68,6 +68,7 @@ function Ship(data){
 	this.structures = [];
 	this.primary = {};
 	this.drawImg;
+	this.deployAnim = [0, 0];
 	this.doDraw = 1;
 }
 
@@ -353,7 +354,7 @@ Ship.prototype.doHover = function(){
 }
 
 Ship.prototype.getRollCost = function(){
-	return Math.ceil(this.getImpulseChangeCost()*2);
+	return Math.ceil(this.getImpulseChangeCost()*1.5);
 	return Math.ceil(this.getSystemByName("Engine").output * 0.75)*(1-(1-this.getImpulseMod())/2);
 	return 1;
 }
@@ -703,6 +704,8 @@ Ship.prototype.handleTurning = function(e, o, f, pos){
 	if (game.shortInfo){
 		game.getUnit(game.shortInfo).drawEW();
 	}
+
+	game.drawEvents();
 }
 
 Ship.prototype.drawMouseVector = function(o, t){
@@ -981,7 +984,7 @@ Ship.prototype.setPreMoveFacing = function(){
 	this.drawFacing = this.facing;
 	if (this.available == game.turn){
 		for (var i = 0; i < this.actions.length; i++){
-			if (this.actions[i].type == "deploy" || this.actions[i].type == "jump"){
+			if (this.actions[i].type == "deploy" || this.actions[i].type == "jumpIn"){
 				this.drawFacing += this.actions[i].a;
 			}
 		}
@@ -1308,9 +1311,12 @@ Ship.prototype.attachLogEntry = function(html){
 			.html(html)));
 }
 
-
 Ship.prototype.createDeployEntry = function(){
 	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> jumps into local space.</span>");
+}
+
+Ship.prototype.createUndeployEntry = function(){
+	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> jumps into hyperspace and leaves the battlefield.</span>");
 }
 
 Ship.prototype.createMoveStartEntry = function(){
@@ -1331,7 +1337,7 @@ Ship.prototype.createMoveEndEntry = function(){
 	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> has completed a full roll.</span>")
 }
 
-Ship.prototype.animateSelfDeployment = function(){
+Ship.prototype.animateSelfJumpIn = function(){
 	if (this.deployAnim[0] == this.deployAnim[1]){
 		this.deployed = 1;
 		this.isReady = 1;
@@ -1357,6 +1363,41 @@ Ship.prototype.animateSelfDeployment = function(){
 		ctx.rotate(-this.getDrawFacing() * Math.PI/180);
 		ctx.translate(-this.drawX, -this.drawY);
 	}
+}
+
+Ship.prototype.animateSelfJumpOut = function(){
+	if (this.deployAnim[0] == this.deployAnim[1]){
+		this.deployed = 0;
+		this.isReady = 0;
+		this.createUndeployEntry();
+		return;
+	}
+
+	this.deployAnim[0] += 1;
+
+	var fraction = 1-this.deployAnim[0] / this.deployAnim[1];
+	var sin = Math.sin(Math.PI*fraction);
+
+	var s = 200*sin;
+
+	//console.log(fraction)
+
+	ctx.globalAlpha = sin;
+	ctx.drawImage(graphics.images.redVortex, this.drawX-s/2, this.drawY-s/2, s, s);
+	//drawCircle(this.drawX, this.drawY, this.size*0.8*sin, "source-over", "orange");
+	//drawCircle(this.drawX, this.drawY, this.size*0.3*sin/2, "lighter", "yellow");
+
+
+	if (fraction > 0.5){
+		ctx.globalAlpha = 1;
+	} else ctx.globalAlpha = fraction * 2
+
+	//this.drawPositionMarker();
+	this.drawSelf();
+
+	ctx.rotate(-this.getDrawFacing() * Math.PI/180);
+	ctx.translate(-this.drawX, -this.drawY);
+
 }
 
 Ship.prototype.draw = function(){
@@ -1693,7 +1734,7 @@ Ship.prototype.getRemainingEP = function(){
 	for (var i = 0; i < this.actions.length; i++){
 		if (this.actions[i].turn == game.turn){
 			if (this.actions[i].cost != 0){
-				ep -= this.actions[i].cost// * this.actions[i].costmod;
+				ep -= this.actions[i].cost * this.getImpulseMod();
 			}
 		}
 	}
@@ -1986,7 +2027,6 @@ Ship.prototype.expandDiv = function(div){
 		.css("left", primX)
 		.css("top", primY);
 
-	$(structContainer).append($("<div>").addClass("mainPower").html(this.getSystemByName("Reactor").getOutput()));
 
 
 	// OUTER STRUCTS
@@ -2225,7 +2265,16 @@ Ship.prototype.expandDiv = function(div){
 	})
 
 	$(structContainer).css("height", Math.max($(primaryDiv).position().top + $(primaryDiv).height(), height) + 20);
+	$(structContainer).append($("<div>").addClass("mainPower").html(this.getSystemByName("Reactor").getOutput()));
+	console.log($(structContainer).width());
 
+	// JUMP OUT
+	$(structContainer).append($("<div>").css("position", "absolute").css("top", 0).css("margin-left", 240)
+		.append($("<img>")
+			.css("width", 50).css("height", 50)
+			.attr("src", "varIcons/redVortex.png")
+			.click(function(){game.getUnit($(this).parent().parent().parent().data("shipId")).requestJumpOut();
+			})))
 	/*
 	var w = $(div).width();
 	var h = $(div).height();
@@ -2286,6 +2335,22 @@ Ship.prototype.expandDiv = function(div){
 
 	$(div).addClass("disabled");
 	return div;
+}
+
+Ship.prototype.requestJumpOut = function(){
+	if (this.destroyed){popup("Nice try, but you cant order withdrawal with this unit.");}
+	else if (game.phase != 3){popup("You can only order withdrawal in </br>Phase 3 / Damage Control.");}
+	else {
+		instruct("Confirm if you really want to withdraw this unit from combat</p></p><div class='popupEntry buttonTD' style='font-size: 20px; width: 200px' onclick='game.getUnit(" + this.id + ").doJumoOut()'>Confirm Withdrawal</div>");
+	}
+}
+
+Ship.prototype.doJumoOut = function(){
+	if (this.status == "bought"){
+		this.status = "jumpOut";
+	} else this.status = "bought";
+
+	$("#instructWrapper").hide();
 }
 
 Ship.prototype.setRollState = function(){
@@ -3069,7 +3134,7 @@ Ship.prototype.setTurnData = function(){
 			.find("#turnMode").html("OFF").removeClass("on").end()
 			//.find("#shortenTurn").addClass("disabled");
 		$("#epButton")
-			.find("#remEP").html(this.getRemainingEP () + " / " + this.getRemainingEP()).addClass("green").end()
+			.find("#remEP").html(this.getRemainingEP() + " / " + this.getRemainingEP()).addClass("green").end()
 			.find("#impulseText").find("#impulseCost").html("");
 		$(vector).addClass("disabled")
 	}

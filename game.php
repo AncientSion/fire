@@ -405,7 +405,7 @@
 						else if (($ship->ship || $ship->squad) && $manager->phase < 1 && $ship->userid != $manager->userid && $ship->available == $manager->turn){
 							echo "<tr class='deployNow ".$ship->id."'</td>";
 							if ($manager->phase == -1){
-								echo "<td><img class='img40' src=varIcons/vortex.png></td>";
+								echo "<td><img class='img40' src=varIcons/blueVortex.png></td>";
 								echo "<td class='red font14'>Unknown</td>";
 							}
 							else if ($manager->phase == 0){
@@ -430,7 +430,7 @@
 						else if ($manager->incoming[$i]["userid"] != $manager->userid && $manager->incoming[$i]["available"] == $manager->turn+1){
 							$val = "deployLater ".$manager->incoming[$i]["id"];
 							echo "<tr class='".$val."'</td>";
-							echo "<td><img class='img40' src=varIcons/vortex.png></td>";
+							echo "<td><img class='img40' src=varIcons/blueVortex.png></td>";
 							echo "<td class='red font14'>Unknown</td>";
 							echo "<td class='font14'>1 Turn</td></tr>";
 						}

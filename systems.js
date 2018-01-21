@@ -673,19 +673,19 @@ System.prototype.hideOptions = function(){
 			ele.find(".modeDiv").hide();
 		}
 	}
-	if (game.phase == -1){
-		var boost = this.effiency;
-		var canPower = this.canPower();
-		var canUnpower = this.canUnpower();
+	//if (game.phase == -1){
+		//var boost = this.effiency;
+		//var canPower = this.canPower();
+		//var canUnpower = this.canUnpower();
 
-		if (boost || canPower || canUnpower){
+		///if (boost || canPower || canUnpower){
 			$(ele)
 				.find(".boostDiv").hide().end()
 				.find(".modeDiv").hide().end()
 				.find(".powerDiv").children().hide();
 			return;
-		}
-	}
+		//}
+	//}
 }
 
 System.prototype.showInfoDiv = function(e){
@@ -807,7 +807,6 @@ System.prototype.getDiv = function(){
 		//img.style.top = "10px";
 	returnDiv.appendChild(img);
 
-
 	var div = document.createElement("div");
 		div.className = "loadLevel";
 		returnDiv.appendChild(div);
@@ -827,7 +826,10 @@ System.prototype.getDiv = function(){
 		returnDiv.appendChild(div);
 	*/
 	if (1){		
-		var outputDiv = $("<div>").addClass("outputMask");
+		var outputDiv = $("<div>")
+		if (this instanceof PrimarySystem){
+			outputDiv.addClass("outputMaskTop")
+		} else outputDiv.addClass("outputMask")
 		if (this.internal || this.getActiveSystem().canBeBoosted()){
 			outputDiv.html(this.getOutput());
 		} else outputDiv.hide();
@@ -1005,8 +1007,8 @@ System.prototype.drawSystemArc = function(facing, rolled, pos){
 			end = this.arc[i][1];
 		}
 		
-		var p1 = getPointInDirection(1200, start+facing, pos.x, pos.y);
-		var p2 = getPointInDirection(1200, end+facing, pos.x, pos.y)
+		var p1 = getPointInDirection(game.arcRange, start+facing, pos.x, pos.y);
+		var p2 = getPointInDirection(game.arcRange, end+facing, pos.x, pos.y)
 		var dist = getDistance( {x: pos.x, y: pos.y}, p1);
 		var rad1 = degreeToRadian(start+facing);
 		var rad2 = degreeToRadian(end+facing);
@@ -1274,7 +1276,8 @@ Sensor.prototype.switchMode = function(id){
 			} else index++;
 
 			this.states[index] = 1;
-			this.setEWMode()
+			this.setEWMode();
+			game.drawEvents();
 			return;
 		}
 	}
@@ -1391,35 +1394,19 @@ Sensor.prototype.getEW = function(data){
 }
 
 Sensor.prototype.drawEW = function(){
-	if (!this.ew.length){
-		return;
-	}
+	if (!this.ew.length){return;}
 	else if (this.img == undefined){
-
 		console.log("NO EW DEFINED!");
 		this.setTempEW();
 		this.drawEW();
-		/*
-		var ship = game.getUnit(this.parentId);
-		var loc = ship.getPlannedPos();
-		var ew = this.ew[this.ew.length-1];
-		var str = this.getOutput();
-		var facing = ship.getPlannedFacing();
-		var w;
-		if (ew.angle == -1){w = 180;}
-		else w = Math.min(180, game.const.ew.len * Math.pow(str/ew.dist, game.const.ew.p));
-
-		drawSensorArc(w, ew.dist, str, loc, facing, ew.angle, this);
-		*/
 	}
 	else {
+		//console.log("drawing EW!");
 		var ship = game.getUnit(this.parentId);
 		var loc = ship.getPlannedPos();
-
 		salvoCtx.translate(cam.o.x, cam.o.y);
 		salvoCtx.scale(cam.z, cam.z);
 		salvoCtx.translate(loc.x, loc.y);
-		//salvoCtx.rotate(a * Math.PI/180);
 		salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height);
 		salvoCtx.setTransform(1,0,0,1,0,0);
 	}
@@ -1445,9 +1432,8 @@ Sensor.prototype.setTempEW = function(){
 		t.height = ew.dist*2;		
 	var ctx = t.getContext("2d");
 		ctx.translate(t.width/2, t.height/2);
-		ctx.globalAlpha = 0.8;
 		var color = "";
-		var opacity = 0.2;
+		ctx.globalAlpha = 0.25;
 
 		switch (this.ew[this.ew.length-1].type){
 			case 0: color = "red"; break;
@@ -1478,7 +1464,6 @@ Sensor.prototype.setTempEW = function(){
 			ctx.closePath();
 		}
 
-		ctx.globalAlpha = opacity;
 		ctx.fillStyle = color;
 		ctx.fill();
 		ctx.globalAlpha = 1;
@@ -1578,6 +1563,13 @@ Weapon.prototype = Object.create(System.prototype);
 
 Weapon.prototype.getDmgsPerShot = function(fire){
 	return 1;
+}
+
+Weapon.prototype.getUsageString = function(){
+	var unit = game.getUnit(this.parentId);
+	if (this.usage == game.phase-1){
+		return ("<span><font color='" + unit.getCodeColor()+ "'> " + unit.name + " #" + unit.id +" </font></span> fires " + this.display);
+	}
 }
 
 Weapon.prototype.hasFireOrder = function(){
@@ -1787,7 +1779,7 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 	var table = document.createElement("table");
 	
 	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
-	$(table).append($("<tr>").append($("<td>").html("Weapon Type").css("width", "60%")).append($("<td>").html(this.type)));
+	$(table).append($("<tr>").append($("<td>").html("Weapon Type").css("width", "50%")).append($("<td>").html(this.type)));
 
 	//if (game.getUnit($(this.element).data("shipId")).ship){
 	if (game.getUnit(this.parentId).ship){
@@ -1810,7 +1802,7 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 			$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + game.getUnitType(this.getTraverseRating()))));
 			$(table).append($("<tr>").append($("<td>").html("Thrust")).append($("<td>").html(this.getImpulseString())));
 			//$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("<span class='red' id='detailShots'>" + this.getOutput() + "</span> / " + this.launchRate[this.ammo])));
-			$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("Up to <span class='red'>" + this.launchRate[this.ammo] + "</span> per cycle")));
+			$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("Up to <span class='red'>" + this.launchRate[this.ammo] + "</span> / cycle")));
 		}
 	}
 	else if (this instanceof Laser){
@@ -1931,22 +1923,28 @@ Weapon.prototype.hasValidTarget = function(){
 
 function Area(system){
 	Weapon.call(this, system);
+	this.maxRange = system.maxRange;
+	this.dmgLoss = system.dmgLoss;
 	this.aoe = system.aoe;
+	this.shots = system.shots;
+	this.maxShots = system.maxShots;
+	this.notes = system.notes;
 }
-Area.prototype = Object.create(Weapon.prototype);
 
+Area.prototype = Object.create(Weapon.prototype);
 
 Area.prototype.getAimData = function(target, final, dist, row){
 	if (target){
 		row
 		.append($("<td>").attr("colSpan", 4).html("<span>Unable to target mobile object.</span>"))
+		this.validTarget = 0;
 		this.odds = 0;
 	}
 	else {
 		row
 		.append($("<td>"))
 		.append($("<td>").attr("colSpan", 2).html("</span>Maximal deviation:</span>"))
-		.append($("<td>").attr("colSpan", 1).html(Math.floor(dist/10 * this.accDecay) + "<span> px</span>"));
+		.append($("<td>").attr("colSpan", 1).html(Math.floor(dist/100 * this.accDecay) + "<span> px</span>"));
 		this.validTarget = 1;
 		this.odds = 1;
 	}
@@ -1970,21 +1968,12 @@ Area.prototype.unsetFireOrder = function(){
 	game.removeEvent(this);
 }
 
-Area.prototype.handleAimEvent = function(origin, target){
-	this.drawAreaWeapon(origin, target);
-}
-
 Area.prototype.highlightFireOrder = function(){
 	return;
 }
 
-Area.prototype.highlightEvent = function(){
-	var o = game.getUnit(this.parentId);
-	var t = this.fireOrders[this.fireOrders.length-1];
-	this.drawAreaWeapon(o, t);
-}
-
-Area.prototype.drawAreaWeapon = function(o, t){
+Area.prototype.handleAimEvent = function(o, t){
+	var dist = getDistance(o, t);
 	salvoCtx.translate(cam.o.x, cam.o.y);
 	salvoCtx.scale(cam.z, cam.z)
 	salvoCtx.translate(o.x, o.y);
@@ -1994,18 +1983,25 @@ Area.prototype.drawAreaWeapon = function(o, t){
 	salvoCtx.translate(-o.x + t.x, -o.y + t.y);
 	salvoCtx.lineTo(0, 0);
 	salvoCtx.closePath();
-	salvoCtx.globalAlpha = 0.3;
+	salvoCtx.globalAlpha = 0.5;
 	salvoCtx.strokeStyle = "white";
 	salvoCtx.lineWidth = 1;
 	salvoCtx.stroke();
-	salvoCtx.lineWidth = 1;
 
+	salvoCtx.globalAlpha = 0.2;
+	salvoCtx.beginPath();
+	salvoCtx.arc(0, 0, Math.max(this.aoe, this.accDecay / dist * 1000), 0, 2*Math.PI, false);
+	salvoCtx.closePath();
+	salvoCtx.fillStyle = "white";
+	salvoCtx.fill();
+	salvoCtx.stroke();
+
+	salvoCtx.globalAlpha = 0.6;
 	salvoCtx.beginPath();
 	salvoCtx.arc(0, 0, this.aoe, 0, 2*Math.PI, false);
 	salvoCtx.closePath();
-
-	salvoCtx.globalAlpha = 0.2;
-	salvoCtx.fillStyle = "red";
+	salvoCtx.globalCompositeOperation = "source-over";
+	salvoCtx.fillStyle = this.getEffectFillStyle(0, 0, dist);
 	salvoCtx.fill();
 
 	salvoCtx.fillStyle = "white";
@@ -2013,13 +2009,143 @@ Area.prototype.drawAreaWeapon = function(o, t){
 	salvoCtx.setTransform(1, 0, 0, 1, 0, 0);
 }
 
+Area.prototype.highlightEvent = function(){
+	var o = game.getUnit(this.parentId);
+	var t = this.fireOrders[this.fireOrders.length-1];
+	var dist = getDistance(o, t);
+	if (game.phase != 2 && !o.friendly){
+		t = getPointInDirection(this.maxRange, getAngleFromTo(o, t), o.x, o.y);
+	}
+
+	salvoCtx.translate(cam.o.x, cam.o.y);
+	salvoCtx.scale(cam.z, cam.z)
+	salvoCtx.translate(o.x, o.y);
+
+	salvoCtx.beginPath();
+	salvoCtx.moveTo(0, 0);
+	salvoCtx.translate(-o.x + t.x, -o.y + t.y);
+	salvoCtx.lineTo(0, 0);
+	salvoCtx.closePath();
+	salvoCtx.globalAlpha = 0.5;
+	salvoCtx.strokeStyle = "white";
+	salvoCtx.stroke();
+
+	salvoCtx.globalAlpha = 0.3;
+	salvoCtx.beginPath();
+	salvoCtx.arc(0, 0, Math.max(this.aoe, this.accDecay / dist * 1000), 0, 2*Math.PI, false);
+	salvoCtx.closePath();
+	salvoCtx.fillStyle = "white";
+	salvoCtx.fill();
+
+	salvoCtx.globalAlpha = 0.3;
+	salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height);
+
+	if (game.phase == 2){
+		salvoCtx.translate(o.x - t.x, o.y - t.y);
+		salvoCtx.translate(-o.x + t.rolls[0], -o.y + t.rolls[1]);
+		salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height);
+	}
+
+
+	salvoCtx.globalAlpha = 1;
+	salvoCtx.setTransform(1,0,0,1,0,0);
+}
+
+Area.prototype.initEvent = function(){
+	var o = game.getUnit(this.parentId);
+	var t = this.fireOrders[this.fireOrders.length-1];
+	var dist = getDistance(o, t);
+
+	var c = document.createElement("canvas");
+		c.width = dist*2;
+		c.height = dist*2;		
+	var ctx = c.getContext("2d");
+		ctx.translate(c.width/2, c.height/2);
+
+	ctx.globalAlpha = 1;
+	ctx.beginPath();
+	ctx.arc(0, 0, this.aoe, 0, 2*Math.PI, false);
+	ctx.closePath();
+	ctx.globalCompositeOperation = "source-over";
+	ctx.fillStyle = this.getEffectFillStyle(0, 0, dist);
+	ctx.fill();
+
+	ctx.fillStyle = "white";
+	ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+	this.img = c;
+}
+
+Area.prototype.getEffectFillStyle = function(x, y, dist){
+	var grad = fxCtx.createRadialGradient(x, y, 0, x, y, this.aoe);
+	var loss = this.dmgLoss * this.getRangeDmgMod();
+
+	//grad.addColorStop(1, "red");
+	grad.addColorStop(1, "rgba(255, 0, 0, 0)");
+	grad.addColorStop(0.9, "rgba(255, 0, 0, 255)");
+	grad.addColorStop(0.5, "yellow");
+	grad.addColorStop(0.0, "green");
+			
+	return grad;
+}
+
 Area.prototype.hasEvent = function(){
+	if (game.phase == 3){return false;}
 	for (var i = this.fireOrders.length-1; i >= 0; i--){
 		if (this.fireOrders[i].turn == game.turn){
+			this.initEvent();
 			return true;
 		}
 	}
 	return false;
+}
+
+
+Area.prototype.getSystemDetailsDiv = function(){
+	var div = document.createElement("div");
+		div.id = "systemDetailsDiv";
+	var table = document.createElement("table");
+	
+	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
+	$(table).append($("<tr>").append($("<td>").html("Weapon Type").css("width", "60%")).append($("<td>").html(this.type)));
+
+
+	if (game.getUnit(this.parentId).ship){
+		$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
+		$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
+	}
+
+	$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
+	if (this.boostEffect.length && !(this instanceof Launcher)){
+		$(table).append($("<tr>").css("border-top", "2px solid white").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerCost").html(this.getEffiency() + " (max: " + this.maxBoost + ")")));
+		this.getBoostEffectElements(table);
+	}
+
+	$(table).append($("<tr>").append($("<td>").html("Max Range")).append($("<td>").html(this.maxRange)));
+	$(table).append($("<tr>").append($("<td>").html("Area of Effect")).append($("<td>").html(this.aoe + "px")));
+	$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").addClass("accuracy").html("up to " + this.getAccuracy()/2 + "px per 100px")));
+	$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("Up to <span class='red'>" + this.maxShots + "</span> / cycle")));
+
+	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDmgString())));
+
+	if (this.notes.length){
+		$(table).append($("<tr>").addClass("notesHeader").css("border-top", "2px solid white").append($("<th>").html("Notes").attr("colSpan", 2)));
+		for (var i = 0; i < this.notes.length; i++){
+			$(table).append($("<tr>").append($("<td>").addClass("notesEntry").html(this.notes[i]).attr("colSpan", 2)));
+		}
+	}
+
+	div.appendChild(table);
+	this.attachDetailsMods(div);
+		
+	return div;
+}
+
+
+Area.prototype.drawSystemArc = function(facing, rolled, pos){
+	game.arcRange = this.maxRange;
+	System.prototype.drawSystemArc.call(this, facing, rolled, pos);
+	game.arcRange = 1200;
 }
 
 function Warhead(data){
@@ -2037,6 +2163,10 @@ function Warhead(data){
 	for (var i = 0; i < data.fireOrders.length; i++){
 		this.fireOrders.push(new FireOrder(data.fireOrders[i]));
 	}
+}
+
+Warhead.prototype.hasEvent = function(){
+	return false;
 }
 
 Warhead.prototype.getShots = function(){
@@ -2244,7 +2374,6 @@ Plasma.prototype.getFillStyle = function(x, y, dist){
 			
 	return grad;
 }
-
 
 function EM(system){
 	Particle.call(this, system);
@@ -3664,7 +3793,7 @@ Hangar.prototype.getSystemDetailsDiv = function(){
 	$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
 	$(table).append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.getMount())));
 	$(table).append($("<tr>").append($("<td>").html("Capacity")).append($("<td>").html("up to " + this.capacity + " units")));
-	$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html(this.getLaunchRate() + " per cycle")));
+	$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html(this.getLaunchRate() + " / cycle")));
 	$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").html(this.getPowerReqString())));
 
 	div.appendChild(table);

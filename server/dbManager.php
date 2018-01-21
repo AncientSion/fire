@@ -920,9 +920,7 @@
 				$stmt->bindParam(":id", $data[$i]->id);
 
 				$stmt->execute();
-				if ($stmt->errorCode() == 0){
-					continue;
-				} else Debug::log("ERROR"); return false;
+				if ($stmt->errorCode() == 0){continue;}
 			}
 		}
 
@@ -957,37 +955,49 @@
 				$stmt->bindParam(":id",  $states[$i]["id"]);
 				$stmt->execute();
 
-				if ($stmt->errorCode() == 0){
-					continue;
-				}// else var_dump($stmt->errorCode());
+				if ($stmt->errorCode() == 0){continue;}
 			}	
 			return true;
 		}
 
 		public function destroyUnitsDB($units){
-			//Debug::log("destroyUnitsDB");
+			Debug::log("destroyUnitsDB");
 			$stmt = $this->connection->prepare("
 				UPDATE units 
 				SET 
-					destroyed = :destroyed
+					destroyed = 1
 				WHERE
 					id = :id
 			");
 			
 			for ($i = 0; $i < sizeof($units); $i++){
-				//Debug::log("unit #".$units[$i]->id." destroyed: ".$units[$i]->destroyed);
-				if ($units[$i]->destroyed){
-					$stmt->bindParam(":id", $units[$i]->id);
-					$stmt->bindParam(":destroyed",  $units[$i]->destroyed);
-					$stmt->execute();
+				if (!$units[$i]->destroyed){continue;}
+				$stmt->bindParam(":id", $units[$i]->id);
+				$stmt->execute();
 
-					if ($stmt->errorCode() == 0){
-						continue;
-					}
-				}
+				if ($stmt->errorCode() == 0){continue;}
 			}
 
 			return;
+		}
+
+		public function jumpOutUnits($data){
+			Debug::log("jumpOutUnits s: ".sizeof($data));
+			$stmt = $this->connection->prepare("
+				UPDATE units 
+				SET 
+					status = :status
+				WHERE
+					id = :id
+			");
+			
+			for ($i = 0; $i < sizeof($data); $i++){
+				$stmt->bindParam(":id", $data[$i]["id"]);
+				$stmt->bindParam(":status", $data[$i]["status"]);
+				$stmt->execute();
+
+				if ($stmt->errorCode() == 0){continue;}
+			}
 		}
 
 		public function insertClientActions($units){
@@ -1193,14 +1203,12 @@
 					resolved = :resolved
 				WHERE
 					id = :id
-			");
-
-			$resolved = 1;
+			");;
 
 			for ($i = 0; $i < sizeof($fires); $i++){
 				$stmt->bindParam(":id", $fires[$i]->id);
 				$stmt->bindParam(":shots", $fires[$i]->shots);
-				$stmt->bindParam(":resolved", $resolved);
+				$stmt->bindParam(":resolved", $fires[$i]->resolved);
 				$stmt->execute();
 
 				if ($stmt->errorCode() == 0){

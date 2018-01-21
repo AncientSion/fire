@@ -128,12 +128,12 @@ class Squadron extends Ship {
 		}
 	}	
 
-	public function hideFireOrders($turn){
+	public function hideFireOrders($turn, $phase){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->structures); $j++){
 				for ($k = 0; $k < sizeof($this->structures[$i]->structures[$j]->systems); $k++){
 					for ($l = sizeof($this->structures[$i]->structures[$j]->systems[$k]->fireOrders)-1; $l >= 0; $l--){
-						if ($this->structures[$i]->structures[$j]->systems[$k]->fireOrders[$l]->turn == $turn){
+						if ($this->structures[$i]->structures[$j]->systems[$k]->fireOrders[$l]->turn == $turn && $this->structures[$i]->structures[$j]->systems[$k]->usage == $phase){
 							array_splice($this->structures[$i]->structures[$j]->systems[$k]->fireOrders, $l, 1);
 						} else break;
 					}
@@ -143,18 +143,18 @@ class Squadron extends Ship {
 	}
 
 	public function hidePowers($turn){
+
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				for ($k = sizeof($this->structures[$i]->systems[$j]->powers)-1; $k >= 0; $k--){
-					if ($this->structures[$i]->systems[$j]->powers[$k]->turn == $turn){
-						if ($this->structures[$i]->systems[$j]->powers[$k]->type == 0){
-							$this->structures[$i]->systems[$j]->disabled = 0;
-						}
-						array_splice($this->structures[$i]->systems[$j]->powers, $k, 1);
-					} else break;
+			for ($j = 0; $j < sizeof($this->structures[$i]->structures); $j++){
+				for ($k = 0; $k < sizeof($this->structures[$i]->structures[$j]->systems); $k++){
+					for ($l = sizeof($this->structures[$i]->structures[$j]->systems[$k]->powers)-1; $l >= 0; $l--){
+						if ($this->structures[$i]->structures[$j]->systems[$k]->powers[$l]->turn == $turn){
+							array_splice($this->structures[$i]->structures[$j]->systems[$k]->powers, $l, 1);
+						} else break;
+					}
 				}
 			}
-		}	
+		}
 
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 			if ($this->primary->systems[$i]->name == "Sensor"){
@@ -539,7 +539,7 @@ class Light extends Squaddie {
 	public $baseImpulse = 190;
 	public $size = 60;
 	public $slipAngle = 25;
-	public $baseImpulseCost = 35;
+	public $baseImpulseCost = 50;
 	public $space = 4;
 	
 	function __construct($id, $parentId){
@@ -550,7 +550,7 @@ class Light extends Squaddie {
 class SuperLight extends Light {
 	public $baseImpulse = 200;
 	public $size = 50;
-	public $baseImpulseCost = 40;
+	public $baseImpulseCost = 55;
 	public $space = 3;
 	
 	function __construct($id, $parentId){

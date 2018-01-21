@@ -6,6 +6,14 @@ window.graphics = {
 		this.preLoadBallistics();
 		this.preloadShips();
 		this.preLoadFactions();
+		this.preLoadVarious();
+	},
+
+	preLoadVarious: function(){
+		this.images.redVortex = new Image();
+		this.images.redVortex.src = "varIcons/redVortex.png";
+		this.images.blueVortex = new Image();
+		this.images.blueVortex.src = "varIcons/blueVortex.png";
 	},
 
 	preLoadBallistics: function(){
@@ -375,6 +383,7 @@ function getRadialGradient(x, y, s){
 }	
 
 function drawSensorArc(w, d, str, loc, facing, a, sensor){
+	console.log("ding");
 	if (game.sensorMode){salvoCtx.clearRect(0, 0, res.x, res.y);}
 	salvoCtx.translate(cam.o.x, cam.o.y);
 	salvoCtx.scale(cam.z, cam.z);
@@ -416,4 +425,9 @@ function drawSensorArc(w, d, str, loc, facing, a, sensor){
 	salvoCtx.fill();
 	salvoCtx.globalAlpha = 1;
 	salvoCtx.setTransform(1,0,0,1,0,0);
+
+	if (game.shortInfo){
+		game.getUnit(game.shortInfo).drawEW();
+	}
+	game.drawEvents()
 }

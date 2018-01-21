@@ -650,24 +650,21 @@ Squadron.prototype.createBaseDiv = function(){
 		if (game.turn > 0){
 			var modeDiv = this.primary.systems[i].getModeDiv();
 			if (modeDiv){
-				div.appendChild(modeDiv);
+				div.appendChild(modeDiv)
 			}
 		}
 		$(this.element).find(".coreContainer").append(div)
-		$(div).css("margin-top", 20).css("margin-left", 10 + (i*50));
+		$(div).css("margin-top", 30).css("margin-left", 10 + (i*50));
 	}
 
-
-	// notes
-	$(this.element)
-		.find(".coreContainer")
-			.append($("<div>")
-				.addClass("notes")
-				.hide())
-
-	//rolling ?
-	this.setRollState();
-
+	// JUMP OUT
+	$(this.element).find(".coreContainer")
+		.append($("<div>").css("margin-top", 80).css("margin-left", 27)
+			.append($("<img>")
+				.css("width", 50).css("height", 50)
+				.attr("src", "varIcons/redVortex.png")
+				.click(function(){game.getUnit($(this).parent().parent().parent().parent().data("shipId")).requestJumpOut();
+				})))
 
 	if (this.structures.length){
 		$(div).removeClass("disabled");
@@ -683,7 +680,6 @@ Squadron.prototype.createBaseDiv = function(){
 Squadron.prototype.setSubElements = function(){
 	var w = $($(this.element).find(".structContainer")).width();
 	var h = $($(this.element).find(".structContainer")).height();
-
 
 	var offset = 0;
 	if (this.structures.length == 3){offset = 30;}
@@ -709,8 +705,11 @@ Squadron.prototype.expandDiv = function(div){
 			.append($("<div>")
 				.addClass("iconContainer")					
 					.append(
-						$(this.getBaseImage()).addClass("rotate270").css("width", "100%").css("margin-top", 20)
+						$(this.getBaseImage()).addClass("rotate270").css("width", "100%")
 					)
+					.append($("<div>")
+						.addClass("notes")
+							.hide())
 					.data("shipId", this.id)
 					.hover(function(e){
 						if (aUnit){
@@ -731,6 +730,7 @@ Squadron.prototype.expandDiv = function(div){
 	//}
 		
 		
+	this.setRollState();
 	//document.getElementById("game").appendChild(div);
 	document.body.appendChild(div);
 	$(div).css("position", "absolute").css("top", 300);
@@ -765,12 +765,6 @@ Squadron.prototype.checkSensorHighlight = function(){
 	//console.log("checkSensorHighlight")
 	return Ship.prototype.checkSensorHighlight.call(this);
 }
-
-Squadron.prototype.drawEW = function(){
-	//console.log("drawEW")
-	return Ship.prototype.drawEW.call(this);
-}
-
 
 Squadron.prototype.getShortInfoa = function(){
 	var ele = $("#shortInfo");
@@ -919,7 +913,7 @@ Squadron.prototype.getPowerOrders = function(){
 		}
 		for (var j = 0; j < this.structures[i].structures.length; j++){
 			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
-				for (var l = 0; l < this.structures[i].structures[j].systems[k].powers.length; l++){
+				for (var l = this.structures[i].structures[j].systems[k].powers.length-1; l >= 0; l--){
 					if (this.structures[i].structures[j].systems[k].powers[l].new){
 						powers.push(this.structures[i].structures[j].systems[k].powers[l]);
 					} else break;
