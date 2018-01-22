@@ -2269,9 +2269,8 @@ Ship.prototype.expandDiv = function(div){
 	console.log($(structContainer).width());
 
 	// JUMP OUT
-	$(structContainer).append($("<div>").css("position", "absolute").css("top", 0).css("margin-left", 240)
+	$(structContainer).append($("<div>").addClass("jumpOut")
 		.append($("<img>")
-			.css("width", 50).css("height", 50)
 			.attr("src", "varIcons/redVortex.png")
 			.click(function(){game.getUnit($(this).parent().parent().parent().data("shipId")).requestJumpOut();
 			})))
@@ -2338,18 +2337,19 @@ Ship.prototype.expandDiv = function(div){
 }
 
 Ship.prototype.requestJumpOut = function(){
-	if (this.destroyed){popup("Nice try, but you cant order withdrawal with this unit.");}
+	if (!this.friendly){return;}
+	else if (this.destroyed){popup("Nice try, but you cant order this unit to withdraw.");}
 	else if (game.phase != 3){popup("You can only order withdrawal in </br>Phase 3 / Damage Control.");}
-	else {
-		instruct("Confirm if you really want to withdraw this unit from combat</p></p><div class='popupEntry buttonTD' style='font-size: 20px; width: 200px' onclick='game.getUnit(" + this.id + ").doJumoOut()'>Confirm Withdrawal</div>");
-	}
+	else if (this.status == "jumpOut"){this.doJumpOut();}
+	else instruct("Confirm if you really want to withdraw this unit from combat</p></p><div class='popupEntry buttonTD' style='font-size: 20px; width: 200px' onclick='game.getUnit(" + this.id + ").doJumpOut()'>Confirm Withdrawal</div>");
 }
 
-Ship.prototype.doJumoOut = function(){
+Ship.prototype.doJumpOut = function(){
 	if (this.status == "bought"){
 		this.status = "jumpOut";
 	} else this.status = "bought";
 
+	$(this.element).find(".jumpOut").toggleClass("selected");
 	$("#instructWrapper").hide();
 }
 

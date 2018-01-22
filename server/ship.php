@@ -537,15 +537,13 @@ class Ship {
 	}
 
 	public function resolveAreaFireOrder($fire){
-		$fire->section = $this->getHitSection($fire);		
+		$fire->section = $this->getHitSection($fire);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->id != $fire->section){continue;}
 			Debug::log("resolveAreaFireOrder on self: ".get_class($this).", hitting struct ".$i);
-
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
-
 				$fire->weapon->doDamage($fire, 0, $this->structures[$i]->systems[$j]);
 			}
 		}

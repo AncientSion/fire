@@ -19,24 +19,24 @@ class Area extends Weapon {
 	public function createAreaFireOrders($gd, $fire){
 		Debug::log("createAreaFireOrders");
 
-		if (false){
+		if (1){
 			$origin = new Point($fire->shooter->x, $fire->shooter->y);
 			$target = new Point($fire->x, $fire->y);
 			$dist = floor(Math::getDist2($origin, $target));
-			$maxDevi = $this->accDecay / $dist * 100;
+			$maxDevi = $dist / 100 * $this->accDecay / 10;
 			$devi = mt_rand(0, $maxDevi);
 			$angle = mt_rand(0, 360);
 
 			$newTarget = Math::getPointInDirection($devi, $angle, $target->x, $target->y);
 			$fire->notes = $newTarget->x.";".$newTarget->y.";";
 
-			//Debug::log("dist: ".$dist.", maxDevi: ".$maxDevi."px, devi: ".$devi."px, angle: ".$angle);
+			Debug::log("dist: ".$dist.", maxDevi: ".$maxDevi."px, devi: ".$devi."px, angle: ".$angle);
 			//Debug::log("newTarget ".$newTarget->x."/".$newTarget->y);
 
 		}
 
-		$newTarget = new Point(-50, -160);
-		$fire->notes = $newTarget->x.";".$newTarget->y.";";
+		//$newTarget = new Point(-50, -160);
+		//$fire->notes = $newTarget->x.";".$newTarget->y.";";
 
 
 		$newFires = array();

@@ -1568,7 +1568,12 @@ Weapon.prototype.getDmgsPerShot = function(fire){
 Weapon.prototype.getUsageString = function(){
 	var unit = game.getUnit(this.parentId);
 	if (this.usage == game.phase-1){
-		return ("<span><font color='" + unit.getCodeColor()+ "'> " + unit.name + " #" + unit.id +" </font></span> fires " + this.display);
+		if (unit.friendly){
+			return ("<span><font color='" + unit.getCodeColor()+ "'> " + unit.name + " #" + unit.id +" </font></span> fires " + this.display);
+		}
+		else 
+			return ("<span><font color='" + unit.getCodeColor()+ "'> " + unit.name + " #" + unit.id +" </font></span> fires " + this.display + ". Target unknown.");
+		
 	}
 }
 
@@ -1974,6 +1979,7 @@ Area.prototype.highlightFireOrder = function(){
 
 Area.prototype.handleAimEvent = function(o, t){
 	var dist = getDistance(o, t);
+
 	salvoCtx.translate(cam.o.x, cam.o.y);
 	salvoCtx.scale(cam.z, cam.z)
 	salvoCtx.translate(o.x, o.y);
@@ -1983,26 +1989,31 @@ Area.prototype.handleAimEvent = function(o, t){
 	salvoCtx.translate(-o.x + t.x, -o.y + t.y);
 	salvoCtx.lineTo(0, 0);
 	salvoCtx.closePath();
-	salvoCtx.globalAlpha = 0.5;
 	salvoCtx.strokeStyle = "white";
 	salvoCtx.lineWidth = 1;
+	salvoCtx.globalAlpha = 0.4;
 	salvoCtx.stroke();
 
-	salvoCtx.globalAlpha = 0.2;
 	salvoCtx.beginPath();
-	salvoCtx.arc(0, 0, Math.max(this.aoe, this.accDecay / dist * 1000), 0, 2*Math.PI, false);
+	salvoCtx.arc(0, 0, Math.max(this.aoe, dist/100*this.accDecay), 0, 2*Math.PI, false);
 	salvoCtx.closePath();
 	salvoCtx.fillStyle = "white";
+	salvoCtx.globalAlpha = 0.2;
 	salvoCtx.fill();
-	salvoCtx.stroke();
 
-	salvoCtx.globalAlpha = 0.6;
 	salvoCtx.beginPath();
 	salvoCtx.arc(0, 0, this.aoe, 0, 2*Math.PI, false);
 	salvoCtx.closePath();
-	salvoCtx.globalCompositeOperation = "source-over";
-	salvoCtx.fillStyle = this.getEffectFillStyle(0, 0, dist);
-	salvoCtx.fill();
+	//salvoCtx.globalCompositeOperation = "source-over";
+	//salvoCtx.fillStyle = this.getEffectFillStyle(0, 0, dist);
+	//salvoCtx.fillStyle = "red";
+	//salvoCtx.globalAlpha = 0.4;
+	//salvoCtx.fill();
+
+	salvoCtx.strokeStyle = "red";
+	salvoCtx.lineWidth = 5;
+	salvoCtx.stroke();
+	salvoCtx.lineWidth = 1;
 
 	salvoCtx.fillStyle = "white";
 	salvoCtx.globalAlpha = 1;
@@ -2026,26 +2037,30 @@ Area.prototype.highlightEvent = function(){
 	salvoCtx.translate(-o.x + t.x, -o.y + t.y);
 	salvoCtx.lineTo(0, 0);
 	salvoCtx.closePath();
-	salvoCtx.globalAlpha = 0.5;
 	salvoCtx.strokeStyle = "white";
+	salvoCtx.globalAlpha = 0.5;
 	salvoCtx.stroke();
 
-	salvoCtx.globalAlpha = 0.3;
 	salvoCtx.beginPath();
-	salvoCtx.arc(0, 0, Math.max(this.aoe, this.accDecay / dist * 1000), 0, 2*Math.PI, false);
+	salvoCtx.arc(0, 0, Math.max(this.aoe, dist/100*this.accDecay), 0, 2*Math.PI, false);
 	salvoCtx.closePath();
 	salvoCtx.fillStyle = "white";
+	salvoCtx.globalAlpha = 0.2;
 	salvoCtx.fill();
 
-	salvoCtx.globalAlpha = 0.3;
+	salvoCtx.globalAlpha = 0.4;
 	salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height);
 
 	if (game.phase == 2){
+		salvoCtx.beginPath();
+		salvoCtx.moveTo(0, 0);	
 		salvoCtx.translate(o.x - t.x, o.y - t.y);
 		salvoCtx.translate(-o.x + t.rolls[0], -o.y + t.rolls[1]);
+		salvoCtx.lineTo(0, 0);
+		salvoCtx.closePath();
+		salvoCtx.stroke();
 		salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height);
 	}
-
 
 	salvoCtx.globalAlpha = 1;
 	salvoCtx.setTransform(1,0,0,1,0,0);
@@ -2066,9 +2081,13 @@ Area.prototype.initEvent = function(){
 	ctx.beginPath();
 	ctx.arc(0, 0, this.aoe, 0, 2*Math.PI, false);
 	ctx.closePath();
-	ctx.globalCompositeOperation = "source-over";
-	ctx.fillStyle = this.getEffectFillStyle(0, 0, dist);
-	ctx.fill();
+	//ctx.globalCompositeOperation = "source-over";
+	//ctx.fillStyle = this.getEffectFillStyle(0, 0, dist);
+
+	ctx.strokeStyle = "red";
+	ctx.lineWidth = 5;
+	ctx.stroke();
+	ctx.lineWidth = 1;
 
 	ctx.fillStyle = "white";
 	ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -2123,7 +2142,7 @@ Area.prototype.getSystemDetailsDiv = function(){
 
 	$(table).append($("<tr>").append($("<td>").html("Max Range")).append($("<td>").html(this.maxRange)));
 	$(table).append($("<tr>").append($("<td>").html("Area of Effect")).append($("<td>").html(this.aoe + "px")));
-	$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").addClass("accuracy").html("up to " + this.getAccuracy()/2 + "px per 100px")));
+	$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").addClass("accuracy").html("up to " + this.getAccuracy() + "px per 100px")));
 	$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("Up to <span class='red'>" + this.maxShots + "</span> / cycle")));
 
 	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDmgString())));

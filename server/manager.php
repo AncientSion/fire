@@ -56,69 +56,6 @@ class Manager {
 	public function test(){
 		return;
 		$this->handlePostMoveFires();
-		foreach ($this->ships as $ship){
-			Debug::log($ship->id);
-		}
-		Debug::log("====");
-		foreach ($this->incoming as $incoming){
-			Debug::log($incoming["id"]);
-		}
-		///return;
-		$ship = $this->getUnit(20);
-		$add = 200;
-		$struct = 1;
-		$ship->primary->remaining += $add;
-		$ship->structures[$struct]->armourDmg = 0;
-		$ship->structures[$struct]->setNegation($ship->primary->integrity, 0);
-
-		$weapon = new MediumIon(0,0,0,0,0,0,0);
-		$fire = new FireOrder(0,0,0,0,0,0,0,0,0,0,0,0);
-		$fire->section = $ship->structures[$struct]->id;
-		$fire->weapon = $weapon;
-		$fire->target = $ship;
-		$shots = 0;
-
-		for ($i = 0; $i < sizeof($ship->structures[$struct]->systems); $i++){
-			$ship->structures[$struct]->systems[$i]->destroyed = 0;
-		}
-
-		while ($shots){
-			$sys = $fire->target->getHitSystem($fire);
-			Debug::log(get_class($sys).", armourmod: ".$sys->getArmourMod()." => ".$ship->getArmourValue($fire, $sys));
-			$shots--;
-		}
-
-		//$ship->primary->remaining -= $add;
-
-		Debug::log("determing to hit for ".get_class($ship)." #".$ship->id);
-
-		$total = $ship->primary->getHitChance();
-		$avail = $total;
-
-		for ($i = 0; $i < sizeof($ship->structures[$struct]->systems); $i++){
-			if ($ship->structures[$struct]->systems[$i]->isDestroyed()){continue;}
-			$avail += $ship->structures[$struct]->systems[$i]->getHitChance();
-			Debug::log("adding ".get_class($ship->structures[$struct]->systems[$i]).", chance: ".$ship->structures[$struct]->systems[$i]->getHitChance());
-		}
-
-		Debug::log("-> primary to struct: ".$total." / ".$avail." => ".(round($total/$avail, 2)*100)."%");
-
-		$avail = $total;
-
-		$fraction = round($ship->primary->remaining / $ship->primary->integrity, 3);
-		Debug::log("main structure at ".$fraction."%");
-		for ($i = 0; $i < sizeof($ship->primary->systems); $i++){
-			if (!$ship->isExposed($fraction, $ship->primary->systems[$i])){continue;}
-			$odd = $ship->primary->systems[$i]->getHitChance();
-			$avail += $odd;
-			Debug::log("adding ".get_class($ship->primary->systems[$i]).", chance: ".$ship->primary->systems[$i]->getHitChance());
-		}
-
-
-		Debug::log("-> main to internal: ".$total." / ".$avail." => ".(round($total/$avail, 2)*100)."%");
-		Debug::log("-> chance to divert to single internal on main hit: ".$ship->primary->systems[$i-1]->getHitChance()." / ".$avail." => ".(round($ship->primary->systems[$i-1]->getHitChance()/$avail, 2)*100)."%");
-		
-		return;
 	}
 
 	public function crits(){
@@ -855,8 +792,8 @@ class Manager {
 		}
 		
 		Debug::log("handling data");
-		return;
 		$this->handleResolvedFireData();
+		return;
 	}
 
 	public function handleShipMovement(){
@@ -1394,7 +1331,8 @@ class Manager {
 	}
 
 	public function getAllNewCrits(){
-		//Debug::log("getAllNewCrits");
+		if ($this->phase == 0)
+		Debug::log("getAllNewCrits");
 		$crits = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->destroyed && ($this->ships[$i]->ship || $this->ships[$i]->squad)){continue;}

@@ -659,9 +659,8 @@ Squadron.prototype.createBaseDiv = function(){
 
 	// JUMP OUT
 	$(this.element).find(".coreContainer")
-		.append($("<div>").css("margin-top", 80).css("margin-left", 27)
+		.append($("<div>").addClass("jumpOut")
 			.append($("<img>")
-				.css("width", 50).css("height", 50)
 				.attr("src", "varIcons/redVortex.png")
 				.click(function(){game.getUnit($(this).parent().parent().parent().parent().data("shipId")).requestJumpOut();
 				})))

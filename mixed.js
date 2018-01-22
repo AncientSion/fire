@@ -99,9 +99,10 @@ Mixed.prototype.drawMovePlan = function(){
 	planCtx.closePath();
 	planCtx.strokeStyle = color;
 	planCtx.stroke();
-	planCtx.setTransform(1,0,0,1,0,0);}
+	planCtx.setTransform(1,0,0,1,0,0);
 
-	if (this.flight){this.drawMissionArea();
+	planCtx.globalAlpha = 1;
+	if (this.flight){this.drawMissionArea();}
 }
 
 Mixed.prototype.drawTargetMovePlan = function(){

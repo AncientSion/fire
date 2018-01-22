@@ -175,10 +175,6 @@ table, th, tr, td {
 	color: #ff3d00;
 }
 
-.selectedaa {
-	box-shadow: inset 0 0 0.5em 0.5em #27e627;
-}
-
 #reinforce:hover {
 	background-color: white;
 	color: black;
@@ -1512,6 +1508,29 @@ div.integrityFull {
 
 .red {
 	color: #ff3d00;
+}
+
+.squad .jumpOut {
+	left: 22px;
+	top:  70px;
+}
+
+.jumpOut {
+	left: 230px;
+	top: -15px;
+	position: relative;
+	width: 55px;
+	height: 55pX;
+	padding: 2px;
+}
+
+.jumpOut img {
+	width: 100%;
+	height: 100%;
+}
+
+.jumpOut.selected {
+	box-shadow: inset 0 0 0.25em 0.25em #27e627;
 }
 
 .structContainer .mainPower {
