@@ -341,6 +341,53 @@ function drawBeam(weapon, fire){
 	fxCtx.setTransform(1,0,0,1,0,0);
 }
 
+function drawAreaEffect(weapon, fire, now, max){
+	//console.log(now, max);
+	fxCtx.translate(cam.o.x, cam.o.y);
+	fxCtx.scale(cam.z, cam.z)
+
+	var fraction = now/max;
+
+	fxCtx.globalAlpha = 0.8-fraction/2;
+	fxCtx.beginPath();
+	fxCtx.arc(fire.tx, fire.ty, weapon.aoe*fraction*0.9, 0, 2*Math.PI);
+	fxCtx.closePath();	
+	fxCtx.fillStyle = weapon.animColor;
+	fxCtx.strokeStyle = weapon.animColor;
+	fxCtx.lineWidth = 16 * fraction;
+	fxCtx.fill();
+
+	fxCtx.beginPath();
+	fxCtx.arc(fire.tx, fire.ty, weapon.aoe*fraction*0.7, 0, 2*Math.PI);
+	fxCtx.closePath();	
+	fxCtx.strokeStyle = "white";
+	fxCtx.globalCompositeOperation = "lighter";
+	fxCtx.fillStyle = "white";
+	fxCtx.strokeStyle = weapon.animColor;
+	fxCtx.lineWidth = 8 * fraction;
+	fxCtx.fill();
+		
+	fxCtx.globalCompositeOperation = "source-over";
+
+	fxCtx.globalAlpha = 0.8 - fraction;
+	var sin = Math.sin(Math.PI*fraction);
+	if (sin > 0){
+		console.log(sin);
+		for (var i = 0; i < 30; i++){
+			var a = 360/30*i;
+			var p = getPointInDirection(weapon.aoe*fraction*1.1, a, fire.tx, fire.ty);
+
+			//fxCtx.translate(p.x, p.y);
+			fxCtx.beginPath(); fxCtx.arc(p.x, p.y, sin, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = "rgb(255,225,75)"; fxCtx.fill();
+			fxCtx.beginPath(); fxCtx.arc(p.x, p.y, sin*0.66, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = "rgb(255,200,0)"; fxCtx.fill();
+			fxCtx.beginPath(); fxCtx.arc(p.x, p.y, sin*0.35, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = "rgb(255,0,0)"; fxCtx.fill();
+			//fxCtx.translate(-p.x, -p.y);
+		}
+	}
+
+	fxCtx.setTransform(1,0,0,1,0,0);
+}
+
 function drawBeamExplosion(weapon, x, y, fraction){
 	fxCtx.globalAlpha = 1.5 - fraction;
 	fxCtx.globalCompositeOperation = "source-over";

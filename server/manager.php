@@ -784,10 +784,9 @@ class Manager {
 				$subFires = $this->fires[$i]->weapon->createAreaFireOrders($this, $this->fires[$i]);
 
 				for ($j = 0; $j < sizeof($subFires); $j++){
-					//Debug::log("resolving SubFire ".$j);
-					//var_export($subFires[$j]); echo "</br>";
 					$subFires[$j]->target->resolveAreaFireOrder($subFires[$j]);
 				}
+				$this->fires[$i]->resolved = 1;
 			}
 		}
 		

@@ -11,7 +11,6 @@ class Area extends Weapon {
 	public $maxRange;
 	public $aoe;
 
-
 	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $destroyed = 0){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
 	}
@@ -72,17 +71,16 @@ class Area extends Weapon {
 }
 
 
-
 class EnergyMine extends Area {
 	public $name = "EnergyMine";
 	public $display = "EnergyMine";
 	public $minDmg = 20;
 	public $maxDmg = 28;
-	public $accDecay = 200;
-	public $shots = 5;
-	public $animColor = "lightBlue";
-	public $projSize = 2;
-	public $projSpeed = 8;
+	public $accDecay = 160;
+	public $shots = 1;
+	public $animColor = "blue";
+	public $projSize = 4;
+	public $projSpeed = 4;
 	public $reload = 1;
 	public $mass = 14;
 	public $powerReq = 4;

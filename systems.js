@@ -1926,247 +1926,6 @@ Weapon.prototype.hasValidTarget = function(){
 	} return false;
 }
 
-function Area(system){
-	Weapon.call(this, system);
-	this.maxRange = system.maxRange;
-	this.dmgLoss = system.dmgLoss;
-	this.aoe = system.aoe;
-	this.shots = system.shots;
-	this.maxShots = system.maxShots;
-	this.notes = system.notes;
-}
-
-Area.prototype = Object.create(Weapon.prototype);
-
-Area.prototype.getAimData = function(target, final, dist, row){
-	if (target){
-		row
-		.append($("<td>").attr("colSpan", 4).html("<span>Unable to target mobile object.</span>"))
-		this.validTarget = 0;
-		this.odds = 0;
-	}
-	else {
-		row
-		.append($("<td>"))
-		.append($("<td>").attr("colSpan", 2).html("</span>Maximal deviation:</span>"))
-		.append($("<td>").attr("colSpan", 1).html(Math.floor(dist/100 * this.accDecay) + "<span> px</span>"));
-		this.validTarget = 1;
-		this.odds = 1;
-	}
-}
-
-Area.prototype.setFireOrder = function(targetid, pos){
-	if (this.odds <= 0){return;}
-	this.fireOrders.push(
-		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, x: pos.x, y: pos.y, weaponid: this.id, 
-		shots: 0, req: -1, notes: "", hits: -1, resolved: 0}
-	);
-	this.selected = 0;
-	this.validTarget = 0;
-	this.highlight = 0;
-	this.setSystemBorder();
-	game.addEvent(this);
-}
-
-Area.prototype.unsetFireOrder = function(){
-	System.prototype.unsetFireOrder.call(this);
-	game.removeEvent(this);
-}
-
-Area.prototype.highlightFireOrder = function(){
-	return;
-}
-
-Area.prototype.handleAimEvent = function(o, t){
-	var dist = getDistance(o, t);
-
-	salvoCtx.translate(cam.o.x, cam.o.y);
-	salvoCtx.scale(cam.z, cam.z)
-	salvoCtx.translate(o.x, o.y);
-
-	salvoCtx.beginPath();
-	salvoCtx.moveTo(0, 0);
-	salvoCtx.translate(-o.x + t.x, -o.y + t.y);
-	salvoCtx.lineTo(0, 0);
-	salvoCtx.closePath();
-	salvoCtx.strokeStyle = "white";
-	salvoCtx.lineWidth = 1;
-	salvoCtx.globalAlpha = 0.4;
-	salvoCtx.stroke();
-
-	salvoCtx.beginPath();
-	salvoCtx.arc(0, 0, Math.max(this.aoe, dist/100*this.accDecay), 0, 2*Math.PI, false);
-	salvoCtx.closePath();
-	salvoCtx.fillStyle = "white";
-	salvoCtx.globalAlpha = 0.2;
-	salvoCtx.fill();
-
-	salvoCtx.beginPath();
-	salvoCtx.arc(0, 0, this.aoe, 0, 2*Math.PI, false);
-	salvoCtx.closePath();
-	//salvoCtx.globalCompositeOperation = "source-over";
-	//salvoCtx.fillStyle = this.getEffectFillStyle(0, 0, dist);
-	//salvoCtx.fillStyle = "red";
-	//salvoCtx.globalAlpha = 0.4;
-	//salvoCtx.fill();
-
-	salvoCtx.strokeStyle = "red";
-	salvoCtx.lineWidth = 5;
-	salvoCtx.stroke();
-	salvoCtx.lineWidth = 1;
-
-	salvoCtx.fillStyle = "white";
-	salvoCtx.globalAlpha = 1;
-	salvoCtx.setTransform(1, 0, 0, 1, 0, 0);
-}
-
-Area.prototype.highlightEvent = function(){
-	var o = game.getUnit(this.parentId);
-	var t = this.fireOrders[this.fireOrders.length-1];
-	var dist = getDistance(o, t);
-	if (game.phase != 2 && !o.friendly){
-		t = getPointInDirection(this.maxRange, getAngleFromTo(o, t), o.x, o.y);
-	}
-
-	salvoCtx.translate(cam.o.x, cam.o.y);
-	salvoCtx.scale(cam.z, cam.z)
-	salvoCtx.translate(o.x, o.y);
-
-	salvoCtx.beginPath();
-	salvoCtx.moveTo(0, 0);
-	salvoCtx.translate(-o.x + t.x, -o.y + t.y);
-	salvoCtx.lineTo(0, 0);
-	salvoCtx.closePath();
-	salvoCtx.strokeStyle = "white";
-	salvoCtx.globalAlpha = 0.5;
-	salvoCtx.stroke();
-
-	salvoCtx.beginPath();
-	salvoCtx.arc(0, 0, Math.max(this.aoe, dist/100*this.accDecay), 0, 2*Math.PI, false);
-	salvoCtx.closePath();
-	salvoCtx.fillStyle = "white";
-	salvoCtx.globalAlpha = 0.2;
-	salvoCtx.fill();
-
-	salvoCtx.globalAlpha = 0.4;
-	salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height);
-
-	if (game.phase == 2){
-		salvoCtx.beginPath();
-		salvoCtx.moveTo(0, 0);	
-		salvoCtx.translate(o.x - t.x, o.y - t.y);
-		salvoCtx.translate(-o.x + t.rolls[0], -o.y + t.rolls[1]);
-		salvoCtx.lineTo(0, 0);
-		salvoCtx.closePath();
-		salvoCtx.stroke();
-		salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height);
-	}
-
-	salvoCtx.globalAlpha = 1;
-	salvoCtx.setTransform(1,0,0,1,0,0);
-}
-
-Area.prototype.initEvent = function(){
-	var o = game.getUnit(this.parentId);
-	var t = this.fireOrders[this.fireOrders.length-1];
-	var dist = getDistance(o, t);
-
-	var c = document.createElement("canvas");
-		c.width = dist*2;
-		c.height = dist*2;		
-	var ctx = c.getContext("2d");
-		ctx.translate(c.width/2, c.height/2);
-
-	ctx.globalAlpha = 1;
-	ctx.beginPath();
-	ctx.arc(0, 0, this.aoe, 0, 2*Math.PI, false);
-	ctx.closePath();
-	//ctx.globalCompositeOperation = "source-over";
-	//ctx.fillStyle = this.getEffectFillStyle(0, 0, dist);
-
-	ctx.strokeStyle = "red";
-	ctx.lineWidth = 5;
-	ctx.stroke();
-	ctx.lineWidth = 1;
-
-	ctx.fillStyle = "white";
-	ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-	this.img = c;
-}
-
-Area.prototype.getEffectFillStyle = function(x, y, dist){
-	var grad = fxCtx.createRadialGradient(x, y, 0, x, y, this.aoe);
-	var loss = this.dmgLoss * this.getRangeDmgMod();
-
-	//grad.addColorStop(1, "red");
-	grad.addColorStop(1, "rgba(255, 0, 0, 0)");
-	grad.addColorStop(0.9, "rgba(255, 0, 0, 255)");
-	grad.addColorStop(0.5, "yellow");
-	grad.addColorStop(0.0, "green");
-			
-	return grad;
-}
-
-Area.prototype.hasEvent = function(){
-	if (game.phase == 3){return false;}
-	for (var i = this.fireOrders.length-1; i >= 0; i--){
-		if (this.fireOrders[i].turn == game.turn){
-			this.initEvent();
-			return true;
-		}
-	}
-	return false;
-}
-
-
-Area.prototype.getSystemDetailsDiv = function(){
-	var div = document.createElement("div");
-		div.id = "systemDetailsDiv";
-	var table = document.createElement("table");
-	
-	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
-	$(table).append($("<tr>").append($("<td>").html("Weapon Type").css("width", "60%")).append($("<td>").html(this.type)));
-
-
-	if (game.getUnit(this.parentId).ship){
-		$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
-		$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
-	}
-
-	$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
-	if (this.boostEffect.length && !(this instanceof Launcher)){
-		$(table).append($("<tr>").css("border-top", "2px solid white").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerCost").html(this.getEffiency() + " (max: " + this.maxBoost + ")")));
-		this.getBoostEffectElements(table);
-	}
-
-	$(table).append($("<tr>").append($("<td>").html("Max Range")).append($("<td>").html(this.maxRange)));
-	$(table).append($("<tr>").append($("<td>").html("Area of Effect")).append($("<td>").html(this.aoe + "px")));
-	$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").addClass("accuracy").html("up to " + this.getAccuracy() + "px per 100px")));
-	$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("Up to <span class='red'>" + this.maxShots + "</span> / cycle")));
-
-	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDmgString())));
-
-	if (this.notes.length){
-		$(table).append($("<tr>").addClass("notesHeader").css("border-top", "2px solid white").append($("<th>").html("Notes").attr("colSpan", 2)));
-		for (var i = 0; i < this.notes.length; i++){
-			$(table).append($("<tr>").append($("<td>").addClass("notesEntry").html(this.notes[i]).attr("colSpan", 2)));
-		}
-	}
-
-	div.appendChild(table);
-	this.attachDetailsMods(div);
-		
-	return div;
-}
-
-
-Area.prototype.drawSystemArc = function(facing, rolled, pos){
-	game.arcRange = this.maxRange;
-	System.prototype.drawSystemArc.call(this, facing, rolled, pos);
-	game.arcRange = 1200;
-}
-
 function Warhead(data){
 	this.id = data.id;
 	this.parentId = data.parentId;
@@ -3294,6 +3053,321 @@ Launcher.prototype.updateTotals = function(){
 
 Launcher.prototype.getImpulseString = function(){
 	return ("+" + this.loads[this.ammo].baseImpulse + " per Turn");
+}
+
+
+function Area(system){
+	Particle.call(this, system);
+	this.maxRange = system.maxRange;
+	this.dmgLoss = system.dmgLoss;
+	this.aoe = system.aoe;
+	this.shots = system.shots;
+	this.maxShots = system.maxShots;
+	this.notes = system.notes;
+	this.animation = "area";
+}
+
+Area.prototype = Object.create(Particle.prototype);
+
+Area.prototype.setMount = function(amount){
+	if (game.getUnit(aUnit) instanceof Flight){this.negation = 0;}
+
+	var w = this.getArcWidth();
+
+	if (w <= 60){
+		this.mount = "Tube";
+	} else if (w <= 120){
+		this.mount = "Canister";
+	}
+}
+
+Area.prototype.getAnimation = function(fire){
+	var allAnims = [];
+	var grouping = 2;
+	var speed = this.projSpeed;
+	var delay = 30;
+	var shotInterval = 10;
+	var cc = 0;
+	var hits = 0;
+	var fraction = 1;
+	var t = {x: fire.rolls[0], y: fire.rolls[1]};
+
+	if (fire.dist < 200){
+		fraction = Math.min(3, 200 / fire.dist);
+	}
+	else if (fire.dist > 600){
+		fraction = Math.max(0.5, 600 / fire.dist);
+	}
+
+	speed /= fraction;
+	delay *= fraction;
+	shotInterval *= fraction;
+	
+	for (var j = 0; j < fire.guns; j++){
+		var gunAnims = [];
+		var o = fire.shooter.getWeaponOrigin(fire.systems[j]);
+
+		var ox = fire.shooter.drawX + o.x;
+		var oy = fire.shooter.drawY + o.y;
+
+		for (var k = 0; k < this.shots; k++){
+			var hit = 0;
+			if (fire.hits[j] > k){
+				hit = 1;
+				hits++;
+			}
+			
+			var dest = {x: 0, y: 0};
+			
+			var tx = t.x + dest.x;
+			var ty = t.y + dest.y;
+
+			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
+				shotAnim.n = 0 - ((j / grouping) * delay + k*shotInterval);
+				shotAnim.p = 0;
+
+			gunAnims.push(shotAnim);
+		}
+		allAnims.push(gunAnims)
+	}
+	return allAnims;
+}
+
+Area.prototype.getAimData = function(target, final, dist, row){
+	if (target){
+		row
+		.append($("<td>").attr("colSpan", 4).html("<span>Unable to target mobile object.</span>"))
+		this.validTarget = 0;
+		this.odds = 0;
+	}
+	else {
+		row
+		.append($("<td>"))
+		.append($("<td>").attr("colSpan", 2).html("</span>Maximal deviation:</span>"))
+		.append($("<td>").attr("colSpan", 1).html(Math.floor(dist/100 * this.accDecay) + "<span> px</span>"));
+		this.validTarget = 1;
+		this.odds = 1;
+	}
+}
+
+Area.prototype.setFireOrder = function(targetid, pos){
+	if (this.odds <= 0){return;}
+	this.fireOrders.push(
+		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, x: pos.x, y: pos.y, weaponid: this.id, 
+		shots: 0, req: -1, notes: "", hits: -1, resolved: 0}
+	);
+	this.selected = 0;
+	this.validTarget = 0;
+	this.highlight = 0;
+	this.setSystemBorder();
+	game.addEvent(this);
+}
+
+Area.prototype.unsetFireOrder = function(){
+	System.prototype.unsetFireOrder.call(this);
+	game.removeEvent(this);
+}
+
+Area.prototype.highlightFireOrder = function(){
+	return;
+}
+
+Area.prototype.handleAimEvent = function(o, t){
+	var dist = getDistance(o, t);
+
+	salvoCtx.translate(cam.o.x, cam.o.y);
+	salvoCtx.scale(cam.z, cam.z)
+	salvoCtx.translate(o.x, o.y);
+
+	salvoCtx.beginPath();
+	salvoCtx.moveTo(0, 0);
+	salvoCtx.translate(-o.x + t.x, -o.y + t.y);
+	salvoCtx.lineTo(0, 0);
+	salvoCtx.closePath();
+	salvoCtx.strokeStyle = "white";
+	salvoCtx.lineWidth = 1;
+	salvoCtx.globalAlpha = 0.4;
+	salvoCtx.stroke();
+
+	salvoCtx.beginPath();
+	salvoCtx.arc(0, 0, Math.max(this.aoe, dist/100*this.accDecay), 0, 2*Math.PI, false);
+	salvoCtx.closePath();
+	salvoCtx.fillStyle = "white";
+	salvoCtx.globalAlpha = 0.2;
+	salvoCtx.fill();
+
+	salvoCtx.beginPath();
+	salvoCtx.arc(0, 0, this.aoe, 0, 2*Math.PI, false);
+	salvoCtx.closePath();
+	//salvoCtx.globalCompositeOperation = "source-over";
+	//salvoCtx.fillStyle = this.getEffectFillStyle(0, 0, dist);
+	//salvoCtx.fillStyle = "red";
+	//salvoCtx.globalAlpha = 0.4;
+	//salvoCtx.fill();
+
+	salvoCtx.strokeStyle = "red";
+	salvoCtx.lineWidth = 5;
+	salvoCtx.stroke();
+	salvoCtx.lineWidth = 1;
+
+	salvoCtx.fillStyle = "white";
+	salvoCtx.globalAlpha = 1;
+	salvoCtx.setTransform(1, 0, 0, 1, 0, 0);
+}
+
+Area.prototype.highlightEvent = function(){
+	var o = game.getUnit(this.parentId);
+	var t = this.fireOrders[this.fireOrders.length-1];
+	var dist = getDistance(o, t);
+	if (game.phase != 2 && !o.friendly){
+		t = getPointInDirection(this.maxRange, getAngleFromTo(o, t), o.x, o.y);
+	}
+
+	salvoCtx.translate(cam.o.x, cam.o.y);
+	salvoCtx.scale(cam.z, cam.z)
+	salvoCtx.translate(o.x, o.y);
+
+	salvoCtx.beginPath();
+	salvoCtx.moveTo(0, 0);
+	salvoCtx.translate(-o.x + t.x, -o.y + t.y);
+	salvoCtx.lineTo(0, 0);
+	salvoCtx.closePath();
+	salvoCtx.strokeStyle = "white";
+	salvoCtx.globalAlpha = 0.5;
+	salvoCtx.stroke();
+
+	salvoCtx.beginPath();
+	salvoCtx.arc(0, 0, Math.max(this.aoe, dist/100*this.accDecay), 0, 2*Math.PI, false);
+	salvoCtx.closePath();
+	salvoCtx.fillStyle = "white";
+	salvoCtx.globalAlpha = 0.2;
+	salvoCtx.fill();
+
+	salvoCtx.globalAlpha = 0.4;
+	salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height);
+
+	if (game.phase == 2){
+		salvoCtx.beginPath();
+		salvoCtx.moveTo(0, 0);	
+		salvoCtx.translate(o.x - t.x, o.y - t.y);
+		salvoCtx.translate(-o.x + t.rolls[0], -o.y + t.rolls[1]);
+		salvoCtx.lineTo(0, 0);
+		salvoCtx.closePath();
+		salvoCtx.stroke();
+		salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height);
+	}
+
+	salvoCtx.globalAlpha = 1;
+	salvoCtx.setTransform(1,0,0,1,0,0);
+}
+
+Area.prototype.initEvent = function(){
+	var o = game.getUnit(this.parentId);
+	var t = this.fireOrders[this.fireOrders.length-1];
+	var dist = getDistance(o, t);
+
+	var c = document.createElement("canvas");
+		c.width = dist*2;
+		c.height = dist*2;		
+	var ctx = c.getContext("2d");
+		ctx.translate(c.width/2, c.height/2);
+
+	ctx.globalAlpha = 1;
+	ctx.beginPath();
+	ctx.arc(0, 0, this.aoe, 0, 2*Math.PI, false);
+	ctx.closePath();
+	//ctx.globalCompositeOperation = "source-over";
+	//ctx.fillStyle = this.getEffectFillStyle(0, 0, dist);
+
+	ctx.strokeStyle = "red";
+	ctx.lineWidth = 5;
+	ctx.stroke();
+	ctx.lineWidth = 1;
+
+	ctx.fillStyle = "white";
+	ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+	this.img = c;
+}
+
+Area.prototype.getEffectFillStyle = function(x, y, dist){
+	var grad = fxCtx.createRadialGradient(x, y, 0, x, y, this.aoe);
+	var loss = this.dmgLoss * this.getRangeDmgMod();
+
+	//grad.addColorStop(1, "red");
+	grad.addColorStop(1, "rgba(255, 0, 0, 0)");
+	grad.addColorStop(0.9, "rgba(255, 0, 0, 255)");
+	grad.addColorStop(0.5, "yellow");
+	grad.addColorStop(0.0, "green");
+			
+	return grad;
+}
+
+Area.prototype.hasEvent = function(){
+	if (game.phase == 3){return false;}
+	for (var i = this.fireOrders.length-1; i >= 0; i--){
+		if (this.fireOrders[i].turn == game.turn){
+			this.initEvent();
+			return true;
+		}
+	}
+	return false;
+}
+
+
+Area.prototype.getSystemDetailsDiv = function(){
+	var div = document.createElement("div");
+		div.id = "systemDetailsDiv";
+	var table = document.createElement("table");
+	
+	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
+	$(table).append($("<tr>").append($("<td>").html("Weapon Type").css("width", "60%")).append($("<td>").html(this.type)));
+
+
+	if (game.getUnit(this.parentId).ship){
+		$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
+		$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
+	}
+
+	$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
+	if (this.boostEffect.length && !(this instanceof Launcher)){
+		$(table).append($("<tr>").css("border-top", "2px solid white").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerCost").html(this.getEffiency() + " (max: " + this.maxBoost + ")")));
+		this.getBoostEffectElements(table);
+	}
+
+	$(table).append($("<tr>").append($("<td>").html("Max Range")).append($("<td>").html(this.maxRange)));
+	$(table).append($("<tr>").append($("<td>").html("Area of Effect")).append($("<td>").html(this.aoe + "px")));
+	$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").addClass("accuracy").html("up to " + this.getAccuracy() + "px per 100px")));
+	$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("Up to <span class='red'>" + this.maxShots + "</span> / cycle")));
+
+	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDmgString())));
+
+	if (this.notes.length){
+		$(table).append($("<tr>").addClass("notesHeader").css("border-top", "2px solid white").append($("<th>").html("Notes").attr("colSpan", 2)));
+		for (var i = 0; i < this.notes.length; i++){
+			$(table).append($("<tr>").append($("<td>").addClass("notesEntry").html(this.notes[i]).attr("colSpan", 2)));
+		}
+	}
+
+	div.appendChild(table);
+	this.attachDetailsMods(div);
+		
+	return div;
+}
+
+Area.prototype.drawSystemArc = function(facing, rolled, pos){
+	game.arcRange = this.maxRange;
+	System.prototype.drawSystemArc.call(this, facing, rolled, pos);
+	game.arcRange = 1200;
+}
+
+Area.prototype.getResolvingFireOrders = function(){
+	for (var i = this.fireOrders.length-1; i >= 0; i--){
+		if (this.fireOrders[i].turn == game.turn){
+			return this.fireOrders[i];
+		}
+	}
+	return false;
 }
 
 function Hangar(system){

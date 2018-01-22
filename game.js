@@ -34,6 +34,7 @@ function Game(data, userid){
 	this.animShip = 0;
 	this.animFlight = 0;
 	this.animSalvo = 0;
+	this.drawingEvents = 1;
 	this.mission;
 	this.timeout = 0;
 	this.canConfirm = 1;
@@ -784,6 +785,16 @@ function Game(data, userid){
 		}
 	}
 
+	this.movementAnimationFinished = function(){
+		console.log("movementAnimationFinished");
+
+		if (this.events.length){
+			console.log(game.events);
+			this.resolvePostMoveFire();
+		}
+		else this.movementResolved();
+	}
+
 	this.movementResolved = function(){	
 		console.log("movementResolved");	
 		game.setlastPosCC()
@@ -816,9 +827,13 @@ function Game(data, userid){
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].setSupportImage();
 		}
-		this.draw();
 		this.animating = 0;
+		if (game.phase == 2){game.drawingEvents = 1;}
+		this.draw();
+		
 		$(fxCanvas).css("opacity", 0.25);
+
+
 		console.log("fireResolved");
 	}
 	
@@ -1553,7 +1568,7 @@ function Game(data, userid){
 		else {
 			game.endMoveSubPhase();
 			game.animFlight = 0; game.animSalvo = 0;
-			game.movementResolved();
+			game.movementAnimationFinished();
 		}
 	}
 
@@ -1634,8 +1649,36 @@ function Game(data, userid){
 			$("#combatLog").show().find("tbody")
 		}
 	}
+	this.resolvePostMoveFire = function(){
+		console.log("resolvePostMoveFire");
+		this.resetImageData();
+		this.getResolvingFireOrders();
+		this.getAreaShotDetails();
+		this.getFireAnimationDetails();
+		this.getUnitExplosionDetails();
+
+		$("#combatlogWrapper").show();
+		setFPS(40);
+		window.then = Date.now();
+		window.startTime = then;
+
+		$(fxCanvas).css("opacity", 1);
+
+		ctx.clearRect(0, 0, res.x, res.y);
+		salvoCtx.clearRect(0, 0, res.x, res.y);
+		fxCtx.clearRect(0, 0, res.x, res.y);
+
+		this.drawingEvents = 0;
+		this.animating = 1;
+		this.drawShips();
+
+		var timeout = setTimeout(function(){
+			game.animateAllFireOrders()
+		}, 500);
+	}
 
 	this.resolveFire = function(){
+		console.log("resolveFire");
 		this.resetImageData();
 		this.getResolvingFireOrders();
 		this.getShotDetails();
@@ -1670,10 +1713,35 @@ function Game(data, userid){
 		this.fireOrders = [];
 		for (var i = 0; i < this.ships.length; i++){
 			var fires = this.ships[i].getResolvingFireOrders();
-			if (fires.length){
-				this.fireOrders = this.fireOrders.concat(fires);
-			}	
+			if (fires.length){this.fireOrders = this.fireOrders.concat(fires);}	
 		}
+	}
+
+	this.getAreaShotDetails = function(){
+		for (var i = 0; i < this.fireOrders.length; i++){
+			this.fireOrders[i].target = game.getUnit(this.fireOrders[i].targetid);
+			this.fireOrders[i].shooter = game.getUnit(this.fireOrders[i].shooterid);
+			this.fireOrders[i].weapon = this.fireOrders[i].shooter.getSystem(this.fireOrders[i].weaponid).getActiveSystem();
+			this.fireOrders[i].damages = this.getAreaDmgs(this.fireOrders[i]);
+			this.fireOrders[i].systems.push(this.fireOrders[i].weaponid);
+
+			var origin = this.fireOrders[i].shooter.getPlannedPos();			
+			this.fireOrders[i].dist = getDistance({x: origin.x, y: origin.y},{x: this.fireOrders[i].rolls[0], y: this.fireOrders[i].rolls[1]});
+		}
+	}
+
+	this.getAreaDmgs = function(fire){
+		var impact = {x: fire.rolls[0], y: fire.rolls[1]};
+		var dmgs = [];
+		for (var i = 0; i < this.ships.length; i++){
+			var unitPos = this.ships[i].getPlannedPos();
+			var dist = getDistance(impact, unitPos);
+
+			if (dist < fire.weapon.aoe){
+				dmgs = dmgs.concat(this.ships[i].getDmgByFire(fire));
+			}
+		}
+		return dmgs;
 	}
 
 	this.getShotDetails = function(){
@@ -1695,21 +1763,12 @@ function Game(data, userid){
 									this.fireOrders[i].guns += this.fireOrders[j].guns;
 									this.fireOrders[i].systems.push(this.fireOrders[j].weaponid);
 									for (var k = 0; k < this.fireOrders[j].damages.length; k++){
-										this.fireOrders[i].damages.push(this.fireOrders[j].damages[k])
+										this.fireOrders[i].adamages.push(this.fireOrders[j].damages[k])
 									}
 									this.fireOrders[i].hits.push(this.fireOrders[j].hits[0]);
 									this.fireOrders[j].guns = 0;
 
 									this.fireOrders[i].req.push(this.fireOrders[j].req[0]);
-
-									/*
-									if (this.fireOrders[j].req > this.fireOrders[i].max){
-										this.fireOrders[i].max = this.fireOrders[j].req;
-									}
-									else if (this.fireOrders[j].req != -1 && this.fireOrders[j].req < this.fireOrders[i].min){
-										this.fireOrders[i].min = this.fireOrders[j].req;
-									}
-									*/
 
 									for (var l = 0; l < this.fireOrders[j].rolls.length; l++){
 										this.fireOrders[i].rolls.push(this.fireOrders[j].rolls[l]);
@@ -1719,14 +1778,13 @@ function Game(data, userid){
 						}
 					}
 				}
-				//console.log(this.fireOrders[i].rolls);
 			}
 		}
 
 		//console.log(this.fireOrders);
 		for (var i = this.fireOrders.length-1; i >= 0; i--){
 				this.fireOrders[i].type = "Regular";
-			if (! this.fireOrders[i].guns){
+			if (!this.fireOrders[i].guns){
 				this.fireOrders.splice(i, 1);
 				continue;
 			}
@@ -1742,21 +1800,8 @@ function Game(data, userid){
 						y: b.y
 					}
 				);
-				//this.fireOrders[i].focus = {x: (a.x + b.x) / 2, y: (a.y + b.y) / 2}
-				//this.fireOrders[i].focus = {x: b.x, y: b.y}
 			}
 		}
-
-		/*for (var i = 0; i < this.fireOrders.length; i++){
-			if (this.fireOrders[i].shooter.flight){
-				var j = 1;
-				while (this.fireOrders[i].hits[0] > 1){
-					this.fireOrders[i].hits[0+j] = 1;
-					this.fireOrders[i].hits[0]--;
-					j++;
-				}
-			}
-		}*/
 	}
 
 	this.getFireAnimationDetails = function(){
@@ -1967,6 +2012,23 @@ function Game(data, userid){
 							drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k], 30); // EXPLO
 							if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
 								game.fireOrders[i].anim[j][k].done = true;
+							}
+						}
+					}
+				}
+				else if (game.fireOrders[i].weapon.animation == "area"){
+					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
+						game.fireOrders[i].anim[j][k].n += 1;
+						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
+							if (game.fireOrders[i].anim[j][k].p == 0){
+								drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k], 30); // projectile
+								if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){game.fireOrders[i].anim[j][k].p = 1; game.fireOrders[i].anim[j][k].n = 0; game.fireOrders[i].anim[j][k].m += 30;}
+							}
+							else {
+								drawAreaEffect(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k], game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m); // mine explo
+								if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
+									game.fireOrders[i].anim[j][k].done = true;
+								}
 							}
 						}
 					}
@@ -2804,6 +2866,7 @@ Game.prototype.drawShips = function(){
 
 Game.prototype.drawEvents = function(){
 	if (!game.drawCircle){return;}
+	else if (!game.drawingEvents){return;}
 	for (var i = 0; i < this.events.length; i++){
 		this.events[i].highlightEvent();
 	}
@@ -3010,9 +3073,7 @@ Game.prototype.logEvents = function(){
 }
 
 Game.prototype.resolveUnitMovement = function(){
-	if (aUnit){
-		game.getUnit(aUnit).select();
-	}
+	if (aUnit){game.getUnit(aUnit).select();}
 
 	this.animShip = 1;
 	this.animFlight = 0;

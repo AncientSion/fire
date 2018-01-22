@@ -704,7 +704,8 @@
 						window.cancelAnimationFrame(anim);
 						game.animFlight = 1; game.animSalvo = 1;
 						game.endMoveSubPhase();
-						game.movementResolved();
+						//game.movementResolved();
+						game.movementAnimationFinished();
 					}
 				}
 			}

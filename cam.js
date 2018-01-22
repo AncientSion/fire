@@ -59,8 +59,8 @@ window.cam = {
 		}
 		else this.z = 1;
 
-		this.setFocusToPos(fire.target.getPlannedPos());
-		this.setFocusToPos(fire.target.getPlannedPos());
+		if (fire.targetid == -1){this.setFocusToPos({x: fire.x, y: fire.y});}
+		else this.setFocusToPos(fire.target.getPlannedPos());
 		//game.draw();
 	}
 }
