@@ -588,11 +588,6 @@ function Game(data, userid){
 	this.enableDeployment = function(id){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].id == id){
-				var index;
-				for (var j = 0; j < playerstatus.length; j++){
-					if (playerstatus[j].userid == this.userid){this.ships[i].drawFacing = 0 + (180 * (j % 2 % 2)); break;}
-				}
-
 				this.deploying = id;
 				this.setupDeploymentDiv(this.ships[i])
 				this.setupDeploymentZone();
@@ -924,6 +919,9 @@ function Game(data, userid){
 
 		for (var i = 0; i < this.reinforcements.length; i++){
 			this.reinforcements[i] = window.initiateUnit(this.reinforcements[i]);
+			for (var j = 0; j < playerstatus.length; j++){
+				if (playerstatus[j].userid == this.userid){this.reinforcements[i].drawFacing = 0 + (180 * (j % 2 % 2)); break;}
+			}			
 			this.reinforcements[i].setImage();
 			this.reinforcements[i].createBaseDiv();
 			this.reinforcements[i].friendly = 1;
@@ -1770,7 +1768,7 @@ function Game(data, userid){
 									this.fireOrders[i].guns += this.fireOrders[j].guns;
 									this.fireOrders[i].systems.push(this.fireOrders[j].weaponid);
 									for (var k = 0; k < this.fireOrders[j].damages.length; k++){
-										this.fireOrders[i].adamages.push(this.fireOrders[j].damages[k])
+										this.fireOrders[i].damages.push(this.fireOrders[j].damages[k])
 									}
 									this.fireOrders[i].hits.push(this.fireOrders[j].hits[0]);
 									this.fireOrders[j].guns = 0;

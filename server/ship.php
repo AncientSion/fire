@@ -46,7 +46,6 @@ class Ship {
 	public $turnAngle = 30;
 	public $slipAngle = 0;
 	public $turnStep = 1;
-	public $baseTurnCost;
 	public $baseTurnDelay;
 	public $baseImpulseCost;
 	public $hitTable;

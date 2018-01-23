@@ -481,7 +481,7 @@ function handleMouseDown(e){
 		}
 	}
 	else if (e.originalEvent.button == 2){
-		if (game.deploying){
+		if (game.deploying && !game.turnMode){
 			$("#deployWrapper").find("#reinforceTable").find(".selected").each(function(){
 				if ($(this).data("id") == game.deploying){
 					$(this).removeClass("selected");

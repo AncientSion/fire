@@ -16,7 +16,6 @@ function Squaddie(data){
 	this.armourElement;
 	this.type = "Main ";
 
-	this.baseTurnCost = data.baseTurnCost;
 	this.baseTurnDelay = data.baseTurnDelay;
 	this.baseImpulseCost = data.baseImpulseCost;
 	this.baseImpulse = data.baseImpulse;
@@ -1082,10 +1081,10 @@ Squadron.prototype.setStats = function(){
 	this.slots[0] = 0;
 	for (var i = 0; i < this.structures.length; i++){
 		this.slots[0] += this.structures[i].space;
-		this.baseTurnCost = Math.max(this.baseTurnCost, this.structures[i].baseTurnCost);
-		this.baseTurnDelay = Math.max(this.baseTurnDelay, this.structures[i].baseTurnDelay);
 		this.baseImpulseCost = Math.max(this.baseImpulseCost, this.structures[i].baseImpulseCost);
+		this.baseTurnDelay = Math.max(this.baseTurnDelay, this.structures[i].baseTurnDelay);
 		this.baseImpulse = Math.min(this.baseImpulse, this.structures[i].baseImpulse);
+		this.currentImpulse = this.baseImpulse;
 		this.primary.systems[0].output = Math.max(this.primary.systems[0].output, this.structures[i].ew);
 		this.primary.systems[0].update();
 		if (this.primary.systems[1].output == 0){this.primary.systems[1].output = this.structures[i].ep;}
@@ -1093,20 +1092,23 @@ Squadron.prototype.setStats = function(){
 		this.primary.systems[1].update();
 	}
 
-	var a = this.baseImpulseCost;
-	var b = this.baseTurnCost;
-	var c = this.baseTurnDelay;
+	var a = this.getBaseImpulse();
+	var b = this.getBaseEP();
+	var c = this.getImpulseChangeCost() + " / " + this.getRollCost();
+	var d = this.baseTurnDelay;
 
-	$(this.element).find(".topDiv").find(".header").find(".general").find("tr").each(function(i){
-		if (i == 3){
+	$(this.element).find(".topDiv").find(".header").find("tr").each(function(i){
+		if (i == 2){
 			$($(this).children()[1]).html(a); return;
 		}
-		else if (i == 4){
+		if (i == 3){
 			$($(this).children()[1]).html(b); return;
-
+		}
+		else if (i == 4){
+			$($(this).children()[1]).html(c); return;
 		}
 		else if (i == 5){
-			$($(this).children()[1]).html(c); return;
+			$($(this).children()[1]).html(d); return;
 		}
 	})
 }

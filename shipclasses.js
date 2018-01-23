@@ -35,7 +35,6 @@ function Ship(data){
 	this.turnStep = data.turnStep || 0;
 	this.turnMod = 1;
 	this.baseTurnDelay = data.baseTurnDelay || 0;
-	this.baseTurnCost = data.baseTurnCost || 0;
 	this.baseImpulseCost = data.baseImpulseCost || 0;
 	this.currentImpulse = data.currentImpulse || 0;
 	this.remainingImpulse = data.remainingImpulse || 0;
@@ -360,8 +359,8 @@ Ship.prototype.getRollCost = function(){
 }
 
 Ship.prototype.getImpulseChangeCost = function(){
-	//return Math.round(this.baseImpulseCost*(1-(1-this.getImpulseMod())/2));
-	return Math.floor(this.baseImpulseCost*(1-(1-this.getImpulseMod())/2) / this.getBaseEP() * this.getEP());
+	return Math.floor(this.baseImpulseCost * this.getBaseEP() / this.getImpulseMod()/100);
+	return Math.floor(this.baseImpulseCost*(1-(1-this.getImpulseMod())/2) / this.getEffectiveEP() * this.getEP());
 }
 
 Ship.prototype.getBaseImpulse = function(){
@@ -389,7 +388,6 @@ Ship.prototype.getTurnCost = function(){
 	if (this.actions.length && (this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0)){
 		return 0;
 	}
-	//else round(this.baseTurnCost*this.getImpulseMod() * this.getTurnMod(), 2);
 	else {
 		return 1;
 		return round(1*this.getImpulseMod() * this.getTurnMod(), 2);
@@ -1713,7 +1711,7 @@ Ship.prototype.drawMoveArcs = function(center, rem){
 	}
 }
 
-Ship.prototype.getBaseEP = function(){
+Ship.prototype.getEffectiveEP = function(){
 	var ep = 0;
 
 	for (var i = 0; i < this.primary.systems.length; i++){
@@ -1724,8 +1722,19 @@ Ship.prototype.getBaseEP = function(){
 	return ep;
 }
 
+Ship.prototype.getBaseEP = function(){
+	var ep = 0;
+
+	for (var i = 0; i < this.primary.systems.length; i++){
+		if (this.primary.systems[i].name == "Engine"){
+			ep += this.primary.systems[i].output;
+		}
+	}
+	return ep;
+}
+
 Ship.prototype.getEP = function(){
-	return Math.floor(this.getBaseEP() / this.getImpulseMod());
+	return Math.floor(this.getEffectiveEP() / this.getImpulseMod());
 }
 
 Ship.prototype.getRemainingEP = function(){
@@ -1734,7 +1743,7 @@ Ship.prototype.getRemainingEP = function(){
 	for (var i = 0; i < this.actions.length; i++){
 		if (this.actions[i].turn == game.turn){
 			if (this.actions[i].cost != 0){
-				ep -= this.actions[i].cost * this.getImpulseMod();
+				ep -= this.actions[i].cost / this.getImpulseMod();
 			}
 		}
 	}

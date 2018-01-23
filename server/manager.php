@@ -16,6 +16,7 @@ class Manager {
 	public $index = 0;
 	public $faction = "";
 	public $value = 0;
+	public $wave = 13;
 
 	public $ships = array();
 	public $ballistics = array();
@@ -55,6 +56,7 @@ class Manager {
 
 	public function test(){
 		return;
+		$this->deleteAllReinforcements();
 		$this->handlePostMoveFires();
 	}
 
@@ -452,45 +454,28 @@ class Manager {
 	}
 	
 	public function pickReinforcements(){
-		if ($this->turn != 11){return;}
-		//if ($this->turn < 5){return;}
-		//return;
-		//Debug::log("pickReinforcements");
+		Debug::log("pickReinforcements");
 		$picks = array();
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+			Debug::log("player: ".$this->playerstatus[$i]["userid"]." has ".$this->playerstatus[$i]["value"]." available");
 			$data = array();
-
 			$faction = $this->playerstatus[$i]["faction"];
+			$entries = $this->getReinforcements($faction);
+			$total = 0;
+			foreach ($entries as $entry){$total += $entry[1];}
 
-			/*
-			$avail = 0;
-			for ($j = 0; $j < sizeof($this->reinforcements); $j++){
-				if ($this->reinforcements[$j]["userid"] == $this->playerstatus[$i]["userid"]){
-					$avail++;
-				}
-			}
-			*/
-
+			//Debug::log("total: ".$total);
 			$add = 12;
 
 			while ($add){
-				//Debug::log("player: ".$this->playerstatus[$i]["userid"]." has ".$this->playerstatus[$i]["value"]." available");
-
-				//if ($avail > 4){if (mt_rand(0, 1)){continue;}} // cap max amount
-				//else if ($this->turn > 13){if (mt_rand(0, $this->turn -12)){continue;}} // slow down post T 13
-
-				$entries = $this->getReinforcements($faction);
-
-				$total = 0;
 				$current = 0;
-				
-				foreach ($entries as $entry){$total += $entry[1];}
-
 				$roll = mt_rand(0, $total);
+				//Debug::log("roll: ".$roll);
 
 				foreach ($entries as $entry){
 					$current += $entry[1];
+					//Debug::log("current: ".$current);
 					if ($roll > $current){continue;}
 					//Debug::log("total: ".$total.", roll: ".$roll.", picking: ".$entry[0]);
 					//echo "</br>picking: ".$entry[0]."</br>";
@@ -537,6 +522,7 @@ class Manager {
 					}
 					$picks[] = $data;
 					$add--;
+					//Debug::log("picking");
 					break;
 				}
 			}
@@ -544,7 +530,7 @@ class Manager {
 
 		for ($i = 0; $i < sizeof($picks); $i++){
 			if ($picks[$i]["eta"] > 3){
-				$picks[$i]["cost"] *= (10 - ($picks[$i]["eta"] - 3))/10;
+				$picks[$i]["cost"] *= 1 - ($picks[$i]["eta"] - 3)/20;
 			}
 		}
 
@@ -878,7 +864,7 @@ class Manager {
 		$this->resolveShipFireOrders();
 		$this->resolveFighterFireOrders();
 		$this->resolveBallisticFireOrders();
-		$this->testUnitCrits();
+		$this->setUnitCrits();
 
 		$this->handleResolvedFireData();
 
@@ -897,7 +883,7 @@ class Manager {
 		$this->setUnitRollState();
 		$this->setUnitStatus();
 		$this->assembleEndStates();
-		if ($this->turn == 11){$this->deleteAllReinforcements();}
+		if ($this->turn == $this->wave){$this->deleteAllReinforcements();}
 	}
 	
 	public function freeFlights(){
@@ -927,7 +913,7 @@ class Manager {
 	}
 
 	public function alterOneTimeReinforce(){
-		if ($this->turn == 11){
+		if ($this->turn == $this->wave){
 			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 				DBManager::app()->addReinforceValue($this->playerstatus[$i]["userid"], $this->gameid, floor($this->reinforce));
 			};
@@ -976,7 +962,7 @@ class Manager {
 
 	public function startDeploymentPhase(){
 		$this->alterOneTimeReinforce();
-		$this->pickReinforcements();
+		if ($this->turn == $this->wave){$this->pickReinforcements();}
 		$this->updatePlayerStatus("waiting");
 	}
 
@@ -1303,10 +1289,10 @@ class Manager {
 		}
 	}
 
-	public function testUnitCrits(){
+	public function setUnitCrits(){
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->damaged){
-				//Debug::log("testUnitCrits #".$this->ships[$i]->id);
+				//Debug::log("setUnitCrits #".$this->ships[$i]->id);
 				$this->ships[$i]->testForCrits($this->turn);
 			} 
 		}
@@ -1488,7 +1474,7 @@ class Manager {
 				$ships = array(
 					array("Omega", 5, 6),
 					array("Hyperion", 7, 5),
-					array("Avenger", 3, 5),
+					array("Avenger", 3, 6),
 					array("Artemis", 10, 3),
 					array("Olympus", 10, 3),
 					array("Squadron", 15, 2),
@@ -1497,9 +1483,9 @@ class Manager {
 			case "Centauri Republic";
 				$ships = array(
 					array("Primus", 5, 6),
-					array("Altarian", 10, 3),
-					array("Demos", 10, 3),
-					array("Squadron", 15, 2),
+					array("Altarian", 15, 3),
+					array("Demos", 15, 3),
+					array("Squadron", 25, 2),
 				);
 				break;
 			case "Minbari Federation";

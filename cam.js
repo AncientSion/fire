@@ -87,7 +87,7 @@ function Turn(){
 		this.id = unit.id;
 		this.a = 0;
 		this.mod = 1;
-		//this.cost = unit.baseTurnCost;
+		this.mod = 1;
 		this.cost = 1;
 		this.delay = unit.baseTurnDelay;
 		this.max = unit.getMaxTurnAngle();

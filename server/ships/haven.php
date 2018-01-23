@@ -31,7 +31,7 @@ class Haven extends SuperLight {
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$right->systems[] = new LightIon($this->getId(), $this->parentId, 180, 60);
+		$left->systems[] = new LightIon($this->getId(), $this->parentId, 180, 60);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

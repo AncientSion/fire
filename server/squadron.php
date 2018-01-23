@@ -6,7 +6,6 @@ class Squadron extends Ship {
 	public $name = "Squadron";
 	public $display = "Squadron";
 	public static $value = 0;
-	public $baseTurnCost = 0;
 	public $baseTurnDelay = 0;
 	public $baseImpulseCost = 0;
 	public $baseImpulse = 1000;
@@ -108,12 +107,10 @@ class Squadron extends Ship {
 			if (($this->structures[$i]->destroyed && !$this->structures[$i]->isDestroyedThisTurn($turn)) || $this->structures[$i]->disabled){continue;}
 
 			$alive = 1;
-			//$this->baseTurnCost = max($this->baseTurnCost, $this->structures[$i]->baseTurnCost);
 			$this->baseTurnDelay = max($this->baseTurnDelay, $this->structures[$i]->baseTurnDelay);
 			$this->baseImpulseCost = max($this->baseImpulseCost, $this->structures[$i]->baseImpulseCost);
 			$this->baseImpulse = min($this->baseImpulse, $this->structures[$i]->baseImpulse);
 			$this->slipAngle = min($this->slipAngle, $this->structures[$i]->slipAngle);
-			//$this->turnAngle = min($this->turnAngle, $this->structures[$i]->turnAngle);
 
 
 			$this->primary->systems[0]->output = max($this->primary->systems[0]->output, $this->structures[$i]->ew);
@@ -360,7 +357,6 @@ class Squadron extends Ship {
 class Squaddie extends Single {
 
 	public $baseHitChance;
-	public $baseTurnCost;
 	public $baseTurnDelay;
 	public $baseImpulseCost;
 

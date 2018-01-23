@@ -645,7 +645,7 @@ table, th, tr, td {
 	display: block;
 }
 
-.squad .outputMaskTop {
+.squad .outputMask.top {
 	top: -50px;
 	width: 100%;
 	font-size: 14px;
@@ -1448,7 +1448,7 @@ div.integrityFull {
 #totalRequestCost {
 	padding: 5px;
 	font-size: 14px;
-	color: green;
+	color: #27e627;
 }
 
 #combatlogWrapper disabled, #deployLogWrapper disabled {

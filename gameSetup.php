@@ -228,6 +228,7 @@ else {
 				shipsBought: [],
 				userid: window.userid,
 				faction: "",
+				arcRange: 100,
 
 				getUnitName: function(){
 					if (this.ships[0].ship){return this.ships[0].name;
@@ -251,7 +252,8 @@ else {
 				},
 
 				setReinforceFaction: function(faction){
-					game.faction = factions;
+					if (faction.length < 3){return;}
+					game.faction = faction;
 					$("#reinforceFaction").removeClass("disabled").html("Reinforcements:</br>" + faction);
 				},
 				
@@ -362,7 +364,7 @@ else {
 						})
 						.contextmenu(function(e){
 							e.stopPropagation(); e.preventDefault();
-							game.setReinforceFaction($(this).data("faction"));
+							game.setReinforceFaction(factions[$(this).data("faction")]);
 						})
 						.append(
 							$("<td>")

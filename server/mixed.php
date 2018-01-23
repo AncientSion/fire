@@ -34,7 +34,6 @@ class Mixed extends Ship {
 
 	public function setBaseStats($phase, $turn){
 		$this->baseHitChance = 0;
-		$this->baseTurnCost = 0;
 		$this->baseTurnDelay = 0;
 		$this->baseImpulseCost = 0;
 	}
