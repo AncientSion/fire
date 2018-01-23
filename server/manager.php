@@ -143,7 +143,7 @@ class Manager {
 		$this->setReinforceStatus();
 		$this->fires = $db->getUnresolvedFireOrders($this->gameid, $this->turn);
 
-		Debug::log(sizeof($this->fires)." unresolved fires");
+		//Debug::log(sizeof($this->fires)." unresolved fires");
 
 		$this->ships = $this->assembleUnits();
 		$this->setCC();
@@ -785,6 +785,7 @@ class Manager {
 
 				for ($j = 0; $j < sizeof($subFires); $j++){
 					$subFires[$j]->target->resolveAreaFireOrder($subFires[$j]);
+					$this->fires[$i]->hits++;
 				}
 				$this->fires[$i]->resolved = 1;
 			}

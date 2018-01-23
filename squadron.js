@@ -1019,7 +1019,7 @@ Squadron.prototype.hasNoFireOrders = function(){
 	return true;
 }
 
-Squadron.prototype.getResolvingFireOrders = function(){
+Squadron.prototype.getAllResolvingFireOrders = function(){
 	var fires = [];
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].destroyed){continue;}
@@ -1133,14 +1133,9 @@ Squadron.prototype.getFireDest = function(fire, isHit, num){
 Squadron.prototype.getDmgByFire = function(fire){
 	var dmgs = [];
 	var lookup = 0;
-
-	if (fire.weapon.aoe){
-		lookup = 20;
-	}
-	else {
-		for (var i = 0; i < fire.hits.length; i++){
-			lookup += fire.hits[i] * fire.weapon.getDmgsPerShot(fire);
-		}
+	
+	for (var i = 0; i < fire.hits.length; i++){
+		lookup += fire.hits[i] * fire.weapon.getDmgsPerShot(fire);
 	}
 
 	if (!lookup){

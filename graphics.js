@@ -348,31 +348,27 @@ function drawAreaEffect(weapon, fire, now, max){
 
 	var fraction = now/max;
 
-	fxCtx.globalAlpha = 0.8-fraction/2;
+	fxCtx.globalAlpha = 1.2-fraction;
 	fxCtx.beginPath();
-	fxCtx.arc(fire.tx, fire.ty, weapon.aoe*fraction*0.9, 0, 2*Math.PI);
+	fxCtx.arc(fire.tx, fire.ty, weapon.aoe*fraction*0.8, 0, 2*Math.PI);
 	fxCtx.closePath();	
-	fxCtx.fillStyle = weapon.animColor;
 	fxCtx.strokeStyle = weapon.animColor;
-	fxCtx.lineWidth = 16 * fraction;
-	fxCtx.fill();
+	fxCtx.lineWidth = 20 * fraction;
+	fxCtx.stroke();
 
 	fxCtx.beginPath();
-	fxCtx.arc(fire.tx, fire.ty, weapon.aoe*fraction*0.7, 0, 2*Math.PI);
+	fxCtx.arc(fire.tx, fire.ty, weapon.aoe*fraction*0.6, 0, 2*Math.PI);
 	fxCtx.closePath();	
 	fxCtx.strokeStyle = "white";
 	fxCtx.globalCompositeOperation = "lighter";
-	fxCtx.fillStyle = "white";
-	fxCtx.strokeStyle = weapon.animColor;
-	fxCtx.lineWidth = 8 * fraction;
-	fxCtx.fill();
+	fxCtx.lineWidth = 12 * fraction;
+	fxCtx.stroke();
 		
 	fxCtx.globalCompositeOperation = "source-over";
 
-	fxCtx.globalAlpha = 0.8 - fraction;
+	fxCtx.globalAlpha = 1 - fraction;
 	var sin = Math.sin(Math.PI*fraction);
 	if (sin > 0){
-		console.log(sin);
 		for (var i = 0; i < 30; i++){
 			var a = 360/30*i;
 			var p = getPointInDirection(weapon.aoe*fraction*1.1, a, fire.tx, fire.ty);
@@ -430,7 +426,7 @@ function getRadialGradient(x, y, s){
 }	
 
 function drawSensorArc(w, d, str, loc, facing, a, sensor){
-	console.log("ding");
+	console.log("drawSensorArc");
 	if (game.sensorMode){salvoCtx.clearRect(0, 0, res.x, res.y);}
 	salvoCtx.translate(cam.o.x, cam.o.y);
 	salvoCtx.scale(cam.z, cam.z);

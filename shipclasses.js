@@ -1352,17 +1352,18 @@ Ship.prototype.animateSelfJumpIn = function(){
 
 	var fraction = this.deployAnim[0] / this.deployAnim[1];
 	var sin = Math.sin(Math.PI*fraction);
+	var s = 200*sin;
 
-	drawCircle(this.drawX, this.drawY, this.size*0.55*sin, "source-over", "blue");
-	drawCircle(this.drawX, this.drawY, this.size*0.2*sin/2, "lighter", "lightBlue");
+	ctx.globalAlpha = sin;
+	ctx.drawImage(graphics.images.blueVortex, this.drawX-s/2, this.drawY-s/2, s, s);
 
-	if (fraction >= 0.3){
+	if (fraction > 0.5){
 		ctx.globalAlpha = fraction;
 		this.drawSelf();
-		ctx.globalAlpha = 1;
 		ctx.rotate(-this.getDrawFacing() * Math.PI/180);
 		ctx.translate(-this.drawX, -this.drawY);
 	}
+
 }
 
 Ship.prototype.animateSelfJumpOut = function(){
@@ -1377,7 +1378,6 @@ Ship.prototype.animateSelfJumpOut = function(){
 
 	var fraction = 1-this.deployAnim[0] / this.deployAnim[1];
 	var sin = Math.sin(Math.PI*fraction);
-
 	var s = 200*sin;
 
 	//console.log(fraction)
@@ -3385,7 +3385,7 @@ Ship.prototype.hasNoFireOrders = function(){
 	return true;
 }
 
-Ship.prototype.getResolvingFireOrders = function(){
+Ship.prototype.getAllResolvingFireOrders = function(){
 	var fires = [];
 
 	for (var j = 0; j < this.structures.length; j++){

@@ -64,7 +64,6 @@ class Area extends Weapon {
 		return $newFires;
 	}
 
-
 	public function doDamage($fire, $roll, $system){
 		parent::doDamage($fire, $roll, $system);
 	}
@@ -74,13 +73,13 @@ class Area extends Weapon {
 class EnergyMine extends Area {
 	public $name = "EnergyMine";
 	public $display = "EnergyMine";
-	public $minDmg = 20;
-	public $maxDmg = 28;
-	public $accDecay = 160;
+	public $minDmg = 10;
+	public $maxDmg = 50;
+	public $accDecay = 100;
 	public $shots = 1;
 	public $animColor = "blue";
 	public $projSize = 4;
-	public $projSpeed = 4;
+	public $projSpeed = 14;
 	public $reload = 1;
 	public $mass = 14;
 	public $powerReq = 4;
@@ -88,10 +87,24 @@ class EnergyMine extends Area {
 	public $dmgLoss = 50;
 	public $maxRange = 700;
 	public $aoe = 50;
-	public $notes = array("Shot deviates pending distance", "Area of Effect");
+	public $notes = array("Point of impact deivates", "Area of Effect", "Damage: 15/30/15/10");
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	}
+
+	public function getBaseDamage($fire){
+		if ($fire->target->ship){
+			return 25;
+		} else if ($fire->target->squad){
+			return 50;
+		} else if ($fire->target->flight){
+			return 15;			
+		} else if ($fire->target->salvo){
+			return 10;			
+		}
+
+		return mt_rand($this->getMinDamage(), $this->getMaxDamage());
 	}
 }
 

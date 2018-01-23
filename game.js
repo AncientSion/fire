@@ -1589,7 +1589,6 @@ function Game(data, userid){
 	}
 
 	this.animateJumpOut = function(){
-		this.animating = 1;
 		anim = window.requestAnimationFrame(game.animateJumpOut.bind(this));
 		window.now = Date.now();		
 		window.elapsed = window.now - window.then;
@@ -1652,7 +1651,7 @@ function Game(data, userid){
 	this.resolvePostMoveFire = function(){
 		console.log("resolvePostMoveFire");
 		this.resetImageData();
-		this.getResolvingFireOrders();
+		this.getAllResolvingFireOrders();
 		this.getAreaShotDetails();
 		this.getFireAnimationDetails();
 		this.getUnitExplosionDetails();
@@ -1680,7 +1679,7 @@ function Game(data, userid){
 	this.resolveFire = function(){
 		console.log("resolveFire");
 		this.resetImageData();
-		this.getResolvingFireOrders();
+		this.getAllResolvingFireOrders();
 		this.getShotDetails();
 		this.getFireAnimationDetails();
 		this.getUnitExplosionDetails();
@@ -1709,17 +1708,17 @@ function Game(data, userid){
 		}
 	}
 
-	this.getResolvingFireOrders = function(){
+	this.getAllResolvingFireOrders = function(){
 		this.fireOrders = [];
 		for (var i = 0; i < this.ships.length; i++){
-			var fires = this.ships[i].getResolvingFireOrders();
-			if (fires.length){this.fireOrders = this.fireOrders.concat(fires);}	
+			var fires = this.ships[i].getAllResolvingFireOrders();
+			this.fireOrders = this.fireOrders.concat(fires);
 		}
 	}
 
 	this.getAreaShotDetails = function(){
 		for (var i = 0; i < this.fireOrders.length; i++){
-			this.fireOrders[i].target = game.getUnit(this.fireOrders[i].targetid);
+			this.fireOrders[i].target = {name: "", id: ""};
 			this.fireOrders[i].shooter = game.getUnit(this.fireOrders[i].shooterid);
 			this.fireOrders[i].weapon = this.fireOrders[i].shooter.getSystem(this.fireOrders[i].weaponid).getActiveSystem();
 			this.fireOrders[i].damages = this.getAreaDmgs(this.fireOrders[i]);
@@ -1733,14 +1732,22 @@ function Game(data, userid){
 	this.getAreaDmgs = function(fire){
 		var impact = {x: fire.rolls[0], y: fire.rolls[1]};
 		var dmgs = [];
+		var hits = fire.hits.concat();
+		for (var i = 0; i < fire.hits.length; i++){fire.hits[i] = 20;}
 		for (var i = 0; i < this.ships.length; i++){
 			var unitPos = this.ships[i].getPlannedPos();
 			var dist = getDistance(impact, unitPos);
+			var color = this.ships[i].getCodeColor();
 
 			if (dist < fire.weapon.aoe){
-				dmgs = dmgs.concat(this.ships[i].getDmgByFire(fire));
+				var subDmgs = this.ships[i].getDmgByFire(fire);
+				for (var j = 0; j < subDmgs.length; j++){
+					subDmgs[j].system = "<font color='" + color + "'>" +this.ships[i].display + " #" + this.ships[i].id + "</font>  /  " + subDmgs[j].system;
+				}
+				dmgs = dmgs.concat(subDmgs);
 			}
 		}
+		fire.hits = hits;
 		return dmgs;
 	}
 
@@ -2143,214 +2150,7 @@ function Game(data, userid){
 	}
 
 	this.createCombatLogEntry = function(i){
-		var log = $($("#combatLog").find("tbody")[0]);
-		var fire = this.fireOrders[i];
-		var shots = 0;
-		var hits = 0;
-		var armour = 0;
-		var system = 0;
-		var struct = 0;
-		var req = fire.req.slice();
-			req.sort(function(a, b){return a-b});
-		var chance = req[0];
-
-		if (req.length > 1 && req[0] != req[req.length-1]){
-			chance = req[0] + " - " + req[req.length-1] + " %";
-		} else chance += " %";
-		
-		if (fire.shooter.salvo){
-			shots = fire.shooter.getShots();
-			hits = fire.hits.reduce((a, b) => a+b, 0);
-		}
-		else {
-			for (var i = 0; i < fire.guns; i++){
-				shots += fire.weapon.getShots();
-				hits += fire.hits[i];
-			}
-		}
-
-		for (var i = 0; i < fire.damages.length; i++){
-			armour += fire.damages[i].armourDmg;
-			system += fire.damages[i].structDmg;
-			struct += fire.damages[i].overkill;
-		}
-
-		var shooterClass = "red";
-		var targetClass = "green";
-
-		if (fire.shooter.friendly){
-			shooterClass = "green";
-			targetClass = "red";
-		}
-		var tr = document.createElement("tr");
-		var index = $(log).children().length;
-
-		$(tr)
-			.data("shooterid", fire.shooter.id)
-			.data("targetid", fire.target.id)
-			.data("fireid", fire.id)
-			.data("row", index)
-			//.data("hasDetails", 0)
-			.data("expanded", 0)
-			.contextmenu(function(){
-				for (var i = 0; i < game.fireOrders.length; i++){
-					if (game.fireOrders[i].id == $(this).data("fireid")){
-						game.fireOrders[i].animating = 0;
-						break;
-					}
-				}
-
-				game.redraw();
-				game.fireOrders[i].anim = game.fireOrders[i].weapon.getAnimation(game.fireOrders[i]);
-				$(fxCanvas).css("opacity", 1);
-				game.animateSingleFireOrder(i, 0)
-			})
-			.hover(function(){
-				var data = $(this).data();
-				game.getUnit(data.shooterid).doHighlight();
-				game.getUnit(data.targetid).doHighlight();
-			})
-			.click(function(){
-				//if ($(this).data("hasDetails")){
-					var startRow = $(this).data("start");
-					var endRow = $(this).data("end");
-					var rows = $("#combatLog").find("tbody").children();
-
-					if ($(this).data("expanded") == 1){
-						$(this).data("expanded", 0).removeClass("selected");
-						for (var i = startRow; i <= endRow; i++){
-							$(rows[i]).hide().removeClass("selected");
-						}
-					}
-					else {
-						$(this).data("expanded", 1).addClass("selected");
-						for (var i = startRow; i <= endRow; i++){
-							$(rows[i]).show().addClass("selected");
-						}
-					}	
-
-					//$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
-
-				//}
-			})
-			.append($("<td>").html(fire.type))
-			.append($("<td>").html("<span class='bold " + shooterClass + "'>" + fire.shooter.name + " #" + fire.shooter.id + "</span>"))
-			.append($("<td>").html("<span class='bold " + targetClass + "'>" + fire.target.name + " #" + fire.target.id + "</span>"))
-			.append($("<td>").html(fire.weapon.getDisplay()))
-			.append($("<td>").html(chance))
-			.append($("<td>").html(hits + " / " + shots))
-		//eturn;
-
-		if (!hits){
-			$(tr)
-				.append($("<td>").html(""))
-				.append($("<td>").html(""))
-				.append($("<td>").html(""))
-		}
-		else {
-			$(tr)
-				.append($("<td>").html(armour))
-				.append($("<td>").html(system ? system : ""))
-				.append($("<td>").html(struct))
-		}
-
-		$(log).append(tr);
-
-		//if (hits){
-			var dmgs = {};
-			var start = index+1;
-			var depth = -1;
-
-			for (var i = 0; i < fire.damages.length; i++){
-				if (dmgs.hasOwnProperty(fire.damages[i].system)){ // hit
-					dmgs[fire.damages[i].system][2]++
-				}
-				else {
-					depth++;
-					dmgs[fire.damages[i].system] = [0, 0, 1, 0, 0, 0]; // new system entry
-				}
-				if (fire.damages[i].destroyed){ // kill
-					dmgs[fire.damages[i].system][0]++;
-				}
-				if (fire.damages[i].notes[fire.damages[i].notes.length-1][0] == "o"){ //%
-					dmgs[fire.damages[i].system][1] += Math.floor(fire.damages[i].notes[fire.damages[i].notes.length-1].slice(1, fire.damages[i].notes[fire.damages[i].notes.length-1].len));
-				}
-
-				dmgs[fire.damages[i].system][3] += fire.damages[i].armourDmg
-				dmgs[fire.damages[i].system][4] += fire.damages[i].structDmg
-				dmgs[fire.damages[i].system][5] += fire.damages[i].overkill
-			}
-
-			for (var i in dmgs){
-				dmgs[i][0] = dmgs[i][0] ? "Kills: "  + dmgs[i][0] : "" 
-				dmgs[i][1] = dmgs[i][1] ? "Overl.: "  + dmgs[i][1] : "" 
-			}
-
-			//var rolls =  fire.rolls.slice().sort(function(a, b){return a > b || a == b || a < b;});
-			let rolls = fire.rolls.slice().sort((a, b) => a-b);
-			var rollString = "";
-			for (var i = 0; i < rolls.length; i++){
-				if (rolls[i] <= req[i]){
-					rollString += "<u>" + rolls[i] + "</u>";
-				} else rollString += rolls[i];
-
-				rollString += " / ";
-			}
-
-			$(log).append(
-					$("<tr>")
-					.hide()
-					.append($("<td>")
-					)
-					.append($("<td>")
-						.html("Rolls:")
-					)
-					.append($("<td>")
-						.attr("colSpan", 2)
-						.css("textAlign", "left")
-						.html(rollString.slice(0, rollString.length-3))
-					)
-					.append($("<td>")
-						.attr("colSpan", 5)
-					)
-				)
-			depth++;
-
-			//dmg Details
-			$(tr)
-				.data("hasDetails", 1)
-				.data("expanded", 0)
-				.data("start", start)
-				.data("end", start + depth)
-
-			for (var i in dmgs){
-				start++;
-				var sub = $("<tr>")
-					.hide()
-					.data("row", start)
-					.append($("<td>")
-					)
-					//.append($("<td>")
-					//	.html("Hitting:")
-					//)
-					.append($("<td>")
-						.attr("colSpan", 2)
-						.html(i) // system name
-					)
-
-				for (var j = 0; j < dmgs[i].length; j++){
-					//if (dmgs[i][1]){console.log(dmgs[i][0]);}
-					$(sub) 
-					.append($("<td>")
-						.html(dmgs[i][j])
-					)
-				}
-
-				$(log).append(sub);
-			}
-		//}
-
-		$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+		this.fireOrders[i].weapon.createCombatLogEntry(this.fireOrders[i]);
 	}
 
 	this.initDeploymentWrapper = function(){
@@ -2990,13 +2790,12 @@ Game.prototype.resolveDeployment = function(){
 		window.startTime = then;
 		cam.setZoom(0.7);
 		this.animating = 1;
-		this.animateDeployment();
+		this.animateJumpIn();
 	}
 }
 
-Game.prototype.animateDeployment = function(){
-	this.animating = 1;
-	anim = window.requestAnimationFrame(game.animateDeployment.bind(this));
+Game.prototype.animateJumpIn = function(){
+	anim = window.requestAnimationFrame(game.animateJumpIn.bind(this));
 	window.now = Date.now();		
 	window.elapsed = window.now - window.then;
 
@@ -3012,24 +2811,24 @@ Game.prototype.animateDeployment = function(){
 		ctx.scale(cam.z, cam.z);
 
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].deployed){
-				this.ships[i].draw();
+			if (this.ships[i].deployAnim[1]){
+				if (this.ships[i].deployed){
+					this.ships[i].draw();
+				}
+				else if (!doing){
+					doing = 1; done = 0;
+					this.ships[i].animateSelfJumpIn();
+				} else continue;
 			}
-			else if (doing){
-				continue;
-			}		
-			else if (!this.ships[i].deployed){
-				this.ships[i].animateSelfJumpIn();
-				doing = 1;
-				done = 0;
-			}
+			else this.ships[i].draw();
 		}
 
 		ctx.setTransform(1,0,0,1,0,0);
 
 		if (done){
 			window.cancelAnimationFrame(anim);
-			this.deployDone()
+			game.animating = 0;
+			this.deployDone();
 		}
 	}
 }
@@ -3078,14 +2877,14 @@ Game.prototype.resolveUnitMovement = function(){
 	this.animShip = 1;
 	this.animFlight = 0;
 	this.animSalvo = 0;
-
+	/*
 	$("#combatlogWrapper")
 	.width(350)
 	.css("top", 75).css("left", 250)
 	.show()
 	.find(".combatLogHeader").html("Movement Log").end()
 	.find("#combatLog").children().children().remove();
-
+*/
 	this.setUnitMovementFocus();
 	this.setUnitMovementDetails();
 	this.animateUnitMovement();

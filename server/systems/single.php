@@ -23,7 +23,7 @@ class Single {
 	public $start = 0;
 	public $end = 360;
 	public $damaged = 0;
-	
+	public $traverse = 0;
 	public $index = 0;
 
 	function __construct($id, $parentId){

@@ -47,6 +47,7 @@ System.prototype.getDisplay = function(){
 }
 
 System.prototype.getResolvingFireOrders = function(){
+	if (game.phase != 3){return false;}
 	for (var i = this.fireOrders.length-1; i >= 0; i--){
 		if (this.fireOrders[i].turn == game.turn){
 			for (var j = 0; j < this.fireOrders[i].req.length; j++){
@@ -1561,6 +1562,217 @@ function Weapon(system){
 }
 Weapon.prototype = Object.create(System.prototype);
 
+Weapon.prototype.createCombatLogEntry = function(fire){
+	var log = $($("#combatLog").find("tbody")[0]);
+	var shots = 0;
+	var hits = 0;
+	var armour = 0;
+	var system = 0;
+	var struct = 0;
+	var req = fire.req.slice();
+		req.sort(function(a, b){return a-b});
+	var chance = req[0];
+
+	if (req.length > 1 && req[0] != req[req.length-1]){
+		chance = req[0] + " - " + req[req.length-1] + " %";
+	} else chance += " %";
+	
+	if (fire.shooter.salvo){
+		shots = fire.shooter.getShots();
+		hits = fire.hits.reduce((a, b) => a+b, 0);
+	}
+	else {
+		for (var i = 0; i < fire.guns; i++){
+			shots += fire.weapon.getShots();
+			hits += fire.hits[i];
+		}
+	}
+
+	for (var i = 0; i < fire.damages.length; i++){
+		armour += fire.damages[i].armourDmg;
+		system += fire.damages[i].structDmg;
+		struct += fire.damages[i].overkill;
+	}
+
+	var shooterClass = "red";
+	var targetClass = "green";
+
+	if (fire.shooter.friendly){
+		shooterClass = "green";
+		targetClass = "red";
+	}
+	var tr = document.createElement("tr");
+	var index = $(log).children().length;
+
+	$(tr)
+		.data("shooterid", fire.shooter.id)
+		.data("targetid", fire.target.id)
+		.data("fireid", fire.id)
+		.data("row", index)
+		//.data("hasDetails", 0)
+		.data("expanded", 0)
+		.contextmenu(function(){
+			for (var i = 0; i < game.fireOrders.length; i++){
+				if (game.fireOrders[i].id == $(this).data("fireid")){
+					game.fireOrders[i].animating = 0;
+					break;
+				}
+			}
+
+			game.redraw();
+			game.fireOrders[i].anim = game.fireOrders[i].weapon.getAnimation(game.fireOrders[i]);
+			$(fxCanvas).css("opacity", 1);
+			game.animateSingleFireOrder(i, 0)
+		})
+		.hover(function(){
+			var data = $(this).data();
+			if (data.targetid == ""){return;}
+			game.getUnit(data.shooterid).doHighlight();
+			game.getUnit(data.targetid).doHighlight();
+		})
+		.click(function(){
+			//if ($(this).data("hasDetails")){
+				var startRow = $(this).data("start");
+				var endRow = $(this).data("end");
+				var rows = $("#combatLog").find("tbody").children();
+
+				if ($(this).data("expanded") == 1){
+					$(this).data("expanded", 0).removeClass("selected");
+					for (var i = startRow; i <= endRow; i++){
+						$(rows[i]).hide().removeClass("selected");
+					}
+				}
+				else {
+					$(this).data("expanded", 1).addClass("selected");
+					for (var i = startRow; i <= endRow; i++){
+						$(rows[i]).show().addClass("selected");
+					}
+				}	
+
+				//$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+
+			//}
+		})
+		.append($("<td>").html(fire.type))
+		.append($("<td>").html("<span class='bold " + shooterClass + "'>" + fire.shooter.name + " #" + fire.shooter.id + "</span>"))
+		.append($("<td>").html("<span class='bold " + targetClass + "'>" + fire.target.name + " #" + fire.target.id + "</span>"))
+		.append($("<td>").html(fire.weapon.getDisplay()))
+		.append($("<td>").html(chance))
+		.append($("<td>").html(hits + " / " + shots))
+	//eturn;
+
+	if (!hits){
+		$(tr)
+			.append($("<td>").html(""))
+			.append($("<td>").html(""))
+			.append($("<td>").html(""))
+	}
+	else {
+		$(tr)
+			.append($("<td>").html(armour))
+			.append($("<td>").html(system ? system : ""))
+			.append($("<td>").html(struct))
+	}
+
+	$(log).append(tr);
+
+	//if (hits){
+		var dmgs = {};
+		var start = index+1;
+		var depth = -1;
+
+		for (var i = 0; i < fire.damages.length; i++){
+			if (dmgs.hasOwnProperty(fire.damages[i].system)){ // hit
+				dmgs[fire.damages[i].system][2]++
+			}
+			else {
+				depth++;
+				dmgs[fire.damages[i].system] = [0, 0, 1, 0, 0, 0]; // new system entry
+			}
+			if (fire.damages[i].destroyed){ // kill
+				dmgs[fire.damages[i].system][0]++;
+			}
+			if (fire.damages[i].notes[fire.damages[i].notes.length-1][0] == "o"){ //%
+				dmgs[fire.damages[i].system][1] += Math.floor(fire.damages[i].notes[fire.damages[i].notes.length-1].slice(1, fire.damages[i].notes[fire.damages[i].notes.length-1].len));
+			}
+
+			dmgs[fire.damages[i].system][3] += fire.damages[i].armourDmg
+			dmgs[fire.damages[i].system][4] += fire.damages[i].structDmg
+			dmgs[fire.damages[i].system][5] += fire.damages[i].overkill
+		}
+
+		for (var i in dmgs){
+			dmgs[i][0] = dmgs[i][0] ? "Kills: "  + dmgs[i][0] : "" 
+			dmgs[i][1] = dmgs[i][1] ? "Overl.: "  + dmgs[i][1] : "" 
+		}
+
+		//var rolls =  fire.rolls.slice().sort(function(a, b){return a > b || a == b || a < b;});
+		let rolls = fire.rolls.slice().sort((a, b) => a-b);
+		var rollString = "";
+		for (var i = 0; i < rolls.length; i++){
+			if (rolls[i] <= req[i]){
+				rollString += "<u>" + rolls[i] + "</u>";
+			} else rollString += rolls[i];
+
+			rollString += " / ";
+		}
+
+		$(log).append(
+				$("<tr>")
+				.hide()
+				.append($("<td>")
+				)
+				.append($("<td>")
+					.html("Rolls:")
+				)
+				.append($("<td>")
+					.attr("colSpan", 2)
+					.css("textAlign", "left")
+					.html(rollString.slice(0, rollString.length-3))
+				)
+				.append($("<td>")
+					.attr("colSpan", 5)
+				)
+			)
+		depth++;
+
+		//dmg Details
+		$(tr)
+			.data("hasDetails", 1)
+			.data("expanded", 0)
+			.data("start", start)
+			.data("end", start + depth)
+
+		for (var i in dmgs){
+			start++;
+			var sub = $("<tr>")
+				.hide()
+				.data("row", start)
+				.append($("<td>")
+				)
+				//.append($("<td>")
+				//	.html("Hitting:")
+				//)
+				.append($("<td>")
+					.attr("colSpan", 2)
+					.html(i) // system name
+				)
+
+			for (var j = 0; j < dmgs[i].length; j++){
+				//if (dmgs[i][1]){console.log(dmgs[i][0]);}
+				$(sub) 
+				.append($("<td>")
+					.html(dmgs[i][j])
+				)
+			}
+
+			$(log).append(sub);
+		}
+	//}
+
+	$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+}
+
 Weapon.prototype.getDmgsPerShot = function(fire){
 	return 1;
 }
@@ -3069,6 +3281,177 @@ function Area(system){
 
 Area.prototype = Object.create(Particle.prototype);
 
+
+Area.prototype.createCombatLogEntry = function(fire){
+	var log = $($("#combatLog").find("tbody")[0]);
+	var shots = 0;
+	var hits = 0;
+	var armour = 0;
+	var system = 0;
+	var struct = 0;
+	var req = fire.req.slice();
+		req.sort(function(a, b){return a-b});
+	var chance = "";
+	
+	if (fire.shooter.salvo){
+		shots = fire.shooter.getShots();
+		hits = fire.hits.reduce((a, b) => a+b, 0);
+	}
+	else {
+		for (var i = 0; i < fire.guns; i++){
+			shots += fire.weapon.getShots();
+			hits += fire.hits[i];
+		}
+	}
+
+	for (var i = 0; i < fire.damages.length; i++){
+		armour += fire.damages[i].armourDmg;
+		system += fire.damages[i].structDmg;
+		struct += fire.damages[i].overkill;
+	}
+
+	var shooterClass = "red";
+	var targetClass = "green";
+
+	if (fire.shooter.friendly){
+		shooterClass = "green";
+		targetClass = "red";
+	}
+	var tr = document.createElement("tr");
+	var index = $(log).children().length;
+
+	$(tr)
+		.data("shooterid", fire.shooter.id)
+		.data("fireid", fire.id)
+		.data("row", index)
+		//.data("hasDetails", 0)
+		.data("expanded", 0)
+		.contextmenu(function(){
+			for (var i = 0; i < game.fireOrders.length; i++){
+				if (game.fireOrders[i].id == $(this).data("fireid")){
+					game.fireOrders[i].animating = 0;
+					break;
+				}
+			}
+
+			game.redraw();
+			game.fireOrders[i].anim = game.fireOrders[i].weapon.getAnimation(game.fireOrders[i]);
+			$(fxCanvas).css("opacity", 1);
+			game.animateSingleFireOrder(i, 0)
+		})
+		.click(function(){
+				var startRow = $(this).data("start");
+				var endRow = $(this).data("end");
+				var rows = $("#combatLog").find("tbody").children();
+
+				if ($(this).data("expanded") == 1){
+					$(this).data("expanded", 0).removeClass("selected");
+					for (var i = startRow; i <= endRow; i++){
+						$(rows[i]).hide().removeClass("selected");
+					}
+				}
+				else {
+					$(this).data("expanded", 1).addClass("selected");
+					for (var i = startRow; i <= endRow; i++){
+						$(rows[i]).show().addClass("selected");
+					}
+				}	
+		})
+		.append($("<td>").html(fire.type))
+		.append($("<td>").html("<span class='bold " + shooterClass + "'>" + fire.shooter.name + " #" + fire.shooter.id + "</span>"))
+		.append($("<td>").html(""))
+		.append($("<td>").html(fire.weapon.getDisplay()))
+		.append($("<td>").html(chance))
+		.append($("<td>").html(hits + " / " + shots))
+	//eturn;
+
+	if (!hits){
+		$(tr)
+			.append($("<td>").html(""))
+			.append($("<td>").html(""))
+			.append($("<td>").html(""))
+	}
+	else {
+		$(tr)
+			.append($("<td>").html(armour))
+			.append($("<td>").html(system ? system : ""))
+			.append($("<td>").html(struct))
+	}
+
+	$(log).append(tr);
+
+	var dmgs = {};
+	var start = index+1;
+	var depth = -1;
+
+	for (var i = 0; i < fire.damages.length; i++){
+		if (dmgs.hasOwnProperty(fire.damages[i].system)){ // hit
+			dmgs[fire.damages[i].system][2]++
+		}
+		else {
+			depth++;
+			dmgs[fire.damages[i].system] = [0, 0, 1, 0, 0, 0]; // new system entry
+		}
+		if (fire.damages[i].destroyed){ // kill
+			dmgs[fire.damages[i].system][0]++;
+		}
+		if (fire.damages[i].notes[fire.damages[i].notes.length-1][0] == "o"){ //%
+			dmgs[fire.damages[i].system][1] += Math.floor(fire.damages[i].notes[fire.damages[i].notes.length-1].slice(1, fire.damages[i].notes[fire.damages[i].notes.length-1].len));
+		}
+
+		dmgs[fire.damages[i].system][3] += fire.damages[i].armourDmg
+		dmgs[fire.damages[i].system][4] += fire.damages[i].structDmg
+		dmgs[fire.damages[i].system][5] += fire.damages[i].overkill
+	}
+
+	for (var i in dmgs){
+		dmgs[i][0] = dmgs[i][0] ? "Kills: "  + dmgs[i][0] : "" 
+		dmgs[i][1] = dmgs[i][1] ? "Overl.: "  + dmgs[i][1] : "" 
+	}
+
+	let rolls = fire.rolls.slice().sort((a, b) => a-b);
+	var rollString = "";
+	for (var i = 0; i < rolls.length; i++){
+		if (rolls[i] <= req[i]){
+			rollString += "<u>" + rolls[i] + "</u>";
+		} else rollString += rolls[i];
+
+		rollString += " / ";
+	}
+
+	//dmg Details
+	$(tr)
+		.data("hasDetails", 1)
+		.data("expanded", 0)
+		.data("start", start)
+		.data("end", start + depth)
+
+	for (var i in dmgs){
+		start++;
+		var sub = $("<tr>")
+			.hide()
+			.data("row", start)
+			.append($("<td>")
+			)
+			.append($("<td>")
+				.attr("colSpan", 2)
+				.html(i) // system name
+			)
+
+		for (var j = 0; j < dmgs[i].length; j++){
+			//if (dmgs[i][1]){console.log(dmgs[i][0]);}
+			$(sub) 
+			.append($("<td>")
+				.html(dmgs[i][j])
+			)
+		}
+
+		$(log).append(sub);
+	}
+
+	$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+}
+
 Area.prototype.setMount = function(amount){
 	if (game.getUnit(aUnit) instanceof Flight){this.negation = 0;}
 
@@ -3105,10 +3488,8 @@ Area.prototype.getAnimation = function(fire){
 	
 	for (var j = 0; j < fire.guns; j++){
 		var gunAnims = [];
-		var o = fire.shooter.getWeaponOrigin(fire.systems[j]);
-
-		var ox = fire.shooter.drawX + o.x;
-		var oy = fire.shooter.drawY + o.y;
+		var ox = fire.shooter.x;
+		var oy = fire.shooter.y;
 
 		for (var k = 0; k < this.shots; k++){
 			var hit = 0;
@@ -3190,7 +3571,7 @@ Area.prototype.handleAimEvent = function(o, t){
 	salvoCtx.stroke();
 
 	salvoCtx.beginPath();
-	salvoCtx.arc(0, 0, Math.max(this.aoe, dist/100*this.accDecay), 0, 2*Math.PI, false);
+	salvoCtx.arc(0, 0, dist/100*this.accDecay, 0, 2*Math.PI, false);
 	salvoCtx.closePath();
 	salvoCtx.fillStyle = "white";
 	salvoCtx.globalAlpha = 0.2;
@@ -3206,7 +3587,8 @@ Area.prototype.handleAimEvent = function(o, t){
 	//salvoCtx.fill();
 
 	salvoCtx.strokeStyle = "red";
-	salvoCtx.lineWidth = 5;
+	salvoCtx.globalAlpha = 0.5;
+	salvoCtx.lineWidth = 3;
 	salvoCtx.stroke();
 	salvoCtx.lineWidth = 1;
 
@@ -3237,13 +3619,13 @@ Area.prototype.highlightEvent = function(){
 	salvoCtx.stroke();
 
 	salvoCtx.beginPath();
-	salvoCtx.arc(0, 0, Math.max(this.aoe, dist/100*this.accDecay), 0, 2*Math.PI, false);
+	salvoCtx.arc(0, 0, dist/100*this.accDecay, 0, 2*Math.PI, false);
 	salvoCtx.closePath();
 	salvoCtx.fillStyle = "white";
 	salvoCtx.globalAlpha = 0.2;
 	salvoCtx.fill();
 
-	salvoCtx.globalAlpha = 0.4;
+	salvoCtx.globalAlpha = 0.5;
 	salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height);
 
 	if (game.phase == 2){
@@ -3280,7 +3662,7 @@ Area.prototype.initEvent = function(){
 	//ctx.fillStyle = this.getEffectFillStyle(0, 0, dist);
 
 	ctx.strokeStyle = "red";
-	ctx.lineWidth = 5;
+	ctx.lineWidth = 3;
 	ctx.stroke();
 	ctx.lineWidth = 1;
 
@@ -3362,6 +3744,7 @@ Area.prototype.drawSystemArc = function(facing, rolled, pos){
 }
 
 Area.prototype.getResolvingFireOrders = function(){
+	if (game.phase != 2){return false;}
 	for (var i = this.fireOrders.length-1; i >= 0; i--){
 		if (this.fireOrders[i].turn == game.turn){
 			return this.fireOrders[i];
