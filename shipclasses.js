@@ -414,10 +414,10 @@ Ship.prototype.drawSystemArcIndicator = function(){
 	var shipPos = this.getGamePos();
 	var angle = this.getPlannedFacing();
 
-	var p1 = getPointInDirection(80, 90+angle, shipPos.x, shipPos.y);
-	var p2 = getPointInDirection(-80, 90+angle, shipPos.x, shipPos.y);
-	var p3 = getPointInDirection(80, 180+angle, shipPos.x, shipPos.y);
-	var p4 = getPointInDirection(-80, 180+angle, shipPos.x, shipPos.y);
+	var p1 = getPointInDir(80, 90+angle, shipPos.x, shipPos.y);
+	var p2 = getPointInDir(-80, 90+angle, shipPos.x, shipPos.y);
+	var p3 = getPointInDir(80, 180+angle, shipPos.x, shipPos.y);
+	var p4 = getPointInDir(-80, 180+angle, shipPos.x, shipPos.y);
 
 	moveCtx.beginPath();
 	moveCtx.moveTo(p1.x, p1.y);
@@ -458,10 +458,10 @@ Ship.prototype.drawImpulseUI = function(){
 
 	var facing = this.getDrawFacing();
 	var center = {x: this.drawX, y: this.drawY};
-	var p1 = getPointInDirection(this.size/2 + 10 + 15, facing + 180, center.x, center.y);
+	var p1 = getPointInDir(this.size/2 + 10 + 15, facing + 180, center.x, center.y);
 
 	if (this.canRoll()){
-		var roll = getPointInDirection(50, facing -180, p1.x, p1.y);
+		var roll = getPointInDir(50, facing -180, p1.x, p1.y);
 		var ox = roll.x * cam.z + cam.o.x - 15;
 		var oy = roll.y * cam.z + cam.o.y - 15;
 		$("#roll").css("left", ox).css("top", oy).removeClass("disabled");
@@ -474,14 +474,14 @@ Ship.prototype.drawImpulseUI = function(){
 	} else $("#doUndoLastAction").addClass("disabled");
 
 	if (this.canIncreaseImpulse()){
-		var pPlus = getPointInDirection(50, facing +90, p1.x, p1.y);
+		var pPlus = getPointInDir(50, facing +90, p1.x, p1.y);
 		var ox = pPlus.x * cam.z + cam.o.x - 15;
 		var oy = pPlus.y * cam.z + cam.o.y - 15;
 		$("#plusImpulse").css("left", ox).css("top", oy).removeClass("disabled");
 	} else $("#plusImpulse").addClass("disabled");
 
 	if (this.canDecreaseImpulse()){
-		var mMinus = getPointInDirection(50, facing -90, p1.x, p1.y);
+		var mMinus = getPointInDir(50, facing -90, p1.x, p1.y);
 		var ox = mMinus.x * cam.z + cam.o.x - 15;
 		var oy = mMinus.y * cam.z + cam.o.y - 15;
 		$("#minusImpulse").css("left", ox).css("top", oy).removeClass("disabled");
@@ -611,14 +611,14 @@ Ship.prototype.doUndoLastAction = function(pos){
 
 Ship.prototype.moveInVector = function(dist){
 	var pos = this.getPlannedPos();
-	var goal = getPointInDirection(dist, this.getPlannedFacing(), pos.x, pos.y);
+	var goal = getPointInDir(dist, this.getPlannedFacing(), pos.x, pos.y);
 		this.issueMove(goal, dist);
 }
 
 Ship.prototype.moveToMaxVector = function(){
 	var pos = this.getPlannedPos();
 	var dist = this.getRemainingImpulse();
-	var goal = getPointInDirection(dist, this.getPlannedFacing(), pos.x, pos.y);
+	var goal = getPointInDir(dist, this.getPlannedFacing(), pos.x, pos.y);
 		this.issueMove(goal, dist);
 }
 
@@ -626,7 +626,7 @@ Ship.prototype.moveToMaxTurnVector = function(){
 	var pos = this.getPlannedPos();
 	var dist = this.getRemainingDelay();
 	var impulse = this.getRemainingImpulse();
-	var goal = getPointInDirection(dist, this.getPlannedFacing(), pos.x, pos.y);
+	var goal = getPointInDir(dist, this.getPlannedFacing(), pos.x, pos.y);
 	this.issueMove(goal, dist);
 }	
 
@@ -634,7 +634,7 @@ Ship.prototype.moveToMaCutVector = function(){
 	var pos = this.getPlannedPos();
 	var dist = this.getRemainingDelay();
 	var impulse = this.getRemainingImpulse();
-	var goal = getPointInDirection(dist, this.getPlannedFacing(), pos.x, pos.y);
+	var goal = getPointInDir(dist, this.getPlannedFacing(), pos.x, pos.y);
 	this.issueMove(goal, dist);
 }
 
@@ -1560,9 +1560,9 @@ Ship.prototype.getDmgByFire = function(fire){
 
 Ship.prototype.getSystemLocation = function(i){
 	if (i == -1){
-		return getPointInDirection(this.size/6, this.getDrawFacing()+range(0, 359), 0, 0);
+		return getPointInDir(this.size/6, this.getDrawFacing()+range(0, 359), 0, 0);
 	}
-	var p = getPointInDirection(this.size/4, getArcDir(this.structures[i]) + this.getDrawFacing(), 0, 0);
+	var p = getPointInDir(this.size/4, getArcDir(this.structures[i]) + this.getDrawFacing(), 0, 0);
 		p.x += range(-5, 5);
 		p.y += range(-5, 5);
 	return p;
@@ -1579,7 +1579,7 @@ Ship.prototype.getWeaponOrigin = function(id){
 	for (var i = 0; i < this.structures.length; i++){
 		if (i == this.structures.length-1 || id > this.structures[i].id && id < this.structures[i+1].id){
 			var devi = this.size / 6;
-			return getPointInDirection(this.size/3 + range (-devi, devi), (getArcDir(this.structures[i]) + this.getDrawFacing()), 0, 0);
+			return getPointInDir(this.size/3 + range (-devi, devi), (getArcDir(this.structures[i]) + this.getDrawFacing()), 0, 0);
 		}
 	}
 	console.log("lacking gun origin");
@@ -1621,6 +1621,16 @@ Ship.prototype.getRemainingImpulse = function(){
 }
 
 Ship.prototype.getFireDest = function(fire, isHit, num){
+	if (isHit){return fire.damages[num].loc;}
+	else {
+		var o = fire.shooter.getPlannedPos();
+		var t = this.getPlannedPos();
+		var a = getAngleFromTo(o, t) + range(-5, 5);
+		var d = this.size * (10-(range(-1, 1)*2))/10;
+		console.log(d);
+		return getPointInDir(d, a, 0, 0);
+	}
+
 	if (!isHit){
 		return {
 			x: ((this.size/2 + (range (0, this.size/6))) * (1-(range(0, 1)*2))),
@@ -1648,7 +1658,7 @@ Ship.prototype.drawMoveArea = function(){
 
 	var center = this.getPlannedPos();	
 	var rem = this.getRemainingImpulse();
-	var p1 = getPointInDirection(rem, this.moveAngles.start, center.x, center.y);
+	var p1 = getPointInDir(rem, this.moveAngles.start, center.x, center.y);
 	var dist = getDistance( {x: center.x, y: center.y}, p1);
 	var rad1 = degreeToRadian(this.moveAngles.start);
 	var rad2 = degreeToRadian(this.moveAngles.end);
@@ -1701,7 +1711,7 @@ Ship.prototype.drawMoveArea = function(){
 
 Ship.prototype.drawMoveArcs = function(center, rem){
 	for (var i in this.moveAngles){
-		var p = getPointInDirection(rem, this.moveAngles[i], center.x, center.y);
+		var p = getPointInDir(rem, this.moveAngles[i], center.x, center.y);
 		moveCtx.beginPath();
 		moveCtx.moveTo(center.x, center.y);
 		moveCtx.lineTo(p.x, p.y);
@@ -1810,7 +1820,7 @@ Ship.prototype.getWeaponPosition = function(){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			if (this.structures[i].systems[j].id == fire.weaponid){
 				var a = range(this.structures[i].start, this.structures[i].end);
-				return getPointInDirection(range(-size/3, size / 3), a, 0, 0);
+				return getPointInDir(range(-size/3, size / 3), a, 0, 0);
 			}
 		}
 	}
@@ -2222,7 +2232,7 @@ Ship.prototype.expandDiv = function(div){
 			else offsetX += 20;
 		}
 		
-		var pos = getPointInDirection(135 - offsetX, a-90, conWidth/2, conHeight/2-40);
+		var pos = getPointInDir(135 - offsetX, a-90, conWidth/2, conHeight/2-40);
 		var w = $(structDiv).width();
 		var h = $(structDiv).height();
 
@@ -2278,11 +2288,13 @@ Ship.prototype.expandDiv = function(div){
 	console.log($(structContainer).width());
 
 	// JUMP OUT
-	$(structContainer).append($("<div>").addClass("jumpOut")
+	if (game.turn > 1 && game.phase == 3){
+		$(structContainer).append($("<div>").addClass("jumpOut")
 		.append($("<img>")
 			.attr("src", "varIcons/redVortex.png")
 			.click(function(){game.getUnit($(this).parent().parent().parent().data("shipId")).requestJumpOut();
-			})))
+			})));
+	}
 	/*
 	var w = $(div).width();
 	var h = $(div).height();
@@ -2385,7 +2397,7 @@ Ship.prototype.doOffset = function(){
 		a = getAngleFromTo(o, this.getTarget().getPlannedPos());
 	} else a = range(0, 360);
 	
-	var p = getPointInDirection(Math.max(25, this.size/3), a, o.x, o.y);
+	var p = getPointInDir(Math.max(25, this.size/3), a, o.x, o.y);
 
 	this.drawX = p.x;
 	this.drawY = p.y;
@@ -2607,8 +2619,8 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 		//ctx.rotate(rota*(Math.PI/180));
 		for (var i = 0; i < friendly.length; i++){
 			var a = split*i + drawFacing;
-			var drawPos = getPointInDirection(size+tresh - fSize/2, a, 0, 0);
-			//var aPos = getPointInDirection(size/2+tresh - fSize/2, a, 0, 0);
+			var drawPos = getPointInDir(size+tresh - fSize/2, a, 0, 0);
+			//var aPos = getPointInDir(size/2+tresh - fSize/2, a, 0, 0);
 			//console.log(a); 
 			//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
 			friendly[i].layout = drawPos;
@@ -2653,8 +2665,8 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 
 		for (var i = 0; i < hostile.length; i++){
 			var a = split*i + drawFacing;
-			var drawPos = getPointInDirection(size+tresh - fSize/2, a, 0, 0);
-			//var aPos = getPointInDirection(size/2+tresh - fSize/2, a, 0, 0);
+			var drawPos = getPointInDir(size+tresh - fSize/2, a, 0, 0);
+			//var aPos = getPointInDir(size/2+tresh - fSize/2, a, 0, 0);
 			//console.log(a); 
 			//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
 			hostile[i].layout = drawPos;
@@ -3005,7 +3017,7 @@ Ship.prototype.drawTurnUI = function(){
 	var center = {x: this.x, y: this.y};
 	var angle = this.getDrawFacing();
 	var turnEle = $("#turnButton")[0];
-	var p1 = getPointInDirection(150/cam.z, addToDirection(angle, -90), center.x, center.y);
+	var p1 = getPointInDir(150/cam.z, addToDirection(angle, -90), center.x, center.y);
 	$(turnEle)
 		.removeClass("disabled")
 		.css("left", p1.x * cam.z + cam.o.x - $(turnEle).width()/2)
@@ -3224,7 +3236,7 @@ Ship.prototype.drawVectorMovementUI = function(){
 
 	if (rem > 0){
 		ele = document.getElementById("maxVector");
-		var p = getPointInDirection(rem + 90, angle, center.x, center.y);
+		var p = getPointInDir(rem + 90, angle, center.x, center.y);
 		var left = p.x * cam.z  + cam.o.x - $(ele).width()/2;
 		var top = p.y * cam.z  + cam.o.y - $(ele).height()/2;
 
@@ -3240,7 +3252,7 @@ Ship.prototype.drawVectorMovementUI = function(){
 
 	if (delay && rem >= delay){
 		ele = document.getElementById("maxTurnVector");
-		var p = getPointInDirection(rem + 60, angle, center.x, center.y);
+		var p = getPointInDir(rem + 60, angle, center.x, center.y);
 		var left = p.x  * cam.z  + cam.o.x - $(ele).width()/2;
 		var top = p.y * cam.z  + cam.o.y - $(ele).height()/2;
 
@@ -3257,7 +3269,7 @@ Ship.prototype.drawVectorMovementUI = function(){
 			delay = Math.ceil(delay/2);
 
 			ele = document.getElementById("maxCutVector");
-			var p = getPointInDirection(rem + 30, angle, center.x, center.y);
+			var p = getPointInDir(rem + 30, angle, center.x, center.y);
 			var left = p.x  * cam.z  + cam.o.x - $(ele).width()/2;
 			var top = p.y * cam.z  + cam.o.y - $(ele).height()/2;
 
@@ -3285,7 +3297,7 @@ Ship.prototype.canMaxCut = function(){
 Ship.prototype.drawVectorIndicator = function(){
 	var center = this.getPlannedPos();
 	var angle = this.getPlannedFacing();
-	var p = getPointInDirection(200, angle, center.x, center.y);
+	var p = getPointInDir(200, angle, center.x, center.y);
 	
 	moveCtx.beginPath();			
 	moveCtx.moveTo(center.x, center.y);
@@ -3330,7 +3342,7 @@ Ship.prototype.drawTurnArcs = function(){
 		for (var i = 1; i <= w; i++){			
 			var modAngle = turnAngle * i * j;
 			var newAngle = addToDirection(angle, modAngle);
-			var p = getPointInDirection(Math.max(this.getBaseImpulse(), this.getRemainingImpulse()*2), newAngle, center.x, center.y);
+			var p = getPointInDir(Math.max(this.getBaseImpulse(), this.getRemainingImpulse()*2), newAngle, center.x, center.y);
 			if (turnAngle != 180){
 				moveCtx.beginPath();
 				moveCtx.moveTo(center.x, center.y);

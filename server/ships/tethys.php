@@ -1,19 +1,19 @@
 <?php
 
-class Tethys extends Light {
+class Tethys extends SuperLight {
 	public $name = "Tethys";
 	public $display = "Tethys";
-	public $role = "Law Enforcement Unit";
+	public $role = "Police Cutter";
 	public $faction = "Earth Alliance";
-	public static $value =  240;
-	public $cost = 240;
+	public static $value =  250;
+	public $cost = 250;
 	public $mass = 1100;
 
-	public $integrity = 400;
-	public $ep = 100;
-	public $ew = 425;
+	public $integrity = 360;
+	public $ep = 110;
+	public $ew = 400;
 	public $power = 2;
-	public $negation = 12;
+	public $negation = 11;
 
 	public $effiency = 2;
 

@@ -52,8 +52,8 @@ class MediumRailGun extends Matter {
 class HeavyRailGun extends Matter {
 	public $name = "HeavyRailGun";
 	public $display = "203mm Rail Gun";
-	public $minDmg = 65;
-	public $maxDmg = 65;
+	public $minDmg = 64;
+	public $maxDmg = 64;
 	public $accDecay = 80;
 	public $shots = 2;
 	public $animColor = "grey";

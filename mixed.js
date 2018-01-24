@@ -82,7 +82,7 @@ Mixed.prototype.drawMovePlan = function(){
 
 	if (impulse < dist){ // does not reach
 		var a = getAngleFromTo(origin, tPos);
-		var step = getPointInDirection(impulse, a, origin.x, origin.y);
+		var step = getPointInDir(impulse, a, origin.x, origin.y);
 			color = "white";
 
 		planCtx.lineTo(step.x, step.y);
@@ -248,7 +248,7 @@ Mixed.prototype.setTarget = function(){
 		d = getDistance(p, this.finalStep);
 		if (d < i){
 			this.nextStep = this.finalStep;
-		} else this.nextStep = getPointInDirection(i, this.facing, p.x, p.y);
+		} else this.nextStep = getPointInDir(i, this.facing, p.x, p.y);
 	}
 	else {
 		if (this.mission.type == 2){
@@ -259,7 +259,7 @@ Mixed.prototype.setTarget = function(){
 				d = getDistance(p, this.finalStep);
 				if (d < i){
 					this.nextStep = this.finalStep;
-				} else this.nextStep = getPointInDirection(i, getAngleFromTo(p, this.finalStep), p.x, p.y);
+				} else this.nextStep = getPointInDir(i, getAngleFromTo(p, this.finalStep), p.x, p.y);
 			}
 			else if (target.flight){
 				if (target.mission.targetid == this.id){
@@ -270,9 +270,9 @@ Mixed.prototype.setTarget = function(){
 
 					d = getDistance(target.finalStep, this.finalStep);
 
-					this.nextStep = getPointInDirection(Math.min(d, i), this.facing, p.x, p.y);
+					this.nextStep = getPointInDir(Math.min(d, i), this.facing, p.x, p.y);
 					var tPos = target.getPlannedPos();
-					target.nextStep = getPointInDirection(Math.min(d, target.getCurrentImpulse()), target.facing, tPos.x, tPos.y);
+					target.nextStep = getPointInDir(Math.min(d, target.getCurrentImpulse()), target.facing, tPos.x, tPos.y);
 					return;
 				*/
 					this.finalStep = target.getPlannedPos();
@@ -280,7 +280,7 @@ Mixed.prototype.setTarget = function(){
 
 					d = getDistance(p, this.finalStep);
 
-					this.nextStep = getPointInDirection(Math.min(d, i), this.facing, p.x, p.y);
+					this.nextStep = getPointInDir(Math.min(d, i), this.facing, p.x, p.y);
 					return;
 				
 				}
@@ -293,7 +293,7 @@ Mixed.prototype.setTarget = function(){
 				d = getDistance(p, this.finalStep);
 				if (d < i){
 					this.nextStep = target.nextStep;
-				} else this.nextStep = getPointInDirection(i, getAngleFromTo(p, this.finalStep), p.x, p.y);
+				} else this.nextStep = getPointInDir(i, getAngleFromTo(p, this.finalStep), p.x, p.y);
 			}
 			else if (target.salvo){
 			}
@@ -480,8 +480,8 @@ Mixed.prototype.setBaseLayout = function(){
 	for (var i = 0; i < this.structures.length/3; i++){
 
 		var a = 360/Math.ceil(this.structures.length/3)*i;
-		//var o = getPointInDirection(0 + this.unitSize*15, a-90, 0, 0);
-		var o = getPointInDirection(reach, a, 0, 0);
+		//var o = getPointInDir(0 + this.unitSize*15, a-90, 0, 0);
+		var o = getPointInDir(reach, a, 0, 0);
 
 		for (var j = 0; j < Math.min(this.structures.length-i*3, 3); j++){
 			var ox = o.x;
@@ -500,7 +500,7 @@ Mixed.prototype.setBaseLayout = function(){
 
 Mixed.prototype.setPatrolLayout = function(){
 	for (var i = 0; i < this.structures.length; i++){
-		var p = getPointInDirection(range(0, this.size*1), range(0, 360), 0, 0);
+		var p = getPointInDir(range(0, this.size*1), range(0, 360), 0, 0);
 		this.structures[i].layout.x = p.x;
 		this.structures[i].layout.y = p.y;
 		//this.structures[i].layout.x = Math.round(range(-this.size/3, this.size/3));

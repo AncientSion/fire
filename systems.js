@@ -1008,8 +1008,8 @@ System.prototype.drawSystemArc = function(facing, rolled, pos){
 			end = this.arc[i][1];
 		}
 		
-		var p1 = getPointInDirection(game.arcRange, start+facing, pos.x, pos.y);
-		var p2 = getPointInDirection(game.arcRange, end+facing, pos.x, pos.y)
+		var p1 = getPointInDir(game.arcRange, start+facing, pos.x, pos.y);
+		var p2 = getPointInDir(game.arcRange, end+facing, pos.x, pos.y)
 		var dist = getDistance( {x: pos.x, y: pos.y}, p1);
 		var rad1 = degreeToRadian(start+facing);
 		var rad2 = degreeToRadian(end+facing);
@@ -1455,7 +1455,7 @@ Sensor.prototype.setTempEW = function(){
 			var start = addAngle(0 + w-facing, ew.angle);
 			var end = addAngle(360 - w-facing, ew.angle);
 			//console.log(start, end);
-			var p1 = getPointInDirection(str, start, loc.x, loc.y);
+			var p1 = getPointInDir(str, start, loc.x, loc.y);
 			var rad1 = degreeToRadian(start);
 			var rad2 = degreeToRadian(end);
 			ctx.beginPath();			
@@ -2185,7 +2185,7 @@ Warhead.prototype.getAnimation = function(fire){
 				hits++;
 			} else continue;
 
-			var traj = getPointInDirection(t.size/4, a, p.x, p.y);
+			var traj = getPointInDir(t.size/4, a, p.x, p.y);
 			var tx = traj.x + range(-t.size/8, t.size/8);
 			var ty = traj.y + range(-t.size/8, t.size/8);
 
@@ -2559,7 +2559,7 @@ Laser.prototype.getAnimation = function(fire){
 				ty = fire.target.drawY + range(-fire.target.size * 0.45, fire.target.size * 0.45);
 				a = getAngleFromTo( {x: tx, y: ty}, {x: fire.target.drawX, y: fire.target.drawY} );
 				a = addToDirection(a, range(-10, 10));
-				tb = getPointInDirection(fire.weapon.rakeTime/4, a, tx, ty); // BEAM swipe END on HIT	
+				tb = getPointInDir(fire.weapon.rakeTime/4, a, tx, ty); // BEAM swipe END on HIT	
 			}
 			*/
 			if (hit){ // shot hit
@@ -2568,7 +2568,7 @@ Laser.prototype.getAnimation = function(fire){
 				if (range(0, 1)){ // swipe outwards
 					tx = t.x + dest.x;
 					ty = t.y + dest.y;
-					tb = getPointInDirection(fire.target.size/4, range(0, 360), tx, ty);
+					tb = getPointInDir(fire.target.size/4, range(0, 360), tx, ty);
 				}
 				else { // sweipe inwards
 					tx = t.x + dest.x + (range(-20, 20));
@@ -2581,7 +2581,7 @@ Laser.prototype.getAnimation = function(fire){
 				ty = fire.target.drawY + range(-fire.target.size * 0.7, fire.target.size * 0.7);
 				a = getAngleFromTo( {x: tx, y: ty}, {x: fire.target.drawX, y: fire.target.drawY} );
 				a = addToDirection(a, range(-40, 40));
-				tb = getPointInDirection(fire.weapon.rakeTime/3, a, tx, ty); // BEAM swipe END on MISS	
+				tb = getPointInDir(fire.weapon.rakeTime/3, a, tx, ty); // BEAM swipe END on MISS	
 			}
 
 			var shotAnim = new BeamVector(
@@ -3543,7 +3543,7 @@ Area.prototype.highlightEvent = function(){
 	var t = this.fireOrders[this.fireOrders.length-1];
 	var dist = getDistance(o, t);
 	if (game.phase != 2 && !o.friendly){
-		t = getPointInDirection(this.maxRange, getAngleFromTo(o, t), o.x, o.y);
+		t = getPointInDir(this.maxRange, getAngleFromTo(o, t), o.x, o.y);
 	}
 
 	salvoCtx.translate(cam.o.x, cam.o.y);

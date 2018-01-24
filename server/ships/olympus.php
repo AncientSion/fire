@@ -22,13 +22,13 @@ class Olympus extends Medium {
 		$front->systems[] = new MediumPulse($this->getId(), $this->id, 0, 120);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 11);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 12);
 		$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 180);
 		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 6, 3), array("Naga", 6, 2)));
 
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 300, 11);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 300, 12);
 		$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 360);
 		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 6, 3), array("Naga", 6, 2)));
 		$structs[] = $left;

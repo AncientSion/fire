@@ -5,15 +5,15 @@ class Haven extends SuperLight {
 	public $display = "Haven";
 	public $role = "Police Cutter";
 	public $faction = "Centauri Republic";
-	public static $value =  250;
-	public $cost = 250;
+	public static $value =  230;
+	public $cost = 230;
 	public $mass = 900;
 
 	public $integrity = 300;
 	public $ep = 135;
 	public $ew = 450;
 	public $power = 0;
-	public $negation = 13;
+	public $negation = 11;
 
 	function __construct($id, $userid){
 		parent::__construct($id, $userid);

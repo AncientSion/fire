@@ -135,7 +135,7 @@ Squaddie.prototype.expandElement = function(){
 
 	for (var i = 0; i < this.structures.length; i++){
 		var a = getArcDir(this.structures[i]);
-		var p = getPointInDirection(pWidth - 15, a-90, primPosX, primPosY);
+		var p = getPointInDir(pWidth - 15, a-90, primPosX, primPosY);
 		var s = 24;
 
 		var oX = 0;
@@ -541,7 +541,7 @@ Squadron.prototype.setLayout = function(){
 	else {
 		for (var i = 0; i < this.structures.length; i++){
 			var a = -45*(this.structures.length == 4) + -90*(this.structures.length == 2) + 360 /  this.structures.length * i;
-			var o = getPointInDirection(115 + (-20*(this.structures.length == 2)) +(10*(this.structures.length == 4)), a-90, 0, 0);
+			var o = getPointInDir(115 + (-20*(this.structures.length == 2)) +(10*(this.structures.length == 4)), a-90, 0, 0);
 
 			minX = Math.min(minX, o.x);
 			maxX = Math.max(maxX, o.x);
@@ -657,12 +657,14 @@ Squadron.prototype.createBaseDiv = function(){
 	}
 
 	// JUMP OUT
-	$(this.element).find(".coreContainer")
-		.append($("<div>").addClass("jumpOut")
-			.append($("<img>")
-				.attr("src", "varIcons/redVortex.png")
-				.click(function(){game.getUnit($(this).parent().parent().parent().parent().data("shipId")).requestJumpOut();
-				})))
+	if (game.turn > 1 && game.phase == 3){
+		$(this.element).find(".coreContainer")
+			.append($("<div>").addClass("jumpOut")
+				.append($("<img>")
+					.attr("src", "varIcons/redVortex.png")
+					.click(function(){game.getUnit($(this).parent().parent().parent().parent().data("shipId")).requestJumpOut();
+					})))
+	}
 
 	if (this.structures.length){
 		$(div).removeClass("disabled");
@@ -1066,7 +1068,7 @@ Squadron.prototype.getWeaponOrigin = function(id){
 				for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
 					if (this.structures[i].structures[j].systems[k].id == id){
 						var devi = this.structures[i].size;
-						var p = getPointInDirection(devi/6, getArcDir(this.structures[i].structures[j])-90, 0, 0);
+						var p = getPointInDir(devi/6, getArcDir(this.structures[i].structures[j])-90, 0, 0);
 						var x = this.structures[i].layout.x/4 + p.x;
 						var y = this.structures[i].layout.y/4 + p.y;
 						return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());

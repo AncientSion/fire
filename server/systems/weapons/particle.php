@@ -58,8 +58,8 @@ class MediumIon extends LightIon {
 class HeavyIon extends MediumIon {
 	public $name = "HeavyIon";
 	public $display = "122mm Ion Cannon";
-	public $minDmg = 48;
-	public $maxDmg = 62;
+	public $minDmg = 54;
+	public $maxDmg = 68;
 	public $accDecay = 90;
 	public $shots = 2;
 	public $animColor = "orange";

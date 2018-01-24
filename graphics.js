@@ -148,11 +148,11 @@ function drawVector(origin, target, dist, angle){
 
 //function drawProjectile(weapon, ox, oy, x, y, now, end){
 function drawProjectile(weapon, fire){
-	//getPointInDirection(dis, angle, oX, oY){
+	//getPointInDir(dis, angle, oX, oY){
 
 	var x = fire.ox + fire.nx * fire.n;
 	var y = fire.oy + fire.ny * fire.n;
-	var trailEnd = getPointInDirection(weapon.projSize*2.5, fire.f, x, y);
+	var trailEnd = getPointInDir(weapon.projSize*2.5, fire.f, x, y);
 	var w = 1;
 
 	fxCtx.translate(cam.o.x, cam.o.y);
@@ -180,7 +180,7 @@ function drawProjectile(weapon, fire){
 	fxCtx.globalCompositeOperation = "source-over";
 
 /*	if (weapon instanceof Plasma){
-		//var end = getPointInDirection(13, fire.f-180, trailEnd.x, trailEnd.y);
+		//var end = getPointInDir(13, fire.f-180, trailEnd.x, trailEnd.y);
 		for (i = 0; i < 3; i++){
 			x = x + range(-2, 2)
 			y = y + range(-2, 2)
@@ -241,7 +241,7 @@ function drawExplosion(weapon, anim, frames){  // 150, 150, 30
 
 	/*if (weapon instanceof Plasma){
 		for (i = 0; i < 6; i++){
-			var d = getPointInDirection(2*sin, 360/6*i + range(-15, 15), x, y)
+			var d = getPointInDir(2*sin, 360/6*i + range(-15, 15), x, y)
 
 			fxCtx.beginPath();
 			fxCtx.moveTo(x, y);
@@ -254,7 +254,7 @@ function drawExplosion(weapon, anim, frames){  // 150, 150, 30
 	}
 	if (weapon instanceof Plasma){
 		for (i = 0; i < 4; i++){
-			var d = getPointInDirection((3 + range(-1, 1))*sin, (getAngle(anim.ox, anim.oy, anim.tx, anim.ty)+(180-(4/2*10) + i*10)), anim.tx, anim.ty)
+			var d = getPointInDir((3 + range(-1, 1))*sin, (getAngle(anim.ox, anim.oy, anim.tx, anim.ty)+(180-(4/2*10) + i*10)), anim.tx, anim.ty)
 
 			fxCtx.beginPath();
 			fxCtx.moveTo(anim.tx, anim.ty);
@@ -371,7 +371,7 @@ function drawAreaEffect(weapon, fire, now, max){
 	if (sin > 0){
 		for (var i = 0; i < 30; i++){
 			var a = 360/30*i;
-			var p = getPointInDirection(weapon.aoe*fraction*1.1, a, fire.tx, fire.ty);
+			var p = getPointInDir(weapon.aoe*fraction*1.1, a, fire.tx, fire.ty);
 
 			//fxCtx.translate(p.x, p.y);
 			fxCtx.beginPath(); fxCtx.arc(p.x, p.y, sin, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = "rgb(255,225,75)"; fxCtx.fill();
@@ -453,7 +453,7 @@ function drawSensorArc(w, d, str, loc, facing, a, sensor){
 	else {
 		var start = addAngle(0 + w-facing, a);
 		var end = addAngle(360 - w-facing, a);
-		var p1 = getPointInDirection(str, start, loc.x, loc.y);
+		var p1 = getPointInDir(str, start, loc.x, loc.y);
 		var rad1 = degreeToRadian(start);
 		var rad2 = degreeToRadian(end);
 		salvoCtx.beginPath();			

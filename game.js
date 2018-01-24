@@ -219,7 +219,7 @@ function Game(data, userid){
 		else {
 			mission = {id: -1, unitid: s.id, turn: this.turn, type: this.mission.new, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
 			if (doOffset){
-				p = getPointInDirection(s.size/3, a, o.x, o.y);
+				p = getPointInDir(s.size/3, a, o.x, o.y);
 				for (var i = s.cc.length-1; i >= 0; i--){
 					var attach = this.getUnit(s.cc[i]);
 						attach.drawX = p.x;
@@ -295,7 +295,7 @@ function Game(data, userid){
 		var hangar = s.getSystem(this.flightDeploy.id)
 		var o = s.getPlannedPos();
 		var facing = getAngleFromTo(o, dest);
-		var p = getPointInDirection(s.size/2, facing, o.x, o.y);
+		var p = getPointInDir(s.size/2, facing, o.x, o.y);
 		var mission = {id: -1, unitid: -this.ships.length-20, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
 
 		var immediate = 0;
@@ -2627,7 +2627,7 @@ Game.prototype.drawAllSensorSettings = function(friendly){
 		else {
 			var start = addAngle(0 + w-facing, a);
 			var end = addAngle(360 - w-facing, a);
-			var p1 = getPointInDirection(str, start, loc.x, loc.y);
+			var p1 = getPointInDir(str, start, loc.x, loc.y);
 			var rad1 = degreeToRadian(start);
 			var rad2 = degreeToRadian(end);
 			salvoCtx.beginPath();			
@@ -2922,7 +2922,7 @@ Game.prototype.drawJumpMarker = function(s){
 
 	if (s.userid == game.userid){
 		if (game.phase == -1){
-			var p = getPointInDirection(100, s.actions[0].a, s.actions[0].x, s.actions[0].y);
+			var p = getPointInDir(100, s.actions[0].a, s.actions[0].x, s.actions[0].y);
 			ctx.moveTo(s.x, s.y);
 			ctx.lineTo(p.x, p.y);
 			ctx.closePath();
@@ -2930,7 +2930,7 @@ Game.prototype.drawJumpMarker = function(s){
 			ctx.stroke();
 		}
 		else {
-			var p = getPointInDirection(100, s.actions[0].a, s.actions[0].x, s.actions[0].y);
+			var p = getPointInDir(100, s.actions[0].a, s.actions[0].x, s.actions[0].y);
 			ctx.moveTo(s.actions[0].x, s.actions[0].y);
 			ctx.lineTo(p.x, p.y);
 			ctx.closePath();
