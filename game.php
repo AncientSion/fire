@@ -147,7 +147,11 @@
 			<img src="varIcons/destroyed.png" style="width: 25px; height: 25px">
 		</div>
 		<div id="roll" class="ui disabled">
-			<img src="varIcons/mode.png" style="width: 25px; height: 25px">
+			<img src="varIcons/roll.png" style="width: 50px; height: 50px">
+		</div>
+
+		<div id="flip" class="ui disabled">
+			<img src="varIcons/flip.png" style="width: 50px; height: 50px">
 		</div>
 		<div id="turnButton" class="turnEle ui disabled">
 			<table class="doTurn" style="margin:auto; width: 100%;">
@@ -550,6 +554,11 @@
 		$("#roll").removeClass("disabled")
 		.click(function(){
 			game.getUnit(aUnit).doRoll()
+		});
+		
+		$("#flip").removeClass("disabled")
+		.click(function(){
+			game.getUnit(aUnit).doFlip()
 		});
 
 		$("#doUndoLastAction").removeClass("disabled")

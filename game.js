@@ -2471,7 +2471,7 @@ function Game(data, userid){
 		if (l){
 			var w = l*(s+3*2);
 
-			ele.width(Math.min(575, w)).css("top", 0).css("left", 225).removeClass("disabled");
+			ele.width(Math.min(575, w)).removeClass("disabled");
 		}
 	}
 }

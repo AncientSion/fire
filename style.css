@@ -1360,6 +1360,8 @@ div.integrityFull {
 	background-color: black;
 	padding: 2px;
 	border-radius: 5px;
+	top: 0px;
+	left: 245px;
 }
 
 #unitGUI.disabled {
@@ -1436,7 +1438,7 @@ div.integrityFull {
 #combatlogWrapper, #deployLogWrapper {
 	position: absolute;
 	top: 0px;
-	left: 225px;
+	left: 245px;
 	width: 800px;	
 	z-index: 8;
 	padding: 3px;

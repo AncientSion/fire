@@ -598,7 +598,7 @@ Squadron.prototype.createBaseDiv = function(){
 			.append($("<td>").html(this.getRemainingEP() + " / " + this.getEP()).addClass("ep")))
 		.append($("<tr>")
 			.append($("<td>").html("Thrust & Roll"))
-			.append($("<td>").html(this.getImpulseChangeCost() + " & " + this.getRollCost()).addClass("change")))
+			.append($("<td>").html(this.getImpulseChangeCost() + " & " + this.getActionCost(0)).addClass("change")))
 		//.append($("<tr>")
 		//	.append($("<td>").html("Turn Cost per 1"))
 		//	.append($("<td>").html(round(this.getTurnCost(), 2) + " EP")))
@@ -1096,7 +1096,7 @@ Squadron.prototype.setStats = function(){
 
 	var a = this.getBaseImpulse();
 	var b = this.getBaseEP();
-	var c = this.getImpulseChangeCost() + " / " + this.getRollCost();
+	var c = this.getImpulseChangeCost() + " / " + this.getActionCost(0);
 	var d = this.baseTurnDelay;
 
 	$(this.element).find(".topDiv").find(".header").find("tr").each(function(i){

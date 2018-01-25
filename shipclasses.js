@@ -22,6 +22,7 @@ function Ship(data){
 	this.status = data.status;
 	this.rolling = data.rolling;
 	this.rolled = data.rolled;
+	this.flipping = data.flipping;
 	this.actions = data.actions || [];
 	this.cc = [];
 	this.mapSelect = 1;
@@ -352,7 +353,12 @@ Ship.prototype.doHover = function(){
 	this.drawTargetMovePlan();
 }
 
-Ship.prototype.getRollCost = function(){
+Ship.prototype.getActionCost = function(type){
+	switch (type){
+		case 0: return Math.ceil(this.getImpulseChangeCost()*1.5);
+		case 1: return Math.ceil(this.getImpulseChangeCost()*2);
+		default: return 0;
+	}
 	return Math.ceil(this.getImpulseChangeCost()*1.5);
 	return Math.ceil(this.getSystemByName("Engine").output * 0.75)*(1-(1-this.getImpulseMod())/2);
 	return 1;
@@ -444,6 +450,11 @@ Ship.prototype.isRolling = function(){
 	return false;
 }
 
+Ship.prototype.isFlipping = function(){
+	if (this.flipping){return true;}
+	return false;
+}
+
 Ship.prototype.doesContinueRolling = function(){
 	if (this.rolling){
 		for (var i = 0; i < this.actions.length; i++){
@@ -461,12 +472,19 @@ Ship.prototype.drawImpulseUI = function(){
 	var center = {x: this.drawX, y: this.drawY};
 	var p1 = getPointInDir(this.size/2 + 10 + 15, facing + 180, center.x, center.y);
 
-	if (this.canRoll()){
-		var roll = getPointInDir(50, facing -180, p1.x, p1.y);
-		var ox = roll.x * cam.z + cam.o.x - 15;
-		var oy = roll.y * cam.z + cam.o.y - 15;
+	if (this.canDoAction(0)){
+		var roll = getPointInDir(50, facing -220, p1.x, p1.y);
+		var ox = roll.x * cam.z + cam.o.x - 25;
+		var oy = roll.y * cam.z + cam.o.y - 25;
 		$("#roll").css("left", ox).css("top", oy).removeClass("disabled");
 	} else $("#roll").addClass("disabled");
+
+	if (this.canDoAction(1)){
+		var roll = getPointInDir(50, facing -140, p1.x, p1.y);
+		var ox = roll.x * cam.z + cam.o.x - 25;
+		var oy = roll.y * cam.z + cam.o.y - 25;
+		$("#flip").css("left", ox).css("top", oy).removeClass("disabled");
+	} else $("#flip").addClass("disabled");
 
 	if (this.canUndoLastAction()){
 		var ox = p1.x * cam.z + cam.o.x - 15;
@@ -1874,7 +1892,7 @@ Ship.prototype.createBaseDiv = function(){
 			.append($("<td>").html(this.getRemainingEP() + " / " + this.getEP()).addClass("ep")))
 		.append($("<tr>")
 			.append($("<td>").html("Thrust & Roll"))
-			.append($("<td>").html(this.getImpulseChangeCost() + " & " + this.getRollCost()).addClass("change")))
+			.append($("<td>").html(this.getImpulseChangeCost() + " & " + this.getActionCost(0)).addClass("change")))
 		//.append($("<tr>")
 		//	.append($("<td>").html("Turn Cost per 1"))
 		//	.append($("<td>").html(round(this.getTurnCost(), 2) + " EP")))
@@ -2381,6 +2399,11 @@ Ship.prototype.setRollState = function(){
 	if (this.isRolling()){this.addNoteEntry("ROLLING");}
 }
 
+Ship.prototype.setFlipState = function(){
+	$(this.element).find(".notes").children().remove();
+	if (this.isFlipping()){this.addNoteEntry("FLIPPING");}
+}
+
 Ship.prototype.addNoteEntry = function(html){
 	$(this.element).find(".notes")
 		.show()
@@ -2470,7 +2493,7 @@ Ship.prototype.updateDiv = function(){
 		.find(".thrust").html(this.getRemainingImpulse() + " / " + this.getCurrentImpulse()).end()
 		.find(".ep").html(this.getRemainingEP() + " / " + this.getEP()).end()
 		.find(".delay").html(this.getRemainingDelay()).end()
-		.find(".change").html(this.getImpulseChangeCost() + " & " + this.getRollCost()).end()			
+		.find(".change").html(this.getImpulseChangeCost() + " & " + this.getActionCost(0)).end()			
 		.find(".turn").html(this.getImpulseChangeCost() + " EP").end()
 }
 
@@ -3027,16 +3050,23 @@ Ship.prototype.drawTurnUI = function(){
 		//.find("#remEP").html(this.getRemainingEP() + " / " + this.getEP()).addClass("green").end()
 }
 
-Ship.prototype.issuedRollThisTurn = function(){
+Ship.prototype.issuedActionThisTurn = function(type){
+	var type = "";
+	switch (type){
+		case 0: type = "roll"; break;
+		case 1: type = "flip"; break;
+		default: return;
+	}
+
 	for (var i = 0; i < this.actions.length; i++){
-		if (this.actions[i].turn == game.turn && this.actions[i].type == "roll"){return true;}
+		if (this.actions[i].turn == game.turn && this.actions[i].type == type){return true;}
 	}
 	return false;
 }
 
-Ship.prototype.canRoll = function(){
-	if (this.getRemainingEP() >= this.getRollCost()){
-		if (this.issuedRollThisTurn()){return false;}
+Ship.prototype.canDoAction = function(type){
+	if (this.getRemainingEP() >= this.getActionCost(type)){
+		if (this.issuedActionThisTurn(type)){return false;}
 		else {
 			for (var i = 0; i < this.actions.length; i++){
 				if (this.actions[i].type != "speed" && this.actions[i].type != "turn"){return false;}
@@ -3046,7 +3076,6 @@ Ship.prototype.canRoll = function(){
 	}
 	return false;
 }
-	
 Ship.prototype.canIncreaseImpulse = function(){
 	//if (this.isRolling()){return false;}
 	if (this.getRemainingEP() >= this.getImpulseChangeCost()){
@@ -3187,12 +3216,22 @@ Ship.prototype.canDoAnotherTurn = function(){
 
 Ship.prototype.doRoll = function(){
 	var shipPos = this.getPlannedPos();
-	this.actions.push(new Move(-1, "roll", 1, shipPos.x, shipPos.y, 0, 0, this.getRollCost(), 1, 1, 0));
+	this.actions.push(new Move(-1, "roll", 1, shipPos.x, shipPos.y, 0, 0, this.getActionCost(0), 1, 1, 0));
 	this.rolling = !this.rolling;
 	this.setRollState();
 	this.resetMoveMode();
 	game.redraw();
 }
+
+Ship.prototype.doFlip = function(){
+	var shipPos = this.getPlannedPos();
+	this.actions.push(new Move(-1, "flip", 1, shipPos.x, shipPos.y, 0, 0, this.getActionCost(1), 1, 1, 0));
+	this.flipping = !this.flipping;
+	this.setFlipState();
+	this.resetMoveMode();
+	game.redraw();
+}
+
 Ship.prototype.doIncreaseImpulse = function(){
 	var shipPos = this.getPlannedPos();
 	if (this.actions.length && this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == -1){

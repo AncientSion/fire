@@ -2577,11 +2577,16 @@ Laser.prototype.getAnimation = function(fire){
 				}
 			}
 			else { // shot miss
-				tx = fire.target.drawX + range(-fire.target.size * 0.7, fire.target.size * 0.7); // BEAM swipe begin on MISS
-				ty = fire.target.drawY + range(-fire.target.size * 0.7, fire.target.size * 0.7);
-				a = getAngleFromTo( {x: tx, y: ty}, {x: fire.target.drawX, y: fire.target.drawY} );
-				a = addToDirection(a, range(-40, 40));
+				tx = fire.target.drawX + range(fire.target.size/2, fire.target.size/2) * (1-(range(0, 1)*2))
+				ty = fire.target.drawY + range(fire.target.size/2, fire.target.size/2) * (1-(range(0, 1)*2))
+				a = getAngleFromTo( {x: fire.target.drawX, y: fire.target.drawY}, {x: tx, y: ty} );
+				//a = addToDirection(a, range(-40, 40));
 				tb = getPointInDir(fire.weapon.rakeTime/3, a, tx, ty); // BEAM swipe END on MISS	
+				//tx = fire.target.drawX + range(-fire.target.size * 0.7, fire.target.size * 0.7); // BEAM swipe begin on MISS
+				//ty = fire.target.drawY + range(-fire.target.size * 0.7, fire.target.size * 0.7);
+				//a = getAngleFromTo( {x: tx, y: ty}, {x: fire.target.drawX, y: fire.target.drawY} );
+				//a = addToDirection(a, range(-40, 40));
+				//tb = getPointInDir(fire.weapon.rakeTime/3, a, tx, ty); // BEAM swipe END on MISS	
 			}
 
 			var shotAnim = new BeamVector(
