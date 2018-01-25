@@ -209,6 +209,7 @@
 				Debug::log("error: phase: ".$phase);
 				Debug::log("error: status: ".$status);
 				return false;
+			}
 		}
 
 		public function getAllReinforcements($gameid, $userid){
