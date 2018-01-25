@@ -5,7 +5,7 @@ include_once 'global.php';
 $manager;
 $dbManager;
 
-echo "in";
+Debug::log("in");
 
 if (isset($_POST["type"])) {
 	$dbManager = DBManager::app();
