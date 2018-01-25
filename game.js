@@ -630,9 +630,9 @@ function Game(data, userid){
 			for (var i = 0; i < window.playerstatus.length; i++){
 
 				var step;
-				var h = 800;
-				var w = 600;
-				var x = 300;
+				var h = 1000;
+				var w = 300;
+				var x = 400;
 				var y = h/2;
 
 				if (i % 2 == 0){
