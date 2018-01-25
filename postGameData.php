@@ -6,17 +6,19 @@ $manager;
 $dbManager;
 
 if (isset($_POST["type"])) {
+	$dbManager = DBManager::app();
+
 	if ($_POST["type"] == "chat"){
-		DBManager::app()->insertChatMsg($_POST);
+		$dbManager->insertChatMsg($_POST);
 		return true;
 	}
 
 	$manager = new Manager($_POST["userid"], $_POST["gameid"]);
-	$dbManager = DBManager::app($_POST["userid"]);
 
 	if ($_POST["type"] == "joinGame") {
+			Debug::log("joinGame success");
 		if ($dbManager->createPlayerStatus($_POST["userid"], $_POST["gameid"], 0, -1, "joined")) {
-			echo "joinGame success";
+			Debug::log("joinGame success");
 		}
 		else {
 			echo "joinGame fail";
@@ -89,10 +91,6 @@ if (isset($_POST["type"])) {
 		if (sizeof($_POST["data"]){$dbManager->jumpOutUnits($_POST["data"])});
 		if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready")){
 			echo "damageControl success";
-		}
-	}
-	else if ($_POST["type"] == "reset"){
-		if ($manager->reset()){
 		}
 	}
 }

@@ -200,9 +200,15 @@
 			$stmt->execute();
 
 			if ($stmt->errorCode() == 0){
-				//Debug::log("entry CREATE for player ".$userid." in game ".$gameid." phase: ".$phase." and status ".$status);
+				Debug::log("entry CREATE for player ".$userid." in game ".$gameid." phase: ".$phase." and status ".$status);
 				return true;
-			} else return false;
+			} else {
+				Debug::log("error: userid: ".$userid);
+				Debug::log("error: gameid: ".$gameid);
+				Debug::log("error: turn: ".$turn);
+				Debug::log("error: phase: ".$phase);
+				Debug::log("error: status: ".$status);
+				return false;
 		}
 
 		public function getAllReinforcements($gameid, $userid){
