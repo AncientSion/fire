@@ -712,7 +712,7 @@ Ship.prototype.handleTurning = function(e, o, f, pos){
 
 	a = Math.min(Math.abs(a), max);
 	turn.a = a;
-	var c = this.getTurnCost() * a;
+	var c = this.getTurnCost() / this.getImpuleMod() * a;
 	$("#epButton").css("top", t.y + 25).css("left", t.x - 180).find("#impulseCost").html(Math.ceil(c, 2) + " : " + Math.floor(this.getRemainingEP() - c));
 
 	this.drawDelay();
