@@ -917,17 +917,17 @@ function Game(data, userid){
 			this.ships[i].setSupportImage();
 		}
 
+		if (game.turn == 1){this.setInitialFacing(this.ships);}
+		this.setInitialFacing(this.reinforcements);
+
 		for (var i = 0; i < this.reinforcements.length; i++){
 			this.reinforcements[i] = window.initiateUnit(this.reinforcements[i]);
-			for (var j = 0; j < playerstatus.length; j++){
-				if (playerstatus[j].userid == this.userid){this.reinforcements[i].drawFacing = 0 + (180 * (j % 2 % 2)); break;}
-			}			
 			this.reinforcements[i].setLayout();
 			this.reinforcements[i].setImage();
 			this.reinforcements[i].createBaseDiv();
 			this.reinforcements[i].friendly = 1;
 			this.reinforcements[i].deployed = 0;
-		}
+		}	
 
 		var canSubmit = false;
 		var isPlaying = false;
@@ -949,6 +949,17 @@ function Game(data, userid){
 		this.canSubmit = canSubmit;
 		cam.setFocus(0, 0);
 		this.initPhase(this.phase);
+	}
+
+	this.setInitialFacing = function(units){
+		for (var i = 0; i < units.length; i++){
+			for (var j = 0; j < playerstatus.length; j++){
+				if (playerstatus[j].userid == this.userid){
+					units[i].drawFacing = 0 + (180 * (j % 2 % 2)); 
+					break;
+				}
+			}
+		}	
 	}
 
 	this.initEvents = function(){
