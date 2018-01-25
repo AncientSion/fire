@@ -1,8 +1,6 @@
 <?php
-include_once 'global.php';
+//include_once 'global.php';
 
-ini_set('display_errors', 1); 
-error_reporting(E_ALL);
 $manager;
 $dbManager;
 
