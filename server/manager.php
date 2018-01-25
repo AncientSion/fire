@@ -16,7 +16,7 @@ class Manager {
 	public $index = 0;
 	public $faction = "";
 	public $value = 0;
-	public $wave = 13;
+	public $wave = 11;
 
 	public $ships = array();
 	public $ballistics = array();
@@ -458,7 +458,7 @@ class Manager {
 		$picks = array();
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-			Debug::log("player: ".$this->playerstatus[$i]["userid"]." has ".$this->playerstatus[$i]["value"]." available");
+			//Debug::log("player: ".$this->playerstatus[$i]["userid"]." has ".$this->playerstatus[$i]["value"]." available");
 			$data = array();
 			$faction = $this->playerstatus[$i]["faction"];
 			$entries = $this->getReinforcements($faction);
@@ -493,7 +493,6 @@ class Manager {
 						for ($j = 0; $j < sizeof($data["upgrades"]); $j++){
 							$subTotal += $data["upgrades"][$j]["chance"];
 						}
-
 						$subRoll = mt_rand(0, $subTotal);
 						$subCurrent = 0;
 
@@ -546,6 +545,7 @@ class Manager {
 		$this->handleJumpOutActions();
 		$this->handleInitialFireOrders();
 		$this->assemblDeployStates();
+		if ($this->turn == $this->wave){$this->deleteAllReinforcements();}
 		DBManager::app()->deleteEmptyLoads($this->gameid);
 	}
 
@@ -883,7 +883,6 @@ class Manager {
 		$this->setUnitRollState();
 		$this->setUnitStatus();
 		$this->assembleEndStates();
-		if ($this->turn == $this->wave){$this->deleteAllReinforcements();}
 	}
 	
 	public function freeFlights(){

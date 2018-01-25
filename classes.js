@@ -440,8 +440,8 @@ Structure.prototype.drawStructArc = function(facing, rolled, pos){
 		end = this.end;
 	}
 
-	var p1 = getPointInDir(1000, start + facing, pos.x, pos.y);
-	var p2 = getPointInDir(1000, end + facing, pos.x, pos.y)
+	var p1 = getPointInDir(game.arcRange, start + facing, pos.x, pos.y);
+	var p2 = getPointInDir(game.arcRange, end + facing, pos.x, pos.y)
 	var dist = getDistance( {x: pos.x, y: pos.y}, p1);
 	var rad1 = degreeToRadian(start + facing);
 	var rad2 = degreeToRadian(end + facing);

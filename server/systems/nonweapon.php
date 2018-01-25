@@ -121,9 +121,9 @@ class Engine extends PrimarySystem {
     }
 
 	public function setPowerReq($mass){
-		$this->powerReq = ceil($this->output * Math::getBaseTurnCost($mass));
+		$this->powerReq = ceil($this->output * Math::getEnginePowerNeed($mass));
 		$this->boostEffect[] = new Effect("Output", 15);
-		$this->effiency = ceil($this->powerReq/5);
+		$this->effiency = ceil($this->powerReq/5)+1;
 	}
 }
 

@@ -89,7 +89,7 @@ class Javelin extends Missile {
 	public $minDmg = 33;
 	public $maxDmg = 45;
 	public $mass = 4;
-	public $cost = 10;
+	public $cost = 8;
 	public $traverse = -1;
 
 	function __construct($id, $parentId){
@@ -103,7 +103,7 @@ class Triarii extends Missile {
 	public $minDmg = 41;
 	public $maxDmg = 53;
 	public $mass = 4;
-	public $cost = 12;
+	public $cost = 10;
 	public $traverse = -1;
 
 	function __construct($id, $parentId){
@@ -145,7 +145,7 @@ class Naga extends Missile {
 	public $minDmg = 33;
 	public $maxDmg = 45;
 	public $mass = 4;
-	public $cost = 10;
+	public $cost = 8;
 	public $traverse = -1;
 
 	function __construct($id, $parentId){
@@ -159,7 +159,7 @@ class Cyclops extends Missile {
 	public $minDmg = 50;
 	public $maxDmg = 68;
 	public $mass = 5;
-	public $cost = 14;
+	public $cost = 11;
 	public $traverse = 0;
 
 	function __construct($id, $parentId){
@@ -173,7 +173,7 @@ class Titan extends Missile {
 	public $minDmg = 70;
 	public $maxDmg = 88;
 	public $mass = 7;
-	public $cost = 16;
+	public $cost = 13;
 	public $traverse = 1;
 
 	function __construct($id, $parentId){

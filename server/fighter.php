@@ -68,8 +68,8 @@ class Thunderbolt extends Fighter {
 	public $name = "Thunderbolt";
 	public $display = "Thunderbolt";
 	public $faction = "Earth Alliance";
-	public static $value =  36;
-	public $mass = 40;
+	public static $value =  35;
+	public $mass = 38;
 	public $ep = 110;
 	public $integrity = 29;
 	public $negation = 5;
@@ -88,7 +88,7 @@ class Sentri extends Fighter {
 	public $name = "Sentri";
 	public $display = "Sentri";
 	public $faction = "Centauri Republic";
-	public static $value =  28;
+	public static $value =  26;
 	public $mass = 32;
 	public $ep = 115;
 	public $integrity = 24;
@@ -108,10 +108,10 @@ class Sitara extends Fighter {
 	public $display = "Sitara";
 	public $faction = "Centauri Republic";
 	public static $value =  24;
-	public $mass = 36;
+	public $mass = 34;
 	public $ep = 105;
-	public $integrity = 26;
-	public $negation = 4;
+	public $integrity = 22;
+	public $negation = 5;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

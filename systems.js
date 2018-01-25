@@ -1992,7 +1992,7 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 	$(table).append($("<tr>").append($("<td>").html("Loading")).append($("<td>").addClass("loading").html(this.getTimeLoaded() + " / " + this.reload)));
 
 	if (this instanceof Launcher){
-		if (this.ammo != undefined){
+		if (this.ammo != -1){
 			$(table).append($("<tr>").append($("<th>").css("border-top", "1px solid white").attr("colSpan", 2).html(this.loads[this.ammo].name)));
 			$(table).append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.loads[this.ammo].display)));
 			$(table).append($("<tr>").append($("<td>").html("Ammo amount")).append($("<td>").html("<span class='red'>" + this.getRemainingAmmo() + "</span> / " + this.getMaxAmmo()).attr("id", "ammo")));
@@ -3076,12 +3076,12 @@ Launcher.prototype.setMount = function(amount){
 }
 
 Launcher.prototype.getTraverseMod = function(target){
-	if (this.ammo != undefined){
+	if (this.ammo != -1){
 		return Math.max(0, (this.loads[this.ammo].traverse - target.traverse));
 	}
 }
 Launcher.prototype.getDmgString = function(){
-	if (this.ammo != undefined){
+	if (this.ammo != -1){
 		return this.loads[this.ammo].systems[0].minDmg + " - " + this.loads[this.ammo].systems[0].maxDmg;
 	} else return "<span class='red'>NO LOADOUT</span>";
 }
@@ -4210,7 +4210,7 @@ Hangar.prototype.getSystemDetailsDiv = function(){
 	$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
 	$(table).append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.getMount())));
 	$(table).append($("<tr>").append($("<td>").html("Capacity")).append($("<td>").html("up to " + this.capacity + " units")));
-	$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html(this.getLaunchRate() + " / cycle")));
+	$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html(this.getLaunchRate() + " each " + this.reload + " turns")));
 	$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").html(this.getPowerReqString())));
 
 	div.appendChild(table);

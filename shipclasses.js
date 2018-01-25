@@ -359,6 +359,7 @@ Ship.prototype.getRollCost = function(){
 }
 
 Ship.prototype.getImpulseChangeCost = function(){
+	return Math.ceil(this.baseImpulseCost * (1-((this.getImpulseMod()-1)/2)) * this.getImpulseMod());
 	return Math.floor(this.baseImpulseCost * this.getBaseEP() / this.getImpulseMod()/100);
 	return Math.floor(this.baseImpulseCost*(1-(1-this.getImpulseMod())/2) / this.getEffectiveEP() * this.getEP());
 }
@@ -1626,7 +1627,7 @@ Ship.prototype.getFireDest = function(fire, isHit, num){
 		var o = fire.shooter.getPlannedPos();
 		var t = this.getPlannedPos();
 		var a = getAngleFromTo(o, t) + range(-5, 5);
-		var d = this.size * (10-(range(-1, 1)*2))/10;
+		var d = this.size * (10-(range(-1, 1)*3))/10;
 		console.log(d);
 		return getPointInDir(d, a, 0, 0);
 	}
@@ -1884,7 +1885,7 @@ Ship.prototype.createBaseDiv = function(){
 			.append($("<td>").html("Active Delay"))
 			.append($("<td>").html(this.getRemainingDelay()).addClass("delay")))
 
-		console.log($(table).find(".ep").html());
+		//console.log($(table).find(".ep").html());
 
 	subDiv.appendChild(table);
 	topDiv.appendChild(subDiv)
@@ -2285,7 +2286,7 @@ Ship.prototype.expandDiv = function(div){
 
 	$(structContainer).css("height", Math.max($(primaryDiv).position().top + $(primaryDiv).height(), height) + 20);
 	$(structContainer).append($("<div>").addClass("mainPower").html(this.getSystemByName("Reactor").getOutput()));
-	console.log($(structContainer).width());
+	//console.log($(structContainer).width());
 
 	// JUMP OUT
 	if (game.turn > 1 && game.phase == 3){

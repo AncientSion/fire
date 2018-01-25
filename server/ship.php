@@ -1132,7 +1132,7 @@ class Ship {
 }
 
 class Medium extends Ship {
-	public $baseImpulse = 175;
+	public $baseImpulse = 165;
 	public $traverse = 0;
 	public $slipAngle = 20;
 	public $baseImpulseCost = 40;
@@ -1154,7 +1154,7 @@ class Medium extends Ship {
 }
 
 class Heavy extends Ship {
-	public $baseImpulse = 160;
+	public $baseImpulse = 155;
 	public $traverse = 1;
 	public $slipAngle = 20;
 	public $baseImpulseCost = 45;
@@ -1172,7 +1172,7 @@ class Heavy extends Ship {
 }
 
 class SuperHeavy extends Ship {
-	public $baseImpulse = 145;
+	public $baseImpulse = 140;
 	public $traverse = 2;
 	public $slipAngle = 20;
 	public $baseImpulseCost = 50;

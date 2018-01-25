@@ -34,6 +34,7 @@ class Primus extends SuperHeavy {
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 900, 19);
 		$aft->systems[] = new MediumIon($this->getId(), $this->id, 120, 240);
 		$aft->systems[] = new MediumIon($this->getId(), $this->id, 120, 240);
+		$aft->systems[] = new MediumIon($this->getId(), $this->id, 120, 240);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 1300, 21);

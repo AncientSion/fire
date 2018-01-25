@@ -922,6 +922,7 @@ function Game(data, userid){
 			for (var j = 0; j < playerstatus.length; j++){
 				if (playerstatus[j].userid == this.userid){this.reinforcements[i].drawFacing = 0 + (180 * (j % 2 % 2)); break;}
 			}			
+			this.reinforcements[i].setLayout();
 			this.reinforcements[i].setImage();
 			this.reinforcements[i].createBaseDiv();
 			this.reinforcements[i].friendly = 1;
@@ -2280,7 +2281,7 @@ function Game(data, userid){
 					)
 					.append($("<td>")
 						.addClass("green font14")
-						.html(this.incoming[i].name)
+						.html(this.incoming[i].name + " " + this.incoming[i].display)
 					)
 					.append($("<td>")
 						.addClass("green font14")

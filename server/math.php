@@ -133,11 +133,15 @@ class Math {
 	}
 
 	static function getBaseTurnDelay($mass){
-		return round(pow($mass, 0.45)/18, 2);
+		return round(pow($mass, 0.45)/20, 2);
 	}
 
 	static function getBaseTurnCost($mass){
 		return round(pow($mass, 1.25)/200000, 2);
+	}
+
+	static function getEnginePowerNeed($mass){
+		return round(pow($mass, 1.1)/70000, 2);
 	}
 
 	static function getBaseImpulseCost($mass){

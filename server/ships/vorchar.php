@@ -5,13 +5,13 @@ class Vorchar extends Light {
 	public $display = "Vorchar";
 	public $role = "Recon Frigate";
 	public $faction = "Centauri Republic";
-	public static $value =  320;
-	public $cost = 320;
+	public static $value =  300;
+	public $cost = 300;
 	public $mass = 1100;
 
 	public $integrity = 400;
 	public $ep = 120;
-	public $ew = 700;
+	public $ew = 800;
 	public $power = 0;
 	public $negation = 12;
 

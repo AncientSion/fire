@@ -1665,7 +1665,7 @@
 
 		public function getIncomingShips($gameid, $turn){
 			$stmt = $this->connection->prepare("
-				SELECT units.id, units.userid, units.available, units.name, actions.x, actions.y, actions.a FROM units
+				SELECT units.id, units.userid, units.available, units.name, units.display, actions.x, actions.y, actions.a FROM units
 				INNER JOIN actions ON
 					units.id = actions.shipid	
 				WHERE gameid = :gameid
@@ -1681,14 +1681,6 @@
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			
 			return $result;
-			if ($result){
-				return $result;
-				//return $this->getActions($result);
-			}
-			else {
-				return false;
-			}
-
 		}
 
 		public function getActiveUnits($gameid, $turn){
