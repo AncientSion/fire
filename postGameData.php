@@ -1,11 +1,11 @@
 <?php
-
 include_once 'global.php';
 
+ini_set('display_errors', 1); 
+error_reporting(E_ALL);
 $manager;
 $dbManager;
 
-Debug::log("in");
 
 if (isset($_POST["type"])) {
 	$dbManager = DBManager::app();
@@ -18,7 +18,7 @@ if (isset($_POST["type"])) {
 	$manager = new Manager($_POST["userid"], $_POST["gameid"]);
 
 	if ($_POST["type"] == "joinGame") {
-			Debug::log("joinGame success");
+		Debug::log("joinGame success");
 		if ($dbManager->createPlayerStatus($_POST["userid"], $_POST["gameid"], 0, -1, "joined")) {
 			Debug::log("joinGame success");
 		}
