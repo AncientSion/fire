@@ -917,7 +917,7 @@ function Game(data, userid){
 			this.ships[i].setSupportImage();
 		}
 
-		if (game.turn == 1){this.setInitialFacing(this.ships);}
+		if (game.turn == 1 && game.phase == -1){this.setInitialFacing(this.ships);}
 		this.setInitialFacing(this.reinforcements);
 
 		for (var i = 0; i < this.reinforcements.length; i++){
@@ -2766,7 +2766,7 @@ Game.prototype.resolveDeployment = function(){
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships[i].deployed = true;
 		if (this.ships[i].available == this.turn){
-			this.ships[i].deployAnim = [0, 90];
+			this.ships[i].deployAnim = [0, 10];
 			this.ships[i].deployed = false;
 		}
 	}
