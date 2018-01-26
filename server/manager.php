@@ -55,6 +55,7 @@ class Manager {
 
 
 	public function test(){
+		$this->freeFlights();
 		return;
 		$this->deleteAllReinforcements();
 		$this->handlePostMoveFires();
@@ -639,7 +640,7 @@ class Manager {
 		Debug::log("handleDeployFireOrders");
 		for ($i = 0; $i < sizeof($this->fires); $i++){
 			if ($this->fires[$i]->weapon instanceof Hangar){
-				$fire->resolved = 1;
+				$this->fires[$i]->resolved = 1;
 			}
 		}
 	}
@@ -886,9 +887,10 @@ class Manager {
 	}
 	
 	public function freeFlights(){
+		Debug::log("freeFlights");
 		$data = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->flight && $this->ships[$i]->mission->arrived && $this->ships[$i]->mission->type == 2){
+			if ($this->ships[$i]->flight && isset($this->ships[$i]->mission) && $this->ships[$i]->mission->arrived && $this->ships[$i]->mission->type == 2){
 				if ($this->getUnit($this->ships[$i]->mission->targetid)->destroyed){
 					//Debug::log("freeeing flight #".$this->ships[$i]->id." from mission");
 					$this->ships[$i]->mission->type = 1;

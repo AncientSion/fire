@@ -2420,7 +2420,7 @@ Ship.prototype.doOffset = function(){
 	var t = this.getTarget();
 	var a = 0;
 	if (t){
-		a = getAngleFromTo(o, this.getTarget().getPlannedPos());
+		a = addAngle(range(30, 45) * (1-(range(0, 1))), getAngleFromTo(o, this.getTarget().getPlannedPos()));
 	} else a = range(0, 360);
 	
 	var p = getPointInDir(Math.max(25, this.size/3), a, o.x, o.y);
