@@ -473,18 +473,20 @@ Ship.prototype.drawImpulseUI = function(){
 	var p1 = getPointInDir(this.size/2 + 10 + 15, facing + 180, center.x, center.y);
 
 	if (this.canDoAction(0)){
-		var roll = getPointInDir(50, facing -220, p1.x, p1.y);
-		var ox = roll.x * cam.z + cam.o.x - 25;
-		var oy = roll.y * cam.z + cam.o.y - 25;
+		var roll = getPointInDir(80, facing -220, p1.x, p1.y);
+		var ox = roll.x * cam.z + cam.o.x - 20;
+		var oy = roll.y * cam.z + cam.o.y - 20;
 		$("#roll").css("left", ox).css("top", oy).removeClass("disabled");
 	} else $("#roll").addClass("disabled");
 
+	
 	if (this.canDoAction(1)){
-		var roll = getPointInDir(50, facing -140, p1.x, p1.y);
-		var ox = roll.x * cam.z + cam.o.x - 25;
-		var oy = roll.y * cam.z + cam.o.y - 25;
+		var roll = getPointInDir(80, facing -140, p1.x, p1.y);
+		var ox = roll.x * cam.z + cam.o.x - 20;
+		var oy = roll.y * cam.z + cam.o.y - 20;
 		$("#flip").css("left", ox).css("top", oy).removeClass("disabled");
 	} else $("#flip").addClass("disabled");
+	
 
 	if (this.canUndoLastAction()){
 		var ox = p1.x * cam.z + cam.o.x - 15;
@@ -2433,6 +2435,23 @@ Ship.prototype.doOffset = function(){
 	}
 }
 
+Ship.prototype.doRandomOffset = function(){
+	if (this.ship || this.squad){return;}
+	if (!this.doDraw){return;}
+	//console.log("doOffset #" + this.id);
+	var o = this.getPlannedPos();
+	var t = this.getTarget();
+	var a = 0;
+	if (t){
+		a = addAngle(range(-45, 45), getAngleFromTo(o, this.getTarget().getPlannedPos()));
+	} else a = range(0, 360);
+	
+	var p = getPointInDir(Math.max(25, this.size/3), a, o.x, o.y);
+
+	this.drawX = p.x;
+	this.drawY = p.y;
+}
+
 Ship.prototype.getAttachDivs = function(){
 	if (this.cc.length){
 		$(this.element).find(".ccContainer").remove();
@@ -3224,6 +3243,7 @@ Ship.prototype.doRoll = function(){
 }
 
 Ship.prototype.doFlip = function(){
+	popup("not yet"); return;
 	var shipPos = this.getPlannedPos();
 	this.actions.push(new Move(-1, "flip", 1, shipPos.x, shipPos.y, 0, 0, this.getActionCost(1), 1, 1, 0));
 	this.flipping = !this.flipping;
