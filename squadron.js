@@ -541,7 +541,7 @@ Squadron.prototype.setLayout = function(){
 	else {
 		for (var i = 0; i < this.structures.length; i++){
 			var a = -45*(this.structures.length == 4) + -90*(this.structures.length == 2) + 360 /  this.structures.length * i;
-			var o = getPointInDir(115 + (-20*(this.structures.length == 2)) +(10*(this.structures.length == 4)), a-90, 0, 0);
+			var o = getPointInDir(100 + (-20*(this.structures.length == 2)) +(10*(this.structures.length == 4)), a-90, 0, 0);
 
 			minX = Math.min(minX, o.x);
 			maxX = Math.max(maxX, o.x);
@@ -559,7 +559,7 @@ Squadron.prototype.setLayout = function(){
 		h = Math.abs(minY) + Math.abs(maxY) + s;
 
 
-	$(this.element).find(".structContainer").css("height", h +20);
+	$(this.element).find(".structContainer").css("height", h +50);
 }
 
 Squadron.prototype.createBaseDiv = function(){
@@ -682,13 +682,15 @@ Squadron.prototype.setSubElements = function(){
 	var h = $($(this.element).find(".structContainer")).height();
 
 	var offset = 0;
-	if (this.structures.length == 3){offset = 30;}
+	if (this.structures.length == 3){offset = 20;}
 
 	for (var i = 0; i < this.structures.length; i++){
 		$(this.element).find(".structContainer").append(this.structures[i].element);
 		var subW = $(this.structures[i].element).width();
 		var subH = $(this.structures[i].element).height();
 		var pos = rotate(0, 0, this.structures[i].layout, -90);
+			pos.x *= 1.2;
+			pos.y *= 1.2;
 
 		$(this.structures[i].element)
 			.css("left", pos.x + w/2 - subW/2)

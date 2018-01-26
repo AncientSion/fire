@@ -44,7 +44,7 @@ class Avenger extends Heavy {
 		$leftBottom->systems[] = new Hangar($this->getId(), $this->id, 8, array("Aurora"), 16);
 		$structs[] = $leftBottom;
 
-		$leftTop = new Structure($this->getId(), $this->id, 270, 330, 800, 16);
+		$leftTop = new Structure($this->getId(), $this->id, 270, 330, 800, 15);
 		$leftTop->systems[] = new Dual($this->getId(), $this->id, 210, 30, 14, array("LightPulse", "LightParticleBeam"));
 		$leftTop->systems[] = new Dual($this->getId(), $this->id, 210, 30, 14, array("LightPulse", "LightParticleBeam"));
 		$leftTop->systems[] = new Hangar($this->getId(), $this->id, 8, array("Aurora"), 16);

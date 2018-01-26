@@ -99,7 +99,7 @@ class Squadron extends Ship {
 	public function setBaseStats($turn, $phase){
 		//Debug::log("setBaseStats #".$this->id);
 
-		$this->size = 40 + sizeof($this->structures)*20;
+		$this->size = 50 + sizeof($this->structures)*10;
 
 		$alive = 0;
 
