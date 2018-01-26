@@ -352,7 +352,7 @@ function Game(data, userid){
 
 		this.hideInstruct();
 		$("#deployOverlay").hide();
-		hangar.setFireOrder(t.id).select();
+		hangar.setFireOrder(t.id, pos).select();
 		this.flightDeploy = false;
 		//flight.disableMissionMode();
 
@@ -362,7 +362,29 @@ function Game(data, userid){
 			this.getUnit(t.id).attachFlight(flight);
 			this.getUnit(t.id).setSupportImage();
 		}
+
+		this.checkDoubleLaunch();
 		this.draw();
+	}
+
+	this.checkDoubleLaunch = function(){
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].flight){
+				for (var j = i+1; j < this.ships.length; j++){
+					if (this.ships[j].flight){
+						if (this.ships[i].doDraw && this.ships[j].doDraw){
+							var aPos = this.ships[i].getDrawPos();
+							var bPos = this.ships[j].getDrawPos();
+
+							if (aPos.x == bPos.x && aPos.y == bPos.y){
+								this.ships[i].doRandomOffset();
+								this.ships[j].doRandomOffset();
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	this.updateSingleIntercept = function(update){
@@ -1586,7 +1608,7 @@ function Game(data, userid){
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].status == "jumpOut"){
-				this.ships[i].deployAnim = [0, 90];
+				this.ships[i].deployAnim = [0, 50];
 			}
 		}
 
@@ -2653,7 +2675,8 @@ Game.prototype.drawAllSensorSettings = function(friendly){
 		salvoCtx.fill();
 		salvoCtx.setTransform(1,0,0,1,0,0);
 	};
-
+	
+	salvoCtx.globalAlpha = 1;
 	return;
 }
 
@@ -2766,7 +2789,7 @@ Game.prototype.resolveDeployment = function(){
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships[i].deployed = true;
 		if (this.ships[i].available == this.turn){
-			this.ships[i].deployAnim = [0, 10];
+			this.ships[i].deployAnim = [0, 50];
 			this.ships[i].deployed = false;
 		}
 	}

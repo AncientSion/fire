@@ -56,6 +56,7 @@ class Manager {
 
 	public function test(){
 		return;
+		$this->freeFlights();
 		$this->deleteAllReinforcements();
 		$this->handlePostMoveFires();
 	}
@@ -639,7 +640,7 @@ class Manager {
 		Debug::log("handleDeployFireOrders");
 		for ($i = 0; $i < sizeof($this->fires); $i++){
 			if ($this->fires[$i]->weapon instanceof Hangar){
-				$fire->resolved = 1;
+				$this->fires[$i]->resolved = 1;
 			}
 		}
 	}
@@ -886,18 +887,21 @@ class Manager {
 	}
 	
 	public function freeFlights(){
+		//Debug::log("freeFlights");
 		$data = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->flight && $this->ships[$i]->mission->arrived && $this->ships[$i]->mission->type == 2){
-				if ($this->getUnit($this->ships[$i]->mission->targetid)->destroyed){
-					//Debug::log("freeeing flight #".$this->ships[$i]->id." from mission");
-					$this->ships[$i]->mission->type = 1;
-					$this->ships[$i]->mission->turn = $this->turn - 2;
-					$this->ships[$i]->mission->arrived = $this->turn - 1;
-					$this->ships[$i]->mission->targetid = 0;
-					$this->ships[$i]->setCurrentImpulse($this->turn, $this->phase);
-					$data[] = $this->ships[$i]->mission;
-				}
+			if (!$this->ships[$i]->flight){continue;}
+			if (!(isset($this->ships[$i]->mission->arrived))){continue;}
+			if ($this->ships[$i]->mission->type != 2){continue;}
+
+			if ($this->getUnit($this->ships[$i]->mission->targetid)->destroyed){
+				//Debug::log("freeeing flight #".$this->ships[$i]->id." from mission");
+				$this->ships[$i]->mission->type = 1;
+				$this->ships[$i]->mission->turn = $this->turn - 2;
+				$this->ships[$i]->mission->arrived = $this->turn - 1;
+				$this->ships[$i]->mission->targetid = 0;
+				$this->ships[$i]->setCurrentImpulse($this->turn, $this->phase);
+				$data[] = $this->ships[$i]->mission;
 			}
 		}
 		if (sizeof($data)){DBManager::app()->updateMissionState($data);}

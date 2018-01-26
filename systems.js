@@ -3855,7 +3855,7 @@ Hangar.prototype.enableHangarDeployment = function(e){
 		var h = ($(div).height());
 		if (e.clientY + h > window.res.y){
 			$(div).data("systemid", this.id).css("left", e.clientX +100).css("top", window.res.y - h - 30).removeClass("disabled");
-		} else $(div).data("systemid", this.id).css("left", e.clientX +100).css("top", e.clientY + 50).removeClass("disabled");
+		} else $(div).data("systemid", this.id).css("left", e.clientX +200).css("top", e.clientY - 100).removeClass("disabled");
 	}
 	else {
 		$(div).addClass("disabled");

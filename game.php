@@ -147,11 +147,11 @@
 			<img src="varIcons/destroyed.png" style="width: 25px; height: 25px">
 		</div>
 		<div id="roll" class="ui disabled">
-			<img src="varIcons/roll.png" style="width: 50px; height: 50px">
+			<img src="varIcons/roll.png" style="width: 40px; height: 40px">
 		</div>
 
 		<div id="flip" class="ui disabled">
-			<img src="varIcons/flip.png" style="width: 50px; height: 50px">
+			<img src="varIcons/flip.png" style="width: 40px; height: 40px">
 		</div>
 		<div id="turnButton" class="turnEle ui disabled">
 			<table class="doTurn" style="margin:auto; width: 100%;">

@@ -148,6 +148,7 @@ spl_autoload_register(
                 'vector' => '/server/classes.php',
                 'action' => '/server/classes.php',
                 'fireorder' => '/server/classes.php',
+                'mission' => '/server/classes.php',
                 'damage' => '/server/classes.php',
                 'power' => '/server/classes.php',
                 'crit' => '/server/classes.php',
