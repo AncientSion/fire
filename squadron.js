@@ -757,10 +757,6 @@ Squadron.prototype.getDeployImg = function(){
 	return graphics.images[this.name.toLowerCase()].cloneNode(true);
 }
 
-Squadron.prototype.getEP = function(){
-	return this.getSystemByName("Engine").getOutput();
-}
-
 Squadron.prototype.checkSensorHighlight = function(){
 	//console.log("checkSensorHighlight")
 	return Ship.prototype.checkSensorHighlight.call(this);

@@ -364,10 +364,19 @@ Ship.prototype.getActionCost = function(type){
 	return 1;
 }
 
+Ship.prototype.getRealActionCost = function(type){
+	return Math.ceil(this.getActionCost(type) / this.getImpulseMod());
+}
+
 Ship.prototype.getImpulseChangeCost = function(){
+	return this.baseImpulseCost;
 	return Math.ceil(this.baseImpulseCost * (1-((this.getImpulseMod()-1)/2)) * this.getImpulseMod());
 	return Math.floor(this.baseImpulseCost * this.getBaseEP() / this.getImpulseMod()/100);
 	return Math.floor(this.baseImpulseCost*(1-(1-this.getImpulseMod())/2) / this.getEffectiveEP() * this.getEP());
+}
+
+Ship.prototype.getRealImpulseChangeCost = function(){
+	return Math.ceil(this.getImpulseChangeCost() / this.getImpulseMod());
 }
 
 Ship.prototype.getBaseImpulse = function(){
@@ -396,6 +405,7 @@ Ship.prototype.getTurnCost = function(){
 		return 0;
 	}
 	else {
+		return round(1*this.getImpulseMod(), 2)
 		return 1;
 		return round(1*this.getImpulseMod() * this.getTurnMod(), 2);
 	}
@@ -662,7 +672,7 @@ Ship.prototype.moveToMaCutVector = function(){
 Ship.prototype.canTurn = function(){
 	if (this.disabled || this.isRolling()){return false;}
 	if (this.getRemainingDelay() == 0){
-		var min = 5;
+		var min = 3;
 		var have = this.getRemainingEP();
 		var need = this.getTurnCost() * min;
 		if (have >= need){
@@ -714,8 +724,9 @@ Ship.prototype.handleTurning = function(e, o, f, pos){
 
 	a = Math.min(Math.abs(a), max);
 	turn.a = a;
-	var c = this.getTurnCost() / this.getImpulseMod() * a;
-	$("#epButton").css("top", t.y + 25).css("left", t.x - 180).find("#impulseCost").html(Math.ceil(c, 2) + " : " + Math.floor(this.getRemainingEP() - c));
+	var c = 1 * a;
+	//var c = this.getTurnCost() * a;
+	$("#epButton").css("top", t.y + 25).css("left", t.x - 200).find("#impulseCost").html(Math.ceil(c, 2) + " : " + Math.floor(this.getRemainingEP() - c));
 
 	this.drawDelay();
 	this.drawMouseVector(o, t);
@@ -1779,7 +1790,7 @@ Ship.prototype.getRemainingEP = function(){
 		}
 	}
 	
-	return Math.floor(ep);
+	return Math.ceil(ep);
 }
 
 Ship.prototype.getRemainingDelay = function(){
@@ -2508,12 +2519,10 @@ Ship.prototype.previewSetup = function(){
 
 Ship.prototype.updateDiv = function(){
 	$(this.element)
-		.find(".pos").html(this.x + " / " + this.y).end()
 		.find(".thrust").html(this.getRemainingImpulse() + " / " + this.getCurrentImpulse()).end()
 		.find(".ep").html(this.getRemainingEP() + " / " + this.getEP()).end()
+		.find(".change").html(this.getRealImpulseChangeCost() + " & " + this.getRealActionCost(0)).end()
 		.find(".delay").html(this.getRemainingDelay()).end()
-		.find(".change").html(this.getImpulseChangeCost() + " & " + this.getActionCost(0)).end()			
-		.find(".turn").html(this.getImpulseChangeCost() + " EP").end()
 }
 
 Ship.prototype.detachFlight = function(id){
@@ -3386,6 +3395,7 @@ Ship.prototype.getMaxTurnAngle = function(){
 	var ep = this.getRemainingEP();
 	var limit = this.getTurnAngle();
 	var c = this.getTurnCost();
+		c = 1;
 
 	return Math.min(limit, Math.floor(ep/c));
 }
