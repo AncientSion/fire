@@ -2675,7 +2675,8 @@ Game.prototype.drawAllSensorSettings = function(friendly){
 		salvoCtx.fill();
 		salvoCtx.setTransform(1,0,0,1,0,0);
 	};
-
+	
+	salvoCtx.globalAlpha = 1;
 	return;
 }
 
