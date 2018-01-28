@@ -5,7 +5,7 @@ class Sharlin extends UltraHeavy {
 	public $display = "Sharlin";
 	public $faction = "Minbari Federation";
 	public $size =  120;
-	public static $value = 2200;
+	public static $value = 1900;
 	public $profile = array(0.90, 1.1);
 	public $mass = 20000;
 
@@ -61,9 +61,9 @@ class Sharlin extends UltraHeavy {
 	}
 
 	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 2400);
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 2000);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(225, 5));
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(225, 5), 55, 8);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(225, 5), 60, 8);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(225, 5), 1100, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(225, 5), 12);
 	}

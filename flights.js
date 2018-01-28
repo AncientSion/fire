@@ -523,7 +523,7 @@ Flight.prototype.getShortInfo = function(){
 	
 	var table = document.createElement("table");
 		table.insertRow(-1).insertCell(-1).innerHTML = "Flight #" + this.id + " (" + game.getMissionTypeString(this, this.getTarget()) + ")";
-		table.insertRow(-1).insertCell(-1).innerHTML =  "Thrust: " + this.getCurrentImpulse();
+		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + this.getCurrentImpulse() + " / " + this.getIntactFighters() + " units";
 		table.insertRow(-1).insertCell(-1).innerHTML = this.getStringHitChance();
 	
 	if (!this.mission.arrived && game.phase < 1 && this.inRange()){
@@ -599,5 +599,10 @@ Flight.prototype.hasNoFireOrders = function(){
 Flight.prototype.createDeployEntry = function(){
 	this.attachLogEntry(
 		"<span><font color='" + this.getCodeColor()+ "'>Flight #" + this.id + "</font> is being deployed (" + this.structures.length + " units).</span>"
+	);
+}
+Flight.prototype.createMissionChangeEntry = function(){
+	this.attachLogEntry(
+		"<span><font color='" + this.getCodeColor()+ "'>Flight #" + this.id + "</font> has been issued a new mission.</span>"
 	);
 }

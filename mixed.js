@@ -627,29 +627,13 @@ Mixed.prototype.getRandomUnitPos = function(){
 Mixed.prototype.getFireDest = function(fire, isHit, num){
 	var t;
 
-	if (!isHit){
-		t = this.getRandomUnitPos();
-	}
-	else {
-		t = this.getSystem(fire.damages[num].systemid).layout;
-	}
+	if (!isHit){t = this.getRandomUnitPos();}
+	else {t = this.getSystem(fire.damages[num].systemid).layout;}
 
-	if (this.mission.arrived){
-		var x = t.x * 0.5;
-		var y = t.y * 0.5;
-		//var x = t.x;
-		//var y = t.y;
-		return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
-	}
-	else {
-		//var x = t.x * (this.size / 200);
-		//var y = t.y * (this.size / 200);
-		var x = t.x * (this.size / 100);
-		var y = t.y * (this.size / 100);
-		var x = t.x * 0.5;
-		var y = t.y * 0.5;
-		return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());
-	}
+	var base = this.getPlannedPos();
+	var x = t.x * 0.5;
+	var y = t.y * 0.5;
+	return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
 }
 
 Mixed.prototype.getTrajectory = function(gun){

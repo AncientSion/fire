@@ -299,16 +299,31 @@ function drawText(ctx, color, text, size, p){
 	ctx.fillStyle = "black";
 }
 
-function getArcDir(element){
-	if (element.start == 0 && element.end == 360){
-		return 0;
-	}
-	else if (element.start > element.end){
-	   return element.start + element.end;
+function getSystemArcDir(element){
+	var a = 0;
+	if (element.start > element.end){
+		if (element.start < 360 && element.end > 0){
+			a = element.start + (360 - element.start + element.end)/2;
+		}
+		else a = element.start + element.end;
 	}
 	else {
-	   return (element.start + element.end) / 2;
+	   a = (element.start + element.end) / 2;
 	}
 
-	console.log("getArcDir ERROR");
+	if (a > 360){a -= 360;}
+	return a;
+}
+
+function getLayoutDir(element){
+	var a = 0;
+	if (element.start > element.end){
+	   a = element.start + element.end;
+	}
+	else {
+	   a = (element.start + element.end) / 2;
+	}
+
+	if (a > 360){a -= 360;}
+	return a;
 }

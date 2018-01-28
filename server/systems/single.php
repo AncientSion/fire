@@ -134,7 +134,7 @@ class Single {
 			} else $old += $this->damages[$i]->overkill;
 		}
 
-		//Debug::log("testCrit for: ".get_class($this).", new: ".$new.", turn: ".$turn.", size: ".sizeof($this->damages));
+		//Debug::log("testCrit for: ".get_class($this).", new: ".$new.", turn: ".$turn);
 		if ($new){
 			$this->determineCrit($old, $new, $turn);
 		}
@@ -147,7 +147,7 @@ class Single {
 	}
 
 	public function getCurrentNegation(){
-		return $this->negaton;
+		return $this->negation;
 	}
 
 	public function determineCrit($old, $new, $turn){

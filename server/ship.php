@@ -16,6 +16,7 @@ class Ship {
 	public $currentImpulse;
 	public $rolling = 0;
 	public $rolled = 0;
+	public $flipping = 0;
 	public $remainingImpulse;
 	public $baseImpulse;
 	public $impulseHitMod = 0;
@@ -167,7 +168,7 @@ class Ship {
 		$this->setCurrentImpulse($turn, $phase);
 		$this->setRemainingImpulse($turn);
 		$this->setRemainingDelay($turn);
-		$this->setRollState($turn, $phase);
+		$this->setSpecialActionState($turn, $phase);
 	}
 
 	public function setPosition(){
@@ -298,6 +299,8 @@ class Ship {
 				$facing += $this->actions[$i]->a;
 			} else if ($this->actions[$i]->type == "jumpIn"){
 				$facing += $this->actions[$i]->a;
+			} else if ($this->actions[$i]->type == "flip"){
+				$facing += 180;
 			}
 		}
 
@@ -328,9 +331,12 @@ class Ship {
 		$this->remainingDelay = $delay;
 	}
 
-	public function setRollState($turn, $phase){
+	public function setSpecialActionState($turn, $phase){
 		for ($i = 0; $i < sizeof($this->actions); $i++){
-			if ($this->actions[$i]->type == "roll"){
+			if ($this->actions[$i]->type == "flip"){
+				$this->flipping = !$this->flipping;
+			}
+			else if ($this->actions[$i]->type == "roll"){
 				$this->rolling = !$this->rolling;
 			}
 		}

@@ -31,7 +31,7 @@
 		}
 	}
 
-	$manager->test();
+	$manager->eval();
 	$post = json_encode($manager->getClientData(), JSON_NUMERIC_CHECK);
 	echo "<script>";
 	echo "window.game = ".$post.";";

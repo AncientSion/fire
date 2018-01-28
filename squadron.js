@@ -115,7 +115,12 @@ Squaddie.prototype.expandElement = function(){
 		)
 
 	$(this.element)
-		.append($("<div>").addClass("mainPower").html(this.getUnusedPower()))
+		.append($("<div>").css("margin-top", 5)
+			.append($("<img>").attr("src", "varIcons/mainPower.png")
+				.addClass("mainPowerIcon"))
+			.append($("<span>")
+				.addClass("mainPower")
+				.html(this.getUnusedPower())))
 		.append($(pDiv)
 		.append(cTable));
 
@@ -134,7 +139,7 @@ Squaddie.prototype.expandElement = function(){
 		.css("top", primPosY)
 
 	for (var i = 0; i < this.structures.length; i++){
-		var a = getArcDir(this.structures[i]);
+		var a = getLayoutDir(this.structures[i]);
 		var p = getPointInDir(pWidth - 15, a-90, primPosX, primPosY);
 		var s = 24;
 
@@ -563,80 +568,7 @@ Squadron.prototype.setLayout = function(){
 }
 
 Squadron.prototype.createBaseDiv = function(){
-	var owner = "friendly";
-	if (game.phase > -2 && this.userid != game.userid){owner = "hostile";}
-	var div = document.createElement("div");
-		div.className = "shipDiv squad " + owner;
-		$(div).data("shipId", this.id);
-
-	this.element = div;
-
-	var topDiv = document.createElement("div");
-		topDiv.className = "topDiv";
-
-	var subDiv = document.createElement("div");
-		subDiv.className = "header";
-	
-	var table = document.createElement("table");
-
-	var headerC = "red";
-	if (this.friendly){headerC = "green";}
-
-	$(table)
-		.append($("<tr>")
-			.append($("<th>").html("Squadron #" + this.id).attr("colSpan", 2).addClass(headerC)))
-		.append($("<tr>")
-			.append($("<td>").html("Classification").css("width", "50%"))
-			.append($("<td>").html(game.getUnitType(this.traverse) + " (" + this.traverse + ")")))
-		.append($("<tr>")
-			.append($("<td>").html("Thrust"))
-			.append($("<td>").html(this.getRemainingImpulse() + " / " + this.getCurrentImpulse()).addClass("Thrust")))
-		.append($("<tr>")
-			//.append($("<td>").html("Engine Power:"))
-			//.append($("<td>").html(this.getRemainingEP() + " / " + this.getEP()).addClass("ep")))
-			.append($("<td>").html("Eff. Turn Ability"))
-			.append($("<td>").html(this.getRemainingEP() + " / " + this.getEP()).addClass("ep")))
-		.append($("<tr>")
-			.append($("<td>").html("Thrust & Roll"))
-			.append($("<td>").html(this.getImpulseChangeCost() + " & " + this.getActionCost(0)).addClass("change")))
-		//.append($("<tr>")
-		//	.append($("<td>").html("Turn Cost per 1"))
-		//	.append($("<td>").html(round(this.getTurnCost(), 2) + " EP")))
-		.append($("<tr>")
-			.append($("<td>").html("Turn Delay / 1"))
-			.append($("<td>").html(round(this.getTurnDelay(), 2) + " px")))
-		.append($("<tr>")
-			.append($("<td>").html("Active Delay"))
-			.append($("<td>").html(this.getRemainingDelay()).addClass("delay")))
-			
-	subDiv.appendChild(table);
-	topDiv.appendChild(subDiv)
-	div.appendChild(topDiv);
-
-	$(this.expandDiv(div))
-		.drag()
-		.find(".structContainer")
-			.contextmenu(function(e){e.stopPropagation(); e.preventDefault()})
-			.end()
-		.find(".header")
-			.contextmenu(function(e){
-				e.stopImmediatePropagation(); e.preventDefault();
-				$(this).parent().find($(".structContainer")).toggle();
-			})
-			.end()
-		.find(".iconContainer")
-			.contextmenu(function(e){
-				e.stopImmediatePropagation(); e.preventDefault();
-				if ($(this).parent().parent().data("shipId") != aUnit){
-					game.zIndex--;
-					$(this).parent().parent().addClass("disabled");
-				}
-			})
-
-
-	if (game.phase == 2){
-		$(div).find(".structContainer").show();
-	}
+	Ship.prototype.createBaseDiv.call(this);
 
 	var w = $(this.element).find(".coreContainer").width();
 	var h = $(this.element).find(".coreContainer").height();
@@ -734,16 +666,14 @@ Squadron.prototype.expandDiv = function(div){
 		
 	this.setRollState();
 	//document.getElementById("game").appendChild(div);
-	document.body.appendChild(div);
+	$(document.body).append(div);
 	$(div).css("position", "absolute").css("top", 300);
 
-	structContainer = document.createElement("div");
-	structContainer.className = "structContainer squad";
-	div.appendChild(structContainer);
+	structContainer = $("<div>").addClass("structContainer squad");
+	$(div).append(structContainer);
 	
 	$(div).addClass("disabled");
 	return div;
-
 }
 
 Squadron.prototype.getLaunchData = function(){
@@ -774,7 +704,7 @@ Squadron.prototype.getShortInfoa = function(){
 
 	var table = document.createElement("table");
 		table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id + " (" +game.getUnitType(this.traverse) + ")";
-		table.insertRow(-1).insertCell(-1).innerHTML =  "Thrust: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")";
+		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")";
 		table.insertRow(-1).insertCell(-1).innerHTML = this.getStringHitChance();
 	return table;
 }
@@ -1066,7 +996,7 @@ Squadron.prototype.getWeaponOrigin = function(id){
 				for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
 					if (this.structures[i].structures[j].systems[k].id == id){
 						var devi = this.structures[i].size;
-						var p = getPointInDir(devi/6, getArcDir(this.structures[i].structures[j])-90, 0, 0);
+						var p = getPointInDir(devi/6, getLayoutDir(this.structures[i].structures[j]), 0, 0);
 						var x = this.structures[i].layout.x/4 + p.x;
 						var y = this.structures[i].layout.y/4 + p.y;
 						return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());

@@ -291,7 +291,7 @@ Salvo.prototype.getShortInfo = function(){
 
 	var table = document.createElement("table");
 		table.insertRow(-1).insertCell(-1).innerHTML = "Salvo #" + this.id + " (" + this.structures.length + "x " + this.structures[0].name + ")";
-		table.insertRow(-1).insertCell(-1).innerHTML =  "Thrust: " + this.getCurrentImpulse();
+		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + this.getCurrentImpulse();
 		table.insertRow(-1).insertCell(-1).innerHTML = this.getStringHitChance();
 
 	if (!this.mission.arrived && game.phase < 1 && this.inRange()){

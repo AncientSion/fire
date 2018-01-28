@@ -146,17 +146,17 @@ class FusionPulsar extends Pulse {
 	public $name = "FusionPulsar";
 	public $display = "Fusion Pulsar";
 	public $minDmg = 25;
-	public $maxDmg = 35;
-	public $accDecay = 160;
+	public $maxDmg = 32;
+	public $accDecay = 180;
 	public $animColor = "lightGreen";
 	public $projSize = 2;
-	public $projSpeed = 10;
+	public $projSpeed = 12;
+	public $reload = 3;
 	public $mass = 18;
-	public $powerReq = 4;
-	public $traverse = -3;
-	public $basePulses = 2;
-	public $extraPulses = 3;
-	public $grouping = 15;
+	public $powerReq = 3;
+	public $traverse = -1;
+	public $basePulses = 3;
+	public $extraPulses = 4;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);

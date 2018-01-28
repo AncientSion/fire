@@ -1816,6 +1816,8 @@ Weapon.prototype.getAimData = function(target, final, dist, row){
 	else {
 		this.getAimDataLocation(accLoss, row);
 	}
+
+	//this.odds = 100;
 }
 
 Weapon.prototype.getAimDataTarget = function(target, final, accLoss, row){
@@ -1879,7 +1881,7 @@ Weapon.prototype.select = function(e){
 	if (game.sensorMode){
 		var sensor = game.getUnit(this.parentId).getSystemByName("Sensor");
 		var str = sensor.getOutput();
-		var center = this.getArcCenter();
+		var center = getSystemArcDir({start: this.arc[0][0], end: this.arc[0][1]});
 		var	w = this.getArcWidth() /2;
 		if (w == 180){a = -1;}
 		var d = str/Math.pow(w/game.const.ew.len, 1/game.const.ew.p);
@@ -1893,6 +1895,7 @@ Weapon.prototype.select = function(e){
 			type: sensor.ew[sensor.ew.length-1].type
 		});
 		salvoCtx.clearRect(0, 0, res.x, res.y);
+		sensor.setTempEW();
 		game.getUnit(this.parentId).drawEW();
 		return;
 	}
@@ -2216,19 +2219,13 @@ Particle.prototype.getAnimation = function(fire){
 	var allAnims = [];
 	var grouping = 2;
 	var speed = this.projSpeed;
-	var delay = 30;
-	var shotInterval = 10;
+	var delay = 25 * this.shots;
+	var shotInterval = 25 - (this.shots *4);
 	var cc = 0;
 	var hits = 0;
 	var fraction = 1;
 	var t = fire.target.getPlannedPos();
-
-	if (this.shots == 2){
-		delay = 60;
-	}
-	else if (this.shots == 4){
-		delay = 80;
-	}
+		t = fire.target.getDrawPos();
 
 	if (fire.target.squad){
 		grouping = Math.ceil(fire.guns/2);
@@ -2353,73 +2350,6 @@ EM.prototype = Object.create(Particle.prototype);
 
 
 EM.prototype.getAnimation = function(fire){
-	var allAnims = [];
-	var grouping = 2;
-	var speed = this.projSpeed;
-	var delay = 30;
-	var shotInterval = 10;
-	var cc = 0;
-	var hits = 0;
-	var fraction = 1;
-
-	if (this.shots == 2){
-		delay = 60;
-	}
-	else if (this.shots == 4){
-		delay = 80;
-	}
-
-	if (game.isCloseCombat(fire.shooter, fire.target)){
-		cc = 1;
-		if (fire.shooter.ship || fire.shooter.squad){
-			fraction = 2;
-		}
-		else if (fire.shooter.flight && (fire.target.ship || fire.target.squad)){
-			fraction = 1.5;
-		} 
-		else if (fire.shooter.flight){
-			fraction = 1.5;
-		}
-	}
-	else if (fire.dist < 200){
-		fraction = Math.min(3, 200 / fire.dist);
-	}
-	else if (fire.dist > 600){
-		fraction = Math.max(0.5, 600 / fire.dist);
-	}
-
-	speed /= fraction;
-	delay *= fraction;
-	shotInterval *= fraction;
-	
-	for (var j = 0; j < fire.guns; j++){
-		var gunAnims = [];
-		var o = fire.shooter.getWeaponOrigin(fire.systems[j]);
-
-		var ox = fire.shooter.drawX + o.x;
-		var oy = fire.shooter.drawY + o.y;
-		var t = fire.target.getPlannedPos();
-
-		for (var k = 0; k < this.shots; k++){
-			var hit = 0;
-			if (fire.hits[j] > k){
-				hit = 1;
-				hits++;
-			}
-			
-			var dest = fire.target.getPlannedPos();
-			
-			var tx = t.x + dest.x;
-			var ty = t.y + dest.y;
-
-			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
-				shotAnim.n = 0 - ((j / grouping) * delay + k*shotInterval);
-
-			gunAnims.push(shotAnim);
-		}
-		allAnims.push(gunAnims)
-	}
-	return allAnims;
 }
 
 function Pulse(system){
@@ -2445,7 +2375,9 @@ Pulse.prototype.getAnimation = function(fire){
 	var cc = 0;
 	var hits = 0;
 	var fraction = 1;
-
+	var t = fire.target.getPlannedPos();
+		t = fire.target.getDrawPos();
+		
 	if (game.isCloseCombat(fire.shooter, fire.target)){
 		cc = 1;
 		if (fire.shooter.ship || fire.shooter.squad){
@@ -2476,7 +2408,6 @@ Pulse.prototype.getAnimation = function(fire){
 		var o = fire.shooter.getWeaponOrigin(fire.systems[j]);
 		var ox = fire.shooter.drawX + o.x;
 		var oy = fire.shooter.drawY + o.y;
-		var t = fire.target.getPlannedPos();
 
 		if (fire.hits[j]){
 			hasHit = 1;
@@ -2530,6 +2461,7 @@ Laser.prototype.getAnimation = function(fire){
 	var hits = 0;
 	var fraction = 1;
 	var t = fire.target.getPlannedPos();
+		t = fire.target.getDrawPos();
 
 	if (fire.guns >= 6){
 		delay = 15;

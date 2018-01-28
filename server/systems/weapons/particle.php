@@ -103,7 +103,7 @@ class FusionCannon extends Particle {
 	public $display = "42mm Fusion Cannon";
 	public $minDmg = 34;
 	public $maxDmg = 44;
-	public $accDecay = 100;
+	public $accDecay = 120;
 	public $shots = 1;
 	public $animColor = "green";
 	public $projSize = 3;

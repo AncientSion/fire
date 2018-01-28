@@ -89,8 +89,8 @@ class LightParticleBeam extends Laser {
 	public $animColor = "blue";
 	public $rakeTime = 25;
 	public $beamWidth = 1;
-	public $minDmg = 29;
-	public $maxDmg = 36;
+	public $minDmg = 27;
+	public $maxDmg = 34;
 	public $optRange = 400;
 	public $dmgLoss = 4;
 	public $accDecay = 120;
@@ -217,7 +217,7 @@ class NeutronLaser extends Laser {
 	public $maxDmg = 130;
 	public $optRange = 800;
 	public $dmgLoss = 2;
-	public $accDecay = 50;
+	public $accDecay = 60;
 	public $shots = 1;
 	public $reload = 2;
 	public $powerReq = 4;
@@ -235,16 +235,16 @@ class NeutronLaser extends Laser {
 class NeutronAccelerator extends Laser {
 	public $name = "NeutronAccelerator";
 	public $display = "Neutron Accelerator";
-	public $rakeTime = 60;
+	public $rakeTime = 50;
 	public $animColor = "yellow";
 	public $beamWidth = 2;
-	public $minDmg = 58;
-	public $maxDmg = 72;
+	public $minDmg = 45;
+	public $maxDmg = 60;
 	public $optRange = 400;
-	public $dmgLoss = 6;
+	public $dmgLoss = 3;
 	public $accDecay = 100;
 	public $shots = 1;
-	public $reload = 1;
+	public $reload = 2;
 	public $powerReq = 5;
 	public $rakes = 1;
 	public $effiency = 3;
@@ -254,7 +254,6 @@ class NeutronAccelerator extends Laser {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
-		$this->boostEffect[0]->value = 0.35;
 	}
 }
 

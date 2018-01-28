@@ -9,10 +9,10 @@ class WhiteStar extends Light {
 	public $cost = 500;
 	public $mass = 1880;
 
-	public $integrity = 575;
-	public $ep = 110;
+	public $integrity = 550;
+	public $ep = 140;
 	public $ew = 650;
-	public $power = 4;
+	public $power = 3;
 	public $negation = 18;
 
 	function __construct($id, $userid){
@@ -23,17 +23,15 @@ class WhiteStar extends Light {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new NeutronAccelerator($this->getId(), $this->id, 330, 30);
+		$front->systems[] = new NeutronAccelerator($this->getId(), $this->parentId, 330, 30);
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new FusionPulsar($this->getId(), $this->id, 0, 60);
-		$right->systems[] = new FusionPulsar($this->getId(), $this->id, 0, 60);
+		$right->systems[] = new FusionPulsar($this->getId(), $this->parentId, 0, 60);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new FusionPulsar($this->getId(), $this->id, 300, 360);
-		$left->systems[] = new FusionPulsar($this->getId(), $this->id, 300, 360);
+		$left->systems[] = new FusionPulsar($this->getId(), $this->parentId, 300, 360);
 		$structs[] = $left;
 		
 		for ($i = 0; $i < sizeof($structs); $i++){

@@ -5,7 +5,7 @@ class Octurion extends UltraHeavy {
 	public $display = "Octurion";
 	public $faction = "Centauri Republic";
 	public $size =  120;
-	public static $value = 1650;
+	public static $value = 1600;
 	public $profile = array(0.95, 1.05);
 	public $mass = 20000;
 
@@ -72,7 +72,7 @@ class Octurion extends UltraHeavy {
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 2100);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(250, 5));
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(250, 5), 55);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(250, 5), 1100, 10);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(250, 5), 1000, 10);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(250, 5));
     }
 

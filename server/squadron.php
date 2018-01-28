@@ -250,11 +250,9 @@ class Squadron extends Ship {
 	}
 
 	public function testForCrits($turn){
-
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed){continue;}
 			else if (!$this->structures[$i]->damaged){/*Debug::log("subunit ".$i." not damaged!");*/ continue;}
-
 			$this->structures[$i]->testCrit($turn, 0);
 		}
 	}	
@@ -478,7 +476,7 @@ class Squaddie extends Single {
 		$dmg =  round(($new + $old/2) / $this->integrity * 100);
 		$effects = $this->getValidEffects();
 
-		//Debug::log(" => SQUAD determineCrit #".$this->parentId."/".$this->id." for ".$this->name.", Dmg: ".$dmg." %");
+		Debug::log(" => SQUAD determineCrit #".$this->parentId."/".$this->id." for ".$this->name.", Dmg: ".$dmg." %");
 
 		$effects = $this->getValidEffects();
 
@@ -495,7 +493,7 @@ class Squaddie extends Single {
 
 				for ($k = sizeof($effects)-1; $k >= 0; $k--){
 					if ($roll >= $effects[$k][1]){
-						//Debug::log("crit");
+						Debug::log("crit: ".$effects[$k][0]);
 						$this->structures[$i]->systems[$j]->crits[] = new Crit(
 							0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn,
 							 $effects[$k][0],  $effects[$k][2],  $effects[$k][3], 1

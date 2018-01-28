@@ -54,7 +54,12 @@ class Manager {
 	}
 
 
-	public function test(){
+	public function eval(){
+		$this->getUnit(1)->damaged = true;
+		$this->getUnit(1)->structures[0]->damaged = true;
+		$this->getUnit(1)->structures[1]->damaged = true;
+		$this->testCriticals();
+
 		return;
 		$this->freeFlights();
 		$this->deleteAllReinforcements();
@@ -543,7 +548,7 @@ class Manager {
 		Debug::log("handleDeploymentPhase");
 		$this->handleDeploymentActions();
 		$this->handleJumpInActions();
-		$this->handleJumpOutActions();
+		$this->resolveJumpOutActions();
 		$this->handleInitialFireOrders();
 		$this->assemblDeployStates();
 		if ($this->turn == $this->wave){$this->deleteAllReinforcements();}
@@ -571,12 +576,27 @@ class Manager {
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->status == "jumpOut"){
 				$needCheck = true;
-				$this->ships[$i]->destroyed = true;
 			}
 		}
 
 		if ($needCheck){
 			$this->freeFlights();
+		}
+	}
+
+	public function resolveJumpOutActions(){
+		Debug::log("resolveJumpOutActions");
+
+		$needCheck = false;
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->status == "jumpOut"){
+				$needCheck = true;
+				$this->ships[$i]->destroyed = true;
+			}
+		}
+
+		if ($needCheck){
 			$this->setUnitStatus();
 		}
 	}
@@ -865,7 +885,7 @@ class Manager {
 		$this->resolveShipFireOrders();
 		$this->resolveFighterFireOrders();
 		$this->resolveBallisticFireOrders();
-		$this->setUnitCrits();
+		$this->testCriticals();
 
 		$this->handleResolvedFireData();
 
@@ -875,6 +895,7 @@ class Manager {
 	}
 	
 	public function handleDamageControlPhase(){
+		$this->handleJumpOutActions();
 		return true;
 	}
 
@@ -891,10 +912,10 @@ class Manager {
 		$data = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if (!$this->ships[$i]->flight){continue;}
-			if (!(isset($this->ships[$i]->mission->arrived))){continue;}
 			if ($this->ships[$i]->mission->type != 2){continue;}
 
-			if ($this->getUnit($this->ships[$i]->mission->targetid)->destroyed){
+			$t = $this->getUnit($this->ships[$i]->mission->targetid);
+			if ($t->destroyed || $t->status == "jumpOut"){
 				//Debug::log("freeeing flight #".$this->ships[$i]->id." from mission");
 				$this->ships[$i]->mission->type = 1;
 				$this->ships[$i]->mission->turn = $this->turn - 2;
@@ -1292,10 +1313,10 @@ class Manager {
 		}
 	}
 
-	public function setUnitCrits(){
+	public function testCriticals(){
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->damaged){
-				//Debug::log("setUnitCrits #".$this->ships[$i]->id);
+				//Debug::log("testCriticals #".$this->ships[$i]->id);
 				$this->ships[$i]->testForCrits($this->turn);
 			} 
 		}

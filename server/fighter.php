@@ -50,7 +50,7 @@ class Aurora extends Fighter {
 	public $display = "Aurora";
 	public $faction = "Earth Alliance";
 	public static $value =  28;
-	public $mass = 36;
+	public $mass = 34;
 	public $ep = 100;
 	public $integrity = 26;
 	public $negation = 4;
@@ -69,7 +69,7 @@ class Thunderbolt extends Fighter {
 	public $display = "Thunderbolt";
 	public $faction = "Earth Alliance";
 	public static $value =  35;
-	public $mass = 38;
+	public $mass = 36;
 	public $ep = 110;
 	public $integrity = 29;
 	public $negation = 5;
