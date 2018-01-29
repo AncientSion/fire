@@ -41,6 +41,7 @@ function Game(data, userid){
 	this.drawCircle = 1;
 	this.events = [];
 	this.arcRange = 1200;
+	this.ui = {shortInfo: $("#shortInfo"), doShorten: $("#doShorten")}
 	window.username = data.username;
 
 	this.doDeployShip = function(e, ship, pos){
@@ -498,7 +499,7 @@ function Game(data, userid){
 	this.hasOpenMoves = function(){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid == this.userid){
-				if (this.ships[i].getRemainingSpeed() > 0){
+				if (this.ships[i].getRemSpeed() > 0){
 					if (aUnit){
 						this.getUnit(aUnit).doUnselect();
 					}
@@ -1265,7 +1266,7 @@ function Game(data, userid){
 
 		this.shortInfo = unit.id;
 
-		var ele = $("#shortInfo");
+		var ele = game.ui.shortInfo;
 		$(ele).children().remove().end().append($(unit.getShortInfo()).css("width", "100%"));
 
 		var oX = $(ele).width()/2;
@@ -1290,7 +1291,7 @@ function Game(data, userid){
 	}
 
 	this.resetHover = function(e, loc, facing, pos){
-		$("#shortInfo").html("").hide();
+		game.ui.shortInfo.html("").hide();
 
 		if (this.deploying){game.drawDeploymentZone();}
 
@@ -1339,7 +1340,7 @@ function Game(data, userid){
 		salvoCtx.clearRect(0, 0, res.x, res.y)
 		mouseCtx.clearRect(0, 0, res.x, res.y)
 
-		$("#shortInfo").hide();
+		game.ui.shortInfo.hide();
 
 		if (aUnit){
 			var unit = this.getUnit(aUnit);
@@ -1449,7 +1450,7 @@ function Game(data, userid){
 			this.ships[i].animationSetupMove();
 
 			if (this.ships[i].ship || this.ships[i].squad){
-				frameMod = 1000 / window.fpsTicks / this.ships[i].getCurrentImpulse();
+				frameMod = 1000 / window.fpsTicks / this.ships[i].getCurSpeed();
 			} else frameMod = 1000 / window.fpsTicks / this.ships[i].actions[this.ships[i].actions.length-1].dist;
 			//frameMod = 1;
 			for (var j = 0; j < this.ships[i].actions.length; j++){
@@ -2478,7 +2479,7 @@ function Game(data, userid){
 								var y = $(this).height();
 								var p = $(this).offset();
 								game.handleHoverEvent(e, 0, vessel);
-								$("#shortInfo").css("left", p.left - x).css("top", p.top + y+20);
+								game.ui.shortInfo.css("left", p.left - x).css("top", p.top + y+20);
 							}
 							if (aUnit && aUnit != vessel.id){
 								var	ship = game.getUnit(aUnit);
@@ -2515,13 +2516,13 @@ function Game(data, userid){
 
 Game.prototype.posIsOccupied = function(ship, pos){
 	var dist = getDistance(ship, step) 
-	if (ship.getRemainingSpeed()){return false;}
+	if (ship.getRemSpeed()){return false;}
 	if (ship.ship){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].ship && this.ships[i].id != ship.id && this.ships[i].userid == ship.userid){ // different ship, different owners
 				var step = this.ships[i].getPlannedPos();
 
-				if (!this.ships[i].getRemainingSpeed() && getDistance(pos, step) <= 0.66*(this.ships[i].size/2 + ship.size/2)){
+				if (!this.ships[i].getRemSpeed() && getDistance(pos, step) <= 0.66*(this.ships[i].size/2 + ship.size/2)){
 				popup("The selected position is too close to the position or planned position of vessel (#"+this.ships[i].id+")");
 					return true;
 				}
@@ -2804,7 +2805,7 @@ Game.prototype.resolveDeployment = function(){
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships[i].deployed = true;
 		if (this.ships[i].available == this.turn){
-			this.ships[i].deployAnim = [0, 60];
+			this.ships[i].deployAnim = [0, 1];
 			this.ships[i].deployed = false;
 		}
 	}

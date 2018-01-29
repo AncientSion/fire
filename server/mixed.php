@@ -160,7 +160,7 @@ class Mixed extends Ship {
 			}
 			else {
 				$origin = $this->getCurrentPosition();
-				$impulse = $this->getCurrentImpulse();
+				$impulse = $this->getCurSpeed();
 				$dist = Math::getDist2($origin, $this->mission);
 				$angle = Math::getAngle2($origin, $this->mission);
 
@@ -194,7 +194,7 @@ class Mixed extends Ship {
 
 					$tPos = $t->getCurrentPosition();
 					$origin = $this->getCurrentPosition();
-					$impulse = $this->getCurrentImpulse();
+					$impulse = $this->getCurSpeed();
 					$dist = Math::getDist2($origin, $tPos);
 					$angle = Math::getAngle2($origin, $tPos);
 
@@ -232,7 +232,7 @@ class Mixed extends Ship {
 				else {
 					$tPos = $t->getCurrentPosition();
 					$origin = $this->getCurrentPosition();
-					$impulse = $this->getCurrentImpulse();
+					$impulse = $this->getCurSpeed();
 					$dist = Math::getDist2($origin, $tPos);
 					$angle = Math::getAngle2($origin, $tPos);
 

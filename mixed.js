@@ -50,7 +50,7 @@ Mixed.prototype.resetMoveMode = function(){
 	return;
 }
 
-Mixed.prototype.getCurrentImpulse = function(){
+Mixed.prototype.getCurSpeed = function(){
 	return this.currentImpulse;
 }
 
@@ -71,7 +71,7 @@ Mixed.prototype.drawMovePlan = function(){
 	} else tPos = {x: this.mission.x, y: this.mission.y};
 
 	var dist = getDistance(origin, tPos);
-	var impulse = this.getCurrentImpulse();
+	var impulse = this.getCurSpeed();
 	var color = "red";
 
 	planCtx.globalAlpha = 0.5;
@@ -229,7 +229,7 @@ Mixed.prototype.getTargetPosition = function(){
 }
 
 Mixed.prototype.inRange = function(){
-	if (getDistance(this.getTargetPosition(), this.getPlannedPos()) <= this.getCurrentImpulse()){
+	if (getDistance(this.getTargetPosition(), this.getPlannedPos()) <= this.getCurSpeed()){
 		return true;
 	} else return false;
 }
@@ -239,7 +239,7 @@ Mixed.prototype.getTarget = function(){
 }
 
 Mixed.prototype.setTarget = function(){
-	var i = this.getCurrentImpulse();
+	var i = this.getCurSpeed();
 	var d = 0;
 	var p = this.getPlannedPos();
 	if (this.mission.type == 1){  // patrol goal
@@ -272,7 +272,7 @@ Mixed.prototype.setTarget = function(){
 
 					this.nextStep = getPointInDir(Math.min(d, i), this.facing, p.x, p.y);
 					var tPos = target.getPlannedPos();
-					target.nextStep = getPointInDir(Math.min(d, target.getCurrentImpulse()), target.facing, tPos.x, tPos.y);
+					target.nextStep = getPointInDir(Math.min(d, target.getCurSpeed()), target.facing, tPos.x, tPos.y);
 					return;
 				*/
 					this.finalStep = target.getPlannedPos();
@@ -688,7 +688,7 @@ Mixed.prototype.getBaseImage = function(){
 	return this.structures[0].getBaseImage();
 }
 
-Mixed.prototype.getRemainingSpeed = function(){
+Mixed.prototype.getRemSpeed = function(){
 	return 0;
 }
 

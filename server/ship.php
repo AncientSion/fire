@@ -270,8 +270,8 @@ class Ship {
 		$this->currentImpulse = $impulse;
 	}
 
-	public function getCurrentImpulse(){
-		//Debug::log("getCurrentImpulse #".$this->id);
+	public function getCurSpeed(){
+		//Debug::log("getCurSpeed #".$this->id);
 		return $this->currentImpulse;
 	}
 
@@ -280,7 +280,7 @@ class Ship {
 			$this->remainingImpulse = 0;
 		}
 		else { 
-			$this->remainingImpulse = $this->getCurrentImpulse();
+			$this->remainingImpulse = $this->getCurSpeed();
 		}
 	}
 
@@ -769,7 +769,7 @@ class Ship {
 		}
 	}
 	public function setImpulseProfileMod(){
-		$now = $this->getCurrentImpulse();
+		$now = $this->getCurSpeed();
 		$stock = $this->getBaseImpulse();
 
 		$ratio = $now/$stock;
@@ -778,7 +778,7 @@ class Ship {
 		}
 		return;
 
-		//return 1+((($this->getBaseImpulse() / $this->getCurrentImpulse())-1)/2);
+		//return 1+((($this->getBaseImpulse() / $this->getCurSpeed())-1)/2);
 	}
 
 	public function getImpulseProfileMod(){

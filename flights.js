@@ -142,7 +142,7 @@ Flight.prototype.createBaseDiv = function(){
 			.append($("<td>").html(game.getUnitType(this.traverse) + " (" + this.traverse + ")")))
 		.append($("<tr>")
 			.append($("<td>").html("Current Thrust"))
-			.append($("<td>").html((this.getCurrentImpulse() + " (max: " + (this.baseImpulse*4) + ")"))))
+			.append($("<td>").html((this.getCurSpeed() + " (max: " + (this.baseImpulse*4) + ")"))))
 		.append($("<tr>")
 			.append($("<td>").html("Current Mission"))
 			.append($("<td>").addClass("missionType").html(game.getMissionTypeString(this, this.getTarget()))))
@@ -516,17 +516,17 @@ Flight.prototype.drawMissionArea = function(){
 }
 
 Flight.prototype.getShortInfo = function(){
-	var ele = $("#shortInfo");
+	var ele = game.ui.shortInfo;
 	if (game.phase > -2 && this.userid == game.userid){
 		$(ele).attr("class", "friendly");
 	} else $(ele).attr("class", "hostile");
 
 	var baseHit = this.getBaseHitChance();
-	var impulse = this.getCurrentImpulse();
+	var impulse = this.getCurSpeed();
 	
 	var table = document.createElement("table");
 		table.insertRow(-1).insertCell(-1).innerHTML = "Flight #" + this.id + " (" + game.getMissionTypeString(this, this.getTarget()) + ")";
-		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + this.getCurrentImpulse() + " / " + this.getIntactFighters() + " units";
+		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + this.getCurSpeed() + " / " + this.getIntactFighters() + " units";
 		table.insertRow(-1).insertCell(-1).innerHTML = this.getStringHitChance();
 	
 	if (!this.mission.arrived && game.phase < 1 && this.inRange()){

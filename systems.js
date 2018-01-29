@@ -1998,7 +1998,7 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 		if (this.ammo != -1){
 			$(table).append($("<tr>").append($("<th>").css("border-top", "1px solid white").attr("colSpan", 2).html(this.loads[this.ammo].name)));
 			$(table).append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.loads[this.ammo].display)));
-			$(table).append($("<tr>").append($("<td>").html("Ammo amount")).append($("<td>").html("<span class='red'>" + this.getRemainingAmmo() + "</span> / " + this.getMaxAmmo()).attr("id", "ammo")));
+			$(table).append($("<tr>").append($("<td>").html("Ammo amount")).append($("<td>").html("<span class='red'>" + this.getRemAmmo() + "</span> / " + this.getMaxAmmo()).attr("id", "ammo")));
 			$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + game.getUnitType(this.getTraverseRating()))));
 			$(table).append($("<tr>").append($("<td>").html("Thrust")).append($("<td>").html(this.getImpulseString())));
 			//$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("<span class='red' id='detailShots'>" + this.getOutput() + "</span> / " + this.launchRate[this.ammo])));
@@ -2827,7 +2827,7 @@ Launcher.prototype.create = function(loads){
 			this.loads[i].amount = 0;
 		}
 	}
-	else if (this.getRemainingAmmo() == 0){
+	else if (this.getRemAmmo() == 0){
 		this.shots = 0;
 		this.forceUnpower();
 	}
@@ -2856,7 +2856,7 @@ Launcher.prototype.getPowerOrders = function(){
 }
 
 Launcher.prototype.setBaseOutput = function(){
-	var rem = this.getRemainingAmmo();
+	var rem = this.getRemAmmo();
 	var max = this.getMaxoutput();
 
 	var boost = Math.min(rem, max);
@@ -2868,7 +2868,7 @@ Launcher.prototype.setBaseOutput = function(){
 	this.update();
 }
 
-Launcher.prototype.getRemainingAmmo = function(){
+Launcher.prototype.getRemAmmo = function(){
 	return this.output;
 }
 
@@ -2877,7 +2877,7 @@ Launcher.prototype.getMaxAmmo = function(){
 }
 
 Launcher.prototype.getBoostDiv = function(){
-	if (!this.getRemainingAmmo()){
+	if (!this.getRemAmmo()){
 		return;
 	}
 	return System.prototype.getBoostDiv.call(this);
@@ -3033,7 +3033,7 @@ Launcher.prototype.getMaxoutput = function(){
 
 Launcher.prototype.updateSystemDetailsDiv = function(){
 	$("#systemDetailsDiv")
-		.find("#ammo").html("<font color='red'>" + this.getRemainingAmmo() + "</font> / " + this.getMaxAmmo());
+		.find("#ammo").html("<font color='red'>" + this.getRemAmmo() + "</font> / " + this.getMaxAmmo());
 }
 
 Launcher.prototype.setupAmmoLoadout = function(e){

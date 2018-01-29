@@ -46,7 +46,7 @@ class Salvo extends Mixed {
 		$this->currentImpulse = floor($this->baseImpulse * min(3, $elapsed + ($phase > 1)));
 	}
 	
-	public function getCurrentImpulse(){
+	public function getCurSpeed(){
 		return $this->currentImpulse;
 	}
 

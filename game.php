@@ -595,33 +595,16 @@
 			game.getUnit(aUnit).switchTurnMode();
 		})
 
-		$(".doShortenTurn")
-		.click(function(e){
-			e.stopPropagation();
-			game.getUnit(aUnit).doShortenTurn(false)
-		})
-		.contextmenu(function(e){
-			e.stopPropagation();
-			e.preventDefault();
-			game.getUnit(aUnit).doShortenTurn(true)
-		})
-
-		$(".doUndoShortenTurn")
-		.click(function(e){
-			e.stopPropagation();
-			game.getUnit(aUnit).doUndoShortenTurn(false)
-		})
-		.contextmenu(function(e){
-			e.stopPropagation();
-			e.preventDefault();
-			game.getUnit(aUnit).doUndoShortenTurn(true)
-		})
-
 		$("#doShorten")
+		.data("set", 0)
 		.click(function(){
 			//console.log("maxVector")
 			game.getUnit(aUnit).doShortenTurn();
-		})	
+		})
+		.contextmenu(function(e){
+			e.stopPropagation(); e.preventDefault();
+			game.getUnit(aUnit).doUndoShortenTurn();
+		})
 
 	
 		$("#maxCutVector")

@@ -376,6 +376,9 @@ function canvasMouseMove(e){
 		else if (ship.hasWeaponsSelected()){
 			handleWeaponAimEvent(ship, unit, e, pos);
 		}
+		else if (game.phase == 0){
+			handleTurnShortening(ship, e, pos);
+		}
 	}
 	else if (game.deploying){
 		game.getDeployingUnit().drawDeploymentPreview(e, pos);
@@ -387,6 +390,88 @@ function canvasMouseMove(e){
 	if (unit){game.handleHoverEvent(e, 1, unit);
 	} else if (game.shortInfo){game.resetHover(e, shipLoc, facing, pos);}
 }
+
+function handleTurnShortening(unit, e, pos){
+	var remDelay = unit.getRemDelay();
+	if (!remDelay){return;}
+
+	var o = unit.getGamePos()
+	var p = getPointInDir(100, unit.getPlannedFacing()-180, o.x, o.y);
+	var left;
+	var top;
+	var last = unit.getLastTurn();
+	var short = "Shorten: <span class=";
+	var post = "Post: ";
+	var reset = false;
+	var dist = Math.floor(getDistance(unit.getPlannedPos(), pos));
+	var multi = 0;
+
+	if (isInArc(getCompassHeadingOfPoint(unit.getPlannedPos(), pos, 0), unit.moveAngles.start, unit.moveAngles.end)){
+		if (dist > Math.min(last.delay / 2 - unit.actions[unit.actions.length-1].dist, remDelay) && dist < remDelay){
+			left = e.clientX - $(game.ui.doShorten).width()/2;
+			top = e.clientY + 50;
+
+			multi = round(unit.getShortenTurnCost(remDelay-dist), 2)
+			//console.log(multi)
+			cost = Math.round(multi * last.cost)
+
+			if (cost > unit.getRemEP()){
+				short += "'red'>";
+			}
+			else {
+				short += "'green'>";
+				post += "<span class='green'>" + (unit.getRemEP() - cost) + "</span> / " + unit.getEP();
+			}
+			
+			short += cost + " TA</span>";
+
+			
+			$(game.ui.doShorten)
+				.empty()
+				.append($("<div>").html(short))
+				.append($("<div>").html(post))
+				//.data("multi", multi)
+				.css("left", left)
+				.css("top", top)
+
+		}
+		else {
+			reset = true;
+		}
+	}
+	else {
+		reset = true;
+	}
+
+	if (reset){
+		left = p.x * cam.z  + cam.o.x - $(game.ui.doShorten).width()/2;
+		top = p.y * cam.z  + cam.o.y - $(game.ui.doShorten).height()/2;
+		multi = $(game.ui.doShorten).data("multi")
+
+
+		if (multi){
+			cost = Math.round(multi * last.cost)
+			if (cost > unit.getRemEP()){
+				short += "'red'>";
+			}
+			else {
+				short += "'green'>";
+				post += "<span class='green'>" + (unit.getRemEP() - cost) + "</span> / " + unit.getEP();
+			}
+
+			short += cost + " TA</span>";
+
+
+			$(game.ui.doShorten)
+			.empty()
+			.append($("<div>").html(short))
+			.append($("<div>").html(post))
+			.css("left", left)
+			.css("top", top)
+		}
+	}
+}
+
 
 function sensorize(ship, pos){
 	var facing = ship.getPlannedFacing();
@@ -448,7 +533,7 @@ function movePhase(e, pos, unit){
 			}
 			else if (isInArc(getCompassHeadingOfPoint(unit.getPlannedPos(), pos, 0), unit.moveAngles.start, unit.moveAngles.end)){ //check if clicked to move in movement arc
 				var dist = Math.floor(getDistance(unit.getPlannedPos(), pos));
-				if (dist < unit.getRemainingSpeed()){
+				if (dist < unit.getRemSpeed()){
 					unit.issueMove(pos, dist);
 				}
 			}

@@ -121,7 +121,7 @@ Salvo.prototype.createBaseDiv = function(){
     		.append($("<th>").html("Tracking up to"))
 		)
 		.append($("<tr>")
-    		.append($("<td>").html(this.getCurrentImpulse() + " (+" + Math.floor(this.getBaseImpulse()) + " per Turn)"))
+    		.append($("<td>").html(this.getCurSpeed() + " (+" + Math.floor(this.getBaseImpulse()) + " per Turn)"))
     		.append($("<td>").html(this.structures[0].negation))
     		.append($("<td>").html(this.getDamage()))
     		.append($("<td>").html(this.getTrackingString()))
@@ -284,14 +284,14 @@ Salvo.prototype.setPostMoveSize = function(){
 }
 
 Salvo.prototype.getShortInfo = function(){
-	var ele = $("#shortInfo");
+	var ele = game.ui.shortInfo;
 	if (this.userid == game.userid){
 		$(ele).attr("class", "friendly");
 	} else $(ele).attr("class", "hostile");
 
 	var table = document.createElement("table");
 		table.insertRow(-1).insertCell(-1).innerHTML = "Salvo #" + this.id + " (" + this.structures.length + "x " + this.structures[0].name + ")";
-		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + this.getCurrentImpulse();
+		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + this.getCurSpeed();
 		table.insertRow(-1).insertCell(-1).innerHTML = this.getStringHitChance();
 
 	if (!this.mission.arrived && game.phase < 1 && this.inRange()){

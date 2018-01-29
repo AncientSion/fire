@@ -840,7 +840,7 @@ class Manager {
 					"y" => $this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1]->y,
 					"facing" => 0,
 					"delay" => 0, 
-					"thrust" => $this->ships[$i]->getCurrentImpulse(),
+					"thrust" => $this->ships[$i]->getCurSpeed(),
 					"rolling" => $this->ships[$i]->rolling,
 					"rolled" => $this->ships[$i]->rolled
 				);

@@ -695,12 +695,12 @@ Squadron.prototype.checkSensorHighlight = function(){
 }
 
 Squadron.prototype.getShortInfoa = function(){
-	var ele = $("#shortInfo");
+	var ele = game.ui.shortInfo;
 	if (this.userid == game.userid){
 		$(ele).attr("class", "friendly");
 	} else $(ele).attr("class", "hostile");
 
-	var impulse = this.getCurrentImpulse();
+	var impulse = this.getCurSpeed();
 
 	var table = document.createElement("table");
 		table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id + " (" +game.getUnitType(this.traverse) + ")";

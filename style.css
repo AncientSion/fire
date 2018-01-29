@@ -1747,19 +1747,14 @@ div.integrityFull {
 	display: none;
 }
 
-.doShortenTurn:hover, .doUndoShortenTurn:hover {
-	background-color: white;
-	color: black;
-}
-
-#maxTurnVector, #maxVector, #maxCutVector, #shortenInfo, #doShorten {
+#maxTurnVector, #maxVector, #maxCutVector {
 	width: 30px;
 	height: 30px;
 	border-radius: 20px;
 	color: white;
 }
 
-#maxTurnVector div, #maxVector div, #maxCutVector div,  #shortenInfodiv, #doShorten div {
+#maxTurnVector div, #maxVector div, #maxCutVector div {
 	margin-left: 4px;
 	margin-top: 7px;
 }
@@ -1768,9 +1763,20 @@ div.integrityFull {
 	display: none;
 }
 
-#maxVector:hover, #maxTurnVector:hover, #maxCutVector:hover {
+#maxVector:hover, #maxTurnVector:hover, #maxCutVector:hover, #doShorten:hover {
 	background-color: white;
 	color: black;
+}
+
+#doShorten {
+	background-color: black;
+	color: white;
+	border-radius: 2px;
+	padding: 5px;
+}
+
+#doShorten div {
+	margin: auto;
 }
 
 .dogFightHeader {
