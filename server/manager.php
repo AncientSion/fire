@@ -55,12 +55,12 @@ class Manager {
 
 
 	public function eval(){
+		return;
 		$this->getUnit(1)->damaged = true;
 		$this->getUnit(1)->structures[0]->damaged = true;
 		$this->getUnit(1)->structures[1]->damaged = true;
 		$this->testCriticals();
 
-		return;
 		$this->freeFlights();
 		$this->deleteAllReinforcements();
 		$this->handlePostMoveFires();

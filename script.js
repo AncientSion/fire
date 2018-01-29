@@ -448,7 +448,7 @@ function movePhase(e, pos, unit){
 			}
 			else if (isInArc(getCompassHeadingOfPoint(unit.getPlannedPos(), pos, 0), unit.moveAngles.start, unit.moveAngles.end)){ //check if clicked to move in movement arc
 				var dist = Math.floor(getDistance(unit.getPlannedPos(), pos));
-				if (dist < unit.getRemainingImpulse()){
+				if (dist < unit.getRemainingSpeed()){
 					unit.issueMove(pos, dist);
 				}
 			}

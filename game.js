@@ -498,7 +498,7 @@ function Game(data, userid){
 	this.hasOpenMoves = function(){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid == this.userid){
-				if (this.ships[i].getRemainingImpulse() > 0){
+				if (this.ships[i].getRemainingSpeed() > 0){
 					if (aUnit){
 						this.getUnit(aUnit).doUnselect();
 					}
@@ -2515,13 +2515,13 @@ function Game(data, userid){
 
 Game.prototype.posIsOccupied = function(ship, pos){
 	var dist = getDistance(ship, step) 
-	if (ship.getRemainingImpulse()){return false;}
+	if (ship.getRemainingSpeed()){return false;}
 	if (ship.ship){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].ship && this.ships[i].id != ship.id && this.ships[i].userid == ship.userid){ // different ship, different owners
 				var step = this.ships[i].getPlannedPos();
 
-				if (!this.ships[i].getRemainingImpulse() && getDistance(pos, step) <= 0.66*(this.ships[i].size/2 + ship.size/2)){
+				if (!this.ships[i].getRemainingSpeed() && getDistance(pos, step) <= 0.66*(this.ships[i].size/2 + ship.size/2)){
 				popup("The selected position is too close to the position or planned position of vessel (#"+this.ships[i].id+")");
 					return true;
 				}
@@ -2913,7 +2913,7 @@ Game.prototype.logEvents = function(){
 	var body = $("#combatLog").find("tbody");
 
 	for (var i = 0; i < this.ships.length; i++){
-		if (this.ships[i].flight && this.ships[i].mission.turn == game.turn){
+		if (this.ships[i].flight && this.ships[i].availabe < game.turn && this.ships[i].mission.turn == game.turn){
 			this.ships[i].createMissionChangeEntry();
 		}
 	}

@@ -1752,14 +1752,14 @@ div.integrityFull {
 	color: black;
 }
 
-#maxTurnVector, #maxVector, #maxCutVector {
+#maxTurnVector, #maxVector, #maxCutVector, #shortenInfo, #doShorten {
 	width: 30px;
 	height: 30px;
 	border-radius: 20px;
 	color: white;
 }
 
-#maxTurnVector div, #maxVector div, #maxCutVector div {
+#maxTurnVector div, #maxVector div, #maxCutVector div,  #shortenInfodiv, #doShorten div {
 	margin-left: 4px;
 	margin-top: 7px;
 }

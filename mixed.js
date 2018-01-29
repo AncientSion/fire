@@ -688,7 +688,7 @@ Mixed.prototype.getBaseImage = function(){
 	return this.structures[0].getBaseImage();
 }
 
-Mixed.prototype.getRemainingImpulse = function(){
+Mixed.prototype.getRemainingSpeed = function(){
 	return 0;
 }
 

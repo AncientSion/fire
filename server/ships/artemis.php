@@ -7,7 +7,7 @@ class Artemis extends Medium {
 	public $size =  50;
 	public static $value = 490;
 	public $profile = array(0.93, 1.07);
-	public $mass = 3500;
+	public $mass = 13500;
 
 	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);

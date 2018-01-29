@@ -24,6 +24,10 @@ class Flight extends Mixed {
 		}
 	}
 
+	public function getMaxSpeed (){
+		return $this->baseImpulse*4;
+	}
+
 	public function setCurrentImpulse($t, $p){
 		//Debug::log("setCurrentImpulse #".$this->id);
 		if (!$this->mass){$this->baseImpulse = 0; $this->currentImpulse = 0; return;}

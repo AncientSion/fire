@@ -112,6 +112,9 @@ Flight.prototype.setImage = function(){
 	}
 }
 
+Flight.prototype.getMaxSpeed = function(){
+	return this.baseImpulse*4;
+}
 
 Flight.prototype.createBaseDiv = function(){
 	var owner = "friendly";

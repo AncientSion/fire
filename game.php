@@ -238,6 +238,12 @@
 		<div id="maxVector" class="ui disabled">
 			<div></div>
 		</div>
+		<div id="shortenInfo" class="ui disabled">
+			<div></div>
+		</div>
+		<div id="doShorten" class="ui disabled">
+			<div></div>
+		</div>
 		<div id="upperGUI" class="disabled">
 			<table id="overview">
 				<tr>
@@ -610,6 +616,13 @@
 			e.preventDefault();
 			game.getUnit(aUnit).doUndoShortenTurn(true)
 		})
+
+		$("#doShorten")
+		.click(function(){
+			//console.log("maxVector")
+			game.getUnit(aUnit).doShortenTurn();
+		})	
+
 	
 		$("#maxCutVector")
 		.click(function(){
