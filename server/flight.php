@@ -28,15 +28,18 @@ class Flight extends Mixed {
 		return $this->baseImpulse*4;
 	}
 
-	public function setCurrentImpulse($t, $p){
-		//Debug::log("setCurrentImpulse #".$this->id);
+	public function setCurSpeed($t, $p){
+		//Debug::log("setCurSpeed #".$this->id);
 		if (!$this->mass){$this->baseImpulse = 0; $this->currentImpulse = 0; return;}
+
 		$this->baseImpulse = floor(pow($this->mass, -2.5)*600000);
 		if (!isset($this->mission) || !sizeof($this->mission)){return;}
 
 		$elapsed = 0;
 
 		if ($this->available == $this->mission->turn){
+			$elapsed++;
+		} else if ($this->mission->arrived && $this->mission->type == 1){
 			$elapsed++;
 		} else $elapsed += 0.5;
 		

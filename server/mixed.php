@@ -27,7 +27,7 @@ class Mixed extends Ship {
 		$this->setBaseStats($phase, $turn);
 		$this->setSize();
 		$this->setMass();
-		$this->setCurrentImpulse($turn, $phase);
+		$this->setCurSpeed($turn, $phase);
 		$this->setRemainingImpulse($turn);
 		$this->setRemainingDelay($turn);
 	}	

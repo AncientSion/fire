@@ -448,8 +448,10 @@ Mixed.prototype.setLayout = function(){
 		this.setBaseLayout();
 	}
 	else if (this.mission.type == 1){ // patrol arrived
-		if (this.mission.arrived < game.turn || this.mission.arrived == game.turn && game.phase > 2){
-			this.setPatrolLayout();
+		if (this.mission.arrived){
+			if (this.mission.arrived < game.turn || this.mission.arrived == game.turn && game.phase > 2){
+				this.setPatrolLayout();
+			} else this.setBaseLayout();
 		}
 	}
 	else if (this.mission.type == 2){ // strike arrived
@@ -500,11 +502,9 @@ Mixed.prototype.setBaseLayout = function(){
 
 Mixed.prototype.setPatrolLayout = function(){
 	for (var i = 0; i < this.structures.length; i++){
-		var p = getPointInDir(range(0, this.size*1), range(0, 360), 0, 0);
+		var p = getPointInDir(range(0, this.size*0.75), range(0, 360), 0, 0);
 		this.structures[i].layout.x = p.x;
 		this.structures[i].layout.y = p.y;
-		//this.structures[i].layout.x = Math.round(range(-this.size/3, this.size/3));
-		//this.structures[i].layout.y = Math.round(range(-this.size/3, this.size/3));
 	}
 }
 

@@ -237,7 +237,6 @@ function Game(data, userid){
 			.find(".missionTarget").html(this.getMissionTargetString(mission)).end()
 			.find(".missionTurn").html("Turn " + mission.turn).end();
 
-
 		if (t && t instanceof Ship && o.x == dest.x && o.y == dest.y){
 			mission.arrived = this.turn-1;
 			if (t.ship){
@@ -252,7 +251,7 @@ function Game(data, userid){
 		else {
 			//s.mission = mission;
 			s.facing = a;
-			s.setSpeed();
+			if (!(s.oldMission.type == 1 && s.oldMission.arrived)){s.setSpeed();} // reset speed only when NOT in patrol
 			s.setTarget();
 		}
 
@@ -2915,7 +2914,7 @@ Game.prototype.logEvents = function(){
 	var body = $("#combatLog").find("tbody");
 
 	for (var i = 0; i < this.ships.length; i++){
-		if (this.ships[i].flight && this.ships[i].availabe < game.turn && this.ships[i].mission.turn == game.turn){
+		if (this.ships[i].flight && this.ships[i].available < game.turn && this.ships[i].mission.turn == game.turn){
 			this.ships[i].createMissionChangeEntry();
 		}
 	}

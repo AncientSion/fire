@@ -165,7 +165,7 @@ class Ship {
 	public function setProps($turn, $phase){
 		//Debug::log("setProps ".get_class($this)." #".$this->id);
 		$this->cost = static::$value;
-		$this->setCurrentImpulse($turn, $phase);
+		$this->setCurSpeed($turn, $phase);
 		$this->setRemainingImpulse($turn);
 		$this->setRemainingDelay($turn);
 		$this->setSpecialActionState($turn, $phase);
@@ -254,7 +254,7 @@ class Ship {
 		return $this->baseImpulse;
 	}
 
-	public function setCurrentImpulse($turn, $phase){
+	public function setCurSpeed($turn, $phase){
 		$impulse = $this->currentImpulse;
 		if ($turn == $this->available){
 			$impulse = $this->getBaseImpulse();

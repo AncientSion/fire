@@ -922,7 +922,7 @@ class Manager {
 				$this->ships[$i]->mission->turn = $this->turn - 2;
 				$this->ships[$i]->mission->arrived = $this->turn - 1;
 				$this->ships[$i]->mission->targetid = 0;
-				$this->ships[$i]->setCurrentImpulse($this->turn, $this->phase);
+				$this->ships[$i]->setCurSpeed($this->turn, $this->phase);
 				$data[] = $this->ships[$i]->mission;
 			}
 		}
