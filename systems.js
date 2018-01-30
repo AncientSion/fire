@@ -2162,6 +2162,11 @@ Warhead.prototype.getDisplay = function(){
 	return "Ballistic Warhead Impact";
 }
 
+Warhead.prototype.createCombatLogEntry = function(fire){
+	return Weapon.prototype.createCombatLogEntry.call(this, fire);
+}
+
+
 Warhead.prototype.getAnimation = function(fire){
 	//console.log(this.display + " / " + this.projSpeed + " / " + fire.dist);
 	//console.log(fire);

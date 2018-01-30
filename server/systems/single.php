@@ -162,7 +162,7 @@ class Single {
 		}
 
 		if (sizeof($valid)){
-			if (mt_rand(0, 100) > $tresh){continue;}
+			if (mt_rand(0, 100) > $tresh){return;}
 
 			$this->crits[] = new Crit(
 				sizeof($this->crits)+1,

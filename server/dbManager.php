@@ -1113,13 +1113,10 @@
 			Debug::log("insertServerFireOrder: ".sizeof($fires));
 			$stmt = $this->connection->prepare("
 				INSERT INTO fireorders 
-					(gameid, turn, shooterid, targetid, x, y, weaponid, resolved)
+					(gameid, turn, shooterid, targetid, x, y, weaponid, shots)
 				VALUES
-					(:gameid, :turn, :shooterid, :targetid, :x, :y, :weaponid, :resolved)
+					(:gameid, :turn, :shooterid, :targetid, :x, :y, :weaponid, :shots)
 			");
-
-			$x = 0;
-			$y = 0;
 
 			for ($i = 0; $i < sizeof($fires); $i++){
 				$stmt->bindParam(":gameid", $fires[$i]->gameid);
