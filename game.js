@@ -371,6 +371,7 @@ function Game(data, userid){
 	this.checkFlightOffset = function(){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].flight){
+				if (this.ships[i].cc.length){continue;}
 				for (var j = i+1; j < this.ships.length; j++){
 					if (this.ships[j].flight){
 						if (this.ships[i].doDraw && this.ships[j].doDraw){
@@ -801,17 +802,13 @@ function Game(data, userid){
 				this.ships[i].setPostMoveFacing();
 			}
 		}
-
-		if (this.animFlight){
-			this.checkFlightOffset();
-		}
 	}
 
 	this.movementAnimationFinished = function(){
 		console.log("movementAnimationFinished");
 
 		if (this.events.length){
-			console.log(game.events);
+			console.log(this.events);
 			this.resolvePostMoveFire();
 		}
 		else this.movementResolved();
@@ -819,7 +816,8 @@ function Game(data, userid){
 
 	this.movementResolved = function(){	
 		console.log("movementResolved");	
-		game.setlastPosCC()
+		this.setlastPosCC();
+		this.checkFlightOffset();
 
 		var table = $("#combatLog").find("tbody");
 
@@ -956,8 +954,9 @@ function Game(data, userid){
 			this.reinforcements[i].createBaseDiv();
 			this.reinforcements[i].friendly = 1;
 			this.reinforcements[i].deployed = 0;
-		}	
-		this.checkFlightOffset();
+		}
+
+		if (game.phase != 2){this.checkFlightOffset();}
 
 		var canSubmit = false;
 		var isPlaying = false;
