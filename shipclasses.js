@@ -543,7 +543,6 @@ Ship.prototype.issueMove = function(pos, dist){
 
 Ship.prototype.doAutoShorten = function(){
 	var speed = this.getRemSpeed();
-	if (speed){return;}
 	var turn = this.getLastTurn();
 	if (turn.costmod == 2){return;}
 	var delay = this.getRemDelay();
