@@ -9,8 +9,8 @@ class Builder {
 		return array(
 			array(
 				"active" => 0,
-				"chance" => 50,
-				"name" => "Tethys (Patrol)",
+				"chance" => 40,
+				"name" => "3x Tethys",
 				"cost" => 700,
 				"launchData" => 
 					array(
@@ -35,8 +35,8 @@ class Builder {
 			),
 			array(
 				"active" => 0,
-				"chance" => 50,
-				"name" => "Crius (Escort)",
+				"chance" => 40,
+				"name" => "2x Crius",
 				"cost" => 550,
 				"launchData" => 
 					array(
@@ -44,6 +44,28 @@ class Builder {
 							array(
 								array(
 									"name" => "Crius",
+									"launch" => 1,
+								),
+								array(
+									"name" => "Crius",
+									"launch" => 1,
+								),
+							),
+							),
+						"loads" =>
+							array()
+			),
+			array(
+				"active" => 0,
+				"chance" => 20,
+				"name" => "Tethys/Crius patrol unit)",
+				"cost" => 500,
+				"launchData" => 
+					array(
+						"loads" =>
+							array(
+								array(
+									"name" => "Tethys",
 									"launch" => 1,
 								),
 								array(

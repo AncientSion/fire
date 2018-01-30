@@ -151,28 +151,26 @@ class Single {
 	}
 
 	public function determineCrit($old, $new, $turn){
-		$dmg = ($old + $new) / $this->integrity * 100;
+		$tresh = ($old + $new) / $this->integrity * 100;
 		$crits = $this->getValidEffects();
 		$valid = array();
 
 		for ($i = 0; $i < sizeof($crits); $i++){
 			if ($dmg > $crits[$i][1]){
-				$valid[] = $crits[$i];
+				$tresh[] = $crits[$i];
 			}
 		}
 
 		if (sizeof($valid)){
-			$mod = mt_rand(0, floor($dmg));
-			if ($mod > $valid[0][1]/2) { // above tresh && mt_rand(0, dmg) > tresh/2
-				Debug::log(" ====>  DROPOUT dmg: ".$dmg.", tresh: ".$valid[0][1].", mt_rand(0, ".floor($dmg).") = ".$mod.", > ".$valid[0][1]/2);
-				$this->crits[] = new Crit(
-					sizeof($this->crits)+1,
-					$this->parentId, $this->id, $turn,
-					$valid[0][0], $valid[0][2],
-					0,
-					1
-				);
-			}
+			if (mt_rand(0, 100) > $tresh){continue;}
+
+			$this->crits[] = new Crit(
+				sizeof($this->crits)+1,
+				$this->parentId, $this->id, $turn,
+				$valid[0][0], $valid[0][2],
+				0,
+				1
+			);
 		}
 	}
 }

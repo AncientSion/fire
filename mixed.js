@@ -355,7 +355,7 @@ Mixed.prototype.getLockEffect = function(target){
 }
 
 Mixed.prototype.getMaskEffect = function(shooter){
-	if (this.flight && this.mission.targetid == shooter.id){
+	if (this.flight && this.mission.arrived && this.mission.targetid == shooter.id){
 		return 0.5;
 	}
 	return 0;
