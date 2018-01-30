@@ -910,7 +910,7 @@ function Game(data, userid){
 	this.create = function(){
 		$("#phaseSwitchDiv").show();
 
-		if (this.turn == 1 || this.turn == this.wave){
+		if ((this.turn == 1 && game.phase == -1) || this.turn == this.wave){
 			$("#deployWrapper").show();
 		} else $("#deployWrapper").hide();
 		//console.log("game.create");
@@ -2806,7 +2806,7 @@ Game.prototype.resolveDeployment = function(){
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships[i].deployed = true;
 		if (this.ships[i].available == this.turn){
-			this.ships[i].deployAnim = [0, 1];
+			this.ships[i].deployAnim = [0, 50];
 			this.ships[i].deployed = false;
 		}
 	}

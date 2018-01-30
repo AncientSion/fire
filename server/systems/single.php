@@ -156,7 +156,7 @@ class Single {
 		$valid = array();
 
 		for ($i = 0; $i < sizeof($crits); $i++){
-			if ($dmg > $crits[$i][1]){
+			if ($tresh > $crits[$i][1]){
 				$tresh[] = $crits[$i];
 			}
 		}

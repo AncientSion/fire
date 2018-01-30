@@ -115,10 +115,10 @@ Squaddie.prototype.expandElement = function(){
 		)
 
 	$(this.element)
-		.append($("<div>").css("margin-top", 5)
+		.append($("<div>").addClass("info").css("top", 10)
 			.append($("<img>").attr("src", "varIcons/mainPower.png")
 				.addClass("mainPowerIcon"))
-			.append($("<span>")
+			.append($("<div>")
 				.addClass("mainPower")
 				.html(this.getUnusedPower())))
 		.append($(pDiv)
@@ -591,9 +591,9 @@ Squadron.prototype.createBaseDiv = function(){
 	// JUMP OUT
 	if (game.turn > 1 && game.phase == 3){
 		$(this.element).find(".coreContainer")
-			.append($("<div>").addClass("jumpOut")
-				.append($("<img>")
-					.attr("src", "varIcons/redVortex.png")
+		.append($("<div>").addClass("info").css("top", 90).css("margin-left", 27)
+		.append($("<img>").addClass("jumpOut")
+			.attr("src", "varIcons/redVortex.png")
 					.click(function(){game.getUnit($(this).parent().parent().parent().parent().data("shipId")).requestJumpOut();
 					})))
 	}

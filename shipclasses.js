@@ -2021,13 +2021,10 @@ Ship.prototype.expandDiv = function(div){
 	if (this.structures.length > 4){
 		widen = 330;
 	} else if (this.structures[this.structures.length-1].systems.length > 4){
-		widen = 310;
-		
+		widen = 310;		
 	}
+
 	if (widen){$(div).css("width", widen);}
-
-
-
 
 
 
@@ -2337,54 +2334,45 @@ Ship.prototype.expandDiv = function(div){
 
 
 	//$(structContainer).append($("<div>").addClass("mainPower").html(this.getSystemByName("Reactor").getOutput()));
+
+	var top = 0;
+	var left = $(structContainer).width() - 55;
+	if (this.structures.length == 3 && this.structures[0].systems.length > 3){
+		top = $(structContainer).height() - 65;
+	}
+
 	$(structContainer)
-	.append($("<div>").css("margin-top", 5)
-		.append($("<img>").attr("src", "varIcons/mainPower.png")
-			.addClass("mainPowerIcon"))
-		.append($("<span>")
-			.addClass("mainPower")
-			.html(this.getSystemByName("Reactor").getOutput())))
-	//console.log($(structContainer).width());
+		.append($("<div>").addClass("info").css("top", top + 5)
+			.append($("<img>").attr("src", "varIcons/mainPower.png")
+				.addClass("mainPowerIcon"))
+			.append($("<div>")
+				.addClass("mainPower")
+				.html(this.getSystemByName("Reactor").getOutput())))
+		//console.log($(structContainer).width());
 
 	// JUMP OUT
 	if (game.turn > 1 && game.phase == 3){
-		$(structContainer).append($("<div>").addClass("jumpOut")
-		.append($("<img>")
-			.attr("src", "varIcons/redVortex.png")
-			.click(function(){game.getUnit($(this).parent().parent().parent().data("shipId")).requestJumpOut();
-			})));
+		$(structContainer)
+		.append($("<div>").addClass("info").css("top", top + 5).css("left", left)
+			.append($("<img>").addClass("jumpOut")
+				.attr("src", "varIcons/redVortex.png")
+				.click(function(){game.getUnit($(this).parent().parent().parent().data("shipId")).requestJumpOut();
+				})));
 	}
-	/*
-	var w = $(div).width();
-	var h = $(div).height();
-	var left = 50;
-	if (this.facing < 90 || this.facing > 270){
-	left = res.x - w - 50;
-	}
-	var x = this.x +cam.o.x - w/2;
-	var y = this.y +cam.o.y + 150;
 
-	$(div).css("left", x).css("top", y);
-	*/	
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].systems.length; j++){
+			var s = $(this.structures[i].systems[j].element)
+			var w = s.width();
+			var h = s.height();
 
+			s
+			.find(".boostDiv").css("left", -14).css("top", -4).end()
+			.find(".powerDiv").css("left", w-2).css("top", -4).end()
+			.find(".modeDiv").css("left", w/2 - 9).css("top", h);
 
-	//if (this.id == 10){
-		for (var i = 0; i < this.structures.length; i++){
-			for (var j = 0; j < this.structures[i].systems.length; j++){
-				var s = $(this.structures[i].systems[j].element)
-				var w = s.width();
-				var h = s.height();
-
-				s
-				.find(".boostDiv").css("left", -14).css("top", -4).end()
-				.find(".powerDiv").css("left", w-2).css("top", -4).end()
-				.find(".modeDiv").css("left", w/2 - 9).css("top", h);
-
-			}
 		}
-		//console.log($(this.structures[3].systems[0].element).width());
-	//}
-
+	}
 
 	var con = $(div).find(".topDiv").find(".iconContainer")
 	var leftWidth = $(div).find(".header").width()
@@ -2477,6 +2465,7 @@ Ship.prototype.doOffset = function(){
 Ship.prototype.doRandomOffset = function(shift){
 	if (this.ship || this.squad){return;}
 	if (!this.doDraw){return;}
+	if (this.mission.arrived && this.mission.type == 1){return;}
 	//console.log("doOffset #" + this.id);
 	var o = this.getPlannedPos();
 	var t = this.getTarget();
@@ -2864,6 +2853,7 @@ Ship.prototype.drawIncomingMovePlan = function(){
 }
 
 Ship.prototype.drawEW = function(){
+	if (this.destroyed){return;}
 	var s = this.getSystemByName("Sensor");
 	if (s){s.drawEW();}
 }
