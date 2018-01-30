@@ -1143,16 +1143,18 @@ function Game(data, userid){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].status == "jumpOut"){continue;}
 			var a = this.ships[i].getPlannedPos();
-			//console.log("a: " + this.ships[i].id);
 			for (var j = i+1; j < this.ships.length; j++){
 				var b = this.ships[j].getPlannedPos();
-				//console.log("b: " + this.ships[j].id);
-				//console.log(this.ships[i].id + " / " + this.ships[j].id);
 				if (a.x == b.x && a.y == b.y){
-					//console.log("ding");
-					//if (this.ships[i].ship && !this.ships[j].ship && this.ships[j].mission.targetid != this.ships[i].id){continue;}
-					this.ships[i].cc.push(this.ships[j].id);
-					this.ships[j].cc.push(this.ships[i].id);
+					if (this.ships[i].flight && this.ships[j].flight){
+						if (this.ships[i].mission.targetid == this.ships[j].id && this.ships[i].mission.targetid == this.ships[j].id){
+							ships[j].cc.push(this.ships[i].id);
+						}
+					}
+					else {
+						this.ships[i].cc.push(this.ships[j].id);
+						this.ships[j].cc.push(this.ships[i].id);
+					}
 				}
 			}
 		}
