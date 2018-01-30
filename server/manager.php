@@ -54,7 +54,7 @@ class Manager {
 	}
 
 
-	public function eval(){
+	public function doEval(){
 		return;
 		$this->getUnit(1)->damaged = true;
 		$this->getUnit(1)->structures[0]->damaged = true;
