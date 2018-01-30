@@ -87,7 +87,8 @@ class Manager {
 			"deploys" => $this->deploys,
 			"incoming" =>$this->getIncomingData(),
 			"const" => $this->const,
-			"username" => $this->getUsername()
+			"username" => $this->getUsername(),
+			"wave" => $this->wave
 		);
 
 	}

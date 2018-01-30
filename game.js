@@ -40,6 +40,7 @@ function Game(data, userid){
 	this.canConfirm = 1;
 	this.drawCircle = 1;
 	this.events = [];
+	this.wave = data.wave;
 	this.arcRange = 1200;
 	this.ui = {shortInfo: $("#shortInfo"), doShorten: $("#doShorten")}
 	window.username = data.username;
@@ -909,8 +910,8 @@ function Game(data, userid){
 	this.create = function(){
 		$("#phaseSwitchDiv").show();
 
-		if (this.turn == 1 || this.turn > 11){
-
+		if (this.turn == 1 || this.turn == this.wave){
+			$("#deployWrapper").show();
 		} else $("#deployWrapper").hide();
 		//console.log("game.create");
 
