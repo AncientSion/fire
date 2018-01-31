@@ -1140,7 +1140,7 @@ class Manager {
 
 					$dest = $this->ships[$i]->getCurrentPosition();
 					$dist = Math::getDist2($origin, $dest);
-					if ($dist) <= $ew->dist){
+					if ($dist <= $ew->dist){
 						$a = Math::getAngle2($origin, $dest);
 						Debug::log("versus #".$this->ships[$i]->id.", angle: ".$a.", dist: ".$dist);
 						if (Math::isInArc($a, $start, $end)){
