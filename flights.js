@@ -1,5 +1,6 @@
 function Fighter(data){
 	Single.call(this, data);
+	this.ep = 0;
 	this.fighter = 1;
 
 	this.create(data);

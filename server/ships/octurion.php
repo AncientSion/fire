@@ -4,7 +4,7 @@ class Octurion extends UltraHeavy {
 	public $name = "Octurion";
 	public $display = "Octurion";
 	public $faction = "Centauri Republic";
-	public $size =  120;
+	public $size =  110;
 	public static $value = 1600;
 	public $profile = array(0.95, 1.05);
 	public $mass = 20000;
@@ -41,13 +41,13 @@ class Octurion extends UltraHeavy {
 		$rightBottomm = new Structure($this->getId(), $this->id, 120, 180, 800, 22);
 		$rightBottomm->systems[] = new LightIon($this->getId(), $this->id, 54, 234);
 		$rightBottomm->systems[] = new LightIon($this->getId(), $this->id, 54, 234);
-		$rightBottomm->systems[] = new Hangar($this->getId(), $this->id, 10, array("Sentri", "Sitara"), 20);
+		$rightBottomm->systems[] = new Hangar($this->getId(), $this->id, 10, array("Sentri", "SitaraIon"), 20);
 		$structs[] = $rightBottomm;
 
 		$leftBottom = new Structure($this->getId(), $this->id, 180, 240, 800, 22);
 		$leftBottom->systems[] = new LightIon($this->getId(), $this->id, 126, 306);
 		$leftBottom->systems[] = new LightIon($this->getId(), $this->id, 126, 306);
-		$leftBottom->systems[] = new Hangar($this->getId(), $this->id, 10, array("Sentri", "Sitara"), 20);
+		$leftBottom->systems[] = new Hangar($this->getId(), $this->id, 10, array("Sentri", "SitaraIon"), 20);
 		$structs[] = $leftBottom;
 
 		$leftTop = new Structure($this->getId(), $this->id, 240, 324, 800, 24);
@@ -119,7 +119,7 @@ class Octurion extends UltraHeavy {
 						),
 						array(
 							"systemid" => 25,
-							"name" => "Sitara",
+							"name" => "Sitara (Ion)",
 							"amount" => 9
 						),
 					)

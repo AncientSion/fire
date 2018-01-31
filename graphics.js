@@ -98,8 +98,11 @@ window.graphics = {
 		this.images.thunderbolt = new Image();
 		this.images.thunderbolt.src = "shipIcons/thunderbolt.png";
 
-		this.images.sitara = new Image();
-		this.images.sitara.src = "shipIcons/sitara.png";
+		this.images.sitaraion = new Image();
+		this.images.sitaraion.src = "shipIcons/sitaraion.png";
+
+		this.images.sitaraplasma = new Image();
+		this.images.sitaraplasma.src = "shipIcons/sitaraplasma.png";
 
 		this.images.sentri = new Image();
 		this.images.sentri.src = "shipIcons/sentri.png";

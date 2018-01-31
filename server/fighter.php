@@ -60,7 +60,7 @@ class Aurora extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new LinkedParticleGun($this->getId(), $this->id, $this->parentId, 1, 2, 12, 16, 0, 360);
+		$this->systems[] = new ParticleGun($this->getId(), $this->id, $this->parentId, 1, 2, 12, 16, 0, 360);
 	}
 }
 
@@ -70,7 +70,6 @@ class Thunderbolt extends Fighter {
 	public $faction = "Earth Alliance";
 	public static $value =  35;
 	public $mass = 36;
-	public $ep = 110;
 	public $integrity = 29;
 	public $negation = 5;
 
@@ -79,8 +78,7 @@ class Thunderbolt extends Fighter {
 	}
 
 	public function addSystems(){
-			//t($id, $fighterId, $parentId, $shots, $minDmg, $maxDmg, $start, $end){
-		$this->systems[] = new ParticlePulsar($this->getId(), $this->id, $this->parentId, 3, 12, 16, 0, 360);
+		$this->systems[] = new ParticlePulsar($this->getId(), $this->id, $this->parentId, 1, 1, 12, 16, 0, 360);
 	}
 }
 
@@ -90,7 +88,6 @@ class Sentri extends Fighter {
 	public $faction = "Centauri Republic";
 	public static $value =  26;
 	public $mass = 32;
-	public $ep = 115;
 	public $integrity = 24;
 	public $negation = 5;
 
@@ -99,19 +96,25 @@ class Sentri extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new LinkedParticleGun($this->getId(), $this->id, $this->parentId, 1, 2, 10, 14, 0, 360);
+		$this->systems[] = new ParticleGun($this->getId(), $this->id, $this->parentId, 1, 2, 10, 14, 0, 360);
 	}
 }
 
 class Sitara extends Fighter {
-	public $name = "Sitara";
-	public $display = "Sitara";
 	public $faction = "Centauri Republic";
 	public static $value =  24;
-	public $mass = 34;
-	public $ep = 105;
 	public $integrity = 22;
 	public $negation = 5;
+
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
+	}
+}
+
+class SitaraIon extends Sitara {
+	public $name = "SitaraIon";
+	public $display = "Sitara (Ion)";
+	public $mass = 34;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -122,13 +125,26 @@ class Sitara extends Fighter {
 	}
 }
 
+class SitaraPlasma extends Sitara {
+	public $name = "SitaraPlasma";
+	public $display = "Sitara (Plasma)";
+	public $mass = 32;
+
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
+	}
+
+	public function addSystems(){
+		$this->systems[] = new PlasmaBomb($this->getId(), $this->id, $this->parentId, 2, 1, 42, 59, 0, 360);
+	}
+}
+
 class Nial extends Fighter {
 	public $name = "Nial";
 	public $display = "Nial";
 	public $faction = "Minbari Federation";
 	public static $value =  45;
 	public $mass = 30;
-	public $ep = 140;
 	public $integrity = 33;
 	public $negation = 7;
 
@@ -137,7 +153,7 @@ class Nial extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new LinkedNeutronRepeater($this->getId(), $this->id, $this->parentId, 1, 3, 14, 18, 0, 360);
+		$this->systems[] = new NeutronRepeater($this->getId(), $this->id, $this->parentId, 1, 3, 14, 18, 0, 360);
 	}
 }
 
@@ -147,7 +163,6 @@ class Gorith extends Fighter {
 	public $faction = "Narn Regime";
 	public static $value =  22;
 	public $mass = 34;
-	public $ep = 85;
 	public $integrity = 22;
 	public $negation = 4;
 
@@ -156,7 +171,7 @@ class Gorith extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new LinkedParticleGun($this->getId(), $this->id, $this->parentId, 1, 2, 11, 15, 0, 360);
+		$this->systems[] = new ParticleGun($this->getId(), $this->id, $this->parentId, 1, 2, 11, 15, 0, 360);
 	}
 }
 
@@ -166,7 +181,6 @@ class Frazi extends Fighter {
 	public $faction = "Narn Regime";
 	public static $value =  32;
 	public $mass = 36;
-	public $ep = 100;
 	public $integrity = 27;
 	public $negation = 5;
 
@@ -175,7 +189,7 @@ class Frazi extends Fighter {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new LinkedParticleGun($this->getId(), $this->id, $this->parentId, 1, 2, 13, 17, 0, 360);
+		$this->systems[] = new ParticleGun($this->getId(), $this->id, $this->parentId, 1, 2, 13, 17, 0, 360);
 	}
 }
 

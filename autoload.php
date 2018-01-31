@@ -37,7 +37,8 @@ spl_autoload_register(
                 'thunderbolt' => '/server/fighter.php',
                 'nial' => '/server/fighter.php',
                 'sentri' => '/server/fighter.php',
-                'sitara' => '/server/fighter.php',
+                'sitaraion' => '/server/fighter.php',
+                'sitaraplasma' => '/server/fighter.php',
                 'gorith' => '/server/fighter.php',
                 'frazi' => '/server/fighter.php',
 
@@ -125,14 +126,14 @@ spl_autoload_register(
                 'launcher' => '/server/systems/weapons/launcher.php',
                 'missilelauncher' => '/server/systems/weapons/launcher.php',
 
-                'linked' => '/server/systems/weapons/linked.php',
-                'linkedparticle' => '/server/systems/weapons/linked.php',
+                'fighterweapon' => '/server/systems/weapons/linked.php',
+                'particlegun' => '/server/systems/weapons/linked.php',
+                'neutronrepeater' => '/server/systems/weapons/linked.php',
                 'ionbolt' => '/server/systems/weapons/linked.php',
-                'linkedparticlegun' => '/server/systems/weapons/linked.php',
-                'linkedneutronrepeater' => '/server/systems/weapons/linked.php',
-
                 'fighterpulse' => '/server/systems/weapons/linked.php',
                 'particlepulsar' => '/server/systems/weapons/linked.php',
+                'fighterplasma' => '/server/systems/weapons/linked.php',
+                'plasmabomb' => '/server/systems/weapons/linked.php',
 
                 'structure' => '/server/systems/structure.php',
                 'primary' => '/server/systems/structure.php',

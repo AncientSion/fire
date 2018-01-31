@@ -12,7 +12,6 @@ function System(system){
 	this.armourMod = system.armourMod;
 	this.disabled = system.disabled;
 	this.locked = system.locked;
-	this.mirror = system.mirror;
 	this.crits = [];
 	this.damages = [];
 	this.detailsTable = false;
@@ -737,13 +736,14 @@ System.prototype.hasOutput = function(){
 		return true;
 	}
 }
+
 System.prototype.getTableData = function(forFighter){
 	var td = document.createElement("td");
 		td.className = "system";
 
 	var img = new Image();
 	var file = "sysIcons/" + this.getImageName();
-	if (forFighter){file += this.linked;}
+	if (forFighter && this.linked > 1){file += this.linked;}
 	else {img.className = "sysIcon";}
 	
 		file += ".png";
@@ -2013,10 +2013,13 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 	}
 	else {
 		$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + game.getUnitType(this.getTraverseRating()))));
-		if (this instanceof Plasma){
-			$(table).append($("<tr>").append($("<td>").html("Damage loss")).append($("<td>").html(this.getDmgLoss(100) + "% per 100px")));
+
+		if (!this.tiny){
+			if (this instanceof Plasma){
+				$(table).append($("<tr>").append($("<td>").html("Damage loss")).append($("<td>").html(this.getDmgLoss(100) + "% per 100px")));
+			}
+			$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").html(this.getAccuracy() + "% per 100px")));
 		}
-		$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").html(this.getAccuracy() + "% per 100px")));
 	}
 
 	if (this.linked > 1){
@@ -3820,7 +3823,7 @@ Hangar.prototype.showHangarControl = function(){
 
 	for (var i = 0; i < this.loads.length; i++){
 		var tr = table.insertRow(-1)
-			tr.insertCell(-1).innerHTML = this.loads[i].name;
+			tr.insertCell(-1).innerHTML = this.loads[i].display;
 			tr.insertCell(-1).innerHTML = this.loads[i].amount;
 			var td = document.createElement("td");
 				td.innerHTML = "<img height='20px' width='20px' src='varIcons/plus.png'>"; $(td).data("name", this.loads[i].name).data("val", 1); tr.appendChild(td);
@@ -3973,7 +3976,7 @@ Hangar.prototype.addFighter = function(ele, all){
 	var tMass = 0;
 	var tCost = 0;
 	var add = 1;
-	var name = ele.childNodes[0].innerHTML;
+	var display = ele.childNodes[0].innerHTML;
 	var sMass = 0;
 	var current = 0;
 	var max = this.capacity;
@@ -3995,25 +3998,18 @@ Hangar.prototype.addFighter = function(ele, all){
 	}
 
 	for (var i = 0; i < this.loads.length; i++){
-		if (this.loads[i].name == name){
-			if (this.loads[i].name == name){
-				this.loads[i].amount += add;
-				this.updateTotals();
-				this.canConfirm();
-				return;
-			}
-			else {
-				popup("Insufficient Hangar Space available");
-				return;
-			}
+		if (this.loads[i].display == display){
+			this.loads[i].amount += add;
+			this.updateTotals();
+			this.canConfirm();
+			return;
 		}
 	}
-
 
 	for (var i = 0; i < this.loads.length; i++){
 		tMass += this.loads[i].amount * this.loads[i].mass;
 		tCost += this.loads[i].amount * this.loads[i].cost;
-		if (this.loads[i].name == name){
+		if (this.loads[i].display == display){
 			sMass = this.loads[i].mass;
 		}
 	}
@@ -4024,7 +4020,7 @@ Hangar.prototype.addFighter = function(ele, all){
 
 
 	for (var i = 0; i < this.loads.length; i++){
-		if (this.loads[i].name == name){
+		if (this.loads[i].display == display){
 			if (tMass + this.loads[i].mass <= this.output){
 				this.loads[i].amount += add;
 				this.updateTotals();
@@ -4040,7 +4036,7 @@ Hangar.prototype.addFighter = function(ele, all){
 
 Hangar.prototype.removeFighter = function(ele, all){
 	for (var i = 0; i < this.loads.length; i++){
-		if (this.loads[i].name == ele.childNodes[0].innerHTML){
+		if (this.loads[i].display == ele.childNodes[0].innerHTML){
 			if (this.loads[i].amount >= 1){
 				if (all){
 					this.loads[i].amount = 0;
@@ -4082,7 +4078,7 @@ Hangar.prototype.updateTotals = function(){
 
 	for (var i = 0; i < this.loads.length; i++){
 		var tr = table.insertRow(-1);
-			tr.insertCell(-1).innerHTML = this.loads[i].name;
+			tr.insertCell(-1).innerHTML = this.loads[i].display;
 			tr.insertCell(-1).innerHTML = this.loads[i].mass;
 			tr.insertCell(-1).innerHTML = this.loads[i].cost;
 		var td = document.createElement("td");

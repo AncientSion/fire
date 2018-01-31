@@ -29,11 +29,11 @@ class Altarian extends Medium {
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 16);
-		$aft->systems[] = new Hangar($this->getId(), $this->id, 8, array("Sentri", "Sitara"), 8);
+		$aft->systems[] = new Hangar($this->getId(), $this->id, 8, array("Sentri", "SitaraIon"), 8);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 325, 16);
-		//$left->systems[] = new Hangar($this->getId(), $this->id, 8, array("Sentri", "Sitara"), 8);
+		//$left->systems[] = new Hangar($this->getId(), $this->id, 8, array("Sentri", "SitaraIon"), 8);
 		$left->systems[] = new MediumIon($this->getId(), $this->id, 240, 360);
 		$left->systems[] = new MediumIon($this->getId(), $this->id, 240, 360);
 		$left->systems[] = new MediumIon($this->getId(), $this->id, 180, 300);
@@ -92,7 +92,7 @@ class Altarian extends Medium {
 						array(
 							"systemid" => 15,
 							"display" => "Aft Main Hangar",
-							"name" => "Sitara",
+							"name" => "Sitara (Ion)",
 							"amount" => 2
 						),
 					)

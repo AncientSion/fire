@@ -226,7 +226,6 @@ function Structure(data){
 	this.end = data.end;
 	this.negation = data.negation;
 	this.remainingNegation = data.remainingNegation;
-	this.mirror = data.mirror;
 	this.destroyed = data.destroyed || false;
 	this.highlight = false;
 	this.systems = [];
@@ -666,7 +665,7 @@ Single.prototype.getDetailsDiv = function(){
 		div.className = this.id + " flight";
 
 		var table = $("<table>")
-			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.name)))
+			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.display)))
 			.append($("<tr>").append($("<td>").html("Mass").css("width", 120)).append($("<td>").html(this.mass)))
 			//.append($("<tr>").append($("<td>").html("Engine Power")).append($("<td>").html(this.ep)))
 			.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.negation)))

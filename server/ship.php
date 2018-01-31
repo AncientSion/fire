@@ -120,9 +120,6 @@ class Ship {
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$dir = Math::getArcDir($this->structures[$i]);
-			$mirror = 1;
-			if ($dir == 0 || $dir == 180 || $dir == 360){$mirror = 0;}
-			$this->structures[$i]->mirror = $mirror;
 
 			$armourDmg = 0;
 			$structDmg = 0;

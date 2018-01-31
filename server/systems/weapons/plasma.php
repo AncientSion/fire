@@ -2,6 +2,7 @@
 
 class Plasma extends Weapon {
 	public $type = "Plasma";
+	public $animColor = "darkGreen";
 	public $priority = 6;
 	public $melt = 50;
 	public $plasma = 1;
@@ -50,7 +51,6 @@ class LightPlasma extends Plasma {
 	public $accDecay = 120;
 	public $dmgLoss = 12;
 	public $shots = 1;
-	public $animColor = "darkGreen";
 	public $projSize = 2.5;
 	public $projSpeed = 8;
 	public $reload = 2;
@@ -73,7 +73,6 @@ class MediumPlasma extends Plasma {
 	public $accDecay = 120;
 	public $dmgLoss = 9;
 	public $shots = 1;
-	public $animColor = "darkGreen";
 	public $projSize = 3;
 	public $projSpeed = 6;
 	public $reload = 2;
@@ -96,7 +95,6 @@ class HeavyPlasma extends Plasma {
 	public $accDecay = 120;
 	public $dmgLoss = 6;
 	public $shots = 1;
-	public $animColor = "darkGreen";
 	public $projSize = 4;
 	public $projSpeed = 5;
 	public $reload = 3;
@@ -119,7 +117,6 @@ class PlasmaShotgun extends Plasma {
 	public $accDecay = 120;
 	public $dmgLoss = 16;
 	public $shots = 1;
-	public $animColor = "darkGreen";
 	public $projSize = 3;
 	public $projSpeed = 4;
 	public $reload = 2;

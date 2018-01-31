@@ -19,7 +19,6 @@ class Structure {
 	public $boostEffect = array();
 	public $effiency = 0;
 	public $bonusNegation = 0;
-	public $mirror = 0;
 
 	function __construct($id, $parentId, $start, $end, $integrity, $negation){
 		$this->id = $id;

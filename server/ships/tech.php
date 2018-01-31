@@ -28,7 +28,7 @@ class Tech extends SuperHeavy {
 		$right->systems[] = new LightIon($this->getId(), $this->id, 300, 120);
 		$right->systems[] = new HeavyIon($this->getId(), $this->id, 0, 120);
 		$right->systems[] = new LightIon($this->getId(), $this->id, 300, 120);
-		$right->systems[] = new Hangar($this->getId(), $this->id, 9, array("Sentri", "Sitara"), 9);
+		$right->systems[] = new Hangar($this->getId(), $this->id, 9, array("Sentri", "Sitara (Ion)", "Sitara (Plasma)")), 9);
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 900, 29);
@@ -41,7 +41,7 @@ class Tech extends SuperHeavy {
 		$left->systems[] = new HeavyIon($this->getId(), $this->id, 240, 360);
 		$left->systems[] = new LightIon($this->getId(), $this->id, 240, 60);
 		$left->systems[] = new HeavyIon($this->getId(), $this->id, 240, 360);
-		$left->systems[] = new Hangar($this->getId(), $this->id, 9, array("Sentri", "Sitara"), 9);
+		$left->systems[] = new Hangar($this->getId(), $this->id, 9, array("Sentri", "Sitara (Ion)", "Sitara (Plasma)")), 9);
 		$structs[] = $left;
 		
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -99,7 +99,7 @@ class Tech extends SuperHeavy {
 						),
 						array(
 							"systemid" => 25,
-							"name" => "Sitara",
+							"name" => "Sitara (Ion)",
 							"amount" => 9
 						),
 					)
