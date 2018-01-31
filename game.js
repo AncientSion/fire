@@ -42,7 +42,7 @@ function Game(data, userid){
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
-	this.ui = {shortInfo: $("#shortInfo"), doShorten: $("#doShorten")};
+	this.ui = {shortInfo: $("#shortInfo"), doShorten: $("#doShorten"), turnButton: $("#turnButton")};
 	this.animData = {jump: 1};
 
 	window.username = data.username;
@@ -1149,7 +1149,8 @@ function Game(data, userid){
 				var b = this.ships[j].getPlannedPos();
 				if (a.x == b.x && a.y == b.y){
 					if (this.ships[i].flight && this.ships[j].flight){
-						if (this.ships[i].mission.targetid == this.ships[j].id && this.ships[i].mission.targetid == this.ships[j].id){
+						if (this.ships[i].mission.targetid == this.ships[j].id || this.ships[j].mission.targetid == this.ships[i].id){
+							ships[i].cc.push(this.ships[j].id);
 							ships[j].cc.push(this.ships[i].id);
 						}
 					}
@@ -3057,4 +3058,51 @@ Game.prototype.undrawJumpMarker = function(id){
 	ctx.restore();
 
 	this.resetShipTransform();
+}
+
+Game.prototype.setShortenInfo = function(e, unit, dist){
+	var short = "Shorten: <span class=";
+	var post = "Post: ";
+
+	var last = unit.getLastTurn();
+	var remEP = unit.getRemEP();
+	var remDelay = unit.getRemDelay();
+
+	var aim = remDelay-dist;
+	var multi = aim / last.delay*2;
+	var cost = Math.ceil(multi * last.cost);
+
+	var left;
+	var top;
+
+	
+	if (e){
+		left = e.clientX - $(game.ui.doShorten).width()/2;
+		top = e.clientY + 50;
+	} else {
+		var pos = unit.getGamePos();
+		var pos = getPointInDir(100, unit.getDrawFacing()-90, pos.x, pos.y);
+		left = pos.x - $(game.ui.doShorten).width()/2;
+		top = pos.y + 50;
+	}
+
+	if (cost > remEP){
+		short += "'red'>";
+	}
+	else {
+		short += "'green'>";
+		post += "<span class='green'>" + (remEP - cost) + "</span> / " + unit.getEP();
+	}
+	
+	short += cost + " TA</span>";
+	
+	$(game.ui.doShorten)
+		.empty()
+		.append($("<div>").html(short))
+		.append($("<div>").html(post))
+		.data("cost", cost)
+		.data("delay", aim)
+		.css("left", left)
+		.css("top", top)
+
 }

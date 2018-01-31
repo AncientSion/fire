@@ -339,13 +339,13 @@ Ship.prototype.doHover = function(){
 
 	if (this.ship || this.squad){
 		this.setMoveTranslation();
-		this.drawVectorIndicator();
 
 		if (!this.isDestroyed()){
 			this.drawMoveArea();
 			this.drawTurnArcs();
 		}
 		
+		this.drawVectorIndicator();
 		this.resetMoveTranslation();
 	}
 	this.drawMovePlan();
@@ -806,13 +806,15 @@ Ship.prototype.issueTurn = function(a){
 				round(turn.mod, 1), 1, 0
 			)
 		);
-		$("#turnButton")
+		$(game.ui.turnButton)
 			.find("#turnCost").html("").end()
 			.find("#turnDelay").html("");
 	}
 
 	if (!this.getRemSpeed() && this.getRemEP()){this.doAutoShorten();}
 	this.getSystemByName("Sensor").setTempEW();
+	if (!this.getRemSpeed()){this.switchTurnMode();}
+	else game.setShortenInfo(false, this, 0);
 	game.redraw();
 }
 
@@ -1277,6 +1279,7 @@ Ship.prototype.doUnselect = function(){
 	$("#popupWrapper").hide()
 	$("#instructWrapper").hide()
 	$("#systemDetailsDiv").remove();
+	$(game.ui.doShorten).empty();
 	mouseCtx.clearRect(0, 0, res.x, res.y);
 	game.redraw();
 }
@@ -1738,7 +1741,7 @@ Ship.prototype.drawMoveArea = function(){
 		moveCtx.globalCompositeOperation = "destination-out";
 		moveCtx.fill();
 		moveCtx.globalCompositeOperation = "source-over";
-
+/*
 		var turn = this.getLastTurn();
 
 		if (delay > turn.delay/2){
@@ -1758,7 +1761,7 @@ Ship.prototype.drawMoveArea = function(){
 			moveCtx.fill();
 			moveCtx.globalCompositeOperation = "source-over";
 		}
-		
+*/		
 		
 	}
 
@@ -3088,12 +3091,11 @@ Ship.prototype.drawTurnUI = function(){
 
 	var center = {x: this.x, y: this.y};
 	var angle = this.getDrawFacing();
-	var turnEle = $("#turnButton")[0];
 	var p1 = getPointInDir(150/cam.z, addToDirection(angle, -90), center.x, center.y);
-	$(turnEle)
+	$(game.ui.turnButton)
 		.removeClass("disabled")
-		.css("left", p1.x * cam.z + cam.o.x - $(turnEle).width()/2)
-		.css("top", p1.y * cam.z + cam.o.y - $(turnEle).height()/2)
+		.css("left", p1.x * cam.z + cam.o.x - $(game.ui.turnButton).width()/2)
+		.css("top", p1.y * cam.z + cam.o.y - $(game.ui.turnButton).height()/2)
 		.find("#impulseMod").html("x " +turn.dif).end()
 		//.find("#remEP").html(this.getRemEP() + " / " + this.getEP()).addClass("green").end()
 }
@@ -3159,17 +3161,15 @@ Ship.prototype.canDecreaseImpulse = function(){
 }
 
 Ship.prototype.setTurnData = function(){
-	//console.log("setTurnData");
-	var button = $("#turnButton");
 	var vector = $("#vectorDiv")
-
-	$(button)
+	
+	$(game.ui.turnButton)
 		.find("#turnMode").html("ON").addClass("on").end().find("#turnCost").html(this.getTurnCost()).end()
 		.find("#turnDelay").html(this.getTurnDelay() + " px").end()
 		.find("#turnMod").html(turn.mod).end()
 
 	if (game.turnMode){
-		$(button)
+		$(game.ui.turnButton)
 			$("#epButton")
 			.find("#remEP").html(this.getRemEP() + " / " + this.getEP()).addClass("green").end()
 			.find("#impulseText").find("#impulseCost").html("");
@@ -3178,7 +3178,7 @@ Ship.prototype.setTurnData = function(){
 		this.adjustMaxTurn()
 	}
 	else {
-		$(button)
+		$(game.ui.turnButton)
 			.find("#turnMode").html("OFF").removeClass("on").end()
 		$("#epButton")
 			.find("#remEP").html(this.getRemEP() + " / " + this.getRemEP()).addClass("green").end()
@@ -3301,7 +3301,8 @@ Ship.prototype.drawShortenTurnUI = function(){
 			.removeClass("disabled");
 	}
 
-	
+
+	return;
 	if (remSpeed && remDelay > this.getLastTurn().delay/2){ // minimum 50 % turn point
 
 		minDelay = Math.ceil(remDelay/2);
@@ -3473,8 +3474,9 @@ Ship.prototype.drawTurnArcs = function(){
 				moveCtx.moveTo(center.x, center.y);
 				moveCtx.lineTo(p.x, p.y);
 				moveCtx.closePath();
-				moveCtx.globalAlpha = 0.5;
+				moveCtx.globalAlpha = 0.25;
 				moveCtx.strokeStyle = "yellow";
+				moveCtx.lineWidth = 1;
 				moveCtx.stroke();
 				moveCtx.globalAlpha = 1;
 			}

@@ -400,8 +400,6 @@ function handleTurnShortening(unit, e, pos){
 	var left;
 	var top;
 	var last = unit.getLastTurn();
-	var short = "Shorten: <span class=";
-	var post = "Post: ";
 	var reset = false;
 	var dist = Math.floor(getDistance(unit.getPlannedPos(), pos));
 	var multi = 0;
@@ -409,69 +407,7 @@ function handleTurnShortening(unit, e, pos){
 	if (isInArc(getCompassHeadingOfPoint(unit.getPlannedPos(), pos, 0), unit.moveAngles.start, unit.moveAngles.end)){
 		//if (dist > Math.min(last.delay / 2 - unit.actions[unit.actions.length-1].dist, remDelay) && dist < remDelay){
 		if (dist < remDelay){
-			left = e.clientX - $(game.ui.doShorten).width()/2;
-			top = e.clientY + 50;
-
-			var aim = remDelay-dist;
-			var multi = aim / last.delay*2;
-			var cost = Math.ceil(multi * last.cost)
-			//console.log(multi);
-
-
-
-			if (cost > unit.getRemEP()){
-				short += "'red'>";
-			}
-			else {
-				short += "'green'>";
-				post += "<span class='green'>" + (unit.getRemEP() - cost) + "</span> / " + unit.getEP();
-			}
-			
-			short += cost + " TA</span>";
-			
-			$(game.ui.doShorten)
-				.empty()
-				.append($("<div>").html(short))
-				.append($("<div>").html(post))
-				.data("cost", cost)
-				.data("delay", aim)
-				.css("left", left)
-				.css("top", top)
-
-		}
-		else {
-			reset = true;
-		}
-	}
-	else {
-		reset = true;
-	}
-
-	if (reset){
-		left = p.x * cam.z  + cam.o.x - $(game.ui.doShorten).width()/2;
-		top = p.y * cam.z  + cam.o.y - $(game.ui.doShorten).height()/2;
-		multi = $(game.ui.doShorten).data("multi")
-
-
-		if (multi){
-			cost = Math.round(multi * last.cost, 2)
-			if (cost > unit.getRemEP()){
-				short += "'red'>";
-			}
-			else {
-				short += "'green'>";
-				post += "<span class='green'>" + (unit.getRemEP() - cost) + "</span> / " + unit.getEP();
-			}
-
-			short += cost + " TA</span>";
-
-
-			$(game.ui.doShorten)
-			.empty()
-			.append($("<div>").html(short))
-			.append($("<div>").html(post))
-			.css("left", left)
-			.css("top", top)
+			game.setShortenInfo(e, unit, dist)
 		}
 	}
 }

@@ -149,7 +149,6 @@
 		<div id="roll" class="ui disabled">
 			<img src="varIcons/roll.png" style="width: 40px; height: 40px">
 		</div>
-
 		<div id="flip" class="ui disabled">
 			<img src="varIcons/flip.png" style="width: 40px; height: 40px">
 		</div>
@@ -557,28 +556,28 @@
 		$("#upperGUI").removeClass("disabled")
 		$("#canvasDiv").removeClass("disabled")
 
-		$("#roll").removeClass("disabled")
+		$("#roll")
 		.click(function(){
 			game.getUnit(aUnit).doRoll()
 		});
 		
-		$("#flip").removeClass("disabled")
+		$("#flip")
 		.click(function(){
 			game.getUnit(aUnit).doFlip()
 		});
 
-		$("#doUndoLastAction").removeClass("disabled")
+		$("#doUndoLastAction")
 		.click(function(){
 			game.getUnit(aUnit).doUndoLastAction()
 		});
 
 
-		$("#plusImpulse").removeClass("disabled")
+		$("#plusImpulse")
 		.click(function(){
 			game.getUnit(aUnit).doIncreaseImpulse();
 		});
 
-		$("#minusImpulse").removeClass("disabled")
+		$("#minusImpulse")
 		.click(function(){
 			game.getUnit(aUnit).doDecreaseImpulse();
 		});
