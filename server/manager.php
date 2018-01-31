@@ -1095,7 +1095,7 @@ class Manager {
 					$w = min(180, $this->const["ew"]["len"] * pow($str/$ew->dist, $this->const["ew"]["p"]));
 					$start = Math::addAngle(0 + $w-$s->getFacing(), $ew->angle);
 					$end = Math::addAngle(360 - $w-$s->getFacing(), $ew->angle);
-					//Debug::log("specific EW for ship #".$s->id.", str: ".$str.", facing: ".$s->getFacing().", w: ".$w.", EW from ".$start." to ".$end.", dist: ".$ew->dist);
+					Debug::log("specific EW for ship #".$s->id.", str: ".$str.", facing: ".$s->getFacing().", w: ".$w.", EW from ".$start." to ".$end.", dist: ".$ew->dist);
 				}
 
 				for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -1141,7 +1141,7 @@ class Manager {
 					$dest = $this->ships[$i]->getCurrentPosition();
 					if (Math::getDist2($origin, $dest) <= $ew->dist){
 						$a = Math::getAngle2($origin, $dest);
-						//Debug::log("versus #".$this->ships[$i]->id.", a: ".$a);
+						Debug::log("versus #".$this->ships[$i]->id.", angle: ".$a);
 						if (Math::isInArc($a, $start, $end)){
 							if ($ew->type == 0){ // LOCK
 								$s->locks[] = array($this->ships[$i]->id, $s->getLockEffect($this->ships[$i]));
@@ -1150,7 +1150,7 @@ class Manager {
 							else if ($ew->type == 1){ // MASK
 								if ($this->ships[$i]->ship || $this->ships[$i]->squad){
 									$s->masks[] = array($this->ships[$i]->id, $s->getMaskEffect($this->ships[$i]));
-									//Debug::log("masking from #".$this->ships[$i]->id." for value: ".$s->masks[sizeof($s->masks)-1][1]);
+									Debug::log("masking from #".$this->ships[$i]->id." for value: ".$s->masks[sizeof($s->masks)-1][1]);
 								}
 							}
 						}// else Debug::log("out of arc");
