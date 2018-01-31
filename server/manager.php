@@ -55,6 +55,7 @@ class Manager {
 
 
 	public function doEval(){
+		$this->setupShips();
 		return;
 		$this->getUnit(1)->damaged = true;
 		$this->getUnit(1)->structures[0]->damaged = true;
@@ -1002,7 +1003,7 @@ class Manager {
 		//set dist and angle for each ship to speed up fire resolution
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$aPos = $this->ships[$i]->getCurrentPosition();
-			//Debug::log("POSITION #".$this->ships[$i]->id.": ".$aPos->x."/".$aPos->y);
+			Debug::log("POSITION #".$this->ships[$i]->id.": ".$aPos->x."/".$aPos->y);
 			for ($j = $i+1; $j < sizeof($this->ships); $j++){
 				if ($this->ships[$i]->userid == $this->ships[$j]->userid){continue;}
 				$bPos = $this->ships[$j]->getCurrentPosition();
@@ -1157,7 +1158,7 @@ class Manager {
 				}
 			}
 
-			//foreach ($s->locks as $entry){Debug::log("lock vs #".$entry[0]." with val: ".$entry[1]);}
+			foreach ($s->masks as $entry){Debug::log("masks vs #".$entry[0]." with val: ".$entry[1]);}
 		}
 	}
 
