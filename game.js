@@ -1150,8 +1150,8 @@ function Game(data, userid){
 				if (a.x == b.x && a.y == b.y){
 					if (this.ships[i].flight && this.ships[j].flight){
 						if (this.ships[i].mission.targetid == this.ships[j].id || this.ships[j].mission.targetid == this.ships[i].id){
-							ships[i].cc.push(this.ships[j].id);
-							ships[j].cc.push(this.ships[i].id);
+							this.ships[i].cc.push(this.ships[j].id);
+							this.ships[j].cc.push(this.ships[i].id);
 						}
 					}
 					else {
