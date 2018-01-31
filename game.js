@@ -42,7 +42,9 @@ function Game(data, userid){
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
-	this.ui = {shortInfo: $("#shortInfo"), doShorten: $("#doShorten")}
+	this.ui = {shortInfo: $("#shortInfo"), doShorten: $("#doShorten")};
+	this.animData = {jump: 1};
+
 	window.username = data.username;
 
 	this.doDeployShip = function(e, ship, pos){
@@ -1624,7 +1626,7 @@ function Game(data, userid){
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].status == "jumpOut"){
-				this.ships[i].deployAnim = [0, 60];
+				this.ships[i].deployAnim = [0, game.animData.jump];
 			}
 		}
 
@@ -2810,7 +2812,7 @@ Game.prototype.resolveDeployment = function(){
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships[i].deployed = true;
 		if (this.ships[i].available == this.turn){
-			this.ships[i].deployAnim = [0, 50];
+			this.ships[i].deployAnim = [0, game.animData.jump];
 			this.ships[i].deployed = false;
 		}
 	}
@@ -2912,6 +2914,10 @@ Game.prototype.deployDone = function(){
 	}
 
 
+	//cam.setZoom(1.5);
+	//cam.setFocusToPos(game.getUnit(14).getPlannedPos());
+	//game.getUnit(14).doSelect();
+	game.redraw()
 	console.log("deployDone");
 }
 

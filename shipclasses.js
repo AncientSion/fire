@@ -533,7 +533,7 @@ Ship.prototype.issueMove = function(pos, dist){
 	this.turnAngles = {}
 	$("#popupWrapper").hide();
 	this.unsetMoveMode();
-	this.doAutoShorten();
+	if (!this.getRemSpeed()){this.doAutoShorten();}
 	this.setMoveMode();
 	game.updateIntercepts(this.id);
 	game.redraw();
@@ -542,20 +542,25 @@ Ship.prototype.issueMove = function(pos, dist){
 
 
 Ship.prototype.doAutoShorten = function(){
-	var speed = this.getRemSpeed();
-	var turn = this.getLastTurn();
-	if (turn.costmod == 2){return;}
 	var delay = this.getRemDelay();
 	if (!delay){return;}
-	var mod = this.getImpulseMod();
+
+	var turn = this.getLastTurn();
 	var ep = this.getRemEP();
+	var mod = this.getImpulseMod();
 
-	//console.log("ep: " + ep);
-	//console.log(turn);
+	var maxCut = Math.floor(ep / turn.cost * turn.delay);
 
-	var boost = round(ep / turn.cost, 2) * mod;
+	if (maxCut <= delay){
+		turn.cost += ep;
+		turn.delay -= maxCut;
+	}
+	else {
+		var cost = Math.ceil(delay / turn.delay * turn.cost);
+		turn.cost += cost
+		turn.delay -= Math.max(delay, Math.ceil(cost * this.baseTurnDelay));
+	}
 
-	turn.costmod += boost;
 	return;	
 
 
@@ -806,6 +811,7 @@ Ship.prototype.issueTurn = function(a){
 			.find("#turnDelay").html("");
 	}
 
+	if (!this.getRemSpeed() && this.getRemEP()){this.doAutoShorten();}
 	this.getSystemByName("Sensor").setTempEW();
 	game.redraw();
 }
@@ -1736,12 +1742,6 @@ Ship.prototype.drawMoveArea = function(){
 		var turn = this.getLastTurn();
 
 		if (delay > turn.delay/2){
-			var cost = this.getShortenTurnCost(turn.delay/2);
-			var ep = this.getRemEP();
-
-			if (cost > ep){
-				console.log("cant issue max Turn");
-			}
 
 			var min = turn.delay/2 - turn.delay + delay;
 			var delayRad1 = degreeToRadian(this.moveAngles.start-45);
@@ -1758,6 +1758,7 @@ Ship.prototype.drawMoveArea = function(){
 			moveCtx.fill();
 			moveCtx.globalCompositeOperation = "source-over";
 		}
+		
 		
 	}
 
@@ -3265,14 +3266,25 @@ Ship.prototype.drawMoveUI = function(){
 Ship.prototype.drawShortenTurnUI = function(){
 	//console.log("drawShortenTurnUI");
 	var remDelay = this.getRemDelay();
-
-	if (!remDelay){$("#doShorten").addClass("disabled"); return;}
-
-	var center = this.getPlannedPos();
-	var angle = this.getPlannedFacing();
 	var remSpeed = this.getRemSpeed();
-	var ele;
-	var turn = this.getLastTurn();
+	var center = this.getPlannedPos();
+
+	if (!remDelay){$(game.ui.doShorten).addClass("disabled");}
+	else {
+		var o = this.getGamePos()
+		var angle = this.getPlannedFacing();
+		var p = getPointInDir(100, angle-180, o.x, o.y);
+		var left = p.x * cam.z  + cam.o.x - $(game.ui.doShorten).width()/2;
+		var top = p.y * cam.z  + cam.o.y - $(game.ui.doShorten).height()/2;
+
+		$(game.ui.doShorten)
+		.css("left", left)
+		.css("top", top)
+		.data("shipId", this.id)
+		.removeClass("disabled");;
+
+
+	}
 
 	if (remDelay && remSpeed >= remDelay){ // normal turn point
 		ele = document.getElementById("maxTurnVector");
@@ -3287,36 +3299,37 @@ Ship.prototype.drawShortenTurnUI = function(){
 			.css("left", left)
 			.css("top", top)
 			.removeClass("disabled");
-
-		
-		if (remDelay > turn.delay/2){ // minimum 50 % turn point
-
-			minDelay = Math.ceil(remDelay/2);
-
-			ele = document.getElementById("maxCutVector");
-			var p = getPointInDir(remSpeed + 30, angle, center.x, center.y);
-			var left = p.x  * cam.z  + cam.o.x - $(ele).width()/2;
-			var top = p.y * cam.z  + cam.o.y - $(ele).height()/2;
-
-			$(ele)
-				.data("shipid", this.id)
-				.data("dist", minDelay)
-				.html("<div>"+minDelay+"<div>")
-				.css("left", left)
-				.css("top", top)
-				.removeClass("disabled");
-		}
 	}
 
+	
+	if (remSpeed && remDelay > this.getLastTurn().delay/2){ // minimum 50 % turn point
+
+		minDelay = Math.ceil(remDelay/2);
+
+		ele = document.getElementById("maxCutVector");
+		var p = getPointInDir(remSpeed + 30, angle, center.x, center.y);
+		var left = p.x  * cam.z  + cam.o.x - $(ele).width()/2;
+		var top = p.y * cam.z  + cam.o.y - $(ele).height()/2;
+
+		$(ele)
+			.data("shipid", this.id)
+			.data("dist", minDelay)
+			.html("<div>"+minDelay+"<div>")
+			.css("left", left)
+			.css("top", top)
+			.removeClass("disabled");
+	}
+
+	return;
 	var multi = round(this.getShortenTurnCost(remDelay), 2)
-	var cost = Math.round(multi * turn.cost)
+	var cost = Math.round(multi * turn.cost, 2)
 	var rem = this.getRemEP();
 	var short = "Shorten: <span class=";
 	var post = "Post: ";
 
-	if (cost > 30){
-		cost = 0;
-	}
+	//if (cost > 30){
+	//	cost = 0;
+	//}
 
 	if (cost == 0 || cost > rem){
 		multi = 0;
@@ -3341,21 +3354,20 @@ Ship.prototype.drawShortenTurnUI = function(){
 		.css("left", left)
 		.css("top", top)
 		.data("shipId", this.id)
-		.data("multi", multi)
 		.removeClass("disabled");
 }
 
 Ship.prototype.doShortenTurn = function(){
 	var data = $(game.ui.doShorten).data();
-	var multi = 0;
 
-	if (data.shipId == this.id){
-		if (data.multi == 0){return;}
-		this.getLastTurn().costmod += data.multi;
-		game.ui.doShorten.data("set", 1);
+	if (data.shipId == this.id && data.cost <= this.getRemEP()){
+		var turn = this.getLastTurn();
+			turn.cost += data.cost;
+			turn.delay -= data.delay;
 		this.unsetMoveMode();
 		this.setMoveMode();
 		game.redraw();
+		console.log(this.getLastTurn());
 	}
 }
 
@@ -3372,10 +3384,15 @@ Ship.prototype.doUndoShortenTurn = function(){
 
 Ship.prototype.getShortenTurnCost = function(delay){
 	var turn = this.getLastTurn();
-	//if (delay == turn.delay || delay > turn.delay/2){return 0;}
-	var multi = ((turn.delay - delay) - turn.delay/2) / (turn.delay/2);
+	//var multi = ((turn.delay - delay) - turn.delay/2) / (turn.delay/2);
+	//var multi = round((Math.ceil(((turn.delay - delay) / turn.delay) * 100)/100), 2);
+	//var multi = round(Math.ceil(delay / turn.delay*2*100)/100, 2)
+	var multi = round(Math.ceil(delay / turn.delay *100)/100, 2)*2
+	console.log(multi);
+	return multi;
+	//var multi = (turn.delay - delay) / turn.delay;
 	return 1-multi;
-	return Math.ceil(turn.cost * (1-multi));
+	return turn.cost * (1-multi);
 }
 
 Ship.prototype.drawVectortUI = function(){

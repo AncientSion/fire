@@ -596,9 +596,7 @@
 		})
 
 		$("#doShorten")
-		.data("set", 0)
 		.click(function(){
-			//console.log("maxVector")
 			game.getUnit(aUnit).doShortenTurn();
 		})
 		.contextmenu(function(e){

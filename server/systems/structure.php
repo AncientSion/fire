@@ -181,7 +181,7 @@ class Primary {
 	}
 
 	public function getHitChance(){
-		return ($this->integrity * 0.8);
+		return ($this->integrity * 0.7);
 		//return max($this->remaining *1.4, $this->integrity *0.2);
 		//return floor($this->remaining *1.4);
 	}

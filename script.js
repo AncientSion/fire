@@ -407,13 +407,17 @@ function handleTurnShortening(unit, e, pos){
 	var multi = 0;
 
 	if (isInArc(getCompassHeadingOfPoint(unit.getPlannedPos(), pos, 0), unit.moveAngles.start, unit.moveAngles.end)){
-		if (dist > Math.min(last.delay / 2 - unit.actions[unit.actions.length-1].dist, remDelay) && dist < remDelay){
+		//if (dist > Math.min(last.delay / 2 - unit.actions[unit.actions.length-1].dist, remDelay) && dist < remDelay){
+		if (dist < remDelay){
 			left = e.clientX - $(game.ui.doShorten).width()/2;
 			top = e.clientY + 50;
 
-			multi = round(unit.getShortenTurnCost(remDelay-dist), 2)
-			//console.log(multi)
-			cost = Math.round(multi * last.cost)
+			var aim = remDelay-dist;
+			var multi = aim / last.delay*2;
+			var cost = Math.ceil(multi * last.cost)
+			//console.log(multi);
+
+
 
 			if (cost > unit.getRemEP()){
 				short += "'red'>";
@@ -424,13 +428,13 @@ function handleTurnShortening(unit, e, pos){
 			}
 			
 			short += cost + " TA</span>";
-
 			
 			$(game.ui.doShorten)
 				.empty()
 				.append($("<div>").html(short))
 				.append($("<div>").html(post))
-				//.data("multi", multi)
+				.data("cost", cost)
+				.data("delay", aim)
 				.css("left", left)
 				.css("top", top)
 
@@ -450,7 +454,7 @@ function handleTurnShortening(unit, e, pos){
 
 
 		if (multi){
-			cost = Math.round(multi * last.cost)
+			cost = Math.round(multi * last.cost, 2)
 			if (cost > unit.getRemEP()){
 				short += "'red'>";
 			}
