@@ -1066,7 +1066,7 @@ class Manager {
 			}
 		}
 		else if ($s->ship || $s->squad){
-			Debug::log("ew for #".$s->id);
+			Debug::log("____________________EW for ".$s->display." #".$s->id);
 			$origin = $s->getCurrentPosition();
 			$sensor =  $s->getSystemByName("Sensor");
 			$ew = $sensor->getEW($this->turn);
@@ -1095,7 +1095,7 @@ class Manager {
 					$w = min(180, $this->const["ew"]["len"] * pow($str/$ew->dist, $this->const["ew"]["p"]));
 					$start = Math::addAngle(0 + $w-$s->getFacing(), $ew->angle);
 					$end = Math::addAngle(360 - $w-$s->getFacing(), $ew->angle);
-					Debug::log("specific EW for ship #".$s->id.", str: ".$str.", facing: ".$s->getFacing().", w: ".$w.", EW from ".$start." to ".$end.", dist: ".$ew->dist);
+					Debug::log("specific EW for ship #".$s->id.", str: ".$str.", facing: ".$s->getFacing().", w: ".$w.", EW @ ".$ew->angle." -> from ".$start." to ".$end.", dist: ".$ew->dist);
 				}
 
 				for ($i = 0; $i < sizeof($this->ships); $i++){
