@@ -55,8 +55,8 @@ class Manager {
 
 
 	public function doEval(){
-		$this->setupShips();
 		return;
+		$this->setupShips();
 		$this->getUnit(1)->damaged = true;
 		$this->getUnit(1)->structures[0]->damaged = true;
 		$this->getUnit(1)->structures[1]->damaged = true;
@@ -1066,7 +1066,7 @@ class Manager {
 			}
 		}
 		else if ($s->ship || $s->squad){
-			Debug::log("____________________EW for ".$s->display." #".$s->id);
+			//Debug::log("____________________EW for ".$s->display." #".$s->id);
 			$origin = $s->getCurrentPosition();
 			$sensor =  $s->getSystemByName("Sensor");
 			$ew = $sensor->getEW($this->turn);
@@ -1095,7 +1095,7 @@ class Manager {
 					$w = min(180, $this->const["ew"]["len"] * pow($str/$ew->dist, $this->const["ew"]["p"]));
 					$start = Math::addAngle(0 + $w-$s->getFacing(), $ew->angle);
 					$end = Math::addAngle(360 - $w-$s->getFacing(), $ew->angle);
-					Debug::log("specific EW for ship #".$s->id.", str: ".$str.", facing: ".$s->getFacing().", w: ".$w.", EW @ ".$ew->angle." -> from ".$start." to ".$end.", dist: ".$ew->dist);
+					//Debug::log("specific EW for ship #".$s->id.", str: ".$str.", facing: ".$s->getFacing().", w: ".$w.", EW @ ".$ew->angle." -> from ".$start." to ".$end.", dist: ".$ew->dist);
 				}
 
 				for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -1142,7 +1142,7 @@ class Manager {
 					$dist = Math::getDist2($origin, $dest);
 					if ($dist <= $ew->dist){
 						$a = Math::getAngle2($origin, $dest);
-						Debug::log("versus #".$this->ships[$i]->id.", angle: ".$a.", dist: ".$dist);
+						//Debug::log("versus #".$this->ships[$i]->id.", angle: ".$a.", dist: ".$dist);
 						if (Math::isInArc($a, $start, $end)){
 							if ($ew->type == 0){ // LOCK
 								$s->locks[] = array($this->ships[$i]->id, $s->getLockEffect($this->ships[$i]));
@@ -1151,7 +1151,7 @@ class Manager {
 							else if ($ew->type == 1){ // MASK
 								if ($this->ships[$i]->ship || $this->ships[$i]->squad){
 									$s->masks[] = array($this->ships[$i]->id, $s->getMaskEffect($this->ships[$i]));
-									Debug::log("masking from #".$this->ships[$i]->id." for value: ".$s->masks[sizeof($s->masks)-1][1]);
+									//Debug::log("masking from #".$this->ships[$i]->id." for value: ".$s->masks[sizeof($s->masks)-1][1]);
 								}
 							}
 						}// else Debug::log("out of arc");
@@ -1159,7 +1159,7 @@ class Manager {
 				}
 			}
 
-			foreach ($s->masks as $entry){Debug::log("masks vs #".$entry[0]." with val: ".$entry[1]);}
+			//foreach ($s->masks as $entry){Debug::log("masks vs #".$entry[0]." with val: ".$entry[1]);}
 		}
 	}
 
