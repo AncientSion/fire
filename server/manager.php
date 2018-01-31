@@ -1066,7 +1066,7 @@ class Manager {
 			}
 		}
 		else if ($s->ship || $s->squad){
-			//Debug::log("ew for #".$s->id);
+			Debug::log("ew for #".$s->id);
 			$origin = $s->getCurrentPosition();
 			$sensor =  $s->getSystemByName("Sensor");
 			$ew = $sensor->getEW($this->turn);
