@@ -1139,9 +1139,10 @@ class Manager {
 					if ($skip){continue;}
 
 					$dest = $this->ships[$i]->getCurrentPosition();
-					if (Math::getDist2($origin, $dest) <= $ew->dist){
+					$dist = Math::getDist2($origin, $dest);
+					if ($dist) <= $ew->dist){
 						$a = Math::getAngle2($origin, $dest);
-						Debug::log("versus #".$this->ships[$i]->id.", angle: ".$a);
+						Debug::log("versus #".$this->ships[$i]->id.", angle: ".$a.", dist: ".$dist);
 						if (Math::isInArc($a, $start, $end)){
 							if ($ew->type == 0){ // LOCK
 								$s->locks[] = array($this->ships[$i]->id, $s->getLockEffect($this->ships[$i]));
