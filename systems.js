@@ -1395,7 +1395,7 @@ Sensor.prototype.getEW = function(data){
 }
 
 Sensor.prototype.drawEW = function(){
-	if (!this.ew.length){return;}
+	if (!this.ew.length || this.destroyed || this.isUnpowered()){return;}
 	else if (this.img == undefined){
 		console.log("NO EW DEFINED!");
 		this.setTempEW();
