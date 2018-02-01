@@ -480,7 +480,27 @@ function Game(data, userid){
 		return false;
 	}
 
-	this.hasBasicEW = function(){
+	this.handleDeployWarnings = function(){
+		var data = [];
+
+		var ew = this.getHasBasicEW();
+		if (ew.length){
+			data.push({data: ew, msg: "The following units have only basic sensor settings:"});
+		}
+
+		var power = this.getHasUnusedPower();
+		if (power.length){
+			data.push({data: power, msg: "The following units have unspent power:"});
+		}
+
+		if (data.length){
+			this.clickablePop(data);
+			return true;
+		}
+		return false;
+	}
+
+	this.getHasBasicEW = function(){
 		var data = [];
 
 		for (var i = 0; i < this.ships.length; i++){
@@ -488,30 +508,64 @@ function Game(data, userid){
 			if (this.ships[i].available > game.turn){continue;}
 			
 			if (this.ships[i].hasBasicEW()){
-				data.push(this.ships[i]);
+				data.push({id: this.ships[i].id, name: this.ships[i].name, value: 0});
 			}
 
 		}
 		if (data.length){
-			this.clickablePop(data, "The following units have only basic sensor settings:");
-			return true;
+			return data;
 		}
 		return false;
 	}
 
-	this.hasOpenMoves = function(){
+	this.getHasUnusedPower = function(){
+		var data = [];
+
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].flight || this.ships[i].salvo || this.ships[i].userid != this.userid){continue;}
+			if (this.ships[i].available > game.turn){continue;}
+
+			var power = this.ships[i].getUnusedPower()
+
+			if (power > 0){
+				data.push({id: this.ships[i].id, name: this.ships[i].name, value: power});
+			}
+		}
+
+		if (data.length){
+			return data;
+		}
+		return false;
+	}
+
+	this.hasUnusedSpeed = function(){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid == this.userid){
 				if (this.ships[i].getRemSpeed() > 0){
 					if (aUnit){
 						this.getUnit(aUnit).doUnselect();
 					}
-					popup("You have units with unused Impulse (#" + this.ships[i].id + ")");
+					popup("You have units with unused speed (#" + this.ships[i].id + ")");
 					this.ships[i].doHover();
 					this.ships[i].select();
 					return true;
 				}
 			}
+		}
+		return false;
+	}
+
+	this.handleFireWarnings = function(){
+		var data = [];
+
+		var fires = this.hasNoFires();
+		if (fires.length){
+			data.push({data: fires, msg: "The following units have no fireorders:"});
+		}
+
+		if (data.length){
+			this.clickablePop(data);
+			return true;
 		}
 		return false;
 	}
@@ -524,27 +578,38 @@ function Game(data, userid){
 				var hasNoFire = this.ships[i].hasNoFireOrders();
 
 				if (hasNoFire){
-					data.push((this.ships[i]));
+					data.push({id: this.ships[i].id, name: this.ships[i].name, value: 0});
 				}
 			}
 		}
 
 		if (data.length){
-			this.clickablePop(data, "The following units have no fireorders:");
-			return true;
+			return data;
 		}
 		return false;
 	}
 
-	this.clickablePop = function(data, msg){
+
+	this.clickablePop = function(data){
+		var html = "";
 		for (var i = 0; i < data.length; i++){
-			msg += "<div class='popupEntry buttonTD' onclick='game.selectFromPopup(" + data[i].id + ")'>" + data[i].name + " #" + data[i].id + "</div>"; 
+			html += "</br>";
+			html += data[i].msg;
+			html += "</br>";
+
+			for (var j = 0; j < data[i].data.length; j++){
+				html += "<div class='popupEntry buttonTD' onclick='game.selectFromPopup(" + data[i].data[j].id + ")'>" + data[i].data[j].name + " #" + data[i].data[j].id;
+				if (data[i].data[j].value){ html += " (" + data[i].data[j].value + ")";}
+				html += "</div>"; 
+			}
 		}
-		msg += "</p><div class='popupEntry buttonTD' style='font-size: 20px; width: 200px' onclick='game.doConfirmOrders()'>Confirm Orders</div>";
-		popup(msg);
+		html += "</p></br><div class='popupEntry buttonTD' style='font-size: 20px; width: 200px' onclick='game.doConfirmOrders()'>Confirm Orders</div>";
+
+	    $("#popupWrapper").show().find("#popupText").empty().html(html)
 	}
 
 	this.doConfirmOrders = function(){
+		//console.log("doConfirmOrders"); return;
 		if (!this.canConfirm){return;}
 		this.canConfirm = 0;
 		switch (this.phase){
@@ -571,15 +636,16 @@ function Game(data, userid){
 		if (this.canSubmit){
 			if (aUnit){game.getUnit(aUnit).select();}
 			if (this.phase == -1){
-				if (this.hasInvalidDeploy() || this.hasInvalidPower() || this.hasBasicEW()){return;}
-				else this.doConfirmOrders();
+				if (this.hasInvalidDeploy() || this.hasInvalidPower()){return;}
+				if (this.handleDeployWarnings()){return;}
+				this.doConfirmOrders();
 			}
 			else if (this.phase == 0 || this.phase == 1){ // SHIP MOVEMENT
-				if (this.hasOpenMoves()){return;}
+				if (this.hasUnusedSpeed()){return;}
 				else this.doConfirmOrders();
 			}
 			else if (this.phase == 2){
-				if (this.hasNoFires()){return;}
+				if (this.handleFireWarnings()){return;}
 				else this.doConfirmOrders();
 			}
 			else if (this.phase == 3){

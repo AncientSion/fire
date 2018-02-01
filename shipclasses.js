@@ -3,6 +3,7 @@ function Ship(data){
 
 	this.id = data.id;
 	this.name = data.name;
+	this.call = data.call;
 	this.display = data.display;
 	this.notes = data.notes;
 	this.x = data.x || 0;
@@ -1196,6 +1197,7 @@ Ship.prototype.getShortInfo = function(){
 		table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id + " ("+this.traverse+")";
 		if (this.isRolled()){table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>!-ROLLED-!</span>";}
 		if (this.isRolling()){table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>!-ROLLING-!</span>";}
+		if (this.isFlipping()){table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>!-FLIPPING-!</span>";}
 		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")";
 		table.insertRow(-1).insertCell(-1).innerHTML = this.getStringHitChance();
 	return table;

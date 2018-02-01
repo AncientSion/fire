@@ -117,6 +117,13 @@ else {
 			<div id="popupText">
 			</div>
 		</div>
+		<div id="nameWrapper">
+			<table>
+				<tr><th>Please name this unit</th></tr>
+				<tr><td class="name"><input type="form"></td></tr>
+				<tr><td class="buttonTD" onclick="doConfirmPurchase()">Confirm Unit Selection</td></td>
+			</table>
+		</div>
 		<table style="height: 200px; width: 700px;">
 			<tr>
 				<td style="vertical-align: top;">
@@ -203,6 +210,7 @@ else {
 		$("#confirmFleet").hover(function(){
 			$(this).toggleClass("selectionHighlight");
 		});
+
 		$("#popupWrapper")
 			.css("left", 700)
 			.css("top", 300)
@@ -211,6 +219,8 @@ else {
 				e.stopPropagation();
 				$(this).hide();
 			});
+
+		$("#nameWrapper").css("left", 500).css("top", 300)
 
 		if (window.ready){
 			$("#shipsBoughtTable").hide();
@@ -284,7 +294,6 @@ else {
 					game.ships[0].upgrades = [];
 					game.ships[0].setBuyData();
 
-
 					var tr = table.insertRow(-1);
 
 					if (game.ships[0].ship){
@@ -318,11 +327,11 @@ else {
 
 					var tr = table.insertRow(-1);
 					var button = tr.insertCell(-1);
-						button.innerHTML = "Confirm Ship Selection";
+						button.innerHTML = "Confirm Setup";
 						button.className = "buttonTD";
 						button.colSpan = 2;
 						$(button).click(function(){
-							window.addUnitToFleet();
+							window.confirmPurchase();
 						});
 					}
 				}
@@ -464,6 +473,7 @@ else {
 
 	function showShipDiv(data){
 		$(".shipDiv").remove();
+		$("#nameWrapper").hide().find("input").attr("placeholder", "Callsign")
 		$("#hangarLoadoutDiv").addClass("disabled");
 		$("#weaponLoadoutDiv").addClass("disabled");
 		$("#hangarTable").html("");
@@ -511,8 +521,7 @@ else {
 		window.game.setUnitTotal();
 	}
 
-
-	function addUnitToFleet(){
+	function confirmPurchase(){
 		var cur = Math.floor($("#totalFleetCost").html());
 		var add = game.ships[0].totalCost;
 		var max = window.maxPoints;
@@ -520,17 +529,26 @@ else {
 		if (game.ships[0].squad && game.ships[0].structures.length < 2){
 			popup("A squadron needs to include at least 2 units.");
 			return false;
-		}
-
-		if (cur + add > max){
+		} else if (cur + add > max){
 			popup("You have insufficient point value left");
 			return false;
 		}
+		else {
+			window.addNameToUnit();
+			return true;
+		}
+	}
 
+	function addNameToUnit(){
+		$("#nameWrapper").show().find("input").focus();
+	}
+
+	function doConfirmPurchase(){
 		var ship = {
 			type: game.getUnitClass(),
 			name: game.getUnitName(),
 			display: game.getUnitDisplay(),
+			call: $("#nameWrapper").find("input").val(),
 			faction: game.ships[0].faction,
 			value: game.ships[0].totalCost,
 			purchaseId: window.game.shipsBought.length,
@@ -539,6 +557,8 @@ else {
 			eta: 0,
 			launchData: game.ships[0].getLaunchData()
 		}
+
+		console.log(ship.call);
 
 		window.game.shipsBought.push(ship);
 
@@ -563,6 +583,7 @@ else {
 			$(target).html(game.getFleetCost());
 
 		$(".shipDiv").remove();
+		$("#nameWrapper").hide();
 		$("#game").addClass("disabled");
 		$("#hangarLoadoutDiv").addClass("disabled");
 		$("#hangarTable").html("");

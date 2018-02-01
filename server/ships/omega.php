@@ -9,8 +9,8 @@ class Omega extends SuperHeavy {
 	public $profile = array(0.93, 1.07);
 	public $mass = 14000;
 
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
+        parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 	}
 
 	public function addStructures(){
@@ -76,7 +76,7 @@ class Omega extends SuperHeavy {
 				array(
 					"active" => 0,
 					"chance" => 30,
-					"name" => "Patrol (Aurora) Outfit",
+					"notes" => "Patrol (Aurora) Outfit",
 					"cost" => 400,
 					"loads" =>
 					array(
@@ -90,7 +90,7 @@ class Omega extends SuperHeavy {
 				array(
 					"active" => 0,
 					"chance" => 30,
-					"name" => "Patrol (T-Bolt) Outfit",
+					"notes" => "Patrol (T-Bolt) Outfit",
 					"cost" => 450,
 					"loads" =>
 					array(
@@ -104,7 +104,7 @@ class Omega extends SuperHeavy {
 				array(
 					"active" => 0,
 					"chance" => 10,
-					"name" => "War (Aurora) Outfit",
+					"notes" => "War (Aurora) Outfit",
 					"cost" => 800,
 					"loads" =>
 					array(
@@ -118,7 +118,7 @@ class Omega extends SuperHeavy {
 				array(
 					"active" => 0,
 					"chance" => 10,
-					"name" => "War (T-Bolt) Outfit",
+					"notes" => "War (T-Bolt) Outfit",
 					"cost" => 900,
 					"loads" =>
 					array(

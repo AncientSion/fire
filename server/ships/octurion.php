@@ -9,8 +9,8 @@ class Octurion extends UltraHeavy {
 	public $profile = array(0.95, 1.05);
 	public $mass = 20000;
 
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
+		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 	}
 
 	public function addStructures(){
@@ -89,7 +89,7 @@ class Octurion extends UltraHeavy {
 				array(
 					"active" => 0,
 					"chance" => 40,
-					"name" => "PATROL (Sentri) Outfit",
+					"notes" => "PATROL (Sentri) Outfit",
 					"cost" => 275,
 					"loads" =>
 					array(
@@ -108,7 +108,7 @@ class Octurion extends UltraHeavy {
 				array(
 					"active" => 0,
 					"chance" => 20,
-					"name" => "WAR (Combined) Outfit",
+					"notes" => "WAR (Combined) Outfit",
 					"cost" => 450,
 					"loads" =>
 					array(

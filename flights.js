@@ -573,21 +573,23 @@ Flight.prototype.switchDiv = function(){
 }
 
 Flight.prototype.hasNoFireOrders = function(){
+	var check = false;
 	if (!this.cc.length){
 		return false;
 	}
 	else {
-		var check = 0;
 		for (var i = 0; i < this.cc.length; i++){
-			if (game.getUnit(this.cc[i]).userid != this.userid){
-				check = true;
-				break;
-			}
+			var t = game.getUnit(this.cc[i]);
+			if (t.userid == this.userid){continue;}
+			check = true;
+			break;
 		}
 	}
 
 	if (check){
 		for (var j = 0; j < this.structures.length; j++){
+			if (this.structures[j].destroyed){continue;}
+
 			for (var k = 0; k < this.structures[j].systems.length; k++){
 				if (this.structures[j].systems[k].weapon &&  this.structures[j].systems[k].getLoadLevel() >= 1){
 					if (this.structures[j].systems[k].hasFireOrder()){

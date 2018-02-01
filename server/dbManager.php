@@ -309,9 +309,9 @@
 
 			$stmt = $this->connection->prepare("
 				INSERT INTO units 
-					(gameid, userid, ship, ball, name, status, available, destroyed)
+					(gameid, userid, ship, ball, name, display, status, available, destroyed)
 				VALUES
-					(:gameid, :userid, :ship, :ball, :name, :status, :available, :destroyed)
+					(:gameid, :userid, :ship, :ball, :name, :display, :status, :available, :destroyed)
 			");
 
 			$missions = array();
@@ -343,6 +343,7 @@
 				$stmt->bindParam(":ship", $ship);
 				$stmt->bindParam(":ball", $ball);
 				$stmt->bindParam(":name", $units[$i]["name"]);
+				$stmt->bindParam(":display", $units[$i]["call"]);
 				$stmt->bindParam(":status", $status);
 				$stmt->bindValue(":available", (floor($units[$i]["turn"]) + floor($units[$i]["eta"])));
 				$stmt->bindParam(":destroyed", $destroyed);
@@ -481,9 +482,9 @@
 			Debug::log("insertReinforcements: ".sizeof($data));
 			$stmt = $this->connection->prepare("
 				INSERT INTO units 
-					(gameid, userid, ship, ball, name, display, status, available, destroyed, facing, turn, phase)
+					(gameid, userid, ship, ball, name, display, status, available, destroyed, facing, turn, phase, notes)
 				VALUES
-					(:gameid, :userid, :ship, :ball, :name, :display, :status, :available, :destroyed, :facing, :turn, :phase)
+					(:gameid, :userid, :ship, :ball, :name, :display, :status, :available, :destroyed, :facing, :turn, :phase, :notes)
 			");
 
 			$ship = 1;
@@ -506,6 +507,7 @@
 				$stmt->bindParam(":facing", $data[$i]["cost"]);
 				$stmt->bindParam(":turn", $data[$i]["turn"]);
 				$stmt->bindParam(":phase", $phase);
+				$stmt->bindParam(":notes", $data[$i]["notes"]);
 				$stmt->execute();
 
 				if ($stmt->errorCode() == 0){

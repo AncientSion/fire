@@ -9,8 +9,8 @@ class Altarian extends Medium {
 	public $profile = array(0.93, 1.07);
 	public $mass = 4250;
 
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
+        parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 	}
 
 	public function addStructures(){
@@ -64,7 +64,7 @@ class Altarian extends Medium {
 				array(
 					"active" => 0,
 					"chance" => 40,
-					"name" => "PATROL (Sentri) Outfit",
+					"notes" => "PATROL (Sentri) Outfit",
 					"cost" => 175,
 					"loads" =>
 					array(
@@ -79,7 +79,7 @@ class Altarian extends Medium {
 				array(
 					"active" => 0,
 					"chance" => 20,
-					"name" => "Raid (Sentri/Sitara) Outfit",
+					"notes" => "Raid (Sentri/Sitara) Outfit",
 					"cost" => 175,
 					"loads" =>
 					array(

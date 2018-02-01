@@ -9,8 +9,8 @@ class Avenger extends Heavy {
 	public $profile = array(0.91, 1.09);
 	public $mass = 12500;
 
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
+		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 	}
 
 	public function addStructures(){
@@ -77,7 +77,7 @@ class Avenger extends Heavy {
 				array(
 					"active" => 0,
 					"chance" => 50,
-					"name" => "PATROL (Half Load) Outfit",
+					"notes" => "PATROL (Half Load) Outfit",
 					"cost" => 750,
 					"loads" =>
 					array(
@@ -106,7 +106,7 @@ class Avenger extends Heavy {
 				array(
 					"active" => 0,
 					"chance" => 50,
-					"name" => "ASSAULT (Full Load) Oufit",
+					"notes" => "ASSAULT (Full Load) Oufit",
 					"cost" => 1800,
 					"loads" =>
 					array(

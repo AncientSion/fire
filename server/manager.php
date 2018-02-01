@@ -16,7 +16,7 @@ class Manager {
 	public $index = 0;
 	public $faction = "";
 	public $value = 0;
-	public $wave = 11;
+	public $wave = 2;
 
 	public $ships = array();
 	public $ballistics = array();
@@ -271,6 +271,7 @@ class Manager {
 					-$this->reinforcements[$i]["id"],
 					$this->reinforcements[$i]["userid"],
 					$this->turn + $this->reinforcements[$i]["available"],
+					$this->reinforcements[$i]["display"],
 					$this->reinforcements[$i]["status"],
 					$this->reinforcements[$i]["destroyed"],
 					$this->reinforcements[$i]["x"],
@@ -280,7 +281,7 @@ class Manager {
 					$this->reinforcements[$i]["thrust"],
 					$this->reinforcements[$i]["rolling"],
 					$this->reinforcements[$i]["rolled"],
-					$this->reinforcements[$i]["display"]
+					$this->reinforcements[$i]["notes"]
 				);
 
 				if (!$unit->ship){$unit->addSubUnits($this->reinforcements[$i]["subunits"]);}
@@ -308,6 +309,7 @@ class Manager {
 				$db[$i]["id"],
 				$db[$i]["userid"],
 				$db[$i]["available"],
+				$db[$i]["display"],
 				$db[$i]["status"],
 				$db[$i]["destroyed"],
 				$db[$i]["x"],
@@ -317,7 +319,7 @@ class Manager {
 				$db[$i]["thrust"],
 				$db[$i]["rolling"],
 				$db[$i]["rolled"],
-				$db[$i]["display"]
+				$db[$i]["notes"]
 			);
 
 			if (isset($db[$i]["subunits"])){$unit->addSubUnits($db[$i]["subunits"]);}
@@ -474,7 +476,7 @@ class Manager {
 			foreach ($entries as $entry){$total += $entry[1];}
 
 			//Debug::log("total: ".$total);
-			$add = 12;
+			$add = 6;
 
 			while ($add){
 				$current = 0;
@@ -489,7 +491,7 @@ class Manager {
 					//echo "</br>picking: ".$entry[0]."</br>";
 					$data = $entry[0]::getKit($faction);
 					$data["name"] = $entry[0];
-					$data["display"] = "";
+					$data["notes"] = "";
 					$data["turn"] = $this->turn;
 					$data["userid"] = $this->playerstatus[$i]["userid"];
 					$data["eta"] = $entry[2];
@@ -517,7 +519,7 @@ class Manager {
 							//echo "roll: ".$subRoll.", subTotal: ".$subTotal.", current: ".$subCurrent.", picking upgrade: ".$j."</br>";
 
 							$data["cost"] += $data["upgrades"][$j]["cost"];
-							$data["display"] = $data["upgrades"][$j]["name"];
+							$data["notes"] = $data["upgrades"][$j]["notes"];
 							break;
 						}
 
@@ -1538,7 +1540,7 @@ class Manager {
 		//Debug::log("asking for preview of: ".$get["name"].", index: ".$get["index"]);
 		$unit;
 		if ($get["unit"] == "ship"){
-			$unit = new $get["name"](1, 1, 0, "", 0, 0, 0, 270, 0, 0, 0, 0, "");
+			$unit = new $get["name"](1, 1, 0, "", "", 0, 0, 0, 270, 0, 0, 0, 0, "");
 		}
 		elseif ($get["unit"] == "squaddie"){
 			$unit = new $get["name"]($get["index"]+1, 1);

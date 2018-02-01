@@ -9,10 +9,11 @@ class Mixed extends Ship {
 	public $profile = 0;
 	public $mission = array();
 
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
+	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
 		$this->id = $id;
 		$this->userid = $userid;
 		$this->available = $available;
+		$this->call = $call;
 		$this->status = $status;
 		$this->destroyed = $destroyed;
 		$this->x = $x;

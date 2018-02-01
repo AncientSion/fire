@@ -10,7 +10,8 @@ class Builder {
 			array(
 				"active" => 0,
 				"chance" => 40,
-				"name" => "3x Tethys",
+				"notes" => "3x Tethys",
+				"display" => "",
 				"cost" => 700,
 				"launchData" => 
 					array(
@@ -36,7 +37,8 @@ class Builder {
 			array(
 				"active" => 0,
 				"chance" => 40,
-				"name" => "2x Crius",
+				"notes" => "2x Crius",
+				"display" => "",
 				"cost" => 550,
 				"launchData" => 
 					array(
@@ -58,7 +60,8 @@ class Builder {
 			array(
 				"active" => 0,
 				"chance" => 20,
-				"name" => "Tethys/Crius patrol unit)",
+				"notes" => "Tethys/Crius patrol unit)",
+				"display" => "",
 				"cost" => 500,
 				"launchData" => 
 					array(
@@ -85,7 +88,8 @@ class Builder {
 			array(
 				"active" => 0,
 				"chance" => 40,
-				"name" => "Vorchan Hunter (Torpedo)",
+				"notes" => "Vorchan Hunter (Torpedo)",
+				"display" => "",
 				"cost" => 700,
 				"launchData" => 
 					array(
@@ -118,7 +122,8 @@ class Builder {
 			array(
 				"active" => 0,
 				"chance" => 30,
-				"name" => "Vorchan (Assault)",
+				"notes" => "Vorchan (Assault)",
+				"display" => "",
 				"cost" => 1000,
 				"launchData" => 
 					array(
@@ -144,7 +149,8 @@ class Builder {
 			array(
 				"active" => 0,
 				"chance" => 30,
-				"name" => "Haven (Patrol)",
+				"notes" => "Haven (Patrol)",
+				"display" => "",
 				"cost" => 500,
 				"launchData" => 
 					array(

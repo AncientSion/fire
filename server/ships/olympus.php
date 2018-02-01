@@ -9,8 +9,8 @@ class Olympus extends Medium {
 	public $profile = array(0.94, 1.06);
 	public $mass = 2500;
 
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
+        parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 	}
 
 	public function addStructures(){
@@ -61,7 +61,7 @@ class Olympus extends Medium {
 					"active" => 0,
 					"chance" => 60,
 					"cost" => 80,
-					"name" => "PATROL Outfit",
+					"notes" => "PATROL Outfit",
 					"loads" => 
 					array(
 						array(
@@ -82,7 +82,7 @@ class Olympus extends Medium {
 					"active" => 0,
 					"chance" => 30,
 					"cost" => 70,
-					"name" => "ESCORT Outfit",
+					"notes" => "ESCORT Outfit",
 					"loads" => 
 					array(
 						array(

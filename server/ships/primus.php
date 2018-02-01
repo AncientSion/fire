@@ -9,8 +9,8 @@ class Primus extends SuperHeavy {
 	public $profile = array(0.92, 1.08);
 	public $mass = 12500;
 
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
+        parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 	}
 
 	public function addStructures(){
@@ -70,7 +70,7 @@ class Primus extends SuperHeavy {
 				array(
 					"active" => 0,
 					"chance" => 40,
-					"name" => "PATROL (Sentri) Outfit",
+					"notes" => "PATROL (Sentri) Outfit",
 					"cost" => 275,
 					"loads" =>
 					array(
@@ -89,7 +89,7 @@ class Primus extends SuperHeavy {
 				array(
 					"active" => 0,
 					"chance" => 20,
-					"name" => "WAR (Combined) Outfit",
+					"notes" => "WAR (Combined) Outfit",
 					"cost" => 450,
 					"loads" =>
 					array(

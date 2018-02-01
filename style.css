@@ -43,7 +43,7 @@ table, th, tr, td {
 	font-size: 20px;
 }
 
-#instructWrapper {
+#instructWrapper, #nameWrapper {
 	display: none;
 	position: absolute;
 	background-color: black;
@@ -51,6 +51,18 @@ table, th, tr, td {
 	border: 5px solid #27e627;
 	padding: 10px;
 	z-index: 20;
+}
+
+#nameWrapper tr {
+	font-size: 20px;
+}
+
+.name {
+	padding: 10px;
+}
+
+.name input {
+	text-align: center;
 }
 
 #instructText {

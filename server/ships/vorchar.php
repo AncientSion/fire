@@ -48,7 +48,7 @@ class Vorchar extends Light {
 					"active" => 0,
 					"chance" => 80,
 					"cost" => 60,
-					"name" => "Standard Outfit",
+					"notes" => "Standard Outfit",
 					"loads" => 
 					array(
 						array(

@@ -2,20 +2,24 @@
 
 class Ship {
 	public $id;
-	public $facing = 0;
-	public $x;
-	public $y;
 	public $userid;
 	public $available;
+	public $call;
 	public $status;
 	public $destroyed;
+	public $x;
+	public $y;
+	public $facing;
+	public $delay;
+	public $thrust;
+	public $rolling;
+	public $rolled;
+
 	public $disabled = false;
 
 	public $baseHitChance;
 	public $remainingDelay;
 	public $currentImpulse;
-	public $rolling = 0;
-	public $rolled = 0;
 	public $flipping = 0;
 	public $remainingImpulse;
 	public $baseImpulse;
@@ -54,10 +58,11 @@ class Ship {
 	public $damaged = 0;
 	public $moveSet = 0;
 
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
+	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
 		$this->id = $id;
 		$this->userid = $userid;
 		$this->available = $available;
+		$this->call = $call;
 		$this->status = $status;
 		$this->destroyed = $destroyed;
 		$this->x = $x;
@@ -1140,8 +1145,8 @@ class Medium extends Ship {
 	public $slipAngle = 20;
 	public $baseImpulseCost = 40;
 
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
+		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 
 		$this->hitTable = array(
 			"Bridge" => 0.65,
@@ -1162,8 +1167,8 @@ class Heavy extends Ship {
 	public $slipAngle = 20;
 	public $baseImpulseCost = 45;
 	
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
+		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 
 		$this->hitTable = array(
 			"Bridge" => 0.55,
@@ -1180,8 +1185,8 @@ class SuperHeavy extends Ship {
 	public $slipAngle = 20;
 	public $baseImpulseCost = 50;
 	
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
+		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 
 		$this->hitTable = array(
 			"Bridge" => 0.5,
@@ -1198,8 +1203,8 @@ class UltraHeavy extends Ship {
 	public $slipAngle = 20;
 	public $baseImpulseCost = 55;
 	
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
+		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 
 		$this->hitTable = array(
 			"Bridge" => 0.35,
