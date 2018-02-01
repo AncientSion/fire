@@ -253,7 +253,7 @@ function Game(data, userid){
 		else {
 			//s.mission = mission;
 			s.facing = a;
-			if (!(s.oldMission.type == 1 && s.oldMission.arrived)){s.setSpeed();} // reset speed only when NOT in patrol
+			if (!(s.oldMission.type == 1 && s.oldMission.arrived)){s.setCurSpeed();} // reset speed only when NOT in patrol
 			s.setTarget();
 		}
 
@@ -417,6 +417,7 @@ function Game(data, userid){
 						serverId: 0,
 						type: "Flight",
 						name: "Flight",
+						display: "",
 						mission: this.ships[i].mission,
 						launchData: this.ships[i].launchData,
 						actions: this.ships[i].actions,
@@ -593,17 +594,16 @@ function Game(data, userid){
 	this.clickablePop = function(data){
 		var html = "";
 		for (var i = 0; i < data.length; i++){
-			html += "</br>";
 			html += data[i].msg;
 			html += "</br>";
 
 			for (var j = 0; j < data[i].data.length; j++){
 				html += "<div class='popupEntry buttonTD' onclick='game.selectFromPopup(" + data[i].data[j].id + ")'>" + data[i].data[j].name + " #" + data[i].data[j].id;
 				if (data[i].data[j].value){ html += " (" + data[i].data[j].value + ")";}
-				html += "</div>"; 
+				html += "</div></br>"; 
 			}
 		}
-		html += "</p></br><div class='popupEntry buttonTD' style='font-size: 20px; width: 200px' onclick='game.doConfirmOrders()'>Confirm Orders</div>";
+		html += "</p><div class='popupEntry buttonTD' style='font-size: 20px; width: 200px' onclick='game.doConfirmOrders()'>Confirm Orders</div>";
 
 	    $("#popupWrapper").show().find("#popupText").empty().html(html)
 	}
@@ -2016,7 +2016,7 @@ function Game(data, userid){
 				anim.html += "A total of <font color='" + color + "'>" + counter + "</font> elements from <font color='" + color + "'>Unit #" + anim.id + "</font> were destroyed or disengaged";
 			}
 			else if (game.ships[i].ship && game.ships[i].isDestroyedThisTurn()){
-				anim.html += "<font color='" + color + "'>Unit #" + anim.id + "</font> ";
+				anim.html += "<font color='" + color + "'>Unit #" + anim.id + ", the " + game.ships[i].getCallSign() + "</font> ";
 				if (game.ships[i].getSystemByName("Reactor").destroyed){
 					anim.html +=  " suffered critical reactor damage and was destroyed.";
 				}

@@ -357,7 +357,7 @@ Ship.prototype.doHover = function(){
 Ship.prototype.getActionCost = function(type){
 	switch (type){
 		case 0: return Math.ceil(this.getImpulseChangeCost()*1.25);
-		case 1: return Math.ceil(this.getImpulseChangeCost()*1.75);
+		case 1: return Math.ceil(this.getImpulseChangeCost()*2);
 		default: return 0;
 	}
 	return Math.ceil(this.getImpulseChangeCost()*1.5);
@@ -1365,35 +1365,35 @@ Ship.prototype.attachLogEntry = function(html){
 }
 
 Ship.prototype.createDeployEntry = function(){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> jumps into local space.</span>");
+	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + ", the " + this.getCallSign() + " </font> jumps into local space.</span>");
 }
 
 Ship.prototype.createUndeployEntry = function(){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> jumps into hyperspace and leaves the battlefield.</span>");
+	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + ", the " + this.getCallSign() + "</font> jumps into hyperspace and leaves the battlefield.</span>");
 }
 
 Ship.prototype.createMoveStartEntry = function(){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> has completed a full roll but is still rolling.</span>");
+	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + ", the " + this.getCallSign() + "</font> has completed a full roll but is still rolling.</span>");
 }
 
 Ship.prototype.createActionEntry = function(move){
 	if (this.isRolling()){
-		this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> is beginning a ROLL manover.</span>");
+		this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id+ ", the " + this.getCallSign() + "</font> is beginning a ROLL manover.</span>");
 	}
 	else if (this.hasStoppedRolling()){
-		this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> has canceled its ongoing ROLL manover.</span>");
+		this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + ", the " + this.getCallSign() + "</font> has canceled its ongoing ROLL manover.</span>");
 	}
 	else if (this.isFlipping()){
-		this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> is beginning a FLIP manover.</span>");
+		this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id+ ", the " + this.getCallSign() + "</font> is beginning a FLIP manover.</span>");
 	}
 }
 
 Ship.prototype.createStillRollingEntry = function(){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> is continueing its roll manover.</span>");							
+	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id+ ", the " + this.getCallSign() + "</font> is continueing its roll manover.</span>");							
 }
 
 Ship.prototype.createMoveEndEntry = function(){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + "</font> has completed a full roll.</span>")
+	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id+ ", the " + this.getCallSign() + "</font> has completed a full roll.</span>")
 }
 
 Ship.prototype.animateSelfJumpIn = function(){
@@ -1900,6 +1900,13 @@ Ship.prototype.unpowerAllSystems = function(){
 	}
 }
 
+Ship.prototype.getCallSign = function(){
+	if (this.call.length > 3){
+		return " - " + this.call + " - ";
+	}
+	return this.call;
+}
+
 Ship.prototype.createBaseDiv = function(){
 	var className = "shipDiv";
 	if (this.squad){className += " squad";}
@@ -1923,6 +1930,8 @@ Ship.prototype.createBaseDiv = function(){
 		.append($("<tr>")
 			.append($("<th>").html(this.name.toUpperCase() + " #" + this.id).attr("colSpan", 2).addClass(headerC)))
 		.append($("<tr>")
+			.append($("<th>").html(this.getCallSign()).attr("colSpan", 2).addClass(headerC)))
+		.append($("<tr>")
 			.append($("<td>").html("Classification").css("width", "50%"))
 			.append($("<td>").html(game.getUnitType(this.traverse) + " (" + this.traverse + ")")))
 		.append($("<tr>")
@@ -1935,7 +1944,7 @@ Ship.prototype.createBaseDiv = function(){
 			.append($("<td>").html("Speed, Roll, Flip"))
 			.append($("<td>").html(this.getImpulseChangeCost() + ", " + this.getActionCost(0) + ", " + this.getActionCost(1)).addClass("change")))
 		.append($("<tr>")
-			.append($("<td>").html("Turn Delay / 1\xB0"))
+			.append($("<td>").html("Delay / 1\xB0"))
 			.append($("<td>").html(round(this.getTurnDelay(), 2) + " px")))
 		.append($("<tr>")
 			.append($("<td>").html("Active Delay"))
@@ -2385,16 +2394,18 @@ Ship.prototype.expandDiv = function(div){
 	var conW = con.width()
 	var conH = con.height();
 
-	var goal = conW * 0.8;
+	//var goal = conW * 0.8;
 		
 	// notes
 	$(con)
 		.append(
 			$(this.getBaseImage().cloneNode(true))
 				.addClass("rotate270")
-				.css("width", goal)
-				.css("height", goal)
-				.css("margin-left", (conW - goal)/2)
+				.css("width", "100%")
+				.css("border-left", "1px solid white")
+				//.css("width", goal)
+				//.css("height", goal)
+				//.css("margin-left", (conW - goal)/2)
 		)
 		.append($("<div>")
 			.addClass("notes")

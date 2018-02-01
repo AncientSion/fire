@@ -190,6 +190,19 @@ Squaddie.prototype.expandElement = function(){
 			if (oX){oX += shiftX + space +1;}
 			else if (oY){oY += shiftY + space;}
 
+
+			if (0){
+				$(this.element)
+					.append($("<img>")
+					.attr("src", "varIcons/destroyed.png")
+					.addClass("overlay").css("width", cWidth).css("height", cHeight)
+					.hover(function(e){
+						e.stopPropagation();
+						var p = $(this).parent().children()[0];
+						game.getUnit($(p).data("shipId")).getSystem($(p).data("fighterId")).hover(e);
+					}))
+			}
+
 		}
 	}
 }
@@ -384,6 +397,7 @@ Squaddie.prototype.armourIn = function(e){
 	if (game.phase != -1 || !this.effiency || game.getUnit(this.parentId).userid != game.userid){return;}
 	$(this.armourElement).find(".boostDiv").show();
 }
+
 Squaddie.prototype.armourOut = function(e){
 	Structure.prototype.hideInfoDiv.call(this, e);
 	if (game.phase != -1 || !this.effiency || game.getUnit(this.parentId).userid != game.userid){return;}
@@ -451,6 +465,16 @@ Squaddie.prototype.getBoostEffect = function(val){
 	return System.prototype.getBoostEffect.call(this, val);
 }
 
+Squaddie.prototype.previewSetup = function(){
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].systems.length; j++){
+			if (this.structures[i].systems[j].loadout){
+				$(this.structures[i].systems[j].element).addClass("bgYellow");
+			}
+		}
+	}
+}
+
 
 
 
@@ -509,6 +533,11 @@ Squadron.prototype.setStatus = function(){
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].destroyed){
 			this.structures[i].doDestroy();
+		}
+		for (var j = 0; j < this.structures[i].crits.length; j++){
+			if (this.structures[i].crits[j].type == "Disabled"){
+				this.structures[i].disabled = true;
+			}
 		}
 	}
 }
@@ -639,7 +668,7 @@ Squadron.prototype.expandDiv = function(div){
 			.append($("<div>")
 				.addClass("iconContainer")					
 					.append(
-						$(this.getBaseImage()).addClass("rotate270").css("width", "100%")
+						$(this.getBaseImage()).addClass("rotate270").css("width", "100%").css("border-left", "1px solid white")
 					)
 					.append($("<div>")
 						.addClass("notes")
@@ -1185,12 +1214,13 @@ Squadron.prototype.previewSetup = function(){
 	return;
 }
 
-Squaddie.prototype.previewSetup = function(){
+Squadron.prototype.getUnusedPower = function(){
+	var power = 0;
 	for (var i = 0; i < this.structures.length; i++){
-		for (var j = 0; j < this.structures[i].systems.length; j++){
-			if (this.structures[i].systems[j].loadout){
-				$(this.structures[i].systems[j].element).addClass("bgYellow");
-			}
-		}
+		if (this.structures[i].destroyed){continue;}
+
+		power += this.structures[i].getUnusedPower();
 	}
+
+	return power;
 }

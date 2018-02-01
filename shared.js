@@ -250,6 +250,12 @@ function initiateSquaddie(data){
 		} else unit.damages.push(data.damages[i]);
 	}
 
+	for (var i = 0; i < data.crits.length; i++){
+		if (data.crits[i].turn == game.turn){
+			unit.crits.push(new Crit(data.crits[i]));
+		}
+	}
+
 	for (var j = 0; j < data.structures.length; j++){
 		var struct = new Section(data.structures[j]);
 

@@ -46,6 +46,7 @@ class Manager {
 		//$this->getMemory();
 		$this->userid = $userid;
 		$this->gameid = $gameid;
+		Debug::init();
 
 		if ($this->gameid){
 			$this->getGeneralData();
@@ -76,6 +77,8 @@ class Manager {
 		//$this->deleteReinforcements();
 		//return;
 		//$this->crits();
+
+		fclose(Debug::$file);
 
 		return array(
 			"id" => $this->gameid,
@@ -423,6 +426,7 @@ class Manager {
 		$time += microtime(true); 
 		Debug::log("TIME: ".round($time, 3)." seconds.");
 		$this->getMemory();
+		fclose(Debug::$file);
 		return true;
 	}
 
@@ -491,6 +495,7 @@ class Manager {
 					//echo "</br>picking: ".$entry[0]."</br>";
 					$data = $entry[0]::getKit($faction);
 					$data["name"] = $entry[0];
+					$data["display"] = "";
 					$data["notes"] = "";
 					$data["turn"] = $this->turn;
 					$data["userid"] = $this->playerstatus[$i]["userid"];
@@ -616,8 +621,8 @@ class Manager {
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if (($this->ships[$i]->ship || $this->ships[$i]->squad) && $this->ships[$i]->available == $this->turn){
 				$order = $this->ships[$i]->actions[0];
-				$output = $this->ships[$i]->getSystemByName("Sensor")->output;
-				$shift = round($this->ships[$i]->size / $output*500*$mod, 2);
+				$output = $this->ships[$i]->getSystemByName("Sensor")->getOutput($this->turn);
+				$shift = round(($this->ships[$i]->size - $this->ships[$i]->squad*15) / $output*500*$mod, 2);
 				$aShift = ceil($shift);
 				$pShift = ceil($shift*2);
 				Debug::log("jumpin: #".$this->ships[$i]->id.", class: ".$this->ships[$i]->name.", size: ".$this->ships[$i]->size.", sensor: ".$output.", ordered to: ".$order->x."/".$order->y.", shiftPotential: ".$shift."%");
@@ -724,7 +729,7 @@ class Manager {
 			DBManager::app()->insertUnits($this->userid, $this->gameid, $units);
 			DBManager::app()->updateSystemLoad($adjust);
 			for ($i = 0; $i < sizeof($units); $i++){
-				$this->ships[] = new Salvo($units[$i]["id"], $units[$i]["userid"], $this->turn, "deployed", 0, 0, 0, 0, 0, 0, 0, 0, "");
+				$this->ships[] = new Salvo($units[$i]["id"], $units[$i]["userid"], $this->turn, "", "deployed", 0, 0, 0, 0, 0, 0, 0, 0, "");
 
 				$this->ships[sizeof($this->ships)-1]->setUnitState($this->turn, $this->phase);
 				$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->ships[$i]->id, $this->turn, "deploy", 0, $units[$i]["actions"][0]["x"], $units[$i]["actions"][0]["y"], $a, 0, 0, 0, 1, 1);
@@ -1005,7 +1010,7 @@ class Manager {
 		//set dist and angle for each ship to speed up fire resolution
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$aPos = $this->ships[$i]->getCurrentPosition();
-			Debug::log("POSITION #".$this->ships[$i]->id.": ".$aPos->x."/".$aPos->y);
+			//Debug::log("POSITION #".$this->ships[$i]->id.": ".$aPos->x."/".$aPos->y);
 			for ($j = $i+1; $j < sizeof($this->ships); $j++){
 				if ($this->ships[$i]->userid == $this->ships[$j]->userid){continue;}
 				$bPos = $this->ships[$j]->getCurrentPosition();
@@ -1346,11 +1351,10 @@ class Manager {
 	}
 
 	public function getAllNewCrits(){
-		if ($this->phase == 0)
-		Debug::log("getAllNewCrits");
+		//Debug::log("getAllNewCrits");
 		$crits = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->destroyed && ($this->ships[$i]->ship || $this->ships[$i]->squad)){continue;}
+			if ($this->ships[$i]->destroyed && $this->ships[$i]->ship){continue;}
 			$crits = array_merge($crits, $this->ships[$i]->getNewCrits($this->turn));
 		}
 		return $crits;

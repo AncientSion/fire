@@ -221,7 +221,7 @@ class Squadron extends Ship {
 	public function getHitSystem($fire){
 	//	if ($fire->weapon->laser && 
 
-
+		return $this->structures[2];
 		$elements = array();
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (!$this->structures[$i]->destroyed){
@@ -449,6 +449,13 @@ class Squaddie extends Single {
 	public function getNewCrits($turn){
 		$crits = array();
 
+
+		for ($i = 0; $i < sizeof($this->crits); $i++){
+			if ($this->crits[$i]->new){
+				$crits[] = $this->crits[$i];
+			}	
+		}
+
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				for ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]->crits); $k++){
@@ -474,9 +481,16 @@ class Squaddie extends Single {
 
 	public function determineCrit($old, $new, $turn){
 		$dmg =  round(($new + $old/2) / $this->integrity * 100);
-		$effects = $this->getValidEffects();
 
 		Debug::log(" => SQUAD determineCrit #".$this->parentId."/".$this->id." for ".$this->name.", Dmg: ".$dmg." %");
+
+		//if ($dmg > 80 && mt_rand(0, 100) < $dmg){
+		if ($dmg > 50 && mt_rand(0, 100)){
+			$this->crits[] = new Crit(
+				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 0, 0, 1
+			);
+			return;
+		}
 
 		$effects = $this->getValidEffects();
 

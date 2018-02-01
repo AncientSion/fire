@@ -67,11 +67,17 @@ class Single {
 		if ($this->destroyed){
 			return true;
 		}
+		for ($i = 0; $i < sizeof($this->crits); $i++){
+			if ($this->crits[$i]->type == "Disabled"){
+				$this->destroyed = true;
+				return;
+			}
+		}
 		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
 			if ($this->damages[$i]->destroyed){
 				$this->destroyed = true;
-				return true;
-			} else return false;
+				return;
+			}
 		}
 		return false;
 	}
@@ -112,15 +118,16 @@ class Single {
 	}
 
 	public function setUnitState($turn, $phase){
-		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
-			if ($this->damages[$i]->destroyed){
+		for ($i = 0; $i < sizeof($this->crits); $i++){
+			if ($this->crits[$i]->type == "Disabled"){
 				$this->destroyed = true;
 				return;
 			}
 		}
-		for ($i = 0; $i < sizeof($this->crits); $i++){
-			if ($this->crits[$i]->type == "Disabled"){
+		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
+			if ($this->damages[$i]->destroyed){
 				$this->destroyed = true;
+				return;
 			}
 		}
 	}

@@ -31,7 +31,7 @@ table, th, tr, td {
 	background-color: black;
 	border-radius: 5px;
 	border: 5px solid red;
-	padding: 10px;
+	padding: 20px;
 	z-index: 20;
 }
 
@@ -1105,7 +1105,7 @@ div.integrityFull {
 
 .topDiv {
 	display: inline-flex;
-	height: 140px;
+	height: 145px;
 }
 
 .topdiv>div {

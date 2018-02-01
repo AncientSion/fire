@@ -61,7 +61,7 @@ Flight.prototype.setMaxMass = function(){
 }
 
 Flight.prototype.setImpulse = function(){
-	this.baseImpulse = Math.floor(Math.pow(this.mass, -2.5)*600000);
+	this.baseImpulse = Math.floor(Math.pow(this.mass, -2.5)*800000);
 	this.currentImpulse = this.baseImpulse;
 }
 
@@ -83,11 +83,16 @@ Flight.prototype.hasWeaponsSelected = function(){
 	return false;
 }
 
-Flight.prototype.setSpeed = function(){
+Flight.prototype.setCurSpeed = function(){
 	if (this.mission.turn == game.turn){
-		this.currentImpulse = Math.floor(this.baseImpulse * 0.5);
-	} else this.currentImpulse = Math.floor(this.baseImpulse * (game.turn - this.mission.turn + 0.5));
+		this.currentImpulse = Math.floor(this.baseImpulse * 1);
+	} else this.currentImpulse = Math.floor(this.baseImpulse * (game.turn - this.mission.turn + 1));
 }
+
+Flight.prototype.getMaxSpeed = function(){
+	return this.baseImpulse*3;
+}
+
 
 Flight.prototype.getNewMission = function(){
 	if (this.mission.turn == game.turn){
@@ -111,10 +116,6 @@ Flight.prototype.setImage = function(){
 			} else this.setPostMoveImage();
 		}
 	}
-}
-
-Flight.prototype.getMaxSpeed = function(){
-	return this.baseImpulse*4;
 }
 
 Flight.prototype.createBaseDiv = function(){
@@ -143,7 +144,7 @@ Flight.prototype.createBaseDiv = function(){
 			.append($("<td>").html(game.getUnitType(this.traverse) + " (" + this.traverse + ")")))
 		.append($("<tr>")
 			.append($("<td>").html("Current Thrust"))
-			.append($("<td>").html((this.getCurSpeed() + " (max: " + (this.baseImpulse*4) + ")"))))
+			.append($("<td>").html((this.getCurSpeed() + " (max: " + (this.getMaxSpeed()) + ")"))))
 		.append($("<tr>")
 			.append($("<td>").html("Current Mission"))
 			.append($("<td>").addClass("missionType").html(game.getMissionTypeString(this, this.getTarget()))))

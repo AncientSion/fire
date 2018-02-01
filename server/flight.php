@@ -32,7 +32,7 @@ class Flight extends Mixed {
 		//Debug::log("setCurSpeed #".$this->id);
 		if (!$this->mass){$this->baseImpulse = 0; $this->currentImpulse = 0; return;}
 
-		$this->baseImpulse = floor(pow($this->mass, -2.5)*600000);
+		$this->baseImpulse = floor(pow($this->mass, -2.5)*800000);
 		if (!isset($this->mission) || !sizeof($this->mission)){return;}
 
 		$elapsed = 0;
@@ -41,7 +41,7 @@ class Flight extends Mixed {
 			$elapsed++;
 		} else if ($this->mission->arrived && $this->mission->type == 1){
 			$elapsed++;
-		} else $elapsed += 0.5;
+		} else $elapsed += 1;
 		
 		//if ($this->mission->type > 1 || !$this->mission->arrived){
 		//var_export($this->mission);
@@ -49,7 +49,7 @@ class Flight extends Mixed {
 			$elapsed += $t - $this->mission->turn;
 		}
 
-		$this->currentImpulse = floor($this->baseImpulse * min(4, $elapsed + ($p > 1)));
+		$this->currentImpulse = floor($this->baseImpulse * min(3, $elapsed + ($p > 1)));
 	}
 
 	public function setSize(){

@@ -89,11 +89,11 @@ class LightParticleBeam extends Laser {
 	public $animColor = "blue";
 	public $rakeTime = 25;
 	public $beamWidth = 1;
-	public $minDmg = 27;
-	public $maxDmg = 34;
-	public $optRange = 400;
+	public $minDmg = 22;
+	public $maxDmg = 28;
+	public $optRange = 300;
 	public $dmgLoss = 4;
-	public $accDecay = 120;
+	public $accDecay = 140;
 	public $shots = 1;
 	public $reload = 2;
 	public $powerReq = 2;
@@ -101,7 +101,7 @@ class LightParticleBeam extends Laser {
 	public $maxBoost = 1;
 	public $rakes = 1;
 	public $mass = 20;
-	public $traverse = -1;
+	public $traverse = -2;
 	public $priority = 2.5;
 	
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
@@ -115,9 +115,9 @@ class LightLaser extends Laser {
 	public $animColor = "red";
 	public $rakeTime = 40;
 	public $beamWidth = 2;
-	public $minDmg = 60;
-	public $maxDmg = 80;
-	public $optRange = 250;
+	public $minDmg = 70;
+	public $maxDmg = 95;
+	public $optRange = 300;
 	public $dmgLoss = 4;
 	public $accDecay = 120;
 	public $shots = 1;
@@ -126,8 +126,8 @@ class LightLaser extends Laser {
 	public $effiency = 2;
 	public $maxBoost = 1;
 	public $rakes = 3;
-	public $mass = 20;
-	public $traverse = -3;
+	public $mass = 22;
+	public $traverse = -2;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
         parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
@@ -166,7 +166,7 @@ class HeavyLaser extends Laser {
 	public $beamWidth = 4;
 	public $minDmg = 145;
 	public $maxDmg = 180;
-	public $optRange = 700;
+	public $optRange = 600;
 	public $dmgLoss = 3;
 	public $accDecay = 60;
 	public $reload = 4;
