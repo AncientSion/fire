@@ -1,0 +1,17 @@
+prepareAdvance 
+********************* doAdvance for game1 from phase 2 to phase 3 
+resolveFireOrder - ID 14, shooter: Squadron #6 vs Hyperion #2, w: LightPlasma #5, shots: 1 
+LightPlasma, weapon id: 5, boost: 1, final multi: 0.8176 
+fire #14, doDamage, weapon: LightPlasma, target #2/2/Bridge, totalDmg: 43, remaining: 97, armour: 18+0 
+resolveBallisticFireOrders 
+testCriticals #2 
+determineCrit for Command & Control #2 on unit #2 
+BRIDGE CRIT: on Engine for :10% 
+DB updateFireOrders: 1 
+ => DB insertDamageEntries: 1 
+ => DB insertCritEntries: 1 
+handleFiringPhase time: 0.016 seconds. 
+game 1, user 1 --- adjusting to turn/phase/status 5/3/waiting 
+game 1, user 2 --- adjusting to turn/phase/status 5/3/waiting 
+TIME: 0.031 seconds. 
+4 mb 

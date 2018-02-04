@@ -1,12 +1,25 @@
 window.graphics = {
 
 	images: [],
+	explos: [],
 
 	preload: function(){
 		this.preLoadBallistics();
 		this.preloadShips();
 		this.preLoadFactions();
 		this.preLoadVarious();
+		this.preloadExplos();
+	},
+
+	preloadExplos: function(){
+		var basePath = "varIcons/explos/";
+		var alt = [1, 2, 3, 4];
+
+		for (var i = 0; i < alt.length; i++){
+			var img = new Image();
+				img.src = basePath + alt[i] + ".png";
+			this.explos.push(img);
+		}
 	},
 
 	preLoadVarious: function(){
@@ -273,7 +286,34 @@ function drawExplosion(weapon, anim, frames){  // 150, 150, 30
 	fxCtx.setTransform(1,0,0,1,0,0);
 }
 
-function drawUnitExplosion(x, y, s, now, max){
+function drawunitExplo(posX, posY, img, s, now, max){
+	now -= 1;
+	var sin = s*0.5*Math.sin(Math.PI*now/max);
+	if (sin < 0){
+		return;
+	}	
+
+	fxCtx.translate(cam.o.x, cam.o.y);
+	fxCtx.scale(cam.z, cam.z)
+
+	var rows = 8;
+	var cols = 8;
+
+	var w = 64;
+	var h = 64;
+
+	var x = ((now/rows) - Math.floor(now/rows)) * 512;
+	var y = 512 / cols * Math.floor(now/cols) 
+
+	fxCtx.globalAlpha = 1.5 - (now/max);
+	fxCtx.drawImage(img, x, y, w, h, posX-s/2, posY-s/2, s, s);
+	fxCtx.globalAlpha = 1;
+
+
+	fxCtx.setTransform(1,0,0,1,0,0);
+}
+
+function drawunitExploa(x, y, s, now, max){
 	var sin = s*0.5*Math.sin(Math.PI*now/max);
 	if (sin < 0){
 		return;

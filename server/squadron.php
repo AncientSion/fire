@@ -219,9 +219,7 @@ class Squadron extends Ship {
 	}
 	
 	public function getHitSystem($fire){
-	//	if ($fire->weapon->laser && 
-
-		return $this->structures[2];
+	//	return $this->structures[2];
 		$elements = array();
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (!$this->structures[$i]->destroyed){
@@ -250,6 +248,7 @@ class Squadron extends Ship {
 	}
 
 	public function testForCrits($turn){
+		//Debug::log("testForCrits ".get_class($this)." #".$this->id);
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed){continue;}
 			else if (!$this->structures[$i]->damaged){/*Debug::log("subunit ".$i." not damaged!");*/ continue;}
@@ -264,6 +263,7 @@ class Squadron extends Ship {
 			for ($j = 0; $j < sizeof($this->structures); $j++){
 				if ($crits[$i]->systemid == $this->structures[$j]->id){
 					$this->structures[$j]->crits[] = $crits[$i];
+					if ($crits[$i]->type == "Disabled" && $crits[$i]->duration == 0){$this->structures[$j]->destroyed = 1;}
 					$found = 1;
 					break;
 				}
@@ -480,19 +480,29 @@ class Squaddie extends Single {
 	}
 
 	public function determineCrit($old, $new, $turn){
-		$dmg =  round(($new + $old/2) / $this->integrity * 100);
+		$dmg = round(($new + $old) / $this->integrity * 100);
 
-		Debug::log(" => SQUAD determineCrit #".$this->parentId."/".$this->id." for ".$this->name.", Dmg: ".$dmg." %");
+		Debug::log(" => SQUAD determineCrit #".$this->parentId."/".$this->id." for ".$this->name.", old/new ".$old."/".$new." => ".$dmg);
 
-		//if ($dmg > 80 && mt_rand(0, 100) < $dmg){
-		if ($dmg > 50 && mt_rand(0, 100)){
-			$this->crits[] = new Crit(
-				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 0, 0, 1
-			);
-			return;
+		$chance = 50;
+		$tresh = 70;
+
+		if ($dmg > $tresh){
+			$min = floor($chance * (1+($dmg - $tresh)/(100 - $tresh)));
+			$roll = mt_rand(0, 100);
+
+			Debug::log("chance;: ".$min.", roll: ".$roll);
+			if ($roll < $min){
+				Debug::log("dropout!");
+				$this->crits[] = new Crit(
+					sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 0, 0, 1
+				);
+				return;
+			}
 		}
 
 		$effects = $this->getValidEffects();
+		$dmg =  round(($new + $old/2) / $this->integrity * 100);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){

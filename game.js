@@ -594,13 +594,14 @@ function Game(data, userid){
 	this.clickablePop = function(data){
 		var html = "";
 		for (var i = 0; i < data.length; i++){
+			if (i){html += "</br>";}
 			html += data[i].msg;
 			html += "</br>";
 
 			for (var j = 0; j < data[i].data.length; j++){
 				html += "<div class='popupEntry buttonTD' onclick='game.selectFromPopup(" + data[i].data[j].id + ")'>" + data[i].data[j].name + " #" + data[i].data[j].id;
-				if (data[i].data[j].value){ html += " (" + data[i].data[j].value + ")";}
-				html += "</div></br>"; 
+				if (data[i].data[j].value){html += " (" + data[i].data[j].value + ")";}
+				html += "</div>"; 
 			}
 		}
 		html += "</p><div class='popupEntry buttonTD' style='font-size: 20px; width: 200px' onclick='game.doConfirmOrders()'>Confirm Orders</div>";
@@ -1772,7 +1773,7 @@ function Game(data, userid){
 		this.getAllResolvingFireOrders();
 		this.getAreaShotDetails();
 		this.getFireAnimationDetails();
-		this.getUnitExplosionDetails();
+		this.getunitExploDetails();
 
 		$("#combatlogWrapper").show();
 		setFPS(40);
@@ -1800,7 +1801,7 @@ function Game(data, userid){
 		this.getAllResolvingFireOrders();
 		this.getShotDetails();
 		this.getFireAnimationDetails();
-		this.getUnitExplosionDetails();
+		this.getunitExploDetails();
 
 		$("#combatlogWrapper").show();
 		setFPS(40);
@@ -1966,7 +1967,11 @@ function Game(data, userid){
 
     }
 
-	this.getUnitExplosionDetails = function(){
+    this.getRandomExplo = function(){
+    	return graphics.explos[range(0, graphics.explos.length-1)];
+    }
+
+	this.getunitExploDetails = function(){
 		window.animations = [];
 
 		for (var i = 0; i < game.ships.length; i++){
@@ -1996,10 +2001,11 @@ function Game(data, userid){
 						var real = game.ships[i].getUnitPosition(j);
 
 						anim.anims.push({
-							t: [0 - counter*20, 40],
+							t: [0 - counter*20, 64],
 							s: game.ships[i].getExplosionSize(j),
 							x: base.x + real.x,
 							y: base.y + real.y,
+							img: this.getRandomExplo(),
 						});
 
 						/*for (var k = 0; k < 5; k++){
@@ -2039,7 +2045,6 @@ function Game(data, userid){
 	}
 
 	this.animateAllFireOrders = function(){
-		//this.animateUnitExplosions(); return;
 		for (var i = 0; i < this.fireOrders.length; i++){
 			if (!this.fireOrders[i].animated){
 				this.createCombatLogEntry(i);
@@ -2049,7 +2054,7 @@ function Game(data, userid){
 		}
 		fxCtx.clearRect(0, 0, res.x, res.y);
 		game.createFireFinalEntry();
-		game.animateUnitExplosions();
+		game.animateunitExplos();
 	}
 
 	this.createFireFinalEntry = function(){
@@ -2190,8 +2195,8 @@ function Game(data, userid){
 		}
 	}
 
-	this.animateUnitExplosions = function(){
-		anim = window.requestAnimationFrame(game.animateUnitExplosions.bind(this));
+	this.animateunitExplos = function(){
+		anim = window.requestAnimationFrame(game.animateunitExplos.bind(this));
 		window.now = Date.now();		
 		window.elapsed = window.now - window.then;
 		if (elapsed > window.fpsTicks){
@@ -2210,19 +2215,20 @@ function Game(data, userid){
 					var done = 1;
 
 					for (var j = 0; j < window.animations[i].anims.length; j++){
-						if (window.animations[i].anims[j].t[0] < window.animations[i].anims[j].t[1]){
-							window.animations[i].anims[j].t[0]++;
-							done = 0;
-						}
-
 						if (window.animations[i].anims[j].t[0] > 0){
-							drawUnitExplosion(
+							drawunitExplo(
 								window.animations[i].anims[j].x,
 								window.animations[i].anims[j].y,
+								window.animations[i].anims[j].img,
 								window.animations[i].anims[j].s,
 								window.animations[i].anims[j].t[0],
 								window.animations[i].anims[j].t[1]
 							)
+						}
+
+						if (window.animations[i].anims[j].t[0] < window.animations[i].anims[j].t[1]){
+							window.animations[i].anims[j].t[0]++;
+							done = 0;
 						}
 					}
 

@@ -420,6 +420,19 @@ class Ship {
 				Debug::log("ERROR unable to apply ship crit id: ".$crits[$i]->id);
 			}
 		}
+
+		$bridge = $this->getSystemByName("Bridge");
+		for ($i = 0; $i < sizeof($bridge->crits); $i++){
+			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
+				if ($this->primary->systems[$j]->name == $bridge->crits[$i]->type){
+					$this->primary->systems[$j]->crits[] = clone $bridge->crits[$i];
+					$this->primary->systems[$j]->crits[0]->type = "Output";
+					$bridge->crits[$i]->type = "Officer MIA: ".$bridge->crits[$i]->type;
+					break;
+				}
+			}
+		}
+
 		return true;
 	}
 
@@ -600,7 +613,7 @@ class Ship {
 	}
 
 	public function calculateToHit($fire){ // shooter
-		//return 100;
+		return 100;
 		$multi = 1;
 		$req = 0;
 		
@@ -627,6 +640,7 @@ class Ship {
 	}
 
 	public function getHitSystem($fire){
+		return $this->getSystemByName("Bridge");
 		//return $this->getPrimaryHitSystem();
 		//Debug::log("getHitSystem ".$this->name);
 		$roll;
@@ -1149,7 +1163,7 @@ class Medium extends Ship {
 		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 
 		$this->hitTable = array(
-			"Bridge" => 0.65,
+			"Bridge" => 0.7,
 			"Engine" => 0.8,
 			"Sensor" => 0.95,
 			"Reactor" => 0.7
@@ -1171,7 +1185,7 @@ class Heavy extends Ship {
 		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 
 		$this->hitTable = array(
-			"Bridge" => 0.55,
+			"Bridge" => 0.6,
 			"Engine" => 0.8,
 			"Sensor" => 0.9,
 			"Reactor" => 0.65
@@ -1207,7 +1221,7 @@ class UltraHeavy extends Ship {
 		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 
 		$this->hitTable = array(
-			"Bridge" => 0.35,
+			"Bridge" => 0.5,
 			"Engine" => 0.85,
 			"Sensor" => 0.9,
 			"Reactor" => 0.75

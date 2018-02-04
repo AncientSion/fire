@@ -103,6 +103,11 @@ table, th, tr, td {
 	height: 80px;
 }
 
+.img80pct {
+	width: 80%;
+	height: 80%;
+}
+
 .img100pct {
 	width: 100%;
 	height: 100%;
@@ -596,6 +601,12 @@ table, th, tr, td {
 	margin: auto;
 }
 
+.size100pct {
+	width: 100%;
+	height: 100%;
+	margin: auto;
+}
+
 .font12 {
 	font-size: 12px;
 }
@@ -1031,22 +1042,31 @@ div.integrityFull {
 }
 
 .fighterDiv {
-	position: absolute;
-	color: black;
-	height: 50px;
-	width: 50px;
-	text-align: center;
+	position: relative;
+    color: black;
+    height: 50px;
+    width: 50px;
+    text-align: center;
+    display: inline-block;
+    margin: 4px;
+    margin-left: 5px;
+    margin-bottom: 20px;
+    margin-top: 35px;
 }
 
-.overlay {
-	position: absolute;
-	top: 5;
-	left: 10;
+.fighterDiv .overlay {
+    position: absolute;
+    z-index: 10;
+    height: 40px;
+    width: 40px;
 }
-
-.size30 {
-	width: 30px;
-	height: 30px;
+.squad .overlay {
+    position: relative;
+    z-index: 10;
+    height: 40%;
+    width: 40%;
+    top: 95px;
+    left: 30%;
 }
 
 .selectionHighlight {

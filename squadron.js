@@ -86,6 +86,33 @@ Squaddie.prototype.getSystemDetailsDiv = function(){
 }
 
 Squaddie.prototype.expandElement = function(){
+
+	var img = $(this.getBaseImage().cloneNode(true)).addClass("size70 rotate270");
+
+	if (this.destroyed){ // RED X
+		$(this.element)
+			.append($("<img>")
+			.attr("src", "varIcons/destroyed.png")
+			.addClass("overlay").css("width", cWidth).css("height", cHeight)
+			.hover(function(e){
+				var data = $(this).closest(".unitContainer").data();
+				game.getUnit(data.shipId).getSystem(data.systemId).hover(e);
+			}))
+	}
+	else {
+		img.click(function(){
+			var data = $(this).closest(".unitContainer").data();
+			console.log(game.getUnit(data.shipId).getSystem(data.systemId));
+		})
+		.hover(
+			function(e){
+				var data = $(this).closest(".unitContainer").data();
+				game.getUnit(data.shipId).getSystem(data.systemId).hover(e);
+			}
+		)
+	}
+
+
 	var pDiv = $("<div>")
 		.addClass("primaryDiv")
 	var cTable = $("<table>")
@@ -94,33 +121,23 @@ Squaddie.prototype.expandElement = function(){
 		.append(this.getArmourData())
 		.append($("<tr>")
 			.append($("<td>").attr("colspan", 3)
-				.append($(this.getBaseImage().cloneNode(true))
-					.addClass("size70 rotate270")
-					.click(function(){
-						var data = $(this).closest(".unitContainer").data();
-						var	shipId = data.shipId;
-						var systemId = data.systemId;
-						console.log(game.getUnit(shipId).getSystem(systemId));
-					})
-					.hover(
-						function(e){
-						var data = $(this).closest(".unitContainer").data();
-						var	shipId = data.shipId;
-						var systemId = data.systemId;
-							game.getUnit(shipId).getSystem(systemId).hover(e);
-						}
-					)
-				)
+				.append(img)
 			)
 		)
 
-	$(this.element)
+	// power icon
+	if (!this.destroyed){
+		$(this.element)
 		.append($("<div>").addClass("info").css("top", 10)
 			.append($("<img>").attr("src", "varIcons/mainPower.png")
 				.addClass("mainPowerIcon"))
 			.append($("<div>")
 				.addClass("mainPower")
 				.html(this.getUnusedPower())))
+	}
+
+	//core div and core table
+	$(this.element)
 		.append($(pDiv)
 		.append(cTable));
 
@@ -189,19 +206,6 @@ Squaddie.prototype.expandElement = function(){
 
 			if (oX){oX += shiftX + space +1;}
 			else if (oY){oY += shiftY + space;}
-
-
-			if (0){
-				$(this.element)
-					.append($("<img>")
-					.attr("src", "varIcons/destroyed.png")
-					.addClass("overlay").css("width", cWidth).css("height", cHeight)
-					.hover(function(e){
-						e.stopPropagation();
-						var p = $(this).parent().children()[0];
-						game.getUnit($(p).data("shipId")).getSystem($(p).data("fighterId")).hover(e);
-					}))
-			}
 
 		}
 	}
@@ -618,7 +622,7 @@ Squadron.prototype.createBaseDiv = function(){
 	}
 
 	// JUMP OUT
-	if (game.turn > 1 && game.phase == 3){
+	if (game.turn > 1 && game.phase == 3 && this.friendly){
 		$(this.element).find(".coreContainer")
 		.append($("<div>").addClass("info").css("top", 90).css("margin-left", 27)
 		.append($("<img>").addClass("jumpOut")

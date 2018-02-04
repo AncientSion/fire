@@ -57,12 +57,13 @@ class Manager {
 
 	public function doEval(){
 		return;
-		$this->setupShips();
 		$this->getUnit(1)->damaged = true;
 		$this->getUnit(1)->structures[0]->damaged = true;
 		$this->getUnit(1)->structures[1]->damaged = true;
+		$this->getUnit(1)->structures[2]->damaged = true;
 		$this->testCriticals();
 
+		$this->setupShips();
 		$this->freeFlights();
 		$this->deleteAllReinforcements();
 		$this->handlePostMoveFires();
@@ -1200,6 +1201,10 @@ class Manager {
 			}
 			else return $a->id - $b->id;
 		});
+
+		for ($i = sizeof($this->fires)-1; $i >= 0; $i--){
+			if ($this->fires[$i]->turn > $this->turn){array_splice($this->fires, $i);}
+		}
 	}
 
 	public function resolveShipFireOrders(){
@@ -1324,11 +1329,11 @@ class Manager {
 	}
 
 	public function testCriticals(){
+		//Debug::log("testCriticals");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->damaged){
-				//Debug::log("testCriticals #".$this->ships[$i]->id);
-				$this->ships[$i]->testForCrits($this->turn);
-			} 
+			if (!$this->ships[$i]->damaged){continue;}
+			Debug::log("testCriticals #".$this->ships[$i]->id);
+			$this->ships[$i]->testForCrits($this->turn);
 		}
 	}
 

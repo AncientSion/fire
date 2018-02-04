@@ -46,24 +46,22 @@ class PrimarySystem extends System {
 		);
 	}
 
-
 	public function determineCrit($old, $new, $turn){
 		$new = round($new / $this->integrity * 100);
 		$old = round($old / $this->integrity * 100);
 		$possible = $this->getValidEffects();
 
-		//Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", newDmg: ".$new.", oldDmg: ".$old);
+		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", newDmg: ".$new.", oldDmg: ".$old);
 
-		$mod = $this->getCritModMax($new + $old);
-		//if ($mod < 5){Debug::log("mod < 5: ".$mod.", droppiong"); return;}
-		if (!$mod){return;}
+		$mod = $this->getCritModMax($new + $old/2);
+		if ($mod < 5){Debug::log("mod < 5: ".$mod.", dropping"); return;}
 
 		$tresh =  ($new + $old/2)*2;
 
 		for ($i = 0; $i < sizeof($possible); $i++){
 			$roll = mt_rand(0, 100);
-			if ($roll > $tresh){/*Debug::log(" NO CRIT - roll: ".$roll. ", tresh: ".$tresh);*/ continue;}
-			//Debug::log("CRIT: ".$mod.", roll: ".$roll.", tresh: ".$tresh);
+			if ($roll > $tresh){Debug::log(" NO CRIT - roll: ".$roll. ", tresh: ".$tresh); continue;}
+			Debug::log("CRIT: ".$mod.", roll: ".$roll.", tresh: ".$tresh);
 
 			//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 			$this->crits[] = new Crit(
@@ -73,7 +71,7 @@ class PrimarySystem extends System {
 	}
 
 	public function getCritModMax($dmg){
-		return min(25, round($dmg/30)*10);
+		return min(15, round($dmg/30)*10);
 	}
 }
 
@@ -85,8 +83,20 @@ class Bridge extends PrimarySystem {
         parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
 	}
 
-	public function setArmourMod(){
-		$this->armourMod = 1.5;
+	public function determineCrit($old, $new, $turn){
+		$new = round($new / $this->integrity * 100);
+		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId);
+		$mod = min(10, $new);
+		if ($new < 5){Debug::log("no BRIDGE crit, fail 50 % or dmg < 5"); return;}
+
+		$pick = array("Engine", "Sensor", "Reactor")[mt_rand(0, 2)];
+
+		Debug::log("BRIDGE CRIT: on ".$pick." for :".$mod."%");
+
+		//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
+		$this->crits[] = new Crit(
+			sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $pick, 0, $mod, 1
+		);
 	}
 }
 

@@ -133,24 +133,17 @@ class Single {
 	}
 
 	public function testCrit($turn, $extra){
-		//Debug::log("testCrit for: ".get_class($this));
-		$old = 0; $new = 0;
+		$old = 0; $new = 1;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			if ($this->damages[$i]->turn == $turn){
 				$new += $this->damages[$i]->overkill;
 			} else $old += $this->damages[$i]->overkill;
 		}
 
-		//Debug::log("testCrit for: ".get_class($this).", new: ".$new.", turn: ".$turn);
+		Debug::log("testCrit for: ".get_class($this).", old: ".$old.", new: ".$new.", turn: ".$turn);
 		if ($new){
 			$this->determineCrit($old, $new, $turn);
 		}
-	}
-
-	public function getValidEffects(){
-		return array(// attr, %-tresh, duration, modifier
-			array("Disabled", 70, 0, 0)
-		);
 	}
 
 	public function getCurrentNegation(){
@@ -158,26 +151,25 @@ class Single {
 	}
 
 	public function determineCrit($old, $new, $turn){
-		$tresh = ($old + $new) / $this->integrity * 100;
-		$crits = $this->getValidEffects();
-		$valid = array();
+		$dmg = round(($new + $old) / $this->integrity * 100);
 
-		for ($i = 0; $i < sizeof($crits); $i++){
-			if ($tresh > $crits[$i][1]){
-				$valid[] = $crits[$i];
+		Debug::log(" => FLIGHT determineCrit #".$this->parentId."/".$this->id." for ".$this->name.", old/new ".$old."/".$new." => ".$dmg);
+
+		$chance = 50;
+		$tresh = 70;
+
+		if ($dmg > $tresh){
+			$min = floor($chance * (1+($dmg - $tresh)/(100 - $tresh)));
+			$roll = mt_rand(0, 100);
+
+			Debug::log("chance;: ".$min.", roll: ".$roll);
+			if ($roll < $min){
+				Debug::log("dropout!");
+				$this->crits[] = new Crit(
+					sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 0, 0, 1
+				);
+				return;
 			}
-		}
-
-		if (sizeof($valid)){
-			if (mt_rand(0, 100) > $tresh){return;}
-
-			$this->crits[] = new Crit(
-				sizeof($this->crits)+1,
-				$this->parentId, $this->id, $turn,
-				$valid[0][0], $valid[0][2],
-				0,
-				1
-			);
 		}
 	}
 }

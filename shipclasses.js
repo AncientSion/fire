@@ -1576,8 +1576,8 @@ Ship.prototype.getDmgByFire = function(fire){
 	for (var i = this.primary.damages.length-1; i >= 0; i--){
 		if (this.primary.damages[i].fireid == fire.id){					
 			dmgs.push(this.primary.damages[i]);
-			dmgs[dmgs.length-1].system = "Main Structure";
-			dmgs[dmgs.length-1].loc = this.getSystemLocation(-1);
+			dmgs[dmgs.length-1].system = this.primary.systems[i].display;
+			dmgs[dmgs.length-1].loc = this.getSystemLocation(-1, this.primary.systems[i].name);
 			lookup--;
 			if (!lookup){return dmgs};
 		}
@@ -1590,8 +1590,8 @@ Ship.prototype.getDmgByFire = function(fire){
 		for (var j = this.primary.systems[i].damages.length-1; j >= 0; j--){
 			if (this.primary.systems[i].damages[j].fireid == fire.id){
 				dmgs.push(this.primary.systems[i].damages[j]);
-				dmgs[dmgs.length-1].system = this.primary.systems[i].display
-				dmgs[dmgs.length-1].loc = this.getSystemLocation(-1);
+				dmgs[dmgs.length-1].system = this.primary.systems[i].display;
+				dmgs[dmgs.length-1].loc = this.getSystemLocation(-1, this.primary.systems[i].name);
 				lookup--;
 				if (!lookup){return dmgs};
 			}
@@ -1607,7 +1607,7 @@ Ship.prototype.getDmgByFire = function(fire){
 				if (this.structures[i].systems[j].damages[k].fireid == fire.id){
 					dmgs.push(this.structures[i].systems[j].damages[k]);
 					dmgs[dmgs.length-1].system = this.structures[i].systems[j].display
-					dmgs[dmgs.length-1].loc = this.getSystemLocation(i);
+					dmgs[dmgs.length-1].loc = this.getSystemLocation(i, this.structures[i].systems[j].name);
 					lookup--;
 					if (!lookup){return dmgs};
 				} else if (this.structures[i].systems[j].damages[k].turn < fire.turn){
@@ -1619,13 +1619,22 @@ Ship.prototype.getDmgByFire = function(fire){
 	return dmgs;
 }
 
-Ship.prototype.getSystemLocation = function(i){
+Ship.prototype.getSystemLocation = function(i, name){
+	var p;
 	if (i == -1){
-		return getPointInDir(this.size/6, this.getDrawFacing()+range(0, 359), 0, 0);
+		switch (name){
+			case "Main Structure": p = getPointInDir(this.size/6, this.getDrawFacing()+range(0, 359), 0, 0); break;
+			case "Bridge": p = getPointInDir(this.size/6, this.getDrawFacing()+range(-10, 10), 0, 0); break;
+			case "Reactor": p = getPointInDir(-this.size/4, this.getDrawFacing()+range(-15, 15), 0, 0); break;
+			case "Sensor": p = getPointInDir(this.size/3, this.getDrawFacing()+range(-15, 15), 0, 0); break;
+			case "Engine": p = getPointInDir(-this.size/3, this.getDrawFacing()+range(-15, 15), 0, 0); break;
+		}
 	}
-	var p = getPointInDir(this.size/4, getLayoutDir(this.structures[i]) + this.getDrawFacing(), 0, 0);
-		p.x += range(-5, 5);
-		p.y += range(-5, 5);
+	else {
+		p = getPointInDir(this.size/4, getLayoutDir(this.structures[i]) + this.getDrawFacing(), 0, 0);
+	}
+	p.x += range(-8, 8);
+	p.y += range(-8, 8);
 	return p;
 }
 
@@ -1691,7 +1700,6 @@ Ship.prototype.getFireDest = function(fire, isHit, num){
 		var t = this.getPlannedPos();
 		var a = getAngleFromTo(o, t) + range(-5, 5);
 		var d = this.size * (10-(range(-1, 1)*3))/10;
-		console.log(d);
 		return getPointInDir(d, a, 0, 0);
 	}
 
@@ -1707,8 +1715,8 @@ Ship.prototype.getFireDest = function(fire, isHit, num){
 Ship.prototype.getExplosionSize = function(j){
 	if (this.ship){return this.size;}
 	else if (this.squad){return this.structures[j].size/2;}
-	else if (this.flight){return this.structures[j].mass / 3;}
-	else if (this.salvo){return this.structures[j].mass * 2;}
+	else if (this.flight){return this.structures[j].mass*0.75;}
+	else if (this.salvo){return this.structures[j].mass*2;}
 }
 
 Ship.prototype.setMoveAngles = function(){
@@ -2365,7 +2373,7 @@ Ship.prototype.expandDiv = function(div){
 		//console.log($(structContainer).width());
 
 	// JUMP OUT
-	if (game.turn > 1 && game.phase == 3){
+	if (game.turn > 1 && game.phase == 3 && this.friendly){
 		$(structContainer)
 		.append($("<div>").addClass("info").css("top", top + 5).css("left", left)
 			.append($("<img>").addClass("jumpOut")

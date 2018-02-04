@@ -149,7 +149,6 @@ class System {
 		return $boost;
 	}
 
-
 	public function getCritMod($type, $turn){
 		$mod = 0;
 		for ($i = 0; $i < sizeof($this->crits); $i++){

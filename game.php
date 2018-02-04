@@ -693,7 +693,7 @@
 
 						game.createFireFinalEntry();
 
-						game.getUnitExplosionDetails();
+						game.getunitExploDetails();
 						for (var i = 0; i < window.animations.length; i++){
 							window.animations[i].done = 1;
 							game.createMiscLogEntry(i);
