@@ -721,3 +721,19 @@ Mixed.prototype.animateSelfJumpIn = function(){
 		ctx.translate(-this.drawX, -this.drawY);
 	}
 }
+
+Mixed.prototype.attachDivClickFunction = function(){
+	if (aUnit){
+		var shooter = game.getUnit(aUnit);
+		if (shooter.hasWeaponsSelected()){
+			var target = game.getUnit($(this).data("id"));
+			firePhase({x: 0, y: 0}, shooter, target.id);
+		} 
+		else {
+			shooter.doUnselect();
+			shooter.switchDiv();
+			game.getUnit($(this).data("id")).select();
+		}
+	}
+	else game.getUnit($(this).data("id")).select();
+}

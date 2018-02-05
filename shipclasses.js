@@ -559,7 +559,7 @@ Ship.prototype.doAutoShorten = function(){
 	else {
 		var cost = Math.ceil(delay / turn.delay * turn.cost);
 		turn.cost += cost
-		turn.delay -= Math.max(delay, Math.ceil(cost * this.baseTurnDelay));
+		turn.delay -= Math.min(delay, Math.ceil(cost * this.baseTurnDelay));
 	}
 
 	return;	
@@ -825,11 +825,9 @@ Ship.prototype.switchModeAll = function(id){
 
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
-			if (this.structures[i].systems[j].dual && !this.structures[i].systems[j].locked){
-				if (this.structures[i].systems[j].getActiveSystem().name == name){
-					this.structures[i].systems[j].switchMode(id);
-				}
-			}
+			if (!this.structures[i].systems[j].dual || this.structures[i].systems[j].locked || this.structures[i].systems[j].destroyed){continue;}
+			if (this.structures[i].systems[j].getLoadLevel() != 1 || this.structures[i].systems[j].getActiveSystem().name != name){continue;}
+			this.structures[i].systems[j].switchMode(id);
 		}
 	}
 }
@@ -1833,7 +1831,7 @@ Ship.prototype.getRemEP = function(){
 		}
 	}
 	
-	if (ep < 0){console.log("EP: " + ep); ep = 0;}
+	if (ep < 0){return 0;}
 	return Math.ceil(ep);
 }
 

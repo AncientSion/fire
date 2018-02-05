@@ -373,6 +373,7 @@ class Squaddie extends Single {
 	public $ep = 0;
 	public $ew = 0;
 	public $power = 0;
+	public $slipAngle = 15;
 
 	public $powers = array();
 	public $boostEffect = array();
@@ -572,7 +573,6 @@ class Squaddie extends Single {
 class Light extends Squaddie {
 	public $baseImpulse = 175;
 	public $size = 60;
-	public $slipAngle = 25;
 	public $baseImpulseCost = 50;
 	public $space = 4;
 	

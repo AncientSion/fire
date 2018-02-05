@@ -134,6 +134,7 @@ class Engine extends PrimarySystem {
 
 	public function setPowerReq($mass){
 		$this->powerReq = ceil($this->output * Math::getEnginePowerNeed($mass));
+		$this->effiency = floor($this->powerReq/10)+2;
 		$this->boostEffect[] = new Effect("Output", 15);
 	}
 }
@@ -142,9 +143,11 @@ class Sensor extends PrimarySystem {
 	public $name = "Sensor";
 	public $display = "Sensor & Analyzing";
 	public $ew = array();
+	public $effiency = 10;
 
 	function __construct($id, $parentId, $mass, $output = 0, $width = 1){
-		$this->powerReq = floor($output/60);
+		$this->powerReq = floor($output/50);
+		$this->effiency = floor($this->powerReq/10)+2;
 		$this->boostEffect[] = new Effect("Output", 10);
 		$this->modes = array("Lock", "Scramble");
 		$this->states = array(0, 0);

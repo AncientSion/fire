@@ -79,7 +79,7 @@ class EnergyMine extends Area {
 	public $shots = 1;
 	public $animColor = "blue";
 	public $projSize = 4;
-	public $projSpeed = 14;
+	public $projSpeed = 8;
 	public $reload = 1;
 	public $mass = 14;
 	public $powerReq = 4;
@@ -87,21 +87,27 @@ class EnergyMine extends Area {
 	public $dmgLoss = 50;
 	public $maxRange = 700;
 	public $aoe = 50;
-	public $notes = array("Point of impact deivates", "Area of Effect", "Damage: 15/30/15/10");
+	public $dmgs = array(10, 15, 50, 25);
+	public $notes;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+		$this->notes = array("Point of impact deviates by distance", "Area of Effect", "Fixed damage based on target", "Salvo: ".$this->dmgs[0]." dmg / element", "Flight: ".$this->dmgs[1]." dmg / element", "Squadron: ".$this->dmgs[2]." dmg / element", "Ship: ".$this->dmgs[3]." dmg / system on facing side.");
         parent::__construct($id, $parentId, $start, $end, $output, $width);
+	}	
+
+	public function setArmourMod(){
+		$this->armourMod =  0.4;
 	}
 
 	public function getBaseDamage($fire){
 		if ($fire->target->ship){
-			return 25;
+			return $this->dmgs[3];
 		} else if ($fire->target->squad){
-			return 50;
+			return $this->dmgs[2];
 		} else if ($fire->target->flight){
-			return 15;			
+			return $this->dmgs[1];
 		} else if ($fire->target->salvo){
-			return 10;			
+			return $this->dmgs[0];
 		}
 
 		return mt_rand($this->getMinDamage(), $this->getMaxDamage());

@@ -210,7 +210,7 @@ Salvo.prototype.supplyAttachDiv = function(div){
 	var color = "red";
 	if (this.friendly){color = "green";}
 
-	console.log(this.getTarget().getMaskEffect(this))
+	//console.log(this.getTarget().getMaskEffect(this))
 
 	var attachDiv = $("<div>").addClass("attachDiv")
 		.append($("<div>").css("display", "block").addClass("center15 " + color)
@@ -218,24 +218,7 @@ Salvo.prototype.supplyAttachDiv = function(div){
 		.append($("<div>").css("display", "block").addClass("center15 " + color)
 			.html("Auto-Targetting: " + this.getTarget().name + " #" + this.mission.targetid)))
 		.data("id", this.id)
-		.click(function(){
-			if (aUnit){
-				var ship = game.getUnit(aUnit);
-				if (ship.hasWeaponsSelected()){
-					var target = game.getUnit($(this).data("id"));
-					if (ship.userid != target.userid){
-						handleFireClick(ship, target);
-					}
-				} 
-				else {
-					ship.doUnselect();
-					ship.switchDiv();
-					game.getUnit($(this).data("id")).select();
-				}
-			}
-			else game.getUnit($(this).data("id")).select();
-			
-		})
+		.click(Mixed.prototype.attachDivClickFunction)
 		.hover(
 			function(e){
 				var vessel = game.getUnit($(this).data("id"));

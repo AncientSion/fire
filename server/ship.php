@@ -49,7 +49,7 @@ class Ship {
 	public $angles = array();
 
 	public $turnAngle = 30;
-	public $slipAngle = 0;
+	public $slipAngle = 15;
 	public $turnStep = 1;
 	public $baseTurnDelay;
 	public $baseImpulseCost;
@@ -363,7 +363,7 @@ class Ship {
 				$chunk[] = $dbLoad[$i];
 			}
 		}
-
+		//var_export($chunk); var_export($this->name); echo "</br></br>";
 		$this->getSystem($chunk[sizeof($chunk)-1]["systemid"])->adjustLoad($chunk);
 
 		return true;
@@ -1157,14 +1157,14 @@ class Ship {
 class Medium extends Ship {
 	public $baseImpulse = 165;
 	public $traverse = 0;
-	public $slipAngle = 20;
+	public $slipAngle = 15;
 	public $baseImpulseCost = 40;
 
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
 		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 
 		$this->hitTable = array(
-			"Bridge" => 0.7,
+			"Bridge" => 0.6,
 			"Engine" => 0.8,
 			"Sensor" => 0.95,
 			"Reactor" => 0.7
@@ -1179,14 +1179,13 @@ class Medium extends Ship {
 class Heavy extends Ship {
 	public $baseImpulse = 155;
 	public $traverse = 1;
-	public $slipAngle = 20;
 	public $baseImpulseCost = 45;
 	
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
 		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 
 		$this->hitTable = array(
-			"Bridge" => 0.6,
+			"Bridge" => 0.65,
 			"Engine" => 0.8,
 			"Sensor" => 0.9,
 			"Reactor" => 0.65
@@ -1197,14 +1196,13 @@ class Heavy extends Ship {
 class SuperHeavy extends Ship {
 	public $baseImpulse = 140;
 	public $traverse = 2;
-	public $slipAngle = 20;
 	public $baseImpulseCost = 50;
 	
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
 		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 
 		$this->hitTable = array(
-			"Bridge" => 0.5,
+			"Bridge" => 0.7,
 			"Engine" => 0.85,
 			"Sensor" => 0.9,
 			"Reactor" => 0.7
@@ -1215,14 +1213,13 @@ class SuperHeavy extends Ship {
 class UltraHeavy extends Ship {
 	public $baseImpulse = 130;
 	public $traverse = 3;
-	public $slipAngle = 20;
 	public $baseImpulseCost = 55;
 	
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
 		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 
 		$this->hitTable = array(
-			"Bridge" => 0.5,
+			"Bridge" => 0.75,
 			"Engine" => 0.85,
 			"Sensor" => 0.9,
 			"Reactor" => 0.75

@@ -70,58 +70,38 @@ class Avenger extends Heavy {
 					"active" => 0,
 					"chance" => 50,
 					"notes" => "PATROL (Half Load) Outfit",
-					"cost" => 750,
+					"cost" => 800,
 					"loads" =>
 					array(
 						array(
 							"systemid" => 12,
 							"name" => "Aurora",
-							"amount" => 8
+							"amount" => 15
 						),
 						array(
-							"systemid" => 16,
+							"systemid" => 21,
 							"name" => "Aurora",
-							"amount" => 8
+							"amount" => 15
 						),
-						array(
-							"systemid" => 23,
-							"name" => "Aurora",
-							"amount" => 8
-						),
-						array(
-							"systemid" => 27,
-							"name" => "Aurora",
-							"amount" => 8
-						)
 					)
 				),
 				array(
 					"active" => 0,
 					"chance" => 50,
 					"notes" => "ASSAULT (Full Load) Oufit",
-					"cost" => 1800,
+					"cost" => 1600,
 					"loads" =>
 					array(
 						array(
 							"systemid" => 12,
 							"name" => "Aurora",
-							"amount" => 16
+							"amount" => 30
 						),
 						array(
-							"systemid" => 16,
+							"systemid" => 21,
 							"name" => "Aurora",
-							"amount" => 16
+							"amount" => 30
 						),
-						array(
-							"systemid" => 23,
-							"name" => "Aurora",
-							"amount" => 16
-						),
-						array(
-							"systemid" => 27,
-							"name" => "Aurora",
-							"amount" => 16
-						)
 					)
 				)
 			)

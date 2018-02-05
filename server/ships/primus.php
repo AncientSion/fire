@@ -53,7 +53,7 @@ class Primus extends SuperHeavy {
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1300);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(160, 4));
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(160, 4), 65);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(160, 4), 70);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(160, 4), 900);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(160, 4));
     }
@@ -80,7 +80,7 @@ class Primus extends SuperHeavy {
 							"amount" => 5
 						),
 						array(
-							"systemid" => 25,
+							"systemid" => 26,
 							"name" => "Sentri",
 							"amount" => 5
 						),
@@ -99,7 +99,7 @@ class Primus extends SuperHeavy {
 							"amount" => 9
 						),
 						array(
-							"systemid" => 25,
+							"systemid" => 26,
 							"name" => "Sitara (Ion)",
 							"amount" => 9
 						),

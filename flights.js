@@ -422,22 +422,7 @@ Flight.prototype.supplyAttachDiv = function(div){
 	var attachDiv = $("<div>").addClass("attachDiv")
 		.append($("<div>").css("display", "block").addClass("center15 " + color).html("Flight #" + this.id + "________Target: " + target.name + " #" + target.id))
 		.data("id", this.id)
-		.click(function(){
-			if (aUnit){
-				var shooter = game.getUnit(aUnit);
-				if (shooter.hasWeaponsSelected()){
-					var target = game.getUnit($(this).data("id"));
-					firePhase({x: 0, y: 0}, shooter, target.id);
-				} 
-				else {
-					shooter.doUnselect();
-					shooter.switchDiv();
-					game.getUnit($(this).data("id")).select();
-				}
-			}
-			else game.getUnit($(this).data("id")).select();
-			
-		})
+		.click(Mixed.prototype.attachDivClickFunction)
 		.hover(
 			function(e){
 				var vessel = game.getUnit($(this).data("id"));

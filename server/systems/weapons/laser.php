@@ -119,11 +119,11 @@ class LightParticleBeam extends Laser {
 	public $animColor = "blue";
 	public $rakeTime = 25;
 	public $beamWidth = 1;
-	public $minDmg = 22;
+	public $minDmg = 23;
 	public $maxDmg = 28;
-	public $optRange = 300;
+	public $optRange = 450;
 	public $dmgLoss = 4;
-	public $accDecay = 140;
+	public $accDecay = 120;
 	public $shots = 1;
 	public $reload = 2;
 	public $powerReq = 2;
@@ -131,7 +131,7 @@ class LightParticleBeam extends Laser {
 	public $maxBoost = 1;
 	public $rakes = 1;
 	public $mass = 20;
-	public $traverse = -2;
+	public $traverse = -1;
 	public $priority = 2.5;
 	
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
@@ -166,12 +166,12 @@ class LightLaser extends Laser {
 
 class MediumLaser extends Laser {
 	public $name = "MediumLaser";
-	public $display = "164mm 'Medium' Laser";
+	public $display = "152mm 'Medium' Laser";
 	public $animColor = "red";
 	public $rakeTime = 60;
 	public $beamWidth = 3;
-	public $minDmg = 90;
-	public $maxDmg = 125;
+	public $minDmg = 95;
+	public $maxDmg = 130;
 	public $optRange = 450;
 	public $dmgLoss = 4;
 	public $accDecay = 90;
@@ -190,12 +190,12 @@ class MediumLaser extends Laser {
 
 class HeavyLaser extends Laser {
 	public $name = "HeavyLaser";
-	public $display = "215mm 'Heavy' Laser";
+	public $display = "234mm 'Heavy' Laser";
 	public $animColor = "red";
 	public $rakeTime = 70;
 	public $beamWidth = 4;
-	public $minDmg = 145;
-	public $maxDmg = 180;
+	public $minDmg = 130;
+	public $maxDmg = 165;
 	public $optRange = 600;
 	public $dmgLoss = 3;
 	public $accDecay = 60;
@@ -218,22 +218,21 @@ class SuperHeavyLaser extends Laser {
 	public $animColor = "red";
 	public $rakeTime = 120;
 	public $beamWidth = 5;
-	public $minDmg = 210;
-	public $maxDmg = 255;
-	public $optRange = 800;
-	public $dmgLoss = 2;
+	public $minDmg = 205;
+	public $maxDmg = 250;
+	public $optRange = 600;
+	public $dmgLoss = 3;
 	public $accDecay = 40;
 	public $reload = 5;
 	public $powerReq = 10;
 	public $rakes = 4;
 	public $effiency = 6;
-	public $maxBoost = 2;
-	public $mass = 43;
+	public $maxBoost = 1;
+	public $mass = 44;
 	public $traverse = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
-		$this->boostEffect[0]->value = 0.15;
 	}
 }
 

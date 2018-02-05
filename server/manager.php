@@ -16,7 +16,7 @@ include_once 'global.php';
 		public $index = 0;
 		public $faction = "";
 		public $value = 0;
-		public $wave = 2;
+		public $wave = 11;
 
 		public $ships = array();
 		public $ballistics = array();

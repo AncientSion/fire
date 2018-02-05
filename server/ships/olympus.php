@@ -23,14 +23,14 @@ class Olympus extends Medium {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 12);
-		$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 180);
-		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 6, 3), array("Naga", 6, 2)));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 10, 5), array("Naga", 6, 2)));
 
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 300, 12);
-		$left->systems[] = new LightPulse($this->getId(), $this->id, 180, 360);
-		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 6, 3), array("Naga", 6, 2)));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 10, 5), array("Naga", 6, 2)));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

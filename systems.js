@@ -1833,9 +1833,9 @@ Weapon.prototype.getAimDataTarget = function(target, final, accLoss, row){
 	} else row.append($("<td>").html(""));
 
 	final = Math.floor(final * (1-(traverseMod*0.2)) - accLoss);
+
 	this.validTarget = 1;
 	this.odds = final;
-
 	row.append($("<td>").html(final + "%"));
 }
 
@@ -2451,7 +2451,7 @@ function Laser(system){
 	this.output = system.rakes;
 	this.beamWidth = system.beamWidth || (this.minDmg+this.maxDmg)/system.rakes/35;
 	this.exploSize = (this.minDmg+this.maxDmg)/system.rakes/30;
-	this.notes = ["Damage is evently split into <span class='green'>" + this.output + "</span> rake(s)"];
+	this.notes = ["Damage evenly spread over <span class='green'>" + this.output + "</span> rake(s)"];
 }
 Laser.prototype = Object.create(Weapon.prototype);
 
@@ -2923,10 +2923,10 @@ Launcher.prototype.getAimDataTarget = function(target, final, accLoss, row){
 		row.append($("<td>").html(" -" + accLoss + "%"));
 	} else row.append($("<td>").html(""));
 
-
 	final = Math.floor(final * (1-(traverseMod*0.2)) - accLoss);
+	
+	this.validTarget = 1;
 	this.odds = final;
-
 	row.append($("<td>").html(final + "%"));
 }
 
@@ -3018,7 +3018,7 @@ Launcher.prototype.setMount = function(amount){
 	} else {
 		this.mount = "Arm Rail";
 	}
-	this.armour =  Math.floor(amount * this.armourMod);
+	this.armour = Math.floor(amount * this.armourMod);
 }
 
 Launcher.prototype.getTraverseMod = function(target){
@@ -3263,12 +3263,8 @@ Area.prototype.createCombatLogEntry = function(fire){
 					}
 				}	
 		})
-		.append($("<td>").html(fire.type))
-		.append($("<th>").html("<font color='" + fire.shooter.getCodeColor() + "'>" + fire.shooter.name + " #" + fire.shooter.id + "</font>"))
-		.append($("<td>").html(""))
-		.append($("<td>").html(fire.weapon.getDisplay()))
-		.append($("<td>").html(chance))
-		.append($("<td>").html(""))
+		.append($("<td>").html("Interrupt"))
+		.append($("<th>").attr("colSpan", 4).html("<font color='" + fire.shooter.getCodeColor() + "'>" + fire.shooter.name + " #" + fire.shooter.id + "</font> firing " + fire.weapon.getDisplay()))
 
 	$(tr)
 		.append($("<td>").html(armour))
@@ -3319,6 +3315,7 @@ Area.prototype.createCombatLogEntry = function(fire){
 			.hide()
 			.data("row", start)
 			.append($("<td>")
+				.html("HIT!")
 			)
 			.append($("<td>")
 				.attr("colSpan", 2)
@@ -3326,6 +3323,7 @@ Area.prototype.createCombatLogEntry = function(fire){
 			)
 
 		for (var j = 0; j < dmgs[i].length; j++){
+			if (j == 2){continue;}
 			//if (dmgs[i][1]){console.log(dmgs[i][0]);}
 			$(sub) 
 			.append($("<td>")
@@ -3340,15 +3338,11 @@ Area.prototype.createCombatLogEntry = function(fire){
 }
 
 Area.prototype.setMount = function(amount){
-	if (game.getUnit(aUnit) instanceof Flight){this.negation = 0;}
-
-	var w = this.getArcWidth();
-
-	if (w <= 60){
-		this.mount = "Tube";
-	} else if (w <= 120){
-		this.mount = "Canister";
+	if (this.name == "EnergyMine"){
+		this.mount = "Catapult"; 
 	}
+	this.armour = Math.floor(amount * this.armourMod);
+	return;
 }
 
 Area.prototype.getAnimation = function(fire){
@@ -3513,7 +3507,9 @@ Area.prototype.highlightEvent = function(){
 	salvoCtx.fill();
 
 	salvoCtx.globalAlpha = 0.5;
-	salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height);
+	if (game.phase < 2){
+		salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height);
+	}
 
 	if (game.phase == 2){
 		salvoCtx.beginPath();
@@ -4150,7 +4146,7 @@ Hangar.prototype.getSystemDetailsDiv = function(){
 	$(table).append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.getMount())));
 	$(table).append($("<tr>").append($("<td>").html("Capacity")).append($("<td>").html("up to " + this.capacity + " units")));
 	$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html(this.getLaunchRate() + " each " + this.reload + " turns")));
-	$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").html(this.getPowerReqString())));
+	//$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").html(this.getPowerReqString())));
 
 	div.appendChild(table);
 	this.attachDetailsMods(div);

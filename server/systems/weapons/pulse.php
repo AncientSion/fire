@@ -104,13 +104,13 @@ class LightPulse extends Pulse {
 class MediumPulse extends Pulse {
 	public $name = "MediumPulse";
 	public $display = "60mm Pulse Cannon";
-	public $minDmg = 25;
-	public $maxDmg = 32;
+	public $minDmg = 23;
+	public $maxDmg = 30;
 	public $accDecay = 120;
 	public $shots = 1;
 	public $animColor = "brown";
 	public $projSize = 3;
-	public $projSpeed = 9;
+	public $projSpeed = 8;
 	public $reload = 3;
 	public $mass = 21;
 	public $powerReq = 4;
@@ -130,7 +130,7 @@ class HeavyPulse extends Pulse {
 	public $shots = 1;
 	public $animColor = "brown";
 	public $projSize = 4;
-	public $projSpeed = 8;
+	public $projSpeed = 7;
 	public $reload = 4;
 	public $mass = 32;
 	public $powerReq = 5;

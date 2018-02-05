@@ -1775,7 +1775,18 @@ function Game(data, userid){
 		this.getFireAnimationDetails();
 		this.getunitExploDetails();
 
-		$("#combatlogWrapper").show();
+		$("#combatlogWrapper")
+			.css("width", 450)
+			.find("#combatlogInnerWrapper").find("#combatLog")
+				.append($("<tr>")
+				.append($("<th>"))
+				.append($("<th>").attr("colSpan", 4).html("Event Type"))
+				.append($("<th>").html("Armour"))
+				.append($("<th>").html("System"))
+				.append($("<th>").html("Structure")))
+			.end().end()
+			.show()
+
 		setFPS(40);
 		window.then = Date.now();
 		window.startTime = then;
@@ -3176,5 +3187,4 @@ Game.prototype.setShortenInfo = function(e, unit, dist){
 		.data("delay", aim)
 		.css("left", left)
 		.css("top", top)
-
 }

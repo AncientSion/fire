@@ -15,3 +15,328 @@ game 1, user 1 --- adjusting to turn/phase/status 5/3/waiting
 game 1, user 2 --- adjusting to turn/phase/status 5/3/waiting 
 TIME: 0.031 seconds. 
 4 mb 
+prepareAdvance 
+********************* doAdvance for game1 from phase 2 to phase 3 
+resolveFireOrder - ID 18, shooter: Olympus #11 vs Squadron #1, w: MediumLaser #8, shots: 1 
+MediumLaser, weapon id: 8, RANGE DMG mod: 0.8812 
+fire #18, doDamage, weapon: MediumLaser, target: 1 for 86 dmg 
+resolveFireOrder - ID 17, shooter: Olympus #11 vs Squadron #1, w: MediumPulse #7, shots: 1 
+fire #17, doDamage, weapon: MediumPulse, target #1/7/Darkner, hits: 4, totalDmg: 26, remaining: 384, armour: 14+0 
+resolveFireOrder - ID 14, shooter: Squadron #6 vs Hyperion #2, w: LightPlasma #5, shots: 1 
+LightPlasma, weapon id: 5, boost: 1, final multi: 0.8176 
+fire #14, doDamage, weapon: LightPlasma, target #2/1/Primary, totalDmg: 36, remaining: 850, armour: 18+0 
+resolveFireOrder - ID 15, shooter: Squadron #6 vs Hyperion #2, w: LightPlasma #6, shots: 1 
+LightPlasma, weapon id: 6, boost: 1, final multi: 0.8176 
+fire #15, doDamage, weapon: LightPlasma, target #2/23/Dual, totalDmg: 40, remaining: 28, armour: 8+0 
+ => OVERKILL ship target system Dual #23 was destroyed, rem: 28, doing: 28, OK for: 4 dmg 
+resolveFireOrder - ID 16, shooter: Hyperion #2 vs Squadron #6, w: LightPulse #22, shots: 1 
+fire #16, doDamage, weapon: LightPulse, target #6/3/Vorchan, hits: 4, totalDmg: 13, remaining: 340, armour: 14+0 
+resolveFireOrder - ID 12, shooter: Squadron #1 vs Flight #15, w: LightPlasma #5, shots: 1 
+Mixed getHitSection 
+LightPlasma, weapon id: 5, boost: 1, final multi: 0.9424 
+fire #12, doDamage, weapon: LightPlasma, target #15/19/Nial, totalDmg: 46, remaining: 33, armour: 7+0 
+ => destroying non-ship target system Nial #19 was destroyed, rem: 33, doing: 39 
+resolveFireOrder - ID 13, shooter: Squadron #1 vs Flight #15, w: LightPlasma #6, shots: 1 
+Mixed getHitSection 
+LightPlasma, weapon id: 6, boost: 1, final multi: 0.9424 
+fire #13, doDamage, weapon: LightPlasma, target #15/5/Aurora, totalDmg: 51, remaining: 26, armour: 4+0 
+ => destroying non-ship target system Aurora #5 was destroyed, rem: 26, doing: 47 
+resolveBallisticFireOrders 
+testCrit for: Vorchan, old: 0, new: 43, turn: 5 
+ => SQUAD determineCrit #1/3 for Vorchan, old/new 0/43 => 13 
+crit: Damage 
+testCrit for: Darkner, old: 0, new: 49, turn: 5 
+ => SQUAD determineCrit #1/7 for Darkner, old/new 0/49 => 13 
+testCrit for: Vorchan, old: 0, new: 1, turn: 5 
+ => SQUAD determineCrit #6/3 for Vorchan, old/new 0/1 => 0 
+potential total power spike for unit #2: 2 
+applyPowerSpike to #2, spike: 2, output: 83/ mod: 2.41 
+DB updateFireOrders: 7 
+ => DB insertDamageEntries: 7 
+ => DB insertCritEntries: 2 
+handleFiringPhase time: 0.105 seconds. 
+game 1, user 1 --- adjusting to turn/phase/status 5/3/waiting 
+game 1, user 2 --- adjusting to turn/phase/status 5/3/waiting 
+TIME: 0.124 seconds. 
+4 mb 
+game 1, user 1 --- adjusting to turn/phase/status 5/3/ready 
+game 1, user 2 --- adjusting to turn/phase/status 5/3/ready 
+prepareAdvance 
+********************* doAdvance for game1 from phase 3 to phase 4 
+handleJumpOutActions 
+endTurn 
+setUnitStatus 
+destroyUnitsDB 
+assembleEndStates 
+updateUnitState s:5 5/3 
+game 1, user 1 --- adjusting to turn/phase/status 6/-1/waiting 
+game 1, user 2 --- adjusting to turn/phase/status 6/-1/waiting 
+TIME: 0.036 seconds. 
+4 mb 
+game 1, user 2 --- adjusting to turn/phase/status 6/-1/ready 
+game 1, user 1 --- adjusting to turn/phase/status 6/-1/ready 
+prepareAdvance 
+********************* doAdvance for game1 from phase -1 to phase 0 
+handleDeploymentPhase 
+resolveDeployActions s: 0 
+handleJumpInActions 
+resolveJumpOutActions 
+handleInitialFireOrders 
+handleDeployFireOrders 
+handleBallisticFireOrders 
+DB insertUnits: 1 
+insertMissions s: 1 
+DB updateBallisticFireOrder, s: 2 
+assemblDeployStates 
+updateUnitState s:1 6/-1 
+game 1, user 1 --- adjusting to turn/phase/status 6/0/waiting 
+game 1, user 2 --- adjusting to turn/phase/status 6/0/waiting 
+TIME: 0.053 seconds. 
+4 mb 
+game 1, user 1 --- adjusting to turn/phase/status 6/0/ready 
+game 1, user 2 --- adjusting to turn/phase/status 6/0/ready 
+prepareAdvance 
+********************* doAdvance for game1 from phase 0 to phase 1 
+handleMovementPhase 
+handleShipMovement 
+resolveUnitMovementDB 
+handleMixedMovement 
+Handling mixed #15 
+handleMixedMovement 
+Handling mixed #16 
+STRIKE 
+handlePostMoveFires: 0 
+handling data 
+DB updateFireOrders: 0 
+ => DB insertDamageEntries: 0 
+ => DB insertCritEntries: 0 
+updateMissionState 
+game 1, user 1 --- adjusting to turn/phase/status 6/2/waiting 
+game 1, user 2 --- adjusting to turn/phase/status 6/2/waiting 
+TIME: 0.07 seconds. 
+4 mb 
+game 1, user 1 --- adjusting to turn/phase/status 6/2/ready 
+game 1, user 2 --- adjusting to turn/phase/status 6/2/ready 
+prepareAdvance 
+********************* doAdvance for game1 from phase 2 to phase 3 
+resolveFireOrder - ID 21, shooter: Squadron #1 vs Hyperion #2, w: LightPlasma #11, shots: 1 
+LightPlasma, weapon id: 11, boost: 1, final multi: 0.7948 
+fire #21, doDamage, weapon: LightPlasma, target #2/1/Primary, totalDmg: 39, remaining: 828, armour: 18+0 
+resolveFireOrder - ID 23, shooter: Squadron #6 vs Hyperion #2, w: LightPlasma #9, shots: 1 
+LightPlasma, weapon id: 9, boost: 0.75, final multi: 0.9019 
+fire #23, doDamage, weapon: LightPlasma, target #2/1/Primary, totalDmg: 48, remaining: 807, armour: 16+0 
+resolveFireOrder - ID 24, shooter: Squadron #6 vs Hyperion #2, w: LightPlasma #10, shots: 1 
+LightPlasma, weapon id: 10, boost: 0.75, final multi: 0.9019 
+fire #24, doDamage, weapon: LightPlasma, target #2/1/Primary, totalDmg: 50, remaining: 775, armour: 15+0 
+resolveFireOrder - ID 25, shooter: Squadron #6 vs Hyperion #2, w: LightPlasma #13, shots: 1 
+LightPlasma, weapon id: 13, boost: 0.75, final multi: 0.9019 
+fire #25, doDamage, weapon: LightPlasma, target #2/17/HeavyLaser, totalDmg: 51, remaining: 56, armour: 11+0 
+resolveFireOrder - ID 26, shooter: Squadron #6 vs Hyperion #2, w: LightPlasma #14, shots: 1 
+LightPlasma, weapon id: 14, boost: 0.75, final multi: 0.9019 
+fire #26, doDamage, weapon: LightPlasma, target #2/18/MediumPulse, totalDmg: 45, remaining: 42, armour: 8+0 
+resolveFireOrder - ID 27, shooter: Hyperion #2 vs Squadron #6, w: LightParticleBeam #14, shots: 1 
+LightParticleBeam, weapon id: 1, RANGE DMG mod: 0.8636 
+fire #27, doDamage, weapon: LightParticleBeam, target: 6 for 22 dmg 
+resolveFireOrder - ID 28, shooter: Hyperion #2 vs Squadron #6, w: LightParticleBeam #15, shots: 1 
+LightParticleBeam, weapon id: 1, RANGE DMG mod: 0.8636 
+fire #28, doDamage, weapon: LightParticleBeam, target: 6 for 21 dmg 
+resolveFireOrder - ID 30, shooter: Hyperion #2 vs Squadron #6, w: HeavyLaser #19, shots: 1 
+HeavyLaser, weapon id: 19, RANGE DMG mod: 0.8527 
+fire #30, doDamage, weapon: HeavyLaser, target: 6 for 136 dmg 
+resolveFireOrder - ID 32, shooter: Olympus #11 vs Squadron #6, w: LightParticleBeam #11, shots: 1 
+LightParticleBeam, weapon id: 1, RANGE DMG mod: 0.8628 
+fire #32, doDamage, weapon: LightParticleBeam, target: 6 for 21 dmg 
+resolveFireOrder - ID 29, shooter: Hyperion #2 vs Squadron #6, w: MediumPulse #18, shots: 1 
+fire #29, doDamage, weapon: MediumPulse, target #6/11/Vorchan, hits: 5, totalDmg: 28, remaining: 247, armour: 13+0 
+resolveFireOrder - ID 31, shooter: Olympus #11 vs Squadron #6, w: MediumPulse #9, shots: 1 
+fire #31, doDamage, weapon: MediumPulse, target #6/3/Vorchan, hits: 5, totalDmg: 25, remaining: 323, armour: 12+0 
+resolveFireOrder - ID 22, shooter: Squadron #1 vs Salvo #16, w: LightIon #13, shots: 4 
+Mixed getHitSection 
+fire #22, doDamage, weapon: LightIon, target #16/3/Needle, totalDmg: 14, remaining: 9, armour: 2+0 
+ => destroying non-ship target system Needle #3 was destroyed, rem: 9, doing: 12 
+fire #22, doDamage, weapon: LightIon, target #16/5/Needle, totalDmg: 12, remaining: 9, armour: 2+0 
+ => destroying non-ship target system Needle #5 was destroyed, rem: 9, doing: 10 
+fire #22, doDamage, weapon: LightIon, target #16/11/Needle, totalDmg: 16, remaining: 9, armour: 2+0 
+ => destroying non-ship target system Needle #11 was destroyed, rem: 9, doing: 14 
+fire #22, doDamage, weapon: LightIon, target #16/1/Needle, totalDmg: 15, remaining: 9, armour: 2+0 
+ => destroying non-ship target system Needle #1 was destroyed, rem: 9, doing: 13 
+resolveBallisticFireOrders 
+insertServerFireOrder: 1 
+resolveFireOrder - ID 33, shooter: Salvo #16 vs Squadron #1, w: Warhead #2, shots: 2 
+fire #33, doDamage, weapon: Warhead, target #1/3/Vorchan, totalDmg: 20, remaining: 298, armour: 13+0 
+fire #33, doDamage, weapon: Warhead, target #1/7/Darkner, totalDmg: 22, remaining: 336, armour: 12+0 
+testCrit for: Vorchan, old: 42, new: 8, turn: 6 
+ => SQUAD determineCrit #1/3 for Vorchan, old/new 42/8 => 15 
+testCrit for: Darkner, old: 48, new: 11, turn: 6 
+ => SQUAD determineCrit #1/7 for Darkner, old/new 48/11 => 15 
+testCrit for: Vorchan, old: 0, new: 83, turn: 6 
+ => SQUAD determineCrit #6/3 for Vorchan, old/new 0/83 => 24 
+testCrit for: Vorchan, old: 0, new: 8, turn: 6 
+ => SQUAD determineCrit #6/7 for Vorchan, old/new 0/8 => 2 
+testCrit for: Vorchan, old: 0, new: 169, turn: 6 
+ => SQUAD determineCrit #6/11 for Vorchan, old/new 0/169 => 50 
+crit: Damage 
+crit: Damage 
+crit: Damage 
+DB updateFireOrders: 13 
+ => DB insertDamageEntries: 17 
+ => DB insertCritEntries: 7 
+handleFiringPhase time: 0.134 seconds. 
+game 1, user 1 --- adjusting to turn/phase/status 6/3/waiting 
+game 1, user 2 --- adjusting to turn/phase/status 6/3/waiting 
+TIME: 0.141 seconds. 
+4 mb 
+createPlayerStatus 
+entry CREATE for player 2 in game 2 phase: -1 and status joined 
+DB insertUnits: 1 
+insertMissions s: 0 
+insertLoads: 1 
+units 0 
+upgrades 0 
+loads 0 
+game 2, user 2 --- adjusting to turn/phase/status -1/-1/ready 
+Game #2 is not ready ! 
+joinGame success 
+createPlayerStatus 
+entry CREATE for player 1 in game 2 phase: -1 and status joined 
+joinGame success 
+DB insertUnits: 1 
+insertMissions s: 0 
+insertLoads: 1 
+units 0 
+continue 
+game 2, user 1 --- adjusting to turn/phase/status -1/-1/ready 
+Game #2 is ready ! 
+Starting game #2 
+game ready, adjusting player 
+game 2, user 2 --- adjusting to turn/phase/status 1/-1/waiting 
+game 2, user 1 --- adjusting to turn/phase/status 1/-1/waiting 
+game 2, user 1 --- adjusting to turn/phase/status 1/-1/ready 
+game 2, user 2 --- adjusting to turn/phase/status 1/-1/ready 
+prepareAdvance 
+********************* doAdvance for game2 from phase -1 to phase 0 
+handleDeploymentPhase 
+resolveDeployActions s: 2 
+handleJumpInActions 
+jumpin: #18, class: Squadron, size: 80, sensor: 550, ordered to: 467/163, shiftPotential: 19.5% 
+Squadron, aShift: 20°, pShift: 39px 
+--> aShift: 13°, psShift: 30/8 (32px) 
+jumpin: #17, class: GQuan, size: 80, sensor: 1050, ordered to: -373/105, shiftPotential: 12.57% 
+GQuan, aShift: 13°, pShift: 26px 
+--> aShift: 10°, psShift: -13/-12 (18px) 
+resolveJumpOutActions 
+handleInitialFireOrders 
+assemblDeployStates 
+updateUnitState s:2 1/-1 
+game 2, user 2 --- adjusting to turn/phase/status 1/0/waiting 
+game 2, user 1 --- adjusting to turn/phase/status 1/0/waiting 
+TIME: 0.035 seconds. 
+4 mb 
+game 2, user 1 --- adjusting to turn/phase/status 1/0/ready 
+game 2, user 2 --- adjusting to turn/phase/status 1/0/ready 
+prepareAdvance 
+********************* doAdvance for game2 from phase 0 to phase 1 
+handleMovementPhase 
+handleShipMovement 
+resolveUnitMovementDB 
+handleMixedMovement 
+handleMixedMovement 
+handlePostMoveFires: 0 
+handling data 
+DB updateFireOrders: 0 
+ => DB insertDamageEntries: 0 
+ => DB insertCritEntries: 0 
+updateMissionState 
+game 2, user 2 --- adjusting to turn/phase/status 1/2/waiting 
+game 2, user 1 --- adjusting to turn/phase/status 1/2/waiting 
+TIME: 0.017 seconds. 
+4 mb 
+game 2, user 1 --- adjusting to turn/phase/status 1/2/ready 
+game 2, user 2 --- adjusting to turn/phase/status 1/2/ready 
+prepareAdvance 
+********************* doAdvance for game2 from phase 2 to phase 3 
+resolveFireOrder - ID 34, shooter: GQuan #17 vs Squadron #18, w: SuperHeavyLaser #7, shots: 1 
+SuperHeavyLaser, weapon id: 7, RANGE DMG mod: 0.9937 
+fire #34, doDamage, weapon: SuperHeavyLaser, target: 18 for 246 dmg 
+resolveFireOrder - ID 35, shooter: GQuan #17 vs Squadron #18, w: SuperHeavyLaser #9, shots: 1 
+SuperHeavyLaser, weapon id: 9, RANGE DMG mod: 0.9937 
+fire #35, doDamage, weapon: SuperHeavyLaser, target: 18 for 230 dmg 
+resolveBallisticFireOrders 
+testCrit for: Vorchan, old: 0, new: 189, turn: 1 
+ => SQUAD determineCrit #18/3 for Vorchan, old/new 0/189 => 56 
+crit: Damage 
+crit: Damage 
+testCrit for: Vorchan, old: 0, new: 173, turn: 1 
+ => SQUAD determineCrit #18/7 for Vorchan, old/new 0/173 => 51 
+crit: Damage 
+crit: Damage 
+crit: Damage 
+DB updateFireOrders: 2 
+ => DB insertDamageEntries: 2 
+ => DB insertCritEntries: 5 
+handleFiringPhase time: 0.023 seconds. 
+game 2, user 2 --- adjusting to turn/phase/status 1/3/waiting 
+game 2, user 1 --- adjusting to turn/phase/status 1/3/waiting 
+TIME: 0.032 seconds. 
+4 mb 
+game 2, user 2 --- adjusting to turn/phase/status 1/3/ready 
+game 2, user 1 --- adjusting to turn/phase/status 1/3/ready 
+prepareAdvance 
+********************* doAdvance for game2 from phase 3 to phase 4 
+handleJumpOutActions 
+endTurn 
+setUnitStatus 
+destroyUnitsDB 
+assembleEndStates 
+updateUnitState s:2 1/3 
+pickReinforcements 
+insertReinforcements: 12 
+game 2, user 2 --- adjusting to turn/phase/status 2/-1/waiting 
+game 2, user 1 --- adjusting to turn/phase/status 2/-1/waiting 
+TIME: 0.16 seconds. 
+4 mb 
+createPlayerStatus 
+entry CREATE for player 1 in game 3 phase: -1 and status joined 
+game 2, user 1 --- adjusting to turn/phase/status 2/-1/ready 
+game 2, user 2 --- adjusting to turn/phase/status 2/-1/ready 
+prepareAdvance 
+********************* doAdvance for game2 from phase -1 to phase 0 
+handleDeploymentPhase 
+resolveDeployActions s: 0 
+handleJumpInActions 
+resolveJumpOutActions 
+handleInitialFireOrders 
+handleDeployFireOrders 
+handleBallisticFireOrders 
+DB updateBallisticFireOrder, s: 1 
+assemblDeployStates 
+game 2, user 2 --- adjusting to turn/phase/status 2/0/waiting 
+game 2, user 1 --- adjusting to turn/phase/status 2/0/waiting 
+TIME: 0.024 seconds. 
+4 mb 
+game 2, user 1 --- adjusting to turn/phase/status 2/0/ready 
+game 2, user 2 --- adjusting to turn/phase/status 2/0/ready 
+prepareAdvance 
+********************* doAdvance for game2 from phase 0 to phase 1 
+handleMovementPhase 
+handleShipMovement 
+resolveUnitMovementDB 
+handleMixedMovement 
+handleMixedMovement 
+handlePostMoveFires: 1 
+handling fire: 36, weapon: EnergyMine 
+createAreaFireOrders 
+dist: 415, maxDevi: 41.5px, devi: 40px, angle: 249 
+resolveAreaFireOrder on self: Squadron 
+fire #36, doDamage, weapon: EnergyMine, target #18/3/Vorchan, totalDmg: 50, remaining: 152, armour: 12+0 
+fire #36, doDamage, weapon: EnergyMine, target #18/7/Vorchan, totalDmg: 50, remaining: 168, armour: 12+0 
+fire #36, doDamage, weapon: EnergyMine, target #18/11/Vorchan, totalDmg: 50, remaining: 340, armour: 14+0 
+handling data 
+DB updateFireOrders: 1 
+ => DB insertDamageEntries: 3 
+ => DB insertCritEntries: 0 
+updateMissionState 
+game 2, user 2 --- adjusting to turn/phase/status 2/2/waiting 
+game 2, user 1 --- adjusting to turn/phase/status 2/2/waiting 
+TIME: 0.054 seconds. 
+4 mb 
