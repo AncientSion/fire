@@ -5,8 +5,8 @@ class Matter extends Weapon {
 	public $animation = "projectile";
 	public $priority = 4;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}	
 
 	public function determineDamage($totalDmg, $negation){
@@ -44,8 +44,8 @@ class MediumRailGun extends Matter {
 	public $powerReq = 3;
 	public $traverse = -1;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
@@ -64,8 +64,8 @@ class HeavyRailGun extends Matter {
 	public $powerReq = 6;
 	public $traverse = 1;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
@@ -75,8 +75,8 @@ class Test extends MediumRailGun {
 	public $minDmg = 1;
 	public $maxDmg = 1;
 	public $shots = 100;
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}	
 
 	public function determineDamage($totalDmg, $negation){

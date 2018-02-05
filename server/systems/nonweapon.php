@@ -1,19 +1,21 @@
 <?php
 
+
+// engine 	$this->effiency = ceil($this->powerReq/5)+1;
+// sensor 4
+
+
 class PrimarySystem extends System {
 	public $name = "PrimarySystem";
 	public $display = "PrimarySystem";
 	public $powerReq = 0;
 	public $internal = 1;
 
-	function __construct($id, $parentId, $subs, $output = 0, $effiency = 0, $destroyed = 0){
-		parent::__construct($id, $parentId, $output, $destroyed);
-		//$this->maxDmg = round($subs[0] / $subs[1]);
+	function __construct($id, $parentId, $subs, $output = 0, $width = 1){
+		parent::__construct($id, $parentId, $output, $width);
 		$this->maxDmg = 25;
 		$this->mass = $subs[0];
 		$this->integrity = floor($subs[0]*0.85);
-		$this->effiency = $effiency;
-
 	}
 
 	public function getHitChance(){
@@ -79,8 +81,8 @@ class Bridge extends PrimarySystem {
 	public $name = "Bridge";
 	public $display = "Command & Control";
 
-	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
-        parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
+	function __construct($id, $parentId, $mass, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $mass, $output, $width);
 	}
 
 	public function determineCrit($old, $new, $turn){
@@ -105,8 +107,8 @@ class Reactor extends PrimarySystem {
 	public $display = "Reactor & Power Grid";
 	public $powerReq = 0;
 
-	function __construct($id, $parentId, $mass, $output = 0, $effiency = 0, $destroyed = 0){
-        parent::__construct($id, $parentId, $mass, $output, $effiency, $destroyed);
+	function __construct($id, $parentId, $mass, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $mass, $output, $width);
     }
 
     public function setOutput($add){
@@ -126,14 +128,13 @@ class Engine extends PrimarySystem {
 	public $name = "Engine";
 	public $display = "Engine & Drive";
 
-	function __construct($id, $parentId, $mass, $output = 0, $destroyed = 0){
-        parent::__construct($id, $parentId, $mass, $output, 0, $destroyed);
+	function __construct($id, $parentId, $mass, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $mass, $output, $width);
     }
 
 	public function setPowerReq($mass){
 		$this->powerReq = ceil($this->output * Math::getEnginePowerNeed($mass));
 		$this->boostEffect[] = new Effect("Output", 15);
-		$this->effiency = ceil($this->powerReq/5)+1;
 	}
 }
 
@@ -142,12 +143,12 @@ class Sensor extends PrimarySystem {
 	public $display = "Sensor & Analyzing";
 	public $ew = array();
 
-	function __construct($id, $parentId, $mass, $output = 0, $effiency, $destroyed = 0){
+	function __construct($id, $parentId, $mass, $output = 0, $width = 1){
 		$this->powerReq = floor($output/60);
 		$this->boostEffect[] = new Effect("Output", 10);
 		$this->modes = array("Lock", "Scramble");
 		$this->states = array(0, 0);
-        parent::__construct($id, $parentId, $mass, $output, ceil($this->powerReq/3), $destroyed);
+        parent::__construct($id, $parentId, $mass, $output, $width);
     }
 
     public function hideEW($turn){
@@ -193,66 +194,9 @@ class Cyber extends Sensor {
 	public $display = "Cyber Warfare";
 	public $ew = array();
 
-	function __construct($id, $parentId, $mass, $output = 0, $effiency, $destroyed = 0){
-        parent::__construct($id, $parentId, $mass, $output, ceil($this->powerReq/3), $destroyed);
+	function __construct($id, $parentId, $mass, $output = 0, $width = 0){
+        parent::__construct($id, $parentId, $mass, $output, $width);
     }
 }
 
-class Hangar extends Weapon {
-	public $type = "Hangar";
-	public $name = "Hangar";
-	public $display = "Hangar";
-	public $loads = array();
-	public $reload = 2;
-	public $utility = 1;
-	public $capacity;
-	public $launchRate;
-	public $usage = -1;
-
-	function __construct($id, $parentId, $launchRate, $loads, $capacity, $destroyed = false){
-		parent::__construct($id, $parentId, 0, $destroyed);
-		$this->launchRate = $launchRate;
-		$this->capacity = $capacity;
-		$this->powerReq = floor($launchRate/3);
-		$this->mass = $capacity*5;
-		$this->integrity = $this->mass *2;
-
-
-		for ($i = 0; $i < sizeof($loads); $i++){
-			$fighter = new $loads[$i](0,0);
-			$this->loads[] = array(
-				"name" => $loads[$i],
-				"display" => $fighter->display,
-				"amount" => 0,
-				"cost" => $fighter::$value,
-				"mass" => $fighter->mass,
-				"integrity" => $fighter->integrity,
-				"launch" => 0
-			);
-		}
-	}
-
-	public function setArmourMod(){
-		$this->armourMod = 0.5;
-	}
-
-	public function getHitChance(){
-		return $this->mass/2;
-	}
-	
-	public function adjustLoad($dbLoad){
-		for ($i = 0; $i < sizeof($dbLoad); $i++){
-			for ($j = 0; $j < sizeof($this->loads); $j++){
-				if ($dbLoad[$i]["name"] == $this->loads[$j]["name"]){
-					$this->loads[$j]["amount"] = $dbLoad[$i]["amount"];
-					break; 
-				}
-			}
-		}
-	}
-
-	public function getValidEffects(){
-		return array();
-	}
-}
 ?>

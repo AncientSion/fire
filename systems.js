@@ -39,6 +39,7 @@ function System(system){
 	this.img;
 	this.usage = system.usage;
 	this.freeAim = system.freeAim;
+	this.width = system.width;
 }
 
 System.prototype.getDisplay = function(){
@@ -2456,8 +2457,7 @@ Laser.prototype = Object.create(Weapon.prototype);
 
 Laser.prototype.getDmgsPerShot = function(fire){
 	if (fire.target.ship){return this.output;}
-	if (fire.target.squad){return this.output;}
-	return 1;
+	return 1
 }
 
 Laser.prototype.getAnimation = function(fire){
@@ -2505,23 +2505,23 @@ Laser.prototype.getAnimation = function(fire){
 			if (hit){ // shot hit
 				var dest = fire.target.getFireDest(fire, hit, hits-1);
 
-				if (range(0, 1)){ // swipe outwards
+				//if (range(0, 1)){ // swipe outwards
 					tx = t.x + dest.x;
 					ty = t.y + dest.y;
-					tb = getPointInDir(fire.target.size/4, range(0, 360), tx, ty);
-				}
-				else { // sweipe inwards
+					tb = getPointInDir(fire.weapon.output*5, range(0, 360), tx, ty);
+				//}
+				/*else { // swipe inwards
 					tx = t.x + dest.x + (range(-20, 20));
 					ty = t.y + dest.y + (range(-20, 20));
 					tb = {x:  t.x + dest.x + range(-10, 10), y: t.y + dest.y + range(-10, 10)}
-				}
+				}*/
 			}
 			else { // shot miss
 				tx = fire.target.drawX + range(fire.target.size/2, fire.target.size/2) * (1-(range(0, 1)*2))
 				ty = fire.target.drawY + range(fire.target.size/2, fire.target.size/2) * (1-(range(0, 1)*2))
 				a = getAngleFromTo( {x: fire.target.drawX, y: fire.target.drawY}, {x: tx, y: ty} );
 				//a = addToDirection(a, range(-40, 40));
-				tb = getPointInDir(fire.weapon.rakeTime/3, a, tx, ty); // BEAM swipe END on MISS	
+				tb = getPointInDir(fire.target.size/10*fire.weapon.output, a, tx, ty); // BEAM swipe END on MISS	
 				//tx = fire.target.drawX + range(-fire.target.size * 0.7, fire.target.size * 0.7); // BEAM swipe begin on MISS
 				//ty = fire.target.drawY + range(-fire.target.size * 0.7, fire.target.size * 0.7);
 				//a = getAngleFromTo( {x: tx, y: ty}, {x: fire.target.drawX, y: fire.target.drawY} );
@@ -2536,9 +2536,10 @@ Laser.prototype.getAnimation = function(fire){
 				{x: tx, y: ty},
 				{x: tb.x, y: tb.y}, 
 				0 - (range(-5, 5)) - (Math.floor(j / grouping) * delay) - k*shotInterval,
-				fire.weapon.rakeTime,
+				fire.weapon.output*20,
 				hit
 			);
+			console.log(shotAnim);
 
 			gunAnims.push(shotAnim);
 		}
@@ -3049,7 +3050,7 @@ Launcher.prototype.setupAmmoLoadout = function(e){
 	if ($(div).hasClass("disabled")){
 		$(div).find("#reload").html(this.reload);
 		//$(div).data("systemid", this.id).css("top", e.clientY + 30).css("left", e.clientX - 150).removeClass("disabled");
-		$(div).data("systemid", this.id).css("left", 800).css("top", 400).removeClass("disabled");
+		$(div).data("systemid", this.id).css("left", 650).css("top", 400).removeClass("disabled");
 		this.updateTotals();
 	}
 	else {
@@ -3136,7 +3137,7 @@ Launcher.prototype.updateTotals = function(){
 		var tr = document.createElement("tr");
 		var th = document.createElement("th"); th.innerHTML = "Class"; th.width = "80px"; tr.appendChild(th)
 		var th = document.createElement("th"); th.innerHTML = "Type"; th.width = "200px"; tr.appendChild(th)
-		var th = document.createElement("th"); th.innerHTML = "RoF"; th.width = "40px"; tr.appendChild(th)
+		var th = document.createElement("th"); th.innerHTML = "Salvo"; th.width = "40px"; tr.appendChild(th)
 		var th = document.createElement("th"); th.innerHTML = "Cost"; th.width = "40px"; tr.appendChild(th)
 		var th = document.createElement("th"); th.innerHTML = ""; tr.appendChild(th)
 		var th = document.createElement("th"); th.innerHTML = ""; tr.appendChild(th)
@@ -4127,7 +4128,7 @@ Hangar.prototype.setupHangarLoadout = function(e){
 		$(div).find("#launchRate").html(this.getOutput());
 		$(div).find("#capacity").html(this.capacity);
 		//$(div).data("systemid", this.id).css("top", e.clientY + 30).css("left", e.clientX - 150).removeClass("disabled");
-		$(div).data("systemid", this.id).css("left", 800).css("top", 400).removeClass("disabled");
+		$(div).data("systemid", this.id).css("left", 650).css("top", 400).removeClass("disabled");
 		this.updateTotals();
 	}
 	else {

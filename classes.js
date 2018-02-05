@@ -466,8 +466,8 @@ Structure.prototype.getBoostDiv = function(){
 
 
 function Primary(data){
-	this.name = "Primary";
-	this.display = "Primary";
+	this.name = data.name;
+	this.display = data.display;
 	this.id = data.id;
 	this.parentId = data.parentId;
 	this.integrity = data.integrity;

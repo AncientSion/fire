@@ -220,6 +220,12 @@ class Squadron extends Ship {
 	
 	public function getHitSystem($fire){
 	//	return $this->structures[2];
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($this->structures[$i]->damaged){continue;}
+			return $this->structures[$i];
+		}
+
 		$elements = array();
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (!$this->structures[$i]->destroyed){

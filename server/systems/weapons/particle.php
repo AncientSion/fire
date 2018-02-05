@@ -6,8 +6,8 @@ class Particle extends Weapon {
 	public $priority = 10;
 	public $particle = 1;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
@@ -15,7 +15,7 @@ class LightIon extends Particle {
 	public $name = "LightIon";
 	public $display = "32mm Ion Bolter Array";
 	public $minDmg = 12;
-	public $maxDmg = 17;
+	public $maxDmg = 16;
 	public $accDecay = 200;
 	public $shots = 4;
 	public $animColor = "orange";
@@ -28,8 +28,8 @@ class LightIon extends Particle {
 	public $effiency = 3;
 	public $maxBoost = 1;
 	
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
         $this->boostEffect[] = new Effect("Reload", -1);
 	}
 }
@@ -50,8 +50,8 @@ class MediumIon extends LightIon {
 	public $traverse = -1;
 	public $effiency = 3;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
@@ -71,8 +71,8 @@ class HeavyIon extends MediumIon {
 	public $traverse = 1;
 	public $effiency = 4;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
@@ -92,8 +92,8 @@ class SuperHeavyIon extends HeavyIon {
 	public $traverse = 1;
 	public $effiency = 4;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
@@ -112,8 +112,8 @@ class FusionCannon extends Particle {
 	public $powerReq = 2;
 	public $traverse = -1;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 

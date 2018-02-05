@@ -265,10 +265,13 @@ class Crit {
 	}
 
 	function inEffect($turn){
-		if (!$this->duration == 0){return true;}
+		if ($this->duration == 0){
+			return true;
+		}
 		else if ($turn <= $this->turn + $this->duration){
 			return true;
-		} else return false;
+		}
+		else return false;
 	}
 }
 

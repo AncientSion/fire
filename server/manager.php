@@ -2,68 +2,67 @@
 
 include_once 'global.php';
 
-class Manager {
-	public $userid;
-	public $gameid;
+	class Manager {
+		public $userid;
+		public $gameid;
 
-	public $name;
-	public $status;
-	public $turn;
-	public $phase;
-	public $pv;
-	public $reinforce;
+		public $name;
+		public $status;
+		public $turn;
+		public $phase;
+		public $pv;
+		public $reinforce;
 
-	public $index = 0;
-	public $faction = "";
-	public $value = 0;
-	public $wave = 2;
+		public $index = 0;
+		public $faction = "";
+		public $value = 0;
+		public $wave = 2;
 
-	public $ships = array();
-	public $ballistics = array();
-	public $gd = array();
-	public $fires = array();
-	public $playerstatus = array();
-	public $reinforcements = array();
-	public $rdyReinforcements = array();
-	public $deploys = array();
-	public $incoming = array();
-	public $userindex = 0;
-	public $flights = array();
+		public $ships = array();
+		public $ballistics = array();
+		public $gd = array();
+		public $fires = array();
+		public $playerstatus = array();
+		public $reinforcements = array();
+		public $rdyReinforcements = array();
+		public $deploys = array();
+		public $incoming = array();
+		public $userindex = 0;
+		public $flights = array();
 
-	public $flight = 0;
-	public $salvo = 0;
+		public $flight = 0;
+		public $salvo = 0;
 
-	public $const = array(
-		"ew" => array(
-			"p" => 1.5,
-			"len" => 10, 
-			"effect" => array(0 => 0.5, 1 => 0.5, 2 => 0.25)
-		),
-	);
+		public $const = array(
+			"ew" => array(
+				"p" => 1.5,
+				"len" => 10, 
+				"effect" => array(0 => 0.5, 1 => 0.5, 2 => 0.25)
+			),
+		);
 
-	function __construct($userid = 0, $gameid = 0){
-		//Debug::log("constructing manager ".$userid."/".$gameid);
-		//$this->getMemory();
-		$this->userid = $userid;
-		$this->gameid = $gameid;
-		Debug::init();
+		function __construct($userid = 0, $gameid = 0){
+			//Debug::log("constructing manager ".$userid."/".$gameid);
+			//$this->getMemory();
+			$this->userid = $userid;
+			$this->gameid = $gameid;
+			Debug::init();
 
-		if ($this->gameid){
-			$this->getGeneralData();
-			$this->setUserIndex();
+			if ($this->gameid){
+				$this->getGeneralData();
+				$this->setUserIndex();
+			}
 		}
-	}
 
 
 	public function doEval(){
 		return;
+		$this->setupShips();
 		$this->getUnit(1)->damaged = true;
 		$this->getUnit(1)->structures[0]->damaged = true;
 		$this->getUnit(1)->structures[1]->damaged = true;
-		$this->getUnit(1)->structures[2]->damaged = true;
 		$this->testCriticals();
 
-		$this->setupShips();
 		$this->freeFlights();
 		$this->deleteAllReinforcements();
 		$this->handlePostMoveFires();
@@ -89,7 +88,7 @@ class Manager {
 			"phase" => $this->phase,
 			"ships" => $this->getShipData(),
 			"reinforcements" => $this->rdyReinforcements,
-			"deploys" => $this->deploys,
+			//"deploys" => $this->deploys,
 			"incoming" =>$this->getIncomingData(),
 			"const" => $this->const,
 			"username" => $this->getUsername(),
@@ -164,7 +163,7 @@ class Manager {
 
 		$this->reinforcements = $db->getAllReinforcements($this->gameid, $this->userid);
 		$this->rdyReinforcements = $this->readyReinforcements();
-		$this->deploys = $db->getDeployArea($this->gameid, $this->turn);
+		//$this->deploys = $db->getDeployArea($this->gameid, $this->turn);
 		$this->incoming = $db->getIncomingShips($this->gameid, $this->turn);
 	}
 
@@ -884,26 +883,26 @@ class Manager {
 		}
 	}
 
-	public function handleFiringPhase(){
-		$time = -microtime(true);
+		public function handleFiringPhase(){
+			$time = -microtime(true);
 
-		$this->setupShips();
-		//return false;
+			$this->setupShips();
+			//return false;
 
-		$this->setFireOrderDetails();
-		$this->sortFireOrders();
-		$this->resolveShipFireOrders();
-		$this->resolveFighterFireOrders();
-		$this->resolveBallisticFireOrders();
-		$this->testCriticals();
+			$this->setFireOrderDetails();
+			$this->sortFireOrders();
+			$this->resolveShipFireOrders();
+			$this->resolveFighterFireOrders();
+			$this->resolveBallisticFireOrders();
+			$this->testCriticals();
 
-		$this->handleResolvedFireData();
+			$this->handleResolvedFireData();
 
-		$time += microtime(true); 
-		Debug::log("handleFiringPhase time: ".round($time, 3)." seconds.");
-		return true;
-	}
-	
+			$time += microtime(true); 
+			Debug::log("handleFiringPhase time: ".round($time, 3)." seconds.");
+			return true;
+		}
+		
 	public function handleDamageControlPhase(){
 		$this->handleJumpOutActions();
 		return true;
@@ -1171,51 +1170,47 @@ class Manager {
 		}
 	}
 
-	public function setFireOrderDetails(){
-		for ($i = sizeof($this->fires)-1; $i >= 0; $i--){
-			//Debug::log("setFireOrderDetails fire #".$this->fires[$i]->id);
-			//echo "fire: ".$this->fires[$i]->id; echo "</br></br>";
-			//var_export($this->fires[$i]); echo "</br></br>";
-			$this->fires[$i]->shooter = $this->getUnit($this->fires[$i]->shooterid);
-			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystem($this->fires[$i]->weaponid);
-			//echo get_class($this->fires[$i]->weapon); echo "</br></br>";
-			$this->fires[$i]->shots = $this->fires[$i]->weapon->getShots($this->turn);
-			$this->fires[$i]->target = $this->getUnit($this->fires[$i]->targetid);
-			//var_export($this->fires[$i]->weapon); echo "</br></br>";
-			//var_export($this->fires[$i]->weapon->getBoostLevel($this->turn)); echo "</br></br>";
-		}
-	}
-
-	public function sortFireOrders(){
-	//order target id ASC, weapon priority ASC, shooterider id ASC
-
-		usort($this->fires, function($a, $b){
-			if ($a->targetid != $b->targetid){
-				return $a->targetid - $b->targetid;
+		public function setFireOrderDetails(){
+			for ($i = sizeof($this->fires)-1; $i >= 0; $i--){
+				//Debug::log("setFireOrderDetails fire #".$this->fires[$i]->id);
+				//echo "fire: ".$this->fires[$i]->id; echo "</br></br>";
+				//var_export($this->fires[$i]); echo "</br></br>";
+				$this->fires[$i]->shooter = $this->getUnit($this->fires[$i]->shooterid);
+				$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystem($this->fires[$i]->weaponid);
+				//echo get_class($this->fires[$i]->weapon); echo "</br></br>";
+				$this->fires[$i]->shots = $this->fires[$i]->weapon->getShots($this->turn);
+				$this->fires[$i]->target = $this->getUnit($this->fires[$i]->targetid);
+				//var_export($this->fires[$i]->weapon); echo "</br></br>";
+				//var_export($this->fires[$i]->weapon->getBoostLevel($this->turn)); echo "</br></br>";
 			}
-			else if ($a->weapon->priority != $b->weapon->priority){
-				return $a->weapon->priority - $b->weapon->priority;
-			}
-			else if ($a->shooterid != $b->shooterid){
-				return $a->shooterid - $b->shooterid;
-			}
-			else return $a->id - $b->id;
-		});
-
-		for ($i = sizeof($this->fires)-1; $i >= 0; $i--){
-			if ($this->fires[$i]->turn > $this->turn){array_splice($this->fires, $i);}
 		}
-	}
 
-	public function resolveShipFireOrders(){
-		// resolve ship vs ship / fighter
-		for ($i = 0; $i < sizeof($this->fires); $i++){
-			if ($this->fires[$i]->resolved){continue;}
-			if ($this->fires[$i]->shooter->flight){continue;}
+		public function sortFireOrders(){
+		//order target id ASC, weapon priority ASC, shooterider id ASC
 
-			$this->fires[$i]->target->resolveFireOrder($this->fires[$i]);
+			usort($this->fires, function($a, $b){
+				if ($a->targetid != $b->targetid){
+					return $a->targetid - $b->targetid;
+				}
+				else if ($a->weapon->priority != $b->weapon->priority){
+					return $a->weapon->priority - $b->weapon->priority;
+				}
+				else if ($a->shooterid != $b->shooterid){
+					return $a->shooterid - $b->shooterid;
+				}
+				else return $a->id - $b->id;
+			});
 		}
-	}
+
+		public function resolveShipFireOrders(){
+			// resolve ship vs ship / fighter
+			for ($i = 0; $i < sizeof($this->fires); $i++){
+				if ($this->fires[$i]->resolved){continue;}
+				if ($this->fires[$i]->shooter->flight){continue;}
+
+				$this->fires[$i]->target->resolveFireOrder($this->fires[$i]);
+			}
+		}
 
 	public function resolveFighterFireOrders(){
 		// splice and delete fireorders from destroyed fighters
@@ -1329,11 +1324,11 @@ class Manager {
 	}
 
 	public function testCriticals(){
-		//Debug::log("testCriticals");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if (!$this->ships[$i]->damaged){continue;}
-			Debug::log("testCriticals #".$this->ships[$i]->id);
-			$this->ships[$i]->testForCrits($this->turn);
+			if ($this->ships[$i]->damaged){
+				//Debug::log("testCriticals #".$this->ships[$i]->id);
+				$this->ships[$i]->testForCrits($this->turn);
+			} 
 		}
 	}
 

@@ -132,6 +132,7 @@ class Structure {
 
 class Primary {
 	public $name = "Main Structure";
+	public $display = "Main Structure";
 	public $id;
 	public $parentId;
 	public $start;

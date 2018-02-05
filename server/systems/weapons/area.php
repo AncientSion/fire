@@ -11,8 +11,8 @@ class Area extends Weapon {
 	public $maxRange;
 	public $aoe;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $destroyed = 0){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 
 	public function createAreaFireOrders($gd, $fire){
@@ -89,8 +89,8 @@ class EnergyMine extends Area {
 	public $aoe = 50;
 	public $notes = array("Point of impact deivates", "Area of Effect", "Damage: 15/30/15/10");
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 
 	public function getBaseDamage($fire){

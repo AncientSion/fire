@@ -258,7 +258,7 @@ table, th, tr, td {
 }
 
 #launchRate, #capacity, #reload {
-	color: red;
+	color: #27e627;
 }
 
 #hangarLoadoutDiv, #weaponLoadoutDiv {
@@ -268,6 +268,10 @@ table, th, tr, td {
 	background-color: black;
 	z-index: 15;
 	border-radius: 5px;
+}
+
+#weaponLoadoutDiv {
+	width: 360px;
 }
 
 #hangarTable, #weaponTable {

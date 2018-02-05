@@ -9,8 +9,8 @@ class Pulse extends Weapon {
 	public $grouping = 30;
 	public $pulse = 1;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 	
 	public function doDamage($fire, $roll, $system){		
@@ -84,8 +84,8 @@ class Pulse extends Weapon {
 class LightPulse extends Pulse {
 	public $name = "LightPulse";
 	public $display = "35mm Pulse Cannon";
-	public $minDmg = 15;
-	public $maxDmg = 19;
+	public $minDmg = 13;
+	public $maxDmg = 17;
 	public $accDecay = 180;
 	public $shots = 1;
 	public $animColor = "brown";
@@ -96,8 +96,8 @@ class LightPulse extends Pulse {
 	public $powerReq = 2;
 	public $traverse = -3;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
@@ -116,8 +116,8 @@ class MediumPulse extends Pulse {
 	public $powerReq = 4;
 	public $traverse = -1;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
@@ -136,8 +136,8 @@ class HeavyPulse extends Pulse {
 	public $powerReq = 5;
 	public $traverse = 1;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
@@ -158,8 +158,8 @@ class FusionPulsar extends Pulse {
 	public $basePulses = 3;
 	public $extraPulses = 4;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 

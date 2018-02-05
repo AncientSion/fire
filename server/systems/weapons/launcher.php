@@ -16,14 +16,14 @@ class Launcher extends Weapon {
 	public $accDecay = 0;
 	public $usage = -1;
 
-	function __construct($id, $parentId, $start, $end, $loads, $destroyed = false){
+	function __construct($id, $parentId, $start, $end, $loads, $width = 1){
 		for ($i = 0; $i < sizeof($loads); $i++){
 			$this->loads[] = new $loads[$i][0]($this->id, -1);
 			$this->capacity[] = $loads[$i][1];
 			$this->launchRate[] = $loads[$i][2];
 		}
 
-        parent::__construct($id, $parentId, $start, $end, 0, $destroyed);
+        parent::__construct($id, $parentId, $start, $end, 0, $width);
 	}
 
 	public function getAmmo(){
@@ -68,7 +68,7 @@ class MissileLauncher extends Launcher {
 	public $display = "Missile Launcher";
 	public $animColor = "black";
 
-	function __construct($id, $parentId, $start, $end, $loads, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $loads, $destroyed);
+	function __construct($id, $parentId, $start, $end, $loads, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $loads, $width);
 	}
 }

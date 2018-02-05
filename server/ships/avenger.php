@@ -5,7 +5,7 @@ class Avenger extends Heavy {
 	public $display = "Avenger Heavvy Carrier";
 	public $faction = "Earth Alliance";
 	public $size =  80;
-	public static $value = 400;
+	public static $value = 480;
 	public $profile = array(0.91, 1.09);
 	public $mass = 12500;
 
@@ -21,48 +21,40 @@ class Avenger extends Heavy {
 		$front->systems[] = new Dual($this->getId(), $this->id, 270, 90, 14, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $front;
 
-		$rightTop = new Structure($this->getId(), $this->id, 30, 90, 800, 15);
-		$rightTop->systems[] = new Dual($this->getId(), $this->id, 330, 150, 14, array("LightPulse", "LightParticleBeam"));
-		$rightTop->systems[] = new Dual($this->getId(), $this->id, 330, 150, 14, array("LightPulse", "LightParticleBeam"));
-		$rightTop->systems[] = new Hangar($this->getId(), $this->id, 8, array("Aurora"), 16);
-		$structs[] = $rightTop;
-
-		$rightBottomm = new Structure($this->getId(), $this->id, 90, 150, 800, 14);
-		$rightBottomm->systems[] = new Dual($this->getId(), $this->id, 30, 210, 14, array("LightPulse", "LightParticleBeam"));
-		$rightBottomm->systems[] = new Dual($this->getId(), $this->id, 30, 210, 14, array("LightPulse", "LightParticleBeam"));
-		$rightBottomm->systems[] = new Hangar($this->getId(), $this->id, 8, array("Aurora"), 16);
-		$structs[] = $rightBottomm;
+		$right = new Structure($this->getId(), $this->id, 30, 150, 800, 15);
+		$right->systems[] = new Dual($this->getId(), $this->id, 330, 150, 14, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 330, 150, 14, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new Hangar($this->getId(), $this->id, 15, array("Aurora"), 30, 2);
+		$right->systems[] = new Dual($this->getId(), $this->id, 30, 210, 14, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 30, 210, 14, array("LightPulse", "LightParticleBeam"));
+		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 12);
 		$aft->systems[] = new Dual($this->getId(), $this->id, 90, 270, 14, array("LightPulse", "LightParticleBeam"));
 		$aft->systems[] = new Dual($this->getId(), $this->id, 90, 270, 14, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $aft;
 
-		$leftBottom = new Structure($this->getId(), $this->id, 210, 270, 800, 14);
-		$leftBottom->systems[] = new Dual($this->getId(), $this->id, 150, 330, 14, array("LightPulse", "LightParticleBeam"));
-		$leftBottom->systems[] = new Dual($this->getId(), $this->id, 150, 330, 14, array("LightPulse", "LightParticleBeam"));
-		$leftBottom->systems[] = new Hangar($this->getId(), $this->id, 8, array("Aurora"), 16);
-		$structs[] = $leftBottom;
-
-		$leftTop = new Structure($this->getId(), $this->id, 270, 330, 800, 15);
-		$leftTop->systems[] = new Dual($this->getId(), $this->id, 210, 30, 14, array("LightPulse", "LightParticleBeam"));
-		$leftTop->systems[] = new Dual($this->getId(), $this->id, 210, 30, 14, array("LightPulse", "LightParticleBeam"));
-		$leftTop->systems[] = new Hangar($this->getId(), $this->id, 8, array("Aurora"), 16);
-		$structs[] = $leftTop;
+		$left = new Structure($this->getId(), $this->id, 210, 330, 800, 15);
+		$left->systems[] = new Dual($this->getId(), $this->id, 210, 30, 14, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 210, 30, 14, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Hangar($this->getId(), $this->id, 15, array("Aurora"), 30, 2);
+		$left->systems[] = new Dual($this->getId(), $this->id, 150, 330, 14, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 150, 330, 14, array("LightPulse", "LightParticleBeam"));
+		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
-			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse + 2;
+			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse + 3;
 		}
 	}
 
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1200);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(140, 4));
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(140, 4), 55, 10);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(140, 4), 650, 10);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(140, 4), 12);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(140, 4), 55);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(140, 4), 600);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(140, 4), 4);
 	}
 
 	static function getKit($faction){

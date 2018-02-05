@@ -41,13 +41,13 @@ class Octurion extends UltraHeavy {
 		$rightBottomm = new Structure($this->getId(), $this->id, 120, 180, 800, 22);
 		$rightBottomm->systems[] = new LightIon($this->getId(), $this->id, 54, 234);
 		$rightBottomm->systems[] = new LightIon($this->getId(), $this->id, 54, 234);
-		$rightBottomm->systems[] = new Hangar($this->getId(), $this->id, 10, array("Sentri", "SitaraIon"), 20);
+		$rightBottomm->systems[] = new Hangar($this->getId(), $this->id, 10, array("Sentri", "SitaraIon"), 20, 2);
 		$structs[] = $rightBottomm;
 
 		$leftBottom = new Structure($this->getId(), $this->id, 180, 240, 800, 22);
 		$leftBottom->systems[] = new LightIon($this->getId(), $this->id, 126, 306);
 		$leftBottom->systems[] = new LightIon($this->getId(), $this->id, 126, 306);
-		$leftBottom->systems[] = new Hangar($this->getId(), $this->id, 10, array("Sentri", "SitaraIon"), 20);
+		$leftBottom->systems[] = new Hangar($this->getId(), $this->id, 10, array("Sentri", "SitaraIon"), 20, 2);
 		$structs[] = $leftBottom;
 
 		$leftTop = new Structure($this->getId(), $this->id, 240, 324, 800, 24);
@@ -72,7 +72,7 @@ class Octurion extends UltraHeavy {
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 2100);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(250, 5));
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(250, 5), 85);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(250, 5), 1000, 10);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(250, 5), 1000);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(250, 5));
     }
 

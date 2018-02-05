@@ -725,7 +725,7 @@ function Game(data, userid){
 				var step;
 				var h = 1000;
 				var w = 200;
-				var x = 500;
+				var x = 300;
 				var y = h/2;
 
 				if (i % 2 == 0){

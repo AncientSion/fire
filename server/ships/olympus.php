@@ -44,7 +44,7 @@ class Olympus extends Medium {
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 500);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(70, 3));
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(70, 3), 80);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(70, 3), 600, 10);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(70, 3), 600);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(70, 3), 3);
 	}
 

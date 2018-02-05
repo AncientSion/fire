@@ -8,8 +8,8 @@ class Laser extends Weapon {
 	public $rakes;
 	public $laser = 1;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $destroyed = 0){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 		$this->boostEffect[] = new Effect("Damage", 20);
 	}
 	
@@ -31,6 +31,7 @@ class Laser extends Weapon {
 		$rakes = $this->rakes;
 		$counter = 1 + (($rakes -1) * $fire->target instanceof Mixed);
 		$systems = array();
+		$entry;
 
 		$print = "hitting --- ";
 		if ($totalDmg <= 0){return;}
@@ -39,12 +40,14 @@ class Laser extends Weapon {
 		Debug::log("fire #".$fire->id.", doDamage, weapon: ".get_class($this).", target: ".$fire->target->id." for ".$totalDmg." dmg");
 
 		while ($rakes){
-			if ($fire->target->ship){$system = $fire->target->getHitSystem($fire);}
+			if ($fire->target->ship){
+				if ($rakes < $this->rakes){$system = $fire->target->getHitSystem($fire);}
 
-			for ($i = 0; $i < sizeof($systems); $i++){
-				if ($systems[$i] == $system->id){Debug::log("Laser DOUBLE HIT, switching to PRIMARY");$system = $fire->target->primary;}
+				for ($i = 0; $i < sizeof($systems); $i++){
+					if ($systems[$i] == $system->id){Debug::log("Laser DOUBLE HIT, switching to PRIMARY");$system = $fire->target->primary;}
+				}
+				if ($system->id > 1){$systems[] = $system->id;}
 			}
-			if ($fire->target->ship && $system->id >1){$systems[] = $system->id;}
 
 			$print .= " ".get_class($system)."/".$system->id.": ".$rake." dmg, ";
 			$destroyed = 0;
@@ -72,15 +75,42 @@ class Laser extends Weapon {
 				}
 			}
 
-			$entry = new Damage(
-				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
-				$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
-			);
-			$fire->target->applyDamage($entry);
+			if (!$fire->target->squad || $rakes == $this->rakes-1){
+				$entry = new Damage(
+					-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
+					$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
+				);
+			}
+
+			if (!$fire->target->squad || !$rakes){
+				$fire->target->applyDamage($entry);
+			}
+			else if ($rakes){
+				$entry->shieldDmg += $dmg->shieldDmg; $entry->structDmg += $dmg->structDmg; $entry->armourDmg += $dmg->armourDmg; $entry->destroyed = $destroyed;
+			}
+
+			/*
+			if (!$fire->target->squad ){
+				if ($rakes == $this->rakes-1){		
+					$entry = new Damage(
+						-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
+						$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
+					);
+				}
+				else $entry->shieldDmg += $dmg->shieldDmg; $entry->structDmg += $dmg->structDmg; $entry->armourDmg += $dmg->armourDmg; $entry->destroyed = $dmg->destroyed;
+			} 
+			else {				
+				$entry = new Damage(
+					-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
+					$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
+				);
+				$fire->target->applyDamage($entry);
+			}*/
 
 		}
-		Debug::log($print);
+		//Debug::log($print);
 	}
+
 }
 
 class LightParticleBeam extends Laser {
@@ -104,8 +134,8 @@ class LightParticleBeam extends Laser {
 	public $traverse = -2;
 	public $priority = 2.5;
 	
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
@@ -129,8 +159,8 @@ class LightLaser extends Laser {
 	public $mass = 22;
 	public $traverse = -2;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
@@ -153,8 +183,8 @@ class MediumLaser extends Laser {
 	public $mass = 26;
 	public $traverse = -1;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
@@ -177,8 +207,8 @@ class HeavyLaser extends Laser {
 	public $mass = 28;
 	public $traverse = 0;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
@@ -201,8 +231,8 @@ class SuperHeavyLaser extends Laser {
 	public $mass = 43;
 	public $traverse = 1;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 		$this->boostEffect[0]->value = 0.15;
 	}
 }
@@ -227,8 +257,8 @@ class NeutronLaser extends Laser {
 	public $mass = 26;
 	public $traverse = -1;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
@@ -252,8 +282,8 @@ class NeutronAccelerator extends Laser {
 	public $mass = 23;
 	public $traverse = 0;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 

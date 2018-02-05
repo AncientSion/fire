@@ -3,15 +3,15 @@
 class WhiteStar extends Light {
 	public $name = "WhiteStar";
 	public $display = "White Star";
-	public $role = "Fast Superiority Frigate";
+	public $role = "Adv. Superiority Frigate";
 	public $faction = "Minbari Federation";
-	public static $value = 500;
-	public $cost = 500;
-	public $mass = 1880;
+	public static $value = 450;
+	public $cost = 450;
+	public $mass = 1800;
 
-	public $integrity = 550;
+	public $integrity = 500;
 	public $ep = 140;
-	public $ew = 650;
+	public $ew = 750;
 	public $power = 3;
 	public $negation = 18;
 
@@ -31,7 +31,7 @@ class WhiteStar extends Light {
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new FusionPulsar($this->getId(), $this->parentId, 300, 360);
+		$left->systems[] = new FusionPulsar($this->getId(), $this->parentId, 300, 260);
 		$structs[] = $left;
 		
 		for ($i = 0; $i < sizeof($structs); $i++){

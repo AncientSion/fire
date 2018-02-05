@@ -41,7 +41,7 @@ class Demos extends Medium {
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 575);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(90, 3));
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(90, 3), 100);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(90, 3), 750, 10);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(90, 3), 750);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(90, 3));
 	}
 

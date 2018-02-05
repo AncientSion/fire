@@ -5,7 +5,7 @@ class System {
 	public $parentId;
 	public $weapon = 0;
 	public $utility = 0;
-	public $destroyed = 0;
+	public $destroyed = false;
 	public $disabled = 0;
 	public $locked = 0;
 	public $dual = 0;
@@ -33,12 +33,13 @@ class System {
 	public $priority = 0;
 	public $usage = -3;
 	public $freeAim = 0;
+	public $width = 1;
 
-	function __construct($id, $parentId, $output = 0, $destroyed = 0){
+	function __construct($id, $parentId, $output = 0, $width = 1){
 		$this->id = $id;
 		$this->parentId = $parentId;
 		$this->output = $output;
-		$this->destroyed = $destroyed;
+		$this->width = $width;
 		$this->integrity = $this->mass*2;
 
 		$this->setArmourMod();

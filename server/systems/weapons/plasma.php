@@ -7,8 +7,8 @@ class Plasma extends Weapon {
 	public $melt = 50;
 	public $plasma = 1;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $destroyed = 0){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 		$this->boostEffect[] = new Effect("Damage loss", -25);
 		$this->boostEffect[] = new Effect("Damage", 15);
 	}
@@ -62,8 +62,8 @@ class LightPlasma extends Plasma {
 	public $maxBoost = 1;
 	public $effiency = 2;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
@@ -84,8 +84,8 @@ class MediumPlasma extends Plasma {
 	public $maxBoost = 2;
 	public $effiency = 3;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
@@ -106,8 +106,8 @@ class HeavyPlasma extends Plasma {
 	public $maxBoost = 3;
 	public $effiency = 3;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
@@ -126,8 +126,8 @@ class PlasmaShotgun extends Plasma {
 	public $traverse = 0;
 	public $powerReq = 6;
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $destroyed = false){
-        parent::__construct($id, $parentId, $start, $end, $output, $destroyed);
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 

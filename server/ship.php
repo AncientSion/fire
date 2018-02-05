@@ -437,6 +437,7 @@ class Ship {
 	}
 
 	public function applyDamage($dmg){
+		//var_export($dmg); echo "</br></br>";
 		if ($dmg->new){$this->damaged = 1;}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
@@ -640,7 +641,7 @@ class Ship {
 	}
 
 	public function getHitSystem($fire){
-		return $this->getSystemByName("Bridge");
+		//return $this->getSystemByName("Bridge");
 		//return $this->getPrimaryHitSystem();
 		//Debug::log("getHitSystem ".$this->name);
 		$roll;

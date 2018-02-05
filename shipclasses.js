@@ -1569,15 +1569,13 @@ Ship.prototype.getDmgByFire = function(fire){
 		lookup += fire.hits[i] * fire.weapon.getDmgsPerShot(fire);
 	}
 
-	if (!lookup){
-		return dmgs;
-	}
+	if (!lookup){return dmgs;}
 
 	for (var i = this.primary.damages.length-1; i >= 0; i--){
 		if (this.primary.damages[i].fireid == fire.id){					
 			dmgs.push(this.primary.damages[i]);
-			dmgs[dmgs.length-1].system = this.primary.systems[i].display;
-			dmgs[dmgs.length-1].loc = this.getSystemLocation(-1, this.primary.systems[i].name);
+			dmgs[dmgs.length-1].system = this.primary.display;
+			dmgs[dmgs.length-1].loc = this.getSystemLocation(-1, this.primary.name);
 			lookup--;
 			if (!lookup){return dmgs};
 		}
@@ -1627,11 +1625,11 @@ Ship.prototype.getSystemLocation = function(i, name){
 			case "Bridge": p = getPointInDir(this.size/6, this.getDrawFacing()+range(-10, 10), 0, 0); break;
 			case "Reactor": p = getPointInDir(-this.size/4, this.getDrawFacing()+range(-15, 15), 0, 0); break;
 			case "Sensor": p = getPointInDir(this.size/3, this.getDrawFacing()+range(-15, 15), 0, 0); break;
-			case "Engine": p = getPointInDir(-this.size/3, this.getDrawFacing()+range(-15, 15), 0, 0); break;
+			case "Engine": p = getPointInDir(-this.size/4, this.getDrawFacing()+range(-15, 15), 0, 0); break;
 		}
 	}
 	else {
-		p = getPointInDir(this.size/4, getLayoutDir(this.structures[i]) + this.getDrawFacing(), 0, 0);
+		p = getPointInDir(this.size/4, getSystemArcDir(this.structures[i]) + this.getDrawFacing(), 0, 0);
 	}
 	p.x += range(-8, 8);
 	p.y += range(-8, 8);
@@ -1648,8 +1646,8 @@ Ship.prototype.canDeploy = function(){
 Ship.prototype.getWeaponOrigin = function(id){
 	for (var i = 0; i < this.structures.length; i++){
 		if (i == this.structures.length-1 || id > this.structures[i].id && id < this.structures[i+1].id){
-			var devi = this.size / 6;
-			return getPointInDir(this.size/6 + range (-devi, devi), (getLayoutDir(this.structures[i]) + this.getDrawFacing()), 0, 0);
+			var devi = this.size / 8;
+			return getPointInDir(this.size/4 + range (-devi, devi), (getSystemArcDir(this.structures[i]) + this.getDrawFacing()), 0, 0);
 		}
 	}
 	console.log("lacking gun origin");
@@ -1835,6 +1833,7 @@ Ship.prototype.getRemEP = function(){
 		}
 	}
 	
+	if (ep < 0){console.log("EP: " + ep); ep = 0;}
 	return Math.ceil(ep);
 }
 
@@ -2141,7 +2140,6 @@ Ship.prototype.expandDiv = function(div){
 
 
 		var col = 0;
-		var colWidth = 1;
 		var max;
 		var a = this.structures[i].direction; if (a == 360){a = 0;}
 		var w;
@@ -2187,8 +2185,13 @@ Ship.prototype.expandDiv = function(div){
 		var innerFill = 0;
 		if (a == 0 || a == 180){
 			if (this.structures[i].getBoostEffect("Armour") && this.structures[i].systems.length < 3){
-				max = 2;
-				innerFill = 1;
+				if (this.structures[i].systems.length < 2){
+					max = 4; outerFill = 1;
+				}
+				else {
+					max = 2;
+					innerFill = 1;
+				}
 			}
 			else if (this.structures[i].systems.length == 1 || this.structures[i].systems.length == 2 && this.structures[i].systems[0].name != this.structures[i].systems[1].name){
 				max = 3;
@@ -2217,15 +2220,10 @@ Ship.prototype.expandDiv = function(div){
 			structTable.childNodes[0].childNodes[0].style.height = "25px";
 		}
 
+		// SYSTEMS
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			if (col == 0){
 				tr = document.createElement("tr");
-				//structTable.appendChild(tr);
-				if (this.structures[i].systems.length - j != max){
-					if ((this.structures[i].systems.length - j) *2 == max){
-						colWidth = 2;
-					}
-				}
 			}
 
 			if (outerFill){
@@ -2236,10 +2234,11 @@ Ship.prototype.expandDiv = function(div){
 			}
 
 			var td = this.structures[i].systems[j].getTableData(false);
-				td.colSpan = colWidth;
+				td.colSpan = this.structures[i].systems[j].width;
 				td = this.attachEvent(td);
 
-			col++;
+			//col++;
+			col+= this.structures[i].systems[j].width;
 			tr.appendChild(td);
 
 			if (this.id > 0 || game.turn == 1){
@@ -2323,7 +2322,7 @@ Ship.prototype.expandDiv = function(div){
 			} else offsetY -= 60 + this.structures.length*12;
 		}
 		else if (a == 180){
-			if (noFront){offsetY += 20;}
+			if (noFront){offsetY -= 20;}
 			else offsetY -= 40;
 		}
 		else if (sides >= 2 && a-90 != 0 && a-90 != 180){
@@ -2362,7 +2361,7 @@ Ship.prototype.expandDiv = function(div){
 	if (this.structures.length == 3 && this.structures[0].systems.length > 3){
 		top = $(structContainer).height() - 65;
 	}
-
+	// POWER
 	$(structContainer)
 		.append($("<div>").addClass("info").css("top", top + 5)
 			.append($("<img>").attr("src", "varIcons/mainPower.png")
@@ -2382,6 +2381,7 @@ Ship.prototype.expandDiv = function(div){
 				})));
 	}
 
+	// System options positioning
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			var s = $(this.structures[i].systems[j].element)

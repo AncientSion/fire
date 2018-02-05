@@ -221,6 +221,8 @@ else {
 			});
 
 		$("#nameWrapper").css("left", 500).css("top", 300)
+		$("#hangarLoadoutDiv").drag();
+		$("#weaponLoadoutDiv").drag();
 
 		if (window.ready){
 			$("#shipsBoughtTable").hide();

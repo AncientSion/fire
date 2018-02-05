@@ -53,7 +53,7 @@ class Hyperion extends Heavy {
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1000);
 		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(115, 4));
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(115, 4), 70);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(115, 4), 700, 15);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(115, 4), 700);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(115, 4), 6);
 	}
 

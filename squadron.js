@@ -647,7 +647,7 @@ Squadron.prototype.setSubElements = function(){
 	var h = $($(this.element).find(".structContainer")).height();
 
 	var offset = 0;
-	if (this.structures.length == 3){offset = 20;}
+	if (this.structures.length == 3){offset = 30;}
 
 	for (var i = 0; i < this.structures.length; i++){
 		$(this.element).find(".structContainer").append(this.structures[i].element);
@@ -1090,8 +1090,8 @@ Squadron.prototype.getFireDest = function(fire, isHit, num){
 		}
 	}
 	var t = this.getSystem(fire.damages[num].systemid).layout;
-	var x = t.x/2 * 0.5 + range(-8, 8);
-	var y = t.y/2 * 0.5 + range(-8, 8);
+	var x = t.x/2 * 0.5 + range(-5, 5);
+	var y = t.y/2 * 0.5 + range(-5, 5);
 	return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());
 }
 
@@ -1103,15 +1103,14 @@ Squadron.prototype.getDmgByFire = function(fire){
 		lookup += fire.hits[i] * fire.weapon.getDmgsPerShot(fire);
 	}
 
-	if (!lookup){
-		return dmgs;
-	}
+	if (!lookup){return dmgs;}
 
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = this.structures[i].damages.length-1; j >= 0; j--){
 			if (this.structures[i].damages[j].fireid == fire.id){
 				dmgs.push(this.structures[i].damages[j]);
 				dmgs[dmgs.length-1].system = (this.structures[i].display + " #" + (i+1));
+				dmgs[dmgs.length-1].loc = this.structures[i].layout;
 				lookup--;
 				if (!lookup){return dmgs};
 			}

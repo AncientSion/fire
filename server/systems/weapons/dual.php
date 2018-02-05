@@ -11,9 +11,9 @@ class Dual extends Weapon {
 	public $dualParent = 0;
 	public $powerReq = 0;
 
-	function __construct($id, $parentId, $start, $end, $mass, $modes, $destroyed = 0){
+	function __construct($id, $parentId, $start, $end, $mass, $modes, $width = 1){
 		$this->mass = $mass;
-		parent::__construct($id, $parentId, $start, $end, 0, $destroyed);
+		parent::__construct($id, $parentId, $start, $end, 0, $width);
 
 		for ($i = 0; $i < sizeof($modes); $i++){
 			$this->states[] = 0;
