@@ -34,23 +34,27 @@ class System {
 	public $usage = -3;
 	public $freeAim = 0;
 	public $width = 1;
+	public $notes = array();
 
 	function __construct($id, $parentId, $output = 0, $width = 1){
 		$this->id = $id;
 		$this->parentId = $parentId;
 		$this->output = $output;
 		$this->width = $width;
-		$this->integrity = $this->mass*2;
 
 		$this->setArmourMod();
 	}
 
 	public function setState($turn, $phase){
-		//Debug::log("set state system: ".$this->parentId);
 		$this->isDisabled($turn);
 		$this->isDestroyed();
 		$this->isPowered($turn);
 	}
+
+	public function getHitChance(){
+		return $this->integrity*3;
+	}
+
 
 	public function getActiveSystem(){
 		return $this;
@@ -187,11 +191,6 @@ class System {
 	public function setMaxDmg($fire, $dmg){
 		return $dmg;
 	}
-
-	public function getHitChance(){
-		return $this->mass*6;
-	}
-
 	public function testCrit($turn, $extra){
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){

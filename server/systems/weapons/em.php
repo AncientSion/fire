@@ -1,7 +1,7 @@
 <?php
 
 class EM extends Weapon {
-	public $type = "EM";
+	public $type = "Particle";
 	public $animation = "em";
 	public $beamWidth;
 	public $priority = 12;
@@ -72,7 +72,7 @@ class EMPulseCannon extends EM {
 	public $projSize = 2;
 	public $projSpeed = 8;
 	public $reload = 1;
-	public $mass = 14;
+	public $integrity = 28;
 	public $effiency = 2;
 	public $maxBoost = 3;
 	public $powerReq = 4;

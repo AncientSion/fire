@@ -17,6 +17,9 @@ class Weapon extends System {
 	public $pulse = 0;
 	public $usage = 2;
 
+	public $melt = 0;
+	public $dmgLoss = 0;
+
 	public $fireMode = "Standard";
 	public $dmgType = "Standard";
 
@@ -90,65 +93,6 @@ class Weapon extends System {
 
 	public function getMaxDamage(){
 		return $this->maxDmg;
-	}
-}
-
-class Hangar extends Weapon {
-	public $type = "Hangar";
-	public $name = "Hangar";
-	public $display = "Hangar";
-	public $loads = array();
-	public $reload = 2;
-	public $utility = 1;
-	public $capacity;
-	public $launchRate;
-	public $usage = -1;
-
-	function __construct($id, $parentId, $launchRate, $loads, $capacity, $width = 1){
-		parent::__construct($id, $parentId, 0, 0, 0, $width);
-		$this->launchRate = $launchRate;
-		$this->capacity = $capacity;
-		$this->powerReq = 0;
-		//$this->powerReq = floor($launchRate/3);
-		$this->mass = $capacity*5;
-		$this->integrity = $this->mass *2;
-
-
-		for ($i = 0; $i < sizeof($loads); $i++){
-			$fighter = new $loads[$i](0,0);
-			$this->loads[] = array(
-				"name" => $loads[$i],
-				"display" => $fighter->display,
-				"amount" => 0,
-				"cost" => $fighter::$value,
-				"mass" => $fighter->mass,
-				"integrity" => $fighter->integrity,
-				"launch" => 0
-			);
-		}
-	}
-
-	public function setArmourMod(){
-		$this->armourMod = 0.5;
-	}
-
-	public function getHitChance(){
-		return $this->mass/2;
-	}
-	
-	public function adjustLoad($dbLoad){
-		for ($i = 0; $i < sizeof($dbLoad); $i++){
-			for ($j = 0; $j < sizeof($this->loads); $j++){
-				if ($dbLoad[$i]["name"] == $this->loads[$j]["name"]){
-					$this->loads[$j]["amount"] = $dbLoad[$i]["amount"];
-					break; 
-				}
-			}
-		}
-	}
-
-	public function getValidEffects(){
-		return array();
 	}
 }
 

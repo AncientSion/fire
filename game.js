@@ -2165,10 +2165,16 @@ function Game(data, userid){
 						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
 							if (game.fireOrders[i].anim[j][k].p == 0){
 								drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k], 30); // projectile
-								if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){game.fireOrders[i].anim[j][k].p = 1; game.fireOrders[i].anim[j][k].n = 0; game.fireOrders[i].anim[j][k].m += 30;}
+								if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){game.fireOrders[i].anim[j][k].p = 1; game.fireOrders[i].anim[j][k].n = 0;}
 							}
 							else {
-								drawAreaEffect(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k], game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m); // mine explo
+								drawAreaEffect(
+									game.fireOrders[i].anim[j][k].tx,
+									game.fireOrders[i].anim[j][k].ty,
+									110,
+									game.fireOrders[i].anim[j][k].n,
+									game.fireOrders[i].anim[j][k].m
+								); // mine explo
 								if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
 									game.fireOrders[i].anim[j][k].done = true;
 								}
@@ -2229,7 +2235,7 @@ function Game(data, userid){
 
 					for (var j = 0; j < window.animations[i].anims.length; j++){
 						if (window.animations[i].anims[j].t[0] > 0){
-							drawunitExplo(
+							drawUnitExplo(
 								window.animations[i].anims[j].x,
 								window.animations[i].anims[j].y,
 								window.animations[i].anims[j].img,

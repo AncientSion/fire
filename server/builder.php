@@ -2,76 +2,6 @@
 
 class DmgCalc {
 
-	public static function determineDmg($weapon, $totalDmg, $negation){
-		switch ($weapon->dmgType){
-			case "Standard": return static::determineStandardDmg($weapon, $totalDmg, $negation);
-			case "Matter": return static::determineMatterDmg($weapon, $totalDmg, $negation);
-			case "Plasma": return static::determinePlasmaDmg($weapon, $totalDmg, $negation);
-		}
-	}
-
-	public static function determineStandardDmg($weapon, $totalDmg, $negation){
-		$shieldDmg = 0;
-		$armourDmg = 0;
-		$structDmg = 0;
-		$notes = "";
-
-		if ($totalDmg <= array_sum($negation)){ 
-			$notes = "b;";
-			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
-			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"])/2);
-		}
-		else {
-			$notes = "p;";
-			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
-			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
-			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
-		}
-
-		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $structDmg * $weapon->linked, $notes);
-	}
-
-	public static function determineMatterDmg($weapon, $totalDmg, $negation){
-		$shieldDmg = 0;
-		$armourDmg = 0;
-		$structDmg = 0;
-		$notes = "";
-
-		if ($totalDmg <= array_sum($negation)){ 
-			$notes = "b;";
-			$armourDmg = round($totalDmg/2);
-		}
-		else {
-			$notes = "p;";
-			$shieldDmg = round(min($totalDmg, $negation["bonus"]/2));
-			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]/2));
-			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
-		}
-		
-		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $structDmg * $weapon->linked, $notes);
-	}
-
-	public static function determinePlasmaDamage($weapon, $totalDmg, $negation){
-		$shieldDmg = 0;
-		$armourDmg = 0;
-		$structDmg = 0;
-		$notes = "";
-
-		if ($totalDmg <= array_sum($negation)){ 
-			$notes = "block;";
-			$armourDmg = round($totalDmg);
-		}
-		else {
-			$notes = "pen;";
-			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
-			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
-			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
-			$armourDmg += floor($totalDmg / 100 * $weapon->melt);
-		}
-
-		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $structDmg * $weapon->linked, $notes);
-	}
-
 	public static function doDmg($fire, $roll, $system){
 		switch ($fire->weapon->fireMode){
 			case "Standard": return static::doStandardDmg($fire, $roll, $system);
@@ -248,6 +178,78 @@ class DmgCalc {
 			}
 		}
 		//Debug::log($print);
+	}
+
+
+
+	public static function determineDmg($weapon, $totalDmg, $negation){
+		switch ($weapon->dmgType){
+			case "Standard": return static::determineStandardDmg($weapon, $totalDmg, $negation);
+			case "Matter": return static::determineMatterDmg($weapon, $totalDmg, $negation);
+			case "Plasma": return static::determinePlasmaDmg($weapon, $totalDmg, $negation);
+		}
+	}
+
+	public static function determineStandardDmg($weapon, $totalDmg, $negation){
+		$shieldDmg = 0;
+		$armourDmg = 0;
+		$structDmg = 0;
+		$notes = "";
+
+		if ($totalDmg <= array_sum($negation)){ 
+			$notes = "b;";
+			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
+			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"])/2);
+		}
+		else {
+			$notes = "p;";
+			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
+			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
+			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
+		}
+
+		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $structDmg * $weapon->linked, $notes);
+	}
+
+	public static function determineMatterDmg($weapon, $totalDmg, $negation){
+		$shieldDmg = 0;
+		$armourDmg = 0;
+		$structDmg = 0;
+		$notes = "";
+
+		if ($totalDmg <= array_sum($negation)){ 
+			$notes = "b;";
+			$armourDmg = round($totalDmg/2);
+		}
+		else {
+			$notes = "p;";
+			$shieldDmg = round(min($totalDmg, $negation["bonus"]/2));
+			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]/2));
+			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
+		}
+		
+		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $structDmg * $weapon->linked, $notes);
+	}
+
+	public static function determinePlasmaDmg($weapon, $totalDmg, $negation){
+		$shieldDmg = 0;
+		$armourDmg = 0;
+		$structDmg = 0;
+		$notes = "";
+
+		if ($totalDmg <= array_sum($negation)){ 
+			$notes = "block;";
+			$armourDmg = round($totalDmg);
+		}
+		else {
+			$notes = "pen;";
+			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
+			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
+			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
+			$armourDmg += floor($totalDmg / 100 * $weapon->melt);
+		}
+
+		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $structDmg * $weapon->linked, $notes);
 	}
 }
 

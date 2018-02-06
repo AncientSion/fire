@@ -683,7 +683,7 @@ class Ship {
 	}
 
 	public function getPrimaryHitSystem(){
-		//Debug::log("getPrimaryHitSystem: #".$this->id);
+		Debug::log("getPrimaryHitSystem: #".$this->id);
 		$roll;
 		$current = 0;
 		$total = $this->primary->getHitChance();
@@ -699,7 +699,7 @@ class Ship {
 		}
 
 		if (!sizeof($valid)){
-			//Debug::log("hitting main structure due to lack of exposed internals");
+			Debug::log("hitting main structure due to lack of exposed internals");
 			return $this->primary;
 		}
 		//else {

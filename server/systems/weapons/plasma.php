@@ -1,7 +1,7 @@
 <?php
 
 class Plasma extends Weapon {
-	public $type = "Plasma";
+	public $type = "Particle";
 	public $animColor = "darkGreen";
 	public $priority = 6;
 	public $melt = 50;
@@ -14,6 +14,7 @@ class Plasma extends Weapon {
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 		$this->boostEffect[] = new Effect("Damage loss", -25);
 		$this->boostEffect[] = new Effect("Damage", 15);
+		$this->notes = array($this->melt."% of total damage is added as EXTRA damage to armour");
 	}
 	
 	public function getDmgRangeMod($fire){
@@ -36,7 +37,7 @@ class LightPlasma extends Plasma {
 	public $projSize = 2.5;
 	public $projSpeed = 8;
 	public $reload = 2;
-	public $mass = 18;
+	public $integrity = 36;
 	public $traverse = -1;
 	public $powerReq = 3;
 	public $maxBoost = 1;
@@ -58,7 +59,7 @@ class MediumPlasma extends Plasma {
 	public $projSize = 3;
 	public $projSpeed = 6;
 	public $reload = 2;
-	public $mass = 24;
+	public $integrity = 48;
 	public $traverse = -1;
 	public $powerReq = 5;
 	public $maxBoost = 2;
@@ -80,7 +81,7 @@ class HeavyPlasma extends Plasma {
 	public $projSize = 4;
 	public $projSpeed = 5;
 	public $reload = 3;
-	public $mass = 32;
+	public $integrity = 64;
 	public $traverse = 1;
 	public $powerReq = 9;
 	public $maxBoost = 3;
@@ -102,7 +103,7 @@ class PlasmaShotgun extends Plasma {
 	public $projSize = 3;
 	public $projSpeed = 4;
 	public $reload = 2;
-	public $mass = 25;
+	public $integrity = 50;
 	public $traverse = 0;
 	public $powerReq = 6;
 

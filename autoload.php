@@ -78,7 +78,8 @@ spl_autoload_register(
                 'sensor' => '/server/systems/nonweapon.php',
                 'cyber' => '/server/systems/nonweapon.php',
                 
-                'hangar' => '/server/systems/hangar.php',
+                'bulkhead' => '/server/systems/nonweapon.php',
+                'hangar' => '/server/systems/nonweapon.php',
 
                 'dual' => '/server/systems/weapons/dual.php',
                 'dualpulseion' => '/server/systems/weapons/dual.php',

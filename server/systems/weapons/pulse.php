@@ -9,6 +9,8 @@ class Pulse extends Weapon {
 	public $grouping = 30;
 	public $pulse = 1;
 
+	public $notes = array("Full volley allocates versus same unit or system");
+
 	public $fireMode = "Pulse";
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
@@ -27,31 +29,9 @@ class LightPulse extends Pulse {
 	public $projSize = 2;
 	public $projSpeed = 10;
 	public $reload = 2;
-	public $mass = 12;
+	public $integrity = 24;
 	public $powerReq = 2;
 	public $traverse = -3;
-
-	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
-        parent::__construct($id, $parentId, $start, $end, $output, $width);
-	}
-}
-
-class LightPlasmaPulse extends LightPulse {
-	public $name = "LightPulse";
-	public $display = "35mm Pulse Cannon";
-	public $minDmg = 13;
-	public $maxDmg = 17;
-	public $accDecay = 180;
-	public $shots = 1;
-	public $animColor = "brown";
-	public $projSize = 2;
-	public $projSpeed = 10;
-	public $reload = 2;
-	public $mass = 12;
-	public $powerReq = 2;
-	public $traverse = -3;
-
-	public $dmgType = "Plasma";
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -69,7 +49,7 @@ class MediumPulse extends Pulse {
 	public $projSize = 3;
 	public $projSpeed = 8;
 	public $reload = 3;
-	public $mass = 21;
+	public $integrity = 42;
 	public $powerReq = 4;
 	public $traverse = -1;
 
@@ -89,7 +69,7 @@ class HeavyPulse extends Pulse {
 	public $projSize = 4;
 	public $projSpeed = 7;
 	public $reload = 4;
-	public $mass = 32;
+	public $integrity = 64;
 	public $powerReq = 5;
 	public $traverse = 1;
 
@@ -109,7 +89,7 @@ class FusionPulsar extends Pulse {
 	public $projSize = 2;
 	public $projSpeed = 12;
 	public $reload = 3;
-	public $mass = 18;
+	public $integrity = 36;
 	public $powerReq = 3;
 	public $traverse = -1;
 	public $basePulses = 3;
@@ -120,5 +100,38 @@ class FusionPulsar extends Pulse {
 	}
 }
 
+class LightPlasmaPulse extends LightPulse {
+	public $name = "LightPlasmaPulse";
+	public $display = "32mm Plasma Pulse Cannon";
+	public $minDmg = 15;
+	public $maxDmg = 19;
+	public $accDecay = 180;
+	public $shots = 1;
+	public $animColor = "darkGreen";
+	public $projSize = 2;
+	public $projSpeed = 10;
+	public $reload = 2;
+	public $integrity = 24;
+	public $powerReq = 2;
+	public $traverse = -1;
+
+	public $melt = 50;
+	public $dmgLoss = 18;
+
+	public $dmgType = "Plasma";
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+		$this->notes[] = ($this->melt."% of total damage is added as EXTRA damage to armour");
+	}
+	
+	public function getDmgRangeMod($fire){
+		$boost = (100 + ($this->getBoostEffect("Damage loss") * $this->getBoostLevel($fire->turn))) / 100;
+		$loss = $fire->dist * ($this->dmgLoss * $boost) / 10000;
+
+		Debug::log(get_class($this).", weapon id: ".$this->id.", boost: ".$boost.", final multi: ".(1-$loss)." @ dist: ".$fire->dist);
+		return 1-$loss;
+	}
+}
 
 ?>

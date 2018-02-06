@@ -7,12 +7,13 @@ class Laser extends Weapon {
 	public $priority = 2;
 	public $rakes;
 	public $laser = 1;
-
 	public $fireMode = "Laser";
 	public $dmgType = "Standard";
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
+
+		$this->notes = array("Damage evenly spreads over ".$this->rakes." rakes.");
 		$this->boostEffect[] = new Effect("Damage", 20);
 	}
 	
@@ -46,7 +47,7 @@ class LightParticleBeam extends Laser {
 	public $effiency = 2;
 	public $maxBoost = 1;
 	public $rakes = 1;
-	public $mass = 20;
+	public $integrity = 40;
 	public $traverse = -1;
 	public $priority = 2.5;
 	
@@ -72,7 +73,7 @@ class LightLaser extends Laser {
 	public $effiency = 2;
 	public $maxBoost = 1;
 	public $rakes = 3;
-	public $mass = 22;
+	public $integrity = 44;
 	public $traverse = -2;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
@@ -96,7 +97,7 @@ class MediumLaser extends Laser {
 	public $effiency = 3;
 	public $maxBoost = 1;
 	public $rakes = 3;
-	public $mass = 26;
+	public $integrity = 52;
 	public $traverse = -1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
@@ -120,7 +121,7 @@ class HeavyLaser extends Laser {
 	public $rakes = 3;
 	public $effiency = 4;
 	public $maxBoost = 2;
-	public $mass = 28;
+	public $integrity = 58;
 	public $traverse = 0;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
@@ -144,7 +145,7 @@ class SuperHeavyLaser extends Laser {
 	public $rakes = 4;
 	public $effiency = 6;
 	public $maxBoost = 1;
-	public $mass = 44;
+	public $integrity = 88;
 	public $traverse = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
@@ -169,7 +170,7 @@ class NeutronLaser extends Laser {
 	public $rakes = 2;
 	public $effiency = 3;
 	public $maxBoost = 1;
-	public $mass = 26;
+	public $integrity = 52;
 	public $traverse = -1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
@@ -194,7 +195,7 @@ class NeutronAccelerator extends Laser {
 	public $rakes = 1;
 	public $effiency = 3;
 	public $maxBoost = 2;
-	public $mass = 23;
+	public $integrity = 46;
 	public $traverse = 0;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){

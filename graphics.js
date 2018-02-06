@@ -2,6 +2,7 @@ window.graphics = {
 
 	images: [],
 	explos: [],
+	eMine: [],
 
 	preload: function(){
 		this.preLoadBallistics();
@@ -20,6 +21,13 @@ window.graphics = {
 				img.src = basePath + alt[i] + ".png";
 			this.explos.push(img);
 		}
+
+		var img = new Image();
+			img.src = basePath + "eMine_1.png";
+		this.eMine.push(img);
+		var img = new Image();
+			img.src = basePath + "eMine_2.png";
+		this.eMine.push(img);
 	},
 
 	preLoadVarious: function(){
@@ -235,7 +243,7 @@ function drawExplosion(weapon, anim, frames){  // 150, 150, 30
 	var mid = "";
 	var inner = "";
 
-	if (weapon instanceof EM){
+	/*if (weapon instanceof EM){
 		outer = "rgb(95,125,255)";
 		mid = "rgb(95,125,255)";
 		inner = "rgb(255,255,255)";
@@ -245,11 +253,11 @@ function drawExplosion(weapon, anim, frames){  // 150, 150, 30
 		mid = "rgb(255,200,0)";
 		inner = "rgb(150,150,0)";
 	}
-	else {
+	else {*/
 		outer ="rgb(255,225,75)";
 		mid = "rgb(255,200,0)";
 		inner = "rgb(255,0,0)";
-	}
+	//}
 
 	fxCtx.beginPath(); fxCtx.arc(anim.tx, anim.ty, sin, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = outer; fxCtx.fill();
 	fxCtx.beginPath(); fxCtx.arc(anim.tx, anim.ty, sin*0.66, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = mid; fxCtx.fill();
@@ -286,7 +294,7 @@ function drawExplosion(weapon, anim, frames){  // 150, 150, 30
 	fxCtx.setTransform(1,0,0,1,0,0);
 }
 
-function drawunitExplo(posX, posY, img, s, now, max){
+function drawUnitExplo(posX, posY, img, s, now, max){
 	now -= 1;
 	var sin = s*0.5*Math.sin(Math.PI*now/max);
 	if (sin < 0){
@@ -313,7 +321,95 @@ function drawunitExplo(posX, posY, img, s, now, max){
 	fxCtx.setTransform(1,0,0,1,0,0);
 }
 
-function drawunitExploa(x, y, s, now, max){
+function drawAreaEffect(posX, posY, s, now, max){
+	///var sin = s*0.5*Math.sin(Math.PI*now/max);
+	//if (sin < 0){
+	//	return;
+	//}	
+
+	fxCtx.translate(cam.o.x, cam.o.y);
+	fxCtx.scale(cam.z, cam.z)
+
+	var size = s / max * now;
+
+	fxCtx.globalAlpha = 1.2-now/max;
+
+	fxCtx.drawImage(graphics.eMine[1], posX -size/2, posY -size/2, size, size);
+	fxCtx.globalAlpha = 1;
+
+	fxCtx.setTransform(1,0,0,1,0,0);
+}
+
+
+function drawAreaEffecta(posX, posY, s, now, max){
+	var sin = s*0.5*Math.sin(Math.PI*now/max);
+	if (sin < 0){
+		return;
+	}	
+
+	fxCtx.translate(cam.o.x, cam.o.y);
+	fxCtx.scale(cam.z, cam.z)
+
+	var rows = 8;
+	var cols = 8;
+
+	var w = 64;
+	var h = 64;
+
+	var x = ((now/rows) - Math.floor(now/rows)) * 512;
+	var y = 512 / cols * Math.floor(now/cols) 
+
+	fxCtx.globalAlpha = 1.5 - (now/max);
+	fxCtx.drawImage(graphics.eMine[0], x, y, w, h, posX-s/2, posY-s/2, s, s);
+	fxCtx.globalAlpha = 1;
+
+	fxCtx.setTransform(1,0,0,1,0,0);
+}
+
+function drawAreaEffectb(weapon, fire, now, max){
+	//console.log(now, max);
+	fxCtx.translate(cam.o.x, cam.o.y);
+	fxCtx.scale(cam.z, cam.z)
+
+	var fraction = now/max;
+
+	fxCtx.globalAlpha = 1.2-fraction;
+	fxCtx.beginPath();
+	fxCtx.arc(fire.tx, fire.ty, weapon.aoe*fraction*0.8, 0, 2*Math.PI);
+	fxCtx.closePath();	
+	fxCtx.strokeStyle = weapon.animColor;
+	fxCtx.lineWidth = 20 * fraction;
+	fxCtx.stroke();
+
+	fxCtx.beginPath();
+	fxCtx.arc(fire.tx, fire.ty, weapon.aoe*fraction*0.6, 0, 2*Math.PI);
+	fxCtx.closePath();	
+	fxCtx.strokeStyle = "white";
+	fxCtx.globalCompositeOperation = "lighter";
+	fxCtx.lineWidth = 12 * fraction;
+	fxCtx.stroke();
+		
+	fxCtx.globalCompositeOperation = "source-over";
+
+	fxCtx.globalAlpha = 1 - fraction;
+	var sin = Math.sin(Math.PI*fraction);
+	if (sin > 0){
+		for (var i = 0; i < 30; i++){
+			var a = 360/30*i;
+			var p = getPointInDir(weapon.aoe*fraction*1.1, a, fire.tx, fire.ty);
+
+			//fxCtx.translate(p.x, p.y);
+			fxCtx.beginPath(); fxCtx.arc(p.x, p.y, sin, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = "rgb(255,225,75)"; fxCtx.fill();
+			fxCtx.beginPath(); fxCtx.arc(p.x, p.y, sin*0.66, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = "rgb(255,200,0)"; fxCtx.fill();
+			fxCtx.beginPath(); fxCtx.arc(p.x, p.y, sin*0.35, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = "rgb(255,0,0)"; fxCtx.fill();
+			//fxCtx.translate(-p.x, -p.y);
+		}
+	}
+
+	fxCtx.setTransform(1,0,0,1,0,0);
+}
+
+function drawUnitExploa(x, y, s, now, max){
 	var sin = s*0.5*Math.sin(Math.PI*now/max);
 	if (sin < 0){
 		return;
@@ -381,49 +477,6 @@ function drawBeam(weapon, fire){
 		
 	fxCtx.globalCompositeOperation = "source-over";
 	fxCtx.lineCap = "butt";
-	fxCtx.setTransform(1,0,0,1,0,0);
-}
-
-function drawAreaEffect(weapon, fire, now, max){
-	//console.log(now, max);
-	fxCtx.translate(cam.o.x, cam.o.y);
-	fxCtx.scale(cam.z, cam.z)
-
-	var fraction = now/max;
-
-	fxCtx.globalAlpha = 1.2-fraction;
-	fxCtx.beginPath();
-	fxCtx.arc(fire.tx, fire.ty, weapon.aoe*fraction*0.8, 0, 2*Math.PI);
-	fxCtx.closePath();	
-	fxCtx.strokeStyle = weapon.animColor;
-	fxCtx.lineWidth = 20 * fraction;
-	fxCtx.stroke();
-
-	fxCtx.beginPath();
-	fxCtx.arc(fire.tx, fire.ty, weapon.aoe*fraction*0.6, 0, 2*Math.PI);
-	fxCtx.closePath();	
-	fxCtx.strokeStyle = "white";
-	fxCtx.globalCompositeOperation = "lighter";
-	fxCtx.lineWidth = 12 * fraction;
-	fxCtx.stroke();
-		
-	fxCtx.globalCompositeOperation = "source-over";
-
-	fxCtx.globalAlpha = 1 - fraction;
-	var sin = Math.sin(Math.PI*fraction);
-	if (sin > 0){
-		for (var i = 0; i < 30; i++){
-			var a = 360/30*i;
-			var p = getPointInDir(weapon.aoe*fraction*1.1, a, fire.tx, fire.ty);
-
-			//fxCtx.translate(p.x, p.y);
-			fxCtx.beginPath(); fxCtx.arc(p.x, p.y, sin, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = "rgb(255,225,75)"; fxCtx.fill();
-			fxCtx.beginPath(); fxCtx.arc(p.x, p.y, sin*0.66, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = "rgb(255,200,0)"; fxCtx.fill();
-			fxCtx.beginPath(); fxCtx.arc(p.x, p.y, sin*0.35, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = "rgb(255,0,0)"; fxCtx.fill();
-			//fxCtx.translate(-p.x, -p.y);
-		}
-	}
-
 	fxCtx.setTransform(1,0,0,1,0,0);
 }
 

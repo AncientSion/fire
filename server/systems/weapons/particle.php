@@ -22,7 +22,7 @@ class LightIon extends Particle {
 	public $projSize = 2;
 	public $projSpeed = 8;
 	public $reload = 2;
-	public $mass = 14;
+	public $integrity = 28;
 	public $powerReq = 2;
 	public $traverse = -4;
 	public $effiency = 3;
@@ -45,7 +45,7 @@ class MediumIon extends LightIon {
 	public $reload = 3;
 	public $projSize = 3;
 	public $projSpeed = 7;
-	public $mass = 18;
+	public $integrity = 36;
 	public $powerReq = 3;
 	public $traverse = -1;
 	public $effiency = 3;
@@ -66,7 +66,7 @@ class HeavyIon extends MediumIon {
 	public $reload = 4;
 	public $projSize = 4;
 	public $projSpeed = 6;
-	public $mass = 32;
+	public $integrity = 64;
 	public $powerReq = 6;
 	public $traverse = 1;
 	public $effiency = 4;
@@ -87,7 +87,7 @@ class SuperHeavyIon extends HeavyIon {
 	public $reload = 6;
 	public $projSize = 4;
 	public $projSpeed = 6;
-	public $mass = 42;
+	public $integrity = 84;
 	public $powerReq = 8;
 	public $traverse = 1;
 	public $effiency = 4;
@@ -108,7 +108,7 @@ class FusionCannon extends Particle {
 	public $animColor = "green";
 	public $projSize = 3;
 	public $projSpeed = 6;
-	public $mass = 24;
+	public $integrity = 48;
 	public $powerReq = 2;
 	public $traverse = -1;
 

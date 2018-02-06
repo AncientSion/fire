@@ -30,7 +30,7 @@ function System(system){
 	this.dual = 0;
 	this.loadout = 0;
 	this.loaded = 0;
-	this.notes = [];
+	this.notes = system.notes;
 	this.launcher = 0;
 	this.hangar = 0;
 	this.validTarget = 0;
@@ -498,22 +498,41 @@ System.prototype.canUnboost = function(){
 	return false;
 }
 
-System.prototype.doUnboost = function(){
-	if (this.powers[this.powers.length-1].turn == game.turn){
-		this.powers.splice(this.powers.length-1, 1);	
-	}
-	if (this.getBoostEffect("Reload")){this.setTimeLoaded();}
-}
-
 System.prototype.doBoost = function(){
 	//console.log("boost");
 	this.powers.push({
 		id: this.powers.length+1, unitid: this.parentId, systemid: this.id,
 		turn: game.turn,type: 1, cost: this.getEffiency(), new: 1
 	})
-
 	if (this.getBoostEffect("Reload")){this.setTimeLoaded();}
+	if (this.weapon && this.dmgType == "Plasma"){
+		if (this.selected || this.highlight){
+			this.redrawSystemArc();
+		}
+	}
 }
+System.prototype.doUnboost = function(){
+	if (this.powers[this.powers.length-1].turn == game.turn){
+		this.powers.splice(this.powers.length-1, 1);	
+	}
+	if (this.getBoostEffect("Reload")){this.setTimeLoaded();}
+	if (this.weapon && this.dmgType == "Plasma"){
+		if (this.selected || this.highlight){
+			this.redrawSystemArc();
+		}
+	}
+}
+
+System.prototype.redrawSystemArc = function(){
+	fxCtx.clearRect(0, 0, res.x, res.y);
+	fxCtx.translate(cam.o.x, cam.o.y);
+	fxCtx.scale(cam.z, cam.z);
+
+	var p = game.getUnit(this.parentId);
+	this.drawSystemArc(p.getPlannedFacing(), p.rolled, p.getPlannedPos());
+	fxCtx.setTransform(1, 0, 0, 1, 0, 0);
+}
+
 System.prototype.isPowered = function(){
 	if (this.destroyed || this.disabled){
 		return false;
@@ -1557,6 +1576,8 @@ function Weapon(system){
 	this.traverse = system.traverse;
 	this.fireMode = system.fireMode;
 	this.dmgType = system.dmgType;
+	this.dmgLoss = system.dmgLoss;
+	this.melt = system.melt;
 	this.loaded;
 	this.fireOrders = [];
 	this.mount;
@@ -1783,7 +1804,7 @@ Weapon.prototype.hasFireOrder = function(){
 
 Weapon.prototype.getRangeDmgMod = function(){
 	var mod = 100;
-	if (this instanceof Laser || this instanceof Plasma){
+	if (this.fireMode == "Laser" || this.dmgType == "Plasma"){
 		mod += this.getCritEffect("Damage loss");
 		mod += this.getBoostEffect("Damage loss") * this.getBoostLevel();
 	}
@@ -1791,12 +1812,12 @@ Weapon.prototype.getRangeDmgMod = function(){
 }
 	
 Weapon.prototype.getDmgLoss = function(dist){
-	if (this instanceof Laser){
+	if (this.fireMode == "Laser"){
 		if (dist < this.optRange){
 			dist = this.optRange - dist;
 		} else dist = dist - this.optRange;
 	}
-	else if (this instanceof Plasma){
+	else if (this.dmgType == "Plasma"){
 	}
 	else return 0;
 
@@ -2009,7 +2030,7 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 			$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("Up to <span class='red'>" + this.launchRate[this.ammo] + "</span> / cycle")));
 		}
 	}
-	else if (this instanceof Laser){
+	else if (this.fireMode == "Laser"){
 		$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + game.getUnitType(this.getTraverseRating()))));
 		$(table).append($("<tr>").append($("<td>").html("Focus point")).append($("<td>").html(this.optRange + "px")));
 		$(table).append($("<tr>").append($("<td>").html("Damage loss")).append($("<td>").html(this.getDmgLoss(this.optRange+100) + "% per 100px")));
@@ -2019,7 +2040,7 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 		$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + game.getUnitType(this.getTraverseRating()))));
 
 		if (!this.tiny){
-			if (this instanceof Plasma){
+			if (this.dmgType == "Plasma"){
 				$(table).append($("<tr>").append($("<td>").html("Damage loss")).append($("<td>").html(this.getDmgLoss(100) + "% per 100px")));
 			}
 			$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").html(this.getAccuracy() + "% per 100px")));
@@ -2029,11 +2050,11 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 	if (this.linked > 1){
 		$(table).append($("<tr>").append($("<td>").html("Linked Shots")).append($("<td>").html(this.linked + " x " + this.shots)));
 	}
-	else if (this instanceof Laser){
+	else if (this.fireMode == "Laser"){
 		$(table).append($("<tr>").append($("<td>").html("Shots & Rakes")).append($("<td>").html(this.shots + " w/ " + this.output + " rakes")));
 	}
 	else if (!(this instanceof Launcher)){
-		if (this instanceof Pulse){
+		if (this.fireMode == "Pulse"){
 			$(table).append($("<tr>").append($("<td>").html("Volley")).append($("<td>").html(this.shots + " w/ " + this.basePulses + " pulses")));
 			$(table).append($("<tr>").append($("<td>").html("Burst")).append($("<td>").html(" +1 (max " + this.extraPulses + ") per " + this.grouping + "%")));
 		} else $(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").html(this.shots)));
@@ -2082,6 +2103,25 @@ Weapon.prototype.getAccuracyLoss = function(dist){
 }
 
 Weapon.prototype.getFillStyle = function(x, y, dist){
+	if (this.dmgType == "Plasma"){
+		var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);
+		var loss = this.dmgLoss * this.getRangeDmgMod();
+
+		var red = 0.7;
+			red = red/loss*10000/dist;
+		var yellow = 0.3;
+			yellow = yellow/loss*10000/dist;
+		var green = 0.0;
+			green = green/loss*10000/dist;
+
+
+		//grad.addColorStop(1, "red");
+		grad.addColorStop(Math.min(1, red), "red");
+		grad.addColorStop((Math.min(1, red) + Math.max(0, green))/2, "yellow");
+		grad.addColorStop(Math.max(0, green), "green");
+		grad.addColorStop(0, "green");				
+		return grad;
+	}
 	return "green";
 }
 
@@ -2295,81 +2335,11 @@ Particle.prototype.getAnimation = function(fire){
 	return allAnims;
 }
 
-function Matter(system){
-	Particle.call(this, system);
-	this.notes = ["Ignores 50 % of Armour"];
-}
-Matter.prototype = Object.create(Particle.prototype);
-
-function Plasma(system){
-	Particle.call(this, system);
-	this.dmgLoss = system.dmgLoss;
-	this.melt = system.melt;
-	this.notes = ["<span class='bold green'>" + this.melt + "%</span> of total damage is added as additional damage to armour"];
-}
-Plasma.prototype = Object.create(Particle.prototype);
-
-Plasma.prototype.doBoost = function(){
-	System.prototype.doBoost.call(this);
-	if (this.selected || this.highlight){
-		this.redrawSystemArc();
-	}
-}
-
-Plasma.prototype.doUnboost = function(){
-	System.prototype.doUnboost.call(this);
-	if (this.selected || this.highlight){
-		this.redrawSystemArc();
-	}
-}
-
-Plasma.prototype.redrawSystemArc = function(){
-	fxCtx.clearRect(0, 0, res.x, res.y);
-	fxCtx.translate(cam.o.x, cam.o.y);
-	fxCtx.scale(cam.z, cam.z);
-
-	var p = game.getUnit(this.parentId);
-	this.drawSystemArc(p.getPlannedFacing(), p.rolled, p.getPlannedPos());
-	fxCtx.setTransform(1, 0, 0, 1, 0, 0);
-}
-
-Plasma.prototype.getFillStyle = function(x, y, dist){
-	var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);
-	var loss = this.dmgLoss * this.getRangeDmgMod();
-
-	var red = 0.7;
-		red = red/loss*10000/dist;
-	var yellow = 0.3;
-		yellow = yellow/loss*10000/dist;
-	var green = 0.0;
-		green = green/loss*10000/dist;
-
-
-	//grad.addColorStop(1, "red");
-	grad.addColorStop(Math.min(1, red), "red");
-	grad.addColorStop((Math.min(1, red) + Math.max(0, green))/2, "yellow");
-	grad.addColorStop(Math.max(0, green), "green");
-	grad.addColorStop(0, "green");
-			
-	return grad;
-}
-
-function EM(system){
-	Particle.call(this, system);
-	this.notes = ["Does no actual damage", "Cause effects if it penetrates Armour"];
-}
-EM.prototype = Object.create(Particle.prototype);
-
-
-EM.prototype.getAnimation = function(fire){
-}
-
 function Pulse(system){
 	Particle.call(this, system);
 	this.basePulses = system.basePulses;
 	this.extraPulses = system.extraPulses;
 	this.grouping = system.grouping;
-	this.notes = ["Full volley allocates versus single system"];
 }
 Pulse.prototype = Object.create(Particle.prototype);
 
@@ -2454,7 +2424,6 @@ function Laser(system){
 	this.output = system.rakes;
 	this.beamWidth = system.beamWidth || (this.minDmg+this.maxDmg)/system.rakes/35;
 	this.exploSize = (this.minDmg+this.maxDmg)/system.rakes/30;
-	this.notes = ["Damage evenly spread over <span class='green'>" + this.output + "</span> rake(s)"];
 }
 Laser.prototype = Object.create(Weapon.prototype);
 
@@ -3204,7 +3173,6 @@ function Area(system){
 	this.aoe = system.aoe;
 	this.shots = system.shots;
 	this.maxShots = system.maxShots;
-	this.notes = system.notes;
 	this.animation = "area";
 }
 
@@ -3640,6 +3608,41 @@ Area.prototype.getResolvingFireOrders = function(){
 	return false;
 }
 
+function Bulkhead(system){
+	PrimarySystem.call(this, system);
+	this.loaded = 1;
+}
+Bulkhead.prototype = Object.create(PrimarySystem.prototype);
+
+Bulkhead.prototype.setMount = function(amount){
+	this.mount = "";
+	this.armour =  Math.floor(amount * this.armourMod);
+}
+
+Bulkhead.prototype.drawSystemArc = function(){
+	console.log(this);
+	return;
+}
+
+Bulkhead.prototype.select = function(){
+	return;
+}
+
+Bulkhead.prototype.getSystemDetailsDiv = function(){
+	var div = document.createElement("div");
+		div.id = "systemDetailsDiv";
+	var table = document.createElement("table");
+		
+	var tr = document.createElement("tr");		
+	var th = document.createElement("th");
+		th.colSpan = 2; th.innerHTML = this.display; th.style.width = "40%"; tr.appendChild(th); table.appendChild(tr);
+
+	$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
+	$(table).append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.getMount())));
+	div.appendChild(table);		
+	return div;
+}
+
 function Hangar(system){
 	PrimarySystem.call(this, system);
 	this.start = 0;
@@ -3761,7 +3764,7 @@ Hangar.prototype.getBoostDiv = function(){
 }
 
 Hangar.prototype.setMount = function(amount){
-	this.mount = ""
+	this.mount = "";
 	this.armour =  Math.floor(amount * this.armourMod);
 }
 

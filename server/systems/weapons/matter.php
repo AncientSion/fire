@@ -1,9 +1,11 @@
 <?php
 
 class Matter extends Weapon {
-	public $type = "Matter";
+	public $type = "Particle";
 	public $animation = "projectile";
 	public $priority = 4;
+
+	public $notes = array("Ignores 50% of target armour");
 
 	public $fireMode = "Standard";
 	public $dmgType = "Matter";
@@ -24,7 +26,7 @@ class MediumRailGun extends Matter {
 	public $projSize = 3;
 	public $projSpeed = 13;
 	public $reload = 3;
-	public $mass = 20;
+	public $integrity = 40;
 	public $powerReq = 3;
 	public $traverse = -1;
 
@@ -44,7 +46,7 @@ class HeavyRailGun extends Matter {
 	public $projSize = 4;
 	public $projSpeed = 10;
 	public $reload = 4;
-	public $mass = 28;
+	public $integrity = 56;
 	public $powerReq = 6;
 	public $traverse = 1;
 
