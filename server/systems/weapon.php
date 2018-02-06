@@ -17,6 +17,9 @@ class Weapon extends System {
 	public $pulse = 0;
 	public $usage = 2;
 
+	public $fireMode = "Standard";
+	public $dmgType = "Standard";
+
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		$this->start = $start;
 		$this->end = $end;
@@ -39,66 +42,9 @@ class Weapon extends System {
 		//Debug::log("target: ".$fire->target->traverse);
 		return max(0, $this->traverse - $fire->target->traverse);
 	}
-	
-	public function determineDamage($totalDmg, $negation){
-		$shieldDmg = 0;
-		$armourDmg = 0;
-		$structDmg = 0;
-		$notes = "";
-
-		if ($totalDmg <= array_sum($negation)){ 
-			$notes = "b;";
-			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
-			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"])/2);
-		}
-		else {
-			$notes = "p;";
-			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
-			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
-			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
-		}
-
-		return new Divider($shieldDmg * $this->linked, $armourDmg * $this->linked, $structDmg * $this->linked, $notes);
-	}
 
 	public function getTotalDamage($fire){
 		return floor($this->getBaseDamage($fire) * $this->getDamageMod($fire) * $this->getDmgRangeMod($fire));
-	}
-
-	public function doDamage($fire, $roll, $system){
-		//Debug::log("hitting: ".get_class($system));
-		$destroyed = 0;
-		$totalDmg = $this->getTotalDamage($fire);
-		$okSystem = 0;
-		$remInt = $system->getRemainingIntegrity();
-		
-		$negation = $fire->target->getArmour($fire, $system);
-		
-		$dmg = $this->determineDamage($totalDmg, $negation);
-		$dmg = $system->setMaxDmg($fire, $dmg);
-
-		Debug::log("fire #".$fire->id.", doDamage, weapon: ".(get_class($this)).", target #".$fire->target->id."/".$system->id."/".get_class($system).", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
-
-		if ($remInt - $dmg->structDmg < 1){
-			$destroyed = 1;
-			$name = get_class($system);
-			$okSystem = $fire->target->getOverKillSystem($fire);
-
-			if ($okSystem){
-				$dmg->overkill += abs($remInt - $dmg->structDmg);
-				$dmg->structDmg = $remInt;
-				Debug::log(" => OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$dmg->overkill." dmg");
-			}
-			else {
-				Debug::log(" => destroying non-ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg);
-			}
-		}
-
-		$entry = new Damage(
-			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
-			$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
-		);
-		$fire->target->applyDamage($entry);	
 	}
 
 	public function getAccuracyLoss($fire){

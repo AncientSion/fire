@@ -99,7 +99,7 @@ function mouseCanvasScroll(e){
 
 function handleWeaponAimEvent(shooter, target, e, pos){
 
-	if (shooter.userid == target.userid){
+	if (shooter.userid == target.userid || target && target.isDestroyed()){
 		$("#weaponAimTableWrapper").hide();
 		return;
 	}

@@ -54,12 +54,6 @@ class Warhead extends Weapon {
 		$this->traverse = $traverse;
 	}
 
-	public function doDamagef($fire, $roll, $system){
-		Debug::log("DO_DAMAGE BALLISTIC fireorder, target: ".get_class($system)." #".$system->id);
-
-		parent::doDamage($fire, $roll, $system);
-	}
-
 	public function getAccuracyLoss($dist){
 		return 0;
 	}

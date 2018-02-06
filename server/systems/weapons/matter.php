@@ -5,30 +5,14 @@ class Matter extends Weapon {
 	public $animation = "projectile";
 	public $priority = 4;
 
+	public $fireMode = "Standard";
+	public $dmgType = "Matter";
+
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
-	}	
-
-	public function determineDamage($totalDmg, $negation){
-		$shieldDmg = 0;
-		$armourDmg = 0;
-		$structDmg = 0;
-		$notes = "";
-
-		if ($totalDmg <= array_sum($negation)){ 
-			$notes = "b;";
-			$armourDmg = round($totalDmg/2);
-		}
-		else {
-			$notes = "p;";
-			$shieldDmg = round(min($totalDmg, $negation["bonus"]/2));
-			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]/2));
-			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
-		}
-		
-		return new Divider($shieldDmg * $this->linked, $armourDmg * $this->linked, $structDmg * $this->linked, $notes);
 	}
 }
+
 class MediumRailGun extends Matter {
 	public $name = "MediumRailGun";
 	public $display = "127mm Rail Gun";

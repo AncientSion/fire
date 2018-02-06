@@ -63,10 +63,6 @@ class Area extends Weapon {
 		}
 		return $newFires;
 	}
-
-	public function doDamage($fire, $roll, $system){
-		parent::doDamage($fire, $roll, $system);
-	}
 }
 
 
@@ -87,11 +83,11 @@ class EnergyMine extends Area {
 	public $dmgLoss = 50;
 	public $maxRange = 700;
 	public $aoe = 50;
-	public $dmgs = array(10, 15, 50, 25);
+	public $dmgs = array(10, 40, 50, 25);
 	public $notes;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
-		$this->notes = array("Point of impact deviates by distance", "Area of Effect", "Fixed damage based on target", "Salvo: ".$this->dmgs[0]." dmg / element", "Flight: ".$this->dmgs[1]." dmg / element", "Squadron: ".$this->dmgs[2]." dmg / element", "Ship: ".$this->dmgs[3]." dmg / system on facing side.");
+		$this->notes = array("Point of impact deviates by distance", "Area of Effect", "Fixed damage based on target", "Salvo: ".$this->dmgs[0]." dmg / unit", "Flight: ".$this->dmgs[1]." dmg / unit", "Squadron: ".$this->dmgs[2]." dmg / unit", "Ship: ".$this->dmgs[3]." dmg / system on facing side.");
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}	
 

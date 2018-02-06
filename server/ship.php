@@ -565,7 +565,7 @@ class Ship {
 			Debug::log("resolveAreaFireOrder on self: ".get_class($this).", hitting struct ".$i);
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
-				$fire->weapon->doDamage($fire, 0, $this->structures[$i]->systems[$j]);
+				DmgCalc::doDmg($fire, 0, $this->structures[$i]->systems[$j]);
 			}
 		}
 	}
@@ -608,7 +608,7 @@ class Ship {
 			}
 			else  if ($fire->rolls[$i] <= $fire->req){
 				$fire->hits++;
-				$fire->weapon->doDamage($fire, $fire->rolls[$i], $this->getHitSystem($fire));
+				DmgCalc::doDmg($fire, $fire->rolls[$i], $this->getHitSystem($fire));
 			}
 		}
 	}

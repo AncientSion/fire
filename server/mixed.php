@@ -285,7 +285,7 @@ class Mixed extends Ship {
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed){continue;}
-			$fire->weapon->doDamage($fire, 0, $this->structures[$i]);
+			DmgCalc::doDmg($fire, 0, $this->structures[$i]);
 		}
 	}
 
@@ -300,7 +300,7 @@ class Mixed extends Ship {
 				$fire->req = $fire->shooter->calculateToHit($fire);
 				if ($fire->rolls[$i] <= $fire->req){
 					$fire->hits++;
-					$fire->weapon->doDamage($fire, $fire->rolls[$i], $target);
+					DmgCalc::doDmg($fire, $fire->rolls[$i], $target);
 				}
 			}
 		}

@@ -606,7 +606,7 @@ include_once 'global.php';
 		}
 
 		if ($needCheck){
-			$this->setUnitStatus();
+			$this->setUnitsDestroyed();
 		}
 	}
 	public function handleJumpInActions(){
@@ -824,7 +824,7 @@ include_once 'global.php';
 				}
 			}
 		}
-		DBManager::app()->resolveUnitMovementDB($this->ships);
+		DBManager::app()->resolveMovementDB($this->ships);
 	}
 
 	public function handleMixedMovement(){
@@ -912,7 +912,7 @@ include_once 'global.php';
 		Debug::log("endTurn");
 		$this->freeFlights();
 		$this->setUnitRollState();
-		$this->setUnitStatus();
+		$this->setUnitsDestroyed();
 		$this->assembleEndStates();
 	}
 	
@@ -962,8 +962,8 @@ include_once 'global.php';
 		};
 	}
 
-	public function setUnitStatus(){
-		Debug::log("setUnitStatus");
+	public function setUnitsDestroyed(){
+		Debug::log("setUnitsDestroyed");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->salvo && $this->ships[$i]->mission->arrived){ // mark impacted salvo as destroyed
 				$this->ships[$i]->destroyed = true;

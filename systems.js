@@ -1555,6 +1555,8 @@ function Weapon(system){
 				];
 	this.priority = system.priority;
 	this.traverse = system.traverse;
+	this.fireMode = system.fireMode;
+	this.dmgType = system.dmgType;
 	this.loaded;
 	this.fireOrders = [];
 	this.mount;
@@ -1980,7 +1982,8 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 	var table = document.createElement("table");
 	
 	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
-	$(table).append($("<tr>").append($("<td>").html("Weapon Type").css("width", "50%")).append($("<td>").html(this.type)));
+	$(table).append($("<tr>").append($("<td>").html("Firing Mode").css("width", "50%")).append($("<td>").html(this.fireMode)));
+	$(table).append($("<tr>").append($("<td>").html("Damage Type").css("width", "50%")).append($("<td>").html(this.dmgType)));
 
 	//if (game.getUnit($(this.element).data("shipId")).ship){
 	if (game.getUnit(this.parentId).ship){
@@ -3303,35 +3306,34 @@ Area.prototype.createCombatLogEntry = function(fire){
 	}
 
 	//dmg Details
-	$(tr)
-		.data("hasDetails", 1)
-		.data("expanded", 0)
-		.data("start", start)
-		.data("end", start + depth)
+	if (fire.damages.length){
+		$(tr)
+			.data("hasDetails", 1)
+			.data("expanded", 0)
+			.data("start", start)
+			.data("end", start + depth)
 
-	for (var i in dmgs){
-		start++;
-		var sub = $("<tr>")
-			.hide()
-			.data("row", start)
-			.append($("<td>")
-				.html("HIT!")
-			)
-			.append($("<td>")
-				.attr("colSpan", 2)
-				.html(i) // system name
-			)
+		for (var i in dmgs){
+			start++;
+			var sub = $("<tr>")
+				.hide()
+				.data("row", start)
+				.append($("<td>")
+				)
+				.append($("<td>")
+					.attr("colSpan", 4)
+					.html(i + " / " +dmgs[i][2] + " hits") // system name
+				)
 
-		for (var j = 0; j < dmgs[i].length; j++){
-			if (j == 2){continue;}
-			//if (dmgs[i][1]){console.log(dmgs[i][0]);}
-			$(sub) 
-			.append($("<td>")
-				.html(dmgs[i][j])
-			)
+			for (var j = 3; j < dmgs[i].length; j++){
+				$(sub) 
+				.append($("<td>")
+					.html(dmgs[i][j])
+				)
+			}
+
+			$(log).append(sub);
 		}
-
-		$(log).append(sub);
 	}
 
 	$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
@@ -3595,6 +3597,8 @@ Area.prototype.getSystemDetailsDiv = function(){
 	}
 
 	$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
+	$(table).append($("<tr>").append($("<td>").html("Loading")).append($("<td>").addClass("loading").html(this.getTimeLoaded() + " / " + this.reload)));
+
 	if (this.boostEffect.length && !(this instanceof Launcher)){
 		$(table).append($("<tr>").css("border-top", "2px solid white").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerCost").html(this.getEffiency() + " (max: " + this.maxBoost + ")")));
 		this.getBoostEffectElements(table);

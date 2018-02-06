@@ -9,75 +9,10 @@ class Pulse extends Weapon {
 	public $grouping = 30;
 	public $pulse = 1;
 
+	public $fireMode = "Pulse";
+
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
-	}
-	
-	public function doDamage($fire, $roll, $system){		
-		$destroyed = 0;
-		$totalDmg = $this->getTotalDamage($fire);
-		$remInt = $system->getRemainingIntegrity();
-		$okSystem = 0;
-
-		$negation = $fire->target->getArmour($fire, $system);
-		$dmg = $this->determineDamage($totalDmg, $negation);
-
-		$total = 0;
-		$shield = 0;
-		$struct = 0;
-		$armour = 0;
-
-		$name = get_class($system);
-
-		$hits = $this->basePulses + min($this->extraPulses, floor(($fire->req - $fire->rolls[sizeof($fire->rolls)-1]) / $this->grouping));
-
-		Debug::log("fire #".$fire->id.", doDamage, weapon: ".(get_class($this)).", target #".$fire->target->id."/".$system->id."/".$name.", hits: ".$hits.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
-
-		for ($i = 0; $i < $hits; $i++){
-
-			if ($destroyed){
-				$total += $totalDmg;
-				$dmg->overkill += $dmg->structDmg;
-				$armour += $dmg->armourDmg;
-				//Debug::log(" => hit ".($i+1).", adding ".$dmg->structDmg."/".$dmg->armourDmg." to overkill which is now: ".$dmg->overkill." pts");
-				continue;
-			}
-			else {
-				//Debug::log("adding hit ".($i+1));
-				$total += $totalDmg;
-				$struct += $dmg->structDmg;
-				$armour += $dmg->armourDmg;
-			}
-
-			if ($struct >= $remInt){
-				$destroyed = 1;
-				$okSystem = $fire->target->getOverKillSystem($fire);
-
-				if ($okSystem){
-					//$dmg->overkill += abs($remInt - $dmg->structDmg);
-					$dmg->overkill += abs($remInt - $struct);
-					$struct -= $dmg->overkill;
-					Debug::log(" => hit ".($i+1)." DESTROYING ship target system ".$name." #".$system->id.", rem: ".$remInt.", doing TOTAL: ".$struct."/".$armour.", OK for: ".$dmg->overkill." dmg");
-					//$struct += $remInt;
-				}
-				else {
-					//Debug::log(" => DESTROYING non-ship target system");
-					break;
-				}
-			}
-		}
-
-		$dmg->structDmg = $struct;
-		$dmg->armourDmg = $armour;
-		$dmg->shieldDmg = $shield;
-
-		$dmg = $system->setMaxDmg($fire, $dmg);
-
-		$entry = new Damage(
-			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
-			$total, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
-		);
-		$fire->target->applyDamage($entry);
 	}
 }
 
@@ -95,6 +30,28 @@ class LightPulse extends Pulse {
 	public $mass = 12;
 	public $powerReq = 2;
 	public $traverse = -3;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+	}
+}
+
+class LightPlasmaPulse extends LightPulse {
+	public $name = "LightPulse";
+	public $display = "35mm Pulse Cannon";
+	public $minDmg = 13;
+	public $maxDmg = 17;
+	public $accDecay = 180;
+	public $shots = 1;
+	public $animColor = "brown";
+	public $projSize = 2;
+	public $projSpeed = 10;
+	public $reload = 2;
+	public $mass = 12;
+	public $powerReq = 2;
+	public $traverse = -3;
+
+	public $dmgType = "Plasma";
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);

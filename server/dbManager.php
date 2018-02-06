@@ -827,8 +827,6 @@
 		}
 
 		public function deployShipsDB($gameid, $ships){
-			//Debug::log("requestShipsDB, s: ".sizeof($ships));
-			//$this->setUnitStatusDB($ships);
 			$this->insertClientActions($ships);
 		}
 
@@ -1838,8 +1836,8 @@
 			}
 		}
 
-		public function resolveUnitMovementDB($ships){
-			Debug::log("resolveUnitMovementDB");
+		public function resolveMovementDB($ships){
+			Debug::log("resolveMovementDB");
 
 			$stmt = $this->connection->prepare("
 				UPDATE actions

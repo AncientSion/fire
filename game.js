@@ -876,11 +876,12 @@ function Game(data, userid){
 	this.movementAnimationFinished = function(){
 		console.log("movementAnimationFinished");
 
+		this.movementResolved();
 		if (this.events.length){
-			console.log(this.events);
+			$($("#combatLog").find("td")[0]).attr("colSpan", 8)
+			//console.log(this.events);
 			this.resolvePostMoveFire();
 		}
-		else this.movementResolved();
 	}
 
 	this.movementResolved = function(){	
@@ -901,6 +902,7 @@ function Game(data, userid){
 			);
 
 		salvoCtx.clearRect(0, 0, res.x, res.y);
+		this.drawingEvents = 1;
 		this.draw();
 	}
 
@@ -947,17 +949,9 @@ function Game(data, userid){
 					//$(this).fadeOut(200);
 				});
 		}
-		else if (n == 1){
-			this.phase = n;
-				$("#phaseSwitchDiv").click(function(){
-					game.resolveUnitMovement();
-					$(this).hide()
-				//	$(this).fadeOut(200);
-				});
-		}
 		else if (n == 2){
 				$("#phaseSwitchDiv").click(function(){
-					game.resolveUnitMovement();
+					game.resolveMovement();
 					$(this).hide()
 				//	$(this).fadeOut(200);
 				});
@@ -1217,6 +1211,10 @@ function Game(data, userid){
 				if (a.x == b.x && a.y == b.y){
 					if (this.ships[i].flight && this.ships[j].flight){
 						if (this.ships[i].mission.targetid == this.ships[j].id || this.ships[j].mission.targetid == this.ships[i].id){
+							this.ships[i].cc.push(this.ships[j].id);
+							this.ships[j].cc.push(this.ships[i].id);
+						}
+						else if (this.ships[i].getTarget().ship && this.ships[j].getTarget().ship){
 							this.ships[i].cc.push(this.ships[j].id);
 							this.ships[j].cc.push(this.ships[i].id);
 						}
@@ -1769,7 +1767,6 @@ function Game(data, userid){
 	}
 	this.resolvePostMoveFire = function(){
 		console.log("resolvePostMoveFire");
-		this.resetImageData();
 		this.getAllResolvingFireOrders();
 		this.getAreaShotDetails();
 		this.getFireAnimationDetails();
@@ -1872,7 +1869,12 @@ function Game(data, userid){
 			if (dist < fire.weapon.aoe){
 				var subDmgs = this.ships[i].getDmgByFire(fire);
 				for (var j = 0; j < subDmgs.length; j++){
-					subDmgs[j].system = "<font color='" + color + "'>" +this.ships[i].display + " #" + this.ships[i].id + "</font>  /  " + subDmgs[j].system;
+					if (this.ships[i].ship){
+						subDmgs[j].system = "<font color='" + color + "'>" +this.ships[i].display + " #" + this.ships[i].id + "</font>";
+					}
+					else {
+						subDmgs[j].system = "<font color='" + color + "'>" +this.ships[i].display + " #" + this.ships[i].id + "</font>  /  " + subDmgs[j].system;
+					}
 				}
 				dmgs = dmgs.concat(subDmgs);
 			}
@@ -3021,9 +3023,10 @@ Game.prototype.logEvents = function(){
 	}
 }
 
-Game.prototype.resolveUnitMovement = function(){
+Game.prototype.resolveMovement = function(){
 	if (aUnit){game.getUnit(aUnit).select();}
 
+	this.drawingEvents = 0;
 	this.animShip = 1;
 	this.animFlight = 0;
 	this.animSalvo = 0;
@@ -3035,6 +3038,7 @@ Game.prototype.resolveUnitMovement = function(){
 	.find(".combatLogHeader").html("Movement Log").end()
 	.find("#combatLog").children().children().remove();
 	
+	this.resetImageData();
 	this.setUnitMovementFocus();
 	this.setUnitMovementDetails();
 	this.animateUnitMovement();

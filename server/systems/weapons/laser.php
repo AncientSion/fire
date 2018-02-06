@@ -8,6 +8,9 @@ class Laser extends Weapon {
 	public $rakes;
 	public $laser = 1;
 
+	public $fireMode = "Laser";
+	public $dmgType = "Standard";
+
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 		$this->boostEffect[] = new Effect("Damage", 20);
@@ -24,93 +27,6 @@ class Laser extends Weapon {
 		Debug::log(get_class($this).", weapon id: ".$this->id.", RANGE DMG mod: ".$mod);
 		return $mod;
 	}
-
-	public function doDamage($fire, $roll, $system){
-		$totalDmg = $this->getTotalDamage($fire);
-		$okSystem = 0;
-		$rakes = $this->rakes;
-		$counter = 1 + (($rakes -1) * $fire->target instanceof Mixed);
-		$systems = array();
-		$entry;
-
-		$print = "hitting --- ";
-		if ($totalDmg <= 0){return;}
-			
-		$rake = floor($totalDmg / $this->rakes);
-		Debug::log("fire #".$fire->id.", doDamage, weapon: ".get_class($this).", target: ".$fire->target->id." for ".$totalDmg." dmg");
-
-		while ($rakes){
-			if ($fire->target->ship){
-				if ($rakes < $this->rakes){$system = $fire->target->getHitSystem($fire);}
-
-				for ($i = 0; $i < sizeof($systems); $i++){
-					if ($systems[$i] == $system->id){Debug::log("Laser DOUBLE HIT, switching to PRIMARY");$system = $fire->target->primary;}
-				}
-				if ($system->id > 1){$systems[] = $system->id;}
-			}
-
-			$print .= " ".get_class($system)."/".$system->id.": ".$rake." dmg, ";
-			$destroyed = 0;
-			$remInt = $system->getRemainingIntegrity();
-			$negation = $fire->target->getArmour($fire, $system);
-
-			$dmg = $this->determineDamage($rake, $negation);
-			$dmg = $system->setMaxDmg($fire, $dmg);
-			
-			$rakes -= $counter;
-
-			if ($remInt - $dmg->structDmg < 1){
-				$destroyed = 1;
-				$name = get_class($system);
-				$okSystem = $fire->target->getOverKillSystem($fire);
-
-				if ($okSystem){
-					$dmg->overkill += abs($remInt - $dmg->structDmg);
-					$dmg->structDmg = $remInt;
-					Debug::log(" => OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$dmg->overkill." dmg");
-				}
-				else {
-					Debug::log(" => destroying non-ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg);
-					$rakes = 0;
-				}
-			}
-
-			if (!$fire->target->squad || $rakes == $this->rakes-1){
-				$entry = new Damage(
-					-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
-					$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
-				);
-			}
-
-			if (!$fire->target->squad || !$rakes){
-				$fire->target->applyDamage($entry);
-			}
-			else if ($rakes){
-				$entry->shieldDmg += $dmg->shieldDmg; $entry->structDmg += $dmg->structDmg; $entry->armourDmg += $dmg->armourDmg; $entry->destroyed = $destroyed;
-			}
-
-			/*
-			if (!$fire->target->squad ){
-				if ($rakes == $this->rakes-1){		
-					$entry = new Damage(
-						-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
-						$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
-					);
-				}
-				else $entry->shieldDmg += $dmg->shieldDmg; $entry->structDmg += $dmg->structDmg; $entry->armourDmg += $dmg->armourDmg; $entry->destroyed = $dmg->destroyed;
-			} 
-			else {				
-				$entry = new Damage(
-					-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
-					$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
-				);
-				$fire->target->applyDamage($entry);
-			}*/
-
-		}
-		//Debug::log($print);
-	}
-
 }
 
 class LightParticleBeam extends Laser {

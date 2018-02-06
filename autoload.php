@@ -110,6 +110,8 @@ spl_autoload_register(
                 'heavypulse' => '/server/systems/weapons/pulse.php',
                 'fusionpulsar' => '/server/systems/weapons/pulse.php',
 
+                'lightplasmapulse' => '/server/systems/weapons/pulse.php',
+
                 'particle' => '/server/systems/weapons/particle.php',
                 'superlightion' => '/server/systems/weapons/particle.php',
                 'lightion' => '/server/systems/weapons/particle.php',
@@ -143,6 +145,7 @@ spl_autoload_register(
                 'debug' => '/server/debug.php',
                 'math' => '/server/math.php',
                 'builder' => '/server/builder.php',
+                'dmgcalc' => '/server/builder.php',
                 
                 'section' => '/server/classes.php',
                 'shared' => '/server/classes.php',

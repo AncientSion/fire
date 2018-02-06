@@ -432,7 +432,7 @@ Mixed.prototype.getParent = function(){
 }
 
 Mixed.prototype.setPreFireImage = function(){
-	//	console.log("setPreFireImage");
+	//console.log("Mixed setPreFireImage");
 	for (var i = 0; i < this.structures.length; i++){
 		if (!this.structures[i].draw){
 			if (this.structures[i].isDestroyedThisTurn()){
@@ -440,6 +440,7 @@ Mixed.prototype.setPreFireImage = function(){
 			}
 		}
 	}
+	this.setPreFireSize();
 	this.resetImage();
 }
 

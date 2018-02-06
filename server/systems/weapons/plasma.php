@@ -7,6 +7,9 @@ class Plasma extends Weapon {
 	public $melt = 50;
 	public $plasma = 1;
 
+	public $fireMode = "Standard";
+	public $dmgType = "Plasma";
+
 	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 		$this->boostEffect[] = new Effect("Damage loss", -25);
@@ -20,36 +23,13 @@ class Plasma extends Weapon {
 		Debug::log(get_class($this).", weapon id: ".$this->id.", boost: ".$boost.", final multi: ".(1-$loss));
 		return 1-$loss;
 	}
-
-	public function determineDamage($totalDmg, $negation){
-		$shieldDmg = 0;
-		$armourDmg = 0;
-		$structDmg = 0;
-		$notes = "";
-
-		if ($totalDmg <= array_sum($negation)){ 
-			$notes = "block;";
-			$armourDmg = round($totalDmg);
-		}
-		else {
-			$notes = "pen;";
-			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
-			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
-			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
-			$armourDmg += floor($totalDmg / 100 * $this->melt);
-		}
-
-		return new Divider($shieldDmg * $this->linked, $armourDmg * $this->linked, $structDmg * $this->linked, $notes);
-	}
 }
 
 class LightPlasma extends Plasma {
 	public $name = "LightPlasma";
 	public $display = "46mm Plasma Gun";
-	//public $minDmg = 33;
-	//public $maxDmg = 46;
-	public $minDmg = 43;
-	public $maxDmg = 56;
+	public $minDmg = 33;
+	public $maxDmg = 46;
 	public $accDecay = 120;
 	public $dmgLoss = 12;
 	public $shots = 1;

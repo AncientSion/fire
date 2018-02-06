@@ -17,13 +17,15 @@ class GQuan extends Heavy {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 22);
-		$front->systems[] = new SuperHeavyLaser($this->getId(), $this->id, 330, 30);
+		//$front->systems[] = new SuperHeavyLaser($this->getId(), $this->id, 330, 30);
 		$front->systems[] = new EnergyMine($this->getId(), $this->id, 330, 30);
-		$front->systems[] = new SuperHeavyLaser($this->getId(), $this->id, 330, 30);
+		$front->systems[] = new EnergyMine($this->getId(), $this->id, 330, 30);
+		$front->systems[] = new EnergyMine($this->getId(), $this->id, 330, 30);
+		//$front->systems[] = new SuperHeavyLaser($this->getId(), $this->id, 330, 30);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 800, 18);
-		$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 120);
+		$right->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 0, 120);
 		$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 120);
 		$right->systems[] = new LightPulse($this->getId(), $this->id, 60, 180);
 		$right->systems[] = new LightPulse($this->getId(), $this->id, 60, 180);
