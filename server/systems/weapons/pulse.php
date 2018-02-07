@@ -113,7 +113,7 @@ class LightPlasmaPulse extends LightPulse {
 	public $reload = 2;
 	public $integrity = 24;
 	public $powerReq = 2;
-	public $traverse = -1;
+	public $traverse = -3;
 
 	public $melt = 50;
 	public $dmgLoss = 18;

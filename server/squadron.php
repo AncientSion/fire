@@ -434,7 +434,6 @@ class Squaddie extends Single {
 
 	public function setNegation($main, $armourDmg){
 		$p = 1.25;
-
 		$this->parentIntegrity = round($main*1.5);
 
 		$this->parentPow = round(pow($this->parentIntegrity, $p));

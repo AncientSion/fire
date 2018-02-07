@@ -725,7 +725,7 @@ function Game(data, userid){
 				var step;
 				var h = 1000;
 				var w = 200;
-				var x = 300;
+				var dist = 500;
 				var y = h/2;
 
 				if (i % 2 == 0){
@@ -746,7 +746,7 @@ function Game(data, userid){
 
 				this.deployArea.push({
 					id: id,
-					x: 0 + (x * step),
+					x: 0 + (dist * step),
 					y: y/2*-1,
 					w: w * step,
 					h: h,

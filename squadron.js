@@ -964,12 +964,15 @@ Squadron.prototype.selectAll = function(e, id){
 }
 
 Squadron.prototype.hasNoFireOrders = function(){
+	var charged = 0;
+
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].destroyed){continue;}
 		for (var j = 0; j < this.structures[i].structures.length; j++){
 			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
 				if (!this.structures[i].structures[j].systems[k].destroyed && this.structures[i].structures[j].systems[k].weapon){
 					if (this.structures[i].structures[j].systems[k].isPowered() && this.structures[i].structures[j].systems[k].getLoadLevel() >= 1){
+						charged = 1;
 						if (this.structures[i].structures[j].systems[k].hasFireOrder()){
 							return false;
 						}
@@ -978,7 +981,9 @@ Squadron.prototype.hasNoFireOrders = function(){
 			}
 		}
 	}
-	return true;
+
+	if (charged){return true;}
+	else return false;
 }
 
 Squadron.prototype.getAllResolvingFireOrders = function(){
@@ -1057,20 +1062,20 @@ Squadron.prototype.setStats = function(){
 
 	var a = this.getBaseImpulse();
 	var b = this.getBaseEP();
-	var c = this.getImpulseChangeCost() + " / " + this.getActionCost(0);
+	var c = this.getImpulseChangeCost() + ", " + this.getActionCost(0) + ", " + this.getActionCost(1);
 	var d = this.baseTurnDelay;
 
 	$(this.element).find(".topDiv").find(".header").find("tr").each(function(i){
-		if (i == 2){
+		if (i == 3){
 			$($(this).children()[1]).html(a); return;
 		}
-		if (i == 3){
+		if (i == 4){
 			$($(this).children()[1]).html(b); return;
 		}
-		else if (i == 4){
+		else if (i == 5){
 			$($(this).children()[1]).html(c); return;
 		}
-		else if (i == 5){
+		else if (i == 6){
 			$($(this).children()[1]).html(d); return;
 		}
 	})

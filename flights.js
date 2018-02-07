@@ -50,17 +50,6 @@ Flight.prototype.setSize = function(){
 	this.size = max + 20;
 }
 
-Flight.prototype.setPreFireSize = function(){
-	console.log("setPreFireSize #" + this.id);
-	var max = 0;
-	for (var i = 0; i < this.structures.length; i++){
-		if (!this.structures[i].draw){continue;}
-		max = Math.max(max, Math.abs(this.structures[i].layout.x));
-		max = Math.max(max, Math.abs(this.structures[i].layout.y));
-	}
-	this.size = max + 20;
-}
-
 Flight.prototype.setMaxMass = function(){
 	for (var i = 0; i < this.structures.length; i++){
 		if (! this.structures[i].destroyed){

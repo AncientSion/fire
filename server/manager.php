@@ -1464,9 +1464,11 @@ include_once 'global.php';
 			case "Narn Regime";
 				$ships = array(
 					array(
-					"GQuan"
+					"GQuan",
 					),
 					array(
+					"Thentus",
+					"Shokos",
 					)
 				);
 				break;

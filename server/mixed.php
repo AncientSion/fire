@@ -104,11 +104,12 @@ class Mixed extends Ship {
 	public function addCritDB($crits){
 		for ($i = 0; $i < sizeof($crits); $i++){
 			for ($j = 0; $j < sizeof($this->structures); $j++){
-				if ($this->structures[$i]->id == $crits[$i]->systemid){
-					$this->structures[$i]->crits[] = $crits[$i];
+				if ($this->structures[$j]->id == $crits[$i]->systemid){
+					$this->structures[$j]->crits[] = $crits[$i];
 					break;
 				}
 			}
+			Debug::log("cant apply crit on mixed unit");
 		}
 		return true;
 	}

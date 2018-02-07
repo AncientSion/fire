@@ -2023,10 +2023,12 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 		$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
 	}
 
-	$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
-	if (this.boostEffect.length && !(this instanceof Launcher)){
-		$(table).append($("<tr>").css("border-top", "2px solid white").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerCost").html(this.getEffiency() + " (max: " + this.maxBoost + ")")));
-		this.getBoostEffectElements(table);
+	if (!this.tiny){
+		$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
+		if (this.boostEffect.length && !(this instanceof Launcher)){
+			$(table).append($("<tr>").css("border-top", "2px solid white").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerCost").html(this.getEffiency() + " (max: " + this.maxBoost + ")")));
+			this.getBoostEffectElements(table);
+		}
 	}
 	$(table).append($("<tr>").append($("<td>").html("Loading")).append($("<td>").addClass("loading").html(this.getTimeLoaded() + " / " + this.reload)));
 
@@ -3499,7 +3501,9 @@ Area.prototype.highlightEvent = function(){
 		salvoCtx.translate(-o.x + t.rolls[0], -o.y + t.rolls[1]);
 		salvoCtx.lineTo(0, 0);
 		salvoCtx.closePath();
+		salvoCtx.strokeStyle = "red";
 		salvoCtx.stroke();
+		salvoCtx.strokeStyle = "white";
 		salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height);
 	}
 

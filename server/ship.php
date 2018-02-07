@@ -165,7 +165,8 @@ class Ship {
 
 	public function setStructureState($turn, $phase){
 		$main = $this->primary->integrity;
-		$multi = $this->getArmourMultiplier() + 0.5;
+		//$multi = $this->getArmourMultiplier() + 1;
+		$multi = 4;
 		$elements = sizeof($this->structures);
 		$each = $main * $multi / $elements;
 
@@ -175,7 +176,7 @@ class Ship {
 	}
 
 	public function getArmourMultiplier(){
-		return pow(1.3, $this->traverse+4);
+		return pow(1.2, $this->traverse+3);
 	}
 
 	public function setProps($turn, $phase){

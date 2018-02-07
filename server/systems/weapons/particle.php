@@ -101,14 +101,14 @@ class SuperHeavyIon extends HeavyIon {
 class FusionCannon extends Particle {
 	public $name = "FusionCannon";
 	public $display = "42mm Fusion Cannon";
-	public $minDmg = 34;
-	public $maxDmg = 44;
+	public $minDmg = 28;
+	public $maxDmg = 36;
 	public $accDecay = 120;
 	public $shots = 1;
 	public $animColor = "green";
 	public $projSize = 3;
 	public $projSpeed = 6;
-	public $integrity = 48;
+	public $integrity = 34;
 	public $powerReq = 2;
 	public $traverse = -1;
 

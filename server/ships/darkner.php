@@ -9,7 +9,7 @@ class Darkner extends Light {
 	public $cost = 300;
 	public $mass = 1400;
 
-	public $integrity = 480;
+	public $integrity = 440;
 	public $ep = 100;
 	public $ew = 550;
 	public $power = 2;

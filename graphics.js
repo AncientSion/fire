@@ -7,6 +7,7 @@ window.graphics = {
 	preload: function(){
 		this.preLoadBallistics();
 		this.preloadShips();
+		this.preLoadFighters();
 		this.preLoadFactions();
 		this.preLoadVarious();
 		this.preloadExplos();
@@ -74,8 +75,6 @@ window.graphics = {
 		this.images.tethys = new Image();
 		this.images.tethys.src = "shipIcons/tethys.png";
 
-		this.images.gquan = new Image();
-		this.images.gquan.src = "shipIcons/gquan.png";
 
 		this.images.primus = new Image();
 		this.images.primus.src = "shipIcons/primus.png";
@@ -104,6 +103,17 @@ window.graphics = {
 		this.images.haven = new Image();
 		this.images.haven.src = "shipIcons/haven.png";
 
+
+		this.images.gquan = new Image();
+		this.images.gquan.src = "shipIcons/gquan.png";
+
+		this.images.thentus = new Image();
+		this.images.thentus.src = "shipIcons/thentus.png";
+
+		this.images.shokos = new Image();
+		this.images.shokos.src = "shipIcons/shokos.png";
+
+
 		this.images.sharlin = new Image();
 		this.images.sharlin.src = "shipIcons/sharlin.png";
 
@@ -112,7 +122,9 @@ window.graphics = {
 
 		this.images.whitestar = new Image();
 		this.images.whitestar.src = "shipIcons/whitestar.png";
+	},
 
+	preLoadFighters: function(){
 		this.images.aurora = new Image();
 		this.images.aurora.src = "shipIcons/aurora.png";
 

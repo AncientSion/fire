@@ -4,7 +4,7 @@ class Sharlin extends UltraHeavy {
 	public $name = "Sharlin";
 	public $display = "Sharlin";
 	public $faction = "Minbari Federation";
-	public $size =  120;
+	public $size =  110;
 	public static $value = 1900;
 	public $profile = array(0.90, 1.1);
 	public $mass = 20000;

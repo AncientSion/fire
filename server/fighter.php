@@ -144,8 +144,8 @@ class Nial extends Fighter {
 	public $display = "Nial";
 	public $faction = "Minbari Federation";
 	public static $value =  45;
-	public $mass = 30;
-	public $integrity = 33;
+	public $mass = 31;
+	public $integrity = 31;
 	public $negation = 7;
 
 	function __construct($id, $parentId){

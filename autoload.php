@@ -66,6 +66,8 @@ spl_autoload_register(
                 'crius' => '/server/ships/crius.php',
 
                 'gquan' => '/server/ships/gquan.php',
+                'thentus' => '/server/ships/thentus.php',
+                'shokos' => '/server/ships/shokos.php',
 
                 'system' => '/server/systems/system.php',
                 'weapon' => '/server/systems/weapon.php',
