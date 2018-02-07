@@ -936,6 +936,17 @@ System.prototype.getMount = function(){
 }
 
 System.prototype.getOutput = function(){
+	var ret = "";
+	for (var i = this.powers.length-1; i >= 0; i--){
+		if (this.powers[i].turn == game.turn && this.powers[i].type > 0){
+			ret += "/ ";
+		}
+		else break;
+	}
+	return ret;
+}
+
+System.prototype.getOutputa = function(){
 	var output = 0;
 	for (var i = this.powers.length-1; i >= 0; i--){
 		if (this.powers[i].turn == game.turn && this.powers[i].type > 0){
@@ -3593,9 +3604,10 @@ Area.prototype.getSystemDetailsDiv = function(){
 }
 
 Area.prototype.drawSystemArc = function(facing, rolled, pos){
+	var oldRange = game.arcRange;
 	game.arcRange = this.maxRange;
 	System.prototype.drawSystemArc.call(this, facing, rolled, pos);
-	game.arcRange = 1200;
+	game.arcRange = oldRange;
 }
 
 Area.prototype.getResolvingFireOrders = function(){

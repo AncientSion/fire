@@ -58,6 +58,10 @@ class Ship {
 	public $damaged = 0;
 	public $moveSet = 0;
 
+	public $ep = 0;
+	public $ew = 0;
+	public $power = 0;
+
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
 		$this->id = $id;
 		$this->userid = $userid;
@@ -73,9 +77,19 @@ class Ship {
 		$this->rolling = $rolling;
 		$this->rolled = $rolled;
 		$this->notes = $notes;
+	}
 
+	public function addAllSystems(){
 		$this->addPrimary();
 		$this->addStructures();
+	}
+
+	public function addPrimary(){
+		$this->primary = new Primary($this->getId(), $this->id, 0, 360, $this->integrity);
+		$this->primary->systems[] = new Bridge($this->getId(), $this->id, $this->intInt);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, $this->intInt, $this->ep);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, $this->intInt, $this->ew);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, $this->intInt);
 	}
 
 	public function getId(){
@@ -85,7 +99,7 @@ class Ship {
 
 	public function setPreviewState($turn, $phase){
 		$this->currentImpulse = $this->baseImpulse;
-		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq());
+		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq(), $this->power);
 
 		for ($j = 0; $j < sizeof($this->structures); $j++){
 			$this->structures[$j]->remainingNegation = $this->structures[$j]->negation;
@@ -121,7 +135,7 @@ class Ship {
 		}
 
 		$this->getSystemByName("Engine")->setPowerReq($this->mass);
-		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq());
+		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq(), $this->power);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$dir = Math::getArcDir($this->structures[$i]);
@@ -614,7 +628,7 @@ class Ship {
 	}
 
 	public function calculateToHit($fire){ // shooter
-		return 100;
+		//return 100;
 		$multi = 1;
 		$req = 0;
 		

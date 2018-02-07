@@ -42,11 +42,6 @@ class BattleCrab extends SuperHeavy {
 			$this->structures[] = $structs[$i];
 		}
 	}
-
-	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 4500);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, 200, +10);
-	}
 }
 
 ?>

@@ -30,7 +30,11 @@ if (isset($_SESSION["userid"])){
 
 	$element = "<table class='gameSetupStatus'";
 	$element .= "<tr>";
-	$element .= "<th colSpan=2 style='font-size: 20px; border: 2px solid white'>".$game["name"]." - ".$game["pv"]." points</th>";
+	$element .= "<th colSpan=2 style='font-size: 20px; border: 2px solid white'>".$game["name"]."</th>";
+	$element .= "</tr>";
+	$element .= "<tr>";
+	$element .= "<th colSpan=2 style='font-size: 20px; border: 2px solid white'>".$game["pv"]." PV + ".$game["reinforce"]." PV @ Turn ".$game["reinforceTurn"]."</th>";
+	$element .= "</tr>";
 
 	$element .= "<tr>";
 	$element .= "<th>Player Name</th>";
@@ -452,8 +456,7 @@ else {
 	}
 
 	function requestSquadUnit(ele){
-		if (!(game.ships[0] instanceof Ship) || !game.ships[0].squad){return;}
-		else if (game.ships[0] == undefined || !game.ships[0].squad){return;}
+		if (game.ships[0] == undefined || !game.ships[0].squad){return;}
 		else if (game.ships[0].structures.length >= 4){popup("A squadron can only contain up to 4 units.");return;}
 		else if (game.ships[0].slots[0] + $(ele).data("space") > game.ships[0].slots[1]){
 			popup("A squadron has a maximum Command Value of " + game.ships[0].slots[1]+".</br>Adding another " + $(ele).data("name") + " would bring the required Command Value to " + (game.ships[0].slots[0] + $(ele).data("space"))) ;return;}
@@ -489,6 +492,8 @@ else {
 			ship.createBaseDiv();
 			ship.previewSetup();
 			drawShipPreview();
+
+		if (ship.squad){$(ship.element).find(".ep").html("0 / 0");}
 
 		$("#game").show();
 		$(".shipDiv")
@@ -663,8 +668,8 @@ else {
 					})
 					.append($("<td>").html(data[0][i]["name"]))
 					.append($("<td>").html(""))
-					.append($("<td>").html(""))
-					.append($("<td>").html(""))
+					.append($("<td>").html(data[0][i]["ep"]))
+					.append($("<td>").html(data[0][i]["ew"]))
 					.append($("<td>").html(data[0][i]["value"]))
 					.append(
 						$("<td>").html("Add Unit")

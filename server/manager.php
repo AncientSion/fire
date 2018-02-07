@@ -16,7 +16,7 @@ include_once 'global.php';
 		public $index = 0;
 		public $faction = "";
 		public $value = 0;
-		public $wave = 11;
+		public $wave;
 
 		public $ships = array();
 		public $ballistics = array();
@@ -131,6 +131,7 @@ include_once 'global.php';
 		$this->status = $gd["status"];
 		$this->turn = $gd["turn"];
 		$this->phase = $gd["phase"];
+		$this->wave = $gd["reinforceTurn"];
 		$this->playerstatus = DBManager::app()->getPlayerStatus($this->gameid);
 	}
 
@@ -287,6 +288,7 @@ include_once 'global.php';
 					$this->reinforcements[$i]["notes"]
 				);
 
+				$unit->addAllSystems();
 				if (!$unit->ship){$unit->addSubUnits($this->reinforcements[$i]["subunits"]);}
 
 				$unit->setPreviewState($this->turn, $this->phase);	
@@ -324,6 +326,8 @@ include_once 'global.php';
 				$db[$i]["rolled"],
 				$db[$i]["notes"]
 			);
+
+			$unit->addAllSystems();
 
 			if (isset($db[$i]["subunits"])){$unit->addSubUnits($db[$i]["subunits"]);}
 			if (isset($db[$i]["mission"])){$unit->addMission($db[$i]["mission"], $this->userid, $this->turn, $this->phase);}
@@ -499,7 +503,8 @@ include_once 'global.php';
 					$data["notes"] = "";
 					$data["turn"] = $this->turn;
 					$data["userid"] = $this->playerstatus[$i]["userid"];
-					$data["eta"] = $entry[2];
+					//$data["eta"] = $entry[2];
+					$data["eta"] = 3;
 
 					if (sizeof($data["upgrades"])){
 						//Debug::log("available kits for ".$data["name"].": ".sizeof($data["upgrades"]));
@@ -542,11 +547,11 @@ include_once 'global.php';
 			}
 		}
 
-		for ($i = 0; $i < sizeof($picks); $i++){
-			if ($picks[$i]["eta"] > 3){
-				$picks[$i]["cost"] *= 1 - ($picks[$i]["eta"] - 3)/20;
-			}
-		}
+		//for ($i = 0; $i < sizeof($picks); $i++){
+		//	if ($picks[$i]["eta"] > 3){
+		//		$picks[$i]["cost"] *= 1 - ($picks[$i]["eta"] - 3)/20;
+		//	}
+		//}
 
 		if (sizeof($picks)){
 			DBManager::app()->insertReinforcements($this->gameid, $picks);
@@ -1473,9 +1478,12 @@ include_once 'global.php';
 
 		for ($i = 0; $i < sizeof($ships[0]); $i++){
 			$name = $ships[0][$i];
+			$unit = new $name(1, 0, 0, 0, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "");
 			$ship = array(
-				"name" => $ships[0][$i],
-				"value" => $name::$value,
+				"name" => $unit->name,
+				"value" => $unit::$value,
+				"ep" => $unit->ep,
+				"ew" => $unit->ew,
 				"eta" => 0
 			);
 			$return[0][] = $ship;
@@ -1545,6 +1553,7 @@ include_once 'global.php';
 		$unit;
 		if ($get["unit"] == "ship"){
 			$unit = new $get["name"](1, 1, 0, "", "", 0, 0, 0, 270, 0, 0, 0, 0, "");
+			$unit->addAllSystems();
 		}
 		elseif ($get["unit"] == "squaddie"){
 			$unit = new $get["name"]($get["index"]+1, 1);
@@ -1589,43 +1598,6 @@ include_once 'global.php';
 			$systems[$i] = new $array[$i](0, 0, 0, 0);
 		}
 		return $systems;
-	}
-
-	public function logShips($elements){
-		$data = func_get_args();
-		if ($data[0] == "all"){
-			return $this->logAllShips();
-		}
-		else {
-			$ships = array();
-			for ($i = 0; $i < sizeof($data); $i++){
-				$ships[] = new $data[$i](0,0,0,0,0,0);
-				$ships[sizeof($ships)-1]->setProps(0, 0);
-			}
-			return $ships;
-		}
-	}
-
-	public function logAllShips(){
-		$allShips = array();
-
-		$factions = $this->getFactions();
-		foreach ($factions as $faction){
-			$ships = $this->getShipsForFaction($faction);
-			foreach ($ships as $ship){
-				$allShips[] = $ship;
-			}
-		}
-
-		for ($i = 0; $i < sizeof($allShips); $i++){
-			$name = $allShips[$i]["name"];
-			$ship = new $name(0, 0, 0, 0, 0, 0);
-			$ship->setProps(1, 0);
-			$allShips[$i] = $ship;
-			continue;
-		}
-
-	return $allShips;
 	}
 
 	public function reset(){

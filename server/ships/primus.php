@@ -9,6 +9,11 @@ class Primus extends SuperHeavy {
 	public $profile = array(0.92, 1.08);
 	public $mass = 12500;
 
+	public $integrity = 1300;
+	public $intInt = 160;
+	public $ep = 70;
+	public $ew = 900;
+
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 	}
@@ -49,14 +54,6 @@ class Primus extends SuperHeavy {
 			$this->structures[] = $structs[$i];
 		}
 	}
-
-	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 1300);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(160, 4));
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(160, 4), 70);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(160, 4), 900);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(160, 4));
-    }
 
 	static function getKit($faction){
 		return array(

@@ -167,8 +167,8 @@
 			}	
 		}
 
-		public function createNewGameAndJoin($userid, $name, $pv, $rv){
-			$this->createNewGame($name, $pv, $rv);
+		public function createNewGameAndJoin($userid, $post){
+			$this->createNewGame($post);
 			$id = $this->getLastInsertId();
 			$this->createPlayerStatus($userid, $id, 0, -1, "joined");
 			if ($id){
@@ -239,24 +239,25 @@
 			return $units;
 		}
 		
-		public function createNewGame($name, $pv, $rv){
+		public function createNewGame($post){
 			$stmt = $this->connection->prepare("
 				INSERT INTO games
-					(name, status, turn, phase, pv, reinforce)
+					(name, status, turn, phase, pv, reinforce, reinforceTurn)
 				VALUES
-					(:name, :status, :turn, :phase, :pv, :reinforce)
+					(:name, :status, :turn, :phase, :pv, :reinforce, :reinforceTurn)
 			");
 			
 			$status = "open";
 			$turn = -1;
 			$phase = -1;
 			
-			$stmt->bindParam(":name", $name);
+			$stmt->bindParam(":name", $post["gameName"]);
 			$stmt->bindParam(":status", $status);
 			$stmt->bindParam(":turn", $turn);
 			$stmt->bindParam(":phase", $phase);
-			$stmt->bindParam(":pv", $pv);
-			$stmt->bindParam(":reinforce", $rv);
+			$stmt->bindParam(":pv", $post["pointValue"]);
+			$stmt->bindParam(":reinforce", $post["reinforceValue"]);
+			$stmt->bindParam(":reinforceTurn", $post["reinforceTurn"]);
 			
 			$stmt->execute();
 			

@@ -9,6 +9,12 @@ class Artemis extends Medium {
 	public $profile = array(0.93, 1.07);
 	public $mass = 3500;
 
+	public $integrity = 650;
+	public $intInt = 80;
+	public $ep = 80;
+	public $ew = 650;
+	public $power = 3;
+
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 	}
@@ -23,8 +29,8 @@ class Artemis extends Medium {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 375, 13);
-		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 240, 12);
@@ -33,8 +39,8 @@ class Artemis extends Medium {
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 375, 13);
-		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -42,14 +48,6 @@ class Artemis extends Medium {
 			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
 			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse + 3;
 		}
-	}
-
-	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 650);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(80, 3));
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(80, 3), 80);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(80, 3), 650);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(80, 3), 4);
 	}
 }
 

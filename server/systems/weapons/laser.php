@@ -141,15 +141,16 @@ class SuperHeavyLaser extends Laser {
 	public $dmgLoss = 3;
 	public $accDecay = 40;
 	public $reload = 5;
-	public $powerReq = 10;
+	public $powerReq = 8;
 	public $rakes = 4;
-	public $effiency = 6;
-	public $maxBoost = 1;
 	public $integrity = 88;
 	public $traverse = 1;
+	public $effiency = 6;
+	public $maxBoost = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
+        $this->boostEffect[0] = new Effect("Reload", -1);
 	}
 }
 

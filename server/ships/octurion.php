@@ -9,6 +9,11 @@ class Octurion extends UltraHeavy {
 	public $profile = array(0.95, 1.05);
 	public $mass = 20000;
 
+	public $integrity = 2100;
+	public $intInt = 250;
+	public $ep = 85;
+	public $ew = 1000;
+
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
 		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 	}
@@ -67,14 +72,6 @@ class Octurion extends UltraHeavy {
 			//$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse + 3;
 		}
 	}
-
-	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 2100);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(250, 5));
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(250, 5), 85);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(250, 5), 1000);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(250, 5));
-    }
 
 	static function getKit($faction){
 		return array();

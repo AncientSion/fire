@@ -9,6 +9,12 @@ class Sharlin extends UltraHeavy {
 	public $profile = array(0.90, 1.1);
 	public $mass = 20000;
 
+	public $integrity = 2000;
+	public $intInt = 225;
+	public $ep = 60;
+	public $ew = 1050;
+
+
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 	}
@@ -58,14 +64,6 @@ class Sharlin extends UltraHeavy {
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 		}
-	}
-
-	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 2000);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(225, 5));
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(225, 5), 60, 8);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(225, 5), 1050);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(225, 5), 12);
 	}
 }
 

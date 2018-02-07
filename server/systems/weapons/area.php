@@ -77,7 +77,7 @@ class EnergyMine extends Area {
 	public $projSize = 3;
 	public $projSpeed = 7;
 	public $reload = 1;
-	public $mass = 14;
+	public $integrity = 26;
 	public $powerReq = 4;
 	public $traverse = -3;
 	public $dmgLoss = 50;
@@ -92,7 +92,11 @@ class EnergyMine extends Area {
 	}	
 
 	public function setArmourMod(){
-		$this->armourMod =  0.4;
+		$this->armourMod = 0.4;
+	}
+
+	public function testCrit($turn, $extra){
+		return;
 	}
 
 	public function getBaseDamage($fire){
@@ -106,7 +110,8 @@ class EnergyMine extends Area {
 			return $this->dmgs[0];
 		}
 
-		return mt_rand($this->getMinDamage(), $this->getMaxDamage());
+		Debug::log("eMine DMG error");
+		return 1;
 	}
 }
 

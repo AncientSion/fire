@@ -9,6 +9,12 @@ class Olympus extends Medium {
 	public $profile = array(0.94, 1.06);
 	public $mass = 2500;
 
+	public $integrity = 500;
+	public $intInt = 70;
+	public $ep = 80;
+	public $ew = 600;
+	public $power = 4;
+
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 	}
@@ -23,13 +29,13 @@ class Olympus extends Medium {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 12);
-		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 14, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
 		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 10, 5), array("Naga", 6, 2)));
 
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 300, 12);
-		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 14, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 10, 5), array("Naga", 6, 2)));
 		$structs[] = $left;
 
@@ -38,14 +44,6 @@ class Olympus extends Medium {
 			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
 			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse + 3;
 		}
-	}
-
-	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 500);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(70, 3));
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(70, 3), 80);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(70, 3), 600);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(70, 3), 3);
 	}
 
 	static function getKit($faction){

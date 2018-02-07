@@ -7,7 +7,7 @@ class Launcher extends Weapon {
 	public $loads = array();
 	public $reload = 3;
 	public $ammo = -1;
-	public $mass = 22;
+	public $integrity = 44;
 	public $capacity = array();
 	public $launchRate = array();
 	public $powerReq = 2;

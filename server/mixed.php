@@ -23,6 +23,9 @@ class Mixed extends Ship {
 		$this->currentImpulse = $thrust;
 		$this->notes = $notes;
 	}
+	
+	public function addAllSystems(){
+	}
 
 	public function setProps($turn, $phase){
 		$this->setBaseStats($phase, $turn);

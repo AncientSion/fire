@@ -7,10 +7,11 @@ if (isset($_SESSION["userid"])){
 	$username = $manager->getUsername();
 	$dbManager = DBManager::app();
 
-	if (isset($_POST["gameName"]) && isset($_POST["pointValue"]) && isset($_POST["reinforceValue"])){
-		if ( $_POST["gameName"] != "" && $_POST["pointValue"] != "" && $_POST["reinforceValue"] != ""){
-			if (ctype_digit($_POST["pointValue"]) && ctype_digit($_POST["reinforceValue"])){
-				$id = $dbManager->createNewGameAndJoin($_SESSION["userid"], $_POST["gameName"], $_POST["pointValue"], $_POST["reinforceValue"]);
+	if (isset($_POST["gameName"]) && isset($_POST["pointValue"]) && isset($_POST["reinforceValue"]) && isset($_POST["reinforceTurn"])){
+		var_export($_POST);
+		if ( $_POST["gameName"] != "" && $_POST["pointValue"] != "" && $_POST["reinforceValue"] != "" && $_POST["reinforceTurn"] != ""){
+			if (ctype_digit($_POST["pointValue"]) && ctype_digit($_POST["reinforceValue"]) && ctype_digit($_POST["reinforceTurn"])){
+				$id = $dbManager->createNewGameAndJoin($_SESSION["userid"], $_POST);
 				if ($id){
 					header("Location: gameSetup.php?gameid=".$id);
 				}
@@ -204,22 +205,38 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 						<form method="post">
 							<table style="margin: auto" >
 								<tr>
+									<td width=60%>
+										Game Name
+									</td>
 									<td>
 										<input type="form" style="text-align: center" value='myGame' placeholder="Game Name" name="gameName"></input>		
 									</td>
 								</tr>
 								<tr>
 									<td>
-										<input type="form" style="text-align: center" value='3000' placeholder="Point Value" name="pointValue"></input>		
+										Point Value
+									</td>
+									<td>
+										<input type="form" style="text-align: center" value=3000 placeholder="3000" name="pointValue"></input>		
 									</td>
 								</tr>
 								<tr>
 									<td>
-										<input type="form" style="text-align: center" value ='1500' placeholder="Reinforce / Turn" name="reinforceValue"></input>		
+										Reinforcements Value
+									</td>
+									<td>
+										<input type="form" style="text-align: center" value=1500 placeholder="1500" name="reinforceValue"></input>		
 									</td>
 								</tr>
 								<tr>
 									<td>
+										Reinforcements Turn
+									</td>
+									<td>
+										<input type="form" style="text-align: center" value=11 placeholder="11" name="reinforceTurn"></input>		
+									</td>
+								</tr>
+									<td colSpan=2>
 										<input type="submit" style="width: 100%" value="Confirm and Forward"></input>	
 									</td>
 								</tr>

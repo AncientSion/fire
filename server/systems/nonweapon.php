@@ -11,11 +11,10 @@ class PrimarySystem extends System {
 	public $powerReq = 0;
 	public $internal = 1;
 
-	function __construct($id, $parentId, $subs, $output = 0, $width = 1){
+	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $output, $width);
 		$this->maxDmg = 25;
-		$this->integrity = $subs[0];
-		$this->integrity = floor($subs[0]*0.85);
+		$this->integrity = floor($integrity*0.85);
 	}
 
 	public function getHitChance(){
@@ -88,7 +87,7 @@ class Bridge extends PrimarySystem {
 	public function determineCrit($old, $new, $turn){
 		$new = round($new / $this->integrity * 100);
 		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId);
-		$mod = min(10, $new);
+		$mod = min(15, $new);
 		if ($new < 5){Debug::log("no BRIDGE crit, fail 50 % or dmg < 5"); return;}
 
 		$pick = array("Engine", "Sensor", "Reactor")[mt_rand(0, 2)];
@@ -111,8 +110,8 @@ class Reactor extends PrimarySystem {
         parent::__construct($id, $parentId, $integrity, $output, $width);
     }
 
-    public function setOutput($add){
-    	$this->output = $this->output + $add;
+    public function setOutput($use, $add){
+    	$this->output = $this->output + + $use + $add;
     }
 
 	public function applyPowerSpike($turn, $overload){
@@ -253,9 +252,8 @@ class Bulkhead extends System {
 	public $fireOrders = array();
 	public $powerReq = 0;
 
-	function __construct($id, $parentId, $mass, $output = 0, $width = 1){
-		$this->mass = $mass;
-		$this->integrity = $this->mass*2;
+	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
+		$this->integrity = $integrity;
         parent::__construct($id, $parentId, $output, $width);
 	}
 

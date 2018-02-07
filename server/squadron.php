@@ -17,6 +17,11 @@ class Squadron extends Ship {
 
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
 		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+
+	}
+	
+	public function addAllSystems(){
+		$this->addPrimary();
 	}
 
 	static function getKit($faction){
@@ -41,8 +46,8 @@ class Squadron extends Ship {
 
 	public function addPrimary(){
 		$this->primary = new Shared();
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(0, 0), 0, 0);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(0, 0), 1000, 0);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 0, 0, 0);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, 0, 1000, 0);
 	}
 	
 	public function addStructures(){

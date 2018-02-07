@@ -9,6 +9,11 @@ class Altarian extends Medium {
 	public $profile = array(0.93, 1.07);
 	public $mass = 4250;
 
+	public $integrity = 700;
+	public $intInt = 90;
+	public $ep = 120;
+	public $ew = 800;
+
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 	}
@@ -42,14 +47,6 @@ class Altarian extends Medium {
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 		}
-	}
-
-	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 700);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(90, 3));
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(90, 3), 90);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(90, 3), 750);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(90, 3));
 	}
 
 	static function getKit($faction){

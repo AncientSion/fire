@@ -9,6 +9,12 @@ class Tinashi extends Medium {
 	public $profile = array(0.9, 1.1);
 	public $mass = 4250;
 
+	public $integrity = 750;
+	public $intInt = 95;
+	public $ep = 85;
+	public $ew = 800;
+
+
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 	}
@@ -41,14 +47,6 @@ class Tinashi extends Medium {
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 		}
-	}
-
-	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 750);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(95, 3));
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(95, 3), 85);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(95, 3), 800);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(95, 3), 4);
 	}
 }
 

@@ -13,8 +13,8 @@ class Plasma extends Weapon {
 	function __construct($id, $parentId, $start, $end, $output = 0, $effiency, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 		$this->boostEffect[] = new Effect("Damage loss", -25);
-		$this->boostEffect[] = new Effect("Damage", 15);
-		$this->notes = array($this->melt."% of total damage is added as EXTRA damage to armour");
+		$this->boostEffect[] = new Effect("Damage", 10);
+		$this->notes = array($this->melt."% of total damage is added as extra damage to armour");
 	}
 	
 	public function getDmgRangeMod($fire){

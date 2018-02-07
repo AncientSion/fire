@@ -47,7 +47,7 @@ class MediumPulse extends Pulse {
 	public $shots = 1;
 	public $animColor = "brown";
 	public $projSize = 3;
-	public $projSpeed = 8;
+	public $projSpeed = 9;
 	public $reload = 3;
 	public $integrity = 42;
 	public $powerReq = 4;
@@ -67,7 +67,7 @@ class HeavyPulse extends Pulse {
 	public $shots = 1;
 	public $animColor = "brown";
 	public $projSize = 4;
-	public $projSpeed = 7;
+	public $projSpeed = 9;
 	public $reload = 4;
 	public $integrity = 64;
 	public $powerReq = 5;
@@ -120,9 +120,14 @@ class LightPlasmaPulse extends LightPulse {
 
 	public $dmgType = "Plasma";
 
+	public $maxBoost = 1;
+	public $effiency = 2;
+
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
-		$this->notes[] = ($this->melt."% of total damage is added as EXTRA damage to armour");
+		$this->boostEffect[] = new Effect("Damage loss", -25);
+		$this->boostEffect[] = new Effect("Damage", 10);
+		$this->notes = array($this->melt."% of total damage is added as extra damage to armour");
 	}
 	
 	public function getDmgRangeMod($fire){

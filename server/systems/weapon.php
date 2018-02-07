@@ -75,11 +75,11 @@ class Weapon extends System {
 	public function getDamageMod($fire){
 		$mod = 100;
 
-		$crit = $this->getCritMod("Damage", $fire->turn);
 		$boost = $this->getBoostEffect("Damage") * $this->getBoostLevel($fire->turn);
+		$crit = $this->getCritMod("Damage", $fire->turn);
 
-		$mod = $mod + $crit + $boost;
-		//if ($mod != 1){Debug::log(get_class($this).", weapon id: ".$this->id.", DAMAGE mod: ".($crit + $boost )." (crits: ".$crit.", boost: ".$boost.")");}
+		$mod = $mod + $boost - $crit;
+		if ($mod != 1){Debug::log(get_class($this).", weapon id: ".$this->id.", DAMAGE mod: ".(-$crit + $boost )." (crits: ".$crit.", boost: ".$boost.")");}
 		return $mod / 100;
 	}
 

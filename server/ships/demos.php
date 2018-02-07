@@ -9,6 +9,11 @@ class Demos extends Medium {
 	public $profile = array(0.92, 1.08);
 	public $mass = 3000;
 
+	public $integrity = 575;
+	public $intInt = 90;
+	public $ep = 100;
+	public $ew = 750;
+
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
 	}
@@ -35,14 +40,6 @@ class Demos extends Medium {
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 		}
-	}
-
-	public function addPrimary(){
-		$this->primary = new Primary($this->getId(), $this->id, 0, 360, 575);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, array(90, 3));
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, array(90, 3), 100);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, array(90, 3), 750);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, array(90, 3));
 	}
 
 	static function getKit($faction){

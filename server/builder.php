@@ -22,7 +22,7 @@ class DmgCalc {
 		$dmg = static::determineDmg($fire->weapon, $totalDmg, $negation);
 		$dmg = $system->setMaxDmg($fire, $dmg);
 
-		Debug::log("fire #".$fire->id.", doDamage, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".get_class($system).", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
+		Debug::log("fire #".$fire->id.", doStandardDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".get_class($system).", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
 
 		if ($remInt - $dmg->structDmg < 1){
 			$destroyed = 1;
@@ -64,7 +64,7 @@ class DmgCalc {
 
 		$hits = $fire->weapon->basePulses + min($fire->weapon->extraPulses, floor(($fire->req - $fire->rolls[sizeof($fire->rolls)-1]) / $fire->weapon->grouping));
 
-		Debug::log("fire #".$fire->id.", doDamage, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".$name.", hits: ".$hits.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
+		Debug::log("fire #".$fire->id.", doPulseDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".$name.", hits: ".$hits.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
 
 		for ($i = 0; $i < $hits; $i++){
 
@@ -125,7 +125,7 @@ class DmgCalc {
 		if ($totalDmg <= 0){return;}
 			
 		$rake = floor($totalDmg / $fire->weapon->rakes);
-		Debug::log("fire #".$fire->id.", doDamage, weapon: ".get_class($fire->weapon).", target: ".$fire->target->id." for ".$totalDmg." dmg");
+		Debug::log("fire #".$fire->id.", doLaserDmg, weapon: ".get_class($fire->weapon).", target: ".$fire->target->id." for ".$totalDmg." dmg");
 
 		while ($rakes){
 			if ($fire->target->ship){
