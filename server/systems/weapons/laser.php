@@ -150,7 +150,6 @@ class SuperHeavyLaser extends Laser {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
-        $this->boostEffect[0] = new Effect("Reload", -1);
 	}
 }
 

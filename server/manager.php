@@ -800,7 +800,7 @@ include_once 'global.php';
 
 		for ($i = 0; $i < sizeof($this->fires); $i++){
 			Debug::log("handling fire: ".$this->fires[$i]->id.", weapon: ".$this->fires[$i]->weapon->display);
-
+			if ($this->fires[$i]->resolved){continue;}
 			if ($this->fires[$i]->weapon instanceof Area){
 				$subFires = $this->fires[$i]->weapon->createAreaFireOrders($this, $this->fires[$i]);
 
@@ -891,8 +891,9 @@ include_once 'global.php';
 		public function handleFiringPhase(){
 			$time = -microtime(true);
 
+			$this->setUnitsDestroyed();
+
 			$this->setupShips();
-			//return false;
 
 			$this->setFireOrderDetails();
 			$this->sortFireOrders();
@@ -989,6 +990,13 @@ include_once 'global.php';
 		}
 
 		DBManager::app()->destroyUnitsDB($this->ships);
+
+		for ($i = sizeof($this->ships)-1; $i >= 0; $i--){
+			if ($this->ships[$i]->destroyed){
+				Debug::log("splicing destroyed unit");
+				array_splice($this->ships, $i, 1);
+			}
+		}
 	}
 
 	public function startNewTurn(){
@@ -1338,12 +1346,13 @@ include_once 'global.php';
 	}
 
 	public function handleResolvedFireData(){
+		Debug::log("handleResolvedFireData");
 		$newDmgs = $this->getAllNewDamages();
 		$newCrits = $this->getAllNewCrits();
 
 		DBManager::app()->updateFireOrders($this->fires);
-		DBManager::app()->insertDamageEntries($newDmgs);
-		DBManager::app()->insertCritEntries($newCrits);
+		if (sizeof($newDmgs)){DBManager::app()->insertDamageEntries($newDmgs);}
+		if (sizeof($newCrits)){DBManager::app()->insertCritEntries($newCrits);}
 	}
 
 	public function getAllNewDamages(){

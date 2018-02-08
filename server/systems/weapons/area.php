@@ -68,10 +68,10 @@ class Area extends Weapon {
 
 class EnergyMine extends Area {
 	public $name = "EnergyMine";
-	public $display = "EnergyMine";
+	public $display = "Energy Mine";
 	public $minDmg = 10;
 	public $maxDmg = 50;
-	public $accDecay = 100;
+	public $accDecay = 10;
 	public $shots = 1;
 	public $animColor = "blue";
 	public $projSize = 3;
