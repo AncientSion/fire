@@ -115,10 +115,9 @@ class LightPlasmaPulse extends LightPulse {
 	public $powerReq = 2;
 	public $traverse = -3;
 
+	public $dmgType = "Plasma";
 	public $melt = 50;
 	public $dmgLoss = 18;
-
-	public $dmgType = "Plasma";
 
 	public $maxBoost = 1;
 	public $effiency = 2;
@@ -136,6 +135,32 @@ class LightPlasmaPulse extends LightPulse {
 
 		Debug::log(get_class($this).", weapon id: ".$this->id.", boost: ".$boost.", final multi: ".(1-$loss)." @ dist: ".$fire->dist);
 		return 1-$loss;
+	}
+}
+
+
+class LightEMPulse extends LightPulse {
+	public $name = "LightEMPulse";
+	public $display = "28mm EM Pulse Cannon";
+	public $minDmg = 3;
+	public $maxDmg = 3;
+	public $accDecay = 180;
+	public $animColor = "lightBlue";
+	public $projSize = 2;
+	public $projSpeed = 8;
+	public $reload = 1;
+	public $integrity = 24;
+	public $powerReq = 3;
+	public $traverse = -3;
+	public $basePulses = 1;
+	public $extraPulses = 4;
+	public $grouping = 20;
+
+	public $em = 1;
+	public $dmgType = "EM";
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 

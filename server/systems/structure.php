@@ -141,6 +141,7 @@ class Primary {
 	public $damages = array();
 	public $remaining = 0;
 	public $damaged = 0;
+	public $emDmg = 0;
 
 	function __construct($id, $parentId, $start, $end, $integrity){
 		$this->id = $id;
@@ -164,12 +165,13 @@ class Primary {
 		if ($dmg->systemid == 1){
 			$dmg->overkill += $dmg->structDmg;
 			$dmg->structDmg = 0;
+			$this->emDmg += $dmg->emDmg;
 			$this->damages[] = $dmg;
 		}
 
 		$this->remaining -= $dmg->overkill;
 
-		if (!$this->destroyed && $this->remaining < 1){
+		if ($this->remaining < 1){
 			$this->destroyed = 1;
 		}
 	}

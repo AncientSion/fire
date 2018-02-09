@@ -114,6 +114,9 @@ spl_autoload_register(
                 'fusionpulsar' => '/server/systems/weapons/pulse.php',
 
                 'lightplasmapulse' => '/server/systems/weapons/pulse.php',
+                'lightempulse' => '/server/systems/weapons/pulse.php',
+
+                'shockcannon' => '/server/systems/weapons/particle.php',
 
                 'particle' => '/server/systems/weapons/particle.php',
                 'superlightion' => '/server/systems/weapons/particle.php',
@@ -122,9 +125,6 @@ spl_autoload_register(
                 'heavyion' => '/server/systems/weapons/particle.php',
                 'superheavyion' => '/server/systems/weapons/particle.php',
                 'fusioncannon' => '/server/systems/weapons/particle.php',
-
-                'em' => '/server/systems/weapons/em.php',
-                'empulsecannon' => '/server/systems/weapons/em.php',
 
                 'area' => '/server/systems/weapons/area.php',
                 'energymine' => '/server/systems/weapons/area.php',

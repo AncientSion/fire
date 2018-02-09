@@ -1251,6 +1251,7 @@
 							$result[$j]["shieldDmg"],
 							$result[$j]["structDmg"],
 							$result[$j]["armourDmg"],
+							$result[$j]["emDmg"],
 							$result[$j]["overkill"],
 							$result[$j]["negation"],
 							$result[$j]["destroyed"],
@@ -1439,9 +1440,9 @@
 
 			$stmt = $this->connection->prepare("
 				INSERT INTO damages 
-					( fireid, shipid, gameid, structureid, systemid, turn, roll, type, totalDmg, shieldDmg, structDmg, armourDmg, overkill, negation, destroyed, notes, new)
+					( fireid, shipid, gameid, structureid, systemid, turn, roll, type, totalDmg, shieldDmg, structDmg, armourDmg, emDmg, overkill, negation, destroyed, notes, new)
 				VALUES
-					( :fireid, :shipid, :gameid, :structureid, :systemid, :turn, :roll, :type, :totalDmg, :shieldDmg, :structDmg, :armourDmg, :overkill, :negation, :destroyed, :notes, :new)
+					( :fireid, :shipid, :gameid, :structureid, :systemid, :turn, :roll, :type, :totalDmg, :shieldDmg, :structDmg, :armourDmg, :emDmg, :overkill, :negation, :destroyed, :notes, :new)
 			");
 
 			$new = 0;
@@ -1460,6 +1461,7 @@
 				$stmt->bindParam(":shieldDmg", $damages[$i]->shieldDmg);
 				$stmt->bindParam(":structDmg", $damages[$i]->structDmg);
 				$stmt->bindParam(":armourDmg", $damages[$i]->armourDmg);
+				$stmt->bindParam(":emDmg", $damages[$i]->emDmg);
 				$stmt->bindParam(":overkill", $damages[$i]->overkill);
 				$stmt->bindParam(":negation", $damages[$i]->negation);
 				$stmt->bindParam(":destroyed", $damages[$i]->destroyed);

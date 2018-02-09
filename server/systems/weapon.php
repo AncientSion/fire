@@ -20,6 +20,8 @@ class Weapon extends System {
 	public $melt = 0;
 	public $dmgLoss = 0;
 
+	public $em = 0;
+
 	public $fireMode = "Standard";
 	public $dmgType = "Standard";
 
@@ -93,6 +95,10 @@ class Weapon extends System {
 
 	public function getMaxDamage(){
 		return $this->maxDmg;
+	}
+
+	public function postDmg($fire){
+		return false;
 	}
 }
 

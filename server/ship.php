@@ -401,7 +401,7 @@ class Ship {
 
 	public function addDamageDB($damages){
 		for ($i = 0; $i < sizeof($damages); $i++){
-			$this->applyDamage($damages[$i]);
+			$this->applyDBDamage($damages[$i]);
 		}
 	}
 
@@ -498,7 +498,41 @@ class Ship {
 			}
 		}
 
-		Debug::log("WARNING couldnt apply damage: #.".$dmg->id);
+		Debug::log("WARNING couldnt apply damage: #".$dmg->id);
+	}
+
+	public function applyDBDamage($dmg){
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($dmg->structureid == $this->structures[$i]->id){
+				$this->structures[$i]->armourDmg += $dmg->armourDmg;
+
+				if ($dmg->systemid == 1){
+					$this->primary->addDamage($dmg);
+				}
+				else {
+					for ($i = 0; $i < sizeof($this->structures); $i++){
+						if ($this->structures[$i]->id == $dmg->structureid){
+							for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+								if ($this->structures[$i]->systems[$j]->id == $dmg->systemid){
+									$this->structures[$i]->systems[$j]->addDamage($dmg);
+									$this->primary->addDamage($dmg);
+									return;
+								}
+							}
+						}
+					}
+				}
+				for ($j = 0; $j < sizeof($this->primary->systems); $j++){
+					if ($this->primary->systems[$j]->id == $dmg->systemid){
+						$this->primary->systems[$j]->addDamage($dmg);
+						$this->primary->addDamage($dmg);
+						return;
+					}
+				}
+			}
+		}
+
+		Debug::log("WARNING couldnt apply SHIP DB damage: #".$dmg->id);
 	}
 
 	public function doUnpowerAllSystems($turn){
@@ -698,7 +732,7 @@ class Ship {
 	}
 
 	public function getPrimaryHitSystem(){
-		Debug::log("getPrimaryHitSystem: #".$this->id);
+		//Debug::log("getPrimaryHitSystem: #".$this->id);
 		$roll;
 		$current = 0;
 		$total = $this->primary->getHitChance();
@@ -928,17 +962,16 @@ class Ship {
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if (!$this->structures[$i]->systems[$j]->damaged){continue;}
-				if ($this->structures[$i]->systems[$j]->destroyed){
+				else if ($this->structures[$i]->systems[$j]->destroyed){
 					if (mt_rand(0, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn, 0)){
-
 						$overload = $this->structures[$i]->systems[$j]->getPowerUsage($turn);
 						$all += $overload;
 						$this->structures[$i]->systems[$j]->damages[sizeof($this->structures[$i]->systems[$j]->damages)-1]->notes .= "o".$overload.";";
 					}
 				}
-
-				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
-				$this->structures[$i]->systems[$j]->testCrit($turn, 0);
+				else {
+					$this->structures[$i]->systems[$j]->testCrit($turn, 0);
+				}
 			}
 		}
 
@@ -949,6 +982,9 @@ class Ship {
 			$this->primary->systems[$j]->testCrit($turn, 0);
 		}
 
+		if ($this->primary->emDmg){
+			Debug::log("emDmge for unit #".$this->id.": ".$this->primary->emDmg);
+		}
 
 		if ($all){
 			Debug::log("potential total power spike for unit #".$this->id.": ".$all);

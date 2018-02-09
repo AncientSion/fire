@@ -25,6 +25,7 @@ class Single {
 	public $damaged = 0;
 	public $traverse = 0;
 	public $index = 0;
+	public $emDmg = 0;
 
 	function __construct($id, $parentId){
 		$this->id = $id;		
@@ -97,6 +98,7 @@ class Single {
 	public function addDamage($dmg){
 		$this->armourDmg += $dmg->armourDmg;
 		$this->remaining -= $dmg->overkill;
+		$this->emDmg += $dmg->emDmg;
 		$this->damages[] = $dmg;
 
 		if (!$this->destroyed && $this->remaining < 1){
@@ -141,7 +143,7 @@ class Single {
 		}
 
 		Debug::log("testCrit for: ".get_class($this).", old: ".$old.", new: ".$new.", turn: ".$turn);
-		if ($new){
+		if ($new || $this->emDmg){
 			$this->determineCrit($old, $new, $turn);
 		}
 	}
@@ -152,8 +154,9 @@ class Single {
 
 	public function determineCrit($old, $new, $turn){
 		$dmg = round(($new + $old) / $this->integrity * 100);
+		$emDmg = $this->emDmg;
 
-		Debug::log(" => FLIGHT determineCrit #".$this->parentId."/".$this->id." for ".$this->name.", old/new ".$old."/".$new." => ".$dmg);
+		Debug::log(" => FLIGHT determineCrit #".$this->parentId."/".$this->id." for ".$this->name.", old/new ".$old."/".$new." => ".$dmg.", em: ".$emDmg);
 
 		$chance = 50;
 		$tresh = 70;

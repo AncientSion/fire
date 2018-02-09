@@ -17,16 +17,17 @@ class LightIon extends Particle {
 	public $minDmg = 12;
 	public $maxDmg = 16;
 	public $accDecay = 200;
-	public $shots = 4;
-	public $animColor = "orange";
-	public $projSize = 2;
-	public $projSpeed = 8;
+	public $shots = 4;	
 	public $reload = 2;
 	public $integrity = 28;
 	public $powerReq = 2;
 	public $traverse = -4;
 	public $effiency = 3;
 	public $maxBoost = 1;
+
+	public $animColor = "orange";
+	public $projSize = 2;
+	public $projSpeed = 8;
 	
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -41,14 +42,15 @@ class MediumIon extends LightIon {
 	public $maxDmg = 38;
 	public $accDecay = 120;
 	public $shots = 2;
-	public $animColor = "orange";
 	public $reload = 3;
-	public $projSize = 3;
-	public $projSpeed = 7;
 	public $integrity = 36;
 	public $powerReq = 3;
 	public $traverse = -1;
 	public $effiency = 3;
+
+	public $animColor = "orange";
+	public $projSize = 3;
+	public $projSpeed = 7;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -62,14 +64,15 @@ class HeavyIon extends MediumIon {
 	public $maxDmg = 64;
 	public $accDecay = 90;
 	public $shots = 2;
-	public $animColor = "orange";
 	public $reload = 4;
-	public $projSize = 4;
-	public $projSpeed = 6;
 	public $integrity = 64;
 	public $powerReq = 6;
 	public $traverse = 1;
 	public $effiency = 4;
+
+	public $animColor = "orange";
+	public $projSize = 4;
+	public $projSpeed = 6;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -78,19 +81,41 @@ class HeavyIon extends MediumIon {
 
 class SuperHeavyIon extends HeavyIon {
 	public $name = "SuperHeavyIon";
-	public $display = "138mm Ion 'Emperor' Cannon";
+	public $display = "138mm Ion Cannon";
 	public $minDmg = 56;
 	public $maxDmg = 70;
 	public $accDecay = 70;
 	public $shots = 3;
-	public $animColor = "orange";
 	public $reload = 6;
-	public $projSize = 4;
-	public $projSpeed = 6;
 	public $integrity = 84;
 	public $powerReq = 8;
 	public $traverse = 1;
 	public $effiency = 4;
+
+	public $animColor = "orange";
+	public $projSize = 4;
+	public $projSpeed = 6;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+	}
+}
+
+class FusionCannon extends Particle {
+	public $name = "FusionCannon";
+	public $display = "42mm Fusion Cannon";
+	public $minDmg = 34;
+	public $maxDmg = 42;
+	public $accDecay = 120;
+	public $shots = 1;
+	public $reload = 2;
+	public $integrity = 34;
+	public $powerReq = 2;
+	public $traverse = -1;
+
+	public $animColor = "green";
+	public $projSize = 3;
+	public $projSpeed = 7;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -98,19 +123,23 @@ class SuperHeavyIon extends HeavyIon {
 }
 
 
-class FusionCannon extends Particle {
-	public $name = "FusionCannon";
-	public $display = "42mm Fusion Cannon";
-	public $minDmg = 28;
-	public $maxDmg = 36;
+class ShockCannon extends Particle {
+	public $name = "ShockCannon";
+	public $display = "42mm Shock Cannon";
+	public $minDmg = 8;
+	public $maxDmg = 12;
 	public $accDecay = 120;
 	public $shots = 1;
-	public $animColor = "green";
-	public $projSize = 3;
-	public $projSpeed = 6;
+	public $reload = 2;
 	public $integrity = 34;
 	public $powerReq = 2;
 	public $traverse = -1;
+
+	public $animColor = "lightBlue";
+	public $projSize = 3;
+	public $projSpeed = 7;
+
+	public $dmgType = "EM";
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);

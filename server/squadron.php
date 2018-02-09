@@ -352,6 +352,17 @@ class Squadron extends Ship {
 		Debug::log("WARNING couldnt apply damage #".$dmg->id.", looking for unit #".$dmg->shipid."/".$dmg->systemid);
 	}
 
+	public function applyDBDamage($dmg){
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($dmg->systemid == $this->structures[$i]->id){
+				$this->structures[$i]->addDamage($dmg);
+				return;
+			}
+		}
+
+		Debug::log("WARNING couldnt apply DB damage #".$dmg->id.", looking for unit #".$dmg->shipid."/".$dmg->systemid);
+	}
+
 	public function getSystemByName($name){
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 			if ($this->primary->systems[$i]->name == $name){
@@ -492,8 +503,10 @@ class Squaddie extends Single {
 
 	public function determineCrit($old, $new, $turn){
 		$dmg = round(($new + $old) / $this->integrity * 100);
+		$emDmg = $this->emDmg;
+		$effects = $this->getValidEffects();
 
-		Debug::log(" => SQUAD determineCrit #".$this->parentId."/".$this->id." for ".$this->name.", old/new ".$old."/".$new." => ".$dmg);
+		Debug::log(" => SQUAD determineCrit #".$this->parentId."/".$this->id." for ".$this->name.", old/new ".$old."/".$new." => ".$dmg.", em: ".$emDmg);
 
 		$chance = 50;
 		$tresh = 70;

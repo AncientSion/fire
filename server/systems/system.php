@@ -35,6 +35,7 @@ class System {
 	public $freeAim = 0;
 	public $width = 1;
 	public $notes = array();
+	public $emDmg = 0;
 
 	function __construct($id, $parentId, $output = 0, $width = 1){
 		$this->id = $id;
@@ -199,7 +200,7 @@ class System {
 			} else $old += $this->damages[$i]->structDmg;
 		}
 
-		if ($new){
+		if ($new || $this->emDmg){
 			$this->determineCrit($old, $new, $turn);
 		}
 	}
@@ -214,9 +215,10 @@ class System {
 	public function determineCrit($old, $new, $turn){
 		$new = round($new / $this->integrity * 100);
 		$old = round($old / $this->integrity * 100);
+		$emDmg = $this->emDmg;
 		$effects = $this->getValidEffects();
 
-		//Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", new: ".$new.", old: ".$old);
+		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", new: ".$new.", old: ".$old.", em: ".$emDmg);
 
 		if ($new > 80 && mt_rand(0, 100) < $new){
 			//Debug::log(" ====> critical hit, disabling system ".get_class($this));
@@ -243,6 +245,7 @@ class System {
 	public function addDamage($dmg){
 		if ($dmg->new){$this->damaged = 1;}
 		$this->damages[] = $dmg;
+		$this->emDmg += $dmg->emDmg;
 		if ($dmg->destroyed){
 			$this->destroyed = true;
 		}

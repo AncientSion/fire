@@ -174,6 +174,7 @@ function Damage(data){
 	this.shieldDmg = data.shieldDmg;
 	this.structDmg = data.structDmg;
 	this.armourDmg = data.armourDmg;
+	this.armourDmg = data.emDmg;
 	this.overkill = data.overkill;
 	this.negation = data.negation;
 	this.destroyed = data.destroyed;

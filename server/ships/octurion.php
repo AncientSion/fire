@@ -21,7 +21,7 @@ class Octurion extends UltraHeavy {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 324, 36, 1050, 26);
+		$front = new Structure($this->getId(), $this->id, 324, 36, 1050, 24);
 		$front->systems[] = new LightIon($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new SuperHeavyIon($this->getId(), $this->id, 315, 45);
 		$front->systems[] = new SuperHeavyIon($this->getId(), $this->id, 315, 45);
@@ -32,7 +32,7 @@ class Octurion extends UltraHeavy {
 		$front->systems[] = new SuperHeavyIon($this->getId(), $this->id, 360, 90);
 		$structs[] = $front;
 
-		$rightTop = new Structure($this->getId(), $this->id, 36, 120, 800, 24);
+		$rightTop = new Structure($this->getId(), $this->id, 36, 120, 800, 22);
 		$rightTop->systems[] = new MediumIon($this->getId(), $this->id, 0, 180);
 		$rightTop->systems[] = new LightIon($this->getId(), $this->id, 30, 150);
 		$rightTop->systems[] = new MediumIon($this->getId(), $this->id, 30, 150);
@@ -55,7 +55,7 @@ class Octurion extends UltraHeavy {
 		$leftBottom->systems[] = new Hangar($this->getId(), $this->id, 10, array("Sentri", "SitaraIon"), 20, 2);
 		$structs[] = $leftBottom;
 
-		$leftTop = new Structure($this->getId(), $this->id, 240, 324, 800, 24);
+		$leftTop = new Structure($this->getId(), $this->id, 240, 324, 800, 22);
 		$leftTop->systems[] = new LightIon($this->getId(), $this->id, 180, 360);
 		$leftTop->systems[] = new MediumIon($this->getId(), $this->id, 210, 330);
 		$leftTop->systems[] = new MediumIon($this->getId(), $this->id, 210, 330);
