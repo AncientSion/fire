@@ -10,7 +10,7 @@ class Olympus extends Medium {
 	public $mass = 2500;
 
 	public $integrity = 500;
-	public $intInt = 70;
+	public $vitalHP = 70;
 	public $ep = 80;
 	public $ew = 600;
 	public $power = 4;
@@ -22,19 +22,19 @@ class Olympus extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 350, 13);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 350, 14);
 		$front->systems[] = new MediumPulse($this->getId(), $this->id, 240, 360);
 		$front->systems[] = new MediumLaser($this->getId(), $this->id, 315, 45);
 		$front->systems[] = new MediumPulse($this->getId(), $this->id, 0, 120);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 12);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 13);
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
 		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 10, 5), array("Naga", 6, 2)));
 
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 300, 12);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 300, 13);
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 10, 5), array("Naga", 6, 2)));
 		$structs[] = $left;

@@ -16,7 +16,7 @@ class LightIon extends Particle {
 	public $display = "32mm Ion Bolter Array";
 	public $minDmg = 12;
 	public $maxDmg = 16;
-	public $accDecay = 200;
+	public $accDecay = 180;
 	public $shots = 4;	
 	public $reload = 2;
 	public $integrity = 28;
@@ -84,7 +84,7 @@ class SuperHeavyIon extends HeavyIon {
 	public $display = "138mm Ion Cannon";
 	public $minDmg = 56;
 	public $maxDmg = 70;
-	public $accDecay = 70;
+	public $accDecay = 90;
 	public $shots = 3;
 	public $reload = 6;
 	public $integrity = 84;
@@ -122,7 +122,6 @@ class FusionCannon extends Particle {
 	}
 }
 
-
 class ShockCannon extends Particle {
 	public $name = "ShockCannon";
 	public $display = "42mm Shock Cannon";
@@ -139,10 +138,12 @@ class ShockCannon extends Particle {
 	public $projSize = 3;
 	public $projSpeed = 7;
 
+	public $em = 1;
 	public $dmgType = "EM";
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
+		$this->notes = array("Does no structural damage", "Damage can cause critical effects");
 	}
 }
 

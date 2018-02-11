@@ -10,7 +10,7 @@ class Saggitarius extends Medium {
 	public $mass = 4500;
 
 	public $integrity = 800;
-	public $intInt = 95;
+	public $vitalHP = 95;
 	public $ep = 65;
 	public $ew = 650;
 	public $power = 3;

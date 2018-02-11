@@ -100,6 +100,9 @@ window.graphics = {
 		this.images.vorchan = new Image();
 		this.images.vorchan.src = "shipIcons/vorchan.png";
 
+		this.images.mograth = new Image();
+		this.images.mograth.src = "shipIcons/mograth.png";
+
 		this.images.haven = new Image();
 		this.images.haven.src = "shipIcons/haven.png";
 

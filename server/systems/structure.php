@@ -160,12 +160,14 @@ class Primary {
 	}
 
 	public function addDamage($dmg){
-		if ($dmg->new){$this->damaged = 1;}
+		if ($dmg->new){
+			$this->damaged = 1;
+			if ($dmg->systemid == 1){$this->emDmg += $dmg->emDmg;}
+		}
 
 		if ($dmg->systemid == 1){
 			$dmg->overkill += $dmg->structDmg;
 			$dmg->structDmg = 0;
-			$this->emDmg += $dmg->emDmg;
 			$this->damages[] = $dmg;
 		}
 

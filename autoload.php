@@ -42,9 +42,10 @@ spl_autoload_register(
                 'gorith' => '/server/fighter.php',
                 'frazi' => '/server/fighter.php',
 
-                'haven' => '/server/ships/haven.php',
                 'vorchan' => '/server/ships/vorchan.php',
+                'mograth' => '/server/ships/mograth.php',
                 'vorchar' => '/server/ships/vorchar.php',
+                'haven' => '/server/ships/haven.php',
                 'darkner' => '/server/ships/darkner.php',
                 'altarian' => '/server/ships/altarian.php',
                 'demos' => '/server/ships/demos.php',
@@ -114,6 +115,7 @@ spl_autoload_register(
                 'fusionpulsar' => '/server/systems/weapons/pulse.php',
 
                 'lightplasmapulse' => '/server/systems/weapons/pulse.php',
+                'mediumplasmapulse' => '/server/systems/weapons/pulse.php',
                 'lightempulse' => '/server/systems/weapons/pulse.php',
 
                 'shockcannon' => '/server/systems/weapons/particle.php',

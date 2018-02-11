@@ -10,7 +10,7 @@ class Avenger extends Heavy {
 	public $mass = 12500;
 
 	public $integrity = 1200;
-	public $intInt = 140;
+	public $vitalHP = 140;
 	public $ep = 55;
 	public $ew = 600;
 	public $power = 5;

@@ -1602,6 +1602,7 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 	var shots = 0;
 	var hits = 0;
 	var armour = 0;
+	var em = 0;
 	var system = 0;
 	var struct = 0;
 	var req = fire.req.slice();
@@ -1625,8 +1626,9 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 
 	for (var i = 0; i < fire.damages.length; i++){
 		armour += fire.damages[i].armourDmg;
+		em += fire.damages[i].emDmg
 		system += fire.damages[i].structDmg;
-		struct += fire.damages[i].overkill;
+		struct += fire.damages[i].overkill;;
 	}
 
 	var tr = document.createElement("tr");
@@ -1691,9 +1693,9 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 	}
 	else {
 		$(tr)
-			.append($("<td>").html(armour))
-			.append($("<td>").html(system ? system : ""))
-			.append($("<td>").html(struct))
+			.append($("<td>").html(armour ? armour : ""))
+			.append($("<td>").html(system || em || ""))
+			.append($("<td>").html(struct ? struct : ""))
 	}
 
 	$(log).append(tr);
@@ -1717,9 +1719,10 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 			dmgs[fire.damages[i].system][1] += Math.floor(fire.damages[i].notes[fire.damages[i].notes.length-1].slice(1, fire.damages[i].notes[fire.damages[i].notes.length-1].len));
 		}
 
-		dmgs[fire.damages[i].system][3] += fire.damages[i].armourDmg
-		dmgs[fire.damages[i].system][4] += fire.damages[i].structDmg
-		dmgs[fire.damages[i].system][5] += fire.damages[i].overkill
+		dmgs[fire.damages[i].system][3] += fire.damages[i].armourDmg;
+		dmgs[fire.damages[i].system][4] += fire.damages[i].structDmg;
+		dmgs[fire.damages[i].system][4] += fire.damages[i].emDmg;
+		dmgs[fire.damages[i].system][5] += fire.damages[i].overkill;
 	}
 
 	for (var i in dmgs){
@@ -1778,7 +1781,7 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 		for (var j = 0; j < dmgs[i].length; j++){
 			$(sub) 
 			.append($("<td>")
-				.html(dmgs[i][j])
+				.html(dmgs[i][j] ? dmgs[i][j] : "")
 			)
 		}
 
@@ -2286,6 +2289,7 @@ Particle.prototype.getAnimation = function(fire){
 	var speed = this.projSpeed;
 	var delay = 25 * this.shots;
 	var shotInterval = 25 - (this.shots *4);
+	if (this.name == "MediumIon"){shotInterval = 10;}
 	var cc = 0;
 	var hits = 0;
 	var fraction = 1;
@@ -3571,7 +3575,8 @@ Area.prototype.getSystemDetailsDiv = function(){
 	var table = document.createElement("table");
 	
 	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
-	$(table).append($("<tr>").append($("<td>").html("Weapon Type").css("width", "60%")).append($("<td>").html(this.type)));
+	$(table).append($("<tr>").append($("<td>").html("Firing Mode").css("width", "60%")).append($("<td>").html(this.fireMode)));
+	$(table).append($("<tr>").append($("<td>").html("Damage Type").css("width", "60%")).append($("<td>").html(this.dmgType)));
 
 
 	if (game.getUnit(this.parentId).ship){

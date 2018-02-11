@@ -184,7 +184,7 @@ Mixed.prototype.getStringHitChance = function(){
 	}
 	if (min == max){
 		return ("Base Hit: " + min + "%");
-	} else return ("Base Hit: " + min + " - " + max + "%");
+	} else return ("Base Hit: " + min + "% - " + max + "%");
 }
 
 Mixed.prototype.getAngledHitSection = function(){

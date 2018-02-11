@@ -10,9 +10,9 @@ class Altarian extends Medium {
 	public $mass = 4250;
 
 	public $integrity = 700;
-	public $intInt = 90;
-	public $ep = 120;
-	public $ew = 800;
+	public $vitalHP = 90;
+	public $ep = 95;
+	public $ew = 750;
 
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);

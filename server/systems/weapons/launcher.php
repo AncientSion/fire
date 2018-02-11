@@ -3,6 +3,7 @@
 class Launcher extends Weapon {
 	public $type = "Launcher";
 	public $animation = "projectile";
+	public $fireMode = "Ballistic";
 	public $priority = 8;
 	public $loads = array();
 	public $reload = 3;
@@ -57,7 +58,7 @@ class Launcher extends Weapon {
 		else $this->armourMod =  0.3;
 	}
 
-	public function testCrit($turn){
+	public function testCrit($turn, $extra){
 		return;
 	}
 

@@ -117,7 +117,6 @@ class Squadron extends Ship {
 			$this->baseImpulse = min($this->baseImpulse, $this->structures[$i]->baseImpulse);
 			$this->slipAngle = min($this->slipAngle, $this->structures[$i]->slipAngle);
 
-
 			$this->primary->systems[0]->output = max($this->primary->systems[0]->output, $this->structures[$i]->ew);
 			$this->primary->systems[1]->output = min($this->primary->systems[1]->output, $this->structures[$i]->ep);
 		}
@@ -372,13 +371,12 @@ class Squadron extends Ship {
 	}
 }
 
-
-
 class Squaddie extends Single {
 
 	public $baseHitChance;
 	public $baseTurnDelay;
 	public $baseImpulseCost;
+	public $dropout = array(80);
 
 	public $faction = "";
 	public $size = 0;
@@ -491,42 +489,47 @@ class Squaddie extends Single {
 	}
 	public function getValidEffects(){
 		return array( // type, min, max, dura
-			array("Damage", 20, 0, 25),
-			array("Disabled", 70, 1, 0.00),
+			array("Damage", 25, 0, 20),
+			array("Disabled", 65, 1, 0.00),
 			array("Destroyed", 80, 0, 0.00),
 		);
-	}	
-
-	public function getCritModMax($dmg){
-		return min(20, (round($dmg/20)*10));
 	}
 
-	public function determineCrit($old, $new, $turn){
-		$dmg = round(($new + $old) / $this->integrity * 100);
-		$emDmg = $this->emDmg;
-		$effects = $this->getValidEffects();
 
-		Debug::log(" => SQUAD determineCrit #".$this->parentId."/".$this->id." for ".$this->name.", old/new ".$old."/".$new." => ".$dmg.", em: ".$emDmg);
+	public function determineCrit($new, $old, $turn){
+		$new = round($new / $this->integrity * 100);
+		$old = round($old / $this->integrity * 100);
 
+		Debug::log(get_class($this)." determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", new: ".$new.", old: ".$old);
+
+		$this->checkDropoutCrits($new, $old, $turn);
+		$this->checkSystemCrits($new, $old, $turn);
+	}
+
+	public function checkDropoutCrits($new, $old, $turn){
 		$chance = 50;
-		$tresh = 70;
-
+		$tresh = $this->dropout[0];
+		$dmg = floor($new + $old);
 		if ($dmg > $tresh){
 			$min = floor($chance * (1+($dmg - $tresh)/(100 - $tresh)));
 			$roll = mt_rand(0, 100);
 
-			Debug::log("chance;: ".$min.", roll: ".$roll);
+			Debug::log("chance: ".$min.", roll: ".$roll);
 			if ($roll < $min){
 				Debug::log("dropout!");
 				$this->crits[] = new Crit(
 					sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 0, 0, 1
 				);
+				$this->destroyed = 1;
 				return;
 			}
 		}
+	}
 
+	public function checkSystemCrits($new, $old, $turn){
+		if ($this->destroyed){return;}
 		$effects = $this->getValidEffects();
-		$dmg =  round(($new + $old/2) / $this->integrity * 100);
+		$tresh =  round(($new + $old/2) / $this->integrity * 100);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
@@ -534,14 +537,14 @@ class Squaddie extends Single {
 
 				$roll = mt_rand(0, 90);
 
-				if ($roll > $dmg){/*Debug::log("rolled above damage on 0-90"); */continue;}
+				if ($roll > $tresh){/*Debug::log("rolled above damage on 0-90"); */continue;}
 
-				$roll = mt_rand(0, 20) + $dmg + sizeof($this->structures[$i]->systems[$j]->crits)*20;
+				$roll = mt_rand(0, 20) + $tresh + sizeof($this->structures[$i]->systems[$j]->crits)*20;
 				//Debug::log("in crit, determine effect roll: ".$roll);
 
 				for ($k = sizeof($effects)-1; $k >= 0; $k--){
 					if ($roll >= $effects[$k][1]){
-						Debug::log("crit: ".$effects[$k][0]);
+						//Debug::log("crit: ".$effects[$k][0]);
 						$this->structures[$i]->systems[$j]->crits[] = new Crit(
 							0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn,
 							 $effects[$k][0],  $effects[$k][2],  $effects[$k][3], 1
@@ -552,6 +555,7 @@ class Squaddie extends Single {
 			}
 		}
 	}
+
 
 	public function getName(){
 		return "Main";
@@ -584,7 +588,6 @@ class Squaddie extends Single {
 		}
 		return $boost;
 	}
-
 }
 
 class Light extends Squaddie {

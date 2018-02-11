@@ -262,6 +262,17 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			shooter.drawEW();
 		}
 
+
+		if ((target.squad || target.flight) && target.getStringHitChance().length > 15){
+			weaponInfo.append(
+				$("<tr>").append(
+					$("<td>")
+						.attr("colSpan", 5)
+						.css("color", "yellow")
+						.css("font-size", 18)
+						.html("- Targeting a combined unit, chance to hit will slightly difer -")));
+		}
+
 		for (var i = 0; i < active.length; i++){
 			var system = active[i].getSystem();
 			var inArc = 1;

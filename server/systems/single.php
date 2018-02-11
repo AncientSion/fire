@@ -96,9 +96,11 @@ class Single {
 	}	
 	
 	public function addDamage($dmg){
+		if ($dmg->new){
+			$this->emDmg += $dmg->emDmg;
+		}
 		$this->armourDmg += $dmg->armourDmg;
 		$this->remaining -= $dmg->overkill;
-		$this->emDmg += $dmg->emDmg;
 		$this->damages[] = $dmg;
 
 		if (!$this->destroyed && $this->remaining < 1){
@@ -133,47 +135,27 @@ class Single {
 			}
 		}
 	}
-
-	public function testCrit($turn, $extra){
-		$old = 0; $new = 1;
-		for ($i = 0; $i < sizeof($this->damages); $i++){
-			if ($this->damages[$i]->turn == $turn){
-				$new += $this->damages[$i]->overkill;
-			} else $old += $this->damages[$i]->overkill;
-		}
-
-		Debug::log("testCrit for: ".get_class($this).", old: ".$old.", new: ".$new.", turn: ".$turn);
-		if ($new || $this->emDmg){
-			$this->determineCrit($old, $new, $turn);
-		}
-	}
-
+	
 	public function getCurrentNegation(){
 		return $this->negation;
 	}
 
-	public function determineCrit($old, $new, $turn){
-		$dmg = round(($new + $old) / $this->integrity * 100);
-		$emDmg = $this->emDmg;
-
-		Debug::log(" => FLIGHT determineCrit #".$this->parentId."/".$this->id." for ".$this->name.", old/new ".$old."/".$new." => ".$dmg.", em: ".$emDmg);
-
-		$chance = 50;
-		$tresh = 70;
-
-		if ($dmg > $tresh){
-			$min = floor($chance * (1+($dmg - $tresh)/(100 - $tresh)));
-			$roll = mt_rand(0, 100);
-
-			Debug::log("chance;: ".$min.", roll: ".$roll);
-			if ($roll < $min){
-				Debug::log("dropout!");
-				$this->crits[] = new Crit(
-					sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 0, 0, 1
-				);
-				return;
-			}
+	public function testCrit($turn, $extra){
+		$old = 0; $new = 0;
+		for ($i = 0; $i < sizeof($this->damages); $i++){
+			if ($this->damages[$i]->turn == $turn){
+				$new += $this->damages[$i]->structDmg;
+				$new += $this->damages[$i]->emDmg*2;
+			} else $old += $this->damages[$i]->structDmg;
 		}
+
+		if ($new){
+			$this->determineCrit($new, $old, $turn);
+		}
+	}
+	
+	public function checkSystemCrits($new, $old, $turn){
+		return;
 	}
 }
 

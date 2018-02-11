@@ -10,7 +10,7 @@ class Sharlin extends UltraHeavy {
 	public $mass = 20000;
 
 	public $integrity = 2000;
-	public $intInt = 225;
+	public $vitalHP = 225;
 	public $ep = 60;
 	public $ew = 1050;
 

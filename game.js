@@ -1350,7 +1350,7 @@ function Game(data, userid){
 		if (onMap){ 
 			pos = unit.getDrawPos();
 			left = (pos.x * cam.z) + cam.o.x - oX;
-			top = (pos.y * cam.z) + cam.o.y + 60;
+			top = (pos.y * cam.z) + cam.o.y + (unit.size/2)*cam.z;
 		}
 		else {
 			pos = {x: e.clientX, y: e.clientY};

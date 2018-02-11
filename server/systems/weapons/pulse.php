@@ -78,7 +78,6 @@ class HeavyPulse extends Pulse {
 	}
 }
 
-
 class FusionPulsar extends Pulse {
 	public $name = "FusionPulsar";
 	public $display = "Fusion Pulsar";
@@ -105,15 +104,7 @@ class LightPlasmaPulse extends LightPulse {
 	public $display = "32mm Plasma Pulse Cannon";
 	public $minDmg = 15;
 	public $maxDmg = 19;
-	public $accDecay = 180;
-	public $shots = 1;
 	public $animColor = "darkGreen";
-	public $projSize = 2;
-	public $projSpeed = 10;
-	public $reload = 2;
-	public $integrity = 24;
-	public $powerReq = 2;
-	public $traverse = -3;
 
 	public $dmgType = "Plasma";
 	public $melt = 50;
@@ -138,6 +129,36 @@ class LightPlasmaPulse extends LightPulse {
 	}
 }
 
+class MediumPlasmaPulse extends MediumPulse {
+	public $name = "MediumPlasmaPulse";
+	public $display = "60mm Plasma Pulse Cannon";
+	public $minDmg = 30;
+	public $maxDmg = 38;
+
+	public $animColor = "darkGreen";
+
+	public $dmgType = "Plasma";
+	public $melt = 50;
+	public $dmgLoss = 18;
+
+	public $maxBoost = 1;
+	public $effiency = 2;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+		$this->boostEffect[] = new Effect("Damage loss", -25);
+		$this->boostEffect[] = new Effect("Damage", 10);
+		$this->notes = array($this->melt."% of total damage is added as extra damage to armour");
+	}
+	
+	public function getDmgRangeMod($fire){
+		$boost = (100 + ($this->getBoostEffect("Damage loss") * $this->getBoostLevel($fire->turn))) / 100;
+		$loss = $fire->dist * ($this->dmgLoss * $boost) / 10000;
+
+		Debug::log(get_class($this).", weapon id: ".$this->id.", boost: ".$boost.", final multi: ".(1-$loss)." @ dist: ".$fire->dist);
+		return 1-$loss;
+	}
+}
 
 class LightEMPulse extends LightPulse {
 	public $name = "LightEMPulse";
@@ -161,6 +182,7 @@ class LightEMPulse extends LightPulse {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
+		$this->notes = array("Does no structural damage", "Damage can cause critical effects");
 	}
 }
 

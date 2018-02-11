@@ -86,10 +86,10 @@ class Ship {
 
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, $this->integrity);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, $this->intInt);
-		$this->primary->systems[] = new Engine($this->getId(), $this->id, $this->intInt, $this->ep);
-		$this->primary->systems[] = new Sensor($this->getId(), $this->id, $this->intInt, $this->ew);
-		$this->primary->systems[] = new Reactor($this->getId(), $this->id, $this->intInt);
+		$this->primary->systems[] = new Bridge($this->getId(), $this->id, $this->vitalHP);
+		$this->primary->systems[] = new Engine($this->getId(), $this->id, $this->vitalHP, $this->ep);
+		$this->primary->systems[] = new Sensor($this->getId(), $this->id, $this->vitalHP, $this->ew);
+		$this->primary->systems[] = new Reactor($this->getId(), $this->id, $this->vitalHP);
 	}
 
 	public function getId(){
@@ -498,7 +498,7 @@ class Ship {
 			}
 		}
 
-		Debug::log("WARNING couldnt apply damage: #".$dmg->id);
+		Debug::log("WARNING couldnt SHIP applyDamage: #".$dmg->id);
 	}
 
 	public function applyDBDamage($dmg){
@@ -508,20 +508,17 @@ class Ship {
 
 				if ($dmg->systemid == 1){
 					$this->primary->addDamage($dmg);
+					return;
 				}
-				else {
-					for ($i = 0; $i < sizeof($this->structures); $i++){
-						if ($this->structures[$i]->id == $dmg->structureid){
-							for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-								if ($this->structures[$i]->systems[$j]->id == $dmg->systemid){
-									$this->structures[$i]->systems[$j]->addDamage($dmg);
-									$this->primary->addDamage($dmg);
-									return;
-								}
-							}
-						}
+
+				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+					if ($this->structures[$i]->systems[$j]->id == $dmg->systemid){
+						$this->structures[$i]->systems[$j]->addDamage($dmg);
+						$this->primary->addDamage($dmg);
+						return;
 					}
 				}
+
 				for ($j = 0; $j < sizeof($this->primary->systems); $j++){
 					if ($this->primary->systems[$j]->id == $dmg->systemid){
 						$this->primary->systems[$j]->addDamage($dmg);
@@ -532,7 +529,7 @@ class Ship {
 			}
 		}
 
-		Debug::log("WARNING couldnt apply SHIP DB damage: #".$dmg->id);
+		Debug::log("WARNING couldnt apply SHIP applyDBDamage: #".$dmg->id);
 	}
 
 	public function doUnpowerAllSystems($turn){
@@ -957,40 +954,34 @@ class Ship {
 	public function testForCrits($turn){
 		//Debug::log("= testForCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
 
-		$all = 0;
+		$overload = 0;
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if (!$this->structures[$i]->systems[$j]->damaged){continue;}
-				else if ($this->structures[$i]->systems[$j]->destroyed){
-					if (mt_rand(0, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn, 0)){
-						$overload = $this->structures[$i]->systems[$j]->getPowerUsage($turn);
-						$all += $overload;
-						$this->structures[$i]->systems[$j]->damages[sizeof($this->structures[$i]->systems[$j]->damages)-1]->notes .= "o".$overload.";";
-					}
-				}
-				else {
+				else if (!$this->structures[$i]->systems[$j]->destroyed){
 					$this->structures[$i]->systems[$j]->testCrit($turn, 0);
+				}
+				else if (mt_rand(0, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn)){
+					$usage = $this->structures[$i]->systems[$j]->getPowerUsage($turn);
+					$overload += $usage;
+					$this->structures[$i]->systems[$j]->damages[sizeof($this->structures[$i]->systems[$j]->damages)-1]->notes .= "o".$usage.";";
 				}
 			}
 		}
 
 		for ($j = 0; $j < sizeof($this->primary->systems); $j++){
-			if ($this->primary->systems[$j]->destroyed){continue;}
 			if (!$this->primary->systems[$j]->damaged){continue;}
+			if ($this->primary->systems[$j]->destroyed){continue;}
 
 			$this->primary->systems[$j]->testCrit($turn, 0);
 		}
 
-		if ($this->primary->emDmg){
-			Debug::log("emDmge for unit #".$this->id.": ".$this->primary->emDmg);
-		}
-
-		if ($all){
-			Debug::log("potential total power spike for unit #".$this->id.": ".$all);
+		if ($overload || $this->primary->emDmg){
+			Debug::log("potential total power spike for unit #".$this->id.": ".$overload);
 			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
 				if ($this->primary->systems[$j]->name == "Reactor"){
-					$this->primary->systems[$j]->applyPowerSpike($turn, $all);
+					$this->primary->systems[$j]->applyPowerSpike($turn, $overload, $this->primary->emDmg);
 					return;
 				}
 			}

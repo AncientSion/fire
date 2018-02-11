@@ -192,16 +192,18 @@ class System {
 	public function setMaxDmg($fire, $dmg){
 		return $dmg;
 	}
+
 	public function testCrit($turn, $extra){
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			if ($this->damages[$i]->turn == $turn){
 				$new += $this->damages[$i]->structDmg;
+				$new += $this->damages[$i]->emDmg*2;
 			} else $old += $this->damages[$i]->structDmg;
 		}
 
-		if ($new || $this->emDmg){
-			$this->determineCrit($old, $new, $turn);
+		if ($new){
+			$this->determineCrit($new, $old, $turn);
 		}
 	}
 
@@ -212,28 +214,36 @@ class System {
 		);
 	}
 
-	public function determineCrit($old, $new, $turn){
+	public function determineCrit($new, $old, $turn){
 		$new = round($new / $this->integrity * 100);
 		$old = round($old / $this->integrity * 100);
-		$emDmg = $this->emDmg;
 		$effects = $this->getValidEffects();
 
-		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", new: ".$new.", old: ".$old.", em: ".$emDmg);
+		Debug::log(get_class($this)." determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", new: ".$new.", old: ".$old);
 
-		if ($new > 80 && mt_rand(0, 100) < $new){
-			//Debug::log(" ====> critical hit, disabling system ".get_class($this));
-			$this->crits[] = new Crit(
-				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 1, 0, 1
-			);
+		$tresh = 80;
+
+		$dmg = floor($new + $old);
+		if ($new > $tresh){
+			$chance = 50;
+			$min = floor($chance * (1+($dmg - $tresh)/(100 - $tresh)));
+			$roll = mt_rand(0, 100);
+			if ($roll < $min){
+				$this->crits[] = new Crit(
+					sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 1, 0, 1
+				);
+			}
 		}
 
 		$mod = $this->getCritModMax($new + $old);
 		if ($mod < 5){return;}
 
-		$tresh =  ($new + $old/2);
+		$tresh = floor($new + $old/2);
 
 		for ($i = 0; $i < sizeof($effects); $i++){
-			if (mt_rand(0, 100) > $tresh){/*Debug::log(" NO CRIT - roll: ".$roll. ", tresh: ".$tresh);*/ continue;}
+			$roll = mt_rand(0, 100); 
+			if ($roll > $tresh){Debug::log(" NO CRIT - roll: ".$roll. ", tresh: ".$tresh); continue;}
+			else {Debug::log(" CRIT - roll: ".$roll. ", tresh: ".$tresh);}
 
 			//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 			$this->crits[] = new Crit(
@@ -243,9 +253,13 @@ class System {
 	}
 
 	public function addDamage($dmg){
-		if ($dmg->new){$this->damaged = 1;}
+		if ($dmg->new){
+			$this->damaged = 1;
+			$this->emDmg += $dmg->emDmg;
+		}
+
 		$this->damages[] = $dmg;
-		$this->emDmg += $dmg->emDmg;
+		
 		if ($dmg->destroyed){
 			$this->destroyed = true;
 		}

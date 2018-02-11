@@ -10,7 +10,7 @@ class Tinashi extends Medium {
 	public $mass = 4250;
 
 	public $integrity = 750;
-	public $intInt = 95;
+	public $vitalHP = 95;
 	public $ep = 85;
 	public $ew = 800;
 

@@ -10,9 +10,9 @@ class Demos extends Medium {
 	public $mass = 3000;
 
 	public $integrity = 575;
-	public $intInt = 90;
-	public $ep = 100;
-	public $ew = 750;
+	public $vitalHP = 85;
+	public $ep = 110;
+	public $ew = 700;
 
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);

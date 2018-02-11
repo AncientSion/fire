@@ -10,12 +10,6 @@ class Missile extends Single {
 		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->minDmg, $this->maxDmg, $this->traverse);
 	}
 
-	public function getValidEffects(){
-		return array(// attr, %-tresh, duration, modifier
-			array("Disabled", 80, 0, 0)
-		);
-	}
-
 	public function jsonSerialize(){
 		return array(
         	"id" => $this->id,
@@ -39,6 +33,10 @@ class Missile extends Single {
 	public function setBaseStats($phase, $turn){
 		$this->baseHitChance = ceil(sqrt($this->mass)*5);
 		$this->baseImpulse = ceil(pow($this->mass, -0.75)*325);
+	}
+
+	public function testCrit($turn, $extra){
+		return;
 	}
 }
 

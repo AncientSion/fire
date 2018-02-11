@@ -605,13 +605,13 @@ include_once 'global.php';
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->status == "jumpOut"){
-				$needCheck = true;
 				$this->ships[$i]->destroyed = true;
+				$needCheck = true;
 			}
 		}
 
 		if ($needCheck){
-			$this->setUnitsDestroyed();
+			$this->doFirstDestroyedCheck();
 		}
 	}
 	public function handleJumpInActions(){
@@ -861,7 +861,7 @@ include_once 'global.php';
 			}
 		}
 
-		if (sizeof($states)){DBManager::app()->updateUnitState($states, $this->turn, $this->phase);}
+		if (sizeof($states)){DBManager::app()->updateUnitStats($states, $this->turn, $this->phase);}
 		
 	}
 
@@ -872,7 +872,7 @@ include_once 'global.php';
 			$states[] = $this->ships[$i]->getEndState($this->turn);
 		}
 
-		if (sizeof($states)){DBManager::app()->updateUnitState($states, $this->turn, $this->phase);}
+		if (sizeof($states)){DBManager::app()->updateUnitStats($states, $this->turn, $this->phase);}
 		
 	}
 
@@ -889,9 +889,11 @@ include_once 'global.php';
 	}
 
 		public function handleFiringPhase(){
+			Debug::log("handleFiringPhase");
 			$time = -microtime(true);
 
-			$this->setUnitsDestroyed();
+			$this->doFullDestroyedCheck();
+			$this->removeDestroyedUnits();
 
 			$this->setupShips();
 
@@ -916,9 +918,8 @@ include_once 'global.php';
 
 	public function endTurn(){
 		Debug::log("endTurn");
-		$this->freeFlights();
 		$this->setUnitRollState();
-		$this->setUnitsDestroyed();
+		$this->doFullDestroyedCheck();
 		$this->assembleEndStates();
 	}
 	
@@ -968,35 +969,49 @@ include_once 'global.php';
 		};
 	}
 
-	public function setUnitsDestroyed(){
-		Debug::log("setUnitsDestroyed");
+	public function doFullDestroyedCheck(){
+		$this->doFirstDestroyedCheck();
+		$this->doSecondDestroyedCheck();
+		$this->writeDestroyedStatus();
+		$this->freeFlights();
+	}
+
+	public function doFirstDestroyedCheck(){
+		Debug::log("doFirstDestroyedCheck");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->salvo && $this->ships[$i]->mission->arrived){ // mark impacted salvo as destroyed
+			if ($this->ships[$i]->salvo && sizeof($this->ships[$i]->structures[0]->systems[0]->fireOrders)){ // impact salvo
 				$this->ships[$i]->destroyed = true;
 			}
-			else if ($this->ships[$i]->flight && $this->ships[$i]->isDestroyed()){
+			else if (($this->ships[$i]->flight || $this->ships[$i]->salvo) && $this->ships[$i]->isDestroyed()){
 				$this->ships[$i]->destroyed = true;
 			}
-			
+		}
+	}
+
+	public function doSecondDestroyedCheck(){
+		Debug::log("doSecondDestroyedCheck");
+		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->destroyed){
-				//Debug::log("destryoed");
 				for ($j = 0; $j < sizeof($this->ships); $j++){
 					if ($this->ships[$j]->salvo && $this->ships[$j]->mission->targetid == $this->ships[$i]->id){
-						//Debug::log("ding");
 						$this->ships[$j]->destroyed = true;
 					}
 				}
 			}
 		}
+	}
 
-		DBManager::app()->destroyUnitsDB($this->ships);
-
+	public function removeDestroyedUnits(){
 		for ($i = sizeof($this->ships)-1; $i >= 0; $i--){
 			if ($this->ships[$i]->destroyed){
 				Debug::log("splicing destroyed unit");
 				array_splice($this->ships, $i, 1);
 			}
 		}
+	}
+
+	public function writeDestroyedStatus(){
+		DBManager::app()->updateDestroyedState($this->ships);
 	}
 
 	public function startNewTurn(){
@@ -1339,7 +1354,7 @@ include_once 'global.php';
 	public function testCriticals(){
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->damaged){
-				Debug::log("testCriticals #".$this->ships[$i]->id);
+				//Debug::log("testCriticals #".$this->ships[$i]->id);
 				$this->ships[$i]->testForCrits($this->turn);
 			} 
 		}
@@ -1447,14 +1462,14 @@ include_once 'global.php';
 					array(
 						"Octurion",
 						"Primus",
-						//"Tech",
 						"Altarian",
+						"Darkner",
 						"Demos",
 					),
 					array(
 						"Vorchar",
+						"Mograth",
 						"Vorchan",
-						"Darkner",
 						"Haven",
 					)
 				);
@@ -1536,6 +1551,7 @@ include_once 'global.php';
 				$ships = array(
 					array("Primus", 5, 6),
 					array("Altarian", 15, 3),
+					array("Darkner", 15, 3),
 					array("Demos", 15, 3),
 					array("Squadron", 25, 2),
 				);

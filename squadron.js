@@ -82,6 +82,9 @@ Squaddie.prototype.getSystemDetailsDiv = function(){
 			.append($("<tr>")
 				.append($("<td>").html("Engine Output"))
 				.append($("<td>").html(this.ep)))
+			.append($("<tr>")
+				.append($("<td>").html("Base Hit Chance"))
+				.append($("<td>").html(this.baseHitChance + " %")))
 		)
 }
 

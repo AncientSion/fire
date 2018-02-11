@@ -69,6 +69,7 @@ class Area extends Weapon {
 class EnergyMine extends Area {
 	public $name = "EnergyMine";
 	public $display = "Energy Mine";
+	public $fireMode = "Ballistic";
 	public $minDmg = 10;
 	public $maxDmg = 50;
 	public $accDecay = 10;
@@ -87,7 +88,7 @@ class EnergyMine extends Area {
 	public $notes;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
-		$this->notes = array("Point of impact deviates by distance", "Area of Effect", "Fixed damage based on target", "Salvo: ".$this->dmgs[0]." dmg / unit", "Flight: ".$this->dmgs[1]." dmg / unit", "Squadron: ".$this->dmgs[2]." dmg / unit", "Ship: ".$this->dmgs[3]." dmg / system on facing side.");
+		$this->notes = array("Area of Effect","Point of impact deviates by distance","Fixed damage based on target", "Salvo: ".$this->dmgs[0]." dmg / unit", "Flight: ".$this->dmgs[1]." dmg / unit", "Squadron: ".$this->dmgs[2]." dmg / unit", "Ship: ".$this->dmgs[3]." dmg / system on facing side.");
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}	
 

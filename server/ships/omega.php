@@ -10,7 +10,7 @@ class Omega extends SuperHeavy {
 	public $mass = 14000;
 
 	public $integrity = 1600;
-	public $intInt = 180;
+	public $vitalHP = 180;
 	public $ep = 60;
 	public $ew = 800;
 	public $power = 6;

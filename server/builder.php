@@ -5,6 +5,7 @@ class DmgCalc {
 	public static function doDmg($fire, $roll, $system){
 		switch ($fire->weapon->fireMode){
 			case "Standard": static::doStandardDmg($fire, $roll, $system); break;
+			case "Ballistic": static::doStandardDmg($fire, $roll, $system); break;
 			case "Pulse": static::doPulseDmg($fire, $roll, $system); break;
 			case "Laser": static::doLaserDmg($fire, $roll, $system); break;
 			default: Debug::log("doDmg ERROR"); break;

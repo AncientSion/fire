@@ -932,8 +932,8 @@
 			}
 		}
 
-		public function updateUnitState($states, $turn, $phase){
-			Debug::log("updateUnitState s:".sizeof($states)." ".$turn."/".$phase);
+		public function updateUnitStats($states, $turn, $phase){
+			Debug::log("updateUnitStats s:".sizeof($states)." ".$turn."/".$phase);
 			$stmt = $this->connection->prepare("
 				UPDATE units
 				SET x = :x,
@@ -968,8 +968,8 @@
 			return true;
 		}
 
-		public function destroyUnitsDB($units){
-			Debug::log("destroyUnitsDB");
+		public function updateDestroyedState($units){
+			Debug::log("updateDestroyedState");
 			$stmt = $this->connection->prepare("
 				UPDATE units 
 				SET 
@@ -1491,6 +1491,7 @@
 
 			for ($i = 0; $i < sizeof($crits); $i++){
 				if ($crits[$i]->new){
+					//var_export($crits[$i]);
 					$stmt->bindParam(":shipid", $crits[$i]->shipid);
 					$stmt->bindParam(":systemid", $crits[$i]->systemid);
 					$stmt->bindParam(":turn", $crits[$i]->turn);

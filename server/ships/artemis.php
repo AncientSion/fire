@@ -10,7 +10,7 @@ class Artemis extends Medium {
 	public $mass = 3500;
 
 	public $integrity = 650;
-	public $intInt = 80;
+	public $vitalHP = 80;
 	public $ep = 80;
 	public $ew = 650;
 	public $power = 3;
@@ -22,23 +22,23 @@ class Artemis extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 330, 30, 450, 14);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 450, 15);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new HeavyRailGun($this->getId(), $this->id, 315, 45);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 30, 150, 375, 13);
+		$right = new Structure($this->getId(), $this->id, 30, 150, 375, 14);
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 150, 210, 240, 12);
+		$aft = new Structure($this->getId(), $this->id, 150, 210, 240, 13);
 		$aft->systems[] = new MediumRailGun($this->getId(), $this->id, 180, 300);
 		$aft->systems[] = new MediumRailGun($this->getId(), $this->id, 60, 180);
 		$structs[] = $aft;
 
-		$left = new Structure($this->getId(), $this->id, 210, 330, 375, 13);
+		$left = new Structure($this->getId(), $this->id, 210, 330, 375, 14);
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $left;

@@ -10,9 +10,9 @@ class Primus extends SuperHeavy {
 	public $mass = 12500;
 
 	public $integrity = 1300;
-	public $intInt = 160;
+	public $vitalHP = 160;
 	public $ep = 70;
-	public $ew = 900;
+	public $ew = 850;
 
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);

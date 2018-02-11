@@ -10,7 +10,7 @@ class Octurion extends UltraHeavy {
 	public $mass = 20000;
 
 	public $integrity = 2100;
-	public $intInt = 250;
+	public $vitalHP = 250;
 	public $ep = 85;
 	public $ew = 1000;
 

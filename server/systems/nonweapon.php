@@ -47,7 +47,7 @@ class PrimarySystem extends System {
 		);
 	}
 
-	public function determineCrit($old, $new, $turn){
+	public function determineCrit($new, $old, $turn){
 		$new = round($new / $this->integrity * 100);
 		$old = round($old / $this->integrity * 100);
 		$possible = $this->getValidEffects();
@@ -84,7 +84,7 @@ class Bridge extends PrimarySystem {
         parent::__construct($id, $parentId, $integrity, $output, $width);
 	}
 
-	public function determineCrit($old, $new, $turn){
+	public function determineCrit($new, $old, $turn){
 		$new = round($new / $this->integrity * 100);
 		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId);
 		$mod = min(15, $new);
@@ -114,10 +114,10 @@ class Reactor extends PrimarySystem {
     	$this->output = $this->output + + $use + $add;
     }
 
-	public function applyPowerSpike($turn, $overload){
-		$mod = round(($overload / $this->output *100), 2);
+	public function applyPowerSpike($turn, $overload, $em){
+		$mod = round((($overload + ($em / 10)) / $this->output *100), 2);
 		//d, $shipid, $systemid, $turn, $type, $duration, $value, $new){
-		Debug::log("applyPowerSpike to #".$this->parentId.", spike: ".$overload.", output: ".$this->output."/ mod: ".$mod);
+		Debug::log("applyPowerSpike to #".$this->parentId.", overload: ".$overload.", emDmg: ".$em.", output: ".$this->output."/ mod: ".$mod);
 		$this->crits[] = new Crit(sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Output", 0, $mod, 1);	
 
 	}
