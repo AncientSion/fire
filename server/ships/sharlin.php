@@ -40,8 +40,8 @@ class Sharlin extends UltraHeavy {
 			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$right->systems[] = new ShockCannon($this->getId(), $this->id, 300, 60);
 			$right->systems[] = new ShockCannon($this->getId(), $this->id, 300, 60);
-			$right->systems[] = new LightEMPulse($this->getId(), $this->id, 0, 180);
-			$right->systems[] = new LightPulse($this->getId(), $this->id, 0, 180);
+			$right->systems[] = new ShockCannon($this->getId(), $this->id, 0, 180);
+			$right->systems[] = new ShockCannon($this->getId(), $this->id, 0, 180);
 			$right->systems[] = new ShockCannon($this->getId(), $this->id, 30, 150);
 			$right->systems[] = new ShockCannon($this->getId(), $this->id, 30, 150);
 			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 30, 150);
@@ -52,7 +52,7 @@ class Sharlin extends UltraHeavy {
 			$aft->systems[] = new ShockCannon($this->getId(), $this->id, 180, 0);
 			$aft->systems[] = new ShockCannon($this->getId(), $this->id, 180, 0);
 			$aft->systems[] = new ShockCannon($this->getId(), $this->id, 120, 240);
-			$aft->systems[] = new ShockCannon($this->getId(), $this->id, 120, 240);
+			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
 			$aft->systems[] = new ShockCannon($this->getId(), $this->id, 0, 180);
 			$aft->systems[] = new ShockCannon($this->getId(), $this->id, 0, 180);
 			$aft->systems[] = new NeutronLaser($this->getId(), $this->id, 120, 240);

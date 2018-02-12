@@ -88,7 +88,7 @@ class Bridge extends PrimarySystem {
 		$new = round($new / $this->integrity * 100);
 		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId);
 		$mod = min(15, $new);
-		if ($new < 5){Debug::log("no BRIDGE crit, fail 50 % or dmg < 5"); return;}
+		if ($new < 5){Debug::log("no BRIDGE crit, dmg < 5"); return;}
 
 		$pick = array("Engine", "Sensor", "Reactor")[mt_rand(0, 2)];
 
@@ -115,7 +115,7 @@ class Reactor extends PrimarySystem {
     }
 
 	public function applyPowerSpike($turn, $overload, $em){
-		$mod = round((($overload + ($em / 10)) / $this->output *100), 2);
+		$mod = round((($overload + ($em / 20)) / $this->output *100), 2);
 		//d, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 		Debug::log("applyPowerSpike to #".$this->parentId.", overload: ".$overload.", emDmg: ".$em.", output: ".$this->output."/ mod: ".$mod);
 		$this->crits[] = new Crit(sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Output", 0, $mod, 1);	

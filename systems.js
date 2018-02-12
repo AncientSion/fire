@@ -1589,6 +1589,7 @@ function Weapon(system){
 	this.dmgType = system.dmgType;
 	this.dmgLoss = system.dmgLoss;
 	this.melt = system.melt;
+	this.animation = system.animation;
 	this.loaded;
 	this.fireOrders = [];
 	this.mount;
@@ -2277,7 +2278,6 @@ Warhead.prototype.getAnimation = function(fire){
 
 function Particle(system){
 	Weapon.call(this, system);	
-	this.animation = "projectile";
 	this.projSize = system.projSize;
 	this.projSpeed = system.projSpeed;
 }
@@ -3373,7 +3373,6 @@ Area.prototype.getAnimation = function(fire){
 
 			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
 				shotAnim.n = 0 - ((j / grouping) * delay + k*shotInterval);
-				shotAnim.p = 0;
 
 			gunAnims.push(shotAnim);
 		}

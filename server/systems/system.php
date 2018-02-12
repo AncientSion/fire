@@ -219,7 +219,7 @@ class System {
 		$old = round($old / $this->integrity * 100);
 		$effects = $this->getValidEffects();
 
-		Debug::log(get_class($this)." determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", new: ".$new.", old: ".$old);
+		Debug::log(get_class($this)." determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", new: ".$new."%, old: ".$old."%");
 
 		$tresh = 80;
 
@@ -247,8 +247,9 @@ class System {
 
 			//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 			$this->crits[] = new Crit(
-				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $effects[$i][0], 0,  ($mod * (1 + $i)), 1
+				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $effects[$i][0], 0,  ($mod * (1 + (0.5*$i))), 1
 			);
+			$roll -= 30;
 		}
 	}
 

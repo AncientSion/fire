@@ -2102,39 +2102,39 @@ function Game(data, userid){
 				if (game.fireOrders[i].weapon.animation == "em"){
 					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
 						game.fireOrders[i].anim[j][k].n += 1;
-						if (game.fireOrders[i].anim[j][k].n > 0){ // valid, now animate
-							drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
+						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
+							if (game.fireOrders[i].anim[j][k].p == 0){ // still doing proj
+								drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k], 30); 
+								if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){ // proj arrived
+									game.fireOrders[i].anim[j][k].p = 1; game.fireOrders[i].anim[j][k].n = 0; game.fireOrders[i].anim[j][k].m = 36; // reset 
+								}
+							}
+							else {
+								drawEMSpriteExplo(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
+								if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
+									game.fireOrders[i].anim[j][k].done = true;
+								}
+							}
 						}
-					}
-					else if (game.fireOrders[i].anim[j][k].h){ // shot animated, does it explode ?
-						game.fireOrders[i].anim[j][k].n += 1;
-						//drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].tx, game.fireOrders[i].anim[j][k].ty, game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m, 30); // EXPLO
-						drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k], 30); // EXPLO
-						if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m+30){
-							game.fireOrders[i].anim[j][k].done = true;
-						}
-					}
-					else {
-						game.fireOrders[i].anim[j][k].done = true;
 					}
 				}
 				else if (game.fireOrders[i].weapon.animation == "projectile"){
 					if (game.fireOrders[i].anim[j][k].n < game.fireOrders[i].anim[j][k].m){ // still to animate
 						game.fireOrders[i].anim[j][k].n += 1;
-						if (game.fireOrders[i].anim[j][k].n > 0){ // valid, now animate
-							drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
+						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
+							if (game.fireOrders[i].anim[j][k].p == 0){ // still doing proj
+								drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k], 30); 
+								if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){ // proj arrived
+									game.fireOrders[i].anim[j][k].p = 1; game.fireOrders[i].anim[j][k].n = 0; game.fireOrders[i].anim[j][k].m = 36; // reset 
+								}
+							}
+							else {
+								drawBaseSpriteExplo(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
+								if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
+									game.fireOrders[i].anim[j][k].done = true;
+								}
+							}
 						}
-					}
-					else if (game.fireOrders[i].anim[j][k].h){ // shot animated, does it explode ?
-						game.fireOrders[i].anim[j][k].n += 1;
-						//drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].tx, game.fireOrders[i].anim[j][k].ty, game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m, 30); // EXPLO
-						drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k], 30); // EXPLO
-						if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m+30){
-							game.fireOrders[i].anim[j][k].done = true;
-						}
-					}
-					else {
-						game.fireOrders[i].anim[j][k].done = true;
 					}
 				}
 				else if (game.fireOrders[i].weapon.animation == "beam"){

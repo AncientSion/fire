@@ -34,6 +34,7 @@ function BallVector(a, b, s, h){
 	this.done = 0;
 	this.f;
 	this.h = h;
+	this.p = 0;
 	
 	this.setup = function(){
 		this.ox = a.x;

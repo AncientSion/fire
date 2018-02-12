@@ -1,597 +1,65 @@
-570.537 
-570.537 
-570.537 
-570.537 
-895.247625 
-895.247625 
-895.247625 
-895.247625 
-3839.08263 
-3839.08263 
-3839.08263 
-437.512 
-437.512 
-437.512 
-437.512 
-635.018 
-635.018 
-635.018 
-635.018 
-2313.8024533333 
-2313.8024533333 
-2313.8024533333 
-471.512 
-471.512 
-471.512 
-471.512 
-677.518 
-677.518 
-677.518 
-677.518 
-2427.1357866667 
-2427.1357866667 
-2427.1357866667 
-471.512 
-471.512 
-471.512 
-471.512 
-677.518 
-677.518 
-677.518 
-677.518 
-2427.1357866667 
-2427.1357866667 
-2427.1357866667 
-437.512 
-437.512 
-437.512 
-437.512 
-635.018 
-635.018 
-635.018 
-635.018 
-2313.8024533333 
-2313.8024533333 
-2313.8024533333 
-378.76 
-378.76 
-378.76 
-378.76 
-546.89 
-546.89 
-546.89 
-546.89 
-1975.3909333333 
-1975.3909333333 
-1975.3909333333 
-458.49 
-458.49 
-458.49 
-458.49 
-713.17125 
-713.17125 
-713.17125 
-713.17125 
-3018.5251 
-3018.5251 
-3018.5251 
-543.49 
-543.49 
-543.49 
-543.49 
-819.42125 
-819.42125 
-819.42125 
-819.42125 
-3301.8584333333 
-3301.8584333333 
-3301.8584333333 
-463.76 
-463.76 
-463.76 
-463.76 
-653.14 
-653.14 
-653.14 
-653.14 
-2258.7242666667 
-2258.7242666667 
-2258.7242666667 
-170 
-170 
-170 
-170 
-212.5 
-212.5 
-212.5 
-212.5 
-566.66666666667 
-566.66666666667 
-566.66666666667 
-510 
-510 
-510 
-510 
-637.5 
-637.5 
-637.5 
-637.5 
-1700 
-1700 
-1700 
-680 
-680 
-680 
-680 
-850 
-850 
-850 
-850 
-2266.6666666667 
-2266.6666666667 
-2266.6666666667 
-createPlayerStatus 
-entry CREATE for player 1 in game 4 phase: -1 and status joined 
-566.66666666667 
-566.66666666667 
-566.66666666667 
-552 
-552 
-552 
-552 
-680 
-680 
-680 
-680 
-850 
-850 
-850 
-850 
-1020 
-1020 
-1020 
-1020 
-1360 
-1360 
-1360 
-1360 
-1020 
-1020 
-1020 
-1020 
-1428 
-1428 
-1428 
-1428 
-1428 
-2266.6666666667 
-2266.6666666667 
-2266.6666666667 
-680 
-680 
-680 
-680 
-850 
-850 
-850 
-850 
-2266.6666666667 
-2266.6666666667 
-2266.6666666667 
-game 2, user 1 --- adjusting to turn/phase/status 1/3/ready 
-680 
-680 
-680 
-680 
-850 
-850 
-850 
-850 
-2266.6666666667 
-2266.6666666667 
-2266.6666666667 
-game 2, user 2 --- adjusting to turn/phase/status 1/3/ready 
 prepareAdvance 
-680 
-680 
-680 
-680 
-850 
-850 
-850 
-850 
-2266.6666666667 
-2266.6666666667 
-2266.6666666667 
-********************* doAdvance for game2 from phase 3 to phase 4 
-handleJumpOutActions 
-endTurn 
-setUnitsDestroyed 
-destroyUnitsDB 
-assembleEndStates 
-updateUnitState s:4 1/3 
-game 2, user 1 --- adjusting to turn/phase/status 2/-1/waiting 
-game 2, user 2 --- adjusting to turn/phase/status 2/-1/waiting 
-TIME: 0.026 seconds. 
-4 mb 
-680 
-680 
-680 
-680 
-850 
-850 
-850 
-850 
-2266.6666666667 
-2266.6666666667 
-2266.6666666667 
-deployFlights 1 
-DB insertUnits: 1 
-insertMissions s: 1 
-game 2, user 2 --- adjusting to turn/phase/status 2/-1/ready 
-680 
-680 
-680 
-680 
-850 
-850 
-850 
-850 
-2266.6666666667 
-2266.6666666667 
-2266.6666666667 
-game 2, user 1 --- adjusting to turn/phase/status 2/-1/ready 
-prepareAdvance 
-680 
-680 
-680 
-680 
-850 
-850 
-850 
-850 
-2266.6666666667 
-2266.6666666667 
-2266.6666666667 
-********************* doAdvance for game2 from phase -1 to phase 0 
-handleDeploymentPhase 
-resolveDeployActions s: 1 
-handleJumpInActions 
-resolveJumpOutActions 
-handleInitialFireOrders 
-handleDeployFireOrders 
-handleBallisticFireOrders 
-DB insertUnits: 1 
-insertMissions s: 1 
-DB updateBallisticFireOrder, s: 3 
-assemblDeployStates 
-updateUnitState s:2 2/-1 
-game 2, user 1 --- adjusting to turn/phase/status 2/0/waiting 
-game 2, user 2 --- adjusting to turn/phase/status 2/0/waiting 
-TIME: 0.072 seconds. 
-4 mb 
-680 
-680 
-680 
-680 
-850 
-850 
-850 
-850 
-2266.6666666667 
-2266.6666666667 
-2266.6666666667 
-game 2, user 1 --- adjusting to turn/phase/status 2/0/ready 
-game 2, user 2 --- adjusting to turn/phase/status 2/0/ready 
-prepareAdvance 
-********************* doAdvance for game2 from phase 0 to phase 1 
-handleMovementPhase 
-handleShipMovement 
-resolveMovementDB 
-handleMixedMovement 
-Handling mixed #9 
-STRIKE 
-handleMixedMovement 
-Handling mixed #10 
-STRIKE 
-handlePostMoveFires: 0 
-handling data 
-DB updateFireOrders: 0 
- => DB insertDamageEntries: 0 
- => DB insertCritEntries: 0 
-updateMissionState 
-game 2, user 1 --- adjusting to turn/phase/status 2/2/waiting 
-game 2, user 2 --- adjusting to turn/phase/status 2/2/waiting 
-TIME: 0.042 seconds. 
-4 mb 
-game 2, user 2 --- adjusting to turn/phase/status 2/2/ready 
-game 2, user 1 --- adjusting to turn/phase/status 2/2/ready 
-prepareAdvance 
-********************* doAdvance for game2 from phase 2 to phase 3 
-resolveFireOrder - ID 38, shooter: Sharlin #8 vs Saggitarius #5, w: FusionCannon #20, shots: 1 
-resolveFireOrder - ID 39, shooter: Sharlin #8 vs Saggitarius #5, w: FusionCannon #21, shots: 1 
-resolveFireOrder - ID 42, shooter: Sharlin #8 vs Saggitarius #5, w: FusionCannon #33, shots: 1 
-resolveFireOrder - ID 43, shooter: Sharlin #8 vs Saggitarius #5, w: FusionCannon #34, shots: 1 
-resolveFireOrder - ID 36, shooter: Sharlin #8 vs Hyperion #6, w: NeutronLaser #15, shots: 1 
-getPrimaryHitSystem: #6 
-NeutronLaser, weapon id: 15, DAMAGE mod: 20 (crits: 0, boost: 20) 
-NeutronLaser, weapon id: 15, RANGE DMG mod: 0.9376 
-fire #36, doLaserDmg, weapon: NeutronLaser, target: 6 for 145 dmg 
-getPrimaryHitSystem: #6 
-resolveFireOrder - ID 37, shooter: Sharlin #8 vs Hyperion #6, w: NeutronLaser #16, shots: 1 
-NeutronLaser, weapon id: 16, DAMAGE mod: 20 (crits: 0, boost: 20) 
-NeutronLaser, weapon id: 16, RANGE DMG mod: 0.9376 
-fire #37, doLaserDmg, weapon: NeutronLaser, target: 6 for 108 dmg 
- => OVERKILL ship target system MediumRailGun #7 was destroyed, rem: 40, doing: 40, OK for: 0 dmg 
-getPrimaryHitSystem: #6 
-resolveFireOrder - ID 32, shooter: Sharlin #8 vs Hyperion #6, w: FusionCannon #9, shots: 1 
-getPrimaryHitSystem: #6 
-FusionCannon, weapon id: 9, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #32, doStandardDmg, weapon: FusionCannon, target #6/5/Reactor, totalDmg: 30, remaining: 97, armour: 15+6 
-resolveFireOrder - ID 33, shooter: Sharlin #8 vs Hyperion #6, w: FusionCannon #10, shots: 1 
-getPrimaryHitSystem: #6 
-FusionCannon, weapon id: 10, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #33, doStandardDmg, weapon: FusionCannon, target #6/1/Primary, totalDmg: 28, remaining: 545, armour: 15+6 
-resolveFireOrder - ID 34, shooter: Sharlin #8 vs Hyperion #6, w: FusionCannon #13, shots: 1 
-FusionCannon, weapon id: 13, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #34, doStandardDmg, weapon: FusionCannon, target #6/10/Dual, totalDmg: 31, remaining: 28, armour: 7+3 
-resolveFireOrder - ID 35, shooter: Sharlin #8 vs Hyperion #6, w: FusionCannon #14, shots: 1 
-getPrimaryHitSystem: #6 
-FusionCannon, weapon id: 14, DAMAGE mod: -20 (crits: 20, boost: 0) 
-fire #35, doStandardDmg, weapon: FusionCannon, target #6/5/Reactor, totalDmg: 24, remaining: 88, armour: 14+6 
-resolveFireOrder - ID 40, shooter: Sharlin #8 vs Hyperion #6, w: FusionCannon #29, shots: 1 
-FusionCannon, weapon id: 29, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #40, doStandardDmg, weapon: FusionCannon, target #6/10/Dual, totalDmg: 31, remaining: 7, armour: 6+3 
- => OVERKILL ship target system Dual #10 was destroyed, rem: 7, doing: 7, OK for: 15 dmg 
-resolveFireOrder - ID 41, shooter: Sharlin #8 vs Hyperion #6, w: FusionCannon #30, shots: 1 
-getPrimaryHitSystem: #6 
-FusionCannon, weapon id: 30, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #41, doStandardDmg, weapon: FusionCannon, target #6/5/Reactor, totalDmg: 34, remaining: 84, armour: 14+6 
-resolveFireOrder - ID 44, shooter: Hyperion #6 vs Sharlin #8, w: HeavyLaser #21, shots: 1 
-getPrimaryHitSystem: #8 
+********************* doAdvance for game1 from phase 2 to phase 3 
+handleFiringPhase 
+doFirstDestroyedCheck 
+doSecondDestroyedCheck 
+updateDestroyedState 
+resolveFireOrder - ID 3, shooter: Sharlin #1 vs Squadron #2, w: ShockCannon #11, shots: 1 
+ShockCannon, weapon id: 11, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #3, doStandardDmg, weapon: ShockCannon, target #2/3/Mograth, totalDmg: 9, remaining: 360, armour: 14+0 
+resolveFireOrder - ID 4, shooter: Sharlin #1 vs Squadron #2, w: ShockCannon #12, shots: 1 
+ShockCannon, weapon id: 12, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #4, doStandardDmg, weapon: ShockCannon, target #2/8/Haven, totalDmg: 10, remaining: 240, armour: 11+0 
+resolveFireOrder - ID 7, shooter: Sharlin #1 vs Squadron #2, w: ShockCannon #29, shots: 1 
+ShockCannon, weapon id: 29, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #7, doStandardDmg, weapon: ShockCannon, target #2/8/Haven, totalDmg: 8, remaining: 240, armour: 11+0 
+resolveFireOrder - ID 8, shooter: Sharlin #1 vs Squadron #2, w: ShockCannon #30, shots: 1 
+ShockCannon, weapon id: 30, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #8, doStandardDmg, weapon: ShockCannon, target #2/8/Haven, totalDmg: 11, remaining: 240, armour: 11+0 
+resolveFireOrder - ID 1, shooter: Sharlin #1 vs Hyperion #3, w: ShockCannon #9, shots: 1 
+ShockCannon, weapon id: 9, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #1, doStandardDmg, weapon: ShockCannon, target #3/8/Dual, totalDmg: 12, remaining: 28, armour: 9+0 
+resolveFireOrder - ID 2, shooter: Sharlin #1 vs Hyperion #3, w: ShockCannon #10, shots: 1 
 hitting main structure due to lack of exposed internals 
-HeavyLaser, weapon id: 21, DAMAGE mod: 40 (crits: 0, boost: 40) 
-HeavyLaser, weapon id: 21, RANGE DMG mod: 0.9664 
-fire #44, doLaserDmg, weapon: HeavyLaser, target: 8 for 184 dmg 
- => OVERKILL ship target system FusionCannon #9 was destroyed, rem: 34, doing: 34, OK for: 11 dmg 
-resolveFireOrder - ID 45, shooter: Hyperion #6 vs Sharlin #8, w: LightParticleBeam #22, shots: 1 
-getPrimaryHitSystem: #8 
+ShockCannon, weapon id: 10, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #2, doStandardDmg, weapon: ShockCannon, target #3/1/Primary, totalDmg: 9, remaining: 850, armour: 19+0 
+resolveFireOrder - ID 5, shooter: Sharlin #1 vs Hyperion #3, w: ShockCannon #20, shots: 1 
 hitting main structure due to lack of exposed internals 
-LightParticleBeam, weapon id: 1, DAMAGE mod: 20 (crits: 0, boost: 20) 
-LightParticleBeam, weapon id: 1, RANGE DMG mod: 0.9848 
-fire #45, doLaserDmg, weapon: LightParticleBeam, target: 8 for 29 dmg 
-resolveFireOrder - ID 46, shooter: Hyperion #6 vs Sharlin #8, w: LightParticleBeam #23, shots: 1 
-getPrimaryHitSystem: #8 
-hitting main structure due to lack of exposed internals 
-LightParticleBeam, weapon id: 1, DAMAGE mod: 20 (crits: 0, boost: 20) 
-LightParticleBeam, weapon id: 1, RANGE DMG mod: 0.9848 
-fire #46, doLaserDmg, weapon: LightParticleBeam, target: 8 for 29 dmg 
+ShockCannon, weapon id: 20, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #5, doStandardDmg, weapon: ShockCannon, target #3/1/Primary, totalDmg: 8, remaining: 850, armour: 19+0 
+resolveFireOrder - ID 6, shooter: Sharlin #1 vs Hyperion #3, w: ShockCannon #21, shots: 1 
+ShockCannon, weapon id: 21, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #6, doStandardDmg, weapon: ShockCannon, target #3/9/Hangar, totalDmg: 12, remaining: 100, armour: 10+0 
+resolveFireOrder - ID 9, shooter: Sharlin #1 vs Hyperion #3, w: ShockCannon #33, shots: 1 
+ShockCannon, weapon id: 33, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #9, doStandardDmg, weapon: ShockCannon, target #3/9/Hangar, totalDmg: 11, remaining: 100, armour: 10+0 
+resolveFireOrder - ID 10, shooter: Sharlin #1 vs Hyperion #3, w: ShockCannon #34, shots: 1 
+ShockCannon, weapon id: 34, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #10, doStandardDmg, weapon: ShockCannon, target #3/10/Dual, totalDmg: 11, remaining: 28, armour: 9+0 
 resolveBallisticFireOrders 
-determineCrit for Reactor & Power Grid #5 on unit #6, newDmg: 28, oldDmg: 0 
-CRIT: 10, roll: 21, tresh: 56 
-potential total power spike for unit #6: 3 
-applyPowerSpike to #6, spike: 3, output: 84/ mod: 3.57 
-potential total power spike for unit #8: 2 
-applyPowerSpike to #8, spike: 2, output: 152/ mod: 1.32 
-DB updateFireOrders: 15 
- => DB insertDamageEntries: 15 
- => DB insertCritEntries: 6 
-handleFiringPhase time: 0.107 seconds. 
-game 2, user 1 --- adjusting to turn/phase/status 2/3/waiting 
-game 2, user 2 --- adjusting to turn/phase/status 2/3/waiting 
-TIME: 0.118 seconds. 
+Mograth determineCrit for Mograth #3 on unit #2, new: 5, old: 0 
+in crit, determine effect roll: 17 
+in crit, determine effect roll: 14 
+in crit, determine effect roll: 3 
+in crit, determine effect roll: 16 
+Haven determineCrit for Haven #8 on unit #2, new: 24, old: 0 
+in crit, determine effect roll: 19 
+in crit, determine effect roll: 16 
+in crit, determine effect roll: 20 
+Dual determineCrit for Dual35mm Pulse Cannon / 35mm Particle Beam #8 on unit #3, new: 86%, old: 0% 
+ CRIT - roll: 39, tresh: 86 
+ CRIT - roll: 54, tresh: 86 
+Dual determineCrit for Dual35mm Pulse Cannon / 35mm Particle Beam #10 on unit #3, new: 79%, old: 0% 
+ CRIT - roll: 21, tresh: 79 
+ NO CRIT - roll: 89, tresh: 79 
+potential total power spike for unit #3: 0 
+applyPowerSpike to #3, overload: 0, emDmg: 17, output: 84/ mod: 1.01 
+handleResolvedFireData 
+DB updateFireOrders: 10 
+ => DB insertDamageEntries: 10 
+ => DB insertCritEntries: 4 
+handleFiringPhase time: 0.082 seconds. 
+game 1, user 1 --- adjusting to turn/phase/status 1/3/waiting 
+game 1, user 2 --- adjusting to turn/phase/status 1/3/waiting 
+TIME: 0.095 seconds. 
 4 mb 
-game 2, user 2 --- adjusting to turn/phase/status 2/3/ready 
-game 2, user 1 --- adjusting to turn/phase/status 2/3/ready 
-prepareAdvance 
-********************* doAdvance for game2 from phase 3 to phase 4 
-handleJumpOutActions 
-endTurn 
-setUnitsDestroyed 
-destroyUnitsDB 
-assembleEndStates 
-updateUnitState s:6 2/3 
-game 2, user 1 --- adjusting to turn/phase/status 3/-1/waiting 
-game 2, user 2 --- adjusting to turn/phase/status 3/-1/waiting 
-TIME: 0.039 seconds. 
-4 mb 
-game 2, user 1 --- adjusting to turn/phase/status 3/-1/ready 
-game 2, user 2 --- adjusting to turn/phase/status 3/-1/ready 
-prepareAdvance 
-********************* doAdvance for game2 from phase -1 to phase 0 
-handleDeploymentPhase 
-resolveDeployActions s: 0 
-handleJumpInActions 
-resolveJumpOutActions 
-handleInitialFireOrders 
-handleDeployFireOrders 
-handleBallisticFireOrders 
-DB insertUnits: 1 
-insertMissions s: 1 
-DB updateBallisticFireOrder, s: 2 
-assemblDeployStates 
-updateUnitState s:1 3/-1 
-game 2, user 1 --- adjusting to turn/phase/status 3/0/waiting 
-game 2, user 2 --- adjusting to turn/phase/status 3/0/waiting 
-TIME: 0.067 seconds. 
-4 mb 
-game 2, user 2 --- adjusting to turn/phase/status 3/0/ready 
-game 2, user 1 --- adjusting to turn/phase/status 3/0/ready 
-prepareAdvance 
-********************* doAdvance for game2 from phase 0 to phase 1 
-handleMovementPhase 
-handleShipMovement 
-resolveMovementDB 
-handleMixedMovement 
-Handling mixed #9 
-STRIKE 
-handleMixedMovement 
-Handling mixed #10 
-STRIKE 
-Handling mixed #11 
-STRIKE 
-handlePostMoveFires: 0 
-handling data 
-DB updateFireOrders: 0 
- => DB insertDamageEntries: 0 
- => DB insertCritEntries: 0 
-updateMissionState 
-game 2, user 1 --- adjusting to turn/phase/status 3/2/waiting 
-game 2, user 2 --- adjusting to turn/phase/status 3/2/waiting 
-TIME: 0.074 seconds. 
-4 mb 
-game 2, user 1 --- adjusting to turn/phase/status 3/2/ready 
-game 2, user 2 --- adjusting to turn/phase/status 3/2/ready 
-prepareAdvance 
-********************* doAdvance for game2 from phase 2 to phase 3 
-resolveFireOrder - ID 69, shooter: Sharlin #8 vs Saggitarius #5, w: NeutronLaser #26, shots: 1 
-NeutronLaser, weapon id: 26, DAMAGE mod: 20 (crits: 0, boost: 20) 
-NeutronLaser, weapon id: 26, RANGE DMG mod: 0.889 
-fire #69, doLaserDmg, weapon: NeutronLaser, target: 5 for 105 dmg 
- => OVERKILL ship target system MissileLauncher #11 was destroyed, rem: 44, doing: 44, OK for: 0 dmg 
-getPrimaryHitSystem: #5 
-resolveFireOrder - ID 70, shooter: Sharlin #8 vs Saggitarius #5, w: NeutronLaser #27, shots: 1 
-NeutronLaser, weapon id: 27, DAMAGE mod: 20 (crits: 0, boost: 20) 
-NeutronLaser, weapon id: 27, RANGE DMG mod: 0.889 
-fire #70, doLaserDmg, weapon: NeutronLaser, target: 5 for 103 dmg 
-Laser DOUBLE HIT, switching to PRIMARY 
-resolveFireOrder - ID 67, shooter: Sharlin #8 vs Saggitarius #5, w: FusionCannon #24, shots: 1 
-resolveFireOrder - ID 68, shooter: Sharlin #8 vs Saggitarius #5, w: FusionCannon #25, shots: 1 
-getPrimaryHitSystem: #5 
-FusionCannon, weapon id: 25, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #68, doStandardDmg, weapon: FusionCannon, target #5/1/Primary, totalDmg: 30, remaining: 532, armour: 13+0 
-resolveFireOrder - ID 61, shooter: Sharlin #8 vs Hyperion #6, w: NeutronLaser #7, shots: 1 
-NeutronLaser, weapon id: 7, DAMAGE mod: 0 (crits: 0, boost: 0) 
-NeutronLaser, weapon id: 7, RANGE DMG mod: 0.8878 
-fire #61, doLaserDmg, weapon: NeutronLaser, target: 6 for 96 dmg 
- => OVERKILL ship target system Dual #15 was destroyed, rem: 28, doing: 28, OK for: 12 dmg 
-getPrimaryHitSystem: #6 
-resolveFireOrder - ID 63, shooter: Sharlin #8 vs Hyperion #6, w: NeutronLaser #18, shots: 1 
-getPrimaryHitSystem: #6 
-NeutronLaser, weapon id: 18, DAMAGE mod: 20 (crits: 0, boost: 20) 
-NeutronLaser, weapon id: 18, RANGE DMG mod: 0.8878 
-fire #63, doLaserDmg, weapon: NeutronLaser, target: 6 for 121 dmg 
-getPrimaryHitSystem: #6 
-resolveFireOrder - ID 64, shooter: Sharlin #8 vs Hyperion #6, w: NeutronLaser #19, shots: 1 
-NeutronLaser, weapon id: 19, DAMAGE mod: 20 (crits: 0, boost: 20) 
-NeutronLaser, weapon id: 19, RANGE DMG mod: 0.8878 
-fire #64, doLaserDmg, weapon: NeutronLaser, target: 6 for 109 dmg 
-getPrimaryHitSystem: #6 
-resolveFireOrder - ID 71, shooter: Sharlin #8 vs Hyperion #6, w: FusionCannon #29, shots: 1 
-resolveFireOrder - ID 72, shooter: Sharlin #8 vs Hyperion #6, w: FusionCannon #30, shots: 1 
-getPrimaryHitSystem: #6 
-FusionCannon, weapon id: 30, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #72, doStandardDmg, weapon: FusionCannon, target #6/4/Sensor, totalDmg: 28, remaining: 97, armour: 16+0 
-resolveFireOrder - ID 62, shooter: Sharlin #8 vs Squadron #7, w: FusionCannon #10, shots: 1 
-FusionCannon, weapon id: 10, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #62, doStandardDmg, weapon: FusionCannon, target #7/3/Crius, totalDmg: 35, remaining: 360, armour: 13+2 
-resolveFireOrder - ID 65, shooter: Sharlin #8 vs Squadron #7, w: FusionCannon #20, shots: 1 
-FusionCannon, weapon id: 20, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #65, doStandardDmg, weapon: FusionCannon, target #7/9/Crius, totalDmg: 35, remaining: 360, armour: 13+2 
-resolveFireOrder - ID 66, shooter: Sharlin #8 vs Squadron #7, w: FusionCannon #21, shots: 1 
-FusionCannon, weapon id: 21, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #66, doStandardDmg, weapon: FusionCannon, target #7/9/Crius, totalDmg: 31, remaining: 340, armour: 13+2 
-resolveFireOrder - ID 73, shooter: Sharlin #8 vs Squadron #7, w: FusionCannon #33, shots: 1 
-FusionCannon, weapon id: 33, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #73, doStandardDmg, weapon: FusionCannon, target #7/9/Crius, totalDmg: 35, remaining: 324, armour: 12+2 
-resolveFireOrder - ID 74, shooter: Sharlin #8 vs Squadron #7, w: FusionCannon #34, shots: 1 
-FusionCannon, weapon id: 34, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #74, doStandardDmg, weapon: FusionCannon, target #7/9/Crius, totalDmg: 28, remaining: 303, armour: 12+2 
-resolveFireOrder - ID 51, shooter: Saggitarius #5 vs Sharlin #8, w: LightPulse #8, shots: 1 
-LightPulse, weapon id: 0, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #51, doPulseDmg, weapon: LightPulse, target #8/25/FusionCannon, hits: 4, totalDmg: 13, remaining: 34, armour: 17+0 
-resolveFireOrder - ID 52, shooter: Saggitarius #5 vs Sharlin #8, w: LightPulse #13, shots: 1 
-getPrimaryHitSystem: #8 
-hitting main structure due to lack of exposed internals 
-LightPulse, weapon id: 0, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #52, doPulseDmg, weapon: LightPulse, target #8/1/Primary, hits: 4, totalDmg: 14, remaining: 1606, armour: 28+0 
-resolveFireOrder - ID 49, shooter: Hyperion #6 vs Sharlin #8, w: LightPulse #14, shots: 1 
-getPrimaryHitSystem: #8 
-hitting main structure due to lack of exposed internals 
-LightPulse, weapon id: 0, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #49, doPulseDmg, weapon: LightPulse, target #8/1/Primary, hits: 3, totalDmg: 17, remaining: 1606, armour: 26+0 
-resolveFireOrder - ID 50, shooter: Hyperion #6 vs Sharlin #8, w: LightPulse #15, shots: 1 
-LightPulse, weapon id: 0, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #50, doPulseDmg, weapon: LightPulse, target #8/15/NeutronLaser, hits: 4, totalDmg: 13, remaining: 52, armour: 15+0 
-resolveFireOrder - ID 53, shooter: Squadron #7 vs Flight #9, w: LightPulse #5, shots: 1 
-Mixed getHitSection 
-resolveFireOrder - ID 54, shooter: Squadron #7 vs Flight #9, w: LightPulse #6, shots: 1 
-Mixed getHitSection 
-resolveFireOrder - ID 55, shooter: Squadron #7 vs Flight #9, w: LightPulse #7, shots: 1 
-Mixed getHitSection 
-resolveFireOrder - ID 56, shooter: Squadron #7 vs Flight #9, w: LightPulse #8, shots: 1 
-Mixed getHitSection 
-LightPulse, weapon id: 8, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #56, doPulseDmg, weapon: LightPulse, target #9/13/Nial, hits: 4, totalDmg: 15, remaining: 31, armour: 7+0 
-resolveFireOrder - ID 57, shooter: Squadron #7 vs Flight #9, w: LightPulse #11, shots: 1 
-Mixed getHitSection 
-LightPulse, weapon id: 11, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #57, doPulseDmg, weapon: LightPulse, target #9/11/Nial, hits: 3, totalDmg: 17, remaining: 31, armour: 7+0 
-resolveFireOrder - ID 58, shooter: Squadron #7 vs Flight #9, w: LightPulse #12, shots: 1 
-Mixed getHitSection 
-resolveFireOrder - ID 59, shooter: Squadron #7 vs Flight #9, w: LightPulse #13, shots: 1 
-Mixed getHitSection 
-resolveFireOrder - ID 60, shooter: Squadron #7 vs Flight #9, w: LightPulse #14, shots: 1 
-Mixed getHitSection 
-LightPulse, weapon id: 14, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #60, doPulseDmg, weapon: LightPulse, target #9/19/Nial, hits: 3, totalDmg: 13, remaining: 31, armour: 7+0 
-AAA skipping fireorder due to destroyed single shooter 
-resolveFireOrder - ID 75, shooter: Flight #9 vs Squadron #7, w: NeutronRepeater #2, shots: 1 
-NeutronRepeater, weapon id: 2, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #75, doStandardDmg, weapon: NeutronRepeater, target #7/3/Crius, totalDmg: 15, remaining: 340, armour: 13+2 
-resolveFireOrder - ID 76, shooter: Flight #9 vs Squadron #7, w: NeutronRepeater #4, shots: 1 
-NeutronRepeater, weapon id: 4, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #76, doStandardDmg, weapon: NeutronRepeater, target #7/3/Crius, totalDmg: 15, remaining: 340, armour: 12+2 
-resolveFireOrder - ID 77, shooter: Flight #9 vs Squadron #7, w: NeutronRepeater #6, shots: 1 
-resolveFireOrder - ID 78, shooter: Flight #9 vs Squadron #7, w: NeutronRepeater #8, shots: 1 
-NeutronRepeater, weapon id: 8, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #78, doStandardDmg, weapon: NeutronRepeater, target #7/9/Crius, totalDmg: 14, remaining: 289, armour: 12+2 
-resolveFireOrder - ID 79, shooter: Flight #9 vs Squadron #7, w: NeutronRepeater #10, shots: 1 
-NeutronRepeater, weapon id: 10, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #79, doStandardDmg, weapon: NeutronRepeater, target #7/9/Crius, totalDmg: 17, remaining: 289, armour: 11+2 
-resolveFireOrder - ID 80, shooter: Flight #9 vs Squadron #7, w: NeutronRepeater #12, shots: 1 
-resolveFireOrder - ID 82, shooter: Flight #9 vs Squadron #7, w: NeutronRepeater #16, shots: 1 
-NeutronRepeater, weapon id: 16, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #82, doStandardDmg, weapon: NeutronRepeater, target #7/3/Crius, totalDmg: 17, remaining: 337, armour: 11+2 
-resolveFireOrder - ID 83, shooter: Flight #9 vs Squadron #7, w: NeutronRepeater #18, shots: 1 
-resolveFireOrder - ID 84, shooter: Flight #9 vs Squadron #7, w: NeutronRepeater #20, shots: 1 
-NeutronRepeater, weapon id: 20, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #84, doStandardDmg, weapon: NeutronRepeater, target #7/3/Crius, totalDmg: 16, remaining: 325, armour: 10+2 
-resolveFireOrder - ID 85, shooter: Flight #9 vs Squadron #7, w: NeutronRepeater #22, shots: 1 
-NeutronRepeater, weapon id: 22, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #85, doStandardDmg, weapon: NeutronRepeater, target #7/3/Crius, totalDmg: 16, remaining: 313, armour: 9+2 
-resolveFireOrder - ID 86, shooter: Flight #9 vs Squadron #7, w: NeutronRepeater #24, shots: 1 
-NeutronRepeater, weapon id: 24, DAMAGE mod: 0 (crits: 0, boost: 0) 
-fire #86, doStandardDmg, weapon: NeutronRepeater, target #7/3/Crius, totalDmg: 17, remaining: 298, armour: 8+2 
-resolveBallisticFireOrders 
-potential total power spike for unit #5: 2 
-applyPowerSpike to #5, spike: 2, output: 42/ mod: 4.76 
-determineCrit for Engine & Drive #3 on unit #6, newDmg: 26, oldDmg: 0 
- NO CRIT - roll: 77, tresh: 52 
-determineCrit for Sensor & Analyzing #4 on unit #6, newDmg: 12, oldDmg: 0 
-mod < 5: 0, dropping 
-potential total power spike for unit #6: 2 
-applyPowerSpike to #6, spike: 2, output: 84/ mod: 2.38 
-testCrit for: Crius, old: 0, new: 84, turn: 3 
- => SQUAD determineCrit #7/3 for Crius, old/new 0/84 => 23 
-crit: Damage 
-crit: Damage 
-testCrit for: Crius, old: 0, new: 84, turn: 3 
- => SQUAD determineCrit #7/9 for Crius, old/new 0/84 => 23 
-crit: Damage 
-testCrit for: Nial, old: 0, new: 31, turn: 3 
- => FLIGHT determineCrit #9/11 for Nial, old/new 0/31 => 100 
-chance;: 100, roll: 43 
-dropout! 
-testCrit for: Nial, old: 0, new: 19, turn: 3 
- => FLIGHT determineCrit #9/19 for Nial, old/new 0/19 => 61 
-DB updateFireOrders: 38 
- => DB insertDamageEntries: 32 
- => DB insertCritEntries: 7 
-handleFiringPhase time: 0.394 seconds. 
-game 2, user 1 --- adjusting to turn/phase/status 3/3/waiting 
-game 2, user 2 --- adjusting to turn/phase/status 3/3/waiting 
-TIME: 0.401 seconds. 
-4 mb 
-cant apply crit on mixed unit 
-cant apply crit on mixed unit 

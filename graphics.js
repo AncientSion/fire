@@ -15,7 +15,7 @@ window.graphics = {
 
 	preloadExplos: function(){
 		var basePath = "varIcons/explos/";
-		var alt = [1, 2, 3, 4];
+		var alt = [1, 2, 3, 4, 5];
 
 		for (var i = 0; i < alt.length; i++){
 			var img = new Image();
@@ -41,7 +41,6 @@ window.graphics = {
 	preLoadBallistics: function(){
 		this.images.missile = new Image();
 		this.images.missile.src = "shipIcons/missile.png";
-
 	},
 
 	preloadShips: function(){
@@ -241,7 +240,77 @@ function drawProjectile(weapon, fire){
 	fxCtx.setTransform(1,0,0,1,0,0);
 }
 //drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].tx, game.fireOrders[i].anim[j][k].ty, game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m, 30); // EXPLO
-									
+				
+
+function drawEMSpriteExplo(wpn, anim){
+	var posX = anim.tx;
+	var posY = anim.ty;
+	var img = graphics.explos[4];
+	var s = wpn.exploSize*10;
+	var now = anim.n;
+	var max = anim.m;
+
+	now -= 1;
+	var sin = s*0.5*Math.sin(Math.PI*now/max);
+	if (sin < 0){
+		return;
+	}
+
+	fxCtx.translate(cam.o.x, cam.o.y);
+	fxCtx.scale(cam.z, cam.z)
+
+	var res = 1024;
+
+	var rows = 6;
+	var cols = 6;
+
+	var w = res/rows;
+	var h = res/cols;
+
+	var x = ((now/rows) - Math.floor(now/rows)) * res;
+	var y = res / cols * Math.floor(now/cols) 
+
+	fxCtx.globalAlpha = 1.5 - (now/max);
+	fxCtx.drawImage(img, x, y, w, h, posX-s/2, posY-s/2, s, s);
+	fxCtx.globalAlpha = 1;
+
+	fxCtx.setTransform(1,0,0,1,0,0);
+}	
+
+function drawBaseSpriteExplo(wpn, anim){
+	var posX = anim.tx;
+	var posY = anim.ty;
+	var img = graphics.explos[0];
+	var s = wpn.exploSize*5;
+	var now = anim.n;
+	var max = anim.m;
+
+	now -= 1;
+	var sin = s*0.5*Math.sin(Math.PI*now/max);
+	if (sin < 0){
+		return;
+	}
+
+	fxCtx.translate(cam.o.x, cam.o.y);
+	fxCtx.scale(cam.z, cam.z)
+
+	var res = 512;
+
+	var rows = 8;
+	var cols = 8;
+
+	var w = res/rows;
+	var h = res/cols;
+
+	var x = ((now/rows) - Math.floor(now/rows)) * res;
+	var y = res / cols * Math.floor(now/cols) 
+
+	fxCtx.globalAlpha = 1.5 - (now/max);
+	fxCtx.drawImage(img, x, y, w, h, posX-s/2, posY-s/2, s, s);
+	fxCtx.globalAlpha = 1;
+
+	fxCtx.setTransform(1,0,0,1,0,0);
+}					
 //function drawExplosion(weapon, x, y, now, max, explo){  // 150, 150, 30
 function drawExplosion(weapon, anim, frames){  // 150, 150, 30
 	var fraction = (anim.n-anim.m)/(frames);

@@ -61,31 +61,46 @@ Squaddie.prototype.hideInfoDiv = function(){
 }
 
 Squaddie.prototype.getSystemDetailsDiv = function(){
-	return $("<div>").attr("id", "systemDetailsDiv")
-		.append($("<table>")
-			.append($("<tr>")
-				.append($("<th>").html(this.display).attr("colSpan", 2)))
-			.append($("<tr>")
-				.append($("<td>").html(this.role).attr("colSpan", 2)))
-			.append($("<tr>")
-				.append($("<td>").html("Main Structure"))
-				.append($("<td>").html(this.remaining + " / " + this.integrity)))
-			.append($("<tr>")
-				.append($("<td>").html("Main Armour"))
-				.append($("<td>").html(this.remainingNegation + " / " + this.negation)))
-			.append($("<tr>")
-				.append($("<td>").html("Sensor Output"))
-				.append($("<td>").html(this.ew)))
-			.append($("<tr>")
-				.append($("<td>").html("Reactor Output"))
-				.append($("<td>").html(this.power)))
-			.append($("<tr>")
-				.append($("<td>").html("Engine Output"))
-				.append($("<td>").html(this.ep)))
-			.append($("<tr>")
-				.append($("<td>").html("Base Hit Chance"))
-				.append($("<td>").html(this.baseHitChance + " %")))
-		)
+	var div = 
+		$("<div>").attr("id", "systemDetailsDiv")
+			.append($("<table>")
+				.append($("<tr>")
+					.append($("<th>").html(this.display).attr("colSpan", 2)))
+				.append($("<tr>")
+					.append($("<td>").html(this.role).attr("colSpan", 2)))
+				.append($("<tr>")
+					.append($("<td>").html("Main Structure"))
+					.append($("<td>").html(this.remaining + " / " + this.integrity)))
+				.append($("<tr>")
+					.append($("<td>").html("Main Armour"))
+					.append($("<td>").html(this.remainingNegation + " / " + this.negation)))
+				.append($("<tr>")
+					.append($("<td>").html("Sensor Output"))
+					.append($("<td>").html(this.ew)))
+				.append($("<tr>")
+					.append($("<td>").html("Reactor Output"))
+					.append($("<td>").html(this.power)))
+				.append($("<tr>")
+					.append($("<td>").html("Engine Output"))
+					.append($("<td>").html(this.ep)))
+				.append($("<tr>")
+					.append($("<td>").html("Base Hit Chance"))
+					.append($("<td>").html(this.baseHitChance + " %")))
+			)
+
+
+	if (this.crits.length){
+		table = $("<table>").addClass("modifiers").append($("<tr>").append($("<th>").html("Modifiers").attr("colSpan", 2)));
+		for (var i = 0; i < this.crits.length; i++){
+			if (this.crits[i].inEffect()){
+				$(table[0]).append($("<tr>").append($("<td>").html(this.crits[i].getString()).attr("colSpan", 2).addClass("negative")));
+			}
+		}
+		div.append(table)
+	}
+	
+
+	return div;
 }
 
 Squaddie.prototype.expandElement = function(){

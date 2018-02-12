@@ -166,6 +166,7 @@ class LightEMPulse extends LightPulse {
 	public $minDmg = 3;
 	public $maxDmg = 3;
 	public $accDecay = 180;
+	public $animation = "em";
 	public $animColor = "lightBlue";
 	public $projSize = 2;
 	public $projSpeed = 8;

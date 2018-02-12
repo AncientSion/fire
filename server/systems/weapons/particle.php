@@ -134,6 +134,7 @@ class ShockCannon extends Particle {
 	public $powerReq = 2;
 	public $traverse = -1;
 
+	public $animation = "em";
 	public $animColor = "lightBlue";
 	public $projSize = 3;
 	public $projSpeed = 7;
