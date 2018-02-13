@@ -193,7 +193,7 @@ class System {
 		return $dmg;
 	}
 
-	public function testCrit($turn, $extra){
+	public function singleCritTest($turn, $extra){
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			if ($this->damages[$i]->turn == $turn){

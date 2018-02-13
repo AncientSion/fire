@@ -140,7 +140,7 @@ class Single {
 		return $this->negation;
 	}
 
-	public function testCrit($turn, $extra){
+	public function singleCritTest($turn, $extra){
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			if ($this->damages[$i]->turn == $turn){
@@ -150,9 +150,34 @@ class Single {
 		}
 
 		if ($new){
-			$this->determineCrit($new, $old, $turn);
+			$new = round($new / $this->integrity * 100);
+			$old = round($old / $this->integrity * 100);
+			Debug::log(get_class($this)." determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", new: ".$new.", old: ".$old);
+			$this->checkDropoutCrits($new, $old, $turn);
+			$this->checkSystemCrits($new, $old, $turn);
 		}
 	}
+	
+	public function checkDropoutCrits($new, $old, $turn){
+		$chance = 50;
+		$tresh = $this->dropout[0];
+		$dmg = floor($new + $old);
+		if ($dmg > $tresh){
+			$min = floor($chance * (1+($dmg - $tresh)/(100 - $tresh)));
+			$roll = mt_rand(0, 100);
+
+			Debug::log("chance: ".$min.", roll: ".$roll);
+			if ($roll < $min){
+				Debug::log("dropout!");
+				$this->crits[] = new Crit(
+					sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 0, 0, 1
+				);
+				$this->destroyed = 1;
+				return;
+			}
+		}
+	}
+
 	
 	public function checkSystemCrits($new, $old, $turn){
 		return;

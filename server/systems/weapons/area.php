@@ -96,7 +96,7 @@ class EnergyMine extends Area {
 		$this->armourMod = 0.4;
 	}
 
-	public function testCrit($turn, $extra){
+	public function singleCritTest($turn, $extra){
 		return;
 	}
 

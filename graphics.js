@@ -238,6 +238,12 @@ function drawProjectile(weapon, fire){
 
 
 	fxCtx.setTransform(1,0,0,1,0,0);
+
+	if (fire.n >= fire.m && fire.h){
+		fire.p = 1;
+		fire.n = 0;
+		fire.m = 36;
+	}
 }
 //drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].tx, game.fireOrders[i].anim[j][k].ty, game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m, 30); // EXPLO
 				
@@ -252,18 +258,14 @@ function drawEMSpriteExplo(wpn, anim){
 
 	now -= 1;
 	var sin = s*0.5*Math.sin(Math.PI*now/max);
-	if (sin < 0){
-		return;
-	}
+	if (sin < 0){return;}
 
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z)
 
 	var res = 1024;
-
 	var rows = 6;
 	var cols = 6;
-
 	var w = res/rows;
 	var h = res/cols;
 
@@ -287,18 +289,14 @@ function drawBaseSpriteExplo(wpn, anim){
 
 	now -= 1;
 	var sin = s*0.5*Math.sin(Math.PI*now/max);
-	if (sin < 0){
-		return;
-	}
+	if (sin < 0){return;}
 
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z)
 
-	var res = 512;
-
+	var res = 512
 	var rows = 8;
 	var cols = 8;
-
 	var w = res/rows;
 	var h = res/cols;
 
@@ -381,26 +379,23 @@ function drawExplosion(weapon, anim, frames){  // 150, 150, 30
 function drawUnitExplo(posX, posY, img, s, now, max){
 	now -= 1;
 	var sin = s*0.5*Math.sin(Math.PI*now/max);
-	if (sin < 0){
-		return;
-	}	
+	if (sin < 0){return;}	
 
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z)
 
+	var res = 512
 	var rows = 8;
 	var cols = 8;
+	var w = res/rows;
+	var h = res/cols;
 
-	var w = 64;
-	var h = 64;
-
-	var x = ((now/rows) - Math.floor(now/rows)) * 512;
-	var y = 512 / cols * Math.floor(now/cols) 
+	var x = ((now/rows) - Math.floor(now/rows)) * res;
+	var y = res / cols * Math.floor(now/cols) 
 
 	fxCtx.globalAlpha = 1.5 - (now/max);
 	fxCtx.drawImage(img, x, y, w, h, posX-s/2, posY-s/2, s, s);
 	fxCtx.globalAlpha = 1;
-
 
 	fxCtx.setTransform(1,0,0,1,0,0);
 }

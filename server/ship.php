@@ -951,40 +951,11 @@ class Ship {
 		return mt_rand(0, 359);
 	}
 
-	public function testForCrits($turn){
-		//Debug::log("= testForCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
-
-		$overload = 0;
-
+	public function handleCritTesting($turn){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				if (!$this->structures[$i]->systems[$j]->damaged){continue;}
-				else if (!$this->structures[$i]->systems[$j]->destroyed){
-					$this->structures[$i]->systems[$j]->testCrit($turn, 0);
-				}
-				else if (mt_rand(0, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn)){
-					$usage = $this->structures[$i]->systems[$j]->getPowerUsage($turn);
-					$overload += $usage;
-					$this->structures[$i]->systems[$j]->damages[sizeof($this->structures[$i]->systems[$j]->damages)-1]->notes .= "o".$usage.";";
-				}
-			}
-		}
-
-		for ($j = 0; $j < sizeof($this->primary->systems); $j++){
-			if (!$this->primary->systems[$j]->damaged){continue;}
-			if ($this->primary->systems[$j]->destroyed){continue;}
-
-			$this->primary->systems[$j]->testCrit($turn, 0);
-		}
-
-		if ($overload || $this->primary->emDmg){
-			Debug::log("potential total power spike for unit #".$this->id.": ".$overload);
-			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
-				if ($this->primary->systems[$j]->name == "Reactor"){
-					$this->primary->systems[$j]->applyPowerSpike($turn, $overload, $this->primary->emDmg);
-					return;
-				}
-			}
+			if ($this->structures[$i]->destroyed){continue;}
+			else if (!$this->structures[$i]->damaged){/*Debug::log("subunit ".$i." not damaged!");*/ continue;}
+			$this->structures[$i]->singleCritTest($turn, 0);
 		}
 	}
 
@@ -1215,6 +1186,43 @@ class Medium extends Ship {
 
 	public function getShipTypeMod(){
 		return 1.15;
+	}	
+
+	public function handleCritTesting($turn){
+		//Debug::log("= handleCritTesting for ".$this->name.", #".$this->id.", turn: ".$turn);
+
+		$overload = 0;
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				if (!$this->structures[$i]->systems[$j]->damaged){continue;}
+				else if (!$this->structures[$i]->systems[$j]->destroyed){
+					$this->structures[$i]->systems[$j]->singleCritTest($turn, 0);
+				}
+				else if (mt_rand(0, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn)){
+					$usage = $this->structures[$i]->systems[$j]->getPowerUsage($turn);
+					$overload += $usage;
+					$this->structures[$i]->systems[$j]->damages[sizeof($this->structures[$i]->systems[$j]->damages)-1]->notes .= "o".$usage.";";
+				}
+			}
+		}
+
+		for ($j = 0; $j < sizeof($this->primary->systems); $j++){
+			if (!$this->primary->systems[$j]->damaged){continue;}
+			if ($this->primary->systems[$j]->destroyed){continue;}
+
+			$this->primary->systems[$j]->singleCritTest($turn, 0);
+		}
+
+		if ($overload || $this->primary->emDmg){
+			Debug::log("potential total power spike for unit #".$this->id.": ".$overload);
+			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
+				if ($this->primary->systems[$j]->name == "Reactor"){
+					$this->primary->systems[$j]->applyPowerSpike($turn, $overload, $this->primary->emDmg);
+					return;
+				}
+			}
+		}
 	}
 }
 

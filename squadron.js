@@ -93,7 +93,8 @@ Squaddie.prototype.getSystemDetailsDiv = function(){
 		table = $("<table>").addClass("modifiers").append($("<tr>").append($("<th>").html("Modifiers").attr("colSpan", 2)));
 		for (var i = 0; i < this.crits.length; i++){
 			if (this.crits[i].inEffect()){
-				$(table[0]).append($("<tr>").append($("<td>").html(this.crits[i].getString()).attr("colSpan", 2).addClass("negative")));
+				var html = "Disengaged + T (" + this.crits[i].turn + ")"
+				$(table[0]).append($("<tr>").append($("<td>").html(html).attr("colSpan", 2).addClass("negative")));
 			}
 		}
 		div.append(table)

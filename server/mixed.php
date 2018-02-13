@@ -109,7 +109,6 @@ class Mixed extends Ship {
 					break;
 				}
 			}
-			Debug::log("cant apply crit on mixed unit");
 		}
 		return true;
 	}
@@ -381,16 +380,6 @@ class Mixed extends Ship {
 	public function setImpulseProfileMod(){
 		$this->impulseHitMod = 0;
 	}
-
-	public function testForCrits($turn){
-
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->destroyed){continue;}
-			else if (!$this->structures[$i]->damaged){/*Debug::log("subunit ".$i." not damaged!");*/ continue;}
-
-			$this->structures[$i]->testCrit($turn, 0);
-		}
-	}	
 
 	public function getEndState($turn){
 		//Debug::log("getMoveState for ".$this->id);

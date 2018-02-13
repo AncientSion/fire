@@ -1770,7 +1770,7 @@ function Game(data, userid){
 		this.getAllResolvingFireOrders();
 		this.getAreaShotDetails();
 		this.getFireAnimationDetails();
-		this.getunitExploDetails();
+		this.getUnitExploDetails();
 
 		$("#combatlogWrapper")
 			.css("width", 450)
@@ -1809,7 +1809,7 @@ function Game(data, userid){
 		this.getAllResolvingFireOrders();
 		this.getShotDetails();
 		this.getFireAnimationDetails();
-		this.getunitExploDetails();
+		this.getUnitExploDetails();
 
 		$("#combatlogWrapper").show();
 		setFPS(40);
@@ -1981,10 +1981,11 @@ function Game(data, userid){
     }
 
     this.getRandomExplo = function(){
+    	return graphics.explos[range(0, 2)];
     	return graphics.explos[range(0, graphics.explos.length-1)];
     }
 
-	this.getunitExploDetails = function(){
+	this.getUnitExploDetails = function(){
 		window.animations = [];
 
 		for (var i = 0; i < game.ships.length; i++){
@@ -2104,16 +2105,14 @@ function Game(data, userid){
 						game.fireOrders[i].anim[j][k].n += 1;
 						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
 							if (game.fireOrders[i].anim[j][k].p == 0){ // still doing proj
-								drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k], 30); 
-								if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){ // proj arrived
-									game.fireOrders[i].anim[j][k].p = 1; game.fireOrders[i].anim[j][k].n = 0; game.fireOrders[i].anim[j][k].m = 36; // reset 
-								}
+								drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
 							}
-							else {
+							else if (game.fireOrders[i].anim[j][k].h){
 								drawEMSpriteExplo(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
-								if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
-									game.fireOrders[i].anim[j][k].done = true;
-								}
+							}
+
+							if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
+								game.fireOrders[i].anim[j][k].done = true;
 							}
 						}
 					}
@@ -2123,16 +2122,14 @@ function Game(data, userid){
 						game.fireOrders[i].anim[j][k].n += 1;
 						if (game.fireOrders[i].anim[j][k].n > 0){ // t valid, now animate
 							if (game.fireOrders[i].anim[j][k].p == 0){ // still doing proj
-								drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k], 30); 
-								if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){ // proj arrived
-									game.fireOrders[i].anim[j][k].p = 1; game.fireOrders[i].anim[j][k].n = 0; game.fireOrders[i].anim[j][k].m = 36; // reset 
-								}
+								drawProjectile(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
 							}
-							else {
+							else if (game.fireOrders[i].anim[j][k].h){
 								drawBaseSpriteExplo(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k]);
-								if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
-									game.fireOrders[i].anim[j][k].done = true;
-								}
+							}
+
+							if (game.fireOrders[i].anim[j][k].n >= game.fireOrders[i].anim[j][k].m){
+								game.fireOrders[i].anim[j][k].done = true;
 							}
 						}
 					}

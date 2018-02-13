@@ -122,11 +122,37 @@ class FusionCannon extends Particle {
 	}
 }
 
+class EMNeedler extends Particle {
+	public $name = "EMNeedler";
+	public $display = "18mm EM-Needler";
+	public $minDmg = 7;
+	public $maxDmg = 10;
+	public $accDecay = 240;
+	public $shots = 3;
+	public $reload = 2;
+	public $integrity = 24;
+	public $powerReq = 3;
+	public $traverse = -4;
+
+	public $animation = "em";
+	public $animColor = "lightBlue";
+	public $projSize = 2;
+	public $projSpeed = 10;
+
+	public $em = 1;
+	public $dmgType = "EM";
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+		$this->notes = array("Does no structural damage", "Damage can cause critical effects");
+	}
+}
+
 class ShockCannon extends Particle {
 	public $name = "ShockCannon";
 	public $display = "42mm Shock Cannon";
-	public $minDmg = 8;
-	public $maxDmg = 12;
+	public $minDmg = 6;
+	public $maxDmg = 8;
 	public $accDecay = 120;
 	public $shots = 1;
 	public $reload = 2;

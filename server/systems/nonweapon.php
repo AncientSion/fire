@@ -115,7 +115,7 @@ class Reactor extends PrimarySystem {
     }
 
 	public function applyPowerSpike($turn, $overload, $em){
-		$mod = round((($overload + ($em / 20)) / $this->output *100), 2);
+		$mod = round((($overload + ($em / 10)) / $this->output *100), 2);
 		//d, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 		Debug::log("applyPowerSpike to #".$this->parentId.", overload: ".$overload.", emDmg: ".$em.", output: ".$this->output."/ mod: ".$mod);
 		$this->crits[] = new Crit(sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Output", 0, $mod, 1);	
@@ -240,7 +240,7 @@ class Hangar extends Weapon {
 		}
 	}
 
-	public function testCrit($turn, $extra){
+	public function singleCritTest($turn, $extra){
 		return;
 	}
 }
@@ -261,7 +261,7 @@ class Bulkhead extends System {
 		$this->armourMod = 1;
 	}
 
-	public function testCrit($turn, $extra){
+	public function singleCritTest($turn, $extra){
 		return;
 	}
 }

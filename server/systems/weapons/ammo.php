@@ -35,7 +35,7 @@ class Missile extends Single {
 		$this->baseImpulse = ceil(pow($this->mass, -0.75)*325);
 	}
 
-	public function testCrit($turn, $extra){
+	public function singleCritTest($turn, $extra){
 		return;
 	}
 }

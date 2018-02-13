@@ -4,11 +4,11 @@ class Darkner extends Medium {
 	public $display = "Darkner";
 	public $faction = "Centauri Republic";
 	public $size =  45;
-	public static $value = 450;
+	public static $value = 420;
 	public $profile = array(0.93, 1.07);
 	public $mass = 3000;
 
-	public $integrity = 550;
+	public $integrity = 525;
 	public $vitalHP = 80;
 	public $ep = 85;
 	public $ew = 800;

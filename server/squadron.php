@@ -257,15 +257,6 @@ class Squadron extends Ship {
 		return $system->getArmourValue($system);
 	}
 
-	public function testForCrits($turn){
-		//Debug::log("testForCrits ".get_class($this)." #".$this->id);
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->destroyed){continue;}
-			else if (!$this->structures[$i]->damaged){/*Debug::log("subunit ".$i." not damaged!");*/ continue;}
-			$this->structures[$i]->testCrit($turn, 0);
-		}
-	}	
-
 	public function addCritDB($crits){
 		for ($i = 0; $i < sizeof($crits); $i++){
 			$found = 0;
@@ -487,43 +478,13 @@ class Squaddie extends Single {
 		}
 		return $crits;
 	}
+	
 	public function getValidEffects(){
 		return array( // type, min, max, dura
 			array("Damage", 30, 0, 20),
 			array("Disabled", 65, 1, 0.00),
 			array("Destroyed", 80, 0, 0.00),
 		);
-	}
-
-
-	public function determineCrit($new, $old, $turn){
-		$new = round($new / $this->integrity * 100);
-		$old = round($old / $this->integrity * 100);
-
-		Debug::log(get_class($this)." determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", new: ".$new.", old: ".$old);
-
-		$this->checkDropoutCrits($new, $old, $turn);
-		$this->checkSystemCrits($new, $old, $turn);
-	}
-
-	public function checkDropoutCrits($new, $old, $turn){
-		$chance = 50;
-		$tresh = $this->dropout[0];
-		$dmg = floor($new + $old);
-		if ($dmg > $tresh){
-			$min = floor($chance * (1+($dmg - $tresh)/(100 - $tresh)));
-			$roll = mt_rand(0, 100);
-
-			Debug::log("chance: ".$min.", roll: ".$roll);
-			if ($roll < $min){
-				Debug::log("dropout!");
-				$this->crits[] = new Crit(
-					sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 0, 0, 1
-				);
-				$this->destroyed = 1;
-				return;
-			}
-		}
 	}
 
 	public function checkSystemCrits($new, $old, $turn){
@@ -536,6 +497,7 @@ class Squaddie extends Single {
 				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
 				$roll = mt_rand(0, 20) + $tresh + sizeof($this->structures[$i]->systems[$j]->crits)*20;
 				Debug::log("in crit, determine effect roll: ".$roll);
+				if ($roll < $effects[0][1]){return;}
 
 				for ($k = sizeof($effects)-1; $k >= 0; $k--){
 					if ($roll >= $effects[$k][1] && mt_rand(0, 2)){//66 % chance to crit

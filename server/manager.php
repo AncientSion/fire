@@ -1354,8 +1354,7 @@ include_once 'global.php';
 	public function testCriticals(){
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->damaged){
-				//Debug::log("testCriticals #".$this->ships[$i]->id);
-				$this->ships[$i]->testForCrits($this->turn);
+				$this->ships[$i]->handleCritTesting($this->turn);
 			} 
 		}
 	}
@@ -1463,8 +1462,8 @@ include_once 'global.php';
 						"Octurion",
 						"Primus",
 						"Altarian",
-						"Darkner",
 						"Demos",
+						"Darkner",
 					),
 					array(
 						"Vorchar",

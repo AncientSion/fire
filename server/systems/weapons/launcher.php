@@ -58,7 +58,7 @@ class Launcher extends Weapon {
 		else $this->armourMod =  0.3;
 	}
 
-	public function testCrit($turn, $extra){
+	public function singleCritTest($turn, $extra){
 		return;
 	}
 
