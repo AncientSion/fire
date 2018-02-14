@@ -67,6 +67,7 @@ spl_autoload_register(
                 'crius' => '/server/ships/crius.php',
 
                 'gquan' => '/server/ships/gquan.php',
+                'katoc' => '/server/ships/katoc.php',
                 'thentus' => '/server/ships/thentus.php',
                 'shokos' => '/server/ships/shokos.php',
 
@@ -116,6 +117,7 @@ spl_autoload_register(
 
                 'lightplasmapulse' => '/server/systems/weapons/pulse.php',
                 'mediumplasmapulse' => '/server/systems/weapons/pulse.php',
+                'heavyplasmapulse' => '/server/systems/weapons/pulse.php',
                 'lightempulse' => '/server/systems/weapons/pulse.php',
                 
                 'emneedler' => '/server/systems/weapons/particle.php',

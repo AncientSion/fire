@@ -245,6 +245,7 @@ else {
 				userid: window.userid,
 				faction: "",
 				arcRange: 100,
+				canSubmit: 0,
 
 				getUnitName: function(){
 					if (this.ships[0].ship){return this.ships[0].name;
@@ -425,7 +426,8 @@ else {
 	}
 
 	function confirmFleetPurchase(){
-		if (game.faction.length > 2){
+		if (!game.canSubmit){return;}
+		else if (game.faction.length > 2){
 			for (var i = 0; i < game.shipsBought.length; i++){
 				for (var j = game.shipsBought[i].upgrades.length-1; j >= 0; j--){
 					if (game.shipsBought[i].upgrades[j].loads.length == 0){
@@ -433,6 +435,7 @@ else {
 					}
 				}
 			}
+			game.canSubmit = 0;
 			ajax.confirmFleetPurchase(playerid, gameid, window.game.shipsBought, redirect);
 		}
 		else popup("Please also pick your reinforcement faction </br>(right click the faction name on the left menu).");

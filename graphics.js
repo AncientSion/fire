@@ -109,6 +109,9 @@ window.graphics = {
 		this.images.gquan = new Image();
 		this.images.gquan.src = "shipIcons/gquan.png";
 
+		this.images.katoc = new Image();
+		this.images.katoc.src = "shipIcons/katoc.png";
+
 		this.images.thentus = new Image();
 		this.images.thentus.src = "shipIcons/thentus.png";
 

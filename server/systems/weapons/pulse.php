@@ -129,35 +129,46 @@ class LightPlasmaPulse extends LightPulse {
 	}
 }
 
-class MediumPlasmaPulse extends MediumPulse {
+class MediumPlasmaPulse extends LightPlasmaPulse {
 	public $name = "MediumPlasmaPulse";
 	public $display = "60mm Plasma Pulse Cannon";
-	public $minDmg = 30;
-	public $maxDmg = 38;
+	public $minDmg = 28;
+	public $maxDmg = 36;
+	public $accDecay = 120;
+	
+	public $projSize = 3;
+	public $projSpeed = 9;
+	public $reload = 3;
+	public $integrity = 42;
+	public $powerReq = 4;
+	public $traverse = -1;
 
-	public $animColor = "darkGreen";
-
-	public $dmgType = "Plasma";
-	public $melt = 50;
-	public $dmgLoss = 18;
-
-	public $maxBoost = 1;
-	public $effiency = 2;
+	public $effiency = 3;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
-		$this->boostEffect[] = new Effect("Damage loss", -25);
-		$this->boostEffect[] = new Effect("Damage", 10);
-		$this->notes = array($this->melt."% of total damage is added as extra damage to armour");
-	}
-	
-	public function getDmgRangeMod($fire){
-		$boost = (100 + ($this->getBoostEffect("Damage loss") * $this->getBoostLevel($fire->turn))) / 100;
-		$loss = $fire->dist * ($this->dmgLoss * $boost) / 10000;
+   }
+}
 
-		Debug::log(get_class($this).", weapon id: ".$this->id.", boost: ".$boost.", final multi: ".(1-$loss)." @ dist: ".$fire->dist);
-		return 1-$loss;
-	}
+class HeavyPlasmaPulse extends MediumPlasmaPulse {
+	public $name = "HeavyPlasmaPulse";
+	public $display = "102mm Plasma Pulse Cannon";
+	public $minDmg = 46;
+	public $maxDmg = 59;
+	public $accDecay = 90;
+	
+	public $projSize = 4;
+	public $projSpeed = 9;
+	public $reload = 4;
+	public $integrity = 64;
+	public $powerReq = 6;
+	public $traverse = 1;
+
+	public $effiency = 4;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+   }
 }
 
 class LightEMPulse extends LightPulse {
