@@ -5,7 +5,6 @@ class Salvo extends Mixed {
 	public $unitType = "Salvo";
 	public $salvo = true;
 	public $traverse = -4;
-	public $trajectory;
 
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
@@ -20,8 +19,7 @@ class Salvo extends Mixed {
 	}
 
 	public function setMass(){
-		if (!sizeof($this->structures)){return;}
-		$this->mass = $this->structures[0]->mass;
+		return;
 	}
 
 	public function setSize(){
@@ -39,24 +37,36 @@ class Salvo extends Mixed {
 	}
 
 	public function setCurSpeed($turn, $phase){
-		$this->baseImpulse = ceil(pow($this->mass, -0.75)*325);
+		//Debug::log("setCurSpeed ".get_class($this));
 
-		$elapsed = 1 + $turn - $this->available;
-
-		$this->currentImpulse = floor($this->baseImpulse * min(3, $elapsed + ($phase > 1)));
+		if ($this->available == $turn && $phase == -1){$this->currentImpulse = 0; return;}
+		
+		$this->baseImpulse = $this->structures[0]->baseImpulse;
+		if ($this->structures[0]->missile){
+			$elapsed = 1 + $turn - $this->available;
+			$this->currentImpulse = floor($this->baseImpulse * min(3, $elapsed + ($phase > 1)));
+		}
+		else {
+			$this->currentImpulse = $this->baseImpulse;
+		}
 	}
 	
 	public function getCurSpeed(){
 		return $this->currentImpulse;
 	}
 
+	public function setPosition(){
+		return;
+	}
+
 	public function getFireAngle($fire){
-		$angle = Math::getAngle2($this->actions[0], $this->getTrajectoryStart());
-		return round($angle);
+		$angle = round(Math::getAngle2($this->actions[sizeof($this->actions)-1], $this->actions[0]));
+		Debug::log("------- SALVO TRAJECT :".$angle);
+		return $angle;
 	}
 
 	public function getTrajectoryStart(){
-		return $this->trajectory;
+		return $this->actions[0];
 	}
 
 	public function addMission($data, $userid, $turn, $phase){

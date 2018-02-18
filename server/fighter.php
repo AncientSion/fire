@@ -112,9 +112,9 @@ class Sitara extends Fighter {
 	}
 }
 
-class SitaraIon extends Sitara {
-	public $name = "SitaraIon";
-	public $display = "Sitara (Ion)";
+class SitaraMuon extends Sitara {
+	public $name = "SitaraMuon";
+	public $display = "Sitara (Muon)";
 	public $mass = 34;
 
 	function __construct($id, $parentId){
@@ -122,7 +122,7 @@ class SitaraIon extends Sitara {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new IonBolt($this->getId(), $this->id, $this->parentId, 1, 1, 36, 44, 0, 360);
+		$this->systems[] = new MuonBolt($this->getId(), $this->id, $this->parentId, 1, 1, 36, 44, 0, 360);
 	}
 }
 
@@ -165,7 +165,7 @@ class Gorith extends Fighter {
 	public static $value =  22;
 	public $mass = 34;
 	public $integrity = 22;
-	public $negation = 4;
+	public $negation = 3;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -181,8 +181,8 @@ class Frazi extends Fighter {
 	public $display = "Frazi";
 	public $faction = "Narn Regime";
 	public static $value =  32;
-	public $mass = 36;
-	public $integrity = 27;
+	public $mass = 34;
+	public $integrity = 26;
 	public $negation = 5;
 
 	function __construct($id, $parentId){

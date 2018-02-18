@@ -306,7 +306,7 @@
 		}
 
 		public function insertUnits($userid, $gameid, &$units){
-			Debug::log("DB insertUnits: ".sizeof($units));
+			//Debug::log("DB insertUnits: ".sizeof($units));
 
 			$stmt = $this->connection->prepare("
 				INSERT INTO units 
@@ -385,7 +385,7 @@
 		}
 
 		public function insertMissions($missions){
-			Debug::log("insertMissions s: ".sizeof($missions));
+			//Debug::log("insertMissions s: ".sizeof($missions));
 			$stmt = $this->connection->prepare("
 				INSERT INTO missions 
 					(unitid, type, turn, targetid, x, y, arrived)

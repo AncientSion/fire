@@ -496,7 +496,7 @@ class Squaddie extends Single {
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
 				$roll = mt_rand(0, 20) + $tresh + sizeof($this->structures[$i]->systems[$j]->crits)*20;
-				Debug::log("in crit, determine effect roll: ".$roll);
+				Debug::log("in crit, determine effect, tresh: ".$tresh." roll: ".$roll);
 				if ($roll < $effects[0][1]){return;}
 
 				for ($k = sizeof($effects)-1; $k >= 0; $k--){

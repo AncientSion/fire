@@ -23,16 +23,16 @@ class Mograth extends Light {
 		$structs = array();
 		
 		$front = new Section(300, 60);
-		$front->systems[] = new MediumIon($this->getId(), $this->parentId, 315, 45);
-		$front->systems[] = new MediumIon($this->getId(), $this->parentId, 315, 45);
+		$front->systems[] = new MediumMuon($this->getId(), $this->parentId, 315, 45);
+		$front->systems[] = new MediumMuon($this->getId(), $this->parentId, 315, 45);
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new LightIon($this->getId(), $this->parentId, 300, 180);
+		$right->systems[] = new LightMuon($this->getId(), $this->parentId, 300, 180);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new LightIon($this->getId(), $this->parentId, 180, 60);
+		$left->systems[] = new LightMuon($this->getId(), $this->parentId, 180, 60);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

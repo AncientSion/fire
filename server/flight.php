@@ -28,7 +28,7 @@ class Flight extends Mixed {
 		return $this->baseImpulse*4;
 	}
 
-	public function setCurSpeed($t, $p){
+	public function setCurSpeed($turn, $phase){
 		//Debug::log("setCurSpeed #".$this->id);
 		if (!$this->mass){$this->baseImpulse = 0; $this->currentImpulse = 0; return;}
 
@@ -38,10 +38,10 @@ class Flight extends Mixed {
 		$elapsed = 1;
 
 		if (!$this->mission->arrived){
-			$elapsed += $t - $this->mission->turn;
+			$elapsed += $turn - $this->mission->turn;
 		}
 
-		$this->currentImpulse = floor($this->baseImpulse * min(4, $elapsed + ($p > 1)));
+		$this->currentImpulse = floor($this->baseImpulse * min(4, $elapsed + ($phase > 1)));
 	}
 
 	public function setSize(){

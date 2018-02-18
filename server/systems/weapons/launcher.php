@@ -5,6 +5,8 @@ class Launcher extends Weapon {
 	public $animation = "projectile";
 	public $fireMode = "Ballistic";
 	public $priority = 8;
+	public $usage = -1;
+
 	public $loads = array();
 	public $reload = 3;
 	public $ammo = -1;
@@ -15,28 +17,13 @@ class Launcher extends Weapon {
 	public $effiency = 1;
 	public $shots = 0;
 	public $accDecay = 0;
-	public $usage = -1;
 
-	function __construct($id, $parentId, $start, $end, $loads, $width = 1){
-		for ($i = 0; $i < sizeof($loads); $i++){
-			$this->loads[] = new $loads[$i][0]($this->id, -1);
-			$this->capacity[] = $loads[$i][1];
-			$this->launchRate[] = $loads[$i][2];
-		}
-
-        parent::__construct($id, $parentId, $start, $end, 0, $width);
+	function __construct($id, $parentId, $start, $end, $width){
+        parent::__construct($id, $parentId, $start, $end);
 	}
 
 	public function getAmmo(){
 		return $this->loads[$this->ammo];
-	}
-
-	public function getShots($turn){
-		return $this->getBoostLevel($turn);
-	}
-
-	public function getBaseDamage($fire){
-		return 0;
 	}
 
 	public function adjustLoad($dbLoad){
@@ -51,6 +38,10 @@ class Launcher extends Weapon {
 		}
 	}
 
+	public function getShots($turn){
+		return $this->getBoostLevel($turn);
+	}
+
 	public function setArmourMod(){
 		$w = Math::getArcWidth($this);
 		if ($w <= 120){$this->armourMod = 0.8;}
@@ -61,15 +52,36 @@ class Launcher extends Weapon {
 	public function singleCritTest($turn, $extra){
 		return;
 	}
-
 }
 
 class MissileLauncher extends Launcher {
 	public $name = "MissileLauncher";
 	public $display = "Missile Launcher";
-	public $animColor = "black";
+	public $loadout = 1;
 
 	function __construct($id, $parentId, $start, $end, $loads, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $loads, $width);
+		for ($i = 0; $i < sizeof($loads); $i++){
+			$this->loads[] = new $loads[$i][0]($this->id, -1);
+			$this->capacity[] = $loads[$i][1];
+			$this->launchRate[] = $loads[$i][2];
+		}
+	}
+}
+
+class ETorpLauncher extends Launcher {
+	public $name = "ETorpLauncher";
+	public $display = "E-Torpedo Launcher";
+	public $loadout = 0;
+
+	function __construct($id, $parentId, $start, $end, $loads, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $width);
+		for ($i = 0; $i < sizeof($loads); $i++){
+			$this->loads[] = new $loads[$i][0]($this->id, -1);
+			$this->capacity[] = $loads[$i][1];
+			$this->launchRate[] = $loads[$i][2];
+			$this->ammo = $i;
+			$this->output = $this->capacity[$i];
+		}
 	}
 }

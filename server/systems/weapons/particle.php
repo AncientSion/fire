@@ -11,9 +11,9 @@ class Particle extends Weapon {
 	}
 }
 
-class LightIon extends Particle {
-	public $name = "LightIon";
-	public $display = "32mm Ion Bolter Array";
+class LightMuon extends Particle {
+	public $name = "LightMuon";
+	public $display = "32mm Muon Bolter Array";
 	public $minDmg = 12;
 	public $maxDmg = 16;
 	public $accDecay = 180;
@@ -35,9 +35,9 @@ class LightIon extends Particle {
 	}
 }
 
-class MediumIon extends LightIon {
-	public $name = "MediumIon";
-	public $display = "68mm Ion Emitter";
+class MediumMuon extends LightMuon {
+	public $name = "MediumMuon";
+	public $display = "68mm Muon Emitter";
 	public $minDmg = 30;
 	public $maxDmg = 38;
 	public $accDecay = 120;
@@ -57,9 +57,9 @@ class MediumIon extends LightIon {
 	}
 }
 
-class HeavyIon extends MediumIon {
-	public $name = "HeavyIon";
-	public $display = "122mm Ion Cannon";
+class HeavyMuon extends MediumMuon {
+	public $name = "HeavyMuon";
+	public $display = "122mm Muon Cannon";
 	public $minDmg = 50;
 	public $maxDmg = 64;
 	public $accDecay = 90;
@@ -79,9 +79,9 @@ class HeavyIon extends MediumIon {
 	}
 }
 
-class SuperHeavyIon extends HeavyIon {
-	public $name = "SuperHeavyIon";
-	public $display = "138mm Ion Cannon";
+class SuperHeavyMuon extends HeavyMuon {
+	public $name = "SuperHeavyMuon";
+	public $display = "138mm Muon Cannon";
 	public $minDmg = 56;
 	public $maxDmg = 70;
 	public $accDecay = 90;
@@ -125,8 +125,8 @@ class FusionCannon extends Particle {
 class EMNeedler extends Particle {
 	public $name = "EMNeedler";
 	public $display = "18mm EM-Needler";
-	public $minDmg = 7;
-	public $maxDmg = 10;
+	public $minDmg = 9;
+	public $maxDmg = 12;
 	public $accDecay = 240;
 	public $shots = 3;
 	public $reload = 2;

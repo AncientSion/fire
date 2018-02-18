@@ -90,103 +90,6 @@ window.index = 0;
 
 window.offset = {x: 0, y: 0};
 
-function Animate(){
-	this.intercepts = [];
-	this.ballAnims = [];
-
-	this.isDone = function(i, j, k){
-		var ele = this.ballAnims[i].anims[j];
-
-		if (ele instanceof FireOrder){
-			if (ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m+30 || !ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m){
-				return false;
-			}
-			return true;
-		}
-		else if (ele instanceof Salvo){
-			if (ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m+30 || !ele.anim[k].h && ele.anim[k].n <= ele.anim[k].m){
-				return false;
-			}
-			ele.setPostMovePosition();
-			return true;
-		}
-	}
-
-	this.isReady = function(i, j, k){
-		var ele = this.ballAnims[i].anims[j];
-		if (ele instanceof FireOrder){
-			if (ele.anim[k].n >= 0){
-				return true;
-			} else return false;
-		}
-
-		else if (ele instanceof Salvo){
-			if (ele.anim[0].n >= 0){
-				return true;
-			} else return false;
-		}
-	}
-
-	this.doAdvance = function(i, j, k){
-		var ele = this.ballAnims[i].anims[j];
-		if (ele instanceof FireOrder){
-			ele.anim[k].n++;
-		}
-		else if (ele instanceof Salvo){
-			ele.anim[k].n++;
-		}
-	}
-
-	this.doAnimate = function(i, j, k){
-		var ele = this.ballAnims[i].anims[j];
-
-		if (ele instanceof FireOrder){
-			ele.anim[k].n++;
-			if (ele.weapon instanceof Laser){
-				if (ele.anim[k].n > 0){
-					drawBeam(ele.weapon, ele.anim[k]);
-				}
-			}
-			else {
-				if (ele.anim[k].h && ele.anim[k].n >= ele.anim[k].m){
-					drawExplosion(ele.weapon, ele.anim[k], 30);
-					//drawExplosion(ele.weapon, ele.shooter, ele.anim[k]);
-				}
-				else {
-					//drawProjectile(ele.weapon, ele.shooter.x, ele.shooter.y, tx, ty, ele.anim[k].n, ele.anim[k].m);
-					drawProjectile(ele.weapon, ele.anim[k]);
-				}
-			}
-		}
-		else if (ele instanceof Salvo){
-			ele.anim[k].n++;
-			if (ele.fireOrder != undefined && ele.fireOrder.damages.length && ele.anim[k].n >= ele.anim[k].m){
-				for (var i = 0; i < ele.fireOrder.hits[0]; i++){
-					drawExplosion(ele.structures[i], {n: ele.anim[k].n, m: ele.anim[k].m, tx: ele.actions[0].x + ele.layout[i].x, ty: ele.actions[0].y + ele.layout[i].y}, 30);
-				}
-			}
-			else {
-				ele.drawX += ele.anim[k].nx;
-				ele.drawY += ele.anim[k].ny;
-				ele.drawMove();
-			}
-		}
-	}
-
-	this.doLog = function(i, j){
-		var ele = this.ballAnims[i].anims[j];
-
-		if (ele instanceof FireOrder){
-			game.createCombatLogEntry(ele);
-		}
-		else if (ele instanceof Salvo && ele.fireOrder != undefined){
-			game.createCombatLogEntry(ele.fireOrder);
-		}
-	}
-}
-
-//window.animate = new Animate();
-
 window.fpsTicks;
 window.speedMod = 1;
 
@@ -201,23 +104,23 @@ function setFPS(fps){
 
 
 
-function initiateUnit(data){
-	if (data.ship){return window.initiateShip(data);}
-	else if (data.squad){return window.initiateSquadron(data);}
-	else if (data.flight){return window.initiateFlight(data);}
-	else if (data.salvo){return window.initiateSalvo(data);}
+function initUnit(data){
+	if (data.ship){return window.initShip(data);}
+	else if (data.squad){return window.initSquadron(data);}
+	else if (data.flight){return window.initFlight(data);}
+	else if (data.salvo){return window.initSalvo(data);}
 }
 
-function initiateSalvo(data){
+function initSalvo(data){
 	var salvo = new Salvo(data);
 	for (var i = 0; i < data.structures.length; i++){
-		salvo.structures.push(new Missile(data.structures[i]));
+		salvo.structures.push(new Ballistic(data.structures[i]));
 	}
 	return salvo;
 }
 
 
-function initiateFlight(data){
+function initFlight(data){
 	var flight = new Flight(data);
 	for (var j = 0; j < data.structures.length; j++){
 		flight.structures.push(new Fighter(data.structures[j]));
@@ -225,7 +128,7 @@ function initiateFlight(data){
 	return flight;	
 }
 
-function initiateSquadron(data){
+function initSquadron(data){
 	var squadron = new Squadron(data);
 	for (var j = 0; j < data.primary.systems.length; j++){
 		var primSystem = new window[data.primary.systems[j].name](data.primary.systems[j]);
@@ -233,7 +136,7 @@ function initiateSquadron(data){
 		squadron.primary.systems.push(primSystem);
 	}
 	for (var i = 0; i < data.structures.length; i++){
-		var sub = initiateSquaddie(data.structures[i]);
+		var sub = initSquaddie(data.structures[i]);
 			sub.create()
 		squadron.structures.push(sub)
 		//squadron.addSubElement(sub);
@@ -241,7 +144,7 @@ function initiateSquadron(data){
 	return squadron;
 }
 
-function initiateSquaddie(data){
+function initSquaddie(data){
 	var unit = new Squaddie(data);
 
 	for (var i = 0; i < data.damages.length; i++){
@@ -281,7 +184,7 @@ function initiateSquaddie(data){
 	return unit;
 }
 
-function initiateShip(data){
+function initShip(data){
 	var ship = new Ship(data);
 		ship.hitTable = data.hitTable;
 		ship.primary = new Primary(data.primary);

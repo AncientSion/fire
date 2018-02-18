@@ -12,7 +12,7 @@ class GQuan extends Heavy {
 	public $integrity = 1100;
 	public $vitalHP = 130;
 	public $ep = 85;
-	public $ew = 750;
+	public $ew = 775;
 
 
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){

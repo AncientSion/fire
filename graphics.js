@@ -41,6 +41,8 @@ window.graphics = {
 	preLoadBallistics: function(){
 		this.images.missile = new Image();
 		this.images.missile.src = "shipIcons/missile.png";
+		this.images.torpedo = new Image();
+		this.images.torpedo.src = "shipIcons/torpedo.png";
 	},
 
 	preloadShips: function(){
@@ -111,6 +113,9 @@ window.graphics = {
 
 		this.images.katoc = new Image();
 		this.images.katoc.src = "shipIcons/katoc.png";
+
+		this.images.dagkar = new Image();
+		this.images.dagkar.src = "shipIcons/dagkar.png";
 
 		this.images.thentus = new Image();
 		this.images.thentus.src = "shipIcons/thentus.png";
@@ -187,20 +192,18 @@ function drawVector(origin, target, dist, angle){
 	.removeClass("disabled");
 }
 
-//function drawProjectile(weapon, ox, oy, x, y, now, end){
-function drawProjectile(weapon, fire){
-	//getPointInDir(dis, angle, oX, oY){
+function drawProjectile(weapon, anim){
 
-	var x = fire.ox + fire.nx * fire.n;
-	var y = fire.oy + fire.ny * fire.n;
-	var trailEnd = getPointInDir(weapon.projSize*2.5, fire.f, x, y);
+	var x = anim.ox + anim.nx * anim.n;
+	var y = anim.oy + anim.ny * anim.n;
+	var trailEnd = getPointInDir(weapon.projSize*2.5, anim.f, x, y);
 	var w = 1;
 
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z)
 
-	if (fire.n/fire.m > 0.7){
-		w -= 2*(fire.n/fire.m- 0.7);
+	if (anim.n/anim.m > 0.7){
+		w -= 2*(anim.n/anim.m- 0.7);
 	}
 
 	fxCtx.globalAlpha = w
@@ -217,39 +220,53 @@ function drawProjectile(weapon, fire){
 	fxCtx.lineWidth = weapon.projSize/4;
 	fxCtx.stroke();
 	fxCtx.closePath();
-
 	fxCtx.globalCompositeOperation = "source-over";
-
-/*	if (weapon instanceof Plasma){
-		//var end = getPointInDir(13, fire.f-180, trailEnd.x, trailEnd.y);
-		for (i = 0; i < 3; i++){
-			x = x + range(-2, 2)
-			y = y + range(-2, 2)
-
-			fxCtx.globalAlpha = 1-w
-			fxCtx.beginPath();
-			fxCtx.arc(x, y, 0.5, 0, 2*Math.PI, false);
-			fxCtx.strokeStyle = weapon.animColor;
-			fxCtx.stroke();
-			fxCtx.beginPath();
-			fxCtx.arc(x, y, 0.5, 0, 2*Math.PI, false);
-			fxCtx.globalCompositeOperation = "lighter";
-			fxCtx.strokeStyle = "white";
-			fxCtx.stroke();
-		}
-	}*/
-
-
 	fxCtx.setTransform(1,0,0,1,0,0);
 
-	if (fire.n >= fire.m && fire.h){
-		fire.p = 1;
-		fire.n = 0;
-		fire.m = 36;
+	if (anim.n >= anim.m && anim.h){
+		anim.p = 1;
+		anim.n = 0;
+		anim.m = 36;
 	}
 }
-//drawExplosion(game.fireOrders[i].weapon, game.fireOrders[i].anim[j][k].tx, game.fireOrders[i].anim[j][k].ty, game.fireOrders[i].anim[j][k].n, game.fireOrders[i].anim[j][k].m, 30); // EXPLO
-				
+
+function drawAreaProjectile(weapon, anim){
+
+	var x = anim.ox + anim.nx * anim.n;
+	var y = anim.oy + anim.ny * anim.n;
+	var trailEnd = getPointInDir(weapon.projSize*2.5, anim.f, x, y);
+	var w = 1;
+
+	fxCtx.translate(cam.o.x, cam.o.y);
+	fxCtx.scale(cam.z, cam.z)
+
+	if (anim.n/anim.m > 0.7){
+		w -= 2*(anim.n/anim.m- 0.7);
+	}
+
+	fxCtx.globalAlpha = w
+	fxCtx.beginPath();
+	fxCtx.moveTo(x, y);
+	fxCtx.lineTo(trailEnd.x, trailEnd.y);
+	fxCtx.closePath();
+	fxCtx.strokeStyle = weapon.animColor;
+	fxCtx.lineWidth = weapon.projSize/2;
+	fxCtx.stroke();
+
+	fxCtx.globalCompositeOperation = "lighter";
+	fxCtx.strokeStyle = "white";
+	fxCtx.lineWidth = weapon.projSize/4;
+	fxCtx.stroke();
+	fxCtx.closePath();
+	fxCtx.globalCompositeOperation = "source-over";
+	fxCtx.setTransform(1,0,0,1,0,0);
+
+	if (anim.n >= anim.m){
+		anim.p = 1;
+		anim.n = 0;
+		anim.m = 36;
+	}
+}
 
 function drawEMSpriteExplo(wpn, anim){
 	var posX = anim.tx;
@@ -403,92 +420,19 @@ function drawUnitExplo(posX, posY, img, s, now, max){
 	fxCtx.setTransform(1,0,0,1,0,0);
 }
 
-function drawAreaEffect(posX, posY, s, now, max){
-	///var sin = s*0.5*Math.sin(Math.PI*now/max);
-	//if (sin < 0){
-	//	return;
-	//}	
+function drawAreaEffect(anim){
+	var size = 110 / anim.m * anim.n;
 
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z)
-
-	var size = s / max * now;
-
-	fxCtx.globalAlpha = 1.2-now/max;
-
-	fxCtx.drawImage(graphics.eMine[1], posX -size/2, posY -size/2, size, size);
+	fxCtx.globalAlpha = 1.3- anim.n / anim.m;
+	fxCtx.drawImage(graphics.eMine[1], anim.tx -size/2, anim.ty -size/2, size, size);
 	fxCtx.globalAlpha = 1;
-
 	fxCtx.setTransform(1,0,0,1,0,0);
-}
 
-
-function drawAreaEffecta(posX, posY, s, now, max){
-	var sin = s*0.5*Math.sin(Math.PI*now/max);
-	if (sin < 0){
-		return;
-	}	
-
-	fxCtx.translate(cam.o.x, cam.o.y);
-	fxCtx.scale(cam.z, cam.z)
-
-	var rows = 8;
-	var cols = 8;
-
-	var w = 64;
-	var h = 64;
-
-	var x = ((now/rows) - Math.floor(now/rows)) * 512;
-	var y = 512 / cols * Math.floor(now/cols) 
-
-	fxCtx.globalAlpha = 1.5 - (now/max);
-	fxCtx.drawImage(graphics.eMine[0], x, y, w, h, posX-s/2, posY-s/2, s, s);
-	fxCtx.globalAlpha = 1;
-
-	fxCtx.setTransform(1,0,0,1,0,0);
-}
-
-function drawAreaEffectb(weapon, fire, now, max){
-	//console.log(now, max);
-	fxCtx.translate(cam.o.x, cam.o.y);
-	fxCtx.scale(cam.z, cam.z)
-
-	var fraction = now/max;
-
-	fxCtx.globalAlpha = 1.2-fraction;
-	fxCtx.beginPath();
-	fxCtx.arc(fire.tx, fire.ty, weapon.aoe*fraction*0.8, 0, 2*Math.PI);
-	fxCtx.closePath();	
-	fxCtx.strokeStyle = weapon.animColor;
-	fxCtx.lineWidth = 20 * fraction;
-	fxCtx.stroke();
-
-	fxCtx.beginPath();
-	fxCtx.arc(fire.tx, fire.ty, weapon.aoe*fraction*0.6, 0, 2*Math.PI);
-	fxCtx.closePath();	
-	fxCtx.strokeStyle = "white";
-	fxCtx.globalCompositeOperation = "lighter";
-	fxCtx.lineWidth = 12 * fraction;
-	fxCtx.stroke();
-		
-	fxCtx.globalCompositeOperation = "source-over";
-
-	fxCtx.globalAlpha = 1 - fraction;
-	var sin = Math.sin(Math.PI*fraction);
-	if (sin > 0){
-		for (var i = 0; i < 30; i++){
-			var a = 360/30*i;
-			var p = getPointInDir(weapon.aoe*fraction*1.1, a, fire.tx, fire.ty);
-
-			//fxCtx.translate(p.x, p.y);
-			fxCtx.beginPath(); fxCtx.arc(p.x, p.y, sin, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = "rgb(255,225,75)"; fxCtx.fill();
-			fxCtx.beginPath(); fxCtx.arc(p.x, p.y, sin*0.66, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = "rgb(255,200,0)"; fxCtx.fill();
-			fxCtx.beginPath(); fxCtx.arc(p.x, p.y, sin*0.35, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = "rgb(255,0,0)"; fxCtx.fill();
-			//fxCtx.translate(-p.x, -p.y);
-		}
+	if (anim.n >= anim.m){
+		anim.done = true;
 	}
-
-	fxCtx.setTransform(1,0,0,1,0,0);
 }
 
 function drawUnitExploa(x, y, s, now, max){

@@ -1,6 +1,8 @@
 <?php
 
 class Missile extends Single {
+	public $missile = 1;
+	public $torpedo = 0;
 
 	function __construct($id, $parentId){
 		$this->integrity = $this->mass*3;
@@ -40,6 +42,24 @@ class Missile extends Single {
 	}
 }
 
+class Torpedo extends Missile {
+	public $missile = 0;
+	public $torpedo = 1;
+
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
+	}
+
+	public function setBaseStats($phase, $turn){
+		$this->baseHitChance = ceil(sqrt($this->mass)*5);
+		$this->baseImpulse = 1500;
+	}
+
+	public function singleCritTest($turn, $extra){
+		return;
+	}
+}
+
 class Warhead extends Weapon {
 	public $priority = 10;
 	public $type = "explosive";
@@ -58,6 +78,20 @@ class Warhead extends Weapon {
 
 	public function getDamageMod($turn){
 		return 1;
+	}
+}
+
+class EnergyTorpedo extends Torpedo {
+	public $name = "EnergyTorpedo";
+	public $display = "";
+	public $minDmg = 26;
+	public $maxDmg = 34;
+	public $mass = 1;
+	public $cost = 0;
+	public $traverse = 1;
+
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
 	}
 }
 

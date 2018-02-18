@@ -36,6 +36,7 @@ class System {
 	public $width = 1;
 	public $notes = array();
 	public $emDmg = 0;
+	public $loadout = 0;
 
 	function __construct($id, $parentId, $output = 0, $width = 1){
 		$this->id = $id;
@@ -219,7 +220,7 @@ class System {
 		$old = round($old / $this->integrity * 100);
 		$effects = $this->getValidEffects();
 
-		Debug::log(get_class($this)." determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", new: ".$new."%, old: ".$old."%");
+		Debug::log("etermineCrit for ".get_class($this)." #".$this->id." on unit #".$this->parentId.", new: ".$new."%, old: ".$old."%");
 
 		$tresh = 80;
 

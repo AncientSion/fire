@@ -189,17 +189,11 @@ class Ship {
 	}
 
 	public function setPosition(){
-		if ($this->salvo){
-			$this->trajectory = new Point($this->x, $this->y);
-			//Debug::log("setting trajectory for #".$this->id.": ".$this->x."/".$this->y);
-		}
-		else {
-			for ($i = sizeof($this->actions)-1; $i >= 0; $i--){
-				if ($this->actions[$i]->resolved){
-					$this->x = $this->actions[$i]->x;
-					$this->y = $this->actions[$i]->y;
-					return;
-				}
+		for ($i = sizeof($this->actions)-1; $i >= 0; $i--){
+			if ($this->actions[$i]->resolved){
+				$this->x = $this->actions[$i]->x;
+				$this->y = $this->actions[$i]->y;
+				return;
 			}
 		}
 	}
@@ -730,35 +724,29 @@ class Ship {
 
 	public function getPrimaryHitSystem(){
 		//Debug::log("getPrimaryHitSystem: #".$this->id);
+		$valid = array();
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+			if (! $this->primary->systems[$i]->destroyed){continue;}
+			if (!$this->isExposed($fraction, $this->primary->systems[$i])){continue;}
+			$valid[] = $this->primary->systems[$i];
+		}
+
+		if (!sizeof($valid)){
+			Debug::log("no internals -> MAIN");
+			return $this->primary;
+		}
+
 		$roll;
 		$current = 0;
 		$total = $this->primary->getHitChance();
 		$fraction = round($this->primary->remaining / $this->primary->integrity, 2);
-		$valid = array();
-
-		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
-			if (! $this->primary->systems[$i]->destroyed){
-				if ($this->isExposed($fraction, $this->primary->systems[$i])){
-					$valid[] = $this->primary->systems[$i];
-				}
-			}
-		}
-
-		if (!sizeof($valid)){
-			Debug::log("hitting main structure due to lack of exposed internals");
-			return $this->primary;
-		}
-		//else {
-		//	Debug::log("main: ".$this->primary->remaining."/".$this->primary->integrity." => ".$fraction. " %, unlocked internals: ".sizeof($valid));
-		//}
-
-		//Debug::log("valid:".sizeof($valid));
 
 		for ($i = 0; $i < sizeof($valid); $i++){
 			$total += $valid[$i]->getHitChance();
 		}
 		$roll = mt_rand(0, $total);
 		$current += $this->primary->getHitChance();
+
 		//Debug::log("roll: ".$roll.", all: ".$total);
 
 		if ($roll <= $current){
@@ -946,12 +934,8 @@ class Ship {
 		return $locs[mt_rand(0, sizeof($locs)-1)];
 	}
 
-
-	public function getFireAngle($fire){
-		return mt_rand(0, 359);
-	}
-
 	public function handleCritTesting($turn){
+		Debug::log(get_class($this)." handleCritTesting");
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed){continue;}
 			else if (!$this->structures[$i]->damaged){/*Debug::log("subunit ".$i." not damaged!");*/ continue;}
@@ -1226,7 +1210,7 @@ class Medium extends Ship {
 	}
 }
 
-class Heavy extends Ship {
+class Heavy extends Medium {
 	public $baseImpulse = 155;
 	public $traverse = 1;
 	public $baseImpulseCost = 45;
@@ -1237,13 +1221,13 @@ class Heavy extends Ship {
 		$this->hitTable = array(
 			"Bridge" => 0.65,
 			"Engine" => 0.8,
-			"Sensor" => 0.9,
+			"Sensor" => 1,
 			"Reactor" => 0.65
 		);
 	}
 }
 
-class SuperHeavy extends Ship {
+class SuperHeavy extends Heavy {
 	public $baseImpulse = 140;
 	public $traverse = 2;
 	public $baseImpulseCost = 50;
@@ -1254,13 +1238,13 @@ class SuperHeavy extends Ship {
 		$this->hitTable = array(
 			"Bridge" => 0.7,
 			"Engine" => 0.85,
-			"Sensor" => 0.9,
+			"Sensor" => 1,
 			"Reactor" => 0.7
 		);
 	}
 }
 
-class UltraHeavy extends Ship {
+class UltraHeavy extends SuperHeavy {
 	public $baseImpulse = 130;
 	public $traverse = 3;
 	public $baseImpulseCost = 55;
@@ -1271,7 +1255,7 @@ class UltraHeavy extends Ship {
 		$this->hitTable = array(
 			"Bridge" => 0.75,
 			"Engine" => 0.85,
-			"Sensor" => 0.9,
+			"Sensor" => 119,
 			"Reactor" => 0.75
 		);
 	}

@@ -28,7 +28,7 @@ function System(system){
 	this.armour;
 	this.type = system.type || "Internal";
 	this.dual = 0;
-	this.loadout = 0;
+	this.loadout = system.loadout;
 	this.loaded = 0;
 	this.notes = system.notes;
 	this.launcher = 0;
@@ -77,7 +77,7 @@ System.prototype.attachDetailsMods = function(ele){
 		div.find(".modifiers").remove();
 	var boost = this.getBoostLevel();
 	var table;
-	if (boost || this.crits.length){
+	if ((boost && !this.launcher) || this.crits.length){
 		table = $("<table>").addClass("modifiers").append($("<tr>").append($("<th>").html("Modifiers").attr("colSpan", 2)));
 		if (boost){
 			for (var i = 0; i < this.boostEffect.length; i++){
@@ -132,6 +132,12 @@ System.prototype.setState = function(){
 		}
 		//this.setTimeLoaded();
 	}
+
+	this.init();
+}
+
+System.prototype.init = function(){
+	return;
 }
 
 System.prototype.getSystem = function(){
@@ -893,10 +899,8 @@ System.prototype.isDestroyed = function(){
 }
 
 System.prototype.copyPowers = function(){
+	if (this.launcher ||this instanceof PrimarySystem && !(this instanceof Hangar)){return;}
 	var copy = [];
-
-	if (this instanceof PrimarySystem && !(this instanceof Hangar)){return;}
-	//if (this instanceof EM){console.log("ding");}
 
 	for (var i = 0; i < this.powers.length; i++){
 		if (this.powers[i].turn == game.turn-1 && this.powers[i].type <= 0){
@@ -936,6 +940,7 @@ System.prototype.getMount = function(){
 }
 
 System.prototype.getOutput = function(){
+	return this.getBoostLevel();
 	var ret = "";
 	for (var i = this.powers.length-1; i >= 0; i--){
 		if (this.powers[i].turn == game.turn && this.powers[i].type > 0){
@@ -1606,6 +1611,7 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 	var em = 0;
 	var system = 0;
 	var struct = 0;
+	var shield = 0;
 	var req = fire.req.slice();
 		req.sort(function(a, b){return a-b});
 	var chance = req[0];
@@ -1629,7 +1635,8 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 		armour += fire.damages[i].armourDmg;
 		em += fire.damages[i].emDmg
 		system += fire.damages[i].structDmg;
-		struct += fire.damages[i].overkill;;
+		struct += fire.damages[i].overkill;
+		shield += fire.damages[i].shieldDmg;
 	}
 
 	var tr = document.createElement("tr");
@@ -1731,10 +1738,12 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 		dmgs[i][1] = dmgs[i][1] ? "Overl.: "  + dmgs[i][1] : "" 
 	}
 
+	// rolls
+	depth++;
 	let rolls = fire.rolls.slice().sort((a, b) => a-b);
 	var rollString = "";
 	for (var i = 0; i < rolls.length; i++){
-		if (rolls[i] <= req[i]){
+		if (rolls[i] <= req[0]){
 			rollString += "<u>" + rolls[i] + "</u>";
 		} else rollString += rolls[i];
 
@@ -1742,23 +1751,39 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 	}
 
 	$(log).append(
+		$("<tr>")
+		.hide()
+		.append($("<td>")
+		)
+		.append($("<td>")
+			.html("Rolls:")
+		)
+	.append($("<td>")
+			.attr("colSpan", 2)
+			.css("textAlign", "left")
+			.html(rollString.slice(0, rollString.length-3))
+		)
+		.append($("<td>")
+			.attr("colSpan", 5)
+		)
+	)
+
+	// e-web
+	if (shield){
+		depth++;
+		$(log).append(
 			$("<tr>")
 			.hide()
-			.append($("<td>")
-			)
-			.append($("<td>")
-				.html("Rolls:")
-			)
-			.append($("<td>")
-				.attr("colSpan", 2)
-				.css("textAlign", "left")
-				.html(rollString.slice(0, rollString.length-3))
-			)
+			.append($("<td>"))
 			.append($("<td>")
 				.attr("colSpan", 5)
+				.html("The Energy-Web nullified a grand total of " + shield + " damage points")
 			)
+			.append($("<td>"))
+			.append($("<td>"))
+			.append($("<td>"))
 		)
-	depth++;
+	}
 
 	//dmg Details
 	$(tr)
@@ -1938,6 +1963,7 @@ Weapon.prototype.select = function(e){
 		game.getUnit(this.parentId).drawEW();
 		return;
 	}
+	else if (game.phase == -2 || game.turn == 1 && game.phase == -1){return;}
 	else if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || this.parentId < 0){
 		return false;
 	}
@@ -2584,12 +2610,6 @@ Dual.prototype.setFireOrder = function(targetid, pos){
 	return System.prototype.setFireOrder.call(this, targetid, pos);
 }
 
-Dual.prototype.setState = function(){
-	System.prototype.setState.call(this);
-	//this.initSubWeapons();
-	this.initMain();
-}
-
 Dual.prototype.getImageName = function(){
 	return this.getActiveSystem().name;
 }
@@ -2602,7 +2622,7 @@ Dual.prototype.initSubWeapons = function(weapons){
 	}
 }
 
-Dual.prototype.initMain = function(){
+Dual.prototype.init = function(){
 	var w = this.getActiveSystem();
 	for (var i = 0; i < this.states.length; i++){
 		if (this.states[i]){
@@ -2718,7 +2738,16 @@ Dual.prototype.resetDetailsDiv = function(){
 }
 
 Dual.prototype.getSystemDetailsDiv = function(){
-	return this.getActiveSystem().getSystemDetailsDiv();
+	var d = this.getActiveSystem().getSystemDetailsDiv();
+	var b = ($(d).find("tbody"))
+
+	//b.prepend($("<tr>").append($("<td>").attr("colSpan", 2).html("Active Mode")));
+
+	b.prepend($("<tr>").append($("<td>").attr("colSpan", 2)));
+	for (var i = 0; i < this.weapons.length; i++){
+		b.prepend($("<tr>").append($("<td>").attr("colSpan", 2).html("Mode: " + this.weapons[i].display)));
+	}
+	return d;
 }
 
 Dual.prototype.drawSystemArc = function(facing, rolled, pos){
@@ -2801,29 +2830,20 @@ Dual.prototype.getActiveSystem = function(){
 
 function Launcher(system){
 	Weapon.call(this, system);	
-	//Weapon.call(this, id, parentId, name, display, 0, 0, integrity, powerReq, output, effiency, maxBoost, 0, 0, 0, 0, 0, 0, 1, reload, arc1, arc2, arc3, arc4);	
-	         // Weapon(id, parentId, name, display, exploSize, animColor, integrity, powerReq, output, effiency, maxBoost, boostEffect, fc, minDmg, maxDmg, accDecay, linked, shots, reload, arc1, arc2, arc3, arc4){
-
 	this.capacity = system.capacity;
 	this.launchRate = system.launchRate;
 	this.animation = "ballistic";
-	this.loads = [];
+	this.loads = system.loads || [];
 	this.ammo = system.ammo;
-	this.loadout = 1;
 	this.launcher = 1;
-
-	this.create(system.loads);
 }
 Launcher.prototype = Object.create(Weapon.prototype);
 
-Launcher.prototype.create = function(loads){
-	for (var i = 0; i < loads.length; i++){
-		this.loads.push(new Missile(loads[i]));
+Launcher.prototype.init = function(){
+	for (var i = 0; i < this.loads.length; i++){
+		this.loads[i]= new Ballistic(this.loads[i]);
 	}
 	if (game.phase == -2){
-		for (var i = 0; i < this.loads.length; i++){
-			this.loads[i].amount = 0;
-		}
 	}
 	else if (this.getRemAmmo() == 0){
 		this.shots = 0;
@@ -2831,6 +2851,16 @@ Launcher.prototype.create = function(loads){
 	}
 	else if (game.phase == -1){
 		this.setBaseOutput();
+	}
+}
+
+Launcher.prototype.setAmmo = function(){
+	for (var i = 0; i < this.loads.length; i++){
+		if (this.loads[i].amount > 0){
+			this.ammo = i;
+			this.output = this.loads[i].amount;
+			return;
+		}
 	}
 }
 
@@ -2854,6 +2884,7 @@ Launcher.prototype.getPowerOrders = function(){
 }
 
 Launcher.prototype.setBaseOutput = function(){
+	if (!this.canFire()){return;}
 	var rem = this.getRemAmmo();
 	var max = this.getMaxoutput();
 
@@ -2867,7 +2898,14 @@ Launcher.prototype.setBaseOutput = function(){
 }
 
 Launcher.prototype.getRemAmmo = function(){
-	return this.output;
+	if (this.fireOrders.length){
+		return this.getMaxAmmo() - this.fireOrders.map(x => x.shots).reduce((l,r) => l+r);
+	}
+	var shots = 0;
+	for (var i = 0; i < this.fireOrders.length; i++){
+		shots += this.fireOrders[i].shots;
+	}
+	return this.getMaxAmmo() - shots;
 }
 
 Launcher.prototype.getMaxAmmo = function(){
@@ -2949,15 +2987,15 @@ Launcher.prototype.select = function(e){
 	if (this.destroyed || this.disabled || this.locked){return false;}
 
 	if (game.phase == -2){
+		if (!this.loadout || game.system && game.system != this.id){return;}
 		if (this.selected){
+			game.system = 0;
 			this.selected = false;
 			this.validTarget = 0;
 		}
-		else {
-			this.selected = true;
-		}
+		else {game.system = this.id;this.selected = true;}
 		this.setSystemBorder();
-		this.setupAmmoLoadout(e);
+		this.setupWeaponLoadout(e);
 	}
 	else if (game.phase != -1 || this.getOutput() == 0){
 		return false;
@@ -3034,12 +3072,11 @@ Launcher.prototype.updateSystemDetailsDiv = function(){
 		.find("#ammo").html("<font color='red'>" + this.getRemAmmo() + "</font> / " + this.getMaxAmmo());
 }
 
-Launcher.prototype.setupAmmoLoadout = function(e){
+Launcher.prototype.setupWeaponLoadout = function(e){
 	var div = document.getElementById("weaponLoadoutDiv");
 	if ($(div).hasClass("disabled")){
 		$(div).find("#reload").html(this.reload);
-		//$(div).data("systemid", this.id).css("top", e.clientY + 30).css("left", e.clientX - 150).removeClass("disabled");
-		$(div).data("systemid", this.id).css("left", 650).css("top", 400).removeClass("disabled");
+		$(div).data("systemid", this.id).css("left", 750).css("top", 400).removeClass("disabled");
 		this.updateTotals();
 	}
 	else {
@@ -3112,9 +3149,9 @@ Launcher.prototype.removeAmmo = function(ele, all){
 }
 
 Launcher.prototype.canConfirm = function(){
-	if (this.hasLoad()){
+	//if (this.hasLoad()){
 		$("#weaponLoadoutDiv").find(".buttonTD").removeClass("disabled");
-	} else $("#weaponLoadoutDiv").find(".buttonTD").addClass("disabled");
+	//} else $("#weaponLoadoutDiv").find(".buttonTD").addClass("disabled");
 }
 
 Launcher.prototype.updateTotals = function(){
@@ -3179,9 +3216,11 @@ Launcher.prototype.updateTotals = function(){
 }
 
 Launcher.prototype.getImpulseString = function(){
-	return ("+" + this.loads[this.ammo].baseImpulse + " per Turn");
+	if (this.loads[this.ammo].missile){
+		return ("adds " + this.loads[this.ammo].baseImpulse + "px / Turn");
+	}
+	else return ("flat " + this.loads[this.ammo].baseImpulse + "px / Turn");
 }
-
 
 function Area(system){
 	Particle.call(this, system);
@@ -3384,7 +3423,7 @@ Area.prototype.getAnimation = function(fire){
 Area.prototype.getAimData = function(target, final, dist, row){
 	if (target){
 		row
-		.append($("<td>").attr("colSpan", 4).html("<span>Unable to target mobile object.</span>"))
+		.append($("<td>").attr("colSpan", 4).html("<span>Unable to target specific unit.</span>"))
 		this.validTarget = 0;
 		this.odds = 0;
 	}
@@ -3472,6 +3511,63 @@ Area.prototype.highlightEvent = function(){
 		t = getPointInDir(this.maxRange, getAngleFromTo(o, t), o.x, o.y);
 	}
 
+	if (!o.friendly && game.phase != 2){return;}
+
+	salvoCtx.translate(cam.o.x, cam.o.y);
+	salvoCtx.scale(cam.z, cam.z)
+	salvoCtx.translate(o.x, o.y);
+
+	salvoCtx.beginPath(); // vector
+	salvoCtx.moveTo(0, 0);
+	salvoCtx.translate(-o.x + t.x, -o.y + t.y);
+	salvoCtx.lineTo(0, 0);
+	salvoCtx.closePath();
+	salvoCtx.strokeStyle = "white";
+	salvoCtx.globalAlpha = 0.25;
+	salvoCtx.stroke();
+
+	salvoCtx.beginPath(); // devi
+	salvoCtx.arc(0, 0, dist/100*this.accDecay, 0, 2*Math.PI, false);
+	salvoCtx.closePath();
+	salvoCtx.fill();
+
+	salvoCtx.globalAlpha = 0.5;
+
+
+	if (game.phase == 2){ // devi vector
+		salvoCtx.beginPath();
+		salvoCtx.moveTo(0, 0);
+		salvoCtx.translate(o.x - t.x, o.y - t.y);
+		salvoCtx.translate(-o.x + t.rolls[0], -o.y + t.rolls[1]);
+		salvoCtx.lineTo(0, 0);
+		salvoCtx.closePath();
+		salvoCtx.strokeStyle = "red";
+		salvoCtx.stroke();
+		//salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height
+	}
+
+	salvoCtx.beginPath();
+	salvoCtx.arc(0, 0, this.aoe, 0, 2*Math.PI, false);
+	salvoCtx.closePath();
+	salvoCtx.lineWidth = 3;
+	salvoCtx.strokeStyle = "red";
+	salvoCtx.stroke();
+
+	salvoCtx.lineWidth = 1;
+	salvoCtx.fillStyle = "white";
+	salvoCtx.strokeStyle = "white";
+	salvoCtx.globalAlpha = 1;
+	salvoCtx.setTransform(1,0,0,1,0,0);
+}
+
+Area.prototype.highlightEventa = function(){
+	var o = game.getUnit(this.parentId);
+	var t = this.fireOrders[this.fireOrders.length-1];
+	var dist = getDistance(o, t);
+	if (game.phase != 2 && !o.friendly){
+		t = getPointInDir(this.maxRange, getAngleFromTo(o, t), o.x, o.y);
+	}
+
 	salvoCtx.translate(cam.o.x, cam.o.y);
 	salvoCtx.scale(cam.z, cam.z)
 	salvoCtx.translate(o.x, o.y);
@@ -3482,15 +3578,17 @@ Area.prototype.highlightEvent = function(){
 	salvoCtx.lineTo(0, 0);
 	salvoCtx.closePath();
 	salvoCtx.strokeStyle = "white";
-	salvoCtx.globalAlpha = 0.5;
+	salvoCtx.globalAlpha = 0.25;
 	salvoCtx.stroke();
 
-	salvoCtx.beginPath();
-	salvoCtx.arc(0, 0, dist/100*this.accDecay, 0, 2*Math.PI, false);
-	salvoCtx.closePath();
-	salvoCtx.fillStyle = "white";
-	salvoCtx.globalAlpha = 0.2;
-	salvoCtx.fill();
+	if (o.friendly){
+		salvoCtx.beginPath();
+		salvoCtx.arc(0, 0, dist/100*this.accDecay, 0, 2*Math.PI, false);
+		salvoCtx.closePath();
+		salvoCtx.fillStyle = "white";
+		salvoCtx.globalAlpha = 0.2;
+		salvoCtx.fill();
+	}
 
 	salvoCtx.globalAlpha = 0.5;
 	if (game.phase < 2){
@@ -3515,6 +3613,7 @@ Area.prototype.highlightEvent = function(){
 }
 
 Area.prototype.initEvent = function(){
+	return;
 	var o = game.getUnit(this.parentId);
 	var t = this.fireOrders[this.fireOrders.length-1];
 	var dist = getDistance(o, t);
@@ -3532,9 +3631,9 @@ Area.prototype.initEvent = function(){
 	//ctx.globalCompositeOperation = "source-over";
 	//ctx.fillStyle = this.getEffectFillStyle(0, 0, dist);
 
-	ctx.strokeStyle = "red";
-	ctx.lineWidth = 3;
-	ctx.stroke();
+	//ctx.strokeStyle = "red";
+	//ctx.lineWidth = 3;
+	//ctx.stroke();
 	ctx.lineWidth = 1;
 
 	ctx.fillStyle = "white";
@@ -3671,7 +3770,6 @@ function Hangar(system){
 	this.launchRate = system.launchRate;
 	this.loads = system.loads;
 	this.capacity = system.capacity;
-	this.loadout = 1;
 	this.mission = 0;
 	this.hangar = 1;
 }
@@ -3679,6 +3777,10 @@ Hangar.prototype = Object.create(PrimarySystem.prototype);
 
 Hangar.prototype.setTimeLoaded = function(){
 	return System.prototype.setTimeLoaded.call(this)
+}
+
+Hangar.prototype.getResolvingFireOrders = function(){
+	return false;
 }
 
 Hangar.prototype.hover = function(e){
@@ -3706,9 +3808,9 @@ Hangar.prototype.getUpgradeData = function(){
 	}
 }
 
-Hangar.prototype.setFireOrder = function(targetid, pos){
+Hangar.prototype.setFireOrder = function(pos){
 	this.fireOrders.push(
-		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, x: pos.x, y: pos.y, weaponid: this.id, 
+		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: 0, x: pos.x, y: pos.y, weaponid: this.id, 
 		shots: 0, req: -1, notes: "fighterLaunch", hits: -1, resolved: 0}
 	);
 	return this;
@@ -3725,9 +3827,11 @@ Hangar.prototype.select = function(e){
 		return false;
 	}
 	else if (game.phase == -2){
+		if (game.system && game.system != this.id){return;}
 		if (this.selected){
+			game.system = 0;
 			this.selected = false;
-		} else this.selected = true;
+		} else {this.selected = true; game.system = this.id;}
 		this.setupHangarLoadout(e);
 	}
 	else if (!this.selected && game.getUnit(this.parentId).userid == game.userid && !ship.hasSystemsSelected()){
@@ -4076,9 +4180,9 @@ Hangar.prototype.removeFighter = function(ele, all){
 }
 
 Hangar.prototype.canConfirm = function(){
-	if (this.hasLoad()){
+	//if (this.hasLoad()){
 		$("#hangarLoadoutDiv").find(".buttonTD").removeClass("disabled");
-	} else $("#hangarLoadoutDiv").find(".buttonTD").addClass("disabled");
+	//} else $("#hangarLoadoutDiv").find(".buttonTD").addClass("disabled");
 }
 
 Hangar.prototype.updateTotals = function(){
@@ -4150,8 +4254,7 @@ Hangar.prototype.setupHangarLoadout = function(e){
 	if ($(div).hasClass("disabled")){
 		$(div).find("#launchRate").html(this.getOutput());
 		$(div).find("#capacity").html(this.capacity);
-		//$(div).data("systemid", this.id).css("top", e.clientY + 30).css("left", e.clientX - 150).removeClass("disabled");
-		$(div).data("systemid", this.id).css("left", 650).css("top", 400).removeClass("disabled");
+		$(div).data("systemid", this.id).css("left", 750).css("top", 400).removeClass("disabled");
 		this.updateTotals();
 	}
 	else {

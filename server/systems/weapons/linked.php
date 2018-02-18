@@ -42,9 +42,9 @@ class NeutronRepeater extends FighterWeapon {
 	}
 }
 
-class IonBolt extends FighterWeapon {
-	public $name = "IonBolt";
-	public $display = "Ion Accelerator";
+class MuonBolt extends FighterWeapon {
+	public $name = "MuonBolt";
+	public $display = "Muon Accelerator";
 	public $animColor = "orange";
 	public $projSize = 3;
 	public $projSpeed = 5;

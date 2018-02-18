@@ -19,11 +19,13 @@ spl_autoload_register(
                 'naga' => '/server/systems/weapons/ammo.php',
                 'cyclops' => '/server/systems/weapons/ammo.php',
                 'titan' => '/server/systems/weapons/ammo.php',
+                'energytorpedo' => '/server/systems/weapons/ammo.php',
 
                 'mixed' => '/server/mixed.php',
 
                 'salvo' => '/server/salvo.php',
-                'missle ' =>  '/server/ammo.php',
+                'missile ' =>  '/server/ammo.php',
+                'torpedo ' =>  '/server/ammo.php',
 
                 'flight' => '/server/flight.php',
                 'fighter' => '/server/fighter.php',
@@ -68,6 +70,7 @@ spl_autoload_register(
 
                 'gquan' => '/server/ships/gquan.php',
                 'katoc' => '/server/ships/katoc.php',
+                'dagkar' => '/server/ships/dagkar.php',
                 'thentus' => '/server/ships/thentus.php',
                 'shokos' => '/server/ships/shokos.php',
 
@@ -124,11 +127,11 @@ spl_autoload_register(
                 'shockcannon' => '/server/systems/weapons/particle.php',
 
                 'particle' => '/server/systems/weapons/particle.php',
-                'superlightion' => '/server/systems/weapons/particle.php',
-                'lightion' => '/server/systems/weapons/particle.php',
-                'mediumion' => '/server/systems/weapons/particle.php',
-                'heavyion' => '/server/systems/weapons/particle.php',
-                'superheavyion' => '/server/systems/weapons/particle.php',
+                'superlightmuon' => '/server/systems/weapons/particle.php',
+                'lightmuon' => '/server/systems/weapons/particle.php',
+                'mediummuon' => '/server/systems/weapons/particle.php',
+                'heavymuon' => '/server/systems/weapons/particle.php',
+                'superheavymuon' => '/server/systems/weapons/particle.php',
                 'fusioncannon' => '/server/systems/weapons/particle.php',
 
                 'area' => '/server/systems/weapons/area.php',
@@ -136,6 +139,7 @@ spl_autoload_register(
 
                 'launcher' => '/server/systems/weapons/launcher.php',
                 'missilelauncher' => '/server/systems/weapons/launcher.php',
+                'etorplauncher' => '/server/systems/weapons/launcher.php',
 
                 'fighterweapon' => '/server/systems/weapons/linked.php',
                 'particlegun' => '/server/systems/weapons/linked.php',

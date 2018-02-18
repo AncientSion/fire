@@ -649,6 +649,10 @@ table, th, tr, td {
     box-shadow: inset 0 0 0px 3px yellow;
 }
 
+#systemDetailsDiv th {
+	color: yellow;
+}
+
 .unitContainer .boostDiv img, .unitContainer .powerDiv img{
 	color: black;
 	width: 100%;
@@ -900,7 +904,7 @@ div.integrityFull {
 	width: 100%;
 	font-size: 14px;
 	color: #ff3b00;
-	color: white;
+    color: white;
 	text-align: center;
 	vertical-align: middle;
 	display: table-cell;
@@ -908,9 +912,8 @@ div.integrityFull {
 
 .structDiv .outputMask {
 	font-size: 11px;
-    color: white;
     top: -2px;
-    left: 5px;
+    left: 2px;
     width: 100%;
     height: 10px;
     text-align: left;

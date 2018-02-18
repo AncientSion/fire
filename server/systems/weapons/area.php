@@ -72,7 +72,7 @@ class EnergyMine extends Area {
 	public $fireMode = "Ballistic";
 	public $minDmg = 10;
 	public $maxDmg = 50;
-	public $accDecay = 10;
+	public $accDecay = 66;
 	public $shots = 1;
 	public $animColor = "blue";
 	public $projSize = 3;
@@ -81,10 +81,9 @@ class EnergyMine extends Area {
 	public $integrity = 26;
 	public $powerReq = 4;
 	public $traverse = -3;
-	public $dmgLoss = 50;
-	public $maxRange = 700;
+	public $maxRange = 1500;
 	public $aoe = 50;
-	public $dmgs = array(10, 40, 50, 25);
+	public $dmgs = array(10, 15, 50, 25);
 	public $notes;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){

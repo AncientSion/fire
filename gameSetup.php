@@ -246,6 +246,7 @@ else {
 				faction: "",
 				arcRange: 100,
 				canSubmit: 0,
+				system: 0,
 
 				getUnitName: function(){
 					if (this.ships[0].ship){return this.ships[0].name;
@@ -486,8 +487,9 @@ else {
 		$("#weaponLoadoutDiv").addClass("disabled");
 		$("#hangarTable").html("");
 
-		var ship = window.initiateUnit(JSON.parse(data));
+		var ship = window.initUnit(JSON.parse(data));
 			game.ships[0] = ship;
+			game.system = 0;
 
 			ship.actions.push(new Move(-1, "deploy", 0, res.x/2, res.y/2, 0, 0, 0, 1, 1, 1));
 			ship.create();
@@ -599,6 +601,7 @@ else {
 		$("#hangarTable").html("");
 		if (game.faction == ""){game.setReinforceFaction(game.ships[0].faction);}
 		game.ships[0] = undefined;
+		game.system = 0;
 		game.canSubmit();
 	}
 

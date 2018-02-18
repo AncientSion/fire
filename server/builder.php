@@ -194,7 +194,7 @@ class DmgCalc {
 				$entry->shieldDmg += $dmg->shieldDmg; $entry->structDmg += $dmg->structDmg; $entry->armourDmg += $dmg->armourDmg; $entry->destroyed = $destroyed;
 			}
 		}
-		//Debug::log($print);
+		Debug::log($print);
 	}
 
 
@@ -216,7 +216,10 @@ class DmgCalc {
 		$emDmg = 0;
 		$notes = "";
 
-		$emDmg = $totalDmg;
+		$shieldDmg = round(min($totalDmg, $negation["bonus"]));
+		$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
+		$emDmg = round($totalDmg - $shieldDmg - $armourDmg);
+		$armourDmg = 0;
 
 		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $structDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);
 	}

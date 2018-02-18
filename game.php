@@ -688,7 +688,7 @@
 						})
 						for (var i = 0; i < game.fireOrders.length; i++){
 							game.fireOrders[i].animated = 1;
-							game.createCombatLogEntry(i);
+							game.fireOrders[i].weapon.createCombatLogEntry(game.fireOrders[i])
 						}
 
 						game.createFireFinalEntry();

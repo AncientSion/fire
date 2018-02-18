@@ -29,14 +29,14 @@ function Salvo(data){
 	this.getTrackingString = function(){
 		var t = this.getTarget().traverse;
 		var html = "";
-		var d = Math.max(0, (this.structures[0].traverse - t));
-		html += game.getUnitType(this.structures[0].traverse) + "<span class=";
+		var d = Math.max(0, (this.structures[0].systems[0].traverse - t));
+		html += game.getUnitType(this.structures[0].systems[0].traverse) + "<span class=";
 
 		if (d > 0){
 			html += "'red'>";
 		} else html += "'green'>";
 		
-		return html + " (" + Math.floor(100-d*20) + "%)</span>";
+		return html + " (" + Math.ceil(90 * (100 - (d*20))/100) + "%)</span>";
 	}
 
 	this.setDisplay = function(){
@@ -83,6 +83,12 @@ function Salvo(data){
 
 Salvo.prototype = Object.create(Mixed.prototype);
 
+Salvo.prototype.getSpeedString = function(){
+	if (this.structures[0].missile){
+		return (this.getCurSpeed() + "px (+" + Math.floor(this.getBaseImpulse()) + "px per Turn)");
+	} else return ("fixed " + this.getCurSpeed() + "px");
+}
+
 Salvo.prototype.createBaseDiv = function(){
 	var owner = "friendly";
 	if (this.userid != game.userid){owner = "hostile";}
@@ -121,7 +127,7 @@ Salvo.prototype.createBaseDiv = function(){
     		.append($("<th>").html("Tracking up to"))
 		)
 		.append($("<tr>")
-    		.append($("<td>").html(this.getCurSpeed() + " (+" + Math.floor(this.getBaseImpulse()) + " per Turn)"))
+    		.append($("<td>").html(this.getSpeedString()))
     		.append($("<td>").html(this.structures[0].negation))
     		.append($("<td>").html(this.getDamage()))
     		.append($("<td>").html(this.getTrackingString()))
@@ -273,7 +279,8 @@ Salvo.prototype.getShortInfo = function(){
 	} else $(ele).attr("class", "hostile");
 
 	var table = document.createElement("table");
-		table.insertRow(-1).insertCell(-1).innerHTML = "Salvo #" + this.id + " (" + this.structures.length + "x " + this.structures[0].name + ")";
+		table.insertRow(-1).insertCell(-1).innerHTML = ("Salvo #" + this.id);
+		table.insertRow(-1).insertCell(-1).innerHTML = this.structures.length + "x " + this.structures[0].name;
 		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + this.getCurSpeed();
 		table.insertRow(-1).insertCell(-1).innerHTML = this.getStringHitChance();
 

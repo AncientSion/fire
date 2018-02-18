@@ -12,7 +12,7 @@ class Thentus extends Light {
 	public $integrity = 440;
 	public $ep = 110;
 	public $ew = 500;
-	public $power = 2;
+	public $power = 1;
 	public $negation = 13;
 
 	function __construct($id, $userid){

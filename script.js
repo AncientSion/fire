@@ -67,6 +67,10 @@ function init(){
 	console.timeEnd("time");
 }
 
+function log(val){
+	console.log(val);
+}
+
 function executeAll(){
 	if (game){
 		game.executeAll();
@@ -377,7 +381,7 @@ function canvasMouseMove(e){
 			drawVector(shipLoc, {x: e.clientX - offset.x, y: e.clientY - offset.y}, dist, a);
 		}
 
-		if (ship.salvo){return;}
+		if (ship.salvo){}
 		else if (game.sensorMode){
 			sensorEvent(false, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), addAngle(facing, getAngleFromTo(shipLoc, pos)));
 		}

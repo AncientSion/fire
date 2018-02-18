@@ -162,13 +162,14 @@ class Single {
 		$chance = 50;
 		$tresh = $this->dropout[0];
 		$dmg = floor($new + $old);
+		Debug::log("dropout on: ".get_class($this).", tresh: ".$thresh.", dmg: ".$dmg);
+
 		if ($dmg > $tresh){
 			$min = floor($chance * (1+($dmg - $tresh)/(100 - $tresh)));
 			$roll = mt_rand(0, 100);
 
 			Debug::log("chance: ".$min.", roll: ".$roll);
 			if ($roll < $min){
-				Debug::log("dropout!");
 				$this->crits[] = new Crit(
 					sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 0, 0, 1
 				);

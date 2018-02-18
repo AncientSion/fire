@@ -137,7 +137,7 @@ class SuperHeavyLaser extends Laser {
 	public $beamWidth = 5;
 	public $minDmg = 205;
 	public $maxDmg = 250;
-	public $optRange = 600;
+	public $optRange = 700;
 	public $dmgLoss = 3;
 	public $accDecay = 40;
 	public $reload = 5;
@@ -161,7 +161,7 @@ class NeutronLaser extends Laser {
 	public $beamWidth = 2;
 	public $minDmg = 95;
 	public $maxDmg = 130;
-	public $optRange = 800;
+	public $optRange = 700;
 	public $dmgLoss = 2;
 	public $accDecay = 60;
 	public $shots = 1;

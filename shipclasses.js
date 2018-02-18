@@ -2387,8 +2387,8 @@ Ship.prototype.expandDiv = function(div){
 			var h = s.height();
 
 			s
-			.find(".boostDiv").css("left", -14).css("top", -4).end()
-			.find(".powerDiv").css("left", w-2).css("top", -4).end()
+			.find(".boostDiv").css("left", -16).css("top", -4).end()
+			.find(".powerDiv").css("left", w).css("top", -4).end()
 			.find(".modeDiv").css("left", w/2 - 9).css("top", h);
 
 		}
@@ -2497,7 +2497,7 @@ Ship.prototype.doRandomOffset = function(shift){
 		a += 90 * shift;
 	} else a = range(0, 360);
 	
-	var p = getPointInDir(15, a, o.x, o.y);
+	var p = getPointInDir(20, a, o.x, o.y);
 	console.log(p);
 
 	this.drawX = p.x;
@@ -3275,7 +3275,7 @@ Ship.prototype.doDecreaseImpulse = function(){
 
 Ship.prototype.drawMoveUI = function(){
 	this.drawImpulseUI();
-	this.drawVectortUI();
+	this.drawVectorUI();
 	if (this.canTurn()){
 		this.drawTurnUI();
 		this.updateDiv();
@@ -3288,7 +3288,7 @@ Ship.prototype.drawShortenTurnUI = function(){
 	var remSpeed = this.getRemSpeed();
 	var center = this.getPlannedPos();
 
-	if (!remDelay){$(game.ui.doShorten).addClass("disabled");}
+	if (!remDelay || this.getRemEP()){$(game.ui.doShorten).addClass("disabled");}
 	else {
 		var o = this.getGamePos()
 		var angle = this.getPlannedFacing();
@@ -3415,13 +3415,14 @@ Ship.prototype.getShortenTurnCost = function(delay){
 	return turn.cost * (1-multi);
 }
 
-Ship.prototype.drawVectortUI = function(){
+Ship.prototype.drawVectorUI = function(){
 	var center = this.getPlannedPos();
 	var angle = this.getPlannedFacing();
 	var remSpeed = this.getRemSpeed();
+	var remDelay = this.getRemDelay();
 	var ele;
 
-	if (remSpeed > 0){
+	if (remSpeed){
 		ele = document.getElementById("maxVector");
 		var p = getPointInDir(remSpeed + 90, angle, center.x, center.y);
 		var left = p.x * cam.z  + cam.o.x - $(ele).width()/2;
@@ -3432,6 +3433,22 @@ Ship.prototype.drawVectortUI = function(){
 			.data("dist", remSpeed)
 			//.html("<div style='margin-left: 4px; margin-top: 7px'>"+rem+"<div>")
 			.html("<div>"+remSpeed+"</div>")
+			.css("left", left)
+			.css("top", top)
+			.removeClass("disabled");
+	}
+
+	if (remDelay && remSpeed >= remDelay){
+		ele = document.getElementById("maxTurnVector");
+		var p = getPointInDir(remSpeed + 60, angle, center.x, center.y);
+		var left = p.x * cam.z  + cam.o.x - $(ele).width()/2;
+		var top = p.y * cam.z  + cam.o.y - $(ele).height()/2;
+
+		$(ele)
+			.data("shipid", this.id)
+			.data("dist", remSpeed)
+			//.html("<div style='margin-left: 4px; margin-top: 7px'>"+rem+"<div>")
+			.html("<div>"+remDelay+"</div>")
 			.css("left", left)
 			.css("top", top)
 			.removeClass("disabled");
@@ -3578,14 +3595,10 @@ Ship.prototype.hasBasicEW = function(){
 }
 
 Ship.prototype.doConfirmSystemLoadout = function(){
-	for (var i = 0; i < this.structures.length; i++){
-		for (var j = 0; j < this.structures[i].systems.length; j++){
-			if (this.structures[i].systems[j].selected){
-				this.structures[i].systems[j].select();
-				return;
-			}
-		}
-	}
+	var system = this.getSystem(game.system);
+	if (system.launcher){system.setAmmo();}
+	system.select();
+	return;
 }
 
 Ship.prototype.posIsOnSystemArc = function(origin, target, facing, system){

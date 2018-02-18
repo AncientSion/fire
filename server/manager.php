@@ -799,7 +799,7 @@ include_once 'global.php';
 		$this->setFireOrderDetails();
 
 		for ($i = 0; $i < sizeof($this->fires); $i++){
-			Debug::log("handling fire: ".$this->fires[$i]->id.", weapon: ".$this->fires[$i]->weapon->display);
+			//Debug::log("handling fire: ".$this->fires[$i]->id.", weapon: ".$this->fires[$i]->weapon->display);
 			if ($this->fires[$i]->resolved){continue;}
 			if ($this->fires[$i]->weapon instanceof Area){
 				$subFires = $this->fires[$i]->weapon->createAreaFireOrders($this, $this->fires[$i]);
@@ -1069,8 +1069,7 @@ include_once 'global.php';
 	}
 
 	public function setLocks($s){
-		if ($s->salvo){
-		}
+		if ($s->salvo){}
 		else if ($s->flight && $s->mission->arrived){
 			//Debug::log("setLocks for FLIGHT #".$s->id);
 			for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -1198,47 +1197,52 @@ include_once 'global.php';
 		}
 	}
 
-		public function setFireOrderDetails(){
-			for ($i = sizeof($this->fires)-1; $i >= 0; $i--){
-				//Debug::log("setFireOrderDetails fire #".$this->fires[$i]->id);
-				//echo "fire: ".$this->fires[$i]->id; echo "</br></br>";
-				//var_export($this->fires[$i]); echo "</br></br>";
-				$this->fires[$i]->shooter = $this->getUnit($this->fires[$i]->shooterid);
-				$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystem($this->fires[$i]->weaponid);
-				//echo get_class($this->fires[$i]->weapon); echo "</br></br>";
-				$this->fires[$i]->shots = $this->fires[$i]->weapon->getShots($this->turn);
-				$this->fires[$i]->target = $this->getUnit($this->fires[$i]->targetid);
-				//var_export($this->fires[$i]->weapon); echo "</br></br>";
-				//var_export($this->fires[$i]->weapon->getBoostLevel($this->turn)); echo "</br></br>";
-			}
-		}
+	public function setFireOrderDetails(){
+		//for ($i = 0; $i < sizeof($this->fires); $i++){var_export($this->fires[$i]); echo "</br></br>";}
 
-		public function sortFireOrders(){
+		for ($i = sizeof($this->fires)-1; $i >= 0; $i--){
+			if ($this->phase == 2 && !$this->fires[$i]->targetid){$this->fires[$i]->resolved = 1; continue;}
+			//Debug::log("setFireOrderDetails fire #".$this->fires[$i]->id);
+			//echo "fire: ".$this->fires[$i]->id; echo "</br></br>";
+			//var_export($this->fires[$i]); echo "</br></br>";
+			$this->fires[$i]->shooter = $this->getUnit($this->fires[$i]->shooterid);
+			//var_export($this->fires[$i]->id);
+			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystem($this->fires[$i]->weaponid);
+			//echo get_class($this->fires[$i]->weapon); echo "</br></br>";
+			$this->fires[$i]->shots = $this->fires[$i]->weapon->getShots($this->turn);
+			$this->fires[$i]->target = $this->getUnit($this->fires[$i]->targetid);
+			//var_export($this->fires[$i]->weapon); echo "</br></br>";
+			//var_export($this->fires[$i]->weapon->getBoostLevel($this->turn)); echo "</br></br>";
+		}
+	}
+
+	public function sortFireOrders(){
+		//Debug::log("fires: ".sizeof($this->fires));
 		//order target id ASC, weapon priority ASC, shooterider id ASC
 
-			usort($this->fires, function($a, $b){
-				if ($a->targetid != $b->targetid){
-					return $a->targetid - $b->targetid;
-				}
-				else if ($a->weapon->priority != $b->weapon->priority){
-					return $a->weapon->priority - $b->weapon->priority;
-				}
-				else if ($a->shooterid != $b->shooterid){
-					return $a->shooterid - $b->shooterid;
-				}
-				else return $a->id - $b->id;
-			});
-		}
-
-		public function resolveShipFireOrders(){
-			// resolve ship vs ship / fighter
-			for ($i = 0; $i < sizeof($this->fires); $i++){
-				if ($this->fires[$i]->resolved){continue;}
-				if ($this->fires[$i]->shooter->flight){continue;}
-
-				$this->fires[$i]->target->resolveFireOrder($this->fires[$i]);
+		usort($this->fires, function($a, $b){
+			if ($a->targetid != $b->targetid){
+				return $a->targetid - $b->targetid;
 			}
+			else if ($a->weapon->priority != $b->weapon->priority){
+				return $a->weapon->priority - $b->weapon->priority;
+			}
+			else if ($a->shooterid != $b->shooterid){
+				return $a->shooterid - $b->shooterid;
+			}
+			else return $a->id - $b->id;
+		});
+	}
+
+	public function resolveShipFireOrders(){
+		// resolve ship vs ship / fighter
+		for ($i = 0; $i < sizeof($this->fires); $i++){
+			if ($this->fires[$i]->resolved){continue;}
+			if ($this->fires[$i]->shooter->flight){continue;}
+			//var_export($this->fires[$i]->id);
+			$this->fires[$i]->target->resolveFireOrder($this->fires[$i]);
 		}
+	}
 
 	public function resolveFighterFireOrders(){
 		// splice and delete fireorders from destroyed fighters
@@ -1489,6 +1493,7 @@ include_once 'global.php';
 					array(
 					"GQuan",
 					"Katoc",
+					"dagkar",
 					),
 					array(
 					"Thentus",
@@ -1566,6 +1571,7 @@ include_once 'global.php';
 				$ships = array(
 					array("GQuan", 6, 2),
 					array("Katoc", 10, 3),
+					array("Dagkar", 10, 3),
 				);
 
 				break;
@@ -1597,8 +1603,8 @@ include_once 'global.php';
 
 		for ($i = 0; $i < sizeof($array); $i++){
 			switch ($array[$i]){
-				case "Ion":
-					$systems[] = array("LightIon", "MediumTwinIon", "HeavyIon"); break;
+				case "Muon":
+					$systems[] = array("LightMuon", "MediumTwinMuon", "HeavyMuon"); break;
 				case "Pulse":
 					$systems[] = array("LightPulse", "MediumPulse"); break;
 				case "Laser":
