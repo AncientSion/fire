@@ -73,13 +73,19 @@ class DmgCalc {
 
 		Debug::log("fire #".$fire->id.", doPulseDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".$name.", hits: ".$hits.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
 
+		if ($negation["bonus"] > 1){
+			Debug::log("PulseDmg:</br>");
+			var_export($dmg);
+			echo "</br></br>";
+		}
+
 		for ($i = 0; $i < $hits; $i++){
 
 			if ($destroyed){
 				$total += $totalDmg;
 				$dmg->overkill += $dmg->structDmg;
-				$armour += $dmg->armourDmg;
 				$shield += $dmg->shieldDmg;
+				$armour += $dmg->armourDmg;
 				$em += $dmg->emDmg;
 				//Debug::log(" => hit ".($i+1).", adding ".$dmg->structDmg."/".$dmg->armourDmg." to overkill which is now: ".$dmg->overkill." pts");
 				continue;
@@ -88,10 +94,10 @@ class DmgCalc {
 				//Debug::log("adding hit ".($i+1).", shieldDmg: ".$dmg->shieldDmg);
 				$total += $totalDmg;
 				$struct += $dmg->structDmg;
-				$armour += $dmg->armourDmg;
 				$shield += $dmg->shieldDmg;
+				$armour += $dmg->armourDmg;
 				$em += $dmg->emDmg;
-				//Debug::log("shield: ".$shield);
+				Debug::log("shield: ".$shield);
 			}
 
 			if ($struct >= $remInt){
@@ -275,11 +281,12 @@ class DmgCalc {
 		$notes = "";
 
 		if ($totalDmg <= array_sum($negation)){ 
-			$notes = "block;";
-			$armourDmg = round($totalDmg);
+			$notes = "b;";
+			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
+			$armourDmg = round($totalDmg-$shieldDmg);
 		}
 		else {
-			$notes = "pen;";
+			$notes = "p;";
 			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
 			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
 			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);

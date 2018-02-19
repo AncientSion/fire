@@ -40,7 +40,7 @@ function Flight(data){
 Flight.prototype = Object.create(Mixed.prototype);
 
 Flight.prototype.setSize = function(){
-	console.log("setSize #" + this.id);
+	//console.log("setSize #" + this.id);
 	var max = 0;
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].destroyed){continue;}
@@ -101,7 +101,7 @@ Flight.prototype.getNewMission = function(){
 }
 
 Flight.prototype.setImage = function(){
-	console.log("setImage #" + this.id);
+	//console.log("setImage #" + this.id);
 
 	if (!this.mission.arrived){
 		this.setPreMoveImage();
@@ -116,6 +116,13 @@ Flight.prototype.setImage = function(){
 			} else this.setPostMoveImage();
 		}
 	}
+}
+
+Flight.prototype.setCallSign = function(){
+	var names = ["Blue", "Yellow", "Red", "Green", "Silver", "Tiger", "Eagle", "Dragon", "Wyvern", "Phoenix", "Rampage", "Assault", "Onslaught"];
+	var signs = ["Alpha", "Beta", "Gamma", "Epsilon", "Sigma", "Phi"];
+
+	this.call = (names[range(0, names.length-1)] + "-" + signs[range(0, signs.length-1)]);
 }
 
 Flight.prototype.createBaseDiv = function(){

@@ -548,7 +548,7 @@ function getRadialGradient(x, y, s){
 }	
 
 function drawSensorArc(w, d, str, loc, facing, a, sensor){
-	console.log("drawSensorArc");
+	//console.log("drawSensorArc");
 	if (game.sensorMode){salvoCtx.clearRect(0, 0, res.x, res.y);}
 	salvoCtx.translate(cam.o.x, cam.o.y);
 	salvoCtx.scale(cam.z, cam.z);

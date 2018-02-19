@@ -446,7 +446,7 @@ Mixed.prototype.setPreFireImage = function(){
 
 Mixed.prototype.setPreFireSize = function(){
 	if (this.salvo){return;}
-	console.log("setPreFireSize #" + this.id);
+	//console.log("setPreFireSize #" + this.id);
 	var max = 0;
 	for (var i = 0; i < this.structures.length; i++){
 		if (!this.structures[i].draw){continue;}
@@ -579,7 +579,7 @@ Mixed.prototype.setPreMoveImage = function(){
 }
 
 Mixed.prototype.setPostMoveImage = function(){
-	console.log("setPostMoveImage " + this.id);
+	//console.log("setPostMoveImage " + this.id);
 	var size = 26;
 	var t = document.createElement("canvas");
 		t.width = this.size*2;

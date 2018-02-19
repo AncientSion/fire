@@ -341,6 +341,7 @@ function Game(data, userid){
 			}
 		}
 
+		flight.setCallSign();
 		flight.setUnitState();
 		flight.isReady = 1;
 		flight.create();
@@ -441,6 +442,7 @@ function Game(data, userid){
 						serverId: 0,
 						type: "Flight",
 						name: "Flight",
+						call: this.ships[i].call,
 						display: "",
 						mission: this.ships[i].mission,
 						launchData: this.ships[i].launchData,
@@ -1233,19 +1235,35 @@ function Game(data, userid){
 			for (var j = i+1; j < this.ships.length; j++){
 				var b = this.ships[j].getPlannedPos();
 				if (a.x == b.x && a.y == b.y){
-					if (this.ships[i].flight && this.ships[j].flight){
+				/*	if (this.ships[i].flight && this.ships[j].flight){
 						if (this.ships[i].mission.targetid == this.ships[j].id || this.ships[j].mission.targetid == this.ships[i].id){
 							this.ships[i].cc.push(this.ships[j].id);
 							this.ships[j].cc.push(this.ships[i].id);
 						}
-						else if (this.ships[i].getTarget().ship && this.ships[j].getTarget().ship){
+						else if (this.ships[i].getTarget().ship || this.ships[j].getTarget().ship){
 							this.ships[i].cc.push(this.ships[j].id);
 							this.ships[j].cc.push(this.ships[i].id);
 						}
 					}
-					else {
+					else {*/
 						this.ships[i].cc.push(this.ships[j].id);
 						this.ships[j].cc.push(this.ships[i].id);
+				//	}
+				}
+			}
+		}
+
+		return;
+
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].flight || this.ships[i].salvo){continue;}
+			if (this.ships[i].cc.length < 2){continue;}
+
+			for (var j = 0; j < this.ships[i].cc.length; j++){
+				for (var k = 0; k < this.ships.length; k++){
+					if (this.ships[k].id == this.ships[i].cc[j]){
+						this.ships[k].cc = this.ships[i].cc; 
+						break;
 					}
 				}
 			}

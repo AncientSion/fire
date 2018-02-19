@@ -7,7 +7,7 @@ class Katoc extends Medium {
 	public $size =  55;
 	public static $value = 480;
 	public $profile = array(0.93, 1.07);
-	public $mass = 400;
+	public $mass = 4000;
 
 	public $integrity = 670;
 	public $vitalHP = 85;

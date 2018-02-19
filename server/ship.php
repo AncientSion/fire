@@ -620,7 +620,7 @@ class Ship {
 		else {
 			$fire->cc = $this->isCloseCombat($fire->shooter->id);
 			$fire->dist = $this->getHitDist($fire);
-			$fire->angle = $this->getImpactAngle($fire);
+			$fire->angle = $this->getIncomingFireAngle($fire);
 			$fire->section = $this->getHitSection($fire);
 
 			$this->rollToHit($fire);
@@ -899,8 +899,12 @@ class Ship {
 		return Math::getDist($tPos->x, $tPos->y, $sPos->x, $sPos->y);
 	}
 
-	public function getImpactAngle($fire){
-		if ($fire->cc){return $fire->shooter->getFireAngle($fire);}
+	public function getIncomingFireAngle($fire){
+		if ($fire->cc){
+			if ($this->ship || $this->squadron){
+				return $fire->shooter->getFireAngle($fire);
+			} else return 0;
+		}
 		
 		for ($i = 0; $i < sizeof($this->angles); $i++){
 			if ($this->angles[$i][0] == $fire->shooter->id){

@@ -272,16 +272,9 @@ class Mixed extends Ship {
 		$this->moveSet = 1;
 	}
 
-	public function getImpactAngle($fire){
-		if ($fire->cc){
-			if ($this->flight && ($fire->shooter->flight || $fire->shooter->ship || $fire->shooter->squad)){
-				return $fire->shooter->getFireAngle($fire);
-			}
-			else if ($this->salvo && $fire->shooter->flight){
-				return $fire->shooter->getFireAngle($fire);
-			} else if ($this->salvo && ($fire->shooter->ship || $fire->shooter->squad)){
-				return round(Math::getAngle2($fire->shooter->getCurrentPosition(), $this->getTrajectoryStart()));
-			}
+	public function getIncomingFireAngle($fire){
+		if ($fire->cc && $this->flight){
+			return 0;
 		}
 		
 		for ($i = 0; $i < sizeof($this->angles); $i++){
@@ -334,7 +327,7 @@ class Mixed extends Ship {
 	}
 
 	public function getHitSection($fire){
-		Debug::log("Mixed getHitSection");
+		//Debug::log("Mixed getHitSection");
 		return 0;
 		return $this->getHitSystem($fire)->id;
 	}
