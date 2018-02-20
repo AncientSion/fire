@@ -519,7 +519,7 @@ else {
 
 	function addUnitToSquadron(data){
 
-		var sub = window.initiateSquaddie(JSON.parse(data));
+		var sub = window.initSquaddie (JSON.parse(data));
 			sub.create();
 
 		game.ships[0].structures.push(sub);

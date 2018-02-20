@@ -4,9 +4,9 @@ class Pulse extends Weapon {
 	public $type = "Pulse";
 	public $animation = "projectile";
 	public $priority = 8;
-	public $basePulses = 3;
-	public $extraPulses = 2;
-	public $grouping = 30;
+	public $basePulses = 2;
+	public $extraPulses = 3;
+	public $grouping = 25;
 	public $pulse = 1;
 
 	public $notes = array("Full volley allocates versus same unit or system", "More hits if to-hit-roll is undercut");
@@ -185,9 +185,6 @@ class LightEMPulse extends LightPulse {
 	public $integrity = 24;
 	public $powerReq = 3;
 	public $traverse = -3;
-	public $basePulses = 1;
-	public $extraPulses = 4;
-	public $grouping = 20;
 
 	public $em = 1;
 	public $dmgType = "EM";
