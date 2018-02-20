@@ -582,6 +582,8 @@ function Single(data){
 	this.parentId = data.parentId;
 	this.name = data.name;
 	this.display = data.display;
+	this.variant = data.variant;
+	this.rarity = data.rarity;
 	this.role = data.role;
 	this.cost = data.cost;
 	this.ep = data.ep || 0;
@@ -606,7 +608,9 @@ function Single(data){
 }
 
 Single.prototype.getBaseImage = function(){
-	return graphics.images[this.name.toLowerCase()];	
+	if (this.variant.length > 2){
+		return graphics.images[this.variant.toLowerCase()];
+	} else return graphics.images[this.name.toLowerCase()];
 }
 
 Single.prototype.isDestroyedThisTurn = function(){

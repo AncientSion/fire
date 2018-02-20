@@ -676,8 +676,24 @@ class Ship {
 		return $this->getStruct($fire->section)->getArmourValue($system);
 	}
 
-	public function getOverKillSystem($fire){
+	public function getOverkillSystem($fire){
 		return true;
+	}
+
+	public function getFlashOverkillSystem($fire){
+		$valid = array();
+		$struct = $this->getStruct($fire->section);
+		for ($i = 0; $i < sizeof($struct->systems); $i++){
+			if ($struct->systems[$i]->destroyed){continue;}
+			$valid[] = $struct->systems[$i];
+		}
+
+		if (!sizeof($valid)){return $this->primary;}
+		return $valid[mt_rand(0, sizeof($valid)-1)];
+	}
+	
+	public function getFacingElement($fire){
+		return $this->getStruct($fire->section);
 	}
 
 	public function getHitSystem($fire){
@@ -690,7 +706,7 @@ class Ship {
 		//Debug::log("main: ".$main);
 		$total = $main;
 
-		$struct = $fire->target->getStruct($fire->section);
+		$struct = $this->getFacingElement($fire);
 
 		for ($i = 0; $i < sizeof($struct->systems); $i++){
 			if ($struct->systems[$i]->destroyed){continue;}
@@ -852,7 +868,7 @@ class Ship {
 		} return 0;
 	}
 
-	public function getCurrentPosition(){
+	public function getCurPos(){
 		for ($i = sizeof($this->actions)-1; $i >= 0; $i--){
 			if ($this->actions[$i]->resolved == 1){
 				return new Point($this->actions[$i]->x, $this->actions[$i]->y);
@@ -894,8 +910,8 @@ class Ship {
 
 		Debug::log("ERROR got no DIST set on ".$this->id." targeted by #".$fire->shooter->id);
 		
-		$tPos = $this->getCurrentPosition();
-		$sPos = $fire->shooter->getCurrentPosition();
+		$tPos = $this->getCurPos();
+		$sPos = $fire->shooter->getCurPos();
 		return Math::getDist($tPos->x, $tPos->y, $sPos->x, $sPos->y);
 	}
 
@@ -915,7 +931,7 @@ class Ship {
 		Debug::log("got no ANGLE set on ".$this->id." targeted by #".$fire->shooter->id);
 	}
 
-	public function getCurrentFacing(){
+	public function getCurFacing(){
 		$facing = $this->facing;
 		for ($i = 0; $i < sizeof($this->actions); $i++){
 			$facing += $this->actions[$i]->a;

@@ -17,7 +17,6 @@ class Squadron extends Ship {
 
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
 		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
-
 	}
 	
 	public function addAllSystems(){
@@ -221,20 +220,20 @@ class Squadron extends Ship {
 	public function getHitChance($fire){
 		return $this->getStruct($fire->singleid)->getSubHitChance($fire);
 	}
+
+	public function getFacingElement($fire){
+		return $this->getHitSystme();
+	}
+
+	public function getFlashOverkillSystem($fire){
+		return false;
+	}
 	
 	public function getHitSystem($fire){
-	//	return $this->structures[2];
-
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->damaged){continue;}
-			return $this->structures[$i];
-		}
-
 		$elements = array();
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if (!$this->structures[$i]->destroyed){
-				$elements[] = $this->structures[$i];
-			}
+			if ($this->structures[$i]->destroyed){continue;}
+			$elements[] = $this->structures[$i];
 		}
 		return $elements[mt_rand(0, sizeof($elements)-1)];
 	}
@@ -428,7 +427,7 @@ class Squaddie extends Single {
 		return $this->baseHitChance;
 	}
 
-	public function getOverKillSystem($fire){
+	public function getOverkillSystem($fire){
 		return false;
 	}
 

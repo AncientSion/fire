@@ -70,9 +70,11 @@ spl_autoload_register(
 
                 'gquan' => '/server/ships/gquan.php',
                 'katoc' => '/server/ships/katoc.php',
+                'rongoth' => '/server/ships/rongoth.php',
                 'dagkar' => '/server/ships/dagkar.php',
                 'thentus' => '/server/ships/thentus.php',
                 'shokos' => '/server/ships/shokos.php',
+                'shokov' => '/server/ships/shokov.php',
 
                 'system' => '/server/systems/system.php',
                 'weapon' => '/server/systems/weapon.php',
@@ -95,6 +97,8 @@ spl_autoload_register(
                 'lightplasma' => '/server/systems/weapons/plasma.php',
                 'mediumplasma' => '/server/systems/weapons/plasma.php',
                 'heavyplasma' => '/server/systems/weapons/plasma.php',
+                'magcompressor' => '/server/systems/weapons/area.php',
+
 
                 'laser' => '/server/systems/weapons/laser.php',
                 'lightparticlebeam' => '/server/systems/weapons/laser.php',

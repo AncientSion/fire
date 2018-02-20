@@ -3364,9 +3364,9 @@ Area.prototype.createCombatLogEntry = function(fire){
 }
 
 Area.prototype.setMount = function(amount){
-	if (this.name == "EnergyMine"){
+	//if (this.name == "EnergyMine"){
 		this.mount = "Catapult"; 
-	}
+	//}
 	this.armour = Math.floor(amount * this.armourMod);
 	return;
 }
@@ -3422,10 +3422,12 @@ Area.prototype.getAnimation = function(fire){
 
 Area.prototype.getAimData = function(target, final, dist, row){
 	if (target){
-		row
-		.append($("<td>").attr("colSpan", 4).html("<span>Unable to target specific unit.</span>"))
-		this.validTarget = 0;
-		this.odds = 0;
+		if (this.freeAim){
+			row
+			.append($("<td>").attr("colSpan", 4).html("<span>Unable to target specific unit.</span>"))
+			this.validTarget = 0;
+			this.odds = 0;
+		} else return Weapon.prototype.getAimData.call(this, target, final, dist, row);
 	}
 	else {
 		row

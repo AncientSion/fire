@@ -7,7 +7,7 @@ class Olympus extends Medium {
 	public $size =  45;
 	public static $value = 430;
 	public $profile = array(0.94, 1.06);
-	public $mass = 2500;
+	public $mass = 2750;
 
 	public $integrity = 500;
 	public $vitalHP = 70;

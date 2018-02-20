@@ -2,16 +2,131 @@
 
 class DmgCalc {
 
+	public static function createAreaFireOrders($gd, $fire){
+		Debug::log("createAreaFireOrders");
+
+		$origin = new Point($fire->shooter->x, $fire->shooter->y);
+		$target = new Point($fire->x, $fire->y);
+		$dist = floor(Math::getDist2($origin, $target));
+
+		if ($fire->weapon->deviate){
+			$maxDevi = $dist / 100 * $fire->weapon->accDecay / 10;
+			$devi = mt_rand(0, $maxDevi);
+			$angle = mt_rand(0, 360);
+			$impact = Math::getPointInDirection($devi, $angle, $target->x, $target->y);
+			$fire->notes = $impact->x.";".$impact->y.";";
+			Debug::log("dist: ".$dist.", maxDevi: ".$maxDevi."px, devi: ".$devi."px, angle: ".$angle);
+		}
+		else {
+			$impact = $target;
+			$angle = getAngle2($origin, $target);
+		}
+
+		//Debug::log("newTarget ".$newTarget->x."/".$newTarget->y);
+		
+
+		//$newTarget = new Point(-50, -160);
+		//$fire->notes = $newTarget->x.";".$newTarget->y.";";
+
+
+		$newFires = array();
+
+		for ($i = 0; $i < sizeof($gd->ships); $i++){
+			$d = Math::getDist2($gd->ships[$i]->getCurPos(), $impact);
+			//Debug::log("eMine impact distance to ".$gd->ships[$i]->name." #".$gd->ships[$i]->id.": ".$d);
+
+			if ($d + $fire->weapon->aoe <= $fire->weapon->aoe*2){
+				$a = round(Math::addAngle($gd->ships[$i]->getCurFacing() - $gd->ships[$i]->facing, Math::getAngle2($gd->ships[$i]->getCurPos(), $impact)));
+				//var_export($newTarget);var_export($gd->ships[$i]->x);var_export($gd->ships[$i]->y);
+				//Debug::log("hitting, dist to impact: ".$d.", impact from: ".$a);
+
+				$subFire = new FireOrder(
+					$fire->id, 0, $gd->turn, $fire->shooterid, $gd->ships[$i]->id, $impact->x, $impact->y, $fire->weapon->id, $fire->shots, 0, "", 1, 0
+				);
+
+				$subFire->cc = 0;
+				$subFire->dist = $d;
+				$subFire->angle = $a;
+				$subFire->target = $gd->ships[$i];
+				$subFire->weapon = $fire->weapon;
+				$newFires[] = $subFire;
+			}
+		}
+		return $newFires;
+	}
+
+	public static function determineDmg($weapon, $totalDmg, $negation){
+		switch ($weapon->dmgType){
+			case "Standard": return static::determineStandardDmg($weapon, $totalDmg, $negation);
+			case "Matter": return static::determineMatterDmg($weapon, $totalDmg, $negation);
+			case "Plasma": return static::determinePlasmaDmg($weapon, $totalDmg, $negation);
+			case "EM": return static::determineEMDmg($weapon, $totalDmg, $negation);
+			default: Debug::log("determineDmg ERROR"); break;
+		}
+	}
+
 	public static function doDmg($fire, $roll, $system){
 		switch ($fire->weapon->fireMode){
 			case "Standard": static::doStandardDmg($fire, $roll, $system); break;
 			case "Ballistic": static::doStandardDmg($fire, $roll, $system); break;
 			case "Pulse": static::doPulseDmg($fire, $roll, $system); break;
 			case "Laser": static::doLaserDmg($fire, $roll, $system); break;
+			case "Flash": static::doFlashDmg($fire, $roll, $system); break;
 			default: Debug::log("doDmg ERROR"); break;
 		}
 
 		$fire->weapon->postDmg($fire);
+	}
+
+
+	public static function doFlashDmg($fire, $roll, $system){
+		$totalDmg = $fire->weapon->getTotalDamage($fire);
+		$toDo = $totalDmg;
+		if ($fire->target->ship){$system = $fire->target->getFlashOverkillSystem($fire);}
+
+		while ($toDo){
+			$push = false;
+			$destroyed = 0;
+			$remInt = $system->getRemainingIntegrity();
+			$negation = $fire->target->getArmour($fire, $system);
+			$dmg = static::determineDmg($fire->weapon, $toDo, $negation);
+			$name = get_class($system);
+
+			Debug::log("fire #".$fire->id.", doFlashDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".$name.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
+
+			if ($remInt - $dmg->structDmg < 1){ // destroy system
+				Debug::log(" => destroying target system ".$name." #".$system->id.", rem: ".$remInt.", doing: ".$dmg->structDmg);
+				$destroyed = 1;
+				$dmg->structDmg = $remInt;
+				$push = true;
+			}
+			else if ($toDo){ // no dmg left
+				Debug::log("dmg depleted");
+				$push = true;
+			}
+
+			if ($push){
+				$toDo -= $dmg->shieldDmg; 
+				$toDo -= $dmg->armourDmg; 
+				$toDo -= $dmg->structDmg; 
+				$toDo -= $dmg->emDmg;
+				$fire->hits++;
+				
+				$entry = new Damage(
+					-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
+					$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->emDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
+				);
+
+				$fire->damages[] = $entry;
+				$fire->target->applyDamage($entry);	
+
+				if ($toDo){
+					$system = $fire->target->getFlashOverkillSystem($fire);
+					if ($system){Debug::log("next target: ".$system->name);}
+					else {Debug::log("FLASH to primary, EXIT"); return;}
+				}
+			}
+		}
 	}
 
 	public static function doStandardDmg($fire, $roll, $system){
@@ -31,7 +146,7 @@ class DmgCalc {
 		if ($remInt - $dmg->structDmg < 1){
 			$destroyed = 1;
 			$name = get_class($system);
-			$okSystem = $fire->target->getOverKillSystem($fire);
+			$okSystem = $fire->target->getOverkillSystem($fire);
 
 			if ($okSystem){
 				$dmg->overkill += abs($remInt - $dmg->structDmg);
@@ -102,7 +217,7 @@ class DmgCalc {
 
 			if ($struct >= $remInt){
 				$destroyed = 1;
-				$okSystem = $fire->target->getOverKillSystem($fire);
+				$okSystem = $fire->target->getOverkillSystem($fire);
 
 				if ($okSystem){
 					//$dmg->overkill += abs($remInt - $dmg->structDmg);
@@ -172,7 +287,7 @@ class DmgCalc {
 			if ($remInt - $dmg->structDmg < 1){
 				$destroyed = 1;
 				$name = get_class($system);
-				$okSystem = $fire->target->getOverKillSystem($fire);
+				$okSystem = $fire->target->getOverkillSystem($fire);
 
 				if ($okSystem){
 					$dmg->overkill += abs($remInt - $dmg->structDmg);
@@ -201,18 +316,6 @@ class DmgCalc {
 			}
 		}
 		Debug::log($print);
-	}
-
-
-
-	public static function determineDmg($weapon, $totalDmg, $negation){
-		switch ($weapon->dmgType){
-			case "Standard": return static::determineStandardDmg($weapon, $totalDmg, $negation);
-			case "Matter": return static::determineMatterDmg($weapon, $totalDmg, $negation);
-			case "Plasma": return static::determinePlasmaDmg($weapon, $totalDmg, $negation);
-			case "EM": return static::determineEMDmg($weapon, $totalDmg, $negation);
-			default: Debug::log("determineDmg ERROR"); break;
-		}
 	}
 
 	public static function determineEMDmg($weapon, $totalDmg, $negation){

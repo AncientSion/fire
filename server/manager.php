@@ -355,10 +355,10 @@ include_once 'global.php';
 		if ($this->turn == 1){return;}
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			$a = $this->ships[$i]->getCurrentPosition();
+			$a = $this->ships[$i]->getCurPos();
 			for ($j = $i+1; $j < sizeof($this->ships); $j++){
 				if ($this->ships[$i]->id != $this->ships[$j]->id){
-					$b = $this->ships[$j]->getCurrentPosition();
+					$b = $this->ships[$j]->getCurPos();
 					if ($a->x == $b->x && $a->y == $b->y){
 						$this->ships[$i]->cc[] = $this->ships[$j]->id;
 						$this->ships[$j]->cc[] = $this->ships[$i]->id;
@@ -715,8 +715,8 @@ include_once 'global.php';
 				continue;
 			}
 
-			$sPos = $this->fires[$i]->shooter->getCurrentPosition();
-			$tPos = $this->getUnit($this->fires[$i]->targetid)->getCurrentPosition();
+			$sPos = $this->fires[$i]->shooter->getCurPos();
+			$tPos = $this->getUnit($this->fires[$i]->targetid)->getCurPos();
 			$a = Math::getAngle($sPos->x, $sPos->y, $tPos->x, $tPos->y);
 			//Debug::log("i = ".$i.", shooterid: ".$shooter->id);
 			$devi = Math::getPointInDirection($this->fires[$i]->shooter->size/3, $a, $sPos->x + mt_rand(-10, 10), $sPos->y + mt_rand(-10, 10));
@@ -802,7 +802,7 @@ include_once 'global.php';
 			//Debug::log("handling fire: ".$this->fires[$i]->id.", weapon: ".$this->fires[$i]->weapon->display);
 			if ($this->fires[$i]->resolved){continue;}
 			if ($this->fires[$i]->weapon instanceof Area){
-				$subFires = $this->fires[$i]->weapon->createAreaFireOrders($this, $this->fires[$i]);
+				$subFires = Builder::createAreaFireOrders($this, $this->fires[$i]);
 
 				for ($j = 0; $j < sizeof($subFires); $j++){
 					$subFires[$j]->target->resolveAreaFireOrder($subFires[$j]);
@@ -816,6 +816,8 @@ include_once 'global.php';
 		$this->handleResolvedFireData();
 		return;
 	}
+
+
 
 	public function handleShipMovement(){
 		Debug::log("handleShipMovement");
@@ -1037,11 +1039,11 @@ include_once 'global.php';
 
 		//set dist and angle for each ship to speed up fire resolution
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			$aPos = $this->ships[$i]->getCurrentPosition();
+			$aPos = $this->ships[$i]->getCurPos();
 			//Debug::log("POSITION #".$this->ships[$i]->id.": ".$aPos->x."/".$aPos->y);
 			for ($j = $i+1; $j < sizeof($this->ships); $j++){
 				if ($this->ships[$i]->userid == $this->ships[$j]->userid){continue;}
-				$bPos = $this->ships[$j]->getCurrentPosition();
+				$bPos = $this->ships[$j]->getCurPos();
 				$dist = Math::getDist2($aPos, $bPos);
 				
 				$this->ships[$i]->distances[] = array($this->ships[$j]->id, $dist);
@@ -1054,7 +1056,7 @@ include_once 'global.php';
 
 		/*
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			$aPos = $this->ships[$i]->getCurrentPosition();
+			$aPos = $this->ships[$i]->getCurPos();
 			Debug::log("POSITION #".$this->ships[$i]->id.": ".$aPos->x."/".$aPos->y);
 			foreach ($this->ships[$i]->angles as $val){Debug::log("--> ANGLE TO: #".$val[0].": ".$val[1]);}
 			foreach ($this->ships[$i]->distances as $val){Debug::log("-->  DIST TO: #".$val[0].": ".$val[1]);}
@@ -1101,7 +1103,7 @@ include_once 'global.php';
 		}
 		else if ($s->ship || $s->squad){
 			//Debug::log("____________________EW for ".$s->display." #".$s->id);
-			$origin = $s->getCurrentPosition();
+			$origin = $s->getCurPos();
 			$sensor =  $s->getSystemByName("Sensor");
 			$ew = $sensor->getEW($this->turn);
 			if ($sensor->destroyed || $sensor->disabled  || !$ew){
@@ -1172,7 +1174,7 @@ include_once 'global.php';
 
 					if ($skip){continue;}
 
-					$dest = $this->ships[$i]->getCurrentPosition();
+					$dest = $this->ships[$i]->getCurPos();
 					$dist = Math::getDist2($origin, $dest);
 					if ($dist <= $ew->dist){
 						$a = Math::getAngle2($origin, $dest);
@@ -1493,11 +1495,13 @@ include_once 'global.php';
 					array(
 					"GQuan",
 					"Katoc",
-					"dagkar",
+					"Rongoth",
+					"Dagkar",
 					),
 					array(
 					"Thentus",
 					"Shokos",
+					"Shokov",
 					)
 				);
 				break;
@@ -1571,6 +1575,7 @@ include_once 'global.php';
 				$ships = array(
 					array("GQuan", 6, 2),
 					array("Katoc", 10, 3),
+					array("Rongoth", 10, 3),
 					array("Dagkar", 10, 3),
 				);
 

@@ -3,6 +3,7 @@
 class Area extends Weapon {
 	public $type = "Area";
 	public $animation = "area";
+	public $deviate = 0;
 	public $priority = 12;
 	public $usage = -1;
 	public $freeAim = 1;
@@ -14,57 +15,7 @@ class Area extends Weapon {
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
-
-	public function createAreaFireOrders($gd, $fire){
-		Debug::log("createAreaFireOrders");
-
-		if (1){
-			$origin = new Point($fire->shooter->x, $fire->shooter->y);
-			$target = new Point($fire->x, $fire->y);
-			$dist = floor(Math::getDist2($origin, $target));
-			$maxDevi = $dist / 100 * $this->accDecay / 10;
-			$devi = mt_rand(0, $maxDevi);
-			$angle = mt_rand(0, 360);
-
-			$newTarget = Math::getPointInDirection($devi, $angle, $target->x, $target->y);
-			$fire->notes = $newTarget->x.";".$newTarget->y.";";
-
-			Debug::log("dist: ".$dist.", maxDevi: ".$maxDevi."px, devi: ".$devi."px, angle: ".$angle);
-			//Debug::log("newTarget ".$newTarget->x."/".$newTarget->y);
-
-		}
-
-		//$newTarget = new Point(-50, -160);
-		//$fire->notes = $newTarget->x.";".$newTarget->y.";";
-
-
-		$newFires = array();
-
-		for ($i = 0; $i < sizeof($gd->ships); $i++){
-			$d = Math::getDist2($gd->ships[$i]->getCurrentPosition(), $newTarget);
-			//Debug::log("eMine impact distance to ".$gd->ships[$i]->name." #".$gd->ships[$i]->id.": ".$d);
-
-			if ($d + $this->aoe <= $this->aoe*2){
-				$a = round(Math::addAngle($gd->ships[$i]->getCurrentFacing() - $gd->ships[$i]->facing, Math::getAngle2($gd->ships[$i]->getCurrentPosition(), $newTarget)));
-				//var_export($newTarget);var_export($gd->ships[$i]->x);var_export($gd->ships[$i]->y);
-				//Debug::log("hitting, dist to impact: ".$d.", impact from: ".$a);
-
-				$subFire = new FireOrder(
-					$fire->id, 0, $gd->turn, $fire->shooterid, $gd->ships[$i]->id, $newTarget->x, $newTarget->y, $this->id, $fire->shots, 0, "", 1, 0
-				);
-
-				$subFire->cc = 0;
-				$subFire->dist = $d;
-				$subFire->angle = $a;
-				$subFire->target = $gd->ships[$i];
-				$subFire->weapon = $this;
-				$newFires[] = $subFire;
-			}
-		}
-		return $newFires;
-	}
 }
-
 
 class EnergyMine extends Area {
 	public $name = "EnergyMine";
@@ -73,6 +24,7 @@ class EnergyMine extends Area {
 	public $minDmg = 10;
 	public $maxDmg = 50;
 	public $accDecay = 66;
+	public $deviate = 1;
 	public $shots = 1;
 	public $animColor = "blue";
 	public $projSize = 3;
@@ -84,7 +36,6 @@ class EnergyMine extends Area {
 	public $maxRange = 1500;
 	public $aoe = 50;
 	public $dmgs = array(10, 15, 50, 25);
-	public $notes;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		$this->notes = array("Area of Effect","Point of impact deviates by distance","Fixed damage based on target", "Salvo: ".$this->dmgs[0]." dmg / unit", "Flight: ".$this->dmgs[1]." dmg / unit", "Squadron: ".$this->dmgs[2]." dmg / unit", "Ship: ".$this->dmgs[3]." dmg / system on facing side.");
@@ -112,6 +63,34 @@ class EnergyMine extends Area {
 
 		Debug::log("eMine DMG error");
 		return 1;
+	}
+}
+
+class MagCompressor extends Particle {
+	public $name = "MagCompressor";
+	public $display = "MagCompressor";
+	public $fireMode = "Flash";
+	public $usage = 2;
+	public $freeAim = 0;
+	public $minDmg = 114;
+	public $maxDmg = 146;
+	public $accDecay = 12;
+	public $dmgLoss = 1;
+	public $shots = 1;
+	public $animColor = "blue";
+	public $projSize = 4;
+	public $projSpeed = 6;
+	public $reload = 4;
+	public $integrity = 54;
+	public $powerReq = 8;
+	public $traverse = 1;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+        $this->boostEffect = [];
+	}	
+	public function singleCritTest($turn, $extra){
+		return;
 	}
 }
 

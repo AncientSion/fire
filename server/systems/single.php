@@ -16,6 +16,8 @@ class Single {
 	public $baseHitChance = 0;
 	public $name = "";
 	public $display = "";
+	public $variant = "";
+	public $rarity = 0;
 	public $role = "";
 	public $mass = 0;
 	public static $value;

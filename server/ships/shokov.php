@@ -1,9 +1,11 @@
 <?php
 
-class Shokos extends SuperLight {
-	public $name = "Shokos";
-	public $display = "Shokos";
-	public $role = "Police Cutter";
+class Shokov extends SuperLight {
+	public $name = "Shokov";
+	public $display = "Shokov";
+	public $variant = "Shokos";
+	public $rarity = 1;
+	public $role = "Torpedo Cutter";
 	public $faction = "Narn Regime";
 	public static $value = 250;
 	public $cost = 250;
@@ -12,7 +14,7 @@ class Shokos extends SuperLight {
 	public $integrity = 370;
 	public $ep = 125;
 	public $ew = 400;
-	public $power = 0;
+	public $power = -4;
 	public $negation = 10;
 
 	function __construct($id, $userid){
@@ -23,8 +25,9 @@ class Shokos extends SuperLight {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->parentId, 270, 90);
-		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->parentId, 270, 90);
+		$front->systems[] = new ETorpLauncher($this->getId(), $this->parentId, 315, 45, array(array("EnergyTorpedo", 8, 2)));
+		$front->systems[] = new ETorpLauncher($this->getId(), $this->parentId, 315, 45, array(array("EnergyTorpedo", 8, 2)));
+
 		$structs[] = $front;
 
 		$right = new Section(60, 180);

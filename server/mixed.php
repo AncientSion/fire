@@ -97,7 +97,7 @@ class Mixed extends Ship {
 		return $crits;
 	}
 
-	public function getOverKillSystem($fire){
+	public function getOverkillSystem($fire){
 		return false;
 	}
 
@@ -169,12 +169,12 @@ class Mixed extends Ship {
 		if ($this->mission->type == 1){ // PATROL
 			//Debug::log("PATROL");
 			if ($this->mission->arrived){
-				$tPos = $this->getCurrentPosition();
+				$tPos = $this->getCurPos();
 				$type = "patrol";
 				//Debug::log("drag");
 			}
 			else {
-				$origin = $this->getCurrentPosition();
+				$origin = $this->getCurPos();
 				$impulse = $this->getCurSpeed();
 				$dist = Math::getDist2($origin, $this->mission);
 				$angle = Math::getAngle2($origin, $this->mission);
@@ -197,7 +197,7 @@ class Mixed extends Ship {
 
 			if (!($t->ship || $t->squad) && $t->mission->targetid == $this->id){ // direct targetting
 				if ($this->mission->arrived){ // at target, circle patrol
-					$tPos = $this->getCurrentPosition();
+					$tPos = $this->getCurPos();
 					$type = "patrol";
 				}
 				else { // on way to intercepting flight
@@ -207,8 +207,8 @@ class Mixed extends Ship {
 						$t->setMove($gd);
 					}
 
-					$tPos = $t->getCurrentPosition();
-					$origin = $this->getCurrentPosition();
+					$tPos = $t->getCurPos();
+					$origin = $this->getCurPos();
 					$impulse = $this->getCurSpeed();
 					$dist = Math::getDist2($origin, $tPos);
 					$angle = Math::getAngle2($origin, $tPos);
@@ -239,14 +239,14 @@ class Mixed extends Ship {
 				if (!$t->moveSet){$t->setMove($gd);}
 
 				if ($this->mission->arrived){ // get ship last position as move goal
-					$tPos = $t->getCurrentPosition();
-					$dist = Math::getDist2($this->getCurrentPosition(), $tPos);
-					$angle = Math::getAngle2($this->getCurrentPosition(), $tPos);
+					$tPos = $t->getCurPos();
+					$dist = Math::getDist2($this->getCurPos(), $tPos);
+					$angle = Math::getAngle2($this->getCurPos(), $tPos);
 					//Debug::log("drag");
 				}
 				else {
-					$tPos = $t->getCurrentPosition();
-					$origin = $this->getCurrentPosition();
+					$tPos = $t->getCurPos();
+					$origin = $this->getCurPos();
 					$impulse = $this->getCurSpeed();
 					$dist = Math::getDist2($origin, $tPos);
 					$angle = Math::getAngle2($origin, $tPos);
@@ -332,12 +332,15 @@ class Mixed extends Ship {
 		return $this->getHitSystem($fire)->id;
 	}
 	
+	public function getFlashOverkillSystem($fire){
+		return false;
+	}
+	
 	public function getHitSystem($fire){
 		$elements = array();
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if (!$this->structures[$i]->destroyed){
-				$elements[] = $this->structures[$i];
-			}
+			if ($this->structures[$i]->destroyed){continue;}
+			$elements[] = $this->structures[$i];
 		}
 		return $elements[mt_rand(0, sizeof($elements)-1)];
 	}

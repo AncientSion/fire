@@ -114,6 +114,9 @@ window.graphics = {
 		this.images.katoc = new Image();
 		this.images.katoc.src = "shipIcons/katoc.png";
 
+		this.images.rongoth = new Image();
+		this.images.rongoth.src = "shipIcons/rongoth.png";
+
 		this.images.dagkar = new Image();
 		this.images.dagkar.src = "shipIcons/dagkar.png";
 
