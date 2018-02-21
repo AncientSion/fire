@@ -9,7 +9,7 @@ class Shokos extends SuperLight {
 	public $cost = 250;
 	public $mass = 1000;
 
-	public $integrity = 370;
+	public $integrity = 350;
 	public $ep = 125;
 	public $ew = 400;
 	public $power = 0;

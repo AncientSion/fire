@@ -413,7 +413,7 @@ Structure.prototype.getBoostEffect = function(val){
 	return System.prototype.getBoostEffect.call(this, val);
 }
 
-Structure.prototype.getRemainingIntegrity = function(){
+Structure.prototype.getRemIntegrity = function(){
 	var integrity = this.integrity;
 	for (var i = 0; i < this.damages.length; i++){
 		integrity -= this.damages[i].armourDmg;
@@ -526,7 +526,7 @@ Primary.prototype.getTableData = function(){
 }
 
 Primary.prototype.setRemainingIntegrity = function(){		
-	this.remaining = this.getRemainingIntegrity();
+	this.remaining = this.getRemIntegrity();
 }
 
 Primary.prototype.hover = function(e){
@@ -560,7 +560,7 @@ Primary.prototype.getSystemDetailsDiv = function(){
 }
 
 
-Primary.prototype.getRemainingIntegrity = function(){
+Primary.prototype.getRemIntegrity = function(){
 	var integrity = this.integrity;
 	for (var i = 0; i < this.damages.length; i++){
 		integrity -= this.damages[i].structDmg;
@@ -642,7 +642,7 @@ Single.prototype.isDamagedThisTurn = function(){
 	return false;
 }
 
-Single.prototype.getRemainingIntegrity = function(){
+Single.prototype.getRemIntegrity = function(){
 	return this.remaining;
 	var integrity = this.integrity;
 	for (var i = 0; i < this.damages.length; i++){

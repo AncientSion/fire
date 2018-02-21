@@ -110,6 +110,8 @@ class Ship {
 		//Debug::log("ship setUnitState #".$this->id."/".$this->display);
 
 		$this->setBaseStats($turn, $phase);
+		$this->setStructureState($turn, $phase);
+		$this->setProps($turn, $phase);
 		
 		if ($this->primary->isDestroyed()){
 			$this->destroyed = 1;
@@ -138,27 +140,12 @@ class Ship {
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq(), $this->power);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			$dir = Math::getArcDir($this->structures[$i]);
-
-			$armourDmg = 0;
-			$structDmg = 0;
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				$this->structures[$i]->systems[$j]->setState($turn, $phase); // set system states
-				for ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]->damages); $k++){// set armour
-					$armourDmg += $this->structures[$i]->systems[$j]->damages[$k]->armourDmg;
-					$structDmg += $this->structures[$i]->systems[$j]->damages[$k]->structDmg;
-				}
-			}
-			for ($j = 0; $j < sizeof($this->primary->damages); $j++){
-				if ($this->primary->damages[$j]->structureid == $this->structures[$i]->id){
-					$armourDmg += $this->primary->damages[$j]->armourDmg;
-					$structDmg += $this->primary->damages[$j]->structDmg;
-				}
+				$rem = $this->structures[$i]->getRemNegation();
+				$this->structures[$i]->systems[$j]->setState($turn, $phase);
+				$this->structures[$i]->systems[$j]->setArmourData($rem);
 			}
 		}
-
-		$this->setStructureState($turn, $phase);
-		$this->setProps($turn, $phase);
 
 		return true;
 	}
@@ -183,8 +170,8 @@ class Ship {
 		//Debug::log("setProps ".get_class($this)." #".$this->id);
 		$this->cost = static::$value;
 		$this->setCurSpeed($turn, $phase);
-		$this->setRemainingImpulse($turn);
-		$this->setRemainingDelay($turn);
+		$this->setRemImpulse($turn);
+		$this->setRemDelay($turn);
 		$this->setSpecialActionState($turn, $phase);
 	}
 
@@ -286,7 +273,7 @@ class Ship {
 		return $this->currentImpulse;
 	}
 
-	public function setRemainingImpulse($turn){
+	public function setRemImpulse($turn){
 		if (sizeof($this->actions) && $this->actions[sizeof($this->actions)-1]->turn == $turn){
 			$this->remainingImpulse = 0;
 		}
@@ -327,7 +314,7 @@ class Ship {
 		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "facing" => $facing, "thrust" => $this->currentImpulse, "rolling" => $this->rolling, "rolled" => $this->rolled);
 	}
 
-	public function setRemainingDelay($turn){
+	public function setRemDelay($turn){
 		$delay = 0;
 
 		for ($i = 0; $i < sizeof($this->actions); $i++){
@@ -560,8 +547,8 @@ class Ship {
 		return $need;
 	}
 
-	public function getRemainingIntegrity($fire){
-		Debug::log("ship getRemainingIntegrity, rem: ".$this->primary->remaining);
+	public function getRemIntegrity($fire){
+		Debug::log("ship getRemIntegrity, rem: ".$this->primary->remaining);
 		$total = $this->primary->integrity;
 		for ($i = 0; $i < sizeof($this->primary->damages); $i++){
 			$total = $total - $this->primary->damages[$i]->structDmg;

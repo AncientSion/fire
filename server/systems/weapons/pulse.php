@@ -135,6 +135,7 @@ class MediumPlasmaPulse extends LightPlasmaPulse {
 	public $minDmg = 28;
 	public $maxDmg = 36;
 	public $accDecay = 120;
+	public $dmgLoss = 12;
 	
 	public $projSize = 3;
 	public $projSpeed = 9;
@@ -156,6 +157,7 @@ class HeavyPlasmaPulse extends MediumPlasmaPulse {
 	public $minDmg = 46;
 	public $maxDmg = 59;
 	public $accDecay = 90;
+	public $dmgLoss = 9;
 	
 	public $projSize = 4;
 	public $projSpeed = 9;

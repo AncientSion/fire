@@ -42,11 +42,12 @@ class Launcher extends Weapon {
 		return $this->getBoostLevel($turn);
 	}
 
-	public function setArmourMod(){
+	public function setArmourData($rem){
 		$w = Math::getArcWidth($this);
-		if ($w <= 120){$this->armourMod = 0.8;}
-		else if ($w <= 180){$this->armourMod =  0.6;}
-		else $this->armourMod =  0.3;
+		if ($w <= 120){$this->armourMod = 0.8; $this->mount = "Tube";}
+		else if ($w <= 180){$this->armourMod =  0.6; $this->mount = "Caninster";}
+		else {$this->armourMod =  0.3; $this->mount = "Arm Rail";}
+		$this->armour = floor($rem * $this->armourMod);
 	}
 
 	public function singleCritTest($turn, $extra){

@@ -226,8 +226,9 @@ class Hangar extends Weapon {
 		}
 	}
 
-	public function setArmourMod(){
+	public function setArmourData($rem){
 		$this->armourMod = 0.5;
+		$this->armour = floor($rem * $this->armourMod);
 	}
 	
 	public function adjustLoad($dbLoad){
@@ -256,10 +257,6 @@ class Bulkhead extends System {
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
 		$this->integrity = $integrity;
         parent::__construct($id, $parentId, $output, $width);
-	}
-
-	public function setArmourMod(){
-		$this->armourMod = 1;
 	}
 
 	public function singleCritTest($turn, $extra){

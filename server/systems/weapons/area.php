@@ -42,8 +42,10 @@ class EnergyMine extends Area {
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}	
 
-	public function setArmourMod(){
+	public function setArmourData($rem){
+		$this->mount = "Catapult";
 		$this->armourMod = 0.4;
+		$this->armour = floor($rem * $this->armourMod);
 	}
 
 	public function singleCritTest($turn, $extra){

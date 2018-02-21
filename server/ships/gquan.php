@@ -7,9 +7,9 @@ class GQuan extends Heavy {
 	public $size =  80;
 	public static $value = 900;
 	public $profile = array(0.95, 1.05);
-	public $mass = 8750;
+	public $mass = 10000;
 
-	public $integrity = 1100;
+	public $integrity = 1150;
 	public $vitalHP = 130;
 	public $ep = 85;
 	public $ew = 775;

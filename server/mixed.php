@@ -32,8 +32,8 @@ class Mixed extends Ship {
 		$this->setSize();
 		$this->setMass();
 		$this->setCurSpeed($turn, $phase);
-		$this->setRemainingImpulse($turn);
-		$this->setRemainingDelay($turn);
+		$this->setRemImpulse($turn);
+		$this->setRemDelay($turn);
 	}	
 
 	public function setBaseStats($phase, $turn){
@@ -42,7 +42,7 @@ class Mixed extends Ship {
 		$this->baseImpulseCost = 0;
 	}
 	
-	public function setRemainingDelay($turn){
+	public function setRemDelay($turn){
 		$this->remainingDelay = 0;
 	}
 
@@ -318,8 +318,8 @@ class Mixed extends Ship {
 		return false;
 	}
 	
-	public function getRemainingIntegrity($fire){
-		return $this->getStruct($fire->hitSystem->id)->getRemainingIntegrity();
+	public function getRemIntegrity($fire){
+		return $this->getStruct($fire->hitSystem->id)->getRemIntegrity();
 	}
 
 	public function getArmour($fire, $system){

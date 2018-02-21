@@ -5,7 +5,7 @@ class Rongoth extends Medium {
 	public $display = "Rongoth";
 	public $faction = "Narn Regime";
 	public $size =  55;
-	public static $value = 440;
+	public static $value = 420;
 	public $profile = array(0.93, 1.07);
 	public $mass = 3750;
 

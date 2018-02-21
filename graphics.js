@@ -114,6 +114,9 @@ window.graphics = {
 		this.images.katoc = new Image();
 		this.images.katoc.src = "shipIcons/katoc.png";
 
+		this.images.varnic = new Image();
+		this.images.varnic.src = "shipIcons/varnic.png";
+
 		this.images.rongoth = new Image();
 		this.images.rongoth.src = "shipIcons/rongoth.png";
 
@@ -122,6 +125,9 @@ window.graphics = {
 
 		this.images.thentus = new Image();
 		this.images.thentus.src = "shipIcons/thentus.png";
+
+		this.images.trakk = new Image();
+		this.images.trakk.src = "shipIcons/trakk.png";
 
 		this.images.shokos = new Image();
 		this.images.shokos.src = "shipIcons/shokos.png";

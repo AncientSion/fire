@@ -31,11 +31,13 @@ class Weapon extends System {
         parent::__construct($id, $parentId, $output, $width);
 	}
 
-	public function setArmourMod(){
+	public function setArmourData($rem){
    		$w = Math::getArcWidth($this);
-		if ($w <= 60){$this->armourMod = 0.75;}
-		else if ($w <= 120){$this->armourMod = 0.6;}
-		else if ($w <= 360){$this->armourMod = 0.45;}
+		if ($w <= 60){$this->armourMod = 0.75; $this->mount = "Fixed";}
+		else if ($w <= 120){$this->armourMod = 0.6; $this->mount = "Embedded";}
+		else if ($w <= 360){$this->armourMod = 0.45; $this->mount = "Turret";}
+		$this->armour = floor($rem * $this->armourMod);
+
 	}
 
 	public function getCritModMax($dmg){

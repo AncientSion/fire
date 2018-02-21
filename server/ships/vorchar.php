@@ -1,16 +1,13 @@
 <?php
 
-class Vorchar extends Light {
+class Vorchar extends Vorchan {
 	public $name = "Vorchar";
 	public $display = "Vorchar";
 	public $role = "Recon Frigate";
 	public $faction = "Centauri Republic";
 	public static $value =  300;
 	public $cost = 340;
-	public $mass = 1100;
-
-	public $integrity = 400;
-	public $ep = 110;
+	
 	public $ew = 800;
 	public $power = 0;
 	public $negation = 12;

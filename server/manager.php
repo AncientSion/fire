@@ -1494,12 +1494,14 @@ include_once 'global.php';
 				$ships = array(
 					array(
 					"GQuan",
+					"Varnic",
 					"Katoc",
 					"Rongoth",
 					"Dagkar",
 					),
 					array(
 					"Thentus",
+					"Trakk",
 					"Shokos",
 					"Shokov",
 					)
@@ -1574,6 +1576,7 @@ include_once 'global.php';
 			case "Narn Regime";
 				$ships = array(
 					array("GQuan", 6, 2),
+					array("Varnic", 8, 3),
 					array("Katoc", 10, 3),
 					array("Rongoth", 10, 3),
 					array("Dagkar", 10, 3),

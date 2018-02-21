@@ -1,21 +1,17 @@
 <?php
 
-class Shokov extends SuperLight {
+class Shokov extends Shokos {
 	public $name = "Shokov";
 	public $display = "Shokov";
 	public $variant = "Shokos";
 	public $rarity = 1;
 	public $role = "Torpedo Cutter";
 	public $faction = "Narn Regime";
-	public static $value = 250;
-	public $cost = 250;
-	public $mass = 1000;
+	public static $value = 280;
+	public $cost = 280;
 
-	public $integrity = 370;
-	public $ep = 125;
-	public $ew = 400;
+	public $ew = 425;
 	public $power = -4;
-	public $negation = 10;
 
 	function __construct($id, $userid){
 		parent::__construct($id, $userid);

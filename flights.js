@@ -351,7 +351,7 @@ Flight.prototype.expandDiv = function(div){
 		var wrap = document.createElement("div");
 			wrap.className = "iconIntegrity"; wrap.style.height = 12;
 
-		var rem = this.structures[i].getRemainingIntegrity();
+		var rem = this.structures[i].getRemIntegrity();
 
 		var bgDiv = document.createElement("div");
 			bgDiv.className = "integrityAmount"; bgDiv.style.textAlign = "center"; bgDiv.style.fontSize = 12; bgDiv.style.top = 0;

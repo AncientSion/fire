@@ -10,6 +10,8 @@ function System(system){
 	this.maxBoost = system.maxBoost;
 	this.boostEffect = system.boostEffect;
 	this.armourMod = system.armourMod;
+	this.armour = system.armour;
+	this.mount = system.mount;
 	this.disabled = system.disabled;
 	this.locked = system.locked;
 	this.crits = [];
@@ -25,7 +27,6 @@ function System(system){
 	this.type = "";
 	this.modes = {};
 	this.element;
-	this.armour;
 	this.type = system.type || "Internal";
 	this.dual = 0;
 	this.loadout = system.loadout;
@@ -791,7 +792,7 @@ System.prototype.getTableData = function(forFighter){
 	if (!forFighter){
 		var lowerDiv = document.createElement("div");
 			lowerDiv.className = "integrityNow";
-			lowerDiv.style.width = this.getRemainingIntegrity() /  this.integrity * 100 + "%";
+			lowerDiv.style.width = this.getRemIntegrity() /  this.integrity * 100 + "%";
 			td.appendChild(lowerDiv);
 
 		var div = document.createElement("div");
@@ -845,7 +846,7 @@ System.prototype.getDiv = function(){
 	/*
 	var lowerDiv = document.createElement("div");
 		lowerDiv.className = "integrityNow";
-		lowerDiv.style.width = this.getRemainingIntegrity() /  this.integrity * 100 + "%";
+		lowerDiv.style.width = this.getRemIntegrity() /  this.integrity * 100 + "%";
 		returnDiv.appendChild(lowerDiv);
 
 	var div = document.createElement("div");
@@ -880,7 +881,7 @@ System.prototype.update = function(){
 	$(this.element).find(".outputMask").html(this.getOutput());
 }
 
-System.prototype.getRemainingIntegrity = function(){
+System.prototype.getRemIntegrity = function(){
 	var dmg = 0;
 	for (var i = 0; i < this.damages.length; i++){
 		dmg += this.damages[i].structDmg;
@@ -1179,7 +1180,7 @@ PrimarySystem.prototype.getSystemDetailsDiv = function(){
 		}
 	}
 	else if (unit.ship){
-		$(table).append($("<tr>").append($("<td>").css("width", "60%").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
+		$(table).append($("<tr>").append($("<td>").css("width", "60%").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
 		$(table).append($("<tr>").append($("<td>").html("Max Damage per hit")).append($("<td>").html(this.maxDmg)));
 
 		if (this.output){
@@ -2049,7 +2050,7 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 
 	//if (game.getUnit($(this.element).data("shipId")).ship){
 	if (game.getUnit(this.parentId).ship){
-		$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
+		$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
 		$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
 	}
 
@@ -3680,7 +3681,7 @@ Area.prototype.getSystemDetailsDiv = function(){
 
 
 	if (game.getUnit(this.parentId).ship){
-		$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
+		$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
 		$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
 	}
 
@@ -3758,7 +3759,7 @@ Bulkhead.prototype.getSystemDetailsDiv = function(){
 	var th = document.createElement("th");
 		th.colSpan = 2; th.innerHTML = this.display; th.style.width = "40%"; tr.appendChild(th); table.appendChild(tr);
 
-	$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
+	$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
 	$(table).append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.getMount())));
 	div.appendChild(table);		
 	return div;
@@ -4274,7 +4275,7 @@ Hangar.prototype.getSystemDetailsDiv = function(){
 	var th = document.createElement("th");
 		th.colSpan = 2; th.innerHTML = this.display; th.style.width = "40%"; tr.appendChild(th); table.appendChild(tr);
 
-	$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemainingIntegrity() + " / " + this.integrity)));
+	$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
 	$(table).append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.getMount())));
 	$(table).append($("<tr>").append($("<td>").html("Capacity")).append($("<td>").html("up to " + this.capacity + " units")));
 	$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html(this.getLaunchRate() + " each " + this.reload + " turns")));

@@ -57,7 +57,7 @@ class Structure {
 		$this->remainingNegation = round((pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow) * $this->negation);
 	}
 
-	public function getCurrentNegation(){
+	public function getRemNegation(){
 		$p = 1.25;
 		return round(pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow * $this->negation);
 	}
@@ -73,7 +73,7 @@ class Structure {
 
 	public function getArmourValue($system){
 		return array(
-			"stock" => round($this->getCurrentNegation() * $system->getArmourMod()),
+			"stock" => round($this->getRemNegation() * $system->getArmourMod()),
 			"bonus" => round($this->getBonusNegation() * $system->getArmourMod())
 		);
 	}
@@ -192,7 +192,7 @@ class Primary {
 		return $dmg;
 	}
 
-	public function getRemainingIntegrity(){
+	public function getRemIntegrity(){
 		return $this->remaining;
 	}
 }

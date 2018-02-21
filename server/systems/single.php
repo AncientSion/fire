@@ -110,7 +110,7 @@ class Single {
 		}
 	}
 
-	public function getRemainingIntegrity(){
+	public function getRemIntegrity(){
 		return $this->remaining;
 	}	
 
@@ -138,7 +138,7 @@ class Single {
 		}
 	}
 	
-	public function getCurrentNegation(){
+	public function getRemNegation(){
 		return $this->negation;
 	}
 

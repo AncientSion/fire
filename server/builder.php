@@ -87,7 +87,7 @@ class DmgCalc {
 		while ($toDo){
 			$push = false;
 			$destroyed = 0;
-			$remInt = $system->getRemainingIntegrity();
+			$remInt = $system->getRemIntegrity();
 			$negation = $fire->target->getArmour($fire, $system);
 			$dmg = static::determineDmg($fire->weapon, $toDo, $negation);
 			$name = get_class($system);
@@ -134,7 +134,7 @@ class DmgCalc {
 		$destroyed = 0;
 		$totalDmg = $fire->weapon->getTotalDamage($fire);
 		$okSystem = 0;
-		$remInt = $system->getRemainingIntegrity();
+		$remInt = $system->getRemIntegrity();
 		
 		$negation = $fire->target->getArmour($fire, $system);
 		
@@ -170,7 +170,7 @@ class DmgCalc {
 	public static function doPulseDmg($fire, $roll, $system){
 		$destroyed = 0;
 		$totalDmg = $fire->weapon->getTotalDamage($fire);
-		$remInt = $system->getRemainingIntegrity();
+		$remInt = $system->getRemIntegrity();
 		$okSystem = 0;
 
 		$negation = $fire->target->getArmour($fire, $system);
@@ -212,7 +212,6 @@ class DmgCalc {
 				$shield += $dmg->shieldDmg;
 				$armour += $dmg->armourDmg;
 				$em += $dmg->emDmg;
-				Debug::log("shield: ".$shield);
 			}
 
 			if ($struct >= $remInt){
@@ -276,7 +275,7 @@ class DmgCalc {
 
 			$print .= " ".get_class($system)."/".$system->id.": ".$rake." dmg, ";
 			$destroyed = 0;
-			$remInt = $system->getRemainingIntegrity();
+			$remInt = $system->getRemIntegrity();
 			$negation = $fire->target->getArmour($fire, $system);
 
 			$dmg = DmgCalc::determineDmg($fire->weapon, $rake, $negation);

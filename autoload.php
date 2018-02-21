@@ -70,8 +70,10 @@ spl_autoload_register(
 
                 'gquan' => '/server/ships/gquan.php',
                 'katoc' => '/server/ships/katoc.php',
+                'varnic' => '/server/ships/varnic.php',
                 'rongoth' => '/server/ships/rongoth.php',
                 'dagkar' => '/server/ships/dagkar.php',
+                'trakk' => '/server/ships/trakk.php',
                 'thentus' => '/server/ships/thentus.php',
                 'shokos' => '/server/ships/shokos.php',
                 'shokov' => '/server/ships/shokov.php',

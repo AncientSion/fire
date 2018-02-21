@@ -13,6 +13,7 @@ class System {
 	public $output = 0;
 	public $name = "";
 	public $display = "";
+	public $mount = "";
 	public $damages = array();
 	public $powers = array();
 	public $crits = array();
@@ -24,6 +25,7 @@ class System {
 	public $boostEffect = array();
 	public $modes = array();
 	public $armourMod = 1;
+	public $armour = 0;
 	public $internal = 0;
 	public $damaged = 0;
 	public $tiny = 0;
@@ -43,8 +45,6 @@ class System {
 		$this->parentId = $parentId;
 		$this->output = $output;
 		$this->width = $width;
-
-		$this->setArmourMod();
 	}
 
 	public function setState($turn, $phase){
@@ -67,8 +67,9 @@ class System {
 		$this->powers[] = $power;
 	}
 
-	public function setArmourMod(){
+	public function setArmourData($rem){
 		$this->armourMod = 1;
+		$this->armour = floor($rem * $this->armourMod);
 	}
 
 	public function getArmourMod(){
@@ -182,7 +183,7 @@ class System {
 		return $usage;
 	}
 
-	public function getRemainingIntegrity(){
+	public function getRemIntegrity(){
 		$rem = $this->integrity;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			$rem -= $this->damages[$i]->structDmg;
