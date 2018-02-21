@@ -21,3 +21,246 @@ game 1, user 1 --- adjusting to turn/phase/status 1/3/waiting
 game 1, user 2 --- adjusting to turn/phase/status 1/3/waiting 
 TIME: 0.018 seconds. 
 2 mb 
+createPlayerStatus 
+entry CREATE for player 1 in game 2 phase: -1 and status joined 
+insertLoads: 1 
+units 0 
+upgrades 0 
+loads 0 
+game 2, user 1 --- adjusting to turn/phase/status -1/-1/ready 
+Game #2 is not ready ! 
+joinGame success 
+createPlayerStatus 
+entry CREATE for player 2 in game 2 phase: -1 and status joined 
+joinGame success 
+insertLoads: 3 
+units 0 
+continue 
+units 1 
+upgrades 0 
+loads 0 
+units 2 
+continue 
+game 2, user 2 --- adjusting to turn/phase/status -1/-1/ready 
+Game #2 is ready ! 
+Starting game #2 
+game ready, adjusting player 
+game 2, user 1 --- adjusting to turn/phase/status 1/-1/waiting 
+game 2, user 2 --- adjusting to turn/phase/status 1/-1/waiting 
+game 2, user 2 --- adjusting to turn/phase/status 1/-1/ready 
+game 2, user 1 --- adjusting to turn/phase/status 1/-1/ready 
+prepareAdvance 
+********************* doAdvance for game2 from phase -1 to phase 0 
+handleDeploymentPhase 
+resolveDeployActions s: 4 
+handleJumpInActions 
+jumpin: #4, class: Sharlin, size: 110, sensor: 1155, ordered to: -532/235, shiftPotential: 15.71% 
+Sharlin, aShift: 16°, pShift: 32px 
+--> aShift: 6°, psShift: 29/30 (42px) 
+jumpin: #5, class: Varnic, size: 70, sensor: 750, ordered to: 544/-82, shiftPotential: 15.4% 
+Varnic, aShift: 16°, pShift: 31px 
+--> aShift: -3°, psShift: -8/3 (9px) 
+jumpin: #6, class: GQuan, size: 80, sensor: 775, ordered to: 549/215, shiftPotential: 17.03% 
+GQuan, aShift: 18°, pShift: 35px 
+--> aShift: -5°, psShift: 4/-9 (10px) 
+jumpin: #7, class: Squadron, size: 80, sensor: 475, ordered to: 558/535, shiftPotential: 22.58% 
+Squadron, aShift: 23°, pShift: 46px 
+--> aShift: 11°, psShift: -30/-16 (34px) 
+resolveJumpOutActions 
+handleInitialFireOrders 
+assemblDeployStates 
+updateUnitStats s:4 1/-1 
+game 2, user 1 --- adjusting to turn/phase/status 1/0/waiting 
+game 2, user 2 --- adjusting to turn/phase/status 1/0/waiting 
+TIME: 0.032 seconds. 
+4 mb 
+game 2, user 1 --- adjusting to turn/phase/status 1/0/ready 
+game 2, user 2 --- adjusting to turn/phase/status 1/0/ready 
+prepareAdvance 
+********************* doAdvance for game2 from phase 0 to phase 1 
+handleMovementPhase 
+handleShipMovement 
+resolveMovementDB 
+handleMixedMovement 
+handleMixedMovement 
+handlePostMoveFires: 0 
+handling data 
+handleResolvedFireData 
+DB updateFireOrders: 0 
+updateMissionState 
+game 2, user 1 --- adjusting to turn/phase/status 1/2/waiting 
+game 2, user 2 --- adjusting to turn/phase/status 1/2/waiting 
+TIME: 0.024 seconds. 
+4 mb 
+game 2, user 2 --- adjusting to turn/phase/status 1/2/ready 
+game 2, user 1 --- adjusting to turn/phase/status 1/2/ready 
+prepareAdvance 
+********************* doAdvance for game2 from phase 2 to phase 3 
+handleFiringPhase 
+doFirstDestroyedCheck 
+doSecondDestroyedCheck 
+updateDestroyedState 
+resolveFireOrder - ID 2, shooter: GQuan #6 vs Sharlin #4, w: SuperHeavyLaser #7, shots: 1 
+no internals -> MAIN 
+SuperHeavyLaser, weapon id: 7, DAMAGE mod: 0 (crits: 0, boost: 0) 
+SuperHeavyLaser, weapon id: 7, RANGE DMG mod: 0.9802 
+fire #2, doLaserDmg, weapon: SuperHeavyLaser, target: 4 for 206 dmg 
+ => OVERKILL ship target system FusionCannon #25 was destroyed, rem: 34, doing: 34, OK for: 1 dmg 
+no internals -> MAIN 
+hitting ---  Primary/1: 51 dmg,  FusionCannon/25: 51 dmg,  Primary/1: 51 dmg,  NeutronLaser/26: 51 dmg,  
+resolveFireOrder - ID 3, shooter: GQuan #6 vs Sharlin #4, w: SuperHeavyLaser #9, shots: 1 
+resolveFireOrder - ID 4, shooter: Sharlin #4 vs GQuan #6, w: NeutronLaser #7, shots: 1 
+NeutronLaser, weapon id: 7, DAMAGE mod: 20 (crits: 0, boost: 20) 
+NeutronLaser, weapon id: 7, RANGE DMG mod: 0.9868 
+fire #4, doLaserDmg, weapon: NeutronLaser, target: 6 for 145 dmg 
+hitting ---  SuperHeavyLaser/7: 72 dmg,  SuperHeavyLaser/9: 72 dmg,  
+resolveFireOrder - ID 5, shooter: Sharlin #4 vs GQuan #6, w: NeutronLaser #8, shots: 1 
+no internals -> MAIN 
+NeutronLaser, weapon id: 8, DAMAGE mod: 20 (crits: 0, boost: 20) 
+NeutronLaser, weapon id: 8, RANGE DMG mod: 0.9868 
+fire #5, doLaserDmg, weapon: NeutronLaser, target: 6 for 134 dmg 
+no internals -> MAIN 
+hitting ---  Primary/1: 67 dmg,  Primary/1: 67 dmg,  
+resolveFireOrder - ID 8, shooter: Sharlin #4 vs GQuan #6, w: NeutronLaser #18, shots: 1 
+NeutronLaser, weapon id: 18, DAMAGE mod: 20 (crits: 0, boost: 20) 
+NeutronLaser, weapon id: 18, RANGE DMG mod: 0.9868 
+fire #8, doLaserDmg, weapon: NeutronLaser, target: 6 for 123 dmg 
+ => OVERKILL ship target system SuperHeavyLaser #9 was destroyed, rem: 31, doing: 31, OK for: 16 dmg 
+no internals -> MAIN 
+hitting ---  SuperHeavyLaser/9: 61 dmg,  Primary/1: 61 dmg,  
+resolveFireOrder - ID 9, shooter: Sharlin #4 vs GQuan #6, w: NeutronLaser #19, shots: 1 
+NeutronLaser, weapon id: 19, DAMAGE mod: 20 (crits: 0, boost: 20) 
+NeutronLaser, weapon id: 19, RANGE DMG mod: 0.9868 
+fire #9, doLaserDmg, weapon: NeutronLaser, target: 6 for 126 dmg 
+ => OVERKILL ship target system SuperHeavyLaser #7 was destroyed, rem: 31, doing: 31, OK for: 19 dmg 
+no internals -> MAIN 
+hitting ---  SuperHeavyLaser/7: 63 dmg,  Primary/1: 63 dmg,  
+resolveFireOrder - ID 6, shooter: Sharlin #4 vs GQuan #6, w: FusionCannon #9, shots: 1 
+resolveFireOrder - ID 7, shooter: Sharlin #4 vs GQuan #6, w: FusionCannon #10, shots: 1 
+resolveFireOrder - ID 10, shooter: Sharlin #4 vs GQuan #6, w: FusionCannon #20, shots: 1 
+resolveFireOrder - ID 11, shooter: Sharlin #4 vs GQuan #6, w: FusionCannon #21, shots: 1 
+resolveFireOrder - ID 12, shooter: Sharlin #4 vs GQuan #6, w: FusionCannon #33, shots: 1 
+resolveFireOrder - ID 13, shooter: Sharlin #4 vs GQuan #6, w: FusionCannon #34, shots: 1 
+resolveBallisticFireOrders 
+etermineCrit for NeutronLaser #26 on unit #4, new: 69%, old: 0% 
+ CRIT - roll: 2, tresh: 69 
+ CRIT - roll: 27, tresh: 69 
+potential total power spike for unit #4: 2 
+applyPowerSpike to #4, overload: 2, emDmg: 0, output: 135/ mod: 1.48 
+potential total power spike for unit #6: 8 
+applyPowerSpike to #6, overload: 8, emDmg: 0, output: 100/ mod: 8 
+handleResolvedFireData 
+DB updateFireOrders: 12 
+ => DB insertDamageEntries: 12 
+ => DB insertCritEntries: 4 
+handleFiringPhase time: 0.106 seconds. 
+game 2, user 1 --- adjusting to turn/phase/status 1/3/waiting 
+game 2, user 2 --- adjusting to turn/phase/status 1/3/waiting 
+TIME: 0.121 seconds. 
+4 mb 
+game 2, user 1 --- adjusting to turn/phase/status 1/3/ready 
+game 2, user 2 --- adjusting to turn/phase/status 1/3/ready 
+prepareAdvance 
+********************* doAdvance for game2 from phase 3 to phase 4 
+handleJumpOutActions 
+endTurn 
+doFirstDestroyedCheck 
+doSecondDestroyedCheck 
+updateDestroyedState 
+assembleEndStates 
+updateUnitStats s:4 1/3 
+game 2, user 1 --- adjusting to turn/phase/status 2/-1/waiting 
+game 2, user 2 --- adjusting to turn/phase/status 2/-1/waiting 
+TIME: 0.034 seconds. 
+4 mb 
+game 2, user 1 --- adjusting to turn/phase/status 2/-1/ready 
+deployFlights 1 
+game 2, user 2 --- adjusting to turn/phase/status 2/-1/ready 
+prepareAdvance 
+********************* doAdvance for game2 from phase -1 to phase 0 
+handleDeploymentPhase 
+resolveDeployActions s: 1 
+handleJumpInActions 
+resolveJumpOutActions 
+handleInitialFireOrders 
+handleDeployFireOrders 
+handleBallisticFireOrders 
+DB updateBallisticFireOrder, s: 2 
+assemblDeployStates 
+updateUnitStats s:2 2/-1 
+game 2, user 1 --- adjusting to turn/phase/status 2/0/waiting 
+game 2, user 2 --- adjusting to turn/phase/status 2/0/waiting 
+TIME: 0.081 seconds. 
+4 mb 
+game 2, user 1 --- adjusting to turn/phase/status 2/0/ready 
+game 2, user 2 --- adjusting to turn/phase/status 2/0/ready 
+prepareAdvance 
+********************* doAdvance for game2 from phase 0 to phase 1 
+handleMovementPhase 
+handleShipMovement 
+resolveMovementDB 
+handleMixedMovement 
+Handling mixed #8 
+STRIKE 
+handleMixedMovement 
+Handling mixed #9 
+STRIKE 
+handlePostMoveFires: 0 
+handling data 
+handleResolvedFireData 
+DB updateFireOrders: 0 
+updateMissionState 
+game 2, user 1 --- adjusting to turn/phase/status 2/2/waiting 
+game 2, user 2 --- adjusting to turn/phase/status 2/2/waiting 
+TIME: 0.029 seconds. 
+2 mb 
+game 2, user 1 --- adjusting to turn/phase/status 2/2/ready 
+game 2, user 2 --- adjusting to turn/phase/status 2/2/ready 
+prepareAdvance 
+********************* doAdvance for game2 from phase 2 to phase 3 
+handleFiringPhase 
+doFirstDestroyedCheck 
+doSecondDestroyedCheck 
+updateDestroyedState 
+resolveFireOrder - ID 23, shooter: Varnic #5 vs Sharlin #4, w: MediumLaser #20, shots: 1 
+resolveFireOrder - ID 24, shooter: Varnic #5 vs Sharlin #4, w: MediumLaser #21, shots: 1 
+resolveFireOrder - ID 22, shooter: GQuan #6 vs Sharlin #4, w: HeavyPlasmaPulse #21, shots: 1 
+resolveFireOrder - ID 18, shooter: Sharlin #4 vs GQuan #6, w: NeutronLaser #15, shots: 1 
+no internals -> MAIN 
+NeutronLaser, weapon id: 15, DAMAGE mod: 20 (crits: 0, boost: 20) 
+NeutronLaser, weapon id: 15, RANGE DMG mod: 0.9592 
+fire #18, doLaserDmg, weapon: NeutronLaser, target: 6 for 117 dmg 
+no internals -> MAIN 
+hitting ---  Primary/1: 58 dmg,  Primary/1: 58 dmg,  
+resolveFireOrder - ID 19, shooter: Sharlin #4 vs GQuan #6, w: NeutronLaser #16, shots: 1 
+resolveFireOrder - ID 16, shooter: Sharlin #4 vs GQuan #6, w: FusionCannon #13, shots: 1 
+resolveFireOrder - ID 17, shooter: Sharlin #4 vs GQuan #6, w: FusionCannon #14, shots: 1 
+resolveFireOrder - ID 20, shooter: Sharlin #4 vs GQuan #6, w: FusionCannon #29, shots: 1 
+resolveFireOrder - ID 21, shooter: Sharlin #4 vs GQuan #6, w: FusionCannon #30, shots: 1 
+resolveBallisticFireOrders 
+insertServerFireOrder: 1 
+resolveFireOrder - ID 25, shooter: Salvo #9 vs Sharlin #4, w: Warhead #2, shots: 5 
+------- SALVO TRAJECT :325 
+no internals -> MAIN 
+fire #25, doStandardDmg, weapon: Warhead, target #4/1/Primary, totalDmg: 27, remaining: 1478, armour: 26+0 
+fire #25, doStandardDmg, weapon: Warhead, target #4/7/NeutronLaser, totalDmg: 33, remaining: 52, armour: 16+0 
+fire #25, doStandardDmg, weapon: Warhead, target #4/16/NeutronLaser, totalDmg: 29, remaining: 52, armour: 15+0 
+no internals -> MAIN 
+fire #25, doStandardDmg, weapon: Warhead, target #4/1/Primary, totalDmg: 34, remaining: 1477, armour: 25+0 
+no internals -> MAIN 
+fire #25, doStandardDmg, weapon: Warhead, target #4/1/Primary, totalDmg: 26, remaining: 1468, armour: 25+0 
+etermineCrit for NeutronLaser #7 on unit #4, new: 33%, old: 0% 
+ CRIT - roll: 33, tresh: 33 
+ NO CRIT - roll: 48, tresh: 33 
+etermineCrit for NeutronLaser #16 on unit #4, new: 27%, old: 0% 
+ NO CRIT - roll: 100, tresh: 27 
+ NO CRIT - roll: 84, tresh: 27 
+handleResolvedFireData 
+DB updateFireOrders: 10 
+ => DB insertDamageEntries: 7 
+ => DB insertCritEntries: 1 
+handleFiringPhase time: 0.076 seconds. 
+game 2, user 1 --- adjusting to turn/phase/status 2/3/waiting 
+game 2, user 2 --- adjusting to turn/phase/status 2/3/waiting 
+TIME: 0.088 seconds. 
+4 mb 

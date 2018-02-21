@@ -1,8 +1,8 @@
 <?php
 
-class Sharlin extends SuperHeavy {
-	public $name = "Sharlin";
-	public $display = "Sharlin";
+class Tigara extends Heavy {
+	public $name = "Tigara";
+	public $display = "Tigara";
 	public $faction = "Minbari Federation";
 	public $size =  110;
 	public static $value = 1900;

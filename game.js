@@ -331,7 +331,8 @@ function Game(data, userid){
 			for (var j = 1; j <= this.flightDeploy.loads[i].launch; j++){
 				var f = new Fighter(
 					{
-						id: j, name: this.flightDeploy.loads[i].name, ep: 0, mass: this.flightDeploy.loads[i].mass, integrity: this.flightDeploy.loads[i].integrity,
+						id: j, name: this.flightDeploy.loads[i].name, display: this.flightDeploy.loads[i].display, variant: "",
+						ep: 0, mass: this.flightDeploy.loads[i].mass, integrity: this.flightDeploy.loads[i].integrity,
 						remaining: this.flightDeploy.loads[i].integrity, value: 0, negation: 0, crits: 0, destroyed: 0, damages: [], crits: [], systems: []
 					}
 				)

@@ -17,6 +17,7 @@ class Missile extends Single {
         	"id" => $this->id,
         	"name" => $this->name,
         	"display" => $this->display,
+        	"variant" => $this->variant,
         	"type" => $this->type,
         	"minDmg" => $this->minDmg,
         	"maxDmg" => $this->maxDmg,

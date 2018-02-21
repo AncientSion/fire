@@ -129,7 +129,7 @@ class Math {
 	}
 
 	static function getBaseHitChance($mass){
-		return ceil(pow($mass, 0.4)*1.5)+300;
+		return ceil(pow($mass, 0.4)*1.5)+30;
 	}
 
 	static function getBaseTurnDelay($mass){

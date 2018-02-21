@@ -56,8 +56,10 @@ spl_autoload_register(
                 'octurion' => '/server/ships/octurion.php',
 
                 'sharlin' => '/server/ships/sharlin.php',
+                'tigara' => '/server/ships/tigara.php',
                 'tinashi' => '/server/ships/tinashi.php',
                 'whitestar' => '/server/ships/whitestar.php',
+                'torotha' => '/server/ships/torotha.php',
 
                 'omega' => '/server/ships/omega.php',
                 'avenger' => '/server/ships/avenger.php',

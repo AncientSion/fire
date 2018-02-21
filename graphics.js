@@ -136,11 +136,17 @@ window.graphics = {
 		this.images.sharlin = new Image();
 		this.images.sharlin.src = "shipIcons/sharlin.png";
 
+		this.images.tigara = new Image();
+		this.images.tigara.src = "shipIcons/tigara.png";
+
 		this.images.tinashi = new Image();
 		this.images.tinashi.src = "shipIcons/tinashi.png";
 
 		this.images.whitestar = new Image();
 		this.images.whitestar.src = "shipIcons/whitestar.png";
+
+		this.images.torotha = new Image();
+		this.images.torotha.src = "shipIcons/torotha.png";
 	},
 
 	preLoadFighters: function(){

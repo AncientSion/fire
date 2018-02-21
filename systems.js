@@ -111,6 +111,7 @@ System.prototype.getDisplay = function(){
 }
 
 System.prototype.setState = function(){
+	this.setTimeLoaded();
 	this.adjustStateByCritical();
 	
 	if (this.isDestroyed()){
@@ -243,6 +244,8 @@ System.prototype.setTableRow = function(){
 			ele.find(".modeDiv").show()
 		}
 	}
+
+	ele.find(".loadLevel").css("width", this.getLoadLevel() * 100 + "%");
 }
 
 System.prototype.setSystemBorder = function(){
@@ -325,8 +328,8 @@ System.prototype.setTimeLoaded = function(){
 		}
 	}
 	this.loaded = turnsLoaded;
-	$(this.element).find(".loadLevel").css("width", this.getLoadLevel() * 100 + "%");
-	$("#systemDetailsDiv").find(".loading").html(this.getTimeLoaded() + " / " + this.reload);
+	if (this.element != undefined){$(this.element).find(".loadLevel").css("width", this.getLoadLevel() * 100 + "%");}
+	if (this.highlight){$("#systemDetailsDiv").find(".loading").html(this.getTimeLoaded() + " / " + this.reload);}
 }
 
 System.prototype.getTimeLoaded = function(){
@@ -814,7 +817,6 @@ System.prototype.getTableData = function(forFighter){
 	$(td).data("systemId", this.id);
 	this.element = td;
 
-	this.setTimeLoaded();
 	this.setTableRow();
 	this.setSystemBorder();
 	return this.element;

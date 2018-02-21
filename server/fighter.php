@@ -27,6 +27,7 @@ class Fighter extends Single {
         	"id" => $this->id,
         	"name" => $this->name,
         	"display" => $this->display,
+        	"variant" => $this->variant,
         	"faction" => $this->faction,
         	"value" => static::$value,
         	"mass" => $this->mass,

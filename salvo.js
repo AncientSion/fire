@@ -179,7 +179,7 @@ Salvo.prototype.createBaseDiv = function(){
 		var td = document.createElement("td");
 			td.className = "iconIntegrity";
 
-		var rem = this.structures[i].getRemainingIntegrity();
+		var rem = this.structures[i].getRemIntegrity();
 
 		var bgDiv = document.createElement("div");
 			bgDiv.className = "integrityAmount"; bgDiv.style.top = 2;

@@ -718,6 +718,7 @@ Ballistic.prototype.create = function(data){
 }
 
 Ballistic.prototype.getBaseImage = function(){
-	return graphics.images["missile"];	
+	if (this.missile){return graphics.images["missile"];}
+	return graphics.images["torpedo"];
 }
 

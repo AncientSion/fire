@@ -1483,10 +1483,12 @@ include_once 'global.php';
 				$ships = array(
 					array(
 					"Sharlin",
+					"Tigara",
 					"Tinashi",
 					),
 					array(
 					"WhiteStar",
+					"Torotha",
 					)
 				);
 				break;
