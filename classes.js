@@ -237,6 +237,7 @@ function Structure(data){
 	this.element;
 	this.effiency = data.effiency;
 	this.boostEffect = data.boostEffect;
+	this.maxWidth = data.maxWidth;
 }
 
 Structure.prototype.getRemainingNegation = function(){

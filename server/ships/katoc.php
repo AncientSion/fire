@@ -23,8 +23,8 @@ class Katoc extends Medium {
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 400, 17);
 		//$front->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 330, 30);
-		$front->systems[] = new MagCompressor($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new MagCompressor($this->getId(), $this->id, 330, 30);
 		$front->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
@@ -90,7 +90,7 @@ class Katoc extends Medium {
 						array(
 							"systemid" => 15,
 							"display" => "Aft Main Hangar",
-							"name" => "Sitara (Muon)",
+							"name" => "Sitara (Particle)",
 							"amount" => 2
 						),
 					)

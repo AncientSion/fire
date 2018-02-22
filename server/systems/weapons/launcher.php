@@ -75,6 +75,7 @@ class ETorpLauncher extends Launcher {
 	public $display = "E-Torpedo Launcher";
 	public $loadout = 0;
 	public $powerReq = 4;
+	public $maxRange = 800;
 
 	function __construct($id, $parentId, $start, $end, $loads, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $width);

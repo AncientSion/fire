@@ -135,12 +135,13 @@ spl_autoload_register(
                 'shockcannon' => '/server/systems/weapons/particle.php',
 
                 'particle' => '/server/systems/weapons/particle.php',
-                'superlightmuon' => '/server/systems/weapons/particle.php',
-                'lightmuon' => '/server/systems/weapons/particle.php',
-                'mediummuon' => '/server/systems/weapons/particle.php',
-                'heavymuon' => '/server/systems/weapons/particle.php',
-                'superheavymuon' => '/server/systems/weapons/particle.php',
+                'superlightparticle' => '/server/systems/weapons/particle.php',
+                'lightparticle' => '/server/systems/weapons/particle.php',
+                'mediumparticle' => '/server/systems/weapons/particle.php',
+                'heavyparticle' => '/server/systems/weapons/particle.php',
+                'superheavyparticle' => '/server/systems/weapons/particle.php',
                 'fusioncannon' => '/server/systems/weapons/particle.php',
+                'heavyfusioncannon' => '/server/systems/weapons/particle.php',
 
                 'area' => '/server/systems/weapons/area.php',
                 'energymine' => '/server/systems/weapons/area.php',

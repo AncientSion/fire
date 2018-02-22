@@ -11,9 +11,9 @@ class Particle extends Weapon {
 	}
 }
 
-class LightMuon extends Particle {
-	public $name = "LightMuon";
-	public $display = "32mm Muon Bolter Array";
+class LightParticle extends Particle {
+	public $name = "LightParticle";
+	public $display = "32mm Particle Bolter Array";
 	public $minDmg = 12;
 	public $maxDmg = 16;
 	public $accDecay = 180;
@@ -35,9 +35,9 @@ class LightMuon extends Particle {
 	}
 }
 
-class MediumMuon extends LightMuon {
-	public $name = "MediumMuon";
-	public $display = "68mm Muon Emitter";
+class MediumParticle extends LightParticle {
+	public $name = "MediumParticle";
+	public $display = "68mm Particle Emitter";
 	public $minDmg = 30;
 	public $maxDmg = 38;
 	public $accDecay = 120;
@@ -57,9 +57,9 @@ class MediumMuon extends LightMuon {
 	}
 }
 
-class HeavyMuon extends MediumMuon {
-	public $name = "HeavyMuon";
-	public $display = "122mm Muon Cannon";
+class HeavyParticle extends MediumParticle {
+	public $name = "HeavyParticle";
+	public $display = "122mm Particle Cannon";
 	public $minDmg = 50;
 	public $maxDmg = 64;
 	public $accDecay = 90;
@@ -79,9 +79,9 @@ class HeavyMuon extends MediumMuon {
 	}
 }
 
-class SuperHeavyMuon extends HeavyMuon {
-	public $name = "SuperHeavyMuon";
-	public $display = "138mm Muon Cannon";
+class SuperHeavyParticle extends HeavyParticle {
+	public $name = "SuperHeavyParticle";
+	public $display = "138mm Particle Cannon";
 	public $minDmg = 56;
 	public $maxDmg = 70;
 	public $accDecay = 90;
@@ -122,6 +122,27 @@ class FusionCannon extends Particle {
 	}
 }
 
+class HeavyFusionCannon extends Particle {
+	public $name = "HeavyFusionCannon";
+	public $display = "60mm Fusion Cannon";
+	public $minDmg = 42;
+	public $maxDmg = 56;
+	public $accDecay = 120;
+	public $shots = 1;
+	public $reload = 2;
+	public $integrity = 48;
+	public $powerReq = 4;
+	public $traverse = -1;
+
+	public $animColor = "green";
+	public $projSize = 4;
+	public $projSpeed = 7;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+	}
+}
+
 class EMNeedler extends Particle {
 	public $name = "EMNeedler";
 	public $display = "18mm EM-Needler";
@@ -144,7 +165,8 @@ class EMNeedler extends Particle {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
-		$this->notes = array("Does no structural damage", "Damage can cause critical effects");
+        $this->notes = array("Does no structural damage", "Damage that exceeds target' armour is 2x as effective when causing criticals");
+	
 	}
 }
 

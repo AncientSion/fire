@@ -22,17 +22,17 @@ class Darkner extends Medium {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 18);
-		$front->systems[] = new HeavyMuon($this->getId(), $this->id, 315, 45);
-		$front->systems[] = new MediumMuon($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new HeavyMuon($this->getId(), $this->id, 315, 45);
+		$front->systems[] = new HeavyParticle($this->getId(), $this->id, 315, 45);
+		$front->systems[] = new MediumParticle($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new HeavyParticle($this->getId(), $this->id, 315, 45);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 12);
-		$right->systems[] = new LightMuon($this->getId(), $this->id, 300, 180);
+		$right->systems[] = new LightParticle($this->getId(), $this->id, 300, 180);
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 300, 12);
-		$left->systems[] = new LightMuon($this->getId(), $this->id, 180, 60);
+		$left->systems[] = new LightParticle($this->getId(), $this->id, 180, 60);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -64,8 +64,8 @@ class Darkner extends Medium {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new SuperHeavyMuon($this->getId(), $this->parentId, 315, 45);
-		$front->systems[] = new LightMuon($this->getId(), $this->parentId, 240, 120);
+		$front->systems[] = new SuperHeavyParticle($this->getId(), $this->parentId, 315, 45);
+		$front->systems[] = new LightParticle($this->getId(), $this->parentId, 240, 120);
 		$structs[] = $front;
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];

@@ -1613,8 +1613,8 @@ include_once 'global.php';
 
 		for ($i = 0; $i < sizeof($array); $i++){
 			switch ($array[$i]){
-				case "Muon":
-					$systems[] = array("LightMuon", "MediumTwinMuon", "HeavyMuon"); break;
+				case "Particle":
+					$systems[] = array("LightParticle", "MediumTwinParticle", "HeavyParticle"); break;
 				case "Pulse":
 					$systems[] = array("LightPulse", "MediumPulse"); break;
 				case "Laser":

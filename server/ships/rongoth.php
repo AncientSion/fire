@@ -87,7 +87,7 @@ class Rongoth extends Medium {
 						array(
 							"systemid" => 15,
 							"display" => "Aft Main Hangar",
-							"name" => "Sitara (Muon)",
+							"name" => "Sitara (Particle)",
 							"amount" => 2
 						),
 					)

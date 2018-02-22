@@ -22,18 +22,17 @@ class Dagkar extends Medium {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 16);
-		$front->systems[] = new ETorpLauncher($this->getId(), $this->id, 315, 45, array(array("EnergyTorpedo", 20, 4)));
-		$front->systems[] = new ETorpLauncher($this->getId(), $this->id, 315, 45, array(array("EnergyTorpedo", 20, 4)));
+		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new EnergyMine($this->getId(), $this->id, 0, 45);
+		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 15);
-		$right->systems[] = new EnergyMine($this->getId(), $this->id, 0, 45);
-		$right->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 0, 180);
+		$right->systems[] = new ETorpLauncher($this->getId(), $this->id, 300, 360, array(array("EnergyTorpedo", 20, 5)));
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 15);
-		$left->systems[] = new EnergyMine($this->getId(), $this->id, 315, 360);
-		$left->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 180, 0);
+		$left->systems[] = new ETorpLauncher($this->getId(), $this->id, 0, 60, array(array("EnergyTorpedo", 20, 5)));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -81,7 +80,7 @@ class Dagkar extends Medium {
 						array(
 							"systemid" => 15,
 							"display" => "Aft Main Hangar",
-							"name" => "Sitara (Muon)",
+							"name" => "Sitara (Particle)",
 							"amount" => 2
 						),
 					)

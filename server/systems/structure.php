@@ -7,6 +7,7 @@ class Structure {
 	public $end;
 	public $integrity;
 	public $negation;
+	public $maxWidth;
 	public $type;
 	public $destroyed = false;
 	public $remainingNegation = 0;
@@ -20,13 +21,14 @@ class Structure {
 	public $effiency = 0;
 	public $bonusNegation = 0;
 
-	function __construct($id, $parentId, $start, $end, $integrity, $negation){
+	function __construct($id, $parentId, $start, $end, $integrity, $negation, $maxWidth = 2){
 		$this->id = $id;
 		$this->parentId = $parentId;
 		$this->start = $start;
 		$this->end = $end;
 		$this->integrity = $integrity;
 		$this->negation = $negation;
+		$this->maxWidth = $maxWidth;
 
 		$this->setName();
 	}

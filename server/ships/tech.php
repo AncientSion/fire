@@ -17,31 +17,31 @@ class Tech extends SuperHeavy {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 1050, 22);
-		$front->systems[] = new LightMuon($this->getId(), $this->id, 300, 120);
-		$front->systems[] = new HeavyMuon($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new HeavyMuon($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new LightMuon($this->getId(), $this->id, 240, 60);
+		$front->systems[] = new LightParticle($this->getId(), $this->id, 300, 120);
+		$front->systems[] = new HeavyParticle($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new HeavyParticle($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new LightParticle($this->getId(), $this->id, 240, 60);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 1300, 21);
-		$right->systems[] = new HeavyMuon($this->getId(), $this->id, 0, 120);
-		$right->systems[] = new LightMuon($this->getId(), $this->id, 300, 120);
-		$right->systems[] = new HeavyMuon($this->getId(), $this->id, 0, 120);
-		$right->systems[] = new LightMuon($this->getId(), $this->id, 300, 120);
-		$right->systems[] = new Hangar($this->getId(), $this->id, 9, array("Sentri", "Sitara (Muon)", "Sitara (Plasma)")), 9);
+		$right->systems[] = new HeavyParticle($this->getId(), $this->id, 0, 120);
+		$right->systems[] = new LightParticle($this->getId(), $this->id, 300, 120);
+		$right->systems[] = new HeavyParticle($this->getId(), $this->id, 0, 120);
+		$right->systems[] = new LightParticle($this->getId(), $this->id, 300, 120);
+		$right->systems[] = new Hangar($this->getId(), $this->id, 9, array("Sentri", "Sitara (Particle)", "Sitara (Plasma)")), 9);
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 900, 29);
-		$aft->systems[] = new MediumMuon($this->getId(), $this->id, 120, 240);
-		$aft->systems[] = new MediumMuon($this->getId(), $this->id, 120, 240);
+		$aft->systems[] = new MediumParticle($this->getId(), $this->id, 120, 240);
+		$aft->systems[] = new MediumParticle($this->getId(), $this->id, 120, 240);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 1300, 21);
-		$left->systems[] = new LightMuon($this->getId(), $this->id, 240, 60);
-		$left->systems[] = new HeavyMuon($this->getId(), $this->id, 240, 360);
-		$left->systems[] = new LightMuon($this->getId(), $this->id, 240, 60);
-		$left->systems[] = new HeavyMuon($this->getId(), $this->id, 240, 360);
-		$left->systems[] = new Hangar($this->getId(), $this->id, 9, array("Sentri", "Sitara (Muon)", "Sitara (Plasma)")), 9);
+		$left->systems[] = new LightParticle($this->getId(), $this->id, 240, 60);
+		$left->systems[] = new HeavyParticle($this->getId(), $this->id, 240, 360);
+		$left->systems[] = new LightParticle($this->getId(), $this->id, 240, 60);
+		$left->systems[] = new HeavyParticle($this->getId(), $this->id, 240, 360);
+		$left->systems[] = new Hangar($this->getId(), $this->id, 9, array("Sentri", "Sitara (Particle)", "Sitara (Plasma)")), 9);
 		$structs[] = $left;
 		
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -99,7 +99,7 @@ class Tech extends SuperHeavy {
 						),
 						array(
 							"systemid" => 25,
-							"name" => "Sitara (Muon)",
+							"name" => "Sitara (Particle)",
 							"amount" => 9
 						),
 					)

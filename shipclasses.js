@@ -2219,6 +2219,7 @@ Ship.prototype.expandDiv = function(div){
 		}
 
 		// SYSTEMS
+		max = this.structures[i].maxWidth;
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			if (col == 0){
 				tr = document.createElement("tr");
@@ -2232,7 +2233,7 @@ Ship.prototype.expandDiv = function(div){
 			}
 
 			var td = this.structures[i].systems[j].getTableData(false);
-				td.colSpan = this.structures[i].systems[j].width;
+				//td.colSpan = this.structures[i].systems[j].width;
 				td = this.attachEvent(td);
 
 			//col++;

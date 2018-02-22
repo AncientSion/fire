@@ -9,7 +9,7 @@ class WhiteStar extends Light {
 	public $cost = 450;
 	public $mass = 1800;
 
-	public $integrity = 500;
+	public $integrity = 535;
 	public $ep = 140;
 	public $ew = 750;
 	public $power = 3;

@@ -113,9 +113,9 @@ class Sitara extends Fighter {
 	}
 }
 
-class SitaraMuon extends Sitara {
-	public $name = "SitaraMuon";
-	public $display = "Sitara (Muon)";
+class SitaraParticle extends Sitara {
+	public $name = "SitaraParticle";
+	public $display = "Sitara (Particle)";
 	public $mass = 34;
 
 	function __construct($id, $parentId){
@@ -123,7 +123,7 @@ class SitaraMuon extends Sitara {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new MuonBolt($this->getId(), $this->id, $this->parentId, 1, 1, 36, 44, 0, 360);
+		$this->systems[] = new ParticleBolt($this->getId(), $this->id, $this->parentId, 1, 1, 36, 44, 0, 360);
 	}
 }
 

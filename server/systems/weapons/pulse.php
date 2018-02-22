@@ -193,7 +193,7 @@ class LightEMPulse extends LightPulse {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
-		$this->notes = array("Does no structural damage", "Damage can cause critical effects");
+		$this->notes = array("Does no structural damage", "Damage that exceeds target' armour is 2x as effective when causing criticals");
 	}
 }
 

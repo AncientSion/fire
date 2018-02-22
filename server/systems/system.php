@@ -21,6 +21,7 @@ class System {
 	public $linked = 1;
 	public $effiency = 0;
 	public $maxBoost = 0;
+	public $maxRange = 0;
 	public $mass;
 	public $boostEffect = array();
 	public $modes = array();

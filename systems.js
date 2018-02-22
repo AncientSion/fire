@@ -14,6 +14,7 @@ function System(system){
 	this.mount = system.mount;
 	this.disabled = system.disabled;
 	this.locked = system.locked;
+	this.maxRange = system.maxRange;
 	this.crits = [];
 	this.damages = [];
 	this.detailsTable = false;
@@ -770,6 +771,7 @@ System.prototype.hasOutput = function(){
 System.prototype.getTableData = function(forFighter){
 	var td = document.createElement("td");
 		td.className = "system";
+		td.colSpan = this.width;
 
 	var img = new Image();
 	var file = "sysIcons/" + this.getImageName();
@@ -1871,6 +1873,11 @@ Weapon.prototype.getAimData = function(target, final, dist, row){
 	var dmgLoss = this.getDmgLoss(dist);
 	var accLoss = this.getAccuracyLoss(dist);
 
+	if (this.maxRange && dist > this.maxRange){
+		row.append($("<td>").attr("colSpan", 4).html("Insufficient Range, max: " + this.maxRange));
+		return;
+	}
+
 	if (dmgLoss){
 		row.append($("<td>").addClass("red").html(" -" + dmgLoss + "%"));
 	} else {
@@ -1878,16 +1885,16 @@ Weapon.prototype.getAimData = function(target, final, dist, row){
 	}
 
 	if (target){
-		this.getAimDataTarget(target, final, accLoss, row);
+		this.getAimDetailsUnit(target, final, accLoss, row);
 	}
 	else {
-		this.getAimDataLocation(accLoss, row);
+		this.getAimDetailsLoc(accLoss, row);
 	}
 
 	//this.odds = 100;
 }
 
-Weapon.prototype.getAimDataTarget = function(target, final, accLoss, row){
+Weapon.prototype.getAimDetailsUnit = function(target, final, accLoss, row){
 	var traverseMod = this.getTraverseMod(target);
 
 	if (!traverseMod){
@@ -1905,7 +1912,7 @@ Weapon.prototype.getAimDataTarget = function(target, final, accLoss, row){
 	row.append($("<td>").html(final + "%"));
 }
 
-Weapon.prototype.getAimDataLocation = function(accLoss, row){
+Weapon.prototype.getAimDetailsLoc = function(accLoss, row){
 	row.append($("<td>").html(""));
 	if (accLoss){
 		row.append($("<td>").addClass("red").html(" -" + accLoss + "%"));
@@ -2941,7 +2948,7 @@ Launcher.prototype.getTraverseRating = function(){
 	return this.loads[this.ammo].traverse;
 }
 
-Launcher.prototype.getAimDataTarget = function(target, final, accLoss, row){
+Launcher.prototype.getAimDetailsUnit = function(target, final, accLoss, row){
 	var final = 90;
 	var traverseMod = this.getTraverseMod(target);
 	

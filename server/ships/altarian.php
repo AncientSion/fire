@@ -22,26 +22,26 @@ class Altarian extends Medium {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 400, 18);
-		$front->systems[] = new LightMuon($this->getId(), $this->id, 240, 60);
-		$front->systems[] = new HeavyMuon($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new LightMuon($this->getId(), $this->id, 300, 120);
+		$front->systems[] = new LightParticle($this->getId(), $this->id, 240, 60);
+		$front->systems[] = new HeavyParticle($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new LightParticle($this->getId(), $this->id, 300, 120);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 325, 16);
-		$right->systems[] = new MediumMuon($this->getId(), $this->id, 0, 120);
-		$right->systems[] = new MediumMuon($this->getId(), $this->id, 0, 120);
-		$right->systems[] = new MediumMuon($this->getId(), $this->id, 60, 180);
+		$right->systems[] = new MediumParticle($this->getId(), $this->id, 0, 120);
+		$right->systems[] = new MediumParticle($this->getId(), $this->id, 0, 120);
+		$right->systems[] = new MediumParticle($this->getId(), $this->id, 60, 180);
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 16);
-		$aft->systems[] = new Hangar($this->getId(), $this->id, 8, array("Sentri", "SitaraMuon"), 8);
+		$aft->systems[] = new Hangar($this->getId(), $this->id, 8, array("Sentri", "SitaraParticle"), 8);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 325, 16);
-		//$left->systems[] = new Hangar($this->getId(), $this->id, 8, array("Sentri", "SitaraMuon"), 8);
-		$left->systems[] = new MediumMuon($this->getId(), $this->id, 240, 360);
-		$left->systems[] = new MediumMuon($this->getId(), $this->id, 240, 360);
-		$left->systems[] = new MediumMuon($this->getId(), $this->id, 180, 300);
+		//$left->systems[] = new Hangar($this->getId(), $this->id, 8, array("Sentri", "SitaraParticle"), 8);
+		$left->systems[] = new MediumParticle($this->getId(), $this->id, 240, 360);
+		$left->systems[] = new MediumParticle($this->getId(), $this->id, 240, 360);
+		$left->systems[] = new MediumParticle($this->getId(), $this->id, 180, 300);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -89,7 +89,7 @@ class Altarian extends Medium {
 						array(
 							"systemid" => 15,
 							"display" => "Aft Main Hangar",
-							"name" => "Sitara (Muon)",
+							"name" => "Sitara (Particle)",
 							"amount" => 2
 						),
 					)

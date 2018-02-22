@@ -3,17 +3,17 @@
 class Torotha extends Light {
 	public $name = "Torotha";
 	public $display = "Torotha";
-	public $role = "Adv. Superiority Frigate";
+	public $role = "Patrol Frigate";
 	public $faction = "Minbari Federation";
-	public static $value = 450;
-	public $cost = 450;
-	public $mass = 1800;
+	public static $value = 350;
+	public $cost = 350;
+	public $mass = 1600;
 
-	public $integrity = 500;
-	public $ep = 140;
-	public $ew = 750;
-	public $power = 3;
-	public $negation = 18;
+	public $integrity = 450;
+	public $ep = 100;
+	public $ew = 650;
+	public $power = 0;
+	public $negation = 15;
 
 	function __construct($id, $userid){
 		parent::__construct($id, $userid);
@@ -23,15 +23,16 @@ class Torotha extends Light {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new NeutronAccelerator($this->getId(), $this->parentId, 330, 30);
+		$front->systems[] = new FusionCannon($this->getId(), $this->parentId, 300, 60);
+		$front->systems[] = new FusionCannon($this->getId(), $this->parentId, 300, 60);
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new FusionPulsar($this->getId(), $this->parentId, 0, 60);
+		$right->systems[] = new EMNeedler($this->getId(), $this->parentId, 0, 180);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new FusionPulsar($this->getId(), $this->parentId, 300, 360);
+		$left->systems[] = new EMNeedler($this->getId(), $this->parentId, 180, 360);
 		$structs[] = $left;
 		
 		for ($i = 0; $i < sizeof($structs); $i++){
