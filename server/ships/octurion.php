@@ -21,7 +21,7 @@ class Octurion extends UltraHeavy {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 324, 36, 1050, 24);
+		$front = new Structure($this->getId(), $this->id, 324, 36, 1050, 24, 4);
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new SuperHeavyParticle($this->getId(), $this->id, 315, 45);
 		$front->systems[] = new SuperHeavyParticle($this->getId(), $this->id, 315, 45);

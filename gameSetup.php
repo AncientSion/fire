@@ -175,7 +175,7 @@ else {
 			<canvas id="shipCanvas" style='border: 2px solid white; z-index: 2'></canvas>
 			<canvas id="fxCanvas" style='z-index: 1'></canvas>
 		</div>
-		<div id="hangarLoadoutDiv" class="disabled">
+		<div id="hangarDiv" class="disabled">
 			<div class="header">
 				Pick Strikecraft for the selected Hangar
 			</div>
@@ -191,7 +191,7 @@ else {
 				<tr><td class="buttonTD disabled" onclick='game.confirmSystemLoadout()'>Confirm Loadout</td></tr>
 			</table>
 		</div>
-		<div id="weaponLoadoutDiv" class="disabled">
+		<div id="weaponDiv" class="disabled">
 			<div class="header">
 				Pick Ammunition for the selected weapon
 			</div>
@@ -199,6 +199,16 @@ else {
 				Can fire all <span id="reload"></span> turn/s.
 			</div>
 			<table id="weaponTable">
+			</table>
+			<table style="margin:auto; width: 220px; margin-top: 10px">
+				<tr><td class="buttonTD disabled" onclick='game.confirmSystemLoadout()'>Confirm Loadout</td></tr>
+			</table>
+		</div>
+		<div id="crewDiv" class="disabled">
+			<div class="header">
+				Add crew specialists to the selected unit.
+			</div>
+			<table id="crewTable">
 			</table>
 			<table style="margin:auto; width: 220px; margin-top: 10px">
 				<tr><td class="buttonTD disabled" onclick='game.confirmSystemLoadout()'>Confirm Loadout</td></tr>
@@ -225,8 +235,8 @@ else {
 			});
 
 		$("#nameWrapper").css("left", 500).css("top", 300)
-		$("#hangarLoadoutDiv").drag();
-		$("#weaponLoadoutDiv").drag();
+		$("#hangarDiv").drag();
+		$("#weaponDiv").drag();
 
 		if (window.ready){
 			$("#shipsBoughtTable").hide();
@@ -483,8 +493,8 @@ else {
 	function showShipDiv(data){
 		$(".shipDiv").remove();
 		$("#nameWrapper").hide().find("input").attr("placeholder", "Callsign")
-		$("#hangarLoadoutDiv").addClass("disabled");
-		$("#weaponLoadoutDiv").addClass("disabled");
+		$("#hangarDiv").addClass("disabled");
+		$("#weaponDiv").addClass("disabled");
 		$("#hangarTable").html("");
 
 		var ship = window.initUnit(JSON.parse(data));
@@ -597,7 +607,7 @@ else {
 		$(".shipDiv").remove();
 		$("#nameWrapper").hide();
 		$("#game").addClass("disabled");
-		$("#hangarLoadoutDiv").addClass("disabled");
+		$("#hangarDiv").addClass("disabled");
 		$("#hangarTable").html("");
 		if (game.faction == ""){game.setReinforceFaction(game.ships[0].faction);}
 		game.ships[0] = undefined;

@@ -493,7 +493,7 @@
 				<div class="img"></div>			
 			</div>
 			<div id="vectorDiv" class="disabled"></div>
-			<div id="hangarLoadoutDiv" class="disabled">
+			<div id="hangarDiv" class="disabled">
 			<div class="header">
 				<span>Assemble and launch a flight</span>
 			</div>
@@ -638,8 +638,8 @@
 				$(this).hide();
 			});
 	
-		$("#hangarLoadoutDiv").drag()
-		$("#weaponLoadoutDiv").drag()
+		$("#hangarDiv").drag()
+		$("#weaponDiv").drag()
 }
 	
 	function initiateKeyDowns(){

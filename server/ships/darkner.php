@@ -21,7 +21,7 @@ class Darkner extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 18);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 18, 3);
 		$front->systems[] = new HeavyParticle($this->getId(), $this->id, 315, 45);
 		$front->systems[] = new MediumParticle($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new HeavyParticle($this->getId(), $this->id, 315, 45);

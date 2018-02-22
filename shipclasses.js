@@ -1275,7 +1275,7 @@ Ship.prototype.doUnselect = function(){
 	//game.drawShipOverlays();
 	this.switchDiv();
 	this.unsetMoveMode();
-	$("#hangarLoadoutDiv").addClass("disabled");
+	$("#hangarDiv").addClass("disabled");
 	$("#popupWrapper").hide()
 	$("#instructWrapper").hide()
 	$("#systemDetailsDiv").remove();

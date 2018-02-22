@@ -21,7 +21,7 @@ class Dagkar extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 16);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 16, 3);
 		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new EnergyMine($this->getId(), $this->id, 0, 45);
 		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 300, 60);

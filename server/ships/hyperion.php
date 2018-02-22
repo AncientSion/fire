@@ -23,7 +23,7 @@ class Hyperion extends Heavy {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 19);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 19, 5);
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new Dual($this->getId(), $this->id, 240, 120, 28, array("LightPulse", "LightParticleBeam"));
 		$front->systems[] = new Hangar($this->getId(), $this->id, 10, array("Aurora"), 10);
@@ -31,19 +31,19 @@ class Hyperion extends Heavy {
 		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 30, 150, 800, 18);
+		$right = new Structure($this->getId(), $this->id, 30, 150, 800, 18, 1);
 		$right->systems[] = new HeavyLaser($this->getId(), $this->id, 0, 60);
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 16);
+		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 16, 3);
 		$aft->systems[] = new HeavyLaser($this->getId(), $this->id, 180, 240);
 		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
 		$aft->systems[] = new HeavyLaser($this->getId(), $this->id, 120, 180);
 		$structs[] = $aft;
 
-		$left = new Structure($this->getId(), $this->id, 210, 330, 800, 18);
+		$left = new Structure($this->getId(), $this->id, 210, 330, 800, 18, 1);
 		$left->systems[] = new HeavyLaser($this->getId(), $this->id, 300, 360);
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));

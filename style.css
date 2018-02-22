@@ -260,7 +260,7 @@ table, th, tr, td {
 	color: #27e627;
 }
 
-#hangarLoadoutDiv, #weaponLoadoutDiv {
+#hangarDiv, #weaponDiv, #crewDiv {
 	position: absolute;
 	width: 320px;
 	border: 2px solid yellow;
@@ -269,11 +269,11 @@ table, th, tr, td {
 	border-radius: 5px;
 }
 
-#weaponLoadoutDiv {
+#weaponDiv {
 	width: 360px;
 }
 
-#hangarTable, #weaponTable {
+#hangarTable, #weaponTable, #crewTable {
 	width: 95%;
 	margin: auto;
 	border-collapse: collapse;

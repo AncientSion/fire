@@ -1248,6 +1248,59 @@ function Bridge(system){
 	this.powerReq = 0;
 }
 Bridge.prototype = Object.create(PrimarySystem.prototype);
+
+Bridge.prototype.select = function(e){
+	console.log(this);
+	var id = this.id;
+	var parentId = this.parentId;
+	var selected = false;
+	var ship = game.getUnit(parentId);
+
+	if (game.phase != -2 || this.destroyed || this.disabled || this.locked || this.parentId != aUnit){
+		return false;
+	}
+	else if (this.selected){
+		game.system = 0;
+		this.selected = false;
+		this.disableCrewPurchase(e);
+	}
+	else {
+		this.selected = true;
+		game.system = this.id;
+		this.enableCrewPurchase(e);
+	}
+	this.setSystemBorder();
+}
+
+Bridge.prototype.enableCrewPurchase = function(e){
+	var div = $("#crewDiv");
+
+
+	var table = div.find("#crewTable").empty();
+
+	var options = ["Engine", "Sensor", "Reactor"];
+
+	for (var i = 0; i < options.length; i++){
+		table
+		.append(
+			$($("<tr>")
+				.append($("<td>").html(options[i] + " specialist"))
+				.append($("<td>").html(options[i] + " specialist"))
+			)
+		)
+	}
+
+
+
+	var h = ($(div).height());
+	if (e.clientY + h > window.res.y){
+		$(div).css("left", e.clientX +100).css("top", window.res.y - h - 30).removeClass("disabled");
+	} else $(div).css("left", e.clientX +200).css("top", e.clientY - 100).removeClass("disabled");
+}
+
+Bridge.prototype.disableCrewPurchase = function(e){
+	$("#crewDiv").addClass("disabled");
+}
 				
 function Reactor(system){
 	PrimarySystem.call(this, system);
@@ -3005,7 +3058,7 @@ Launcher.prototype.select = function(e){
 		}
 		else {game.system = this.id;this.selected = true;}
 		this.setSystemBorder();
-		this.setupWeaponLoadout(e);
+		this.switchWeaponDiv(e);
 	}
 	else if (game.phase != -1 || this.getOutput() == 0){
 		return false;
@@ -3082,8 +3135,8 @@ Launcher.prototype.updateSystemDetailsDiv = function(){
 		.find("#ammo").html("<font color='red'>" + this.getRemAmmo() + "</font> / " + this.getMaxAmmo());
 }
 
-Launcher.prototype.setupWeaponLoadout = function(e){
-	var div = document.getElementById("weaponLoadoutDiv");
+Launcher.prototype.switchWeaponDiv = function(e){
+	var div = document.getElementById("weaponDiv");
 	if ($(div).hasClass("disabled")){
 		$(div).find("#reload").html(this.reload);
 		$(div).data("systemid", this.id).css("left", 750).css("top", 400).removeClass("disabled");
@@ -3160,8 +3213,8 @@ Launcher.prototype.removeAmmo = function(ele, all){
 
 Launcher.prototype.canConfirm = function(){
 	//if (this.hasLoad()){
-		$("#weaponLoadoutDiv").find(".buttonTD").removeClass("disabled");
-	//} else $("#weaponLoadoutDiv").find(".buttonTD").addClass("disabled");
+		$("#weaponDiv").find(".buttonTD").removeClass("disabled");
+	//} else $("#weaponDiv").find(".buttonTD").addClass("disabled");
 }
 
 Launcher.prototype.updateTotals = function(){
@@ -3192,21 +3245,21 @@ Launcher.prototype.updateTotals = function(){
 			td.innerHTML = "<img class='size20' src='varIcons/plus.png'>"; tr.appendChild(td);
 			td.addEventListener("click", function(e){
 				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystem($("#weaponLoadoutDiv").data("systemid")).addAmmo(this.parentNode, false);
+				window.game.ships[0].getSystem($("#weaponDiv").data("systemid")).addAmmo(this.parentNode, false);
 			})
 			td.addEventListener("contextmenu", function(e){
 				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystem($("#weaponLoadoutDiv").data("systemid")).addAmmo(this.parentNode, true);
+				window.game.ships[0].getSystem($("#weaponDiv").data("systemid")).addAmmo(this.parentNode, true);
 			})
 		var td = document.createElement("td");
 			td.innerHTML = "<img class='size20' src='varIcons/minus.png'>"; tr.appendChild(td);
 			td.addEventListener("click", function(e){
 				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystem($("#weaponLoadoutDiv").data("systemid")).removeAmmo(this.parentNode, false);
+				window.game.ships[0].getSystem($("#weaponDiv").data("systemid")).removeAmmo(this.parentNode, false);
 			})
 			td.addEventListener("contextmenu", function(e){
 				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystem($("#weaponLoadoutDiv").data("systemid")).removeAmmo(this.parentNode, true);
+				window.game.ships[0].getSystem($("#weaponDiv").data("systemid")).removeAmmo(this.parentNode, true);
 			})
 
 			amount += this.loads[i].amount
@@ -3848,12 +3901,12 @@ Hangar.prototype.select = function(e){
 	}
 	else if (!this.selected && game.getUnit(this.parentId).userid == game.userid && !ship.hasSystemsSelected()){
 		this.selected = true;
-		this.enableHangarDeployment(e);
+		this.switchHangarDiv(e);
 	}
 	else {
 		this.selected = false;
 		this.mission = 0;
-		$("#hangarLoadoutDiv")
+		$("#hangarDiv")
 		.addClass("disabled")
 		.find("#missionType")
 		.find("tr").removeClass("selected").end().end()
@@ -3923,8 +3976,8 @@ Hangar.prototype.drawSystemArc = function(){
 	return;
 }
 
-Hangar.prototype.enableHangarDeployment = function(e){
-	var div = document.getElementById("hangarLoadoutDiv");
+Hangar.prototype.switchHangarDiv = function(e){
+	var div = document.getElementById("hangarDiv");
 		$("#launchRate").html(this.getLaunchRate());
 		$("#capacity").html(this.capacity);
 	this.unsetFireOrder();
@@ -3990,7 +4043,7 @@ Hangar.prototype.showHangarControl = function(){
 		table.appendChild(tr);
 	}
 	var mission = this.getMission();
-	var element = $("#hangarLoadoutDiv");
+	var element = $("#hangarDiv");
 		$(element)
 			.data("mission", mission)
 			.data("systemid", id)
@@ -3999,7 +4052,7 @@ Hangar.prototype.showHangarControl = function(){
 					if (i){
 						$(this).off("click");
 						$(this).click(function(){
-							game.getUnit(aUnit).getSystem($("#hangarLoadoutDiv").data("systemid")).setMission(i);
+							game.getUnit(aUnit).getSystem($("#hangarDiv").data("systemid")).setMission(i);
 						})
 					}
 				})
@@ -4009,19 +4062,19 @@ Hangar.prototype.showHangarControl = function(){
 
 Hangar.prototype.triggerLaunchButton = function(){
 	if (this.canLaunchFlight()){
-		$("#hangarLoadoutDiv").find(".buttonTD").removeClass("disabled");
+		$("#hangarDiv").find(".buttonTD").removeClass("disabled");
 	}
 	else {
 		game.flightDeploy = 0;
 		$("#deployOverlay").hide();
-		$("#hangarLoadoutDiv").find(".buttonTD").addClass("disabled");
+		$("#hangarDiv").find(".buttonTD").addClass("disabled");
 	}
 }
 
 Hangar.prototype.setMission = function(val){
 	this.mission = val;
 
-	$("#hangarLoadoutDiv").find("#missionType").find("tr").each(function(i){
+	$("#hangarDiv").find("#missionType").find("tr").each(function(i){
 		$(this).removeClass("selected");
 		if (val == i){
 			$(this).addClass("selected");
@@ -4193,8 +4246,8 @@ Hangar.prototype.removeFighter = function(ele, all){
 
 Hangar.prototype.canConfirm = function(){
 	//if (this.hasLoad()){
-		$("#hangarLoadoutDiv").find(".buttonTD").removeClass("disabled");
-	//} else $("#hangarLoadoutDiv").find(".buttonTD").addClass("disabled");
+		$("#hangarDiv").find(".buttonTD").removeClass("disabled");
+	//} else $("#hangarDiv").find(".buttonTD").addClass("disabled");
 }
 
 Hangar.prototype.updateTotals = function(){
@@ -4225,21 +4278,21 @@ Hangar.prototype.updateTotals = function(){
 			td.innerHTML = "<img class='size20' src='varIcons/plus.png'>"; tr.appendChild(td);
 			td.addEventListener("click", function(e){
 				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystem($("#hangarLoadoutDiv").data("systemid")).addFighter(this.parentNode, false);
+				window.game.ships[0].getSystem($("#hangarDiv").data("systemid")).addFighter(this.parentNode, false);
 			})
 			td.addEventListener("contextmenu", function(e){
 				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystem($("#hangarLoadoutDiv").data("systemid")).addFighter(this.parentNode, true);
+				window.game.ships[0].getSystem($("#hangarDiv").data("systemid")).addFighter(this.parentNode, true);
 			})
 		var td = document.createElement("td");
 			td.innerHTML = "<img class='size20' src='varIcons/minus.png'>"; tr.appendChild(td);
 			td.addEventListener("click", function(e){
 				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystem($("#hangarLoadoutDiv").data("systemid")).removeFighter(this.parentNode, false);
+				window.game.ships[0].getSystem($("#hangarDiv").data("systemid")).removeFighter(this.parentNode, false);
 			})
 			td.addEventListener("contextmenu", function(e){
 				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystem($("#hangarLoadoutDiv").data("systemid")).removeFighter(this.parentNode, true);
+				window.game.ships[0].getSystem($("#hangarDiv").data("systemid")).removeFighter(this.parentNode, true);
 			})
 
 			amount += this.loads[i].amount;
@@ -4262,7 +4315,7 @@ Hangar.prototype.updateTotals = function(){
 }
 
 Hangar.prototype.setupHangarLoadout = function(e){
-	var div = document.getElementById("hangarLoadoutDiv");
+	var div = document.getElementById("hangarDiv");
 	if ($(div).hasClass("disabled")){
 		$(div).find("#launchRate").html(this.getOutput());
 		$(div).find("#capacity").html(this.capacity);

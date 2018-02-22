@@ -4,8 +4,8 @@ class Tigara extends Heavy {
 	public $name = "Tigara";
 	public $display = "Tigara";
 	public $faction = "Minbari Federation";
-	public $size =  110;
-	public static $value = 1900;
+	public $size =  100;
+	public static $value = 1400;
 	public $profile = array(0.93, 1.07);
 	public $mass = 11000;
 
@@ -42,10 +42,10 @@ class Tigara extends Heavy {
 			$right->systems[] = new EMNeedler($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 120, 240, 2100, 20, 4);
-			$aft->systems[] = new NeutronLaser($this->getId(), $this->id, 240, 120, 0, 4);
+		$aft = new Structure($this->getId(), $this->id, 120, 240, 2100, 20, 6);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
+			$aft->systems[] = new NeutronLaser($this->getId(), $this->id, 120, 240, 0, 2);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
 		$structs[] = $aft;

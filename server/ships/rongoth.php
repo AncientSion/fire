@@ -26,7 +26,7 @@ class Rongoth extends Medium {
 		$front->systems[] = new HeavyPlasmaPulse($this->getId(), $this->id, 315, 45);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 30, 150, 325, 15);
+		$right = new Structure($this->getId(), $this->id, 30, 150, 325, 15, 1);
 		$right->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 0, 120);
 		$right->systems[] = new Bulkhead($this->getId(), $this->id, 60, 0, 1);
 		$right->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 60, 180);
@@ -36,7 +36,7 @@ class Rongoth extends Medium {
 		$aft->systems[] = new Hangar($this->getId(), $this->id, 10, array("Gorith", "Frazi"), 7);
 		$structs[] = $aft;
 
-		$left = new Structure($this->getId(), $this->id, 210, 330, 325, 15);
+		$left = new Structure($this->getId(), $this->id, 210, 330, 325, 15, 1);
 		$left->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 240, 360);
 		$left->systems[] = new Bulkhead($this->getId(), $this->id, 60, 0, 1);
 		$left->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 180, 300);

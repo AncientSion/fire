@@ -22,7 +22,7 @@ class GQuan extends Heavy {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 20);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 20, 3);
 		$front->systems[] = new SuperHeavyLaser($this->getId(), $this->id, 330, 30);
 		$front->systems[] = new EnergyMine($this->getId(), $this->id, 330, 30);
 		$front->systems[] = new SuperHeavyLaser($this->getId(), $this->id, 330, 30);
@@ -37,9 +37,9 @@ class GQuan extends Heavy {
 		$right->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 60, 180, 0, 2);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 17);
+		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 17, 4);
 		$aft->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 120, 300);
-		$aft->systems[] = new Hangar($this->getId(), $this->id, 10, array("Gorith", "Frazi"), 10);
+		$aft->systems[] = new Hangar($this->getId(), $this->id, 10, array("Gorith", "Frazi"), 10, 2);
 		$aft->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 60, 240);
 		$structs[] = $aft;
 

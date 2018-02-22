@@ -118,7 +118,7 @@ function Game(data, userid){
 	}
 
 	this.enableFlightDeployment = function(){
-		this.flightDeploy = this.getUnit(aUnit).getSystem($("#hangarLoadoutDiv").data("systemid"));
+		this.flightDeploy = this.getUnit(aUnit).getSystem($("#hangarDiv").data("systemid"));
 		//var mission = this.getMissionTypeString(this.flightDeploy.mission);
 
 		instruct("Please select the offensive or defensive target for the flight");
