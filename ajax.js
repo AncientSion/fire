@@ -189,7 +189,6 @@ window.ajax = {
 				}
 			}
 
-
 			for (var j = 0; j < ships[i].upgrades.length; j++){
 				for (var k = ships[i].upgrades[j].loads.length-1; k >= 0; k--){
 					if (ships[i].upgrades[j].loads[k].amount == 0){

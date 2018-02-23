@@ -374,8 +374,8 @@ Structure.prototype.updateSystemDetailsDiv = function(){
 	$(this.element).find(".integrityAmount").html(this.getArmourString());
 }
 
-Structure.prototype.getCurrentPowerUsage = function(){
-	return System.prototype.getCurrentPowerUsage.call(this);
+Structure.prototype.getPowerUsage = function(){
+	return System.prototype.getPowerUsage.call(this);
 }
 
 Structure.prototype.getEffiency = function(){

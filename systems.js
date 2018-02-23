@@ -15,6 +15,7 @@ function System(system){
 	this.disabled = system.disabled;
 	this.locked = system.locked;
 	this.maxRange = system.maxRange;
+	this.loads = system.loads || [];
 	this.crits = [];
 	this.damages = [];
 	this.detailsTable = false;
@@ -946,30 +947,12 @@ System.prototype.getMount = function(){
 
 System.prototype.getOutput = function(){
 	return this.getBoostLevel();
-	var ret = "";
-	for (var i = this.powers.length-1; i >= 0; i--){
-		if (this.powers[i].turn == game.turn && this.powers[i].type > 0){
-			ret += "/ ";
-		}
-		else break;
-	}
-	return ret;
-}
-
-System.prototype.getOutputa = function(){
-	var output = 0;
-	for (var i = this.powers.length-1; i >= 0; i--){
-		if (this.powers[i].turn == game.turn && this.powers[i].type > 0){
-			output += this.powers[i].type;
-		}
-		else break;
-	}
-	return output;
 }
 
 System.prototype.getExtraOutput = function(){
 	var extra = 0;
 	var boost = 0;
+	var crew = 0;
 	for (var i = 0; i < this.boostEffect.length; i++){
 		if (this.boostEffect[i].type == "Output"){
 			boost = this.boostEffect[i].value;
@@ -994,10 +977,10 @@ System.prototype.getPowerReq = function(){
 }
 
 System.prototype.getPowerReqString = function(){
-	return (this.powerReq + " + " + (this.getCurrentPowerUsage() - this.powerReq));
+	return (this.powerReq + " + " + (this.getPowerUsage() - this.powerReq));
 }
 
-System.prototype.getCurrentPowerUsage = function(){
+System.prototype.getPowerUsage = function(){
 	var usage = this.powerReq || 0;
 	for (var i = this.powers.length-1; i >= 0; i--){
 		if (this.powers[i].turn == game.turn && this.powers[i].type > 0){
@@ -1272,35 +1255,137 @@ Bridge.prototype.select = function(e){
 	this.setSystemBorder();
 }
 
+Bridge.prototype.getUpgradeData = function(){
+	return {
+		"name": this.display,
+		"systemid": this.id,
+		"cost": this.totalCost,
+		"loads": this.loads
+	}
+}
+
 Bridge.prototype.enableCrewPurchase = function(e){
 	var div = $("#crewDiv");
-
-
 	var table = div.find("#crewTable").empty();
 
 	var options = ["Engine", "Sensor", "Reactor"];
+
+	table
+		.append(
+			$($("<tr>")
+				.append($("<th>").html("Type"))
+				.append($("<th>").html("Effect / lvl"))
+				.append($("<th>").html("Train Cost"))
+				.append($("<th>").attr("colSpan", 3).html("Current Level"))
+				.append($("<th>").html("Total Cost"))
+			)
+		)
 
 	for (var i = 0; i < options.length; i++){
 		table
 		.append(
 			$($("<tr>")
 				.append($("<td>").html(options[i] + " specialist"))
-				.append($("<td>").html(options[i] + " specialist"))
+				.append($("<td>").html(this.getCrewEffect(i)))
+				.append($("<td>").html(this.getCrewAddCost(i)))
+				.append($("<td>")
+					.append($("<img>")
+						.attr("src", "varIcons/plus.png").addClass("size20")
+						.data("type", i)
+						.click(function(){game.ships[0].getSystem(game.system).plusCrewLevel($(this).data("type"))})
+					)
+				)
+				.append($("<td>").html(this.getCrewLevel(i)))
+				.append($("<td>")
+					.append($("<img>")
+						.attr("src", "varIcons/minus.png").addClass("size20")
+						.data("type", i)
+						.click(function(){game.ships[0].getSystem(game.system).minusCrewLevel($(this).data("type"))})
+					)
+				)
+				.append($("<td>").html(this.getTotalCrewCost(i)))
 			)
 		)
 	}
 
+	table
+		.append(
+			$($("<tr>")
+				.append($("<th>").attr("colSpan", 3).html(""))
+				.append($("<th>").attr("colSpan", 3).html("Grand Total"))
+				.append($("<th>").html(this.totalCost))
+			)
+		)
 
-
-	var h = ($(div).height());
-	if (e.clientY + h > window.res.y){
-		$(div).css("left", e.clientX +100).css("top", window.res.y - h - 30).removeClass("disabled");
-	} else $(div).css("left", e.clientX +200).css("top", e.clientY - 100).removeClass("disabled");
+	$(div).data("systemid", this.id).css("left", 650).css("top", 400).removeClass("disabled");
 }
 
 Bridge.prototype.disableCrewPurchase = function(e){
 	$("#crewDiv").addClass("disabled");
+	//this.updateTotals();
+	window.game.setUnitTotal();
 }
+
+Bridge.prototype.plusCrewLevel = function(i){
+	if (this.loads[i].amount == 3){return;}
+	this.loads[i].amount++;
+	this.updateCrewDiv(i);
+}
+
+Bridge.prototype.minusCrewLevel = function(i){
+	if (!this.loads[i].amount){return;}
+	this.loads[i].amount--;
+	this.updateCrewDiv(i);
+}
+
+Bridge.prototype.updateCrewDiv = function(i){
+	var tr = $($("#crewDiv").find("#crewTable").children().find("tr")[i+1]);
+	$(tr.children()[2]).html(this.getCrewAddCost(i));
+	$(tr.children()[4]).html(this.getCrewLevel(i));
+	$(tr.children()[6]).html(this.getTotalCrewCost(i));
+	this.updateTotals();
+}
+
+Bridge.prototype.getCrewEffect = function(i){
+	return this.loads[i].mod + "% " + this.loads[i].name + " power";
+}
+
+Bridge.prototype.getCrewBaseCost = function(i){
+	return this.loads[i].cost;
+}
+
+Bridge.prototype.getCrewAddCost = function(i){
+	var baseCost = this.getCrewBaseCost(i);
+	var level = this.getCrewLevel(i);
+	var add = 0.5;
+	return Math.ceil(baseCost * (1 + (level*add)));
+}
+
+Bridge.prototype.getCrewLevel = function(i){
+	return this.loads[i].amount;
+}
+
+Bridge.prototype.getTotalCrewCost = function(i){
+	var baseCost = this.getCrewBaseCost(i);
+	var level = this.getCrewLevel(i);
+	var cost = 0;
+	var add = 0.5;
+
+	for (j = 0; j < level; j++){
+		cost += baseCost * (1 + add*j)
+	}
+	return Math.ceil(cost);
+}
+
+Bridge.prototype.updateTotals = function(){
+	var total = 0;
+	for (var i = 0; i < this.loads.length; i++){
+		total += this.getTotalCrewCost(i);
+	}
+	this.totalCost = total;	
+	$("#crewDiv").find("#crewTable").children().children().children().last().html(total);
+}
+
 				
 function Reactor(system){
 	PrimarySystem.call(this, system);
@@ -1316,16 +1401,16 @@ Reactor.prototype.getOutputUsage  = function(){
 	var use = 0;
 	var ship = game.getUnit(this.parentId);
 	for (var i = 0; i < ship.structures.length; i++){
-		use += ship.structures[i].getCurrentPowerUsage();
+		use += ship.structures[i].getPowerUsage();
 		for (var j = 0; j < ship.structures[i].systems.length; j++){
 			if (ship.structures[i].systems[j].isPowered()){
-				use += ship.structures[i].systems[j].getCurrentPowerUsage();
+				use += ship.structures[i].systems[j].getPowerUsage();
 			}
 		}
 	}
 	for (var i = 0; i < ship.primary.systems.length; i++){
 		if (ship.primary.systems[i].isPowered()){
-			use += ship.primary.systems[i].getCurrentPowerUsage();
+			use += ship.primary.systems[i].getPowerUsage();
 		}
 	}
 	return use;
@@ -2896,7 +2981,6 @@ function Launcher(system){
 	this.capacity = system.capacity;
 	this.launchRate = system.launchRate;
 	this.animation = "ballistic";
-	this.loads = system.loads || [];
 	this.ammo = system.ammo;
 	this.launcher = 1;
 }
@@ -3022,18 +3106,24 @@ Launcher.prototype.getAimDetailsUnit = function(target, final, accLoss, row){
 
 Launcher.prototype.getUpgradeData = function(){
 	var loads = [];
+	var text = "";
 	for (var i = 0; i < this.loads.length; i++){
-		if (this.loads[i].amount > 0){
-			loads.push(
-				{
-				"amount": this.loads[i].amount,
-				"cost": this.loads[i].cost,
-				"name": this.loads[i].name}
-				);
-		}
+		if (!this.loads[i].amount){continue;}
+		loads.push({
+			"amount": this.loads[i].amount,
+			"cost": this.loads[i].cost,
+			"name": this.loads[i].name
+		});
+		text = this.loads[i].amount + "x " + this.loads[i].name;
+		break;
 	}
 
-	return {name: this.display, systemid: this.id, cost: this.totalCost, loads: loads};
+	return {
+		"name": (this.display + ": " + text),
+		"systemid": this.id,
+		"cost": this.totalCost,
+		"loads": loads
+	}
 }
 
 Launcher.prototype.getAccuracyLoss = function(dist){		
@@ -3136,15 +3226,15 @@ Launcher.prototype.updateSystemDetailsDiv = function(){
 }
 
 Launcher.prototype.switchWeaponDiv = function(e){
-	var div = document.getElementById("weaponDiv");
-	if ($(div).hasClass("disabled")){
-		$(div).find("#reload").html(this.reload);
-		$(div).data("systemid", this.id).css("left", 750).css("top", 400).removeClass("disabled");
+	var div = $("#weaponDiv");
+	if (div.hasClass("disabled")){
+		div.find("#reload").html(this.reload);
+		div.data("systemid", this.id).css("left", 750).css("top", 400).removeClass("disabled");
 		this.updateTotals();
 	}
 	else {
 		window.game.setUnitTotal();
-		$(div).addClass("disabled");
+		div.addClass("disabled");
 	}
 }
 
@@ -3833,7 +3923,6 @@ function Hangar(system){
 	this.end = 0;
 	this.reload = system.reload;
 	this.launchRate = system.launchRate;
-	this.loads = system.loads;
 	this.capacity = system.capacity;
 	this.mission = 0;
 	this.hangar = 1;
@@ -3977,27 +4066,27 @@ Hangar.prototype.drawSystemArc = function(){
 }
 
 Hangar.prototype.switchHangarDiv = function(e){
-	var div = document.getElementById("hangarDiv");
+	var div = $("#hangarDiv");
 		$("#launchRate").html(this.getLaunchRate());
 		$("#capacity").html(this.capacity);
 	this.unsetFireOrder();
 	this.doUndoActions();
 	this.showHangarControl(e);
 
-	if ($(div).hasClass("disabled")){
-		var h = ($(div).height());
+	if (div.hasClass("disabled")){
+		var h = (div.height());
 		if (e.clientY + h > window.res.y){
-			$(div).data("systemid", this.id).css("left", e.clientX +100).css("top", window.res.y - h - 30).removeClass("disabled");
-		} else $(div).data("systemid", this.id).css("left", e.clientX +200).css("top", e.clientY - 100).removeClass("disabled");
+			div.data("systemid", this.id).css("left", e.clientX +100).css("top", window.res.y - h - 30).removeClass("disabled");
+		} else div.data("systemid", this.id).css("left", e.clientX +200).css("top", e.clientY - 100).removeClass("disabled");
 	}
 	else {
-		$(div).addClass("disabled");
+		div.addClass("disabled");
 	}
 
 	
 	if (game.phase != -1 || this.parentId < 0 || game.getUnit(this.parentId).available == game.turn){
-		$(div).find("#missionType").hide();
-	} else $(div).find("#missionType").show();
+		div.find("#missionType").hide();
+	} else div.find("#missionType").show();
 }
 
 Hangar.prototype.showHangarControl = function(){

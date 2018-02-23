@@ -86,7 +86,7 @@ class Ship {
 
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, $this->integrity);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, $this->vitalHP);
+		$this->primary->systems[] = new Bridge($this->getId(), $this->id, $this->vitalHP, static::$value);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, $this->vitalHP, $this->ep);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, $this->vitalHP, $this->ew);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, $this->vitalHP);
@@ -120,17 +120,17 @@ class Ship {
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){ // check primary criticals
 			$this->primary->systems[$i]->setState($turn, $phase);
 			switch ($this->primary->systems[$i]->name){
+				case "Bridge":
+					if ($this->primary->systems[$i]->destroyed || $this->primary->systems[$i]->disabled){
+						$this->doUncommandShip($turn);
+					}
+					break;
 				case "Reactor":
 					if ($this->primary->systems[$i]->destroyed){
 						$this->destroyed = 1;
 					}
 					else if ($this->primary->systems[$i]->disabled){
 						$this->doUnpowerAllSystems($turn);
-					}
-					break;
-				case "Bridge":
-					if ($this->primary->systems[$i]->destroyed || $this->primary->systems[$i]->disabled){
-						$this->doUncommandShip($turn);
 					}
 					break;
 			}
@@ -144,6 +144,14 @@ class Ship {
 				$rem = $this->structures[$i]->getRemNegation();
 				$this->structures[$i]->systems[$j]->setState($turn, $phase);
 				$this->structures[$i]->systems[$j]->setArmourData($rem);
+			}
+		}
+
+		$bridge = $this->getSystemByName("Bridge");
+		for ($i = 0; $i < sizeof($bridge->loads); $i++){
+			if ($bridge->loads[$i]["amount"]){
+				$crew = new Power(0, $this->id, 0, $turn, 1, 0);
+				$this->getSystemByName($bridge->loads[$i]["name"])->powers[] = $crew;
 			}
 		}
 
@@ -340,14 +348,9 @@ class Ship {
 		}
 	}
 
-	public function addLoadout($dbLoad){ // [4, 17, 17]
+	public function addLoadout($dbLoad){
 		$chunk = array();
 		$chunk[] = $dbLoad[0];
-
-		//if (get_class($this) == "Demos"){
-		//	var_export($dbload);
-		//	$this->getSystem($chunk[sizeof($chunk)-1]["systemid"])->adjustLoad($chunk);
-		//}
 
 		for ($i = 1; $i < sizeof($dbLoad); $i++){
 			if ($dbLoad[$i]["systemid"] != $chunk[sizeof($chunk)-1]["systemid"]){

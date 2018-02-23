@@ -188,7 +188,7 @@ else {
 			<table id="hangarTable">
 			</table>
 			<table style="margin:auto; width: 220px; margin-top: 10px">
-				<tr><td class="buttonTD disabled" onclick='game.confirmSystemLoadout()'>Confirm Loadout</td></tr>
+				<tr><td class="buttonTD disabled" onclick='game.ships[0].doConfirmSystemLoadout()'>Confirm Loadout</td></tr>
 			</table>
 		</div>
 		<div id="weaponDiv" class="disabled">
@@ -201,17 +201,17 @@ else {
 			<table id="weaponTable">
 			</table>
 			<table style="margin:auto; width: 220px; margin-top: 10px">
-				<tr><td class="buttonTD disabled" onclick='game.confirmSystemLoadout()'>Confirm Loadout</td></tr>
+				<tr><td class="buttonTD disabled" onclick='game.ships[0].doConfirmSystemLoadout()'>Confirm Loadout</td></tr>
 			</table>
 		</div>
 		<div id="crewDiv" class="disabled">
 			<div class="header">
-				Add crew specialists to the selected unit.
+				Add crew specialists to the selected unit
 			</div>
 			<table id="crewTable">
 			</table>
 			<table style="margin:auto; width: 220px; margin-top: 10px">
-				<tr><td class="buttonTD disabled" onclick='game.confirmSystemLoadout()'>Confirm Loadout</td></tr>
+				<tr><td class="buttonTD" onclick='game.ships[0].doConfirmSystemLoadout()'>Confirm Training</td></tr>
 			</table>
 		</div>
 	</body>
@@ -293,10 +293,6 @@ else {
 					return cost;
 				},
 
-				confirmSystemLoadout: function(){
-					game.ships[0].doConfirmSystemLoadout();
-				},
-
 				canSubmit: function(){
 					var fleetCost = game.getFleetCost();
 					if (fleetCost && fleetCost <= window.maxPoints){
@@ -324,7 +320,8 @@ else {
 
 					for (var i = 0; i < game.ships[0].upgrades.length; i++){
 						var tr = table.insertRow(-1);
-							tr.insertCell(-1).innerHTML = game.ships[0].upgrades[i].name + " #" + game.ships[0].upgrades[i].systemid;
+							//tr.insertCell(-1).innerHTML = game.ships[0].upgrades[i].name + " #" + game.ships[0].upgrades[i].systemid;
+							tr.insertCell(-1).innerHTML = game.ships[0].upgrades[i].name;
 							tr.insertCell(-1).innerHTML = game.ships[0].upgrades[i].cost;
 
 							$(tr)
@@ -495,6 +492,7 @@ else {
 		$("#nameWrapper").hide().find("input").attr("placeholder", "Callsign")
 		$("#hangarDiv").addClass("disabled");
 		$("#weaponDiv").addClass("disabled");
+		$("#crewDiv").addClass("disabled");
 		$("#hangarTable").html("");
 
 		var ship = window.initUnit(JSON.parse(data));

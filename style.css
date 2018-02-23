@@ -262,15 +262,22 @@ table, th, tr, td {
 
 #hangarDiv, #weaponDiv, #crewDiv {
 	position: absolute;
-	width: 320px;
 	border: 2px solid yellow;
 	background-color: black;
 	z-index: 15;
 	border-radius: 5px;
 }
 
+#hangarDiv {
+	width: 320px;
+}
+
 #weaponDiv {
 	width: 360px;
+}
+
+#crewDiv {
+	width: 400px;
 }
 
 #hangarTable, #weaponTable, #crewTable {
@@ -282,7 +289,7 @@ table, th, tr, td {
 	font-size: 14px;
 }
 
-#weaponTable tr {
+#hangarTable tr, #weaponTable tr, #crewTable tr {
 	border: 1px solid white;
 }
 
@@ -303,6 +310,7 @@ table, th, tr, td {
 .missionOption.selected {
 
 }
+
 #missionType table {
 	margin: auto;
 	margin-top: 20px;

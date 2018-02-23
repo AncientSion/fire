@@ -1,10 +1,5 @@
 <?php
 
-
-// engine 	$this->effiency = ceil($this->powerReq/5)+1;
-// sensor 4
-
-
 class PrimarySystem extends System {
 	public $name = "PrimarySystem";
 	public $display = "PrimarySystem";
@@ -80,8 +75,33 @@ class Bridge extends PrimarySystem {
 	public $name = "Bridge";
 	public $display = "Command & Control";
 
-	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
-        parent::__construct($id, $parentId, $integrity, $output, $width);
+	function __construct($id, $parentId, $integrity, $output, $width = 1){
+        parent::__construct($id, $parentId, $integrity, 0, $width);
+
+        $crew = array("Engine", "Sensor", "Reactor");
+        $cost = floor($output/10);
+        $mod = array(8, 8, 4);
+
+        for ($i = 0; $i < sizeof($crew); $i++){
+			$this->loads[] = array(
+				"name" => $crew[$i],
+				"amount" => 0,
+				"cost" => $cost,
+				"mod" => 	$mod[$i]
+			);
+        }
+	}
+
+	public function adjustLoad($dbLoad){
+		//Debug::log("ding");
+		for ($i = 0; $i < sizeof($dbLoad); $i++){
+			for ($j = 0; $j < sizeof($this->loads); $j++){
+				if ($dbLoad[$i]["name"] == $this->loads[$j]["name"]){
+					$this->loads[$j]["amount"] = $dbLoad[$i]["amount"];
+					break; 
+				}
+			}
+		}
 	}
 
 	public function determineCrit($new, $old, $turn){

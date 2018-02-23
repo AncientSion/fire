@@ -401,53 +401,6 @@
 						ETA
 					</th>
 				</tr>
-				<?php
-					/*
-					foreach ($manager->ships as $ship){
-						if (($ship->ship || $ship->squad) && $manager->phase < 1 && $ship->userid == $manager->userid && $ship->available == $manager->turn){
-							echo "<tr class='deployNow ".$ship->id."'</td>";
-							echo "<td><img class='img40' src=shipIcons/".strtolower($ship->name).".png></td>";
-							echo "<td class='green font14'>".$ship->name."</td>";
-							echo "<td class='green font14'> NOW </td>";
-							echo "</tr>";
-						}							
-						else if (($ship->ship || $ship->squad) && $manager->phase < 1 && $ship->userid != $manager->userid && $ship->available == $manager->turn){
-							echo "<tr class='deployNow ".$ship->id."'</td>";
-							if ($manager->phase == -1){
-								echo "<td><img class='img40' src=varIcons/blueVortex.png></td>";
-								echo "<td class='red font14'>Unknown</td>";
-							}
-							else if ($manager->phase == 0){
-								echo "<td><img class='img40' src=shipIcons/".strtolower($ship->name).".png></td>";
-								echo "<td class='red font14'>".$ship->name."</td>";
-							}
-							echo "<td class='red font14'> NOW </td>";
-							echo "</tr>";
-						}
-					}
-					for ($i = 0; $i < sizeof($manager->incoming); $i++){
-						if ($manager->incoming[$i]["userid"] == $manager->userid){
-							$val = "deployLater ".$manager->incoming[$i]["id"];
-							echo "<tr class='".$val."'</td>";
-							echo "<td><img class='img40' src=shipIcons/".strtolower($manager->incoming[$i]["name"]).".png></td>";
-							echo "<td class='green font14'>".$manager->incoming[$i]["name"]."</td>";
-							$rem = $manager->incoming[$i]["available"] - $manager->turn;
-							if ($rem == 1){
-								echo "<td class='font14'>1 Turn</td></tr>";
-							} else echo "<td class='font14'>".$rem." Turns</td></tr>";
-						}
-						else if ($manager->incoming[$i]["userid"] != $manager->userid && $manager->incoming[$i]["available"] == $manager->turn+1){
-							$val = "deployLater ".$manager->incoming[$i]["id"];
-							echo "<tr class='".$val."'</td>";
-							echo "<td><img class='img40' src=varIcons/blueVortex.png></td>";
-							echo "<td class='red font14'>Unknown</td>";
-							echo "<td class='font14'>1 Turn</td></tr>";
-						}
-
-					}
-					*/
-					
-				?>
 			</table>
 			<table id="reinforceTable">
 				<tr>
@@ -494,28 +447,28 @@
 			</div>
 			<div id="vectorDiv" class="disabled"></div>
 			<div id="hangarDiv" class="disabled">
-			<div class="header">
-				<span>Assemble and launch a flight</span>
-			</div>
-			<div class="header">
-				Can launch up to <span id="launchRate"></span> units per cycle.
-			</div>
-			<div class="header">
-				Sufficient space for <span id="capacity"></span> units.
-			</div>
-			<table id="hangarTable">
-			</table>
-			<div id ="missionType">
-				<table style="border: 1px solid white">
-					<tr><th colSpan=3>Select Mission Type</th></tr>
-					<tr><td></td><td width=70%>Patrol location</td><td></td></tr>
-					<tr><td></td><td>Strike / Escort / Intercept unit</td><td></td></tr>
+				<div class="header">
+					<span>Assemble and launch a flight</span>
+				</div>
+				<div class="header">
+					Can launch up to <span id="launchRate"></span> units per cycle.
+				</div>
+				<div class="header">
+					Sufficient space for <span id="capacity"></span> units.
+				</div>
+				<table id="hangarTable">
 				</table>
+				<div id ="missionType">
+					<table style="border: 1px solid white">
+						<tr><th colSpan=3>Select Mission Type</th></tr>
+						<tr><td></td><td width=70%>Patrol location</td><td></td></tr>
+						<tr><td></td><td>Strike / Escort / Intercept unit</td><td></td></tr>
+					</table>
+				</div>
+				<div class="header">
+					<div class="buttonTD disabled" onclick="game.enableFlightDeployment()">Launch Flight</div>
+				</div>
 			</div>
-			<div class="header">
-				<div class="buttonTD disabled" onclick="game.enableFlightDeployment()">Launch Flight</div>
-			</div>
-		</div>
 	</body>
 </html>
 
@@ -639,7 +592,7 @@
 			});
 	
 		$("#hangarDiv").drag()
-		$("#weaponDiv").drag()
+		$("#crewDiv").drag()
 }
 	
 	function initiateKeyDowns(){

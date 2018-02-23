@@ -270,11 +270,11 @@ Squaddie.prototype.getUnusedPower = function(){
 	var output = this.power;
 	var use = 0;
 
-	use += this.getCurrentPowerUsage();
+	use += this.getPowerUsage();
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			if (this.structures[i].systems[j].isPowered()){
-				use += this.structures[i].systems[j].getCurrentPowerUsage();
+				use += this.structures[i].systems[j].getPowerUsage();
 			}
 		}
 	}
@@ -444,8 +444,8 @@ Squaddie.prototype.getRemainingNegation = function(){
 	return Structure.prototype.getRemainingNegation.call(this);
 }
 
-Squaddie.prototype.getCurrentPowerUsage = function(){
-	return System.prototype.getCurrentPowerUsage.call(this);
+Squaddie.prototype.getPowerUsage = function(){
+	return System.prototype.getPowerUsage.call(this);
 }
 
 Squaddie.prototype.getEffiency = function(){

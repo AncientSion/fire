@@ -58,6 +58,10 @@ class System {
 		return $this->integrity*3;
 	}
 
+	public function adjustLoad($dbLoad){
+		Debug::log("FATAL ERROR ADJUSTLOAD");
+		return;
+	}
 
 	public function getActiveSystem(){
 		return $this;
@@ -176,7 +180,7 @@ class System {
 			if ($this->powers[$i]->turn == $turn){
 				switch ($this->powers[$i]->type){
 					case 0: return 0; break;
-					case 1: $usage += $this->effiency; break;
+					case 1: $usage += $this->powers[$i]->cost; break;
 					default: continue;
 				}
 			} else return $usage;
