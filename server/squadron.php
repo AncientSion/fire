@@ -37,8 +37,10 @@ class Squadron extends Ship {
 
 	static function getSubUnits($faction){
 		switch ($faction){
-			case "Earth Alliance": return Builder::getEA();
-			case "Centauri Republic": return Builder::getCR();
+			case "Earth Alliance": return SquadBuilder::getEA();
+			case "Centauri Republic": return SquadBuilder::getCR();
+			case "Minbari Federation": return SquadBuilder::getMF();
+			case "Narn Regime": return SquadBuilder::getNR();
 			default: return array();
 		}
 	}

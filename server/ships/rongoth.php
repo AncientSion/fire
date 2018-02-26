@@ -48,6 +48,7 @@ class Rongoth extends Medium {
 	}
 
 	static function getKit($faction){
+		return array();
 		return array(
 			"id" => 0,
 			"name" => "",

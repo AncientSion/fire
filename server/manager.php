@@ -484,7 +484,7 @@ include_once 'global.php';
 			foreach ($entries as $entry){$total += $entry[1];}
 
 			//Debug::log("total: ".$total);
-			$add = 6;
+			$add = 9;
 
 			while ($add){
 				$current = 0;
@@ -1576,8 +1576,10 @@ include_once 'global.php';
 				break;
 			case "Minbari Federation";
 				$ships = array(
-					array("Sharlin", 8, 4),
+					array("Sharlin", 2, 4),
+					array("Tigara", 3, 4),
 					array("Tinashi", 4, 3),
+					array("Squadron", 10, 2),
 				);
 				break;
 			case "Narn Regime";
@@ -1587,6 +1589,7 @@ include_once 'global.php';
 					array("Katoc", 10, 3),
 					array("Rongoth", 10, 3),
 					array("Dagkar", 10, 3),
+					array("Squadron", 15, 2),
 				);
 
 				break;

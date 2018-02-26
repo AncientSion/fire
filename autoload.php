@@ -165,8 +165,8 @@ spl_autoload_register(
 
                 'debug' => '/server/debug.php',
                 'math' => '/server/math.php',
-                'builder' => '/server/builder.php',
-                'dmgcalc' => '/server/builder.php',
+                'squadbuilder' => '/server/squadbuilder.php',
+                'dmgcalc' => '/server/dmgcalc.php',
                 
                 'section' => '/server/classes.php',
                 'shared' => '/server/classes.php',

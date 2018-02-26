@@ -42,52 +42,7 @@ class Dagkar extends Medium {
 	}
 
 	static function getKit($faction){
-		return array(
-			"id" => 0,
-			"name" => "",
-			"cost" => static::$value,
-			"gameid" => 0,
-			"userid" => 0,
-			"upgrades" => 
-			array(
-				array(
-					"active" => 0,
-					"chance" => 40,
-					"notes" => "PATROL (Sentri) Outfit",
-					"cost" => 175,
-					"loads" =>
-					array(
-						array(
-							"systemid" => 15,
-							"display" => "Aft Main Hangar",
-							"name" => "Sentri",
-							"amount" => 8
-						),
-					)
-				),
-				array(
-					"active" => 0,
-					"chance" => 20,
-					"notes" => "Raid (Sentri/Sitara) Outfit",
-					"cost" => 175,
-					"loads" =>
-					array(
-						array(
-							"systemid" => 15,
-							"display" => "Aft Main Hangar",
-							"name" => "Sentri",
-							"amount" => 8
-						),
-						array(
-							"systemid" => 15,
-							"display" => "Aft Main Hangar",
-							"name" => "Sitara (Particle)",
-							"amount" => 2
-						),
-					)
-				),
-			)
-		);
+		return array();
 	}
 }
 
