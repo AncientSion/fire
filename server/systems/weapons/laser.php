@@ -143,13 +143,19 @@ class SuperHeavyLaser extends Laser {
 	public $reload = 5;
 	public $powerReq = 8;
 	public $rakes = 4;
-	public $integrity = 88;
+	public $integrity = 66;
 	public $traverse = 1;
 	public $effiency = 6;
 	public $maxBoost = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
+	}
+
+	public function setArmourData($rem){
+		$this->mount = "Fixed";
+		$this->armourMod = 0.85;
+		$this->armour = floor($rem * $this->armourMod);
 	}
 }
 

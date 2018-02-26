@@ -22,19 +22,18 @@ class EnergyMine extends Area {
 	public $fireMode = "Ballistic";
 	public $minDmg = 10;
 	public $maxDmg = 50;
-	public $accDecay = 66;
+	public $accDecay = 35;
 	public $deviate = 1;
 	public $shots = 1;
 	public $animColor = "blue";
 	public $projSize = 3;
 	public $projSpeed = 7;
 	public $reload = 4;
-	public $integrity = 32;
-	public $powerReq = 8;
+	public $integrity = 56;
+	public $powerReq = 10;
 	public $traverse = -3;
-	public $maxRange = 1250;
-	public $aoe = 60;
-	public $dmgs = array(10, 15, 50, 25);
+	public $aoe = 70;
+	public $dmgs = array(10, 15, 60, 30);
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		$this->notes = array("Area of Effect","Point of impact deviates by distance","Fixed damage based on target", "Salvo: ".$this->dmgs[0]." dmg / unit", "Flight: ".$this->dmgs[1]." dmg / unit", "Squadron: ".$this->dmgs[2]." dmg / unit", "Ship: ".$this->dmgs[3]." dmg / system on facing side.");
@@ -43,7 +42,7 @@ class EnergyMine extends Area {
 
 	public function setArmourData($rem){
 		$this->mount = "Catapult";
-		$this->armourMod = 0.4;
+		$this->armourMod = 0.2;
 		$this->armour = floor($rem * $this->armourMod);
 	}
 
@@ -69,7 +68,7 @@ class EnergyMine extends Area {
 
 class MagCompressor extends Particle {
 	public $name = "MagCompressor";
-	public $display = "MagCompressor";
+	public $display = "Magnetic Compressor";
 	public $fireMode = "Flash";
 	public $usage = 2;
 	public $freeAim = 0;

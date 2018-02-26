@@ -13,6 +13,7 @@ class Dagkar extends Medium {
 	public $vitalHP = 75;
 	public $ep = 80;
 	public $ew = 600;
+	public $power = -4;
 
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
@@ -23,16 +24,16 @@ class Dagkar extends Medium {
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 16, 3);
 		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new EnergyMine($this->getId(), $this->id, 0, 45);
+		$front->systems[] = new EnergyMine($this->getId(), $this->id, 330, 30);
 		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 15);
-		$right->systems[] = new ETorpLauncher($this->getId(), $this->id, 300, 360, array(array("EnergyTorpedo", 20, 5)));
+		$right->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 360, array(array("Vran", 20, 5)));
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 15);
-		$left->systems[] = new ETorpLauncher($this->getId(), $this->id, 0, 60, array(array("EnergyTorpedo", 20, 5)));
+		$left->systems[] = new TorpedoLauncher($this->getId(), $this->id, 0, 60, array(array("Vran", 20, 5)));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

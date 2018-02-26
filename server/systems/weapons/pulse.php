@@ -90,9 +90,9 @@ class FusionPulsar extends Pulse {
 	public $reload = 3;
 	public $integrity = 36;
 	public $powerReq = 3;
-	public $traverse = -1;
+	public $traverse = -3;
 	public $basePulses = 3;
-	public $extraPulses = 4;
+	public $extraPulses = 3;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);

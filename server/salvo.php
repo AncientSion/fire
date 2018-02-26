@@ -5,9 +5,17 @@ class Salvo extends Mixed {
 	public $unitType = "Salvo";
 	public $salvo = true;
 	public $traverse = -4;
+	public $missile = false;
+	public $torpedo = false;
 
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+	}
+
+	public function addSubUnits($elements){
+		parent::addSubUnits($elements);
+		$this->missile = $this->structures[0]->missile;
+		$this->torpedo = $this->structures[0]->torpedo;
 	}
 
 	public function getFireOrder($gameid, $turn, $target){
@@ -75,10 +83,10 @@ class Salvo extends Mixed {
 
 	public function calculateToHit($fire){
 		//return 100;
-		$base = 90;
+		$base = 100;
 		$mask = $fire->target->getDefensiveBonus($this->id);
 		$traverse = $fire->weapon->getTraverseMod($fire)*0.2;
-		return ceil(90 * (1-$mask) * (1-$traverse));
+		return ceil($base * (1-$mask) * (1-$traverse));
 	}
 
 	public function getLockMultiplier(){

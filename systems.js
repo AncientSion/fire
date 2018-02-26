@@ -79,8 +79,9 @@ System.prototype.attachDetailsMods = function(ele){
 	var div = $(ele) || $("#systemDetailsDiv");
 		div.find(".modifiers").remove();
 	var boost = this.getBoostLevel();
+	var crew = this.getCrewLevel();
 	var table;
-	if ((boost && !this.launcher) || this.crits.length){
+	if ((boost && !this.launcher) || this.crits.length || crew){
 		table = $("<table>").addClass("modifiers").append($("<tr>").append($("<th>").html("Modifiers").attr("colSpan", 2)));
 		if (boost){
 			for (var i = 0; i < this.boostEffect.length; i++){
@@ -96,6 +97,9 @@ System.prototype.attachDetailsMods = function(ele){
 				}
 				$(table[0]).append($("<tr>").append($("<td>").html(html).attr("colSpan", 2).addClass("positive")));
 			}
+		}
+		if (crew){
+			$(table[0]).append($("<tr>").append($("<td>").html("Tier " + crew +" crew: +" + (this.getCrewEffect() * crew) + "% Output").attr("colSpan", 2).addClass("positive")));
 		}
 		if (this.crits.length){
 			for (var i = 0; i < this.crits.length; i++){
@@ -351,6 +355,10 @@ System.prototype.getBoostLevel = function(){
 	return level;
 }
 
+System.prototype.getCrewLevel = function(){
+	return false;
+}
+
 System.prototype.getBoostEffectElements = function(table){
 
 	for (var i = 0; i < this.boostEffect.length; i++){
@@ -500,18 +508,16 @@ System.prototype.getPowerOrders = function(){
 }
 
 System.prototype.canUnboost = function(){
-	if (this.powers.length){
-		if (this.powers[this.powers.length-1].turn == game.turn){
-			if (this.powers[this.powers.length-1].type > 0){
-				return true;
-			}
+	if (!this.powers.length){return false;}	
+	if (this.powers[this.powers.length-1].turn == game.turn){
+		if (this.powers[this.powers.length-1].type){
+			return true;
 		}
 	}
 	return false;
 }
 
 System.prototype.doBoost = function(){
-	//console.log("boost");
 	this.powers.push({
 		id: this.powers.length+1, unitid: this.parentId, systemid: this.id,
 		turn: game.turn,type: 1, cost: this.getEffiency(), new: 1
@@ -523,9 +529,10 @@ System.prototype.doBoost = function(){
 		}
 	}
 }
+
 System.prototype.doUnboost = function(){
 	if (this.powers[this.powers.length-1].turn == game.turn){
-		this.powers.splice(this.powers.length-1, 1);	
+		this.powers.splice(this.powers.length-1, 1);
 	}
 	if (this.getBoostEffect("Reload")){this.setTimeLoaded();}
 	if (this.weapon && this.dmgType == "Plasma"){
@@ -882,7 +889,7 @@ System.prototype.hasUnresolvedFireOrder = function(){
 }
 
 System.prototype.update = function(){
-	this.updateSystemDetailsDiv();
+	if (this.highlight){this.updateSystemDetailsDiv();}
 	$(this.element).find(".outputMask").html(this.getOutput());
 }
 
@@ -949,10 +956,9 @@ System.prototype.getOutput = function(){
 	return this.getBoostLevel();
 }
 
-System.prototype.getExtraOutput = function(){
+System.prototype.getBoostOutput = function(){
 	var extra = 0;
 	var boost = 0;
-	var crew = 0;
 	for (var i = 0; i < this.boostEffect.length; i++){
 		if (this.boostEffect[i].type == "Output"){
 			boost = this.boostEffect[i].value;
@@ -1056,18 +1062,14 @@ System.prototype.hasEvent = function(){
 function PrimarySystem(system){
 	System.call(this, system);
 	this.exposed = 0;
+	this.crewEffect = system.crewEffect;
 	this.maxDmg = system.maxDmg;
 }
 PrimarySystem.prototype = Object.create(System.prototype);
 
 PrimarySystem.prototype.getEffiency = function(){
 	var boost = this.getBoostLevel();
-
 	return Math.max(this.effiency+boost, Math.ceil(this.effiency * (1+(boost * this.getBoostCostIncrease()))));
-}
-
-System.prototype.getBoostCostIncrease = function(){
-	return 0;
 }
 
 PrimarySystem.prototype.setTimeLoaded = function(){
@@ -1089,6 +1091,16 @@ PrimarySystem.prototype.hover = function(e){
 	}
 }
 
+PrimarySystem.prototype.canUnboost = function(){
+	if (!this.powers.length){return false;}	
+	if (this.powers[this.powers.length-1].turn == game.turn){
+		if (this.powers[this.powers.length-1].type && this.powers[this.powers.length-1].cost){
+			return true;
+		}
+	}
+	return false;
+}
+
 PrimarySystem.prototype.select = function(e){
 	console.log(this);
 	return;
@@ -1103,21 +1115,36 @@ PrimarySystem.prototype.getLoadLevel = function(){
 }
 
 PrimarySystem.prototype.getOutput = function(){
-	var output;
-	var mod;
-
-	if (this.disabled || this.destroyed){
-		output = 0;
-		mod = 0;
-	}
-	else {
-		output = this.output + this.getExtraOutput();
-		mod = this.getOutputReduction();
-	}
-
 	var usage = this.getOutputUsage();
 
-	return output - mod - usage;
+	if (this.disabled || this.destroyed){
+		return -usage;
+	}
+
+	var mod = 100;
+		mod += this.getBoostEffect("Output") * this.getBoostLevel();
+		mod += this.getCrewEffect() * this.getCrewLevel();
+		mod += this.getOutputCrits();
+
+	return Math.floor(this.output * mod / 100) - usage;
+}
+
+System.prototype.getCrewLevel = function(){
+	var lvl = 0;
+	for (var i = 0; i < this.powers.length; i++){
+		if (this.powers[i].type == 2){
+			lvl++;
+		}
+	}
+	return lvl;
+}
+
+PrimarySystem.prototype.getCrewOutput = function(){
+	return Math.floor(this.output * (this.getCrewLevel() * this.getCrewEffect()/100));
+}
+
+PrimarySystem.prototype.getCrewEffect = function(){
+	return this.crewEffect;
 }
 
 PrimarySystem.prototype.getOutputUsage = function(){
@@ -1143,7 +1170,7 @@ System.prototype.getOutputReduction = function(){
 
 PrimarySystem.prototype.getOutputString = function(){
 	var effect = 100  + this.getOutputCrits();
-	return this.output + " + " + Math.floor(this.getExtraOutput()/100*effect) + " - " + this.getOutputReduction();
+	return this.output + " +" + Math.floor(this.getBoostOutput()/100*effect) + " +" + Math.floor(this.getCrewOutput()/100*effect) + " -" + this.getOutputReduction();
 }
 
 PrimarySystem.prototype.getBoostCostIncrease = function(){
@@ -1168,7 +1195,7 @@ PrimarySystem.prototype.getSystemDetailsDiv = function(){
 	}
 	else if (unit.ship){
 		$(table).append($("<tr>").append($("<td>").css("width", "60%").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
-		$(table).append($("<tr>").append($("<td>").html("Max Damage per hit")).append($("<td>").html(this.maxDmg)));
+		$(table).append($("<tr>").append($("<td>").html("Max Damage / hit")).append($("<td>").html(this.maxDmg)));
 
 		if (this.output){
 			$(table).append($("<tr>").append($("<td>").html("Current Output")).append($("<td>").addClass("output").html(this.getOutputString())));
@@ -1188,7 +1215,6 @@ PrimarySystem.prototype.getSystemDetailsDiv = function(){
 	
 	this.attachDetailsMods(div.append(table));
 	return div;
-
 }
 
 PrimarySystem.prototype.updateSystemDetailsDiv = function(){
@@ -1239,20 +1265,16 @@ Bridge.prototype.select = function(e){
 	var selected = false;
 	var ship = game.getUnit(parentId);
 
-	if (game.phase != -2 || this.destroyed || this.disabled || this.locked || this.parentId != aUnit){
+	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit){
 		return false;
 	}
-	else if (this.selected){
-		game.system = 0;
-		this.selected = false;
-		this.disableCrewPurchase(e);
+	else ship.handleCrew(e, this);
+	if (game.phase != -2){
+		$("#crewDiv")
+			.find(".header").html("Crew specialists on board").end()
+			.find("#crewTable").find("img").each(function(){$(this).remove();});
 	}
-	else {
-		this.selected = true;
-		game.system = this.id;
-		this.enableCrewPurchase(e);
-	}
-	this.setSystemBorder();
+
 }
 
 Bridge.prototype.getUpgradeData = function(){
@@ -1264,127 +1286,6 @@ Bridge.prototype.getUpgradeData = function(){
 	}
 }
 
-Bridge.prototype.enableCrewPurchase = function(e){
-	var div = $("#crewDiv");
-	var table = div.find("#crewTable").empty();
-
-	var options = ["Engine", "Sensor", "Reactor"];
-
-	table
-		.append(
-			$($("<tr>")
-				.append($("<th>").html("Type"))
-				.append($("<th>").html("Effect / lvl"))
-				.append($("<th>").html("Train Cost"))
-				.append($("<th>").attr("colSpan", 3).html("Current Level"))
-				.append($("<th>").html("Total Cost"))
-			)
-		)
-
-	for (var i = 0; i < options.length; i++){
-		table
-		.append(
-			$($("<tr>")
-				.append($("<td>").html(options[i] + " specialist"))
-				.append($("<td>").html(this.getCrewEffect(i)))
-				.append($("<td>").html(this.getCrewAddCost(i)))
-				.append($("<td>")
-					.append($("<img>")
-						.attr("src", "varIcons/plus.png").addClass("size20")
-						.data("type", i)
-						.click(function(){game.ships[0].getSystem(game.system).plusCrewLevel($(this).data("type"))})
-					)
-				)
-				.append($("<td>").html(this.getCrewLevel(i)))
-				.append($("<td>")
-					.append($("<img>")
-						.attr("src", "varIcons/minus.png").addClass("size20")
-						.data("type", i)
-						.click(function(){game.ships[0].getSystem(game.system).minusCrewLevel($(this).data("type"))})
-					)
-				)
-				.append($("<td>").html(this.getTotalCrewCost(i)))
-			)
-		)
-	}
-
-	table
-		.append(
-			$($("<tr>")
-				.append($("<th>").attr("colSpan", 3).html(""))
-				.append($("<th>").attr("colSpan", 3).html("Grand Total"))
-				.append($("<th>").html(this.totalCost))
-			)
-		)
-
-	$(div).data("systemid", this.id).css("left", 650).css("top", 400).removeClass("disabled");
-}
-
-Bridge.prototype.disableCrewPurchase = function(e){
-	$("#crewDiv").addClass("disabled");
-	//this.updateTotals();
-	window.game.setUnitTotal();
-}
-
-Bridge.prototype.plusCrewLevel = function(i){
-	if (this.loads[i].amount == 3){return;}
-	this.loads[i].amount++;
-	this.updateCrewDiv(i);
-}
-
-Bridge.prototype.minusCrewLevel = function(i){
-	if (!this.loads[i].amount){return;}
-	this.loads[i].amount--;
-	this.updateCrewDiv(i);
-}
-
-Bridge.prototype.updateCrewDiv = function(i){
-	var tr = $($("#crewDiv").find("#crewTable").children().find("tr")[i+1]);
-	$(tr.children()[2]).html(this.getCrewAddCost(i));
-	$(tr.children()[4]).html(this.getCrewLevel(i));
-	$(tr.children()[6]).html(this.getTotalCrewCost(i));
-	this.updateTotals();
-}
-
-Bridge.prototype.getCrewEffect = function(i){
-	return this.loads[i].mod + "% " + this.loads[i].name + " power";
-}
-
-Bridge.prototype.getCrewBaseCost = function(i){
-	return this.loads[i].cost;
-}
-
-Bridge.prototype.getCrewAddCost = function(i){
-	var baseCost = this.getCrewBaseCost(i);
-	var level = this.getCrewLevel(i);
-	var add = 0.5;
-	return Math.ceil(baseCost * (1 + (level*add)));
-}
-
-Bridge.prototype.getCrewLevel = function(i){
-	return this.loads[i].amount;
-}
-
-Bridge.prototype.getTotalCrewCost = function(i){
-	var baseCost = this.getCrewBaseCost(i);
-	var level = this.getCrewLevel(i);
-	var cost = 0;
-	var add = 0.5;
-
-	for (j = 0; j < level; j++){
-		cost += baseCost * (1 + add*j)
-	}
-	return Math.ceil(cost);
-}
-
-Bridge.prototype.updateTotals = function(){
-	var total = 0;
-	for (var i = 0; i < this.loads.length; i++){
-		total += this.getTotalCrewCost(i);
-	}
-	this.totalCost = total;	
-	$("#crewDiv").find("#crewTable").children().children().children().last().html(total);
-}
 
 				
 function Reactor(system){
@@ -1659,13 +1560,15 @@ Sensor.prototype.select = function(e){
 	var selected = false;
 	var unit;
 
-	if (this.selected){
+
+	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || aUnit < 0){
+		return false;
+	}
+	else if (game.system && game.system != this.id && !this.selected){return false;}
+	else if (this.selected){
 		this.selected = false;
 		game.sensorMode = 0;
 		this.setSystemBorder();
-	}
-	else if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || aUnit < 0 || this.getEWMode() == "Sweep" || this.getEWMode() == "Mask"){
-		return false;
 	}
 	else {
 		unit = game.getUnit(parentId);
@@ -1692,25 +1595,28 @@ Sensor.prototype.hover = function(e){
 
 Sensor.prototype.doBoost = function(){
 	System.prototype.doBoost.call(this);
+
+	if (game.phase == -2){return;}
 	mouseCtx.clearRect(0, 0, res.x, res.y);
 	if (this.ew[this.ew.length-1].angle == -1){
 		this.ew[this.ew.length-1].dist = Math.floor(this.ew[this.ew.length-1].dist * 1.1);
 	}
-	//game.drawShipOverlays();
 	game.sensorMode = 1;
 	this.setTempEW();
 	salvoCtx.clearRect(0, 0, res.x, res.y);
 	this.drawEW();
 	game.sensorMode = 0;
+
 }
 
 Sensor.prototype.doUnboost = function(){
 	System.prototype.doUnboost.call(this);
+
+	if (game.phase == -2){return;}
 	mouseCtx.clearRect(0, 0, res.x, res.y);
 	if (this.ew[this.ew.length-1].angle == -1){
 		this.ew[this.ew.length-1].dist = Math.floor(this.ew[this.ew.length-1].dist / 1.1);
 	}
-	//game.drawShipOverlays();
 	game.sensorMode = 1;
 	this.setTempEW();
 	salvoCtx.clearRect(0, 0, res.x, res.y);
@@ -2012,7 +1918,7 @@ Weapon.prototype.getAimData = function(target, final, dist, row){
 	var accLoss = this.getAccuracyLoss(dist);
 
 	if (this.maxRange && dist > this.maxRange){
-		row.append($("<td>").attr("colSpan", 4).html("Insufficient Range, max: " + this.maxRange));
+		row.append($("<td>").attr("colSpan", 4).addClass("red").html("Insufficient Range, max: " + this.maxRange));
 		return;
 	}
 
@@ -2212,6 +2118,7 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 
 	if (this instanceof Launcher){
 		if (this.ammo != -1){
+			$(table).append($("<tr>").append($("<td>").html("Max Range")).append($("<td>").html(this.maxRange)));
 			$(table).append($("<tr>").append($("<th>").css("border-top", "1px solid white").attr("colSpan", 2).html(this.loads[this.ammo].name)));
 			$(table).append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.loads[this.ammo].display)));
 			$(table).append($("<tr>").append($("<td>").html("Ammo amount")).append($("<td>").html("<span class='red'>" + this.getRemAmmo() + "</span> / " + this.getMaxAmmo()).attr("id", "ammo")));
@@ -2366,9 +2273,9 @@ function Warhead(data){
 	this.maxDmg = data.maxDmg;
 	this.shots = data.shots;
 	this.traverse = data.traverse;
+	this.animation = data.animation;
 	this.fireOrders = [];
 	this.guns = 1;
-	this.animation = "explo";
 	this.exploSize = (this.minDmg + this.maxDmg)/15;
 
 	for (var i = 0; i < data.fireOrders.length; i++){
@@ -2440,7 +2347,7 @@ Warhead.prototype.getAnimation = function(fire){
 					tx = p.x + t.x;
 					ty = p.y + t.y;
 			}
-			var shotAnim = {tx: tx, ty: ty, m: 70, n: 0 - ((j / grouping) * delay + k*shotInterval)};
+			var shotAnim = {tx: tx, ty: ty, m: 35, n: 0 - ((j / grouping) * delay + k*shotInterval)};
 
 			gunAnims.push(shotAnim);
 		}
@@ -2458,6 +2365,11 @@ function Particle(system){
 Particle.prototype = Object.create(Weapon.prototype);
 
 Particle.prototype.getAnimation = function(fire){
+
+	
+	let a;
+	let b;
+
 	var allAnims = [];
 	var grouping = 2;
 	var speed = this.projSpeed;
@@ -2467,8 +2379,7 @@ Particle.prototype.getAnimation = function(fire){
 	var cc = 0;
 	var hits = 0;
 	var fraction = 1;
-	var t = fire.target.getPlannedPos();
-		t = fire.target.getDrawPos();
+	var t = fire.target.getDrawPos();
 
 	if (fire.target.squad){
 		grouping = Math.ceil(fire.guns/2);
@@ -2496,6 +2407,10 @@ Particle.prototype.getAnimation = function(fire){
 	speed /= fraction;
 	delay *= fraction;
 	shotInterval *= fraction;
+
+	if (fire.shooter.flight && fire.target.flight){
+		a = JSON.parse(JSON.stringify(fire.target.structures[1].layout));
+	}
 	
 	for (var j = 0; j < fire.guns; j++){
 		var gunAnims = [];
@@ -2523,6 +2438,16 @@ Particle.prototype.getAnimation = function(fire){
 		}
 		allAnims.push(gunAnims)
 	}
+
+
+	if (fire.shooter.flight && fire.target.flight){
+		b = JSON.parse(JSON.stringify(fire.target.structures[1].layout));
+
+		if (a.x != b.x || a.y != b.y){
+			console.log("ding");
+		}
+	}
+
 	return allAnims;
 }
 
@@ -2608,7 +2533,6 @@ Pulse.prototype.getAnimation = function(fire){
 
 function Laser(system){
 	Weapon.call(this, system);	
-	this.animation = "beam";
 	this.optRange = system.optRange;
 	this.dmgLoss = system.dmgLoss;
 	this.rakeTime = system.rakeTime;
@@ -2702,7 +2626,7 @@ Laser.prototype.getAnimation = function(fire){
 				fire.weapon.output*20,
 				hit
 			);
-			console.log(shotAnim);
+			//console.log(shotAnim);
 
 			gunAnims.push(shotAnim);
 		}
@@ -2962,7 +2886,7 @@ Dual.prototype.doUnboost = function(){
 }
 
 Dual.prototype.doBoost = function(){
-	var p = {id: this.powers.length+1,unitid: this.parentId,systemid: this.id,
+	var p = {id: this.powers.length+1,unitid: this.parentId, systemid: this.id,
 				turn: game.turn,type: 1, cost: this.getEffiency(), new: 1};
 	this.powers.push(p);
 	this.getActiveSystem().powers.push(p);
@@ -2980,7 +2904,6 @@ function Launcher(system){
 	Weapon.call(this, system);	
 	this.capacity = system.capacity;
 	this.launchRate = system.launchRate;
-	this.animation = "ballistic";
 	this.ammo = system.ammo;
 	this.launcher = 1;
 }
@@ -3044,6 +2967,10 @@ Launcher.prototype.setBaseOutput = function(){
 	this.update();
 }
 
+Launcher.prototype.getEffiency = function(){
+	return 0;
+}
+
 Launcher.prototype.getRemAmmo = function(){
 	if (this.fireOrders.length){
 		return this.getMaxAmmo() - this.fireOrders.map(x => x.shots).reduce((l,r) => l+r);
@@ -3066,13 +2993,6 @@ Launcher.prototype.getBoostDiv = function(){
 	return System.prototype.getBoostDiv.call(this);
 }
 
-Launcher.prototype.doBoost = function(){
-	this.powers.push({
-		id: this.powers.length+1, unitid: this.parentId, systemid: this.id,
-		turn: game.turn, type: 1, cost: 0, new: 1
-	})
-}
-
 Launcher.prototype.canBeBoosted = function(){
 	return this.launchRate[this.ammo];
 }
@@ -3086,7 +3006,7 @@ Launcher.prototype.getTraverseRating = function(){
 }
 
 Launcher.prototype.getAimDetailsUnit = function(target, final, accLoss, row){
-	var final = 90;
+	var final = 100;
 	var traverseMod = this.getTraverseMod(target);
 	
 	if (!traverseMod){
@@ -3377,12 +3297,10 @@ Launcher.prototype.getImpulseString = function(){
 
 function Area(system){
 	Particle.call(this, system);
-	this.maxRange = system.maxRange;
 	this.dmgLoss = system.dmgLoss;
 	this.aoe = system.aoe;
 	this.shots = system.shots;
 	this.maxShots = system.maxShots;
-	this.animation = "area";
 }
 
 Area.prototype = Object.create(Particle.prototype);
@@ -3663,7 +3581,8 @@ Area.prototype.highlightEvent = function(){
 	var t = this.fireOrders[this.fireOrders.length-1];
 	var dist = getDistance(o, t);
 	if (game.phase != 2 && !o.friendly){
-		t = getPointInDir(this.maxRange, getAngleFromTo(o, t), o.x, o.y);
+		//t = getPointInDir(this.maxRange, getAngleFromTo(o, t), o.x, o.y);
+		t = getPointInDir(game.arcRange, getAngleFromTo(o, t), o.x, o.y);
 	}
 
 	if (!o.friendly && game.phase != 2){return;}
@@ -3845,7 +3764,7 @@ Area.prototype.getSystemDetailsDiv = function(){
 		this.getBoostEffectElements(table);
 	}
 
-	$(table).append($("<tr>").append($("<td>").html("Max Range")).append($("<td>").html(this.maxRange)));
+	//$(table).append($("<tr>").append($("<td>").html("Max Range")).append($("<td>").html(this.maxRange)));
 	$(table).append($("<tr>").append($("<td>").html("Area of Effect")).append($("<td>").html(this.aoe + "px")));
 	$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").addClass("accuracy").html("up to " + this.getAccuracy() + "px per 100px")));
 	$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("Up to <span class='red'>" + this.maxShots + "</span> / cycle")));
@@ -3866,10 +3785,10 @@ Area.prototype.getSystemDetailsDiv = function(){
 }
 
 Area.prototype.drawSystemArc = function(facing, rolled, pos){
-	var oldRange = game.arcRange;
-	game.arcRange = this.maxRange;
+	//var oldRange = game.arcRange;
+	//game.arcRange = this.maxRange;
 	System.prototype.drawSystemArc.call(this, facing, rolled, pos);
-	game.arcRange = oldRange;
+	//game.arcRange = oldRange;
 }
 
 Area.prototype.getResolvingFireOrders = function(){

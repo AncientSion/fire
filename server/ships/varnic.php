@@ -24,7 +24,7 @@ class Varnic extends Heavy {
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 18, 3);
 		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 240, 60);
-		$front->systems[] = new ETorpLauncher($this->getId(), $this->id, 315, 45, array(array("EnergyTorpedo", 15, 5)));
+		$front->systems[] = new TorpedoLauncher($this->getId(), $this->id, 315, 45, array(array("Vran", 15, 5)));
 		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 300, 120);
 		$structs[] = $front;
 

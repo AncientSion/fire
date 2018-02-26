@@ -695,7 +695,7 @@ Ship.prototype.moveToMaCutVector = function(){
 }
 
 Ship.prototype.canTurn = function(){
-	if (this.disabled || this.isRolling() || this.isFlipping()){return false;}
+	if (this.disabled || this.isRolling() || this.isFlipping() || this.lastActionWasTurn()){return false;}
 	if (this.getRemDelay() == 0){
 		var min = 3;
 		var have = this.getRemEP();
@@ -704,6 +704,12 @@ Ship.prototype.canTurn = function(){
 			return true;
 		}
 	}
+	return false;
+}
+
+Ship.prototype.lastActionWasTurn = function(){
+	if (!this.actions.length){return false;}
+	if (this.actions[this.actions.length-1].type == "turn"){return true;}
 	return false;
 }
 	
@@ -1136,7 +1142,7 @@ Ship.prototype.getStructureFromAngle = function(a){
 
 Ship.prototype.drawMovePlan = function(){
 	//console.log("draw moves for #" + this.id);
-	if (!this.actions.length || this.actions[this.actions.length-1].resolved){
+	if (!this.actions.length || this.actions[this.actions.length-1].resolved || !this.deployed){
 		return;
 	}
 	else {
@@ -1362,36 +1368,50 @@ Ship.prototype.attachLogEntry = function(html){
 			.html(html)));
 }
 
+Ship.prototype.getCallSign = function(){
+	if (this.call.length > 3){
+		return " - " + this.call + " - ";
+	}
+	return this.call;
+}
+
+Ship.prototype.getLogNameEntry = function(){
+	if (this.call.length > 3){
+		return ", the " + this.getCallSign;
+	}
+	return "";
+}
+
 Ship.prototype.createDeployEntry = function(){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + ", the " + this.getCallSign() + " </font> jumps into local space.</span>");
+	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + this.getLogNameEntry() + " </font> jumps into local space.</span>");
 }
 
 Ship.prototype.createUndeployEntry = function(){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + ", the " + this.getCallSign() + "</font> jumps into hyperspace and leaves the battlefield.</span>");
+	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + this.getLogNameEntry() + " </font> jumps into hyperspace and leaves the battlefield.</span>");
 }
 
 Ship.prototype.createMoveStartEntry = function(){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + ", the " + this.getCallSign() + "</font> has completed a full roll but is still rolling.</span>");
+	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + this.getLogNameEntry() + " </font> has completed a full roll but is still rolling.</span>");
 }
 
 Ship.prototype.createActionEntry = function(move){
 	if (this.isRolling()){
-		this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id+ ", the " + this.getCallSign() + "</font> is beginning a ROLL manover.</span>");
+		this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + this.getLogNameEntry() + "</font> is beginning a ROLL manover.</span>");
 	}
 	else if (this.hasStoppedRolling()){
-		this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + ", the " + this.getCallSign() + "</font> has canceled its ongoing ROLL manover.</span>");
+		this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + this.getLogNameEntry() + " </font> has canceled its ongoing ROLL manover.</span>");
 	}
 	else if (this.isFlipping()){
-		this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id+ ", the " + this.getCallSign() + "</font> is beginning a FLIP manover.</span>");
+		this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + this.getLogNameEntry() + "</font> is beginning a FLIP manover.</span>");
 	}
 }
 
 Ship.prototype.createStillRollingEntry = function(){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id+ ", the " + this.getCallSign() + "</font> is continueing its roll manover.</span>");							
+	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + this.getLogNameEntry() + "</font> is continueing its roll manover.</span>");							
 }
 
 Ship.prototype.createMoveEndEntry = function(){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id+ ", the " + this.getCallSign() + "</font> has completed a full roll.</span>")
+	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + this.getLogNameEntry() + "</font> has completed a full roll.</span>")
 }
 
 Ship.prototype.animateSelfJumpIn = function(){
@@ -1409,7 +1429,7 @@ Ship.prototype.animateSelfJumpIn = function(){
 
 	var fraction = this.deployAnim[0] / this.deployAnim[1];
 	var sin = Math.sin(Math.PI*fraction);
-	var s = 200*sin;
+	var s = this.size*2*sin;
 
 	ctx.globalAlpha = sin;
 	ctx.drawImage(graphics.images.blueVortex, this.drawX-s/2, this.drawY-s/2, s, s);
@@ -1711,7 +1731,7 @@ Ship.prototype.getFireDest = function(fire, isHit, num){
 Ship.prototype.getExplosionSize = function(j){
 	if (this.ship){return this.size;}
 	else if (this.squad){return this.structures[j].size/2;}
-	else if (this.flight){return this.structures[j].mass*0.75;}
+	else if (this.flight){return this.structures[j].mass*0.5;}
 	else if (this.salvo){return this.structures[j].mass*2;}
 }
 
@@ -1903,13 +1923,6 @@ Ship.prototype.unpowerAllSystems = function(){
 			}
 		}
 	}
-}
-
-Ship.prototype.getCallSign = function(){
-	if (this.call.length > 3){
-		return " - " + this.call + " - ";
-	}
-	return this.call;
 }
 
 Ship.prototype.createBaseDiv = function(){
@@ -2488,7 +2501,7 @@ Ship.prototype.doOffset = function(){
 Ship.prototype.doRandomOffset = function(shift){
 	if (this.ship || this.squad){return;}
 	if (!this.doDraw){return;}
-	if (this.mission.arrived && this.mission.type == 1){return;}
+	if (this.mission.arrived){return;}
 	//console.log("doOffset #" + this.id);
 	var o = this.getPlannedPos();
 	var t = this.getTarget();
@@ -2708,7 +2721,7 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 		
 		//var rota = range(0, 360);
 		
-		var split = Math.floor(360/friendly.length+1);
+		var split = Math.floor(360/friendly.length);
 
 		//ctx.rotate(rota*(Math.PI/180));
 		for (var i = 0; i < friendly.length; i++){
@@ -2755,7 +2768,7 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 		ctx.globalAlpha = 1;
 		ctx.lineWidth = 1;
 		
-		var split = Math.floor(360/hostile.length+1)
+		var split = Math.floor(360/hostile.length);
 
 		for (var i = 0; i < hostile.length; i++){
 			var a = split*i + drawFacing;
@@ -2764,6 +2777,10 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 			//console.log(a); 
 			//console.log("figher at " +(this.drawX+pos.x)+"/"+(this.drawY + pos.y));
 			hostile[i].layout = drawPos;
+		//	if (hostile[i].isDestroyedThisTurn()){
+			//	console.log(hostile[i].id)
+		//		console.log(hostile[i].layout);
+		//	}
 			ctx.translate(drawPos.x, drawPos.y);
 			ctx.rotate((a-180)*(Math.PI/180));
 			ctx.drawImage(
@@ -2808,10 +2825,10 @@ Ship.prototype.getLockEffect = function(target){
 	}
 	else if (target.salvo){
 		multi = 1;
-	}	
+	}
 
-	if (d == 0 && game.isCloseCombat(this, target) && this.isInEWArc(origin, target.getTrajectory(), sensor, ew)){
-		if (target.salvo){
+	if (game.isCloseCombat(this, target)){
+		if (target.salvo && this.isInEWArc(origin, target.getTrajectory(), sensor, ew)){
 			return multi;
 		}
 		else if (target.flight){
@@ -2981,8 +2998,6 @@ Ship.prototype.setBuyData = function(){
 			this.upgrades.push(this.structures[i].systems[j].getUpgradeData());
 		}
 	}
-
-
 }
 
 Ship.prototype.getLaunchData = function(){
@@ -3024,6 +3039,171 @@ Ship.prototype.updateNonPowerOutput = function(system){
 		}
 	)
 }
+
+Ship.prototype.showCrew = function(e, bridge){
+	if (bridge.selected){
+		game.system = 0;
+		bridge.selected = false;
+		this.disableCrewPurchase(e);
+	}
+	else {
+		bridge.selected = true;
+		game.system = bridge.id;
+		this.enableCrewPurchase(e, bridge);
+	}
+	bridge.setSystemBorder();
+}
+
+Ship.prototype.handleCrew = function(e, bridge){
+	if (bridge.selected){
+		game.system = 0;
+		bridge.selected = false;
+		this.disableCrewPurchase(e);
+	}
+	else {
+		bridge.selected = true;
+		game.system = bridge.id;
+		this.enableCrewPurchase(e, bridge);
+	}
+	bridge.setSystemBorder();
+}
+
+Ship.prototype.enableCrewPurchase = function(e, bridge){
+	var div = $("#crewDiv");
+	var table = div.find("#crewTable").empty();
+	var options = ["Engine", "Sensor", "Reactor"];
+
+	table
+		.append(
+			$($("<tr>")
+				.append($("<th>").html("Type"))
+				.append($("<th>").html("Effect / lvl"))
+				.append($("<th>").html("Train Cost"))
+				.append($("<th>").attr("colSpan", 3).html("Current Level"))
+				.append($("<th>").html("Total Cost"))
+			)
+		)
+
+	for (var i = 0; i < options.length; i++){
+		table
+		.append(
+			$($("<tr>")
+				.append($("<td>").html(options[i] + " specialist"))
+				.append($("<td>").html(this.getCrewEffect(i)))
+				.append($("<td>").html(this.getCrewAddCost(i)))
+				.append($("<td>")
+					.append($("<img>")
+						.attr("src", "varIcons/plus.png").addClass("size20")
+						.data("type", i)
+						.click(function(){game.ships[0].plusCrewLevel($(this).data("type"))})
+					)
+				)
+				.append($("<td>").html(this.getCrewLevel(i)))
+				.append($("<td>")
+					.append($("<img>")
+						.attr("src", "varIcons/minus.png").addClass("size20")
+						.data("type", i)
+						.click(function(){game.ships[0].minusCrewLevel($(this).data("type"))})
+					)
+				)
+				.append($("<td>").html(this.getTotalCrewCost(i)))
+			)
+		)
+	}
+
+	if (game.phase == -2){
+	table
+		.append(
+			$($("<tr>")
+				.append($("<th>").attr("colSpan", 3).html(""))
+				.append($("<th>").attr("colSpan", 3).html("Grand Total"))
+				.append($("<th>").html(bridge.totalCost))
+			)
+		)
+	}
+	!
+	$(div).data("systemid", this.id).css("left", 650).css("top", 400).removeClass("disabled");
+}
+
+
+Ship.prototype.disableCrewPurchase = function(e){
+	$("#crewDiv").addClass("disabled");
+	if (game.phase == -2){window.game.setUnitTotal();}
+}
+
+Ship.prototype.plusCrewLevel = function(i){
+	var bridge = this.getSystemByName("Bridge");
+	if (bridge.loads[i].amount == 3){return;}
+	bridge.loads[i].amount++;
+	var system = this.getSystem(i+3);
+		system.powers.push({
+			id: system.powers.length+1, unitid: system.parentId, systemid: system.id,
+			turn: game.turn,type: 2, cost: 0, new: 1
+		})
+		system.update();
+	this.updateCrewDiv(i);
+}
+
+Ship.prototype.minusCrewLevel = function(i){
+	var bridge = this.getSystemByName("Bridge");
+	if (!bridge.loads[i].amount){return;}
+	bridge.loads[i].amount--;
+	var system = this.getSystem(i+3);
+		system.doUnboost();
+		system.update();
+	this.updateCrewDiv(i);
+}
+
+Ship.prototype.updateCrewDiv = function(i){
+	var tr = $($("#crewDiv").find("#crewTable").children().find("tr")[i+1]);
+	$(tr.children()[2]).html(this.getCrewAddCost(i));
+	$(tr.children()[4]).html(this.getCrewLevel(i));
+	$(tr.children()[6]).html(this.getTotalCrewCost(i));
+	this.updateTotals();
+}
+
+Ship.prototype.getCrewEffect = function(i){
+	return "+" + this.getSystem(i+3).getCrewEffect() + " % output";
+}
+
+Ship.prototype.getCrewBaseCost = function(i){
+	return this.getSystemByName("Bridge").loads[i].cost;
+}
+
+Ship.prototype.getCrewAddCost = function(i){
+	if (game.phase > -2){return "";}
+	var baseCost = this.getCrewBaseCost(i);
+	var level = this.getCrewLevel(i);
+	var add = 0.5;
+	return Math.ceil(baseCost * (1 + (level*add)));
+}
+
+Ship.prototype.getCrewLevel = function(i){
+	return this.getSystemByName("Bridge").loads[i].amount;
+}
+
+Ship.prototype.getTotalCrewCost = function(i){
+	var baseCost = this.getCrewBaseCost(i);
+	var level = this.getCrewLevel(i);
+	var cost = 0;
+	var add = 0.5;
+
+	for (j = 0; j < level; j++){
+		cost += baseCost * (1 + add*j)
+	}
+	return Math.ceil(cost);
+}
+
+Ship.prototype.updateTotals = function(){
+	var bridge = this.getSystemByName("Bridge");
+	var total = 0;
+	for (var i = 0; i < bridge.loads.length; i++){
+		total += this.getTotalCrewCost(i);
+	}
+	bridge.totalCost = total;	
+	$("#crewDiv").find("#crewTable").children().children().children().last().html(total);
+}
+
 
 Ship.prototype.getSystemByName = function(name){
 	for (var i = 0; i < this.primary.systems.length; i++){

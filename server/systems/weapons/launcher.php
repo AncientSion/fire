@@ -20,6 +20,7 @@ class Launcher extends Weapon {
 
 	function __construct($id, $parentId, $start, $end, $width){
         parent::__construct($id, $parentId, $start, $end);
+		$this->notes = array("Ignores Offensive EW", "100% chance to hit target", "Each lacking tracking level: -20% to hit", "Defensive EW by target: - 33% to hit");
 	}
 
 	public function getAmmo(){
@@ -62,6 +63,7 @@ class MissileLauncher extends Launcher {
 
 	function __construct($id, $parentId, $start, $end, $loads, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $loads, $width);
+
 		for ($i = 0; $i < sizeof($loads); $i++){
 			$this->loads[] = new $loads[$i][0]($this->id, -1);
 			$this->capacity[] = $loads[$i][1];
@@ -70,21 +72,16 @@ class MissileLauncher extends Launcher {
 	}
 }
 
-class ETorpLauncher extends Launcher {
-	public $name = "ETorpLauncher";
-	public $display = "E-Torpedo Launcher";
+class TorpedoLauncher extends MissileLauncher {
+	public $name = "TorpedoLauncher";
+	public $display = "Torpedo Launcher";
 	public $loadout = 0;
 	public $powerReq = 4;
-	public $maxRange = 800;
 
 	function __construct($id, $parentId, $start, $end, $loads, $width = 1){
-        parent::__construct($id, $parentId, $start, $end, $width);
-		for ($i = 0; $i < sizeof($loads); $i++){
-			$this->loads[] = new $loads[$i][0]($this->id, -1);
-			$this->capacity[] = $loads[$i][1];
-			$this->launchRate[] = $loads[$i][2];
-			$this->ammo = $i;
-			$this->output = $this->capacity[$i];
-		}
+        parent::__construct($id, $parentId, $start, $end, $loads, $width);
+        $this->ammo = 0;
+        $this->output = $this->capacity[$this->ammo];
+        $this->maxRange = $this->loads[$this->ammo]->maxRange;
 	}
 }

@@ -469,6 +469,16 @@
 					<div class="buttonTD disabled" onclick="game.enableFlightDeployment()">Launch Flight</div>
 				</div>
 			</div>
+			<div id="crewDiv" class="disabled">
+				<div class="header">
+					Add crew specialists to the selected unit
+				</div>
+				<table id="crewTable">
+				</table>
+				<table style="margin:auto; width: 220px; margin-top: 10px">
+					<tr><td class="buttonTD" onclick='game.ships[0].doConfirmSystemLoadout()'>Confirm Training</td></tr>
+				</table>
+			</div>
 	</body>
 </html>
 

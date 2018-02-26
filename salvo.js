@@ -1,5 +1,7 @@
 function Salvo(data){
 	Mixed.call(this, data);
+	this.missiles = data.missile;
+	this.torpedo = data.torpedo;
 	this.salvo = 1;
 
 	this.setSize = function(){
@@ -36,7 +38,7 @@ function Salvo(data){
 			html += "'red'>";
 		} else html += "'green'>";
 		
-		return html + " (" + Math.ceil(90 * (100 - (d*20))/100) + "%)</span>";
+		return html + " (" + Math.ceil(100 * (100 - (d*20))/100) + "%)</span>";
 	}
 
 	this.setDisplay = function(){

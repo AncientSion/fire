@@ -616,25 +616,16 @@ Mixed.prototype.getWeaponOrigin = function(id){
 }
 
 Mixed.prototype.getUnitPosition = function(j){
-	if (this.mission.arrived && this.mission.type != 1){
-		var x = this.structures[j].layout.x * 0.5;
-		var y = this.structures[j].layout.y * 0.5;
-		return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
-	}
-	else {
-		var x = this.structures[j].layout.x * 0.5;
-		var y = this.structures[j].layout.y * 0.5;
-		return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
-	}
+	var x = this.structures[j].layout.x * 0.5;
+	var y = this.structures[j].layout.y * 0.5;
+	return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
 }
 
 Mixed.prototype.getRandomUnitPos = function(){
 	var t = this.structures[range(0, this.structures.length-1)].layout;
-		//t.x += range(10, 20) * (1-(range(0, 1)*2));
-		//t.y += range(10, 20) * (1-(range(0, 1)*2));
-		t.x += range(-30, 30)
-		t.y += range(-30, 30)
-	return t;
+	var x = t.x + range(-30, 30);
+	var y =	t.y + range(-30, 30);
+	return {x: x, y: y};
 }
 
 Mixed.prototype.getFireDest = function(fire, isHit, num){

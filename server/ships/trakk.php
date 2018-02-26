@@ -5,8 +5,8 @@ class Trakk extends Light {
 	public $display = "Trakk";
 	public $role = "Attack Frigate";
 	public $faction = "Narn Regime";
-	public static $value = 300;
-	public $cost = 300;
+	public static $value = 290;
+	public $cost = 290;
 	public $mass = 1250;
 
 	public $integrity = 400;
@@ -24,18 +24,19 @@ class Trakk extends Light {
 
 		$front = new Section(300, 60);
 		$front->systems[] = new MediumPlasmaPulse($this->getId(), $this->parentId, 315, 45);
-		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->parentId, 240, 120);
+		//$front->systems[] = new LightPlasmaPulse($this->getId(), $this->parentId, 240, 120);
 		$front->systems[] = new MediumPlasmaPulse($this->getId(), $this->parentId, 315, 45);
 		$structs[] = $front;
 		
+		/*
 		$right = new Section(60, 180);
 		$right->systems[] = new LightPlasmaPulse($this->getId(), $this->parentId, 300, 120);
-		//$structs[] = $right;
+		$structs[] = $right;
 
 		$left = new Section(180, 300);
 		$left->systems[] = new LightPlasmaPulse($this->getId(), $this->parentId, 240, 60);
-		//$structs[] = $left;
-
+		$structs[] = $left;
+		*/
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 		}

@@ -102,6 +102,7 @@ function mouseCanvasScroll(e){
 }
 
 function handleWeaponAimEvent(shooter, target, e, pos){
+	console.log("dign")
 
 	if (shooter.userid == target.userid || target && target.isDestroyed()){
 		$("#weaponAimTableWrapper").hide();
@@ -176,15 +177,35 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 
 			if (lock){
 				multi += lock;
-				lockString = "<span class ='green'>+" + lock + "</span>";
+				lockString = "<span class ='green'>+" + lock;
+				if ((shooter.ship || shooter.squad)){
+					if (target.flight || target.salvo){
+						lockString += " (Sensor)";
+					}
+				}
+				else if (shooter.flight){
+					if (target.flight || target.salvo){
+						lockString += " (Escort)";
+					}
+				}
+				lockString += "</span>";
 			}
 			if (mask){
 				multi -= mask;
-				maskString = "<span class ='red'>-" + mask + "</span>";
+				maskString = "<span class ='red'>-" + mask;
+				if (target.flight || target.salvo){
+					maskString += " (Mission)";
+				}
+				else if (shooter.flight){
+					if (target.flight || target.salvo){
+						maskString += " (escorting)";
+					}
+				}
+				maskString += "</span>";
 			}
 			if (impulse){
-				if (shooter.flight){
-					impulseString = "<span>Ineffective</span>";
+				if (shooter.flight && (target.ship || target.squad)){
+					impulseString = "<span> No effect on flight<span>";
 				}
 				else {
 					multi += impulse / 2;

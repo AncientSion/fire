@@ -5,6 +5,7 @@ class PrimarySystem extends System {
 	public $display = "PrimarySystem";
 	public $powerReq = 0;
 	public $internal = 1;
+	public $crewEffect = 0;
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $output, $width);
@@ -25,15 +26,30 @@ class PrimarySystem extends System {
 		return $dmg;
 	}
 
+	public function getCrewLevel(){
+		$lvl = 0;
+		for ($i = 0; $i < sizeof($this->powers); $i++){
+			if ($this->powers[$i]->type == 2){
+				$lvl++;
+			}
+		}
+		return $lvl;
+	}
+
+	public function getCrewEffect(){
+		return $this->crewEffect;
+	}
+
 	public function getOutput($turn){
 		if ($this->disabled || $this->destroyed){return 0;}
 
 		$mod = 100;
 		$mod += $this->getBoostEffect("Output") * $this->getBoostLevel($turn);
-		$mod -= $this->getCritMod("Output", $turn);
+		$mod += $this->getCrewEffect() * $this->getCrewLevel();
+		$mod += $this->getCritMod("Output", $turn);
 
 		//Debug::log("ship: #".$this->parentId.", output: ".floor($this->output*$mod));
-		return round($this->output * $mod/100);
+		return floor($this->output * $mod/100);
 	}
 
 	public function getValidEffects(){
@@ -52,12 +68,12 @@ class PrimarySystem extends System {
 		$mod = $this->getCritModMax($new + $old/2);
 		if ($mod < 5){Debug::log("mod < 5: ".$mod.", dropping"); return;}
 
-		$tresh =  ($new + $old/2)*2;
+		$trigger =  ($new + $old/2)*2;
 
 		for ($i = 0; $i < sizeof($possible); $i++){
 			$roll = mt_rand(0, 100);
-			if ($roll > $tresh){Debug::log(" NO CRIT - roll: ".$roll. ", tresh: ".$tresh); continue;}
-			Debug::log("CRIT: ".$mod.", roll: ".$roll.", tresh: ".$tresh);
+			if ($roll > $trigger){Debug::log(" NO CRIT - roll: ".$roll. ", tresh: ".$trigger); continue;}
+			Debug::log("CRIT: ".$mod.", roll: ".$roll.", tresh: ".$trigger);
 
 			//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 			$this->crits[] = new Crit(
@@ -87,7 +103,6 @@ class Bridge extends PrimarySystem {
 				"name" => $crew[$i],
 				"amount" => 0,
 				"cost" => $cost,
-				"mod" => 	$mod[$i]
 			);
         }
 	}
@@ -125,6 +140,7 @@ class Reactor extends PrimarySystem {
 	public $name = "Reactor";
 	public $display = "Reactor & Power Grid";
 	public $powerReq = 0;
+	public $crewEffect = 4;
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $integrity, $output, $width);
@@ -146,6 +162,7 @@ class Reactor extends PrimarySystem {
 class Engine extends PrimarySystem {
 	public $name = "Engine";
 	public $display = "Engine & Drive";
+	public $crewEffect = 8;
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $integrity, $output, $width);
@@ -153,8 +170,8 @@ class Engine extends PrimarySystem {
 
 	public function setPowerReq($mass){
 		$this->powerReq = ceil($this->output * Math::getEnginePowerNeed($mass));
-		$this->effiency = floor($this->powerReq/10)+2;
-		$this->boostEffect[] = new Effect("Output", 15);
+		$this->effiency = floor($this->powerReq/10)+3;
+		$this->boostEffect[] = new Effect("Output", 12);
 	}
 }
 
@@ -163,6 +180,7 @@ class Sensor extends PrimarySystem {
 	public $display = "Sensor & Analyzing";
 	public $ew = array();
 	public $effiency = 10;
+	public $crewEffect = 8;
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
 		$this->powerReq = floor($output/50);

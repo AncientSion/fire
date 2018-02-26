@@ -37,7 +37,7 @@ if (isset($_SESSION["userid"])){
 	$element .= "</tr>";
 
 	$element .= "<tr>";
-	$element .= "<th>Player Name</th>";
+	$element .= "<th width='80%'>Player Name</th>";
 	$element .= "<th>Status</th>";
 	$element .= "</tr>";
 
@@ -72,24 +72,18 @@ if (isset($_SESSION["userid"])){
 		}
 	}
 
-	if ($ready){
-	}
-	else if ($joined){
-		$element .= "<tr><td colSpan='2' class='leaveGame' onclick='leaveGame()'>Leave Game</td></tr>";	
-	}
-	else {
-		$element .= "<tr><td colSpan='2' class='joinGame' onclick='joinGame()'>Join Game</td></tr>";	
-	}
-		$element .= "<tr><td colSpan='2' class='toLobby' onclick='window.goToLobby()'>Return to Lobby</td></tr>";	
+	if ($ready){}
+	else if ($joined){$element .= "<tr><td colSpan=2><div class='buttonTD' onclick='leaveGame()'>Leave Game</div></td></tr>";}
+	else {$element .= "<tr><td colSpan=2><div class='buttonTD' onclick='joinGame()'>Join Game</div></td></tr>";}
+	
+	//$element .= "<tr><td colSpan='2' class='buttonTD' onclick='window.goToLobby()'>Return to Lobby</td></tr>";	
+
+	$element .= "<tr><td colSpan=2><div class='buttonTD' onclick='window.goToLobby()'>Return to Lobby</div></td></tr>";	
 
 	$element .= "</table>";
 
-	if ($ready){
-		echo "<script> window.ready = true;</script>";
-	}
-	else if ($joined){
-		echo "<script> window.joined = true;</script>";
-	}
+	if ($ready){echo "<script> window.ready = true;</script>";}
+	else if ($joined){echo "<script> window.joined = true;</script>";}
 
 }
 else {
@@ -144,17 +138,16 @@ else {
 								</th>
 							</tr>
 							<tr>
-								<th>
-									Total Fleet Cost:
-								</th>
-								<th id="totalFleetCost" style="width:50px">
+								<td style='font-size: 18px'>
+									Total Cost:
+								</td>
+								<td id="totalFleetCost" style="width:50px">
 									0
-								</th>
+								</td>
 							</tr>
-							<tr>
-								<th class="buttonTD disabled" onclick="confirmFleetPurchase()" colSpan=2>
-									Confirm Fleet Selection
-								</th>
+							<tr class="buttonTD disabled" onclick="confirmFleetPurchase()">
+								<th>Confirm Fleet Selection</th>
+								<th id="remPV"></th>
 							</tr>
 						</table>
 					</div>
@@ -221,9 +214,6 @@ else {
 	graphics.preload();
 
 	$(document).ready(function(){
-		$("#confirmFleet").hover(function(){
-			$(this).toggleClass("selectionHighlight");
-		});
 
 		$("#popupWrapper")
 			.css("left", 700)
@@ -237,6 +227,7 @@ else {
 		$("#nameWrapper").css("left", 500).css("top", 300)
 		$("#hangarDiv").drag();
 		$("#weaponDiv").drag();
+		$("#crewDiv").drag();
 
 		if (window.ready){
 			$("#shipsBoughtTable").hide();
@@ -299,6 +290,11 @@ else {
 						$("#shipsBoughtTable").find(".buttonTD").removeClass("disabled");
 					}
 					else {$("#shipsBoughtTable").find(".buttonTD").addClass("disabled");}
+				},
+
+				getFleetCost: function(){
+					if (!this.shipsBought.length){return 0;}
+					return this.shipsBought.map(x => x.value).reduce((l,r) => l+r);
 				},
 
 				setUnitTotal: function(){
@@ -526,7 +522,6 @@ else {
 	}
 
 	function addUnitToSquadron(data){
-
 		var sub = window.initSquaddie (JSON.parse(data));
 			sub.create();
 
@@ -542,21 +537,16 @@ else {
 	}
 
 	function confirmPurchase(){
-		var cur = Math.floor($("#totalFleetCost").html());
+		var cur = game.getFleetCost();
 		var add = game.ships[0].totalCost;
 		var max = window.maxPoints;
 
 		if (game.ships[0].squad && game.ships[0].structures.length < 2){
 			popup("A squadron needs to include at least 2 units.");
-			return false;
 		} else if (cur + add > max){
 			popup("You have insufficient point value left");
-			return false;
 		}
-		else {
-			window.addNameToUnit();
-			return true;
-		}
+		else {window.addNameToUnit();}
 	}
 
 	function addNameToUnit(){
@@ -578,7 +568,7 @@ else {
 			launchData: game.ships[0].getLaunchData()
 		}
 
-		console.log(ship.call);
+		//console.log(ship.call);
 
 		window.game.shipsBought.push(ship);
 
@@ -603,10 +593,12 @@ else {
 			$(target).html(game.getFleetCost());
 
 		$(".shipDiv").remove();
+		$("#remPV").html("(" + (window.maxPoints - game.getFleetCost()) + ")");
 		$("#nameWrapper").hide();
 		$("#game").addClass("disabled");
 		$("#hangarDiv").addClass("disabled");
 		$("#hangarTable").html("");
+		$("remPV").html("");
 		if (game.faction == ""){game.setReinforceFaction(game.ships[0].faction);}
 		game.ships[0] = undefined;
 		game.system = 0;

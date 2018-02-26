@@ -29,8 +29,8 @@ class Plasma extends Weapon {
 class LightPlasma extends Plasma {
 	public $name = "LightPlasma";
 	public $display = "46mm Plasma Gun";
-	public $minDmg = 33;
-	public $maxDmg = 46;
+	public $minDmg = 34;
+	public $maxDmg = 45;
 	public $accDecay = 120;
 	public $dmgLoss = 12;
 	public $shots = 1;

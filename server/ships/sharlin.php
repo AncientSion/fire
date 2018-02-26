@@ -5,14 +5,14 @@ class Sharlin extends SuperHeavy {
 	public $display = "Sharlin";
 	public $faction = "Minbari Federation";
 	public $size =  110;
-	public static $value = 1900;
+	public static $value = 1700;
 	public $profile = array(0.93, 1.07);
-	public $mass = 15000;
+	public $mass = 14000;
 
-	public $integrity = 1800;
-	public $vitalHP = 210;
+	public $integrity = 1600;
+	public $vitalHP = 200;
 	public $ep = 60;
-	public $ew = 1050;
+	public $ew = 1000;
 
 
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
@@ -22,7 +22,7 @@ class Sharlin extends SuperHeavy {
 	public function addStructures(){
 		$structs = array();
 
-		$left = new Structure($this->getId(), $this->id, 240, 360, 2450, 26);
+		$left = new Structure($this->getId(), $this->id, 240, 360, 2450, 25);
 			$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$left->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
@@ -35,7 +35,7 @@ class Sharlin extends SuperHeavy {
 			$left->systems[] = new NeutronLaser($this->getId(), $this->id, 210, 330);
 		$structs[] = $left;
 
-		$right = new Structure($this->getId(), $this->id, 0, 120, 2450, 26);
+		$right = new Structure($this->getId(), $this->id, 0, 120, 2450, 25);
 			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$right->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
@@ -48,7 +48,7 @@ class Sharlin extends SuperHeavy {
 			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 30, 150);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 120, 240, 2100, 23, 6);
+		$aft = new Structure($this->getId(), $this->id, 120, 240, 2100, 22, 6);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 180, 0);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 180, 0);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);

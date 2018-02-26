@@ -41,7 +41,7 @@ window.cam = {
 	},
 	
 	adjustZoom: function(e, pos){
-		if (e.originalEvent.wheelDelta == 120) {
+		if (e.originalEvent.wheelDelta == 120 || e.originalEvent.deltaY < 0){
 			this.z = Math.min(2, this.z + 0.2);
 		}
 		else {

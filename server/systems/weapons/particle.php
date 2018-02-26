@@ -2,7 +2,6 @@
 
 class Particle extends Weapon {
 	public $type = "Particle";
-	public $animation = "projectile";
 	public $priority = 10;
 	public $particle = 1;
 
@@ -62,7 +61,7 @@ class HeavyParticle extends MediumParticle {
 	public $display = "122mm Particle Cannon";
 	public $minDmg = 50;
 	public $maxDmg = 64;
-	public $accDecay = 90;
+	public $accDecay = 80;
 	public $shots = 2;
 	public $reload = 4;
 	public $integrity = 64;
@@ -81,10 +80,10 @@ class HeavyParticle extends MediumParticle {
 
 class SuperHeavyParticle extends HeavyParticle {
 	public $name = "SuperHeavyParticle";
-	public $display = "138mm Particle Cannon";
+	public $display = "138mm Particle Accelerator";
 	public $minDmg = 56;
 	public $maxDmg = 70;
-	public $accDecay = 90;
+	public $accDecay = 60;
 	public $shots = 3;
 	public $reload = 6;
 	public $integrity = 84;
@@ -125,18 +124,18 @@ class FusionCannon extends Particle {
 class HeavyFusionCannon extends Particle {
 	public $name = "HeavyFusionCannon";
 	public $display = "60mm Fusion Cannon";
-	public $minDmg = 42;
-	public $maxDmg = 56;
-	public $accDecay = 120;
+	public $minDmg = 43;
+	public $maxDmg = 55;
+	public $accDecay = 100;
 	public $shots = 1;
 	public $reload = 2;
 	public $integrity = 48;
 	public $powerReq = 4;
-	public $traverse = -1;
+	public $traverse = 0;
 
 	public $animColor = "green";
 	public $projSize = 4;
-	public $projSpeed = 7;
+	public $projSpeed = 8;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);

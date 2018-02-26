@@ -14,7 +14,8 @@ window.graphics = {
 	},
 
 	preloadExplos: function(){
-		var basePath = "varIcons/explos/";
+		/*
+		var basePath = ;
 		var alt = [1, 2, 3, 4, 5];
 
 		for (var i = 0; i < alt.length; i++){
@@ -29,6 +30,9 @@ window.graphics = {
 		var img = new Image();
 			img.src = basePath + "eMine_2.png";
 		this.eMine.push(img);
+		*/
+		this.eMine= new Image();
+		this.eMine.src = "varIcons/explos/eMine.png";
 	},
 
 	preLoadVarious: function(){
@@ -276,10 +280,35 @@ function drawAreaProjectile(weapon, anim){
 	fxCtx.globalCompositeOperation = "source-over";
 	fxCtx.setTransform(1,0,0,1,0,0);
 
-	if (anim.n >= anim.m){
+	if (anim.n >= 5){
+	//if (anim.n >= anim.m){
 		anim.p = 1;
 		anim.n = 0;
-		anim.m = 36;
+		anim.m = 80;
+	}
+}
+
+function drawAreaEffect(weapon, anim){
+	var fraction = anim.n/anim.m;
+	var size = weapon.aoe*2 * fraction;
+
+	fxCtx.translate(cam.o.x, cam.o.y);
+	fxCtx.scale(cam.z, cam.z)
+
+	//var cos = 0.5 + Math.cos(2*Math.PI*fraction);
+	//console.log(cos);
+
+	if (fraction > 0.7){
+		fxCtx.globalAlpha = 1 - (fraction-0.7)*3
+	} else fxCtx.globalAlpha = 1;
+	
+
+	fxCtx.drawImage(graphics.eMine, anim.tx -size/2, anim.ty -size/2, size, size);
+	fxCtx.globalAlpha = 1;
+	fxCtx.setTransform(1,0,0,1,0,0);
+
+	if (anim.n >= anim.m){
+		anim.done = true;
 	}
 }
 
@@ -345,8 +374,8 @@ function drawBaseSpriteExplo(wpn, anim){
 	fxCtx.setTransform(1,0,0,1,0,0);
 }					
 //function drawExplosion(weapon, x, y, now, max, explo){  // 150, 150, 30
-function drawExplosion(weapon, anim, frames){  // 150, 150, 30
-	var fraction = (anim.n-anim.m)/(frames);
+function drawExplosion(weapon, anim){  // 150, 150, 30
+	var fraction = anim.n/anim.m;
 	var sin = weapon.exploSize*1*Math.sin(Math.PI*fraction);
 	if (sin < 0){
 		return;
@@ -411,7 +440,7 @@ function drawExplosion(weapon, anim, frames){  // 150, 150, 30
 	fxCtx.setTransform(1,0,0,1,0,0);
 }
 
-function drawUnitExplo(posX, posY, img, s, now, max){
+function drawUnitExploa(posX, posY, img, s, now, max){
 	now -= 1;
 	var sin = s*0.5*Math.sin(Math.PI*now/max);
 	if (sin < 0){return;}	
@@ -435,22 +464,7 @@ function drawUnitExplo(posX, posY, img, s, now, max){
 	fxCtx.setTransform(1,0,0,1,0,0);
 }
 
-function drawAreaEffect(anim){
-	var size = 110 / anim.m * anim.n;
-
-	fxCtx.translate(cam.o.x, cam.o.y);
-	fxCtx.scale(cam.z, cam.z)
-	fxCtx.globalAlpha = 1.3- anim.n / anim.m;
-	fxCtx.drawImage(graphics.eMine[1], anim.tx -size/2, anim.ty -size/2, size, size);
-	fxCtx.globalAlpha = 1;
-	fxCtx.setTransform(1,0,0,1,0,0);
-
-	if (anim.n >= anim.m){
-		anim.done = true;
-	}
-}
-
-function drawUnitExploa(x, y, s, now, max){
+function drawUnitExplo(x, y, s, now, max){
 	var sin = s*0.5*Math.sin(Math.PI*now/max);
 	if (sin < 0){
 		return;
@@ -474,7 +488,7 @@ function drawBeam(weapon, fire){
 	fxCtx.scale(cam.z, cam.z)
 
 	var fraction = fire.n/fire.m;
-	var charge =  0.5 - 0.3*Math.cos(2*Math.PI*fraction);
+	var charge = 0.5 - 0.3*Math.cos(2*Math.PI*fraction);
 
 	fxCtx.globalAlpha = 1;
 	fxCtx.beginPath();

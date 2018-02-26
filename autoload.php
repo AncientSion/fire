@@ -19,7 +19,7 @@ spl_autoload_register(
                 'naga' => '/server/systems/weapons/ammo.php',
                 'cyclops' => '/server/systems/weapons/ammo.php',
                 'titan' => '/server/systems/weapons/ammo.php',
-                'energytorpedo' => '/server/systems/weapons/ammo.php',
+                'vran' => '/server/systems/weapons/ammo.php',
 
                 'mixed' => '/server/mixed.php',
 
@@ -148,7 +148,7 @@ spl_autoload_register(
 
                 'launcher' => '/server/systems/weapons/launcher.php',
                 'missilelauncher' => '/server/systems/weapons/launcher.php',
-                'etorplauncher' => '/server/systems/weapons/launcher.php',
+                'torpedolauncher' => '/server/systems/weapons/launcher.php',
 
                 'fighterweapon' => '/server/systems/weapons/linked.php',
                 'particlegun' => '/server/systems/weapons/linked.php',

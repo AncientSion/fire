@@ -802,7 +802,7 @@ include_once 'global.php';
 			//Debug::log("handling fire: ".$this->fires[$i]->id.", weapon: ".$this->fires[$i]->weapon->display);
 			if ($this->fires[$i]->resolved){continue;}
 			if ($this->fires[$i]->weapon instanceof Area){
-				$subFires = Builder::createAreaFireOrders($this, $this->fires[$i]);
+				$subFires = DmgCalc::createAreaFireOrders($this, $this->fires[$i]);
 
 				for ($j = 0; $j < sizeof($subFires); $j++){
 					$subFires[$j]->target->resolveAreaFireOrder($subFires[$j]);
@@ -972,8 +972,8 @@ include_once 'global.php';
 	}
 
 	public function doFullDestroyedCheck(){
-		$this->doFirstDestroyedCheck();
-		$this->doSecondDestroyedCheck();
+		$this->doFirstDestroyedCheck(); // direct unit destruction
+		$this->doSecondDestroyedCheck(); // indirect -> salvos without target
 		$this->writeDestroyedStatus();
 		$this->freeFlights();
 	}
@@ -982,6 +982,9 @@ include_once 'global.php';
 		Debug::log("doFirstDestroyedCheck");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->salvo && sizeof($this->ships[$i]->structures[0]->systems[0]->fireOrders)){ // impact salvo
+				$this->ships[$i]->destroyed = true;
+			}
+			else if ($this->phase == 3 && $this->ships[$i]->salvo && $this->ships[$i]->structures[0]->torpedo){ // torps out of range
 				$this->ships[$i]->destroyed = true;
 			}
 			else if (($this->ships[$i]->flight || $this->ships[$i]->salvo) && $this->ships[$i]->isDestroyed()){
@@ -1131,7 +1134,7 @@ include_once 'global.php';
 					$w = min(180, $this->const["ew"]["len"] * pow($str/$ew->dist, $this->const["ew"]["p"]));
 					$start = Math::addAngle(0 + $w-$s->getFacing(), $ew->angle);
 					$end = Math::addAngle(360 - $w-$s->getFacing(), $ew->angle);
-					//Debug::log("specific EW for ship #".$s->id.", str: ".$str.", facing: ".$s->getFacing().", w: ".$w.", EW @ ".$ew->angle." -> from ".$start." to ".$end.", dist: ".$ew->dist);
+					Debug::log("specific EW for ship #".$s->id.", str: ".$str.", facing: ".$s->getFacing().", w: ".$w.", EW @ ".$ew->angle." -> from ".$start." to ".$end.", dist: ".$ew->dist);
 				}
 
 				for ($i = 0; $i < sizeof($this->ships); $i++){
@@ -1340,6 +1343,7 @@ include_once 'global.php';
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->salvo && !$this->ships[$i]->isDestroyed()){
 				if ($this->ships[$i]->mission->arrived){
+					Debug::log("arrived!");
 					$target = $this->getUnit($this->ships[$i]->mission->targetid);
 					$fire = $this->ships[$i]->getFireOrder($this->gameid, $this->turn, $target);
 					$fires[] = $fire;
@@ -1351,6 +1355,7 @@ include_once 'global.php';
 			DBManager::app()->insertServerFireOrder($fires);
 
 			for ($i = 0; $i < sizeof($fires); $i++){
+				Debug::log("ball fireorder");
 				$fires[$i]->target->resolveFireOrder($fires[$i]);
 			}
 			$this->fires = array_merge($this->fires, $fires);

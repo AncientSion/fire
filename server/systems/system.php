@@ -226,14 +226,14 @@ class System {
 		$old = round($old / $this->integrity * 100);
 		$effects = $this->getValidEffects();
 
-		Debug::log("etermineCrit for ".get_class($this)." #".$this->id." on unit #".$this->parentId.", new: ".$new."%, old: ".$old."%");
+		//Debug::log("determineCrit for ".get_class($this)." #".$this->id." on unit #".$this->parentId.", new: ".$new."%, old: ".$old."%");
 
-		$tresh = 80;
+		$trigger = 80;
 
 		$dmg = floor($new + $old);
-		if ($new > $tresh){
+		if ($new > $trigger){
 			$chance = 50;
-			$min = floor($chance * (1+($dmg - $tresh)/(100 - $tresh)));
+			$min = floor($chance * (1+($dmg - $trigger)/(100 - $trigger)));
 			$roll = mt_rand(0, 100);
 			if ($roll < $min){
 				$this->crits[] = new Crit(
@@ -245,12 +245,12 @@ class System {
 		$mod = $this->getCritModMax($new + $old);
 		if ($mod < 5){return;}
 
-		$tresh = floor($new + $old/2);
+		$trigger = floor($new + $old/2);
 
 		for ($i = 0; $i < sizeof($effects); $i++){
 			$roll = mt_rand(0, 100); 
-			if ($roll > $tresh){Debug::log(" NO CRIT - roll: ".$roll. ", tresh: ".$tresh); continue;}
-			else {Debug::log(" CRIT - roll: ".$roll. ", tresh: ".$tresh);}
+			if ($roll > $trigger){/*Debug::log(" NO CRIT - roll: ".$roll. ", tresh: ".$trigger); */continue;}
+			//else {Debug::log(" CRIT - roll: ".$roll. ", tresh: ".$trigger);}
 
 			//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 			$this->crits[] = new Crit(

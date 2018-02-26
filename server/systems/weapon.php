@@ -10,6 +10,7 @@ class Weapon extends System {
 	public $traverse = 0;
 	public $projSize = 10;
 	public $projSpeed = 5;
+	public $animation = "projectile";
 
 	public $particle = 0;
 	public $laser = 0;
@@ -21,7 +22,6 @@ class Weapon extends System {
 	public $dmgLoss = 0;
 
 	public $em = 0;
-
 	public $fireMode = "Standard";
 	public $dmgType = "Standard";
 

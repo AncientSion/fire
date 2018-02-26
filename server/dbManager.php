@@ -46,13 +46,13 @@
 
 		public function purgeChat(){
 			$time = time();
-			$tresh = $time - (24 * 60 * 60);
+			$trigger = $time - (24 * 60 * 60);
 
 			$stmt = $this->connection->prepare("
 				DELETE FROM chat WHERE time < :tresh"
 			);
 
-			$stmt->bindParam(":tresh", $tresh);
+			$stmt->bindParam(":tresh", $trigger);
 			$stmt->execute();
 		}
 

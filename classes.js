@@ -700,6 +700,7 @@ function Ballistic(data){
 	this.amount = 0;
 	this.missile = data.missile;
 	this.torpedo = data.torpedo;
+	this.maxRange = data.maxRange;
 	
 	this.create(data);
 }

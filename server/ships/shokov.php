@@ -21,8 +21,8 @@ class Shokov extends Shokos {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new ETorpLauncher($this->getId(), $this->parentId, 315, 45, array(array("EnergyTorpedo", 8, 2)));
-		$front->systems[] = new ETorpLauncher($this->getId(), $this->parentId, 315, 45, array(array("EnergyTorpedo", 8, 2)));
+		$front->systems[] = new TorpedoLauncher($this->getId(), $this->parentId, 315, 45, array(array("Vran", 8, 2)));
+		$front->systems[] = new TorpedoLauncher($this->getId(), $this->parentId, 315, 45, array(array("Vran", 8, 2)));
 
 		$structs[] = $front;
 

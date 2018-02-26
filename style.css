@@ -240,6 +240,7 @@ table, th, tr, td {
 	color: white;
 	display: inline-block;
 	position: relative;
+	padding: 3px;
 }
 
 .link:hover {
@@ -277,7 +278,7 @@ table, th, tr, td {
 }
 
 #crewDiv {
-	width: 400px;
+	width: 450px;
 }
 
 #hangarTable, #weaponTable, #crewTable {
@@ -457,18 +458,6 @@ table, th, tr, td {
 	border: 1px solid white;
 	width: 405px;
 	border-radius: 5px;
-}
-
-.joinGame, .leaveGame, .toLobby {
-	height: 30px;
-	font-size: 20px;
-	cursor: pointer;
-	background-color: blue;
-	color: white;
-}
-
-.joinGame:hover, .leaveGame:hover, .toLobby:hover {
-	color: red;
 }
 
 .gameSetupStatus td {
@@ -677,7 +666,6 @@ table, th, tr, td {
 	margin: auto;
 	width: 100%;
 	font-size: 14px;
-	color: #ff3b00;
 	color: white;
 	text-align: center;
 	vertical-align: middle;
@@ -688,7 +676,6 @@ table, th, tr, td {
 	top: -50px;
 	width: 100%;
 	font-size: 14px;
-	color: #ff3b00;
 	color: white;
 	text-align: center;
 	vertical-align: middle;
@@ -911,7 +898,6 @@ div.integrityFull {
 	top: 5px;
 	width: 100%;
 	font-size: 14px;
-	color: #ff3b00;
     color: white;
 	text-align: center;
 	vertical-align: middle;
@@ -1466,6 +1452,19 @@ div.integrityFull {
 	margin: auto;
 	margin-top: 6px;
 	margin-bottom: 6px;
+}
+
+div.popupEntry.buttonTD {
+	margin: auto;
+	width: max-content;
+	padding: 2px;
+	margin-top: 6px;
+	margin-bottom: 6px;
+}
+
+div.buttonTD {
+	margin: auto;
+	width: 60%;
 }
 
 .buttonTD {

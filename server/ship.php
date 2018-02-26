@@ -149,9 +149,10 @@ class Ship {
 
 		$bridge = $this->getSystemByName("Bridge");
 		for ($i = 0; $i < sizeof($bridge->loads); $i++){
-			if ($bridge->loads[$i]["amount"]){
-				$crew = new Power(0, $this->id, 0, $turn, 1, 0);
-				$this->getSystemByName($bridge->loads[$i]["name"])->powers[] = $crew;
+			if (!$bridge->loads[$i]["amount"]){continue;}
+			$target = $this->getSystemByName($bridge->loads[$i]["name"]);
+			for ($j = 0; $j < $bridge->loads[$i]["amount"]; $j++){
+				$target->powers[] = new Power(0, $this->id, 0, $turn, 2, 0);
 			}
 		}
 

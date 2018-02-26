@@ -33,7 +33,7 @@ class Rongoth extends Medium {
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 15);
-		$aft->systems[] = new Hangar($this->getId(), $this->id, 10, array("Gorith", "Frazi"), 7);
+		$aft->systems[] = new Hangar($this->getId(), $this->id, 6, array("Gorith", "Frazi"), 6);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 325, 15, 1);

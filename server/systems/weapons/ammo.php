@@ -53,7 +53,7 @@ class Torpedo extends Missile {
 
 	public function setBaseStats($phase, $turn){
 		$this->baseHitChance = ceil(sqrt($this->mass)*5);
-		$this->baseImpulse = 1500;
+		$this->baseImpulse = $this->maxRange;
 	}
 
 	public function singleCritTest($turn, $extra){
@@ -64,6 +64,8 @@ class Torpedo extends Missile {
 class Warhead extends Weapon {
 	public $priority = 10;
 	public $type = "explosive";
+	public $animation = "explosive";
+
 
 	function __construct($id, $parentId, $minDmg, $maxDmg, $traverse){
 		$this->id = $id;
@@ -82,14 +84,15 @@ class Warhead extends Weapon {
 	}
 }
 
-class EnergyTorpedo extends Torpedo {
-	public $name = "EnergyTorpedo";
-	public $display = "";
-	public $minDmg = 26;
-	public $maxDmg = 34;
+class Vran extends Torpedo {
+	public $name = "Vran";
+	public $display = "Medium Particle Torpedo";
+	public $minDmg = 38;
+	public $maxDmg = 48;
 	public $mass = 1;
 	public $cost = 0;
 	public $traverse = 1;
+	public $maxRange = 800;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

@@ -7,9 +7,9 @@ class Omega extends SuperHeavy {
 	public $size =  100;
 	public static $value = 1200;
 	public $profile = array(0.93, 1.07);
-	public $mass = 14000;
+	public $mass = 13000;
 
-	public $integrity = 1600;
+	public $integrity = 1525;
 	public $vitalHP = 180;
 	public $ep = 60;
 	public $ew = 800;
