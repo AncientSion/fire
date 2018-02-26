@@ -125,7 +125,9 @@ class Bridge extends PrimarySystem {
 		$mod = min(15, $new);
 		if ($new < 5){Debug::log("no BRIDGE crit, dmg < 5"); return;}
 
-		$pick = array("Engine", "Sensor", "Reactor")[mt_rand(0, 2)];
+		$options = array("Engine", "Sensor", "Reactor");
+		$roll = mt_rand(0, 2);
+		$pick = $options[$roll];
 
 		Debug::log("BRIDGE CRIT: on ".$pick." for :".$mod."%");
 
