@@ -87,7 +87,7 @@ class MagCompressor extends Particle {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
-        $this->boostEffect = [];
+        $this->boostEffect = array();
 	}	
 	public function singleCritTest($turn, $extra){
 		return;
