@@ -280,8 +280,8 @@ function drawAreaProjectile(weapon, anim){
 	fxCtx.globalCompositeOperation = "source-over";
 	fxCtx.setTransform(1,0,0,1,0,0);
 
-	if (anim.n >= 5){
-	//if (anim.n >= anim.m){
+	//if (anim.n >= 5){
+	if (anim.n >= anim.m){
 		anim.p = 1;
 		anim.n = 0;
 		anim.m = 80;
