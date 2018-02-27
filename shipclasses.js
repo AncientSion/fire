@@ -3481,7 +3481,7 @@ Ship.prototype.drawShortenTurnUI = function(){
 	var remSpeed = this.getRemSpeed();
 	var center = this.getPlannedPos();
 
-	if (!remDelay || this.getRemEP()){$(game.ui.doShorten).addClass("disabled");}
+	if (!remDelay || !this.getRemEP()){$(game.ui.doShorten).addClass("disabled");}
 	else {
 		var o = this.getGamePos()
 		var angle = this.getPlannedFacing();
