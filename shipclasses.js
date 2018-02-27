@@ -1377,7 +1377,7 @@ Ship.prototype.getCallSign = function(){
 
 Ship.prototype.getLogNameEntry = function(){
 	if (this.call.length > 3){
-		return ", the " + this.getCallSign;
+		return ", the " + this.getCallSign();
 	}
 	return "";
 }
