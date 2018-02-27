@@ -3471,7 +3471,8 @@ Ship.prototype.drawMoveUI = function(){
 	if (this.canTurn()){
 		this.drawTurnUI();
 		this.updateDiv();
-	} else this.drawShortenTurnUI();
+	}
+	this.drawShortenTurnUI();
 }
 
 Ship.prototype.drawShortenTurnUI = function(){
