@@ -2505,7 +2505,12 @@ Ship.prototype.doRandomOffset = function(shift){
 	//console.log("doOffset #" + this.id);
 	var o = this.getPlannedPos();
 	var t = this.getTarget();
-	var a = getAngleFromTo(o, this.getTarget().getPlannedPos())
+	var tPos;
+	if (t){
+		var tPos = target.getPlannedPos();
+	} else tPos = {x: this.mission.x, y: this.mission.y};
+
+	var a = getAngleFromTo(o, tPos);
 	if (t){
 		//a = addAngle(range(-90, 90), getAngleFromTo(o, this.getTarget().getPlannedPos()));
 		a += 90 * shift;
