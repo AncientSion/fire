@@ -25,6 +25,8 @@
 	$phase = getPhaseString($manager->phase);
 	$post;
 
+	//Debug::log("Ding");
+
 	foreach ($manager->playerstatus as $player){
 		if ($player["userid"] == $userid){
 			$status = $player["status"];

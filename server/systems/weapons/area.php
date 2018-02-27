@@ -74,7 +74,7 @@ class MagCompressor extends Particle {
 	public $freeAim = 0;
 	public $minDmg = 114;
 	public $maxDmg = 146;
-	public $accDecay = 12;
+	public $accDecay = 120;
 	public $dmgLoss = 1;
 	public $shots = 1;
 	public $animColor = "blue";

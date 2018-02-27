@@ -614,6 +614,7 @@ else {
 			}
 		}
 		$("#totalFleetCost").html(game.getFleetCost());
+		$("#remPV").html("(" + (window.maxPoints - game.getFleetCost()) + ")");
 		game.canSubmit();
 	}
 	

@@ -46,7 +46,7 @@ include_once 'global.php';
 			//$this->getMemory();
 			$this->userid = $userid;
 			$this->gameid = $gameid;
-			Debug::init();
+			Debug::open();
 
 			if ($this->gameid){
 				$this->getGeneralData();
@@ -78,7 +78,7 @@ include_once 'global.php';
 		//return;
 		//$this->crits();
 
-		fclose(Debug::$file);
+		Debug::close();
 
 		return array(
 			"id" => $this->gameid,
@@ -430,7 +430,7 @@ include_once 'global.php';
 		$time += microtime(true); 
 		Debug::log("TIME: ".round($time, 3)." seconds.");
 		$this->getMemory();
-		fclose(Debug::$file);
+		Debug::close();
 		return true;
 	}
 
