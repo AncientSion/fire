@@ -2534,10 +2534,11 @@ function Game(data, userid){
 							game.enableDeployment($(this).data("id"));
 						}
 						else if (!game.deploying){
-							if (!$(this).hasClass("green") && Math.floor(game.reinforcePoints) >= $(this).data("cost") + game.getCurrentReinforceCost()){
+							var rem = game.getCurrentReinforceCost();
+							if (!$(this).hasClass("green") && Math.floor(game.reinforcePoints) >= $(this).data("cost") + rem){
 								$(this).addClass("selected");
 								game.enableDeployment($(this).data("id"));
-							} else popup("You have insufficient Reinforce Points ("+game.reinforcePoints+") available.");
+							} else popup("You have insufficient Reinforce Points ("+(game.reinforcePoints - rem)+") available.");
 						}
 					}
 				} else popup("Reinforces can only be requested in Deployment/Initial Phase.");
@@ -2910,7 +2911,7 @@ Game.prototype.getCurrentReinforceCost = function(){
 		cost += $(this).data("cost");
 	})
 
-	return cost;
+	return Math.floor(cost);
 }
 
 Game.prototype.getFireDistance = function(a, b){

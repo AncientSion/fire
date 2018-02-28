@@ -39,10 +39,6 @@ class Shokos extends SuperLight {
 			$this->structures[] = $structs[$i];
 		}
 	}
-
-	static function getKit($faction){
-		return array();
-	}
 }
 
 ?>

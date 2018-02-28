@@ -1257,7 +1257,7 @@ include_once 'global.php';
 			if ($this->fires[$i]->resolved){continue;}
 			if (!$this->fires[$i]->shooter->flight){continue;}
 			if ($this->fires[$i]->shooter->getStruct($this->fires[$i]->weapon->fighterId)->destroyed){
-				Debug::log("AAA skipping fireorder due to destroyed single shooter");
+				Debug::log("SKIPPING firorder, fighter (shooter) is destroyed");
 				$this->fires[$i]->resolved = 1;
 			}
 		}

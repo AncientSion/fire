@@ -492,12 +492,13 @@ class Squaddie extends Single {
 		if ($this->destroyed){return;}
 		$effects = $this->getValidEffects();
 		$trigger =  round(($new + $old/2) / $this->integrity * 100);
+		//if ($trigger < 5){return;}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
 				$roll = mt_rand(0, 20) + $trigger + sizeof($this->structures[$i]->systems[$j]->crits)*20;
-				Debug::log("in crit, determine effect, tresh: ".$trigger." roll: ".$roll);
+				//Debug::log("in crit, determine effect, tresh: ".$trigger." roll: ".$roll);
 				if ($roll < $effects[0][1]){continue;}
 
 				for ($k = sizeof($effects)-1; $k >= 0; $k--){

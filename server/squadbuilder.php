@@ -236,11 +236,11 @@ class SquadBuilder {
 						"loads" =>
 							array(
 								array(
-									"name" => "WhiteStar",
+									"name" => "Thentus",
 									"launch" => 1,
 								),
 								array(
-									"name" => "WhiteStar",
+									"name" => "Thentus",
 									"launch" => 1,
 								),
 							),

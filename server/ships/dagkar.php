@@ -40,10 +40,6 @@ class Dagkar extends Medium {
 			$this->structures[] = $structs[$i];
 		}
 	}
-
-	static function getKit($faction){
-		return array();
-	}
 }
 
 ?>

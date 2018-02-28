@@ -38,10 +38,6 @@ class Thentus extends Light {
 			$this->structures[] = $structs[$i];
 		}
 	}
-
-	static function getKit($faction){
-		return array();
-	}
 }
 
 ?>

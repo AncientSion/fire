@@ -71,61 +71,6 @@ class Octurion extends UltraHeavy {
 			//$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
 			//$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse + 3;
 		}
-	}
-
-	static function getKit($faction){
-		return array();
-		return array(
-			"id" => 0,
-			"name" => "",
-			"cost" => static::$value,
-			"gameid" => 0,
-			"userid" => 0,
-			"upgrades" => 
-			array(
-				array(
-					"active" => 0,
-					"chance" => 40,
-					"notes" => "PATROL (Sentri) Outfit",
-					"cost" => 275,
-					"loads" =>
-					array(
-						array(
-							"systemid" => 16,
-							"name" => "Sentri",
-							"amount" => 5
-						),
-						array(
-							"systemid" => 25,
-							"name" => "Sentri",
-							"amount" => 5
-						),
-					)
-				),
-				array(
-					"active" => 0,
-					"chance" => 20,
-					"notes" => "WAR (Combined) Outfit",
-					"cost" => 450,
-					"loads" =>
-					array(
-						array(
-							"systemid" => 16,
-							"name" => "Sentri",
-							"amount" => 9
-						),
-						array(
-							"systemid" => 25,
-							"name" => "Sitara (Particle)",
-							"amount" => 9
-						),
-					)
-				),
-			)
-		);
-	}
-
-
-}
+	}}
 
 ?>
