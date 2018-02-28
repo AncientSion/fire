@@ -154,9 +154,9 @@ function initSquaddie(data){
 	}
 
 	for (var i = 0; i < data.crits.length; i++){
-		if (data.crits[i].turn == game.turn){
+		//if (data.crits[i].turn == game.turn){
 			unit.crits.push(new Crit(data.crits[i]));
-		}
+		//}
 	}
 
 	for (var j = 0; j < data.structures.length; j++){
