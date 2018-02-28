@@ -31,9 +31,9 @@ spl_autoload_register(
                 'fighter' => '/server/fighter.php',
 
                 'squadron' => '/server/squadron.php',                
-                'squaddie' => '/server/squadron.php',
-                'light' => '/server/squadron.php',
-                'superlight' => '/server/squadron.php',
+                'squaddie' => '/server/squaddie.php',
+                'light' => '/server/squaddie.php',
+                'superlight' => '/server/squaddie.php',
                 
                 'aurora' => '/server/fighter.php',
                 'thunderbolt' => '/server/fighter.php',

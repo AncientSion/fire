@@ -67,7 +67,9 @@ class Single {
 	}
 
 	public function isDestroyed(){
+		//Debug::log("isDestroyed:".get_class($this));
 		if ($this->destroyed){
+			//Debug::log("ding");
 			return true;
 		}
 		for ($i = 0; $i < sizeof($this->crits); $i++){
@@ -98,15 +100,19 @@ class Single {
 	}	
 	
 	public function addDamage($dmg){
+		//Debug::log("adding dmg");
 		if ($dmg->new){
 			$this->emDmg += $dmg->emDmg;
 		}
+		//Debug::log($this->remaining);
 		$this->armourDmg += $dmg->armourDmg;
 		$this->remaining -= $dmg->overkill;
 		$this->damages[] = $dmg;
 
-		if (!$this->destroyed && $this->remaining < 1){
+
+		if ($this->remaining < 1){
 			$this->destroyed = 1;
+			$dmg->destroyed = 1;
 		}
 	}
 
@@ -123,7 +129,8 @@ class Single {
 		return $this->bonusNegation;
 	}
 
-	public function setUnitState($turn, $phase){
+	public function setSubunitState($turn, $phase){
+		Debug::log("setSubunitState ".get_class($this));
 		for ($i = 0; $i < sizeof($this->crits); $i++){
 			if ($this->crits[$i]->type == "Disabled"){
 				$this->destroyed = true;

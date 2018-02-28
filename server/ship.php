@@ -112,10 +112,6 @@ class Ship {
 		$this->setBaseStats($turn, $phase);
 		$this->setStructureState($turn, $phase);
 		$this->setProps($turn, $phase);
-		
-		if ($this->primary->isDestroyed()){
-			$this->destroyed = 1;
-		}
 
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){ // check primary criticals
 			$this->primary->systems[$i]->setState($turn, $phase);
@@ -155,6 +151,8 @@ class Ship {
 				$target->powers[] = new Power(0, $this->id, 0, $turn, 2, 0);
 			}
 		}
+
+		$this->isDestroyed();
 
 		return true;
 	}
@@ -552,29 +550,37 @@ class Ship {
 	}
 
 	public function getRemIntegrity($fire){
-		Debug::log("ship getRemIntegrity, rem: ".$this->primary->remaining);
+		//Debug::log("ship getRemIntegrity, rem: ".$this->primary->remaining);
 		$total = $this->primary->integrity;
 		for ($i = 0; $i < sizeof($this->primary->damages); $i++){
 			$total = $total - $this->primary->damages[$i]->structDmg;
 		}
-		Debug::log("total: ".$total);
+		//Debug::log("total: ".$total);
 		return $total;
 	}
 
 	public function isDestroyed(){
+		//Debug::log("isDestroyed()".get_class($this));
+		$kill = 0;
 		if ($this->destroyed){
 			return true;
 		}
+		if ($this->primary->isDestroyed()){
+			$kill = 1;
+		}
 		else if ($this->getSystemByName("Reactor")->destroyed){
-			$this->destroyed = 1;
-			$this->status = "destroyed";
-			return true;
+			$kill = 1;
 		}
 		else if ($this->getSystemByName("Bridge")->destroyed){
+			$kill = 1;
+		}
+
+		if ($kill){
 			$this->destroyed = 1;
 			$this->status = "destroyed";
 			return true;
 		}
+
 		return false;
 	}	
 
@@ -605,7 +611,7 @@ class Ship {
 		Debug::log("resolveFireOrder - ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots);
 
 		if ($this->isDestroyed()){
-			Debug::log("STOP - resolveFireOrder ".get_class($this)." isDestroyed() = true");
+			Debug::log("STOP - resolveFireOrder ".get_class($this)." (target) isDestroyed() = true");
 			$fire->resolved = 1;
 		}
 		else {
