@@ -732,8 +732,9 @@ class Ship {
 	public function getPrimaryHitSystem(){
 		//Debug::log("getPrimaryHitSystem: #".$this->id);
 		$valid = array();
+		$fraction = round($this->primary->remaining / $this->primary->integrity, 2);
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
-			if (! $this->primary->systems[$i]->destroyed){continue;}
+			if ($this->primary->systems[$i]->destroyed){continue;}
 			if (!$this->isExposed($fraction, $this->primary->systems[$i])){continue;}
 			$valid[] = $this->primary->systems[$i];
 		}
@@ -746,7 +747,6 @@ class Ship {
 		$roll;
 		$current = 0;
 		$total = $this->primary->getHitChance();
-		$fraction = round($this->primary->remaining / $this->primary->integrity, 2);
 
 		for ($i = 0; $i < sizeof($valid); $i++){
 			$total += $valid[$i]->getHitChance();
@@ -774,6 +774,7 @@ class Ship {
 	}
 
 	public function isExposed($fraction, $system){
+		return true;
 		if ($fraction <= $this->getHitTreshold($system)){
 			return true;
 		}
@@ -908,7 +909,7 @@ class Ship {
 
 	public function getIncomingFireAngle($fire){
 		if ($fire->cc){
-			if ($this->ship || $this->squadron){
+			if ($this->ship || $this->squad){
 				return $fire->shooter->getFireAngle($fire);
 			} else return 0;
 		}
@@ -1175,7 +1176,7 @@ class Medium extends Ship {
 			"Bridge" => 0.6,
 			"Engine" => 0.8,
 			"Sensor" => 0.95,
-			"Reactor" => 0.7
+			"Reactor" => 0.6
 		);
 	}
 

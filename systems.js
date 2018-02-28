@@ -2524,6 +2524,10 @@ Pulse.prototype.getAnimation = function(fire){
 			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx + devi.x, y: ty + devi.y}, speed, (k < subHits));
 				shotAnim.n = 0 - ((j / grouping) * delay + k*shotInterval);
 
+				if ( isNaN(shotAnim.n) ||isNaN(shotAnim.m) ||isNaN(shotAnim.n) ){
+					console.log("ERROR");
+				}
+
 			gunAnims.push(shotAnim);
 		}
 		allAnims.push(gunAnims)
