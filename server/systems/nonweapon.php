@@ -91,10 +91,14 @@ class Bridge extends PrimarySystem {
 	public $name = "Bridge";
 	public $display = "Command & Control";
 
+	public function getNodes(){
+		return array("Engine", "Sensor", "Reactor");
+	}
+
 	function __construct($id, $parentId, $integrity, $output, $width = 1){
         parent::__construct($id, $parentId, $integrity, 0, $width);
 
-        $options = array("Engine", "Sensor", "Reactor");
+        $options = $this->getNodes();
         $cost = floor($output/10);
         $mod = array(8, 8, 4);
 
@@ -123,11 +127,13 @@ class Bridge extends PrimarySystem {
 		$new = round($new / $this->integrity * 100);
 		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId);
 		$mod = min(15, $new);
-		if ($new < 5){Debug::log("no BRIDGE crit, dmg < 5"); return;}
+		if ($new <= 3){Debug::log("no BRIDGE crit, dmg < 3"); return;}
 
-		$options = array("Engine", "Sensor", "Reactor");
+        $options = $this->getNodes();
 		$roll = mt_rand(0, sizeof($options)-1);
 		$pick = $options[$roll];
+
+		if ($roll == 2){$mod = round($mod/2, 2);}
 
 		Debug::log("BRIDGE CRIT: on ".$pick." for :".$mod."%");
 

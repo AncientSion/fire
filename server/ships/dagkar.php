@@ -33,7 +33,7 @@ class Dagkar extends Medium {
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 15);
-		$left->systems[] = new TorpedoLauncher($this->getId(), $this->id, 0, 120, array(array("Vran", 20, 5)));
+		$left->systems[] = new TorpedoLauncher($this->getId(), $this->id, 0, 60, array(array("Vran", 20, 5)));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

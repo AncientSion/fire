@@ -173,6 +173,7 @@ class System {
 		}
 		return $mod;
 	}
+	
 	public function getPowerUsage($turn){
 		$usage = $this->powerReq;
 

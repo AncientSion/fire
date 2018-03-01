@@ -32,7 +32,7 @@
 			$status = $player["status"];
 		}
 	}
-
+	//$manager->pickReinforcements();
 	$manager->doEval();
 	$post = json_encode($manager->getClientData(), JSON_NUMERIC_CHECK);
 	echo "<script>";

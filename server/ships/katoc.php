@@ -5,7 +5,7 @@ class Katoc extends Medium {
 	public $display = "Katoc";
 	public $faction = "Narn Regime";
 	public $size =  55;
-	public static $value = 460;
+	public static $value = 480;
 	public $profile = array(0.93, 1.07);
 	public $mass = 4000;
 

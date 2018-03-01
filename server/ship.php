@@ -418,13 +418,15 @@ class Ship {
 			}
 		}
 
+		//return true;
 		$bridge = $this->getSystemByName("Bridge");
 		for ($i = 0; $i < sizeof($bridge->crits); $i++){
 			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
 				if ($this->primary->systems[$j]->name == $bridge->crits[$i]->type){
-					$this->primary->systems[$j]->crits[] = clone $bridge->crits[$i];
-					$this->primary->systems[$j]->crits[0]->type = "Output";
-					$bridge->crits[$i]->type = "Officer MIA: ".$bridge->crits[$i]->type;
+					$copy = clone $bridge->crits[$i];
+					$copy->type = "Output";
+					$this->primary->systems[$j]->crits[] = $copy;
+					$bridge->crits[$i]->type = "Officer KIA: ".$bridge->crits[$i]->type;
 					break;
 				}
 			}
@@ -693,7 +695,7 @@ class Ship {
 	}
 
 	public function getHitSystem($fire){
-		return $this->getSystemByName("Bridge");
+		//return $this->getSystemByName("Bridge");
 		//return $this->getPrimaryHitSystem();
 		//Debug::log("getHitSystem ".$this->name);
 		$roll;
@@ -779,7 +781,7 @@ class Ship {
 	}
 
 	public function isExposed($fraction, $system){
-		return true;
+		//return true;
 		if ($fraction <= $this->getHitTreshold($system)){
 			return true;
 		}

@@ -2498,7 +2498,7 @@ function Game(data, userid){
 	}
 
 	this.initReinforceTable = function(){		
-		$("#deployWrapper").find("#deployTable").find(".requestReinforcements").each(function(i){
+		$("#deployWrapper").find("#reinforceTable").find(".requestReinforcements").each(function(i){
 			$(this)
 			.data("id", game.reinforcements[i]["id"])
 			.data("cost", game.reinforcements[i]["cost"])

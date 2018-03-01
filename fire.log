@@ -1,0 +1,108 @@
+prepareAdvance 
+********************* doAdvance for game1 from phase 2 to phase 3 
+handleFiringPhase 
+doFirstDestroyedCheck 
+doSecondDestroyedCheck 
+updateDestroyedState 
+resolveFireOrder - ID 1, shooter: Tigara #2 vs Katoc #1, w: NeutronLaser #7, shots: 1 
+NeutronLaser, weapon id: 7, DAMAGE mod: 0 (crits: 0, boost: 0) 
+NeutronLaser, weapon id: 7, RANGE DMG mod: 0.957 
+fire #1, doLaserDmg, weapon: NeutronLaser, target: 1 for 99 dmg 
+hitting ---  MagCompressor/8: 49 dmg,  Primary/1: 49 dmg,  
+resolveFireOrder - ID 2, shooter: Tigara #2 vs Katoc #1, w: NeutronLaser #15, shots: 1 
+NeutronLaser, weapon id: 15, DAMAGE mod: 0 (crits: 0, boost: 0) 
+NeutronLaser, weapon id: 15, RANGE DMG mod: 0.957 
+fire #2, doLaserDmg, weapon: NeutronLaser, target: 1 for 120 dmg 
+ => OVERKILL ship target system MediumPlasmaPulse #9 was destroyed, rem: 42, doing: 42, OK for: 9 dmg 
+hitting ---  Reactor/5: 60 dmg,  MediumPlasmaPulse/9: 60 dmg,  
+resolveFireOrder - ID 4, shooter: Tigara #2 vs Katoc #1, w: HeavyFusionCannon #8, shots: 1 
+HeavyFusionCannon, weapon id: 8, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #4, doStandardDmg, weapon: HeavyFusionCannon, target #1/2/Bridge, totalDmg: 54, remaining: 72, armour: 15+0 
+resolveFireOrder - ID 5, shooter: Tigara #2 vs Katoc #1, w: HeavyFusionCannon #9, shots: 1 
+HeavyFusionCannon, weapon id: 9, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #5, doStandardDmg, weapon: HeavyFusionCannon, target #1/7/MediumPlasmaPulse, totalDmg: 53, remaining: 42, armour: 8+0 
+ => OVERKILL ship target system MediumPlasmaPulse #7 was destroyed, rem: 42, doing: 42, OK for: 3 dmg 
+resolveFireOrder - ID 6, shooter: Tigara #2 vs Katoc #1, w: HeavyFusionCannon #10, shots: 1 
+HeavyFusionCannon, weapon id: 10, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #6, doStandardDmg, weapon: HeavyFusionCannon, target #1/1/Primary, totalDmg: 53, remaining: 492, armour: 14+0 
+resolveFireOrder - ID 7, shooter: Tigara #2 vs Katoc #1, w: HeavyFusionCannon #11, shots: 1 
+HeavyFusionCannon, weapon id: 11, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #7, doStandardDmg, weapon: HeavyFusionCannon, target #1/1/Primary, totalDmg: 52, remaining: 453, armour: 14+0 
+resolveFireOrder - ID 3, shooter: Katoc #1 vs Tigara #2, w: HeavyLaser #11, shots: 1 
+HeavyLaser, weapon id: 11, DAMAGE mod: 0 (crits: 0, boost: 0) 
+HeavyLaser, weapon id: 11, RANGE DMG mod: 0.9655 
+fire #3, doLaserDmg, weapon: HeavyLaser, target: 2 for 129 dmg 
+ => OVERKILL ship target system EMNeedler #13 was destroyed, rem: 24, doing: 24, OK for: 9 dmg 
+hitting ---  EMNeedler/13: 43 dmg,  HeavyFusionCannon/9: 43 dmg,  Engine/3: 43 dmg,  
+resolveBallisticFireOrders 
+determineCrit for Command & Control #2 on unit #1 
+BRIDGE CRIT: on Engine for :15% 
+handleResolvedFireData 
+DB updateFireOrders: 7 
+ => DB insertDamageEntries: 11 
+ => DB insertCritEntries: 1 
+handleFiringPhase time: 0.064 seconds. 
+game 1, user 1 --- adjusting to turn/phase/status 2/3/waiting 
+game 1, user 2 --- adjusting to turn/phase/status 2/3/waiting 
+TIME: 0.072 seconds. 
+4 mb 
+prepareAdvance 
+********************* doAdvance for game1 from phase 2 to phase 3 
+handleFiringPhase 
+doFirstDestroyedCheck 
+doSecondDestroyedCheck 
+updateDestroyedState 
+resolveFireOrder - ID 4, shooter: Tigara #2 vs Katoc #1, w: HeavyFusionCannon #8, shots: 1 
+HeavyFusionCannon, weapon id: 8, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #4, doStandardDmg, weapon: HeavyFusionCannon, target #1/8/MagCompressor, totalDmg: 45, remaining: 18, armour: 11+0 
+ => OVERKILL ship target system MagCompressor #8 was destroyed, rem: 18, doing: 18, OK for: 16 dmg 
+resolveFireOrder - ID 5, shooter: Tigara #2 vs Katoc #1, w: HeavyFusionCannon #9, shots: 1 
+HeavyFusionCannon, weapon id: 9, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #5, doStandardDmg, weapon: HeavyFusionCannon, target #1/7/MediumPlasmaPulse, totalDmg: 46, remaining: 42, armour: 9+0 
+resolveFireOrder - ID 6, shooter: Tigara #2 vs Katoc #1, w: HeavyFusionCannon #10, shots: 1 
+HeavyFusionCannon, weapon id: 10, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #6, doStandardDmg, weapon: HeavyFusionCannon, target #1/2/Bridge, totalDmg: 55, remaining: 72, armour: 14+0 
+resolveFireOrder - ID 7, shooter: Tigara #2 vs Katoc #1, w: HeavyFusionCannon #11, shots: 1 
+HeavyFusionCannon, weapon id: 11, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #7, doStandardDmg, weapon: HeavyFusionCannon, target #1/1/Primary, totalDmg: 48, remaining: 477, armour: 14+0 
+resolveBallisticFireOrders 
+determineCrit for Command & Control #2 on unit #1 
+BRIDGE CRIT: on Sensor for :15% 
+handleResolvedFireData 
+DB updateFireOrders: 4 
+ => DB insertDamageEntries: 4 
+ => DB insertCritEntries: 4 
+handleFiringPhase time: 0.1 seconds. 
+game 1, user 1 --- adjusting to turn/phase/status 2/3/waiting 
+game 1, user 2 --- adjusting to turn/phase/status 2/3/waiting 
+TIME: 0.122 seconds. 
+2 mb 
+prepareAdvance 
+********************* doAdvance for game1 from phase 2 to phase 3 
+handleFiringPhase 
+doFirstDestroyedCheck 
+doSecondDestroyedCheck 
+updateDestroyedState 
+resolveFireOrder - ID 4, shooter: Tigara #2 vs Katoc #1, w: HeavyFusionCannon #8, shots: 1 
+HeavyFusionCannon, weapon id: 8, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #4, doStandardDmg, weapon: HeavyFusionCannon, target #1/1/Primary, totalDmg: 51, remaining: 509, armour: 15+0 
+resolveFireOrder - ID 5, shooter: Tigara #2 vs Katoc #1, w: HeavyFusionCannon #9, shots: 1 
+HeavyFusionCannon, weapon id: 9, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #5, doStandardDmg, weapon: HeavyFusionCannon, target #1/1/Primary, totalDmg: 51, remaining: 473, armour: 14+0 
+resolveFireOrder - ID 6, shooter: Tigara #2 vs Katoc #1, w: HeavyFusionCannon #10, shots: 1 
+HeavyFusionCannon, weapon id: 10, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #6, doStandardDmg, weapon: HeavyFusionCannon, target #1/1/Primary, totalDmg: 55, remaining: 436, armour: 14+0 
+resolveFireOrder - ID 7, shooter: Tigara #2 vs Katoc #1, w: HeavyFusionCannon #11, shots: 1 
+HeavyFusionCannon, weapon id: 11, DAMAGE mod: 0 (crits: 0, boost: 0) 
+fire #7, doStandardDmg, weapon: HeavyFusionCannon, target #1/1/Primary, totalDmg: 48, remaining: 395, armour: 13+0 
+resolveBallisticFireOrders 
+handleResolvedFireData 
+DB updateFireOrders: 4 
+ => DB insertDamageEntries: 4 
+handleFiringPhase time: 0.05 seconds. 
+game 1, user 1 --- adjusting to turn/phase/status 2/3/waiting 
+game 1, user 2 --- adjusting to turn/phase/status 2/3/waiting 
+TIME: 0.068 seconds. 
+2 mb 
+createPlayerStatus 
+entry CREATE for player 1 in game 3 phase: -1 and status joined 
