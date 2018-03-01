@@ -621,17 +621,10 @@ Mixed.prototype.getUnitPosition = function(j){
 	return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
 }
 
-Mixed.prototype.getRandomUnitPos = function(){
-	var t = this.structures[range(0, this.structures.length-1)].layout;
-	var x = t.x + range(-30, 30);
-	var y =	t.y + range(-30, 30);
-	return {x: x, y: y};
-}
-
 Mixed.prototype.getFireDest = function(fire, isHit, num){
 	var t;
 
-	if (!isHit){t = getPointInDir((this.size/2 + range(-5, 5)), range(0, 360), 0, 0)};
+	if (!isHit){t = getPointInDir((this.size/2 + range(-5, 5)), range(0, 360), 0, 0);}
 	else {t = this.getSystem(fire.damages[num].systemid).layout;}
 
 	var base = this.getPlannedPos();
