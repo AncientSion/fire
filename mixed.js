@@ -631,7 +631,7 @@ Mixed.prototype.getRandomUnitPos = function(){
 Mixed.prototype.getFireDest = function(fire, isHit, num){
 	var t;
 
-	if (!isHit){t = this.getRandomUnitPos();}
+	if (!isHit){t = getPointInDir((this.size/2 + range(-5, 5)), range(0, 360), 0, 0)};
 	else {t = this.getSystem(fire.damages[num].systemid).layout;}
 
 	var base = this.getPlannedPos();
