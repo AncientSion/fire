@@ -394,7 +394,7 @@ function handleMouseDown(e){
 			$("#deployWrapper").find("#reinforceTable").find(".selected").each(function(){
 				if ($(this).data("id") == game.deploying){
 					$(this).removeClass("selected");
-					game.disableDeployment();
+					game.disableDeploy();
 					return;
 				}
 			})

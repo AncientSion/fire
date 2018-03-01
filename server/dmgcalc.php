@@ -188,11 +188,11 @@ class DmgCalc {
 
 		Debug::log("fire #".$fire->id.", doPulseDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".$name.", hits: ".$hits.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
 
-		if ($negation["bonus"] > 1){
+		/*if ($negation["bonus"] > 1){
 			Debug::log("PulseDmg:</br>");
 			var_export($dmg);
 			echo "</br></br>";
-		}
+		}*/
 
 		for ($i = 0; $i < $hits; $i++){
 

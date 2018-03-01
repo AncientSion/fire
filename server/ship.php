@@ -195,7 +195,6 @@ class Ship {
 	public function setBaseStats($phase, $turn){
 		$this->baseHitChance = Math::getBaseHitChance($this->mass);
 		$this->baseTurnDelay = Math::getBaseTurnDelay($this->mass);
-		//$this->baseImpulseCost = Math::getBaseImpulseCost($this->mass);
 	}
 
 	public function getImpulseStep(){
@@ -694,7 +693,7 @@ class Ship {
 	}
 
 	public function getHitSystem($fire){
-		//return $this->getSystemByName("Bridge");
+		return $this->getSystemByName("Bridge");
 		//return $this->getPrimaryHitSystem();
 		//Debug::log("getHitSystem ".$this->name);
 		$roll;
@@ -1173,7 +1172,7 @@ class Medium extends Ship {
 	public $baseImpulse = 165;
 	public $traverse = 0;
 	public $slipAngle = 15;
-	public $baseImpulseCost = 40;
+	public $baseImpulseCost = 35;
 
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
 		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
@@ -1231,7 +1230,7 @@ class Medium extends Ship {
 class Heavy extends Medium {
 	public $baseImpulse = 155;
 	public $traverse = 1;
-	public $baseImpulseCost = 45;
+	//public $baseImpulseCost = 45;
 	
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
 		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
@@ -1248,7 +1247,7 @@ class Heavy extends Medium {
 class SuperHeavy extends Heavy {
 	public $baseImpulse = 140;
 	public $traverse = 2;
-	public $baseImpulseCost = 50;
+	//public $baseImpulseCost = 50;
 	
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
 		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
@@ -1265,7 +1264,7 @@ class SuperHeavy extends Heavy {
 class UltraHeavy extends SuperHeavy {
 	public $baseImpulse = 130;
 	public $traverse = 3;
-	public $baseImpulseCost = 55;
+	//public $baseImpulseCost = 55;
 	
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
 		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);

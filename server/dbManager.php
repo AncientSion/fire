@@ -496,8 +496,8 @@
 
 
 			for ($i = 0; $i < sizeof($data); $i++){
-				var_export($data);
-				echo "</br></br>";
+				//var_export($data);
+				//echo "</br></br>";
 				$stmt->bindParam(":gameid", $gameid);
 				$stmt->bindParam(":userid", $data[$i]["userid"]);
 				$stmt->bindParam(":ship", $ship);

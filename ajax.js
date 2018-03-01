@@ -216,7 +216,7 @@ window.ajax = {
 		});
 	},
 
-	confirmDeployment: function(callback){
+	confirmDeploy: function(callback){
 		var initial = [];
 		var reinforce = [];
 		var fireOrders = [];
@@ -276,7 +276,7 @@ window.ajax = {
 			url: "postGameData.php",
 			datatype: "json",
 			data: {
-					type: "deployment",
+					type: "Deploy",
 					gameid: game.id,
 					userid: game.userid,
 					turn: game.turn,

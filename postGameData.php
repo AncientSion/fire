@@ -42,7 +42,7 @@ if (isset($_POST["type"])) {
 		}
 		else echo "Invalid Fleet";
 	}
-	else if ($_POST["type"] == "deployment"){
+	else if ($_POST["type"] == "Deploy"){
 		if (isset($_POST["initial"])){
 			$dbManager->deployShipsDB($_POST["gameid"], $_POST["initial"]);
 		}

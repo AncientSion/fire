@@ -401,7 +401,7 @@ include_once 'global.php';
 
 		switch ($this->phase){
 			case -1; // from deploy to move
-				$this->handleDeploymentPhase();
+				$this->handleDeployPhase();
 				$this->startMovementPhase();
 				break;
 			case 0; // ship moves
@@ -417,7 +417,7 @@ include_once 'global.php';
 				$this->handleDamageControlPhase();
 				$this->endTurn();
 				$this->startNewTurn();
-				$this->startDeploymentPhase();
+				$this->startDeployPhase();
 				//$this->turn++;
 				//$this->phase = 2;
 				//DBManager::app()->setGameTurnPhase($this->gameid, $this->turn, $this->phase);
@@ -558,9 +558,9 @@ include_once 'global.php';
 		}
 	}
 	
-	public function handleDeploymentPhase(){
-		Debug::log("handleDeploymentPhase");
-		$this->handleDeploymentActions();
+	public function handleDeployPhase(){
+		Debug::log("handleDeployPhase");
+		$this->handleDeployActions();
 		$this->handleJumpInActions();
 		$this->resolveJumpOutActions();
 		$this->handleInitialFireOrders();
@@ -569,7 +569,7 @@ include_once 'global.php';
 		DBManager::app()->deleteEmptyLoads($this->gameid);
 	}
 
-	public function handleDeploymentActions(){
+	public function handleDeployActions(){
 		$data = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->available == $this->turn){
@@ -1026,7 +1026,7 @@ include_once 'global.php';
 		DBManager::app()->setGameTurnPhase($this->gameid, $this->turn, $this->phase);
 	}
 
-	public function startDeploymentPhase(){
+	public function startDeployPhase(){
 		$this->alterOneTimeReinforce();
 		if ($this->turn == $this->wave){$this->pickReinforcements();}
 		$this->updatePlayerStatus("waiting");
@@ -1606,13 +1606,14 @@ include_once 'global.php';
 		if ($get["unit"] == "ship"){
 			$unit = new $get["name"](1, 1, 0, "", "", 0, 0, 0, 270, 0, 0, 0, 0, "");
 			$unit->addAllSystems();
+			$unit->setUnitState(0, 0);
 		}
 		elseif ($get["unit"] == "squaddie"){
 			$unit = new $get["name"]($get["index"]+1, 1);
+			$unit->setSubunitState(0, 0);
 		}
 
 		
-		$unit->setUnitState(0, 0);
 		return $unit;
 	}
 

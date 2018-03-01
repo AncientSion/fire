@@ -73,7 +73,7 @@ function Ship(data){
 	this.doDraw = 1;
 }
 
-Ship.prototype.drawDeploymentPreview = function(e, pos){
+Ship.prototype.drawDeployPreview = function(e, pos){
 	var ele = $("#deployOverlay");
 	var w = $(ele).width()/2;
 	var top = (e.clientY)  + 80;
@@ -356,8 +356,8 @@ Ship.prototype.doHover = function(){
 
 Ship.prototype.getActionCost = function(type){
 	switch (type){
-		case 0: return Math.ceil(this.getImpulseChangeCost()*1.25);
-		case 1: return Math.ceil(this.getImpulseChangeCost()*2);
+		case 0: return Math.ceil(this.getImpulseChangeCost()*1.5);
+		case 1: return Math.ceil(this.getImpulseChangeCost()*3);
 		default: return 0;
 	}
 	return Math.ceil(this.getImpulseChangeCost()*1.5);
@@ -1272,7 +1272,7 @@ Ship.prototype.doUnselect = function(){
 	aUnit = false;
 	this.selected = false;
 	this.setUnitGUI();
-	if (game.deploying){game.disableDeployment();}
+	if (game.deploying){game.disableDeploy();}
 	else if (game.flightDeploy){game.flightDeploy = false;}
 	else if (game.mission){this.disableMissionMode()}
 	//game.setShipTransform();

@@ -117,7 +117,7 @@ function Game(data, userid){
 		else return "";
 	}
 
-	this.enableFlightDeployment = function(){
+	this.enableFlightDeploy = function(){
 		this.flightDeploy = this.getUnit(aUnit).getSystem($("#hangarDiv").data("systemid"));
 		//var mission = this.getMissionTypeString(this.flightDeploy.mission);
 
@@ -498,6 +498,7 @@ function Game(data, userid){
 	this.hasInvalidPower = function(){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].flight || this.ships[i].salvo || this.ships[i].userid != this.userid){continue;}
+			if (game.turn != this.ships[i].available){continue;}
 
 			if (this.ships[i].hasInvalidPower()){
 				popup("You have units with invalid Reactor settings (#" + this.ships[i].id + ")"); 
@@ -641,7 +642,7 @@ function Game(data, userid){
 		if (!this.canConfirm){return;}
 		this.canConfirm = 0;
 		switch (this.phase){
-			case -1: ajax.confirmDeployment(goToLobby); return;
+			case -1: ajax.confirmDeploy(goToLobby); return;
 			case 0: ajax.confirmMovement(goToLobby); return;
 			case 1: ajax.confirmMovement(goToLobby); return;
 			case 2: ajax.confirmFiringOrders(goToLobby); return;
@@ -683,7 +684,7 @@ function Game(data, userid){
 		else popup("You have already confirmed your orders");
 	}
 
-	this.undoDeployment = function(id){
+	this.undoDeploy = function(id){
 		for (var i = this.ships.length-1; i >= 0; i--){
 			if (this.ships[i].id == id){
 				this.ships.splice(i, 1);
@@ -692,7 +693,7 @@ function Game(data, userid){
 		}
 	}
 
-	this.disableDeployment = function(){
+	this.disableDeploy = function(){
 		if (aUnit){game.getUnit(aUnit).select();}
 		this.deploying = false;
 		this.deployArea = [];
@@ -705,13 +706,13 @@ function Game(data, userid){
 		game.draw();
 	}
 
-	this.enableDeployment = function(id){
+	this.enableDeploy = function(id){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].id == id){
 				this.deploying = id;
-				this.setupDeploymentDiv(this.ships[i])
-				this.setupDeploymentZone();
-				this.drawDeploymentZone();
+				this.setupDeployDiv(this.ships[i])
+				this.setupDeployZone();
+				this.drawDeployZone();
 				$("#deployWrapper").find("#reinforceTable").find(".requestReinforcements").each(function(){
 					if ($(this).data("id") == id){
 						$(this).addClass("selected");
@@ -725,15 +726,15 @@ function Game(data, userid){
 		for (var i = 0; i < this.reinforcements.length; i++){
 			if (this.reinforcements[i].id == id){
 				this.deploying = id;
-				this.setupDeploymentDiv(this.reinforcements[i])
-				this.setupDeploymentZone();
-				this.drawDeploymentZone();
+				this.setupDeployDiv(this.reinforcements[i])
+				this.setupDeployZone();
+				this.drawDeployZone();
 				return;
 			}
 		}
 	}
 
-	this.setupDeploymentDiv = function(unit){
+	this.setupDeployDiv = function(unit){
 		var ele = ("#deployOverlay");
 		if (game.flightDeploy){
 			$(ele).find("span").html("Deploy Flight").end().find(".img").html("");
@@ -744,7 +745,7 @@ function Game(data, userid){
 		}
 	}
 
-	this.setupDeploymentZone = function(){
+	this.setupDeployZone = function(){
 
 		if (game.turn == 1){
 			for (var i = 0; i < window.playerstatus.length; i++){
@@ -792,7 +793,7 @@ function Game(data, userid){
 		}
 	}
 
-	this.drawDeploymentZone = function(){
+	this.drawDeployZone = function(){
 		if (game.turn == 1){
 			for (var i = 0; i < this.deployArea.length; i++){
 				drawCtx.translate(cam.o.x, cam.o.y)
@@ -867,10 +868,9 @@ function Game(data, userid){
 		}
 	}
 
-	this.initDeployment = function(){
+	this.initDeploy = function(){
 		cam.setZoom(0.6);
 		this.draw();
-		$("#deployWrapper").removeClass("disabled");
 
 		if (game.turn == 1){return;}
 		$("#combatlogWrapper")
@@ -957,13 +957,11 @@ function Game(data, userid){
 	
 	this.initPhase = function(n){
 		this.setShipDivs();
-		//$(fxCanvas).css("opacity", 0.3);
 
 		if (n == -1){
 			this.phase = n;
 				$("#phaseSwitchDiv").click(function(){
-					game.initDeployment();
-					//$("#deployWrapper").find("#reinforceTable").show();
+					game.initDeploy();
 					$(this).hide();
 				});
 		}
@@ -971,43 +969,62 @@ function Game(data, userid){
 			this.phase = n;
 				ctx.clearRect(0, 0, res.x, res.y);
 				$("#phaseSwitchDiv").click(function(){
-					game.resolveDeployment();
+					game.resolveDeploy();
 					$(this).hide()
-					//$(this).fadeOut(200);
 				});
 		}
 		else if (n == 2){
 				$("#phaseSwitchDiv").click(function(){
 					game.resolveMovement();
 					$(this).hide()
-				//	$(this).fadeOut(200);
 				});
 		}
 		else if (n == 3){
 			this.phase = n;
-				//game.draw();
 				$("#phaseSwitchDiv").click(function(){
-				//$(fxCanvas).css("opacity", 1);
 					game.initDamageControl();
 					$(this).hide()
-					//$(this).fadeOut(200);
 				});
 			
+		}
+	}
+
+	this.setDeployWrapperView = function(){	
+		$("#reinforce")
+			.data("on", 1)
+			.click(function(e){
+				e.stopPropagation();
+				if (!$(this).data("on")){
+					$(this).data("on", 1);
+					$("#deployWrapper").show();
+				}
+				else {
+					$(this).data("on", 0);
+					$("#deployWrapper").hide();
+					if (game.phase == -1){
+						$("#deployWrapper").find("#reinforceTable").find(".selected").each(function(){
+							$(this).removeClass("selected");
+							game.disableDeploy();
+						})
+					}
+				}
+			})
+
+		var wrapper = $("#deployWrapper");
+		var incoming = wrapper.find("#deployTable");
+		var avail = wrapper.find("#reinforceTable");
+
+		if (incoming.children().children().length > 2 || avail.children().children().length > 3){
+			return;
+		} 
+		else {
+			$("#reinforce").data("on", 0);
+			wrapper.hide()
 		}
 	}
 	
 	this.create = function(){
 		$("#phaseSwitchDiv").show();
-
-		if ((this.turn == 1 && game.phase == -1) || this.turn == this.wave){
-			$("#deployWrapper").show();
-		} else $("#deployWrapper").hide();
-		//console.log("game.create");
-
-		//this.ships.sort(function(a, b){
-			//return a.ship-b.ship || a.flight - b.flight || a.salvo - b.salvo;
-		//	return a.salvo - b.salvo || a.flight - b.flight || a.ship-b.ship ;
-		//})
 
 		for (var i = 0; i < this.ships.length; i++){
 			var ship = window.initUnit(this.ships[i]);
@@ -1061,8 +1078,9 @@ function Game(data, userid){
 			}
 		}
 
-		this.initDeploymentWrapper();
-		this.initReinforcementWrapper();
+		this.initIncomingTable();
+		this.initReinforceTable();
+		this.setDeployWrapperView();
 		this.initSelectionWrapper();
 		this.initEvents();
 		this.canSubmit = canSubmit;
@@ -1413,7 +1431,7 @@ function Game(data, userid){
 	this.resetHover = function(e, loc, facing, pos){
 		game.ui.shortInfo.html("").hide();
 
-		if (this.deploying){game.drawDeploymentZone();}
+		if (this.deploying){game.drawDeployZone();}
 
 		if (aUnit != this.shortInfo){
 			moveCtx.clearRect(0, 0, res.x, res.y);
@@ -1450,7 +1468,7 @@ function Game(data, userid){
 		this.drawEvents();
 		
 		if (this.deploying){
-			this.drawDeploymentZone();
+			this.drawDeployZone();
 		}
 	}
 
@@ -2328,110 +2346,93 @@ function Game(data, userid){
 		$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 	}
 
-	this.initDeploymentWrapper = function(){
-
+	this.initIncomingTable = function(){
 		var wrapper = $("#deployTable");
 
-		$("#deployWrapper")	
-			.removeClass("disabled")
-			.contextmenu(function(e){
-				e.preventDefault();
-				$(this).hide();
-				$("#reinforce").data("on", 0);
-				if (game.phase == -1){
-					$(this).find("#reinforceTable").find(".selected").each(function(){
-						$(this).removeClass("selected");
-						game.disableDeployment();
-					})
-				}
-			})
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].salvo){continue;}
+			else if (game.phase > 1){continue;}
+			else if (this.ships[i].available != this.turn){continue;}
 
-		if (game.phase == -1){
-			for (var i = 0; i < this.ships.length; i++){
-				if (this.ships[i].available == this.turn){
-					if (this.ships[i].friendly){
-						wrapper
-						.append($("<tr>").addClass("deployNow")
-							.hover(
-								function(){game.drawDeployMarker($(this).data("shipid"))},
-								function(){game.draw();}
-							)
-							.data("shipid", this.ships[i].id)
-							.append($("<td>")
-								.append($(this.ships[i].getBaseImage().cloneNode(true))
-									.addClass("size40")
-								)
-							)
-							.append($("<td>")
-								.addClass("green font14")
-								.html(this.ships[i].name)
-							)
-							.append($("<td>")
-								.addClass("green font14")
-								.html("NOW")
-							)
-						)
-					}
-					else if (!this.ships[i].friendly){
-						wrapper
-						.append($("<tr>").addClass("deployNow")
-							.data("shipid", this.ships[i].id)
-							.hover(
-								function(){game.drawDeployMarker($(this).data("shipid"))},
-								function(){game.draw();}
-							)
-							.append($("<td>")
-								.append($("<img>")
-									.addClass("size40")
-									.attr("src", "varIcons/blueVortex.png")
-								)
-							)
-							.append($("<td>")
-								.addClass("red font14")
-								.html("Unknown")
-							)
-							.append($("<td>")
-								.addClass("red font14")
-								.html("NOW")
-							)
-						)
-					}
-				}
-			}
-
-			if (game.turn == 1){
-				$(wrapper)
-					.find("tr")
-					.each(function(i){
-						if (i < 2){return;}
-						$(this).click(function(e){
-							e.stopPropagation();
-							if (game.phase == -1){
-								if (game.deploying && $(this).hasClass("selected")){
-									$(this).removeClass("selected");
-									game.disableDeployment();
-								}
-								else if (!game.deploying && !game.aUnit && game.getUnit($(this).data("shipid")).canDeploy()){
-									$(this).addClass("selected");
-									game.enableDeployment($(this).data("shipid"));
-								}
-							}
-						})
-						.contextmenu(function(e){
-							e.preventDefault(); e.stopPropagation();
-						})	
-					$(this).hover(
-						function(e){
-							game.drawDeployMarker($(this).data("shipid"));
-							//console.log("hoverIn");
-						},
-						function(e){
-							game.redraw();
-							//console.log("hoverOut");
-						}
+			if (this.ships[i].friendly){
+				wrapper
+				.append($("<tr>").addClass("deployNow")
+					.hover(
+						function(){game.drawDeployMarker($(this).data("shipid"))},
+						function(){game.draw();}
 					)
-				})
+					.data("shipid", this.ships[i].id)
+					.append($("<td>")
+						.append($(this.ships[i].getBaseImage().cloneNode(true))
+							.addClass("size40")
+						)
+					)
+					.append($("<td>")
+						.addClass("green font14")
+						.html(this.ships[i].name)
+					)
+					.append($("<td>")
+						.addClass("green font14")
+						.html("NOW")
+					)
+				)
 			}
+			else {
+				wrapper
+				.append($("<tr>").addClass("deployNow")
+					.data("shipid", this.ships[i].id)
+					.hover(
+						function(){game.drawDeployMarker($(this).data("shipid"))},
+						function(){game.draw();}
+					)
+					.append($("<td>")
+						.append($("<img>")
+							.addClass("size40")
+							.attr("src", "varIcons/blueVortex.png")
+						)
+					)
+					.append($("<td>")
+						.addClass("red font14")
+						.html("Unknown")
+					)
+					.append($("<td>")
+						.addClass("red font14")
+						.html("NOW")
+					)
+				)
+			}
+		}
+
+		if (game.turn == 1){
+			$(wrapper)
+				.find("tr")
+				.each(function(i){
+					if (i < 2){return;}
+					$(this).click(function(e){
+						e.stopPropagation();
+						if (game.phase == -1){
+							if (game.deploying && $(this).hasClass("selected")){
+								$(this).removeClass("selected");
+								game.disableDeploy();
+							}
+							else if (!game.deploying && !game.aUnit && game.getUnit($(this).data("shipid")).canDeploy()){
+								$(this).addClass("selected");
+								game.enableDeploy($(this).data("shipid"));
+							}
+						}
+					})
+					.contextmenu(function(e){
+						e.preventDefault(); e.stopPropagation();
+					})	
+				$(this).hover(
+					function(e){
+						game.drawDeployMarker($(this).data("shipid"));
+					},
+					function(e){
+						game.redraw();
+					}
+				)
+			})
 		}
 
 		for (var i = 0; i < this.incoming.length; i++){
@@ -2496,28 +2497,8 @@ function Game(data, userid){
 		}
 	}
 
-	this.initReinforcementWrapper = function(){
-		$("#reinforce")
-			.data("on", 1)
-			.click(function(e){
-				e.stopPropagation();
-				if (!$(this).data("on")){
-					$(this).data("on", 1);
-					$("#deployWrapper").show();
-				}
-				else {
-					$(this).data("on", 0);
-					$("#deployWrapper").hide();
-					if (game.phase == -1){
-						$("#deployWrapper").find("#reinforceTable").find(".selected").each(function(){
-							$(this).removeClass("selected");
-							game.disableDeployment();
-						})
-					}
-				}
-			})
-		
-		$("#deployWrapper").find(".requestReinforcements").each(function(i){
+	this.initReinforceTable = function(){		
+		$("#deployWrapper").find("#deployTable").find(".requestReinforcements").each(function(i){
 			$(this)
 			.data("id", game.reinforcements[i]["id"])
 			.data("cost", game.reinforcements[i]["cost"])
@@ -2526,27 +2507,27 @@ function Game(data, userid){
 				if (game.phase == -1){
 					if (game.deploying && $(this).hasClass("selected")){
 						$(this).removeClass("selected");
-						game.disableDeployment();
+						game.disableDeploy();
 					}
 					else if (!aUnit){
 						if ($(this).hasClass("green")){
 							$(this).addClass("selected");
-							game.enableDeployment($(this).data("id"));
+							game.enableDeploy($(this).data("id"));
 						}
 						else if (!game.deploying){
 							var rem = game.getCurrentReinforceCost();
 							if (!$(this).hasClass("green") && Math.floor(game.reinforcePoints) >= $(this).data("cost") + rem){
 								$(this).addClass("selected");
-								game.enableDeployment($(this).data("id"));
+								game.enableDeploy($(this).data("id"));
 							} else popup("You have insufficient Reinforce Points ("+(game.reinforcePoints - rem)+") available.");
 						}
 					}
-				} else popup("Reinforces can only be requested in Deployment/Initial Phase.");
+				} else popup("Reinforces can only be requested in Deploy/Initial Phase.");
 			})
 			.contextmenu(function(e){
 				e.preventDefault(); e.stopPropagation();
 				if (game.phase == -1 && !aUnit && $(this).hasClass("green")){
-					game.undoDeployment($(this).data("id"));
+					game.undoDeploy($(this).data("id"));
 					$(this).removeClass("green");
 					$("#deployWrapper").find("#reinforceTable").find("#totalRequestCost").html(game.getCurrentReinforceCost());
 					game.draw();
@@ -2933,7 +2914,7 @@ Game.prototype.getFireDistance = function(a, b){
 	return -666;
 }
 
-Game.prototype.resolveDeployment = function(){
+Game.prototype.resolveDeploy = function(){
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships[i].deployed = true;
 		if (this.ships[i].available == this.turn){
@@ -2946,7 +2927,7 @@ Game.prototype.resolveDeployment = function(){
 	.width(350)
 	.css("top", 75).css("left", 250)
 	.show()
-	.find(".combatLogHeader").html("Deployment Log").end()
+	.find(".combatLogHeader").html("Deploy Log").end()
 	.find("#combatLog").children().children().remove();
 
 	var show = 0;
@@ -3031,7 +3012,7 @@ Game.prototype.deployDone = function(){
 		timeout = setTimeout(function(){
 			$("#combatLog").find("tbody")
 				.append($("<tr>")
-					.append($("<td>").html("Deployment Resolution concluded."))
+					.append($("<td>").html("Deploy Resolution concluded."))
 				);
 			$("#unitGUI").empty();
 			game.initSelectionWrapper();

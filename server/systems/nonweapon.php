@@ -94,13 +94,13 @@ class Bridge extends PrimarySystem {
 	function __construct($id, $parentId, $integrity, $output, $width = 1){
         parent::__construct($id, $parentId, $integrity, 0, $width);
 
-        $crew = array("Engine", "Sensor", "Reactor");
+        $options = array("Engine", "Sensor", "Reactor");
         $cost = floor($output/10);
         $mod = array(8, 8, 4);
 
-        for ($i = 0; $i < sizeof($crew); $i++){
+        for ($i = 0; $i < sizeof($options); $i++){
 			$this->loads[] = array(
-				"name" => $crew[$i],
+				"name" => $options[$i],
 				"amount" => 0,
 				"cost" => $cost,
 			);
@@ -126,7 +126,7 @@ class Bridge extends PrimarySystem {
 		if ($new < 5){Debug::log("no BRIDGE crit, dmg < 5"); return;}
 
 		$options = array("Engine", "Sensor", "Reactor");
-		$roll = mt_rand(0, 2);
+		$roll = mt_rand(0, sizeof($options)-1);
 		$pick = $options[$roll];
 
 		Debug::log("BRIDGE CRIT: on ".$pick." for :".$mod."%");

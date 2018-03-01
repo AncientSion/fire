@@ -3619,7 +3619,7 @@ Area.prototype.highlightEvent = function(){
 		salvoCtx.translate(-o.x + t.rolls[0], -o.y + t.rolls[1]);
 		salvoCtx.lineTo(0, 0);
 		salvoCtx.closePath();
-		salvoCtx.strokeStyle = "red";
+		salvoCtx.strokeStyle = "yellow";
 		salvoCtx.stroke();
 		//salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height
 	}
@@ -4114,8 +4114,8 @@ Hangar.prototype.doLaunchFlight = function(){
 			}
 		}
 	}
-	instruct("Select a deployment point. The flight's facing will be projected onwards the launching vessel.");
-	game.setupDeploymentDiv();
+	instruct("Select a Deploy point. The flight's facing will be projected onwards the launching vessel.");
+	game.setupDeployDiv();
 	game.flightDeploy = this;
 }
 

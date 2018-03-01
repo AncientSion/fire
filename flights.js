@@ -184,7 +184,7 @@ Flight.prototype.createBaseDiv = function(){
 		}
 		else {
 			if (game.phase != -1){
-				text = "Orders: -DEPLOYMENT PHASE-";
+				text = "Orders: -Deployment PHASE-";
 			}
 			else if (!this.friendly){
 				text = "New orders possible";
@@ -198,55 +198,7 @@ Flight.prototype.createBaseDiv = function(){
 					.addClass("missionButton")
 					.html(text)));
 		}
-
-
-		/*
-		var need = 3;
-		var elapsed = game.turn - this.mission.turn;
-		if (this.friendly && elapsed >= need && game.phase == -1){
-			$(table)
-			.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
-			.append($("<tr>").addClass("missionSwitch")
-				.append($("<td>")
-					.attr("colSpan", 2)
-					.addClass("missionButton active")
-					.html("Disengage From Mission")
-					.data("active", 0)
-					.data("mission", this.mission.type)
-					.data("shipid", this.id)
-					.click(function(e){
-						if (aUnit == $(this).data("shipid")){
-							game.getUnit(aUnit).switchMissionMode();
-						}
-					})))
-			.append($("<tr>").addClass("missionOption").click(function(){game.mission.set(1, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Patrol Location")))
-			.append($("<tr>").addClass("missionOption").click(function(){game.mission.set(2, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Strike/ Escort Ship")))
-		}
-		else {
-			var text = "";
-
-			if (elapsed < need){
-				if (game.turn != -1){
-					//text = "New orders possible in</br> " + (need - elapsed) + " Turn/s";
-					text = "Orders in: "+(need-elapsed)+" turn/s";
-				} else text = "Orders in: "+(need-elapsed)+" turn/s";
-			}
-			else if (game.phase != -1){
-				text = "Orders: -DEPLOYMENT PHASE-";
-			}
-			else if (!this.friendly){
-				text = "New orders possible";
-			}
-
-			$(table)
-			.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
-			.append($("<tr>").addClass("missionSwitch")
-				.append($("<td>")
-					.attr("colSpan", 2)
-					.addClass("missionButton")
-					.html(text)));
-		}
-		*/
+		
 			
 	subDiv.appendChild(table);
 	div.appendChild(subDiv);
