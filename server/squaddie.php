@@ -53,7 +53,7 @@ class Squaddie extends Single {
 	}
 
 	public function setSubunitState($turn, $phase){
-		//Debug::log("setSubunitState ".get_class($this));
+		Debug::log("setSubunitState ".get_class($this));
 		if ($this->isDestroyed()){
 			$this->destroyed = 1;
 		}

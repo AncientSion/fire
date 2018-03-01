@@ -130,7 +130,7 @@ class Single {
 	}
 
 	public function setSubunitState($turn, $phase){
-		Debug::log("setSubunitState ".get_class($this));
+		//Debug::log("setSubunitState ".get_class($this));
 		for ($i = 0; $i < sizeof($this->crits); $i++){
 			if ($this->crits[$i]->type == "Disabled"){
 				$this->destroyed = true;
