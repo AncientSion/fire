@@ -2375,7 +2375,8 @@ Particle.prototype.getAnimation = function(fire){
 	var speed = this.projSpeed;
 	var delay = 25 * this.shots;
 	var shotInterval = 25 - (this.shots *4);
-	if (this.name == "MediumIon"){shotInterval = 10;}
+	if (this.name == "MediumParticle"){shotInterval = 10;}
+	else if (this.name == "LightParticle"){delay = 15;}
 	var cc = 0;
 	var hits = 0;
 	var fraction = 1;
