@@ -373,6 +373,10 @@ Mixed.prototype.create = function(){
 	}
 }
 
+Mixed.prototype.setSubSystemState = function(){
+	return;
+}
+
 Mixed.prototype.hasSystemSelected = function(){
 	return false;
 }
