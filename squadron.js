@@ -552,7 +552,7 @@ Squadron.prototype.create = function(){
 }
 
 Squadron.prototype.setSubSystemState = function(){
-	for (var i = 0; i < this.primary.systems.length){
+	for (var i = 0; i < this.primary.systems.length; i++){
 		this.primary.systems[i].setState();
 	}
 	for (var i = 0; i < this.structures.length; i++){
