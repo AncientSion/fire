@@ -132,7 +132,6 @@ function initSquadron(data){
 	var squadron = new Squadron(data);
 	for (var j = 0; j < data.primary.systems.length; j++){
 		var primSystem = new window[data.primary.systems[j].name](data.primary.systems[j]);
-			primSystem.setState();
 		squadron.primary.systems.push(primSystem);
 	}
 	for (var i = 0; i < data.structures.length; i++){
@@ -176,7 +175,6 @@ function initSquaddie(data){
 			for (var l = 0; l < data.structures[j].systems[k].crits.length; l++){
 				system.crits.push(new Crit(data.structures[j].systems[k].crits[l]));
 			}
-			system.setState();
 			struct.systems.push(system);
 		}
 		unit.structures.push(struct);
@@ -208,8 +206,6 @@ function initShip(data){
 		for (var l = 0; l < data.primary.systems[j].crits.length; l++){
 			primSystem.crits.push(new Crit(data.primary.systems[j].crits[l]));
 		}
-
-		primSystem.setState();
 		ship.primary.systems.push(primSystem);
 	}
 
@@ -241,7 +237,6 @@ function initShip(data){
 				for (var l = 0; l < data.structures[j].systems[k].crits.length; l++){
 					system.crits.push(new Crit(data.structures[j].systems[k].crits[l]));
 				}
-				system.setState();
 				struct.systems.push(system);
 			}	
 		}

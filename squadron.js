@@ -551,6 +551,19 @@ Squadron.prototype.create = function(){
 	this.setStatus();
 }
 
+Squadron.prototype.setSubSystemState = function(){
+	for (var i = 0; i < this.primary.systems.length){
+		this.primary.systems[i].setState();
+	}
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].structures.length; j++){
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				this.structures[i].structures[j].systems[k].setState()
+			}
+		}
+	}
+}
+
 Squadron.prototype.setStatus = function(){
 	//console.log("setStatus CREATE")
 	for (var i = 0; i < this.structures.length; i++){

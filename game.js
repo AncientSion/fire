@@ -1022,16 +1022,17 @@ function Game(data, userid){
 			wrapper.hide()
 		}
 	}
-	
+
 	this.create = function(){
 		$("#phaseSwitchDiv").show();
 
 		for (var i = 0; i < this.ships.length; i++){
 			var ship = window.initUnit(this.ships[i]);
 				ship.setUnitState();
+				ship.setSubSystemState();
+				ship.create()
 
 			this.ships[i] = ship;
-			this.ships[i].create();
 		}
 
 		this.setCC();
