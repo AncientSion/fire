@@ -100,11 +100,15 @@ class Single {
 	}	
 	
 	public function addDamage($dmg){
-		//Debug::log("adding dmg");
 		if ($dmg->new){
 			$this->emDmg += $dmg->emDmg;
+			Debug::log($this->parentId."/".$this->id." total emDmg: ".$this->emDmg);
+			if ($this->emDmg >= $this->integrity){
+				Debug::log("immediate disable");
+				$this->destroyed = 1;
+			}
 		}
-		//Debug::log($this->remaining);
+
 		$this->armourDmg += $dmg->armourDmg;
 		$this->remaining -= $dmg->overkill;
 		$this->damages[] = $dmg;
@@ -150,7 +154,7 @@ class Single {
 	}
 
 	public function singleCritTest($turn, $extra){
-		Debug::log("singleCritTest ".get_class($this)." #".$this->id);
+		//Debug::log("singleCritTest ".get_class($this)." #".$this->id);
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			if ($this->damages[$i]->turn == $turn){
@@ -162,7 +166,7 @@ class Single {
 		if ($new){
 			$new = round($new / $this->integrity * 100);
 			$old = round($old / $this->integrity * 100);
-			Debug::log(get_class($this)." determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", new: ".$new.", old: ".$old);
+			//Debug::log(get_class($this)." determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", new: ".$new.", old: ".$old);
 			$this->checkDropoutCrits($new, $old, $turn);
 			$this->checkSystemCrits($new, $old, $turn);
 		}
@@ -172,13 +176,13 @@ class Single {
 		$trigger = $this->dropout[0];
 		$chance = $this->dropout[1];
 		$dmg = floor($new + $old);
-		Debug::log("dropout chance: ".get_class($this).", trigger: ".$trigger.", dmg: ".$dmg);
+		//Debug::log("dropout chance: ".get_class($this).", trigger: ".$trigger.", dmg: ".$dmg);
 
 		if ($dmg > $trigger){
 			$min = floor($chance * (1+($dmg - $trigger)/(100 - $trigger)));
 			$roll = mt_rand(0, 100);
 
-			Debug::log("chance: ".$min.", roll: ".$roll);
+			//Debug::log("chance: ".$min.", roll: ".$roll);
 			if ($roll < $min){
 				$this->crits[] = new Crit(
 					sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 0, 0, 1

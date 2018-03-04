@@ -220,7 +220,7 @@ function initShip(data){
 		for (var k = 0; k < data.structures[j].systems.length; k++){
 			var system = new window[data.structures[j].systems[k].type](data.structures[j].systems[k]);
 			if (system){
-				//system.setMount(struct.remainingNegation);
+				//system.setMount(struct.remNegation);
 				
 				for (var l = 0; l < data.structures[j].systems[k].fireOrders.length; l++){
 					system.fireOrders.push(new FireOrder(data.structures[j].systems[k].fireOrders[l]));

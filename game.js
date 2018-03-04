@@ -2350,7 +2350,7 @@ function Game(data, userid){
 		var wrapper = $("#deployTable");
 
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].salvo){continue;}
+			if (this.ships[i].salvo || this.ships[i].flight){continue;}
 			else if (game.phase > 1){continue;}
 			else if (this.ships[i].available != this.turn){continue;}
 

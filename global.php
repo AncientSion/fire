@@ -4,7 +4,7 @@
 	
 	-include(dirname(__FILE__) . "/autoload.php");
 	session_start();
-
+	
 
 	function getPhaseString($phase){
 		switch ($phase){

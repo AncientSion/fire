@@ -25,7 +25,7 @@ class Squaddie extends Single {
 	public $effiency = 0;
 
 	public $bonusNegation = 0;
-	public $remainingNegation = 0;
+	public $remNegation = 0;
 	public $parentIntegrity = 0;
 	public $parentPow;
 
@@ -79,7 +79,9 @@ class Squaddie extends Single {
 
 		$this->parentPow = round(pow($this->parentIntegrity, $p));
 		$this->armourDmg += $armourDmg;
-		$this->remainingNegation = round((pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow) * $this->negation);
+
+		if ($this->armourDmg >= $this->parentIntegrity){$this->remNegation = 0; return;}
+		$this->remNegation = round((pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow) * $this->negation);
 	}
 
 	public function getRemNegation(){
@@ -122,9 +124,9 @@ class Squaddie extends Single {
 	
 	public function getValidEffects(){
 		return array( // type, min, max, dura
-			array("Damage", 30, 0, 20),
-			array("Disabled", 65, 1, 0.00),
-			array("Destroyed", 80, 0, 0.00),
+			array("Damage", 25, 0, 20),
+			array("Disabled", 55, 1, 0.00),
+			array("Destroyed", 70, 0, 0.00),
 		);
 	}
 

@@ -186,7 +186,7 @@ class DmgCalc {
 
 		$hits = $fire->weapon->basePulses + min($fire->weapon->extraPulses, floor(($fire->req - $fire->rolls[sizeof($fire->rolls)-1]) / $fire->weapon->grouping));
 
-		Debug::log("fire #".$fire->id.", doPulseDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".$name.", hits: ".$hits.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
+		Debug::log("fire #".$fire->id.", doPulseDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".$name.", hits: ".$hits.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"].", armourDmg: ".$dmg->armourDmg);
 
 		/*if ($negation["bonus"] > 1){
 			Debug::log("PulseDmg:</br>");
@@ -195,50 +195,31 @@ class DmgCalc {
 		}*/
 
 		for ($i = 0; $i < $hits; $i++){
-
-			if ($destroyed){
-				$total += $totalDmg;
-				$dmg->overkill += $dmg->structDmg;
-				$shield += $dmg->shieldDmg;
-				$armour += $dmg->armourDmg;
-				$em += $dmg->emDmg;
-				//Debug::log(" => hit ".($i+1).", adding ".$dmg->structDmg."/".$dmg->armourDmg." to overkill which is now: ".$dmg->overkill." pts");
-				continue;
-			}
-			else {
-				//Debug::log("adding hit ".($i+1).", shieldDmg: ".$dmg->shieldDmg);
-				$total += $totalDmg;
-				$struct += $dmg->structDmg;
-				$shield += $dmg->shieldDmg;
-				$armour += $dmg->armourDmg;
-				$em += $dmg->emDmg;
-			}
-
-			if ($struct >= $remInt){
-				$destroyed = 1;
-				$okSystem = $fire->target->getOverkillSystem($fire);
-
-				if ($okSystem){
-					//$dmg->overkill += abs($remInt - $dmg->structDmg);
-					$dmg->overkill += abs($remInt - $struct);
-					$struct -= $dmg->overkill;
-					$em += $dmg->emDmg;
-					//Debug::log(" => hit ".($i+1)." DESTROYING ship target system ".$name." #".$system->id.", rem: ".$remInt.", doing TOTAL: ".$struct."/".$armour.", OK for: ".$dmg->overkill." dmg");
-					//$struct += $remInt;
-				}
-				else {
-					//Debug::log(" => DESTROYING non-ship target system");
-					break;
-				}
-			}
+			$total += $totalDmg;
+			$shield += $dmg->shieldDmg;
+			$armour += $dmg->armourDmg;
+			$struct += $dmg->structDmg;
+			$em += $dmg->emDmg;
+			Debug::log("added hit ".($i+1).", ".$shield."/".$armour."/".$struct);
 		}
-
-		$dmg->structDmg = $struct;
-		$dmg->armourDmg = $armour;
 		$dmg->shieldDmg = $shield;
+		$dmg->armourDmg = $armour;
+		$dmg->structDmg = $struct;
 		$dmg->emDmg = $em;
 
 		$dmg = $system->setMaxDmg($fire, $dmg);
+
+		if ($remInt <= $dmg->structDmg){ // destroyed
+			Debug::log("destroying");
+			$destroyed = 1;
+			$okSystem = $fire->target->getOverkillSystem($fire);
+
+			if ($okSystem){
+				$dmg->overkill += abs($remInt - $struct);
+				$dmg->structDmg -= $dmg->overkill;
+				Debug::log(" => hit ".($i+1).", adding ".$dmg->structDmg."/".$dmg->armourDmg." to overkill which is now: ".$dmg->overkill." pts");
+			}
+		}
 
 		$entry = new Damage(
 			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,

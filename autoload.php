@@ -39,7 +39,7 @@ spl_autoload_register(
                 'thunderbolt' => '/server/fighter.php',
                 'nial' => '/server/fighter.php',
                 'sentri' => '/server/fighter.php',
-                'sitaraion' => '/server/fighter.php',
+                'sitaraparticle' => '/server/fighter.php',
                 'sitaraplasma' => '/server/fighter.php',
                 'gorith' => '/server/fighter.php',
                 'frazi' => '/server/fighter.php',
@@ -71,8 +71,8 @@ spl_autoload_register(
                 'crius' => '/server/ships/crius.php',
 
                 'gquan' => '/server/ships/gquan.php',
+                'gsten' => '/server/ships/gsten.php',
                 'katoc' => '/server/ships/katoc.php',
-                'varnic' => '/server/ships/varnic.php',
                 'rongoth' => '/server/ships/rongoth.php',
                 'dagkar' => '/server/ships/dagkar.php',
                 'trakk' => '/server/ships/trakk.php',

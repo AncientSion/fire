@@ -36,8 +36,8 @@ include_once 'global.php';
 		public $const = array(
 			"ew" => array(
 				"p" => 1.5,
-				"len" => 10, 
-				"effect" => array(0 => 0.5, 1 => 0.5, 2 => 0.25)
+				"len" => 10,
+				"effect" => array(0 => 0.5, 1 => 0.5, 2 => 0.25),
 			),
 		);
 
@@ -57,23 +57,10 @@ include_once 'global.php';
 
 	public function doEval(){
 		return;
-		$this->setupShips();
-		$this->getUnit(1)->damaged = true;
-		$this->getUnit(1)->structures[0]->damaged = true;
-		$this->getUnit(1)->structures[1]->damaged = true;
-		$this->testCriticals();
-
-		$this->freeFlights();
-		$this->deleteAllReinforcements();
-		$this->handlePostMoveFires();
-	}
-
-	public function crits(){
-		$crits = $this->getUnit(8)->getNewCrits($this->turn);
-		Debug::log("size ".sizeof($crits));
 	}
 
 	public function getClientData(){
+		//var_export($this->getShipData());
 		//$this->deleteReinforcements();
 		//return;
 		//$this->crits();
@@ -130,6 +117,7 @@ include_once 'global.php';
 		$this->reinforce = $gd["reinforce"];
 		$this->status = $gd["status"];
 		$this->turn = $gd["turn"];
+		//$GLOBALS["turn"] = $gd["turn"];
 		$this->phase = $gd["phase"];
 		$this->wave = $gd["reinforceTurn"];
 		$this->playerstatus = DBManager::app()->getPlayerStatus($this->gameid);
@@ -1364,9 +1352,8 @@ include_once 'global.php';
 
 	public function testCriticals(){
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->damaged){
-				$this->ships[$i]->handleCritTesting($this->turn);
-			} 
+			Debug::log(get_class($this->ships[$i])." handleCritTesting");
+			$this->ships[$i]->handleCritTesting($this->turn);
 		}
 	}
 
@@ -1501,10 +1488,10 @@ include_once 'global.php';
 				$ships = array(
 					array(
 					"GQuan",
-					"Varnic",
-					"Katoc",
-					"Rongoth",
-					"Dagkar",
+					"GSten",
+					"KaToc",
+					"RonGoth",
+					"DagKar",
 					),
 					array(
 					"Thentus",
@@ -1585,10 +1572,10 @@ include_once 'global.php';
 			case "Narn Regime";
 				$ships = array(
 					array("GQuan", 6, 2),
-					array("Varnic", 8, 3),
-					array("Katoc", 10, 3),
-					array("Rongoth", 10, 3),
-					array("Dagkar", 10, 3),
+					array("GSten", 8, 3),
+					array("KaToc", 10, 3),
+					array("RonGoth", 10, 3),
+					array("DagKar", 10, 3),
 					array("Squadron", 15, 2),
 				);
 

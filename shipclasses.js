@@ -349,7 +349,10 @@ Ship.prototype.doHover = function(){
 		this.drawVectorIndicator();
 		this.resetMoveTranslation();
 	}
-	this.drawMovePlan();
+
+	if (game.phase == 2){
+		this.drawPastMovePlan();
+	} else this.drawMovePlan();
 	this.drawIncomingMovePlan();
 	this.drawTargetMovePlan();
 }
@@ -1173,8 +1176,6 @@ Ship.prototype.drawMovePlan = function(){
 					planCtx.stroke();
 				}
 				else if (action.type == "turn"){
-					var angle = this.getPlannedFacing(i);
-					
 					planCtx.beginPath();
 					planCtx.arc(action.x, action.y, 3, 0, 2*Math.PI, false);
 					planCtx.stroke();
@@ -1187,6 +1188,44 @@ Ship.prototype.drawMovePlan = function(){
 		this.drawPlanMarker();
 		this.resetMoveTranslation();
 	}
+}
+
+Ship.prototype.drawPastMovePlan = function(){
+	this.setMoveTranslation();
+
+	planCtx.strokeStyle = "yellow";
+
+	var i;
+	for (i = 0; i < this.actions.length; i++){
+		if (this.actions[i].turn == game.turn){
+			var action = this.actions[i];
+			planCtx.beginPath();
+			
+			if (i == 0){
+				var p = {x: this.x, y: this.y};
+				planCtx.moveTo(p.x, p.y);
+			}
+			else {
+				planCtx.moveTo(this.actions[i-1].x, this.actions[i-1].y);
+			}
+						
+			if (action.type == "move"){
+				planCtx.lineTo(action.x, action.y);
+				planCtx.closePath();
+				planCtx.stroke();
+			}
+			else if (action.type == "turn"){
+				planCtx.beginPath();
+				planCtx.arc(action.x, action.y, 3, 0, 2*Math.PI, false);
+				planCtx.stroke();
+			}
+			
+			planCtx.closePath();
+		}
+	}
+	planCtx.strokeStyle = "black";
+	this.drawPlanMarker();
+	this.resetMoveTranslation();
 }
 
 Ship.prototype.getShortInfo = function(){
@@ -2060,15 +2099,6 @@ Ship.prototype.expandDiv = function(div){
 	}
 	sides /= 2;
 
-	// siden for very wide ship windows
-	if (this.structures.length > 4){
-		widen = 330;
-	} else if (this.structures[this.structures.length-1].systems.length > 4){
-		widen = 310;		
-	}
-
-	if (widen){$(div).css("width", widen);}
-
 
 
 	var conWidth = $(structContainer).width();
@@ -2162,105 +2192,54 @@ Ship.prototype.expandDiv = function(div){
 
 
 		var col = 0;
-		var max;
-		var a = this.structures[i].direction; if (a == 360){a = 0;}
+		var max = this.structures[i].width;
 		var w;
-		var maxRow = 0;
+		var a = this.structures[i].direction; if (a == 360){a = 0;}
+		var extraWidth = 0;
 
-		if (a == 0 || a == 180){ // front or aft
-			if (a == 180){
-				max = Math.min(6, this.structures[i].systems.length);
-			}
-			else if (this.structures[i].systems.length % 4 == 0){
-				max = 4;
-			}
-			else if (this.structures[i].systems.length % 4 == 3){
-				max = 3;
-			}
-			else if (this.structures[i].systems.length % 3 == 0){
-				max = 6;
-			}
-			else {
-				max = 5;
-			}
-		}
-		else { // sides
-			if (sides > 1){
-				max = 2;
-			}
-			else if (this.structures[i].systems.length <= 3){
-				max = 1;
-			}
-			else {
-				if (this.structures[i].systems.length <= 4 && noFront){
-					max = 1;
-				}
-				else {
-					max = 2;
-				}
-			}
-		}
-
-		//max = Math.min(max, this.structures[i].systems.length)
-
-		var outerFill = 0; // front / aft, make a wider system in a single row
-		var innerFill = 0;
-		if (a == 0 || a == 180){
-			if (this.structures[i].getBoostEffect("Armour") && this.structures[i].systems.length < 3){
-				if (this.structures[i].systems.length < 2){
-					max = 4; outerFill = 1;
-				}
-				else {
-					max = 2;
-					innerFill = 1;
-				}
-			}
-			else if (this.structures[i].systems.length == 1 || this.structures[i].systems.length == 2 && this.structures[i].systems[0].name != this.structures[i].systems[1].name){
-				max = 3;
-				outerFill = 1;
-			}
-		}
+		if (this.structures[i].getBoostEffect("Armour")){extraWidth = 1;}
 
 		if (max == 1){
-			if (this.structures[i].getBoostEffect("Armour")){
-				structTable.childNodes[0].childNodes[0].style.height = "45px";
-				structTable.childNodes[0].childNodes[0].style.width = "40px";
-			} 
+			if (extraWidth){ // EA
+				if (a == 0 || a == 180){
+					armour.style.width = "40px";
+				}
+				else {
+					armour.style.width = "50px";
+					armour.style.height = "42px";
+				}
+			}
 			else {
-				structTable.childNodes[0].childNodes[0].style.height = "60px";
+				if (a == 0 || a == 180){
+					armour.style.width = "55px";
+				}
+				else {
+					armour.style.width = "50px";
+				}
 			}
 		}
-		else if (max == 2 && !innerFill){
-			if (this.structures[i].getBoostEffect("Armour")){
-				structTable.childNodes[0].childNodes[0].style.height = "45px";
-			} 
-			else {
-				structTable.childNodes[0].childNodes[0].style.height = "25px";
+		else if (max == 2){
+			if (extraWidth){
+				if (a == 0 || a == 180){
+					armour.style.width = "80px";
+					armour.style.height = "25px";
+				}
+				else {
+					armour.style.width = "40px";
+					armour.style.height = "42px";
+				}
 			}
-		}
-		else {
-			structTable.childNodes[0].childNodes[0].style.height = "25px";
 		}
 
 		// SYSTEMS
-		max = this.structures[i].maxWidth;
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			if (col == 0){
 				tr = document.createElement("tr");
 			}
 
-			if (outerFill){
-				tr.insertCell(-1).className ="emptySystem"; col++;
-			}
-			else if (innerFill && (j == Math.floor(this.structures[i].systems.length / 2))){
-				tr.insertCell(-1).className ="emptySystem"; col++;
-			}
-
 			var td = this.structures[i].systems[j].getTableData(false);
-				//td.colSpan = this.structures[i].systems[j].width;
 				td = this.attachEvent(td);
 
-			//col++;
 			col+= this.structures[i].systems[j].width;
 			tr.appendChild(td);
 
@@ -2269,9 +2248,7 @@ Ship.prototype.expandDiv = function(div){
 				if (boostDiv){td.appendChild(boostDiv);}
 
 				var powerDiv = this.structures[i].systems[j].getPowerDiv();
-				if (powerDiv){
-					//console.log($(powerDiv).width());
-					td.appendChild(powerDiv);}
+				if (powerDiv){td.appendChild(powerDiv);}
 
 				var modeDiv = this.structures[i].systems[j].getModeDiv();
 				if (modeDiv){td.appendChild(modeDiv);}
@@ -2281,19 +2258,10 @@ Ship.prototype.expandDiv = function(div){
 				$(td).find(".outputMask").hide();
 			}
 
-			if (outerFill){
-				tr.insertCell(-1).className ="emptySystem"; col++;
-			}
-
 			if (col == max || j == this.structures[i].systems.length-1){
 				structTable.appendChild(tr);
-				if (maxRow < col){
-					maxRow = col;
-				}
 				col = 0;
 			}
-
-			$(structTable).find(".armour").attr("colSpan", maxRow);
 
 
 		}
@@ -2306,6 +2274,7 @@ Ship.prototype.expandDiv = function(div){
 
 		var offsetX = 0;
 		var offsetY = -20;
+		var a = this.structures[i].direction; if (a == 360){a = 0;}
 
 		// STRUCT X
 
@@ -2335,9 +2304,6 @@ Ship.prototype.expandDiv = function(div){
 		if (a == 0){
 			if (!noAft && this.structures[i].systems.length <= 3){
 				offsetY += 10;
-			} else if (outerFill){
-				offsetY -= 10;
-				$(primaryDiv).css("top", (primY + 20));
 			}
 		}
 		else if (noAft){
@@ -2840,7 +2806,7 @@ Ship.prototype.getLockEffect = function(target){
 		multi = 1.5;
 	}
 	else if (target.salvo){
-		multi = 1;
+		multi = 1.5;
 	}
 
 	if (game.isCloseCombat(this, target)){

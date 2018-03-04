@@ -496,6 +496,8 @@ else {
 			game.system = 0;
 
 			ship.actions.push(new Move(-1, "deploy", 0, res.x/2, res.y/2, 0, 0, 0, 1, 1, 1));
+			ship.setUnitState();
+			ship.setSubSystemState();
 			ship.create();
 			ship.setImage();
 			ship.createBaseDiv();
@@ -529,7 +531,8 @@ else {
 		game.ships[0].index = sub.index;
 		game.ships[0].setLayout();
 		game.ships[0].setSubElements();
-		game.ships[0].setStats()
+		game.ships[0].setStats();
+		game.ships[0].setSubSystemState();
 		sub.expandElement();
 		sub.previewSetup();
 

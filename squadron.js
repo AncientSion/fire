@@ -5,7 +5,7 @@ function Squaddie(data){
 	this.index = data.index;
 	this.ew = data.ew;
 	this.power = data.power;
-	this.remainingNegation = data.remainingNegation;
+	this.remNegation = data.remNegation;
 	this.bonusNegation = data.bonusNegation;
 	this.boostEffect = data.boostEffect;
 	this.effiency = data.effiency;
@@ -73,7 +73,7 @@ Squaddie.prototype.getSystemDetailsDiv = function(){
 					.append($("<td>").html(this.remaining + " / " + this.integrity)))
 				.append($("<tr>")
 					.append($("<td>").html("Main Armour"))
-					.append($("<td>").html(this.remainingNegation + " / " + this.negation)))
+					.append($("<td>").html(this.remNegation + " / " + this.negation)))
 				.append($("<tr>")
 					.append($("<td>").html("Sensor Output"))
 					.append($("<td>").html(this.ew)))
@@ -375,7 +375,7 @@ Squaddie.prototype.getArmourData = function(){
 		)
 		.append($("<div>")
 			.addClass("integrityNow")
-			.css("width",  (this.getRemainingNegation()/this.negation * 100) + "%")
+			.css("width",  (this.getRemNegation()/this.negation * 100) + "%")
 		)
 		.append($("<div>")
 			.addClass("integrityFull")
@@ -440,8 +440,8 @@ Squaddie.prototype.drawSystemArc = function(){
 	return;
 }
 
-Squaddie.prototype.getRemainingNegation = function(){
-	return Structure.prototype.getRemainingNegation.call(this);
+Squaddie.prototype.getRemNegation = function(){
+	return Structure.prototype.getRemNegation.call(this);
 }
 
 Squaddie.prototype.getPowerUsage = function(){
@@ -948,7 +948,7 @@ Squadron.prototype.getArmourString = function(a){
 	var ret = "";
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].destroyed){continue;}
-		ret += this.structures[i].remainingNegation + ", ";
+		ret += this.structures[i].remNegation + ", ";
 	}
 
 	return ret.slice(ret, ret.length-2);
@@ -1021,7 +1021,7 @@ Squadron.prototype.hasNoFireOrders = function(){
 Squadron.prototype.getAllResolvingFireOrders = function(){
 	var fires = [];
 	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].destroyed){continue;}
+		if (!this.structures[i].destroyed || !this.structures[i].isDestroyedThisTurn()){continue;}
 		for (var j = 0; j < this.structures[i].structures.length; j++){
 			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
 				var fire = this.structures[i].structures[j].systems[k].getResolvingFireOrders();

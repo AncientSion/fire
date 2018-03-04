@@ -27,11 +27,11 @@ class Darkner extends Medium {
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 300, 120);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 12);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 12, 1);
 		$right->systems[] = new MediumParticle($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 300, 12);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 300, 12, 1);
 		$left->systems[] = new MediumParticle($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
 

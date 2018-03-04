@@ -102,7 +102,7 @@ class Ship {
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq(), $this->power);
 
 		for ($j = 0; $j < sizeof($this->structures); $j++){
-			$this->structures[$j]->remainingNegation = $this->structures[$j]->negation;
+			$this->structures[$j]->remNegation = $this->structures[$j]->negation;
 		}
 	}
 
@@ -436,8 +436,6 @@ class Ship {
 	}
 
 	public function applyDamage($dmg){
-		//var_export($dmg); echo "</br></br>";
-		if ($dmg->new){$this->damaged = 1;}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($dmg->structureid == $this->structures[$i]->id){
@@ -819,7 +817,7 @@ class Ship {
 			return 1.5;
 		}
 		else if ($target->salvo){
-			return 1;
+			return 1.5;
 		}
 	}
 
@@ -954,13 +952,11 @@ class Ship {
 	}
 
 	public function handleCritTesting($turn){
-		Debug::log(get_class($this)." handleCritTesting");
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed){continue;}
-			else if (!$this->structures[$i]->damaged){/*Debug::log("subunit ".$i." not damaged!");*/ continue;}
 			$this->structures[$i]->singleCritTest($turn, 0);
 		}
-	}
+}
 
 	public function addSystem($obj){
 		$obj->id = sizeof($this->systems)+1;
@@ -1070,7 +1066,6 @@ class Ship {
 
 	public function getNewCrits($turn){
 		$crits = array();
-		if (!$this->damaged){return $crits;}
 
 		for ($k = 0; $k < sizeof($this->primary->systems); $k++){
 			for ($l = 0; $l < sizeof($this->primary->systems[$k]->crits); $l++){
@@ -1094,7 +1089,6 @@ class Ship {
 
 	public function getNewDamages($turn){
 		$dmgs = array();
-		if (!$this->damaged){return $dmgs;}
 
 		if ($this->primary->damages){
 			for ($i = 0; $i < sizeof($this->primary->damages); $i++){
@@ -1105,7 +1099,6 @@ class Ship {
 		}
 		
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
-			if (!$this->primary->systems[$i]->damaged){continue;}
 			for ($j = 0; $j < sizeof($this->primary->systems[$i]->damages); $j++){
 				if ($this->primary->systems[$i]->damages[$j]->new){
 					$dmgs[] = $this->primary->systems[$i]->damages[$j];
@@ -1115,7 +1108,6 @@ class Ship {
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				if (!$this->structures[$i]->systems[$j]->damaged){continue;}
 				for ($k = 0; $k < sizeof($this->structures[$i]->systems[$j]->damages); $k++){
 					if ($this->structures[$i]->systems[$j]->damages[$k]->new){
 						$dmgs[] = $this->structures[$i]->systems[$j]->damages[$k];
@@ -1198,8 +1190,7 @@ class Medium extends Ship {
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				if (!$this->structures[$i]->systems[$j]->damaged){continue;}
-				else if (!$this->structures[$i]->systems[$j]->destroyed){
+				if (!$this->structures[$i]->systems[$j]->destroyed){
 					$this->structures[$i]->systems[$j]->singleCritTest($turn, 0);
 				}
 				else if (mt_rand(0, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn)){
@@ -1211,7 +1202,6 @@ class Medium extends Ship {
 		}
 
 		for ($j = 0; $j < sizeof($this->primary->systems); $j++){
-			if (!$this->primary->systems[$j]->damaged){continue;}
 			if ($this->primary->systems[$j]->destroyed){continue;}
 
 			$this->primary->systems[$j]->singleCritTest($turn, 0);

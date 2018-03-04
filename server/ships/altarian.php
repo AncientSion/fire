@@ -33,7 +33,7 @@ class Altarian extends Medium {
 		$right->systems[] = new MediumParticle($this->getId(), $this->id, 60, 180);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 16);
+		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 16, 1);
 		$aft->systems[] = new Hangar($this->getId(), $this->id, 8, array("Sentri", "SitaraParticle"), 8);
 		$structs[] = $aft;
 

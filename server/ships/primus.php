@@ -4,7 +4,7 @@ class Primus extends SuperHeavy {
 	public $name = "Primus";
 	public $display = "Primus";
 	public $faction = "Centauri Republic";
-	public $size =  100;
+	public $size =  90;
 	public static $value = 1080;
 	public $profile = array(0.92, 1.08);
 	public $mass = 12500;

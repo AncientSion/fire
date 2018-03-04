@@ -263,7 +263,6 @@ class System {
 
 	public function addDamage($dmg){
 		if ($dmg->new){
-			$this->damaged = 1;
 			$this->emDmg += $dmg->emDmg;
 		}
 

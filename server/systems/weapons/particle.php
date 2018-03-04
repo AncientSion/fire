@@ -123,9 +123,9 @@ class FusionCannon extends Particle {
 
 class HeavyFusionCannon extends Particle {
 	public $name = "HeavyFusionCannon";
-	public $display = "60mm Fusion Cannon";
-	public $minDmg = 43;
-	public $maxDmg = 55;
+	public $display = "56mm Fusion Cannon";
+	public $minDmg = 40;
+	public $maxDmg = 52;
 	public $accDecay = 100;
 	public $shots = 1;
 	public $reload = 2;
@@ -135,7 +135,7 @@ class HeavyFusionCannon extends Particle {
 
 	public $animColor = "green";
 	public $projSize = 4;
-	public $projSpeed = 8;
+	public $projSpeed = 7;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -145,8 +145,8 @@ class HeavyFusionCannon extends Particle {
 class EMNeedler extends Particle {
 	public $name = "EMNeedler";
 	public $display = "18mm EM-Needler";
-	public $minDmg = 9;
-	public $maxDmg = 12;
+	public $minDmg = 19;
+	public $maxDmg = 112;
 	public $accDecay = 240;
 	public $shots = 3;
 	public $reload = 2;
@@ -164,7 +164,7 @@ class EMNeedler extends Particle {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
-        $this->notes = array("Does no structural damage", "Damage that exceeds target' armour is 2x as effective when causing criticals");
+        $this->notes = array("Does no HP damage, but EM damage.", "EM damage dissipates at end of turn.", "EM Damage that penetrates armour is 2x as effective when testing criticals.", "Fighters and Ballistic are disabled immediatly if they receive more EM-damage than their maximum health");
 	
 	}
 }

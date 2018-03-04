@@ -294,10 +294,8 @@ class Squadron extends Ship {
 
 	public function getNewCrits($turn){
 		$crits = array();
-		if (!$this->damaged){return $crits;}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if (!$this->structures[$i]->damaged){continue;}
 			$crits = array_merge($crits, $this->structures[$i]->getNewCrits($turn));
 		}
 		return $crits;
@@ -305,7 +303,6 @@ class Squadron extends Ship {
 
 	public function getNewDamages($turn){
 		$dmgs = array();
-		if (!$this->damaged){return $dmgs;}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->damages); $j++){
@@ -318,6 +315,7 @@ class Squadron extends Ship {
 	}
 
 	public function applyDamage($dmg){
+
 		if ($dmg->new){
 			$dmg->overkill += $dmg->structDmg;
 			$dmg->structDmg = 0;
@@ -325,10 +323,6 @@ class Squadron extends Ship {
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($dmg->systemid == $this->structures[$i]->id){
-				if ($dmg->new){
-					$this->damaged = 1;
-					$this->structures[$i]->damaged = 1;
-				}
 
 				$this->structures[$i]->addDamage($dmg);
 
@@ -351,6 +345,7 @@ class Squadron extends Ship {
 	}
 
 	public function applyDBDamage($dmg){
+
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($dmg->systemid == $this->structures[$i]->id){
 				$this->structures[$i]->addDamage($dmg);

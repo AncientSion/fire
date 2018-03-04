@@ -4,13 +4,13 @@ class Sharlin extends SuperHeavy {
 	public $name = "Sharlin";
 	public $display = "Sharlin";
 	public $faction = "Minbari Federation";
-	public $size =  110;
+	public $size =  95;
 	public static $value = 1700;
 	public $profile = array(0.93, 1.07);
 	public $mass = 14000;
 
 	public $integrity = 1600;
-	public $vitalHP = 200;
+	public $vitalHP = 180;
 	public $ep = 60;
 	public $ew = 1000;
 

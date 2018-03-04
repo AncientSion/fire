@@ -227,7 +227,7 @@ function Structure(data){
 	this.start = data.start;
 	this.end = data.end;
 	this.negation = data.negation;
-	this.remainingNegation = data.remainingNegation;
+	this.remNegation = data.remNegation;
 	this.destroyed = data.destroyed || false;
 	this.highlight = false;
 	this.systems = [];
@@ -237,23 +237,24 @@ function Structure(data){
 	this.element;
 	this.effiency = data.effiency;
 	this.boostEffect = data.boostEffect;
-	this.maxWidth = data.maxWidth;
+	this.width = data.width;
 }
 
-Structure.prototype.getRemainingNegation = function(){
-	return this.remainingNegation;
+Structure.prototype.getRemNegation = function(){
+	return this.remNegation;
 }
 
 Structure.prototype.getArmourString = function(){
 	if (this.boostEffect.length){
-		return this.remainingNegation + "<span style='color: #27e627; font-size: 16px'>+" + (this.getBoostEffect("Armour") * this.getBoostLevel()) + "</span> / " + this.negation;
+		return this.remNegation + "<span style='color: #27e627; font-size: 16px'>+" + (this.getBoostEffect("Armour") * this.getBoostLevel()) + "</span> / " + this.negation;
 	}
-	return this.remainingNegation + " / " + this.negation;
+	return this.remNegation + " / " + this.negation;
 }
 
 Structure.prototype.getTableData = function(){
 	var td = document.createElement("td");
 		td.className = "armour";
+		td.style.height = "25px";
 
 	var span = document.createElement("div");
 		span.className = "integrityAmount font16";
@@ -262,7 +263,7 @@ Structure.prototype.getTableData = function(){
 
 	var lowerDiv = document.createElement("div");
 		lowerDiv.className = "integrityNow";
-		lowerDiv.style.width =  this.getRemainingNegation()/this.negation * 100 + "%";
+		lowerDiv.style.width =  this.getRemNegation()/this.negation * 100 + "%";
 		td.appendChild(lowerDiv);
 		
 	var upperDiv = document.createElement("div");
@@ -270,10 +271,10 @@ Structure.prototype.getTableData = function(){
 		td.appendChild(upperDiv);
 
 
-
 	$(td)
 		.data("shipId", this.parentId)
 		.data("systemId", this.id)
+		.attr("colSpan", this.width)
 		.hover(
 			function(e){
 				var shipId = $(this).data("shipId");
@@ -340,7 +341,7 @@ Structure.prototype.getSystemDetailsDiv = function(){
 			.append($("<th>").html(this.type + " Armour Plating").attr("colSpan", 2)))
 		.append($("<tr>")
 			.append($("<td>").html("Armour Strength"))
-			.append($("<td>").html(this.getRemainingNegation() + " / " + this.negation)))
+			.append($("<td>").html(this.getRemNegation() + " / " + this.negation)))
 		.append($("<tr>")
 			.append($("<td>").html("Relative Strength"))
 			.append($("<td>").html(((this.parentIntegrity - this.armourDmg) + " / " + this.parentIntegrity))))
@@ -666,6 +667,11 @@ Single.prototype.hover = function(e){
 	}
 }
 
+Single.prototype.getEmDmg = function(){
+	if (!this.damages.length){return 0;}
+	return this.damages.map(x => x.emDmg).reduce((l,r) => l+r);
+}
+
 Single.prototype.getDetailsDiv = function(){
 	var div = document.createElement("div");
 		div.id = "systemDetailsDiv";
@@ -674,10 +680,8 @@ Single.prototype.getDetailsDiv = function(){
 		var table = $("<table>")
 			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.display)))
 			.append($("<tr>").append($("<td>").html("Mass").css("width", 120)).append($("<td>").html(this.mass)))
-			//.append($("<tr>").append($("<td>").html("Engine Power")).append($("<td>").html(this.ep)))
 			.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.negation)))
-			//.append($("<tr>").append($("<td>").html("Side Armour")).append($("<td>").html(this.negation[1])))
-			//.append($("<tr>").append($("<td>").html("Rear Armour")).append($("<td>").html(this.negation[2])))
+			.append($("<tr>").append($("<td>").html("EM-D sustained")).append($("<td>").html(this.getEmDmg())))
 
 	if (this.crits.length){
 			$(table)

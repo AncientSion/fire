@@ -7,10 +7,10 @@ class Structure {
 	public $end;
 	public $integrity;
 	public $negation;
-	public $maxWidth;
+	public $width;
 	public $type;
 	public $destroyed = false;
-	public $remainingNegation = 0;
+	public $remNegation = 0;
 	public $armourDmg = 0;
 	public $parentIntegrity = 0;
 	public $parentPow;
@@ -21,14 +21,14 @@ class Structure {
 	public $effiency = 0;
 	public $bonusNegation = 0;
 
-	function __construct($id, $parentId, $start, $end, $integrity, $negation, $maxWidth = 2){
+	function __construct($id, $parentId, $start, $end, $integrity, $negation, $width = 2){
 		$this->id = $id;
 		$this->parentId = $parentId;
 		$this->start = $start;
 		$this->end = $end;
 		$this->integrity = $integrity;
 		$this->negation = $negation;
-		$this->maxWidth = $maxWidth;
+		$this->width = $width;
 
 		$this->setName();
 	}
@@ -56,7 +56,7 @@ class Structure {
 
 		$this->parentPow = round(pow($this->parentIntegrity, $p));
 		$this->armourDmg += $armourDmg;
-		$this->remainingNegation = round((pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow) * $this->negation);
+		$this->remNegation = round((pow($this->parentIntegrity - $this->armourDmg, $p) / $this->parentPow) * $this->negation);
 	}
 
 	public function getRemNegation(){
@@ -163,7 +163,6 @@ class Primary {
 
 	public function addDamage($dmg){
 		if ($dmg->new){
-			$this->damaged = 1;
 			if ($dmg->systemid == 1){$this->emDmg += $dmg->emDmg;}
 		}
 

@@ -20,7 +20,7 @@ class PrimarySystem extends System {
 	public function setMaxDmg($fire, $dmg){
 		if ($dmg->structDmg > $this->maxDmg){
 			$dmg->overkill += $dmg->structDmg - $this->maxDmg;
-			$dmg->structDmg  = $this->maxDmg;
+			$dmg->structDmg = $this->maxDmg;
 			$dmg->notes .= "c;";
 		}
 		return $dmg;
@@ -83,7 +83,7 @@ class PrimarySystem extends System {
 	}
 
 	public function getCritModMax($dmg){
-		return min(15, round($dmg/30)*10);
+		return min(25, round($dmg/2));
 	}
 }
 

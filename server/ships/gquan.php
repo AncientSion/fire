@@ -4,7 +4,7 @@ class GQuan extends Heavy {
 	public $name = "GQuan";
 	public $display = "GQuan";
 	public $faction = "Narn Regime";
-	public $size =  80;
+	public $size =  85;
 	public static $value = 900;
 	public $profile = array(0.95, 1.05);
 	public $mass = 10000;
@@ -32,10 +32,10 @@ class GQuan extends Heavy {
 		$right = new Structure($this->getId(), $this->id, 30, 150, 800, 18);
 		$right->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 300, 120);
 		$right->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 300, 120);
-		$right->systems[] = new Bulkhead($this->getId(), $this->id, 100, 0, 2);
-		$right->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 0, 120, 0, 2);
-		$right->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 30, 150, 0, 2);
-		$right->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 60, 180, 0, 2);
+		$right->systems[] = new Bulkhead($this->getId(), $this->id, 100);
+		$right->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 0, 120);
+		$right->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 0, 120);
+		$right->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 0, 120);
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 17, 4);
@@ -47,10 +47,10 @@ class GQuan extends Heavy {
 		$left = new Structure($this->getId(), $this->id, 210, 330, 800, 18);
 		$left->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 240, 60);
 		$left->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 240, 60);
-		$left->systems[] = new Bulkhead($this->getId(), $this->id, 100, 0, 2);
-		$left->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 240, 360, 0, 2);
-		$left->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 210, 330, 0, 2);
-		$left->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 180, 300, 0, 2);
+		$left->systems[] = new Bulkhead($this->getId(), $this->id, 100);
+		$left->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 240, 360);
+		$left->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 240, 360);
+		$left->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 240, 360);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

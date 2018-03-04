@@ -118,8 +118,8 @@ window.graphics = {
 		this.images.katoc = new Image();
 		this.images.katoc.src = "shipIcons/katoc.png";
 
-		this.images.varnic = new Image();
-		this.images.varnic.src = "shipIcons/varnic.png";
+		this.images.gsten = new Image();
+		this.images.gsten.src = "shipIcons/gsten.png";
 
 		this.images.rongoth = new Image();
 		this.images.rongoth.src = "shipIcons/rongoth.png";
@@ -160,8 +160,8 @@ window.graphics = {
 		this.images.thunderbolt = new Image();
 		this.images.thunderbolt.src = "shipIcons/thunderbolt.png";
 
-		this.images.sitaraion = new Image();
-		this.images.sitaraion.src = "shipIcons/sitaraion.png";
+		this.images.sitaraparticle = new Image();
+		this.images.sitaraparticle.src = "shipIcons/sitaraparticle.png";
 
 		this.images.sitaraplasma = new Image();
 		this.images.sitaraplasma.src = "shipIcons/sitaraplasma.png";

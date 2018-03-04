@@ -33,7 +33,7 @@ class EnergyMine extends Area {
 	public $powerReq = 10;
 	public $traverse = -3;
 	public $aoe = 65;
-	public $dmgs = array(10, 15, 60, 30);
+	public $dmgs = array(10, 25, 60, 30);
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		$this->notes = array("Area of Effect","Point of impact deviates by distance","Fixed damage based on target", "Salvo: ".$this->dmgs[0]." dmg / unit", "Flight: ".$this->dmgs[1]." dmg / unit", "Squadron: ".$this->dmgs[2]." dmg / unit", "Ship: ".$this->dmgs[3]." dmg / system on facing side.");

@@ -70,10 +70,8 @@ class Mixed extends Ship {
 
 	public function getNewDamages($turn){
 		$dmgs = array();
-		if (!$this->damaged){return $dmgs;}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if (!$this->structures[$i]->damaged){continue;}
 			for ($j = 0; $j < sizeof($this->structures[$i]->damages); $j++){
 				if ($this->structures[$i]->damages[$j]->new){
 					$dmgs[] = $this->structures[$i]->damages[$j];
@@ -85,7 +83,6 @@ class Mixed extends Ship {
 
 	public function getNewCrits($turn){
 		$crits = array();
-		if (!$this->damaged){return $crits;}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->crits); $j++){
@@ -124,24 +121,19 @@ class Mixed extends Ship {
 		}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($dmg->systemid == $this->structures[$i]->id){
-				if ($dmg->new){
-					$this->damaged = 1;
-					$this->structures[$i]->damaged = 1;
-				}
+			if ($dmg->systemid != $this->structures[$i]->id){continue;}
+			
+			$this->structures[$i]->addDamage($dmg);
 
-				$this->structures[$i]->addDamage($dmg);
-
-				if ($dmg->destroyed){
-					for ($j = 0; $j < sizeof($this->structures); $j++){
-						if (!$this->structures[$j]->destroyed){
-							return;
-						}
+			if ($dmg->destroyed){
+				for ($j = 0; $j < sizeof($this->structures); $j++){
+					if (!$this->structures[$j]->destroyed){
+						return;
 					}
-					$this->destroyed = 1;
 				}
-				return;
+				$this->destroyed = 1;
 			}
+			return;
 		}
 
 		Debug::log("WARNING couldnt apply damage #".$dmg->id.", looking for unit #".$dmg->shipid."/".$dmg->systemid);

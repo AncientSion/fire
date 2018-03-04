@@ -1,8 +1,8 @@
 <?php
 
-class Katoc extends Medium {
-	public $name = "Katoc";
-	public $display = "Katoc";
+class KaToc extends Medium {
+	public $name = "KaToc";
+	public $display = "KaToc";
 	public $faction = "Narn Regime";
 	public $size =  55;
 	public static $value = 480;
@@ -22,16 +22,15 @@ class Katoc extends Medium {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 400, 17, 3);
-		//$front->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 240, 60);
 		$front->systems[] = new MagCompressor($this->getId(), $this->id, 330, 30);
-		$front->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 300, 120);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 325, 15, 1);
-		$right->systems[] = new HeavyLaser($this->getId(), $this->id, 0, 60);
+		$right->systems[] = new MediumLaser($this->getId(), $this->id, 0, 120);
 		$right->systems[] = new Bulkhead($this->getId(), $this->id, 60, 0, 1);
-		$right->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 300, 120);
+		$right->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 0, 120);
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 15);
@@ -40,9 +39,9 @@ class Katoc extends Medium {
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 325, 15, 1);
-		$left->systems[] = new HeavyLaser($this->getId(), $this->id, 300, 360);
+		$left->systems[] = new MediumLaser($this->getId(), $this->id, 240, 360);
 		$left->systems[] = new Bulkhead($this->getId(), $this->id, 60, 0, 1);
-		$left->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 240, 60);
+		$left->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 240, 360);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

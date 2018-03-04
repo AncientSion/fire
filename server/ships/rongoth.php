@@ -1,8 +1,8 @@
 <?php
 
-class Rongoth extends Medium {
-	public $name = "Rongoth";
-	public $display = "Rongoth";
+class RonGoth extends Medium {
+	public $name = "RonGoth";
+	public $display = "RonGoth";
 	public $faction = "Narn Regime";
 	public $size =  55;
 	public static $value = 420;
@@ -32,7 +32,7 @@ class Rongoth extends Medium {
 		$right->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 60, 180);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 15);
+		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 15, 1);
 		$aft->systems[] = new Hangar($this->getId(), $this->id, 6, array("Gorith", "Frazi"), 6);
 		$structs[] = $aft;
 

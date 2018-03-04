@@ -1,17 +1,17 @@
 <?php
 
-class Octurion extends UltraHeavy {
+class Octurion extends SuperHeavy {
 	public $name = "Octurion";
 	public $display = "Octurion";
 	public $faction = "Centauri Republic";
 	public $size =  110;
 	public static $value = 1600;
 	public $profile = array(0.95, 1.05);
-	public $mass = 20000;
+	public $mass = 18000;
 
-	public $integrity = 2100;
-	public $vitalHP = 250;
-	public $ep = 85;
+	public $integrity = 1950;
+	public $vitalHP = 225;
+	public $ep = 60;
 	public $ew = 1000;
 
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){

@@ -2916,7 +2916,7 @@ Launcher.prototype = Object.create(Weapon.prototype);
 
 Launcher.prototype.init = function(){
 	for (var i = 0; i < this.loads.length; i++){
-		this.loads[i]= new Ballistic(this.loads[i]);
+		this.loads[i] = new Ballistic(this.loads[i]);
 	}
 	if (game.phase == -2){
 	}

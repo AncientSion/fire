@@ -1,8 +1,8 @@
 <?php
 
-class Dagkar extends Medium {
-	public $name = "Dagkar";
-	public $display = "Dagkar";
+class DagKar extends Medium {
+	public $name = "DagKar";
+	public $display = "DagKar";
 	public $faction = "Narn Regime";
 	public $size =  50;
 	public static $value = 480;
@@ -28,11 +28,11 @@ class Dagkar extends Medium {
 		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 15);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 15, 1);
 		$right->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 360, array(array("Vran", 20, 5)));
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 15);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 15, 1);
 		$left->systems[] = new TorpedoLauncher($this->getId(), $this->id, 0, 60, array(array("Vran", 20, 5)));
 		$structs[] = $left;
 
