@@ -93,9 +93,12 @@ if (isset($_POST["type"])) {
 			echo "damageControl success";
 		}
 	}
+	else if ($_POST["type"] == "concede"){
+		$dbManager->handleConcession($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"]);
+	}
 }
 else {
-	echo "no data to be found";
+	echo "lacking post data !";
 }
 
 ?>

@@ -37,7 +37,7 @@ class LightParticle extends Particle {
 class MediumParticle extends LightParticle {
 	public $name = "MediumParticle";
 	public $display = "68mm Particle Emitter";
-	public $minDmg = 30;
+	public $minDmg = 28;
 	public $maxDmg = 36;
 	public $accDecay = 120;
 	public $shots = 2;
@@ -129,8 +129,8 @@ class HeavyFusionCannon extends Particle {
 	public $accDecay = 100;
 	public $shots = 1;
 	public $reload = 2;
-	public $integrity = 48;
-	public $powerReq = 4;
+	public $integrity = 44;
+	public $powerReq = 3;
 	public $traverse = 0;
 
 	public $animColor = "green";
@@ -153,8 +153,8 @@ class AntimatterConverter extends Particle {
 	public $projSize = 5;
 	public $projSpeed = 8;
 	public $reload = 1;
-	public $integrity = 45;
-	public $powerReq = 8;
+	public $integrity = 50;
+	public $powerReq = 5;
 	public $traverse = 0;
 	public $dmgs = array(1, 2, 6, 3);
 

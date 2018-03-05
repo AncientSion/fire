@@ -101,7 +101,7 @@ spl_autoload_register(
                 'lightplasma' => '/server/systems/weapons/plasma.php',
                 'mediumplasma' => '/server/systems/weapons/plasma.php',
                 'heavyplasma' => '/server/systems/weapons/plasma.php',
-                'magcompressor' => '/server/systems/weapons/area.php',
+                'magcompressor' => '/server/systems/weapons/plasma.php',
 
 
                 'laser' => '/server/systems/weapons/laser.php',

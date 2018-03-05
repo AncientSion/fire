@@ -651,6 +651,17 @@ function Game(data, userid){
 		}
 	}
 
+	this.concedeMatch = function(){
+		var html = "Are you absolutly sure you want to concede the match ?";
+			html += "</p>";
+			html += "<div class='popupEntry buttonTD' style='font-size: 20px; width: 200px' onclick='game.doConcedeMatch()'>Yes, i concede</div>";
+	    $("#popupWrapper").show().find("#popupText").empty().html(html);
+	}
+
+	this.doConcedeMatch = function(){
+		ajax.concedeMatch();
+	}
+
 	this.selectFromPopup = function(id){
 		$("#popupWrapper").hide();
 		if (aUnit){

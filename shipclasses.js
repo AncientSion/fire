@@ -2274,7 +2274,6 @@ Ship.prototype.expandDiv = function(div){
 
 		var offsetX = 0;
 		var offsetY = -20;
-		var a = this.structures[i].direction; if (a == 360){a = 0;}
 
 		// STRUCT X
 
@@ -2286,6 +2285,9 @@ Ship.prototype.expandDiv = function(div){
 			else if (max == 1){
 				offsetX += 40;
 			}
+		}
+		else if (this.structures.length == 5 && (a == 78 || a == 282)){
+			offsetX += 25; offsetY -= 30;
 		}
 		else if (a == 60 || a == 300 || noAft){
 			if (sides > 1){offsetX += 10;}

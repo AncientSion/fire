@@ -36,7 +36,7 @@ class Tinashi extends Medium {
 			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 120, 240, 400, 16, 3);
+		$aft = new Structure($this->getId(), $this->id, 120, 240, 400, 15, 3);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
 			$aft->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);

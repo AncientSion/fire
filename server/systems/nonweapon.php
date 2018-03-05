@@ -308,6 +308,10 @@ class Bulkhead extends System {
 	public function singleCritTest($turn, $extra){
 		return;
 	}
+
+	public function getHitChance(){
+		return $this->integrity*4;
+	}
 }
 
 class Cyber extends Sensor {

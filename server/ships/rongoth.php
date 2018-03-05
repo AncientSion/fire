@@ -11,7 +11,7 @@ class RonGoth extends Medium {
 
 	public $integrity = 630;
 	public $vitalHP = 80;
-	public $ep = 80;
+	public $ep = 85;
 	public $ew = 675;
 
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
@@ -28,8 +28,8 @@ class RonGoth extends Medium {
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 325, 15, 1);
 		$right->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 0, 120);
-		$right->systems[] = new Bulkhead($this->getId(), $this->id, 60, 0, 1);
-		$right->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 60, 180);
+		$right->systems[] = new Bulkhead($this->getId(), $this->id, 50, 0, 1);
+		$right->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 15, 1);
@@ -38,8 +38,8 @@ class RonGoth extends Medium {
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 325, 15, 1);
 		$left->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 240, 360);
-		$left->systems[] = new Bulkhead($this->getId(), $this->id, 60, 0, 1);
-		$left->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 180, 300);
+		$left->systems[] = new Bulkhead($this->getId(), $this->id, 50, 0, 1);
+		$left->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

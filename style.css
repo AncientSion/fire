@@ -1932,3 +1932,15 @@ body {
 .waiting {
 	background-color: red;
 }
+
+#activeGames {
+	width: 90%;
+}
+
+#activeGames td{
+	padding: 7px;
+}
+
+#activeGames th{
+	padding: 5px;
+}

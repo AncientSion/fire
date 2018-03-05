@@ -25,11 +25,11 @@ if (isset($_SESSION["userid"])){
 		}
 	}
 
-	$ongoingGames = $dbManager->getMyGames($_SESSION["userid"]);
+	$myGames = $dbManager->getGames($_SESSION["userid"]);
 	$update = 0;
-	for ($i = 0; $i < sizeof($ongoingGames); $i++){
-		if ($manager->canAdvance($ongoingGames[$i]["id"])){
-			$manager->prepareAdvance($ongoingGames[$i]["id"]);
+	for ($i = 0; $i < sizeof($myGames); $i++){
+		if ($manager->canAdvance($myGames[$i]["id"])){
+			$manager->prepareAdvance($myGames[$i]["id"]);
 			if ($manager->doAdvance()){
 				$update = 1;
 			}
@@ -37,55 +37,58 @@ if (isset($_SESSION["userid"])){
 	}
 
 	if ($update){
-		$ongoingGames = $dbManager->getMyGames($_SESSION["userid"]);
+		$myGames = $dbManager->getGames($_SESSION["userid"]);
 	}
 
 	$check = array();
 
-	$ongoingGamesElement = "<table id='activeGames'>";
+	$myGamesElement = "<table id='activeGames'>";
 
-	if ($ongoingGames) {	
-		$ongoingGamesElement .= "<tr>";
-		$ongoingGamesElement .= "<th colSpan = 4>My Ongoing Games</th>";
-		$ongoingGamesElement .= "</tr>";
+	if ($myGames) {	
+		$myGamesElement .= "<tr>";
+		$myGamesElement .= "<th colSpan = 4>My Ongoing Games</th>";
+		$myGamesElement .= "</tr>";
 
-		$ongoingGamesElement .= "<tr>";
-		$ongoingGamesElement .= "<th style='width: 40%'>Game Name</th>";
-		$ongoingGamesElement .= "<th style='width: 10%'>Turn</th>";
-		$ongoingGamesElement .= "<th style='width: 30%'>Phase</th>";
-		$ongoingGamesElement .= "<th style='width: 15%'>Status</th>";
-		$ongoingGamesElement .= "</tr>";
+		$myGamesElement .= "<tr>";
+		$myGamesElement .= "<th style='width: 35%'>Game Name</th>";
+		$myGamesElement .= "<th style='width: 10%'>Turn</th>";
+		$myGamesElement .= "<th style='width: 30%'>Phase</th>";
+		$myGamesElement .= "<th style='width: 20%'>Status</th>";
+		$myGamesElement .= "</tr>";
 		
-		foreach ($ongoingGames as $game){
+		foreach ($myGames as $game){
 			$phase = getPhaseString($game["phase"]);
 			
-			$ongoingGamesElement .= "<tr id=".$game['id'].">";
-			$ongoingGamesElement .= "<td>";
-			$ongoingGamesElement .= "<a href=game.php?gameid=".$game['id'].">";
-			$ongoingGamesElement .= "<font color='darkcyan'>".$game["name"]."</font>";
-			$ongoingGamesElement .= "</a>";
-			$ongoingGamesElement .= "</td>";
+			$myGamesElement .= "<tr id=".$game['id'].">";
+			$myGamesElement .= "<td>";
+			$myGamesElement .= "<a href=game.php?gameid=".$game['id'].">";
+			$myGamesElement .= "<font color='darkcyan'>".$game["name"]."</font>";
+			$myGamesElement .= "</a>";
+			$myGamesElement .= "</td>";
 			
-			$ongoingGamesElement .= "<td>".$game["turn"]."</td>";
-			$ongoingGamesElement .= "<td>".$phase."</td>";
+			$myGamesElement .= "<td>".$game["turn"]."</td>";
+			$myGamesElement .= "<td>".$phase."</td>";
 
 			$status = $game["playerstatus"];
 			$td;
-			if ($status == "waiting"){
+			if ($game["status"] == "closed"){
+				$td = "<td class='closed'>Completed</td>";
+			}
+			else if ($status == "waiting"){
 				$td = "<td class='waiting'>Awaiting Orders</td>";
 			}
 			else {
 				$td = "<td class='ready'>Waiting for Opponent</td>";
 				$check[] = array($game["id"], $game["turn"], $game["phase"]);
 			}
-			$ongoingGamesElement .= $td;
-			$ongoingGamesElement .= "</tr>";
+			$myGamesElement .= $td;
+			$myGamesElement .= "</tr>";
 		}
 		
-		$ongoingGamesElement .= "</table>";
+		$myGamesElement .= "</table>";
 	}
 	else {
-		$ongoingGamesElement .= "<tr><th>no Active Games found</tr></th></table>";
+		$myGamesElement .= "<tr><th>no Active Games found</tr></th></table>";
 	}
 
 	$openGames = $manager->getOpenGames();
@@ -193,7 +196,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 				</span>
 			</div>
 			<div class="lobbyDiv">
-				<?php echo $ongoingGamesElement; ?>
+				<?php echo $myGamesElement; ?>
 			</div>
 			<div id="openGames" class="lobbyDiv">
 				<?php echo $openGamesElement; ?>

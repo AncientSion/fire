@@ -118,6 +118,23 @@ window.ajax = {
 		});
 	},
 
+	concedeMatch: function(){
+		$.ajax({
+			type: "POST",
+			url: "postGameData.php",
+			datatype: "json",
+			data: {
+					type: "concede",
+					gameid: gameid,
+					userid: userid,
+					turn: game.turn,
+					phase: game.phase,
+					},
+			//success: callback,
+			error: ajax.error,
+		});
+	},
+
 	checkGameState: function(){
 		if (!window.check.length){return;}
 

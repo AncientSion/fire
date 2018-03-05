@@ -357,20 +357,18 @@ include_once 'global.php';
 	}
 
 	public function canAdvance($gameid){
-		//Debug::log("canAdvance?");
-		if ($this->status == "open"){
-			return false;
-		}
-		else {
-			$this->playerstatus = DBManager::app()->getPlayerStatus($gameid);
-			if (sizeof($this->playerstatus) >= 2){
-				for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-					if ($this->playerstatus[$i]["status"] == "waiting"){
-						return false;
-					}
+		if ($this->status != "active"){return false;}
+
+		$this->playerstatus = DBManager::app()->getPlayerStatus($gameid);
+
+		if (sizeof($this->playerstatus) >= 2){
+			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+				if ($this->playerstatus[$i]["status"] == "waiting"){
+					return false;
 				}
 			}
 		}
+
 		return true;
 	}
 

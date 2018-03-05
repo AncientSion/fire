@@ -42,7 +42,7 @@ class Tigara extends Heavy {
 			$right->systems[] = new EMNeedler($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 120, 240, 2100, 20, 6);
+		$aft = new Structure($this->getId(), $this->id, 120, 240, 2100, 18, 6);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
 			$aft->systems[] = new NeutronLaser($this->getId(), $this->id, 120, 240, 0, 2);

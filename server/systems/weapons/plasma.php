@@ -107,12 +107,13 @@ class MagCompressor extends Plasma {
 	public $projSpeed = 6;
 	public $reload = 4;
 	public $integrity = 54;
-	public $powerReq = 8;
+	public $powerReq = 6;
 	public $traverse = -1;
 	public $dmgs = array(1, 2, 6, 3);
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $start, $end, $output, $width);
+		$this->boostEffect = array();
         $this->setFlashData();
 	}
 

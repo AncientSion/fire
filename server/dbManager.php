@@ -145,7 +145,7 @@
 			}
 		}
 		
-		public function validateLogin($name, $pass){		
+		public function validateLogin($name, $pass){
 			//Debug::log("validating login");
 			$stmt = $this->connection->prepare("
 				SELECT id, access FROM users
@@ -165,6 +165,29 @@
 			else {
 				return false;
 			}	
+		}
+
+		public function handleConcession($user, $gameid, $turn, $phase){
+			Debug::log("handleConcession");
+			$stmt = $this->connection->prepare("
+				UPDATE games set status = :status WHERE id = :id
+			");
+
+			$status = "closed";
+			$stmt->bindParam(":status", $status);
+			$stmt->bindParam(":id", $gameid);
+			$stmt->execute();
+
+			if ($stmt->errorCode() == 0){
+				Debug::log("sucess");
+				$stmt = $this->connection->prepare("
+					UPDATE playerstatus set status = :status WHERE gameid = :gameid
+				");
+
+				$stmt->bindParam(":status", $status);
+				$stmt->bindParam(":gameid", $gameid);
+				$stmt->execute();
+			}
 		}
 
 		public function createNewGameAndJoin($userid, $post){
@@ -1881,10 +1904,7 @@
 			return $result;
 		}
 
-
-			
-
-		public function getMyGames($userid){
+		public function getGames($userid){
 		/*	$stmt = $this->connection->prepare("
 				SELECT * FROM games
 				JOIN playerstatus 
@@ -1898,10 +1918,9 @@
 				RIGHT JOIN games
 					ON playerstatus.gameid = games.id
 				WHERE playerstatus.userid = :userid
-				AND games.status = :status
 			");
-			$status = "active";
-			$stmt->bindParam(":status", $status);
+			//$status = "active";
+			//$stmt->bindParam(":status", $status);
 			$stmt->bindParam(":userid", $userid);
 			$stmt->execute();
 			

@@ -2,8 +2,6 @@
 
 	include_once 'global.php';
 
-	$time = -microtime(true);
-
 
 	$gameid = $_GET["gameid"];
 	$userid;
@@ -15,7 +13,12 @@
 	$manager = new Manager($userid, $gameid);
 	if ($manager->status == "active"){
 		$manager->getGameData();
-	} else {
+	}
+	else if ($manager->status == "closed"){
+		$manager->getGameData();
+		//header("Location: endGame.php?gameid=".$gameid);
+	}
+	else {
 		header("Location: lobby.php");
 	}
 
@@ -282,6 +285,10 @@
 							echo '<td colSpan=3 class="buttonTD" style="background-color: lightGreen;">Waiting for Opponent</td>';
 						}
 						else echo '<td colSpan=3 class="buttonTD" style="font-size: 20px" onclick="this.disabled=true;game.endPhase()">Confirm Orders</td>';
+
+						if ($manager->phase == 3 && $status == "waiting"){
+							echo '<tr><td></td></tr><tr><td colSpan=3 class="buttonTD" style="font-size: 20px" onclick="this.disabled=true;game.concedeMatch()">Concede Match</td></tr>';
+						}
 					?>
 				</tr>
 			</table>
@@ -483,11 +490,6 @@
 			</div>
 	</body>
 </html>
-
-<?php 
-	$time += microtime(true); 
-	//Debug::log("serve gamedata time: ".round($time, 3)." seconds.");
-?>
 
 <script>
 
