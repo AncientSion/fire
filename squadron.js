@@ -1126,10 +1126,15 @@ Squadron.prototype.getFireDest = function(fire, isHit, num){
 			y: range(10, 25) * (1-range(0, 1)*2)
 		}
 	}
-	var t = this.getSystem(fire.damages[num].systemid).layout;
-	var x = t.x/2 * 0.5 + range(-5, 5);
-	var y = t.y/2 * 0.5 + range(-5, 5);
-	return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());
+	else if (fire.weapon.fireMode == "Flash"){
+		return {x: 0, y: 0};
+	}
+	else {
+		var t = this.getSystem(fire.damages[num].systemid).layout;
+		var x = t.x/2 * 0.5 + range(-5, 5);
+		var y = t.y/2 * 0.5 + range(-5, 5);
+		return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());
+	}
 }
 
 Squadron.prototype.getDmgByFire = function(fire){

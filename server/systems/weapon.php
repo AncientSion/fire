@@ -37,7 +37,19 @@ class Weapon extends System {
 		else if ($w <= 120){$this->armourMod = 0.6; $this->mount = "Embedded";}
 		else if ($w <= 360){$this->armourMod = 0.45; $this->mount = "Turret";}
 		$this->armour = floor($rem * $this->armourMod);
+	}
 
+	public function setFlashData(){
+		$this->maxDmg = $this->minDmg * $this->dmgs[2];
+		for ($i = 0; $i < sizeof($this->dmgs); $i++){
+			$this->dmgs[$i] *= $this->minDmg;
+		}
+		
+		$this->notes[] = "Fixed damage based on target";
+		$this->notes[] = "Salvo: ".$this->dmgs[0]." dmg / unit";
+		$this->notes[] = "Flight: ".$this->dmgs[1]." dmg / unit";
+		$this->notes[] = "Squadron: ".$this->dmgs[2]." dmg / unit";
+		$this->notes[] = "Ship: ".$this->dmgs[3]." dmg / system on facing side";    
 	}
 
 	public function getCritModMax($dmg){
@@ -52,6 +64,25 @@ class Weapon extends System {
 
 	public function getTotalDamage($fire){
 		return floor($this->getBaseDamage($fire) * $this->getDamageMod($fire) * $this->getDmgRangeMod($fire));
+	}
+
+	public function getBaseDamage($fire){
+		return mt_rand($this->getMinDamage(), $this->getMaxDamage());
+	}
+
+	public function getFlashDamage($fire){
+		if ($fire->target->ship){
+			return $this->dmgs[3];
+		} else if ($fire->target->squad){
+			return $this->dmgs[2];
+		} else if ($fire->target->flight){
+			return $this->dmgs[1];
+		} else if ($fire->target->salvo){
+			return $this->dmgs[0];
+		}
+
+		Debug::log("getFlashDamage DMG error");
+		return 1;
 	}
 
 	public function getAccuracyLoss($fire){
@@ -70,10 +101,6 @@ class Weapon extends System {
 
 	public function getDmgRangeMod($fire){
 		return 1;
-	}
-
-	public function getBaseDamage($fire){
-		return mt_rand($this->getMinDamage(), $this->getMaxDamage());
 	}
 
 	public function getDamageMod($fire){

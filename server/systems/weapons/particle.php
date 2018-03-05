@@ -38,7 +38,7 @@ class MediumParticle extends LightParticle {
 	public $name = "MediumParticle";
 	public $display = "68mm Particle Emitter";
 	public $minDmg = 30;
-	public $maxDmg = 38;
+	public $maxDmg = 36;
 	public $accDecay = 120;
 	public $shots = 2;
 	public $reload = 3;
@@ -59,8 +59,8 @@ class MediumParticle extends LightParticle {
 class HeavyParticle extends MediumParticle {
 	public $name = "HeavyParticle";
 	public $display = "122mm Particle Cannon";
-	public $minDmg = 50;
-	public $maxDmg = 64;
+	public $minDmg = 54;
+	public $maxDmg = 69;
 	public $accDecay = 80;
 	public $shots = 2;
 	public $reload = 4;
@@ -139,6 +139,32 @@ class HeavyFusionCannon extends Particle {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
+	}
+}
+
+class AntimatterConverter extends Particle {
+	public $name = "AntimatterConverter";
+	public $display = "Antimatter-Converterr";
+	public $fireMode = "Flash";
+	public $minDmg = 16;
+	public $accDecay = 80;
+	public $shots = 1;
+	public $animColor = "green";
+	public $projSize = 5;
+	public $projSpeed = 8;
+	public $reload = 1;
+	public $integrity = 45;
+	public $powerReq = 8;
+	public $traverse = 0;
+	public $dmgs = array(1, 2, 6, 3);
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+		parent::__construct($id, $parentId, $start, $end, $output, $width);
+        $this->setFlashData();
+	}
+
+	public function getBaseDamage($fire){
+		return $this->getFlashDamage($fire);
 	}
 }
 

@@ -143,6 +143,8 @@ spl_autoload_register(
                 'fusioncannon' => '/server/systems/weapons/particle.php',
                 'heavyfusioncannon' => '/server/systems/weapons/particle.php',
 
+                'antimatterconverter' => '/server/systems/weapons/particle.php',
+
                 'area' => '/server/systems/weapons/area.php',
                 'energymine' => '/server/systems/weapons/area.php',
 

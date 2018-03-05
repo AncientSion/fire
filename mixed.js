@@ -374,24 +374,6 @@ Mixed.prototype.create = function(){
 }
 
 Mixed.prototype.setSubSystemState = function(){
-	return;
-}
-
-Mixed.prototype.hasSystemSelected = function(){
-	return false;
-}
-
-Mixed.prototype.getSystem = function(id){
-	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].id == id){
-			return this.structures[i];
-		}
-		for (var j = 0; j < this.structures[i].systems.length; j++){
-			if (this.structures[i].systems[j].id == id){
-				return this.structures[i].systems[j];
-			}
-		}
-	}
 }
 
 Mixed.prototype.getSystemByName = function(name){

@@ -79,55 +79,6 @@ class DmgCalc {
 	}
 
 
-	public static function doFlashDmg($fire, $roll, $system){
-		$totalDmg = $fire->weapon->getTotalDamage($fire);
-		$toDo = $totalDmg;
-		if ($fire->target->ship){$system = $fire->target->getFlashOverkillSystem($fire);}
-
-		while ($toDo){
-			$push = false;
-			$destroyed = 0;
-			$remInt = $system->getRemIntegrity();
-			$negation = $fire->target->getArmour($fire, $system);
-			$dmg = static::determineDmg($fire->weapon, $toDo, $negation);
-			$name = get_class($system);
-
-			Debug::log("fire #".$fire->id.", doFlashDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".$name.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
-
-			if ($remInt - $dmg->structDmg < 1){ // destroy system
-				Debug::log(" => destroying target system ".$name." #".$system->id.", rem: ".$remInt.", doing: ".$dmg->structDmg);
-				$destroyed = 1;
-				$dmg->structDmg = $remInt;
-				$push = true;
-			}
-			else if ($toDo){ // no dmg left
-				Debug::log("dmg depleted");
-				$push = true;
-			}
-
-			if ($push){
-				$toDo -= $dmg->shieldDmg; 
-				$toDo -= $dmg->armourDmg; 
-				$toDo -= $dmg->structDmg; 
-				$toDo -= $dmg->emDmg;
-				$fire->hits++;
-				
-				$entry = new Damage(
-					-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
-					$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->emDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
-				);
-
-				$fire->damages[] = $entry;
-				$fire->target->applyDamage($entry);	
-
-				if ($toDo){
-					$system = $fire->target->getFlashOverkillSystem($fire);
-					if ($system){Debug::log("next target: ".$system->name);}
-					else {Debug::log("FLASH to primary, EXIT"); return;}
-				}
-			}
-		}
-	}
 
 	public static function doStandardDmg($fire, $roll, $system){
 		//Debug::log("hitting: ".get_class($system));
@@ -296,6 +247,88 @@ class DmgCalc {
 			}
 		}
 		Debug::log($print);
+	}
+
+	public static function doFlashDmg($fire, $roll, $system){
+		$totalDmg = $fire->weapon->getTotalDamage($fire);
+		$targets = $fire->target->getFlashDmgTargets($fire);
+		$negation;
+
+		Debug::log("flash, targets: ".sizeof($targets).", damage: ".$totalDmg);
+
+		for ($i = 0; $i < sizeof($targets); $i++){
+			$fire->hits++;
+			$system = $targets[$i];
+			$destroyed = 0;
+			$remInt = $system->getRemIntegrity();
+			$negation = $fire->target->getArmour($fire, $system);
+			$dmg = static::determineDmg($fire->weapon, $totalDmg, $negation);
+
+			if ($remInt - $dmg->structDmg < 1){
+				$destroyed = 1;
+				$dmg->structDmg = $remInt;
+			}
+			
+			$entry = new Damage(
+				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
+				$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->emDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
+			);
+
+			$fire->damages[] = $entry;
+			$fire->target->applyDamage($entry);
+
+		}
+	}
+
+
+	public static function doFlashDmg2($fire, $roll, $system){ // old flash
+		$totalDmg = $fire->weapon->getTotalDamage($fire);
+		$toDo = $totalDmg;
+		if ($fire->target->ship){$system = $fire->target->getFlashOverkillSystem($fire);}
+
+		while ($toDo){
+			$push = false;
+			$destroyed = 0;
+			$remInt = $system->getRemIntegrity();
+			$negation = $fire->target->getArmour($fire, $system);
+			$dmg = static::determineDmg($fire->weapon, $toDo, $negation);
+			$name = get_class($system);
+
+			Debug::log("fire #".$fire->id.", doFlashDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".$name.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
+
+			if ($remInt - $dmg->structDmg < 1){ // destroy system
+				Debug::log(" => destroying target system ".$name." #".$system->id.", rem: ".$remInt.", doing: ".$dmg->structDmg);
+				$destroyed = 1;
+				$dmg->structDmg = $remInt;
+				$push = true;
+			}
+			else if ($toDo){ // no dmg left
+				Debug::log("dmg depleted");
+				$push = true;
+			}
+
+			if ($push){
+				$toDo -= $dmg->shieldDmg; 
+				$toDo -= $dmg->armourDmg; 
+				$toDo -= $dmg->structDmg; 
+				$toDo -= $dmg->emDmg;
+				$fire->hits++;
+				
+				$entry = new Damage(
+					-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
+					$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->emDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
+				);
+
+				$fire->damages[] = $entry;
+				$fire->target->applyDamage($entry);	
+
+				if ($toDo){
+					$system = $fire->target->getFlashOverkillSystem($fire);
+					if ($system){Debug::log("next target: ".$system->name);}
+					else {Debug::log("FLASH to primary, EXIT"); return;}
+				}
+			}
+		}
 	}
 
 	public static function determineEMDmg($weapon, $totalDmg, $negation){

@@ -23,7 +23,7 @@ class Tigara extends Heavy {
 		$structs = array();
 
 		$left = new Structure($this->getId(), $this->id, 240, 360, 2450, 23, 2);
-			$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60, 0, 2);
+			$left->systems[] = new AntimatterConverter($this->getId(), $this->id, 300, 60, 0, 2);
 			$left->systems[] = new HeavyFusionCannon($this->getId(), $this->id, 240, 360);
 			$left->systems[] = new HeavyFusionCannon($this->getId(), $this->id, 240, 360);
 			$left->systems[] = new HeavyFusionCannon($this->getId(), $this->id, 240, 360);
@@ -33,7 +33,7 @@ class Tigara extends Heavy {
 		$structs[] = $left;
 
 		$right = new Structure($this->getId(), $this->id, 0, 120, 2450, 23, 2);
-			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60, 0, 2);
+			$right->systems[] = new AntimatterConverter($this->getId(), $this->id, 300, 60, 0, 2);
 			$right->systems[] = new HeavyFusionCannon($this->getId(), $this->id, 0, 120);
 			$right->systems[] = new HeavyFusionCannon($this->getId(), $this->id, 0, 120);
 			$right->systems[] = new HeavyFusionCannon($this->getId(), $this->id, 0, 120);

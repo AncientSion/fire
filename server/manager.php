@@ -117,7 +117,7 @@ include_once 'global.php';
 		$this->reinforce = $gd["reinforce"];
 		$this->status = $gd["status"];
 		$this->turn = $gd["turn"];
-		//$GLOBALS["turn"] = $gd["turn"];
+		$GLOBALS["turn"] = $gd["turn"];
 		$this->phase = $gd["phase"];
 		$this->wave = $gd["reinforceTurn"];
 		$this->playerstatus = DBManager::app()->getPlayerStatus($this->gameid);
@@ -793,7 +793,8 @@ include_once 'global.php';
 				$subFires = DmgCalc::createAreaFireOrders($this, $this->fires[$i]);
 
 				for ($j = 0; $j < sizeof($subFires); $j++){
-					$subFires[$j]->target->resolveAreaFireOrder($subFires[$j]);
+					//$subFires[$j]->target->resolveAreaFireOrder($subFires[$j]);
+					$subFires[$j]->target->resolveFireOrder($subFires[$j]);
 					$this->fires[$i]->hits++;
 				}
 				$this->fires[$i]->resolved = 1;

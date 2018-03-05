@@ -103,9 +103,10 @@ class Single {
 		if ($dmg->new){
 			$this->emDmg += $dmg->emDmg;
 			Debug::log($this->parentId."/".$this->id." total emDmg: ".$this->emDmg);
-			if ($this->emDmg >= $this->integrity){
+			if (!$this->destroyed && $this->emDmg >= $this->integrity){
 				Debug::log("immediate disable");
-				$this->destroyed = 1;
+				$this->doDropout();
+
 			}
 		}
 
@@ -184,15 +185,18 @@ class Single {
 
 			//Debug::log("chance: ".$min.", roll: ".$roll);
 			if ($roll < $min){
-				$this->crits[] = new Crit(
-					sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 0, 0, 1
-				);
-				$this->destroyed = 1;
+				$this->doDropout();
 				return;
 			}
 		}
 	}
 
+	public function doDropout(){
+		$this->crits[] = new Crit(
+			sizeof($this->crits)+1, $this->parentId, $this->id, $GLOBALS["turn"], "Disabled", 0, 0, 1
+		);
+		$this->destroyed = 1;
+	}
 	
 	public function checkSystemCrits($new, $old, $turn){
 		return;

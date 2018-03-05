@@ -1647,7 +1647,7 @@ function Weapon(system){
 	this.loaded;
 	this.fireOrders = [];
 	this.mount;
-	this.exploSize = 2+((this.minDmg+this.maxDmg)/30);
+	this.exploSize = 2+((this.minDmg+this.maxDmg)/30) * (1+(3*(this.fireMode == "Flash")));
 	this.odds = 0;
 }
 Weapon.prototype = Object.create(System.prototype);
@@ -2365,11 +2365,6 @@ function Particle(system){
 Particle.prototype = Object.create(Weapon.prototype);
 
 Particle.prototype.getAnimation = function(fire){
-
-	
-	let a;
-	let b;
-
 	var allAnims = [];
 	var grouping = 2;
 	var speed = this.projSpeed;
@@ -2438,15 +2433,6 @@ Particle.prototype.getAnimation = function(fire){
 			gunAnims.push(shotAnim);
 		}
 		allAnims.push(gunAnims)
-	}
-
-
-	if (fire.shooter.flight && fire.target.flight){
-		b = JSON.parse(JSON.stringify(fire.target.structures[1].layout));
-
-		if (a.x != b.x || a.y != b.y){
-			console.log("ding");
-		}
 	}
 
 	return allAnims;
