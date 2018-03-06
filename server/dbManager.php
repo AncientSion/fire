@@ -220,7 +220,7 @@
 
 			for ($i = 0; $i < sizeof($result); $i++){
 				$result[$i]["subunits"] = array();
-				if ($result[$i]["name"] == "Squadron" || $result[$i]["name"] == "Flight" ||$result[$i]["name"] == "Salvo"){
+				if ($result[$i]["name"] == "Squadron" || $result[$i]["name"] == "Flight"){
 					$stmt->bindParam(":id", $result[$i]["id"]);
 					$stmt->execute();
 					$subunits = $stmt->fetchAll(PDO::FETCH_ASSOC);

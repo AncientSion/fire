@@ -1040,23 +1040,33 @@ function Game(data, userid){
 			return a.userid - b.userid || a.id - b.id
 		});
 
-		var div = $("<div>")
-			.attr("id", "statsOverview")
+		var wrapper = $("<div>")
+			.attr("id", "statsWrapper")
 			.append($("<div>").html("Damage statistics")
 				.css("font-size", 22)
 				.css("text-align", "center")
 				.css("margin", "auto"))
 			.drag();
 
+		var div;
+
 		for (i = 0; i < units.length; i++){
 			console.log(units[i]);
+
+			if (!i || units[i].userid != units[i-1].userid){
+				div = $("<div>")
+					.addClass("statsOverview")
+
+				wrapper.append(div);
+			}
+
 			var table = $("<table>")
 				.addClass("unitStats")
 				.append($("<tr>")
 					.append($("<th>")
 						.attr("colSpan", 4)
-						.attr("font-size", 1)
-						.html(units[i].name + " #" + units[i].id + "  -" + units[i].display +"-")
+						.css("font-size", 16)
+						.html(units[i].name + " #" + units[i].id + "  '" + units[i].display +"'")
 					)
 				)
 
@@ -1078,13 +1088,15 @@ function Game(data, userid){
 				.append($("<tr>")
 					.append($("<th>")
 						.attr("colSpan", 4)
-						.css("height", 10)
+						.css("height", 5)
 					)
 				)
 				.append($("<tr>")
 					.append($("<th>")
+						.css("border", "1px solid white")
+						.css("font-size", 13)
 						.attr("colSpan", 4)
-						.html("Total damage dealt to")
+						.html("Total damage dealt")
 					)
 				)
 				.append($("<tr>")
@@ -1098,6 +1110,7 @@ function Game(data, userid){
 						.html("Structure")
 					)
 					.append($("<td>")
+						.css("font-weight", "bold")
 						.html("Combined")
 					)
 				)
@@ -1123,7 +1136,7 @@ function Game(data, userid){
 			div.append(table);
 		}
 
-		$(document.body).append(div)
+		$(document.body).append(wrapper)
 	}
 
 
