@@ -1944,3 +1944,29 @@ body {
 #activeGames th{
 	padding: 5px;
 }
+
+#statsOverview {
+	z-index: 50;
+	position: absolute;
+	border: 1px solid white;
+	border-radius: 5px;
+	padding: 5px;
+	background-color: black;
+	width: 400px;
+}
+
+.unitStats {
+	width: 90%;
+	margin: auto;
+	margin-bottom: 20px;
+	padding: 3px;
+	border-radius: 5px;
+	border-collapse: collapse;
+}
+
+.unitStats tr {
+}
+
+.unitStats td {
+	border: 1px solid white;
+}

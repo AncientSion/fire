@@ -1034,6 +1034,99 @@ function Game(data, userid){
 		}
 	}
 
+	this.showStats = function(data){
+		units = JSON.parse(data);
+		units.sort(function(a, b){
+			return a.userid - b.userid || a.id - b.id
+		});
+
+		var div = $("<div>")
+			.attr("id", "statsOverview")
+			.append($("<div>").html("Damage statistics")
+				.css("font-size", 22)
+				.css("text-align", "center")
+				.css("margin", "auto"))
+			.drag();
+
+		for (i = 0; i < units.length; i++){
+			console.log(units[i]);
+			var table = $("<table>")
+				.addClass("unitStats")
+				.append($("<tr>")
+					.append($("<th>")
+						.attr("colSpan", 4)
+						.attr("font-size", 1)
+						.html(units[i].name + " #" + units[i].id + "  -" + units[i].display +"-")
+					)
+				)
+
+			if (units[i].subunits.length){
+				var html = "";
+				for (var j = 0; j < units[i].subunits.length; j++){
+					html += (units[i].subunits[j].amount + "x " + units[i].subunits[j].name+", ");
+				}
+				table.append($("<tr>")
+						.append($("<th>")
+							.attr("colSpan", 4)
+							.html(html)
+						)
+					)
+			}
+
+
+			table
+				.append($("<tr>")
+					.append($("<th>")
+						.attr("colSpan", 4)
+						.css("height", 10)
+					)
+				)
+				.append($("<tr>")
+					.append($("<th>")
+						.attr("colSpan", 4)
+						.html("Total damage dealt to")
+					)
+				)
+				.append($("<tr>")
+					.append($("<td>")
+						.html("Armour")
+					)
+					.append($("<td>")
+						.html("Systems")
+					)
+					.append($("<td>")
+						.html("Structure")
+					)
+					.append($("<td>")
+						.html("Combined")
+					)
+				)
+				.append($("<tr>")
+					.append($("<td>")
+						.html(units[i].armourDmg)
+					)
+					.append($("<td>")
+						.html(units[i].structDmg)
+					)
+					.append($("<td>")
+						.html(units[i].overkill)
+					)
+					.append($("<td>")
+						.html(units[i].armourDmg + units[i].structDmg + units[i].overkill)
+					)
+				)
+
+				if (game.userid == units[i].userid){
+					table.addClass("friendly")
+				} else table.addClass("hostile");
+
+			div.append(table);
+		}
+
+		$(document.body).append(div)
+	}
+
+
 	this.create = function(){
 		$("#phaseSwitchDiv").show();
 

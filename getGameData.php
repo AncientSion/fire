@@ -39,6 +39,9 @@ if (isset($_GET["type"])){
 		$unit = $manager->getPreviewData($_GET);
 		echo json_encode($unit, JSON_NUMERIC_CHECK);
 	}
+	else if ($_GET["type"] == "unitStats"){
+		echo json_encode($dbManager->getUnitStats($_GET["gameid"], $_GET["userid"]), JSON_NUMERIC_CHECK);
+	}
 }
 	
 

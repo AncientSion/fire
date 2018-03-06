@@ -278,7 +278,10 @@
 				</tr>
 				<tr>
 					<?php 
-						if (!$status){
+						if ($status == "closed"){
+							echo '<tr><td></td></tr><tr><td colSpan=3 class="buttonTD" style="font-size: 20px" onclick="this.disabled=true;ajax.getStats()">Show Statistics</td></tr>';
+						}
+						else if (!$status){
 							echo '<td colSpan=3 class="buttonTD" style="background-color: yellow;">Anonymus Mode</td>';
 						}
 						else if ($status == "ready"){

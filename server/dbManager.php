@@ -190,6 +190,57 @@
 			}
 		}
 
+		public function getUnitStats($gameid, $user){
+
+			$stmt = $this->connection->prepare("
+				SELECT
+					units.name, units.display, units.id, units.userid,
+					COALESCE(SUM(damages.armourDmg), 0) as armourDmg,
+					COALESCE(SUM(damages.structDmg), 0) as structDmg,
+					COALESCE(SUM(damages.overkill), 0) as overkill
+				FROM units
+				LEFT JOIN fireorders ON
+					fireorders.shooterid = units.id
+				LEFT JOIN damages ON
+					damages.fireid = fireorders.id
+				WHERE units.gameid = :gameid
+				GROUP BY units.id
+			");
+
+			$stmt->bindParam(":gameid", $gameid);
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+			$stmt = $this->connection->prepare("
+				SELECT subunits.name, subunits.amount
+				FROM subunits
+				WHERE subunits.unitid = :id
+			");
+
+			for ($i = 0; $i < sizeof($result); $i++){
+				$result[$i]["subunits"] = array();
+				if ($result[$i]["name"] == "Squadron" || $result[$i]["name"] == "Flight" ||$result[$i]["name"] == "Salvo"){
+					$stmt->bindParam(":id", $result[$i]["id"]);
+					$stmt->execute();
+					$subunits = $stmt->fetchAll(PDO::FETCH_ASSOC);
+					$result[$i]["subunits"] = $subunits;
+				}
+			}
+
+
+
+			if ($stmt->errorCode() == 0){
+				//return "ding";
+				return $result;
+			} else return "ERROR";
+
+			foreach ($rows as $row){
+				var_export($row);
+				echo "</br></br>";
+			}
+		}
+
 		public function createNewGameAndJoin($userid, $post){
 			$this->createNewGame($post);
 			$id = $this->getLastInsertId();

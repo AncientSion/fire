@@ -130,7 +130,22 @@ window.ajax = {
 					turn: game.turn,
 					phase: game.phase,
 					},
-			//success: callback,
+			success: returnToLobby,
+			error: ajax.error,
+		});
+	},
+
+	getStats: function(){
+		$.ajax({
+			type: "GET",
+			url: "getGameData.php",
+			datatype: "json",
+			data: {
+					type: "unitStats",
+					gameid: game.id,
+					userid: game.userid,
+					},
+			success: game.showStats,
 			error: ajax.error,
 		});
 	},
@@ -148,7 +163,7 @@ window.ajax = {
 					data: window.check
 					},
 			success: function(ret){
-				console.log("return");
+				//console.log("return");
 				var data = JSON.parse(ret);
 				if (!data.length){
 					//console.log("no change")
