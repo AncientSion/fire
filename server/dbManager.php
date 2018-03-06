@@ -204,10 +204,13 @@
 				LEFT JOIN damages ON
 					damages.fireid = fireorders.id
 				WHERE units.gameid = :gameid
+				AND units.name != :salvo
 				GROUP BY units.id
 			");
 
+			$salvo = "Salvo";
 			$stmt->bindParam(":gameid", $gameid);
+			$stmt->bindParam(":salvo", $salvo);
 			$stmt->execute();
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -219,7 +222,6 @@
 			");
 
 			for ($i = 0; $i < sizeof($result); $i++){
-				if ($result[$i]["name"] == "Salvo"){continue;}
 				$result[$i]["subunits"] = array();
 				if ($result[$i]["name"] == "Squadron" || $result[$i]["name"] == "Flight"){
 					$stmt->bindParam(":id", $result[$i]["id"]);
