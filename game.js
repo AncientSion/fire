@@ -1034,6 +1034,18 @@ function Game(data, userid){
 		}
 	}
 
+	this.getUnitStatsNameString = function(unit){
+		var html = units[i].name + " #" + units[i].id;
+
+		if (units[i].display != ""){
+			html += "  '" + units[i].display + "'";
+		}
+		if (units[i].destroyed){
+			html += "  (MIA)";
+		}
+		return html;
+	}
+
 	this.showStats = function(data){
 		units = JSON.parse(data);
 		units.sort(function(a, b){
@@ -1066,7 +1078,7 @@ function Game(data, userid){
 					.append($("<th>")
 						.attr("colSpan", 4)
 						.css("font-size", 16)
-						.html(units[i].name + " #" + units[i].id + "  '" + units[i].display +"'")
+						.html(game.getUnitStatsNameString(units[i]))
 					)
 				)
 

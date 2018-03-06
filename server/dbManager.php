@@ -194,7 +194,7 @@
 
 			$stmt = $this->connection->prepare("
 				SELECT
-					units.name, units.display, units.id, units.userid,
+					units.name, units.display, units.id, units.userid, units.destroyed,
 					COALESCE(SUM(damages.armourDmg), 0) as armourDmg,
 					COALESCE(SUM(damages.structDmg), 0) as structDmg,
 					COALESCE(SUM(damages.overkill), 0) as overkill
