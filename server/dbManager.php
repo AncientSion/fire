@@ -219,6 +219,7 @@
 			");
 
 			for ($i = 0; $i < sizeof($result); $i++){
+				if ($result[$i]["name"] == "Salvo"){continue;}
 				$result[$i]["subunits"] = array();
 				if ($result[$i]["name"] == "Squadron" || $result[$i]["name"] == "Flight"){
 					$stmt->bindParam(":id", $result[$i]["id"]);
@@ -227,7 +228,6 @@
 					$result[$i]["subunits"] = $subunits;
 				}
 			}
-
 
 
 			if ($stmt->errorCode() == 0){
