@@ -118,7 +118,7 @@ window.ajax = {
 		});
 	},
 
-	concedeMatch: function(){
+	concedeMatch: function(callback){
 		$.ajax({
 			type: "POST",
 			url: "postGameData.php",
@@ -130,7 +130,7 @@ window.ajax = {
 					turn: game.turn,
 					phase: game.phase,
 					},
-			success: returnToLobby,
+			success: callback,
 			error: ajax.error,
 		});
 	},

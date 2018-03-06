@@ -290,7 +290,7 @@
 						else echo '<td colSpan=3 class="buttonTD" style="font-size: 20px" onclick="this.disabled=true;game.endPhase()">Confirm Orders</td>';
 
 						if ($manager->phase == 3 && $status == "waiting"){
-							echo '<tr><td></td></tr><tr><td colSpan=3 class="buttonTD" style="font-size: 20px" onclick="this.disabled=true;game.concedeMatch()">Concede Match</td></tr>';
+							echo '<tr><td></td></tr><tr><td colSpan=3 class="buttonTD" style="font-size: 20px" onclick="this.disabled=true;game.concedeMatch(goToLobby)">Concede Match</td></tr>';
 						}
 					?>
 				</tr>
