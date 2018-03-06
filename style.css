@@ -1976,3 +1976,9 @@ body {
 	font-size: 14px;
 	border: 1px solid white;
 }
+
+.totalDmgDiv {
+	text-align: center;
+	margin-top: 20px;
+	font-size: 22px;
+}

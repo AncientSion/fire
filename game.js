@@ -1054,7 +1054,7 @@ function Game(data, userid){
 
 		var wrapper = $("<div>")
 			.attr("id", "statsWrapper")
-			.append($("<div>").html("Match Damage Statistics")
+			.append($("<div>").html("Match Damage-by-source Statistics")
 				.css("margin-bottom", 10)
 				.css("font-size", 22)
 				.css("text-align", "center")
@@ -1062,23 +1062,27 @@ function Game(data, userid){
 			.drag();
 
 		var div;
+		var total = 0;
+
 
 		for (i = 0; i < units.length; i++){
 			console.log(units[i]);
 
 			if (!i || units[i].userid != units[i-1].userid){
 				div = $("<div>")
-					.addClass("statsOverview")
-
+					.addClass("statsOverview");
 				wrapper.append(div);
 			}
+
+			var combined = units[i].armourDmg + units[i].structDmg + units[i].overkill;
+			total += combined;
 
 			var table = $("<table>")
 				.addClass("unitStats")
 				.append($("<tr>")
 					.append($("<th>")
 						.attr("colSpan", 4)
-						.css("font-size", 16)
+						.css("font-size", 15)
 						.html(game.getUnitStatsNameString(units[i]))
 					)
 				)
@@ -1102,14 +1106,6 @@ function Game(data, userid){
 					.append($("<th>")
 						.attr("colSpan", 4)
 						.css("height", 5)
-					)
-				)
-				.append($("<tr>")
-					.append($("<th>")
-						.css("border", "1px solid white")
-						.css("font-size", 13)
-						.attr("colSpan", 4)
-						.html("Total damage dealt")
 					)
 				)
 				.append($("<tr>")
@@ -1138,7 +1134,7 @@ function Game(data, userid){
 						.html(units[i].overkill)
 					)
 					.append($("<td>")
-						.html(units[i].armourDmg + units[i].structDmg + units[i].overkill)
+						.html(combined)
 					)
 				)
 
@@ -1147,6 +1143,11 @@ function Game(data, userid){
 				} else table.addClass("hostile");
 
 			div.append(table);
+
+			if (i == units.length-1 || (i && units[i+1].userid != units[i].userid)){
+				div.append($("<div>").addClass("totalDmgDiv").html("Total Damage dealt: " + total))
+				total = 0;
+			}
 		}
 
 		$(document.body).append(wrapper)
