@@ -1054,7 +1054,8 @@ function Game(data, userid){
 
 		var wrapper = $("<div>")
 			.attr("id", "statsWrapper")
-			.append($("<div>").html("Damage statistics")
+			.append($("<div>").html("Match Damage Statistics")
+				.css("margin-bottom", 10)
 				.css("font-size", 22)
 				.css("text-align", "center")
 				.css("margin", "auto"))

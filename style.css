@@ -1956,7 +1956,6 @@ body {
 
 .statsOverview {
 	margin: auto;
-	margin-top: 15px;
 	padding: 3px;
 	border-radius: 5px;
 	border-collapse: collapse;
@@ -1967,7 +1966,7 @@ body {
 .unitStats {
 	width: 320px;
 	border-radius: 3px;
-	margin-top: 15px;
+	margin-top: 10px;
 }
 
 .unitStats tr {
