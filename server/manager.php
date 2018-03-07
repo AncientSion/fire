@@ -356,10 +356,10 @@ include_once 'global.php';
 		}
 	}
 
-	public function canAdvance($gameid){
-		if ($this->status != "active"){return false;}
+	public function canAdvance($gamedata){
+		if ($gamedata["status"] )= "closed"){return false;}
 
-		$this->playerstatus = DBManager::app()->getPlayerStatus($gameid);
+		$this->playerstatus = DBManager::app()->getPlayerStatus($gamedata["id"]);
 
 		if (sizeof($this->playerstatus) >= 2){
 			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
