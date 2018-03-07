@@ -1187,7 +1187,7 @@ class Medium extends Ship {
 		$this->hitTable = array(
 			"Bridge" => 0.6,
 			"Engine" => 0.8,
-			"Sensor" => 0.95,
+			"Sensor" => 1,
 			"Reactor" => 0.6
 		);
 	}
@@ -1277,7 +1277,7 @@ class UltraHeavy extends SuperHeavy {
 		$this->hitTable = array(
 			"Bridge" => 0.75,
 			"Engine" => 0.85,
-			"Sensor" => 119,
+			"Sensor" => 1,
 			"Reactor" => 0.75
 		);
 	}

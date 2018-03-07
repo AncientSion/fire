@@ -63,7 +63,7 @@ class HeavyPulse extends Pulse {
 	public $display = "102mm Pulse Cannon";
 	public $minDmg = 38;
 	public $maxDmg = 55;
-	public $accDecay = 90;
+	public $accDecay = 80;
 	public $shots = 1;
 	public $animColor = "brown";
 	public $projSize = 4;
@@ -156,8 +156,8 @@ class HeavyPlasmaPulse extends MediumPlasmaPulse {
 	public $display = "102mm Plasma Pulse Cannon";
 	public $minDmg = 46;
 	public $maxDmg = 59;
-	public $accDecay = 90;
-	public $dmgLoss = 9;
+	public $accDecay = 80;
+	public $dmgLoss = 8;
 	
 	public $projSize = 4;
 	public $projSpeed = 9;

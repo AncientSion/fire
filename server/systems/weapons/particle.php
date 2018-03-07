@@ -38,7 +38,7 @@ class MediumParticle extends LightParticle {
 	public $name = "MediumParticle";
 	public $display = "68mm Particle Emitter";
 	public $minDmg = 30;
-	public $maxDmg = 28;
+	public $maxDmg = 38;
 	public $accDecay = 120;
 	public $shots = 2;
 	public $reload = 3;

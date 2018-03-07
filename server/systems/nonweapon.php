@@ -65,10 +65,10 @@ class PrimarySystem extends System {
 
 		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", newDmg: ".$new.", oldDmg: ".$old);
 
-		$mod = $this->getCritModMax($new + $old/2);
-		if ($mod < 5){Debug::log("mod < 5: ".$mod.", dropping"); return;}
+		$mod = $this->getCritModMax($new);
+		if ($mod < 4){return;}
 
-		$trigger =  ($new + $old/2)*2;
+		$trigger =  ($new*2 + $old/2);
 
 		for ($i = 0; $i < sizeof($possible); $i++){
 			$roll = mt_rand(0, 100);
@@ -83,7 +83,7 @@ class PrimarySystem extends System {
 	}
 
 	public function getCritModMax($dmg){
-		return min(25, round($dmg/2));
+		return min(20, round($dmg/2));
 	}
 }
 
