@@ -108,7 +108,7 @@ class MagCompressor extends Plasma {
 	public $reload = 4;
 	public $integrity = 54;
 	public $powerReq = 6;
-	public $traverse = -1;
+	public $traverse = 1;
 	public $dmgs = array(1, 2, 6, 3);
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
