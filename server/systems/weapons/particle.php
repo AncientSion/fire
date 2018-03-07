@@ -81,8 +81,8 @@ class HeavyParticle extends MediumParticle {
 class SuperHeavyParticle extends HeavyParticle {
 	public $name = "SuperHeavyParticle";
 	public $display = "138mm Particle Accelerator";
-	public $minDmg = 56;
-	public $maxDmg = 70;
+	public $minDmg = 64;
+	public $maxDmg = 82;
 	public $accDecay = 60;
 	public $shots = 3;
 	public $reload = 6;
