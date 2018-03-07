@@ -357,7 +357,7 @@ include_once 'global.php';
 	}
 
 	public function canAdvance($gamedata){
-		if ($gamedata["status"] )= "closed"){return false;}
+		if ($gamedata["status"] == "closed"){return false;}
 
 		$this->playerstatus = DBManager::app()->getPlayerStatus($gamedata["id"]);
 
