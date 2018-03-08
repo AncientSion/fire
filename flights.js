@@ -150,18 +150,21 @@ Flight.prototype.createBaseDiv = function(){
 			.append($("<td>").html("Classification"))
 			.append($("<td>").html(game.getUnitType(this.traverse) + " (" + this.traverse + ")")))
 		.append($("<tr>")
-			.append($("<td>").html("Current Thrust"))
-			.append($("<td>").html((this.getCurSpeed() + " (max: " + (this.getMaxSpeed()) + ")"))))
-		.append($("<tr>")
 			.append($("<td>").html("Current Mission"))
 			.append($("<td>").addClass("missionType").html(game.getMissionTypeString(this, this.getTarget()))))
 		.append($("<tr>")
+			.append($("<td>").html("Current Speed"))
+			.append($("<td>").html(this.getCurSpeed())))
+		.append($("<tr>")
+			.append($("<td>").html("Acceleration"))
+			.append($("<td>").html(" +" + this.baseImpulse + " per turn, maximum " + (this.getMaxSpeed()))))
+		.append($("<tr>")
 			.append($("<td>").html("Mission Target"))
 			.append($("<td>").addClass("missionTarget").html(game.getMissionTargetString(this.mission))))
-		.append($("<tr>")
-			.append($("<td>").html("Mission Start"))
-			.append($("<td>").addClass("missionTurn").html("Turn " + this.mission.turn)))
-
+		//.append($("<tr>")
+		//	.append($("<td>").html("Mission Start"))
+		//	.append($("<td>").addClass("missionTurn").html("Turn " + this.mission.turn)))
+		
 
 		if (this.friendly && game.phase == -1){
 			$(table)

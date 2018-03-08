@@ -248,6 +248,7 @@ else {
 				arcRange: 100,
 				canSubmit: 0,
 				system: 0,
+				fighters: [],
 
 				getUnitName: function(){
 					if (this.ships[0].ship){return this.ships[0].name;
@@ -344,8 +345,82 @@ else {
 						$(button).click(function(){
 							window.confirmPurchase();
 						});
-					}
-				}
+				},
+
+
+				buildShipList: function(data, t){
+					for (var i = 0; i < data.length; i++){
+						$(t).append(
+							$("<tr>")
+								.hover(function(){
+									$(this).toggleClass("highlight");
+								})
+								.append($("<td>").html(data[i]["name"]))
+								.append($("<td>").html(""))
+								.append($("<td>").html(data[i]["ep"]))
+								.append($("<td>").html(data[i]["ew"]))
+								.append($("<td>").html(data[i]["value"]))
+								.append(
+									$("<td>").html("Add Unit")
+									.data("name", data[i]["name"])
+									.data("value", data[i]["value"])
+									.hover(function(){$(this).toggleClass("selectionHighlight");})
+									.click(function(){requestSingleUnitData($(this).data("name"));})
+								)
+							)
+						}
+				},
+
+				buildSquadList: function(data, t){
+					$(t).append(
+						$("<tr>")
+							.hover(function(){
+								$(this).toggleClass("highlight");
+							})
+							.css("border", "1px solid")
+							.append($("<td>").html("Squadron"))
+							.append($("<td>").html("14"))
+							.append($("<td>").html(""))
+							.append($("<td>").html(""))
+							.append($("<td>").html(""))
+							.append($("<td>").html("Add Unit")
+								.data("name", "Squadron")
+								.data("value", 0)
+								.hover(function(){
+									$(this).toggleClass("selectionHighlight");
+								})
+								.click(function(){requestSingleUnitData($(this).data("name"));})
+							)
+					)
+
+					for (var i = 0; i < data.length; i++){
+						$(t).append(
+							$("<tr>")
+								.hover(function(){
+									$(this).toggleClass("highlight");
+								})
+								.append($("<td>").html(data[i]["name"]))
+								.append($("<td>").html(data[i]["space"]))
+								.append($("<td>").html(data[i]["ep"]))
+								.append($("<td>").html(data[i]["ew"]))
+								.append($("<td>").html(data[i]["value"]))
+								.append(
+									$("<td>").html("Add Unit")
+									.data("name", data[i]["name"])
+									.data("value", data[i]["value"])
+									.data("space", data[i]["space"])
+									.hover(function(){$(this).toggleClass("selectionHighlight");})
+									.click(function(){requestSquadUnit($(this))})
+								)
+							)
+						}
+				},
+
+
+				buildFighterList: function(data, t){
+					console.log(data)
+				},
+			}
 
 			initPreviewCanvas();
 			initFactionTable();
@@ -379,7 +454,7 @@ else {
 								showShipList($(this));
 							}
 							else {
-								requestShipsForFaction(this, buildShipList);
+								requestShipsForFaction(this, buildUnitList);
 							}
 						})
 						.contextmenu(function(e){
@@ -664,77 +739,18 @@ else {
 		});
 	}
 
-	function buildShipList(data, ele){
-		var t = $("#factionDiv").find("#" + $(ele).data("faction"))
+	function buildUnitList(data, ele){
 		data = JSON.parse(data);
+
+		var t = $("#factionDiv").find("#" + $(ele).data("faction"))
 		$(ele).data("set", 1);
 
-		// capitals
-		for (var i = 0; i < data[0].length; i++){
-			$(t).append(
-				$("<tr>")
-					.hover(function(){
-						$(this).toggleClass("highlight");
-					})
-					.append($("<td>").html(data[0][i]["name"]))
-					.append($("<td>").html(""))
-					.append($("<td>").html(data[0][i]["ep"]))
-					.append($("<td>").html(data[0][i]["ew"]))
-					.append($("<td>").html(data[0][i]["value"]))
-					.append(
-						$("<td>").html("Add Unit")
-						.data("name", data[0][i]["name"])
-						.data("value", data[0][i]["value"])
-						.hover(function(){$(this).toggleClass("selectionHighlight");})
-						.click(function(){requestSingleUnitData($(this).data("name"));})
-					)
-				)
-		}
+		game.buildShipList(data[0], t);
+		game.buildSquadList(data[1], t);
+		game.buildFighterList(data[2], t);
 
-		/// squadron
-		$(t).append(
-			$("<tr>")
-				.hover(function(){
-					$(this).toggleClass("highlight");
-				})
-				.css("border", "1px solid")
-				.append($("<td>").html("Squadron"))
-				.append($("<td>").html("14"))
-				.append($("<td>").html(""))
-				.append($("<td>").html(""))
-				.append($("<td>").html(""))
-				.append($("<td>").html("Add Unit")
-					.data("name", "Squadron")
-					.data("value", 0)
-					.hover(function(){
-						$(this).toggleClass("selectionHighlight");
-					})
-					.click(function(){requestSingleUnitData($(this).data("name"));})
-				)
-		)
 
 		//squaddie
-		for (var i = 0; i < data[1].length; i++){
-			$(t).append(
-				$("<tr>")
-					.hover(function(){
-						$(this).toggleClass("highlight");
-					})
-					.append($("<td>").html(data[1][i]["name"]))
-					.append($("<td>").html(data[1][i]["space"]))
-					.append($("<td>").html(data[1][i]["ep"]))
-					.append($("<td>").html(data[1][i]["ew"]))
-					.append($("<td>").html(data[1][i]["value"]))
-					.append(
-						$("<td>").html("Add Unit")
-						.data("name", data[1][i]["name"])
-						.data("value", data[1][i]["value"])
-						.data("space", data[1][i]["space"])
-						.hover(function(){$(this).toggleClass("selectionHighlight");})
-						.click(function(){requestSquadUnit($(this))})
-					)
-				)
-		}
 		showShipList(ele);
 	}
 

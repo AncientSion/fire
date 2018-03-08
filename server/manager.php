@@ -18,7 +18,7 @@ include_once 'global.php';
 		public $value = 0;
 		public $wave;
 
-		public $ships = array();
+		public $units = array();
 		public $ballistics = array();
 		public $gd = array();
 		public $fires = array();
@@ -123,11 +123,11 @@ include_once 'global.php';
 		$this->playerstatus = DBManager::app()->getPlayerStatus($this->gameid);
 	}
 
-	public function validateFleetCost($ships){
+	public function validateFleetCost($units){
 		$used = 0;
 
-		for ($i = 0; $i < sizeof($ships); $i++){
-			$used = $used + $ships[$i]["value"];
+		for ($i = 0; $i < sizeof($units); $i++){
+			$used = $used + $units[$i]["value"];
 		}
 
 		$avail = $this->pv;
@@ -357,7 +357,7 @@ include_once 'global.php';
 	}
 
 	public function canAdvance($gamedata){
-		if ($gamedata["status"] == "closed"){return false;}
+		if ($gamedata["status"] == "closed" || $gamedata["status"] == "open"){return false;}
 
 		$this->playerstatus = DBManager::app()->getPlayerStatus($gamedata["id"]);
 
@@ -1433,12 +1433,12 @@ include_once 'global.php';
 
 	public function getShipsForFaction($faction){
 		//Debug::log("getShipsForFaction");
-		$ships = array(array(), array());
-		$return = array(array(), array());
+		$units = array(array(), array(), array());
+		$return = array(array(), array(), array());
 
 		switch ($faction){
 			case "Earth Alliance";
-				$ships = array(
+				$units = array(
 					array(
 						"Omega",
 						"Avenger",
@@ -1450,11 +1450,15 @@ include_once 'global.php';
 					array(
 						"Crius",
 						"Tethys",
-					)
+					),
+					array(
+						"Aurora",
+						"Thunderbolt",
+					),
 				);
 				break;
 			case "Centauri Republic";
-				$ships = array(
+				$units = array(
 					array(
 						"Octurion",
 						"Primus",
@@ -1467,37 +1471,49 @@ include_once 'global.php';
 						"Mograth",
 						"Vorchan",
 						"Haven",
-					)
+					),
+					array(
+						"Sentri",
+						"SitaraParticle",
+					),
 				);
 				break;
 			case "Minbari Federation";
-				$ships = array(
+				$units = array(
 					array(
-					"Sharlin",
-					"Tigara",
-					"Tinashi",
+						"Sharlin",
+						"Tigara",
+						"Tinashi",
 					),
 					array(
-					"WhiteStar",
-					"Torotha",
-					)
+						"WhiteStar",
+						"Torotha",
+					),
+					array(
+						"Nial",
+					//	"Tishat",
+					),
 				);
 				break;
 			case "Narn Regime";
-				$ships = array(
+				$units = array(
 					array(
-					"GQuan",
-					"GSten",
-					"KaToc",
-					"RonGoth",
-					"DagKar",
+						"GQuan",
+						"GSten",
+						"KaToc",
+						"RonGoth",
+						"DagKar",
 					),
 					array(
-					"Thentus",
-					"Trakk",
-					"Shokos",
-					"Shokov",
-					)
+						"Thentus",
+						"Trakk",
+						"Shokos",
+						"Shokov",
+					),
+					array(
+						"Frazi",
+						"Gorith",
+					),
 				);
 				break;
 			default:
@@ -1506,23 +1522,22 @@ include_once 'global.php';
 
 		$ship;
 
-		for ($i = 0; $i < sizeof($ships[0]); $i++){
-			$name = $ships[0][$i];
+		for ($i = 0; $i < sizeof($units[0]); $i++){
+			$name = $units[0][$i];
 			$unit = new $name(1, 0, 0, 0, "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "");
-			$ship = array(
+			$data = array(
 				"name" => $unit->name,
 				"value" => $unit::$value,
 				"ep" => $unit->ep,
 				"ew" => $unit->ew,
 				"eta" => 0
 			);
-			$return[0][] = $ship;
+			$return[0][] = $data;
 		}
 
-		for ($j = 0; $j < sizeof($ships[1]); $j++){
-			$unit = new $ships[1][$j](1, 1);
-
-			$ship = array(
+		for ($j = 0; $j < sizeof($units[1]); $j++){
+			$unit = new $units[1][$j](1, 1);
+			$data = array(
 				"name" => $unit->name,
 				"value" => $unit->cost,
 				"ep" => $unit->ep,
@@ -1530,19 +1545,25 @@ include_once 'global.php';
 				"space" => $unit->space,
 				"eta" => 0
 			);
-			$return[1][] = $ship;
+			$return[1][] = $data;
 		}
+
+		for ($i = 0; $i < sizeof($units[2]); $i++){
+			$fighter = new $units[2][$i](0, 0);
+			$return[2][] = $fighter;
+		}
+
 
 		return $return;
 	}
 
 	public function getReinforcements($faction){
 		//Debug::log("getShipsForFaction");
-		$ships = array();
+		$units = array();
 
 		switch ($faction){
 			case "Earth Alliance";
-				$ships = array(
+				$units = array(
 					array("Omega", 5, 6),
 					array("Hyperion", 7, 5),
 					array("Avenger", 3, 6),
@@ -1552,7 +1573,7 @@ include_once 'global.php';
 				);
 				break;
 			case "Centauri Republic";
-				$ships = array(
+				$units = array(
 					array("Primus", 5, 6),
 					array("Altarian", 15, 3),
 					array("Demos", 15, 3),
@@ -1561,7 +1582,7 @@ include_once 'global.php';
 				);
 				break;
 			case "Minbari Federation";
-				$ships = array(
+				$units = array(
 					array("Sharlin", 2, 4),
 					array("Tigara", 3, 4),
 					array("Tinashi", 4, 3),
@@ -1569,13 +1590,13 @@ include_once 'global.php';
 				);
 				break;
 			case "Narn Regime";
-				$ships = array(
+				$units = array(
 					array("GQuan", 6, 2),
-					array("GSten", 8, 3),
-					array("KaToc", 10, 3),
-					array("RonGoth", 10, 3),
+					array("GSten", 6, 3),
+					array("KaToc", 9, 3),
+					array("RonGoth", 9, 3),
 					array("DagKar", 10, 3),
-					array("Squadron", 15, 2),
+					array("Squadron", 18, 2),
 				);
 
 				break;
@@ -1583,7 +1604,7 @@ include_once 'global.php';
 				break;
 		}
 
-		return $ships;
+		return $units;
 
 	}
 	public function getPreviewData($get){

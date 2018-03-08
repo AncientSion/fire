@@ -237,7 +237,7 @@ function Game(data, userid){
 		$(s.element).find(".header")
 			.find(".missionType").html(this.getMissionTypeString(s, s.getTarget())).end()
 			.find(".missionTarget").html(this.getMissionTargetString(mission)).end()
-			.find(".missionTurn").html("Turn " + mission.turn).end();
+		//	.find(".missionTurn").html("Turn " + mission.turn).end();
 
 		if (t && t instanceof Ship && o.x == dest.x && o.y == dest.y){
 			mission.arrived = this.turn-1;

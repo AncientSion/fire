@@ -123,7 +123,7 @@ class SitaraParticle extends Sitara {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new ParticleBolt($this->getId(), $this->id, $this->parentId, 1, 1, 36, 44, 0, 360);
+		$this->systems[] = new ParticleBolt($this->getId(), $this->id, $this->parentId, 1, 1, 30, 38, 0, 360);
 	}
 }
 

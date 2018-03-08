@@ -57,6 +57,47 @@ class GQuan extends Heavy {
 			$this->structures[] = $structs[$i];
 		}
 	}
+
+	static function getKit($faction){
+		return array(
+			"id" => 0,
+			"name" => "",
+			"cost" => static::$value,
+			"gameid" => 0,
+			"userid" => 0,
+			"upgrades" => 
+			array(
+				array(
+					"active" => 0,
+					"chance" => 30,
+					"notes" => "Gorith Outfit",
+					"cost" => 220,
+					"loads" =>
+					array(
+						array(
+							"systemid" => 16,
+							"name" => "Gorith",
+							"amount" => 10
+						),
+					)
+				),
+				array(
+					"active" => 0,
+					"chance" => 30,
+					"notes" => "Frazi Outfit",
+					"cost" => 320,
+					"loads" =>
+					array(
+						array(
+							"systemid" => 16,
+							"name" => "Frazi",
+							"amount" => 10
+						),
+					)
+				),
+			)
+		);
+	}
 }
 
 ?>

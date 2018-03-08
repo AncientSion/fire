@@ -46,6 +46,47 @@ class RonGoth extends Medium {
 			$this->structures[] = $structs[$i];
 		}
 	}
+
+	static function getKit($faction){
+		return array(
+			"id" => 0,
+			"name" => "",
+			"cost" => static::$value,
+			"gameid" => 0,
+			"userid" => 0,
+			"upgrades" => 
+			array(
+				array(
+					"active" => 0,
+					"chance" => 50,
+					"notes" => "Gorith Outfit",
+					"cost" => 130,
+					"loads" =>
+					array(
+						array(
+							"systemid" => 14,
+							"name" => "Gorith",
+							"amount" => 6
+						),
+					)
+				),
+				array(
+					"active" => 0,
+					"chance" => 50,
+					"notes" => "Frazi Outfit",
+					"cost" => 200,
+					"loads" =>
+					array(
+						array(
+							"systemid" => 14,
+							"name" => "Frazi",
+							"amount" => 6
+						),
+					)
+				),
+			)
+		);
+	}
 }
 
 ?>
