@@ -1189,6 +1189,7 @@ function Game(data, userid){
 			this.reinforcements[i] = window.initUnit(this.reinforcements[i]);
 			this.reinforcements[i].setLayout();
 			this.reinforcements[i].setImage();
+			this.reinforcements[i].setSubSystemState();
 			this.reinforcements[i].createBaseDiv();
 			this.reinforcements[i].friendly = 1;
 			this.reinforcements[i].deployed = 0;

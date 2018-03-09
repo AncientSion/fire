@@ -668,8 +668,7 @@ Single.prototype.hover = function(e){
 }
 
 Single.prototype.getEmDmg = function(){
-	if (!this.damages.length){return 0;}
-	return this.damages.map(x => x.emDmg).reduce((l,r) => l+r);
+	return this.damages.map(x => x.emDmg).reduce((l,r) => l+r, 0);
 }
 
 Single.prototype.getDetailsDiv = function(){

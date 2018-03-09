@@ -119,13 +119,16 @@ function initSalvo(data){
 	return salvo;
 }
 
-
 function initFlight(data){
 	var flight = new Flight(data);
 	for (var j = 0; j < data.structures.length; j++){
-		flight.structures.push(new Fighter(data.structures[j]));
+		flight.structures.push(initFighter(data.structures[j]));
 	}
 	return flight;	
+}
+
+function initFighter(data){
+	return new Fighter(data);
 }
 
 function initSquadron(data){

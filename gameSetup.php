@@ -294,8 +294,7 @@ else {
 				},
 
 				getFleetCost: function(){
-					if (!this.shipsBought.length){return 0;}
-					return this.shipsBought.map(x => x.value).reduce((l,r) => l+r);
+					return this.shipsBought.map(x => x.value).reduce((l,r) => l+r, 0);
 				},
 
 				setUnitTotal: function(){
@@ -418,7 +417,10 @@ else {
 
 
 				buildFighterList: function(data, t){
-					console.log(data)
+					for (var i = 0; i < data.length; i++){
+						var fighter = initFighter(data[i]);;
+						this.fighters.push({fighter: fighter, element: fighter.getElement()});
+					}
 				},
 			}
 

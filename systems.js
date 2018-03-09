@@ -584,10 +584,8 @@ System.prototype.canPower = function(){
 System.prototype.forceUnpower = function(){
 	if (this.powers.length && this.powers[this.powers.length-1].type == 0){
 		this.powers.splice(this.powers.length-1, 1);
-		this.disabled = 0;
-		this.setTableRow();
-		game.getUnit(this.parentId).updateShipPower(this);
 	}
+	this.doUnpower();
 }
 System.prototype.doUnpower = function(){
 	if (this.selected){
@@ -2963,14 +2961,7 @@ Launcher.prototype.getEffiency = function(){
 }
 
 Launcher.prototype.getRemAmmo = function(){
-	if (this.fireOrders.length){
-		return this.getMaxAmmo() - this.fireOrders.map(x => x.shots).reduce((l,r) => l+r);
-	}
-	var shots = 0;
-	for (var i = 0; i < this.fireOrders.length; i++){
-		shots += this.fireOrders[i].shots;
-	}
-	return this.getMaxAmmo() - shots;
+	return this.getMaxAmmo() - this.fireOrders.map(x => x.shots).reduce((l,r) => l+r, []);
 }
 
 Launcher.prototype.getMaxAmmo = function(){

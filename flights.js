@@ -24,6 +24,112 @@ Fighter.prototype.create = function(data){
 	}
 }
 
+Fighter.prototype.getElement = function(){
+
+	var fighterDiv = $("<div>").addClass("fighterDiv").data("fighterId", this.id)
+
+	var active = true;
+	if (this.destroyed || this.disabled){
+		active = false;
+	}
+
+	var img = $(this.getBaseImage().cloneNode(true))
+			.addClass("rotate270 img80pct")
+
+	if (!active){
+		var overlay = new Image();
+		$(overlay)
+			.attr("src", "varIcons/destroyed.png")
+			.addClass("overlay")
+			.hover(function(e){
+				e.stopPropagation();
+				var shipId = $(this).parent().parent().parent().data("shipId");
+				var fighterId = $(this).parent().data("fighterId");
+				game.getUnit(shipId).getSystem(fighterId).hover(e);
+			})
+			.click(function(e){
+				e.stopPropagation();
+				var shipId = $(this).parent().parent().parent().data("shipId");
+				var fighterId = $(this).parent().data("fighterId");
+				console.log(game.getUnit(shipId).getSystem(fighterId));
+			});
+		fighterDiv.append(overlay);
+	}
+	else {
+		$(img)
+		.hover(function(e){
+			e.stopPropagation();
+			var shipId = $(this).parent().parent().parent().data("shipId");
+			var fighterId = $(this).parent().data("fighterId");
+			game.getUnit(shipId).getSystem(fighterId).hover(e);
+		})
+		.click(function(e){
+			e.stopPropagation();
+			var shipId = $(this).parent().parent().parent().data("shipId");
+			var fighterId = $(this).parent().data("fighterId");
+			console.log(game.getUnit(shipId).getSystem(fighterId));
+		});
+	}
+
+	fighterDiv.append(img)
+
+	var wrap = document.createElement("div");
+		wrap.className = "iconIntegrity"; wrap.style.height = 12;
+
+	var rem = this.getRemIntegrity();
+
+	var bgDiv = document.createElement("div");
+		bgDiv.className = "integrityAmount"; bgDiv.style.textAlign = "center"; bgDiv.style.fontSize = 12; bgDiv.style.top = 0;
+		bgDiv.innerHTML = rem + " / " + this.integrity;
+		wrap.appendChild(bgDiv);
+
+	var lowerDiv = document.createElement("div");
+		lowerDiv.className = "integrityNow"; lowerDiv.style.top = 0; lowerDiv.style.height = "100%";
+		lowerDiv.style.width = rem/this.integrity * 100 + "%";
+		wrap.appendChild(lowerDiv);
+		
+	var upperDiv = document.createElement("div");
+		upperDiv.className = "integrityFull"; upperDiv.style.top = 0;
+		wrap.appendChild(upperDiv);
+
+	fighterDiv.append(wrap);
+
+	var s = 20;
+	// FIGHTER WEAPONS
+	for (var j = 0; j < this.systems.length; j++){
+		var td = this.systems[j].getTableData(true);
+		//$(td.childNodes[0]).attr("width", s).attr("height", s);
+		fighterDiv.append(td);
+		$(td)
+			.addClass("fighter")
+			.css("top", -75)
+			.css("left", 15 +1)
+			.click(function(e){
+				e.stopPropagation();
+				var shipId = $(this).parent().parent().parent().data("shipId");
+				game.getUnit(shipId).getSystem($(this).data("systemId")).select(e)
+			})
+			.contextmenu(function(e){
+				e.stopPropagation();
+				e.preventDefault();
+				var shipId = $(this).parent().parent().parent().data("shipId");
+				game.getUnit(shipId).selectAll(e, $(this).data("systemId"));
+			});
+			
+		$(td).hover(function(e){
+			e.stopPropagation();
+			$("#systemDetailsDiv").remove();
+			var shipId = $(this).parent().parent().parent().data("shipId");
+			game.getUnit(shipId).getSystem($(this).data("systemId")).hover(e)
+		})
+	}
+
+	return fighterDiv;
+}
+
+
+
+
 
 
 
@@ -234,133 +340,15 @@ Flight.prototype.expandDiv = function(div){
 	$(div).append(structContainer);
 	$(document.body).append(div);
 
-	// OUTER STRUCTS
 
-	maxWidth = $(div).width();
-	var x = 15;
-	var y = 30;
-	var h = 50;
-	var w = 50;
 
 	for (var i = 0; i < this.structures.length; i++){
-		var fighterDiv = $("<div>").addClass("fighterDiv").data("fighterId", this.structures[i].id)
-
-		var active = true;
-		if (this.structures[i].destroyed || this.structures[i].disabled){
-			active = false;
-		}
-
-		var img = $(this.structures[i].getBaseImage().cloneNode(true))
-				.addClass("rotate270 img80pct")
-
-		if (!active){
-			var overlay = new Image();
-			$(overlay)
-				.attr("src", "varIcons/destroyed.png")
-				.addClass("overlay")
-				.hover(function(e){
-					e.stopPropagation();
-					var shipId = $(this).parent().parent().parent().data("shipId");
-					var fighterId = $(this).parent().data("fighterId");
-					game.getUnit(shipId).getSystem(fighterId).hover(e);
-				})
-				.click(function(e){
-					e.stopPropagation();
-					var shipId = $(this).parent().parent().parent().data("shipId");
-					var fighterId = $(this).parent().data("fighterId");
-					console.log(game.getUnit(shipId).getSystem(fighterId));
-				});
-			fighterDiv.append(overlay);
-		}
-		else {
-			$(img)
-			.hover(function(e){
-				e.stopPropagation();
-				var shipId = $(this).parent().parent().parent().data("shipId");
-				var fighterId = $(this).parent().data("fighterId");
-				game.getUnit(shipId).getSystem(fighterId).hover(e);
-			})
-			.click(function(e){
-				e.stopPropagation();
-				var shipId = $(this).parent().parent().parent().data("shipId");
-				var fighterId = $(this).parent().data("fighterId");
-				console.log(game.getUnit(shipId).getSystem(fighterId));
-			});
-		}
-
-		fighterDiv.append(img)
-
+		var fighterDiv = this.structures[i].getElement();
 		structContainer.append(fighterDiv);
-
-		if (x + 50 + 5 > maxWidth){
-			x = 15;
-			y += h*2;
-		}
-
-
-		//$(fighterDiv)
-			//.css("left", x)
-			//.css("top", y)
-
-		x += 50 + 5;
-		var wrap = document.createElement("div");
-			wrap.className = "iconIntegrity"; wrap.style.height = 12;
-
-		var rem = this.structures[i].getRemIntegrity();
-
-		var bgDiv = document.createElement("div");
-			bgDiv.className = "integrityAmount"; bgDiv.style.textAlign = "center"; bgDiv.style.fontSize = 12; bgDiv.style.top = 0;
-			bgDiv.innerHTML = rem + " / " + this.structures[i].integrity;
-			wrap.appendChild(bgDiv);
-
-		var lowerDiv = document.createElement("div");
-			lowerDiv.className = "integrityNow"; lowerDiv.style.top = 0; lowerDiv.style.height = "100%";
-			lowerDiv.style.width = rem/this.structures[i].integrity * 100 + "%";
-			wrap.appendChild(lowerDiv);
-			
-		var upperDiv = document.createElement("div");
-			upperDiv.className = "integrityFull"; upperDiv.style.top = 0;
-			wrap.appendChild(upperDiv);
-
-		fighterDiv.append(wrap);
-
-		if (1){
-			var s = 20;
-			// FIGHTER WEAPONS
-			for (var j = 0; j < this.structures[i].systems.length; j++){
-				var td = this.structures[i].systems[j].getTableData(true);
-					$(td.childNodes[0]).attr("width", s).attr("height", s);
-					fighterDiv.append(td);
-					$(td)
-						.addClass("fighter")
-						.css("top", -h -s - 5)
-						.css("left", w/2 - s/2 +1)
-						.click(function(e){
-							e.stopPropagation();
-							var shipId = $(this).parent().parent().parent().data("shipId");
-							game.getUnit(shipId).getSystem($(this).data("systemId")).select(e)
-						})
-						.contextmenu(function(e){
-							e.stopPropagation();
-							e.preventDefault();
-							var shipId = $(this).parent().parent().parent().data("shipId");
-							game.getUnit(shipId).selectAll(e, $(this).data("systemId"));
-						});
-
-				if (1){					
-					$(td).hover(function(e){
-						e.stopPropagation();
-						$("#systemDetailsDiv").remove();
-						var shipId = $(this).parent().parent().parent().data("shipId");
-						game.getUnit(shipId).getSystem($(this).data("systemId")).hover(e)
-					})
-				}
-			}
-		}
 	}
 
-
 	var height = 0;
+
 	$(structContainer).find(".fighterDiv").each(function(){
 		var y = $(this).position().top + $(this).height();
 		if (y > height){
@@ -370,15 +358,6 @@ Flight.prototype.expandDiv = function(div){
 
 	$(structContainer).css("height", height + 50);
 
-	/*var w = $(div).width();
-	var h = $(div).height();
-	var left = 50;
-	if (this.facing < 90 || this.facing > 270){
-		left = res.x - w - 50;
-	}
-
-	$(div).css("top", 100).css("left", left);
-	*/
 
 	return div;
 }
