@@ -1591,11 +1591,11 @@ include_once 'global.php';
 				break;
 			case "Narn Regime";
 				$units = array(
-					array("GQuan", 6, 2),
+					array("GQuan", 5, 2),
 					array("GSten", 6, 3),
-					array("KaToc", 9, 3),
-					array("RonGoth", 9, 3),
-					array("DagKar", 10, 3),
+					array("KaToc", 8, 3),
+					array("RonGoth", 8, 3),
+					array("DagKar", 6, 3),
 					array("Squadron", 18, 2),
 				);
 

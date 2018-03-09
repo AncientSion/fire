@@ -227,10 +227,10 @@ class SquadBuilder {
 		return array(
 			array(
 				"active" => 0,
-				"chance" => 40,
+				"chance" => 30,
 				"notes" => "2x Thentus",
 				"display" => "",
-				"cost" => 640,
+				"cost" => 580,
 				"launchData" => 
 					array(
 						"loads" =>
@@ -250,7 +250,7 @@ class SquadBuilder {
 			),
 			array(
 				"active" => 0,
-				"chance" => 20,
+				"chance" => 30,
 				"notes" => "2x Trakk",
 				"display" => "",
 				"cost" => 580,
@@ -273,7 +273,7 @@ class SquadBuilder {
 			),
 			array(
 				"active" => 0,
-				"chance" => 40,
+				"chance" => 20,
 				"notes" => "3x Shokos",
 				"display" => "",
 				"cost" => 750,
@@ -291,6 +291,29 @@ class SquadBuilder {
 								),
 								array(
 									"name" => "Shokos",
+									"launch" => 1,
+								),
+							),
+						),
+						"loads" =>
+							array(),
+			),
+			array(
+				"active" => 0,
+				"chance" => 20,
+				"notes" => "2x Shokov",
+				"display" => "",
+				"cost" => 560,
+				"launchData" => 
+					array(
+						"loads" =>
+							array(
+								array(
+									"name" => "Shokov",
+									"launch" => 1,
+								),
+								array(
+									"name" => "Shokov",
 									"launch" => 1,
 								),
 							),
