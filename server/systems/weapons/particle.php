@@ -37,8 +37,8 @@ class LightParticle extends Particle {
 class MediumParticle extends LightParticle {
 	public $name = "MediumParticle";
 	public $display = "68mm Particle Emitter";
-	public $minDmg = 30;
-	public $maxDmg = 38;
+	public $minDmg = 28;
+	public $maxDmg = 36;
 	public $accDecay = 120;
 	public $shots = 2;
 	public $reload = 3;
@@ -59,8 +59,8 @@ class MediumParticle extends LightParticle {
 class HeavyParticle extends MediumParticle {
 	public $name = "HeavyParticle";
 	public $display = "122mm Particle Cannon";
-	public $minDmg = 59;
-	public $maxDmg = 74;
+	public $minDmg = 54;
+	public $maxDmg = 69;
 	public $accDecay = 80;
 	public $shots = 2;
 	public $reload = 4;
@@ -86,7 +86,7 @@ class SuperHeavyParticle extends HeavyParticle {
 	public $accDecay = 60;
 	public $shots = 3;
 	public $reload = 6;
-	public $integrity = 84;
+	public $integrity = 74;
 	public $powerReq = 8;
 	public $traverse = 1;
 	public $effiency = 4;

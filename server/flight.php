@@ -11,6 +11,7 @@ class Flight extends Mixed {
 
 	public $fSize = 15;
 	public $traverse = -3;
+	public $baseImpulse = 1000;
 
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
         parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
@@ -29,10 +30,12 @@ class Flight extends Mixed {
 	}
 
 	public function setCurSpeed($turn, $phase){
-		//Debug::log("setCurSpeed #".$this->id);
-		if (!$this->mass){$this->baseImpulse = 0; $this->currentImpulse = 0; return;}
 
-		$this->baseImpulse = floor(pow($this->mass, -2)*100000);
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if ($this->structures[$i]->destroyed || $this->structures[$i]->disabled){continue;}
+			$this->baseImpulse = min($this->baseImpulse, $this->structures[$i]->baseImpulse);
+		}
+
 		if (!isset($this->mission) || !sizeof($this->mission)){return;}
 
 		$elapsed = 1;

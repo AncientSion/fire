@@ -75,7 +75,7 @@ class GQuan extends Heavy {
 					"loads" =>
 					array(
 						array(
-							"systemid" => 16,
+							"systemid" => 19,
 							"name" => "Gorith",
 							"amount" => 10
 						),
@@ -89,7 +89,7 @@ class GQuan extends Heavy {
 					"loads" =>
 					array(
 						array(
-							"systemid" => 16,
+							"systemid" => 19,
 							"name" => "Frazi",
 							"amount" => 10
 						),

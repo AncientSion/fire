@@ -5,7 +5,6 @@ class Tethys extends SuperLight {
 	public $display = "Tethys";
 	public $role = "Police Cutter";
 	public $faction = "Earth Alliance";
-	public static $value =  240;
 	public $cost = 250;
 	public $mass = 1100;
 
@@ -26,17 +25,15 @@ class Tethys extends SuperLight {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		//$front->systems[] = new LightPulse($this->getId(), $this->parentId, 270, 90);
-		$front->systems[] = new LightLaser($this->getId(), $this->parentId, 300, 60);
-		//$front->systems[] = new LightPulse($this->getId(), $this->parentId, 270, 90);
+		$front->systems[] = new LightPulse($this->getId(), $this->parentId, 270, 90);
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new LightPulse($this->getId(), $this->parentId, 270, 90);
+		$right->systems[] = new LightLaser($this->getId(), $this->parentId, 300, 60);;
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new LightPulse($this->getId(), $this->parentId, 270, 90);
+		$left->systems[] = new LightLaser($this->getId(), $this->parentId, 300, 60);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

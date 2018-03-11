@@ -5,7 +5,6 @@ class Haven extends SuperLight {
 	public $display = "Haven";
 	public $role = "Police Cutter";
 	public $faction = "Centauri Republic";
-	public static $value =  230;
 	public $cost = 230;
 	public $mass = 900;
 

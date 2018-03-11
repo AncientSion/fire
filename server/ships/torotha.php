@@ -5,7 +5,6 @@ class Torotha extends Light {
 	public $display = "Torotha";
 	public $role = "Patrol Frigate";
 	public $faction = "Minbari Federation";
-	public static $value = 350;
 	public $cost = 350;
 	public $mass = 1600;
 

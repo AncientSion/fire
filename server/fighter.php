@@ -8,6 +8,9 @@ class Fighter extends Single {
 		$this->addSystems();
 	}
 
+	public function setBaseStats($phase, $turn){
+	}
+
 	public function lockWeapons($turn){
 		for ($i = 0; $i < sizeof($this->systems); $i++){
 			for ($j = sizeof($this->systems[$i]->fireOrders)-1; $j >= 0; $j--){
@@ -21,41 +24,18 @@ class Fighter extends Single {
 			}
 		}
 	}
-
-	public function jsonSerialize(){
-		return array(
-        	"id" => $this->id,
-        	"name" => $this->name,
-        	"display" => $this->display,
-        	"variant" => $this->variant,
-        	"faction" => $this->faction,
-        	"value" => static::$value,
-        	"mass" => $this->mass,
-        	"integrity" => $this->integrity,
-        	"ep" => $this->ep,
-        	"turns" => $this->turns,
-        	"negation" => $this->negation,
-        	"systems" => $this->systems,
-        	"damages" => $this->damages,
-        	"crits" => $this->crits,
-        	"destroyed" => $this->destroyed
-        );
-    }
-
-	public function setBaseStats($phase, $turn){
-		$this->baseHitChance = ceil($this->mass/1.5);
-	}
 }
 
 class Aurora extends Fighter {
 	public $name = "Aurora";
 	public $display = "Aurora";
 	public $faction = "Earth Alliance";
-	public static $value =  28;
+	public $cost =  28;
 	public $mass = 34;
-	public $ep = 100;
 	public $integrity = 26;
 	public $negation = 4;
+	public $baseImpulse = 90;
+	public $baseHitChance = 24;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -70,10 +50,12 @@ class Thunderbolt extends Fighter {
 	public $name = "Thunderbolt";
 	public $display = "Thunderbolt";
 	public $faction = "Earth Alliance";
-	public static $value =  35;
+	public $cost =  35;
 	public $mass = 36;
 	public $integrity = 29;
 	public $negation = 5;
+	public $baseImpulse = 1000;
+	public $baseHitChance = 25;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -88,10 +70,12 @@ class Sentri extends Fighter {
 	public $name = "Sentri";
 	public $display = "Sentri";
 	public $faction = "Centauri Republic";
-	public static $value =  26;
+	public $cost =  26;
 	public $mass = 32;
 	public $integrity = 24;
 	public $negation = 5;
+	public $baseImpulse = 110;
+	public $baseHitChance = 22;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -104,9 +88,10 @@ class Sentri extends Fighter {
 
 class Sitara extends Fighter {
 	public $faction = "Centauri Republic";
-	public static $value =  24;
+	public $cost =  24;
 	public $integrity = 22;
 	public $negation = 5;
+	public $baseImpulse = 90;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -145,10 +130,12 @@ class Nial extends Fighter {
 	public $name = "Nial";
 	public $display = "Nial";
 	public $faction = "Minbari Federation";
-	public static $value =  45;
+	public $cost =  45;
 	public $mass = 31;
 	public $integrity = 31;
 	public $negation = 7;
+	public $baseImpulse = 125;
+	public $baseHitChance = 26;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -163,10 +150,12 @@ class Gorith extends Fighter {
 	public $name = "Gorith";
 	public $display = "Gorith";
 	public $faction = "Narn Regime";
-	public static $value =  22;
+	public $cost =  22;
 	public $mass = 34;
 	public $integrity = 22;
 	public $negation = 3;
+	public $baseImpulse = 90;
+	public $baseHitChance = 24;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -181,10 +170,12 @@ class Frazi extends Fighter {
 	public $name = "Frazi";
 	public $display = "Frazi";
 	public $faction = "Narn Regime";
-	public static $value =  32;
+	public $cost =  32;
 	public $mass = 34;
 	public $integrity = 26;
 	public $negation = 5;
+	public $baseImpulse = 95;
+	public $baseHitChance = 25;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

@@ -368,7 +368,6 @@ Mixed.prototype.canUndoShortenTurn = function(){
 Mixed.prototype.create = function(){
 	this.setStatus();
 	if (this.id < 0){
-		this.setMaxMass();
 		this.setImpulse();
 	}
 }

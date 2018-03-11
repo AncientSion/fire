@@ -321,6 +321,7 @@ class Ship {
 	}
 
 	public function setRemDelay($turn){
+		return;
 		$delay = 0;
 
 		for ($i = 0; $i < sizeof($this->actions); $i++){
@@ -333,6 +334,7 @@ class Ship {
 		}
 
 		$this->remainingDelay = $delay;
+		//echo $this->remainingDelay;
 	}
 
 	public function setSpecialActionState($turn, $phase){

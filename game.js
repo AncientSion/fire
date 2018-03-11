@@ -329,16 +329,7 @@ function Game(data, userid){
 
 		for (var i = 0; i < this.flightDeploy.loads.length; i++){
 			for (var j = 1; j <= this.flightDeploy.loads[i].launch; j++){
-				var f = new Fighter(
-					{
-						id: j, name: this.flightDeploy.loads[i].name, display: this.flightDeploy.loads[i].display, variant: "",
-						ep: 0, mass: this.flightDeploy.loads[i].mass, integrity: this.flightDeploy.loads[i].integrity,
-						remaining: this.flightDeploy.loads[i].integrity, value: 0, negation: 0, crits: 0, destroyed: 0, damages: [], crits: [], systems: []
-					}
-				)
-
-				f.baseHitChance = 0;
-				flight.structures.push(f);
+				flight.structures.push(new Fighter(this.flightDeploy.loads[i]));
 			}
 		}
 
@@ -446,19 +437,12 @@ function Game(data, userid){
 						call: this.ships[i].call,
 						display: "",
 						mission: this.ships[i].mission,
-						launchData: this.ships[i].launchData,
+						launchData: this.ships[i].getLaunchData(),
 						actions: this.ships[i].actions,
 						turn: this.turn,
 						eta: 0,
 						upgrades: []
 					}
-
-					for (var j = flight.launchData.loads.length-1; j >= 0; j--){
-						if (flight.launchData.loads[j].amount == 0){
-							flight.launchData.loads.splice(j, 1);
-						}
-					}
-
 					ret.push(flight);
 				}
 			}
@@ -764,7 +748,7 @@ function Game(data, userid){
 				var step;
 				var h = 1000;
 				var w = 200;
-				var dist = 500;
+				var dist = 300;
 				var y = h/2;
 
 				if (i % 2 == 0){
@@ -3323,6 +3307,7 @@ Game.prototype.undrawJumpMarker = function(id){
 }
 
 Game.prototype.setShortenInfo = function(e, unit, dist){
+	return;
 	var short = "Shorten: <span class=";
 	var post = "Post: ";
 

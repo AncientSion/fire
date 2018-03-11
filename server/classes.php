@@ -147,7 +147,7 @@ class Power {
 	public $systemid;
 	public $turn;
 	public $type;
-	public $cost;
+	public static $value;
 	public $new;
 
 	function __construct($id, $unitid, $systemid, $turn, $type, $cost){

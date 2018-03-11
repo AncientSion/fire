@@ -100,7 +100,7 @@ class MagCompressor extends Plasma {
 	public $freeAim = 0;
 	public $minDmg = 12;
 	public $accDecay = 120;
-	public $dmgLoss = 1;
+	public $dmgLoss = 9;
 	public $shots = 1;
 	public $animColor = "green";
 	public $projSize = 4;

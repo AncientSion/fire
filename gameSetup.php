@@ -254,6 +254,12 @@ else {
 					if (this.ships[0].ship){return this.ships[0].name;
 					} else return "Squadron";
 				},
+
+				getSampleFighter: function(display){
+					for (let i = 0; i < this.fighters.length; i++){
+						if (this.fighters[i].display == display){return this.fighters[i];}
+					}
+				},
 				
 				getUnitDisplay: function(){
 					if (this.ships[0].ship){return this.ships[0].name;
@@ -415,11 +421,10 @@ else {
 						}
 				},
 
-
 				buildFighterList: function(data, t){
 					for (var i = 0; i < data.length; i++){
 						var fighter = initFighter(data[i]);;
-						this.fighters.push({fighter: fighter, element: fighter.getElement()});
+						this.fighters.push(fighter);
 					}
 				},
 			}

@@ -48,8 +48,8 @@ else if (isset($_POST["newUsername"]) && isset($_POST["newPassword"])){
 		<div style="margin: auto; width: 500px">
 			<div id="loginDiv">
 				<form method="post">
-					<input type="form" style="margin-bottom: 5px; margin-top: 5px" placeholder="Enter Username here" name="username" value=""></input>
-					<input type="form" style="margin-bottom: 5px;"placeholder="Enter Password here" name="password" value=""></input>
+					<input type="text" style="margin-bottom: 5px; margin-top: 5px" placeholder="Enter Username here" name="username" value=""></input>
+					<input type="password" style="margin-bottom: 5px;"placeholder="Enter Password here" name="password" value=""></input>
 					<input type="submit" style="width: auto; display: block;" value="Login"></input>	
 					</br>
 				</form>

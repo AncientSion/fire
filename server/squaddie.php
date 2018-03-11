@@ -1,7 +1,5 @@
 <?php
 
-
-
 class Squaddie extends Single {
 
 	public $baseHitChance;
@@ -49,7 +47,6 @@ class Squaddie extends Single {
 	public function setBaseStats($phase, $turn){
 		$this->baseHitChance = Math::getBaseHitChance($this->mass);
 		$this->baseTurnDelay = Math::getBaseTurnDelay($this->mass);
-		//$this->baseImpulseCost = Math::getBaseImpulseCost($this->mass);
 	}
 
 	public function setSubunitState($turn, $phase){
@@ -125,8 +122,8 @@ class Squaddie extends Single {
 	public function getValidEffects(){
 		return array( // type, min, max, dura
 			array("Damage", 25, 0, 20),
-			array("Disabled", 55, 1, 0.00),
-			array("Destroyed", 70, 0, 0.00),
+			array("Disabled", 50, 1, 0.00),
+			array("Destroyed", 65, 0, 0.00),
 		);
 	}
 

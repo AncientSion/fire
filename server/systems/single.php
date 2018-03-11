@@ -9,6 +9,8 @@ class Single {
 	public $armourDmg = 0;
 	public $destroyed = 0;
 	public $disabled = 0;
+	public $amount = 0;
+	public $launch = 0;
 	public $systems = array();
 	public $damages = array();
 	public $crits = array();
@@ -20,14 +22,14 @@ class Single {
 	public $rarity = 0;
 	public $role = "";
 	public $mass = 0;
-	public static $value;
-	public $cost = 0;
+	public static $value = 0;
 	public $start = 0;
 	public $end = 360;
 	public $damaged = 0;
 	public $traverse = 0;
 	public $index = 0;
 	public $emDmg = 0;
+
 
 	function __construct($id, $parentId){
 		$this->id = $id;		
@@ -52,10 +54,6 @@ class Single {
 
 	public function setPowerOutput(){
 		return;
-	}
-
-	public function setBaseStats($phase, $turn){
-		$this->baseHitChance = ceil(sqrt($this->mass)*5);
 	}
 
 	public function getSubHitChance($fire){

@@ -70,7 +70,7 @@ class HeavyPulse extends Pulse {
 	public $projSpeed = 9;
 	public $reload = 4;
 	public $integrity = 64;
-	public $powerReq = 5;
+	public $powerReq = 6;
 	public $traverse = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
@@ -105,6 +105,8 @@ class LightPlasmaPulse extends LightPulse {
 	public $minDmg = 15;
 	public $maxDmg = 19;
 	public $animColor = "darkGreen";
+
+	public $priority = 6;
 
 	public $dmgType = "Plasma";
 	public $melt = 50;

@@ -165,7 +165,7 @@ System.prototype.hover = function(e){
 		this.highlight = false;
 		this.hideInfoDiv(e);
 		this.hideOptions();
-		p.highlightAllSelectedWeapons();
+		if (p){p.highlightAllSelectedWeapons();}
 		if (this.hasUnresolvedFireOrder()){
 			salvoCtx.clearRect(0, 0, res.x, res.y);
 			p.drawEW();
@@ -774,15 +774,35 @@ System.prototype.hasOutput = function(){
 	}
 }
 
+System.prototype.getFighterSystemData = function(){
+	var file = "sysIcons/" + this.getImageName() + this.linked + ".png";
+	var sysDiv = $("<div>").addClass("system");
+		sysDiv
+		.data("systemId", this.id)
+		.append(
+			$("<img>").attr("src", file)
+		)
+		.append(
+			$("<div>").addClass("loadLevel")
+		)
+		.append(
+			$("<div>").addClass("bgloadlevel")
+		)
+
+	this.element = sysDiv;
+	this.setTableRow();
+	this.setSystemBorder();
+	return this.element;
+}
+
 System.prototype.getTableData = function(forFighter){
 	var td = document.createElement("td");
 		td.className = "system";
 		td.colSpan = this.width;
 
 	var img = new Image();
+		img.className = "sysIcon"
 	var file = "sysIcons/" + this.getImageName();
-	if (forFighter && this.linked > 1){file += this.linked;}
-	else {img.className = "sysIcon";}
 	
 		file += ".png";
 		img.src = file;
@@ -800,26 +820,24 @@ System.prototype.getTableData = function(forFighter){
 
 		$(td).data("systemId", this.id);
 
-	if (!forFighter){
-		var lowerDiv = document.createElement("div");
-			lowerDiv.className = "integrityNow";
-			lowerDiv.style.width = this.getRemIntegrity() /  this.integrity * 100 + "%";
-			td.appendChild(lowerDiv);
+	var lowerDiv = document.createElement("div");
+		lowerDiv.className = "integrityNow";
+		lowerDiv.style.width = this.getRemIntegrity() /  this.integrity * 100 + "%";
+		td.appendChild(lowerDiv);
 
-		var div = document.createElement("div");
-			div.className = "integrityFull";
-			td.appendChild(div);
+	var div = document.createElement("div");
+		div.className = "integrityFull";
+		td.appendChild(div);
 
-		if (!this.destroyed){
-				var outputDiv = document.createElement("div");
-					outputDiv.className = "outputMask";
-					if (this.internal || this.getActiveSystem().canBeBoosted()){
-						outputDiv.innerHTML = this.getActualOutput();
-					}
-					else $(outputDiv).hide();
-					td.appendChild(outputDiv);
-			//}
-		}
+	if (!this.destroyed){
+			var outputDiv = document.createElement("div");
+				outputDiv.className = "outputMask";
+				if (this.internal || this.getActiveSystem().canBeBoosted()){
+					outputDiv.innerHTML = this.getActualOutput();
+				}
+				else $(outputDiv).hide();
+				td.appendChild(outputDiv);
+		//}
 	}
 
 	$(td).data("systemId", this.id);
@@ -2370,6 +2388,7 @@ Particle.prototype.getAnimation = function(fire){
 	var shotInterval = 25 - (this.shots *4);
 	if (this.name == "MediumParticle"){shotInterval = 10;}
 	else if (this.name == "LightParticle"){delay = 15;}
+	else if (this.name == "SuperHeavyParticle"){shotInterval = 3; delay = 35;}
 	var cc = 0;
 	var hits = 0;
 	var fraction = 1;
@@ -2709,6 +2728,7 @@ Dual.prototype.switchMode = function(id){
 	this.setSystemImage()
 	this.setSystemWindow(id);
 	this.resetDetailsDiv();
+	this.redrawSystemArc();
 	game.getUnit(this.parentId).updateShipPower(this);
 }
 
@@ -3830,6 +3850,13 @@ function Hangar(system){
 }
 Hangar.prototype = Object.create(PrimarySystem.prototype);
 
+
+Hangar.prototype.init = function(){
+	for (var i = 0; i < this.loads.length; i++){
+		this.loads[i] = new Fighter(this.loads[i]);
+	}
+}
+
 Hangar.prototype.setTimeLoaded = function(){
 	return System.prototype.setTimeLoaded.call(this)
 }
@@ -3863,7 +3890,7 @@ Hangar.prototype.getUpgradeData = function(){
 	}
 }
 
-Hangar.prototype.setFireOrder = function(pos){
+Hangar.prototype.setFireOrder = function(targetid, pos){
 	this.fireOrders.push(
 		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: 0, x: pos.x, y: pos.y, weaponid: this.id, 
 		shots: 0, req: -1, notes: "fighterLaunch", hits: -1, resolved: 0}
@@ -4081,13 +4108,11 @@ Hangar.prototype.getMission = function(){
 Hangar.prototype.doLaunchFlight = function(){
 	for (var i = game.ships.length-1; i >= 0; i--){
 		if (game.ships[i].userid == game.userid){
-			if (game.ships[i].flight && game.ships[i].available == game.turn){
-				if (!game.ships[i].actions[0].resolved){
-					if (game.ships[i].launchData.shipid == window.aUnit && game.ships[i].launchData.systemid == this.id){
-						game.ships.splice(i, 1);
-						game.draw();
-						break;
-					}
+			if (game.ships[i].flight && game.ships[i].available == game.turn && game.ships[i].actions[0].resolved){
+				if (game.ships[i].launchData.shipid == window.aUnit && game.ships[i].launchData.systemid == this.id){
+					game.ships.splice(i, 1);
+					game.draw();
+					break;
 				}
 			}
 		}
@@ -4183,7 +4208,7 @@ Hangar.prototype.addFighter = function(ele, all){
 	for (var i = 0; i < this.loads.length; i++){
 		if (this.loads[i].display == display){
 			this.loads[i].amount += add;
-			this.updateTotals();
+			this.updateHangarDiv(i);
 			this.canConfirm();
 			return;
 		}
@@ -4206,7 +4231,7 @@ Hangar.prototype.addFighter = function(ele, all){
 		if (this.loads[i].display == display){
 			if (tMass + this.loads[i].mass <= this.output){
 				this.loads[i].amount += add;
-				this.updateTotals();
+				this.updateHangarDiv(i);
 				this.canConfirm();
 				return;
 			}
@@ -4226,7 +4251,7 @@ Hangar.prototype.removeFighter = function(ele, all){
 				} else {
 					this.loads[i].amount -= 1;
 				}
-				this.updateTotals();
+				this.updateHangarDiv(i);
 				this.canConfirm();
 				return;
 			}
@@ -4240,68 +4265,93 @@ Hangar.prototype.canConfirm = function(){
 	//} else $("#hangarDiv").find(".buttonTD").addClass("disabled");
 }
 
-Hangar.prototype.updateTotals = function(){
-	var amount = 0;
-	var tMass = 0;
-	var tCost = 0;
-	var table = document.getElementById("hangarTable");
-		table.innerHTML = "";
+Hangar.prototype.initHangarDiv = function(){
+	var table = $("#hangarTable");
 
-		var tr = document.createElement("tr");
-		var th = document.createElement("th"); th.innerHTML = "Class"; tr.appendChild(th);
-		var th = document.createElement("th"); th.innerHTML = "Mass"; th.width = "40px"; tr.appendChild(th);
-		var th = document.createElement("th"); th.innerHTML = "Cost"; th.width = "40px"; tr.appendChild(th);
-		var th = document.createElement("th"); th.innerHTML = ""; tr.appendChild(th);
-		var th = document.createElement("th"); th.innerHTML = ""; tr.appendChild(th);
-		var th = document.createElement("th"); th.innerHTML = "Amount"; th.width = "70px"; tr.appendChild(th);
-		//var th = document.createElement("th"); th.innerHTML = "Total Mass"; th.width = "70px"; tr.appendChild(th);
-		var th = document.createElement("th"); th.innerHTML = "Total Cost"; th.width = "70px"; tr.appendChild(th);
-		table.appendChild(tr);
-
+	table
+		.empty()
+		.append($("<tr>")
+			.append($("<th>").html("Class"))
+			.append($("<th>").html(""))
+			.append($("<th>").html("Cost").css("width", 40))
+			.append($("<th>").html(""))
+			.append($("<th>").html(""))
+			.append($("<th>").html("Amount").css("width", 70))
+			.append($("<th>").html("Total Cost").css("width", 70)))
 
 	for (var i = 0; i < this.loads.length; i++){
-		var tr = table.insertRow(-1);
-			tr.insertCell(-1).innerHTML = this.loads[i].display;
-			tr.insertCell(-1).innerHTML = this.loads[i].mass;
-			tr.insertCell(-1).innerHTML = this.loads[i].cost;
-		var td = document.createElement("td");
-			td.innerHTML = "<img class='size20' src='varIcons/plus.png'>"; tr.appendChild(td);
-			td.addEventListener("click", function(e){
-				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystem($("#hangarDiv").data("systemid")).addFighter(this.parentNode, false);
-			})
-			td.addEventListener("contextmenu", function(e){
-				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystem($("#hangarDiv").data("systemid")).addFighter(this.parentNode, true);
-			})
-		var td = document.createElement("td");
-			td.innerHTML = "<img class='size20' src='varIcons/minus.png'>"; tr.appendChild(td);
-			td.addEventListener("click", function(e){
-				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystem($("#hangarDiv").data("systemid")).removeFighter(this.parentNode, false);
-			})
-			td.addEventListener("contextmenu", function(e){
-				e.preventDefault(); e.stopPropagation();
-				window.game.ships[0].getSystem($("#hangarDiv").data("systemid")).removeFighter(this.parentNode, true);
-			})
-
-			amount += this.loads[i].amount;
-			//tMass += this.loads[i].amount * this.loads[i].mass;
-			tCost += this.loads[i].amount * this.loads[i].cost;
-			tr.insertCell(-1).innerHTML = this.loads[i].amount;
-			//tr.insertCell(-1).innerHTML = this.loads[i].amount * this.loads[i].mass
-			tr.insertCell(-1).innerHTML = this.loads[i].amount * this.loads[i].cost
+		table
+			.append($("<tr>")
+				.append($("<td>").html(this.loads[i].display))
+				.append($("<td>")
+					.append($(this.loads[i].getElement(true)))
+				)
+				.append($("<td>").html(this.loads[i].cost))
+				.append($("<td>")
+					.append($("<img>").addClass("size20").attr("src", "varIcons/plus.png"))
+					.click(function(e){
+						e.preventDefault(); e.stopPropagation();
+						window.game.ships[0].getSystem($("#hangarDiv").data("systemid")).addFighter(this.parentNode, false);
+					})
+					.contextmenu(function(e){
+						e.preventDefault(); e.stopPropagation();
+						window.game.ships[0].getSystem($("#hangarDiv").data("systemid")).addFighter(this.parentNode, true);
+					})
+				)
+				.append($("<td>")
+					.append($("<img>").addClass("size20").attr("src", "varIcons/minus.png"))
+					.click(function(e){
+						e.preventDefault(); e.stopPropagation();
+						window.game.ships[0].getSystem($("#hangarDiv").data("systemid")).removeFighter(this.parentNode, false);
+					})
+					.contextmenu(function(e){
+						e.preventDefault(); e.stopPropagation();
+						window.game.ships[0].getSystem($("#hangarDiv").data("systemid")).removeFighter(this.parentNode, true);
+					})
+				)
+				.append($("<td>").html(this.loads[i].amount))
+				.append($("<td>").html(this.loads[i].amount * this.loads[i].cost))
+			)
 	}
 
-	var tr = document.createElement("tr");
-	var th = document.createElement("th"); tr.appendChild(th);
-		th.innerHTML = "Grand Total";
-		th.colSpan = 5;
-	var th = document.createElement("th"); th.innerHTML = amount; tr.appendChild(th);
-	//var th = document.createElement("th"); th.innerHTML = tMass; tr.appendChild(th);
-	var th = document.createElement("th"); th.innerHTML = tCost; tr.appendChild(th);
-	table.appendChild(tr);
+	table
+		.append($("<tr>")
+			.css("fontSize", 20)
+			.append($("<th>").attr("colSpan", 5).html("Grand Total"))
+			.append($("<th>"))
+			.append($("<th>")))
+
+	this.setTotalBuyData();
+}
+
+Hangar.prototype.setTotalBuyData = function(){
+	var table = $("#hangarTable");
+	var tAmount = 0;
+	var tCost = 0;
+
+	for (let i = 0; i < this.loads.length; i++){
+		tAmount += this.loads[i].amount;
+		tCost += this.loads[i].amount * this.loads[i].cost;
+	}
+
+	table.find("tr").last().children().each(function(i){
+		if (!i){return;}
+		else if (i == 1){$(this).html(tAmount);}
+		else if (i == 2){$(this).html(tCost);}
+	});
+
 	this.totalCost = tCost;
+}
+
+Hangar.prototype.updateHangarDiv = function(index){
+	var amount = this.loads[index].amount;
+	var cost = this.loads[index].cost * amount;
+	var tr = $($("#hangarTable").find("tr")[index+1]);
+	var tds = tr.find("td");
+		$(tds[5]).html(amount);
+		$(tds[6]).html(cost);
+
+	this.setTotalBuyData();
 }
 
 Hangar.prototype.setupHangarLoadout = function(e){
@@ -4310,7 +4360,7 @@ Hangar.prototype.setupHangarLoadout = function(e){
 		$(div).find("#launchRate").html(this.getOutput());
 		$(div).find("#capacity").html(this.capacity);
 		$(div).data("systemid", this.id).css("left", 750).css("top", 400).removeClass("disabled");
-		this.updateTotals();
+		this.initHangarDiv();
 	}
 	else {
 		window.game.setUnitTotal();
@@ -4319,21 +4369,14 @@ Hangar.prototype.setupHangarLoadout = function(e){
 }
 
 Hangar.prototype.getSystemDetailsDiv = function(){
-	var div = document.createElement("div");
-		div.id = "systemDetailsDiv";
-	var table = document.createElement("table");
-		
-	var tr = document.createElement("tr");		
-	var th = document.createElement("th");
-		th.colSpan = 2; th.innerHTML = this.display; th.style.width = "40%"; tr.appendChild(th); table.appendChild(tr);
-
-	$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
-	$(table).append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.getMount())));
-	$(table).append($("<tr>").append($("<td>").html("Capacity")).append($("<td>").html("up to " + this.capacity + " units")));
-	$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html(this.getLaunchRate() + " each " + this.reload + " turns")));
-	//$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").html(this.getPowerReqString())));
-
-	div.appendChild(table);
+	var div = $("<div>")
+		.attr("id", "systemDetailsDiv")
+		.append($("<table>")
+			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.display).css("width", "40%")))
+			.append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)))
+			.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.getMount())))
+			.append($("<tr>").append($("<td>").html("Capacity")).append($("<td>").html("up to " + this.capacity + " units")))
+			.append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html(this.getLaunchRate() + " each " + this.reload + " turns"))))
 	this.attachDetailsMods(div);
 		
 	return div;

@@ -228,6 +228,17 @@ window.ajax = {
 					}
 				}
 			}
+
+			for (var j = 0; j < ships[i].upgrades.length; j++){
+				if (ships[i].upgrades[j].name == "Hangar"){
+					for (var k = ships[i].upgrades[j].loads.length-1; k >= 0; k--){
+						ships[i].upgrades[j].loads[k] = {
+							name: ships[i].upgrades[j].loads[k].name,
+							amount: ships[i].upgrades[j].loads[k].amount
+						}
+					}
+				}
+			}
 		}
 
 		$.ajax({

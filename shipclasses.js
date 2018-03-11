@@ -1237,7 +1237,8 @@ Ship.prototype.getShortInfo = function(){
 	var impulse = this.getCurSpeed();
 
 	var table = document.createElement("table");
-		table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id + " ("+this.traverse+")";
+		table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id;
+		//table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id + " ("+this.traverse+")";
 		if (this.isRolled()){table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>!-ROLLED-!</span>";}
 		if (this.isRolling()){table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>!-ROLLING-!</span>";}
 		if (this.isFlipping()){table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>!-FLIPPING-!</span>";}
@@ -3474,7 +3475,6 @@ Ship.prototype.drawShortenTurnUI = function(){
 		.data("shipId", this.id)
 		.removeClass("disabled");;
 
-
 	}
 
 	if (remDelay && remSpeed >= remDelay){ // normal turn point
@@ -3491,62 +3491,6 @@ Ship.prototype.drawShortenTurnUI = function(){
 			.css("top", top)
 			.removeClass("disabled");
 	}
-
-
-	return;
-	if (remSpeed && remDelay > this.getLastTurn().delay/2){ // minimum 50 % turn point
-
-		minDelay = Math.ceil(remDelay/2);
-
-		ele = document.getElementById("maxCutVector");
-		var p = getPointInDir(remSpeed + 30, angle, center.x, center.y);
-		var left = p.x  * cam.z  + cam.o.x - $(ele).width()/2;
-		var top = p.y * cam.z  + cam.o.y - $(ele).height()/2;
-
-		$(ele)
-			.data("shipid", this.id)
-			.data("dist", minDelay)
-			.html("<div>"+minDelay+"<div>")
-			.css("left", left)
-			.css("top", top)
-			.removeClass("disabled");
-	}
-
-	return;
-	var multi = round(this.getShortenTurnCost(remDelay), 2)
-	var cost = Math.round(multi * turn.cost, 2)
-	var rem = this.getRemEP();
-	var short = "Shorten: <span class=";
-	var post = "Post: ";
-
-	//if (cost > 30){
-	//	cost = 0;
-	//}
-
-	if (cost == 0 || cost > rem){
-		multi = 0;
-		short += "'red'>";
-	}
-	else {
-		short += "'green'>";
-		post += "<span class='green'>" + (this.getRemEP() - cost) + "</span> / " + this.getEP();
-	}
-	
-	short += cost + " TA</span>";
-
-	var o = this.getGamePos()
-	var p = getPointInDir(100, angle-180, o.x, o.y);
-	var left = p.x * cam.z  + cam.o.x - $(game.ui.doShorten).width()/2;
-	var top = p.y * cam.z  + cam.o.y - $(game.ui.doShorten).height()/2;
-	
-	$(game.ui.doShorten)
-		.empty()
-		.append($("<div>").html(short))
-		.append($("<div>").html(post))
-		.css("left", left)
-		.css("top", top)
-		.data("shipId", this.id)
-		.removeClass("disabled");
 }
 
 Ship.prototype.doShortenTurn = function(){

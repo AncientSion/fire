@@ -46,10 +46,10 @@ class Weapon extends System {
 		}
 		
 		$this->notes[] = "Fixed damage based on target";
-		$this->notes[] = "Salvo: ".$this->dmgs[0]." dmg / unit";
-		$this->notes[] = "Flight: ".$this->dmgs[1]." dmg / unit";
-		$this->notes[] = "Squadron: ".$this->dmgs[2]." dmg / unit";
-		$this->notes[] = "Ship: ".$this->dmgs[3]." dmg / system on facing side";    
+		$this->notes[] = "<b>Salvo</b>: ".$this->dmgs[0]." dmg / unit";
+		$this->notes[] = "<b>Flight</b>: ".$this->dmgs[1]." dmg / unit";
+		$this->notes[] = "<b>Squadron</b>: ".$this->dmgs[2]." dmg / unit";
+		$this->notes[] = "<b>Ship</b>: ".$this->dmgs[3]." dmg to each system on facing side, ".$this->dmgs[3]." per target size to structure";
 	}
 
 	public function getCritModMax($dmg){

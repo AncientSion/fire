@@ -99,8 +99,7 @@ class Bridge extends PrimarySystem {
         parent::__construct($id, $parentId, $integrity, 0, $width);
 
         $options = $this->getNodes();
-        $cost = floor($output/10);
-        $mod = array(8, 8, 4);
+        $cost = floor($output/12);
 
         for ($i = 0; $i < sizeof($options); $i++){
 			$this->loads[] = array(
@@ -170,7 +169,7 @@ class Reactor extends PrimarySystem {
 class Engine extends PrimarySystem {
 	public $name = "Engine";
 	public $display = "Engine & Drive";
-	public $crewEffect = 8;
+	public $crewEffect = 10;
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $integrity, $output, $width);
@@ -191,8 +190,8 @@ class Sensor extends PrimarySystem {
 	public $crewEffect = 8;
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
-		$this->powerReq = floor($output/50);
-		$this->effiency = floor($this->powerReq/10)+2;
+		$this->powerReq = floor($output/60);
+		$this->effiency = floor($this->powerReq/9)+2;
 		$this->boostEffect[] = new Effect("Output", 10);
 		$this->modes = array("Lock", "Scramble");
 		$this->states = array(0, 0);
@@ -260,15 +259,7 @@ class Hangar extends Weapon {
 
 		for ($i = 0; $i < sizeof($loads); $i++){
 			$fighter = new $loads[$i](0,0);
-			$this->loads[] = array(
-				"name" => $loads[$i],
-				"display" => $fighter->display,
-				"amount" => 0,
-				"cost" => $fighter::$value,
-				"mass" => $fighter->mass,
-				"integrity" => $fighter->integrity,
-				"launch" => 0
-			);
+			$this->loads[] = $fighter;
 		}
 	}
 
@@ -280,8 +271,8 @@ class Hangar extends Weapon {
 	public function adjustLoad($dbLoad){
 		for ($i = 0; $i < sizeof($dbLoad); $i++){
 			for ($j = 0; $j < sizeof($this->loads); $j++){
-				if ($dbLoad[$i]["name"] == $this->loads[$j]["name"]){
-					$this->loads[$j]["amount"] = $dbLoad[$i]["amount"];
+				if ($dbLoad[$i]["name"] == $this->loads[$j]->name){
+					$this->loads[$j]->amount = $dbLoad[$i]["amount"];
 					break; 
 				}
 			}

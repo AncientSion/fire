@@ -588,6 +588,8 @@ function Single(data){
 	this.rarity = data.rarity;
 	this.role = data.role;
 	this.cost = data.cost;
+	this.amount = data.amount;
+	this.launch = data.launch;
 	this.ep = data.ep || 0;
 	this.mass = data.mass;
 	this.remaining = data.remaining;
@@ -678,8 +680,9 @@ Single.prototype.getDetailsDiv = function(){
 
 		var table = $("<table>")
 			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.display)))
-			.append($("<tr>").append($("<td>").html("Mass").css("width", 120)).append($("<td>").html(this.mass)))
+			.append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.integrity)))
 			.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.negation)))
+			.append($("<tr>").append($("<td>").html("Speed").css("width", 120)).append($("<td>").html(this.baseImpulse)))
 			.append($("<tr>").append($("<td>").html("EM-D sustained")).append($("<td>").html(this.getEmDmg())))
 
 	if (this.crits.length){

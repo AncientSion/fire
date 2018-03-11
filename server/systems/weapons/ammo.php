@@ -11,31 +11,11 @@ class Missile extends Single {
 		parent::__construct($id, $parentId);
 		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->minDmg, $this->maxDmg, $this->traverse);
 	}
-
-	public function jsonSerialize(){
-		return array(
-        	"id" => $this->id,
-        	"name" => $this->name,
-        	"display" => $this->display,
-        	"variant" => $this->variant,
-        	"type" => $this->type,
-        	"minDmg" => $this->minDmg,
-        	"maxDmg" => $this->maxDmg,
-        	"Thrust" => $this->impulse,
-        	"integrity" => $this->integrity,
-        	"negation" => $this->negation,
-        	"mass" => $this->mass,
-        	"damages" => $this->damages,
-        	"crits" => $this->crits,
-        	"destroyed" => $this->destroyed,
-        	"fc" => $this->fc,
-        	"fireOrders" => $this->fireOrders
-        );
-    }
-
+	
 	public function setBaseStats($phase, $turn){
 		$this->baseHitChance = ceil(sqrt($this->mass)*5);
-		$this->baseImpulse = ceil(pow($this->mass, -0.75)*325);
+		if ($this->missile){$this->baseImpulse = ceil(pow($this->mass, -0.75)*325);}
+		else {$this->baseImpulse = $this->maxRange;}
 	}
 
 	public function singleCritTest($turn, $extra){
@@ -51,14 +31,10 @@ class Torpedo extends Missile {
 		parent::__construct($id, $parentId);
 	}
 
-	public function setBaseStats($phase, $turn){
-		$this->baseHitChance = ceil(sqrt($this->mass)*5);
-		$this->baseImpulse = $this->maxRange;
-	}
-
-	public function singleCritTest($turn, $extra){
-		return;
-	}
+	//public function setBaseStats($phase, $turn){
+	//	$this->baseHitChance = ceil(sqrt($this->mass)*5);
+	//	$this->baseImpulse = $this->maxRange;
+	//}
 }
 
 class Warhead extends Weapon {

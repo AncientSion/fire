@@ -4,7 +4,7 @@ class Laser extends Weapon {
 	public $type = "Laser";
 	public $animation = "beam";
 	public $beamWidth;
-	public $priority = 2;
+	public $priority = 7;
 	public $rakes;
 	public $laser = 1;
 	public $fireMode = "Laser";
@@ -93,7 +93,7 @@ class MediumLaser extends Laser {
 	public $dmgLoss = 4;
 	public $accDecay = 90;
 	public $reload = 3;
-	public $powerReq = 5;
+	public $powerReq = 4;
 	public $effiency = 3;
 	public $maxBoost = 1;
 	public $rakes = 3;

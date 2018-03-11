@@ -162,6 +162,54 @@ if (isset($_SESSION["userid"])){
 else {
    header("Location: index.php");
 }
+/*
+
+	var active = true;
+	if (this.destroyed || this.disabled){
+		active = false;
+	}
+
+
+	if (!active){
+		fighterDiv($("<image>")
+			.attr("src", "varIcons/destroyed.png")
+			.addClass("overlay")
+			.hover(function(e){
+				e.stopPropagation();
+				var shipId = $(this).parent().parent().parent().data("shipId");
+				var fighterId = $(this).parent().data("fighterId");
+				game.getUnit(shipId).getSystem(fighterId).hover(e);
+			})
+			.click(function(e){
+				e.stopPropagation();
+				var shipId = $(this).parent().parent().parent().data("shipId");
+				var fighterId = $(this).parent().data("fighterId");
+				console.log(game.getUnit(shipId).getSystem(fighterId));
+			}))
+	}
+	else {
+		$(img)
+		.hover(function(e){
+			e.stopPropagation();
+			var shipId = $(this).parent().parent().parent().data("shipId");
+			var fighterId = $(this).parent().data("fighterId");
+			game.getUnit(shipId).getSystem(fighterId).hover(e);
+		})
+		.click(function(e){
+			e.stopPropagation();
+			var shipId = $(this).parent().parent().parent().data("shipId");
+			var fighterId = $(this).parent().data("fighterId");
+			console.log(game.getUnit(shipId).getSystem(fighterId));
+		});
+	}
+
+
+
+*/
+
+
+
+
 
 
 ?>

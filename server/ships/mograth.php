@@ -5,7 +5,6 @@ class Mograth extends Light {
 	public $display = "Mograth";
 	public $role = "Multi-purpose Frigate";
 	public $faction = "Centauri Republic";
-	public static $value =  360;
 	public $cost = 360;
 	public $mass = 1400;
 

@@ -489,7 +489,7 @@
 		}
 
 		public function updateSystemLoad($data){
-			//Debug::log("updateSystemLoad: ".sizeof($data));
+			Debug::log("updateSystemLoad: ".sizeof($data));
 			$stmt = $this->connection->prepare("
 				UPDATE loads
 				SET amount = amount - :amount
@@ -613,7 +613,7 @@
 				if (!isset($units[$i]["launchData"]) || !(sizeof($units[$i]["launchData"]))){continue;}
 				$stmt->bindParam(":unitid", $units[$i]["id"]);
 				
-								for ($j = 0; $j < sizeof($units[$i]["launchData"]["loads"]); $j++){
+				for ($j = 0; $j < sizeof($units[$i]["launchData"]["loads"]); $j++){
 					$stmt->bindValue(":amount", $units[$i]["launchData"]["loads"][$j]["launch"]);
 					$stmt->bindValue(":name", $units[$i]["launchData"]["loads"][$j]["name"]);
 					$stmt->execute();
@@ -936,19 +936,8 @@
 				}
 				*/
 
-				for ($i = sizeof($data)-1; $i >= 0; $i--){
-					$splice = 1;
-					for ($j = 0; $j < sizeof($data[$i]["launchData"]["loads"]); $j++){
-						if ($data[$i]["launchData"]["loads"][$j]["launch"] >= 1){
-							$splice = 0;
-							break 1; 
-						}
-					}
-					if ($splice){
-						array_splice($data, $i, 1);
-					}
-				}
 				//Debug::log("insert :".sizeof($data));
+				var_export($data);
 				$this->insertUnits($userid, $gameid, $data);
 			}
 			return true;

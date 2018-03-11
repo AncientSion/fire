@@ -24,39 +24,24 @@ Fighter.prototype.create = function(data){
 	}
 }
 
-Fighter.prototype.getElement = function(){
-
-	var fighterDiv = $("<div>").addClass("fighterDiv").data("fighterId", this.id)
-
-	var active = true;
-	if (this.destroyed || this.disabled){
-		active = false;
+Fighter.prototype.addMainDivEvents = function(div, alive, isBuy){
+	if (isBuy){
+		div
+		.find("img")
+		.hover(function(e){
+			e.stopPropagation();
+			game.getSampleFighter($(this).parent().parent().parent().find("td").first().html()).hover(e);
+			return;
+			var shipId = $(this).parent().parent().parent().data("shipId");
+			var fighterId = $(this).parent().data("fighterId");
+			game.getUnit(shipId).getSystem(fighterId).hover(e);
+		});
+		return;
 	}
 
-	var img = $(this.getBaseImage().cloneNode(true))
-			.addClass("rotate270 img80pct")
-
-	if (!active){
-		var overlay = new Image();
-		$(overlay)
-			.attr("src", "varIcons/destroyed.png")
-			.addClass("overlay")
-			.hover(function(e){
-				e.stopPropagation();
-				var shipId = $(this).parent().parent().parent().data("shipId");
-				var fighterId = $(this).parent().data("fighterId");
-				game.getUnit(shipId).getSystem(fighterId).hover(e);
-			})
-			.click(function(e){
-				e.stopPropagation();
-				var shipId = $(this).parent().parent().parent().data("shipId");
-				var fighterId = $(this).parent().data("fighterId");
-				console.log(game.getUnit(shipId).getSystem(fighterId));
-			});
-		fighterDiv.append(overlay);
-	}
-	else {
-		$(img)
+	if (alive){
+		div
+		.find("img")
 		.hover(function(e){
 			e.stopPropagation();
 			var shipId = $(this).parent().parent().parent().data("shipId");
@@ -70,8 +55,79 @@ Fighter.prototype.getElement = function(){
 			console.log(game.getUnit(shipId).getSystem(fighterId));
 		});
 	}
+	else {
+		div
+		.find(".overlay")
+		.hover(function(e){
+			e.stopPropagation();
+			var shipId = $(this).parent().parent().parent().data("shipId");
+			var fighterId = $(this).parent().data("fighterId");
+			game.getUnit(shipId).getSystem(fighterId).hover(e);
+		})
+		.click(function(e){
+			e.stopPropagation();
+			var shipId = $(this).parent().parent().parent().data("shipId");
+			var fighterId = $(this).parent().data("fighterId");
+			console.log(game.getUnit(shipId).getSystem(fighterId));
+		})
+	}
+}
 
-	fighterDiv.append(img)
+Fighter.prototype.addSysEvents = function(div, isBuy){
+	console.log("dign");
+	if (isBuy){
+		div
+		.css("zIndex", 1)
+		.hover(function(e){
+			e.stopPropagation();
+			//$("#systemDetailsDiv").remove();
+			console.log("ding"); 
+			game.getSampleFighter($(this).parent().parent().parent().children().first().html()).systems[0].hover(e);
+
+			return;
+			var shipId = $(this).parent().parent().parent().data("shipId");
+			game.getUnit(shipId).getSystem($(this).data("systemId")).hover(e)
+		})
+		return;
+	}
+	
+	div
+	.click(function(e){
+		e.stopPropagation();
+		var shipId = $(this).parent().parent().parent().data("shipId");
+		game.getUnit(shipId).getSystem($(this).data("systemId")).select(e)
+	})
+	.contextmenu(function(e){
+		e.stopPropagation();
+		e.preventDefault();
+		var shipId = $(this).parent().parent().parent().data("shipId");
+		game.getUnit(shipId).selectAll(e, $(this).data("systemId"));
+	})
+	.hover(function(e){
+		e.stopPropagation();
+		$("#systemDetailsDiv").remove();
+		var shipId = $(this).parent().parent().parent().data("shipId");
+		game.getUnit(shipId).getSystem($(this).data("systemId")).hover(e)
+	})
+}
+
+Fighter.prototype.getElement = function(isBuy){
+	var fighterDiv = $("<div>")
+		.addClass("fighterDiv")
+		.data("fighterId", this.id)
+		.append($(this.getBaseImage().cloneNode(true))
+			.addClass("rotate270 img80pct"))
+
+	var alive = 1;
+	if (this.destroyed || this.disabled){alive = 0;}
+	if (!alive){
+		fighterDiv
+			.append($("<img>")
+				.attr("src", "varIcons/destroyed.png")
+				.addClass("overlay"))
+	}
+
+	this.addMainDivEvents(fighterDiv, alive, isBuy);
 
 	var wrap = document.createElement("div");
 		wrap.className = "iconIntegrity"; wrap.style.height = 12;
@@ -95,41 +151,14 @@ Fighter.prototype.getElement = function(){
 	fighterDiv.append(wrap);
 
 	var s = 20;
-	// FIGHTER WEAPONS
 	for (var j = 0; j < this.systems.length; j++){
-		var td = this.systems[j].getTableData(true);
-		//$(td.childNodes[0]).attr("width", s).attr("height", s);
-		fighterDiv.append(td);
-		$(td)
-			.addClass("fighter")
-			.css("top", -75)
-			.css("left", 15 +1)
-			.click(function(e){
-				e.stopPropagation();
-				var shipId = $(this).parent().parent().parent().data("shipId");
-				game.getUnit(shipId).getSystem($(this).data("systemId")).select(e)
-			})
-			.contextmenu(function(e){
-				e.stopPropagation();
-				e.preventDefault();
-				var shipId = $(this).parent().parent().parent().data("shipId");
-				game.getUnit(shipId).selectAll(e, $(this).data("systemId"));
-			});
-			
-		$(td).hover(function(e){
-			e.stopPropagation();
-			$("#systemDetailsDiv").remove();
-			var shipId = $(this).parent().parent().parent().data("shipId");
-			game.getUnit(shipId).getSystem($(this).data("systemId")).hover(e)
-		})
+		var ele = $(this.systems[j].getFighterSystemData(true));
+		this.addSysEvents(ele, isBuy)
+		fighterDiv.append(ele);
 	}
 
 	return fighterDiv;
 }
-
-
-
-
 
 
 
@@ -156,23 +185,26 @@ Flight.prototype.setSize = function(){
 	this.size = max + 20;
 }
 
-Flight.prototype.setMaxMass = function(){
-	for (var i = 0; i < this.structures.length; i++){
-		if (! this.structures[i].destroyed){
-			if (this.structures[i].mass > this.mass){
-				this.mass = this.structures[i].mass; 
-			}
-		}
-	}
-}
-
 Flight.prototype.setImpulse = function(){
-	this.baseImpulse = Math.floor(Math.pow(this.mass, -2.5)*800000);
+	this.baseImpulse = 1000;
+	for (var i = 0; i < this.structures.length; i++){
+		this.baseImpulse = Math.min(this.baseImpulse, this.structures[i].baseImpulse)
+	}
 	this.currentImpulse = this.baseImpulse;
 }
 
 Flight.prototype.getEP = function(){
 	return this.ep;
+}
+
+Flight.prototype.getLaunchData = function(){
+	var data = []
+	for (var j = this.launchData.loads.length-1; j >= 0; j--){
+		if (this.launchData.loads[j].launch){
+			data.push({name: this.launchData.loads[j].name, launch: this.launchData.loads[j].launch});
+		}
+	}
+	return {loads: data, shipid: this.launchData.shipid, systemid: this.launchData.systemid};
 }
 
 Flight.prototype.hasWeaponsSelected = function(){
@@ -343,7 +375,7 @@ Flight.prototype.expandDiv = function(div){
 
 
 	for (var i = 0; i < this.structures.length; i++){
-		var fighterDiv = this.structures[i].getElement();
+		var fighterDiv = this.structures[i].getElement(false);
 		structContainer.append(fighterDiv);
 	}
 
