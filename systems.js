@@ -2162,9 +2162,11 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 	}
 
 	if (this.linked > 1){
-		$(table).append($("<tr>").append($("<td>").html("Linked Shots")).append($("<td>").html(this.linked + " x " + this.shots)));
+		//$(table).append($("<tr>").append($("<td>").html("Linked Shots")).append($("<td>").html(this.linked + " x " + this.shots)));
+		$(table).append($("<tr>").append($("<td>").html("Linked Mounts")).append($("<td>").html(this.linked)));
 	}
-	else if (this.fireMode == "Laser"){
+	
+	if (this.fireMode == "Laser"){
 		$(table).append($("<tr>").append($("<td>").html("Shots & Rakes")).append($("<td>").html(this.shots + " w/ " + this.output + " rakes")));
 	}
 	else if (!(this instanceof Launcher)){

@@ -26,11 +26,11 @@ class Shokov extends Shokos {
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new LightPlasmaPulse($this->getId(), $this->parentId, 0, 180);
+		$right->systems[] = new TwinParticleBolter($this->getId(), $this->parentId, 300, 180);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new LightPlasmaPulse($this->getId(), $this->parentId, 180, 360);
+		$left->systems[] = new TwinParticleBolter($this->getId(), $this->parentId, 180, 60);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

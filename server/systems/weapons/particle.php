@@ -10,6 +10,29 @@ class Particle extends Weapon {
 	}
 }
 
+class TwinParticleBolter extends Particle {
+	public $name = "TwinParticleBolter";
+	public $display = "Twin Particle Bolter";
+	public $minDmg = 10;
+	public $maxDmg = 14;
+	public $accDecay = 180;
+	public $shots = 1;
+	public $linked = 2;
+	public $reload = 2;
+	public $integrity = 24;
+	public $powerReq = 2;
+	public $traverse = -4;
+
+	public $animColor = "orange";
+	public $projSize = 2;
+	public $projSpeed = 8;
+	
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+	}
+
+}
+
 class LightParticle extends Particle {
 	public $name = "LightParticle";
 	public $display = "32mm Particle Bolter Array";

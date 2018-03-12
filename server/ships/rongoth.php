@@ -1,8 +1,8 @@
 <?php
 
-class RonGoth extends Medium {
-	public $name = "RonGoth";
-	public $display = "RonGoth";
+class Rongoth extends Medium {
+	public $name = "Rongoth";
+	public $display = "Rongoth";
 	public $faction = "Narn Regime";
 	public $size =  55;
 	public static $value = 420;

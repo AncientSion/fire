@@ -153,7 +153,7 @@ class Single {
 	}
 
 	public function singleCritTest($turn, $extra){
-		//Debug::log("singleCritTest ".get_class($this)." #".$this->id);
+		Debug::log("singleCritTest ".get_class($this)." #".$this->id);
 		$old = 0; $new = 0;
 		for ($i = 0; $i < sizeof($this->damages); $i++){
 			if ($this->damages[$i]->turn == $turn){

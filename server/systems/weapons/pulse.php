@@ -71,7 +71,7 @@ class HeavyPulse extends Pulse {
 	public $reload = 4;
 	public $integrity = 64;
 	public $powerReq = 6;
-	public $traverse = 1;
+	public $traverse = 0;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -166,7 +166,7 @@ class HeavyPlasmaPulse extends MediumPlasmaPulse {
 	public $reload = 4;
 	public $integrity = 64;
 	public $powerReq = 6;
-	public $traverse = 1;
+	public $traverse = 0;
 
 	public $effiency = 4;
 

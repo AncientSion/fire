@@ -1482,6 +1482,7 @@ div.popupEntry.buttonTD {
 div.buttonTD {
 	margin: auto;
 	width: 60%;
+	text-align: center;
 }
 
 .buttonTD {

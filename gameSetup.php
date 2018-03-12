@@ -180,9 +180,8 @@ else {
 			</div>
 			<table id="hangarTable">
 			</table>
-			<table style="margin:auto; width: 220px; margin-top: 10px">
-				<tr><td class="buttonTD disabled" onclick='game.ships[0].doConfirmSystemLoadout()'>Confirm Loadout</td></tr>
-			</table>
+			<div class="buttonTD disabled" onclick='game.ships[0].doConfirmSystemLoadout()'>Confirm Loadout</div>
+
 		</div>
 		<div id="weaponDiv" class="disabled">
 			<div class="header">

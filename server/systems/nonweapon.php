@@ -254,7 +254,7 @@ class Hangar extends Weapon {
 		$this->capacity = $capacity;
 		$this->powerReq = 0;
 		//$this->powerReq = floor($launchRate/3);
-		$this->integrity = $capacity*10;
+		$this->integrity = $capacity*8;
 
 
 		for ($i = 0; $i < sizeof($loads); $i++){

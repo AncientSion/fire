@@ -21,33 +21,33 @@ class Primus extends SuperHeavy {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 330, 30, 1050, 22, 4);
-		$front->systems[] = new LightParticle($this->getId(), $this->id, 300, 120);
-		$front->systems[] = new HeavyParticle($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new HeavyParticle($this->getId(), $this->id, 300, 60);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 1050, 22, 6);
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 240, 60);
+		$front->systems[] = new HeavyParticle($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new Hangar($this->getId(), $this->id, 14, array("Sentri", "SitaraParticle"), 14, 2);
+		$front->systems[] = new HeavyParticle($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new LightParticle($this->getId(), $this->id, 300, 120);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 1300, 21);
 		$right->systems[] = new HeavyParticle($this->getId(), $this->id, 0, 120);
 		$right->systems[] = new LightParticle($this->getId(), $this->id, 300, 120);
 		$right->systems[] = new HeavyParticle($this->getId(), $this->id, 0, 120);
-		$right->systems[] = new LightParticle($this->getId(), $this->id, 300, 120);
-		$right->systems[] = new Hangar($this->getId(), $this->id, 9, array("Sentri", "SitaraParticle"), 9, 2);
+		$right->systems[] = new LightParticle($this->getId(), $this->id, 60, 240);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 150, 210, 900, 19, 3);
+		$aft = new Structure($this->getId(), $this->id, 150, 210, 900, 19, 4);
+		$aft->systems[] = new LightParticle($this->getId(), $this->id, 120, 300);
 		$aft->systems[] = new MediumParticle($this->getId(), $this->id, 120, 240);
 		$aft->systems[] = new MediumParticle($this->getId(), $this->id, 120, 240);
-		$aft->systems[] = new MediumParticle($this->getId(), $this->id, 120, 240);
+		$aft->systems[] = new LightParticle($this->getId(), $this->id, 60, 240);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 1300, 21);
 		$left->systems[] = new LightParticle($this->getId(), $this->id, 240, 60);
 		$left->systems[] = new HeavyParticle($this->getId(), $this->id, 240, 0);
-		$left->systems[] = new LightParticle($this->getId(), $this->id, 240, 60);
+		$left->systems[] = new LightParticle($this->getId(), $this->id, 120, 300);
 		$left->systems[] = new HeavyParticle($this->getId(), $this->id, 240, 0);
-		$left->systems[] = new Hangar($this->getId(), $this->id, 9, array("Sentri", "SitaraParticle"), 9, 2);
 		$structs[] = $left;
 		
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -66,43 +66,36 @@ class Primus extends SuperHeavy {
 			array(
 				array(
 					"active" => 0,
-					"chance" => 40,
-					"notes" => "PATROL (Sentri) Outfit",
-					"cost" => 275,
+					"chance" => 33,
+					"notes" => "14 Sentri Outfit",
+					"cost" => 364,
 					"loads" =>
 					array(
 						array(
-							"systemid" => 16,
+							"systemid" => 9,
 							"name" => "Sentri",
-							"amount" => 5
-						),
-						array(
-							"systemid" => 26,
-							"name" => "Sentri",
-							"amount" => 5
+							"amount" => 14,
 						),
 					)
 				),
 				array(
 					"active" => 0,
-					"chance" => 20,
-					"notes" => "WAR (Combined) Outfit",
-					"cost" => 450,
+					"chance" => 33,
+					"notes" => "10/4 Sentri/Sitara Outfit",
+					"cost" => 364,
 					"loads" =>
 					array(
 						array(
-							"systemid" => 16,
+							"systemid" => 9,
 							"name" => "Sentri",
-							"amount" => 9
+							"amount" => 10,
 						),
-						array(
-							"systemid" => 26,
-							"name" => "Sitara (Particle)",
-							"amount" => 9
+							"systemid" => 9,
+							"name" => "SitaraParticle",
+							"amount" => 4,
 						),
 					)
 				),
-			)
 		);
 	}
 

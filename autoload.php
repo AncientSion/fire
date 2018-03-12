@@ -135,7 +135,7 @@ spl_autoload_register(
                 'shockcannon' => '/server/systems/weapons/particle.php',
 
                 'particle' => '/server/systems/weapons/particle.php',
-                'superlightparticle' => '/server/systems/weapons/particle.php',
+                'twinparticlebolter' => '/server/systems/weapons/particle.php',
                 'lightparticle' => '/server/systems/weapons/particle.php',
                 'mediumparticle' => '/server/systems/weapons/particle.php',
                 'heavyparticle' => '/server/systems/weapons/particle.php',

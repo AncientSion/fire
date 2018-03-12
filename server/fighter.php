@@ -108,7 +108,7 @@ class SitaraParticle extends Sitara {
 	}
 
 	public function addSystems(){
-		$this->systems[] = new ParticleBolt($this->getId(), $this->id, $this->parentId, 1, 1, 30, 38, 0, 360);
+		$this->systems[] = new ParticleBolt($this->getId(), $this->id, $this->parentId, 1, 1, 30, 36, 0, 360);
 	}
 }
 
@@ -172,7 +172,7 @@ class Frazi extends Fighter {
 	public $faction = "Narn Regime";
 	public $cost =  32;
 	public $mass = 34;
-	public $integrity = 26;
+	public $integrity = 27;
 	public $negation = 5;
 	public $baseImpulse = 95;
 	public $baseHitChance = 25;

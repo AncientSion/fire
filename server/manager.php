@@ -1503,7 +1503,7 @@ include_once 'global.php';
 						"GQuan",
 						"GSten",
 						"KaToc",
-						"RonGoth",
+						"Rongoth",
 						"DagKar",
 					),
 					array(
@@ -1596,7 +1596,7 @@ include_once 'global.php';
 					array("GQuan", 5, 2),
 					array("GSten", 6, 3),
 					array("KaToc", 8, 3),
-					array("RonGoth", 8, 3),
+					array("Rongoth", 8, 3),
 					array("DagKar", 6, 3),
 					array("Squadron", 18, 2),
 				);

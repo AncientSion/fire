@@ -8,7 +8,7 @@ class Tethys extends SuperLight {
 	public $cost = 250;
 	public $mass = 1100;
 
-	public $integrity = 340;
+	public $integrity = 300;
 	public $ep = 110;
 	public $ew = 375;
 	public $power = 2;
