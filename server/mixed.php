@@ -323,7 +323,7 @@ class Mixed extends Ship {
 		return $this->getHitSystem($fire)->id;
 	}
 
-	public function getFlashDmgTargets($fire){
+	public function getFlashTargets($fire){
 		$valid = array();
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){

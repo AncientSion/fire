@@ -179,7 +179,6 @@ class AntimatterConverter extends Particle {
 	public $integrity = 50;
 	public $powerReq = 5;
 	public $traverse = 0;
-	public $dmgs = array(1, 2, 6, 3);
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -187,7 +186,7 @@ class AntimatterConverter extends Particle {
 	}
 
 	public function getBaseDamage($fire){
-		return $this->getFlashDamage($fire);
+		return $this->getFlashBaseDamage($fire);
 	}
 }
 

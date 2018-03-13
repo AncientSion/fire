@@ -20,6 +20,7 @@ class Weapon extends System {
 
 	public $melt = 0;
 	public $dmgLoss = 0;
+	public $flashDiv;
 
 	public $em = 0;
 	public $fireMode = "Standard";
@@ -37,19 +38,6 @@ class Weapon extends System {
 		else if ($w <= 120){$this->armourMod = 0.6; $this->mount = "Embedded";}
 		else if ($w <= 360){$this->armourMod = 0.45; $this->mount = "Turret";}
 		$this->armour = floor($rem * $this->armourMod);
-	}
-
-	public function setFlashData(){
-		$this->maxDmg = $this->minDmg * $this->dmgs[2];
-		for ($i = 0; $i < sizeof($this->dmgs); $i++){
-			$this->dmgs[$i] *= $this->minDmg;
-		}
-		
-		$this->notes[] = "Fixed damage based on target";
-		$this->notes[] = "<b>Salvo</b>: ".$this->dmgs[0]." dmg / unit";
-		$this->notes[] = "<b>Flight</b>: ".$this->dmgs[1]." dmg / unit";
-		$this->notes[] = "<b>Squadron</b>: ".$this->dmgs[2]." dmg / unit";
-		$this->notes[] = "<b>Ship</b>: ".$this->dmgs[3]." dmg to each system on facing side, ".$this->dmgs[3]." per target size to structure";
 	}
 
 	public function getCritModMax($dmg){
@@ -70,9 +58,30 @@ class Weapon extends System {
 		return mt_rand($this->getMinDamage(), $this->getMaxDamage());
 	}
 
-	public function getFlashDamage($fire){
+	public function setFlashData(){
+		$data = array(1, 2, 6, 10);
+		$this->flashDiv = array(40, 60);
+
+		for ($i = 0; $i < sizeof($data); $i++){
+			$this->dmgs[$i] = $data[$i] * $this->minDmg;
+		}
+		
+		$this->notes[] = "<u>Salvo</u>: ".$this->dmgs[0]." dmg / unit";
+		$this->notes[] = "<u>Flight</u>: ".$this->dmgs[1]." dmg / unit";
+		$this->notes[] = "<u>Squadron</u>: ".$this->dmgs[2]." dmg / unit";
+
+		$html = "<u>Ship</u></br>";
+		$html .= $this->dmgs[3]." (+".floor($this->dmgs[3]*0.5)." per target size) damage</br>";
+		$html .= $this->flashDiv[0]."% directed towards main structure</br>";
+		$html .= $this->flashDiv[1]."% evenly divided directed towards each facing system</br>";
+	
+		$this->notes[] = $html;
+		$this->maxDmg = $this->dmgs[3];
+	}
+
+	public function getFlashBaseDamage($fire){
 		if ($fire->target->ship){
-			return $this->dmgs[3];
+			return floor($this->dmgs[3] + $this->dmgs[3]*0.5 * $fire->target->traverse);
 		} else if ($fire->target->squad){
 			return $this->dmgs[2];
 		} else if ($fire->target->flight){
@@ -81,7 +90,7 @@ class Weapon extends System {
 			return $this->dmgs[0];
 		}
 
-		Debug::log("getFlashDamage DMG error");
+		Debug::log("getFlashBaseDamage DMG error");
 		return 1;
 	}
 

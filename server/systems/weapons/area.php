@@ -48,7 +48,7 @@ class EnergyMine extends Area {
 	}
 
 	public function getBaseDamage($fire){
-		return $this->getFlashDamage($fire);
+		return $this->getFlashBaseDamage($fire);
 	}
 }
 

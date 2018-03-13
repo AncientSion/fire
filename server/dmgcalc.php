@@ -1,4 +1,4 @@
-<?php
+"<?php
 
 class DmgCalc {
 
@@ -250,8 +250,73 @@ class DmgCalc {
 	}
 
 	public static function doFlashDmg($fire, $roll, $system){
+		//$totalDmg = $fire->weapon->getTotalDamage($fire) * (1 - ($this->ship*0.5));
 		$totalDmg = $fire->weapon->getTotalDamage($fire);
-		$targets = $fire->target->getFlashDmgTargets($fire);
+		$targets = $fire->target->getFlashTargets($fire);
+		$negation;
+		$overkill = 0;
+
+
+		Debug::log("flash, system targets: ".sizeof($targets).", damage: ".$totalDmg);
+
+		$dmgs = array();
+
+		if ($fire->target->ship){
+			$fire->hits--;
+			$subDmg = floor($totalDmg  / 100 * $fire->weapon->flashDiv[1] / sizeof($targets));
+			Debug::log("VS SHIP, subDamage: ".$subDmg);
+			for ($i = 0; $i < sizeof($targets); $i++){
+				$dmgs[] = $subDmg;
+			}
+			$targets[] = $fire->target->primary;
+			$dmgs[] = floor($totalDmg / 100 * $fire->weapon->flashDiv[0]);
+			Debug::log("VS SHIP, struct: ".$dmgs[sizeof($dmgs)-1]);
+		}
+		else {		
+			Debug::log("VS NON SHIP");
+			for ($i = 0; $i < sizeof($targets)-1; $i++){
+				$dmgs[] = $totalDmg;
+			}
+		}
+
+		for ($i = 0; $i < sizeof($targets); $i++){
+			$fire->hits++;
+			$system = $targets[$i];
+			$destroyed = 0;
+			$remInt = $system->getRemIntegrity();
+			$negation = $fire->target->getArmour($fire, $system);
+
+			$dmg = static::determineDmg($fire->weapon, $dmgs[$i], $negation);
+
+			if ($fire->target->ship && $targets[$i]->id == 1){
+				Debug::log("hitting structure, accumulated overkill @ ".$overkill);
+				$dmg->structDmg += $overkill;
+			}
+
+			if ($remInt - $dmg->structDmg < 1){
+				$destroyed = 1;
+				$overkill += $dmg->structDmg - $remInt;
+				Debug::log("destroying, rem: ".$remInt.", dmg: ".$dmg->structDmg.", adding overkill ".($dmg->structDmg - $remInt).", now at: ".$overkill);
+				$dmg->structDmg = $remInt;
+			}
+			
+			Debug::log("dealing ".$dmg->armourDmg."/".$dmg->structDmg."/".$dmg->overkill." to ".$targets[$i]->display);
+
+			$entry = new Damage(
+				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
+				$dmgs[$i], $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->emDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
+			);
+
+			$fire->damages[] = $entry;
+			$fire->target->applyDamage($entry);
+		}
+
+
+	}
+
+	public static function doFlashDmg3($fire, $roll, $system){ // old flas
+		$totalDmg = $fire->weapon->getTotalDamage($fire);
+		$targets = $fire->target->getFlashTargets($fire);
 		$negation;
 
 		Debug::log("flash, targets: ".sizeof($targets).", damage: ".$totalDmg);
@@ -279,8 +344,6 @@ class DmgCalc {
 
 		}
 	}
-
-
 	public static function doFlashDmg2($fire, $roll, $system){ // old flash
 		$totalDmg = $fire->weapon->getTotalDamage($fire);
 		$toDo = $totalDmg;
@@ -417,4 +480,4 @@ class DmgCalc {
 
 
 
-?>
+?>"

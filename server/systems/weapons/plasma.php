@@ -92,7 +92,7 @@ class HeavyPlasma extends Plasma {
 	}
 }
 
-class MagCompressor extends Plasma {
+class MagCompressor extends Particle {
 	public $name = "MagCompressor";
 	public $display = "Mag-Plasma Compressor";
 	public $fireMode = "Flash";
@@ -100,7 +100,7 @@ class MagCompressor extends Plasma {
 	public $freeAim = 0;
 	public $minDmg = 12;
 	public $accDecay = 120;
-	public $dmgLoss = 9;
+	public $dmgLoss = 1;
 	public $shots = 1;
 	public $animColor = "green";
 	public $projSize = 4;
@@ -109,7 +109,7 @@ class MagCompressor extends Plasma {
 	public $integrity = 54;
 	public $powerReq = 6;
 	public $traverse = 1;
-	public $dmgs = array(1, 2, 6, 3);
+	public $dmgs = array();
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -118,7 +118,7 @@ class MagCompressor extends Plasma {
 	}
 
 	public function getBaseDamage($fire){
-		return $this->getFlashDamage($fire);
+		return $this->getFlashBaseDamage($fire);
 	}
 }
 

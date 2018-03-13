@@ -2001,7 +2001,7 @@ Ship.prototype.createBaseDiv = function(){
 		.append($("<tr>")
 			.append($("<th>").html(this.getCallSign()).attr("colSpan", 2).addClass(headerC)))
 		.append($("<tr>")
-			.append($("<td>").html("Classification").css("width", "50%"))
+			.append($("<td>").html("Unit Type / Size").css("width", "50%"))
 			.append($("<td>").html(game.getUnitType(this.traverse) + " (" + this.traverse + ")")))
 		.append($("<tr>")
 			.append($("<td>").html("Speed"))

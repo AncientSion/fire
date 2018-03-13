@@ -678,7 +678,7 @@ class Ship {
 		return true;
 	}
 
-	public function getFlashDmgTargets($fire){
+	public function getFlashTargets($fire){
 		$valid = array();
 		$struct = $this->getStruct($fire->section);
 		for ($i = 0; $i < sizeof($struct->systems); $i++){
@@ -686,9 +686,6 @@ class Ship {
 			$valid[] = $struct->systems[$i];
 		}
 		return $valid;
-
-		if (!sizeof($valid)){return $this->primary;}
-		return $valid[mt_rand(0, sizeof($valid)-1)];
 	}
 
 	public function getFlashOverkillSystem($fire){
