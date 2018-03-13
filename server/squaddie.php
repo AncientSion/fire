@@ -121,9 +121,9 @@ class Squaddie extends Single {
 	
 	public function getValidEffects(){
 		return array( // type, min, max, dura
-			array("Damage", 25, 0, 20),
-			array("Disabled", 50, 1, 0.00),
-			array("Destroyed", 65, 0, 0.00),
+			array("Damage", 30, 0, 15),
+			array("Disabled", 60, 1, 0.00),
+			array("Destroyed", 80, 0, 0.00),
 		);
 	}
 
@@ -138,12 +138,14 @@ class Squaddie extends Single {
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
+				if ($new < 30 &&  mt_rand(0, 1)){Debug::log("lucky skip!"); continue;}
+
 				$roll = mt_rand(0, 20) + $trigger + sizeof($this->structures[$i]->systems[$j]->crits)*20;
 				Debug::log("roll: ".$roll);
 				if ($roll < $effects[0][1]){continue;}
 
 				for ($k = sizeof($effects)-1; $k >= 0; $k--){
-					if ($roll >= $effects[$k][1] && mt_rand(0, 3)){//66 % chance to crit
+					if ($roll >= $effects[$k][1]){//66 % chance to crit
 						$this->structures[$i]->systems[$j]->crits[] = new Crit(
 							0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn,
 							 $effects[$k][0],  $effects[$k][2],  $effects[$k][3], 1

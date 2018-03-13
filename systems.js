@@ -2568,11 +2568,11 @@ Laser.prototype.getAnimation = function(fire){
 	var t = fire.target.getPlannedPos();
 		t = fire.target.getDrawPos();
 
-	if (fire.guns >= 6){
-		delay = 15;
+	if (fire.shooter.squad){
+		delay = 40; shotInterval = 5;
 	}
-	else if (fire.shooter.squad){
-		delay = 20;
+	else if (fire.guns >= 6){
+		delay = 15;
 	}
 	
 	for (var j = 0; j < fire.guns; j++){

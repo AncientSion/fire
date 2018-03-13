@@ -58,22 +58,22 @@ class LightParticleBeam extends Laser {
 
 class LightLaser extends Laser {
 	public $name = "LightLaser";
-	public $display = "88mm 'Light' Laser";
+	public $display = "Laser Laser";
 	public $animColor = "red";
 	public $rakeTime = 40;
 	public $beamWidth = 2;
-	public $minDmg = 70;
-	public $maxDmg = 95;
-	public $optRange = 300;
-	public $dmgLoss = 4;
-	public $accDecay = 120;
+	public $minDmg = 60;
+	public $maxDmg = 80;
+	public $optRange = 250;
+	public $dmgLoss = 8;
+	public $accDecay = 60;
 	public $shots = 1;
 	public $reload = 2;
 	public $powerReq = 3;
 	public $effiency = 2;
 	public $maxBoost = 1;
 	public $rakes = 3;
-	public $integrity = 44;
+	public $integrity = 40;
 	public $traverse = -2;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
@@ -83,15 +83,15 @@ class LightLaser extends Laser {
 
 class MediumLaser extends Laser {
 	public $name = "MediumLaser";
-	public $display = "152mm 'Medium' Laser";
+	public $display = "Medium Laser";
 	public $animColor = "red";
 	public $rakeTime = 60;
 	public $beamWidth = 3;
-	public $minDmg = 95;
-	public $maxDmg = 130;
-	public $optRange = 450;
+	public $minDmg = 90;
+	public $maxDmg = 125;
+	public $optRange = 400;
 	public $dmgLoss = 4;
-	public $accDecay = 90;
+	public $accDecay = 60;
 	public $reload = 3;
 	public $powerReq = 4;
 	public $effiency = 3;
@@ -107,12 +107,12 @@ class MediumLaser extends Laser {
 
 class HeavyLaser extends Laser {
 	public $name = "HeavyLaser";
-	public $display = "234mm 'Heavy' Laser";
+	public $display = "Heavy Laser";
 	public $animColor = "red";
 	public $rakeTime = 70;
 	public $beamWidth = 4;
-	public $minDmg = 130;
-	public $maxDmg = 165;
+	public $minDmg = 140;
+	public $maxDmg = 175;
 	public $optRange = 600;
 	public $dmgLoss = 3;
 	public $accDecay = 60;
@@ -131,12 +131,12 @@ class HeavyLaser extends Laser {
 
 class SuperHeavyLaser extends Laser {
 	public $name = "SuperHeavyLaser";
-	public $display = "340mm 'Super-Heavy' Laser";
+	public $display = "Super-Heavy Laser";
 	public $animColor = "red";
 	public $rakeTime = 120;
 	public $beamWidth = 5;
-	public $minDmg = 205;
-	public $maxDmg = 250;
+	public $minDmg = 190;
+	public $maxDmg = 230;
 	public $optRange = 700;
 	public $dmgLoss = 3;
 	public $accDecay = 40;
@@ -161,13 +161,13 @@ class SuperHeavyLaser extends Laser {
 
 class NeutronLaser extends Laser {
 	public $name = "NeutronLaser";
-	public $display = "238mm Neutron Laser";
+	public $display = "Neutron Laser";
 	public $rakeTime = 40;
 	public $animColor = "yellow";
 	public $beamWidth = 2;
 	public $minDmg = 95;
 	public $maxDmg = 130;
-	public $optRange = 700;
+	public $optRange = 500;
 	public $dmgLoss = 2;
 	public $accDecay = 60;
 	public $shots = 1;
