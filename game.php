@@ -39,16 +39,14 @@
 	$manager->doEval();
 	$post = json_encode($manager->getClientData(), JSON_NUMERIC_CHECK);
 
+	
 	/*
 	$lasers = array(new LightLaser(0, 0, 0, 0, 0, 0),new MediumLaser(0, 0, 0, 0, 0, 0),new HeavyLaser(0, 0, 0, 0, 0, 0),new SuperHeavyLaser(0, 0, 0, 0, 0, 0));
-
-
-	
 	foreach ($lasers as $laser){
-		echo $laser->name." - ".floor(($laser->minDmg + $laser->maxDmg) / 2  / 3)." dps / rake</br>";
-		echo $laser->name." - ".floor(($laser->minDmg + $laser->maxDmg) / 2  / $laser->reload)." dps / turn</br>";
+		echo $laser->name.": ".floor(($laser->minDmg + $laser->maxDmg) / 2  / $laser->rakes)." dps / rake turn</br>";
 	}
 	*/
+	
 	
 	echo "<script>";
 	echo "window.game = ".$post.";";

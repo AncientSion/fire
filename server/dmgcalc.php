@@ -274,7 +274,7 @@ class DmgCalc {
 		}
 		else {		
 			Debug::log("VS NON SHIP");
-			for ($i = 0; $i < sizeof($targets)-1; $i++){
+			for ($i = 0; $i < sizeof($targets); $i++){
 				$dmgs[] = $totalDmg;
 			}
 		}

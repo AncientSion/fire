@@ -2375,6 +2375,57 @@ Warhead.prototype.getAnimation = function(fire){
 }
 
 
+
+function Flash(){}
+Flash.prototype.getAnimation = function(fire){
+	var allAnims = [];
+	var grouping = 2;
+	var speed = this.projSpeed;
+	var delay = 25 * this.shots;
+	var shotInterval = 25;
+	var cc = 0;
+	var hits = 0;
+	var fraction = 1;
+	var t = fire.target.getDrawPos();
+
+	if (fire.dist < 200){
+		fraction = Math.min(3, 200 / fire.dist);
+	}
+	else if (fire.dist > 600){
+		fraction = Math.max(0.5, 600 / fire.dist);
+	}
+
+	speed /= fraction;
+	delay *= fraction;
+	shotInterval *= fraction;
+
+	if (fire.shooter.flight && fire.target.flight){
+		a = iSON.parse(iSON.stringify(fire.target.structures[1].layout));
+	}
+	
+	for (var i = 0; i < fire.guns; i++){
+		var o = fire.shooter.getWeaponOrigin(fire.systems[i]);
+		var ox = fire.shooter.drawX + o.x;
+		var oy = fire.shooter.drawY + o.y;
+		var hit = false;
+
+		if (fire.hits[i]){
+			hit = true;
+		}
+		
+		var dest = fire.target.getFlasHitSection(fire);
+		
+		var tx = t.x + dest.x;
+		var ty = t.y + dest.y;
+
+		var gunAnims = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
+			gunAnims.n = 0 - ((i / grouping) * delay + i*shotInterval);
+
+		allAnims.push([gunAnims])
+	}
+	return allAnims;
+}
+
 function Particle(system){
 	Weapon.call(this, system);	
 	this.projSize = system.projSize;
@@ -2383,6 +2434,7 @@ function Particle(system){
 Particle.prototype = Object.create(Weapon.prototype);
 
 Particle.prototype.getAnimation = function(fire){
+	if (this.fireMode == "Flash"){return Flash.prototype.getAnimation.call(this, fire);}
 	var allAnims = [];
 	var grouping = 2;
 	var speed = this.projSpeed;

@@ -1122,7 +1122,7 @@ Ship.prototype.getSectionString = function(a){
 
 Ship.prototype.getStructureFromAngle = function(a){
 	for (var i = 0; i < this.structures.length; i++){
-		var	start; var	end;
+		var	start; var end;
 
 		if (this.rolled){
 			if (this.structures[i].start < this.structures[i].end){
@@ -1758,6 +1758,14 @@ Ship.prototype.getRemSpeed = function(){
 		}
 	}
 	return impulse;
+}
+
+Ship.prototype.getFlasHitSection = function(fire){
+	var o = fire.shooter.getPlannedPos();
+	var t = this.getPlannedPos();
+	var a = getAngleFromTo(o, t) + range(-5, 5);
+	var d = -this.size/3;
+	return getPointInDir(d, a, 0, 0);
 }
 
 Ship.prototype.getFireDest = function(fire, isHit, num){

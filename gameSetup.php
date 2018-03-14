@@ -336,6 +336,19 @@ else {
 							game.ships[0].totalCost += game.ships[0].upgrades[i].cost;
 					}
 
+					if (game.ships[0].squad && game.ships[0].structures.length > 2){
+						var size = game.ships[0].structures.length;
+						var mod = 0;
+						if (size == 3){mod = 8;} else if (size == 4){mod = 12;}
+						var extra = Math.floor(game.ships[0].totalCost / 100 * mod);
+
+						var tr = table.insertRow(-1);
+							tr.insertCell(-1).innerHTML = "Squadron size: " + size + ", total cost +" + mod + "%";
+							tr.insertCell(-1).innerHTML = extra;
+
+							game.ships[0].totalCost += extra
+					}
+
 					var tr = table.insertRow(-1);
 						tr.insertCell(-1).innerHTML = "Total Cost";
 						tr.insertCell(-1).innerHTML = game.ships[0].totalCost;

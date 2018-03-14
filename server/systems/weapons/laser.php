@@ -58,9 +58,9 @@ class LightParticleBeam extends Laser {
 
 class LightLaser extends Laser {
 	public $name = "LightLaser";
-	public $display = "Laser Laser";
+	public $display = "Light Laser";
 	public $animColor = "red";
-	public $rakeTime = 40;
+	public $rakeTime = 60;
 	public $beamWidth = 2;
 	public $minDmg = 60;
 	public $maxDmg = 80;
@@ -68,7 +68,7 @@ class LightLaser extends Laser {
 	public $dmgLoss = 8;
 	public $accDecay = 60;
 	public $shots = 1;
-	public $reload = 2;
+	public $reload = 3;
 	public $powerReq = 3;
 	public $effiency = 2;
 	public $maxBoost = 1;
@@ -81,22 +81,18 @@ class LightLaser extends Laser {
 	}
 }
 
-class MediumLaser extends Laser {
+class MediumLaser extends LightLaser {
 	public $name = "MediumLaser";
 	public $display = "Medium Laser";
 	public $animColor = "red";
 	public $rakeTime = 60;
 	public $beamWidth = 3;
-	public $minDmg = 90;
-	public $maxDmg = 125;
+	public $minDmg = 80;
+	public $maxDmg = 105;
 	public $optRange = 400;
-	public $dmgLoss = 4;
-	public $accDecay = 60;
-	public $reload = 3;
+	public $dmgLoss = 6;
 	public $powerReq = 4;
 	public $effiency = 3;
-	public $maxBoost = 1;
-	public $rakes = 3;
 	public $integrity = 52;
 	public $traverse = -1;
 
@@ -105,22 +101,18 @@ class MediumLaser extends Laser {
 	}
 }
 
-class HeavyLaser extends Laser {
+class HeavyLaser extends LightLaser {
 	public $name = "HeavyLaser";
 	public $display = "Heavy Laser";
 	public $animColor = "red";
-	public $rakeTime = 70;
+	public $rakeTime = 60;
 	public $beamWidth = 4;
-	public $minDmg = 140;
-	public $maxDmg = 175;
+	public $minDmg = 105;
+	public $maxDmg = 140;
 	public $optRange = 600;
-	public $dmgLoss = 3;
-	public $accDecay = 60;
-	public $reload = 4;
+	public $dmgLoss = 4;
 	public $powerReq = 6;
-	public $rakes = 3;
 	public $effiency = 4;
-	public $maxBoost = 2;
 	public $integrity = 58;
 	public $traverse = 0;
 
@@ -129,24 +121,21 @@ class HeavyLaser extends Laser {
 	}
 }
 
-class SuperHeavyLaser extends Laser {
+class SuperHeavyLaser extends LightLaser {
 	public $name = "SuperHeavyLaser";
 	public $display = "Super-Heavy Laser";
 	public $animColor = "red";
-	public $rakeTime = 120;
+	public $rakeTime = 100;
 	public $beamWidth = 5;
-	public $minDmg = 190;
-	public $maxDmg = 230;
+	public $minDmg = 140;
+	public $maxDmg = 18;
 	public $optRange = 700;
-	public $dmgLoss = 3;
-	public $accDecay = 40;
-	public $reload = 5;
+	public $dmgLoss = 2;
 	public $powerReq = 8;
-	public $rakes = 4;
+	public $rakes = 3;
 	public $integrity = 66;
 	public $traverse = 1;
-	public $effiency = 6;
-	public $maxBoost = 1;
+	public $effiency = 5;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
