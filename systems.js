@@ -2476,19 +2476,23 @@ Particle.prototype.getAnimation = function(fire){
 	shotInterval *= fraction;
 
 	if (fire.shooter.flight && fire.target.flight){
-		a = JSON.parse(JSON.stringify(fire.target.structures[1].layout));
+		a = JSON.parse(iSON.stringify(fire.target.structures[1].layout));
 	}
 	
-	for (var j = 0; j < fire.guns; j++){
+	var linked = this.linked * !fire.shooter.flight;
+	console.log(linked);
+
+	
+	for (var i = 0; i < fire.guns; i++){
 		var gunAnims = [];
-		var o = fire.shooter.getWeaponOrigin(fire.systems[j]);
+		var o = fire.shooter.getWeaponOrigin(fire.systems[i]);
 
 		var ox = fire.shooter.drawX + o.x;
 		var oy = fire.shooter.drawY + o.y;
 
-		for (var k = 0; k < this.shots; k++){
+		for (var j = 0; j < this.shots; j++){
 			var hit = 0;
-			if (fire.hits[j] > k){
+			if (fire.hits[i] > j){
 				hit = 1;
 				hits++;
 			}
@@ -2499,9 +2503,19 @@ Particle.prototype.getAnimation = function(fire){
 			var ty = t.y + dest.y;
 
 			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
-				shotAnim.n = 0 - ((j / grouping) * delay + k*shotInterval);
-
+				shotAnim.n = 0 - ((i / grouping) * delay + j*shotInterval);
 			gunAnims.push(shotAnim);
+
+
+			if (linked){
+				ox += range(3, 6) * range(0, 1) * -1;
+				oy += range(3, 6) * range(0, 1) * -1;
+				tx += range(3, 6) * range(0, 1) * -1;
+				ty += range(3, 6) * range(0, 1) * -1;
+				var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
+					shotAnim.n = 0 - ((i / grouping) * delay + j*shotInterval);
+				gunAnims.push(shotAnim);
+			}
 		}
 		allAnims.push(gunAnims)
 	}
@@ -3822,7 +3836,7 @@ Area.prototype.getSystemDetailsDiv = function(){
 
 	//$(table).append($("<tr>").append($("<td>").html("Max Range")).append($("<td>").html(this.maxRange)));
 	$(table).append($("<tr>").append($("<td>").html("Area of Effect")).append($("<td>").html(this.aoe + "px")));
-	$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").addClass("accuracy").html("up to " + this.getAccuracy() + "px per 100px")));
+	$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").addClass("accuracy").html(this.getAccuracy() + "px / 100px")));
 	$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("Up to <span class='red'>" + this.maxShots + "</span> / cycle")));
 
 	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDmgString())));

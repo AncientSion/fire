@@ -741,7 +741,6 @@ function Game(data, userid){
 	}
 
 	this.setupDeployZone = function(){
-
 		if (game.turn == 1){
 			for (var i = 0; i < window.playerstatus.length; i++){
 

@@ -277,16 +277,6 @@ class Mixed extends Ship {
 		Debug::log("got no ANGLE set on ".$this->id." targeted by #".$fire->shooter->id);
 	}
 
-	public function resolveAreaFireOrder($fire){
-		Debug::log("resolveAreaFireOrder on self: ".get_class($this));
-		$fire->section = 0;		
-
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->destroyed){continue;}
-			DmgCalc::doDmg($fire, 0, $this->structures[$i]);
-		}
-	}
-
 	public function determineHits($fire){
 		for ($i = 0; $i < sizeof($fire->rolls); $i++){
 			if ($this->destroyed){

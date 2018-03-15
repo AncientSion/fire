@@ -595,27 +595,21 @@ class Ship {
 		return false;
 	}
 
-	public function resolveAreaFireOrder($fire){
-		$fire->section = $this->getHitSection($fire);
-
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($this->structures[$i]->id != $fire->section){continue;}
-			Debug::log("resolveAreaFireOrder on self: ".get_class($this).", hitting struct ".$i);
-			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
-				DmgCalc::doDmg($fire, 0, $this->structures[$i]->systems[$j]);
-			}
-		}
-	}
-
 	public function resolveFireOrder($fire){ // target
-		Debug::log("resolveFireOrder - ID ".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots);
 
 		if ($this->isDestroyed()){
-			Debug::log("STOP - resolveFireOrder ".get_class($this)." (target) isDestroyed() = true");
-			$fire->resolved = 1;
+			Debug::log("STOP - resolveFireOrder #".$fire->id.", TARGET: ".get_class($this)." isDestroyed()");
+		}
+		else if ($fire->weapon->aoe){
+			Debug::log("resolveFireOrder AREA - #".$fire->id.", TARGET ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
+
+			$fire->section = $this->getHitSection($fire);
+			DmgCalc::doDmg($fire, 100, $this->getHitSystem($fire));
+
 		}
 		else {
+			Debug::log("resolveFireOrder - #".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots);
+
 			$fire->cc = $this->isCloseCombat($fire->shooter->id);
 			$fire->dist = $this->getHitDist($fire);
 			$fire->angle = $this->getIncomingFireAngle($fire);
@@ -623,7 +617,19 @@ class Ship {
 
 			$this->rollToHit($fire);
 			$this->determineHits($fire);
+			$fire->resolved = 1;
+		}
 
+		$fire->resolved = 1;
+	}
+
+	public function resolveAreaFireorder($fire){
+
+		if ($this->isDestroyed()){
+			Debug::log("STOP - resolveFireOrder ".get_class($this)." (target) isDestroyed() = true");
+			$fire->resolved = 1;
+		}
+		else {
 			$fire->resolved = 1;
 		}
 	}

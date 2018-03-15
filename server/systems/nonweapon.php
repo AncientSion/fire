@@ -6,10 +6,10 @@ class PrimarySystem extends System {
 	public $powerReq = 0;
 	public $internal = 1;
 	public $crewEffect = 0;
+	public $maxDmg = 20;
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $output, $width);
-		$this->maxDmg = 25;
 		$this->integrity = floor($integrity*0.85);
 	}
 
@@ -17,7 +17,7 @@ class PrimarySystem extends System {
 		return $this->integrity;
 	}
 
-	public function setMaxDmg($fire, $dmg){
+	public function setpMaxDmg($fire, $dmg){
 		if ($dmg->structDmg > $this->maxDmg){
 			$dmg->overkill += $dmg->structDmg - $this->maxDmg;
 			$dmg->structDmg = $this->maxDmg;

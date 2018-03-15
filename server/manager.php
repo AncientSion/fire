@@ -789,7 +789,7 @@ include_once 'global.php';
 		for ($i = 0; $i < sizeof($this->fires); $i++){
 			//Debug::log("handling fire: ".$this->fires[$i]->id.", weapon: ".$this->fires[$i]->weapon->display);
 			if ($this->fires[$i]->resolved){continue;}
-			if ($this->fires[$i]->weapon instanceof Area){
+			if ($this->fires[$i]->weapon->aoe){
 				$subFires = DmgCalc::createAreaFireOrders($this, $this->fires[$i]);
 
 				for ($j = 0; $j < sizeof($subFires); $j++){

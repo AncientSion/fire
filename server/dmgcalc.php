@@ -47,6 +47,7 @@ class DmgCalc {
 				$subFire->cc = 0;
 				$subFire->dist = $d;
 				$subFire->angle = $a;
+				$subFire->shooter = &$fire->shooter;
 				$subFire->target = $gd->ships[$i];
 				$subFire->weapon = $fire->weapon;
 				$newFires[] = $subFire;

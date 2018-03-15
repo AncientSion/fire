@@ -25,7 +25,7 @@ class Laser extends Weapon {
 		else $dist = $dist - $this->optRange;
 
 		$mod = 1-($dist * $this->dmgLoss / 10000);
-		Debug::log(get_class($this).", weapon id: ".$this->id.", RANGE DMG mod: ".$mod);
+		//Debug::log(get_class($this).", weapon id: ".$this->id.", RANGE DMG mod: ".$mod);
 		return $mod;
 	}
 }
@@ -107,8 +107,9 @@ class HeavyLaser extends LightLaser {
 	public $animColor = "red";
 	public $rakeTime = 60;
 	public $beamWidth = 4;
-	public $minDmg = 105;
-	public $maxDmg = 140;
+	public $minDmg = 140;
+	public $maxDmg = 180;
+	public $reload = 4;
 	public $optRange = 600;
 	public $dmgLoss = 4;
 	public $powerReq = 6;
@@ -121,14 +122,14 @@ class HeavyLaser extends LightLaser {
 	}
 }
 
-class SuperHeavyLaser extends LightLaser {
+class SuperHeavyLaser extends HeavyLaser {
 	public $name = "SuperHeavyLaser";
 	public $display = "Super-Heavy Laser";
 	public $animColor = "red";
 	public $rakeTime = 100;
 	public $beamWidth = 5;
-	public $minDmg = 140;
-	public $maxDmg = 18;
+	public $minDmg = 170;
+	public $maxDmg = 215;
 	public $optRange = 700;
 	public $dmgLoss = 2;
 	public $powerReq = 8;

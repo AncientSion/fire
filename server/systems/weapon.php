@@ -17,6 +17,7 @@ class Weapon extends System {
 	public $plasma = 0;
 	public $pulse = 0;
 	public $usage = 2;
+	public $aoe = 0;
 
 	public $melt = 0;
 	public $dmgLoss = 0;
@@ -119,7 +120,7 @@ class Weapon extends System {
 		$crit = $this->getCritMod("Damage", $fire->turn);
 
 		$mod = $mod + $boost - $crit;
-		if ($mod != 1){Debug::log(get_class($this).", weapon id: ".$this->id.", DAMAGE mod: ".(-$crit + $boost )." (crits: ".$crit.", boost: ".$boost.")");}
+		//if ($mod != 1){Debug::log(get_class($this).", weapon id: ".$this->id.", DAMAGE mod: ".(-$crit + $boost )." (crits: ".$crit.", boost: ".$boost.")");}
 		return $mod / 100;
 	}
 

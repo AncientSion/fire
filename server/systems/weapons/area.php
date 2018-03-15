@@ -9,7 +9,6 @@ class Area extends Weapon {
 	public $freeAim = 1;
 	public $shots = 1;
 	public $maxShots = 1;
-	public $aoe;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
