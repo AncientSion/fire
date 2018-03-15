@@ -6,7 +6,7 @@ class Tethys extends SuperLight {
 	public $role = "Police Cutter";
 	public $faction = "Earth Alliance";
 	public $cost = 250;
-	public $mass = 1100;
+	public $mass = 900;
 
 	public $integrity = 300;
 	public $ep = 110;

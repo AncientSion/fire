@@ -1918,9 +1918,9 @@ Weapon.prototype.getRangeDmgMod = function(){
 	
 Weapon.prototype.getDmgLoss = function(dist){
 	if (this.fireMode == "Laser"){
-		if (dist < this.optRange){
-			dist = this.optRange - dist;
-		} else dist = dist - this.optRange;
+		if (dist > this.optRange){
+			dist = dist - this.optRange;
+		} else dist = 0;
 	}
 	else if (this.dmgType == "Plasma"){
 	}
@@ -2713,24 +2713,9 @@ Laser.prototype.getAnimation = function(fire){
 	
 Laser.prototype.getFillStyle = function(x, y, dist){
 	var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);
-	var opt = this.optRange / dist;
-
-	if (opt > 1){opt = 1;}
-
-		grad.addColorStop(0, "red");
-		grad.addColorStop(opt/2, "yellow");
-		grad.addColorStop(opt, "green");
-	//	grad.addColorStop(this.optRange/res.x*1.5, "yellow");
-	
-		if (opt*1.5 > 1){
-			grad.addColorStop(1, "yellow");
-		}
-		else {
-			grad.addColorStop(opt*1.5, "yellow");
-			if (opt*2 < 1){	
-				grad.addColorStop(opt*2, "red");
-			}
-		}
+		grad.addColorStop(this.optRange / dist, "green");
+		grad.addColorStop((this.optRange + dist) / 2 / dist, "yellow");
+		grad.addColorStop(dist/dist, "red");
 			
 	return grad;
 }

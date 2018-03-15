@@ -18,14 +18,12 @@ class Laser extends Weapon {
 	}
 	
 	public function getDmgRangeMod($fire){
-		$dist = $fire->dist;
-		if ($dist < $this->optRange){
-			$dist = $this->optRange - $dist;
+		if ($fire->dist <= $this->optRange){
+			return 1;
 		}
-		else $dist = $dist - $this->optRange;
 
-		$mod = 1-($dist * $this->dmgLoss / 10000);
-		//Debug::log(get_class($this).", weapon id: ".$this->id.", RANGE DMG mod: ".$mod);
+		$mod = 1-(($fire->dist - $this->optRange) * $this->dmgLoss / 10000);
+		Debug::log(get_class($this).", weapon id: ".$this->id.", RANGE DMG mod: ".$mod);
 		return $mod;
 	}
 }

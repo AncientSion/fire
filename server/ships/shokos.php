@@ -6,7 +6,7 @@ class Shokos extends SuperLight {
 	public $role = "Police Cutter";
 	public $faction = "Narn Regime";
 	public $cost = 250;
-	public $mass = 1000;
+	public $mass = 900;
 
 	public $integrity = 315;
 	public $ep = 125;
