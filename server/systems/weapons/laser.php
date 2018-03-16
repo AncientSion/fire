@@ -30,7 +30,7 @@ class Laser extends Weapon {
 
 class LightParticleBeam extends Laser {
 	public $name = "LightParticleBeam";
-	public $display = "35mm Particle Beam";
+	public $display = "Light Particle Beam";
 	public $animColor = "blue";
 	public $rakeTime = 25;
 	public $beamWidth = 1;
@@ -42,15 +42,14 @@ class LightParticleBeam extends Laser {
 	public $shots = 1;
 	public $reload = 2;
 	public $powerReq = 2;
-	public $effiency = 2;
-	public $maxBoost = 1;
 	public $rakes = 1;
 	public $integrity = 40;
 	public $traverse = -1;
-	public $priority = 2.5;
 	
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
+        $this->boostEffect = array();
+
 	}
 }
 

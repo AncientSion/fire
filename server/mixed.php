@@ -67,6 +67,14 @@ class Mixed extends Ship {
 		return true;
 	}
 
+	public function isRolling(){
+		return 0;
+	}
+
+	public function isRolled(){
+		return 0;
+	}
+
 	public function getNewDamages($turn){
 		$dmgs = array();
 

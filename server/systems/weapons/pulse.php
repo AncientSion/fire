@@ -20,7 +20,7 @@ class Pulse extends Weapon {
 
 class LightPulse extends Pulse {
 	public $name = "LightPulse";
-	public $display = "35mm Pulse Cannon";
+	public $display = "Light Pulse Cannon";
 	public $minDmg = 13;
 	public $maxDmg = 17;
 	public $accDecay = 180;
@@ -40,7 +40,7 @@ class LightPulse extends Pulse {
 
 class MediumPulse extends Pulse {
 	public $name = "MediumPulse";
-	public $display = "60mm Pulse Cannon";
+	public $display = "Medium Pulse Cannon";
 	public $minDmg = 23;
 	public $maxDmg = 30;
 	public $accDecay = 120;
@@ -60,7 +60,7 @@ class MediumPulse extends Pulse {
 
 class HeavyPulse extends Pulse {
 	public $name = "HeavyPulse";
-	public $display = "102mm Pulse Cannon";
+	public $display = "Heavy Pulse Cannon";
 	public $minDmg = 38;
 	public $maxDmg = 55;
 	public $accDecay = 80;
@@ -101,7 +101,7 @@ class FusionPulsar extends Pulse {
 
 class LightPlasmaPulse extends LightPulse {
 	public $name = "LightPlasmaPulse";
-	public $display = "32mm Plasma Pulse Cannon";
+	public $display = "Light Plasma Pulse Cannon";
 	public $minDmg = 15;
 	public $maxDmg = 19;
 	public $animColor = "darkGreen";
@@ -133,7 +133,7 @@ class LightPlasmaPulse extends LightPulse {
 
 class MediumPlasmaPulse extends LightPlasmaPulse {
 	public $name = "MediumPlasmaPulse";
-	public $display = "60mm Plasma Pulse Cannon";
+	public $display = "Medium Plasma Pulse Cannon";
 	public $minDmg = 28;
 	public $maxDmg = 36;
 	public $accDecay = 120;
@@ -155,7 +155,7 @@ class MediumPlasmaPulse extends LightPlasmaPulse {
 
 class HeavyPlasmaPulse extends MediumPlasmaPulse {
 	public $name = "HeavyPlasmaPulse";
-	public $display = "102mm Plasma Pulse Cannon";
+	public $display = "Heavy Plasma Pulse Cannon";
 	public $minDmg = 46;
 	public $maxDmg = 59;
 	public $accDecay = 80;
@@ -177,7 +177,7 @@ class HeavyPlasmaPulse extends MediumPlasmaPulse {
 
 class LightEMPulse extends LightPulse {
 	public $name = "LightEMPulse";
-	public $display = "28mm EM Pulse Cannon";
+	public $display = "Light EM Pulse Cannon";
 	public $minDmg = 3;
 	public $maxDmg = 3;
 	public $accDecay = 180;

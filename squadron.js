@@ -298,11 +298,7 @@ Squaddie.prototype.updateSystemDetailsDiv = function(){
 	$(this.armourElement).find(".integrityAmount").html(this.getArmourString());
 }
 
-Squaddie.prototype.doUnpowerAll = function(id){
-	var system = this.getSystem(id);
-		$(system.element).find(".powerDiv").find(".unpower").hide().end().find(".power").show();
-	var name = system.getActiveSystem().name;
-
+Squaddie.prototype.unpowerSystemsByName = function(name){
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			if (this.structures[i].systems[j].isPowered()){
@@ -314,18 +310,24 @@ Squaddie.prototype.doUnpowerAll = function(id){
 	}
 }
 
-Squaddie.prototype.doPowerAll = function(id){
-	var system = this.getSystem(id);
-		$(system.element).find(".powerDiv").find(".power").hide().end().find(".unpower").show();
-	var name = system.getActiveSystem().name;
-
+Squaddie.prototype.powerSystemsByName = function(name){
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			if (!this.structures[i].systems[j].isPowered()){
 				if (this.structures[i].systems[j].getActiveSystem().name == name){
-					//this.structures[i].systems[j].highlight = 1;
 					this.structures[i].systems[j].doPower();
-					//this.structures[i].systems[j].highlight = 0;
+				}
+			}
+		}
+	}
+}
+
+Squaddie.prototype.powerSystemsNamed = function(name){
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = 0; j < this.structures[i].systems.length; j++){
+			if (this.structures[i].systems[j].isPowered()){
+				if (this.structures[i].systems[j].getActiveSystem().name == name){
+					this.structures[i].systems[j].doUnpower();
 				}
 			}
 		}
@@ -1189,20 +1191,22 @@ Squadron.prototype.updateShipPower = function(system){
 }
 
 Squadron.prototype.doUnpowerAll = function(id){
-	for (var i = this.structures.length-1; i >= 0; i--){
-		if (id > this.structures[i].id){
-			this.structures[i].doUnpowerAll(id);
-			return;
-		}
+	var system = this.getSystem(id);
+	var name = system.getActiveSystem().name;
+
+	for (let i = 0; i < this.structures.length; i++){
+		if (this.structures[i].destroyed){continue;}
+		this.structures[i].unpowerSystemsByName(name);
 	}
 }
 
 Squadron.prototype.doPowerAll = function(id){
-	for (var i = this.structures.length-1; i >= 0; i--){
-		if (id > this.structures[i].id){
-			this.structures[i].doPowerAll(id);
-			return;
-		}
+	var system = this.getSystem(id);
+	var name = system.getActiveSystem().name;
+
+	for (let i = 0; i < this.structures.length; i++){
+		if (this.structures[i].destroyed){continue;}
+		this.structures[i].powerSystemsByName(name);
 	}
 }
 

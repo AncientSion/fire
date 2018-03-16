@@ -64,7 +64,6 @@ if (isset($_POST["type"])) {
 		if (isset($_POST["ew"])){
 			$dbManager->insertEW($_POST["ew"]);
 		}
-		//return;
 		$dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready");
 	}
 	else if ($_POST["type"] == "movement"){;

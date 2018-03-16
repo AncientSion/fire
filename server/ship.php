@@ -320,6 +320,14 @@ class Ship {
 		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "facing" => $facing, "thrust" => $this->currentImpulse, "rolling" => $this->rolling, "rolled" => $this->rolled);
 	}
 
+	public function isRolling(){
+		return $this->isRolling;
+	}
+
+	public function isRolled(){
+		return $this->isRolled;
+	}
+
 	public function setRemDelay($turn){
 		return;
 		$delay = 0;

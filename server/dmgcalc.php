@@ -152,7 +152,7 @@ class DmgCalc {
 			$armour += $dmg->armourDmg;
 			$struct += $dmg->structDmg;
 			$em += $dmg->emDmg;
-			Debug::log("added hit ".($i+1).", ".$shield."/".$armour."/".$struct);
+			//Debug::log("added hit ".($i+1).", ".$shield."/".$armour."/".$struct);
 		}
 		$dmg->shieldDmg = $shield;
 		$dmg->armourDmg = $armour;
@@ -162,14 +162,14 @@ class DmgCalc {
 		$dmg = $system->setMaxDmg($fire, $dmg);
 
 		if ($remInt <= $dmg->structDmg){ // destroyed
-			Debug::log("destroying");
+			//Debug::log("destroying");
 			$destroyed = 1;
 			$okSystem = $fire->target->getOverkillSystem($fire);
 
 			if ($okSystem){
 				$dmg->overkill += abs($remInt - $struct);
 				$dmg->structDmg -= $dmg->overkill;
-				Debug::log(" => hit ".($i+1).", adding ".$dmg->structDmg."/".$dmg->armourDmg." to overkill which is now: ".$dmg->overkill." pts");
+				//Debug::log(" => hit ".($i+1).", adding ".$dmg->structDmg."/".$dmg->armourDmg." to overkill which is now: ".$dmg->overkill." pts");
 			}
 		}
 

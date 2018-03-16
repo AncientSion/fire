@@ -17,7 +17,7 @@ class PrimarySystem extends System {
 		return $this->integrity;
 	}
 
-	public function setpMaxDmg($fire, $dmg){
+	public function setMaxDmg($fire, $dmg){
 		if ($dmg->structDmg > $this->maxDmg){
 			$dmg->overkill += $dmg->structDmg - $this->maxDmg;
 			$dmg->structDmg = $this->maxDmg;

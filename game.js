@@ -1368,6 +1368,7 @@ function Game(data, userid){
 			if (this.ships[i].status == "jumpOut"){continue;}
 			var a = this.ships[i].getPlannedPos();
 			for (var j = i+1; j < this.ships.length; j++){
+				if (this.ships[j].status == "jumpOut"){continue;}
 				var b = this.ships[j].getPlannedPos();
 				if (a.x == b.x && a.y == b.y){
 					if (this.ships[i].flight && this.ships[j].flight && this.ships[i].userid == this.ships[j].userid){
@@ -1847,14 +1848,14 @@ function Game(data, userid){
 	this.finishMoveSubPhase = function(){
 		var time = 500;
 		if (game.animShip){
-			console.log("ship done -> flight moves");
+			//console.log("ship done -> flight moves");
 			game.timeout = setTimeout(function(){
 				game.animShip = 0; game.animFlight = 1;
 				game.animateUnitMovement();
 			}, time);
 		}
 		else if (game.animFlight){
-			console.log("flight done -> salvo moves");
+			//console.log("flight done -> salvo moves");
 			game.timeout = setTimeout(function(){
 				game.endMoveSubPhase();
 				game.animFlight = 0; game.animSalvo = 1;

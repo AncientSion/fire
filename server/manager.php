@@ -577,6 +577,7 @@ include_once 'global.php';
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->status == "jumpOut"){
+				Debug::log("check");
 				$needCheck = true;
 			}
 		}
@@ -599,7 +600,7 @@ include_once 'global.php';
 		}
 
 		if ($needCheck){
-			$this->doFirstDestroyedCheck();
+			$this->doFullDestroyedCheck();
 		}
 	}
 	public function handleJumpInActions(){
@@ -846,8 +847,8 @@ include_once 'global.php';
 					"facing" => 0,
 					"delay" => 0, 
 					"thrust" => $this->ships[$i]->getCurSpeed(),
-					"rolling" => $this->ships[$i]->rolling,
-					"rolled" => $this->ships[$i]->rolled
+					"rolling" => $this->ships[$i]->isRolling(),
+					"rolled" => $this->ships[$i]->isRolled(),
 				);
 			}
 		}
@@ -1123,7 +1124,7 @@ include_once 'global.php';
 					$w = min(180, $this->const["ew"]["len"] * pow($str/$ew->dist, $this->const["ew"]["p"]));
 					$start = Math::addAngle(0 + $w-$emitter->getFacing(), $ew->angle);
 					$end = Math::addAngle(360 - $w-$emitter->getFacing(), $ew->angle);
-					Debug::log("specific EW for ship #".$emitter->id.", str: ".$str.", facing: ".$emitter->getFacing().", w: ".$w.", EW @ ".$ew->angle." -> from ".$start." to ".$end.", dist: ".$ew->dist);
+					//Debug::log("specific EW for ship #".$emitter->id.", str: ".$str.", facing: ".$emitter->getFacing().", w: ".$w.", EW @ ".$ew->angle." -> from ".$start." to ".$end.", dist: ".$ew->dist);
 				}
 
 				for ($i = 0; $i < sizeof($this->ships); $i++){
