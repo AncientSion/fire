@@ -1662,7 +1662,9 @@ function Game(data, userid){
 			cam.setZoom(res.y/distY / 1.3);
 		}
 
-
+		//$("#unitGUI").hide();
+		//$("#combatlogWrapper").hide()
+		//cam.setZoom(1)
 		cam.setFocusToPos({x: endX, y: endY});
 
 	}
@@ -1992,8 +1994,8 @@ function Game(data, userid){
 		this.getFireAnimationDetails();
 		this.getUnitExploDetails();
 
-
-		$("#combatlogWrapper").show();
+		//$("#unitGUI").hide();
+		//$("#combatlogWrapper").show();
 		setFPS(40);
 		window.then = Date.now();
 		window.startTime = then;
@@ -2002,6 +2004,8 @@ function Game(data, userid){
 		fxCtx.clearRect(0, 0, res.x, res.y);
 		ctx.clearRect(0, 0, res.x, res.y);
 
+		//cam.setZoom(0.8)
+		//cam.setFocusToPos({x: -150, y: 200})
 		this.drawShips();
 		this.animating = 1;
 		//this.drawShips(); this.animateUnitExplos(); return;
@@ -2226,12 +2230,13 @@ function Game(data, userid){
 				}
 				else anim.html +=  " suffered catastrophic hull damage and was destroyed.";
 
-				for (var j = 0; j < 5; j++){
+				for (var j = 0; j < 25; j++){
 					anim.anims.push({
-						t: [0 - j-20, 100],
-						s: game.ships[i].getExplosionSize(0) + range(-30, 10),
-						x: base.x + (range(-1, 1) * range(0, game.ships[i].size / 10)),
-						y: base.y + (range(-1, 1) * range(0, game.ships[i].size / 10)),
+						t: [0 - j-40, 100],
+						//s: game.ships[i].getExplosionSize(0) + range(-30, 10),
+						s: range (5, 40),
+						x: base.x + (range(-1, 1) * range(0, game.ships[i].size / 3)),
+						y: base.y + (range(-1, 1) * range(0, game.ships[i].size / 3)),
 					})
 				}
 			}
@@ -2244,6 +2249,7 @@ function Game(data, userid){
 
 	this.animateAllFireOrders = function(){
 		for (var i = 0; i < this.fireOrders.length; i++){
+			//if (this.fireOrders[i].shooterid != 16){continue;}
 			if (!this.fireOrders[i].animated){
 				this.fireOrders[i].weapon.createCombatLogEntry(this.fireOrders[i]);
 				this.animateSingleFireOrder(i, 1);
@@ -2377,7 +2383,7 @@ function Game(data, userid){
 			if (goOn){
 				game.timeout = setTimeout(function(){
 					game.animateAllFireOrders();
-				}, 1000);
+				}, 750);
 			}
 			else {
 				$(fxCanvas).css("opacity", 0.3)
@@ -2398,7 +2404,7 @@ function Game(data, userid){
 				if (!window.animations[i].done){
 					if (!window.animations[i].animating){
 						window,animations[i].animating = 1;
-						cam.setFocusToPos(game.getUnit(window.animations[i].id).getPlannedPos());
+						//cam.setFocusToPos(game.getUnit(window.animations[i].id).getPlannedPos());
 						game.redraw();
 					}
 
@@ -2414,6 +2420,11 @@ function Game(data, userid){
 								window.animations[i].anims[j].t[0],
 								window.animations[i].anims[j].t[1]
 							)
+						}
+						
+						if (window.animations[i].anims[j].t[0] > window.animations[i].anims[j].t[1] * 0.6){
+							game.getUnit(window.animations[i].id).doDraw = 0;
+							game.redraw();
 						}
 
 						if (window.animations[i].anims[j].t[0] < window.animations[i].anims[j].t[1]){
@@ -3067,6 +3078,7 @@ Game.prototype.resolveDeploy = function(){
 		window.then = Date.now();
 		window.startTime = then;
 		cam.setZoom(0.7);
+		//cam.setFocusToPos({x: 8, y: 300});
 		this.animating = 1;
 		this.animateJumpIn();
 	}

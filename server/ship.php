@@ -321,11 +321,11 @@ class Ship {
 	}
 
 	public function isRolling(){
-		return $this->isRolling;
+		return $this->rolling;
 	}
 
 	public function isRolled(){
-		return $this->isRolled;
+		return $this->rolled;
 	}
 
 	public function setRemDelay($turn){
