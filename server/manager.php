@@ -1419,7 +1419,7 @@ include_once 'global.php';
 	}
 
 	public function getFactions(){
-		return array("Earth Alliance", "Centauri Republic", "Minbari Federation", "Narn Regime");
+		return array("Earth Alliance", "Centauri Republic", "Minbari Federation", "Narn Regime", "The Shadows");
 	}
 
 	public function getFightersForFaction($faction){
@@ -1434,8 +1434,8 @@ include_once 'global.php';
 		));
 	}
 
-	public function getShipsForFaction($faction){
-		//Debug::log("getShipsForFaction");
+	public function getUnitsForFaction($faction){
+		//Debug::log("getUnitsForFaction");
 		$units = array(array(), array(), array());
 		$return = array(array(), array(), array());
 
@@ -1519,6 +1519,17 @@ include_once 'global.php';
 					),
 				);
 				break;
+			case "The Shadows";
+				$units = array(
+					array(
+						"Battlecrab",
+					),
+					array(
+					),
+					array(
+					),
+				);
+				break;
 			default:
 				break;
 		}
@@ -1561,7 +1572,7 @@ include_once 'global.php';
 	}
 
 	public function getReinforcements($faction){
-		//Debug::log("getShipsForFaction");
+		//Debug::log("getUnitsForFaction");
 		$units = array();
 
 		switch ($faction){

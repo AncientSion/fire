@@ -2222,20 +2222,21 @@ Weapon.prototype.getFillStyle = function(x, y, dist){
 	if (this.dmgType == "Plasma"){
 		var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);
 		var loss = this.dmgLoss * this.getRangeDmgMod();
-
-		var red = 0.7;
-			red = red/loss*10000/dist;
-		var yellow = 0.3;
-			yellow = yellow/loss*10000/dist;
-		var green = 0.0;
-			green = green/loss*10000/dist;
-
-
-		//grad.addColorStop(1, "red");
+		var	red = 0.7/loss*10000/dist;
+		var	yellow = 0.3/loss*10000/dist;
+		var green = 0;
 		grad.addColorStop(Math.min(1, red), "red");
 		grad.addColorStop((Math.min(1, red) + Math.max(0, green))/2, "yellow");
 		grad.addColorStop(Math.max(0, green), "green");
-		grad.addColorStop(0, "green");				
+		grad.addColorStop(green, "green");	
+		return grad;
+	}
+	else if (this.fireMode == "Laser" && this.dmgLoss){
+		var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);
+		grad.addColorStop(0, "green");
+		grad.addColorStop((this.optRange/1200*dist) / dist, "green");
+		grad.addColorStop(((this.optRange/1200*dist)+dist) / 2 / dist, "yellow");
+		grad.addColorStop(1, "red");
 		return grad;
 	}
 	return "green";
@@ -2666,7 +2667,8 @@ Laser.prototype.getAnimation = function(fire){
 			}
 			*/
 			if (hit){ // shot hit
-				var dest = fire.target.getFireDest(fire, hit, hits-1);
+				//var dest = fire.target.getFireDest(fire, hit, hits-1);
+				var dest = fire.target.getHitSection(fire);
 
 				//if (range(0, 1)){ // swipe outwards
 					tx = t.x + dest.x;
@@ -2709,16 +2711,6 @@ Laser.prototype.getAnimation = function(fire){
 		allAnims.push(gunAnims)
 	}
 	return allAnims;
-}
-	
-Laser.prototype.getFillStyle = function(x, y, dist){
-	var grad = fxCtx.createRadialGradient(x, y, 0, x, y, dist);
-
-	grad.addColorStop(0, "green");
-	grad.addColorStop(this.optRange / dist, "green");
-	grad.addColorStop((this.optRange+dist) / 2 / dist, "yellow");
-	grad.addColorStop(1, "red");
-	return grad;
 }
 
 function Dual(system){

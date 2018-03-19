@@ -5,7 +5,7 @@ class Matter extends Weapon {
 	public $animation = "projectile";
 	public $priority = 4;
 
-	public $notes = array("Ignores 50% of target armour");
+	public $notes = array("Ignores <span style='font-color='green'>50%</span> of target armour");
 
 	public $fireMode = "Standard";
 	public $dmgType = "Matter";

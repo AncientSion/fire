@@ -171,6 +171,31 @@ class NeutronLaser extends Laser {
 	}
 }
 
+class MolecularSlicer extends Laser {
+	public $name = "MolecularSlicer";
+	public $display = "Molecular Slicer";
+	public $dmgType = "Molecular";
+	public $rakeTime = 80;
+	public $animColor = "purple";
+	public $beamWidth = 4;
+	public $minDmg = 270;
+	public $maxDmg = 340;
+	public $optRange = 0;
+	public $dmgLoss = 0;
+	public $accDecay = 4;
+	public $shots = 1;
+	public $reload = 3;
+	public $powerReq = 4;
+	public $rakes = 3;
+	public $integrity = 52;
+	public $traverse = -1;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+		$this->notes[] = ("Ignores 75% of target armour");
+	}
+}
+
 class NeutronAccelerator extends Laser {
 	public $name = "NeutronAccelerator";
 	public $display = "Neutron Accelerator";

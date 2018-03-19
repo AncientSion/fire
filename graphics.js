@@ -51,13 +51,16 @@ window.graphics = {
 
 	preloadShips: function(){
 		this.images.battlecrab = new Image();
-		this.images.battlecrab.src = "shipIcons/omega.png";
+		this.images.battlecrab.src = "shipIcons/battlecrab.png";
 
 		this.images.squadron = new Image();
 		this.images.squadron.src = "shipIcons/squadron.png";
 
 		this.images.omega = new Image();
 		this.images.omega.src = "shipIcons/omega.png";
+
+		this.images.omegax = new Image();
+		this.images.omegax.src = "shipIcons/omegax.png";
 
 		this.images.avenger = new Image();
 		this.images.avenger.src = "shipIcons/avenger.png";
@@ -188,6 +191,8 @@ window.graphics = {
 		this.images.minbari.src = "factionIcons/minbari.png";
 		this.images.narn = new Image();
 		this.images.narn.src = "factionIcons/narn.png";
+		this.images.shadows = new Image();
+		this.images.shadows.src = "factionIcons/shadows.png";
 	}
 }
 

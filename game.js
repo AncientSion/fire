@@ -747,7 +747,7 @@ function Game(data, userid){
 				var step;
 				var h = 1000;
 				var w = 200;
-				var dist = 600;
+				var dist = 300;
 				var y = h/2;
 
 				if (i % 2 == 0){
@@ -1995,7 +1995,7 @@ function Game(data, userid){
 		this.getUnitExploDetails();
 
 		//$("#unitGUI").hide();
-		//$("#combatlogWrapper").show();
+		$("#combatlogWrapper").show();
 		setFPS(40);
 		window.then = Date.now();
 		window.startTime = then;

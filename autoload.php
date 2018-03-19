@@ -80,6 +80,8 @@ spl_autoload_register(
                 'shokos' => '/server/ships/shokos.php',
                 'shokov' => '/server/ships/shokov.php',
 
+                'battlecrab' => '/server/ships/battlecrab.php',
+
                 'system' => '/server/systems/system.php',
                 'weapon' => '/server/systems/weapon.php',
                 
@@ -111,6 +113,7 @@ spl_autoload_register(
                 'heavylaser' => '/server/systems/weapons/laser.php',
                 'superheavylaser' => '/server/systems/weapons/laser.php',
                 'neutronlaser' => '/server/systems/weapons/laser.php',
+                'molecularslicer' => '/server/systems/weapons/laser.php',
                 'neutronaccelerator' => '/server/systems/weapons/laser.php',
 
                 'matter' => '/server/systems/weapons/matter.php',

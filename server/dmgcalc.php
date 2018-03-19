@@ -56,13 +56,14 @@ class DmgCalc {
 		return $newFires;
 	}
 
-	public static function determineDmg($weapon, $totalDmg, $negation){
+	public static function calcDmg($weapon, $totalDmg, $negation){
 		switch ($weapon->dmgType){
-			case "Standard": return static::determineStandardDmg($weapon, $totalDmg, $negation);
-			case "Matter": return static::determineMatterDmg($weapon, $totalDmg, $negation);
-			case "Plasma": return static::determinePlasmaDmg($weapon, $totalDmg, $negation);
-			case "EM": return static::determineEMDmg($weapon, $totalDmg, $negation);
-			default: Debug::log("determineDmg ERROR"); break;
+			case "Standard": return static::calcStandardDmg($weapon, $totalDmg, $negation);
+			case "Matter": return static::calcMatterDmg($weapon, $totalDmg, $negation);
+			case "Plasma": return static::calcPlasmaDmg($weapon, $totalDmg, $negation);
+			case "Molecular": return static::calcMolecularDmg($weapon, $totalDmg, $negation);
+			case "EM": return static::calcEMDmg($weapon, $totalDmg, $negation);
+			default: Debug::log("calcDmg ERROR"); break;
 		}
 	}
 
@@ -90,7 +91,7 @@ class DmgCalc {
 		
 		$negation = $fire->target->getArmour($fire, $system);
 		
-		$dmg = static::determineDmg($fire->weapon, $totalDmg, $negation);
+		$dmg = static::calcDmg($fire->weapon, $totalDmg, $negation);
 		$dmg = $system->setMaxDmg($fire, $dmg);
 
 		Debug::log("fire #".$fire->id.", doStandardDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".get_class($system).", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
@@ -126,7 +127,7 @@ class DmgCalc {
 		$okSystem = 0;
 
 		$negation = $fire->target->getArmour($fire, $system);
-		$dmg = DmgCalc::determineDmg($fire->weapon, $totalDmg, $negation);
+		$dmg = DmgCalc::calcDmg($fire->weapon, $totalDmg, $negation);
 
 		$total = 0;
 		$shield = 0;
@@ -211,7 +212,7 @@ class DmgCalc {
 			$remInt = $system->getRemIntegrity();
 			$negation = $fire->target->getArmour($fire, $system);
 
-			$dmg = DmgCalc::determineDmg($fire->weapon, $rake, $negation);
+			$dmg = DmgCalc::calcDmg($fire->weapon, $rake, $negation);
 			$dmg = $system->setMaxDmg($fire, $dmg);
 			
 			$rakes -= $counter;
@@ -287,7 +288,7 @@ class DmgCalc {
 			$remInt = $system->getRemIntegrity();
 			$negation = $fire->target->getArmour($fire, $system);
 
-			$dmg = static::determineDmg($fire->weapon, $dmgs[$i], $negation);
+			$dmg = static::calcDmg($fire->weapon, $dmgs[$i], $negation);
 
 			if ($fire->target->ship && $targets[$i]->id == 1){
 				Debug::log("hitting structure, accumulated overkill @ ".$overkill);
@@ -328,7 +329,7 @@ class DmgCalc {
 			$destroyed = 0;
 			$remInt = $system->getRemIntegrity();
 			$negation = $fire->target->getArmour($fire, $system);
-			$dmg = static::determineDmg($fire->weapon, $totalDmg, $negation);
+			$dmg = static::calcDmg($fire->weapon, $totalDmg, $negation);
 
 			if ($remInt - $dmg->structDmg < 1){
 				$destroyed = 1;
@@ -355,7 +356,7 @@ class DmgCalc {
 			$destroyed = 0;
 			$remInt = $system->getRemIntegrity();
 			$negation = $fire->target->getArmour($fire, $system);
-			$dmg = static::determineDmg($fire->weapon, $toDo, $negation);
+			$dmg = static::calcDmg($fire->weapon, $toDo, $negation);
 			$name = get_class($system);
 
 			Debug::log("fire #".$fire->id.", doFlashDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".$name.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
@@ -395,7 +396,7 @@ class DmgCalc {
 		}
 	}
 
-	public static function determineEMDmg($weapon, $totalDmg, $negation){
+	public static function calcEMDmg($weapon, $totalDmg, $negation){
 		$shieldDmg = 0;
 		$armourDmg = 0;
 		$structDmg = 0;
@@ -410,7 +411,7 @@ class DmgCalc {
 		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $structDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);
 	}
 
-	public static function determineStandardDmg($weapon, $totalDmg, $negation){
+	public static function calcStandardDmg($weapon, $totalDmg, $negation){
 		$shieldDmg = 0;
 		$armourDmg = 0;
 		$structDmg = 0;
@@ -432,7 +433,7 @@ class DmgCalc {
 		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $structDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);
 	}
 
-	public static function determineMatterDmg($weapon, $totalDmg, $negation){
+	public static function calcMatterDmg($weapon, $totalDmg, $negation){
 		$shieldDmg = 0;
 		$armourDmg = 0;
 		$structDmg = 0;
@@ -453,7 +454,28 @@ class DmgCalc {
 		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $structDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);
 	}
 
-	public static function determinePlasmaDmg($weapon, $totalDmg, $negation){
+	public static function calcMolecularDmg($weapon, $totalDmg, $negation){
+		$shieldDmg = 0;
+		$armourDmg = 0;
+		$structDmg = 0;
+		$emDmg = 0;
+		$notes = "";
+
+		if ($totalDmg <= array_sum($negation)){ 
+			$notes = "b;";
+			$armourDmg = round($totalDmg/4);
+		}
+		else {
+			$notes = "p;";
+			$shieldDmg = round(min($totalDmg, $negation["bonus"]/4));
+			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]/4));
+			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
+		}
+		
+		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $structDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);
+	}
+
+	public static function calcPlasmaDmg($weapon, $totalDmg, $negation){
 		$shieldDmg = 0;
 		$armourDmg = 0;
 		$structDmg = 0;

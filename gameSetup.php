@@ -448,7 +448,7 @@ else {
 
 
 	function initFactionTable(){
-		var icons = [graphics.images.earth, graphics.images.centauri, graphics.images.minbari, graphics.images.narn];		
+		var icons = [graphics.images.earth, graphics.images.centauri, graphics.images.minbari, graphics.images.narn, graphics.images.shadows];		
 
 		var table = document.createElement("table"); 
 			table.className = "factionUpperTable";

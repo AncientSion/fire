@@ -1787,6 +1787,14 @@ Ship.prototype.getFireDest = function(fire, isHit, num){
 	return fire.damages[num].loc;
 }
 
+Ship.prototype.getHitSection = function(fire){
+	var o = fire.shooter.getPlannedPos();
+	var t = this.getPlannedPos();
+	var a = getAngleFromTo(o, t) + range(-5, 5);
+	//var d = getDistance(o, t);
+	return getPointInDir(-this.size/4, a, 0, 0);
+}
+
 Ship.prototype.getExplosionSize = function(j){
 	if (this.ship){return this.size;}
 	else if (this.squad){return this.structures[j].size/2;}

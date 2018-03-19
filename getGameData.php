@@ -32,7 +32,7 @@ if (isset($_GET["type"])){
 		echo json_encode($return, JSON_NUMERIC_CHECK);
 	}
 	else if ($_GET["type"] == "shiplist"){
-		$ships = $manager->getShipsForFaction($_GET["faction"]);
+		$ships = $manager->getUnitsForFaction($_GET["faction"]);
 		echo json_encode($ships);
 	}
 	else if ($_GET["type"] == "shipdata"){
