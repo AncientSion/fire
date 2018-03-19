@@ -1632,7 +1632,7 @@ function Game(data, userid){
 	this.setUnitMovementFocus = function(){
 		window.then = Date.now();
 		window.startTime = then;
-		cam.setZoom(1);
+
 		setFPS(90);
 
 		var minX = 0;
@@ -1994,7 +1994,7 @@ function Game(data, userid){
 		this.getFireAnimationDetails();
 		this.getUnitExploDetails();
 
-		//$("#unitGUI").hide();
+		//$("#unitGUI").hide(); $(".chatWrapper").hide();
 		$("#combatlogWrapper").show();
 		setFPS(40);
 		window.then = Date.now();
@@ -2004,8 +2004,8 @@ function Game(data, userid){
 		fxCtx.clearRect(0, 0, res.x, res.y);
 		ctx.clearRect(0, 0, res.x, res.y);
 
-		//cam.setZoom(0.8)
-		//cam.setFocusToPos({x: -150, y: 200})
+		//cam.setZoom(1.2)
+		//cam.setFocusToPos({x: -50, y: 687})
 		this.drawShips();
 		this.animating = 1;
 		//this.drawShips(); this.animateUnitExplos(); return;
@@ -2203,6 +2203,7 @@ function Game(data, userid){
 						var real = game.ships[i].getUnitPosition(j);
 						//console.log(real);
 						anim.anims.push({
+							u: game.ships[i].structures[j],
 							t: [0 - counter*20, 50],
 							s: game.ships[i].getExplosionSize(j),
 							x: base.x + real.x,
@@ -2232,6 +2233,7 @@ function Game(data, userid){
 
 				for (var j = 0; j < 25; j++){
 					anim.anims.push({
+						id: game.ships[i],
 						t: [0 - j-40, 100],
 						//s: game.ships[i].getExplosionSize(0) + range(-30, 10),
 						s: range (5, 40),
@@ -2281,7 +2283,7 @@ function Game(data, userid){
 
 		if (!game.fireOrders[i].animating){
 			game.fireOrders[i].animating = 1;
-			cam.setFireFocus(game.fireOrders[i]);
+			//cam.setFireFocus(game.fireOrders[i]);
 			game.draw();
 			return;
 		}
@@ -2423,7 +2425,7 @@ function Game(data, userid){
 						}
 						
 						if (window.animations[i].anims[j].t[0] > window.animations[i].anims[j].t[1] * 0.6){
-							game.getUnit(window.animations[i].id).doDraw = 0;
+							window.animations[i].anims[j].u.doDraw = 0;
 							game.redraw();
 						}
 

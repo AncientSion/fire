@@ -430,7 +430,7 @@ Squaddie.prototype.armourOut = function(e){
 }
 
 Squaddie.prototype.doDestroy = function(){
-	this.draw = 0;
+	this.doDraw = 0;
 	for (var i = 0; i < this.structures.length; i++){
 		for (var k = 0; k < this.structures[i].systems.length; k++){
 			this.structures[i].systems[k].destroyed = true;
@@ -583,9 +583,9 @@ Squadron.prototype.setStatus = function(){
 Squadron.prototype.setPreFireImage = function(){
 	//console.log("Squadron setPreFireImage");
 	for (var i = 0; i < this.structures.length; i++){
-		if (!this.structures[i].draw){
+		if (!this.structures[i].doDraw){
 			if (this.structures[i].isDestroyedThisTurn()){
-				this.structures[i].draw = true;
+				this.structures[i].doDraw = true;
 			}
 		}
 	}
@@ -1043,7 +1043,7 @@ Squadron.prototype.setImage = function(){
 		ctx.translate(t.width/2, t.height/2);
 
 	for (var i = 0; i < this.structures.length; i++){
-		if (!this.structures[i].draw){continue;}
+		if (!this.structures[i].doDraw){continue;}
 
 		ctx.translate(this.structures[i].layout.x/2, this.structures[i].layout.y/2);
 		//ctx.rotate(-90 * (Math.PI/180))

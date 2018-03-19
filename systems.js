@@ -2650,6 +2650,7 @@ Laser.prototype.getAnimation = function(fire){
 		for (var k = 0; k < this.shots; k++){
 			var tx; var ty; var tb; var a;
 			var hit = 0;
+			var dest;
 
 			if (fire.hits[j] > k){
 				hit = 1;
@@ -2667,8 +2668,8 @@ Laser.prototype.getAnimation = function(fire){
 			}
 			*/
 			if (hit){ // shot hit
-				//var dest = fire.target.getFireDest(fire, hit, hits-1);
-				var dest = fire.target.getHitSection(fire);
+				if (fire.target.ship){dest = fire.target.getHitSection(fire);}
+				else {dest = fire.target.getFireDest(fire, hit, hits-1);}
 
 				//if (range(0, 1)){ // swipe outwards
 					tx = t.x + dest.x;

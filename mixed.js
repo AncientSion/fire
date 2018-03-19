@@ -144,13 +144,13 @@ Mixed.prototype.setStatus = function(){
 		}
 
 		if (this.structures[i].destroyed){
-			this.structures[i].draw = 0;
+			this.structures[i].doDraw = 0;
 			for (var k = 0; k < this.structures[i].systems.length; k++){
 				this.structures[i].systems[k].destroyed = true;
 			}
 		}
 		else if (this.structures[i].disabled){
-			this.structures[i].draw = 0;
+			this.structures[i].doDraw = 0;
 			for (var k = 0; k < this.structures[i].systems.length; k++){
 				this.structures[i].systems[k].disabled = true;
 			}
@@ -419,9 +419,9 @@ Mixed.prototype.getParent = function(){
 Mixed.prototype.setPreFireImage = function(){
 	//console.log("Mixed setPreFireImage");
 	for (var i = 0; i < this.structures.length; i++){
-		if (!this.structures[i].draw){
+		if (!this.structures[i].doDraw){
 			if (this.structures[i].isDestroyedThisTurn()){
-				this.structures[i].draw = true;
+				this.structures[i].doDraw = true;
 			}
 		}
 	}
@@ -434,7 +434,7 @@ Mixed.prototype.setPreFireSize = function(){
 	//console.log("setPreFireSize #" + this.id);
 	var max = 0;
 	for (var i = 0; i < this.structures.length; i++){
-		if (!this.structures[i].draw){continue;}
+		if (!this.structures[i].doDraw){continue;}
 		max = Math.max(max, Math.abs(this.structures[i].layout.x));
 		max = Math.max(max, Math.abs(this.structures[i].layout.y));
 	}
@@ -516,7 +516,7 @@ Mixed.prototype.setPatrolImage = function(){
 		ctx.translate(t.width/2, t.height/2);
 
 	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].draw){
+		if (this.structures[i].doDraw){
 			ctx.translate(this.structures[i].layout.x, this.structures[i].layout.y);
 			ctx.rotate((360/this.structures.length*i) * (Math.PI/180));
 			ctx.drawImage(
@@ -546,7 +546,7 @@ Mixed.prototype.setPreMoveImage = function(){
 		ctx.translate(t.width/2, t.height/2);
 
 	for (var i = 0; i < this.structures.length; i++){
-		if (!this.structures[i].draw){continue;}
+		if (!this.structures[i].doDraw){continue;}
 
 		ctx.translate(this.structures[i].layout.x, this.structures[i].layout.y);
 		ctx.drawImage(
@@ -573,7 +573,7 @@ Mixed.prototype.setPostMoveImage = function(){
 		ctx.translate(t.width/2, t.height/2);
 
 	for (var i = 0; i < this.structures.length; i++){
-		if (!this.structures[i].draw){continue;}
+		if (!this.structures[i].doDraw){continue;}
 
 		ctx.save();
 		ctx.translate(this.structures[i].layout.x, this.structures[i].layout.y);

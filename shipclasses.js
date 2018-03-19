@@ -272,6 +272,7 @@ Ship.prototype.isDestroyed = function(){
 }
 
 Ship.prototype.isDestroyedThisTurn = function(){
+	//if (this.id == 48){return true;}
 	if (this.destroyed || this.primary.destroyed || this.getSystemByName("Reactor").destroyed){
 		return true;
 	}
@@ -2615,8 +2616,8 @@ Ship.prototype.setPostFireImage = function(){
 	if (this.ship){return;}
 
 	for (var i = 0; i < this.structures.length; i++){
-		if (this.structures[i].draw && (this.structures[i].destroyed || this.structures[i].disabled)){
-			this.structures[i].draw = 0;
+		if (this.structures[i].doDraw && (this.structures[i].destroyed || this.structures[i].disabled)){
+			this.structures[i].doDraw = 0;
 		}
 	}
 	this.resetImage();
