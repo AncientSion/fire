@@ -110,7 +110,7 @@ else {
 	<script src='game.js'></script>
 	<script src='ajax.js'></script>
 </head>
-	<body style="padding: 20px">
+	<body style="padding: 10px">
 		<div id ="popupWrapper">
 			<div id="popupText">
 			</div>
@@ -122,7 +122,7 @@ else {
 				<tr><td class="buttonTD" onclick="doConfirmPurchase()">Confirm Unit Selection</td></td>
 			</table>
 		</div>
-		<table style="height: 200px; width: 700px;">
+		<table style="width: 700px; top: 200px">
 			<tr>
 				<td style="vertical-align: top;">
 					<div style="margin: auto">
@@ -130,6 +130,7 @@ else {
 					</div>
 				</td>
 				<td style="vertical-align: top; padding-left: 30px">
+					<div id="reinforceFaction" class="disabled"></div>
 					<div>
 						<table id="shipsBoughtTable">
 							<tr>
@@ -141,7 +142,7 @@ else {
 								<td style='font-size: 18px'>
 									Total Cost:
 								</td>
-								<td id="totalFleetCost" style="width:50px">
+								<td id="totalFleetCost" style="width:60px">
 									0
 								</td>
 							</tr>
@@ -151,21 +152,20 @@ else {
 							</tr>
 						</table>
 					</div>
-					<div id="reinforceFaction" class="disabled"></div>
 				</td>
 			</tr>
 		</table>
-		<table>
+		<table style="position: absolute; top: 200px">
 			<tr>
-				<td style="vertical-align: top;">
+				<td>
 					<div id="factionDiv">			
 					</div>
 				</td>
 			</tr>
 		</table>
-		<div id="game" class="disabled" style="top: 650px; left: 125px">
+		<div id="game" style="position: absolute; top: 13px; left: 825px">
 			<canvas id="canvas" style='z-index: 0'></canvas>
-			<canvas id="shipCanvas" style='border: 2px solid white; z-index: 2'></canvas>
+			<canvas id="shipCanvas" style='border: 1px solid white; z-index: 2'></canvas>
 			<canvas id="fxCanvas" style='z-index: 1'></canvas>
 		</div>
 		<div id="hangarDiv" class="disabled">
@@ -223,7 +223,7 @@ else {
 				$(this).hide();
 			});
 
-		$("#nameWrapper").css("left", 500).css("top", 300)
+		$("#nameWrapper").css("left", 800).css("top", 300)
 		$("#hangarDiv").drag();
 		$("#weaponDiv").drag();
 		$("#crewDiv").drag();
@@ -279,7 +279,7 @@ else {
 				setReinforceFaction: function(faction){
 					if (faction.length < 3){return;}
 					game.faction = faction;
-					$("#reinforceFaction").removeClass("disabled").html("Reinforcements:</br>" + faction);
+					$("#reinforceFaction").removeClass("disabled").html("Reinforcements: " + faction);
 				},
 				
 				getFleetCost: function(){
@@ -602,7 +602,7 @@ else {
 
 		$("#game").show();
 		$(".shipDiv")
-			.css("left", "460px").css("top", "220px").removeClass("disabled")
+			.css("left", "450px").css("top", "205px").removeClass("disabled")
 			.find(".structContainer").show();
 
 		var div = document.createElement("div");
@@ -779,7 +779,7 @@ else {
 
 		var t = $(".factionUpperTable").position();
 		var h =  $(".factionUpperTable").height();
-		$("#game").css("top", t.top+h+20);
+		//$("#game").css("top", t.top+h+20);
 	}
 
 	function joinGame(){

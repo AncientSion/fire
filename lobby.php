@@ -234,16 +234,13 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 			<div id="instructText">
 			</div>
 		</div>
-		<div style>
-			<div class="lobbyDiv">
-				<span>
-					<?php
-						if (isset($_SESSION["userid"])){
-							echo "<font color='red'>Welcome, ".$username.", your player ID: ".$_SESSION['userid']."</font>";
-						} else echo "error, no userid,";
-					?>
-				</span>
-			</div>
+		<div class="lobbyDiv">
+			<?php
+				if (isset($_SESSION["userid"])){
+					echo "<soan style='color: lightGreen; font-size: 16px'>Welcome, ".$username." (ID: ".$_SESSION['userid'].")</span>";
+				} else echo "error, no userid,";
+			?>
+		</div>
 			<div class="lobbyDiv">
 				<?php echo $myGamesElement; ?>
 			</div>
@@ -253,48 +250,49 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 			<div class="lobbyDiv">
 				<div class="link">
 					Create a new Game
-					<div id="createGame" class="disabled">
-						<form method="post">
-							<table style="margin: auto" >
-								<tr>
-									<td width=60%>
-										Game Name
-									</td>
-									<td>
-										<input type="form" style="text-align: center" value='myGame' placeholder="Game Name" name="gameName"></input>		
-									</td>
-								</tr>
-								<tr>
-									<td>
-										Point Value
-									</td>
-									<td>
-										<input type="form" style="text-align: center" value=3000 placeholder="3000" name="pointValue"></input>		
-									</td>
-								</tr>
-								<tr>
-									<td>
-										Reinforcements Value
-									</td>
-									<td>
-										<input type="form" style="text-align: center" value=1500 placeholder="1500" name="reinforceValue"></input>		
-									</td>
-								</tr>
-								<tr>
-									<td>
-										Reinforcements Turn
-									</td>
-									<td>
-										<input type="form" style="text-align: center" value=11 placeholder="11" name="reinforceTurn"></input>		
-									</td>
-								</tr>
-									<td colSpan=2>
-										<input type="submit" style="width: 100%" value="Confirm and Forward"></input>	
-									</td>
-								</tr>
-							</table>
-						</form>
-					</div>
+				</div>
+
+				<div id="createGame" class="disabled">
+					<form method="post">
+						<table class="createGame">
+							<tr>
+								<td width=60%>
+									Game Name
+								</td>
+								<td>
+									<input type="form" style="text-align: center" value='myGame' placeholder="Game Name" name="gameName"></input>		
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Point Value
+								</td>
+								<td>
+									<input type="form" style="text-align: center" value=3000 placeholder="3000" name="pointValue"></input>		
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Reinforcements Value
+								</td>
+								<td>
+									<input type="form" style="text-align: center" value=1500 placeholder="1500" name="reinforceValue"></input>		
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Reinforcements Turn
+								</td>
+								<td>
+									<input type="form" style="text-align: center" value=11 placeholder="11" name="reinforceTurn"></input>		
+								</td>
+							</tr>
+								<td colSpan=2>
+									<input type="submit" style="width: 60%" value="Confirm and Forward"></input>	
+								</td>
+							</tr>
+						</table>
+					</form>
 				</div>
 			</div>
 			<div class="lobbyDiv">

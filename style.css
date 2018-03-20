@@ -251,10 +251,15 @@ table, th, tr, td {
 }
 
 #createGame {
-	border: 1px solid white;
 	text-align: center;
 	background: black;
 	color: white;
+	width: 400px;
+	margin: auto;
+}
+
+#createGame td, #createGame th {
+	padding: 3px;
 }
 
 #launchRate, #capacity, #reload {
@@ -338,7 +343,7 @@ table, th, tr, td {
 	width: 100%;
 	font-size: 20px;
 	border: 1px solid white;
-	margin-top: 20px;
+	margin-bottom: 10px;
 }
 
 #shipsBoughtTable {
@@ -434,6 +439,7 @@ table, th, tr, td {
 }
 
 .lobbyDiv table {
+	width: 90%;
 	border-collapse: collapse;
 	border: 1px solid black;
 	margin: auto;
@@ -443,11 +449,13 @@ table, th, tr, td {
 	font-size: 16px;
 	border-collapse: collapse;
 	border: 1px solid white;
+	padding: 7px;
 }
 .lobbyDiv th {
 	font-size: 20px;
 	border-collapse: collapse;
 	border: 1px solid white;
+	padding: 5px;
 }
 
 .gui {
@@ -1949,18 +1957,6 @@ body {
 
 .waiting {
 	background-color: red;
-}
-
-#activeGames {
-	width: 90%;
-}
-
-#activeGames td{
-	padding: 7px;
-}
-
-#activeGames th{
-	padding: 5px;
 }
 
 #statsWrapper {
