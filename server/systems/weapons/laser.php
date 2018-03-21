@@ -84,8 +84,8 @@ class MediumLaser extends LightLaser {
 	public $animColor = "red";
 	public $rakeTime = 60;
 	public $beamWidth = 3;
-	public $minDmg = 80;
-	public $maxDmg = 105;
+	public $minDmg = 90;
+	public $maxDmg = 120;
 	public $optRange = 400;
 	public $dmgLoss = 6;
 	public $powerReq = 4;
@@ -127,7 +127,7 @@ class SuperHeavyLaser extends HeavyLaser {
 	public $beamWidth = 5;
 	public $minDmg = 170;
 	public $maxDmg = 215;
-	public $optRange = 700;
+	public $optRange = 800;
 	public $dmgLoss = 2;
 	public $powerReq = 8;
 	public $rakes = 3;
