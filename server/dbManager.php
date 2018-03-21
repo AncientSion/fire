@@ -190,7 +190,7 @@
 			}
 		}
 
-		public function getUnitStats($gameid, $user){
+		public function getDamageStatistics($gameid, $user){
 
 			$stmt = $this->connection->prepare("
 				SELECT
@@ -203,14 +203,16 @@
 					fireorders.shooterid = units.id
 				LEFT JOIN damages ON
 					damages.fireid = fireorders.id
+				LEFT JOIN subunits ON
+					units.name = squadron
 				WHERE units.gameid = :gameid
-				AND units.name != :salvo
+				AND units.name != salvo
 				GROUP BY units.id
 			");
 
-			$salvo = "Salvo";
+			//$salvo = "Salvo";
 			$stmt->bindParam(":gameid", $gameid);
-			$stmt->bindParam(":salvo", $salvo);
+			//$stmt->bindParam(":salvo", $salvo);
 			$stmt->execute();
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

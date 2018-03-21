@@ -618,7 +618,7 @@ Single.prototype.getBaseImage = function(){
 }
 
 Single.prototype.isDestroyedThisTurn = function(){
-	if (this.parentId == 53 && this.id == 7){return true;}
+	//if (this.parentId == 53 && this.id == 7){return true;}
 	if (this.disabled){
 		for (var j = this.crits.length-1; j >= 0; j--){
 			if (this.crits[j].type == "Disabled" && this.crits[j].turn == game.turn){

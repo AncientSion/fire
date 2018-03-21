@@ -40,7 +40,7 @@ if (isset($_GET["type"])){
 		echo json_encode($unit, JSON_NUMERIC_CHECK);
 	}
 	else if ($_GET["type"] == "unitStats"){
-		echo json_encode($dbManager->getUnitStats($_GET["gameid"], $_GET["userid"]), JSON_NUMERIC_CHECK);
+		echo json_encode($dbManager->getDamageStatistics($_GET["gameid"], $_GET["userid"]), JSON_NUMERIC_CHECK);
 	}
 }
 	
