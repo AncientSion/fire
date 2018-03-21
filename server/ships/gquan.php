@@ -13,7 +13,7 @@ class GQuan extends Heavy {
 	public $vitalHP = 130;
 	public $ep = 85;
 	public $ew = 775;
-	public $power = -6;
+	public $power = -4;
 
 
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
@@ -39,9 +39,9 @@ class GQuan extends Heavy {
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 17, 4);
-		$aft->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 120, 300);
+		$aft->systems[] = new TwinParticleBolter($this->getId(), $this->id, 120, 300);
 		$aft->systems[] = new Hangar($this->getId(), $this->id, 10, array("Gorith", "Frazi"), 10, 2);
-		$aft->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 60, 240);
+		$aft->systems[] = new TwinParticleBolter($this->getId(), $this->id, 60, 240);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 800, 18);

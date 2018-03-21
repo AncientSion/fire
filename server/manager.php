@@ -1452,6 +1452,7 @@ include_once 'global.php';
 					),
 					array(
 						"Crius",
+						"Hermes",
 						"Tethys",
 					),
 					array(

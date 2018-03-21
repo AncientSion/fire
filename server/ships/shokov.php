@@ -10,7 +10,7 @@ class Shokov extends Shokos {
 	public $cost = 280;
 
 	public $ew = 425;
-	public $power = -3;
+	public $power = -2;
 
 	function __construct($id, $userid){
 		parent::__construct($id, $userid);
@@ -20,17 +20,16 @@ class Shokov extends Shokos {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new TorpedoLauncher($this->getId(), $this->parentId, 315, 45, array(array("Vran", 8, 2)));
-		$front->systems[] = new TorpedoLauncher($this->getId(), $this->parentId, 315, 45, array(array("Vran", 8, 2)));
+		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->parentId, 270, 90);
 
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new TwinParticleBolter($this->getId(), $this->parentId, 300, 180);
+		$right->systems[] = new TorpedoLauncher($this->getId(), $this->parentId, 315, 45, array(array("Vran", 8, 2)));
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new TwinParticleBolter($this->getId(), $this->parentId, 180, 60);
+		$left->systems[] = new TorpedoLauncher($this->getId(), $this->parentId, 315, 45, array(array("Vran", 8, 2)));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

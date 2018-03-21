@@ -83,6 +83,9 @@ window.graphics = {
 		this.images.tethys = new Image();
 		this.images.tethys.src = "shipIcons/tethys.png";
 
+		this.images.hermes = new Image();
+		this.images.hermes.src = "shipIcons/hermes.png";
+
 
 		this.images.primus = new Image();
 		this.images.primus.src = "shipIcons/primus.png";

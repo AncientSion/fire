@@ -23,9 +23,9 @@ class DagKar extends Medium {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 16, 3);
-		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new TwinParticleBolter($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new EnergyMine($this->getId(), $this->id, 330, 30);
-		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new TwinParticleBolter($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 15, 1);

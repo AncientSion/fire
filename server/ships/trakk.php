@@ -10,7 +10,7 @@ class Trakk extends Light {
 
 	public $integrity = 400;
 	public $ep = 100;
-	public $ew = 475;
+	public $ew = 450;
 	public $power = 0;
 	public $negation = 12;
 
@@ -22,7 +22,7 @@ class Trakk extends Light {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new LightLaser($this->getId(), $this->parentId, 240, 120);
+		$front->systems[] = new TwinParticleBolter($this->getId(), $this->parentId, 270, 90);
 		$structs[] = $front;
 		
 		

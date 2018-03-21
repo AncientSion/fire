@@ -3,12 +3,12 @@
 class Shokos extends SuperLight {
 	public $name = "Shokos";
 	public $display = "Shokos";
-	public $role = "Police Cutter";
+	public $role = "Light Corvette";
 	public $faction = "Narn Regime";
-	public $cost = 250;
-	public $mass = 900;
+	public $cost = 240;
+	public $mass = 1000;
 
-	public $integrity = 315;
+	public $integrity = 300;
 	public $ep = 125;
 	public $ew = 400;
 	public $power = 2;
@@ -24,7 +24,7 @@ class Shokos extends SuperLight {
 		$front = new Section(300, 60);
 		//$front->systems[] = new LightPlasmaPulse($this->getId(), $this->parentId, 270, 90);
 		//$front->systems[] = new LightPlasmaPulse($this->getId(), $this->parentId, 270, 90);
-		$front->systems[] = new LightLaser($this->getId(), $this->parentId, 240, 120);
+		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->parentId, 270, 90);
 		$structs[] = $front;
 
 		$right = new Section(60, 180);

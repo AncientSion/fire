@@ -9,7 +9,7 @@ class Pulse extends Weapon {
 	public $grouping = 25;
 	public $pulse = 1;
 
-	public $notes = array("Full volley allocates versus same unit or system", "More hits if to-hit-roll is undercut");
+	public $notes = array("Hits allocate versus same unit / system", "More hits if to-hit-roll is undercut");
 
 	public $fireMode = "Pulse";
 

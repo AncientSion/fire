@@ -6,19 +6,19 @@ class Tethys extends SuperLight {
 	public $role = "Police Cutter";
 	public $faction = "Earth Alliance";
 	public $cost = 250;
-	public $mass = 900;
+	public $mass = 1000;
 
-	public $integrity = 300;
+	public $integrity = 320;
 	public $ep = 110;
 	public $ew = 375;
 	public $power = 2;
-	public $negation = 11;
+	public $negation = 10;
 
-	public $effiency = 2;
+	//public $effiency = 2;
 
 	function __construct($id, $parentId){
         parent::__construct($id, $parentId);
-		$this->boostEffect[] = new Effect("Armour", 2);
+		//$this->boostEffect[] = new Effect("Armour", 2);
 	}
 
 	public function addStructures(){
@@ -29,7 +29,7 @@ class Tethys extends SuperLight {
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new LightLaser($this->getId(), $this->parentId, 300, 60);;
+		$right->systems[] = new LightLaser($this->getId(), $this->parentId, 300, 60);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);

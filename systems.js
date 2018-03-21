@@ -2171,8 +2171,9 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 	}
 	else if (!(this instanceof Launcher)){
 		if (this.fireMode == "Pulse"){
-			$(table).append($("<tr>").append($("<td>").html("Volley")).append($("<td>").html(this.shots + " w/ " + this.basePulses + " pulses")));
-			$(table).append($("<tr>").append($("<td>").html("Burst")).append($("<td>").html(" +1 (max " + this.extraPulses + ") per " + this.grouping + "%")));
+			$(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").html(this.shots)));
+			$(table).append($("<tr>").append($("<td>").html("Base / Max Hits")).append($("<td>").html(this.basePulses + " / " + (this.basePulses + this.extraPulses))));
+			$(table).append($("<tr>").append($("<td>").html("Bonus Hits")).append($("<td>").html(" +1 per " + this.grouping + "%")));
 		} else $(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").html(this.shots)));
 	}
 

@@ -12,7 +12,7 @@ class Particle extends Weapon {
 
 class TwinParticleBolter extends Particle {
 	public $name = "TwinParticleBolter";
-	public $display = "Twin Particle Bolter";
+	public $display = "Twin Particle Bolter Array";
 	public $minDmg = 9;
 	public $maxDmg = 13;
 	public $accDecay = 180;
@@ -35,7 +35,7 @@ class TwinParticleBolter extends Particle {
 
 class LightParticle extends Particle {
 	public $name = "LightParticle";
-	public $display = "32mm Particle Bolter Array";
+	public $display = "Particle Bolter Array";
 	public $minDmg = 12;
 	public $maxDmg = 16;
 	public $accDecay = 180;
@@ -59,7 +59,7 @@ class LightParticle extends Particle {
 
 class MediumParticle extends LightParticle {
 	public $name = "MediumParticle";
-	public $display = "68mm Particle Emitter";
+	public $display = "Medium Particle Cannon";
 	public $minDmg = 28;
 	public $maxDmg = 36;
 	public $accDecay = 120;
@@ -81,7 +81,7 @@ class MediumParticle extends LightParticle {
 
 class HeavyParticle extends MediumParticle {
 	public $name = "HeavyParticle";
-	public $display = "122mm Particle Cannon";
+	public $display = "Heavy Particle Cannon";
 	public $minDmg = 54;
 	public $maxDmg = 69;
 	public $accDecay = 80;
@@ -103,7 +103,7 @@ class HeavyParticle extends MediumParticle {
 
 class SuperHeavyParticle extends HeavyParticle {
 	public $name = "SuperHeavyParticle";
-	public $display = "138mm Particle Accelerator";
+	public $display = "Super-Heavy Particle Cannon";
 	public $minDmg = 64;
 	public $maxDmg = 82;
 	public $accDecay = 60;

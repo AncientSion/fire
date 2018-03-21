@@ -27,8 +27,8 @@ class Thentus extends Light {
 
 		$right = new Section(60, 180);
 		$right->systems[] = new TwinParticleBolter($this->getId(), $this->parentId, 0, 180);
-		$structs[] = $right;
 
+		$structs[] = $right;
 		$left = new Section(180, 300);
 		$left->systems[] = new TwinParticleBolter($this->getId(), $this->parentId, 180, 360);
 		$structs[] = $left;

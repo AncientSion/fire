@@ -34,8 +34,8 @@ class KaToc extends Medium {
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 15);
-		$aft->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 120, 300);
-		$aft->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 60, 240);
+		$aft->systems[] = new TwinParticleBolter($this->getId(), $this->id, 120, 300);
+		$aft->systems[] = new TwinParticleBolter($this->getId(), $this->id, 60, 240);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 325, 15, 1);

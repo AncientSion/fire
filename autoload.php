@@ -69,6 +69,7 @@ spl_autoload_register(
                 'olympus' => '/server/ships/olympus.php',
                 'tethys' => '/server/ships/tethys.php',
                 'crius' => '/server/ships/crius.php',
+                'hermes' => '/server/ships/hermes.php',
 
                 'gquan' => '/server/ships/gquan.php',
                 'gsten' => '/server/ships/gsten.php',
