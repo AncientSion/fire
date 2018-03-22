@@ -5,7 +5,7 @@ class Hermes extends Light {
 	public $display = "Hermes";
 	public $role = "Courier Corvette";
 	public $faction = "Earth Alliance";
-	public $cost = 280;
+	public static $value = 280;
 	public $mass = 1200;
 
 	public $integrity = 380;

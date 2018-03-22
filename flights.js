@@ -197,16 +197,6 @@ Flight.prototype.getEP = function(){
 	return this.ep;
 }
 
-Flight.prototype.getLaunchData = function(){
-	var data = []
-	for (var j = this.launchData.loads.length-1; j >= 0; j--){
-		if (this.launchData.loads[j].launch){
-			data.push({name: this.launchData.loads[j].name, launch: this.launchData.loads[j].launch});
-		}
-	}
-	return {loads: data, shipid: this.launchData.shipid, systemid: this.launchData.systemid};
-}
-
 Flight.prototype.hasWeaponsSelected = function(){
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){

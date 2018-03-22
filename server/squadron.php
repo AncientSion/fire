@@ -31,7 +31,7 @@ class Squadron extends Ship {
 			"gameid" => 0,
 			"userid" => 0,
 			"upgrades" => static::getSubUnits($faction),
-			"launchData" => array(),
+			"launch" => array(),
 		);
 	}
 

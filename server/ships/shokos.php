@@ -5,7 +5,7 @@ class Shokos extends SuperLight {
 	public $display = "Shokos";
 	public $role = "Light Corvette";
 	public $faction = "Narn Regime";
-	public $cost = 240;
+	public static $value = 240;
 	public $mass = 1000;
 
 	public $integrity = 300;

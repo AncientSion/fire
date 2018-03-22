@@ -67,7 +67,6 @@ class Altarian extends Medium {
 					array(
 						array(
 							"systemid" => 15,
-							"display" => "Aft Main Hangar",
 							"name" => "Sentri",
 							"amount" => 8
 						),
@@ -82,14 +81,12 @@ class Altarian extends Medium {
 					array(
 						array(
 							"systemid" => 15,
-							"display" => "Aft Main Hangar",
 							"name" => "Sentri",
 							"amount" => 8
 						),
 						array(
 							"systemid" => 15,
-							"display" => "Aft Main Hangar",
-							"name" => "Sitara (Particle)",
+							"name" => "SitaraParticle",
 							"amount" => 2
 						),
 					)

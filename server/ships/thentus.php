@@ -5,7 +5,7 @@ class Thentus extends Light {
 	public $display = "Thentus";
 	public $role = "Heavy Patrol Frigate";
 	public $faction = "Narn Regime";
-	public $cost = 320;
+	public static $value = 320;
 	public $mass = 1300;
 
 	public $integrity = 440;

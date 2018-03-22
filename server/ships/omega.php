@@ -76,7 +76,7 @@ class Omega extends SuperHeavy {
 					"active" => 0,
 					"chance" => 30,
 					"notes" => "Patrol (Aurora) Outfit",
-					"cost" => 400,
+					"units" => array(),
 					"loads" =>
 					array(
 						array(

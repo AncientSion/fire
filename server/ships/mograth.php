@@ -5,7 +5,7 @@ class Mograth extends Light {
 	public $display = "Mograth";
 	public $role = "Multi-purpose Frigate";
 	public $faction = "Centauri Republic";
-	public $cost = 360;
+	public static $value = 360;
 	public $mass = 1400;
 
 	public $integrity = 450;
@@ -53,6 +53,7 @@ class Mograth extends Light {
 					"chance" => 80,
 					"cost" => 60,
 					"name" => "Standard Outfit",
+					"units" => array(),
 					"loads" => 
 					array(
 						array(
@@ -68,6 +69,7 @@ class Mograth extends Light {
 					"chance" => 80,
 					"cost" => 60,
 					"name" => "Standard Outfit",
+					"units" => array(),
 					"loads" => 
 					array(
 						array(

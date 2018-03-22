@@ -30,7 +30,6 @@ class TwinParticleBolter extends Particle {
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
-
 }
 
 class LightParticle extends Particle {

@@ -1301,8 +1301,6 @@ Bridge.prototype.getUpgradeData = function(){
 		"loads": this.loads
 	}
 }
-
-
 				
 function Reactor(system){
 	PrimarySystem.call(this, system);
@@ -1575,7 +1573,6 @@ Sensor.prototype.select = function(e){
 	var parentId = this.parentId;
 	var selected = false;
 	var unit;
-
 
 	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || aUnit < 0){
 		return false;
@@ -3076,24 +3073,21 @@ Launcher.prototype.getAimDetailsUnit = function(target, final, accLoss, row){
 
 Launcher.prototype.getUpgradeData = function(){
 	var loads = [];
-	var text = "";
+	var units = [];
+	var text = this.display + ": ";
+	var cost = 0;
 	for (var i = 0; i < this.loads.length; i++){
 		if (!this.loads[i].amount){continue;}
 		loads.push({
 			"amount": this.loads[i].amount,
 			"cost": this.loads[i].cost,
-			"name": this.loads[i].name
+			"name": this.loads[i].name,
+			"systemid": this.id
 		});
-		text = this.loads[i].amount + "x " + this.loads[i].name;
-		break;
+		text += this.loads[i].amount + "x " + this.loads[i].name;
+		cost += this.loads[i].cost;
 	}
-
-	return {
-		"name": (this.display + ": " + text),
-		"systemid": this.id,
-		"cost": this.totalCost,
-		"loads": loads
-	}
+	return {systemid: this.id, active: 1, units: units, loads: loads, text: text, cost: cost};
 }
 
 Launcher.prototype.getAccuracyLoss = function(dist){		
@@ -3120,7 +3114,7 @@ Launcher.prototype.select = function(e){
 		this.setSystemBorder();
 		this.switchWeaponDiv(e);
 	}
-	else if (game.phase != -1 || this.getOutput() == 0){
+	else if (game.phase != -1  || game.deploying || this.getOutput() == 0){
 		return false;
 	}
 	
@@ -3284,13 +3278,13 @@ Launcher.prototype.updateTotals = function(){
 		table.innerHTML = "";
 
 		var tr = document.createElement("tr");
-		var th = document.createElement("th"); th.innerHTML = "Class"; th.width = "80px"; tr.appendChild(th)
+		var th = document.createElement("th"); th.innerHTML = "Name"; th.width = "80px"; tr.appendChild(th)
 		var th = document.createElement("th"); th.innerHTML = "Type"; th.width = "200px"; tr.appendChild(th)
-		var th = document.createElement("th"); th.innerHTML = "Salvo"; th.width = "40px"; tr.appendChild(th)
+		var th = document.createElement("th"); th.innerHTML = "Launchrate"; th.width = "40px"; tr.appendChild(th)
 		var th = document.createElement("th"); th.innerHTML = "Cost"; th.width = "40px"; tr.appendChild(th)
 		var th = document.createElement("th"); th.innerHTML = ""; tr.appendChild(th)
-		var th = document.createElement("th"); th.innerHTML = ""; tr.appendChild(th)
 		var th = document.createElement("th"); th.innerHTML = "Amount"; th.width = "70px"; tr.appendChild(th)
+		var th = document.createElement("th"); th.innerHTML = ""; tr.appendChild(th)
 		var th = document.createElement("th"); th.innerHTML = "Total Cost"; th.width = "70px"; tr.appendChild(th)
 		table.appendChild(tr);
 
@@ -3302,7 +3296,7 @@ Launcher.prototype.updateTotals = function(){
 			tr.insertCell(-1).innerHTML = this.launchRate[i];
 			tr.insertCell(-1).innerHTML = this.loads[i].cost;
 		var td = document.createElement("td");
-			td.innerHTML = "<img class='size20' src='varIcons/plus.png'>"; tr.appendChild(td);
+			td.innerHTML = "<img class='size30' src='varIcons/plus.png'>"; tr.appendChild(td);
 			td.addEventListener("click", function(e){
 				e.preventDefault(); e.stopPropagation();
 				window.game.ships[0].getSystem($("#weaponDiv").data("systemid")).addAmmo(this.parentNode, false);
@@ -3311,8 +3305,13 @@ Launcher.prototype.updateTotals = function(){
 				e.preventDefault(); e.stopPropagation();
 				window.game.ships[0].getSystem($("#weaponDiv").data("systemid")).addAmmo(this.parentNode, true);
 			})
+
+		amount += this.loads[i].amount
+		tCost += this.loads[i].amount * this.loads[i].cost
+		tr.insertCell(-1).innerHTML = this.loads[i].amount + " / "  + this.capacity[i];
+
 		var td = document.createElement("td");
-			td.innerHTML = "<img class='size20' src='varIcons/minus.png'>"; tr.appendChild(td);
+			td.innerHTML = "<img class='size30' src='varIcons/minus.png'>"; tr.appendChild(td);
 			td.addEventListener("click", function(e){
 				e.preventDefault(); e.stopPropagation();
 				window.game.ships[0].getSystem($("#weaponDiv").data("systemid")).removeAmmo(this.parentNode, false);
@@ -3321,20 +3320,18 @@ Launcher.prototype.updateTotals = function(){
 				e.preventDefault(); e.stopPropagation();
 				window.game.ships[0].getSystem($("#weaponDiv").data("systemid")).removeAmmo(this.parentNode, true);
 			})
-
-			amount += this.loads[i].amount
-			tCost += this.loads[i].amount * this.loads[i].cost
-			tr.insertCell(-1).innerHTML = this.loads[i].amount + " / "  + this.capacity[i];
 			tr.insertCell(-1).innerHTML = this.loads[i].amount * this.loads[i].cost
 	}
 
-	var tr = document.createElement("tr");
-	var th = document.createElement("th"); tr.appendChild(th);
-		th.innerHTML = "Grand Total";
-		th.colSpan = 6; th.style.fontAlign = "right";
-	var th = document.createElement("th"); th.innerHTML = amount; tr.appendChild(th);
-	var th = document.createElement("th"); th.innerHTML = tCost; tr.appendChild(th);
-	table.appendChild(tr);
+
+
+	$(table)
+		.append($("<tr>")
+			.css("fontSize", 18)
+			.append($("<th>").attr("colSpan", 5).html("Grand Total"))
+			.append($("<th>").html(amount))
+			.append($("<th>"))
+			.append($("<th>").html(tCost)))
 	this.totalCost = tCost;
 }
 
@@ -3930,12 +3927,22 @@ Hangar.prototype.hasUnresolvedFireOrder = function(){
 }
 
 Hangar.prototype.getUpgradeData = function(){
-	return {
-		"name": this.display,
-		"systemid": this.id,
-		"cost": this.totalCost,
-		"loads": this.loads
+	var loads = [];
+	var units = [];
+	var text = this.display + ": ";
+	var cost = 0;
+	for (var i = 0; i < this.loads.length; i++){
+		if (!this.loads[i].amount){continue;}
+		loads.push({
+			"amount": this.loads[i].amount,
+			"cost": this.loads[i].cost,
+			"name": this.loads[i].name,
+			"systemid": this.id
+		});
+		cost += this.loads[i].cost * this.loads[i].amount;
 	}
+	text += this.loads.map(x => x.amount).reduce((l, r) => l+r, 0) + " fighters";
+	return {systemid: this.id, active: 1, units: units, loads: loads, text: text, cost: cost};
 }
 
 Hangar.prototype.setFireOrder = function(targetid, pos){
@@ -3990,7 +3997,7 @@ Hangar.prototype.doUndoActions = function(){
 	if (game.phase != -1){return;}
 	for (var i = game.ships.length-1; i >= 0; i--){
 		if (game.ships[i].flight && game.ships[i].actions.length && game.ships[i].available == game.turn){
-			if (game.ships[i].launchData.shipid == this.parentId && game.ships[i].launchData.systemid == this.id){
+			if (game.ships[i].launch.shipid == this.parentId && game.ships[i].launch.systemid == this.id){
 				if (game.ships[i].cc.length){
 					game.getUnit(game.ships[i].cc[0]).detachFlight(game.ships[i].id);
 				}
@@ -4004,7 +4011,7 @@ Hangar.prototype.doUndoActions = function(){
 				game.ships.splice(i, 1);
 				this.fireOrders.splice(this.fireOrders.length-1, 1);
 				for (var j = 0; j < this.loads.length; j++){
-					this.loads[j].launch = 0;
+					this.loads[j].amount = 0;
 				}
 			break;
 			}
@@ -4157,7 +4164,7 @@ Hangar.prototype.doLaunchFlight = function(){
 	for (var i = game.ships.length-1; i >= 0; i--){
 		if (game.ships[i].userid == game.userid){
 			if (game.ships[i].flight && game.ships[i].available == game.turn && game.ships[i].actions[0].resolved){
-				if (game.ships[i].launchData.shipid == window.aUnit && game.ships[i].launchData.systemid == this.id){
+				if (game.ships[i].launch.shipid == window.aUnit && game.ships[i].launch.systemid == this.id){
 					game.ships.splice(i, 1);
 					game.draw();
 					break;
@@ -4323,8 +4330,8 @@ Hangar.prototype.initHangarDiv = function(){
 			.append($("<th>").html(""))
 			.append($("<th>").html("Cost").css("width", 40))
 			.append($("<th>").html(""))
-			.append($("<th>").html(""))
 			.append($("<th>").html("Amount").css("width", 70))
+			.append($("<th>").html(""))
 			.append($("<th>").html("Total Cost").css("width", 70)))
 
 	for (var i = 0; i < this.loads.length; i++){
@@ -4336,7 +4343,7 @@ Hangar.prototype.initHangarDiv = function(){
 				)
 				.append($("<td>").html(this.loads[i].cost))
 				.append($("<td>")
-					.append($("<img>").addClass("size20").attr("src", "varIcons/plus.png"))
+					.append($("<img>").addClass("size30").attr("src", "varIcons/plus.png"))
 					.click(function(e){
 						e.preventDefault(); e.stopPropagation();
 						window.game.ships[0].getSystem($("#hangarDiv").data("systemid")).addFighter(this.parentNode, false);
@@ -4346,8 +4353,9 @@ Hangar.prototype.initHangarDiv = function(){
 						window.game.ships[0].getSystem($("#hangarDiv").data("systemid")).addFighter(this.parentNode, true);
 					})
 				)
+				.append($("<td>").html(this.loads[i].amount))
 				.append($("<td>")
-					.append($("<img>").addClass("size20").attr("src", "varIcons/minus.png"))
+					.append($("<img>").addClass("size30").attr("src", "varIcons/minus.png"))
 					.click(function(e){
 						e.preventDefault(); e.stopPropagation();
 						window.game.ships[0].getSystem($("#hangarDiv").data("systemid")).removeFighter(this.parentNode, false);
@@ -4357,15 +4365,15 @@ Hangar.prototype.initHangarDiv = function(){
 						window.game.ships[0].getSystem($("#hangarDiv").data("systemid")).removeFighter(this.parentNode, true);
 					})
 				)
-				.append($("<td>").html(this.loads[i].amount))
 				.append($("<td>").html(this.loads[i].amount * this.loads[i].cost))
 			)
 	}
 
 	table
 		.append($("<tr>")
-			.css("fontSize", 20)
-			.append($("<th>").attr("colSpan", 5).html("Grand Total"))
+			.css("fontSize", 18)
+			.append($("<th>").attr("colSpan", 4).html("Grand Total"))
+			.append($("<th>"))
 			.append($("<th>"))
 			.append($("<th>")))
 
@@ -4385,7 +4393,7 @@ Hangar.prototype.setTotalBuyData = function(){
 	table.find("tr").last().children().each(function(i){
 		if (!i){return;}
 		else if (i == 1){$(this).html(tAmount);}
-		else if (i == 2){$(this).html(tCost);}
+		else if (i == 3){$(this).html(tCost);}
 	});
 
 	this.totalCost = tCost;
@@ -4396,7 +4404,7 @@ Hangar.prototype.updateHangarDiv = function(index){
 	var cost = this.loads[index].cost * amount;
 	var tr = $($("#hangarTable").find("tr")[index+1]);
 	var tds = tr.find("td");
-		$(tds[5]).html(amount);
+		$(tds[4]).html(amount);
 		$(tds[6]).html(cost);
 
 	this.setTotalBuyData();

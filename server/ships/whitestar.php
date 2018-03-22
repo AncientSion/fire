@@ -5,7 +5,7 @@ class WhiteStar extends Light {
 	public $display = "White Star";
 	public $role = "Adv. Superiority Frigate";
 	public $faction = "Minbari Federation";
-	public $cost = 400;
+	public static $value = 400;
 	public $mass = 1800;
 
 	public $integrity = 535;

@@ -274,19 +274,7 @@ table, th, tr, td {
 	border-radius: 5px;
 }
 
-#hangarDiv {
-	width: 440px;
-}
-
-#hangarDiv td {
-	font-size: 14px;
-}
-
-#weaponDiv {
-	width: 360px;
-}
-
-#crewDiv {
+#hangarDiv, #weaponDiv, #crewDiv {
 	width: 450px;
 }
 
@@ -300,6 +288,7 @@ table, th, tr, td {
 }
 
 #hangarTable tr, #weaponTable tr, #crewTable tr {
+	height: 40px;
 	border: 1px solid white;
 }
 
@@ -419,7 +408,7 @@ table, th, tr, td {
 }
 
 .rowHighlight {
-	border: 1px solid yellow;
+	border: 3px solid yellow;
 }
 
 .fontHighlight {
@@ -439,7 +428,7 @@ table, th, tr, td {
 }
 
 .lobbyDiv table {
-	width: 90%;
+	width: 100%;
 	border-collapse: collapse;
 	border: 1px solid black;
 	margin: auto;
@@ -594,6 +583,7 @@ table, th, tr, td {
 	width: 60px;
 	height: 60px;
 	margin: auto;
+	margin-top: -5px;
 }
 
 .size90 {

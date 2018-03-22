@@ -197,6 +197,10 @@ Ship.prototype.canDeployHere = function(pos){
 	}
 }
 
+Ship.prototype.getAllUpgrades = function(){
+	return this.upgrades;
+}
+
 Ship.prototype.doDeploy = function(pos){
 	console.log(this);
 	if (this.actions.length){
@@ -3000,10 +3004,6 @@ Ship.prototype.setBuyData = function(){
 			this.upgrades.push(this.structures[i].systems[j].getUpgradeData());
 		}
 	}
-}
-
-Ship.prototype.getLaunchData = function(){
-	return [];
 }
 
 Ship.prototype.getDeployImg = function(){

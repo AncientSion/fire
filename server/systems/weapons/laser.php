@@ -104,14 +104,14 @@ class HeavyLaser extends LightLaser {
 	public $animColor = "red";
 	public $rakeTime = 60;
 	public $beamWidth = 4;
-	public $minDmg = 140;
-	public $maxDmg = 180;
+	public $minDmg = 160;
+	public $maxDmg = 200;
 	public $reload = 4;
 	public $optRange = 600;
 	public $dmgLoss = 4;
 	public $powerReq = 6;
 	public $effiency = 4;
-	public $integrity = 58;
+	public $integrity = 60;
 	public $traverse = 0;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
@@ -125,13 +125,13 @@ class SuperHeavyLaser extends HeavyLaser {
 	public $animColor = "red";
 	public $rakeTime = 100;
 	public $beamWidth = 5;
-	public $minDmg = 170;
-	public $maxDmg = 215;
+	public $minDmg = 200;
+	public $maxDmg = 240;
 	public $optRange = 800;
 	public $dmgLoss = 2;
 	public $powerReq = 8;
 	public $rakes = 3;
-	public $integrity = 66;
+	public $integrity = 70;
 	public $traverse = 1;
 	public $effiency = 5;
 
@@ -141,7 +141,7 @@ class SuperHeavyLaser extends HeavyLaser {
 
 	public function setArmourData($rem){
 		$this->mount = "Fixed";
-		$this->armourMod = 0.85;
+		$this->armourMod = 0.8;
 		$this->armour = floor($rem * $this->armourMod);
 	}
 }

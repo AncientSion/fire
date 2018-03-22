@@ -125,7 +125,7 @@ include_once 'global.php';
 		$this->playerstatus = DBManager::app()->getPlayerStatus($this->gameid);
 	}
 
-	public function validateFleetCost($units){
+	public function verifyFleetCost($units){
 		$used = 0;
 
 		for ($i = 0; $i < sizeof($units); $i++){
@@ -334,7 +334,6 @@ include_once 'global.php';
 		DBManager::app()->getShipLoad($units);
 
 		for ($i = 0; $i < sizeof($units); $i++){
-			//Debug::log("manager setUnitState #".$units[$i]->id);
 			$units[$i]->setUnitState($this->turn, $this->phase);
 		}
 
@@ -472,7 +471,7 @@ include_once 'global.php';
 			foreach ($entries as $entry){$total += $entry[1];}
 
 			//Debug::log("total: ".$total);
-			$add = 9;
+			$add = 10;
 
 			while ($add){
 				$current = 0;
@@ -481,20 +480,14 @@ include_once 'global.php';
 
 				foreach ($entries as $entry){
 					$current += $entry[1];
-					//Debug::log("current: ".$current);
 					if ($roll > $current){continue;}
-					//Debug::log("total: ".$total.", roll: ".$roll.", picking: ".$entry[0]);
-					//echo "</br>picking: ".$entry[0]."</br>";
 					$data = $entry[0]::getKit($faction);
 					$data["name"] = $entry[0];
-					$data["display"] = "";
 					$data["notes"] = "";
-					$data["turn"] = $this->turn;
 					$data["userid"] = $this->playerstatus[$i]["userid"];
-					//$data["eta"] = $entry[2];
 					$data["eta"] = 3;
 
-					if (sizeof($data["upgrades"])){
+					if (sizeof($data["upgrades"])){ // pick on upgrades !
 						//Debug::log("available kits for ".$data["name"].": ".sizeof($data["upgrades"]));
 						$subTotal = 0;
 
@@ -509,22 +502,21 @@ include_once 'global.php';
 							if ($subRoll > $subCurrent){continue;}
 
 							$data["upgrades"][$j]["active"] = 1;
-
-							if (isset($data["launchData"])){ // convert squadron data
-								$data["launchData"] = $data["upgrades"][$j]["launchData"];
-								unset($data["upgrades"][$j]["launchData"]);
-							}
-							//echo "roll: ".$subRoll.", subTotal: ".$subTotal.", current: ".$subCurrent.", picking upgrade: ".$j."</br>";
-
-							$data["cost"] += $data["upgrades"][$j]["cost"];
 							$data["notes"] = $data["upgrades"][$j]["notes"];
-							break;
-						}
 
-						for ($j = sizeof($data["upgrades"])-1; $j >= 0; $j--){
-							if ($data["upgrades"][$j]["active"] == 0){
-								array_splice($data["upgrades"], $j, 1);
+							if (isset($data["upgrades"][$j]["units"])){
+								foreach ($data["upgrades"][$j]["units"] as $entry){
+									//echo "name: ".$entry["name"].", cost : ".$entry["name"]::$value.", amount: ".$entry["amount"]."</br>";
+									$data["cost"] += floor($entry["name"]::$value * $entry["amount"]);
+								}
+							} else $data["upgrades"][$j]["units"] = array();
+							
+							foreach ($data["upgrades"][$j]["loads"] as $entry){
+								//echo "name: ".$entry["name"].", cost : ".$entry["name"]::$value.", amount: ".$entry["amount"]."</br>";
+								$data["cost"] += floor($entry["name"]::$value * $entry["amount"]);
 							}
+
+							break;
 						}
 					}
 					$picks[] = $data;
@@ -542,7 +534,7 @@ include_once 'global.php';
 		//}
 
 		if (sizeof($picks)){
-			DBManager::app()->insertReinforcements($this->gameid, $picks);
+			DBManager::app()->insertReinforcements($this->gameid, $this->turn, $picks);
 		}
 	}
 	
@@ -685,16 +677,18 @@ include_once 'global.php';
 
 			$name = $this->fires[$i]->weapon->getAmmo()->name;
 			$adjust[] = array(
-				"launchData" => array("shipid" => $this->fires[$i]->shooterid, "systemid" => $this->fires[$i]->weaponid, 
-					"loads" => array(0 => array("name" => $name, "launch" => $this->fires[$i]->shots)
+				"loadAdjust" => array(
+					"shipid" => $this->fires[$i]->shooterid,
+					"systemid" => $this->fires[$i]->weaponid, 
+					"loads" => array(0 => array("name" => $name, "amount" => $this->fires[$i]->shots)
 					)
 				)
 			);
 
 			for ($j = 0; $j < sizeof($units); $j++){
-				if ($units[$j]["launchData"]["shipid"] == $this->fires[$i]->shooterid && $units[$j]["launchData"]["loads"][0]["name"] == $name && $units[$j]["mission"]["targetid"] == $this->fires[$i]->targetid){
+				if ($units[$j]["upgrades"][0]["shipid"] == $this->fires[$i]->shooterid && $units[$j]["upgrades"][0]["units"][0]["name"] == $name && $units[$j]["mission"]["targetid"] == $this->fires[$i]->targetid){
 					//Debug::log("merging");
-					$units[$j]["launchData"]["loads"][0]["launch"] += $this->fires[$i]->shots;
+					$units[$j]["upgrades"][0]["units"][0]["amount"] += $this->fires[$i]->shots;
 					$skip = 1;
 					break;
 				}
@@ -711,17 +705,17 @@ include_once 'global.php';
 			$devi = Math::getPointInDirection($this->fires[$i]->shooter->size/3, $a, $sPos->x + mt_rand(-10, 10), $sPos->y + mt_rand(-10, 10));
 			$mission = array("type" => 2, "turn" => $this->turn, "targetid" => $this->fires[$i]->targetid, "x" => $tPos->x, "y" => $tPos->y, "arrived" => 0, "new" => 1);
 			$move = array("turn" => $this->turn, "type" => "deploy", "dist" => 0, "x" => $devi->x, "y" => $devi->y, "a" => $a, "cost" => 0, "delay" => 0, "costmod" => 0, "resolved" => 0);
-			$launchData = array("shipid" => $this->fires[$i]->shooter->id, "systemid" => $this->fires[$i]->weapon->id, "loads" => array(0 => array("launch" => $this->fires[$i]->shots, "name" => $name)));
+			$upgrades = array(array("active" => 1, "shipid" => $this->fires[$i]->shooter->id, "systemid" => $this->fires[$i]->weapon->id, "units" => array(0 => array("amount" => $this->fires[$i]->shots, "name" => $name))));
 
 			$units[] = array("gameid" => $this->gameid, "userid" => $this->fires[$i]->shooter->userid, "type" => "Salvo", "name" => "Salvo", "turn" => $this->turn, "eta" => 0,
-				"mission" => $mission, "actions" => array($move), "launchData" => $launchData);
+				"mission" => $mission, "actions" => array($move), "upgrades" => $upgrades);
 
 
 		}
 
 		if (sizeof($units)){
-			DBManager::app()->insertUnits($this->userid, $this->gameid, $units);
 			DBManager::app()->updateSystemLoad($adjust);
+			DBManager::app()->insertUnits($this->userid, $this->gameid, $units);
 			for ($i = 0; $i < sizeof($units); $i++){
 				$this->ships[] = new Salvo($units[$i]["id"], $units[$i]["userid"], $this->turn, "", "deployed", 0, 0, 0, 0, 0, 0, 0, 0, "");
 
@@ -1554,7 +1548,7 @@ include_once 'global.php';
 			$unit = new $units[1][$j](1, 1);
 			$data = array(
 				"name" => $unit->name,
-				"value" => $unit->cost,
+				"value" => $unit::$value,
 				"ep" => $unit->ep,
 				"ew" => $unit->ew,
 				"space" => $unit->space,

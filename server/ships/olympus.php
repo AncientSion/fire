@@ -62,6 +62,7 @@ class Olympus extends Medium {
 					"chance" => 60,
 					"cost" => 80,
 					"notes" => "PATROL Outfit",
+					"units" => array(),
 					"loads" => 
 					array(
 						array(
@@ -83,6 +84,7 @@ class Olympus extends Medium {
 					"chance" => 30,
 					"cost" => 70,
 					"notes" => "ESCORT Outfit",
+					"units" => array(),
 					"loads" => 
 					array(
 						array(

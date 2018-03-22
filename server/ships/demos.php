@@ -56,6 +56,7 @@ class Demos extends Medium {
 					"chance" => 80,
 					"cost" => 60,
 					"notes" => "Standard Outfit",
+					"units" => array(),
 					"loads" => 
 					array(
 						array(

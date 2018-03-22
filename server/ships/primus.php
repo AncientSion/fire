@@ -90,12 +90,14 @@ class Primus extends SuperHeavy {
 							"name" => "Sentri",
 							"amount" => 10,
 						),
+						array(
 							"systemid" => 9,
 							"name" => "SitaraParticle",
 							"amount" => 4,
 						),
 					)
 				),
+			)
 		);
 	}
 

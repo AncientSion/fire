@@ -214,7 +214,9 @@ window.ajax = {
 	},
 
 	confirmFleetPurchase: function(userid, gameid, ships, callback){
-		for (var i = 0; i < ships.length; i++){
+		//console.log(ships);
+		//return;
+		/*for (var i = 0; i < ships.length; i++){
 			for (var j = ships[i].upgrades.length-1; j >= 0; j--){
 				if (ships[i].upgrades[j].loads.length == 0){
 					ships[i].upgrades.splice(j, 1);
@@ -239,7 +241,7 @@ window.ajax = {
 					}
 				}
 			}
-		}
+		}*/
 
 		$.ajax({
 			type: "POST",

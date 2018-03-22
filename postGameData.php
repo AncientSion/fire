@@ -27,7 +27,7 @@ if (isset($_POST["type"])) {
 		echo $dbManager->leaveGame($_POST["userid"], $_POST["gameid"]);
 	}
 	else if ($_POST["type"] == "buyInitialFleet") {
-		$rem = $manager->validateFleetCost($_POST["ships"]);
+		$rem = $manager->verifyFleetCost($_POST["ships"]);
 		if ($rem >= 0){
 			if ($dbManager->processInitialBuy($_POST["userid"], $_POST["gameid"], $_POST["ships"], $rem, $_POST["faction"])){
 				if ($dbManager->gameIsReady($_POST["gameid"])) {

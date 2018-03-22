@@ -303,7 +303,7 @@ function Game(data, userid){
 
 		var immediate = 0;
 
-		if (t.id == aUnit || t.id < 0 && t.flight && t.launchData.shipid == aUnit){
+		if (t.id == aUnit || t.id < 0 && t.flight && t.launch.shipid == aUnit){
 			immediate = 1;
 		}
 
@@ -319,7 +319,7 @@ function Game(data, userid){
 
 		flight.primary = new Primary(0, flight.id, 0, 0, 0);
 		flight.actions.push(new Move(-1, "deploy", 0, p.x, p.y, facing, 0, 1, 1, 0));
-		flight.launchData = {
+		flight.launch = {
 			shipid: aUnit,
 			systemid: this.flightDeploy.id,
 			loads: this.flightDeploy.loads,
@@ -437,11 +437,11 @@ function Game(data, userid){
 						call: this.ships[i].call,
 						display: "",
 						mission: this.ships[i].mission,
-						launchData: this.ships[i].getLaunchData(),
+						loadAdjust: this.ships[i].getLoadAdjustment(),
+						upgrades: this.ships[i].getLaunchData(),
 						actions: this.ships[i].actions,
 						turn: this.turn,
 						eta: 0,
-						upgrades: []
 					}
 					ret.push(flight);
 				}
@@ -449,6 +449,26 @@ function Game(data, userid){
 		}
 		return ret;
 	}
+
+	Flight.prototype.getLoadAdjustment = function(){
+		var data = {shipid: this.launch.shipid, systemid: this.launch.systemid, loads: []};
+		for (var i = 0; i < this.launch.loads.length; i++){
+			if (!this.launch.loads[i].amount){continue;}
+			data.loads.push({amount: this.launch.loads[i].amount, name: this.launch.loads[i].name});
+		}
+		return data;
+	}
+
+	Flight.prototype.getLaunchData = function(){
+		var units = []
+		for (var i = 0; i < this.launch.loads.length; i++){
+			if (!this.launch.loads[i].amount){continue;}
+			units.push({amount: this.launch.loads[i].amount, name: this.launch.loads[i].name});
+		}
+		var data = {active: 1, units: units};
+		return [data];
+	}
+
 
 	this.getEWSettings = function(){
 		var ret = [];
@@ -745,9 +765,9 @@ function Game(data, userid){
 			for (var i = 0; i < window.playerstatus.length; i++){
 
 				var step;
-				var h = 1000;
+				var h = 1200;
 				var w = 200;
-				var dist = 300;
+				var dist = 700;
 				var y = h/2;
 
 				if (i % 2 == 0){
@@ -2701,7 +2721,7 @@ function Game(data, userid){
 									game.issueMission();
 								}
 								else if (game.flightDeploy){
-									game.doDeployFlight();
+									game.doDeployFlight(vessel.getPlannedPos());
 								}
 								else firePhase({x: 0, y: 0}, ship, vessel.id);
 							}

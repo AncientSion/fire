@@ -7,7 +7,7 @@ class Shokov extends Shokos {
 	public $rarity = 1;
 	public $role = "Torpedo Cutter";
 	public $faction = "Narn Regime";
-	public $cost = 280;
+	public static $value = 280;
 
 	public $ew = 425;
 	public $power = -2;

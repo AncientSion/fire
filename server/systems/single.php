@@ -22,6 +22,7 @@ class Single {
 	public $rarity = 0;
 	public $role = "";
 	public $mass = 0;
+	public $cost = 0;
 	public static $value = 0;
 	public $start = 0;
 	public $end = 360;
@@ -37,6 +38,7 @@ class Single {
 
 		$this->index = $this->id;
 		$this->remaining = $this->integrity;
+		$this->cost = static::$value;
 
 		$this->setBaseStats(0, 0);
 		$this->addStructures();

@@ -47,7 +47,7 @@ class Darkner extends Medium {
 	public $role = "Long-range Support Frigate";
 	public $faction = "Centauri Republic";
 	public static $value =  300;
-	public $cost = 300;
+	public static $value = 300;
 	public $mass = 1400;
 
 	public $integrity = 440;

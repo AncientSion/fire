@@ -155,7 +155,7 @@ else {
 				</td>
 			</tr>
 		</table>
-		<table style="position: absolute; top: 200px">
+		<table style="position: absolute; top: 215px">
 			<tr>
 				<td>
 					<div id="factionDiv">			
@@ -319,22 +319,7 @@ else {
 						tr.insertCell(-1).innerHTML = "<th>Squadron Setup</th>"; tr.childNodes[0].colSpan = 2;
 					}
 
-					for (var i = 0; i < game.ships[0].upgrades.length; i++){
-						var tr = table.insertRow(-1);
-							//tr.insertCell(-1).innerHTML = game.ships[0].upgrades[i].name + " #" + game.ships[0].upgrades[i].systemid;
-							tr.insertCell(-1).innerHTML = game.ships[0].upgrades[i].name;
-							tr.insertCell(-1).innerHTML = game.ships[0].upgrades[i].cost;
-
-							$(tr)
-								.data("systemid", game.ships[0].upgrades[i].systemid)
-								.hover(function(){
-									$(this).toggleClass("rowHighlight");
-									$(game.getUnit(0).getSystem($(this).data("systemid")).element).toggleClass("borderHighlight");
-								})
-	
-
-							game.ships[0].totalCost += game.ships[0].upgrades[i].cost;
-					}
+					$(table).append(game.ships[0].getBuyTableData(table))
 
 					if (game.ships[0].squad && game.ships[0].structures.length > 2){
 						var size = game.ships[0].structures.length;
@@ -524,19 +509,19 @@ else {
 	}
 
 	function confirmFleetPurchase(){
-		if (!game.canSubmit){return;}
-		else if (game.faction.length > 2){
-			for (var i = 0; i < game.shipsBought.length; i++){
+		//if (!game.canSubmit){return;}
+		//else if (game.faction.length > 2){
+			/*for (var i = 0; i < game.shipsBought.length; i++){
 				for (var j = game.shipsBought[i].upgrades.length-1; j >= 0; j--){
 					if (game.shipsBought[i].upgrades[j].loads.length == 0){
 						game.shipsBought[i].upgrades.splice(j, 1);
 					}
 				}
-			}
+			}*/
 			game.canSubmit = 0;
 			ajax.confirmFleetPurchase(playerid, gameid, window.game.shipsBought, redirect);
-		}
-		else popup("Please also pick your reinforcement faction </br>(right click the faction name on the left menu).");
+		//}
+		//else popup("Please also pick your reinforcement faction </br>(right click the faction name on the left menu).");
 	}
 
 	function requestSingleUnitData(name){
@@ -602,7 +587,7 @@ else {
 
 		$("#game").show();
 		$(".shipDiv")
-			.css("left", "450px").css("top", "205px").removeClass("disabled")
+			.css("left", "450px").css("top", "220px").removeClass("disabled")
 			.find(".structContainer").show();
 
 		var div = document.createElement("div");
@@ -659,10 +644,9 @@ else {
 			faction: game.ships[0].faction,
 			value: game.ships[0].totalCost,
 			purchaseId: window.game.shipsBought.length,
-			upgrades: game.ships[0].upgrades,
+			upgrades: game.ships[0].getAllUpgrades(),
 			turn: 1,
 			eta: 0,
-			launchData: game.ships[0].getLaunchData()
 		}
 
 		//console.log(ship.call);

@@ -5,7 +5,7 @@ class Trakk extends Light {
 	public $display = "Trakk";
 	public $role = "Attack Frigate";
 	public $faction = "Narn Regime";
-	public $cost = 290;
+	public static $value = 290;
 	public $mass = 1250;
 
 	public $integrity = 400;

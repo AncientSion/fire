@@ -501,20 +501,18 @@
 			");
 
 			for ($i = 0; $i < sizeof($data); $i++){
-				if (!isset($data[$i]["launchData"])){continue;}
 
-				$stmt->bindParam(":shipid", $data[$i]["launchData"]["shipid"]);
-				$stmt->bindParam(":systemid", $data[$i]["launchData"]["systemid"]);
+				$stmt->bindParam(":shipid", $data[$i]["loadAdjust"]["shipid"]);
+				$stmt->bindParam(":systemid", $data[$i]["loadAdjust"]["systemid"]);
 
-				for ($j = 0; $j < sizeof($data[$i]["launchData"]["loads"]); $j++){
-					$stmt->bindValue(":name", $data[$i]["launchData"]["loads"][$j]["name"]);
-					$stmt->bindValue(":amount", $data[$i]["launchData"]["loads"][$j]["launch"]);
+				for ($j = 0; $j < sizeof($data[$i]["loadAdjust"]["loads"]); $j++){
+					$stmt->bindValue(":name", $data[$i]["loadAdjust"]["loads"][$j]["name"]);
+					$stmt->bindValue(":amount", $data[$i]["loadAdjust"]["loads"][$j]["amount"]);
 					$stmt->execute();
 
 					if ($stmt->errorCode() != 0){
 						Debug::log("error updateSystemLoad");
-						//Debug::log("success updateSystemLoad");
-					}// else Debug::log("error updateSystemLoad");
+					}
 				}
 			}
 			return true;
@@ -557,7 +555,7 @@
 			return true;
 		}	
 
-		public function insertReinforcements($gameid, $data){
+		public function insertReinforcements($gameid, $turn, $data){
 			Debug::log("insertReinforcements: ".sizeof($data));
 			$stmt = $this->connection->prepare("
 				INSERT INTO units 
@@ -571,6 +569,8 @@
 			$status = "reinforce";
 			$destroyed = 0;
 			$phase = -2;
+			$eta = 3;
+			$display = "";
 
 
 			for ($i = 0; $i < sizeof($data); $i++){
@@ -581,12 +581,12 @@
 				$stmt->bindParam(":ship", $ship);
 				$stmt->bindParam(":ball", $ball);
 				$stmt->bindParam(":name", $data[$i]["name"]);
-				$stmt->bindParam(":display", $data[$i]["display"]);
+				$stmt->bindParam(":display", $display);
 				$stmt->bindParam(":status", $status);
-				$stmt->bindValue(":available", $data[$i]["eta"]);
+				$stmt->bindValue(":available", $eta);
 				$stmt->bindParam(":destroyed", $destroyed);
 				$stmt->bindParam(":facing", $data[$i]["cost"]);
-				$stmt->bindParam(":turn", $data[$i]["turn"]);
+				$stmt->bindParam(":turn", $turn);
 				$stmt->bindParam(":phase", $phase);
 				$stmt->bindParam(":notes", $data[$i]["notes"]);
 				$stmt->execute();
@@ -612,17 +612,20 @@
 			");
 
 			for ($i = 0; $i < sizeof($units); $i++){
-				if (!isset($units[$i]["launchData"]) || !(sizeof($units[$i]["launchData"]))){continue;}
-				$stmt->bindParam(":unitid", $units[$i]["id"]);
-				
-				for ($j = 0; $j < sizeof($units[$i]["launchData"]["loads"]); $j++){
-					$stmt->bindValue(":amount", $units[$i]["launchData"]["loads"][$j]["launch"]);
-					$stmt->bindValue(":name", $units[$i]["launchData"]["loads"][$j]["name"]);
-					$stmt->execute();
+				for ($j = 0; $j < sizeof($units[$i]["upgrades"]); $j++){
+					if (isset($units[$i]["upgrades"][$j]["active"]) && !$units[$i]["upgrades"][$j]["active"]){continue;}
+					if (!sizeof($units[$i]["upgrades"])){continue;}
 
-					if ($stmt->errorCode() == 0){
-						//Debug::log("success insertSubUnits");
-					} //else Debug::log("error insertSubUnits");
+					$stmt->bindParam(":unitid", $units[$i]["id"]);
+					
+					for ($k = 0; $k < sizeof($units[$i]["upgrades"][$j]["units"]); $k++){
+						$stmt->bindValue(":amount", $units[$i]["upgrades"][$j]["units"][$k]["amount"]);
+						$stmt->bindValue(":name", $units[$i]["upgrades"][$j]["units"][$k]["name"]);
+						$stmt->execute();
+
+						if ($stmt->errorCode() == 0){continue;}
+						else Debug::log("error insertSubUnits");
+					}
 				}
 			}
 			return true;
@@ -639,19 +642,20 @@
 
 			for ($i = 0; $i < sizeof($units); $i++){
 				for ($j = 0; $j < sizeof($units[$i]["upgrades"]); $j++){
+					if (isset($units[$i]["upgrades"][$j]["active"]) && !$units[$i]["upgrades"][$j]["active"]){continue;}
+					if (!sizeof($units[$i]["upgrades"])){continue;}
+
+					$stmt->bindParam(":shipid", $units[$i]["id"]);
+
 					for ($k = 0; $k < sizeof($units[$i]["upgrades"][$j]["loads"]); $k++){
-						$stmt->bindParam(":shipid", $units[$i]["id"]);
+
 						$stmt->bindParam(":systemid", $units[$i]["upgrades"][$j]["loads"][$k]["systemid"]);
 						$stmt->bindParam(":name", $units[$i]["upgrades"][$j]["loads"][$k]["name"]);
 						$stmt->bindParam(":amount", $units[$i]["upgrades"][$j]["loads"][$k]["amount"]);
-
 						$stmt->execute();
-						if ($stmt->errorCode() == 0){
-							continue;
-						}
-						else {
-							return false;
-						}
+
+						if ($stmt->errorCode() == 0){continue;}
+						else Debug::log("error insertServerLoads");
 					}
 				}
 			}
@@ -916,30 +920,6 @@
 
 			if (sizeof($data)){
 				$this->updateSystemLoad($data);
-
-				/*
-				for ($i = 0; $i < sizeof($data); $i++){
-					for ($j = $i+1; $j < sizeof($data); $j++){
-						if ($data[$i]["launchData"]["shipid"] == $data[$j]["launchData"]["shipid"]){ // same origin
-							if ($data[$i]["mission"]["targetid"] == $data[$j]["mission"]["targetid"]){ // same target
-								for ($k = 0; $k < sizeof($data[$j]["launchData"]["loads"]); $k++){
-									if ($data[$j]["launchData"]["loads"][$k]["launch"] >= 1){
-										for ($l = 0; $l < sizeof($data[$i]["launchData"]["loads"]); $l++){
-											if ($data[$i]["launchData"]["loads"][$l]["name"] == $data[$j]["launchData"]["loads"][$k]["name"]){ // same type
-												$data[$i]["launchData"]["loads"][$l]["launch"] += $data[$j]["launchData"]["loads"][$k]["launch"];
-												$data[$j]["launchData"]["loads"][$k]["launch"] = 0;
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				*/
-
-				//Debug::log("insert :".sizeof($data));
-				var_export($data);
 				$this->insertUnits($userid, $gameid, $data);
 			}
 			return true;

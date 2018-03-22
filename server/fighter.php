@@ -30,7 +30,7 @@ class Aurora extends Fighter {
 	public $name = "Aurora";
 	public $display = "Aurora";
 	public $faction = "Earth Alliance";
-	public $cost =  28;
+	public static $value =  28;
 	public $mass = 34;
 	public $integrity = 26;
 	public $negation = 4;
@@ -50,7 +50,7 @@ class Thunderbolt extends Fighter {
 	public $name = "Thunderbolt";
 	public $display = "Thunderbolt";
 	public $faction = "Earth Alliance";
-	public $cost =  35;
+	public static $value =  35;
 	public $mass = 36;
 	public $integrity = 29;
 	public $negation = 5;
@@ -70,7 +70,7 @@ class Sentri extends Fighter {
 	public $name = "Sentri";
 	public $display = "Sentri";
 	public $faction = "Centauri Republic";
-	public $cost =  26;
+	public static $value =  26;
 	public $mass = 32;
 	public $integrity = 24;
 	public $negation = 5;
@@ -88,7 +88,7 @@ class Sentri extends Fighter {
 
 class Sitara extends Fighter {
 	public $faction = "Centauri Republic";
-	public $cost =  24;
+	public static $value =  24;
 	public $integrity = 22;
 	public $negation = 5;
 	public $baseImpulse = 90;
@@ -130,7 +130,7 @@ class Nial extends Fighter {
 	public $name = "Nial";
 	public $display = "Nial";
 	public $faction = "Minbari Federation";
-	public $cost =  45;
+	public static $value =  45;
 	public $mass = 31;
 	public $integrity = 31;
 	public $negation = 7;
@@ -150,7 +150,7 @@ class Gorith extends Fighter {
 	public $name = "Gorith";
 	public $display = "Gorith";
 	public $faction = "Narn Regime";
-	public $cost =  22;
+	public static $value =  22;
 	public $mass = 34;
 	public $integrity = 22;
 	public $negation = 3;
@@ -170,7 +170,7 @@ class Frazi extends Fighter {
 	public $name = "Frazi";
 	public $display = "Frazi";
 	public $faction = "Narn Regime";
-	public $cost =  32;
+	public static $value =  32;
 	public $mass = 34;
 	public $integrity = 27;
 	public $negation = 5;

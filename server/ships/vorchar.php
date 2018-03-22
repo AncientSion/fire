@@ -5,7 +5,7 @@ class Vorchar extends Vorchan {
 	public $display = "Vorchar";
 	public $role = "Recon Frigate";
 	public $faction = "Centauri Republic";
-	public $cost = 340;
+	public static $value = 340;
 	
 	public $ew = 800;
 	public $power = 0;
@@ -45,6 +45,7 @@ class Vorchar extends Vorchan {
 					"chance" => 80,
 					"cost" => 60,
 					"notes" => "Standard Outfit",
+					"units" => array(),
 					"loads" => 
 					array(
 						array(

@@ -107,14 +107,15 @@ if (isset($_SESSION["userid"])){
 	$openGamesElement = "<table>";
 	if ($openGames) {
 		$openGamesElement .= "<tr>";
-		$openGamesElement .= "<th style='font-size: 26px' colSpan = 5>Open Games</th>";
+		$openGamesElement .= "<th style='font-size: 22px' colSpan = 5>Open Games</th>";
 		$openGamesElement .= "</tr>";
 
 		$openGamesElement .= "<tr>";
 		$openGamesElement .= "<td style='font-size: 18px' >Game Name</td>";
-		$openGamesElement .= "<td style='font-size: 18px' >Point Value</td>";
-		$openGamesElement .= "<td style='font-size: 18px' >Reinforce / Turn</td>";
+		$openGamesElement .= "<td style='font-size: 18px' >PV</td>";
+		$openGamesElement .= "<td style='font-size: 18px' >RV / Turn</td>";
 		$openGamesElement .= "<td style='font-size: 18px' >Players</td>";
+		//$openGamesElement .= "<td style='font-size: 18px' >Turn / Phase</td>";
 		$openGamesElement .= "<td>My Status</td>";
 		$openGamesElement .= "</tr>";
 
@@ -124,6 +125,8 @@ if (isset($_SESSION["userid"])){
 		//$players = 0;
 		//$players = $dbManager->getAmountOfPlayersInGame($game["id"]);
 
+			//var_export($game);
+
 			$openGamesElement .= "<tr id=".$game['id'].">";
 			$openGamesElement .= "<td width='40%'>";
 			$openGamesElement .= "<a href=gameSetup.php?gameid=".$game['id'].">";
@@ -131,8 +134,9 @@ if (isset($_SESSION["userid"])){
 			$openGamesElement .= "</a>";
 			$openGamesElement .= "</td>";
 			$openGamesElement .= "<td>".$game["pv"]."</td>";
-			$openGamesElement .= "<td>".$game["reinforce"]."</td>";
+			$openGamesElement .= "<td>".$game["reinforce"]." @ ".$game["reinforceTurn"]."</td>";
 			$openGamesElement .= "<td>".sizeof($players)."</td>";
+			//$openGamesElement .= "<td>".$game["turn"]." / ".$game["phase"]."</td>";
 
 			$in = false;
 			for ($i = 0; $i < sizeof($players); $i++){

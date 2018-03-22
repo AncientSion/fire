@@ -1,0 +1,56 @@
+prepareAdvance 
+********************* doAdvance for game2 from phase -1 to phase 0 
+handleDeployPhase 
+resolveDeployActions s: 0 
+handleJumpInActions 
+resolveJumpOutActions 
+handleInitialFireOrders 
+assemblDeployStates 
+game 2, user 1 --- adjusting to turn/phase/status 3/0/waiting 
+game 2, user 2 --- adjusting to turn/phase/status 3/0/waiting 
+TIME: 0.018 seconds. 
+4 mb 
+game 2, user 2 --- adjusting to turn/phase/status 2/3/ready 
+prepareAdvance 
+********************* doAdvance for game2 from phase 3 to phase 4 
+handleJumpOutActions 
+endTurn 
+doFirstDestroyedCheck 
+doSecondDestroyedCheck 
+updateDestroyedState 
+assembleEndStates 
+updateUnitStats s:4 2/3 
+pickReinforcements 
+insertReinforcements: 20 
+game 2, user 2 --- adjusting to turn/phase/status 2/3/ready 
+prepareAdvance 
+********************* doAdvance for game2 from phase 3 to phase 4 
+handleJumpOutActions 
+endTurn 
+doFirstDestroyedCheck 
+doSecondDestroyedCheck 
+updateDestroyedState 
+assembleEndStates 
+updateUnitStats s:4 2/3 
+pickReinforcements 
+insertReinforcements: 20 
+game 2, user 1 --- adjusting to turn/phase/status 3/-1/waiting 
+game 2, user 2 --- adjusting to turn/phase/status 3/-1/waiting 
+TIME: 0.235 seconds. 
+4 mb 
+requestShipsDB, s: 2, turn: 3 
+game 2, user 2 --- adjusting to turn/phase/status 3/-1/ready 
+game 2, user 1 --- adjusting to turn/phase/status 3/-1/ready 
+prepareAdvance 
+********************* doAdvance for game2 from phase -1 to phase 0 
+handleDeployPhase 
+resolveDeployActions s: 0 
+handleJumpInActions 
+resolveJumpOutActions 
+handleInitialFireOrders 
+assemblDeployStates 
+deleteReinforcements: 18 
+game 2, user 1 --- adjusting to turn/phase/status 3/0/waiting 
+game 2, user 2 --- adjusting to turn/phase/status 3/0/waiting 
+TIME: 0.104 seconds. 
+4 mb 

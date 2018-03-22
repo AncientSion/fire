@@ -5,7 +5,7 @@ class Vorchan extends Light {
 	public $display = "Vorchan";
 	public $role = "Light Warship";
 	public $faction = "Centauri Republic";
-	public $cost = 330;
+	public static $value = 330;
 	public $mass = 1250;
 
 	public $integrity = 425;
@@ -52,6 +52,7 @@ class Vorchan extends Light {
 					"chance" => 80,
 					"cost" => 60,
 					"name" => "Standard Outfit",
+					"units" => array(),
 					"loads" => 
 					array(
 						array(
@@ -67,6 +68,7 @@ class Vorchan extends Light {
 					"chance" => 80,
 					"cost" => 60,
 					"name" => "Standard Outfit",
+					"units" => array(),
 					"loads" => 
 					array(
 						array(
