@@ -25,7 +25,7 @@ class EnergyMine extends Area {
 	public $shots = 1;
 	public $animColor = "blue";
 	public $projSize = 3;
-	public $projSpeed = 7;
+	public $projSpeed = 6;
 	public $reload = 5;
 	public $maxBoost = 1;
 	public $effiency = 4;

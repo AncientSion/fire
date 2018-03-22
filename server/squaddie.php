@@ -97,7 +97,8 @@ class Squaddie extends Single {
 	public function getArmourValue($system){
 		return array(
 			"stock" => round($this->getRemNegation() * $system->getArmourMod()),
-			"bonus" => round($this->getBonusNegation() * $system->getArmourMod())
+			"bonus" => round($this->getBonusNegation())
+			//"bonus" => round($this->getBonusNegation() * $system->getArmourMod())
 		);
 	}
 

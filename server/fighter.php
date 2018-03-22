@@ -54,7 +54,7 @@ class Thunderbolt extends Fighter {
 	public $mass = 36;
 	public $integrity = 29;
 	public $negation = 5;
-	public $baseImpulse = 1000;
+	public $baseImpulse = 100;
 	public $baseHitChance = 25;
 
 	function __construct($id, $parentId){

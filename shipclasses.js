@@ -2677,7 +2677,7 @@ Ship.prototype.setSupportImage = function(){
 		}
 		else hostiles.push(u);
 		for (var j = 0; j < u.structures.length; j++){
-			if (!u.structures[j].draw){;continue;}
+			if (!u.structures[j].doDraw){;continue;}
 			if (this.userid == u.userid){
 				friendly.push(u.structures[j]);
 			} else hostile.push(u.structures[j]);
