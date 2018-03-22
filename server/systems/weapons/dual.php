@@ -29,7 +29,7 @@ class Dual extends Weapon {
 	}
 
 	public function setState($turn, $phase){
-		//Debug::log("setState Dual");
+		Debug::log("setState Dual");
 		parent::setState($turn, $phase);
 		$this->setActiveSystem($turn);
 		$this->setProps();
@@ -38,7 +38,6 @@ class Dual extends Weapon {
 	}
 
 	public function setActiveSystem($turn){
-		//Debug::log("setActiveSystem");
 		//if ($this->parentId == 15 && $this->id == 14){
 		//	Debug::log("setActiveSystempowers: ".sizeof($this->powers));
 		//}

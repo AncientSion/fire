@@ -311,13 +311,13 @@ else {
 
 					var tr = table.insertRow(-1);
 
-					if (game.ships[0].ship){
-						tr.insertCell(-1).innerHTML = "<th>Base Ship Cost</th>";
+					//if (game.ships[0].ship){
+						tr.insertCell(-1).innerHTML = "<th>Base Unit Cost</th>";
 						tr.insertCell(-1).innerHTML = game.ships[0].cost;
-					} 
-					else {
-						tr.insertCell(-1).innerHTML = "<th>Squadron Setup</th>"; tr.childNodes[0].colSpan = 2;
-					}
+					//} 
+					//else {
+					//	tr.insertCell(-1).innerHTML = "<th>Squadron Setup</th>"; tr.childNodes[0].colSpan = 2;
+					//}
 
 					$(table).append(game.ships[0].getBuyTableData(table))
 
@@ -334,9 +334,10 @@ else {
 							game.ships[0].totalCost += extra
 					}
 
-					var tr = table.insertRow(-1);
-						tr.insertCell(-1).innerHTML = "Total Cost";
-						tr.insertCell(-1).innerHTML = game.ships[0].totalCost;
+					$(table).append(
+						$("<tr>")
+							.append($("<th>").html("Total Unit Cost").css("font-size", 20))
+							.append($("<th>").html(game.ships[0].totalCost).css("font-size", 20)))
 
 
 					var tr = table.insertRow(-1);

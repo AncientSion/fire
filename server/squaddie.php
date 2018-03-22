@@ -55,6 +55,14 @@ class Squaddie extends Single {
 			$this->destroyed = 1;
 		}
 		$this->setNegation($this->integrity, 0);
+
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				$this->structures[$i]->systems[$j]->setState($turn, $phase);
+			}
+		}
+
 		return true;
 	}
 

@@ -510,7 +510,7 @@ System.prototype.getPowerOrders = function(){
 System.prototype.canUnboost = function(){
 	if (!this.powers.length){return false;}	
 	if (this.powers[this.powers.length-1].turn == game.turn){
-		if (this.powers[this.powers.length-1].type){
+		if (this.powers[this.powers.length-1].type > 0){
 			return true;
 		}
 	}
@@ -3026,6 +3026,7 @@ Launcher.prototype.getEffiency = function(){
 }
 
 Launcher.prototype.getRemAmmo = function(){
+	return this.output;
 	return this.getMaxAmmo() - this.fireOrders.map(x => x.shots).reduce((l,r) => l+r, []);
 }
 

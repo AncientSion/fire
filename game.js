@@ -767,7 +767,7 @@ function Game(data, userid){
 				var step;
 				var h = 1200;
 				var w = 200;
-				var dist = 700;
+				var dist = 600;
 				var y = h/2;
 
 				if (i % 2 == 0){
@@ -2245,7 +2245,7 @@ function Game(data, userid){
 				anim.html += "A total of <font color='" + color + "'>" + counter + "</font> elements from <font color='" + color + "'>Unit #" + anim.id + "</font> were destroyed or disengaged";
 			}
 			else if (game.ships[i].ship && game.ships[i].isDestroyedThisTurn()){
-				anim.html += "<font color='" + color + "'>Unit #" + anim.id + ", the " + game.ships[i].getCallSign() + "</font> ";
+				anim.html += "<font color='" + color + "'>Unit #" + anim.id + " " + game.ships[i].getCallSign() + "</font> ";
 				if (game.ships[i].getSystemByName("Reactor").destroyed){
 					anim.html +=  " suffered critical reactor damage and was destroyed.";
 				}

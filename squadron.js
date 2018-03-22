@@ -147,7 +147,7 @@ Squaddie.prototype.expandElement = function(){
 	// power icon
 	if (!this.destroyed){
 		$(this.element)
-		.append($("<div>").addClass("info").css("top", 10)
+		.append($("<div>").addClass("info")
 			.append($("<img>").attr("src", "varIcons/mainPower.png")
 				.addClass("mainPowerIcon"))
 			.append($("<div>")
@@ -200,7 +200,7 @@ Squaddie.prototype.expandElement = function(){
 		}
 		else {
 			if (this.structures[i].systems.length > 1){
-				oY = -s*this.structures[i].systems.length + space;
+				oY = -s*this.structures[i].systems.length;
 			} else oY = -pHeight / 4;
 		}
 
@@ -224,7 +224,7 @@ Squaddie.prototype.expandElement = function(){
 				)
 
 			if (oX){oX += shiftX + space +1;}
-			else if (oY){oY += shiftY + space;}
+			else if (oY){oY += shiftY + space*2;}
 
 		}
 	}
@@ -292,11 +292,8 @@ Squaddie.prototype.updateSystemDetailsDiv = function(){
 Squaddie.prototype.unpowerSystemsByName = function(name){
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
-			if (this.structures[i].systems[j].isPowered()){
-				if (this.structures[i].systems[j].getActiveSystem().name == name){
-					this.structures[i].systems[j].doUnpower();
-				}
-			}
+			if (!this.structures[i].systems[j].isPowered() || this.structures[i].systems[j].getActiveSystem().name != name){continue;}
+			this.structures[i].systems[j].doUnpower();
 		}
 	}
 }
@@ -304,22 +301,18 @@ Squaddie.prototype.unpowerSystemsByName = function(name){
 Squaddie.prototype.powerSystemsByName = function(name){
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
-			if (!this.structures[i].systems[j].isPowered()){
-				if (this.structures[i].systems[j].getActiveSystem().name == name){
-					this.structures[i].systems[j].doPower();
-				}
-			}
+			if (this.structures[i].systems[j].isPowered() || this.structures[i].systems[j].getActiveSystem().name != name){continue;}
+			this.structures[i].systems[j].doPower();
 		}
 	}
 }
 
-Squaddie.prototype.powerSystemsNamed = function(name){
+Squaddie.prototype.switchSystemsByName = function(name){
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
-			if (this.structures[i].systems[j].isPowered()){
-				if (this.structures[i].systems[j].getActiveSystem().name == name){
-					this.structures[i].systems[j].doUnpower();
-				}
+			if (!this.structures[i].systems[j].dual || this.structures[i].systems[j].getLoadLevel() != 1){continue;}
+			if (this.structures[i].systems[j].getActiveSystem().name == name){
+				this.structures[i].systems[j].switchMode();
 			}
 		}
 	}
@@ -1175,6 +1168,7 @@ Squadron.prototype.updateShipPower = function(system){
 
 Squadron.prototype.doUnpowerAll = function(id){
 	var system = this.getSystem(id);
+		//	$(system.element).find(".powerDiv").find(".unpower").hide().end().find(".power").show();
 	var name = system.getActiveSystem().name;
 
 	for (let i = 0; i < this.structures.length; i++){
@@ -1185,11 +1179,22 @@ Squadron.prototype.doUnpowerAll = function(id){
 
 Squadron.prototype.doPowerAll = function(id){
 	var system = this.getSystem(id);
+		//$(system.element).find(".powerDiv").find(".power").hide().end().find(".unpower").show();
 	var name = system.getActiveSystem().name;
 
 	for (let i = 0; i < this.structures.length; i++){
 		if (this.structures[i].destroyed){continue;}
 		this.structures[i].powerSystemsByName(name);
+	}
+}
+
+Squadron.prototype.switchModeAll = function(id){
+	var system = this.getSystem(id);
+	var name = system.getActiveSystem().name;
+
+	for (let i = 0; i < this.structures.length; i++){
+		if (this.structures[i].destroyed){continue;}
+		this.structures[i].switchSystemsByName(name);
 	}
 }
 

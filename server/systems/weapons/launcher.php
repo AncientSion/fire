@@ -27,18 +27,6 @@ class Launcher extends Weapon {
 		return $this->loads[$this->ammo];
 	}
 
-	public function adjustLoad($dbLoad){
-		for ($i = 0; $i < sizeof($dbLoad); $i++){
-			for ($j = 0; $j < sizeof($this->loads); $j++){
-				if ($dbLoad[$i]["name"] == $this->loads[$j]->name){
-					$this->ammo = $j;
-					$this->output = $dbLoad[$i]["amount"];
-					return;
-				}
-			}
-		}
-	}
-
 	public function getShots($turn){
 		return $this->getBoostLevel($turn);
 	}
@@ -68,6 +56,19 @@ class MissileLauncher extends Launcher {
 			$this->loads[] = new $loads[$i][0]($this->id, -1);
 			$this->capacity[] = $loads[$i][1];
 			$this->launchRate[] = $loads[$i][2];
+		}
+	}
+
+	public function adjustLoad($dbLoad){
+		for ($i = 0; $i < sizeof($dbLoad); $i++){
+			for ($j = 0; $j < sizeof($this->loads); $j++){
+				if ($dbLoad[$i]["name"] == $this->loads[$j]->name){
+					$this->ammo = $j;
+					$this->output = $dbLoad[$i]["amount"];
+					$this->loads[$j]->amount = $dbLoad[$i]["amount"];
+					return;
+				}
+			}
 		}
 	}
 }
