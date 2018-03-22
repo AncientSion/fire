@@ -724,7 +724,7 @@ class Ship {
 		//Debug::log("getHitSystem ".$this->name);
 		$roll;
 		$current = 0;
-		$main = $this->primary->getHitChance();// * $this->getShipTypeMod();
+		$main = $this->primary->getHitChance();
 		//Debug::log("main: ".$main);
 		$total = $main;
 
@@ -1148,10 +1148,6 @@ class Ship {
 		return $this->hitTable[$system->name];
 	}
 
-	public function getShipTypeMod(){
-		return 1;
-	}
-
 	public function getLockMultiplier(){
 		return 0.5;
 	}
@@ -1205,10 +1201,6 @@ class Medium extends Ship {
 		);
 	}
 
-	public function getShipTypeMod(){
-		return 1.15;
-	}	
-
 	public function handleCritTesting($turn){
 		//Debug::log("= handleCritTesting for ".$this->name.", #".$this->id.", turn: ".$turn);
 
@@ -1252,13 +1244,6 @@ class Heavy extends Medium {
 	
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
 		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
-
-		$this->hitTable = array(
-			"Bridge" => 0.65,
-			"Engine" => 0.8,
-			"Sensor" => 1,
-			"Reactor" => 0.65
-		);
 	}
 }
 
@@ -1269,13 +1254,6 @@ class SuperHeavy extends Heavy {
 	
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
 		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
-
-		$this->hitTable = array(
-			"Bridge" => 0.7,
-			"Engine" => 0.85,
-			"Sensor" => 1,
-			"Reactor" => 0.7
-		);
 	}
 }
 
@@ -1286,13 +1264,6 @@ class UltraHeavy extends SuperHeavy {
 	
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
 		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
-
-		$this->hitTable = array(
-			"Bridge" => 0.75,
-			"Engine" => 0.85,
-			"Sensor" => 1,
-			"Reactor" => 0.75
-		);
 	}
 }
 

@@ -18,7 +18,7 @@ class TwinParticleBolter extends Particle {
 	public $accDecay = 180;
 	public $shots = 2;
 	public $linked = 2;
-	public $reload = 1;
+	public $reload = 2;
 	public $integrity = 24;
 	public $powerReq = 2;
 	public $traverse = -4;

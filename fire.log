@@ -193,3 +193,456 @@ setState Dual
 setState Dual 
 setState Dual 
 setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+continue 
+continue 
+continue 
+game 2, user 1 --- adjusting to turn/phase/status -1/-1/ready 
+Game #2 is not ready ! 
+joinGame success 
+createPlayerStatus 
+entry CREATE for player 2 in game 2 phase: -1 and status joined 
+joinGame success 
+continue 
+continue 
+continue 
+game 2, user 2 --- adjusting to turn/phase/status -1/-1/ready 
+Game #2 is ready ! 
+Starting game #2 
+game ready, adjusting player 
+game 2, user 1 --- adjusting to turn/phase/status 1/-1/waiting 
+game 2, user 2 --- adjusting to turn/phase/status 1/-1/waiting 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+game 2, user 2 --- adjusting to turn/phase/status 1/-1/ready 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+game 2, user 1 --- adjusting to turn/phase/status 1/-1/ready 
+prepareAdvance 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+********************* doAdvance for game2 from phase -1 to phase 0 
+handleDeployPhase 
+resolveDeployActions s: 6 
+handleJumpInActions 
+jumpin: #3, class: Artemis, size: 50, sensor: 650, ordered to: -612/-125, shiftPotential: 12.69% 
+Artemis, aShift: 13°, pShift: 26px 
+--> aShift: -4°, psShift: 15/21 (26px) 
+jumpin: #4, class: Artemis, size: 50, sensor: 650, ordered to: -629/232, shiftPotential: 12.69% 
+Artemis, aShift: 13°, pShift: 26px 
+--> aShift: 2°, psShift: 3/22 (23px) 
+jumpin: #5, class: Artemis, size: 50, sensor: 650, ordered to: -621/623, shiftPotential: 12.69% 
+Artemis, aShift: 13°, pShift: 26px 
+--> aShift: -6°, psShift: 11/-4 (12px) 
+jumpin: #6, class: GQuan, size: 85, sensor: 775, ordered to: 611/243, shiftPotential: 18.1% 
+GQuan, aShift: 19°, pShift: 37px 
+--> aShift: 1°, psShift: 29/-32 (44px) 
+jumpin: #7, class: GQuan, size: 85, sensor: 775, ordered to: 601/-135, shiftPotential: 18.1% 
+GQuan, aShift: 19°, pShift: 37px 
+--> aShift: -4°, psShift: -25/37 (45px) 
+jumpin: #8, class: GQuan, size: 85, sensor: 775, ordered to: 621/705, shiftPotential: 18.1% 
+GQuan, aShift: 19°, pShift: 37px 
+--> aShift: -8°, psShift: 27/-19 (34px) 
+resolveJumpOutActions 
+handleInitialFireOrders 
+assemblDeployStates 
+updateUnitStats s:6 1/-1 
+game 2, user 1 --- adjusting to turn/phase/status 1/0/waiting 
+game 2, user 2 --- adjusting to turn/phase/status 1/0/waiting 
+TIME: 0.079 seconds. 
+4 mb 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+game 2, user 1 --- adjusting to turn/phase/status 1/0/ready 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+game 2, user 2 --- adjusting to turn/phase/status 1/0/ready 
+prepareAdvance 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+********************* doAdvance for game2 from phase 0 to phase 1 
+handleMovementPhase 
+handleShipMovement 
+resolveMovementDB 
+handleMixedMovement 
+handleMixedMovement 
+handlePostMoveFires: 0 
+handling data 
+handleResolvedFireData 
+DB updateFireOrders: 0 
+updateMissionState 
+game 2, user 1 --- adjusting to turn/phase/status 1/2/waiting 
+game 2, user 2 --- adjusting to turn/phase/status 1/2/waiting 
+TIME: 0.028 seconds. 
+4 mb 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+game 2, user 2 --- adjusting to turn/phase/status 1/2/ready 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+game 2, user 1 --- adjusting to turn/phase/status 1/2/ready 
+prepareAdvance 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+********************* doAdvance for game2 from phase 2 to phase 3 
+handleFiringPhase 
+doFirstDestroyedCheck 
+doSecondDestroyedCheck 
+updateDestroyedState 
+resolveFireOrder - #4, shooter: GQuan #7 vs Artemis #3, w: MediumLaser #14, shots: 1 
+MediumLaser, weapon id: 14, RANGE DMG mod: 0.7276 
+fire #4, doLaserDmg, weapon: MediumLaser, target: 3 for 65 dmg 
+hitting ---  MediumRailGun/9: 21 dmg,  Primary/1: 21 dmg,  MediumRailGun/7: 21 dmg,  
+resolveFireOrder - #5, shooter: GQuan #7 vs Artemis #3, w: MediumLaser #24, shots: 1 
+MediumLaser, weapon id: 24, RANGE DMG mod: 0.7276 
+fire #5, doLaserDmg, weapon: MediumLaser, target: 3 for 69 dmg 
+Laser DOUBLE HIT, switching to PRIMARY 
+hitting ---  MediumRailGun/7: 23 dmg,  Primary/1: 23 dmg,  Primary/1: 23 dmg,  
+resolveFireOrder - #2, shooter: GQuan #6 vs Artemis #4, w: MediumLaser #14, shots: 1 
+MediumLaser, weapon id: 14, RANGE DMG mod: 0.6712 
+fire #2, doLaserDmg, weapon: MediumLaser, target: 4 for 63 dmg 
+hitting ---  HeavyRailGun/8: 21 dmg,  Primary/1: 21 dmg,  MediumRailGun/9: 21 dmg,  
+resolveFireOrder - #3, shooter: GQuan #6 vs Artemis #4, w: MediumLaser #24, shots: 1 
+MediumLaser, weapon id: 24, RANGE DMG mod: 0.6712 
+fire #3, doLaserDmg, weapon: MediumLaser, target: 4 for 67 dmg 
+hitting ---  Primary/1: 22 dmg,  Primary/1: 22 dmg,  HeavyRailGun/8: 22 dmg,  
+resolveFireOrder - #6, shooter: GQuan #8 vs Artemis #5, w: MediumLaser #14, shots: 1 
+MediumLaser, weapon id: 14, RANGE DMG mod: 0.6718 
+fire #6, doLaserDmg, weapon: MediumLaser, target: 5 for 74 dmg 
+hitting ---  Primary/1: 24 dmg,  HeavyRailGun/8: 24 dmg,  Primary/1: 24 dmg,  
+resolveFireOrder - #7, shooter: GQuan #8 vs Artemis #5, w: MediumLaser #24, shots: 1 
+MediumLaser, weapon id: 24, RANGE DMG mod: 0.6718 
+fire #7, doLaserDmg, weapon: MediumLaser, target: 5 for 71 dmg 
+hitting ---  Primary/1: 23 dmg,  Primary/1: 23 dmg,  HeavyRailGun/8: 23 dmg,  
+resolveFireOrder - #11, shooter: Artemis #4 vs GQuan #6, w: MediumRailGun #7, shots: 2 
+fire #11, doStandardDmg, weapon: MediumRailGun, target #6/1/Primary, totalDmg: 36, remaining: 977, armour: 20+0 
+fire #11, doStandardDmg, weapon: MediumRailGun, target #6/7/SuperHeavyLaser, totalDmg: 36, remaining: 70, armour: 16+0 
+resolveFireOrder - #12, shooter: Artemis #4 vs GQuan #6, w: HeavyRailGun #8, shots: 2 
+fire #12, doStandardDmg, weapon: HeavyRailGun, target #6/1/Primary, totalDmg: 64, remaining: 951, armour: 20+0 
+fire #12, doStandardDmg, weapon: HeavyRailGun, target #6/8/EnergyMine, totalDmg: 64, remaining: 56, armour: 4+0 
+ => OVERKILL ship target system EnergyMine #8 was destroyed, rem: 56, doing: 56, OK for: 6 dmg 
+resolveFireOrder - #13, shooter: Artemis #4 vs GQuan #6, w: MediumRailGun #9, shots: 2 
+fire #13, doStandardDmg, weapon: MediumRailGun, target #6/1/Primary, totalDmg: 36, remaining: 891, armour: 19+0 
+fire #13, doStandardDmg, weapon: MediumRailGun, target #6/4/Sensor, totalDmg: 36, remaining: 110, armour: 19+0 
+resolveFireOrder - #8, shooter: Artemis #3 vs GQuan #7, w: MediumRailGun #7, shots: 2 
+fire #8, doStandardDmg, weapon: MediumRailGun, target #7/4/Sensor, totalDmg: 36, remaining: 110, armour: 20+0 
+fire #8, doStandardDmg, weapon: MediumRailGun, target #7/8/EnergyMine, totalDmg: 36, remaining: 56, armour: 4+0 
+resolveFireOrder - #9, shooter: Artemis #3 vs GQuan #7, w: HeavyRailGun #8, shots: 2 
+fire #9, doStandardDmg, weapon: HeavyRailGun, target #7/8/EnergyMine, totalDmg: 64, remaining: 22, armour: 4+0 
+ => OVERKILL ship target system EnergyMine #8 was destroyed, rem: 22, doing: 22, OK for: 40 dmg 
+fire #9, doStandardDmg, weapon: HeavyRailGun, target #7/7/SuperHeavyLaser, totalDmg: 64, remaining: 70, armour: 16+0 
+resolveFireOrder - #10, shooter: Artemis #3 vs GQuan #7, w: MediumRailGun #9, shots: 2 
+fire #10, doStandardDmg, weapon: MediumRailGun, target #7/9/SuperHeavyLaser, totalDmg: 36, remaining: 70, armour: 15+0 
+fire #10, doStandardDmg, weapon: MediumRailGun, target #7/1/Primary, totalDmg: 36, remaining: 931, armour: 19+0 
+resolveFireOrder - #14, shooter: Artemis #5 vs GQuan #8, w: MediumRailGun #7, shots: 2 
+fire #14, doStandardDmg, weapon: MediumRailGun, target #8/7/SuperHeavyLaser, totalDmg: 36, remaining: 70, armour: 16+0 
+fire #14, doStandardDmg, weapon: MediumRailGun, target #8/1/Primary, totalDmg: 36, remaining: 977, armour: 20+0 
+resolveFireOrder - #15, shooter: Artemis #5 vs GQuan #8, w: HeavyRailGun #8, shots: 2 
+fire #15, doStandardDmg, weapon: HeavyRailGun, target #8/1/Primary, totalDmg: 64, remaining: 951, armour: 20+0 
+fire #15, doStandardDmg, weapon: HeavyRailGun, target #8/1/Primary, totalDmg: 64, remaining: 897, armour: 19+0 
+resolveFireOrder - #16, shooter: Artemis #5 vs GQuan #8, w: MediumRailGun #9, shots: 2 
+resolveBallisticFireOrders 
+Artemis handleCritTesting 
+Artemis handleCritTesting 
+Artemis handleCritTesting 
+GQuan handleCritTesting 
+determineCrit for Sensor & Analyzing #4 on unit #6, newDmg: 18, oldDmg: 0 
+ NO CRIT - roll: 99, tresh: 36 
+GQuan handleCritTesting 
+determineCrit for Sensor & Analyzing #4 on unit #7, newDmg: 18, oldDmg: 0 
+ NO CRIT - roll: 39, tresh: 36 
+GQuan handleCritTesting 
+handleResolvedFireData 
+DB updateFireOrders: 15 
+ => DB insertDamageEntries: 34 
+ => DB insertCritEntries: 9 
+handleFiringPhase time: 0.247 seconds. 
+game 2, user 1 --- adjusting to turn/phase/status 1/3/waiting 
+game 2, user 2 --- adjusting to turn/phase/status 1/3/waiting 
+TIME: 0.257 seconds. 
+4 mb 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+createPlayerStatus 
+entry CREATE for player 3 in game 3 phase: -1 and status joined 
+continue 
+continue 
+game 3, user 3 --- adjusting to turn/phase/status -1/-1/ready 
+Game #3 is not ready ! 
+joinGame success 
+createPlayerStatus 
+entry CREATE for player 1 in game 3 phase: -1 and status joined 
+joinGame success 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+continue 
+game 3, user 1 --- adjusting to turn/phase/status -1/-1/ready 
+Game #3 is ready ! 
+Starting game #3 
+game ready, adjusting player 
+game 3, user 3 --- adjusting to turn/phase/status 1/-1/waiting 
+game 3, user 1 --- adjusting to turn/phase/status 1/-1/waiting 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+game 3, user 1 --- adjusting to turn/phase/status 1/-1/ready 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+game 3, user 3 --- adjusting to turn/phase/status 1/-1/ready 
+prepareAdvance 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+********************* doAdvance for game3 from phase -1 to phase 0 
+handleDeployPhase 
+resolveDeployActions s: 4 
+handleJumpInActions 
+jumpin: #12, class: Hyperion, size: 80, sensor: 700, ordered to: 643/65, shiftPotential: 18.86% 
+Hyperion, aShift: 19°, pShift: 38px 
+--> aShift: -1°, psShift: -12/-34 (37px) 
+jumpin: #9, class: Primus, size: 90, sensor: 850, ordered to: -642/-100, shiftPotential: 17.47% 
+Primus, aShift: 18°, pShift: 35px 
+--> aShift: -6°, psShift: 34/16 (38px) 
+jumpin: #10, class: Demos, size: 45, sensor: 700, ordered to: -694/-35, shiftPotential: 10.61% 
+Demos, aShift: 11°, pShift: 22px 
+--> aShift: 6°, psShift: -2/15 (16px) 
+jumpin: #11, class: Squadron, size: 80, sensor: 550, ordered to: -747/-198, shiftPotential: 19.5% 
+Squadron, aShift: 20°, pShift: 39px 
+--> aShift: -6°, psShift: 31/-37 (49px) 
+resolveJumpOutActions 
+handleInitialFireOrders 
+assemblDeployStates 
+updateUnitStats s:4 1/-1 
+game 3, user 3 --- adjusting to turn/phase/status 1/0/waiting 
+game 3, user 1 --- adjusting to turn/phase/status 1/0/waiting 
+TIME: 0.046 seconds. 
+4 mb 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+createPlayerStatus 
+entry CREATE for player 1 in game 4 phase: -1 and status joined 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
+setState Dual 
