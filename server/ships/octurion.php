@@ -33,7 +33,7 @@ class Octurion extends SuperHeavy {
 		$structs[] = $front;
 
 		$rightTop = new Structure($this->getId(), $this->id, 36, 120, 800, 22);
-		$rightTop->systems[] = new MediumParticle($this->getId(), $this->id, 0, 180);
+		$rightTop->systems[] = new MediumParticle($this->getId(), $this->id, 30, 150);
 		$rightTop->systems[] = new LightParticle($this->getId(), $this->id, 30, 150);
 		$rightTop->systems[] = new MediumParticle($this->getId(), $this->id, 30, 150);
 		$rightTop->systems[] = new MediumParticle($this->getId(), $this->id, 30, 150);

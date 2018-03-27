@@ -285,6 +285,7 @@ Squaddie.prototype.update = function(){
 Squaddie.prototype.updateSystemDetailsDiv = function(){
 	$("#systemDetailsDiv")
 		.find(".boostEffect").html(this.getBoostEffect("Armour") * this.getBoostLevel()).end()
+		.find(".powerUse").html(this.getPowerUsage()).end()
 		.find(".powerCost").html(this.getEffiency());
 	$(this.armourElement).find(".integrityAmount").html(this.getArmourString());
 }
@@ -884,11 +885,7 @@ Squadron.prototype.getPowerOrders = function(){
 		}
 		for (var j = 0; j < this.structures[i].structures.length; j++){
 			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
-				for (var l = this.structures[i].structures[j].systems[k].powers.length-1; l >= 0; l--){
-					if (this.structures[i].structures[j].systems[k].powers[l].new){
-						powers.push(this.structures[i].structures[j].systems[k].powers[l]);
-					} else break;
-				}
+				powers = powers.concat(this.structures[i].structures[j].systems[k].getPowerOrders());
 			}
 		}
 	}
@@ -1249,7 +1246,7 @@ Squadron.prototype.setBuyData = function(){
 
 		for (var j = 0; j < this.structures[i].structures.length; j++){
 			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
-				if (!this.structures[i].structures[j].systems[k].totalCost){continue;}
+				if (!this.structures[i].structures[j].systems[k].cost){continue;}
 				this.upgrades.push(this.structures[i].structures[j].systems[k].getUpgradeData());
 			}
 		}
@@ -1276,13 +1273,13 @@ Squadron.prototype.getBuyTableData = function(table){
 
 		for (var j = 0; j < this.structures[i].structures.length; j++){
 			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
-				if (!this.structures[i].structures[j].systems[k].totalCost){continue;}
+				if (!this.structures[i].structures[j].systems[k].cost){continue;}
 
 				$(table)
 				.append(
 					$("<tr>")
 					.append($("<td>").html(this.structures[i].structures[j].systems[k].display))
-					.append($("<td>").html(this.structures[i].structures[j].systems[k].totalCost))
+					.append($("<td>").html(this.structures[i].structures[j].systems[k].cost))
 					.data("systemid", this.structures[i].structures[j].systems[k].id)
 					.hover(function(){
 						$(this).toggleClass("rowHighlight");
@@ -1292,23 +1289,6 @@ Squadron.prototype.getBuyTableData = function(table){
 
 			}
 		}
-	}
-}
-
-Ship.prototype.getBuyTableData = function(table){
-	for (var i = 0; i < this.upgrades.length; i++){
-		this.totalCost += this.upgrades[i].cost;
-		$(table)
-		.append(
-			$("<tr>")
-			.append($("<td>").html(this.upgrades[i].text))
-			.append($("<td>").html(this.upgrades[i].cost))
-			.data("systemid", this.upgrades[i].systemid)
-			.hover(function(){
-				$(this).toggleClass("rowHighlight");
-				$(game.getUnit(0).getSystem($(this).data("systemid")).element).toggleClass("borderHighlight");
-			})
-		)
 	}
 }
 

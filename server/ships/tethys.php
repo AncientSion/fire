@@ -5,7 +5,7 @@ class Tethys extends SuperLight {
 	public $display = "Tethys";
 	public $role = "Police Cutter";
 	public $faction = "Earth Alliance";
-	public static $value = 250;
+	public static $value = 210;
 	public $mass = 1000;
 
 	public $integrity = 320;

@@ -11,6 +11,7 @@
 	} else $userid = 0;
 
 	$manager = new Manager($userid, $gameid);
+	Debug::open();
 	if ($manager->status == "active"){
 		$manager->getGameData();
 	}
@@ -671,9 +672,10 @@
 							game.fireOrders[i].weapon.createCombatLogEntry(game.fireOrders[i])
 						}
 
-						game.createFireFinalEntry();
 
 						game.getUnitExploDetails();
+						game.handlePostFireOrderAnim();
+
 						for (var i = 0; i < window.animations.length; i++){
 							window.animations[i].done = 1;
 							game.createMiscLogEntry(i);

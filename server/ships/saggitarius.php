@@ -34,8 +34,8 @@ class Saggitarius extends Medium {
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 325, 12);
-		$aft->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
 		$aft->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
+		$aft->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 450, 14, 1);
@@ -48,6 +48,63 @@ class Saggitarius extends Medium {
 			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 2);
 			$this->structures[sizeof($this->structures)-1]->effiency = 3;
 		}
+	}
+	
+	static function getKit($faction){
+		return array(
+			"id" => 0,
+			"name" => "",
+			"cost" => static::$value,
+			"gameid" => 0,
+			"userid" => 0,
+			"upgrades" => 
+			array(
+				array(
+					"active" => 0,
+					"chance" => 60,
+					"cost" => 80,
+					"notes" => "Naga Outfit",
+					"units" => array(),
+					"loads" => 
+					array(
+						array(
+							"systemid" => 13,
+							"display" => "Port Missile Launcher",
+							"name" => "Naga",
+							"amount" => 4
+						),
+						array(
+							"systemid" => 17,
+							"display" => "Starboard Missile Launcher",
+							"name" => "Naga",
+							"amount" => 4
+						)
+					)
+				),
+				array(
+					"active" => 0,
+					"chance" => 30,
+					"cost" => 70,
+					"notes" => "Needle Outfit",
+					"units" => array(),
+					"loads" => 
+					array(
+						array(
+							"systemid" => 13,
+							"display" => "Port Missile Launcher",
+							"name" => "Needle",
+							"amount" => 6
+						),
+						array(
+							"systemid" => 17,
+							"display" => "Starboard Missile Launcher",
+							"name" => "Needle",
+							"amount" => 6
+						)
+					)
+				)
+			)
+		);
 	}
 }
 

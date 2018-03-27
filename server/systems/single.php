@@ -177,13 +177,13 @@ class Single {
 		$trigger = $this->dropout[0];
 		$chance = $this->dropout[1];
 		$dmg = floor($new + $old);
-		//Debug::log("dropout chance: ".get_class($this).", trigger: ".$trigger.", dmg: ".$dmg);
+		Debug::log("dropout chance: ".get_class($this).", trigger: ".$trigger.", dmg: ".$dmg."%");
 
 		if ($dmg > $trigger){
 			$min = floor($chance * (1+($dmg - $trigger)/(100 - $trigger)));
 			$roll = mt_rand(0, 100);
 
-			//Debug::log("chance: ".$min.", roll: ".$roll);
+			Debug::log("chance: ".$min.", roll: ".$roll);
 			if ($roll < $min){
 				$this->doDropout();
 				return;

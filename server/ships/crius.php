@@ -8,11 +8,11 @@ class Crius extends Light {
 	public static $value = 310;
 	public $mass = 1400;
 
-	public $integrity = 450;
+	public $integrity = 430;
 	public $ep = 90;
 	public $ew = 500;
 	public $power = 2;
-	public $negation = 13;
+	public $negation = 12;
 
 	public $effiency = 2;
 

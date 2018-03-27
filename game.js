@@ -42,7 +42,7 @@ function Game(data, userid){
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
-	this.ui = {shortInfo: $("#shortInfo"), doShorten: $("#doShorten"), turnButton: $("#turnButton")};
+	this.ui = {shortInfo: $("#shortInfo"), doShorten: $("#doShorten"), turnButton: $("#turnButton"), logWrapper: $("#combatlogWrapper")};
 	this.animData = {jump: 40};
 
 	window.username = data.username;
@@ -663,7 +663,7 @@ function Game(data, userid){
 	}
 
 	this.doConcedeMatch = function(){
-		ajax.concedeMatch();
+		ajax.concedeMatch(goToLobby);
 	}
 
 	this.selectFromPopup = function(id){
@@ -767,7 +767,7 @@ function Game(data, userid){
 				var step;
 				var h = 1200;
 				var w = 200;
-				var dist = 600;
+				var dist = 300;
 				var y = h/2;
 
 				if (i % 2 == 0){
@@ -1065,11 +1065,11 @@ function Game(data, userid){
 			.drag();
 
 		var div;
-		var total = 0;
-
+		var aTotal = 0;
+		var sTotal = 0;
 
 		for (i = 0; i < units.length; i++){
-			console.log(units[i]);
+			//console.log(units[i]);
 
 			if (!i || units[i].userid != units[i-1].userid){
 				div = $("<div>")
@@ -1077,8 +1077,9 @@ function Game(data, userid){
 				wrapper.append(div);
 			}
 
-			var combined = units[i].armourDmg + units[i].structDmg + units[i].overkill;
-			total += combined;
+			aTotal += units[i].armourDmg;
+			sTotal += units[i].structDmg;
+			sTotal += units[i].overkill
 
 			var table = $("<table>")
 				.addClass("unitStats")
@@ -1122,12 +1123,12 @@ function Game(data, userid){
 						.html("Structure")
 					)
 					.append($("<td>")
-						.css("font-weight", "bold")
-						.html("Combined")
+						.html("S+S total")
 					)
 				)
 				.append($("<tr>")
 					.append($("<td>")
+						.css("color", "yellow")
 						.html(units[i].armourDmg)
 					)
 					.append($("<td>")
@@ -1137,7 +1138,8 @@ function Game(data, userid){
 						.html(units[i].overkill)
 					)
 					.append($("<td>")
-						.html(combined)
+						.css("color", "yellow")
+						.html(units[i].structDmg + units[i].overkill)
 					)
 				)
 
@@ -1148,7 +1150,7 @@ function Game(data, userid){
 			div.append(table);
 
 			if (i == units.length-1 || (i && units[i+1].userid != units[i].userid)){
-				div.append($("<div>").addClass("totalDmgDiv").html("Total Damage dealt: " + total))
+				div.append($("<div>").addClass("totalDmgDiv").html("Total Damage dealt: " + aTotal + " " + sTotal))
 				total = 0;
 			}
 		}
@@ -2253,7 +2255,7 @@ function Game(data, userid){
 
 				for (var j = 0; j < 25; j++){
 					anim.anims.push({
-						id: game.ships[i],
+						u: game.ships[i],
 						t: [0 - j-40, 100],
 						//s: game.ships[i].getExplosionSize(0) + range(-30, 10),
 						s: range (5, 40),
@@ -2279,7 +2281,13 @@ function Game(data, userid){
 			}
 		}
 		fxCtx.clearRect(0, 0, res.x, res.y);
+
+		this.handlePostFireOrderAnim();
+	}
+
+	this.handlePostFireOrderAnim = function(){
 		this.createFireFinalEntry();
+		this.createCritLogEntries();
 		this.animateUnitExplos();
 	}
 
@@ -2290,6 +2298,12 @@ function Game(data, userid){
 				.append($("<td>").attr("colSpan", 9).html("Fire Order Resolution concluded")));
 
 		$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+	}
+
+	this.createCritLogEntries = function(){
+		for (let i = 0; i < this.ships.length; i++){
+			this.ships[i].createCritLogEntry();
+		}
 	}
 
 	this.animateSingleFireOrder = function(i, goOn){

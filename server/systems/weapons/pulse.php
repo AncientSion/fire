@@ -6,7 +6,7 @@ class Pulse extends Weapon {
 	public $priority = 8;
 	public $basePulses = 2;
 	public $extraPulses = 3;
-	public $grouping = 25;
+	public $grouping = 15;
 	public $pulse = 1;
 
 	public $notes = array("Hits allocate versus same unit / system", "More hits if to-hit-roll is undercut");
@@ -61,8 +61,8 @@ class MediumPulse extends Pulse {
 class HeavyPulse extends Pulse {
 	public $name = "HeavyPulse";
 	public $display = "Heavy Pulse Cannon";
-	public $minDmg = 38;
-	public $maxDmg = 55;
+	public $minDmg = 39;
+	public $maxDmg = 54;
 	public $accDecay = 80;
 	public $shots = 1;
 	public $animColor = "brown";
@@ -137,7 +137,7 @@ class MediumPlasmaPulse extends LightPlasmaPulse {
 	public $minDmg = 28;
 	public $maxDmg = 36;
 	public $accDecay = 120;
-	public $dmgLoss = 12;
+	public $dmgLoss = 15;
 	
 	public $projSize = 3;
 	public $projSpeed = 9;
@@ -156,10 +156,10 @@ class MediumPlasmaPulse extends LightPlasmaPulse {
 class HeavyPlasmaPulse extends MediumPlasmaPulse {
 	public $name = "HeavyPlasmaPulse";
 	public $display = "Heavy Plasma Pulse Cannon";
-	public $minDmg = 46;
-	public $maxDmg = 59;
+	public $minDmg = 43;
+	public $maxDmg = 57;
 	public $accDecay = 80;
-	public $dmgLoss = 8;
+	public $dmgLoss = 12;
 	
 	public $projSize = 4;
 	public $projSpeed = 9;

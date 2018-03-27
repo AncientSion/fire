@@ -604,7 +604,6 @@ class Ship {
 	}
 
 	public function resolveFireOrder($fire){ // target
-
 		if ($this->isDestroyed()){
 			Debug::log("STOP - resolveFireOrder #".$fire->id.", TARGET: ".get_class($this)." isDestroyed()");
 		}
@@ -660,7 +659,7 @@ class Ship {
 			}
 			else  if ($fire->rolls[$i] <= $fire->req){
 				$fire->hits++;
-				DmgCalc::doDmg($fire, $fire->rolls[$i], $this->getHitSystem($fire));
+				DmgCalc::doDmg($fire, $this->getHitSystem($fire));
 			}
 		}
 	}
@@ -766,7 +765,7 @@ class Ship {
 		$fraction = round($this->primary->remaining / $this->primary->integrity, 2);
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 			if ($this->primary->systems[$i]->destroyed){continue;}
-			if (!$this->isExposed($fraction, $this->primary->systems[$i])){continue;}
+			//if (!$this->isExposed($fraction, $this->primary->systems[$i])){continue;}
 			$valid[] = $this->primary->systems[$i];
 		}
 

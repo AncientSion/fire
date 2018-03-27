@@ -4,6 +4,7 @@ include_once 'global.php';
 
 if (isset($_SESSION["userid"])){
 	$manager = new Manager($_SESSION["userid"]);
+	Debug::open();
 	$username = $manager->getUsername();
 	$dbManager = DBManager::app();
 
@@ -213,6 +214,7 @@ else {
 
 
 
+	Debug::close();
 
 
 

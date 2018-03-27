@@ -1,4 +1,4 @@
-"<?php
+<?php
 
 class DmgCalc {
 
@@ -67,13 +67,13 @@ class DmgCalc {
 		}
 	}
 
-	public static function doDmg($fire, $roll, $system){
+	public static function doDmg($fire, $system){
 		switch ($fire->weapon->fireMode){
-			case "Standard": static::doStandardDmg($fire, $roll, $system); break;
-			case "Ballistic": static::doStandardDmg($fire, $roll, $system); break;
-			case "Pulse": static::doPulseDmg($fire, $roll, $system); break;
-			case "Laser": static::doLaserDmg($fire, $roll, $system); break;
-			case "Flash": static::doFlashDmg($fire, $roll, $system); break;
+			case "Standard": static::doStandardDmg($fire, $system); break;
+			case "Ballistic": static::doStandardDmg($fire, $system); break;
+			case "Pulse": static::doPulseDmg($fire, $system); break;
+			case "Laser": static::doLaserDmg($fire, $system); break;
+			case "Flash": static::doFlashDmg($fire, $system); break;
 			default: Debug::log("doDmg ERROR"); break;
 		}
 
@@ -82,7 +82,7 @@ class DmgCalc {
 
 
 
-	public static function doStandardDmg($fire, $roll, $system){
+	public static function doStandardDmg($fire, $system){
 		//Debug::log("hitting: ".get_class($system));
 		$destroyed = 0;
 		$totalDmg = $fire->weapon->getTotalDamage($fire);
@@ -112,7 +112,7 @@ class DmgCalc {
 		}
 
 		$entry = new Damage(
-			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
+			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
 			$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->emDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
 		);
 
@@ -120,7 +120,7 @@ class DmgCalc {
 		$fire->target->applyDamage($entry);	
 	}
 
-	public static function doPulseDmg($fire, $roll, $system){
+	public static function doPulseDmg($fire, $system){
 		$destroyed = 0;
 		$totalDmg = $fire->weapon->getTotalDamage($fire);
 		$remInt = $system->getRemIntegrity();
@@ -136,8 +136,8 @@ class DmgCalc {
 		$em = 0;
 
 		$name = get_class($system);
-
 		$hits = $fire->weapon->basePulses + min($fire->weapon->extraPulses, floor(($fire->req - $fire->rolls[sizeof($fire->rolls)-1]) / $fire->weapon->grouping));
+		$dmg->notes .= ("v".$hits.";");
 
 		Debug::log("fire #".$fire->id.", doPulseDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".$name.", hits: ".$hits.", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"].", armourDmg: ".$dmg->armourDmg);
 
@@ -175,7 +175,7 @@ class DmgCalc {
 		}
 
 		$entry = new Damage(
-			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
+			-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
 			$total, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->emDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
 		);
 
@@ -183,7 +183,7 @@ class DmgCalc {
 		$fire->target->applyDamage($entry);
 	}
 
-	public static function doLaserDmg($fire, $roll, $system){
+	public static function doLaserDmg($fire, $system){
 		$totalDmg = $fire->weapon->getTotalDamage($fire);
 		$okSystem = 0;
 		$rakes = $fire->weapon->rakes;
@@ -235,7 +235,7 @@ class DmgCalc {
 
 			if (!$fire->target->squad || $rakes == $fire->weapon->rakes-1){
 				$entry = new Damage(
-					-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
+					-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
 					$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->emDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
 				);
 			}
@@ -251,7 +251,7 @@ class DmgCalc {
 		Debug::log($print);
 	}
 
-	public static function doFlashDmg($fire, $roll, $system){
+	public static function doFlashDmg($fire, $system){
 		//$totalDmg = $fire->weapon->getTotalDamage($fire) * (1 - ($this->ship*0.5));
 		$totalDmg = $fire->weapon->getTotalDamage($fire);
 		$targets = $fire->target->getFlashTargets($fire);
@@ -305,7 +305,7 @@ class DmgCalc {
 			Debug::log("dealing ".$dmg->armourDmg."/".$dmg->structDmg."/".$dmg->overkill." to ".$targets[$i]->display);
 
 			$entry = new Damage(
-				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
+				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
 				$dmgs[$i], $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->emDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
 			);
 
@@ -316,7 +316,7 @@ class DmgCalc {
 
 	}
 
-	public static function doFlashDmg3($fire, $roll, $system){ // old flas
+	public static function doFlashDmg3($fire, $system){ // old flas
 		$totalDmg = $fire->weapon->getTotalDamage($fire);
 		$targets = $fire->target->getFlashTargets($fire);
 		$negation;
@@ -337,7 +337,7 @@ class DmgCalc {
 			}
 			
 			$entry = new Damage(
-				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
+				-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
 				$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->emDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
 			);
 
@@ -346,7 +346,7 @@ class DmgCalc {
 
 		}
 	}
-	public static function doFlashDmg2($fire, $roll, $system){ // old flash
+	public static function doFlashDmg2($fire, $system){ // old flash
 		$totalDmg = $fire->weapon->getTotalDamage($fire);
 		$toDo = $totalDmg;
 		if ($fire->target->ship){$system = $fire->target->getFlashOverkillSystem($fire);}
@@ -380,7 +380,7 @@ class DmgCalc {
 				$fire->hits++;
 				
 				$entry = new Damage(
-					-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $roll, $fire->weapon->type,
+					-1, $fire->id, $fire->gameid, $fire->targetid, $fire->section, $system->id, $fire->turn, $fire->weapon->type,
 					$totalDmg, $dmg->shieldDmg, $dmg->structDmg, $dmg->armourDmg, $dmg->emDmg, $dmg->overkill, array_sum($negation), $destroyed, $dmg->notes, 1
 				);
 
@@ -503,4 +503,4 @@ class DmgCalc {
 
 
 
-?>"
+?>

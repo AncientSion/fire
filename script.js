@@ -311,11 +311,11 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 					if (system instanceof Launcher){
 						legalTarget = 0;
 					}
-					else if (target.salvo && !shooter.posIsOnSystemArc(shooterLoc, pos, facing, system)){
+					else if (target.salvo && !shooter.posJSONSystemArc(shooterLoc, pos, facing, system)){
 						legalTarget = 0;
 					}
 				}
-				else if (!shooter.posIsOnSystemArc(shooterLoc, pos, facing, system)){
+				else if (!shooter.posJSONSystemArc(shooterLoc, pos, facing, system)){
 					inArc = 0;
 				}
 			}

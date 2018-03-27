@@ -51,11 +51,11 @@ function initChat(){
 				}
 				else if ($(this).data("s") == 1){
 					$(this).data("s", 2).css("width", Math.min(res.x - 50, 1000)).css("top", res.y - 325)
-						.find(".chatBox").css("height", 300).css("max-height", 300);
+						.find(".chatBox").addClass("widen");
 				}
 				else {
 					$(this).data("s", 0).css("width", 150).css("top", $(this).data("pos"))
-						.find(".chatBox").css("height", 100).css("max-height", 100)
+						.find(".chatBox").removeClass("widen")
 							.scrollTop(function(){return this.scrollHeight});
 				}
 			})//.drag();

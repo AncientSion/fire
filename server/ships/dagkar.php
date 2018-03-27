@@ -5,7 +5,7 @@ class DagKar extends Medium {
 	public $display = "DagKar";
 	public $faction = "Narn Regime";
 	public $size =  50;
-	public static $value = 480;
+	public static $value = 450;
 	public $profile = array(0.93, 1.07);
 	public $mass = 3000;
 
@@ -29,11 +29,11 @@ class DagKar extends Medium {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 15, 1);
-		$right->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 360, array(array("Vran", 20, 5)));
+		$right->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, array(array("Vran", 25, 5)));
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 15, 1);
-		$left->systems[] = new TorpedoLauncher($this->getId(), $this->id, 0, 60, array(array("Vran", 20, 5)));
+		$left->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, array(array("Vran", 25, 5)));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

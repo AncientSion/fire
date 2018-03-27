@@ -130,8 +130,9 @@ class Squaddie extends Single {
 	
 	public function getValidEffects(){
 		return array( // type, min, max, dura
-			array("Damage", 30, 0, 15),
-			array("Disabled", 60, 1, 0.00),
+			array("Accuracy", 25, 0, 25),
+			array("Damage", 40, 0, 15),
+			//array("Disabled", 60, 1, 0.00),
 			array("Destroyed", 80, 0, 0.00),
 		);
 	}
@@ -140,16 +141,15 @@ class Squaddie extends Single {
 		Debug::log("checkSystemCrits .".get_class($this)." #".$this->id);
 		if ($this->destroyed){return;}
 		$effects = $this->getValidEffects();
-		$trigger =  round($new + $old/2);
-		Debug::log("determine effect, new/old/int: ".$new."/".$old."/".$this->integrity.", trigger: ".$trigger);
-		//if ($trigger < 5){return;}
+		$penalty =  round($new + $old/2);
+		Debug::log("determine effect, new/old ".$new."%/".$old."%, increaseToRoll: ".$penalty);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
-				if ($new < 30 &&  mt_rand(0, 1)){Debug::log("lucky skip!"); continue;}
+				if ($new < 30 &&  mt_rand(0, 1)){Debug::log("lucky skip, new below 30 % and rand(0,1)!"); continue;}
 
-				$roll = mt_rand(0, 20) + $trigger + sizeof($this->structures[$i]->systems[$j]->crits)*20;
+				$roll = mt_rand(0, 20) + $penalty + sizeof($this->structures[$i]->systems[$j]->crits)*20;
 				Debug::log("roll: ".$roll);
 				if ($roll < $effects[0][1]){continue;}
 
@@ -204,7 +204,7 @@ class Light extends Squaddie {
 	public $baseImpulse = 175;
 	public $size = 60;
 	public $baseImpulseCost = 40;
-	public $space = 4;
+	public $space = 3;
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -215,7 +215,7 @@ class SuperLight extends Light {
 	public $baseImpulse = 185;
 	public $size = 50;
 	//public $baseImpulseCost = 55;
-	public $space = 3;
+	public $space = 2;
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

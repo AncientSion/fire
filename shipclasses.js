@@ -992,6 +992,23 @@ Ship.prototype.unselectSystems = function(){
 	}
 }
 
+Ship.prototype.getBuyTableData = function(table){
+	for (var i = 0; i < this.upgrades.length; i++){
+		this.totalCost += this.upgrades[i].cost;
+		$(table)
+		.append(
+			$("<tr>")
+			.append($("<td>").html(this.upgrades[i].text))
+			.append($("<td>").html(this.upgrades[i].cost))
+			.data("systemid", this.upgrades[i].systemid)
+			.hover(function(){
+				$(this).toggleClass("rowHighlight");
+				$(game.getUnit(0).getSystem($(this).data("systemid")).element).toggleClass("borderHighlight");
+			})
+		)
+	}
+}
+
 Ship.prototype.getFireOrders = function(){
 	var fires = [];
 	for (var i = 0; i < this.structures.length; i++){
@@ -1366,9 +1383,9 @@ Ship.prototype.drawTrajectory = function(){
 }
 
 Ship.prototype.create = function(){
-	this.setHitTable();
+	//this.setHitTable();
 
-	if (game.turn > 1 && game.phase == -1 &&this.available == game.turn){
+	if (game.turn > 1 && game.phase == -1 && this.available == game.turn){
 		this.x = this.actions[0].x;
 		this.y = this.actions[0].y;
 		this.drawX = this.actions[0].x;
@@ -1420,8 +1437,30 @@ Ship.prototype.attachLogEntry = function(html){
 					game.redraw();
 				}
 			)
-		.append($("<td>")
-			.html(html)));
+			.html(html));
+	game.ui.logWrapper.find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+}
+
+Ship.prototype.createCritLogEntry = function(){
+	if (!this.ship){return;}
+	
+	var html = "<td colSpan=4><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is subject to critical effects.</td>" + "<td colSpan=5>";
+	var crits = false;
+
+	for (let i = 0; i < this.primary.systems.length; i++){
+		for (let j = this.primary.systems[i].crits.length-1; j >= 0; j--){
+			if (this.primary.systems[i].crits[j].turn == game.turn){
+				crits = true;
+				html += this.primary.systems[i].display + ": " + this.primary.systems[i].crits[j].value + "% efficiency loss.</br>";
+			} else break;
+		}
+	}
+
+	if (crits){
+		this.attachLogEntry(html);
+		html+= "</td>";
+		//$("#combatLog").find("tr").last().find("td").attr("colSpan", 9)
+	}
 }
 
 Ship.prototype.getCallSign = function(){
@@ -1429,6 +1468,10 @@ Ship.prototype.getCallSign = function(){
 		return " - " + this.call + " - ";
 	}
 	return this.call;
+}
+
+Ship.prototype.getLogTitleSpan = function(){
+	return "<font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + this.getLogNameEntry() + " </font>";
 }
 
 Ship.prototype.getLogNameEntry = function(){
@@ -1439,35 +1482,35 @@ Ship.prototype.getLogNameEntry = function(){
 }
 
 Ship.prototype.createDeployEntry = function(){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + this.getLogNameEntry() + " </font> jumps into local space.</span>");
+	this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " jumps into local space.</span></td>");
 }
 
 Ship.prototype.createUndeployEntry = function(){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + this.getLogNameEntry() + " </font> jumps into hyperspace and leaves the battlefield.</span>");
+	this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " jumps into hyperspace and leaves the battlefield.</span></td>");
 }
 
 Ship.prototype.createMoveStartEntry = function(){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + this.getLogNameEntry() + " </font> has completed a full roll but is still rolling.</span>");
+	this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " has completed a full roll but is still rolling.</span></td>");
 }
 
 Ship.prototype.createActionEntry = function(move){
 	if (this.isRolling()){
-		this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + this.getLogNameEntry() + "</font> is beginning a ROLL manover.</span>");
+		this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " is beginning a ROLL manover.</span></td>");
 	}
 	else if (this.hasStoppedRolling()){
-		this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + this.getLogNameEntry() + " </font> has canceled its ongoing ROLL manover.</span>");
+		this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " has canceled its ongoing ROLL manover.</span></td>");
 	}
 	else if (this.isFlipping()){
-		this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + this.getLogNameEntry() + "</font> is beginning a FLIP manover.</span>");
+		this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " is beginning a FLIP manover.</span></td>");
 	}
 }
 
 Ship.prototype.createStillRollingEntry = function(){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + this.getLogNameEntry() + "</font> is continueing its roll manover.</span>");							
+	this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " is continueing its roll manover.</span></td>");							
 }
 
 Ship.prototype.createMoveEndEntry = function(){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + this.getLogNameEntry() + "</font> has completed a full roll.</span>")
+	this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " has completed a full roll.</span></td>")
 }
 
 Ship.prototype.animateSelfJumpIn = function(){
@@ -2994,13 +3037,13 @@ Ship.prototype.weaponHighlight = function(weapon){
 
 Ship.prototype.setBuyData = function(){
 	for (var i = 0; i < this.primary.systems.length; i++){
-		if (!this.primary.systems[i].totalCost){continue;}
+		if (!this.primary.systems[i].cost){continue;}
 		this.upgrades.push(this.primary.systems[i].getUpgradeData());
 	}
 
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
-			if (!this.structures[i].systems[j].totalCost){continue;}
+			if (!this.structures[i].systems[j].cost){continue;}
 			this.upgrades.push(this.structures[i].systems[j].getUpgradeData());
 		}
 	}
@@ -3734,7 +3777,7 @@ Ship.prototype.doConfirmSystemLoadout = function(){
 	return;
 }
 
-Ship.prototype.posIsOnSystemArc = function(origin, target, facing, system){
+Ship.prototype.posJSONSystemArc = function(origin, target, facing, system){
 	for (var i = 0; i < system.arc.length; i++){
 		var	start;
 		var	end;

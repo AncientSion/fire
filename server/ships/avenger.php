@@ -31,7 +31,7 @@ class Avenger extends Heavy {
 		$right = new Structure($this->getId(), $this->id, 30, 150, 800, 15);
 		$right->systems[] = new Dual($this->getId(), $this->id, 330, 150, 28, array("LightPulse", "LightParticleBeam"));
 		$right->systems[] = new Dual($this->getId(), $this->id, 330, 150, 28, array("LightPulse", "LightParticleBeam"));
-		$right->systems[] = new Hangar($this->getId(), $this->id, 15, array("Aurora"), 30, 2);
+		$right->systems[] = new Hangar($this->getId(), $this->id, 12, array("Aurora"), 24, 2);
 		$right->systems[] = new Dual($this->getId(), $this->id, 30, 210, 28, array("LightPulse", "LightParticleBeam"));
 		$right->systems[] = new Dual($this->getId(), $this->id, 30, 210, 28, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $right;
@@ -44,7 +44,7 @@ class Avenger extends Heavy {
 		$left = new Structure($this->getId(), $this->id, 210, 330, 800, 15);
 		$left->systems[] = new Dual($this->getId(), $this->id, 210, 30, 28, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new Dual($this->getId(), $this->id, 210, 30, 28, array("LightPulse", "LightParticleBeam"));
-		$left->systems[] = new Hangar($this->getId(), $this->id, 15, array("Aurora"), 30, 2);
+		$left->systems[] = new Hangar($this->getId(), $this->id, 12, array("Aurora"), 24, 2);
 		$left->systems[] = new Dual($this->getId(), $this->id, 150, 330, 28, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new Dual($this->getId(), $this->id, 150, 330, 28, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $left;

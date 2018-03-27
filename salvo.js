@@ -331,5 +331,5 @@ Salvo.prototype.hasNoFireOrders = function(){
 }
 
 Salvo.prototype.createDeployEntry = function(){
-	this.attachLogEntry("<span><font color='" + this.getCodeColor()+ "'>Salvo #" + this.id + "</font> is launched (" + this.structures.length + " units).</span>");
+	this.attachLogEntry("<td colSpan=9><span><font color='" + this.getCodeColor()+ "'>Salvo #" + this.id + "</font> is launched (" + this.structures.length + " units).</span></td>");
 }

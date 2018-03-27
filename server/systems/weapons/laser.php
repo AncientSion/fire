@@ -23,7 +23,7 @@ class Laser extends Weapon {
 		}
 
 		$mod = 1-(($fire->dist - $this->optRange) * $this->dmgLoss / 10000);
-		Debug::log(get_class($this).", weapon id: ".$this->id.", RANGE DMG mod: ".$mod);
+		//Debug::log(get_class($this).", weapon id: ".$this->id.", RANGE DMG mod: ".$mod);
 		return $mod;
 	}
 }
@@ -34,8 +34,8 @@ class LightParticleBeam extends Laser {
 	public $animColor = "blue";
 	public $rakeTime = 25;
 	public $beamWidth = 1;
-	public $minDmg = 23;
-	public $maxDmg = 28;
+	public $minDmg = 27;
+	public $maxDmg = 31;
 	public $optRange = 450;
 	public $dmgLoss = 4;
 	public $accDecay = 120;
@@ -84,13 +84,13 @@ class MediumLaser extends LightLaser {
 	public $animColor = "red";
 	public $rakeTime = 60;
 	public $beamWidth = 3;
-	public $minDmg = 90;
-	public $maxDmg = 120;
+	public $minDmg = 80;
+	public $maxDmg = 110;
 	public $optRange = 400;
 	public $dmgLoss = 6;
 	public $powerReq = 4;
 	public $effiency = 3;
-	public $integrity = 52;
+	public $integrity = 50;
 	public $traverse = -1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
@@ -107,7 +107,7 @@ class HeavyLaser extends LightLaser {
 	public $minDmg = 160;
 	public $maxDmg = 200;
 	public $reload = 4;
-	public $optRange = 600;
+	public $optRange = 650;
 	public $dmgLoss = 4;
 	public $powerReq = 6;
 	public $effiency = 4;
@@ -125,9 +125,9 @@ class SuperHeavyLaser extends HeavyLaser {
 	public $animColor = "red";
 	public $rakeTime = 100;
 	public $beamWidth = 5;
-	public $minDmg = 200;
-	public $maxDmg = 240;
-	public $optRange = 800;
+	public $minDmg = 190;
+	public $maxDmg = 230;
+	public $optRange = 850;
 	public $dmgLoss = 2;
 	public $powerReq = 8;
 	public $rakes = 3;
@@ -137,12 +137,6 @@ class SuperHeavyLaser extends HeavyLaser {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
-	}
-
-	public function setArmourData($rem){
-		$this->mount = "Fixed";
-		$this->armourMod = 0.8;
-		$this->armour = floor($rem * $this->armourMod);
 	}
 }
 
@@ -154,7 +148,7 @@ class NeutronLaser extends Laser {
 	public $beamWidth = 2;
 	public $minDmg = 95;
 	public $maxDmg = 130;
-	public $optRange = 500;
+	public $optRange = 600;
 	public $dmgLoss = 2;
 	public $accDecay = 60;
 	public $shots = 1;

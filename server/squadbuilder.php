@@ -50,20 +50,31 @@ class SquadBuilder {
 			array(
 				"active" => 0,
 				"chance" => 20,
-				"notes" => "Tethys/Crius patrol unit",
+				"notes" => "2x Hermes (AF)",
 				"units" =>
 					array(
 						array(
-							"name" => "Tethys",
+							"name" => "Hermes",
 							"amount" => 1,
 						),
 						array(
-							"name" => "Crius",
+							"name" => "Hermes",
 							"amount" => 1,
 						),
 					),
 				"loads" =>
-					array()
+					array(
+						array(
+							"systemid" => 4,
+							"name" => "Needle",
+							"amount" => 4,
+						),
+						array(
+							"systemid" => 8,
+							"name" => "Needle",
+							"amount" => 4,
+						),
+					),
 			),
 		);
 	}

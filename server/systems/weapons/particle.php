@@ -12,7 +12,7 @@ class Particle extends Weapon {
 
 class TwinParticleBolter extends Particle {
 	public $name = "TwinParticleBolter";
-	public $display = "Twin Particle Bolter Array";
+	public $display = "Twin Particle Bolter";
 	public $minDmg = 9;
 	public $maxDmg = 13;
 	public $accDecay = 180;
@@ -34,7 +34,7 @@ class TwinParticleBolter extends Particle {
 
 class LightParticle extends Particle {
 	public $name = "LightParticle";
-	public $display = "Particle Bolter Array";
+	public $display = "Light Particle Bolter Array";
 	public $minDmg = 12;
 	public $maxDmg = 16;
 	public $accDecay = 180;
@@ -127,7 +127,7 @@ class FusionCannon extends Particle {
 	public $display = "42mm Fusion Cannon";
 	public $minDmg = 34;
 	public $maxDmg = 42;
-	public $accDecay = 120;
+	public $accDecay = 100;
 	public $shots = 1;
 	public $reload = 2;
 	public $integrity = 34;
@@ -192,8 +192,8 @@ class AntimatterConverter extends Particle {
 class EMNeedler extends Particle {
 	public $name = "EMNeedler";
 	public $display = "18mm EM-Needler";
-	public $minDmg = 19;
-	public $maxDmg = 112;
+	public $minDmg = 9;
+	public $maxDmg = 12;
 	public $accDecay = 240;
 	public $shots = 3;
 	public $reload = 2;
@@ -211,7 +211,7 @@ class EMNeedler extends Particle {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
-        $this->notes = array("Does no HP damage, but EM damage.", "EM damage dissipates at end of turn.", "EM Damage that penetrates armour is 2x as effective when testing criticals.", "Fighters and Ballistic are disabled immediatly if they receive more EM-damage than their maximum health");
+        $this->notes = array("Does no HP damage, but EM damage.", "EM damage dissipates at end of turn.", "Armour fully applies.", "EM Damage that penetrates armour is 2x as effective when testing criticals.", "Fighters and Ballistics are disabled without crit-test if EM > Full HP");
 	
 	}
 }

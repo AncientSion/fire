@@ -11,7 +11,7 @@ class GSten extends Heavy {
 
 	public $integrity = 900;
 	public $vitalHP = 110;
-	public $ep = 90;
+	public $ep = 85;
 	public $ew = 750;
 
 
@@ -23,15 +23,14 @@ class GSten extends Heavy {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 18, 3);
-		$front->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new TorpedoLauncher($this->getId(), $this->id, 315, 45, array(array("Vran", 18, 6)));
-		$front->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new TorpedoLauncher($this->getId(), $this->id, 315, 45, array(array("Vran", 12, 3)));
+		$front->systems[] = new Bulkhead($this->getId(), $this->id, 80);
+		$front->systems[] = new TorpedoLauncher($this->getId(), $this->id, 315, 45, array(array("Vran", 12, 3)));
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 800, 16);
 		$right->systems[] = new MediumLaser($this->getId(), $this->id, 345, 105);
 		$right->systems[] = new MediumLaser($this->getId(), $this->id, 345, 105);
-		$right->systems[] = new Bulkhead($this->getId(), $this->id, 80, 0, 2);
 		$right->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 0, 180);
 		$right->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
@@ -44,7 +43,6 @@ class GSten extends Heavy {
 		$left = new Structure($this->getId(), $this->id, 210, 330, 800, 16);
 		$left->systems[] = new MediumLaser($this->getId(), $this->id, 255, 15);
 		$left->systems[] = new MediumLaser($this->getId(), $this->id, 255, 15);
-		$left->systems[] = new Bulkhead($this->getId(), $this->id, 80, 0, 2);
 		$left->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 180, 360);
 		$left->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;

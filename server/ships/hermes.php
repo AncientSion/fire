@@ -5,11 +5,11 @@ class Hermes extends Light {
 	public $display = "Hermes";
 	public $role = "Courier Corvette";
 	public $faction = "Earth Alliance";
-	public static $value = 280;
+	public static $value = 250;
 	public $mass = 1200;
 
 	public $integrity = 380;
-	public $ep = 100;
+	public $ep = 120;
 	public $ew = 425;
 	public $power = 2;
 	public $negation = 11;
@@ -23,7 +23,7 @@ class Hermes extends Light {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 9, 3), array("Naga", 6, 2)));
+		$front->systems[] = new MissileLauncher($this->getId(), $this->parentId, 270, 90, array(array("Needle", 8, 4), array("Naga", 6, 3)));
 		$structs[] = $front;
 
 		$right = new Section(60, 180);

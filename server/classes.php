@@ -211,7 +211,7 @@ class Damage {
 	public $structureid;
 	public $systemid;
 	public $turn;
-	public $roll;
+	public $roll = 0;
 	public $type;
 	public $totalDmg;
 	public $shieldDmg;
@@ -223,7 +223,7 @@ class Damage {
 	public $notes;
 	public $new;
 	
-	function __construct($id, $fireid, $gameid, $shipid, $structureid, $systemid, $turn, $roll, $type, $totalDmg, $shieldDmg, $structDmg, $armourDmg, $emDmg, $overkill, $negation, $destroyed, $notes, $new){
+	function __construct($id, $fireid, $gameid, $shipid, $structureid, $systemid, $turn, $type, $totalDmg, $shieldDmg, $structDmg, $armourDmg, $emDmg, $overkill, $negation, $destroyed, $notes, $new){
 		$this->id = $id;
 		$this->fireid = $fireid;
 		$this->gameid = $gameid;
@@ -231,7 +231,6 @@ class Damage {
 		$this->structureid = $structureid;
 		$this->systemid = $systemid;
 		$this->turn = $turn;
-		$this->roll = $roll;
 		$this->type = $type;
 		$this->totalDmg = $totalDmg;
 		$this->shieldDmg = $shieldDmg;

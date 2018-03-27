@@ -52,9 +52,16 @@ class Weapon extends System {
 	}
 
 	public function getTotalDamage($fire){
+		$base = $this->getBaseDamage($fire);
+		$mod = $this->getDamageMod($fire);
+		$range = $this->getDmgRangeMod($fire);
+
+		Debug::log("base: ".$base.", mod: ".$mod.", range: ".$range);
+		return floor($base*$mod*$range);
+
 		return floor($this->getBaseDamage($fire) * $this->getDamageMod($fire) * $this->getDmgRangeMod($fire));
 	}
-
+	
 	public function getBaseDamage($fire){
 		return mt_rand($this->getMinDamage(), $this->getMaxDamage());
 	}

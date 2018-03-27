@@ -9,7 +9,7 @@ class Olympus extends Medium {
 	public $profile = array(0.94, 1.06);
 	public $mass = 2750;
 
-	public $integrity = 500;
+	public $integrity = 550;
 	public $vitalHP = 70;
 	public $ep = 80;
 	public $ew = 600;
@@ -30,7 +30,7 @@ class Olympus extends Medium {
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 300, 13, 1);
 		$right->systems[] = new MediumPulse($this->getId(), $this->id, 0, 180);
-		$right->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
 		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 270, 90, array(array("Needle", 10, 5), array("Naga", 6, 2)));
 
 		$structs[] = $right;
@@ -61,18 +61,18 @@ class Olympus extends Medium {
 					"active" => 0,
 					"chance" => 60,
 					"cost" => 80,
-					"notes" => "PATROL Outfit",
+					"notes" => "Naga Outfit",
 					"units" => array(),
 					"loads" => 
 					array(
 						array(
-							"systemid" => 12,
+							"systemid" => 13,
 							"display" => "Port Missile Launcher",
 							"name" => "Naga",
 							"amount" => 4
 						),
 						array(
-							"systemid" => 15,
+							"systemid" => 17,
 							"display" => "Starboard Missile Launcher",
 							"name" => "Naga",
 							"amount" => 4
@@ -83,18 +83,18 @@ class Olympus extends Medium {
 					"active" => 0,
 					"chance" => 30,
 					"cost" => 70,
-					"notes" => "ESCORT Outfit",
+					"notes" => "Needle Outfit",
 					"units" => array(),
 					"loads" => 
 					array(
 						array(
-							"systemid" => 12,
+							"systemid" => 13,
 							"display" => "Port Missile Launcher",
 							"name" => "Needle",
 							"amount" => 6
 						),
 						array(
-							"systemid" => 15,
+							"systemid" => 17,
 							"display" => "Starboard Missile Launcher",
 							"name" => "Needle",
 							"amount" => 6

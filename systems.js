@@ -23,7 +23,7 @@ function System(system){
 	this.selected = false;
 	this.destroyed = false;
 	this.weapon = false;
-	this.totalCost = 0;
+	this.cost = 0;
 	this.powers = [];
 	this.fireOrders = [];
 	this.type = "";
@@ -73,9 +73,8 @@ System.prototype.hasLoad = function(){
 }
 
 System.prototype.attachDetailsMods = function(ele){
-	if (this.destroyed){
-		return;
-	}
+	//if (this.destroyed){return;}
+	
 	var div = $(ele) || $("#systemDetailsDiv");
 		div.find(".modifiers").remove();
 	var boost = this.getBoostLevel();
@@ -117,6 +116,7 @@ System.prototype.getDisplay = function(){
 }
 
 System.prototype.setState = function(){
+	//if (this.id == 8 && this.parentId == 4){console.log("omega");}
 	this.setTimeLoaded();
 	this.adjustStateByCritical();
 	
@@ -211,6 +211,7 @@ System.prototype.highlightFireOrder = function(){
 }
 
 System.prototype.setTableRow = function(){
+	//if (this.id == 8 && this.parentId == 4){console.log("omega");}
 	var ele = $(this.element);
 	if (this.destroyed){
 		ele.addClass("destroyed"); 
@@ -242,7 +243,7 @@ System.prototype.setTableRow = function(){
 	}
 
 	if (Object.keys(this.modes).length){
-		if (this.getLoadLevel() != 1){return;}
+		//if (this.getLoadLevel() != 1){return;}
 		if (this.highlight && this.disabled){
 			ele.find(".modeDiv").hide()
 		}
@@ -796,9 +797,10 @@ System.prototype.getFighterSystemData = function(){
 }
 
 System.prototype.getTableData = function(forFighter){
-	var td = document.createElement("td");
-		td.className = "system";
-		td.colSpan = this.width;
+	td = $("<td>")
+	.addClass("system")
+	.attr("colSpan", this.width)
+	.data("systemid", this.id)
 
 	var img = new Image();
 		img.className = "sysIcon"
@@ -806,28 +808,28 @@ System.prototype.getTableData = function(forFighter){
 	
 		file += ".png";
 		img.src = file;
-	td.appendChild(img);
+	td.append(img);
 
 	var div = document.createElement("div");
 		if (this instanceof PrimarySystem && this.exposed){
 			div.className = "loadLevel exposed";
 		} else div.className = "loadLevel";
-		td.appendChild(div);
+	td.append(div);
 
 	var div = document.createElement("div");
 		div.className = "bgloadlevel";
-		td.appendChild(div);
+	td.append(div);
 
 		$(td).data("systemId", this.id);
 
 	var lowerDiv = document.createElement("div");
 		lowerDiv.className = "integrityNow";
 		lowerDiv.style.width = this.getRemIntegrity() /  this.integrity * 100 + "%";
-		td.appendChild(lowerDiv);
+	td.append(lowerDiv);
 
 	var div = document.createElement("div");
 		div.className = "integrityFull";
-		td.appendChild(div);
+	td.append(div);
 
 	if (!this.destroyed){
 			var outputDiv = document.createElement("div");
@@ -836,13 +838,14 @@ System.prototype.getTableData = function(forFighter){
 					outputDiv.innerHTML = this.getActualOutput();
 				}
 				else $(outputDiv).hide();
-				td.appendChild(outputDiv);
+	td.append(outputDiv);
 		//}
 	}
 
 	$(td).data("systemId", this.id);
-	this.element = td;
+	this.element = td[0];
 
+	//this.setTimeLoaded();
 	this.setTableRow();
 	this.setSystemBorder();
 	return this.element;
@@ -894,7 +897,7 @@ System.prototype.getDiv = function(){
 	$(returnDiv).append(outputDiv).data("systemId", this.id);
 	this.element = returnDiv;
 
-	this.setTimeLoaded();
+	//this.setTimeLoaded();
 	this.setTableRow();
 	this.setSystemBorder();
 	return this.element;
@@ -928,7 +931,7 @@ System.prototype.isDestroyed = function(){
 }
 
 System.prototype.copyPowers = function(){
-	if (this.launcher ||this instanceof PrimarySystem && !(this instanceof Hangar)){return;}
+	if (this.launcher || this instanceof PrimarySystem && !(this instanceof Hangar)){return;}
 	var copy = [];
 
 	for (var i = 0; i < this.powers.length; i++){
@@ -1297,7 +1300,7 @@ Bridge.prototype.getUpgradeData = function(){
 	return {
 		"name": this.display,
 		"systemid": this.id,
-		"cost": this.totalCost,
+		"cost": this.cost,
 		"loads": this.loads
 	}
 }
@@ -1665,6 +1668,63 @@ function Weapon(system){
 }
 Weapon.prototype = Object.create(System.prototype);
 
+
+
+Weapon.prototype.assembleDmgData = function(fire){
+	var dmgs = {};
+	for (var i = 0; i < fire.damages.length; i++){
+		if (dmgs.hasOwnProperty(fire.damages[i].system)){ // hit
+			dmgs[fire.damages[i].system][2]++
+		}
+		else dmgs[fire.damages[i].system] = [0, 0, 1, 0, 0, 0, ""]; // new system entry
+
+		if (this.grouping && fire.damages[i].notes[1][0] == "v"){ // pulse volley 
+			dmgs[fire.damages[i].system][6] += Math.floor(fire.damages[i].notes[1].slice(1, fire.damages[i].notes[1].length)) + ", ";
+		}
+		
+		if (fire.damages[i].destroyed){ // kill
+			dmgs[fire.damages[i].system][0]++;
+		}
+		if (fire.damages[i].notes[fire.damages[i].notes.length-1][0] == "o"){ // overload
+			dmgs[fire.damages[i].system][1] += Math.floor(fire.damages[i].notes[fire.damages[i].notes.length-1].slice(1, fire.damages[i].notes[fire.damages[i].notes.length-1].length));
+		}
+
+		dmgs[fire.damages[i].system][3] += fire.damages[i].armourDmg;
+		dmgs[fire.damages[i].system][4] += fire.damages[i].structDmg;
+		dmgs[fire.damages[i].system][4] += fire.damages[i].emDmg;
+		dmgs[fire.damages[i].system][5] += fire.damages[i].overkill;
+
+	}
+
+	if (this.grouping){
+		for (var i in dmgs){
+			dmgs[i][6] = " (" + (dmgs[i][6].slice(0, dmgs[i][6].length-2)) + ")";
+		}
+	}
+	return dmgs;
+}
+
+Weapon.prototype.getRollsString = function(rolls, req){
+	var string = "";
+	for (var i = 0; i < rolls.length; i++){
+		if (rolls[i] <= req){
+			string += "<u>" + rolls[i] + "</u>";
+		} else string += rolls[i];
+
+		string += " / ";
+	}
+	return string;
+}
+
+Weapon.prototype.getReqString = function(req){
+	var string = req[0];
+
+	if (req.length > 1 && req[0] != req[req.length-1]){
+		string = req[0] + " - " + req[req.length-1] + " %";
+	} else string += " %";
+	return string;
+}
+
 Weapon.prototype.createCombatLogEntry = function(fire){
 	var log = $($("#combatLog").find("tbody")[0]);
 	var shots = 0;
@@ -1674,13 +1734,13 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 	var system = 0;
 	var struct = 0;
 	var shield = 0;
+
 	var req = fire.req.slice();
 		req.sort(function(a, b){return a-b});
-	var chance = req[0];
+	var reqString = this.getReqString(req);
 
-	if (req.length > 1 && req[0] != req[req.length-1]){
-		chance = req[0] + " - " + req[req.length-1] + " %";
-	} else chance += " %";
+	var rolls = fire.rolls.slice().sort((a, b) => a-b);
+	var rollString = this.getRollsString(rolls, req[0]);
 	
 	if (fire.shooter.salvo){
 		shots = fire.shooter.getShots();
@@ -1701,10 +1761,10 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 		shield += fire.damages[i].shieldDmg;
 	}
 
-	var tr = document.createElement("tr");
+	var tr = $("<tr>");
 	var index = $(log).children().length;
 
-	$(tr)
+	tr
 		.data("shooterid", fire.shooter.id)
 		.data("targetid", fire.target.id)
 		.data("fireid", fire.id)
@@ -1752,7 +1812,7 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 		.append($("<th>").html("<font color='" + fire.shooter.getCodeColor() + "'>" + fire.shooter.name + " #" + fire.shooter.id + "</font>"))
 		.append($("<th>").html("<font color='" + fire.target.getCodeColor() + "'>" + fire.target.name + " #" + fire.target.id + "</font>"))
 		.append($("<td>").html(fire.weapon.getDisplay()))
-		.append($("<td>").html(chance))
+		.append($("<td>").html(reqString))
 		.append($("<td>").html(hits + " / " + shots))
 
 	if (!hits){
@@ -1770,47 +1830,9 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 
 	$(log).append(tr);
 
-	var dmgs = {};
+	var dmgs = this.assembleDmgData(fire);
 	var start = index+1;
-	var depth = -1;
-
-	for (var i = 0; i < fire.damages.length; i++){
-		if (dmgs.hasOwnProperty(fire.damages[i].system)){ // hit
-			dmgs[fire.damages[i].system][2]++
-		}
-		else {
-			depth++;
-			dmgs[fire.damages[i].system] = [0, 0, 1, 0, 0, 0]; // new system entry
-		}
-		if (fire.damages[i].destroyed){ // kill
-			dmgs[fire.damages[i].system][0]++;
-		}
-		if (fire.damages[i].notes[fire.damages[i].notes.length-1][0] == "o"){ //%
-			dmgs[fire.damages[i].system][1] += Math.floor(fire.damages[i].notes[fire.damages[i].notes.length-1].slice(1, fire.damages[i].notes[fire.damages[i].notes.length-1].len));
-		}
-
-		dmgs[fire.damages[i].system][3] += fire.damages[i].armourDmg;
-		dmgs[fire.damages[i].system][4] += fire.damages[i].structDmg;
-		dmgs[fire.damages[i].system][4] += fire.damages[i].emDmg;
-		dmgs[fire.damages[i].system][5] += fire.damages[i].overkill;
-	}
-
-	for (var i in dmgs){
-		dmgs[i][0] = dmgs[i][0] ? "Kills: "  + dmgs[i][0] : "" 
-		dmgs[i][1] = dmgs[i][1] ? "Overl.: "  + dmgs[i][1] : "" 
-	}
-
-	// rolls
-	depth++;
-	let rolls = fire.rolls.slice().sort((a, b) => a-b);
-	var rollString = "";
-	for (var i = 0; i < rolls.length; i++){
-		if (rolls[i] <= req[0]){
-			rollString += "<u>" + rolls[i] + "</u>";
-		} else rollString += rolls[i];
-
-		rollString += " / ";
-	}
+	var depth = Object.keys(dmgs).length;
 
 	$(log).append(
 		$("<tr>")
@@ -1854,6 +1876,8 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 		.data("start", start)
 		.data("end", start + depth)
 
+	console.log(dmgs);
+
 	for (var i in dmgs){
 		start++;
 		var sub = $("<tr>")
@@ -1863,10 +1887,20 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 			)
 			.append($("<td>")
 				.attr("colSpan", 2)
-				.html(i) // system name
+				.html(i + dmgs[i][6]) // system name
 			)
 
-		for (var j = 0; j < dmgs[i].length; j++){
+		var string = "";
+
+		if (dmgs[i][0]){string += "Kills: " + dmgs[i][0]};
+		if (string.length > 2 && dmgs[i][1]){string += ", "};
+		if (dmgs[i][1]){string += "Overload: " + dmgs[i][1]}
+
+		$(sub) 
+		.append($("<td>").attr("colSpan", 2).html(string)
+		)
+
+		for (var j = 2; j < dmgs[i].length-1; j++){
 			$(sub) 
 			.append($("<td>")
 				.html(dmgs[i][j] ? dmgs[i][j] : "")
@@ -1876,7 +1910,7 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 		$(log).append(sub);
 	}
 
-	$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+	game.ui.logWrapper.find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 }
 
 Weapon.prototype.getDmgsPerShot = function(fire){
@@ -1988,7 +2022,7 @@ Weapon.prototype.getShots = function(){
 	return this.shots;
 }
 
-Weapon.prototype.posIsOnArc = function(loc, pos, facing){
+Weapon.prototype.posJSONArc = function(loc, pos, facing){
 	for (var i = 0; i < this.arc.length; i++){
 		var start = this.arc[i][0];
 		var end = this.arc[i][1];
@@ -2399,7 +2433,7 @@ Flash.prototype.getAnimation = function(fire){
 	shotInterval *= fraction;
 
 	if (fire.shooter.flight && fire.target.flight){
-		a = iSON.parse(iSON.stringify(fire.target.structures[1].layout));
+		a = JSON.parse(JSON.stringify(fire.target.structures[1].layout));
 	}
 	
 	for (var i = 0; i < fire.guns; i++){
@@ -2475,7 +2509,7 @@ Particle.prototype.getAnimation = function(fire){
 	shotInterval *= fraction;
 
 	if (fire.shooter.flight && fire.target.flight){
-		a = JSON.parse(iSON.stringify(fire.target.structures[1].layout));
+		a = JSON.parse(JSON.stringify(fire.target.structures[1].layout));
 	}
 	
 	var linked = this.linked * !fire.shooter.flight-1;
@@ -3086,7 +3120,7 @@ Launcher.prototype.getUpgradeData = function(){
 			"systemid": this.id
 		});
 		text += this.loads[i].amount + "x " + this.loads[i].name;
-		cost += this.loads[i].cost;
+		cost += this.loads[i].cost * this.loads[i].amount;
 	}
 	return {systemid: this.id, active: 1, units: units, loads: loads, text: text, cost: cost};
 }
@@ -3324,8 +3358,6 @@ Launcher.prototype.updateTotals = function(){
 			tr.insertCell(-1).innerHTML = this.loads[i].amount * this.loads[i].cost
 	}
 
-
-
 	$(table)
 		.append($("<tr>")
 			.css("fontSize", 18)
@@ -3333,7 +3365,7 @@ Launcher.prototype.updateTotals = function(){
 			.append($("<th>").html(amount))
 			.append($("<th>"))
 			.append($("<th>").html(tCost)))
-	this.totalCost = tCost;
+	this.cost = tCost;
 }
 
 Launcher.prototype.getImpulseString = function(){
@@ -3435,7 +3467,7 @@ Area.prototype.createCombatLogEntry = function(fire){
 			dmgs[fire.damages[i].system][0]++;
 		}
 		if (fire.damages[i].notes[fire.damages[i].notes.length-1][0] == "o"){ //%
-			dmgs[fire.damages[i].system][1] += Math.floor(fire.damages[i].notes[fire.damages[i].notes.length-1].slice(1, fire.damages[i].notes[fire.damages[i].notes.length-1].len));
+			dmgs[fire.damages[i].system][1] += Math.floor(fire.damages[i].notes[fire.damages[i].notes.length-1].slice(1, fire.damages[i].notes[fire.damages[i].notes.length-1].length));
 		}
 
 		dmgs[fire.damages[i].system][3] += fire.damages[i].armourDmg
@@ -3479,7 +3511,7 @@ Area.prototype.createCombatLogEntry = function(fire){
 		}
 	}
 
-	$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+	game.ui.logWrapper.find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 }
 
 Area.prototype.setMount = function(amount){
@@ -4397,7 +4429,7 @@ Hangar.prototype.setTotalBuyData = function(){
 		else if (i == 3){$(this).html(tCost);}
 	});
 
-	this.totalCost = tCost;
+	this.cost = tCost;
 }
 
 Hangar.prototype.updateHangarDiv = function(index){

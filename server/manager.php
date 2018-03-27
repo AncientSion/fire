@@ -46,7 +46,6 @@ include_once 'global.php';
 			//$this->getMemory();
 			$this->userid = $userid;
 			$this->gameid = $gameid;
-			Debug::open();
 
 			if ($this->gameid){
 				$this->getGeneralData();
@@ -417,7 +416,7 @@ include_once 'global.php';
 		$time += microtime(true); 
 		Debug::log("TIME: ".round($time, 3)." seconds.");
 		$this->getMemory();
-		Debug::close();
+		//	Debug::close();
 		return true;
 	}
 
@@ -1192,12 +1191,12 @@ include_once 'global.php';
 		for ($i = sizeof($this->fires)-1; $i >= 0; $i--){
 			if ($this->phase == 2 && !$this->fires[$i]->targetid){$this->fires[$i]->resolved = 1; continue;}
 			//Debug::log("setFireOrderDetails fire #".$this->fires[$i]->id);
-			//echo "fire: ".$this->fires[$i]->id; echo "</br></br>";
+			//Debug::log("fire: ".$this->fires[$i]->id);
 			//var_export($this->fires[$i]); echo "</br></br>";
 			$this->fires[$i]->shooter = $this->getUnit($this->fires[$i]->shooterid);
 			//var_export($this->fires[$i]->id);
 			$this->fires[$i]->weapon = $this->fires[$i]->shooter->getSystem($this->fires[$i]->weaponid);
-			//echo get_class($this->fires[$i]->weapon); echo "</br></br>";
+			//Debug::log("weapon: ".get_class($this->fires[$i]->weapon));
 			$this->fires[$i]->shots = $this->fires[$i]->weapon->getShots($this->turn);
 			$this->fires[$i]->target = $this->getUnit($this->fires[$i]->targetid);
 			//var_export($this->fires[$i]->weapon); echo "</br></br>";
@@ -1228,7 +1227,6 @@ include_once 'global.php';
 		for ($i = 0; $i < sizeof($this->fires); $i++){
 			if ($this->fires[$i]->resolved){continue;}
 			if ($this->fires[$i]->shooter->flight){continue;}
-			//var_export($this->fires[$i]->id);
 			$this->fires[$i]->target->resolveFireOrder($this->fires[$i]);
 		}
 	}
@@ -1460,6 +1458,7 @@ include_once 'global.php';
 					array(
 						"Octurion",
 						"Primus",
+						"Centurion",
 						"Altarian",
 						"Demos",
 						"Darkner",

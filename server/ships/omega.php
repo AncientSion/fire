@@ -5,7 +5,7 @@ class Omega extends SuperHeavy {
 	public $display = "Omega Destroyer";
 	public $faction = "Earth Alliance";
 	public $size =  90;
-	public static $value = 1200;
+	public static $value = 1100;
 	public $profile = array(0.93, 1.07);
 	public $mass = 13000;
 
@@ -24,11 +24,11 @@ class Omega extends SuperHeavy {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 1200, 21, 5);
-		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 50, array("HeavyLaser", "HeavyPulse"));
-		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 50, array("HeavyLaser", "HeavyPulse"));
+		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 60, array("HeavyLaser", "HeavyPulse"));
+		$front->systems[] = new Dual($this->getId(), $this->id, 300, 360, 60, array("HeavyLaser", "HeavyPulse"));
 		$front->systems[] = new Hangar($this->getId(), $this->id, 12, array("Aurora", "Thunderbolt"), 24);
-		$front->systems[] = new Dual($this->getId(), $this->id, 0, 60, 50, array("HeavyLaser", "HeavyPulse"));
-		$front->systems[] = new Dual($this->getId(), $this->id, 0, 60, 50, array("HeavyLaser", "HeavyPulse"));
+		$front->systems[] = new Dual($this->getId(), $this->id, 0, 60, 60, array("HeavyLaser", "HeavyPulse"));
+		$front->systems[] = new Dual($this->getId(), $this->id, 0, 60, 60, array("HeavyLaser", "HeavyPulse"));
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 1500, 19);
@@ -36,20 +36,24 @@ class Omega extends SuperHeavy {
 		$right->systems[] = new Dual($this->getId(), $this->id, 300, 120, 28, array("LightPulse", "LightParticleBeam"));
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
+		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
 		$right->systems[] = new Dual($this->getId(), $this->id, 60, 240, 28, array("LightPulse", "LightParticleBeam"));
 		$right->systems[] = new Dual($this->getId(), $this->id, 60, 240, 28, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 1050, 17, 4);
-		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 180, 240);
-		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 180, 240);
-		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 180);
-		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 180);
+		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
+		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
+		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
+		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 1500, 19);
 		$left->systems[] = new Dual($this->getId(), $this->id, 240, 60, 28, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new Dual($this->getId(), $this->id, 240, 60, 28, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
+		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new Dual($this->getId(), $this->id, 120, 300, 28, array("LightPulse", "LightParticleBeam"));
@@ -82,7 +86,7 @@ class Omega extends SuperHeavy {
 						array(
 							"systemid" => 9,
 							"name" => "Aurora",
-							"amount" => 14
+							"amount" => 12
 						),
 					)
 				),
@@ -96,7 +100,7 @@ class Omega extends SuperHeavy {
 						array(
 							"systemid" => 9,
 							"name" => "Thunderbolt",
-							"amount" => 14
+							"amount" => 12
 						),
 					)
 				),
@@ -110,7 +114,7 @@ class Omega extends SuperHeavy {
 						array(
 							"systemid" => 9,
 							"name" => "Aurora",
-							"amount" => 28
+							"amount" => 24
 						),
 					)
 				),
@@ -124,7 +128,7 @@ class Omega extends SuperHeavy {
 						array(
 							"systemid" => 9,
 							"name" => "Thunderbolt",
-							"amount" => 28
+							"amount" => 24
 						),
 					),
 				)

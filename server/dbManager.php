@@ -203,16 +203,12 @@
 					fireorders.shooterid = units.id
 				LEFT JOIN damages ON
 					damages.fireid = fireorders.id
-				LEFT JOIN subunits ON
-					units.name = squadron
 				WHERE units.gameid = :gameid
-				AND units.name != salvo
+				AND units.name != 'Salvo'
 				GROUP BY units.id
 			");
 
-			//$salvo = "Salvo";
 			$stmt->bindParam(":gameid", $gameid);
-			//$stmt->bindParam(":salvo", $salvo);
 			$stmt->execute();
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -239,10 +235,10 @@
 				return $result;
 			} else return "ERROR";
 
-			foreach ($rows as $row){
+			/*foreach ($rows as $row){
 				var_export($row);
 				echo "</br></br>";
-			}
+			}*/
 		}
 
 		public function createNewGameAndJoin($userid, $post){
@@ -1294,7 +1290,6 @@
 							$result[$j]["structureid"],
 							$result[$j]["systemid"],
 							$result[$j]["turn"],
-							$result[$j]["roll"],
 							$result[$j]["type"],
 							$result[$j]["totalDmg"],
 							$result[$j]["shieldDmg"],

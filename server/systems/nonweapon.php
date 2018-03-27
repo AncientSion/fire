@@ -14,7 +14,7 @@ class PrimarySystem extends System {
 	}
 
 	public function getHitChance(){
-		return $this->integrity;
+		return $this->integrity/4;
 	}
 
 	public function setMaxDmg($fire, $dmg){

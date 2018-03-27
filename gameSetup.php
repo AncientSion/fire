@@ -363,8 +363,7 @@ else {
 								.append($("<td>").html(data[i]["ep"]))
 								.append($("<td>").html(data[i]["ew"]))
 								.append($("<td>").html(data[i]["value"]))
-								.append(
-									$("<td>").html("Add Unit")
+								.append($("<td>").html("Select")
 									.data("name", data[i]["name"])
 									.data("value", data[i]["value"])
 									.hover(function(){$(this).toggleClass("selectionHighlight");})
@@ -382,11 +381,9 @@ else {
 							})
 							.css("border", "1px solid")
 							.append($("<td>").html("Squadron"))
-							.append($("<td>").html("14"))
-							.append($("<td>").html(""))
-							.append($("<td>").html(""))
-							.append($("<td>").html(""))
-							.append($("<td>").html("Add Unit")
+							.append($("<td>").html("Can hold a Command Value of up to 9")
+								.attr("colSpan", 4))
+							.append($("<td>").html("Select")
 								.data("name", "Squadron")
 								.data("value", 0)
 								.hover(function(){
@@ -403,12 +400,11 @@ else {
 									$(this).toggleClass("highlight");
 								})
 								.append($("<td>").html(data[i]["name"]))
-								.append($("<td>").html(data[i]["space"]))
+								.append($("<td>").html(data[i]["space"] + " CP"))
 								.append($("<td>").html(data[i]["ep"]))
 								.append($("<td>").html(data[i]["ew"]))
 								.append($("<td>").html(data[i]["value"]))
-								.append(
-									$("<td>").html("Add Unit")
+								.append($("<td>").html("Select")
 									.data("name", data[i]["name"])
 									.data("value", data[i]["value"])
 									.data("space", data[i]["space"])
@@ -494,12 +490,12 @@ else {
 									.attr("id", i)
 									.append(
 										$("<tr>")
-											.append($("<th>").css("width", 130).html("Class"))
+											.append($("<th>").css("width", 90).html("Class"))
 											.append($("<th>").html(""))
-											.append($("<th>").css("width", 90).html("Mobility"))
+											.append($("<th>").css("width", 80).html("Turning"))
 											.append($("<th>").css("width", 80).html("Sensor"))
 											.append($("<th>").css("width", 50).html("Cost"))
-											.append($("<th>").css("width", 100).html("")
+											.append($("<th>").html("")
 											)
 										)
 									)
@@ -633,15 +629,17 @@ else {
 	}
 
 	function addNameToUnit(){
-		$("#nameWrapper").show().find("input").focus();
+		$("#nameWrapper").show().find("input").val("").focus();
 	}
 
 	function doConfirmPurchase(){
+		game.ships[0].call = $("#nameWrapper").find("input").val();
+
 		var ship = {
 			type: game.getUnitClass(),
 			name: game.getUnitName(),
 			display: game.getUnitDisplay(),
-			call: $("#nameWrapper").find("input").val(),
+			call: game.ships[0].call,
 			faction: game.ships[0].faction,
 			value: game.ships[0].totalCost,
 			purchaseId: window.game.shipsBought.length,
@@ -649,8 +647,6 @@ else {
 			turn: 1,
 			eta: 0,
 		}
-
-		//console.log(ship.call);
 
 		window.game.shipsBought.push(ship);
 
@@ -665,7 +661,7 @@ else {
 			})
 
 		var td = tr.insertCell(-1)
-			td.innerHTML = ship.display;
+			td.innerHTML = ship.display + " " + game.ships[0].getCallSign();
 		var td = tr.insertCell(-1)
 			td.innerHTML = ship.value;
 		tr.appendChild(td);

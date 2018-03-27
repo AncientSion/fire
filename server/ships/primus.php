@@ -68,7 +68,6 @@ class Primus extends SuperHeavy {
 					"active" => 0,
 					"chance" => 33,
 					"notes" => "14 Sentri Outfit",
-					"cost" => 364,
 					"loads" =>
 					array(
 						array(
@@ -82,7 +81,6 @@ class Primus extends SuperHeavy {
 					"active" => 0,
 					"chance" => 33,
 					"notes" => "10/4 Sentri/Sitara Outfit",
-					"cost" => 364,
 					"loads" =>
 					array(
 						array(

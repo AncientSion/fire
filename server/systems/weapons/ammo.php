@@ -81,7 +81,7 @@ class Hasta extends Missile {
 	public $minDmg = 15;
 	public $maxDmg = 18;
 	public $mass = 2;
-	public static $value = 5;
+	public static $value = 3;
 	public $traverse = -3;
 
 	function __construct($id, $parentId){
@@ -95,7 +95,7 @@ class Javelin extends Missile {
 	public $minDmg = 33;
 	public $maxDmg = 45;
 	public $mass = 4;
-	public static $value = 8;
+	public static $value = 5;
 	public $traverse = -1;
 
 	function __construct($id, $parentId){
@@ -109,7 +109,7 @@ class Triarii extends Missile {
 	public $minDmg = 41;
 	public $maxDmg = 53;
 	public $mass = 4;
-	public static $value = 10;
+	public static $value = 7;
 	public $traverse = -1;
 
 	function __construct($id, $parentId){
@@ -123,7 +123,7 @@ class Vanguard extends Missile {
 	public $minDmg = 9;
 	public $maxDmg = 12;
 	public $mass = 2;
-	public static $value = 6;
+	public static $value = 3;
 	public $traverse = -4;
 
 	function __construct($id, $parentId){
@@ -137,7 +137,7 @@ class Needle extends Missile {
 	public $minDmg = 15;
 	public $maxDmg = 18;
 	public $mass = 2;
-	public static $value = 5;
+	public static $value = 3;
 	public $traverse = -3;
 
 	function __construct($id, $parentId){
@@ -151,7 +151,7 @@ class Naga extends Missile {
 	public $minDmg = 33;
 	public $maxDmg = 45;
 	public $mass = 4;
-	public static $value = 8;
+	public static $value = 5;
 	public $traverse = -1;
 
 	function __construct($id, $parentId){
@@ -165,7 +165,7 @@ class Cyclops extends Missile {
 	public $minDmg = 50;
 	public $maxDmg = 68;
 	public $mass = 5;
-	public static $value = 11;
+	public static $value = 8;
 	public $traverse = 0;
 
 	function __construct($id, $parentId){
@@ -179,7 +179,7 @@ class Titan extends Missile {
 	public $minDmg = 70;
 	public $maxDmg = 88;
 	public $mass = 7;
-	public static $value = 13;
+	public static $value = 10;
 	public $traverse = 1;
 
 	function __construct($id, $parentId){

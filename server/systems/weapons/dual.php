@@ -3,7 +3,7 @@
 class Dual extends Weapon {
 	public $type = "Dual";
 	public $name = "Dual";
-	public $display = "Dual";
+	public $display = "";
 	public $modes = array();
 	public $states = array();
 	public $weapons = array();
@@ -29,7 +29,7 @@ class Dual extends Weapon {
 	}
 
 	public function setState($turn, $phase){
-		Debug::log("setState Dual");
+		//Debug::log("setState Dual");
 		parent::setState($turn, $phase);
 		$this->setActiveSystem($turn);
 		$this->setProps();
@@ -69,19 +69,23 @@ class Dual extends Weapon {
 				return $this->weapons[$i];
 			}
 		}
+
 		//Debug::log("ERROR - ".$this->parentId."/".$this->id." CANT RETURN ACTIVE WEAPON, return DUAL");
 		return $this;
 	}
 
 	public function setProps(){
 		for ($i = 0; $i < sizeof($this->states); $i++){
-			if ($this->states[$i]){
-				$this->weapons[$i]->powers = $this->powers;
-				$this->weapons[$i]->crits = $this->crits;
-				$this->reload = $this->weapons[$i]->reload;
-				return;
-			}
+			if (!$this->states[$i]){continue;}
+
+			//Debug::log("copy dual power into active child");
+			$this->weapons[$i]->powers = $this->powers;
+			$this->weapons[$i]->crits = $this->crits;
+			$this->reload = $this->weapons[$i]->reload;
+			return;
 		}
+
+		//Debug::log("no active dual child system: ".$this->parentId."/".$this->id);
 	}
 }
 

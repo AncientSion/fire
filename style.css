@@ -387,7 +387,7 @@ table, th, tr, td {
 
 .factionSubTable {
 	margin: auto;
-	width: 95%;
+	width: 98%;
 	border-collapse: collapse;
 	border: 1px solid white;
 }
@@ -1553,7 +1553,7 @@ div.buttonTD {
 
 #combatlogInnerWrapper {
 	width: 100%;
-    max-height:240px;
+    max-height:300px;
     overflow:auto;
 }
 
@@ -1909,6 +1909,20 @@ div.buttonTD {
 	background-color: black;
 }
 
+.chatBox.widen {
+	height: 300px;
+	max-height: 300px;
+
+}
+
+.chatBox span {
+	font-size: 12px;
+}
+
+.chatBox.widen span {
+	font-size: 16px;
+}
+
 .sendWrapper {
 	text-align: center;
 	width: 100%;
@@ -1979,14 +1993,6 @@ body {
 	width: 320px;
 	border-radius: 3px;
 	margin-top: 10px;
-}
-
-.unitStats tr {
-}
-
-.unitStats td {
-	font-size: 14px;
-	border: 1px solid white;
 }
 
 .totalDmgDiv {
