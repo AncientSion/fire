@@ -12,45 +12,21 @@
 
 	$manager = new Manager($userid, $gameid);
 	Debug::open();
-	if ($manager->status == "active"){
-		$manager->getGameData();
-	}
-	else if ($manager->status == "closed"){
-		$manager->getGameData();
-		//header("Location: endGame.php?gameid=".$gameid);
-	}
-	else {
-		header("Location: lobby.php");
-	}
-
+	$manager->getGameData();
 	echo "<script> window.gameid = ".$gameid."; window.userid = ".$userid.";</script>";
 
-	$status = 0;
-	$phase = getPhaseString($manager->phase);
-	$post;
-
-	//Debug::log("Ding");
+	$status = "";
 
 	foreach ($manager->playerstatus as $player){
 		if ($player["userid"] == $userid){
 			$status = $player["status"];
+			break;
 		}
 	}
-	//$manager->pickReinforcements();
 	$manager->doEval();
-	$post = json_encode($manager->getClientData(), JSON_NUMERIC_CHECK);
-
-	
-	/*
-	$lasers = array(new LightLaser(0, 0, 0, 0, 0, 0),new MediumLaser(0, 0, 0, 0, 0, 0),new HeavyLaser(0, 0, 0, 0, 0, 0),new SuperHeavyLaser(0, 0, 0, 0, 0, 0));
-	foreach ($lasers as $laser){
-		echo $laser->name.": ".floor(($laser->minDmg + $laser->maxDmg) / 2  / $laser->rakes)." dps / rake turn</br>";
-	}
-	*/
-	
 	
 	echo "<script>";
-	echo "window.game = ".$post.";";
+	echo "window.game = ".json_encode($manager->getClientData(), JSON_NUMERIC_CHECK).";";
 	echo "window.playerstatus = ".json_encode($manager->playerstatus, JSON_NUMERIC_CHECK).";";
 	echo "</script>";
 ?>
@@ -96,7 +72,7 @@
 				</div>
 				<div>
 					<?php
-						echo $phase;
+						echo getPhaseString($manager->phase);
 					?>
 				</div>
 				<div class="hintDiv">
@@ -278,7 +254,7 @@
 						?>
 					</td>
 					<td>
-						<?php echo $phase;
+						<?php echo getPhaseString($manager->phase);
 						?>
 					</td>
 					<td id="reinforce">
@@ -289,7 +265,7 @@
 				</tr>
 				<tr>
 					<?php 
-						if ($status == "closed"){
+						if ($manager->status == "closed"){
 							echo '<tr><td></td></tr><tr><td colSpan=3 class="buttonTD" style="font-size: 20px" onclick="this.disabled=true;ajax.getStats()">Show Statistics</td></tr>';
 						}
 						else if (!$status){

@@ -1,2 +1,55 @@
-createPlayerStatus 
-entry CREATE for player 1 in game 3 phase: -1 and status joined 
+prepareAdvance 
+********************* doAdvance for game4 from phase 2 to phase 3 
+handleFiringPhase 
+doFirstDestroyedCheck 
+doSecondDestroyedCheck 
+updateDestroyedState 
+resolveFireOrder - #41, shooter: GSten #12 vs Primus #13, w: MediumLaser #11, shots: 1 
+base: 110, mod: 1, range: 0.9796 
+fire #41, doLaserDmg, weapon: MediumLaser, target: 13 for 107 dmg 
+Laser DOUBLE HIT, switching to PRIMARY 
+hitting ---  Hangar/9: 35 dmg,  Primary/1: 35 dmg,  HeavyParticle/10: 35 dmg,  
+resolveFireOrder - #42, shooter: GSten #12 vs Primus #13, w: MediumLaser #12, shots: 1 
+resolveFireOrder - #37, shooter: Primus #13 vs Salvo #14, w: LightParticle #7, shots: 4 
+base: 16, mod: 1, range: 1 
+fire #37, doStandardDmg, weapon: LightParticle, target #14/3/Vranoth, totalDmg: 16, remaining: 3, armour: 0+0 
+ => destroying non-ship target system Vranoth #3 was destroyed, rem: 3, doing: 16 
+14/3 total emDmg: 0 
+resolveFireOrder - #38, shooter: Primus #13 vs Salvo #14, w: LightParticle #11, shots: 4 
+resolveFireOrder - #39, shooter: Primus #13 vs Salvo #14, w: LightParticle #14, shots: 4 
+base: 14, mod: 1, range: 1 
+fire #39, doStandardDmg, weapon: LightParticle, target #14/1/Vranoth, totalDmg: 14, remaining: 3, armour: 0+0 
+ => destroying non-ship target system Vranoth #1 was destroyed, rem: 3, doing: 14 
+14/1 total emDmg: 0 
+base: 13, mod: 1, range: 1 
+fire #39, doStandardDmg, weapon: LightParticle, target #14/11/Vranoth, totalDmg: 13, remaining: 3, armour: 0+0 
+ => destroying non-ship target system Vranoth #11 was destroyed, rem: 3, doing: 13 
+14/11 total emDmg: 0 
+resolveFireOrder - #40, shooter: Primus #13 vs Salvo #14, w: LightParticle #23, shots: 4 
+resolveBallisticFireOrders 
+arrived! 
+insertServerFireOrder: 1 
+ball fireorder 
+resolveFireOrder - #43, shooter: Salvo #14 vs Primus #13, w: Warhead #2, shots: 3 
+------- SALVO TRAJECT :164 
+base: 35, mod: 1, range: 1 
+fire #43, doStandardDmg, weapon: Warhead, target #13/1/Primary, totalDmg: 35, remaining: 1092, armour: 21+0 
+base: 40, mod: 1, range: 1 
+fire #43, doStandardDmg, weapon: Warhead, target #13/7/LightParticle, totalDmg: 40, remaining: 28, armour: 9+0 
+ => OVERKILL ship target system LightParticle #7 was destroyed, rem: 28, doing: 28, OK for: 3 dmg 
+base: 35, mod: 1, range: 1 
+fire #43, doStandardDmg, weapon: Warhead, target #13/10/HeavyParticle, totalDmg: 35, remaining: 42, armour: 12+0 
+GSten handleCritTesting 
+Salvo handleCritTesting 
+Primus handleCritTesting 
+potential total power spike for unit #13: 2 
+applyPowerSpike to #13, overload: 2, emDmg: 0, output: 105/ mod: 1.9 
+handleResolvedFireData 
+DB updateFireOrders: 7 
+ => DB insertDamageEntries: 9 
+ => DB insertCritEntries: 3 
+handleFiringPhase time: 0.1 seconds. 
+game 4, user 1 --- adjusting to turn/phase/status 2/3/waiting 
+game 4, user 2 --- adjusting to turn/phase/status 2/3/waiting 
+TIME: 0.113 seconds. 
+2 mb 

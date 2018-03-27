@@ -34,8 +34,8 @@ class LightParticleBeam extends Laser {
 	public $animColor = "blue";
 	public $rakeTime = 25;
 	public $beamWidth = 1;
-	public $minDmg = 27;
-	public $maxDmg = 31;
+	public $minDmg = 25;
+	public $maxDmg = 32;
 	public $optRange = 450;
 	public $dmgLoss = 4;
 	public $accDecay = 120;

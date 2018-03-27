@@ -611,7 +611,7 @@ class Ship {
 			Debug::log("resolveFireOrder AREA - #".$fire->id.", TARGET ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
 
 			$fire->section = $this->getHitSection($fire);
-			DmgCalc::doDmg($fire, 100, $this->getHitSystem($fire));
+			DmgCalc::doDmg($fire, $this->getHitSystem($fire));
 
 		}
 		else {

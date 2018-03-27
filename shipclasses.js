@@ -2414,7 +2414,7 @@ Ship.prototype.expandDiv = function(div){
 
 	var top = 0;
 	var left = $(structContainer).width() - 55;
-	if (this.structures.length == 3 && this.structures[0].systems.length > 3){
+	if (this.structures.length == 3 && this.structures[0].start == 0){
 		top = $(structContainer).height() - 65;
 	}
 	// POWER

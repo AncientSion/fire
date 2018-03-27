@@ -296,7 +296,7 @@ class Mixed extends Ship {
 				$fire->req = $fire->shooter->calculateToHit($fire);
 				if ($fire->rolls[$i] <= $fire->req){
 					$fire->hits++;
-					DmgCalc::doDmg($fire, $fire->rolls[$i], $target);
+					DmgCalc::doDmg($fire, $target);
 				}
 			}
 		}

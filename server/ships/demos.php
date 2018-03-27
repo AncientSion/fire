@@ -23,7 +23,7 @@ class Demos extends Medium {
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 17, 3);
 		$front->systems[] = new MediumPlasma($this->getId(), $this->id, 315, 45);
-		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60,	array(array("Triarii", 9, 3), array("Javelin", 9, 3)));
+		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60,	array(array("Javelin", 9, 3)));
 		$front->systems[] = new MediumPlasma($this->getId(), $this->id, 315, 45);
 		$structs[] = $front;
 

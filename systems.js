@@ -2334,6 +2334,8 @@ function Warhead(data){
 	}
 }
 
+Warhead.prototype = Object.create(Weapon.prototype)
+
 Warhead.prototype.hasEvent = function(){
 	return false;
 }
@@ -2361,7 +2363,6 @@ Warhead.prototype.getDisplay = function(){
 Warhead.prototype.createCombatLogEntry = function(fire){
 	return Weapon.prototype.createCombatLogEntry.call(this, fire);
 }
-
 
 Warhead.prototype.getAnimation = function(fire){
 	//console.log(this.display + " / " + this.projSpeed + " / " + fire.dist);
@@ -3122,6 +3123,7 @@ Launcher.prototype.getUpgradeData = function(){
 		text += this.loads[i].amount + "x " + this.loads[i].name;
 		cost += this.loads[i].cost * this.loads[i].amount;
 	}
+	if (loads.length && this.name == "TorpedoLauncher"){cost += 1;}
 	return {systemid: this.id, active: 1, units: units, loads: loads, text: text, cost: cost};
 }
 
@@ -3263,12 +3265,16 @@ Launcher.prototype.addAmmo = function(ele, all){
 
 	if (canAdd){
 		if (all){
-			//this.loads[index].amount = this.capacity[index];
-			var rate = this.launchRate[index];
-			var multi = this.loads[index].amount / rate;
-			if (multi % 1 == 0){multi++;}
-			else multi = Math.ceil(multi);
-			this.loads[index].amount = rate * multi
+			if (this.loads[index].cost == 0){ // torpedo, no cost
+				this.loads[index].amount = this.capacity[index];
+			}
+			else { // missiles, cost
+				var rate = this.launchRate[index];
+				var multi = this.loads[index].amount / rate;
+				if (multi % 1 == 0){multi++;}
+				else multi = Math.ceil(multi);
+				this.loads[index].amount = rate * multi
+			}
 		}
 		else {
 			this.loads[index].amount++;
@@ -3283,11 +3289,16 @@ Launcher.prototype.removeAmmo = function(ele, all){
 		if (this.loads[i].name == ele.childNodes[0].innerHTML){
 			if (this.loads[i].amount >= 1){
 				if (all){
-					var rate = this.launchRate[i];
-					var multi = this.loads[i].amount / rate;
-					if (multi % 1 == 0){multi--;}
-					else multi = Math.floor(multi);
-					this.loads[i].amount = rate * multi
+					if (this.loads[i].cost == 0){ // torpedo, no cost
+						this.loads[i].amount = 0;
+					}
+					else {// missiles, cost
+						var rate = this.launchRate[i];
+						var multi = this.loads[i].amount / rate;
+						if (multi % 1 == 0){multi--;}
+						else multi = Math.floor(multi);
+						this.loads[i].amount = rate * multi
+					}
 				}
 				else {
 					this.loads[i].amount -= 1;
@@ -3356,6 +3367,10 @@ Launcher.prototype.updateTotals = function(){
 				window.game.ships[0].getSystem($("#weaponDiv").data("systemid")).removeAmmo(this.parentNode, true);
 			})
 			tr.insertCell(-1).innerHTML = this.loads[i].amount * this.loads[i].cost
+	}
+
+	if (this.name == "TorpedoLauncher" && amount){
+		tCost++;
 	}
 
 	$(table)

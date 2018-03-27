@@ -1464,7 +1464,7 @@ include_once 'global.php';
 						"Darkner",
 					),
 					array(
-						"Vorchar",
+						//"Vorchar",
 						"Mograth",
 						"Vorchan",
 						"Haven",

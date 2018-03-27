@@ -102,8 +102,8 @@ class FusionPulsar extends Pulse {
 class LightPlasmaPulse extends LightPulse {
 	public $name = "LightPlasmaPulse";
 	public $display = "Light Plasma Pulse Cannon";
-	public $minDmg = 15;
-	public $maxDmg = 19;
+	public $minDmg = 14;
+	public $maxDmg = 18;
 	public $animColor = "darkGreen";
 
 	public $priority = 6;
@@ -134,8 +134,8 @@ class LightPlasmaPulse extends LightPulse {
 class MediumPlasmaPulse extends LightPlasmaPulse {
 	public $name = "MediumPlasmaPulse";
 	public $display = "Medium Plasma Pulse Cannon";
-	public $minDmg = 28;
-	public $maxDmg = 36;
+	public $minDmg = 26;
+	public $maxDmg = 33;
 	public $accDecay = 120;
 	public $dmgLoss = 15;
 	

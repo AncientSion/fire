@@ -27,7 +27,7 @@ class Weapon extends System {
 	public $fireMode = "Standard";
 	public $dmgType = "Standard";
 
-	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+	function __construct($id, $parentId, $start, $end, $output, $width){
 		$this->start = $start;
 		$this->end = $end;
         parent::__construct($id, $parentId, $output, $width);

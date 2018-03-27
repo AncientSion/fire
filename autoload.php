@@ -20,6 +20,8 @@ spl_autoload_register(
                 'cyclops' => '/server/systems/weapons/ammo.php',
                 'titan' => '/server/systems/weapons/ammo.php',
                 'vran' => '/server/systems/weapons/ammo.php',
+                'vranoth' => '/server/systems/weapons/ammo.php',
+                'vranothka' => '/server/systems/weapons/ammo.php',
 
                 'mixed' => '/server/mixed.php',
 

@@ -8,10 +8,9 @@ class Mograth extends Light {
 	public static $value = 360;
 	public $mass = 1400;
 
-	public $integrity = 450;
+	public $integrity = 420;
 	public $ep = 110;
 	public $ew = 550;
-	public $power = 0;
 	public $negation = 14;
 
 	function __construct($id, $userid){

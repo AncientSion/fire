@@ -2881,6 +2881,7 @@ Game.prototype.getUnitType = function(val){
 		case 1: return "Heavy";
 		case 0: return "Medium";
 		case -1: return "Squadron";
+		case -2: return "";
 		case -3: return "Flight";
 		case -4: return "Salvo";
 	}

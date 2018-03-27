@@ -62,13 +62,49 @@ class Warhead extends Weapon {
 
 class Vran extends Torpedo {
 	public $name = "Vran";
-	public $display = "Medium Particle Torpedo";
-	public $minDmg = 38;
-	public $maxDmg = 48;
+	public $display = "Light Particle Torpedo";
+	public $minDmg = 25;
+	public $maxDmg = 32;
 	public $mass = 1;
+	public $integrity = 5;
+	public $negation = 1;
+	public static $value = 0;
+	public $traverse = -1;
+	public $maxRange = 600;
+
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
+	}
+}
+
+class Vranoth extends Torpedo {
+	public $name = "Vranoth";
+	public $display = "Medium Particle Torpedo";
+	public $minDmg = 33;
+	public $maxDmg = 45;
+	public $mass = 1;
+	public $integrity = 8;
+	public $negation = 2;
+	public static $value = 0;
+	public $traverse = 0;
+	public $maxRange = 800;
+
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
+	}
+}
+
+class VranothKa extends Torpedo {
+	public $name = "VranothKa";
+	public $display = "Heavy Particle Torpedo";
+	public $minDmg = 54;
+	public $maxDmg = 72;
+	public $mass = 1;
+	public $integrity = 11;
+	public $negation = 3;
 	public static $value = 0;
 	public $traverse = 1;
-	public $maxRange = 800;
+	public $maxRange = 1000;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -91,15 +127,17 @@ class Hasta extends Missile {
 
 class Javelin extends Missile {
 	public $name = "Javelin";
-	public $display = "Multirole Missiles";
-	public $minDmg = 33;
-	public $maxDmg = 45;
+	public $display = "Impr. Multirole Missiles";
+	public $minDmg = 36;
+	public $maxDmg = 48;
 	public $mass = 4;
 	public static $value = 5;
 	public $traverse = -1;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
+		$this->integrity += 3;
+		$this->negation += 1;
 	}
 }
 

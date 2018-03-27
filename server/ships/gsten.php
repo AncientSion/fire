@@ -5,7 +5,7 @@ class GSten extends Heavy {
 	public $display = "GSten";
 	public $faction = "Narn Regime";
 	public $size =  70;
-	public static $value = 775;
+	public static $value = 750;
 	public $profile = array(0.95, 1.05);
 	public $mass = 8000;
 
@@ -23,9 +23,9 @@ class GSten extends Heavy {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 18, 3);
-		$front->systems[] = new TorpedoLauncher($this->getId(), $this->id, 315, 45, array(array("Vran", 12, 3)));
+		$front->systems[] = new TorpedoLauncher($this->getId(), $this->id, 315, 45, array(array("Vran", 20, 5), array("Vranoth", 12, 3)));
 		$front->systems[] = new Bulkhead($this->getId(), $this->id, 80);
-		$front->systems[] = new TorpedoLauncher($this->getId(), $this->id, 315, 45, array(array("Vran", 12, 3)));
+		$front->systems[] = new TorpedoLauncher($this->getId(), $this->id, 315, 45, array(array("Vran", 20, 5), array("Vranoth", 12, 3)));
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 800, 16);
