@@ -454,6 +454,58 @@ function sensorize(ship, pos){
 	sensorEvent(true, ship, shipLoc, facing, Math.floor(getDistance(shipLoc, pos)), a);
 }
 
+function planPhase(e, pos, unit){
+	if (game.deploying){
+		unit = game.getUnit(game.deploying); // ship deploy
+		if (game.sensorMode){
+			sensorize(unit, pos);
+		}
+		else if (game.turnMode){
+			unit.handleTurnAttempt(pos);
+		}
+		else if (unit.canDeployHere(pos)){
+			game.doDeployShip(e, unit, pos);
+		}
+	}
+	else if (game.flightDeploy){ // deploy via hangar
+		game.doDeployFlight(pos);
+	}
+	else if (game.mission && game.mission.new){
+		game.issueMission(pos);
+	}
+	else if (!game.deploying){
+		if (unit){
+			if (game.mode == 1){ //no active weapon but ship active -> MOVE MODE
+				if (game.sensorMode){
+					sensorize(unit, pos);
+				}
+				else if (game.turnMode){
+					unit.handleTurnAttempt(pos);
+				}
+				else if (isInArc(getCompassHeadingOfPoint(unit.getPlannedPos(), pos, 0), unit.moveAngles.start, unit.moveAngles.end)){ //check if clicked to move in movement arc
+					var dist = Math.floor(getDistance(unit.getPlannedPos(), pos));
+					if (dist < unit.getRemSpeed()){
+						unit.issueMove(pos, dist);
+					}
+				}
+			}
+			else if (unit.canDeploy()){
+				game.enableDeploy(unit.id);
+			}
+			else firePhase(pos, unit, 0);
+		}
+		else {
+			unit = game.getUnitByClick(pos);
+			if (unit){
+				unit.select(e); 
+				if (unit.canDeploy()){
+					game.enableDeploy(unit.id);
+				}
+			}
+		}
+	}
+}
+
 function deployPhase(e, pos, unit){
 	var unit;
 	var ammo;

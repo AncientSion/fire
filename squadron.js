@@ -1297,11 +1297,11 @@ Squadron.prototype.previewSetup = function(){
 }
 
 Squadron.prototype.getUnusedPower = function(){
-	var power = 0;
+	var highest = 0;
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].destroyed){continue;}
-
-		power += this.structures[i].getUnusedPower();
+		var unused =  this.structures[i].getUnusedPower();
+		power = Math.max(highest, unused);
 	}
 
 	return power;

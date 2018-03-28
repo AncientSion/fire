@@ -380,6 +380,17 @@ function handleMouseDown(e){
 
 		switch (game.phase){
 			case -1:
+				planPhase(e, pos, unit); break;
+			case 0: 
+				planPhase(e, pos, unit); break;
+			case 2: 
+				firePhase(pos, unit, 0); break;
+			case 3: 
+				dmgPhase(e, pos, unit); break;
+		}
+
+		/*	switch (game.phase){
+			case -1:
 				deployPhase(e, pos); break;
 			case 0: 
 				movePhase(e, pos, unit); break;
@@ -387,7 +398,7 @@ function handleMouseDown(e){
 				firePhase(pos, unit, 0); break;
 			case 3: 
 				dmgPhase(e, pos, unit); break;
-		}
+		}*/
 	}
 	else if (e.originalEvent.button == 2){
 		if (game.deploying && !game.turnMode){

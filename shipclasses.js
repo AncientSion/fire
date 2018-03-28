@@ -919,9 +919,12 @@ Ship.prototype.setMoveMode = function(){
 	this.setTurnData();
 	this.setMoveTranslation();
 
-	if (game.phase == -1 && (this.available == game.turn && game.turn == 1|| this.id < 0)){
+	if ((this.available == game.turn && game.turn == 1 || this.id < 0) && game.phase == -1){
 		this.drawTurnUI();
 		this.drawTurnArcs();
+	}
+	else if (game.phase == -1){
+		this.drawMoveUI();
 	}
 	else if (game.phase == 0){
 		this.drawMoveUI();
@@ -2843,8 +2846,8 @@ Ship.prototype.getLockEffect = function(target){
 	var ew = sensor.getEW();
 	if (sensor.disabled || sensor.destroyed || ew.type == 1){return 0;}
 
-	var tPos = target.getGamePos();
-	var origin = this.getGamePos();
+	var tPos = target.getPlannedPos();
+	var origin = this.getPlannedPos();
 	var d = getDistance(origin, tPos);
 	var multi = 0;
 

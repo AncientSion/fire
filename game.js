@@ -1684,7 +1684,6 @@ function Game(data, userid){
 		//$("#combatlogWrapper").hide()
 		//cam.setZoom(1)
 		cam.setFocusToPos({x: endX, y: endY});
-
 	}
 
 	this.setUnitMovementDetails = function(){
@@ -2127,7 +2126,7 @@ function Game(data, userid){
 
 		//console.log(this.fireOrders);
 		for (var i = this.fireOrders.length-1; i >= 0; i--){
-				this.fireOrders[i].type = "Regular";
+				this.fireOrders[i].type = "Regular" + this.fireOrders[i].id;
 			if (!this.fireOrders[i].guns){
 				this.fireOrders.splice(i, 1);
 				continue;
@@ -2313,7 +2312,7 @@ function Game(data, userid){
 
 		if (!game.fireOrders[i].animating){
 			game.fireOrders[i].animating = 1;
-			//cam.setFireFocus(game.fireOrders[i]);
+			cam.setFireFocus(game.fireOrders[i]);
 			game.draw();
 			return;
 		}

@@ -2,7 +2,7 @@
 
 class Particle extends Weapon {
 	public $type = "Particle";
-	public $priority = 100;
+	public $priority = 400;
 	public $particle = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
@@ -13,7 +13,7 @@ class Particle extends Weapon {
 class TwinParticleBolter extends Particle {
 	public $name = "TwinParticleBolter";
 	public $display = "Twin Particle Bolter";
-	public $priority = 101;
+	public $priority = 450;
 	public $minDmg = 9;
 	public $maxDmg = 13;
 	public $accDecay = 180;
@@ -36,7 +36,7 @@ class TwinParticleBolter extends Particle {
 class LightParticle extends Particle {
 	public $name = "LightParticle";
 	public $display = "Light Particle Bolter Array";
-	public $priority = 102;
+	public $priority = 440;
 	public $minDmg = 12;
 	public $maxDmg = 16;
 	public $accDecay = 180;
@@ -61,7 +61,7 @@ class LightParticle extends Particle {
 class MediumParticle extends LightParticle {
 	public $name = "MediumParticle";
 	public $display = "Medium Particle Cannon";
-	public $priority = 103;
+	public $priority = 430;
 	public $minDmg = 28;
 	public $maxDmg = 36;
 	public $accDecay = 120;
@@ -84,7 +84,7 @@ class MediumParticle extends LightParticle {
 class HeavyParticle extends MediumParticle {
 	public $name = "HeavyParticle";
 	public $display = "Heavy Particle Cannon";
-	public $priority = 108;
+	public $priority = 420;
 	public $minDmg = 54;
 	public $maxDmg = 69;
 	public $accDecay = 80;
@@ -107,7 +107,7 @@ class HeavyParticle extends MediumParticle {
 class SuperHeavyParticle extends HeavyParticle {
 	public $name = "SuperHeavyParticle";
 	public $display = "Super-Heavy Particle Cannon";
-	public $priority = 107;
+	public $priority = 410;
 	public $minDmg = 64;
 	public $maxDmg = 82;
 	public $accDecay = 60;
@@ -130,7 +130,7 @@ class SuperHeavyParticle extends HeavyParticle {
 class FusionCannon extends Particle {
 	public $name = "FusionCannon";
 	public $display = "42mm Fusion Cannon";
-	public $priority = 104;
+	public $priority = 425;
 	public $minDmg = 34;
 	public $maxDmg = 42;
 	public $accDecay = 100;
@@ -152,7 +152,7 @@ class FusionCannon extends Particle {
 class HeavyFusionCannon extends Particle {
 	public $name = "HeavyFusionCannon";
 	public $display = "56mm Fusion Cannon";
-	public $priority = 105;
+	public $priority = 426;
 	public $minDmg = 40;
 	public $maxDmg = 52;
 	public $accDecay = 100;

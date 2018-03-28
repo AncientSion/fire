@@ -3,7 +3,7 @@
 class Matter extends Weapon {
 	public $type = "Particle";
 	public $animation = "projectile";
-	public $priority = 4;
+	public $priority = 100;
 
 	public $notes = array("Ignores <span style='font-color='green'>50%</span> of target armour");
 
@@ -20,7 +20,7 @@ class MediumRailGun extends Matter {
 	public $display = "127mm Rail Gun";
 	public $minDmg = 36;
 	public $maxDmg = 36;
-	public $accDecay = 100;
+	public $accDecay = 102;
 	public $shots = 2;
 	public $animColor = "grey";
 	public $projSize = 3;
@@ -40,7 +40,7 @@ class HeavyRailGun extends Matter {
 	public $display = "203mm Rail Gun";
 	public $minDmg = 64;
 	public $maxDmg = 64;
-	public $accDecay = 80;
+	public $accDecay = 101;
 	public $shots = 2;
 	public $animColor = "grey";
 	public $projSize = 4;
