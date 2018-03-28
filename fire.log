@@ -53,3 +53,5 @@ game 4, user 1 --- adjusting to turn/phase/status 2/3/waiting
 game 4, user 2 --- adjusting to turn/phase/status 2/3/waiting 
 TIME: 0.113 seconds. 
 2 mb 
+createPlayerStatus 
+entry CREATE for player 1 in game 5 phase: -1 and status joined 

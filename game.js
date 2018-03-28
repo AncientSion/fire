@@ -767,15 +767,11 @@ function Game(data, userid){
 				var step;
 				var h = 1200;
 				var w = 200;
-				var dist = 300;
+				var dist = 1200;
 				var y = h/2;
 
-				if (i % 2 == 0){
-					step = -1;
-				}
-				else {
-					step = 1;
-				}
+				if (i % 2 == 0){step = -1;}
+				else {step = 1;}
 
 				if (window.playerstatus[i].userid == this.userid){
 					var id = this.userid;

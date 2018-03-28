@@ -164,7 +164,6 @@ else {
 			</tr>
 		</table>
 		<div id="game" style="position: absolute; top: 13px; left: 825px">
-			<canvas id="canvas" style='z-index: 0'></canvas>
 			<canvas id="shipCanvas" style='border: 1px solid white; z-index: 2'></canvas>
 			<canvas id="fxCanvas" style='z-index: 1'></canvas>
 		</div>
@@ -244,7 +243,7 @@ else {
 				shipsBought: [],
 				userid: window.userid,
 				faction: "",
-				arcRange: 100,
+				arcRange: res.x/2,
 				canSubmit: 0,
 				system: 0,
 				fighters: [],
@@ -381,7 +380,7 @@ else {
 							})
 							.css("border", "1px solid")
 							.append($("<td>").html("Squadron"))
-							.append($("<td>").html("Can hold a Command Value of up to 9")
+							.append($("<td>").html("Can hold a Command Value of up to 10")
 								.attr("colSpan", 4))
 							.append($("<td>").html("Select")
 								.data("name", "Squadron")
@@ -708,9 +707,11 @@ else {
 
 		window.fxCanvas = document.getElementById("fxCanvas");
 		window.fxCtx = fxCanvas.getContext("2d");
-
+		window.fxCanvas.style.opacity = 0.4;
 		window.shipCanvas = document.getElementById("shipCanvas");
 		window.shipCtx = shipCanvas.getContext("2d");
+
+
 	}
 
 	function drawShipPreview(){

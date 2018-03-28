@@ -13,7 +13,7 @@ class Squadron extends Ship {
 	public $turnangle = 40;
 	public $traverse = -1;
 	public static $space;
-	public $slots = array(0, 9);
+	public $slots = array(0, 10);
 
 	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
 		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
