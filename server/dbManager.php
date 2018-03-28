@@ -1668,9 +1668,11 @@
 		
 		public function getUsername($id){	
 			$sql = "(SELECT username FROM users WHERE ID = ".$id.")";
-			$result = $this->query($sql);		
+			$result = $this->query($sql);
+			if (!$result){return "";}
 			return $result[0]["username"];
 		}
+
 		public function getCurrentTurn($gameid){
 
 			$sql = "(SELECT turn FROM games WHERE id = ".$gameid.")";

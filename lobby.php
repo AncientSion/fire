@@ -350,12 +350,14 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 
 		$(".chatWrapper").css("position", "relative").css("display", "inline-block").css("width", 700).css("margin-left", 100).css("margin-top", 20).find(".chatBox").scrollTop(function(){return this.scrollHeight}).end();
 		
-		var checkChat = setInterval(
-			function(){
-				ajax.checkChat();
-				ajax.checkGameState();
-			},
-		7000);
+		if (game.userid){
+			var checkChat = setInterval(
+				function(){
+					ajax.checkChat();
+					ajax.checkGameState();
+				},
+			7000);
+		}
 
 		$("#instructWrapper")
 			.css("left", 225)
