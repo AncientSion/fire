@@ -55,14 +55,13 @@ function init(){
 	drawCanvas.style.zIndex = 0;
 	drawCtx = drawCanvas.getContext("2d");
 
-	showUI();
-	window.initChat();
-	
-	window.initiateKeyDowns();
-
 	turn = new Turn();
 	game = new Game(game, userid);
 	game.create();
+	showUI();
+	window.initChat();
+	window.initiateKeyDowns();
+
 
 	console.timeEnd("time");
 }
