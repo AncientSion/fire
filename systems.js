@@ -2221,7 +2221,7 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 	}
 
 	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDmgString())));
-	$(table).append($("<tr>").append($("<td>").html("Priority")).append($("<td>").addClass("damage").html(this.priority)));
+	$(table).append($("<tr>").append($("<td>").html("Priority")).append($("<td>").html(this.priority)));
 
 	if (this.notes.length){
 		$(table).append($("<tr>").addClass("notesHeader").css("border-top", "2px solid white").append($("<th>").html("Notes").attr("colSpan", 2)));

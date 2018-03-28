@@ -13,6 +13,7 @@ class Trakk extends Light {
 	public $ew = 450;
 	public $power = 0;
 	public $negation = 12;
+	public $power = 1;
 
 	function __construct($id, $userid){
 		parent::__construct($id, $userid);
