@@ -81,9 +81,9 @@ class TorpedoLauncher extends MissileLauncher {
 
 	function __construct($id, $parentId, $start, $end, $loads, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $loads, $width);
+        $this->maxRange = $this->loads[$this->ammo]->maxRange;
         return;
         $this->ammo = 0;
         $this->output = $this->capacity[$this->ammo];
-        $this->maxRange = $this->loads[$this->ammo]->maxRange;
 	}
 }
