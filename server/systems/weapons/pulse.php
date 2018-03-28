@@ -109,9 +109,6 @@ class LightPlasmaPulse extends LightPulse {
 	public $minDmg = 14;
 	public $maxDmg = 18;
 	public $animColor = "darkGreen";
-
-	public $priority = 6;
-
 	public $dmgType = "Plasma";
 	public $melt = 50;
 	public $dmgLoss = 18;
