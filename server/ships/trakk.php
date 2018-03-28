@@ -11,7 +11,6 @@ class Trakk extends Light {
 	public $integrity = 400;
 	public $ep = 100;
 	public $ew = 450;
-	public $power = 0;
 	public $negation = 12;
 	public $power = 1;
 
