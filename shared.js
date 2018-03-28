@@ -26,13 +26,13 @@ function doSort(a, b){
 
 function initChat(){
 	$(".chatWrapper").removeClass("disabled").find(".chatBox").scrollTop(function(){return this.scrollHeight});
-	if (game.userid){
+	//if (game.userid){
 		var checkChat = setInterval(
 			function(){
 				ajax.checkChat();
 			},
 		7000);
-	}
+	//}
 
 	if (window.game){
 		$chat = $(".chatWrapper");
