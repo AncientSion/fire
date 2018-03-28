@@ -3,6 +3,7 @@
 class Missile extends Single {
 	public $missile = 1;
 	public $torpedo = 0;
+	public $maxRange = 0;
 
 	function __construct($id, $parentId){
 		$this->integrity = $this->mass*3;

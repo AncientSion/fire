@@ -66,6 +66,7 @@ class MissileLauncher extends Launcher {
 					$this->ammo = $j;
 					$this->output = $dbLoad[$i]["amount"];
 					$this->loads[$j]->amount = $dbLoad[$i]["amount"];
+       				$this->maxRange = $this->loads[$this->ammo]->maxRange;
 					return;
 				}
 			}
@@ -81,7 +82,6 @@ class TorpedoLauncher extends MissileLauncher {
 
 	function __construct($id, $parentId, $start, $end, $loads, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $loads, $width);
-        $this->maxRange = $this->loads[$this->ammo]->maxRange;
         return;
         $this->ammo = 0;
         $this->output = $this->capacity[$this->ammo];
