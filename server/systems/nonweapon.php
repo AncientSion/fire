@@ -99,13 +99,14 @@ class Bridge extends PrimarySystem {
         parent::__construct($id, $parentId, $integrity, 0, $width);
 
         $options = $this->getNodes();
-        $cost = floor($output/12);
+        $baseCost = floor($output/12);
 
         for ($i = 0; $i < sizeof($options); $i++){
 			$this->loads[] = array(
 				"name" => $options[$i],
 				"amount" => 0,
-				"cost" => $cost,
+				"baseCost" => $baseCost,
+				"cost" => 0,
 			);
         }
 	}

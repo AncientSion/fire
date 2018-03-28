@@ -992,23 +992,6 @@ Ship.prototype.unselectSystems = function(){
 	}
 }
 
-Ship.prototype.getBuyTableData = function(table){
-	for (var i = 0; i < this.upgrades.length; i++){
-		this.totalCost += this.upgrades[i].cost;
-		$(table)
-		.append(
-			$("<tr>")
-			.append($("<td>").html(this.upgrades[i].text))
-			.append($("<td>").html(this.upgrades[i].cost))
-			.data("systemid", this.upgrades[i].systemid)
-			.hover(function(){
-				$(this).toggleClass("rowHighlight");
-				$(game.getUnit(0).getSystem($(this).data("systemid")).element).toggleClass("borderHighlight");
-			})
-		)
-	}
-}
-
 Ship.prototype.getFireOrders = function(){
 	var fires = [];
 	for (var i = 0; i < this.structures.length; i++){
@@ -3034,7 +3017,6 @@ Ship.prototype.weaponHighlight = function(weapon){
 		weapon.drawSystemArc(angle, this.rolled, shipPos);
 	}
 }
-
 Ship.prototype.setBuyData = function(){
 	for (var i = 0; i < this.primary.systems.length; i++){
 		if (!this.primary.systems[i].cost){continue;}
@@ -3046,6 +3028,23 @@ Ship.prototype.setBuyData = function(){
 			if (!this.structures[i].systems[j].cost){continue;}
 			this.upgrades.push(this.structures[i].systems[j].getUpgradeData());
 		}
+	}
+}
+
+Ship.prototype.getBuyTableData = function(table){
+	for (var i = 0; i < this.upgrades.length; i++){
+		this.totalCost += this.upgrades[i].cost;
+		$(table)
+		.append(
+			$("<tr>")
+			.append($("<td>").html(this.upgrades[i].text))
+			.append($("<td>").html(this.upgrades[i].cost))
+			.data("systemid", this.upgrades[i].systemid)
+			.hover(function(){
+				$(this).toggleClass("rowHighlight");
+				$(game.getUnit(0).getSystem($(this).data("systemid")).element).toggleClass("borderHighlight");
+			})
+		)
 	}
 }
 
@@ -3166,7 +3165,6 @@ Ship.prototype.enableCrewPurchase = function(e, bridge){
 			)
 		)
 	}
-	!
 	$(div).data("systemid", this.id).css("left", 650).css("top", 400).removeClass("disabled");
 }
 
@@ -3180,6 +3178,7 @@ Ship.prototype.plusCrewLevel = function(i){
 	var bridge = this.getSystemByName("Bridge");
 	if (bridge.loads[i].amount == 3){return;}
 	bridge.loads[i].amount++;
+	bridge.loads[i].cost = this.getTotalCrewCost(i);
 	var system = this.getSystem(i+3);
 		system.powers.push({
 			id: system.powers.length+1, unitid: system.parentId, systemid: system.id,
@@ -3204,7 +3203,7 @@ Ship.prototype.updateCrewDiv = function(i){
 	$(tr.children()[2]).html(this.getCrewAddCost(i));
 	$(tr.children()[4]).html(this.getCrewLevel(i));
 	$(tr.children()[6]).html(this.getTotalCrewCost(i));
-	this.updateTotals();
+	this.updateCrewTotals();
 }
 
 Ship.prototype.getCrewEffect = function(i){
@@ -3212,7 +3211,7 @@ Ship.prototype.getCrewEffect = function(i){
 }
 
 Ship.prototype.getCrewBaseCost = function(i){
-	return this.getSystemByName("Bridge").loads[i].cost;
+	return this.getSystemByName("Bridge").loads[i].baseCost;
 }
 
 Ship.prototype.getCrewAddCost = function(i){
@@ -3239,13 +3238,13 @@ Ship.prototype.getTotalCrewCost = function(i){
 	return Math.ceil(cost);
 }
 
-Ship.prototype.updateTotals = function(){
+Ship.prototype.updateCrewTotals = function(){
 	var bridge = this.getSystemByName("Bridge");
 	var total = 0;
 	for (var i = 0; i < bridge.loads.length; i++){
 		total += this.getTotalCrewCost(i);
 	}
-	bridge.totalCost = total;	
+	bridge.cost = total;	
 	$("#crewDiv").find("#crewTable").children().children().children().last().html(total);
 }
 

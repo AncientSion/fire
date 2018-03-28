@@ -1296,13 +1296,24 @@ Bridge.prototype.select = function(e){
 
 }
 
+
 Bridge.prototype.getUpgradeData = function(){
-	return {
-		"name": this.display,
-		"systemid": this.id,
-		"cost": this.cost,
-		"loads": this.loads
+	var loads = [];
+	var units = [];
+	var text = this.display + ":</br>";
+	var cost = 0;
+	for (var i = 0; i < this.loads.length; i++){
+		if (!this.loads[i].amount){continue;}
+		loads.push({
+			"amount": this.loads[i].amount,
+			"cost": this.loads[i].cost,
+			"name": this.loads[i].name,
+			"systemid": this.id
+		});
+		text += this.loads[i].name + " crew level " + this.loads[i].amount + "</br>";
+		cost += this.loads[i].cost;
 	}
+	return {systemid: this.id, active: 1, units: units, loads: loads, text: text, cost: cost};
 }
 				
 function Reactor(system){
@@ -1643,6 +1654,7 @@ Sensor.prototype.doUnboost = function(){
 function Weapon(system){
 	System.call(this, system);
 	this.animColor = system.animColor;
+	this.priority = system.priority;
 	this.weapon = true;
 	this.minDmg = system.minDmg;
 	this.maxDmg = system.maxDmg;
@@ -2209,6 +2221,7 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 	}
 
 	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDmgString())));
+	$(table).append($("<tr>").append($("<td>").html("Priority")).append($("<td>").addClass("damage").html(this.priority)));
 
 	if (this.notes.length){
 		$(table).append($("<tr>").addClass("notesHeader").css("border-top", "2px solid white").append($("<th>").html("Notes").attr("colSpan", 2)));

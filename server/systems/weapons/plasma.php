@@ -3,7 +3,7 @@
 class Plasma extends Weapon {
 	public $type = "Particle";
 	public $animColor = "darkGreen";
-	public $priority = 6;
+	public $priority = 300;
 	public $melt = 50;
 	public $plasma = 1;
 
@@ -29,6 +29,7 @@ class Plasma extends Weapon {
 class LightPlasma extends Plasma {
 	public $name = "LightPlasma";
 	public $display = "46mm Plasma Gun";
+	public $priority = 302;
 	public $minDmg = 34;
 	public $maxDmg = 45;
 	public $accDecay = 120;
@@ -51,6 +52,7 @@ class LightPlasma extends Plasma {
 class MediumPlasma extends Plasma {
 	public $name = "MediumPlasma";
 	public $display = "78mm Plasma Accelerator";
+	public $priority = 303;
 	public $minDmg = 48;
 	public $maxDmg = 66;
 	public $accDecay = 120;
@@ -73,6 +75,7 @@ class MediumPlasma extends Plasma {
 class HeavyPlasma extends Plasma {
 	public $name = "HeavyPlasma";
 	public $display = "148mm Plasma Cannon";
+	public $priority = 304;
 	public $minDmg = 75;
 	public $maxDmg = 98;
 	public $accDecay = 120;
@@ -96,6 +99,7 @@ class MagCompressor extends Particle {
 	public $name = "MagCompressor";
 	public $display = "Mag-Plasma Compressor";
 	public $fireMode = "Flash";
+	public $priority = 301;
 	public $usage = 2;
 	public $freeAim = 0;
 	public $minDmg = 12;

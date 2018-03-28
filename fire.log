@@ -55,3 +55,26 @@ TIME: 0.113 seconds.
 2 mb 
 createPlayerStatus 
 entry CREATE for player 1 in game 5 phase: -1 and status joined 
+prepareAdvance 
+********************* doAdvance for game5 from phase -1 to phase 0 
+handleDeployPhase 
+resolveDeployActions s: 2 
+handleJumpInActions 
+jumpin: #15, class: Hyperion, size: 80, sensor: 700, ordered to: -681/-118, shiftPotential: 18.86% 
+Hyperion, aShift: 19°, pShift: 38px 
+--> aShift: -13°, psShift: 13/6 (15px) 
+jumpin: #16, class: Avenger, size: 80, sensor: 648, ordered to: 609/7, shiftPotential: 20.37% 
+Avenger, aShift: 21°, pShift: 41px 
+--> aShift: -14°, psShift: 37/40 (55px) 
+resolveJumpOutActions 
+handleInitialFireOrders 
+assemblDeployStates 
+updateUnitStats s:2 1/-1 
+game 5, user 1 --- adjusting to turn/phase/status 1/0/waiting 
+game 5, user 2 --- adjusting to turn/phase/status 1/0/waiting 
+TIME: 0.033 seconds. 
+4 mb 
+createPlayerStatus 
+entry CREATE for player 1 in game 6 phase: -1 and status joined 
+createPlayerStatus 
+entry CREATE for player 1 in game 7 phase: -1 and status joined 

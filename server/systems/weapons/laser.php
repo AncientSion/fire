@@ -4,7 +4,7 @@ class Laser extends Weapon {
 	public $type = "Laser";
 	public $animation = "beam";
 	public $beamWidth;
-	public $priority = 7;
+	public $priority = 500;
 	public $rakes;
 	public $laser = 1;
 	public $fireMode = "Laser";
@@ -31,6 +31,7 @@ class Laser extends Weapon {
 class LightParticleBeam extends Laser {
 	public $name = "LightParticleBeam";
 	public $display = "Light Particle Beam";
+	public $priority = 501;
 	public $animColor = "blue";
 	public $rakeTime = 25;
 	public $beamWidth = 1;
@@ -56,6 +57,7 @@ class LightParticleBeam extends Laser {
 class LightLaser extends Laser {
 	public $name = "LightLaser";
 	public $display = "Light Laser";
+	public $priority = 502;
 	public $animColor = "red";
 	public $rakeTime = 60;
 	public $beamWidth = 2;
@@ -81,7 +83,7 @@ class LightLaser extends Laser {
 class MediumLaser extends LightLaser {
 	public $name = "MediumLaser";
 	public $display = "Medium Laser";
-	public $animColor = "red";
+	public $priority = 503;
 	public $rakeTime = 60;
 	public $beamWidth = 3;
 	public $minDmg = 80;
@@ -101,7 +103,7 @@ class MediumLaser extends LightLaser {
 class HeavyLaser extends LightLaser {
 	public $name = "HeavyLaser";
 	public $display = "Heavy Laser";
-	public $animColor = "red";
+	public $priority = 505;
 	public $rakeTime = 60;
 	public $beamWidth = 4;
 	public $minDmg = 160;
@@ -122,7 +124,7 @@ class HeavyLaser extends LightLaser {
 class SuperHeavyLaser extends HeavyLaser {
 	public $name = "SuperHeavyLaser";
 	public $display = "Super-Heavy Laser";
-	public $animColor = "red";
+	public $priority = 506;
 	public $rakeTime = 100;
 	public $beamWidth = 5;
 	public $minDmg = 190;
@@ -141,6 +143,7 @@ class SuperHeavyLaser extends HeavyLaser {
 }
 
 class NeutronLaser extends Laser {
+	public $priority = 503;
 	public $name = "NeutronLaser";
 	public $display = "Neutron Laser";
 	public $rakeTime = 40;
