@@ -143,6 +143,13 @@ class Ship {
 			}
 		}
 
+		$this->setCrewBoosts($turn);
+		$this->isDestroyed();
+
+		return true;
+	}
+
+	public function setCrewBoosts($turn){
 		$bridge = $this->getSystemByName("Bridge");
 		for ($i = 0; $i < sizeof($bridge->loads); $i++){
 			if (!$bridge->loads[$i]["amount"]){continue;}
@@ -151,10 +158,6 @@ class Ship {
 				$target->powers[] = new Power(0, $this->id, 0, $turn, 2, 0);
 			}
 		}
-
-		$this->isDestroyed();
-
-		return true;
 	}
 
 	public function setStructureState($turn, $phase){
@@ -226,7 +229,7 @@ class Ship {
 				$this->primary->systems[$i]->hideEW($turn);
 			}
 			for ($j = sizeof($this->primary->systems[$i]->powers)-1; $j >= 0; $j--){
-				if ($this->primary->systems[$i]->powers[$j]->turn == $turn){
+				if ($this->primary->systems[$i]->powers[$j]->turn == $turn && $this->primary->systems[$i]->powers[$j]->type != 2){
 					array_splice($this->primary->systems[$i]->powers, $j, 1);
 				} else break;
 			}
