@@ -137,7 +137,6 @@ class Javelin extends Missile {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->integrity += 3;
 		$this->negation += 1;
 	}
 }
