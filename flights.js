@@ -344,12 +344,14 @@ Flight.prototype.createBaseDiv = function(){
 			.contextmenu(function(e){e.stopPropagation(); e.preventDefault()})
 			//.addClass("disabled")
 			.end()
-		.contextmenu(function(e){
-			//e.stopImmediatePropagation(); e.preventDefault();
-			if ($(this).data("shipId") != aUnit){
-				$(this).addClass("disabled");
-			}
-		})
+		.find(".general")
+			.contextmenu(function(e){
+				e.stopImmediatePropagation(); e.preventDefault();
+				if ($(this).parent().parent().data("shipId") != aUnit){
+					game.zIndex--;
+					$(this).parent().parent().addClass("disabled");
+				}
+			})
 
 	if (game.phase == 2){
 		$(div).find(".structContainer").show();

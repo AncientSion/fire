@@ -1197,7 +1197,8 @@ System.prototype.getOutputReduction = function(){
 }
 
 PrimarySystem.prototype.getOutputString = function(){
-	var effect = 100  + this.getOutputCrits();
+	//var effect = 100 + this.getOutputCrits();
+	var effect = 100;
 	return this.output + " +" + Math.floor(this.getBoostOutput()/100*effect) + " +" + Math.floor(this.getCrewOutput()/100*effect) + " -" + this.getOutputReduction();
 }
 

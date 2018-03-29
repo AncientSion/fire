@@ -437,7 +437,7 @@ class Ship {
 			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
 				if ($this->primary->systems[$j]->name == $bridge->crits[$i]->type){
 					$copy = clone $bridge->crits[$i];
-					$copy->type = "Output";
+					$copy->type = "Officier KIA";
 					$this->primary->systems[$j]->crits[] = $copy;
 					$bridge->crits[$i]->type = "Officer KIA: ".$bridge->crits[$i]->type;
 					break;

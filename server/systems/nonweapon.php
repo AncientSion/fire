@@ -46,10 +46,18 @@ class PrimarySystem extends System {
 		$mod = 100;
 		$mod += $this->getBoostEffect("Output") * $this->getBoostLevel($turn);
 		$mod += $this->getCrewEffect() * $this->getCrewLevel();
-		$mod += $this->getCritMod("Output", $turn);
+		$mod += $this->getCritMod("", $turn);
 
 		//Debug::log("ship: #".$this->parentId.", output: ".floor($this->output*$mod));
 		return floor($this->output * $mod/100);
+	}	
+
+	public function getCritMod($type, $turn){
+		$mod = 0;
+		for ($i = 0; $i < sizeof($this->crits); $i++){
+			$mod =+ $this->crits[$i]->value; break;
+		}
+		return $mod;
 	}
 
 	public function getValidEffects(){
