@@ -935,6 +935,7 @@ function Game(data, userid){
 					e.preventDefault(); e.stopPropagation();
 					//game.resetMovement();
 					setFPS(150);
+					game.resetCC();
 					game.setPreMoveCC();
 					game.resetFireOrders();
 					game.prepResolveMovement();
@@ -1310,6 +1311,11 @@ function Game(data, userid){
 		else if (this.phase == 2){
 			this.setPreMoveCC();
 		}
+	}
+
+	this.resetCC = function(){
+		for (var i = 0; i < this.ships.length; i++){
+			this.ships[i].cc = [];
 	}
 
 
