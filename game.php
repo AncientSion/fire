@@ -663,8 +663,7 @@
 						window.cancelAnimationFrame(anim);
 						game.animFlight = 1; game.animSalvo = 1;
 						game.endMoveSubPhase();
-						//game.movementDone();
-						game.movementAnimationFinished();
+						game.movementDone();
 					}
 				}
 			}
