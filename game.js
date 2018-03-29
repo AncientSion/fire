@@ -987,15 +987,19 @@ function Game(data, userid){
 		else if (n == 2){
 				$("#phaseSwitchDiv").click(function(){
 					setFPS(90);
-					game.resolveMovement();
-					$(this).hide()
+					$(this).hide();
+					game.setTimeout(function(){
+						game.resolveMovement();
+					}, 1000);
 				});
 		}
 		else if (n == 3){
 			this.phase = n;
 				$("#phaseSwitchDiv").click(function(){
-					game.initDamageControl();
-					$(this).hide()
+					$(this).hide();
+					game.setTimeout(function(){
+						game.initDamageControl();
+					}, 1000);
 				});
 			
 		}
