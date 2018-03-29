@@ -910,6 +910,15 @@ function Game(data, userid){
 		}
 	}
 
+	this.resetFireOrder = function(){
+		for (let i = 0; i < this.fireOrders.length; i++){
+			if (this.fireOrders[i].animated){
+				this.fireOrders[i].animated = 0;
+				this.fireOrders[i].aniamting = 0;
+			}
+		}
+	}
+
 	this.movementDone = function(){
 		console.log("movementDone");	
 		this.setlastPosCC();
@@ -927,6 +936,7 @@ function Game(data, userid){
 					//game.resetMovement();
 					setFPS(150);
 					game.setPreMoveCC();
+					game.resetFireOrders();
 					game.prepResolveMovement();
 					game.doResolveMovement();
 				})
