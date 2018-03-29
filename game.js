@@ -956,7 +956,7 @@ function Game(data, userid){
 			this.ships[i].setSupportImage();
 		}
 		this.animating = 0;
-		this.drawingEvents = 1;}
+		this.drawingEvents = 1;
 		this.draw();
 		
 		$(fxCanvas).css("opacity", 0.25);
