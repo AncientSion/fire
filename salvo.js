@@ -96,7 +96,7 @@ Salvo.prototype.createBaseDiv = function(){
 	if (this.userid != game.userid){owner = "hostile";}
 	var div = document.createElement("div");
 		$(div)
-			.addclass("ammoDiv " + owner + " disabled")
+			.addClass("ammoDiv " + owner + " disabled")
 			.data("shipId", this.id)
 			.contextmenu(function(e){
 				e.stopImmediatePropagation(); e.preventDefault();
