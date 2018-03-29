@@ -2323,7 +2323,7 @@ function Game(data, userid){
 
 		if (!game.fireOrders[i].animating){
 			game.fireOrders[i].animating = 1;
-			cam.setFireFocus(game.fireOrders[i]);
+			if (game.phase == 2){cam.setFireFocus(game.fireOrders[i]);}
 			game.draw();
 			return;
 		}
@@ -3251,7 +3251,7 @@ Game.prototype.doResolveMovement = function(){
 	this.animSalvo = 0;
 
 	$("#combatlogWrapper")
-	.width(350)
+	.width(400)
 	.css("top", 150).css("left", 250)
 	.show()
 	.find(".combatLogHeader").html("Movement Log").end()
