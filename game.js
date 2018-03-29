@@ -1982,16 +1982,15 @@ function Game(data, userid){
 
 		$("#combatlogWrapper")
 			.css("width", 450)
+			.show()
 			.find("#combatlogInnerWrapper").find("#combatLog")
 				.append($("<tr>")
-					.append($("<th>").attr("colSpan", 8).html("Event Log"))
+					.append($("<th>").attr("colSpan", 8).html("Event Log")))
 				.append($("<tr>")
 				.append($("<th>").attr("colSpan", 5).html("Event Type"))
 				.append($("<th>").html("Armour"))
 				.append($("<th>").html("System"))
 				.append($("<th>").html("Structure")))
-			.end().end()
-			.show()
 
 		setFPS(40);
 		window.then = Date.now();
