@@ -270,8 +270,8 @@ function drawAreaProjectile(weapon, anim){
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z)
 
-	if (anim.n/anim.m > 0.7){
-		w -= 2*(anim.n/anim.m- 0.7);
+	if (anim.n/anim.m > 0.8){
+		w -= 2*(anim.n/anim.m - 0.8);
 	}
 
 	fxCtx.globalAlpha = w
@@ -291,7 +291,6 @@ function drawAreaProjectile(weapon, anim){
 	fxCtx.globalCompositeOperation = "source-over";
 	fxCtx.setTransform(1,0,0,1,0,0);
 
-	//if (anim.n >= 5){
 	if (anim.n >= anim.m){
 		anim.p = 1;
 		anim.n = 0;
