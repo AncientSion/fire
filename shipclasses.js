@@ -1436,8 +1436,7 @@ Ship.prototype.createCritLogEntry = function(){
 
 	for (let i = 0; i < this.primary.systems.length; i++){
 		expand += this.primary.systems[i].getCritLogString()
-	} else break;
-
+	}
 	if (expand.length > 2){
 		this.attachLogEntry(html + expand);
 	}
