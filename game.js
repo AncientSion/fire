@@ -910,39 +910,32 @@ function Game(data, userid){
 		}
 	}
 
-	this.movementAnimationFinished = function(){
-		console.log("movementAnimationFinished");
-
-		this.movementResolved();
-		if (this.events.length){
-			$($("#combatLog").find("td")[0]).attr("colSpan", 8)
-			//console.log(this.events);
-			this.resolvePostMoveFire();
-		}
-	}
-
-	this.movementResolved = function(){	
-		console.log("movementResolved");	
+	this.movementDone = function(){	
+		console.log("movementDone");	
 		this.setlastPosCC();
 		this.checkUnitOffsetting();
-
-		var table = $("#combatLog").find("tbody");
 
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].setSupportImage();
 			this.ships[i].getAttachDivs();
 		}
-
-		$(table)
+		$("#combatLog").find("tbody")
 			.append($("<tr>")
 				.append($("<td>").html("Movement Resolution concluded."))
 				.contextmenu(function(e){
 					e.preventDefault(); e.stopPropagation();
 					//game.resetMovement();
 					setFPS(150);
+					this.setPreMoveCC();
 					game.resolveMovement();
 				})
 			);
+
+		if (this.events.length){
+			$($("#combatLog").find("td")[0]).attr("colSpan", 8)
+			//console.log(this.events);
+			this.resolvePostMoveFire();
+		}
 
 		salvoCtx.clearRect(0, 0, res.x, res.y);
 		this.drawingEvents = 1;
@@ -1890,7 +1883,7 @@ function Game(data, userid){
 		else {
 			game.endMoveSubPhase();
 			game.animFlight = 0; game.animSalvo = 0;
-			game.movementAnimationFinished();
+			game.movementDone();
 		}
 	}
 
@@ -2038,10 +2031,12 @@ function Game(data, userid){
 	this.resetImageData = function(){
 		console.log("resetImageData");
 		for (var i = 0; i < this.ships.length; i++){
-			 if (!this.ships[i].ship){this.ships[i].setPreFireImage();}
+			this.ships[i].setPreFireImage();
+			// if (!this.ships[i].ship){this.ships[i].setPreFireImage();}
 		}
 		for (var i = 0; i < this.ships.length; i++){
-			 if (!this.ships[i].salvo){this.ships[i].setSupportImage();}
+			this.ships[i].setSupportImage();
+			// if (!this.ships[i].salvo){this.ships[i].setSupportImage();}
 		}
 	}
 
