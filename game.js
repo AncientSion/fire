@@ -987,6 +987,7 @@ function Game(data, userid){
 		else if (n == 2){
 				$("#phaseSwitchDiv").click(function(){
 					setFPS(90);
+					game.draw();
 					$(this).hide();
 					game.timeout = setTimeout(function(){
 						game.resolveMovement();
@@ -996,6 +997,7 @@ function Game(data, userid){
 		else if (n == 3){
 			this.phase = n;
 				$("#phaseSwitchDiv").click(function(){
+					game.draw();
 					$(this).hide();
 					game.timeout = setTimeout(function(){
 						game.initDamageControl();
