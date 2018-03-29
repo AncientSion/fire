@@ -2659,6 +2659,10 @@ Ship.prototype.getBaseImage = function(){
 	return graphics.images[this.name.toLowerCase()];
 }
 
+Ship.prototype.setPreFireImage = function(){
+	return;
+}
+
 Ship.prototype.setDogFightImage = function(){
 	//console.log("setDogFightImage " + this.id);
 	if (!this.flight){return;}

@@ -2035,6 +2035,7 @@ function Game(data, userid){
 			// if (!this.ships[i].ship){this.ships[i].setPreFireImage();}
 		}
 		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].salvo){continue;}
 			this.ships[i].setSupportImage();
 			// if (!this.ships[i].salvo){this.ships[i].setSupportImage();}
 		}
