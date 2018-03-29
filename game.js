@@ -988,7 +988,7 @@ function Game(data, userid){
 				$("#phaseSwitchDiv").click(function(){
 					setFPS(90);
 					$(this).hide();
-					game.setTimeout(function(){
+					game.timeout = setTimeout(function(){
 						game.resolveMovement();
 					}, 1000);
 				});
@@ -997,7 +997,7 @@ function Game(data, userid){
 			this.phase = n;
 				$("#phaseSwitchDiv").click(function(){
 					$(this).hide();
-					game.setTimeout(function(){
+					game.timeout = setTimeout(function(){
 						game.initDamageControl();
 					}, 1000);
 				});
