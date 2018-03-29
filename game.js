@@ -1316,6 +1316,7 @@ function Game(data, userid){
 	this.resetCC = function(){
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].cc = [];
+		}
 	}
 
 
