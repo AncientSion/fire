@@ -1985,7 +1985,7 @@ function Game(data, userid){
 			.show()
 			.find("#combatlogInnerWrapper").find("#combatLog")
 				.append($("<tr>")
-					.append($("<th>").attr("colSpan", 8).html("Event Log")))
+					.append($("<th>").attr("colSpan", 8).css("font-size", 18).html("Event Log")))
 				.append($("<tr>")
 				.append($("<th>").attr("colSpan", 5).html("Event Type"))
 				.append($("<th>").html("Armour"))
