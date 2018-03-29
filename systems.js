@@ -1097,7 +1097,7 @@ PrimarySystem.prototype.setTimeLoaded = function(){
 }
 
 PrimarySystem.getCritLogString = function(){
-	var html "";
+	var html = "";
 	for (let i = 0; i < this.crits.length; i++){
 		if (this.crits[i].turn != game.turn){continue;}
 		return html += (this.display + ": " + this.crits[j].value + "% efficiency loss.</br>");
@@ -1305,7 +1305,7 @@ Bridge.prototype.select = function(e){
 }
 
 Bridge.getCritLogString = function(){
-	var html "";
+	var html = "";
 	for (let i = 0; i < this.crits.length; i++){
 		if (this.crits[i].turn != game.turn){continue;}
 		return html += (this.display + " - " + this.crits[i].type + ": " + this.crits[j].value + "% efficiency loss.</br>");
