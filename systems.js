@@ -1096,7 +1096,7 @@ PrimarySystem.prototype.setTimeLoaded = function(){
 	$(this.element).find(".loadLevel").css("width", this.getLoadLevel() * 100 + "%");
 }
 
-PrimarySystem.getCritLogString = function(){
+PrimarySystem.prototype.getCritLogString = function(){
 	var html = "";
 	for (let i = 0; i < this.crits.length; i++){
 		if (this.crits[i].turn != game.turn){continue;}
@@ -1304,7 +1304,7 @@ Bridge.prototype.select = function(e){
 	}
 }
 
-Bridge.getCritLogString = function(){
+Bridge.prototype.getCritLogString = function(){
 	var html = "";
 	for (let i = 0; i < this.crits.length; i++){
 		if (this.crits[i].turn != game.turn){continue;}

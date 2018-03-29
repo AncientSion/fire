@@ -74,7 +74,6 @@ Fighter.prototype.addMainDivEvents = function(div, alive, isBuy){
 }
 
 Fighter.prototype.addSysEvents = function(div, isBuy){
-	console.log("dign");
 	if (isBuy){
 		div
 		.css("zIndex", 1)
