@@ -1317,7 +1317,7 @@ function Game(data, userid){
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].cc = [];
 			this.ships[i].doDraw = 1;
-		}
+			this.ships[i].setSize();
 	}
 
 	this.setPreMoveCC = function(){
