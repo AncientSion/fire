@@ -885,7 +885,7 @@ function Game(data, userid){
 		if (game.turn == 1){return;}
 		$("#combatlogWrapper")
 			.width(350)
-			.css("top", 75).css("left", 250)
+			.css("top", 150).css("left", 250)
 			.show()
 			.find(".combatLogHeader").html("Tactical Log").end()
 			.find("#combatLog").children().children().remove();
@@ -926,7 +926,7 @@ function Game(data, userid){
 					e.preventDefault(); e.stopPropagation();
 					//game.resetMovement();
 					setFPS(150);
-					this.setPreMoveCC();
+					game.setPreMoveCC();
 					game.resolveMovement();
 				})
 			);
@@ -1865,7 +1865,7 @@ function Game(data, userid){
 	}
 
 	this.finishMoveSubPhase = function(){
-		var time = 500;
+		var time = 1000;
 		if (game.animShip){
 			//console.log("ship done -> flight moves");
 			game.timeout = setTimeout(function(){
@@ -3239,7 +3239,7 @@ Game.prototype.resolveMovement = function(){
 
 	$("#combatlogWrapper")
 	.width(350)
-	.css("top", 75).css("left", 250)
+	.css("top", 150).css("left", 250)
 	.show()
 	.find(".combatLogHeader").html("Movement Log").end()
 	.find("#combatLog").children().children().remove();
