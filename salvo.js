@@ -97,7 +97,7 @@ Salvo.prototype.createBaseDiv = function(){
 	var div = document.createElement("div");
 		$(div)
 			.addclass("ammoDiv " + owner + " disabled")
-			.data("shipId", this.id);
+			.data("shipId", this.id)
 			.contextmenu(function(e){
 				e.stopImmediatePropagation(); e.preventDefault();
 				if ($(this).parent().parent().data("shipId") != aUnit){
