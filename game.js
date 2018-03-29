@@ -2435,7 +2435,7 @@ function Game(data, userid){
 				if (!window.animations[i].done){
 					if (!window.animations[i].animating){
 						window,animations[i].animating = 1;
-						//cam.setFocusToPos(game.getUnit(window.animations[i].id).getPlannedPos());
+						cam.setFocusToPos(game.getUnit(window.animations[i].id).getPlannedPos());
 						game.redraw();
 					}
 
@@ -2780,7 +2780,7 @@ function Game(data, userid){
 		if (l){
 			var w = l*(s+3*2);
 
-			ele.width(Math.min(800, w)).removeClass("disabled");
+			ele.width(Math.min(782, w)).removeClass("disabled");
 		}
 	}
 }
@@ -2820,7 +2820,7 @@ Game.prototype.getUnitByClick = function(pos){
 	var max = 100;
 
 	for (var i = 0; i < this.ships.length; i++){
-		var r = this.ships[i].size/3;
+		var r = Math.max(10, this.ships[i].size/5);
 		if (! this.ships[i].destroyed){
 			if (this.ships[i].isReady){
 				var shipPos = this.ships[i].getDrawPos();

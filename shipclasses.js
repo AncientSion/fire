@@ -357,7 +357,8 @@ Ship.prototype.doHover = function(){
 
 	if (game.phase == 2){
 		this.drawPastMovePlan();
-	} else this.drawMovePlan();
+	}
+	this.drawMovePlan();
 	this.drawIncomingMovePlan();
 	this.drawTargetMovePlan();
 }
@@ -1431,21 +1432,14 @@ Ship.prototype.createCritLogEntry = function(){
 	if (!this.ship){return;}
 	
 	var html = "<td colSpan=4><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is subject to critical effects.</td>" + "<td colSpan=5>";
-	var crits = false;
+	var expand = "";
 
 	for (let i = 0; i < this.primary.systems.length; i++){
-		for (let j = this.primary.systems[i].crits.length-1; j >= 0; j--){
-			if (this.primary.systems[i].crits[j].turn == game.turn){
-				crits = true;
-				html += this.primary.systems[i].display + ": " + this.primary.systems[i].crits[j].value + "% efficiency loss.</br>";
-			} else break;
-		}
-	}
+		expand += this.primary.systems[i].getCritLogString()
+	} else break;
 
-	if (crits){
-		this.attachLogEntry(html);
-		html+= "</td>";
-		//$("#combatLog").find("tr").last().find("td").attr("colSpan", 9)
+	if (expand.length > 2){
+		this.attachLogEntry(html + expand);
 	}
 }
 

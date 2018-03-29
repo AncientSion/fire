@@ -1096,6 +1096,15 @@ PrimarySystem.prototype.setTimeLoaded = function(){
 	$(this.element).find(".loadLevel").css("width", this.getLoadLevel() * 100 + "%");
 }
 
+PrimarySystem.getCritLogString = function(){
+	var html "";
+	for (let i = 0; i < this.crits.length; i++){
+		if (this.crits[i].turn != game.turn){continue;}
+		return html += (this.display + ": " + this.crits[j].value + "% efficiency loss.</br>");
+	}
+	return html;
+}
+
 PrimarySystem.prototype.hover = function(e){
 	if (game.flightDeploy){return false;}
 	if (this.highlight){
@@ -1293,9 +1302,16 @@ Bridge.prototype.select = function(e){
 			.find(".header").html("Crew specialists on board").end()
 			.find("#crewTable").find("img").each(function(){$(this).remove();});
 	}
-
 }
 
+Bridge.getCritLogString = function(){
+	var html "";
+	for (let i = 0; i < this.crits.length; i++){
+		if (this.crits[i].turn != game.turn){continue;}
+		return html += (this.display + " - " + this.crits[i].type + ": " + this.crits[j].value + "% efficiency loss.</br>");
+	}
+	return html;
+}
 
 Bridge.prototype.getUpgradeData = function(){
 	var loads = [];
@@ -3612,7 +3628,7 @@ Area.prototype.getAimData = function(target, final, dist, row){
 		row
 		.append($("<td>"))
 		.append($("<td>").attr("colSpan", 2).html("</span>Maximal deviation:</span>"))
-		.append($("<td>").attr("colSpan", 1).html(Math.floor(dist/100 * this.accDecay) + "<span> px</span>"));
+		.append($("<td>").attr("colSpan", 1).html(Math.floor(dist/100 * this.getAccuracy()) + "<span> px</span>"));
 		this.validTarget = 1;
 		this.odds = 1;
 	}
@@ -3658,7 +3674,7 @@ Area.prototype.handleAimEvent = function(o, t){
 	salvoCtx.stroke();
 
 	salvoCtx.beginPath();
-	salvoCtx.arc(0, 0, dist/100*this.accDecay, 0, 2*Math.PI, false);
+	salvoCtx.arc(0, 0, dist/100*this.getAccuracy(), 0, 2*Math.PI, false);
 	salvoCtx.closePath();
 	salvoCtx.fillStyle = "white";
 	salvoCtx.globalAlpha = 0.2;
@@ -3709,7 +3725,7 @@ Area.prototype.highlightEvent = function(){
 	salvoCtx.stroke();
 
 	salvoCtx.beginPath(); // devi
-	salvoCtx.arc(0, 0, dist/100*this.accDecay, 0, 2*Math.PI, false);
+	salvoCtx.arc(0, 0, dist/100*this.getAccuracy(), 0, 2*Math.PI, false);
 	salvoCtx.closePath();
 	salvoCtx.fill();
 
@@ -3738,58 +3754,6 @@ Area.prototype.highlightEvent = function(){
 	salvoCtx.lineWidth = 1;
 	salvoCtx.fillStyle = "white";
 	salvoCtx.strokeStyle = "white";
-	salvoCtx.globalAlpha = 1;
-	salvoCtx.setTransform(1,0,0,1,0,0);
-}
-
-Area.prototype.highlightEventa = function(){
-	var o = game.getUnit(this.parentId);
-	var t = this.fireOrders[this.fireOrders.length-1];
-	var dist = getDistance(o, t);
-	if (game.phase != 2 && !o.friendly){
-		t = getPointInDir(this.maxRange, getAngleFromTo(o, t), o.x, o.y);
-	}
-
-	salvoCtx.translate(cam.o.x, cam.o.y);
-	salvoCtx.scale(cam.z, cam.z)
-	salvoCtx.translate(o.x, o.y);
-
-	salvoCtx.beginPath();
-	salvoCtx.moveTo(0, 0);
-	salvoCtx.translate(-o.x + t.x, -o.y + t.y);
-	salvoCtx.lineTo(0, 0);
-	salvoCtx.closePath();
-	salvoCtx.strokeStyle = "white";
-	salvoCtx.globalAlpha = 0.25;
-	salvoCtx.stroke();
-
-	if (o.friendly){
-		salvoCtx.beginPath();
-		salvoCtx.arc(0, 0, dist/100*this.accDecay, 0, 2*Math.PI, false);
-		salvoCtx.closePath();
-		salvoCtx.fillStyle = "white";
-		salvoCtx.globalAlpha = 0.2;
-		salvoCtx.fill();
-	}
-
-	salvoCtx.globalAlpha = 0.5;
-	if (game.phase < 2){
-		salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height);
-	}
-
-	if (game.phase == 2){
-		salvoCtx.beginPath();
-		salvoCtx.moveTo(0, 0);	
-		salvoCtx.translate(o.x - t.x, o.y - t.y);
-		salvoCtx.translate(-o.x + t.rolls[0], -o.y + t.rolls[1]);
-		salvoCtx.lineTo(0, 0);
-		salvoCtx.closePath();
-		salvoCtx.strokeStyle = "red";
-		salvoCtx.stroke();
-		salvoCtx.strokeStyle = "white";
-		salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height);
-	}
-
 	salvoCtx.globalAlpha = 1;
 	salvoCtx.setTransform(1,0,0,1,0,0);
 }
