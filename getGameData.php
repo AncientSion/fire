@@ -1,10 +1,13 @@
 <?php
 
 include_once 'global.php';
+$userid = 0;
+$gameid = 0;
+if (isset($_SESSION["userid"])){$userid = $_SESSION["userid"];}
+if (isset($_SESSION["gameid"])){$gameid = $_SESSION["gameid"];}
 
 $dbManager = DBManager::app();
-$manager = new Manager($_SESSION["userid"], $_SESSION["gameid"] = 0);
-$gameid = $_SESSION["gameid"];
+$manager = new Manager($userid, $gameid);
 	
 
 if (isset($_GET["type"])){

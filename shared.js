@@ -62,6 +62,10 @@ function initChat(){
 				}
 			})//.drag();
 		}
+
+		if (!game.userid){
+			$chat.find(".sendWrapper").remove();
+		}
 }
 
 function getPhaseString(val){

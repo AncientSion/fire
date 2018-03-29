@@ -61,7 +61,6 @@ window.ajax = {
 	},
 
 	doChat: function(){
-		if (!game.userid){return;}
 		var msg = $(".chatWrapper").find(".sendWrapper").find("#msg").val();
 		if (!msg.length || (msg.length == 2 && msg.substring(0, 1) == '"' && msg.substring(1, 2) == '"')){return;}
 
@@ -86,7 +85,6 @@ window.ajax = {
 	},
 
 	checkChat: function(){
-		//return;
 		$.ajax({
 			type: "GET",
 			url: "getGameData.php",
