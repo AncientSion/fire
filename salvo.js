@@ -100,9 +100,9 @@ Salvo.prototype.createBaseDiv = function(){
 			.data("shipId", this.id)
 			.contextmenu(function(e){
 				e.stopImmediatePropagation(); e.preventDefault();
-				if ($(this).parent().parent().data("shipId") != aUnit){
+				if ($(this).data("shipId") != aUnit){
 					game.zIndex--;
-					$(this).parent().parent().addClass("disabled");
+					$(this).addClass("disabled");
 				}
 			})
 
