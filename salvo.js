@@ -95,9 +95,18 @@ Salvo.prototype.createBaseDiv = function(){
 	var owner = "friendly";
 	if (this.userid != game.userid){owner = "hostile";}
 	var div = document.createElement("div");
-		div.className = "ammoDiv " + owner + " disabled";
-		$(div).data("ammoId", this.id);
-	
+		$(div)
+			.addclass("ammoDiv " + owner + " disabled")
+			.data("shipId", this.id);
+			.contextmenu(function(e){
+				e.stopImmediatePropagation(); e.preventDefault();
+				if ($(this).parent().parent().data("shipId") != aUnit){
+					game.zIndex--;
+					$(this).parent().parent().addClass("disabled");
+				}
+			})
+
+
 	this.element = div;
 	
 	var table = document.createElement("table");
@@ -205,7 +214,7 @@ Salvo.prototype.createBaseDiv = function(){
 	$(div).contextmenu(function(e){
 		e.stopPropagation();
 		e.preventDefault();
-		if (!aUnit ||aUnit != $(this).data("ammoId")){
+		if (!aUnit ||aUnit != $(this).data("shipId")){
 			$(this).addClass("disabled");
 		};
 	}).drag();
