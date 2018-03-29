@@ -932,9 +932,10 @@ function Game(data, userid){
 			);
 
 		if (this.events.length){
-			$($("#combatLog").find("td")[0]).attr("colSpan", 8)
-			//console.log(this.events);
-			this.resolvePostMoveFire();
+			game.timeout = setTimeout(function(){
+				$($("#combatLog").find("td")[0]).attr("colSpan", 8)
+				game.resolvePostMoveFire();
+			}, 1000);
 		}
 		else {
 			this.animating = 0;
@@ -1998,7 +1999,7 @@ function Game(data, userid){
 		this.animating = 1;
 		this.drawShips();
 
-		var timeout = setTimeout(function(){
+		this.timeout = setTimeout(function(){
 			game.animateAllFireOrders()
 		}, 500);
 	}
@@ -3172,7 +3173,7 @@ Game.prototype.deployDone = function(){
 	this.logEvents();
 
 	if (hasEvent){
-		timeout = setTimeout(function(){
+		this.timeout = setTimeout(function(){
 			$("#combatLog").find("tbody")
 				.append($("<tr>")
 					.append($("<td>").html("Deploy Resolution concluded."))
