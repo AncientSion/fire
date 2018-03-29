@@ -936,10 +936,11 @@ function Game(data, userid){
 			//console.log(this.events);
 			this.resolvePostMoveFire();
 		}
-
-		salvoCtx.clearRect(0, 0, res.x, res.y);
-		this.drawingEvents = 1;
-		this.draw();
+		else {
+			this.animating = 0;
+			this.drawingEvents = 1;}
+			this.draw();
+		}
 	}
 
 	this.initDamageControl = function(){		
@@ -955,7 +956,7 @@ function Game(data, userid){
 			this.ships[i].setSupportImage();
 		}
 		this.animating = 0;
-		if (game.phase == 2){game.drawingEvents = 1;}
+		this.drawingEvents = 1;}
 		this.draw();
 		
 		$(fxCanvas).css("opacity", 0.25);
@@ -3238,7 +3239,7 @@ Game.prototype.resolveMovement = function(){
 
 	$("#combatlogWrapper")
 	.width(350)
-	.css("top", 75).css("left", 250)
+	.css("top", 150).css("left", 250)
 	.show()
 	.find(".combatLogHeader").html("Movement Log").end()
 	.find("#combatLog").children().children().remove();
