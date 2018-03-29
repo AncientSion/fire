@@ -921,7 +921,7 @@ function Game(data, userid){
 		}
 		$("#combatLog").find("tbody")
 			.append($("<tr>")
-				.append($("<td>").html("Movement Resolution concluded."))
+				.append($("<td>").html("All ships, squadrons, fighters, ballistics have moved."))
 				.contextmenu(function(e){
 					e.preventDefault(); e.stopPropagation();
 					//game.resetMovement();
@@ -1682,9 +1682,9 @@ function Game(data, userid){
 		var distY = maxY - minY;
 
 		if (distX > res.x){
-			cam.setZoom(res.x/distX / 1.3);
+			cam.setZoom(res.x/distX / 1.4);
 		} else if (distY > res.y){
-			cam.setZoom(res.y/distY / 1.3);
+			cam.setZoom(res.y/distY / 1.4);
 		}
 
 		//$("#unitGUI").hide();
@@ -1984,8 +1984,9 @@ function Game(data, userid){
 			.css("width", 450)
 			.find("#combatlogInnerWrapper").find("#combatLog")
 				.append($("<tr>")
-				.append($("<th>"))
-				.append($("<th>").attr("colSpan", 4).html("Event Type"))
+					.append($"<th>").attr("colSpan", 8).html("Event Log"))
+				.append($("<tr>")
+				.append($("<th>").attr("colSpan", 5).html("Event Type"))
 				.append($("<th>").html("Armour"))
 				.append($("<th>").html("System"))
 				.append($("<th>").html("Structure")))
@@ -2323,7 +2324,7 @@ function Game(data, userid){
 
 		if (!game.fireOrders[i].animating){
 			game.fireOrders[i].animating = 1;
-			if (game.phase == 2){cam.setFireFocus(game.fireOrders[i]);}
+			if (game.phase == 3){cam.setFireFocus(game.fireOrders[i]);}
 			game.draw();
 			return;
 		}
