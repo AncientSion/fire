@@ -987,10 +987,11 @@ function Game(data, userid){
 		else if (n == 2){
 				$("#phaseSwitchDiv").click(function(){
 					setFPS(90);
+					game.prepResolveMovement();
 					game.draw();
 					$(this).hide();
 					game.timeout = setTimeout(function(){
-						game.resolveMovement();
+						game.doResolveMovement();
 					}, 1000);
 				});
 		}
@@ -3236,9 +3237,14 @@ Game.prototype.logEvents = function(){
 	}
 }
 
-Game.prototype.resolveMovement = function(){
-	if (aUnit){game.getUnit(aUnit).select();}
+Game.prototype.prepResolveMovement = function(){
+	this.resetImageData();
+	this.setUnitMovementFocus();
+	this.setUnitMovementDetails();
+}
 
+Game.prototype.doResolveMovement = function(){
+	if (aUnit){game.getUnit(aUnit).select();}
 	this.drawingEvents = 0;
 	this.animShip = 1;
 	this.animFlight = 0;
@@ -3250,10 +3256,7 @@ Game.prototype.resolveMovement = function(){
 	.show()
 	.find(".combatLogHeader").html("Movement Log").end()
 	.find("#combatLog").children().children().remove();
-	
-	this.resetImageData();
-	this.setUnitMovementFocus();
-	this.setUnitMovementDetails();
+
 	this.animateUnitMovement();
 }
 
