@@ -348,7 +348,7 @@
 						<th style="border-bottom: 1px solid white;" colSpan=9>Combat Log</th>
 					</tr>
 					<tr>
-						<th style="border-left: 1px solid white;" width=60px>Type</th>
+						<th style="border-left: 1px solid white;" width=50px>Type</th>
 						<th width=105px>Shooter</th>
 						<th width=105px>Target</th>
 						<th width=160px>Weapon</th>
@@ -364,7 +364,7 @@
 				<table id="combatLog">
 					<tbody>
 						<tr style="height: 2px">
-							<th width=70px></th>
+							<th width=50px></th>
 							<th width=105px></th>
 							<th width=105px></th>
 							<th width=160px></th>
