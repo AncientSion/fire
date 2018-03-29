@@ -2269,7 +2269,8 @@ function Game(data, userid){
 						}*/
 					}
 				}
-				anim.html += "A total of <font color='" + color + "'>" + counter + "</font> elements from <font color='" + color + "'>Unit #" + anim.id + "</font> were destroyed or disengaged";
+				anim.html += "A total of <font color='" + color + "'>" + counter + "</font> elements from <font color='" + color + "'>Unit #" + anim.id + "</font> were destroyed or disengaged.";
+				if (this.ships[i].isDestroyed()){anim.html += " The unit is completly wiped."}
 			}
 			else if (game.ships[i].ship && game.ships[i].isDestroyedThisTurn()){
 				anim.html += "<font color='" + color + "'>Unit #" + anim.id + " " + game.ships[i].getCallSign() + "</font> ";

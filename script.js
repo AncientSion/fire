@@ -182,8 +182,12 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 					}
 				}
 				else if (shooter.flight){
+					if (target.id == this.mission.targetid){
+						lockString += " (Mission)";
+					} else lockString += " (Escort)";
+
 					if (target.flight || target.salvo){
-						lockString += " (Escort)";
+						lockString += " (Mission)";
 					}
 				}
 				lockString += "</span>";
@@ -196,7 +200,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 				}
 				else if (shooter.flight){
 					if (target.flight || target.salvo){
-						maskString += " (escorting)";
+						maskString += " ERROR 666";
 					}
 				}
 				maskString += "</span>";

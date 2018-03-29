@@ -1100,6 +1100,7 @@ PrimarySystem.prototype.getCritLogString = function(){
 	var html = "";
 	for (let i = 0; i < this.crits.length; i++){
 		if (this.crits[i].turn != game.turn){continue;}
+		if (this.crits[i].type.length > 6){continue;}
 		return html += (this.display + ": " + this.crits[i].value + "% efficiency loss.</br>");
 	}
 	return html;
