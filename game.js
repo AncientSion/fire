@@ -2156,7 +2156,7 @@ function Game(data, userid){
 
 		//console.log(this.fireOrders);
 		for (var i = this.fireOrders.length-1; i >= 0; i--){
-				this.fireOrders[i].type = "Regular" + this.fireOrders[i].id;
+				this.fireOrders[i].type = "Reg."// + this.fireOrders[i].id;
 			if (!this.fireOrders[i].guns){
 				this.fireOrders.splice(i, 1);
 				continue;

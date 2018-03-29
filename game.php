@@ -348,11 +348,11 @@
 						<th style="border-bottom: 1px solid white;" colSpan=9>Combat Log</th>
 					</tr>
 					<tr>
-						<th style="border-left: 1px solid white;" width=70px>Type</th>
+						<th style="border-left: 1px solid white;" width=60px>Type</th>
 						<th width=105px>Shooter</th>
 						<th width=105px>Target</th>
 						<th width=160px>Weapon</th>
-						<th width=60px>Chance</th>
+						<th width=70px>Chance</th>
 						<th width=60px>Hits</th>
 						<th width=70px>Armour</th>
 						<th width=70px>System</th>

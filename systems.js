@@ -2545,8 +2545,7 @@ Particle.prototype.getAnimation = function(fire){
 	}
 	
 	var linked = this.linked * !fire.shooter.flight-1;
-	console.log(linked);
-
+	//console.log(linked);
 	
 	for (var i = 0; i < fire.guns; i++){
 		var gunAnims = [];
