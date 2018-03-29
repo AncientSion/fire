@@ -936,6 +936,12 @@ function Game(data, userid){
 		$(table)
 			.append($("<tr>")
 				.append($("<td>").html("Movement Resolution concluded."))
+				.contextmenu(function(e){
+					e.preventDefault(); e.stopPropagation();
+					//game.resetMovement();
+					setFPS(150);
+					game.resolveMovement();
+				})
 			);
 
 		salvoCtx.clearRect(0, 0, res.x, res.y);
@@ -985,6 +991,7 @@ function Game(data, userid){
 		}
 		else if (n == 2){
 				$("#phaseSwitchDiv").click(function(){
+					setFPS(90);
 					game.resolveMovement();
 					$(this).hide()
 				});
@@ -1651,8 +1658,6 @@ function Game(data, userid){
 		window.then = Date.now();
 		window.startTime = then;
 
-		setFPS(90);
-
 		var minX = 0;
 		var minY = 0;
 		var maxX = 0;
@@ -1695,12 +1700,13 @@ function Game(data, userid){
 				toDo = false;
 			}
 			else if (this.ships[i].flight && this.ships[i].mission.arrived && this.ships[i].mission.arrived < game.turn){
+				toDo = false;
 				for (var j = 0; j < this.ships[i].actions.length; j++){
 					this.ships[i].actions[j].animated = true;
 				}
 			}
 
-			if (! toDo){
+			if (!toDo){
 				continue;
 			}
 

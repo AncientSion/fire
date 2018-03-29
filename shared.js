@@ -105,6 +105,7 @@ window.startTime, window.now, window.then, window.elapsed;
 window.iterator = 0;
 
 function setFPS(fps){
+	console.log("setting fps to: " + fps);
 	window.fpsTicks = 1000 / fps;
 }
 

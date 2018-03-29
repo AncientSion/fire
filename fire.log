@@ -140,3 +140,44 @@ game 5, user 1 --- adjusting to turn/phase/status 2/3/waiting
 game 5, user 2 --- adjusting to turn/phase/status 2/3/waiting 
 TIME: 0.039 seconds. 
 4 mb 
+prepareAdvance 
+********************* doAdvance for game5 from phase 3 to phase 4 
+handleJumpOutActions 
+endTurn 
+doFirstDestroyedCheck 
+doSecondDestroyedCheck 
+updateDestroyedState 
+assembleEndStates 
+updateUnitStats s:2 2/3 
+game 5, user 1 --- adjusting to turn/phase/status 3/-1/waiting 
+game 5, user 2 --- adjusting to turn/phase/status 3/-1/waiting 
+TIME: 0.017 seconds. 
+2 mb 
+prepareAdvance 
+********************* doAdvance for game5 from phase -1 to phase 0 
+handleDeployPhase 
+resolveDeployActions s: 0 
+handleJumpInActions 
+resolveJumpOutActions 
+handleInitialFireOrders 
+assemblDeployStates 
+game 5, user 1 --- adjusting to turn/phase/status 3/0/waiting 
+game 5, user 2 --- adjusting to turn/phase/status 3/0/waiting 
+TIME: 0.008 seconds. 
+4 mb 
+prepareAdvance 
+********************* doAdvance for game5 from phase 0 to phase 1 
+handleMovementPhase 
+handleShipMovement 
+resolveMovementDB 
+handleMixedMovement 
+handleMixedMovement 
+handlePostMoveFires: 0 
+handling data 
+handleResolvedFireData 
+DB updateFireOrders: 0 
+updateMissionState 
+game 5, user 1 --- adjusting to turn/phase/status 3/2/waiting 
+game 5, user 2 --- adjusting to turn/phase/status 3/2/waiting 
+TIME: 0.021 seconds. 
+4 mb 
