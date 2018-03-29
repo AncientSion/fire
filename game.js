@@ -910,7 +910,7 @@ function Game(data, userid){
 		}
 	}
 
-	this.movementDone = function(){	
+	this.movementDone = function(){
 		console.log("movementDone");	
 		this.setlastPosCC();
 		this.checkUnitOffsetting();
@@ -938,7 +938,7 @@ function Game(data, userid){
 		}
 		else {
 			this.animating = 0;
-			this.drawingEvents = 1;}
+			this.drawingEvents = 1;
 			this.draw();
 		}
 	}
@@ -3239,7 +3239,7 @@ Game.prototype.resolveMovement = function(){
 
 	$("#combatlogWrapper")
 	.width(350)
-	.css("top", 150).css("left", 250)
+	.css("top", 75).css("left", 250)
 	.show()
 	.find(".combatLogHeader").html("Movement Log").end()
 	.find("#combatLog").children().children().remove();
