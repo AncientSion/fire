@@ -910,7 +910,7 @@ function Game(data, userid){
 		}
 	}
 
-	this.resetFireOrder = function(){
+	this.resetFireOrders = function(){
 		for (let i = 0; i < this.fireOrders.length; i++){
 			if (this.fireOrders[i].animated){
 				this.fireOrders[i].animated = 0;
