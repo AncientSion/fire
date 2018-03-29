@@ -3238,6 +3238,7 @@ Game.prototype.logEvents = function(){
 }
 
 Game.prototype.prepResolveMovement = function(){
+	this.drawingEvents = 0;
 	this.resetImageData();
 	this.setUnitMovementFocus();
 	this.setUnitMovementDetails();
@@ -3245,7 +3246,6 @@ Game.prototype.prepResolveMovement = function(){
 
 Game.prototype.doResolveMovement = function(){
 	if (aUnit){game.getUnit(aUnit).select();}
-	this.drawingEvents = 0;
 	this.animShip = 1;
 	this.animFlight = 0;
 	this.animSalvo = 0;
