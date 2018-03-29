@@ -927,7 +927,8 @@ function Game(data, userid){
 					//game.resetMovement();
 					setFPS(150);
 					game.setPreMoveCC();
-					game.resolveMovement();
+					game.prepResolveMovement();
+					game.doResolveMovement();
 				})
 			);
 
@@ -1985,7 +1986,7 @@ function Game(data, userid){
 			.show()
 			.find("#combatlogInnerWrapper").find("#combatLog")
 				.append($("<tr>")
-					.append($("<th>").attr("colSpan", 8).css("font-size", 18).html("Event Log")))
+					.append($("<td>").attr("colSpan", 8).css("font-size", 18).html("Event Log")))
 				.append($("<tr>")
 				.append($("<th>").attr("colSpan", 5).html("Event Type"))
 				.append($("<th>").html("Armour"))
