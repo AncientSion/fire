@@ -182,7 +182,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 					}
 				}
 				else if (shooter.flight){
-					if (target.id == this.mission.targetid){
+					if (target.id == shooter.mission.targetid){
 						lockString += " (Mission)";
 					} else lockString += " (Escort)";
 
