@@ -88,63 +88,87 @@ Salvo.prototype = Object.create(Mixed.prototype);
 Salvo.prototype.getSpeedString = function(){
 	if (this.structures[0].missile){
 		return (this.getCurSpeed() + "px (+" + Math.floor(this.getBaseImpulse()) + "px per Turn)");
-	} else return ("fixed " + this.getCurSpeed() + "px");
+	} else return ("fixed " + this.getCurSpeed() + "px / Turn");
 }
 
 Salvo.prototype.createBaseDiv = function(){
 	var owner = "friendly";
 	if (this.userid != game.userid){owner = "hostile";}
-	var div = document.createElement("div");
-		$(div)
+	var div = $("<div>")
 			.addClass("ammoDiv " + owner + " disabled")
 			.data("shipId", this.id)
-			.contextmenu(function(e){
+			/*.contextmenu(function(e){
 				e.stopImmediatePropagation(); e.preventDefault();
 				if ($(this).data("shipId") != aUnit){
 					game.zIndex--;
 					$(this).addClass("disabled");
 				}
-			})
+			})*/
 
 
 	this.element = div;
+	$(document.body).append(div);
 	
-	var table = document.createElement("table");
-		table.style.width = "95%"
-
-	var tr = table.insertRow(-1);
-	var td = tr.insertCell(-1); td.className = "header";	
-		td.innerHTML = this.structures.length + "x '" + this.structures[0].name + "' #" + this.id; td.colSpan = 4;
-
-	var tr = table.insertRow(-1);
-	var td = tr.insertCell(-1); td.className = "subHeader";
-		td.innerHTML = this.structures[0].display; td.colSpan = 4;
+	var topDiv = $("<div>").addClass("topDiv");
+	var subDiv = $("<div>").addClass("header");
+	var headerC = "red";
+	if (this.friendly){headerC = "green";}
 
 	var target = this.getTarget();
 	var dist = Math.ceil(getDistance(this.getPlannedPos(), target.getPlannedPos()));
-	var tr = table.insertRow(-1);
-	var td = tr.insertCell(-1);
-		td.className = "subHeader"; td.colSpan = 4;
-		td.innerHTML = "Target: <span class='red font15'>" + target.name + " #" + target.id + "</span>,  distance: " + dist + "px";
-	div.appendChild(table);
 
-	var table = document.createElement("table");
-		table.style.width = "95%"; table.style.marginTop = "10px";
-	$(table)
+	var table = $("<table>")
 		.append($("<tr>")
-    		.append($("<th>").html("Thrust / Accel"))
-    		.append($("<th>").html("Armour"))
-    		.append($("<th>").html("Damage"))
-    		.append($("<th>").html("Tracking up to"))
-		)
+			.append($("<th>").html(this.structures.length + "x '" + this.structures[0].name + "' #" + this.id).attr("colSpan", 4).addClass(headerC)))
 		.append($("<tr>")
-    		.append($("<td>").html(this.getSpeedString()))
-    		.append($("<td>").html(this.structures[0].negation))
-    		.append($("<td>").html(this.getDamage()))
-    		.append($("<td>").html(this.getTrackingString()))
-		)
+			.append($("<th>").html(this.structures[0].display).attr("colSpan", 4)))
+		.append($("<tr>")
+			.append($("<td>").html("Type (Size)"))
+			.append($("<td>").html(game.getUnitType(this.traverse) + " (" + this.traverse + ")").attr("colSpan", 3)))
+		.append($("<tr>")
+			.append($("<td>").html("Target"))
+			.append($("<td>").html("<span class='red'>" + target.name + " #" + target.id + "</span> - Dist: " + dist + "px").attr("colSpan", 3)))
+		.append($("<tr>")
+			.append($("<td>").html("Speed"))
+			.append($("<td>").html(this.getSpeedString()).addClass("Thrust").attr("colSpan", 3)))
+		.append($("<tr>")
+    		.append($("<td>").html("Tracking up to"))
+			.append($("<td>").html(this.getTrackingString()).attr("colSpan", 3)))
+		.append($("<tr>")
+    		.append($("<td>").html("Damage"))
+    		.append($("<td>").html(this.getDamage()).attr("colSpan", 3)))
+		.append($("<tr>")
+			.append($("<td>").html("To-Hit Profile"))
+			.append($("<td>").html(this.getProfileString()).attr("colSpan", 3)))
+		.append($("<tr>")
+    		.append($("<td>").html("Armour"))
+    		.append($("<td>").html(this.structures[0].negation).attr("colSpan", 3)))
 
-	div.appendChild(table);
+	subDiv.append(table);
+	topDiv.append(subDiv)
+	div.append(topDiv);
+
+
+	var structContainer = $("<div>").addClass("structContainer");
+	$(div).append(structContainer);
+
+	for (var i = 0; i < this.structures.length; i++){
+		var ballDiv = this.structures[i].getElement(false);
+		structContainer.append(ballDiv);
+	}
+
+
+	$(div)/*.contextmenu(function(e){
+		e.stopPropagation();
+		e.preventDefault();
+		if (!aUnit ||aUnit != $(this).data("shipId")){
+			$(this).addClass("disabled");
+		};
+	})
+	*/.drag();
+
+	return;
+
 
 	var table = document.createElement("table");
 		table.style.borderCollapse = "collapse";
@@ -283,6 +307,10 @@ Salvo.prototype.setPostMoveSize = function(){
 	return;
 }
 
+Salvo.prototype.getProfileString = function(){
+	return this.getStringHitChance();
+}
+
 Salvo.prototype.getShortInfo = function(){
 	var ele = game.ui.shortInfo;
 	if (this.userid == game.userid){
@@ -293,7 +321,7 @@ Salvo.prototype.getShortInfo = function(){
 		table.insertRow(-1).insertCell(-1).innerHTML = ("Salvo #" + this.id);
 		table.insertRow(-1).insertCell(-1).innerHTML = this.structures.length + "x " + this.structures[0].name;
 		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + this.getCurSpeed();
-		table.insertRow(-1).insertCell(-1).innerHTML = this.getStringHitChance();
+		table.insertRow(-1).insertCell(-1).innerHTML = "Base To-Hit: " + this.getStringHitChance();
 
 	if (!this.mission.arrived && game.phase < 1 && this.inRange()){
 		table.insertRow(-1).insertCell(-1).innerHTML = "<span class='red'>contact imminent</span>";

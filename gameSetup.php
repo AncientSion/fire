@@ -169,25 +169,28 @@ else {
 		</div>
 		<div id="hangarDiv" class="disabled">
 			<div class="header">
-				Pick Strikecraft for the selected Hangar
-			</div>
-			<div class="header">
+				<span>Configure Fighter loadout.</span>
+				<br>
 				Can launch up to <span id="launchRate"></span> units per cycle.
-			</div>
-			<div class="header">
+				<br>
 				Sufficient space for <span id="capacity"></span> units.
 			</div>
 			<table id="hangarTable">
 			</table>
-			<div class="buttonTD disabled" onclick='game.ships[0].doConfirmSystemLoadout()'>Confirm Loadout</div>
-
+			<div id ="missionType">
+				<table style="border: 1px solid white">
+					<tr><th colSpan=3>Select Mission Type</th></tr>
+					<tr><td></td><td width=70%>Patrol location</td><td></td></tr>
+					<tr><td></td><td>Strike / Escort / Intercept unit</td><td></td></tr>
+				</table>
+			</div>
+			<div class="header">
+				<div class="buttonTD disabled" onclick="game.enableFlightDeploy()">Launch Flight</div>
+			</div>
 		</div>
 		<div id="weaponDiv" class="disabled">
 			<div class="header">
 				Pick Ammunition for the selected weapon
-			</div>
-			<div class="header">
-				Can fire all <span id="reload"></span> turn/s.
 			</div>
 			<table id="weaponTable">
 			</table>
@@ -247,15 +250,19 @@ else {
 				canSubmit: 0,
 				system: 0,
 				fighters: [],
+				ballistics: [],
 
 				getUnitName: function(){
 					if (this.ships[0].ship){return this.ships[0].name;
 					} else return "Squadron";
 				},
 
-				getSampleFighter: function(display){
+				getSampleSubUnit: function(name){
 					for (let i = 0; i < this.fighters.length; i++){
-						if (this.fighters[i].display == display){return this.fighters[i];}
+						if (this.fighters[i].name == name){return this.fighters[i];}
+					}
+					for (let i = 0; i < this.ballistics.length; i++){
+						if (this.ballistics[i].name == name){return this.ballistics[i];}
 					}
 				},
 				
@@ -265,9 +272,12 @@ else {
 					for (var i = 0; i < this.ships[0].structures.length; i++){html +=  this.ships[0].structures[i].name + "/";}
 					return html.substr(0, html.length-1) + ")";
 				},
+
 				getUnitClass: function(){
 					if (this.ships[0].ship){return "Ship";
-					} else return "Squadron";},
+					} else return "Squadron";
+				},
+
 				getUnit: function(id){	
 					return this.ships[0];
 				},
@@ -418,6 +428,12 @@ else {
 					for (var i = 0; i < data.length; i++){
 						var fighter = initFighter(data[i]);;
 						this.fighters.push(fighter);
+					}
+				},
+				buildBallisticList: function(data, t){
+					for (var i = 0; i < data.length; i++){
+						var ballistic = initBallistic(data[i]);;
+						this.ballistics.push(ballistic);
 					}
 				},
 			}
@@ -749,9 +765,8 @@ else {
 		game.buildShipList(data[0], t);
 		game.buildSquadList(data[1], t);
 		game.buildFighterList(data[2], t);
+		game.buildBallisticList(data[3], t);
 
-
-		//squaddie
 		showShipList(ele);
 	}
 

@@ -11,7 +11,7 @@ class Trakk extends Light {
 	public $integrity = 400;
 	public $ep = 100;
 	public $ew = 450;
-	public $negation = 12;
+	public $negation = 11;
 	public $power = 1;
 
 	function __construct($id, $userid){

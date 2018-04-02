@@ -684,7 +684,8 @@ Single.prototype.getDetailsDiv = function(){
 		div.className = this.id + " flight";
 
 		var table = $("<table>")
-			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.display)))
+			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.name)))
+			.append($("<tr>").append($("<td>").attr("colSpan", 2).html(this.display)))
 			.append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.integrity)))
 			.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.negation)))
 			.append($("<tr>").append($("<td>").html("Speed").css("width", 120)).append($("<td>").html(this.baseImpulse)))
@@ -704,6 +705,139 @@ Single.prototype.getDetailsDiv = function(){
 	return div;
 }
 
+Single.prototype.addMainDivEvents = function(div, alive, isBuy){
+	if (isBuy){
+		div
+		.find("img")
+		.hover(function(e){
+			e.stopPropagation();
+			game.getSampleSubUnit($(this).parent().parent().parent().find("td").first().html()).hover(e);
+			return;
+		});
+		return;
+	}
+
+	if (alive){
+		div
+		.find("img")
+		.hover(function(e){
+			e.stopPropagation();
+			var shipId = $(this).parent().parent().parent().data("shipId");
+			var subId = $(this).parent().data("subId");
+			game.getUnit(shipId).getSystem(subId).hover(e);
+		})
+		.click(function(e){
+			e.stopPropagation();
+			var shipId = $(this).parent().parent().parent().data("shipId");
+			var subId = $(this).parent().data("subId");
+			console.log(game.getUnit(shipId).getSystem(subId));
+		});
+	}
+	else {
+		div
+		.find(".overlay")
+		.hover(function(e){
+			e.stopPropagation();
+			var shipId = $(this).parent().parent().parent().data("shipId");
+			var subId = $(this).parent().data("subId");
+			game.getUnit(shipId).getSystem(subId).hover(e);
+		})
+		.click(function(e){
+			e.stopPropagation();
+			var shipId = $(this).parent().parent().parent().data("shipId");
+			var subId = $(this).parent().data("subId");
+			console.log(game.getUnit(shipId).getSystem(subId));
+		})
+	}
+}
+
+Single.prototype.addSysEvents = function(div, isBuy){
+	if (isBuy){
+		div
+		.css("zIndex", 1)
+		.hover(function(e){
+			e.stopPropagation();
+			game.getSampleSubUnit($(this).parent().parent().parent().children().first().html()).systems[0].hover(e);
+
+			return;
+			var shipId = $(this).parent().parent().parent().data("shipId");
+			game.getUnit(shipId).getSystem($(this).data("systemId")).hover(e)
+		})
+		return;
+	}
+	
+	div
+	.click(function(e){
+		e.stopPropagation();
+		var shipId = $(this).parent().parent().parent().data("shipId");
+		game.getUnit(shipId).getSystem($(this).data("systemId")).select(e)
+	})
+	.contextmenu(function(e){
+		e.stopPropagation();
+		e.preventDefault();
+		var shipId = $(this).parent().parent().parent().data("shipId");
+		game.getUnit(shipId).selectAll(e, $(this).data("systemId"));
+	})
+	.hover(function(e){
+		e.stopPropagation();
+		$("#systemDetailsDiv").remove();
+		var shipId = $(this).parent().parent().parent().data("shipId");
+		game.getUnit(shipId).getSystem($(this).data("systemId")).hover(e)
+	})
+}
+
+Single.prototype.getElement = function(isBuy){
+	var div = $("<div>")
+		.addClass("fighterDiv")
+		.data("subId", this.id)
+		.append($(this.getBaseImage().cloneNode(true))
+			.addClass("rotate270 img80pct"))
+
+	var alive = 1;
+	if (this.destroyed || this.disabled){alive = 0;}
+	if (!alive){
+		div
+			.append($("<img>")
+				.attr("src", "varIcons/destroyed.png")
+				.addClass("overlay"))
+	}
+
+	this.addMainDivEvents(div, alive, isBuy);
+
+	var wrap = document.createElement("div");
+		wrap.className = "iconIntegrity"; wrap.style.height = 12;
+
+	var rem = this.getRemIntegrity();
+
+	var bgDiv = document.createElement("div");
+		bgDiv.className = "integrityAmount"; bgDiv.style.textAlign = "center"; bgDiv.style.fontSize = 12; bgDiv.style.top = 0;
+		bgDiv.innerHTML = rem + " / " + this.integrity;
+		wrap.appendChild(bgDiv);
+
+	var lowerDiv = document.createElement("div");
+		lowerDiv.className = "integrityNow"; lowerDiv.style.top = 0; lowerDiv.style.height = "100%";
+		lowerDiv.style.width = rem/this.integrity * 100 + "%";
+		wrap.appendChild(lowerDiv);
+		
+	var upperDiv = document.createElement("div");
+		upperDiv.className = "integrityFull"; upperDiv.style.top = 0;
+		wrap.appendChild(upperDiv);
+
+	div.append(wrap);
+
+	var s = 20;
+	for (var j = 0; j < this.systems.length; j++){
+		var ele = $(this.systems[j].getFighterSystemData(true));
+		this.addSysEvents(ele, isBuy)
+		div.append(ele);
+	}
+
+	return div;
+}
+
+
+
+
 
 
 function Ballistic(data){
@@ -717,6 +851,7 @@ function Ballistic(data){
 }
 
 Ballistic.prototype = Object.create(Single.prototype);
+
 
 Ballistic.prototype.create = function(data){
 	for (var k = 0; k < data.systems.length; k++){

@@ -8,10 +8,10 @@ class Mograth extends Light {
 	public static $value = 360;
 	public $mass = 1400;
 
-	public $integrity = 420;
-	public $ep = 110;
+	public $integrity = 390;
+	public $ep = 100;
 	public $ew = 550;
-	public $negation = 14;
+	public $negation = 13;
 
 	function __construct($id, $userid){
 		parent::__construct($id, $userid);
@@ -26,11 +26,11 @@ class Mograth extends Light {
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new LightParticle($this->getId(), $this->parentId, 300, 180);
+		$right->systems[] = new LightParticle($this->getId(), $this->parentId, 0, 180);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new LightParticle($this->getId(), $this->parentId, 180, 60);
+		$left->systems[] = new LightParticle($this->getId(), $this->parentId, 180, 360);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

@@ -1451,6 +1451,12 @@ include_once 'global.php';
 						"Aurora",
 						"Thunderbolt",
 					),
+					array(
+						"Needle",
+						"Naga",
+						"Cyclops",
+						"Titan",
+					),
 				);
 				break;
 			case "Centauri Republic";
@@ -1472,6 +1478,11 @@ include_once 'global.php';
 					array(
 						"Sentri",
 						"SitaraParticle",
+					),
+					array(
+						"Hasta",
+						"Javelin",
+						"Triarii",
 					),
 				);
 				break;
@@ -1510,6 +1521,11 @@ include_once 'global.php';
 					array(
 						"Frazi",
 						"Gorith",
+					),
+					array(
+						"Vran",
+						"Vranoth",
+						"VranothKa",
 					),
 				);
 				break;
@@ -1559,6 +1575,10 @@ include_once 'global.php';
 		for ($i = 0; $i < sizeof($units[2]); $i++){
 			$fighter = new $units[2][$i](0, 0);
 			$return[2][] = $fighter;
+		}
+		for ($i = 0; $i < sizeof($units[3]); $i++){
+			$ballistic = new $units[3][$i](0, 0);
+			$return[3][] = $ballistic;
 		}
 
 

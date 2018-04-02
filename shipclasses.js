@@ -1256,11 +1256,6 @@ Ship.prototype.getShortInfo = function(){
 	return table;
 }
 
-Ship.prototype.getStringHitChance = function(){
-	var baseHit = this.getBaseHitChance();
-	return ("Base Hit: " + Math.floor(this.profile[0] * baseHit) + "% - " + Math.floor(this.profile[1] * baseHit) + "%");
-}
-
 Ship.prototype.getParent = function(){
 	return this;
 }
@@ -1631,7 +1626,6 @@ Ship.prototype.getDrawFacing = function(){
 Ship.prototype.getImpulseMod = function(){
 	return this.getCurSpeed() / this.getBaseImpulse();
 }
-
 
 Ship.prototype.getBaseHitChance = function(){
 	return this.baseHitChance;
@@ -2044,7 +2038,7 @@ Ship.prototype.createBaseDiv = function(){
 		.append($("<tr>")
 			.append($("<th>").html(this.getCallSign()).attr("colSpan", 2).addClass(headerC)))
 		.append($("<tr>")
-			.append($("<td>").html("Unit Type / Size").css("width", "50%"))
+			.append($("<td>").html("Type (Size)").css("width", "50%"))
 			.append($("<td>").html(game.getUnitType(this.traverse) + " (" + this.traverse + ")")))
 		.append($("<tr>")
 			.append($("<td>").html("Speed"))
@@ -2055,12 +2049,15 @@ Ship.prototype.createBaseDiv = function(){
 		.append($("<tr>")
 			.append($("<td>").html("Speed, Roll, Flip"))
 			.append($("<td>").html(this.getImpulseChangeCost() + ", " + this.getActionCost(0) + ", " + this.getActionCost(1)).addClass("change")))
-		.append($("<tr>")
-			.append($("<td>").html("Delay / 1\xB0"))
-			.append($("<td>").html(round(this.getTurnDelay(), 2) + " px")))
+		//.append($("<tr>")
+		//	.append($("<td>").html("Delay / 1\xB0"))
+		//	.append($("<td>").html(round(this.getTurnDelay(), 2) + " px")))
 		.append($("<tr>")
 			.append($("<td>").html("Active Delay"))
 			.append($("<td>").html(this.getRemDelay()).addClass("delay")))
+		.append($("<tr>")
+			.append($("<td>").html("To-Hit Profile"))
+			.append($("<td>").html(this.getProfileString())))
 
 	subDiv.append(table);
 	topDiv.append(subDiv)
@@ -2090,6 +2087,15 @@ Ship.prototype.createBaseDiv = function(){
 	if (game.phase == 2){
 		$(div).find(".structContainer").show();
 	}
+}
+
+Ship.prototype.getProfileString = function(){
+	return ((Math.floor(this.baseHitChance*this.profile[0]) + " - " + Math.floor(this.baseHitChance*this.profile[1])) + "%");
+}
+
+Ship.prototype.getStringHitChance = function(){
+	var baseHit = this.getBaseHitChance();
+	return ("Base To-Hit: " + this.getProfileString());
 }
 
 Ship.prototype.expandDiv = function(div){
@@ -3132,7 +3138,7 @@ Ship.prototype.enableCrewPurchase = function(e, bridge){
 		table
 		.append(
 			$($("<tr>")
-				.append($("<td>").html(options[i] + " specialist"))
+				.append($("<td>").html(options[i] + "</br>specialist"))
 				.append($("<td>").html(this.getCrewEffect(i)))
 				.append($("<td>").html(this.getCrewAddCost(i)))
 				.append($("<td>")
@@ -3207,7 +3213,7 @@ Ship.prototype.updateCrewDiv = function(i){
 }
 
 Ship.prototype.getCrewEffect = function(i){
-	return "+" + this.getSystem(i+3).getCrewEffect() + " % output";
+	return "+" + this.getSystem(i+3).getCrewEffect() + " %</br>Output";
 }
 
 Ship.prototype.getCrewBaseCost = function(i){

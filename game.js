@@ -974,8 +974,14 @@ function Game(data, userid){
 		
 		$(fxCanvas).css("opacity", 0.25);
 
-
+		this.createCritLogEntries();
 		console.log("fireResolved");
+	}
+	
+	this.createCritLogEntries = function(){
+		for (let i = 0; i < this.ships.length; i++){
+			this.ships[i].createCritLogEntry();
+		}
 	}
 	
 	this.initPhase = function(n){
@@ -2313,7 +2319,6 @@ function Game(data, userid){
 
 	this.handlePostFireOrderAnim = function(){
 		this.createFireFinalEntry();
-		this.createCritLogEntries();
 		this.animateUnitExplos();
 	}
 
@@ -2324,12 +2329,6 @@ function Game(data, userid){
 				.append($("<td>").attr("colSpan", 9).html("Fire Order Resolution concluded")));
 
 		$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
-	}
-
-	this.createCritLogEntries = function(){
-		for (let i = 0; i < this.ships.length; i++){
-			this.ships[i].createCritLogEntry();
-		}
 	}
 
 	this.animateSingleFireOrder = function(i, goOn){

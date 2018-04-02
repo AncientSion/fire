@@ -175,6 +175,9 @@ Mixed.prototype.getArmourString = function(a){
 }
 
 Mixed.prototype.getStringHitChance = function(){
+	if (!this.structures.length){
+		return "";
+	}
 	var min = 1000; var max = 0;
 	for (var i = 0; i < this.structures.length; i++){
 		if (!this.structures[i].destroyed){
@@ -183,8 +186,8 @@ Mixed.prototype.getStringHitChance = function(){
 		}
 	}
 	if (min == max){
-		return ("Base Hit: " + min + "%");
-	} else return ("Base Hit: " + min + "% - " + max + "%");
+		return (min + "%");
+	} else return (min + " - " + max + "%");
 }
 
 Mixed.prototype.getAngledHitSection = function(){

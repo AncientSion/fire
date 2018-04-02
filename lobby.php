@@ -182,13 +182,13 @@ else {
 			.hover(function(e){
 				e.stopPropagation();
 				var shipId = $(this).parent().parent().parent().data("shipId");
-				var fighterId = $(this).parent().data("fighterId");
+				var fighterId = $(this).parent().data("subId");
 				game.getUnit(shipId).getSystem(fighterId).hover(e);
 			})
 			.click(function(e){
 				e.stopPropagation();
 				var shipId = $(this).parent().parent().parent().data("shipId");
-				var fighterId = $(this).parent().data("fighterId");
+				var fighterId = $(this).parent().data("subId");
 				console.log(game.getUnit(shipId).getSystem(fighterId));
 			}))
 	}
@@ -197,13 +197,13 @@ else {
 		.hover(function(e){
 			e.stopPropagation();
 			var shipId = $(this).parent().parent().parent().data("shipId");
-			var fighterId = $(this).parent().data("fighterId");
+			var fighterId = $(this).parent().data("subId");
 			game.getUnit(shipId).getSystem(fighterId).hover(e);
 		})
 		.click(function(e){
 			e.stopPropagation();
 			var shipId = $(this).parent().parent().parent().data("shipId");
-			var fighterId = $(this).parent().data("fighterId");
+			var fighterId = $(this).parent().data("subId");
 			console.log(game.getUnit(shipId).getSystem(fighterId));
 		});
 	}

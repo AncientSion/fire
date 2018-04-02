@@ -30,10 +30,10 @@ class GQuan extends Heavy {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 800, 18, 1);
-		$right->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 0, 120);
 		$right->systems[] = new MediumLaser($this->getId(), $this->id, 0, 120);
 		$right->systems[] = new Bulkhead($this->getId(), $this->id, 80);
-		$right->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 0, 180);
+		$right->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 0, 180);
+		$right->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 0, 180);
 		$right->systems[] = new TwinParticleBolter($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
@@ -44,10 +44,10 @@ class GQuan extends Heavy {
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 800, 18, 1);
-		$left->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 240, 360);
 		$left->systems[] = new MediumLaser($this->getId(), $this->id, 240, 360);
 		$left->systems[] = new Bulkhead($this->getId(), $this->id, 80);
-		$left->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 180, 360);
+		$left->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 180, 360);
+		$left->systems[] = new MediumPlasmaPulse($this->getId(), $this->id, 180, 360);
 		$left->systems[] = new TwinParticleBolter($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
 

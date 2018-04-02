@@ -24,142 +24,6 @@ Fighter.prototype.create = function(data){
 	}
 }
 
-Fighter.prototype.addMainDivEvents = function(div, alive, isBuy){
-	if (isBuy){
-		div
-		.find("img")
-		.hover(function(e){
-			e.stopPropagation();
-			game.getSampleFighter($(this).parent().parent().parent().find("td").first().html()).hover(e);
-			return;
-			var shipId = $(this).parent().parent().parent().data("shipId");
-			var fighterId = $(this).parent().data("fighterId");
-			game.getUnit(shipId).getSystem(fighterId).hover(e);
-		});
-		return;
-	}
-
-	if (alive){
-		div
-		.find("img")
-		.hover(function(e){
-			e.stopPropagation();
-			var shipId = $(this).parent().parent().parent().data("shipId");
-			var fighterId = $(this).parent().data("fighterId");
-			game.getUnit(shipId).getSystem(fighterId).hover(e);
-		})
-		.click(function(e){
-			e.stopPropagation();
-			var shipId = $(this).parent().parent().parent().data("shipId");
-			var fighterId = $(this).parent().data("fighterId");
-			console.log(game.getUnit(shipId).getSystem(fighterId));
-		});
-	}
-	else {
-		div
-		.find(".overlay")
-		.hover(function(e){
-			e.stopPropagation();
-			var shipId = $(this).parent().parent().parent().data("shipId");
-			var fighterId = $(this).parent().data("fighterId");
-			game.getUnit(shipId).getSystem(fighterId).hover(e);
-		})
-		.click(function(e){
-			e.stopPropagation();
-			var shipId = $(this).parent().parent().parent().data("shipId");
-			var fighterId = $(this).parent().data("fighterId");
-			console.log(game.getUnit(shipId).getSystem(fighterId));
-		})
-	}
-}
-
-Fighter.prototype.addSysEvents = function(div, isBuy){
-	if (isBuy){
-		div
-		.css("zIndex", 1)
-		.hover(function(e){
-			e.stopPropagation();
-			//$("#systemDetailsDiv").remove();
-			console.log("ding"); 
-			game.getSampleFighter($(this).parent().parent().parent().children().first().html()).systems[0].hover(e);
-
-			return;
-			var shipId = $(this).parent().parent().parent().data("shipId");
-			game.getUnit(shipId).getSystem($(this).data("systemId")).hover(e)
-		})
-		return;
-	}
-	
-	div
-	.click(function(e){
-		e.stopPropagation();
-		var shipId = $(this).parent().parent().parent().data("shipId");
-		game.getUnit(shipId).getSystem($(this).data("systemId")).select(e)
-	})
-	.contextmenu(function(e){
-		e.stopPropagation();
-		e.preventDefault();
-		var shipId = $(this).parent().parent().parent().data("shipId");
-		game.getUnit(shipId).selectAll(e, $(this).data("systemId"));
-	})
-	.hover(function(e){
-		e.stopPropagation();
-		$("#systemDetailsDiv").remove();
-		var shipId = $(this).parent().parent().parent().data("shipId");
-		game.getUnit(shipId).getSystem($(this).data("systemId")).hover(e)
-	})
-}
-
-Fighter.prototype.getElement = function(isBuy){
-	var fighterDiv = $("<div>")
-		.addClass("fighterDiv")
-		.data("fighterId", this.id)
-		.append($(this.getBaseImage().cloneNode(true))
-			.addClass("rotate270 img80pct"))
-
-	var alive = 1;
-	if (this.destroyed || this.disabled){alive = 0;}
-	if (!alive){
-		fighterDiv
-			.append($("<img>")
-				.attr("src", "varIcons/destroyed.png")
-				.addClass("overlay"))
-	}
-
-	this.addMainDivEvents(fighterDiv, alive, isBuy);
-
-	var wrap = document.createElement("div");
-		wrap.className = "iconIntegrity"; wrap.style.height = 12;
-
-	var rem = this.getRemIntegrity();
-
-	var bgDiv = document.createElement("div");
-		bgDiv.className = "integrityAmount"; bgDiv.style.textAlign = "center"; bgDiv.style.fontSize = 12; bgDiv.style.top = 0;
-		bgDiv.innerHTML = rem + " / " + this.integrity;
-		wrap.appendChild(bgDiv);
-
-	var lowerDiv = document.createElement("div");
-		lowerDiv.className = "integrityNow"; lowerDiv.style.top = 0; lowerDiv.style.height = "100%";
-		lowerDiv.style.width = rem/this.integrity * 100 + "%";
-		wrap.appendChild(lowerDiv);
-		
-	var upperDiv = document.createElement("div");
-		upperDiv.className = "integrityFull"; upperDiv.style.top = 0;
-		wrap.appendChild(upperDiv);
-
-	fighterDiv.append(wrap);
-
-	var s = 20;
-	for (var j = 0; j < this.systems.length; j++){
-		var ele = $(this.systems[j].getFighterSystemData(true));
-		this.addSysEvents(ele, isBuy)
-		fighterDiv.append(ele);
-	}
-
-	return fighterDiv;
-}
-
-
 
 
 function Flight(data){
@@ -274,7 +138,7 @@ Flight.prototype.createBaseDiv = function(){
 		.append($("<tr>")
 			.append($("<th>").html(this.name.toUpperCase() + " #" + this.id).attr("colSpan", 2).addClass(header)))
 		.append($("<tr>")
-			.append($("<td>").html("Unit Type / Size"))
+			.append($("<td>").html("Unit Type (Size)"))
 			.append($("<td>").html(game.getUnitType(this.traverse) + " (" + this.traverse + ")")))
 		.append($("<tr>")
 			.append($("<td>").html("Current Mission"))
@@ -490,7 +354,7 @@ Flight.prototype.getShortInfo = function(){
 	var table = document.createElement("table");
 		table.insertRow(-1).insertCell(-1).innerHTML = "Flight #" + this.id + " (" + game.getMissionTypeString(this, this.getTarget()) + ")";
 		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + this.getCurSpeed() + " / " + this.getIntactFighters() + " units";
-		table.insertRow(-1).insertCell(-1).innerHTML = this.getStringHitChance();
+		table.insertRow(-1).insertCell(-1).innerHTML = "Base To-Hit: " + this.getStringHitChance();
 	
 	if (!this.mission.arrived && game.phase < 1 && this.inRange()){
 		table.insertRow(-1).insertCell(-1).innerHTML = "<span class='red'>contact imminent</span>";

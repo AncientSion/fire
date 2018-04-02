@@ -753,10 +753,14 @@ Squadron.prototype.getShortInfoa = function(){
 	return table;
 }
 
+Squadron.prototype.getProfileString = function(){
+	return this.getStringHitChance();
+}
+
 Squadron.prototype.getStringHitChance = function(){
 	return Mixed.prototype.getStringHitChance.call(this);
 	//var baseHit = this.getBaseHitChance();
-	//return ("Base Hit: " + Math.floor(this.profile[0] * baseHit) + "% - " + Math.floor(this.profile[1] * baseHit) + "%");
+	//return ("Base To-Hit: " + Math.floor(this.profile[0] * baseHit) + "% - " + Math.floor(this.profile[1] * baseHit) + "%");
 }
 
 Squadron.prototype.hasHangarSelected = function(){		
@@ -1070,7 +1074,8 @@ Squadron.prototype.setStats = function(){
 	var a = this.getBaseImpulse();
 	var b = this.getBaseEP();
 	var c = this.getImpulseChangeCost() + ", " + this.getActionCost(0) + ", " + this.getActionCost(1);
-	var d = this.baseTurnDelay;
+	//var d = this.baseTurnDelay;
+	var d = this.getStringHitChance();
 
 	$(this.element).find(".topDiv").find(".header").find("tr").each(function(i){
 		if (i == 3){
@@ -1082,7 +1087,7 @@ Squadron.prototype.setStats = function(){
 		else if (i == 5){
 			$($(this).children()[1]).html(c); return;
 		}
-		else if (i == 6){
+		else if (i == 7){
 			$($(this).children()[1]).html(d); return;
 		}
 	})

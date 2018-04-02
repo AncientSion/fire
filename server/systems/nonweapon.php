@@ -7,6 +7,7 @@ class PrimarySystem extends System {
 	public $internal = 1;
 	public $crewEffect = 0;
 	public $maxDmg = 20;
+	public $hitMod = 4;
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $output, $width);
@@ -14,7 +15,7 @@ class PrimarySystem extends System {
 	}
 
 	public function getHitChance(){
-		return $this->integrity/4;
+		return $this->integrity / $this->hitMod;
 	}
 
 	public function setMaxDmg($fire, $dmg){
@@ -179,6 +180,7 @@ class Engine extends PrimarySystem {
 	public $name = "Engine";
 	public $display = "Engine & Drive";
 	public $crewEffect = 10;
+	public $hitMod = 3;
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $integrity, $output, $width);
@@ -197,6 +199,7 @@ class Sensor extends PrimarySystem {
 	public $ew = array();
 	public $effiency = 10;
 	public $crewEffect = 8;
+	public $hitMod = 2;
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
 		$this->powerReq = floor($output/60);

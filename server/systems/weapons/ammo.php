@@ -40,9 +40,12 @@ class Torpedo extends Missile {
 
 class Warhead extends Weapon {
 	public $priority = 10;
-	public $type = "explosive";
-	public $animation = "explosive";
-
+	public $name = "Warhead";
+	public $display = "Warhead";
+	public $fireMode = "Standard";
+	public $dmgType = "Standard";
+	public $animation = "";
+	public $linked = 1;
 
 	function __construct($id, $parentId, $minDmg, $maxDmg, $traverse){
 		$this->id = $id;

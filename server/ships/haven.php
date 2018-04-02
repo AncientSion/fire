@@ -8,11 +8,11 @@ class Haven extends SuperLight {
 	public static $value = 230;
 	public $mass = 900;
 
-	public $integrity = 280;
+	public $integrity = 310;
 	public $ep = 135;
 	public $ew = 450;
 	public $power = 0;
-	public $negation = 10;
+	public $negation = 9;
 
 	function __construct($id, $userid){
 		parent::__construct($id, $userid);

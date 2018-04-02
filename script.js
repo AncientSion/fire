@@ -185,10 +185,6 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 					if (target.id == shooter.mission.targetid){
 						lockString += " (Mission)";
 					} else lockString += " (Escort)";
-
-					if (target.flight || target.salvo){
-						lockString += " (Mission)";
-					}
 				}
 				lockString += "</span>";
 			}

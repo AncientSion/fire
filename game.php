@@ -448,11 +448,9 @@
 			<div id="hangarDiv" class="disabled">
 				<div class="header">
 					<span>Assemble and launch a flight</span>
-				</div>
-				<div class="header">
+					<br>
 					Can launch up to <span id="launchRate"></span> units per cycle.
-				</div>
-				<div class="header">
+					<br>
 					Sufficient space for <span id="capacity"></span> units.
 				</div>
 				<table id="hangarTable">

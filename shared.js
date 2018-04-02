@@ -121,7 +121,7 @@ function initUnit(data){
 function initSalvo(data){
 	var salvo = new Salvo(data);
 	for (var i = 0; i < data.structures.length; i++){
-		salvo.structures.push(new Ballistic(data.structures[i]));
+		salvo.structures.push(initBallistic(data.structures[j]));
 	}
 	return salvo;
 }
@@ -134,9 +134,8 @@ function initFlight(data){
 	return flight;	
 }
 
-function initFighter(data){
-	return new Fighter(data);
-}
+function initFighter(data){return new Fighter(data);}
+function initBallistic(data){return new Ballistic(data);}
 
 function initSquadron(data){
 	var squadron = new Squadron(data);
