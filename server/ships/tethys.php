@@ -12,7 +12,7 @@ class Tethys extends SuperLight {
 	public $ep = 110;
 	public $ew = 375;
 	public $power = 2;
-	public $negation = 9;
+	public $negation = 8;
 
 	//public $effiency = 2;
 

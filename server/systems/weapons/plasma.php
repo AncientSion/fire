@@ -33,7 +33,7 @@ class LightPlasma extends Plasma {
 	public $minDmg = 34;
 	public $maxDmg = 45;
 	public $accDecay = 120;
-	public $dmgLoss = 12;
+	public $dmgLoss = 10;
 	public $shots = 1;
 	public $projSize = 2.5;
 	public $projSpeed = 8;
@@ -56,7 +56,7 @@ class MediumPlasma extends Plasma {
 	public $minDmg = 48;
 	public $maxDmg = 66;
 	public $accDecay = 120;
-	public $dmgLoss = 9;
+	public $dmgLoss = 8;
 	public $shots = 1;
 	public $projSize = 3;
 	public $projSpeed = 6;

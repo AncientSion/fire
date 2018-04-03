@@ -2856,13 +2856,13 @@ Ship.prototype.getLockEffect = function(target){
 
 	if (target.ship || target.squad){
 		multi = 0.5;
-		multi += (multi / 10 * this.traverse);
+		multi += (0.8 / 10 * this.traverse);
 	}
 	else if (target.flight){
 		multi = 1.5;
 	}
 	else if (target.salvo){
-		multi = 1.5;
+		multi = 3;
 	}
 
 	if (game.isCloseCombat(this, target)){

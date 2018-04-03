@@ -1428,8 +1428,8 @@ include_once 'global.php';
 
 	public function getUnitsForFaction($faction){
 		//Debug::log("getUnitsForFaction");
-		$units = array(array(), array(), array());
-		$return = array(array(), array(), array());
+		$units = array(array(), array(), array(), array());
+		$return = array(array(), array(), array(), array());
 
 		switch ($faction){
 			case "Earth Alliance";
@@ -1501,6 +1501,7 @@ include_once 'global.php';
 						"Nial",
 					//	"Tishat",
 					),
+					array()
 				);
 				break;
 			case "Narn Regime";

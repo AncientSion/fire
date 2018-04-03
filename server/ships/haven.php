@@ -12,7 +12,7 @@ class Haven extends SuperLight {
 	public $ep = 135;
 	public $ew = 450;
 	public $power = 0;
-	public $negation = 9;
+	public $negation = 8;
 
 	function __construct($id, $userid){
 		parent::__construct($id, $userid);

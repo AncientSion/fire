@@ -12,7 +12,7 @@ class Crius extends Light {
 	public $ep = 90;
 	public $ew = 500;
 	public $power = 2;
-	public $negation = 12;
+	public $negation = 11;
 
 	public $effiency = 2;
 

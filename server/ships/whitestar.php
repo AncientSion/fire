@@ -8,11 +8,11 @@ class WhiteStar extends Light {
 	public static $value = 400;
 	public $mass = 1800;
 
-	public $integrity = 535;
+	public $integrity = 500;
 	public $ep = 140;
 	public $ew = 750;
 	public $power = 3;
-	public $negation = 18;
+	public $negation = 15;
 
 	function __construct($id, $userid){
 		parent::__construct($id, $userid);

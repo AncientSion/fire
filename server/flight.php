@@ -90,7 +90,7 @@ class Flight extends Mixed {
 		//Debug::log("CALCULATE TO HIT - angle: ".$fire->angle.", base: ".$base.", trav: ".$traverse.", total multi: ".$multi.", dist/range: ".$fire->dist."/".$range.", req: ".$req);
 
 		if ($fire->target->ship && $this->mission->targetid == $fire->target->id && $this->mission->arrived){
-			Debug::log("strike flight attackign ship");
+			//Debug::log("strike flight attacking ship");
 		}
 
 		return ceil($req);
@@ -106,7 +106,7 @@ class Flight extends Mixed {
 			return 1;
 		}
 		else if ($target->salvo){
-			return 1;
+			return 3;
 		}
 	}
 

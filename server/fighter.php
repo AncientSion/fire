@@ -34,7 +34,7 @@ class Aurora extends Fighter {
 	public $mass = 34;
 	public $integrity = 26;
 	public $negation = 4;
-	public $baseImpulse = 90;
+	public $baseImpulse = 100;
 	public $baseHitChance = 24;
 
 	function __construct($id, $parentId){
@@ -74,7 +74,7 @@ class Sentri extends Fighter {
 	public $mass = 32;
 	public $integrity = 24;
 	public $negation = 5;
-	public $baseImpulse = 110;
+	public $baseImpulse = 115;
 	public $baseHitChance = 22;
 
 	function __construct($id, $parentId){
@@ -154,7 +154,7 @@ class Gorith extends Fighter {
 	public $mass = 34;
 	public $integrity = 22;
 	public $negation = 3;
-	public $baseImpulse = 90;
+	public $baseImpulse = 100;
 	public $baseHitChance = 24;
 
 	function __construct($id, $parentId){
@@ -174,7 +174,7 @@ class Frazi extends Fighter {
 	public $mass = 34;
 	public $integrity = 27;
 	public $negation = 5;
-	public $baseImpulse = 95;
+	public $baseImpulse = 100;
 	public $baseHitChance = 25;
 
 	function __construct($id, $parentId){

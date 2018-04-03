@@ -12,7 +12,7 @@ class Shokos extends SuperLight {
 	public $ep = 130;
 	public $ew = 400;
 	public $power = 2;
-	public $negation = 9;
+	public $negation = 8;
 
 	function __construct($id, $userid){
 		parent::__construct($id, $userid);

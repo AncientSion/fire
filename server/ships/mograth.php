@@ -5,13 +5,13 @@ class Mograth extends Light {
 	public $display = "Mograth";
 	public $role = "Multi-purpose Frigate";
 	public $faction = "Centauri Republic";
-	public static $value = 360;
+	public static $value = 330;
 	public $mass = 1400;
 
 	public $integrity = 390;
 	public $ep = 100;
 	public $ew = 550;
-	public $negation = 13;
+	public $negation = 12;
 
 	function __construct($id, $userid){
 		parent::__construct($id, $userid);

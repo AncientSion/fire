@@ -8,10 +8,10 @@ class Trakk extends Light {
 	public static $value = 290;
 	public $mass = 1250;
 
-	public $integrity = 400;
+	public $integrity = 380;
 	public $ep = 100;
 	public $ew = 450;
-	public $negation = 11;
+	public $negation = 10;
 	public $power = 1;
 
 	function __construct($id, $userid){
@@ -27,11 +27,11 @@ class Trakk extends Light {
 		
 		
 		$right = new Section(60, 180);
-		$right->systems[] = new MediumPlasmaPulse($this->getId(), $this->parentId, 240, 60);
+		$right->systems[] = new MediumPlasmaPulse($this->getId(), $this->parentId, 315, 45);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new MediumPlasmaPulse($this->getId(), $this->parentId, 300, 120);
+		$left->systems[] = new MediumPlasmaPulse($this->getId(), $this->parentId, 315, 45);
 		$structs[] = $left;
 		
 		for ($i = 0; $i < sizeof($structs); $i++){

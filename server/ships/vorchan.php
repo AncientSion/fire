@@ -12,7 +12,7 @@ class Vorchan extends Light {
 	public $ep = 120;
 	public $ew = 550;
 	public $power = 2;
-	public $negation = 13;
+	public $negation = 11;
 
 	function __construct($id, $userid){
 		parent::__construct($id, $userid);
