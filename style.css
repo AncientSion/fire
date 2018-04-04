@@ -273,6 +273,9 @@ table, th, tr, td {
 	border-radius: 5px;
 	width: 450px;
 }
+ #weaponDiv {
+	width: 500px;
+ }
 
 #hangarDiv .header, #weaponDiv .header, #crewDiv .header {
 	padding: 5px;

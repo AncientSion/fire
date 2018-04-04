@@ -2178,19 +2178,19 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 	$(table).append($("<tr>").append($("<td>").html("Firing Mode").css("width", "50%")).append($("<td>").html(this.fireMode)));
 	$(table).append($("<tr>").append($("<td>").html("Damage Type").css("width", "50%")).append($("<td>").html(this.dmgType)));
 
-	//if (game.getUnit($(this.element).data("shipId")).ship){
-	if (game.getUnit(this.parentId).ship){
-		$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
-		$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
-	}
 
 	if (!this.tiny){
+		if (game.getUnit(this.parentId).ship){
+			$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
+			$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
+		}
 		$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
 		if (this.boostEffect.length && !(this instanceof Launcher)){
 			$(table).append($("<tr>").css("border-top", "2px solid white").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerCost").html(this.getEffiency() + " (max: " + this.maxBoost + ")")));
 			this.getBoostEffectElements(table);
 		}
 	}
+	
 	$(table).append($("<tr>").append($("<td>").html("Loading")).append($("<td>").addClass("loading").html(this.getTimeLoaded() + " / " + this.reload)));
 
 	if (this instanceof Launcher){
@@ -2239,7 +2239,7 @@ Weapon.prototype.getSystemDetailsDiv = function(){
 	}
 
 	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDmgString())));
-	$(table).append($("<tr>").append($("<td>").html("Priority (low->early)")).append($("<td>").html(this.priority)));
+	if (!this.tiny){$(table).append($("<tr>").append($("<td>").html("Priority (low->early)")).append($("<td>").html(this.priority)));}
 
 	if (this.notes.length){
 		$(table).append($("<tr>").addClass("notesHeader").css("border-top", "2px solid white").append($("<th>").html("Notes").attr("colSpan", 2)));
@@ -2396,10 +2396,14 @@ Warhead.prototype.getSystemDetailsDiv = function(){
 				.append($("<td>").html("Damage Type"))
 				.append($("<td>").html(this.dmgType)))
 			.append($("<tr>")
+				.append($("<td>").html("Tracking"))
+				.append($("<td>").html(this.getTraverseRating() + " / " + game.getUnitType(this.getTraverseRating()))))
+			.append($("<tr>")
 				.append($("<td>").html("Damage"))
 				.append($("<td>").html(this.getDmgString()))))
 	return div;
 }
+
 
 Warhead.prototype.getResolvingFireOrders = function(){
 	return System.prototype.getResolvingFireOrders.call(this);
@@ -3386,6 +3390,7 @@ Launcher.prototype.initLauncherDiv = function(){
 		.append($("<tr>")
 			.append($("<th>").html("Class"))
 			.append($("<th>").html(""))
+			.append($("<th>").html("Tracking"))
 			.append($("<th>").html("Shots / Cycle"))
 			.append($("<th>").html("Cost"))
 			.append($("<th>").html(""))
@@ -3400,6 +3405,7 @@ Launcher.prototype.initLauncherDiv = function(){
 				.append($("<td>")
 					.append($(this.loads[i].getElement(true)))
 				)
+				.append($("<td>").html(this.loads[i].systems[0].getTraverseRating() + "</br>(" + (game.getUnitType(this.loads[i].systems[0].getTraverseRating()) + ")")))
 				.append($("<td>").html(this.launchRate[i]))
 				.append($("<td>").html(this.loads[i].cost))
 				.append($("<td>")
@@ -3432,7 +3438,7 @@ Launcher.prototype.initLauncherDiv = function(){
 	table
 		.append($("<tr>")
 			.css("fontSize", 18)
-			.append($("<th>").attr("colSpan", 5).css("fontSize", 18).html("Grand Total"))
+			.append($("<th>").attr("colSpan", 6).css("fontSize", 18).html("Grand Total"))
 			.append($("<th>"))
 			.append($("<th>"))
 			.append($("<th>")))
@@ -3464,8 +3470,8 @@ Launcher.prototype.updateLauncherDiv = function(index){
 	var cost = this.loads[index].cost * amount;
 	var tr = $($("#weaponTable").find("tr")[index+1]);
 	var tds = tr.find("td");
-		$(tds[5]).html(amount);
-		$(tds[7]).html(cost);
+		$(tds[6]).html(amount);
+		$(tds[8]).html(cost);
 
 	this.setTotalBuyData();
 	this.canConfirm();

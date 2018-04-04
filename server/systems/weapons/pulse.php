@@ -3,7 +3,7 @@
 class Pulse extends Weapon {
 	public $type = "Pulse";
 	public $animation = "projectile";
-	public $basePulses = 2;
+	public $basePulses = 1;
 	public $extraPulses = 3;
 	public $grouping = 15;
 	public $pulse = 1;
