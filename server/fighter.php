@@ -150,7 +150,7 @@ class Gorith extends Fighter {
 	public $name = "Gorith";
 	public $display = "Gorith";
 	public $faction = "Narn Regime";
-	public static $value =  22;
+	public static $value =  24;
 	public $mass = 34;
 	public $integrity = 22;
 	public $negation = 3;
