@@ -177,15 +177,8 @@ else {
 			</div>
 			<table id="hangarTable">
 			</table>
-			<div id ="missionType">
-				<table style="border: 1px solid white">
-					<tr><th colSpan=3>Select Mission Type</th></tr>
-					<tr><td></td><td width=70%>Patrol location</td><td></td></tr>
-					<tr><td></td><td>Strike / Escort / Intercept unit</td><td></td></tr>
-				</table>
-			</div>
 			<div class="header">
-				<div class="buttonTD disabled" onclick="game.enableFlightDeploy()">Launch Flight</div>
+				<div class="buttonTD disabled" onclick="game.ships[0].doConfirmSystemLoadout()">Confirm Loadout</div>
 			</div>
 		</div>
 		<div id="weaponDiv" class="disabled">

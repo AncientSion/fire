@@ -3456,6 +3456,9 @@ Launcher.prototype.setTotalBuyData = function(){
 	for (let i = 0; i < this.loads.length; i++){
 		tAmount += this.loads[i].amount;
 		tCost += this.loads[i].amount * this.loads[i].cost;
+		if (this.loads[i].amount && this.loads[i].torpedo){
+			tCost = 1;
+		}
 	}
 
 	table.find("tr").last().children().each(function(i){

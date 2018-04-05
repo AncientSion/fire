@@ -14,13 +14,14 @@ class DmgCalc {
 			$devi = mt_rand(0, $maxDevi);
 			$angle = mt_rand(0, 360);
 			$impact = Math::getPointInDirection($devi, $angle, $target->x, $target->y);
-			$fire->notes = $impact->x.";".$impact->y.";";
 			Debug::log("dist: ".$dist.", maxDevi: ".$maxDevi."px, devi: ".$devi."px, angle: ".$angle);
 		}
 		else {
+			$angle = Math::getAngle2($origin, $target);
 			$impact = $target;
-			$angle = getAngle2($origin, $target);
 		}
+
+		$fire->notes = $impact->x.";".$impact->y.";";
 
 		//Debug::log("newTarget ".$newTarget->x."/".$newTarget->y);
 		

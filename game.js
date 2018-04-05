@@ -765,7 +765,7 @@ function Game(data, userid){
 			for (var i = 0; i < window.playerstatus.length; i++){
 
 				var step;
-				var h = 1400;
+				var h = 1000;
 				var w = 200;
 				var dist = 600;
 				var y = h/2;

@@ -17,7 +17,7 @@ class Missile extends Single {
 	
 	public function setBaseStats($phase, $turn){
 		$this->baseHitChance = ceil(sqrt($this->mass)*5);
-		if ($this->missile){$this->baseImpulse = ceil(pow($this->mass, -0.75)*325);}
+		if ($this->missile){$this->baseImpulse = ceil(pow($this->mass, -0.75)*400);}
 		else {$this->baseImpulse = $this->maxRange;}
 	}
 
@@ -44,9 +44,10 @@ class Warhead extends Weapon {
 	public $priority = 10;
 	public $name = "Warhead";
 	public $display = "Warhead";
+	public $type = "Warhead";
 	public $fireMode = "Standard";
 	public $dmgType = "Standard";
-	public $animation = "";
+	public $animation = "explosive";
 	public $linked = 1;
 
 	function __construct($id, $parentId, $minDmg, $maxDmg, $traverse){
@@ -74,7 +75,7 @@ class Vran extends Torpedo {
 	public $integrity = 5;
 	public $negation = 1;
 	public $traverse = -1;
-	public $maxRange = 600;
+	public $maxRange = 1600;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

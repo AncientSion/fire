@@ -121,15 +121,15 @@ function initUnit(data){
 function initSalvo(data){
 	var salvo = new Salvo(data);
 	for (var i = 0; i < data.structures.length; i++){
-		salvo.structures.push(initBallistic(data.structures[j]));
+		salvo.structures.push(initBallistic(data.structures[i]));
 	}
 	return salvo;
 }
 
 function initFlight(data){
 	var flight = new Flight(data);
-	for (var j = 0; j < data.structures.length; j++){
-		flight.structures.push(initFighter(data.structures[j]));
+	for (var i = 0; i < data.structures.length; i++){
+		flight.structures.push(initFighter(data.structures[i]));
 	}
 	return flight;	
 }
@@ -139,8 +139,8 @@ function initBallistic(data){return new Ballistic(data);}
 
 function initSquadron(data){
 	var squadron = new Squadron(data);
-	for (var j = 0; j < data.primary.systems.length; j++){
-		var primSystem = new window[data.primary.systems[j].name](data.primary.systems[j]);
+	for (var i = 0; i < data.primary.systems.length; i++){
+		var primSystem = new window[data.primary.systems[i].name](data.primary.systems[i]);
 		squadron.primary.systems.push(primSystem);
 	}
 	for (var i = 0; i < data.structures.length; i++){

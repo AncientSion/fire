@@ -11,6 +11,7 @@
 	} else $userid = 0;
 
 	$manager = new Manager($userid, $gameid);
+	if (!$manager->turn){header("Location: lobby.php");}
 	Debug::open();
 	$manager->getGameData();
 	echo "<script> window.gameid = ".$gameid."; window.userid = ".$userid.";</script>";
