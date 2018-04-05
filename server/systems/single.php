@@ -3,7 +3,7 @@
 class Single {
 	public $id = 0;
 	public $parentId = 0;
-	public $integritx = 0;
+	public $integrity = 0;
 	public $remaining = 0;
 	public $negation = 0;
 	public $armourDmg = 0;

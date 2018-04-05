@@ -69,10 +69,8 @@ class Vran extends Torpedo {
 	public $display = "Light Particle Torpedo";
 	public $minDmg = 25;
 	public $maxDmg = 32;
-	public $mass = 1;
 	public $integrity = 5;
 	public $negation = 1;
-	public static $value = 0;
 	public $traverse = -1;
 	public $maxRange = 600;
 
@@ -81,15 +79,13 @@ class Vran extends Torpedo {
 	}
 }
 
-class Vranoth extends Torpedo {
+class Vranoth extends Vran {
 	public $name = "Vranoth";
 	public $display = "Medium Particle Torpedo";
-	public $minDmg = 33;
-	public $maxDmg = 45;
-	public $mass = 1;
+	public $minDmg = 34;
+	public $maxDmg = 46;
 	public $integrity = 8;
 	public $negation = 2;
-	public static $value = 0;
 	public $traverse = 0;
 	public $maxRange = 800;
 
@@ -98,15 +94,13 @@ class Vranoth extends Torpedo {
 	}
 }
 
-class VranothKa extends Torpedo {
+class VranothKa extends Vranoth {
 	public $name = "VranothKa";
 	public $display = "Heavy Particle Torpedo";
 	public $minDmg = 54;
 	public $maxDmg = 72;
-	public $mass = 1;
 	public $integrity = 11;
 	public $negation = 3;
-	public static $value = 0;
 	public $traverse = 1;
 	public $maxRange = 1000;
 
@@ -132,8 +126,8 @@ class Hasta extends Missile {
 class Javelin extends Missile {
 	public $name = "Javelin";
 	public $display = "Impr. Multirole Missiles";
-	public $minDmg = 36;
-	public $maxDmg = 48;
+	public $minDmg = 32;
+	public $maxDmg = 44;
 	public $mass = 4;
 	public static $value = 5;
 	public $traverse = -1;
@@ -189,8 +183,8 @@ class Needle extends Missile {
 class Naga extends Missile {
 	public $name = "Naga";
 	public $display = "Multirole Missiles";
-	public $minDmg = 33;
-	public $maxDmg = 45;
+	public $minDmg = 30;
+	public $maxDmg = 42;
 	public $mass = 4;
 	public static $value = 5;
 	public $traverse = -1;
