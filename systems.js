@@ -2361,6 +2361,8 @@ function Warhead(data){
 	this.fireMode = data.fireMode;
 	this.linked = data.linked;
 	this.dmgType = data.dmgType;
+	this.loaded = 1;
+	this.reload = 1;
 	this.fireOrders = [];
 	this.guns = 1;
 	this.tiny = 1;

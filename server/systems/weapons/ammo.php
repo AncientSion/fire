@@ -6,8 +6,10 @@ class Missile extends Single {
 	public $maxRange = 0;
 
 	function __construct($id, $parentId){
-		$this->integrity = $this->mass*3;
-		$this->negation = $this->mass-1;
+		if ($this->missile){
+			$this->integrity = $this->mass*3;
+			$this->negation = $this->mass-1;
+		}
 
 		parent::__construct($id, $parentId);
 		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->minDmg, $this->maxDmg, $this->traverse);

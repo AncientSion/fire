@@ -10,7 +10,7 @@ class Vorchan extends Light {
 
 	public $integrity = 400;
 	public $ep = 120;
-	public $ew = 550;
+	public $ew = 525;
 	public $power = 2;
 	public $negation = 11;
 
