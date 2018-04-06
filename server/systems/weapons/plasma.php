@@ -26,12 +26,35 @@ class Plasma extends Weapon {
 	}
 }
 
-class LightPlasma extends Plasma {
-	public $name = "LightPlasma";
-	public $display = "46mm Plasma Gun";
-	public $priority = 230;
+class LightPlasmaShredder extends Plasma {
+	public $name = "LightPlasmaShredder";
+	public $display = "Light Plasma Shredder";
+	public $priority = 223;
 	public $minDmg = 34;
 	public $maxDmg = 45;
+	public $accDecay = 120;
+	public $dmgLoss = 14;
+	public $shots = 1;
+	public $projSize = 2.5;
+	public $projSpeed = 8;
+	public $reload = 2;
+	public $integrity = 36;
+	public $traverse = -1;
+	public $powerReq = 3;
+	public $maxBoost = 1;
+	public $effiency = 2;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+	}
+}
+
+class LightPlasma extends Plasma {
+	public $name = "LightPlasma";
+	public $display = "Light Plasma Cannon";
+	public $priority = 233;
+	public $minDmg = 36;
+	public $maxDmg = 47;
 	public $accDecay = 120;
 	public $dmgLoss = 10;
 	public $shots = 1;
@@ -51,8 +74,8 @@ class LightPlasma extends Plasma {
 
 class MediumPlasma extends Plasma {
 	public $name = "MediumPlasma";
-	public $display = "78mm Plasma Accelerator";
-	public $priority = 220;
+	public $display = "Medium Plasma Cannon";
+	public $priority = 232;
 	public $minDmg = 48;
 	public $maxDmg = 66;
 	public $accDecay = 120;
@@ -74,8 +97,8 @@ class MediumPlasma extends Plasma {
 
 class HeavyPlasma extends Plasma {
 	public $name = "HeavyPlasma";
-	public $display = "148mm Plasma Cannon";
-	public $priority = 210;
+	public $display = "Heavy Plasma Cannon";
+	public $priority = 231;
 	public $minDmg = 75;
 	public $maxDmg = 98;
 	public $accDecay = 120;
@@ -123,26 +146,6 @@ class MagCompressor extends Particle {
 
 	public function getBaseDamage($fire){
 		return $this->getFlashBaseDamage($fire);
-	}
-}
-
-class PlasmaShotgun extends Plasma {
-	public $name = "PlasmaShotgun";
-	public $display = "6x36mm Plasma Shotgun";
-	public $minDmg = 22;
-	public $maxDmg = 28;
-	public $accDecay = 120;
-	public $dmgLoss = 16;
-	public $shots = 1;
-	public $projSize = 3;
-	public $projSpeed = 4;
-	public $reload = 2;
-	public $integrity = 50;
-	public $traverse = 0;
-	public $powerReq = 6;
-
-	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
-        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 

@@ -31,7 +31,7 @@ class Centurion extends Heavy {
 		$right->systems[] = new HeavyParticle($this->getId(), $this->id, 360, 120);
 		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 120,	array(array("Javelin", 12, 4)));
 		$right->systems[] = new MediumParticle($this->getId(), $this->id, 360, 120);
-		$right->systems[] = new MediumParticle($this->getId(), $this->id, 360, 120);
+		//$right->systems[] = new MediumParticle($this->getId(), $this->id, 360, 120);
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 1300, 19);
@@ -43,7 +43,7 @@ class Centurion extends Heavy {
 		$left->systems[] = new HeavyParticle($this->getId(), $this->id, 240, 360);
 		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 240, 60,	array(array("Javelin", 12, 4)));
 		$left->systems[] = new MediumParticle($this->getId(), $this->id, 240, 360);
-		$left->systems[] = new MediumParticle($this->getId(), $this->id, 240, 360);
+		//$left->systems[] = new MediumParticle($this->getId(), $this->id, 240, 360);
 		$structs[] = $left;
 		
 		for ($i = 0; $i < sizeof($structs); $i++){
