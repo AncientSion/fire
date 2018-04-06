@@ -21,15 +21,15 @@ class Centurion extends Heavy {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 330, 30, 1050, 20);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 1050, 20, 3);
 		$front->systems[] = new MediumParticle($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new HeavyParticle($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new MediumParticle($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 30, 150, 1300, 19);
+		$right = new Structure($this->getId(), $this->id, 30, 150, 1300, 19, 1);
 		$right->systems[] = new HeavyParticle($this->getId(), $this->id, 360, 120);
-		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 120, array(array("Javelin", 12, 4)));
+		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 120,	array(array("Javelin", 12, 4)));
 		$right->systems[] = new MediumParticle($this->getId(), $this->id, 360, 120);
 		$right->systems[] = new MediumParticle($this->getId(), $this->id, 360, 120);
 		$structs[] = $right;
