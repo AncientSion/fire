@@ -27,9 +27,9 @@ class Centurion extends Heavy {
 		$front->systems[] = new MediumParticle($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 30, 150, 1300, 19, 1);
+		$right = new Structure($this->getId(), $this->id, 30, 150, 1300, 19);
 		$right->systems[] = new HeavyParticle($this->getId(), $this->id, 360, 120);
-		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 120,	array(array("Javelin", 12, 4)));
+		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 120, array(array("Javelin", 12, 4)));
 		$right->systems[] = new MediumParticle($this->getId(), $this->id, 360, 120);
 		$right->systems[] = new MediumParticle($this->getId(), $this->id, 360, 120);
 		$structs[] = $right;
