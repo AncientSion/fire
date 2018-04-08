@@ -51,6 +51,61 @@ class GSten extends Heavy {
 			$this->structures[] = $structs[$i];
 		}
 	}
+
+	static function getKit($faction){
+		return array(
+			"id" => 0,
+			"name" => "",
+			"cost" => static::$value,
+			"gameid" => 0,
+			"userid" => 0,
+			"upgrades" => 
+			array(
+				array(
+					"active" => 0,
+					"chance" => 50,
+					"notes" => "Vran Outfit",
+					"units" => array(),
+					"loads" => 
+					array(
+						array(
+							"systemid" => 7,
+							"display" => "Bow Launcher 1",
+							"name" => "Vran",
+							"amount" => 12
+						),
+						array(
+							"systemid" => 9,
+							"display" => "Bow Launcher 2",
+							"name" => "Vran",
+							"amount" => 12
+						)
+					)
+				),
+				array(
+					"active" => 0,
+					"chance" => 50,
+					"notes" => "Vranoth Outfit",
+					"units" => array(),
+					"loads" => 
+					array(
+						array(
+							"systemid" => 7,
+							"display" => "Bow Launcher 1",
+							"name" => "Vranoth",
+							"amount" => 9
+						),
+						array(
+							"systemid" => 9,
+							"display" => "Bow Launcher 2",
+							"name" => "Vranoth",
+							"amount" => 9
+						)
+					)
+				)
+			)
+		);
+	}
 }
 
 ?>

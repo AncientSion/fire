@@ -1,11 +1,11 @@
 <?php
 
-class Vorchan extends Light {
-	public $name = "Vorchan";
-	public $display = "Vorchan";
+class VorchanA extends Light {
+	public $name = "VorchanA";
+	public $display = "VorchanA";
 	public $role = "Light Warship";
 	public $faction = "Centauri Republic";
-	public static $value = 330;
+	public static $value = 320;
 	public $mass = 1250;
 
 	public $integrity = 400;

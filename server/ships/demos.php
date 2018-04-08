@@ -29,12 +29,12 @@ class Demos extends Medium {
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 15, 1);
 		$right->systems[] = new MediumParticle($this->getId(), $this->id, 300, 120);
-		$right->systems[] = new LightParticle($this->getId(), $this->id, 300, 180);
+		$right->systems[] = new LightParticle($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 15, 1);
 		$left->systems[] = new MediumParticle($this->getId(), $this->id, 240, 60);
-		$left->systems[] = new LightParticle($this->getId(), $this->id, 180, 60);
+		$left->systems[] = new LightParticle($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

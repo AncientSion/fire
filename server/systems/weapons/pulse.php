@@ -105,8 +105,8 @@ class LightPlasmaPulse extends LightPulse {
 	public $name = "LightPlasmaPulse";
 	public $display = "Light Plasma Pulse Cannon";
 	public $priority = 231;
-	public $minDmg = 14;
-	public $maxDmg = 18;
+	public $minDmg = 13;
+	public $maxDmg = 17;
 	public $animColor = "darkGreen";
 	public $dmgType = "Plasma";
 	public $melt = 50;
@@ -135,8 +135,8 @@ class MediumPlasmaPulse extends LightPlasmaPulse {
 	public $name = "MediumPlasmaPulse";
 	public $display = "Medium Plasma Pulse Cannon";
 	public $priority = 221;
-	public $minDmg = 26;
-	public $maxDmg = 33;
+	public $minDmg = 23;
+	public $maxDmg = 30;
 	public $accDecay = 120;
 	public $dmgLoss = 14;
 	
@@ -158,8 +158,8 @@ class HeavyPlasmaPulse extends MediumPlasmaPulse {
 	public $name = "HeavyPlasmaPulse";
 	public $display = "Heavy Plasma Pulse Cannon";
 	public $priority = 211;
-	public $minDmg = 43;
-	public $maxDmg = 57;
+	public $minDmg = 39;
+	public $maxDmg = 54;
 	public $accDecay = 80;
 	public $dmgLoss = 10;
 	

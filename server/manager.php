@@ -1,7 +1,5 @@
 <?php
 
-include_once 'global.php';
-
 	class Manager {
 		public $userid;
 		public $gameid;
@@ -937,23 +935,6 @@ include_once 'global.php';
 		}
 	}
 
-	public function alterOneTimeReinforce(){
-		if ($this->turn == $this->wave){
-			for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-				DBManager::app()->addReinforceValue($this->playerstatus[$i]["userid"], $this->gameid, floor($this->reinforce));
-			};
-		}
-	}
-
-	public function alterReinforcementPoints(){
-		if ($this->turn > 16){return;}
-		$mod = 100;
-
-		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-			DBManager::app()->addReinforceValue($this->playerstatus[$i]["userid"], $this->gameid, floor($this->reinforce/100*$mod));
-		};
-	}
-
 	public function doFullDestroyedCheck(){
 		$this->doFirstDestroyedCheck(); // direct unit destruction
 		$this->doSecondDestroyedCheck(); // indirect -> salvos without target
@@ -1010,7 +991,6 @@ include_once 'global.php';
 	}
 
 	public function startDeployPhase(){
-		$this->alterOneTimeReinforce();
 		if ($this->turn == $this->wave){$this->pickReinforcements();}
 		$this->updatePlayerStatus("waiting");
 	}
@@ -1467,12 +1447,14 @@ include_once 'global.php';
 						"Centurion",
 						"Altarian",
 						"Demos",
-						"Darkner",
+						//"Darkner",
 					),
 					array(
 						//"Vorchar",
 						"Mograth",
-						"Vorchan",
+						"Darkner",
+						"VorchanA",
+						"VorchanB",
 						"Haven",
 					),
 					array(
@@ -1651,33 +1633,6 @@ include_once 'global.php';
 
 		
 		return $unit;
-	}
-
-	public function logSystemsByClass($array){
-		$systems = array();
-
-		for ($i = 0; $i < sizeof($array); $i++){
-			switch ($array[$i]){
-				case "Particle":
-					$systems[] = array("LightParticle", "MediumTwinParticle", "HeavyParticle"); break;
-				case "Pulse":
-					$systems[] = array("LightPulse", "MediumPulse"); break;
-				case "Laser":
-					$systems[] = array("LightLaser", "MediumLaser", "HeavyLaser"); break;
-				case "Matter":
-					$systems[] = array("MediumRailGun", "HeavyRailGun"); break;
-				default: break;
-			}
-		}
-
-		$return = array();
-
-		for ($i = 0; $i < sizeof($systems); $i++){
-			for ($j = 0; $j < sizeof($systems[$i]); $j++){
-				$return[] = new $systems[$i][$j](0, 0, 0, 0);
-			}
-		}
-		return $return;
 	}
 
 	public function compareSystems($array){

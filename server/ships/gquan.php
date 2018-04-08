@@ -67,11 +67,10 @@ class GQuan extends Heavy {
 					"active" => 0,
 					"chance" => 30,
 					"notes" => "Gorith Outfit",
-					"cost" => 220,
 					"loads" =>
 					array(
 						array(
-							"systemid" => 19,
+							"systemid" => 17,
 							"name" => "Gorith",
 							"amount" => 10
 						),
@@ -81,11 +80,10 @@ class GQuan extends Heavy {
 					"active" => 0,
 					"chance" => 30,
 					"notes" => "Frazi Outfit",
-					"cost" => 320,
 					"loads" =>
 					array(
 						array(
-							"systemid" => 19,
+							"systemid" => 17,
 							"name" => "Frazi",
 							"amount" => 10
 						),

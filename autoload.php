@@ -46,7 +46,8 @@ spl_autoload_register(
                 'gorith' => '/server/fighter.php',
                 'frazi' => '/server/fighter.php',
 
-                'vorchan' => '/server/ships/vorchan.php',
+                'vorchana' => '/server/ships/vorchana.php',
+                'vorchanb' => '/server/ships/vorchanb.php',
                 'mograth' => '/server/ships/mograth.php',
                 'vorchar' => '/server/ships/vorchar.php',
                 'haven' => '/server/ships/haven.php',
@@ -104,11 +105,12 @@ spl_autoload_register(
                 'dualpulseion' => '/server/systems/weapons/dual.php',
 
                 'plasma' => '/server/systems/weapons/plasma.php',
+                'lightplasmashredder' => '/server/systems/weapons/plasma.php',
                 'lightplasma' => '/server/systems/weapons/plasma.php',
                 'mediumplasma' => '/server/systems/weapons/plasma.php',
                 'heavyplasma' => '/server/systems/weapons/plasma.php',
+                'heavyplasmamaser' => '/server/systems/weapons/plasma.php',
                 'magcompressor' => '/server/systems/weapons/plasma.php',
-
 
                 'laser' => '/server/systems/weapons/laser.php',
                 'lightparticlebeam' => '/server/systems/weapons/laser.php',

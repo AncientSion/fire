@@ -70,12 +70,13 @@ class Warhead extends Weapon {
 class Vran extends Torpedo {
 	public $name = "Vran";
 	public $display = "Light Particle Torpedo";
-	public $minDmg = 25;
+	public $minDmg = 28;
 	public $maxDmg = 32;
 	public $integrity = 5;
 	public $negation = 1;
 	public $traverse = -1;
-	public $maxRange = 1600;
+	public $maxRange = 600;
+	public static $value = 0;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

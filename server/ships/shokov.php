@@ -7,7 +7,7 @@ class Shokov extends Shokos {
 	public $rarity = 1;
 	public $role = "Torpedo Cutter";
 	public $faction = "Narn Regime";
-	public static $value = 280;
+	public static $value = 250;
 
 	public $ew = 425;
 	public $power = -2;
@@ -24,11 +24,11 @@ class Shokov extends Shokos {
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$front->systems[] = new TorpedoLauncher($this->getId(), $this->parentId, 315, 45, array(array("Vran", 12, 3)));
+		$right->systems[] = new TorpedoLauncher($this->getId(), $this->parentId, 315, 45, array(array("Vran", 8, 2)));
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$front->systems[] = new TorpedoLauncher($this->getId(), $this->parentId, 315, 45, array(array("Vran", 12, 3)));
+		$left->systems[] = new TorpedoLauncher($this->getId(), $this->parentId, 315, 45, array(array("Vran", 8, 2)));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

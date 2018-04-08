@@ -1154,7 +1154,7 @@ Ship.prototype.getStructureFromAngle = function(a){
 
 Ship.prototype.drawMovePlan = function(){
 	//console.log("draw moves for #" + this.id);
-	if (!this.actions.length || this.actions[this.actions.length-1].resolved || !this.deployed){
+	if (!this.actions.length || !this.deployed){
 		return;
 	}
 	else {
@@ -1727,7 +1727,7 @@ Ship.prototype.getSystemLocation = function(i, name){
 }
 
 Ship.prototype.canDeploy = function(){
-	if (this.userid == game.userid && (game.turn == 1 || this.id < 0)){
+	if (this.userid == game.userid && game.phase == -1 && (game.turn == 1 || this.id < 0)){
 		return true;
 	}
 	return false;

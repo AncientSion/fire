@@ -21,15 +21,16 @@ class Centurion extends Heavy {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 330, 30, 1050, 20, 3);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 1050, 20, 4);
+		$front->systems[] = new LightParticle($this->getId(), $this->id, 240, 60);
 		$front->systems[] = new MediumParticle($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new HeavyParticle($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new MediumParticle($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new LightParticle($this->getId(), $this->id, 300, 120);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 1300, 19, 1);
 		$right->systems[] = new HeavyParticle($this->getId(), $this->id, 360, 120);
-		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 120,	array(array("Javelin", 12, 4)));
+		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 120, array(array("Javelin", 12, 4)));
 		$right->systems[] = new MediumParticle($this->getId(), $this->id, 360, 120);
 		//$right->systems[] = new MediumParticle($this->getId(), $this->id, 360, 120);
 		$structs[] = $right;
@@ -41,7 +42,7 @@ class Centurion extends Heavy {
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 1300, 19, 1);
 		$left->systems[] = new HeavyParticle($this->getId(), $this->id, 240, 360);
-		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 240, 60,	array(array("Javelin", 12, 4)));
+		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 240, 60, array(array("Javelin", 12, 4)));
 		$left->systems[] = new MediumParticle($this->getId(), $this->id, 240, 360);
 		//$left->systems[] = new MediumParticle($this->getId(), $this->id, 240, 360);
 		$structs[] = $left;
@@ -67,12 +68,12 @@ class Centurion extends Heavy {
 					"loads" =>
 					array(
 						array(
-							"systemid" => 8,
+							"systemid" => 13,
 							"name" => "Javelin",
 							"amount" => 8,
 						),
 						array(
-							"systemid" => 8,
+							"systemid" => 20,
 							"name" => "Javelin",
 							"amount" => 8,
 						),

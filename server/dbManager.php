@@ -1,7 +1,5 @@
 <?php
 
-	include_once 'global.php';
-
 	class DBManager {
 
 		private $connection = null;
@@ -1623,7 +1621,7 @@
 		}
 
 		public function addReinforceValue($userid, $gameid, $add){
-			//Debug::log("addReinforceValue: ".$add);
+			Debug::log("addReinforceValue for user: ".$userid.": ".$add);
 			$stmt = $this->connection->prepare("
 				UPDATE playerstatus 
 				SET	value = value + :add

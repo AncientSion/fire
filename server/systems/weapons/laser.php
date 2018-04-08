@@ -28,6 +28,7 @@ class Laser extends Weapon {
 	}
 }
 
+
 class LightParticleBeam extends Laser {
 	public $name = "LightParticleBeam";
 	public $display = "Light Particle Beam";
@@ -51,6 +52,27 @@ class LightParticleBeam extends Laser {
         parent::__construct($id, $parentId, $start, $end, $output, $width);
         $this->boostEffect = array();
 
+	}
+}
+
+class HeavyPlasmaMaser extends Laser {
+	public $name = "HeavyPlasmaMaser";
+	public $display = "Heavy Plasma Maser";
+	public $priority = 520;
+	public $rakeTime = 60;
+	public $beamWidth = 4;
+	public $minDmg = 160;
+	public $maxDmg = 200;
+	public $reload = 4;
+	public $optRange = 650;
+	public $dmgLoss = 4;
+	public $powerReq = 6;
+	public $effiency = 4;
+	public $integrity = 60;
+	public $traverse = 0;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 

@@ -1,4 +1,6 @@
 <?php
+
+/*
 class Darkner extends Medium {
 	public $name = "Darkner";
 	public $display = "Darkner";
@@ -22,7 +24,6 @@ class Darkner extends Medium {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 18, 3);
-		$front->systems[] = new LightParticle($this->getId(), $this->id, 240, 60);
 		$front->systems[] = new SuperHeavyParticle($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 300, 120);
 		$structs[] = $front;
@@ -40,21 +41,20 @@ class Darkner extends Medium {
 		}
 	}
 }
+*/
 
-/*class Darkner extends Light {
+class Darkner extends Light {
 	public $name = "Darkner";
 	public $display = "Darkner";
 	public $role = "Long-range Support Frigate";
 	public $faction = "Centauri Republic";
 	public static $value =  300;
-	public static $value = 300;
 	public $mass = 1400;
 
-	public $integrity = 440;
-	public $ep = 100;
-	public $ew = 550;
-	public $power = 2;
-	public $negation = 14;
+	public $integrity = 370;
+	public $ep = 80;
+	public $ew = 700;
+	public $negation = 11;
 
 	function __construct($id, $userid){
 		parent::__construct($id, $userid);
@@ -64,13 +64,12 @@ class Darkner extends Medium {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new SuperHeavyParticle($this->getId(), $this->parentId, 315, 45);
-		$front->systems[] = new LightParticle($this->getId(), $this->parentId, 240, 120);
+		$front->systems[] = new SuperHeavyParticle($this->getId(), $this->parentId, 300, 60);
 		$structs[] = $front;
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 		}
 	}
-}*/
+}
 
 ?>
