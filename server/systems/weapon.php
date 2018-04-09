@@ -56,7 +56,7 @@ class Weapon extends System {
 		$mod = $this->getDamageMod($fire);
 		$range = $this->getDmgRangeMod($fire);
 
-		Debug::log("base: ".$base.", mod: ".$mod.", range: ".$range);
+		//Debug::log("base: ".$base.", mod: ".$mod.", range: ".$range);
 		return floor($base*$mod*$range);
 
 		return floor($this->getBaseDamage($fire) * $this->getDamageMod($fire) * $this->getDmgRangeMod($fire));

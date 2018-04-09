@@ -99,6 +99,7 @@ class PrimarySystem extends System {
 class Bridge extends PrimarySystem {
 	public $name = "Bridge";
 	public $display = "Command & Control";
+	public $hitMod = 6;
 
 	public function getNodes(){
 		return array("Engine", "Sensor", "Reactor");
