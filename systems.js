@@ -1716,8 +1716,8 @@ Weapon.prototype.assembleDmgData = function(fire){
 			dmgs[fire.damages[i].system][0]++;
 		}
 		if (fire.damages[i].notes[fire.damages[i].notes.length-1][0] == "o"){ // overload
-			dmgs[fire.damages[i].system][1] += Math.floor(fire.damages[i].notes[fire.damages[i].notes.length-1].slice(1, fire.damages[i].notes[fire.damages[i].notes.length-1].length));
-		}
+				dmgs[fire.damages[i].system][1] += Math.floor(fire.damages[i].notes[fire.damages[i].notes.length-1].slice(1, fire.damages[i].notes[fire.damages[i].notes.length-1].length));
+			}
 
 		dmgs[fire.damages[i].system][3] += fire.damages[i].armourDmg;
 		dmgs[fire.damages[i].system][4] += fire.damages[i].structDmg;
@@ -1924,7 +1924,7 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 
 		if (dmgs[i][0]){string += "Kills: " + dmgs[i][0]};
 		if (string.length > 2 && dmgs[i][1]){string += ", "};
-		if (dmgs[i][1]){string += "Overload: " + dmgs[i][1]}
+		if (dmgs[i][1]){string += "potential Overload: " + dmgs[i][1]}
 
 		$(sub) 
 		.append($("<td>").attr("colSpan", 2).html(string)
