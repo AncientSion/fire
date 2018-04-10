@@ -64,7 +64,8 @@ class Darkner extends Light {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new SuperHeavyParticle($this->getId(), $this->parentId, 300, 60);
+		$front->systems[] = new SuperHeavyParticle($this->getId(), $this->parentId, 330, 30);
+		$front->systems[] = new LightParticle($this->getId(), $this->parentId, 270, 90);
 		$structs[] = $front;
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];

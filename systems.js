@@ -1155,7 +1155,7 @@ PrimarySystem.prototype.getOutput = function(){
 		mod += this.getCrewEffect() * this.getCrewLevel();
 		mod += this.getOutputCrits();
 
-	return Math.floor(this.output * mod / 100) - usage;
+	return Math.floor(this.output / 100 * mod) - usage;
 }
 
 System.prototype.getCrewLevel = function(){
@@ -1194,7 +1194,7 @@ System.prototype.getOutputReduction = function(){
 	var mod = this.getOutputCrits();
 
 	if (!mod){return 0;}
-	else return Math.abs(Math.round(this.output / 100 * mod));
+	else return Math.ceil(Math.abs(this.output / 100 * mod));
 }
 
 PrimarySystem.prototype.getOutputString = function(){
@@ -1906,7 +1906,7 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 		.data("start", start)
 		.data("end", start + depth)
 
-	console.log(dmgs);
+	//console.log(dmgs);
 
 	for (var i in dmgs){
 		start++;

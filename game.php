@@ -654,7 +654,7 @@
 							window.animations[i].done = 1;
 							game.createMiscLogEntry(i);
 						}
-						game.fireResolved();
+						//game.fireResolved();
 					}
 				}
 				else if (e.keyCode == 109){ // m, cancel move animation

@@ -199,6 +199,7 @@ function Crit(data){
 			} return this.type + " (T " + this.turn + ")";
 		}
 		else if (this.type == "Destroyed"){return this.type + " (T " + this.turn + ")";}
+		else if (this.turn == -1){return "Overload: -" +  this.value +  "% " + this.type + " (T " + this.turn + ")";}
 		else return (this.type + " -" + (this.value) + "% (T " + this.turn + ")");
 	}
 
