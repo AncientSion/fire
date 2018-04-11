@@ -2894,7 +2894,7 @@ Ship.prototype.getMaskEffect = function(shooter){
 
 	if (shooter.ship || shooter.squad){
 		multi = 0.5;
-		multi += (multi / 10 * this.traverse);
+		multi += (0.8 / 10 * this.traverse);
 	}
 	else if (shooter.flight){
 		return 0;

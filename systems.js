@@ -4106,7 +4106,7 @@ Hangar.prototype.doUndoActions = function(){
 				game.ships.splice(i, 1);
 				this.fireOrders.splice(this.fireOrders.length-1, 1);
 				for (var j = 0; j < this.loads.length; j++){
-					this.loads[j].amount = 0;
+					this.loads[j].launch = 0;
 				}
 			break;
 			}

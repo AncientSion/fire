@@ -56,7 +56,7 @@ class PrimarySystem extends System {
 	public function getCritMod($type, $turn){
 		$mod = 0;
 		for ($i = 0; $i < sizeof($this->crits); $i++){
-			$mod =+ $this->crits[$i]->value;;
+			$mod =+ $this->crits[$i]->value;w;
 		}
 		return $mod;
 	}
@@ -171,9 +171,9 @@ class Reactor extends PrimarySystem {
 	public function applyPowerSpike($turn, $overload, $em){
 		Debug::log("applyPowerSpike to #".$this->parentId);
 
-		if ($overload){ // 8
-			$roll = mt_rand(0, 100); // 43
-			$result = round($overload * $roll / $this->output, 2);
+		if ($overload){
+			$roll = mt_rand(0, 100);
+			$result = round($overload / 100 * $roll, 2);
 			Debug::log("OVERLOAD: ".$overload.", roll: ".$roll.", output: ".$this->output.", result: ".$result);
 
 			$this->crits[] = new Crit(sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Overload", 0, $result, 1);
@@ -277,6 +277,7 @@ class Hangar extends Weapon {
 		for ($i = 0; $i < sizeof($loads); $i++){
 			$fighter = new $loads[$i](0,0);
 			$this->loads[] = $fighter;
+			//$this->loads[$i]->amount = 10;
 		}
 	}
 

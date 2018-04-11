@@ -286,7 +286,7 @@ function Game(data, userid){
 			 //(t && (t.ship || (!t.friendly && t.flight))){
 			if (t && (!t.salvo)){
 				valid = true;
-				dest = t.getPlannedPos();
+				dest = t.getGamePos();
 			}
 		}
 
@@ -296,7 +296,7 @@ function Game(data, userid){
 
 		var s = this.getUnit(aUnit);
 		var hangar = s.getSystem(this.flightDeploy.id)
-		var o = s.getPlannedPos();
+		var o = s.getGamePos();
 		var facing = getAngleFromTo(o, dest);
 		var p = getPointInDir(s.size/2, facing, o.x, o.y);
 		var mission = {id: -1, unitid: -this.ships.length-20, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};

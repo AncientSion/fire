@@ -851,7 +851,7 @@ class Ship {
 
 	public function getMaskEffect($target){
 		if ($target->ship || $target->squad){
-			return 0.5 + (0.05 * $this->traverse);
+			return 0.5 + (0.08 * $this->traverse);
 		}
 		else if ($target->flight){
 			return 0;
