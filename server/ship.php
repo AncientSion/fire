@@ -618,7 +618,7 @@ class Ship {
 
 		}
 		else {
-			//Debug::log("resolveFireOrder - #".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots);
+			Debug::log("resolveFireOrder - #".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots);
 
 			$fire->cc = $this->isCloseCombat($fire->shooter->id);
 			$fire->dist = $this->getHitDist($fire);

@@ -123,7 +123,6 @@
 		$this->playerstatus = DBManager::app()->getPlayerStatus($this->gameid);
 
 		$this->weapons = DmgCalc::getWeaponPriority();
-		Debug::log("weapons: ".sizeof($this->weapons));
 	}
 
 	public function verifyFleetCost($units){
@@ -1209,7 +1208,7 @@
 	public function resolveShipFireOrders(){
 		// resolve ship vs ship / fighter
 		for ($i = 0; $i < sizeof($this->fires); $i++){
-			Debug::log("resolving fire: ".$i.", prio: ".$this->fires[$i]->weapon::$prio);
+			//Debug::log("resolving fire: ".$i.", prio: ".$this->fires[$i]->weapon::$prio);
 			if ($this->fires[$i]->resolved){continue;}
 			if ($this->fires[$i]->shooter->flight){continue;}
 			$this->fires[$i]->target->resolveFireOrder($this->fires[$i]);
