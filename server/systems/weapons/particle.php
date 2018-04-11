@@ -62,8 +62,8 @@ class MediumParticle extends LightParticle {
 	public $name = "MediumParticle";
 	public $display = "Medium Particle Cannon";
 	public $priority = 430;
-	public $minDmg = 48;
-	public $maxDmg = 56;
+	public $minDmg = 28;
+	public $maxDmg = 36;
 	public $accDecay = 120;
 	public $shots = 2;
 	public $reload = 3;
