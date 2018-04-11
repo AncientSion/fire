@@ -3,7 +3,7 @@
 class Matter extends Weapon {
 	public $type = "Particle";
 	public $animation = "projectile";
-	public $priority = 100;
+	public static $prio =  100;
 
 	public $notes = array("Ignores <span style='font-color='green'>50%</span> of target armour");
 

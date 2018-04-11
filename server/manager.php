@@ -30,6 +30,7 @@
 
 		public $flight = 0;
 		public $salvo = 0;
+		public $weapons = array();
 
 		public $const = array(
 			"ew" => array(
@@ -120,6 +121,9 @@
 		$this->phase = $gd["phase"];
 		$this->wave = $gd["reinforceTurn"];
 		$this->playerstatus = DBManager::app()->getPlayerStatus($this->gameid);
+
+		$this->weapons = DmgCalc::getWeaponPriority();
+		Debug::log("weapons: ".sizeof($this->weapons));
 	}
 
 	public function verifyFleetCost($units){
@@ -1205,6 +1209,7 @@
 	public function resolveShipFireOrders(){
 		// resolve ship vs ship / fighter
 		for ($i = 0; $i < sizeof($this->fires); $i++){
+			Debug::log("resolving fire: ".$i.", prio: ".$this->fires[$i]->weapon::$prio);
 			if ($this->fires[$i]->resolved){continue;}
 			if ($this->fires[$i]->shooter->flight){continue;}
 			$this->fires[$i]->target->resolveFireOrder($this->fires[$i]);
@@ -1586,10 +1591,10 @@
 			case "Centauri Republic";
 				$units = array(
 					array("Primus", 5, 6),
+					array("Centurion", 7, 6),
 					array("Altarian", 15, 3),
 					array("Demos", 15, 3),
-					array("Darkner", 15, 3),
-					array("Squadron", 25, 2),
+					array("Squadron", 20, 2),
 				);
 				break;
 			case "Minbari Federation";
@@ -1602,12 +1607,12 @@
 				break;
 			case "Narn Regime";
 				$units = array(
-					array("GQuan", 5, 2),
+					array("GQuan", 6, 2),
 					array("GSten", 6, 3),
 					array("KaToc", 8, 3),
 					array("Rongoth", 8, 3),
-					array("DagKar", 6, 3),
-					array("Squadron", 18, 2),
+					array("DagKar", 4, 3),
+					array("Squadron", 20, 2),
 				);
 
 				break;

@@ -618,7 +618,7 @@ class Ship {
 
 		}
 		else {
-			Debug::log("resolveFireOrder - #".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots);
+			//Debug::log("resolveFireOrder - #".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots);
 
 			$fire->cc = $this->isCloseCombat($fire->shooter->id);
 			$fire->dist = $this->getHitDist($fire);
@@ -1206,7 +1206,7 @@ class Medium extends Ship {
 	public function handleCritTesting($turn){
 		//Debug::log("= handleCritTesting for ".$this->name.", #".$this->id.", turn: ".$turn);
 
-		$potential = 0;
+		$potential = array();
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
@@ -1216,7 +1216,7 @@ class Medium extends Ship {
 				//else if (mt_rand(0, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn)){
 				else if ($this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn)){
 					$usage = $this->structures[$i]->systems[$j]->getPowerUsage($turn);
-					$potential += $usage;
+					$potential[] = $usage;
 					$this->structures[$i]->systems[$j]->damages[sizeof($this->structures[$i]->systems[$j]->damages)-1]->notes .= "o".$usage.";";
 				}
 			}
@@ -1229,7 +1229,7 @@ class Medium extends Ship {
 		}
 
 
-		if ($potential || $this->primary->emDmg){
+		if (sizeof($potential) || $this->primary->emDmg){
 			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
 				if ($this->primary->systems[$j]->name == "Reactor"){
 					$this->primary->systems[$j]->applyPowerSpike($turn, $potential, $this->primary->emDmg);

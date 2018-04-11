@@ -2,6 +2,83 @@
 
 class DmgCalc {
 
+	public static function getWeaponPriority(){
+		$names = array(
+			"SuperHeavyLaser", "HeavyLaser", "MediumLaser", "LightLaser", "LightParticleBeam", "NeutronLaser", "NeutronAccelerator",
+			"SuperHeavyParticle", "HeavyParticle", "MediumParticle", "LightParticle", "TwinParticleBolter", "FusionCannon", "HeavyFusionCannon",
+			"HeavyPlasma", "MediumPlasma", "LightPlasma", "LightPlasmaShredder",
+			"AntimatterConverter", "MagCompressor",
+			"LightPulse", "MediumPulse", "HeavyPulse", 
+			"LightPlasmaPulse", "MediumPlasmaPulse", "HeavyPlasmaPulse"
+		);
+
+		$weapons = array();
+
+	/*	echo "<table>";
+		echo "<thead>";
+		echo "<tr>";
+		echo "<th width=300>Name</th>";
+		echo "<th width=100>DPS Value</th>";
+		echo "<th width=100>Priority</th>";
+		echo "</tr>";
+		echo "</thead>";
+
+	*/	for ($i = 0; $i < sizeof($names); $i++){
+			$weapons[] = new $names[$i](0, 0, 0, 0, 0, 0);
+
+			$val = ($weapons[$i]->minDmg + $weapons[$i]->maxDmg)/2;
+
+			if (isset($weapons[$i]->rakes)){
+				$val /= $weapons[$i]->rakes;
+			}
+
+			if (isset($weapons[$i]->melt)){
+				$val *= 1 + ($weapons[$i]->melt/100);
+			}
+
+			if (isset($weapon[$i]->pulse)){
+			}
+
+			$val = round($val);
+			$weapons[$i]::$prio = $val;
+
+	/*		echo "<tr>";
+			echo "<td>".$weapons[$i]->display."</td>";
+			echo "<td>".$weapons[$i]->prio."</td>";
+			echo "<td>".""."</td>";
+			echo "</tr>";
+	*/	}
+
+	//	echo "</table>";
+
+		usort($weapons, function($a, $b){
+			return $b::$prio - $a::$prio;
+		});
+
+	/*	echo "</br></br>";
+
+
+		echo "<table>";
+		echo "<thead>";
+		echo "<tr>";
+		echo "<th width=300>Name</th>";
+		echo "<th width=100>DPS Value</th>";
+		echo "<th width=100>Priority</th>";
+		echo "</tr>";
+		echo "</thead>";
+	
+	*/	for ($i = 0; $i < sizeof($weapons); $i++){
+	/*		echo "<tr>";
+			echo "<td>".$weapons[$i]->display."</td>";
+			echo "<td>".$weapons[$i]::$prio."</td>";
+			echo "<td>".$i."</td>";
+			echo "</tr>";
+	*/		$weapons[$i]::$prio = $i;
+		}
+		return $weapons;
+	//	echo "</table>";
+	}
+
 	public static function createAreaFireOrders($gd, $fire){
 		Debug::log("createAreaFireOrders");
 

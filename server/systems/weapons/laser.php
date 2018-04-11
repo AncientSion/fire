@@ -4,7 +4,7 @@ class Laser extends Weapon {
 	public $type = "Laser";
 	public $animation = "beam";
 	public $beamWidth;
-	public $priority = 500;
+	public static $prio =  500;
 	public $rakes;
 	public $laser = 1;
 	public $fireMode = "Laser";
@@ -32,7 +32,7 @@ class Laser extends Weapon {
 class LightParticleBeam extends Laser {
 	public $name = "LightParticleBeam";
 	public $display = "Light Particle Beam";
-	public $priority = 550;
+	public static $prio =  550;
 	public $animColor = "blue";
 	public $rakeTime = 25;
 	public $beamWidth = 1;
@@ -58,7 +58,7 @@ class LightParticleBeam extends Laser {
 class HeavyPlasmaMaser extends Laser {
 	public $name = "HeavyPlasmaMaser";
 	public $display = "Heavy Plasma Maser";
-	public $priority = 520;
+	public static $prio =  520;
 	public $rakeTime = 60;
 	public $beamWidth = 4;
 	public $minDmg = 160;
@@ -79,7 +79,7 @@ class HeavyPlasmaMaser extends Laser {
 class LightLaser extends Laser {
 	public $name = "LightLaser";
 	public $display = "Light Laser";
-	public $priority = 540;
+	public static $prio =  540;
 	public $animColor = "red";
 	public $rakeTime = 60;
 	public $beamWidth = 2;
@@ -105,7 +105,7 @@ class LightLaser extends Laser {
 class MediumLaser extends LightLaser {
 	public $name = "MediumLaser";
 	public $display = "Medium Laser";
-	public $priority = 530;
+	public static $prio =  530;
 	public $rakeTime = 60;
 	public $beamWidth = 3;
 	public $minDmg = 80;
@@ -125,7 +125,7 @@ class MediumLaser extends LightLaser {
 class HeavyLaser extends LightLaser {
 	public $name = "HeavyLaser";
 	public $display = "Heavy Laser";
-	public $priority = 520;
+	public static $prio =  520;
 	public $rakeTime = 60;
 	public $beamWidth = 4;
 	public $minDmg = 160;
@@ -146,7 +146,7 @@ class HeavyLaser extends LightLaser {
 class SuperHeavyLaser extends HeavyLaser {
 	public $name = "SuperHeavyLaser";
 	public $display = "Super-Heavy Laser";
-	public $priority = 510;
+	public static $prio =  510;
 	public $rakeTime = 100;
 	public $beamWidth = 5;
 	public $minDmg = 190;
@@ -165,7 +165,7 @@ class SuperHeavyLaser extends HeavyLaser {
 }
 
 class NeutronLaser extends Laser {
-	public $priority = 503;
+	public static $prio =  503;
 	public $name = "NeutronLaser";
 	public $display = "Neutron Laser";
 	public $rakeTime = 40;

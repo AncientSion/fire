@@ -41,7 +41,7 @@ class Torpedo extends Missile {
 }
 
 class Warhead extends Weapon {
-	public $priority = 10;
+	public static $prio =  10;
 	public $name = "Warhead";
 	public $display = "Warhead";
 	public $type = "Warhead";

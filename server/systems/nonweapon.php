@@ -168,16 +168,24 @@ class Reactor extends PrimarySystem {
     	$this->output = $this->output + + $use + $add;
     }
 
-	public function applyPowerSpike($turn, $overload, $em){
+	public function applyPowerSpike($turn, $potential, $em){
 		Debug::log("applyPowerSpike to #".$this->parentId);
 
-		if ($overload){
-			$roll = mt_rand(0, 100);
-			$result = round($overload / 100 * $roll, 2);
-			$critValue = round($result / $this->output * 100);
-			Debug::log("OVERLOAD: ".$overload.", roll: ".$roll.", output: ".$this->output.", result: ".$result, ", value: ".$critValue."%");
 
-			$this->crits[] = new Crit(sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Overload", 0, $critValue, 1);
+		if (sizeof($potential)){
+			$overload = 0.00;
+			$all = 0;
+
+			for ($i = 0; $i < sizeof($potential); $i++){
+				$all += $potential[$i];
+				$roll = mt_rand(0, 100);
+				$overload += round($potential[$i] / 100 * $roll, 2);
+			}
+
+			$modifier = round($overload / $this->output * 100);
+			Debug::log("POTENTIAL: ".$all.", output: ".$this->output.", result: ".$overload." units, value: ".$modifier."%");
+
+			$this->crits[] = new Crit(sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Overload", 0, $modifier, 1);
 		}
 	}
 }

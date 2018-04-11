@@ -33,7 +33,7 @@ class System {
 	public $accDecay = 0;
 	public $minDmg = 0;
 	public $maxDmg = 0;
-	public $priority = 0;
+	public static $prio =  0;
 	public $usage = -3;
 	public $freeAim = 0;
 	public $width = 1;

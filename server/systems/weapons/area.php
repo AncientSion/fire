@@ -4,7 +4,7 @@ class Area extends Weapon {
 	public $type = "Area";
 	public $animation = "area";
 	public $deviate = 0;
-	public $priority = 12;
+	public static $prio =  12;
 	public $usage = -1;
 	public $freeAim = 1;
 	public $shots = 1;

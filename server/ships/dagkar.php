@@ -39,6 +39,42 @@ class DagKar extends Medium {
 			$this->structures[] = $structs[$i];
 		}
 	}
+
+	static function getKit($faction){
+		return array(
+			"id" => 0,
+			"name" => "",
+			"cost" => static::$value,
+			"gameid" => 0,
+			"userid" => 0,
+			"upgrades" => 
+			array(
+				array(
+					"active" => 0,
+					"chance" => 100,
+					"cost" => 0,
+					"notes" => "Standard Outfit",
+					"units" => array(),
+					"loads" => 
+					array(
+						array(
+							"systemid" => 9,
+							"display" => "Port Torpedo Launcher",
+							"name" => "Vranoth",
+							"amount" => 24
+						),
+						array(
+							"systemid" => 13,
+							"display" => "Starboard Torpedo Launcher",,
+							"name" => "Vranoth",
+							"amount" => 24
+						)
+					)
+				)
+			)
+		);
+	}
+
 }
 
 ?>

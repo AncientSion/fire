@@ -4,7 +4,7 @@ class FighterWeapon extends Particle {
 	public $projSpeed = 7;
 	public $projSize = 1.5;
 	public $reload = 1;
-	public $priority = 10;
+	public static $prio =  10;
 	public $traverse = -4;
 	public $accDecay = 0;
 	public $tiny = 1;
