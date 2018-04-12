@@ -272,37 +272,37 @@ window.ajax = {
 		var ew = game.getEWSettings();
 
 		for (var i = 0; i < game.ships.length; i++){
+			if (game.ships[i].userid != game.userid){continue;}
 			if (game.ships[i].flight || game.ships[i].salvo){continue;}
-			if (game.ships[i].ship && game.ships[i].available < game.turn){continue;}
+
+			if (game.turn > 1 && game.ships[i].available == game.turn){continue;}
+
 			var ship;
-			if (game.ships[i].userid == game.userid){
-				for (var j = 0; j < game.ships[i].actions.length; j++){
-					if (game.ships[i].actions[j].manual){
-						if (game.ships[i].available == game.turn){
-							ship = {
-								actions: [ game.ships[i].actions[j] ],
-								id: game.ships[i].id,
-								status: "initial"
-							};
-							initial.push(ship);
-						}
-						else {
-							ship = {
-								actions: [ game.ships[i].actions[j] ],
-								id: game.ships[i].id * -1,
-								status: "request",
-								available: game.ships[i].available,
-								cost: game.ships[i].cost
-							};
-							reinforce.push(ship);
-						}
+			for (var j = 0; j < game.ships[i].actions.length; j++){
+				if (game.ships[i].actions[j].manual){
+					if (game.ships[i].available == game.turn){
+						ship = {
+							actions: [ game.ships[i].actions[j] ],
+							id: game.ships[i].id,
+						};
+						initial.push(ship);
 					}
+					else {
+						ship = {
+							actions: [ game.ships[i].actions[j] ],
+							id: game.ships[i].id * -1,
+							available: game.ships[i].available,
+							cost: game.ships[i].cost
+						};
+						reinforce.push(ship);
+					}
+					break;
 				}
-				if (game.ships[i].ship || game.ships[i].squad){
-					var power = game.ships[i].getPowerOrders();
-					for (var j = 0; j < power.length; j++){
-						powers.push(power[j]);
-					}
+			}
+			if (game.ships[i].ship || game.ships[i].squad){
+				var power = game.ships[i].getPowerOrders();
+				for (var j = 0; j < power.length; j++){
+					powers.push(power[j]);
 				}
 			}
 
