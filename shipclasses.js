@@ -837,7 +837,7 @@ Ship.prototype.issueTurn = function(a){
 		);
 		$(game.ui.turnButton)
 			.find("#turnCost").html("").end()
-			.find("#turnDelay").html("");
+			//.find("#turnDelay").html("");
 	}
 
 	if (!this.getRemSpeed() && this.getRemEP()){this.doAutoShorten();}
@@ -3427,7 +3427,7 @@ Ship.prototype.setTurnData = function(){
 	
 	$(game.ui.turnButton)
 		.find("#turnMode").html("ON").addClass("on").end().find("#turnCost").html(this.getTurnCost()).end()
-		.find("#turnDelay").html(this.getTurnDelay() + " px").end()
+		//.find("#turnDelay").html(this.getTurnDelay() + " px").end()
 		.find("#turnMod").html(turn.mod).end()
 
 	if (game.turnMode){
