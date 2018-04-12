@@ -3448,7 +3448,7 @@ Game.prototype.undrawJumpMarker = function(id){
 Game.prototype.toggleUI = function(){
 	if (aUnit){
 		unit = game.getUnit(aUnit);
-		if (aUnit.canTurn()){
+		if (unit.canTurn()){
 			if (game.ui.turnButton.is(":visible")){
 				$(game.ui.turnButton).addClass("disabled");
 			} else $(game.ui.turnButton).removeClass("disabled");
