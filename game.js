@@ -813,7 +813,7 @@ function Game(data, userid){
 
 			for (var i = 0; i < this.ships.length; i++){
 				if (this.ships[i].flight || this.ships[i].salvo){continue;}
-				if (this.ships[i].available == game.turn){continue;}
+				if (this.ships[i].available > game.turn){continue;}
 				d = Math.max(d, getDistance(this.ships[i], center));
 			}
 			//console.log(d);
