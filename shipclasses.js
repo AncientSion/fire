@@ -3527,6 +3527,7 @@ Ship.prototype.drawMoveUI = function(){
 }
 
 Ship.prototype.drawShortenTurnUI = function(){
+	return;
 	//console.log("drawShortenTurnUI");
 	var remDelay = this.getRemDelay();
 	var remSpeed = this.getRemSpeed();

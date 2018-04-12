@@ -537,17 +537,18 @@
 		.click(function(){
 			game.getUnit(aUnit).doDecreaseImpulse();
 		});
+
+		$("#turnButton")
+		.click(function(){
+			game.getUnit(aUnit).switchTurnMode();
+		})
+		
 	/*	$(".doTurn")
 		.click(function(){
 			//console.log("issueTurn")
 		//	game.getUnit($(this).data("shipid")).issueTurn($(this).data("a"))
 		//	game.getUnit($(this).data("shipid")).switchTurnMode();
 
-		})
-	*/
-		$("#turnButton")
-		.click(function(){
-			game.getUnit(aUnit).switchTurnMode();
 		})
 
 		$("#doShorten")
@@ -558,6 +559,7 @@
 			e.stopPropagation(); e.preventDefault();
 			game.getUnit(aUnit).doUndoShortenTurn();
 		})
+	*/
 
 	
 		$("#maxCutVector")

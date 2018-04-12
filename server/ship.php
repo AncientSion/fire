@@ -116,7 +116,7 @@ class Ship {
 		}
 
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
-			round($this->primary->systems[$i]->hitPct = $this->primary->systems[$i]->getHitChance() / $all, 2);
+			$this->primary->systems[$i]->hitPct = round($this->primary->systems[$i]->getHitChance() / $all * 100, 2);
 		}
 	}
 
