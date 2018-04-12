@@ -113,9 +113,30 @@ Ship.prototype.getTurnEndPosition = function(){
 	return this.actions[this.actions.length-1];
 }
 
+Ship.prototype.getAllUpgrades = function(){
+	return this.upgrades;
+}
+
+Ship.prototype.canDeployFlightHere = function(pos){
+	var dist = getDistance({x: this.x, y: this.y}, {x: pos.x, y: pos.y})
+	if (dist <= game.flightDeploy.range){
+		var a = getAngleFromTo( {x: this.x, y: this.y}, {x: pos.x, y: pos.y} );
+			a = addAngle(this.getDrawFacing(), a);
+		if (isInArc(a, game.flightDeploy.start, game.flightDeploy.end)){
+			return true;
+		}
+	}
+	return false;
+}
+
+Ship.prototype.canDeploy = function(){
+	if (this.userid == game.userid && game.phase == -1 && (game.turn == 1 || this.id < 0)){
+		return true;
+	}
+	return false;
+}
+
 Ship.prototype.canDeployHere = function(pos){
-	
-	//console.log(pos);
 	var valid = false;		
 	
 	/*
@@ -148,7 +169,6 @@ Ship.prototype.canDeployHere = function(pos){
 
 
 	if (game.turn == 1){
-
 		for (var i = 0; i < game.deployArea.length; i++){
 			if (game.deployArea[i].id != game.userid){continue;}
 			if (game.deployArea[i].x > 0){
@@ -184,6 +204,14 @@ Ship.prototype.canDeployHere = function(pos){
 
 		return false;
 	}
+	else if (game.turn > 1){
+		console.log(game.deployArea);
+		var d = getDistance(pos, {x: game.deployArea[0].x, y: game.deployArea[0].y});
+		if (d > game.deployArea[0].b){
+			return true;
+		}
+		return false;
+	}
 	else {
 		for (var i = 0; i < game.deployArea.length; i++){
 			if (game.deployArea[i].id != this.userid){continue;}
@@ -197,9 +225,6 @@ Ship.prototype.canDeployHere = function(pos){
 	}
 }
 
-Ship.prototype.getAllUpgrades = function(){
-	return this.upgrades;
-}
 
 Ship.prototype.doDeploy = function(pos){
 	console.log(this);
@@ -242,18 +267,6 @@ Ship.prototype.doDeploy = function(pos){
 		.find("#totalRequestCost").html(game.getCurrentReinforceCost());
 
 	game.redraw();
-}
-
-Ship.prototype.canDeployFlightHere = function(pos){
-	var dist = getDistance({x: this.x, y: this.y}, {x: pos.x, y: pos.y})
-	if (dist <= game.flightDeploy.range){
-		var a = getAngleFromTo( {x: this.x, y: this.y}, {x: pos.x, y: pos.y} );
-			a = addAngle(this.getDrawFacing(), a);
-		if (isInArc(a, game.flightDeploy.start, game.flightDeploy.end)){
-			return true;
-		}
-	}
-	return false;
 }
 
 Ship.prototype.setHitTable = function(){
@@ -1724,13 +1737,6 @@ Ship.prototype.getSystemLocation = function(i, name){
 	p.x += range(-8, 8);
 	p.y += range(-8, 8);
 	return p;
-}
-
-Ship.prototype.canDeploy = function(){
-	if (this.userid == game.userid && game.phase == -1 && (game.turn == 1 || this.id < 0)){
-		return true;
-	}
-	return false;
 }
 
 Ship.prototype.getWeaponOrigin = function(id){

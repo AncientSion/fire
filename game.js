@@ -764,14 +764,13 @@ function Game(data, userid){
 		if (game.turn == 1){
 			for (var i = 0; i < window.playerstatus.length; i++){
 
-				var step;
+				var step = 1;
 				var h = 1000;
 				var w = 200;
 				var dist = 600;
 				var y = h/2;
 
 				if (i % 2 == 0){step = -1;}
-				else {step = 1;}
 
 				if (window.playerstatus[i].userid == this.userid){
 					var id = this.userid;
@@ -792,6 +791,40 @@ function Game(data, userid){
 				});
 			}
 		}
+		else if (game.turn > 1){
+			var center = {x: 0, y: 0};
+			var count = 0;
+			for (var i = 0; i < this.ships.length; i++){
+				if (this.ships[i].flight || this.ships[i].salvo){continue;}
+				center.x += this.ships[i].x;
+				center.y += this.ships[i].y;
+				count++;
+			}
+
+			center.x /= count;
+			center.y /= count;
+			console.log(center);
+
+			center.x = Math.round(center.x);
+			center.y = Math.round(center.y);
+
+			var d = 0;
+
+			for (var i = 0; i < this.ships.length; i++){
+				if (this.ships[i].flight || this.ships[i].salvo){continue;}
+				d = Math.max(d, getDistance(this.ships[i], center));
+			}
+			//console.log(d);
+
+			this.deployArea.push({
+				id: this.userid,
+				x: center.x,
+				y: center.y,
+				s: 2000,
+				b: Math.round(d*1.75),
+				c: "green"
+			});
+		}
 		else {
 			this.deployArea.push({
 				id: this.userid,
@@ -801,6 +834,9 @@ function Game(data, userid){
 				c: "green"
 			});
 		}
+
+
+
 	}
 
 	this.drawDeployZone = function(){
@@ -810,10 +846,31 @@ function Game(data, userid){
 				drawCtx.scale(cam.z, cam.z)
 				drawCtx.beginPath();
 				drawCtx.rect(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].w, this.deployArea[i].h);
+				drawCtx.closePath();
 				drawCtx.fillStyle = this.deployArea[i].c;
 				drawCtx.fill();
 				drawCtx.setTransform(1,0,0,1,0,0);
 			}
+		}
+		else if (game.turn > 1){
+			for (var i = 0; i < this.deployArea.length; i++){
+				drawCtx.translate(cam.o.x, cam.o.y)
+				drawCtx.scale(cam.z, cam.z)
+				drawCtx.beginPath();
+				drawCtx.arc(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].s, 0, 2*Math.PI);
+				drawCtx.closePath();
+				drawCtx.fillStyle = this.deployArea[i].c;
+				drawCtx.fill();
+
+				drawCtx.beginPath();
+				drawCtx.arc(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].b, 0, 2*Math.PI);
+				drawCtx.closePath();
+				drawCtx.globalCompositeOperation = "destination-out";
+				drawCtx.fillStyle = "red";
+				drawCtx.fill();
+				drawCtx.setTransform(1,0,0,1,0,0);
+				drawCtx.globalCompositeOperation = "source-over";
+			};
 		}
 		else {
 			for (var i = 0; i < this.deployArea.length; i++){
@@ -821,6 +878,7 @@ function Game(data, userid){
 				drawCtx.scale(cam.z, cam.z)
 				drawCtx.beginPath();
 				drawCtx.arc(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].s, 0, 2*Math.PI);
+				drawCtx.closePath();
 				drawCtx.fillStyle = this.deployArea[i].c;
 				drawCtx.fill();
 				drawCtx.setTransform(1,0,0,1,0,0);
@@ -1681,30 +1739,33 @@ function Game(data, userid){
 		}
 	}
 
-	this.setUnitMovementFocus = function(){
-		window.then = Date.now();
-		window.startTime = then;
-
+	this.getUnitMaxPos = function(){
 		var minX = 0;
 		var minY = 0;
 		var maxX = 0;
 		var maxY = 0;
-		var amount = 0;
 
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].ship || this.ships[i].squad){
-				minX = Math.min(minX, this.ships[i].x);
-				maxX = Math.max(maxX, this.ships[i].x);
-				minY = Math.min(minY, this.ships[i].y);
-				maxY = Math.max(maxY, this.ships[i].y);
-			}
+			if (this.ships[i].flight || this.ships[i].salvo){continue;}
+			minX = Math.min(minX, this.ships[i].x);
+			maxX = Math.max(maxX, this.ships[i].x);
+			minY = Math.min(minY, this.ships[i].y);
+			maxY = Math.max(maxY, this.ships[i].y);
 		}
 
-		var endX = (minX + maxX) / 2;
-		var endY = (minY + maxY) / 2;
+		return {minX: minX, minY: minY, maxX: maxX, maxY: maxY};
 
-		var distX = maxX - minX;
-		var distY = maxY - minY;
+	}
+
+	this.setUnitMovementFocus = function(){
+
+		var data = this.getUnitMaxPos();
+
+		var endX = (data.minX + data.maxX) / 2;
+		var endY = (data.minY + data.maxY) / 2;
+
+		var distX = data.maxX - data.minX;
+		var distY = data.maxY - data.minY;
 
 		if (distX > res.x){
 			cam.setZoom(res.x/distX / 1.4);
