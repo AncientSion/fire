@@ -106,11 +106,26 @@ class Ship {
 		}
 	}
 
+	public function setInternalHitChance(){
+		$main = $this->primary->getHitChance();
+		$all = $main;
+
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+			$this->primary->systems[$i]->setHitChanceValue();
+			$all += $this->primary->systems[$i]->getHitChance();
+		}
+
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+			round($this->primary->systems[$i]->hitPct = $this->primary->systems[$i]->getHitChance / $all, 2);
+		}
+	}
+
 	public function setUnitState($turn, $phase){
 		//Debug::log("ship setUnitState #".$this->id."/".$this->display);
 
 		$this->setBaseStats($turn, $phase);
 		$this->setStructureState($turn, $phase);
+		$this->setInternalHitChance();
 		$this->setProps($turn, $phase);
 
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){ // check primary criticals

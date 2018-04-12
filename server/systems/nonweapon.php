@@ -8,14 +8,21 @@ class PrimarySystem extends System {
 	public $crewEffect = 0;
 	public $maxDmg = 20;
 	public $hitMod = 4;
+	public $hitChance = 0;
+	public $hitPct = 0;
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $output, $width);
 		$this->integrity = floor($integrity*0.85);
 	}
 
+	public function setHitChanceValue(){
+		$this->hitChance = $this->integrity / $this->hitMod;
+
+	}
+
 	public function getHitChance(){
-		return $this->integrity / $this->hitMod;
+		return $this->hitChance;
 	}
 
 	public function setMaxDmg($fire, $dmg){

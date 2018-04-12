@@ -1083,6 +1083,7 @@ function PrimarySystem(system){
 	this.exposed = 0;
 	this.crewEffect = system.crewEffect;
 	this.maxDmg = system.maxDmg;
+	this.hitPct = system.hitPct;
 }
 PrimarySystem.prototype = Object.create(System.prototype);
 
