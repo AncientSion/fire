@@ -65,7 +65,7 @@ class DagKar extends Medium {
 						),
 						array(
 							"systemid" => 13,
-							"display" => "Starboard Torpedo Launcher",,
+							"display" => "Starboard Torpedo Launcher",
 							"name" => "Vranoth",
 							"amount" => 24
 						)
