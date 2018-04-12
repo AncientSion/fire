@@ -170,16 +170,13 @@
 					<th id="turnCost" style="width: 55px, text-align: center">
 					</th>
 				</tr>
-			-->
-
 				<tr>
 					<th style="text-align: left">
 						Delay / 1°
-			<!---	</th>
+					</th>
 					<th id="turnDelay" style="width: 55px; text-align: center">
-					</th>-->
+					</th>
 				</tr>
-			<!---
 				<tr>
 					<th style="text-align: left">
 						EP Mod
