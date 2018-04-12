@@ -1226,6 +1226,7 @@ PrimarySystem.prototype.getSystemDetailsDiv = function(){
 	}
 	else if (unit.ship){
 		$(table).append($("<tr>").append($("<td>").css("width", "60%").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
+		$(table).append($("<tr>").append($("<td>").css("width", "60%").html("Hit Chance")).append($("<td>").html(this.hitPct + "%")));
 		$(table).append($("<tr>").append($("<td>").html("Max Damage / hit")).append($("<td>").html(this.maxDmg)));
 
 		if (this.output){
