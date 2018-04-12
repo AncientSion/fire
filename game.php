@@ -542,7 +542,7 @@
 		.click(function(){
 			game.getUnit(aUnit).switchTurnMode();
 		})
-		
+
 	/*	$(".doTurn")
 		.click(function(){
 			//console.log("issueTurn")
@@ -570,12 +570,12 @@
 		$("#maxTurnVector")
 		.click(function(){
 			//console.log("maxVector")
-			game.getUnit($(this).data("shipid")).moveInVector($(this).data("dist"));
+			game.getUnit($(this).data("shipid")).moveToMaxTurnVector();
 		})	
 		$("#maxVector")
 		.click(function(){
 			//console.log("maxVector")
-			game.getUnit($(this).data("shipid")).moveInVector($(this).data("dist"));
+			game.getUnit($(this).data("shipid")).moveToMaxVector();
 		})
 
 		$("#popupWrapper")
