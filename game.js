@@ -3449,7 +3449,7 @@ Game.prototype.toggleUI = function(){
 	if (aUnit){
 		unit = game.getUnit(aUnit);
 		if (aUnit.canTurn()){
-			if (game.ui.turnButton).is(":visible"){
+			if (game.ui.turnButton.is(":visible")){
 				$(game.ui.turnButton).addClass("disabled");
 			} else $(game.ui.turnButton).removeClass("disabled");
 		}
