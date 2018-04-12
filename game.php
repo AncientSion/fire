@@ -609,6 +609,9 @@
 					game.drawCircle = !game.drawCircle;
 					game.redraw();
 				}
+				if (e.keyCode == 117){ // u - disable movement UI
+					game.toggleUI();
+				}
 				else if (e.keyCode == 113){ // q - show friendly sensor
 					if (!game.animating && !game.sensorMode){
 						//game.drawShipOverlays();

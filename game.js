@@ -3445,6 +3445,17 @@ Game.prototype.undrawJumpMarker = function(id){
 	this.resetShipTransform();
 }
 
+Game.prototype.toggleUI = function(){
+	if (aUnit){
+		unit = game.getUnit(aUnit);
+		if (aUnit.canTurn()){
+			if (game.ui.turnButton).is(":visible"){
+				$(game.ui.turnButton).addClass("disabled");
+			} else $(game.ui.turnButton).removeClass("disabled");
+		}
+	}
+}
+
 Game.prototype.setShortenInfo = function(e, unit, dist){
 	return;
 	var short = "Shorten: <span class=";
