@@ -63,7 +63,7 @@ class PrimarySystem extends System {
 	public function getCritMod($type, $turn){
 		$mod = 0;
 		for ($i = 0; $i < sizeof($this->crits); $i++){
-			$mod =+ $this->crits[$i]->value;w;
+			$mod =+ $this->crits[$i]->value;
 		}
 		return $mod;
 	}
@@ -82,7 +82,7 @@ class PrimarySystem extends System {
 		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId.", newDmg: ".$new.", oldDmg: ".$old);
 
 		$mod = $this->getCritModMax($new);
-		if ($mod < 4){return;}
+		if ($mod < 2){return;}
 
 		$trigger =  ($new*2 + $old/2);
 
@@ -189,7 +189,7 @@ class Reactor extends PrimarySystem {
 				$overload += round($potential[$i] / 100 * $roll, 2);
 			}
 
-			$modifier = round($overload / $this->output * 100);
+			$modifier = round($overload / $this->output * 100, 2);
 			Debug::log("POTENTIAL: ".$all.", output: ".$this->output.", result: ".$overload." units, value: ".$modifier."%");
 
 			$this->crits[] = new Crit(sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Overload", 0, $modifier, 1);
