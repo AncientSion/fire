@@ -274,7 +274,7 @@ window.ajax = {
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid != game.userid){continue;}
 			if (game.ships[i].flight || game.ships[i].salvo){continue;}
-			if (game.turn > 1 && game.ships[i].available == game.turn){continue;}
+			if (game.turn > 1 && (game.ships[i].available < game.turn || game.ships[i].available == game.turn)){continue;}
 
 			var ship;
 			for (var j = 0; j < game.ships[i].actions.length; j++){
@@ -304,7 +304,7 @@ window.ajax = {
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid != game.userid){continue;}
 			if (game.ships[i].flight || game.ships[i].salvo){continue;}
-		
+
 			var power = game.ships[i].getPowerOrders();
 			for (var j = 0; j < power.length; j++){
 				powers.push(power[j]);
