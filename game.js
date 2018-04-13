@@ -2269,6 +2269,8 @@ function Game(data, userid){
 			return (
 				//a.shooter.flight - b.target.ship ||
 				a.shooter.salvo - b.shooter.salvo ||
+				a.shooter.flight - b.target.squad ||
+				a.shooter.flight - b.target.ship ||
 				a.shooter.flight - b.shooter.flight ||
 				a.targetid - b.targetid ||
 				a.weapon.priority - b.weapon.priority ||
