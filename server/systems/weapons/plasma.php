@@ -44,7 +44,7 @@ class LightPlasmaShredder extends Plasma {
 	public $maxBoost = 1;
 	public $effiency = 3;
 	public $linked = 2;
-	public $melt = 200;
+	public $melt = 300;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);

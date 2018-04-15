@@ -17,7 +17,7 @@ class PrimarySystem extends System {
 	}
 
 	public function setHitChanceValue(){
-		$this->hitChance = $this->integrity / $this->hitMod;
+		$this->hitChance = ($this->integrity / $this->hitMod)*1.2;
 
 	}
 

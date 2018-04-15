@@ -728,7 +728,7 @@ System.prototype.hideOptions = function(){
 
 System.prototype.showInfoDiv = function(e){
 	$(document.body).append(
-		$(this.getSystemDetailsDiv())
+		$(this.getSysDiv())
 			.css("left", e.clientX - 90)
 			.css("top", e.clientY + 50)
 		)
@@ -1208,7 +1208,7 @@ PrimarySystem.prototype.getBoostCostIncrease = function(){
 	return 0.35;
 }
 
-PrimarySystem.prototype.getSystemDetailsDiv = function(){
+PrimarySystem.prototype.getSysDiv = function(){
 	var unit = game.getUnit(this.parentId);
 	var table = $("<table>");
 	var div = $("<div>").attr("id", "systemDetailsDiv")
@@ -1525,7 +1525,7 @@ Sensor.prototype.getEW = function(data){
 Sensor.prototype.drawEW = function(){
 	if (!this.ew.length || this.destroyed || this.isUnpowered()){return;}
 	else if (this.img == undefined){
-		console.log("NO EW DEFINED!");
+		//console.log("NO EW DEFINED!");
 		this.setTempEW();
 		this.drawEW();
 	}
@@ -2171,7 +2171,7 @@ Weapon.prototype.getTraverseRating = function(){
 	return this.traverse;
 }
 
-Weapon.prototype.getSystemDetailsDiv = function(){
+Weapon.prototype.getSysDiv = function(){
 	var div = document.createElement("div");
 		div.id = "systemDetailsDiv";
 	var table = document.createElement("table");
@@ -2388,7 +2388,7 @@ Warhead.prototype.getDmgsPerShot = function(fire){return 1;}
 Warhead.prototype.getActiveSystem = function(){return this;}
 
 
-Warhead.prototype.getSystemDetailsDiv = function(){
+Warhead.prototype.getSysDiv = function(){
 	var div = $("<div>").attr("id", "systemDetailsDiv")
 		.append($("<table>")
 			.append($("<tr>")
@@ -2948,15 +2948,15 @@ Dual.prototype.resetDetailsDiv = function(){
 		old.remove();
 
 	$(document.body).append(
-		$(this.getSystemDetailsDiv())
+		$(this.getSysDiv())
 		.css("left", x)
 		.css("top", y)
 	)
 }
 
-Dual.prototype.getSystemDetailsDiv = function(){
-	var d = this.getActiveSystem().getSystemDetailsDiv();
-	var b = ($(d).find("tbody"))
+Dual.prototype.getSysDiv = function(){
+	var d = this.getActiveSystem().getSysDiv();
+	var b = ($(d).find("tbody").first())
 
 	//b.prepend($("<tr>").append($("<td>").attr("colSpan", 2).html("Active Mode")));
 
@@ -3885,7 +3885,7 @@ Area.prototype.hasEvent = function(){
 }
 
 
-Area.prototype.getSystemDetailsDiv = function(){
+Area.prototype.getSysDiv = function(){
 	var div = document.createElement("div");
 		div.id = "systemDetailsDiv";
 	var table = document.createElement("table");
@@ -3965,7 +3965,7 @@ Bulkhead.prototype.select = function(){
 	return;
 }
 
-Bulkhead.prototype.getSystemDetailsDiv = function(){
+Bulkhead.prototype.getSysDiv = function(){
 	var div = document.createElement("div");
 		div.id = "systemDetailsDiv";
 	var table = document.createElement("table");
@@ -4519,7 +4519,7 @@ Hangar.prototype.setupHangarLoadout = function(e){
 	}
 }
 
-Hangar.prototype.getSystemDetailsDiv = function(){
+Hangar.prototype.getSysDiv = function(){
 	var div = $("<div>")
 		.attr("id", "systemDetailsDiv")
 		.append($("<table>")

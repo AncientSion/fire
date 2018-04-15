@@ -50,7 +50,7 @@ Squaddie.prototype.hover = function(e){
 
 Squaddie.prototype.showInfoDiv = function(e){
 	$(document.body).append(
-		$(this.getSystemDetailsDiv())
+		$(this.getSysDiv())
 			.css("left", e.clientX - 90)
 			.css("top", e.clientY + 50)
 		)
@@ -60,7 +60,7 @@ Squaddie.prototype.hideInfoDiv = function(){
 	$("#systemDetailsDiv").remove();
 }
 
-Squaddie.prototype.getSystemDetailsDiv = function(){
+Squaddie.prototype.getSysDiv = function(){
 	var div = 
 		$("<div>").attr("id", "systemDetailsDiv")
 			.append($("<table>")
@@ -400,7 +400,7 @@ Squaddie.prototype.getArmourString = function(){
 
 Squaddie.prototype.armourIn = function(e){
 	$(document.body).append(
-		$(Structure.prototype.getSystemDetailsDiv.call(this))
+		$(Structure.prototype.getSysDiv.call(this))
 			.css("left", e.clientX - 90)
 			.css("top", e.clientY + 40)
 		)

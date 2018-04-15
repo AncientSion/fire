@@ -28,8 +28,6 @@
 		public $userindex = 0;
 		public $flights = array();
 
-		public $flight = 0;
-		public $salvo = 0;
 		public $weapons = array();
 
 		public $const = array(
@@ -185,6 +183,8 @@
 
 		for ($i = sizeof($this->ships)-1; $i >= 0; $i--){
 			if ($this->ships[$i]->userid != $this->userid){
+				if ($this->phase == 3){$this->ships[$i]->move = 0;}
+
 				if ($this->ships[$i]->available == $this->turn && !$this->ships[$i]->actions[0]->resolved){
 					if ($this->ships[$i]->flight){
 						array_splice($this->ships, $i, 1);
@@ -200,22 +200,24 @@
 		switch ($this->phase){
 			case -1: 
 				for ($i = 0; $i < sizeof($this->ships); $i++){
-					if ($this->ships[$i]->userid != $this->userid){
-						$this->ships[$i]->hidePowers($this->turn);
-						$this->ships[$i]->hideFireOrders($this->turn, $this->phase);
-					}
+					if ($this->ships[$i]->userid == $this->userid){continue;}
+					$this->ships[$i]->hidePowers($this->turn);
+					$this->ships[$i]->hideFireOrders($this->turn, $this->phase);
 				} break;
 			case 0: 
 				for ($i = 0; $i < sizeof($this->ships); $i++){
-					if ($this->ships[$i]->userid != $this->userid){
-						$this->ships[$i]->hideActions();
-					}
+					if ($this->ships[$i]->userid == $this->userid){continue;}
+					$this->ships[$i]->hideActions($this->phase);
+				} break;
+			case 1: 
+				for ($i = 0; $i < sizeof($this->ships); $i++){
+					if ($this->ships[$i]->userid == $this->userid){continue;}
+					$this->ships[$i]->hideActions($this->phase);
 				} break;
 			case 2:
 				for ($i = 0; $i < sizeof($this->ships); $i++){
-					if ($this->ships[$i]->userid != $this->userid){
-						$this->ships[$i]->hideFireOrders($this->turn, $this->phase);
-					}
+					if ($this->ships[$i]->userid == $this->userid){continue;}
+					$this->ships[$i]->hideFireOrders($this->turn, $this->phase);
 				} break;
 			default: break;
 		}
@@ -317,6 +319,7 @@
 				$db[$i]["notes"]
 			);
 
+			$unit->move = $db[$i]["move"];
 			$unit->addAllSystems();
 
 			if (isset($db[$i]["subunits"])){$unit->addSubUnits($db[$i]["subunits"]);}
@@ -358,6 +361,7 @@
 	}
 
 	public function canAdvance($gamedata){
+		//return false;
 		if ($gamedata["status"] == "closed" || $gamedata["status"] == "open"){return false;}
 
 		$this->playerstatus = DBManager::app()->getPlayerStatus($gamedata["id"]);
@@ -391,10 +395,13 @@
 				$this->handleDeployPhase();
 				$this->startMovementPhase();
 				break;
-			case 0; // ship moves
-				$this->handleMovementPhase();
+			case 0;
+				$this->handleBaseMovementPhase();
+				$this->startCommandMovePhase();
+				break;
+			case 1;
+				$this->handleCommandMovementPhase();
 				$this->startFiringPhase();
-			//	$this->startFighterMovementPhase();startFiringPhase
 				break;
 			case 2; // from fire to resolve fire
 				$this->handleFiringPhase();
@@ -459,6 +466,7 @@
 	}
 	
 	public function pickReinforcements(){
+		if ($this->turn != $this->wave){return;}
 		Debug::log("pickReinforcements");
 		$picks = array();
 
@@ -574,9 +582,7 @@
 			}
 		}
 
-		if ($needCheck){
-			$this->freeFlights();
-		}
+		if ($needCheck){$this->freeFlights();}
 	}
 
 	public function resolveJumpOutActions(){
@@ -736,11 +742,23 @@
 		}
 	}
 
+	public function startCommandMovePhase(){
+		//Debug::log("startCommandMovePhase");
+		$dbManager = DBManager::app();
+		$this->phase = 1;
+
+		if ($dbManager->setGameTurnPhase($this->gameid, $this->turn, $this->phase)){
+			$this->updatePlayerStatus("waiting");
+			return true;
+		}
+	}
+
 	public function handleNewActions(){
 		$new = array();
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if (($this->ships[$i]->ship || $this->ships[$i]->squad)){continue;}			
+			if ($this->ships[$i]->ship || $this->ships[$i]->squad){continue;}
+			if (!$this->ships[$i]->hasMoved()){continue;}		
 			$new[] = $this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1];
 		}
 
@@ -759,6 +777,23 @@
 		}
 
 		DBManager::app()->updateMissionState($data);
+	}
+
+	public function handleBaseMovementPhase(){
+		Debug::log("handleBaseMovementPhase");
+		$this->handleShipMovement();
+		$this->freeFlights();
+	}
+
+	public function handleCommandMovementPhase(){
+		Debug::log("handleCommandMovementPhase");
+		$this->handleShipMovement();
+		$this->handleFlightMovement();
+		$this->handleSalvoMovement();
+		$this->handleNewActions();
+
+		$this->handlePostMoveFires();
+		$this->updateMissions();
 	}
 
 	public function handleMovementPhase(){
@@ -801,30 +836,36 @@
 		return;
 	}
 
-
-
 	public function handleShipMovement(){
 		Debug::log("handleShipMovement");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->ship || $this->ships[$i]->squad){
-				$this->ships[$i]->moveSet = 1;
-				for ($j = sizeof($this->ships[$i]->actions)-1; $j >= 0; $j--){
-					if ($this->ships[$i]->actions[$j]->resolved == 0){
-						$this->ships[$i]->actions[$j]->resolved = 1;
-					} else break 1;
-				}
+			if ($this->ships[$i]->flight || $this->ships[$i]->salvo){continue;}
+			if ($this->ships[$i]->move > $this->phase){continue;}
+
+			for ($j = sizeof($this->ships[$i]->actions)-1; $j >= 0; $j--){
+				if ($this->ships[$i]->actions[$j]->resolved == 0){
+					$this->ships[$i]->actions[$j]->resolved = 1;
+					$this->ships[$i]->moveSet = 1;
+				} else break 1;
 			}
 		}
 		DBManager::app()->resolveMovementDB($this->ships);
 	}
 
-	public function handleMixedMovement(){
-		Debug::log("handleMixedMovement");
-	
-		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->moveSet){continue;}
-			else if ($this->flight && !$this->ships[$i]->flight || $this->salvo && !$this->ships[$i]->salvo){continue;}
+	public function handleFlightMovement(){
+		Debug::log("handleFlightMovement");
 
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if (!$this->ships[$i]->flight){continue;}
+			$this->ships[$i]->setMove($this);
+		}
+	}
+
+	public function handleSalvoMovement(){
+		Debug::log("handleSalvoMovement");
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if (!$this->ships[$i]->salvo){continue;}
 			$this->ships[$i]->setMove($this);
 		}
 	}
@@ -926,6 +967,10 @@
 				$this->ships[$i]->setCurSpeed($this->turn, $this->phase);
 				$data[] = $this->ships[$i]->mission;
 			}
+			else if ($this->ships[$i]->mission->arrived && ($t->ship || $t->squad) && $t->hasMoved() && !$this->ships[$i]->hasMoved()){
+				$this->ships[$i]->mission->arrived = 0;
+				$data[] = $this->ships[$i]->mission;
+			}
 		}
 		if (sizeof($data)){DBManager::app()->updateMissionState($data);}
 	}
@@ -994,7 +1039,6 @@
 	}
 
 	public function startDeployPhase(){
-		if ($this->turn == $this->wave){$this->pickReinforcements();}
 		$this->updatePlayerStatus("waiting");
 	}
 
@@ -1367,17 +1411,12 @@
 	public function startDamageControlPhase(){
 		//Debug::log("startDamageControlPhase");
 
-		$dbManager = DBManager::app();
 		$this->phase = 3;
 
-		if ($dbManager->setGameTurnPhase($this->gameid, $this->turn, $this->phase)){
-			$this->updatePlayerStatus("waiting");
-			return true;
-		}
-	}
-
-	public function finishTurn(){
-		//Debug::log("finishTurn");
+		DBManager::app()->resetUnitMovePriority($this->ships);
+		DBManager::app()->setGameTurnPhase($this->gameid, $this->turn, $this->phase);
+		$this->updatePlayerStatus("waiting");
+		return true;
 	}
 
 	public function getId(){

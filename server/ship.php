@@ -57,6 +57,7 @@ class Ship {
 	public $cc = array();
 	public $damaged = 0;
 	public $moveSet = 0;
+	public $move = 0;
 
 	public $ep = 0;
 	public $ew = 0;
@@ -95,6 +96,10 @@ class Ship {
 	public function getId(){
 		$this->index++;
 		return $this->index;
+	}
+
+	public function hasMoved(){
+		return sizeof($this->actions);
 	}
 
 	public function setPreviewState($turn, $phase){
@@ -263,7 +268,8 @@ class Ship {
 		}
 	}
 	
-	public function hideActions(){;
+	public function hideActions($phase){
+		if ($this->move != $phase){return;}
 		for ($i = sizeof($this->actions)-1; $i >= 0; $i--){
 			if (!$this->actions[$i]->resolved){
 				if ($this->actions[$i]->type == "roll"){$this->rolling = !$this->rolling;}

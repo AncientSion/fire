@@ -349,20 +349,22 @@ window.ajax = {
 	confirmMovement: function(callback){
 		var myShips = [];
 		for (var i = 0; i < game.ships.length; i++){
-			if (game.ships[i].userid == game.userid){
-				var ship = {
-					id: game.ships[i].id,
-					actions: []
-				}
-				for (var j = 0; j < game.ships[i].actions.length; j++){
-					if (!game.ships[i].actions[j].resolved){
-						ship.actions.push(game.ships[i].actions[j]);
-					}
-				}
+			if (game.ships[i].userid != game.userid){continue;}
+			if (game.ships[i].salvo || game.ships[i].flight){continue;}
+			if (game.ships[i].move > game.phase){continue;}
 
-				myShips.push(ship);
+			var ship = {
+				id: game.ships[i].id,
+				actions: []
 			}
+			for (var j = 0; j < game.ships[i].actions.length; j++){
+				if (game.ships[i].actions[j].resolved){continue;}
+				ship.actions.push(game.ships[i].actions[j]);
+			}
+
+			myShips.push(ship);
 		}
+
 		$.ajax({
 			type: "POST",
 			url: "postGameData.php",
@@ -412,28 +414,32 @@ window.ajax = {
 
 	confirmDamageControl: function(callback){
 	
-		var data = [];
+		var jumpout = [];
+		var command = [];
 
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid == game.userid){
 				if (game.ships[i].status == "jumpOut"){
-					data.push({id: game.ships[i].id, status: "jumpOut"});
+					jumpout.push({id: game.ships[i].id, status: "jumpOut"});
+				}
+				if (game.ships[i].command){
+					command.push(game.ships[i].id);
 				}
 			}
 		}
-
 		$.ajax({
 			type: "POST",
 			url: "postGameData.php",
 			datatype: "json",
 			data: {
-					type: "damageControl",
-					gameid: game.id,
-					userid: game.userid,
-					turn: game.turn,
-					phase: game.phase,
-					data: data
-					},
+				type: "damageControl",
+				gameid: game.id,
+				userid: game.userid,
+				turn: game.turn,
+				phase: game.phase,
+				jumpout: jumpout,
+				command: command
+				},
 			success: callback,
 			error: ajax.error,
 		});

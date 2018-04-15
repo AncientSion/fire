@@ -85,8 +85,11 @@ if (isset($_POST["type"])) {
 		}
 	}
 	else if ($_POST["type"] == "damageControl"){
-		if (sizeof($_POST["data"])){
-			$dbManager->jumpOutUnits($_POST["data"]);
+		if (sizeof($_POST["jumpout"])){
+			$dbManager->jumpOutUnits($_POST["jumpout"]);
+		}
+		if (sizeof($_POST["command"])){
+			$dbManager->setCommandUnits($_POST["command"]);
 		}
 		if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready")){
 			echo "damageControl success";

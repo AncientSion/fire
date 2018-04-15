@@ -113,6 +113,7 @@ spl_autoload_register(
                 'magcompressor' => '/server/systems/weapons/plasma.php',
 
                 'laser' => '/server/systems/weapons/laser.php',
+                'bLaser' => '/server/systems/weapons/laser.php',
                 'lightparticlebeam' => '/server/systems/weapons/laser.php',
                 'lightlaser' => '/server/systems/weapons/laser.php',
                 'mediumlaser' => '/server/systems/weapons/laser.php',

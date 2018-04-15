@@ -22,14 +22,18 @@ class Thentus extends Light {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new MediumLaser($this->getId(), $this->parentId, 315, 45);
+		$front->systems[] = new bLaser($this->getId(), $this->parentId, 315, 45, 3);
+		$front->systems[] = new bLaser($this->getId(), $this->parentId, 315, 45, 5);
+		$front->systems[] = new bLaser($this->getId(), $this->parentId, 315, 45, 7);
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
+		$right->systems[] = new HeavyLaser($this->getId(), $this->parentId, 315, 45);
 		$right->systems[] = new TwinParticleBolter($this->getId(), $this->parentId, 0, 180);
 
 		$structs[] = $right;
 		$left = new Section(180, 300);
+		$left->systems[] = new LightLaser($this->getId(), $this->parentId, 315, 45);
 		$left->systems[] = new TwinParticleBolter($this->getId(), $this->parentId, 180, 360);
 		$structs[] = $left;
 

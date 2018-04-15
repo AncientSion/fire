@@ -71,7 +71,8 @@ function initChat(){
 function getPhaseString(val){
 	switch (val){
 		case -1: return "Initial Orders";
-		case 0: return "Unit Movement";
+		case 0: return "Base Movement";
+		case 1: return "Command Movement";
 		case 2: return "Firing Orders";
 		case 3: return "Damage Control";
 		default: return "ERROR";
@@ -387,22 +388,13 @@ function handleMouseDown(e){
 				planPhase(e, pos, unit); break;
 			case 0: 
 				planPhase(e, pos, unit); break;
+			case 1: 
+				planPhase(e, pos, unit); break;
 			case 2: 
 				firePhase(pos, unit, 0); break;
 			case 3: 
 				dmgPhase(e, pos, unit); break;
 		}
-
-		/*	switch (game.phase){
-			case -1:
-				deployPhase(e, pos); break;
-			case 0: 
-				movePhase(e, pos, unit); break;
-			case 2: 
-				firePhase(pos, unit, 0); break;
-			case 3: 
-				dmgPhase(e, pos, unit); break;
-		}*/
 	}
 	else if (e.originalEvent.button == 2){
 		if (game.deploying && !game.turnMode){

@@ -344,6 +344,7 @@ function Game(data, userid){
 		flight.setPreMovePosition();
 		flight.setPreMoveImage();
 		flight.createBaseDiv();
+		flight.setPostMoveFacing();
 		this.ships.push(flight);
 
 		this.hideInstruct();
@@ -427,48 +428,27 @@ function Game(data, userid){
 	this.getDeployedFlights = function(){
 		var ret = [];
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].userid == this.userid){
-				if (this.ships[i].flight && this.ships[i].available == this.turn){
-					var flight = {
-						clientId: this.ships[i].id,
-						serverId: 0,
-						type: "Flight",
-						name: "Flight",
-						call: this.ships[i].call,
-						display: "",
-						mission: this.ships[i].mission,
-						loadAdjust: this.ships[i].getLoadAdjustment(),
-						upgrades: this.ships[i].getLaunchData(),
-						actions: this.ships[i].actions,
-						turn: this.turn,
-						eta: 0,
-					}
-					ret.push(flight);
+			if (this.ships[i].userid != this.userid){continue;}
+			if (this.ships[i].flight && this.ships[i].available == this.turn){
+				var flight = {
+					clientId: this.ships[i].id,
+					serverId: 0,
+					type: "Flight",
+					name: "Flight",
+					call: this.ships[i].call,
+					display: "",
+					mission: this.ships[i].mission,
+					loadAdjust: this.ships[i].getLoadAdjustment(),
+					upgrades: this.ships[i].getLaunchData(),
+					actions: this.ships[i].actions,
+					turn: this.turn,
+					eta: 0,
 				}
+				ret.push(flight);
 			}
 		}
 		return ret;
 	}
-
-	Flight.prototype.getLoadAdjustment = function(){
-		var data = {shipid: this.launch.shipid, systemid: this.launch.systemid, loads: []};
-		for (var i = 0; i < this.launch.loads.length; i++){
-			if (!this.launch.loads[i].amount){continue;}
-			data.loads.push({amount: this.launch.loads[i].amount, name: this.launch.loads[i].name});
-		}
-		return data;
-	}
-
-	Flight.prototype.getLaunchData = function(){
-		var units = []
-		for (var i = 0; i < this.launch.loads.length; i++){
-			if (!this.launch.loads[i].amount){continue;}
-			units.push({amount: this.launch.loads[i].amount, name: this.launch.loads[i].name});
-		}
-		var data = {active: 1, units: units};
-		return [data];
-	}
-
 
 	this.getEWSettings = function(){
 		var ret = [];
@@ -573,16 +553,16 @@ function Game(data, userid){
 
 	this.hasUnusedSpeed = function(){
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].userid == this.userid){
-				if (this.ships[i].getRemSpeed() > 0){
-					if (aUnit){
-						this.getUnit(aUnit).doUnselect();
-					}
-					popup("You have units with unused speed (#" + this.ships[i].id + ")");
-					this.ships[i].doHover();
-					this.ships[i].select();
-					return true;
+			if (this.ships[i].userid != this.userid || this.ships[i].flight || this.ships[i].salvo){continue;}
+			if (this.ships[i].move != game.phase){continue;}
+			if (this.ships[i].getRemSpeed() > 0){
+				if (aUnit){
+					this.getUnit(aUnit).doUnselect();
 				}
+				popup("You have units with unused speed (#" + this.ships[i].id + ")");
+				this.ships[i].doHover();
+				this.ships[i].select();
+				return true;
 			}
 		}
 		return false;
@@ -607,12 +587,11 @@ function Game(data, userid){
 		var data = [];
 
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].userid == this.userid){
-				var hasNoFire = this.ships[i].hasNoFireOrders();
+			if (this.ships[i].userid != this.userid){continue}
+			var hasNoFire = this.ships[i].hasNoFireOrders();
 
-				if (hasNoFire){
-					data.push({id: this.ships[i].id, name: this.ships[i].name, value: 0});
-				}
+			if (hasNoFire){
+				data.push({id: this.ships[i].id, name: this.ships[i].name, value: 0});
 			}
 		}
 
@@ -621,7 +600,30 @@ function Game(data, userid){
 		}
 		return false;
 	}
+	
+	this.handleDmgControlWarnings = function(){
+		var hasNoCommand = 1;
 
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].userid != this.userid){continue}
+			if (this.ships[i].command){
+				hasNoCommand = 0; break;
+			}
+		}
+
+		if (hasNoCommand){
+			popup("Please assign a unit as Fleet Command for the next turn.");
+			return true;
+		}
+		return false;
+	}
+
+	this.assignCommand = function(id){
+		for (var i = 0; i < this.ships.length; i++){
+			this.ships[i].unsetAsCommand();
+		}
+		game.getUnit(id).setAsCommand();
+	}
 
 	this.clickablePop = function(data){
 		var html = "";
@@ -693,6 +695,7 @@ function Game(data, userid){
 				else this.doConfirmOrders();
 			}
 			else if (this.phase == 3){
+				if (this.handleDmgControlWarnings()){return;}
 				this.doConfirmOrders();
 			}
 		}
@@ -984,13 +987,15 @@ function Game(data, userid){
 		this.setlastPosCC();
 		this.checkUnitOffsetting();
 
+
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].setSupportImage();
 			this.ships[i].getAttachDivs();
 		}
+		
 		$("#combatLog").find("tbody")
 			.append($("<tr>")
-				.append($("<td>").html("All ships, squadrons, fighters, ballistics have moved."))
+				.append($("<td>").html("Phase concluded"))
 				.contextmenu(function(e){
 					e.preventDefault(); e.stopPropagation();
 					//game.resetMovement();
@@ -1046,42 +1051,51 @@ function Game(data, userid){
 	
 	this.initPhase = function(n){
 		this.setShipDivs();
+		this.phase = n;
 
-		if (n == -1){
-			this.phase = n;
-				$("#phaseSwitchDiv").click(function(){
-					game.initDeploy();
-					$(this).hide();
-				});
+		if (this.phase == -1){
+			$("#phaseSwitchDiv").click(function(){
+				game.initDeploy();
+				$(this).hide();
+			});
 		}
-		else if (n == 0){
-			this.phase = n;
-				ctx.clearRect(0, 0, res.x, res.y);
-				$("#phaseSwitchDiv").click(function(){
-					game.resolveDeploy();
-					$(this).hide()
-				});
+		else if (this.phase == 0){
+			ctx.clearRect(0, 0, res.x, res.y);
+			$("#phaseSwitchDiv").click(function(){
+				game.resolveDeploy();
+				$(this).hide()
+			});
 		}
-		else if (n == 2){
-				$("#phaseSwitchDiv").click(function(){
-					setFPS(90);
-					game.prepResolveMovement();
-					game.draw();
-					$(this).hide();
-					game.timeout = setTimeout(function(){
-						game.doResolveMovement();
-					}, 1000);
-				});
+		else if (this.phase == 1){
+			$("#phaseSwitchDiv").click(function(){
+				setFPS(90);
+				game.prepResolveMovement();
+				game.draw();
+				$(this).hide();
+				game.timeout = setTimeout(function(){
+					game.doResolveMovement();
+				}, 1000);
+			});
 		}
-		else if (n == 3){
-			this.phase = n;
-				$("#phaseSwitchDiv").click(function(){
-					game.draw();
-					$(this).hide();
-					game.timeout = setTimeout(function(){
-						game.initDamageControl();
-					}, 1000);
-				});
+		else if (this.phase == 2){
+			$("#phaseSwitchDiv").click(function(){
+				setFPS(90);
+				game.prepResolveMovement();
+				game.draw();
+				$(this).hide();
+				game.timeout = setTimeout(function(){
+					game.doResolveMovement();
+				}, 1000);
+			});
+		}
+		else if (this.phase == 3){
+			$("#phaseSwitchDiv").click(function(){
+				game.draw();
+				$(this).hide();
+				game.timeout = setTimeout(function(){
+					game.initDamageControl();
+				}, 1000);
+			});
 			
 		}
 	}
@@ -1371,7 +1385,7 @@ function Game(data, userid){
 		if (this.phase == -1 || this.phase > 2){
 		 	this.setlastPosCC();
 		}
-		else if (this.phase == 0){
+		else if (this.phase == 0 || this.phase == 1){
 			this.setPostDeployCC();
 		}
 		else if (this.phase == 2){
@@ -1784,11 +1798,9 @@ function Game(data, userid){
 	this.setUnitMovementDetails = function(){
 		var toDo;
 		for (var i = 0; i < this.ships.length; i++){
-			var frameMod;
-			var toDo = true;
-			if (!this.ships[i].deployed){
-				toDo = false;
-			}
+			toDo = true;
+			if (!this.ships[i].deployed){toDo = false;}
+			else if (!this.ships[i].movesThisPhase()){toDo = false;}
 			else if (this.ships[i].flight && this.ships[i].mission.arrived && this.ships[i].mission.arrived < game.turn){
 				toDo = false;
 				for (var j = 0; j < this.ships[i].actions.length; j++){
@@ -1796,9 +1808,7 @@ function Game(data, userid){
 				}
 			}
 
-			if (!toDo){
-				continue;
-			}
+			if (!toDo){continue;}
 
 			if (this.ships[i].cc.length){
 				if (this.ships[i].ship || this.ships[i].squad){
@@ -1818,6 +1828,7 @@ function Game(data, userid){
 
 			this.ships[i].animationSetupMove();
 
+			var frameMod;
 			if (this.ships[i].ship || this.ships[i].squad){
 				frameMod = 1000 / window.fpsTicks / this.ships[i].getCurSpeed();
 			} else frameMod = 1000 / window.fpsTicks / this.ships[i].actions[this.ships[i].actions.length-1].dist;
@@ -1874,10 +1885,7 @@ function Game(data, userid){
 		
 			for (var i = 0; i < game.ships.length; i++){
 				if (game.ships[i].deployed){
-					if ((this.ships[i].ship || this.ships[i].squad) && !this.animShip || this.ships[i].flight && !this.animFlight || this.ships[i].salvo && !this.animSalvo){
-						game.ships[i].draw();
-						continue;
-					}
+					if (!game.ships[i].needsAnimationNow()){game.ships[i].draw(); continue;}
 
 					for (var j = 0; j < game.ships[i].actions.length; j++){
 						if (game.ships[i].actions[j].turn == game.turn && !game.ships[i].actions[j].animated){
@@ -1938,10 +1946,8 @@ function Game(data, userid){
 			var done = true;
 			
 			for (var i = 0; i < game.ships.length; i++){
-				if (!done){
-					break;
-				}
-				else if ((this.ships[i].ship || this.ships[i].squad) && this.animShip || this.ships[i].flight && this.animFlight || this.ships[i].salvo && this.animSalvo){
+				if (!done){break;}
+				else if (game.ships[i].needsAnimationNow()){
 					for (var j = 0; j < game.ships[i].actions.length; j++){
 						if (game.ships[i].actions[j].turn == game.turn){
 							if (! game.ships[i].actions[j].animated){
@@ -1961,25 +1967,33 @@ function Game(data, userid){
 	}
 
 	this.finishMoveSubPhase = function(){
-		var time = 1000;
-		if (game.animShip){
-			//console.log("ship done -> flight moves");
-			game.timeout = setTimeout(function(){
-				game.animShip = 0; game.animFlight = 1;
-				game.animateUnitMovement();
-			}, time);
-		}
-		else if (game.animFlight){
-			//console.log("flight done -> salvo moves");
-			game.timeout = setTimeout(function(){
+		var time = 500;
+
+		if (game.phase == 2){
+			if (game.animShip){
+				//console.log("ship done -> flight moves");
+				game.timeout = setTimeout(function(){
+					game.animShip = 0; game.animFlight = 1;
+					game.animateUnitMovement();
+				}, time);
+			}
+			else if (game.animFlight){
+				//console.log("flight done -> salvo moves");
+				game.timeout = setTimeout(function(){
+					game.endMoveSubPhase();
+					game.animFlight = 0; game.animSalvo = 1;
+					game.animateUnitMovement();
+				}, time);
+			}
+			else {
 				game.endMoveSubPhase();
-				game.animFlight = 0; game.animSalvo = 1;
-				game.animateUnitMovement();
-			}, time);
+				game.animFlight = 0; game.animSalvo = 0;
+				game.movementDone();
+			}
 		}
 		else {
+			game.animShip = 0; 
 			game.endMoveSubPhase();
-			game.animFlight = 0; game.animSalvo = 0;
 			game.movementDone();
 		}
 	}
@@ -2980,7 +2994,7 @@ Game.prototype.drawShipOverlays = function(){
 
 	if (game.phase == -1){
 		sensor = 1;
-	} else if (game.phase == 0){
+	} else if (game.phase == 0 || game.phase == 1){
 		moves = 1;
 	}
 

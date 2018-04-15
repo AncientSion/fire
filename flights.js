@@ -92,7 +92,7 @@ Flight.prototype.getNewMission = function(){
 }
 
 Flight.prototype.setImage = function(){
-	//console.log("setImage #" + this.id);
+	console.log("setImage #" + this.id);
 
 	if (!this.mission.arrived){
 		this.setPreMoveImage();
@@ -435,4 +435,23 @@ Flight.prototype.createDeployEntry = function(){
 
 Flight.prototype.createMissionChangeEntry = function(){
 	this.attachLogEntry("<td colSpan=9><span><font color='" + this.getCodeColor()+ "'>Flight #" + this.id + "</font> has been issued a new mission.</span></td>");
+}
+
+Flight.prototype.getLoadAdjustment = function(){
+	var data = {shipid: this.launch.shipid, systemid: this.launch.systemid, loads: []};
+	for (var i = 0; i < this.launch.loads.length; i++){
+		if (!this.launch.loads[i].launch){continue;}
+		data.loads.push({amount: this.launch.loads[i].launch, name: this.launch.loads[i].name});
+	}
+	return data;
+}
+
+Flight.prototype.getLaunchData = function(){
+	var units = []
+	for (var i = 0; i < this.launch.loads.length; i++){
+		if (!this.launch.loads[i].launch){continue;}
+		units.push({amount: this.launch.loads[i].launch, name: this.launch.loads[i].name});
+	}
+	var data = {active: 1, units: units};
+	return [data];
 }

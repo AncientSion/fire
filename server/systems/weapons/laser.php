@@ -4,7 +4,6 @@ class Laser extends Weapon {
 	public $type = "Laser";
 	public $animation = "beam";
 	public $beamWidth;
-	public static $prio =  500;
 	public $rakes;
 	public $laser = 1;
 	public $fireMode = "Laser";
@@ -28,11 +27,56 @@ class Laser extends Weapon {
 	}
 }
 
+class bLaser extends Laser {
+	public $name = "bLaser";
+	public $rakeTime = 60;
+	public $beamWidth = 3;
+	public $minDmg = 80;
+	public $maxDmg = 110;
+	public $optRange = 400;
+	public $dmgLoss = 6;
+	public $accDecay = 60;
+	public $shots = 1;
+	public $reload = 3;
+	public $maxBoost = 1;
+	public $powerReq = 5;
+	public $integrity = 50;
+	public $traverse = -1;
+	public $rakes = 3;
+
+	function __construct($id, $parentId, $start, $end, $output = 5, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+        $this->display = "Laser - Scale " . $output;
+		$this->beamWidth = $this->beamWidth / 5 * $output;
+		//$this->minDmg = ($this->minDmg / 5) * (5 + ((($output / 5) - 1)*1.5));
+		//$this->maxDmg = ($this->maxDmg / 5) * (5 + ((($output / 5) - 1)*1.5));
+		//$this->minDmg = $this->minDmg / 5 * 5 + (($output - 5)*10);
+		//$this->maxDmg = $this->maxDmg / 5 * 5 + (($output - 5)*10);
+		$this->minDmg = $this->minDmg / 5 * 5 + (($output - 5)*10);
+		$this->maxDmg = $this->maxDmg / 5 * 5 + (($output - 5)*10);
+		$this->optRange = $this->optRange / 5 * $output;
+		$this->dmgLoss = $this->dmgLoss * 5 / $output;
+		//$this->accDecay = $this->accDecay * 5 / $output;
+		$this->powerReq = $this->powerReq - 5 + $output;
+		$this->effiency = ceil($this->powerReq/2);
+		$this->integrity = $this->integrity / 5 * $output;
+		$this->traverse = $this->traverse - 5 + $output;
+	}
+	
+	public function getDmgRangeMod($fire){
+		if ($fire->dist <= $this->optRange){
+			return 1;
+		}
+
+		$mod = 1-(($fire->dist - $this->optRange) * $this->dmgLoss / 10000);
+		//Debug::log(get_class($this).", weapon id: ".$this->id.", RANGE DMG mod: ".$mod);
+		return $mod;
+	}
+}
 
 class LightParticleBeam extends Laser {
 	public $name = "LightParticleBeam";
 	public $display = "Light Particle Beam";
-	public static $prio =  550;
 	public $animColor = "blue";
 	public $rakeTime = 25;
 	public $beamWidth = 1;
@@ -58,7 +102,6 @@ class LightParticleBeam extends Laser {
 class HeavyPlasmaMaser extends Laser {
 	public $name = "HeavyPlasmaMaser";
 	public $display = "Heavy Plasma Maser";
-	public static $prio =  520;
 	public $rakeTime = 60;
 	public $beamWidth = 4;
 	public $minDmg = 160;
@@ -79,7 +122,6 @@ class HeavyPlasmaMaser extends Laser {
 class LightLaser extends Laser {
 	public $name = "LightLaser";
 	public $display = "Light Laser";
-	public static $prio =  540;
 	public $animColor = "red";
 	public $rakeTime = 60;
 	public $beamWidth = 2;
@@ -105,7 +147,6 @@ class LightLaser extends Laser {
 class MediumLaser extends LightLaser {
 	public $name = "MediumLaser";
 	public $display = "Medium Laser";
-	public static $prio =  530;
 	public $rakeTime = 60;
 	public $beamWidth = 3;
 	public $minDmg = 80;
@@ -125,7 +166,6 @@ class MediumLaser extends LightLaser {
 class HeavyLaser extends LightLaser {
 	public $name = "HeavyLaser";
 	public $display = "Heavy Laser";
-	public static $prio =  520;
 	public $rakeTime = 60;
 	public $beamWidth = 4;
 	public $minDmg = 160;
@@ -146,7 +186,6 @@ class HeavyLaser extends LightLaser {
 class SuperHeavyLaser extends HeavyLaser {
 	public $name = "SuperHeavyLaser";
 	public $display = "Super-Heavy Laser";
-	public static $prio =  510;
 	public $rakeTime = 100;
 	public $beamWidth = 5;
 	public $minDmg = 190;
@@ -168,7 +207,6 @@ class NeutronLaser extends Laser {
 	public static $prio =  503;
 	public $name = "NeutronLaser";
 	public $display = "Neutron Laser";
-	public $rakeTime = 40;
 	public $animColor = "yellow";
 	public $beamWidth = 2;
 	public $minDmg = 95;

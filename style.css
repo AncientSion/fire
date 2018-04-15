@@ -743,6 +743,22 @@ table, th, tr, td {
 	width: 390px;
 }
 
+.commandContainer {
+	position: relative;
+	color: white;
+	margin: auto;
+	margin-top: 5px;
+	border: 1px solid white;
+	padding: 3px;
+}
+
+.commandEntry {
+	margin: auto;
+	text-align: center;
+	font-size: 20px;
+	color: yellow;
+}
+
 .structDiv, .primaryDiv {
 	display: inline-block;
 	position: absolute;
@@ -1216,7 +1232,7 @@ div.integrityFull {
 	width: 95%;
 }
 #totalShipCost td {
-	font-size: 16px;
+	font-size: 22px;
 }
 
 .shipDiv th, td {

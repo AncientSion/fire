@@ -324,7 +324,7 @@ Structure.prototype.hideOptions = function(){
 
 Structure.prototype.showInfoDiv = function(e){
 	$(document.body).append(
-		$(this.getSystemDetailsDiv())
+		$(this.getSysDiv())
 			.css("left", e.clientX - 90)
 			.css("top", e.clientY + 40)
 		)
@@ -334,7 +334,7 @@ Structure.prototype.hideInfoDiv = function(e){
 	$("#systemDetailsDiv").remove();
 }
 
-Structure.prototype.getSystemDetailsDiv = function(){
+Structure.prototype.getSysDiv = function(){
 	var div = $("<div>").attr("id", "systemDetailsDiv")
 
 	var table = $("<table>")
@@ -550,13 +550,13 @@ Primary.prototype.hover = function(e){
 
 Primary.prototype.showInfoDiv = function(e){
 	$(document.body).append(
-		$(this.getSystemDetailsDiv())
+		$(this.getSysDiv())
 			.css("left", e.clientX - 90)
 			.css("top", e.clientY + 40)
 		)
 }
 
-Primary.prototype.getSystemDetailsDiv = function(){
+Primary.prototype.getSysDiv = function(){
 	return $("<div>").attr("id", "systemDetailsDiv")
 		.append($("<table>")
 			.append($("<tr>")

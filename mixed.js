@@ -375,6 +375,26 @@ Mixed.prototype.create = function(){
 	}
 }
 
+Mixed.prototype.setDrawData = function(){
+	//console.log("MIXED setDrawData");
+	if (this.available > game.turn || !this.available || game.turn == 1 && game.phase == -1){
+		if (this.friendly && this.isReady){
+			this.setPostMovePosition();
+			this.setPostMoveFacing();
+			return;
+		}
+	}
+
+	this.setPostMoveFacing();
+
+	if (game.phase < 2){
+		this.setPreMovePosition();
+	}
+	else {
+		this.setPostMovePosition();
+	}
+}
+
 Mixed.prototype.setSubSystemState = function(){
 }
 
@@ -466,6 +486,7 @@ Mixed.prototype.setLayout = function(){
 				if (u.ship || u.squad){roam = 0; break;}
 			}
 			if (roam){this.setPatrolLayout();}
+			else this.setBaseLayout();
 		}
 	}
 	else this.setBaseLayout();

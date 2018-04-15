@@ -373,8 +373,21 @@
 			$this->insertLoads($userid, $gameid, $units);
 			$this->setReinforceFaction($userid, $gameid, $faction);
 			$this->addReinforceValue($userid, $gameid, $rem);
+			$this->setInitialCommandUnit($units);
 			$this->setPlayerStatus($userid, $gameid, -1, -1, "ready");
 			return true;
+		}
+
+		public function setInitialCommandUnit($units){
+			//Debug::log("setInitialCommandUnit s:".sizeof($units));
+			//for ($i = 0; $i < sizeof($units); $i++){Debug::log("i: ".$i.", id: ".$units[$i]["id"]);}
+
+			usort($units, function($a, $b){
+				return $a["value"] - $b["value"];
+			});
+
+			$id = $units[sizeof($units)-1]["id"];
+			$this->setCommandUnits(array($id));
 		}
 
 		public function insertUnits($userid, $gameid, &$units){
@@ -425,6 +438,7 @@
 				if ($stmt->errorCode() == 0){
 					$id = $this->getLastInsertId();
 					$units[$i]["id"] = $id;
+					Debug::log("i: ".$i.", id: ".$id);
 
 					if (!$ship){
 						$units[$i]["mission"]["unitid"] = $id;
@@ -1011,6 +1025,31 @@
 			return true;
 		}
 
+		public function resetUnitMovePriority($units){
+			Debug::log("resetUnitMovePriority s: ".sizeof($units));
+			$stmt = $this->connection->prepare("
+				UPDATE units
+				SET
+					move = :move
+				WHERE id = :id
+			");
+
+
+			$move = 0;
+
+			for ($i = 0; $i < sizeof($units); $i++){
+				//foreach ($states[$i] as $key => $value){Debug::log($key." / ".$value);}
+
+				$stmt->bindParam(":id",  $units[$i]->id);
+				$stmt->bindParam(":move",  $move);
+				$stmt->execute();
+
+				if ($stmt->errorCode() == 0){continue;}
+			}
+			return true;
+		}
+
+
 		public function updateDestroyedState($units){
 			Debug::log("updateDestroyedState");
 			$stmt = $this->connection->prepare("
@@ -1045,6 +1084,25 @@
 			for ($i = 0; $i < sizeof($data); $i++){
 				$stmt->bindParam(":id", $data[$i]["id"]);
 				$stmt->bindParam(":status", $data[$i]["status"]);
+				$stmt->execute();
+
+				if ($stmt->errorCode() == 0){continue;}
+			}
+		}
+
+		public function setCommandUnits($data){
+			Debug::log("setCommandUnits s: ".sizeof($data));
+			Debug::log("0: ".$data[0]);
+			$stmt = $this->connection->prepare("
+				UPDATE units 
+				SET 
+					move = 1
+				WHERE
+					id = :id
+			");
+			
+			for ($i = 0; $i < sizeof($data); $i++){
+				$stmt->bindParam(":id", $data[$i]);
 				$stmt->execute();
 
 				if ($stmt->errorCode() == 0){continue;}
@@ -1594,7 +1652,7 @@
 			$stmt->execute();
 
 			if ($stmt->errorCode() == 0){
-				Debug::log("game ".$gameid.", user ".$userid." --- adjusting to turn/phase/status ".$turn."/".$phase."/".$status);
+				//Debug::log("game ".$gameid.", user ".$userid." --- adjusting to turn/phase/status ".$turn."/".$phase."/".$status);
 				return true;
 			} else return false;
 		}

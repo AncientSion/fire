@@ -235,8 +235,6 @@ class Mixed extends Ship {
 				}
 			}
 			else { // "normal" stack resolution
-				if (!$t->moveSet){$t->setMove($gd);}
-
 				if ($this->mission->arrived){ // get ship last position as move goal
 					$tPos = $t->getCurPos();
 					$dist = Math::getDist2($this->getCurPos(), $tPos);

@@ -410,7 +410,7 @@ function canvasMouseMove(e){
 		else if (ship.hasWeaponsSelected()){
 			handleWeaponAimEvent(ship, unit, e, pos);
 		}
-		else if (game.phase == 0){
+		else if (game.phase == 0 || game.phase == 1){
 			handleTurnShortening(ship, e, pos);
 		}
 	}
