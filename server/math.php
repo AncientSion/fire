@@ -145,7 +145,7 @@ class Math {
 	}
 
 	static function getBaseImpulseCost($mass){
-		return round(pow($mass, 1.05)/200, 2);
+		return round(pow($mass, 1.05)/250, 2);
 	}
 
 

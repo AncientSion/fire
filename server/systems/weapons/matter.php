@@ -26,7 +26,7 @@ class MediumRailGun extends Matter {
 	public $projSize = 3;
 	public $projSpeed = 13;
 	public $reload = 3;
-	public $integrity = 40;
+	public $integrity = 44;
 	public $powerReq = 3;
 	public $traverse = -1;
 

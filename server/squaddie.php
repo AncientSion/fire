@@ -203,7 +203,7 @@ class Squaddie extends Single {
 class Light extends Squaddie {
 	public $baseImpulse = 175;
 	public $size = 60;
-	public $baseImpulseCost = 40;
+	public $baseImpulseCost = 30;
 	public $space = 3;
 	
 	function __construct($id, $parentId){

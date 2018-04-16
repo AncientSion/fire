@@ -50,7 +50,7 @@ class MediumPulse extends Pulse {
 	public $projSize = 3;
 	public $projSpeed = 9;
 	public $reload = 3;
-	public $integrity = 42;
+	public $integrity = 40;
 	public $powerReq = 4;
 	public $traverse = -1;
 
@@ -143,7 +143,7 @@ class MediumPlasmaPulse extends LightPlasmaPulse {
 	public $projSize = 3;
 	public $projSpeed = 9;
 	public $reload = 3;
-	public $integrity = 42;
+	public $integrity = 40;
 	public $powerReq = 4;
 	public $traverse = -1;
 

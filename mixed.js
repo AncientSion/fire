@@ -340,7 +340,7 @@ Mixed.prototype.getLockEffect = function(target){
 		multi = 1;
 	}
 	else if (target.salvo){
-		multi = 3;
+		multi = 2;
 	}	
 
 	if (target.flight){

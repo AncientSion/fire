@@ -369,6 +369,7 @@
 		}
 
 		public function processInitialBuy($userid, $gameid, $units, $rem, $faction){
+			//Debug::log("processInitialBuy s:".sizeof($units));
 			$this->insertUnits($userid, $gameid, $units);
 			$this->insertLoads($userid, $gameid, $units);
 			$this->setReinforceFaction($userid, $gameid, $faction);
@@ -1091,8 +1092,8 @@
 		}
 
 		public function setCommandUnits($data){
-			Debug::log("setCommandUnits s: ".sizeof($data));
-			Debug::log("0: ".$data[0]);
+			//Debug::log("setCommandUnits s: ".sizeof($data));
+			//Debug::log("0: ".$data[0]);
 			$stmt = $this->connection->prepare("
 				UPDATE units 
 				SET 

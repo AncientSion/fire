@@ -1628,7 +1628,7 @@ Ship.prototype.drawMarker = function(x, y, c, context){
 	context.beginPath();
 	context.arc(x, y, (this.size-2)/2, 0, 2*Math.PI, false);
 	context.closePath();
-	context.lineWidth = 1 + Math.floor(this.selected*2 + (this.move == 1 )*2);
+	context.lineWidth = 1 + (this.salvo *1) + Math.floor(this.selected*2 + (this.move == 1 )*2);
 	context.globalAlpha = 0.7 + (this.move == 1) * 0.1;
 	context.globalCompositeOperation = "source-over";
 	context.strokeStyle = c;
@@ -1776,7 +1776,7 @@ Ship.prototype.resetMoveMode = function(){
 }
 
 Ship.prototype.getCurSpeed = function(){
-	if (game.phase >= 1 && (this.ship || this.squad)){return this.currentImpulse;}
+	if (game.phase >= 1 && (this.movesThisPhase())){return this.currentImpulse;}
 	var step = this.getImpulseStep();
 	var amount = 0;
 	for (var i = 0; i < this.actions.length; i++){
@@ -2927,7 +2927,7 @@ Ship.prototype.getLockEffect = function(target){
 		multi = 1.5;
 	}
 	else if (target.salvo){
-		multi = 3;
+		multi = 2;
 	}
 
 	if (game.isCloseCombat(this, target)){
@@ -3712,7 +3712,7 @@ Ship.prototype.drawVectorIndicator = function(){
 	moveCtx.lineTo(p.x, p.y);
 	moveCtx.closePath();
 	moveCtx.lineWidth = 1;
-	moveCtx.strokeStyle = "white";
+	moveCtx.strokeStyle = "yellow";
 	moveCtx.globalAlpha = 0.5;
 	moveCtx.stroke();
 	moveCtx.globalAlpha = 1;
@@ -3740,6 +3740,11 @@ Ship.prototype.getMaxTurnAngle = function(){
 }
 
 Ship.prototype.drawTurnArcs = function(){
+	var angle = this.getPlannedFacing();
+	var turnAngle = this.getMaxTurnAngle();
+	this.turnAngles = {start: addAngle(0 + turnAngle, angle), end: addAngle(360 - turnAngle, angle)};
+
+	return;
 	var center = this.getPlannedPos();
 	var angle = this.getPlannedFacing();
 	var turnAngle = this.getMaxTurnAngle();

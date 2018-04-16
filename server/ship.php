@@ -866,7 +866,7 @@ class Ship {
 			return 1.5;
 		}
 		else if ($target->salvo){
-			return 3;
+			return 2;
 		}
 	}
 
