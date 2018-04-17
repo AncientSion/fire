@@ -486,7 +486,7 @@ table, th, tr, td {
 	cursor: pointer;
 }
 
-.buttonSelection:hover{
+.buttonSelection:hover {
 	color: red;
 }
 

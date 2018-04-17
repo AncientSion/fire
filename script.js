@@ -1,9 +1,10 @@
 graphics.preload();
-$(window).on("load", function() {
-	init();
+
+$(window).on("load", function(){
+	ajax.getGameData(window.gameid, window.userid);
 });
 
-function init(){
+function init(data){
 	console.time("time");
 	window.res.x = window.innerWidth-1;
 	window.res.y = window.innerHeight-1;
@@ -56,8 +57,8 @@ function init(){
 	drawCtx = drawCanvas.getContext("2d");
 
 	turn = new Turn();
-	game = new Game(game, userid);
-	game.create();
+	game = new Game(data);
+	game.create(data);
 	showUI();
 	window.initChat();
 	window.initiateKeyDowns();

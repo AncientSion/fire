@@ -3,7 +3,7 @@ window.ajax = {
 	getGameData: function(gameid, userid){
 		$.ajax({
 			type: "GET",
-			url: "game.php",
+			url: "getGameData.php",
 			datatype: "json",
 			data: {
 					type: "gamedata",
@@ -12,8 +12,7 @@ window.ajax = {
 					},
 			success: function(data){
 				console.log("success");
-				game = new Game(data, userid);
-				game.create();
+				init(JSON.parse(data));
 			},
 			error: ajax.error,
 		});

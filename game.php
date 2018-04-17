@@ -10,11 +10,15 @@
 		$userid = $_SESSION["userid"];
 	} else $userid = 0;
 
-	$manager = new Manager($userid, $gameid);
-	if (!$manager->turn){header("Location: lobby.php");}
-	Debug::open();
-	$manager->getGameData();
+
+	
+	//$manager = new Manager($gameid, $userid);
+	//if (!$manager->turn){header("Location: lobby.php");}
 	echo "<script> window.gameid = ".$gameid."; window.userid = ".$userid.";</script>";
+	
+	/*
+	$manager = new Manager($gameid, $userid);
+	if (!$manager->turn){header("Location: lobby.php");}
 
 	$status = "";
 
@@ -25,11 +29,7 @@
 		}
 	}
 	$manager->doEval();
-	
-	echo "<script>";
-	echo "window.game = ".json_encode($manager->getClientData(), JSON_NUMERIC_CHECK).";";
-	echo "window.playerstatus = ".json_encode($manager->playerstatus, JSON_NUMERIC_CHECK).";";
-	echo "</script>";
+	*/
 ?>
 
 
@@ -65,48 +65,7 @@
 		<div id="game">
 		</div>
 		<div id="phaseSwitchDiv" style="width: 100%; height: 100%">
-			<div id="phaseSwitchInnerDiv" class="disabled">
-				<div>
-					<?php
-						echo "Turn ".$manager->turn;
-					?>
-				</div>
-				<div>
-					<?php
-						echo getPhaseString($manager->phase);
-					?>
-				</div>
-				<div class="hintDiv">
-					<?php
-						$hints = array();
-						$hints[] = "Press 'F' to cancel fire animations and display the combat log immediatly";
-						$hints[] = "Press 'M' to cancel move animations and immediatly position each unit";
-						$hints[] = "Press '+' or '-' to increase or decrease EP allocation for turn shortening";
-						$hints[] = "Press 'SPACE' to enable and disable a tool to measure distances and angles.";
-						$hints[] = "Matter weapons like the Railgun are able to penetrate enemy armour. They ignore 50 % of the target units armour.";
-						$hints[] = "In addition to dealing very high damage, Plasma weapons deal additional damage to the target units armour. However, Plasma weapons also lose potential damage the further the target away, as the plasma cools down rapidly.";
-						$hints[] = "Laser have an optimal focal point. The farther away the target unit (in either direction), the less damage the Laser will deal.";
-						$hints[] = "Laser rake over a target. As such they are likely to hit more than one system which also means their final damage is very dependant on the armour of the target unit.";
-						$hints[] = "Each Pulse weapon will score a fixed base amount of hits. This amount will then be increased further if you scored a good roll on the hit dice.";
-						$hints[] = "Pulse weapons fire a volley of several shots. All shots of a volley hit the same unit (or system). As such, armour is applied for each single hit.";
-						$hints[] = "Fighters are combined as a unit into a single flight, while Missiles and Torpedos are combined as a unit into a single Salvo.";
-						$hints[] = "Since Missiles and Torpedos (as units) are very fragile and often destroyed after a single hit, try to fire weapons with many shots, but low damage at them.";
-						$hints[] = "For the most part, weapons with more than 1 shot will spread all their shots over a target, instead of applying all of them on a single fighter or system.";
-						$hints[] = "If a weapon does less damage than the target has armour on the hit section or system, then the weapon will effectivly only deal half of that damage, counting as being unable to penetrade the armour. As such, light weapons are very ineffective against strongly armored ships but become more effective as a battle progresses and ship armor degrades.";
-						$hints[] = "Once deployed onto the battlezone, fighter flights can only change their objective / orders every 3 turns. Issueing new orders will reset a flights thrust back to 50 % of maximum thrust, regardless of new mission direction.";
-						$hints[] = "After deploying from a hangar (as well as receiving a new order), a fighter flight will reset its thrust and accelerate one turn, accomplashing maximum speed the turn after.";
-						$hints[] = "Missiles and Torpedos increase their thrust linear, becoming more fast every turn without speed being capped.";
-						$hints[] = "Having an active sensor lock (red circle overlay) increases the chance to hit a starship by 50 %. This bonus is doubled (to 100%) when targeting a locked Flight or Salvo. To be counted as 'active', the target must be within your sensor arc (red circle overlay)";
-						$hints[] = "Having a active sensor scramble (blue circle overlay), will decrease your starships chance to be hit by 50 %. To be counted as 'active', the ship firing at you need to be within your sensor arc (blue circle overlay).";
-						$hints[] = "A starship's main reactor icon shows the available power (deficit). The same value can also be seen at the top left (in white colro) on the ship layout element";
-						$hints[] = "Each unit is associated with a certain 'size' value, with goes from -5 to 3:</br></br><b>Salvo (-5)</b> - Ballistic Missile/Torpedo barrages</br><b>Flight (-4)</b> - Fighter / Bomber flights of any kind</br><b>Very Light Ship (-2)</b> - Non-military grade Police Cutter, Border Patrol etc.<b></br>Light Ship (-1)</b> - Corvettes , Light Frigates</br><b>Medium Ship (0)</b> - Frigates, Support/Light Destroyers></br><b>Heavy Ship (1)</b> - Main Destroyers, Cruisers</br><b>Super Heavy Ship (2)</b> - Attack/Battle Cruiser, Light Battleships, Support Carriers</br><b>Ultra Heavy Ship (3)</b> - Heavy Battleships, Dreadnaughts, Main Carrier";
-						$hints[] = "Each unit is associated with a certain 'size' value, with goes from -4 to 3:</br>Salvo (-4) - Ballistic Missile/Torpedo barrages</br>Flight (-3) - Fighter / Bomber flights of any kind</br> Very Light Ship (-2) - Non-military grade Police Cutter, Border Patrol etc.</br>Light Ship (-1) - Corvettes , Light Frigates</br>Medium Ship (0) - Frigates, Support/Light Destroyers></br>Heavy Ship (1) - Main Destroyers, Cruisers</br>Super Heavy Ship (2) - Attack/Battle Cruiser, Light Battleships, Support Carriers</br>Ultra Heavy Ship (3) - Heavy Battleships, Dreadnaughts, Main Carrier";
-						$hints[] = "Weapons each have a 'tracking' stat (-4 to 3) that correspond with the 'size' stat of every unit. Thisindicates the weapons ability to track units by size. If a weapon can only track relativly large targets but is trying to aim at say a cutter or fighter, it will come with a harsh penalty, indicated by a loss of accuracy (seen in the overlay).";
-						$hints[] = "Weapons each have a 'tracking' stat (-4 to 3) that correspond with the 'size' stat of every unit. </br>This indicates the weapons ability to track units by size.</br>If a weapon can only track relativly large targets but is trying to aim at say a cutter or fighter, it will come with a harsh penalty, indicated by a loss of accuracy (seen in the overlay).";
-						echo $hints[mt_rand(0, sizeof($hints)-1)];
-						//echo $hints[sizeof($hints)-4];
-					?>
-				</div>
+			<div id="phaseSwitchInnerDiv">
 			</div>
 		</div>
 		<div class="chatWrapper disabled">
@@ -235,6 +194,10 @@
 		</div>
 		<div id="upperGUI" class="disabled">
 			<table id="overview">
+				<thead></thead>
+				<tbody></tbody>
+			
+				<!--
 				<tr>
 					<th width="10%">
 						Turn
@@ -246,6 +209,7 @@
 						Reinforce
 					</th>
 				</tr>
+				
 				<tr>
 					<td>
 						<?php echo $manager->turn;
@@ -279,6 +243,7 @@
 						}
 					?>
 				</tr>
+				-->
 			</table>
 		</div>
 
@@ -416,6 +381,7 @@
 						Cost
 					</th>
 				</tr>
+				<!--
 				<?php
 					if (sizeof($manager->rdyReinforcements)){
 						//echo "<script>console.log(window.reinforcements)</script>";
@@ -435,6 +401,7 @@
 							echo "</tr>";
 						}
 					?>
+					-->
 				</table>
 			</div>
 			<div id="deployOverlay" class="disabled">
@@ -558,43 +525,43 @@
 		})
 	*/
 
-	
-		$("#maxCutVector")
-		.click(function(){
-			//console.log("maxVector")
-			game.getUnit($(this).data("shipid")).moveInVector($(this).data("dist"));
-		})	
-		$("#maxTurnVector")
-		.click(function(){
-			//console.log("maxVector")
-			game.getUnit($(this).data("shipid")).moveToMaxTurnVector();
-		})	
-		$("#maxVector")
-		.click(function(){
-			//console.log("maxVector")
-			game.getUnit($(this).data("shipid")).moveToMaxVector();
-		})
 
-		$("#popupWrapper")
-			.css("left", res.x / 2 - 300)
-			.css("top", res.y / 2 - 300)
-			.contextmenu(function(e){
-				e.preventDefault();
-				e.stopPropagation();
-				$(this).hide();
-			});
+	$("#maxCutVector")
+	.click(function(){
+		//console.log("maxVector")
+		game.getUnit($(this).data("shipid")).moveInVector($(this).data("dist"));
+	})	
+	$("#maxTurnVector")
+	.click(function(){
+		//console.log("maxVector")
+		game.getUnit($(this).data("shipid")).moveToMaxTurnVector();
+	})	
+	$("#maxVector")
+	.click(function(){
+		//console.log("maxVector")
+		game.getUnit($(this).data("shipid")).moveToMaxVector();
+	})
 
-		$("#instructWrapper")
-			.css("left", res.x / 2 - 300)
-			.css("top", res.y / 2 - 300)
-			.contextmenu(function(e){
-				e.preventDefault();
-				e.stopPropagation();
-				$(this).hide();
-			});
-	
-		$("#hangarDiv").drag()
-		$("#crewDiv").drag()
+	$("#popupWrapper")
+		.css("left", res.x / 2 - 300)
+		.css("top", res.y / 2 - 300)
+		.contextmenu(function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			$(this).hide();
+		});
+
+	$("#instructWrapper")
+		.css("left", res.x / 2 - 300)
+		.css("top", res.y / 2 - 300)
+		.contextmenu(function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			$(this).hide();
+		});
+
+	$("#hangarDiv").drag()
+	$("#crewDiv").drag()
 }
 	
 	function initiateKeyDowns(){

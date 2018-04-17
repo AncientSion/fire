@@ -17,7 +17,7 @@ if (isset($_SESSION["userid"])){
 	if ($game["status"] == "active"){
 		header("Location: game.php?gameid=".$game["id"]);
 	}
-	$manager = new Manager($playerid);
+	$manager = new Manager(0, $playerid);
 	$players = $dbManager->getPlayersInGame($gameid);
 	echo "<script>";
 	echo "window.players = ".json_encode($players).";";

@@ -12,7 +12,7 @@ if (isset($_POST["type"])) {
 		return true;
 	}
 
-	$manager = new Manager($_POST["userid"], $_POST["gameid"]);
+	$manager = new Manager($_POST["gameid"], $_POST["userid"]);
 
 	if ($_POST["type"] == "joinGame") {
 		Debug::log("joinGame success");

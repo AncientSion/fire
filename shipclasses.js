@@ -1454,7 +1454,7 @@ Ship.prototype.attachLogEntry = function(html){
 Ship.prototype.createCritLogEntry = function(){
 	if (!this.ship){return;}
 	
-	var html = "<td colSpan=4><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is subject to critical effects.</td>" + "<td colSpan=5>";
+	var html = "<td style='padding: 10px' colSpan=4><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is subject to critical effects.</td>" + "<td colSpan=5>";
 	var expand = "";
 
 	for (let i = 0; i < this.primary.systems.length; i++){

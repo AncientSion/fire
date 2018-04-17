@@ -38,8 +38,9 @@
 			),
 		);
 
-		function __construct($userid = 0, $gameid = 0){
-			//Debug::log("constructing manager ".$userid."/".$gameid);
+		function __construct($gameid = 0, $userid = 0){
+			Debug::log("__construct ".$gameid."/".$userid);
+			//Debug::trace();
 			//$this->getMemory();
 			$this->userid = $userid;
 			$this->gameid = $gameid;
@@ -60,7 +61,7 @@
 		//$this->deleteReinforcements();
 		//return;
 		//$this->crits();
-
+		//Debug::log("in getClientData!");
 		Debug::close();
 
 		//var_export($this->getUnit(2)->getEndState(1));
@@ -73,11 +74,11 @@
 			"phase" => $this->phase,
 			"ships" => $this->getShipData(),
 			"reinforcements" => $this->rdyReinforcements,
-			//"deploys" => $this->deploys,
 			"incoming" =>$this->getIncomingData(),
 			"const" => $this->const,
 			"username" => $this->getUsername(),
-			"wave" => $this->wave
+			"wave" => $this->wave,
+			"playerstatus" => $this->playerstatus
 		);
 
 	}
@@ -107,7 +108,7 @@
 	}
 
 	public function getGeneralData(){
-		//Debug::log("getGeneralData for game ".$this->gameid);
+		Debug::log("getGeneralData for game ".$this->gameid);
 		$gd = DBManager::app()->getGameDetails($this->gameid);
 
 		$this->name = $gd["name"];
@@ -139,7 +140,7 @@
 	}
 
 	public function getGameData(){
-		//Debug::log("getGameData");
+		//Debug::log("getGameData for: ".$this->gameid.", for user: ".$this->userid);
 		$db = DBManager::app();
 
 		$this->setReinforceStatus();

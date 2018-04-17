@@ -2,13 +2,16 @@ function Game(data, userid){
 	this.id = data.id;
 	this.name = data.name;
 	this.status = data.status;
-	this.userid = userid;
+	this.userid = data.userid;
 	this.turn = data.turn;
 	this.phase = data.phase;
-	this.ships = data.ships || [];
-	this.reinforcements = data.reinforcements;
+	this.playerstatus = data.playerstatus;
 	this.incoming = data.incoming;
 	this.const = data.const;
+	this.ships = [];
+	this.reinforcements = [];
+	this.ships = [];
+	this.reinforcements = [];
 	this.fireOrders = []
 	this.mode = false;
 	this.deploying = false;
@@ -765,7 +768,7 @@ function Game(data, userid){
 
 	this.setupDeployZone = function(){
 		if (game.turn == 1){
-			for (var i = 0; i < window.playerstatus.length; i++){
+			for (var i = 0; i < this.playerstatus.length; i++){
 
 				var step = 1;
 				var h = 1000;
@@ -775,7 +778,7 @@ function Game(data, userid){
 
 				if (i % 2 == 0){step = -1;}
 
-				if (window.playerstatus[i].userid == this.userid){
+				if (this.playerstatus[i].userid == this.userid){
 					var id = this.userid;
 					var color = "green";
 				}
@@ -1255,77 +1258,10 @@ function Game(data, userid){
 		$(document.body).append(wrapper)
 	}
 
-
-	this.create = function(){
-		$("#phaseSwitchDiv").show();
-
-		for (var i = 0; i < this.ships.length; i++){
-			var ship = window.initUnit(this.ships[i]);
-			this.ships[i] = ship;
-			this.ships[i].setUnitState();
-			this.ships[i].setSubSystemState();
-			this.ships[i].create();
-		}
-
-		this.setCC();
-
-		for (var i = 0; i < this.ships.length; i++){
-			this.ships[i].setTarget();
-			this.ships[i].setLayout();
-			this.ships[i].setSize();
-			this.ships[i].setDrawData();
-		}
-
-		for (var i = 0; i < this.ships.length; i++){
-			this.ships[i].setImage();
-			this.ships[i].createBaseDiv();
-			if (game.turn == 1 && game.phase == -1){continue;}
-			this.ships[i].getAttachDivs();
-			this.ships[i].setSupportImage();
-		}
-
-		if (game.turn == 1 && game.phase == -1){this.setInitialFacing(this.ships);}
-		this.setInitialFacing(this.reinforcements);
-
-		for (var i = 0; i < this.reinforcements.length; i++){
-			this.reinforcements[i] = window.initUnit(this.reinforcements[i]);
-			this.reinforcements[i].setLayout();
-			this.reinforcements[i].setImage();
-			this.reinforcements[i].setSubSystemState();
-			this.reinforcements[i].createBaseDiv();
-			this.reinforcements[i].friendly = 1;
-			this.reinforcements[i].deployed = 0;
-		}
-
-		if (game.phase != 2){this.checkUnitOffsetting();}
-
-		var canSubmit = false;
-		var isPlaying = false;
-		for (var i = 0; i < playerstatus.length; i++){
-			if (playerstatus[i].userid == userid){
-				isPlaying = true;
-				this.reinforcePoints = $("#reinforce").html();
-				if (playerstatus[i].status == "waiting"){
-					canSubmit = true;
-					break;
-				}
-			}
-		}
-
-		this.initIncomingTable();
-		this.initReinforceTable();
-		this.setDeployWrapperView();
-		this.initSelectionWrapper();
-		this.initEvents();
-		this.canSubmit = canSubmit;
-		cam.setFocus(0, 0);
-		this.initPhase(this.phase);
-	}
-
 	this.setInitialFacing = function(units){
 		for (var i = 0; i < units.length; i++){
-			for (var j = 0; j < playerstatus.length; j++){
-				if (playerstatus[j].userid == this.userid){
+			for (var j = 0; j < this.playerstatus.length; j++){
+				if (this.playerstatus[j].userid == this.userid){
 					units[i].drawFacing = 0 + (180 * (j % 2 % 2)); 
 					break;
 				}
@@ -3514,4 +3450,89 @@ Game.prototype.setShortenInfo = function(e, unit, dist){
 		.data("delay", aim)
 		.css("left", left)
 		.css("top", top)
+}
+
+
+Game.prototype.setPhaseSwitchDiv = function(){
+	$("#phaseSwitchDiv").find("#phaseSwitchInnerDiv")
+		.append($("<div>").html("Turn: " + this.turn))
+		.append($("<div>").html(getPhaseString(this.phase)))
+		.show();
+}
+
+Game.prototype.upperGUIOverview = function(){
+	$("#upperGUI").find("#overview").find("tbody")
+		.append($("<tr>")
+			.append($("<td>").html(this.turn))
+			.append($("<td>").html(getPhaseString(this.phase)))
+			.append($("<td>").html(this.reinforce)))
+}
+
+
+Game.prototype.create = function(data){
+
+	this.setPhaseSwitchDiv();
+	this.upperGUIOverview();
+
+	for (var i = 0; i < data.ships.length; i++){
+		var ship = window.initUnit(data.ships[i]);
+		this.ships[i] = ship;
+		this.ships[i].setUnitState();
+		this.ships[i].setSubSystemState();
+		this.ships[i].create();
+	}
+
+	this.setCC();
+
+	for (var i = 0; i < this.ships.length; i++){
+		this.ships[i].setTarget();
+		this.ships[i].setLayout();
+		this.ships[i].setSize();
+		this.ships[i].setDrawData();
+	}
+
+	for (var i = 0; i < this.ships.length; i++){
+		this.ships[i].setImage();
+		this.ships[i].createBaseDiv();
+		if (game.turn == 1 && game.phase == -1){continue;}
+		this.ships[i].getAttachDivs();
+		this.ships[i].setSupportImage();
+	}
+
+	if (game.turn == 1 && game.phase == -1){this.setInitialFacing(this.ships);}
+	this.setInitialFacing(data.reinforcements);
+
+	for (var i = 0; i < data.reinforcements.length; i++){
+		this.reinforcements[i] = window.initUnit(data.reinforcements[i]);
+		this.reinforcements[i].setLayout();
+		this.reinforcements[i].setImage();
+		this.reinforcements[i].setSubSystemState();
+		this.reinforcements[i].createBaseDiv();
+		this.reinforcements[i].friendly = 1;
+		this.reinforcements[i].deployed = 0;
+	}
+
+	if (game.phase != 2){this.checkUnitOffsetting();}
+
+	var canSubmit = false;
+	var isPlaying = false;
+	for (var i = 0; i < this.playerstatus.length; i++){
+		if (this.playerstatus[i].userid == userid){
+			isPlaying = true;
+			this.reinforcePoints = $("#reinforce").html();
+			if (this.playerstatus[i].status == "waiting"){
+				canSubmit = true;
+				break;
+			}
+		}
+	}
+
+	this.initIncomingTable();
+	this.initReinforceTable();
+	this.setDeployWrapperView();
+	this.initSelectionWrapper();
+	this.initEvents();
+	this.canSubmit = canSubmit;
+	cam.setFocus(0, 0);
+	this.initPhase(this.phase);
 }
