@@ -1,4 +1,4 @@
-function Game(data, userid){
+function Game(data){
 	this.id = data.id;
 	this.name = data.name;
 	this.status = data.status;
@@ -2697,6 +2697,40 @@ function Game(data, userid){
 		}
 	}
 
+
+	this.createReinforcementsTable = function(){
+		var target = $("#deployWrapper").find("#reinforceTable").find("tbody");
+
+		for (let i = 0; i < this.reinforcements.length; i++){
+			if (this.reinforcements[i].userid != this.userid){continue;}
+
+			target.append(
+				$("<tr>")
+				.addClass("requestReinforcements")
+				.append(
+					$("<td>")
+					.append(
+						$("<img>")
+						.addClass("img50")
+						.attr("src", "shipIcons/" + this.reinforcements[i].name.toLowerCase() + ".png")
+					)
+				)
+				.append($("<td>").html(this.reinforcements[i].name + "</br>" + this.reinforcements[i].notes))
+				.append($("<td>").html(this.reinforcements[i].available - this.turn))
+				.append($("<td>").addClass("cost").html(this.reinforcements[i].cost))
+			)
+		}
+
+
+		target.append(
+			$("<tr>")
+			.append($("<th>").attr("colSpan", 2).css("padding", 5).css("font-size", 20).html("Total Cost"))
+			.append($("<th>").attr("colSpan", 2).attr("id", "totalRequestCost").html(0)))
+
+	}
+
+
+
 	this.initReinforceTable = function(){		
 		$("#deployWrapper").find("#reinforceTable").find(".requestReinforcements").each(function(i){
 			$(this)
@@ -3460,19 +3494,73 @@ Game.prototype.setPhaseSwitchDiv = function(){
 		.show();
 }
 
-Game.prototype.upperGUIOverview = function(){
+Game.prototype.setGameInfo = function(){
 	$("#upperGUI").find("#overview").find("tbody")
 		.append($("<tr>")
 			.append($("<td>").html(this.turn))
 			.append($("<td>").html(getPhaseString(this.phase)))
-			.append($("<td>").html(this.reinforce)))
+			.append($("<td>").html(this.getPlayerStatus().value)))
+}
+
+Game.prototype.getPlayerStatus = function(){
+	for (let i = 0; i < this.playerstatus.length; i++){
+		if (this.playerstatus[i].userid == this.userid){return this.playerstatus[i];}
+	}
+	return false;
+}
+
+Game.prototype.setConfirmInfo = function(){
+	var player = this.getPlayerStatus();
+
+	var td = $("<td>").attr("colSpan", 3).addClass("buttonTD").css("font-size", 20)
+
+
+	if (this.status == "closed"){
+		td
+		.html("Show Statistics")
+		.click(function(){
+			this.disabled = true;
+			ajax.getStats();
+		})
+	}
+	else if (!player){
+		td
+		.html("Observer Mode")
+		.css("background-color", "yellow")
+	}
+	else if (player.status == "ready"){
+		td
+		.html("Waiting for Opp.")
+		.css("background-color", "lightGreen")
+	}
+	else {
+		td
+		.html("Confirm Orders")
+		.click(function(){
+			this.disabled = true;
+			game.endPhase();
+		})
+	}
+
+	
+	$("#upperGUI").find("#overview").find("tbody").append($("<tr>").append(td));
+
+
+	if (this.phase == 3 && this.status == "waiting"){
+		tr.append($("<td>").attr("colSpan", 3).addClass("buttonTD").css("font-size", 20))
+		.click(function(){
+			this.disabled = true;
+			game.concedeMatch(goToLobby);
+		})
+	}
 }
 
 
 Game.prototype.create = function(data){
 
 	this.setPhaseSwitchDiv();
-	this.upperGUIOverview();
+	this.setGameInfo();
+	this.setConfirmInfo();
 
 	for (var i = 0; i < data.ships.length; i++){
 		var ship = window.initUnit(data.ships[i]);
@@ -3514,25 +3602,26 @@ Game.prototype.create = function(data){
 
 	if (game.phase != 2){this.checkUnitOffsetting();}
 
-	var canSubmit = false;
-	var isPlaying = false;
-	for (var i = 0; i < this.playerstatus.length; i++){
-		if (this.playerstatus[i].userid == userid){
-			isPlaying = true;
-			this.reinforcePoints = $("#reinforce").html();
-			if (this.playerstatus[i].status == "waiting"){
-				canSubmit = true;
-				break;
-			}
-		}
-	}
 
 	this.initIncomingTable();
+	this.createReinforcementsTable();
 	this.initReinforceTable();
 	this.setDeployWrapperView();
 	this.initSelectionWrapper();
 	this.initEvents();
-	this.canSubmit = canSubmit;
+	this.extractPlayerStatusData()
 	cam.setFocus(0, 0);
 	this.initPhase(this.phase);
+}
+
+Game.prototype.extractPlayerStatusData = function(){
+	for (var i = 0; i < this.playerstatus.length; i++){
+		if (this.playerstatus[i].userid == userid){
+			if (this.playerstatus[i].status == "waiting"){
+				this.canSubmit = true;
+				this.reinforcePoints = this.playerstatus[i].value;
+				break;
+			}
+		}
+	}
 }

@@ -14,7 +14,7 @@
 		public $index = 0;
 		public $faction = "";
 		public $value = 0;
-		public $wave;
+		public $wave = 0;
 
 		public $units = array();
 		public $ballistics = array();
@@ -76,6 +76,7 @@
 			"reinforcements" => $this->rdyReinforcements,
 			"incoming" =>$this->getIncomingData(),
 			"const" => $this->const,
+			"userid" => $this->userid,
 			"username" => $this->getUsername(),
 			"wave" => $this->wave,
 			"playerstatus" => $this->playerstatus
@@ -119,6 +120,7 @@
 		$GLOBALS["turn"] = $gd["turn"];
 		$this->phase = $gd["phase"];
 		$this->wave = $gd["reinforceTurn"];
+		Debug::log($this->wave);
 		$this->playerstatus = DBManager::app()->getPlayerStatus($this->gameid);
 
 		$this->weapons = DmgCalc::getWeaponPriority();
@@ -436,6 +438,8 @@
 	}
 
 	public function deleteAllReinforcements(){
+		if ($this->turn != $this->wave){return;}
+		Debug::log("deleteAllReinforcements");
 		$data = array();
 
 		for ($i = 0; $i < sizeof($this->reinforcements); $i++){
@@ -446,28 +450,9 @@
 			DBManager::app()->deleteReinforcements($data);
 		}
 	}
-
-	public function deleteReinforcements(){
-		$data = array();
-
-		for ($i = 0; $i < sizeof($this->reinforcements); $i++){
-			$passed = $this->turn - $this->reinforcements[$i]["turn"]; // 1
-			if ($passed < 2){continue;}
-			$odds = 20;
-			$roll = mt_rand(0, 100);
-			if ($roll <= $passed * $odds){
-				Debug::log("roll: ".$roll.", odds: ".$passed * $odds.", DELETING");
-				$data[] = $this->reinforcements[$i]["id"];
-			}
-		}
-
-		if (sizeof($data)){
-			DBManager::app()->deleteReinforcements($data);
-		}
-	}
 	
 	public function pickReinforcements(){
-		if ($this->turn != $this->wave){return;}
+		if ($this->turn != $this->wave-1){return;}
 		Debug::log("pickReinforcements");
 		$picks = array();
 
@@ -554,7 +539,7 @@
 		$this->resolveJumpOutActions();
 		$this->handleInitialFireOrders();
 		$this->assemblDeployStates();
-		if ($this->turn == $this->wave){$this->deleteAllReinforcements();}
+		$this->deleteAllReinforcements();
 		DBManager::app()->deleteEmptyLoads($this->gameid);
 	}
 
@@ -949,6 +934,7 @@
 		$this->setUnitRollState();
 		$this->doFullDestroyedCheck();
 		$this->assembleEndStates();
+		$this->pickReinforcements();
 	}
 	
 	public function freeFlights(){

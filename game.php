@@ -194,56 +194,20 @@
 		</div>
 		<div id="upperGUI" class="disabled">
 			<table id="overview">
-				<thead></thead>
+				<thead>
+					<tr>
+						<th width="10%">
+							Turn
+						</th>
+						<th width="70%">
+							Phase
+						</th>
+						<th width="20%">
+							PV
+						</th>
+					</tr>
+				</thead>
 				<tbody></tbody>
-			
-				<!--
-				<tr>
-					<th width="10%">
-						Turn
-					</th>
-					<th width="55%">
-						Phase
-					</th>
-					<th width="35%">
-						Reinforce
-					</th>
-				</tr>
-				
-				<tr>
-					<td>
-						<?php echo $manager->turn;
-						?>
-					</td>
-					<td>
-						<?php echo getPhaseString($manager->phase);
-						?>
-					</td>
-					<td id="reinforce">
-						<?php
-							echo $manager->value;
-						?>
-					</td>
-				</tr>
-				<tr>
-					<?php 
-						if ($manager->status == "closed"){
-							echo '<tr><td></td></tr><tr><td colSpan=3 class="buttonTD" style="font-size: 20px" onclick="this.disabled=true;ajax.getStats()">Show Statistics</td></tr>';
-						}
-						else if (!$status){
-							echo '<td colSpan=3 class="buttonTD" style="background-color: yellow;">Anonymus Mode</td>';
-						}
-						else if ($status == "ready"){
-							echo '<td colSpan=3 class="buttonTD" style="background-color: lightGreen;">Waiting for Opponent</td>';
-						}
-						else echo '<td colSpan=3 class="buttonTD" style="font-size: 20px" onclick="this.disabled=true;game.endPhase()">Confirm Orders</td>';
-
-						if ($manager->phase == 3 && $status == "waiting"){
-							echo '<tr><td></td></tr><tr><td colSpan=3 class="buttonTD" style="font-size: 20px" onclick="this.disabled=true;game.concedeMatch(goToLobby)">Concede Match</td></tr>';
-						}
-					?>
-				</tr>
-				-->
 			</table>
 		</div>
 
@@ -365,43 +329,26 @@
 				</tr>
 			</table>
 			<table id="reinforceTable">
-				<tr>
-					<th class="head" colSpan=4>
-						Reinforcements
-					</th>
-				</tr>
-				<tr>
-					<th  width="65%" colSpan="2">
-						Class
-					</th>
-					<th  width="17%" >
-						ETA
-					</th>
-					<th  width="18%" >
-						Cost
-					</th>
-				</tr>
-				<!--
-				<?php
-					if (sizeof($manager->rdyReinforcements)){
-						//echo "<script>console.log(window.reinforcements)</script>";
-						foreach ($manager->rdyReinforcements as $ship){
-								if ($ship->userid != $manager->userid){continue;}
-								echo "<tr class='requestReinforcements'>";
-								echo "<td><img class='img50' src=shipIcons/".strtolower($ship->name).".png></td>";
-								echo "<td>".$ship->name."</br>".$ship->notes."</td>";
-								echo "<td>".($ship->available - $manager->turn)."</td>";
-								echo "<td class='cost'>".$ship->cost."</td>";
-								echo "</tr>";
-							}
-
-						echo "<tr>";
-							echo "<th colSpan=2 style='padding: 5px'>Total Cost</th>";
-							echo "<th colSpan=2 id='totalRequestCost'>0</th>";
-							echo "</tr>";
-						}
-					?>
-					-->
+				<thead>
+					<tr>
+						<th colSpan=4>
+							Reinforcements
+						</th>
+					</tr>
+					<tr>
+						<th  width="65%" colSpan="2">
+							Class
+						</th>
+						<th  width="17%" >
+							ETA
+						</th>
+						<th  width="18%" >
+							Cost
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
 				</table>
 			</div>
 			<div id="deployOverlay" class="disabled">

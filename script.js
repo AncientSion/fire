@@ -31,7 +31,7 @@ function init(data){
 	$("#phaseSwitchDiv").css("width", res.x).css("height", res.y);
 	var h = $("#phaseSwitchInnerDiv").height();
 	var w = $("#phaseSwitchInnerDiv").width();
-	$("#phaseSwitchInnerDiv").css("top", res.y/2 - h).css("left", res.x/2 - w/2).removeClass("disabled");
+	$("#phaseSwitchInnerDiv").css("top", res.y/2 - h-400).css("left", res.x/2 - w/2).removeClass("disabled");
 
 
 	canvas = canv[0];

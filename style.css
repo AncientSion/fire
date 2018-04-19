@@ -1250,10 +1250,10 @@ div.integrityFull {
 	background: black;
 	color: white;
 	border-radius: 5px;
+	display: none;
 }
 
 #phaseSwitchInnerDiv div {
-	width: 200px;
 	font-size: 30px;
 	text-align: center;
 	margin: auto;
