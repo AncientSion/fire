@@ -1236,7 +1236,6 @@ Squadron.prototype.doConfirmSystemLoadout = function(){
 	}
 }
 
-
 Squadron.prototype.setBuyData = function(){
 	var units = [];
 	var loads = [];

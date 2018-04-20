@@ -9,27 +9,8 @@
 	if (isset($_SESSION["userid"])) {
 		$userid = $_SESSION["userid"];
 	} else $userid = 0;
-
-
-	
-	//$manager = new Manager($gameid, $userid);
 	//if (!$manager->turn){header("Location: lobby.php");}
 	echo "<script> window.gameid = ".$gameid."; window.userid = ".$userid.";</script>";
-	
-	/*
-	$manager = new Manager($gameid, $userid);
-	if (!$manager->turn){header("Location: lobby.php");}
-
-	$status = "";
-
-	foreach ($manager->playerstatus as $player){
-		if ($player["userid"] == $userid){
-			$status = $player["status"];
-			break;
-		}
-	}
-	$manager->doEval();
-	*/
 ?>
 
 

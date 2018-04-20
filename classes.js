@@ -562,8 +562,11 @@ Primary.prototype.getSysDiv = function(){
 			.append($("<tr>")
 				.append($("<th>").html("Main Structure").attr("colSpan", 2)))
 			.append($("<tr>")
-				.append($("<td>").html("Strength"))
-				.append($("<td>").html(this.remaining + " / " + this.integrity))));
+				.append($("<td>").html("Integrity"))
+				.append($("<td>").html(this.remaining + " / " + this.integrity)))
+			.append($("<tr>")
+				.append($("<td>"))
+				.append($("<td>").html(round(this.remaining / this.integrity)*100 + " %"))));
 }
 
 

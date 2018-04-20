@@ -35,6 +35,14 @@ class Mixed extends Ship {
 		$this->setRemDelay($turn);
 	}	
 
+	public function setMorale(){
+		$this->morale = round($this->getIntactElements() / sizeof($this->structures), 2)*100;
+	}
+
+	public function handleMoraleTesting($turn){
+		return;
+	}
+	
 	public function setBaseStats($phase, $turn){
 		$this->baseHitChance = 0;
 		$this->baseTurnDelay = 0;
@@ -50,6 +58,7 @@ class Mixed extends Ship {
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$this->structures[$i]->setSubunitState($turn, $phase);
 		}
+		$this->setMorale();
 		$this->isDestroyed();
 		$this->setProps($turn, $phase);
 	}

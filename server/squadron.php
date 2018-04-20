@@ -45,6 +45,10 @@ class Squadron extends Ship {
 		}
 	}
 
+	public function setMorale(){
+		$this->morale = round($this->getIntactElements() / sizeof($this->structures), 2)*100;
+	}
+
 	public function addPrimary(){
 		$this->primary = new Shared();
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, 0, 0, 0);
@@ -96,6 +100,7 @@ class Squadron extends Ship {
 		$this->getSystemByName("Engine")->setPowerReq(0);
 		$this->setBaseStats($turn, $phase);
 		$this->setProps($turn, $phase);
+		$this->setMorale();
 		$this->isDestroyed();
 
 		return true;

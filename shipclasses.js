@@ -25,6 +25,7 @@ function Ship(data){
 	this.rolled = data.rolled;
 	this.flipping = data.flipping;
 	this.actions = data.actions || [];
+	this.morale = data.morale;
 	this.cc = [];
 	this.mapSelect = 1;
 	this.index = 0;
@@ -2034,6 +2035,20 @@ Ship.prototype.unpowerAllSystems = function(){
 	}
 }
 
+Ship.prototype.getIntactElements = function(){
+	var alive = 0;
+	for (var i = 0; i < this.structures.length; i++){
+		if (!this.structures[i].destroyed){
+			alive++;
+		}
+	}
+	return alive;
+}
+
+Ship.prototype.getCurMorale = function(){
+	return this.morale;
+}
+
 Ship.prototype.createBaseDiv = function(){
 	var className = "shipDiv";
 	if (this.squad){className += " squad";}
@@ -2061,6 +2076,16 @@ Ship.prototype.createBaseDiv = function(){
 			.append($("<td>").html("Type (Size)").css("width", "50%"))
 			.append($("<td>").html(game.getUnitType(this.traverse) + " (" + this.traverse + ")")))
 		.append($("<tr>")
+			.append($("<td>").html("To-Hit Profile"))
+			.append($("<td>").html(this.getProfileString())))
+		.append($("<tr>")
+			.append($("<td>").html("Morale"))
+			.append($("<td>").html(round(this.getCurMorale()) + "%")))
+		.append($("<tr>").addClass("morale")
+			.append($("<td>").attr("colSpan", 2)
+				.append($("<div>").addClass("moraleFull"))
+				.append($("<div>").addClass("moraleNow").css("width", (this.getCurMorale() + "%")))))
+		.append($("<tr>")
 			.append($("<td>").html("Speed"))
 			.append($("<td>").html(this.getRemSpeed() + " / " + this.getCurSpeed()).addClass("Thrust")))
 		.append($("<tr>")
@@ -2075,9 +2100,6 @@ Ship.prototype.createBaseDiv = function(){
 		.append($("<tr>")
 			.append($("<td>").html("Active Delay"))
 			.append($("<td>").html(this.getRemDelay()).addClass("delay")))
-		.append($("<tr>")
-			.append($("<td>").html("To-Hit Profile"))
-			.append($("<td>").html(this.getProfileString())))
 
 	subDiv.append(table);
 	topDiv.append(subDiv)
@@ -2090,7 +2112,7 @@ Ship.prototype.createBaseDiv = function(){
 			.end()
 		.find(".header")
 			.contextmenu(function(e){
-				e.stopImmediatePropagation(); e.preventDefault();
+				//e.stopImmediatePropagation(); e.preventDefault();
 				$(this).parent().find($(".structContainer")).toggle();
 			})
 			.end()

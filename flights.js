@@ -363,16 +363,6 @@ Flight.prototype.getShortInfo = function(){
 	return table;
 }
 
-Flight.prototype.getIntactFighters = function(){
-	var alive = 0;
-	for (var i = 0; i < this.structures.length; i++){
-		if (!this.structures[i].destroyed){
-			alive++;
-		}
-	}
-	return alive;
-}
-
 Flight.prototype.setPreMoveSize = function(){
 	this.size = this.baseSize + this.unitSize * this.getIntactFighters();
 }

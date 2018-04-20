@@ -164,6 +164,7 @@ class Ship {
 		}
 
 		$this->setCrewBoosts($turn);
+		$this->setMorale();
 		$this->isDestroyed();
 
 		return true;
@@ -178,6 +179,20 @@ class Ship {
 				$target->powers[] = new Power(0, $this->id, 0, $turn, 2, 0);
 			}
 		}
+	}
+
+	public function getIntactElements(){
+		$alive = 0;
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			if (!$this->structures[$i]->destroyed){
+				$alive++;
+			}
+		}
+		return $alive;
+	}
+
+	public function setMorale(){
+		$this->morale = round($this->primary->remaining / $this->primary->integrity, 2)*100;
 	}
 
 	public function setStructureState($turn, $phase){
@@ -1005,7 +1020,28 @@ class Ship {
 			if ($this->structures[$i]->destroyed){continue;}
 			$this->structures[$i]->singleCritTest($turn, 0);
 		}
-}
+	}
+
+	public function handleMoraleTesting($turn){
+		if ($this->morale == 100){return;}
+		Debug::log(get_class($this). " #".$this->id.", morale @ ".$this->morale."%");
+
+
+		$trigger = 60;
+		$chance = 20;
+		$morale = $this->morale;
+
+		if ($morale > $trigger){
+			$chance = floor($chance * (1+($morale - $trigger)/(100 - $trigger)));
+			$roll = mt_rand(0, 100);
+
+			Debug::log("chance: ".$chance.", roll: ".$roll);
+			if ($roll < $chance){
+				Debug::log(" => retreat!");
+				return;
+			}
+		}
+	}
 
 	public function addSystem($obj){
 		$obj->id = sizeof($this->systems)+1;
@@ -1025,9 +1061,7 @@ class Ship {
 
 	public function getSystem($id){
 		//if ($id == 14){Debug::log("ship getSystem looking for: ".$id);}
-		if ($id == 1){
-			return $this->primary;
-		}
+		if ($id == 1){return $this->primary;}
 		else {
 			for ($i = 0; $i < sizeof($this->primary->systems); $i++){
 				if ($this->primary->systems[$i]->id == $id){

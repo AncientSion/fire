@@ -39,7 +39,8 @@
 		);
 
 		function __construct($gameid = 0, $userid = 0){
-			Debug::log("__construct ".$gameid."/".$userid);
+			//Debug::log("__construct ".$gameid."/".$userid);
+			//Debug::trace();
 			//Debug::trace();
 			//$this->getMemory();
 			$this->userid = $userid;
@@ -53,6 +54,7 @@
 
 
 	public function doEval(){
+		$this->testMorale();
 		return;
 	}
 
@@ -62,6 +64,7 @@
 		//return;
 		//$this->crits();
 		//Debug::log("in getClientData!");
+		$this->doEval();
 		Debug::close();
 
 		//var_export($this->getUnit(2)->getEndState(1));
@@ -109,7 +112,7 @@
 	}
 
 	public function getGeneralData(){
-		Debug::log("getGeneralData for game ".$this->gameid);
+		//Debug::log("getGeneralData for game ".$this->gameid);
 		$gd = DBManager::app()->getGameDetails($this->gameid);
 
 		$this->name = $gd["name"];
@@ -120,7 +123,6 @@
 		$GLOBALS["turn"] = $gd["turn"];
 		$this->phase = $gd["phase"];
 		$this->wave = $gd["reinforceTurn"];
-		Debug::log($this->wave);
 		$this->playerstatus = DBManager::app()->getPlayerStatus($this->gameid);
 
 		$this->weapons = DmgCalc::getWeaponPriority();
@@ -916,6 +918,7 @@
 			$this->resolveFighterFireOrders();
 			$this->resolveBallisticFireOrders();
 			$this->testCriticals();
+			$this->testMorale();
 
 			$this->handleResolvedFireData();
 
@@ -1361,8 +1364,15 @@
 
 	public function testCriticals(){
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			Debug::log(get_class($this->ships[$i])." handleCritTesting");
+			//Debug::log(get_class($this->ships[$i])." #".$this->ships[$i]->id." testCriticals");
 			$this->ships[$i]->handleCritTesting($this->turn);
+		}
+	}
+
+	public function testMorale(){
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			//Debug::log(get_class($this->ships[$i])." #".$this->ships[$i]->id." testMorale");
+			$this->ships[$i]->handleMoraleTesting($this->turn);
 		}
 	}
 
