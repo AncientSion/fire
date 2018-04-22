@@ -1196,6 +1196,9 @@ function Game(data){
 				div = $("<div>")
 					.addClass("statsOverview");
 				wrapper.append(div);
+
+				aTotal = 0;
+				sTotal = 0;
 			}
 
 			aTotal += units[i].armourDmg;
