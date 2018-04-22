@@ -46,8 +46,16 @@ class Squadron extends Ship {
 	}
 
 	public function setMorale(){
-		$this->morale = round($this->getIntactElements() / sizeof($this->structures), 2)*100;
-	}
+		$integrity = 0;
+		$remaining = 0;
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			$integrity += $this->structures[$i]->integrity;
+			$remaining += max(0, $this->structures[$i]->remaining);
+		}
+
+		$this->morale = new Morale(floor($remaining / $integrity * 100));
+	 }
+
 
 	public function addPrimary(){
 		$this->primary = new Shared();

@@ -255,7 +255,7 @@ Flight.prototype.supplyAttachDiv = function(div){
 	var target = this.getTarget();
 	if (this.friendly){color = "green";}
 	var attachDiv = $("<div>").addClass("attachDiv")
-		.append($("<div>").css("display", "block").addClass("center15 " + color).html("Flight #" + this.id + "________Target: " + target.name + " #" + target.id))
+		.append($("<div>").css("display", "block").addClass("center15 " + color).html("Flight #" + this.id + " --------- Target: " + target.name + " #" + target.id))
 		.data("id", this.id)
 		.click(Mixed.prototype.attachDivClickFunction)
 		.hover(
@@ -353,7 +353,7 @@ Flight.prototype.getShortInfo = function(){
 	
 	var table = document.createElement("table");
 		table.insertRow(-1).insertCell(-1).innerHTML = "Flight #" + this.id + " (" + game.getMissionTypeString(this, this.getTarget()) + ")";
-		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + this.getCurSpeed() + " / " + this.getIntactFighters() + " units";
+		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + this.getCurSpeed() + " / " + this.getIntactElements() + " units";
 		table.insertRow(-1).insertCell(-1).innerHTML = "Base To-Hit: " + this.getStringHitChance();
 	
 	if (!this.mission.arrived && game.phase < 1 && this.inRange()){
@@ -364,7 +364,7 @@ Flight.prototype.getShortInfo = function(){
 }
 
 Flight.prototype.setPreMoveSize = function(){
-	this.size = this.baseSize + this.unitSize * this.getIntactFighters();
+	this.size = this.baseSize + this.unitSize * this.getIntactElements();
 }
 
 Flight.prototype.setPostMoveSize = function(){
@@ -374,10 +374,10 @@ Flight.prototype.setPostMoveSize = function(){
 			//this.size = s+30;
 		}
 		else if (this.mission.type == 1){
-			//this.size = 1.5*(this.baseSize + this.unitSize * this.getIntactFighters());
+			//this.size = 1.5*(this.baseSize + this.unitSize * this.getIntactElements());
 		}
 	}
-	else this.size = this.baseSize + this.unitSize * this.getIntactFighters();
+	else this.size = this.baseSize + this.unitSize * this.getIntactElements();
 }
 
 Flight.prototype.switchDiv = function(){

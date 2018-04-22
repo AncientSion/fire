@@ -566,7 +566,7 @@ Primary.prototype.getSysDiv = function(){
 				.append($("<td>").html(this.remaining + " / " + this.integrity)))
 			.append($("<tr>")
 				.append($("<td>"))
-				.append($("<td>").html(round(this.remaining / this.integrity)*100 + " %"))));
+				.append($("<td>").html(Math.floor(this.remaining / this.integrity * 100) + " %"))));
 }
 
 

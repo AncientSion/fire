@@ -2,7 +2,18 @@
 
 error_reporting(E_ALL); ini_set('display_errors', '1');
 
+class Morale {
+	public $base = 100;
+	public $current;
+	public $trigger = 30;
+	public $baseChance = 40;
+	public $effChance;
 
+	function __construct($current){
+		$this->current = $current;
+		$this->effChance = floor($this->baseChance * (1+($this->trigger - $this->current) / ($this->trigger)));
+	}
+}
 
 class Shared {
 	public $systems = array();

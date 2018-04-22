@@ -271,7 +271,7 @@
 			<div id="combatlogInnerWrapper">
 				<table id="combatLog">
 					<tbody>
-						<tr style="height: 2px">
+						<tr style="height: 10px">
 							<th width=50px></th>
 							<th width=105px></th>
 							<th width=105px></th>
@@ -295,19 +295,21 @@
 		</div>
 		<div id="deployWrapper">
 			<table id="deployTable">
-				<tr>
-					<th class="head" colSpan=3>
-						Incoming Units
-					</th>
-				</tr>
-				<tr>
-					<th  width="50%" colSpan="2">
-						Class
-					</th>
-					<th colSpan=2 width="20%">
-						ETA
-					</th>
-				</tr>
+				<thead>
+					<tr>
+						<th class="head" colSpan=3>
+							Incoming Units
+						</th>
+					</tr>
+					<tr>
+						<th  width="50%" colSpan="2">
+							Class
+						</th>
+						<th colSpan=2 width="20%">
+							ETA
+						</th>
+					</tr>
+				</thead>
 			</table>
 			<table id="reinforceTable">
 				<thead>

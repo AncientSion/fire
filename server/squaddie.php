@@ -147,7 +147,7 @@ class Squaddie extends Single {
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
-				if ($new < 30 &&  mt_rand(0, 1)){Debug::log("lucky skip, new below 30 % and rand(0,1)!"); continue;}
+				if ($new < 20 &&  mt_rand(0, 1)){Debug::log("lucky skip, new below 30 % and rand(0,1)!"); continue;}
 
 				$roll = mt_rand(0, 20) + $penalty + sizeof($this->structures[$i]->systems[$j]->crits)*20;
 				Debug::log("roll: ".$roll);

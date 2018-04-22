@@ -46,7 +46,7 @@ function Game(data){
 	this.wave = data.wave;
 	this.arcRange = 1200;
 	this.ui = {shortInfo: $("#shortInfo"), doShorten: $("#doShorten"), turnButton: $("#turnButton"), logWrapper: $("#combatlogWrapper")};
-	this.animData = {jump: 40};
+	this.animData = {jump: 60};
 
 	window.username = data.username;
 
@@ -615,7 +615,7 @@ function Game(data){
 		}
 
 		if (hasNoCommand){
-			popup("Please assign a unit as Fleet Command for the next turn.");
+			popup("Please assign Command Focus to a unit for the next turn.");
 			return true;
 		}
 		return false;
@@ -1029,6 +1029,7 @@ function Game(data){
 	}
 
 	this.fireResolved = function(){
+		console.log("fireResolved");
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].setPostFireImage();
 			this.ships[i].setSize();
@@ -1043,12 +1044,26 @@ function Game(data){
 		$(fxCanvas).css("opacity", 0.25);
 
 		this.createCritLogEntries();
-		console.log("fireResolved");
+		this.createMoraleLogEntries();
 	}
 	
 	this.createCritLogEntries = function(){
 		for (let i = 0; i < this.ships.length; i++){
 			this.ships[i].createCritLogEntry();
+		}
+
+		$("#combatLog")
+		.find("tbody")
+			.append($("<tr>")
+				//.append($("<td>").css("font-size", 18).attr("colSpan", 9).html("Firing Phase Resolution concluded")));
+				.append($("<td>").css("height", 5).attr("colSpan", 9)));
+
+		$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+	}
+
+	this.createMoraleLogEntries = function(){
+		for (let i = 0; i < this.ships.length; i++){
+			this.ships[i].createMoraleLogEntry();
 		}
 	}
 	
@@ -1058,8 +1073,11 @@ function Game(data){
 
 		if (this.phase == -1){
 			$("#phaseSwitchDiv").click(function(){
-				game.initDeploy();
 				$(this).hide();
+				game.draw();
+				game.timeout = setTimeout(function(){
+					game.initDeploy();
+				}, 1000);
 			});
 		}
 		else if (this.phase == 0){
@@ -1128,14 +1146,17 @@ function Game(data){
 		var incoming = wrapper.find("#deployTable");
 		var avail = wrapper.find("#reinforceTable");
 
-		if (incoming.children().children().length > 2 || avail.children().children().length > 3){
+		if (game.turn != game.wave){avail.hide();}
+		if (!incoming.find("tbody").children().length){incoming.hide();}
+
+	/*	if (incoming.children().children().length > 2 || avail.children().children().length > 3){
 			return;
 		} 
 		else {
 			$("#reinforce").data("on", 0);
 			wrapper.hide()
 		}
-	}
+	*/}
 
 	this.getUnitStatsNameString = function(unit){
 		var html = units[i].name + " #" + units[i].id;
@@ -1427,7 +1448,7 @@ function Game(data){
 		}
 
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].status == "jumpOut"){continue;}
+			if (this.ships[i].status == "jumpOut" && game.phase != 3){continue;}
 			var a = this.ships[i].getPlannedPos();
 			for (var j = i+1; j < this.ships.length; j++){
 				if (this.ships[j].status == "jumpOut"){continue;}
@@ -1737,12 +1758,14 @@ function Game(data){
 			toDo = true;
 			if (!this.ships[i].deployed){toDo = false;}
 			else if (!this.ships[i].movesThisPhase()){toDo = false;}
+			/*
 			else if (this.ships[i].flight && this.ships[i].mission.arrived && this.ships[i].mission.arrived < game.turn){
 				toDo = false;
 				for (var j = 0; j < this.ships[i].actions.length; j++){
 					this.ships[i].actions[j].animated = true;
 				}
 			}
+			*/
 
 			if (!toDo){continue;}
 
@@ -2063,15 +2086,17 @@ function Game(data){
 		window.then = Date.now();
 		window.startTime = then;
 
+
 		$(fxCanvas).css("opacity", 1);
 		fxCtx.clearRect(0, 0, res.x, res.y);
 		ctx.clearRect(0, 0, res.x, res.y);
+
+		//this.animateUnitExplos(); return;
 
 		//cam.setZoom(1.2)
 		//cam.setFocusToPos({x: -50, y: 687})
 		this.drawShips();
 		this.animating = 1;
-		//this.drawShips(); this.animateUnitExplos(); return;
 		this.animateAllFireOrders();
 	}
 
@@ -2263,31 +2288,19 @@ function Game(data){
 				for (var j = 0; j < game.ships[i].structures.length; j++){
 					if (game.ships[i].structures[j].isDestroyedThisTurn()){
 						counter++;
-						//console.log(game.ships[i].structures[j].id);
-						//console.log(game.ships[i].structures[j].layout);
 						var real = game.ships[i].getUnitPosition(j);
-						//console.log(real);
-						anim.anims.push({
-							u: game.ships[i].structures[j],
-							t: [0 - counter*20, 50],
-							s: game.ships[i].getExplosionSize(j),
-							x: base.x + real.x,
-							y: base.y + real.y,
-							//img: this.getRandomExplo(),
-						});
-
-						/*for (var k = 0; k < 5; k++){
+						for (var k = 0; k < 1+(this.ships[i].squad*4); k++){
 							anim.anims.push({
-								t: [0 - 30*anim.anims.length - j*20, 70],
-								t: [0 - range(0, 15), 70],
-								s: game.ships[i].getExplosionSize(j) + range(-30, 10),
-								x: base.x + real.x + (range(-1, 1) * range(0, game.ships[i].size / 10)),
-								y: base.y + real.y + (range(-1, 1) * range(0, game.ships[i].size / 10)),
+								u: game.ships[i].structures[j],
+								t: [0 - k*6 - counter*20, 50],
+								s: game.ships[i].getExplosionSize(j) + (range(-1, 1) *  game.ships[i].getExplosionSize(j)/3),
+								x: base.x + real.x + (range(-1, 1) * 5),
+								y: base.y + real.y + (range(-1, 1) * 5),
 							});
-						}*/
+						}
 					}
 				}
-				anim.html += "A total of <font color='" + color + "'>" + counter + "</font> elements from <font color='" + color + "'>Unit #" + anim.id + "</font> were destroyed or disengaged.";
+				anim.html += "A total of <font color='" + "yellow" + "'>" + counter + "</font> elements from <font weight='bold' color='" + color + "'>Unit #" + anim.id + "</font> were destroyed or disengaged.";
 				if (this.ships[i].isDestroyed()){anim.html += " The unit is completly wiped."}
 			}
 			else if (game.ships[i].ship && game.ships[i].isDestroyedThisTurn()){
@@ -2301,7 +2314,6 @@ function Game(data){
 					anim.anims.push({
 						u: game.ships[i],
 						t: [0 - j-40, 100],
-						//s: game.ships[i].getExplosionSize(0) + range(-30, 10),
 						s: range (5, 40),
 						x: base.x + (range(-1, 1) * range(0, game.ships[i].size / 3)),
 						y: base.y + (range(-1, 1) * range(0, game.ships[i].size / 3)),
@@ -2338,7 +2350,8 @@ function Game(data){
 		$("#combatLog")
 		.find("tbody")
 			.append($("<tr>")
-				.append($("<td>").attr("colSpan", 9).html("Fire Order Resolution concluded")));
+				//.append($("<td>").css("font-size", 18).attr("colSpan", 9).html("Firing Phase Resolution concluded")));
+				.append($("<td>").css("height", 5).attr("colSpan", 9)));
 
 		$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 	}
@@ -3323,6 +3336,10 @@ Game.prototype.doResolveMovement = function(){
 	.find("#combatLog").children().children().remove();
 
 	this.animateUnitMovement();
+}
+
+Game.prototype.hideMoraleDiv = function(){
+	$("#systemDetailsDiv").remove();
 }
 
 Game.prototype.drawDeployMarker = function(id){

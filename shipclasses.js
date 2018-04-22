@@ -1272,7 +1272,7 @@ Ship.prototype.getShortInfo = function(){
 	var impulse = this.getCurSpeed();
 
 	var header = this.name + " #" + this.id;
-	if (this.command){header += "<font color='yellow'> (CMD)</font>";
+	if (this.command){header += "<font color='yellow'> (FOCUS)</font>";
 	}
 
 	var table = document.createElement("table");
@@ -1466,6 +1466,14 @@ Ship.prototype.createCritLogEntry = function(){
 	}
 }
 
+Ship.prototype.createMoraleLogEntry = function(){
+	if (this.flight || this.salvo){return;}
+	if (this.status != "jumpOut"){return;}
+	
+	var html = "<td colSpan=9><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is in disarray and routes !</td>";
+	this.attachLogEntry(html);
+}
+
 Ship.prototype.getCallSign = function(){
 	if (this.call.length > 3){
 		return " - " + this.call + " - ";
@@ -1474,7 +1482,7 @@ Ship.prototype.getCallSign = function(){
 }
 
 Ship.prototype.getLogTitleSpan = function(){
-	return "<font color='" + this.getCodeColor() + "'>" + this.name + " #" + this.id + this.getLogNameEntry() + " </font>";
+	return "<span style='color: " + this.getCodeColor() + "'>" + this.name + " #" + this.id + this.getLogNameEntry() + " </span>";
 }
 
 Ship.prototype.getLogNameEntry = function(){
@@ -2046,7 +2054,40 @@ Ship.prototype.getIntactElements = function(){
 }
 
 Ship.prototype.getCurMorale = function(){
-	return this.morale;
+	return this.morale.current;
+}
+
+Ship.prototype.showMoraleDiv = function(e){
+	$(document.body)
+	.append($("<div>")
+			.css("left", e.clientX - 90)
+			.css("top", e.clientY + 40)
+			.attr("id", "systemDetailsDiv")
+			.append($("<table>")
+				.append($("<tr>")
+					.append($("<th>").attr("colSpan", 2).html("Morale Overview")))
+				.append($("<tr>")
+					.append($("<td>").html("Base Morale"))
+					.append($("<td>").html(" 100%")))
+				.append($("<tr>")
+					.append($("<td>").html("Damage Malus"))
+					.append($("<td>").html("-"  + (100 - this.morale.current) + "%") ))
+				.append($("<tr>")
+					.append($("<td>").html("Current Morale"))
+					.append($("<td>").html(this.morale.current + "%")))
+				.append($("<tr>")
+					.append($("<td>").attr("colSpan", 2).css("height", 10)))
+				.append($("<tr>")
+					.append($("<td>").html("Morale Check Trigger"))
+					.append($("<td>").html("< " + this.morale.trigger + "%")))
+				.append($("<tr>")
+					.append($("<td>").html("Base Rout Chance"))
+					.append($("<td>").html(this.morale.baseChance + "%")))
+				.append($("<tr>")
+					.append($("<td>").html("Effective Rout Chance"))
+					.append($("<td>").html(this.morale.effChance + "%")))
+			)
+	)
 }
 
 Ship.prototype.createBaseDiv = function(){
@@ -2080,11 +2121,19 @@ Ship.prototype.createBaseDiv = function(){
 			.append($("<td>").html(this.getProfileString())))
 		.append($("<tr>")
 			.append($("<td>").html("Morale"))
-			.append($("<td>").html(round(this.getCurMorale()) + "%")))
+			.append($("<td>").html(this.morale.current + "%")))
 		.append($("<tr>").addClass("morale")
 			.append($("<td>").attr("colSpan", 2)
 				.append($("<div>").addClass("moraleFull"))
-				.append($("<div>").addClass("moraleNow").css("width", (this.getCurMorale() + "%")))))
+				.append($("<div>").addClass("moraleNow").css("width", (this.morale.current + "%")))
+				.hover(
+					function(e){
+						game.getUnit($(this).parent().parent().parent().parent().parent().parent().data("shipId")).showMoraleDiv(e);
+					},
+					function(e){
+						game.hideMoraleDiv();
+					}))
+				)
 		.append($("<tr>")
 			.append($("<td>").html("Speed"))
 			.append($("<td>").html(this.getRemSpeed() + " / " + this.getCurSpeed()).addClass("Thrust")))
@@ -2105,7 +2154,7 @@ Ship.prototype.createBaseDiv = function(){
 	topDiv.append(subDiv)
 	div.append(topDiv);
 
-	$(this.expandDiv(div[0]))
+	$(this.expandDiv($(div[0])))
 		.drag()
 		.find(".structContainer")
 			.contextmenu(function(e){e.stopPropagation(); e.preventDefault()})
@@ -2142,6 +2191,7 @@ Ship.prototype.getStringHitChance = function(){
 }
 
 Ship.prototype.addCommandDiv = function(div){
+	if (this.status == "jumpOut"){return;}
 
 	$(div).append(
 		$("<div>")
@@ -2149,7 +2199,7 @@ Ship.prototype.addCommandDiv = function(div){
 		.append(
 			$("<div>")
 			.data("unitid", this.id)
-			.html("Assign unit as </br>Fleet Command")
+			.html("Grant Command Focus")
 			.addClass("buttonTD")
 			.hide()
 			.click(function(){
@@ -2158,7 +2208,7 @@ Ship.prototype.addCommandDiv = function(div){
 		)
 		.append(
 			$("<div>")
-			.html("Assigned as Fleet Command")
+			.html("Holds Command Focus")
 			.addClass("commandEntry")
 			.hide()
 		)
@@ -2188,7 +2238,7 @@ Ship.prototype.setAsCommand = function(){
 }
 
 Ship.prototype.expandDiv = function(div){
-	$(div)
+	div
 	.find(".topDiv")
 	.append($("<div>")
 		.addClass("iconContainer")
@@ -2210,13 +2260,12 @@ Ship.prototype.expandDiv = function(div){
 			}));
 
 
-	document.body.appendChild(div);
+	$(document.body).append(div);
 	
 	//$(div).css("position", "absolute").css("top", 300);
 
-	structContainer = document.createElement("div");
-	structContainer.className = "structContainer";
-	div.appendChild(structContainer);
+	structContainer = $("<div>").addClass("structContainer");
+	div.append(structContainer);
 
 	var noFront = true;
 	var noAft = true;
@@ -2237,8 +2286,8 @@ Ship.prototype.expandDiv = function(div){
 	}
 	sides /= 2;
 
-	var conWidth = $(structContainer).width();
-	var conHeight = $(structContainer).height();
+	var conWidth = structContainer.width();
+	var conHeight = structContainer.height();
 
 	// PRIMARY
 	var primaryDiv = document.createElement("div");
@@ -2293,7 +2342,7 @@ Ship.prototype.expandDiv = function(div){
 	}
 
 	primaryDiv.appendChild(primaryTable);
-	structContainer.appendChild(primaryDiv);
+	structContainer.append(primaryDiv);
 	var w = $(primaryDiv).width();
 	var h = $(primaryDiv).height();
 	var primX = conWidth/2 - w/2;
@@ -2307,13 +2356,11 @@ Ship.prototype.expandDiv = function(div){
 	// OUTER STRUCTS
 	for (var i = 0; i < this.structures.length; i++){
 
-		var structDiv = document.createElement("div");
-			structDiv.className = "structDiv";
-		structContainer.appendChild(structDiv);
+		var structDiv = $("<div>").addClass("structDiv")
+		structContainer.append(structDiv);
 			
-		var structTable = document.createElement("table");
-			structTable.className = "structTable";
-		structDiv.appendChild(structTable);
+		var structTable = $("<table>").addClass("structTable")
+		structDiv.append(structTable);
 
 
 		var armour = this.structures[i].getTableData();
@@ -2324,7 +2371,7 @@ Ship.prototype.expandDiv = function(div){
 
 		var tr = document.createElement("tr");
 			tr.appendChild(armour);
-		structTable.appendChild(tr);
+		structTable.append(tr);
 
 
 		var col = 0;
@@ -2395,7 +2442,7 @@ Ship.prototype.expandDiv = function(div){
 			}
 
 			if (col == max || j == this.structures[i].systems.length-1){
-				structTable.appendChild(tr);
+				structTable.append(tr);
 				col = 0;
 			}
 
@@ -2478,18 +2525,18 @@ Ship.prototype.expandDiv = function(div){
 		}
 	})
 
-	$(structContainer).css("height", Math.max($(primaryDiv).position().top + $(primaryDiv).height(), height) + 20);
+	structContainer.css("height", Math.max($(primaryDiv).position().top + $(primaryDiv).height(), height) + 20);
 
 
 	//$(structContainer).append($("<div>").addClass("mainPower").html(this.getSystemByName("Reactor").getOutput()));
 
 	var top = 0;
-	var left = $(structContainer).width() - 55;
+	var left = structContainer.width() - 55;
 	if (this.structures.length == 3 && this.structures[0].start == 0){
-		top = $(structContainer).height() - 65;
+		top = structContainer.height() - 65;
 	}
 	// POWER
-	$(structContainer)
+	structContainer
 		.append($("<div>").addClass("info").css("top", top + 5)
 			.append($("<img>").attr("src", "varIcons/mainPower.png")
 				.addClass("mainPowerIcon"))
@@ -2499,13 +2546,27 @@ Ship.prototype.expandDiv = function(div){
 		//console.log($(structContainer).width());
 
 	// JUMP OUT
-	if (game.turn > 1 && game.phase == 3 && this.friendly){
-		$(structContainer)
-		.append($("<div>").addClass("info").css("top", top + 5).css("left", left)
+
+
+
+	if (!this.destroyed){
+		var jumpDiv = 
+		$("<div>").addClass("info").css("top", top + 5).css("left", left)
 			.append($("<img>").addClass("jumpOut")
-				.attr("src", "varIcons/redVortex.png")
-				.click(function(){game.getUnit($(this).parent().parent().parent().data("shipId")).requestJumpOut();
-				})));
+				.attr("src", "varIcons/redVortex.png"));
+
+		if (this.canBeIssuedToJumpOut()){
+			jumpDiv.find("img")
+			.click(function(){game.getUnit($(this).parent().parent().parent().data("shipId")).requestJumpOut();
+			});
+		}
+		else {
+			jumpDiv.find("img")
+			.click(function(){game.getUnit($(this).parent().parent().parent().data("shipId")).requestJumpOut();
+			});
+		}
+
+		structContainer.append(jumpDiv);
 	}
 
 	// System options positioning
@@ -2554,6 +2615,11 @@ Ship.prototype.expandDiv = function(div){
 
 	$(div).addClass("disabled");
 	return div;
+}
+
+Ship.prototype.canBeIssuedToJumpOut = function(){
+	if (game.turn > 1 && game.phase == 3 && this.friendly && this.status != "jumpOut"){return true;}
+	return false;
 }
 
 Ship.prototype.requestJumpOut = function(){
@@ -2764,7 +2830,7 @@ Ship.prototype.setDogFightImage = function(){
 }
 
 Ship.prototype.setSupportImage = function(){
-	if (this.movesThisPhase()){return;}
+	//if (this.movesThisPhase()){return;}
 	console.log("setSupportImage #" + this.id);
 	var friendlies = [];
 	var hostiles = [];

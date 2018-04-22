@@ -179,7 +179,7 @@ spl_autoload_register(
                 'math' => '/server/math.php',
                 'squadbuilder' => '/server/squadbuilder.php',
                 'dmgcalc' => '/server/dmgcalc.php',
-                
+                'morale' => '/server/classes.php',
                 'section' => '/server/classes.php',
                 'shared' => '/server/classes.php',
                 'point' => '/server/classes.php',

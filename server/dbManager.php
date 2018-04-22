@@ -964,7 +964,7 @@
 		}
 
 		public function updateMissionState($data){
-			Debug::log("updateMissionState");
+			Debug::log("updateMissionState: ".sizeof($data));
 			$stmt = $this->connection->prepare("
 				UPDATE missions
 				SET type = :type,
@@ -1074,6 +1074,7 @@
 
 		public function jumpOutUnits($data){
 			Debug::log("jumpOutUnits s: ".sizeof($data));
+			
 			$stmt = $this->connection->prepare("
 				UPDATE units 
 				SET 

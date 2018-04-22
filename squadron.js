@@ -641,13 +641,22 @@ Squadron.prototype.createBaseDiv = function(){
 	}
 
 	// JUMP OUT
-	if (game.turn > 1 && game.phase == 3 && this.friendly){
-		$(this.element).find(".coreContainer")
-		.append($("<div>").addClass("info").css("top", 90).css("margin-left", 27)
-		.append($("<img>").addClass("jumpOut")
-			.attr("src", "varIcons/redVortex.png")
-					.click(function(){game.getUnit($(this).parent().parent().parent().parent().data("shipId")).requestJumpOut();
-					})))
+	if (!this.destroyed){
+		var jumpDiv = 
+			$("<div>").addClass("info").css("top", 90).css("margin-left", 27)
+			.append($("<img>").addClass("jumpOut")
+				.attr("src", "varIcons/redVortex.png"))
+
+		if (this.canBeIssuedToJumpOut()){
+			jumpDiv.find("img")
+			.click(function(){game.getUnit($(this).parent().parent().parent().parent().data("shipId")).requestJumpOut();
+			})
+		}
+		else {
+			jumpDiv.find("img").toggleClass("selected");
+		}
+
+		$(this.element).find(".coreContainer").append(jumpDiv);
 	}
 
 	if (this.structures.length){
@@ -683,38 +692,35 @@ Squadron.prototype.setSubElements = function(){
 }
 
 Squadron.prototype.expandDiv = function(div){
-	//if (game.phase != -2){
-		$(div)
-		.find(".topDiv")
-			.append($("<div>")
-				.addClass("coreContainer"))
-			.append($("<div>")
-				.addClass("iconContainer")					
-					.append(
-						$(this.getBaseImage()).addClass("rotate270").css("width", "100%").css("border-left", "1px solid white")
-					)
-					.append($("<div>")
-						.addClass("notes")
-							.hide())
-					.data("shipId", this.id)
-					.hover(function(e){
-						if (aUnit){
-							var shooter = game.getUnit(aUnit);
-							var target = game.getUnit($(this).parent().parent().data("shipId"));
-							if (shooter.id != target.id && shooter.hasWeaponsSelected()){
-								handleWeaponAimEvent(shooter, target, e);
-							}
-						}
-					}).
-					click(function(e){
+	$(div)
+	.find(".topDiv")
+		.append($("<div>")
+			.addClass("coreContainer"))
+		.append($("<div>")
+			.addClass("iconContainer")					
+				.append(
+					$(this.getBaseImage()).addClass("rotate270").css("width", "100%").css("border-left", "1px solid white")
+				)
+				.append($("<div>")
+					.addClass("notes")
+						.hide())
+				.data("shipId", this.id)
+				.hover(function(e){
+					if (aUnit){
 						var shooter = game.getUnit(aUnit);
 						var target = game.getUnit($(this).parent().parent().data("shipId"));
-						if (shooter && target){
-							firePhase({x: 0, y: 0}, shooter, target.id);
+						if (shooter.id != target.id && shooter.hasWeaponsSelected()){
+							handleWeaponAimEvent(shooter, target, e);
 						}
-					}));
-	//}
-		
+					}
+				}).
+				click(function(e){
+					var shooter = game.getUnit(aUnit);
+					var target = game.getUnit($(this).parent().parent().data("shipId"));
+					if (shooter && target){
+						firePhase({x: 0, y: 0}, shooter, target.id);
+					}
+				}));
 		
 	this.setRollState();
 	//document.getElementById("game").appendChild(div);

@@ -36,7 +36,14 @@ class Mixed extends Ship {
 	}	
 
 	public function setMorale(){
-		$this->morale = round($this->getIntactElements() / sizeof($this->structures), 2)*100;
+		$integrity = 0;
+		$remaining = 0;
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			$integrity += $this->structures[$i]->integrity;
+			$remaining += max(0, $this->structures[$i]->remaining);
+		}
+
+		$this->morale = new Morale(floor($remaining / $integrity * 100));
 	}
 
 	public function handleMoraleTesting($turn){
@@ -243,31 +250,23 @@ class Mixed extends Ship {
 					}
 				}
 			}
-			else { // "normal" stack resolution
-				if ($this->mission->arrived){ // get ship last position as move goal
-					$tPos = $t->getCurPos();
-					$dist = Math::getDist2($this->getCurPos(), $tPos);
-					$angle = Math::getAngle2($this->getCurPos(), $tPos);
-					//Debug::log("drag");
+			else {
+				$tPos = $t->getCurPos();
+				$origin = $this->getCurPos();
+				$impulse = $this->getCurSpeed();
+				$dist = Math::getDist2($origin, $tPos);
+				$angle = Math::getAngle2($origin, $tPos);
+
+				$this->mission->x = $tPos->x;
+				$this->mission->y = $tPos->y;
+
+				if ($impulse < $dist){
+					//Debug::log("close in");
+					$tPos = Math::getPointInDirection($impulse, $angle, $origin->x, $origin->y);
 				}
 				else {
-					$tPos = $t->getCurPos();
-					$origin = $this->getCurPos();
-					$impulse = $this->getCurSpeed();
-					$dist = Math::getDist2($origin, $tPos);
-					$angle = Math::getAngle2($origin, $tPos);
-
-					$this->mission->x = $tPos->x;
-					$this->mission->y = $tPos->y;
-
-					if ($impulse < $dist){
-						//Debug::log("close in");
-						$tPos = Math::getPointInDirection($impulse, $angle, $origin->x, $origin->y);
-					}
-					else {
-						//Debug::log("arrival");
-						$this->mission->arrived = $gd->turn;
-					}
+					//Debug::log("arrival");
+					$this->mission->arrived = $gd->turn;
 				}
 			}
 		}

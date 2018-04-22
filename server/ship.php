@@ -15,6 +15,8 @@ class Ship {
 	public $rolling;
 	public $rolled;
 
+	public $morale;
+
 	public $disabled = false;
 
 	public $baseHitChance;
@@ -192,7 +194,7 @@ class Ship {
 	}
 
 	public function setMorale(){
-		$this->morale = round($this->primary->remaining / $this->primary->integrity, 2)*100;
+		$this->morale = new Morale(floor($this->primary->remaining / $this->primary->integrity * 100));
 	}
 
 	public function setStructureState($turn, $phase){
@@ -1023,23 +1025,18 @@ class Ship {
 	}
 
 	public function handleMoraleTesting($turn){
-		if ($this->morale == 100){return;}
-		Debug::log(get_class($this). " #".$this->id.", morale @ ".$this->morale."%");
+		Debug::log(get_class($this). " #".$this->id.", morale @ ".$this->morale->current."%");
 
+		//$this->morale->current = 20;
 
-		$trigger = 60;
-		$chance = 20;
-		$morale = $this->morale;
+		if ($this->morale->current > $this->morale->trigger){return;}
+		$roll = mt_rand(0, 100);
 
-		if ($morale > $trigger){
-			$chance = floor($chance * (1+($morale - $trigger)/(100 - $trigger)));
-			$roll = mt_rand(0, 100);
-
-			Debug::log("chance: ".$chance.", roll: ".$roll);
-			if ($roll < $chance){
-				Debug::log(" => retreat!");
-				return;
-			}
+		Debug::log(" => effChance: ".$this->morale->effChance.", roll: ".$roll);
+		if ($roll < $this->morale->effChance){
+			Debug::log(" ===> retreat!");
+			$this->status = "jumpOut";
+			return;
 		}
 	}
 

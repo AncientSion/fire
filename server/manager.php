@@ -55,6 +55,7 @@
 
 	public function doEval(){
 		$this->testMorale();
+		//$this->handleResolvedFireData();
 		return;
 	}
 
@@ -903,30 +904,30 @@
 		}
 	}
 
-		public function handleFiringPhase(){
-			Debug::log("handleFiringPhase");
-			$time = -microtime(true);
+	public function handleFiringPhase(){
+		Debug::log("handleFiringPhase");
+		$time = -microtime(true);
 
-			$this->doFullDestroyedCheck();
-			$this->removeDestroyedUnits();
+		$this->doFullDestroyedCheck();
+		$this->removeDestroyedUnits();
 
-			$this->setupShips();
+		$this->setupShips();
 
-			$this->setFireOrderDetails();
-			$this->sortFireOrders();
-			$this->resolveShipFireOrders();
-			$this->resolveFighterFireOrders();
-			$this->resolveBallisticFireOrders();
-			$this->testCriticals();
-			$this->testMorale();
+		$this->setFireOrderDetails();
+		$this->sortFireOrders();
+		$this->resolveShipFireOrders();
+		$this->resolveFighterFireOrders();
+		$this->resolveBallisticFireOrders();
+		$this->testCriticals();
+		$this->testMorale();
 
-			$this->handleResolvedFireData();
+		$this->handleResolvedFireData();
 
-			$time += microtime(true); 
-			Debug::log("handleFiringPhase time: ".round($time, 3)." seconds.");
-			return true;
-		}
-		
+		$time += microtime(true); 
+		Debug::log("handleFiringPhase time: ".round($time, 3)." seconds.");
+		return true;
+	}
+	
 	public function handleDamageControlPhase(){
 		$this->handleJumpOutActions();
 		return true;
@@ -1363,6 +1364,7 @@
 	}
 
 	public function testCriticals(){
+		Debug::log("------------------------------- testCriticals");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			//Debug::log(get_class($this->ships[$i])." #".$this->ships[$i]->id." testCriticals");
 			$this->ships[$i]->handleCritTesting($this->turn);
@@ -1370,8 +1372,9 @@
 	}
 
 	public function testMorale(){
+		Debug::log("------------------------------- testMorale");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			//Debug::log(get_class($this->ships[$i])." #".$this->ships[$i]->id." testMorale");
+			$this->ships[$i]->setMorale();
 			$this->ships[$i]->handleMoraleTesting($this->turn);
 		}
 	}
@@ -1380,29 +1383,42 @@
 		Debug::log("handleResolvedFireData");
 		$newDmgs = $this->getAllNewDamages();
 		$newCrits = $this->getAllNewCrits();
+		$retreats = $this->getAllNewRetreats();
 
 		DBManager::app()->updateFireOrders($this->fires);
 		if (sizeof($newDmgs)){DBManager::app()->insertDamageEntries($newDmgs);}
 		if (sizeof($newCrits)){DBManager::app()->insertCritEntries($newCrits);}
+		if (sizeof($retreats)){DBManager::app()->jumpOutUnits($retreats);}
 	}
 
 	public function getAllNewDamages(){
 		//Debug::log("getAllNewDamages");
-		$dmgs = array();
+		$data = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			$dmgs = array_merge($dmgs, $this->ships[$i]->getNewDamages($this->turn));
+			$data = array_merge($data, $this->ships[$i]->getNewDamages($this->turn));
 		}
-		return $dmgs;
+		return $data;
 	}
 
 	public function getAllNewCrits(){
 		//Debug::log("getAllNewCrits");
-		$crits = array();
+		$data = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->destroyed && $this->ships[$i]->ship){continue;}
-			$crits = array_merge($crits, $this->ships[$i]->getNewCrits($this->turn));
+			$data = array_merge($data, $this->ships[$i]->getNewCrits($this->turn));
 		}
-		return $crits;
+		return $data;
+	}
+	
+	public function getAllNewRetreats(){
+		//Debug::log("getAllNewRetreats");
+		$data = array();
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->destroyed || $this->ships[$i]->flight || $this->ships[$i]->salvo){continue;}
+			if ($this->ships[$i]->status != "jumpOut"){continue;}
+			$data[] = array("id" => $this->ships[$i]->id, "status" => $this->ships[$i]->status);
+		}
+		return $data;
 	}
 
 	public function startDamageControlPhase(){
@@ -1432,18 +1448,6 @@
 
 	public function getFactions(){
 		return array("Earth Alliance", "Centauri Republic", "Minbari Federation", "Narn Regime", "The Shadows");
-	}
-
-	public function getFightersForFaction($faction){
-		//Debug::log("getFightersForFaction");
-	}
-
-	public function getFlights(){
-		return array(array(
-			"name" => "Flight",
-			"value" => 500,
-			"eta" => 2
-		));
 	}
 
 	public function getUnitsForFaction($faction){

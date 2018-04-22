@@ -174,13 +174,12 @@ table, th, tr, td {
 	background-color: black;
 }
 
-#deployTable th, #deployTable td {
-	border: 1px solid white
+#deployWrapper thead th {
+	font-size: 16px;
 }
 
-.head {
-	font-size: 18;
-	font-weight: bold;
+#deployTable th, #deployTable td {
+	border: 1px solid white
 }
 
 #deployTable tr.selected {
@@ -188,7 +187,7 @@ table, th, tr, td {
 }
 
 #deployTarget {
-	font-size: 16;
+	font-size: 16px;
 	color: #ff3d00;
 }
 
@@ -1504,6 +1503,10 @@ div.buttonTD {
 	margin: auto;
 	width: 60%;
 	text-align: center;
+}
+
+.shipDiv div.buttonTD {
+	width: 100%;
 }
 
 .buttonTD {
