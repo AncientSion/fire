@@ -1029,7 +1029,7 @@ class Ship {
 
 		//$this->morale->current = 20;
 
-		if ($this->morale->current > $this->morale->trigger){return;}
+		if ($this->morale->current >= $this->morale->trigger){return;}
 		$roll = mt_rand(0, 100);
 
 		Debug::log(" => effChance: ".$this->morale->effChance.", roll: ".$roll);

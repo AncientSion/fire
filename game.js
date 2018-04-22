@@ -17,7 +17,6 @@ function Game(data){
 	this.deploying = false;
 	this.flightDeploy = false;
 	this.adjustMission = false;
-	this.canSubmit = false;
 	this.index = 1;
 	this.reinforcePoints = 0;
 	this.animating = false;
@@ -40,6 +39,7 @@ function Game(data){
 	this.drawingEvents = 1;
 	this.mission;
 	this.timeout = 0;
+	this.canSubmit = 0;
 	this.canConfirm = 1;
 	this.drawCircle = 1;
 	this.events = [];
@@ -1271,7 +1271,7 @@ function Game(data){
 			div.append(table);
 
 			if (i == units.length-1 || (i && units[i+1].userid != units[i].userid)){
-				div.append($("<div>").addClass("totalDmgDiv").html("Total Damage dealt: " + aTotal + " " + sTotal))
+				div.append($("<div>").addClass("totalDmgDiv").html("Total Damage dealt: " + aTotal + " / " + sTotal))
 				total = 0;
 			}
 		}
@@ -3536,7 +3536,7 @@ Game.prototype.setConfirmInfo = function(){
 		td
 		.html("Show Statistics")
 		.click(function(){
-			this.disabled = true;
+			if ($("#statsWrapper").length){return;}
 			ajax.getStats();
 		})
 	}
@@ -3554,7 +3554,6 @@ Game.prototype.setConfirmInfo = function(){
 		td
 		.html("Confirm Orders")
 		.click(function(){
-			this.disabled = true;
 			game.endPhase();
 		})
 	}
@@ -3562,13 +3561,17 @@ Game.prototype.setConfirmInfo = function(){
 	
 	$("#upperGUI").find("#overview").find("tbody").append($("<tr>").append(td));
 
-
-	if (this.phase == 3 && this.status == "waiting"){
-		tr.append($("<td>").attr("colSpan", 3).addClass("buttonTD").css("font-size", 20))
-		.click(function(){
-			this.disabled = true;
-			game.concedeMatch(goToLobby);
-		})
+	if (this.phase == 3 && this.getPlayerStatus().status == "waiting"){
+		$("#upperGUI").find("#overview").find("tbody")
+		.append($("<tr>")
+			.append($("<td>").attr("colSpan", 3).addClass("buttonTD").css("font-size", 20).html("Concede Match")
+				.click(function(){
+					if (!game.canConfirm){return;}
+					game.canConfirm = 0;
+					game.concedeMatch(goToLobby);
+				})
+			)
+		)
 	}
 }
 
@@ -3635,7 +3638,7 @@ Game.prototype.extractPlayerStatusData = function(){
 	for (var i = 0; i < this.playerstatus.length; i++){
 		if (this.playerstatus[i].userid == userid){
 			if (this.playerstatus[i].status == "waiting"){
-				this.canSubmit = true;
+				this.canSubmit = 1;
 				this.reinforcePoints = this.playerstatus[i].value;
 				break;
 			}

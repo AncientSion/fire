@@ -8,6 +8,7 @@ if (isset($_SESSION["gameid"])){$gameid = $_SESSION["gameid"];}
 
 
 //Debug::log("getGameData.php");
+//Debug::log("userid: ".$userid); Debug::log("gameid: ".$gameid);
 
 
 if (isset($_GET["type"])){
@@ -51,7 +52,8 @@ if (isset($_GET["type"])){
 			echo json_encode($unit, JSON_NUMERIC_CHECK);
 		}
 		else if ($_GET["type"] == "unitStats"){
-			echo json_encode($dbManager->getDamageStatistics($gameid, $userid), JSON_NUMERIC_CHECK);
+			//Debug::log("unitStats");
+			echo json_encode($dbManager->getDamageStatistics($_GET["gameid"], $_GET["userid"]), JSON_NUMERIC_CHECK);
 		}
 	}
 }

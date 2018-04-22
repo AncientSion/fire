@@ -54,18 +54,12 @@
 
 
 	public function doEval(){
-		$this->testMorale();
+		//$this->testMorale();
 		//$this->handleResolvedFireData();
 		return;
 	}
 
 	public function getClientData(){
-		//var_export($this->getShipData());
-		//$this->deleteReinforcements();
-		//return;
-		//$this->crits();
-		//Debug::log("in getClientData!");
-		$this->doEval();
 		Debug::close();
 
 		//var_export($this->getUnit(2)->getEndState(1));

@@ -1470,7 +1470,7 @@ Ship.prototype.createMoraleLogEntry = function(){
 	if (this.flight || this.salvo){return;}
 	if (this.status != "jumpOut"){return;}
 	
-	var html = "<td colSpan=9><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is in disarray and routes !</td>";
+	var html = "<td colSpan=9><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is routed and prepares to flee to hyperspace !</td>";
 	this.attachLogEntry(html);
 }
 
@@ -2085,9 +2085,16 @@ Ship.prototype.showMoraleDiv = function(e){
 					.append($("<td>").html(this.morale.baseChance + "%")))
 				.append($("<tr>")
 					.append($("<td>").html("Effective Rout Chance"))
-					.append($("<td>").html(this.morale.effChance + "%")))
+					.append($("<td>").html(this.getRoutChance() + "%")))
 			)
 	)
+}
+
+Ship.prototype.getRoutChance = function(){
+	if (this.morale.effChance < 1 || this.morale.current >= this.morale.trigger){
+		return 0;
+	}
+	else return this.morale.effChance;
 }
 
 Ship.prototype.createBaseDiv = function(){

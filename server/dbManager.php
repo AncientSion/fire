@@ -189,7 +189,7 @@
 		}
 
 		public function getDamageStatistics($gameid, $user){
-
+			//Debug::log("getDamageStatistics, game: ".$gameid.", user: ".$user);
 			$stmt = $this->connection->prepare("
 				SELECT
 					units.name, units.display, units.id, units.userid, units.destroyed,
