@@ -1368,7 +1368,7 @@
 	public function testMorale(){
 		Debug::log("------------------------------- testMorale");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			$this->ships[$i]->setMorale();
+			$this->ships[$i]->setMorale($this->turn, $this->phase);
 			$this->ships[$i]->handleMoraleTesting($this->turn);
 		}
 	}

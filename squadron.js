@@ -641,7 +641,7 @@ Squadron.prototype.createBaseDiv = function(){
 	}
 
 	// JUMP OUT
-	if (!this.destroyed){
+	if (!this.destroyed && game.turn && game.phase == 3){
 		var jumpDiv = 
 			$("<div>").addClass("info").css("top", 90).css("margin-left", 27)
 			.append($("<img>").addClass("jumpOut")
@@ -1077,24 +1077,24 @@ Squadron.prototype.setStats = function(){
 		this.primary.systems[1].update();
 	}
 
-	var a = this.getBaseImpulse();
-	var b = this.getBaseEP();
-	var c = this.getImpulseChangeCost() + ", " + this.getActionCost(0) + ", " + this.getActionCost(1);
+	var impulse = this.getBaseImpulse();
+	var ep = this.getBaseEP();
+	var change = this.getImpulseChangeCost() + ", " + this.getActionCost(0) + ", " + this.getActionCost(1);
 	//var d = this.baseTurnDelay;
-	var d = this.getStringHitChance();
+	var hit = this.getStringHitChance();
 
 	$(this.element).find(".topDiv").find(".header").find("tr").each(function(i){
-		if (i == 3){
-			$($(this).children()[1]).html(a); return;
+		if (i == 6){
+			$($(this).children()[1]).html(impulse); return;
 		}
-		if (i == 4){
-			$($(this).children()[1]).html(b); return;
+		if (i == 7){
+			$($(this).children()[1]).html(ep); return;
 		}
-		else if (i == 5){
-			$($(this).children()[1]).html(c); return;
+		else if (i == 8){
+			$($(this).children()[1]).html(change); return;
 		}
-		else if (i == 7){
-			$($(this).children()[1]).html(d); return;
+		else if (i == 3){
+			$($(this).children()[1]).html(hit); return;
 		}
 	})
 }

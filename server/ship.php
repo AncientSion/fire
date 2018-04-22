@@ -107,6 +107,7 @@ class Ship {
 	public function setPreviewState($turn, $phase){
 		$this->currentImpulse = $this->baseImpulse;
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq(), $this->power);
+		$this->morale = new Morale(100);
 
 		for ($j = 0; $j < sizeof($this->structures); $j++){
 			$this->structures[$j]->remNegation = $this->structures[$j]->negation;
@@ -166,7 +167,7 @@ class Ship {
 		}
 
 		$this->setCrewBoosts($turn);
-		$this->setMorale();
+		$this->setMorale($turn, $phase);
 		$this->isDestroyed();
 
 		return true;
@@ -193,7 +194,7 @@ class Ship {
 		return $alive;
 	}
 
-	public function setMorale(){
+	public function setMorale($turn, $phase){
 		$this->morale = new Morale(floor($this->primary->remaining / $this->primary->integrity * 100));
 	}
 

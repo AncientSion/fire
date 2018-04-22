@@ -12,9 +12,9 @@
 			case -1:
 				return "Initial Orders";
 			case 0:
-				return "Base Movement";
+				return "Default Movement";
 			case 1:
-				return "Command Movement";
+				return "Focus Movement";
 			case 2:
 				return "Firing Orders";
 			case 3:

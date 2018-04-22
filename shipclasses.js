@@ -2090,6 +2090,10 @@ Ship.prototype.showMoraleDiv = function(e){
 	)
 }
 
+Ship.prototype.hideMoraleDiv = function(){
+	$("#systemDetailsDiv").remove();
+}
+
 Ship.prototype.getRoutChance = function(){
 	if (this.morale.effChance < 1 || this.morale.current >= this.morale.trigger){
 		return 0;
@@ -2138,7 +2142,7 @@ Ship.prototype.createBaseDiv = function(){
 						game.getUnit($(this).parent().parent().parent().parent().parent().parent().data("shipId")).showMoraleDiv(e);
 					},
 					function(e){
-						game.hideMoraleDiv();
+						game.getUnit($(this).parent().parent().parent().parent().parent().parent().data("shipId")).hideMoraleDiv();
 					}))
 				)
 		.append($("<tr>")
@@ -2553,10 +2557,7 @@ Ship.prototype.expandDiv = function(div){
 		//console.log($(structContainer).width());
 
 	// JUMP OUT
-
-
-
-	if (!this.destroyed){
+	if (!this.destroyed && game.turn && game.phase == 3){
 		var jumpDiv = 
 		$("<div>").addClass("info").css("top", top + 5).css("left", left)
 			.append($("<img>").addClass("jumpOut")

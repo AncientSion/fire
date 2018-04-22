@@ -45,15 +45,19 @@ class Squadron extends Ship {
 		}
 	}
 
-	public function setMorale(){
-		$integrity = 0;
-		$remaining = 0;
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			$integrity += $this->structures[$i]->integrity;
-			$remaining += max(0, $this->structures[$i]->remaining);
+	public function setMorale($turn, $phase){
+		$val = 100;
+		if (sizeof($this->structures)){
+			$integrity = 0;
+			$remaining = 0;
+			for ($i = 0; $i < sizeof($this->structures); $i++){
+				$integrity += $this->structures[$i]->integrity;
+				$remaining += max(0, $this->structures[$i]->remaining);
+			}
+			$val = floor($remaining / $integrity * 100);
 		}
 
-		$this->morale = new Morale(floor($remaining / $integrity * 100));
+		$this->morale = new Morale($val);
 	 }
 
 
@@ -79,24 +83,16 @@ class Squadron extends Ship {
 		}
 		return true;
 	}
+	
 
 	public function setPreviewState($turn, $phase){
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			$this->structures[$i]->setSubunitState($turn, $phase);
-		}
-
-		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
-			$this->primary->systems[$i]->setState($turn, $phase);
-		}
-
-		$this->getSystemByName("Engine")->setPowerReq(0);
-		$this->setBaseStats($turn, $phase);
-		$this->setProps($turn, $phase);
+		Debug::log("setPreviewState ".get_class($this));
+		$this->setUnitState($turn, $phase);
 		$this->currentImpulse = $this->baseImpulse;
 	}
 	
 	public function setUnitState($turn, $phase){
-		//Debug::log("setUnitState ".get_class($this));
+		Debug::log("setUnitState ".get_class($this));
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$this->structures[$i]->setSubunitState($turn, $phase);
 		}
@@ -108,7 +104,7 @@ class Squadron extends Ship {
 		$this->getSystemByName("Engine")->setPowerReq(0);
 		$this->setBaseStats($turn, $phase);
 		$this->setProps($turn, $phase);
-		$this->setMorale();
+		$this->setMorale($turn, $phase);
 		$this->isDestroyed();
 
 		return true;

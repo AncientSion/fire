@@ -33,7 +33,7 @@ class Single {
 
 
 	function __construct($id, $parentId){
-		$this->id = $id;		
+		$this->id = $id;
 		$this->parentId = $parentId;
 
 		$this->index = $this->id;

@@ -71,8 +71,8 @@ function initChat(){
 function getPhaseString(val){
 	switch (val){
 		case -1: return "Initial Orders";
-		case 0: return "Base Movement";
-		case 1: return "Command Movement";
+		case 0: return "Default Movement";
+		case 1: return "Focus Movement";
 		case 2: return "Firing Orders";
 		case 3: return "Damage Control";
 		default: return "ERROR";

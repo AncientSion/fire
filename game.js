@@ -1121,7 +1121,7 @@ function Game(data){
 		}
 	}
 
-	this.setDeployWrapperView = function(){	
+	this.setDeployWrapperVisibility = function(){	
 		$("#reinforce")
 			.data("on", 1)
 			.click(function(e){
@@ -1147,7 +1147,13 @@ function Game(data){
 		var avail = wrapper.find("#reinforceTable");
 
 		if (game.turn != game.wave){avail.hide();}
+		else if (game.phase > -1){avail.hide();}
+		
 		if (!incoming.find("tbody").children().length){incoming.hide();}
+
+		if (!avail.is(":visible") && !incoming.is(":visible")){
+			wrapper.hide();
+		}
 
 	/*	if (incoming.children().children().length > 2 || avail.children().children().length > 3){
 			return;
@@ -2567,8 +2573,8 @@ function Game(data){
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].salvo || this.ships[i].flight){continue;}
-			else if (game.phase > 1){continue;}
 			else if (this.ships[i].available != this.turn){continue;}
+			else if (this.ships[i].available == this.turn && this.phase > 0){continue;}
 
 			if (this.ships[i].friendly){
 				wrapper
@@ -3341,10 +3347,6 @@ Game.prototype.doResolveMovement = function(){
 	this.animateUnitMovement();
 }
 
-Game.prototype.hideMoraleDiv = function(){
-	$("#systemDetailsDiv").remove();
-}
-
 Game.prototype.drawDeployMarker = function(id){
 	var s = game.getUnit(id);
 
@@ -3629,7 +3631,7 @@ Game.prototype.create = function(data){
 	this.initIncomingTable();
 	this.createReinforcementsTable();
 	this.initReinforceTable();
-	this.setDeployWrapperView();
+	this.setDeployWrapperVisibility();
 	this.initSelectionWrapper();
 	this.initEvents();
 	this.extractPlayerStatusData()
