@@ -43,6 +43,7 @@ function System(system){
 	this.usage = system.usage;
 	this.freeAim = system.freeAim;
 	this.width = system.width;
+	this.monoSystem = false;
 }
 
 System.prototype.getDisplay = function(){
@@ -736,6 +737,18 @@ System.prototype.showInfoDiv = function(e){
 }
 
 System.prototype.setFireOrder = function(targetid, pos){
+	if (this.odds <= 0){return;}
+	this.fireOrders.push(
+		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, x: pos.x, y: pos.y, weaponid: this.id, 
+		shots: 0, req: -1, notes: "", hits: -1, resolved: 0}
+	);
+	this.selected = 0;
+	this.validTarget = 0;
+	this.highlight = 0;
+	this.setSystemBorder();
+}
+
+Launcher.prototype.setFireOrder = function(){
 	if (this.odds <= 0){return;}
 	this.fireOrders.push(
 		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, x: pos.x, y: pos.y, weaponid: this.id, 
@@ -1951,7 +1964,8 @@ Weapon.prototype.getDmgsPerShot = function(fire){
 
 Weapon.prototype.getUsageString = function(){
 	var unit = game.getUnit(this.parentId);
-	if (this.usage == game.phase-1){
+	//if (this.usage == game.phase-1){
+	if (this.usage == -1){
 		if (unit.friendly){
 			return ("<span><font color='" + unit.getCodeColor()+ "'> " + unit.name + " #" + unit.id +" </font></span> fires " + this.display);
 		}
@@ -2113,7 +2127,7 @@ Weapon.prototype.select = function(e){
 				this.selected = false;
 				this.validTarget = 0;
 			}
-			else if(!unit.hasHangarSelected()){
+			else if(!unit.hasHangarSelected() && !game.monoSystem){
 				this.selected = true;
 			}
 		}
@@ -3192,7 +3206,6 @@ Launcher.prototype.getEffiency = function(){
 }
 
 Launcher.prototype.select = function(e){
-	console.log(this);
 
 	if (this.destroyed || this.disabled || this.locked){return false;}
 
@@ -3210,7 +3223,8 @@ Launcher.prototype.select = function(e){
 	else if (game.phase != -1  || game.deploying || this.getOutput() == 0){
 		return false;
 	}
-	
+	else if (game.phase == -1 && game.getUnit(aUnit).hasPlannedMoves()){popup("This system can only be used BEFORE planning movement</br>Please reverse movement plan.");return;}
+
 	var id = this.id;
 	var parentId = this.parentId;
 	var selected = false;
@@ -3501,6 +3515,13 @@ function Area(system){
 
 Area.prototype = Object.create(Particle.prototype);
 
+Area.prototype.select = function(){
+	if (aUnit != this.parentId){return;}
+	if (game.phase == -1 && game.getUnit(aUnit).hasPlannedMoves()){popup("This system can only be used BEFORE planning movement</br>Please reverse movement plan.");return;}
+	if (!game.monoSystem && game.getUnit(aUnit).hasWeaponsSelected()){return;}
+	Weapon.prototype.select.call(this);
+	game.monoSystem = this.selected;
+}
 
 Area.prototype.createCombatLogEntry = function(fire){
 	var log = $($("#combatLog").find("tbody")[0]);
@@ -3713,6 +3734,7 @@ Area.prototype.setFireOrder = function(targetid, pos){
 		shots: 0, req: -1, notes: "", hits: -1, resolved: 0}
 	);
 	this.selected = 0;
+	game.monoSystem = 0;
 	this.validTarget = 0;
 	this.highlight = 0;
 	this.setSystemBorder();

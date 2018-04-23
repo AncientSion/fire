@@ -110,7 +110,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	//else if (shooter.flight && !game.isCloseCombat(shooter, target)){
 	//	return;
 	//}
-
+	
 	var shooterLoc = shooter.getPlannedPos();
 	var facing = shooter.getPlannedFacing();					
 	var targetData1 = $("#weaponAimTableWrapper").find("#targetInfo").find("#targetData1");
@@ -281,7 +281,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 		if (onlyArea){
 			salvoCtx.clearRect(0, 0, res.x, res.y);
 			for (var i = 0; i < active.length; i++){
-				active[i].handleAimEvent(shooterLoc, pos);
+				active[i].handleAimEvent(shooter.getGamePos(), pos);
 			}
 			shooter.drawEW();
 		}
@@ -492,51 +492,6 @@ function planPhase(e, pos, unit){
 			}
 			else if (unit.canDeploy()){
 				game.enableDeploy(unit.id);
-			}
-			else firePhase(pos, unit, 0);
-		}
-		else {
-			unit = game.getUnitByClick(pos);
-			if (unit){
-				unit.select(e); 
-				if (unit.canDeploy()){
-					game.enableDeploy(unit.id);
-				}
-			}
-		}
-	}
-}
-
-function deployPhase(e, pos, unit){
-	var unit;
-	var ammo;
-	var index;
-	if (game.deploying){
-		unit = game.getUnit(game.deploying); // ship deploy
-		if (game.sensorMode){
-			sensorize(unit, pos);
-		}
-		else if (game.turnMode){
-			unit.handleTurnAttempt(pos);
-		}
-		else if (unit.canDeployHere(pos)){
-			game.doDeployShip(e, unit, pos);
-		}
-	}
-	else if (game.flightDeploy){ // deploy via hangar
-		game.doDeployFlight(pos);
-	}
-	else if (game.mission && game.mission.new){
-		game.issueMission(pos);
-	}
-	else if (!game.deploying){
-		if (aUnit){
-			unit = game.getUnit(aUnit);
-			if (unit.canDeploy()){
-				game.enableDeploy(unit.id);
-			}
-			else if (game.sensorMode){
-				sensorize(unit, pos);
 			}
 			else firePhase(pos, unit, 0);
 		}

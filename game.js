@@ -1011,11 +1011,14 @@ function Game(data){
 				})
 			);
 
-		if (this.events.length){
+		if (this.events.length && game.phase == 2){
 			game.timeout = setTimeout(function(){
 				$($("#combatLog").find("td")[0]).attr("colSpan", 8)
 				game.resolvePostMoveFire();
 			}, 1000);
+		}
+		else if (this.events.length && game.phase == 1){
+			this.logEvents();
 		}
 		else {
 			this.animating = 0;
@@ -1596,7 +1599,10 @@ function Game(data){
 
 		for (var i = 0; i < active.length; i++){
 			if (active[i].hasValidTarget() && active[i].canFire()){
-				if (active[i].freeAim == 0 && hostileUnit == 1 || active[i].freeAim == 1 && hostileUnit == 0){
+				if (active[i].freeAim == 0 && hostileUnit == 1){
+					active[i].setFireOrder(targetid, pos);
+				}
+				else if (active[i].freeAim == 1 && hostileUnit == 0){
 					active[i].setFireOrder(targetid, pos);
 				}
 			}
@@ -3311,7 +3317,7 @@ Game.prototype.logEvents = function(){
 							fxCtx.scale(cam.z, cam.z);
 							var d = $(this).data();
 							var unit = game.getUnit(d.shipId)
-							unit.getSystem(d.systemId).drawSystemArc(unit.getPlannedFacing(), unit.rolled, unit.getPlannedPos());
+							unit.getSystem(d.systemId).drawSystemArc(unit.getTurnStartFacing(), unit.rolled, unit.getTurnStartPos());
 							fxCtx.setTransform(1,0,0,1,0,0);
 						},
 						function(){

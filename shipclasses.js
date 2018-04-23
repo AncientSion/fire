@@ -816,6 +816,13 @@ Ship.prototype.handleTurnAttempt = function(dest){
 	} else this.issueTurn(max);
 }
 
+Ship.prototype.hasPlannedMoves = function(){
+	for (let i = this.actions.length-1; i >= 0; i--){
+		if (!this.actions[i].resolved){return true;}
+	}
+	return false;
+}
+
 Ship.prototype.issueTurn = function(a){
 	if (this.actions.length && this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0){
 		this.actions[0].a += Math.round(a);
@@ -1995,6 +2002,14 @@ Ship.prototype.getNextPosition = function(){
 	return this.getPlannedPos();
 }
 
+Ship.prototype.getTurnStartPos = function(){
+	return new Point(this.x, this.y);
+}
+
+Ship.prototype.getTurnStartFacing = function(){
+	return this.facing;
+}
+
 Ship.prototype.getPlannedPos = function(){
 	if (this.actions.length){
 		return new Point(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y);
@@ -3048,8 +3063,8 @@ Ship.prototype.getMaskEffect = function(shooter){
 	var ew = sensor.getEW();
 	if (sensor.disabled || sensor.destroyed || ew.type == 0){return 0;}
 
-	var tPos = shooter.getGamePos();
-	var origin = this.getGamePos();
+	var tPos = shooter.getPlannedPos();
+	var origin = this.getPlannedPos();
 	var d = getDistance(origin, tPos);
 	var multi = 0;
 

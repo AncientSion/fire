@@ -15,8 +15,6 @@ class Ship {
 	public $rolling;
 	public $rolled;
 
-	public $morale;
-
 	public $disabled = false;
 
 	public $baseHitChance;
@@ -107,7 +105,6 @@ class Ship {
 	public function setPreviewState($turn, $phase){
 		$this->currentImpulse = $this->baseImpulse;
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq(), $this->power);
-		$this->morale = new Morale(100);
 
 		for ($j = 0; $j < sizeof($this->structures); $j++){
 			$this->structures[$j]->remNegation = $this->structures[$j]->negation;
@@ -1027,12 +1024,9 @@ class Ship {
 
 	public function handleMoraleTesting($turn){
 		Debug::log(get_class($this). " #".$this->id.", morale @ ".$this->morale->current."%");
-
 		//$this->morale->current = 20;
-
 		if ($this->morale->current >= $this->morale->trigger){return;}
 		$roll = mt_rand(0, 100);
-
 		Debug::log(" => effChance: ".$this->morale->effChance.", roll: ".$roll);
 		if ($roll < $this->morale->effChance){
 			Debug::log(" ===> retreat!");
