@@ -15,12 +15,12 @@ if (isset($_POST["type"])) {
 	$manager = new Manager($_POST["gameid"], $_POST["userid"]);
 
 	if ($_POST["type"] == "joinGame") {
-		Debug::log("joinGame success");
+		//Debug::log("joinGame success");
 		if ($dbManager->createPlayerStatus($_POST["userid"], $_POST["gameid"], 0, -1, "joined")) {
-			Debug::log("joinGame success");
+			//Debug::log("joinGame success");
 		}
 		else {
-			echo "joinGame fail";
+			//echo "joinGame fail";
 		}
 	}
 	else if ($_POST["type"] == "leaveGame") {

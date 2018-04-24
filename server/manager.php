@@ -590,7 +590,7 @@
 
 		$mod = 1;
 		if ($this->turn == 1){
-			$mod = 0.33;
+			$mod = 0;
 		}
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){

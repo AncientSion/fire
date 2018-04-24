@@ -439,7 +439,7 @@
 				if ($stmt->errorCode() == 0){
 					$id = $this->getLastInsertId();
 					$units[$i]["id"] = $id;
-					Debug::log("i: ".$i.", id: ".$id);
+					//Debug::log("i: ".$i.", id: ".$id);
 
 					if (!$ship){
 						$units[$i]["mission"]["unitid"] = $id;
@@ -721,21 +721,19 @@
 
 				foreach ($result as $player){
 					if ($player["status"] != "ready"){
-						Debug::log("Game #".$gameid." is not ready !");
+						//Debug::log("Game #".$gameid." is not ready !");
 						return false;
 					}
 				}
-				Debug::log("Game #".$gameid." is ready !");
+				//Debug::log("Game #".$gameid." is ready !");
 				return true;
 			}
-			Debug::log("Game #".$gameid." is not ready !");
+			//Debug::log("Game #".$gameid." is not ready !");
 			return false;
 		}
 
 		public function startGame($gameid){
-			Debug::log("Starting game #".$gameid);
-			
-			//$this->insertDeployArea($deploys);
+			Debug::log("startGame #".$gameid);
 
 			$stmt = $this->connection->prepare("
 				UPDATE games 
@@ -743,63 +741,45 @@
 					status = :status,
 					turn = :turn
 				WHERE
-					id = :id				
+					id = :gameid				
 			");
 
 			$status = "active";
 			$turn = 1;
+			$phase = -1;
 
 			$stmt->bindParam(":status", $status);
 			$stmt->bindParam(":turn", $turn);
-			$stmt->bindParam(":id", $gameid);
+			$stmt->bindParam(":gameid", $gameid);
 
 			$stmt->execute();
 
 			if ($stmt->errorCode() == 0){
-				Debug::log("game ready, adjusting player");
+				Debug::log("A");
 
-			
-				$players = $this->getPlayersInGame($gameid);
-				$deploys = array();
+				$stmt = $this->connection->prepare("
+					UPDATE playerstatus 
+					SET 
+						turn = :turn,
+						phase = :phase,
+						status = :status,
+						value = value + (SELECT reinforce FROM games where id = :gameid)
+					WHERE
+						gameid = :gameid				
+				");
 
-				for ($i = 0; $i < sizeof($players); $i++){
-					$this->setPlayerstatus($players[$i]["userid"], $gameid, 1, -1, "waiting");
-					//$units = $this->query("SELECT * FROM units WHERE gameid = ".$gameid." AND userid = ".$players[$i]["userid"]);
+				$status = "waiting";
+				$stmt->bindParam(":turn", $turn);
+				$stmt->bindParam(":phase", $phase);
+				$stmt->bindParam(":status", $status);
+				$stmt->bindParam(":gameid", $gameid);
 
-					/*for ($j = 0; $j < sizeof($units); $j++){
-						$unit = new $units[$j]["name"](1, 1, 0, "", 0);
+				$stmt->execute();
 
-						$do = 1;
-
-						while ($do){
-							$valid = 1;
-							$width = 100;
-							$height = 600;
-							//$dist = 400;
-							$dist = 600;
-							$x = mt_rand(-($dist+$width), -$dist) * (1-$i*2);
-							$y = mt_rand(-$height, $height) * (1-$i*2);
-							$s = ceil(($unit->size*1.3)/2);
-
-							for ($k = 0; $k < sizeof($deploys); $k++){
-								$d = Math::getDist($deploys[$k]["x"], $deploys[$k]["y"], $x, $y);
-								$min = $deploys[$k]["s"] + $s;
-								//Debug::log("d is".$d." min is ".$min);
-								if ($d < $min){
-									$valid = 0;
-									break;
-								}
-							}
-
-							if ($valid){
-								$do = 0;
-								$deploys[] = array("gameid" => $gameid, "userid" => $players[$i]["userid"], "turn" => 1, "phase" => -1, "x" => $x, "y" => $y, "s" => $s);
-							}//else Debug::log("redoing!");
-						}
-					}
-					*/
-				}
-				return true;
+				if ($stmt->errorCode() == 0){
+					Debug::log("B");
+					return true;
+				} else return false;
 			}
 			else return false;
 		}
