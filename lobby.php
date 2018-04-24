@@ -3,6 +3,7 @@
 include_once 'global.php';
 
 if (isset($_SESSION["userid"])){
+
 	$manager = new Manager(0, $_SESSION["userid"]);
 	$username = $manager->getUsername();
 	$dbManager = DBManager::app();
