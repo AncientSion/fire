@@ -40,6 +40,7 @@ spl_autoload_register(
                 'aurora' => '/server/fighter.php',
                 'thunderbolt' => '/server/fighter.php',
                 'nial' => '/server/fighter.php',
+                'tishat' => '/server/fighter.php',
                 'sentri' => '/server/fighter.php',
                 'sitaraparticle' => '/server/fighter.php',
                 'sitaraplasma' => '/server/fighter.php',
@@ -62,6 +63,7 @@ spl_autoload_register(
                 'sharlin' => '/server/ships/sharlin.php',
                 'tigara' => '/server/ships/tigara.php',
                 'tinashi' => '/server/ships/tinashi.php',
+                'rolentha' => '/server/ships/rolentha.php',
                 'whitestar' => '/server/ships/whitestar.php',
                 'torotha' => '/server/ships/torotha.php',
 
@@ -141,7 +143,7 @@ spl_autoload_register(
                 'heavyplasmapulse' => '/server/systems/weapons/pulse.php',
                 'lightempulse' => '/server/systems/weapons/pulse.php',
                 
-                'emneedler' => '/server/systems/weapons/particle.php',
+                'lightemneedler' => '/server/systems/weapons/particle.php',
                 'shockcannon' => '/server/systems/weapons/particle.php',
 
                 'particle' => '/server/systems/weapons/particle.php',

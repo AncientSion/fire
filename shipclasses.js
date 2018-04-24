@@ -1205,6 +1205,7 @@ Ship.prototype.drawMovePlan = function(){
 		planCtx.strokeStyle = "red";
 	}
 
+	planCtx.globalAlpha = 0.5;
 	planCtx.beginPath();
 	planCtx.moveTo(this.x, this.y);
 
@@ -1228,6 +1229,7 @@ Ship.prototype.drawMovePlan = function(){
 	planCtx.lineWidth = 1;
 //	planCtx.stroke();
 	planCtx.strokeStyle = "black";
+	planCtx.globalAlpha = 1;
 	this.drawPlanMarker();
 	this.resetMoveTranslation();
 }
@@ -2584,9 +2586,7 @@ Ship.prototype.expandDiv = function(div){
 			});
 		}
 		else {
-			jumpDiv.find("img")
-			.click(function(){game.getUnit($(this).parent().parent().parent().data("shipId")).requestJumpOut();
-			});
+			jumpDiv.find("img").addClass("selected");
 		}
 
 		structContainer.append(jumpDiv);

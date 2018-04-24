@@ -129,7 +129,7 @@ class SuperHeavyParticle extends HeavyParticle {
 
 class FusionCannon extends Particle {
 	public $name = "FusionCannon";
-	public $display = "42mm Fusion Cannon";
+	public $display = "Medium Fusion Cannon";
 	public static $prio =  425;
 	public $minDmg = 34;
 	public $maxDmg = 42;
@@ -151,7 +151,7 @@ class FusionCannon extends Particle {
 
 class HeavyFusionCannon extends Particle {
 	public $name = "HeavyFusionCannon";
-	public $display = "56mm Fusion Cannon";
+	public $display = "Heavy Fusion Cannon";
 	public static $prio =  426;
 	public $minDmg = 40;
 	public $maxDmg = 52;
@@ -196,9 +196,9 @@ class AntimatterConverter extends Particle {
 	}
 }
 
-class EMNeedler extends Particle {
-	public $name = "EMNeedler";
-	public $display = "18mm EM-Needler";
+class LightEMNeedler extends Particle {
+	public $name = "LightEMNeedler";
+	public $display = "Light EM-Needler";
 	public $minDmg = 9;
 	public $maxDmg = 12;
 	public $accDecay = 240;

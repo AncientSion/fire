@@ -5,12 +5,12 @@ class Torotha extends Light {
 	public $display = "Torotha";
 	public $role = "Patrol Frigate";
 	public $faction = "Minbari Federation";
-	public static $value = 350;
+	public static $value = 320;
 	public $mass = 1600;
 
-	public $integrity = 450;
+	public $integrity = 380;
 	public $ep = 100;
-	public $ew = 650;
+	public $ew = 600;
 	public $power = 0;
 	public $negation = 13;
 
@@ -27,11 +27,11 @@ class Torotha extends Light {
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new EMNeedler($this->getId(), $this->parentId, 0, 180);
+		$right->systems[] = new LightEMNeedler($this->getId(), $this->parentId, 0, 180);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new EMNeedler($this->getId(), $this->parentId, 180, 360);
+		$left->systems[] = new LightEMNeedler($this->getId(), $this->parentId, 180, 360);
 		$structs[] = $left;
 		
 		for ($i = 0; $i < sizeof($structs); $i++){

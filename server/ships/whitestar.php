@@ -5,14 +5,14 @@ class WhiteStar extends Light {
 	public $display = "White Star";
 	public $role = "Adv. Superiority Frigate";
 	public $faction = "Minbari Federation";
-	public static $value = 400;
+	public static $value = 390;
 	public $mass = 1800;
 
-	public $integrity = 500;
+	public $integrity = 420;
 	public $ep = 140;
-	public $ew = 750;
+	public $ew = 700;
 	public $power = 3;
-	public $negation = 15;
+	public $negation = 16;
 
 	function __construct($id, $userid){
 		parent::__construct($id, $userid);
@@ -26,11 +26,11 @@ class WhiteStar extends Light {
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new FusionPulsar($this->getId(), $this->parentId, 0, 60);
+		$right->systems[] = new FusionPulsar($this->getId(), $this->parentId, 300, 60);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new FusionPulsar($this->getId(), $this->parentId, 300, 360);
+		$left->systems[] = new FusionPulsar($this->getId(), $this->parentId, 300, 60);
 		$structs[] = $left;
 		
 		for ($i = 0; $i < sizeof($structs); $i++){

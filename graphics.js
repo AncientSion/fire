@@ -147,7 +147,6 @@ window.graphics = {
 		this.images.shokos = new Image();
 		this.images.shokos.src = "shipIcons/shokos.png";
 
-
 		this.images.sharlin = new Image();
 		this.images.sharlin.src = "shipIcons/sharlin.png";
 
@@ -156,6 +155,9 @@ window.graphics = {
 
 		this.images.tinashi = new Image();
 		this.images.tinashi.src = "shipIcons/tinashi.png";
+
+		this.images.rolentha = new Image();
+		this.images.rolentha.src = "shipIcons/rolentha.png";
 
 		this.images.whitestar = new Image();
 		this.images.whitestar.src = "shipIcons/whitestar.png";
@@ -182,6 +184,9 @@ window.graphics = {
 
 		this.images.nial = new Image();
 		this.images.nial.src = "shipIcons/nial.png";
+
+		this.images.tishat = new Image();
+		this.images.tishat.src = "shipIcons/tishat.png";
 
 		this.images.gorith = new Image();
 		this.images.gorith.src = "shipIcons/gorith.png";

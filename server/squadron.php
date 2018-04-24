@@ -86,13 +86,13 @@ class Squadron extends Ship {
 	
 
 	public function setPreviewState($turn, $phase){
-		Debug::log("setPreviewState ".get_class($this));
+		//Debug::log("setPreviewState ".get_class($this));
 		$this->setUnitState($turn, $phase);
 		$this->currentImpulse = $this->baseImpulse;
 	}
 	
 	public function setUnitState($turn, $phase){
-		Debug::log("setUnitState ".get_class($this));
+		//Debug::log("setUnitState ".get_class($this));
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$this->structures[$i]->setSubunitState($turn, $phase);
 		}

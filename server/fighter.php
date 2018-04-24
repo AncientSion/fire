@@ -146,6 +146,26 @@ class Nial extends Fighter {
 	}
 }
 
+class Tishat extends Fighter {
+	public $name = "Tishat";
+	public $display = "Tishat";
+	public $faction = "Minbari Federation";
+	public static $value =  45;
+	public $mass = 31;
+	public $integrity = 31;
+	public $negation = 7;
+	public $baseImpulse = 115;
+	public $baseHitChance = 26;
+
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
+	}
+
+	public function addSystems(){
+		$this->systems[] = new NeutronRepeater($this->getId(), $this->id, $this->parentId, 1, 3, 14, 18, 0, 360);
+	}
+}
+
 class Gorith extends Fighter {
 	public $name = "Gorith";
 	public $display = "Gorith";
