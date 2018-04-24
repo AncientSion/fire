@@ -104,6 +104,7 @@ class Ship {
 
 	public function setPreviewState($turn, $phase){
 		$this->currentImpulse = $this->baseImpulse;
+		$this->morale = new Morale(100);
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq(), $this->power);
 
 		for ($j = 0; $j < sizeof($this->structures); $j++){
