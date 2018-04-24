@@ -150,19 +150,19 @@ class Tishat extends Fighter {
 	public $name = "Tishat";
 	public $display = "Tishat";
 	public $faction = "Minbari Federation";
-	public static $value =  45;
-	public $mass = 31;
-	public $integrity = 31;
-	public $negation = 7;
+	public static $value =  34;
+	public $mass = 29;
+	public $integrity = 28;
+	public $negation = 6;
 	public $baseImpulse = 115;
-	public $baseHitChance = 26;
+	public $baseHitChance = 24;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
 	}
 
 	public function addSystems(){
-		$this->systems[] = new NeutronRepeater($this->getId(), $this->id, $this->parentId, 1, 3, 14, 18, 0, 360);
+		$this->systems[] = new NeutronRepeater($this->getId(), $this->id, $this->parentId, 1, 2, 14, 18, 0, 360);
 	}
 }
 

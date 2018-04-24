@@ -272,16 +272,9 @@
 			$stmt->execute();
 
 			if ($stmt->errorCode() == 0){
-				Debug::log("entry CREATE for player ".$userid." in game ".$gameid." phase: ".$phase." and status ".$status);
+				//Debug::log("entry CREATE for player ".$userid." in game ".$gameid." phase: ".$phase." and status ".$status);
 				return true;
-			} else {
-				Debug::log("error: userid: ".$userid);
-				Debug::log("error: gameid: ".$gameid);
-				Debug::log("error: turn: ".$turn);
-				Debug::log("error: phase: ".$phase);
-				Debug::log("error: status: ".$status);
-				return false;
-			}
+			} else return false;
 		}
 
 		public function getAllReinforcements($gameid, $userid){
@@ -538,7 +531,7 @@
 
 			for ($i = 0; $i < sizeof($units); $i++){
 				//Debug::log("units ".$i);
-				if (!isset($units[$i]["upgrades"]) || sizeof($units[$i]["upgrades"]) == 0){Debug::log("continue"); continue;}
+				if (!isset($units[$i]["upgrades"]) || sizeof($units[$i]["upgrades"]) == 0){continue;}
 
 				for ($j = 0; $j < sizeof($units[$i]["upgrades"]); $j++){
 					//Debug::log("upgrades ".$j);
@@ -746,7 +739,6 @@
 
 			$status = "active";
 			$turn = 1;
-			$phase = -1;
 
 			$stmt->bindParam(":status", $status);
 			$stmt->bindParam(":turn", $turn);
@@ -755,33 +747,44 @@
 			$stmt->execute();
 
 			if ($stmt->errorCode() == 0){
-				Debug::log("A");
-
-				$stmt = $this->connection->prepare("
-					UPDATE playerstatus 
-					SET 
-						turn = :turn,
-						phase = :phase,
-						status = :status,
-						value = value + (SELECT reinforce FROM games where id = :gameid)
-					WHERE
-						gameid = :gameid				
-				");
-
-				$status = "waiting";
-				$stmt->bindParam(":turn", $turn);
-				$stmt->bindParam(":phase", $phase);
-				$stmt->bindParam(":status", $status);
-				$stmt->bindParam(":gameid", $gameid);
-
-				$stmt->execute();
-
-				if ($stmt->errorCode() == 0){
-					Debug::log("B");
-					return true;
-				} else return false;
+				$this->setStartGamePlayerStatus($gameid);
+				return true;
 			}
-			else return false;
+		}
+
+
+		public function setStartGamePlayerStatus($gameid){
+			Debug::log("setStartGamePlayerStatus");
+
+			$stmt = $this->connection->prepare("
+				UPDATE playerstatus 
+				SET 
+					turn = :turn,
+					phase = :phase,
+					status = :status,
+					value = value + 1500
+				WHERE
+					gameid = :gameid
+			");
+
+			$turn = 1;
+			$phase = -1;
+			$status = "waiting";
+
+			$stmt->bindParam(":turn", $turn);
+			$stmt->bindParam(":phase", $phase);
+			$stmt->bindParam(":status", $status);
+			$stmt->bindParam(":gameid", $gameid);
+
+			$stmt->execute();
+
+			if ($stmt->errorCode() == 0){
+				//Debug::log("sucess");
+				return true;
+			} else {
+				//Debug::log("error");
+				return false;
+			}
 		}
 
 		public function insertDeployArea($data){

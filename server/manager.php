@@ -1512,7 +1512,7 @@
 						"Sharlin",
 						"Tigara",
 						"Tinashi",
-						"Rolentha",
+						//"Rolentha",
 					),
 					array(
 						"WhiteStar",
