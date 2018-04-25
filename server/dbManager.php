@@ -762,7 +762,7 @@
 					turn = :turn,
 					phase = :phase,
 					status = :status,
-					value = value + (SELECT reinforce FROM games WHERE id = :gameid)
+					value = value + (SELECT reinforce FROM games WHERE id = :gameid1)
 				WHERE
 					gameid = :gameid2
 			");
@@ -775,7 +775,7 @@
 			$stmt->bindParam(":phase", $phase);
 			$stmt->bindParam(":status", $status);
 			$stmt->bindParam(":gameid", $gameid);
-			$stmt->bindParam(":gameid", $gameid);
+			$stmt->bindParam(":gameid1", $gameid);
 			$stmt->bindParam(":gameid2", $gameid);
 
 			$stmt->execute();

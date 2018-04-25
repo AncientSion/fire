@@ -522,6 +522,7 @@ function Game(data){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].flight || this.ships[i].salvo || this.ships[i].userid != this.userid){continue;}
 			if (this.ships[i].available > game.turn){continue;}
+			if (this.ships[i].status == "jumpOut"){continue;}
 			
 			if (this.ships[i].hasBasicEW()){
 				data.push({id: this.ships[i].id, name: this.ships[i].name, value: 0});
@@ -540,6 +541,7 @@ function Game(data){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].flight || this.ships[i].salvo || this.ships[i].userid != this.userid){continue;}
 			if (this.ships[i].available > game.turn){continue;}
+			if (this.ships[i].status == "jumpOut"){continue;}
 
 			var power = this.ships[i].getUnusedPower()
 
@@ -608,7 +610,8 @@ function Game(data){
 		var hasNoCommand = 1;
 
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].userid != this.userid){continue}
+			if (this.ships[i].userid != this.userid){continue;}
+			if (this.ships[i].status == "jumpOut" || this.ships[i].destroyed){continue;}
 			if (this.ships[i].command){
 				hasNoCommand = 0; break;
 			}

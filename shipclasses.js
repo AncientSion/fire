@@ -414,17 +414,14 @@ Ship.prototype.getImpulseStep = function(){
 }
 
 Ship.prototype.getTurnCost = function(){
-	if (game.phase == -2){
+	if (game.turn == 1 && game.phase == -2 || game.phase == -1 && game.turn > 1 && this.available == game.turn){
 		return 1;
-		return round(this.baseTurnDelay*this.getImpulseMod() / this.getTurnMod(), 2);
 	}
 	if (this.actions.length && (this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0)){
 		return 0;
 	}
 	else {
 		return round(1*this.getImpulseMod(), 2)
-		return 1;
-		return round(1*this.getImpulseMod() * this.getTurnMod(), 2);
 	}
 }
 
@@ -2584,12 +2581,13 @@ Ship.prototype.expandDiv = function(div){
 			jumpDiv.find("img")
 			.click(function(){game.getUnit($(this).parent().parent().parent().data("shipId")).requestJumpOut();
 			});
+			structContainer.append(jumpDiv);
 		}
-		else {
+		else if (this.isJumpingOut()){
 			jumpDiv.find("img").addClass("selected");
+			structContainer.append(jumpDiv);
 		}
 
-		structContainer.append(jumpDiv);
 	}
 
 	// System options positioning
@@ -2642,6 +2640,11 @@ Ship.prototype.expandDiv = function(div){
 
 Ship.prototype.canBeIssuedToJumpOut = function(){
 	if (game.turn > 1 && game.phase == 3 && this.friendly && this.status != "jumpOut"){return true;}
+	return false;
+}
+
+Ship.prototype.isJumpingOut = function(){
+	if (this.status == "jumpOut"){return true;}
 	return false;
 }
 
