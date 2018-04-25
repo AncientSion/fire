@@ -293,11 +293,22 @@ else {
 				},
 
 				canSubmit: function(){
-					var fleetCost = game.getFleetCost();
-					if (fleetCost && fleetCost <= window.maxPoints){
+					if (game.hasNotOverspend() && game.hasCommandUnit()){
 						$("#shipsBoughtTable").find(".buttonTD").removeClass("disabled");
 					}
 					else {$("#shipsBoughtTable").find(".buttonTD").addClass("disabled");}
+				},
+
+				hasNotOverspend: function(){
+					var fleetCost = game.getFleetCost();
+					if (fleetCost && fleetCost <= window.maxPoints){return true;}
+					return false;
+				},
+
+				hasCommandUnit: function(){
+					for (var i = 0; i < window.game.shipsBought.length; i++){
+						if (game.shipsBought[i].command){return true;}
+					} return false;
 				},
 
 				getFleetCost: function(){
@@ -514,19 +525,11 @@ else {
 	}
 
 	function confirmFleetPurchase(){
-		//if (!game.canSubmit){return;}
-		//else if (game.faction.length > 2){
-			/*for (var i = 0; i < game.shipsBought.length; i++){
-				for (var j = game.shipsBought[i].upgrades.length-1; j >= 0; j--){
-					if (game.shipsBought[i].upgrades[j].loads.length == 0){
-						game.shipsBought[i].upgrades.splice(j, 1);
-					}
-				}
-			}*/
-			game.canSubmit = 0;
-			ajax.confirmFleetPurchase(playerid, gameid, window.game.shipsBought, redirect);
-		//}
-		//else popup("Please also pick your reinforcement faction </br>(right click the faction name on the left menu).");
+		for (var i = 0; i < game.shipsBought.length; i++){
+			game.shipsBought[i].tr = undefined;
+		}
+		game.canSubmit = 0;
+		ajax.confirmFleetPurchase(playerid, gameid, window.game.shipsBought, redirect);
 	}
 
 	function requestSingleUnitData(name){
@@ -652,8 +655,10 @@ else {
 			value: game.ships[0].totalCost,
 			purchaseId: window.game.shipsBought.length,
 			upgrades: game.ships[0].getAllUpgrades(),
+			command: 0,
 			turn: 1,
 			eta: 0,
+			tr: false
 		}
 
 		window.game.shipsBought.push(ship);
@@ -663,9 +668,13 @@ else {
 			.hover(function(e){
 				$(this).toggleClass("fontHighlight");
 			})
-			.click(function(e){
+			.contextmenu(function(e){
 				e.preventDefault(); e.stopPropagation();
 				removeShipFromFleet($(this));
+			})
+			.click(function(e){
+				e.preventDefault(); e.stopPropagation();
+				setAsCommand($(this));
 			})
 
 		var td = tr.insertCell(-1)
@@ -673,6 +682,7 @@ else {
 		var td = tr.insertCell(-1)
 			td.innerHTML = ship.value;
 		tr.appendChild(td);
+		ship.tr = tr;
 
 		var target = document.getElementById("totalFleetCost");
 			target.parentNode.parentNode.insertBefore(tr, target.parentNode);
@@ -692,22 +702,37 @@ else {
 	}
 
 	function removeShipFromFleet(ele){
-		for (var i = window.game.shipsBought.length; i--; i > 0){
-			if (window.game.shipsBought[i].purchaseId == $(ele).data("purchaseId")){
-				window.game.shipsBought.splice(i, 1);
-				$(ele).remove();
+		for (let i = game.shipsBought.length; i >= 0; i--){
+			if (game.shipsBought[i].purchaseId == $(ele).data("purchaseId")){
+				$(game.shipsBought[i].tr).remove();
+				game.shipsBought.splice(i, 1);
 				break;
 			}
 		}
 		$("#totalFleetCost").html(game.getFleetCost());
 		$("#remPV").html("(" + (window.maxPoints - game.getFleetCost()) + ")");
 		game.canSubmit();
-	}
-	
+	}	
+
+	function setAsCommand(ele){
+		for (let i = 0; i < game.shipsBought.length; i++){
+			if (game.shipsBought[i].command){
+				game.shipsBought[i].command = 0;
+			}
+		}
+
+		for (let i = 0; i < game.shipsBought.length; i++){
+			if (game.shipsBought[i].purchaseId == $(ele).data("purchaseId")){
+				game.shipsBought[i].command = 1;
+				$(game.shipsBought[i].tr).addClass("buyCommand");
+			} else $(game.shipsBought[i].tr).removeClass("buyCommand");
+		}
+		game.canSubmit();
+	}	
 
 	function initPreviewCanvas(){
 		var c = document.getElementsByTagName("canvas");
-		for (var i = 0; i < c.length; i++){
+		for (let i = 0; i < c.length; i++){
 			c[i].width = res.x;
 			c[i].height = res.y;
 			c[i].style.width = res.x;

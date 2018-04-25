@@ -119,7 +119,7 @@ class HeavyPlasma extends Plasma {
 	}
 }
 
-class MagCompressor extends Particle {
+class MagCompressor extends Plasma {
 	public $name = "MagCompressor";
 	public $display = "Mag-Plasma Compressor";
 	public $fireMode = "Flash";
@@ -128,7 +128,7 @@ class MagCompressor extends Particle {
 	public static $prio = 0;
 	public $minDmg = 12;
 	public $accDecay = 120;
-	public $dmgLoss = 1;
+	public $dmgLoss = 8;
 	public $shots = 1;
 	public $animColor = "green";
 	public $projSize = 4;

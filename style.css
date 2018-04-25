@@ -516,6 +516,10 @@ table, th, tr, td {
 	height: 20px;
 }
 
+.buyCommand td {
+	color: red;
+}
+
 #game {
 	position: absolute;
 	top: 0px;

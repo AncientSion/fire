@@ -2,7 +2,7 @@
 
 class DmgCalc {
 
-	public static function getWeaponPriority(){
+	public static function setWeaponPriority(){
 		$names = array(
 			"SuperHeavyLaser", "HeavyLaser", "MediumLaser", "LightLaser", "LightParticleBeam", "NeutronLaser", "NeutronAccelerator",
 			"SuperHeavyParticle", "HeavyParticle", "MediumParticle", "LightParticle", "TwinParticleBolter", "FusionCannon", "HeavyFusionCannon",
@@ -44,7 +44,6 @@ class DmgCalc {
 			//Debug::log($i.": ".$val);
 
 			$weapons[$i]::setStaticPriority($val);
-			//Debug::log($weapons[$i]::$prio.": ".$val);
 
 	/*		echo "<tr>";
 			echo "<td>".$weapons[$i]->display."</td>";
@@ -55,10 +54,18 @@ class DmgCalc {
 
 	//	echo "</table>";
 
+
+
+
+
 		usort($weapons, function($a, $b){
 			return $b::$prio - $a::$prio;
 		});
 
+
+	//	for ($i = 0; $i < sizeof($weapons); $i++){
+	//		Debug::log($weapons[$i]->name.": ".$weapons[$i]::$prio);
+	//	}
 
 	/*	echo "</br></br>";
 

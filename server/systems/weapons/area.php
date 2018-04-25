@@ -28,6 +28,7 @@ class EnergyMine extends Area {
 	public $projSpeed = 5;
 	public $reload = 5;
 	public $maxBoost = 1;
+	public $maxRange = 1000;
 	public $effiency = 4;
 	public $integrity = 56;
 	public $powerReq = 10;

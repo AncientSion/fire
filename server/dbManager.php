@@ -376,12 +376,18 @@
 			//Debug::log("setInitialCommandUnit s:".sizeof($units));
 			//for ($i = 0; $i < sizeof($units); $i++){Debug::log("i: ".$i.", id: ".$units[$i]["id"]);}
 
-			usort($units, function($a, $b){
-				return $a["value"] - $b["value"];
-			});
+			//usort($units, function($a, $b){
+			//return $a["value"] - $b["value"];
+			//});
 
-			$id = $units[sizeof($units)-1]["id"];
-			$this->setCommandUnits(array($id));
+			$command = array();
+
+			for ($i = 0; $i < sizeof($units); $i++){
+				if ($units[$i]["command"]){
+					$command[] = $units[$i]["id"];
+				}
+			}
+			$this->setCommandUnits($command);
 		}
 
 		public function insertUnits($userid, $gameid, &$units){

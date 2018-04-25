@@ -27,6 +27,7 @@ function Game(data){
 	this.markers = [];
 	this.ballistics = [];
 	this.antiBallistics = [];
+	this.unitExploAnims = [];
 	this.shortInfo = false;
 	this.turnMode = 0;
 	this.zIndex = 10;
@@ -993,12 +994,13 @@ function Game(data){
 		this.setlastPosCC();
 		this.checkUnitOffsetting();
 
-
-		for (var i = 0; i < this.ships.length; i++){
-			this.ships[i].setSupportImage();
-			this.ships[i].getAttachDivs();
+		if (game.phase == 2){
+			for (var i = 0; i < this.ships.length; i++){
+				this.ships[i].setSupportImage();
+				this.ships[i].getAttachDivs();
+			}
 		}
-		
+			
 		$("#combatLog").find("tbody")
 			.append($("<tr>")
 				.append($("<td>").html("Phase concluded"))
@@ -1353,6 +1355,7 @@ function Game(data){
 
 	this.setCC = function(){
 		if (this.turn == 1 && this.phase == -1){return;}
+		if (this.phase == 1 && game.phase == 2){return;}
 
 		if (this.phase == -1 || this.phase > 2){
 		 	this.setlastPosCC();
@@ -1376,6 +1379,7 @@ function Game(data){
 	this.setPreMoveCC = function(){
 		for (var i = 0; i < this.ships.length; i++){
 			if (!this.ships[i].ship && !this.ships[i].squad || this.ships[i].status == "jumpOut"){continue;}
+			if ((this.ships[i].ship || this.ships[i].squad) && this.ships[i].movesThisPhase()){continue;}
 
 			for (var j = 0; j < this.ships.length; j++){
 				if (this.ships[j].ship || this.ships[j].squad){continue;}
@@ -2057,7 +2061,7 @@ function Game(data){
 		this.getAllResolvingFireOrders();
 		this.getAreaShotDetails();
 		this.getFireAnimationDetails();
-		this.getUnitExploDetails();
+		this.getAllUnitExplos();
 
 		$("#combatlogWrapper")
 			.css("width", 450)
@@ -2091,12 +2095,13 @@ function Game(data){
 	}
 
 	this.resolveFire = function(){
-		console.log("resolveFire");
 		this.resetImageData();
 		this.getAllResolvingFireOrders();
 		this.getShotDetails();
 		this.getFireAnimationDetails();
-		this.getUnitExploDetails();
+	
+		this.getAllUnitExplos();
+		//this.animateUnitExplos();
 
 		//$("#unitGUI").hide(); $(".chatWrapper").hide();
 		$("#combatlogWrapper").show();
@@ -2280,69 +2285,18 @@ function Game(data){
     	return graphics.explos[range(0, graphics.explos.length-1)];
     }
 
-	this.getUnitExploDetails = function(){
-		console.log("getUnitExploDetails");
-		window.animations = [];
+	this.getAllUnitExplos = function(){
+		console.log("getAllUnitExplos");
 
-		for (var i = 0; i < game.ships.length; i++){
-			if (!game.ships[i].deployed){continue;}
-
-			var color = "#ff3d00";
-			if (game.ships[i].friendly){
-				color = "#27e627";
-			}
-
-			var anim = {
-				anims: [],
-				done: 0,
-				animating: 0,
-				id: game.ships[i].id,
-				html: ""
-			}
-
-			var base = {x: game.ships[i].drawX, y: game.ships[i].drawY};
-			if (!game.ships[i].ship){
-				var counter = 0;
-				for (var j = 0; j < game.ships[i].structures.length; j++){
-					if (game.ships[i].structures[j].isDestroyedThisTurn()){
-						counter++;
-						var real = game.ships[i].getUnitPosition(j);
-						for (var k = 0; k < 1+(this.ships[i].squad*4); k++){
-							anim.anims.push({
-								u: game.ships[i].structures[j],
-								t: [0 - k*6 - counter*20, 50],
-								s: game.ships[i].getExplosionSize(j) + (range(-1, 1) *  game.ships[i].getExplosionSize(j)/3),
-								x: base.x + real.x + (range(-1, 1) * 5),
-								y: base.y + real.y + (range(-1, 1) * 5),
-							});
-						}
-					}
-				}
-				anim.html += "A total of <font color='" + "yellow" + "'>" + counter + "</font> elements from <font weight='bold' color='" + color + "'>Unit #" + anim.id + "</font> were destroyed or disengaged.";
-				if (this.ships[i].isDestroyed()){anim.html += " The unit is completly wiped."}
-			}
-			else if (game.ships[i].ship && game.ships[i].isDestroyedThisTurn()){
-				anim.html += "<font color='" + color + "'>Unit #" + anim.id + " " + game.ships[i].getCallSign() + "</font> ";
-				if (game.ships[i].getSystemByName("Reactor").destroyed){
-					anim.html +=  " suffered critical reactor damage and was destroyed.";
-				}
-				else anim.html +=  " suffered catastrophic hull damage and was destroyed.";
-
-				for (var j = 0; j < 25; j++){
-					anim.anims.push({
-						u: game.ships[i],
-						t: [0 - j-40, 100],
-						s: range (5, 40),
-						x: base.x + (range(-1, 1) * range(0, game.ships[i].size / 3)),
-						y: base.y + (range(-1, 1) * range(0, game.ships[i].size / 3)),
-					})
-				}
-			}
+		for (var i = 0; i < this.ships.length; i++){
+			if (!this.ships[i].deployed){continue;}
+			var data = this.ships[i].getSelfExplo();
 		
-			if (anim.anims.length){
-				animations.push(anim);
+			if (data.entries.length){
+				this.unitExploAnims.push(data);
 			}
 		}
+		return true;
 	}
 
 	this.animateAllFireOrders = function(){
@@ -2504,36 +2458,37 @@ function Game(data){
 			fxCtx.clearRect(0, 0, res.x, res.y);
 
 			var allDone = 1;
-			for (var i = 0; i < window.animations.length; i++){
-				if (!window.animations[i].done){
-					if (!window.animations[i].animating){
-						window,animations[i].animating = 1;
-						cam.setFocusToPos(game.getUnit(window.animations[i].id).getPlannedPos());
+			for (var i = 0; i < game.unitExploAnims.length; i++){
+				if (!game.unitExploAnims[i].done){
+					if (!game.unitExploAnims[i].animating){
+						game.unitExploAnims[i].animating = 1;
+						cam.setFocusToPos(game.getUnit(game.unitExploAnims[i].id).getPlannedPos());
 						game.redraw();
 					}
 
 					var done = 1;
 
-					for (var j = 0; j < window.animations[i].anims.length; j++){
-						if (window.animations[i].anims[j].t[0] > 0){
-							drawUnitExplo(
-								window.animations[i].anims[j].x,
-								window.animations[i].anims[j].y,
-								//window.animations[i].anims[j].img,
-								window.animations[i].anims[j].s,
-								window.animations[i].anims[j].t[0],
-								window.animations[i].anims[j].t[1]
-							)
-						}
-						
-						if (window.animations[i].anims[j].t[0] > window.animations[i].anims[j].t[1] * 0.6){
-							window.animations[i].anims[j].u.doDraw = 0;
-							game.redraw();
-						}
+					for (var j = 0; j < game.unitExploAnims[i].entries.length; j++){
+						for (var k = 0; k < game.unitExploAnims[i].entries[j].anims.length; k++){
+							if (game.unitExploAnims[i].entries[j].anims[k].t[0] > 0){
+								drawUnitExplo(
+									game.unitExploAnims[i].entries[j].anims[k].x,
+									game.unitExploAnims[i].entries[j].anims[k].y,
+									game.unitExploAnims[i].entries[j].anims[k].s,
+									game.unitExploAnims[i].entries[j].anims[k].t[0],
+									game.unitExploAnims[i].entries[j].anims[k].t[1]
+								)
+							}
+							
+							if (game.unitExploAnims[i].entries[j].anims[k].t[0] > game.unitExploAnims[i].entries[j].anims[k].t[1] * 0.6){
+								game.unitExploAnims[i].entries[j].u.doDraw = 0;
+								game.redraw();
+							}
 
-						if (window.animations[i].anims[j].t[0] < window.animations[i].anims[j].t[1]){
-							window.animations[i].anims[j].t[0]++;
-							done = 0;
+							if (game.unitExploAnims[i].entries[j].anims[k].t[0] < game.unitExploAnims[i].entries[j].anims[k].t[1]){
+								game.unitExploAnims[i].entries[j].anims[k].t[0]++;
+								done = 0;
+							}
 						}
 					}
 
@@ -2542,8 +2497,8 @@ function Game(data){
 						break;
 					}
 					else {
-						window.animations[i].done = 1;
-						window.animations[i].animating = 0;
+						game.unitExploAnims[i].done = 1;
+						game.unitExploAnims[i].animating = 0;
 						game.createMiscLogEntry(i);
 					}
 				}
@@ -2563,8 +2518,8 @@ function Game(data){
 			.find("tbody")
 				.append(
 				$("<tr>")
-					.append($("<td>").attr("colSpan", 9).css("font-size", 14).html(window.animations[i].html))
-					.data("shipid", window.animations[i].id)
+					.append($("<td>").attr("colSpan", 9).css("font-size", 14).html(game.unitExploAnims[i].html))
+					.data("shipid", game.unitExploAnims[i].id)
 					.hover(
 						function(){
 						var data = $(this).data();
@@ -3616,7 +3571,6 @@ Game.prototype.create = function(data){
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships[i].setImage();
 		this.ships[i].createBaseDiv();
-		if (game.turn == 1 && game.phase == -1){continue;}
 		this.ships[i].getAttachDivs();
 		this.ships[i].setSupportImage();
 	}

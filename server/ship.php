@@ -1272,12 +1272,11 @@ class Medium extends Ship {
 
 		for ($j = 0; $j < sizeof($this->primary->systems); $j++){
 			if ($this->primary->systems[$j]->destroyed){continue;}
-
 			$this->primary->systems[$j]->singleCritTest($turn, 0);
 		}
 
 
-		if (sizeof($potential) || $this->primary->emDmg){
+		if (sizeof($potential) || array_sum($potential) || $this->primary->emDmg){
 			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
 				if ($this->primary->systems[$j]->name == "Reactor"){
 					$this->primary->systems[$j]->applyPowerSpike($turn, $potential, $this->primary->emDmg);

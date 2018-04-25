@@ -107,7 +107,7 @@
 	}
 
 	public function getGeneralData(){
-		Debug::log("getGeneralData for game ".$this->gameid);
+		//Debug::log("getGeneralData for game ".$this->gameid);
 		$gd = DBManager::app()->getGameDetails($this->gameid);
 
 		$this->name = $gd["name"];
@@ -120,7 +120,7 @@
 		$this->wave = $gd["reinforceTurn"];
 		$this->playerstatus = DBManager::app()->getPlayerStatus($this->gameid);
 
-		$this->weapons = DmgCalc::getWeaponPriority();
+		$this->weapons = DmgCalc::setWeaponPriority();
 	}
 
 	public function verifyFleetCost($units){

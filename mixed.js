@@ -59,7 +59,31 @@ Mixed.prototype.getPostMovePos = function(){
 }
 
 Mixed.prototype.drawMovePlan = function(){
-	if (this.mission.arrived){return;}
+	//if (this.mission.arrived){return;}
+
+
+	planCtx.strokeStyle = "#00ea00";
+	if (!this.friendly){
+		planCtx.strokeStyle = "red";
+	}
+
+	planCtx.globalAlpha = 0.4;
+	planCtx.lineWidth = 1;
+	planCtx.translate(cam.o.x, cam.o.y);
+	planCtx.scale(cam.z, cam.z);
+
+	planCtx.beginPath();
+	planCtx.moveTo(this.x, this.y);
+
+	for (var i = 0; i < this.actions.length; i++){
+		if (this.actions[i].type == "move"){
+			planCtx.lineTo(this.actions[i].x, this.actions[i].y);
+			planCtx.stroke();
+		}
+	}
+	planCtx.closePath();
+		
+
 	var target = this.getTarget();
 	var tPos;
 	var origin = this.getPlannedPos();
@@ -74,9 +98,6 @@ Mixed.prototype.drawMovePlan = function(){
 	var impulse = this.getCurSpeed();
 	var color = "red";
 
-	planCtx.globalAlpha = 0.5;
-	planCtx.translate(cam.o.x, cam.o.y);
-	planCtx.scale(cam.z, cam.z);
 	planCtx.beginPath();
 	planCtx.moveTo(origin.x, origin.y);
 
@@ -90,6 +111,7 @@ Mixed.prototype.drawMovePlan = function(){
 		if (!this.friendly){
 		planCtx.strokeStyle = "red";
 		} else planCtx.strokeStyle = "#00ea00";
+		planCtx.globalAlpha = 0.7;
 		planCtx.stroke();
 		planCtx.beginPath();
 		planCtx.moveTo(step.x, step.y);
@@ -465,6 +487,21 @@ Mixed.prototype.setPreFireSize = function(){
 }
 
 Mixed.prototype.setLayout = function(){
+	console.log(this.id);
+	this.setBaseLayout();
+
+	if (this.mission.type == 1 && this.mission.arrived && this.mission.arrived < game.turn){
+		this.setPatrolLayout();
+	}
+	return;
+
+
+
+
+
+
+
+
 	if (!this.mission.arrived){
 		this.setBaseLayout();
 	}
@@ -480,6 +517,8 @@ Mixed.prototype.setLayout = function(){
 			this.setBaseLayout();
 		}
 		else {
+			this.setBaseLayout();
+			return;
 			var roam = 1;
 			for (var i = 0; i < this.cc.length; i++){
 				var u = game.getUnit(this.cc[i]);
@@ -742,4 +781,47 @@ Mixed.prototype.attachDivClickFunction = function(){
 		}
 	}
 	else game.getUnit($(this).data("id")).select();
+}
+
+Mixed.prototype.getSelfExplo = function(){
+	console.log(this.id);
+
+	var base = {x: this.drawX, y: this.drawY};
+
+	var data = {
+		entries: [],
+		done: 0,
+		animating: 0,
+		id: this.id,
+		html: ""
+	}
+
+	var color = "#ff3d00";
+	if (this.friendly){
+		color = "#27e627";
+	}
+
+	var counter = 0;
+	for (var j = 0; j < this.structures.length; j++){
+		if (!this.structures[j].isDestroyedThisTurn()){continue;}
+
+		var explo = {u: this.structures[j], anims: []};
+
+		counter++;
+		var real = this.getUnitPosition(j);
+		console.log(real);
+		for (var k = 0; k < 1; k++){
+			explo.anims.push({
+				t: [0 - k*6 - counter*20, 50],
+				s: this.getExploSize(j), 
+				x: base.x + real.x,
+				y: base.y + real.y,
+			});
+		}
+		data.entries.push(explo);
+	}
+	data.html += "A total of <font color='" + "yellow" + "'>" + counter + "</font> elements from <font weight='bold' color='" + color + "'>Unit #" + this.id + "</font> were destroyed or disengaged.";
+	if (this.isDestroyed()){data.html += " The unit is completly wiped."}
+
+	return data;
 }

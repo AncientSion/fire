@@ -371,9 +371,6 @@ Ship.prototype.doHover = function(){
 		this.resetMoveTranslation();
 	}
 
-	if (game.phase == 2){
-		//this.drawPastMovePlan();
-	}
 	this.drawMovePlan();
 	this.drawIncomingMovePlan();
 	this.drawTargetMovePlan();
@@ -1231,44 +1228,6 @@ Ship.prototype.drawMovePlan = function(){
 	this.resetMoveTranslation();
 }
 
-Ship.prototype.drawPastMovePlan = function(){
-	this.setMoveTranslation();
-
-	planCtx.strokeStyle = "yellow";
-
-	var i;
-	for (i = 0; i < this.actions.length; i++){
-		if (this.actions[i].turn == game.turn){
-			var action = this.actions[i];
-			planCtx.beginPath();
-			
-			if (i == 0){
-				var p = {x: this.x, y: this.y};
-				planCtx.moveTo(p.x, p.y);
-			}
-			else {
-				planCtx.moveTo(this.actions[i-1].x, this.actions[i-1].y);
-			}
-						
-			if (action.type == "move"){
-				planCtx.lineTo(action.x, action.y);
-				planCtx.closePath();
-				planCtx.stroke();
-			}
-			else if (action.type == "turn"){
-				planCtx.beginPath();
-				planCtx.arc(action.x, action.y, 3, 0, 2*Math.PI, false);
-				planCtx.stroke();
-			}
-			
-			planCtx.closePath();
-		}
-	}
-	planCtx.strokeStyle = "black";
-	this.drawPlanMarker();
-	this.resetMoveTranslation();
-}
-
 Ship.prototype.getShortInfo = function(){
 	var ele = game.ui.shortInfo;
 	if (this.userid == game.userid){
@@ -1852,10 +1811,10 @@ Ship.prototype.getHitSection = function(fire){
 	return getPointInDir(-this.size/4, a, 0, 0);
 }
 
-Ship.prototype.getExplosionSize = function(j){
+Ship.prototype.getExploSize = function(j){
 	if (this.ship){return this.size;}
 	else if (this.squad){return this.structures[j].size/2;}
-	else if (this.flight){return this.structures[j].mass*0.5;}
+	else if (this.flight){return this.structures[j].mass*0.4;}
 	else if (this.salvo){return this.structures[j].mass*2;}
 }
 
@@ -2014,10 +1973,6 @@ Ship.prototype.getPlannedPos = function(){
 		return new Point(this.actions[this.actions.length-1].x, this.actions[this.actions.length-1].y);
 	}
 	return new Point(this.x, this.y);
-}
-
-Ship.prototype.getDrawPos = function(){
-	return new Point(this.drawX, this.drawY);
 }
 	
 Ship.prototype.getGamePos = function(){
@@ -2724,7 +2679,7 @@ Ship.prototype.doRandomOffset = function(shift){
 	} else a = range(0, 360);
 	
 	var p = getPointInDir(20, a, o.x, o.y);
-	console.log(p);
+	//console.log(p);
 
 	this.drawX = p.x;
 	this.drawY = p.y;
@@ -4000,5 +3955,47 @@ Ship.prototype.getEvents = function(){
 			}
 		}
 	}
+	return data;
+}
+
+
+Ship.prototype.getSelfExplo = function(){
+
+	var data = {
+		entries: [],
+		done: 0,
+		animating: 0,
+		id: this.id,
+		html: ""
+	}
+
+	if (this.isDestroyedThisTurn()){
+
+		var base = {x: this.drawX, y: this.drawY};
+
+		var color = "#ff3d00";
+		if (this.friendly){
+			color = "#27e627";
+		}
+
+		anim.html += "<font color='" + color + "'>Unit #" + this.id + " " + this.getCallSign() + "</font> ";
+		if (this.getSystemByName("Reactor").destroyed){
+			anim.html +=  " suffered critical reactor damage and was destroyed.";
+		}
+		else anim.html +=  " suffered catastrophic hull damage and was destroyed.";
+
+		var explo = {u: this, anims: []};
+
+		for (var j = 0; j < 25; j++){
+			explo.anims.push({
+				t: [0 - j-40, 100],
+				s: range (5, 40),
+				x: base.x + (range(-1, 1) * range(0, this.size / 3)),
+				y: base.y + (range(-1, 1) * range(0, this.size / 3)),
+			})
+		}
+		data.entries.push(explos);
+	}
+
 	return data;
 }

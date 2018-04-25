@@ -28,19 +28,18 @@ if (isset($_POST["type"])) {
 	}
 	else if ($_POST["type"] == "buyInitialFleet") {
 		$rem = $manager->verifyFleetCost($_POST["ships"]);
-		if ($rem >= 0){
-			if ($dbManager->processInitialBuy($_POST["userid"], $_POST["gameid"], $_POST["ships"], $rem, $_POST["faction"])){
-				if ($dbManager->gameIsReady($_POST["gameid"])) {
-					if ($dbManager->startGame($_POST["gameid"])) {
-						header("Location: game.php?gameid=".$_POST["gameid"]);
-					}
-				}
-				else {
-					header("Location: lobby.php");
+		if ($rem < 0){echo "Invalid Fleet";}
+	
+		if ($dbManager->processInitialBuy($_POST["userid"], $_POST["gameid"], $_POST["ships"], $rem, $_POST["faction"])){
+			if ($dbManager->gameIsReady($_POST["gameid"])) {
+				if ($dbManager->startGame($_POST["gameid"])) {
+					header("Location: game.php?gameid=".$_POST["gameid"]);
 				}
 			}
+			else {
+				header("Location: lobby.php");
+			}
 		}
-		else echo "Invalid Fleet";
 	}
 	else if ($_POST["type"] == "Deploy"){
 		if (isset($_POST["initial"])){

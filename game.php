@@ -13,6 +13,7 @@
 	echo "<script> window.gameid = ".$gameid."; window.userid = ".$userid.";</script>";
 
 
+
 ?>
 
 
@@ -548,11 +549,11 @@
 							game.fireOrders[i].weapon.createCombatLogEntry(game.fireOrders[i]);
 						}
 
-						game.getUnitExploDetails();
+						game.getAllUnitExplos();
 						game.handlePostFireOrderAnim();
 
-						for (var i = 0; i < window.animations.length; i++){
-							window.animations[i].done = 1;
+						for (var i = 0; i < game.unitExplos.length; i++){
+							game.unitExplos[i].done = 1;
 							game.createMiscLogEntry(i);
 						}
 						//game.fireResolved();

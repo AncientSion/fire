@@ -748,18 +748,6 @@ System.prototype.setFireOrder = function(targetid, pos){
 	this.setSystemBorder();
 }
 
-Launcher.prototype.setFireOrder = function(){
-	if (this.odds <= 0){return;}
-	this.fireOrders.push(
-		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, x: pos.x, y: pos.y, weaponid: this.id, 
-		shots: 0, req: -1, notes: "", hits: -1, resolved: 0}
-	);
-	this.selected = 0;
-	this.validTarget = 0;
-	this.highlight = 0;
-	this.setSystemBorder();
-}
-
 System.prototype.unsetFireOrder = function(){
 	for (var i = this.fireOrders.length-1; i >= 0; i--){
 		if (this.fireOrders[i].turn == game.turn){
@@ -3158,6 +3146,18 @@ Launcher.prototype.getTraverseRating = function(){
 	return this.loads[this.ammo].traverse;
 }
 
+Launcher.prototype.setFireOrder = function(){
+	if (this.odds <= 0){return;}
+	this.fireOrders.push(
+		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, x: pos.x, y: pos.y, weaponid: this.id, 
+		shots: 0, req: -1, notes: "", hits: -1, resolved: 0}
+	);
+	this.selected = 0;
+	this.validTarget = 0;
+	this.highlight = 0;
+	this.setSystemBorder();
+}
+
 Launcher.prototype.getAimDetailsUnit = function(target, final, accLoss, row){
 	var final = 100;
 	var traverseMod = this.getTraverseMod(target);
@@ -3296,10 +3296,6 @@ Launcher.prototype.updateSystemDetailsDiv = function(){
 		.find("#ammo").html("<font color='red'>" + this.getRemAmmo() + "</font> / " + this.getMaxAmmo());
 }
 
-
-
-
-
 Launcher.prototype.setupLauncherLoadout = function(e){
 	var div = $("#weaponDiv");
 	if (div.hasClass("disabled")){
@@ -3313,7 +3309,6 @@ Launcher.prototype.setupLauncherLoadout = function(e){
 		$(div).addClass("disabled");
 	}
 }
-
 
 Launcher.prototype.addAmmo = function(ele, all){
 	var tMass = 0;
@@ -3709,7 +3704,7 @@ Area.prototype.getAnimation = function(fire){
 }
 
 Area.prototype.getAimData = function(target, final, dist, row){
-	if (target){
+	if (target){		
 		if (this.freeAim){
 			row
 			.append($("<td>").attr("colSpan", 4).html("<span>Unable to target specific unit.</span>"))
@@ -3718,12 +3713,19 @@ Area.prototype.getAimData = function(target, final, dist, row){
 		} else return Weapon.prototype.getAimData.call(this, target, final, dist, row);
 	}
 	else {
-		row
-		.append($("<td>"))
-		.append($("<td>").attr("colSpan", 2).html("</span>Maximal deviation:</span>"))
-		.append($("<td>").attr("colSpan", 1).html(Math.floor(dist/100 * this.getAccuracy()) + "<span> px</span>"));
-		this.validTarget = 1;
-		this.odds = 1;
+		if (this.maxRange && dist > this.maxRange){
+			row.append($("<td>").attr("colSpan", 4).addClass("red").html("Insufficient Range, max: " + this.maxRange));
+			this.validTarget = 0;
+			this.odds = 0;
+		}
+		else {
+			row
+			.append($("<td>"))
+			.append($("<td>").attr("colSpan", 2).html("</span>Maximal deviation:</span>"))
+			.append($("<td>").attr("colSpan", 1).html(Math.floor(dist/100 * this.getAccuracy()) + "<span> px</span>"));
+			this.validTarget = 1;
+			this.odds = 1;
+		}
 	}
 }
 
@@ -3932,6 +3934,8 @@ Area.prototype.getSysDiv = function(){
 
 	//$(table).append($("<tr>").append($("<td>").html("Max Range")).append($("<td>").html(this.maxRange)));
 	$(table).append($("<tr>").append($("<td>").html("Area of Effect")).append($("<td>").html(this.aoe + "px")));
+		$(table).append($("<tr>").append($("<td>").html("Max Range")).append($("<td>").html(this.maxRange)));
+	//$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").addClass("accuracy").html(this.getAccuracy() + "px / 100px")));
 	$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").addClass("accuracy").html(this.getAccuracy() + "px / 100px")));
 	$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("Up to <span class='red'>" + this.maxShots + "</span> / cycle")));
 

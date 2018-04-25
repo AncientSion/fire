@@ -206,11 +206,12 @@ class Mixed extends Ship {
 			}
 		}
 		else if ($this->mission->type == 2){ // STRIKE
-			Debug::log("STRIKE");
 			
 			$t = $gd->getUnit($this->mission->targetid);
 
-			if (!($t->ship || $t->squad) && $t->mission->targetid == $this->id){ // direct targetting
+			Debug::log("STRIKE @ ".get_class($t)." #".$t->id);
+
+			if (!($t->ship || $t->squad) && $t->mission->targetid == $this->id){ // FLIGHT SALVO
 				if ($this->mission->arrived){ // at target, circle patrol
 					$tPos = $this->getCurPos();
 					$type = "patrol";
@@ -237,11 +238,11 @@ class Mixed extends Ship {
 						$this->mission->arrived = $gd->turn;
 					}
 					else  if ($impulse < $dist){
-						//Debug::log("close in");
+						Debug::log("close in");
 						$tPos = Math::getPointInDirection($impulse, $angle, $origin->x, $origin->y);
 					}
 					else {
-						//Debug::log("move arrival");
+						Debug::log("move arrival");
 						$this->mission->arrived = $gd->turn;
 						if ($t->mission->targetid == $this->id){
 							//Debug::log("so enemy arrived, too !");
@@ -250,7 +251,7 @@ class Mixed extends Ship {
 					}
 				}
 			}
-			else {
+			else { // SHIP SQUAD
 				$tPos = $t->getCurPos();
 				$origin = $this->getCurPos();
 				$impulse = $this->getCurSpeed();
@@ -260,11 +261,13 @@ class Mixed extends Ship {
 				$this->mission->x = $tPos->x;
 				$this->mission->y = $tPos->y;
 
-				if ($impulse < $dist){
+				if ($this->mission->arrived){ // DRAG
+				}
+				else if ($impulse < $dist){ // ON ROUTE; take own speed OUT OR RANGE
 					//Debug::log("close in");
 					$tPos = Math::getPointInDirection($impulse, $angle, $origin->x, $origin->y);
 				}
-				else {
+				else { // ON ROUTE; REACH
 					//Debug::log("arrival");
 					$this->mission->arrived = $gd->turn;
 				}
@@ -272,7 +275,7 @@ class Mixed extends Ship {
 		}
 
 		$move = new Action(-1, $this->id, $gd->turn, $type, $dist, $tPos->x, $tPos->y, $angle, 0, 0, 0, 1, 1);
-		//Debug::log("adding move to => ".$move->x."/".$move->y);
+		Debug::log("adding move to => ".$move->x."/".$move->y.", dist: ".$dist);
 		$this->actions[] = $move;
 		$this->moveSet = 1;
 	}
