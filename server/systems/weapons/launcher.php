@@ -4,7 +4,6 @@ class Launcher extends Weapon {
 	public $type = "Launcher";
 	public $animation = "projectile";
 	public $fireMode = "Ballistic";
-	public static $prio =  8;
 	public $usage = -1;
 
 	public $loads = array();

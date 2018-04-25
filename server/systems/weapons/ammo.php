@@ -41,7 +41,6 @@ class Torpedo extends Missile {
 }
 
 class Warhead extends Weapon {
-	public static $prio =  10;
 	public $name = "Warhead";
 	public $display = "Warhead";
 	public $type = "Warhead";
@@ -70,6 +69,7 @@ class Warhead extends Weapon {
 class Vran extends Torpedo {
 	public $name = "Vran";
 	public $display = "Light Particle Torpedo";
+	public static $prio = 0;
 	public $minDmg = 28;
 	public $maxDmg = 32;
 	public $integrity = 5;
@@ -86,6 +86,7 @@ class Vran extends Torpedo {
 class Vranoth extends Vran {
 	public $name = "Vranoth";
 	public $display = "Medium Particle Torpedo";
+	public static $prio = 0;
 	public $minDmg = 34;
 	public $maxDmg = 46;
 	public $integrity = 8;
@@ -101,6 +102,7 @@ class Vranoth extends Vran {
 class VranothKa extends Vranoth {
 	public $name = "VranothKa";
 	public $display = "Heavy Particle Torpedo";
+	public static $prio = 0;
 	public $minDmg = 54;
 	public $maxDmg = 72;
 	public $integrity = 11;
@@ -116,6 +118,7 @@ class VranothKa extends Vranoth {
 class Hasta extends Missile {
 	public $name = "Hasta";
 	public $display = "Light Anti-Fighter Missiles";
+	public static $prio = 0;
 	public $minDmg = 15;
 	public $maxDmg = 18;
 	public $mass = 2;
@@ -130,6 +133,7 @@ class Hasta extends Missile {
 class Javelin extends Missile {
 	public $name = "Javelin";
 	public $display = "Impr. Multirole Missiles";
+	public static $prio = 0;
 	public $minDmg = 32;
 	public $maxDmg = 44;
 	public $mass = 4;
@@ -145,6 +149,7 @@ class Javelin extends Missile {
 class Triarii extends Missile {
 	public $name = "Triarii";
 	public $display = "Heavy Multirole Missiles";
+	public static $prio = 0;
 	public $minDmg = 41;
 	public $maxDmg = 53;
 	public $mass = 4;
@@ -159,6 +164,7 @@ class Triarii extends Missile {
 class Vanguard extends Missile {
 	public $name = "Vanguard";
 	public $display = "Light Interceptor Missiles";
+	public static $prio = 0;
 	public $minDmg = 9;
 	public $maxDmg = 12;
 	public $mass = 2;
@@ -173,6 +179,7 @@ class Vanguard extends Missile {
 class Needle extends Missile {
 	public $name = "Needle";
 	public $display = "Light Anti-Fighter Missiles";
+	public static $prio = 0;
 	public $minDmg = 15;
 	public $maxDmg = 18;
 	public $mass = 2;
@@ -187,6 +194,7 @@ class Needle extends Missile {
 class Naga extends Missile {
 	public $name = "Naga";
 	public $display = "Multirole Missiles";
+	public static $prio = 0;
 	public $minDmg = 30;
 	public $maxDmg = 42;
 	public $mass = 4;
@@ -201,6 +209,7 @@ class Naga extends Missile {
 class Cyclops extends Missile {
 	public $name = "Cyclops";
 	public $display = "Light Antiship Missiles";
+	public static $prio = 0;
 	public $minDmg = 50;
 	public $maxDmg = 68;
 	public $mass = 5;
@@ -215,6 +224,7 @@ class Cyclops extends Missile {
 class Titan extends Missile {
 	public $name = "Titan";
 	public $display = "Heavy Antiship Missiles";
+	public static $prio = 0;
 	public $minDmg = 70;
 	public $maxDmg = 88;
 	public $mass = 7;

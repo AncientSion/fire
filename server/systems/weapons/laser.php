@@ -31,6 +31,7 @@ class bLaser extends Laser {
 	public $name = "bLaser";
 	public $rakeTime = 60;
 	public $beamWidth = 3;
+	public static $prio = 0;
 	public $minDmg = 80;
 	public $maxDmg = 110;
 	public $optRange = 400;
@@ -80,6 +81,7 @@ class LightParticleBeam extends Laser {
 	public $animColor = "blue";
 	public $rakeTime = 25;
 	public $beamWidth = 1;
+	public static $prio = 0;
 	public $minDmg = 25;
 	public $maxDmg = 32;
 	public $optRange = 450;
@@ -104,6 +106,7 @@ class HeavyPlasmaMaser extends Laser {
 	public $display = "Heavy Plasma Maser";
 	public $rakeTime = 60;
 	public $beamWidth = 4;
+	public static $prio = 0;
 	public $minDmg = 160;
 	public $maxDmg = 200;
 	public $reload = 4;
@@ -125,6 +128,7 @@ class LightLaser extends Laser {
 	public $animColor = "red";
 	public $rakeTime = 60;
 	public $beamWidth = 2;
+	public static $prio = 0;
 	public $minDmg = 60;
 	public $maxDmg = 80;
 	public $optRange = 250;
@@ -149,6 +153,7 @@ class MediumLaser extends LightLaser {
 	public $display = "Medium Laser";
 	public $rakeTime = 60;
 	public $beamWidth = 3;
+	public static $prio = 0;
 	public $minDmg = 80;
 	public $maxDmg = 110;
 	public $optRange = 400;
@@ -168,6 +173,7 @@ class HeavyLaser extends LightLaser {
 	public $display = "Heavy Laser";
 	public $rakeTime = 60;
 	public $beamWidth = 4;
+	public static $prio = 0;
 	public $minDmg = 160;
 	public $maxDmg = 200;
 	public $reload = 4;
@@ -188,6 +194,7 @@ class SuperHeavyLaser extends HeavyLaser {
 	public $display = "Super-Heavy Laser";
 	public $rakeTime = 100;
 	public $beamWidth = 5;
+	public static $prio = 0;
 	public $minDmg = 190;
 	public $maxDmg = 230;
 	public $optRange = 850;
@@ -204,10 +211,10 @@ class SuperHeavyLaser extends HeavyLaser {
 }
 
 class NeutronLaser extends Laser {
-	public static $prio =  503;
 	public $name = "NeutronLaser";
 	public $display = "Neutron Laser";
 	public $animColor = "yellow";
+	public static $prio = 0;
 	public $beamWidth = 2;
 	public $minDmg = 95;
 	public $maxDmg = 130;
@@ -235,6 +242,7 @@ class MolecularSlicer extends Laser {
 	public $rakeTime = 80;
 	public $animColor = "purple";
 	public $beamWidth = 4;
+	public static $prio = 0;
 	public $minDmg = 270;
 	public $maxDmg = 340;
 	public $optRange = 0;
@@ -259,6 +267,7 @@ class NeutronAccelerator extends Laser {
 	public $rakeTime = 50;
 	public $animColor = "yellow";
 	public $beamWidth = 2;
+	public static $prio = 0;
 	public $minDmg = 45;
 	public $maxDmg = 60;
 	public $optRange = 400;

@@ -4,7 +4,6 @@ class Area extends Weapon {
 	public $type = "Area";
 	public $animation = "area";
 	public $deviate = 0;
-	public static $prio =  12;
 	public $usage = -1;
 	public $freeAim = 1;
 	public $shots = 1;
@@ -19,6 +18,7 @@ class EnergyMine extends Area {
 	public $name = "EnergyMine";
 	public $display = "Energy Mine";
 	public $fireMode = "Flash";
+	public static $prio = 0;
 	public $minDmg = 10;
 	public $accDecay = 0;
 	public $deviate = 0;

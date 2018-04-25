@@ -41,6 +41,8 @@ if (isset($_SESSION["userid"])){
 		$myGames = $dbManager->getGames($_SESSION["userid"]);
 	}
 
+	//echo DmgCalc::getWeaponPriority();
+
 	$check = array();
 
 	$myGamesElement = "<table id='activeGames'>";

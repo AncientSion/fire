@@ -20,7 +20,7 @@ class Pulse extends Weapon {
 class LightPulse extends Pulse {
 	public $name = "LightPulse";
 	public $display = "Light Pulse Cannon";
-	public static $prio =  441;
+	public static $prio = 0;
 	public $minDmg = 13;
 	public $maxDmg = 17;
 	public $accDecay = 180;
@@ -41,7 +41,7 @@ class LightPulse extends Pulse {
 class MediumPulse extends Pulse {
 	public $name = "MediumPulse";
 	public $display = "Medium Pulse Cannon";
-	public static $prio =  431;
+	public static $prio = 0;
 	public $minDmg = 23;
 	public $maxDmg = 30;
 	public $accDecay = 120;
@@ -62,7 +62,7 @@ class MediumPulse extends Pulse {
 class HeavyPulse extends Pulse {
 	public $name = "HeavyPulse";
 	public $display = "Heavy Pulse Cannon";
-	public static $prio =  421;
+	public static $prio = 0;
 	public $minDmg = 39;
 	public $maxDmg = 54;
 	public $accDecay = 80;
@@ -83,6 +83,7 @@ class HeavyPulse extends Pulse {
 class FusionPulsar extends Pulse {
 	public $name = "FusionPulsar";
 	public $display = "Fusion Pulsar";
+	public static $prio = 0;
 	public $minDmg = 25;
 	public $maxDmg = 32;
 	public $accDecay = 180;
@@ -104,7 +105,7 @@ class FusionPulsar extends Pulse {
 class LightPlasmaPulse extends LightPulse {
 	public $name = "LightPlasmaPulse";
 	public $display = "Light Plasma Pulse Cannon";
-	public static $prio =  231;
+	public static $prio = 0;
 	public $minDmg = 13;
 	public $maxDmg = 17;
 	public $animColor = "darkGreen";
@@ -134,7 +135,7 @@ class LightPlasmaPulse extends LightPulse {
 class MediumPlasmaPulse extends LightPlasmaPulse {
 	public $name = "MediumPlasmaPulse";
 	public $display = "Medium Plasma Pulse Cannon";
-	public static $prio =  221;
+	public static $prio = 0;
 	public $minDmg = 23;
 	public $maxDmg = 30;
 	public $accDecay = 120;
@@ -157,7 +158,7 @@ class MediumPlasmaPulse extends LightPlasmaPulse {
 class HeavyPlasmaPulse extends MediumPlasmaPulse {
 	public $name = "HeavyPlasmaPulse";
 	public $display = "Heavy Plasma Pulse Cannon";
-	public static $prio =  211;
+	public static $prio = 0;
 	public $minDmg = 39;
 	public $maxDmg = 54;
 	public $accDecay = 80;
@@ -180,6 +181,7 @@ class HeavyPlasmaPulse extends MediumPlasmaPulse {
 class LightEMPulse extends LightPulse {
 	public $name = "LightEMPulse";
 	public $display = "Light EM Pulse Cannon";
+	public static $prio = 0;
 	public $minDmg = 3;
 	public $maxDmg = 3;
 	public $accDecay = 180;

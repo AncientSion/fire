@@ -2857,7 +2857,7 @@ Ship.prototype.setDogFightImage = function(){
 
 Ship.prototype.setSupportImage = function(){
 	//if (this.movesThisPhase()){return;}
-	console.log("setSupportImage #" + this.id);
+	//console.log("setSupportImage #" + this.id);
 	var friendlies = [];
 	var hostiles = [];
 	var friendly = [];

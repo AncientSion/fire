@@ -3,7 +3,6 @@
 class Plasma extends Weapon {
 	public $type = "Particle";
 	public $animColor = "darkGreen";
-	public static $prio =  200;
 	public $melt = 50;
 	public $plasma = 1;
 
@@ -29,7 +28,7 @@ class Plasma extends Weapon {
 class LightPlasmaShredder extends Plasma {
 	public $name = "LightPlasmaShredder";
 	public $display = "Light Plasma Shredder";
-	public static $prio =  223;
+	public static $prio = 0;
 	public $minDmg = 15;
 	public $maxDmg = 20;
 	public $accDecay = 120;
@@ -54,7 +53,7 @@ class LightPlasmaShredder extends Plasma {
 class LightPlasma extends Plasma {
 	public $name = "LightPlasma";
 	public $display = "Light Plasma Cannon";
-	public static $prio =  233;
+	public static $prio = 0;
 	public $minDmg = 36;
 	public $maxDmg = 47;
 	public $accDecay = 120;
@@ -77,7 +76,7 @@ class LightPlasma extends Plasma {
 class MediumPlasma extends Plasma {
 	public $name = "MediumPlasma";
 	public $display = "Medium Plasma Cannon";
-	public static $prio =  232;
+	public static $prio = 0;
 	public $minDmg = 48;
 	public $maxDmg = 66;
 	public $accDecay = 120;
@@ -100,7 +99,7 @@ class MediumPlasma extends Plasma {
 class HeavyPlasma extends Plasma {
 	public $name = "HeavyPlasma";
 	public $display = "Heavy Plasma Cannon";
-	public static $prio =  231;
+	public static $prio = 0;
 	public $minDmg = 75;
 	public $maxDmg = 98;
 	public $accDecay = 120;
@@ -124,9 +123,9 @@ class MagCompressor extends Particle {
 	public $name = "MagCompressor";
 	public $display = "Mag-Plasma Compressor";
 	public $fireMode = "Flash";
-	public static $prio =  205;
 	public $usage = 2;
 	public $freeAim = 0;
+	public static $prio = 0;
 	public $minDmg = 12;
 	public $accDecay = 120;
 	public $dmgLoss = 1;

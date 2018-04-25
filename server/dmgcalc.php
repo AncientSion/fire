@@ -41,7 +41,10 @@ class DmgCalc {
 			}
 
 			$val = round($val);
-			$weapons[$i]::$prio = $val;
+			//Debug::log($i.": ".$val);
+
+			$weapons[$i]::setStaticPriority($val);
+			//Debug::log($weapons[$i]::$prio.": ".$val);
 
 	/*		echo "<tr>";
 			echo "<td>".$weapons[$i]->display."</td>";
@@ -55,6 +58,7 @@ class DmgCalc {
 		usort($weapons, function($a, $b){
 			return $b::$prio - $a::$prio;
 		});
+
 
 	/*	echo "</br></br>";
 
@@ -74,8 +78,11 @@ class DmgCalc {
 			echo "<td>".$weapons[$i]::$prio."</td>";
 			echo "<td>".$i."</td>";
 			echo "</tr>";
-	*/		$weapons[$i]::$prio = $i;
+	*/		
+			$weapons[$i]::setStaticPriority($i);
 		}
+
+		//foreach ($weapons as $wpn){Debug::log($wpn->name."/".$wpn::$prio);}
 		return $weapons;
 	//	echo "</table>";
 	}

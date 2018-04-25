@@ -774,7 +774,6 @@
 			$stmt->bindParam(":turn", $turn);
 			$stmt->bindParam(":phase", $phase);
 			$stmt->bindParam(":status", $status);
-			$stmt->bindParam(":gameid", $gameid);
 			$stmt->bindParam(":gameid1", $gameid);
 			$stmt->bindParam(":gameid2", $gameid);
 

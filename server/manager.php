@@ -107,7 +107,7 @@
 	}
 
 	public function getGeneralData(){
-		//Debug::log("getGeneralData for game ".$this->gameid);
+		Debug::log("getGeneralData for game ".$this->gameid);
 		$gd = DBManager::app()->getGameDetails($this->gameid);
 
 		$this->name = $gd["name"];

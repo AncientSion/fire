@@ -212,35 +212,7 @@ window.ajax = {
 	},
 
 	confirmFleetPurchase: function(userid, gameid, ships, callback){
-		//console.log(ships);
-		//return;
-		/*for (var i = 0; i < ships.length; i++){
-			for (var j = ships[i].upgrades.length-1; j >= 0; j--){
-				if (ships[i].upgrades[j].loads.length == 0){
-					ships[i].upgrades.splice(j, 1);
-				}
-			}
-
-			for (var j = 0; j < ships[i].upgrades.length; j++){
-				for (var k = ships[i].upgrades[j].loads.length-1; k >= 0; k--){
-					if (ships[i].upgrades[j].loads[k].amount == 0){
-						ships[i].upgrades[j].loads.splice(k, 1);
-					}
-				}
-			}
-
-			for (var j = 0; j < ships[i].upgrades.length; j++){
-				if (ships[i].upgrades[j].name == "Hangar"){
-					for (var k = ships[i].upgrades[j].loads.length-1; k >= 0; k--){
-						ships[i].upgrades[j].loads[k] = {
-							name: ships[i].upgrades[j].loads[k].name,
-							amount: ships[i].upgrades[j].loads[k].amount
-						}
-					}
-				}
-			}
-		}*/
-
+		
 		$.ajax({
 			type: "POST",
 			url: "postGameData.php",

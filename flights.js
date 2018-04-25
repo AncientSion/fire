@@ -92,7 +92,7 @@ Flight.prototype.getNewMission = function(){
 }
 
 Flight.prototype.setImage = function(){
-	console.log("setImage #" + this.id);
+	//console.log("setImage #" + this.id);
 
 	if (!this.mission.arrived){
 		this.setPreMoveImage();

@@ -11,7 +11,6 @@ class Weapon extends System {
 	public $projSize = 10;
 	public $projSpeed = 5;
 	public $animation = "projectile";
-	public static $prio = 0;
 	public $priority = 0;
 
 	public $particle = 0;
@@ -33,6 +32,7 @@ class Weapon extends System {
 		$this->start = $start;
 		$this->end = $end;
 		$this->priority = static::$prio;
+		//Debug::log("setting priority to: ".$this->priority.", from static: ".static::$prio);
         parent::__construct($id, $parentId, $output, $width);
 	}
 

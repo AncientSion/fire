@@ -31,9 +31,9 @@ class System {
 	public $damaged = 0;
 	public $tiny = 0;
 	public $accDecay = 0;
+	public static $prio = 0;
 	public $minDmg = 0;
 	public $maxDmg = 0;
-	public static $prio =  0;
 	public $usage = -3;
 	public $freeAim = 0;
 	public $width = 1;
@@ -46,6 +46,10 @@ class System {
 		$this->parentId = $parentId;
 		$this->output = $output;
 		$this->width = $width;
+	}
+
+	static function setStaticPriority($val){
+		static::$prio = $val;
 	}
 
 	public function setState($turn, $phase){

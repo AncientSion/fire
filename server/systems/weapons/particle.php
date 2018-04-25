@@ -2,7 +2,6 @@
 
 class Particle extends Weapon {
 	public $type = "Particle";
-	public static $prio =  400;
 	public $particle = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
@@ -13,7 +12,7 @@ class Particle extends Weapon {
 class TwinParticleBolter extends Particle {
 	public $name = "TwinParticleBolter";
 	public $display = "Twin Particle Bolter";
-	public static $prio =  450;
+	public static $prio = 0;
 	public $minDmg = 9;
 	public $maxDmg = 13;
 	public $accDecay = 180;
@@ -36,7 +35,7 @@ class TwinParticleBolter extends Particle {
 class LightParticle extends Particle {
 	public $name = "LightParticle";
 	public $display = "Light Particle Bolter Array";
-	public static $prio =  440;
+	public static $prio = 0;
 	public $minDmg = 12;
 	public $maxDmg = 16;
 	public $accDecay = 180;
@@ -61,7 +60,7 @@ class LightParticle extends Particle {
 class MediumParticle extends LightParticle {
 	public $name = "MediumParticle";
 	public $display = "Medium Particle Cannon";
-	public static $prio =  430;
+	public static $prio = 0;
 	public $minDmg = 28;
 	public $maxDmg = 36;
 	public $accDecay = 120;
@@ -84,7 +83,7 @@ class MediumParticle extends LightParticle {
 class HeavyParticle extends MediumParticle {
 	public $name = "HeavyParticle";
 	public $display = "Heavy Particle Cannon";
-	public static $prio =  420;
+	public static $prio = 0;
 	public $minDmg = 54;
 	public $maxDmg = 69;
 	public $accDecay = 80;
@@ -107,7 +106,7 @@ class HeavyParticle extends MediumParticle {
 class SuperHeavyParticle extends HeavyParticle {
 	public $name = "SuperHeavyParticle";
 	public $display = "Super-Heavy Particle Cannon";
-	public static $prio =  410;
+	public static $prio = 0;
 	public $minDmg = 64;
 	public $maxDmg = 82;
 	public $accDecay = 60;
@@ -130,7 +129,7 @@ class SuperHeavyParticle extends HeavyParticle {
 class FusionCannon extends Particle {
 	public $name = "FusionCannon";
 	public $display = "Medium Fusion Cannon";
-	public static $prio =  425;
+	public static $prio = 0;
 	public $minDmg = 34;
 	public $maxDmg = 42;
 	public $accDecay = 100;
@@ -152,7 +151,7 @@ class FusionCannon extends Particle {
 class HeavyFusionCannon extends Particle {
 	public $name = "HeavyFusionCannon";
 	public $display = "Heavy Fusion Cannon";
-	public static $prio =  426;
+	public static $prio = 0;
 	public $minDmg = 40;
 	public $maxDmg = 52;
 	public $accDecay = 100;
@@ -175,6 +174,7 @@ class AntimatterConverter extends Particle {
 	public $name = "AntimatterConverter";
 	public $display = "Antimatter-Converterr";
 	public $fireMode = "Flash";
+	public static $prio = 0;
 	public $minDmg = 16;
 	public $accDecay = 80;
 	public $shots = 1;
@@ -199,6 +199,7 @@ class AntimatterConverter extends Particle {
 class LightEMNeedler extends Particle {
 	public $name = "LightEMNeedler";
 	public $display = "Light EM-Needler";
+	public static $prio = 0;
 	public $minDmg = 9;
 	public $maxDmg = 12;
 	public $accDecay = 240;
@@ -226,6 +227,7 @@ class LightEMNeedler extends Particle {
 class ShockCannon extends Particle {
 	public $name = "ShockCannon";
 	public $display = "42mm Shock Cannon";
+	public static $prio = 0;
 	public $minDmg = 6;
 	public $maxDmg = 8;
 	public $accDecay = 120;
