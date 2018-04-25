@@ -810,7 +810,7 @@ function Game(data){
 
 			center.x /= count;
 			center.y /= count;
-			console.log(center);
+			//console.log(center);
 
 			center.x = Math.round(center.x);
 			center.y = Math.round(center.y);
@@ -829,7 +829,7 @@ function Game(data){
 				x: center.x,
 				y: center.y,
 				s: 2000,
-				b: Math.round(d*1.75),
+				b: Math.round(d*2),
 				c: "green"
 			});
 		}
