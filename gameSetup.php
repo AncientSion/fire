@@ -702,7 +702,7 @@ else {
 	}
 
 	function removeShipFromFleet(ele){
-		for (let i = game.shipsBought.length; i >= 0; i--){
+		for (let i = game.shipsBought.length-1; i >= 0; i--){
 			if (game.shipsBought[i].purchaseId == $(ele).data("purchaseId")){
 				$(game.shipsBought[i].tr).remove();
 				game.shipsBought.splice(i, 1);
