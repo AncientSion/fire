@@ -2555,7 +2555,7 @@ function Game(data){
 					)
 					.append($("<td>")
 						.addClass("green font14")
-						.html(this.ships[i].name)
+						.html(this.ships[i].name + "</br>" + this.ships[i].notes)
 					)
 					.append($("<td>")
 						.addClass("green font14")
@@ -2883,18 +2883,15 @@ Game.prototype.getUnitByClick = function(pos){
 
 	for (var i = 0; i < this.ships.length; i++){
 		var r = Math.max(10, this.ships[i].size/5);
-		if (! this.ships[i].destroyed){
-			if (this.ships[i].isReady){
-				var shipPos = this.ships[i].getDrawPos();
-				//if (pos.x < shipPos.drawX + r && pos.x > shipPos.drawX - r){
-				//	if (pos.y > shipPos.drawY - r && pos.y < shipPos.drawY + r){
-				if (pos.x < shipPos.x + r && pos.x > shipPos.x - r){
-					if (pos.y > shipPos.y - r && pos.y < shipPos.y + r){
-						var dist = getDistance(shipPos, pos);
-						if (dist < max){
-							pick = this.ships[i].id;
-						}
-					}
+		if (this.ships[i].destroyed){continue;}
+		if (!this.ships[i].isReady){continue;}
+
+		var shipPos = this.ships[i].getDrawPos();
+		if (pos.x < shipPos.x + r && pos.x > shipPos.x - r){
+			if (pos.y > shipPos.y - r && pos.y < shipPos.y + r){
+				var dist = getDistance(shipPos, pos);
+				if (dist < max){
+					pick = this.ships[i].id;
 				}
 			}
 		}
@@ -2906,6 +2903,32 @@ Game.prototype.getUnitByClick = function(pos){
 	return this.getUnit(pick).getParent();
 }
 
+Game.prototype.snapByTurnAttempt = function(pos){
+	var pick = 0;
+	var max = 100;
+
+	for (var i = 0; i < this.ships.length; i++){
+		var r = 5;
+
+		if (this.ships[i].destroyed){continue;}
+		if (!this.ships[i].isReady){continue;}
+
+		var shipPos = this.ships[i].getDrawPos();
+		if (pos.x < shipPos.x + r && pos.x > shipPos.x - r){
+			if (pos.y > shipPos.y - r && pos.y < shipPos.y + r){
+				var dist = getDistance(shipPos, pos);
+				if (dist < max){
+					pick = this.ships[i].id;
+				}
+			}
+		}
+	}
+
+	if (!pick){
+		return false;
+	}
+	return this.getUnit(pick).getParent();
+}
 
 Game.prototype.setShipDivs = function(val){
 	var x = 10;

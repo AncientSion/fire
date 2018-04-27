@@ -652,7 +652,7 @@ Squadron.prototype.createBaseDiv = function(){
 			.click(function(){game.getUnit($(this).parent().parent().parent().parent().data("shipId")).requestJumpOut();
 			})
 		}
-		else {
+		else if (this.isJumpingOut()){
 			jumpDiv.find("img").toggleClass("selected");
 		}
 
@@ -1336,23 +1336,23 @@ Squadron.prototype.getSelfExplo = function(){
 
 	var counter = 0;
 	for (var j = 0; j < this.structures.length; j++){
-		if (this.structures[j].isDestroyedThisTurn()){
+		if (!this.structures[j].isDestroyedThisTurn()){continue;}
 
-			var explo = {u: this.structures[j], anims: []};
+		var explo = {u: this.structures[j], anims: []};
 
-			counter++;
-			var real = this.getUnitPosition(j);
-			for (var k = 0; k < 4; k++){
-				explo.anims.push({
-					t: [0 - k*6 - counter*20, 50],
-					s: this.getExploSize(j) + (range(-1, 1) *  this.getExploSize(j)/3),
-					x: base.x + real.x + (range(-1, 1) * 5),
-					y: base.y + real.y + (range(-1, 1) * 5),
-				});
-			}
+		counter++;
+		var real = this.getUnitPosition(j);
+		for (var k = 0; k < 4; k++){
+			explo.anims.push({
+				t: [0 - k*6 - counter*20, 50],
+				s: this.getExploSize(j) + (range(-1, 1) *  this.getExploSize(j)/3),
+				x: base.x + real.x + (range(-1, 1) * 5),
+				y: base.y + real.y + (range(-1, 1) * 5),
+			});
 		}
 		data.entries.push(explo);
 	}
+
 	data.html += "A total of <font color='" + "yellow" + "'>" + counter + "</font> elements from <font weight='bold' color='" + color + "'>Unit #" + this.id + "</font> were destroyed or disengaged.";
 	if (this.isDestroyed()){data.html += " The unit is completly wiped."}
 

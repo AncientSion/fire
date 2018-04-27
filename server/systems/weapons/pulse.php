@@ -23,7 +23,7 @@ class LightPulse extends Pulse {
 	public static $prio = 0;
 	public $minDmg = 13;
 	public $maxDmg = 17;
-	public $accDecay = 180;
+	public $accDecay = 10;
 	public $shots = 1;
 	public $animColor = "brown";
 	public $projSize = 2;

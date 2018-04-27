@@ -60,6 +60,12 @@
 	}
 
 	public function getClientData(){
+
+		/*foreach ($this->playerstatus as $player){
+			foreach ($player as $key => $value){
+				Debug::log($key.": ".$value);
+			}
+		}*/
 		Debug::close();
 
 		//var_export($this->getUnit(2)->getEndState(1));
@@ -510,6 +516,10 @@
 							break;
 						}
 					}
+
+					if (floor($data["cost"]) > floor($playerstatus[$i]["value"])){$add--; continue;}
+
+
 					$picks[] = $data;
 					$add--;
 					//Debug::log("picking");
@@ -517,6 +527,8 @@
 				}
 			}
 		}
+
+
 
 		//for ($i = 0; $i < sizeof($picks); $i++){
 		//	if ($picks[$i]["eta"] > 3){

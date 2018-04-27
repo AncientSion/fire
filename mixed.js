@@ -820,6 +820,7 @@ Mixed.prototype.getSelfExplo = function(){
 		}
 		data.entries.push(explo);
 	}
+	
 	data.html += "A total of <font color='" + "yellow" + "'>" + counter + "</font> elements from <font weight='bold' color='" + color + "'>Unit #" + this.id + "</font> were destroyed or disengaged.";
 	if (this.isDestroyed()){data.html += " The unit is completly wiped."}
 

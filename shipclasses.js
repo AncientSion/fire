@@ -746,11 +746,31 @@ Ship.prototype.switchTurnMode = function(){
 	this.setTurnData();
 }
 
+Ship.prototype.hasFocus = function(){
+	return this.move;
+}
+
 Ship.prototype.handleTurning = function(e, o, f, pos){
-	var t = {x: e.clientX - offset.x, y: e.clientY - offset.y};
+
+	var unit = game.getUnitByClick(pos);
+	var a = 0;
+	var t;
+
+	if (unit && unit.move == 0 && this.move == 1){
+		console.log("sanp");
+		a = getAngleFromTo(this.getPlannedPos(), unit.getPlannedPos());
+		t = unit.getDrawPos();
+		t.x += cam.o.x;
+		t.y += cam.o.y;
+	}
+	else {
+		console.log("free");
+		t = {x: e.clientX, y: e.clientY};
+		a = getAngleFromTo(o, pos);
+		a = addAngle(f, a);
+	}
+
 	var max = this.getMaxTurnAngle();
-	var a =  getAngleFromTo(o, pos);
-		a = (addAngle(f, a));
 
 	if (a > 180){a = (360-a) *-1;}
 
@@ -789,7 +809,7 @@ Ship.prototype.drawMouseVector = function(o, t){
 	mouseCtx.moveTo(o.x * cam.z + cam.o.x, o.y * cam.z + cam.o.y);
 	mouseCtx.lineTo(t.x, t.y);
 	mouseCtx.closePath();
-	mouseCtx.strokeStyle = "white";
+	mouseCtx.strokeStyle = "lightBlue";
 	mouseCtx.lineWidth = 1;
 	mouseCtx.stroke();
 }
@@ -1471,13 +1491,13 @@ Ship.prototype.createMoveStartEntry = function(){
 
 Ship.prototype.createActionEntry = function(move){
 	if (this.isRolling()){
-		this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " is beginning a ROLL manover.</span></td>");
+		this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " is initiating a ROLL manover.</span></td>");
 	}
 	else if (this.hasStoppedRolling()){
 		this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " has canceled its ongoing ROLL manover.</span></td>");
 	}
 	else if (this.isFlipping()){
-		this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " is beginning a FLIP manover.</span></td>");
+		this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " is initiating a FLIP manover.</span></td>");
 	}
 }
 
@@ -2536,13 +2556,12 @@ Ship.prototype.expandDiv = function(div){
 			jumpDiv.find("img")
 			.click(function(){game.getUnit($(this).parent().parent().parent().data("shipId")).requestJumpOut();
 			});
-			structContainer.append(jumpDiv);
 		}
 		else if (this.isJumpingOut()){
 			jumpDiv.find("img").addClass("selected");
-			structContainer.append(jumpDiv);
 		}
 
+		$(structContainer).append(jumpDiv);
 	}
 
 	// System options positioning
@@ -2594,7 +2613,7 @@ Ship.prototype.expandDiv = function(div){
 }
 
 Ship.prototype.canBeIssuedToJumpOut = function(){
-	if (game.turn > 1 && game.phase == 3 && this.friendly && this.status != "jumpOut"){return true;}
+	if (game.phase == 3 && this.friendly && this.status != "jumpOut"){return true;}
 	return false;
 }
 
