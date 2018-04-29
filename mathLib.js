@@ -70,13 +70,32 @@ function adjustForFacing(facing, angle){
 	return angle - facing;
 
 }
+
+function targetInArc(oPos, tPos, oFacing, system){
+	for (var i = 0; i < system.arc.length; i++){
+		var	start;
+		var	end;
+
+		if (this.rolled){
+			if (system.arc[i][0] < system.arc[i][1]){
+				start = 360 - system.arc[i][1];
+				end = 360 - system.arc[i][0];
+			}
+			else {
+				end = 360 - system.arc[i][0];
+				start = 360 - system.arc[i][1];
+			}
+		}
+		else {
+			start = system.arc[i][0];
+			end = system.arc[i][1];
+		}
+
+		return isInArc(getCompassHeadingOfPoint(oPos, tPos, oFacing), start, end);
+	}
+}
 	
 function isInArc(direction, start, end){
-	//console.log("direction: "+direction + " start: " + start + " end: " + end);	
-	//direction: 300 start: 360 end: 240
-	
-	//$("#curArc").html("vector angle, start, end: " + direction + " - " + start + " - " + end);
-	
 	if (start == end)
 		return true;
 		
@@ -99,29 +118,18 @@ function getCompassHeadingOfPoint(observer, target, facing){
 	var dY = target.y - observer.y;
 	var heading = 0.0;			
 	if (dX == 0){
-		if (dY>0){
-			heading = 180.0;
-		}
-		else{
-			heading = 0.0;
-		}		
+		if (dY > 0){heading = 180.0;}
+		else heading = 0.0;
 	}
 	else if (dY == 0){
-		if (dX>0){
-			heading = 90.0;
-		}
-		else{
-			heading = 270.0;
-		}
-	}else if (dX>0 && dY<0 ){
-		heading = radianToDegree(Math.atan(dX/Math.abs(dY)));
-	}else if (dX>0 && dY>0 ){
-		heading = radianToDegree(Math.atan(dY/dX)) + 90;
-	}else if (dX<0 && dY>0){
-		heading = radianToDegree(Math.atan(Math.abs(dX)/dY)) + 180;
-	}else if (dX<0 && dY<0){
-		heading = radianToDegree(Math.atan(dY/dX)) + 270;
+		if (dX > 0){heading = 90.0;}
+		else heading = 270.0;
 	}
+	else if (dX > 0 && dY < 0){heading = radianToDegree(Math.atan(dX/Math.abs(dY)));}
+	else if (dX > 0 && dY > 0){heading = radianToDegree(Math.atan(dY/dX)) + 90;}
+	else if (dX < 0 && dY > 0){heading = radianToDegree(Math.atan(Math.abs(dX)/dY)) + 180;}
+	else if (dX < 0 && dY < 0){heading = radianToDegree(Math.atan(dY/dX)) + 270;}
+	
 	heading = addToDirection(heading, -90);
 	heading = addToDirection(heading, -facing);
 

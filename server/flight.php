@@ -96,8 +96,6 @@ class Flight extends Mixed {
 		return ceil($req);
 	}
 
-
-
 	public function getLockEffect($target){
 		if ($target->ship || $target->squad){
 			return 0;

@@ -1609,7 +1609,7 @@ Sensor.prototype.select = function(e){
 	var selected = false;
 	var unit;
 
-	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || aUnit < 0){
+	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || aUnit < 0 || game.turnMode){
 		return false;
 	}
 	else if (game.system && game.system != this.id && !this.selected){return false;}
@@ -2099,7 +2099,7 @@ Weapon.prototype.select = function(e){
 		return;
 	}
 	else if (game.phase == -2 || game.turn == 1 && game.phase == -1){return;}
-	else if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || this.parentId < 0){
+	else if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || this.parentId < 0 || game.turnMode){
 		return false;
 	}
 	else {
@@ -3207,7 +3207,7 @@ Launcher.prototype.getEffiency = function(){
 
 Launcher.prototype.select = function(e){
 
-	if (this.destroyed || this.disabled || this.locked){return false;}
+	if (this.destroyed || this.disabled || this.locked || game.turnMode){return false;}
 
 	if (game.phase == -2){
 		if (!this.loadout || game.system && game.system != this.id){return;}
@@ -4083,7 +4083,7 @@ Hangar.prototype.select = function(e){
 	var selected = false;
 	var ship = game.getUnit(parentId);
 
-	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit){
+	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || game.turnMode){
 		return false;
 	}
 	else if (game.phase == -2){

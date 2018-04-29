@@ -200,6 +200,7 @@ class DmgCalc {
 				Debug::log(" => OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$dmg->overkill." dmg");
 			}
 			else {
+				$dmg->structDmg = $remInt;
 				Debug::log(" => destroying non-ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg);
 			}
 		}

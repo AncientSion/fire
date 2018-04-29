@@ -111,7 +111,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	//	return;
 	//}
 	
-	var shooterLoc = shooter.getPlannedPos();
+	var shooterPos = shooter.getPlannedPos();
 	var facing = shooter.getPlannedFacing();					
 	var targetData1 = $("#weaponAimTableWrapper").find("#targetInfo").find("#targetData1");
 	var targetData2 = $("#weaponAimTableWrapper").find("#targetInfo").find("#targetData2");
@@ -154,16 +154,17 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			var target;
 			var section;
 			var angle;
+			var shooterAngle = addAngle(facing, getAngleFromTo(shooterPos, target.getPlannedPos()));
 
 			//dist = Math.max(50, game.getFireDistance(shooter, target));
 			dist = game.getFireDistance(shooter, target);
 			if (shooter.ship || shooter.squad){
 				if (target.salvo){
-					angle = getAngleFromTo(target.getTrajectory(), shooterLoc);
+					angle = getAngleFromTo(target.getTrajectory(), shooterPos);
 					angle = addAngle(-shooter.getPlannedFacing(), angle);
 				}
 				else {
-					angle = getAngleFromTo(target.getPlannedPos(), shooterLoc);
+					angle = getAngleFromTo(target.getPlannedPos(), shooterPos);
 					angle = addAngle(target.getPlannedFacing(), angle);
 				}
 			} else angle = range(0, 359);
@@ -185,7 +186,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 				else if (shooter.flight){
 					if (target.id == shooter.mission.targetid){
 						lockString += " (Mission)";
-					} else lockString += " (Escort)";
+					} else if (shooter.mission.type == 1 && shooter.mission.arrived){lockString += " (Patrol)"};
 				}
 				lockString += "</span>";
 			}
@@ -263,6 +264,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 	})
 
 	var validWeapon = false;
+	var snap = false;
 
 	if (target){
 		if (target.salvo){
@@ -286,6 +288,11 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			shooter.drawEW();
 		}
 
+		if (shooter.move && target && !target.move && !shooter.getRemSpeed()){
+			snap = true;
+			console.log("shoter facing " + facing);
+			console.log("angle to target: " + shooterAngle);
+		}
 
 		if ((target.squad || target.flight) && target.getStringHitChance().length > 15){
 			weaponInfo.append(
@@ -294,7 +301,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 						.attr("colSpan", 5)
 						.css("color", "yellow")
 						.css("font-size", 18)
-						.html("- Targeting a combined unit, chance to hit will slightly difer -")));
+						.html("- Targeting a mixed unit, chance to hit will slightly difer -")));
 		}
 
 		for (var i = 0; i < active.length; i++){
@@ -311,13 +318,15 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 					if (system instanceof Launcher){
 						legalTarget = 0;
 					}
-					else if (target.salvo && !shooter.posJSONSystemArc(shooterLoc, pos, facing, system)){
+					else if (target.salvo && !targetInArc(shooterPos, pos, facing, system)){
 						legalTarget = 0;
 					}
 				}
-				else if (!shooter.posJSONSystemArc(shooterLoc, pos, facing, system)){
-					inArc = 0;
-				}
+
+				else if (!targetInArc(shooterPos, pos, facing, system)){
+					if (snap && Math.abs(shooterAngle) < 1 && (active[i].arc[0][0] == 0 || active[i].arc[0][1] == 360)){
+					} else inArc = 0;
+				}	
 			}
 			else if (shooter.flight){
 				if (!cc){

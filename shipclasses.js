@@ -738,7 +738,7 @@ Ship.prototype.switchTurnMode = function(){
 		mouseCtx.clearRect(0, 0, res.x, res.y);
 		$("#epButton").addClass("disabled");
 	}	
-	else {
+	else if (!this.hasSystemsSelected()){
 		game.turnMode = 1;
 		turn.set(this);
 		$("#epButton").removeClass("disabled");
@@ -759,15 +759,18 @@ Ship.prototype.handleTurning = function(e, o, f, pos){
 	if (unit && unit.move == 0 && this.move == 1){
 		console.log("sanp");
 		a = getAngleFromTo(this.getPlannedPos(), unit.getPlannedPos());
+		a = addAngle(f, a);
 		t = unit.getDrawPos();
-		t.x += cam.o.x;
-		t.y += cam.o.y;
+		t.x = t.x * cam.z + cam.o.x;
+		t.y = t.y * cam.z + cam.o.y;
+		game.snapTurn = unit.id;
 	}
 	else {
 		console.log("free");
 		t = {x: e.clientX, y: e.clientY};
 		a = getAngleFromTo(o, pos);
 		a = addAngle(f, a);
+		game.snapTurn = 0;
 	}
 
 	var max = this.getMaxTurnAngle();
@@ -815,6 +818,9 @@ Ship.prototype.drawMouseVector = function(o, t){
 }
 
 Ship.prototype.handleTurnAttempt = function(dest){
+	if (game.snapTurn){
+		dest = game.getUnit(game.snapTurn).getGamePos();
+	}
 	var origin = this.getPlannedPos();
 	var a = getAngleFromTo(origin, dest);
 		a = addAngle(this.getPlannedFacing(), a);
@@ -822,7 +828,7 @@ Ship.prototype.handleTurnAttempt = function(dest){
 	var max = this.getMaxTurnAngle();
 
 	if (isInArc(getCompassHeadingOfPoint(origin, dest, 0), this.turnAngles.start, this.turnAngles.end)){
-		if (Math.abs(a) >= 2){
+		if (Math.abs(a) >= 1){
 			this.issueTurn(a);
 		}
 	} else if (a < 0){
@@ -838,6 +844,7 @@ Ship.prototype.hasPlannedMoves = function(){
 }
 
 Ship.prototype.issueTurn = function(a){
+	console.log(a);
 	if (this.actions.length && this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0){
 		this.actions[0].a += Math.round(a);
 		if (this.actions[0].a > 360){
@@ -1219,7 +1226,7 @@ Ship.prototype.drawMovePlan = function(){
 		planCtx.strokeStyle = "red";
 	}
 
-	planCtx.globalAlpha = 0.5;
+	planCtx.globalAlpha = 0.7;
 	planCtx.beginPath();
 	planCtx.moveTo(this.x, this.y);
 
@@ -1438,7 +1445,7 @@ Ship.prototype.attachLogEntry = function(html){
 }
 
 Ship.prototype.createCritLogEntry = function(){
-	if (!this.ship){return;}
+	if (!this.ship){return false;}
 	
 	var html = "<td style='padding: 10px' colSpan=4><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is subject to critical effects.</td>" + "<td colSpan=5>";
 	var expand = "";
@@ -1448,6 +1455,7 @@ Ship.prototype.createCritLogEntry = function(){
 	}
 	if (expand.length > 2){
 		this.attachLogEntry(html + expand);
+		return true;
 	}
 }
 
@@ -2155,7 +2163,6 @@ Ship.prototype.createBaseDiv = function(){
 	div.append(topDiv);
 
 	$(this.expandDiv($(div[0])))
-		.drag()
 		.find(".structContainer")
 			.contextmenu(function(e){e.stopPropagation(); e.preventDefault()})
 			.end()
@@ -2174,6 +2181,9 @@ Ship.prototype.createBaseDiv = function(){
 				}
 			})
 
+	if (game.turn){
+		div.drag()
+	}
 
 	if (game.phase == 2){
 		$(div).find(".structContainer").show();
@@ -2238,11 +2248,13 @@ Ship.prototype.setAsCommand = function(){
 }
 
 Ship.prototype.expandDiv = function(div){
+
 	div
 	.find(".topDiv")
 	.append($("<div>")
 		.addClass("iconContainer")
 			.hover(function(e){
+				if (!game.turn){return;}
 				if (aUnit){
 					var shooter = game.getUnit(aUnit);
 					var target = game.getUnit($(this).parent().parent().data("shipId"));
@@ -2252,6 +2264,7 @@ Ship.prototype.expandDiv = function(div){
 				}
 			}).
 			click(function(e){
+				if (!game.turn){return;}
 				var shooter = game.getUnit(aUnit);
 				var target = game.getUnit($(this).parent().parent().data("shipId"));
 				if (shooter && target){
@@ -2564,6 +2577,7 @@ Ship.prototype.expandDiv = function(div){
 		$(structContainer).append(jumpDiv);
 	}
 
+
 	// System options positioning
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
@@ -2819,14 +2833,6 @@ Ship.prototype.getBaseImage = function(){
 
 Ship.prototype.setPreFireImage = function(){
 	return;
-}
-
-Ship.prototype.setDogFightImage = function(){
-	//console.log("setDogFightImage " + this.id);
-	if (!this.flight){return;}
-	this.doDraw = 1;
-	this.setPatrolLayout();
-	this.setPatrolImage();
 }
 
 Ship.prototype.setSupportImage = function(){
@@ -3828,11 +3834,11 @@ Ship.prototype.getMaxTurnAngle = function(){
 }
 
 Ship.prototype.drawTurnArcs = function(){
-	var angle = this.getPlannedFacing();
-	var turnAngle = this.getMaxTurnAngle();
-	this.turnAngles = {start: addAngle(0 + turnAngle, angle), end: addAngle(360 - turnAngle, angle)};
+	//var angle = this.getPlannedFacing();
+	//var turnAngle = this.getMaxTurnAngle();
+	//this.turnAngles = {start: addAngle(0 + turnAngle, angle), end: addAngle(360 - turnAngle, angle)};
 
-	return;
+	//return;
 	var center = this.getPlannedPos();
 	var angle = this.getPlannedFacing();
 	var turnAngle = this.getMaxTurnAngle();
@@ -3844,7 +3850,8 @@ Ship.prototype.drawTurnArcs = function(){
 		for (var i = 1; i <= w; i++){			
 			var modAngle = turnAngle * i * j;
 			var newAngle = addToDirection(angle, modAngle);
-			var p = getPointInDir(Math.max(this.getBaseImpulse(), this.getRemSpeed()*2), newAngle, center.x, center.y);
+			//var p = getPointInDir(Math.max(this.getBaseImpulse(), this.getRemSpeed()*2), newAngle, center.x, center.y);
+			var p = getPointInDir(100, newAngle, center.x, center.y);
 			if (turnAngle != 180){
 				moveCtx.beginPath();
 				moveCtx.moveTo(center.x, center.y);
@@ -3941,28 +3948,7 @@ Ship.prototype.doConfirmSystemLoadout = function(){
 	return;
 }
 
-Ship.prototype.posJSONSystemArc = function(origin, target, facing, system){
-	for (var i = 0; i < system.arc.length; i++){
-		var	start;
-		var	end;
-
-		if (this.rolled){
-			if (system.arc[i][0] < system.arc[i][1]){
-				start = 360 - system.arc[i][1];
-				end = 360 - system.arc[i][0];
-			}
-			else {
-				end = 360 - system.arc[i][0];
-				start = 360 - system.arc[i][1];
-			}
-		}
-		else {
-			start = system.arc[i][0];
-			end = system.arc[i][1];
-		}
-
-		return isInArc(getCompassHeadingOfPoint(origin, target, facing), start, end);
-	}
+Ship.prototype.getAngleOff = function(origin, target, facing, system){
 }
 
 Ship.prototype.getEvents = function(){

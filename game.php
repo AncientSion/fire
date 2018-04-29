@@ -549,22 +549,34 @@
 							game.fireOrders[i].weapon.createCombatLogEntry(game.fireOrders[i]);
 						}
 
-						game.getAllUnitExplos();
-						game.handlePostFireOrderAnim();
+						game.createFireFinalEntry();
 
-						for (var i = 0; i < game.unitExplos.length; i++){
-							game.unitExplos[i].done = 1;
+						for (var i = 0; i < game.unitExploAnims.length; i++){
+							for (var j = 0; j < game.unitExploAnims[i].entries.length; j++){
+								game.unitExploAnims[i].entries[j].u.doDraw = 0;
+							}
 							game.createMiscLogEntry(i);
 						}
-						//game.fireResolved();
+
+						game.fireResolved();
 					}
 				}
 				else if (e.keyCode == 109){ // m, cancel move animation
-					if (game.phase == 2){
+					if (game.phase == 1 || game.phase == 2){
 						window.cancelAnimationFrame(anim);
-						game.animFlight = 1; game.animSalvo = 1;
+						for (var i = 0; i < game.ships.length; i++){
+							if (!game.ships[i].actions.length){continue;}
+							game.ships[i].drawX = game.ships[i].actions[game.ships[i].actions.length-1].x;
+							game.ships[i].drawY = game.ships[i].actions[game.ships[i].actions.length-1].y;
+							game.ships[i].drawFacing = game.ships[i].getPlannedFacing();
+						}
+
+						game.animShip = 1; game.animFlight = 1; game.animSalvo = 1;
 						game.endMoveSubPhase();
+						game.animShip = 0; game.animFlight = 0; game.animSalvo = 0;
+
 						game.movementDone();
+						//game.draw();
 					}
 				}
 			}

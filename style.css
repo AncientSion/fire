@@ -43,7 +43,7 @@ table, th, tr, td {
 	font-size: 20px;
 }
 
-#instructWrapper, #nameWrapper {
+#instructWrapper {
 	display: none;
 	position: absolute;
 	background-color: black;
@@ -53,8 +53,23 @@ table, th, tr, td {
 	z-index: 20;
 }
 
-#nameWrapper tr {
+#nameWrapper { 
+	border: 1px solid white;
+	margin: auto;
+}
+
+#nameWrapper table {
+	width: 80%;
+	margin: auto;
+}
+
+#nameWrapper td {
 	font-size: 20px;
+}
+
+#nameWrapper input {
+	font-size: 18px;
+	text-align: center;
 }
 
 .name {
@@ -1251,8 +1266,9 @@ div.integrityFull {
 	margin: auto;
 	width: 95%;
 }
+
 #totalShipCost td {
-	font-size: 22px;
+	font-size: 20px;
 }
 
 .shipDiv th, td {

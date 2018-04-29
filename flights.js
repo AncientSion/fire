@@ -92,7 +92,7 @@ Flight.prototype.getNewMission = function(){
 }
 
 Flight.prototype.setImage = function(){
-	console.log("setImage #" + this.id);
+	//console.log("setImage #" + this.id);
 
 	this.setPreMoveImage();
 	return;
@@ -260,10 +260,9 @@ Flight.prototype.expandDiv = function(div){
 Flight.prototype.supplyAttachDiv = function(div){
 	var color = "red";
 
-	var target = this.getTarget();
 	if (this.friendly){color = "green";}
 	var attachDiv = $("<div>").addClass("attachDiv")
-		.append($("<div>").css("display", "block").addClass("center15 " + color).html("Flight #" + this.id + " --------- Target: " + target.name + " #" + target.id))
+		.append($("<div>").css("display", "block").addClass("center15 " + color).html(this.getAttachDivTargetString()))
 		.data("id", this.id)
 		.click(Mixed.prototype.attachDivClickFunction)
 		.hover(
@@ -302,6 +301,12 @@ Flight.prototype.supplyAttachDiv = function(div){
 
 	div.append(attachDiv);
 	return div;
+}
+
+Flight.prototype.getAttachDivTargetString = function(){
+	var target = this.getTarget();
+	if (this.mission.type == 2){return "Flight #" + this.id + " --------- Target: " + target.name + " #" + target.id;}
+	else return " Patrolling ";
 }
 
 

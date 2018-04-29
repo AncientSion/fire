@@ -43,6 +43,7 @@ function Game(data){
 	this.canSubmit = 0;
 	this.canConfirm = 1;
 	this.drawCircle = 1;
+	this.snapTurn = 0;
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
@@ -970,10 +971,12 @@ function Game(data){
 				this.ships[i].setPostMoveFacing();
 
 				if (this.ships[i].mission.arrived){
+					if (this.ships[i].flight && this.ships[i].mission.type == 1 && this.ships[i].mission.arrived == game.turn){ this.ships[i].setPatrolLayout();}
 					this.ships[i].setPostMoveSize();
 					this.ships[i].setPostMoveImage();
 				}
-			} else if ((this.ships[i].ship || this.ships[i].squad) && this.animShip){
+			}
+			else if ((this.ships[i].ship || this.ships[i].squad) && this.animShip){
 				this.ships[i].setPostMovePosition();
 				this.ships[i].setPostMoveFacing();
 			}
@@ -984,7 +987,7 @@ function Game(data){
 		for (let i = 0; i < this.fireOrders.length; i++){
 			if (this.fireOrders[i].animated){
 				this.fireOrders[i].animated = 0;
-				this.fireOrders[i].aniamting = 0;
+				this.fireOrders[i].animating = 0;
 			}
 		}
 	}
@@ -996,7 +999,7 @@ function Game(data){
 
 		if (game.phase == 2){
 			for (var i = 0; i < this.ships.length; i++){
-				this.ships[i].setSupportImage();
+				if (this.ships[i].ship || this.ships[i].squad){this.ships[i].setSupportImage();}
 				this.ships[i].getAttachDivs();
 			}
 		}
@@ -1016,14 +1019,16 @@ function Game(data){
 				})
 			);
 
-		if (this.events.length && game.phase == 2){
-			game.timeout = setTimeout(function(){
-				$($("#combatLog").find("td")[0]).attr("colSpan", 8)
-				game.resolvePostMoveFire();
-			}, 1000);
-		}
-		else if (this.events.length && game.phase == 1){
-			this.logEvents();
+		if (this.events.length){
+			if (game.phase == 2){
+				game.timeout = setTimeout(function(){
+					$($("#combatLog").find("td")[0]).attr("colSpan", 8)
+					game.resolvePostMoveFire();
+				}, 1000);
+			}
+			else if (game.phase == 1){
+				this.logEvents();
+			}
 		}
 		else {
 			this.animating = 0;
@@ -1056,17 +1061,22 @@ function Game(data){
 	}
 	
 	this.createCritLogEntries = function(){
+		var entry = 0;
+
 		for (let i = 0; i < this.ships.length; i++){
-			this.ships[i].createCritLogEntry();
+			let done = this.ships[i].createCritLogEntry();
+			if (done){entry = 1;}
 		}
 
-		$("#combatLog")
-		.find("tbody")
-			.append($("<tr>")
-				//.append($("<td>").css("font-size", 18).attr("colSpan", 9).html("Firing Phase Resolution concluded")));
-				.append($("<td>").css("height", 5).attr("colSpan", 9)));
+		if (entry){
+			$("#combatLog")
+			.find("tbody")
+				.append($("<tr>")
+					//.append($("<td>").css("font-size", 18).attr("colSpan", 9).html("Firing Phase Resolution concluded")));
+					.append($("<td>").css("height", 5).attr("colSpan", 9)));
 
-		$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+			$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+		}
 	}
 
 	this.createMoraleLogEntries = function(){
@@ -1085,7 +1095,7 @@ function Game(data){
 				game.draw();
 				game.timeout = setTimeout(function(){
 					game.initDeploy();
-				}, 1000);
+				}, 500);
 			});
 		}
 		else if (this.phase == 0){
@@ -1103,7 +1113,7 @@ function Game(data){
 				$(this).hide();
 				game.timeout = setTimeout(function(){
 					game.doResolveMovement();
-				}, 1000);
+				}, 50);
 			});
 		}
 		else if (this.phase == 2){
@@ -1114,7 +1124,7 @@ function Game(data){
 				$(this).hide();
 				game.timeout = setTimeout(function(){
 					game.doResolveMovement();
-				}, 1000);
+				}, 500);
 			});
 		}
 		else if (this.phase == 3){
@@ -1123,7 +1133,7 @@ function Game(data){
 				$(this).hide();
 				game.timeout = setTimeout(function(){
 					game.initDamageControl();
-				}, 1000);
+				}, 500);
 			});
 			
 		}
@@ -2322,8 +2332,8 @@ function Game(data){
 		$("#combatLog")
 		.find("tbody")
 			.append($("<tr>")
-				//.append($("<td>").css("font-size", 18).attr("colSpan", 9).html("Firing Phase Resolution concluded")));
-				.append($("<td>").css("height", 5).attr("colSpan", 9)));
+				.append($("<td>").css("font-size", 16).attr("colSpan", 9).html("- All Fireorders have been animated -")))
+				.append($("<td>").css("height", 5).attr("colSpan", 9));
 
 		$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 	}
@@ -2503,7 +2513,6 @@ function Game(data){
 					}
 				}
 			}
-
 
 			if (allDone){
 				window.cancelAnimationFrame(anim);
@@ -3325,7 +3334,7 @@ Game.prototype.doResolveMovement = function(){
 	this.animSalvo = 0;
 
 	$("#combatlogWrapper")
-	.width(400)
+	.width(500)
 	.css("top", 150).css("left", 250)
 	.show()
 	.find(".combatLogHeader").html("Movement Log").end()

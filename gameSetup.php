@@ -115,13 +115,6 @@ else {
 			<div id="popupText">
 			</div>
 		</div>
-		<div id="nameWrapper">
-			<table>
-				<tr><th>Please name this unit</th></tr>
-				<tr><td class="name"><input type="form"></td></tr>
-				<tr><td class="buttonTD" onclick="doConfirmPurchase()">Confirm Unit Selection</td></td>
-			</table>
-		</div>
 		<table style="width: 700px; top: 200px">
 			<tr>
 				<td style="vertical-align: top;">
@@ -218,7 +211,6 @@ else {
 				$(this).hide();
 			});
 
-		$("#nameWrapper").css("left", 800).css("top", 300)
 		$("#hangarDiv").drag();
 		$("#weaponDiv").drag();
 		$("#crewDiv").drag();
@@ -572,7 +564,6 @@ else {
 
 	function showShipDiv(data){
 		$(".shipDiv").remove();
-		$("#nameWrapper").hide().find("input").attr("placeholder", "Callsign")
 		$("#hangarDiv").addClass("disabled");
 		$("#weaponDiv").addClass("disabled");
 		$("#crewDiv").addClass("disabled");
@@ -598,15 +589,23 @@ else {
 			.css("left", "450px").css("top", "220px").removeClass("disabled")
 			.find(".structContainer").show();
 
-		var div = document.createElement("div");
-			div.style.border = "1px solid white";
-		var table = document.createElement("table");		
-			table.id = "totalShipCost";
+		addNamingDiv(game.ships[0].element);
+		addCostDiv(game.ships[0].element);
+		game.setUnitTotal();
 
-		div.appendChild(table);
+	}
 
-		game.ships[0].element.appendChild(div);
-		window.game.setUnitTotal();
+	function addNamingDiv(ele){
+		.a$(ele).append($("<div>").attr("id", "nameWrapper")
+			.append($("<table>")
+				.append($("<tr>")
+					.append($("<td>").css("width", 70).html("Name: "))
+					.append($("<td>")
+						.append($("<input>").attr("type", "form").click(function(e){e.stopPropagation();}))))))
+	}
+
+	function addCostDiv(ele){
+		$(ele).append($("<div>").css("border", "1px solid white").append($("<table>").attr("id", "totalShipCost")))
 
 	}
 
@@ -636,11 +635,7 @@ else {
 		} else if (cur + add > max){
 			popup("You have insufficient point value left");
 		}
-		else {window.addNameToUnit();}
-	}
-
-	function addNameToUnit(){
-		$("#nameWrapper").show().find("input").val("").focus();
+		else {window.doConfirmPurchase();}
 	}
 
 	function doConfirmPurchase(){
@@ -690,7 +685,6 @@ else {
 
 		$(".shipDiv").remove();
 		$("#remPV").html("(" + (window.maxPoints - game.getFleetCost()) + ")");
-		$("#nameWrapper").hide();
 		$("#game").addClass("disabled");
 		$("#hangarDiv").addClass("disabled");
 		$("#hangarTable").html("");

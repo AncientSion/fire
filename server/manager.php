@@ -1101,6 +1101,9 @@
 							else if ($emitter->mission->targetid == $this->ships[$i]->mission->targetid && $emitter->userid == $this->getUnit($emitter->mission->targetid)->userid){ //escorting flight
 								$emitter->locks[] = array($this->ships[$i]->id, $emitter->getLockEffect($this->ships[$i]));
 							}
+							else if ($this->ships[$i]->mission->type == 1 && $this->ships[$i]->mission->arrived){
+								$emitter->locks[] = array($this->ships[$i]->id, $emitter->getLockEffect($this->ships[$i]));
+							}
 						}
 						else if ($this->ships[$i]->salvo){ // if flight in patrol vs salvo || flight in escort duty vs salvo
 							if ($emitter->mission->type == 1 || $this->ships[$i]->mission->targetid != $emitter->id){
