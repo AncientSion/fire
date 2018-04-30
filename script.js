@@ -289,9 +289,11 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 		}
 
 		if (shooter.move && target && !target.move && !shooter.getRemSpeed()){
-			snap = true;
-			console.log("shoter facing " + facing);
 			console.log("angle to target: " + shooterAngle);
+			if (Math.round(shooterAngle) == 360 || Math.round(shooterAngle) == 0){
+				console.log("snap!");
+				snap = true;
+			}
 		}
 
 		if ((target.squad || target.flight) && target.getStringHitChance().length > 15){
@@ -324,7 +326,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 				}
 
 				else if (!targetInArc(shooterPos, pos, facing, system)){
-					if (snap && Math.abs(shooterAngle) < 1 && (active[i].arc[0][0] == 0 || active[i].arc[0][1] == 360)){
+					if (snap && (active[i].arc[0][0] == 0 || active[i].arc[0][1] == 360)){
 					} else inArc = 0;
 				}	
 			}
@@ -359,8 +361,8 @@ function handleScroll(e){
 	var mouseY = e.clientY;
 	// dx & dy are the distance the mouse has moved since
 	// the last mousemove event
-	var dx = mouseX- cam.sx;
-	var dy = mouseY- cam.sy;
+	var dx = mouseX - cam.sx;
+	var dy = mouseY - cam.sy;
 
 	if (dx != 0 || dy != 0){
 		// reset the vars for next mousemove
@@ -371,6 +373,8 @@ function handleScroll(e){
 		cam.o.x += dx;
 		cam.o.y += dy;
 		//console.log(dx, dy);
+
+		//console.log("redraw");
 		game.redraw();
 	}
 }

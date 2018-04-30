@@ -237,9 +237,9 @@ class System {
 
 		$dmg = floor($new + $old);
 		if ($new > $trigger){
-			$chance = 50;
+			$chance = 40;
 			$min = floor($chance * (1+($dmg - $trigger)/(100 - $trigger)));
-			$roll = mt_rand(0, 100);
+			$roll = mt_rand(0, 120);
 			if ($roll < $min){
 				$this->crits[] = new Crit(
 					sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 1, 0, 1
@@ -250,18 +250,16 @@ class System {
 		$mod = $this->getCritModMax($new + $old);
 		if ($mod < 5){return;}
 
-		$trigger = floor($new + $old/2);
-
+		$bonus = 0;
 		for ($i = 0; $i < sizeof($effects); $i++){
-			$roll = mt_rand(0, 100); 
-			if ($roll > $trigger){/*Debug::log(" NO CRIT - roll: ".$roll. ", tresh: ".$trigger); */continue;}
-			//else {Debug::log(" CRIT - roll: ".$roll. ", tresh: ".$trigger);}
+			$roll = mt_rand(0, 120 + $bonus);
 
-			//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
-			$this->crits[] = new Crit(
-				sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $effects[$i][0], 0,  ($mod * (1 + (0.5*$i))), 1
-			);
-			$roll -= 30;
+			if ($roll < $dmg){
+				$bonus += 20;
+				$this->crits[] = new Crit(
+					sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $effects[$i][0], 0,  ($mod * (1 + (0.5*$i))), 1
+				);
+			}
 		}
 	}
 

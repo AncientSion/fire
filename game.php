@@ -84,6 +84,7 @@
 		</div>
 		<div id="roll" class="ui disabled">
 			<img src="varIcons/roll.png" style="width: 40px; height: 40px">
+			<img src="varIcons/destroyed.png" style="width: 40px; height: 40px; margin-left: -40px">
 		</div>
 		<div id="flip" class="ui disabled">
 			<img src="varIcons/flip.png" style="width: 40px; height: 40px">
@@ -195,7 +196,7 @@
 			</table>
 		</div>
 
-		<div id="unitGUI" class="disabled">
+		<div id="unitSelector" class="disabled">
 		</div>
 
 		<div id="canvasDiv" class="disabled">
@@ -562,22 +563,24 @@
 					}
 				}
 				else if (e.keyCode == 109){ // m, cancel move animation
-					if (game.phase == 1 || game.phase == 2){
-						window.cancelAnimationFrame(anim);
-						for (var i = 0; i < game.ships.length; i++){
-							if (!game.ships[i].actions.length){continue;}
-							game.ships[i].drawX = game.ships[i].actions[game.ships[i].actions.length-1].x;
-							game.ships[i].drawY = game.ships[i].actions[game.ships[i].actions.length-1].y;
-							game.ships[i].drawFacing = game.ships[i].getPlannedFacing();
-						}
+					if (!game.animating){return;}
+					if (game.phase < 1 || game.phase > 2){return;}
 
-						game.animShip = 1; game.animFlight = 1; game.animSalvo = 1;
-						game.endMoveSubPhase();
-						game.animShip = 0; game.animFlight = 0; game.animSalvo = 0;
-
-						game.movementDone();
-						//game.draw();
+					window.cancelAnimationFrame(anim);
+					for (var i = 0; i < game.ships.length; i++){
+						if (!game.ships[i].actions.length){continue;}
+						//if (!game.ships[i].move == game.phase -1){continue;}
+						game.ships[i].drawX = game.ships[i].actions[game.ships[i].actions.length-1].x;
+						game.ships[i].drawY = game.ships[i].actions[game.ships[i].actions.length-1].y;
+						game.ships[i].drawFacing = game.ships[i].getPlannedFacing();
 					}
+
+					game.animShip = 1; game.animFlight = 1; game.animSalvo = 1;
+					game.endMoveSubPhase();
+					game.animShip = 0; game.animFlight = 0; game.animSalvo = 0;
+
+					game.movementDone();
+					game.draw();
 				}
 			}
 		});

@@ -6,7 +6,7 @@ class Morale {
 	public $base = 100;
 	public $current;
 	public $trigger = 30;
-	public $baseChance = 40;
+	public $baseChance = 70;
 	public $effChance;
 
 	function __construct($current){

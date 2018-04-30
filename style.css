@@ -250,14 +250,6 @@ table, th, tr, td {
 	padding: 2px;
 }
 
-.shipDiv .moraleNow {
-	position: relative;
-	z-index: 3;
-	background-color: green;
-	height: 100%;
-	top: -5;
-}
-
 .shipDiv .moraleFull {
 	position: relative;
 	z-index: 2;
@@ -265,6 +257,22 @@ table, th, tr, td {
 	height: 100%;
 	width: 100%;
 	top: 6;
+}
+
+.shipDiv .moraleNow {
+	position: relative;
+	z-index: 3;
+	background-color: green;
+	height: 100%;
+	top: -16;
+}
+
+.shipDiv .moraleTrigger {
+	position: relative;
+	z-index: 4;
+	height: 100%;
+	top: -5;
+	border-right: 2px solid yellow;
 }
 
 .link {
@@ -1453,7 +1461,7 @@ div.integrityFull {
 	display: none;
 }
 
-#unitGUI {
+#unitSelector {
 	display: inline-block;
 	position: absolute;
 	z-index: 8;
@@ -1466,27 +1474,27 @@ div.integrityFull {
 	left: 245px;
 }
 
-#unitGUI.disabled {
+#unitSelector.disabled {
 	display: none;
 }
 
-#unitGUI .selected {
+#unitSelector .selected {
 	box-shadow: inset 0 0 4px 3px yellow
 }
 
-#unitGUI img {
+#unitSelector img {
 	margin: 2px;
 }
 
-#unitGUI img:hover {
+#unitSelector img:hover {
 	background-color: white;
 }
 
-#unitGUI .friendly {
+#unitSelector .friendly {
 	border: 1px solid #27e627;
 }
 
-#unitGUI .hostile {
+#unitSelector .hostile {
 	border: 1px solid red;
 }
 
