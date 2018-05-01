@@ -609,6 +609,7 @@ function Single(data){
 	this.disabled = data.disabled;
 	this.traverse = data.traverse;
 	this.baseImpulse = data.baseImpulse;
+	this.dropout = data.dropout;
 	this.damages = [];
 	this.crits = [];
 	this.systems = [];
@@ -694,6 +695,8 @@ Single.prototype.getDetailsDiv = function(){
 			.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.negation)))
 			.append($("<tr>").append($("<td>").html("Speed").css("width", 120)).append($("<td>").html(this.baseImpulse)))
 			.append($("<tr>").append($("<td>").html("EM-D sustained")).append($("<td>").html(this.getEmDmg())))
+			.append($("<tr>").append($("<td>").html("Dropout Test Trigger")).append($("<td>").html("< " + this.dropout[0] + "% HP")))
+			.append($("<tr>").append($("<td>").html("Base Dropout Chance")).append($("<td>").html(this.dropout[1] + "%")))
 
 	if (this.crits.length){
 			$(table)

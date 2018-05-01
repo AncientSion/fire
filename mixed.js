@@ -489,49 +489,36 @@ Mixed.prototype.setPreFireSize = function(){
 	this.size = max + 20;
 }
 
-Mixed.prototype.setLayout = function(){
-	//console.log(this.id);
-	this.setBaseLayout();
+Mixed.prototype.hasPatrolLayout = function(){
+	if (this.mission.arrived < game.turn){
+		if (this.mission.type == 1){
+			return true;
+		} else {
+			var target = this.getTarget();
+			if (target.flight && target.mission.type == 1 && target.mission.arrived < game.turn){
+				return true;
+			}
+		}
+	}
+	return false;
+}
 
-	if (this.mission.type == 1 && this.mission.arrived && this.mission.arrived < game.turn){
+Mixed.prototype.setLayout = function(){
+	//console.log("setLayout: "+this.id);
+	
+	if (this.hasPatrolLayout()){
 		this.setPatrolLayout();
 	}
-	return;
-
-
-
-
-
-
-
-
-	if (!this.mission.arrived){
-		this.setBaseLayout();
-	}
-	else if (this.mission.type == 1){ // patrol arrived
-		if (this.mission.arrived){
-			if (this.mission.arrived < game.turn || this.mission.arrived == game.turn && game.phase > 2){
-				this.setPatrolLayout();
-			} else this.setBaseLayout();
-		}
-	}
-	else if (this.mission.type == 2){ // strike arrived
-		if (this.mission.arrived == game.turn){
-			this.setBaseLayout();
-		}
-		else {
-			this.setBaseLayout();
-			return;
-			var roam = 1;
-			for (var i = 0; i < this.cc.length; i++){
-				var u = game.getUnit(this.cc[i]);
-				if (u.ship || u.squad){roam = 0; break;}
-			}
-			if (roam){this.setPatrolLayout();}
-			else this.setBaseLayout();
-		}
-	}
 	else this.setBaseLayout();
+}
+
+Mixed.prototype.setPatrolLayout = function(){
+	console.log("setPatrolLayout " + this.id);
+	for (var i = 0; i < this.structures.length; i++){
+		var p = getPointInDir(range(0, this.size*0.75), range(0, 360), 0, 0);
+		this.structures[i].layout.x = p.x;
+		this.structures[i].layout.y = p.y;
+	}
 }
 
 Mixed.prototype.setBaseLayout = function(){
@@ -564,17 +551,9 @@ Mixed.prototype.setBaseLayout = function(){
 	}
 }
 
-Mixed.prototype.setPatrolLayout = function(){
-	console.log("setPatrolLayout " + this.id);
-	for (var i = 0; i < this.structures.length; i++){
-		var p = getPointInDir(range(0, this.size*0.75), range(0, 360), 0, 0);
-		this.structures[i].layout.x = p.x;
-		this.structures[i].layout.y = p.y;
-	}
-}
-
-Mixed.prototype.setPreMoveImage = function(){
-	//console.log("setPreMoveImage " + this.id);
+Mixed.prototype.setImage = function(){
+	if (this.hasPatrolLayout()){this.setPatrolImage(); return}
+	console.log("setImage " + this.id);
 	var size = 26;
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
@@ -600,8 +579,8 @@ Mixed.prototype.setPreMoveImage = function(){
 	//console.log(this.img.toDataURL());
 }
 
-Mixed.prototype.setPostMoveImage = function(){
-	//console.log("setPostMoveImage " + this.id);
+Mixed.prototype.setPatrolImage = function(){
+	console.log("setPatrolImage " + this.id);
 	var size = 26;
 	var t = document.createElement("canvas");
 		t.width = this.size*2;

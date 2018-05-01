@@ -971,9 +971,12 @@ function Game(data){
 				this.ships[i].setPostMoveFacing();
 
 				if (this.ships[i].mission.arrived){
-					if (this.ships[i].flight && this.ships[i].mission.type == 1 && this.ships[i].mission.arrived == game.turn){ this.ships[i].setPatrolLayout();}
 					this.ships[i].setPostMoveSize();
-					this.ships[i].setPostMoveImage();
+					if (this.ships[i].flight && this.ships[i].mission.type == 1 && this.ships[i].mission.arrived == game.turn){
+						this.ships[i].setPatrolLayout();
+						this.ships[i].setPatrolImage();
+					}
+					this.ships[i].setImage();
 				}
 			}
 			else if ((this.ships[i].ship || this.ships[i].squad) && this.animShip){

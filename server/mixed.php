@@ -211,42 +211,49 @@ class Mixed extends Ship {
 
 			Debug::log("STRIKE @ ".get_class($t)." #".$t->id);
 
-			if (!($t->ship || $t->squad) && $t->mission->targetid == $this->id){ // FLIGHT SALVO
-				if ($this->mission->arrived){ // at target, circle patrol
+
+			if ($t->flight){
+				if ($this->mission->arrived && $t->mission->arrived && $t->mission->type == 1){
 					$tPos = $this->getCurPos();
 					$type = "patrol";
 				}
-				else { // on way to intercepting flight
-					if (!$t->moveSet && mt_rand(0, 1)){
-						//Debug::log("priority achieved: ".$this->id);
-						$this->moveSet = 1;
-						$t->setMove($gd);
-					}
-
-					$tPos = $t->getCurPos();
-					$origin = $this->getCurPos();
-					$impulse = $this->getCurSpeed();
-					$dist = Math::getDist2($origin, $tPos);
-					$angle = Math::getAngle2($origin, $tPos);
-
-					$this->mission->x = $tPos->x;
-					$this->mission->y = $tPos->y;
-
-					if ($dist == 0){
+				else if ($t->mission->targetid == $this->id){ // FLIGHT target
+					if ($this->mission->arrived){ // at target, circle patrol
+						$tPos = $this->getCurPos();
 						$type = "patrol";
-						//Debug::log("target did reach first us, patrol");
-						$this->mission->arrived = $gd->turn;
 					}
-					else  if ($impulse < $dist){
-						Debug::log("close in");
-						$tPos = Math::getPointInDirection($impulse, $angle, $origin->x, $origin->y);
-					}
-					else {
-						Debug::log("move arrival");
-						$this->mission->arrived = $gd->turn;
-						if ($t->mission->targetid == $this->id){
-							//Debug::log("so enemy arrived, too !");
-							$t->mission->arrived = $gd->turn;
+					else { // on way to intercepting flight
+						if (!$t->moveSet && mt_rand(0, 1)){
+							//Debug::log("priority achieved: ".$this->id);
+							$this->moveSet = 1;
+							$t->setMove($gd);
+						}
+
+						$tPos = $t->getCurPos();
+						$origin = $this->getCurPos();
+						$impulse = $this->getCurSpeed();
+						$dist = Math::getDist2($origin, $tPos);
+						$angle = Math::getAngle2($origin, $tPos);
+
+						$this->mission->x = $tPos->x;
+						$this->mission->y = $tPos->y;
+
+						if ($dist == 0){
+							Debug::log("at target, static !");
+							$type = "patrol";
+							$this->mission->arrived = $gd->turn;
+						}
+						else  if ($impulse < $dist){
+							Debug::log("close in");
+							$tPos = Math::getPointInDirection($impulse, $angle, $origin->x, $origin->y);
+						}
+						else {
+							Debug::log("move arrival");
+							$this->mission->arrived = $gd->turn;
+							if ($t->mission->targetid == $this->id){
+								//Debug::log("so enemy arrived, too !");
+								$t->mission->arrived = $gd->turn;
+							}
 						}
 					}
 				}

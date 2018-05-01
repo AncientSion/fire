@@ -1095,7 +1095,7 @@
 							}
 						}
 						else if ($this->ships[$i]->flight){
-							if ($emitter->mission->targetid == $this->ships[$i]->id){ // mission direct target lock
+							if ($emitter->mission->targetid == $this->ships[$i]->id || $emitter->mission->typr == 1){ // mission direct target lock OR patrol 
 								$emitter->locks[] = array($this->ships[$i]->id, $emitter->getLockEffect($this->ships[$i]));
 							}
 							else if ($emitter->mission->targetid == $this->ships[$i]->mission->targetid && $emitter->userid == $this->getUnit($emitter->mission->targetid)->userid){ //escorting flight

@@ -28,7 +28,7 @@ class Fighter extends Single {
 
 class Aurora extends Fighter {
 	public $name = "Aurora";
-	public $display = "Aurora";
+	public $display = "Medium Fighter";
 	public $faction = "Earth Alliance";
 	public static $value =  28;
 	public $mass = 34;
@@ -48,7 +48,7 @@ class Aurora extends Fighter {
 
 class Thunderbolt extends Fighter {
 	public $name = "Thunderbolt";
-	public $display = "Thunderbolt";
+	public $display = "Superiority Fighter";
 	public $faction = "Earth Alliance";
 	public static $value =  35;
 	public $mass = 36;
@@ -68,7 +68,7 @@ class Thunderbolt extends Fighter {
 
 class Sentri extends Fighter {
 	public $name = "Sentri";
-	public $display = "Sentri";
+	public $display = "Interceptor";
 	public $faction = "Centauri Republic";
 	public static $value =  26;
 	public $mass = 32;
@@ -88,6 +88,7 @@ class Sentri extends Fighter {
 
 class Sitara extends Fighter {
 	public $faction = "Centauri Republic";
+	public $display = "Light Bomber";
 	public static $value =  24;
 	public $integrity = 22;
 	public $negation = 5;
@@ -128,7 +129,7 @@ class SitaraPlasma extends Sitara {
 
 class Nial extends Fighter {
 	public $name = "Nial";
-	public $display = "Nial";
+	public $display = "Advanced Superiority Fighter";
 	public $faction = "Minbari Federation";
 	public static $value =  45;
 	public $mass = 31;
@@ -148,7 +149,7 @@ class Nial extends Fighter {
 
 class Tishat extends Fighter {
 	public $name = "Tishat";
-	public $display = "Tishat";
+	public $display = "Medium Fighter";
 	public $faction = "Minbari Federation";
 	public static $value =  34;
 	public $mass = 29;
@@ -168,7 +169,7 @@ class Tishat extends Fighter {
 
 class Gorith extends Fighter {
 	public $name = "Gorith";
-	public $display = "Gorith";
+	public $display = "Medium Fighter";
 	public $faction = "Narn Regime";
 	public static $value =  24;
 	public $mass = 34;
@@ -188,7 +189,7 @@ class Gorith extends Fighter {
 
 class Frazi extends Fighter {
 	public $name = "Frazi";
-	public $display = "Frazi";
+	public $display = "Heavy Fighter";
 	public $faction = "Narn Regime";
 	public static $value =  32;
 	public $mass = 34;

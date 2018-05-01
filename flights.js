@@ -91,32 +91,6 @@ Flight.prototype.getNewMission = function(){
 	}
 }
 
-Flight.prototype.setImage = function(){
-	//console.log("setImage #" + this.id);
-
-	this.setPreMoveImage();
-	return;
-
-	if (this.actions.length){
-		this.setPreMoveImage();
-	} else this.setPostMoveImage();
-	return;
-
-	if (!this.mission.arrived){
-		this.setPreMoveImage();
-	}	
-	else if (this.mission.arrived){
-		if (this.mission.arrived < game.turn){
-			this.setPostMoveImage();
-		} 
-		else if (this.mission.arrived == game.turn){
-			if (game.phase < 3){
-				this.setPreMoveImage();
-			} else this.setPostMoveImage();
-		}
-	}
-}
-
 Flight.prototype.setCallSign = function(){
 	var names = ["Blue", "Yellow", "Red", "Green", "Silver", "Tiger", "Eagle", "Dragon", "Wyvern", "Phoenix", "Rampage", "Assault", "Onslaught"];
 	var signs = ["Alpha", "Beta", "Gamma", "Epsilon", "Sigma", "Phi"];

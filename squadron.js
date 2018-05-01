@@ -85,7 +85,13 @@ Squaddie.prototype.getSysDiv = function(){
 					.append($("<td>").html(this.ep)))
 				.append($("<tr>")
 					.append($("<td>").html("Base Hit Chance"))
-					.append($("<td>").html(this.baseHitChance + " %")))
+					.append($("<td>").html(this.baseHitChance + "%")))
+				.append($("<tr>")
+					.append($("<td>").html("Dropout Test Trigger"))
+					.append($("<td>").html("< " + this.dropout[0] + "% HP")))
+				.append($("<tr>")
+					.append($("<td>").html("Base Dropout Chance"))
+					.append($("<td>").html(this.dropout[1] + "%")))
 			)
 
 
