@@ -235,9 +235,9 @@
 
 	public function shiftToIncoming($unit){
 		$this->incoming[] = array(
-						"id" => $unit->id, "userid" => $unit->userid, "available" => $unit->available, "name" => $unit->name,
-							"x" => $unit->actions[0]->x, "y" => $unit->actions[0]->y, "a" => $unit->actions[0]->a
-						);
+			"id" => $unit->id, "userid" => $unit->userid, "available" => $unit->available, "name" => $unit->name,
+				"x" => $unit->actions[0]->x, "y" => $unit->actions[0]->y, "a" => $unit->actions[0]->a
+		);
 	}
 
 	public function getIncomingData(){

@@ -156,7 +156,7 @@ Mixed.prototype.isDestroyed = function(){
 	return true;
 }
 
-Mixed.prototype.setStatus = function(){
+Mixed.prototype.setSubUnitStatus = function(){
 	//	console.log("setStatus")
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].crits.length; j++){
@@ -196,9 +196,9 @@ Mixed.prototype.getArmourString = function(a){
 	return this.structures[0].negation;
 }
 
-Mixed.prototype.getStringHitChance = function(){
+Mixed.prototype.setStringHitChance = function(){
 	if (!this.structures.length){
-		return "";
+		this.stringHitChance = "";
 	}
 	var min = 1000; var max = 0;
 	for (var i = 0; i < this.structures.length; i++){
@@ -208,8 +208,8 @@ Mixed.prototype.getStringHitChance = function(){
 		}
 	}
 	if (min == max){
-		return (min + "%");
-	} else return (min + " - " + max + "%");
+		this.stringHitChance = (min + "%");
+	} else this.stringHitChance = (min + " - " + max + "%");
 }
 
 Mixed.prototype.getAngledHitSection = function(){
@@ -394,7 +394,8 @@ Mixed.prototype.canUndoShortenTurn = function(){
 }
 
 Mixed.prototype.create = function(){
-	this.setStatus();
+	this.setSubUnitStatus();
+	this.setStringHitChance();
 	if (this.id < 0){
 		this.setImpulse();
 	}

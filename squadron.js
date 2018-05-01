@@ -529,6 +529,9 @@ Squadron.prototype = Object.create(Ship.prototype);
 
 
 Squadron.prototype.create = function(){
+	this.setSubUnitStatus();
+	this.setStringHitChance();
+
 	if (game.turn > 1 && game.phase == -1 && this.available == game.turn){
 		this.x = this.actions[0].x;
 		this.y = this.actions[0].y;
@@ -541,7 +544,6 @@ Squadron.prototype.create = function(){
 		this.primary.systems[1].output = 0;
 	}
 
-	this.setStatus();
 }
 
 Squadron.prototype.setSubSystemState = function(){
@@ -557,8 +559,8 @@ Squadron.prototype.setSubSystemState = function(){
 	}
 }
 
-Squadron.prototype.setStatus = function(){
-	//console.log("setStatus CREATE")
+Squadron.prototype.setSubUnitStatus = function(){
+	//console.log("setSubUnitStatus CREATE")
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].destroyed){
 			this.structures[i].doDestroy();
@@ -748,31 +750,6 @@ Squadron.prototype.getDeployImg = function(){
 Squadron.prototype.checkSensorHighlight = function(){
 	//console.log("checkSensorHighlight")
 	return Ship.prototype.checkSensorHighlight.call(this);
-}
-
-Squadron.prototype.getShortInfoa = function(){
-	var ele = game.ui.shortInfo;
-	if (this.userid == game.userid){
-		$(ele).attr("class", "friendly");
-	} else $(ele).attr("class", "hostile");
-
-	var impulse = this.getCurSpeed();
-
-	var table = document.createElement("table");
-		table.insertRow(-1).insertCell(-1).innerHTML = this.name + " #" + this.id + " (" +game.getUnitType(this.traverse) + ")";
-		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")";
-		table.insertRow(-1).insertCell(-1).innerHTML = this.getStringHitChance();
-	return table;
-}
-
-Squadron.prototype.getProfileString = function(){
-	return this.getStringHitChance();
-}
-
-Squadron.prototype.getStringHitChance = function(){
-	return Mixed.prototype.getStringHitChance.call(this);
-	//var baseHit = this.getBaseHitChance();
-	//return ("Base To-Hit: " + Math.floor(this.profile[0] * baseHit) + "% - " + Math.floor(this.profile[1] * baseHit) + "%");
 }
 
 Squadron.prototype.hasHangarSelected = function(){		

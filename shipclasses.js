@@ -13,7 +13,7 @@ function Ship(data){
 	this.mass = data.mass;
 	this.cost = data.cost;
 	this.profile = data.profile;
-	this.size = Math.floor(data.size/2);
+	this.stringHitChance = "";
 	this.size = data.size;
 	this.userid = data.userid;
 	this.available = data.available;
@@ -506,6 +506,9 @@ Ship.prototype.drawImpulseUI = function(){
 		var roll = getPointInDir(80, facing -220, p1.x, p1.y);
 		var ox = roll.x * cam.z + cam.o.x - 20;
 		var oy = roll.y * cam.z + cam.o.y - 20;
+		if (this.isRolling()){
+			$($("#roll").children()[1]).show();
+		} else $($("#roll").children()[1]).hide();
 		$("#roll").css("left", ox).css("top", oy).removeClass("disabled");
 	} else $("#roll").addClass("disabled");
 
@@ -956,7 +959,7 @@ Ship.prototype.resetMoveTranslation = function(){
 
 Ship.prototype.setMoveMode = function(){
 	if (this.salvo || this.flight){return;}
-	else if (this.move > game.phase && game.phase > -1){instruct("Priority unit!");}
+	else if (this.move > game.phase && game.phase > -1){instruct("Focus Unit!");}
 	else if (this.move == 0 && game.phase == 1){return;}
 	game.mode = 1;
 	turn.set(this);
@@ -1120,7 +1123,8 @@ Ship.prototype.setPostMovePosition = function(){
 	//console.log("setPostMovePosition");
 	//this.setPreMovePosition(); return;
 	if (!this.actions.length){
-		this.actions.push(new Move(0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+		//this.actions.push(new Move(0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+		return;
 	}
 	this.drawX = this.actions[this.actions.length-1].x;
 	this.drawY = this.actions[this.actions.length-1].y;
@@ -1171,9 +1175,9 @@ Ship.prototype.setDrawData = function(){
 	}
 }
 
-Ship.prototype.setUnitGUI = function(){
+Ship.prototype.setunitSelector = function(){
 	var id = this.id;
-	$("#unitGUI").find("img").each(function(){
+	$("#unitSelector").find("img").each(function(){
 		if ($(this).data("id") == id){
 			$(this).toggleClass("selected"); return;
 		}
@@ -1264,8 +1268,7 @@ Ship.prototype.getShortInfo = function(){
 	var impulse = this.getCurSpeed();
 
 	var header = this.name + " #" + this.id;
-	if (this.command){header += "<font color='yellow'> (FOCUS)</font>";
-	}
+	if (this.command){header += "<font color='yellow'> (FOCUS)</font>";}
 
 	var table = document.createElement("table");
 		table.insertRow(-1).insertCell(-1).innerHTML = header;
@@ -1274,7 +1277,7 @@ Ship.prototype.getShortInfo = function(){
 		if (this.isRolling()){table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>!-ROLLING-!</span>";}
 		if (this.isFlipping()){table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>!-FLIPPING-!</span>";}
 		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + impulse + " (" + round(impulse / this.getBaseImpulse(), 2) + ")";
-		table.insertRow(-1).insertCell(-1).innerHTML = this.getStringHitChance();
+		table.insertRow(-1).insertCell(-1).innerHTML = "Base To-Hit: " + this.getStringHitChance();
 	return table;
 }
 
@@ -1323,7 +1326,7 @@ Ship.prototype.doSelect = function(){
 	console.log(this);
 	aUnit = this.id;
 	this.selected = true;
-	this.setUnitGUI();
+	this.setunitSelector();
 	game.setShipTransform();
 	this.drawPositionMarker();
 	game.resetShipTransform();
@@ -1336,7 +1339,7 @@ Ship.prototype.doUnselect = function(){
 	this.unselectSystems();
 	aUnit = false;
 	this.selected = false;
-	this.setUnitGUI();
+	this.setunitSelector();
 	if (game.deploying){game.disableDeploy();}
 	else if (game.flightDeploy){game.flightDeploy = false;}
 	else if (game.mission){this.disableMissionMode()}
@@ -1388,6 +1391,8 @@ Ship.prototype.drawTrajectory = function(){
 Ship.prototype.create = function(){
 	//this.setHitTable();
 
+	this.setStringHitChance();
+
 	if (game.turn > 1 && game.phase == -1 && this.available == game.turn){
 		this.x = this.actions[0].x;
 		this.y = this.actions[0].y;
@@ -1405,6 +1410,15 @@ Ship.prototype.setSubSystemState = function(){
 			this.structures[i].systems[j].setState();
 		}
 	}
+}
+
+Ship.prototype.setStringHitChance = function(){
+	if (this.squad){return Mixed.prototype.setStringHitChance.call(this); }
+	this.stringHitChance = Math.floor(this.baseHitChance * this.profile[0]) + " - " + Math.floor(this.baseHitChance * this.profile[1]) + "%"
+}
+
+Ship.prototype.getStringHitChance = function(){
+	return this.stringHitChance;
 }
 
 Ship.prototype.setSize = function(){
@@ -2081,8 +2095,8 @@ Ship.prototype.showMoraleDiv = function(e){
 					.append($("<td>").html("Base Rout Chance"))
 					.append($("<td>").html(this.morale.baseChance + "%")))
 				.append($("<tr>")
-					.append($("<td>").html("Effective Rout Chance"))
-					.append($("<td>").html(this.getRoutChance() + "%")))
+					.append($("<td>").html("Current Rout Chance"))
+					.append($("<th>").html(this.getRoutChance() + "%")))
 			)
 	)
 }
@@ -2125,14 +2139,15 @@ Ship.prototype.createBaseDiv = function(){
 			.append($("<td>").html("Type (Size)").css("width", "50%"))
 			.append($("<td>").html(game.getUnitType(this.traverse) + " (" + this.traverse + ")")))
 		.append($("<tr>")
-			.append($("<td>").html("To-Hit Profile"))
-			.append($("<td>").html(this.getProfileString())))
+			.append($("<td>").html("Base To-Hit"))
+			.append($("<td>").html(this.getStringHitChance())))
 		.append($("<tr>")
 			.append($("<td>").html("Morale"))
 			.append($("<td>").html(this.morale.current + "%")))
 		.append($("<tr>").addClass("morale")
 			.append($("<td>").attr("colSpan", 2)
 				.append($("<div>").addClass("moraleFull"))
+				.append($("<div>").addClass("moraleTrigger").css("width", (this.morale.trigger + "%")))
 				.append($("<div>").addClass("moraleNow").css("width", (this.morale.current + "%")))
 				.hover(
 					function(e){
@@ -2189,15 +2204,6 @@ Ship.prototype.createBaseDiv = function(){
 		$(div).find(".structContainer").show();
 	}
 	$(this.addCommandDiv(div[0]))
-}
-
-Ship.prototype.getProfileString = function(){
-	return ((Math.floor(this.baseHitChance*this.profile[0]) + " - " + Math.floor(this.baseHitChance*this.profile[1])) + "%");
-}
-
-Ship.prototype.getStringHitChance = function(){
-	var baseHit = this.getBaseHitChance();
-	return ("Base To-Hit: " + this.getProfileString());
 }
 
 Ship.prototype.addCommandDiv = function(div){
@@ -3531,7 +3537,8 @@ Ship.prototype.issuedActionThisTurn = function(type){
 
 Ship.prototype.canDoAction = function(type){
 	if (this.getRemEP() >= this.getRealActionCost(type)){
-		if (this.issuedActionThisTurn(type)){return false;}
+		if (this.issuedActionThisTurn(type)){return false;} // instead UNDO iit
+		else if (this.isRolling() && type == 1){return false;} // cant flip while you are rolling
 		else {
 			for (var i = 0; i < this.actions.length; i++){
 				if (this.actions[i].type != "speed" && this.actions[i].type != "turn"){return false;}
