@@ -517,7 +517,7 @@
 						}
 					}
 
-					if (floor($data["cost"]) > floor($playerstatus[$i]["value"])){$add--; continue;}
+					if (floor($data["cost"]) > floor($this->playerstatus[$i]["value"])){$add--; continue;}
 
 
 					$picks[] = $data;
@@ -812,18 +812,18 @@
 		$this->setFireOrderDetails();
 
 		for ($i = 0; $i < sizeof($this->fires); $i++){
-			//Debug::log("handling fire: ".$this->fires[$i]->id.", weapon: ".$this->fires[$i]->weapon->display);
+			Debug::log("handling fire: ".$this->fires[$i]->id.", weapon: ".$this->fires[$i]->weapon->display);
 			if ($this->fires[$i]->resolved){continue;}
-			if ($this->fires[$i]->weapon->aoe){
-				$subFires = DmgCalc::createAreaFireOrders($this, $this->fires[$i]);
+			if ($this->fires[$i]->usage > $this->turn){continue;}
 
-				for ($j = 0; $j < sizeof($subFires); $j++){
-					//$subFires[$j]->target->resolveAreaFireOrder($subFires[$j]);
-					$subFires[$j]->target->resolveFireOrder($subFires[$j]);
-					$this->fires[$i]->hits++;
-				}
-				$this->fires[$i]->resolved = 1;
+			$subFires = DmgCalc::createAreaFireOrders($this, $this->fires[$i]);
+
+			for ($j = 0; $j < sizeof($subFires); $j++){
+				//$subFires[$j]->target->resolveAreaFireOrder($subFires[$j]);
+				$subFires[$j]->target->resolveFireOrder($subFires[$j]);
+				$this->fires[$i]->hits++;
 			}
+			$this->fires[$i]->resolved = 1;
 		}
 		
 		Debug::log("handling data");

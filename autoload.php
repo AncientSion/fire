@@ -159,6 +159,7 @@ spl_autoload_register(
 
                 'area' => '/server/systems/weapons/area.php',
                 'energymine' => '/server/systems/weapons/area.php',
+                'graviticmine' => '/server/systems/weapons/area.php',
 
                 'launcher' => '/server/systems/weapons/launcher.php',
                 'missilelauncher' => '/server/systems/weapons/launcher.php',

@@ -1368,6 +1368,7 @@ function Game(data){
 	}
 
 	this.setCC = function(){
+		console.log("setCC");
 		if (this.turn == 1 && this.phase == -1){return;}
 		if (this.phase == 1 && game.phase == 2){return;}
 
@@ -1441,15 +1442,13 @@ function Game(data){
 	this.setPostDeployCC = function(){
 
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].flight){
-				if (this.ships[i].mission.arrived && this.ships[i].mission.type == 2){
-					var t = this.getUnit(this.ships[i].mission.targetid);
-						t.cc.push(this.ships[i].id);
-						this.ships[i].cc.push(t.id);
-				}
+			if (!this.ships[i].flight){continue;}
+			if (this.ships[i].mission.arrived && this.ships[i].mission.type == 2){
+				var t = this.getUnit(this.ships[i].mission.targetid);
+					t.cc.push(this.ships[i].id);
+					this.ships[i].cc.push(t.id);
 			}
 		}
-
 
 		for (var i = 0; i < this.ships.length; i++){
 			for (var j = i+1; j < this.ships.length; j++){
