@@ -989,6 +989,7 @@
 					thrust = :thrust,
 					rolling = :rolling,
 					rolled = :rolled,
+					flipped = :flipped,
 					turn = :turn,
 					phase = :phase
 				WHERE id = :id
@@ -1004,6 +1005,7 @@
 				$stmt->bindParam(":thrust", $states[$i]["thrust"]);
 				$stmt->bindParam(":rolling", $states[$i]["rolling"]);
 				$stmt->bindParam(":rolled", $states[$i]["rolled"]);
+				$stmt->bindParam(":flipped", $states[$i]["flipped"]);
 				$stmt->bindParam(":turn", $turn);
 				$stmt->bindParam(":phase", $phase);
 				$stmt->bindParam(":id",  $states[$i]["id"]);

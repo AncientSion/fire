@@ -2050,6 +2050,7 @@ function Game(data){
 
 	this.createInitialPhaseEntries = function(){
 		console.log("createInitialPhaseEntries");
+		var show = 0;
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].isRolling()){
 				show = 1;

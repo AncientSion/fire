@@ -14,13 +14,14 @@ class Ship {
 	public $thrust;
 	public $rolling;
 	public $rolled;
+	public $flipping;
+	public $flipped;
 
 	public $disabled = false;
 
 	public $baseHitChance;
 	public $remainingDelay;
 	public $currentImpulse;
-	public $flipping = 0;
 	public $remainingImpulse;
 	public $baseImpulse;
 	public $impulseHitMod = 0;
@@ -63,21 +64,22 @@ class Ship {
 	public $ew = 0;
 	public $power = 0;
 
-	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-		$this->id = $id;
-		$this->userid = $userid;
-		$this->available = $available;
-		$this->call = $call;
-		$this->status = $status;
-		$this->destroyed = $destroyed;
-		$this->x = $x;
-		$this->y = $y;
-		$this->facing = $facing;
-		$this->remainingDelay = $delay;
-		$this->currentImpulse = $thrust;
-		$this->rolling = $rolling;
-		$this->rolled = $rolled;
-		$this->notes = $notes;
+	function __construct($data){
+		//var_export($data);
+		$this->id = $data["id"];
+		$this->userid = $data["userid"];
+		$this->available = $data["available"];
+		$this->call = $data["display"];
+		$this->status = $data["status"];
+		$this->destroyed = $data["destroyed"];
+		$this->x = $data["x"];
+		$this->y = $data["y"];
+		$this->facing = $data["facing"];
+		$this->remainingDelay = $data["delay"];
+		$this->currentImpulse = $data["thrust"];
+		$this->rolling = $data["rolling"];
+		$this->rolled = $data["rolled"];
+		$this->notes = $data["notes"];
 	}
 
 	public function addAllSystems(){
@@ -357,7 +359,7 @@ class Ship {
 
 		//Debug::log("getMoveState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$facing);
 
-		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "facing" => $facing, "thrust" => $this->currentImpulse, "rolling" => $this->rolling, "rolled" => $this->rolled);
+		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "facing" => $facing, "thrust" => $this->currentImpulse, "rolling" => $this->rolling, "rolled" => $this->rolled, "flipped" => $this->flipped);
 	}
 
 	public function isRolling(){
@@ -1240,8 +1242,8 @@ class Medium extends Ship {
 	public $slipAngle = 15;
 	public $baseImpulseCost = 35;
 
-	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+	function __construct($data){
+		parent::__construct($data);
 
 		$this->hitTable = array(
 			"Bridge" => 0.6,
@@ -1292,8 +1294,8 @@ class Heavy extends Medium {
 	public $traverse = 1;
 	//public $baseImpulseCost = 45;
 	
-	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+	function __construct($data){
+		parent::__construct($data);
 	}
 }
 
@@ -1302,8 +1304,8 @@ class SuperHeavy extends Heavy {
 	public $traverse = 2;
 	//public $baseImpulseCost = 50;
 	
-	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+	function __construct($data){
+		parent::__construct($data);
 	}
 }
 
@@ -1312,8 +1314,8 @@ class UltraHeavy extends SuperHeavy {
 	public $traverse = 3;
 	//public $baseImpulseCost = 55;
 	
-	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-		parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+	function __construct($data){
+		parent::__construct($data);
 	}
 }
 

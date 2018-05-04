@@ -8,19 +8,8 @@ class Mixed extends Ship {
 	public $profile = 0;
 	public $mission = array();
 
-	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $notes){
-		$this->id = $id;
-		$this->userid = $userid;
-		$this->available = $available;
-		$this->call = $call;
-		$this->status = $status;
-		$this->destroyed = $destroyed;
-		$this->x = $x;
-		$this->y = $y;
-		$this->facing = $facing;
-		$this->remainingDelay = $delay;
-		$this->currentImpulse = $thrust;
-		$this->notes = $notes;
+	function __construct($data){
+		parent::__construct($data);
 	}
 	
 	public function addAllSystems(){
@@ -408,7 +397,7 @@ class Mixed extends Ship {
 
 		//Debug::log("getMoveState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$angle);
 
-		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $this->remainingDelay, "facing" => $facing, "thrust" => $this->currentImpulse, "rolling" => $this->rolling, "rolled" => $this->rolled);
+		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $this->remainingDelay, "facing" => $facing, "thrust" => $this->currentImpulse, "rolling" => $this->rolling, "rolled" => $this->rolled, "flipped" => $this->flipped);
 	}
 }
 

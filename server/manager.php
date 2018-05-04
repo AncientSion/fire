@@ -308,22 +308,7 @@
 		$units = array();
 
 		for ($i = 0; $i < sizeof($db); $i++){
-			$unit = new $db[$i]["name"](
-				$db[$i]["id"],
-				$db[$i]["userid"],
-				$db[$i]["available"],
-				$db[$i]["display"],
-				$db[$i]["status"],
-				$db[$i]["destroyed"],
-				$db[$i]["x"],
-				$db[$i]["y"],
-				$db[$i]["facing"],
-				$db[$i]["delay"],
-				$db[$i]["thrust"],
-				$db[$i]["rolling"],
-				$db[$i]["rolled"],
-				$db[$i]["notes"]
-			);
+			$unit = new $db[$i]["name"]($db[$i]);
 
 			$unit->move = $db[$i]["move"];
 			$unit->addAllSystems();
