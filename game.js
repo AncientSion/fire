@@ -26,6 +26,7 @@ function Game(data){
 	this.opacity = false;
 	this.markers = [];
 	this.ballistics = [];
+	this.fighters = [];
 	this.antiBallistics = [];
 	this.unitExploAnims = [];
 	this.shortInfo = false;
@@ -1031,6 +1032,7 @@ function Game(data){
 				}, 1000);
 			}
 			else if (game.phase == 1){
+				this.animating = 0;
 				this.logWeaponEvents();
 			}
 		}
@@ -2054,9 +2056,11 @@ function Game(data){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].isRolling()){
 				show = 1;
-				this.ships[i].createMoveStartEntry();
-			} else if (this.ships[i].isFlipping()){
-				
+				this.ships[i].createMoveStartEntry("roll");
+			}
+			else if (this.ships[i].hasFlipped()){
+				show = 1;
+				this.ships[i].createMoveStartEntry("flip");
 			}
 		}
 
@@ -3638,5 +3642,14 @@ Game.prototype.extractPlayerStatusData = function(){
 				break;
 			}
 		}
+	}
+}
+
+Game.prototype.getSampleSubUnit = function(name){
+	for (let i = 0; i < this.fighters.length; i++){
+		if (this.fighters[i].name == name){return this.fighters[i];}
+	}
+	for (let i = 0; i < this.ballistics.length; i++){
+		if (this.ballistics[i].name == name){return this.ballistics[i];}
 	}
 }

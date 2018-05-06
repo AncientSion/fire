@@ -422,13 +422,13 @@ else {
 
 				buildFighterList: function(data, t){
 					for (var i = 0; i < data.length; i++){
-						var fighter = initFighter(data[i]);;
+						var fighter = initFighter(data[i]);
 						this.fighters.push(fighter);
 					}
 				},
 				buildBallisticList: function(data, t){
 					for (var i = 0; i < data.length; i++){
-						var ballistic = initBallistic(data[i]);;
+						var ballistic = initBallistic(data[i]);
 						this.ballistics.push(ballistic);
 					}
 				},
@@ -596,12 +596,14 @@ else {
 	}
 
 	function addNamingDiv(ele){
-		.a$(ele).append($("<div>").attr("id", "nameWrapper")
+		$(ele).append(
+			$($("<div>")
+			.attr("id", "nameWrapper")
 			.append($("<table>")
 				.append($("<tr>")
 					.append($("<td>").css("width", 70).html("Name: "))
 					.append($("<td>")
-						.append($("<input>").attr("type", "form").click(function(e){e.stopPropagation();}))))))
+						.append($("<input>").attr("type", "form").click(function(e){e.stopPropagation();})))))))
 	}
 
 	function addCostDiv(ele){

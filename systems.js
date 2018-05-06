@@ -4022,7 +4022,19 @@ Hangar.prototype = Object.create(PrimarySystem.prototype);
 Hangar.prototype.init = function(){
 	for (var i = 0; i < this.loads.length; i++){
 		this.loads[i] = new Fighter(this.loads[i]);
+		let add = 1;
+
+		for (let j = 0; j < game.fighters.length; j++){
+			if (game.fighters[j].name == this.loads[i].name){
+				add = 0; break;
+			}
+		}
+
+		if (add){
+			game.fighters.push(new Fighter(this.loads[i]));
+		}
 	}
+
 }
 
 Hangar.prototype.setTimeLoaded = function(){
@@ -4177,7 +4189,7 @@ Hangar.prototype.switchHangarDiv = function(e){
 		$("#capacity").html(this.capacity);
 	this.unsetFireOrder();
 	this.doUndoActions();
-	this.showHangarControl(e);
+	this.showHangarLaunchControl(e);
 
 	if (div.hasClass("disabled")){
 		var h = (div.height());
@@ -4195,48 +4207,55 @@ Hangar.prototype.switchHangarDiv = function(e){
 	} else div.find("#missionType").show();
 }
 
-Hangar.prototype.showHangarControl = function(){
-	var table = document.getElementById("hangarTable");
-		table.innerHTML = "";
+Hangar.prototype.showHangarLaunchControl = function(){
+	var table = $("#hangarTable");
+		table
+			.empty()
+			.append($("<tr>")
+				.append($("<th>").html("Class"))
+				.append($("<th>").html(""))
+				.append($("<th>").html("Available"))
+				.append($("<th>").html(""))
+				.append($("<th>").html(""))
+				.append($("<th>").html("to Launch")))
 
-		var tr = document.createElement("tr");
-		var th = document.createElement("th"); th.innerHTML = "Class"; tr.appendChild(th)
-		var th = document.createElement("th"); th.innerHTML = "Available"; tr.appendChild(th)
-		var th = document.createElement("th"); th.innerHTML = ""; tr.appendChild(th)
-		var th = document.createElement("th"); th.innerHTML = ""; tr.appendChild(th)
-		var th = document.createElement("th"); th.innerHTML = "To launch"; tr.appendChild(th)
-		table.appendChild(tr);
 
 	var id = this.id;
 
 	for (var i = 0; i < this.loads.length; i++){
-		var tr = table.insertRow(-1)
-			tr.insertCell(-1).innerHTML = this.loads[i].display;
-			tr.insertCell(-1).innerHTML = this.loads[i].amount;
-			var td = document.createElement("td");
-				td.innerHTML = "<img height='20px' width='20px' src='varIcons/plus.png'>"; $(td).data("name", this.loads[i].name).data("val", 1); tr.appendChild(td);
-				td.addEventListener("click", function(){
-					game.getUnit(aUnit).getSystem(id).alterFlight(this, false);
-				});
-				td.addEventListener("contextmenu", function(e){
-					e.preventDefault();
-					game.getUnit(aUnit).getSystem(id).alterFlight(this, true);
-				});
-			var td = document.createElement("td");
-				td.innerHTML = "<img height='20px' width='20px' src='varIcons/minus.png'>"; $(td).data("name", this.loads[i].name).data("val", -1); tr.appendChild(td);
-				td.addEventListener("click", function(){
-					game.getUnit(aUnit).getSystem(id).alterFlight(this, false);
-				});
-				td.addEventListener("contextmenu", function(e){
-					e.preventDefault();
-					game.getUnit(aUnit).getSystem(id).alterFlight(this, true);
-				});
-			var td = document.createElement("td");
-				td.id = this.loads[i].name + "Amount";
-				td.innerHTML = this.loads[i].launch; tr.appendChild(td);
-
-		table.appendChild(tr);
+		table
+			.append($("<tr>")
+				.append($("<td>").html(this.loads[i].name))
+				.append($("<td>")
+					.append($(this.loads[i].getElement(true)))
+				)
+				.append($("<td>").html(this.loads[i].amount))
+				.append($("<td>")
+					.append($("<img>").addClass("size30").attr("src", "varIcons/plus.png").data("name", this.loads[i].name).data("val", 1)
+					.click(function(e){
+						e.preventDefault(); e.stopPropagation();
+						game.getUnit(aUnit).getSystem(id).alterFlight(this, false);
+					})
+					.contextmenu(function(e){
+						e.preventDefault(); e.stopPropagation();
+						game.getUnit(aUnit).getSystem(id).alterFlight(this, true);
+					})
+				))
+				.append($("<td>")
+					.append($("<img>").addClass("size30").attr("src", "varIcons/minus.png").data("name", this.loads[i].name).data("val", -1)
+					.click(function(e){
+						e.preventDefault(); e.stopPropagation();
+						game.getUnit(aUnit).getSystem(id).alterFlight(this, false);
+					})
+					.contextmenu(function(e){
+						e.preventDefault(); e.stopPropagation();
+						game.getUnit(aUnit).getSystem(id).alterFlight(this, true);
+					})
+				))
+				.append($("<td>").html(this.loads[i].launch).attr("id", this.loads[i].name + "Amount")));
 	}
+
+
 	var mission = this.getMission();
 	var element = $("#hangarDiv");
 		$(element)
@@ -4362,7 +4381,7 @@ Hangar.prototype.addFighter = function(ele, all){
 	var tMass = 0;
 	var tCost = 0;
 	var add = 1;
-	var display = ele.childNodes[0].innerHTML;
+	var name = ele.childNodes[0].innerHTML;
 	var sMass = 0;
 	var current = 0;
 	var max = this.capacity;
@@ -4384,7 +4403,7 @@ Hangar.prototype.addFighter = function(ele, all){
 	}
 
 	for (var i = 0; i < this.loads.length; i++){
-		if (this.loads[i].display == display){
+		if (this.loads[i].name == name){
 			this.loads[i].amount += add;
 			this.updateHangarDiv(i);
 			return;
@@ -4394,7 +4413,7 @@ Hangar.prototype.addFighter = function(ele, all){
 	for (var i = 0; i < this.loads.length; i++){
 		tMass += this.loads[i].amount * this.loads[i].mass;
 		tCost += this.loads[i].amount * this.loads[i].cost;
-		if (this.loads[i].display == display){
+		if (this.loads[i].name == name){
 			sMass = this.loads[i].mass;
 		}
 	}
@@ -4420,7 +4439,7 @@ Hangar.prototype.addFighter = function(ele, all){
 
 Hangar.prototype.removeFighter = function(ele, all){
 	for (var i = 0; i < this.loads.length; i++){
-		if (this.loads[i].display == ele.childNodes[0].innerHTML){
+		if (this.loads[i].name == ele.childNodes[0].innerHTML){
 			if (this.loads[i].amount >= 1){
 				if (all){
 					this.loads[i].amount = 0;
@@ -4440,7 +4459,7 @@ Hangar.prototype.canConfirm = function(){
 	//} else $("#hangarDiv").find(".buttonTD").addClass("disabled");
 }
 
-Hangar.prototype.initHangarDiv = function(){
+Hangar.prototype.initHangarPurchaseDiv = function(){
 	var table = $("#hangarTable");
 
 	table
@@ -4457,7 +4476,7 @@ Hangar.prototype.initHangarDiv = function(){
 	for (var i = 0; i < this.loads.length; i++){
 		table
 			.append($("<tr>")
-				.append($("<td>").html(this.loads[i].display))
+				.append($("<td>").html(this.loads[i].name))
 				.append($("<td>")
 					.append($(this.loads[i].getElement(true)))
 				)
@@ -4537,7 +4556,7 @@ Hangar.prototype.setupHangarLoadout = function(e){
 		$(div).find("#launchRate").html(this.getOutput());
 		$(div).find("#capacity").html(this.capacity);
 		$(div).data("systemid", this.id).css("left", 750).css("top", 400).removeClass("disabled");
-		this.initHangarDiv();
+		this.initHangarPurchaseDiv();
 	}
 	else {
 		window.game.setUnitTotal();

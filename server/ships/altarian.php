@@ -14,8 +14,8 @@ class Altarian extends Medium {
 	public $ep = 95;
 	public $ew = 750;
 
-	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-        parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+	function __construct($data){
+        parent::__construct($data);
 	}
 
 	public function addStructures(){

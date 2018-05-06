@@ -4,6 +4,7 @@ class Missile extends Single {
 	public $missile = 1;
 	public $torpedo = 0;
 	public $maxRange = 0;
+	public $dropout = array(0, 0);
 
 	function __construct($id, $parentId){
 		if ($this->missile){

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 04. Mai 2018 um 15:32
+-- Erstellungszeit: 06. Mai 2018 um 20:49
 -- Server-Version: 10.1.16-MariaDB
 -- PHP-Version: 7.0.9
 
@@ -519,7 +519,8 @@ CREATE TABLE `games` (
 
 INSERT INTO `games` (`id`, `name`, `status`, `turn`, `phase`, `pv`, `reinforce`, `reinforceTurn`) VALUES
 (1, 'myGame', 'active', 11, 1, 3000, 1500, 11),
-(2, 'myGame', 'active', 4, 3, 3000, 1500, 11);
+(2, 'myGame', 'active', 5, -1, 3000, 1500, 11),
+(3, 'myGame', 'active', 1, -1, 3000, 1500, 11);
 
 -- --------------------------------------------------------
 
@@ -540,7 +541,8 @@ CREATE TABLE `loads` (
 --
 
 INSERT INTO `loads` (`id`, `shipid`, `systemid`, `name`, `amount`) VALUES
-(3, 2, 17, 'Frazi', 10);
+(3, 2, 17, 'Frazi', 10),
+(4, 15, 9, 'Aurora', 12);
 
 -- --------------------------------------------------------
 
@@ -597,8 +599,10 @@ CREATE TABLE `playerstatus` (
 INSERT INTO `playerstatus` (`id`, `userid`, `gameid`, `turn`, `phase`, `faction`, `value`, `status`) VALUES
 (1, 1, 1, 11, 1, 'Earth Alliance', 2676, 'waiting'),
 (2, 2, 1, 11, 1, 'Narn Regime', 2074, 'ready'),
-(3, 1, 2, 4, 3, 'Earth Alliance', 3725, 'waiting'),
-(4, 2, 2, 4, 3, 'Centauri Republic', 3335, 'waiting');
+(3, 1, 2, 5, -1, 'Earth Alliance', 3725, 'waiting'),
+(4, 2, 2, 5, -1, 'Centauri Republic', 3335, 'waiting'),
+(5, 1, 3, 1, -1, 'Earth Alliance', 4010, 'waiting'),
+(6, 2, 3, 1, -1, 'Earth Alliance', 3064, 'waiting');
 
 -- --------------------------------------------------------
 
@@ -1012,7 +1016,7 @@ CREATE TABLE `units` (
   `ship` tinyint(1) DEFAULT '0',
   `ball` tinyint(1) DEFAULT '0',
   `name` varchar(255) DEFAULT '',
-  `display` varchar(50) DEFAULT '',
+  `display` varchar(40) DEFAULT '',
   `status` varchar(255) DEFAULT '',
   `available` int(3) DEFAULT '0',
   `destroyed` tinyint(1) DEFAULT '0',
@@ -1045,9 +1049,11 @@ INSERT INTO `units` (`id`, `gameid`, `userid`, `ship`, `ball`, `name`, `display`
 (8, 1, 2, 0, 0, 'Flight', 'Tiger-Gamma', 'deployed', 3, 0, -356, -136, 295, 0, 180, NULL, NULL, 0, 10, 3, 0, ''),
 (9, 1, 1, 0, 0, 'Flight', 'Eagle-Alpha', 'deployed', 4, 0, -3, -466, 201, 0, 180, NULL, NULL, 0, 10, 3, 0, ''),
 (10, 1, 1, 0, 0, 'Flight', 'Blue-Phi', 'deployed', 4, 0, -85, 299, 359, 0, 180, NULL, NULL, 0, 10, 3, 0, ''),
-(11, 2, 1, 1, 0, 'Hyperion', '', 'bought', 1, 0, -178, 56, 327, 0, 155, 0, 0, 0, 3, 3, 0, ''),
-(12, 2, 2, 1, 0, 'Altarian', '', 'bought', 1, 0, 168, -165, 210, 0, 165, 0, 0, 0, 3, 3, 0, ''),
-(13, 2, 2, 1, 0, 'Squadron', '', 'bought', 1, 0, 129, 275, 180, 0, 175, 0, 0, 0, 3, 3, 0, '');
+(11, 2, 1, 1, 0, 'Hyperion', '', 'bought', 1, 0, -48, -28, 327, 0, 155, 0, 0, 0, 4, 3, 1, ''),
+(12, 2, 2, 1, 0, 'Altarian', '', 'bought', 1, 0, 97, -206, 30, 0, 165, 0, 0, 4, 4, 3, 1, ''),
+(13, 2, 2, 1, 0, 'Squadron', '', 'bought', 1, 0, -46, 275, 180, 0, 175, 1, 1, 0, 4, 3, 0, ''),
+(14, 3, 1, 1, 0, 'Artemis', 'Bow Before Your God', 'bought', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, ''),
+(15, 3, 2, 1, 0, 'Omega', '', 'bought', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '');
 
 -- --------------------------------------------------------
 
@@ -1214,12 +1220,12 @@ ALTER TABLE `fireorders`
 -- AUTO_INCREMENT für Tabelle `games`
 --
 ALTER TABLE `games`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT für Tabelle `loads`
 --
 ALTER TABLE `loads`
-  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT für Tabelle `missions`
 --
@@ -1229,7 +1235,7 @@ ALTER TABLE `missions`
 -- AUTO_INCREMENT für Tabelle `playerstatus`
 --
 ALTER TABLE `playerstatus`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT für Tabelle `powers`
 --
@@ -1259,7 +1265,7 @@ ALTER TABLE `systemcrits`
 -- AUTO_INCREMENT für Tabelle `units`
 --
 ALTER TABLE `units`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT für Tabelle `users`
 --

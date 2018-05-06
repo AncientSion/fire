@@ -3,7 +3,6 @@ function Ship(data){
 
 	this.id = data.id;
 	this.name = data.name;
-	this.call = data.call;
 	this.display = data.display;
 	this.notes = data.notes;
 	this.x = data.x || 0;
@@ -24,6 +23,7 @@ function Ship(data){
 	this.rolling = data.rolling;
 	this.rolled = data.rolled;
 	this.flipping = data.flipping;
+	this.flipped = data.flipped;
 	this.actions = data.actions || [];
 	this.morale = data.morale;
 	this.cc = [];
@@ -483,6 +483,11 @@ Ship.prototype.hasStoppedRolling = function(){
 
 Ship.prototype.isFlipping = function(){
 	if (this.flipping){return true;}
+	return false;
+}
+
+Ship.prototype.hasFlipped = function(){
+	if (this.flipped && this.flipped == game.turn-1){return true;}
 	return false;
 }
 
@@ -1482,10 +1487,10 @@ Ship.prototype.createMoraleLogEntry = function(){
 }
 
 Ship.prototype.getCallSign = function(){
-	if (this.call.length > 3){
-		return " - " + this.call + " - ";
+	if (this.display.length > 3){
+		return " - " + this.display + " - ";
 	}
-	return this.call;
+	return this.display;
 }
 
 Ship.prototype.getLogTitleSpan = function(){
@@ -1493,7 +1498,7 @@ Ship.prototype.getLogTitleSpan = function(){
 }
 
 Ship.prototype.getLogNameEntry = function(){
-	if (this.call.length > 3){
+	if (this.display.length > 3){
 		return this.getCallSign();
 	}
 	return "";
@@ -1507,8 +1512,16 @@ Ship.prototype.createUndeployEntry = function(){
 	this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " jumps into hyperspace and leaves the battlefield.</span></td>");
 }
 
-Ship.prototype.createMoveStartEntry = function(){
-	this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " has completed a full roll but is still rolling.</span></td>");
+Ship.prototype.createMoveStartEntry = function(type){
+	switch (type){
+		case "roll":
+			this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " has completed a full roll but is still rolling.</span></td>");
+			return;
+		case "flip":
+			this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " has completed a full flip.</span></td>");
+			return;
+	}
+
 }
 
 Ship.prototype.createActionEntry = function(move){

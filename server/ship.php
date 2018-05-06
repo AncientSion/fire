@@ -4,7 +4,7 @@ class Ship {
 	public $id;
 	public $userid;
 	public $available;
-	public $call;
+	public $display;
 	public $status;
 	public $destroyed;
 	public $x;
@@ -14,7 +14,7 @@ class Ship {
 	public $thrust;
 	public $rolling;
 	public $rolled;
-	public $flipping;
+	public $flipping = 0;
 	public $flipped;
 
 	public $disabled = false;
@@ -27,7 +27,6 @@ class Ship {
 	public $impulseHitMod = 0;
 
 	public $name = "";
-	public $display = "";
 	public $faction = "";
 	public $notes = "";
 	public $size;
@@ -69,7 +68,7 @@ class Ship {
 		$this->id = $data["id"];
 		$this->userid = $data["userid"];
 		$this->available = $data["available"];
-		$this->call = $data["display"];
+		$this->display = $data["display"];
 		$this->status = $data["status"];
 		$this->destroyed = $data["destroyed"];
 		$this->x = $data["x"];
@@ -79,6 +78,7 @@ class Ship {
 		$this->currentImpulse = $data["thrust"];
 		$this->rolling = $data["rolling"];
 		$this->rolled = $data["rolled"];
+		$this->flipped = $data["flipped"];
 		$this->notes = $data["notes"];
 	}
 
@@ -346,6 +346,7 @@ class Ship {
 			} else if ($this->actions[$i]->type == "jumpIn"){
 				$facing += $this->actions[$i]->a;
 			} else if ($this->actions[$i]->type == "flip"){
+				$this->flipped = $turn;
 				$facing += 180;
 			}
 		}

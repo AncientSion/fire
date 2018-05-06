@@ -15,8 +15,8 @@ class Rolentha extends Medium {
 	public $ew = 800;
 
 
-	function __construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-        parent::__construct($id, $userid, $available, $call, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
+	function __construct($data){
+        parent::__construct($data);
 	}
 
 	public function addStructures(){

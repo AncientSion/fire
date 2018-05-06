@@ -712,8 +712,8 @@ Single.prototype.getDetailsDiv = function(){
 	return div;
 }
 
-Single.prototype.addMainDivEvents = function(div, alive, isBuy){
-	if (isBuy){
+Single.prototype.addMainDivEvents = function(div, alive, isPreview){
+	if (isPreview){
 		div
 		.find("img")
 		.hover(function(e){

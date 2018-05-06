@@ -1661,7 +1661,13 @@
 		//Debug::log("asking for preview of: ".$get["name"].", index: ".$get["index"]);
 		$unit;
 		if ($get["unit"] == "ship"){
-			$unit = new $get["name"](1, 1, 0, "", "", 0, 0, 0, 270, 0, 0, 0, 0, "");
+			$unit = new $get["name"](
+				array(
+					"id" => 1, "userid" => 1, "available" => 0, "display" => "", "status" => "",
+					"destroyed" => 0, "x" => 0, "y" => 0, "facing" => 270, "delay" => 0, "thrust" => 0, 
+					"rolling" => 0, "rolled" => 0, "flipped" => 0, "notes" => ""
+				)
+			);
 			$unit->addAllSystems();
 			$unit->setUnitState(0, 0);
 		}
