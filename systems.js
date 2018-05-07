@@ -3149,7 +3149,7 @@ Launcher.prototype.getTraverseRating = function(){
 	return this.loads[this.ammo].traverse;
 }
 
-Launcher.prototype.setFireOrder = function(){
+Launcher.prototype.setFireOrder = function(targetid, pos){
 	if (this.odds <= 0){return;}
 	this.fireOrders.push(
 		{id: 0, turn: game.turn, shooterid: this.parentId, targetid: targetid, x: pos.x, y: pos.y, weaponid: this.id, 
