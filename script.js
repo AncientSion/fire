@@ -288,7 +288,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			shooter.drawEW();
 		}
 
-		snap = game.hasSnapCenterline(shooter, shooterAngle, target);
+		if (target){snap = game.hasSnapCenterline(shooter, shooterAngle, target);}
 
 		if ((target.squad || target.flight) && target.getStringHitChance().length > 15){
 			weaponInfo.append(
