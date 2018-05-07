@@ -20,9 +20,9 @@ class Ship {
 	public $disabled = false;
 
 	public $baseHitChance;
-	public $remainingDelay;
-	public $currentImpulse;
-	public $remainingImpulse;
+	public $remDelay;
+	public $curImp;
+	public $remImp;
 	public $baseImpulse;
 	public $impulseHitMod = 0;
 
@@ -74,8 +74,8 @@ class Ship {
 		$this->x = $data["x"];
 		$this->y = $data["y"];
 		$this->facing = $data["facing"];
-		$this->remainingDelay = $data["delay"];
-		$this->currentImpulse = $data["thrust"];
+		$this->remDelay = $data["delay"];
+		$this->curImp = $data["thrust"];
 		$this->rolling = $data["rolling"];
 		$this->rolled = $data["rolled"];
 		$this->flipped = $data["flipped"];
@@ -105,7 +105,7 @@ class Ship {
 	}
 
 	public function setPreviewState($turn, $phase){
-		$this->currentImpulse = $this->baseImpulse;
+		$this->curImp = $this->baseImpulse;
 		$this->morale = new Morale(100);
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq(), $this->power);
 
@@ -301,7 +301,7 @@ class Ship {
 	}
 
 	public function setCurSpeed($turn, $phase){
-		$impulse = $this->currentImpulse;
+		$impulse = $this->curImp;
 		if ($turn == $this->available){
 			$impulse = $this->getBaseImpulse();
 		}
@@ -313,26 +313,26 @@ class Ship {
 				$impulse += $step*$this->actions[$i]->dist;
 			}
 		}
-		$this->currentImpulse = $impulse;
+		$this->curImp = $impulse;
 	}
 
 	public function getCurSpeed(){
 		//Debug::log("getCurSpeed #".$this->id);
-		return $this->currentImpulse;
+		return $this->curImp;
 	}
 
 	public function setRemImpulse($turn){
 		if (sizeof($this->actions) && $this->actions[sizeof($this->actions)-1]->turn == $turn){
-			$this->remainingImpulse = 0;
+			$this->remImp = 0;
 		}
 		else { 
-			$this->remainingImpulse = $this->getCurSpeed();
+			$this->remImp = $this->getCurSpeed();
 		}
 	}
 
 	public function getEndState($turn){
 		//Debug::log("getMoveState for ".$this->id);
-		$delay = $this->remainingDelay;
+		$delay = $this->remDelay;
 		$facing = $this->facing;
 		for ($i = 0; $i < sizeof($this->actions); $i++){
 			if ($this->actions[$i]->turn < $turn){continue;}
@@ -360,7 +360,7 @@ class Ship {
 
 		//Debug::log("getMoveState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$facing);
 
-		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "facing" => $facing, "thrust" => $this->currentImpulse, "rolling" => $this->rolling, "rolled" => $this->rolled, "flipped" => $this->flipped);
+		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "facing" => $facing, "thrust" => $this->curImp, "rolling" => $this->rolling, "rolled" => $this->rolled, "flipped" => $this->flipped);
 	}
 
 	public function isRolling(){
@@ -384,8 +384,8 @@ class Ship {
 			}
 		}
 
-		$this->remainingDelay = $delay;
-		//echo $this->remainingDelay;
+		$this->remDelay = $delay;
+		//echo $this->remDelay;
 	}
 
 	public function setSpecialActionState($turn, $phase){

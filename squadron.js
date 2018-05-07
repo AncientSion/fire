@@ -539,7 +539,7 @@ Squadron.prototype.create = function(){
 		this.drawY = this.actions[0].y;
 	}
 	if (!this.structures.length){
-		this.currentImpulse = 0;
+		this.curImp = 0;
 		this.primary.systems[0].output = 0;
 		this.primary.systems[1].output = 0;
 	}
@@ -1052,7 +1052,7 @@ Squadron.prototype.setStats = function(){
 		this.baseImpulseCost = Math.max(this.baseImpulseCost, this.structures[i].baseImpulseCost);
 		this.baseTurnDelay = Math.max(this.baseTurnDelay, this.structures[i].baseTurnDelay);
 		this.baseImpulse = Math.min(this.baseImpulse, this.structures[i].baseImpulse);
-		this.currentImpulse = this.baseImpulse;
+		this.curImp = this.baseImpulse;
 		this.primary.systems[0].output = Math.max(this.primary.systems[0].output, this.structures[i].ew);
 		this.primary.systems[0].update();
 		if (this.primary.systems[1].output == 0){this.primary.systems[1].output = this.structures[i].ep;}

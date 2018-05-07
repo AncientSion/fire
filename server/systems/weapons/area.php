@@ -56,6 +56,8 @@ class GraviticMine extends Area {
 	public $name = "GraviticMine";
 	public $display = "Gravitic Mine";
 	public static $prio = 0;
+	public $minDmg = 30;
+	public $maxDmg = 30;
 	public $animColor = "blue";
 	public $projSize = 3;
 	public $projSpeed = 5;

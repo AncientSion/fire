@@ -23,8 +23,8 @@ class KaToc extends Medium {
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 400, 17, 3);
 		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 240, 60);
-		//$front->systems[] = new MagCompressor($this->getId(), $this->id, 330, 30);
-		$front->systems[] = new GraviticMine($this->getId(), $this->id, 330, 30);
+		$front->systems[] = new MagCompressor($this->getId(), $this->id, 330, 30);
+		//$front->systems[] = new GraviticMine($this->getId(), $this->id, 330, 30);
 		$front->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 300, 120);
 		$structs[] = $front;
 

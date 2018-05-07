@@ -39,9 +39,9 @@ function Ship(data){
 	this.turnMod = 1;
 	this.baseTurnDelay = data.baseTurnDelay || 0;
 	this.baseImpulseCost = data.baseImpulseCost || 0;
-	this.currentImpulse = data.currentImpulse || 0;
-	this.remainingImpulse = data.remainingImpulse || 0;
-	this.remainingDelay = data.remainingDelay || 0;
+	this.curImp = data.curImp || 0;
+	this.remImp = data.remImp || 0;
+	this.remDelay = data.remDelay || 0;
 
 	this.turnAngles = {};
 	this.moveAngles = {};
@@ -1805,14 +1805,14 @@ Ship.prototype.resetMoveMode = function(){
 }
 
 Ship.prototype.getCurSpeed = function(){
-	if (game.phase >= 1 && (this.movesThisPhase())){return this.currentImpulse;}
+	if (game.phase >= 1 && (this.movesThisPhase())){return this.curImp;}
 	var step = this.getImpulseStep();
 	var amount = 0;
 	for (var i = 0; i < this.actions.length; i++){
 		if (this.actions[i].type != "speed"){continue;}
 		amount += this.actions[i].dist;
 	}
-	return this.currentImpulse + step*amount;
+	return this.curImp + step*amount;
 }
 
 Ship.prototype.getRemSpeed = function(){
@@ -1994,7 +1994,7 @@ Ship.prototype.getRemEP = function(){
 }
 
 Ship.prototype.getRemDelay = function(){
-	var delay = this.remainingDelay;
+	var delay = this.remDelay;
 	for (var i = 0; i < this.actions.length; i++){
 		if (this.actions[i].type == "turn"){
 			delay += Math.ceil(this.actions[i].delay/this.actions[i].costmod);
@@ -2008,7 +2008,7 @@ Ship.prototype.getRemDelay = function(){
 }	
 
 Ship.prototype.getRemDelaya = function(){
-	return this.remainingDelay;
+	return this.remDelay;
 }
 
 Ship.prototype.getNextPosition = function(){

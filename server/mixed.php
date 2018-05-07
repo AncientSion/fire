@@ -46,7 +46,7 @@ class Mixed extends Ship {
 	}
 	
 	public function setRemDelay($turn){
-		$this->remainingDelay = 0;
+		$this->remDelay = 0;
 	}
 
 	public function setUnitState($turn, $phase){
@@ -169,6 +169,7 @@ class Mixed extends Ship {
 		$dist = 0;
 		$angle = -1;
 		$type = "move";
+		$origin = $this->getCurPos();
 
 		if ($this->mission->type == 1){ // PATROL
 			//Debug::log("PATROL");
@@ -178,7 +179,6 @@ class Mixed extends Ship {
 				//Debug::log("drag");
 			}
 			else {
-				$origin = $this->getCurPos();
 				$impulse = $this->getCurSpeed();
 				$dist = Math::getDist2($origin, $this->mission);
 				$angle = Math::getAngle2($origin, $this->mission);
@@ -206,6 +206,11 @@ class Mixed extends Ship {
 					$tPos = $this->getCurPos();
 					$type = "patrol";
 				}
+				else if ($this->mission->arrived && $t->mission->arrived && $t->mission->type == 2){
+					$tPos = $t->getCurPos();
+					$dist = Math::getDist2($origin, $tPos);
+					$type = "move";
+				}
 				else if ($t->mission->targetid == $this->id){ // FLIGHT target
 					if ($this->mission->arrived){ // at target, circle patrol
 						$tPos = $this->getCurPos();
@@ -219,7 +224,6 @@ class Mixed extends Ship {
 						}
 
 						$tPos = $t->getCurPos();
-						$origin = $this->getCurPos();
 						$impulse = $this->getCurSpeed();
 						$dist = Math::getDist2($origin, $tPos);
 						$angle = Math::getAngle2($origin, $tPos);
@@ -249,7 +253,6 @@ class Mixed extends Ship {
 			}
 			else { // SHIP SQUAD
 				$tPos = $t->getCurPos();
-				$origin = $this->getCurPos();
 				$impulse = $this->getCurSpeed();
 				$dist = Math::getDist2($origin, $tPos);
 				$angle = Math::getAngle2($origin, $tPos);
@@ -397,7 +400,7 @@ class Mixed extends Ship {
 
 		//Debug::log("getMoveState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$angle);
 
-		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $this->remainingDelay, "facing" => $facing, "thrust" => $this->currentImpulse, "rolling" => $this->rolling, "rolled" => $this->rolled, "flipped" => $this->flipped);
+		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $this->remDelay, "facing" => $facing, "thrust" => $this->curImp, "rolling" => $this->rolling, "rolled" => $this->rolled, "flipped" => $this->flipped);
 	}
 }
 

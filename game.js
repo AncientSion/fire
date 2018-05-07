@@ -320,7 +320,7 @@ function Game(data){
 
 		var flight = new Flight(
 			{id: -this.ships.length-20, name: "Flight", mission: mission,
-			x: p.x, y: p.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, currentImpulse: 0, fSize: 15, baseSize: 25, unitSize: 4, userid: this.userid, available: this.turn}
+			x: p.x, y: p.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, curImp: 0, fSize: 15, baseSize: 25, unitSize: 4, userid: this.userid, available: this.turn}
 		);
 
 		flight.primary = new Primary(0, flight.id, 0, 0, 0);
@@ -1033,6 +1033,7 @@ function Game(data){
 			}
 			else if (game.phase == 1){
 				this.animating = 0;
+				this.drawingEvents = 1;
 				this.logWeaponEvents();
 			}
 		}
@@ -2187,12 +2188,7 @@ function Game(data){
 			if (dist < fire.weapon.aoe){
 				var subDmgs = this.ships[i].getDmgByFire(fire);
 				for (var j = 0; j < subDmgs.length; j++){
-					if (this.ships[i].ship){
-						subDmgs[j].system = "<font color='" + color + "'>" +this.ships[i].display + " #" + this.ships[i].id + "</font>";
-					}
-					else {
-						subDmgs[j].system = "<font color='" + color + "'>" +this.ships[i].display + " #" + this.ships[i].id + "</font>  /  " + subDmgs[j].system;
-					}
+					subDmgs[j].system = this.ships[i].getLogTitleSpan();
 				}
 				dmgs = dmgs.concat(subDmgs);
 			}

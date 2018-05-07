@@ -51,7 +51,7 @@ Mixed.prototype.resetMoveMode = function(){
 }
 
 Mixed.prototype.getCurSpeed = function(){
-	return this.currentImpulse;
+	return this.curImp;
 }
 
 Mixed.prototype.getPostMovePos = function(){
@@ -655,7 +655,7 @@ Mixed.prototype.getDmgByFire = function(fire){
 		for (var j = this.structures[i].damages.length-1; j >= 0; j--){
 			if (this.structures[i].damages[j].fireid == fire.id){
 				dmgs.push(this.structures[i].damages[j]);
-				dmgs[dmgs.length-1].system = this.structures[i].display;
+				dmgs[dmgs.length-1].system = this.structures[i].name;
 				lookup--;
 				if (!lookup){return dmgs};
 			}

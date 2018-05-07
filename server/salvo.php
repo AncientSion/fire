@@ -47,20 +47,20 @@ class Salvo extends Mixed {
 	public function setCurSpeed($turn, $phase){
 		//Debug::log("setCurSpeed ".get_class($this));
 
-		if ($this->available == $turn && $phase == -1){$this->currentImpulse = 0; return;}
+		if ($this->available == $turn && $phase == -1){$this->curImp = 0; return;}
 		
 		$this->baseImpulse = $this->structures[0]->baseImpulse;
 		if ($this->structures[0]->missile){
 			$elapsed = 1 + $turn - $this->available;
-			$this->currentImpulse = floor($this->baseImpulse * min(3, $elapsed + ($phase > 1)));
+			$this->curImp = floor($this->baseImpulse * min(3, $elapsed + ($phase > 1)));
 		}
 		else {
-			$this->currentImpulse = $this->baseImpulse;
+			$this->curImp = $this->baseImpulse;
 		}
 	}
 	
 	public function getCurSpeed(){
-		return $this->currentImpulse;
+		return $this->curImp;
 	}
 
 	public function setPosition(){

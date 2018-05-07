@@ -3798,8 +3798,10 @@ Area.prototype.handleAimEvent = function(o, t){
 
 Area.prototype.highlightEvent = function(){
 	var o = game.getUnit(this.parentId);
+	if (!o.friendly && game.phase != 2){return;}
 	var t = this.fireOrders[this.fireOrders.length-1];
 	var dist = getDistance(o, t);
+	
 	if (game.phase != 2 && !o.friendly){
 		//t = getPointInDir(this.maxRange, getAngleFromTo(o, t), o.x, o.y);
 		t = getPointInDir(game.arcRange, getAngleFromTo(o, t), o.x, o.y);
@@ -3827,18 +3829,19 @@ Area.prototype.highlightEvent = function(){
 
 	salvoCtx.globalAlpha = 0.5;
 
-
-	if (game.phase == 2){ // devi vector
-		salvoCtx.beginPath();
-		salvoCtx.moveTo(0, 0);
-		salvoCtx.translate(o.x - t.x, o.y - t.y);
-		salvoCtx.translate(-o.x + t.rolls[0], -o.y + t.rolls[1]);
-		salvoCtx.lineTo(0, 0);
-		salvoCtx.closePath();
-		salvoCtx.strokeStyle = "yellow";
-		salvoCtx.stroke();
-		//salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height
-	}
+	/*
+		if (game.phase == 2){ // devi vector
+			salvoCtx.beginPath();
+			salvoCtx.moveTo(0, 0);
+			salvoCtx.translate(o.x - t.x, o.y - t.y);
+			salvoCtx.translate(-o.x + t.rolls[0], -o.y + t.rolls[1]);
+			salvoCtx.lineTo(0, 0);
+			salvoCtx.closePath();
+			salvoCtx.strokeStyle = "yellow";
+			salvoCtx.stroke();
+			//salvoCtx.drawImage(this.img, -this.img.width/2 , -this.img.height/2, this.img.width, this.img.height
+		}
+	*/
 
 	salvoCtx.beginPath();
 	salvoCtx.arc(0, 0, this.aoe, 0, 2*Math.PI, false);

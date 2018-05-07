@@ -799,7 +799,6 @@
 		for ($i = 0; $i < sizeof($this->fires); $i++){
 			Debug::log("handling fire: ".$this->fires[$i]->id.", weapon: ".$this->fires[$i]->weapon->display);
 			if ($this->fires[$i]->resolved){continue;}
-			if ($this->fires[$i]->usage > $this->turn){continue;}
 
 			$subFires = DmgCalc::createAreaFireOrders($this, $this->fires[$i]);
 
@@ -1080,7 +1079,7 @@
 							}
 						}
 						else if ($this->ships[$i]->flight){
-							if ($emitter->mission->targetid == $this->ships[$i]->id || $emitter->mission->typr == 1){ // mission direct target lock OR patrol 
+							if ($emitter->mission->targetid == $this->ships[$i]->id || $emitter->mission->type == 1){ // mission direct target lock OR patrol 
 								$emitter->locks[] = array($this->ships[$i]->id, $emitter->getLockEffect($this->ships[$i]));
 							}
 							else if ($emitter->mission->targetid == $this->ships[$i]->mission->targetid && $emitter->userid == $this->getUnit($emitter->mission->targetid)->userid){ //escorting flight
