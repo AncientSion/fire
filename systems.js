@@ -1061,8 +1061,8 @@ System.prototype.drawSystemArc = function(facing, rolled, pos){
 			end = this.arc[i][1];
 		}
 		
-		var p1 = getPointInDir(game.arcRange, start+facing, pos.x, pos.y);
-		var p2 = getPointInDir(game.arcRange, end+facing, pos.x, pos.y)
+		var p1 = getPointInDir(dist, start+facing, pos.x, pos.y);
+		var p2 = getPointInDir(dist, end+facing, pos.x, pos.y)
 		var dist = getDistance( {x: pos.x, y: pos.y}, p1);
 		var rad1 = degreeToRadian(start+facing);
 		var rad2 = degreeToRadian(end+facing);
