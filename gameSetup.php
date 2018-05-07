@@ -227,6 +227,7 @@ else {
 			window.game = {
 				turn: 0,
 			 	phase: -2,
+			 	purchases: 1,
 				ships: [],				
 				shipsBought: [],
 				userid: window.userid,
@@ -601,7 +602,7 @@ else {
 			.attr("id", "nameWrapper")
 			.append($("<table>")
 				.append($("<tr>")
-					.append($("<td>").css("width", 70).html("Name: "))
+					.append($("<td>").css("width", 60).html("Name: "))
 					.append($("<td>")
 						.append($("<input>").attr("type", "form").click(function(e){e.stopPropagation();})))))))
 	}
@@ -650,7 +651,7 @@ else {
 			call: game.ships[0].call,
 			faction: game.ships[0].faction,
 			value: game.ships[0].totalCost,
-			purchaseId: window.game.shipsBought.length,
+			purchaseId: purchases,
 			upgrades: game.ships[0].getAllUpgrades(),
 			command: 0,
 			turn: 1,
@@ -659,9 +660,10 @@ else {
 		}
 
 		window.game.shipsBought.push(ship);
+		game.purchases++;
 
 		var tr = document.createElement("tr");
-		$(tr).data("purchaseId", window.game.shipsBought[window.game.shipsBought.length-1].purchaseId)
+		$(tr).data("purchaseId", game.shipsBought[game.shipsBought.length-1].purchaseId)
 			.hover(function(e){
 				$(this).toggleClass("fontHighlight");
 			})

@@ -1609,7 +1609,7 @@ Sensor.prototype.select = function(e){
 	var selected = false;
 	var unit;
 
-	if (this.destroyed || this.disabled || this.locked || this.parentId != aUnit || aUnit < 0 || game.turnMode){
+	if (game.phase == -2 || this.destroyed || this.disabled || this.locked || this.parentId != aUnit || aUnit < 0 || game.turnMode){
 		return false;
 	}
 	else if (game.system && game.system != this.id && !this.selected){return false;}
@@ -3220,7 +3220,7 @@ Launcher.prototype.select = function(e){
 		this.setSystemBorder();
 		this.setupLauncherLoadout(e);
 	}
-	else if (game.phase != -1  || game.deploying || this.getOutput() == 0){
+	else if (game.turn == 1 || game.phase != -1  || game.deploying || this.getOutput() == 0){
 		return false;
 	}
 	else if (game.phase == -1 && game.getUnit(aUnit).hasPlannedMoves()){popup("This system can only be used BEFORE planning movement</br>Please reverse movement plan.");return;}
@@ -3801,7 +3801,7 @@ Area.prototype.highlightEvent = function(){
 	if (!o.friendly && game.phase != 2){return;}
 	var t = this.fireOrders[this.fireOrders.length-1];
 	var dist = getDistance(o, t);
-	
+
 	if (game.phase != 2 && !o.friendly){
 		//t = getPointInDir(this.maxRange, getAngleFromTo(o, t), o.x, o.y);
 		t = getPointInDir(game.arcRange, getAngleFromTo(o, t), o.x, o.y);
