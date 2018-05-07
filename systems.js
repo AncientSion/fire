@@ -1045,6 +1045,9 @@ System.prototype.drawSystemArc = function(facing, rolled, pos){
 			if (start < end){start = inverse - w/2;end = inverse + w/2;}
 			else {start = inverse + w/2;end = inverse - w/2;}
 		}*/
+
+	var dist = game.arcRange;
+	if (this.maxRange){dist = this.maxRange;}
 	for (var i = 0; i < this.arc.length; i++){
 		var	start;
 		var	end;
