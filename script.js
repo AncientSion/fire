@@ -288,13 +288,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			shooter.drawEW();
 		}
 
-		if (shooter.move && target && !target.move && !shooter.getRemSpeed()){
-			console.log("angle to target: " + shooterAngle);
-			if (Math.round(shooterAngle) == 360 || Math.round(shooterAngle) == 0){
-				console.log("snap!");
-				snap = true;
-			}
-		}
+		snap = game.hasSnapCenterline(shooter, shooterAngle, target);
 
 		if ((target.squad || target.flight) && target.getStringHitChance().length > 15){
 			weaponInfo.append(

@@ -22,23 +22,23 @@ class Saggitarius extends Medium {
 	public function addStructures(){
 		$structs = array();
 		
-		$front = new Structure($this->getId(), $this->id, 330, 30, 375, 14);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 375, 16);
 		$front->systems[] = new MediumPulse($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new MediumPulse($this->getId(), $this->id, 300, 60);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 30, 150, 450, 14, 1);
+		$right = new Structure($this->getId(), $this->id, 30, 150, 450, 15, 1);
 		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 0, 180, array(array("Naga", 16, 4), array("Cyclops", 12, 2), array("Titan", 8, 2)));
 		$right->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
 		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 0, 180, array(array("Naga", 16, 4), array("Cyclops", 12, 2), array("Titan", 8, 2)));
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 150, 210, 325, 12);
+		$aft = new Structure($this->getId(), $this->id, 150, 210, 325, 13);
 		$aft->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
 		$aft->systems[] = new Dual($this->getId(), $this->id, 0, 180, 28, array("LightPulse", "LightParticleBeam"));
 		$structs[] = $aft;
 
-		$left = new Structure($this->getId(), $this->id, 210, 330, 450, 14, 1);
+		$left = new Structure($this->getId(), $this->id, 210, 330, 450, 15, 1);
 		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 180, 360, array(array("Naga", 16, 4), array("Cyclops", 12, 2), array("Titan", 8, 2)));
 		$left->systems[] = new Dual($this->getId(), $this->id, 180, 360, 28, array("LightPulse", "LightParticleBeam"));
 		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 180, 360, array(array("Naga", 16, 4), array("Cyclops", 12, 2), array("Titan", 8, 2)));

@@ -53,6 +53,25 @@ function Game(data){
 
 	window.username = data.username;
 
+	this.hasSnapCenterline = function(shooter, shooterAngle, target){
+		if (game.phase == 2){
+			if (shooter.move && target && !target.move && !shooter.getRemSpeed()){
+				console.log("angle to target: " + shooterAngle);
+				if (Math.round(shooterAngle) == 360 || Math.round(shooterAngle) == 0){
+					console.log("snap!");
+					return true;
+				}
+			}
+		}
+		else if (game.phase == -1){
+			if (Math.round(shooterAngle) == 360 || Math.round(shooterAngle) == 0){
+				console.log("snap!");
+					return true;
+			}
+		}
+		return false;
+	}
+
 	this.doDeployShip = function(e, ship, pos){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].id == ship.id){

@@ -14,11 +14,11 @@ class Tethys extends SuperLight {
 	public $power = 2;
 	public $negation = 8;
 
-	//public $effiency = 2;
+	public $effiency = 2;
 
 	function __construct($id, $parentId){
         parent::__construct($id, $parentId);
-		//$this->boostEffect[] = new Effect("Armour", 2);
+		$this->boostEffect[] = new Effect("Armour", 2);
 	}
 
 	public function addStructures(){

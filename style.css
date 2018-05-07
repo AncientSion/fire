@@ -468,11 +468,6 @@ table, th, tr, td {
 	border: 3px solid yellow;
 }
 
-.fontHighlight {
-	background-color: red;
-	color: white;
-}
-
 .lobbyDiv {
 	text-align: center;
 	margin-left: 100px;
