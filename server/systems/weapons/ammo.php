@@ -17,9 +17,14 @@ class Missile extends Single {
 	}
 	
 	public function setBaseStats($phase, $turn){
-		$this->baseHitChance = ceil(sqrt($this->mass)*5);
-		if ($this->missile){$this->baseImpulse = ceil(pow($this->mass, -0.75)*400);}
-		else {$this->baseImpulse = $this->maxRange;}
+		if ($this->missile){
+			$this->baseImpulse = ceil(pow($this->mass, -0.75)*400);
+			$this->baseHitChance = ceil(sqrt($this->mass)*5);
+		}
+		else {
+			$this->baseImpulse = $this->maxRange;
+			$this->baseHitChance = 5;
+		}
 	}
 
 	public function singleCritTest($turn, $extra){
@@ -30,7 +35,6 @@ class Missile extends Single {
 class Torpedo extends Missile {
 	public $missile = 0;
 	public $torpedo = 1;
-	public $baseHitChance = 5;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
