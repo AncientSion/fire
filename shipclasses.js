@@ -379,7 +379,7 @@ Ship.prototype.doHover = function(){
 Ship.prototype.getActionCost = function(type){
 	switch (type){
 		case 0: return Math.ceil(this.getImpulseChangeCost()*1.5);
-		case 1: return Math.ceil(this.getImpulseChangeCost()*1);
+		case 1: return Math.ceil(this.getImpulseChangeCost()*3);
 		default: return 0;
 	}
 	return Math.ceil(this.getImpulseChangeCost()*1.5);
