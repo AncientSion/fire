@@ -3276,7 +3276,7 @@ Game.prototype.initialDone = function(){
 
 	if (newUnit){
 		$("#unitSelector").empty();
-		this.timeout = sinitSelectionWrapperetTimeout(function(){
+		this.timeout = setTimeout(function(){
 			game.initSelectionWrapper();
 		})
 	}
