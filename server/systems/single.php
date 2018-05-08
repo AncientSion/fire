@@ -30,6 +30,7 @@ class Single {
 	public $traverse = 0;
 	public $index = 0;
 	public $emDmg = 0;
+	public $dropout = array(80, 50);
 
 
 	function __construct($id, $parentId){

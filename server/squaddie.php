@@ -5,7 +5,6 @@ class Squaddie extends Single {
 	public $baseHitChance;
 	public $baseTurnDelay;
 	public $baseImpulseCost;
-	public $dropout = array(80, 50);
 
 	public $faction = "";
 	public $size = 0;

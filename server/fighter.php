@@ -1,7 +1,6 @@
 <?php
 
 class Fighter extends Single {
-	public $dropout = array(70, 40);
 	
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
