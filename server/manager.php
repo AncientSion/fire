@@ -703,7 +703,13 @@
 			DBManager::app()->updateSystemLoad($adjust);
 			DBManager::app()->insertUnits($this->userid, $this->gameid, $units);
 			for ($i = 0; $i < sizeof($units); $i++){
-				$this->ships[] = new Salvo($units[$i]["id"], $units[$i]["userid"], $this->turn, "", "deployed", 0, 0, 0, 0, 0, 0, 0, 0, "");
+				//$this->ships[] = new Salvo($units[$i]["id"], $units[$i]["userid"], $this->turn, "", "deployed", 0, 0, 0, 0, 0, 0, 0, 0, "");
+				$this->ships[] =
+					array(
+						"id" => $units[$i]["id"], "userid" => $units[$i]["userid"], "available" => $this->turn, "display" => "", "status" => "deployed",
+						"destroyed" => 0, "x" => 0, "y" => 0, "facing" => 270, "delay" => 0, "thrust" => 0, 
+						"rolling" => 0, "rolled" => 0, "flipped" => 0, "notes" => ""
+					);
 
 				$this->ships[sizeof($this->ships)-1]->setUnitState($this->turn, $this->phase);
 				$this->ships[sizeof($this->ships)-1]->actions[] = new Action(-1, $this->ships[$i]->id, $this->turn, "deploy", 0, $units[$i]["actions"][0]["x"], $units[$i]["actions"][0]["y"], $a, 0, 0, 0, 1, 1);

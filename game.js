@@ -57,9 +57,10 @@ function Game(data){
 		if (game.phase == 2){
 			if (shooter.move && target && !target.move && !shooter.getRemSpeed()){
 				console.log("angle to target: " + shooterAngle);
-				if (Math.round(shooterAngle) == 360 || Math.round(shooterAngle) == 0){
-					console.log("snap!");
-					return true;
+				if (Math.ceil(shooterAngle) == 360 || Math.ceil(shooterAngle) == 0
+					|| Math.floor(shooterAngle) == 360 || Math.floor(shooterAngle) == 0){
+						console.log("snap!");
+						return true;
 				}
 			}
 		}
@@ -367,7 +368,7 @@ function Game(data){
 		flight.setSize();
 		flight.setDrawData();
 		flight.setPreMovePosition();
-		flight.setPreMoveImage();
+		flight.setImage();
 		flight.createBaseDiv();
 		flight.setPostMoveFacing();
 		this.ships.push(flight);

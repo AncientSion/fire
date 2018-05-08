@@ -836,9 +836,9 @@ Ship.prototype.handleTurnAttempt = function(dest){
 	var max = this.getMaxTurnAngle();
 
 	if (isInArc(getCompassHeadingOfPoint(origin, dest, 0), this.turnAngles.start, this.turnAngles.end)){
-		if (Math.abs(a) >= 1){
+		//if (Math.abs(a) >= 1){
 			this.issueTurn(a);
-		}
+		//}
 	} else if (a < 0){
 		this.issueTurn(-max);
 	} else this.issueTurn(max);

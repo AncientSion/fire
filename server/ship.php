@@ -64,7 +64,6 @@ class Ship {
 	public $power = 0;
 
 	function __construct($data){
-		//var_export($data);
 		$this->id = $data["id"];
 		$this->userid = $data["userid"];
 		$this->available = $data["available"];
