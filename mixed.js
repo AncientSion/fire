@@ -407,6 +407,10 @@ Mixed.prototype.setPreMovePosition = function(){
 		this.drawX = this.actions[0].x;
 		this.drawY = this.actions[0].y;
 	}
+	else {
+		this.drawX = this.x;
+		this.drawY = this.y;
+	}
 }
 
 Mixed.prototype.setDrawData = function(){
