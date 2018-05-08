@@ -400,9 +400,7 @@ Mixed.prototype.create = function(){
 	if (this.id < 0){
 		this.setImpulse();
 	}
-	if (game.turn > 1 && game.phase == -1 && this.available == game.turn){
-		this.x = this.actions[0].x;
-		this.y = this.actions[0].y;
+	if (this.available == game.turn && game.phase <= 2){
 		this.drawX = this.actions[0].x;
 		this.drawY = this.actions[0].y;
 	}
