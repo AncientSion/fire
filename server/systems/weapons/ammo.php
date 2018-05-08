@@ -29,7 +29,8 @@ class Missile extends Single {
 
 class Torpedo extends Missile {
 	public $missile = 0;
-	public $torpedo = 1;
+	public $torpedo = 1
+	public $baseHitChance = 5;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
