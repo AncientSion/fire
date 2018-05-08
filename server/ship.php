@@ -287,6 +287,7 @@ class Ship {
 	}
 	
 	public function hideActions($phase){
+		if ($this->flight || $this->salvo){return;}
 		if ($this->move != $phase){return;}
 		for ($i = sizeof($this->actions)-1; $i >= 0; $i--){
 			if (!$this->actions[$i]->resolved){
