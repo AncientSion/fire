@@ -400,6 +400,9 @@ Mixed.prototype.create = function(){
 	if (this.id < 0){
 		this.setImpulse();
 	}
+}
+
+Mixed.prototype.setPreMovePosition = function(){
 	if (this.available == game.turn && game.phase <= 2){
 		this.drawX = this.actions[0].x;
 		this.drawY = this.actions[0].y;
