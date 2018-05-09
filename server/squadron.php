@@ -51,8 +51,9 @@ class Squadron extends Ship {
 			$integrity = 0;
 			$remaining = 0;
 			for ($i = 0; $i < sizeof($this->structures); $i++){
-				if ($this->structures[$i]->isDestroyed()){continue;}
 				$integrity += $this->structures[$i]->integrity;
+				
+				if ($this->structures[$i]->isDestroyed()){continue;}
 				$remaining += max(0, $this->structures[$i]->remaining);
 			}
 			$val = floor($remaining / $integrity * 100);
