@@ -37,7 +37,8 @@ class Tinashi extends Medium {
 		$left = new Structure($this->getId(), $this->id, 240, 360, 475, 18, 1);
 			$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
 			$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
-			$left->systems[] = new LightEMNeedler($this->getId(), $this->id, 180, 0);
+			$left->systems[] = new Dual($this->getId(), $this->id, 180, 0, 34, array("LightEMNeedler", "MediumEMDissipator"));
+			//$left->systems[] = new LightEMNeedler($this->getId(), $this->id, 180, 0);
 			$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 		$structs[] = $left;
 

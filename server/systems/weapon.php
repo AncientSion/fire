@@ -90,6 +90,10 @@ class Weapon extends System {
 		$this->maxDmg = $this->dmgs[3];
 	}
 
+	public function setEMData(){
+        $this->notes = array("Deals only EM damage.", "EM damage dissipates at end of turn.", "Armour fully applies.", "EM Damage is 2x as effective when testing criticals.", "Fighters and Ballistics are disabled immediatly if EM > Full HP");
+	}
+
 	public function getFlashBaseDamage($fire){
 		if ($fire->target->ship){
 			return floor($this->dmgs[3] + $this->dmgs[3]*0.5 * $fire->target->traverse);
@@ -135,7 +139,7 @@ class Weapon extends System {
 	}
 
 	public function getShots($turn){
-		return $this->shots;
+		return $this->shots + $this->getBoostEffect("Shots") * $this->getBoostLevel($turn);
 	}
 
 	public function getMinDamage(){

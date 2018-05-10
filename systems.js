@@ -32,6 +32,7 @@ function System(system){
 	this.type = system.type || "Internal";
 	this.dual = 0;
 	this.loadout = system.loadout;
+	this.emDmg = system.emDmg;
 	this.loaded = 0;
 	this.notes = system.notes;
 	this.launcher = 0;
@@ -76,7 +77,7 @@ System.prototype.hasLoad = function(){
 System.prototype.attachDetailsMods = function(ele){
 	//if (this.destroyed){return;}
 	
-	var div = $(ele) || $("#systemDetailsDiv");
+	var div = $(ele) || $("#sysDiv");
 		div.find(".modifiers").remove();
 	var boost = this.getBoostLevel();
 	var crew = this.getCrewLevel();
@@ -85,9 +86,12 @@ System.prototype.attachDetailsMods = function(ele){
 		table = $("<table>").addClass("modifiers").append($("<tr>").append($("<th>").html("Modifiers").attr("colSpan", 2)));
 		if (boost){
 			for (var i = 0; i < this.boostEffect.length; i++){
-				if (this.boostEffect[i].type == "Reload" || this.boostEffect[i].type == "Shots"){
+				if (this.boostEffect[i].type == "Reload"){
 					var html = this.boostEffect[i].type + ": " + (this.boostEffect[i].value * boost);
-				}		
+				}
+				else if (this.boostEffect[i].type == "Shots"){
+					var html = this.boostEffect[i].type + ": +" + (this.boostEffect[i].value * boost);
+				}
 				else {
 					var mod = "";
 					if (this.boostEffect[i].value > 0 && this.boostEffect[i].value){
@@ -338,7 +342,7 @@ System.prototype.setTimeLoaded = function(){
 	}
 	this.loaded = turnsLoaded;
 	if (this.element != undefined){$(this.element).find(".loadLevel").css("width", this.getLoadLevel() * 100 + "%");}
-	if (this.highlight){$("#systemDetailsDiv").find(".loading").html(this.getTimeLoaded() + " / " + this.reload);}
+	if (this.highlight){$("#sysDiv").find(".loading").html(this.getTimeLoaded() + " / " + this.reload);}
 }
 
 System.prototype.getTimeLoaded = function(){
@@ -526,6 +530,7 @@ System.prototype.doBoost = function(){
 		turn: game.turn,type: 1, cost: this.getEffiency(), new: 1
 	})
 	if (this.getBoostEffect("Reload")){this.setTimeLoaded();}
+	if (this.getBoostEffect("Shots")){this.updatesysDiv();}
 	if (this.weapon && this.dmgType == "Plasma"){
 		if (this.selected || this.highlight){
 			this.redrawSystemArc();
@@ -760,7 +765,7 @@ System.prototype.unsetFireOrder = function(){
 }
 
 System.prototype.hideInfoDiv = function(){
-	$("#systemDetailsDiv").remove();
+	$("#sysDiv").remove();
 }
 
 System.prototype.getImageName = function(){
@@ -910,7 +915,7 @@ System.prototype.hasUnresolvedFireOrder = function(){
 }
 
 System.prototype.update = function(){
-	if (this.highlight){this.updateSystemDetailsDiv();}
+	if (this.highlight){this.updatesysDiv();}
 	$(this.element).find(".outputMask").html(this.getOutput());
 }
 
@@ -921,6 +926,16 @@ System.prototype.getRemIntegrity = function(){
 	}
 	return this.integrity - dmg;
 }
+
+System.prototype.getEMDmg = function(){
+	var dmg = 0;
+	for (var i = this.damages.length-1; i >= 0; i--){
+		if (this.damages[i].turn < game.turn){return dmg;}
+		dmg += this.damages[i].emDmg;
+	}
+	return dmg;
+}
+
 System.prototype.isDestroyed = function(){
 	if (this.destroyed){
 		return true;
@@ -1216,7 +1231,7 @@ PrimarySystem.prototype.getBoostCostIncrease = function(){
 PrimarySystem.prototype.getSysDiv = function(){
 	var unit = game.getUnit(this.parentId);
 	var table = $("<table>");
-	var div = $("<div>").attr("id", "systemDetailsDiv")
+	var div = $("<div>").attr("id", "sysDiv")
 	
 	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
 
@@ -1254,11 +1269,11 @@ PrimarySystem.prototype.getSysDiv = function(){
 	return div;
 }
 
-PrimarySystem.prototype.updateSystemDetailsDiv = function(){
+PrimarySystem.prototype.updatesysDiv = function(){
 	var output = this.getOutputString();
 	var powerReq = this.getPowerReqString();
 	var boostReq = this.getEffiency();
-	var ele = $("#systemDetailsDiv");
+	var ele = $("#sysDiv");
 	$(ele).find("tr").each(function(i){
 		if (this.childNodes.length == 2){
 			if (this.childNodes[1].className == "output"){
@@ -1274,7 +1289,7 @@ PrimarySystem.prototype.updateSystemDetailsDiv = function(){
 	})
 
 	if (this instanceof Sensor){
-		$("#systemDetailsDiv").find(".sensorMode").html(this.getEWMode()).end().find(".sensorEffect").html(this.getEWModeEffect());
+		$("#sysDiv").find(".sensorMode").html(this.getEWMode()).end().find(".sensorEffect").html(this.getEWModeEffect());
 	}
 	this.attachDetailsMods(ele);
 }
@@ -1432,7 +1447,7 @@ Sensor.prototype.setEWMode = function(){
 			break;
 		}
 	}
-	this.updateSystemDetailsDiv();
+	this.updatesysDiv();
 }
 
 Sensor.prototype.getEWMode = function(){
@@ -2057,7 +2072,7 @@ Weapon.prototype.doUndoActions = function(){
 }
 
 Weapon.prototype.getShots = function(){
-	return this.shots;
+	return this.shots + this.getBoostEffect("Shots") * this.getBoostLevel();
 }
 
 Weapon.prototype.posJSONArc = function(loc, pos, facing){
@@ -2179,7 +2194,7 @@ Weapon.prototype.getTraverseRating = function(){
 
 Weapon.prototype.getSysDiv = function(){
 	var div = document.createElement("div");
-		div.id = "systemDetailsDiv";
+		div.id = "sysDiv";
 	var table = document.createElement("table");
 	
 	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
@@ -2190,6 +2205,7 @@ Weapon.prototype.getSysDiv = function(){
 	if (!this.tiny){
 		if (game.getUnit(this.parentId).ship){
 			$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
+			$(table).append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html(this.getEMDmg())));
 			$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
 		}
 		$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
@@ -2236,14 +2252,14 @@ Weapon.prototype.getSysDiv = function(){
 	}
 	
 	if (this.fireMode == "Laser"){
-		$(table).append($("<tr>").append($("<td>").html("Shots & Rakes")).append($("<td>").html(this.shots + " w/ " + this.output + " rakes")));
+		$(table).append($("<tr>").append($("<td>").html("Shots & Rakes")).append($("<td>").html(this.getShots() + " w/ " + this.output + " rakes")));
 	}
 	else if (!(this instanceof Launcher)){
 		if (this.fireMode == "Pulse"){
-			$(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").html(this.shots)));
+			$(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").addClass("shots").html(this.getShots())));
 			$(table).append($("<tr>").append($("<td>").html("Base / Max Hits")).append($("<td>").html(this.basePulses + " / " + (this.basePulses + this.extraPulses))));
 			$(table).append($("<tr>").append($("<td>").html("Bonus Hits")).append($("<td>").html(" +1 per " + this.grouping + "%")));
-		} else $(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").html(this.shots)));
+		} else $(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").addClass("shots").html(this.getShots())));
 	}
 
 	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDmgString())));
@@ -2262,25 +2278,18 @@ Weapon.prototype.getSysDiv = function(){
 	return div;
 }
 
-Weapon.prototype.updateSystemDetailsDiv = function(){
+Weapon.prototype.updatesysDiv = function(){
 	var dmg = this.getDmgString();
 	var acc = this.getAccuracy();
 	var power = this.getPowerReqString()
-	var ele = $("#systemDetailsDiv");
+	var shots = this.getShots();
+	var ele = $("#sysDiv");
 
-	$(ele).find("tr").each(function(i){
-		if (this.childNodes.length == 2){
-			if (this.childNodes[1].className == "damage"){
-				this.childNodes[1].innerHTML = dmg;
-			}
-			else if (this.childNodes[1].className == "accuracy"){
-				this.childNodes[1].innerHTML = acc + "% per 100px";
-			}
-			else if (this.childNodes[1].className == "powerReq"){
-				this.childNodes[1].innerHTML = power;
-			}
-		}
-	})
+	(ele)
+	.find(".powerReq").html(power).end()
+	.find(".accuracy").html(acc + "% per 100px").end()
+	.find(".shots").html(this.getShots()).end()
+	.find(".damage").html(dmg).end()
 
 	this.attachDetailsMods(ele);
 }
@@ -2395,7 +2404,7 @@ Warhead.prototype.getActiveSystem = function(){return this;}
 
 
 Warhead.prototype.getSysDiv = function(){
-	var div = $("<div>").attr("id", "systemDetailsDiv")
+	var div = $("<div>").attr("id", "sysDiv")
 		.append($("<table>")
 			.append($("<tr>")
 				.append($("<th>").html(this.display).attr("colSpan", 2)))
@@ -2629,7 +2638,6 @@ Pulse.prototype = Object.create(Particle.prototype);
 
 Pulse.prototype.getShots = function(){
 	return this.shots;
-	return this.basePulses + this.extraPulses;
 }
 	
 Pulse.prototype.getAnimation = function(fire){
@@ -2822,8 +2830,8 @@ function Dual(system){
 }
 Dual.prototype = Object.create(Weapon.prototype);
 
-Dual.prototype.updateSystemDetailsDiv = function(){
-	this.getActiveSystem().updateSystemDetailsDiv();
+Dual.prototype.updatesysDiv = function(){
+	this.getActiveSystem().updatesysDiv();
 	//game.getUnit(this.parentId).updateDiv();
 }
 
@@ -2948,7 +2956,7 @@ Dual.prototype.setSystemWindow = function(id){
 }
 
 Dual.prototype.resetDetailsDiv = function(){
-	var old = $("#systemDetailsDiv");
+	var old = $("#sysDiv");
 	var y = $(old).css("top")
 	var x = $(old).css("left")
 		old.remove();
@@ -3210,6 +3218,7 @@ Launcher.prototype.getEffiency = function(){
 }
 
 Launcher.prototype.select = function(e){
+	console.log(this);
 
 	if (this.destroyed || this.disabled || this.locked || game.turnMode){return false;}
 
@@ -3295,8 +3304,8 @@ Launcher.prototype.getMaxoutput = function(){
 	return this.launchRate[this.ammo];
 }
 
-Launcher.prototype.updateSystemDetailsDiv = function(){
-	$("#systemDetailsDiv")
+Launcher.prototype.updatesysDiv = function(){
+	$("#sysDiv")
 		.find("#ammo").html("<font color='red'>" + this.getRemAmmo() + "</font> / " + this.getMaxAmmo());
 }
 
@@ -3918,7 +3927,7 @@ Area.prototype.hasEvent = function(){
 
 Area.prototype.getSysDiv = function(){
 	var div = document.createElement("div");
-		div.id = "systemDetailsDiv";
+		div.id = "sysDiv";
 	var table = document.createElement("table");
 	
 	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
@@ -4000,7 +4009,7 @@ Bulkhead.prototype.select = function(){
 
 Bulkhead.prototype.getSysDiv = function(){
 	var div = document.createElement("div");
-		div.id = "systemDetailsDiv";
+		div.id = "sysDiv";
 	var table = document.createElement("table");
 		
 	var tr = document.createElement("tr");		
@@ -4573,7 +4582,7 @@ Hangar.prototype.setupHangarLoadout = function(e){
 
 Hangar.prototype.getSysDiv = function(){
 	var div = $("<div>")
-		.attr("id", "systemDetailsDiv")
+		.attr("id", "sysDiv")
 		.append($("<table>")
 			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.display).css("width", "40%")))
 			.append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)))

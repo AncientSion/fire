@@ -947,6 +947,7 @@
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if (!$this->ships[$i]->flight){continue;}
 			if ($this->ships[$i]->mission->type != 2){continue;}
+			if ($this->ships[$i]->mission->type == 1 && !$this->mission->arrived){continue;} // player issue new patrol in same initial phase as flight target jumpsOut
 
 			$t = $this->getUnit($this->ships[$i]->mission->targetid);
 			if ($t->destroyed || $t->status == "jumpOut"){

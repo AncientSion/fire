@@ -144,6 +144,7 @@ spl_autoload_register(
                 'lightempulse' => '/server/systems/weapons/pulse.php',
                 
                 'lightemneedler' => '/server/systems/weapons/particle.php',
+                'mediumemdissipator' => '/server/systems/weapons/particle.php',
                 'shockcannon' => '/server/systems/weapons/particle.php',
 
                 'particle' => '/server/systems/weapons/particle.php',

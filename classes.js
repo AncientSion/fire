@@ -331,11 +331,11 @@ Structure.prototype.showInfoDiv = function(e){
 }
 
 Structure.prototype.hideInfoDiv = function(e){
-	$("#systemDetailsDiv").remove();
+	$("#sysDiv").remove();
 }
 
 Structure.prototype.getSysDiv = function(){
-	var div = $("<div>").attr("id", "systemDetailsDiv")
+	var div = $("<div>").attr("id", "sysDiv")
 
 	var table = $("<table>")
 		.append($("<tr>")
@@ -368,12 +368,12 @@ Structure.prototype.getSysDiv = function(){
 }
 
 Structure.prototype.update = function(){
-	this.updateSystemDetailsDiv();
+	this.updatesysDiv();
 	//$(this.element).find(".outputMask").html(this.getOutput());
 }
 
-Structure.prototype.updateSystemDetailsDiv = function(){
-	$("#systemDetailsDiv")
+Structure.prototype.updatesysDiv = function(){
+	$("#sysDiv")
 		.find(".boostEffect").html(this.getBoostEffect("Armour") * this.getBoostLevel()).end()
 		.find(".powerUse").html(this.getPowerUsage()).end()
 		.find(".powerCost").html(this.getEffiency());
@@ -540,7 +540,7 @@ Primary.prototype.hover = function(e){
 	if (game.flightDeploy){return false;}
 	if (this.highlight){
 		this.highlight = false;
-		$("#systemDetailsDiv").remove();
+		$("#sysDiv").remove();
 	}
 	else {
 		this.highlight = true;
@@ -557,7 +557,7 @@ Primary.prototype.showInfoDiv = function(e){
 }
 
 Primary.prototype.getSysDiv = function(){
-	return $("<div>").attr("id", "systemDetailsDiv")
+	return $("<div>").attr("id", "sysDiv")
 		.append($("<table>")
 			.append($("<tr>")
 				.append($("<th>").html("Main Structure").attr("colSpan", 2)))
@@ -680,7 +680,7 @@ Single.prototype.hover = function(e){
 	}
 	else {
 		this.highlight = false;
-		$("#systemDetailsDiv").remove();
+		$("#sysDiv").remove();
 	}
 }
 
@@ -690,7 +690,7 @@ Single.prototype.getEmDmg = function(){
 
 Single.prototype.getDetailsDiv = function(){
 	var div = document.createElement("div");
-		div.id = "systemDetailsDiv";
+		div.id = "sysDiv";
 		div.className = this.id + " flight";
 
 		var table = $("<table>")
@@ -788,7 +788,7 @@ Single.prototype.addSysEvents = function(div, isBuy){
 	})
 	.hover(function(e){
 		e.stopPropagation();
-		$("#systemDetailsDiv").remove();
+		$("#sysDiv").remove();
 		var shipId = $(this).parent().parent().parent().data("shipId");
 		game.getUnit(shipId).getSystem($(this).data("systemId")).hover(e)
 	})

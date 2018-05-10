@@ -7,8 +7,8 @@ class Missile extends Single {
 
 	function __construct($id, $parentId){
 		if ($this->missile){
-			$this->integrity = 1 + $this->mass*2;
-			$this->negation = $this->mass-1;
+			$this->integrity = $this->mass*2;
+			$this->negation = $this->mass-2;
 		}
 
 		parent::__construct($id, $parentId);

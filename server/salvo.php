@@ -68,7 +68,7 @@ class Salvo extends Mixed {
 	}
 
 	public function getFireAngle($fire){
-		$angle = round(Math::getAngle2($this->actions[sizeof($this->actions)-1], $this->actions[0]));
+		$angle = round(Math::getAngle2(new Point($this->x, $this->y), $this->actions[0]));
 		Debug::log("------- SALVO TRAJECT: ".$angle);
 		return $angle;
 	}

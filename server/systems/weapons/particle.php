@@ -208,6 +208,8 @@ class LightEMNeedler extends Particle {
 	public $integrity = 24;
 	public $powerReq = 3;
 	public $traverse = -4;
+	public $effiency = 3;
+	public $maxBoost = 1;
 
 	public $animation = "em";
 	public $animColor = "lightBlue";
@@ -219,23 +221,23 @@ class LightEMNeedler extends Particle {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
-        $this->notes = array("Does no HP damage, but EM damage.", "EM damage dissipates at end of turn.", "Armour fully applies.", "EM Damage that penetrates armour is 2x as effective when testing criticals.", "Fighters and Ballistics are disabled without crit-test if EM > Full HP");
-	
+        $this->setEMData();
+		$this->boostEffect[] = new Effect("Shots", 3);
 	}
 }
 
-class ShockCannon extends Particle {
-	public $name = "ShockCannon";
-	public $display = "42mm Shock Cannon";
+class MediumEMDissipator extends Particle {
+	public $name = "MediumEMDissipator";
+	public $display = "Medium EM Dissipator";
 	public static $prio = 0;
-	public $minDmg = 6;
-	public $maxDmg = 8;
+	public $minDmg = 20;
+	public $maxDmg = 24;
 	public $accDecay = 120;
 	public $shots = 1;
 	public $reload = 2;
 	public $integrity = 34;
-	public $powerReq = 2;
-	public $traverse = -1;
+	public $powerReq = 3;
+	public $traverse = 0;
 
 	public $animation = "em";
 	public $animColor = "lightBlue";
@@ -247,7 +249,7 @@ class ShockCannon extends Particle {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
-		$this->notes = array("Does no structural damage", "Damage can cause critical effects");
+        $this->setEMData();
 	}
 }
 

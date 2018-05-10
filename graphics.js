@@ -406,21 +406,21 @@ function drawExplosion(weapon, anim){  // 150, 150, 30
 	var mid = "";
 	var inner = "";
 
-	/*if (weapon instanceof EM){
+	if (weapon.dmgType[0] == "E"){
 		outer = "rgb(95,125,255)";
 		mid = "rgb(95,125,255)";
 		inner = "rgb(255,255,255)";
-	}
-	else if (weapon instanceof Plasma){
+	}	
+	else if (weapon.dmgType[0] == "P"){
 		outer ="rgb(150,255,0)";
 		mid = "rgb(255,200,0)";
 		inner = "rgb(150,150,0)";
 	}
-	else {*/
+	else {
 		outer ="rgb(255,225,75)";
 		mid = "rgb(255,200,0)";
 		inner = "rgb(255,0,0)";
-	//}
+	}
 
 	fxCtx.beginPath(); fxCtx.arc(anim.tx, anim.ty, sin, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = outer; fxCtx.fill();
 	fxCtx.beginPath(); fxCtx.arc(anim.tx, anim.ty, sin*0.66, 0, 2*Math.PI); fxCtx.closePath(); fxCtx.fillStyle = mid; fxCtx.fill();

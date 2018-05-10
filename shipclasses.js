@@ -1357,7 +1357,7 @@ Ship.prototype.doUnselect = function(){
 	$("#hangarDiv").addClass("disabled");
 	$("#popupWrapper").hide()
 	$("#instructWrapper").hide()
-	$("#systemDetailsDiv").remove();
+	$("#sysDiv").remove();
 	$(game.ui.doShorten).empty();
 	mouseCtx.clearRect(0, 0, res.x, res.y);
 	game.redraw();
@@ -2086,7 +2086,7 @@ Ship.prototype.showMoraleDiv = function(e){
 	.append($("<div>")
 			.css("left", e.clientX - 90)
 			.css("top", e.clientY + 40)
-			.attr("id", "systemDetailsDiv")
+			.attr("id", "sysDiv")
 			.append($("<table>")
 				.append($("<tr>")
 					.append($("<th>").attr("colSpan", 2).html("Morale Overview")))
@@ -2115,7 +2115,7 @@ Ship.prototype.showMoraleDiv = function(e){
 }
 
 Ship.prototype.hideMoraleDiv = function(){
-	$("#systemDetailsDiv").remove();
+	$("#sysDiv").remove();
 }
 
 Ship.prototype.getRoutChance = function(){

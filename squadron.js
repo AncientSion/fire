@@ -57,12 +57,12 @@ Squaddie.prototype.showInfoDiv = function(e){
 }
 
 Squaddie.prototype.hideInfoDiv = function(){
-	$("#systemDetailsDiv").remove();
+	$("#sysDiv").remove();
 }
 
 Squaddie.prototype.getSysDiv = function(){
 	var div = 
-		$("<div>").attr("id", "systemDetailsDiv")
+		$("<div>").attr("id", "sysDiv")
 			.append($("<table>")
 				.append($("<tr>")
 					.append($("<th>").html(this.display).attr("colSpan", 2)))
@@ -285,11 +285,11 @@ Squaddie.prototype.updateShipPower = function(system){
 }
 
 Squaddie.prototype.update = function(){
-	this.updateSystemDetailsDiv();
+	this.updatesysDiv();
 }
 
-Squaddie.prototype.updateSystemDetailsDiv = function(){
-	$("#systemDetailsDiv")
+Squaddie.prototype.updatesysDiv = function(){
+	$("#sysDiv")
 		.find(".boostEffect").html(this.getBoostEffect("Armour") * this.getBoostLevel()).end()
 		.find(".powerUse").html(this.getPowerUsage()).end()
 		.find(".powerCost").html(this.getEffiency());

@@ -270,7 +270,28 @@ class SquadBuilder {
 						),
 					),
 				"loads" =>
-					array(),
+					array(
+						array(
+							"systemid" => 5,
+							"name" => "Vran",
+							"amount" => 6,
+						),
+						array(
+							"systemid" => 6,
+							"name" => "Vran",
+							"amount" => 6,
+						),
+						array(
+							"systemid" => 9,
+							"name" => "Vran",
+							"amount" => 6,
+						),
+						array(
+							"systemid" => 10,
+							"name" => "Vran",
+							"amount" => 6,
+						),
+					),
 			),
 		);
 	}

@@ -1158,6 +1158,8 @@ function Game(data){
 			$("#phaseSwitchDiv").click(function(){
 				game.draw();
 				$(this).hide();
+				game.resetImageData();
+				game.draw();
 				game.timeout = setTimeout(function(){
 					game.initDamageControl();
 				}, 500);
@@ -2133,7 +2135,7 @@ function Game(data){
 	}
 
 	this.resolveFire = function(){
-		this.resetImageData();
+		//this.resetImageData();
 		this.getAllResolvingFireOrders();
 		this.getShotDetails();
 		this.getFireAnimationDetails();
