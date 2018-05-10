@@ -270,20 +270,23 @@
 		for ($i = 0; $i < sizeof($this->reinforcements); $i++){
 			if ($this->reinforcements[$i]["userid"] == $this->userid){
 				$unit = new $this->reinforcements[$i]["name"](
-					-$this->reinforcements[$i]["id"],
-					$this->reinforcements[$i]["userid"],
-					$this->turn + $this->reinforcements[$i]["available"],
-					$this->reinforcements[$i]["display"],
-					$this->reinforcements[$i]["status"],
-					$this->reinforcements[$i]["destroyed"],
-					$this->reinforcements[$i]["x"],
-					$this->reinforcements[$i]["y"],
-					0,
-					$this->reinforcements[$i]["delay"],
-					$this->reinforcements[$i]["thrust"],
-					$this->reinforcements[$i]["rolling"],
-					$this->reinforcements[$i]["rolled"],
-					$this->reinforcements[$i]["notes"]
+					array(
+					"id" => -$this->reinforcements[$i]["id"],
+					"userid" => $this->reinforcements[$i]["userid"],
+					"available" => $this->turn + $this->reinforcements[$i]["available"],
+					"display" => $this->reinforcements[$i]["display"],
+					"status" => $this->reinforcements[$i]["status"],
+					"destroyed" => $this->reinforcements[$i]["destroyed"],
+					"x" => $this->reinforcements[$i]["x"],
+					"y" => $this->reinforcements[$i]["y"],
+					"facing" => 0,
+					"delay" => $this->reinforcements[$i]["delay"],
+					"thrust" => $this->reinforcements[$i]["thrust"],
+					"rolling" => $this->reinforcements[$i]["rolling"],
+					"rolled" => $this->reinforcements[$i]["rolled"],
+					"flipped" => $this->reinforcements[$i]["flipped"],
+					"notes" => $this->reinforcements[$i]["notes"]
+					)
 				);
 
 				$unit->addAllSystems();
@@ -1356,7 +1359,7 @@
 			DBManager::app()->insertServerFireOrder($fires);
 
 			for ($i = 0; $i < sizeof($fires); $i++){
-				Debug::log("ball fireorder");
+				Debug::log("ball fireorder ".$i);
 				$fires[$i]->target->resolveFireOrder($fires[$i]);
 			}
 			$this->fires = array_merge($this->fires, $fires);

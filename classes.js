@@ -626,6 +626,11 @@ Single.prototype.getBaseImage = function(){
 	} else return graphics.images[this.name.toLowerCase()];
 }
 
+Single.prototype.isDestroyed = function(){
+	if (this.destroyed || this.disabled){return true;}
+	return false;
+}
+
 Single.prototype.isDestroyedThisTurn = function(){
 	//if (this.parentId == 53 && this.id == 7){return true;}
 	if (this.disabled){

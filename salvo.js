@@ -356,9 +356,9 @@ Salvo.prototype.setImage = function(){
 Salvo.prototype.getShots = function(){
 	shots = 0;
 	for (var i = 0; i < this.structures.length; i++){
-		if (!this.structures[i].isDestroyedThisTurn()){
-			shots++;
-		}
+		if (this.structures[i].isDestroyed()){continue;}
+		//if (!this.structures[i].isDestroyedThisTurn()){
+		shots++;
 	}
 	return shots;
 }

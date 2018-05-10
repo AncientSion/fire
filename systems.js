@@ -244,12 +244,13 @@ System.prototype.setTableRow = function(){
 	}
 
 	if (Object.keys(this.modes).length){
-		//if (this.getLoadLevel() != 1){return;}
-		if (this.highlight && this.disabled){
-			ele.find(".modeDiv").hide()
-		}
-		else if (this.highlight && !this.disabled){
-			ele.find(".modeDiv").show()
+		if (this.highlight){
+			if (this.disabled){
+				ele.find(".modeDiv").hide()
+			}
+			else if (this.canChangeMode()){
+				ele.find(".modeDiv").show()
+			}
 		}
 	}
 
