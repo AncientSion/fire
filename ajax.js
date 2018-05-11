@@ -386,15 +386,15 @@ window.ajax = {
 	confirmDamageControl: function(callback){
 	
 		var jumpout = [];
-		var command = [];
+		var focus = [];
 
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid == game.userid){
 				if (game.ships[i].status == "jumpOut"){
 					jumpout.push({id: game.ships[i].id, status: "jumpOut"});
 				}
-				if (game.ships[i].command){
-					command.push(game.ships[i].id);
+				if (game.ships[i].focus){
+					focus.push(game.ships[i].id);
 				}
 			}
 		}
@@ -409,7 +409,7 @@ window.ajax = {
 				turn: game.turn,
 				phase: game.phase,
 				jumpout: jumpout,
-				command: command
+				focus: focus
 				},
 			success: callback,
 			error: ajax.error,

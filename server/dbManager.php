@@ -1082,8 +1082,8 @@
 			}
 		}
 
-		public function setCommandUnits($data){
-			//Debug::log("setCommandUnits s: ".sizeof($data));
+		public function setFocusUnits($data){
+			//Debug::log("setFocusUnits s: ".sizeof($data));
 			//Debug::log("0: ".$data[0]);
 			$stmt = $this->connection->prepare("
 				UPDATE units 

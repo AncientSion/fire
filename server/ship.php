@@ -31,7 +31,7 @@ class Ship {
 	public $notes = "";
 	public $size;
 	public static $value;
-	public $cost;
+	public $cost = 0;
 
 	public $ship = true;
 	public $flight = false;
@@ -126,7 +126,7 @@ class Ship {
 			$this->primary->systems[$i]->hitPct = round($this->primary->systems[$i]->getHitChance() / $all * 100, 2);
 		}
 	}
-
+	
 	public function setUnitState($turn, $phase){
 		//Debug::log("ship setUnitState #".$this->id."/".$this->display);
 
@@ -215,11 +215,20 @@ class Ship {
 
 	public function setProps($turn, $phase){
 		//Debug::log("setProps ".get_class($this)." #".$this->id);
-		$this->cost = static::$value;
+		$this->cost = $this->getUnitCost();
 		$this->setCurSpeed($turn, $phase);
 		$this->setRemImpulse($turn);
 		$this->setRemDelay($turn);
 		$this->setSpecialActionState($turn, $phase);
+	}
+
+	public function getUnitCost(){
+		if ($this->ship){return static::$value;}
+		$cost = 0;
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			$cost += $this->structures[$i]::$value;
+		}
+		return $cost;
 	}
 
 	public function setPosition(){

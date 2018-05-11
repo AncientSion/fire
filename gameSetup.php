@@ -103,6 +103,7 @@ else {
 	<script src='mixed.js'></script>
 	<script src='salvo.js'></script>
 	<script src='flights.js'></script>
+	<script src='squaddie.js'></script>
 	<script src='squadron.js'></script>
 	<script src='systems.js'></script>
 	<script src='graphics.js'></script>
@@ -666,7 +667,7 @@ else {
 			})
 			.click(function(e){
 				e.preventDefault(); e.stopPropagation();
-				setAsCommand($(this));
+				setFocus($(this));
 			})
 
 		var td = tr.insertCell(-1)
@@ -713,7 +714,7 @@ else {
 		return ("(" + (window.maxPoints - game.getFleetCost()) + ")");
 	}
 
-	function setAsCommand(ele){
+	function setFocus(ele){
 		for (let i = 0; i < game.shipsBought.length; i++){
 			if (game.shipsBought[i].command){
 				game.shipsBought[i].command = 0;

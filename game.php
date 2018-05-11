@@ -29,6 +29,7 @@
 	<script src='mixed.js'></script>
 	<script src='salvo.js'></script>
 	<script src='flights.js'></script>
+	<script src='squaddie.js'></script>
 	<script src='squadron.js'></script>
 	<script src='systems.js'></script>
 	<script src='graphics.js'></script>
@@ -181,14 +182,17 @@
 			<table id="overview">
 				<thead>
 					<tr>
-						<th width="10%">
+						<th>
 							Turn
 						</th>
-						<th width="70%">
+						<th>
 							Phase
 						</th>
-						<th width="20%">
+						<th>
 							PV
+						</th>
+						<th id="focusPoints">
+							FP
 						</th>
 					</tr>
 				</thead>

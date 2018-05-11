@@ -630,28 +630,26 @@ function Game(data){
 	}
 	
 	this.handleDmgControlWarnings = function(){
-		var hasNoCommand = 1;
+		var hasNoFocus = 1;
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid != this.userid){continue;}
 			if (this.ships[i].status == "jumpOut" || this.ships[i].destroyed){continue;}
-			if (this.ships[i].command){
-				hasNoCommand = 0; break;
+			if (this.ships[i].focus){
+				hasNoFocus = 0; break;
 			}
 		}
 
-		if (hasNoCommand){
+		if (hasNoFocus){
 			popup("Please assign Command Focus to a unit for the next turn.");
 			return true;
 		}
 		return false;
 	}
 
-	this.assignCommand = function(id){
-		for (var i = 0; i < this.ships.length; i++){
-			this.ships[i].unsetAsCommand();
-		}
-		game.getUnit(id).setAsCommand();
+	this.assignFocus = function(id){
+		//for (var i = 0; i < this.ships.length; i++){this.ships[i].unsetFocus();}
+		this.getUnit(id).setFocus();
 	}
 
 	this.clickablePop = function(data){
@@ -3534,9 +3532,63 @@ Game.prototype.setGameInfo = function(){
 		.append($("<tr>")
 			.append($("<td>").html(this.turn))
 			.append($("<td>").html(getPhaseString(this.phase)))
-			.append($("<td>").html(this.getPlayerStatus().value)))
+			.append($("<td>").html(this.getPlayerStatus().value))
+			.append($("<td>")
+				.html(this.getPlayerStatus().curFocus)
+				.hover(
+					function(){
+						game.showFocusInfo();
+					},
+					function(){
+						game.hideFocusInfo();
+					})))
 }
 
+Game.prototype.showFocusInfo = function(){
+	var div = document.createElement("div");
+		div.id = "sysDiv";
+	var table = document.createElement("table");
+
+	$(document.body)
+	.append(
+		$("<div>").attr("id", "sysDiv")
+		.css("top", 50).css("left", 100)
+		.append($("<table>")
+			.append($("<tr>")
+				.append($("<th>").html("Focus Overview").attr("colSpan", 2))
+			)
+			.append($("<tr>")
+				.append($("<td>").html("Maximum Focus").css("width", "60%"))
+				.append($("<td>").html(this.getPlayerStatus().maxFocus))
+			)
+			.append($("<tr>")
+				.append($("<td>").html("Focus gain/turn"))
+				.append($("<td>").html(this.getPlayerStatus().gainFocus))
+			)
+			.append($("<tr>")
+				.append($("<td>").html("Current Focus"))
+				.append($("<td>").html(this.getPlayerStatus().curFocus))
+			)
+			.append($("<tr>")
+				.append($("<td>").html("Current Spending"))
+				.append($("<td>").html(this.getFocusSpending()))
+			)
+		)
+	)
+}
+
+Game.prototype.hideFocusInfo = function(){
+	$("#sysDiv").remove();
+}
+
+Game.prototype.getFocusSpending = function(){
+	var spend = 0;
+	for (let i = 0; i < this.ships.length; i++){
+		if (!this.ships[i].friendly){continue;}
+		if (this.ships[i].focus){spend += 10;}
+	}
+	return spend;
+}
 Game.prototype.getPlayerStatus = function(){
 	for (let i = 0; i < this.playerstatus.length; i++){
 		if (this.playerstatus[i].userid == this.userid){return this.playerstatus[i];}
@@ -3547,7 +3599,7 @@ Game.prototype.getPlayerStatus = function(){
 Game.prototype.setConfirmInfo = function(){
 	var player = this.getPlayerStatus();
 
-	var td = $("<td>").attr("colSpan", 3).addClass("buttonTD").css("font-size", 20)
+	var td = $("<td>").attr("colSpan", 4).addClass("buttonTD").css("font-size", 20)
 
 
 	if (this.status == "closed"){
@@ -3582,7 +3634,7 @@ Game.prototype.setConfirmInfo = function(){
 	if (this.phase == 3 && this.getPlayerStatus().status == "waiting"){
 		$("#upperGUI").find("#overview").find("tbody")
 		.append($("<tr>")
-			.append($("<td>").attr("colSpan", 3).addClass("buttonTD").css("font-size", 20).html("Concede Match")
+			.append($("<td>").attr("colSpan", 4).addClass("buttonTD").css("font-size", 20).html("Concede Match")
 				.click(function(){
 					if (!game.canConfirm){return;}
 					game.canConfirm = 0;

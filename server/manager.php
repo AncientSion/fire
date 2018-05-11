@@ -83,9 +83,13 @@
 			"userid" => $this->userid,
 			"username" => $this->getUsername(),
 			"wave" => $this->wave,
-			"playerstatus" => $this->playerstatus
+			"playerstatus" => $this->getPlayerStatus()
 		);
 
+	}
+
+	public function getPlayerStatus(){
+		return $this->playerstatus;
 	}
 
 	public function getMemory(){
@@ -227,8 +231,6 @@
 				} break;
 			default: break;
 		}
-
-		//Debug::log(sizeof($this->ships));
 
 		return $this->ships;
 	}

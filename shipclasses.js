@@ -52,7 +52,8 @@ function Ship(data){
 	this.salvo = data.salvo;
 	this.squad = data.squad;
 	this.move = data.move;
-	this.command = data.move;
+	this.command = data.command;
+	this.focus = data.focus;
 
 	this.friendly = 0;
 	this.deployed = 0;
@@ -1273,7 +1274,7 @@ Ship.prototype.getShortInfo = function(){
 	var impulse = this.getCurSpeed();
 
 	var header = this.name + " #" + this.id;
-	if (this.command){header += "<font color='yellow'> (FOCUS)</font>";}
+	if (this.focus){header += "<font color='yellow'> (FOCUS)</font>";}
 
 	var table = document.createElement("table");
 		table.insertRow(-1).insertCell(-1).innerHTML = header;
@@ -1657,8 +1658,8 @@ Ship.prototype.drawMarker = function(x, y, c, context){
 	context.beginPath();
 	context.arc(x, y, (this.size-2)/2, 0, 2*Math.PI, false);
 	context.closePath();
-	context.lineWidth = 1 + (this.salvo *1) + Math.floor(this.selected*2 + (this.move == 1 )*2);
-	context.globalAlpha = 0.7 + (this.move == 1) * 0.1;
+	context.lineWidth = 1 + (this.salvo *1) + Math.floor(this.selected*2 + (this.focus == 1)*2);
+	context.globalAlpha = 0.7 + (this.focus == 1) * 0.1;
 	context.globalCompositeOperation = "source-over";
 	context.strokeStyle = c;
 	context.stroke();
@@ -2216,10 +2217,10 @@ Ship.prototype.createBaseDiv = function(){
 	if (game.phase == 2){
 		$(div).find(".structContainer").show();
 	}
-	$(this.addCommandDiv(div[0]))
+	$(this.addFocusDiv(div[0]))
 }
 
-Ship.prototype.addCommandDiv = function(div){
+Ship.prototype.addFocusDiv = function(div){
 	if (this.status == "jumpOut"){return;}
 
 	$(div).append(
@@ -2228,22 +2229,22 @@ Ship.prototype.addCommandDiv = function(div){
 		.append(
 			$("<div>")
 			.data("unitid", this.id)
-			.html("Grant Command Focus")
+			.html("Assign Focus (" + this.getFocusCost()+")")
 			.addClass("buttonTD")
 			.hide()
 			.click(function(){
-				game.assignCommand($(this).data("unitid"));
+				game.assignFocus($(this).data("unitid"));
 			})
 		)
 		.append(
 			$("<div>")
-			.html("Holds Command Focus")
+			.html("Has Focus (" + this.getFocusCost()+")")
 			.addClass("commandEntry")
 			.hide()
 		)
 	)
 
-	if (this.command){
+	if (this.focus){
 		$(this.element).find(".commandEntry").show();
 	}
 	else if (game.phase == 3 && this.friendly){
@@ -2252,17 +2253,21 @@ Ship.prototype.addCommandDiv = function(div){
 	else $(this.element).find(".commandContainer").hide();
 }
 
-Ship.prototype.unsetAsCommand = function(){
-	if (this.command){
-		this.command = 0;
-		$(this.element).find(".commandContainer").find(".buttonTD").show().end().find(".commandEntry").hide();
+Ship.prototype.getFocusCost = function(){
+	return Math.ceil(this.cost/10);
+}
+
+Ship.prototype.setFocus = function(){
+	if (!this.focus){
+		this.focus = 1;
+		$(this.element).find(".commandContainer").find(".buttonTD").hide().end().find(".commandEntry").show();
 	}
 }
 
-Ship.prototype.setAsCommand = function(){
-	if (!this.command){
-		this.command = 1;
-		$(this.element).find(".commandContainer").find(".buttonTD").hide().end().find(".commandEntry").show();
+Ship.prototype.unsetFocus = function(){
+	if (this.focus){
+		this.focus = 0;
+		$(this.element).find(".commandContainer").find(".buttonTD").show().end().find(".commandEntry").hide();
 	}
 }
 
