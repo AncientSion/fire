@@ -2466,11 +2466,11 @@ Warhead.prototype.getAnimation = function(fire){
 			var tx = traj.x + range(-t.size/8, t.size/8);
 			var ty = traj.y + range(-t.size/8, t.size/8);
 
-			if (fire.target.flight){
+			//if (fire.target.flight){
 				var t = fire.target.getFireDest(fire, hit, hits-1);
 					tx = p.x + t.x;
 					ty = p.y + t.y;
-			}
+			//}
 			var shotAnim = {tx: tx, ty: ty, m: 35, n: 0 - ((j / grouping) * delay + k*shotInterval)};
 
 			gunAnims.push(shotAnim);

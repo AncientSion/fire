@@ -71,12 +71,12 @@ function adjustForFacing(facing, angle){
 
 }
 
-function targetInArc(oPos, tPos, oFacing, system){
+function targetInArc(shooter, oPos, tPos, oFacing, system){
 	for (var i = 0; i < system.arc.length; i++){
 		var	start;
 		var	end;
 
-		if (this.rolled){
+		if (shooter.rolled){
 			if (system.arc[i][0] < system.arc[i][1]){
 				start = 360 - system.arc[i][1];
 				end = 360 - system.arc[i][0];
