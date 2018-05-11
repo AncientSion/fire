@@ -314,12 +314,12 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 					if (system instanceof Launcher){
 						legalTarget = 0;
 					}
-					else if (target.salvo && !targetInArc(shooterPos, pos, facing, system)){
+					else if (target.salvo && !targetInArc(shooter, shooterPos, pos, facing, system)){
 						legalTarget = 0;
 					}
 				}
 
-				else if (!targetInArc(shooterPos, pos, facing, system)){
+				else if (!targetInArc(shooter, shooterPos, pos, facing, system)){
 					if (snap && (active[i].arc[0][0] == 0 || active[i].arc[0][1] == 360)){
 					} else inArc = 0;
 				}	
