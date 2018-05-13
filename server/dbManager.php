@@ -381,13 +381,14 @@
 				}
 			}
 
-			$maxFocus = 1000;
-			$gainFocus = 250;
+			$maxFocus = 1400;
+			$gainFocus = 350;
+			$curFocus = 700;
 
 			$sql = "UPDATE units set command = 1 WHERE id = ".$id;
 			$this->query($sql);
 
-			$sql = "UPDATE playerstatus SET maxFocus = ".$maxFocus.", gainFocus = ".$gainFocus.", curFocus = ".$maxFocus." WHERE userid = ".$userid." AND gameid = ".$gameid;
+			$sql = "UPDATE playerstatus SET maxFocus = ".$maxFocus.", gainFocus = ".$gainFocus.", curFocus = ".$curFocus." WHERE userid = ".$userid." AND gameid = ".$gameid;
 			$this->query($sql);
 		}
 

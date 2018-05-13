@@ -45,7 +45,7 @@ class DmgCalc {
 			$weapons[$i]::setStaticPriority($i);
 		}
 
-		foreach ($weapons as $wpn){echo $wpn->name." / ".$wpn::$prio." / ".ceil(($wpn->minDmg + $wpn->maxDmg)/2)."</br>";}
+		//foreach ($weapons as $wpn){echo $wpn->name." / ".$wpn::$prio." / ".ceil(($wpn->minDmg + $wpn->maxDmg)/2)."</br>";}
 		return $weapons;
 	}
 

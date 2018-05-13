@@ -606,15 +606,15 @@
 				$shift = round(($this->ships[$i]->size - $this->ships[$i]->squad*15) / $output*500*$mod, 2);
 				$aShift = ceil($shift);
 				$pShift = ceil($shift*2);
-				Debug::log("jumpin: #".$this->ships[$i]->id.", class: ".$this->ships[$i]->name.", size: ".$this->ships[$i]->size.", sensor: ".$output.", ordered to: ".$order->x."/".$order->y.", shiftPotential: ".$shift."%");
-				Debug::log($this->ships[$i]->name.", aShift: ".$aShift."°, pShift: ".$pShift."px");
+				//Debug::log("jumpin: #".$this->ships[$i]->id.", class: ".$this->ships[$i]->name.", size: ".$this->ships[$i]->size.", sensor: ".$output.", ordered to: ".$order->x."/".$order->y.", shiftPotential: ".$shift."%");
+				//Debug::log($this->ships[$i]->name.", aShift: ".$aShift."°, pShift: ".$pShift."px");
 
 				$aShift = mt_rand(-$aShift, $aShift);
 				$xShift = mt_rand(-$pShift, $pShift);
 				$yShift = mt_rand(-$pShift, $pShift);
 				$dist = Math::getDist($order->x, $order->y, $order->x + $xShift, $order->y + $yShift);
 
-				Debug::log("--> aShift: ".$aShift."°, psShift: ".$xShift."/".$yShift." (".$dist."px)");
+				//Debug::log("--> aShift: ".$aShift."°, psShift: ".$xShift."/".$yShift." (".$dist."px)");
 
 				$this->ships[$i]->actions[0]->resolved = 1;
 				$this->ships[$i]->actions[] = new Action(-1, $this->ships[$i]->id, $this->turn, "jumpIn", $dist, $order->x + $xShift, $order->y + $yShift, $aShift, 0, 0, 0, 1, 1);
@@ -862,6 +862,7 @@
 					"thrust" => $this->ships[$i]->getCurSpeed(),
 					"rolling" => $this->ships[$i]->isRolling(),
 					"rolled" => $this->ships[$i]->isRolled(),
+					"flipped" => $this->ships[$i]->flipped,
 				);
 			}
 		}

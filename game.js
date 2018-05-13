@@ -2593,7 +2593,9 @@ function Game(data){
 			else if (this.ships[i].available != this.turn){continue;}
 			else if (this.ships[i].available == this.turn && this.phase > 0){continue;}
 
-			if (this.ships[i].friendly){
+			if (this.ships[i].friendly || game.phase == 0){
+				var color = "green";
+				if (!this.ships[i].friendly){color = "red"}
 				wrapper
 				.append($("<tr>").addClass("deployNow")
 					.hover(
@@ -2607,11 +2609,11 @@ function Game(data){
 						)
 					)
 					.append($("<td>")
-						.addClass("green font14")
+						.addClass(color + " font14")
 						.html(this.ships[i].name + "</br>" + this.ships[i].notes)
 					)
 					.append($("<td>")
-						.addClass("green font14")
+						.addClass(color + " font14")
 						.html("NOW")
 					)
 				)

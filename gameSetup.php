@@ -504,7 +504,7 @@ else {
 
 	function tryConfirmFleet(){
 		if (!game.hasCommandUnit()){
-			popup("Please select a unit as having Command Focus for the first turn.</br>(Left click one of your purchase units)");
+			popup("Please select a unit to serve as the flagship for the fleet.</br>(Left click one of your purchase units)");
 		} else if (!game.hasReinforceFaction()){			
 			popup("Please select a faction to receive reinforcements from.</br>(Right-click on the faction names on the left)");
 		}

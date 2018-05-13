@@ -2,7 +2,7 @@
 
 include_once 'global.php';
 
-echo DmgCalc::setWeaponPriority(); return;
+//echo DmgCalc::setWeaponPriority(); return;
 
 if (isset($_SESSION["userid"])){
 
