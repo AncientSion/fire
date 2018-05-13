@@ -28,7 +28,7 @@ if (isset($_POST["type"])) {
 	}
 	else if ($_POST["type"] == "buyInitialFleet") {
 		$rem = $manager->verifyFleetCost($_POST["ships"]);
-		if ($rem < 0){echo "Invalid Fleet";}
+		if ($rem < 0){echo "Invalid Fleet"; return;}
 	
 		if ($dbManager->processInitialBuy($_POST["userid"], $_POST["gameid"], $_POST["ships"], $rem, $_POST["faction"])){
 			if ($dbManager->gameIsReady($_POST["gameid"])) {
@@ -88,7 +88,7 @@ if (isset($_POST["type"])) {
 			$dbManager->jumpOutUnits($_POST["jumpout"]);
 		}
 		if (sizeof($_POST["focus"])){
-			$dbManager->setFocusUnits($_POST["focus"]);
+			$dbManager->setFocusState($_POST["focus"]);
 		}
 		if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready")){
 			echo "damageControl success";

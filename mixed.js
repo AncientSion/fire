@@ -327,11 +327,12 @@ Mixed.prototype.setTarget = function(){
 }
 
 Mixed.prototype.setPreMoveFacing = function(){
-	///console.log("setPreMoveFacing");
+	console.log("setPreMoveFacing");
 	//if (this.salvo){console.log("setPreMoveFacing");}
-	//if (this.mission.turn == game.turn){
-	//	this.facing = getAngleFromTo(this.getPlannedPos(), this.getTargetPosition());
-	//}
+	if (this.mission.turn == game.turn){
+		this.facing = getAngleFromTo(this.getPlannedPos(), this.getTargetPosition());
+		return;
+	}
 
 	if (this.actions.length){
 		this.facing = getAngleFromTo(this, this.actions[this.actions.length-1]);
@@ -340,7 +341,7 @@ Mixed.prototype.setPreMoveFacing = function(){
 }
 
 Mixed.prototype.setPostMoveFacing = function(){
-	//console.log("setPostMoveFacing");
+	console.log("setPostMoveFacing");
 	//if (this.salvo){console.log("setPostMoveFacing");}
 	//if (this.mission.turn == game.turn){
 		this.facing = getAngleFromTo(this.getPlannedPos(), this.finalStep);

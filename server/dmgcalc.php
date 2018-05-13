@@ -15,16 +15,7 @@ class DmgCalc {
 
 		$weapons = array();
 
-	/*	echo "<table>";
-		echo "<thead>";
-		echo "<tr>";
-		echo "<th width=300>Name</th>";
-		echo "<th width=100>DPS Value</th>";
-		echo "<th width=100>Priority</th>";
-		echo "</tr>";
-		echo "</thead>";
-
-	*/	for ($i = 0; $i < sizeof($names); $i++){
+		for ($i = 0; $i < sizeof($names); $i++){
 			$weapons[] = new $names[$i](0, 0, 0, 0, 0, 0);
 
 			$val = ($weapons[$i]->minDmg + $weapons[$i]->maxDmg)/2;
@@ -44,54 +35,18 @@ class DmgCalc {
 			//Debug::log($i.": ".$val);
 
 			$weapons[$i]::setStaticPriority($val);
-
-	/*		echo "<tr>";
-			echo "<td>".$weapons[$i]->display."</td>";
-			echo "<td>".$weapons[$i]->prio."</td>";
-			echo "<td>".""."</td>";
-			echo "</tr>";
-	*/	}
-
-	//	echo "</table>";
-
-
-
-
+		}
 
 		usort($weapons, function($a, $b){
 			return $b::$prio - $a::$prio;
 		});
 
-
-	//	for ($i = 0; $i < sizeof($weapons); $i++){
-	//		Debug::log($weapons[$i]->name.": ".$weapons[$i]::$prio);
-	//	}
-
-	/*	echo "</br></br>";
-
-
-		echo "<table>";
-		echo "<thead>";
-		echo "<tr>";
-		echo "<th width=300>Name</th>";
-		echo "<th width=100>DPS Value</th>";
-		echo "<th width=100>Priority</th>";
-		echo "</tr>";
-		echo "</thead>";
-	
-	*/	for ($i = 0; $i < sizeof($weapons); $i++){
-	/*		echo "<tr>";
-			echo "<td>".$weapons[$i]->display."</td>";
-			echo "<td>".$weapons[$i]::$prio."</td>";
-			echo "<td>".$i."</td>";
-			echo "</tr>";
-	*/		
+		for ($i = 0; $i < sizeof($weapons); $i++){
 			$weapons[$i]::setStaticPriority($i);
 		}
 
-		//foreach ($weapons as $wpn){Debug::log($wpn->name."/".$wpn::$prio);}
+		foreach ($weapons as $wpn){echo $wpn->name." / ".$wpn::$prio." / ".ceil(($wpn->minDmg + $wpn->maxDmg)/2)."</br>";}
 		return $weapons;
-	//	echo "</table>";
 	}
 
 	public static function createAreaFireOrders($gd, $fire){

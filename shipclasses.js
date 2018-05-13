@@ -51,7 +51,7 @@ function Ship(data){
 	this.flight = data.flight;
 	this.salvo = data.salvo;
 	this.squad = data.squad;
-	this.move = data.move;
+	this.focus= data.move;
 	this.command = data.command;
 	this.focus = data.focus;
 
@@ -61,6 +61,7 @@ function Ship(data){
 	this.drawFacing = 0;
 	this.drawX = 0;
 	this.drawY = 0;
+	this.toAnimate = 0;
 
 	this.highlight = false;
 	this.destroyed = false;
@@ -756,7 +757,7 @@ Ship.prototype.switchTurnMode = function(){
 }
 
 Ship.prototype.hasFocus = function(){
-	return this.move;
+	return this.focus;
 }
 
 Ship.prototype.handleTurning = function(e, o, f, pos){
@@ -765,8 +766,8 @@ Ship.prototype.handleTurning = function(e, o, f, pos){
 	var a = 0;
 	var t;
 
-	if (unit && unit.move == 0 && this.move == 1){
-		console.log("sanp");
+	if (unit && !unit.focus == 0 && this.focus == 1){
+		console.log("snap");
 		a = getAngleFromTo(this.getPlannedPos(), unit.getPlannedPos());
 		a = addAngle(f, a);
 		t = unit.getDrawPos();
@@ -965,8 +966,8 @@ Ship.prototype.resetMoveTranslation = function(){
 
 Ship.prototype.setMoveMode = function(){
 	if (this.salvo || this.flight){return;}
-	else if (this.move > game.phase && game.phase > -1){instruct("Focus Unit!");}
-	else if (this.move == 0 && game.phase == 1){return;}
+	else if (this.focus> game.phase && game.phase > -1){instruct("Focus Unit!");}
+	else if (this.focus== 0 && game.phase == 1){return;}
 	game.mode = 1;
 	turn.set(this);
 	this.setTurnData();
@@ -1136,16 +1137,16 @@ Ship.prototype.setPostMovePosition = function(){
 	this.drawY = this.actions[this.actions.length-1].y;
 }
 
-Ship.prototype.movesThisPhase = function(){
-	if ((this.ship || this.squad) && game.phase != this.move +1){return false;}
-	if ((this.flight || this.salvo) && game.phase != 2){return false;}
+Ship.prototype.needsAnimationNow = function(){
+	if (!this.toAnimate){return false;}
+	if ((this.ship || this.squad) && !game.animShip){return false;}
+	if (this.flight && !game.animFlight || this.salvo && !game.animSalvo){return false;}
 	return true;
 }
 
-Ship.prototype.needsAnimationNow = function(){
-	if (!this.movesThisPhase()){return false;}
-	if ((this.ship || this.squad) && !game.animShip){return false;}
-	if (this.flight && !game.animFlight || this.salvo && !game.animSalvo){return false;}
+Ship.prototype.movesThisPhase = function(){
+	if ((this.ship || this.squad) && game.phase != this.focus +1){return false;}
+	if ((this.flight || this.salvo) && game.phase != 2){return false;}
 	return true;
 }
 
@@ -1163,15 +1164,15 @@ Ship.prototype.setDrawData = function(){
 		this.setPreMovePosition();
 		this.setPreMoveFacing();
 	}
-	else if (this.move == game.phase-1){
+	else if (this.focus == game.phase-1){
 		this.setPreMovePosition();
 		this.setPreMoveFacing();
 	}
-	else if (this.move == game.phase){
+	else if (this.focus == game.phase){
 		this.setPreMovePosition();
 		this.setPreMoveFacing();
 	}
-	else if (this.move < game.phase){
+	else if (this.focus < game.phase){
 		this.setPostMovePosition();
 		this.setPostMoveFacing();
 	}
@@ -1274,6 +1275,7 @@ Ship.prototype.getShortInfo = function(){
 	var impulse = this.getCurSpeed();
 
 	var header = this.name + " #" + this.id;
+	if (this.command){header += "<font color='yellow'> - Flagship - </font>";}
 	if (this.focus){header += "<font color='yellow'> (FOCUS)</font>";}
 
 	var table = document.createElement("table");
@@ -2228,12 +2230,11 @@ Ship.prototype.addFocusDiv = function(div){
 		.addClass("commandContainer")
 		.append(
 			$("<div>")
-			.data("unitid", this.id)
 			.html("Assign Focus (" + this.getFocusCost()+")")
 			.addClass("buttonTD")
 			.hide()
 			.click(function(){
-				game.assignFocus($(this).data("unitid"));
+				game.getUnit($(this).parent().parent().data("shipId")).setFocus();
 			})
 		)
 		.append(
@@ -2241,6 +2242,9 @@ Ship.prototype.addFocusDiv = function(div){
 			.html("Has Focus (" + this.getFocusCost()+")")
 			.addClass("commandEntry")
 			.hide()
+			.click(function(){
+				game.getUnit($(this).parent().parent().data("shipId")).unsetFocus();
+			})
 		)
 	)
 
@@ -2254,13 +2258,15 @@ Ship.prototype.addFocusDiv = function(div){
 }
 
 Ship.prototype.getFocusCost = function(){
-	return Math.ceil(this.cost/10);
+	return Math.ceil(this.cost);
 }
 
 Ship.prototype.setFocus = function(){
+	if (this.isJumpingOut()){popup("This unit is jumping to hyperspace, it cant be issued focus."); return;}
 	if (!this.focus){
 		this.focus = 1;
 		$(this.element).find(".commandContainer").find(".buttonTD").hide().end().find(".commandEntry").show();
+		game.setFocusInfo();
 	}
 }
 
@@ -2268,6 +2274,7 @@ Ship.prototype.unsetFocus = function(){
 	if (this.focus){
 		this.focus = 0;
 		$(this.element).find(".commandContainer").find(".buttonTD").show().end().find(".commandEntry").hide();
+		game.setFocusInfo();
 	}
 }
 
@@ -2673,6 +2680,7 @@ Ship.prototype.doJumpOut = function(){
 		this.status = "jumpOut";
 	} else this.status = "bought";
 
+	if (this.hasFocus()){this.unsetFocus();}
 	$(this.element).find(".jumpOut").toggleClass("selected");
 	$("#instructWrapper").hide();
 }
@@ -2860,7 +2868,6 @@ Ship.prototype.setPreFireImage = function(){
 }
 
 Ship.prototype.setSupportImage = function(){
-	//if (this.movesThisPhase()){return;}
 	//console.log("setSupportImage #" + this.id);
 	var friendlies = [];
 	var hostiles = [];

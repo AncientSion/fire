@@ -2,6 +2,8 @@
 
 include_once 'global.php';
 
+echo DmgCalc::setWeaponPriority(); return;
+
 if (isset($_SESSION["userid"])){
 
 	$manager = new Manager(0, $_SESSION["userid"]);
@@ -40,8 +42,6 @@ if (isset($_SESSION["userid"])){
 	if ($update){
 		$myGames = $dbManager->getGames($_SESSION["userid"]);
 	}
-
-	//echo DmgCalc::setWeaponPriority();
 
 	$check = array();
 

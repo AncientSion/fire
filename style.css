@@ -1500,11 +1500,11 @@ div.integrityFull {
 }
 
 #overview th {
-	border: 1px solid black;
+	font-size: 15px;
 }
 
 #overview td {
-	border: 1px solid black;
+	padding: 3px;
 }
 
 .popupEntry {

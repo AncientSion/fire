@@ -287,6 +287,7 @@
 					"rolling" => $this->reinforcements[$i]["rolling"],
 					"rolled" => $this->reinforcements[$i]["rolled"],
 					"flipped" => $this->reinforcements[$i]["flipped"],
+					"focus" => $this->reinforcements[$i]["focus"],
 					"notes" => $this->reinforcements[$i]["notes"]
 					)
 				);
@@ -314,8 +315,6 @@
 
 		for ($i = 0; $i < sizeof($db); $i++){
 			$unit = new $db[$i]["name"]($db[$i]);
-
-			$unit->move = $db[$i]["move"];
 			$unit->addAllSystems();
 
 			if (isset($db[$i]["subunits"])){$unit->addSubUnits($db[$i]["subunits"]);}
@@ -386,35 +385,33 @@
 		//return;
 		$time = -microtime(true);
 
-		switch ($this->phase){
-			case -1; // from deploy to move
-				$this->handleDeployPhase();
-				$this->startMovementPhase();
-				break;
-			case 0;
-				$this->handleBaseMovementPhase();
+		if ($this->phase == -1){
+			$this->handleDeployPhase();
+			$this->startMovementPhase();
+		}
+		else if ($this->phase == 0){
+			$this->handleBaseMovementPhase();
+			if ($this->hasFocusUnits()){
 				$this->startCommandMovePhase();
-				break;
-			case 1;
+			}
+			else {
 				$this->handleCommandMovementPhase();
 				$this->startFiringPhase();
-				break;
-			case 2; // from fire to resolve fire
-				$this->handleFiringPhase();
-				$this->startDamageControlPhase();
-				break;
-			case 3; // from damage control to NEW TURN - deploymnt
-				$this->handleDamageControlPhase();
-				$this->endTurn();
-				$this->startNewTurn();
-				$this->startDeployPhase();
-				//$this->turn++;
-				//$this->phase = 2;
-				//DBManager::app()->setGameTurnPhase($this->gameid, $this->turn, $this->phase);
-				//$this->updatePlayerStatus("waiting");
-				break;
-			default:
-				break;
+			}
+		}
+		else if ($this->phase == 1){
+			$this->handleCommandMovementPhase();
+			$this->startFiringPhase();
+		}
+		else if ($this->phase == 2){
+			$this->handleFiringPhase();
+			$this->startDamageControlPhase();
+		}
+		else if ($this->phase == 3){
+			$this->handleDamageControlPhase();
+			$this->endTurn();
+			$this->startNewTurn();
+			$this->startDeployPhase();
 		}
 
 		$time += microtime(true); 
@@ -422,6 +419,13 @@
 		$this->getMemory();
 		//	Debug::close();
 		return true;
+	}
+
+	public function hasFocusUnits(){
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->focus){return true;}
+		}
+		return false;
 	}
 
 	public function updatePlayerStatus($status){
@@ -711,9 +715,9 @@
 				//$this->ships[] = new Salvo($units[$i]["id"], $units[$i]["userid"], $this->turn, "", "deployed", 0, 0, 0, 0, 0, 0, 0, 0, "");
 				$this->ships[] = new Salvo(
 					array(
-						"id" => $units[$i]["id"], "userid" => $units[$i]["userid"], "available" => $this->turn, "display" => "", "status" => "deployed",
+						"id" => $units[$i]["id"], "userid" => $units[$i]["userid"], "command" => 0, "available" => $this->turn, "display" => "", "status" => "deployed",
 						"destroyed" => 0, "x" => 0, "y" => 0, "facing" => 270, "delay" => 0, "thrust" => 0, 
-						"rolling" => 0, "rolled" => 0, "flipped" => 0, "notes" => ""
+						"rolling" => 0, "rolled" => 0, "flipped" => 0, "focus" => 0, "notes" => ""
 					)
 				);
 
@@ -788,22 +792,6 @@
 		$this->updateMissions();
 	}
 
-	public function handleMovementPhase(){
-		Debug::log("handleMovementPhase");
-		$this->handleShipMovement();
-		$this->flight = 1;
-		$this->handleMixedMovement();
-		$this->flight = 0;
-		$this->salvo = 1;
-		$this->handleMixedMovement();
-		$this->salvo = 0;
-
-		$this->handleNewActions();
-
-		$this->handlePostMoveFires();
-		$this->updateMissions();
-	}
-
 	public function handlePostMoveFires(){
 		Debug::log("handlePostMoveFires: ".sizeof($this->fires));
 		$this->setFireOrderDetails();
@@ -831,8 +819,7 @@
 		Debug::log("handleShipMovement");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->flight || $this->ships[$i]->salvo){continue;}
-			if ($this->ships[$i]->move > $this->phase){continue;}
-
+			
 			for ($j = sizeof($this->ships[$i]->actions)-1; $j >= 0; $j--){
 				if ($this->ships[$i]->actions[$j]->resolved == 0){
 					$this->ships[$i]->actions[$j]->resolved = 1;
@@ -940,7 +927,29 @@
 		$this->setUnitRollState();
 		$this->doFullDestroyedCheck();
 		$this->assembleEndStates();
+		$this->adjustFocusPoints();
 		$this->pickReinforcements();
+	}
+
+	public function adjustFocusPoints(){
+		$data = array();
+
+		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+			$curFocus = $this->playerstatus[$i]["curFocus"];
+			for ($j = 0; $j < sizeof($this->ships); $j++){
+				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
+				if ($this->ships[$j]->focus){$curFocus -= ceil($this->ships[$j]->cost);}
+			}
+
+			$gainFocus = $this->playerstatus[$i]["gainFocus"];
+
+			$data[] = array(
+				"id" => $this->playerstatus[$i]["id"],
+				"curFocus" => min($this->playerstatus[$i]["maxFocus"], $curFocus + $gainFocus)
+			);
+		}
+
+		DBManager::app()->updateFocusPoints($data);
 	}
 	
 	public function freeFlights(){
@@ -1432,7 +1441,7 @@
 
 		$this->phase = 3;
 
-		DBManager::app()->resetUnitMovePriority($this->ships);
+		DBManager::app()->resetFocusState($this->ships);
 		DBManager::app()->setGameTurnPhase($this->gameid, $this->turn, $this->phase);
 		$this->updatePlayerStatus("waiting");
 		return true;
@@ -1675,9 +1684,9 @@
 		if ($get["unit"] == "ship"){
 			$unit = new $get["name"](
 				array(
-					"id" => 1, "userid" => 1, "available" => 0, "display" => "", "status" => "",
+					"id" => 1, "userid" => 1, "command" => 0, "available" => 0, "display" => "", "status" => "",
 					"destroyed" => 0, "x" => 0, "y" => 0, "facing" => 270, "delay" => 0, "thrust" => 0, 
-					"rolling" => 0, "rolled" => 0, "flipped" => 0, "notes" => ""
+					"rolling" => 0, "rolled" => 0, "flipped" => 0, "focus" => 0, "notes" => ""
 				)
 			);
 			$unit->addAllSystems();

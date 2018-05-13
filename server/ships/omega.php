@@ -45,7 +45,8 @@ class Omega extends SuperHeavy {
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 1050, 17, 4);
 		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
 		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
-		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
+		$aft->systems[] = new EnergyMine($this->getId(), $this->id, 120, 240);
+	//	$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
 		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
 		$structs[] = $aft;
 

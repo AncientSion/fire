@@ -367,27 +367,28 @@
 			$this->insertLoads($userid, $gameid, $units);
 			$this->setReinforceFaction($userid, $gameid, $faction);
 			$this->addReinforceValue($userid, $gameid, $rem);
-			$this->setInitialCommandUnit($units);
+			$this->setInitialCommandUnit($userid, $gameid, $units);
 			$this->setPlayerStatus($userid, $gameid, -1, -1, "ready");
 			return true;
 		}
 
-		public function setInitialCommandUnit($units){
-			//Debug::log("setInitialCommandUnit s:".sizeof($units));
-			//for ($i = 0; $i < sizeof($units); $i++){Debug::log("i: ".$i.", id: ".$units[$i]["id"]);}
-
-			//usort($units, function($a, $b){
-			//return $a["value"] - $b["value"];
-			//});
-
-			$command = array();
+		public function setInitialCommandUnit($userid, $gameid, $units){			
+			$id = 0;
 
 			for ($i = 0; $i < sizeof($units); $i++){
 				if ($units[$i]["command"]){
-					$command[] = $units[$i]["id"];
+					$id = $units[$i]["id"]; break;
 				}
 			}
-			$this->setCommandUnits($command);
+
+			$maxFocus = 1000;
+			$gainFocus = 250;
+
+			$sql = "UPDATE units set command = 1 WHERE id = ".$id;
+			$this->query($sql);
+
+			$sql = "UPDATE playerstatus SET maxFocus = ".$maxFocus.", gainFocus = ".$gainFocus.", curFocus = ".$maxFocus." WHERE userid = ".$userid." AND gameid = ".$gameid;
+			$this->query($sql);
 		}
 
 		public function insertUnits($userid, $gameid, &$units){
@@ -1016,23 +1017,23 @@
 			return true;
 		}
 
-		public function resetUnitMovePriority($units){
-			Debug::log("resetUnitMovePriority s: ".sizeof($units));
+		public function resetFocusState($units){
+			Debug::log("resetFocusState s: ".sizeof($units));
 			$stmt = $this->connection->prepare("
 				UPDATE units
 				SET
-					move = :move
+					focus = :focus
 				WHERE id = :id
 			");
 
 
-			$move = 0;
+			$focus = 0;
 
 			for ($i = 0; $i < sizeof($units); $i++){
 				//foreach ($states[$i] as $key => $value){Debug::log($key." / ".$value);}
 
 				$stmt->bindParam(":id",  $units[$i]->id);
-				$stmt->bindParam(":move",  $move);
+				$stmt->bindParam(":focus",  $focus);
 				$stmt->execute();
 
 				if ($stmt->errorCode() == 0){continue;}
@@ -1082,13 +1083,13 @@
 			}
 		}
 
-		public function setFocusUnits($data){
-			//Debug::log("setFocusUnits s: ".sizeof($data));
+		public function setFocusState($data){
+			//Debug::log("setFocusState s: ".sizeof($data));
 			//Debug::log("0: ".$data[0]);
 			$stmt = $this->connection->prepare("
 				UPDATE units 
 				SET 
-					move = 1
+					focus = 1
 				WHERE
 					id = :id
 			");
@@ -1099,6 +1100,10 @@
 
 				if ($stmt->errorCode() == 0){continue;}
 			}
+		}
+
+		public function payFocusPoints(){
+
 		}
 
 		public function insertClientActions($units){
@@ -1620,6 +1625,61 @@
 			else return false;
 		}
 
+		public function setFocusPoints($userid, $gameid, $maxFocus, $gainFocus, $curFocus){
+			//Debug::log("setFocusPoints");
+
+			$stmt = $this->connection->prepare("
+				UPDATE playerstatus 
+				SET 
+					maxFocus = :maxFocus,
+					gainFocus = :gainFocus,
+					curFocus = :curFocus
+				WHERE
+					gameid = :gameid
+				AND
+					userid = :userid
+			");
+
+			$stmt->bindParam(":maxFocus", $maxFocus);
+			$stmt->bindParam(":gainFocus", $gainFocus);
+			$stmt->bindParam(":curFocus", $curFocus);
+			$stmt->bindParam(":gameid", $gameid);
+			$stmt->bindParam(":userid", $userid);
+
+			$stmt->execute();
+
+			if ($stmt->errorCode() == 0){
+				//Debug::log("game ".$gameid.", user ".$userid." --- adjusting to turn/phase/status ".$turn."/".$phase."/".$status);
+				return true;
+			} else return false;
+		}
+
+		public function updateFocusPoints($data){
+			//Debug::log("updateFocusPoints");
+			//var_export($data);
+
+			$stmt = $this->connection->prepare("
+				UPDATE playerstatus 
+				SET 
+					curFocus = :curFocus
+				WHERE
+					id = :id
+			");
+
+			for ($i = 0; $i < sizeof($data); $i++){
+
+				$stmt->bindParam(":curFocus",  $data[$i]["curFocus"]);
+				$stmt->bindParam(":id", $data[$i]["id"]);
+
+				$stmt->execute();
+
+				if ($stmt->errorCode() == 0){
+					continue;
+				}
+			}
+			return true;
+		}
+
 		public function setPlayerstatus($userid, $gameid, $turn, $phase, $status){
 			//Debug::log("setPlayerstatus for player ".$userid. " adjusted to turn/phase: ".$turn."/".$phase);
 
@@ -1635,11 +1695,11 @@
 					userid = :userid
 			");
 
-			$stmt->bindParam(":userid", $userid);
-			$stmt->bindParam(":gameid", $gameid);
 			$stmt->bindParam(":turn", $turn);
 			$stmt->bindParam(":phase", $phase);
 			$stmt->bindParam(":status", $status);
+			$stmt->bindParam(":gameid", $gameid);
+			$stmt->bindParam(":userid", $userid);
 
 			$stmt->execute();
 

@@ -200,8 +200,8 @@ class LightEMNeedler extends Particle {
 	public $name = "LightEMNeedler";
 	public $display = "Light EM-Needler";
 	public static $prio = 0;
-	public $minDmg = 9;
-	public $maxDmg = 12;
+	public $minDmg = 14;
+	public $maxDmg = 19;
 	public $accDecay = 240;
 	public $shots = 3;
 	public $reload = 2;

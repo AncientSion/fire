@@ -66,9 +66,10 @@ class Ship {
 	function __construct($data){
 		$this->id = $data["id"];
 		$this->userid = $data["userid"];
-		$this->available = $data["available"];
 		$this->display = $data["display"];
 		$this->status = $data["status"];
+		$this->command = $data["command"];
+		$this->available = $data["available"];
 		$this->destroyed = $data["destroyed"];
 		$this->x = $data["x"];
 		$this->y = $data["y"];
@@ -78,6 +79,7 @@ class Ship {
 		$this->rolling = $data["rolling"];
 		$this->rolled = $data["rolled"];
 		$this->flipped = $data["flipped"];
+		$this->focus = $data["focus"];
 		$this->notes = $data["notes"];
 	}
 

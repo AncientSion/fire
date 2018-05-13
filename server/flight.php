@@ -30,6 +30,7 @@ class Flight extends Mixed {
 	}
 
 	public function setCurSpeed($turn, $phase){
+		Debug::log($this->curImp);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed || $this->structures[$i]->disabled){continue;}
@@ -40,9 +41,9 @@ class Flight extends Mixed {
 
 		$elapsed = 1;
 
-		if (!$this->mission->arrived){
+		//if (!$this->mission->arrived){
 			$elapsed += $turn - $this->mission->turn;
-		}
+		//}
 
 		$this->curImp = floor($this->baseImpulse * min(4, $elapsed + ($phase > 1)));
 	}

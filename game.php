@@ -191,9 +191,6 @@
 						<th>
 							PV
 						</th>
-						<th id="focusPoints">
-							FP
-						</th>
 					</tr>
 				</thead>
 				<tbody></tbody>

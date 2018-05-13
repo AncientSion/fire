@@ -129,8 +129,8 @@ class LightLaser extends Laser {
 	public $rakeTime = 60;
 	public $beamWidth = 2;
 	public static $prio = 0;
-	public $minDmg = 60;
-	public $maxDmg = 80;
+	public $minDmg = 50;
+	public $maxDmg = 70;
 	public $optRange = 250;
 	public $dmgLoss = 8;
 	public $accDecay = 60;
