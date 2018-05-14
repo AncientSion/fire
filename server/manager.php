@@ -196,7 +196,7 @@
 
 		for ($i = sizeof($this->ships)-1; $i >= 0; $i--){
 			if ($this->ships[$i]->userid != $this->userid){
-				if ($this->phase == 3){$this->ships[$i]->move = 0;}
+				if ($this->phase == 3){$this->ships[$i]->focus = 0;}
 
 				if ($this->ships[$i]->available == $this->turn && !$this->ships[$i]->actions[0]->resolved){
 					if ($this->ships[$i]->flight){
