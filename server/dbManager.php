@@ -27,7 +27,7 @@
 		}
 
 		public function query($sql){
-			///Debug::log("query: --".$sql."--");
+			Debug::log("query: --".$sql."--");
 			$stmt = $this->connection->prepare($sql);
 			$stmt->execute();
 			return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -362,7 +362,7 @@
 		}
 
 		public function processInitialBuy($userid, $gameid, $units, $rem, $faction){
-			//Debug::log("processInitialBuy s:".sizeof($units));
+			Debug::log("processInitialBuy s:".sizeof($units));
 			$this->insertUnits($userid, $gameid, $units);
 			$this->insertLoads($userid, $gameid, $units);
 			$this->setReinforceFaction($userid, $gameid, $faction);
@@ -372,7 +372,8 @@
 			return true;
 		}
 
-		public function setInitialCommandUnit($userid, $gameid, $units){			
+		public function setInitialCommandUnit($userid, $gameid, $units){		
+			Debug::log("setInitialCommandUnit s:".sizeof($units));	
 			$id = 0;
 
 			for ($i = 0; $i < sizeof($units); $i++){
@@ -1732,7 +1733,7 @@
 		}
 
 		public function addReinforceValue($userid, $gameid, $add){
-			Debug::log("addReinforceValue for user: ".$userid.": ".$add);
+			//Debug::log("addReinforceValue for user: ".$userid.": ".$add);
 			$stmt = $this->connection->prepare("
 				UPDATE playerstatus 
 				SET	value = value + :add
