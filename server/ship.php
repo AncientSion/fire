@@ -299,7 +299,7 @@ class Ship {
 	
 	public function hideActions($phase){
 		if ($this->flight || $this->salvo){return;}
-		if ($this->focus && $phase == 1){return;}
+		if ($this->focus != $phase){return;}
 		for ($i = sizeof($this->actions)-1; $i >= 0; $i--){
 			if (!$this->actions[$i]->resolved){
 				if ($this->actions[$i]->type == "roll"){$this->rolling = !$this->rolling;}
