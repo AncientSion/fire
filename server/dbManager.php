@@ -392,7 +392,7 @@
 			$this->setInitialFocus($maxFocus, $gainFocus, $curFocus);
 		}
 
-		public function setInitialFocus($maxFocus, $gainFocus, $curFocus){
+		public function setInitialFocus($maxFocus, $gainFocus, $curFocus, $userid, $gameid){
 			Debug::log("setInitialFocus");	
 
 			$sql = "UPDATE playerstatus SET maxFocus = ".$maxFocus.", gainFocus = ".$gainFocus.", curFocus = ".$curFocus." WHERE userid = ".$userid." AND gameid = ".$gameid;
