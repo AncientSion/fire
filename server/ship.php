@@ -225,7 +225,8 @@ class Ship {
 	}
 
 	public function getUnitCost(){
-		if ($this->ship){return static::$value;}
+		if ($this->ship || !sizeof($this->structures)){return static::$value;}
+		
 		$cost = 0;
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			$cost += $this->structures[$i]::getValue();
