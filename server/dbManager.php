@@ -27,7 +27,6 @@
 		}
 
 		public function query($sql){
-			Debug::log("query: --".$sql."--");
 			$stmt = $this->connection->prepare($sql);
 			$stmt->execute();
 			return $stmt->fetchAll(PDO::FETCH_ASSOC);

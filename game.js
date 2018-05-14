@@ -3610,6 +3610,10 @@ Game.prototype.hideFocusInfo = function(){
 	$("#sysDiv").remove();
 }
 
+Game.prototype.getCurFocus = function(){
+	return this.getPlayerStatus().curFocus;
+}
+
 Game.prototype.getFocusSpending = function(){
 	var spend = 0;
 	for (let i = 0; i < this.ships.length; i++){

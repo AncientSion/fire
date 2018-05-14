@@ -66,11 +66,11 @@
 				Debug::log($key.": ".$value);
 			}
 		}*/
-		Debug::close();
 
 		//var_export($this->getUnit(2)->getEndState(1));
 		//return;
-		return array(
+		
+		$data = array(
 			"id" => $this->gameid,
 			"name" => $this->name,
 			"status" => $this->status,
@@ -85,6 +85,9 @@
 			"wave" => $this->wave,
 			"playerstatus" => $this->getPlayerStatus()
 		);
+
+		Debug::close();
+		return $data;
 
 	}
 

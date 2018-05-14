@@ -2263,6 +2263,7 @@ Ship.prototype.getFocusCost = function(){
 
 Ship.prototype.setFocus = function(){
 	if (this.isJumpingOut()){popup("This unit is jumping to hyperspace, it cant be issued focus."); return;}
+	if (!this.canAffordFocus()){popup("You dont enough have ressources to focus this unit."); return;}
 	if (!this.focus){
 		this.focus = 1;
 		$(this.element).find(".commandContainer").find(".buttonTD").hide().end().find(".commandEntry").show();
@@ -2276,6 +2277,12 @@ Ship.prototype.unsetFocus = function(){
 		$(this.element).find(".commandContainer").find(".buttonTD").show().end().find(".commandEntry").hide();
 		game.setFocusInfo();
 	}
+}
+
+Ship.prototype.canAffordFocus = function(){
+	if (game.getCurFocus() - game.getFocusSpending() - this.getFocusCost() >= 0){
+		return true;
+	} return false;
 }
 
 Ship.prototype.expandDiv = function(div){
