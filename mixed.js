@@ -504,7 +504,7 @@ Mixed.prototype.setPreFireSize = function(){
 }
 
 Mixed.prototype.hasPatrolLayout = function(){
-	if (this.mission.arrived < game.turn){
+	if (this.mission.arrived && this.mission.arrived < game.turn){
 		if (this.mission.type == 1){
 			return true;
 		} else {

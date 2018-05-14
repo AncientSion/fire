@@ -278,6 +278,7 @@
 					array(
 					"id" => -$this->reinforcements[$i]["id"],
 					"userid" => $this->reinforcements[$i]["userid"],
+					"command" => $this->turn + $this->reinforcements[$i]["command"],
 					"available" => $this->turn + $this->reinforcements[$i]["available"],
 					"display" => $this->reinforcements[$i]["display"],
 					"status" => $this->reinforcements[$i]["status"],
