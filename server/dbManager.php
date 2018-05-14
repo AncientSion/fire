@@ -389,7 +389,7 @@
 			$sql = "UPDATE units SET command = 1 WHERE id = ".$id;
 			$this->connection->query($sql);
 
-			$this->setInitialFocus($maxFocus, $gainFocus, $curFocus);
+			$this->setInitialFocus($maxFocus, $gainFocus, $curFocus, $userid, $gameid);
 		}
 
 		public function setInitialFocus($maxFocus, $gainFocus, $curFocus, $userid, $gameid){
