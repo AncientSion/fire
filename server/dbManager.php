@@ -386,7 +386,7 @@
 			$gainFocus = 350;
 			$curFocus = 700;
 
-			$sql = "UPDATE units set command = 1 WHERE id = ".$id;
+			$sql = "UPDATE units SET command = 1 WHERE id = ".$id;
 			$this->connection->query($sql);
 
 			$this->setInitialFocus($maxFocus, $gainFocus, $curFocus);
@@ -396,7 +396,8 @@
 			Debug::log("setInitialFocus");	
 
 			$sql = "UPDATE playerstatus SET maxFocus = ".$maxFocus.", gainFocus = ".$gainFocus.", curFocus = ".$curFocus." WHERE userid = ".$userid." AND gameid = ".$gameid;
-			
+			Debug::log($sql);
+
 			$this->connection->query($sql);
 
 		}
