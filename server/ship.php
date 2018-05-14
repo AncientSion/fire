@@ -228,7 +228,7 @@ class Ship {
 		if ($this->ship){return static::$value;}
 		$cost = 0;
 		for ($i = 0; $i < sizeof($this->structures); $i++){
-			$cost += $this->structures[$i]->name::$value;
+			$cost += $this->structures[$i]::getValue();
 		}
 		return $cost;
 	}

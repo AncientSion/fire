@@ -46,6 +46,10 @@ class Single {
 		$this->setPowerOutput();
 	}
 
+	static function getValue(){
+		return static::$value;
+	}
+
 	public function getId(){
 		$this->index++;
 		return $this->index;
