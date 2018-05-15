@@ -247,14 +247,14 @@ Mixed.prototype.getWeaponPosition = function(){
 	}
 }
 
-Mixed.prototype.getTargetPosition = function(){
+Mixed.prototype.getTargetPos = function(){
 	if (this.mission.targetid){
 		return this.getTarget().getPlannedPos();
 	} else return this.mission;
 }
 
 Mixed.prototype.inRange = function(){
-	if (getDistance(this.getTargetPosition(), this.getPlannedPos()) <= this.getCurSpeed()){
+	if (getDistance(this.getTargetPos(), this.getPlannedPos()) <= this.getCurSpeed()){
 		return true;
 	} else return false;
 }
@@ -330,7 +330,12 @@ Mixed.prototype.setPreMoveFacing = function(){
 	console.log("setPreMoveFacing");
 	//if (this.salvo){console.log("setPreMoveFacing");}
 	if (this.mission.turn == game.turn){
-		this.facing = getAngleFromTo(this.getPlannedPos(), this.getTargetPosition());
+		if (game.phase == 2){
+			this.facing = getAngleFromTo({x: this.x, y: this.y}, this.getTarget());
+		}
+		else {
+			this.facing = getAngleFromTo(this.getPlannedPos(), this.getTargetPos());
+		}
 		return;
 	}
 

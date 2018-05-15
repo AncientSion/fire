@@ -213,7 +213,7 @@ class Mixed extends Ship {
 					$type = "move";
 				}
 				else { // flight on flight
-					if ($t->mission->targetid == $this->id && $this->mission->targetid == $t->id){
+					if ($t->mission->targetid == $this->id && $this->mission->targetid == $t->id){ // flight @ each other
 						if ($this->mission->arrived && $t->mission->arrived){
 							$tPos = $t->getCurPos();
 							$dist = 0;
@@ -225,7 +225,13 @@ class Mixed extends Ship {
 							$t->setMove($gd);
 						}
 					}
-					else { // flight intercepting flight
+					else {// flight intercepting flight
+
+						if ($t->moveSet){
+							Debug::log("switching resolution to ".$t->id);
+							$t->setMove($td);
+						}
+						Debug::log("continuing with ".$this->id);
 						$tPos = $t->getCurPos();
 						$impulse = $this->getCurSpeed();
 						$dist = Math::getDist2($origin, $tPos);
