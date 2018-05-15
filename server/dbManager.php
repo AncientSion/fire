@@ -1619,7 +1619,9 @@
 
 		public function getPlayerStatus($gameid){
 			$stmt = $this->connection->prepare("
-				SELECT * FROM playerstatus
+				SELECT users.username, playerstatus.id, playerstatus.userid, playerstatus.gameid, playerstatus.turn, playerstatus.phase, playerstatus.faction, playerstatus.value, playerstatus.maxFocus, playerstatus.gainFocus, playerstatus.curFocus, playerstatus.status FROM playerstatus
+				LEFT JOIN users 
+				ON playerstatus.userid = users.id
 				WHERE
 					gameid = :gameid
 			");

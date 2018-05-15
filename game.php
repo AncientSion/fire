@@ -11,9 +11,6 @@
 	} else $userid = 0;
 	//if (!$manager->turn){header("Location: lobby.php");}
 	echo "<script> window.gameid = ".$gameid."; window.userid = ".$userid.";</script>";
-
-
-
 ?>
 
 

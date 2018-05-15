@@ -3565,7 +3565,7 @@ Game.prototype.setFocusInfo = function(){
 
 Game.prototype.getFocusInfoA = function(){
 	var status = this.getPlayerStatus();
-	return "<span class='yellow'>" + status.curFocus + "</span> + " + status.gainFocus + " @ end of turn, max: " + status.maxFocus;
+	return "<span class='yellow'>" + status.curFocus + "</span> + " + status.gainFocus + " / turn, max: " + status.maxFocus;
 }
 
 Game.prototype.getFocusInfoB = function(){
@@ -3630,12 +3630,35 @@ Game.prototype.getPlayerStatus = function(){
 }
 
 Game.prototype.addFocusInfo = function(){
-	$("#upperGUI").find("#overview").find("tbody")
-	.append($("<tr>")
-		.append($("<th>")
-			.css("border-top", "1px solid white")
-			.attr("colSpan", 3)
-			.html("Focus Overview")))
+	var tBody = $("#upperGUI").find("#overview").find("tbody");
+		tBody
+			.append($("<tr>")
+				.append($("<td>")
+					.css("height", 10)
+					.attr("colSpan", 3)))
+			.append($("<tr>")
+				.append($("<th>")
+					.attr("colSpan", 3)
+					.html("Focus Overview")))
+	
+	for (let i = 0; i < this.playerstatus.length; i++){
+		var status = this.playerstatus[i];
+
+		tBody.append($("<tr>")
+			.append($("<td>")
+				.html(this.playerstatus[i].username))
+			.append($("<td>")
+				.attr("colSpan", 2)
+				.html("<span class='yellow'>" + status.curFocus + "</span> + " + status.gainFocus + " / turn, max: " + status.maxFocus)))
+	}
+		tBody
+			.append($("<tr>")
+				.append($("<td>")
+					.css("height", 10)
+					.attr("colSpan", 3)))
+
+	/*
+
 	.append($("<tr>")
 		.append($("<td>")
 			.addClass("focusInfoA")
@@ -3646,6 +3669,7 @@ Game.prototype.addFocusInfo = function(){
 			.addClass("focusInfoB")
 			.attr("colSpan", 3)
 			.html(this.getFocusInfoB())))
+	*/
 }
 
 Game.prototype.setConfirmInfo = function(){

@@ -684,8 +684,14 @@ Single.prototype.hover = function(e){
 	}
 }
 
-Single.prototype.getEmDmg = function(){
-	return this.damages.map(x => x.emDmg).reduce((l,r) => l+r, 0);
+Single.prototype.getEMDmg = function(){
+	//return this.damages.map(x => x.emDmg).reduce((l,r) => l+r, 0);
+	var dmg = 0;
+	for (var i = this.damages.length-1; i >= 0; i--){
+		if (this.damages[i].turn < game.turn){return dmg;}
+		dmg += this.damages[i].emDmg;
+	}
+	return dmg;
 }
 
 Single.prototype.getDetailsDiv = function(){
@@ -699,7 +705,7 @@ Single.prototype.getDetailsDiv = function(){
 			.append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.integrity)))
 			.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.negation)))
 			.append($("<tr>").append($("<td>").html("Speed").css("width", 120)).append($("<td>").html(this.baseImpulse)))
-			.append($("<tr>").append($("<td>").html("EM-D sustained")).append($("<td>").html(this.getEmDmg())))
+			.append($("<tr>").append($("<td>").html("EM-D sustained")).append($("<td>").html(this.getEMDmg())))
 			.append($("<tr>").append($("<td>").html("Dropout Test Trigger")).append($("<td>").html("< " + this.dropout[0] + "% HP")))
 			.append($("<tr>").append($("<td>").html("Base Dropout Chance")).append($("<td>").html(this.dropout[1] + "%")))
 

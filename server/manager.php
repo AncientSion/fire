@@ -81,7 +81,6 @@
 			"incoming" =>$this->getIncomingData(),
 			"const" => $this->const,
 			"userid" => $this->userid,
-			"username" => $this->getUsername(),
 			"wave" => $this->wave,
 			"playerstatus" => $this->getPlayerStatus()
 		);
