@@ -331,7 +331,7 @@ Mixed.prototype.setPreMoveFacing = function(){
 	//if (this.salvo){console.log("setPreMoveFacing");}
 	if (this.mission.turn == game.turn){
 		if (game.phase == 2){
-			this.facing = getAngleFromTo({x: this.x, y: this.y}, this.getTarget());
+			this.facing = getAngleFromTo({x: this.x, y: this.y}, this.getTargetPos());
 		}
 		else {
 			this.facing = getAngleFromTo(this.getPlannedPos(), this.getTargetPos());
