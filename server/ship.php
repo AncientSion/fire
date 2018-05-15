@@ -1019,6 +1019,8 @@ class Ship {
 	public function getHitSection($fire){
 		if ($fire->cc && $fire->shooter->flight){return $this->structures[mt_rand(0, sizeof($this->structures)-1)]->id;}
 
+		Debug::log("fire-angle: ".$fire->angle);
+		Debug::log("facing: ".$this->facing);
 		$fire->angle = Math::addAngle($this->facing, $fire->angle);
 		if ($this->rolled){$fire->angle = Math::getMirrorAngle($fire->angle);}
 		if ($fire->shooter->salvo){Debug::log("effective impact from: ".$fire->angle);}

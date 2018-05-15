@@ -68,13 +68,24 @@ class Salvo extends Mixed {
 	}
 
 	public function getFireAngle($fire){
-		$angle = round(Math::getAngle2(new Point($this->x, $this->y), $this->actions[0]));
+		//$origin = $this->getTrajectoryStart();
+		//$impact = $this->actions[sizeof($this->actions)-1];
+
+		//var_export($origin);
+		//var_export($impact);
+		//$angle = round(Math::getAngle2($this->getTrajectoryStart(), $this->actions[sizeof($this->actions)-1]));
+		$angle = round(Math::getAngle2($this->actions[sizeof($this->actions)-1], $this->getTrajectoryStart()));
 		Debug::log("------- SALVO TRAJECT: ".$angle);
 		return $angle;
 	}
 
 	public function getTrajectoryStart(){
-		return $this->actions[0];
+		if ($this->torpedo){return $this->actions[0];}
+		if ($this->missile){
+			if ($this->available == $this->actions[sizeof($this->actions)-1]->turn){return $this->actions[0];}
+			else return new Point($this->x, $this->y);
+		}
+		Debug::log("no return!");
 	}
 
 	public function addMission($data, $userid, $turn, $phase){

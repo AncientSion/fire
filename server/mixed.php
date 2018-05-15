@@ -199,12 +199,12 @@ class Mixed extends Ship {
 			
 			$t = $gd->getUnit($this->mission->targetid);
 
-			Debug::log("STRIKE @ ".get_class($t)." #".$t->id);
-
+			Debug::log("MISSION @ ".get_class($t)." #".$t->id);
 
 			if ($t->flight){
 				if ($this->mission->arrived && $t->mission->arrived && $t->mission->type == 1){
 					$tPos = $this->getCurPos();
+					$dist = 0;
 					$type = "patrol";
 				}
 				else if ($this->mission->arrived && $t->mission->arrived && $t->mission->type == 2){
@@ -212,18 +212,20 @@ class Mixed extends Ship {
 					$dist = Math::getDist2($origin, $tPos);
 					$type = "move";
 				}
-				else if ($t->mission->targetid == $this->id){ // FLIGHT target
-					if ($this->mission->arrived){ // at target, circle patrol
-						$tPos = $this->getCurPos();
-						$type = "patrol";
-					}
-					else { // on way to intercepting flight
-						if (!$t->moveSet && mt_rand(0, 1)){
+				else { // flight on flight
+					if ($t->mission->targetid == $this->id && $this->mission->targetid == $t->id){
+						if ($this->mission->arrived && $t->mission->arrived){
+							$tPos = $t->getCurPos();
+							$dist = 0;
+							$type = "patrol";
+						}
+						else if (!$t->moveSet && mt_rand(0, 1)){
 							//Debug::log("priority achieved: ".$this->id);
 							$this->moveSet = 1;
 							$t->setMove($gd);
 						}
-
+					}
+					else { // flight intercepting flight
 						$tPos = $t->getCurPos();
 						$impulse = $this->getCurSpeed();
 						$dist = Math::getDist2($origin, $tPos);
