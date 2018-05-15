@@ -71,7 +71,7 @@ window.ajax = {
 			datatype: "json",
 			data: {
 					type: "chat",
-					username: username,
+					username: window.username,
 					userid: userid,
 					msg: msg,
 					time: Math.round(Date.now()/1000),

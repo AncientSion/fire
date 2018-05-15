@@ -855,19 +855,19 @@
 		Debug::log("assemblDeployStates");
 		$states = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
-			if ($this->ships[$i]->available == $this->turn){
-				$states[] = array(
-					"id" => $this->ships[$i]->id,
-					"x" => $this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1]->x,
-					"y" => $this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1]->y,
-					"facing" => 0,
-					"delay" => 0, 
-					"thrust" => $this->ships[$i]->getCurSpeed(),
-					"rolling" => $this->ships[$i]->isRolling(),
-					"rolled" => $this->ships[$i]->isRolled(),
-					"flipped" => $this->ships[$i]->flipped,
-				);
-			}
+			if ($this->ships[$i]->available != $this->turn){continue;}
+			
+			$states[] = array(
+				"id" => $this->ships[$i]->id,
+				"x" => $this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1]->x,
+				"y" => $this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1]->y,
+				"facing" => 0,
+				"delay" => 0, 
+				"thrust" => $this->ships[$i]->getCurSpeed(),
+				"rolling" => $this->ships[$i]->isRolling(),
+				"rolled" => $this->ships[$i]->isRolled(),
+				"flipped" => $this->ships[$i]->flipped,
+			);
 		}
 
 		if (sizeof($states)){DBManager::app()->updateUnitStats($states, $this->turn, $this->phase);}

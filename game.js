@@ -51,8 +51,6 @@ function Game(data){
 	this.ui = {shortInfo: $("#shortInfo"), doShorten: $("#doShorten"), turnButton: $("#turnButton"), logWrapper: $("#combatlogWrapper")};
 	this.animData = {jump: 60};
 
-	window.username = data.username;
-
 	this.hasSnapCenterline = function(shooter, shooterAngle, target){
 		if (game.phase == 2){
 			if (shooter.focus && target && !target.focus && !shooter.getRemSpeed()){
@@ -3730,6 +3728,7 @@ Game.prototype.create = function(data){
 	this.setGameInfo();
 	this.addFocusInfo();
 	this.setConfirmInfo();
+	window.username = this.getPlayerStatus().username;
 
 	for (var i = 0; i < data.ships.length; i++){
 		var ship = window.initUnit(data.ships[i]);
