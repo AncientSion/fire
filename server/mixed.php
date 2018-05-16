@@ -223,19 +223,22 @@ class Mixed extends Ship {
 						$dist = 0;
 						$type = "patrol";
 					}
-					else if (!$t->moveSet && mt_rand(0, 1)){
-						Debug::log("enemy has the drop, switching to: ".$t->id);
-						$this->moveSet = 1;
-						$t->setMove($gd);
-					}
 					else {
-						$tPos = $t->getCurPos();
-						$dist = Math::getDist2($origin, $tPos);
-						$angle = Math::getAngle2($origin, $tPos);
-						Debug::log("continuing with ".$this->id.", dist to target:".$dist);
+						if (!$t->moveSet && mt_rand(0, 1)){
+							Debug::log("enemy has the drop, switching to: ".$t->id);
+							$this->moveSet = 1;
+							$t->setMove($gd);
+						}
+						else {
+							$tPos = $t->getCurPos();
+							$dist = Math::getDist2($origin, $tPos);
+							$angle = Math::getAngle2($origin, $tPos);
+							Debug::log("continuing with ".$this->id.", dist to target: ".$dist);
 
-						$this->mission->x = $tPos->x;
-						$this->mission->y = $tPos->y;
+							$this->mission->x = $tPos->x;
+							$this->mission->y = $tPos->y;
+						}
+					
 
 						if ($dist == 0){
 							Debug::log("at target, static !");
