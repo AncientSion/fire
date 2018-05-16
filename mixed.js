@@ -801,3 +801,33 @@ Mixed.prototype.getSelfExplo = function(){
 
 	return data;
 }
+
+Mixed.prototype.readyForAnim = function(){
+	this.setPreMovePosition();
+	this.setPreMoveFacing();	
+
+	var frameMod = 1000 / window.fpsTicks / this.actions[this.actions.length-1].dist;
+
+	for (var i = 0; i < this.actions.length; i++){
+		if (this.actions[i].turn == game.turn){
+			var action = this.actions[i];
+
+			if (action.dist == 0 || action.type == "deploy" || action.type == "patrol"){
+				this.actions[i].animated = 1;
+			}
+			else {
+				this.actions[i].animated = 0;
+				if (j == 0 && action.type == "move"){
+					var v = new Vector({x: this.x, y: this.y}, {x: action.x, y: action.y});
+					v.t = [0, action.dist * frameMod];
+					this.actions[i].v = v;
+				}
+				else if (action.type == "move"){
+					var v = new Vector({x: this.actions[j-1].x, y: this.actions[j-1].y}, {x: action.x, y: action.y});
+						v.t = [0, action.dist * frameMod];
+					this.actions[i].v = v;
+				}
+			}
+		}
+	}
+}

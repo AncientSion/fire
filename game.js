@@ -1862,44 +1862,7 @@ function Game(data){
 				}
 			}
 
-			this.ships[i].animationSetupMove();
-
-			var frameMod;
-			if (this.ships[i].ship || this.ships[i].squad){
-				frameMod = 1000 / window.fpsTicks / this.ships[i].getCurSpeed();
-			} else frameMod = 1000 / window.fpsTicks / this.ships[i].actions[this.ships[i].actions.length-1].dist;
-			//frameMod = 1;
-			for (var j = 0; j < this.ships[i].actions.length; j++){
-				if (this.ships[i].actions[j].turn == game.turn){
-					var action = this.ships[i].actions[j];
-
-					if (action.dist == 0 || action.type == "speed" || action.type == "deploy" || action.type == "jumpIn" || action.type == "patrol"){
-						this.ships[i].actions[j].animated = 1;
-					}
-					else {
-						this.ships[i].actions[j].animated = 0;
-						if (j == 0){
-							if (action.type == "move"){
-								var v = new Vector({x: this.ships[i].x, y: this.ships[i].y}, {x: action.x, y: action.y});
-									v.t = [0, action.dist * frameMod];
-								this.ships[i].actions[j].v = v;
-							}
-							else if (action.type == "turn"){this.ships[i].actions[j].angle = this.ships[i].actions[j].a;}
-						}
-						else {
-							if (action.type == "move"){
-								var v = new Vector({x: this.ships[i].actions[j-1].x, y: this.ships[i].actions[j-1].y}, {x: action.x, y: action.y});
-									v.t = [0, action.dist * frameMod];
-								this.ships[i].actions[j].v = v;
-								//console.log(v);
-							}
-							else if (action.type == "turn"){
-								this.ships[i].actions[j].angle = this.ships[i].actions[j].a;
-							}
-						}
-					}
-				}
-			}
+			this.ships[i].readyForAnim();
 		}
 	}
 

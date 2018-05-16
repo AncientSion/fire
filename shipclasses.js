@@ -3036,9 +3036,44 @@ Ship.prototype.setEscortImage = function(friendly, friendlies, hostile, hostiles
 	ctx.setTransform(1,0,0,1,0,0);
 }
 
-Ship.prototype.animationSetupMove = function(){
+
+Ship.prototype.readyForAnim = function(){
 	this.setPreMovePosition();
-	this.setPreMoveFacing();
+	this.setPreMoveFacing();	
+
+	var frameMod = 1000 / window.fpsTicks / this.getCurSpeed();
+
+	for (var i = 0; i < this.actions.length; i++){
+		if (this.actions[i].turn == game.turn){
+			var action = this.actions[i];
+
+			if (action.type == "speed" || action.type == "deploy" || action.type == "jumpIn"){
+				this.actions[i].animated = 1;
+			}
+			else {
+				this.actions[i].animated = 0;
+				if (j == 0){
+					if (action.type == "move"){
+						var v = new Vector({x: this.x, y: this.y}, {x: action.x, y: action.y});
+							v.t = [0, action.dist * frameMod];
+						this.actions[i].v = v;
+					}
+					else if (action.type == "turn"){this.actions[i].angle = this.actions[i].a;}
+				}
+				else {
+					if (action.type == "move"){
+						var v = new Vector({x: this.actions[j-1].x, y: this.actions[j-1].y}, {x: action.x, y: action.y});
+							v.t = [0, action.dist * frameMod];
+						this.actions[i].v = v;
+						//console.log(v);
+					}
+					else if (action.type == "turn"){
+						this.actions[i].angle = this.actions[i].a;
+					}
+				}
+			}
+		}
+	}
 }
 
 Ship.prototype.getLockEffect = function(target){
