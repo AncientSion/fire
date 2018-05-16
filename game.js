@@ -1873,7 +1873,7 @@ function Game(data){
 				if (this.ships[i].actions[j].turn == game.turn){
 					var action = this.ships[i].actions[j];
 
-					if (action.type == "speed" || action.type == "deploy" || action.type == "jumpIn" || action.type == "patrol"){
+					if (action.dist == 0 || action.type == "speed" || action.type == "deploy" || action.type == "jumpIn" || action.type == "patrol"){
 						this.ships[i].actions[j].animated = 1;
 					}
 					else {
