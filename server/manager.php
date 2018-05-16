@@ -61,7 +61,7 @@
 
 	public function getClientData(){
 
-		$this->handleFocusMovePhase();
+		$this->handleFlightMovement();
 
 		/*foreach ($this->playerstatus as $player){
 			foreach ($player as $key => $value){
@@ -788,13 +788,13 @@
 
 	public function handleFocusMovePhase(){
 		Debug::log("handleFocusMovePhase");
-		//$this->handleShipMovement();
+		$this->handleShipMovement();
 		$this->handleFlightMovement();
-		//$this->handleSalvoMovement();
-		//$this->handleNewActions();
+		$this->handleSalvoMovement();
+		$this->handleNewActions();
 
-		//$this->handlePostMoveFires();
-		//$this->updateMissions();
+		$this->handlePostMoveFires();
+		$this->updateMissions();
 	}
 
 	public function handlePostMoveFires(){
