@@ -215,14 +215,15 @@ class Mixed extends Ship {
 					$type = "move";
 				}
 				else { // flight on flight
-					if ($t->mission->targetid == $this->id && $this->mission->targetid == $t->id){ // flight @ each other
+					if ($t->mission->targetid == $this->id && $this->mission->targetid == $t->id){ // flight STATIC @ each other
 						if ($this->mission->arrived && $t->mission->arrived){
+							Debug::log("both arrived, no move");
 							$tPos = $t->getCurPos();
 							$dist = 0;
 							$type = "patrol";
 						}
 						else if (!$t->moveSet && mt_rand(0, 1)){
-							//Debug::log("priority achieved: ".$this->id);
+							Debug::log("priority achieved: ".$this->id);
 							$this->moveSet = 1;
 							$t->setMove($gd);
 						}
@@ -273,11 +274,11 @@ class Mixed extends Ship {
 				if ($this->mission->arrived){ // DRAG
 				}
 				else if ($impulse < $dist){ // ON ROUTE; take own speed OUT OR RANGE
-					//Debug::log("close in");
+					Debug::log("close in");
 					$tPos = Math::getPointInDirection($impulse, $angle, $origin->x, $origin->y);
 				}
 				else { // ON ROUTE; REACH
-					//Debug::log("arrival");
+					Debug::log("arrival");
 					$this->mission->arrived = $gd->turn;
 				}
 			}

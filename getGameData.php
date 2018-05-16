@@ -19,6 +19,8 @@ if (isset($_GET["type"])){
 	else if ($_GET["type"] == "gamedata"){
 		$manager = new Manager($_GET["gameid"], $_GET["userid"]);
 		$manager->getGameData();
+		$manager->resolveCommandMovement();
+		return;
 		echo JSON_encode($manager->getClientData(), JSON_NUMERIC_CHECK);
 		return;
 	}

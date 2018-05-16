@@ -393,17 +393,17 @@
 			$this->startMovementPhase();
 		}
 		else if ($this->phase == 0){
-			$this->handleBaseMovementPhase();
+			$this->handleBaseMovePhase();
 			if ($this->hasFocusUnits()){
-				$this->startCommandMovePhase();
+				$this->startFocusMovePhase();
 			}
 			else {
-				$this->handleCommandMovementPhase();
+				$this->handleFocusMovePhase();
 				$this->startFiringPhase();
 			}
 		}
 		else if ($this->phase == 1){
-			$this->handleCommandMovementPhase();
+			$this->handleFocusMovePhase();
 			$this->startFiringPhase();
 		}
 		else if ($this->phase == 2){
@@ -741,8 +741,8 @@
 		}
 	}
 
-	public function startCommandMovePhase(){
-		//Debug::log("startCommandMovePhase");
+	public function startFocusMovePhase(){
+		//Debug::log("startFocusMovePhase");
 		$dbManager = DBManager::app();
 		$this->phase = 1;
 
@@ -778,20 +778,20 @@
 		DBManager::app()->updateMissionState($data);
 	}
 
-	public function handleBaseMovementPhase(){
-		Debug::log("handleBaseMovementPhase");
+	public function handleBaseMovePhase(){
+		Debug::log("handleBaseMovePhase");
 		$this->handleShipMovement();
 		$this->freeFlights();
 	}
 
-	public function handleCommandMovementPhase(){
-		Debug::log("handleCommandMovementPhase");
-		$this->handleShipMovement();
+	public function handleFocusMovePhase(){
+		Debug::log("handleFocusMovePhase");
+		//$this->handleShipMovement();
 		$this->handleFlightMovement();
 		$this->handleSalvoMovement();
-		$this->handleNewActions();
+		//$this->handleNewActions();
 
-		$this->handlePostMoveFires();
+		//$this->handlePostMoveFires();
 		$this->updateMissions();
 	}
 

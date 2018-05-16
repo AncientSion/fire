@@ -1014,7 +1014,7 @@ function Game(data){
 	this.movementDone = function(){
 		console.log("movementDone");
 
-		this.setlastPosCC();
+		this.setLastPosCC();
 		this.checkUnitOffsetting();
 
 		if (game.phase == 2){
@@ -1393,7 +1393,7 @@ function Game(data){
 		if (this.phase == 1 && game.phase == 2){return;}
 
 		if (this.phase == -1 || this.phase > 2){
-		 	this.setlastPosCC();
+		 	this.setLastPosCC();
 		}
 		else if (this.phase == 0 || this.phase == 1){
 			this.setPostDeployCC();
@@ -1493,8 +1493,8 @@ function Game(data){
 		}
 	}
 
-	this.setlastPosCC = function(){
-		console.log("setlastPosCC");
+	this.setLastPosCC = function(){
+		console.log("setLastPosCC");
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].cc = [];
 		}
@@ -1507,7 +1507,7 @@ function Game(data){
 				var b = this.ships[j].getPlannedPos();
 				if (a.x == b.x && a.y == b.y){
 					if (this.ships[i].flight && this.ships[j].flight && this.ships[i].userid == this.ships[j].userid){
-						if (this.ships[i].mission.targetid != this.ships[j].id &&this.ships[i].id != this.ships[j].mission.targetid){continue;}
+						if (this.ships[i].mission.targetid != this.ships[j].id && this.ships[j].mission.targetid != this.ships[i].id){continue;}
 					}
 				/*	if (this.ships[i].flight && this.ships[j].flight){
 						if (this.ships[i].mission.targetid == this.ships[j].id || this.ships[j].mission.targetid == this.ships[i].id){
