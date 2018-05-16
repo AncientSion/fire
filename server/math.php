@@ -148,8 +148,6 @@ class Math {
 		return round(pow($mass, 1.05)/250, 2);
 	}
 
-	static function getMovePos($origin, $target, $angle, $)
-
 /*
 	function getIntercept(src, dst, v){
 		var tx = dst.x - src.x;
