@@ -166,12 +166,12 @@ class Mixed extends Ship {
 	public function setMove(&$gd){
 		Debug::log("Handling mixed #".$this->id);
 
+		$origin = $this->getCurPos();
 		$t;
 		$tPos;
 		$dist = 0;
 		$angle = -1;
 		$type = "move";
-		$origin = $this->getCurPos();
 
 		if ($this->mission->type == 1){ // PATROL
 			//Debug::log("PATROL");
@@ -222,14 +222,11 @@ class Mixed extends Ship {
 						$dist = 0;
 						$type = "patrol";
 					}
-					else if (!$t->moveSet){
-						Debug::log("target has not moved");
-						if (mt_rand(0, 1)){
-							Debug::log("ME priority achieved, switching to: ".$t->id);
-							$this->moveSet = 1;
-							$t->setMove($gd);
-						} else Debug::log("i failed, doing my own move first");
-
+					else if (!$t->moveSet && mt_rand(0, 1)){
+						$this->moveSet = 1;
+						$t->setMove($gd);
+					}
+					else {
 						Debug::log("continuing with ".$this->id);
 						$tPos = $t->getCurPos();
 						$impulse = $this->getCurSpeed();
