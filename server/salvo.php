@@ -58,10 +58,6 @@ class Salvo extends Mixed {
 			$this->curImp = $this->baseImpulse;
 		}
 	}
-	
-	public function getCurSpeed(){
-		return $this->curImp;
-	}
 
 	public function setPosition(){
 		return;
