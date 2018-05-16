@@ -244,6 +244,7 @@ class Mixed extends Ship {
 						}
 						else  if ($impulse < $dist){
 							Debug::log("close in");
+							$dist = $impulse;
 							$tPos = Math::getPointInDirection($impulse, $angle, $origin->x, $origin->y);
 						}
 						else {
