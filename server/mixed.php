@@ -203,17 +203,20 @@ class Mixed extends Ship {
 
 			if ($t->flight){
 				if ($this->mission->arrived && $t->mission->arrived && $t->mission->type == 1){
+					Debug::log("standoff, patrol !");
 					$tPos = $this->getCurPos();
 					$dist = 0;
 					$type = "patrol";
 				}
 				else if ($this->mission->arrived && $t->mission->arrived && $t->mission->type == 2){
+					Debug::log("i have arrived, target has arrived, target is striking another unit, im following!");
 					$tPos = $t->getCurPos();
 					$dist = Math::getDist2($origin, $tPos);
 					$type = "move";
 				}
 				else { // flight on flight
 					if ($t->mission->targetid == $this->id && $this->mission->targetid == $t->id){ // flight STATIC @ each other
+						Debug::log("flights @ each other!");
 						if ($this->mission->arrived && $t->mission->arrived){
 							Debug::log("both arrived, no move");
 							$tPos = $t->getCurPos();
