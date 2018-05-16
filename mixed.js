@@ -510,11 +510,14 @@ Mixed.prototype.setPreFireSize = function(){
 
 Mixed.prototype.hasPatrolLayout = function(){
 	if (this.mission.arrived && this.mission.arrived < game.turn){
-		if (this.mission.type == 1){
-			return true;
-		} else {
+		if (this.mission.type == 1){return true;}
+		else {
 			var target = this.getTarget();
-			if (target.flight && target.mission.type == 1 && target.mission.arrived < game.turn){
+			if (!target.flight){return false;}
+			if (target.mission.type == 1 && target.mission.arrived < game.turn){
+				return true;
+			}
+			else if (this.mission.type == 2 && this.mission.arrived < game.turn && target.mission.arrived){
 				return true;
 			}
 		}
