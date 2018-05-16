@@ -221,7 +221,7 @@ class Mixed extends Ship {
 							$type = "patrol";
 						}
 						else if (!$t->moveSet && mt_rand(0, 1)){
-							Debug::log("priority achieved: ".$this->id);
+							Debug::log("ME priority achieved, switching to: ".$t->id);
 							$this->moveSet = 1;
 							$t->setMove($gd);
 						}
@@ -283,7 +283,7 @@ class Mixed extends Ship {
 		}
 
 		$move = new Action(-1, $this->id, $gd->turn, $type, $dist, $tPos->x, $tPos->y, $angle, 0, 0, 0, 1, 1);
-		Debug::log("adding ".$move->type." to => ".$move->x."/".$move->y.", dist: ".$dist);
+		Debug::log("--- adding ".$move->type." to => ".$move->x."/".$move->y.", dist: ".$dist);
 		$this->actions[] = $move;
 		$this->moveSet = 1;
 	}
