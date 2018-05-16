@@ -196,7 +196,8 @@ class Mixed extends Ship {
 			}
 		}
 		else if ($this->mission->type == 2){ // STRIKE
-			
+			echo "</br>resolving: ".$this->id."</br>";
+			var_export($this->mission);
 			$t = $gd->getUnit($this->mission->targetid);
 
 			Debug::log("MISSION @ ".get_class($t)." #".$t->id);
