@@ -223,9 +223,12 @@ class Mixed extends Ship {
 							$type = "patrol";
 					}
 					else if (!$t->moveSet){
-							Debug::log("switching resolution to ".$t->id);
-							$t->setMove($td);
+						if (mt_rand(0, 1)){
+							Debug::log("ME priority achieved, switching to: ".$t->id);
+							$this->moveSet = 1;
+							$t->setMove($gd);
 						}
+						
 						Debug::log("continuing with ".$this->id);
 						$tPos = $t->getCurPos();
 						$impulse = $this->getCurSpeed();
