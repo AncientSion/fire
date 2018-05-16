@@ -217,15 +217,15 @@ class Mixed extends Ship {
 					$type = "move";
 				}
 				else { // flight on flight
-					if ($t->mission->targetid == $this->id && $this->mission->targetid == $t->id&& $this->mission->arrived && $t->mission->arrived){
+					if ($t->mission->targetid == $this->id && $this->mission->targetid == $t->id && $this->mission->arrived && $t->mission->arrived){
 						Debug::log("both arrived, no move");
 						$tPos = $t->getCurPos();
 						$dist = 0;
 						$type = "patrol";
 					}
 					else {
-						if (!$t->moveSet && mt_rand(0, 1)){
-							Debug::log("enemy has the drop, switching to: ".$t->id);
+						if ($this->mission->targetid == $t->id && $t->mission->targetid == $this->id && !$t->moveSet && mt_rand(0, 1)){
+							Debug::log("two flights intercepts each other, enemy moves first, switching to: ".$t->id);
 							$this->moveSet = 1;
 							$t->setMove($gd);
 						}
