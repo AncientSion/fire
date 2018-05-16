@@ -218,11 +218,12 @@ class Mixed extends Ship {
 					$type = "move";
 				}
 				else { // flight on flight
-					if ($t->mission->targetid == $this->id && $this->mission->targetid == $t->id && $this->mission->arrived && $t->mission->arrived){
+					if ($this->mission->arrived && $t->mission->arrived && $t->mission->targetid == $this->id && $this->mission->targetid == $t->id){
 						Debug::log("both arrived, no move");
 						$tPos = $t->getCurPos();
 						$dist = 0;
 						$type = "patrol";
+						$this->mission->arrived = $gd->turn;
 					}
 					else {
 						if ($this->mission->targetid == $t->id && $t->mission->targetid == $this->id && !$t->moveSet && mt_rand(0, 1)){
@@ -235,11 +236,7 @@ class Mixed extends Ship {
 							$dist = Math::getDist2($origin, $tPos);
 							$angle = Math::getAngle2($origin, $tPos);
 							Debug::log("continuing with ".$this->id.", dist to target: ".$dist);
-
-							$this->mission->x = $tPos->x;
-							$this->mission->y = $tPos->y;
 						}
-
 
 						if ($dist == 0){
 							Debug::log("at target, static !");
@@ -268,12 +265,7 @@ class Mixed extends Ship {
 				$dist = Math::getDist2($origin, $tPos);
 				$angle = Math::getAngle2($origin, $tPos);
 
-				$this->mission->x = $tPos->x;
-				$this->mission->y = $tPos->y;
-
-				if ($this->mission->arrived){ // DRAG
-				}
-				else if ($impulse < $dist){ // ON ROUTE; take own speed OUT OR RANGE
+				if ($impulse < $dist){ // on route or drag -> own speed
 					Debug::log("close in");
 					$dist = $impulse;
 					$tPos = Math::getPointInDirection($impulse, $angle, $origin->x, $origin->y);

@@ -1807,7 +1807,7 @@ function Game(data){
 		cam.setFocusToPos({x: endX, y: endY});
 	}
 
-	this.setUnitMovementDetails = function(){
+	this.setUnitMoveDetails = function(){
 		var baseUnit = false;
 		var focusUnit = false;
 		var split = false;
@@ -1873,7 +1873,7 @@ function Game(data){
 				if (this.ships[i].actions[j].turn == game.turn){
 					var action = this.ships[i].actions[j];
 
-					if (action.type == "speed" || action.type == "deploy" || action.type == "jumpIn"){
+					if (action.type == "speed" || action.type == "deploy" || action.type == "jumpIn" || action.type == "patrol"){
 						this.ships[i].actions[j].animated = 1;
 					}
 					else {
@@ -3359,7 +3359,7 @@ Game.prototype.prepResolveMovement = function(){
 	this.drawingEvents = 0;
 	this.resetImageData();
 	this.setUnitMovementFocus();
-	this.setUnitMovementDetails();
+	this.setUnitMoveDetails();
 }
 
 Game.prototype.doResolveMovement = function(){
