@@ -238,11 +238,12 @@ class Mixed extends Ship {
 							$this->mission->x = $tPos->x;
 							$this->mission->y = $tPos->y;
 						}
-					
+
 
 						if ($dist == 0){
 							Debug::log("at target, static !");
 							$type = "patrol";
+							$tPos = $this->getCurPos();
 							$this->mission->arrived = $gd->turn;
 						}
 						else  if ($impulse < $dist){
@@ -273,6 +274,7 @@ class Mixed extends Ship {
 				}
 				else if ($impulse < $dist){ // ON ROUTE; take own speed OUT OR RANGE
 					Debug::log("close in");
+					$dist = $impulse;
 					$tPos = Math::getPointInDirection($impulse, $angle, $origin->x, $origin->y);
 				}
 				else { // ON ROUTE; REACH
