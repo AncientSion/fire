@@ -229,10 +229,10 @@ class Mixed extends Ship {
 						$t->setMove($gd);
 					}
 					else {
-						Debug::log("continuing with ".$this->id);
 						$tPos = $t->getCurPos();
 						$dist = Math::getDist2($origin, $tPos);
 						$angle = Math::getAngle2($origin, $tPos);
+						Debug::log("continuing with ".$this->id.", dist to target:".$dist);
 
 						$this->mission->x = $tPos->x;
 						$this->mission->y = $tPos->y;
