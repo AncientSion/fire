@@ -61,6 +61,8 @@
 
 	public function getClientData(){
 
+		$this->handleFocusMovePhase();
+
 		/*foreach ($this->playerstatus as $player){
 			foreach ($player as $key => $value){
 				Debug::log($key.": ".$value);
