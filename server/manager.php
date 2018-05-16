@@ -788,7 +788,7 @@
 		Debug::log("handleFocusMovePhase");
 		//$this->handleShipMovement();
 		$this->handleFlightMovement();
-		$this->handleSalvoMovement();
+		//$this->handleSalvoMovement();
 		//$this->handleNewActions();
 
 		//$this->handlePostMoveFires();
