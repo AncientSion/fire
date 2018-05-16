@@ -164,6 +164,7 @@ class Mixed extends Ship {
 	}
 
 	public function setMove(&$gd){
+		if ($this->moveSet){return;}
 
 		$origin = $this->getCurPos();
 		$impulse = $this->getCurSpeed();
