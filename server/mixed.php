@@ -164,7 +164,6 @@ class Mixed extends Ship {
 	}
 
 	public function setMove(&$gd){
-		Debug::log("Handling mixed #".$this->id);
 
 		$origin = $this->getCurPos();
 		$impulse = $this->getCurSpeed();
@@ -173,6 +172,8 @@ class Mixed extends Ship {
 		$dist = 0;
 		$angle = -1;
 		$type = "move";
+
+		Debug::log("Handling mixed #".$this->id.", speed ".$impulse);
 
 		if ($this->mission->type == 1){ // PATROL
 			//Debug::log("PATROL");
