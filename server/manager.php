@@ -792,7 +792,7 @@
 		//$this->handleNewActions();
 
 		//$this->handlePostMoveFires();
-		$this->updateMissions();
+		//$this->updateMissions();
 	}
 
 	public function handlePostMoveFires(){

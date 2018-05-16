@@ -197,8 +197,6 @@ class Mixed extends Ship {
 			}
 		}
 		else if ($this->mission->type == 2){ // STRIKE
-			echo "</br>resolving: ".$this->id."</br>";
-			var_export($this->mission);
 			$t = $gd->getUnit($this->mission->targetid);
 
 			Debug::log("MISSION @ ".get_class($t)." #".$t->id);
@@ -285,7 +283,7 @@ class Mixed extends Ship {
 		}
 
 		$move = new Action(-1, $this->id, $gd->turn, $type, $dist, $tPos->x, $tPos->y, $angle, 0, 0, 0, 1, 1);
-		Debug::log("adding move to => ".$move->x."/".$move->y.", dist: ".$dist);
+		Debug::log("adding ".$move->type." to => ".$move->x."/".$move->y.", dist: ".$dist);
 		$this->actions[] = $move;
 		$this->moveSet = 1;
 	}
