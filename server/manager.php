@@ -60,13 +60,14 @@
 	}
 
 	public function getClientData(){
-
+		
+/*
 		$this->handleFlightMovement();
 		$this->handleNewActions();
 		$this->updateMissions();
 		return;
 
-		/*foreach ($this->playerstatus as $player){
+		foreach ($this->playerstatus as $player){
 			foreach ($player as $key => $value){
 				Debug::log($key.": ".$value);
 			}
