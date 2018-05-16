@@ -202,6 +202,7 @@ class Mixed extends Ship {
 			Debug::log("MISSION @ ".get_class($t)." #".$t->id);
 
 			if ($t->flight){
+				Debug::log("target is a flight");
 				if ($this->mission->arrived && $t->mission->arrived && $t->mission->type == 1){
 					Debug::log("standoff, patrol !");
 					$tPos = $this->getCurPos();
@@ -215,20 +216,20 @@ class Mixed extends Ship {
 					$type = "move";
 				}
 				else { // flight on flight
-					if ($t->mission->targetid == $this->id && $this->mission->targetid == $t->id
-						&& $this->mission->arrived && $t->mission->arrived){
-							Debug::log("both arrived, no move");
-							$tPos = $t->getCurPos();
-							$dist = 0;
-							$type = "patrol";
+					if ($t->mission->targetid == $this->id && $this->mission->targetid == $t->id&& $this->mission->arrived && $t->mission->arrived){
+						Debug::log("both arrived, no move");
+						$tPos = $t->getCurPos();
+						$dist = 0;
+						$type = "patrol";
 					}
 					else if (!$t->moveSet){
+						Debug::log("target has not moved");
 						if (mt_rand(0, 1)){
 							Debug::log("ME priority achieved, switching to: ".$t->id);
 							$this->moveSet = 1;
 							$t->setMove($gd);
-						}
-						
+						} else Debug::log("i failed, doing my own move first");
+
 						Debug::log("continuing with ".$this->id);
 						$tPos = $t->getCurPos();
 						$impulse = $this->getCurSpeed();
