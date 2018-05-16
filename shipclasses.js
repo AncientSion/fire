@@ -3052,7 +3052,7 @@ Ship.prototype.readyForAnim = function(){
 			}
 			else {
 				this.actions[i].animated = 0;
-				if (j == 0){
+				if (i == 0){
 					if (action.type == "move"){
 						var v = new Vector({x: this.x, y: this.y}, {x: action.x, y: action.y});
 							v.t = [0, action.dist * frameMod];
@@ -3062,7 +3062,7 @@ Ship.prototype.readyForAnim = function(){
 				}
 				else {
 					if (action.type == "move"){
-						var v = new Vector({x: this.actions[j-1].x, y: this.actions[j-1].y}, {x: action.x, y: action.y});
+						var v = new Vector({x: this.actions[i-1].x, y: this.actions[i-1].y}, {x: action.x, y: action.y});
 							v.t = [0, action.dist * frameMod];
 						this.actions[i].v = v;
 						//console.log(v);

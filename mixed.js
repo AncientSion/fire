@@ -806,6 +806,11 @@ Mixed.prototype.readyForAnim = function(){
 	this.setPreMovePosition();
 	this.setPreMoveFacing();	
 
+	if (this.actions[this.actions.length-1].dist == 0){
+		this.actions[this.actions.length-1].animated = 1;
+		return;
+	}
+	
 	var frameMod = 1000 / window.fpsTicks / this.actions[this.actions.length-1].dist;
 
 	for (var i = 0; i < this.actions.length; i++){
@@ -817,13 +822,13 @@ Mixed.prototype.readyForAnim = function(){
 			}
 			else {
 				this.actions[i].animated = 0;
-				if (j == 0 && action.type == "move"){
+				if (i == 0 && action.type == "move"){
 					var v = new Vector({x: this.x, y: this.y}, {x: action.x, y: action.y});
 					v.t = [0, action.dist * frameMod];
 					this.actions[i].v = v;
 				}
 				else if (action.type == "move"){
-					var v = new Vector({x: this.actions[j-1].x, y: this.actions[j-1].y}, {x: action.x, y: action.y});
+					var v = new Vector({x: this.actions[i-1].x, y: this.actions[i-1].y}, {x: action.x, y: action.y});
 						v.t = [0, action.dist * frameMod];
 					this.actions[i].v = v;
 				}
