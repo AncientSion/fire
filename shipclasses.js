@@ -1819,7 +1819,7 @@ Ship.prototype.getCurSpeed = function(){
 }
 
 Ship.prototype.getRemSpeed = function(){
-	if (game.phase > this.move){return 0;}	
+	if (game.phase > this.focus){return 0;}	
 	var impulse = this.getCurSpeed();
 	for (var i = 0; i < this.actions.length; i++){
 		if (this.actions[i].turn == game.turn){
