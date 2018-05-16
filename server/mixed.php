@@ -166,6 +166,7 @@ class Mixed extends Ship {
 	public function setMove(&$gd){
 		Debug::log("Handling mixed #".$this->id);
 
+		$t;
 		$tPos;
 		$dist = 0;
 		$angle = -1;
@@ -227,8 +228,7 @@ class Mixed extends Ship {
 						}
 					}
 					else {// flight intercepting flight
-
-						if ($t->moveSet){
+						if (!$t->moveSet){
 							Debug::log("switching resolution to ".$t->id);
 							$t->setMove($td);
 						}
