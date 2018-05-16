@@ -167,6 +167,7 @@ class Mixed extends Ship {
 		Debug::log("Handling mixed #".$this->id);
 
 		$origin = $this->getCurPos();
+		$impulse = $this->getCurSpeed();
 		$t;
 		$tPos;
 		$dist = 0;
@@ -181,7 +182,6 @@ class Mixed extends Ship {
 				//Debug::log("drag");
 			}
 			else {
-				$impulse = $this->getCurSpeed();
 				$dist = Math::getDist2($origin, $this->mission);
 				$angle = Math::getAngle2($origin, $this->mission);
 
@@ -230,7 +230,6 @@ class Mixed extends Ship {
 					else {
 						Debug::log("continuing with ".$this->id);
 						$tPos = $t->getCurPos();
-						$impulse = $this->getCurSpeed();
 						$dist = Math::getDist2($origin, $tPos);
 						$angle = Math::getAngle2($origin, $tPos);
 
@@ -259,7 +258,6 @@ class Mixed extends Ship {
 			}
 			else { // SHIP SQUAD
 				$tPos = $t->getCurPos();
-				$impulse = $this->getCurSpeed();
 				$dist = Math::getDist2($origin, $tPos);
 				$angle = Math::getAngle2($origin, $tPos);
 
