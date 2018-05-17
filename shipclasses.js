@@ -13,7 +13,7 @@ function Ship(data){
 	this.cost = data.cost;
 	this.profile = data.profile;
 	this.stringHitChance = "";
-	this.size = data.size;
+	this.size = data.size * 0.7;
 	this.userid = data.userid;
 	this.available = data.available;
 	this.baseHitChance = data.baseHitChance || 0;

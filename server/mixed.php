@@ -205,9 +205,9 @@ class Mixed extends Ship {
 
 			if ($t->flight){
 				Debug::log("target is a flight");
-				if ($this->mission->arrived && $t->mission->arrived && $t->mission->type == 1){
+				if ($this->mission->arrived && $t->mission->arrived && $t->mission->type == 1 && $t->moveSet && !$t->actions[sizeof($actions)-1]->dist){
 					Debug::log("standoff, patrol !");
-					$tPos = $this->getCurPos();
+					$tPos = $origin;
 					$dist = 0;
 					$type = "patrol";
 				}
