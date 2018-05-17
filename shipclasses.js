@@ -413,15 +413,10 @@ Ship.prototype.getImpulseStep = function(){
 }
 
 Ship.prototype.getTurnCost = function(){
-	if (game.turn == 1 && game.phase == -2 || game.phase == -1 && game.turn > 1 && this.available == game.turn){
-		return 1;
-	}
-	if (this.actions.length && (this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0)){
+	if (this.canTurnFreely()){
 		return 0;
 	}
-	else {
-		return round(1*this.getImpulseMod(), 2)
-	}
+	return round(1*this.getImpulseMod(), 2);
 }
 
 Ship.prototype.getTurnMod = function(){
