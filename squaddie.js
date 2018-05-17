@@ -1,7 +1,7 @@
 function Squaddie(data){
 	Single.call(this, data);
 	this.structures = [];
-	this.size = data.size * 0.7;
+	this.size = data.size;
 	this.index = data.index;
 	this.ew = data.ew;
 	this.power = data.power;
