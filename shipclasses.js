@@ -1601,7 +1601,7 @@ Ship.prototype.animateSelfJumpOut = function(){
 
 	var fraction = 1-this.deployAnim[0] / this.deployAnim[1];
 	var sin = Math.sin(Math.PI*fraction);
-	var s = this.size*1.5*sin;
+	var s = this.size*2*sin;
 
 	//console.log(fraction)
 
