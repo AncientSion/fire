@@ -3630,7 +3630,7 @@ Ship.prototype.canDoAction = function(type){
 }
 Ship.prototype.canIncreaseImpulse = function(){
 	if (this.getRemEP() >= this.getImpulseChangeCost() / this.getImpulseMod()){
-		if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship + this.squad)){
+		if (!this.actions.length){
 			return true;
 		}
 		else if (this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == 1){
@@ -3650,7 +3650,7 @@ Ship.prototype.canIncreaseImpulse = function(){
 Ship.prototype.canDecreaseImpulse = function(){
 	if (this.getCurSpeed() <= 30){return false;}
 	else if (this.getRemEP() >= this.getImpulseChangeCost() / this.getImpulseMod()){
-		if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship + this.squad)){
+		if (!this.actions.length){
 			return true;
 		}
 		else if (this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == -1){
