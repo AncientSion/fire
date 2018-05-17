@@ -767,7 +767,7 @@ Ship.prototype.handleTurning = function(e, o, f, pos){
 	var t;
 
 	if (unit && !unit.focus == 0 && this.focus == 1){
-		console.log("snap");
+		//console.log("snap");
 		a = getAngleFromTo(this.getPlannedPos(), unit.getPlannedPos());
 		a = addAngle(f, a);
 		t = unit.getDrawPos();
@@ -776,7 +776,7 @@ Ship.prototype.handleTurning = function(e, o, f, pos){
 		game.snapTurn = unit.id;
 	}
 	else {
-		console.log("free");
+		//console.log("free");
 		t = {x: e.clientX, y: e.clientY};
 		a = getAngleFromTo(o, pos);
 		a = addAngle(f, a);
@@ -847,15 +847,28 @@ Ship.prototype.handleTurnAttempt = function(dest){
 }
 
 Ship.prototype.hasPlannedMoves = function(){
+	if (game.turn > 1 && this.available == game.turn){
+		for (let i = this.actions.length-1; i >= 1; i--){
+			if (!this.actions[i].resolved){return true;}
+		}
+		return false;
+	}
+
 	for (let i = this.actions.length-1; i >= 0; i--){
 		if (!this.actions[i].resolved){return true;}
 	}
 	return false;
 }
 
-Ship.prototype.issueTurn = function(a){
-	console.log(a);
+Ship.prototype.canTurnFreely = function(){
 	if (this.actions.length && this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0){
+		if (game.turn == 1 || (this.available > game.turn)){return true;}
+	}
+	return false;
+}
+
+Ship.prototype.issueTurn = function(a){
+	if (this.canTurnFreely()){
 		this.actions[0].a += Math.round(a);
 		if (this.actions[0].a > 360){
 			this.actions[0].a -= 360;
@@ -3616,12 +3629,14 @@ Ship.prototype.canDoAction = function(type){
 	return false;
 }
 Ship.prototype.canIncreaseImpulse = function(){
-	//if (this.isRolling()){return false;}
 	if (this.getRemEP() >= this.getImpulseChangeCost() / this.getImpulseMod()){
 		if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship + this.squad)){
 			return true;
 		}
 		else if (this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == 1){
+			return true;
+		}
+		else if (this.actions[0].type == "deploy" && this.actions.length == 1 && game.turn > 1 && this.available == game.turn){
 			return true;
 		}
 	}
@@ -3639,6 +3654,9 @@ Ship.prototype.canDecreaseImpulse = function(){
 			return true;
 		}
 		else if (this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == -1){
+			return true;
+		}
+		else if (this.actions[0].type == "deploy" && this.actions.length == 1 && game.turn > 1 && this.available == game.turn){
 			return true;
 		}
 	}

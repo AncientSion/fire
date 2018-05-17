@@ -311,8 +311,8 @@ Flight.prototype.enableMissionMode = function(){
 }
 
 Flight.prototype.drawMissionArea = function(){
+	return;
 	if (this.mission.type != 1){
-		return;
 	}
 
 	planCtx.translate(cam.o.x, cam.o.y);
