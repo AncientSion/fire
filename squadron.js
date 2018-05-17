@@ -91,7 +91,7 @@ Squadron.prototype.setLayout = function(){
 	else {
 		for (var i = 0; i < this.structures.length; i++){
 			var a = -45*(this.structures.length == 4) + -90*(this.structures.length == 2) + 360 /  this.structures.length * i;
-			var o = getPointInDir(70 + (-20*(this.structures.length == 2)) +(10*(this.structures.length == 4)), a-90, 0, 0);
+			var o = getPointInDir(100 + (-20*(this.structures.length == 2)) +(10*(this.structures.length == 4)), a-90, 0, 0);
 
 			minX = Math.min(minX, o.x);
 			maxX = Math.max(maxX, o.x);
@@ -492,6 +492,7 @@ Squadron.prototype.setImage = function(){
 		t.height = this.size*2;
 	var ctx = t.getContext("2d");
 		ctx.translate(t.width/2, t.height/2);
+		ctx.scale(0.8, 0.8)
 
 	for (var i = 0; i < this.structures.length; i++){
 		if (!this.structures[i].doDraw){continue;}
@@ -530,6 +531,67 @@ Squadron.prototype.getWeaponOrigin = function(id){
 	}
 }
 
+
+Squadron.prototype.getUnitPos = function(unit){
+	var x = unit.layout.x * 0.8 / 2 * 0.5;
+	var y = unit.layout.y * 0.8 / 2 * 0.5;
+	return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());
+}
+
+Squadron.prototype.getFireDest = function(fire, isHit, num){
+	if (!isHit){
+		return {
+			x: range(10, 25) * (1-range(0, 1)*2),
+			y: range(10, 25) * (1-range(0, 1)*2)
+		}
+	}
+	else if (fire.weapon.fireMode == "Flash"){
+		return {x: 0, y: 0};
+	}
+	else {
+	//	var t = this.getSystem(fire.damages[num].systemid).layout;
+		var t = this.getUnitPos(this.getSystem(fire.damages[num].systemid));
+		return {x: t.x + range(-7, 7), y: t.y + range(-7, 7)}
+		var x = t.x * 0.8 / 2 * 0.5 + range(-5, 5);
+		var y = t.y * 0.8 / 2 * 0.5 + range(-5, 5);
+		return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());
+
+
+		var t = this.getSystem(fire.damages[num].systemid).layout;
+		var x = t.x/2 * 0.5 + range(-5, 5);
+		var y = t.y/2 * 0.5 + range(-5, 5);
+		return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());
+	}
+}
+
+Squadron.prototype.getDmgByFire = function(fire){
+	var dmgs = [];
+	var lookup = 0;
+	
+	for (var i = 0; i < fire.hits.length; i++){
+		lookup += fire.hits[i] * fire.weapon.getDmgsPerShot(fire);
+	}
+
+	if (!lookup){return dmgs;}
+
+	for (var i = 0; i < this.structures.length; i++){
+		for (var j = this.structures[i].damages.length-1; j >= 0; j--){
+			if (this.structures[i].damages[j].fireid == fire.id){
+				dmgs.push(this.structures[i].damages[j]);
+				dmgs[dmgs.length-1].system = (this.structures[i].display + " #" + (i+1));
+				dmgs[dmgs.length-1].loc = this.structures[i].layout;
+				lookup--;
+				if (!lookup){return dmgs};
+			}
+			else if (this.structures[i].damages[j].turn < fire.turn){
+				break;
+			}
+		}
+	}
+	console.log("ERROR getDmgByFire");
+	return dmgs;
+}
+
 Squadron.prototype.setStats = function(){
 	this.slots[0] = 0;
 	for (var i = 0; i < this.structures.length; i++){
@@ -565,58 +627,6 @@ Squadron.prototype.setStats = function(){
 			$($(this).children()[1]).html(hit); return;
 		}
 	})
-}
-
-Squadron.prototype.getUnitPosition = function(i){
-	var x = this.structures[i].layout.x/2 * 0.5;
-	var y = this.structures[i].layout.y/2 * 0.5;
-	return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());
-}
-
-Squadron.prototype.getFireDest = function(fire, isHit, num){
-	if (!isHit){
-		return {
-			x: range(10, 25) * (1-range(0, 1)*2),
-			y: range(10, 25) * (1-range(0, 1)*2)
-		}
-	}
-	else if (fire.weapon.fireMode == "Flash"){
-		return {x: 0, y: 0};
-	}
-	else {
-		var t = this.getSystem(fire.damages[num].systemid).layout;
-		var x = t.x/2 * 0.5 + range(-5, 5);
-		var y = t.y/2 * 0.5 + range(-5, 5);
-		return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());
-	}
-}
-
-Squadron.prototype.getDmgByFire = function(fire){
-	var dmgs = [];
-	var lookup = 0;
-	
-	for (var i = 0; i < fire.hits.length; i++){
-		lookup += fire.hits[i] * fire.weapon.getDmgsPerShot(fire);
-	}
-
-	if (!lookup){return dmgs;}
-
-	for (var i = 0; i < this.structures.length; i++){
-		for (var j = this.structures[i].damages.length-1; j >= 0; j--){
-			if (this.structures[i].damages[j].fireid == fire.id){
-				dmgs.push(this.structures[i].damages[j]);
-				dmgs[dmgs.length-1].system = (this.structures[i].display + " #" + (i+1));
-				dmgs[dmgs.length-1].loc = this.structures[i].layout;
-				lookup--;
-				if (!lookup){return dmgs};
-			}
-			else if (this.structures[i].damages[j].turn < fire.turn){
-				break;
-			}
-		}
-	}
-	console.log("ERROR getDmgByFire");
-	return dmgs;
 }
 
 Squadron.prototype.getSectionString = function(angle){
@@ -809,7 +819,7 @@ Squadron.prototype.getSelfExplo = function(){
 		var explo = {u: this.structures[j], anims: []};
 
 		counter++;
-		var real = this.getUnitPosition(j);
+		var real = this.getUnitPos(this.structures[i]);
 		for (var k = 0; k < 4; k++){
 			explo.anims.push({
 				t: [0 - k*6 - counter*20, 50],

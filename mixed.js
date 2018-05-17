@@ -633,12 +633,12 @@ Mixed.prototype.setPatrolImage = function(){
 Mixed.prototype.getWeaponOrigin = function(id){
 	for (i = this.structures.length-1; i >= 0; i--){
 		if (id > this.structures[i].id){
-			return this.getUnitPosition(i);
+			return this.getUnitPos(i);
 		}
 	}
 }
 
-Mixed.prototype.getUnitPosition = function(j){
+Mixed.prototype.getUnitPos = function(j){
 	var x = this.structures[j].layout.x * 0.5;
 	var y = this.structures[j].layout.y * 0.5;
 	return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
@@ -783,7 +783,7 @@ Mixed.prototype.getSelfExplo = function(){
 		var explo = {u: this.structures[j], anims: []};
 
 		counter++;
-		var real = this.getUnitPosition(j);
+		var real = this.getUnitPos(j);
 		console.log(real);
 		for (var k = 0; k < 1; k++){
 			explo.anims.push({
