@@ -966,7 +966,8 @@ function Game(data){
 	}
 
 	this.initDeploy = function(){
-		cam.setZoom(0.6);
+		setUnitMovementFocus();
+		cam.setZoom(1);
 		this.draw();
 
 		if (game.turn == 1){return;}
