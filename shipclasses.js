@@ -1575,7 +1575,7 @@ Ship.prototype.animateSelfJumpIn = function(){
 
 	var fraction = this.deployAnim[0] / this.deployAnim[1];
 	var sin = Math.sin(Math.PI*fraction);
-	var s = this.size*1.5*sin;
+	var s = this.size*2.5*sin;
 
 	ctx.globalAlpha = sin;
 	ctx.drawImage(graphics.images.blueVortex, this.drawX-s/2, this.drawY-s/2, s, s);
@@ -1601,7 +1601,7 @@ Ship.prototype.animateSelfJumpOut = function(){
 
 	var fraction = 1-this.deployAnim[0] / this.deployAnim[1];
 	var sin = Math.sin(Math.PI*fraction);
-	var s = this.size*2*sin;
+	var s = this.size*2.5*sin;
 
 	//console.log(fraction)
 
@@ -3630,7 +3630,7 @@ Ship.prototype.canDoAction = function(type){
 }
 Ship.prototype.canIncreaseImpulse = function(){
 	if (this.getRemEP() >= this.getImpulseChangeCost() / this.getImpulseMod()){
-		if (!this.actions.length){
+		if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship + this.squad)){
 			return true;
 		}
 		else if (this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == 1){
@@ -3650,7 +3650,7 @@ Ship.prototype.canIncreaseImpulse = function(){
 Ship.prototype.canDecreaseImpulse = function(){
 	if (this.getCurSpeed() <= 30){return false;}
 	else if (this.getRemEP() >= this.getImpulseChangeCost() / this.getImpulseMod()){
-		if (!this.actions.length){
+		if (!this.actions.length || this.available == game.turn && this.actions.length == (1 + this.ship + this.squad)){
 			return true;
 		}
 		else if (this.actions[this.actions.length-1].type == "speed" && this.actions[this.actions.length-1].dist == -1){
