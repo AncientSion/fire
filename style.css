@@ -629,9 +629,21 @@ table, th, tr, td {
 	margin: auto;
 }
 
+.size50 {
+	width: 50px;
+	height: 50px;
+	margin: auto;
+}
+
 .size45 {
 	width: 45px;
 	height: 45px;
+	margin: auto;
+}
+
+.size60 {
+	width: 60px;
+	height: 60px;
 	margin: auto;
 }
 

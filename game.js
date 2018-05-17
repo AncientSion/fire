@@ -2776,7 +2776,7 @@ function Game(data){
 		var ele = $("#unitSelector");
 		//	ele.remove() $("#deployWrapper").remove();return;
 		var l = 0;
-		var s = 40;
+		var s = 50;
 		var className = "rotate270 size" + s
 
 		this.ships.sort(function(a, b){

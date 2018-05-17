@@ -91,7 +91,7 @@ Squadron.prototype.setLayout = function(){
 	else {
 		for (var i = 0; i < this.structures.length; i++){
 			var a = -45*(this.structures.length == 4) + -90*(this.structures.length == 2) + 360 /  this.structures.length * i;
-			var o = getPointInDir(100 + (-20*(this.structures.length == 2)) +(10*(this.structures.length == 4)), a-90, 0, 0);
+			var o = getPointInDir(70 + (-20*(this.structures.length == 2)) +(10*(this.structures.length == 4)), a-90, 0, 0);
 
 			minX = Math.min(minX, o.x);
 			maxX = Math.max(maxX, o.x);
@@ -109,7 +109,7 @@ Squadron.prototype.setLayout = function(){
 		h = Math.abs(minY) + Math.abs(maxY) + s;
 
 
-	$(this.element).find(".structContainer").css("height", h +50);
+	$(this.element).find(".structContainer").css("height", h + 20 + ((this.structures.length > 2) * 70));
 }
 
 Squadron.prototype.createBaseDiv = function(){
@@ -175,8 +175,8 @@ Squadron.prototype.setSubElements = function(){
 		var subW = $(this.structures[i].element).width();
 		var subH = $(this.structures[i].element).height();
 		var pos = rotate(0, 0, this.structures[i].layout, -90);
-			pos.x *= 1.2;
-			pos.y *= 1.2;
+			pos.x *= 1.7;
+			pos.y *= 1.7;
 
 		$(this.structures[i].element)
 			.css("left", pos.x + w/2 - subW/2)
@@ -486,13 +486,13 @@ Squadron.prototype.getAllResolvingFireOrders = function(){
 }
 
 Squadron.prototype.setImage = function(){
-	//console.log("Squad setImage");
+	console.log("Squad setImage");
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
 		t.height = this.size*2;
 	var ctx = t.getContext("2d");
 		ctx.translate(t.width/2, t.height/2);
-		ctx.scale(0.8, 0.8)
+		//ctx.scale(0.8, 0.8)
 
 	for (var i = 0; i < this.structures.length; i++){
 		if (!this.structures[i].doDraw){continue;}
@@ -533,8 +533,8 @@ Squadron.prototype.getWeaponOrigin = function(id){
 
 
 Squadron.prototype.getUnitPos = function(unit){
-	var x = unit.layout.x * 0.8 / 2 * 0.5;
-	var y = unit.layout.y * 0.8 / 2 * 0.5;
+	var x = unit.layout.x * 1 / 2 * 0.5;
+	var y = unit.layout.y * 1 / 2 * 0.5;
 	return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());
 }
 
