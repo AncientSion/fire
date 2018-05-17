@@ -1575,7 +1575,7 @@ Ship.prototype.animateSelfJumpIn = function(){
 
 	var fraction = this.deployAnim[0] / this.deployAnim[1];
 	var sin = Math.sin(Math.PI*fraction);
-	var s = this.size*2*sin;
+	var s = this.size*1.5*sin;
 
 	ctx.globalAlpha = sin;
 	ctx.drawImage(graphics.images.blueVortex, this.drawX-s/2, this.drawY-s/2, s, s);
@@ -1601,7 +1601,7 @@ Ship.prototype.animateSelfJumpOut = function(){
 
 	var fraction = 1-this.deployAnim[0] / this.deployAnim[1];
 	var sin = Math.sin(Math.PI*fraction);
-	var s = 200*sin;
+	var s = this.size*1.5*sin;
 
 	//console.log(fraction)
 
