@@ -424,14 +424,10 @@ Ship.prototype.getTurnMod = function(){
 }
 
 Ship.prototype.getTurnDelay = function(){
-	if (game.phase == -2){
-		return round(this.baseTurnDelay*this.getImpulseMod() / this.getTurnMod());
-	}
-	if (this.actions.length && this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0){
+	if (this.canTurnFreely()){
 		return 0;
 	}
-	else return round(this.baseTurnDelay*this.getImpulseMod() / (1+((this.getTurnMod()-1)*3)), 2);
-	//else return round(this.baseTurnDelay*this.getImpulseMod() / this.getTurnMod());
+	return round(this.baseTurnDelay*this.getImpulseMod() / (1+((this.getTurnMod()-1)*3)), 2);
 }
 
 Ship.prototype.drawSystemArcIndicator = function(){
