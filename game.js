@@ -966,7 +966,7 @@ function Game(data){
 	}
 
 	this.initDeploy = function(){
-		setUnitMovementFocus();
+		game.setUnitCenterFocus();
 		cam.setZoom(1);
 		this.draw();
 
@@ -1786,7 +1786,7 @@ function Game(data){
 
 	}
 
-	this.setUnitMovementFocus = function(){
+	this.setUnitCenterFocus = function(){
 
 		var data = this.getUnitMaxPos();
 
@@ -3322,7 +3322,7 @@ Game.prototype.logWeaponEvents = function(){
 Game.prototype.prepResolveMovement = function(){
 	this.drawingEvents = 0;
 	this.resetImageData();
-	this.setUnitMovementFocus();
+	this.setUnitCenterFocus();
 	this.setUnitMoveDetails();
 }
 
