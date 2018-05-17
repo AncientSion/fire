@@ -966,7 +966,7 @@ function Game(data){
 	}
 
 	this.initDeploy = function(){
-		game.setUnitCenterFocus();
+		this.setUnitCenterFocus();
 		cam.setZoom(1);
 		this.draw();
 
