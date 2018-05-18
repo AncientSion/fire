@@ -976,9 +976,9 @@
 			$t = $this->getUnit($this->ships[$i]->mission->targetid);
 			if ($t->destroyed || $t->status == "jumpOut"){
 				//Debug::log("freeeing flight #".$this->ships[$i]->id." from mission");
-				$pos = $this->ships[$i]->getCurPos();
+				$pos = $this->ships[$i->getCurPos();
 				$this->ships[$i]->mission->type = 1;
-				$this->ships[$i]->mission->turn = $this->turn - 2;
+				$this->ships[$i]->mission->turn = $this->turn - 1;
 				$this->ships[$i]->mission->arrived = $this->turn - 1;
 				$this->ships[$i]->mission->targetid = 0;
 				$this->ships[$i]->mission->x = $pos->x;
