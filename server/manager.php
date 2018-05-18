@@ -1198,7 +1198,7 @@
 						else if ($ew->type == 1){ // ship MASK in cc, only working against salvo ATM
 							if ($this->ships[$i]->salvo){ // salvo, in trajectory ?
 								$angle = Math::getAngle2($emitter, $this->ships[$i]->getTrajectoryStart());
-								Debug::log("ship: ".$ship->id." vs salvo: ".$this->ships[$i]->id.", angle: ".$angle);
+								Debug::log("ship: ".$emitter->id." vs salvo: ".$this->ships[$i]->id.", angle: ".$angle);
 								if (Math::isInArc($angle, $start, $end)){
 									//Debug::log("adding CC mask from ship vs salvo");
 									$emitter->masks[] = array($this->ships[$i]->id, $emitter->getMaskEffect($this->ships[$i]));
