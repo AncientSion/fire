@@ -52,7 +52,7 @@ function Game(data){
 	this.animData = {jump: 60};
 
 	this.hasSnapCenterline = function(shooter, shooterAngle, target){
-		if (game.phase == 2){
+		if (game.phase > 0){
 			if (shooter.focus && target && !target.focus && !shooter.getRemSpeed()){
 				console.log("angle to target: " + shooterAngle);
 				if (Math.ceil(shooterAngle) == 360 || Math.ceil(shooterAngle) == 0
