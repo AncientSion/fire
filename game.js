@@ -277,7 +277,8 @@ function Game(data){
 		else {
 			//s.mission = mission;
 			s.facing = a;
-			if (!(s.oldMission.type == 1 && s.oldMission.arrived)){s.setCurSpeed();} // reset speed only when NOT in patrol
+			//if (!(s.oldMission.type == 1 && s.oldMission.arrived)){s.setCurSpeed();} // reset speed only when NOT in patrol
+			s.setCurSpeed();
 			s.setTarget();
 		}
 
