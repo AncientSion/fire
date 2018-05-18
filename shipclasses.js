@@ -1397,7 +1397,19 @@ Ship.prototype.doHighlight = function(){
 }
 
 Ship.prototype.drawTrajectory = function(){
-	return;
+	if (!this.salvo || !this.mission.arrived){return;}
+	var t = this.getTarget().getPlannedPos();
+
+	planCtx.globalAlpha = 1;
+	planCtx.translate(cam.o.x, cam.o.y);
+	planCtx.scale(cam.z, cam.z);
+	planCtx.beginPath();
+	planCtx.moveTo(this.x, this.y);
+	planCtx.lineTo(t.x, t.y);
+	planCtx.closePath();
+	planCtx.strokeStyle = "red";
+	planCtx.stroke();
+	planCtx.setTransform(1,0,0,1,0,0);
 }
 
 Ship.prototype.create = function(){

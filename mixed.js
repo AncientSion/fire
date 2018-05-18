@@ -133,20 +133,6 @@ Mixed.prototype.drawTargetMovePlan = function(){
 	t.drawMovePlan();
 }
 
-Mixed.prototype.drawTrajectory = function(){
-	if (!this.salvo || !this.mission.arrived){return;}
-	planCtx.globalAlpha = 1;
-	planCtx.translate(cam.o.x, cam.o.y);
-	planCtx.scale(cam.z, cam.z);
-	planCtx.beginPath();
-	planCtx.moveTo(this.x, this.y);
-	planCtx.lineTo(this.mission.x, this.mission.y);
-	planCtx.closePath();
-	planCtx.strokeStyle = "red";
-	planCtx.stroke();
-	planCtx.setTransform(1,0,0,1,0,0);
-}
-
 Mixed.prototype.isDestroyed = function(){
 	for (var i = 0; i < this.structures.length; i++){
 		if (!this.structures[i].destroyed && !this.structures[i].disabled){

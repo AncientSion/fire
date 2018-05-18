@@ -61,7 +61,7 @@
 
 	public function getClientData(){
 
-		$this->setupShips();
+		//$this->setupShips();
 		//return;
 		
 /*
