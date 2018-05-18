@@ -757,7 +757,7 @@ Ship.prototype.handleTurning = function(e, o, f, pos){
 	var a = 0;
 	var t;
 
-	if (this.focus == 1 unit && !unit.focus){
+	if (this.focus == 1 && unit && !unit.focus){
 		//console.log("snap");
 		a = getAngleFromTo(this.getPlannedPos(), unit.getPlannedPos());
 		a = addAngle(f, a);
