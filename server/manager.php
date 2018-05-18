@@ -1203,7 +1203,7 @@
 								if (Math::isInArc($angle, $start, $end)){
 									//Debug::log("adding CC mask from ship vs salvo");
 									$emitter->masks[] = array($this->ships[$i]->id, $emitter->getMaskEffect($this->ships[$i]));
-									$skip = 1; break;
+									$skip = 1;
 								}
 							}
 						}

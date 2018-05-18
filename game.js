@@ -325,6 +325,7 @@ function Game(data){
 		var p = getPointInDir(s.size/2, facing, o.x, o.y);
 		var mission = {id: -1, unitid: -this.ships.length-20, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
 
+		
 		var immediate = 0;
 
 		if (t.id == aUnit || t.id < 0 && t.flight && t.launch.shipid == aUnit){
@@ -335,6 +336,8 @@ function Game(data){
 			p = dest;
 			mission.arrived = 1 //this.turn;
 		}
+
+		immediate = 0;
 
 		var flight = new Flight(
 			{id: -this.ships.length-20, name: "Flight", mission: mission,
