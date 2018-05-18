@@ -1282,8 +1282,8 @@ class Medium extends Ship {
 				}
 				//else if (mt_rand(0, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn)){
 				else if ($this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn)){
-					if (!$this->structures[$i]->systems[$j]->isPowered()){continue;}
 					$usage = $this->structures[$i]->systems[$j]->getPowerUsage($turn);
+					if (!$usage){continue;}
 					$potential[] = $usage;
 					$this->structures[$i]->systems[$j]->damages[sizeof($this->structures[$i]->systems[$j]->damages)-1]->notes .= "o".$usage.";";
 				}

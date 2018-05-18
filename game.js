@@ -3206,7 +3206,7 @@ Game.prototype.resolveDeploy = function(){
 		window.then = Date.now();
 		window.startTime = then;
 		cam.setZoom(0.7);
-		//cam.setFocusToPos({x: 8, y: 300});
+		cam.setUnitCenterFocus();
 		this.animating = 1;
 		this.animateJumpIn();
 	}

@@ -174,7 +174,7 @@ class Mixed extends Ship {
 		$angle = -1;
 		$type = "move";
 
-		Debug::log("Handling mixed #".$this->id.", speed ".$impulse);
+		Debug::log("Handling ".get_class($this)." #".$this->id.", speed ".$impulse);
 
 		if ($this->mission->type == 1){ // PATROL
 			//Debug::log("PATROL");
