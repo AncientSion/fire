@@ -62,6 +62,7 @@
 	public function getClientData(){
 
 		$this->setupShips();
+		return;
 		
 /*
 		$this->handleFlightMovement();
