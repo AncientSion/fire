@@ -978,8 +978,8 @@
 				//Debug::log("freeeing flight #".$this->ships[$i]->id." from mission");
 				$pos = $this->ships[$i]->getCurPos();
 				$this->ships[$i]->mission->type = 1;
-				$this->ships[$i]->mission->turn = $this->turn - 1;
-				$this->ships[$i]->mission->arrived = $this->turn - 1;
+				$this->ships[$i]->mission->turn = $this->turn;
+				$this->ships[$i]->mission->arrived = $this->turn;
 				$this->ships[$i]->mission->targetid = 0;
 				$this->ships[$i]->mission->x = $pos->x;
 				$this->ships[$i]->mission->y = $pos->y;
