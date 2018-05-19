@@ -2685,6 +2685,7 @@ Ship.prototype.expandDiv = function(div){
 
 Ship.prototype.setNotes = function(){
 	$(this.element).find(".notes").children().remove();
+	if (this.isRolled()){this.addNoteEntry("ROLLED");}
 	if (this.isRolling()){this.addNoteEntry("ROLLING");}
 	if (this.isFlipping()){this.addNoteEntry("FLIPPING");}
 }
