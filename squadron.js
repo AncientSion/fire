@@ -215,7 +215,7 @@ Squadron.prototype.expandDiv = function(div){
 					}
 				}));
 		
-	this.setRollState();
+	this.setNotes();
 	//document.getElementById("game").appendChild(div);
 	$(document.body).append(div);
 	$(div).css("position", "absolute").css("top", 300);
