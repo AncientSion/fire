@@ -2724,7 +2724,7 @@ Ship.prototype.setFlipState = function(){
 Ship.prototype.addNoteEntry = function(val){
 	$(this.element).find(".notes")
 		.show()
-		.append($("<p>").html(val));
+		.append($("<span>").html(val + "</br>"));
 }
 
 Ship.prototype.doOffset = function(){
