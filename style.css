@@ -1244,9 +1244,8 @@ div.integrityFull {
 .shipDiv .notes {
 	display: inline-block;
 	position: relative;
-	margin-top: 10px;
+	margin-top: 5px;
 	width: 100%;
-	font-size: 18px;
 	text-align: center;
 	color: yellow;
 }

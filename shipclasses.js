@@ -2721,10 +2721,10 @@ Ship.prototype.doJumpOut = function(){
 Ship.prototype.setFlipState = function(){
 }
 
-Ship.prototype.addNoteEntry = function(html){
+Ship.prototype.addNoteEntry = function(val){
 	$(this.element).find(".notes")
 		.show()
-		.append($("<span>").html("<p>"+html+"</p>"));
+		.append($("<p>").html(val));
 }
 
 Ship.prototype.doOffset = function(){
