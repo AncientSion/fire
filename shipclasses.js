@@ -665,11 +665,11 @@ Ship.prototype.doUndoLastAction = function(pos){
 	}
 	else if (this.actions[this.actions.length-1].type == "roll"){
 		this.rolling = !this.rolling;
-		this.setRollState();
+		this.setNotes();
 	}
 	else if (this.actions[this.actions.length-1].type == "flip"){
 		this.flipping = !this.flipping;
-		this.setFlipState();
+		this.setNotes();
 	}
 
 	this.actions.splice(this.actions.length-1, 1);
@@ -2676,12 +2676,17 @@ Ship.prototype.expandDiv = function(div){
 
 	//rolling ?
 
-	this.setRollState();
-	this.setFlipState();
+	this.setNotes();
 
 
 	$(div).addClass("disabled");
 	return div;
+}
+
+Ship.prototype.setNotes = function(){
+	$(this.element).find(".notes").children().remove();
+	if (this.isRolling()){this.addNoteEntry("ROLLING");}
+	if (this.isFlipping()){this.addNoteEntry("FLIPPING");}
 }
 
 Ship.prototype.canBeIssuedToJumpOut = function(){
@@ -2712,15 +2717,7 @@ Ship.prototype.doJumpOut = function(){
 	$("#instructWrapper").hide();
 }
 
-Ship.prototype.setRollState = function(){
-	$(this.element).find(".notes").children().remove();
-	if (this.isRolled()){this.addNoteEntry("ROLLED");}
-	if (this.isRolling()){this.addNoteEntry("ROLLING");}
-}
-
 Ship.prototype.setFlipState = function(){
-	$(this.element).find(".notes").children().remove();
-	if (this.isFlipping()){this.addNoteEntry("FLIPPING");}
 }
 
 Ship.prototype.addNoteEntry = function(html){
@@ -3728,7 +3725,7 @@ Ship.prototype.doRoll = function(){
 	var shipPos = this.getPlannedPos();
 	this.actions.push(new Move(-1, "roll", 1, shipPos.x, shipPos.y, 0, 0, this.getActionCost(0), 1, 1, 0));
 	this.rolling = !this.rolling;
-	this.setRollState();
+	this.setNotes();
 	this.resetMoveMode();
 	game.redraw();
 }
@@ -3737,7 +3734,7 @@ Ship.prototype.doFlip = function(){
 	var shipPos = this.getPlannedPos();
 	this.actions.push(new Move(-1, "flip", 1, shipPos.x, shipPos.y, 0, 0, this.getActionCost(1), 1, 1, 0));
 	this.flipping = !this.flipping;
-	this.setFlipState();
+	this.setNotes();
 	this.resetMoveMode();
 	game.redraw();
 }
