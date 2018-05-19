@@ -245,33 +245,36 @@ table, th, tr, td {
 	margin-bottom: 4px;
 }
 
-.morale td {
-	height: 15px;
-	padding: 2px;
+ td.morale {
+	height: 10px;
+	position: relative;
 }
 
 .shipDiv .moraleFull {
-	position: relative;
+	position: absolute;
 	z-index: 2;
 	background-color: red;
 	height: 100%;
 	width: 100%;
-	top: 6;
+	top: 0;
+	left: 0;
 }
 
 .shipDiv .moraleNow {
-	position: relative;
+	position: absolute;
 	z-index: 3;
 	background-color: green;
 	height: 100%;
-	top: -16;
+	top: 0;
+	left: 0;
 }
 
 .shipDiv .moraleTrigger {
-	position: relative;
+	position: absolute;
 	z-index: 4;
 	height: 100%;
-	top: -5;
+	top: 0;
+	left: 0;
 	border-right: 2px solid yellow;
 }
 

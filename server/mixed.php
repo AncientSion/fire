@@ -174,7 +174,7 @@ class Mixed extends Ship {
 		$angle = -1;
 		$type = "move";
 
-		Debug::log("Handling ".get_class($this)." #".$this->id.", speed ".$impulse);
+		Debug::log("**** Handling ".get_class($this)." #".$this->id.", speed ".$impulse);
 
 		if ($this->mission->type == 1){ // PATROL
 			//Debug::log("PATROL");
@@ -201,7 +201,7 @@ class Mixed extends Ship {
 		else if ($this->mission->type == 2){ // STRIKE
 			$t = $gd->getUnit($this->mission->targetid);
 
-			Debug::log("MISSION @ ".get_class($t)." #".$t->id);
+			Debug::log("Target: ".get_class($t)." #".$t->id);
 
 			if ($t->flight){
 				Debug::log("target is a flight");

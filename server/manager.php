@@ -61,7 +61,7 @@
 
 	public function getClientData(){
 
-		//$this->setupShips();
+		$this->setupShips();
 		//return;
 		
 /*
@@ -847,6 +847,16 @@
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if (!$this->ships[$i]->flight){continue;}
+
+			$t = $this->ships[$i]->getTarget();
+
+			if ($t->ship || $t->squad){
+				$this->ships[$i]->setMove($this);
+			}
+		}
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if (!$this->ships[$i]->flight){continue;}
 			$this->ships[$i]->setMove($this);
 		}
 	}
@@ -1073,7 +1083,7 @@
 		//set dist and angle for each ship to speed up fire resolution
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$aPos = $this->ships[$i]->getCurPos();
-			//Debug::log("POSITION #".$this->ships[$i]->id.": ".$aPos->x."/".$aPos->y);
+			Debug::log("POSITION #".$this->ships[$i]->id.": ".$aPos->x."/".$aPos->y);
 			for ($j = $i+1; $j < sizeof($this->ships); $j++){
 				if ($this->ships[$i]->userid == $this->ships[$j]->userid){continue;}
 				$bPos = $this->ships[$j]->getCurPos();
@@ -1138,7 +1148,7 @@
 			}
 		}
 		else if ($emitter->ship || $emitter->squad){
-			//Debug::log("____________________EW for ".$emitter->display." #".$emitter->id);
+			Debug::log("____________________EW for ".$emitter->display." #".$emitter->id);
 			$oPos = $emitter->getCurPos();
 			$sensor =  $emitter->getSystemByName("Sensor");
 			$ew = $sensor->getEW($this->turn);
@@ -1167,7 +1177,7 @@
 					$w = min(180, $this->const["ew"]["len"] * pow($str/$ew->dist, $this->const["ew"]["p"]));
 					$start = Math::addAngle(0 + $w-$emitter->getFacing(), $ew->angle);
 					$end = Math::addAngle(360 - $w-$emitter->getFacing(), $ew->angle);
-					//Debug::log("specific EW for ship #".$emitter->id.", str: ".$str.", facing: ".$emitter->getFacing().", w: ".$w.", EW @ ".$ew->angle." -> from ".$start." to ".$end.", dist: ".$ew->dist);
+					Debug::log("specific EW for ship #".$emitter->id.", str: ".$str.", facing: ".$emitter->getFacing().", w: ".$w.", EW @ ".$ew->angle." -> from ".$start." to ".$end.", dist: ".$ew->dist);
 				}
 
 				for ($i = 0; $i < sizeof($this->ships); $i++){
