@@ -10,22 +10,24 @@ if (isset($_SESSION["userid"])){
 	$username = $manager->getUsername();
 	$dbManager = DBManager::app();
 
-	if (isset($_POST["gameName"]) && isset($_POST["pointValue"]) && isset($_POST["reinforceValue"]) && isset($_POST["reinforceTurn"])){
-		var_export($_POST);
-		if ( $_POST["gameName"] != "" && $_POST["pointValue"] != "" && $_POST["reinforceValue"] != "" && $_POST["reinforceTurn"] != ""){
-			if (ctype_digit($_POST["pointValue"]) && ctype_digit($_POST["reinforceValue"]) && ctype_digit($_POST["reinforceTurn"])){
-				$id = $dbManager->createNewGameAndJoin($_SESSION["userid"], $_POST);
-				if ($id){
-					header("Location: gameSetup.php?gameid=".$id);
-				}
-			}
-			else {
-				echo "<span class='hinter'>Invalid point value entered</span>";
-			}
-		}
-		else {
-			echo "<span class='hinter'>Please enter valid game data</span>";
-		}
+	if (isset($_POST["gameName"]) && isset($_POST["pointValue"]) && isset($_POST["reinforceValue"]) && isset($_POST["reinforceTurn"])
+	&& isset($_POST["reinforceETA"]) && isset($_POST["focusMod"])){
+		if ($_POST["gameName"] == ""){return;}
+		if ($_POST["pointValue"] == ""){return;}
+		if ($_POST["reinforceValue"] == ""){return;}
+		if ($_POST["reinforceTurn"] == ""){return;}
+		if ($_POST["reinforceETA"] == ""){return;}
+		if ($_POST["focusMod"] == ""){return;}
+
+		if (!ctype_digit($_POST["pointValue"])){return;}
+		if (!ctype_digit($_POST["reinforceValue"])){return;}
+		if (!ctype_digit($_POST["reinforceTurn"])){return;}
+		if (!ctype_digit($_POST["reinforceETA"])){return;}
+		if (!ctype_digit($_POST["focusMod"])){return;}
+
+		$id = $dbManager->createNewGameAndJoin($_SESSION["userid"], $_POST);
+		if ($id){header("Location: gameSetup.php?gameid=".$id);}
+		else echo "<span class='hinter'>ERROR</span>";
 	}
 
 	$myGames = $dbManager->getGames($_SESSION["userid"]);
@@ -263,7 +265,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 							</tr>
 							<tr>
 								<td>
-									Point Value
+									Initial Point Value
 								</td>
 								<td>
 									<input type="form" style="text-align: center" value=3000 placeholder="3000" name="pointValue"></input>		
@@ -271,7 +273,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 							</tr>
 							<tr>
 								<td>
-									Reinforcements Value
+									Reinforcements Point Value
 								</td>
 								<td>
 									<input type="form" style="text-align: center" value=1500 placeholder="1500" name="reinforceValue"></input>		
@@ -284,6 +286,21 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 								<td>
 									<input type="form" style="text-align: center" value=11 placeholder="11" name="reinforceTurn"></input>		
 								</td>
+							<tr>
+								<td>
+									Reinforcements ETA
+								</td>
+								<td>
+									<input type="form" style="text-align: center" value=3 placeholder="3" name="reinforceETA"></input>		
+								</td>
+							<tr>
+								<td>
+									Focus Modifier in %
+								</td>
+								<td>
+									<input type="form" style="text-align: center" value=100 placeholder="100" name="focusMod"></input>		
+								</td>
+							</tr>
 							</tr>
 								<td colSpan=2>
 									<input type="submit" style="width: 60%" value="Confirm and Forward"></input>	

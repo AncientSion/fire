@@ -464,6 +464,7 @@
 		if ($this->turn != $this->wave-1){return;}
 		Debug::log("pickReinforcements");
 		$picks = array();
+		$eta = $this->gd["reinforceETA"];
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			//Debug::log("player: ".$this->playerstatus[$i]["userid"]." has ".$this->playerstatus[$i]["value"]." available");
@@ -488,7 +489,7 @@
 					$data["name"] = $entry[0];
 					$data["notes"] = "";
 					$data["userid"] = $this->playerstatus[$i]["userid"];
-					$data["eta"] = 3;
+					$data["eta"] = $eta;
 
 					if (sizeof($data["upgrades"])){ // pick on upgrades !
 						//Debug::log("available kits for ".$data["name"].": ".sizeof($data["upgrades"]));
@@ -847,8 +848,9 @@
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if (!$this->ships[$i]->flight){continue;}
+			if ($this->mission->type == 1){continue;}
 
-			$t = $this->ships[$i]->getTarget();
+			$t = $this->getUnit($this->ships[$i]->mission->targetid);
 
 			if ($t->ship || $t->squad){
 				$this->ships[$i]->setMove($this);

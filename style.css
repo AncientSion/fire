@@ -396,9 +396,7 @@ table, th, tr, td {
 }
 
 #shipsBoughtTable {
-	width: 350px;
-	display: inline-block;
-	vertical-align: top;
+	width: 400px;
 	margin: 0 0 0 0;
 	border-collapse: collapse;
 	border: 1px solid white;

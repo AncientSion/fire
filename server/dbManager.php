@@ -242,9 +242,8 @@
 			$this->createNewGame($post);
 			$id = $this->getLastInsertId();
 			$this->createPlayerStatus($userid, $id, 0, -1, "joined");
-			if ($id){
-				return $id;
-			} else return 0;
+			if ($id){return $id;}
+			return 0;
 		}
 
 		public function createPlayerStatus($userid, $gameid, $turn, $phase, $status){
@@ -306,9 +305,9 @@
 		public function createNewGame($post){
 			$stmt = $this->connection->prepare("
 				INSERT INTO games
-					(name, status, turn, phase, pv, reinforce, reinforceTurn)
+					(name, status, turn, phase, pv, reinforce, reinforceTurn, reinforceETA, focusMod)
 				VALUES
-					(:name, :status, :turn, :phase, :pv, :reinforce, :reinforceTurn)
+					(:name, :status, :turn, :phase, :pv, :reinforce, :reinforceTurn, :reinforceETA, :focusMod)
 			");
 			
 			$status = "open";
@@ -322,6 +321,8 @@
 			$stmt->bindParam(":pv", $post["pointValue"]);
 			$stmt->bindParam(":reinforce", $post["reinforceValue"]);
 			$stmt->bindParam(":reinforceTurn", $post["reinforceTurn"]);
+			$stmt->bindParam(":reinforceETA", $post["reinforceETA"]);
+			$stmt->bindParam(":focusMod", $post["focusMod"]);
 			
 			$stmt->execute();
 			
@@ -440,7 +441,7 @@
 				$stmt->bindParam(":ship", $ship);
 				$stmt->bindParam(":ball", $ball);
 				$stmt->bindParam(":name", $units[$i]["name"]);
-				$stmt->bindParam(":display", $units[$i]["call"]);
+				$stmt->bindParam(":display", $units[$i]["display"]);
 				$stmt->bindParam(":status", $status);
 				$stmt->bindValue(":available", (floor($units[$i]["turn"]) + floor($units[$i]["eta"])));
 				$stmt->bindParam(":destroyed", $destroyed);

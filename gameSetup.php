@@ -116,19 +116,25 @@ else {
 			<div id="popupText">
 			</div>
 		</div>
-		<table style="width: 700px; top: 200px">
+		<table>
 			<tr>
-				<td style="vertical-align: top;">
+				<td>
 					<div style="margin: auto">
 						<?php echo $element; ?>
 					</div>
 				</td>
-				<td style="vertical-align: top; padding-left: 30px">
+				</td>
+			</tr>
+		</table>
+
+		<table style="position: absolute; top: 10px; left: 450px">
+			<tr>
+				<td>
 					<div id="reinforceFaction" class="disabled"></div>
 					<div>
 						<table id="shipsBoughtTable">
 							<tr>
-								<th colSpan=2 style="width: 350px">
+								<th colSpan=2>
 									Current Fleet Selection
 								</th>
 							</tr>
@@ -141,13 +147,15 @@ else {
 								</th>
 							</tr>
 							<tr class="buttonTD" onclick="tryConfirmFleet()">
-								<th style="font-size: 20spx" colSpan=2>Confirm Fleet Selection</th>
+								<th colSpan=2>Confirm Fleet Selection</th>
 							</tr>
 						</table>
 					</div>
 				</td>
 			</tr>
 		</table>
+
+
 		<table style="position: absolute; top: 215px">
 			<tr>
 				<td>
@@ -156,7 +164,7 @@ else {
 				</td>
 			</tr>
 		</table>
-		<div id="game" style="position: absolute; top: 13px; left: 825px">
+		<div id="game" style="position: absolute; top: 13px; left: 875px">
 			<canvas id="shipCanvas" style='border: 1px solid white; z-index: 2'></canvas>
 			<canvas id="fxCanvas" style='z-index: 1'></canvas>
 		</div>
@@ -251,11 +259,23 @@ else {
 					}
 				},
 				
-				getUnitDisplay: function(){
-					if (this.ships[0].ship){return this.ships[0].name;
-					} else var html = "Squadron (";
-					for (var i = 0; i < this.ships[0].structures.length; i++){html +=  this.ships[0].structures[i].name + "/";}
-					return html.substr(0, html.length-1) + ")";
+				getRowHeader: function(){
+					var display = $("#nameWrapper").find("input").val();
+					var ret;
+
+					if (this.ships[0].ship){
+						ret = this.ships[0].name;
+					}
+					else {
+						ret = "Squadron (";
+						for (var i = 0; i < this.ships[0].structures.length; i++){ret +=  this.ships[0].structures[i].name + "/";}
+							ret = ret.substr(0, ret.length-1) + ")";
+					}
+
+
+					if (display){return ret + " <span class='green'>-" + display + "-</span>";}
+					return ret;
+
 				},
 
 				getUnitClass: function(){
@@ -636,13 +656,11 @@ else {
 	}
 
 	function doConfirmPurchase(){
-		game.ships[0].call = $("#nameWrapper").find("input").val();
 
 		var ship = {
 			type: game.getUnitClass(),
 			name: game.getUnitName(),
-			display: game.getUnitDisplay(),
-			call: game.ships[0].call,
+			display: $("#nameWrapper").find("input").val(),
 			faction: game.ships[0].faction,
 			value: game.ships[0].totalCost,
 			purchaseId: game.purchases,
@@ -650,7 +668,8 @@ else {
 			command: 0,
 			turn: 1,
 			eta: 0,
-			tr: false
+			tr: false,
+			entry: game.getRowHeader()
 		}
 
 		window.game.shipsBought.push(ship);
@@ -671,7 +690,7 @@ else {
 			})
 
 		var td = tr.insertCell(-1)
-			td.innerHTML = ship.display + " " + game.ships[0].getCallSign();
+			td.innerHTML = ship.entry
 		var td = tr.insertCell(-1)
 			td.innerHTML = ship.value;
 		tr.appendChild(td);
@@ -724,8 +743,8 @@ else {
 		for (let i = 0; i < game.shipsBought.length; i++){
 			if (game.shipsBought[i].purchaseId == $(ele).data("purchaseId")){
 				game.shipsBought[i].command = 1;
-				$(game.shipsBought[i].tr).addClass("buyCommand");
-			} else $(game.shipsBought[i].tr).removeClass("buyCommand");
+				$(game.shipsBought[i].tr).find("td").first().html(game.shipsBought[i].entry + " <span class='yellow'>CMD</span>");
+			} else $(game.shipsBought[i].tr).find("td").first().html(game.shipsBought[i].entry);
 		}
 	}	
 
