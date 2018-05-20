@@ -495,6 +495,8 @@ Mixed.prototype.setPreFireSize = function(){
 }
 
 Mixed.prototype.hasPatrolLayout = function(){
+	if (this.patrolLayout){return true;}
+	return false;
 	if (this.mission.arrived && this.mission.arrived < game.turn){
 		if (this.mission.type == 1){return true;}
 		else {
@@ -527,6 +529,7 @@ Mixed.prototype.setPatrolLayout = function(){
 		this.structures[i].layout.x = p.x;
 		this.structures[i].layout.y = p.y;
 	}
+	this.patrolLayout = 1;
 }
 
 Mixed.prototype.setBaseLayout = function(){
@@ -557,6 +560,7 @@ Mixed.prototype.setBaseLayout = function(){
 			this.structures[(i*3)+j].layout = {x: ox, y: oy};
 		}
 	}
+	this.patrolLayout = 0;
 }
 
 Mixed.prototype.setImage = function(){

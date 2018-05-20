@@ -848,7 +848,7 @@
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if (!$this->ships[$i]->flight){continue;}
-			if ($this->mission->type == 1){continue;}
+			if ($this->ships[$i]->mission->type == 1){continue;}
 
 			$t = $this->getUnit($this->ships[$i]->mission->targetid);
 
