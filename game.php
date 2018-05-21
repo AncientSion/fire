@@ -535,6 +535,8 @@
 				}
 				else if (e.keyCode == 102){ // f, cancel fire animation
 					if (game.phase == 3 && game.animating){
+
+						window.fpsTicks = 1; return;
 						game.animating = false;
 						window.cancelAnimationFrame(anim);
 						fxCtx.clearRect(0, 0, res.x, res.y);

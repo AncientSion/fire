@@ -1272,7 +1272,7 @@ Ship.prototype.drawMovePlan = function(){
 
 Ship.prototype.getHeader = function(){
 	var header = this.name + " #" + this.id;
-	if (this.command){header += "<font color='yellow'> - Flagship - </font>";}
+	if (this.command){header += "<font color='yellow'> - CMD - </font>";}
 	if (this.focus){header += "<font color='yellow'> (FOCUS)</font>";}
 	return header;
 }
@@ -2232,22 +2232,22 @@ Ship.prototype.createBaseDiv = function(){
 				}
 			})
 
-	if (game.turn){
-		div.drag()
-	}
+	if (game.turn){div.drag();}
 
 	if (game.phase == 2){
 		$(div).find(".structContainer").show();
 	}
+
 	$(this.addFocusDiv(div[0]))
 }
 
 Ship.prototype.addFocusDiv = function(div){
-	if (this.status == "jumpOut"){return;}
+	if (this.isJumpingOut()){return;}
+	if (this.isDestroyed()){return;}
 
 	$(div).append(
 		$("<div>")
-		.addClass("commandContainer")
+		.addClass("focusContainer")
 		.append(
 			$("<div>")
 			.html("Assign Focus (" + this.getFocusCost()+")")
@@ -2260,7 +2260,7 @@ Ship.prototype.addFocusDiv = function(div){
 		.append(
 			$("<div>")
 			.html("Has Focus (" + this.getFocusCost()+")")
-			.addClass("commandEntry")
+			.addClass("focusEntry")
 			.hide()
 			.click(function(){
 				game.getUnit($(this).parent().parent().data("shipId")).unsetFocus();
@@ -2269,12 +2269,14 @@ Ship.prototype.addFocusDiv = function(div){
 	)
 
 	if (this.focus){
-		$(this.element).find(".commandEntry").show();
-	}
-	else if (game.phase == 3 && this.friendly){
+		$(this.element).find(".focusEntry").show();
+	} else $(this.element).find(".buttonTD").show();
+	return;
+	/*else if (game.phase == 3 && this.friendly){
 		$(this.element).find(".buttonTD").show();
 	}
-	else $(this.element).find(".commandContainer").hide();
+	else $(this.element).find(".focusContainer").hide();
+	*/
 }
 
 Ship.prototype.getFocusCost = function(){
@@ -2282,11 +2284,12 @@ Ship.prototype.getFocusCost = function(){
 }
 
 Ship.prototype.setFocus = function(){
+	if (!this.friendly){return;}
 	if (this.isJumpingOut()){popup("This unit is jumping to hyperspace, it cant be issued focus."); return;}
 	if (!this.canAffordFocus()){popup("You dont enough have ressources to focus this unit."); return;}
 	if (!this.focus){
 		this.focus = 1;
-		$(this.element).find(".commandContainer").find(".buttonTD").hide().end().find(".commandEntry").show();
+		$(this.element).find(".focusContainer").find(".buttonTD").hide().end().find(".focusEntry").show();
 		game.setFocusInfo();
 	}
 }
@@ -2294,7 +2297,7 @@ Ship.prototype.setFocus = function(){
 Ship.prototype.unsetFocus = function(){
 	if (this.focus){
 		this.focus = 0;
-		$(this.element).find(".commandContainer").find(".buttonTD").show().end().find(".commandEntry").hide();
+		$(this.element).find(".focusContainer").find(".buttonTD").show().end().find(".focusEntry").hide();
 		game.setFocusInfo();
 	}
 }
@@ -2837,7 +2840,19 @@ Ship.prototype.updateDiv = function(){
 		.find(".delay").html(this.getRemDelay()).end()
 }
 
-Ship.prototype.detachFlight = function(id){
+Ship.prototype.doDestroy = function(){
+	this.doDraw = 0;
+	for (var i = this.cc.length-1; i >= 0; i--){
+		var attach = game.getUnit(this.cc[i]);
+		if (attach.flight){
+			attach.doDraw = 1;
+		}
+		this.cc.splice(i, 1);
+	}
+	this.setSupportImage();
+}
+
+Ship.prototype.detachUnit = function(id){
 	for (var i = this.cc.length-1; i >= 0; i--){
 		if (this.cc[i] == id){
 			this.cc.splice(i, 1);
@@ -2857,7 +2872,7 @@ Ship.prototype.detachFlight = function(id){
 	this.setSupportImage();
 }
 
-Ship.prototype.attachFlight = function(unit){
+Ship.prototype.attachUnit = function(unit){
 	$(this.element).find(".ccContainer").remove();
 	this.cc.push(unit.id);
 	for (var i = 0; i < unit.cc.length; i++){
@@ -2894,6 +2909,7 @@ Ship.prototype.setPreFireImage = function(){
 
 Ship.prototype.setSupportImage = function(){
 	//console.log("setSupportImage #" + this.id);
+	if (!this.doDraw){return;}
 	var friendlies = [];
 	var hostiles = [];
 	var friendly = [];
@@ -4086,10 +4102,12 @@ Ship.prototype.getSelfExplo = function(){
 		}
 		else anim.html +=  " suffered catastrophic hull damage and was destroyed.";
 
-		var explo = {u: this, anims: []};
+		var explos = {u: this, anims: []};
 
-		for (var j = 0; j < 25; j++){
-			explo.anims.push({
+		var amount = 20 + (this.traverse * 8);
+
+		for (var j = 0; j < amount; j++){
+			explos.anims.push({
 				t: [0 - j-40, 100],
 				s: range (5, 40),
 				x: base.x + (range(-1, 1) * range(0, this.size / 3)),

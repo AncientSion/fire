@@ -743,7 +743,7 @@ else {
 		for (let i = 0; i < game.shipsBought.length; i++){
 			if (game.shipsBought[i].purchaseId == $(ele).data("purchaseId")){
 				game.shipsBought[i].command = 1;
-				$(game.shipsBought[i].tr).find("td").first().html(game.shipsBought[i].entry + " <span class='yellow'>CMD</span>");
+				$(game.shipsBought[i].tr).find("td").first().html("<span class='yellow'>CMD  </span>" + game.shipsBought[i].entry);
 			} else $(game.shipsBought[i].tr).find("td").first().html(game.shipsBought[i].entry);
 		}
 	}	

@@ -41,12 +41,12 @@ class HeavyRailGun extends Matter {
 	public static $prio = 0;
 	public $minDmg = 64;
 	public $maxDmg = 64;
-	public $accDecay = 80;
-	public $shots = 2;
+	public $accDecay = 8;
+	public $shots = 12;
 	public $animColor = "grey";
 	public $projSize = 4;
 	public $projSpeed = 10;
-	public $reload = 4;
+	public $reload = 1;
 	public $integrity = 56;
 	public $powerReq = 6;
 	public $traverse = 1;

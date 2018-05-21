@@ -375,16 +375,20 @@
 		public function setInitialCommandUnit($userid, $gameid, $units){
 			Debug::log("setInitialCommandUnit s:".sizeof($units));	
 			$id = 0;
+			$unit;
 
 			for ($i = 0; $i < sizeof($units); $i++){
-				if ($units[$i]["command"]){
-					$id = $units[$i]["id"]; break;
-				}
+				if ($units[$i]["command"]){$id = $units[$i]["id"]; $unit = new $units[$i]["name"](); break;}
 			}
 
-			$maxFocus = 1400;
-			$gainFocus = 350;
-			$curFocus = 700;
+			$gd = $this->getGameDetails($gameid);
+			$size = $unit->traverse;
+
+			$gainFocus = floor($gd["pv"] / 10 / 100 * $gd["focusMod"]);
+			$gainFocus = floor($gainFocus / 10 * (10 + ($size-1)*1.5));
+			$curFocus = floor($gainFocus * 2 / 100 * $gd["focusMod"]);
+			$maxFocus = floor($gainFocus * 4 / 100 * $gd["focusMod"]);
+
 
 			$sql = "UPDATE units SET command = 1 WHERE id = ".$id;
 			$this->connection->query($sql);
@@ -393,10 +397,9 @@
 		}
 
 		public function setInitialFocus($maxFocus, $gainFocus, $curFocus, $userid, $gameid){
-			Debug::log("setInitialFocus ".$userid."/".$gameid);	
+			//Debug::log("setInitialFocus ".$userid."/".$gameid.": ".$maxFocus."/".$gainFocus."/".$curFocus);
 
 			$sql = "UPDATE playerstatus SET maxFocus = ".$maxFocus.", gainFocus = ".$gainFocus.", curFocus = ".$curFocus." WHERE userid = ".$userid." AND gameid = ".$gameid;
-			Debug::log($sql);
 
 			$this->connection->query($sql);
 

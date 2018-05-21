@@ -63,7 +63,8 @@ class Ship {
 	public $ew = 0;
 	public $power = 0;
 
-	function __construct($data){
+	function __construct($data = false){
+		if (!$data){return;}
 		$this->id = $data["id"];
 		$this->userid = $data["userid"];
 		$this->display = $data["display"];

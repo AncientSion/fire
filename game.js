@@ -228,7 +228,7 @@ function Game(data){
 				var attach = this.getUnit(s.cc[i]);
 				if ( (attach.flight || attach.salvo) && attach.mission.targetid == s.id && t.id == attach.id){attach.doDraw = 1;} // skip CC targeting this
 				if ( (attach.flight || attach.salvo) && attach.mission.targetid == s.id){continue;} // skip CC targeting this
-				attach.detachFlight(s.id);
+				attach.detachUnit(s.id);
 				s.cc.splice(i, 1);
 			}
 		}
@@ -270,7 +270,7 @@ function Game(data){
 			}
 			var p = t.getParent();
 			if (p.id != s.id){
-				p.attachFlight(s);
+				p.attachUnit(s);
 				p.setSupportImage(s);
 			}
 		}
@@ -384,7 +384,7 @@ function Game(data){
 		$(flight.element).css("top", 600).css("left", 0);
 
 		if (immediate){
-			this.getUnit(t.id).attachFlight(flight);
+			this.getUnit(t.id).attachUnit(flight);
 			this.getUnit(t.id).setSupportImage();
 		}
 
@@ -1070,13 +1070,16 @@ function Game(data){
 
 	this.fireResolved = function(){
 		console.log("fireResolved");
+
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].setPostFireImage();
 			this.ships[i].setSize();
 		}
+
 		for (var i = 0; i < this.ships.length; i++){
 			this.ships[i].setSupportImage();
 		}
+
 		this.animating = 0;
 		this.drawingEvents = 1;
 		this.draw();
@@ -1506,6 +1509,7 @@ function Game(data){
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].status == "jumpOut" && game.phase != 3){continue;}
+			if (!this.ships[i].doDraw){continue;}
 			var a = this.ships[i].getPlannedPos();
 			for (var j = i+1; j < this.ships.length; j++){
 				if (this.ships[j].status == "jumpOut"){continue;}
@@ -2129,7 +2133,7 @@ function Game(data){
 		//this.animateUnitExplos();
 
 		//$("#unitSelector").hide(); $(".chatWrapper").hide();
-		$("#combatlogWrapper").show();
+		$("#combatlogWrapper").css("top", 100).show();
 		setFPS(40);
 		window.then = Date.now();
 		window.startTime = then;
@@ -2501,7 +2505,7 @@ function Game(data){
 							}
 							
 							if (game.unitExploAnims[i].entries[j].anims[k].t[0] > game.unitExploAnims[i].entries[j].anims[k].t[1] * 0.6){
-								game.unitExploAnims[i].entries[j].u.doDraw = 0;
+								game.getUnit(game.unitExploAnims[i].id).doDestroy();
 								game.redraw();
 							}
 
@@ -2541,13 +2545,11 @@ function Game(data){
 					.data("shipid", game.unitExploAnims[i].id)
 					.hover(
 						function(){
-						var data = $(this).data();
-						game.getUnit($(this).data("shipid")).doHighlight()
+							var data = $(this).data();
+							game.getUnit($(this).data("shipid")).doHighlight()
 						}
 					)
 				)
-
-			
 		$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 	}
 
