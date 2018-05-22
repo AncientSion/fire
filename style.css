@@ -799,7 +799,7 @@ table, th, tr, td {
 	width: 390px;
 }
 
-.focusContainer {
+.focusContainer, .commandContainer {
 	position: relative;
 	color: white;
 	margin: auto;
@@ -808,7 +808,7 @@ table, th, tr, td {
 	padding: 3px;
 }
 
-.focusEntry {
+.focusEntry, .commandEntry {
 	margin: auto;
 	text-align: center;
 	font-size: 20px;

@@ -3203,6 +3203,8 @@ Game.prototype.resolveDeploy = function(){
 		if (this.ships[i].available == this.turn){show = 1; break;}
 		else if (this.ships[i].flight && this.ships[i].mission.turn == this.turn){show = 1; break;}
 	}
+	
+	game.setUnitCenterFocus();
 
 	if (!show){this.initialDone();}
 	else {
@@ -3210,7 +3212,6 @@ Game.prototype.resolveDeploy = function(){
 		window.then = Date.now();
 		window.startTime = then;
 		cam.setZoom(0.7);
-		game.setUnitCenterFocus();
 		this.animating = 1;
 		this.animateJumpIn();
 	}

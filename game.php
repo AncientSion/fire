@@ -534,33 +534,32 @@
 					}
 				}
 				else if (e.keyCode == 102){ // f, cancel fire animation
-					if (game.phase == 3 && game.animating){
+					if (game.phase != 3 || !game.animating){return;}
 
-						window.fpsTicks = 1; return;
-						game.animating = false;
-						window.cancelAnimationFrame(anim);
-						fxCtx.clearRect(0, 0, res.x, res.y);
-						$("#combatLog").find("tr").each(function(i){
-							if (i){
-								$(this).remove()
-							}
-						})
-						for (var i = 0; i < game.fireOrders.length; i++){
-							game.fireOrders[i].animated = 1;
-							game.fireOrders[i].weapon.createCombatLogEntry(game.fireOrders[i]);
-						}
+					game.animating = false;
+					window.cancelAnimationFrame(anim);
+					fxCtx.clearRect(0, 0, res.x, res.y);
 
-						game.createFireFinalEntry();
+					$("#combatLog").find("tr").each(function(i){if (i){$(this).remove()}});
 
-						for (var i = 0; i < game.unitExploAnims.length; i++){
-							for (var j = 0; j < game.unitExploAnims[i].entries.length; j++){
-								game.unitExploAnims[i].entries[j].u.doDraw = 0;
-							}
-							game.createMiscLogEntry(i);
-						}
-
-						game.fireResolved();
+					for (var i = 0; i < game.fireOrders.length; i++){
+						game.fireOrders[i].animated = 1;
+						game.fireOrders[i].weapon.createCombatLogEntry(game.fireOrders[i]);
 					}
+
+					game.createFireFinalEntry();
+
+					for (var i = 0; i < game.unitExploAnims.length; i++){
+						game.unitExploAnims[i].done = 1;
+						game.unitExploAnims[i].animating = 0;
+						for (var j = 0; j < game.unitExploAnims[i].entries.length; j++){
+							game.unitExploAnims[i].entries[j].u.doDestroy();
+						}
+						
+						game.createMiscLogEntry(i);
+					}
+
+					game.fireResolved();
 				}
 				else if (e.keyCode == 109){ // m, cancel move animation
 					if (!game.animating){return;}
