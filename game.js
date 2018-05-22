@@ -2505,7 +2505,7 @@ function Game(data){
 							}
 							
 							if (game.unitExploAnims[i].entries[j].anims[k].t[0] > game.unitExploAnims[i].entries[j].anims[k].t[1] * 0.6){
-								game.getUnit(game.unitExploAnims[i].id).doDestroy();
+								game.unitExploAnims[i].entries[j].anims[k].unit.doDestroy();
 								game.redraw();
 							}
 
@@ -3204,9 +3204,7 @@ Game.prototype.resolveDeploy = function(){
 		else if (this.ships[i].flight && this.ships[i].mission.turn == this.turn){show = 1; break;}
 	}
 
-	if (!show){
-		this.initialDone();
-	}
+	if (!show){this.initialDone();}
 	else {
 		setFPS(30);
 		window.then = Date.now();
