@@ -2505,7 +2505,7 @@ function Game(data){
 							}
 							
 							if (game.unitExploAnims[i].entries[j].anims[k].t[0] > game.unitExploAnims[i].entries[j].anims[k].t[1] * 0.6){
-								game.unitExploAnims[i].entries[j].anims[k].unit.doDestroy();
+								game.unitExploAnims[i].entries[j].unit.doDestroy();
 								game.redraw();
 							}
 
