@@ -37,8 +37,8 @@ Squadron.prototype.setSubSystemState = function(){
 	}
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].structures.length; j++){
-			for (var k = 0; k < this.structures[i].structures[i].systems.length; k++){
-				this.structures[i].structures[i].systems[k].setState()
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				this.structures[i].structures[j].systems[k].setState()
 			}
 		}
 	}
@@ -51,7 +51,7 @@ Squadron.prototype.setSubUnitStatus = function(){
 			this.structures[i].doDestroy();
 		}
 		for (var j = 0; j < this.structures[i].crits.length; j++){
-			if (this.structures[i].crits[i].type == "Disabled"){
+			if (this.structures[i].crits[j].type == "Disabled"){
 				this.structures[i].disabled = true;
 			}
 		}
@@ -260,9 +260,9 @@ Squadron.prototype.getSystem = function(id){
 			return this.structures[i];
 		}
 		for (var j = 0; j < this.structures[i].structures.length; j++){
-			for (var k = 0; k < this.structures[i].structures[i].systems.length; k++){
-				if (this.structures[i].structures[i].systems[k].id == id){
-					return this.structures[i].structures[i].systems[k];
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (this.structures[i].structures[j].systems[k].id == id){
+					return this.structures[i].structures[j].systems[k];
 				}
 			}
 		}
@@ -272,8 +272,8 @@ Squadron.prototype.getSystem = function(id){
 Squadron.prototype.hasSystemsSelected = function(){	
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].structures.length; j++){
-			for (var k = 0; k < this.structures[i].structures[i].systems.length; k++){
-				if (this.structures[i].structures[i].systems[k].selected){return true;}
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (this.structures[i].structures[j].systems[k].selected){return true;}
 			}
 		}
 	}
@@ -283,9 +283,9 @@ Squadron.prototype.hasSystemsSelected = function(){
 Squadron.prototype.hasWeaponsSelected = function(){		
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].structures.length; j++){
-			for (var k = 0; k < this.structures[i].structures[i].systems.length; k++){
-				if (this.structures[i].structures[i].systems[k].selected){
-					if (this.structures[i].structures[i].systems[k].weapon){
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (this.structures[i].structures[j].systems[k].selected){
+					if (this.structures[i].structures[j].systems[k].weapon){
 						return true;
 					}
 				}
@@ -302,10 +302,10 @@ Squadron.prototype.getSelectedWeapons = function(){
 		if (this.structures[i].destroyed){continue;}
 
 		for (var j = 0; j < this.structures[i].structures.length; j++){
-			for (var k = 0; k < this.structures[i].structures[i].systems.length; k++){
-				if (this.structures[i].structures[i].systems[k].weapon){
-					if (this.structures[i].structures[i].systems[k].selected){
-						systems.push(this.structures[i].structures[i].systems[k]);
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (this.structures[i].structures[j].systems[k].weapon){
+					if (this.structures[i].structures[j].systems[k].selected){
+						systems.push(this.structures[i].structures[j].systems[k]);
 					}
 				}
 			}
@@ -320,9 +320,9 @@ Squadron.prototype.unselectSystems = function(){
 
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].structures.length; j++){
-			for (var k = 0; k < this.structures[i].structures[i].systems.length; k++){
-				if (this.structures[i].structures[i].systems[k].selected){
-					this.structures[i].structures[i].systems[k].select()
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (this.structures[i].structures[j].systems[k].selected){
+					this.structures[i].structures[j].systems[k].select()
 				}
 			}
 		}
@@ -339,10 +339,10 @@ Squadron.prototype.getFireOrders = function(){
 
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].structures.length; j++){
-			for (var k = 0; k < this.structures[i].structures[i].systems.length; k++){
-				for (var l = this.structures[i].structures[i].systems[k].fireOrders.length-1; l >= 0; l--){
-					if (!this.structures[i].structures[i].systems[k].fireOrders[l].id){
-						fires.push(this.structures[i].structures[i].systems[k].fireOrders[l]);
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				for (var l = this.structures[i].structures[j].systems[k].fireOrders.length-1; l >= 0; l--){
+					if (!this.structures[i].structures[j].systems[k].fireOrders[l].id){
+						fires.push(this.structures[i].structures[j].systems[k].fireOrders[l]);
 					} else break;
 				}
 			}
@@ -357,13 +357,13 @@ Squadron.prototype.getPowerOrders = function(){
 
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].powers.length; j++){
-			if (this.structures[i].powers[i].new){
-				powers.push(this.structures[i].powers[i]);
+			if (this.structures[i].powers[j].new){
+				powers.push(this.structures[i].powers[j]);
 			}
 		}
 		for (var j = 0; j < this.structures[i].structures.length; j++){
-			for (var k = 0; k < this.structures[i].structures[i].systems.length; k++){
-				powers = powers.concat(this.structures[i].structures[i].systems[k].getPowerOrders());
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				powers = powers.concat(this.structures[i].structures[j].systems[k].getPowerOrders());
 			}
 		}
 	}
@@ -383,11 +383,11 @@ Squadron.prototype.highlightAllSelectedWeapons = function(){
 
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].structures.length; j++){
-			for (var k = 0; k < this.structures[i].structures[i].systems.length; k++){
-				if (this.structures[i].structures[i].systems[k].weapon){
-					if (this.structures[i].structures[i].systems[k].highlight || this.structures[i].structures[i].systems[k].selected){
-						if (this.structures[i].structures[i].systems[k].weapon){
-							this.structures[i].structures[i].systems[k].drawSystemArc(angle, this.rolled, pos);
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (this.structures[i].structures[j].systems[k].weapon){
+					if (this.structures[i].structures[j].systems[k].highlight || this.structures[i].structures[j].systems[k].selected){
+						if (this.structures[i].structures[j].systems[k].weapon){
+							this.structures[i].structures[j].systems[k].drawSystemArc(angle, this.rolled, pos);
 						}
 					}
 				}
@@ -436,10 +436,10 @@ Squadron.prototype.selectAll = function(e, id){
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].destroyed){continue;}
 		for (var j = 0; j < this.structures[i].structures.length; j++){
-			for (var k = 0; k < this.structures[i].structures[i].systems.length; k++){
-				if (this.structures[i].structures[i].systems[k].getActiveSystem().name == name){
-					if (this.structures[i].structures[i].systems[k].hasUnresolvedFireOrder() == hasFire){
-						this.structures[i].structures[i].systems[k].select(e);
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (this.structures[i].structures[j].systems[k].getActiveSystem().name == name){
+					if (this.structures[i].structures[j].systems[k].hasUnresolvedFireOrder() == hasFire){
+						this.structures[i].structures[j].systems[k].select(e);
 					}
 				}
 			}
@@ -454,11 +454,11 @@ Squadron.prototype.hasNoFireOrders = function(){
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].destroyed){continue;}
 		for (var j = 0; j < this.structures[i].structures.length; j++){
-			for (var k = 0; k < this.structures[i].structures[i].systems.length; k++){
-				if (!this.structures[i].structures[i].systems[k].destroyed && this.structures[i].structures[i].systems[k].weapon){
-					if (this.structures[i].structures[i].systems[k].isPowered() && this.structures[i].structures[i].systems[k].getLoadLevel() >= 1){
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (!this.structures[i].structures[j].systems[k].destroyed && this.structures[i].structures[j].systems[k].weapon){
+					if (this.structures[i].structures[j].systems[k].isPowered() && this.structures[i].structures[j].systems[k].getLoadLevel() >= 1){
 						charged = 1;
-						if (this.structures[i].structures[i].systems[k].hasFireOrder()){
+						if (this.structures[i].structures[j].systems[k].hasFireOrder()){
 							return false;
 						}
 					}
@@ -476,8 +476,8 @@ Squadron.prototype.getAllResolvingFireOrders = function(){
 	for (var i = 0; i < this.structures.length; i++){
 		if (this.structures[i].destroyed && !this.structures[i].isDestroyedThisTurn()){continue;}
 		for (var j = 0; j < this.structures[i].structures.length; j++){
-			for (var k = 0; k < this.structures[i].structures[i].systems.length; k++){
-				var fire = this.structures[i].structures[i].systems[k].getResolvingFireOrders();
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				var fire = this.structures[i].structures[j].systems[k].getResolvingFireOrders();
 				if (fire){fires.push(fire);}
 			}
 		}
@@ -517,10 +517,10 @@ Squadron.prototype.getWeaponOrigin = function(id){
 	for (i = this.structures.length-1; i >= 0; i--){
 		if (id > this.structures[i].id){
 			for (j = 0; j < this.structures[i].structures.length; j++){
-				for (var k = 0; k < this.structures[i].structures[i].systems.length; k++){
-					if (this.structures[i].structures[i].systems[k].id == id){
+				for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+					if (this.structures[i].structures[j].systems[k].id == id){
 						var devi = this.structures[i].size;
-						var p = getPointInDir(devi/6, getLayoutDir(this.structures[i].structures[i]), 0, 0);
+						var p = getPointInDir(devi/6, getLayoutDir(this.structures[i].structures[j]), 0, 0);
 						var x = this.structures[i].layout.x/4 + p.x;
 						var y = this.structures[i].layout.y/4 + p.y;
 						return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());
@@ -576,14 +576,14 @@ Squadron.prototype.getDmgByFire = function(fire){
 
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = this.structures[i].damages.length-1; j >= 0; j--){
-			if (this.structures[i].damages[i].fireid == fire.id){
-				dmgs.push(this.structures[i].damages[i]);
+			if (this.structures[i].damages[j].fireid == fire.id){
+				dmgs.push(this.structures[i].damages[j]);
 				dmgs[dmgs.length-1].system = (this.structures[i].display + " #" + (i+1));
 				dmgs[dmgs.length-1].loc = this.structures[i].layout;
 				lookup--;
 				if (!lookup){return dmgs};
 			}
-			else if (this.structures[i].damages[i].turn < fire.turn){
+			else if (this.structures[i].damages[j].turn < fire.turn){
 				break;
 			}
 		}
@@ -710,9 +710,9 @@ Squadron.prototype.isDestroyed = function(){
 Squadron.prototype.doConfirmSystemLoadout = function(){
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].structures.length; j++){
-			for (var k = 0; k < this.structures[i].structures[i].systems.length; k++){
-				if (this.structures[i].structures[i].systems[k].selected){
-					this.structures[i].structures[i].systems[k].select();
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (this.structures[i].structures[j].systems[k].selected){
+					this.structures[i].structures[j].systems[k].select();
 					return;
 				}
 			}
@@ -733,9 +733,9 @@ Squadron.prototype.setBuyData = function(){
 		});
 
 		for (var j = 0; j < this.structures[i].structures.length; j++){
-			for (var k = 0; k < this.structures[i].structures[i].systems.length; k++){
-				if (!this.structures[i].structures[i].systems[k].cost){continue;}
-				this.upgrades.push(this.structures[i].structures[i].systems[k].getUpgradeData());
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (!this.structures[i].structures[j].systems[k].cost){continue;}
+				this.upgrades.push(this.structures[i].structures[j].systems[k].getUpgradeData());
 			}
 		}
 	}
@@ -760,15 +760,15 @@ Squadron.prototype.getBuyTableData = function(table){
 		)
 
 		for (var j = 0; j < this.structures[i].structures.length; j++){
-			for (var k = 0; k < this.structures[i].structures[i].systems.length; k++){
-				if (!this.structures[i].structures[i].systems[k].cost){continue;}
+			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
+				if (!this.structures[i].structures[j].systems[k].cost){continue;}
 
 				$(table)
 				.append(
 					$("<tr>")
-					.append($("<td>").html(this.structures[i].structures[i].systems[k].display))
-					.append($("<td>").html(this.structures[i].structures[i].systems[k].cost))
-					.data("systemid", this.structures[i].structures[i].systems[k].id)
+					.append($("<td>").html(this.structures[i].structures[j].systems[k].display))
+					.append($("<td>").html(this.structures[i].structures[j].systems[k].cost))
+					.data("systemid", this.structures[i].structures[j].systems[k].id)
 					.hover(function(){
 						$(this).toggleClass("rowHighlight");
 						$(game.getUnit(0).getSystem($(this).data("systemid")).element).toggleClass("borderHighlight");
@@ -820,10 +820,10 @@ Squadron.prototype.getSelfExplo = function(){
 
 		counter++;
 		var real = this.getUnitPos(this.structures[i]);
-		for (var k = 0; k < 4; k++){
+		for (var j = 0; j < 4; j++){
 			explo.anims.push({
-				t: [0 - k*6 - counter*20, 50],
-				s: this.getExploSize[i]+ (range(-1, 1) *  this.getExploSize[i]/3),
+				t: [0 - j*6 - counter*20, 50],
+				s: this.getExploSize(i) + (range(-1, 1) *  this.getExploSize(i)/3),
 				x: base.x + real.x + (range(-1, 1) * 5),
 				y: base.y + real.y + (range(-1, 1) * 5),
 			});
