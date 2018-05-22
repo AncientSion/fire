@@ -422,6 +422,7 @@ Squaddie.prototype.armourOut = function(e){
 
 Squaddie.prototype.doDestroy = function(){
 	this.doDraw = 0;
+	this.destroyed = 1;
 	for (var i = 0; i < this.structures.length; i++){
 		for (var k = 0; k < this.structures[i].systems.length; k++){
 			this.structures[i].systems[k].destroyed = true;

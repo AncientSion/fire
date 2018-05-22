@@ -633,6 +633,7 @@ Single.prototype.isDestroyed = function(){
 
 Single.prototype.doDestroy = function(){
 	this.doDraw = 0;
+	this.destroyed = 1;
 	for (var i = 0; i < this.systems.length; i++){
 			this.systems[i].destroyed = true;
 		}

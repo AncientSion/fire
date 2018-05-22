@@ -2842,6 +2842,7 @@ Ship.prototype.updateDiv = function(){
 
 Ship.prototype.doDestroy = function(){
 	this.doDraw = 0;
+	this.destroyed = 1;
 	for (var i = this.cc.length-1; i >= 0; i--){
 		var attach = game.getUnit(this.cc[i]);
 		if (attach.flight){
