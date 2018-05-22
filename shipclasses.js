@@ -1889,11 +1889,11 @@ Ship.prototype.getHitSection = function(fire){
 	return getPointInDir(-this.size/4, a, 0, 0);
 }
 
-Ship.prototype.getExploSize = function(j){
+Ship.prototype.getExploSize = function(i){
 	if (this.ship){return this.size;}
-	else if (this.squad){return this.structures[j].size/2;}
-	else if (this.flight){return this.structures[j].mass*0.4;}
-	else if (this.salvo){return this.structures[j].mass*2;}
+	else if (this.squad){return this.structures[i].size/2;}
+	else if (this.flight){return this.structures[i].mass*0.4;}
+	else if (this.salvo){return this.structures[i].mass*2;}
 }
 
 Ship.prototype.setMoveAngles = function(){

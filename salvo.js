@@ -319,11 +319,10 @@ Salvo.prototype.getShortInfo = function(){
 
 	var table = document.createElement("table");
 		table.insertRow(-1).insertCell(-1).innerHTML = ("Salvo #" + this.id);
-		table.insertRow(-1).insertCell(-1).innerHTML = this.structures.length + "x " + this.structures[0].name;
-		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + this.getCurSpeed();
+		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + this.getCurSpeed() + " / " + this.getIntactElements() + " " + this.structures[0];
 		table.insertRow(-1).insertCell(-1).innerHTML = "Base To-Hit: " + this.getStringHitChance();
 
-	if (!this.mission.arrived && game.phase < 1 && this.inRange()){
+	if (!this.mission.arrived && game.phase < 2 && this.inRange()){
 		table.insertRow(-1).insertCell(-1).innerHTML = "<span class='red'>contact imminent</span>";
 	}
 
