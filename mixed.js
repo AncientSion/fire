@@ -749,7 +749,7 @@ Mixed.prototype.attachDivClickFunction = function(){
 }
 
 Mixed.prototype.getSelfExplo = function(){
-	console.log(this.id);
+	//console.log(this.id);
 
 	var base = {x: this.drawX, y: this.drawY};
 
@@ -774,7 +774,7 @@ Mixed.prototype.getSelfExplo = function(){
 
 		counter++;
 		var real = this.getUnitPos(j);
-		console.log(real);
+		//console.log(real);
 		for (var k = 0; k < 1; k++){
 			explo.anims.push({
 				t: [0 - k*6 - counter*20, 50],
