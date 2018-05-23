@@ -2610,7 +2610,7 @@ Particle.prototype.getAnimation = function(fire){
 			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
 				shotAnim.n = 0 - ((i / grouping) * delay + j*shotInterval);
 			gunAnims.push(shotAnim);
-			console.log(shotAnim.n +"/"+shotAnim.m);
+			//console.log(shotAnim.n +"/"+shotAnim.m);
 
 
 			if (linked){
