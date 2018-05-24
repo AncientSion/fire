@@ -247,7 +247,7 @@
 		}
 
 		public function createPlayerStatus($userid, $gameid, $turn, $phase, $status){
-			Debug::log("createPlayerStatus");
+			//Debug::log("createPlayerStatus");
 
 			$stmt = $this->connection->prepare("
 				INSERT INTO playerstatus
@@ -384,8 +384,8 @@
 			$gd = $this->getGameDetails($gameid);
 			$size = $unit->traverse;
 
-			$gainFocus = floor($gd["pv"] / 10 / 100 * $gd["focusMod"]);
-			$gainFocus = floor($gainFocus / 10 * (10 + ($size-1)*1.5));
+			$gainFocus = floor($gd["pv"] / 100 * $gd["focusMod"]);
+			$gainFocus = floor($gainFocus * (10 + ($size-1)*1.5));
 			$curFocus = floor($gainFocus * 2 / 100 * $gd["focusMod"]);
 			$maxFocus = floor($gainFocus * 4 / 100 * $gd["focusMod"]);
 

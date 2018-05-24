@@ -26,6 +26,8 @@ function Ship(data){
 	this.flipped = data.flipped;
 	this.actions = data.actions || [];
 	this.morale = data.morale;
+	this.baseFocusRate = data.baseFocusRate;
+	this.modFocusRate = data.modFocusRate;
 	this.cc = [];
 	this.mapSelect = 1;
 	this.index = 0;
@@ -1359,10 +1361,6 @@ Ship.prototype.doUnselect = function(){
 	if (game.deploying){game.disableDeploy();}
 	else if (game.flightDeploy){game.flightDeploy = false;}
 	else if (game.mission){this.disableMissionMode()}
-	//game.setShipTransform();
-	//this.drawPositionMarker();
-	//game.resetShipTransform();
-	//game.drawShipOverlays();
 	this.switchDiv();
 	this.unsetMoveMode();
 	$("#hangarDiv").addClass("disabled");
@@ -1589,6 +1587,8 @@ Ship.prototype.animateSelfJumpIn = function(){
 
 	if (fraction > 0.5){
 		ctx.globalAlpha = fraction;
+		ctx.translate(this.drawX, this.drawY);
+		ctx.rotate(this.getDrawFacing() * Math.PI/180);
 		this.drawSelf();
 		ctx.rotate(-this.getDrawFacing() * Math.PI/180);
 		ctx.translate(-this.drawX, -this.drawY);
@@ -1622,23 +1622,32 @@ Ship.prototype.animateSelfJumpOut = function(){
 		ctx.globalAlpha = 1;
 	} else ctx.globalAlpha = fraction * 2
 
-	//this.drawPositionMarker();
+	ctx.translate(this.drawX, this.drawY);
+	ctx.rotate(this.getDrawFacing() * Math.PI/180);
 	this.drawSelf();
-
 	ctx.rotate(-this.getDrawFacing() * Math.PI/180);
 	ctx.translate(-this.drawX, -this.drawY);
 
 }
 
 Ship.prototype.draw = function(){
-	if (!this.doDraw){return;}
+	if (!this.isReady){return;}
 
-	if (this.isReady){
-		//console.log("draw #" + this.id);
-	 	this.drawPositionMarker();
-		this.drawSelf();
-		this.drawEscort();
+ 	if (this.doDraw){
+ 		this.drawPositionMarker();
 	}
+
+	ctx.translate(this.drawX, this.drawY);
+	ctx.rotate(this.getDrawFacing() * Math.PI/180);
+
+	//console.log("draw #" + this.id);
+ 	if (this.doDraw){
+		this.drawSelf();
+	}
+
+	this.drawEscort();
+	ctx.rotate(-this.getDrawFacing() * Math.PI/180);
+	ctx.translate(-this.drawX, -this.drawY);
 }
 
 Ship.prototype.drawPositionMarker = function(){
@@ -1650,9 +1659,6 @@ Ship.prototype.drawPositionMarker = function(){
 }
 
 Ship.prototype.drawSelf = function(){
-	ctx.translate(this.drawX, this.drawY);
-	ctx.rotate(this.getDrawFacing() * Math.PI/180);
-
 	ctx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
 }
 
@@ -1661,8 +1667,6 @@ Ship.prototype.drawEscort = function(){
 		var s = this.drawImg.width/2;
 		ctx.drawImage(this.drawImg, -s/2, -s/2, s, s);
 	}
-	ctx.rotate(-this.getDrawFacing() * Math.PI/180);
-	ctx.translate(-this.drawX, -this.drawY);
 }
 
 Ship.prototype.drawPlanMarker = function(){
@@ -2178,6 +2182,9 @@ Ship.prototype.createBaseDiv = function(){
 		//	.append($("<td>").html("Base To-Hit"))
 		//	.append($("<td>").html(this.getStringHitChance())))
 		.append($("<tr>")
+			.append($("<td>").html("Focus Gain"))
+			.append($("<td>").html(this.baseFocusRate + "% + " + this.modFocusRate + "%")))
+		.append($("<tr>")
 			.append($("<td>").html("Morale"))
 			//.append($("<td>").html(this.morale.current + "%")))
 		//.append($("<tr>").addClass("morale")
@@ -2245,6 +2252,7 @@ Ship.prototype.createBaseDiv = function(){
 Ship.prototype.addFocusDiv = function(div){
 	if (this.isJumpingOut()){return;}
 	if (this.isDestroyed()){return;}
+	if (game.phase == -2){return;}
 
 	$(div).append(
 		$("<div>")
@@ -2284,6 +2292,7 @@ Ship.prototype.addCommandDiv = function(div){
 	if (this.isJumpingOut()){return;}
 	if (this.isDestroyed()){return;}
 	if (!this.friendly){return;}
+	if (game.phase == -2){return;}
 
 	$(div).append(
 		$("<div>")
@@ -2905,7 +2914,7 @@ Ship.prototype.updateDiv = function(){
 Ship.prototype.doDestroy = function(){
 	this.doDraw = 0;
 	this.destroyed = 1;
-	for (var i = this.cc.length-1; i >= 0; i--){
+	/*for (var i = this.cc.length-1; i >= 0; i--){
 		var attach = game.getUnit(this.cc[i]);
 		if (attach.flight){
 			attach.doDraw = 1;
@@ -2913,6 +2922,8 @@ Ship.prototype.doDestroy = function(){
 		this.cc.splice(i, 1);
 	}
 	this.setSupportImage();
+	*/
+
 }
 
 Ship.prototype.detachUnit = function(id){

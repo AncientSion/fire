@@ -623,9 +623,9 @@ Squadron.prototype.setStats = function(){
 		else if (i == 8){
 			$($(this).children()[1]).html(change); return;
 		}
-		else if (i == 3){
-			$($(this).children()[1]).html(hit); return;
-		}
+		//else if (i == 3){
+		//	$($(this).children()[1]).html(hit); return;
+		//}
 	})
 }
 

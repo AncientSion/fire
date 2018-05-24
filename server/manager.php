@@ -78,6 +78,10 @@
 
 		//var_export($this->getUnit(2)->getEndState(1));
 		//return;
+
+		if (!$this->name){
+			return false;
+		}
 		
 		$data = array(
 			"id" => $this->gameid,
@@ -130,6 +134,7 @@
 	public function getGeneralData(){
 		//Debug::log("getGeneralData for game ".$this->gameid);
 		$gd = DBManager::app()->getGameDetails($this->gameid);
+		if (!$gd){return;}
 
 		$this->name = $gd["name"];
 		$this->pv = $gd["pv"];
@@ -165,15 +170,10 @@
 
 		$this->setReinforceStatus();
 		$this->fires = $db->getUnresolvedFireOrders($this->gameid, $this->turn);
-
-		//Debug::log(sizeof($this->fires)." unresolved fires");
-
 		$this->ships = $this->assembleUnits();
 		$this->setCC();
-
 		$this->reinforcements = $db->getAllReinforcements($this->gameid, $this->userid);
 		$this->rdyReinforcements = $this->readyReinforcements();
-		//$this->deploys = $db->getDeployArea($this->gameid, $this->turn);
 		$this->incoming = $db->getIncomingShips($this->gameid, $this->turn);
 	}
 

@@ -295,10 +295,10 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 								</td>
 							<tr>
 								<td>
-									Focus Modifier in %
+									Focus % / Turn
 								</td>
 								<td>
-									<input type="form" style="text-align: center" value=100 placeholder="100" name="focusMod"></input>		
+									<input type="form" style="text-align: center" value=10 placeholder="10" name="focusMod"></input>		
 								</td>
 							</tr>
 							</tr>

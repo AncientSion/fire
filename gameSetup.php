@@ -139,15 +139,14 @@ else {
 								</th>
 							</tr>
 							<tr>
-								<th>
-									Remaining Points:
-								</th>
-								<th id="remPV" style="width:60px">
-									<?php echo $game["pv"]; ?>
+								<th colSpan=2 id="focusGain" style="width:60px">
 								</th>
 							</tr>
 							<tr class="buttonTD" onclick="tryConfirmFleet()">
-								<th colSpan=2>Confirm Fleet Selection</th>
+								<th colSpan=2>
+									<span>Confirm Fleet Selection</span>
+									<span id="remPV"></span>
+								</th>
 							</tr>
 						</table>
 					</div>
@@ -244,6 +243,30 @@ else {
 				system: 0,
 				fighters: [],
 				ballistics: [],
+
+				setAsCommand: function(ele){
+					for (let i = 0; i < game.shipsBought.length; i++){
+						if (game.shipsBought[i].command){
+							game.shipsBought[i].command = 0;
+						}
+					}
+
+					for (let i = 0; i < game.shipsBought.length; i++){
+						if (game.shipsBought[i].purchaseId == $(ele).data("purchaseId")){
+							game.shipsBought[i].command = 1;
+							this.setFocusGain();
+							$(game.shipsBought[i].tr).find("td").first().html("<span class='yellow'>CMD  </span>" + game.shipsBought[i].entry);
+						} else $(game.shipsBought[i].tr).find("td").first().html(game.shipsBought[i].entry);
+					}
+				},
+
+				setRemPV: function(){
+					$("#remPV").html(" (" + (window.maxPoints - game.getFleetCost()) + " left)");
+				},
+
+				setFocusGain: function(){
+					$("#focusGain").html("666");
+				},
 
 				getUnitName: function(){
 					if (this.ships[0].ship){return this.ships[0].name;
@@ -523,8 +546,11 @@ else {
 	}
 
 	function tryConfirmFleet(){
-		if (!game.hasCommandUnit()){
-			popup("Please select a unit to serve as the flagship for the fleet.</br>(Left click one of your purchase units)");
+		if (!game.shipsBought.length){
+			popup("Please add units to your fleet.")
+		}
+		else if (!game.hasCommandUnit()){
+			popup("Please select a unit to serve as the flagship for the fleet.</br>(Left click one of your purchased units)");
 		} else if (!game.hasReinforceFaction()){			
 			popup("Please select a faction to receive reinforcements from.</br>(Right-click on the faction names on the left)");
 		}
@@ -686,7 +712,7 @@ else {
 			})
 			.click(function(e){
 				e.preventDefault(); e.stopPropagation();
-				setFocus($(this));
+				game.setAsCommand($(this));
 			})
 
 		var td = tr.insertCell(-1)
@@ -706,7 +732,7 @@ else {
 
 		$("#remPoints").html()
 		$(".shipDiv").remove();
-		$("#remPV").html(getRemPoints());
+		game.setRemPV()
 		window.shipCtx.clearRect(0, 0, res.x, res.y);
 		window.fxCtx.clearRect(0, 0, res.x, res.y);
 		$("#hangarDiv").addClass("disabled");
@@ -725,27 +751,8 @@ else {
 				break;
 			}
 		}
-		$("#remPV").html(getRemPoints());
+		game.setRemPV()
 		$("#popupWrapper").hide();
-	}
-
-	function getRemPoints(){
-		return ("(" + (window.maxPoints - game.getFleetCost()) + ")");
-	}
-
-	function setFocus(ele){
-		for (let i = 0; i < game.shipsBought.length; i++){
-			if (game.shipsBought[i].command){
-				game.shipsBought[i].command = 0;
-			}
-		}
-
-		for (let i = 0; i < game.shipsBought.length; i++){
-			if (game.shipsBought[i].purchaseId == $(ele).data("purchaseId")){
-				game.shipsBought[i].command = 1;
-				$(game.shipsBought[i].tr).find("td").first().html("<span class='yellow'>CMD  </span>" + game.shipsBought[i].entry);
-			} else $(game.shipsBought[i].tr).find("td").first().html(game.shipsBought[i].entry);
-		}
 	}	
 
 	function initPreviewCanvas(){

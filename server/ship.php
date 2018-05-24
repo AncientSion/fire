@@ -54,6 +54,7 @@ class Ship {
 	public $baseTurnDelay;
 	public $baseImpulseCost;
 	public $hitTable;
+	public $modFocusRate = 0;
 	public $cc = array();
 	public $damaged = 0;
 	public $moveSet = 0;
@@ -1259,6 +1260,8 @@ class Medium extends Ship {
 	public $traverse = 0;
 	public $slipAngle = 15;
 	public $baseImpulseCost = 35;
+	public $baseFocusRate = 10;
+	public $modFocusRate = 0;
 
 	function __construct($data){
 		parent::__construct($data);
@@ -1311,6 +1314,7 @@ class Medium extends Ship {
 class Heavy extends Medium {
 	public $baseImpulse = 155;
 	public $traverse = 1;
+	public $baseFocusRate = 12;
 	//public $baseImpulseCost = 45;
 	
 	function __construct($data){
@@ -1321,6 +1325,7 @@ class Heavy extends Medium {
 class SuperHeavy extends Heavy {
 	public $baseImpulse = 140;
 	public $traverse = 2;
+	public $baseFocusRate = 14;
 	//public $baseImpulseCost = 50;
 	
 	function __construct($data){
@@ -1331,6 +1336,7 @@ class SuperHeavy extends Heavy {
 class UltraHeavy extends SuperHeavy {
 	public $baseImpulse = 130;
 	public $traverse = 3;
+	public $baseFocusRate = 16;
 	//public $baseImpulseCost = 55;
 	
 	function __construct($data){

@@ -17,6 +17,10 @@ table, th, tr, td {
 	color: red;
 }
 
+th span {
+	font-size: 20px;
+}
+
 .cache {
 	position: absolute;
 	z-index: 20;
