@@ -24,6 +24,21 @@ function doSort(a, b){
 	} else return 0;
 }
 
+
+function getUnitType(val){
+	switch (val){
+		case 3: return "Ultra Heavy";
+		case 2: return "Super Heavy";
+		case 1: return "Heavy";
+		case 0: return "Medium";
+		case -1: return "Squadron";
+		case -2: return "";
+		case -3: return "Flight";
+		case -4: return "Salvo";
+	}
+}
+
+
 function initChat(){
 	$(".chatWrapper").removeClass("disabled").find(".chatBox").scrollTop(function(){return this.scrollHeight});
 	//if (game.userid){

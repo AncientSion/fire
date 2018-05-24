@@ -2177,7 +2177,7 @@ Ship.prototype.createBaseDiv = function(){
 			.append($("<th>").html(this.getCallSign()).attr("colSpan", 2).addClass(headerC)))
 		.append($("<tr>")
 			.append($("<td>").html("Type (Size)").css("width", "50%"))
-			.append($("<td>").html(game.getUnitType(this.traverse) + " (" + this.traverse + ")")))
+			.append($("<td>").html(getUnitType(this.traverse) + " (" + this.traverse + ")")))
 		//.append($("<tr>")
 		//	.append($("<td>").html("Base To-Hit"))
 		//	.append($("<td>").html(this.getStringHitChance())))
@@ -2258,9 +2258,9 @@ Ship.prototype.addFocusDiv = function(div){
 		$("<div>")
 		.addClass("focusContainer")
 		.append(
-			$("<div>")
-			.html("Assign Focus (" + this.getFocusCost()+")")
-			.addClass("buttonTD")
+			$("<input>")
+			.attr("type", "button")
+			.attr("value", "Assign Focus (" + this.getFocusCost()+")")
 			.hide()
 			.click(function(){
 				game.getUnit($(this).parent().parent().data("shipId")).setFocus();
@@ -2271,21 +2271,11 @@ Ship.prototype.addFocusDiv = function(div){
 			.html("Has Focus (" + this.getFocusCost()+")")
 			.addClass("focusEntry")
 			.hide()
-			.click(function(){
-				game.getUnit($(this).parent().parent().data("shipId")).unsetFocus();
-			})
 		)
 	)
 
-	if (this.focus){
-		$(this.element).find(".focusEntry").show();
-	} else $(this.element).find(".focusContainer .buttonTD").show();
-	return;
-	/*else if (game.phase == 3 && this.friendly){
-		$(this.element).find(".buttonTD").show();
-	}
-	else $(this.element).find(".focusContainer").hide();
-	*/
+	if (this.focus){$(this.element).find(".focusContainer .focusEntry").show();}
+	else $(this.element).find(".focusContainer input").show();
 }
 
 Ship.prototype.addCommandDiv = function(div){
@@ -2298,9 +2288,9 @@ Ship.prototype.addCommandDiv = function(div){
 		$("<div>")
 		.addClass("commandContainer")
 		.append(
-			$("<div>")
-			.html("Assign as Fleet Command")
-			.addClass("buttonTD")
+			$("<input>")
+			.attr("type", "button")
+			.attr("value", "Assign as Fleet Command")
 			.hide()
 			.click(function(){
 				game.getUnit($(this).parent().parent().data("shipId")).setCommand();
@@ -2317,16 +2307,19 @@ Ship.prototype.addCommandDiv = function(div){
 		)
 	)
 
-	if (this.command){
-		$(this.element).find(".commandEntry").show();
-	} else $(this.element).find(".commandContainer .buttonTD").show();
-	return;
-	/*else if (game.phase == 3 && this.friendly){
-		$(this.element).find(".buttonTD").show();
-	}
-	else $(this.element).find(".focusContainer").hide();
-	*/
+	if (this.command){$(this.element).find(".commandContainer .commandEntry").show();}
+	else $(this.element).find(".commandContainer input").show();
 }
+
+Ship.prototype.getUnitClass = function(){
+	if (this.ship){return "Ship";
+	} else return "Squadron";
+}
+
+Ship.prototype.getUnitName = function(){
+	if (this.ship){return this.name;
+	} else return "Squadron";
+}	
 
 Ship.prototype.setCommand = function(){
 	console.log("setCommand");
@@ -2356,6 +2349,7 @@ Ship.prototype.getFocusCost = function(){
 
 Ship.prototype.setFocus = function(){
 	if (!this.friendly){return;}
+	if (game.phase != 3){return;}
 	if (this.isJumpingOut()){popup("This unit is jumping to hyperspace, it cant be issued focus."); return;}
 	if (!this.canAffordFocus()){popup("You dont enough have ressources to focus this unit."); return;}
 	if (!this.focus){
@@ -2901,6 +2895,10 @@ Ship.prototype.previewSetup = function(){
 			}
 		}
 	}
+}
+
+Ship.prototype.getFocusGain = function(){
+	return this.baseFocusRate + this.modFocusRate;
 }
 
 Ship.prototype.updateDiv = function(){

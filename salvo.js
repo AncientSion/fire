@@ -32,7 +32,7 @@ function Salvo(data){
 		var t = this.getTarget().traverse;
 		var html = "";
 		var d = Math.max(0, (this.structures[0].systems[0].traverse - t));
-		html += game.getUnitType(this.structures[0].systems[0].traverse) + "<span class=";
+		html += getUnitType(this.structures[0].systems[0].traverse) + "<span class=";
 
 		if (d > 0){
 			html += "'red'>";
@@ -124,7 +124,7 @@ Salvo.prototype.createBaseDiv = function(){
 			.append($("<th>").html(this.structures[0].display).attr("colSpan", 4)))
 		.append($("<tr>")
 			.append($("<td>").html("Type (Size)"))
-			.append($("<td>").html(game.getUnitType(this.traverse) + " (" + this.traverse + ")").attr("colSpan", 3)))
+			.append($("<td>").html(getUnitType(this.traverse) + " (" + this.traverse + ")").attr("colSpan", 3)))
 		.append($("<tr>")
 			.append($("<td>").html("Target"))
 			.append($("<td>").html("<span class='red'>" + target.name + " #" + target.id + "</span> - Dist: " + dist + "px").attr("colSpan", 3)))

@@ -2899,19 +2899,6 @@ Game.prototype.setShipDivs = function(val){
 	}
 }
 
-Game.prototype.getUnitType = function(val){
-	switch (val){
-		case 3: return "Ultra Heavy";
-		case 2: return "Super Heavy";
-		case 1: return "Heavy";
-		case 0: return "Medium";
-		case -1: return "Squadron";
-		case -2: return "";
-		case -3: return "Flight";
-		case -4: return "Salvo";
-	}
-}
-
 Game.prototype.drawShipOverlays = function(){
 	var sensor = 0;
 	var moves = 0;

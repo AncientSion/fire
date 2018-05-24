@@ -2223,20 +2223,20 @@ Weapon.prototype.getSysDiv = function(){
 			$(table).append($("<tr>").append($("<th>").css("border-top", "1px solid white").attr("colSpan", 2).html(this.loads[this.ammo].name)));
 			$(table).append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.loads[this.ammo].display)));
 			$(table).append($("<tr>").append($("<td>").html("Ammo amount")).append($("<td>").html("<span class='red'>" + this.getRemAmmo() + "</span> / " + this.getMaxAmmo()).attr("id", "ammo")));
-			$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + game.getUnitType(this.getTraverseRating()))));
+			$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + getUnitType(this.getTraverseRating()))));
 			$(table).append($("<tr>").append($("<td>").html("Thrust")).append($("<td>").html(this.getImpulseString())));
 			//$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("<span class='red' id='detailShots'>" + this.getOutput() + "</span> / " + this.launchRate[this.ammo])));
 			$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("Up to <span class='red'>" + this.launchRate[this.ammo] + "</span> / cycle")));
 		}
 	}
 	else if (this.fireMode == "Laser"){
-		$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + game.getUnitType(this.getTraverseRating()))));
+		$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + getUnitType(this.getTraverseRating()))));
 		$(table).append($("<tr>").append($("<td>").html("Focus point")).append($("<td>").html(this.optRange + "px")));
 		$(table).append($("<tr>").append($("<td>").html("Damage loss")).append($("<td>").html(this.getDmgLoss(this.optRange+100) + "% per 100px")));
 		$(table).append($("<tr>").append($("<td>").html("Accuracy loss")).append($("<td>").addClass("accuracy").html(this.getAccuracy() + "% per 100px")));
 	}
 	else {
-		$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + game.getUnitType(this.getTraverseRating()))));
+		$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + getUnitType(this.getTraverseRating()))));
 
 		if (!this.tiny){
 			if (this.dmgType == "Plasma"){
@@ -2416,7 +2416,7 @@ Warhead.prototype.getSysDiv = function(){
 				.append($("<td>").html(this.dmgType)))
 			.append($("<tr>")
 				.append($("<td>").html("Tracking"))
-				.append($("<td>").html(this.getTraverseRating() + " / " + game.getUnitType(this.getTraverseRating()))))
+				.append($("<td>").html(this.getTraverseRating() + " / " + getUnitType(this.getTraverseRating()))))
 			.append($("<tr>")
 				.append($("<td>").html("Damage"))
 				.append($("<td>").html(this.getDmgString()))))
@@ -3432,7 +3432,7 @@ Launcher.prototype.initLauncherDiv = function(){
 				.append($("<td>")
 					.append($(this.loads[i].getElement(true)))
 				)
-				.append($("<td>").html(this.loads[i].systems[0].getTraverseRating() + "</br>(" + (game.getUnitType(this.loads[i].systems[0].getTraverseRating()) + ")")))
+				.append($("<td>").html(this.loads[i].systems[0].getTraverseRating() + "</br>(" + (getUnitType(this.loads[i].systems[0].getTraverseRating()) + ")")))
 				.append($("<td>").html(this.launchRate[i]))
 				.append($("<td>").html(this.loads[i].cost))
 				.append($("<td>")

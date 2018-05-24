@@ -131,7 +131,7 @@ Flight.prototype.createBaseDiv = function(){
 			.append($("<th>").html(this.name.toUpperCase() + " #" + this.id).attr("colSpan", 2).addClass(header)))
 		.append($("<tr>")
 			.append($("<td>").html("Unit Type (Size)"))
-			.append($("<td>").html(game.getUnitType(this.traverse) + " (" + this.traverse + ")")))
+			.append($("<td>").html(getUnitType(this.traverse) + " (" + this.traverse + ")")))
 		.append($("<tr>")
 			.append($("<td>").html("Current Mission"))
 			.append($("<td>").addClass("missionType").html(game.getMissionTypeString(this, this.getTarget()))))

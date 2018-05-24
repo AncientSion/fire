@@ -374,30 +374,35 @@
 
 		public function setInitialCommandUnit($userid, $gameid, $units){
 			Debug::log("setInitialCommandUnit s:".sizeof($units));	
-			$id = 0;
 			$unit;
 
 			for ($i = 0; $i < sizeof($units); $i++){
-				if ($units[$i]["command"]){$id = $units[$i]["id"]; $unit = new $units[$i]["name"](); break;}
+				if ($units[$i]["command"]){$unit = new $units[$i]["name"](); break;}
 			}
 
 			$gd = $this->getGameDetails($gameid);
-			$size = $unit->traverse;
 
-			$gainFocus = floor($gd["pv"] / 100 * $gd["focusMod"]);
-			$gainFocus = floor($gainFocus * (10 + ($size-1)*1.5));
+
+			$baseGain = floor($gd["pv"] / 100 * $gd["focusMod"]);
+			$curFocus = floor($baseGain * 2);
+			$maxFocus = floor($baseGain * 4);
+
+			$gainFocus = floor($baseGain / 100 * ($unit->baseFocusRate + $unit->modFocusRate));
+
+			/*
+			$gainFocus = floor($baseGain * (10 + ($size-1)*1.5));
 			$curFocus = floor($gainFocus * 2 / 100 * $gd["focusMod"]);
 			$maxFocus = floor($gainFocus * 4 / 100 * $gd["focusMod"]);
+			*/
 
-
-			$sql = "UPDATE units SET command = 1 WHERE id = ".$id;
+			$sql = "UPDATE units SET command = 1 WHERE id = ".$units[$i]["id"];
 			$this->connection->query($sql);
 
 			$this->setInitialFocus($maxFocus, $gainFocus, $curFocus, $userid, $gameid);
 		}
 
 		public function setInitialFocus($maxFocus, $gainFocus, $curFocus, $userid, $gameid){
-			//Debug::log("setInitialFocus ".$userid."/".$gameid.": ".$maxFocus."/".$gainFocus."/".$curFocus);
+			Debug::log("setInitialFocus ".$userid."/".$gameid.": ".$maxFocus."/".$gainFocus."/".$curFocus);
 
 			$sql = "UPDATE playerstatus SET maxFocus = ".$maxFocus.", gainFocus = ".$gainFocus.", curFocus = ".$curFocus." WHERE userid = ".$userid." AND gameid = ".$gameid;
 
@@ -464,7 +469,7 @@
 								//Debug::log("comparing to: ".$units[$j]["clientId"]);
 								if (isset($units[$j]["mission"]) && $units[$j]["mission"]["targetid"] == $units[$i]["clientId"]){
 									$units[$j]["mission"]["targetid"] = $id;
-									Debug::log("adjusting mission id!");
+									//Debug::log("adjusting mission id!");
 									break;
 								}
 							}

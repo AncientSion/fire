@@ -220,7 +220,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			targetData1
 				.empty()
 				.append($("<td>").html(target.name + " #" + target.id))
-				.append($("<td>").html(game.getUnitType(target.traverse) + " (" + target.traverse + ")"))
+				.append($("<td>").html(getUnitType(target.traverse) + " (" + target.traverse + ")"))
 				.append($("<td>").html(target.getArmourString(angle)))
 				.append($("<td>").html(target.getSectionString(angle)))
 				.append($("<td>").html(dist));
