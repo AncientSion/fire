@@ -30,7 +30,7 @@ else if (isset($_POST["newUsername"]) && isset($_POST["newPassword"])){
 		$dbManager->registerAccount($_POST["newUsername"], $_POST["newPassword"]);
 	}
 	else {
-		echo "Please enter valid registration data";	
+		echo "<div style='color: red; font-size: 24px; margin: auto; margin-top: 50px; width: 400px'> Please enter valid registration data</div>";	
 	}
 }
 
@@ -45,40 +45,28 @@ else if (isset($_POST["newUsername"]) && isset($_POST["newPassword"])){
 	<script src="jquery-2.1.1.min.js"></script>
 </head>
 	<body> 
-		<div style="margin: auto; width: 500px">
-			<div id="loginDiv">
-				<form method="post">
-					<input type="text" style="margin-bottom: 5px; margin-top: 5px" placeholder="Enter Username here" name="username" value=""></input>
-					<input type="password" style="margin-bottom: 5px;"placeholder="Enter Password here" name="password" value=""></input>
-					<input type="submit" style="width: auto; display: block;" value="Login"></input>	
-					</br>
-				</form>
-					<input type="button" style="margin-top: 30px; margin-bottom: 10px;" value="Or Register" onclick="register()"></input>
-			</div>
-			
-			<div id="registerDiv">
-				<form method="post">
-					<input type="form" placeholder="Enter new Username here" name="newUsername"></input>	
-					<input type="form" placeholder="Enter new Password here" name="newPassword"></input>
-					<input type="submit" value="Create Account"></input>
-				</form>	
-			</div>
-			<div style="margin: auto; margin-top: 20px; display: block; text-align: center; width: auto; border: none;">
-				<span>
-					<a href="logout.php">
-						EXIT
-					</a>
-				</span>
-			</div>
+		<div id="loginDiv">
+			<form method="post">
+				<input type="text" style="float: left;" placeholder="Enter Username here" name="username" value=""></input>
+				<input type="password" style="float: right;" placeholder="Enter Password here" name="password" value=""></input>
+				<input type="submit" value="Login"></input>	
+				</br>
+			</form>
+		</div>
+
+		<div style="margin: auto; width: 700px">
+			<img style="width: 700px; height: 322px;" src="varIcons/header.jpg">
+		</div>
+		
+		<div id="registerDiv">
+			<form method="post">
+				<input type="text" style="float: left;" placeholder="Enter new Username here" name="newUsername"></input>	
+				<input type="text" style="float: right;" placeholder="Enter new Password here" name="newPassword"></input>
+				<input type="submit" value="Register New Account"></input>
+			</form>	
 		</div>
 	</body>
 </html>
 
 <script>
-
-function register(){
-	$("#loginDiv").hide();
-	$("#registerDiv").show();
-}
-
 </script>

@@ -73,10 +73,10 @@ if (isset($_SESSION["userid"])){
 	}
 
 	if ($ready){}
-	else if ($joined){$element .= "<tr><td colSpan=2><div class='buttonTD' onclick='leaveGame()'>Leave Game</div></td></tr>";}
-	else {$element .= "<tr><td colSpan=2><div class='buttonTD' onclick='joinGame()'>Join Game</div></td></tr>";}
+	else if ($joined){$element .= "<tr><td colSpan=2><input type='button' value='Leave Game' onclick='leaveGame()'></td></tr>";}
+	else {$element .= "<tr><td colSpan=2><input onclick='joinGame()' value='Join Game'></td></tr>";}
 
-	$element .= "<tr><td colSpan=2><div class='buttonTD' onclick='window.goToLobby()'>Return to Lobby</div></td></tr>";	
+	$element .= "<tr><td colSpan=2><input type='button' onclick='window.goToLobby()'' value='Return to Lobby'></td></tr>";	
 
 	$element .= "</table>";
 
@@ -488,12 +488,26 @@ else {
 							game.ships[0].totalCost += extra
 					}
 
-					$(table).append(
+					$(table)
+						.append(
 						$("<tr>")
 							.append($("<th>").html("Total Unit Cost").css("font-size", 20))
 							.append($("<th>").html(game.ships[0].totalCost).css("font-size", 20)))
+						.append(
+						$("<tr>")
+							.append($("<td>")
+								.attr("colSpan", 2)
+								.append($("<input>")
+									.attr("type", "button")
+									.attr("value", "Confirm Setup")
+									.click(function(){
+										game.tryConfirmPurchase();
+									}))))
 
 
+
+
+					/*
 					var tr = table.insertRow(-1);
 					var button = tr.insertCell(-1);
 						button.innerHTML = "Confirm Setup";
@@ -502,6 +516,7 @@ else {
 						$(button).click(function(){
 							game.tryConfirmPurchase();
 						});
+					*/
 				},
 
 

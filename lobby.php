@@ -161,51 +161,6 @@ if (isset($_SESSION["userid"])){
 else {
    header("Location: index.php");
 }
-/*
-
-	var active = true;
-	if (this.destroyed || this.disabled){
-		active = false;
-	}
-
-
-	if (!active){
-		fighterDiv($("<image>")
-			.attr("src", "varIcons/destroyed.png")
-			.addClass("overlay")
-			.hover(function(e){
-				e.stopPropagation();
-				var shipId = $(this).parent().parent().parent().data("shipId");
-				var fighterId = $(this).parent().data("subId");
-				game.getUnit(shipId).getSystem(fighterId).hover(e);
-			})
-			.click(function(e){
-				e.stopPropagation();
-				var shipId = $(this).parent().parent().parent().data("shipId");
-				var fighterId = $(this).parent().data("subId");
-				console.log(game.getUnit(shipId).getSystem(fighterId));
-			}))
-	}
-	else {
-		$(img)
-		.hover(function(e){
-			e.stopPropagation();
-			var shipId = $(this).parent().parent().parent().data("shipId");
-			var fighterId = $(this).parent().data("subId");
-			game.getUnit(shipId).getSystem(fighterId).hover(e);
-		})
-		.click(function(e){
-			e.stopPropagation();
-			var shipId = $(this).parent().parent().parent().data("shipId");
-			var fighterId = $(this).parent().data("subId");
-			console.log(game.getUnit(shipId).getSystem(fighterId));
-		});
-	}
-
-
-
-*/
-
 
 
 	Debug::close();
@@ -218,7 +173,6 @@ window.userid = <?php echo json_encode($_SESSION["userid"], JSON_NUMERIC_CHECK);
 window.username = <?php echo json_encode($username); ?>;
 window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 </script>
-
 
 
 <!DOCTYPE html>
@@ -248,19 +202,19 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 				<?php echo $openGamesElement; ?>
 			</div>
 			<div class="lobbyDiv">
-				<div class="link">
-					Create a new Game
+				<div style="margin-bottom: 20px">
+					<input id=createGameToggle" style="margin-top: 50px; width: 180px" type="button" value="Create a new Game" onclick="toggleGameCreation()">
 				</div>
 
-				<div id="createGame" class="disabled">
+				<div>
 					<form method="post">
-						<table class="createGame">
+						<table id="createGameMenu">
 							<tr>
-								<td width=60%>
+								<td width=70%>
 									Game Name
 								</td>
 								<td>
-									<input type="form" style="text-align: center" value='myGame' placeholder="Game Name" name="gameName"></input>		
+									<input type="text" style="text-align: center" value='myGame' placeholder="Game Name" name="gameName"></input>		
 								</td>
 							</tr>
 							<tr>
@@ -268,7 +222,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 									Initial Point Value
 								</td>
 								<td>
-									<input type="form" style="text-align: center" value=3000 placeholder="3000" name="pointValue"></input>		
+									<input type="number" style="text-align: center" value=3000 placeholder="3000" name="pointValue" step="500"></input>		
 								</td>
 							</tr>
 							<tr>
@@ -276,7 +230,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 									Reinforcements Point Value
 								</td>
 								<td>
-									<input type="form" style="text-align: center" value=1500 placeholder="1500" name="reinforceValue"></input>		
+									<input type="number" style="text-align: center" value=1500 placeholder="1500" name="reinforceValue" step="250"></input>		
 								</td>
 							</tr>
 							<tr>
@@ -284,35 +238,30 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 									Reinforcements Turn
 								</td>
 								<td>
-									<input type="form" style="text-align: center" value=11 placeholder="11" name="reinforceTurn"></input>		
+									<input type="number" style="text-align: center" value=11 placeholder="11" name="reinforceTurn" step="1"></input>		
 								</td>
 							<tr>
 								<td>
 									Reinforcements ETA
 								</td>
 								<td>
-									<input type="form" style="text-align: center" value=3 placeholder="3" name="reinforceETA"></input>		
+									<input type="number" style="text-align: center" value=3 placeholder="3" name="reinforceETA" step="1"></input>		
 								</td>
 							<tr>
 								<td>
 									Focus % / Turn
 								</td>
 								<td>
-									<input type="form" style="text-align: center" value=100 placeholder="100" name="focusMod"></input>		
+									<input type="number" style="text-align: center" value=10 placeholder="10" name="focusMod" step="2"></input>		
 								</td>
 							</tr>
 							</tr>
-								<td colSpan=2>
-									<input type="submit" style="width: 60%" value="Confirm and Forward"></input>	
+								<td colSpan=2 style="border: none">
+									<input type="submit" style="width: 40%" value="Confirm and Forward"></input>	
 								</td>
 							</tr>
 						</table>
 					</form>
-				</div>
-			</div>
-			<div class="lobbyDiv">
-				<div class="link">
-					Logout
 				</div>
 			</div>
 			<div class="chatWrapper">
@@ -334,9 +283,12 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 
 					?>
 				</div>
-				<div class ="sendWrapper">
-					<input id="msg" placeholder ="chat here" type="text">
+				<div class="sendWrapper">
+					<input id="msg" type="text" placeholder ="chat here">
 				</div>
+			</div>
+			<div class="lobbyDiv">
+				<input style="margin-top: 50px; width: 100px" type="button" value="Logout" onclick="doLogout()">
 			</div>
 		</div>
 	</body>
@@ -345,17 +297,6 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 
 <script>
 	$(document).ready(function(){
-		var buttons = $(".link");
-
-		$(buttons[0]).click(function(){
-			$("#createGame").toggleClass("disabled");
-		})
-		$(buttons[1]).click(function(){
-			window.location = "logout.php"
-		})
-		$("#createGame").click(function(e){
-			e.stopPropagation();
-		})
 
 		$(".chatWrapper").css("position", "relative").css("display", "inline-block").css("width", 700).css("margin-left", 100).css("margin-top", 20).find(".chatBox").scrollTop(function(){return this.scrollHeight}).end();
 		
@@ -376,6 +317,8 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 				$(this).hide();
 			})
 
+		$("#createGameMenu").addClass("disabled");
+
 		$(this).keypress(function(e){
 			if (e.keyCode == 13){ // enter
 				if ($(":focus").attr("id") == ("msg")){
@@ -385,4 +328,12 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 		});
 	
 	})
+
+	function doLogout(){
+		window.location = "logout.php"
+	}
+
+	function toggleGameCreation(){
+		$("#createGameMenu").toggleClass("disabled")
+	}
 </script>
