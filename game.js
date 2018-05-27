@@ -633,22 +633,18 @@ function Game(data){
 	}
 	
 	this.handleDmgControlWarnings = function(){
-		return false;
-		var hasNoFocus = 1;
-
-
-
+		var hasNoCommand = 1;
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].userid != this.userid){continue;}
 			if (this.ships[i].status == "jumpOut" || this.ships[i].destroyed){continue;}
-			if (this.ships[i].focus){
-				hasNoFocus = 0; break;
+			if (this.ships[i].command){
+				hasNoCommand = 0; break;
 			}
 		}
 
-		if (hasNoFocus){
-			popup("Please assign Command Focus to a unit for the next turn.");
+		if (hasNoCommand){
+			popup("Your fleet is lacking a Command unit.</br>Please select a unit to act as Fleet Command.");
 			return true;
 		}
 		return false;
@@ -657,17 +653,18 @@ function Game(data){
 	this.clickablePop = function(data){
 		var html = "";
 		for (var i = 0; i < data.length; i++){
-			if (i){html += "</br>";}
+			html += "<div class='popupHeader'>";
 			html += data[i].msg;
-			html += "</br>";
+			html += "</div>";
 
 			for (var j = 0; j < data[i].data.length; j++){
-				html += "<div class='popupEntry buttonTD' onclick='game.selectFromPopup(" + data[i].data[j].id + ")'>" + data[i].data[j].name + " #" + data[i].data[j].id;
-				if (data[i].data[j].value){html += " (" + data[i].data[j].value + ")";}
-				html += "</div>"; 
+				var substring = data[i].data[j].name + " #" + data[i].data[j].id;
+				if (data[i].data[j].value){substring += " (" + data[i].data[j].value + ")";}
+
+				html += "<input type='button' class='popupEntry' value='" + substring + "' onclick='game.selectFromPopup(" + data[i].data[j].id + ")'>";
 			}
 		}
-		html += "</p><div class='popupEntry buttonTD' style='font-size: 20px; width: 200px' onclick='game.doConfirmOrders()'>Confirm Orders</div>";
+		html += "<input type='button' class='popupEntryConfirm' value='Confirm Orders' onclick='game.doConfirmOrders()'>";
 
 	    $("#popupWrapper").show().find("#popupText").empty().html(html)
 	}
@@ -1089,28 +1086,25 @@ function Game(data){
 
 		this.createCritLogEntries();
 		this.createMoraleLogEntries();
+
+		$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 	}
 	
 	this.createCritLogEntries = function(){
-		var entry = 0;
+		var target = $("#combatLog").find("tbody");
+			target.append($("<tr>")
+					.append($("<td>").css("height", 15).attr("colSpan", 9)));
 
 		for (let i = 0; i < this.ships.length; i++){
 			let done = this.ships[i].createCritLogEntry();
-			if (done){entry = 1;}
-		}
-
-		if (entry){
-			$("#combatLog")
-			.find("tbody")
-				.append($("<tr>")
-					//.append($("<td>").css("font-size", 18).attr("colSpan", 9).html("Firing Phase Resolution concluded")));
-					.append($("<td>").css("height", 5).attr("colSpan", 9)));
-
-			$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 		}
 	}
 
 	this.createMoraleLogEntries = function(){
+		var target = $("#combatLog").find("tbody");
+			target.append($("<tr>")
+					.append($("<td>").css("height", 15).attr("colSpan", 9)));
+
 		for (let i = 0; i < this.ships.length; i++){
 			this.ships[i].createMoraleLogEntry();
 		}
@@ -2268,8 +2262,16 @@ function Game(data){
 		$("#combatLog")
 		.find("tbody")
 			.append($("<tr>")
-				.append($("<td>").css("font-size", 16).attr("colSpan", 9).html("- All Fireorders have been animated -")))
-				.append($("<td>").css("height", 5).attr("colSpan", 9));
+				.css("height", 20)
+				.append($("<th>").attr("colSpan", 9)))
+		return;
+		$("#combatLog")
+		.find("tbody")
+			.append($("<tr>")
+				.append($("<th>").attr("colSpan", 9).html("--- Fireorder animation completed ---")))
+			.append($("<tr>")
+				.css("height", 20)
+				.append($("<th>").attr("colSpan", 9)))
 
 		$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 	}
@@ -2408,6 +2410,7 @@ function Game(data){
 				if (!game.unitExploAnims[i].done){
 					if (!game.unitExploAnims[i].animating){
 						game.unitExploAnims[i].animating = 1;
+						cam.setZoom(1.5);
 						cam.setFocusToPos(game.getUnit(game.unitExploAnims[i].id).getPlannedPos());
 						game.redraw();
 					}
@@ -2426,7 +2429,7 @@ function Game(data){
 								)
 							}
 							
-							if (game.unitExploAnims[i].entries[j].anims[k].t[0] > game.unitExploAnims[i].entries[j].anims[k].t[1] * 0.6){
+							if (game.unitExploAnims[i].entries[j].anims[k].t[0] > game.unitExploAnims[i].entries[j].anims[k].t[1] * 0.7){
 								game.unitExploAnims[i].entries[j].u.doDestroy();
 								game.redraw();
 							}
@@ -2463,7 +2466,7 @@ function Game(data){
 			.find("tbody")
 				.append(
 				$("<tr>")
-					.append($("<td>").attr("colSpan", 9).css("font-size", 14).html(game.unitExploAnims[i].html))
+					.append($("<th>").attr("colSpan", 9).html(game.unitExploAnims[i].html))
 					.data("shipid", game.unitExploAnims[i].id)
 					.hover(
 						function(){
@@ -3551,33 +3554,50 @@ Game.prototype.addFocusInfo = function(){
 Game.prototype.setConfirmInfo = function(){
 	var player = this.getPlayerStatus();
 
-	var td = $("<td>").attr("colSpan", 3).addClass("buttonTD").css("font-size", 20)
+	var td = $("<td>")
+		.attr("colSpan", 3)
 
 
 	if (this.status == "closed"){
 		td
-		.html("Show Statistics")
-		.click(function(){
-			if ($("#statsWrapper").length){return;}
-			ajax.getStats();
-		})
+		.append($("<input>")
+			.attr("type", "button")
+			.attr("value", "Show Statistics")
+			.click(function(){
+				if ($("#statsWrapper").length){return;}
+				ajax.getStats();
+			}))
 	}
 	else if (!player){
 		td
-		.html("Observer Mode")
-		.css("background-color", "yellow")
+		.append($("<input>")
+			.attr("type", "button")
+			.attr("value", "Observer Mode")
+			.addClass("inactive")
+			.css("background-color", "yellow")
+			.click(function(){
+				return;
+			}))
 	}
 	else if (player.status == "ready"){
 		td
-		.html("Waiting for Opp.")
-		.css("background-color", "lightGreen")
+		.append($("<input>")
+			.attr("type", "button")
+			.attr("value", "Waiting for Opponent")
+			.addClass("inactive")
+			.css("background-color", "#00ff14")
+			.click(function(){
+				return;
+			}))
 	}
 	else {
 		td
-		.html("Confirm Orders")
-		.click(function(){
-			game.endPhase();
-		})
+		.append($("<input>")
+			.attr("type", "button")
+			.attr("value", "Confirm Orders")
+			.click(function(){
+				game.endPhase();
+			}))
 	}
 
 	
@@ -3588,12 +3608,16 @@ Game.prototype.setConfirmInfo = function(){
 		$("#upperGUI").find("#overview").find("tbody")
 		.append($("<tr>").append($("<td>").css("height", 8)))
 		.append($("<tr>")
-			.append($("<td>").attr("colSpan", 3).addClass("buttonTD").css("font-size", 20).html("Concede Match")
-				.click(function(){
-					if (!game.canConfirm){return;}
-					game.canConfirm = 0;
-					game.concedeMatch(goToLobby);
-				})
+			.append($("<td>").attr("colSpan", 3)
+				.append($("<input>")
+					.attr("type", "button")
+					.attr("value", "Concede Match")
+					.click(function(){
+						if (!game.canConfirm){return;}
+						game.canConfirm = 0;
+						game.concedeMatch(goToLobby);
+					})
+				)
 			)
 		)
 	}

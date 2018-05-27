@@ -382,18 +382,12 @@
 
 			$gd = $this->getGameDetails($gameid);
 
+			$gamegain = floor($gd["pv"] / 100 * $gd["focusMod"]);
+			$unitmod = $unit->baseFocusRate + $unit->modFocusRate;
 
-			$baseGain = floor($gd["pv"] / 100 * $gd["focusMod"]);
+			$baseGain = $gamegain / 10 * $unitmod;
 			$curFocus = floor($baseGain * 2);
 			$maxFocus = floor($baseGain * 4);
-
-			$gainFocus = floor($baseGain / 100 * ($unit->baseFocusRate + $unit->modFocusRate));
-
-			/*
-			$gainFocus = floor($baseGain * (10 + ($size-1)*1.5));
-			$curFocus = floor($gainFocus * 2 / 100 * $gd["focusMod"]);
-			$maxFocus = floor($gainFocus * 4 / 100 * $gd["focusMod"]);
-			*/
 
 			$sql = "UPDATE units SET command = 1 WHERE id = ".$units[$i]["id"];
 			$this->connection->query($sql);

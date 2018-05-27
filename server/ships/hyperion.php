@@ -9,7 +9,7 @@ class Hyperion extends Heavy {
 	public $profile = array(0.93, 1.07);
 	public $mass = 8000;
 
-	public $integrity = 10;
+	public $integrity = 1000;
 	public $vitalHP = 115;
 	public $ep = 70;
 	public $ew = 700;

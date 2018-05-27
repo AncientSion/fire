@@ -74,16 +74,29 @@ System.prototype.hasLoad = function(){
 	return false;
 }
 
-System.prototype.attachDetailsMods = function(ele){
-	//if (this.destroyed){return;}
-	
+System.prototype.attachSysNotes = function(ele){
+	if (this.notes.length){
+		var div = $(ele) || $("#sysDiv");
+			div = div.find("tbody");
+		div.append($("<tr>").css("height", 7).append($("<td>").attr("colSpan", 2)))
+
+		$(div).append($("<tr>").addClass("notesHeader").append($("<th>").html("Notes").attr("colSpan", 2)));
+		for (var i = 0; i < this.notes.length; i++){
+			$(div).append($("<tr>").append($("<td>").addClass("notesEntry").html(this.notes[i]).attr("colSpan", 2)));
+		}
+	}
+}
+
+System.prototype.attachSysMods = function(ele){
 	var div = $(ele) || $("#sysDiv");
 		div.find(".modifiers").remove();
 	var boost = this.getBoostLevel();
 	var crew = this.getCrewLevel();
 	var table;
 	if ((boost && !this.launcher) || this.crits.length || crew){
-		table = $("<table>").addClass("modifiers").append($("<tr>").append($("<th>").html("Modifiers").attr("colSpan", 2)));
+		table = $("<table>").addClass("modifiers")
+		.append($("<tr>").css("height", 7).append($("<td>").attr("colSpan", 2)))
+		.append($("<tr>").append($("<th>").html("Modifiers").attr("colSpan", 2)));
 		if (boost){
 			for (var i = 0; i < this.boostEffect.length; i++){
 				if (this.boostEffect[i].type == "Reload"){
@@ -168,7 +181,7 @@ System.prototype.hover = function(e){
 
 	if (this.highlight){
 		this.highlight = false;
-		this.hideInfoDiv(e);
+		this.hideSysDiv(e);
 		this.hideOptions();
 		if (p){p.highlightAllSelectedWeapons();}
 		if (this.hasUnresolvedFireOrder()){
@@ -179,7 +192,7 @@ System.prototype.hover = function(e){
 	}
 	else {
 		this.highlight = true;
-		this.showInfoDiv(e);
+		this.showSysDiv(e);
 		this.showOptions();
 		if (p.ship || p.squad){
 			fxCtx.clearRect(0, 0, res.x, res.y);
@@ -382,7 +395,8 @@ System.prototype.getBoostEffectElements = function(table){
 		$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).html(html)));
 	}
 
-	$(table).find("tr").last().css("border-bottom", "2px solid white");
+	//$(table).find("tr").last().css("background-color", "#397a68")
+	$(table).find("tr").last().css("border-bottom", "1px solid white")
 }
 
 System.prototype.getBoostDiv = function(){
@@ -733,13 +747,17 @@ System.prototype.hideOptions = function(){
 	//}
 }
 
-System.prototype.showInfoDiv = function(e){
+System.prototype.showSysDiv = function(e){
 	$(document.body).append(
 		$(this.getSysDiv())
 			.css("left", e.clientX - 90)
 			.css("top", e.clientY + 50)
 		)
 	return;
+}
+
+System.prototype.hideSysDiv = function(){
+	$("#sysDiv").remove();
 }
 
 System.prototype.setFireOrder = function(targetid, pos){
@@ -762,10 +780,6 @@ System.prototype.unsetFireOrder = function(){
 			return;
 		}
 	}
-}
-
-System.prototype.hideInfoDiv = function(){
-	$("#sysDiv").remove();
 }
 
 System.prototype.getImageName = function(){
@@ -1131,12 +1145,12 @@ PrimarySystem.prototype.hover = function(e){
 	if (game.flightDeploy){return false;}
 	if (this.highlight){
 		this.highlight = false;
-		this.hideInfoDiv(e);
+		this.hideSysDiv(e);
 		this.hideOptions();
 	}
 	else {
 		this.highlight = true;
-		this.showInfoDiv(e);
+		this.showSysDiv(e);
 		this.showOptions();
 	}
 }
@@ -1241,12 +1255,12 @@ PrimarySystem.prototype.getSysDiv = function(){
 		}
 		if (this.modes.length){
 			$(table).append($("<tr>").append($("<td>").html("Sensor Mode")).append($("<td>").addClass("sensorMode negative").html(this.getEWMode())));
-			$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("sensorEffect").html(this.getEWModeEffect())));
+			//$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("sensorEffect").html(this.getEWModeEffect())));
 		}
 	}
 	else if (unit.ship){
 		$(table).append($("<tr>").append($("<td>").css("width", "60%").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
-		$(table).append($("<tr>").append($("<td>").css("width", "60%").html("Hit Chance")).append($("<td>").html(this.hitPct + "%")));
+		$(table).append($("<tr>").append($("<td>").html("Hit Chance")).append($("<td>").html(this.hitPct + "%")));
 		$(table).append($("<tr>").append($("<td>").html("Max Damage / hit")).append($("<td>").html(this.maxDmg)));
 
 		if (this.output){
@@ -1261,11 +1275,12 @@ PrimarySystem.prototype.getSysDiv = function(){
 		}
 		if (this.modes.length){
 			$(table).append($("<tr>").append($("<td>").html("Sensor Mode")).append($("<td>").addClass("sensorMode negative").html(this.getEWMode())));
-			$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("sensorEffect").html(this.getEWModeEffect())));
+			//$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("sensorEffect").html(this.getEWModeEffect())));
 		}
 	}
 	
-	this.attachDetailsMods(div.append(table));
+
+	(div.append(table));
 	return div;
 }
 
@@ -1291,7 +1306,7 @@ PrimarySystem.prototype.updatesysDiv = function(){
 	if (this instanceof Sensor){
 		$("#sysDiv").find(".sensorMode").html(this.getEWMode()).end().find(".sensorEffect").html(this.getEWModeEffect());
 	}
-	this.attachDetailsMods(ele);
+	this.attachSysMods(ele);
 }
 
 function Engine(system){
@@ -2198,8 +2213,8 @@ Weapon.prototype.getSysDiv = function(){
 	var table = document.createElement("table");
 	
 	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
-	$(table).append($("<tr>").append($("<td>").html("Firing Mode").css("width", "50%")).append($("<td>").html(this.fireMode)));
-	$(table).append($("<tr>").append($("<td>").html("Damage Type").css("width", "50%")).append($("<td>").html(this.dmgType)));
+	$(table).append($("<tr>").append($("<td>").html("Firing Mode").css("width", "60%")).append($("<td>").html(this.fireMode)));
+	$(table).append($("<tr>").append($("<td>").html("Damage Type")).append($("<td>").html(this.dmgType)));
 
 
 	if (!this.tiny){
@@ -2210,7 +2225,7 @@ Weapon.prototype.getSysDiv = function(){
 		}
 		$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
 		if (this.boostEffect.length && !(this instanceof Launcher)){
-			$(table).append($("<tr>").css("border-top", "2px solid white").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerCost").html(this.getEffiency() + " (max: " + this.maxBoost + ")")));
+			$(table).append($("<tr>").css("border-top", "1px solid white").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerCost").html(this.getEffiency() + " (max: " + this.maxBoost + ")")));
 			this.getBoostEffectElements(table);
 		}
 	}
@@ -2265,18 +2280,16 @@ Weapon.prototype.getSysDiv = function(){
 	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDmgString())));
 	if (!this.tiny){$(table).append($("<tr>").append($("<td>").html("Priority (low->early)")).append($("<td>").html(this.priority)));}
 
-	if (this.notes.length){
-		$(table).append($("<tr>").addClass("notesHeader").css("border-top", "2px solid white").append($("<th>").html("Notes").attr("colSpan", 2)));
-		for (var i = 0; i < this.notes.length; i++){
-			$(table).append($("<tr>").append($("<td>").addClass("notesEntry").html(this.notes[i]).attr("colSpan", 2)));
-		}
-	}
 
 	div.appendChild(table);
-	this.attachDetailsMods(div);
+	this.attachSysNotes(div);
+	this.attachSysMods(div);
 		
 	return div;
 }
+
+
+
 
 Weapon.prototype.updatesysDiv = function(){
 	var dmg = this.getDmgString();
@@ -2291,7 +2304,7 @@ Weapon.prototype.updatesysDiv = function(){
 	.find(".shots").html(this.getShots()).end()
 	.find(".damage").html(dmg).end()
 
-	this.attachDetailsMods(ele);
+	this.attachSysMods(ele);
 }
 
 Weapon.prototype.getAccuracyLoss = function(dist){		
@@ -2409,7 +2422,7 @@ Warhead.prototype.getSysDiv = function(){
 			.append($("<tr>")
 				.append($("<th>").html(this.display).attr("colSpan", 2)))
 			.append($("<tr>")
-				.append($("<td>").html("Firing Mode").css("width", "50%"))
+				.append($("<td>").html("Firing Mode").css("width", "60%"))
 				.append($("<td>").html(this.fireMode)))
 			.append($("<tr>")
 				.append($("<td>").html("Damage Type"))
@@ -2973,9 +2986,7 @@ Dual.prototype.getSysDiv = function(){
 	var d = this.getActiveSystem().getSysDiv();
 	var b = ($(d).find("tbody").first())
 
-	//b.prepend($("<tr>").append($("<td>").attr("colSpan", 2).html("Active Mode")));
-
-	b.prepend($("<tr>").append($("<td>").attr("colSpan", 2)));
+	b.prepend($("<tr>").css("height", 7).append($("<td>").attr("colSpan", 2)));
 	for (var i = 0; i < this.weapons.length; i++){
 		b.prepend($("<tr>").append($("<td>").attr("colSpan", 2).html("Mode: " + this.weapons[i].display)));
 	}
@@ -3933,7 +3944,7 @@ Area.prototype.getSysDiv = function(){
 	
 	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
 	$(table).append($("<tr>").append($("<td>").html("Firing Mode").css("width", "60%")).append($("<td>").html(this.fireMode)));
-	$(table).append($("<tr>").append($("<td>").html("Damage Type").css("width", "60%")).append($("<td>").html(this.dmgType)));
+	$(table).append($("<tr>").append($("<td>").html("Damage Type")).append($("<td>").html(this.dmgType)));
 
 
 	if (game.getUnit(this.parentId).ship){
@@ -3958,15 +3969,10 @@ Area.prototype.getSysDiv = function(){
 
 	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDmgString())));
 
-	if (this.notes.length){
-		$(table).append($("<tr>").addClass("notesHeader").css("border-top", "2px solid white").append($("<th>").html("Notes").attr("colSpan", 2)));
-		for (var i = 0; i < this.notes.length; i++){
-			$(table).append($("<tr>").append($("<td>").addClass("notesEntry").html(this.notes[i]).attr("colSpan", 2)));
-		}
-	}
 
 	div.appendChild(table);
-	this.attachDetailsMods(div);
+	this.attachSysNotes(div);
+	this.attachSysMods(div);
 		
 	return div;
 }
@@ -4590,7 +4596,7 @@ Hangar.prototype.getSysDiv = function(){
 			.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.getMount())))
 			.append($("<tr>").append($("<td>").html("Capacity")).append($("<td>").html("up to " + this.capacity + " units")))
 			.append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html(this.getLaunchRate() + " each " + this.reload + " turns"))))
-	this.attachDetailsMods(div);
+	this.attachSysMods(div);
 		
 	return div;
 }

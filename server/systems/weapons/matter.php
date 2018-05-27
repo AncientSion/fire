@@ -42,7 +42,7 @@ class HeavyRailGun extends Matter {
 	public $minDmg = 64;
 	public $maxDmg = 64;
 	public $accDecay = 8;
-	public $shots = 12;
+	public $shots = 2;
 	public $animColor = "grey";
 	public $projSize = 4;
 	public $projSpeed = 10;

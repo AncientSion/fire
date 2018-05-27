@@ -370,7 +370,7 @@
 				<table id="crewTable">
 				</table>
 				<table style="margin:auto; width: 220px; margin-top: 10px">
-					<tr><td class="buttonTD" onclick='game.ships[0].doConfirmSystemLoadout()'>Confirm Training</td></tr>
+					<tr><td><input type="button" value="Close" onclick='$(this).parent().parent().parent().parent().parent().toggleClass("disabled");'></td></tr>
 				</table>
 			</div>
 	</body>

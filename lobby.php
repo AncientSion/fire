@@ -141,7 +141,7 @@ if (isset($_SESSION["userid"])){
 					$status = $players[$i]["status"];
 					$style = "";
 					if ($status == "ready"){$style = "background-color: green'";
-					} else $style = "background-color: yellow; color: black'";
+					} else $style = "background-color: #ffeb3e; color: black'";
 
 					$openGamesElement .= "<td style='".$style.">".$status."</td>";
 				}
@@ -298,7 +298,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 <script>
 	$(document).ready(function(){
 
-		$(".chatWrapper").css("position", "relative").css("display", "inline-block").css("width", 700).css("margin-left", 100).css("margin-top", 20).find(".chatBox").scrollTop(function(){return this.scrollHeight}).end();
+		$(".chatWrapper").css("position", "relative").css("width", 700).css("margin", "auto").css("margin-top", 20).find(".chatBox").scrollTop(function(){return this.scrollHeight}).end();
 		
 		var checkChat = setInterval(
 			function(){ajax.checkChat();},

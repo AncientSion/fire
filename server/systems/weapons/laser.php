@@ -213,7 +213,7 @@ class SuperHeavyLaser extends HeavyLaser {
 class NeutronLaser extends Laser {
 	public $name = "NeutronLaser";
 	public $display = "Neutron Laser";
-	public $animColor = "yellow";
+	public $animColor = "#ffeb3e";
 	public static $prio = 0;
 	public $beamWidth = 2;
 	public $minDmg = 95;
@@ -265,7 +265,7 @@ class NeutronAccelerator extends Laser {
 	public $name = "NeutronAccelerator";
 	public $display = "Neutron Accelerator";
 	public $rakeTime = 50;
-	public $animColor = "yellow";
+	public $animColor = "#ffeb3e";
 	public $beamWidth = 2;
 	public static $prio = 0;
 	public $minDmg = 45;

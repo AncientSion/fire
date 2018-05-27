@@ -30,13 +30,15 @@ if (isset($_SESSION["userid"])){
 
 	$element = "<table class='gameSetupStatus'";
 	$element .= "<tr>";
-	$element .= "<th colSpan=2 style='font-size: 20px; border: 2px solid white'>".$game["name"]."</th>";
+	$element .= "<th colSpan=2 style='font-size: 22px;''>".$game["name"]."</th>";
 	$element .= "</tr>";
 	$element .= "<tr>";
-	$element .= "<th colSpan=2 style='font-size: 20px; border: 2px solid white'>".$game["pv"]." PV + ".$game["reinforce"]." PV @ Turn ".$game["reinforceTurn"]."</th>";
+	$element .= "<th colSpan=2 style='font-size: 16px;'>".$game["pv"]." PV + ".$game["reinforce"]." PV @ Turn ".$game["reinforceTurn"]."</th>";
 	$element .= "</tr>";
 
-	$element .= "<tr>";
+	$element .= "<tr style='height: 20px;'><td colSpan=2></td></tr>";
+
+	$element .= "<tr style='border-bottom: 1px solid white'>";
 	$element .= "<th width='80%'>Player Name</th>";
 	$element .= "<th>Status</th>";
 	$element .= "</tr>";
@@ -56,25 +58,26 @@ if (isset($_SESSION["userid"])){
 					$joined = true;
 				}
 			}
-			$element .= "<tr>";
-			$element .= "<td style='border-bottom: 1px solid white; text-align: center'>".$player["username"]."</td>";
+			$element .= "<tr style='border-bottom: 1px solid white'>";
+			$element .= "<td style=text-align: center'>".$player["username"]."</td>";
 
 			$status = $player["status"];
 			if ($status == "ready"){
-				$element .= "<td style='color: black; background-color: lightGreen; border-bottom: 1px solid white; text-align: center'>".$status."</td>";
+				$element .= "<td style='color: black; background-color: lightGreen; text-align: center'>".$status."</td>";
 
 			}
 			else if ($status == "joined"){
-				$element .= "<td style='color: black; background-color: yellow; border-bottom: 1px solid white; text-align: center'>".$status."</td>";
+				$element .= "<td style='color: black; background-color: #ffeb3e; text-align: center'>".$status."</td>";
 			}
 
 			$element .= "</tr>";
 		}
 	}
+	$element .= "<tr style='height: 20px;'><td colSpan=2></td></tr>";
 
 	if ($ready){}
 	else if ($joined){$element .= "<tr><td colSpan=2><input type='button' value='Leave Game' onclick='leaveGame()'></td></tr>";}
-	else {$element .= "<tr><td colSpan=2><input onclick='joinGame()' value='Join Game'></td></tr>";}
+	else {$element .= "<tr><td colSpan=2><input type='button' onclick='joinGame()' value='Join Game'></td></tr>";}
 
 	$element .= "<tr><td colSpan=2><input type='button' onclick='window.goToLobby()'' value='Return to Lobby'></td></tr>";	
 
@@ -125,29 +128,37 @@ else {
 			</tr>
 		</table>
 
-		<table style="position: absolute; top: 10px; left: 450px">
+		<table id="fleetInfo">
 			<tr>
 				<td>
 					<div id="reinforceFaction" class="disabled"></div>
 					<div>
 						<table id="shipsBoughtTable">
 							<tr>
-								<th colSpan=2>
-									Current Fleet Selection
+								<th width=10%>
+								</th>
+								<th width=75%>
+								</th>
+								<th width=15%>
 								</th>
 							</tr>
 							<tr>
-								<th colSpan=2 id="focusGain" style="width:60px">
+								<th colSpan=3">
+									<span id="remPV">
+									</span>
 								</th>
 							</tr>
-							<tr class="buttonTD" onclick="game.tryConfirmFleet()">
-								<th colSpan=2>
-									<span>
-										Confirm Fleet Selection
-									</span>
-									<span id="remPV">
-										
-									</span>
+							<tr>
+								<th colSpan=3 id="focusGain">
+								</th>
+							</tr>
+							<tr style="height: 10px">
+								<th colSpan=3>
+								</th>
+							</tr>
+							<tr>
+								<th colSpan=3>
+									<input type="button" style="font-size: 20px" onclick="game.tryConfirmFleet()" value="Confirm Fleet Selection">
 								</th>
 							</tr>
 						</table>
@@ -180,7 +191,7 @@ else {
 			<table id="hangarTable">
 			</table>
 			<div class="header">
-				<div class="buttonTD disabled" onclick="game.ships[0].doConfirmSystemLoadout()">Confirm Loadout</div>
+				<input type="button" value="Confirm Loadout" onclick="game.ships[0].doConfirmSystemLoadout()">
 			</div>
 		</div>
 		<div id="weaponDiv" class="disabled">
@@ -189,9 +200,9 @@ else {
 			</div>
 			<table id="weaponTable">
 			</table>
-			<table style="margin:auto; width: 220px; margin-top: 10px">
-				<tr><td class="buttonTD disabled" onclick='game.ships[0].doConfirmSystemLoadout()'>Confirm Loadout</td></tr>
-			</table>
+			<div class="header">
+				<input type="button" value="Confirm Loadout" onclick="game.ships[0].doConfirmSystemLoadout()">
+			</div>
 		</div>
 		<div id="crewDiv" class="disabled">
 			<div class="header">
@@ -199,9 +210,9 @@ else {
 			</div>
 			<table id="crewTable">
 			</table>
-			<table style="margin:auto; width: 220px; margin-top: 10px">
-				<tr><td class="buttonTD" onclick='game.ships[0].doConfirmSystemLoadout()'>Confirm Training</td></tr>
-			</table>
+			<div class="header">
+				<input type="button" value="Confirm Training" onclick="game.ships[0].doConfirmSystemLoadout()">
+			</div>
 		</div>
 	</body>
 </html>
@@ -286,8 +297,8 @@ else {
 					game.shipsBought.push(game.ships[0]);
 					game.purchases++;
 
-					var tr = document.createElement("tr");
-					$(tr).data("purchaseId", game.shipsBought[game.shipsBought.length-1].purchaseId)
+					var tr = $("<tr>")
+						.data("purchaseId", game.shipsBought[game.shipsBought.length-1].purchaseId)
 						.hover(function(e){
 							$(this).toggleClass("highlight");
 						})
@@ -299,16 +310,13 @@ else {
 							e.preventDefault(); e.stopPropagation();
 							game.setAsCommand($(this));
 						})
+						.append($("<td>").html(""))
+						.append($("<td>").html(game.getRowHeader(game.shipsBought[game.shipsBought.length-1])))
+						.append($("<td>").html(game.shipsBought[game.shipsBought.length-1].totalCost))
 
-					var td = tr.insertCell(-1)
-						td.innerHTML = game.getRowHeader(game.shipsBought[game.shipsBought.length-1]);
-					var td = tr.insertCell(-1)
-						td.innerHTML = game.shipsBought[game.shipsBought.length-1].totalCost;
-					tr.appendChild(td);
 					game.shipsBought[game.shipsBought.length-1].tr = tr;
 
-					$("#shipsBoughtTable tr").eq(-2).before(tr);
-					//$("#shipsBoughtTable").find("tr:last").eq(-2).before(tr);
+					$("#shipsBoughtTable tr").eq(-4).before(tr);
 
 
 					$("#remPoints").html()
@@ -332,7 +340,8 @@ else {
 							break;
 						}
 					}
-					game.setRemPV()
+					game.setRemPV();
+					game.setFocusGain();
 					$("#popupWrapper").hide();
 				},
 
@@ -341,11 +350,11 @@ else {
 						popup("Please add units to your fleet.")
 					}
 					else if (!game.hasCommandUnit()){
-						popup("Please select a unit to serve as the flagship for the fleet.</br>(Left click one of your purchased units)");
+						popup("Please select a unit to serve as Fleet Command.</br>(Left click one of your purchased units)");
 					} else if (!game.hasReinforceFaction()){			
 						popup("Please select a faction to receive reinforcements from.</br>(Right-click on the faction names on the left)");
 					}
-					else popup("Are you absolutly sure you want to confirm your fleet setup ?</br>(Right click this to cancel)</br></br><div class='buttonTD' onclick='game.doConfirmFleet()'>Yes, im sure</div>");
+					else popup("Are you absolutly sure you want to confirm your fleet setup ?</br>(Right click this to cancel)</br></br><input type='button' onclick='game.doConfirmFleet()' value='Yes, im sure'>");
 				},
 
 				doConfirmFleet: function(){
@@ -382,8 +391,8 @@ else {
 					for (let i = 0; i < game.shipsBought.length; i++){
 						if (game.shipsBought[i].purchaseId == $(ele).data("purchaseId")){
 							game.shipsBought[i].command = 1;
-							$(game.shipsBought[i].tr).find("td").first().html("<span class='yellow'>CMD  </span>" + this.getRowHeader(game.shipsBought[i]))
-						} else $(game.shipsBought[i].tr).find("td").first().html(this.getRowHeader(game.shipsBought[i]));
+							$(game.shipsBought[i].tr).find("td").first().html("<span class='yellow'>CMD</span>");
+						} else $(game.shipsBought[i].tr).find("td").first().empty();
 					}
 
 					this.setFocusGain();
@@ -397,12 +406,16 @@ else {
 				},
 
 				setRemPV: function(){
-					$("#remPV").html(" (" + (window.maxPoints - this.getFleetCost()) + " left)");
+					$("#remPV").html(" (" + (window.maxPoints - this.getFleetCost()) + " points left)");
 				},
 
 				setFocusGain: function(){
-					var gain = this.getCommandUnit().getFocusGain()
-					$("#focusGain").html("Focus per Turn: " + gain + " %  / " + window.maxPoints / 100 * gain);
+					var unit = this.getCommandUnit();
+					if (unit){
+						var gain = this.getCommandUnit().getFocusGain()
+						$("#focusGain").html("Focus per Turn: " + gain + " %  / " + window.maxPoints / 100 * gain);
+					}
+					else $("#focusGain").html("");
 				},
 
 				getSampleSubUnit: function(name){
@@ -499,24 +512,11 @@ else {
 								.attr("colSpan", 2)
 								.append($("<input>")
 									.attr("type", "button")
-									.attr("value", "Confirm Setup")
+									.attr("value", "Confirm Unit Setup")
 									.click(function(){
 										game.tryConfirmPurchase();
 									}))))
 
-
-
-
-					/*
-					var tr = table.insertRow(-1);
-					var button = tr.insertCell(-1);
-						button.innerHTML = "Confirm Setup";
-						button.className = "buttonTD";
-						button.colSpan = 2;
-						$(button).click(function(){
-							game.tryConfirmPurchase();
-						});
-					*/
 				},
 
 
@@ -532,11 +532,14 @@ else {
 								.append($("<td>").html(data[i]["ep"]))
 								.append($("<td>").html(data[i]["ew"]))
 								.append($("<td>").html(data[i]["value"]))
-								.append($("<td>").html("Select")
-									.data("name", data[i]["name"])
-									.data("value", data[i]["value"])
-									.hover(function(){$(this).toggleClass("selectionHighlight");})
-									.click(function(){requestSingleUnitData($(this).data("name"));})
+								.append($("<td>")
+									.append($("<input>")
+										.attr("type", "button")
+										.attr("value", "Select")
+										.data("name", data[i]["name"])
+										.data("value", data[i]["value"])
+										.click(function(){requestSingleUnitData($(this).data("name"));})
+									)
 								)
 							)
 						}
@@ -548,17 +551,19 @@ else {
 							.hover(function(){
 								$(this).toggleClass("highlight");
 							})
-							.css("border", "1px solid")
+							.css("border-top", "1px solid white")
+							.css("border-bottom", "1px solid white")
 							.append($("<td>").html("Squadron"))
 							.append($("<td>").html("Can group units worth up to </br>10 formation points (FP)</br> into a singular Squadron")
 								.attr("colSpan", 4))
-							.append($("<td>").html("Select")
-								.data("name", "Squadron")
-								.data("value", 0)
-								.hover(function(){
-									$(this).toggleClass("selectionHighlight");
-								})
-								.click(function(){requestSingleUnitData($(this).data("name"));})
+							.append($("<td>")
+								.append($("<input>")
+									.attr("type", "button")
+									.attr("value", "Select")
+									.data("name", "Squadron")
+									.data("value", 0)
+									.click(function(){requestSingleUnitData($(this).data("name"));})
+								)
 							)
 					)
 
@@ -573,12 +578,15 @@ else {
 								.append($("<td>").html(data[i]["ep"]))
 								.append($("<td>").html(data[i]["ew"]))
 								.append($("<td>").html(data[i]["value"]))
-								.append($("<td>").html("Select")
-									.data("name", data[i]["name"])
-									.data("value", data[i]["value"])
-									.data("space", data[i]["space"])
-									.hover(function(){$(this).toggleClass("selectionHighlight");})
-									.click(function(){requestSquadUnit($(this))})
+								.append($("<td>")
+									.append($("<input>")
+										.attr("type", "button")
+										.attr("value", "Select")
+										.data("name", data[i]["name"])
+										.data("value", data[i]["value"])
+										.data("space", data[i]["space"])
+										.click(function(){requestSquadUnit($(this))})
+									)
 								)
 							)
 						}
@@ -645,7 +653,7 @@ else {
 						.append(
 							$("<td>")
 							.css("fontSize", 20)
-							.css("width", "40%")
+							.css("width", "50%")
 							.html(factions[i])
 						)
 						.append(
@@ -743,7 +751,7 @@ else {
 
 		$("#game").show();
 		$(".shipDiv")
-			.css("left", "450px").css("top", "220px").removeClass("disabled")
+			.css("left", "450px").css("top", "240px").removeClass("disabled")
 			.find(".structContainer").show();
 
 		addNamingDiv(game.ships[0].element);
@@ -760,7 +768,7 @@ else {
 				.append($("<tr>")
 					.append($("<td>").css("width", 60).html("Name: "))
 					.append($("<td>")
-						.append($("<input>").attr("type", "form").click(function(e){e.stopPropagation();})))))))
+						.append($("<input>").attr("type", "text").click(function(e){e.stopPropagation();})))))))
 	}
 
 	function addCostDiv(ele){

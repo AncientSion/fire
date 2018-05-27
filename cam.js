@@ -55,9 +55,17 @@ window.cam = {
 			this.z = 2;
 		}
 		else if (fire.dist > res.x / 2 || fire.dist > res.y){
-			this.z = Math.floor( (res.x / 2) / fire.dist * 10)/10;
+			this.z = Math.floor( (res.x / 2) / fire.dist * 15)/10;
 		}
 		else this.z = 1;
+
+		var origin = fire.shooter.getPlannedPos();
+		var target = fire.target.getPlannedPos();
+
+		var centerX = (target.x + origin.x) / 2;
+		var centerY = (target.x + origin.x) / 2;
+
+		this.setFocusToPos({x: centerX, y: centerY}); return;
 
 		if (fire.targetid == -1){this.setFocusToPos({x: fire.x, y: fire.y});}
 		else this.setFocusToPos(fire.target.getPlannedPos());

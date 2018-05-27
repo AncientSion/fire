@@ -1487,13 +1487,14 @@ Ship.prototype.attachLogEntry = function(html){
 Ship.prototype.createCritLogEntry = function(){
 	if (!this.ship){return false;}
 	
-	var html = "<td style='padding: 10px' colSpan=4><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is subject to critical effects.</td>" + "<td colSpan=5>";
+	var html = "<th style='padding: 10px' colSpan=4><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is subject to critical effects.</th><th colSpan=5>";
 	var expand = "";
 
 	for (let i = 0; i < this.primary.systems.length; i++){
 		expand += this.primary.systems[i].getCritLogString()
 	}
 	if (expand.length > 2){
+		expand += "</th>"
 		this.attachLogEntry(html + expand);
 		return true;
 	}
@@ -1633,9 +1634,7 @@ Ship.prototype.animateSelfJumpOut = function(){
 Ship.prototype.draw = function(){
 	if (!this.isReady){return;}
 
- 	if (this.doDraw){
- 		this.drawPositionMarker();
-	}
+ 	if (this.doDraw){this.drawPositionMarker();}
 
 	ctx.translate(this.drawX, this.drawY);
 	ctx.rotate(this.getDrawFacing() * Math.PI/180);
@@ -2245,8 +2244,8 @@ Ship.prototype.createBaseDiv = function(){
 		$(div).find(".structContainer").show();
 	}
 
-	$(this.addFocusDiv(div[0]))
-	$(this.addCommandDiv(div[0]))
+	$(this.addFocusDiv($(div[0])))
+	$(this.addCommandDiv($(div[0])))
 }
 
 Ship.prototype.addFocusDiv = function(div){
@@ -2254,7 +2253,7 @@ Ship.prototype.addFocusDiv = function(div){
 	if (this.isDestroyed()){return;}
 	if (game.phase == -2){return;}
 
-	$(div).append(
+	div.append(
 		$("<div>")
 		.addClass("focusContainer")
 		.append(
@@ -2274,6 +2273,7 @@ Ship.prototype.addFocusDiv = function(div){
 		)
 	)
 
+	if (game.phase != 3){div.find(".focusContainer input").addClass("inactive")}
 	if (this.focus){$(this.element).find(".focusContainer .focusEntry").show();}
 	else $(this.element).find(".focusContainer input").show();
 }
@@ -2282,7 +2282,7 @@ Ship.prototype.addCommandDiv = function(div){
 	if (this.isJumpingOut()){return;}
 	if (this.isDestroyed()){return;}
 	if (!this.friendly){return;}
-	if (game.phase == -2){return;}
+	if (game.phase != 3){return;}
 
 	$(div).append(
 		$("<div>")
@@ -2323,14 +2323,22 @@ Ship.prototype.getUnitName = function(){
 
 Ship.prototype.setCommand = function(){
 	console.log("setCommand");
-	return;
-	if (!this.friendly){return;}
-	if (this.isJumpingOut()){popup("This unit is jumping to hyperspace, it cant be issued focus."); return;}
-	if (!this.command){
-		this.focus = 1;
-		$(this.element).find(".focusContainer").find(".buttonTD").hide().end().find(".focusEntry").show();
-		game.setFocusInfo();
+
+	if (this.destroyed || this.isJumpingOut()){return;}
+
+	for (var i = 0; i < game.ships.length; i++){
+		if (!game.ships[i].friendly || game.ships[i].flight || game.ships[i].salvo){continue;}
+		game.ships[i].command = 0;
+		$(game.ships[i].element).find(".commandContainer")
+		.find("input").show().end()
+		.find(".commandEntry").hide().end();
 	}
+
+	this.command = 1;
+	$(this.element)
+	.find(".commandContainer")
+	.find("input").hide().end()
+	.find(".commandEntry").show();
 }
 
 Ship.prototype.unsetCommand = function(){
@@ -2349,9 +2357,9 @@ Ship.prototype.getFocusCost = function(){
 
 Ship.prototype.setFocus = function(){
 	if (!this.friendly){return;}
-	if (game.phase != 3){return;}
+	if (game.phase != 3){popup("Focus can only be issued in Phase 3 - Damage Control"); return;}
 	if (this.isJumpingOut()){popup("This unit is jumping to hyperspace, it cant be issued focus."); return;}
-	if (!this.canAffordFocus()){popup("You dont enough have ressources to focus this unit."); return;}
+	if (!this.canAffordFocus()){popup("You are lacking focus ressources for this action.</br>(Have: " + game.getPlayerStatus().curFocus + ", Need: " + this.cost+")"); return;}
 	if (!this.focus){
 		this.focus = 1;
 		$(this.element).find(".focusContainer").find(".buttonTD").hide().end().find(".focusEntry").show();
@@ -2891,7 +2899,7 @@ Ship.prototype.previewSetup = function(){
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			if (this.structures[i].systems[j].loadout){
-				$(this.structures[i].systems[j].element).addClass("bgYellow");
+				$(this.structures[i].systems[j].element).addClass("bgyellow");
 			}
 		}
 	}
@@ -4126,7 +4134,7 @@ Ship.prototype.hasBasicEW = function(){
 	return true;
 }
 
-Ship.prototype.doConfirmSystemLoadout = function(){
+Ship.prototype.aSystemLoadout = function(){
 	var system = this.getSystem(game.system);
 	if (system.launcher){system.setAmmo();}
 	system.select();
@@ -4163,25 +4171,31 @@ Ship.prototype.getSelfExplo = function(){
 
 		var base = {x: this.drawX, y: this.drawY};
 
-		var color = "#ff3d00";
+		var color = "red";
 		if (this.friendly){
-			color = "#27e627";
+			color = "green";
 		}
 
-		data.html += "<font color='" + color + "'>Unit #" + this.id + " " + this.getCallSign() + "</font> ";
-		if (this.getSystemByName("Reactor").destroyed){
-			data.html +=  " suffered critical reactor damage and was destroyed.";
+		if (this.command){
+			data.html += "<span class='yellow'>Command </span>";
 		}
-		else data.html +=  " suffered catastrophic hull damage and was destroyed.";
+
+		data.html += "<span class='" + color + "'>" + this.name + " #" + this.id + " " + this.getCallSign() + "</span>";
+		if (this.getSystemByName("Reactor").destroyed){
+			data.html += "<span> suffered critical reactor damage and was destroyed.";
+		}
+		else data.html += "<span> suffered catastrophic hull damage and was destroyed.";
+
+		data.html += "</span>"
 
 		var explos = {u: this, anims: []};
 
-		var amount = 20 + (this.traverse * 8);
+		var amount = 26 + (this.traverse * 10);
 
 		for (var j = 0; j < amount; j++){
 			explos.anims.push({
-				t: [0 - j-40, 100],
-				s: range (5, 40),
+				t: [0 - (j*2)-40, 60 + range (-20, 20)],
+				s: range (5, this.size*0.8),
 				x: base.x + (range(-1, 1) * range(0, this.size / 3)),
 				y: base.y + (range(-1, 1) * range(0, this.size / 3)),
 			})

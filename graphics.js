@@ -490,7 +490,7 @@ function drawUnitExplo(x, y, s, now, max){
 	fxCtx.translate(cam.o.x, cam.o.y);
 	fxCtx.scale(cam.z, cam.z)
 
-	fxCtx.globalAlpha = 1.5 - (now/max);
+	fxCtx.globalAlpha = 1.3 - (now/max);
 
 	fxCtx.beginPath(); fxCtx.arc(x, y, sin, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = "rgb(255,225,75)"; fxCtx.fill();
 	fxCtx.beginPath(); fxCtx.arc(x, y, sin/3*2, 0, 2*Math.PI); fxCtx.closePath();	fxCtx.fillStyle = "rgb(255,200,0)"; fxCtx.fill();

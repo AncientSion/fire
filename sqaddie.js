@@ -40,15 +40,15 @@ Squaddie.prototype.hover = function(e){
 
 	if (this.highlight){
 		this.highlight = false;
-		this.hideInfoDiv(e);
+		this.hideSysDiv(e);
 	}
 	else {
 		this.highlight = true;
-		this.showInfoDiv(e);
+		this.showSysDiv(e);
 	}
 }
 
-Squaddie.prototype.showInfoDiv = function(e){
+Squaddie.prototype.showSysDiv = function(e){
 	$(document.body).append(
 		$(this.getSysDiv())
 			.css("left", e.clientX - 90)
@@ -56,7 +56,7 @@ Squaddie.prototype.showInfoDiv = function(e){
 		)
 }
 
-Squaddie.prototype.hideInfoDiv = function(){
+Squaddie.prototype.hideSysDiv = function(){
 	$("#sysDiv").remove();
 }
 
@@ -415,7 +415,7 @@ Squaddie.prototype.armourIn = function(e){
 }
 
 Squaddie.prototype.armourOut = function(e){
-	Structure.prototype.hideInfoDiv.call(this, e);
+	Structure.prototype.hideSysDiv.call(this, e);
 	if (game.phase != -1 || !this.effiency || game.getUnit(this.parentId).userid != game.userid){return;}
 	$(this.armourElement).find(".boostDiv").hide();
 }
@@ -485,7 +485,7 @@ Squaddie.prototype.previewSetup = function(){
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			if (this.structures[i].systems[j].loadout){
-				$(this.structures[i].systems[j].element).addClass("bgYellow");
+				$(this.structures[i].systems[j].element).addClass("bgyellow");
 			}
 		}
 	}

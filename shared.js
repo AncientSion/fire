@@ -322,11 +322,11 @@ function redirect(url){
 }
 
 function popup(text){
-    $("#popupWrapper").show().find("#popupText").html(text);
+    $("#popupWrapper").show().find("#popupText").html("<div class='popupHeader'>" + text + "</div");
 }
 
 function instruct(text){
-    $("#instructWrapper").show().find("#instructText").html(text);
+    $("#instructWrapper").show().find("#instructText").html("<div class='popupHeader'>" + text + "</div");
 }
 
 (function($) {

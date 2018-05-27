@@ -300,14 +300,14 @@ Structure.prototype.hover = function(e){
 	if (this.highlight){
 		this.highlight = false;
 		fxCtx.clearRect(0, 0, res.x, res.y);
-		this.hideInfoDiv();
+		this.hideSysDiv();
 		this.hideOptions();
 		p.highlightAllSelectedWeapons();
 	}
 	else {
 		this.highlight = true;
 		this.drawStructArc(p.getPlannedFacing(), p.rolled, p.getPlannedPos());
-		this.showInfoDiv(e);
+		this.showSysDiv(e);
 		this.showOptions();
 	}
 }
@@ -322,7 +322,7 @@ Structure.prototype.hideOptions = function(){
 	$(this.element).find(".boostDiv").hide();
 }
 
-Structure.prototype.showInfoDiv = function(e){
+Structure.prototype.showSysDiv = function(e){
 	$(document.body).append(
 		$(this.getSysDiv())
 			.css("left", e.clientX - 90)
@@ -330,7 +330,7 @@ Structure.prototype.showInfoDiv = function(e){
 		)
 }
 
-Structure.prototype.hideInfoDiv = function(e){
+Structure.prototype.hideSysDiv = function(e){
 	$("#sysDiv").remove();
 }
 
@@ -544,11 +544,11 @@ Primary.prototype.hover = function(e){
 	}
 	else {
 		this.highlight = true;
-		this.showInfoDiv(e);
+		this.showSysDiv(e);
 	}
 }	
 
-Primary.prototype.showInfoDiv = function(e){
+Primary.prototype.showSysDiv = function(e){
 	$(document.body).append(
 		$(this.getSysDiv())
 			.css("left", e.clientX - 90)
