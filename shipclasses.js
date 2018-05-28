@@ -2359,7 +2359,7 @@ Ship.prototype.setFocus = function(){
 	if (!this.friendly){return;}
 	if (game.phase != 3){popup("Focus can only be issued in Phase 3 - Damage Control"); return;}
 	if (this.isJumpingOut()){popup("This unit is jumping to hyperspace, it cant be issued focus."); return;}
-	if (!this.canAffordFocus()){popup("You are lacking focus ressources for this action.</br>(Have: " + game.getPlayerStatus().curFocus + ", Need: " + this.cost+")"); return;}
+	if (!this.canAffordFocus()){popup("You are lacking focus ressources for this action.</br>(Have: " + (game.getCurFocus() - game.getFocusSpending()) + ", Need: " + this.getFocusCost() +")"); return;}
 	if (!this.focus){
 		this.focus = 1;
 		$(this.element).find(".focusContainer").find(".buttonTD").hide().end().find(".focusEntry").show();
@@ -4190,11 +4190,11 @@ Ship.prototype.getSelfExplo = function(){
 
 		var explos = {u: this, anims: []};
 
-		var amount = 26 + (this.traverse * 10);
+		var amount = 22 + (this.traverse * 8);
 
 		for (var j = 0; j < amount; j++){
 			explos.anims.push({
-				t: [0 - (j*2)-40, 60 + range (-20, 20)],
+				t: [0 - (j*1)-40, 60 + range (-20, 20)],
 				s: range (5, this.size*0.8),
 				x: base.x + (range(-1, 1) * range(0, this.size / 3)),
 				y: base.y + (range(-1, 1) * range(0, this.size / 3)),

@@ -401,6 +401,7 @@ window.ajax = {
 				}
 			}
 		}
+		return;
 		$.ajax({
 			type: "POST",
 			url: "postGameData.php",

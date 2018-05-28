@@ -67,7 +67,7 @@ function initChat(){
 					$(this).data("s", 1).css("width", 600);
 				}
 				else if ($(this).data("s") == 1){
-					$(this).data("s", 2).css("width", Math.min(res.x - 50, 1000)).css("top", res.y - 325)
+					$(this).data("s", 2).css("width", Math.min(res.x - 50, 1000)).css("top", res.y - 330)
 						.find(".chatBox").addClass("widen");
 				}
 				else {
