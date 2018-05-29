@@ -2283,6 +2283,8 @@ Ship.prototype.addCommandDiv = function(div){
 	if (this.isDestroyed()){return;}
 	if (!this.friendly){return;}
 	if (game.phase != 3){return;}
+	if (!game.hasNoCommandUnit()){return;}
+	if (!game.canSetNewCommandUnit()){return;}
 
 	$(div).append(
 		$("<div>")
@@ -2290,7 +2292,7 @@ Ship.prototype.addCommandDiv = function(div){
 		.append(
 			$("<input>")
 			.attr("type", "button")
-			.attr("value", "Assign as Fleet Command")
+			.attr("value", "Assign Fleet Command ( +" + (game.settings.pv / 100 * (this.baseFocusRate + this.modFocusRate)) + " / Turn)")
 			.hide()
 			.click(function(){
 				game.getUnit($(this).parent().parent().data("shipId")).setCommand();
@@ -2302,7 +2304,7 @@ Ship.prototype.addCommandDiv = function(div){
 			.addClass("commandEntry")
 			.hide()
 			.click(function(){
-				game.getUnit($(this).parent().parent().data("shipId")).unsetCommand();
+			//	game.getUnit($(this).parent().parent().data("shipId")).unsetCommand();
 			})
 		)
 	)
@@ -2329,16 +2331,19 @@ Ship.prototype.setCommand = function(){
 	for (var i = 0; i < game.ships.length; i++){
 		if (!game.ships[i].friendly || game.ships[i].flight || game.ships[i].salvo){continue;}
 		game.ships[i].command = 0;
+		game.commandChange.old = game.ships[i].id;
 		$(game.ships[i].element).find(".commandContainer")
 		.find("input").show().end()
 		.find(".commandEntry").hide().end();
 	}
 
 	this.command = 1;
+	game.commandChange.new = this.id;
 	$(this.element)
-	.find(".commandContainer")
-	.find("input").hide().end()
-	.find(".commandEntry").show();
+		.find(".commandContainer")
+		.find("input").hide().end()
+		.find(".commandEntry").show();
+	game.setFocusInfo()
 }
 
 Ship.prototype.unsetCommand = function(){
@@ -2359,11 +2364,11 @@ Ship.prototype.setFocus = function(){
 	if (!this.friendly){return;}
 	if (game.phase != 3){popup("Focus can only be issued in Phase 3 - Damage Control"); return;}
 	if (this.isJumpingOut()){popup("This unit is jumping to hyperspace, it cant be issued focus."); return;}
-	if (!this.canAffordFocus()){popup("You are lacking focus ressources for this action.</br>(Have: " + (game.getCurFocus() - game.getFocusSpending()) + ", Need: " + this.getFocusCost() +")"); return;}
+	if (!this.canAffordFocus()){popup("You are lacking focus ressources for this action.</br>(Have: " + (game.getRemFocus() - game.getFocusSpending()) + ", Need: " + this.getFocusCost() +")"); return;}
 	if (!this.focus){
 		this.focus = 1;
 		$(this.element).find(".focusContainer").find(".buttonTD").hide().end().find(".focusEntry").show();
-		game.setFocusInfo();
+		//game.setFocusInfo();
 	}
 }
 
@@ -2371,12 +2376,12 @@ Ship.prototype.unsetFocus = function(){
 	if (this.focus){
 		this.focus = 0;
 		$(this.element).find(".focusContainer").find(".buttonTD").show().end().find(".focusEntry").hide();
-		game.setFocusInfo();
+		//game.setFocusInfo();
 	}
 }
 
 Ship.prototype.canAffordFocus = function(){
-	if (game.getCurFocus() - game.getFocusSpending() - this.getFocusCost() >= 0){
+	if (game.getRemFocus() - game.getFocusSpending() - this.getFocusCost() >= 0){
 		return true;
 	} return false;
 }

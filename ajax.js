@@ -401,7 +401,7 @@ window.ajax = {
 				}
 			}
 		}
-		return;
+		//return;
 		$.ajax({
 			type: "POST",
 			url: "postGameData.php",
@@ -413,8 +413,9 @@ window.ajax = {
 				turn: game.turn,
 				phase: game.phase,
 				jumpout: jumpout,
-				focus: focus
-				},
+				focus: focus,
+				commandChange: game.commandChange
+			},
 			success: callback,
 			error: ajax.error,
 		});

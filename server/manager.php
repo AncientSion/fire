@@ -28,6 +28,8 @@
 		public $userindex = 0;
 		public $flights = array();
 
+		public $settings = array();
+
 		public $weapons = array();
 
 		public $const = array(
@@ -95,7 +97,8 @@
 			"const" => $this->const,
 			"userid" => $this->userid,
 			"wave" => $this->wave,
-			"playerstatus" => $this->getPlayerStatus()
+			"playerstatus" => $this->getPlayerStatus(),
+			"settings" => $this->settings
 		);
 
 		Debug::close();
@@ -136,6 +139,7 @@
 		$gd = DBManager::app()->getGameDetails($this->gameid);
 		if (!$gd){return;}
 
+		$this->settings = $gd;
 		$this->name = $gd["name"];
 		$this->pv = $gd["pv"];
 		$this->reinforce = $gd["reinforce"];
@@ -1471,7 +1475,7 @@
 
 		$this->phase = 3;
 
-		DBManager::app()->resetFocusState($this->ships);
+		DBManager::app()->reupdateFocusState($this->ships);
 		DBManager::app()->setGameTurnPhase($this->gameid, $this->turn, $this->phase);
 		$this->updatePlayerStatus("waiting");
 		return true;

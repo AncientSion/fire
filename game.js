@@ -1,4 +1,5 @@
 function Game(data){
+	this.settings = data.settings;
 	this.id = data.id;
 	this.name = data.name;
 	this.status = data.status;
@@ -50,6 +51,7 @@ function Game(data){
 	this.arcRange = 1200;
 	this.ui = {shortInfo: $("#shortInfo"), doShorten: $("#doShorten"), turnButton: $("#turnButton"), logWrapper: $("#combatlogWrapper")};
 	this.animData = {jump: 60};
+	this.commandChange = {old: 0, new: 0}
 
 	this.hasSnapCenterline = function(shooter, shooterAngle, target){
 		if (game.phase > 0){
@@ -633,19 +635,19 @@ function Game(data){
 	}
 	
 	this.handleDmgControlWarnings = function(){
-		var hasNoCommand = 1;
-
-		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].userid != this.userid){continue;}
-			if (this.ships[i].status == "jumpOut" || this.ships[i].destroyed){continue;}
-			if (this.ships[i].command){
-				hasNoCommand = 0; break;
-			}
-		}
-
-		if (hasNoCommand){
+		var hasCommand = this.userHasCommandUnit(this.getPlayerStatus().userid);
+		if (!hasCommand){
 			popup("Your fleet is lacking a Command unit.</br>Please select a unit to act as Fleet Command.");
 			return true;
+		}
+		return false;
+	}
+
+	this.userHasCommandUnit = function(userid){
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].userid != userid){continue;}
+			if (this.ships[i].status == "jumpOut" || this.ships[i].isDestroyed()){continue;}
+			if (this.ships[i].command){return true;}
 		}
 		return false;
 	}
@@ -1086,6 +1088,7 @@ function Game(data){
 
 		this.createCritLogEntries();
 		this.createMoraleLogEntries();
+		this.createEndEntry("Done");
 
 		$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 	}
@@ -1108,6 +1111,12 @@ function Game(data){
 		for (let i = 0; i < this.ships.length; i++){
 			this.ships[i].createMoraleLogEntry();
 		}
+	}
+
+	this.createEndEntry = function(html){
+		var target = $("#combatLog").find("tbody");
+			target.append($("<tr>")
+				.append($("<td>").attr("colSpan", 9).html(html)));
 	}
 	
 	this.initPhase = function(n){
@@ -3438,18 +3447,61 @@ Game.prototype.setGameInfo = function(){
 }
 
 Game.prototype.setFocusInfo = function(){
-	//$("#upperGUI").find("#overview").find(".focusInfoA").html(game.getFocusInfoA())
-	$("#upperGUI").find("#overview").find(".focusInfoB").html(game.getFocusInfoB())
+	for (let i = 0; i < this.playerstatus.length; i++){
+		var html = "<span class='yellow'>" + this.getUserCurFocus(i) + "</span> + " + this.getUserFocusGain(i) + " / turn, max: " + this.getUserMaxFocus(i);
+		$("#upperGUI").find("#overview").find(".focusInfo" + i).html(html);
+	}
 }
 
-Game.prototype.getFocusInfoA = function(){
-	var status = this.getPlayerStatus();
-	return "<span class='yellow'>" + status.curFocus + "</span> + " + status.gainFocus + " / turn, max: " + status.maxFocus;
+Game.prototype.getRemFocus = function(){
+	for (let i = 0; i < this.playerstatus.length; i++){
+		if (this.playerstatus[i].userid == game.userid){
+			return this.getUserCurFocus(i);
+		}
+	}
+	return 0;
 }
 
-Game.prototype.getFocusInfoB = function(){
-	var status = this.getPlayerStatus();
-	return "Estimated spending: <span class='yellow'>" + this.getFocusSpending() + "</span>";
+Game.prototype.userHasNoCommand = function(userid){
+	for (var i = 0; i < this.ships.length; i++){
+		if (this.ships[i].userid != userid){continue;}
+		if (this.ships[i].command && this.ships[i].isDestroyed()){return true;}
+	}
+	return false;
+}
+
+Game.prototype.getCommandUnit = function(userid){
+	for (var i = 0; i < this.ships.length; i++){
+		if (this.ships[i].userid != userid){continue;}
+		if (this.ships[i].command){return this.ships[i];}
+	}
+	return false;
+}
+
+Game.prototype.getUserCurFocus = function(i){
+	if (this.userHasNoCommand(this.playerstatus[i].userid)){return 0;}
+	else if (this.playerstatus[i].userid == this.userid && this.commandChange.new){
+		return 0;
+	}
+	return this.playerstatus[i].curFocus;
+}
+
+Game.prototype.getUserFocusGain = function(i){
+	if (this.userHasNoCommand(this.playerstatus[i].userid)){return 0;}
+	else if (this.playerstatus[i].userid == this.userid && this.commandChange.new){
+		var cmd = this.getUnit(this.commandChange.new);
+		return this.settings.pv / 100 * (cmd.baseFocusRate + cmd.modFocusRate);
+	}
+	return this.playerstatus[i].gainFocus;
+}
+
+Game.prototype.getUserMaxFocus = function(i){
+	if (this.userHasNoCommand(this.playerstatus[i].userid)){return 0;}
+	if (this.playerstatus[i].userid == this.userid && this.commandChange.new){
+		var cmd = this.getUnit(this.commandChange.new);
+		return this.getUserFocusGain(i) * 4;
+	}
+	return this.playerstatus[i].maxFocus;
 }
 
 Game.prototype.showFocusInfo = function(){
@@ -3489,10 +3541,6 @@ Game.prototype.hideFocusInfo = function(){
 	$("#sysDiv").remove();
 }
 
-Game.prototype.getCurFocus = function(){
-	return this.getPlayerStatus().curFocus;
-}
-
 Game.prototype.getFocusSpending = function(){
 	var spend = 0;
 	for (let i = 0; i < this.ships.length; i++){
@@ -3521,34 +3569,27 @@ Game.prototype.addFocusInfo = function(){
 					.html("Focus Overview")))
 	
 	for (let i = 0; i < this.playerstatus.length; i++){
-		var status = this.playerstatus[i];
+		var string = "<span class='";
+		if (this.playerstatus[i].userid == this.userid){
+			string += "green'";
+		} else string += "red'";
+		string += ">" + this.playerstatus[i].username + "</span>";
 
 		tBody.append($("<tr>")
-			.append($("<td>")
-				.html(this.playerstatus[i].username))
+			.append($("<th>")
+				.html(string))
 			.append($("<td>")
 				.attr("colSpan", 2)
-				.html("<span class='yellow'>" + status.curFocus + "</span> + " + status.gainFocus + " / turn, max: " + status.maxFocus)))
+				.addClass("focusInfo" + i)))
 	}
-		tBody
-			.append($("<tr>")
-				.append($("<td>")
-					.css("height", 10)
-					.attr("colSpan", 3)))
 
-	/*
+	this.setFocusInfo()
 
-	.append($("<tr>")
-		.append($("<td>")
-			.addClass("focusInfoA")
-			.attr("colSpan", 3)
-			.html(this.getFocusInfoA())))
-	.append($("<tr>")
-		.append($("<td>")
-			.addClass("focusInfoB")
-			.attr("colSpan", 3)
-			.html(this.getFocusInfoB())))
-	*/
+	tBody
+		.append($("<tr>")
+			.append($("<td>")
+				.css("height", 10)
+				.attr("colSpan", 3)))
 }
 
 Game.prototype.setConfirmInfo = function(){
@@ -3628,7 +3669,6 @@ Game.prototype.create = function(data){
 
 	this.setPhaseSwitchDiv();
 	this.setGameInfo();
-	this.addFocusInfo();
 	this.setConfirmInfo();
 	window.username = this.getPlayerStatus().username;
 
@@ -3672,6 +3712,7 @@ Game.prototype.create = function(data){
 	if (game.phase != 2){this.checkUnitOffsetting();}
 
 
+	this.addFocusInfo();
 	this.initIncomingTable();
 	this.createReinforcementsTable();
 	this.initReinforceTable();
@@ -3702,4 +3743,20 @@ Game.prototype.getSampleSubUnit = function(name){
 	for (let i = 0; i < this.ballistics.length; i++){
 		if (this.ballistics[i].name == name){return this.ballistics[i];}
 	}
+}
+
+Game.prototype.hasNoCommandUnit = function(){
+	for (let i = 0; i < this.ships.length; i++){
+		if (!this.ships[i].friendly || this.ships[i].flight || this.ships[i].salvo){continue;}
+		if (this.ships[i].command && (this.ships[i].isDestroyed() || this.ships[i].isJumpingOut())){return true;}
+	}
+	return false;
+}
+
+Game.prototype.canSetNewCommandUnit = function(){
+	for (let i = 0; i < this.ships.length; i++){
+		if (!this.ships[i].friendly || this.ships[i].flight || this.ships[i].salvo || this.ships[i].isDestroyed()){continue;}
+		return true;
+	}
+	return false;
 }
