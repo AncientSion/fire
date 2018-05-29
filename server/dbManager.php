@@ -385,125 +385,93 @@
 			}
 
 			$sql = "UPDATE units SET command = 1 WHERE id = ".$id;
-			$this->connection->query($sql);
+			$this->query($sql);
 
-			$this->setFocusValues($userid, $gameid, $unit);
-		}
-
-		public function setFocusValues($userid, $gameid, $unit){
-			Debug::log("setFocusValues");
 
 			$gd = $this->getGameDetails($gameid);
+			$sql = "SELECT id FROM playerstatus WHERE userid = ".$userid." AND gameid = ".$gameid;
+			//Debug::log($sql);
+			$playerstatus = $this->query($sql);
+
+			/*foreach ($playerstatus as $state){
+				foreach ($state as $key => $value){
+					Debug::log($key."/".$value);
+				}
+			}*/
 
 			$baseGain = floor($gd["pv"] / 100 * $gd["focusMod"]);
 			$unitmod = $unit->baseFocusRate + $unit->modFocusRate;
 
 			$gainFocus = floor($baseGain / 10 * $unitmod);
-			$curFocus = 0;
-			$maxFocus = $gainFocus * 4;
 
+			$data = array(
+				"id" => $playerstatus[0]["id"],
+				"curFocus" => 0,
+				"gainFocus" => $gainFocus, 
+				"maxFocus" => $gainFocus * 4
+			);
 
-			if ($gd["turn"] < 1){
-				$curFocus = $gainFocus * 2;
-				$curFocus *= 2;
-			}
-
-			$sql = "UPDATE playerstatus SET maxFocus = ".$maxFocus.", gainFocus = ".$gainFocus.", curFocus = ".$curFocus." WHERE userid = ".$userid." AND gameid = ".$gameid;
-			Debug::log($sql);
-
-			$this->connection->query($sql);
+			$this->updateFocusValues(array($data));
 		}
 
-		public function updateCommandState($userid, $gameid, $old, $new){
-			Debug::log("updateCommandState user:".$user.", game ".$gameid." old: ".$old.", new: ".$new);
-			$stmt = $this->connection->prepare("
-				UPDATE units 
-				SET 
-					command = 0
-				WHERE
-					id = :id
-			");
-
-
-			$stmt->bindParam(":id", $old);
-			$stmt->execute();
+		public function updateCommandState($data){
+			Debug::log("updateCommandState:".$data["commandChange"]["new"].", ".$data["turn"]);
+			//$_POST["userid"], $_POST["gameid"], $_POST["commandChange"]["old"], $_POST["commandChange"]["new"
 
 			$stmt = $this->connection->prepare("
 				UPDATE units 
 				SET 
-					command = 1
+					command = :turn
 				WHERE
 					id = :id
 			");
 
-
-			$stmt->bindParam(":id", $new);
+			$stmt->bindValue(":id", $data["commandChange"]["new"]);
+			$stmt->bindValue(":turn", ($data["turn"]+1));
+			//Debug::log("executing");
 			$stmt->execute();
 
+			//Debug::log($stmt->errorCode());
 
-			$sql = "SELECT * FROM units where userid = ".$userid." AND gameid = ".$gameid." AND command = 1";
+			return;
+
+
+			$sql = "SELECT * FROM units where id = ".$id;
 			Debug::log($sql);
 			$result = $this->query($sql);
-
-			if (sizeof($result)){
-				Debug::log("in");
-				$unit = new $result[0]["name"]();
-				$this->setFocusValues($userid, $gameid, $unit);
-			}
 		}
 
-
-		public function setFocusPoints($userid, $gameid, $maxFocus, $gainFocus, $curFocus){
-			//Debug::log("setFocusPoints");
-
-			$stmt = $this->connection->prepare("
-				UPDATE playerstatus 
-				SET 
-					maxFocus = :maxFocus,
-					gainFocus = :gainFocus,
-					curFocus = :curFocus
-				WHERE
-					gameid = :gameid
-				AND
-					userid = :userid
-			");
-
-			$stmt->bindParam(":maxFocus", $maxFocus);
-			$stmt->bindParam(":gainFocus", $gainFocus);
-			$stmt->bindParam(":curFocus", $curFocus);
-			$stmt->bindParam(":gameid", $gameid);
-			$stmt->bindParam(":userid", $userid);
-
-			$stmt->execute();
-
-			if ($stmt->errorCode() == 0){
-				//Debug::log("game ".$gameid.", user ".$userid." --- adjusting to turn/phase/status ".$turn."/".$phase."/".$status);
-				return true;
-			} else return false;
-		}
-
-		public function updateFocusPoints($data){
-			//Debug::log("updateFocusPoints");
+		public function updateFocusValues($data){
+			Debug::log("updateFocusValues s: ".sizeof($data));
+			//Debug::log("curFocus: ".$data[0]["curFocus"]);
+			//Debug::log("gainFocus: ".$data[0]["gainFocus"]);
+			//Debug::log("maxFocus: ".$data[0]["maxFocus"]);
+			//Debug::log("id: ".$data[0]["id"]);
 			//var_export($data);
 
 			$stmt = $this->connection->prepare("
 				UPDATE playerstatus 
 				SET 
-					curFocus = :curFocus
+					curFocus = :curFocus,
+					gainFocus = :gainFocus,
+					maxFocus = :maxFocus
 				WHERE
 					id = :id
 			");
 
 			for ($i = 0; $i < sizeof($data); $i++){
-
-				$stmt->bindParam(":curFocus",  $data[$i]["curFocus"]);
+				//var_export($data[$i]);
+				$stmt->bindParam(":curFocus", $data[$i]["curFocus"]);
+				$stmt->bindParam(":gainFocus", $data[$i]["gainFocus"]);
+				$stmt->bindParam(":maxFocus", $data[$i]["maxFocus"]);
 				$stmt->bindParam(":id", $data[$i]["id"]);
 
 				$stmt->execute();
+				//Debug::log("executing");
 
 				if ($stmt->errorCode() == 0){
 					continue;
-				}
+				}// else Debug::log("error");
 			}
 			return true;
 		}
@@ -1097,7 +1065,7 @@
 		}
 
 		public function updateUnitStats($states, $turn, $phase){
-			Debug::log("updateUnitStats s:".sizeof($states)." ".$turn."/".$phase);
+			//Debug::log("updateUnitStats s:".sizeof($states)." ".$turn."/".$phase);
 			$stmt = $this->connection->prepare("
 				UPDATE units
 				SET x = :x,
@@ -1134,8 +1102,8 @@
 			return true;
 		}
 
-		public function reupdateFocusState($units){
-			Debug::log("reupdateFocusState s: ".sizeof($units));
+		public function resetFocuState($units){
+			Debug::log("resetFocuState s: ".sizeof($units));
 			$stmt = $this->connection->prepare("
 				UPDATE units
 				SET

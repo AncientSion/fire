@@ -244,6 +244,11 @@
 					if ($this->ships[$i]->userid == $this->userid){continue;}
 					$this->ships[$i]->hideFireOrders($this->turn, $this->phase);
 				} break;
+			case 3:
+				for ($i = 0; $i < sizeof($this->ships); $i++){
+					//if ($this->ships[$i]->userid == $this->userid){continue;}
+					if ($this->ships[$i]->command > $this->turn){$this->ships[$i]->command = 0;}
+				} break;
 			default: break;
 		}
 
@@ -465,10 +470,10 @@
 	}
 	
 	public function pickReinforcements(){
-		if ($this->turn != $this->wave-1){return;}
+		if ($this->turn != $this->wave){return;}
 		Debug::log("pickReinforcements");
 		$picks = array();
-		$eta = $this->gd["reinforceETA"];
+		$eta = $this->settings["reinforceETA"];
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			//Debug::log("player: ".$this->playerstatus[$i]["userid"]." has ".$this->playerstatus[$i]["value"]." available");
@@ -900,7 +905,7 @@
 	}
 
 	public function assembleEndStates(){
-		Debug::log("assembleEndStates");
+		//Debug::log("assembleEndStates");
 		$states = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			$states[] = $this->ships[$i]->getEndState($this->turn);
@@ -938,6 +943,7 @@
 		$this->resolveBallisticFireOrders();
 		$this->testCriticals();
 		$this->testMorale();
+		$this->checkForCommandKill();
 
 		$this->handleResolvedFireData();
 
@@ -948,6 +954,7 @@
 	
 	public function handleDamageControlPhase(){
 		$this->handleJumpOutActions();
+		$this->handleCommandTransfer();
 		return true;
 	}
 
@@ -956,29 +963,6 @@
 		$this->setUnitRollState();
 		$this->doFullDestroyedCheck();
 		$this->assembleEndStates();
-		$this->adjustFocusPoints();
-		$this->pickReinforcements();
-	}
-
-	public function adjustFocusPoints(){
-		$data = array();
-
-		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-			$curFocus = $this->playerstatus[$i]["curFocus"];
-			for ($j = 0; $j < sizeof($this->ships); $j++){
-				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
-				if ($this->ships[$j]->focus){$curFocus -= ceil($this->ships[$j]->cost);}
-			}
-
-			$gainFocus = $this->playerstatus[$i]["gainFocus"];
-
-			$data[] = array(
-				"id" => $this->playerstatus[$i]["id"],
-				"curFocus" => min($this->playerstatus[$i]["maxFocus"], $curFocus + $gainFocus)
-			);
-		}
-
-		DBManager::app()->updateFocusPoints($data);
 	}
 	
 	public function freeFlights(){
@@ -1026,7 +1010,7 @@
 	}
 
 	public function doFirstDestroyedCheck(){
-		Debug::log("doFirstDestroyedCheck");
+		//Debug::log("doFirstDestroyedCheck");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->salvo && sizeof($this->ships[$i]->structures[0]->systems[0]->fireOrders)){ // impact salvo
 				$this->ships[$i]->destroyed = true;
@@ -1041,7 +1025,7 @@
 	}
 
 	public function doSecondDestroyedCheck(){
-		Debug::log("doSecondDestroyedCheck");
+		//Debug::log("doSecondDestroyedCheck");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->destroyed){
 				for ($j = 0; $j < sizeof($this->ships); $j++){
@@ -1071,6 +1055,64 @@
 		$this->turn++;
 		$this->phase = -1;
 		DBManager::app()->setGameTurnPhase($this->gameid, $this->turn, $this->phase);
+
+		$this->addTurnStartFocusPoints();
+		$this->pickReinforcements();
+	}
+
+	public function addTurnStartFocusPoints(){
+		$data = array();
+
+		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+			$curFocus = $this->playerstatus[$i]["curFocus"];
+			for ($j = 0; $j < sizeof($this->ships); $j++){
+				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
+				if ($this->ships[$j]->focus){$curFocus -= ceil($this->ships[$j]->cost);}
+			}
+
+			$gainFocus = $this->playerstatus[$i]["gainFocus"];
+
+			$data[] = array(
+				"id" => $this->playerstatus[$i]["id"],
+				"curFocus" => min($this->playerstatus[$i]["maxFocus"], $curFocus + $gainFocus),
+				"gainFocus" => $this->playerstatus[$i]["gainFocus"], 
+				"maxFocus" => $this->playerstatus[$i]["maxFocus"]
+			);
+		}
+
+		if (sizeof($data)){DBManager::app()->updateFocusValues($data);}
+	}
+
+
+
+	public function handleCommandTransfer(){
+		Debug::log("handleCommandTransfer");	
+		$data = array();
+
+		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+			for ($j = 0; $j < sizeof($this->ships); $j++){
+				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
+				if ($this->ships[$j]->command <= $this->turn){continue;}
+
+				$baseGain = floor($this->settings["pv"] / 100 * $this->settings["focusMod"]);
+				$unitmod = $this->ships[$j]->baseFocusRate + $this->ships[$j]->modFocusRate;
+
+				$gainFocus = floor($baseGain / 10 * $unitmod);
+
+				$data[] = array(
+					"id" => $this->playerstatus[$i]["id"],
+					"curFocus" => 0,
+					"gainFocus" => $gainFocus, 
+					"maxFocus" => $gainFocus * 4
+				);
+
+				$this->playerstatus[$i]["curFocus"] = $data[sizeof($data)-1]["curFocus"];
+				$this->playerstatus[$i]["gainFocus"] = $data[sizeof($data)-1]["gainFocus"];
+				$this->playerstatus[$i]["maxFocus"] = $data[sizeof($data)-1]["maxFocus"];
+			}
+		}
+
+		if (sizeof($data)){DBManager::app()->updateFocusValues($data);}
 	}
 
 	public function startDeployPhase(){
@@ -1423,8 +1465,33 @@
 	public function testMorale(){
 		Debug::log("------------------------------- testMorale");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if ($this->ships[$i]->isDestroyed()){continue;}
 			$this->ships[$i]->setMorale($this->turn, $this->phase);
 			$this->ships[$i]->handleMoraleTesting($this->turn);
+		}
+	}
+
+	public function checkForCommandKill(){
+		//Debug::log("------------------------------- checkForCommandKill");
+		$data = array();
+
+		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+			for ($j = 0; $j < sizeof($this->ships); $j++){
+				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
+				if ($this->ships[$j]->command && $this->ships[$j]->isDestroyed()){
+					Debug::log("kill!");
+					$data[] = array(
+						"id" => $this->playerstatus[$i]["id"],
+						"curFocus" => 0,
+						"gainFocus" => 0, 
+						"maxFocus" => 0
+					);
+				}
+			}
+		}
+
+		if (sizeof($data)){
+			DBManager::app()->updateFocusValues($data);
 		}
 	}
 
@@ -1475,7 +1542,7 @@
 
 		$this->phase = 3;
 
-		DBManager::app()->reupdateFocusState($this->ships);
+		DBManager::app()->resetFocuState($this->ships);
 		DBManager::app()->setGameTurnPhase($this->gameid, $this->turn, $this->phase);
 		$this->updatePlayerStatus("waiting");
 		return true;

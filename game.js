@@ -983,6 +983,17 @@ function Game(data){
 			.find("#combatLog").children().children().remove();
 			
 		this.resolveDamageControl();
+		this.createCommandTransferEntries();
+	}
+
+	this.createCommandTransferEntries = function(){
+		if (game.phase == 1){return;}
+
+		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].command == game.turn){
+				this.ships[i].createCommandTransferEntry();
+			}
+		}
 	}
 
 	this.endMoveSubPhase = function(){
@@ -3449,7 +3460,7 @@ Game.prototype.setGameInfo = function(){
 Game.prototype.setFocusInfo = function(){
 	for (let i = 0; i < this.playerstatus.length; i++){
 		var html = "<span class='yellow'>" + this.getUserCurFocus(i) + "</span> + " + this.getUserFocusGain(i) + " / turn, max: " + this.getUserMaxFocus(i);
-		$("#upperGUI").find("#overview").find(".focusInfo" + i).html(html);
+		$("#upperGUI").find("#overview").find(".focusInfo" + this.playerstatus[i].id).html(html);
 	}
 }
 
@@ -3479,28 +3490,14 @@ Game.prototype.getCommandUnit = function(userid){
 }
 
 Game.prototype.getUserCurFocus = function(i){
-	if (this.userHasNoCommand(this.playerstatus[i].userid)){return 0;}
-	else if (this.playerstatus[i].userid == this.userid && this.commandChange.new){
-		return 0;
-	}
 	return this.playerstatus[i].curFocus;
 }
 
 Game.prototype.getUserFocusGain = function(i){
-	if (this.userHasNoCommand(this.playerstatus[i].userid)){return 0;}
-	else if (this.playerstatus[i].userid == this.userid && this.commandChange.new){
-		var cmd = this.getUnit(this.commandChange.new);
-		return this.settings.pv / 100 * (cmd.baseFocusRate + cmd.modFocusRate);
-	}
 	return this.playerstatus[i].gainFocus;
 }
 
 Game.prototype.getUserMaxFocus = function(i){
-	if (this.userHasNoCommand(this.playerstatus[i].userid)){return 0;}
-	if (this.playerstatus[i].userid == this.userid && this.commandChange.new){
-		var cmd = this.getUnit(this.commandChange.new);
-		return this.getUserFocusGain(i) * 4;
-	}
 	return this.playerstatus[i].maxFocus;
 }
 
@@ -3580,7 +3577,7 @@ Game.prototype.addFocusInfo = function(){
 				.html(string))
 			.append($("<td>")
 				.attr("colSpan", 2)
-				.addClass("focusInfo" + i)))
+				.addClass("focusInfo" + this.playerstatus[i].id)))
 	}
 
 	this.setFocusInfo()

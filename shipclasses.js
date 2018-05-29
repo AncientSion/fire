@@ -1534,6 +1534,10 @@ Ship.prototype.createUndeployEntry = function(){
 	this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " jumps into hyperspace and leaves the battlefield.</span></td>");
 }
 
+Ship.prototype.createCommandTransferEntry = function(){
+	this.attachLogEntry("<td colSpan=9><span class='yellow'>Fleet Command</span> has been transfered to " + this.getLogTitleSpan() + "</td>");
+}
+
 Ship.prototype.createMoveStartEntry = function(type){
 	switch (type){
 		case "roll":
@@ -2270,6 +2274,9 @@ Ship.prototype.addFocusDiv = function(div){
 			.html("Has Focus (" + this.getFocusCost()+")")
 			.addClass("focusEntry")
 			.hide()
+			.click(function(){
+				game.getUnit($(this).parent().parent().data("shipId")).unsetFocus();
+			})
 		)
 	)
 
@@ -2282,7 +2289,8 @@ Ship.prototype.addCommandDiv = function(div){
 	if (this.isJumpingOut()){return;}
 	if (this.isDestroyed()){return;}
 	if (!this.friendly){return;}
-	if (game.phase != 3){return;}
+	if (game.phase == -2){return;}
+	//if (game.phase != 3){return;}
 	if (!game.hasNoCommandUnit()){return;}
 	if (!game.canSetNewCommandUnit()){return;}
 
@@ -2303,14 +2311,12 @@ Ship.prototype.addCommandDiv = function(div){
 			.html("Acts as Fleet Command")
 			.addClass("commandEntry")
 			.hide()
-			.click(function(){
-			//	game.getUnit($(this).parent().parent().data("shipId")).unsetCommand();
-			})
 		)
 	)
 
-	if (this.command){$(this.element).find(".commandContainer .commandEntry").show();}
-	else $(this.element).find(".commandContainer input").show();
+	if (this.command){div.find(".commandContainer .commandEntry").show();}
+	else if (game.phase == 3 && game.canSetNewCommandUnit()){div.find(".commandContainer input").show();}
+	else div.find(".commandContainer").hide();
 }
 
 Ship.prototype.getUnitClass = function(){
@@ -2337,23 +2343,22 @@ Ship.prototype.setCommand = function(){
 		.find(".commandEntry").hide().end();
 	}
 
-	this.command = 1;
+	this.command = game.turn + 1;
 	game.commandChange.new = this.id;
 	$(this.element)
 		.find(".commandContainer")
 		.find("input").hide().end()
 		.find(".commandEntry").show();
-	game.setFocusInfo()
-}
 
-Ship.prototype.unsetCommand = function(){
-	console.log("unsetCommand");
-	return;
-	if (this.focus){
-		this.focus = 0;
-		$(this.element).find(".focusContainer").find(".buttonTD").show().end().find(".focusEntry").hide();
-		game.setFocusInfo();
+	for (let i = 0; i < game.playerstatus.length; i++){
+		if (game.playerstatus[i].userid == game.userid){
+			game.playerstatus[i].gainFocus = Math.floor(game.settings.pv / 100 * game.settings.focusMod / 10 * (this.baseFocusRate + this.modFocusRate));
+			game.playerstatus[i].maxFocus = game.playerstatus[i].gainFocus * 4;
+			break;
+		}
 	}
+
+	game.setFocusInfo()
 }
 
 Ship.prototype.getFocusCost = function(){
@@ -2364,10 +2369,10 @@ Ship.prototype.setFocus = function(){
 	if (!this.friendly){return;}
 	if (game.phase != 3){popup("Focus can only be issued in Phase 3 - Damage Control"); return;}
 	if (this.isJumpingOut()){popup("This unit is jumping to hyperspace, it cant be issued focus."); return;}
-	if (!this.canAffordFocus()){popup("You are lacking focus ressources for this action.</br>(Have: " + (game.getRemFocus() - game.getFocusSpending()) + ", Need: " + this.getFocusCost() +")"); return;}
+	if (!this.canAffordFocus()){popup("You are lacking focus ressources for this action.</br>Have: " + game.getRemFocus() + "</br>Spending: " + game.getFocusSpending() + "</br>Need: " + this.getFocusCost()); return;}
 	if (!this.focus){
 		this.focus = 1;
-		$(this.element).find(".focusContainer").find(".buttonTD").hide().end().find(".focusEntry").show();
+		$(this.element).find(".focusContainer").find("input").hide().end().find(".focusEntry").show();
 		//game.setFocusInfo();
 	}
 }
@@ -2375,7 +2380,7 @@ Ship.prototype.setFocus = function(){
 Ship.prototype.unsetFocus = function(){
 	if (this.focus){
 		this.focus = 0;
-		$(this.element).find(".focusContainer").find(".buttonTD").show().end().find(".focusEntry").hide();
+		$(this.element).find(".focusContainer").find("input").show().end().find(".focusEntry").hide();
 		//game.setFocusInfo();
 	}
 }
@@ -3282,7 +3287,7 @@ Ship.prototype.drawIncomingMovePlan = function(){
 }
 
 Ship.prototype.drawEW = function(){
-	if (this.destroyed){return;}
+	//if (this.destroyed){return;}
 	var s = this.getSystemByName("Sensor");
 	if (s){s.drawEW();}
 }

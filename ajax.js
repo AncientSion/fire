@@ -228,7 +228,7 @@ window.ajax = {
 					phase: game.phase,
 					ships: ships,
 					faction: game.faction
-					},
+				},
 			success: callback,
 			error: ajax.error,
 		});

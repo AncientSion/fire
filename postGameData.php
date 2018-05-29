@@ -91,7 +91,7 @@ if (isset($_POST["type"])) {
 			$dbManager->updateFocusState($_POST["focus"]);
 		}
 		if (sizeof($_POST["commandChange"]) && $_POST["commandChange"]["new"]){
-			$dbManager->updateCommandState($_POST["userid"], $_POST["gameid"], $_POST["commandChange"]["old"], $_POST["commandChange"]["new"]);
+			$dbManager->updateCommandState($_POST);
 		}
 		if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready")){
 			echo "damageControl success";
