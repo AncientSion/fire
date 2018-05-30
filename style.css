@@ -334,9 +334,13 @@ table, th, tr, td {
 	background-color: black;
 	z-index: 15;
 	border-radius: 5px;
+}
+
+#hangarDiv {
 	width: 450px;
 }
- #weaponDiv {
+
+ #weaponDiv, #crewDiv {
 	width: 500px;
  }
 
@@ -351,7 +355,7 @@ table, th, tr, td {
 }
 
 #hangarTable, #weaponTable, #crewTable {
-	width: 95%;
+	width: 98%;
 	margin: auto;
 	border-collapse: collapse;
 	border: 1px solid white;
@@ -1731,7 +1735,7 @@ input[type=button].inactive:hover, input[type=submit].inactive:hover {
 	color: #27e627;
 }
 
-.bg#ffeb3e {
+.hasOptions {
 	background: #ce1dae;
 }
 

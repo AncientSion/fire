@@ -2906,10 +2906,15 @@ Ship.prototype.getAttachDivs = function(){
 }
 
 Ship.prototype.previewSetup = function(){
+	for (var i = 0; i < this.primary.systems.length; i++){
+		if (this.primary.systems[i].loadout){
+			$(this.primary.systems[i].element).addClass("hasOptions");
+		}
+	}
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			if (this.structures[i].systems[j].loadout){
-				$(this.structures[i].systems[j].element).addClass("bgyellow");
+				$(this.structures[i].systems[j].element).addClass("hasOptions");
 			}
 		}
 	}
@@ -3477,24 +3482,23 @@ Ship.prototype.handleCrew = function(e, bridge){
 Ship.prototype.enableCrewPurchase = function(e, bridge){
 	var div = $("#crewDiv");
 	var table = div.find("#crewTable").empty();
-	var options = ["Engine", "Sensor", "Reactor"];
 
 	table
 		.append(
 			$($("<tr>")
-				.append($("<th>").html("Type"))
-				.append($("<th>").html("Effect / lvl"))
-				.append($("<th>").html("Train Cost"))
-				.append($("<th>").attr("colSpan", 3).html("Current Level"))
+				.append($("<th>").html("Type").css("width", "18%"))
+				.append($("<th>").html("Effect / lvl").css("width", "40%"))
+				.append($("<th>").html("Cost").css("width", "8%"))
+				.append($("<th>").attr("colSpan", 3).html("Level").css("width", "15%"))
 				.append($("<th>").html("Total Cost"))
 			)
 		)
 
-	for (var i = 0; i < options.length; i++){
+	for (var i = 0; i < bridge.loads.length; i++){
 		table
 		.append(
 			$($("<tr>")
-				.append($("<td>").html(options[i] + "</br>specialist"))
+				.append($("<td>").html(bridge.loads[i].name + "</br>specialist"))
 				.append($("<td>").html(this.getCrewEffect(i)))
 				.append($("<td>").html(this.getCrewAddCost(i)))
 				.append($("<td>")
@@ -3569,19 +3573,33 @@ Ship.prototype.updateCrewDiv = function(i){
 }
 
 Ship.prototype.getCrewEffect = function(i){
-	return "+" + this.getSystem(i+3).getCrewEffect() + " %</br>Output";
-}
+	var type = this.getSystemByName("Bridge").loads[i];
+	var name = type.name;
+	var value = 0;
 
-Ship.prototype.getCrewBaseCost = function(i){
-	return this.getSystemByName("Bridge").loads[i].baseCost;
+	if (name == "Morale"){
+		return "-" + "20" + " %</br>Damage Effect on Morale";
+	}
+	else if (name == "Focus"){
+		return "+" + "10" + " %</br>Focus Generation";
+	}
+	else return "+" + this.getSystemByName(name).crewEffect + " %</br>Output";
 }
 
 Ship.prototype.getCrewAddCost = function(i){
+	var type = this.getSystemByName("Bridge").loads[i];
+	var name = type.name;
+
+	//console.log("getCrewAddCost " + name);
 	if (game.phase > -2){return "";}
 	var baseCost = this.getCrewBaseCost(i);
 	var level = this.getCrewLevel(i);
 	var add = 0.5;
 	return Math.ceil(baseCost * (1 + (level*add)));
+}
+
+Ship.prototype.getCrewBaseCost = function(i){
+	return this.getSystemByName("Bridge").loads[i].baseCost;
 }
 
 Ship.prototype.getCrewLevel = function(i){
@@ -4144,11 +4162,10 @@ Ship.prototype.hasBasicEW = function(){
 	return true;
 }
 
-Ship.prototype.aSystemLoadout = function(){
+Ship.prototype.doConfirmSystemLoadout = function(){
 	var system = this.getSystem(game.system);
 	if (system.launcher){system.setAmmo();}
 	system.select();
-	return;
 }
 
 Ship.prototype.getAngleOff = function(origin, target, facing, system){

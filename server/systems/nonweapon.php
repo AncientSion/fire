@@ -107,15 +107,16 @@ class Bridge extends PrimarySystem {
 	public $name = "Bridge";
 	public $display = "Command & Control";
 	public $hitMod = 6;
+	public $loadout = 1;
 
-	public function getNodes(){
-		return array("Engine", "Sensor", "Reactor");
+	public function getUpgradeOptions(){
+		return array("Morale", "Focus", "Engine", "Sensor", "Reactor");
 	}
 
 	function __construct($id, $parentId, $integrity, $output, $width = 1){
         parent::__construct($id, $parentId, $integrity, 0, $width);
 
-        $options = $this->getNodes();
+        $options = $this->getUpgradeOptions();
         $baseCost = floor($output/12);
 
         for ($i = 0; $i < sizeof($options); $i++){

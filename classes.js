@@ -368,11 +368,11 @@ Structure.prototype.getSysDiv = function(){
 }
 
 Structure.prototype.update = function(){
-	this.updatesysDiv();
+	this.updateSysDiv();
 	//$(this.element).find(".outputMask").html(this.getOutput());
 }
 
-Structure.prototype.updatesysDiv = function(){
+Structure.prototype.updateSysDiv = function(){
 	$("#sysDiv")
 		.find(".boostEffect").html(this.getBoostEffect("Armour") * this.getBoostLevel()).end()
 		.find(".powerUse").html(this.getPowerUsage()).end()

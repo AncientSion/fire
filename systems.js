@@ -544,7 +544,7 @@ System.prototype.doBoost = function(){
 		turn: game.turn,type: 1, cost: this.getEffiency(), new: 1
 	})
 	if (this.getBoostEffect("Reload")){this.setTimeLoaded();}
-	if (this.getBoostEffect("Shots")){this.updatesysDiv();}
+	if (this.getBoostEffect("Shots")){this.updateSysDiv();}
 	if (this.weapon && this.dmgType == "Plasma"){
 		if (this.selected || this.highlight){
 			this.redrawSystemArc();
@@ -929,7 +929,7 @@ System.prototype.hasUnresolvedFireOrder = function(){
 }
 
 System.prototype.update = function(){
-	if (this.highlight){this.updatesysDiv();}
+	if (this.highlight){this.updateSysDiv();}
 	$(this.element).find(".outputMask").html(this.getOutput());
 }
 
@@ -1284,7 +1284,7 @@ PrimarySystem.prototype.getSysDiv = function(){
 	return div;
 }
 
-PrimarySystem.prototype.updatesysDiv = function(){
+PrimarySystem.prototype.updateSysDiv = function(){
 	var output = this.getOutputString();
 	var powerReq = this.getPowerReqString();
 	var boostReq = this.getEffiency();
@@ -1365,7 +1365,7 @@ Bridge.prototype.getUpgradeData = function(){
 			"name": this.loads[i].name,
 			"systemid": this.id
 		});
-		text += this.loads[i].name + " crew level " + this.loads[i].amount + "</br>";
+		text += this.loads[i].name + " level " + this.loads[i].amount + "</br>";
 		cost += this.loads[i].cost;
 	}
 	return {systemid: this.id, active: 1, units: units, loads: loads, text: text, cost: cost};
@@ -1462,7 +1462,7 @@ Sensor.prototype.setEWMode = function(){
 			break;
 		}
 	}
-	this.updatesysDiv();
+	this.updateSysDiv();
 }
 
 Sensor.prototype.getEWMode = function(){
@@ -2291,7 +2291,7 @@ Weapon.prototype.getSysDiv = function(){
 
 
 
-Weapon.prototype.updatesysDiv = function(){
+Weapon.prototype.updateSysDiv = function(){
 	var dmg = this.getDmgString();
 	var acc = this.getAccuracy();
 	var power = this.getPowerReqString()
@@ -2844,8 +2844,8 @@ function Dual(system){
 }
 Dual.prototype = Object.create(Weapon.prototype);
 
-Dual.prototype.updatesysDiv = function(){
-	this.getActiveSystem().updatesysDiv();
+Dual.prototype.updateSysDiv = function(){
+	this.getActiveSystem().updateSysDiv();
 	//game.getUnit(this.parentId).updateDiv();
 }
 
@@ -3316,7 +3316,7 @@ Launcher.prototype.getMaxoutput = function(){
 	return this.launchRate[this.ammo];
 }
 
-Launcher.prototype.updatesysDiv = function(){
+Launcher.prototype.updateSysDiv = function(){
 	$("#sysDiv")
 		.find("#ammo").html("<font color='red'>" + this.getRemAmmo() + "</font> / " + this.getMaxAmmo());
 }
