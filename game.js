@@ -1099,29 +1099,41 @@ function Game(data){
 
 		this.createCritLogEntries();
 		this.createMoraleLogEntries();
-		this.createEndEntry("Done");
+		this.createEndEntry(" --Phase Events concluded --");
 
 		$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 	}
 	
 	this.createCritLogEntries = function(){
-		var target = $("#combatLog").find("tbody");
-			target.append($("<tr>")
-					.append($("<td>").css("height", 15).attr("colSpan", 9)));
+		var placeHolder = 0;
 
 		for (let i = 0; i < this.ships.length; i++){
-			let done = this.ships[i].createCritLogEntry();
+			let created = this.ships[i].createCritLogEntry();
+			if (created && !placeHolder){
+				this.createPlaceHolderEntry();
+				placeHolder = 1;
+			}
 		}
 	}
 
 	this.createMoraleLogEntries = function(){
+		var placeHolder = 0;
+
+		for (let i = 0; i < this.ships.length; i++){
+			let created = this.ships[i].createMoraleLogEntry();
+			if (created && !placeHolder){
+				this.createPlaceHolderEntry();
+				placeHolder = 1;
+			}
+		}
+	}
+
+	this.createPlaceHolderEntry = function(){
+		console.log("createPlaceHolderEntry");
 		var target = $("#combatLog").find("tbody");
 			target.append($("<tr>")
 					.append($("<td>").css("height", 15).attr("colSpan", 9)));
 
-		for (let i = 0; i < this.ships.length; i++){
-			this.ships[i].createMoraleLogEntry();
-		}
 	}
 
 	this.createEndEntry = function(html){
@@ -2282,18 +2294,7 @@ function Game(data){
 		$("#combatLog")
 		.find("tbody")
 			.append($("<tr>")
-				.css("height", 20)
-				.append($("<th>").attr("colSpan", 9)))
-		return;
-		$("#combatLog")
-		.find("tbody")
-			.append($("<tr>")
 				.append($("<th>").attr("colSpan", 9).html("--- Fireorder animation completed ---")))
-			.append($("<tr>")
-				.css("height", 20)
-				.append($("<th>").attr("colSpan", 9)))
-
-		$("#combatlogWrapper").find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 	}
 
 	this.animateSingleFireOrder = function(i, goOn){
@@ -3459,6 +3460,9 @@ Game.prototype.setGameInfo = function(){
 
 Game.prototype.setFocusInfo = function(){
 	for (let i = 0; i < this.playerstatus.length; i++){
+		if (game.turn == 1 && game.phase == -1 && this.playerstatus[i].userid != this.userid){
+			$("#upperGUI").find("#overview").find(".focusInfo" + this.playerstatus[i].id).html("Unknown"); continue;
+		}
 		var html = "<span class='yellow'>" + this.getUserCurFocus(i) + "</span> + " + this.getUserFocusGain(i) + " / turn, max: " + this.getUserMaxFocus(i);
 		$("#upperGUI").find("#overview").find(".focusInfo" + this.playerstatus[i].id).html(html);
 	}

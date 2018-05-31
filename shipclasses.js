@@ -803,9 +803,7 @@ Ship.prototype.handleTurning = function(e, o, f, pos){
 	this.drawDelay();
 	this.drawMouseVector(o, t);
 
-	if (game.shortInfo){
-		game.getUnit(game.shortInfo).drawEW();
-	}
+	if (game.shortInfo){game.getUnit(game.shortInfo).drawEW();}
 
 	game.drawEvents();
 }
@@ -861,8 +859,11 @@ Ship.prototype.canTurnFreely = function(){
 }
 
 Ship.prototype.issueTurn = function(a){
+	a = round(a, 2);
+	console.log(a)
 	if (this.canTurnFreely()){
-		this.actions[0].a += Math.round(a);
+		//this.actions[0].a += Math.round(a);
+		this.actions[0].a += a;
 		if (this.actions[0].a > 360){
 			this.actions[0].a -= 360;
 		} else if (this.actions[0].a < 0){this.actions[0].a += 360;}
@@ -871,10 +872,16 @@ Ship.prototype.issueTurn = function(a){
 	else {
 		var o = this.getPlannedPos();
 		this.actions.push(
-			new Move(-1, "turn", 0, o.x, o.y, 
+		/*	new Move(-1, "turn", 0, o.x, o.y, 
 				Math.round(a),
 				Math.ceil(this.getTurnDelay()*Math.abs(a)),
 				Math.ceil(this.getTurnCost()*Math.abs(a)),
+				round(turn.mod, 1), 1, 0
+			)
+		*/	new Move(-1, "turn", 0, o.x, o.y, 
+				a,
+				Math.ceil(Math.abs(this.getTurnDelay()*a)),
+				Math.ceil(Math.abs(this.getTurnCost()*a)),
 				round(turn.mod, 1), 1, 0
 			)
 		);
@@ -1498,14 +1505,16 @@ Ship.prototype.createCritLogEntry = function(){
 		this.attachLogEntry(html + expand);
 		return true;
 	}
+	return false;
 }
 
 Ship.prototype.createMoraleLogEntry = function(){
-	if (this.flight || this.salvo){return;}
-	if (this.status != "jumpOut"){return;}
+	if (this.flight || this.salvo){return false;}
+	if (this.status != "jumpOut"){return false;}
 	
 	var html = "<td colSpan=9><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is routed and prepares to flee to hyperspace !</td>";
 	this.attachLogEntry(html);
+	return true;
 }
 
 Ship.prototype.getCallSign = function(){

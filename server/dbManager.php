@@ -313,6 +313,7 @@
 			$status = "open";
 			$turn = -1;
 			$phase = -1;
+			$focusMod = 10;
 			
 			$stmt->bindParam(":name", $post["gameName"]);
 			$stmt->bindParam(":status", $status);
@@ -322,7 +323,7 @@
 			$stmt->bindParam(":reinforce", $post["reinforceValue"]);
 			$stmt->bindParam(":reinforceTurn", $post["reinforceTurn"]);
 			$stmt->bindParam(":reinforceETA", $post["reinforceETA"]);
-			$stmt->bindParam(":focusMod", $post["focusMod"]);
+			$stmt->bindParam(":focusMod", $focusMod);
 			
 			$stmt->execute();
 			
@@ -406,7 +407,7 @@
 
 			$data = array(
 				"id" => $playerstatus[0]["id"],
-				"curFocus" => 0,
+				"curFocus" => $gainFocus * 2,
 				"gainFocus" => $gainFocus, 
 				"maxFocus" => $gainFocus * 4
 			);
@@ -663,7 +664,6 @@
 			$status = "reinforce";
 			$destroyed = 0;
 			$phase = -2;
-			$eta = 3;
 			$display = "";
 
 
@@ -677,7 +677,7 @@
 				$stmt->bindParam(":name", $data[$i]["name"]);
 				$stmt->bindParam(":display", $display);
 				$stmt->bindParam(":status", $status);
-				$stmt->bindValue(":available", $eta);
+				$stmt->bindValue(":available", $data[$i]["eta"]);
 				$stmt->bindParam(":destroyed", $destroyed);
 				$stmt->bindParam(":facing", $data[$i]["cost"]);
 				$stmt->bindParam(":turn", $turn);

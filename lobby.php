@@ -11,19 +11,17 @@ if (isset($_SESSION["userid"])){
 	$dbManager = DBManager::app();
 
 	if (isset($_POST["gameName"]) && isset($_POST["pointValue"]) && isset($_POST["reinforceValue"]) && isset($_POST["reinforceTurn"])
-	&& isset($_POST["reinforceETA"]) && isset($_POST["focusMod"])){
+	&& isset($_POST["reinforceETA"])){
 		if ($_POST["gameName"] == ""){return;}
 		if ($_POST["pointValue"] == ""){return;}
 		if ($_POST["reinforceValue"] == ""){return;}
 		if ($_POST["reinforceTurn"] == ""){return;}
 		if ($_POST["reinforceETA"] == ""){return;}
-		if ($_POST["focusMod"] == ""){return;}
 
 		if (!ctype_digit($_POST["pointValue"])){return;}
 		if (!ctype_digit($_POST["reinforceValue"])){return;}
 		if (!ctype_digit($_POST["reinforceTurn"])){return;}
 		if (!ctype_digit($_POST["reinforceETA"])){return;}
-		if (!ctype_digit($_POST["focusMod"])){return;}
 
 		$id = $dbManager->createNewGameAndJoin($_SESSION["userid"], $_POST);
 		if ($id){header("Location: gameSetup.php?gameid=".$id);}
@@ -247,14 +245,6 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 								<td>
 									<input type="number" style="text-align: center" value=3 placeholder="3" name="reinforceETA" step="1"></input>		
 								</td>
-							<tr>
-								<td>
-									Focus % / Turn
-								</td>
-								<td>
-									<input type="number" style="text-align: center" value=10 placeholder="10" name="focusMod" step="2"></input>		
-								</td>
-							</tr>
 							</tr>
 								<td colSpan=2 style="border: none">
 									<input type="submit" style="width: 40%" value="Confirm and Forward"></input>	

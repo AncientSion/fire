@@ -223,7 +223,7 @@ function drawVector(origin, target, dist, angle){
 		angle = (360-angle) *-1;
 	}
 
-	$("#vectorDiv").html("Distance: " + dist + " </br>Angle: " + Math.round(angle))
+	$("#vectorDiv").html("Distance: " + dist + " </br>Angle: " + round(angle, 2))
 	.css("left", target.x- 45 + "px")
 	.css("top", target.y + 40 + "px")
 	.removeClass("disabled");

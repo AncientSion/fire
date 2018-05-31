@@ -90,13 +90,13 @@ class Olympus extends Medium {
 							"systemid" => 13,
 							"display" => "Port Missile Launcher",
 							"name" => "Needle",
-							"amount" => 6
+							"amount" => 10
 						),
 						array(
 							"systemid" => 17,
 							"display" => "Starboard Missile Launcher",
 							"name" => "Needle",
-							"amount" => 6
+							"amount" => 10
 						)
 					)
 				)
