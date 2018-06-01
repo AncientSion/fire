@@ -168,7 +168,7 @@ else {
 		</table>
 
 
-		<table style="position: absolute; top: 215px">
+		<table style="position: absolute; top: 240px">
 			<tr>
 				<td>
 					<div id="factionDiv">			

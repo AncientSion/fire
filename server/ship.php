@@ -169,15 +169,16 @@ class Ship {
 			}
 		}
 
-		$this->setCrewBoosts($turn);
+		$this->setCrewUpgrades($turn);
 		$this->setMorale($turn, $phase);
 		$this->isDestroyed();
 
 		return true;
 	}
 
-	public function setCrewBoosts($turn){
+	public function setCrewUpgrades($turn){
 		$bridge = $this->getSystemByName("Bridge");
+		
 		for ($i = 0; $i < sizeof($bridge->loads); $i++){
 			if (!$bridge->loads[$i]["amount"]){continue;}
 			$target = $this->getSystemByName($bridge->loads[$i]["name"]);

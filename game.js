@@ -2291,6 +2291,7 @@ function Game(data){
 	}
 
 	this.createFireFinalEntry = function(){
+		if (!game.fireOrders.length){return;}
 		$("#combatLog")
 		.find("tbody")
 			.append($("<tr>")

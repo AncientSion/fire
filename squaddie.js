@@ -40,15 +40,15 @@ Squaddie.prototype.hover = function(e){
 
 	if (this.highlight){
 		this.highlight = false;
-		this.hideInfoDiv(e);
+		this.hideSysDiv(e);
 	}
 	else {
 		this.highlight = true;
-		this.showInfoDiv(e);
+		this.showSysDiv(e);
 	}
 }
 
-Squaddie.prototype.showInfoDiv = function(e){
+Squaddie.prototype.showSysDiv = function(e){
 	$(document.body).append(
 		$(this.getSysDiv())
 			.css("left", e.clientX - 90)
@@ -56,7 +56,7 @@ Squaddie.prototype.showInfoDiv = function(e){
 		)
 }
 
-Squaddie.prototype.hideInfoDiv = function(){
+Squaddie.prototype.hideSysDiv = function(){
 	$("#sysDiv").remove();
 }
 
@@ -388,11 +388,11 @@ Squaddie.prototype.getArmourData = function(){
 		.hover(
 			function(e){
 				var data = $(this).closest(".unitContainer").data();
-				game.getUnit(data.shipId).getSystem(data.systemId).armourIn(e);
+				game.getUnit(data.shipId).getSystem(data.systemId).showSysDiv(e);
 			},
 			function(e){
 				var data = $(this).closest(".unitContainer").data();
-				game.getUnit(data.shipId).getSystem(data.systemId).armourOut(e);
+				game.getUnit(data.shipId).getSystem(data.systemId).hideSysDiv(e);
 			}
 		)
 	}
@@ -404,7 +404,7 @@ Squaddie.prototype.getArmourString = function(){
 	return Structure.prototype.getArmourString.call(this);
 }
 
-Squaddie.prototype.armourIn = function(e){
+Squaddie.prototype.showSysDiv = function(e){
 	$(document.body).append(
 		$(Structure.prototype.getSysDiv.call(this))
 			.css("left", e.clientX - 90)
@@ -414,8 +414,8 @@ Squaddie.prototype.armourIn = function(e){
 	$(this.armourElement).find(".boostDiv").show();
 }
 
-Squaddie.prototype.armourOut = function(e){
-	Structure.prototype.hideInfoDiv.call(this, e);
+Squaddie.prototype.hideSysDiv = function(e){
+	Structure.prototype.hideSysDiv.call(this, e);
 	if (game.phase != -1 || !this.effiency || game.getUnit(this.parentId).userid != game.userid){return;}
 	$(this.armourElement).find(".boostDiv").hide();
 }
