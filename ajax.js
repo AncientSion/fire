@@ -394,7 +394,7 @@ window.ajax = {
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid == game.userid){
 				if (game.ships[i].status == "jumpOut"){
-					jumpout.push({id: game.ships[i].id, status: "jumpOut"});
+					jumpout.push({id: game.ships[i].id, status: "jumpOut", notes: ""});
 				}
 				if (game.ships[i].focus){
 					focus.push(game.ships[i].id);

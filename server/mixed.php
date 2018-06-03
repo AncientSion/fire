@@ -26,14 +26,6 @@ class Mixed extends Ship {
 
 	public function setMorale($turn, $phase){
 		return;
-		$integrity = 0;
-		$remaining = 0;
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			$integrity += $this->structures[$i]->integrity;
-			$remaining += max(0, $this->structures[$i]->remaining);
-		}
-
-		$this->morale = new Morale(floor($remaining / $integrity * 100));
 	}
 
 	public function handleMoraleTesting($turn){

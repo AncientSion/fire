@@ -63,6 +63,8 @@
 
 	public function getClientData(){
 
+		$this->testMorale();
+		//$this->setPostFireFocusValues();
 		//$this->setupShips();
 		//return;
 		
@@ -943,7 +945,7 @@
 		$this->resolveBallisticFireOrders();
 		$this->testCriticals();
 		$this->testMorale();
-		$this->checkForCommandKill();
+		$this->setPostFireFocusValues();
 
 		$this->handleResolvedFireData();
 
@@ -1058,61 +1060,6 @@
 
 		$this->addTurnStartFocusPoints();
 		$this->pickReinforcements();
-	}
-
-	public function addTurnStartFocusPoints(){
-		$data = array();
-
-		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-			$curFocus = $this->playerstatus[$i]["curFocus"];
-			for ($j = 0; $j < sizeof($this->ships); $j++){
-				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
-				if ($this->ships[$j]->focus){$curFocus -= ceil($this->ships[$j]->cost);}
-			}
-
-			$gainFocus = $this->playerstatus[$i]["gainFocus"];
-
-			$data[] = array(
-				"id" => $this->playerstatus[$i]["id"],
-				"curFocus" => min($this->playerstatus[$i]["maxFocus"], $curFocus + $gainFocus),
-				"gainFocus" => $this->playerstatus[$i]["gainFocus"], 
-				"maxFocus" => $this->playerstatus[$i]["maxFocus"]
-			);
-		}
-
-		if (sizeof($data)){DBManager::app()->updateFocusValues($data);}
-	}
-
-
-
-	public function handleCommandTransfer(){
-		Debug::log("handleCommandTransfer");	
-		$data = array();
-
-		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-			for ($j = 0; $j < sizeof($this->ships); $j++){
-				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
-				if ($this->ships[$j]->command <= $this->turn){continue;}
-
-				$baseGain = floor($this->settings["pv"] / 100 * $this->settings["focusMod"]);
-				$unitmod = $this->ships[$j]->baseFocusRate + $this->ships[$j]->modFocusRate;
-
-				$gainFocus = floor($baseGain / 10 * $unitmod);
-
-				$data[] = array(
-					"id" => $this->playerstatus[$i]["id"],
-					"curFocus" => 0,
-					"gainFocus" => $gainFocus, 
-					"maxFocus" => $gainFocus * 4
-				);
-
-				$this->playerstatus[$i]["curFocus"] = $data[sizeof($data)-1]["curFocus"];
-				$this->playerstatus[$i]["gainFocus"] = $data[sizeof($data)-1]["gainFocus"];
-				$this->playerstatus[$i]["maxFocus"] = $data[sizeof($data)-1]["maxFocus"];
-			}
-		}
-
-		if (sizeof($data)){DBManager::app()->updateFocusValues($data);}
 	}
 
 	public function startDeployPhase(){
@@ -1471,28 +1418,95 @@
 		}
 	}
 
-	public function checkForCommandKill(){
-		//Debug::log("------------------------------- checkForCommandKill");
+	public function addTurnStartFocusPoints(){
+		$data = array();
+
+		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+			$curFocus = $this->playerstatus[$i]["curFocus"];
+			for ($j = 0; $j < sizeof($this->ships); $j++){
+				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
+				if ($this->ships[$j]->focus){$curFocus -= ceil($this->ships[$j]->cost);}
+			}
+
+			$gainFocus = $this->playerstatus[$i]["gainFocus"];
+
+			$data[] = array(
+				"id" => $this->playerstatus[$i]["id"],
+				"curFocus" => min($this->playerstatus[$i]["maxFocus"], $curFocus + $gainFocus),
+				"gainFocus" => $this->playerstatus[$i]["gainFocus"], 
+				"maxFocus" => $this->playerstatus[$i]["maxFocus"]
+			);
+		}
+
+		if (sizeof($data)){DBManager::app()->updateFocusValues($data);}
+	}
+
+	public function getNewFocusValue($playerstatus, $unit){
+		Debug::log("getNewFocusValue turn:".$this->turn.", phase: ".$this->phase);	
+		if ($unit->isDestroyed() || $unit->status == "jumpOut"){
+			Debug::log("kill/flee!");
+			$curFocus = 0; $gainFocus = 0; $maxFocus = 0;
+		}
+		else {
+			$command = $unit->getSystemByName("Command");
+			$command->output = 100;
+			$output = $command->getOutput($this->turn);
+			$command->output = 0;
+
+			$baseGain = floor($this->settings["pv"] / 100 * $this->settings["focusMod"]);
+			$gainFocus = $unit::$value;
+			$commandRating = ($unit->baseFocusRate + $unit->modFocusRate);
+			$gainFocus = floor($baseGain / 10 * $commandRating / 100 * $output);
+
+			//Debug::log("basegain: ".$baseGain.", commandRating: ".$commandRating.", command: ".$unit->name.", output: ".$output.", gain: ".$gainFocus);
+
+			$curFocus = $playerstatus["curFocus"];
+		}
+
+		return 
+			array(
+				"id" => $playerstatus["id"],
+				"curFocus" => $curFocus,
+				"gainFocus" => $gainFocus, 
+				"maxFocus" => $gainFocus * 4
+			);
+	}
+
+	public function setPostFireFocusValues(){
+		//Debug::log("setPostFireFocusValues");
 		$data = array();
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			for ($j = 0; $j < sizeof($this->ships); $j++){
 				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
-				if ($this->ships[$j]->command && $this->ships[$j]->isDestroyed()){
-					Debug::log("kill!");
-					$data[] = array(
-						"id" => $this->playerstatus[$i]["id"],
-						"curFocus" => 0,
-						"gainFocus" => 0, 
-						"maxFocus" => 0
-					);
-				}
+				if (!$this->ships[$j]->command){continue;}
+
+				$data[] = $this->getNewFocusValue($this->playerstatus[$i], $this->ships[$j]);
+				$curFocus = $this->playerstatus[$i]["curFocus"];
 			}
 		}
 
-		if (sizeof($data)){
-			DBManager::app()->updateFocusValues($data);
+		if (sizeof($data)){DBManager::app()->updateFocusValues($data);}
+	}
+
+	public function handleCommandTransfer(){
+		//Debug::log("handleCommandTransfer");	
+		$data = array();
+
+		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
+			for ($j = 0; $j < sizeof($this->ships); $j++){
+				if ($this->playerstatus[$i]["userid"] != $this->ships[$j]->userid){continue;}
+				if ($this->ships[$j]->command <= $this->turn){continue;}
+
+				$data[] = $this->getNewFocusValue($this->playerstatus[$i], $this->ships[$j]);
+
+				$this->playerstatus[$i]["curFocus"] = $data[sizeof($data)-1]["curFocus"];
+				$this->playerstatus[$i]["gainFocus"] = $data[sizeof($data)-1]["gainFocus"];
+				$this->playerstatus[$i]["maxFocus"] = $data[sizeof($data)-1]["maxFocus"];
+			}
 		}
+
+		if (sizeof($data)){DBManager::app()->updateFocusValues($data);}
 	}
 
 	public function handleResolvedFireData(){

@@ -57,10 +57,9 @@ function Game(data){
 		if (game.phase > 0){
 			if (shooter.focus && target && !target.focus && !shooter.getRemSpeed()){
 				console.log("angle to target: " + shooterAngle);
-				if (Math.ceil(shooterAngle) == 360 || Math.ceil(shooterAngle) == 0
-					|| Math.floor(shooterAngle) == 360 || Math.floor(shooterAngle) == 0){
-						console.log("snap!");
-						return true;
+				if (shooterAngle == 0 || shooterAngle == 360 || (shooterAngle > 0 && shooterAngle < 0.2)|| (shooterAngle < 360 && shooterAngle > 359.8)){
+					console.log("snap!");
+					return true;
 				}
 			}
 		}
@@ -344,7 +343,7 @@ function Game(data){
 		immediate = 0;
 
 		var flight = new Flight(
-			{id: -this.ships.length-20, name: "Flight", mission: mission,
+			{id: -this.ships.length-20, name: "Flight", mission: mission, traverse: -3,
 			x: p.x, y: p.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, curImp: 0, fSize: 15, baseSize: 25, unitSize: 4, userid: this.userid, available: this.turn}
 		);
 
@@ -1105,26 +1104,28 @@ function Game(data){
 	}
 	
 	this.createCritLogEntries = function(){
-		var placeHolder = 0;
+		var entries = 0;
 
 		for (let i = 0; i < this.ships.length; i++){
 			let created = this.ships[i].createCritLogEntry();
-			if (created && !placeHolder){
-				this.createPlaceHolderEntry();
-				placeHolder = 1;
-			}
+			if (created){entries = 1;}
+		}
+
+		if (entries){
+			this.createPlaceHolderEntry();
 		}
 	}
 
 	this.createMoraleLogEntries = function(){
-		var placeHolder = 0;
+		var entries = 0;
 
 		for (let i = 0; i < this.ships.length; i++){
 			let created = this.ships[i].createMoraleLogEntry();
-			if (created && !placeHolder){
-				this.createPlaceHolderEntry();
-				placeHolder = 1;
-			}
+			if (created){entries = 1;}
+		}
+
+		if (entries){
+			this.createPlaceHolderEntry();
 		}
 	}
 
@@ -1788,7 +1789,7 @@ function Game(data){
 		if (game.phase == 1){
 			for (var i = 0; i < this.ships.length; i++){
 				if (this.ships[i].focus || this.ships[i].flight || this.ships[i].salvo){continue;}
-				this.ships[i].toAnimate = true;0
+				this.ships[i].toAnimate = true;
 			}
 		}
 		else if (game.phase == 2){
@@ -1853,42 +1854,54 @@ function Game(data){
 						if (game.ships[i].actions[j].turn == game.turn && !game.ships[i].actions[j].animated){
 							var action = game.ships[i].actions[j];
 							if (action.type == "move"){
-								//	console.log(game.ships[i].actions[j].v);
-								game.ships[i].actions[j].v.t[0] += 1;
+								//	console.log(action.v);
+								action.v.t[0] += 1;
 								game.ships[i].drawX += action.v.x * 1 / action.v.t[1];
 								game.ships[i].drawY += action.v.y * 1 / action.v.t[1];
-								if (game.ships[i].actions[j].v.t[0] >= action.v.t[1]){
-									game.ships[i].actions[j].animated = true;
+								if (action.v.t[0] >= action.v.t[1]){
+									action.animated = true;
 									game.ships[i].drawX = action.x;
 									game.ships[i].drawY = action.y;
 									if (game.ships[i].doesContinueRolling()){game.ships[i].createStillRollingEntry()}
 								}
 							}
 							else if (action.type == "turn"){
+
+								action.t[0]++;
+								game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, action.t[2]);
+								//action.angle += action.t[2];
+
+								if (action.t[0] >= action.t[1]){
+									action.animated = true;
+								}
+
+
+								/*
 								var step = 1;
 								if (action.a > 0){
 									game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, step);
-									game.ships[i].actions[j].angle -= step;
+									action.angle -= step;
 								}
 								else {
 									game.ships[i].drawFacing = addToDirection(game.ships[i].drawFacing, -step);
-									game.ships[i].actions[j].angle += step;
+									action.angle += step;
 								}
 								
-								if (game.ships[i].actions[j].angle == 0){
-									game.ships[i].actions[j].animated = true;
+								if (action. == 0){
+									action.animated = true;
 								}
+								*/
 							}
 							else if (action.type == "roll"){
-								game.ships[i].actions[j].animated = true;
+								action.animated = true;
 								game.ships[i].createActionEntry(action);
 							}
 							else if (action.type == "flip"){
-								game.ships[i].actions[j].animated = true;
+								action.animated = true;
 								game.ships[i].createActionEntry(action);
 							}
 							else if (action.type == "patrol"){
-								game.ships[i].actions[j].animated = true;
+								action.animated = true;
 							}
 
 							//for (var k = 0; k < game.ships[i].attachAnims.length; k++){
@@ -3465,7 +3478,14 @@ Game.prototype.setFocusInfo = function(){
 			$("#upperGUI").find("#overview").find(".focusInfo" + this.playerstatus[i].id).html("Unknown"); continue;
 		}
 		var html = "<span class='yellow'>" + this.getUserCurFocus(i) + "</span> + " + this.getUserFocusGain(i) + " / turn, max: " + this.getUserMaxFocus(i);
-		$("#upperGUI").find("#overview").find(".focusInfo" + this.playerstatus[i].id).html(html);
+		$("#upperGUI").find("#overview").find(".focusInfo" + this.playerstatus[i].id)
+			.html(html)
+			.data("userid", this.playerstatus[i].userid)
+			.hover(
+				function(){game.showFocusInfo($(this).data("userid"));},
+				function(){game.hideFocusInfo();}
+			)
+
 	}
 }
 
@@ -3506,37 +3526,55 @@ Game.prototype.getUserMaxFocus = function(i){
 	return this.playerstatus[i].maxFocus;
 }
 
-Game.prototype.showFocusInfo = function(){
-	var div = document.createElement("div");
-		div.id = "sysDiv";
-	var table = document.createElement("table");
+Game.prototype.showFocusInfo = function(userid){
+	var i;
+	for (i = 0; i < this.playerstatus.length; i++){
+		if (this.playerstatus[i].userid == userid){break;}
+	}
+
+	var flagship = game.getCommandUnit(userid);
+	var command = flagship.getSystemByName("Command");
 
 	$(document.body)
 	.append(
 		$("<div>").attr("id", "sysDiv")
-		.css("top", 50).css("left", 100)
+		.css("top", 180).css("left", 0)
 		.append($("<table>")
 			.append($("<tr>")
-				.append($("<th>").html("Focus Overview").attr("colSpan", 2))
+				.append($("<th>").html("Focus Overview - " + this.playerstatus[i].username).attr("colSpan", 2))
 			)
 			.append($("<tr>")
-				.append($("<td>").html("Maximum Focus").css("width", "60%"))
-				.append($("<td>").html(this.getPlayerStatus().maxFocus))
+				.append($("<td>").html("Game Point Value").css("width", "70%"))
+				.append($("<td>").html(Math.floor(game.settings.pv / 10 * game.settings.focusMod)))
 			)
 			.append($("<tr>")
-				.append($("<td>").html("Focus gain/turn"))
-				.append($("<td>").html(this.getPlayerStatus().gainFocus))
+				.append($("<td>").html("Flagship Command Rating"))
+				.append($("<td>").html(flagship.baseFocusRate + " %"))
 			)
 			.append($("<tr>")
-				.append($("<td>").html("Current Focus"))
-				.append($("<td>").html(this.getPlayerStatus().curFocus))
+				.append($("<td>").html("Base Focus Generation"))
+				.append($("<td>").html(Math.floor(game.settings.pv / 10 * game.settings.focusMod) / 100 * flagship.baseFocusRate))
 			)
 			.append($("<tr>")
-				.append($("<td>").html("Current Spending"))
-				.append($("<td>").html(this.getFocusSpending()))
+				.append($("<td>").attr("colSpan", 2).css("height", 10))
 			)
-		)
-	)
+			.append($("<tr>")
+				.append($("<td>").html("Flagship Crew Modifiers"))
+				.append($("<td>").html("+" + command.getCrewEffect() * command.getCrewLevel() + "%"))
+			)
+			.append($("<tr>")
+				.append($("<td>").html("Flagship Crit Modifiers"))
+				.append($("<td>").html(command.getOutputCrits() + "%"))
+			)
+			.append($("<tr>")
+				.append($("<td>").attr("colSpan", 2).css("height", 10))
+			)
+			.append($("<tr>")
+				.append($("<th>").html("Final Focus Gain"))
+				.append($("<th>").html(this.playerstatus[i].gainFocus))
+			)
+		))
+	return;
 }
 
 Game.prototype.hideFocusInfo = function(){

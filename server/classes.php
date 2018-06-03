@@ -7,11 +7,13 @@ class Morale {
 	public $current;
 	public $trigger = 30;
 	public $baseChance = 70;
+	public $bonusChance = 0;
 	public $effChance;
 
-	function __construct($current){
+	function __construct($current, $crew){
 		$this->current = $current;
-		$this->effChance = floor($this->baseChance * (1+($this->trigger - $this->current) / ($this->trigger)));
+		$this->bonusChance = -10*$crew;
+		$this->effChance = floor(($this->baseChance + $this->bonusChance) * (1+($this->trigger - $this->current) / ($this->trigger)));
 	}
 }
 
@@ -264,6 +266,7 @@ class Crit {
 	public $type;
 	public $duration;
 	public $value;
+	public $display = "";
 	public $new = 0;
 	
 	function __construct($id, $shipid, $systemid, $turn, $type, $duration, $value, $new){

@@ -109,7 +109,7 @@ class Ship {
 
 	public function setPreviewState($turn, $phase){
 		$this->curImp = $this->baseImpulse;
-		$this->morale = new Morale(100);
+		$this->morale = new Morale(100, 0);
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq(), $this->power);
 
 		for ($j = 0; $j < sizeof($this->structures); $j++){
@@ -142,7 +142,7 @@ class Ship {
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){ // check primary criticals
 			$this->primary->systems[$i]->setState($turn, $phase);
 			switch ($this->primary->systems[$i]->name){
-				case "Bridge":
+				case "Command":
 					if ($this->primary->systems[$i]->destroyed || $this->primary->systems[$i]->disabled){
 						$this->doUncommandShip($turn);
 					}
@@ -177,12 +177,13 @@ class Ship {
 	}
 
 	public function setCrewUpgrades($turn){
-		$bridge = $this->getSystemByName("Bridge");
+		$command = $this->getSystemByName("Command");
 		
-		for ($i = 0; $i < sizeof($bridge->loads); $i++){
-			if (!$bridge->loads[$i]["amount"]){continue;}
-			$target = $this->getSystemByName($bridge->loads[$i]["name"]);
-			for ($j = 0; $j < $bridge->loads[$i]["amount"]; $j++){
+		for ($i = 0; $i < sizeof($command->loads); $i++){
+			if (!$command->loads[$i]["amount"]){continue;}
+			$target = $this->getSystemByName($command->loads[$i]["name"]);
+
+			for ($j = 0; $j < $command->loads[$i]["amount"]; $j++){
 				$target->powers[] = new Power(0, $this->id, 0, $turn, 2, 0);
 			}
 		}
@@ -199,7 +200,10 @@ class Ship {
 	}
 
 	public function setMorale($turn, $phase){
-		$this->morale = new Morale(floor($this->primary->remaining / $this->primary->integrity * 100));
+		$this->morale = new Morale(
+			floor($this->primary->remaining / $this->primary->integrity * 100),
+			$this->getSystemByName("Command")->getCrewLevel()
+		);
 	}
 
 	public function setStructureState($turn, $phase){
@@ -487,16 +491,32 @@ class Ship {
 		}
 
 		//return true;
-		$bridge = $this->getSystemByName("Bridge");
+		$bridge = $this->getSystemByName("Command");
 		for ($i = 0; $i < sizeof($bridge->crits); $i++){
+
+			if ($bridge->crits[$i]->type == "Command"){
+				$bridge->crits[$i]->type = "Output";
+				$bridge->crits[$i]->display = "Officer KIA: <span class='yellow'>Command -".$bridge->crits[$i]->value."%</span> effect.";
+				continue;
+			}
 			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
 				if ($this->primary->systems[$j]->name == $bridge->crits[$i]->type){
 					$copy = clone $bridge->crits[$i];
-					$copy->type = "Officer KIA";
+					$copy->type = "Output";
+					$copy->display = "Officer KIA: <span class='yellow'>".$bridge->crits[$i]->type." -".$bridge->crits[$i]->value ."%</span> effect.";
 					$this->primary->systems[$j]->crits[] = $copy;
-					$bridge->crits[$i]->type = "Officer KIA: ".$bridge->crits[$i]->type;
+
+					$bridge->crits[$i]->display = "Officer KIA: <span class='yellow'>".$bridge->crits[$i]->type." -".$bridge->crits[$i]->value."%</span> effect.";
+					$bridge->crits[$i]->type = "";
 					break;
 				}
+			}
+		}
+
+		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+			for ($j = 0; $j < sizeof($this->primary->systems[$i]->crits); $j++){
+				if ($this->primary->systems[$i]->crits[$j]->display != ""){continue;}
+				$this->primary->systems[$i]->crits[$j]->display = "<span class='yellow'>".$this->primary->systems[$i]->display." -".$this->primary->systems[$i]->crits[$j]->value."%</span> effect."; 
 			}
 		}
 
@@ -638,7 +658,7 @@ class Ship {
 		else if ($this->getSystemByName("Reactor")->destroyed){
 			$kill = 1;
 		}
-		else if ($this->getSystemByName("Bridge")->destroyed){
+		else if ($this->getSystemByName("Command")->destroyed){
 			$kill = 1;
 		}
 
@@ -776,9 +796,10 @@ class Ship {
 	}
 
 	public function getHitSystem($fire){
-		//return $this->getSystemByName("Bridge");
+		//return $this->getSystemByName("Command");
 		//return $this->getPrimaryHitSystem();
 		//Debug::log("getHitSystem ".$this->name);
+
 		$roll;
 		$current = 0;
 		$main = $this->primary->getHitChance();
@@ -1046,10 +1067,11 @@ class Ship {
 	}
 
 	public function handleMoraleTesting($turn){
-		Debug::log(get_class($this). " #".$this->id.", morale @ ".$this->morale->current."%");
+		//Debug::log(get_class($this). " #".$this->id.", morale @ ".$this->morale->current."%");
 		//$this->morale->current = 20;
 		if ($this->morale->current >= $this->morale->trigger){return;}
 		$roll = mt_rand(0, 100);
+		$this->notes = $roll;
 		Debug::log(" => effChance: ".$this->morale->effChance.", roll: ".$roll);
 		if ($roll < $this->morale->effChance){
 			Debug::log(" ===> retreat!");
@@ -1095,7 +1117,7 @@ class Ship {
 				}
 			}
 		}
-		echo ("ERROR ship getSystem: ".$id." on unit #".$this->id."/".$this->display);
+		Debug::log("ERROR ship getSystem: ".$id." on unit #".$this->id."/".$this->display);
 	}
 
 	public function getSystemByName($name){
@@ -1268,7 +1290,7 @@ class Medium extends Ship {
 		parent::__construct($data);
 
 		$this->hitTable = array(
-			"Bridge" => 0.6,
+			"Command" => 0.6,
 			"Engine" => 0.8,
 			"Sensor" => 1,
 			"Reactor" => 0.6

@@ -1494,14 +1494,14 @@ Ship.prototype.attachLogEntry = function(html){
 Ship.prototype.createCritLogEntry = function(){
 	if (!this.ship){return false;}
 	
-	var html = "<th style='padding: 10px' colSpan=4><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is subject to critical effects.</th><th colSpan=5>";
+	var html = "<th style='padding: 10px' colSpan=4><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is subject to critical effects.</th><td colSpan=5>";
 	var expand = "";
 
 	for (let i = 0; i < this.primary.systems.length; i++){
-		expand += this.primary.systems[i].getCritLogString()
+		expand += this.primary.systems[i].getCritLogString();
 	}
 	if (expand.length > 2){
-		expand += "</th>"
+		expand += "</td>"
 		this.attachLogEntry(html + expand);
 		return true;
 	}
@@ -1808,7 +1808,7 @@ Ship.prototype.getSystemLocation = function(i, name){
 	if (i == -1){
 		switch (name){
 			case "Main Structure": p = getPointInDir(this.size/6, this.getDrawFacing()+range(0, 359), 0, 0); break;
-			case "Bridge": p = getPointInDir(this.size/6, this.getDrawFacing()+range(-10, 10), 0, 0); break;
+			case "Command": p = getPointInDir(this.size/6, this.getDrawFacing()+range(-10, 10), 0, 0); break;
 			case "Reactor": p = getPointInDir(-this.size/4, this.getDrawFacing()+range(-15, 15), 0, 0); break;
 			case "Sensor": p = getPointInDir(this.size/3, this.getDrawFacing()+range(-15, 15), 0, 0); break;
 			case "Engine": p = getPointInDir(-this.size/4, this.getDrawFacing()+range(-15, 15), 0, 0); break;
@@ -2139,16 +2139,17 @@ Ship.prototype.showMoraleDiv = function(e){
 					.append($("<td>").html("Current Morale"))
 					.append($("<td>").html(this.morale.current + "%")))
 				.append($("<tr>")
-					.append($("<td>").attr("colSpan", 2).css("height", 10)))
+					.append($("<td>").attr("colSpan", 2).css("height", 6)))
 				.append($("<tr>")
-					.append($("<td>").html("Morale Test Trigger"))
-					.append($("<td>").html("< " + this.morale.trigger + "% HP")))
+					.append($("<td>").attr("colSpan", 2).html("Check required @ Morale < " + this.getMoraleTrigger() + "%")))
 				.append($("<tr>")
-					.append($("<td>").html("Base Rout Chance"))
-					.append($("<td>").html(this.morale.baseChance + "%")))
+					.append($("<td>").attr("colSpan", 2).css("height", 6)))
+				.append($("<tr>")
+					.append($("<td>").html("Start Chance to Rout"))
+					.append($("<td>").html(this.getModifiedRoutChance())))
 				.append($("<tr>")
 					.append($("<td>").html("Current Rout Chance"))
-					.append($("<th>").html(this.getRoutChance() + "%")))
+					.append($("<th>").html(this.getEffectiveRoutChance() + "%")))
 			)
 	)
 }
@@ -2157,7 +2158,24 @@ Ship.prototype.hideMoraleDiv = function(){
 	$("#sysDiv").remove();
 }
 
-Ship.prototype.getRoutChance = function(){
+Ship.prototype.getMoraleTrigger = function(){
+	return this.morale.trigger;
+	var command = this.getSystemByName("Command");
+	var boost = command.getCrewLevel();
+
+	if (!boost){return this.morale.trigger;}
+	else return this.morale.trigger - boost * 10;
+}
+
+Ship.prototype.getModifiedRoutChance = function(){
+	var html = this.morale.baseChance + "%";
+	if (this.morale.bonusChance){
+		html += " (" + this.morale.bonusChance + "%)";
+	}
+	return html;
+}
+
+Ship.prototype.getEffectiveRoutChance = function(){
 	if (this.morale.effChance < 1 || this.morale.current >= this.morale.trigger){
 		return 0;
 	}
@@ -2195,14 +2213,14 @@ Ship.prototype.createBaseDiv = function(){
 		//	.append($("<td>").html(this.getStringHitChance())))
 		.append($("<tr>")
 			.append($("<td>").html("Focus Gain"))
-			.append($("<td>").html(this.baseFocusRate + "% + " + this.modFocusRate + "%")))
+			.append($("<td>").html((this.baseFocusRate + " + " + this.modFocusRate + "%" + " / " + this.getFocusIfCommand()))))
 		.append($("<tr>")
 			.append($("<td>").html("Morale"))
 			//.append($("<td>").html(this.morale.current + "%")))
 		//.append($("<tr>").addClass("morale")
 			.append($("<td>").attr("colSpan", 1).addClass("Morale")
 				.append($("<div>").addClass("moraleFull"))
-				.append($("<div>").addClass("moraleTrigger").css("width", (this.morale.trigger + "%")))
+				.append($("<div>").addClass("moraleTrigger").css("width", (this.getMoraleTrigger() + "%")))
 				.append($("<div>").addClass("moraleNow").css("width", (this.morale.current + "%")))
 				.hover(
 					function(e){
@@ -2309,7 +2327,7 @@ Ship.prototype.addCommandDiv = function(div){
 		.append(
 			$("<input>")
 			.attr("type", "button")
-			.attr("value", "Assign Fleet Command ( +" + (game.settings.pv / 100 * (this.baseFocusRate + this.modFocusRate)) + " / Turn)")
+			.attr("value", "Assign Fleet Command ( +" + this.getFocusIfCommand() + " / Turn)")
 			.hide()
 			.click(function(){
 				game.getUnit($(this).parent().parent().data("shipId")).setCommand();
@@ -2326,6 +2344,10 @@ Ship.prototype.addCommandDiv = function(div){
 	if (this.command){div.find(".commandContainer .commandEntry").show();}
 	else if (game.phase == 3 && game.canSetNewCommandUnit()){div.find(".commandContainer input").show();}
 	else div.find(".commandContainer").hide();
+}
+
+Ship.prototype.getFocusIfCommand = function(){
+	return (game.settings.pv / 100 * (this.baseFocusRate + this.modFocusRate))
 }
 
 Ship.prototype.getUnitClass = function(){
@@ -2929,10 +2951,6 @@ Ship.prototype.previewSetup = function(){
 	}
 }
 
-Ship.prototype.getFocusGain = function(){
-	return this.baseFocusRate + this.modFocusRate;
-}
-
 Ship.prototype.updateDiv = function(){
 	$(this.element)
 		.find(".thrust").html(this.getRemSpeed() + " / " + this.getCurSpeed()).end()
@@ -3180,36 +3198,31 @@ Ship.prototype.readyForAnim = function(){
 	this.setPreMoveFacing();	
 
 	var frameMod = 1000 / window.fpsTicks / this.getCurSpeed();
-
+	//console.log(frameMod)
 	for (var i = 0; i < this.actions.length; i++){
-		if (this.actions[i].turn == game.turn){
-			var action = this.actions[i];
+		var action = this.actions[i];
+		this.actions[i].animated = 0;
 
-			if (action.type == "speed" || action.type == "deploy" || action.type == "jumpIn"){
-				this.actions[i].animated = 1;
+		if (action.type == "speed" || action.type == "deploy" || action.type == "jumpIn"){
+			this.actions[i].animated = 1;
+		}
+		else if (action.type == "turn"){
+
+			this.actions[i].t = [0, Math.abs(this.actions[i].a*3), this.actions[i].a/Math.abs(this.actions[i].a*3)];
+			//console.log(this.actions[i].t)
+
+		}
+		else {
+			if (i == 0){
+				var v = new Vector({x: this.x, y: this.y}, {x: action.x, y: action.y});
+					v.t = [0, action.dist * frameMod];
 			}
 			else {
-				this.actions[i].animated = 0;
-				if (i == 0){
-					if (action.type == "move"){
-						var v = new Vector({x: this.x, y: this.y}, {x: action.x, y: action.y});
-							v.t = [0, action.dist * frameMod];
-						this.actions[i].v = v;
-					}
-					else if (action.type == "turn"){this.actions[i].angle = this.actions[i].a;}
-				}
-				else {
-					if (action.type == "move"){
-						var v = new Vector({x: this.actions[i-1].x, y: this.actions[i-1].y}, {x: action.x, y: action.y});
-							v.t = [0, action.dist * frameMod];
-						this.actions[i].v = v;
-						//console.log(v);
-					}
-					else if (action.type == "turn"){
-						this.actions[i].angle = this.actions[i].a;
-					}
-				}
+				var v = new Vector({x: this.actions[i-1].x, y: this.actions[i-1].y}, {x: action.x, y: action.y});
+					v.t = [0, action.dist * frameMod];
 			}
+
+			this.actions[i].v = v;
 		}
 	}
 }
@@ -3507,7 +3520,7 @@ Ship.prototype.enableCrewPurchase = function(e, bridge){
 		table
 		.append(
 			$($("<tr>")
-				.append($("<td>").html(bridge.loads[i].name + "</br>specialist"))
+				.append($("<td>").html(bridge.loads[i].name + "</br>Officer"))
 				.append($("<td>").html(this.getCrewEffect(i)))
 				.append($("<td>").html(this.getCrewAddCost(i)))
 				.append($("<td>")
@@ -3536,7 +3549,7 @@ Ship.prototype.enableCrewPurchase = function(e, bridge){
 			$($("<tr>")
 				.append($("<th>").attr("colSpan", 3).html(""))
 				.append($("<th>").attr("colSpan", 3).html("Grand Total"))
-				.append($("<th>").html(bridge.totalCost))
+				.append($("<th>").html(bridge.cost))
 			)
 		)
 	}
@@ -3550,11 +3563,11 @@ Ship.prototype.disableCrewPurchase = function(e){
 }
 
 Ship.prototype.plusCrewLevel = function(i){
-	var bridge = this.getSystemByName("Bridge");
+	var bridge = this.getSystemByName("Command");
 	if (bridge.loads[i].amount == 3){return;}
 	bridge.loads[i].amount++;
 	bridge.loads[i].cost = this.getTotalCrewCost(i);
-	var system = this.getSystem(i+3);
+	var system = this.getSystemByName(bridge.loads[i].name);
 		system.powers.push({
 			id: system.powers.length+1, unitid: system.parentId, systemid: system.id,
 			turn: game.turn,type: 2, cost: 0, new: 1
@@ -3564,10 +3577,11 @@ Ship.prototype.plusCrewLevel = function(i){
 }
 
 Ship.prototype.minusCrewLevel = function(i){
-	var bridge = this.getSystemByName("Bridge");
+	var bridge = this.getSystemByName("Command");
 	if (!bridge.loads[i].amount){return;}
 	bridge.loads[i].amount--;
-	var system = this.getSystem(i+3);
+	bridge.loads[i].cost = this.getTotalCrewCost(i);
+	var system = this.getSystemByName(bridge.loads[i].name);
 		system.doUnboost();
 		system.update();
 	this.updateCrewDiv(i);
@@ -3582,21 +3596,19 @@ Ship.prototype.updateCrewDiv = function(i){
 }
 
 Ship.prototype.getCrewEffect = function(i){
-	var type = this.getSystemByName("Bridge").loads[i];
+	var command = this.getSystemByName("Command");
+	var type = command.loads[i];
 	var name = type.name;
 	var value = 0;
 
-	if (name == "Morale"){
-		return "-" + "20" + " %</br>Damage Effect on Morale";
+	if (name == "Command"){
+		return "-" +  10 + "% Rout Chance</br>+" + command.crewEffect + "% Focus Generation";
 	}
-	else if (name == "Focus"){
-		return "+" + "10" + " %</br>Focus Generation";
-	}
-	else return "+" + this.getSystemByName(name).crewEffect + " %</br>Output";
+	else return "+" + this.getSystemByName(name).crewEffect + "% " + name + " Output";
 }
 
 Ship.prototype.getCrewAddCost = function(i){
-	var type = this.getSystemByName("Bridge").loads[i];
+	var type = this.getSystemByName("Command").loads[i];
 	var name = type.name;
 
 	//console.log("getCrewAddCost " + name);
@@ -3608,11 +3620,11 @@ Ship.prototype.getCrewAddCost = function(i){
 }
 
 Ship.prototype.getCrewBaseCost = function(i){
-	return this.getSystemByName("Bridge").loads[i].baseCost;
+	return this.getSystemByName("Command").loads[i].baseCost;
 }
 
 Ship.prototype.getCrewLevel = function(i){
-	return this.getSystemByName("Bridge").loads[i].amount;
+	return this.getSystemByName("Command").loads[i].amount;
 }
 
 Ship.prototype.getTotalCrewCost = function(i){
@@ -3628,7 +3640,7 @@ Ship.prototype.getTotalCrewCost = function(i){
 }
 
 Ship.prototype.updateCrewTotals = function(){
-	var bridge = this.getSystemByName("Bridge");
+	var bridge = this.getSystemByName("Command");
 	var total = 0;
 	for (var i = 0; i < bridge.loads.length; i++){
 		total += this.getTotalCrewCost(i);

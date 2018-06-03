@@ -22,7 +22,7 @@ if (isset($_SESSION["userid"])){
 	echo "<script>";
 	echo "window.players = ".json_encode($players).";";
 	echo "window.factions = ".json_encode($manager->getFactions()).";";
-	echo "window.maxPoints = ".$game["pv"].";";
+	echo "window.settings = ".json_encode($game).";";
 	echo "window.userid = ".$playerid.";";
 	echo "</script>";
 	$joined = false;
@@ -33,7 +33,7 @@ if (isset($_SESSION["userid"])){
 	$element .= "<th colSpan=2 style='font-size: 22px;''>".$game["name"]."</th>";
 	$element .= "</tr>";
 	$element .= "<tr>";
-	$element .= "<th colSpan=2 style='font-size: 16px;'>".$game["pv"]." points for starting fleet</br>".$game["reinforce"]." for reinforcements @ turn ".$game["reinforceTurn"].",  ETA ".$game["reinforceETA"]."</th>";
+	$element .= "<th colSpan=2 style='font-size: 16px;'>".$game["pv"]." points for starting fleet</br>".$game["reinforce"]." for reinforcements @ turn ".$game["reinforceTurn"]." - ETA ".$game["reinforceETA"]."</th>";
 	$element .= "</tr>";
 
 	$element .= "<tr style='height: 20px;'><td colSpan=2></td></tr>";
@@ -79,7 +79,7 @@ if (isset($_SESSION["userid"])){
 	else if ($joined){$element .= "<tr><td colSpan=2><input type='button' value='Leave Game' onclick='leaveGame()'></td></tr>";}
 	else {$element .= "<tr><td colSpan=2><input type='button' onclick='joinGame()' value='Join Game'></td></tr>";}
 
-	$element .= "<tr><td colSpan=2><input type='button' onclick='window.goToLobby()'' value='Return to Lobby'></td></tr>";	
+	$element .= "<tr><td colSpan=2><input type='button' onclick='window.goToLobby()' value='Return to Lobby'></td></tr>";	
 
 	$element .= "</table>";
 
@@ -121,9 +121,8 @@ else {
 			<tr>
 				<td>
 					<div style="margin: auto">
-						<?php echo $element; ?>
+						<?php echo $element;?>
 					</div>
-				</td>
 				</td>
 			</tr>
 		</table>
@@ -143,7 +142,7 @@ else {
 								</th>
 							</tr>
 							<tr>
-								<th colSpan=3">
+								<th colSpan=3>
 									<span id="remPV">
 									</span>
 								</th>
@@ -256,12 +255,13 @@ else {
 				system: 0,
 				fighters: [],
 				ballistics: [],
+				settings: window.settings,
 
 
 				tryConfirmPurchase: function(){
 					var cur = game.getFleetCost();
 					var add = game.ships[0].totalCost;
-					var max = window.maxPoints;
+					var max = game.settings.pv
 
 					if (game.ships[0].squad && game.ships[0].structures.length < 2){
 						popup("A squadron needs to include at least 2 units.");
@@ -406,14 +406,14 @@ else {
 				},
 
 				setRemPV: function(){
-					$("#remPV").html(" (" + (window.maxPoints - this.getFleetCost()) + " points left)");
+					$("#remPV").html(" (" + (game.settings.pv - this.getFleetCost()) + " points left)");
 				},
 
 				setFocusGain: function(){
 					var unit = this.getCommandUnit();
 					if (unit){
-						var gain = this.getCommandUnit().getFocusGain()
-						$("#focusGain").html("Focus per Turn: " + gain + " %  / " + window.maxPoints / 100 * gain);
+						var gain = this.getCommandUnit().getFocusIfCommand();
+						$("#focusGain").html("Focus per Turn: " + (unit.baseFocusRate + unit.modFocusRate) + " %  / " + gain);
 					}
 					else $("#focusGain").html("");
 				},

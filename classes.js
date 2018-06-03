@@ -191,6 +191,7 @@ function Crit(data){
 	this.turn = data.turn;
 	this.type = data.type;
 	this.duration = data.duration;
+	this.display = data.display;
 	this.value = data.value;
 
 	this.getString = function(){
@@ -199,18 +200,15 @@ function Crit(data){
 			} return this.type + " (T " + this.turn + ")";
 		}
 		else if (this.type == "Destroyed"){return this.type + " (T " + this.turn + ")";}
-		else if (this.turn == -1){return "Overload: -" +  this.value +  "% " + this.type + " (T " + this.turn + ")";}
 		else return (this.type + " -" + (this.value) + "% (T " + this.turn + ")");
 	}
 
 	this.inEffect = function(){
-		if (this.duration == 0){
+		if (this.type == ""){return false;}
+		if (this.duration == 0 || game.turn <= this.turn + this.duration){
 			return true;
 		}
-		else if (game.turn <= this.turn + this.duration){
-			return true;
-		}
-		else return false;
+		return false;
 	}
 
 
@@ -681,7 +679,7 @@ Single.prototype.getRemIntegrity = function(){
 Single.prototype.hover = function(e){
 	if (!this.highlight){
 		this.highlight = true;
-		var ele = this.getDetailsDiv();
+		var ele = this.getSysDiv();
 		$(document.body).append(ele);
 		var w = $(ele).width();
 		$(ele).css("left", e.clientX - w/2).css("top", e.clientY + 40)
@@ -702,32 +700,33 @@ Single.prototype.getEMDmg = function(){
 	return dmg;
 }
 
-Single.prototype.getDetailsDiv = function(){
-	var div = document.createElement("div");
-		div.id = "sysDiv";
-		div.className = this.id + " flight";
+Single.prototype.getSysDiv = function(){
+	var div = $("<div>").attr("id", "sysDiv").addClass(this.id + " flight");
 
-		var table = $("<table>")
-			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.name)))
-			.append($("<tr>").append($("<td>").attr("colSpan", 2).html(this.display)))
-			.append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.integrity)))
-			.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.negation)))
-			.append($("<tr>").append($("<td>").html("Speed").css("width", 120)).append($("<td>").html(this.baseImpulse)))
-			.append($("<tr>").append($("<td>").html("EM-D sustained")).append($("<td>").html(this.getEMDmg())))
-			.append($("<tr>").append($("<td>").html("Dropout Test Trigger")).append($("<td>").html("< " + this.dropout[0] + "% HP")))
-			.append($("<tr>").append($("<td>").html("Base Dropout Chance")).append($("<td>").html(this.dropout[1] + "%")))
+	var table = $("<table>")
+		.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.name)))
+		.append($("<tr>").append($("<td>").attr("colSpan", 2).html(this.display)))
+		.append($("<tr>").append($("<td>").html("Integrity").css("width", "70%")).append($("<td>").html(this.integrity)))
+		.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.negation)))
+		.append($("<tr>").append($("<td>").html("Speed").css("width", 120)).append($("<td>").html(this.baseImpulse)))
+		.append($("<tr>").append($("<td>").html("EM-D sustained")).append($("<td>").html(this.getEMDmg())))
+		.append($("<tr>")
+					.append($("<td>").attr("colSpan", 2).css("height", 6)))
+		.append($("<tr>").append($("<td>").attr("colSpan", 2).html("Dropout Check required @ HP < " + (100-this.dropout[0]) + "%")))
+		.append($("<tr>").append($("<td>").html("Start Dropout Chance")).append($("<td>").html(this.dropout[1] + "%")))
 
 	if (this.crits.length){
 			$(table)
 				.append($("<tr>").append($("<td>").attr("colSpan", 2).css("fontSize", 16).css("borderBottom", "1px solid white").css("borderTop", "1px solid white").html("Modifiers")))
 
 		for (var i = 0; i < this.crits.length; i++){
+  			if (!this.crits[i].inEffect()){continue;}
 			$(table)
 				.append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("negative").html(this.crits[i].getString())))
 		}
 	}
 		
-	div.appendChild(table[0]);
+	div.append(table[0]);
 	return div;
 }
 

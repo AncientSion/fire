@@ -116,17 +116,23 @@ System.prototype.attachSysMods = function(ele){
 			}
 		}
 		if (crew){
-			$(table[0]).append($("<tr>").append($("<td>").html("Tier " + crew +" crew: +" + (this.getCrewEffect() * crew) + "% Output").attr("colSpan", 2).addClass("positive")));
+			$(table[0]).append($("<tr>").append($("<td>").html(crew + "* Officer: +" + (this.getCrewEffect() * crew) + "% " + this.getCrewTerm()).attr("colSpan", 2).addClass("positive")));
 		}
 		if (this.crits.length){
 			for (var i = 0; i < this.crits.length; i++){
-				if (this.crits[i].inEffect()){
-					$(table[0]).append($("<tr>").append($("<td>").html(this.crits[i].getString()).attr("colSpan", 2).addClass("negative")));
-				}
+  				if (!this.crits[i].inEffect()){continue;}
+				$(table[0]).append($("<tr>").append($("<td>").html(this.crits[i].getString()).attr("colSpan", 2).addClass("negative")));
 			}
 		}
 		div.append(table);
 	}
+}
+
+System.prototype.getCrewTerm = function(){
+	if (this.name == "Command"){
+		return "Focus";
+	}
+	else return "Output";
 }
 
 System.prototype.getDisplay = function(){
@@ -1135,8 +1141,8 @@ PrimarySystem.prototype.getCritLogString = function(){
 	var html = "";
 	for (let i = 0; i < this.crits.length; i++){
 		if (this.crits[i].turn != game.turn){continue;}
-		if (this.crits[i].type.length > 6){continue;}
-		return html += (this.display + ": " + this.crits[i].value + "% efficiency loss.</br>");
+		if (this.crits[i].type != "Output"){continue;}
+		html += this.crits[i].display + "</br>";
 	}
 	return html;
 }
@@ -1193,6 +1199,15 @@ PrimarySystem.prototype.getOutput = function(){
 	return Math.floor(this.output / 100 * mod) - usage;
 }
 
+PrimarySystem.prototype.getCombinedModifiers = function(){
+	var mod = 0;
+		mod += this.getBoostEffect("Output") * this.getBoostLevel();
+		mod += this.getCrewEffect() * this.getCrewLevel();
+		mod += this.getOutputCrits();
+
+	return round(mod/100, 2);
+}
+
 System.prototype.getCrewLevel = function(){
 	var lvl = 0;
 	for (var i = 0; i < this.powers.length; i++){
@@ -1218,9 +1233,9 @@ PrimarySystem.prototype.getOutputUsage = function(){
 PrimarySystem.prototype.getOutputCrits = function(){
 	var mod = 0;
 	for (var i = 0; i < this.crits.length; i++){
-		if (this.crits[i].inEffect()){
-			mod -= this.crits[i].value;
-		}
+		if (!this.crits[i].inEffect()){continue;}
+		if (this.crits[i].type == ""){continue;}
+		mod -= this.crits[i].value;
 	}
 	return mod;
 }
@@ -1278,9 +1293,10 @@ PrimarySystem.prototype.getSysDiv = function(){
 			//$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("sensorEffect").html(this.getEWModeEffect())));
 		}
 	}
-	
-
+		
 	(div.append(table));
+	this.attachSysNotes(div);
+	this.attachSysMods(div);
 	return div;
 }
 
@@ -1318,14 +1334,22 @@ Engine.prototype.getPowerDiv = function(){
 	return;
 }
 
-function Bridge(system){
+function Command(system){
 	PrimarySystem.call(this, system);
 	this.effiency = 0;
 	this.powerReq = 0;
 }
-Bridge.prototype = Object.create(PrimarySystem.prototype);
+Command.prototype = Object.create(PrimarySystem.prototype);
 
-Bridge.prototype.select = function(e){
+Command.prototype.update = function(){
+	var unit = game.getUnit(this.parentId);
+		unit.morale.bonusChance = 0;
+	for (var i = 0; i < this.powers.length; i++){
+		unit.morale.bonusChance -= 10;
+	}
+}
+
+Command.prototype.select = function(e){
 	console.log(this);
 	var id = this.id;
 	var parentId = this.parentId;
@@ -1343,16 +1367,7 @@ Bridge.prototype.select = function(e){
 	}
 }
 
-Bridge.prototype.getCritLogString = function(){
-	var html = "";
-	for (let i = 0; i < this.crits.length; i++){
-		if (this.crits[i].turn != game.turn){continue;}
-		return html += (this.display + " - " + this.crits[i].type + ": " + this.crits[i].value + "% efficiency loss.</br>");
-	}
-	return html;
-}
-
-Bridge.prototype.getUpgradeData = function(){
+Command.prototype.getUpgradeData = function(){
 	var loads = [];
 	var units = [];
 	var text = this.display + ":</br>";
@@ -2263,7 +2278,7 @@ Weapon.prototype.getSysDiv = function(){
 
 	if (this.linked > 1){
 		//$(table).append($("<tr>").append($("<td>").html("Linked Shots")).append($("<td>").html(this.linked + " x " + this.shots)));
-		$(table).append($("<tr>").append($("<td>").html("Linked Mounts")).append($("<td>").html(this.linked)));
+		$(table).append($("<tr>").append($("<td>").html("Linked Guns")).append($("<td>").html(this.linked)));
 	}
 	
 	if (this.fireMode == "Laser"){
@@ -2455,8 +2470,8 @@ Warhead.prototype.getAnimation = function(fire){
 	
 	var allAnims = [];
 	var grouping = 1;
-	var delay = 30;
-	var shotInterval = 10;
+	var gunDelay = 30;
+	var shotDelay = 10;
 	var hits = 0;
 
 	var o = game.getUnit(this.parentId);
@@ -2484,7 +2499,7 @@ Warhead.prototype.getAnimation = function(fire){
 					tx = p.x + t.x;
 					ty = p.y + t.y;
 			//}
-			var shotAnim = {tx: tx, ty: ty, m: 35, n: 0 - ((j / grouping) * delay + k*shotInterval)};
+			var shotAnim = {tx: tx, ty: ty, m: 35, n: 0 - ((j / grouping) * gunDelay + k*shotDelay)};
 
 			gunAnims.push(shotAnim);
 		}
@@ -2501,7 +2516,7 @@ Flash.prototype.getAnimation = function(fire){
 	var grouping = 2;
 	var speed = this.projSpeed;
 	var delay = 25 * this.shots;
-	var shotInterval = 25;
+	var shotDelay = 25;
 	var cc = 0;
 	var hits = 0;
 	var fraction = 1;
@@ -2516,7 +2531,7 @@ Flash.prototype.getAnimation = function(fire){
 
 	speed /= fraction;
 	delay *= fraction;
-	shotInterval *= fraction;
+	shotDelay *= fraction;
 
 	if (fire.shooter.flight && fire.target.flight){
 		a = JSON.parse(JSON.stringify(fire.target.structures[1].layout));
@@ -2538,7 +2553,7 @@ Flash.prototype.getAnimation = function(fire){
 		var ty = t.y + dest.y;
 
 		var gunAnims = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
-			gunAnims.n = 0 - ((i / grouping) * delay + i*shotInterval);
+			gunAnims.n = 0 - ((i / grouping) * delay + i*shotDelay);
 
 		allAnims.push([gunAnims])
 	}
@@ -2557,11 +2572,11 @@ Particle.prototype.getAnimation = function(fire){
 	var allAnims = [];
 	var grouping = 2;
 	var speed = this.projSpeed;
-	var delay = 25 * this.shots;
-	var shotInterval = 25 - (this.shots *4);
-	if (this.name == "MediumParticle"){shotInterval = 10;}
-	else if (this.name == "LightParticle"){delay = 15;}
-	else if (this.name == "SuperHeavyParticle"){shotInterval = 3; delay = 35;}
+	var gunDelay = 40;
+	var shotDelay = 8;
+	//if (this.name == "MediumParticle"){shotDelay = 10;}
+	//else if (this.name == "LightParticle"){gunDelay = 15;}
+	//else if (this.name == "SuperHeavyParticle"){shotDelay = 3; gunDelay = 35;}
 	var cc = 0;
 	var hits = 0;
 	var fraction = 1;
@@ -2591,8 +2606,8 @@ Particle.prototype.getAnimation = function(fire){
 	}
 
 	speed /= fraction;
-	delay *= fraction;
-	shotInterval *= fraction;
+	gunDelay *= fraction;
+	shotDelay *= fraction;
 
 	if (fire.shooter.flight && fire.target.flight){
 		a = JSON.parse(JSON.stringify(fire.target.structures[1].layout));
@@ -2621,7 +2636,12 @@ Particle.prototype.getAnimation = function(fire){
 			var ty = t.y + dest.y;
 
 			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
-				shotAnim.n = 0 - ((i / grouping) * delay + j*shotInterval);
+				shotAnim.n = 0 - ((Math.floor(i / grouping) * gunDelay) + i*10 + (j+1)*shotDelay);
+
+				shotAnim.n = 0 - i*gunDelay - j*shotDelay
+
+
+				console.log(shotAnim.n);
 			gunAnims.push(shotAnim);
 			//console.log(shotAnim.n +"/"+shotAnim.m);
 
@@ -2632,7 +2652,7 @@ Particle.prototype.getAnimation = function(fire){
 				tx += range(3, 6) * range(0, 1) * -1;
 				ty += range(3, 6) * range(0, 1) * -1;
 				var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
-					shotAnim.n = 0 - ((i / grouping) * delay + j*shotInterval);
+					shotAnim.n = 0 - ((i / grouping) * delay + j*shotDelay);
 				gunAnims.push(shotAnim);
 			}
 		}
@@ -2659,7 +2679,7 @@ Pulse.prototype.getAnimation = function(fire){
 	var grouping = 2;
 	var speed = this.projSpeed;
 	var delay = 30;
-	var shotInterval = 4;
+	var shotDelay = 4;
 	var cc = 0;
 	var hits = 0;
 	var fraction = 1;
@@ -2687,7 +2707,7 @@ Pulse.prototype.getAnimation = function(fire){
 
 	speed /= fraction;
 	delay *= fraction;
-	shotInterval *= fraction;
+	shotDelay *= fraction;
 
 	for (var j = 0; j < fire.guns; j++){
 		var hasHit = 0;
@@ -2712,7 +2732,7 @@ Pulse.prototype.getAnimation = function(fire){
 		for (var k = 0; k < (this.basePulses + this.extraPulses); k++){
 			var devi = {x: range(-2, 2), y: range(-2, 2)};
 			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx + devi.x, y: ty + devi.y}, speed, (k < subHits));
-				shotAnim.n = 0 - ((j / grouping) * delay + k*shotInterval);
+				shotAnim.n = 0 - ((j / grouping) * delay + k*shotDelay);
 
 				if ( isNaN(shotAnim.n) ||isNaN(shotAnim.m) ||isNaN(shotAnim.n) ){
 					console.log("ERROR");
@@ -2745,7 +2765,7 @@ Laser.prototype.getAnimation = function(fire){
 	var allAnims = [];
 	var grouping = 1;
 	var delay = 30;
-	var shotInterval = 15;
+	var shotDelay = 15;
 	var cc = 0;
 	var hits = 0;
 	var fraction = 1;
@@ -2753,7 +2773,7 @@ Laser.prototype.getAnimation = function(fire){
 		t = fire.target.getDrawPos();
 
 	if (fire.shooter.squad){
-		delay = 40; shotInterval = 5;
+		delay = 40; shotDelay = 5;
 	}
 	else if (fire.guns >= 6){
 		delay = 15;
@@ -2818,7 +2838,7 @@ Laser.prototype.getAnimation = function(fire){
 				//y: fire.shooter.drawY + range(fire.shooter.size * 0.2 * -1, fire.shooter.size * 0.2)},
 				{x: tx, y: ty},
 				{x: tb.x, y: tb.y}, 
-				0 - (range(-5, 5)) - (Math.floor(j / grouping) * delay) - k*shotInterval,
+				0 - (range(-5, 5)) - (Math.floor(j / grouping) * delay) - k*shotDelay,
 				fire.weapon.output*20,
 				hit
 			);
@@ -3684,7 +3704,7 @@ Area.prototype.getAnimation = function(fire){
 	var grouping = 2;
 	var speed = this.projSpeed;
 	var delay = 30;
-	var shotInterval = 10;
+	var shotDelay = 10;
 	var cc = 0;
 	var hits = 0;
 	var fraction = 1;
@@ -3699,7 +3719,7 @@ Area.prototype.getAnimation = function(fire){
 
 	speed /= fraction;
 	delay *= fraction;
-	shotInterval *= fraction;
+	shotDelay *= fraction;
 	
 	for (var j = 0; j < fire.guns; j++){
 		var gunAnims = [];
@@ -3719,7 +3739,7 @@ Area.prototype.getAnimation = function(fire){
 			var ty = t.y + dest.y;
 
 			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
-				shotAnim.n = 0 - ((j / grouping) * delay + k*shotInterval);
+				shotAnim.n = 0 - ((j / grouping) * delay + k*shotDelay);
 
 			gunAnims.push(shotAnim);
 		}

@@ -174,8 +174,8 @@ class HeavyLaser extends LightLaser {
 	public $rakeTime = 60;
 	public $beamWidth = 4;
 	public static $prio = 0;
-	public $minDmg = 160;
-	public $maxDmg = 200;
+	public $minDmg = 560;
+	public $maxDmg = 600;
 	public $reload = 4;
 	public $optRange = 650;
 	public $dmgLoss = 6;

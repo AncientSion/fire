@@ -54,19 +54,11 @@ class PrimarySystem extends System {
 		$mod = 100;
 		$mod += $this->getBoostEffect("Output") * $this->getBoostLevel($turn);
 		$mod += $this->getCrewEffect() * $this->getCrewLevel();
-		$mod -= $this->getCritMod("", $turn);
+		$mod -= $this->getCritMod("Output", $turn);
 
 		//Debug::log("ship: #".$this->parentId.", output: ".floor($this->output*$mod));
 		return floor($this->output * $mod/100);
 	}	
-
-	public function getCritMod($type, $turn){
-		$mod = 0;
-		for ($i = 0; $i < sizeof($this->crits); $i++){
-			$mod =+ $this->crits[$i]->value;
-		}
-		return $mod;
-	}
 
 	public function getValidEffects(){
 		return array(
@@ -104,14 +96,11 @@ class PrimarySystem extends System {
 }
 
 class Bridge extends PrimarySystem {
-	public $name = "Bridge";
+	public $name = "Command";
 	public $display = "Command & Control";
 	public $hitMod = 6;
 	public $loadout = 1;
-
-	public function getNodes(){
-		return array("Morale", "Focus", "Engine", "Sensor", "Reactor");
-	}
+	public $crewEffect = 5;
 
 	function __construct($id, $parentId, $integrity, $output, $width = 1){
         parent::__construct($id, $parentId, $integrity, 0, $width);
@@ -141,6 +130,10 @@ class Bridge extends PrimarySystem {
 		}
 	}
 
+	public function getNodes(){
+		return array("Command", "Engine", "Sensor", "Reactor");
+	}
+
 	public function determineCrit($new, $old, $turn){
 		$new = round($new / $this->integrity * 100);
 		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId);
@@ -151,7 +144,7 @@ class Bridge extends PrimarySystem {
 		$roll = mt_rand(0, sizeof($options)-1);
 		$pick = $options[$roll];
 
-		if ($roll == 2){$mod = round($mod/2, 2);}
+		if (!$roll || $roll == 3){$mod = round($mod/2, 2);}
 
 		Debug::log("BRIDGE CRIT: on ".$pick." for :".$mod."%");
 
@@ -178,7 +171,6 @@ class Reactor extends PrimarySystem {
 
 	public function applyPowerSpike($turn, $potential, $em){
 		Debug::log("applyPowerSpike to #".$this->parentId);
-
 
 		if (sizeof($potential)){
 			$overload = 0.00;

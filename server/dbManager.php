@@ -1155,6 +1155,7 @@
 				UPDATE units 
 				SET 
 					status = :status
+					notes = :notes
 				WHERE
 					id = :id
 			");
@@ -1162,6 +1163,7 @@
 			for ($i = 0; $i < sizeof($data); $i++){
 				$stmt->bindParam(":id", $data[$i]["id"]);
 				$stmt->bindParam(":status", $data[$i]["status"]);
+				$stmt->bindParam(":notes", $data[$i]["notes"]);
 				$stmt->execute();
 
 				if ($stmt->errorCode() == 0){continue;}
