@@ -117,6 +117,8 @@ window.speedMod = 1;
 
 window.startTime, window.now, window.then, window.elapsed;
 
+window.res.x = window.innerWidth-1;
+window.res.y = window.innerHeight-1;
 
 window.iterator = 0;
 
@@ -322,11 +324,33 @@ function redirect(url){
 }
 
 function popup(text){
-    $("#popupWrapper").show().find("#popupText").html("<div class='popupHeader'>" + text + "</div");
+    game.ui.popupWrapper
+     	.show()
+    	.find("#popupText")
+    		.html("<div class='popupSingle'>" + text + "</div>")
+
+	var ox = game.ui.popupWrapper.width()/2;
+	var oy =  game.ui.popupWrapper.height()/2;
+		oy = 400;
+
+    game.ui.popupWrapper
+		.css("top", res.y / 2 - oy)
+		.css("left", res.x / 2 - ox)
 }
 
 function instruct(text){
-    $("#instructWrapper").show().find("#instructText").html("<div class='popupHeader'>" + text + "</div");
+    game.ui.instructWrapper
+    	.show()
+  		.find("#instructText")
+  			.html("<div class='popupSingle'>" + text + "</div>")
+
+	var ox = game.ui.popupWrapper.width()/2;
+	var oy =  game.ui.popupWrapper.height()/2;
+		oy = 400;
+
+    game.ui.instructWrapper
+		.css("top", res.y / 2 - oy)
+		.css("left", res.x / 2 - ox)
 }
 
 (function($) {

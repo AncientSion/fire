@@ -186,7 +186,6 @@ Flight.prototype.createBaseDiv = function(){
 				.append($("<input>")
 					.attr("type", "button")
 					.attr("value", "Set new mission")
-					.data("mission", this.mission.type)
 					.click(function(e){
 						if (aUnit == $(this).parent().parent().data("shipId")){
 							game.getUnit(aUnit).switchMissionMode();
@@ -206,16 +205,15 @@ Flight.prototype.createBaseDiv = function(){
 						.attr("type", "radio")
 						.attr("name", "mission")
 						.attr("value", 2))
-					.append($("<span>").html("Strike / Escort / Intercept unit"))
+					.append($("<span>").html("Strike / Escort / Intercept"))
 				)
 				.append($("<input>")
 					.addClass("missionOption confirm disabled")
 					.attr("type", "button")
 					.attr("value", "Confirm / Proceed")
-					.data("mission", this.mission.type)
 					.click(function(e){
 						if (aUnit == $(this).parent().parent().data("shipId")){
-							game.getUnit(aUnit).enableMissionChange();
+							game.getUnit(aUnit).confirmMissionMode();
 						}
 					}))
 	}
@@ -233,15 +231,6 @@ Flight.prototype.createBaseDiv = function(){
 				.attr("type", "button")
 				.attr("value", text))
 	}
-}
-
-Flight.prototype.enableMissionChange = function(){
-
-	var value =  Math.floor($(this.element).find("input[name=mission]:checked").val());
-	console.log(value);
-
-
-	$("#deployOverlay").show().find("#deployType").html( game.getMissionType(value)).end();
 }
 
 Flight.prototype.expandDiv = function(div){
@@ -325,18 +314,16 @@ Flight.prototype.getAttachDivTargetString = function(){
 
 
 Flight.prototype.switchMissionMode = function(){
-	if (game.mission){this.disableMissionMode();}
+	if (game.flightDeploy){this.disableMissionMode();}
 	else this.enableMissionMode();
 }
 
-Flight.prototype.disableMissionMode = function(){
-	game.mission = 0;
-	$(this.element).find(".missionOption").addClass("disabled");
-}
-
-Flight.prototype.enableMissionMode = function(){
-	game.mission = 1;
-	$(this.element).find(".missionOption").removeClass("disabled");
+Flight.prototype.confirmMissionMode = function(){
+	var value = Math.floor($(this.element).find("input[name=mission]:checked").val());
+	game.mission = value;
+	if (!game.mission){return;}
+	//console.log(value);
+	$("#deployOverlay").show().find("#deployType").html( game.getMissionType(value)).end();
 }
 
 Flight.prototype.drawMissionArea = function(){

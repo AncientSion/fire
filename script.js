@@ -6,8 +6,6 @@ $(window).on("load", function(){
 
 function init(data){
 	console.time("time");
-	window.res.x = window.innerWidth-1;
-	window.res.y = window.innerHeight-1;
 
 	$("#mouseCanvas").mousemove(canvasMouseMove);
 	$("#mouseCanvas").bind('wheel', mouseCanvasZoom);
@@ -387,11 +385,8 @@ function canvasMouseMove(e){
 	//$("#currentPos").html(pos.x + " / " + pos.y + "____" + cam.o.x + " / " + cam.o.y+ "___" + (pos.x-cam.o.x) + " / " + (pos.y-cam.o.y));
 	var unit = game.getUnitByClick(pos);
 
-	if (game.flightDeploy){
-		game.handleFlightDeployMouseMove(e, pos, unit)
-	}
-	else if (game.mission){
-		game.handleFlightDeployMouseMove(e, pos, unit)
+	if (game.flightDeploy && game.mission){
+		game.handleFlightDeployMouseMove(e)
 	}
 	 
 	if (aUnit){
@@ -475,11 +470,9 @@ function planPhase(e, pos, unit){
 			game.doDeployShip(e, unit, pos);
 		}
 	}
-	else if (game.flightDeploy){ // deploy via hangar
-		game.doDeployFlight(pos);
-	}
-	else if (game.mission){
-		game.issueMission(pos);
+	else if (game.flightDeploy && game.mission){
+		if (unit.flight){game.issueMission(pos);}
+		else game.doDeployFlight(pos);
 	}
 	else if (!game.deploying){
 		if (unit){

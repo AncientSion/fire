@@ -17,7 +17,7 @@ function Game(data){
 	this.mode = false;
 	this.deploying = false;
 	this.flightDeploy = false;
-	this.adjustMission = false;
+	this.mission = 0;
 	this.index = 1;
 	this.reinforcePoints = 0;
 	this.animating = false;
@@ -49,7 +49,8 @@ function Game(data){
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
-	this.ui = {shortInfo: $("#shortInfo"), doShorten: $("#doShorten"), turnButton: $("#turnButton"), logWrapper: $("#combatlogWrapper")};
+	this.ui = {shortInfo: $("#shortInfo"), doShorten: $("#doShorten"), turnButton: $("#turnButton"),
+			logWrapper: $("#combatlogWrapper"), popupWrapper: $("#popupWrapper"), instructWrapper: $("#instructWrappert")};
 	this.animData = {jump: 60};
 	this.commandChange = {old: 0, new: 0}
 
@@ -151,45 +152,30 @@ function Game(data){
 	}
 
 	this.enableFlightDeploy = function(){
-		this.flightDeploy = this.getUnit(aUnit).getSystem($("#hangarDiv").data("systemid"));
+		var hangar = game.getUnit(aUnit).getSystem($("#hangarDiv").data("systemid"));
+		if (!hangar.canFire()){return false;}
+
+		var hasFighters = 0;
+		for (var i = 0; i < hangar.loads.length; i++){
+			if (hangar.loads[i].launch >= 1){
+				hasFighters = 1; break;
+			}
+		}
+
+		if (!hasFighters){return false;}
+
+		var value = Math.floor($($("#hangarDiv")).find("input[name=mission]:checked").val());
+		if (!value){return false;}
+		game.mission = value;
+
+		this.flightDeploy = hangar;
 		//var mission = this.getMissionTypeString(this.flightDeploy.mission);
 
-		instruct("Please select the offensive or defensive target for the flight");
-		$("#deployOverlay").find("#deployType").html("Select target</span>").show();
+		instruct("Please select the target unit/location target for the flight");
+		$("#deployOverlay").show().find("#deployType").html( game.getMissionType(value)).end();
 	}
 
-	this.handleFlightDeployMouseMove = function(e, pos, unit){
-		var valid = false;
-		if (this.flightDeploy.mission == 1){ // patrol
-			valid = true;
-			var s = 0;
-			for (var i = 0; i < this.flightDeploy.loads.length; i++){
-				s += this.flightDeploy.loads[i].launch;
-			}
-			s = 35 + s*8;
-			s = Math.floor(s/2);
-
-			salvoCtx.clearRect(0, 0, res.x, res.y);
-			salvoCtx.translate(cam.o.x, cam.o.y);
-			salvoCtx.scale(cam.z, cam.z);
-			salvoCtx.translate(pos.x, pos.y);
-			salvoCtx.beginPath();			
-			salvoCtx.arc(0, 0, s, 0, 2*Math.PI, false);
-			salvoCtx.closePath();
-			salvoCtx.fillStyle = "green";
-			salvoCtx.globalAlpha = 0.3;
-			salvoCtx.fill();
-			salvoCtx.globalAlpha = 1;
-			salvoCtx.setTransform(1,0,0,1,0,0);
-		}
-		else if (this.userid != unit.userid && this.flightDeploy.mission == 2 && unit && unit.ship){ // strike
-			valid = true
-		} 
-		else if (this.userid != unit.userid && this.flightDeploy.mission == 3 && unit && (!unit.ship)){ // int
-			valid = true;
-		}
-
-
+	this.handleFlightDeployMouseMove = function(e){
 		var ele = $("#deployOverlay");
 		var w = $(ele).width()/2;
 		var top = (e.clientY) + 100;
@@ -203,16 +189,16 @@ function Game(data){
 		var t = 0;
 		var dest;
 
-		if (this.shortInfo){
+		if (game.mission == 1 && pos){
+			valid = true;
+			dest = pos;
+		}
+		else if (game.mission == 2 && this.shortInfo){
 			t = this.getUnit(this.shortInfo);
 			if (!t.salvo){
 				valid = true;
 				dest = t.getPlannedPos();
 			}
-		}
-		else if (pos){
-			valid = true;
-			dest = pos;
 		}
 
 		if (!valid){
@@ -249,7 +235,7 @@ function Game(data){
 			mission = s.oldMission;
 		}
 		else {
-			mission = {id: -1, unitid: s.id, turn: this.turn, type: this.mission.new, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
+			mission = {id: -1, unitid: s.id, turn: this.turn, type: this.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
 			if (doOffset){
 				p = getPointInDir(s.size/3, a, o.x, o.y);
 				for (var i = s.cc.length-1; i >= 0; i--){
@@ -302,51 +288,19 @@ function Game(data){
 	}
 
 	this.doDeployFlight = function(pos){
-		var valid = false;
-		var t = 0;
-		var dest;
 
-		if (this.flightDeploy.mission == 1){ // Patrol
-			//console.log("PATROL");
-			dest = pos;		
-			valid = true;
-		}
-		else if (this.shortInfo){
-			t = this.getUnit(this.shortInfo);
-			 //(t && (t.ship || (!t.friendly && t.flight))){
-			if (t && (!t.salvo)){
-				valid = true;
-				dest = t.getGamePos();
-			}
-		}
-
-		if (!valid){
-			return false;
-		}
+		if (game.mission == 1 && !pos || game.mission == 2 && !game.shortInfo){return false;}
 
 		var s = this.getUnit(aUnit);
 		var hangar = s.getSystem(this.flightDeploy.id)
 		var o = s.getGamePos();
-		var facing = getAngleFromTo(o, dest);
+		//var facing = getAngleFromTo(o, dest);
+		var facing = 0;
 		var p = getPointInDir(s.size/2, facing, o.x, o.y);
-		var mission = {id: -1, unitid: -this.ships.length-20, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
-
-		
-		var immediate = 0;
-
-		if (t.id == aUnit || t.id < 0 && t.flight && t.launch.shipid == aUnit){
-			immediate = 1;
-		}
-
-		if (immediate){
-			p = dest;
-			mission.arrived = 1 //this.turn;
-		}
-
-		immediate = 0;
+		//var mission = {id: -1, unitid: -this.ships.length-20, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
 
 		var flight = new Flight(
-			{id: -this.ships.length-20, name: "Flight", mission: mission, traverse: -3,
+			{id: -this.ships.length-20, name: "Flight", mission: false, traverse: -3,
 			x: p.x, y: p.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, curImp: 0, fSize: 15, baseSize: 25, unitSize: 4, userid: this.userid, available: this.turn}
 		);
 
@@ -355,9 +309,7 @@ function Game(data){
 		flight.launch = {
 			shipid: aUnit,
 			systemid: this.flightDeploy.id,
-			loads: this.flightDeploy.loads,
-			x: dest.x,
-			y: dest.y
+			loads: this.flightDeploy.loads
 		};
 
 		for (var i = 0; i < this.flightDeploy.loads.length; i++){
@@ -373,6 +325,7 @@ function Game(data){
 		flight.setTarget();
 		flight.setLayout();
 		flight.setSize();
+		flight.finalStep = {x: o.x, y: o.y}
 		flight.setDrawData();
 		flight.setPreMovePosition();
 		flight.setImage();
@@ -382,19 +335,23 @@ function Game(data){
 
 		this.hideInstruct();
 		$("#deployOverlay").hide();
-		hangar.setFireOrder(t.id, pos).select();
+		hangar.setFireOrder(0, pos).select();
 		this.flightDeploy = false;
-		//flight.disableMissionMode();
 
 		$(flight.element).css("top", 600).css("left", 0);
-
-		if (immediate){
-			this.getUnit(t.id).attachUnit(flight);
-			this.getUnit(t.id).setSupportImage();
-		}
-
 		this.checkUnitOffsetting();
 		this.draw();
+
+		var m = game.mission;
+		var f = game.flightDeploy;
+		game.mission = 0;
+		game.flightDeploy = 0;
+		s.doUnselect();
+		game.mission = m;
+		game.flightDeploy = f;
+		flight.doSelect();
+
+		this.issueMission(pos);
 	}
 
 	this.checkUnitOffsetting = function(){
@@ -670,7 +627,7 @@ function Game(data){
 		}
 		html += "<input type='button' class='popupEntryConfirm' value='Confirm Orders' onclick='game.doConfirmOrders()'>";
 
-	    $("#popupWrapper").show().find("#popupText").empty().html(html)
+		popup(html)
 	}
 
 	this.doConfirmOrders = function(){
@@ -972,8 +929,7 @@ function Game(data){
 	}
 
 	this.initDeploy = function(){
-		this.setUnitCenterFocus();
-		cam.setZoom(1);
+		this.setCamera();
 		this.draw();
 
 		if (game.turn == 1){return;}
@@ -2774,7 +2730,7 @@ function Game(data){
 							var ship = game.getUnit(aUnit);
 							var vessel = game.getUnit($(this).data("id"));
 							if (ship && vessel){
-								if (game.mission){
+								if (game.flightDeploy){
 									game.issueMission();
 								}
 								else if (game.flightDeploy){
@@ -3154,17 +3110,66 @@ Game.prototype.resolveDeploy = function(){
 		else if (this.ships[i].flight && this.ships[i].mission.turn == this.turn){show = 1; break;}
 	}
 	
-	game.setUnitCenterFocus();
+	game.setCamera();	
 
 	if (!show){this.initialDone();}
 	else {
 		setFPS(30);
 		window.then = Date.now();
 		window.startTime = then;
-		cam.setZoom(0.7);
 		this.animating = 1;
 		this.animateJumpIn();
 	}
+}
+
+Game.prototype.setCamera = function(){
+
+	var data = this.getUnitMaxPos();
+
+	var endX = (data.minX + data.maxX) / 2;
+	var endY = (data.minY + data.maxY) / 2;
+
+
+	var min = 0;
+	var maxD = 0;
+	var center = {x: endX, y: endY}
+	console.log(center)
+
+	for (var i = 0; i < this.ships.length; i++){
+		var d = getDistance(center, this.ships[i].getPlannedPos());
+		maxD = Math.max(d, maxD);
+	}
+
+	console.log(maxD);
+	cam.z = 1.8 - (Math.ceil(maxD / 100)/10)
+	cam.setFocusToPos({x: endX, y: endY});
+	return;
+
+
+
+
+	var distX = data.maxX - data.minX;
+	var distY = data.maxY - data.minY;
+
+	if (distX > res.x){
+		cam.setZoom(res.x/distX / 1.4);
+	} else if (distY > res.y){
+		cam.setZoom(res.y/distY / 1.4);
+	}
+
+	cam.setFocusToPos({x: endX, y: endY});
+}
+Game.prototype.getDistanceFromFocusCentre = function(){
+	var min = 0;
+	var max = 0;
+
+	for (var i = 0; i < this.ships.length; i++){
+		for (var j = i+1; j < this.ships.length; j++){
+			var d = getDistance(cam.o, this.ships[j].getPlannedPos());
+			max = Math.max(d, max);
+		}
+	}
+	return max;
 }
 
 Game.prototype.animateJumpIn = function(){
@@ -3277,7 +3282,7 @@ Game.prototype.logWeaponEvents = function(){
 Game.prototype.prepResolveMovement = function(){
 	this.drawingEvents = 0;
 	this.resetImageData();
-	this.setUnitCenterFocus();
+	this.setCamera();
 	this.setUnitMoveDetails();
 }
 

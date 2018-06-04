@@ -182,7 +182,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 	<script src='shared.js'></script>
 </head>
 	<body>
-		<div id="instructWrapper">
+		<div id="instructWrapper style='top'>
 			<div id="instructText">
 			</div>
 		</div>

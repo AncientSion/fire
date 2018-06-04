@@ -2058,6 +2058,12 @@ Ship.prototype.getTurnStartPos = function(){
 	return new Point(this.x, this.y);
 }
 
+Ship.prototype.getCameraStartPos = function(){
+	if (game.phase == -1 || game.phase == 3){
+		return this.getPlannedPos();
+	}
+}
+
 Ship.prototype.getTurnStartFacing = function(){
 	return this.facing;
 }
@@ -4252,4 +4258,17 @@ Ship.prototype.getSelfExplo = function(){
 	}
 
 	return data;
+}
+
+Ship.prototype.disableMissionMode = function(){
+	game.flightDeploy = 0;
+	game.mission = 0;
+	$(this.element)
+		.find("input[name=mission]:checked").each(function(){$(this).prop("checked", false)}).end()
+		.find(".missionOption").addClass("disabled");
+}
+
+Ship.prototype.enableMissionMode = function(){
+	game.flightDeploy = 1;
+	$(this.element).find(".missionOption").removeClass("disabled");
 }

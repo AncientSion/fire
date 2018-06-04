@@ -352,15 +352,17 @@
 				</div>
 				<table id="hangarTable">
 				</table>
-				<div id="missionType">
-					<table style="width: 80%">
-						<tr><th colSpan=3 style="font-size: 24px">Available Missions</th></tr>
-						<tr><td style="width: 15%"></td><td style="width: 70%">-> Patrol location <-</td><td style="width: 15%"></td></tr>
-						<tr><td></td><td>-> Strike / Escort / Intercept unit <-</td><td></td></tr>
-					</table>
-				</div>
-				<div class="header">
-					<input type="button" class="disabled" value="Launch Flight" onclick="game.enableFlightDeploy()"></input>
+				<div class="missionContainer">
+					<div class="missionOption" style='margin-top: 20px'">
+						<input type="radio" name="mission" value=1></input>
+						<span>Patrol location</span>
+					</div>
+						<div class="missionOption" style='margin-top: 20px; margin-bottom: 20px'">
+						<input type="radio" name="mission" value=2></input>
+						<span>Strike / Escort / Intercept</span>
+					</div>
+						<input type="button" value="Launch Flight" onclick="game.enableFlightDeploy()"></input>
+		
 				</div>
 			</div>
 			<div id="crewDiv" class="disabled">
@@ -391,6 +393,14 @@
 	function showUI(){
 		$("#mouseCanvas").on("mouseleave", function(){
 			$("#weaponAimTableWrapper").hide();
+		})
+
+		$("input[type=button").mousedown(function(e){
+			e.stopPropagation();
+		})
+
+		$("input[type=radio").mousedown(function(e){
+			e.stopPropagation();
 		})
 
 		$("#combatlogWrapper")
@@ -477,8 +487,6 @@
 	})
 
 	$("#popupWrapper")
-		.css("left", res.x / 2 - 300)
-		.css("top", res.y / 2 - 300)
 		.contextmenu(function(e){
 			e.preventDefault();
 			e.stopPropagation();
@@ -486,8 +494,6 @@
 		});
 
 	$("#instructWrapper")
-		.css("left", res.x / 2 - 300)
-		.css("top", res.y / 2 - 300)
 		.contextmenu(function(e){
 			e.preventDefault();
 			e.stopPropagation();

@@ -63,7 +63,7 @@
 
 	public function getClientData(){
 
-		$this->testMorale();
+		//$this->testMorale();
 		//$this->setPostFireFocusValues();
 		//$this->setupShips();
 		//return;
