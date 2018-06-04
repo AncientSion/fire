@@ -336,7 +336,7 @@
 				</tbody>
 				</table>
 			</div>
-			<div id="deployOverlay" class="disabled">
+			<div id="deployOverlay">
 				<span id="deployType"></span>	
 				<span id="deployTarget"</span>	
 				<div class="img"></div>			
@@ -352,15 +352,15 @@
 				</div>
 				<table id="hangarTable">
 				</table>
-				<div id ="missionType">
-					<table style="border: 1px solid white">
-						<tr><th colSpan=3>Select Mission Type</th></tr>
-						<tr><td></td><td width=70%>Patrol location</td><td></td></tr>
-						<tr><td></td><td>Strike / Escort / Intercept unit</td><td></td></tr>
+				<div id="missionType">
+					<table style="width: 80%">
+						<tr><th colSpan=3 style="font-size: 24px">Available Missions</th></tr>
+						<tr><td style="width: 15%"></td><td style="width: 70%">-> Patrol location <-</td><td style="width: 15%"></td></tr>
+						<tr><td></td><td>-> Strike / Escort / Intercept unit <-</td><td></td></tr>
 					</table>
 				</div>
 				<div class="header">
-					<div class="buttonTD disabled" onclick="game.enableFlightDeploy()">Launch Flight</div>
+					<input type="button" class="disabled" value="Launch Flight" onclick="game.enableFlightDeploy()"></input>
 				</div>
 			</div>
 			<div id="crewDiv" class="disabled">
@@ -407,6 +407,8 @@
 
 		$("#upperGUI").removeClass("disabled")
 		$("#canvasDiv").removeClass("disabled")
+
+		$("#deployOverlay").hide();
 
 		$("#roll")
 		.click(function(){

@@ -3429,15 +3429,8 @@ Launcher.prototype.removeAmmo = function(ele, all){
 }
 
 Launcher.prototype.canConfirm = function(){
-	//if (this.hasLoad()){
-		$("#weaponDiv").find(".buttonTD").removeClass("disabled");
-	//} else $("#weaponDiv").find(".buttonTD").addClass("disabled");
+	$("#weaponDiv").find(".buttonTD").removeClass("disabled");
 }
-
-
-
-
-
 
 Launcher.prototype.initLauncherDiv = function(){
 	var table = $("#weaponTable");
@@ -4058,6 +4051,7 @@ function Hangar(system){
 	this.capacity = system.capacity;
 	this.mission = 0;
 	this.hangar = 1;
+	this.reload = 1;
 }
 Hangar.prototype = Object.create(PrimarySystem.prototype);
 
@@ -4159,8 +4153,8 @@ Hangar.prototype.select = function(e){
 		$("#hangarDiv")
 		.addClass("disabled")
 		.find("#missionType")
-		.find("tr").removeClass("selected").end().end()
-		.find(".buttonTD").addClass("disabled").end().end()
+		.find(".selected").removeClass("selected").end().end()
+		.find("input").addClass("disabled").end().end()
 
 		if (game.flightDeploy){
 			game.flightDeploy = false;
@@ -4319,12 +4313,12 @@ Hangar.prototype.showHangarLaunchControl = function(){
 
 Hangar.prototype.triggerLaunchButton = function(){
 	if (this.canLaunchFlight()){
-		$("#hangarDiv").find(".buttonTD").removeClass("disabled");
+		$("#hangarDiv").find("input").removeClass("disabled");
 	}
 	else {
 		game.flightDeploy = 0;
 		$("#deployOverlay").hide();
-		$("#hangarDiv").find(".buttonTD").addClass("disabled");
+		$("#hangarDiv").find("input").addClass("disabled");
 	}
 }
 
@@ -4332,9 +4326,9 @@ Hangar.prototype.setMission = function(val){
 	this.mission = val;
 
 	$("#hangarDiv").find("#missionType").find("tr").each(function(i){
-		$(this).removeClass("selected");
+		$(this).find(".selected").removeClass("selected");
 		if (val == i){
-			$(this).addClass("selected");
+			$($(this).children()[1]).addClass("selected")
 		}
 	});
 
@@ -4497,9 +4491,7 @@ Hangar.prototype.removeFighter = function(ele, all){
 }
 
 Hangar.prototype.canConfirm = function(){
-	//if (this.hasLoad()){
-		$("#hangarDiv").find(".buttonTD").removeClass("disabled");
-	//} else $("#hangarDiv").find(".buttonTD").addClass("disabled");
+	$("#hangarDiv").find("input").removeClass("disabled");
 }
 
 Hangar.prototype.initHangarPurchaseDiv = function(){

@@ -390,7 +390,7 @@ function canvasMouseMove(e){
 	if (game.flightDeploy){
 		game.handleFlightDeployMouseMove(e, pos, unit)
 	}
-	else if (game.mission && game.mission.new){
+	else if (game.mission){
 		game.handleFlightDeployMouseMove(e, pos, unit)
 	}
 	 
@@ -478,7 +478,7 @@ function planPhase(e, pos, unit){
 	else if (game.flightDeploy){ // deploy via hangar
 		game.doDeployFlight(pos);
 	}
-	else if (game.mission && game.mission.new){
+	else if (game.mission){
 		game.issueMission(pos);
 	}
 	else if (!game.deploying){

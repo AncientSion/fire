@@ -113,6 +113,14 @@ function Game(data){
 		return false;
 	}
 
+	this.getMissionType = function(val){
+		switch (val){
+			case 1: return "PATROL";
+			case 2: return "STRIKE / ESCORT / INTERCEPT";
+			default: return "ERROR";
+		}
+	}
+
 	this.getMissionTypeString = function(origin, target){
 		if (!target){return "PATROL";}
 		else if (origin.userid == target.userid){
@@ -129,7 +137,7 @@ function Game(data){
 
 		switch (val){
 			case 1: return "PATROL";
-			case 2: return "STRIKE / ESCORT";
+			case 2: return "STRIKE / ESCORT / INTERCEPT";
 			default: return "ERROR";
 		}
 	}
@@ -147,7 +155,7 @@ function Game(data){
 		//var mission = this.getMissionTypeString(this.flightDeploy.mission);
 
 		instruct("Please select the offensive or defensive target for the flight");
-		$("#deployOverlay").find("#deployType").html("Select target</span>");
+		$("#deployOverlay").find("#deployType").html("Select target</span>").show();
 	}
 
 	this.handleFlightDeployMouseMove = function(e, pos, unit){
@@ -184,15 +192,10 @@ function Game(data){
 
 		var ele = $("#deployOverlay");
 		var w = $(ele).width()/2;
-		var top = (e.clientY) + 50;
+		var top = (e.clientY) + 100;
 		var left = (e.clientX) - w;
-		$(ele).css("top", top).css("left", left).show();
-		/*if (valid){
-			if (game.flightDeploy.mission > 1){
-				ele.find("#deployTarget").html(unit.name + " #" + unit.id);
-			} else ele.find("#deployTarget").html(unit.name + " #" + unit.id);
-		} else ele.find("#deployTarget").html("");
-		*/return;
+		$(ele).css("top", top).css("left", left)
+		return;
 	}
 
 	this.issueMission = function(pos){
@@ -200,16 +203,16 @@ function Game(data){
 		var t = 0;
 		var dest;
 
-		if (this.mission.new == 1){
-			dest = pos;		
-			valid = true;
-		}
-		else if (this.shortInfo){
+		if (this.shortInfo){
 			t = this.getUnit(this.shortInfo);
 			if (!t.salvo){
 				valid = true;
 				dest = t.getPlannedPos();
 			}
+		}
+		else if (pos){
+			valid = true;
+			dest = pos;
 		}
 
 		if (!valid){
@@ -2771,7 +2774,7 @@ function Game(data){
 							var ship = game.getUnit(aUnit);
 							var vessel = game.getUnit($(this).data("id"));
 							if (ship && vessel){
-								if (game.mission && game.mission.new){
+								if (game.mission){
 									game.issueMission();
 								}
 								else if (game.flightDeploy){

@@ -112,32 +112,3 @@ function Turn(){
 		this.dif = round(unit.getCurSpeed() / unit.getBaseImpulse(), 1);
 	}
 }
-
-function Mission(unit){
-	this.id = unit.id;
-	this.old = unit.mission.type;
-	this.new = 0;
-
-	this.set = function(val, ele){
-		//console.log(this.old + " -> " + val);
-		if (this.new){
-			var m = this.new;
-			$(game.getUnit(this.id).element).find(".header").find("tr").slice(-2).each(function(i){
-				if (i == m-1){
-					$(this).removeClass("selected");
-					return false;
-				}
-			})
-			this.new = 0;
-		}
-
-		this.new = val;
-		$(ele).addClass("selected");
-
-		if (this.new){
-			$("#deployOverlay").find("#deployType").html("Select target</span>");
-			//$("#deployOverlay").find("#deployType").html("Select target for </br>" +  game.getMissionTypeString(val) + "</br></span>");
-		}
-	
-	}
-}

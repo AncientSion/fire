@@ -148,42 +148,6 @@ Flight.prototype.createBaseDiv = function(){
 		//	.append($("<td>").html("Mission Start"))
 		//	.append($("<td>").addClass("missionTurn").html("Turn " + this.mission.turn)))
 		
-
-		if (this.friendly && game.phase == -1){
-			$(table)
-			.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
-			.append($("<tr>").addClass("missionSwitch")
-				.append($("<td>")
-					.attr("colSpan", 2)
-					.addClass("missionButton active")
-					.html("Disengage From Mission")
-					.data("active", 0)
-					.data("mission", this.mission.type)
-					.data("shipid", this.id)
-					.click(function(e){
-						if (aUnit == $(this).data("shipid")){
-							game.getUnit(aUnit).switchMissionMode();
-						}
-					})))
-			.append($("<tr>").addClass("missionOption").click(function(){game.mission.set(1, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Patrol location")))
-			.append($("<tr>").addClass("missionOption").click(function(){game.mission.set(2, this)}).addClass("disabled").append($("<td>").attr("colSpan", 2).css("font-size", "14px").html("Strike / Escort / Intercept unit")))
-		}
-		else {
-			if (game.phase != -1){
-				text = "Orders: -Deployment PHASE-";
-			}
-			else if (!this.friendly){
-				text = "New orders possible";
-			}
-
-			$(table)
-			.append($("<tr>").append("<td>").attr("colSpan", 2).css("height", "10px"))
-			.append($("<tr>").addClass("missionSwitch")
-				.append($("<td>")
-					.attr("colSpan", 2)
-					.addClass("missionButton")
-					.html(text)));
-		}
 		
 			
 	subDiv.appendChild(table);
@@ -212,6 +176,72 @@ Flight.prototype.createBaseDiv = function(){
 	if (game.phase == 2){
 		$(div).find(".structContainer").show();
 	}
+
+	var missionContainer = $("<div>").addClass("missionContainer");
+	$(div).append(missionContainer);
+
+
+	if (this.friendly && game.phase == -1){
+			missionContainer
+				.append($("<input>")
+					.attr("type", "button")
+					.attr("value", "Set new mission")
+					.data("mission", this.mission.type)
+					.click(function(e){
+						if (aUnit == $(this).parent().parent().data("shipId")){
+							game.getUnit(aUnit).switchMissionMode();
+						}
+					}))
+				.append($("<div>")
+					.addClass("missionOption disabled")
+					.append($("<input>")
+						.attr("type", "radio")
+						.attr("name", "mission")
+						.attr("value", 1))
+					.append($("<span>").html("Patrol location"))
+					)
+				.append($("<div>")
+					.addClass("missionOption disabled")
+					.append($("<input>")
+						.attr("type", "radio")
+						.attr("name", "mission")
+						.attr("value", 2))
+					.append($("<span>").html("Strike / Escort / Intercept unit"))
+				)
+				.append($("<input>")
+					.addClass("missionOption confirm disabled")
+					.attr("type", "button")
+					.attr("value", "Confirm / Proceed")
+					.data("mission", this.mission.type)
+					.click(function(e){
+						if (aUnit == $(this).parent().parent().data("shipId")){
+							game.getUnit(aUnit).enableMissionChange();
+						}
+					}))
+	}
+	else {
+		if (game.phase != -1){
+			text = "Orders: -Initial Phase only-";
+		}
+		else if (!this.friendly){
+			text = "New orders possible";
+		}
+
+		missionContainer
+			.append($("<input>")
+				.addClass("inactive")
+				.attr("type", "button")
+				.attr("value", text))
+	}
+}
+
+Flight.prototype.enableMissionChange = function(){
+
+	var value =  Math.floor($(this.element).find("input[name=mission]:checked").val());
+	console.log(value);
+
+
+	$("#deployOverlay").show().find("#deployType").html( game.getMissionType(value)).end();
 }
 
 Flight.prototype.expandDiv = function(div){
@@ -301,23 +331,12 @@ Flight.prototype.switchMissionMode = function(){
 
 Flight.prototype.disableMissionMode = function(){
 	game.mission = 0;
-	$(this.element).find(".header").css("height", "130px").find("tr").slice(-3)
-	.each(function(i){
-		if (!i){
-			$(this).children()[0].innerHTML = "Disengage from Mission";
-		} else $(this).addClass("disabled").removeClass("selected");
-	});
+	$(this.element).find(".missionOption").addClass("disabled");
 }
 
-
 Flight.prototype.enableMissionMode = function(){
-	game.mission = new Mission(this);
-	$(this.element).find(".header").css("height", "auto").find("tr").slice(-3)
-	.each(function(i){
-		if (!i){
-			$(this).children()[0].innerHTML = "Select new Mission";
-		} else $(this).removeClass("disabled");
-	});
+	game.mission = 1;
+	$(this.element).find(".missionOption").removeClass("disabled");
 }
 
 Flight.prototype.drawMissionArea = function(){
@@ -379,8 +398,8 @@ Flight.prototype.setPostMoveSize = function(){
 
 Flight.prototype.switchDiv = function(){
 	if (this.selected){
-		$(this.element).find(".header").find(".general").find(".missionSwitch").removeClass("disabled");
-	} else $(this.element).find(".header").find(".general").find(".missionSwitch").addClass("disabled");
+		$(this.element).find(".header").find(".general").find(".missionEntry").removeClass("disabled");
+	} else $(this.element).find(".header").find(".general").find(".missionEntry").addClass("disabled");
 
 	Ship.prototype.switchDiv.call(this);
 }

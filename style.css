@@ -806,7 +806,7 @@ table, th, tr, td {
 	width: 390px;
 }
 
-.focusContainer, .commandContainer {
+.focusContainer, .commandContainer, .missionContainer {
 	position: relative;
 	color: white;
 	margin: auto;
@@ -815,7 +815,7 @@ table, th, tr, td {
 	padding: 3px;
 }
 
-.focusEntry, .commandEntry {
+.focusEntry, .commandEntry, .missionEntry {
 	margin: auto;
 	width: 100%;
 	text-align: center;
@@ -1094,6 +1094,11 @@ div.integrityFull {
 
 #missionType .selected, .missionOption.selected {
 	box-shadow: inset 0 0 8px 4px #ffeb3e;
+}
+
+.missionOption {
+	width: 200px;
+	margin: auto;
 }
 
 .yellow {
@@ -1596,19 +1601,6 @@ input[type=button].inactive:hover, input[type=submit].inactive:hover {
 }
 
 .buttonTD:hover {
-	background-color: #27e627;
-}
-
-.missionButton {
-	font-size: 18px;
-	font-weight: bold;
-	color: black;
-	background-color: lightBlue;
-	border-radius: 3px;
-}
-
-.missionButton.active:hover {
-	cursor: pointer;
 	background-color: #27e627;
 }
 
