@@ -49,7 +49,7 @@ function Game(data){
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
-	this.ui = {shortInfo: $("#shortInfo"), doShorten: $("#doShorten"), turnButton: $("#turnButton"),
+	this.ui = {shortInfo: $("#shortInfo"), doShorten: $("#doShorten"), turnButton: $("#turnButton"), deployOverlay: $("#deployOverlay"),
 			logWrapper: $("#combatlogWrapper"), popupWrapper: $("#popupWrapper"), instructWrapper: $("#instructWrappert")};
 	this.animData = {jump: 60};
 	this.commandChange = {old: 0, new: 0}
@@ -172,16 +172,17 @@ function Game(data){
 		//var mission = this.getMissionTypeString(this.flightDeploy.mission);
 
 		instruct("Please select the target unit/location target for the flight");
-		$("#deployOverlay").show().find("#deployType").html( game.getMissionType(value)).end();
+		$("#deployOverlay").show().find("ädeployType").html( game.getMissionType(value)).end();
 	}
 
-	this.handleFlightDeployMouseMove = function(e){
-		var ele = $("#deployOverlay");
-		var w = $(ele).width()/2;
+	this.handleFlightDeployMouseMove = function(e, pos, unit){
+		var w = $(game.ui.deployOverlay).width()/2;
 		var top = (e.clientY) + 100;
 		var left = (e.clientX) - w;
-		$(ele).css("top", top).css("left", left)
-		return;
+		if (unit){
+			game.ui.deployOverlay.find("#deployTarget").html("ding");
+		} else game.ui.deployOverlay.find("#deployTarget").empty();
+		$(game.ui.deployOverlay).css("top", top).css("left", left)
 	}
 
 	this.issueMission = function(pos){

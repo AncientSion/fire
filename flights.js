@@ -319,7 +319,9 @@ Flight.prototype.switchMissionMode = function(){
 }
 
 Flight.prototype.confirmMissionMode = function(){
-	var value = Math.floor($(this.element).find("input[name=mission]:checked").val());
+	var checked =  $(this.element).find("input[name=mission]:checked");
+	if (!checked.length){return;}
+	var value = Math.floor(checked.val());
 	game.mission = value;
 	if (!game.mission){return;}
 	//console.log(value);

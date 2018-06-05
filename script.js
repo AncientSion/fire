@@ -386,7 +386,7 @@ function canvasMouseMove(e){
 	var unit = game.getUnitByClick(pos);
 
 	if (game.flightDeploy && game.mission){
-		game.handleFlightDeployMouseMove(e)
+		game.handleFlightDeployMouseMove(e, pos, unit);
 	}
 	 
 	if (aUnit){

@@ -338,7 +338,7 @@
 			</div>
 			<div id="deployOverlay">
 				<span id="deployType"></span>	
-				<span id="deployTarget"</span>	
+				<span id="deployTarget"></span>	
 				<div class="img"></div>			
 			</div>
 			<div id="vectorDiv" class="disabled"></div>
