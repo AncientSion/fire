@@ -250,9 +250,7 @@ function Game(data){
 
 		$(s.element).find(".header")
 			.find(".missionType").html(this.getMissionTypeString(s, s.getTarget())).end()
-			.find(".missionTarget").html(this.getMissionTargetString(mission)).end()
-		//	.find(".missionTurn").html("Turn " + mission.turn).end();
-
+			.find(".missionTarget").html(this.getMissionTargetString(mission));
 		if (t && t instanceof Ship && o.x == dest.x && o.y == dest.y){
 			mission.arrived = this.turn-1;
 			if (t.ship){
@@ -265,9 +263,7 @@ function Game(data){
 			}
 		}
 		else {
-			//s.mission = mission;
 			s.facing = a;
-			//if (!(s.oldMission.type == 1 && s.oldMission.arrived)){s.setCurSpeed();} // reset speed only when NOT in patrol
 			s.setCurSpeed();
 			s.setTarget();
 		}
@@ -294,18 +290,16 @@ function Game(data){
 		var s = this.getUnit(aUnit);
 		var hangar = s.getSystem(this.flightDeploy.id)
 		var o = s.getGamePos();
-		//var facing = getAngleFromTo(o, dest);
 		var facing = 0;
-		var p = getPointInDir(s.size/2, facing, o.x, o.y);
 		//var mission = {id: -1, unitid: -this.ships.length-20, turn: this.turn, type: this.flightDeploy.mission, targetid: t.id || 0, x: dest.x, y: dest.y, arrived: 0, new: 1};
 
 		var flight = new Flight(
 			{id: -this.ships.length-20, name: "Flight", mission: false, traverse: -3,
-			x: p.x, y: p.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, curImp: 0, fSize: 15, baseSize: 25, unitSize: 4, userid: this.userid, available: this.turn}
+			x: o.x, y: o.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, curImp: 0, fSize: 15, baseSize: 25, unitSize: 4, userid: this.userid, available: this.turn}
 		);
 
 		flight.primary = new Primary(0, flight.id, 0, 0, 0);
-		flight.actions.push(new Move(-1, "deploy", 0, p.x, p.y, facing, 0, 1, 1, 0));
+		flight.actions.push(new Move(-1, "deploy", 0, o.x, o.y, facing, 0, 1, 1, 0));
 		flight.launch = {
 			shipid: aUnit,
 			systemid: this.flightDeploy.id,
@@ -339,7 +333,7 @@ function Game(data){
 		this.flightDeploy = false;
 
 		$(flight.element).css("top", 600).css("left", 0);
-		this.checkUnitOffsetting();
+		//this.checkUnitOffsetting();
 		this.draw();
 
 		var m = game.mission;

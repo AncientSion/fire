@@ -353,11 +353,11 @@
 				<table id="hangarTable">
 				</table>
 				<div class="missionContainer">
-					<div class="missionOption" style='margin-top: 20px'">
+					<div class="missionOption" style='margin-top: 10px'">
 						<input type="radio" name="mission" value=1></input>
 						<span>Patrol location</span>
 					</div>
-						<div class="missionOption" style='margin-top: 20px; margin-bottom: 20px'">
+						<div class="missionOption" style='margin-top: 10px; margin-bottom: 10px'">
 						<input type="radio" name="mission" value=2></input>
 						<span>Strike / Escort / Intercept</span>
 					</div>
@@ -393,6 +393,10 @@
 	function showUI(){
 		$("#mouseCanvas").on("mouseleave", function(){
 			$("#weaponAimTableWrapper").hide();
+		})
+
+		$(".missionOption").mousedown(function(e){
+			e.stopPropagation();
 		})
 
 		$("input[type=button").mousedown(function(e){

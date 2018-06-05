@@ -75,13 +75,13 @@ Flight.prototype.hasWeaponsSelected = function(){
 }
 
 Flight.prototype.setCurSpeed = function(){
-	var start = 1;
+	var start = game.turn;
 
 	if (this.mission.targetid == this.oldMission.targetid && this.mission.type == this.oldMission.type){
 		start = this.oldMission.turn;
 	}
 
-	this.curImp = Math.floor(this.baseImpulse * start);
+	this.curImp = Math.floor(this.baseImpulse * ((game.turn - start)+1));
 	return
 	
 
