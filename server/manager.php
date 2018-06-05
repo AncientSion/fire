@@ -1454,7 +1454,6 @@
 			$command->output = 0;
 
 			$baseGain = floor($this->settings["pv"] / 100 * $this->settings["focusMod"]);
-			$gainFocus = $unit::$value;
 			$commandRating = ($unit->baseFocusRate + $unit->modFocusRate);
 			$gainFocus = floor($baseGain / 10 * $commandRating / 100 * $output);
 
@@ -1546,7 +1545,7 @@
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->destroyed || $this->ships[$i]->flight || $this->ships[$i]->salvo){continue;}
 			if ($this->ships[$i]->status != "jumpOut"){continue;}
-			$data[] = array("id" => $this->ships[$i]->id, "status" => $this->ships[$i]->status);
+			$data[] = array("id" => $this->ships[$i]->id, "status" => $this->ships[$i]->status, "notes" => $this->ships[$i]->notes);
 		}
 		return $data;
 	}

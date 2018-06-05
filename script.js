@@ -217,7 +217,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			final = Math.floor(baseHit * multi);
 			targetData1
 				.empty()
-				.append($("<td>").html(target.name + " #" + target.id))
+				.append($("<td>").addClass("red").html(target.name + " #" + target.id))
 				.append($("<td>").html(getUnitType(target.traverse) + " (" + target.traverse + ")"))
 				.append($("<td>").html(target.getArmourString(angle)))
 				.append($("<td>").html(target.getSectionString(angle)))
@@ -225,11 +225,11 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 
 			targetData2
 				.empty()
-				.append($("<td>").html(baseHit + "%"))
 				.append($("<td>").html(impulseString))
 				.append($("<td>").html(lockString))
 				.append($("<td>").html(maskString))
-				.append($("<td>").addClass("final").html(final + "%"));
+				.append($("<td>").addClass("green").html(baseHit + "%"))
+				.append($("<td>").html("x" + multi + "</br><div class='final'>" + final + "%</div>"));
 		}
 	}
 	else {

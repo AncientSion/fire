@@ -144,19 +144,19 @@ class DmgCalc {
 
 		Debug::log("fire #".$fire->id.", doStandardDmg, weapon: ".(get_class($fire->weapon)).", target #".$fire->target->id."/".$system->id."/".get_class($system).", totalDmg: ".$totalDmg.", remaining: ".$remInt.", armour: ".$negation["stock"]."+".$negation["bonus"]);
 
-		if ($remInt - $dmg->structDmg < 1){
+		if ($remInt <= $dmg->structDmg){ // destroyed
+			//Debug::log("destroying");
 			$destroyed = 1;
-			$name = get_class($system);
 			$okSystem = $fire->target->getOverkillSystem($fire);
 
 			if ($okSystem){
 				$dmg->overkill += abs($remInt - $dmg->structDmg);
 				$dmg->structDmg = $remInt;
-				Debug::log(" => OVERKILL ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$dmg->overkill." dmg");
+				Debug::log(" => OVERKILL ship target system ".$system->name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg.", OK for: ".$dmg->overkill." dmg");
 			}
 			else {
 				$dmg->structDmg = $remInt;
-				Debug::log(" => destroying non-ship target system ".$name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg);
+				Debug::log(" => destroying non-ship target system ".$system->name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg);
 			}
 		}
 
@@ -220,6 +220,10 @@ class DmgCalc {
 				$dmg->overkill += abs($remInt - $struct);
 				$dmg->structDmg -= $dmg->overkill;
 				//Debug::log(" => hit ".($i+1).", adding ".$dmg->structDmg."/".$dmg->armourDmg." to overkill which is now: ".$dmg->overkill." pts");
+			}
+			else {
+				$dmg->structDmg = $remInt;
+				Debug::log(" => destroying non-ship target system ".$system->name." #".$system->id." was destroyed, rem: ".$remInt.", doing: ".$dmg->structDmg);
 			}
 		}
 

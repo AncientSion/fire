@@ -1992,7 +1992,7 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 		$(log).append(sub);
 	}
 
-	game.ui.logWrapper.find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+	ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 }
 
 Weapon.prototype.getDmgsPerShot = function(fire){
@@ -3681,7 +3681,7 @@ Area.prototype.createCombatLogEntry = function(fire){
 		}
 	}
 
-	game.ui.logWrapper.find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+	ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 }
 
 Area.prototype.setMount = function(amount){

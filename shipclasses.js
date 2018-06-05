@@ -1241,7 +1241,7 @@ Ship.prototype.getStructureFromAngle = function(a){
 
 Ship.prototype.drawMovePlan = function(){
 	//console.log("draw moves for #" + this.id);
-	if (!this.actions.length || !this.deployed){return;}
+	if (!this.actions.length || !this.deployed || !game.drawMoves){return;}
 
 	this.setMoveTranslation();
 
@@ -1416,7 +1416,7 @@ Ship.prototype.drawTrajectory = function(){
 	planCtx.moveTo(this.x, this.y);
 	planCtx.lineTo(t.x, t.y);
 	planCtx.closePath();
-	planCtx.strokeStyle = "red";
+	planCtx.strokeStyle = "white";
 	planCtx.stroke();
 	planCtx.setTransform(1,0,0,1,0,0);
 }
@@ -1488,7 +1488,7 @@ Ship.prototype.attachLogEntry = function(html){
 				}
 			)
 			.html(html));
-	game.ui.logWrapper.find("#combatlogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+	ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 }
 
 Ship.prototype.createCritLogEntry = function(){
@@ -1512,7 +1512,7 @@ Ship.prototype.createMoraleLogEntry = function(){
 	if (this.flight || this.salvo){return false;}
 	if (this.status != "jumpOut"){return false;}
 	
-	var html = "<td colSpan=9><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is routed and prepares to flee to hyperspace !</td>";
+	var html = "<td colSpan=9><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is routed (and prepares to flee to hyperspace (Chance to rout: " + this.morale.effChance + "%, roll: " + this.notes + ")</td>";
 	this.attachLogEntry(html);
 	return true;
 }
@@ -1909,7 +1909,7 @@ Ship.prototype.getExploSize = function(i){
 	if (this.ship){return this.size;}
 	else if (this.squad){return this.structures[i].size/2;}
 	else if (this.flight){return this.structures[i].mass*0.4;}
-	else if (this.salvo){return this.structures[i].mass*2;}
+	else if (this.salvo){return 10;}
 }
 
 Ship.prototype.setMoveAngles = function(){
@@ -2059,9 +2059,10 @@ Ship.prototype.getTurnStartPos = function(){
 }
 
 Ship.prototype.getCameraStartPos = function(){
-	if (game.phase == -1 || game.phase == 3){
-		return this.getPlannedPos();
+	if (this.focus && game.phase == 2){
+		return new Point(this.x, this.y);
 	}
+	return this.getPlannedPos();
 }
 
 Ship.prototype.getTurnStartFacing = function(){

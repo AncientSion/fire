@@ -1067,7 +1067,7 @@ class Ship {
 	}
 
 	public function handleMoraleTesting($turn){
-		//Debug::log(get_class($this). " #".$this->id.", morale @ ".$this->morale->current."%");
+		Debug::log(get_class($this). " #".$this->id.", morale @ ".$this->morale->current."%");
 		//$this->morale->current = 20;
 		if ($this->morale->current >= $this->morale->trigger){return;}
 		$roll = mt_rand(0, 100);

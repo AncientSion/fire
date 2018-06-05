@@ -18,6 +18,15 @@ window.downTime = 0;
 window.hold = 0;
 window.translate = 0;
 
+
+$(document).ready(function(){
+	window.ui = {
+		popupWrapper: $("#popupWrapper"),
+		instructWrapper: $("#instructWrapper"),
+		combatLogWrapper: $("#combatLogWrapper")
+	}
+})
+
 function doSort(a, b){
 	if (a.name != b.name){
 		return 1;
@@ -324,33 +333,33 @@ function redirect(url){
 }
 
 function popup(text){
-    game.ui.popupWrapper
+    ui.popupWrapper
      	.show()
     	.find("#popupText")
     		.html("<div class='popupSingle'>" + text + "</div>")
 
-	var ox = game.ui.popupWrapper.width()/2;
-	var oy =  game.ui.popupWrapper.height()/2;
+	var ox = ui.popupWrapper.width()/2;
+	var oy =  ui.popupWrapper.height()/2;
 		oy = 400;
 
-    game.ui.popupWrapper
-		.css("top", res.y / 2 - oy)
-		.css("left", res.x / 2 - ox)
+    ui.popupWrapper
+		.css("top", window.innerHeight / 2 - oy)
+		.css("left", window.innerWidth / 2 - ox)
 }
 
 function instruct(text){
-    game.ui.instructWrapper
+   ui.instructWrapper
     	.show()
   		.find("#instructText")
   			.html("<div class='popupSingle'>" + text + "</div>")
 
-	var ox = game.ui.popupWrapper.width()/2;
-	var oy =  game.ui.popupWrapper.height()/2;
+	var ox = ui.popupWrapper.width()/2;
+	var oy =  ui.popupWrapper.height()/2;
 		oy = 400;
 
-    game.ui.instructWrapper
-		.css("top", res.y / 2 - oy)
-		.css("left", res.x / 2 - ox)
+    ui.instructWrapper
+		.css("top", window.innerHeight / 2 - oy)
+		.css("left", window.innerWidth / 2 - ox)
 }
 
 (function($) {

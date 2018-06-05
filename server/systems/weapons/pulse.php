@@ -120,7 +120,7 @@ class LightPlasmaPulse extends LightPulse {
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 		$this->boostEffect[] = new Effect("Damage loss", -25);
 		$this->boostEffect[] = new Effect("Damage", 10);
-		$this->notes = array($this->melt."% of total damage is added as extra damage to armour");
+		$this->notes[] = ($this->melt."% of total damage is added as extra damage to armour");
 	}
 	
 	public function getDmgRangeMod($fire){

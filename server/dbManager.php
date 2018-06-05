@@ -382,7 +382,8 @@
 				if ($units[$i]["command"]){
 					$id = $units[$i]["id"];
 					$unit = new $units[$i]["name"]();
-					break;}
+					break;
+				}
 			}
 
 			$sql = "UPDATE units SET command = 1 WHERE id = ".$id;
@@ -393,15 +394,10 @@
 			$sql = "SELECT id FROM playerstatus WHERE userid = ".$userid." AND gameid = ".$gameid;
 			//Debug::log($sql);
 			$playerstatus = $this->query($sql);
-
-			/*foreach ($playerstatus as $state){
-				foreach ($state as $key => $value){
-					Debug::log($key."/".$value);
-				}
-			}*/
+			
 
 			$baseGain = floor($gd["pv"] / 100 * $gd["focusMod"]);
-			$unitmod = $unit->baseFocusRate + $unit->modFocusRate;
+			$commandRating = $unit->baseFocusRate + $unit->modFocusRate;
 
 			$gainFocus = floor($baseGain / 10 * $unitmod);
 
@@ -1154,7 +1150,7 @@
 			$stmt = $this->connection->prepare("
 				UPDATE units 
 				SET 
-					status = :status
+					status = :status,
 					notes = :notes
 				WHERE
 					id = :id

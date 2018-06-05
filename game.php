@@ -225,13 +225,12 @@
 					<td></td>
 					<td></td>
 				</tr>
-				<tr><td colSpan=5 height=10px></td></tr>
 				<tr>
-					<th>Base</th>
 					<th>Thrust Mod</th>
 					<th>Lock Mod</th>
 					<th>Mask Mod</th>
-					<th>Result</th>
+					<th>Base %</th>
+					<th>FINAL</th>
 				</tr>
 				<tr id="targetData2">
 					<td></td>
@@ -251,7 +250,7 @@
 				</tr>
 			</table>
 		</div>
-		<div id="combatlogWrapper" class="disabled">
+		<div id="combatLogWrapper" class="disabled">
 			<table class="combatLogHeader">
 				<thead>
 					<tr>
@@ -270,7 +269,7 @@
 					</tr>
 				</thead>
 			</table>
-			<div id="combatlogInnerWrapper">
+			<div id="combatLogInnerWrapper">
 				<table id="combatLog">
 					<tbody>
 						<tr style="height: 10px">
@@ -407,7 +406,7 @@
 			e.stopPropagation();
 		})
 
-		$("#combatlogWrapper")
+		$("#combatLogWrapper")
 			.find("#combatLog")
 				.contextmenu(function(e){
 					e.preventDefault(); e.stopPropagation();
@@ -417,7 +416,7 @@
 					$(this).parent().find("#combatLog").toggleClass("disabled");
 				});
 
-		$("#combatlogWrapper").drag();
+		$("#combatLogWrapper").drag();
 
 		$("#upperGUI").removeClass("disabled")
 		$("#canvasDiv").removeClass("disabled")
@@ -516,7 +515,8 @@
 			}
 			else if (game){
 				if (e.keyCode == 101){ // e - disable unit circle
-					game.drawCircle = !game.drawCircle;
+					//game.drawCircle = !game.drawCircle;
+					game.drawMoves = !game.drawMoves;
 					game.redraw();
 				}
 				if (e.keyCode == 117){ // u - disable movement UI
@@ -561,14 +561,17 @@
 
 					game.createFireFinalEntry();
 
-					for (var i = 0; i < game.unitExploAnims.length; i++){
-						game.unitExploAnims[i].done = 1;
-						game.unitExploAnims[i].animating = 0;
-						for (var j = 0; j < game.unitExploAnims[i].entries.length; j++){
-							game.unitExploAnims[i].entries[j].u.doDestroy();
+					if (game.unitExploAnims.length){
+						game.createPlaceHolderEntry();
+						for (var i = 0; i < game.unitExploAnims.length; i++){
+							game.unitExploAnims[i].done = 1;
+							game.unitExploAnims[i].animating = 0;
+							for (var j = 0; j < game.unitExploAnims[i].entries.length; j++){
+								game.unitExploAnims[i].entries[j].u.doDestroy();
+							}
+							
+							game.createMiscLogEntry(i);
 						}
-						
-						game.createMiscLogEntry(i);
 					}
 
 					game.fireResolved();

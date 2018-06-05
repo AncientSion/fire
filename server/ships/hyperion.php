@@ -15,7 +15,6 @@ class Hyperion extends Heavy {
 	public $ew = 700;
 	public $power = 4;
 
-
 	function __construct($data){
         parent::__construct($data);
 	}

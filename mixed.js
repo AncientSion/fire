@@ -23,6 +23,13 @@ Mixed.prototype.getPlannedFacing = function(){
 	return this.actions[this.actions.length-1].a;
 }
 
+Mixed.prototype.getCameraStartPos = function(){
+	if (game.phase == 2){
+		return new Point(this.x, this.y);
+	}
+	return this.getPlannedPos();
+}
+
 Mixed.prototype.getDrawFacing = function(){
 	return this.facing;
 }
@@ -59,8 +66,7 @@ Mixed.prototype.getPostMovePos = function(){
 }
 
 Mixed.prototype.drawMovePlan = function(){
-	//if (this.mission.arrived){return;}
-
+	if (!this.actions.length || !this.deployed || !game.drawMoves){return;}
 
 	planCtx.strokeStyle = "#00ea00";
 	if (!this.friendly){
