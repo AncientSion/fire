@@ -80,29 +80,6 @@ function Ship(data){
 	this.doDraw = 1;
 }
 
-Ship.prototype.drawDeployPreview = function(e, pos){
-	//console.log(e)
-	var ele = ui.deployOverlay;
-	var w = $(ele).width()/2;
-	var top = (e.clientY)  + 80;
-	var left = (e.clientX) - w;
-	$(ele).css("top", top).css("left", left);
-
-	mouseCtx.clearRect(0, 0, res.x, res.y);
-	mouseCtx.translate(cam.o.x, cam.o.y)
-	mouseCtx.scale(cam.z, cam.z)
-	mouseCtx.translate(pos.x, pos.y);
-
-	this.drawMarker(0, 0, "yellow", mouseCtx);
-	
-	mouseCtx.rotate(this.getDrawFacing() * Math.PI/180);
-	mouseCtx.drawImage(this.img, -this.size/2, -this.size/2, this.size, this.size);
-
-	mouseCtx.setTransform(1,0,0,1,0,0);
-	//mouseCtx.globalAlpha = 1;
-
-}
-
 Ship.prototype.getFiringPosition = function(){
 	return new Point(
 		this.x + range(size * 0.3 * -1, size * 0.3),
@@ -260,9 +237,9 @@ Ship.prototype.doDeploy = function(pos){
 				return;
 			}
 		})
+		$(this.element).css("left", res.x - 450).css("top", 50);
 	}
 	this.select();
-	$(this.element).css("left", res.x - 450).css("top", 50)
 
 	ui.deployOverlay.hide();
 	$("#deployWrapper")

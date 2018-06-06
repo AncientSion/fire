@@ -4319,7 +4319,7 @@ Hangar.prototype.triggerLaunchButton = function(){
 	var value = Math.floor($(this.element).find("input[name=mission]:checked").val());
 	game.mission = value;
 	//console.log(value);
-	ui.deployOverlayshow().find("#deployType").html( game.getMissionType(value)).end();
+	ui.deployOverlay.show().find("#deployType").html( game.getMissionType(value)).end();
 
 	if (this.canLaunchFlight()){
 		$("#hangarDiv").find("input[type=button]").removeClass("inactive")

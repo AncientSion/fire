@@ -325,7 +325,7 @@ Flight.prototype.confirmMissionMode = function(){
 	game.mission = value;
 	if (!game.mission){return;}
 	//console.log(value);
-	ui.deployOverlayshow().find("#deployType").html( game.getMissionType(value)).end();
+	ui.deployOverlay.show().find("#deployType").html( game.getMissionType(value)).end();
 }
 
 Flight.prototype.drawMissionArea = function(){

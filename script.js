@@ -418,7 +418,7 @@ function canvasMouseMove(e){
 		}
 	}
 	else if (game.deploying){
-		game.getDeployingUnit().drawDeployPreview(e, pos);
+		game.handleShipDeployMouseMove(e, pos);
 	}
 	else if (!game.deploying){
 		ui.deployOverlay.hide();
@@ -459,15 +459,15 @@ function sensorize(ship, pos){
 
 function planPhase(e, pos, unit){
 	if (game.deploying){
-		unit = game.getUnit(game.deploying); // ship deploy
+		//unit = game.getUnit(); // ship deploy
 		if (game.sensorMode){
-			sensorize(unit, pos);
+			sensorize(game.deploying, pos);
 		}
 		else if (game.turnMode){
-			unit.handleTurnAttempt(pos);
+			game.deploying.handleTurnAttempt(pos);
 		}
-		else if (unit.canDeployHere(pos)){
-			game.doDeployShip(e, unit, pos);
+		else if (game.deploying.canDeployHere(pos)){
+			game.doDeployShip(e, game.deploying, pos);
 		}
 	}
 	else if (game.flightDeploy && game.mission){
@@ -491,7 +491,7 @@ function planPhase(e, pos, unit){
 				}
 			}
 			else if (unit.canDeploy()){
-				game.enableUnitDeploy(unit.id);
+				game.enableShipDeploy(unit.id);
 			}
 			else firePhase(pos, unit, 0);
 		}
@@ -500,7 +500,7 @@ function planPhase(e, pos, unit){
 			if (unit){
 				unit.select(e); 
 				if (unit.canDeploy()){
-					game.enableUnitDeploy(unit.id);
+					game.enableShipDeploy(unit.id);
 				}
 			}
 		}
