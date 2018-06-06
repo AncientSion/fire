@@ -4156,7 +4156,7 @@ Hangar.prototype.select = function(e){
 
 		if (game.flightDeploy){
 			game.flightDeploy = false;
-			$("#deployOverlay").hide();
+			ui.deployOverlay.hide();
 		}
 	}
 
@@ -4319,14 +4319,14 @@ Hangar.prototype.triggerLaunchButton = function(){
 	var value = Math.floor($(this.element).find("input[name=mission]:checked").val());
 	game.mission = value;
 	//console.log(value);
-	$("#deployOverlay").show().find("#deployType").html( game.getMissionType(value)).end();
+	ui.deployOverlayshow().find("#deployType").html( game.getMissionType(value)).end();
 
 	if (this.canLaunchFlight()){
 		$("#hangarDiv").find("input[type=button]").removeClass("inactive")
 	}
 	else {
 		game.flightDeploy = 0;
-		$("#deployOverlay").hide();
+		ui.deployOverlay.hide();
 		$("#hangarDiv").find("input[type=button]").addClass("inactive");
 	}
 }
@@ -4346,23 +4346,6 @@ Hangar.prototype.setMission = function(val){
 
 Hangar.prototype.getMission = function(){
 	return this.mission;
-}
-
-Hangar.prototype.doLaunchFlight = function(){
-	for (var i = game.ships.length-1; i >= 0; i--){
-		if (game.ships[i].userid == game.userid){
-			if (game.ships[i].flight && game.ships[i].available == game.turn && game.ships[i].actions[0].resolved){
-				if (game.ships[i].launch.shipid == window.aUnit && game.ships[i].launch.systemid == this.id){
-					game.ships.splice(i, 1);
-					game.draw();
-					break;
-				}
-			}
-		}
-	}
-	instruct("Select a Deploy point. The flight's facing will be projected onwards the launching vessel.");
-	game.setupDeployDiv();
-	game.flightDeploy = this;
 }
 
 Hangar.prototype.alterFlight = function(ele, max){

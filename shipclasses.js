@@ -81,11 +81,12 @@ function Ship(data){
 }
 
 Ship.prototype.drawDeployPreview = function(e, pos){
-	var ele = $("#deployOverlay");
+	//console.log(e)
+	var ele = ui.deployOverlay;
 	var w = $(ele).width()/2;
 	var top = (e.clientY)  + 80;
 	var left = (e.clientX) - w;
-	$(ele).css("top", top).css("left", left).show();
+	$(ele).css("top", top).css("left", left);
 
 	mouseCtx.clearRect(0, 0, res.x, res.y);
 	mouseCtx.translate(cam.o.x, cam.o.y)
@@ -261,16 +262,17 @@ Ship.prototype.doDeploy = function(pos){
 		})
 	}
 	this.select();
+	$(this.element).css("left", res.x - 450).css("top", 50)
 
-	$("#deployOverlay").hide();
+	ui.deployOverlay.hide();
 	$("#deployWrapper")
-			.find("#reinforceTable").find(".requestReinforcements").each(function(){
+			.find("#reinforceBody").find(".requestReinforcements").each(function(){
 			if ($(this).hasClass("selected")){
 				//$(this).find(".cost").addClass("green");
 				$(this).addClass("green");
 				return;
 			}
-		}).end()
+		}).end().end()
 		.find("#totalRequestCost").html(game.getCurrentReinforceCost());
 
 	game.redraw();

@@ -23,7 +23,8 @@ $(document).ready(function(){
 	window.ui = {
 		popupWrapper: $("#popupWrapper"),
 		instructWrapper: $("#instructWrapper"),
-		combatLogWrapper: $("#combatLogWrapper")
+		combatLogWrapper: $("#combatLogWrapper"),
+		deployOverlay:  $("#deployOverlay"),
 	}
 })
 
@@ -446,7 +447,7 @@ function handleMouseDown(e){
 	}
 	else if (e.originalEvent.button == 2){
 		if (game.deploying && !game.turnMode){
-			$("#deployWrapper").find("#reinforceTable").find(".selected").each(function(){
+			$("#deployWrapper").find("#reinforceBody").find(".selected").each(function(){
 				if ($(this).data("id") == game.deploying){
 					$(this).removeClass("selected");
 					game.disableDeploy();

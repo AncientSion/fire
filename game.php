@@ -312,68 +312,78 @@
 					</tr>
 				</thead>
 			</table>
-			<table id="reinforceTable">
-				<thead>
-					<tr>
-						<th colSpan=4>
-							Reinforcements
-						</th>
-					</tr>
-					<tr>
-						<th  width="65%" colSpan="2">
-							Class
-						</th>
-						<th  width="17%" >
-							ETA
-						</th>
-						<th  width="18%" >
-							Cost
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
+			<div class="reinforceWrapper">
+				<table class="reinforceHead">
+					<thead>
+						<tr>
+							<th colSpan=4>
+								Reinforcements
+							</th>
+						</tr>
+						<tr>
+							<th  width="60%" colSpan="2">
+								Class
+							</th>
+							<th  width="17%">
+								ETA
+							</th>
+							<th>
+								Cost
+							</th>
+						</tr>
+					</thead>
 				</table>
-			</div>
-			<div id="deployOverlay">
-				<span id="deployType"></span>	
-				<span id="deployTarget"></span>	
-				<div class="img"></div>			
-			</div>
-			<div id="vectorDiv" class="disabled"></div>
-			<div id="hangarDiv" class="disabled">
-				<div class="header">
-					<span>Assemble and launch a flight</span>
-					<br>
-					Can launch up to <span id="launchRate"></span> units per cycle.
-					<br>
-					Sufficient space for <span id="capacity"></span> units.
+				<div class="reinforceBodyWrapper">
+					<table id="reinforceBody">
+						<tbody>
+						</tbody>
+					</table>
 				</div>
-				<table id="hangarTable">
-				</table>
-				<div class="missionContainer">
-					<div class="missionOption" style='margin-top: 10px'">
-						<input type="radio" name="mission" value=1></input>
-						<span>Patrol location</span>
-					</div>
-						<div class="missionOption" style='margin-top: 10px; margin-bottom: 10px'">
-						<input type="radio" name="mission" value=2></input>
-						<span>Strike / Escort / Intercept</span>
-					</div>
-						<input type="button" value="Launch Flight" onclick="game.enableFlightDeploy()"></input>
-		
+				<div style="padding: 5px">
+					<div style="display: inline-block; font-size: 20px; width: 150px; text-align: center">Total Cost</div>
+					<div id="totalRequestCost">0</div>
 				</div>
 			</div>
-			<div id="crewDiv" class="disabled">
-				<div class="header">
-					Add crew specialists to the selected unit
-				</div>
-				<table id="crewTable">
-				</table>
-				<table style="margin:auto; width: 220px; margin-top: 10px">
-					<tr><td><input type="button" value="Close" onclick='$(this).parent().parent().parent().parent().parent().toggleClass("disabled");'></td></tr>
-				</table>
+		</div>
+		<div id="deployOverlay">
+			<span id="deployType"></span>	
+			<span id="deployTarget"></span>	
+			<div class="img"></div>			
+		</div>
+		<div id="vectorDiv" class="disabled"></div>
+		<div id="hangarDiv" class="disabled">
+			<div class="header">
+				<span>Assemble and launch a flight</span>
+				<br>
+				Can launch up to <span id="launchRate"></span> units per cycle.
+				<br>
+				Sufficient space for <span id="capacity"></span> units.
 			</div>
+			<table id="hangarTable">
+			</table>
+			<div class="missionContainer">
+				<div class="missionOption" style='margin-top: 10px'">
+					<input type="radio" name="mission" value=1></input>
+					<span>Patrol location</span>
+				</div>
+					<div class="missionOption" style='margin-top: 10px; margin-bottom: 10px'">
+					<input type="radio" name="mission" value=2></input>
+					<span>Strike / Escort / Intercept</span>
+				</div>
+					<input type="button" value="Launch Flight" onclick="game.enableFlightDeploy()"></input>
+	
+			</div>
+		</div>
+		<div id="crewDiv" class="disabled">
+			<div class="header">
+				Add crew specialists to the selected unit
+			</div>
+			<table id="crewTable">
+			</table>
+			<table style="margin:auto; width: 220px; margin-top: 10px">
+				<tr><td><input type="button" value="Close" onclick='$(this).parent().parent().parent().parent().parent().toggleClass("disabled");'></td></tr>
+			</table>
+		</div>
 	</body>
 </html>
 
@@ -421,7 +431,7 @@
 		$("#upperGUI").removeClass("disabled")
 		$("#canvasDiv").removeClass("disabled")
 
-		$("#deployOverlay").hide();
+		ui.deployOverlay.hide();
 
 		$("#roll")
 		.click(function(){

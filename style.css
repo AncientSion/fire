@@ -215,19 +215,24 @@ table, th, tr, td {
 	color: black;
 }
 
-#reinforceTable {
-	margin: auto;
-	margin-top: 20px;
-	width: 98%;
-	border-collapse: collapse;
-	border: 1px solid white;
+.reinforceHead {
+	width: 95%;
 }
 
-#reinforceTable tr {	
+.reinforceBodyWrapper {
+	max-height: 434px;
+	overflow: auto;
+}
+
+#reinforceBody {
+	border-collapse: collapse;
+}
+
+#reinforceBody tr {	
 	background-color: black;
 }
 
-#reinforceTable th, #reinforceTable td {
+#reinforceBody th, #reinforceBody td {
 	border: 1px solid white
 }
 
@@ -1499,14 +1504,6 @@ div.integrityFull {
 	background-color: white;
 }
 
-#unitSelector .friendly {
-	border: 1px solid #27e627;
-}
-
-#unitSelector .hostile {
-	border: 1px solid red;
-}
-
 #overview {
 	border-collapse: collapse;
 	width: 100%;
@@ -1620,9 +1617,12 @@ input[type=button].inactive:hover, input[type=submit].inactive:hover {
 }
 
 #totalRequestCost {
-	padding: 5px;
-	font-size: 14px;
+	font-size: 20px;
 	color: #27e627;
+	float: right;
+	width: 50px;
+	margin-right: 10px;
+	text-align: center;
 }
 
 #combatLogWrapper disabled, #deployLogWrapper disabled {

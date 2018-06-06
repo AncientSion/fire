@@ -304,8 +304,8 @@
 					"destroyed" => $this->reinforcements[$i]["destroyed"],
 					"x" => $this->reinforcements[$i]["x"],
 					"y" => $this->reinforcements[$i]["y"],
-					"facing" => 0,
-					"delay" => $this->reinforcements[$i]["delay"],
+					"facing" => $this->reinforcements[$i]["facing"],
+					"delay" => 0,
 					"thrust" => $this->reinforcements[$i]["thrust"],
 					"rolling" => $this->reinforcements[$i]["rolling"],
 					"rolled" => $this->reinforcements[$i]["rolled"],
@@ -319,7 +319,7 @@
 				if (!$unit->ship){$unit->addSubUnits($this->reinforcements[$i]["subunits"]);}
 
 				$unit->setPreviewState($this->turn, $this->phase);	
-				$unit->cost = $this->reinforcements[$i]["facing"];
+				$unit->cost = $this->reinforcements[$i]["delay"];
 				$data[] = $unit;
 			}
 		}

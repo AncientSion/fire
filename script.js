@@ -421,7 +421,7 @@ function canvasMouseMove(e){
 		game.getDeployingUnit().drawDeployPreview(e, pos);
 	}
 	else if (!game.deploying){
-		$("#deployOverlay").hide();
+		ui.deployOverlay.hide();
 	}
 
 	if (unit){game.handleHoverEvent(e, 1, unit);
@@ -491,7 +491,7 @@ function planPhase(e, pos, unit){
 				}
 			}
 			else if (unit.canDeploy()){
-				game.enableDeploy(unit.id);
+				game.enableUnitDeploy(unit.id);
 			}
 			else firePhase(pos, unit, 0);
 		}
@@ -500,7 +500,7 @@ function planPhase(e, pos, unit){
 			if (unit){
 				unit.select(e); 
 				if (unit.canDeploy()){
-					game.enableDeploy(unit.id);
+					game.enableUnitDeploy(unit.id);
 				}
 			}
 		}

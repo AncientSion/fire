@@ -398,8 +398,7 @@
 
 			$baseGain = floor($gd["pv"] / 100 * $gd["focusMod"]);
 			$commandRating = $unit->baseFocusRate + $unit->modFocusRate;
-
-			$gainFocus = floor($baseGain / 10 * $unitmod);
+			$gainFocus = floor($baseGain / 10 * $commandRating);
 
 			$data = array(
 				"id" => $playerstatus[0]["id"],
@@ -439,7 +438,7 @@
 		}
 
 		public function updateFocusValues($data){
-			Debug::log("updateFocusValues s: ".sizeof($data));
+			//Debug::log("updateFocusValues s: ".sizeof($data));
 			//Debug::log("curFocus: ".$data[0]["curFocus"]);
 			//Debug::log("gainFocus: ".$data[0]["gainFocus"]);
 			//Debug::log("maxFocus: ".$data[0]["maxFocus"]);
@@ -650,9 +649,9 @@
 			Debug::log("insertReinforcements: ".sizeof($data));
 			$stmt = $this->connection->prepare("
 				INSERT INTO units 
-					(gameid, userid, ship, ball, name, display, status, available, destroyed, facing, turn, phase, notes)
+					(gameid, userid, ship, ball, name, display, status, available, destroyed, delay, turn, phase, notes)
 				VALUES
-					(:gameid, :userid, :ship, :ball, :name, :display, :status, :available, :destroyed, :facing, :turn, :phase, :notes)
+					(:gameid, :userid, :ship, :ball, :name, :display, :status, :available, :destroyed, :delay, :turn, :phase, :notes)
 			");
 
 			$ship = 1;
@@ -675,7 +674,7 @@
 				$stmt->bindParam(":status", $status);
 				$stmt->bindValue(":available", $data[$i]["eta"]);
 				$stmt->bindParam(":destroyed", $destroyed);
-				$stmt->bindParam(":facing", $data[$i]["cost"]);
+				$stmt->bindParam(":delay", $data[$i]["cost"]);
 				$stmt->bindParam(":turn", $turn);
 				$stmt->bindParam(":phase", $phase);
 				$stmt->bindParam(":notes", $data[$i]["notes"]);
