@@ -1492,12 +1492,17 @@ div.integrityFull {
 	display: none;
 }
 
-#unitSelector .selected {
-	box-shadow: inset 0 0 4px 3px #ffeb3e
+#unitSelector div {
+	display: inline-block;
+	margin: 2px;
 }
 
-#unitSelector img {
-	margin: 2px;
+#unitSelector .selected {
+	background-color: #ffeb3e;
+}
+
+.borderShadow {
+	box-shadow: inset 0 0 4px 3px #ffeb3e
 }
 
 #unitSelector img:hover {

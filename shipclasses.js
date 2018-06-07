@@ -864,7 +864,7 @@ Ship.prototype.issueTurn = function(a){
 				round(turn.mod, 1), 1, 0
 			)
 		);
-		$(game.ui.turnButton)
+		$(ui.turnButton)
 			.find("#turnCost").html("").end()
 			//.find("#turnDelay").html("");
 	}
@@ -1174,9 +1174,9 @@ Ship.prototype.setDrawData = function(){
 	}
 }
 
-Ship.prototype.setunitSelector = function(){
+Ship.prototype.setUnitSelector = function(){
 	var id = this.id;
-	$("#unitSelector").find("img").each(function(){
+	$("#unitSelector").find("div").each(function(){
 		if ($(this).data("id") == id){
 			$(this).toggleClass("selected"); return;
 		}
@@ -1266,7 +1266,7 @@ Ship.prototype.getHeader = function(){
 }
 
 Ship.prototype.getShortInfo = function(){
-	var ele = game.ui.shortInfo;
+	var ele = ui.shortInfo;
 	if (this.userid == game.userid){
 		$(ele).attr("class", "friendly");
 	} else $(ele).attr("class", "hostile");
@@ -1330,12 +1330,13 @@ Ship.prototype.doSelect = function(){
 	console.log(this);
 	aUnit = this.id;
 	this.selected = true;
-	this.setunitSelector();
-	game.setShipTransform();
-	this.drawPositionMarker();
-	game.resetShipTransform();
+	this.setUnitSelector();
+	//game.setShipTransform();
+	//this.drawPositionMarker();
+	//game.resetShipTransform();
+	game.redraw()
 	this.switchDiv();
-	game.drawMixedMoves();
+	//game.drawMixedMoves();
 	this.setMoveMode();
 }
 
@@ -1343,7 +1344,7 @@ Ship.prototype.doUnselect = function(){
 	this.unselectSystems();
 	aUnit = false;
 	this.selected = false;
-	this.setunitSelector();
+	this.setUnitSelector();
 	if (game.deploying){game.disableDeploy();}
 	else if (game.flightDeploy){game.flightDeploy = false;}
 	else if (game.mission){this.disableMissionMode()}
@@ -1353,7 +1354,7 @@ Ship.prototype.doUnselect = function(){
 	$("#popupWrapper").hide()
 	$("#instructWrapper").hide()
 	$("#sysDiv").remove();
-	$(game.ui.doShorten).empty();
+	$(ui.doShorten).empty();
 	mouseCtx.clearRect(0, 0, res.x, res.y);
 	game.redraw();
 }
@@ -1515,24 +1516,24 @@ Ship.prototype.getLogNameEntry = function(){
 }
 
 Ship.prototype.createDeployEntry = function(){
-	this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " jumps into local space.</span></td>");
+	this.attachLogEntry("<th colSpan=9><span>" + this.getLogTitleSpan() + " jumps into local space.</span></th>");
 }
 
 Ship.prototype.createUndeployEntry = function(){
-	this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " jumps into hyperspace and leaves the battlefield.</span></td>");
+	this.attachLogEntry("<th colSpan=9><span>" + this.getLogTitleSpan() + " jumps into hyperspace and leaves the battlefield.</span></th>");
 }
 
 Ship.prototype.createCommandTransferEntry = function(){
-	this.attachLogEntry("<td colSpan=9><span class='yellow'>Fleet Command</span> has been transfered to " + this.getLogTitleSpan() + "</td>");
+	this.attachLogEntry("<th colSpan=9><span class='yellow'>Fleet Command</span> has been transfered to " + this.getLogTitleSpan() + "</th>");
 }
 
 Ship.prototype.createMoveStartEntry = function(type){
 	switch (type){
 		case "roll":
-			this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " has completed a full roll but is still rolling.</span></td>");
+			this.attachLogEntry("<th colSpan=9><span>" + this.getLogTitleSpan() + " has completed a full roll but is still rolling.</span></th>");
 			return;
 		case "flip":
-			this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " has completed a full flip.</span></td>");
+			this.attachLogEntry("<th colSpan=9><span>" + this.getLogTitleSpan() + " has completed a full flip.</span></th>");
 			return;
 	}
 
@@ -1540,28 +1541,30 @@ Ship.prototype.createMoveStartEntry = function(type){
 
 Ship.prototype.createActionEntry = function(move){
 	if (this.isRolling()){
-		this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " is initiating a ROLL manover.</span></td>");
+		this.attachLogEntry("<th colSpan=9><span>" + this.getLogTitleSpan() + " is initiating a ROLL manover.</span></th>");
 	}
 	else if (this.hasStoppedRolling()){
-		this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " has canceled its ongoing ROLL manover.</span></td>");
+		this.attachLogEntry("<th colSpan=9><span>" + this.getLogTitleSpan() + " has canceled its ongoing ROLL manover.</span></th>");
 	}
 	else if (this.isFlipping()){
-		this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " is initiating a FLIP manover.</span></td>");
+		this.attachLogEntry("<th colSpan=9><span>" + this.getLogTitleSpan() + " is initiating a FLIP manover.</span></th>");
 	}
 }
 
 Ship.prototype.createStillRollingEntry = function(){
-	this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " is continueing its roll manover.</span></td>");							
+	this.attachLogEntry("<th colSpan=9><span>" + this.getLogTitleSpan() + " is continueing its roll manover.</span></th>");							
 }
 
 Ship.prototype.createMoveEndEntry = function(){
-	this.attachLogEntry("<td colSpan=9><span>" + this.getLogTitleSpan() + " has completed a full roll.</span></td>")
+	this.attachLogEntry("<th colSpan=9><span>" + this.getLogTitleSpan() + " has completed a full roll.</span></th>")
 }
 
 Ship.prototype.animateSelfJumpIn = function(){
 	if (this.deployAnim[0] == this.deployAnim[1]){
 		this.deployed = 1;
 		this.isReady = 1;
+		ctx.translate(this.drawX, this.drawY);
+		ctx.rotate(this.getDrawFacing() * Math.PI/180);
 		this.drawSelf();
 		ctx.rotate(-this.getDrawFacing() * Math.PI/180);
 		ctx.translate(-this.drawX, -this.drawY);
@@ -2199,7 +2202,7 @@ Ship.prototype.createBaseDiv = function(){
 		//	.append($("<td>").html(this.getStringHitChance())))
 		.append($("<tr>")
 			.append($("<td>").html("Focus Gain"))
-			.append($("<td>").html((this.baseFocusRate + " + " + this.modFocusRate + "%" + " / " + this.getFocusIfCommand()))))
+			.append($("<td>").addClass("focusGain").html((this.getFocusString()))))
 		.append($("<tr>")
 			.append($("<td>").html("Morale"))
 			//.append($("<td>").html(this.morale.current + "%")))
@@ -2263,6 +2266,10 @@ Ship.prototype.createBaseDiv = function(){
 
 	$(this.addFocusDiv($(div[0])))
 	$(this.addCommandDiv($(div[0])))
+}
+
+Ship.prototype.getFocusString = function(){
+	return this.baseFocusRate + " + " + this.modFocusRate + "%" + " / " + this.getFocusIfCommand();
 }
 
 Ship.prototype.addFocusDiv = function(div){
@@ -2333,7 +2340,12 @@ Ship.prototype.addCommandDiv = function(div){
 }
 
 Ship.prototype.getFocusIfCommand = function(){
-	return (game.settings.pv / 100 * (this.baseFocusRate + this.modFocusRate))
+	var bridge = this.getSystemByName("Command");
+	var output = bridge.output;
+	bridge.output = 100;
+	var gain = Math.floor(game.settings.pv / 100 * bridge.getOutput() / 100 * (this.baseFocusRate + this.modFocusRate));
+	bridge.output = 0;
+	return gain;
 }
 
 Ship.prototype.getUnitClass = function(){
@@ -3578,6 +3590,10 @@ Ship.prototype.updateCrewDiv = function(i){
 	$(tr.children()[2]).html(this.getCrewAddCost(i));
 	$(tr.children()[4]).html(this.getCrewLevel(i));
 	$(tr.children()[6]).html(this.getTotalCrewCost(i));
+
+	if (i == 0){ // Command upgrade
+		$(this.element).find(".focusGain").html(this.getFocusString());
+	}
 	this.updateCrewTotals();
 }
 
@@ -3729,10 +3745,10 @@ Ship.prototype.drawTurnUI = function(){
 	var center = {x: this.x, y: this.y};
 	var angle = this.getDrawFacing();
 	var p1 = getPointInDir(150/cam.z, addToDirection(angle, -90), center.x, center.y);
-	$(game.ui.turnButton)
+	$(ui.turnButton)
 		.removeClass("disabled")
-		.css("left", p1.x * cam.z + cam.o.x - $(game.ui.turnButton).width()/2)
-		.css("top", p1.y * cam.z + cam.o.y - $(game.ui.turnButton).height()/2)
+		.css("left", p1.x * cam.z + cam.o.x - $(ui.turnButton).width()/2)
+		.css("top", p1.y * cam.z + cam.o.y - $(ui.turnButton).height()/2)
 		.find("#impulseMod").html("x " +turn.dif).end()
 		//.find("#remEP").html(this.getRemEP() + " / " + this.getEP()).addClass("green").end()
 }
@@ -3806,13 +3822,13 @@ Ship.prototype.canDecreaseImpulse = function(){
 Ship.prototype.setTurnData = function(){
 	var vector = $("#vectorDiv")
 	
-	$(game.ui.turnButton)
+	$(ui.turnButton)
 		.find("#turnMode").html("ON").addClass("on").end().find("#turnCost").html(this.getTurnCost()).end()
 		//.find("#turnDelay").html(this.getTurnDelay() + " px").end()
 		.find("#turnMod").html(turn.mod).end()
 
 	if (game.turnMode){
-		$(game.ui.turnButton)
+		$(ui.turnButton)
 			$("#epButton")
 			.find("#remEP").html(this.getRemEP() + " / " + this.getEP()).addClass("green").end()
 			.find("#impulseText").find("#impulseCost").html("");
@@ -3821,7 +3837,7 @@ Ship.prototype.setTurnData = function(){
 		this.adjustMaxTurn()
 	}
 	else {
-		$(game.ui.turnButton)
+		$(ui.turnButton)
 			.find("#turnMode").html("OFF").removeClass("on").end()
 		$("#epButton")
 			.find("#remEP").html(this.getRemEP() + " / " + this.getRemEP()).addClass("green").end()
@@ -3914,15 +3930,15 @@ Ship.prototype.drawShortenTurnUI = function(){
 	var remSpeed = this.getRemSpeed();
 	var center = this.getPlannedPos();
 
-	if (!remDelay || !this.getRemEP()){$(game.ui.doShorten).addClass("disabled");}
+	if (!remDelay || !this.getRemEP()){$(ui.doShorten).addClass("disabled");}
 	else {
 		var o = this.getGamePos()
 		var angle = this.getPlannedFacing();
 		var p = getPointInDir(100, angle-180, o.x, o.y);
-		var left = p.x * cam.z  + cam.o.x - $(game.ui.doShorten).width()/2;
-		var top = p.y * cam.z  + cam.o.y - $(game.ui.doShorten).height()/2;
+		var left = p.x * cam.z  + cam.o.x - $(ui.doShorten).width()/2;
+		var top = p.y * cam.z  + cam.o.y - $(ui.doShorten).height()/2;
 
-		$(game.ui.doShorten)
+		$(ui.doShorten)
 		.css("left", left)
 		.css("top", top)
 		.data("shipId", this.id)
@@ -3947,7 +3963,7 @@ Ship.prototype.drawShortenTurnUI = function(){
 }
 
 Ship.prototype.doShortenTurn = function(){
-	var data = $(game.ui.doShorten).data();
+	var data = $(ui.doShorten).data();
 
 	if (data.shipId == this.id && data.cost <= this.getRemEP()){
 		var turn = this.getLastTurn();
@@ -4066,7 +4082,13 @@ Ship.prototype.drawTurnArcs = function(){
 	//var turnAngle = this.getMaxTurnAngle();
 	//this.turnAngles = {start: addAngle(0 + turnAngle, angle), end: addAngle(360 - turnAngle, angle)};
 
-	//return;
+	var turnAngle = this.getMaxTurnAngle();
+	var angle = this.getPlannedFacing();
+	
+	this.turnAngles = {start: addAngle(0 + turnAngle, angle), end: addAngle(360 - turnAngle, angle)};
+
+	return;
+
 	var center = this.getPlannedPos();
 	var angle = this.getPlannedFacing();
 	var turnAngle = this.getMaxTurnAngle();

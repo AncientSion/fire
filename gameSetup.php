@@ -354,7 +354,7 @@ else {
 					} else if (!game.hasReinforceFaction()){			
 						popup("Please select a faction to receive reinforcements from.</br>(Right-click on the faction names on the left)");
 					}
-					else popup("Are you absolutly sure you want to confirm your fleet setup ?</br>(Right click this to cancel)</br></br><input type='button' onclick='game.doConfirmFleet()' value='Yes, im sure'>");
+					else popup("Are you absolutly sure you want to confirm your fleet setup ?</br>(Right click this to cancel)</br></br><input type='button' class='popupEntryConfirm' onclick='game.doConfirmFleet()' value='Yes, im sure'>");
 				},
 
 				doConfirmFleet: function(){

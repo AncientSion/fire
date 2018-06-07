@@ -163,6 +163,10 @@ Squadron.prototype.createBaseDiv = function(){
 	}
 }
 
+Squadron.prototype.getFocusIfCommand = function(){
+	return Math.floor(game.settings.pv / 100 * (this.baseFocusRate + this.modFocusRate));
+}
+
 Squadron.prototype.setSubElements = function(){
 	var w = $($(this.element).find(".structContainer")).width();
 	var h = $($(this.element).find(".structContainer")).height();

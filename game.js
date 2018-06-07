@@ -50,8 +50,6 @@ function Game(data){
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
-	this.ui = {shortInfo: $("#shortInfo"), doShorten: $("#doShorten"), turnButton: $("#turnButton"),
-			combatLogWrapper: $("#combatLogWrapper"), popupWrapper: $("#popupWrapper"), instructWrapper: $("#instructWrappert")};
 	this.animData = {jump: 60};
 	this.commandChange = {old: 0, new: 0}
 
@@ -209,7 +207,7 @@ function Game(data){
 			.find(".missionTarget").html(this.getMissionTargetString(mission)).end()
 		//	.find(".missionTurn").html("Turn " + mission.turn).end();
 
-		if (t && t instanceof Ship && o.x == dest.x && o.y == dest.y){
+	/*	if (t && t instanceof Ship && o.x == dest.x && o.y == dest.y){
 			mission.arrived = this.turn-1;
 			if (t.ship){
 				s.doDraw = 0;
@@ -221,12 +219,12 @@ function Game(data){
 			}
 		}
 		else {
-			//s.mission = mission;
+	*/		//s.mission = mission;
 			s.facing = a;
 			//if (!(s.oldMission.type == 1 && s.oldMission.arrived)){s.setCurSpeed();} // reset speed only when NOT in patrol
 			s.setCurSpeed();
 			s.setTarget();
-		}
+	//	}
 
 		s.setBaseLayout();
 		//s.setLayout();
@@ -241,6 +239,7 @@ function Game(data){
 		this.redraw();
 		//this.drawShipOverlays();
 		ui.deployOverlay.hide();
+		this.checkUnitOffsetting();
 	}
 
 	this.doDeployFlight = function(pos){
@@ -257,11 +256,11 @@ function Game(data){
 
 		var flight = new Flight(
 			{id: range(-0, -100), name: "Flight", mission: false, traverse: -3,
-			x: p.x, y: p.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, curImp: 0, fSize: 15, baseSize: 25, unitSize: 4, userid: this.userid, available: this.turn}
+			x: o.x, y: o.y, mass: 0, facing: facing, ep: 0, baseImpulse: 0, curImp: 0, fSize: 15, baseSize: 25, unitSize: 4, userid: this.userid, available: this.turn}
 		);
 
 		flight.primary = new Primary(0, flight.id, 0, 0, 0);
-		flight.actions.push(new Move(-1, "deploy", 0, p.x, p.y, facing, 0, 1, 1, 0));
+		flight.actions.push(new Move(-1, "deploy", 0, o.x, o.y, facing, 0, 1, 1, 0));
 		flight.launch = {
 			shipid: aUnit,
 			systemid: this.flightDeploy.id,
@@ -294,8 +293,7 @@ function Game(data){
 		hangar.setFireOrder(0, pos).select();
 		this.flightDeploy = false;
 
-		$(flight.element).css("top", 600).css("left", 0);
-		this.checkUnitOffsetting();
+		$(flight.element).css("top", 600).css("left", 0);		this.checkUnitOffsetting();
 		this.draw();
 
 		var m = game.mission;
@@ -613,10 +611,11 @@ function Game(data){
 	}
 
 	this.concedeMatch = function(){
-		var html = "Are you absolutly sure you want to concede the match ?";
+		var html = "Are you absolutely sure you want to concede the match ?";
 			html += "</p>";
-			html += "<div class='popupEntry buttonTD' style='font-size: 20px; width: 200px' onclick='game.doConcedeMatch()'>Yes, i concede</div>";
-	    $("#popupWrapper").show().find("#popupText").empty().html(html);
+			html += "<input type='button' class='popupEntryConfirm' onclick='game.doConcedeMatch()' value='Yes, i concede'>";
+		popup(html);
+	   // $("#popupWrapper").show().find("#popupText").empty().html(html);
 	}
 
 	this.doConcedeMatch = function(){
@@ -937,14 +936,15 @@ function Game(data){
 
 		if (game.turn == 1){return;}
 		$("#combatLogWrapper")
-			.width(350)
+			.width(450)
 			.css("top", 150).css("left", 250)
 			.show()
 			.find(".combatLogHeader").html("Tactical Log").end()
 			.find("#combatLog").children().children().remove();
+
 			
-		this.resolveDamageControl();
 		this.createCommandTransferEntries();
+		this.resolveDamageControl();
 	}
 
 	this.createCommandTransferEntries = function(){
@@ -1000,7 +1000,10 @@ function Game(data){
 				this.ships[i].getAttachDivs();
 			}
 		}
-			
+
+		this.createEndEntry("-- Movement Events concluded --");
+
+		/*
 		$("#combatLog").find("tbody")
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 8).html("Movenent concluded"))
@@ -1015,6 +1018,7 @@ function Game(data){
 					game.doResolveMovement();
 				})
 			);
+		*/
 
 		if (this.events.length){
 			if (game.phase == 2){
@@ -1061,7 +1065,7 @@ function Game(data){
 		this.createCritLogEntries();
 		this.createMoraleLogEntries();
 		this.createPlaceHolderEntry();
-		this.createEndEntry(" --Phase Events concluded --");
+		this.createEndEntry("-- Fire Events concluded --");
 
 		$("#combatLogWrapper").find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 	}
@@ -1097,7 +1101,6 @@ function Game(data){
 	}
 
 	this.createPlaceHolderEntry = function(){
-		console.log("createPlaceHolderEntry");
 		var target = $("#combatLog").find("tbody");
 			target.append($("<tr>")
 					.append($("<td>").css("height", 15).attr("colSpan", 9)));
@@ -1107,7 +1110,7 @@ function Game(data){
 	this.createEndEntry = function(html){
 		var target = $("#combatLog").find("tbody");
 			target.append($("<tr>")
-				.append($("<td>").attr("colSpan", 9).html(html)));
+				.append($("<th>").attr("colSpan", 9).html(html)));
 	}
 	
 	this.initPhase = function(n){
@@ -1589,7 +1592,7 @@ function Game(data){
 
 		this.shortInfo = unit.id;
 
-		var ele = game.ui.shortInfo;
+		var ele = ui.shortInfo;
 		$(ele).children().remove().end().append($(unit.getShortInfo()).css("width", "100%"));
 
 		var oX = $(ele).width()/2;
@@ -1614,7 +1617,7 @@ function Game(data){
 	}
 
 	this.resetHover = function(e, loc, facing, pos){
-		game.ui.shortInfo.html("").hide();
+		ui.shortInfo.html("").hide();
 
 		if (this.deploying){game.drawDeployZone();}
 
@@ -1663,7 +1666,7 @@ function Game(data){
 		salvoCtx.clearRect(0, 0, res.x, res.y)
 		mouseCtx.clearRect(0, 0, res.x, res.y)
 
-		game.ui.shortInfo.hide();
+		ui.shortInfo.hide();
 
 		if (aUnit){
 			var unit = this.getUnit(aUnit);
@@ -1941,18 +1944,21 @@ function Game(data){
 	}
 
 	this.resolveDamageControl = function(){
+		var toDo = false;
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].status == "jumpOut"){
 				this.ships[i].deployAnim = [0, game.animData.jump];
+				toDo = true;
 			}
 		}
 
-		setFPS(30);
-		window.then = Date.now();
-		window.startTime = then;
-		this.animating = 1;
-		this.animateJumpOut();
-
+		if (toDo){
+			setFPS(30);
+			window.then = Date.now();
+			window.startTime = then;
+			this.animating = 1;
+			this.animateJumpOut();
+		} else this.createTurnStartMoveActionEntries();
 	}
 
 	this.animateJumpOut = function(){
@@ -1991,13 +1997,13 @@ function Game(data){
 			if (done){
 				window.cancelAnimationFrame(anim);
 				game.animating = 0;
-				this.createInitialPhaseEntries();
+				this.createTurnStartMoveActionEntries();
 			}
 		}
 	}
 
-	this.createInitialPhaseEntries = function(){
-		console.log("createInitialPhaseEntries");
+	this.createTurnStartMoveActionEntries = function(){
+		console.log("createTurnStartMoveActionEntries");
 		var show = 0;
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].isRolling()){
@@ -2010,13 +2016,8 @@ function Game(data){
 			}
 		}
 
-		if (!show){
-			$("#combatLog").show().find("tbody")
-			.append($("<tr>")
-				.append($("<td>").html("No futher data available."))
-			);
-		}
-		else $("#combatLog").show().find("tbody");
+		this.createPlaceHolderEntry();
+		this.createEndEntry("--Initial Events concluded--")
 	}
 
 	this.resolvePostMoveFire = function(){
@@ -2051,7 +2052,7 @@ function Game(data){
 		this.getFireAnimationDetails();	
 		this.getAllUnitExplos();
 
-		$("#combatLogWrapper").css("top", 100).show();
+		$("#combatLogWrapper").css("top", 0).show();
 
 		this.setFireGlobals();
 
@@ -2273,10 +2274,7 @@ function Game(data){
 
 	this.createFireFinalEntry = function(){
 		if (!game.fireOrders.length){return;}
-		$("#combatLog")
-		.find("tbody")
-			.append($("<tr>")
-				.append($("<th>").attr("colSpan", 9).html("--- Fireorder animation completed ---")))
+		this.createEndEntry("-- Fireorder animation completed --");
 	}
 
 	this.animateSingleFireOrder = function(i, goOn){
@@ -2719,15 +2717,15 @@ function Game(data){
 		for (var i = 0; i < this.ships.length; i++){
 			if (!this.ships[i].isReady){continue}
 
-			var name = "friendly";
-			if (this.ships[i].userid != game.userid){name = "hostile";}
+			var type = "friendly";
+			if (this.ships[i].userid != game.userid){type = "hostile";}
 			l++;
 
 			ele
-			.append(($(this.ships[i].getBaseImage().cloneNode(true))
-				.data("id", this.ships[i].id))
-				.removeClass()
-				.addClass(className + " " + name)
+			.append($("<div>")
+				.append($(this.ships[i].getBaseImage().cloneNode(true)).addClass(className))
+				.data("id", this.ships[i].id)
+				.addClass(type)
 				.click(function(e){
 					e.preventDefault(); e.stopPropagation();						
 					if (!aUnit && !game.getUnit($(this).data("id")).selected){ // selecting
@@ -2762,7 +2760,7 @@ function Game(data){
 							var y = $(this).height();
 							var p = $(this).offset();
 							game.handleHoverEvent(e, 0, vessel);
-							game.ui.shortInfo.css("left", p.left - x).css("top", p.top + y+20);
+							ui.shortInfo.css("left", p.left - x).css("top", p.top + y+20);
 						}
 						if (aUnit && aUnit != vessel.id){
 							var	ship = game.getUnit(aUnit);
@@ -3101,7 +3099,7 @@ Game.prototype.resolveDeploy = function(){
 
 	$("#combatLogWrapper")
 	.width(350)
-	.css("top", 75).css("left", 250)
+	.css("top", 0).css("left", 240)
 	.show()
 	.find(".combatLogHeader").html("Deploy Log").end()
 	.find("#combatLog").children().children().remove();
@@ -3115,7 +3113,9 @@ Game.prototype.resolveDeploy = function(){
 	
 	game.setCamera();	
 
-	if (!show){this.initialDone();}
+	if (!show){	
+		this.initialDone();
+	}
 	else {
 		setFPS(30);
 		window.then = Date.now();
@@ -3132,36 +3132,26 @@ Game.prototype.setCamera = function(){
 	var endX = (data.minX + data.maxX) / 2;
 	var endY = (data.minY + data.maxY) / 2;
 
-
 	var min = 0;
 	var maxD = 0;
 	var center = {x: endX, y: endY}
-	console.log(center)
 
 	for (var i = 0; i < this.ships.length; i++){
 		var d = getDistance(center, this.ships[i].getCameraStartPos());
 		maxD = Math.max(d, maxD);
 	}
 
-	console.log(maxD);
-	cam.z = 1.8 - (Math.ceil(maxD / 100)/10)
-	cam.setFocusToPos({x: endX, y: endY});
-	return;
+	cam.z = 1.6 - (Math.ceil(maxD / 100)/10)
 
+	var shiftX = 0;
 
-
-
-	var distX = data.maxX - data.minX;
-	var distY = data.maxY - data.minY;
-
-	if (distX > res.x){
-		cam.setZoom(res.x/distX / 1.4);
-	} else if (distY > res.y){
-		cam.setZoom(res.y/distY / 1.4);
+	if (ui.reinforceWrapper.is(":visible")){
+		shiftX = 200;
 	}
 
-	cam.setFocusToPos({x: endX, y: endY});
+	cam.setFocusToPos({x: endX - shiftX, y: endY});
 }
+
 Game.prototype.getDistanceFromFocusCentre = function(){
 	var min = 0;
 	var max = 0;
@@ -3181,6 +3171,7 @@ Game.prototype.animateJumpIn = function(){
 	window.elapsed = window.now - window.then;
 
 	if (elapsed > window.fpsTicks){
+		//console.log("ding");
 
 		var done = 1;
 		var doing = 0;
@@ -3209,13 +3200,13 @@ Game.prototype.animateJumpIn = function(){
 		if (done){
 			window.cancelAnimationFrame(anim);
 			game.animating = 0;
-			this.initialDone();
+			this.initialPhaseResolutionDone();
 		}
 	}
 }
 
-Game.prototype.initialDone = function(){
-	console.log("initialDone");
+Game.prototype.initialPhaseResolutionDone = function(){
+	console.log("initialPhaseResolutionDone");
 	var newUnit = 0;
 
 	for (var i = 0; i < this.ships.length; i++){
@@ -3232,12 +3223,8 @@ Game.prototype.initialDone = function(){
 
 	this.logMissionChanges();
 	this.logWeaponEvents();
-
-	$("#combatLog").find("tbody")
-		.append($("<tr>")
-			.append($("<td>").html("Initial Phase concluded."))
-		);
-
+	this.createPlaceHolderEntry();
+	this.createEndEntry("-- Initial Events concluded --");
 	game.draw();
 }
 
@@ -3298,7 +3285,7 @@ Game.prototype.doResolveMovement = function(){
 
 	$("#combatLogWrapper")
 	.width(600)
-	.css("top", 150).css("left", 250)
+	.css("top", 0).css("left", 245)
 	.show()
 	.find(".combatLogHeader").html("Movement Log").end()
 	.find("#combatLog").children().children().remove();
@@ -3413,9 +3400,9 @@ Game.prototype.toggleUI = function(){
 	if (aUnit){
 		unit = game.getUnit(aUnit);
 		if (unit.canTurn()){
-			if (game.ui.turnButton.is(":visible")){
-				$(game.ui.turnButton).addClass("disabled");
-			} else $(game.ui.turnButton).removeClass("disabled");
+			if (ui.turnButton.is(":visible")){
+				$(ui.turnButton).addClass("disabled");
+			} else $(ui.turnButton).removeClass("disabled");
 		}
 	}
 }
@@ -3438,12 +3425,12 @@ Game.prototype.setShortenInfo = function(e, unit, dist){
 
 	
 	if (e){
-		left = e.clientX - $(game.ui.doShorten).width()/2;
+		left = e.clientX - $(ui.doShorten).width()/2;
 		top = e.clientY + 50;
 	} else {
 		var pos = unit.getGamePos();
 		var pos = getPointInDir(100, unit.getDrawFacing()-90, pos.x, pos.y);
-		left = pos.x - $(game.ui.doShorten).width()/2;
+		left = pos.x - $(ui.doShorten).width()/2;
 		top = pos.y + 50;
 	}
 
@@ -3457,7 +3444,7 @@ Game.prototype.setShortenInfo = function(e, unit, dist){
 	
 	short += cost + " TA</span>";
 	
-	$(game.ui.doShorten)
+	$(ui.doShorten)
 		.empty()
 		.append($("<div>").html(short))
 		.append($("<div>").html(post))

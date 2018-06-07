@@ -25,8 +25,13 @@ $(document).ready(function(){
 		instructWrapper: $("#instructWrapper"),
 		combatLogWrapper: $("#combatLogWrapper"),
 		deployOverlay:  $("#deployOverlay"),
+		reinforceWrapper: $(".reinforceWrapper"),
+		shortInfo: $("#shortInfo"),
+		doShorten: $("#doShorten"),
+		turnButton: $("#turnButton"),
 	}
 })
+
 
 function doSort(a, b){
 	if (a.name != b.name){
@@ -447,8 +452,8 @@ function handleMouseDown(e){
 	}
 	else if (e.originalEvent.button == 2){
 		if (game.deploying && !game.turnMode){
-			$("#deployWrapper").find("#reinforceBody").find(".selected").each(function(){
-				if ($(this).data("id") == game.deploying){
+			ui.reinforceWrapper.find("#reinforceBody").find(".selected").each(function(){
+				if ($(this).data("id") == game.deploying.id){
 					$(this).removeClass("selected");
 					game.disableDeploy();
 					return;

@@ -88,8 +88,7 @@ Mixed.prototype.drawMovePlan = function(){
 		}
 	}
 	planCtx.closePath();
-		
-
+	
 	var target = this.getTarget();
 	var tPos;
 	var origin = this.getPlannedPos();
@@ -117,7 +116,6 @@ Mixed.prototype.drawMovePlan = function(){
 		if (!this.friendly){
 		planCtx.strokeStyle = "red";
 		} else planCtx.strokeStyle = "#00ea00";
-		planCtx.globalAlpha = 0.7;
 		planCtx.stroke();
 		planCtx.beginPath();
 		planCtx.moveTo(step.x, step.y);
@@ -125,6 +123,7 @@ Mixed.prototype.drawMovePlan = function(){
 
 	planCtx.lineTo(tPos.x, tPos.y);
 	planCtx.closePath();
+	planCtx.globalAlpha = 0.7;
 	planCtx.strokeStyle = color;
 	planCtx.stroke();
 	planCtx.setTransform(1,0,0,1,0,0);

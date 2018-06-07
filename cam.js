@@ -54,7 +54,10 @@ window.cam = {
 	},
 
 	setFireFocus: function(fire){
-		if (fire.dist <= 100){
+		if (fire.dist == 0){
+			this.z = 2.5
+		}
+		else if (fire.dist <= 100){
 			this.z = 2;
 		}
 		else if (fire.dist > res.x / 2 || fire.dist > res.y){
@@ -66,7 +69,7 @@ window.cam = {
 		var target = fire.target.getPlannedPos();
 
 		var centerX = (target.x + origin.x) / 2;
-		var centerY = (target.x + origin.x) / 2;
+		var centerY = (target.y + origin.y) / 2;
 
 		this.setFocusToPos({x: centerX, y: centerY}); return;
 

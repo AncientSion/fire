@@ -312,7 +312,7 @@ Salvo.prototype.getProfileString = function(){
 }
 
 Salvo.prototype.getShortInfo = function(){
-	var ele = game.ui.shortInfo;
+	var ele = ui.shortInfo;
 	if (this.userid == game.userid){
 		$(ele).attr("class", "friendly");
 	} else $(ele).attr("class", "hostile");
@@ -322,8 +322,8 @@ Salvo.prototype.getShortInfo = function(){
 		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + this.getCurSpeed() + " / " + this.getIntactElements() + "x " + this.structures[0].name;
 		table.insertRow(-1).insertCell(-1).innerHTML = "Base To-Hit: " + this.getStringHitChance();
 
-	if (!this.mission.arrived && game.phase < 2 && this.inRange()){
-		table.insertRow(-1).insertCell(-1).innerHTML = "<span class='red'>contact imminent</span>";
+	if (!this.mission.arrived && this.inRange()){
+		table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>contact imminent</span>";
 	}
 
 	return table;

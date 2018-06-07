@@ -1612,7 +1612,7 @@ Sensor.prototype.setTempEW = function(){
 	var ctx = t.getContext("2d");
 		ctx.translate(t.width/2, t.height/2);
 		var color = "";
-		ctx.globalAlpha = 0.25;
+		ctx.globalAlpha = 0.2;
 
 		switch (this.ew[this.ew.length-1].type){
 			case 0: color = "red"; break;
