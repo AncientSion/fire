@@ -1497,6 +1497,14 @@ div.integrityFull {
 	margin: 2px;
 }
 
+#unitSelector .friendly {
+	border: 1px solid #27e627;
+}
+
+#unitSelector .hostile {
+	border: 1px solid red;
+}
+
 #unitSelector .selected {
 	background-color: #ffeb3e;
 }

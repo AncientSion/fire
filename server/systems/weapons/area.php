@@ -38,7 +38,6 @@ class EnergyMine extends Area {
 	public $powerReq = 10;
 	public $traverse = -3;
 	public $aoe = 65;
-	public $dmgs = array(1, 2, 6, 3);
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);

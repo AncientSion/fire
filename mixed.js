@@ -68,11 +68,10 @@ Mixed.prototype.getPostMovePos = function(){
 Mixed.prototype.drawMovePlan = function(){
 	if (!this.actions.length || !this.deployed || !game.drawMoves){return;}
 
-	planCtx.strokeStyle = "#00ea00";
-	if (!this.friendly){
-		planCtx.strokeStyle = "red";
-	}
+	var color = "#00ea00";
+	if (!this.friendly){color = "red";}
 
+	planCtx.strokeStyle = color;
 	planCtx.globalAlpha = 0.4;
 	planCtx.lineWidth = 1;
 	planCtx.translate(cam.o.x, cam.o.y);
@@ -100,35 +99,38 @@ Mixed.prototype.drawMovePlan = function(){
 	} else tPos = {x: this.mission.x, y: this.mission.y};
 
 	var dist = getDistance(origin, tPos);
-	var impulse = this.getCurSpeed();
-	var color = "red";
+	var speed = this.getCurSpeed();
 
 	planCtx.beginPath();
 	planCtx.moveTo(origin.x, origin.y);
+	planCtx.globalAlpha = 0.7;
 
-	if (impulse < dist){ // does not reach
+	if (dist <= speed){
+		planCtx.lineTo(tPos.x, tPos.y);
+		planCtx.closePath();
+		planCtx.stroke();
+		planCtx.setTransform(1,0,0,1,0,0);
+	}
+	else {
 		var a = getAngleFromTo(origin, tPos);
-		var step = getPointInDir(impulse, a, origin.x, origin.y);
-			color = "white";
+		var step = getPointInDir(speed, a, origin.x, origin.y);
 
 		planCtx.lineTo(step.x, step.y);
 		planCtx.closePath();
-		if (!this.friendly){
-		planCtx.strokeStyle = "red";
-		} else planCtx.strokeStyle = "#00ea00";
+
 		planCtx.stroke();
 		planCtx.beginPath();
 		planCtx.moveTo(step.x, step.y);
+
+
+		planCtx.lineTo(tPos.x, tPos.y);
+		planCtx.closePath();
+		planCtx.strokeStyle = "white";
+		planCtx.stroke();
+		planCtx.setTransform(1,0,0,1,0,0);
 	}
-
-	planCtx.lineTo(tPos.x, tPos.y);
-	planCtx.closePath();
-	planCtx.globalAlpha = 0.7;
-	planCtx.strokeStyle = color;
-	planCtx.stroke();
-	planCtx.setTransform(1,0,0,1,0,0);
-
 	planCtx.globalAlpha = 1;
+	
 	if (this.flight){this.drawMissionArea();}
 }
 

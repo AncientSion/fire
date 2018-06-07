@@ -126,7 +126,7 @@ class LightLaser extends Laser {
 	public $name = "LightLaser";
 	public $display = "Light Laser";
 	public $animColor = "red";
-	public $rakeTime = 60;
+	public $rakeTime = 40;
 	public $beamWidth = 2;
 	public static $prio = 0;
 	public $minDmg = 50;
@@ -151,7 +151,7 @@ class LightLaser extends Laser {
 class MediumLaser extends LightLaser {
 	public $name = "MediumLaser";
 	public $display = "Medium Laser";
-	public $rakeTime = 60;
+	public $rakeTime = 50;
 	public $beamWidth = 3;
 	public static $prio = 0;
 	public $minDmg = 80;
@@ -174,8 +174,8 @@ class HeavyLaser extends LightLaser {
 	public $rakeTime = 60;
 	public $beamWidth = 4;
 	public static $prio = 0;
-	public $minDmg = 560;
-	public $maxDmg = 600;
+	public $minDmg = 160;
+	public $maxDmg = 200;
 	public $reload = 4;
 	public $optRange = 650;
 	public $dmgLoss = 6;
@@ -192,7 +192,7 @@ class HeavyLaser extends LightLaser {
 class SuperHeavyLaser extends HeavyLaser {
 	public $name = "SuperHeavyLaser";
 	public $display = "Super-Heavy Laser";
-	public $rakeTime = 100;
+	public $rakeTime = 70;
 	public $beamWidth = 5;
 	public static $prio = 0;
 	public $minDmg = 190;
@@ -200,10 +200,10 @@ class SuperHeavyLaser extends HeavyLaser {
 	public $optRange = 850;
 	public $dmgLoss = 4;
 	public $powerReq = 8;
+	public $effiency = 5;
 	public $rakes = 3;
 	public $integrity = 70;
 	public $traverse = 1;
-	public $effiency = 5;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);

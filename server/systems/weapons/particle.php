@@ -154,7 +154,7 @@ class HeavyFusionCannon extends Particle {
 	public static $prio = 0;
 	public $minDmg = 40;
 	public $maxDmg = 52;
-	public $accDecay = 100;
+	public $accDecay = 80;
 	public $shots = 1;
 	public $reload = 2;
 	public $integrity = 44;
@@ -176,15 +176,15 @@ class AntimatterConverter extends Particle {
 	public $fireMode = "Flash";
 	public static $prio = 0;
 	public $minDmg = 16;
-	public $accDecay = 80;
+	public $accDecay = 120;
 	public $shots = 1;
 	public $animColor = "green";
 	public $projSize = 5;
-	public $projSpeed = 8;
+	public $projSpeed = 6;
 	public $reload = 1;
-	public $integrity = 50;
+	public $integrity = 60;
 	public $powerReq = 5;
-	public $traverse = 0;
+	public $traverse = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $start, $end, $output, $width);

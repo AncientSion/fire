@@ -2788,7 +2788,7 @@ function Game(data){
 
 		if (!l){return;}
 
-		var w = l*(s+8);
+		var w = l*(s+6);
 
 		ele.width(Math.min(res.x - 400, w)).removeClass("disabled");
 	}
