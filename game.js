@@ -937,7 +937,7 @@ function Game(data){
 		if (game.turn == 1){return;}
 		$("#combatLogWrapper")
 			.width(450)
-			.css("top", 150).css("left", 250)
+			.css("top", 0).css("left", 245)
 			.show()
 			.find(".combatLogHeader").html("Tactical Log").end()
 			.find("#combatLog").children().children().remove();
@@ -3562,7 +3562,7 @@ Game.prototype.showFocusInfo = function(userid){
 			)
 			.append($("<tr>")
 				.append($("<td>").html("Flagship Crit Modifiers"))
-				.append($("<td>").html(command.getOutputCrits() + "%"))
+				.append($("<td>").html(command.getCritMod() + "%"))
 			)
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 10))

@@ -196,11 +196,11 @@ function Crit(data){
 
 	this.getString = function(){
 		if (this.type == "Disabled"){
-			if (this.duration){return (this.type + " (Incl. Turn " + (this.turn + this.duration) + ")" + " (T " + this.turn + ")");
-			} return this.type + " (T " + this.turn + ")";
+			if (this.duration){return (this.type + " (Incl. Turn " + (this.turn + this.duration) + ")" + " (Turn " + this.turn + ")");
+			} return this.type + " (Turn " + this.turn + ")";
 		}
-		else if (this.type == "Destroyed"){return this.type + " (T " + this.turn + ")";}
-		else return (this.type + " -" + (this.value) + "% (T " + this.turn + ")");
+		else if (this.type == "Destroyed"){return this.type + " (Turn " + this.turn + ")";}
+		else return (this.type + " -" + (this.value) + "% (Turn " + this.turn + ")");
 	}
 
 	this.inEffect = function(){

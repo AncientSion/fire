@@ -66,7 +66,8 @@ Mixed.prototype.getPostMovePos = function(){
 }
 
 Mixed.prototype.drawMovePlan = function(){
-	if (!this.actions.length || !this.deployed || !game.drawMoves){return;}
+	//if (!this.actions.length || !this.deployed || !game.drawMoves){return;}
+	if (!this.deployed || !game.drawMoves){return;}
 
 	var color = "#00ea00";
 	if (!this.friendly){color = "red";}

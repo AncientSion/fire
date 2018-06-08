@@ -5,12 +5,12 @@ class Tigara extends Heavy {
 	public $display = "Tigara";
 	public $faction = "Minbari Federation";
 	public $size =  85;
-	public static $value = 1350;
+	public static $value = 1150;
 	public $profile = array(0.93, 1.07);
 	public $mass = 10500;
 
 	public $integrity = 1200;
-	public $vitalHP = 140;
+	public $vitalHP = 130;
 	public $ep = 75;
 	public $ew = 900;
 
@@ -35,7 +35,7 @@ class Tigara extends Heavy {
 		$aft = new Structure($this->getId(), $this->id, 120, 240, 2100, 17, 6);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
-			$aft->systems[] = new NeutronLaser($this->getId(), $this->id, 120, 240, 0, 2);
+			$aft->systems[] = new AntimatterConverter($this->getId(), $this->id, 135, 225, 0, 2);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
 		$structs[] = $aft;

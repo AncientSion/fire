@@ -7,7 +7,7 @@ class PrimarySystem extends System {
 	public $internal = 1;
 	public $crewEffect = 0;
 	public $maxDmg = 20;
-	public $hitMod = 4;
+	public $hitMod = 5;
 	public $hitChance = 0;
 	public $hitPct = 0;
 
@@ -17,7 +17,7 @@ class PrimarySystem extends System {
 	}
 
 	public function setHitChanceValue(){
-		$this->hitChance = ($this->integrity / $this->hitMod)*1.2;
+		$this->hitChance = ($this->integrity / $this->hitMod);
 
 	}
 
@@ -98,7 +98,7 @@ class PrimarySystem extends System {
 class Bridge extends PrimarySystem {
 	public $name = "Command";
 	public $display = "Command & Control";
-	public $hitMod = 6;
+	public $hitMod = 2;
 	public $loadout = 1;
 	public $crewEffect = 5;
 
@@ -117,6 +117,16 @@ class Bridge extends PrimarySystem {
 			);
         }
 	}
+
+	public function getCritMod($type, $turn){
+		$mod = 0;
+		for ($i = 0; $i < sizeof($this->crits); $i++){
+		if ($this->crits[$i]->type != "Command"){continue;}
+			$mod += $this->crits[$i]->value;
+		}
+		return $mod;
+	}
+
 
 	public function adjustLoad($dbLoad){
 		//Debug::log("ding");
@@ -183,6 +193,7 @@ class Reactor extends PrimarySystem {
 			}
 
 			$modifier = round($overload / $this->output * 100, 2);
+			if (!$modifier){return;}
 			Debug::log("POTENTIAL: ".$all.", output: ".$this->output.", result: ".$overload." units, value: ".$modifier."%");
 
 			$this->crits[] = new Crit(sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Overload", 0, $modifier, 1);
@@ -213,7 +224,7 @@ class Sensor extends PrimarySystem {
 	public $ew = array();
 	public $effiency = 10;
 	public $crewEffect = 8;
-	public $hitMod = 2;
+	public $hitMod = 2.5;
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
 		$this->powerReq = floor($output/60);

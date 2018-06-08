@@ -1361,6 +1361,7 @@ div.integrityFull {
 	border: 4px solid #1effa2;
 	border-collapse: collapse;
 	background-color: black;
+	padding: 2px;
 }
 
 #sysDiv table {

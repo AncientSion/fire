@@ -1457,7 +1457,7 @@
 			$commandRating = ($unit->baseFocusRate + $unit->modFocusRate);
 			$gainFocus = floor($baseGain / 10 * $commandRating / 100 * $output);
 
-			//Debug::log("basegain: ".$baseGain.", commandRating: ".$commandRating.", command: ".$unit->name.", output: ".$output.", gain: ".$gainFocus);
+			Debug::log("basegain: ".$baseGain.", commandRating: ".$commandRating.", command: ".$unit->name.", output: ".$output.", gain: ".$gainFocus);
 
 			$curFocus = $playerstatus["curFocus"];
 		}

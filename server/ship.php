@@ -494,8 +494,8 @@ class Ship {
 		$bridge = $this->getSystemByName("Command");
 		for ($i = 0; $i < sizeof($bridge->crits); $i++){
 
-			if ($bridge->crits[$i]->type == "Command"){
-				$bridge->crits[$i]->type = "Output";
+			if ($bridge->crits[$i]->type == "Output"){
+				//$bridge->crits[$i]->type = "Output";
 				$bridge->crits[$i]->display = "Officer KIA: <span class='yellow'>Command -".$bridge->crits[$i]->value."%</span> effect.";
 				continue;
 			}
@@ -507,7 +507,7 @@ class Ship {
 					$this->primary->systems[$j]->crits[] = $copy;
 
 					$bridge->crits[$i]->display = "Officer KIA: <span class='yellow'>".$bridge->crits[$i]->type." -".$bridge->crits[$i]->value."%</span> effect.";
-					$bridge->crits[$i]->type = "";
+					//$bridge->crits[$i]->type = "";
 					break;
 				}
 			}

@@ -256,7 +256,6 @@ Flight.prototype.expandDiv = function(div){
 
 	$(structContainer).css("height", height + 50);
 
-
 	return div;
 }
 

@@ -51,6 +51,19 @@ System.prototype.getDisplay = function(){
 	return this.display;
 }
 
+System.prototype.getCritMod = function(type){
+	var mod = 0;
+
+	for (var i = 0; i < this.crits.length; i++){
+		switch (this.crits[i].type){
+			case type:
+				mod += this.crits[i].value; break;
+			default: break;
+		}
+	}
+	return mod;
+}
+
 System.prototype.getResolvingFireOrders = function(){
 	if (game.phase != 3){return false;}
 	for (var i = this.fireOrders.length-1; i >= 0; i--){
@@ -121,12 +134,29 @@ System.prototype.attachSysMods = function(ele){
 		if (this.crits.length){
 			for (var i = 0; i < this.crits.length; i++){
   				if (!this.crits[i].inEffect()){continue;}
-				$(table[0]).append($("<tr>").append($("<td>").html(this.crits[i].getString()).attr("colSpan", 2).addClass("negative")));
+
+  				var html = "";
+
+				if (this.crits[i].type == "Disabled"){
+					if (this.crits[i].duration){html = (this.crits[i].type + " (Incl. Turn " + (this.crits[i].turn + this.crits[i].duration) + ")" + " (Turn " + this.crits[i].turn + ")");}
+					html = this.crits[i].type + " (Turn " + this.crits[i].turn + ")";
+				}
+				else if (this.crits[i].type == "Destroyed"){html = this.crits[i].type + " (Turn " + this.crits[i].turn + ")";}
+				else if (this.name == "Command" && this.crits[i].type == "Output"){
+					html = "Focus -" + (this.crits[i].value) + "% (Turn " + this.crits[i].turn + ")";
+					html+= "</br>";
+					html += "Morale -" + (this.crits[i].value) + "% (Turn " + this.crits[i].turn + ")";
+				}
+				else html = (this.crits[i].type + " -" + (this.crits[i].value) + "% (Turn " + this.crits[i].turn + ")");
+
+				$(table[0]).append($("<tr>").append($("<td>").html(html).attr("colSpan", 2).addClass("negative")));
 			}
 		}
 		div.append(table);
 	}
 }
+
+
 
 System.prototype.getCrewTerm = function(){
 	if (this.name == "Command"){
@@ -1194,7 +1224,7 @@ PrimarySystem.prototype.getOutput = function(){
 	var mod = 100;
 		mod += this.getBoostEffect("Output") * this.getBoostLevel();
 		mod += this.getCrewEffect() * this.getCrewLevel();
-		mod += this.getOutputCrits();
+		mod += this.getCritMod("Output");
 
 	return Math.floor(this.output / 100 * mod) - usage;
 }
@@ -1203,7 +1233,7 @@ PrimarySystem.prototype.getCombinedModifiers = function(){
 	var mod = 0;
 		mod += this.getBoostEffect("Output") * this.getBoostLevel();
 		mod += this.getCrewEffect() * this.getCrewLevel();
-		mod += this.getOutputCrits();
+		mod += this.getCritMod();
 
 	return round(mod/100, 2);
 }
@@ -1230,25 +1260,14 @@ PrimarySystem.prototype.getOutputUsage = function(){
 	return 0;
 }
 
-PrimarySystem.prototype.getOutputCrits = function(){
-	var mod = 0;
-	for (var i = 0; i < this.crits.length; i++){
-		if (!this.crits[i].inEffect()){continue;}
-		if (this.crits[i].type == ""){continue;}
-		mod -= this.crits[i].value;
-	}
-	return mod;
-}
-
-System.prototype.getOutputReduction = function(){
-	var mod = this.getOutputCrits();
+PrimarySystem.prototype.getOutputReduction = function(){
+	var mod = this.getCritMod();
 
 	if (!mod){return 0;}
 	else return Math.ceil(Math.abs(this.output / 100 * mod));
 }
 
 PrimarySystem.prototype.getOutputString = function(){
-	//var effect = 100 + this.getOutputCrits();
 	var effect = 100;
 	return this.output + " +" + Math.floor(this.getBoostOutput()/100*effect) + " +" + Math.floor(this.getCrewOutput()/100*effect) + " -" + this.getOutputReduction();
 }
@@ -1347,6 +1366,16 @@ Command.prototype.update = function(){
 	for (var i = 0; i < this.powers.length; i++){
 		unit.morale.bonusChance -= 10;
 	}
+}
+
+Command.prototype.getCritMod = function(){
+	var mod = 0;
+
+	for (var i = 0; i < this.crits.length; i++){
+		if (this.crits[i].type != "Command"){continue;}
+		mod += this.crits[i].value;
+	}
+	return mod;
 }
 
 Command.prototype.select = function(e){
@@ -2024,7 +2053,7 @@ Weapon.prototype.hasFireOrder = function(){
 Weapon.prototype.getRangeDmgMod = function(){
 	var mod = 100;
 	if (this.fireMode == "Laser" || this.dmgType == "Plasma"){
-		mod += this.getCritEffect("Damage loss");
+		mod += this.getCritMod("Damage loss");
 		mod += this.getBoostEffect("Damage loss") * this.getBoostLevel();
 	}
 	return mod / 100;
@@ -2350,22 +2379,9 @@ Weapon.prototype.getFillStyle = function(x, y, dist){
 	return "green";
 }
 
-Weapon.prototype.getCritEffect = function(value){
-	var mod = 0;
-
-	for (var i = 0; i < this.crits.length; i++){
-		switch (this.crits[i].type){
-			case value:
-				mod += this.crits[i].value; break;
-			default: break;
-		}
-	}
-	return mod;
-}
-
 Weapon.prototype.getAccuracy = function(){
 	var mod = 100;
-		mod += this.getCritEffect("Accuracy");
+		mod += this.getCritMod("Accuracy");
 		mod -= this.getBoostEffect("Accuracy") * this.getBoostLevel();
 
 	return Math.round(this.accDecay * mod / 100);
@@ -2381,7 +2397,7 @@ Weapon.prototype.getDmgString = function(){
 
 Weapon.prototype.getDamage = function(){
 	var mod = 100;
-		mod -= this.getCritEffect("Damage");
+		mod -= this.getCritMod("Damage");
 		mod += this.getBoostEffect("Damage") * this.getBoostLevel();
 
 	return mod / 100;
@@ -2641,7 +2657,7 @@ Particle.prototype.getAnimation = function(fire){
 				shotAnim.n = 0 - i*gunDelay - j*shotDelay
 
 
-				console.log(shotAnim.n);
+			//console.log(shotAnim.n);
 			gunAnims.push(shotAnim);
 			//console.log(shotAnim.n +"/"+shotAnim.m);
 
@@ -4200,18 +4216,7 @@ Hangar.prototype.setMount = function(amount){
 }
 
 Hangar.prototype.getOutput = function(){
-	return this.getLaunchRate();
-}
-
-Hangar.prototype.getLaunchRate = function(){
 	return this.launchRate;
-	var rate = this.effiency;
-	var mod = 1;
-
-	for (var i = 0; i < this.crits.length; i++){
-		mod -= this.crits[i].value;
-	}
-	return Math.ceil(rate * mod);
 }
 
 Hangar.prototype.drawSystemArc = function(){
@@ -4219,7 +4224,7 @@ Hangar.prototype.drawSystemArc = function(){
 }
 
 Hangar.prototype.enableHangarDiv = function(e){
-	$("#launchRate").html(this.getLaunchRate());
+	$("#launchRate").html(this.getOutput());
 	$("#capacity").html(this.capacity);
 	var div = $("#hangarDiv");
 
@@ -4352,7 +4357,7 @@ Hangar.prototype.alterFlight = function(ele, max){
 	if (game.phase >= 0 || !this.canFire()){return false}
 	var name = $(ele).data("name");
 	var add = $(ele).data("val");
-	var launchRate = this.getLaunchRate();
+	var launchRate = this.getOutput();
 	var current = 0;
 
 	if (add > 0){
@@ -4586,7 +4591,7 @@ Hangar.prototype.getSysDiv = function(){
 			.append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)))
 			.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.getMount())))
 			.append($("<tr>").append($("<td>").html("Capacity")).append($("<td>").html("up to " + this.capacity + " units")))
-			.append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html(this.getLaunchRate() + " each " + this.reload + " turns"))))
+			.append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html(this.getOutput() + " each " + this.reload + " turns"))))
 	this.attachSysMods(div);
 		
 	return div;

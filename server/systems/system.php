@@ -171,7 +171,7 @@ class System {
 		for ($i = 0; $i < sizeof($this->crits); $i++){
 			switch ($this->crits[$i]->type){
 				case $type: 
-					$mod =+ $this->crits[$i]->value; break;
+					$mod += $this->crits[$i]->value; break;
 				default: break;
 			}
 		}

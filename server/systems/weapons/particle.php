@@ -182,7 +182,7 @@ class AntimatterConverter extends Particle {
 	public $projSize = 5;
 	public $projSpeed = 6;
 	public $reload = 1;
-	public $integrity = 60;
+	public $integrity = 62;
 	public $powerReq = 5;
 	public $traverse = 1;
 
