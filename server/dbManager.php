@@ -382,11 +382,13 @@
 				if ($units[$i]["command"]){
 					$id = $units[$i]["id"];
 					$unit = new $units[$i]["name"]();
+					Debug::log("created!");
 					break;
 				}
 			}
 
 			$sql = "UPDATE units SET command = 1 WHERE id = ".$id;
+			Debug::log($sql);
 			$this->query($sql);
 			Debug::log("Command set");
 
