@@ -95,21 +95,6 @@
 			}
 		}
 
-		public function update($sql){
-			
-			//Debug::log("upd");
-			$stmt = $this->connection->prepare($sql);
-			
-			if ($stmt->execute()){
-				//Debug::log("true");
-				return true;
-			}
-			else {
-				//Debug::log("false");
-				return false;
-			}
-		}
-
 		public function registerAccount($name, $pass){
 			
 			$sql = "SELECT * FROM users";
