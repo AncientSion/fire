@@ -382,23 +382,23 @@
 				if ($units[$i]["command"]){
 					$id = $units[$i]["id"];
 					$unit = new $units[$i]["name"]();
-					Debug::log("created!");
+					//Debug::log("created!");
 					break;
 				}
 			}
 
 			$sql = "UPDATE units SET command = 1 WHERE id = ".$id;
-			Debug::log($sql);
+			//Debug::log($sql);
 			$this->query($sql);
-			Debug::log("Command set");
+			//Debug::log("Command set");
 
 
 			$gd = $this->getGameDetails($gameid);
-			Debug::log("getGameDetails");
+			//Debug::log("getGameDetails");
 			$sql = "SELECT id FROM playerstatus WHERE userid = ".$userid." AND gameid = ".$gameid;
-			Debug::log($sql);
+			//Debug::log($sql);
 			$playerstatus = $this->query($sql);
-			Debug::log("playerstatus");
+			//Debug::log("playerstatus");
 			
 
 			$baseGain = floor($gd["pv"] / 100 * $gd["focusMod"]);
