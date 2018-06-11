@@ -22,6 +22,7 @@
 	        }
 	        return self::$instance;
 		}
+
 		public function getLastInsertId(){
 			return $this->connection->lastInsertId();
 		}
@@ -30,6 +31,13 @@
 			$stmt = $this->connection->prepare($sql);
 			$stmt->execute();
 			return $stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+
+		public function update($sql){
+			$stmt = $this->connection->prepare($sql);
+			$stmt->execute();
+
+			return $stmt->rowCount();
 		}
 
 		public function insertChatMsg($post){
@@ -388,9 +396,8 @@
 			}
 
 			$sql = "UPDATE units SET command = 1 WHERE id = ".$id;
-			//Debug::log($sql);
-			$this->query($sql);
-			//Debug::log("Command set");
+			$rows = $this->update($sql);
+			Debug::log("Command set, rows updates: ".$rows);
 
 
 			$gd = $this->getGameDetails($gameid);
