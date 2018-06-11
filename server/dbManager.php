@@ -388,12 +388,15 @@
 
 			$sql = "UPDATE units SET command = 1 WHERE id = ".$id;
 			$this->query($sql);
+			Debug::log("Command set");
 
 
 			$gd = $this->getGameDetails($gameid);
+			Debug::log("getGameDetails");
 			$sql = "SELECT id FROM playerstatus WHERE userid = ".$userid." AND gameid = ".$gameid;
-			//Debug::log($sql);
+			Debug::log($sql);
 			$playerstatus = $this->query($sql);
+			Debug::log("playerstatus");
 			
 
 			$baseGain = floor($gd["pv"] / 100 * $gd["focusMod"]);
