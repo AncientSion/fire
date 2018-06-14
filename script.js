@@ -214,6 +214,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 				}
 			}
 
+			multi = round(multi, 2);
 			final = Math.floor(baseHit * multi);
 			targetData1
 				.empty()

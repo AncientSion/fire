@@ -130,12 +130,12 @@ class FusionCannon extends Particle {
 	public $name = "FusionCannon";
 	public $display = "Medium Fusion Cannon";
 	public static $prio = 0;
-	public $minDmg = 34;
-	public $maxDmg = 42;
+	public $minDmg = 32;
+	public $maxDmg = 43;
 	public $accDecay = 100;
 	public $shots = 1;
 	public $reload = 2;
-	public $integrity = 34;
+	public $integrity = 38;
 	public $powerReq = 2;
 	public $traverse = -1;
 
@@ -153,13 +153,13 @@ class HeavyFusionCannon extends Particle {
 	public $display = "Heavy Fusion Cannon";
 	public static $prio = 0;
 	public $minDmg = 40;
-	public $maxDmg = 52;
-	public $accDecay = 80;
+	public $maxDmg = 54;
+	public $accDecay = 100;
 	public $shots = 1;
 	public $reload = 2;
 	public $integrity = 44;
 	public $powerReq = 3;
-	public $traverse = 0;
+	public $traverse = -1;
 
 	public $animColor = "green";
 	public $projSize = 4;
@@ -172,7 +172,7 @@ class HeavyFusionCannon extends Particle {
 
 class AntimatterConverter extends Particle {
 	public $name = "AntimatterConverter";
-	public $display = "Antimatter-Converterr";
+	public $display = "Antimatter-Converter";
 	public $fireMode = "Flash";
 	public static $prio = 0;
 	public $minDmg = 16;
@@ -181,9 +181,9 @@ class AntimatterConverter extends Particle {
 	public $animColor = "green";
 	public $projSize = 5;
 	public $projSpeed = 6;
-	public $reload = 1;
-	public $integrity = 62;
-	public $powerReq = 5;
+	public $reload = 3;
+	public $integrity = 64;
+	public $powerReq = 8;
 	public $traverse = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){

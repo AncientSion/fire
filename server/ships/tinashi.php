@@ -22,19 +22,19 @@ class Tinashi extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$right = new Structure($this->getId(), $this->id, 0, 120, 475, 18, 1);
+		$right = new Structure($this->getId(), $this->id, 0, 120, 475, 20, 1);
 			$right->systems[] = new FusionCannon($this->getId(), $this->id, 0, 120);
 			$right->systems[] = new FusionCannon($this->getId(), $this->id, 0, 120);
 			$right->systems[] = new LightEMNeedler($this->getId(), $this->id, 0, 180);
 			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 120, 240, 400, 15);
+		$aft = new Structure($this->getId(), $this->id, 120, 240, 400, 17);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
 			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
 		$structs[] = $aft;
 
-		$left = new Structure($this->getId(), $this->id, 240, 360, 475, 18, 1);
+		$left = new Structure($this->getId(), $this->id, 240, 360, 475, 20, 1);
 			$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
 			$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
 			$left->systems[] = new Dual($this->getId(), $this->id, 180, 0, 34, array("LightEMNeedler", "MediumEMDissipator"));

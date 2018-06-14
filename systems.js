@@ -1779,6 +1779,9 @@ function Weapon(system){
 }
 Weapon.prototype = Object.create(System.prototype);
 
+Weapon.prototype.assembleDmgDatass = function(fire){
+
+}
 
 
 Weapon.prototype.assembleDmgData = function(fire){
@@ -1836,8 +1839,8 @@ Weapon.prototype.getReqString = function(req){
 	return string;
 }
 
-Weapon.prototype.createCombatLogEntry = function(fire){
-	var log = $($("#combatLog").find("tbody")[0]);
+Weapon.prototype.addLogStartEntry = function(log, fire){
+
 	var shots = 0;
 	var hits = 0;
 	var armour = 0;
@@ -1865,127 +1868,114 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 	}
 
 	for (var i = 0; i < fire.damages.length; i++){
-		armour += fire.damages[i].armourDmg;
-		em += fire.damages[i].emDmg
+		armour += fire.damages[i].armourDmg
 		system += fire.damages[i].structDmg;
 		struct += fire.damages[i].overkill;
-		shield += fire.damages[i].shieldDmg;
+		shield += fire.damages[i].shieldDmg;;
+		em += fire.damages[i].emDmg
 	}
+
 
 	var tr = $("<tr>");
 	var index = $(log).children().length;
 
 	tr
-		.data("shooterid", fire.shooter.id)
-		.data("targetid", fire.target.id)
-		.data("fireid", fire.id)
-		.data("row", index)
-		//.data("hasDetails", 0)
-		.data("expanded", 0)
-		.contextmenu(function(){
-			for (var i = 0; i < game.fireOrders.length; i++){
-				if (game.fireOrders[i].id == $(this).data("fireid")){
-					game.fireOrders[i].animating = 0;
-					break;
-				}
+	.data("shooterid", fire.shooter.id)
+	.data("targetid", fire.target.id)
+	.data("fireid", fire.id)
+	.data("row", index)
+	.data("expanded", 0)
+	.contextmenu(function(){
+		for (var i = 0; i < game.fireOrders.length; i++){
+			if (game.fireOrders[i].id == $(this).data("fireid")){
+				game.fireOrders[i].animating = 0;
+				break;
 			}
+		}
 
-			game.redraw();
-			game.fireOrders[i].anim = game.fireOrders[i].weapon.getAnimation(game.fireOrders[i]);
-			$(fxCanvas).css("opacity", 1);
-			game.animateSingleFireOrder(i, 0)
-		})
-		.hover(function(){
+		game.redraw();
+		game.fireOrders[i].anim = game.fireOrders[i].weapon.getAnimation(game.fireOrders[i]);
+		$(fxCanvas).css("opacity", 1);
+		game.animateSingleFireOrder(i, 0)
+	})
+	.click(function(){
+		var startRow = $(this).data("start");
+		var endRow = $(this).data("end");
+		var rows = $("#combatLog").find("tbody").children();
+		console.log("ding");
+
+		if ($(this).data("expanded") == 1){
+			$(this).data("expanded", 0).removeClass("selected");
+			for (var i = startRow; i <= endRow; i++){
+				$(rows[i]).hide().removeClass("selected");
+			}
+		}
+		else {
+			$(this).data("expanded", 1).addClass("selected");
+			for (var i = startRow; i <= endRow; i++){
+				$(rows[i]).show().addClass("selected");
+			}
+		}
+	})
+
+
+	if (!(this instanceof Area)){
+		tr.hover(function(){
 			var data = $(this).data();
 			if (data.targetid == ""){return;}
 			game.getUnit(data.shooterid).doHighlight();
 			game.getUnit(data.targetid).doHighlight();
 		})
-		.click(function(){
-				var startRow = $(this).data("start");
-				var endRow = $(this).data("end");
-				var rows = $("#combatLog").find("tbody").children();
 
-				if ($(this).data("expanded") == 1){
-					$(this).data("expanded", 0).removeClass("selected");
-					for (var i = startRow; i <= endRow; i++){
-						$(rows[i]).hide().removeClass("selected");
-					}
-				}
-				else {
-					$(this).data("expanded", 1).addClass("selected");
-					for (var i = startRow; i <= endRow; i++){
-						$(rows[i]).show().addClass("selected");
-					}
-				}	
-		})
+		var req = fire.req.slice();
+			req.sort(function(a, b){return a-b});
+		var reqString = this.getReqString(req);
+
+		tr
 		.append($("<td>").html(fire.type))
 		.append($("<th>").html("<font color='" + fire.shooter.getCodeColor() + "'>" + fire.shooter.name + " #" + fire.shooter.id + "</font>"))
 		.append($("<th>").html("<font color='" + fire.target.getCodeColor() + "'>" + fire.target.name + " #" + fire.target.id + "</font>"))
 		.append($("<td>").html(fire.weapon.getDisplay()))
 		.append($("<td>").html(reqString))
 		.append($("<td>").html(hits + " / " + shots))
-
-	if (!hits){
-		$(tr)
-			.append($("<td>").html(""))
-			.append($("<td>").html(""))
-			.append($("<td>").html(""))
+		.append($("<td>").html(armour ? armour : ""))
+		.append($("<td>").html(system || em || ""))
+		.append($("<td>").html(struct ? struct : ""))
 	}
 	else {
-		$(tr)
-			.append($("<td>").html(armour ? armour : ""))
-			.append($("<td>").html(system || em || ""))
-			.append($("<td>").html(struct ? struct : ""))
+		tr
+		.append($("<td>").html("Interrupt"))
+		.append($("<th>").attr("colSpan", 4).html("<font color='" + fire.shooter.getCodeColor() + "'>" + fire.shooter.name + " #" + fire.shooter.id + "</font> firing " + fire.weapon.getDisplay()))
+		.append($("<td>").html(armour ? armour : ""))
+		.append($("<td>").html(system || em || ""))
+		.append($("<td>").html(struct ? struct : ""))
 	}
 
 	$(log).append(tr);
 
+	return {armour: armour, system: system, struct: struct, shield: shield, em: em};
+
+}
+
+Weapon.prototype.createCombatLogEntry = function(fire){
+	var log = $($("#combatLog").find("tbody")[0]);
+	var start = log.children().length;
+	var inflicted = this.addLogStartEntry(log, fire);
+
+	this.addLogRollsEntry(log, fire);
 	var dmgs = this.assembleDmgData(fire);
-	var start = index+1;
 	var depth = Object.keys(dmgs).length;
 
-	$(log).append(
-		$("<tr>")
-		.hide()
-		.append($("<td>")
-		)
-		.append($("<td>")
-			.html("Rolls:")
-		)
-	.append($("<td>")
-			.attr("colSpan", 2)
-			.css("textAlign", "left")
-			.html(rollString.slice(0, rollString.length-3))
-		)
-		.append($("<td>")
-			.attr("colSpan", 5)
-		)
-	)
-
-	// e-web
-	if (shield){
+	if (inflicted.shield){ // e-web
 		depth++;
-		$(log).append(
-			$("<tr>")
-			.hide()
-			.append($("<td>"))
-			.append($("<td>")
-				.attr("colSpan", 5)
-				.html("The Energy-Web nullified a grand total of " + shield + " damage points")
-			)
-			.append($("<td>"))
-			.append($("<td>"))
-			.append($("<td>"))
-		)
+		this.addLogShieldEntry(log, inflicted.shield);
 	}
 
 	//dmg Details
-	$(tr)
-		.data("hasDetails", 1)
+	$($(log.children())[start])
 		.data("expanded", 0)
-		.data("start", start)
-		.data("end", start + depth)
+		.data("start", start+1)
+		.data("end", start+1 + depth)
 
 	//console.log(dmgs);
 
@@ -2006,10 +1996,9 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 		if (dmgs[i][0]){string += "Kills: " + dmgs[i][0]};
 		if (string.length > 2 && dmgs[i][1]){string += ", "};
 		if (dmgs[i][1]){string += "potential Overload: " + dmgs[i][1]}
+		$(sub).append($("<td>").attr("colSpan", 2).html(string))
 
-		$(sub) 
-		.append($("<td>").attr("colSpan", 2).html(string)
-		)
+
 
 		for (var j = 2; j < dmgs[i].length-1; j++){
 			$(sub) 
@@ -2022,6 +2011,49 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 	}
 
 	ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+}
+
+Weapon.prototype.addLogRollsEntry = function(log, fire){
+	if (this instanceof Area){return;}
+
+	var req = fire.req.slice();
+		req.sort(function(a, b){return a-b});
+	var reqString = this.getReqString(req);
+
+	var rolls = fire.rolls.slice().sort((a, b) => a-b);
+	var rollString = this.getRollsString(rolls, req[0]);
+
+	$(log).append(
+		$("<tr>")
+		.hide()
+		.append($("<td>"))
+		.append($("<td>")
+			.html("Rolls:")
+		)
+		.append($("<td>")
+			.attr("colSpan", 2)
+			.css("textAlign", "left")
+			.html(rollString.slice(0, rollString.length-3))
+		)
+		.append($("<td>")
+			.attr("colSpan", 5)
+		)
+	)
+}
+
+Weapon.prototype.addLogShieldEntry = function(log, shield){
+	$(log).append(
+		$("<tr>")
+		.hide()
+		.append($("<td>"))
+		.append($("<td>")
+			.attr("colSpan", 5)
+			.html("The Energy-Web nullified a grand total of <span class='yellow'>" + shield + "</span> damage points")
+		)
+		.append($("<td>"))
+		.append($("<td>"))
+		.append($("<td>"))
+	)
 }
 
 Weapon.prototype.getDmgsPerShot = function(fire){
@@ -3572,13 +3604,15 @@ Area.prototype.select = function(){
 	game.monoSystem = this.selected;
 }
 
-Area.prototype.createCombatLogEntry = function(fire){
+Area.prototype.createCombatLogEndtry = function(fire){
 	var log = $($("#combatLog").find("tbody")[0]);
 	var shots = 0;
 	var hits = 0;
 	var armour = 0;
+	var em = 0;
 	var system = 0;
 	var struct = 0;
+	var shield = 0;
 	var req;
 	var chance = "";
 
@@ -3586,115 +3620,53 @@ Area.prototype.createCombatLogEntry = function(fire){
 		armour += fire.damages[i].armourDmg;
 		system += fire.damages[i].structDmg;
 		struct += fire.damages[i].overkill;
+		shield += fire.damages[i].shieldDmg;
+		em += fire.damages[i].emDmg
 	}
 
-	var tr = document.createElement("tr");
-	var index = $(log).children().length;
-
-	$(tr)
-		.data("shooterid", fire.shooter.id)
-		.data("fireid", fire.id)
-		.data("row", index)
-		.data("expanded", 0)
-		.contextmenu(function(){
-			for (var i = 0; i < game.fireOrders.length; i++){
-				if (game.fireOrders[i].id == $(this).data("fireid")){
-					game.fireOrders[i].animating = 0;
-					break;
-				}
-			}
-
-			game.redraw();
-			game.fireOrders[i].anim = game.fireOrders[i].weapon.getAnimation(game.fireOrders[i]);
-			$(fxCanvas).css("opacity", 1);
-			game.animateSingleFireOrder(i, 0)
-		})
-		.click(function(){
-				var startRow = $(this).data("start");
-				var endRow = $(this).data("end");
-				var rows = $("#combatLog").find("tbody").children();
-
-				if ($(this).data("expanded") == 1){
-					$(this).data("expanded", 0).removeClass("selected");
-					for (var i = startRow; i <= endRow; i++){
-						$(rows[i]).hide().removeClass("selected");
-					}
-				}
-				else {
-					$(this).data("expanded", 1).addClass("selected");
-					for (var i = startRow; i <= endRow; i++){
-						$(rows[i]).show().addClass("selected");
-					}
-				}	
-		})
-		.append($("<td>").html("Interrupt"))
-		.append($("<th>").attr("colSpan", 4).html("<font color='" + fire.shooter.getCodeColor() + "'>" + fire.shooter.name + " #" + fire.shooter.id + "</font> firing " + fire.weapon.getDisplay()))
-
-	$(tr)
-		.append($("<td>").html(armour))
-		.append($("<td>").html(system ? system : ""))
-		.append($("<td>").html(struct))
-
+	var tr = this.addLogStartEntry(log, fire);
 	$(log).append(tr);
 
-	var dmgs = {};
+	var dmgs  = this.assembleDmgData(fire);
 	var start = index+1;
-	var depth = -1;
-
-	for (var i = 0; i < fire.damages.length; i++){
-		if (dmgs.hasOwnProperty(fire.damages[i].system)){ // hit
-			dmgs[fire.damages[i].system][2]++;
-		}
-		else {
-			depth++;
-			dmgs[fire.damages[i].system] = [0, 0, 1, 0, 0, 0]; // new system entry
-		}
-		if (fire.damages[i].destroyed){ // kill
-			dmgs[fire.damages[i].system][0]++;
-		}
-		if (fire.damages[i].notes[fire.damages[i].notes.length-1][0] == "o"){ //%
-			dmgs[fire.damages[i].system][1] += Math.floor(fire.damages[i].notes[fire.damages[i].notes.length-1].slice(1, fire.damages[i].notes[fire.damages[i].notes.length-1].length));
-		}
-
-		dmgs[fire.damages[i].system][3] += fire.damages[i].armourDmg
-		dmgs[fire.damages[i].system][4] += fire.damages[i].structDmg
-		dmgs[fire.damages[i].system][5] += fire.damages[i].overkill
-	}
+	var depth = Object.keys(dmgs).length;
 
 	for (var i in dmgs){
 		dmgs[i][0] = dmgs[i][0] ? "Kills: "  + dmgs[i][0] : "" 
 		dmgs[i][1] = dmgs[i][1] ? "Overl.: "  + dmgs[i][1] : "" 
 	}
 
-	//dmg Details
-	if (fire.damages.length){
-		$(tr)
-			.data("hasDetails", 1)
-			.data("expanded", 0)
-			.data("start", start)
-			.data("end", start + depth)
+	// e-web
+	if (shield){
+		depth++;
+		this.addLogShieldEntry(log, shield);
+	}
 
-		for (var i in dmgs){
-			start++;
-			var sub = $("<tr>")
-				.hide()
-				.data("row", start)
-				.append($("<td>")
-				)
-				.append($("<td>")
-					.attr("colSpan", 4)
-					.html(i + " / " +dmgs[i][2] + " hits") // system name
-				)
+	$(tr)
+		.data("expanded", 0)
+		.data("start", start)
+		.data("end", start + depth)
 
-			for (var j = 3; j < dmgs[i].length; j++){
-				$(sub) 
-				.append($("<td>")
-					.html(dmgs[i][j])
-				)
-			}
+	for (var i in dmgs){
+		start++;
+		var sub = $("<tr>")
+			.hide()
+			.data("row", start)
+			.append($("<td>")
+			)
+			.append($("<td>")
+				.attr("colSpan", 4)
+				.html(i + " / " +dmgs[i][2] + " hits") // system name
+			)
 
-			$(log).append(sub);
+		for (var j = 3; j < dmgs[i].length; j++){
+			$(sub) 
+			.append($("<td>")
+				.html(dmgs[i][j])
+			)
 		}
+
+		$(log).append(sub);
 	}
 
 	ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});

@@ -435,11 +435,11 @@
 		}
 
 		public function updateFocusValues($data){
-			Debug::log("updateFocusValues s: ".sizeof($data));
-			Debug::log("curFocus: ".$data[0]["curFocus"]);
-			Debug::log("gainFocus: ".$data[0]["gainFocus"]);
-			Debug::log("maxFocus: ".$data[0]["maxFocus"]);
-			Debug::log("id: ".$data[0]["id"]);
+		//	Debug::log("updateFocusValues s: ".sizeof($data));
+		//	Debug::log("curFocus: ".$data[0]["curFocus"]);
+		//	Debug::log("gainFocus: ".$data[0]["gainFocus"]);
+		//	Debug::log("maxFocus: ".$data[0]["maxFocus"]);
+		//	Debug::log("id: ".$data[0]["id"]);
 			//var_export($data);
 
 			$stmt = $this->connection->prepare("

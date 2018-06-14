@@ -3114,7 +3114,7 @@ Game.prototype.resolveDeploy = function(){
 	game.setCamera();	
 
 	if (!show){	
-		this.initialDone();
+		this.initialPhaseResolutionDone();
 	}
 	else {
 		setFPS(30);
