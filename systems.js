@@ -1946,6 +1946,7 @@ Weapon.prototype.addLogStartEntry = function(log, fire){
 		tr
 		.append($("<td>").html("Interrupt"))
 		.append($("<th>").attr("colSpan", 4).html("<font color='" + fire.shooter.getCodeColor() + "'>" + fire.shooter.name + " #" + fire.shooter.id + "</font> firing " + fire.weapon.getDisplay()))
+		.append($("<td>").html(fire.damages.length))
 		.append($("<td>").html(armour ? armour : ""))
 		.append($("<td>").html(system || em || ""))
 		.append($("<td>").html(struct ? struct : ""))
