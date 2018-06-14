@@ -227,6 +227,7 @@ function Structure(data){
 	this.end = data.end;
 	this.negation = data.negation;
 	this.remNegation = data.remNegation;
+	this.bonusNegation = 0;
 	this.destroyed = data.destroyed || false;
 	this.highlight = false;
 	this.systems = [];
@@ -248,6 +249,11 @@ Structure.prototype.getArmourString = function(){
 		return this.remNegation + "<span style='color: #27e627; font-size: 16px'>+" + (this.getBoostEffect("Armour") * this.getBoostLevel()) + "</span> / " + this.negation;
 	}
 	return this.remNegation + " / " + this.negation;
+}
+
+Structure.prototype.setBonusNegation = function(){
+	if (!this.boostEffect.length){this.bonusNegation = 0; return;}
+	this.bonusNegation = this.getBoostEffect("Armour") * this.getBoostLevel(); return;
 }
 
 Structure.prototype.getTableData = function(){

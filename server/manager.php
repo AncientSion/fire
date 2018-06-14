@@ -61,14 +61,23 @@
 		return;
 	}
 
-	public function getClientData(){
+	public function getClientData(){	
+/*
+
+		$u = $this->getUnit(32);
+		foreach ($u->structures as $struct){
+			Debug::log($struct->getBoostEffect("Armour") * $struct->getBoostLevel(2));
+		}
+
+		$s = $u->getSystem(19);
+
+		Debug::log($u->getAr)
 
 		//$this->testMorale();
 		//$this->setPostFireFocusValues();
 		//$this->setupShips();
 		//return;
-		
-/*
+	
 		$this->handleFlightMovement();
 		$this->handleNewActions();
 		$this->updateMissions();
@@ -818,6 +827,16 @@
 
 	public function handlePostMoveFires(){
 		Debug::log("handlePostMoveFires: ".sizeof($this->fires));
+
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			$this->ships[$i]->setFacing();
+			$this->ships[$i]->setPosition();
+			$this->ships[$i]->setImpulseProfileMod();
+			$this->ships[$i]->setBonusNegation($this->turn);
+		}
+
+		
 		$this->setFireOrderDetails();
 
 		for ($i = 0; $i < sizeof($this->fires); $i++){

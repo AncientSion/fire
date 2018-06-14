@@ -67,6 +67,7 @@ class Structure {
 	public function setBonusNegation($turn){
 		if (!sizeof($this->boostEffect)){return;}
 		$this->bonusNegation = $this->getBoostEffect("Armour") * $this->getBoostLevel($turn);
+		if ($this->bonusNegation){Debug::log("ding");}
 	}
 
 	public function getBonusNegation(){
@@ -74,6 +75,7 @@ class Structure {
 	}
 
 	public function getArmourValue($system){
+		//Debug::log("getArmourValues".$this->getBoostEffect("Armour")."/".$this->getBoostLevel(2));
 		return array(
 			"stock" => round($this->getRemNegation() * $system->getArmourMod()),
 			"bonus" => round($this->getBonusNegation())

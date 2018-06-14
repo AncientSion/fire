@@ -312,20 +312,20 @@ class DmgCalc {
 		$overkill = 0;
 
 
-		Debug::log("flash, system targets: ".sizeof($targets).", damage: ".$totalDmg);
+		Debug::log("flash, sub targets: ".sizeof($targets).", damage: ".$totalDmg);
 
 		$dmgs = array();
 
 		if ($fire->target->ship){
 			$fire->hits--;
 			$subDmg = floor($totalDmg  / 100 * $fire->weapon->flashDiv[1] / sizeof($targets));
-			Debug::log("VS SHIP, subDamage: ".$subDmg);
+			Debug::log("VS SHIP ".$subDmg."dmg ea");
 			for ($i = 0; $i < sizeof($targets); $i++){
 				$dmgs[] = $subDmg;
 			}
 			$targets[] = $fire->target->primary;
 			$dmgs[] = floor($totalDmg / 100 * $fire->weapon->flashDiv[0]);
-			Debug::log("VS SHIP, struct: ".$dmgs[sizeof($dmgs)-1]);
+			Debug::log("VS SHIP, struct: ".$dmgs[sizeof($dmgs)-1]."dmg");
 		}
 		else {		
 			Debug::log("VS NON SHIP");
@@ -465,6 +465,7 @@ class DmgCalc {
 	}
 
 	public static function calcStandardDmg($weapon, $totalDmg, $negation){
+		Debug::log("calcStandardDmg, negation: ".$negation["stock"]."/".$negation["bonus"]);
 		$shieldDmg = 0;
 		$armourDmg = 0;
 		$structDmg = 0;

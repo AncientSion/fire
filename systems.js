@@ -23,6 +23,7 @@ function System(system){
 	this.selected = false;
 	this.destroyed = false;
 	this.weapon = false;
+	this.bonusNegation = 0;
 	this.cost = 0;
 	this.powers = [];
 	this.fireOrders = [];
@@ -1032,9 +1033,17 @@ System.prototype.adjustStateByCritical = function(){
 	}
 }
 
+System.prototype.setBonusNegation = function(value){
+	this.bonusNegation = value;
+	if (!this.dual){return;}
+	for (var i = 0; i < this.weapons.length; i++){
+		this.weapons[i].bonusNegation = value;
+	}
+}
+
 System.prototype.getMount = function(){
 	if (this.mount.length){
-		return this.mount + " / " + this.armour;
+		return this.mount + " / " + this.armour + (this.bonusNegation ? (" <span class='green'>+ " + this.bonusNegation) + "</span>" : "");
 	} else return this.armour;
 }
 
@@ -1224,7 +1233,7 @@ PrimarySystem.prototype.getOutput = function(){
 	var mod = 100;
 		mod += this.getBoostEffect("Output") * this.getBoostLevel();
 		mod += this.getCrewEffect() * this.getCrewLevel();
-		mod += this.getCritMod("Output");
+		mod -= this.getCritMod();
 
 	return Math.floor(this.output / 100 * mod) - usage;
 }
@@ -1233,7 +1242,7 @@ PrimarySystem.prototype.getCombinedModifiers = function(){
 	var mod = 0;
 		mod += this.getBoostEffect("Output") * this.getBoostLevel();
 		mod += this.getCrewEffect() * this.getCrewLevel();
-		mod += this.getCritMod();
+		mod -= this.getCritMod();
 
 	return round(mod/100, 2);
 }
@@ -1274,6 +1283,15 @@ PrimarySystem.prototype.getOutputString = function(){
 
 PrimarySystem.prototype.getBoostCostIncrease = function(){
 	return 0.35;
+}
+
+PrimarySystem.prototype.getCritMod = function(){
+	var mod = 0;
+
+	for (var i = 0; i < this.crits.length; i++){
+		mod += this.crits[i].value;
+	}
+	return mod;
 }
 
 PrimarySystem.prototype.getSysDiv = function(){
@@ -1779,11 +1797,6 @@ function Weapon(system){
 }
 Weapon.prototype = Object.create(System.prototype);
 
-Weapon.prototype.assembleDmgDatass = function(fire){
-
-}
-
-
 Weapon.prototype.assembleDmgData = function(fire){
 	var dmgs = {};
 	for (var i = 0; i < fire.damages.length; i++){
@@ -1840,7 +1853,6 @@ Weapon.prototype.getReqString = function(req){
 }
 
 Weapon.prototype.addLogStartEntry = function(log, fire){
-
 	var shots = 0;
 	var hits = 0;
 	var armour = 0;
@@ -3603,74 +3615,6 @@ Area.prototype.select = function(){
 	if (!game.monoSystem && game.getUnit(aUnit).hasWeaponsSelected()){return;}
 	Weapon.prototype.select.call(this);
 	game.monoSystem = this.selected;
-}
-
-Area.prototype.createCombatLogEndtry = function(fire){
-	var log = $($("#combatLog").find("tbody")[0]);
-	var shots = 0;
-	var hits = 0;
-	var armour = 0;
-	var em = 0;
-	var system = 0;
-	var struct = 0;
-	var shield = 0;
-	var req;
-	var chance = "";
-
-	for (var i = 0; i < fire.damages.length; i++){
-		armour += fire.damages[i].armourDmg;
-		system += fire.damages[i].structDmg;
-		struct += fire.damages[i].overkill;
-		shield += fire.damages[i].shieldDmg;
-		em += fire.damages[i].emDmg
-	}
-
-	var tr = this.addLogStartEntry(log, fire);
-	$(log).append(tr);
-
-	var dmgs  = this.assembleDmgData(fire);
-	var start = index+1;
-	var depth = Object.keys(dmgs).length;
-
-	for (var i in dmgs){
-		dmgs[i][0] = dmgs[i][0] ? "Kills: "  + dmgs[i][0] : "" 
-		dmgs[i][1] = dmgs[i][1] ? "Overl.: "  + dmgs[i][1] : "" 
-	}
-
-	// e-web
-	if (shield){
-		depth++;
-		this.addLogShieldEntry(log, shield);
-	}
-
-	$(tr)
-		.data("expanded", 0)
-		.data("start", start)
-		.data("end", start + depth)
-
-	for (var i in dmgs){
-		start++;
-		var sub = $("<tr>")
-			.hide()
-			.data("row", start)
-			.append($("<td>")
-			)
-			.append($("<td>")
-				.attr("colSpan", 4)
-				.html(i + " / " +dmgs[i][2] + " hits") // system name
-			)
-
-		for (var j = 3; j < dmgs[i].length; j++){
-			$(sub) 
-			.append($("<td>")
-				.html(dmgs[i][j])
-			)
-		}
-
-		$(log).append(sub);
-	}
-
-	ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 }
 
 Area.prototype.setMount = function(amount){

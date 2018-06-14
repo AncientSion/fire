@@ -46,7 +46,7 @@ class HeavyRailGun extends Matter {
 	public $animColor = "grey";
 	public $projSize = 4;
 	public $projSpeed = 10;
-	public $reload = 1;
+	public $reload = 4;
 	public $integrity = 56;
 	public $powerReq = 6;
 	public $traverse = 1;

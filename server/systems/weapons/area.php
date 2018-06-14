@@ -26,7 +26,7 @@ class EnergyMine extends Area {
 	public $display = "Energy Mine";
 	public $fireMode = "Flash";
 	public static $prio = 0;
-	public $minDmg = 10;
+	public $minDmg = 13;
 	public $animColor = "blue";
 	public $projSize = 3;
 	public $projSpeed = 5;
