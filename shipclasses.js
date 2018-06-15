@@ -1189,6 +1189,7 @@ Ship.prototype.getArmourString = function(a){
 }
 
 Ship.prototype.getSectionString = function(a){
+	return this.getStructureFromAngle(a).type + (this.rolled ? "<span class='yellow'> (rolled)</span>" : "");
 	if (this.rolled){
 		var val = this.getStructureFromAngle(a).type;
 		return val + "<span class='yellow'> (rolled)</span>";
@@ -2114,34 +2115,34 @@ Ship.prototype.getCurMorale = function(){
 Ship.prototype.showMoraleDiv = function(e){
 	$(document.body)
 	.append($("<div>")
-			.css("left", e.clientX - 90)
-			.css("top", e.clientY + 40)
-			.attr("id", "sysDiv")
-			.append($("<table>")
-				.append($("<tr>")
-					.append($("<th>").attr("colSpan", 2).html("Morale Overview")))
-				.append($("<tr>")
-					.append($("<td>").html("Base Morale"))
-					.append($("<td>").html(" 100%")))
-				.append($("<tr>")
-					.append($("<td>").html("Damage Malus"))
-					.append($("<td>").html("-"  + (100 - this.morale.current) + "%") ))
-				.append($("<tr>")
-					.append($("<td>").html("Current Morale"))
-					.append($("<td>").html(this.morale.current + "%")))
-				.append($("<tr>")
-					.append($("<td>").attr("colSpan", 2).css("height", 6)))
-				.append($("<tr>")
-					.append($("<td>").attr("colSpan", 2).html("Check required @ Morale < " + this.getMoraleTrigger() + "%")))
-				.append($("<tr>")
-					.append($("<td>").attr("colSpan", 2).css("height", 6)))
-				.append($("<tr>")
-					.append($("<td>").html("Start Chance to Rout"))
-					.append($("<td>").html(this.getModifiedRoutChance())))
-				.append($("<tr>")
-					.append($("<td>").html("Current Rout Chance"))
-					.append($("<th>").html(this.getEffectiveRoutChance() + "%")))
-			)
+		.css("left", e.clientX - 90)
+		.css("top", e.clientY + 40)
+		.attr("id", "sysDiv")
+		.append($("<table>")
+			.append($("<tr>")
+				.append($("<th>").attr("colSpan", 2).html("Morale Overview")))
+			.append($("<tr>")
+				.append($("<td>").html("Base Morale"))
+				.append($("<td>").html(" 100%")))
+			.append($("<tr>")
+				.append($("<td>").html("Damage Malus"))
+				.append($("<td>").html("-"  + (100 - this.morale.current) + "%")))
+			.append($("<tr>")
+				.append($("<td>").html("Current Morale"))
+				.append($("<td>").html(this.morale.current + "%")))
+			.append($("<tr>")
+				.append($("<td>").attr("colSpan", 2).css("height", 6)))
+			.append($("<tr>")
+				.append($("<td>").attr("colSpan", 2).html("Check required @ Morale < " + this.getMoraleTrigger() + "%")))
+			.append($("<tr>")
+				.append($("<td>").attr("colSpan", 2).css("height", 6)))
+			.append($("<tr>")
+				.append($("<td>").html("Start Chance to Rout"))
+				.append($("<td>").html(this.getModifiedRoutChance())))
+			.append($("<tr>")
+				.append($("<td>").html("Current Rout Chance"))
+				.append($("<th>").html(this.getEffectiveRoutChance() + "%")))
+		)
 	)
 }
 
@@ -2159,6 +2160,9 @@ Ship.prototype.getMoraleTrigger = function(){
 }
 
 Ship.prototype.getModifiedRoutChance = function(){
+	return (this.morale.bonusChance ?  this.morale.baseChance + "% (" + this.morale.bonusChance + "%)" : this.morale.baseChance + "%")
+
+
 	var html = this.morale.baseChance + "%";
 	if (this.morale.bonusChance){
 		html += " (" + this.morale.bonusChance + "%)";

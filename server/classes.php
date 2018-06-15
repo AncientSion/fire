@@ -10,9 +10,9 @@ class Morale {
 	public $bonusChance = 0;
 	public $effChance;
 
-	function __construct($current, $crew){
+	function __construct($current, $crew, $crit){
 		$this->current = $current;
-		$this->bonusChance = -10*$crew;
+		$this->bonusChance = -10*$crew +$crit;
 		$this->effChance = floor(($this->baseChance + $this->bonusChance) * (1+($this->trigger - $this->current) / ($this->trigger)));
 	}
 }

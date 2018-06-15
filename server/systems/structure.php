@@ -116,11 +116,11 @@ class Structure {
 		switch ($a){
 			case 0: return "Bow";
 			case 360: return "Bow";
-			case 60: return "Bow Starboard";
-			case 78: return "Main Starboard";
+			case 60: return "Bow Starb.";
+			case 78: return "Main Starb.";
 			case 90: return "Starboard";
-			case 120: return "Rear Starboard";
-			case 150: return "Rear Starboard";
+			case 120: return "Rear Starb.";
+			case 150: return "Rear Starb.";
 			case 180: return "Rear";
 			case 210: return "Rear Port";
 			case 222: return "Rear Port";

@@ -60,7 +60,7 @@ class Squadron extends Ship {
 			$val = floor($remaining / $integrity * 100);
 		}
 
-		$this->morale = new Morale($val, 0);
+		$this->morale = new Morale($val, 0, 0);
 	 }
 
 
