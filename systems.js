@@ -1233,7 +1233,8 @@ PrimarySystem.prototype.getOutput = function(){
 	var mod = 100;
 		mod += this.getBoostEffect("Output") * this.getBoostLevel();
 		mod += this.getCrewEffect() * this.getCrewLevel();
-		mod -= this.getCritMod();
+		mod -= this.getCritMod("Output");
+		mod -= this.getCritMod("Overload");
 
 	return Math.floor(this.output / 100 * mod) - usage;
 }
@@ -1242,7 +1243,7 @@ PrimarySystem.prototype.getCombinedModifiers = function(){
 	var mod = 0;
 		mod += this.getBoostEffect("Output") * this.getBoostLevel();
 		mod += this.getCrewEffect() * this.getCrewLevel();
-		mod -= this.getCritMod();
+		mod -= this.getCritMod("Output");
 
 	return round(mod/100, 2);
 }
@@ -1270,7 +1271,7 @@ PrimarySystem.prototype.getOutputUsage = function(){
 }
 
 PrimarySystem.prototype.getOutputReduction = function(){
-	var mod = this.getCritMod();
+	var mod = this.getCritMod("Output") + this.getCritMod("Overload");
 
 	if (!mod){return 0;}
 	else return Math.ceil(Math.abs(this.output / 100 * mod));
@@ -1283,15 +1284,6 @@ PrimarySystem.prototype.getOutputString = function(){
 
 PrimarySystem.prototype.getBoostCostIncrease = function(){
 	return 0.35;
-}
-
-PrimarySystem.prototype.getCritMod = function(){
-	var mod = 0;
-
-	for (var i = 0; i < this.crits.length; i++){
-		mod += this.crits[i].value;
-	}
-	return mod;
 }
 
 PrimarySystem.prototype.getSysDiv = function(){
@@ -1384,16 +1376,6 @@ Command.prototype.update = function(){
 	for (var i = 0; i < this.powers.length; i++){
 		unit.morale.bonusChance -= 10;
 	}
-}
-
-Command.prototype.getCritMod = function(){
-	var mod = 0;
-
-	for (var i = 0; i < this.crits.length; i++){
-		if (this.crits[i].type != "Command"){continue;}
-		mod += this.crits[i].value;
-	}
-	return mod;
 }
 
 Command.prototype.select = function(e){

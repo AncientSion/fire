@@ -98,14 +98,13 @@ class PrimarySystem extends System {
 class Bridge extends PrimarySystem {
 	public $name = "Command";
 	public $display = "Command & Control";
-	public $hitMod = 2;
 	public $loadout = 1;
 	public $crewEffect = 5;
 
 	function __construct($id, $parentId, $integrity, $output, $width = 1){
         parent::__construct($id, $parentId, $integrity, 0, $width);
 
-        $options = $this->getNodes();
+		$options = array("Command", "Engine", "Sensor", "Reactor");
         $baseCost = floor($output/12);
 
         for ($i = 0; $i < sizeof($options); $i++){
@@ -117,16 +116,6 @@ class Bridge extends PrimarySystem {
 			);
         }
 	}
-
-	public function getCritMod($type, $turn){
-		$mod = 0;
-		for ($i = 0; $i < sizeof($this->crits); $i++){
-		if ($this->crits[$i]->type != "Command"){continue;}
-			$mod += $this->crits[$i]->value;
-		}
-		return $mod;
-	}
-
 
 	public function adjustLoad($dbLoad){
 		//Debug::log("ding");
@@ -140,25 +129,25 @@ class Bridge extends PrimarySystem {
 		}
 	}
 
-	public function getNodes(){
-		return array("Command", "Engine", "Sensor", "Reactor");
+	public function getCritModMax($dmg){
+		return min(10, round($dmg/2));
 	}
 
 	public function determineCrit($new, $old, $turn){
 		$new = round($new / $this->integrity * 100);
 		Debug::log("determineCrit for ".$this->display." #".$this->id." on unit #".$this->parentId);
-		$mod = min(15, $new);
+		$mod = $this->getCritModMax($new);
 		if ($new <= 3){Debug::log("no BRIDGE crit, dmg < 3"); return;}
 
-        $options = $this->getNodes();
+        $options = array("Output", "Engine", "Sensor", "Reactor");
+        $multi = array(1, 0.75, 1, 0.75);
 		$roll = mt_rand(0, sizeof($options)-1);
+		$roll = 0;
 		$pick = $options[$roll];
-
-		if (!$roll || $roll == 3){$mod = round($mod/2, 2);}
+		$mod = round($mod * $multi[$roll], 2);
 
 		Debug::log("BRIDGE CRIT: on ".$pick." for :".$mod."%");
 
-		//$id, $shipid, $systemid, $turn, $type, $duration, $value, $new){
 		$this->crits[] = new Crit(
 			sizeof($this->crits)+1, $this->parentId, $this->id, $turn, $pick, 0, $mod, 1
 		);

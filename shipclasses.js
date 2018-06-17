@@ -2347,7 +2347,6 @@ Ship.prototype.addCommandDiv = function(div){
 
 Ship.prototype.getFocusIfCommand = function(){
 	var bridge = this.getSystemByName("Command");
-	var output = bridge.output;
 	bridge.output = 100;
 	var gain = Math.floor(game.settings.pv / 100 * bridge.getOutput() / 100 * (this.baseFocusRate + this.modFocusRate));
 	bridge.output = 0;

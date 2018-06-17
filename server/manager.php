@@ -1459,7 +1459,7 @@
 
 		if (sizeof($data)){DBManager::app()->updateFocusValues($data);}
 	}
-
+			
 	public function getNewFocusValue($playerstatus, $unit){
 		Debug::log("getNewFocusValue turn:".$this->turn.", phase: ".$this->phase);	
 		if ($unit->isDestroyed() || $unit->status == "jumpOut"){

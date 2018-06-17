@@ -204,8 +204,8 @@ class Ship {
 
 		$this->morale = new Morale(
 			floor($this->primary->remaining / $this->primary->integrity * 100),
-			$command->getCrewLevel(),
-			$command->getCritMod("", $turn)
+			$command->getCrewEffect() * $command->getCrewLevel(),
+			$command->getCritMod("Output", $turn)
 		);
 	}
 
@@ -496,9 +496,7 @@ class Ship {
 		//return true;
 		$bridge = $this->getSystemByName("Command");
 		for ($i = 0; $i < sizeof($bridge->crits); $i++){
-
 			if ($bridge->crits[$i]->type == "Output"){
-				//$bridge->crits[$i]->type = "Output";
 				$bridge->crits[$i]->display = "Officer KIA: <span class='yellow'>Command -".$bridge->crits[$i]->value."%</span> effect.";
 				continue;
 			}
