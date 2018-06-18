@@ -235,8 +235,9 @@ window.ajax = {
 	},
 
 	confirmDeploy: function(callback){
-		var initial = [];
-		var reinforce = [];
+		var deployedShips = [];
+		var requestReinforce = [];
+		var plannedMoves = [];
 		var fireOrders = [];
 		var powers = [];
 		var deployedFlights = [];
@@ -246,31 +247,27 @@ window.ajax = {
 		var ew = game.getEWSettings();
 
 		for (var i = 0; i < game.ships.length; i++){
-			if (game.turn > 1 && game.ships[i].available <= game.turn){continue;}
+			//if (game.turn > 1 && game.ships[i].available <= game.turn){continue;}
 			if (game.ships[i].userid != game.userid){continue;}
 			if (game.ships[i].flight || game.ships[i].salvo){continue;}
 
-			var ship;
+			var	ship = {actions: [], id: game.ships[i].id};
+
 			for (var j = 0; j < game.ships[i].actions.length; j++){
-				if (game.ships[i].actions[j].manual){
-					if (game.ships[i].available == game.turn){
-						ship = {
-							actions: [ game.ships[i].actions[j] ],
-							id: game.ships[i].id,
-						};
-						initial.push(ship);
-					}
-					else {
-						ship = {
-							actions: [ game.ships[i].actions[j] ],
-							id: game.ships[i].id * -1,
-							available: game.ships[i].available,
-							cost: game.ships[i].cost
-						};
-						reinforce.push(ship);
-					}
-					break;
-				}
+				if (!game.ships[i].actions[j].manual){continue;}
+				ship.actions.push(game.ships[i].actions[j]);
+			}
+
+			if (!ship.actions.length){continue;}
+
+			if (game.ships[i].available == game.turn){
+				deployedShips.push(ship);
+			}
+			else if (game.ships[i].available > game.turn){
+				requestReinforce.push(ship);
+			}
+			else if (game.ships[i].available < game.turn){
+				plannedMoves.push(ship);
 			}
 		}
 
@@ -301,13 +298,14 @@ window.ajax = {
 			url: "postGameData.php",
 			datatype: "json",
 			data: {
-					type: "Deploy",
+					type: "deploy",
 					gameid: game.id,
 					userid: game.userid,
 					turn: game.turn,
 					phase: game.phase,
-					initial: initial,
-					reinforce: reinforce,
+					deployedShips: deployedShips,
+					requestReinforce: requestReinforce,
+					plannedMoves: plannedMoves,
 					deployedFlights: deployedFlights,
 					powers: powers,
 					missions: missions,
@@ -321,7 +319,7 @@ window.ajax = {
 	},
 
 	confirmMovement: function(callback){
-		var myShips = [];
+		var ships = [];
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid != game.userid){continue;}
 			if (game.ships[i].salvo || game.ships[i].flight){continue;}
@@ -331,12 +329,13 @@ window.ajax = {
 				id: game.ships[i].id,
 				actions: []
 			}
+
 			for (var j = 0; j < game.ships[i].actions.length; j++){
 				if (game.ships[i].actions[j].resolved){continue;}
 				ship.actions.push(game.ships[i].actions[j]);
 			}
 
-			myShips.push(ship);
+			ships.push(ship);
 		}
 
 		$.ajax({
@@ -349,7 +348,7 @@ window.ajax = {
 					userid: game.userid,
 					turn: game.turn,
 					phase: game.phase,
-					ships: myShips
+					ships: ships
 				},
 			success: callback,
 			error: ajax.error,

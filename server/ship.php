@@ -799,7 +799,6 @@ class Ship {
 	public function getHitSystem($fire){
 		//return $this->getSystemByName("Command");
 		//return $this->getPrimaryHitSystem();
-		//Debug::log("getHitSystem ".$this->name);
 
 		$roll;
 		$current = 0;

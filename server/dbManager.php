@@ -1180,6 +1180,26 @@
 			}
 		}
 
+		public function deletePlannedMoves($units, $turn){
+			$stmt = $this->connection->prepare("
+				DELETE from actions
+				WHERE shipid = :shipid
+				AND turn = :turn
+			");
+
+
+			for ($i = 0; $i < sizeof($units); $i++){
+				$stmt->bindParam(":shipid", $units[$i]["id"]);
+				$stmt->bindParam(":turn", $turn);
+
+					$stmt->execute();
+				if ($stmt->errorCode() == 0){
+					Debug::log("success!");
+					continue;;
+				}
+			}
+		}
+
 		public function insertClientActions($units){
 			//Debug::log("insertClientActions s: ".sizeof($units));
 			$stmt = $this->connection->prepare("
@@ -1192,15 +1212,11 @@
 			$resolved = 0;
 
 			for ($i = 0; $i < sizeof($units); $i++){
-				//Debug::log($i);
 				$stmt->bindParam(":shipid", $units[$i]["id"]);
 
 				for ($j = 0; $j < sizeof($units[$i]["actions"]); $j++){
-					//Debug::log($j);
-					if ($units[$i]["actions"][$j]["resolved"]){
-						continue;
-					};
-					//Debug::log("DING 1");
+					if ($units[$i]["actions"][$j]["resolved"]){continue;}
+
 					$stmt->bindParam(":turn", $units[$i]["actions"][$j]["turn"]);
 					$stmt->bindParam(":type", $units[$i]["actions"][$j]["type"]);
 					$stmt->bindParam(":dist", $units[$i]["actions"][$j]["dist"]);
@@ -1214,7 +1230,6 @@
 					$stmt->execute();
 
 					if ($stmt->errorCode() == 0){
-						//Debug::log("DING 2");
 						continue;
 					} 
 					else {

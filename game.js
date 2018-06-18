@@ -2795,6 +2795,20 @@ function Game(data){
 	}
 }
 
+Game.prototype.initOptionsUI = function(){
+	$(".optionsWrapper").css("top", 2).css("left", res.x - 10 - 60);
+	$(".options img").each(function(i){
+		if (i == 0){$(this).click(function(){game.drawAllSensorSettings(1);})}
+		else if (i == 1){$(this).click(function(){game.drawAllSensorSettings(0);})}
+		else if (i == 2){$(this).click(function(){game.toggleDrawMovePaths();})}
+	})
+}
+
+Game.prototype.toggleDrawMovePaths = function(){
+	this.drawMoves = !this.drawMoves;
+	this.redraw();
+}
+
 Game.prototype.posIsOccupied = function(ship, pos){
 	var dist = getDistance(ship, step) 
 	if (ship.getRemSpeed()){return false;}
@@ -3757,6 +3771,7 @@ Game.prototype.create = function(data){
 	this.initReinforceTable();
 	this.setDeployWrapperVisibility();
 	this.initSelectionWrapper();
+	this.initOptionsUI();
 	this.initEvents();
 	this.extractPlayerStatusData()
 	cam.setFocus(0, 0);

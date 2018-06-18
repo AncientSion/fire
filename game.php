@@ -71,6 +71,17 @@
 				<input id="msg" placeholder ="chat here" type="text">
 			</div>
 		</div>
+		<div class="optionsWrapper">
+			<div class="options">
+				<img src=sysIcons/Sensor.png style="background-color: green">
+			</div>
+			<div class="options">
+				<img src=sysIcons/Sensor.png style="background-color: red">
+			</div>
+			<div class="options">
+				<img src=varIcons/plan.png>
+			</div>
+		</div>
 		<div id="plusImpulse" class="ui disabled">
 			<img src="varIcons/plus.png" style="width: 25px; height: 25px">
 		</div>
@@ -526,8 +537,7 @@
 			else if (game){
 				if (e.keyCode == 101){ // e - disable unit circle
 					//game.drawCircle = !game.drawCircle;
-					game.drawMoves = !game.drawMoves;
-					game.redraw();
+					game.toggleDrawMovePaths();
 				}
 				if (e.keyCode == 117){ // u - disable movement UI
 					game.toggleUI();

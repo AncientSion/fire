@@ -2139,7 +2139,7 @@ Weapon.prototype.getAimDetailsUnit = function(target, final, accLoss, row){
 
 	this.validTarget = 1;
 	this.odds = final;
-	row.append($("<td>").html(final + "%"));
+	row.append($("<td>").addClass("yellow").html(final + "%"));
 }
 
 Weapon.prototype.getAimDetailsLoc = function(accLoss, row){

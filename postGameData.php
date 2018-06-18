@@ -41,12 +41,15 @@ if (isset($_POST["type"])) {
 			}
 		}
 	}
-	else if ($_POST["type"] == "Deploy"){
-		if (isset($_POST["initial"])){
-			$dbManager->deployShipsDB($_POST["gameid"], $_POST["initial"]);
+	else if ($_POST["type"] == "deploy"){
+		if (isset($_POST["deployedShips"])){
+			$dbManager->deployShipsDB($_POST["gameid"], $_POST["deployedShips"]);
 		}
-		if (isset($_POST["reinforce"])){
-			$dbManager->requestShipsDB($_POST["userid"], $_POST["gameid"], $manager->turn, $_POST["reinforce"]);
+		if (isset($_POST["requestReinforce"])){
+			$dbManager->requestShipsDB($_POST["userid"], $_POST["gameid"], $manager->turn, $_POST["requestReinforce"]);
+		}
+		if (isset($_POST["plannedMoves"])){
+			$dbManager->insertClientActions($_POST["plannedMoves"]);
 		}
 		if (isset($_POST["deployedFlights"])){
 			$dbManager->deployFlightsDB($_POST["userid"], $_POST["gameid"], $_POST["deployedFlights"]);
@@ -65,12 +68,10 @@ if (isset($_POST["type"])) {
 		}
 		$dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready");
 	}
-	else if ($_POST["type"] == "movement"){;
-		if ($dbManager->insertClientActions($_POST["ships"])){
-			if ($dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready")){
-				//echo "movement success";
-			}
-		} else echo "movement fail";
+	else if ($_POST["type"] == "movement"){
+		$dbManager->deletePlannedMoves($_POST["ships"], $_POST["turn"]);
+		$dbManager->insertClientActions($_POST["ships"]);
+		$dbManager->setPlayerStatus($_POST["userid"], $_POST["gameid"], $_POST["turn"], $_POST["phase"], "ready");
 	}
 	else if ($_POST["type"] == "firing"){
 		if ($dbManager->insertClientFireOrders($_POST["gameid"], $_POST["turn"], $_POST["fireOrders"])){

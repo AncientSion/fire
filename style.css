@@ -1274,6 +1274,27 @@ div.integrityFull {
 	height: 30px;
 }
 
+.optionsWrapper {
+	position: absolute;
+	padding: 3px;
+	border-radius: 5px;
+	border: 1px solid white;
+	background-color: black;
+	z-index: 8;
+}
+
+.options {
+	width: 30px;
+	height: 30px;
+	border-radius: 5px;
+	padding: 2px;
+}
+
+.options img {
+	width: 100%;
+	height: 100%;
+}
+
 .coreContainer  .system img {
 	width: 30px;
 	height: 30px;
