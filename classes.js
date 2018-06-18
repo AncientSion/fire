@@ -287,6 +287,7 @@ Structure.prototype.getTableData = function(){
 				game.getUnit(shipId).getSystem(systemId).hover(e);
 			}
 		)
+		.mousedown(function(e){e.stopPropagation();})
 		.click(function(e){
 			var shipId = $(this).data("shipId");
 			var systemId = $(this).data("systemId");
@@ -525,6 +526,7 @@ Primary.prototype.getTableData = function(){
 				game.getUnit(shipId).primary.hover(e);
 			}
 		)
+		.mousedown(function(e){e.stopPropagation();})
 		.click(function(e){
 			var shipId = $(this).data("shipId");
 			var systemId = $(this).data("systemId");
@@ -757,6 +759,7 @@ Single.prototype.addMainDivEvents = function(div, alive, isPreview){
 			var subId = $(this).parent().data("subId");
 			game.getUnit(shipId).getSystem(subId).hover(e);
 		})
+		.mousedown(function(e){e.stopPropagation();})
 		.click(function(e){
 			e.stopPropagation();
 			var shipId = $(this).parent().parent().parent().data("shipId");
@@ -773,6 +776,7 @@ Single.prototype.addMainDivEvents = function(div, alive, isPreview){
 			var subId = $(this).parent().data("subId");
 			game.getUnit(shipId).getSystem(subId).hover(e);
 		})
+		.mousedown(function(e){e.stopPropagation();})
 		.click(function(e){
 			e.stopPropagation();
 			var shipId = $(this).parent().parent().parent().data("shipId");
@@ -794,6 +798,7 @@ Single.prototype.addSysEvents = function(div, isBuy){
 	}
 	
 	div
+	.mousedown(function(e){e.stopPropagation();})
 	.click(function(e){
 		e.stopPropagation();
 		var shipId = $(this).parent().parent().parent().data("shipId");

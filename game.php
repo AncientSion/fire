@@ -78,8 +78,11 @@
 			<div class="options">
 				<img src=sysIcons/Sensor.png style="background-color: red">
 			</div>
-			<div class="options">
+			<div class="options drawMoves">
 				<img src=varIcons/plan.png>
+			</div>
+			<div class="options distMeter">
+				<img src=varIcons/dist.png>
 			</div>
 		</div>
 		<div id="plusImpulse" class="ui disabled">
@@ -536,34 +539,19 @@
 			}
 			else if (game){
 				if (e.keyCode == 101){ // e - disable unit circle
-					//game.drawCircle = !game.drawCircle;
 					game.toggleDrawMovePaths();
 				}
 				if (e.keyCode == 117){ // u - disable movement UI
 					game.toggleUI();
 				}
 				else if (e.keyCode == 113){ // q - show friendly sensor
-					if (!game.animating && !game.sensorMode){
-						//game.drawShipOverlays();
-						game.drawAllSensorSettings(1);
-					}
+					game.drawAllSensorSettings(1);
 				}
 				else if (e.keyCode == 119){ // w - show hostile sensor
-					if (!game.animating && !game.sensorMode){
-						//game.drawShipOverlays();
-						game.drawAllSensorSettings(0);
-					}
+					game.drawAllSensorSettings(0);
 				}
 				else if (e.keyCode == 32){ // space - dist logger
-					if (game.vector){
-						game.vector = false;
-						$("#vectorDiv").addClass("disabled");
-						mouseCtx.clearRect(0, 0, res.x, res.y);
-					}
-					else {
-						game.vector = true;
-						$("#vectorDiv").removeClass("disabled");
-					}
+					game.toggleDistMeter();
 				}
 				else if (e.keyCode == 102){ // f, cancel fire animation
 					if (game.phase != 3 || !game.animating){return;}

@@ -92,9 +92,7 @@
 		//var_export($this->getUnit(2)->getEndState(1));
 		//return;
 
-		if (!$this->name){
-			return false;
-		}
+		if (!$this->name){return false;}
 		
 		$data = array(
 			"id" => $this->gameid,
@@ -239,6 +237,7 @@
 					if ($this->ships[$i]->userid == $this->userid){continue;}
 					$this->ships[$i]->hidePowers($this->turn);
 					$this->ships[$i]->hideFireOrders($this->turn, $this->phase);
+					$this->ships[$i]->hideActions($this->phase);
 				} break;
 			case 0: 
 				for ($i = 0; $i < sizeof($this->ships); $i++){

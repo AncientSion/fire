@@ -237,9 +237,7 @@ Flight.prototype.expandDiv = function(div){
 	var structContainer = $("<div>").addClass("structContainer");
 	$(div).append(structContainer);
 	$(document.body).append(div);
-
-
-
+	
 	for (var i = 0; i < this.structures.length; i++){
 		var fighterDiv = this.structures[i].getElement(false);
 		structContainer.append(fighterDiv);

@@ -1101,16 +1101,13 @@ function Game(data){
 	}
 
 	this.createPlaceHolderEntry = function(){
-		var target = $("#combatLog").find("tbody");
-			target.append($("<tr>")
-					.append($("<td>").css("height", 15).attr("colSpan", 9)));
-
+		$("#combatLog").find("tbody").append($("<tr>")
+			.append($("<td>").css("height", 15).attr("colSpan", 9)));
 	}
 
 	this.createEndEntry = function(html){
-		var target = $("#combatLog").find("tbody");
-			target.append($("<tr>")
-				.append($("<th>").attr("colSpan", 9).html(html)));
+		$("#combatLog").find("tbody").append($("<tr>")
+			.append($("<th>").attr("colSpan", 9).html(html)));
 	}
 	
 	this.initPhase = function(n){
@@ -2796,16 +2793,45 @@ function Game(data){
 }
 
 Game.prototype.initOptionsUI = function(){
-	$(".optionsWrapper").css("top", 2).css("left", res.x - 10 - 60);
-	$(".options img").each(function(i){
-		if (i == 0){$(this).click(function(){game.drawAllSensorSettings(1);})}
-		else if (i == 1){$(this).click(function(){game.drawAllSensorSettings(0);})}
-		else if (i == 2){$(this).click(function(){game.toggleDrawMovePaths();})}
-	})
+	$(".optionsWrapper").css("top", 2).css("left", res.x - 10 - 85)
+	.find(".options").each(function(i){
+		$(this).mousedown(function(e){e.preventDefault();});
+		if (i == 0){
+			$(this).hover(
+				function(){game.drawAllSensorSettings(1);},
+				function(){game.redraw();}
+			)
+		}
+		else if (i == 1){
+			$(this).hover(
+				function(){game.drawAllSensorSettings(0);},
+				function(){game.redraw();}
+			)
+		}
+		else if (i == 2){
+			$(this).click(function(){game.toggleDrawMovePaths();})
+			$(this).addClass("selected");
+		}
+		else if (i == 3){
+			$(this).click(function(){game.toggleDistMeter();})
+		}
+	}).end().drag();
+}
+
+Game.prototype.toggleDistMeter = function(){
+	this.vector = !this.vector;
+	$(".optionsWrapper .distMeter").toggleClass("selected");
+
+	if (!this.vector){
+		$("#vectorDiv").addClass("disabled");
+		mouseCtx.clearRect(0, 0, res.x, res.y);
+	}
+	else $("#vectorDiv").removeClass("disabled");
 }
 
 Game.prototype.toggleDrawMovePaths = function(){
 	this.drawMoves = !this.drawMoves;
+	$(".optionsWrapper .drawMoves").toggleClass("selected");
 	this.redraw();
 }
 
@@ -2942,6 +2968,8 @@ Game.prototype.drawShipOverlays = function(){
 }
 
 Game.prototype.drawAllSensorSettings = function(friendly){
+	if (game.animating || game.sensorMode){return;}
+
 	salvoCtx.clearRect(0, 0, res.x, res.y);
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].flight || this.ships[i].salvo || !this.ships[i].deployed){continue;}

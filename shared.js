@@ -378,13 +378,14 @@ function instruct(text){
         var $handle = this,
             $drag = this;
 
-        if( options.handle ) {
+        if (options.handle){
             $handle = $(options.handle);
         }
 
         $handle
             .css('cursor', options.cursor)
             .on("mousedown", function(e){
+    			console.log("drag");
             	if (e.button == 2){return;}
                 e.preventDefault();
                 e.stopPropagation();
@@ -464,14 +465,14 @@ function handleMouseDown(e){
 		var clickUnit = game.getUnitByClick(pos);
 		if (clickUnit){
 			if (unit && unit.id == clickUnit.id){
-				game.getUnit(aUnit).doUnselect();
+				game.getUnit(aUnit).doUnselect(e);
 			}
 			else clickUnit.switchDiv();
 		}
 		else if (unit){
 			if (game.turnMode){
 				unit.switchTurnMode();
-			} else unit.doUnselect();
+			} else unit.doUnselect(e);
 		}
 	}
 }

@@ -249,8 +249,9 @@ Squaddie.prototype.attachEvent = function(ele){
 			e.stopPropagation();
 			game.getUnit($(this).data("shipId")).getSystem($(this).data("systemId")).select(e);
 		}
-	).
-	contextmenu(
+	)
+	.mousedown(function(e){e.stopPropagation();})
+	.contextmenu(
 		function(e){
 			e.preventDefault();
 			if (!game.sensorMode){game.getUnit($(this).data("shipId")).selectAll(e, $(this).data("systemId"));}

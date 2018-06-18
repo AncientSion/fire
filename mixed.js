@@ -66,28 +66,30 @@ Mixed.prototype.getPostMovePos = function(){
 }
 
 Mixed.prototype.drawMovePlan = function(){
-	//if (!this.actions.length || !this.deployed || !game.drawMoves){return;}
-	if (!this.deployed || !game.drawMoves){return;}
+	if (!this.deployed){return;}
 
 	var color = "#00ea00";
 	if (!this.friendly){color = "red";}
-
-	planCtx.strokeStyle = color;
-	planCtx.globalAlpha = 0.4;
-	planCtx.lineWidth = 1;
+	
 	planCtx.translate(cam.o.x, cam.o.y);
 	planCtx.scale(cam.z, cam.z);
+	planCtx.strokeStyle = color;
 
-	planCtx.beginPath();
-	planCtx.moveTo(this.x, this.y);
+	if (game.drawMoves){
+		planCtx.globalAlpha = 0.4;
+		planCtx.lineWidth = 1;
 
-	for (var i = 0; i < this.actions.length; i++){
-		if (this.actions[i].type == "move"){
-			planCtx.lineTo(this.actions[i].x, this.actions[i].y);
-			planCtx.stroke();
+		planCtx.beginPath();
+		planCtx.moveTo(this.x, this.y);
+
+		for (var i = 0; i < this.actions.length; i++){
+			if (this.actions[i].type == "move"){
+				planCtx.lineTo(this.actions[i].x, this.actions[i].y);
+				planCtx.stroke();
+			}
 		}
+		planCtx.closePath();
 	}
-	planCtx.closePath();
 	
 	var target = this.getTarget();
 	var tPos;
