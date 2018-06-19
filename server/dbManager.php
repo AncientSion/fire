@@ -1187,16 +1187,13 @@
 				AND turn = :turn
 			");
 
-
 			for ($i = 0; $i < sizeof($units); $i++){
+				Debug::log("deleting: ".$units[$i]["id"]);
 				$stmt->bindParam(":shipid", $units[$i]["id"]);
 				$stmt->bindParam(":turn", $turn);
 
-					$stmt->execute();
-				if ($stmt->errorCode() == 0){
-					Debug::log("success!");
-					continue;;
-				}
+				$stmt->execute();
+				if ($stmt->errorCode() == 0){continue;}
 			}
 		}
 
@@ -2043,6 +2040,8 @@
 			");
 
 			for ($i = 0; $i < sizeof($ships); $i++){
+				if (!$ships[$i]->moveSet){continue;}
+				Debug::log("resolving: ".$ships[$i]->id);
 				$stmt->bindParam(":shipid", $ships[$i]->id);
 				$stmt->execute();
 

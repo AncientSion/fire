@@ -1176,7 +1176,7 @@ Ship.prototype.setDrawData = function(){
 
 Ship.prototype.setUnitSelector = function(){
 	var id = this.id;
-	$("#unitSelector").find("div").each(function(){
+	ui.unitSelector.find("div").each(function(){
 		if ($(this).data("id") == id){
 			$(this).toggleClass("selected"); return;
 		}
@@ -1226,9 +1226,7 @@ Ship.prototype.drawMovePlan = function(){
 	this.setMoveTranslation();
 
 	planCtx.strokeStyle = "#00ea00";
-	if (!this.friendly){
-		planCtx.strokeStyle = "red";
-	}
+	if (!this.friendly){planCtx.strokeStyle = "red";}
 
 	planCtx.globalAlpha = 0.7;
 	planCtx.beginPath();
@@ -1332,12 +1330,8 @@ Ship.prototype.doSelect = function(){
 	aUnit = this.id;
 	this.selected = true;
 	this.setUnitSelector();
-	//game.setShipTransform();
-	//this.drawPositionMarker();
-	//game.resetShipTransform();
 	game.redraw()
 	this.switchDiv();
-	//game.drawMixedMoves();
 	this.setMoveMode();
 }
 
@@ -2292,7 +2286,7 @@ Ship.prototype.addFocusDiv = function(div){
 			.attr("value", "Assign Focus (" + this.getFocusCost()+")")
 			.hide()
 			.click(function(){
-				game.getUnit($(this).parent().parent().data("shipId")).setFocus();
+				game.getUnit($(this).parent().parent().data("shipId")).setUnitFocus();
 			})
 		)
 		.append(
@@ -2301,7 +2295,7 @@ Ship.prototype.addFocusDiv = function(div){
 			.addClass("focusEntry")
 			.hide()
 			.click(function(){
-				game.getUnit($(this).parent().parent().data("shipId")).unsetFocus();
+				game.getUnit($(this).parent().parent().data("shipId")).unsetUnitFocus();
 			})
 		)
 	)
@@ -2399,7 +2393,7 @@ Ship.prototype.getFocusCost = function(){
 	return Math.ceil(this.cost);
 }
 
-Ship.prototype.setFocus = function(){
+Ship.prototype.setUnitFocus = function(){
 	if (!this.friendly){return;}
 	if (game.phase != 3){popup("Focus can only be issued in Phase 3 - Damage Control"); return;}
 	if (this.isJumpingOut()){popup("This unit is jumping to hyperspace, it cant be issued focus."); return;}
@@ -2411,7 +2405,7 @@ Ship.prototype.setFocus = function(){
 	}
 }
 
-Ship.prototype.unsetFocus = function(){
+Ship.prototype.unsetUnitFocus = function(){
 	if (this.focus){
 		this.focus = 0;
 		$(this.element).find(".focusContainer").find("input").show().end().find(".focusEntry").hide();
@@ -2833,7 +2827,7 @@ Ship.prototype.doJumpOut = function(){
 		this.status = "jumpOut";
 	} else this.status = "bought";
 
-	if (this.hasFocus()){this.unsetFocus();}
+	if (this.hasFocus()){this.unsetUnitFocus();}
 	$(this.element).find(".jumpOut").toggleClass("selected");
 	$("#instructWrapper").hide();
 }

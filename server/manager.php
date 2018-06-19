@@ -861,11 +861,14 @@
 		Debug::log("handleShipMovement");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->flight || $this->ships[$i]->salvo){continue;}
+			if (!$this->ships[$i]->focus && $this->phase != 0){continue;}
+			if ($this->ships[$i]->focus && $this->phase != 1){continue;}
+			
+			$this->ships[$i]->moveSet = 1;
 			
 			for ($j = sizeof($this->ships[$i]->actions)-1; $j >= 0; $j--){
 				if ($this->ships[$i]->actions[$j]->resolved == 0){
 					$this->ships[$i]->actions[$j]->resolved = 1;
-					$this->ships[$i]->moveSet = 1;
 				} else break 1;
 			}
 		}

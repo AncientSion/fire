@@ -323,7 +323,7 @@ window.ajax = {
 		for (var i = 0; i < game.ships.length; i++){
 			if (game.ships[i].userid != game.userid){continue;}
 			if (game.ships[i].salvo || game.ships[i].flight){continue;}
-			if (game.ships[i].move > game.phase){continue;}
+			if (game.ships[i].focus != game.phase){continue;}
 
 			var ship = {
 				id: game.ships[i].id,

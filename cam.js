@@ -3,12 +3,11 @@
 
 window.cam = {
 	o: {x: 0, y: 0},
+	c: {x: 0, y: 0},
 	z: 1,
 	scroll: 0,
 	sx: 0,
 	sy: 0,
-	tx: 0,
-	ty: 0,
 	
 	getOffset: function(){
 		return {x: this.o.x * this.z, y: this.o.y * this.z};
@@ -18,38 +17,31 @@ window.cam = {
 		return {x: res.x/2 - this.o.x, y: res.y/2 - this.o.y};
 	},
 
-	setFocus: function(x, y){
-		this.o.x = res.x/2 - x;
-		this.o.y = res.y/2 - y;
-	},
-
 	setFocusToPos(pos){
 		this.o.x = res.x/2 - (pos.x*cam.z);
 		this.o.y = res.y/2 - (pos.y*cam.z);
+		this.c = pos;
 	},
 
 	setZoom: function(val){
-		this.z = val;
+		if (game.phase != 3 || !game.animating){return;}
 
-		if (game.phase == 3 && game.animating){
-			for (var i = 0; i < game.fireOrders.length; i++){
-				if (!game.fireOrders[i].animated && game.fireOrders[i].animating){
-					this.setFocusToPos(game.fireOrders[i].target.getPlannedPos());
-					game.draw();
-					break;
-				}
+		for (var i = 0; i < game.fireOrders.length; i++){
+			if (!game.fireOrders[i].animated && game.fireOrders[i].animating){
+				this.setFocusToPos(game.fireOrders[i].target.getPlannedPos());
+				game.draw(); return;
 			}
 		}
-		//game.draw();
 	},
 	
-	adjustZoom: function(e, pos){
+	adjustZoom: function(e){
 		if (e.originalEvent.wheelDelta == 120 || e.originalEvent.deltaY < 0){
-			this.z = Math.min(2, this.z + 0.2);
+			this.z = Math.min(3, this.z + 0.2);
 		}
 		else {
-			this.z = Math.max(0.4, this.z - 0.2);
+			this.z = Math.max(0.2, this.z - 0.2);
 		}
+		
 		game.redraw();
 	},
 

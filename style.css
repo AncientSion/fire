@@ -1281,6 +1281,7 @@ div.integrityFull {
 	z-index: 8;
 	border: 1px solid white;
 	border-radius: 5px;
+	background-color: black;
 }
 
 .options {

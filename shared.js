@@ -29,6 +29,7 @@ $(document).ready(function(){
 		shortInfo: $("#shortInfo"),
 		doShorten: $("#doShorten"),
 		turnButton: $("#turnButton"),
+		unitSelector: $("#unitSelector")
 	}
 })
 
@@ -412,18 +413,13 @@ function instruct(text){
     };
 })(jQuery);
 
-function reOffset(){
-	var s = mouseCanvas.getBoundingClientRect();
-	offset.x = s.left;
-	offset.y = s.top;        
-}
 
 function handleMouseDown(e){
 	//console.log("handleMouseDown");
 	e.preventDefault();
 	e.stopPropagation();
 	var rect = this.getBoundingClientRect();
-	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
+	var pos = new Point(e.clientX, e.clientY).getOffset();
 	console.log("game pos " + pos.x	+ " / " + pos.y);
 
 	var unit;	

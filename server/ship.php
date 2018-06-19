@@ -309,12 +309,14 @@ class Ship {
 	
 	public function hideActions($phase){
 		if ($this->flight || $this->salvo){return;}
-		if ($this->focus != $phase && $phase != -1){return;}
+		if ($this->focus && $phase == 2){return;}
+		if (!$this->focus && $phase == 1){return;}
+
 		for ($i = sizeof($this->actions)-1; $i >= 0; $i--){
-			if (!$this->actions[$i]->resolved){
-				if ($this->actions[$i]->type == "roll"){$this->rolling = !$this->rolling;}
-				array_splice($this->actions, $i, 1);
-			}
+			if ($this->actions[$i]->resolved){continue;}
+
+			if ($this->actions[$i]->type == "roll"){$this->rolling = !$this->rolling;}
+			array_splice($this->actions, $i, 1);
 		}
 	}
 
@@ -347,9 +349,7 @@ class Ship {
 		if (sizeof($this->actions) && $this->actions[sizeof($this->actions)-1]->turn == $turn){
 			$this->remImp = 0;
 		}
-		else { 
-			$this->remImp = $this->getCurSpeed();
-		}
+		else $this->remImp = $this->getCurSpeed();
 	}
 
 	public function getEndState($turn){

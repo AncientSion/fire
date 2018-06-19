@@ -77,26 +77,7 @@ function executeAll(){
 
 function mouseCanvasZoom(e){
 	e.preventDefault();		
-	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y);
-	if (game){
-		cam.adjustZoom(e, pos);
-		//game.draw();
-	}	
-}
-
-function mouseCanvasScroll(e){
-	e.preventDefault();return;
-	if (aUnit && game.turnMode){
-		game.getUnit(aUnit).switchTurnMode();
-	} else if (aUnit){
-		game.getUnit(aUnit).doUnselect();
-	} else {
-		return;
-		var rect = this.getBoundingClientRect();
-		var pos = new Point(e.clientX - offset.x, e.clientY - offset.y);
-		cam.setFocus(pos.x - cam.o.x, pos.y - cam.o.y);
-		game.redraw();
-	}
+	if (game){cam.adjustZoom(e);}	
 }
 
 function handleWeaponAimEvent(shooter, target, e, pos){
@@ -105,9 +86,6 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 		$("#weaponAimTableWrapper").hide();
 		return;
 	}
-	//else if (shooter.flight && !game.isCloseCombat(shooter, target)){
-	//	return;
-	//}
 	
 	var shooterPos = shooter.getPlannedPos();
 	var facing = shooter.getPlannedFacing();					
@@ -365,9 +343,7 @@ function handleScroll(e){
 		// accumulate the net panning done
 		cam.o.x += dx;
 		cam.o.y += dy;
-		//console.log(dx, dy);
-
-		//console.log("redraw");
+		
 		game.redraw();
 	}
 }
@@ -382,7 +358,7 @@ function canvasMouseMove(e){
 
 	if (cam.scroll){handleScroll(e);}
 
-	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
+	var pos = new Point(e.clientX, e.clientY).getOffset();
 	//$("#currentPos").html(pos.x + " / " + pos.y + "____" + cam.o.x + " / " + cam.o.y+ "___" + (pos.x-cam.o.x) + " / " + (pos.y-cam.o.y));
 	var unit = game.getUnitByClick(pos);
 
@@ -401,7 +377,7 @@ function canvasMouseMove(e){
 			var dist = Math.floor(getDistance(shipLoc, pos));
 			var a = getAngleFromTo(shipLoc, pos);
 				a = addAngle(facing, a);
-			drawVector(shipLoc, {x: e.clientX - offset.x, y: e.clientY - offset.y}, dist, a);
+			drawVector(shipLoc, {x: e.clientX, y: e.clientY}, dist, a);
 		}
 
 		if (ship.salvo){}
@@ -537,7 +513,7 @@ function firePhase(pos, unit, targetid){
 }
 
 function dmgPhase(e, pos, unit){
-	var pos = new Point(e.clientX - offset.x, e.clientY - offset.y).getOffset();
+	var pos = new Point(e.clientX, e.clientY).getOffset();
 	var index;
 
 	if (unit){
