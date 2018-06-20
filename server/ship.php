@@ -326,9 +326,11 @@ class Ship {
 
 	public function setCurSpeed($turn, $phase){
 		$impulse = $this->curImp;
+		//Debug::log("setCurSpeed #".$this->id.": ".$impulse);
 		if ($turn == $this->available){
 			$impulse = $this->getBaseImpulse();
 		}
+
 		$step = $this->getImpulseStep();
 
 		for ($i = 0; $i < sizeof($this->actions); $i++){

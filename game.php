@@ -589,14 +589,12 @@
 					if (game.phase < 1 || game.phase > 2){return;}
 
 					window.cancelAnimationFrame(anim);
-					for (var i = 0; i < game.ships.length; i++){
-						if (!game.ships[i].actions.length){continue;}
+				/*	for (var i = 0; i < game.ships.length; i++){
 						if (game.ships[i].focus+1 > game.phase){continue;}
-						game.ships[i].drawX = game.ships[i].actions[game.ships[i].actions.length-1].x;
-						game.ships[i].drawY = game.ships[i].actions[game.ships[i].actions.length-1].y;
+						game.ships[i].setPostMovePosition();
 						game.ships[i].drawFacing = game.ships[i].getPlannedFacing();
 					}
-
+*/
 					game.animShip = 1; game.animFlight = 1; game.animSalvo = 1;
 					game.endMoveSubPhase();
 					game.animShip = 0; game.animFlight = 0; game.animSalvo = 0;

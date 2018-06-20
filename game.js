@@ -935,14 +935,8 @@ function Game(data){
 		this.draw();
 
 		if (game.turn == 1){return;}
-		$("#combatLogWrapper")
-			.width(450)
-			.css("top", 0).css("left", 245)
-			.show()
-			.find(".combatLogHeader").html("Tactical Log").end()
-			.find("#combatLog").children().children().remove();
 
-			
+		this.doPositionLog("Turn Beginning Log", 400);
 		this.createCommandTransferEntries();
 		this.resolveDamageControl();
 	}
@@ -958,7 +952,9 @@ function Game(data){
 	}
 
 	this.endMoveSubPhase = function(){
+		//console.log("endMoveSubPhase")
 		for (var i = 0; i < this.ships.length; i++){
+			if (!this.ships[i].toAnimate){continue;}
 			if (this.ships[i].flight && this.animFlight || this.ships[i].salvo && this.animSalvo){
 				this.ships[i].setPostMovePosition();
 				this.ships[i].setPostMoveFacing();
@@ -973,6 +969,7 @@ function Game(data){
 				}
 			}
 			else if ((this.ships[i].ship || this.ships[i].squad) && this.animShip){
+				//if (this.ships[i].focus){console.log("ding")}
 				this.ships[i].setPostMovePosition();
 				this.ships[i].setPostMoveFacing();
 			}
@@ -2010,8 +2007,8 @@ function Game(data){
 			}
 		}
 
-		this.createPlaceHolderEntry();
-		this.createEndEntry("--Initial Events concluded--")
+		if (show){this.createPlaceHolderEntry();}
+		this.createEndEntry("-- Initial Events concluded --")
 	}
 
 	this.resolvePostMoveFire = function(){
@@ -2259,7 +2256,6 @@ function Game(data){
 
 	this.handlePostFireOrderAnim = function(){
 		this.createFireFinalEntry();
-		//this.createPlaceHolderEntry();
 
 		if (game.unitExploAnims.length){
 			this.createPlaceHolderEntry();
@@ -3144,7 +3140,7 @@ Game.prototype.resolveDeploy = function(){
 		}
 	}
 
-	this.setupDeployLog();
+	this.doPositionLog("Initial Phase Log", 375);
 
 	var show = 0;
 
@@ -3167,14 +3163,13 @@ Game.prototype.resolveDeploy = function(){
 	}
 }
 
-Game.prototype.setupDeployLog = function(){
+Game.prototype.doPositionLog = function(html, length){
 	var w = ui.unitSelector.width();
 	var x = ui.unitSelector.css("left");
 	var x = Math.floor(x.substr(0, x.length-2));
 
 	var top;
 	var left;
-	var length = 375;
 
 	if (x + w + 20 + 100 + length < res.x){
 		left = x + w + 20;
@@ -3185,37 +3180,10 @@ Game.prototype.setupDeployLog = function(){
 		top = 80;
 	}
 
-	$("#combatLogWrapper")
-	.show()
-	.width(length).css("top", top).css("left", left)
-	.find(".combatLogHeader").html("Deployment / Initial Events Log").end()
-	.find("#combatLog").children().children().remove();
-}
-
-Game.prototype.setupMoveLog = function(){
-	var w = ui.unitSelector.width();
-	var x = ui.unitSelector.css("left");
-	var x = Math.floor(x.substr(0, x.length-2));
-
-	var top;
-	var left;
-	var length = 600;
-
-	if (x + w + 20 + 100 + length < res.x){
-		left = x + w + 20;
-		top = 0;
-	}
-	else {
-		left = x;
-		top = 80;
-	}
-
-	$("#combatLogWrapper")
-	.show()
-	.width(length).css("top", top).css("left", left)
-	.find(".combatLogHeader").html("Movement Log").end()
-	.find("#combatLog").children().children().remove();
-	
+	$("#combatLogWrapper").show()
+		.width(length).css("top", top).css("left", left)
+		.find(".combatLogHeader").html(html).end()
+		.find("#combatLog").children().children().remove();
 }
 
 Game.prototype.setCamera = function(){
@@ -3377,7 +3345,7 @@ Game.prototype.doResolveMovement = function(){
 	this.animFlight = 0;
 	this.animSalvo = 0;
 
-	this.setupMoveLog();
+	this.doPositionLog("Movement Resolution Log", 600);
 
 	this.animateUnitMovement();
 }

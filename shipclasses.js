@@ -1137,9 +1137,14 @@ Ship.prototype.needsAnimationNow = function(){
 }
 
 Ship.prototype.movesThisPhase = function(){
-	if ((this.ship || this.squad) && game.phase != this.focus +1){return false;}
+	if ((this.ship || this.squad) && game.phase > this.focus){return false;}
 	if ((this.flight || this.salvo) && game.phase != 2){return false;}
 	return true;
+}
+
+Ship.prototype.hasMoved = function(){
+	if (this.actions.length && this.actions[this.actions.length-1].resolved){return true;}
+	return false;
 }
 
 Ship.prototype.setDrawData = function(){
@@ -1823,7 +1828,7 @@ Ship.prototype.resetMoveMode = function(){
 }
 
 Ship.prototype.getCurSpeed = function(){
-	if (game.phase >= 1 && (this.movesThisPhase())){return this.curImp;}
+	if (game.phase >= 1 && (this.hasMoved())){return this.curImp;}
 	var step = this.getImpulseStep();
 	var amount = 0;
 	for (var i = 0; i < this.actions.length; i++){
