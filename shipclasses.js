@@ -1226,7 +1226,7 @@ Ship.prototype.getStructureFromAngle = function(a){
 
 Ship.prototype.drawMovePlan = function(){
 	//console.log("draw moves for #" + this.id);
-	if (!this.actions.length || !this.deployed || !game.drawMoves){return;}
+	if (!this.selected && (!this.actions.length || !this.deployed || !game.drawMoves)){return;}
 
 	this.setMoveTranslation();
 
@@ -2159,14 +2159,12 @@ Ship.prototype.getMoraleTrigger = function(){
 }
 
 Ship.prototype.getModifiedRoutChance = function(){
-	return (this.morale.bonusChance ?  this.morale.baseChance + "% (" + this.morale.bonusChance + "%)" : this.morale.baseChance + "%")
-
-
-	var html = this.morale.baseChance + "%";
 	if (this.morale.bonusChance){
-		html += " (" + this.morale.bonusChance + "%)";
+		if (this.morale.bonusChance > 0){
+			return this.morale.baseChance + " + " + this.morale.bonusChance + "%";
+		} else return this.morale.baseChance + " - " + this.morale.bonusChance + "%";
 	}
-	return html;
+	else return this.morale.baseChance + "%";
 }
 
 Ship.prototype.getEffectiveRoutChance = function(){

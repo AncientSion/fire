@@ -1188,7 +1188,7 @@
 			");
 
 			for ($i = 0; $i < sizeof($units); $i++){
-				Debug::log("deleting: ".$units[$i]["id"]);
+				//Debug::log("deleting: ".$units[$i]["id"]);
 				$stmt->bindParam(":shipid", $units[$i]["id"]);
 				$stmt->bindParam(":turn", $turn);
 
@@ -2041,7 +2041,7 @@
 
 			for ($i = 0; $i < sizeof($ships); $i++){
 				if (!$ships[$i]->moveSet){continue;}
-				Debug::log("resolving: ".$ships[$i]->id);
+				//Debug::log("resolving: ".$ships[$i]->id);
 				$stmt->bindParam(":shipid", $ships[$i]->id);
 				$stmt->execute();
 

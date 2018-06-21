@@ -157,8 +157,6 @@ System.prototype.attachSysMods = function(ele){
 	}
 }
 
-
-
 System.prototype.getCrewTerm = function(){
 	if (this.name == "Command"){
 		return "Focus";
@@ -1323,7 +1321,7 @@ PrimarySystem.prototype.getSysDiv = function(){
 		}
 	}
 		
-	(div.append(table));
+	div.append(table);
 	this.attachSysNotes(div);
 	this.attachSysMods(div);
 	return div;
@@ -2629,35 +2627,24 @@ Particle.prototype.getAnimation = function(fire){
 		grouping = Math.ceil(fire.guns/2);
 	}
 
-	if (game.isCloseCombat(fire.shooter, fire.target)){
-		cc = 1;
-		if (fire.shooter.ship || fire.shooter.squad){
-			fraction = 2;
-		}
-		else if (fire.shooter.flight && (fire.target.ship || fire.target.squad)){
-			fraction = 1.5;
-		} 
-		else if (fire.shooter.flight){
-			fraction = 1.5;
-		}
-	}
-	else if (fire.dist < 200){
-		fraction = Math.min(3, 200 / fire.dist);
-	}
-	else if (fire.dist > 600){
-		fraction = Math.max(0.5, 600 / fire.dist);
-	}
-
-	speed /= fraction;
-	gunDelay *= fraction;
-	shotDelay *= fraction;
-
 	if (fire.shooter.flight && fire.target.flight){
 		a = JSON.parse(JSON.stringify(fire.target.structures[1].layout));
 	}
 	
 	var linked = this.linked * !fire.shooter.flight-1;
 	//console.log(linked);
+
+
+	if (linked){
+		gunDelay = 20;
+		shotDelay = 0;
+	}
+
+	if (fire.dist == 0){
+		speed /= 2;
+	}
+
+
 	
 	for (var i = 0; i < fire.guns; i++){
 		var gunAnims = [];
@@ -2679,15 +2666,9 @@ Particle.prototype.getAnimation = function(fire){
 			var ty = t.y + dest.y;
 
 			var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
-				shotAnim.n = 0 - ((Math.floor(i / grouping) * gunDelay) + i*10 + (j+1)*shotDelay);
-
 				shotAnim.n = 0 - i*gunDelay - j*shotDelay
 
-
-			//console.log(shotAnim.n);
 			gunAnims.push(shotAnim);
-			//console.log(shotAnim.n +"/"+shotAnim.m);
-
 
 			if (linked){
 				ox += range(3, 6) * range(0, 1) * -1;
@@ -2695,7 +2676,7 @@ Particle.prototype.getAnimation = function(fire){
 				tx += range(3, 6) * range(0, 1) * -1;
 				ty += range(3, 6) * range(0, 1) * -1;
 				var shotAnim = new BallVector({x: ox, y: oy}, {x: tx, y: ty}, speed, hit);
-					shotAnim.n = 0 - ((i / grouping) * delay + j*shotDelay);
+					shotAnim.n = 0 - i*gunDelay - j*shotDelay
 				gunAnims.push(shotAnim);
 			}
 		}

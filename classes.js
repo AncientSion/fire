@@ -716,26 +716,43 @@ Single.prototype.getSysDiv = function(){
 		.append($("<tr>").append($("<td>").attr("colSpan", 2).html(this.display)))
 		.append($("<tr>").append($("<td>").html("Integrity").css("width", "70%")).append($("<td>").html(this.integrity)))
 		.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.negation)))
-		.append($("<tr>").append($("<td>").html("Speed").css("width", 120)).append($("<td>").html(this.baseImpulse)))
-		.append($("<tr>").append($("<td>").html("EM-D sustained")).append($("<td>").html(this.getEMDmg())))
-		.append($("<tr>")
-					.append($("<td>").attr("colSpan", 2).css("height", 6)))
+		.append($("<tr>").append($("<td>").html("Acceleration")).append($("<td>").html(this.baseImpulse)))
+		.append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html("<span class='yellow'>" + this.getEMDmg() + "<span>")))
+		.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 6)))
 		.append($("<tr>").append($("<td>").attr("colSpan", 2).html("Dropout Check required @ HP < " + (100-this.dropout[0]) + "%")))
 		.append($("<tr>").append($("<td>").html("Start Dropout Chance")).append($("<td>").html(this.dropout[1] + "%")))
 
-	if (this.crits.length){
-			$(table)
-				.append($("<tr>").append($("<td>").attr("colSpan", 2).css("fontSize", 16).css("borderBottom", "1px solid white").css("borderTop", "1px solid white").html("Modifiers")))
+	div.append(table);
+	this.attachSysNotes(div);
+	this.attachSysMods(div);
+	return div;
+}
 
+Single.prototype.attachSysNotes = function(ele){
+	return;
+}
+
+Single.prototype.attachSysMods = function(ele){
+	var div = $(ele) || $("#sysDiv");
+		div.find(".modifiers").remove();
+	var table;
+
+	if (this.crits.length){
+		table = $("<table>").addClass("modifiers")
+		.append($("<tr>").css("height", 7).append($("<td>").attr("colSpan", 2)))
+		.append($("<tr>").append($("<th>").html("Modifiers").attr("colSpan", 2)));
 		for (var i = 0; i < this.crits.length; i++){
-  			if (!this.crits[i].inEffect()){continue;}
+				if (!this.crits[i].inEffect()){continue;}
 			$(table)
-				.append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("negative").html(this.crits[i].getString())))
+				.append($("<tr>")
+					.append($("<td>")
+						.attr("colSpan", 2)
+						.addClass("negative")
+						.html(this.crits[i].getString())))
 		}
 	}
-		
-	div.append(table[0]);
-	return div;
+
+	div.append(table);
 }
 
 Single.prototype.addMainDivEvents = function(div, alive, isPreview){

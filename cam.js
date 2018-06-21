@@ -47,15 +47,15 @@ window.cam = {
 
 	setFireFocus: function(fire){
 		if (fire.dist == 0){
-			this.z = 2.5
+			this.z = 3
 		}
-		else if (fire.dist <= 100){
+		else if (fire.dist <= 150){
 			this.z = 2;
 		}
 		else if (fire.dist > res.x / 2 || fire.dist > res.y){
 			this.z = Math.floor( (res.x / 2) / fire.dist * 15)/10;
 		}
-		else this.z = 1;
+		else this.z = 1.5;
 
 		var origin = fire.shooter.getPlannedPos();
 		var target = fire.target.getPlannedPos();
@@ -63,11 +63,10 @@ window.cam = {
 		var centerX = (target.x + origin.x) / 2;
 		var centerY = (target.y + origin.y) / 2;
 
-		this.setFocusToPos({x: centerX, y: centerY}); return;
+		//var h = ui.combatLogWrapper.height();
+		//console.log(h);
 
-		if (fire.targetid == -1){this.setFocusToPos({x: fire.x, y: fire.y});}
-		else this.setFocusToPos(fire.target.getPlannedPos());
-		//game.draw();
+		this.setFocusToPos({x: centerX, y: centerY}); return;
 	}
 }
 

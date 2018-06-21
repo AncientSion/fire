@@ -985,8 +985,8 @@ function Game(data){
 		}
 	}
 
-	this.movementDone = function(){
-		console.log("movementDone");
+	this.moveResolved = function(){
+		console.log("moveResolved");
 
 		this.setPostMoveCC();
 		this.checkUnitOffsetting();
@@ -1000,23 +1000,6 @@ function Game(data){
 
 		this.createEndEntry("-- Movement Events concluded --");
 
-		/*
-		$("#combatLog").find("tbody")
-			.append($("<tr>")
-				.append($("<td>").attr("colSpan", 8).html("Movenent concluded"))
-				.contextmenu(function(e){
-					e.preventDefault(); e.stopPropagation();
-					//game.resetMovement();
-					setFPS(150);
-					game.resetCC();
-					game.setPreMoveCC();
-					game.resetFireOrders();
-					game.prepResolveMovement();
-					game.doResolveMovement();
-				})
-			);
-		*/
-
 		if (this.events.length){
 			if (game.phase == 2){
 				game.timeout = setTimeout(function(){
@@ -1028,6 +1011,7 @@ function Game(data){
 				this.animating = 0;
 				this.drawingEvents = 1;
 				this.logWeaponEvents();
+				this.draw();
 			}
 		}
 		else {
@@ -1924,13 +1908,13 @@ function Game(data){
 			else {
 				game.endMoveSubPhase();
 				game.animFlight = 0; game.animSalvo = 0;
-				game.movementDone();
+				game.moveResolved();
 			}
 		}
 		else {
 			game.animShip = 0; 
 			game.endMoveSubPhase();
-			game.movementDone();
+			game.moveResolved();
 		}
 	}
 

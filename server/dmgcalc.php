@@ -309,8 +309,6 @@ class DmgCalc {
 		$totalDmg = $fire->weapon->getTotalDamage($fire);
 		$targets = $fire->target->getFlashTargets($fire);
 		$negation;
-		$overkill = 0;
-
 
 		Debug::log("flash, sub targets: ".sizeof($targets).", damage: ".$totalDmg);
 
@@ -343,15 +341,10 @@ class DmgCalc {
 
 			$dmg = static::calcDmg($fire->weapon, $dmgs[$i], $negation);
 
-			if ($fire->target->ship && $targets[$i]->id == 1){
-				Debug::log("hitting structure, accumulated overkill @ ".$overkill);
-				$dmg->structDmg += $overkill;
-			}
-
 			if ($remInt - $dmg->structDmg < 1){
 				$destroyed = 1;
-				$overkill += $dmg->structDmg - $remInt;
-				Debug::log("destroying, rem: ".$remInt.", dmg: ".$dmg->structDmg.", adding overkill ".($dmg->structDmg - $remInt).", now at: ".$overkill);
+				$dmg->overkill = $dmg->structDmg - $remInt;
+				Debug::log("destroying, rem: ".$remInt.", dmg: ".$dmg->structDmg.", adding overkill ".$dmg->overkill);
 				$dmg->structDmg = $remInt;
 			}
 			

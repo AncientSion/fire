@@ -1681,7 +1681,7 @@ input[type=button].inactive:hover, input[type=submit].inactive:hover {
 
 #combatLogInnerWrapper {
 	width: 100%;
-    max-height:300px;
+    max-height:250px;
     overflow:auto;
 }
 
