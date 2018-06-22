@@ -1,7 +1,7 @@
 function Squaddie(data){
 	Single.call(this, data);
 	this.structures = [];
-	this.size = data.size * 0.7;
+	this.size = data.size;
 	this.index = data.index;
 	this.ew = data.ew;
 	this.power = data.power;
@@ -13,13 +13,11 @@ function Squaddie(data){
 	this.armourDmg = data.armourDmg;
 	this.space = data.space;
 	this.powers = data.powers;
-	this.armourElement;
-	this.type = "Main ";
-
 	this.baseTurnDelay = data.baseTurnDelay;
 	this.baseImpulseCost = data.baseImpulseCost;
 	this.baseImpulse = data.baseImpulse;
-
+	this.armourElement;
+	this.type = "Main ";
 }
 
 Squaddie.prototype = Object.create(Single.prototype);
@@ -61,6 +59,8 @@ Squaddie.prototype.hideSysDiv = function(){
 }
 
 Squaddie.prototype.getSysDiv = function(){
+	console.log("ding");
+
 	var div = 
 		$("<div>").attr("id", "sysDiv")
 			.append($("<table>")
@@ -249,8 +249,9 @@ Squaddie.prototype.attachEvent = function(ele){
 			e.stopPropagation();
 			game.getUnit($(this).data("shipId")).getSystem($(this).data("systemId")).select(e);
 		}
-	).
-	contextmenu(
+	)
+	.mousedown(function(e){e.stopPropagation();})
+	.contextmenu(
 		function(e){
 			e.preventDefault();
 			if (!game.sensorMode){game.getUnit($(this).data("shipId")).selectAll(e, $(this).data("systemId"));}
@@ -285,10 +286,10 @@ Squaddie.prototype.updateShipPower = function(system){
 }
 
 Squaddie.prototype.update = function(){
-	this.updateSysDiv();
+	this.updatesysDiv();
 }
 
-Squaddie.prototype.updateSysDiv = function(){
+Squaddie.prototype.updatesysDiv = function(){
 	$("#sysDiv")
 		.find(".boostEffect").html(this.getBoostEffect("Armour") * this.getBoostLevel()).end()
 		.find(".powerUse").html(this.getPowerUsage()).end()
@@ -388,11 +389,11 @@ Squaddie.prototype.getArmourData = function(){
 		.hover(
 			function(e){
 				var data = $(this).closest(".unitContainer").data();
-				game.getUnit(data.shipId).getSystem(data.systemId).showSysDiv(e);
+				game.getUnit(data.shipId).getSystem(data.systemId).armourIn(e);
 			},
 			function(e){
 				var data = $(this).closest(".unitContainer").data();
-				game.getUnit(data.shipId).getSystem(data.systemId).hideSysDiv(e);
+				game.getUnit(data.shipId).getSystem(data.systemId).armourOut(e);
 			}
 		)
 	}
@@ -404,7 +405,7 @@ Squaddie.prototype.getArmourString = function(){
 	return Structure.prototype.getArmourString.call(this);
 }
 
-Squaddie.prototype.showSysDiv = function(e){
+Squaddie.prototype.armourIn = function(e){
 	$(document.body).append(
 		$(Structure.prototype.getSysDiv.call(this))
 			.css("left", e.clientX - 90)
@@ -414,7 +415,7 @@ Squaddie.prototype.showSysDiv = function(e){
 	$(this.armourElement).find(".boostDiv").show();
 }
 
-Squaddie.prototype.hideSysDiv = function(e){
+Squaddie.prototype.armourOut = function(e){
 	Structure.prototype.hideSysDiv.call(this, e);
 	if (game.phase != -1 || !this.effiency || game.getUnit(this.parentId).userid != game.userid){return;}
 	$(this.armourElement).find(".boostDiv").hide();
@@ -422,7 +423,6 @@ Squaddie.prototype.hideSysDiv = function(e){
 
 Squaddie.prototype.doDestroy = function(){
 	this.doDraw = 0;
-	this.destroyed = 1;
 	for (var i = 0; i < this.structures.length; i++){
 		for (var k = 0; k < this.structures[i].systems.length; k++){
 			this.structures[i].systems[k].destroyed = true;
@@ -486,7 +486,7 @@ Squaddie.prototype.previewSetup = function(){
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			if (this.structures[i].systems[j].loadout){
-				$(this.structures[i].systems[j].element).addClass("hasOptions");
+				$(this.structures[i].systems[j].element).addClass("bgyellow");
 			}
 		}
 	}

@@ -14,6 +14,8 @@ class Tigara extends Heavy {
 	public $ep = 75;
 	public $ew = 900;
 
+	public $modFocusRate = 2;
+
 
 	function __construct($data){
         parent::__construct($data);

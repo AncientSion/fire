@@ -13,13 +13,11 @@ function Squaddie(data){
 	this.armourDmg = data.armourDmg;
 	this.space = data.space;
 	this.powers = data.powers;
-	this.armourElement;
-	this.type = "Main ";
-
 	this.baseTurnDelay = data.baseTurnDelay;
 	this.baseImpulseCost = data.baseImpulseCost;
 	this.baseImpulse = data.baseImpulse;
-
+	this.armourElement;
+	this.type = "Main ";
 }
 
 Squaddie.prototype = Object.create(Single.prototype);
@@ -50,7 +48,7 @@ Squaddie.prototype.hover = function(e){
 
 Squaddie.prototype.showSysDiv = function(e){
 	$(document.body).append(
-		$(this.getSysDiv())
+		$(Squaddie.prototype.getSysDiv())
 			.css("left", e.clientX - 90)
 			.css("top", e.clientY + 50)
 		)
@@ -61,6 +59,8 @@ Squaddie.prototype.hideSysDiv = function(){
 }
 
 Squaddie.prototype.getSysDiv = function(){
+	console.log("ding");
+
 	var div = 
 		$("<div>").attr("id", "sysDiv")
 			.append($("<table>")

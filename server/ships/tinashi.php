@@ -7,12 +7,14 @@ class Tinashi extends Medium {
 	public $size =  70;
 	public static $value = 600;
 	public $profile = array(0.9, 1.1);
-	public $mass = 114250;
+	public $mass = 4250;
 
-	public $integrity = 70;
+	public $integrity = 700;
 	public $vitalHP = 85;
 	public $ep = 85;
 	public $ew = 750;
+
+	public $modFocusRate = 2;
 
 
 	function __construct($data){
@@ -22,24 +24,24 @@ class Tinashi extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$right = new Structure($this->getId(), $this->id, 0, 120, 475, 20, 1);
-			$right->systems[] = new FusionCannon($this->getId(), $this->id, 0, 120);
-			$right->systems[] = new FusionCannon($this->getId(), $this->id, 0, 120);
-			$right->systems[] = new LightEMNeedler($this->getId(), $this->id, 0, 180);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 475, 20, 3);
+			$front->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
+			$front->systems[] = new LightEMNeedler($this->getId(), $this->id, 270, 90);
+			$front->systems[] = new FusionCannon($this->getId(), $this->id, 300, 60);
+		$structs[] = $front;
+
+		$right = new Structure($this->getId(), $this->id, 60, 180, 400, 17, 1);
 			$right->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
+			$right->systems[] = new FusionCannon($this->getId(), $this->id, 0, 120);
+			$right->systems[] = new FusionCannon($this->getId(), $this->id, 60, 180);
+			$right->systems[] = new LightEMNeedler($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
-		$aft = new Structure($this->getId(), $this->id, 120, 240, 400, 17);
-			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
-			$aft->systems[] = new FusionCannon($this->getId(), $this->id, 120, 240);
-		$structs[] = $aft;
-
-		$left = new Structure($this->getId(), $this->id, 240, 360, 475, 20, 1);
-			$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
-			$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
-			$left->systems[] = new Dual($this->getId(), $this->id, 180, 0, 34, array("LightEMNeedler", "MediumEMDissipator"));
-			//$left->systems[] = new LightEMNeedler($this->getId(), $this->id, 180, 0);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 475, 17, 1);
 			$left->systems[] = new NeutronLaser($this->getId(), $this->id, 300, 60);
+			$left->systems[] = new FusionCannon($this->getId(), $this->id, 240, 360);
+			$left->systems[] = new FusionCannon($this->getId(), $this->id, 180, 300);
+			$left->systems[] = new LightEMNeedler($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
 
 

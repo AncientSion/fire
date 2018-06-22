@@ -130,12 +130,12 @@ class FusionCannon extends Particle {
 	public $name = "FusionCannon";
 	public $display = "Medium Fusion Cannon";
 	public static $prio = 0;
-	public $minDmg = 32;
-	public $maxDmg = 43;
+	public $minDmg = 34;
+	public $maxDmg = 45;
 	public $accDecay = 100;
 	public $shots = 1;
 	public $reload = 2;
-	public $integrity = 38;
+	public $integrity = 40;
 	public $powerReq = 2;
 	public $traverse = -1;
 
@@ -152,12 +152,12 @@ class HeavyFusionCannon extends Particle {
 	public $name = "HeavyFusionCannon";
 	public $display = "Heavy Fusion Cannon";
 	public static $prio = 0;
-	public $minDmg = 40;
-	public $maxDmg = 54;
+	public $minDmg = 42;
+	public $maxDmg = 56;
 	public $accDecay = 100;
 	public $shots = 1;
 	public $reload = 2;
-	public $integrity = 44;
+	public $integrity = 46;
 	public $powerReq = 3;
 	public $traverse = -1;
 
@@ -183,7 +183,7 @@ class AntimatterConverter extends Particle {
 	public $projSpeed = 6;
 	public $reload = 3;
 	public $integrity = 64;
-	public $powerReq = 8;
+	public $powerReq = 7;
 	public $traverse = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
@@ -206,9 +206,9 @@ class LightEMNeedler extends Particle {
 	public $shots = 3;
 	public $reload = 2;
 	public $integrity = 24;
-	public $powerReq = 3;
+	public $powerReq = 5;
 	public $traverse = -4;
-	public $effiency = 3;
+	public $effiency = 4;
 	public $maxBoost = 1;
 
 	public $animation = "em";
