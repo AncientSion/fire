@@ -716,6 +716,7 @@ Squadron.prototype.doConfirmSystemLoadout = function(){
 		for (var j = 0; j < this.structures[i].structures.length; j++){
 			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
 				if (this.structures[i].structures[j].systems[k].selected){
+					if (this.structures[i].structures[j].systems[k].launcher){this.structures[i].structures[j].systems[k].setAmmo();}
 					this.structures[i].structures[j].systems[k].select();
 					return;
 				}
@@ -766,6 +767,7 @@ Squadron.prototype.getBuyTableData = function(table){
 		for (var j = 0; j < this.structures[i].structures.length; j++){
 			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
 				if (!this.structures[i].structures[j].systems[k].cost){continue;}
+				this.totalCost += this.structures[i].structures[j].systems[k].cost;
 
 				$(table)
 				.append(

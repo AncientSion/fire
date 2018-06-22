@@ -30,7 +30,7 @@ if (isset($_SESSION["userid"])){
 
 	$element = "<table class='gameSetupStatus'";
 	$element .= "<tr>";
-	$element .= "<th colSpan=2 style='font-size: 22px;''>".$game["name"]."</th>";
+	$element .= "<th colSpan=2 style='font-size: 22px;'>".$game["name"]."</th>";
 	$element .= "</tr>";
 	$element .= "<tr>";
 	$element .= "<th colSpan=2 style='font-size: 16px;'>".$game["pv"]." points for starting fleet</br>".$game["reinforce"]." for reinforcements @ turn ".$game["reinforceTurn"]." - ETA ".$game["reinforceETA"]."</th>";

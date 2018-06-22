@@ -486,7 +486,7 @@ Squaddie.prototype.previewSetup = function(){
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
 			if (this.structures[i].systems[j].loadout){
-				$(this.structures[i].systems[j].element).addClass("bgyellow");
+				$(this.structures[i].systems[j].element).addClass("hasOptions");
 			}
 		}
 	}

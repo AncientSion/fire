@@ -46,14 +46,14 @@ class Darkner extends Medium {
 class Darkner extends Light {
 	public $name = "Darkner";
 	public $display = "Darkner";
-	public $role = "Long-range Support Frigate";
+	public $role = "Ballistic Support Frigate";
 	public $faction = "Centauri Republic";
-	public static $value =  300;
+	public static $value =  180;
 	public $mass = 1400;
 
 	public $integrity = 370;
 	public $ep = 80;
-	public $ew = 700;
+	public $ew = 450;
 	public $negation = 11;
 
 	function __construct($id, $userid){
@@ -64,7 +64,8 @@ class Darkner extends Light {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new SuperHeavyParticle($this->getId(), $this->parentId, 330, 30);
+		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 120, array(
+			array("Javelin", 16, 4), array("Myrmidon", 9, 3)));
 		$front->systems[] = new LightParticle($this->getId(), $this->parentId, 270, 90);
 		$structs[] = $front;
 		for ($i = 0; $i < sizeof($structs); $i++){

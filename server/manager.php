@@ -1659,6 +1659,7 @@
 						"Hasta",
 						"Javelin",
 						"Triarii",
+						"Myrmidon",
 					),
 				);
 				break;

@@ -14,6 +14,7 @@ spl_autoload_register(
                 'hasta' => '/server/systems/weapons/ammo.php',
                 'javelin' => '/server/systems/weapons/ammo.php',
                 'triarii' => '/server/systems/weapons/ammo.php',
+                'myrmidon' => '/server/systems/weapons/ammo.php',
                 'vanguard' => '/server/systems/weapons/ammo.php',
                 'needle' => '/server/systems/weapons/ammo.php',
                 'naga' => '/server/systems/weapons/ammo.php',

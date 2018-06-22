@@ -6,11 +6,6 @@ class Missile extends Single {
 	public $maxRange = 0;
 
 	function __construct($id, $parentId){
-		if ($this->missile){
-			$this->integrity = $this->mass*2;
-			$this->negation = $this->mass-2;
-		}
-
 		parent::__construct($id, $parentId);
 		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->minDmg, $this->maxDmg, $this->traverse);
 	}
@@ -127,6 +122,8 @@ class Hasta extends Missile {
 	public $minDmg = 15;
 	public $maxDmg = 18;
 	public $mass = 2;
+	public $integrity = 4;
+	public $negation = 0;
 	public static $value = 3;
 	public $traverse = -3;
 
@@ -142,6 +139,8 @@ class Javelin extends Missile {
 	public $minDmg = 32;
 	public $maxDmg = 44;
 	public $mass = 4;
+	public $integrity = 8;
+	public $negation = 2;
 	public static $value = 5;
 	public $traverse = -1;
 
@@ -158,8 +157,27 @@ class Triarii extends Missile {
 	public $minDmg = 41;
 	public $maxDmg = 53;
 	public $mass = 4;
+	public $integrity = 8;
+	public $negation = 2;
 	public static $value = 7;
 	public $traverse = -1;
+
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
+	}
+}
+
+class Myrmidon extends Missile {
+	public $name = "Myrmidon";
+	public $display = "Light Imp. Antiship Missiles";
+	public static $prio = 0;
+	public $minDmg = 54;
+	public $maxDmg = 70;
+	public $mass = 5;
+	public $integrity = 10;
+	public $negation = 3;
+	public static $value = 9;
+	public $traverse = 0;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -173,6 +191,8 @@ class Vanguard extends Missile {
 	public $minDmg = 9;
 	public $maxDmg = 12;
 	public $mass = 2;
+	public $integrity = 4;
+	public $negation = 0;
 	public static $value = 3;
 	public $traverse = -4;
 
@@ -188,6 +208,8 @@ class Needle extends Missile {
 	public $minDmg = 15;
 	public $maxDmg = 18;
 	public $mass = 2;
+	public $integrity = 4;
+	public $negation = 0;
 	public static $value = 3;
 	public $traverse = -3;
 
@@ -203,6 +225,8 @@ class Naga extends Missile {
 	public $minDmg = 30;
 	public $maxDmg = 42;
 	public $mass = 4;
+	public $integrity = 8;
+	public $negation = 2;
 	public static $value = 5;
 	public $traverse = -1;
 
@@ -216,8 +240,10 @@ class Cyclops extends Missile {
 	public $display = "Light Antiship Missiles";
 	public static $prio = 0;
 	public $minDmg = 50;
-	public $maxDmg = 68;
+	public $maxDmg = 66;
 	public $mass = 5;
+	public $integrity = 10;
+	public $negation = 3;
 	public static $value = 8;
 	public $traverse = 0;
 
@@ -233,6 +259,8 @@ class Titan extends Missile {
 	public $minDmg = 70;
 	public $maxDmg = 88;
 	public $mass = 7;
+	public $integrity = 14;
+	public $negation = 5;
 	public static $value = 10;
 	public $traverse = 1;
 
