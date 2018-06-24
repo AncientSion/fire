@@ -374,11 +374,12 @@
 			for ($i = 0; $i < sizeof($units); $i++){
 				Debug::log("checking!");
 				if ($units[$i]["command"]){
+					Debug::log("found!");
 					$id = $units[$i]["id"];
 					$unit = new $units[$i]["name"]();
 					Debug::log("created!");
 					break;
-				}
+				} else Debug::log("nope!");
 			}
 
 			$sql = "UPDATE units SET command = 1 WHERE id = ".$id;
