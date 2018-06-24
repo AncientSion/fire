@@ -208,7 +208,7 @@ spl_autoload_register(
 
 
         if(class_exists("Omega", false)) {
-            Debug::log("yes!");
-        } else Debug::log("no!");
+            echo  ("yes!");
+        } else ("no!");
     }
 );
