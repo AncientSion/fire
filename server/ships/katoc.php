@@ -14,8 +14,8 @@ class KaToc extends Medium {
 	public $ep = 85;
 	public $ew = 700;
 
-	function __construct($data){
-		parent::__construct($data);
+	function __construct($data = false){
+        parent::__construct($data);
 	}
 
 	public function addStructures(){

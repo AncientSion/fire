@@ -15,9 +15,8 @@ class Avenger extends Heavy {
 	public $ew = 600;
 	public $power = 5;
 
-
-	function __construct($data){
-		parent::__construct($data);
+	function __construct($data = false){
+        parent::__construct($data);
 	}
 
 	public function addStructures(){

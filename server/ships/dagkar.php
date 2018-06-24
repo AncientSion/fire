@@ -14,7 +14,7 @@ class DagKar extends Medium {
 	public $ep = 80;
 	public $ew = 600;
 
-	function __construct($data){
+	function __construct($data = false){
         parent::__construct($data);
 	}
 

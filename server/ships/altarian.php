@@ -14,7 +14,7 @@ class Altarian extends Medium {
 	public $ep = 95;
 	public $ew = 750;
 
-	function __construct($data){
+	function __construct($data = false){
         parent::__construct($data);
 	}
 

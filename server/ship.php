@@ -64,8 +64,8 @@ class Ship {
 	public $ew = 0;
 	public $power = 0;
 
-	function __construct($data = false){
-		Debug::log("constructing!");
+	function __construct($data){
+		//Debug::log("constructing!");
 		if (!$data){return;}
 		$this->id = $data["id"];
 		$this->userid = $data["userid"];
@@ -1343,8 +1343,8 @@ class Heavy extends Medium {
 	public $baseFocusRate = 12;
 	//public $baseImpulseCost = 45;
 	
-	function __construct($data){
-		parent::__construct($data);
+	function __construct($data = false){
+        parent::__construct($data);
 	}
 }
 
@@ -1354,8 +1354,8 @@ class SuperHeavy extends Heavy {
 	public $baseFocusRate = 14;
 	//public $baseImpulseCost = 50;
 	
-	function __construct($data){
-		parent::__construct($data);
+	function __construct($data = false){
+        parent::__construct($data);
 	}
 }
 
@@ -1365,8 +1365,8 @@ class UltraHeavy extends SuperHeavy {
 	public $baseFocusRate = 16;
 	//public $baseImpulseCost = 55;
 	
-	function __construct($data){
-		parent::__construct($data);
+	function __construct($data = false){
+        parent::__construct($data);
 	}
 }
 

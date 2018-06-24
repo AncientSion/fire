@@ -14,7 +14,7 @@ class Demos extends Medium {
 	public $ep = 110;
 	public $ew = 700;
 
-	function __construct($data){
+	function __construct($data = false){
         parent::__construct($data);
 	}
 

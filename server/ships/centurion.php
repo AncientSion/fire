@@ -14,7 +14,7 @@ class Centurion extends Heavy {
 	public $ep = 85;
 	public $ew = 800;
 
-	function __construct($data){
+	function __construct($data = false){
         parent::__construct($data);
 	}
 

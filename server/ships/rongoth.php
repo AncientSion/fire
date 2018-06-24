@@ -15,7 +15,7 @@ class Rongoth extends Medium {
 	public $ew = 650;
 	public $power = 3;
 
-	function __construct($data){
+	function __construct($data = false){
         parent::__construct($data);
 	}
 

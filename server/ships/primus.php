@@ -14,7 +14,7 @@ class Primus extends SuperHeavy {
 	public $ep = 70;
 	public $ew = 850;
 
-	function __construct($data){
+	function __construct($data = false){
         parent::__construct($data);
 	}
 
