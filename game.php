@@ -599,7 +599,7 @@
 					game.endMoveSubPhase();
 					game.animShip = 0; game.animFlight = 0; game.animSalvo = 0;
 
-					game.movementDone();
+					game.moveResolved();
 					game.draw();
 				}
 			}

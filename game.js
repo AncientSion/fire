@@ -1018,7 +1018,49 @@ function Game(data){
 			this.animating = 0;
 			this.drawingEvents = 1;
 			this.draw();
+			if (game.phase == 2){
+				this.autoDoFireOrders();
+			}
 		}
+	}
+
+	this.autoDoFireOrders = function(){
+		console.log("autoDoFireOrders");
+
+		for (var i = 0; i < this.ships.length; i++){
+			if (!this.ships[i].friendly || !this.ships[i].flight){continue;}
+			if (!this.ships[i].cc.length){continue;}
+
+			var hostiles = [];
+
+			for (var j = 0; j < this.ships[i].cc.length; j++){
+				var unit = game.getUnit(this.ships[i].cc[j]);
+				if (unit.friendly){continue;}
+				hostiles.push(unit);
+			}
+
+			if (hostiles.length != 1){continue;}
+
+			var weapons = [];
+
+			for (var j = 0; j < this.ships[i].structures.length; j++){
+				for (var k = 0; j < this.ships[i].structures[j].systems[k].length; k++){
+					if (this.ships[i].structures[j].systems[k].reload > 1 || !this.ships[i].structures[j].systems[k].canFire()){continue;}
+				}
+				weapons.push(this.ships[i].structures[j].systems[k]);
+			}
+			//console.log(weapons);
+
+			var target = hostiles[0].id;
+			var pos = hostiles[0].getPlannedPos();
+
+			for (var j = 0; j < weapons.length; j++){
+				weapons[j].odds = 1;
+				weapons[j].validTarget = 1;
+				weapons[j].setFireOrder(target, pos);
+			}
+		}
+
 	}
 
 	this.initDamageControl = function(){
@@ -1049,6 +1091,10 @@ function Game(data){
 		this.createEndEntry("-- Fire Events concluded --");
 
 		$("#combatLogWrapper").find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+
+		if (game.phase == 2){
+			this.autoDoFireOrders();
+		}
 	}
 	
 	this.createCritLogEntries = function(){

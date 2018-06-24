@@ -234,13 +234,15 @@ class System {
 		//Debug::log("determineCrit for ".get_class($this)." #".$this->id." on unit #".$this->parentId.", new: ".$new."%, old: ".$old."%");
 
 		$trigger = 80;
+		$bonus = 0;
 
 		$dmg = floor($new + $old);
 		if ($new > $trigger){
-			$chance = 40;
-			$min = floor($chance * (1+($dmg - $trigger)/(100 - $trigger)));
-			$roll = mt_rand(0, 120);
+			$chance = 30;
+			$min = floor($chance * (1+($new - $trigger)/(100 - $trigger)));
+			$roll = mt_rand(0, 100);
 			if ($roll < $min){
+				$bonus += 20;
 				$this->crits[] = new Crit(
 					sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 1, 0, 1
 				);
@@ -250,9 +252,8 @@ class System {
 		$mod = $this->getCritModMax($new + $old);
 		if ($mod < 5){return;}
 
-		$bonus = 0;
 		for ($i = 0; $i < sizeof($effects); $i++){
-			$roll = mt_rand(0, 120 + $bonus);
+			$roll = mt_rand(0, 100) + $bonus;
 
 			if ($roll < $dmg){
 				$bonus += 20;

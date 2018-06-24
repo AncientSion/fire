@@ -386,7 +386,7 @@ function instruct(text){
         $handle
             .css('cursor', options.cursor)
             .on("mousedown", function(e){
-    			console.log("drag");
+    			//console.log("drag");
             	if (e.button == 2){return;}
                 e.preventDefault();
                 e.stopPropagation();

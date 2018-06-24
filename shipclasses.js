@@ -3239,7 +3239,7 @@ Ship.prototype.getLockEffect = function(target){
 
 	if (target.ship || target.squad){
 		multi = 0.5;
-		multi += (0.8 / 10 * this.traverse);
+		multi += (0.6 / 10 * this.traverse);
 	}
 	else if (target.flight){
 		multi = 1.5;
@@ -3277,7 +3277,7 @@ Ship.prototype.getMaskEffect = function(shooter){
 
 	if (shooter.ship || shooter.squad){
 		multi = 0.5;
-		multi += (0.8 / 10 * this.traverse);
+		multi += (0.6 / 10 * this.traverse);
 	}
 	else if (shooter.flight){
 		return 0;

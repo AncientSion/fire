@@ -917,7 +917,7 @@ class Ship {
 
 	public function getLockEffect($target){
 		if ($target->ship || $target->squad){
-			return 0.5 + (0.08 * $this->traverse);
+			return 0.5 + (0.06 * $this->traverse);
 		}
 		else if ($target->flight){
 			return 1.5;
@@ -929,7 +929,7 @@ class Ship {
 
 	public function getMaskEffect($target){
 		if ($target->ship || $target->squad){
-			return 0.5 + (0.08 * $this->traverse);
+			return 0.5 + (0.06 * $this->traverse);
 		}
 		else if ($target->flight){
 			return 0;

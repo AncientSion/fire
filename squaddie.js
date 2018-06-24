@@ -59,7 +59,7 @@ Squaddie.prototype.hideSysDiv = function(){
 }
 
 Squaddie.prototype.getSysDiv = function(){
-	console.log("ding");
+	//console.log("ding");
 
 	var div = 
 		$("<div>").attr("id", "sysDiv")

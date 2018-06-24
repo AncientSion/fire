@@ -804,6 +804,7 @@ System.prototype.setFireOrder = function(targetid, pos){
 	this.selected = 0;
 	this.validTarget = 0;
 	this.highlight = 0;
+	this.odds = 0;
 	this.setSystemBorder();
 }
 
@@ -1894,7 +1895,6 @@ Weapon.prototype.addLogStartEntry = function(log, fire){
 		var startRow = $(this).data("start");
 		var endRow = $(this).data("end");
 		var rows = $("#combatLog").find("tbody").children();
-		console.log("ding");
 
 		if ($(this).data("expanded") == 1){
 			$(this).data("expanded", 0).removeClass("selected");
@@ -1903,11 +1903,31 @@ Weapon.prototype.addLogStartEntry = function(log, fire){
 			}
 		}
 		else {
+			//console.log(ui.combatLogWrapper.find("#combatLogInnerWrapper")[0].scrollHeight)
 			$(this).data("expanded", 1).addClass("selected");
 			for (var i = startRow; i <= endRow; i++){
 				$(rows[i]).show().addClass("selected");
+				//console.log($(rows[i]).scrollTop())
 			}
+			//console.log(ui.combatLogWrapper.find("#combatLogInnerWrapper")[0].scrollHeight)
+			//ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+			//ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return 100});
 		}
+
+
+
+		var tableHeight = 10;
+		for (var i = 0; i < endRow; i++){
+			if ($(rows[i]).is(":visible")){tableHeight += 22;}
+		}
+
+		//var cur = $("#combatLog").prop("scrollHeight")
+		var h = $("#combatLog").height();
+		//console.log(cur);
+		//console.log(h);
+		//console.log(tableHeight);
+		ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return tableHeight - 250 + 22});
+
 	})
 
 
@@ -2642,6 +2662,9 @@ Particle.prototype.getAnimation = function(fire){
 
 	if (fire.dist == 0){
 		speed /= 2;
+	}
+	else if (fire.dist < 150){
+		speed /= 3;
 	}
 
 

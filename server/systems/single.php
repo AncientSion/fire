@@ -191,7 +191,6 @@ class Single {
 			Debug::log("chance: ".$min.", roll: ".$roll);
 			if ($roll < $min){
 				$this->doDropout();
-				return;
 			}
 		}
 	}
