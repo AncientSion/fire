@@ -371,6 +371,9 @@
 			$unit;
 			$id;
 
+			$ship = new Hyperion();
+			Debug::log("ding");
+
 			for ($i = 0; $i < sizeof($units); $i++){
 				//Debug::log("checking!");
 
