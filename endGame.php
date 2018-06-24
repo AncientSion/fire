@@ -1,6 +1,6 @@
 <?php
 
-	include_once 'global.php';
+	include_once $_SERVER["DOCUMENT_ROOT"]."/fire/global.php";
 
 	$gameid = $_GET["gameid"];
 	$gameid = 2;

@@ -1832,7 +1832,6 @@
 			$unit = new $get["name"]($get["index"]+1, 1);
 			$unit->setSubunitState(0, 0);
 		}
-
 		
 		return $unit;
 	}
