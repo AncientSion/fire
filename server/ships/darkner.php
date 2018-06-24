@@ -49,7 +49,7 @@ class Darkner extends Light {
 	public $role = "Ballistic Support Frigate";
 	public $faction = "Centauri Republic";
 	public static $value =  180;
-	public $mass = 1400;
+	public $mass = 1200;
 
 	public $integrity = 370;
 	public $ep = 80;

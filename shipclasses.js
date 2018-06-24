@@ -2477,68 +2477,7 @@ Ship.prototype.expandDiv = function(div){
 	var conWidth = structContainer.width();
 	var conHeight = structContainer.height();
 
-	// PRIMARY
-	var primaryDiv = document.createElement("div");
-		primaryDiv.className = "primaryDiv";
-	var primaryTable = document.createElement("table");
-		primaryTable.className = "PrimaryTable";
-		primaryTable.appendChild(this.primary.getTableData());
-
-		var systems = 0;
-		var max = 2;
-		primaryTable.childNodes[0].childNodes[0].colSpan = max;
-
-		for (var i = 0; i < this.primary.systems.length; i++){
-			if (systems == 0){
-				var tr = document.createElement("tr");
-			}
-
-			var td = this.primary.systems[i].getTableData(false);
-				td = this.attachEvent(td);
-
-			if (this.id > 0 || game.turn == 1){
-				var boostDiv = this.primary.systems[i].getBoostDiv();
-				if (boostDiv){td.appendChild(boostDiv)};
-
-				var powerDiv = this.primary.systems[i].getPowerDiv();
-				if (powerDiv){
-					td.appendChild(powerDiv);
-				}
-				var modeDiv =this.primary.systems[i].getModeDiv();
-				if (modeDiv){
-					td.appendChild(modeDiv);
-				}
-			}
-
-			systems++;
-			tr.appendChild(td);
-
-
-			if (systems == max || i == this.primary.systems.length-1 ){
-				primaryTable.appendChild(tr);
-				systems = 0;
-			}
-		}
-
-	// PRIMARY OFFSET
-	var offsetX = 0;
-	var offsetY = -50;
-	if (noFront){
-		offsetY -= 40;
-	} else if (noAft){
-		offsetY += 20;
-	}
-
-	primaryDiv.appendChild(primaryTable);
-	structContainer.append(primaryDiv);
-	var w = $(primaryDiv).width();
-	var h = $(primaryDiv).height();
-	var primX = conWidth/2 - w/2;
-	var primY = conHeight/2 - h/2 + offsetY
-	$(primaryDiv)
-		.css("left", primX)
-		.css("top", primY);
-
+	var globalShiftY = 0;
 
 
 	// OUTER STRUCTS
@@ -2677,6 +2616,8 @@ Ship.prototype.expandDiv = function(div){
 		if (a == 0){
 			if (!noAft && this.structures[i].systems.length <= 3){
 				offsetY += 10;
+			} else if (this.structures[i].systems.length > 6){
+				globalShiftY = 5;
 			}
 		}
 		else if (noAft){
@@ -2685,6 +2626,7 @@ Ship.prototype.expandDiv = function(div){
 		}
 		else if (a == 180){
 			if (noFront){offsetY -= 20;}
+			else if (globalShiftY){offsetY -= 20;}
 			else offsetY -= 40;
 		}
 		else if (sides >= 2 && a-90 != 0 && a-90 != 180){
@@ -2699,6 +2641,79 @@ Ship.prototype.expandDiv = function(div){
 			.css("left", pos.x + -w/2)
 			.css("top", pos.y + offsetY)
 	}
+
+
+
+
+
+
+	// PRIMARY
+	var primaryDiv = document.createElement("div");
+		primaryDiv.className = "primaryDiv";
+	var primaryTable = document.createElement("table");
+		primaryTable.className = "PrimaryTable";
+		primaryTable.appendChild(this.primary.getTableData());
+
+		var systems = 0;
+		var max = 2;
+		primaryTable.childNodes[0].childNodes[0].colSpan = max;
+
+		for (var i = 0; i < this.primary.systems.length; i++){
+			if (systems == 0){
+				var tr = document.createElement("tr");
+			}
+
+			var td = this.primary.systems[i].getTableData(false);
+				td = this.attachEvent(td);
+
+			if (this.id > 0 || game.turn == 1){
+				var boostDiv = this.primary.systems[i].getBoostDiv();
+				if (boostDiv){td.appendChild(boostDiv)};
+
+				var powerDiv = this.primary.systems[i].getPowerDiv();
+				if (powerDiv){
+					td.appendChild(powerDiv);
+				}
+				var modeDiv = this.primary.systems[i].getModeDiv();
+				if (modeDiv){
+					td.appendChild(modeDiv);
+				}
+			}
+
+			systems++;
+			tr.appendChild(td);
+
+
+			if (systems == max || i == this.primary.systems.length-1 ){
+				primaryTable.appendChild(tr);
+				systems = 0;
+			}
+		}
+
+	// PRIMARY OFFSET
+	var offsetX = 0;
+	var offsetY = -50;
+	if (noFront){
+		offsetY -= 40;
+	} else if (noAft){
+		offsetY += 20;
+	} else offsetY += globalShiftY *4;
+
+	primaryDiv.appendChild(primaryTable);
+	structContainer.append(primaryDiv);
+	var w = $(primaryDiv).width();
+	var h = $(primaryDiv).height();
+	var primX = conWidth/2 - w/2;
+	var primY = conHeight/2 - h/2 + offsetY
+	$(primaryDiv)
+		.css("left", primX)
+		.css("top", primY);
+
+
+
+
+
+
 
 	var width = 0;
 	var height = 0;

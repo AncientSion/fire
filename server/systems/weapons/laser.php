@@ -235,6 +235,29 @@ class NeutronLaser extends Laser {
 	}
 }
 
+class HeavyAntimatterBeamProjector extends Laser {
+	public $name = "HeavyAntimatterBeamProjector";
+	public $display = "Heavy Antimatter Beam Projector";
+	public $animColor = "#ffeb3e";
+	public static $prio = 0;
+	public $beamWidth = 4;
+	public $minDmg = 265;
+	public $maxDmg = 335;
+	public $optRange = 1000;
+	public $dmgLoss = 2;
+	public $accDecay = 50;
+	public $shots = 1;
+	public $reload = 4;
+	public $powerReq = 12;
+	public $rakes = 4;
+	public $integrity = 62;
+	public $traverse = 1;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+	}
+}
+
 class MolecularSlicer extends Laser {
 	public $name = "MolecularSlicer";
 	public $display = "Molecular Slicer";
