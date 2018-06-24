@@ -372,9 +372,9 @@
 			$id;
 
 			if (class_exists("Hyperion")){
-				Debug::log("does!")
+				Debug::log("does!");
 			} else Debug::log("does n ot!");
-			
+
 			for ($i = 0; $i < sizeof($units); $i++){
 				//Debug::log("checking!");
 				if ($units[$i]["command"]){
