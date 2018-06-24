@@ -372,16 +372,17 @@
 			$id;
 
 			for ($i = 0; $i < sizeof($units); $i++){
-				Debug::log("checking!");
+				//Debug::log("checking!");
 				if ($units[$i]["command"]){
-					Debug::log("found!");
+					Debug::log("found! ".$units[$i]["name"]);
 					$id = $units[$i]["id"];
 					$unit = new $units[$i]["name"]();
 					Debug::log("created!");
 					break;
-				} else Debug::log("nope!");
+				}// else Debug::log("nope!");
 			}
 
+			Debug::log("post");
 			$sql = "UPDATE units SET command = 1 WHERE id = ".$id;
 			Debug::log($sql);
 			$rows = $this->update($sql);
