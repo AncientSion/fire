@@ -1882,7 +1882,7 @@ Weapon.prototype.addLogStartEntry = function(log, fire){
 		for (var i = 0; i < game.fireOrders.length; i++){
 			if (game.fireOrders[i].id == $(this).data("fireid")){
 				game.fireOrders[i].animating = 0;
-				break;;;
+				break;
 			}
 		}
 
