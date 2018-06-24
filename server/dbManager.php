@@ -371,31 +371,18 @@
 			$unit;
 			$id;
 
-			$ship = new Hyperion();
-			Debug::log("ding");
-
 			for ($i = 0; $i < sizeof($units); $i++){
-				//Debug::log("checking!");
-
-				if (class_exists($units[$i]["name"])){
-					Debug::log("does!");
-				} else Debug::log("does not!");
-
 				if ($units[$i]["command"]){
-					Debug::log("found! ".$units[$i]["name"]);
 					$id = $units[$i]["id"];
-					$name = $units[$i]["name"];
-					$unit = new $name();
-					Debug::log("created!");
+					$unit = new $units[$i]["name"]();
+					//Debug::log("created!");
 					break;
-				}// else Debug::log("nope!");
+				}
 			}
 
-			Debug::log("post");
 			$sql = "UPDATE units SET command = 1 WHERE id = ".$id;
-			Debug::log($sql);
 			$rows = $this->update($sql);
-			Debug::log("Command set, rows updates: ".$rows);
+			//Debug::log("Command set, rows updates: ".$rows);
 
 
 			$gd = $this->getGameDetails($gameid);
