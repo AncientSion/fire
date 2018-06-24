@@ -373,6 +373,7 @@
 
 			for ($i = 0; $i < sizeof($units); $i++){
 				if ($units[$i]["command"]){
+					Debug::log("ding: ".$units[$i]["name"]);
 					$id = $units[$i]["id"];
 					$unit = new $units[$i]["name"]();
 					//Debug::log("created!");
@@ -382,7 +383,7 @@
 
 			$sql = "UPDATE units SET command = 1 WHERE id = ".$id;
 			$rows = $this->update($sql);
-			//Debug::log("Command set, rows updates: ".$rows);
+			Debug::log("Command set, rows updates: ".$rows);
 
 
 			$gd = $this->getGameDetails($gameid);

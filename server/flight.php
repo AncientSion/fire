@@ -13,8 +13,8 @@ class Flight extends Mixed {
 	public $traverse = -3;
 	public $baseImpulse = 1000;
 
-	function __construct($data){
-		parent::__construct($data);
+	function __construct($data = false){
+        parent::__construct($data);
 	}
 
 	public function setMass(){

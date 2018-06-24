@@ -8,8 +8,8 @@ class Mixed extends Ship {
 	public $profile = 0;
 	public $mission = array();
 
-	function __construct($data){
-		parent::__construct($data);
+	function __construct($data = false){
+        parent::__construct($data);
 	}
 	
 	public function addAllSystems(){

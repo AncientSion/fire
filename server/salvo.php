@@ -8,8 +8,8 @@ class Salvo extends Mixed {
 	public $missile = false;
 	public $torpedo = false;
 
-	function __construct($data){
-		parent::__construct($data);
+	function __construct($data = false){
+        parent::__construct($data);
 	}
 
 	public function addSubUnits($elements){

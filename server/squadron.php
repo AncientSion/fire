@@ -16,8 +16,8 @@ class Squadron extends Ship {
 	public $slots = array(0, 10);
 	public $baseFocusRate = 6;
 
-	function __construct($data){
-		parent::__construct($data);
+	function __construct($data = false){
+        parent::__construct($data);
 	}
 	
 	public function addAllSystems(){
