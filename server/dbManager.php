@@ -376,7 +376,8 @@
 				if ($units[$i]["command"]){
 					Debug::log("found! ".$units[$i]["name"]);
 					$id = $units[$i]["id"];
-					$unit = new $units[$i]["name"]();
+					$name = $units[$i]["name"]);
+					$unit = new $name();
 					Debug::log("created!");
 					break;
 				}// else Debug::log("nope!");
