@@ -65,6 +65,7 @@ class Ship {
 	public $power = 0;
 
 	function __construct($data = false){
+		Debug::log("constructing!");
 		if (!$data){return;}
 		$this->id = $data["id"];
 		$this->userid = $data["userid"];
