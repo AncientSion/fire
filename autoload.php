@@ -207,8 +207,8 @@ spl_autoload_register(
         }
 
 
-        if(class_exists("Omega", false)) {
-            echo  ("yes!");
-        } else ("no!");
+       // if(class_exists("Omega", false)) {
+       //     echo  ("yes!");
+      //  } else ("no!");
     }
 );
