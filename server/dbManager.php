@@ -372,6 +372,7 @@
 			$id;
 
 			for ($i = 0; $i < sizeof($units); $i++){
+				Debug::log("checking!");
 				if ($units[$i]["command"]){
 					$id = $units[$i]["id"];
 					$unit = new $units[$i]["name"]();
