@@ -3645,7 +3645,7 @@ Game.prototype.showFocusInfo = function(userid){
 			)
 			.append($("<tr>")
 				.append($("<td>").html("Flagship Officer Modifiers"))
-				.append($("<td>").html("+" + command.getCrewEffect() * command.getCrewLevel() + "%"))
+				.append($("<td>").html("+" + (command ? (command.getCrewEffect() * command.getCrewLevel() + "%") : "0%")) 
 			)
 			.append($("<tr>")
 				.append($("<td>").html("Flagship Crit Modifiers"))
