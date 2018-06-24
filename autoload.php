@@ -205,5 +205,10 @@ spl_autoload_register(
         if (isset($classes[$cn])) {
             require __DIR__ . $classes[$cn];
         }
+
+
+        if(class_exists("Omega", false)) {
+            Debug::log("yes!");
+        } else Debug::log("no!");
     }
 );
