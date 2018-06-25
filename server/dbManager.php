@@ -607,7 +607,7 @@
 		}
 
 		public function insertLoads($userid, $gameid, &$units){
-			//Debug::log("insertLoads: ".sizeof($units));
+			Debug::log("insertLoads: ".sizeof($units));
 			$stmt = $this->connection->prepare("
 				INSERT INTO loads 
 					(shipid, systemid, name, amount)
@@ -631,9 +631,11 @@
 
 						$stmt->execute();
 						if ($stmt->errorCode() == 0){
+							//Debug::log("success!");
 							continue;
 						}
 						else {
+							//Debug::log("breaking!");
 							return false;
 						}
 					}

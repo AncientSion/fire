@@ -2633,7 +2633,7 @@ Particle.prototype.getAnimation = function(fire){
 	var allAnims = [];
 	var grouping = 2;
 	var speed = this.projSpeed;
-	var gunDelay = 40;
+	var gunDelay = 30;
 	var shotDelay = 8;
 	//if (this.name == "MediumParticle"){shotDelay = 10;}
 	//else if (this.name == "LightParticle"){gunDelay = 15;}
@@ -2656,7 +2656,7 @@ Particle.prototype.getAnimation = function(fire){
 
 
 	if (linked){
-		gunDelay = 20;
+		gunDelay = 10;
 		shotDelay = 0;
 	}
 

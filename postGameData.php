@@ -3,6 +3,7 @@ include_once $_SERVER["DOCUMENT_ROOT"]."/fire/global.php";
 
 $manager;
 $dbManager;
+//return;
 
 if (isset($_POST["type"])) {
 	$dbManager = DBManager::app();
