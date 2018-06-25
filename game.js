@@ -3307,7 +3307,7 @@ Game.prototype.initialPhaseResolutionDone = function(){
 	}
 
 	if (newUnit){
-		game.unitSelector.empty();
+		ui.unitSelector.empty();
 		this.timeout = setTimeout(function(){
 			game.initSelectionWrapper();
 		})
