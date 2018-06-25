@@ -37,7 +37,7 @@ class Flight extends Mixed {
 			$this->baseImpulse = min($this->baseImpulse, $this->structures[$i]->baseImpulse);
 		}
 
-		if (!isset($this->mission) || !sizeof($this->mission)){return;}
+		if (!isset($this->mission) || !sizeof($this->structures)){return;}
 
 		$elapsed = 1;
 
