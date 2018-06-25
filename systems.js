@@ -3580,7 +3580,7 @@ Launcher.prototype.updateLauncherDiv = function(index){
 
 Launcher.prototype.getImpulseString = function(){
 	if (this.loads[this.ammo].missile){
-		return ("adds " + this.loads[this.ammo].baseImpulse + "px / Turn");
+		return ("+" + this.loads[this.ammo].baseImpulse + "px / Turn");
 	}
 	else return ("flat " + this.loads[this.ammo].baseImpulse + "px / Turn");
 }

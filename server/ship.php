@@ -205,7 +205,7 @@ class Ship {
 
 		$this->morale = new Morale(
 			floor($this->primary->remaining / $this->primary->integrity * 100),
-			$command->getCrewEffect() * $command->getCrewLevel(),
+			$command->getCrewEffect()*-2 * $command->getCrewLevel(),
 			$command->getCritMod("Output", $turn)
 		);
 	}
