@@ -573,7 +573,7 @@
 		$this->handleJumpInActions();
 		$this->resolveJumpOutActions();
 		$this->handleInitialFireOrders();
-		$this->assemblDeployStates();
+		$this->assembleDeployStates();
 		$this->deleteAllReinforcements();
 		DBManager::app()->deleteEmptyLoads($this->gameid);
 	}
@@ -904,8 +904,8 @@
 		}
 	}
 
-	public function assemblDeployStates(){
-		Debug::log("assemblDeployStates");
+	public function assembleDeployStates(){
+		Debug::log("assembleDeployStates");
 		$states = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->available != $this->turn){continue;}

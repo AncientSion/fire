@@ -1188,6 +1188,7 @@
 				DELETE from actions
 				WHERE shipid = :shipid
 				AND turn = :turn
+				AND resolved = 0
 			");
 
 			for ($i = 0; $i < sizeof($units); $i++){

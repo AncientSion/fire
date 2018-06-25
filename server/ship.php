@@ -360,7 +360,9 @@ class Ship {
 		$delay = $this->remDelay;
 		$facing = $this->facing;
 		for ($i = 0; $i < sizeof($this->actions); $i++){
+			//Debug::log("checking");
 			if ($this->actions[$i]->turn < $turn){continue;}
+			//Debug::log("adding");
 			if ($delay && $this->actions[$i]->type == "move"){
 				$delay = max(0, $delay - $this->actions[$i]->dist);
 			} else if ($this->actions[$i]->type == "turn"){
@@ -383,7 +385,7 @@ class Ship {
 			$facing += 360;
 		}
 
-		//Debug::log("getMoveState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$facing);
+		Debug::log("getMoveState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$facing);
 
 		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "facing" => $facing, "thrust" => $this->curImp, "rolling" => $this->rolling, "rolled" => $this->rolled, "flipped" => $this->flipped);
 	}
