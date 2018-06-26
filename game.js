@@ -967,8 +967,8 @@ function Game(data){
 						this.ships[i].setPatrolLayout();
 						this.ships[i].setPatrolImage();
 					}
-					this.ships[i].setImage();
 				}
+				this.ships[i].setImage();
 			}
 			else if ((this.ships[i].ship || this.ships[i].squad) && this.animShip){
 				//if (this.ships[i].focus){console.log("ding")}
