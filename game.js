@@ -1093,7 +1093,7 @@ function Game(data){
 		this.createPlaceHolderEntry();
 		this.createEndEntry("-- Fire Events concluded --");
 
-		$("#combatLogWrapper").find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+		ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 
 		if (game.phase == 2){
 			this.autoIssueFireOrders();
@@ -2053,7 +2053,7 @@ function Game(data){
 		this.getFireAnimationDetails();
 		this.getAllUnitExplos();
 
-		$("#combatLogWrapper")
+		ui.combatLogWrapper
 			.find("#combatLogInnerWrapper").find("#combatLog")
 				.append($("<tr>")
 					.append($("<td>").attr("colSpan", 9).css("font-size", 18).html("Event Log")))
@@ -2079,8 +2079,8 @@ function Game(data){
 		this.getFireAnimationDetails();	
 		this.getAllUnitExplos();
 
-		//$("#combatLogWrapper").css("top", 0).show();
-		this.doPositionLog("Combat Log", 800);
+		//ui.combatLogWrapper.css("top", 0).show();
+		this.doPositionLog(false, 800);
 
 		this.setFireGlobals();
 
@@ -2503,7 +2503,7 @@ function Game(data){
 						}
 					)
 				)
-		$("#combatLogWrapper").find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+		ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 	}
 
 	this.initIncomingTable = function(){
@@ -3202,8 +3202,13 @@ Game.prototype.doPositionLog = function(html, length){
 		top = 80;
 	}
 
-	$("#combatLogWrapper").show()
+	ui.combatLogWrapper
+		.show()
 		.width(length).css("top", top).css("left", left)
+
+	if (!html){return;}
+
+	ui.combatLogWrapper
 		.find(".combatLogHeader").html(html).end()
 		.find("#combatLog").children().children().remove();
 }
