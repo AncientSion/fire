@@ -3046,7 +3046,7 @@ Ship.prototype.setPreFireImage = function(){
 
 Ship.prototype.setSupportImage = function(){
 	//console.log("setSupportImage #" + this.id);
-	if (!this.doDraw){return;}
+	if (!this.doDraw){return;})
 	var friendlies = [];
 	var hostiles = [];
 	var friendly = [];
@@ -3065,7 +3065,7 @@ Ship.prototype.setSupportImage = function(){
 		var add = 0;
 
 		//if (!u.doDraw){continue;}
-		 if (this.ship || this.squad){add = 1;}
+		if (this.ship || this.squad){add = 1;}
 		else if (u.salvo && u.mission.arrived && u.mission.targetid == this.id){add = 1;}
 		else if (!this.ship && !this.mission.arrived && u.mission.arrived && u.mission.targetid == this.id){add = 1;}
 

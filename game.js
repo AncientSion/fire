@@ -967,8 +967,8 @@ function Game(data){
 						this.ships[i].setPatrolLayout();
 						this.ships[i].setPatrolImage();
 					}
+					this.ships[i].setImage();
 				}
-				this.ships[i].setImage();
 			}
 			else if ((this.ships[i].ship || this.ships[i].squad) && this.animShip){
 				//if (this.ships[i].focus){console.log("ding")}
@@ -995,7 +995,8 @@ function Game(data){
 
 		if (game.phase == 2){
 			for (var i = 0; i < this.ships.length; i++){
-				if (this.ships[i].ship || this.ships[i].squad){this.ships[i].setSupportImage();}
+				//if (this.ships[i].ship || this.ships[i].squad){this.ships[i].setSupportImage();}
+				this.ships[i].setSupportImage();
 				this.ships[i].getAttachDivs();
 			}
 		}
