@@ -1022,13 +1022,13 @@ function Game(data){
 			this.drawingEvents = 1;
 			this.draw();
 			if (game.phase == 2){
-				this.autoDoFireOrders();
+				this.autoIssueFireOrders();
 			}
 		}
 	}
 
-	this.autoDoFireOrders = function(){
-		console.log("autoDoFireOrders");
+	this.autoIssueFireOrders = function(){
+		console.log("autoIssueFireOrders");
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (!this.ships[i].friendly || !this.ships[i].flight){continue;}
@@ -1038,7 +1038,7 @@ function Game(data){
 
 			for (var j = 0; j < this.ships[i].cc.length; j++){
 				var unit = game.getUnit(this.ships[i].cc[j]);
-				if (unit.friendly){continue;}
+				if (unit.friendly || unit.salvo){continue;}
 				hostiles.push(unit);
 			}
 
@@ -1096,7 +1096,7 @@ function Game(data){
 		$("#combatLogWrapper").find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 
 		if (game.phase == 2){
-			this.autoDoFireOrders();
+			this.autoIssueFireOrders();
 		}
 	}
 	
