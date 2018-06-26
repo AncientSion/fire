@@ -3046,7 +3046,7 @@ Ship.prototype.setPreFireImage = function(){
 
 Ship.prototype.setSupportImage = function(){
 	//console.log("setSupportImage #" + this.id);
-	if (!this.doDraw){return;})
+	if (!this.doDraw){return;}
 	var friendlies = [];
 	var hostiles = [];
 	var friendly = [];
