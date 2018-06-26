@@ -3154,6 +3154,7 @@ Game.prototype.getFireDistance = function(a, b){
 Game.prototype.resolveDeploy = function(){
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships[i].deployed = true;
+		if (this.ships[i].flight || this.ships[i].salvo){continue;}
 		if (this.ships[i].available == this.turn){
 			this.ships[i].deployAnim = [0, game.animData.jump];
 			this.ships[i].deployed = false;
