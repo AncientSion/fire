@@ -1713,6 +1713,8 @@ function Game(data){
 			this.drawMixedMoves();
 		}
 		this.draw();
+		this.drawAllEW();
+
 		//game.drawShipOverlays();
 	}
 
@@ -2074,7 +2076,8 @@ function Game(data){
 		this.getFireAnimationDetails();	
 		this.getAllUnitExplos();
 
-		$("#combatLogWrapper").css("top", 0).show();
+		//$("#combatLogWrapper").css("top", 0).show();
+		this.doPositionLog("Combat Log", 800);
 
 		this.setFireGlobals();
 
@@ -2985,6 +2988,22 @@ Game.prototype.drawShipOverlays = function(){
 				this.ships[i].drawEW();
 			}
 		}
+	}
+}
+
+Game.prototype.toggleDrawSensor = function(friendly){
+	this.drawSensor = !this.drawSensor;
+	this.drawAllEW();
+}
+
+Game.prototype.drawAllEW = function(){
+	if (this.animating || this.sensorMode || !this.drawSensor){return;}
+
+	salvoCtx.clearRect(0, 0, res.x, res.y);
+	for (var i = 0; i < this.ships.length; i++){
+		if (this.ships[i].flight || this.ships[i].salvo || !this.ships[i].deployed){continue;}
+		//if (this.ships[i].friendly != friendly){continue;}
+		this.ships[i].getSystemByName("Sensor").drawEW();
 	}
 }
 

@@ -545,10 +545,10 @@
 					game.toggleUI();
 				}
 				else if (e.keyCode == 113){ // q - show friendly sensor
-					game.drawAllSensorSettings(1);
+					game.toggleDrawSensor(1);
 				}
 				else if (e.keyCode == 119){ // w - show hostile sensor
-					game.drawAllSensorSettings(0);
+					game.toggleDrawSensor(0);
 				}
 				else if (e.keyCode == 32){ // space - dist logger
 					game.toggleDistMeter();

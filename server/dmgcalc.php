@@ -316,13 +316,29 @@ class DmgCalc {
 
 		if ($fire->target->ship){
 			$fire->hits--;
-			$subDmg = floor($totalDmg  / 100 * $fire->weapon->flashDiv[1] / sizeof($targets));
-			Debug::log("VS SHIP ".$subDmg."dmg ea");
-			for ($i = 0; $i < sizeof($targets); $i++){
-				$dmgs[] = $subDmg;
+
+			$coreDmg = floor($totalDmg / 100 * $fire->weapon->flashDiv[0]); // 160
+			$systemDmg = floor($totalDmg / 100 * $fire->weapon->flashDiv[1]); // 80
+			$allSystems = sizeof($fire->target->getStruct($fire->section)->systems); // 3
+
+			if (sizeof($targets)){
+				$subDmg = floor($systemDmg / $allSystems);
+				$overflow = $subDmg * ($allSystems - sizeof($targets));
+				$coreDmg += $overflow;
+
+				Debug::log("VS SHIP systems ".$subDmg." dmg ea, overflow to core: ".$overflow);
+				for ($i = 0; $i < sizeof($targets); $i++){
+					$dmgs[] = $subDmg;
+				}
+			} 
+			else {
+				$coreDmg += $systemDmg;
+				Debug::log("full overflow");
 			}
+
+
 			$targets[] = $fire->target->primary;
-			$dmgs[] = floor($totalDmg / 100 * $fire->weapon->flashDiv[0]);
+			$dmgs[] = floor($coreDmg);
 			Debug::log("VS SHIP, struct: ".$dmgs[sizeof($dmgs)-1]."dmg");
 		}
 		else {		

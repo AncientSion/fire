@@ -83,8 +83,8 @@ class Weapon extends System {
 
 		$html = "<u>Ship</u></br>";
 		$html .= $this->dmgs[3]." (+".floor($this->dmgs[3]*0.5)." per target size) damage</br>";
+		$html .= $this->flashDiv[1]."% evenly divided directed towards each facing system. Overkill fully applies.</br>";
 		$html .= $this->flashDiv[0]."% directed towards main structure</br>";
-		$html .= $this->flashDiv[1]."% evenly divided directed towards each facing system. Overkill applies.</br>";
 	
 		$this->notes[] = $html;
 		$this->maxDmg = $this->dmgs[3];
