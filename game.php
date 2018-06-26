@@ -72,10 +72,10 @@
 			</div>
 		</div>
 		<div class="optionsWrapper">
-			<div class="options">
+			<div class="options drawFriendlyEW">
 				<img src=sysIcons/Sensor.png style="background-color: green">
 			</div>
-			<div class="options">
+			<div class="options drawHostileEW">
 				<img src=sysIcons/Sensor.png style="background-color: red">
 			</div>
 			<div class="options drawMoves">
@@ -538,22 +538,22 @@
 				else return;
 			}
 			else if (game){
-				if (e.keyCode == 101){ // e - disable unit circle
+				if (e.keyCode == 101){ // e
 					game.toggleDrawMovePaths();
 				}
-				if (e.keyCode == 117){ // u - disable movement UI
+				if (e.keyCode == 117){ // u
 					game.toggleUI();
 				}
-				else if (e.keyCode == 113){ // q - show friendly sensor
-					game.toggleDrawSensor(1);
+				else if (e.keyCode == 113){ // q
+					game.toggleFriendlyEW();
 				}
-				else if (e.keyCode == 119){ // w - show hostile sensor
-					game.toggleDrawSensor(0);
+				else if (e.keyCode == 119){ // w
+					game.toggleHostileEW();
 				}
-				else if (e.keyCode == 32){ // space - dist logger
+				else if (e.keyCode == 32){ // space
 					game.toggleDistMeter();
 				}
-				else if (e.keyCode == 102){ // f, cancel fire animation
+				else if (e.keyCode == 102){ // f
 					if (game.phase != 3 || !game.animating){return;}
 
 					game.animating = false;

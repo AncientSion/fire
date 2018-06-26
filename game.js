@@ -46,6 +46,8 @@ function Game(data){
 	this.canConfirm = 1;
 	this.drawCircle = 1;
 	this.drawMoves = 1;
+	this.showFriendlyEW = 0;
+	this.showHostileEW = 0;
 	this.snapTurn = 0;
 	this.events = [];
 	this.wave = data.wave;
@@ -2822,15 +2824,21 @@ Game.prototype.initOptionsUI = function(){
 		$(this).mousedown(function(e){e.preventDefault();});
 		if (i == 0){
 			$(this).hover(
-				function(){game.drawAllSensorSettings(1);},
+				function(){game.drawFriendlyEW();},
 				function(){game.redraw();}
 			)
+			$(this).click(function(){
+				game.toggleFriendlyEW();
+			})
 		}
 		else if (i == 1){
 			$(this).hover(
-				function(){game.drawAllSensorSettings(0);},
+				function(){game.drawHostileEW();},
 				function(){game.redraw();}
 			)
+			$(this).click(function(){
+				game.toggleHostileEW();
+			})
 		}
 		else if (i == 2){
 			$(this).click(function(){game.toggleDrawMovePaths();})
@@ -2991,83 +2999,46 @@ Game.prototype.drawShipOverlays = function(){
 	}
 }
 
-Game.prototype.toggleDrawSensor = function(friendly){
-	this.drawSensor = !this.drawSensor;
+Game.prototype.toggleFriendlyEW = function(){
+	this.showFriendlyEW = !this.showFriendlyEW;
+	$(".optionsWrapper .drawFriendlyEW").toggleClass("selected");
+	salvoCtx.clearRect(0, 0, res.x, res.y);
+	this.drawAllEW();
+}
+
+Game.prototype.toggleHostileEW = function(){
+	this.showHostileEW = !this.showHostileEW;
+	$(".optionsWrapper .drawHostileEW").toggleClass("selected");
+	salvoCtx.clearRect(0, 0, res.x, res.y);
 	this.drawAllEW();
 }
 
 Game.prototype.drawAllEW = function(){
-	if (this.animating || this.sensorMode || !this.drawSensor){return;}
-
-	salvoCtx.clearRect(0, 0, res.x, res.y);
+	if (this.animating || this.sensorMode){return;}
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].flight || this.ships[i].salvo || !this.ships[i].deployed){continue;}
-		//if (this.ships[i].friendly != friendly){continue;}
+		if (this.ships[i].friendly && !this.showFriendlyEW){continue;}
+		if (!this.ships[i].friendly && !this.showHostileEW){continue;}
 		this.ships[i].getSystemByName("Sensor").drawEW();
 	}
 }
 
-Game.prototype.drawAllSensorSettings = function(friendly){
-	if (game.animating || game.sensorMode){return;}
-
-	salvoCtx.clearRect(0, 0, res.x, res.y);
+Game.prototype.drawFriendlyEW = function(){
+	if (this.animating || this.sensorMode){return;}
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].flight || this.ships[i].salvo || !this.ships[i].deployed){continue;}
-		if (this.ships[i].friendly != friendly){continue;}
-		
-		var sensor = this.ships[i].getSystemByName("Sensor");
-		if (!sensor.ew.length){continue;}
-		var loc = this.ships[i].getPlannedPos();
-		var facing = this.ships[i].getPlannedFacing();
-		var ew = sensor.ew[sensor.ew.length-1];
-		var str = sensor.getOutput();
-		var d = ew.dist;
-		var a = ew.angle;
-		var w;
-		if (ew.angle == -1){
-			w = 180;
-		}
-		else w = Math.min(180, game.const.ew.len * Math.pow(str/ew.dist, game.const.ew.p));
+		if (!this.ships[i].friendly){continue;}
+		this.ships[i].getSystemByName("Sensor").drawEW();
+	}
+}
 
-		salvoCtx.translate(cam.o.x, cam.o.y)
-		salvoCtx.scale(cam.z, cam.z)
-		salvoCtx.beginPath();
-		var color = "";
-		switch (sensor.ew[sensor.ew.length-1].type){
-			case 0: color = "red"; break;
-			case 1: color = "blue"; break;
-		}
-
-		//salvoCtx.clearRect(0, 0, res.x, res.y);
-		//salvoCtx.translate(cam.o.x, cam.o.y);
-		//salvoCtx.scale(cam.z, cam.z);
-
-		w = Math.ceil(w);	
-		if (w == 180){
-			salvoCtx.beginPath();
-			salvoCtx.arc(loc.x, loc.y, d, 0, 2*Math.PI, false);
-			salvoCtx.closePath();
-		}
-		else {
-			var start = addAngle(0 + w-facing, a);
-			var end = addAngle(360 - w-facing, a);
-			var p1 = getPointInDir(str, start, loc.x, loc.y);
-			var rad1 = degreeToRadian(start);
-			var rad2 = degreeToRadian(end);
-			salvoCtx.beginPath();			
-			salvoCtx.moveTo(loc.x, loc.y);
-			salvoCtx.lineTo(p1.x, p1.y); 
-			salvoCtx.arc(loc.x, loc.y, d, rad1, rad2, false);
-			salvoCtx.closePath();
-		}
-		salvoCtx.fillStyle = color;
-		salvoCtx.globalAlpha = 0.2;
-		salvoCtx.fill();
-		salvoCtx.setTransform(1,0,0,1,0,0);
-	};
-	
-	salvoCtx.globalAlpha = 1;
-	return;
+Game.prototype.drawHostileEW = function(){
+	if (this.animating || this.sensorMode){return;}
+	for (var i = 0; i < this.ships.length; i++){
+		if (this.ships[i].flight || this.ships[i].salvo || !this.ships[i].deployed){continue;}
+		if (this.ships[i].friendly){continue;}
+		this.ships[i].getSystemByName("Sensor").drawEW();
+	}
 }
 
 Game.prototype.setShipTransform = function(){
