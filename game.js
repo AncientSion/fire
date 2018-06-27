@@ -3010,6 +3010,7 @@ Game.prototype.drawShipOverlays = function(){
 }
 
 Game.prototype.toggleFriendlyEW = function(){
+	if (game.animating || game.sensorMode){return;}
 	this.showFriendlyEW = !this.showFriendlyEW;
 	$(".optionsWrapper .drawFriendlyEW").toggleClass("selected");
 	salvoCtx.clearRect(0, 0, res.x, res.y);
@@ -3017,6 +3018,7 @@ Game.prototype.toggleFriendlyEW = function(){
 }
 
 Game.prototype.toggleHostileEW = function(){
+	if (game.animating || game.sensorMode){return;}
 	this.showHostileEW = !this.showHostileEW;
 	$(".optionsWrapper .drawHostileEW").toggleClass("selected");
 	salvoCtx.clearRect(0, 0, res.x, res.y);
