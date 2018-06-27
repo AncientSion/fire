@@ -3032,21 +3032,25 @@ Game.prototype.drawAllEW = function(){
 }
 
 Game.prototype.drawFriendlyEW = function(){
-	if (this.animating || this.sensorMode || this.showFriendlyEW){return;}
+	this.showFriendlyEW = 1;
+	if (this.animating || this.sensorMode){return;}
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].flight || this.ships[i].salvo || !this.ships[i].deployed){continue;}
 		if (!this.ships[i].friendly){continue;}
 		this.ships[i].drawEW();
 	}
+	this.showFriendlyEW = 0;
 }
 
 Game.prototype.drawHostileEW = function(){
-	if (this.animating || this.sensorMode || this.showHostileEW){return;}
+	this.showHostileEW = 1;
+	if (this.animating || this.sensorMode){return;}
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].flight || this.ships[i].salvo || !this.ships[i].deployed){continue;}
 		if (this.ships[i].friendly){continue;}
 		this.ships[i].drawEW();
 	}
+	this.showHostileEW = 0;
 }
 
 Game.prototype.setShipTransform = function(){
