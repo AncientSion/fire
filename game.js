@@ -3032,6 +3032,7 @@ Game.prototype.drawAllEW = function(){
 }
 
 Game.prototype.drawFriendlyEW = function(){
+	if (this.showFriendlyEW){return;}
 	this.showFriendlyEW = 1;
 	if (this.animating || this.sensorMode){return;}
 	for (var i = 0; i < this.ships.length; i++){
@@ -3043,6 +3044,7 @@ Game.prototype.drawFriendlyEW = function(){
 }
 
 Game.prototype.drawHostileEW = function(){
+	if (this.showHostileEW){return;}
 	this.showHostileEW = 1;
 	if (this.animating || this.sensorMode){return;}
 	for (var i = 0; i < this.ships.length; i++){
