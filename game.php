@@ -430,7 +430,7 @@
 			e.stopPropagation();
 		})
 
-		$("#combatLogWrapper")
+		ui.combatLogWrapper
 			.find("#combatLog")
 				.contextmenu(function(e){
 					e.preventDefault(); e.stopPropagation();
@@ -440,7 +440,7 @@
 					$(this).parent().find("#combatLog").toggleClass("disabled");
 				});
 
-		$("#combatLogWrapper").drag();
+		ui.combatLogWrapper.drag();
 
 		$("#upperGUI").removeClass("disabled")
 		$("#canvasDiv").removeClass("disabled")

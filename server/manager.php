@@ -569,10 +569,10 @@
 	
 	public function handleDeployPhase(){
 		Debug::log("handleDeployPhase");
-		$this->handleDeployActions();
-		$this->handleJumpInActions();
 		$this->resolveJumpOutActions();
+		$this->handleJumpInActions();
 		$this->handleInitialFireOrders();
+		$this->handleDeployActions();
 		$this->assembleDeployStates();
 		$this->deleteAllReinforcements();
 		DBManager::app()->deleteEmptyLoads($this->gameid);

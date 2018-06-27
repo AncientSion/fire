@@ -994,7 +994,8 @@ function Game(data){
 
 		if (game.phase == 2){
 			for (var i = 0; i < this.ships.length; i++){
-				if (this.ships[i].ship || this.ships[i].squad){this.ships[i].setSupportImage();}
+				//if (this.ships[i].ship || this.ships[i].squad){this.ships[i].setSupportImage();}
+				this.ships[i].setSupportImage();
 				this.ships[i].getAttachDivs();
 			}
 		}
@@ -1020,13 +1021,13 @@ function Game(data){
 			this.drawingEvents = 1;
 			this.draw();
 			if (game.phase == 2){
-				this.autoDoFireOrders();
+				this.autoIssueFireOrders();
 			}
 		}
 	}
 
-	this.autoDoFireOrders = function(){
-		console.log("autoDoFireOrders");
+	this.autoIssueFireOrders = function(){
+		console.log("autoIssueFireOrders");
 
 		for (var i = 0; i < this.ships.length; i++){
 			if (!this.ships[i].friendly || !this.ships[i].flight){continue;}
@@ -1036,7 +1037,7 @@ function Game(data){
 
 			for (var j = 0; j < this.ships[i].cc.length; j++){
 				var unit = game.getUnit(this.ships[i].cc[j]);
-				if (unit.friendly){continue;}
+				if (unit.friendly || unit.salvo){continue;}
 				hostiles.push(unit);
 			}
 
@@ -1091,10 +1092,10 @@ function Game(data){
 		this.createPlaceHolderEntry();
 		this.createEndEntry("-- Fire Events concluded --");
 
-		$("#combatLogWrapper").find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+		ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 
 		if (game.phase == 2){
-			this.autoDoFireOrders();
+			this.autoIssueFireOrders();
 		}
 	}
 	
@@ -2061,7 +2062,7 @@ function Game(data){
 		this.getFireAnimationDetails();
 		this.getAllUnitExplos();
 
-		$("#combatLogWrapper")
+		ui.combatLogWrapper
 			.find("#combatLogInnerWrapper").find("#combatLog")
 				.append($("<tr>")
 					.append($("<td>").attr("colSpan", 9).css("font-size", 18).html("Event Log")))
@@ -2087,8 +2088,8 @@ function Game(data){
 		this.getFireAnimationDetails();	
 		this.getAllUnitExplos();
 
-		//$("#combatLogWrapper").css("top", 0).show();
-		this.doPositionLog("Combat Log", 800);
+		//ui.combatLogWrapper.css("top", 0).show();
+		this.doPositionLog(false, 800);
 
 		this.setFireGlobals();
 
@@ -2511,7 +2512,7 @@ function Game(data){
 						}
 					)
 				)
-		$("#combatLogWrapper").find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
+		ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 	}
 
 	this.initIncomingTable = function(){
@@ -3161,6 +3162,7 @@ Game.prototype.getFireDistance = function(a, b){
 Game.prototype.resolveDeploy = function(){
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships[i].deployed = true;
+		if (this.ships[i].flight || this.ships[i].salvo){continue;}
 		if (this.ships[i].available == this.turn){
 			this.ships[i].deployAnim = [0, game.animData.jump];
 			this.ships[i].deployed = false;
@@ -3207,8 +3209,13 @@ Game.prototype.doPositionLog = function(html, length){
 		top = 80;
 	}
 
-	$("#combatLogWrapper").show()
+	ui.combatLogWrapper
+		.show()
 		.width(length).css("top", top).css("left", left)
+
+	if (!html){return;}
+
+	ui.combatLogWrapper
 		.find(".combatLogHeader").html(html).end()
 		.find("#combatLog").children().children().remove();
 }
