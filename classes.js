@@ -762,7 +762,7 @@ Single.prototype.addMainDivEvents = function(div, alive, isPreview){
 		.find("img")
 		.hover(function(e){
 			e.stopPropagation();
-			game.getSampleSubUnit($(this).parent().data("class").hover(e);
+			game.getSampleSubUnit($(this).parent().data("class").hover(e));
 			return;
 		});
 		return;
