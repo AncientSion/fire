@@ -3487,10 +3487,9 @@ Launcher.prototype.initLauncherDiv = function(){
 		.empty()
 		.append($("<tr>")
 			.append($("<th>").html("Class"))
-			.append($("<th>").html(""))
 			.append($("<th>").html("Tracking"))
-			.append($("<th>").html("Shots & Reload"))
 			.append($("<th>").html("Cost"))
+			.append($("<th>").html("Shots & Reload"))
 			.append($("<th>").html(""))
 			.append($("<th>").html("Loaded"))
 			.append($("<th>").html(""))
@@ -3499,13 +3498,13 @@ Launcher.prototype.initLauncherDiv = function(){
 	for (var i = 0; i < this.loads.length; i++){
 		table
 			.append($("<tr>")
-				.append($("<td>").html(this.loads[i].name))
 				.append($("<td>")
+					.append($("<span>").html(this.loads[i].name))
 					.append($(this.loads[i].getElement(true)))
 				)
 				.append($("<td>").html(this.loads[i].systems[0].getTraverseRating() + "</br>(" + (getUnitType(this.loads[i].systems[0].getTraverseRating()) + ")")))
-				.append($("<td>").html(this.launchRate[i] + " ea " + this.loads[i].reload + "turns"))
 				.append($("<td>").html(this.loads[i].cost))
+				.append($("<td>").html(this.launchRate[i] + " @ " + this.loads[i].reload + " turns"))
 				.append($("<td>")
 					.append($("<img>").addClass("size30").attr("src", "varIcons/plus.png"))
 					.click(function(e){
