@@ -339,8 +339,11 @@ table, th, tr, td {
 	width: 450px;
 }
 
- #weaponDiv, #crewDiv {
+#crewDiv {
 	width: 500px;
+ }
+ #weaponDiv {
+	width: 600px;
  }
 
 #hangarDiv .header, #weaponDiv .header, #crewDiv .header {
