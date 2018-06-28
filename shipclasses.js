@@ -3329,9 +3329,10 @@ Ship.prototype.drawIncomingMovePlan = function(){
 }
 
 Ship.prototype.drawEW = function(){
-	//if (this.destroyed){return;}
-	var s = this.getSystemByName("Sensor");
-	if (s){s.drawEW();}
+	if (game.shortInfo == this.id || this.selected || game.showFriendlyEW && this.friendly || game.showHostileEW && !this.friendly){
+		var s = this.getSystemByName("Sensor");
+		if (s){s.drawEW();}
+	}
 }
 
 Ship.prototype.checkSensorHighlight = function(){

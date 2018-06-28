@@ -252,9 +252,12 @@ class HeavyAntimatterBeamProjector extends Laser {
 	public $rakes = 4;
 	public $integrity = 62;
 	public $traverse = 1;
+	public $effiency = 0;
+	public $maxBoost = 0;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
+		$this->boostEffect = array();
 	}
 }
 

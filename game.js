@@ -52,7 +52,7 @@ function Game(data){
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
-	this.animData = {jump: 60};
+	this.animData = {jump: 6};
 	this.commandChange = {old: 0, new: 0}
 
 	this.hasSnapCenterline = function(shooter, shooterAngle, target){
@@ -939,7 +939,6 @@ function Game(data){
 		if (game.turn == 1){return;}
 
 		this.doPositionLog("Turn Beginning Log", 400);
-		this.createCommandTransferEntries();
 		this.resolveDamageControl();
 	}
 
@@ -1645,8 +1644,12 @@ function Game(data){
 
 	this.resetHover = function(e, loc, facing, pos){
 		ui.shortInfo.html("").hide();
+		this.shortInfo = false;
+		game.redraw();
 
-		if (this.deploying){game.drawDeployZone();}
+
+
+		return;
 
 		if (aUnit != this.shortInfo){
 			moveCtx.clearRect(0, 0, res.x, res.y);
@@ -1674,6 +1677,7 @@ function Game(data){
 			}
 		}
 		this.shortInfo = false;
+		this.drawAllEW();
 	}
 	
 	this.draw = function(){
@@ -1695,6 +1699,8 @@ function Game(data){
 
 		ui.shortInfo.hide();
 
+		if (this.deploying){game.drawDeployZone();}
+
 		if (aUnit){
 			var unit = this.getUnit(aUnit);
 			if (!unit.salvo){
@@ -1704,7 +1710,7 @@ function Game(data){
 				unit.resetMoveMode();
 
 				if (unit.ship || unit.squad){
-					unit.drawEW();
+				//	unit.drawEW();
 					unit.setMoveTranslation();
 					unit.drawMoveArea();
 					unit.drawVectorIndicator();
@@ -2030,6 +2036,7 @@ function Game(data){
 
 	this.createTurnStartMoveActionEntries = function(){
 		console.log("createTurnStartMoveActionEntries");
+
 		var show = 0;
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].isRolling()){
@@ -2043,6 +2050,8 @@ function Game(data){
 		}
 
 		if (show){this.createPlaceHolderEntry();}
+
+		this.createCommandTransferEntries();
 		this.createEndEntry("-- Initial Events concluded --")
 	}
 
@@ -3001,6 +3010,7 @@ Game.prototype.drawShipOverlays = function(){
 }
 
 Game.prototype.toggleFriendlyEW = function(){
+	if (game.animating || game.sensorMode){return;}
 	this.showFriendlyEW = !this.showFriendlyEW;
 	$(".optionsWrapper .drawFriendlyEW").toggleClass("selected");
 	salvoCtx.clearRect(0, 0, res.x, res.y);
@@ -3008,6 +3018,7 @@ Game.prototype.toggleFriendlyEW = function(){
 }
 
 Game.prototype.toggleHostileEW = function(){
+	if (game.animating || game.sensorMode){return;}
 	this.showHostileEW = !this.showHostileEW;
 	$(".optionsWrapper .drawHostileEW").toggleClass("selected");
 	salvoCtx.clearRect(0, 0, res.x, res.y);
@@ -3018,28 +3029,32 @@ Game.prototype.drawAllEW = function(){
 	if (this.animating || this.sensorMode){return;}
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].flight || this.ships[i].salvo || !this.ships[i].deployed){continue;}
-		if (this.ships[i].friendly && !this.showFriendlyEW){continue;}
-		if (!this.ships[i].friendly && !this.showHostileEW){continue;}
-		this.ships[i].getSystemByName("Sensor").drawEW();
+		this.ships[i].drawEW();
 	}
 }
 
 Game.prototype.drawFriendlyEW = function(){
+	if (game.animating || game.sensorMode || this.showFriendlyEW){return;}
+	this.showFriendlyEW = 1;
 	if (this.animating || this.sensorMode){return;}
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].flight || this.ships[i].salvo || !this.ships[i].deployed){continue;}
 		if (!this.ships[i].friendly){continue;}
-		this.ships[i].getSystemByName("Sensor").drawEW();
+		this.ships[i].drawEW();
 	}
+	this.showFriendlyEW = 0;
 }
 
 Game.prototype.drawHostileEW = function(){
+	if (game.animating || game.sensorMode || this.showHostileEW){return;}
+	this.showHostileEW = 1;
 	if (this.animating || this.sensorMode){return;}
 	for (var i = 0; i < this.ships.length; i++){
 		if (this.ships[i].flight || this.ships[i].salvo || !this.ships[i].deployed){continue;}
 		if (this.ships[i].friendly){continue;}
-		this.ships[i].getSystemByName("Sensor").drawEW();
+		this.ships[i].drawEW();
 	}
+	this.showHostileEW = 0;
 }
 
 Game.prototype.setShipTransform = function(){

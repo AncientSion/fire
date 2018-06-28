@@ -518,6 +518,7 @@ function sensorEvent(isClick, ship, loc, facing, d, a){
 		});
 		salvoCtx.clearRect(0, 0, res.x, res.y);
 		sensor.setTempEW();
+		game.redraw();
 	}
-	drawSensorArc(w, d, str, loc, facing, a, sensor);
+	else drawSensorArc(w, d, str, loc, facing, a, sensor);
 }

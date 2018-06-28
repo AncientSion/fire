@@ -61,7 +61,7 @@
 		return;
 	}
 
-	public function getClientData(){	
+	public function getClientData(){
 /*
 
 		$u = $this->getUnit(32);
