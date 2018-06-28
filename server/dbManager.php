@@ -268,8 +268,8 @@
 			} else return false;
 		}
 
-		public function getAllReinforcements($gameid, $userid){
-			//Debug::log("getAvailableReinforcements");
+		public function getPossiblyReinforces($gameid, $userid){
+			//Debug::log("getPossiblyReinforces");
 			$stmt = $this->connection->prepare("
 				SELECT * FROM units 
 				WHERE gameid = :gameid
@@ -915,34 +915,27 @@
 		}
 
 		public function requestShipsDB($userid, $gameid, $turn, $picks){
-			Debug::log("requestShipsDB, s: ".sizeof($picks).", turn: ".$turn);
+			//Debug::log("requestShipsDB, s: ".sizeof($picks).", turn: ".$turn);
 
 			$cost = 0;
 
 			$stmt = $this->connection->prepare("
 				UPDATE units
-				SET status = :status,
-					available = :available,
+				SET status = 'bought',
+					available = available + :eta,
 					facing = 0,
 					turn = :turn,
-					phase = :phase
+					phase = -1,
+					delay = 0
 				WHERE id = :id
 			");
 
 			for ($i = 0; $i < sizeof($picks); $i++){
-				$status = "bought";
-				$turn = 0;
-				$picks[$i]["actions"][0]["turn"] = $picks[$i]["available"];
 				$cost += $picks[$i]["cost"];
-				$phase = -1;
-
-				//Debug::log("id: ".$picks[$i]["id"].", cost: ".$cost);
-
-				$stmt->bindParam(":id", $picks[$i]["id"]);
-				$stmt->bindParam(":status", $status);
-				$stmt->bindParam(":available", $picks[$i]["available"]);
+;
+				$stmt->bindParam(":eta", $turn);
 				$stmt->bindParam(":turn", $turn);
-				$stmt->bindParam(":phase", $phase);
+				$stmt->bindParam(":id", $picks[$i]["id"]);
 
 				$stmt->execute();
 				if ($stmt->errorCode == 0){
@@ -957,36 +950,24 @@
 			//$this->insertUnits($userid, $gameid, $ships);
 		}
 
-		public function deleteReinforcements($data){
-			Debug::log("deleteReinforcements: ".sizeof($data));
+
+		public function deleteAllReinforcements($gameid){
+			Debug::log("DB deleteAllReinforcements");
+
+			$sql = "SELECT id FROM units WHERE gameid = ".$gameid." AND status = 'reinforce'";
+			$stmt = $this->connection->prepare($sql);
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+			if (!sizeof($result)){Debug::log("no results!"); return;}
 
 			$stmt = $this->connection->prepare("
-				DELETE FROM units WHERE id = :id
+				delete units, subunits, loads from units left join subunits on units.id = subunits.unitid left join loads on units.id = loads.shipid where units.id = :id
 			");
-			for ($i = 0; $i < sizeof($data); $i++){
-				$stmt->bindParam(":id", $data[$i]);
+			for ($i = 0; $i < sizeof($result); $i++){
+				$stmt->bindParam(":id", $result[$i]["id"]);
 				$stmt->execute();
 			}
-
-			$stmt = $this->connection->prepare("
-				DELETE FROM loads WHERE shipid = :shipid
-			");
-
-			for ($i = 0; $i < sizeof($data); $i++){
-				$stmt->bindParam(":shipid", $data[$i]);
-				$stmt->execute();
-			}
-
-			$stmt = $this->connection->prepare("
-				DELETE FROM subunits WHERE unitid = :unitid
-			");
-
-			for ($i = 0; $i < sizeof($data); $i++){
-				$stmt->bindParam(":unitid", $data[$i]);
-				$stmt->execute();
-			}
-
-			return;
 		}
 
 		public function deployShipsDB($gameid, $ships){

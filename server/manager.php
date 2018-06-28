@@ -56,41 +56,10 @@
 
 
 	public function doEval(){
-		//$this->testMorale();
-		//$this->handleResolvedFireData();
 		return;
 	}
 
 	public function getClientData(){
-/*
-
-		$u = $this->getUnit(32);
-		foreach ($u->structures as $struct){
-			Debug::log($struct->getBoostEffect("Armour") * $struct->getBoostLevel(2));
-		}
-
-		$s = $u->getSystem(19);
-
-		Debug::log($u->getAr)
-
-		//$this->testMorale();
-		//$this->setPostFireFocusValues();
-		//$this->setupShips();
-		//return;
-	
-		$this->handleFlightMovement();
-		$this->handleNewActions();
-		$this->updateMissions();
-		return;
-
-		foreach ($this->playerstatus as $player){
-			foreach ($player as $key => $value){
-				Debug::log($key.": ".$value);
-			}
-		}*/
-
-		//var_export($this->getUnit(2)->getEndState(1));
-		//return;
 
 		if (!$this->name){return false;}
 		
@@ -101,7 +70,7 @@
 			"turn" => $this->turn,
 			"phase" => $this->phase,
 			"ships" => $this->getShipData(),
-			"reinforcements" => $this->rdyReinforcements,
+			"reinforcements" => $this->reinforcements,
 			"incoming" =>$this->getIncomingData(),
 			"const" => $this->const,
 			"userid" => $this->userid,
@@ -185,8 +154,7 @@
 		$this->fires = $db->getUnresolvedFireOrders($this->gameid, $this->turn);
 		$this->ships = $this->assembleUnits();
 		$this->setCC();
-		$this->reinforcements = $db->getAllReinforcements($this->gameid, $this->userid);
-		$this->rdyReinforcements = $this->readyReinforcements();
+		$this->reinforcements = $this->readyReinforcements();
 		$this->incoming = $db->getIncomingShips($this->gameid, $this->turn);
 	}
 
@@ -266,6 +234,7 @@
 	}
 
 	public function shiftToIncoming($unit){
+		Debug::log("shifting");
 		$this->incoming[] = array(
 			"id" => $unit->id, "userid" => $unit->userid, "available" => $unit->available, "name" => $unit->name,
 				"x" => $unit->actions[0]->x, "y" => $unit->actions[0]->y, "a" => $unit->actions[0]->a
@@ -297,37 +266,39 @@
 
 	public function readyReinforcements(){
 		//Debug::log("readyReinforcements s".sizeof($this->reinforcements));
+
+		$possible = DBManager::app()->getPossiblyReinforces($this->gameid, $this->userid);
 		$data = array();
 
-		for ($i = 0; $i < sizeof($this->reinforcements); $i++){
-			if ($this->reinforcements[$i]["userid"] == $this->userid){
-				$unit = new $this->reinforcements[$i]["name"](
+		for ($i = 0; $i < sizeof($possible); $i++){
+			if ($possible[$i]["userid"] == $this->userid){
+				$unit = new $possible[$i]["name"](
 					array(
-					"id" => -$this->reinforcements[$i]["id"],
-					"userid" => $this->reinforcements[$i]["userid"],
-					"command" => $this->turn + $this->reinforcements[$i]["command"],
-					"available" => $this->turn + $this->reinforcements[$i]["available"],
-					"display" => $this->reinforcements[$i]["display"],
-					"status" => $this->reinforcements[$i]["status"],
-					"destroyed" => $this->reinforcements[$i]["destroyed"],
-					"x" => $this->reinforcements[$i]["x"],
-					"y" => $this->reinforcements[$i]["y"],
-					"facing" => $this->reinforcements[$i]["facing"],
+					"id" => -$possible[$i]["id"],
+					"userid" => $possible[$i]["userid"],
+					"command" => $this->turn + $possible[$i]["command"],
+					"available" => $this->turn + $possible[$i]["available"],
+					"display" => $possible[$i]["display"],
+					"status" => $possible[$i]["status"],
+					"destroyed" => $possible[$i]["destroyed"],
+					"x" => $possible[$i]["x"],
+					"y" => $possible[$i]["y"],
+					"facing" => $possible[$i]["facing"],
 					"delay" => 0,
-					"thrust" => $this->reinforcements[$i]["thrust"],
-					"rolling" => $this->reinforcements[$i]["rolling"],
-					"rolled" => $this->reinforcements[$i]["rolled"],
-					"flipped" => $this->reinforcements[$i]["flipped"],
-					"focus" => $this->reinforcements[$i]["focus"],
-					"notes" => $this->reinforcements[$i]["notes"]
+					"thrust" => $possible[$i]["thrust"],
+					"rolling" => $possible[$i]["rolling"],
+					"rolled" => $possible[$i]["rolled"],
+					"flipped" => $possible[$i]["flipped"],
+					"focus" => $possible[$i]["focus"],
+					"notes" => $possible[$i]["notes"]
 					)
 				);
 
 				$unit->addAllSystems();
-				if (!$unit->ship){$unit->addSubUnits($this->reinforcements[$i]["subunits"]);}
+				if (!$unit->ship){$unit->addSubUnits($possible[$i]["subunits"]);}
 
 				$unit->setPreviewState($this->turn, $this->phase);	
-				$unit->cost = $this->reinforcements[$i]["delay"];
+				$unit->cost = $possible[$i]["delay"];
 				$data[] = $unit;
 			}
 		}
@@ -468,15 +439,7 @@
 	public function deleteAllReinforcements(){
 		if ($this->turn != $this->wave){return;}
 		Debug::log("deleteAllReinforcements");
-		$data = array();
-
-		for ($i = 0; $i < sizeof($this->reinforcements); $i++){
-			$data[] = $this->reinforcements[$i]["id"];
-		}
-
-		if (sizeof($data)){
-			DBManager::app()->deleteReinforcements($data);
-		}
+		DBManager::app()->deleteAllReinforcements($this->gameid); return;
 	}
 	
 	public function pickReinforcements(){

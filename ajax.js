@@ -264,6 +264,9 @@ window.ajax = {
 				deployedShips.push(ship);
 			}
 			else if (game.ships[i].available > game.turn){
+				ship.id *= -1;
+				ship.actions[0].turn = game.ships[i].available;
+				ship.cost = game.ships[i].cost;
 				requestReinforce.push(ship);
 			}
 			else if (game.ships[i].available < game.turn){
