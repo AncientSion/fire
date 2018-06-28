@@ -85,7 +85,7 @@ class Sentri extends Fighter {
 	}
 }
 
-class Sitara extends Sitara {
+class Sitara extends Fighter {
 	public $name = "Sitara";
 	public $display = "Strike Fighter";
 	public $mass = 34;
@@ -96,20 +96,6 @@ class Sitara extends Sitara {
 
 	public function addSystems(){
 		$this->systems[] = new ParticleBolt($this->getId(), $this->id, $this->parentId, 1, 1, 30, 36, 0, 360);
-	}
-}
-
-class SitaraPlasma extends Sitara {
-	public $name = "SitaraPlasma";
-	public $display = "Sitara (Plasma)";
-	public $mass = 32;
-
-	function __construct($id, $parentId){
-		parent::__construct($id, $parentId);
-	}
-
-	public function addSystems(){
-		$this->systems[] = new PlasmaBomb($this->getId(), $this->id, $this->parentId, 2, 1, 42, 59, 0, 360);
 	}
 }
 
