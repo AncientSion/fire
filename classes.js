@@ -810,7 +810,7 @@ Single.prototype.addSysEvents = function(div, isBuy){
 		.css("zIndex", 1)
 		.hover(function(e){
 			e.stopPropagation();
-			game.getSampleSubUnit($(this).parent().parent().parent().children().first().html()).systems[0].hover(e);
+			game.getSampleSubUnit($(this).parent().data("class")).systems[0].hover(e);
 		})
 		return;
 	}
