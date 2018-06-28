@@ -2161,8 +2161,8 @@ Ship.prototype.getMoraleTrigger = function(){
 Ship.prototype.getModifiedRoutChance = function(){
 	if (this.morale.bonusChance){
 		if (this.morale.bonusChance > 0){
-			return this.morale.baseChance + " - " + this.morale.bonusChance + "%";
-		} else return this.morale.baseChance + " + " + this.morale.bonusChance + "%";
+			return this.morale.baseChance + " +" + this.morale.bonusChance + "%";
+		} else return this.morale.baseChance + " " + this.morale.bonusChance + "%";
 	}
 	else return this.morale.baseChance + "%";
 }
