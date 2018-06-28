@@ -1653,7 +1653,7 @@
 					),
 					array(
 						"Sentri",
-						"SitaraParticle",
+						"Sitara",
 					),
 					array(
 						"Hasta",

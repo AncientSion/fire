@@ -3406,7 +3406,7 @@ Launcher.prototype.addAmmo = function(ele, all){
 	var tMass = 0;
 	var tCost = 0;
 	var add = 1;
-	var name = ele.childNodes[0].innerHTML;
+	var name = ele.childNodes[0].childNodes[0].innerHTML;
 	var sMass = 0;
 
 	var canAdd = true;
@@ -3450,7 +3450,7 @@ Launcher.prototype.addAmmo = function(ele, all){
 Launcher.prototype.removeAmmo = function(ele, all){
 	var index = 0;
 	for (var i = 0; i < this.loads.length; i++){
-		if (this.loads[i].name == ele.childNodes[0].innerHTML){
+		if (this.loads[i].name == ele.childNodes[0].childNodes[0].innerHTML){
 			index = i;
 			if (this.loads[i].amount >= 1){
 				if (all){
@@ -3500,6 +3500,7 @@ Launcher.prototype.initLauncherDiv = function(){
 			.append($("<tr>")
 				.append($("<td>")
 					.append($("<div>").addClass("yellow").html(this.loads[i].name))
+					.append($("<div>").addClass("yellow").html(this.loads[i].display))
 					.append($(this.loads[i].getElement(true)))
 				)
 				.append($("<td>").html(this.loads[i].systems[0].getTraverseRating() + "</br>(" + (getUnitType(this.loads[i].systems[0].getTraverseRating()) + ")")))
@@ -3535,7 +3536,7 @@ Launcher.prototype.initLauncherDiv = function(){
 	table
 		.append($("<tr>")
 			.css("fontSize", 18)
-			.append($("<th>").attr("colSpan", 6).css("fontSize", 18).html("Grand Total"))
+			.append($("<th>").attr("colSpan", 5).css("fontSize", 18).html("Grand Total"))
 			.append($("<th>"))
 			.append($("<th>"))
 			.append($("<th>")))
@@ -3570,8 +3571,8 @@ Launcher.prototype.updateLauncherDiv = function(index){
 	var cost = this.loads[index].cost * amount;
 	var tr = $($("#weaponTable").find("tr")[index+1]);
 	var tds = tr.find("td");
-		$(tds[6]).html(amount);
-		$(tds[8]).html(cost);
+		$(tds[5]).html(amount);
+		$(tds[7]).html(cost);
 
 	this.setTotalBuyData();
 	this.canConfirm();
@@ -4156,7 +4157,6 @@ Hangar.prototype.showHangarLaunchControl = function(){
 			.empty()
 			.append($("<tr>")
 				.append($("<th>").html("Class"))
-				.append($("<th>").html(""))
 				.append($("<th>").html("Available"))
 				.append($("<th>").html(""))
 				.append($("<th>").html(""))
@@ -4168,8 +4168,9 @@ Hangar.prototype.showHangarLaunchControl = function(){
 	for (var i = 0; i < this.loads.length; i++){
 		table
 			.append($("<tr>")
-				.append($("<td>").html(this.loads[i].name))
 				.append($("<td>")
+					.append($("<div>").addClass("yellow").html(this.loads[i].name))
+					.append($("<div>").addClass("yellow").html(this.loads[i].display))
 					.append($(this.loads[i].getElement(true)))
 				)
 				.append($("<td>").html(this.loads[i].amount))
@@ -4304,7 +4305,7 @@ Hangar.prototype.addFighter = function(ele, all){
 	var tMass = 0;
 	var tCost = 0;
 	var add = 1;
-	var name = ele.childNodes[0].innerHTML;
+	var name = ele.childNodes[0].childNodes[0].innerHTML;
 	var sMass = 0;
 	var current = 0;
 	var max = this.capacity;
@@ -4347,7 +4348,7 @@ Hangar.prototype.addFighter = function(ele, all){
 
 
 	for (var i = 0; i < this.loads.length; i++){
-		if (this.loads[i].display == display){
+		if (this.loads[i].display == name){
 			if (tMass + this.loads[i].mass <= this.output){
 				this.loads[i].amount += add;
 				this.updateHangarDiv(i);
@@ -4362,7 +4363,7 @@ Hangar.prototype.addFighter = function(ele, all){
 
 Hangar.prototype.removeFighter = function(ele, all){
 	for (var i = 0; i < this.loads.length; i++){
-		if (this.loads[i].name == ele.childNodes[0].innerHTML){
+		if (this.loads[i].name == ele.childNodes[0].childNodes[0].innerHTML){
 			if (this.loads[i].amount >= 1){
 				if (all){
 					this.loads[i].amount = 0;
@@ -4387,7 +4388,6 @@ Hangar.prototype.initHangarPurchaseDiv = function(){
 		.empty()
 		.append($("<tr>")
 			.append($("<th>").html("Class"))
-			.append($("<th>").html(""))
 			.append($("<th>").html("Cost").css("width", 40))
 			.append($("<th>").html(""))
 			.append($("<th>").html("Amount").css("width", 70))
@@ -4397,8 +4397,9 @@ Hangar.prototype.initHangarPurchaseDiv = function(){
 	for (var i = 0; i < this.loads.length; i++){
 		table
 			.append($("<tr>")
-				.append($("<td>").html(this.loads[i].name))
 				.append($("<td>")
+					.append($("<div>").addClass("yellow").html(this.loads[i].name))
+					.append($("<div>").addClass("yellow").html(this.loads[i].display))
 					.append($(this.loads[i].getElement(true)))
 				)
 				.append($("<td>").html(this.loads[i].cost))
@@ -4432,7 +4433,7 @@ Hangar.prototype.initHangarPurchaseDiv = function(){
 	table
 		.append($("<tr>")
 			.css("fontSize", 18)
-			.append($("<th>").attr("colSpan", 4).css("fontSize", 18).html("Grand Total"))
+			.append($("<th>").attr("colSpan", 3).css("fontSize", 18).html("Grand Total"))
 			.append($("<th>"))
 			.append($("<th>"))
 			.append($("<th>")))
@@ -4464,8 +4465,8 @@ Hangar.prototype.updateHangarDiv = function(index){
 	var cost = this.loads[index].cost * amount;
 	var tr = $($("#hangarTable").find("tr")[index+1]);
 	var tds = tr.find("td");
-		$(tds[4]).html(amount);
-		$(tds[6]).html(cost);
+		$(tds[3]).html(amount);
+		$(tds[5]).html(cost);
 
 	this.setTotalBuyData();
 	this.canConfirm();

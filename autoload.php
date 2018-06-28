@@ -43,8 +43,7 @@ spl_autoload_register(
                 'nial' => '/server/fighter.php',
                 'tishat' => '/server/fighter.php',
                 'sentri' => '/server/fighter.php',
-                'sitaraparticle' => '/server/fighter.php',
-                'sitaraplasma' => '/server/fighter.php',
+                'sitara' => '/server/fighter.php',
                 'gorith' => '/server/fighter.php',
                 'frazi' => '/server/fighter.php',
 

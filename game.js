@@ -710,7 +710,7 @@ function Game(data){
 
 	this.enableFlightDeploy = function(){
 		var hangar = game.getUnit(aUnit).getSystem($("#hangarDiv").data("systemid"));
-		if (!hangar.canFire()){return false;}
+		if (!hangar.canFire()){popup("The selected Hangar is not ready yet"); return false;}
 
 		var hasFighters = 0;
 		for (var i = 0; i < hangar.loads.length; i++){
@@ -719,16 +719,17 @@ function Game(data){
 			}
 		}
 
-		if (!hasFighters){return false;}
+		if (!hasFighters){popup("No fighter amount selected"); return false;}
 
 		var value = Math.floor($($("#hangarDiv")).find("input[name=mission]:checked").val());
-		if (!value){return false;}
+		if (!value){popup("No mission selected"); return false;}
 		game.mission = value;
 
 		this.flightDeploy = hangar;
 		//var mission = this.getMissionTypeString(this.flightDeploy.mission);
 
 		//instruct("Please select the target unit/location target for the flight");
+		instruct("Select mission target for the Flight");
 		ui.deployOverlay.css("top", res.y - 100).css("left", 10).show().find("#deployType").html( game.getMissionType(value)).end();
 	}
 

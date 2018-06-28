@@ -24,7 +24,7 @@ class Primus extends SuperHeavy {
 		$front = new Structure($this->getId(), $this->id, 330, 30, 1050, 22, 6);
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 240, 60);
 		$front->systems[] = new HeavyParticle($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new Hangar($this->getId(), $this->id, 14, array("Sentri", "SitaraParticle"), 14, 2);
+		$front->systems[] = new Hangar($this->getId(), $this->id, 14, array("Sentri", "Sitara"), 14, 2);
 		$front->systems[] = new HeavyParticle($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 300, 120);
 		$structs[] = $front;
@@ -90,7 +90,7 @@ class Primus extends SuperHeavy {
 						),
 						array(
 							"systemid" => 9,
-							"name" => "SitaraParticle",
+							"name" => "Sitara",
 							"amount" => 4,
 						),
 					)
