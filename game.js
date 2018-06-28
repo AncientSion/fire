@@ -52,7 +52,7 @@ function Game(data){
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
-	this.animData = {jump: 6};
+	this.animData = {jump: 60};
 	this.commandChange = {old: 0, new: 0}
 
 	this.hasSnapCenterline = function(shooter, shooterAngle, target){
@@ -3171,7 +3171,6 @@ Game.prototype.getFireDistance = function(a, b){
 Game.prototype.resolveDeploy = function(){
 	for (var i = 0; i < this.ships.length; i++){
 		this.ships[i].deployed = true;
-		if (this.ships[i].flight || this.ships[i].salvo){continue;}
 		if (this.ships[i].available == this.turn){
 			this.ships[i].deployAnim = [0, game.animData.jump];
 			this.ships[i].deployed = false;
@@ -3288,6 +3287,8 @@ Game.prototype.animateJumpIn = function(){
 		ctx.scale(cam.z, cam.z);
 
 		for (var i = 0; i < this.ships.length; i++){
+			if (this.ships[i].available < game.turn){continue;}
+
 			if (this.ships[i].deployAnim[1]){
 				if (this.ships[i].deployed){
 					this.ships[i].draw();
