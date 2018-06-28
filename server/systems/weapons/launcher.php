@@ -66,6 +66,7 @@ class MissileLauncher extends Launcher {
 					$this->output = $dbLoad[$i]["amount"];
 					$this->loads[$j]->amount = $dbLoad[$i]["amount"];
        				$this->maxRange = $this->loads[$this->ammo]->maxRange;
+       				$this->reload = $this->loads[$this->ammo]->reload;
 					return;
 				}
 			}
