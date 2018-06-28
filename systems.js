@@ -3504,7 +3504,7 @@ Launcher.prototype.initLauncherDiv = function(){
 					.append($(this.loads[i].getElement(true)))
 				)
 				.append($("<td>").html(this.loads[i].systems[0].getTraverseRating() + "</br>(" + (getUnitType(this.loads[i].systems[0].getTraverseRating()) + ")")))
-				.append($("<td>").html(this.launchRate[i]) + " ea " + this.loads[i].reload + "turns")
+				.append($("<td>").html(this.launchRate[i] + " ea " + this.loads[i].reload + "turns"))
 				.append($("<td>").html(this.loads[i].cost))
 				.append($("<td>")
 					.append($("<img>").addClass("size30").attr("src", "varIcons/plus.png"))
