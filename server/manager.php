@@ -1468,11 +1468,6 @@
 			Debug::log("kill/flee!");
 			$curFocus = 0; $gainFocus = 0; $maxFocus = 0;
 		}
-		else if (get_class($unit) == "Squadron"){
-			$baseGain = floor($this->settings["pv"] / 100 * $this->settings["focusMod"]);
-			$commandRating = ($unit->baseFocusRate + $unit->modFocusRate);
-			$gainFocus = floor($baseGain / 10 * $commandRating / 100 * $output);
-		}
 		else {
 			if (get_class($unit) == "Squadron"){
 				$output = 100;
