@@ -3260,7 +3260,7 @@ Ship.prototype.getLockEffect = function(target){
 		multi = 1.5;
 	}
 	else if (target.salvo){
-		multi = 2;
+		multi = 3;
 	}
 
 	if (game.isCloseCombat(this, target)){

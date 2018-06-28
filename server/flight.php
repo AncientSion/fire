@@ -105,7 +105,7 @@ class Flight extends Mixed {
 			return 1;
 		}
 		else if ($target->salvo){
-			return 2;
+			return 3;
 		}
 	}
 
