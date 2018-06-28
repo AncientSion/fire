@@ -3499,7 +3499,7 @@ Launcher.prototype.initLauncherDiv = function(){
 		table
 			.append($("<tr>")
 				.append($("<td>")
-					.append($("<span>").html(this.loads[i].name))
+					.append($("<div>").addClass("yellow").html(this.loads[i].name))
 					.append($(this.loads[i].getElement(true)))
 				)
 				.append($("<td>").html(this.loads[i].systems[0].getTraverseRating() + "</br>(" + (getUnitType(this.loads[i].systems[0].getTraverseRating()) + ")")))

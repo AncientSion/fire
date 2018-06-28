@@ -758,10 +758,11 @@ Single.prototype.attachSysMods = function(ele){
 Single.prototype.addMainDivEvents = function(div, alive, isPreview){
 	if (isPreview){
 		div
+		.data("class", this.name)
 		.find("img")
 		.hover(function(e){
 			e.stopPropagation();
-			game.getSampleSubUnit($(this).parent().parent().parent().find("td").first().html()).hover(e);
+			game.getSampleSubUnit($(this).parent().data("class").hover(e);
 			return;
 		});
 		return;
