@@ -1342,7 +1342,7 @@ class Medium extends Ship {
 class Heavy extends Medium {
 	public $baseImpulse = 155;
 	public $traverse = 1;
-	public $baseFocusRate = 12;
+	public $baseFocusRate = 11;
 	//public $baseImpulseCost = 45;
 	
 	function __construct($data = false){
@@ -1353,7 +1353,7 @@ class Heavy extends Medium {
 class SuperHeavy extends Heavy {
 	public $baseImpulse = 140;
 	public $traverse = 2;
-	public $baseFocusRate = 14;
+	public $baseFocusRate = 12;
 	//public $baseImpulseCost = 50;
 	
 	function __construct($data = false){
@@ -1364,7 +1364,7 @@ class SuperHeavy extends Heavy {
 class UltraHeavy extends SuperHeavy {
 	public $baseImpulse = 130;
 	public $traverse = 3;
-	public $baseFocusRate = 16;
+	public $baseFocusRate = 13;
 	//public $baseImpulseCost = 55;
 	
 	function __construct($data = false){

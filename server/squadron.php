@@ -14,7 +14,7 @@ class Squadron extends Ship {
 	public $traverse = -1;
 	public static $space;
 	public $slots = array(0, 10);
-	public $baseFocusRate = 6;
+	public $baseFocusRate = 8;
 
 	function __construct($data = false){
         parent::__construct($data);
