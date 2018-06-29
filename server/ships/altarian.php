@@ -23,7 +23,7 @@ class Altarian extends Medium {
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 400, 18, 3);
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 240, 60);
-		$front->systems[] = new HeavyParticle($this->getId(), $this->id, 300, 60);
+		//$front->systems[] = new HeavyParticle($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 300, 120);
 		$structs[] = $front;
 
