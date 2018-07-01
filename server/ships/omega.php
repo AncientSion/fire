@@ -43,15 +43,15 @@ class Omega extends SuperHeavy {
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 1050, 17, 4);
+	/*	$aft->systems[] = new HeavyRailGun($this->getId(), $this->id, 120, 240);
 		$aft->systems[] = new HeavyRailGun($this->getId(), $this->id, 120, 240);
 		$aft->systems[] = new HeavyRailGun($this->getId(), $this->id, 120, 240);
 		$aft->systems[] = new HeavyRailGun($this->getId(), $this->id, 120, 240);
-		$aft->systems[] = new HeavyRailGun($this->getId(), $this->id, 120, 240);
-	/*	$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
+	*/	$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
 		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
 		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
 		$aft->systems[] = new MediumPulse($this->getId(), $this->id, 120, 240);
-	*/	$structs[] = $aft;
+		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 1500, 19);
 		$left->systems[] = new Dual($this->getId(), $this->id, 240, 60, 28, array("LightPulse", "LightParticleBeam"));

@@ -9,7 +9,7 @@ class Centurion extends Heavy {
 	public $profile = array(0.92, 1.08);
 	public $mass = 7500;
 
-	public $integrity = 900;
+	public $integrity = 850;
 	public $vitalHP = 100;
 	public $ep = 85;
 	public $ew = 800;
@@ -21,16 +21,17 @@ class Centurion extends Heavy {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 330, 30, 1050, 20, 4);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 1050, 20, 5);
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 240, 60);
 		$front->systems[] = new MediumParticle($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new MediumPlasma($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new MediumParticle($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 300, 120);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 1300, 19, 1);
 		$right->systems[] = new HeavyParticle($this->getId(), $this->id, 360, 120);
-		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 120, array(array("Javelin", 12, 4)));
+		$right->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 120, array(array("Javelin", 12, 4), array("Triarii", 12, 4)));
 		$right->systems[] = new MediumParticle($this->getId(), $this->id, 360, 120);
 		//$right->systems[] = new MediumParticle($this->getId(), $this->id, 360, 120);
 		$structs[] = $right;
@@ -42,7 +43,7 @@ class Centurion extends Heavy {
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 1300, 19, 1);
 		$left->systems[] = new HeavyParticle($this->getId(), $this->id, 240, 360);
-		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 240, 60, array(array("Javelin", 12, 4)));
+		$left->systems[] = new MissileLauncher($this->getId(), $this->id, 240, 60, array(array("Javelin", 12, 4), array("Triarii", 12, 4)));
 		$left->systems[] = new MediumParticle($this->getId(), $this->id, 240, 360);
 		//$left->systems[] = new MediumParticle($this->getId(), $this->id, 240, 360);
 		$structs[] = $left;

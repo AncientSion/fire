@@ -110,7 +110,7 @@ class Ship {
 
 	public function setPreviewState($turn, $phase){
 		$this->curImp = $this->baseImpulse;
-		$this->morale = new Morale(100, 0, 0);
+		$this->morale = new Morale(100, 0, 0, 0);
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq(), $this->power);
 
 		for ($j = 0; $j < sizeof($this->structures); $j++){
@@ -205,7 +205,8 @@ class Ship {
 
 		$this->morale = new Morale(
 			floor($this->primary->remaining / $this->primary->integrity * 100),
-			$command->getCrewEffect()*-2 * $command->getCrewLevel(),
+			$this->command,
+			$command->getCrewLevel() * $command->getCrewEffect(),
 			$command->getCritMod("Output", $turn)
 		);
 	}
@@ -695,11 +696,11 @@ class Ship {
 			Debug::log("resolveFireOrder AREA - #".$fire->id.", TARGET ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid);
 
 			$fire->section = $this->getHitSection($fire);
-			DmgCalc::doDmg($fire, $this->getHitSystem($fire));
+			DmgCalc::doDmg($fire, 0, $this->getHitSystem($fire));
 
 		}
 		else {
-			Debug::log("resolveFireOrder - #".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots);
+			Debug::log("resolveFireOrder - #".$fire->id.", shooter: ".get_class($fire->shooter)." #".$fire->shooterid." vs ".get_class($this)." #".$fire->targetid.", w: ".get_class($fire->weapon)." #".$fire->weaponid.", shots: ".$fire->shots.", type: ".$fire->weapon->dmgType);
 
 			$fire->cc = $this->isCloseCombat($fire->shooter->id);
 			$fire->dist = $this->getHitDist($fire);
@@ -708,7 +709,6 @@ class Ship {
 
 			$this->rollToHit($fire);
 			$this->determineHits($fire);
-			$fire->resolved = 1;
 		}
 
 		$fire->resolved = 1;
@@ -743,7 +743,7 @@ class Ship {
 			}
 			else  if ($fire->rolls[$i] <= $fire->req){
 				$fire->hits++;
-				DmgCalc::doDmg($fire, $this->getHitSystem($fire));
+				DmgCalc::doDmg($fire, $i, $this->getHitSystem($fire));
 			}
 		}
 	}
@@ -938,7 +938,7 @@ class Ship {
 			return 0;
 		}
 		else if ($target->salvo){
-			return 0.33;
+			return 0.5;
 		}
 	}
 	public function setImpulseProfileMod(){

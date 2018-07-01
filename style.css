@@ -843,9 +843,10 @@ table, th, tr, td {
 }
 
 .attachDiv {
-	width: 99%;
+	display: block;
 	margin-top: 8px;
 	margin-bottom: 8px;
+	border-bottom: 1px solid white;
 }
 
 .attachDiv div {
@@ -860,7 +861,7 @@ div.system {
 	position: absolute;
 }
 
-.center15 {
+.center15, .center15 div {
 	font-size: 15;
 	text-align: center;
 }
@@ -1200,7 +1201,7 @@ div.integrityFull {
 }
 
 .shipDiv.selection, .ammoDiv.selection {
-	border: 2px solid #ffeb3e;
+	border: 4px solid #ffeb3e;
 }
 
 .shipdiv .mainDiv {

@@ -47,13 +47,13 @@ spl_autoload_register(
                 'gorith' => '/server/fighter.php',
                 'frazi' => '/server/fighter.php',
 
-                'vorchana' => '/server/ships/vorchana.php',
-                'vorchanb' => '/server/ships/vorchanb.php',
+                'vorchan' => '/server/ships/vorchan.php',
+                'vorchora' => '/server/ships/vorchora.php',
                 'mograth' => '/server/ships/mograth.php',
-                'vorchar' => '/server/ships/vorchar.php',
                 'haven' => '/server/ships/haven.php',
                 'darkner' => '/server/ships/darkner.php',
                 'altarian' => '/server/ships/altarian.php',
+                'kutai' => '/server/ships/kutai.php',
                 'demos' => '/server/ships/demos.php',
                 'primus' => '/server/ships/primus.php',
                 'centurion' => '/server/ships/centurion.php',
@@ -122,8 +122,9 @@ spl_autoload_register(
                 'heavylaser' => '/server/systems/weapons/laser.php',
                 'superheavylaser' => '/server/systems/weapons/laser.php',
                 'neutronlaser' => '/server/systems/weapons/laser.php',
+                'assaultneutronlaser' => '/server/systems/weapons/laser.php',
+                'heavyantimatterbeamprojector' => '/server/systems/weapons/laser.php',
                 'molecularslicer' => '/server/systems/weapons/laser.php',
-                'neutronaccelerator' => '/server/systems/weapons/laser.php',
 
                 'matter' => '/server/systems/weapons/matter.php',
                 'heavyrailgun' => '/server/systems/weapons/matter.php',
@@ -136,7 +137,7 @@ spl_autoload_register(
                 'lightpulse' => '/server/systems/weapons/pulse.php',
                 'mediumpulse' => '/server/systems/weapons/pulse.php',
                 'heavypulse' => '/server/systems/weapons/pulse.php',
-                'fusionpulsar' => '/server/systems/weapons/pulse.php',
+                'pulsedusioncannon' => '/server/systems/weapons/pulse.php',
 
                 'lightplasmapulse' => '/server/systems/weapons/pulse.php',
                 'mediumplasmapulse' => '/server/systems/weapons/pulse.php',
@@ -157,7 +158,6 @@ spl_autoload_register(
                 'heavyfusioncannon' => '/server/systems/weapons/particle.php',
 
                 'antimatterconverter' => '/server/systems/weapons/particle.php',
-                'heavyantimatterbeamprojector' => '/server/systems/weapons/laser.php',
 
                 'area' => '/server/systems/weapons/area.php',
                 'energymine' => '/server/systems/weapons/area.php',

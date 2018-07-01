@@ -24,6 +24,9 @@ class Weapon extends System {
 	public $dmgLoss = 0;
 	public $flashDiv;
 
+	public $amBonus = 0;
+	public $amMax = 0;
+
 	public $em = 0;
 	public $fireMode = "Standard";
 	public $dmgType = "Standard";
@@ -54,23 +57,26 @@ class Weapon extends System {
 		return max(0, $this->traverse - $fire->target->traverse);
 	}
 
-	public function getTotalDamage($fire){
-		$base = $this->getBaseDamage($fire);
+	public function getTotalDamage($fire, $hit){
+		$base = $this->getBaseDamage($fire, $hit);
+		$bonus = $this->getBonusDamage($fire, $base, $hit);
 		$mod = $this->getDamageMod($fire);
 		$range = $this->getDmgRangeMod($fire);
 
-		//Debug::log("base: ".$base.", mod: ".$mod.", range: ".$range);
-		return floor($base*$mod*$range);
-
-		return floor($this->getBaseDamage($fire) * $this->getDamageMod($fire) * $this->getDmgRangeMod($fire));
+		Debug::log("base: ".$base.", bonus: ".$bonus.", mod: ".$mod.", range: ".$range);
+		return floor(($base+$bonus)*$mod*$range);
 	}
 	
-	public function getBaseDamage($fire){
+	public function getBaseDamage($fire, $hit){
 		return mt_rand($this->getMinDamage(), $this->getMaxDamage());
+	}
+	
+	public function getBonusDamage($fire, $baseDmg, $hit){
+		return 0;
 	}
 
 	public function setFlashData(){
-		$data = array(1, 2, 6, 10);
+		$data = array(1, 2, 0, 6, 10, 15, 20);
 		$this->flashDiv = array(40, 60);
 
 		for ($i = 0; $i < sizeof($data); $i++){
@@ -79,34 +85,26 @@ class Weapon extends System {
 		
 		$this->notes[] = "<u>Salvo</u>: ".$this->dmgs[0]." dmg / unit";
 		$this->notes[] = "<u>Flight</u>: ".$this->dmgs[1]." dmg / unit";
-		$this->notes[] = "<u>Squadron</u>: ".$this->dmgs[2]." dmg / unit";
+		$this->notes[] = "<u>Squadron</u>: ".$this->dmgs[3]." dmg / unit";
 
 		$html = "<u>Ship</u></br>";
-		$html .= $this->dmgs[3]." (+".floor($this->dmgs[3]*0.5)." per target size) damage</br>";
+		$html .= $this->dmgs[4]." (+".floor($this->dmgs[4]*0.5)." per target size) damage</br>";
 		$html .= $this->flashDiv[1]."% evenly divided directed towards each facing system. Overkill fully applies.</br>";
 		$html .= $this->flashDiv[0]."% directed towards main structure</br>";
 	
 		$this->notes[] = $html;
-		$this->maxDmg = $this->dmgs[3];
+		$this->maxDmg = $this->dmgs[sizeof($this->dmgs)-1];
+	}
+
+	public function setAntimatterData(){		
+		$this->amBonus = 2;
+		$this->amMax = 30;
+		$this->notes[] = "<span class='yellow'>".$this->amBonus."</span> Points of extra damage for each 1 point of undercutting the required roll";
+		$this->notes[] = "Extra damage is capped at <span class='yellow'>".$this->amMax."%</span> of base damage";
 	}
 
 	public function setEMData(){
         $this->notes = array("Deals only EM damage.", "EM damage dissipates at end of turn.", "Armour fully applies.", "EM Damage is 2x as effective when testing criticals.", "Fighters and Ballistics are disabled immediatly if EM > Full HP");
-	}
-
-	public function getFlashBaseDamage($fire){
-		if ($fire->target->ship){
-			return floor($this->dmgs[3] + $this->dmgs[3]*0.5 * $fire->target->traverse);
-		} else if ($fire->target->squad){
-			return $this->dmgs[2];
-		} else if ($fire->target->flight){
-			return $this->dmgs[1];
-		} else if ($fire->target->salvo){
-			return $this->dmgs[0];
-		}
-
-		Debug::log("getFlashBaseDamage DMG error");
-		return 1;
 	}
 
 	public function getAccuracyLoss($fire){

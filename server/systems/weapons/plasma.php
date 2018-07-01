@@ -145,8 +145,8 @@ class MagCompressor extends Plasma {
         $this->setFlashData();
 	}
 
-	public function getBaseDamage($fire){
-		return $this->getFlashBaseDamage($fire);
+	public function getBaseDamage($fire, $hit){
+		return DmgCalc::getFlashBaseDamage($fire, $hit);
 	}
 }
 

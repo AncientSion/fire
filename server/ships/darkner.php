@@ -53,7 +53,7 @@ class Darkner extends Light {
 
 	public $integrity = 370;
 	public $ep = 80;
-	public $ew = 450;
+	public $ew = 475;
 	public $negation = 11;
 
 	function __construct($id, $userid){

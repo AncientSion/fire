@@ -5,14 +5,14 @@ class Altarian extends Medium {
 	public $display = "Altarian";
 	public $faction = "Centauri Republic";
 	public $size =  55;
-	public static $value = 525;
+	public static $value = 510;
 	public $profile = array(0.93, 1.07);
 	public $mass = 4250;
 
 	public $integrity = 700;
 	public $vitalHP = 90;
-	public $ep = 95;
-	public $ew = 750;
+	public $ep = 85;
+	public $ew = 725;
 
 	function __construct($data = false){
         parent::__construct($data);
@@ -21,9 +21,10 @@ class Altarian extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 330, 30, 400, 18, 3);
+		$front = new Structure($this->getId(), $this->id, 330, 30, 400, 17, 3);
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 240, 60);
 		//$front->systems[] = new HeavyParticle($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new LightParticle($this->getId(), $this->id, 270, 90);
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 300, 120);
 		$structs[] = $front;
 

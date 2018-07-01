@@ -27,10 +27,10 @@ class Sharlin extends SuperHeavy {
 			$front->systems[] = new LightEMNeedler($this->getId(), $this->id, 270, 90);
 			$front->systems[] = new HeavyAntimatterBeamProjector($this->getId(), $this->id, 330, 30, 0, 2);
 			$front->systems[] = new LightEMNeedler($this->getId(), $this->id, 270, 90);
-			$front->systems[] = new HeavyFusionCannon($this->getId(), $this->id, 315, 45);
-			$front->systems[] = new HeavyFusionCannon($this->getId(), $this->id, 315, 45);
-			$front->systems[] = new HeavyFusionCannon($this->getId(), $this->id, 315, 45);
-			$front->systems[] = new HeavyFusionCannon($this->getId(), $this->id, 315, 45);
+			$front->systems[] = new FusionCannon($this->getId(), $this->id, 315, 45);
+			$front->systems[] = new FusionCannon($this->getId(), $this->id, 315, 45);
+			$front->systems[] = new FusionCannon($this->getId(), $this->id, 315, 45);
+			$front->systems[] = new FusionCannon($this->getId(), $this->id, 315, 45);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 2450, 27);

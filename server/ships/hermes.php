@@ -12,7 +12,7 @@ class Hermes extends Light {
 	public $ep = 120;
 	public $ew = 425;
 	public $power = 2;
-	public $negation = 11;
+	public $negation = 10;
 
 	public $effiency = 2;
 

@@ -105,16 +105,17 @@ window.graphics = {
 		this.images.demos = new Image();
 		this.images.demos.src = "shipIcons/demos.png";
 
+		this.images.kutai = new Image();
+		this.images.kutai.src = "shipIcons/kutai.png";
+
 		this.images.darkner = new Image();
 		this.images.darkner.src = "shipIcons/darkner.png";
 
-		this.images.vorchar = new Image();
-		this.images.vorchar.src = "shipIcons/vorchar.png";
+		this.images.vorchan = new Image();
+		this.images.vorchan.src = "shipIcons/vorchan.png";
 
-		this.images.vorchana = new Image();
-		this.images.vorchana.src = "shipIcons/vorchan.png";
-		this.images.vorchanb = new Image();
-		this.images.vorchanb.src = "shipIcons/vorchan.png";
+		this.images.vorchora = new Image();
+		this.images.vorchora.src = "shipIcons/vorchan.png";
 
 		this.images.mograth = new Image();
 		this.images.mograth.src = "shipIcons/mograth.png";

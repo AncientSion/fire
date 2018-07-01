@@ -60,7 +60,7 @@ class Squadron extends Ship {
 			$val = floor($remaining / $integrity * 100);
 		}
 
-		$this->morale = new Morale($val, 0, 0);
+		$this->morale = new Morale($val, $this->command, 0, 0);
 	 }
 
 
@@ -214,7 +214,7 @@ class Squadron extends Ship {
 				$fire->req = $fire->shooter->calculateToHit($fire);
 				if ($fire->rolls[$i] <= $fire->req){
 					$fire->hits++;
-					DmgCalc::doDmg($fire, $target);
+					DmgCalc::doDmg($fire, $i, $target);
 				}
 			}
 		}

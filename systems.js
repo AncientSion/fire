@@ -2518,7 +2518,7 @@ Warhead.prototype.getResolvingFireOrders = function(){
 }
 
 Warhead.prototype.getDisplay = function(){
-	return "Ballistic Warhead Impact";
+	return "Ballistic Warhead (" + this.dmgType + ")";
 }
 
 Warhead.prototype.createCombatLogEntry = function(fire){
@@ -3250,7 +3250,7 @@ Launcher.prototype.setFireOrder = function(targetid, pos){
 }
 
 Launcher.prototype.getAimDetailsUnit = function(target, final, accLoss, row){
-	var final = 100;
+	var final = 80;
 	var traverseMod = this.getTraverseMod(target);
 	
 	if (!traverseMod){

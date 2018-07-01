@@ -23,17 +23,17 @@ class Demos extends Medium {
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 17, 3);
 		$front->systems[] = new MediumPlasma($this->getId(), $this->id, 315, 45);
-		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60,	array(array("Javelin", 9, 3)));
+		$front->systems[] = new MissileLauncher($this->getId(), $this->id, 300, 60,	array(array("Javelin", 9, 3), array("Triarii", 9, 3)));
 		$front->systems[] = new MediumPlasma($this->getId(), $this->id, 315, 45);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 15, 1);
-		$right->systems[] = new MediumParticle($this->getId(), $this->id, 300, 120);
+		$right->systems[] = new LightPlasmaShredder($this->getId(), $this->id, 300, 120);
 		$right->systems[] = new LightParticle($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 15, 1);
-		$left->systems[] = new MediumParticle($this->getId(), $this->id, 240, 60);
+		$left->systems[] = new LightPlasmaShredder($this->getId(), $this->id, 240, 60);
 		$left->systems[] = new LightParticle($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
 

@@ -5,10 +5,11 @@ class Missile extends Single {
 	public $torpedo = 0;
 	public $maxRange = 0;
 	public $reload = 3;
+	public $dmgType = "Standard";
+	public $fireMode = "Standard";
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->minDmg, $this->maxDmg, $this->traverse);
 	}
 	
 	public function setBaseStats($phase, $turn){
@@ -45,17 +46,18 @@ class Warhead extends Weapon {
 	public $name = "Warhead";
 	public $display = "Warhead";
 	public $type = "Warhead";
-	public $fireMode = "Standard";
-	public $dmgType = "Standard";
 	public $animation = "explosive";
 	public $linked = 1;
 
-	function __construct($id, $parentId, $minDmg, $maxDmg, $traverse){
+	function __construct($id, $parentId, $traverse, $minDmg, $maxDmg, $fireMode = "Standard", $dmgType = "Standard", $melt = 0){
 		$this->id = $id;
 		$this->parentId = $parentId;
 		$this->minDmg = $minDmg;
 		$this->maxDmg = $maxDmg;
 		$this->traverse = $traverse;
+		$this->fireMode = $fireMode;
+		$this->dmgType = $dmgType;
+		$this->melt = $melt;
 	}
 
 	public function getAccuracyLoss($dist){
@@ -71,51 +73,50 @@ class Vran extends Torpedo {
 	public $name = "Vran";
 	public $display = "Light Particle Torpedo";
 	public static $prio = 0;
-	public $minDmg = 28;
-	public $maxDmg = 32;
 	public $integrity = 5;
 	public $negation = 1;
 	public $traverse = -1;
-	public $maxRange = 600;
+	public $maxRange = 1600;
 	public $reload = 2;
 	public static $value = 0;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 28, 32, "Standard", "Plasma", 50);
 	}
 }
 
-class Vranoth extends Vran {
+class Vranoth extends Torpedo {
 	public $name = "Vranoth";
 	public $display = "Medium Particle Torpedo";
 	public static $prio = 0;
-	public $minDmg = 34;
-	public $maxDmg = 46;
 	public $integrity = 8;
 	public $negation = 2;
 	public $traverse = 0;
-	public $maxRange = 800;
+	public $maxRange = 1800;
 	public $reload = 3;
+	public static $value = 0;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 34, 46, "Flash");
 	}
 }
 
-class VranothKa extends Vranoth {
+class VranothKa extends Torpedo {
 	public $name = "VranothKa";
 	public $display = "Heavy Particle Torpedo";
 	public static $prio = 0;
-	public $minDmg = 54;
-	public $maxDmg = 72;
 	public $integrity = 11;
 	public $negation = 3;
 	public $traverse = 1;
 	public $maxRange = 1000;
 	public $reload = 3;
+	public static $value = 0;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 54, 72);
 	}
 }
 
@@ -123,8 +124,6 @@ class Hasta extends Missile {
 	public $name = "Hasta";
 	public $display = "Light Anti-Fighter Missiles";
 	public static $prio = 0;
-	public $minDmg = 15;
-	public $maxDmg = 18;
 	public $mass = 2;
 	public $integrity = 4;
 	public $negation = 0;
@@ -133,15 +132,14 @@ class Hasta extends Missile {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 15, 18);
 	}
 }
 
 class Javelin extends Missile {
 	public $name = "Javelin";
-	public $display = "Impr. Multirole Missiles";
+	public $display = "Std. Multirole Missiles";
 	public static $prio = 0;
-	public $minDmg = 32;
-	public $maxDmg = 44;
 	public $mass = 4;
 	public $integrity = 8;
 	public $negation = 2;
@@ -150,16 +148,14 @@ class Javelin extends Missile {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->negation += 1;
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 32, 44);
 	}
 }
 
-class Triarii extends Missile {
+class Triarii extends Javelin {
 	public $name = "Triarii";
-	public $display = "Heavy Multirole Missiles";
+	public $display = "Plasma Multirole Missiles";
 	public static $prio = 0;
-	public $minDmg = 41;
-	public $maxDmg = 53;
 	public $mass = 4;
 	public $integrity = 8;
 	public $negation = 2;
@@ -168,15 +164,15 @@ class Triarii extends Missile {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 32, 44, "Standard", "Plasma", 50);
+
 	}
 }
 
 class Myrmidon extends Missile {
 	public $name = "Myrmidon";
-	public $display = "Light Imp. Antiship Missiles";
+	public $display = "Light Std. Antiship Missiles";
 	public static $prio = 0;
-	public $minDmg = 54;
-	public $maxDmg = 70;
 	public $mass = 5;
 	public $integrity = 10;
 	public $negation = 3;
@@ -185,6 +181,7 @@ class Myrmidon extends Missile {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 54, 70);
 	}
 }
 
@@ -192,8 +189,6 @@ class Vanguard extends Missile {
 	public $name = "Vanguard";
 	public $display = "Light Interceptor Missiles";
 	public static $prio = 0;
-	public $minDmg = 9;
-	public $maxDmg = 12;
 	public $mass = 2;
 	public $integrity = 4;
 	public $negation = 0;
@@ -202,6 +197,7 @@ class Vanguard extends Missile {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 9, 12);
 	}
 }
 
@@ -209,8 +205,6 @@ class Needle extends Missile {
 	public $name = "Needle";
 	public $display = "Light Anti-Fighter Missiles";
 	public static $prio = 0;
-	public $minDmg = 15;
-	public $maxDmg = 18;
 	public $mass = 2;
 	public $integrity = 4;
 	public $negation = 0;
@@ -219,6 +213,7 @@ class Needle extends Missile {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 15, 18);
 	}
 }
 
@@ -226,8 +221,6 @@ class Naga extends Missile {
 	public $name = "Naga";
 	public $display = "Multirole Missiles";
 	public static $prio = 0;
-	public $minDmg = 30;
-	public $maxDmg = 42;
 	public $mass = 4;
 	public $integrity = 8;
 	public $negation = 2;
@@ -236,6 +229,7 @@ class Naga extends Missile {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 30, 42);
 	}
 }
 
@@ -243,8 +237,6 @@ class Cyclops extends Missile {
 	public $name = "Cyclops";
 	public $display = "Light Antiship Missiles";
 	public static $prio = 0;
-	public $minDmg = 50;
-	public $maxDmg = 66;
 	public $mass = 5;
 	public $integrity = 10;
 	public $negation = 3;
@@ -253,6 +245,7 @@ class Cyclops extends Missile {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 50, 66);
 	}
 }
 
@@ -260,8 +253,6 @@ class Titan extends Missile {
 	public $name = "Titan";
 	public $display = "Heavy Antiship Missiles";
 	public static $prio = 0;
-	public $minDmg = 70;
-	public $maxDmg = 88;
 	public $mass = 7;
 	public $integrity = 14;
 	public $negation = 5;
@@ -270,6 +261,7 @@ class Titan extends Missile {
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 70, 88);
 	}
 }
 

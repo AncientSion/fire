@@ -84,15 +84,15 @@ class SquadBuilder {
 			array(
 				"active" => 0,
 				"chance" => 40,
-				"notes" => "VorchanA Hunter (Torpedo)",
+				"notes" => "Vorchan Hunter (Torpedo)",
 				"units" =>
 					array(
 						array(
-							"name" => "VorchanA",
+							"name" => "Vorchan",
 							"amount" => 1,
 						),
 						array(
-							"name" => "VorchanA",
+							"name" => "Vorchan",
 							"amount" => 1,
 						),
 					),
@@ -113,19 +113,19 @@ class SquadBuilder {
 			array(
 				"active" => 0,
 				"chance" => 30,
-				"notes" => "VorchanB (Assault)",
+				"notes" => "Vorchara (Support)",
 				"units" =>
 					array(
 						array(
-							"name" => "VorchanB",
+							"name" => "Vorchara",
 							"amount" => 1,
 						),
 						array(
-							"name" => "VorchanB",
+							"name" => "Vorchara",
 							"amount" => 1,
 						),
 						array(
-							"name" => "VorchanB",
+							"name" => "Vorchara",
 							"amount" => 1,
 						),
 					),

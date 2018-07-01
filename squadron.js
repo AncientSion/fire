@@ -842,3 +842,33 @@ Squadron.prototype.getSelfExplo = function(){
 
 	return data;
 }
+
+Squadron.prototype.getDamageMoraleMalus = function(){
+	var dmg = 100;
+	if (this.structures.length){
+		var integrity = 0;
+		var remaining = 0;
+
+		for (var i = 0; i < this.structures.length; i++){
+			integrity += this.structures[i].integrity;
+
+			if (this.structures[i].isDestroyed()){continue;}
+			remaining += Math.max(0, this.structures[i].remaining);
+		}
+
+		dmg = Math.floor(remaining / integrity *100)
+	}
+
+	if (!dmg){return ""}
+	return dmg-100 + "%";
+}
+
+
+Squadron.prototype.getCurrentMorale = function(){
+	var base = 100;
+	var cmd = this.command*10;
+	var dmg = this.getDamageMoraleMalus();
+	if (dmg){dmg = Math.floor(dmg.slice(0, dmg.length-1))}
+
+	return Math.floor(base + cmd + dmg);
+}

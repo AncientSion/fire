@@ -61,6 +61,9 @@
 
 	public function getClientData(){
 
+		//$this->testMorale();
+		//return;
+
 		if (!$this->name){return false;}
 		
 		$data = array(
@@ -183,12 +186,15 @@
 	public function getShipData(){
 		if ($this->turn == 1 && $this->phase == -1){return $this->ships;}
 
+		//Debug::log("user: ".$this->userid.", phase: ".$this->phase);
 		for ($i = sizeof($this->ships)-1; $i >= 0; $i--){
 			if ($this->ships[$i]->userid != $this->userid){
+				//Debug::log("shipid: ".$this->ships[$i]->id.", user ".$this->ships[$i]->userid);
 				if ($this->phase == 3){$this->ships[$i]->focus = 0;}
 
 				if ($this->ships[$i]->available == $this->turn && !$this->ships[$i]->actions[0]->resolved){
 					if ($this->ships[$i]->flight){
+						//Debug::log("ding");
 						array_splice($this->ships, $i, 1);
 					}
 					else if ($this->turn > 1 && $this->phase == -1){
@@ -533,9 +539,9 @@
 	public function handleDeployPhase(){
 		Debug::log("handleDeployPhase");
 		$this->resolveJumpOutActions();
+		$this->handleDeployActions();
 		$this->handleJumpInActions();
 		$this->handleInitialFireOrders();
-		$this->handleDeployActions();
 		$this->assembleDeployStates();
 		$this->deleteAllReinforcements();
 		DBManager::app()->deleteEmptyLoads($this->gameid);
@@ -545,7 +551,7 @@
 		$data = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->available == $this->turn){
-				if (sizeof($this->ships[$i]->actions) == 1){
+				if (sizeof($this->ships[$i]->actions) == 1 && $this->ships[$i]->actions[0]->type == "deploy"){
 					$data[] = $this->ships[$i]->id;
 				}
 			}
@@ -1608,6 +1614,7 @@
 						"Primus",
 						"Centurion",
 						"Altarian",
+						"Kutai",
 						"Demos",
 						//"Darkner",
 					),
@@ -1615,8 +1622,8 @@
 						//"Vorchar",
 						"Mograth",
 						"Darkner",
-						"VorchanA",
-						"VorchanB",
+						"Vorchan",
+						"Vorchora",
 						"Haven",
 					),
 					array(
@@ -1751,6 +1758,7 @@
 				$units = array(
 					array("Primus", 5, 6),
 					array("Centurion", 7, 6),
+					array("Kutai", 15, 3),
 					array("Altarian", 15, 3),
 					array("Demos", 15, 3),
 					array("Squadron", 20, 2),

@@ -219,7 +219,7 @@ class NeutronLaser extends Laser {
 	public $minDmg = 95;
 	public $maxDmg = 130;
 	public $optRange = 600;
-	public $dmgLoss = 2;
+	public $dmgLoss = 4;
 	public $accDecay = 60;
 	public $shots = 1;
 	public $reload = 3;
@@ -235,10 +235,25 @@ class NeutronLaser extends Laser {
 	}
 }
 
+class AssaultNeutronlaser extends NeutronLaser {
+	public $name = "AssaultNeutronLaser";
+	public $display = "Assault Neutron Laser";
+	public $minDmg = 80;
+	public $maxDmg = 105;
+	public $reload = 2;
+	public $optRange = 400;
+	public $dmgLoss = 6;
+	public $integrity = 46;
+
+	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $output, $width);
+	}
+}
+
 class HeavyAntimatterBeamProjector extends Laser {
 	public $name = "HeavyAntimatterBeamProjector";
 	public $display = "Heavy Antimatter Beam Projector";
-	public $animColor = "#ffeb3e";
+	public $animColor = "#a1ff00";
 	public static $prio = 0;
 	public $beamWidth = 4;
 	public $minDmg = 265;
@@ -248,16 +263,24 @@ class HeavyAntimatterBeamProjector extends Laser {
 	public $accDecay = 50;
 	public $shots = 1;
 	public $reload = 4;
-	public $powerReq = 12;
+	public $powerReq = 10;
 	public $rakes = 4;
 	public $integrity = 62;
 	public $traverse = 1;
-	public $effiency = 0;
-	public $maxBoost = 0;
+	public $amBonus = 2;
+	public $amMax = 30;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 		$this->boostEffect = array();
+        $this->setAntimatterData();
+	}
+
+	public function getBonusDamage($fire, $baseDmg, $hit){
+		//Debug::log("hit #".$hit);
+		//Debug::log("req: ".$fire->req);
+		//Debug::log("roll: ".$fire->rolls[$hit]);
+		return min($baseDmg / 100 * $this->amMax, ($fire->req - $fire->rolls[$hit]) * $this->amBonus);
 	}
 }
 
@@ -284,32 +307,6 @@ class MolecularSlicer extends Laser {
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 		$this->notes[] = ("Ignores 75% of target armour");
-	}
-}
-
-class NeutronAccelerator extends Laser {
-	public $name = "NeutronAccelerator";
-	public $display = "Neutron Accelerator";
-	public $rakeTime = 50;
-	public $animColor = "#ffeb3e";
-	public $beamWidth = 2;
-	public static $prio = 0;
-	public $minDmg = 45;
-	public $maxDmg = 60;
-	public $optRange = 400;
-	public $dmgLoss = 3;
-	public $accDecay = 100;
-	public $shots = 1;
-	public $reload = 2;
-	public $powerReq = 5;
-	public $rakes = 1;
-	public $effiency = 3;
-	public $maxBoost = 2;
-	public $integrity = 46;
-	public $traverse = 0;
-
-	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
-        parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 

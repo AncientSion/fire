@@ -2122,13 +2122,22 @@ Ship.prototype.showMoraleDiv = function(e){
 				.append($("<th>").attr("colSpan", 2).html("Morale Overview")))
 			.append($("<tr>")
 				.append($("<td>").html("Base Morale"))
-				.append($("<td>").html(" 100%")))
+				.append($("<td>").html("100%")))
+			.append($("<tr>")
+				.append($("<td>").html("Flagship Bonus"))
+				.append($("<td>").addClass("moraleFlagship").html(this.getFlagshipMoraleBonus())))
+			.append($("<tr>")
+				.append($("<td>").html("Officer Bonus"))
+				.append($("<td>").html(this.getOfficerMoraleBonus())))
+			.append($("<tr>")
+				.append($("<td>").html("Critical Malus"))
+				.append($("<td>").addClass("moraleCrit").html(this.getCriticalMoraleMalus())))
 			.append($("<tr>")
 				.append($("<td>").html("Damage Malus"))
-				.append($("<td>").html("-"  + (100 - this.morale.current) + "%")))
+				.append($("<td>").addClass("moraleDamage").html(this.getDamageMoraleMalus())))
 			.append($("<tr>")
 				.append($("<td>").html("Current Morale"))
-				.append($("<td>").html(this.morale.current + "%")))
+				.append($("<td>").addClass("moraleFinal").html(this.getCurrentMorale() + "%")))
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 6)))
 			.append($("<tr>")
@@ -2151,11 +2160,46 @@ Ship.prototype.hideMoraleDiv = function(){
 
 Ship.prototype.getMoraleTrigger = function(){
 	return this.morale.trigger;
-	var command = this.getSystemByName("Command");
-	var boost = command.getCrewLevel();
+}
 
-	if (!boost){return this.morale.trigger;}
-	else return this.morale.trigger - boost * 10;
+Ship.prototype.getFlagshipMoraleBonus = function(){
+	if (this.command){
+		return "+10%";
+	} return "";
+}
+
+Ship.prototype.getOfficerMoraleBonus = function(){
+	if (!this.ship){return ""};
+
+	var mod = this.getCrewLevel(0) * this.getSystemByName("Command").crewEffect;
+	if (mod){return "+" + mod + "%";}
+	return "";
+}
+
+Ship.prototype.getCriticalMoraleMalus = function(){
+	if (!this.ship){return ""};
+
+	var mod = this.getSystemByName("Command").getCritMod("Output");
+	if (mod){return mod + "%";}
+	return "";
+}
+
+Ship.prototype.getDamageMoraleMalus = function(){
+	var dmg = (100 - Math.floor(this.primary.remaining / this.primary.integrity * 100))*-1;
+	if (!dmg){return ""}
+	return dmg + "%";
+}
+
+Ship.prototype.getCurrentMorale = function(){
+	var cmd = this.getSystemByName("Command");
+	var base = 100;
+	var flagship = this.command * 10;
+	var upgrade = this.getCrewLevel(0) * cmd.crewEffect;
+	var crits = cmd.getCritMod("Output");
+	var dmg = this.getDamageMoraleMalus();
+	if (dmg){dmg = Math.floor(dmg.slice(0, dmg.length-1))}
+
+	return Math.floor(base + flagship + upgrade + crits + dmg);
 }
 
 Ship.prototype.getModifiedRoutChance = function(){
@@ -2213,7 +2257,7 @@ Ship.prototype.createBaseDiv = function(){
 			.append($("<td>").attr("colSpan", 1).addClass("Morale")
 				.append($("<div>").addClass("moraleFull"))
 				.append($("<div>").addClass("moraleTrigger").css("width", (this.getMoraleTrigger() + "%")))
-				.append($("<div>").addClass("moraleNow").css("width", (this.morale.current + "%")))
+				.append($("<div>").addClass("moraleNow").css("width", (Math.min(100, this.getCurrentMorale()) + "%")))
 				.hover(
 					function(e){
 						game.getUnit($(this).parent().parent().parent().parent().parent().parent().data("shipId")).showMoraleDiv(e);
@@ -3279,7 +3323,7 @@ Ship.prototype.getLockEffect = function(target){
 }
 
 Ship.prototype.getMaskEffect = function(shooter){
-	if (this.flight || this.salvo || shooter.flight | shooter.salvo){return 0;}
+	if (this.flight || this.salvo || shooter.flight){return 0;}
 
 	var sensor = this.getSystemByName("Sensor");
 	var ew = sensor.getEW();
@@ -3298,7 +3342,7 @@ Ship.prototype.getMaskEffect = function(shooter){
 		return 0;
 	}
 	else if (shooter.salvo){
-		multi = 0.33;
+		multi = 0.5;
 	}	
 
 	if (d == 0 && game.isCloseCombat(this, shooter) && this.isInEWArc(origin, shooter.getTrajectory(), sensor, ew)){
@@ -3619,10 +3663,10 @@ Ship.prototype.getCrewEffect = function(i){
 	var command = this.getSystemByName("Command");
 	var type = command.loads[i];
 	var name = type.name;
-	var value = 0;
+	var value = command.crewEffect;
 
 	if (name == "Command"){
-		return "-" +  10 + "% Rout Chance</br>+" + command.crewEffect + "% Focus Generation";
+		return + value + "% Unit Morale</br>+" + value + "% Focus Generation";
 	}
 	else return "+" + this.getSystemByName(name).crewEffect + "% " + name + " Output";
 }

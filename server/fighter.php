@@ -88,7 +88,12 @@ class Sentri extends Fighter {
 class Sitara extends Fighter {
 	public $name = "Sitara";
 	public $display = "Strike Fighter";
+	public static $value =  26;
 	public $mass = 34;
+	public $integrity = 22;
+	public $negation = 6;
+	public $baseImpulse = 95;
+	public $baseHitChance = 24;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

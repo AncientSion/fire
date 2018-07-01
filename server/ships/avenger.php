@@ -5,7 +5,7 @@ class Avenger extends Heavy {
 	public $display = "Avenger Heavvy Carrier";
 	public $faction = "Earth Alliance";
 	public $size =  80;
-	public static $value = 480;
+	public static $value = 450;
 	public $profile = array(0.91, 1.09);
 	public $mass = 12500;
 
@@ -13,7 +13,7 @@ class Avenger extends Heavy {
 	public $vitalHP = 140;
 	public $ep = 55;
 	public $ew = 600;
-	public $power = 5;
+	public $power = 0;
 
 	function __construct($data = false){
         parent::__construct($data);

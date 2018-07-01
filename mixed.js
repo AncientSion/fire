@@ -662,7 +662,7 @@ Mixed.prototype.getFireDest = function(fire, isHit, num){
 	return rotate(0, 0, {x: x, y: y}, this.getParent().getDrawFacing());
 }
 
-Mixed.prototype.getTrajectory = function(gun){
+Mixed.prototype.getTrajectory = function(){
 	return {x: this.x, y: this.y};
 }
 

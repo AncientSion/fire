@@ -28,17 +28,61 @@ function Salvo(data){
 		return this.structures[0].systems[0].maxDmg;
 	}
 
-	this.getTrackingString = function(){
+	this.getTrackingStrinag = function(){
 		var t = this.getTarget().traverse;
 		var html = "";
 		var d = Math.max(0, (this.structures[0].systems[0].traverse - t));
-		html += getUnitType(this.structures[0].systems[0].traverse) + "<span class=";
+		html += getUnitType(this.structures[0].systems[0].traverse) + "<span class='yellow'>";
 
-		if (d > 0){
-			html += "'red'>";
-		} else html += "'green'>";
+	//	if (d > 0){
+	//		html += "'red'>";
+	//	} else html += "'green'>";
+	//	html += ""
+
+		var base = 80;
+		var final = Math.floor(base / 100 * (100 - (d*20)))
 		
-		return html + " (" + Math.ceil(100 * (100 - (d*20))/100) + "%)</span>";
+		return html + " (" + final + "%)</span>";
+	}
+
+	this.isBeingSpoofed = function(){
+		var t = this.getTarget();
+		var angle = getAngleFromTo(t.getPlannedPos(), this.getTrajectory());
+			angle = addAngle(-t.getPlannedFacing(), angle);
+
+		var ew = t.getMaskEffect(this);
+		console.log(ew);
+
+			console.log(angle);
+			return angle;
+	}
+
+
+	this.getTrackingString = function(){
+		var base = 80;
+		var trackStep = 20;
+		var target = this.getTarget();
+		var spoof = target.getMaskEffect(this);
+			spoof = 0;
+		var trackingLack = Math.max(0, (this.structures[0].systems[0].traverse - target.traverse));
+		var final = base * (1-spoof) / 100 * (100-(trackingLack * trackStep))
+
+		/*
+		var string = base + "% ";
+		if (trackingLack){
+			string += " x" + ((100-(trackingLack*trackStep))/100);
+		}
+		if (spoof){
+			string += " x" + spoof;
+		}
+
+		if (spoof || trackingLack){
+			string += " = " + final + "%";
+		}
+		*/
+
+
+		return "<span class='yellow'>" + final + "%</span>";
 	}
 
 	this.setDisplay = function(){
@@ -115,34 +159,53 @@ Salvo.prototype.createBaseDiv = function(){
 	if (this.friendly){headerC = "green";}
 
 	var target = this.getTarget();
-	var dist = Math.ceil(getDistance(this.getPlannedPos(), target.getPlannedPos()));
+	var lacking = 0;
+	//var dist = Math.ceil(getDistance(this.getPlannedPos(), target.getPlannedPos()));
+
+	if (target.traverse < this.structures[0].systems[0].traverse){
+		lacking = 1;
+	}
 
 	var table = $("<table>")
 		.append($("<tr>")
 			.append($("<th>").html(this.structures.length + "x '" + this.structures[0].name + "' #" + this.id).attr("colSpan", 4).addClass(headerC)))
 		.append($("<tr>")
-			.append($("<th>").html(this.structures[0].display).attr("colSpan", 4)))
+			.append($("<td>").html(this.structures[0].display).addClass("yellow").css("font-size", 14).attr("colSpan", 4)))
 		.append($("<tr>")
-			.append($("<td>").html("Type (Size)"))
+			.append($("<td>").html("Type (Size)").css("width", "60%"))
 			.append($("<td>").html(getUnitType(this.traverse) + " (" + this.traverse + ")").attr("colSpan", 3)))
 		.append($("<tr>")
-			.append($("<td>").html("Target"))
-			.append($("<td>").html("<span class='red'>" + target.name + " #" + target.id + "</span> - Dist: " + dist + "px").attr("colSpan", 3)))
+			.append($("<td>").html("Base To-Hit"))
+			.append($("<td>").html(this.getProfileString()).attr("colSpan", 3)))
 		.append($("<tr>")
 			.append($("<td>").html("Speed"))
 			.append($("<td>").html(this.getSpeedString()).addClass("Thrust").attr("colSpan", 3)))
 		.append($("<tr>")
-    		.append($("<td>").html("Tracking up to"))
+    		.append($("<td>").html("Maximum Tracking"))
+			.append($("<td>").html(getUnitType(this.structures[0].systems[0].traverse)).attr("colSpan", 3)))
+		.append($("<tr>").append($("<td>").attr("colSpan", 4).css("height", 15)))
+		.append($("<tr>")
+			.append($("<td>").html("Targeting"))
+			.append($("<td>").html(target.name + " #" + target.id).attr("colSpan", 3)))
+		.append($("<tr>").append($("<td>").attr("colSpan", 4).css("height", 15)))
+
+		if (lacking){
+			table
+			.append($("<tr>")
+				.append($("<th>").html("- Targetting unsuited units -").attr("colSpan", 4)))
+		}
+
+
+
+		table.append($("<tr>")
+    		.append($("<td>").html("Chance to hit outside of EW"))
 			.append($("<td>").html(this.getTrackingString()).attr("colSpan", 3)))
-		.append($("<tr>")
-    		.append($("<td>").html("Damage"))
-    		.append($("<td>").html(this.getDamage()).attr("colSpan", 3)))
-		.append($("<tr>")
-			.append($("<td>").html("To-Hit Profile"))
-			.append($("<td>").html(this.getProfileString()).attr("colSpan", 3)))
-		.append($("<tr>")
-    		.append($("<td>").html("Armour"))
-    		.append($("<td>").html(this.structures[0].negation).attr("colSpan", 3)))
+		//.append($("<tr>")
+    	//	.append($("<td>").html("Damage"))
+    	//	.append($("<td>").html(this.getDamage()).attr("colSpan", 3)))
+		//.append($("<tr>")
+    	//	.append($("<td>").html("Armour"))
+    	//	.append($("<td>").html(this.structures[0].negation).attr("colSpan", 3)))
 
 	subDiv.append(table);
 	topDiv.append(subDiv)
@@ -253,9 +316,16 @@ Salvo.prototype.supplyAttachDiv = function(div){
 
 	//console.log(this.getTarget().getMaskEffect(this))
 
+	var alive = 0;
+	for (var j = 0; j < this.structures.length; j++){
+		if (this.structures[j].destroyed || this.structures[j].disabled){continue;}
+		alive++;
+	}
+
 	var attachDiv = $("<div>").addClass("attachDiv")
 		.append($("<div>").css("display", "block").addClass("center15 " + color)
-			.html("Salvo #" + this.id + (" (click to select)"))
+			.append($("<div>").html("Salvo #" + this.id))
+			.append($("<div>").css("margin-left", 60).html(alive +"x " + this.structures[0].name + "</div>"))
 		.append($("<div>").css("display", "block").addClass("center15 " + color)
 			.html("Auto-Targetting: " + this.getTarget().name + " #" + this.mission.targetid)))
 		.data("id", this.id)
@@ -284,11 +354,9 @@ Salvo.prototype.supplyAttachDiv = function(div){
 			}
 		)
 		
-
-	for (var j = 0; j < this.structures.length; j++){
-		if (this.structures[j].destroyed || this.structures[j].disabled){continue;}
+	for (var j = 0; j < alive; j++){
 		attachDiv.append($("<div>")
-			.append($(this.structures[j].getBaseImage().cloneNode(true))
+			.append($(this.structures[0].getBaseImage().cloneNode(true))
 				.addClass("rotate270")
 				.css("width", 34)
 				.css("height", 34)

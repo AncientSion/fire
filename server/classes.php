@@ -3,17 +3,23 @@
 error_reporting(E_ALL); ini_set('display_errors', '1');
 
 class Morale {
-	public $base = 100;
-	public $current;
 	public $trigger = 30;
 	public $baseChance = 70;
-	public $bonusChance = 0;
-	public $effChance;
 
-	function __construct($current, $crew, $crit){
-		$this->current = $current;
-		$this->bonusChance = $crew + $crit;
-		$this->effChance = floor(($this->baseChance + $this->bonusChance) * (1+($this->trigger - $this->current) / ($this->trigger)));
+	public $damage;
+	public $dmg;
+	public $crew;
+	public $crit;
+	public $current;
+
+	function __construct($damage, $cmd, $crew, $crit){
+		$this->damage = $damage;
+		$this->cmd = $cmd*10;
+		$this->crew = $crew;
+		$this->crit = $crit;
+		$this->current = $this->damage + $this->cmd + $this->crew + $this->crit;
+
+		$this->effChance = floor($this->baseChance * (1+($this->trigger - $this->current) / ($this->trigger)));
 	}
 }
 

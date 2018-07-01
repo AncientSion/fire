@@ -175,24 +175,34 @@ class AntimatterConverter extends Particle {
 	public $display = "Antimatter-Converter";
 	public $fireMode = "Flash";
 	public static $prio = 0;
-	public $minDmg = 16;
-	public $accDecay = 120;
+	public $minDmg = 14;
+	public $accDecay = -120;
 	public $shots = 1;
-	public $animColor = "green";
+	public $animColor = "#a1ff00";
 	public $projSize = 5;
 	public $projSpeed = 6;
 	public $reload = 3;
-	public $integrity = 64;
+	public $integrity = 60;
 	public $powerReq = 7;
 	public $traverse = 1;
+	public $amBonus = 2;
+	public $amMax = 80;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
 		parent::__construct($id, $parentId, $start, $end, $output, $width);
         $this->setFlashData();
+        $this->setAntimatterData();
 	}
 
-	public function getBaseDamage($fire){
-		return $this->getFlashBaseDamage($fire);
+	public function getBaseDamage($fire, $hit){
+		return DmgCalc::getFlashBaseDamage($fire, $hit);
+	}
+
+	public function getBonusDamage($fire, $baseDmg, $hit){
+		//Debug::log("hit #".$hit);
+		//Debug::log("req: ".$fire->req);p
+		//Debug::log("roll: ".$fire->rolls[$hit]);
+		return min($baseDmg / 100 * $this->amMax, ($fire->req - $fire->rolls[$hit]) * $this->amBonus);
 	}
 }
 

@@ -2,13 +2,23 @@
 
 class DmgCalc {
 
+	public static function getFlashBaseDamage($fire){
+		return $fire->weapon->dmgs[$fire->target->traverse+4];
+
+		//$data = array( 1,  2,  0,  6, 10, 15,  20);
+		//			   0   1   2   3   4   5   6  7
+		//			  -4  -3  -2  -1   0   1   2  3
+		Debug::log("getFlashBaseDamage DMG error");
+		return 1;
+	}
+
 	public static function setWeaponPriority(){
 		$names = array(
-			"SuperHeavyLaser", "HeavyLaser", "MediumLaser", "LightLaser", "LightParticleBeam", "NeutronLaser", "NeutronAccelerator",
+			"SuperHeavyLaser", "HeavyLaser", "MediumLaser", "LightLaser", "LightParticleBeam", "NeutronLaser", "AssaultNeutronLaser", "HeavyAntimatterBeamProjector",
 			"SuperHeavyParticle", "HeavyParticle", "MediumParticle", "LightParticle", "TwinParticleBolter", "FusionCannon", "HeavyFusionCannon",
 			"HeavyPlasma", "MediumPlasma", "LightPlasma", "LightPlasmaShredder",
 			"AntimatterConverter", "MagCompressor",
-			"LightPulse", "MediumPulse", "HeavyPulse", 
+			"LightPulse", "MediumPulse", "HeavyPulse", "PulseFusionCannon",
 			"LightPlasmaPulse", "MediumPlasmaPulse", "HeavyPlasmaPulse",
 			"MediumRailGun", "HeavyRailGun"
 		);
@@ -110,30 +120,29 @@ class DmgCalc {
 			case "Matter": return static::calcMatterDmg($weapon, $totalDmg, $negation);
 			case "Plasma": return static::calcPlasmaDmg($weapon, $totalDmg, $negation);
 			case "Molecular": return static::calcMolecularDmg($weapon, $totalDmg, $negation);
+			case "Molecular": return static::CalcAntimatterDmg($weapon, $totalDmg, $negation);
 			case "EM": return static::calcEMDmg($weapon, $totalDmg, $negation);
 			default: Debug::log("calcDmg ERROR"); break;
 		}
 	}
 
-	public static function doDmg($fire, $system){
+	public static function doDmg($fire, $hit, $system){
 		switch ($fire->weapon->fireMode){
-			case "Standard": static::doStandardDmg($fire, $system); break;
-			case "Ballistic": static::doStandardDmg($fire, $system); break;
-			case "Pulse": static::doPulseDmg($fire, $system); break;
-			case "Laser": static::doLaserDmg($fire, $system); break;
-			case "Flash": static::doFlashDmg($fire, $system); break;
+			case "Standard": static::doStandardDmg($fire, $hit, $system); break;
+			case "Ballistic": static::doStandardDmg($fire, $hit, $system); break;
+			case "Pulse": static::doPulseDmg($fire, $hit, $system); break;
+			case "Laser": static::doLaserDmg($fire, $hit, $system); break;
+			case "Flash": static::doFlashDmg($fire, $hit, $system); break;
 			default: Debug::log("doDmg ERROR"); break;
 		}
 
 		$fire->weapon->postDmg($fire);
 	}
 
-
-
-	public static function doStandardDmg($fire, $system){
+	public static function doStandardDmg($fire, $hit, $system){
 		//Debug::log("hitting: ".get_class($system));
 		$destroyed = 0;
-		$totalDmg = $fire->weapon->getTotalDamage($fire);
+		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit);
 		$okSystem = 0;
 		$remInt = $system->getRemIntegrity();
 		
@@ -169,9 +178,9 @@ class DmgCalc {
 		$fire->target->applyDamage($entry);	
 	}
 
-	public static function doPulseDmg($fire, $system){
+	public static function doPulseDmg($fire, $hit, $system){
 		$destroyed = 0;
-		$totalDmg = $fire->weapon->getTotalDamage($fire);
+		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit);
 		$remInt = $system->getRemIntegrity();
 		$okSystem = 0;
 
@@ -236,8 +245,8 @@ class DmgCalc {
 		$fire->target->applyDamage($entry);
 	}
 
-	public static function doLaserDmg($fire, $system){
-		$totalDmg = $fire->weapon->getTotalDamage($fire);
+	public static function doLaserDmg($fire, $hit, $system){
+		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit);
 		$okSystem = 0;
 		$rakes = $fire->weapon->rakes;
 		$counter = 1 + (($rakes -1) * $fire->target instanceof Mixed);
@@ -304,9 +313,9 @@ class DmgCalc {
 		Debug::log($print);
 	}
 
-	public static function doFlashDmg($fire, $system){
+	public static function doFlashDmg($fire, $hit, $system){
 		//$totalDmg = $fire->weapon->getTotalDamage($fire) * (1 - ($this->ship*0.5));
-		$totalDmg = $fire->weapon->getTotalDamage($fire);
+		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit);
 		$targets = $fire->target->getFlashTargets($fire);
 		$negation;
 
@@ -343,6 +352,7 @@ class DmgCalc {
 		}
 		else {		
 			Debug::log("VS NON SHIP");
+			$fire->hits = 0;
 			for ($i = 0; $i < sizeof($targets); $i++){
 				$dmgs[] = $totalDmg;
 			}
@@ -379,7 +389,7 @@ class DmgCalc {
 	}
 
 	public static function doFlashDmg3($fire, $system){ // old flas
-		$totalDmg = $fire->weapon->getTotalDamage($fire);
+		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit);
 		$targets = $fire->target->getFlashTargets($fire);
 		$negation;
 
@@ -409,7 +419,7 @@ class DmgCalc {
 		}
 	}
 	public static function doFlashDmg2($fire, $system){ // old flash
-		$totalDmg = $fire->weapon->getTotalDamage($fire);
+		$totalDmg = $fire->weapon->getTotalDamage($fire, $hit);
 		$toDo = $totalDmg;
 		if ($fire->target->ship){$system = $fire->target->getFlashOverkillSystem($fire);}
 
@@ -497,6 +507,7 @@ class DmgCalc {
 	}
 
 	public static function calcMatterDmg($weapon, $totalDmg, $negation){
+		Debug::log("calcMatterDmg, negation: ".$negation["stock"]."/".$negation["bonus"]);
 		$shieldDmg = 0;
 		$armourDmg = 0;
 		$structDmg = 0;
@@ -539,6 +550,7 @@ class DmgCalc {
 	}
 
 	public static function calcPlasmaDmg($weapon, $totalDmg, $negation){
+		Debug::log("calcPlasmaDmg, negation: ".$negation["stock"]."/".$negation["bonus"]);
 		$shieldDmg = 0;
 		$armourDmg = 0;
 		$structDmg = 0;

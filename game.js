@@ -52,7 +52,7 @@ function Game(data){
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
-	this.animData = {jump: 60};
+	this.animData = {jump: 6};
 	this.commandChange = {old: 0, new: 0}
 
 	this.hasSnapCenterline = function(shooter, shooterAngle, target){
@@ -295,7 +295,8 @@ function Game(data){
 		hangar.setFireOrder(0, pos).select();
 		this.flightDeploy = false;
 
-		$(flight.element).css("top", 600).css("left", 0);		this.checkUnitOffsetting();
+		$(flight.element).css("top", 600).css("left", 0);
+		this.checkUnitOffsetting();
 		this.draw();
 
 		var m = game.mission;
