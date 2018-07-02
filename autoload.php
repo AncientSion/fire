@@ -53,7 +53,7 @@ spl_autoload_register(
                 'haven' => '/server/ships/haven.php',
                 'darkner' => '/server/ships/darkner.php',
                 'altarian' => '/server/ships/altarian.php',
-                //'kutai' => '/server/ships/kutai.php',
+                'kutai' => '/server/ships/kutai.php',
                 'demos' => '/server/ships/demos.php',
                 'primus' => '/server/ships/primus.php',
                 'centurion' => '/server/ships/centurion.php',
