@@ -21,18 +21,18 @@ class Kutai extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 16, 4);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 15, 4);
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 240, 60);
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 300, 120);
 		$structs[] = $front;
 
-		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 15, 1);
+		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 14, 1);
 		$right->systems[] = new LightPlasma($this->getId(), $this->id, 0, 180);
 		$right->systems[] = new LightPlasma($this->getId(), $this->id, 0, 180);
 		$right->systems[] = new LightPlasma($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
-		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 15, 1);
+		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 14, 1);
 		$left->systems[] = new LightPlasma($this->getId(), $this->id, 180, 360);
 		$left->systems[] = new LightPlasma($this->getId(), $this->id, 180, 360);
 		$left->systems[] = new LightPlasma($this->getId(), $this->id, 180, 360);

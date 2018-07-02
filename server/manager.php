@@ -1614,8 +1614,8 @@
 						"Primus",
 						"Centurion",
 						"Altarian",
-						"Kutai",
 						"Demos",
+						"Kutai",
 						//"Darkner",
 					),
 					array(
