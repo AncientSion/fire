@@ -4,12 +4,12 @@ class Demos extends Medium {
 	public $name = "Demos";
 	public $display = "Demos";
 	public $faction = "Centauri Republic";
-	public $size =  45;
+	public $size =  50;
 	public static $value = 450;
 	public $profile = array(0.92, 1.08);
 	public $mass = 3000;
 
-	public $integrity = 575;
+	public $integrity = 600;
 	public $vitalHP = 85;
 	public $ep = 110;
 	public $ew = 700;
