@@ -3487,6 +3487,7 @@ Launcher.prototype.initLauncherDiv = function(){
 		.empty()
 		.append($("<tr>")
 			.append($("<th>").html("Class"))
+			.append($("<th>").html(""))
 			.append($("<th>").html("Tracking"))
 			.append($("<th>").html("Cost"))
 			.append($("<th>").html("Shots & Reload"))
@@ -3501,6 +3502,8 @@ Launcher.prototype.initLauncherDiv = function(){
 				.append($("<td>")
 					.append($("<div>").addClass("yellow").html(this.loads[i].name))
 					.append($("<div>").addClass("yellow").html(this.loads[i].display))
+				)
+				.append($("<td>")
 					.append($(this.loads[i].getElement(true)))
 				)
 				.append($("<td>").html(this.loads[i].systems[0].getTraverseRating() + "</br>(" + (getUnitType(this.loads[i].systems[0].getTraverseRating()) + ")")))
@@ -3536,7 +3539,7 @@ Launcher.prototype.initLauncherDiv = function(){
 	table
 		.append($("<tr>")
 			.css("fontSize", 18)
-			.append($("<th>").attr("colSpan", 5).css("fontSize", 18).html("Grand Total"))
+			.append($("<th>").attr("colSpan", 6).css("fontSize", 18).html("Grand Total"))
 			.append($("<th>"))
 			.append($("<th>"))
 			.append($("<th>")))
@@ -3571,8 +3574,8 @@ Launcher.prototype.updateLauncherDiv = function(index){
 	var cost = this.loads[index].cost * amount;
 	var tr = $($("#weaponTable").find("tr")[index+1]);
 	var tds = tr.find("td");
-		$(tds[5]).html(amount);
-		$(tds[7]).html(cost);
+		$(tds[6]).html(amount);
+		$(tds[8]).html(cost);
 
 	this.setTotalBuyData();
 	this.canConfirm();

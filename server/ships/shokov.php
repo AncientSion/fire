@@ -10,7 +10,7 @@ class Shokov extends Shokos {
 	public static $value = 250;
 
 	public $ew = 425;
-	//public $power = -2;
+	public $power = 0;
 
 	function __construct($id, $userid){
 		parent::__construct($id, $userid);

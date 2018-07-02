@@ -838,7 +838,7 @@ Single.prototype.addSysEvents = function(div, isBuy){
 
 Single.prototype.getElement = function(isBuy){
 	var div = $("<div>")
-		.addClass("fighterDiv")
+		.addClass("singleDiv")
 		.data("subId", this.id)
 		.append($(this.getBaseImage().cloneNode(true))
 			.addClass("rotate270 img80pct"))

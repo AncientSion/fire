@@ -239,20 +239,20 @@ Flight.prototype.expandDiv = function(div){
 	$(document.body).append(div);
 	
 	for (var i = 0; i < this.structures.length; i++){
-		var fighterDiv = this.structures[i].getElement(false);
-		structContainer.append(fighterDiv);
+		var singleDiv = this.structures[i].getElement(false);
+		structContainer.append(singleDiv);
 	}
 
 	var height = 0;
 
-	$(structContainer).find(".fighterDiv").each(function(){
+	$(structContainer).find(".singleDiv").each(function(){
 		var y = $(this).position().top + $(this).height();
 		if (y > height){
 			height = y;
 		}
 	})
 
-	$(structContainer).css("height", height + 50);
+	$(structContainer).css("height", height + 30).css("padding-top", 5).css("padding-bottom", 5);
 
 	return div;
 }

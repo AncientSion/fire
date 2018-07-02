@@ -366,7 +366,6 @@ table, th, tr, td {
 }
 
 #hangarTable tr, #weaponTable tr, #crewTable tr {
-	height: 40px;
 	border: 1px solid white;
 }
 
@@ -833,6 +832,8 @@ table, th, tr, td {
 	border: 1px solid white;
 }
 
+
+
 .ccContainer {
 	width: 99%;
 	margin: auto;
@@ -1131,7 +1132,7 @@ div.integrityFull {
 	width: 40px;
 }
 
-.fighterDiv {
+.singleDiv {
 	position: relative;
     color: black;
     height: 50px;
@@ -1140,23 +1141,23 @@ div.integrityFull {
     display: inline-block;
     margin: 4px;
     margin-left: 5px;
-    margin-bottom: 20px;
-    margin-top: 35px;
+    margin-bottom: 12px;
+    margin-top: 25px;
 }
 
-.fighterDiv .system {
+.singleDiv .system {
 	width: 20px;
 	height: 20px;
 	top: -22px;
 	left: 15px;
 }
 
-.fighterDiv .system img{
+.singleDiv .system img{
 	width: 100%;
 	height: 100%;
 }
 
-.fighterDiv .overlay {
+.singleDiv .overlay {
     position: absolute;
     z-index: 10;
     height: 40px;

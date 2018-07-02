@@ -76,13 +76,13 @@ class Vran extends Torpedo {
 	public $integrity = 5;
 	public $negation = 1;
 	public $traverse = -1;
-	public $maxRange = 1600;
+	public $maxRange = 600;
 	public $reload = 2;
 	public static $value = 0;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 28, 32, "Standard", "Plasma", 50);
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 28, 32);
 	}
 }
 
@@ -93,13 +93,13 @@ class Vranoth extends Torpedo {
 	public $integrity = 8;
 	public $negation = 2;
 	public $traverse = 0;
-	public $maxRange = 1800;
+	public $maxRange = 800;
 	public $reload = 3;
 	public static $value = 0;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
-		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 34, 46, "Flash");
+		$this->systems[] = new Warhead($this->getId(), $this->parentId, $this->traverse, 34, 46);
 	}
 }
 

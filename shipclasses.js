@@ -2203,6 +2203,7 @@ Ship.prototype.getCurrentMorale = function(){
 }
 
 Ship.prototype.getModifiedRoutChance = function(){
+	return this.morale.baseChance + "%";
 	if (this.morale.bonusChance){
 		if (this.morale.bonusChance > 0){
 			return this.morale.baseChance + " +" + this.morale.bonusChance + "%";
@@ -3666,7 +3667,7 @@ Ship.prototype.getCrewEffect = function(i){
 	var value = command.crewEffect;
 
 	if (name == "Command"){
-		return + value + "% Unit Morale</br>+" + value + "% Focus Generation";
+		return "+" + value + "% Unit Morale</br>+" + value + "% Focus Generation";
 	}
 	else return "+" + this.getSystemByName(name).crewEffect + "% " + name + " Output";
 }
