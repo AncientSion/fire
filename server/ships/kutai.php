@@ -4,15 +4,15 @@ class Kutai extends Medium {
 	public $name = "Kutai";
 	public $display = "Kutai";
 	public $faction = "Centauri Republic";
-	public $size =  50;
-	public static $value = 440;
+	public $size =  40;
+	public static $value = 400;
 	public $profile = array(0.93, 1.07);
 	public $mass = 3800;
 
-	public $integrity = 650;
-	public $vitalHP = 80;
-	public $ep = 70;
-	public $ew = 675;
+	public $integrity = 525;
+	public $vitalHP = 70;
+	public $ep = 80;
+	public $ew = 650;
 
 	function __construct($data = false){
         parent::__construct($data);
@@ -23,8 +23,6 @@ class Kutai extends Medium {
 
 		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 16, 4);
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 240, 60);
-		$front->systems[] = new MediumParticle($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new MediumParticle($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 300, 120);
 		$structs[] = $front;
 
