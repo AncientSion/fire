@@ -1614,7 +1614,7 @@
 						"Primus",
 						"Centurion",
 						"Altarian",
-						//"Kutai",
+						"Kutai",
 						"Demos",
 						//"Darkner",
 					),
@@ -1758,7 +1758,7 @@
 				$units = array(
 					array("Primus", 5, 6),
 					array("Centurion", 7, 6),
-				//	array("Kutai", 15, 3),
+					array("Kutai", 15, 3),
 					array("Altarian", 15, 3),
 					array("Demos", 15, 3),
 					array("Squadron", 20, 2),
