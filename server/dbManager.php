@@ -23,6 +23,15 @@
 	        return self::$instance;
 		}
 
+		public function doPurge(){
+			$tables = array("actions", "damages", "fireorders", "games", "loads", "missions", "playerstatus", "powers", "sensors", "subunits", "systemcrits", "units", "users");
+
+			for ($i = 0; $i < sizeof($tables); $i++){
+				$sql = "truncate ".$tables[$i];
+				$this->query($sql);
+			}
+		}
+
 		public function getLastInsertId(){
 			return $this->connection->lastInsertId();
 		}
