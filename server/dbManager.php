@@ -509,7 +509,7 @@
 				$stmt->bindParam(":ship", $ship);
 				$stmt->bindParam(":ball", $ball);
 				$stmt->bindParam(":name", $units[$i]["name"]);
-				Debug::log("display: ".$unis[$i]["display"]);
+				Debug::log("display: ".$units[$i]["display"]);
 				$stmt->bindParam(":display", $units[$i]["display"]);
 				$stmt->bindParam(":status", $status);
 				$stmt->bindValue(":available", (floor($units[$i]["turn"]) + floor($units[$i]["eta"])));
