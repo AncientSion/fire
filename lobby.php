@@ -5,9 +5,7 @@ include_once $_SERVER["DOCUMENT_ROOT"]."/fire/global.php";
 //$dbManager = DBManager::app();
 //$dbManager->setInitialCommandUnit(1, 1, array(array("id" => 5, "name" => "Hyperion", "command" => 1)));
 
-if (true){
-	DBManager::app()->doPurge();
-}
+if (0){DBManager::app()->doPurge();}
 
 //echo DmgCalc::setWeaponPriority(); return;
 

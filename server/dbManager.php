@@ -24,7 +24,7 @@
 		}
 
 		public function doPurge(){
-			$tables = array("actions", "damages", "fireorders", "games", "loads", "missions", "playerstatus", "powers", "sensors", "subunits", "systemcrits", "units", "users");
+			$tables = array("actions", "damages", "fireorders", "games", "loads", "missions", "playerstatus", "powers", "sensors", "subunits", "systemcrits", "units");
 
 			for ($i = 0; $i < sizeof($tables); $i++){
 				$sql = "truncate ".$tables[$i];
