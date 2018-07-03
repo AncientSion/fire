@@ -143,7 +143,7 @@ class Javelin extends Missile {
 	public $mass = 4;
 	public $integrity = 8;
 	public $negation = 2;
-	public static $value = 5;
+	public static $value = 4;
 	public $traverse = -1;
 
 	function __construct($id, $parentId){
@@ -159,7 +159,7 @@ class Triarii extends Javelin {
 	public $mass = 4;
 	public $integrity = 8;
 	public $negation = 2;
-	public static $value = 7;
+	public static $value = 6;
 	public $traverse = -1;
 
 	function __construct($id, $parentId){
@@ -176,7 +176,7 @@ class Myrmidon extends Missile {
 	public $mass = 5;
 	public $integrity = 10;
 	public $negation = 3;
-	public static $value = 9;
+	public static $value = 7;
 	public $traverse = 0;
 
 	function __construct($id, $parentId){
@@ -224,7 +224,7 @@ class Naga extends Missile {
 	public $mass = 4;
 	public $integrity = 8;
 	public $negation = 2;
-	public static $value = 5;
+	public static $value = 4;
 	public $traverse = -1;
 
 	function __construct($id, $parentId){
@@ -240,7 +240,7 @@ class Cyclops extends Missile {
 	public $mass = 5;
 	public $integrity = 10;
 	public $negation = 3;
-	public static $value = 8;
+	public static $value = 6;
 	public $traverse = 0;
 
 	function __construct($id, $parentId){
@@ -256,7 +256,7 @@ class Titan extends Missile {
 	public $mass = 7;
 	public $integrity = 14;
 	public $negation = 5;
-	public static $value = 10;
+	public static $value = 8;
 	public $traverse = 1;
 
 	function __construct($id, $parentId){
