@@ -4,12 +4,12 @@ class Demos extends Medium {
 	public $name = "Demos";
 	public $display = "Demos";
 	public $faction = "Centauri Republic";
-	public $size =  45;
+	public $size =  50;
 	public static $value = 450;
 	public $profile = array(0.92, 1.08);
 	public $mass = 3000;
 
-	public $integrity = 575;
+	public $integrity = 600;
 	public $vitalHP = 85;
 	public $ep = 110;
 	public $ew = 700;
@@ -28,12 +28,12 @@ class Demos extends Medium {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 15, 1);
-		$right->systems[] = new LightPlasmaShredder($this->getId(), $this->id, 300, 120);
+		$right->systems[] = new MediumParticle($this->getId(), $this->id, 300, 120);
 		$right->systems[] = new LightParticle($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 15, 1);
-		$left->systems[] = new LightPlasmaShredder($this->getId(), $this->id, 240, 60);
+		$left->systems[] = new MediumParticle($this->getId(), $this->id, 240, 60);
 		$left->systems[] = new LightParticle($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
 

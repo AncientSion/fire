@@ -5,7 +5,7 @@ class Centurion extends Heavy {
 	public $display = "Centurion";
 	public $faction = "Centauri Republic";
 	public $size =  80;
-	public static $value = 800;
+	public static $value = 740;
 	public $profile = array(0.92, 1.08);
 	public $mass = 7500;
 
@@ -24,7 +24,6 @@ class Centurion extends Heavy {
 		$front = new Structure($this->getId(), $this->id, 330, 30, 1050, 20, 5);
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 240, 60);
 		$front->systems[] = new MediumParticle($this->getId(), $this->id, 300, 60);
-		$front->systems[] = new MediumPlasma($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new MediumParticle($this->getId(), $this->id, 300, 60);
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 300, 120);
 		$structs[] = $front;

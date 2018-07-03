@@ -152,7 +152,7 @@ class Javelin extends Missile {
 	}
 }
 
-class Triarii extends Javelin {
+class Triarii extends Missile {
 	public $name = "Triarii";
 	public $display = "Plasma Multirole Missiles";
 	public static $prio = 0;
