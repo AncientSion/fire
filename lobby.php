@@ -225,7 +225,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 									Initial Point Value
 								</td>
 								<td>
-									<input type="number" style="text-align: center" value=3000 placeholder="3000" name="pointValue" step="500"></input>		
+									<input type="number" style="text-align: center" value=3500 placeholder="3500" name="pointValue" step="250"></input>		
 								</td>
 							</tr>
 							<tr>
@@ -233,7 +233,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 									Reinforcements Point Value
 								</td>
 								<td>
-									<input type="number" style="text-align: center" value=1500 placeholder="1500" name="reinforceValue" step="250"></input>		
+									<input type="number" style="text-align: center" value=1500 placeholder="1500" name="reinforceValue" step="100"></input>		
 								</td>
 							</tr>
 							<tr>
