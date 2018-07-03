@@ -409,7 +409,7 @@
 
 			$data = array(
 				"id" => $playerstatus[0]["id"],
-				"curFocus" => $gainFocus * 2,
+				"curFocus" => $gainFocus * 1,
 				"gainFocus" => $gainFocus, 
 				"maxFocus" => $gainFocus * 4
 			);
