@@ -14,10 +14,10 @@ class Morale {
 
 	function __construct($damage, $cmd, $crew, $crit){
 		$this->damage = $damage;
-		$this->cmd = $cmd*10;
+		$this->cmd = $cmd;
 		$this->crew = $crew;
 		$this->crit = $crit;
-		$this->current = $this->damage - $this->cmd - $this->crew + $this->crit;
+		$this->current = 100 + $this->damage + $this->cmd + $this->crew + $this->crit;
 
 		$this->effChance = floor($this->baseChance * (1+($this->current - $this->trigger) / (100 - $this->trigger)));
 

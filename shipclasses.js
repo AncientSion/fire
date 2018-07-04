@@ -2179,8 +2179,8 @@ Ship.prototype.getOfficerMoraleBonus = function(){
 Ship.prototype.getCriticalMoraleMalus = function(){
 	if (!this.ship){return ""};
 
-	var mod = this.getSystemByName("Command").getCritMod("Output");
-	if (mod){return mod + "%";}
+	var mod = this.getSystemByName("Command").getCritMod("Output")*-1;
+	if (mod){return "-" + mod + "%";}
 	return "";
 }
 

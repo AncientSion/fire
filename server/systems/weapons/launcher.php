@@ -34,7 +34,7 @@ class Launcher extends Weapon {
 	public function setArmourData($rem){
 		$w = Math::getArcWidth($this);
 		if ($w <= 120){$this->armourMod = 0.8; $this->mount = "Tube";}
-		else if ($w <= 180){$this->armourMod =  0.6; $this->mount = "Caninster";}
+		else if ($w <= 180){$this->armourMod =  0.6; $this->mount = "Canister";}
 		else {$this->armourMod =  0.3; $this->mount = "Arm Rail";}
 		$this->armour = floor($rem * $this->armourMod);
 	}

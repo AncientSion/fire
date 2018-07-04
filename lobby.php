@@ -226,6 +226,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 								</td>
 								<td>
 									<input type="number" style="text-align: center" value=3500 placeholder="3500" name="pointValue" step="250"></input>		
+									<input type="number" style="text-align: center" value=3500 placeholder="3500" name="pointValue" step="250"></input>		
 								</td>
 							</tr>
 							<tr>

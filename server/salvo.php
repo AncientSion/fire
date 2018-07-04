@@ -90,7 +90,7 @@ class Salvo extends Mixed {
 
 	public function calculateToHit($fire){
 		$base = 80;
-		$base = 120;
+		//$base = 120;
 		$mask = $fire->target->getDefensiveBonus($this->id);
 		$traverse = $fire->weapon->getTraverseMod($fire)*0.2;
 		return ceil($base * (1-$mask) * (1-$traverse));
