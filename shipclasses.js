@@ -3749,6 +3749,19 @@ Ship.prototype.attachEvent = function(td){
 	return td;
 }
 
+Ship.prototype.checkUnboostEngine = function(){
+	var redraw = 0;
+
+	for (var i = this.actions.length-1; i >= 0; i--){
+		if (this.actions[i].resolved){continue;}
+		this.actions.splice(i, 1);
+		redraw = 1;
+	}
+
+	if (!redraw){return;}
+	game.redraw();
+}
+
 Ship.prototype.selectAll = function(e, id){
 	var s = this.getSystem(id);
 	if (!s.weapon){return;}

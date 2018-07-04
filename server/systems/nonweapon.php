@@ -130,7 +130,7 @@ class Bridge extends PrimarySystem {
 	}
 
 	public function getCritModMax($dmg){
-		return min(10, round($dmg/2));
+		return min(6, round($dmg/2));
 	}
 
 	public function determineCrit($new, $old, $turn){
