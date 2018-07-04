@@ -131,7 +131,7 @@ Salvo.prototype = Object.create(Mixed.prototype);
 
 Salvo.prototype.getSpeedString = function(){
 	if (this.structures[0].missile){
-		return (this.getCurSpeed() + "px (+" + Math.floor(this.getBaseImpulse()) + "px per Turn)");
+		return (this.getCurSpeed() + "px</br>+" + Math.floor(this.getBaseImpulse()) + "px per Turn)");
 	} else return ("fixed " + this.getCurSpeed() + "px / Turn");
 }
 

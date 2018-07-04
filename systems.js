@@ -591,12 +591,6 @@ System.prototype.doUnboost = function(){
 	if (this.powers[this.powers.length-1].turn == game.turn){
 		this.powers.splice(this.powers.length-1, 1);
 	}
-	if (this.getBoostEffect("Reload")){this.setTimeLoaded();}
-	if (this.weapon && this.dmgType == "Plasma"){
-		if (this.selected || this.highlight){
-			this.redrawSystemArc();
-		}
-	}
 }
 
 System.prototype.redrawSystemArc = function(){
@@ -1358,6 +1352,11 @@ function Engine(system){
 }
 Engine.prototype = Object.create(PrimarySystem.prototype);
 
+Engine.prototype.doUnboost = function(){
+	System.prototype.doUnboost.call(this);
+	if (this.name == "Engine"){game.getUnit(this.parentId).checkUnboostEngine(); return;}
+}
+
 Engine.prototype.getPowerDiv = function(){
 	return;
 }
@@ -1777,6 +1776,17 @@ function Weapon(system){
 	this.odds = 0;
 }
 Weapon.prototype = Object.create(System.prototype);
+
+Weapon.prototype.doUnboost = function(){
+	System.prototype.doUnboost.call(this);
+	
+	if (this.getBoostEffect("Reload")){this.setTimeLoaded();}
+	if (this.weapon && this.dmgType == "Plasma"){
+		if (this.selected || this.highlight){
+			this.redrawSystemArc();
+		}
+	}
+}
 
 Weapon.prototype.assembleDmgData = function(fire){
 	var dmgs = {};

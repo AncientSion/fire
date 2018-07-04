@@ -204,10 +204,10 @@ class Ship {
 		$command = $this->getSystemByName("Command");
 
 		$this->morale = new Morale(
-			floor($this->primary->remaining / $this->primary->integrity * 100),
-			$this->command,
+			floor($this->primary->remaining / $this->primary->integrity * 100)*-1,
+			$this->command*10,
 			$command->getCrewLevel() * $command->getCrewEffect(),
-			$command->getCritMod("Output", $turn)
+			$command->getCritMod("Output", $turn)*-1
 		);
 	}
 
@@ -318,6 +318,7 @@ class Ship {
 			if ($this->actions[$i]->resolved){continue;}
 
 			if ($this->actions[$i]->type == "roll"){$this->rolling = !$this->rolling;}
+			if ($this->actions[$i]->type == "flip"){$this->flipping = !$this->flipping;}
 			array_splice($this->actions, $i, 1);
 		}
 	}

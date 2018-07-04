@@ -2179,7 +2179,7 @@ Ship.prototype.getOfficerMoraleBonus = function(){
 Ship.prototype.getCriticalMoraleMalus = function(){
 	if (!this.ship){return ""};
 
-	var mod = this.getSystemByName("Command").getCritMod("Output");
+	var mod = this.getSystemByName("Command").getCritMod("Output")*-1;
 	if (mod){return mod + "%";}
 	return "";
 }
@@ -2195,7 +2195,7 @@ Ship.prototype.getCurrentMorale = function(){
 	var base = 100;
 	var flagship = this.command * 10;
 	var upgrade = this.getCrewLevel(0) * cmd.crewEffect;
-	var crits = cmd.getCritMod("Output");
+	var crits = cmd.getCritMod("Output")*-1;
 	var dmg = this.getDamageMoraleMalus();
 	if (dmg){dmg = Math.floor(dmg.slice(0, dmg.length-1))}
 
@@ -3747,6 +3747,19 @@ Ship.prototype.attachEvent = function(td){
 		}
 	);
 	return td;
+}
+
+Ship.prototype.checkUnboostEngine = function(){
+	var redraw = 0;
+
+	for (var i = this.actions.length-1; i >= 0; i--){
+		if (this.actions[i].resolved){continue;}
+		this.actions.splice(i, 1);
+		redraw = 1;
+	}
+
+	if (!redraw){return;}
+	game.redraw();
 }
 
 Ship.prototype.selectAll = function(e, id){
