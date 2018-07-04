@@ -2180,7 +2180,7 @@ Ship.prototype.getCriticalMoraleMalus = function(){
 	if (!this.ship){return ""};
 
 	var mod = this.getSystemByName("Command").getCritMod("Output")*-1;
-	if (mod){return "-" + mod + "%";}
+	if (mod){return mod + "%";}
 	return "";
 }
 
