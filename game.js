@@ -1039,7 +1039,8 @@ function Game(data){
 
 			for (var j = 0; j < this.ships[i].cc.length; j++){
 				var unit = game.getUnit(this.ships[i].cc[j]);
-				if (unit.friendly || unit.salvo){continue;}
+				if (unit.friendly){continue;}
+				if (unit.salvo){hostiles += 5; continue;}
 				hostiles.push(unit);
 			}
 

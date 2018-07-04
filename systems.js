@@ -2775,6 +2775,7 @@ Pulse.prototype.getAnimation = function(fire){
 		var ty = t.y + dest.y;
 
 		var subHits = hasHit * this.basePulses + Math.floor((fire.req[j] - fire.rolls[j]) / this.grouping);
+			subHits = Math.floor()
 
 		for (var k = 0; k < (this.basePulses + this.extraPulses); k++){
 			var devi = {x: range(-2, 2), y: range(-2, 2)};
