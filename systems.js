@@ -2784,7 +2784,7 @@ Pulse.prototype.getAnimation = function(fire){
 		var tx = t.x + dest.x;
 		var ty = t.y + dest.y;
 
-		var subHits = Math.min(this.basePulses + this.extraPulases, hasHit * (this.basePulses + Math.floor((fire.req[j] - fire.rolls[j]) / this.grouping)));
+		var subHits = Math.min(this.basePulses + this.extraPulses, hasHit * (this.basePulses + Math.floor((fire.req[j] - fire.rolls[j]) / this.grouping)));
 			//subHits = Math.floor()
 
 		for (var k = 0; k < (this.basePulses + this.extraPulses); k++){
