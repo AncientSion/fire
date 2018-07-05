@@ -146,20 +146,20 @@ class Squaddie extends Single {
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
-				if ($new < 20 &&  mt_rand(0, 1)){Debug::log("lucky skip, new below 30 % and rand(0,1)!"); continue;}
+				if ($new < 15 &&  mt_rand(0, 1)){Debug::log("lucky skip, new below 30 % and rand(0,1)!"); continue;}
 
 				$roll = mt_rand(0, 20) + $penalty + sizeof($this->structures[$i]->systems[$j]->crits)*40;
 				Debug::log("roll: ".$roll);
 				if ($roll < $effects[0][1]){continue;}
 
 				for ($k = sizeof($effects)-1; $k >= 0; $k--){
-					if ($roll >= $effects[$k][1]){//66 % chance to crit
-						$this->structures[$i]->systems[$j]->crits[] = new Crit(
-							0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn,
-							 $effects[$k][0],  $effects[$k][2],  $effects[$k][3], 1
-						);
-						break 2;
-					}
+					if ($roll < $effects[$k][1]){continue;}
+
+					$this->structures[$i]->systems[$j]->crits[] = new Crit(
+						0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn,
+						 $effects[$k][0],  $effects[$k][2],  $effects[$k][3], 1
+					);
+					break 2;
 				}
 			}
 		}
