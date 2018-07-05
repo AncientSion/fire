@@ -113,19 +113,19 @@ class SquadBuilder {
 			array(
 				"active" => 0,
 				"chance" => 30,
-				"notes" => "Vorchara (Support)",
+				"notes" => "vorchora (Support)",
 				"units" =>
 					array(
 						array(
-							"name" => "Vorchara",
+							"name" => "vorchora",
 							"amount" => 1,
 						),
 						array(
-							"name" => "Vorchara",
+							"name" => "vorchora",
 							"amount" => 1,
 						),
 						array(
-							"name" => "Vorchara",
+							"name" => "vorchora",
 							"amount" => 1,
 						),
 					),
