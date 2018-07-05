@@ -1051,7 +1051,7 @@
 		}
 
 		public function updateUnitStats($states, $turn, $phase){
-			//Debug::log("updateUnitStats s:".sizeof($states)." ".$turn."/".$phase);
+			Debug::log("updateUnitStats s:".sizeof($states)." ".$turn."/".$phase);
 			$stmt = $this->connection->prepare("
 				UPDATE units
 				SET x = :x,
@@ -1068,7 +1068,7 @@
 			");
 
 			for ($i = 0; $i < sizeof($states); $i++){
-				//foreach ($states[$i] as $key => $value){Debug::log($key." / ".$value);}
+				if ($states[$i]["id"] == 6){foreach ($states[$i] as $key => $value){Debug::log($key." / ".$value);}}
 
 				$stmt->bindParam(":x", $states[$i]["x"]);
 				$stmt->bindParam(":y", $states[$i]["y"]);

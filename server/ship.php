@@ -358,7 +358,7 @@ class Ship {
 	}
 
 	public function getEndState($turn){
-		//Debug::log("getMoveState for ".$this->id);
+		//Debug::log("getEndState for ".$this->id);
 		$delay = $this->remDelay;
 		$facing = $this->facing;
 		for ($i = 0; $i < sizeof($this->actions); $i++){
