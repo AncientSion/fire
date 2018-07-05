@@ -9,9 +9,6 @@ class Tech extends SuperHeavy {
 	public $profile = array(0.92, 1.08);
 	public $mass = 12500;
 
-	function __construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes){
-        parent::__construct($id, $userid, $available, $status, $destroyed, $x, $y, $facing, $delay, $thrust, $rolling, $rolled, $notes);
-	}
 
 	public function addStructures(){
 		$structs = array();

@@ -387,7 +387,7 @@ class Ship {
 			$facing += 360;
 		}
 
-		Debug::log("getMoveState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$facing);
+		Debug::log("getMoveState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$facing.", rolling: ".$this->rolling);
 
 		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "facing" => $facing, "thrust" => $this->curImp, "rolling" => $this->rolling, "rolled" => $this->rolled, "flipped" => $this->flipped);
 	}
