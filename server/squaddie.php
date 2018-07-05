@@ -201,7 +201,7 @@ class Squaddie extends Single {
 
 class Light extends Squaddie {
 	public $baseImpulse = 175;
-	public $size = 60;
+	public $size = 55;
 	public $baseImpulseCost = 30;
 	public $space = 3;
 	
@@ -212,7 +212,7 @@ class Light extends Squaddie {
 
 class SuperLight extends Light {
 	public $baseImpulse = 185;
-	public $size = 50;
+	public $size = 47;
 	//public $baseImpulseCost = 55;
 	public $space = 2;
 	
