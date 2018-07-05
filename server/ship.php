@@ -423,9 +423,9 @@ class Ship {
 				$this->flipping = !$this->flipping;
 			}
 			else if ($this->actions[$i]->type == "roll"){
-				Debug::log("Ding! ".$this->roling);
+				Debug::log("Ding! ".$this->rolling);
 				$this->rolling = !$this->rolling;
-				Debug::log("Ding! ".$this->roling);
+				Debug::log("Ding! ".$this->rolling);
 			}
 		}
 	}
