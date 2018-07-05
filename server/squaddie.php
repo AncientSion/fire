@@ -140,7 +140,7 @@ class Squaddie extends Single {
 		Debug::log("checkSystemCrits .".get_class($this)." #".$this->id);
 		if ($this->destroyed){return;}
 		$effects = $this->getValidEffects();
-		$penalty =  round($new + $old/2);
+		$penalty =  round($new + $old/4);
 		Debug::log("determine effect, new/old ".$new."%/".$old."%, increaseToRoll: ".$penalty);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
@@ -148,7 +148,7 @@ class Squaddie extends Single {
 				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
 				if ($new < 20 &&  mt_rand(0, 1)){Debug::log("lucky skip, new below 30 % and rand(0,1)!"); continue;}
 
-				$roll = mt_rand(0, 20) + $penalty + sizeof($this->structures[$i]->systems[$j]->crits)*20;
+				$roll = mt_rand(0, 20) + $penalty + sizeof($this->structures[$i]->systems[$j]->crits)*40;
 				Debug::log("roll: ".$roll);
 				if ($roll < $effects[0][1]){continue;}
 
