@@ -186,10 +186,10 @@
 	public function getShipData(){
 		if ($this->turn == 1 && $this->phase == -1){return $this->ships;}
 
-		//Debug::log("user: ".$this->userid.", phase: ".$this->phase);
+		Debug::log("user: ".$this->userid.", phase: ".$this->phase);
 		for ($i = sizeof($this->ships)-1; $i >= 0; $i--){
 			if ($this->ships[$i]->userid != $this->userid){
-				//Debug::log("shipid: ".$this->ships[$i]->id.", user ".$this->ships[$i]->userid);
+				Debug::log("shipid: ".$this->ships[$i]->id.", user ".$this->ships[$i]->userid.", actions: ".sizeof($this->ships[$i]->actions[0]));
 				if ($this->phase == 3){$this->ships[$i]->focus = 0;}
 
 				if ($this->ships[$i]->available == $this->turn && !$this->ships[$i]->actions[0]->resolved){
