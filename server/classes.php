@@ -14,7 +14,7 @@ class Morale {
 
 	function __construct($damage, $cmd, $crew, $crit){
 		$this->damage = floor($damage);
-		$this->cmd = $cmd == true ? 1 : 0;
+		$this->cmd = $cmd == true ? 10 : 0;
 		$this->crew = $crew;
 		$this->crit = $crit;
 		$this->current = 100 + $this->damage + $this->cmd + $this->crew + $this->crit;
