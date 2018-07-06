@@ -7,7 +7,6 @@ class Morale {
 	public $baseChance = 70;
 
 	public $damage;
-	public $dmg;
 	public $crew;
 	public $crit;
 	public $current;
@@ -20,7 +19,7 @@ class Morale {
 		$this->current = 100 + $this->damage + $this->cmd + $this->crew + $this->crit;
 
 		if ($this->current >= $this->trigger){$this->effChance = 0;}
-		else $this->effChance = floor($this->baseChance * (1+($this->current - $this->trigger) / (100 - $this->trigger)));
+		else $this->effChance = floor($this->baseChance * (1+($this->current - $this->trigger/100) / (100 - $this->trigger/100)));
 
 	}
 }
