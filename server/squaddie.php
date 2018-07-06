@@ -155,6 +155,7 @@ class Squaddie extends Single {
 				for ($k = sizeof($effects)-1; $k >= 0; $k--){
 					if ($roll < $effects[$k][1]){continue;}
 
+					Debug::log("crit: ".$effects[$k][0]);
 					$this->structures[$i]->systems[$j]->crits[] = new Crit(
 						0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn,
 						 $effects[$k][0],  $effects[$k][2],  $effects[$k][3], 1

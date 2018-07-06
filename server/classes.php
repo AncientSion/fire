@@ -13,6 +13,7 @@ class Morale {
 	public $current;
 
 	function __construct($damage, $cmd, $crew, $crit){
+		Debug::log($damage."/".$cmd."/".$crew."/".$crit);
 		$this->damage = $damage;
 		$this->cmd = $cmd;
 		$this->crew = $crew;
