@@ -553,18 +553,8 @@ Squadron.prototype.getFireDest = function(fire, isHit, num){
 		return {x: 0, y: 0};
 	}
 	else {
-	//	var t = this.getSystem(fire.damages[num].systemid).layout;
 		var t = this.getUnitPos(this.getSystem(fire.damages[num].systemid));
 		return {x: t.x + range(-7, 7), y: t.y + range(-7, 7)}
-		var x = t.x * 0.8 / 2 * 0.5 + range(-5, 5);
-		var y = t.y * 0.8 / 2 * 0.5 + range(-5, 5);
-		return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());
-
-
-		var t = this.getSystem(fire.damages[num].systemid).layout;
-		var x = t.x/2 * 0.5 + range(-5, 5);
-		var y = t.y/2 * 0.5 + range(-5, 5);
-		return rotate(0, 0, {x: x, y: y}, this.getDrawFacing());
 	}
 }
 
