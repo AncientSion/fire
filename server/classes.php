@@ -20,7 +20,7 @@ class Morale {
 		$this->current = 100 + $this->damage + $this->cmd + $this->crew + $this->crit;
 
 		$this->effChance = floor($this->baseChance * (1+($this->current - $this->trigger) / (100 - $this->trigger)));
-		Debug::log($damage."/".$cmd."/".$crew."/".$crit.", :".$this->effChance);
+		Debug::log($damage."/".$cmd."/".$crew."/".$crit.", current: ".$this->current.", effChance: ".$this->effChance);
 
 		if ($this->effChance < $this->baseChance){$this->effChance = 0;}
 	}
