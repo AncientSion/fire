@@ -21,7 +21,7 @@ class Morale {
 
 		$this->effChance = floor($this->baseChance * (1+($this->current - $this->trigger) / (100 - $this->trigger)));
 
-		if ($this->effChance < $this->baseChance){$this->effChance = 0;}
+		if ($this->effChance < $this->trigger){$this->effChance = 0;}
 	}
 }
 
