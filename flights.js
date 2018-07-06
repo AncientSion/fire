@@ -422,11 +422,11 @@ Flight.prototype.hasNoFireOrders = function(){
 }
 
 Flight.prototype.createDeployEntry = function(){
-	this.attachLogEntry("<td colSpan=9><span><font color='" + this.getCodeColor()+ "'>Flight #" + this.id + "</font> is being deployed (" + this.structures.length + " units).</span></td>");
+	this.attachLogEntry("<th colSpan=9><span><font color='" + this.getCodeColor()+ "'>Flight #" + this.id + "</font> is being deployed (" + this.structures.length + " units).</span></th>");
 }
 
 Flight.prototype.createMissionChangeEntry = function(){
-	this.attachLogEntry("<td colSpan=9><span><font color='" + this.getCodeColor()+ "'>Flight #" + this.id + "</font> has been issued a new mission.</span></td>");
+	this.attachLogEntry("<th colSpan=9><span><font color='" + this.getCodeColor()+ "'>Flight #" + this.id + "</font> has been issued a new mission.</span></th>");
 }
 
 Flight.prototype.getLoadAdjustment = function(){

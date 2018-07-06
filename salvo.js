@@ -129,6 +129,15 @@ function Salvo(data){
 
 Salvo.prototype = Object.create(Mixed.prototype);
 
+Salvo.prototype.setUnitState = function(){
+	if (this.userid == game.userid){
+		this.friendly = 1;
+	}
+	
+	this.deployed = 1;
+	this.isReady = 1;
+}
+
 Salvo.prototype.getSpeedString = function(){
 	if (this.structures[0].missile){
 		return (this.getCurSpeed() + "px</br>+" + Math.floor(this.getBaseImpulse()) + "px per Turn)");
@@ -435,5 +444,5 @@ Salvo.prototype.hasNoFireOrders = function(){
 }
 
 Salvo.prototype.createDeployEntry = function(){
-	this.attachLogEntry("<td><span><font color='" + this.getCodeColor()+ "'>Salvo #" + this.id + "</font> is launched (" + this.structures.length + " units).</span></td>");
+	this.attachLogEntry("<th><span><font color='" + this.getCodeColor()+ "'>Salvo #" + this.id + "</font> is launched (" + this.structures.length + " units).</span></th>");
 }

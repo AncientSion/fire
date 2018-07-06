@@ -21,7 +21,7 @@ class Kutai extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 15, 4);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 15, 2);
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 240, 60);
 		$front->systems[] = new LightParticle($this->getId(), $this->id, 300, 120);
 		$structs[] = $front;
