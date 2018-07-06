@@ -13,7 +13,6 @@ class Morale {
 	public $current;
 
 	function __construct($damage, $cmd, $crew, $crit){
-		Debug::log($damage."/".$cmd."/".$crew."/".$crit);
 		$this->damage = $damage;
 		$this->cmd = $cmd;
 		$this->crew = $crew;
@@ -21,6 +20,7 @@ class Morale {
 		$this->current = 100 + $this->damage + $this->cmd + $this->crew + $this->crit;
 
 		$this->effChance = floor($this->baseChance * (1+($this->current - $this->trigger) / (100 - $this->trigger)));
+		Debug::log($damage."/".$cmd."/".$crew."/".$crit.", :".$this->effChance);
 
 		if ($this->effChance < $this->baseChance){$this->effChance = 0;}
 	}
