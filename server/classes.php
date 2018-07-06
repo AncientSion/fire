@@ -13,7 +13,7 @@ class Morale {
 	public $current;
 
 	function __construct($damage, $cmd, $crew, $crit){
-		$this->damage = $damage;
+		$this->damage = floor($damage);
 		$this->cmd = $cmd;
 		$this->crew = $crew;
 		$this->crit = $crit;

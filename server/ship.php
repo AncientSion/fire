@@ -201,17 +201,20 @@ class Ship {
 	}
 
 	public function setMorale($turn, $phase){
+		Debug::log("Morale ".$this->id);
 		$command = $this->getSystemByName("Command");
 
+		Debug::log($this->primary->integrity);
+		Debug::log($this->primary->remaining);
 		$this->morale = new Morale(
-			floor(($this->primary->integrity - $this->primary->remaining) / $this->primary->remaining * 100)*-1,
+			($this->primary->integrity - $this->primary->remaining) / $this->primary->remaining * -100,
 			$this->command*10,
 			$command->getCrewLevel() * $command->getCrewEffect(),
 			$command->getCritMod("Output", $turn)*-1
 		);
 
 
-		Debug::log("Morale for #".$this->id."___".$this->morale->damage."/".$this->morale->cmd."/".$this->morale->crew."/".$this->morale->crit.", current: ".$this->morale->current.", effChance: ".$this->morale->effChance);
+		Debug::log($this->morale->damage."/".$this->morale->cmd."/".$this->morale->crew."/".$this->morale->crit.", current: ".$this->morale->current.", effChance: ".$this->morale->effChance);
 
 
 	}
