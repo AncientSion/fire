@@ -186,10 +186,10 @@
 	public function getShipData(){
 		if ($this->turn == 1 && $this->phase == -1){return $this->ships;}
 
-		Debug::log("user: ".$this->userid.", phase: ".$this->phase);
+		//Debug::log("user: ".$this->userid.", turn: ".$this->turn.", phase: ".$this->phase);
 		for ($i = sizeof($this->ships)-1; $i >= 0; $i--){
 			if ($this->ships[$i]->userid != $this->userid){
-				Debug::log("shipid: ".$this->ships[$i]->id.", user ".$this->ships[$i]->userid.", actions: ".sizeof($this->ships[$i]->actions));
+				//Debug::log("shipid: ".$this->ships[$i]->id.", user ".$this->ships[$i]->userid.", actions: ".sizeof($this->ships[$i]->actions));
 				if ($this->phase == 3){$this->ships[$i]->focus = 0;}
 
 				if ($this->ships[$i]->available == $this->turn && !$this->ships[$i]->actions[0]->resolved){
@@ -542,9 +542,9 @@
 	public function handleDeployPhase(){
 		Debug::log("handleDeployPhase");
 		$this->resolveJumpOutActions();
+		$this->handleInitialFireOrders();
 		$this->handleDeployActions();
 		$this->handleJumpInActions();
-		$this->handleInitialFireOrders();
 		$this->assembleDeployStates();
 		$this->deleteAllReinforcements();
 		DBManager::app()->deleteEmptyLoads($this->gameid);
@@ -703,7 +703,7 @@
 			//Debug::log("i = ".$i.", shooterid: ".$shooter->id);
 			$devi = Math::getPointInDirection($this->fires[$i]->shooter->size/3, $a, $sPos->x + mt_rand(-10, 10), $sPos->y + mt_rand(-10, 10));
 			$mission = array("type" => 2, "turn" => $this->turn, "targetid" => $this->fires[$i]->targetid, "x" => $tPos->x, "y" => $tPos->y, "arrived" => 0, "new" => 1);
-			$move = array("turn" => $this->turn, "type" => "deploy", "dist" => 0, "x" => $devi->x, "y" => $devi->y, "a" => $a, "cost" => 0, "delay" => 0, "costmod" => 0, "resolved" => 1);
+			$move = array("turn" => $this->turn, "type" => "deploy", "dist" => 0, "x" => $devi->x, "y" => $devi->y, "a" => $a, "cost" => 0, "delay" => 0, "costmod" => 0, "resolved" => 0);
 			$upgrades = array(array("active" => 1, "shipid" => $this->fires[$i]->shooter->id, "systemid" => $this->fires[$i]->weapon->id, "units" => array(0 => array("amount" => $this->fires[$i]->shots, "name" => $name))));
 
 			$units[] = array("gameid" => $this->gameid, "userid" => $this->fires[$i]->shooter->userid, "type" => "Salvo", "name" => "Salvo", "display" => "", "turn" => $this->turn, "eta" => 0,

@@ -250,6 +250,7 @@ window.ajax = {
 			//if (game.turn > 1 && game.ships[i].available <= game.turn){continue;}
 			if (game.ships[i].userid != game.userid){continue;}
 			if (game.ships[i].flight || game.ships[i].salvo){continue;}
+			if (game.ships[i].available == game.turn && game.turn > 1){continue;}
 
 			var	ship = {actions: [], id: game.ships[i].id};
 

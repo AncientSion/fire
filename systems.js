@@ -2287,17 +2287,6 @@ Weapon.prototype.getArcWidth = function(){
 	}
 }
 
-Weapon.prototype.setMount = function(amount){
-	this.armour = Math.floor(amount * this.armourMod);
-	var w = this.getArcWidth();
-
-	switch (this.armourMod){
-		case 0.75: this.mount = "Fixed"; return;
-		case 0.6: this.mount = "Embedded"; return;
-		case 0.45: this.mount = "Turret"; return;
-	}
-}
-
 Weapon.prototype.getTraverseMod = function(target){
 	return Math.max(0, (this.traverse - target.traverse));
 }
@@ -2556,22 +2545,30 @@ Warhead.prototype.getAnimation = function(fire){
 
 		for (var k = 0; k < fire.shots; k++){
 			var hit = 0;
+			var dest;
 			if (fire.hits[j] > k){
 				hit = 1;
 				hits++;
 			} else continue;
 
-			var traj = getPointInDir(t.size/4, a, p.x, p.y);
+			if (fire.target.ship){
+				dest = getPointInDir(t.size/3 * (range(7, 13)/10), a, p.x+ range(-4, 4), p.y + range(-4, 4));
+			} else dest = fire.target.getFireDest(fire, hit, hits-1);
+			
+			/*
 			var tx = traj.x + range(-t.size/8, t.size/8);
 			var ty = traj.y + range(-t.size/8, t.size/8);
 
-			//if (fire.target.flight){
-				var t = fire.target.getFireDest(fire, hit, hits-1);
-					tx = p.x + t.x;
-					ty = p.y + t.y;
-			//}
-			var shotAnim = {tx: tx, ty: ty, m: 35, n: 0 - ((j / grouping) * gunDelay + k*shotDelay)};
 
+			var t = fire.target.getFireDest(fire, hit, hits-1);
+				tx = p.x + t.x;
+				ty = p.y + t.y;
+				
+			var shotAnim = {tx: tx, ty: ty, m: 35, n: 0 - ((j / grouping) * gunDelay + k*shotDelay)};
+			*/
+
+			var shotAnim = {tx: dest.x, ty: dest.y, m: 35, n: 0 - ((j / grouping) * gunDelay + k*shotDelay)};
+			
 			gunAnims.push(shotAnim);
 		}
 		allAnims.push(gunAnims)
@@ -3323,7 +3320,7 @@ Launcher.prototype.select = function(e){
 		this.setSystemBorder();
 		this.setupLauncherLoadout(e);
 	}
-	else if (game.turn == 1 || game.phase != -1  || game.deploying || this.getOutput() == 0){
+	else if ((game.turn == 1 || game.turn == game.getUnit(this.parentId).available) || game.phase != -1  || game.deploying || this.getOutput() == 0){
 		return false;
 	}
 	else if (game.phase == -1 && game.getUnit(aUnit).hasPlannedMoves()){popup("This system can only be used BEFORE planning movement</br>Please reverse movement plan.");return;}
@@ -3358,21 +3355,6 @@ Launcher.prototype.select = function(e){
 		game.mode = 1;
 		fxCtx.clearRect(0, 0, res.x, res.y);
 	}
-}
-
-Launcher.prototype.setMount = function(amount){
-	if (game.getUnit(aUnit) instanceof Flight){this.negation = 0;}
-
-	var w = this.getArcWidth();
-
-	if (w <= 60){
-		this.mount = "Tube";
-	} else if (w <= 120){
-		this.mount = "Canister";
-	} else {
-		this.mount = "Arm Rail";
-	}
-	this.armour = Math.floor(amount * this.armourMod);
 }
 
 Launcher.prototype.getTraverseMod = function(target){
@@ -3615,14 +3597,6 @@ Area.prototype.select = function(){
 	if (!game.monoSystem && game.getUnit(aUnit).hasWeaponsSelected()){return;}
 	Weapon.prototype.select.call(this);
 	game.monoSystem = this.selected;
-}
-
-Area.prototype.setMount = function(amount){
-	//if (this.name == "EnergyMine"){
-		this.mount = "Catapult"; 
-	//}
-	this.armour = Math.floor(amount * this.armourMod);
-	return;
 }
 
 Area.prototype.getAnimation = function(fire){
@@ -3946,10 +3920,6 @@ function Bulkhead(system){
 }
 Bulkhead.prototype = Object.create(PrimarySystem.prototype);
 
-Bulkhead.prototype.setMount = function(amount){
-	this.mount = "";
-	this.armour =  Math.floor(amount * this.armourMod);
-}
 
 Bulkhead.prototype.drawSystemArc = function(){
 	console.log(this);
@@ -4125,11 +4095,6 @@ Hangar.prototype.doUndoActions = function(){
 
 Hangar.prototype.getBoostDiv = function(){
 	return false;
-}
-
-Hangar.prototype.setMount = function(amount){
-	this.mount = "";
-	this.armour =  Math.floor(amount * this.armourMod);
 }
 
 Hangar.prototype.getOutput = function(){

@@ -960,6 +960,7 @@ Ship.prototype.setMoveMode = function(){
 	if (this.salvo || this.flight){return;}
 	else if (this.focus> game.phase && game.phase > -1){instruct("Focus Unit!");}
 	else if (this.focus== 0 && game.phase == 1){return;}
+	console.log("ding!");
 	game.mode = 1;
 	turn.set(this);
 	this.setTurnData();

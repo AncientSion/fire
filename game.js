@@ -1707,10 +1707,12 @@ function Game(data){
 		if (aUnit){
 			var unit = this.getUnit(aUnit);
 			if (!unit.salvo){
+				unit.resetMoveMode();
+
 				if (unit.hasWeaponsSelected()){
 					unit.highlightAllSelectedWeapons();
+					game.mode = 2;
 				}
-				unit.resetMoveMode();
 
 				if (unit.ship || unit.squad){
 				//	unit.drawEW();
@@ -3247,7 +3249,7 @@ Game.prototype.setCamera = function(){
 		maxD = Math.max(d, maxD);
 	}
 
-	cam.z = 1.5 - (Math.ceil(maxD / 100)/10)
+	cam.z = Math.max(0.5, 1.5 - (Math.ceil(maxD / 100)/10));
 
 	var shiftX = 0;
 

@@ -1201,7 +1201,7 @@
 					(:shipid, :turn, :type, :dist, :x, :y, :a, :cost, :delay, :costmod, :resolved)
 			");
 
-			//$resolved = 0;
+			$resolved = 0;
 
 			for ($i = 0; $i < sizeof($units); $i++){
 				$stmt->bindParam(":shipid", $units[$i]["id"]);
@@ -1218,8 +1218,8 @@
 					$stmt->bindParam(":cost", $units[$i]["actions"][$j]["cost"]);
 					$stmt->bindParam(":delay", $units[$i]["actions"][$j]["delay"]);
 					$stmt->bindParam(":costmod", $units[$i]["actions"][$j]["costmod"]);
-					$stmt->bindParam(":resolved", $units[$i]["actions"][$j]["resolved"]);
-					//$stmt->bindParam(":resolved", $resolved);
+					//$stmt->bindParam(":resolved", $units[$i]["actions"][$j]["resolved"]);
+					$stmt->bindParam(":resolved", $resolved);
 					$stmt->execute();
 
 					if ($stmt->errorCode() == 0){
