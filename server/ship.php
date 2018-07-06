@@ -205,12 +205,12 @@ class Ship {
 		$command = $this->getSystemByName("Command");
 		$this->morale = new Morale(
 			($this->primary->integrity - $this->primary->remaining) / $this->primary->integrity * -100,
-			$this->command*10,
+			$this->command,
 			$command->getCrewLevel() * $command->getCrewEffect(),
 			$command->getCritMod("Output", $turn)*-1
 		);
 
-		Debug::log($this->morale->damage."/".$this->morale->cmd."/".$this->morale->crew."/".$this->morale->crit.", current: ".$this->morale->current.", effChance: ".$this->morale->effChance);
+		Debug::log("Morale #".$this->id.": ".$this->morale->damage."/".$this->morale->cmd."/".$this->morale->crew."/".$this->morale->crit.", current: ".$this->morale->current.", effChance: ".$this->morale->effChance);
 
 
 	}
