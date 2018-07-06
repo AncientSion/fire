@@ -57,10 +57,10 @@ class Squadron extends Ship {
 				if ($this->structures[$i]->isDestroyed()){continue;}
 				$remaining += max(0, $this->structures[$i]->remaining);
 			}
-			$val = floor($remaining / $integrity * 100);
+			$val = floor(($integrity - $remaining) / $integrity * 100)*-1;
 		}
 
-		$this->morale = new Morale(-$val, $this->command*10, 0, 0);
+		$this->morale = new Morale($val, $this->command*10, 0, 0);
 	 }
 
 

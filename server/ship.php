@@ -110,7 +110,7 @@ class Ship {
 
 	public function setPreviewState($turn, $phase){
 		$this->curImp = $this->baseImpulse;
-		$this->morale = new Morale(100, 0, 0, 0);
+		$this->morale = new Morale(0, 0, 0, 0);
 		$this->getSystemByName("Reactor")->setOutput($this->getPowerReq(), $this->power);
 
 		for ($j = 0; $j < sizeof($this->structures); $j++){
@@ -204,7 +204,7 @@ class Ship {
 		$command = $this->getSystemByName("Command");
 
 		$this->morale = new Morale(
-			floor($this->primary->remaining / $this->primary->integrity * 100)*-1,
+			floor(($this->primary->integrity - $this->primary->remaining) / $this->primary->remaining * 100)*-1,
 			$this->command*10,
 			$command->getCrewLevel() * $command->getCrewEffect(),
 			$command->getCritMod("Output", $turn)*-1
