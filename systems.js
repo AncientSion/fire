@@ -2556,8 +2556,8 @@ Warhead.prototype.getAnimation = function(fire){
 			} 
 			else {
 				dest = fire.target.getFireDest(fire, hit, hits-1);
-				//dest.x += t.x;
-				//dest.y += t.y;
+				dest.x += p.x;
+				dest.y += p.y;
 			}
 			/*
 			var tx = traj.x + range(-t.size/8, t.size/8);
