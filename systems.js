@@ -2552,9 +2552,13 @@ Warhead.prototype.getAnimation = function(fire){
 			} else continue;
 
 			if (fire.target.ship){
-				dest = getPointInDir(t.size/3 * (range(7, 13)/10), a, p.x+ range(-4, 4), p.y + range(-4, 4));
-			} else dest = fire.target.getFireDest(fire, hit, hits-1);
-			
+				dest = getPointInDir(t.size/3 * (range(7, 13)/10), a, p.x + range(-4, 4), p.y + range(-4, 4));
+			} 
+			else {
+				dest = fire.target.getFireDest(fire, hit, hits-1);
+				dest.x += t.x;
+				dest.y += t.y;
+			}
 			/*
 			var tx = traj.x + range(-t.size/8, t.size/8);
 			var ty = traj.y + range(-t.size/8, t.size/8);
