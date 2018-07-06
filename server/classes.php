@@ -19,9 +19,9 @@ class Morale {
 		$this->crit = $crit;
 		$this->current = 100 + $this->damage + $this->cmd + $this->crew + $this->crit;
 
-		$this->effChance = floor($this->baseChance * (1+($this->current - $this->trigger) / (100 - $this->trigger)));
+		if ($this->current < $this->trigger){$this->effChance = 0;}
+		else $this->effChance = floor($this->baseChance * (1+($this->current - $this->trigger) / (100 - $this->trigger)));
 
-		if ($this->effChance < $this->trigger){$this->effChance = 0;}
 	}
 }
 
