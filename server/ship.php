@@ -209,6 +209,11 @@ class Ship {
 			$command->getCrewLevel() * $command->getCrewEffect(),
 			$command->getCritMod("Output", $turn)*-1
 		);
+
+
+		Debug::log("Morale for #".$this->id."___".$this->morale->damage."/".$this->morale->cmd."/".$this->morale->crew."/".$this->morale->crit.", current: ".$this->morale->current.", effChance: ".$this->morale->effChance);
+
+
 	}
 
 	public function setStructureState($turn, $phase){
