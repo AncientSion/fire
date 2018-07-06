@@ -2194,7 +2194,7 @@ Ship.prototype.getDamageMoraleMalus = function(){
 Ship.prototype.getCurrentMorale = function(){
 	var cmd = this.getSystemByName("Command");
 	var base = 100;
-	var flagship = this.command * 10;
+	var flagship = this.command == true ? 10 : 0;
 	var upgrade = this.getCrewLevel(0) * cmd.crewEffect;
 	var crits = cmd.getCritMod("Output")*-1;
 	var dmg = this.getDamageMoraleMalus();
