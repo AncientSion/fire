@@ -201,7 +201,7 @@ class Ship {
 	}
 
 	public function setMorale($turn, $phase){
-		//Debug::log("Morale ".$this->id);
+		Debug::log("Morale ".$this->id);
 		$command = $this->getSystemByName("Command");
 		$this->morale = new Morale(
 			($this->primary->integrity - $this->primary->remaining) / $this->primary->integrity * -100,

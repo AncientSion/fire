@@ -168,6 +168,10 @@ class Reactor extends PrimarySystem {
     	$this->output = $this->output + + $use + $add;
     }
 
+	public function getCritModMax($dmg){
+		return min(10, round($dmg/2));
+	}
+
 	public function applyPowerSpike($turn, $potential, $em){
 		Debug::log("applyPowerSpike to #".$this->parentId);
 
