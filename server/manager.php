@@ -1399,7 +1399,7 @@
 		Debug::log("------------------------------- testCriticals");
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			//Debug::log(get_class($this->ships[$i])." #".$this->ships[$i]->id." testCriticals");
-			$this->ships[$i]->handleCritTesting($this->turn);
+			$this->ships[$i]->doHandleCritTesting($this->turn);
 		}
 	}
 
@@ -1408,7 +1408,7 @@
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->isDestroyed()){continue;}
 			$this->ships[$i]->setMorale($this->turn, $this->phase);
-			$this->ships[$i]->handleMoraleTesting($this->turn);
+			$this->ships[$i]->doHandleMoraleTesting($this->turn);
 		}
 	}
 

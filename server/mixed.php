@@ -28,7 +28,7 @@ class Mixed extends Ship {
 		return;
 	}
 
-	public function handleMoraleTesting($turn){
+	public function doHandleMoraleTesting($turn){
 		return;
 	}
 	

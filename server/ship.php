@@ -207,7 +207,7 @@ class Ship {
 			($this->primary->integrity - $this->primary->remaining) / $this->primary->integrity * -100,
 			$this->command,
 			$command->getCrewLevel() * $command->getCrewEffect(),
-			$command->getCritMod("Output", $turn)*-1
+			$command->getCritMod("Output", $turn)
 		);
 
 		Debug::log("Morale #".$this->id.": ".$this->morale->damage."/".$this->morale->cmd."/".$this->morale->crew."/".$this->morale->crit.", current: ".$this->morale->current.", effChance: ".$this->morale->effChance);
@@ -1075,14 +1075,14 @@ class Ship {
 		return $locs[mt_rand(0, sizeof($locs)-1)];
 	}
 
-	public function handleCritTesting($turn){
+	public function doHandleCritTesting($turn){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed){continue;}
 			$this->structures[$i]->singleCritTest($turn, 0);
 		}
 	}
 
-	public function handleMoraleTesting($turn){
+	public function doHandleMoraleTesting($turn){
 		Debug::log(get_class($this). " #".$this->id.", morale @ ".$this->morale->current."%");
 		//$this->morale->current = 20;
 		if ($this->morale->current >= $this->morale->trigger){return;}
@@ -1092,8 +1092,9 @@ class Ship {
 		if ($roll < $this->morale->effChance){
 			Debug::log(" ===> retreat!");
 			$this->status = "jumpOut";
-			return;
+			return true;
 		}
+		return false;
 	}
 
 	public function addSystem($obj){
@@ -1313,8 +1314,8 @@ class Medium extends Ship {
 		);
 	}
 
-	public function handleCritTesting($turn){
-		//Debug::log("= handleCritTesting for ".$this->name.", #".$this->id.", turn: ".$turn);
+	public function doHandleCritTesting($turn){
+		//Debug::log("= doHandleCritTesting for ".$this->name.", #".$this->id.", turn: ".$turn);
 
 		$potential = array();
 
