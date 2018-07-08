@@ -27,11 +27,11 @@ class Torotha extends Light {
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new LightEMNeedler($this->getId(), $this->parentId, 0, 180);
+		$right->systems[] = new TwinEMProjector($this->getId(), $this->parentId, 0, 180);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new LightEMNeedler($this->getId(), $this->parentId, 180, 360);
+		$left->systems[] = new TwinEMProjector($this->getId(), $this->parentId, 180, 360);
 		$structs[] = $left;
 		
 		for ($i = 0; $i < sizeof($structs); $i++){

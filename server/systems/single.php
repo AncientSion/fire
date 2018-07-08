@@ -180,18 +180,17 @@ class Single {
 	
 	public function checkDropoutCrits($new, $old, $turn){
 		$trigger = $this->dropout[0];
-		$chance = $this->dropout[1];
-		$dmg = floor($new + $old);
-		Debug::log("dropout chance: ".get_class($this).", trigger: ".$trigger.", dmg: ".$dmg."%");
+		$baseChance = $this->dropout[1];
+		$current = 100-floor($new + $old);
 
-		if ($dmg > $trigger){
-			$min = floor($chance * (1+($dmg - $trigger)/(100 - $trigger)));
-			$roll = mt_rand(0, 100);
+		if ($current >= $trigger){return;}
 
-			Debug::log("chance: ".$min.", roll: ".$roll);
-			if ($roll < $min){
-				$this->doDropout();
-			}
+		$effChance = floor(100*($baseChance * (1+($trigger-$current)/100) / (100 - $trigger/100)));
+		$roll = mt_rand(0, 100);
+
+		Debug::log("dropout chance: ".get_class($this).", trigger: ".$trigger.", hp: ".$current."%, eff: ".$effChance.", roll: ".$roll);
+		if ($roll < $effChance){
+			$this->doDropout();
 		}
 	}
 

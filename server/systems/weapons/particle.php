@@ -206,19 +206,20 @@ class AntimatterConverter extends Particle {
 	}
 }
 
-class LightEMNeedler extends Particle {
-	public $name = "LightEMNeedler";
-	public $display = "Light EM-Needler";
+class TwinEMProjector extends Particle {
+	public $name = "TwinEMProjector";
+	public $display = "Twin EM Projector";
 	public static $prio = 0;
-	public $minDmg = 12;
-	public $maxDmg = 16;
+	public $minDmg = 11;
+	public $maxDmg = 14;
 	public $accDecay = 240;
-	public $shots = 3;
+	public $shots = 1;
+	public $linked = 2;
 	public $reload = 2;
 	public $integrity = 24;
-	public $powerReq = 5;
+	public $powerReq = 3;
 	public $traverse = -4;
-	public $effiency = 4;
+	public $effiency = 3;
 	public $maxBoost = 1;
 
 	public $animation = "em";
@@ -232,7 +233,7 @@ class LightEMNeedler extends Particle {
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
         $this->setEMData();
-		$this->boostEffect[] = new Effect("Shots", 3);
+		$this->boostEffect[] = new Effect("Reload", -1);
 	}
 }
 

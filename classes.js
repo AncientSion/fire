@@ -344,7 +344,7 @@ Structure.prototype.getSysDiv = function(){
 
 	var table = $("<table>")
 		.append($("<tr>")
-			.append($("<th>").html(this.type + " Armour Plating").attr("colSpan", 2)))
+			.append($("<th>").html(this.type + " Armour").attr("colSpan", 2)))
 		.append($("<tr>")
 			.append($("<td>").html("Armour Strength"))
 			.append($("<td>").html(this.getRemNegation() + " / " + this.negation)))
@@ -892,7 +892,7 @@ Single.prototype.getElement = function(isBuy){
 
 function Ballistic(data){
 	Single.call(this, data);
-	this.amount = 0;
+	this.amount = data.amount;
 	this.missile = data.missile;
 	this.torpedo = data.torpedo;
 	this.maxRange = data.maxRange;

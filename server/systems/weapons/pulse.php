@@ -82,11 +82,11 @@ class HeavyPulse extends Pulse {
 
 class PulseFusionCannon extends Pulse {
 	public $name = "PulseFusionCannon";
-	public $display = "Pulse-Fusion Cannon";
+	public $display = "Pulse Fusion Cannon";
 	public static $prio = 0;
-	public $minDmg = 30;
-	public $maxDmg = 38;
-	public $accDecay = 180;
+	public $minDmg = 26;
+	public $maxDmg = 34;
+	public $accDecay = 140;
 	public $animColor = "green";
 	public $projSize = 2;
 	public $projSpeed = 9;

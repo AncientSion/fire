@@ -7,6 +7,7 @@ class Weapon extends System {
 	public $reload = 1;
 	public $powerReq = 2;
 	public $fireOrders = array();
+	public $arc = array();
 	public $traverse = 0;
 	public $projSize = 10;
 	public $projSpeed = 5;
@@ -32,8 +33,7 @@ class Weapon extends System {
 	public $dmgType = "Standard";
 
 	function __construct($id, $parentId, $start, $end, $output, $width){
-		$this->start = $start;
-		$this->end = $end;
+		$this->arc = array(0 => array($start, $end));
 		$this->priority = static::$prio;
 		//Debug::log("setting priority to: ".$this->priority.", from static: ".static::$prio);
         parent::__construct($id, $parentId, $output, $width);

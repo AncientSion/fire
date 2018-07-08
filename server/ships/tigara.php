@@ -30,8 +30,8 @@ class Tigara extends Heavy {
 			$right->systems[] = new HeavyFusionCannon($this->getId(), $this->id, 0, 120);
 			$right->systems[] = new HeavyFusionCannon($this->getId(), $this->id, 0, 120);
 			$right->systems[] = new HeavyFusionCannon($this->getId(), $this->id, 0, 120);
-			$right->systems[] = new LightEMNeedler($this->getId(), $this->id, 0, 180);
-			$right->systems[] = new LightEMNeedler($this->getId(), $this->id, 0, 180);
+			$right->systems[] = new TwinEMProjector($this->getId(), $this->id, 0, 180);
+			$right->systems[] = new TwinEMProjector($this->getId(), $this->id, 0, 180);
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 120, 240, 2100, 19, 6);
@@ -48,8 +48,8 @@ class Tigara extends Heavy {
 			$left->systems[] = new HeavyFusionCannon($this->getId(), $this->id, 240, 360);
 			$left->systems[] = new HeavyFusionCannon($this->getId(), $this->id, 240, 360);
 			$left->systems[] = new HeavyFusionCannon($this->getId(), $this->id, 240, 360);
-			$left->systems[] = new LightEMNeedler($this->getId(), $this->id, 180, 360);
-			$left->systems[] = new LightEMNeedler($this->getId(), $this->id, 180, 360);
+			$left->systems[] = new TwinEMProjector($this->getId(), $this->id, 180, 360);
+			$left->systems[] = new TwinEMProjector($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;
 
 	

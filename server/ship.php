@@ -201,7 +201,7 @@ class Ship {
 	}
 
 	public function setMorale($turn, $phase){
-		Debug::log("Morale ".$this->id);
+		//Debug::log("Morale ".$this->id);
 		$command = $this->getSystemByName("Command");
 		$this->morale = new Morale(
 			($this->primary->integrity - $this->primary->remaining) / $this->primary->integrity * -100,
@@ -210,7 +210,7 @@ class Ship {
 			$command->getCritMod("Output", $turn)
 		);
 
-		Debug::log("Morale #".$this->id.": ".$this->morale->damage."/".$this->morale->cmd."/".$this->morale->crew."/".$this->morale->crit.", current: ".$this->morale->current.", effChance: ".$this->morale->effChance);
+		//Debug::log("Morale #".$this->id.": ".$this->morale->damage."/".$this->morale->cmd."/".$this->morale->crew."/".$this->morale->crit.", current: ".$this->morale->current.", effChance: ".$this->morale->effChance);
 
 
 	}
@@ -1094,7 +1094,7 @@ class Ship {
 			$this->status = "jumpOut";
 			return true;
 		}
-		return false;
+		return false; 
 	}
 
 	public function addSystem($obj){
@@ -1299,7 +1299,7 @@ class Medium extends Ship {
 	public $baseImpulse = 165;
 	public $traverse = 0;
 	public $slipAngle = 15;
-	public $baseImpulseCost = 35;
+	public $baseImpulseCost = 30;
 	public $baseFocusRate = 10;
 	public $modFocusRate = 0;
 

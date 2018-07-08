@@ -48,6 +48,10 @@ function System(system){
 	this.monoSystem = false;
 }
 
+System.prototype.setTotalBuyData = function(){
+	return;
+}
+
 System.prototype.getDisplay = function(){
 	return this.display;
 }
@@ -1759,9 +1763,7 @@ function Weapon(system){
 	this.linked = system.linked;
 	this.shots = system.shots;
 	this.reload = system.reload;
-	this.arc = [
-					[system.start, system.end]
-				];
+	this.arc = system.arc;
 	this.priority = system.priority;
 	this.traverse = system.traverse;
 	this.fireMode = system.fireMode;
@@ -2187,14 +2189,6 @@ Weapon.prototype.doUndoActions = function(){
 
 Weapon.prototype.getShots = function(){
 	return this.shots + this.getBoostEffect("Shots") * this.getBoostLevel();
-}
-
-Weapon.prototype.posJSONArc = function(loc, pos, facing){
-	for (var i = 0; i < this.arc.length; i++){
-		var start = this.arc[i][0];
-		var end = this.arc[i][1];
-		return isInArc(getCompassHeadingOfPoint(loc, pos, facing), start, end);
-	}
 }
 
 Weapon.prototype.hasUnresolvedFireOrder = function(){
@@ -3161,6 +3155,7 @@ Launcher.prototype = Object.create(Weapon.prototype);
 
 Launcher.prototype.init = function(){
 	for (var i = 0; i < this.loads.length; i++){
+		if (this.loads[i] instanceof Ballistic){continue;}
 		this.loads[i] = new Ballistic(this.loads[i]);
 	}
 	if (game.phase == -2){
@@ -3417,7 +3412,7 @@ Launcher.prototype.addAmmo = function(ele, all){
 			canAdd = false
 			break;
 		}
-		else if (this.loads[i].amount == this.capacity[i]){
+		else if (this.loads[i].amount >= this.capacity[i]){
 			canAdd = false;
 			break;
 		}

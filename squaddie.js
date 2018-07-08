@@ -117,17 +117,22 @@ Squaddie.prototype.expandElement = function(){
 	if (this.destroyed){ // RED X
 		$(this.element)
 			.append($("<img>")
-			.attr("src", "varIcons/destroyed.png")
-			.addClass("overlay")//.css("width", cWidth).css("height", cHeight)
-			.hover(function(e){
-				var data = $(this).closest(".unitContainer").data();
-				game.getUnit(data.shipId).getSystem(data.systemId).hover(e);
-			}))
+				.attr("src", "varIcons/destroyed.png")
+				.addClass("overlay")//.css("width", cWidth).css("height", cHeight)
+				.hover(function(e){
+					var data = $(this).closest(".unitContainer").data();
+					game.getUnit(data.shipId).getSystem(data.systemId).hover(e);
+				})
+			)
 	}
 	else {
-		img.click(function(){
+		img
+		.click(function(){
 			var data = $(this).closest(".unitContainer").data();
 			console.log(game.getUnit(data.shipId).getSystem(data.systemId));
+		})
+		.contextmenu(function(){
+			game.doCloneSquaddie($(this).parent().parent().parent().parent().parent().parent().data());
 		})
 		.hover(
 			function(e){

@@ -59,7 +59,7 @@ if (isset($_SESSION["userid"])){
 				}
 			}
 			$element .= "<tr style='border-bottom: 1px solid white'>";
-			$element .= "<td style=text-align: center'>".$player["username"]."</td>";
+			$element .= "<td style='text-align: center'>".$player["username"]."</td>";
 
 			$status = $player["status"];
 			if ($status == "ready"){
@@ -257,6 +257,38 @@ else {
 				ballistics: [],
 				settings: window.settings,
 
+				doCloneSquaddie: function(data){
+					var sub = game.ships[0].getSystem(data.systemId);
+
+					if (game.ships[0].slots[0] + sub.space > game.ships[0].slots[1]){return;}
+
+					var copy = initSquaddie(JSON.parse(JSON.stringify(sub)));
+						copy.index = game.ships[0].index +1;
+						copy.id = copy.index;
+						copy.create();
+
+						id = copy.id;
+
+						for (var i = 0; i < copy.structures.length; i++){
+							for (var j = 0; j < copy.structures[i].systems.length; j++){
+								id++;
+								copy.structures[i].systems[j].id = id;
+								copy.structures[i].systems[j].setTotalBuyData();
+							}
+						}
+
+					game.ships[0].structures.push(copy);
+					game.ships[0].index = id;
+					game.ships[0].setLayout();
+					game.ships[0].setSubElements();
+					game.ships[0].setStats();
+					game.ships[0].setSubSystemState();
+					copy.expandElement();
+					copy.previewSetup();
+
+					window.game.setUnitTotal();
+
+				},
 
 				tryConfirmPurchase: function(){
 					var cur = game.getFleetCost();
@@ -777,7 +809,7 @@ else {
 	}
 
 	function addUnitToSquadron(data){
-		var sub = window.initSquaddie (JSON.parse(data));
+		var sub = initSquaddie (JSON.parse(data));
 			sub.create();
 
 		game.ships[0].structures.push(sub);
@@ -789,7 +821,7 @@ else {
 		sub.expandElement();
 		sub.previewSetup();
 
-		window.game.setUnitTotal();
+		game.setUnitTotal();
 	}
 
 	function initPreviewCanvas(){

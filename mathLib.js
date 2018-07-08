@@ -63,10 +63,7 @@ function rotate(cx, cy, v, angle) {
 	return {x: nx, y: ny};
 }
 
-                       //    150     180
 function adjustForFacing(facing, angle){
-	//console.log(arguments)
-	//console.log(ret);
 	return angle - facing;
 
 }

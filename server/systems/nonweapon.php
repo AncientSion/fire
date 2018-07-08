@@ -7,7 +7,7 @@ class PrimarySystem extends System {
 	public $internal = 1;
 	public $crewEffect = 0;
 	public $maxDmg = 20;
-	public $hitMod = 5;
+	public $hitMod = 4;
 	public $hitChance = 0;
 	public $hitPct = 0;
 
@@ -198,7 +198,7 @@ class Engine extends PrimarySystem {
 	public $name = "Engine";
 	public $display = "Engine & Drive";
 	public $crewEffect = 10;
-	public $hitMod = 3;
+	public $hitMod = 2.5;
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $integrity, $output, $width);
@@ -217,7 +217,7 @@ class Sensor extends PrimarySystem {
 	public $ew = array();
 	public $effiency = 10;
 	public $crewEffect = 8;
-	public $hitMod = 2.5;
+	public $hitMod = 2;
 
 	function __construct($id, $parentId, $integrity, $output = 0, $width = 1){
 		$this->powerReq = floor($output/60);
