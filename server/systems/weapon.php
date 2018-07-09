@@ -76,7 +76,7 @@ class Weapon extends System {
 	}
 
 	public function setFlashData(){
-		$data = array(1, 2, 0, 6, 10, 15, 20);
+		$data = array(1, 2, 0, 6, 12, 18, 24);
 		$this->flashDiv = array(40, 60);
 
 		for ($i = 0; $i < sizeof($data); $i++){

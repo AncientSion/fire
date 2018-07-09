@@ -109,7 +109,7 @@ class LightPlasmaPulse extends LightPulse {
 	public $animColor = "darkGreen";
 	public $dmgType = "Plasma";
 	public $melt = 50;
-	public $dmgLoss = 18;
+	public $dmgLoss = 14;
 
 	public $maxBoost = 1;
 	public $effiency = 2;
@@ -137,7 +137,6 @@ class MediumPlasmaPulse extends LightPlasmaPulse {
 	public $minDmg = 23;
 	public $maxDmg = 30;
 	public $accDecay = 120;
-	public $dmgLoss = 14;
 	
 	public $projSize = 3;
 	public $projSpeed = 9;
@@ -160,14 +159,13 @@ class HeavyPlasmaPulse extends MediumPlasmaPulse {
 	public $minDmg = 39;
 	public $maxDmg = 54;
 	public $accDecay = 80;
-	public $dmgLoss = 10;
 	
 	public $projSize = 4;
 	public $projSpeed = 9;
 	public $reload = 4;
 	public $integrity = 64;
 	public $powerReq = 6;
-	public $traverse = 0;
+	public $traverse = 1;
 
 	public $effiency = 4;
 

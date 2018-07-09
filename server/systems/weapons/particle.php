@@ -175,7 +175,7 @@ class AntimatterConverter extends Particle {
 	public $display = "Antimatter-Converter";
 	public $fireMode = "Flash";
 	public static $prio = 0;
-	public $minDmg = 14;
+	public $minDmg = 12;
 	public $accDecay = -120;
 	public $shots = 1;
 	public $animColor = "#a1ff00";

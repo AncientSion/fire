@@ -2220,6 +2220,24 @@ Ship.prototype.getEffectiveRoutChance = function(){
 	else return this.morale.effChance;
 }
 
+Ship.prototype.getMoraleDiv = function(){
+	if (!this.ship){return false}
+	return ($("<tr>")
+			.append($("<td>").html("Morale"))
+			.append($("<td>").attr("colSpan", 1).addClass("Morale")
+				.append($("<div>").addClass("moraleFull"))
+				.append($("<div>").addClass("moraleTrigger").css("width", (this.getMoraleTrigger() + "%")))
+				.append($("<div>").addClass("moraleNow").css("width", (Math.min(100, this.getCurrentMorale()) + "%")))
+				.hover(
+					function(e){
+						game.getUnit($(this).parent().parent().parent().parent().parent().parent().data("shipId")).showMoraleDiv(e);
+					},
+					function(e){
+						game.getUnit($(this).parent().parent().parent().parent().parent().parent().data("shipId")).hideMoraleDiv();
+					}))
+				)
+}
+
 Ship.prototype.createBaseDiv = function(){
 	var className = "shipDiv";
 	if (this.squad){className += " squad";}
@@ -2246,28 +2264,10 @@ Ship.prototype.createBaseDiv = function(){
 		.append($("<tr>")
 			.append($("<td>").html("Type (Size)").css("width", "50%"))
 			.append($("<td>").html(getUnitType(this.traverse) + " (" + this.traverse + ")")))
-		//.append($("<tr>")
-		//	.append($("<td>").html("Base To-Hit"))
-		//	.append($("<td>").html(this.getStringHitChance())))
 		.append($("<tr>")
 			.append($("<td>").html("Focus Gain"))
 			.append($("<td>").addClass("focusGain").html((this.getFocusString()))))
-		.append($("<tr>")
-			.append($("<td>").html("Morale"))
-			//.append($("<td>").html(this.morale.current + "%")))
-		//.append($("<tr>").addClass("morale")
-			.append($("<td>").attr("colSpan", 1).addClass("Morale")
-				.append($("<div>").addClass("moraleFull"))
-				.append($("<div>").addClass("moraleTrigger").css("width", (this.getMoraleTrigger() + "%")))
-				.append($("<div>").addClass("moraleNow").css("width", (Math.min(100, this.getCurrentMorale()) + "%")))
-				.hover(
-					function(e){
-						game.getUnit($(this).parent().parent().parent().parent().parent().parent().data("shipId")).showMoraleDiv(e);
-					},
-					function(e){
-						game.getUnit($(this).parent().parent().parent().parent().parent().parent().data("shipId")).hideMoraleDiv();
-					})))
-				//)
+		.append(this.getMoraleDiv())
 		.append($("<tr>")
 			.append($("<td>").html("Speed"))
 			.append($("<td>").html(this.getRemSpeed() + " / " + this.getCurSpeed()).addClass("Thrust")))

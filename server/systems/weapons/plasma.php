@@ -126,7 +126,7 @@ class MagCompressor extends Plasma {
 	public $usage = 2;
 	public $freeAim = 0;
 	public static $prio = 0;
-	public $minDmg = 12;
+	public $minDmg = 11;
 	public $accDecay = 120;
 	public $dmgLoss = 8;
 	public $shots = 1;

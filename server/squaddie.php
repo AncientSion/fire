@@ -128,10 +128,9 @@ class Squaddie extends Single {
 	}
 	
 	public function getValidEffects(){
-		return array( // type, min, max, dura
+		return array( // type, min%, null, effect
 			array("Accuracy", 25, 0, 25),
 			array("Damage", 40, 0, 15),
-			//array("Disabled", 60, 1, 0.00),
 			array("Destroyed", 80, 0, 0.00),
 		);
 	}

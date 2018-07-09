@@ -170,10 +170,10 @@ class Frazi extends Fighter {
 	public $faction = "Narn Regime";
 	public static $value =  32;
 	public $mass = 34;
-	public $integrity = 27;
+	public $integrity = 26;
 	public $negation = 5;
 	public $baseImpulse = 90;
-	public $baseHitChance = 25;
+	public $baseHitChance = 26;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
