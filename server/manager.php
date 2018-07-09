@@ -1800,7 +1800,7 @@
 		if ($get["unit"] == "ship"){
 			$unit = new $get["name"](
 				array(
-					"id" => 1, "userid" => 1, "command" => 0, "available" => 0, "display" => "", "status" => "",
+					"id" => $get["purchases"], "userid" => 1, "command" => 0, "available" => 0, "display" => "", "status" => "",
 					"destroyed" => 0, "x" => 0, "y" => 0, "facing" => 270, "delay" => 0, "thrust" => 0, 
 					"rolling" => 0, "rolled" => 0, "flipped" => 0, "focus" => 0, "notes" => ""
 				)

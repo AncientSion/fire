@@ -79,6 +79,15 @@ function Ship(data){
 	this.deployAnim = [0, 0];
 	this.doDraw = 1;
 }
+Ship.prototype.doRefit = function(){
+	if (!this.ship){return;}
+	console.log("doRefit");
+	console.log(this);
+	game.refit = this.id;
+	this.createBaseDiv();
+	this.previewSetup();
+	doShowShipDiv(this);
+}
 
 Ship.prototype.getFiringPosition = function(){
 	return new Point(
@@ -3493,7 +3502,7 @@ Ship.prototype.getBuyTableData = function(table){
 			.data("systemid", this.upgrades[i].systemid)
 			.hover(function(){
 				$(this).toggleClass("rowHighlight");
-				$(game.getUnit(0).getSystem($(this).data("systemid")).element).toggleClass("borderHighlight");
+				$(game.getUnit(aUnit).getSystem($(this).data("systemid")).element).toggleClass("borderHighlight");
 			})
 		)
 	}
@@ -3589,7 +3598,7 @@ Ship.prototype.enableCrewPurchase = function(e, bridge){
 					.append($("<img>")
 						.attr("src", "varIcons/plus.png").addClass("size20")
 						.data("type", i)
-						.click(function(){game.ships[0].plusCrewLevel($(this).data("type"))})
+						.click(function(){game.getUnit(aUnit).plusCrewLevel($(this).data("type"))})
 					)
 				)
 				.append($("<td>").html(this.getCrewLevel(i)))
@@ -3597,7 +3606,7 @@ Ship.prototype.enableCrewPurchase = function(e, bridge){
 					.append($("<img>")
 						.attr("src", "varIcons/minus.png").addClass("size20")
 						.data("type", i)
-						.click(function(){game.ships[0].minusCrewLevel($(this).data("type"))})
+						.click(function(){game.getUnit(aUnit).minusCrewLevel($(this).data("type"))})
 					)
 				)
 				.append($("<td>").html(this.getTotalCrewCost(i)))
@@ -3621,7 +3630,7 @@ Ship.prototype.enableCrewPurchase = function(e, bridge){
 
 Ship.prototype.disableCrewPurchase = function(e){
 	$("#crewDiv").addClass("disabled");
-	if (game.phase == -2){window.game.setUnitTotal();}
+	if (game.phase == -2){game.setUnitTotal(this);}
 }
 
 Ship.prototype.plusCrewLevel = function(i){

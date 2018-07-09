@@ -626,14 +626,14 @@
 			");
 
 			for ($i = 0; $i < sizeof($units); $i++){
-				//Debug::log("units ".$i);
+				Debug::log("units ".$i);
 				if (!isset($units[$i]["upgrades"]) || sizeof($units[$i]["upgrades"]) == 0){continue;}
 
 				for ($j = 0; $j < sizeof($units[$i]["upgrades"]); $j++){
-					//Debug::log("upgrades ".$j);
+					Debug::log("upgrades ".$j);
 					
 					for ($k = 0; $k < sizeof($units[$i]["upgrades"][$j]["loads"]); $k++){
-						//Debug::log("loads ".$k);
+						Debug::log("loads ".$k);
 						$stmt->bindParam(":shipid", $units[$i]["id"]);
 						$stmt->bindParam(":systemid", $units[$i]["upgrades"][$j]["systemid"]);
 						$stmt->bindParam(":name", $units[$i]["upgrades"][$j]["loads"][$k]["name"]);
@@ -641,7 +641,7 @@
 
 						$stmt->execute();
 						if ($stmt->errorCode() == 0){
-							//Debug::log("success!");
+							Debug::log("success!");
 							continue;
 						}
 						else {

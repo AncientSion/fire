@@ -426,7 +426,7 @@ table, th, tr, td {
 	font-size: 16px;
 } 
 
-#shipsBoughtTable td {
+#shipsBoughtTable td, #shipsBoughtTable td span {
 	font-size: 14px;
 }
 
