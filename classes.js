@@ -246,7 +246,7 @@ Structure.prototype.getRemNegation = function(){
 
 Structure.prototype.getArmourString = function(){
 	if (this.boostEffect.length){
-		return this.remNegation + "<span style='color: #27e627; font-size: 16px'>+" + (this.getBoostEffect("Armour") * this.getBoostLevel()) + "</span> / " + this.negation;
+		return this.remNegation + "<span style='color: yellow; font-size: 16px'>+" + (this.getBoostEffect("Armour") * this.getBoostLevel()) + "</span> / " + this.negation;
 	}
 	return this.remNegation + " / " + this.negation;
 }

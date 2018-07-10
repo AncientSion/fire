@@ -229,6 +229,7 @@ class Sensor extends PrimarySystem {
     }
 
     public function hideEW($turn){
+		//Debug::log($this->parentId);
 		$this->states = array(1, 0, 0, 0);
 		$this->locked = 0;
 		for ($k = sizeof($this->ew)-1; $k >= 0; $k--){

@@ -91,7 +91,7 @@ Squadron.prototype.setLayout = function(){
 	else {
 		for (var i = 0; i < this.structures.length; i++){
 			var a = -45*(this.structures.length == 4) + -90*(this.structures.length == 2) + 360 /  this.structures.length * i;
-			var o = getPointInDir(70 + (-20*(this.structures.length == 2)) +(10*(this.structures.length == 4)), a-90, 0, 0);
+			var o = getPointInDir(60 + (-5*(this.structures.length == 2)) + (5*(this.structures.length == 4)), a-90, 0, 0);
 
 			minX = Math.min(minX, o.x);
 			maxX = Math.max(maxX, o.x);
@@ -179,8 +179,8 @@ Squadron.prototype.setSubElements = function(){
 		var subW = $(this.structures[i].element).width();
 		var subH = $(this.structures[i].element).height();
 		var pos = rotate(0, 0, this.structures[i].layout, -90);
-			pos.x *= 1.7;
-			pos.y *= 1.7;
+			pos.x *= 1.9;
+			pos.y *= 1.9;
 
 		$(this.structures[i].element)
 			.css("left", pos.x + w/2 - subW/2)
@@ -490,7 +490,7 @@ Squadron.prototype.getAllResolvingFireOrders = function(){
 }
 
 Squadron.prototype.setImage = function(){
-	console.log("Squad setImage");
+	//console.log("Squad setImage");
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
 		t.height = this.size*2;

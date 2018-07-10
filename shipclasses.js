@@ -2230,7 +2230,7 @@ Ship.prototype.getEffectiveRoutChance = function(){
 }
 
 Ship.prototype.getMoraleDiv = function(){
-	if (!this.ship){return false}
+	//if (!this.ship){return false}
 	return ($("<tr>")
 			.append($("<td>").html("Morale"))
 			.append($("<td>").attr("colSpan", 1).addClass("Morale")

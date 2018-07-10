@@ -73,7 +73,7 @@ class HeavyPulse extends Pulse {
 	public $reload = 4;
 	public $integrity = 64;
 	public $powerReq = 6;
-	public $traverse = 0;
+	public $traverse = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -116,8 +116,8 @@ class LightPlasmaPulse extends LightPulse {
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
-		$this->boostEffect[] = new Effect("Damage loss", -25);
-		$this->boostEffect[] = new Effect("Damage", 10);
+		$this->boostEffect[] = new Effect("Damage loss", -50);
+		//$this->boostEffect[] = new Effect("Damage", 10);
 		$this->notes[] = ($this->melt."% of total damage is added as extra damage to armour");
 	}
 	

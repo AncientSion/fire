@@ -936,7 +936,7 @@ function Game(data){
 		if (game.turn == 1 && game.phase == -1){
 			cam.z = 0.5;
 		} else this.setCamera();
-		this.draw();
+		this.redraw();
 
 		if (game.turn == 1){return;}
 
@@ -1145,11 +1145,11 @@ function Game(data){
 	this.initPhase = function(n){
 		this.setShipDivs();
 		this.phase = n;
+		game.redraw();
 
 		if (this.phase == -1){
 			$("#phaseSwitchDiv").click(function(){
 				$(this).hide();
-				game.draw();
 				game.timeout = setTimeout(function(){
 					game.initDeploy();
 				}, 500);
@@ -1166,7 +1166,7 @@ function Game(data){
 			$("#phaseSwitchDiv").click(function(){
 				setFPS(90);
 				game.prepResolveMovement();
-				game.draw();
+				game.redraw();
 				$(this).hide();
 				game.timeout = setTimeout(function(){
 					game.doResolveMovement();
@@ -1177,7 +1177,7 @@ function Game(data){
 			$("#phaseSwitchDiv").click(function(){
 				setFPS(90);
 				game.prepResolveMovement();
-				game.draw();
+				game.redraw();
 				$(this).hide();
 				game.timeout = setTimeout(function(){
 					game.doResolveMovement();
@@ -1189,7 +1189,7 @@ function Game(data){
 				game.draw();
 				$(this).hide();
 				game.resetImageData();
-				game.draw();
+				game.redraw();
 				game.timeout = setTimeout(function(){
 					game.initDamageControl();
 				}, 500);
@@ -1695,6 +1695,7 @@ function Game(data){
 	}
 
 	this.redraw = function(){
+		//console.log("redraw");
 		planCtx.clearRect(0, 0, res.x, res.y);
 		moveCtx.clearRect(0, 0, res.x, res.y)
 		salvoCtx.clearRect(0, 0, res.x, res.y)
@@ -2454,7 +2455,6 @@ function Game(data){
 						game.unitExploAnims[i].animating = 1;
 						cam.setZoom(2);
 						cam.setFocusToPos(game.getUnit(game.unitExploAnims[i].id).getPlannedPos());
-						game.redraw();
 					}
 
 					var done = 1;
@@ -3190,11 +3190,9 @@ Game.prototype.resolveDeploy = function(){
 		else if (this.ships[i].flight && this.ships[i].mission.turn == this.turn){show = 1; break;}
 	}
 	
-	game.setCamera();	
+	this.setCamera();	
 
-	if (!show){	
-		this.initialPhaseResolutionDone();
-	}
+	if (!show){this.initialPhaseResolutionDone();}
 	else {
 		setFPS(30);
 		window.then = Date.now();

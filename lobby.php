@@ -35,11 +35,13 @@ if (isset($_SESSION["userid"])){
 
 	$myGames = $dbManager->getGames($_SESSION["userid"]);
 	$update = 0;
-	for ($i = 0; $i < sizeof($myGames); $i++){
-		if ($manager->canAdvance($myGames[$i])){
-			$manager->prepareAdvance($myGames[$i]["id"]);
-			if ($manager->doAdvance()){
-				$update = 1;
+	if (1){
+		for ($i = 0; $i < sizeof($myGames); $i++){
+			if ($manager->canAdvance($myGames[$i])){
+				$manager->prepareAdvance($myGames[$i]["id"]);
+				if ($manager->doAdvance()){
+					$update = 1;
+				}
 			}
 		}
 	}

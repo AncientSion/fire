@@ -14,7 +14,7 @@ class Crius extends Light {
 	public $power = 2;
 	public $negation = 11;
 
-	public $effiency = 0;
+	public $effiency = 2;
 
 	function __construct($id, $parentId){
         parent::__construct($id, $parentId);
@@ -25,7 +25,7 @@ class Crius extends Light {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new MediumRailGun($this->getId(), $this->id, 300, 60);
+		$front->systems[] = new MediumRailGun($this->getId(), $this->parentId, 300, 60);
 		$structs[] = $front;
 
 		$right = new Section(60, 180);

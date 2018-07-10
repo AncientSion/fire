@@ -21,6 +21,7 @@ window.cam = {
 		this.o.x = res.x/2 - (pos.x*cam.z);
 		this.o.y = res.y/2 - (pos.y*cam.z);
 		this.c = pos;
+		game.redraw();
 	},
 
 	setZoom: function(val){
@@ -29,7 +30,7 @@ window.cam = {
 		for (var i = 0; i < game.fireOrders.length; i++){
 			if (!game.fireOrders[i].animated && game.fireOrders[i].animating){
 				this.setFocusToPos(game.fireOrders[i].target.getPlannedPos());
-				game.draw(); return;
+				return;
 			}
 		}
 	},

@@ -1534,7 +1534,7 @@ Sensor.prototype.getEWModeEffect = function(){
 
 Sensor.prototype.setState = function(){
 	System.prototype.setState.call(this);
-	if (game.phase == -1){
+	if (game.phase == -1 && !this.locked){
 		this.setEW({
 			angle: -1,
 			dist: Math.ceil(this.getOutput() / Math.pow(180/game.const.ew.len, 1/game.const.ew.p)),
@@ -1582,16 +1582,16 @@ Sensor.prototype.doUnpower = function(){
 }
 
 Sensor.prototype.setEW = function(data){
-		for (var i = this.ew.length-1; i >= 0; i--){
-			if (this.ew[i].turn == game.turn){
-				this.ew.splice(i, 1);
-			} else break;
-		}
-		this.ew.push(data);
-		if (this.selected){
-			this.select();
-		}
-		return;
+	for (var i = this.ew.length-1; i >= 0; i--){
+		if (this.ew[i].turn == game.turn){
+			this.ew.splice(i, 1);
+		} else break;
+	}
+	this.ew.push(data);
+	if (this.selected){
+		this.select();
+	}
+	return;
 }
 
 Sensor.prototype.getEW = function(data){

@@ -1305,13 +1305,6 @@ class Medium extends Ship {
 
 	function __construct($data){
 		parent::__construct($data);
-
-		$this->hitTable = array(
-			"Command" => 0.6,
-			"Engine" => 0.8,
-			"Sensor" => 1,
-			"Reactor" => 0.6
-		);
 	}
 
 	public function doHandleCritTesting($turn){

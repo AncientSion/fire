@@ -27,6 +27,7 @@ class Squaddie extends Single {
 	public $parentPow;
 
 	public $slots = 0;
+	public $dropout = array(0, 0);
 	
 	function __construct($id, $parentId){
 		$this->integrity = floor($this->integrity * 0.8);
@@ -129,13 +130,44 @@ class Squaddie extends Single {
 	
 	public function getValidEffects(){
 		return array( // type, min%, null, effect
-			array("Accuracy", 25, 0, 25),
-			array("Damage", 40, 0, 15),
-			array("Destroyed", 80, 0, 0.00),
+			array("Accuracy", 0, 0, 25),
+			array("Damage", 70, 0, 15),
+			array("Destroyed", 110, 0, 0.00),
 		);
 	}
 
 	public function checkSystemCrits($new, $old, $turn){
+		Debug::log("checkSystemCrits .".get_class($this)." #".$this->id);
+		if ($this->destroyed){return;}
+		$effects = $this->getValidEffects();
+
+		$dmg = round($new/(100-$old)*100);
+		Debug::log("determine effect, rel Dmg this turn: ".$dmg);
+		if ($dmg < 15){return;}
+
+		for ($i = 0; $i < sizeof($this->structures); $i++){
+			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
+
+				$roll = mt_rand(0, 100);
+
+				if ($roll + $dmg < $effects[0][1]){continue;}
+
+				for ($k = sizeof($effects)-1; $k >= 0; $k--){
+					if ($roll + $dmg < $effects[$k][1]){continue;}
+
+					Debug::log("roll: ".$roll.", dmg: ".$dmg.", crit: ".$effects[$k][0]);
+					$this->structures[$i]->systems[$j]->crits[] = new Crit(
+						0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn,
+						 $effects[$k][0],  $effects[$k][2],  $effects[$k][3], 1
+					);
+					break;
+				}
+			}
+		}
+	}
+
+	public function checkSystemCritso($new, $old, $turn){
 		Debug::log("checkSystemCrits .".get_class($this)." #".$this->id);
 		if ($this->destroyed){return;}
 		$effects = $this->getValidEffects();
@@ -202,7 +234,7 @@ class Squaddie extends Single {
 
 class Light extends Squaddie {
 	public $baseImpulse = 175;
-	public $size = 55;
+	public $size = 45;
 	public $baseImpulseCost = 30;
 	public $space = 3;
 	
@@ -213,8 +245,7 @@ class Light extends Squaddie {
 
 class SuperLight extends Light {
 	public $baseImpulse = 185;
-	public $size = 47;
-	//public $baseImpulseCost = 55;
+	public $size = 40;
 	public $space = 2;
 	
 	function __construct($id, $parentId){

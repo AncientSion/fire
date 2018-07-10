@@ -1598,6 +1598,7 @@
 
 				if ($result){
 					for ($j = 0; $j < sizeof($result); $j++){
+						//Debug::log("adding");
 						$units[$i]->getSystem($result[$j]["systemid"])->ew[] = new EW(
 							$result[$j]["id"],
 							$result[$j]["unitid"],

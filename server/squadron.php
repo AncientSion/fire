@@ -51,7 +51,6 @@ class Squadron extends Ship {
 	}
 
 	public function setMorale($turn, $phase){
-		return;
 		$val = 100;
 		if (sizeof($this->structures)){
 			$integrity = 0;
