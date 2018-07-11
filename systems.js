@@ -1040,7 +1040,7 @@ System.prototype.setBonusNegation = function(value){
 
 System.prototype.getMount = function(){
 	if (this.mount.length){
-		return this.mount + " / " + this.armour + (this.bonusNegation ? (" <span class='green'>+ " + this.bonusNegation) + "</span>" : "");
+		return this.mount + " / " + this.armour + (this.bonusNegation ? (" <span class='yellow'>+" + this.bonusNegation) + "</span>" : "");
 	} else return this.armour;
 }
 
@@ -1300,7 +1300,7 @@ PrimarySystem.prototype.getSysDiv = function(){
 		}
 	}
 	else if (unit.ship){
-		$(table).append($("<tr>").append($("<td>").css("width", "60%").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
+		$(table).append($("<tr>").append($("<td>").css("width", "55%").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
 		$(table).append($("<tr>").append($("<td>").html("Hit Chance")).append($("<td>").html(this.hitPct + "%")));
 		$(table).append($("<tr>").append($("<td>").html("Max Damage / hit")).append($("<td>").html(this.maxDmg)));
 
@@ -2295,7 +2295,7 @@ Weapon.prototype.getSysDiv = function(){
 	var table = document.createElement("table");
 	
 	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
-	$(table).append($("<tr>").append($("<td>").html("Firing Mode").css("width", "60%")).append($("<td>").html(this.fireMode)));
+	$(table).append($("<tr>").append($("<td>").html("Firing Mode").css("width", "55%")).append($("<td>").html(this.fireMode)));
 	$(table).append($("<tr>").append($("<td>").html("Damage Type")).append($("<td>").html(this.dmgType)));
 
 

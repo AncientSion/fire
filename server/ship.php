@@ -422,17 +422,17 @@ class Ship {
 	}
 
 	public function setSpecialActionState($turn, $phase){
-		Debug::log("setSpecialActionState #".$this->id);
+		//Debug::log("setSpecialActionState #".$this->id);
 		for ($i = 0; $i < sizeof($this->actions); $i++){
 			if ($this->actions[$i]->type == "flip"){
-				Debug::log("flipping! ".$this->flipping);
+				//Debug::log("flipping! ".$this->flipping);
 				$this->flipping = $this->flipping ? 0 : 1;
-				Debug::log("flipping! ".$this->flipping);
+				//Debug::log("flipping! ".$this->flipping);
 			}
 			else if ($this->actions[$i]->type == "roll"){
-				Debug::log("rolling! ".$this->rolling);
+				//Debug::log("rolling! ".$this->rolling);
 				$this->rolling = $this->rolling ? 0 : 1;
-				Debug::log("rolling! ".$this->rolling);
+				//Debug::log("rolling! ".$this->rolling);
 			}
 		}
 	}
