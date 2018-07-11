@@ -750,7 +750,7 @@ Squadron.prototype.getBuyTableData = function(table){
 			.data("systemid", this.structures[i].id)
 			.hover(function(){
 				$(this).toggleClass("rowHighlight");
-				$(game.getUnit(0).getSystem($(this).data("systemid")).element).toggleClass("borderHighlight");
+				$(game.getUnit(aUnit).getSystem($(this).data("systemid")).element).toggleClass("borderHighlight");
 			})
 		)
 
@@ -767,7 +767,7 @@ Squadron.prototype.getBuyTableData = function(table){
 					.data("systemid", this.structures[i].structures[j].systems[k].id)
 					.hover(function(){
 						$(this).toggleClass("rowHighlight");
-						$(game.getUnit(0).getSystem($(this).data("systemid")).element).toggleClass("borderHighlight");
+						$(game.getUnit(aUnit).getSystem($(this).data("systemid")).element).toggleClass("borderHighlight");
 					})
 				)
 

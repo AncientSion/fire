@@ -12,8 +12,8 @@ class Shokov extends Shokos {
 	public $ew = 425;
 	public $power = 0;
 
-	function __construct($id, $userid){
-		parent::__construct($id, $userid);
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
 	}
 
 	public function addStructures(){

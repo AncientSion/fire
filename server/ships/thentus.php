@@ -13,8 +13,8 @@ class Thentus extends Light {
 	public $ew = 500;
 	public $negation = 10;
 
-	function __construct($id, $userid){
-		parent::__construct($id, $userid);
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
 	}
 
 	public function addStructures(){

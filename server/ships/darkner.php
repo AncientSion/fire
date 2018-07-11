@@ -1,5 +1,36 @@
 <?php
 
+class Darkner extends Light {
+	public $name = "Darkner";
+	public $display = "Darkner";
+	public $role = "Ballistic Attack Frigate";
+	public $faction = "Centauri Republic";
+	public static $value =  180;
+	public $mass = 1200;
+
+	public $integrity = 370;
+	public $ep = 80;
+	public $ew = 475;
+	public $negation = 11;
+
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
+	}
+
+	public function addStructures(){
+		$structs = array();
+
+		$front = new Section(300, 60);
+		$front->systems[] = new MissileLauncher($this->getId(), $this->parentId, 270, 90, array(array("Javelin", 18, 3), array("Myrmidon", 12, 2)));
+		$front->systems[] = new LightParticle($this->getId(), $this->parentId, 240, 120);
+		$front->systems[] = new MissileLauncher($this->getId(), $this->parentId, 270, 90, array(array("Javelin", 18, 3), array("Myrmidon", 12, 2)));
+		$structs[] = $front;
+		for ($i = 0; $i < sizeof($structs); $i++){
+			$this->structures[] = $structs[$i];
+		}
+	}
+}
+
 /*
 class Darkner extends Medium {
 	public $name = "Darkner";
@@ -42,36 +73,5 @@ class Darkner extends Medium {
 	}
 }
 */
-
-class Darkner extends Light {
-	public $name = "Darkner";
-	public $display = "Darkner";
-	public $role = "Ballistic Support Frigate";
-	public $faction = "Centauri Republic";
-	public static $value =  180;
-	public $mass = 1200;
-
-	public $integrity = 370;
-	public $ep = 80;
-	public $ew = 475;
-	public $negation = 11;
-
-	function __construct($id, $userid){
-		parent::__construct($id, $userid);
-	}
-
-	public function addStructures(){
-		$structs = array();
-
-		$front = new Section(300, 60);
-		$front->systems[] = new MissileLauncher($this->getId(), $this->parentId, 270, 90, array(array("Javelin", 18, 3), array("Myrmidon", 12, 2)));
-		$front->systems[] = new LightParticle($this->getId(), $this->parentId, 240, 120);
-		$front->systems[] = new MissileLauncher($this->getId(), $this->parentId, 270, 90, array(array("Javelin", 18, 3), array("Myrmidon", 12, 2)));
-		$structs[] = $front;
-		for ($i = 0; $i < sizeof($structs); $i++){
-			$this->structures[] = $structs[$i];
-		}
-	}
-}
 
 ?>

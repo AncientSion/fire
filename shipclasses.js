@@ -80,10 +80,16 @@ function Ship(data){
 	this.doDraw = 1;
 }
 Ship.prototype.doRefit = function(){
-	if (!this.ship){return;}
+	//if (!this.ship){return;}
 	console.log("doRefit");
 	console.log(this);
 	game.refit = this.id;
+	if (this.squad){
+		for (var i = 0; i < this.structures.length; i++){
+			this.structures[i].create();
+			this.structures[i].previewSetup();
+		}
+	}
 	this.createBaseDiv();
 	this.previewSetup();
 	doShowShipDiv(this);

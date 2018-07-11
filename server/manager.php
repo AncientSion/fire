@@ -1809,7 +1809,7 @@
 			$unit->setUnitState(0, 0);
 		}
 		elseif ($get["unit"] == "squaddie"){
-			$unit = new $get["name"]($get["index"]+1, 1);
+			$unit = new $get["name"]($get["index"]+1, $get["purchases"]);
 			$unit->setSubunitState(0, 0);
 		}
 		

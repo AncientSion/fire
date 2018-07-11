@@ -246,7 +246,7 @@ else {
 			window.game = {
 				turn: 0,
 			 	phase: -2,
-			 	purchases: 2,
+			 	purchases: 1,
 			 	refit: 0,
 				ships: [],				
 				shipsBought: [],
@@ -586,7 +586,7 @@ else {
 										.attr("value", "Select")
 										.data("name", data[i]["name"])
 										.data("value", data[i]["value"])
-										.click(function(){requestSingleUnitData($(this).data("name"));})
+										.click(function(){requestBaseUnitData($(this).data("name"));})
 									)
 								)
 							)
@@ -610,7 +610,7 @@ else {
 									.attr("value", "Select")
 									.data("name", "Squadron")
 									.data("value", 0)
-									.click(function(){requestSingleUnitData($(this).data("name"));})
+									.click(function(){requestBaseUnitData($(this).data("name"));})
 								)
 							)
 					)
@@ -633,7 +633,7 @@ else {
 										.data("name", data[i]["name"])
 										.data("value", data[i]["value"])
 										.data("space", data[i]["space"])
-										.click(function(){requestSquadUnit($(this))})
+										.click(function(){requestSubUnit($(this))})
 									)
 								)
 							)
@@ -736,8 +736,8 @@ else {
 		}
 	}
 
-	function requestSingleUnitData(name){
-		//console.log("requestSingleUnitData");
+	function requestBaseUnitData(name){
+		//console.log("requestBaseUnitData");
 		game.refit = 0;
 		$.ajax({
 			type: "GET",
@@ -754,11 +754,18 @@ else {
 		});
 	}
 
-	function requestSquadUnit(ele){
-		if (game.ships[0] == undefined || !game.ships[0].squad){return;}
-		else if (game.ships[0].structures.length >= 4){popup("A squadron can only contain up to 4 units."); return;}
-		else if (game.ships[0].slots[0] + $(ele).data("space") > game.ships[0].slots[1]){
-			popup("This Squadron can only hold units worth a total of " +game.ships[0].slots[1]+ " Formation Points (FP).</br>The Squadron currently requires " + game.ships[0].slots[1] + " FP.</br>Adding another " + $(ele).data("name") + " would bring the FP to " + (game.ships[0].slots[0] + $(ele).data("space"))+".") ;return;}
+	function requestSubUnit(ele){
+		var unit = game.getUnit(aUnit);
+		if (!unit || !unit.squad){return;}
+		else if (unit.structures.length >= 4){popup("A squadron can only contain up to 4 units."); return;}
+		else if (unit.slots[0] + $(ele).data("space") > unit.slots[1]){
+			popup("This Squadron can only hold units worth a total of " + unit.slots[1]+  " Formation Points (FP).</br>The Squadron currently requires " + unit.slots[1] + " FP.</br>Adding another " + $(ele).data("name") + " would bring the FP to " + (unit.slots[0] + $(ele).data("space"))+".") ;return;}
+
+		var purchase = game.purchases;
+
+		if (game.refit){
+			purchase = unit.purchaseId;
+		}
 
 		$.ajax({
 			type: "GET",
@@ -767,9 +774,10 @@ else {
 			data: {
 					type: "shipdata",
 					unit: "squaddie",
-					index: game.ships[0].index,
+					purchases: purchase,
+					index: unit.index,
 					name: $(ele).data("name"),
-					},
+				},
 			success: addUnitToSquadron,
 			error: ajax.error,
 		});
@@ -833,19 +841,21 @@ else {
 	}
 
 	function addUnitToSquadron(data){
+
+		var unit = game.getUnit(aUnit);
 		var sub = initSquaddie (JSON.parse(data));
 			sub.create();
 
-		game.ships[0].structures.push(sub);
-		game.ships[0].index = sub.index;
-		game.ships[0].setLayout();
-		game.ships[0].setSubElements();
-		game.ships[0].setStats();
-		game.ships[0].setSubSystemState();
+		unit.structures.push(sub);
+		unit.index = sub.index;
+		unit.setLayout();
+		unit.setSubElements();
+		unit.setStats();
+		unit.setSubSystemState();
 		sub.expandElement();
 		sub.previewSetup();
 
-		game.setUnitTotal(game.ships[0]);
+		game.setUnitTotal(unit);
 	}
 
 	function initPreviewCanvas(){
@@ -865,12 +875,13 @@ else {
 	}
 
 	function drawShipPreview(){
+		var unit = game.getUnit(aUnit);
 		window.shipCtx.clearRect(0, 0, res.x, res.y);
 		window.shipCtx.save();
 		window.shipCtx.translate(res.x/2, res.y/2);
-		window.shipCtx.rotate(game.ships[0].getPlannedFacing()*(Math.PI/180));
+		window.shipCtx.rotate(unit.getPlannedFacing()*(Math.PI/180));
 		var size = shipCanvas.width/4;
-		window.shipCtx.drawImage(game.ships[0].getBaseImage(), -size, -size, size*2, size*2);
+		window.shipCtx.drawImage(unit.getBaseImage(), -size, -size, size*2, size*2);
 		window.shipCtx.restore();
 	}
 

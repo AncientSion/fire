@@ -14,8 +14,8 @@ class Haven extends SuperLight {
 	public $power = 0;
 	public $negation = 8;
 
-	function __construct($id, $userid){
-		parent::__construct($id, $userid);
+	function __construct($id, $parentId){
+		parent::__construct($id, $parentId);
 	}
 
 	public function addStructures(){
