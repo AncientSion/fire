@@ -167,7 +167,6 @@ Ship.prototype.canDeployHere = function(pos){
 	}
 	*/
 
-
 	if (game.turn == 1){
 		for (var i = 0; i < game.deployArea.length; i++){
 			if (game.deployArea[i].id != game.userid){continue;}
@@ -205,9 +204,9 @@ Ship.prototype.canDeployHere = function(pos){
 		return false;
 	}
 	else if (game.turn > 1){
-		console.log(game.deployArea);
+		//console.log(game.deployArea);
 		var d = getDistance(pos, {x: game.deployArea[0].x, y: game.deployArea[0].y});
-		if (d > game.deployArea[0].b){
+		if (d > game.deployArea[0].b && d < game.deployArea[0].s){
 			return true;
 		}
 		return false;

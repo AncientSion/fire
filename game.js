@@ -817,7 +817,7 @@ function Game(data){
 				x: center.x,
 				y: center.y,
 				s: 2000,
-				b: Math.round(d*2),
+				b: Math.round(d*2.5),
 				c: "green"
 			});
 		}
