@@ -384,6 +384,8 @@ class Ship {
 			}
 		}
 
+		$rolling = $this->rolling ? 1 : 0;
+
 		if ($facing > 360){
 			$facing -= 360;
 		}
@@ -393,7 +395,7 @@ class Ship {
 
 		Debug::log("getEndState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$facing.", rolling: ".$this->rolling);
 
-		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "facing" => $facing, "thrust" => $this->curImp, "rolling" => $this->rolling, "rolled" => $this->rolled, "flipped" => $this->flipped);
+		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "facing" => $facing, "thrust" => $this->curImp, "rolling" => $rolling, "rolled" => $this->rolled, "flipped" => $this->flipped);
 	}
 
 	public function isRolling(){
@@ -425,14 +427,14 @@ class Ship {
 		Debug::log("setSpecialActionState #".$this->id);
 		for ($i = 0; $i < sizeof($this->actions); $i++){
 			if ($this->actions[$i]->type == "flip"){
-				Debug::log("flip! ".$this->rolling);
+				//Debug::log("flip! ".$this->rolling);
 				$this->flipping = !$this->flipping;
-				Debug::log("flip! ".$this->rolling);
+				//Debug::log("flip! ".$this->rolling);
 			}
 			else if ($this->actions[$i]->type == "roll"){
-				Debug::log("rolling! ".$this->rolling);
+				//Debug::log("rolling! ".$this->rolling);
 				$this->rolling = !$this->rolling;
-				Debug::log("rolling! ".$this->rolling);
+				//Debug::log("rolling! ".$this->rolling);
 			}
 		}
 	}
