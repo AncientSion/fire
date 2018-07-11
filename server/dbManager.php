@@ -1068,7 +1068,7 @@
 			");
 
 			for ($i = 0; $i < sizeof($states); $i++){
-				//if ($states[$i]["id"] == 6){foreach ($states[$i] as $key => $value){Debug::log($key." / ".$value);}}
+				if ($states[$i]["id"] == 47){foreach ($states[$i] as $key => $value){Debug::log($key." / ".$value);}}
 
 				$stmt->bindParam(":x", $states[$i]["x"]);
 				$stmt->bindParam(":y", $states[$i]["y"]);

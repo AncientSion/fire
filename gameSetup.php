@@ -504,7 +504,7 @@ else {
 					var cost = 0;
 					for (var i = 0; i < game.shipsBought.length; i++){
 						cost += game.shipsBought[i].totalCost;
-						if (game.refit == game.shipsBought[i].totalCost){
+						if (game.refit == game.shipsBought[i].id){
 							console.log("refit");
 							cost -= game.shipsBought[i].totalCost;
 						}

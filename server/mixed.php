@@ -218,7 +218,7 @@ class Mixed extends Ship {
 						$this->mission->arrived = $gd->turn;
 					}
 					else {
-						if ($this->mission->targetid == $t->id && $t->mission->targetid == $this->id && !$t->moveSet && mt_rand(0, 1)){
+						if ($this->mission->targetid == $t->id && $t->mission->targetid == $this->id && !$t->moveSet &&mt_rand(0, 1)){
 							Debug::log("two flights intercepts each other, enemy moves first, switching to: ".$t->id);
 							$this->moveSet = 1;
 							$t->setMove($gd);
