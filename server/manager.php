@@ -994,7 +994,7 @@
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->flight || $this->ships[$i]->salvo){continue;}
 
-			if ($this->ships[$i]->rolling){$this->ships[$i]->rolled = !$this->ships[$i]->rolled;}
+			if ($this->ships[$i]->rolling){$this->ships[$i]->rolled = $this->ships[$i]->rolled ? 0 : 1;}
 		}
 	}
 
