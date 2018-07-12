@@ -203,7 +203,7 @@ class Single {
 			$roll = mt_rand(0, 100);
 			Debug::log("roll: ".$roll);
 			if ($roll < $dmg){
-				Debug::log("FAIL @ attempt #".$attempts.", roll above dmg");
+				Debug::log("FAIL attempts left ".($attempts-1).", roll above dmg");
 				$triggered = 1;
 				$attempts = 0;
 			}
