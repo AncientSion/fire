@@ -714,13 +714,12 @@ Single.prototype.getSysDiv = function(){
 	var table = $("<table>")
 		.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.name)))
 		.append($("<tr>").append($("<td>").attr("colSpan", 2).html(this.display)))
-		.append($("<tr>").append($("<td>").html("Integrity").css("width", "70%")).append($("<td>").html(this.integrity)))
-		.append($("<tr>").append($("<td>").html("Armour")).append($("<td>").html(this.negation)))
+		//.append($("<tr>").append($("<td>").html("Integrity").css("width", "70%")).append($("<td>").html(this.integrity)))
+		.append($("<tr>").append($("<td>").html("Armour").css("width", "70%")).append($("<td>").html(this.negation)))
 		.append($("<tr>").append($("<td>").html("Acceleration")).append($("<td>").html(this.baseImpulse)))
 		.append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html("<span class='yellow'>" + this.getEMDmg() + "<span>")))
 		.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 6)))
-		.append($("<tr>").append($("<td>").attr("colSpan", 2).html("Dropout Check required @ HP < " + (100-this.dropout[0]) + "%")))
-		.append($("<tr>").append($("<td>").html("Start Dropout Chance")).append($("<td>").html(this.dropout[1] + "%")))
+		.append($("<tr>").append($("<td>").attr("colSpan", 2).html("Subject to dropout test if damage for more than " + this.dropout[0] + "% of current HP in a given turn.</br>Needs to roll against HP lost this turn and pass twice to matain combat ability.")))
 
 	div.append(table);
 	this.attachSysNotes(div);
