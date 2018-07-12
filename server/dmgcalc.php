@@ -568,6 +568,17 @@ class DmgCalc {
 			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
 			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
 			$armourDmg += floor($totalDmg / 100 * $weapon->melt);
+
+//		shield	round(min(16, 3))
+//		armour 	round(min(16-3, 9))
+//		struct	round (16-3-9)
+//		armour	+= floor(16 / 100 * 50)
+
+//		shield	3
+//		armour	9
+//		struct	4
+//		armouzr	8
+
 		}
 
 		return new Divider($shieldDmg * $weapon->linked, $armourDmg * $weapon->linked, $structDmg * $weapon->linked, $emDmg * $weapon->linked, $notes);

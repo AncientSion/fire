@@ -30,7 +30,7 @@ class Single {
 	public $traverse = 0;
 	public $index = 0;
 	public $emDmg = 0;
-	public $dropout = array(80, 50);
+	public $dropout = array(15, 0);
 
 
 	function __construct($id, $parentId){
@@ -72,7 +72,7 @@ class Single {
 	}
 
 	public function isDestroyed(){
-		//Debug::log("isDestroyed:".get_class($this));
+		//Debug::log("isDestroyed ".get_class($this)." #".$this->id);
 		if ($this->destroyed){
 			//Debug::log("ding");
 			return true;
@@ -80,13 +80,13 @@ class Single {
 		for ($i = 0; $i < sizeof($this->crits); $i++){
 			if ($this->crits[$i]->type == "Disabled"){
 				$this->destroyed = true;
-				return;
+				return true;
 			}
 		}
 		for ($i = sizeof($this->damages)-1; $i >= 0; $i--){
 			if ($this->damages[$i]->destroyed){
 				$this->destroyed = true;
-				return;
+				return true;
 			}
 		}
 		return false;
@@ -177,8 +177,57 @@ class Single {
 			$this->checkSystemCrits($new, $old, $turn);
 		}
 	}
+
 	
+	public function getValidEffects(){
+		return array( // type, min%, null, effect
+			array("Disabled", 100, 0, 0.00),
+		);
+	}
+
 	public function checkDropoutCrits($new, $old, $turn){
+		if ($this->destroyed){return;}
+		$effects = $this->getValidEffects();
+
+		$dmg = round($new/(100-$old)*100);
+		Debug::log("checkDropoutCrits .".get_class($this)." #".$this->id.", newDmg: ".$dmg."%");
+
+		if ($dmg < $this->dropout[0]){return;}
+
+		Debug::log("single scope DROP test!");
+		$attempts = 2;
+		$triggered = 0;
+
+		while ($attempts){
+			$attempts--;
+			$roll = mt_rand(0, 100);
+			Debug::log("roll: ".$roll);
+			if ($roll < $dmg){
+				Debug::log("FAIL attempt: ".($attempts).", roll above dmg");
+				$triggered = 1;
+				$attempts = 0;
+			}
+		}
+
+		if (!$triggered){Debug::log("passed both!"); return;}
+
+		$effectRoll = mt_rand(0, 100);
+
+		if ($effectRoll + $dmg < $effects[0][1]){return;}
+
+		for ($i = sizeof($effects)-1; $i >= 0; $i--){
+			if ($effectRoll + $dmg < $effects[$i][1]){continue;}
+
+			$this->crits[] = new Crit(
+				sizeof($this->crits)+1, $this->parentId, $this->id, $GLOBALS["turn"], $effects[$i][0], 0, 0, 1
+			);
+			$this->destroyed = 1;
+			break;
+		}
+	}
+
+	
+	public function checkDropoutCritso($new, $old, $turn){
 		$trigger = $this->dropout[0];
 		$baseChance = $this->dropout[1];
 		$current = 100-floor($new + $old);
@@ -188,7 +237,7 @@ class Single {
 		$effChance = floor(100*($baseChance * (1+($trigger-$current)/100) / (100 - $trigger/100)));
 		$roll = mt_rand(0, 100);
 
-		Debug::log("dropout chance: ".get_class($this).", trigger: ".$trigger.", hp: ".$current."%, eff: ".$effChance.", roll: ".$roll);
+		Debug::log("dropout chance: ".get_class($this).", trigger: <".$trigger."%, hp: ".$current."%, eff: ".$effChance.", roll: ".$roll);
 		if ($roll < $effChance){
 			$this->doDropout();
 		}

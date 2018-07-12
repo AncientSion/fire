@@ -27,7 +27,7 @@ class Squaddie extends Single {
 	public $parentPow;
 
 	public $slots = 0;
-	public $dropout = array(0, 0);
+	//public $dropout = array(0, 0);
 	
 	function __construct($id, $parentId){
 		$this->integrity = floor($this->integrity * 0.8);
@@ -136,6 +136,10 @@ class Squaddie extends Single {
 		);
 	}
 
+	public function checkDropoutCrits($new, $old, $turn){
+		return;
+	}
+
 	public function checkSystemCrits($new, $old, $turn){
 		if ($this->destroyed){return;}
 		$effects = $this->getValidEffects();
@@ -143,7 +147,7 @@ class Squaddie extends Single {
 		$dmg = round($new/(100-$old)*100);
 		Debug::log("checkSystemCrits .".get_class($this)." #".$this->id.", newDmg: ".$dmg);
 
-		if ($dmg < 15){return;}
+		if ($dmg < $this->dropout[0]){return;}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){

@@ -124,6 +124,12 @@ class System {
 				return true;
 			}
 		}
+		for ($i = sizeof($this->crits)-1; $i >= 0; $i--){
+			if ($this->crits[$i]->type == "Destroyed"){
+				$this->disabled = true;
+				return true;
+			}
+		}
 		return false;
 	}
 
