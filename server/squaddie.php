@@ -137,26 +137,41 @@ class Squaddie extends Single {
 	}
 
 	public function checkSystemCrits($new, $old, $turn){
-		Debug::log("checkSystemCrits .".get_class($this)." #".$this->id);
 		if ($this->destroyed){return;}
 		$effects = $this->getValidEffects();
 
 		$dmg = round($new/(100-$old)*100);
-		Debug::log("determine effect, rel Dmg this turn: ".$dmg);
+		Debug::log("checkSystemCrits .".get_class($this)." #".$this->id.", newDmg: ".$dmg);
+
 		if ($dmg < 15){return;}
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
+				Debug::log("system scope crit test!");
+				$attempts = 2;
+				$triggered = 0;
 
-				$roll = mt_rand(0, 100);
+				while ($attempts){
+					$attempts--;
+					if (mt_rand(0, 100) < $dmg){
+						Debug::log("FAIL attempt: ".($attempts).", roll above dmg");
+						$triggered = 1;
+						$attempts = 0;
+					}
+				}
 
-				if ($roll + $dmg < $effects[0][1]){continue;}
+
+				if (!$triggered){Debug::log("passed both!"); continue;}
+
+				$effectRoll = mt_rand(0, 100);
+
+				if ($effectRoll + $dmg < $effects[0][1]){continue;}
 
 				for ($k = sizeof($effects)-1; $k >= 0; $k--){
-					if ($roll + $dmg < $effects[$k][1]){continue;}
+					if ($effectRoll + $dmg < $effects[$k][1]){continue;}
 
-					Debug::log("roll: ".$roll.", dmg: ".$dmg.", crit: ".$effects[$k][0]);
+					Debug::log("effectRoll: ".$effectRoll.", dmg: ".$dmg.", crit: ".$effects[$k][0]);
 					$this->structures[$i]->systems[$j]->crits[] = new Crit(
 						0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn,
 						 $effects[$k][0],  $effects[$k][2],  $effects[$k][3], 1

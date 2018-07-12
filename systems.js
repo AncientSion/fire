@@ -2162,7 +2162,7 @@ Weapon.prototype.getAimDetailsUnit = function(target, final, accLoss, row){
 	} else row.append($("<td>").html("<span class='red'>-"+ Math.floor(final / 5 * traverseMod) + "% </span> (-" + traverseMod + ")"));
 
 	if (accLoss){
-		row.append($("<td>").addClass("red").html(" -" + accLoss + "%"));
+		row.append($("<td>").addClass("red").html(accLoss*-1 + "%"));
 	} else row.append($("<td>").html(""));
 
 	final = Math.floor(final * (1-(traverseMod*0.2)) - accLoss);
@@ -2175,7 +2175,7 @@ Weapon.prototype.getAimDetailsUnit = function(target, final, accLoss, row){
 Weapon.prototype.getAimDetailsLoc = function(accLoss, row){
 	row.append($("<td>").html(""));
 	if (accLoss){
-		row.append($("<td>").addClass("red").html(" -" + accLoss + "%"));
+		row.append($("<td>").addClass("red").html(accLoss*-1 + "%"));
 	} else {			
 		row.append($("<td>").html(""));
 	}
@@ -3265,7 +3265,7 @@ Launcher.prototype.getAimDetailsUnit = function(target, final, accLoss, row){
 	} else row.append($("<td>").html("<span class='red'>-"+ Math.floor(final / 5 * traverseMod) + "% </span> (-" + traverseMod + ")"))
 
 	if (accLoss){
-		row.append($("<td>").html(" -" + accLoss + "%"));
+		row.append($("<td>").html(accLoss*-1 + "%"));
 	} else row.append($("<td>").html(""));
 
 	final = Math.floor(final * (1-(traverseMod*0.2)) - accLoss);
