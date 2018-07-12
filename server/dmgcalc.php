@@ -567,7 +567,7 @@ class DmgCalc {
 			$shieldDmg = round(min($totalDmg, $negation["bonus"]));
 			$armourDmg = round(min($totalDmg-$shieldDmg, $negation["stock"]));
 			$structDmg = round($totalDmg - $shieldDmg - $armourDmg);
-			$armourDmg += floor($totalDmg / 100 * $weapon->melt);
+			$armourDmg += floor(($totalDmg-$shieldDmg) / 100 * $weapon->melt);
 
 //		shield	round(min(16, 3))
 //		armour 	round(min(16-3, 9))

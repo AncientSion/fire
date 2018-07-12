@@ -203,7 +203,7 @@ class Single {
 			$roll = mt_rand(0, 100);
 			Debug::log("roll: ".$roll);
 			if ($roll < $dmg){
-				Debug::log("FAIL attempt: ".($attempts).", roll above dmg");
+				Debug::log("FAIL @ attempt #".$attempts.", roll above dmg");
 				$triggered = 1;
 				$attempts = 0;
 			}
@@ -218,8 +218,10 @@ class Single {
 		for ($i = sizeof($effects)-1; $i >= 0; $i--){
 			if ($effectRoll + $dmg < $effects[$i][1]){continue;}
 
+			Debug::log("effectRoll: ".$effectRoll.", dmg: ".$dmg.", crit: ".$effects[$k][0]);
 			$this->crits[] = new Crit(
-				sizeof($this->crits)+1, $this->parentId, $this->id, $GLOBALS["turn"], $effects[$i][0], 0, 0, 1
+				sizeof($this->crits)+1, $this->parentId, $this->id, $turn,
+				$effects[$i][0], $effects[$i][2], $effects[$i][3], 1
 			);
 			$this->destroyed = 1;
 			break;
