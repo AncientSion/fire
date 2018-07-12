@@ -44,7 +44,7 @@ class Torpedo extends Missile {
 
 class Warhead extends Weapon {
 	public $name = "Warhead";
-	public $display = "Warhead";
+	public $role = "Warhead";
 	public $type = "Warhead";
 	public $animation = "explosive";
 	public $linked = 1;
@@ -71,7 +71,7 @@ class Warhead extends Weapon {
 
 class Vran extends Torpedo {
 	public $name = "Vran";
-	public $display = "Light Particle Torpedo";
+	public $role = "Light Particle Torpedo";
 	public static $prio = 0;
 	public $integrity = 5;
 	public $negation = 1;
@@ -88,7 +88,7 @@ class Vran extends Torpedo {
 
 class Vranoth extends Torpedo {
 	public $name = "Vranoth";
-	public $display = "Medium Particle Torpedo";
+	public $role = "Medium Particle Torpedo";
 	public static $prio = 0;
 	public $integrity = 8;
 	public $negation = 2;
@@ -105,7 +105,7 @@ class Vranoth extends Torpedo {
 
 class VranothKa extends Torpedo {
 	public $name = "VranothKa";
-	public $display = "Heavy Particle Torpedo";
+	public $role = "Heavy Particle Torpedo";
 	public static $prio = 0;
 	public $integrity = 11;
 	public $negation = 3;
@@ -122,7 +122,7 @@ class VranothKa extends Torpedo {
 
 class Hasta extends Missile {
 	public $name = "Hasta";
-	public $display = "Light Anti-Fighter Missiles";
+	public $role = "Light Anti-Fighter Missiles";
 	public static $prio = 0;
 	public $mass = 2;
 	public $integrity = 4;
@@ -138,7 +138,7 @@ class Hasta extends Missile {
 
 class Javelin extends Missile {
 	public $name = "Javelin";
-	public $display = "Std. Multirole Missiles";
+	public $role = "Std. Multirole Missiles";
 	public static $prio = 0;
 	public $mass = 4;
 	public $integrity = 8;
@@ -154,7 +154,7 @@ class Javelin extends Missile {
 
 class Triarii extends Missile {
 	public $name = "Triarii";
-	public $display = "Plasma Multirole Missiles";
+	public $role = "Plasma Multirole Missiles";
 	public static $prio = 0;
 	public $mass = 4;
 	public $integrity = 8;
@@ -171,7 +171,7 @@ class Triarii extends Missile {
 
 class Myrmidon extends Missile {
 	public $name = "Myrmidon";
-	public $display = "Light Std. Antiship Missiles";
+	public $role = "Light Std. Antiship Missiles";
 	public static $prio = 0;
 	public $mass = 5;
 	public $integrity = 10;
@@ -187,7 +187,7 @@ class Myrmidon extends Missile {
 
 class Vanguard extends Missile {
 	public $name = "Vanguard";
-	public $display = "Light Interceptor Missiles";
+	public $role = "Light Interceptor Missiles";
 	public static $prio = 0;
 	public $mass = 2;
 	public $integrity = 4;
@@ -203,7 +203,7 @@ class Vanguard extends Missile {
 
 class Needle extends Missile {
 	public $name = "Needle";
-	public $display = "Light Anti-Fighter Missiles";
+	public $role = "Light Anti-Fighter Missiles";
 	public static $prio = 0;
 	public $mass = 2;
 	public $integrity = 4;
@@ -219,7 +219,7 @@ class Needle extends Missile {
 
 class Naga extends Missile {
 	public $name = "Naga";
-	public $display = "Multirole Missiles";
+	public $role = "Multirole Missiles";
 	public static $prio = 0;
 	public $mass = 4;
 	public $integrity = 8;
@@ -235,7 +235,7 @@ class Naga extends Missile {
 
 class Cyclops extends Missile {
 	public $name = "Cyclops";
-	public $display = "Light Antiship Missiles";
+	public $role = "Light Antiship Missiles";
 	public static $prio = 0;
 	public $mass = 5;
 	public $integrity = 10;
@@ -251,7 +251,7 @@ class Cyclops extends Missile {
 
 class Titan extends Missile {
 	public $name = "Titan";
-	public $display = "Heavy Antiship Missiles";
+	public $role = "Heavy Antiship Missiles";
 	public static $prio = 0;
 	public $mass = 7;
 	public $integrity = 14;

@@ -709,19 +709,18 @@ Single.prototype.getEMDmg = function(){
 }
 
 Single.prototype.getSysDiv = function(){
-	var div = $("<div>").attr("id", "sysDiv").addClass(this.id + " flight");
+	var div = 
+		$("<div>").attr("id", "sysDiv")
+		.append($("<table>")
+			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.name)))
+			.append($("<tr>").append($("<td>").attr("colSpan", 2).html(this.role)))
+			.append($("<tr>").append($("<td>").html("Armour").css("width", "70%")).append($("<td>").html(this.negation)))
+			.append($("<tr>").append($("<td>").html("Acceleration")).append($("<td>").html(this.baseImpulse)))
+			.append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html("<span class='yellow'>" + this.getEMDmg() + "<span>")))
+			.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 6)))
+			.append($("<tr>").append($("<td>").attr("colSpan", 2).html("Subject to dropout test if damaged for more than " + this.dropout[0] + "% of current HP in a given turn.</br>Needs to roll against HP lost this turn and pass twice to matain combat ability."))))
 
-	var table = $("<table>")
-		.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.name)))
-		.append($("<tr>").append($("<td>").attr("colSpan", 2).html(this.display)))
-		//.append($("<tr>").append($("<td>").html("Integrity").css("width", "70%")).append($("<td>").html(this.integrity)))
-		.append($("<tr>").append($("<td>").html("Armour").css("width", "70%")).append($("<td>").html(this.negation)))
-		.append($("<tr>").append($("<td>").html("Acceleration")).append($("<td>").html(this.baseImpulse)))
-		.append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html("<span class='yellow'>" + this.getEMDmg() + "<span>")))
-		.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 6)))
-		.append($("<tr>").append($("<td>").attr("colSpan", 2).html("Subject to dropout test if damage for more than " + this.dropout[0] + "% of current HP in a given turn.</br>Needs to roll against HP lost this turn and pass twice to matain combat ability.")))
 
-	div.append(table);
 	this.attachSysNotes(div);
 	this.attachSysMods(div);
 	return div;

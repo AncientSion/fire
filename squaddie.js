@@ -59,61 +59,30 @@ Squaddie.prototype.hideSysDiv = function(){
 }
 
 Squaddie.prototype.getSysDiv = function(){
-	//console.log("ding");
-
 	var div = 
 		$("<div>").attr("id", "sysDiv")
-			.append($("<table>")
-				.append($("<tr>")
-					.append($("<th>").html(this.display).attr("colSpan", 2)))
-				.append($("<tr>")
-					.append($("<td>").html(this.role).attr("colSpan", 2)))
-//				.append($("<tr>")
-//					.append($("<td>").html("Main Structure"))
-//					.append($("<td>").html(this.remaining + " / " + this.integrity)))
-//				.append($("<tr>")
-//					.append($("<td>").html("Main Armour"))
-//					.append($("<td>").html(this.remNegation + " / " + this.negation)))
-				.append($("<tr>")
-					.append($("<td>").html("Sensor Output"))
-					.append($("<td>").html(this.ew)))
-				//.append($("<tr>")
-				//	.append($("<td>").html("Reactor Output"))
-				//	.append($("<td>").html(this.power)))
-				.append($("<tr>")
-					.append($("<td>").html("Engine Output"))
-					.append($("<td>").html(this.ep)))
-				.append($("<tr>")
-					.append($("<td>").html("Base Hit Chance"))
-					.append($("<td>").html(this.baseHitChance + "%")))
-//				.append($("<tr>")
-//					.append($("<td>").html("Dropout Test Trigger"))
-//					.append($("<td>").html("< " + this.dropout[0] + "% HP")))
-				.append($("<tr>")
-					.append($("<td>").attr("colSpan", 2).css("height", 8)))
-				.append($("<tr>")
-					.append($("<td>").attr("colSpan", 2).html("Subject to dropout test if damage for more than " + this.dropout[0] + "% of current HP in a given turn.</br>Needs to roll against HP lost this turn and pass twice to matain combat ability.")))
-				//.append($("<tr>")
-				//	.append($("<td>").html("Base Dropout Chance"))
-				//	.append($("<td>").html(this.dropout[1] + "%")))
-				//.append($("<tr>")
-				//	.append($("<td>").html("Base Dropout Chance"))
-				//	.append($("<td>").html(this.dropout[1] + "%")))
-			)
+		.append($("<table>")
+			.append($("<tr>")
+				.append($("<th>").html(this.display).attr("colSpan", 2)))
+			.append($("<tr>")
+				.append($("<td>").html(this.role).attr("colSpan", 2)))
+			.append($("<tr>")
+				.append($("<td>").html("Sensor Output"))
+				.append($("<td>").html(this.ew)))
+			.append($("<tr>")
+				.append($("<td>").html("Engine Output"))
+				.append($("<td>").html(this.ep)))
+			.append($("<tr>")
+				.append($("<td>").html("Base Hit Chance"))
+				.append($("<td>").html(this.baseHitChance + "%")))
+			.append($("<tr>")
+				.append($("<td>").attr("colSpan", 2).css("height", 6)))
+			.append($("<tr>")
+				.append($("<td>").attr("colSpan", 2).html("Subject to dropout test if damaged for more than " + this.dropout[0] + "% of current HP in a given turn.</br>Needs to roll against HP lost this turn and pass twice to matain combat ability.")))
+		)
 
-
-	if (this.crits.length){
-		table = $("<table>").addClass("modifiers").append($("<tr>").append($("<th>").html("Modifiers").attr("colSpan", 2)));
-		for (var i = 0; i < this.crits.length; i++){
-			if (this.crits[i].inEffect()){
-				var html = "Disengaged + T (" + this.crits[i].turn + ")"
-				$(table[0]).append($("<tr>").append($("<td>").html(html).attr("colSpan", 2).addClass("negative")));
-			}
-		}
-		div.append(table)
-	}
-	
-
+	this.attachSysNotes(div);
+	this.attachSysMods(div);
 	return div;
 }
 
