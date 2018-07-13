@@ -218,7 +218,7 @@ class Single {
 		for ($i = sizeof($effects)-1; $i >= 0; $i--){
 			if ($effectRoll + $dmg < $effects[$i][1]){continue;}
 
-			Debug::log("effectRoll: ".$effectRoll.", dmg: ".$dmg.", crit: ".$effects[$k][0]);
+			Debug::log("effectRoll: ".$effectRoll.", dmg: ".$dmg.", crit: ".$effects[$i][0]);
 			$this->crits[] = new Crit(
 				sizeof($this->crits)+1, $this->parentId, $this->id, $turn,
 				$effects[$i][0], $effects[$i][2], $effects[$i][3], 1

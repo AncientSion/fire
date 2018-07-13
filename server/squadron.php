@@ -46,7 +46,7 @@ class Squadron extends Ship {
 		}
 	}
 
-	public function doHandleMoraleTesting($turn){
+	public function doHandleMoraleTestinga($turn){
 		return;
 	}
 
