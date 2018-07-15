@@ -1507,10 +1507,19 @@ Ship.prototype.createCritLogEntry = function(){
 }
 
 Ship.prototype.createMoraleLogEntry = function(){
-	if (this.flight || this.salvo){return false;}
-	if (this.status != "jumpOut"){return false;}
+	if (!this.notes || this.flight || this.salvo){return false;}
+
+
 	
-	var html = "<td colSpan=9><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is routed (and prepares to flee to hyperspace (Chance to rout: " + this.morale.effChance + "%, roll: " + this.notes + ")</td>";
+	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is subject to a morale check.</br>";
+
+	if (this.status == "jumpOut"){
+		html += "The unit <span class='yellow'>fails</span> and is routed (Chance: " + this.morale.effChance + "%, roll: " + this.notes + ").</td>";
+	} else html += "The unit <span class='yellow'>passes</span> (Chance: " + this.morale.effChance + "%, roll: " + this.notes + ").</td>";
+	
+	
+	//var html = "<td colSpan=9><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is routed (and prepares to flee to hyperspace (Chance to rout: " + this.morale.effChance + "%, roll: " + this.notes + ")</td>";
+	
 	this.attachLogEntry(html);
 	return true;
 }

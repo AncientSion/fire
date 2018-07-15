@@ -1440,7 +1440,7 @@
 
 						$result[$j] = $dmg;
 					}
-					$units[$i]->addDamageDB($result);
+					$units[$i]->addDamagesFromDB($result);
 				}
 			}
 			return true;

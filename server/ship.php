@@ -472,9 +472,34 @@ class Ship {
 		}
 	}
 
-	public function addDamageDB($damages){
-		for ($i = 0; $i < sizeof($damages); $i++){
-			$this->applyDBDamage($damages[$i]);
+	public function addDamagesFromDB($dmgs){
+		for ($i = 0; $i < sizeof($dmgs); $i++){
+			for ($j = 0; $j < sizeof($this->structures); $j++){
+				if ($dmgs[$i]->structureid == $this->structures[$j]->id){
+					$this->structures[$j]->armourDmg += $dmgs[$i]->armourDmg;
+
+					if ($dmgs[$i]->systemid == 1){
+						$this->primary->addDamage($dmgs[$i]);
+						break 1;
+					}
+
+					for ($k = 0; $k < sizeof($this->structures[$j]->systems); $k++){
+						if ($this->structures[$j]->systems[$k]->id == $dmgs[$i]->systemid){
+							$this->structures[$j]->systems[$k]->addDamage($dmgs[$i]);
+							$this->primary->addDamage($dmgs[$i]);
+							break 2;
+						}
+					}
+
+					for ($k = 0; $k < sizeof($this->primary->systems); $k++){
+						if ($this->primary->systems[$k]->id == $dmgs[$i]->systemid){
+							$this->primary->systems[$k]->addDamage($dmgs[$i]);
+							$this->primary->addDamage($dmgs[$i]);
+							break 2;
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -540,7 +565,7 @@ class Ship {
 		return true;
 	}
 
-	public function applyDamage($dmg){
+	public function addNewDamage($dmg){
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($dmg->structureid == $this->structures[$i]->id){
@@ -585,38 +610,7 @@ class Ship {
 			}
 		}
 
-		Debug::log("WARNING couldnt SHIP applyDamage: #".$dmg->id);
-	}
-
-	public function applyDBDamage($dmg){
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($dmg->structureid == $this->structures[$i]->id){
-				$this->structures[$i]->armourDmg += $dmg->armourDmg;
-
-				if ($dmg->systemid == 1){
-					$this->primary->addDamage($dmg);
-					return;
-				}
-
-				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-					if ($this->structures[$i]->systems[$j]->id == $dmg->systemid){
-						$this->structures[$i]->systems[$j]->addDamage($dmg);
-						$this->primary->addDamage($dmg);
-						return;
-					}
-				}
-
-				for ($j = 0; $j < sizeof($this->primary->systems); $j++){
-					if ($this->primary->systems[$j]->id == $dmg->systemid){
-						$this->primary->systems[$j]->addDamage($dmg);
-						$this->primary->addDamage($dmg);
-						return;
-					}
-				}
-			}
-		}
-
-		Debug::log("WARNING couldnt apply SHIP applyDBDamage: #".$dmg->id);
+		Debug::log("WARNING couldnt SHIP addNewDamage: #".$dmg->id);
 	}
 
 	public function doUnpowerAllSystems($turn){

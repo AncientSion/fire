@@ -175,7 +175,7 @@ class DmgCalc {
 		);
 
 		$fire->damages[] = $entry;
-		$fire->target->applyDamage($entry);	
+		$fire->target->addNewDamage($entry);	
 	}
 
 	public static function doPulseDmg($fire, $hit, $system){
@@ -242,7 +242,7 @@ class DmgCalc {
 		);
 
 		$fire->damages[] = $entry;
-		$fire->target->applyDamage($entry);
+		$fire->target->addNewDamage($entry);
 	}
 
 	public static function doLaserDmg($fire, $hit, $system){
@@ -304,7 +304,7 @@ class DmgCalc {
 
 			if (!$fire->target->squad || !$rakes){
 				$fire->damages[] = $entry;
-				$fire->target->applyDamage($entry);
+				$fire->target->addNewDamage($entry);
 			}
 			else if ($rakes){
 				$entry->shieldDmg += $dmg->shieldDmg; $entry->structDmg += $dmg->structDmg; $entry->armourDmg += $dmg->armourDmg; $entry->destroyed = $destroyed;
@@ -382,7 +382,7 @@ class DmgCalc {
 			);
 
 			$fire->damages[] = $entry;
-			$fire->target->applyDamage($entry);
+			$fire->target->addNewDamage($entry);
 		}
 
 
@@ -414,7 +414,7 @@ class DmgCalc {
 			);
 
 			$fire->damages[] = $entry;
-			$fire->target->applyDamage($entry);
+			$fire->target->addNewDamage($entry);
 
 		}
 	}
@@ -457,7 +457,7 @@ class DmgCalc {
 				);
 
 				$fire->damages[] = $entry;
-				$fire->target->applyDamage($entry);	
+				$fire->target->addNewDamage($entry);	
 
 				if ($toDo){
 					$system = $fire->target->getFlashOverkillSystem($fire);

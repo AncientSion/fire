@@ -337,7 +337,7 @@ class Squadron extends Ship {
 		return $dmgs;
 	}
 
-	public function applyDamage($dmg){
+	public function addNewDamage($dmg){
 
 		if ($dmg->new){
 			$dmg->overkill += $dmg->structDmg;
@@ -367,16 +367,15 @@ class Squadron extends Ship {
 		Debug::log("WARNING couldnt apply damage #".$dmg->id.", looking for unit #".$dmg->shipid."/".$dmg->systemid);
 	}
 
-	public function applyDBDamage($dmg){
-
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($dmg->systemid == $this->structures[$i]->id){
-				$this->structures[$i]->addDamage($dmg);
-				return;
+	public function addDamagesFromDB($dmg){
+		for ($i = 0; $i < sizeof($dmgs); $i++){
+			for ($i = 0; $i < sizeof($this->structures); $i++){
+				if ($dmgs[$i]->systemid == $this->structures[$i]->id){
+					$this->structures[$i]->addDamage($dmgs[$i]);
+					return;
+				}
 			}
 		}
-
-		Debug::log("WARNING couldnt apply DB damage #".$dmg->id.", looking for unit #".$dmg->shipid."/".$dmg->systemid);
 	}
 
 	public function getSystemByName($name){

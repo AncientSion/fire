@@ -119,7 +119,7 @@ class Mixed extends Ship {
 		return;
 	}
 
-	public function applyDamage($dmg){
+	public function addNewDamage($dmg){
 		if ($dmg->new){
 			$dmg->overkill += $dmg->structDmg;
 			$dmg->structDmg = 0;
@@ -144,15 +144,15 @@ class Mixed extends Ship {
 		Debug::log("WARNING couldnt apply damage #".$dmg->id.", looking for unit #".$dmg->shipid."/".$dmg->systemid);
 	}
 
-	public function applyDBDamage($dmg){
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			if ($dmg->systemid == $this->structures[$i]->id){
-				$this->structures[$i]->addDamage($dmg);
-				return;
+	public function addDamagesFromDB($dmg){
+		for ($i = 0; $i < sizeof($dmgs); $i++){
+			for ($j = 0; $j < sizeof($this->structures); $j++){
+				if ($dmgs[$i]->systemid == $this->structures[$j]->id){
+					$this->structures[$j]->addDamage($dmgs[$i]);
+					return;
+				}
 			}
 		}
-
-		Debug::log("WARNING couldnt apply DB damage #".$dmg->id.", looking for unit #".$dmg->shipid."/".$dmg->systemid);
 	}
 
 	public function setMove(&$gd){
