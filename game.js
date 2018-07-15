@@ -3324,9 +3324,9 @@ Game.prototype.initialPhaseResolutionDone = function(){
 
 	if (newUnit){
 		ui.unitSelector.empty();
-		this.timeout = setTimeout(function(){
-			game.initSelectionWrapper();
-		})
+		game.initSelectionWrapper();
+		this.createPlaceHolderEntry();
+		//this.timeout = setTimeout(function(){game.initSelectionWrapper();})
 	}
 
 	this.logMissionChanges();
