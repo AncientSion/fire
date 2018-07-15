@@ -93,7 +93,7 @@ class Vranoth extends Torpedo {
 	public $integrity = 8;
 	public $negation = 2;
 	public $traverse = 0;
-	public $maxRange = 1800;
+	public $maxRange = 800;
 	public $reload = 3;
 	public static $value = 0;
 

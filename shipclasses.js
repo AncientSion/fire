@@ -84,6 +84,7 @@ Ship.prototype.doRefit = function(){
 	console.log("doRefit");
 	console.log(this);
 	game.refit = this.id;
+	$(".shipDiv").remove();
 	if (this.squad){
 		for (var i = 0; i < this.structures.length; i++){
 			this.structures[i].create();

@@ -52,7 +52,7 @@ function Game(data){
 	this.events = [];
 	this.wave = data.wave;
 	this.arcRange = 1200;
-	this.animData = {jump: 6};
+	this.animData = {jump: 45};
 	this.commandChange = {old: 0, new: 0}
 
 	this.hasSnapCenterline = function(shooter, shooterAngle, target){
