@@ -164,9 +164,7 @@ class Primary {
 	}
 
 	public function addDamage($dmg){
-		if ($dmg->new){
-			if ($dmg->systemid == 1){$this->emDmg += $dmg->emDmg;}
-		}
+		if ($dmg->new && $dmg->systemid == 1){$this->emDmg += $dmg->emDmg;}
 
 		if ($dmg->systemid == 1){
 			$dmg->overkill += $dmg->structDmg;

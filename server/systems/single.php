@@ -211,14 +211,14 @@ class Single {
 
 		if (!$triggered){Debug::log("passed both!"); return;}
 
-		$effectRoll = mt_rand(0, 100);
+		$magnitude = mt_rand(0, 100) + $dmg;
 
-		if ($effectRoll + $dmg < $effects[0][1]){return;}
+		if ($effectRoll < $effects[0][1]){return;}
 
 		for ($i = sizeof($effects)-1; $i >= 0; $i--){
-			if ($effectRoll + $dmg < $effects[$i][1]){continue;}
+			if ($magnitude < $effects[$i][1]){continue;}
 
-			Debug::log("effectRoll: ".$effectRoll.", dmg: ".$dmg.", crit: ".$effects[$i][0]);
+			Debug::log("magnitude: ".$magnitude.", crit: ".$effects[$i][0]);
 			$this->crits[] = new Crit(
 				sizeof($this->crits)+1, $this->parentId, $this->id, $turn,
 				$effects[$i][0], $effects[$i][2], $effects[$i][3], 1

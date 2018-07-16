@@ -507,11 +507,16 @@ Mixed.prototype.setPreFireSize = function(){
 Mixed.prototype.hasPatrolLayout = function(){
 	if (this.patrolLayout){return true;}
 
-	if (this.mission.arrived && this.mission.type == 1){
-		if (game.phase == 1 || game.phase == 3){
-			return true;
-		}
+
+
+	if (this.mission.arrived && this.mission.type == 1 && (game.phase == 1 || game.phase == 3)){
+		return true;
 	}
+
+
+	
+
+	
 
 	if (this.mission.arrived && this.mission.arrived < game.turn){
 		if (this.mission.type == 1){return true;}
@@ -525,6 +530,16 @@ Mixed.prototype.hasPatrolLayout = function(){
 				return true;
 			}
 		}
+	}
+	else if (this.mission.type == 2 && game.subPhase == 2 && this.cc.length){
+		var can = 1;
+		for (var i = 0; i < this.cc.length; i++){
+			var unit = game.getUnit(this.cc[i]);
+			if (!unit.flight){
+				can = 0;
+			}
+		}
+		if (can){}
 	}
 	return false;
 }

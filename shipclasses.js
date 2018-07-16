@@ -2163,7 +2163,7 @@ Ship.prototype.showMoraleDiv = function(e){
 			.append($("<tr>")
 				.append($("<td>").html("Current Morale"))
 				.append($("<td>").addClass("moraleFinal").html(this.getCurrentMorale() + "%")))
-			.append($("<tr>")
+/*			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 6)))
 			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).html("Check required @ Morale < " + this.getMoraleTrigger() + "%")))
@@ -2175,7 +2175,7 @@ Ship.prototype.showMoraleDiv = function(e){
 			.append($("<tr>")
 				.append($("<td>").html("Current Rout Chance"))
 				.append($("<th>").html(this.getEffectiveRoutChance() + "%")))
-		)
+*/		)
 	)
 }
 

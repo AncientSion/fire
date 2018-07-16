@@ -168,14 +168,14 @@ class Squaddie extends Single {
 
 				if (!$triggered){Debug::log("passed both!"); continue;}
 
-				$effectRoll = mt_rand(0, 100);
+				$magnitude = mt_rand(0, 100) + $dmg;
 
-				if ($effectRoll + $dmg < $effects[0][1]){continue;}
+				if ($magnitude < $effects[0][1]){continue;}
 
 				for ($k = sizeof($effects)-1; $k >= 0; $k--){
-					if ($effectRoll + $dmg < $effects[$k][1]){continue;}
+					if ($magnitude < $effects[$k][1]){continue;}
 
-					Debug::log("effectRoll: ".$effectRoll.", dmg: ".$dmg.", crit: ".$effects[$k][0]);
+					Debug::log("magnitude: ".$magnitude.", crit: ".$effects[$k][0]);
 					$this->structures[$i]->systems[$j]->crits[] = new Crit(
 						0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn,
 						 $effects[$k][0],  $effects[$k][2],  $effects[$k][3], 1

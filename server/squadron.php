@@ -46,15 +46,16 @@ class Squadron extends Ship {
 		}
 	}
 
-	public function doHandleMoraleTestinga($turn){
+	public function doTestMoralea($turn){
 		return;
 	}
 
-	public function setMorale($turn, $phase){
+	public function setMorale($turn){
 		$val = 100;
 		if (sizeof($this->structures)){
 			$integrity = 0;
 			$remaining = 0;
+
 			for ($i = 0; $i < sizeof($this->structures); $i++){
 				$integrity += $this->structures[$i]->integrity;
 				
@@ -67,9 +68,30 @@ class Squadron extends Ship {
 		$this->morale = new Morale($val, $this->command, 0, 0);
 
 		//Debug::log("Morale #".$this->id.": ".$this->morale->damage."/".$this->morale->cmd."/".$this->morale->crew."/".$this->morale->crit.", current: ".$this->morale->current.", effChance: ".$this->morale->effChance);
-
-
 	 }
+
+
+	public function getMoraleDamages($turn){
+		$total = 0;	$old = 0; $new = 0;
+		if (sizeof($this->structures)){
+			for ($i = 0; $i < sizeof($this->structures); $i++){
+				$total += $this->structures[$i]->integrity;
+				if ($this->structures[$i]->isDestroyed()){continue;}
+				for ($j = 0; $j < sizeof($this->structures[$i]->damages); $j++){
+					if ($this->structures[$i]->damages[$j]->turn == $turn){
+						$new += $this->structures[$i]->damages[$j]->overkill;
+					} else $old += $this->structures[$i]->damages[$j]->overkill;
+				}
+			}
+		}
+
+		Debug::log("total: ".$total.", old: ".$old."%, new: ".$new."%");
+
+		$new = round($new / $total * 100);
+		$old = round($old / $total * 100);
+
+		return array("old" => $old, "new" => $new);
+	}
 
 
 	public function addPrimary(){
@@ -367,12 +389,12 @@ class Squadron extends Ship {
 		Debug::log("WARNING couldnt apply damage #".$dmg->id.", looking for unit #".$dmg->shipid."/".$dmg->systemid);
 	}
 
-	public function addDamagesFromDB($dmg){
+	public function addDamagesFromDB($dmgs){
 		for ($i = 0; $i < sizeof($dmgs); $i++){
-			for ($i = 0; $i < sizeof($this->structures); $i++){
-				if ($dmgs[$i]->systemid == $this->structures[$i]->id){
-					$this->structures[$i]->addDamage($dmgs[$i]);
-					return;
+			for ($j = 0; $j < sizeof($this->structures); $j++){
+				if ($dmgs[$i]->systemid == $this->structures[$j]->id){
+					$this->structures[$j]->addDamage($dmgs[$i]);
+					break;
 				}
 			}
 		}

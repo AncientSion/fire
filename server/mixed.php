@@ -24,11 +24,11 @@ class Mixed extends Ship {
 		$this->setRemDelay($turn);
 	}	
 
-	public function setMorale($turn, $phase){
+	public function setMorale($turn){
 		return;
 	}
 
-	public function doHandleMoraleTesting($turn){
+	public function doTestMorale($turn){
 		return;
 	}
 	
@@ -144,12 +144,12 @@ class Mixed extends Ship {
 		Debug::log("WARNING couldnt apply damage #".$dmg->id.", looking for unit #".$dmg->shipid."/".$dmg->systemid);
 	}
 
-	public function addDamagesFromDB($dmg){
+	public function addDamagesFromDB($dmgs){
 		for ($i = 0; $i < sizeof($dmgs); $i++){
 			for ($j = 0; $j < sizeof($this->structures); $j++){
 				if ($dmgs[$i]->systemid == $this->structures[$j]->id){
 					$this->structures[$j]->addDamage($dmgs[$i]);
-					return;
+					break;
 				}
 			}
 		}
@@ -218,10 +218,12 @@ class Mixed extends Ship {
 						$this->mission->arrived = $gd->turn;
 					}
 					else {
-						if ($this->mission->targetid == $t->id && $t->mission->targetid == $this->id && !$t->moveSet &&mt_rand(0, 1)){
+						if ($this->mission->targetid == $t->id && $t->mission->targetid == $this->id && !$t->moveSet && mt_rand(0, 1)){
 							Debug::log("two flights intercepts each other, enemy moves first, switching to: ".$t->id);
 							$this->moveSet = 1;
 							$t->setMove($gd);
+							$dist = Math::getDist2($origin, $t->getCurPos());
+							Debug::log("Adjusting DIST to ".$dist);
 						}
 						else {
 							$tPos = $t->getCurPos();
@@ -231,10 +233,11 @@ class Mixed extends Ship {
 						}
 
 						if ($dist == 0){
-							Debug::log("at target, static !");
+							Debug::log("Dist to T is 0 - static !");
 							$type = "patrol";
 							$tPos = $this->getCurPos();
 							$this->mission->arrived = $gd->turn;
+							$t->mision->arrioed = $gd->turn;
 						}
 						else  if ($impulse < $dist){
 							Debug::log("close in");

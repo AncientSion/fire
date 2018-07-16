@@ -200,7 +200,7 @@ class Ship {
 		return $alive;
 	}
 
-	public function setMorale($turn, $phase){
+	public function setMorale($turn){
 		//Debug::log("Morale ".$this->id);
 		$command = $this->getSystemByName("Command");
 		$this->morale = new Morale(
@@ -1068,14 +1068,89 @@ class Ship {
 		return $locs[mt_rand(0, sizeof($locs)-1)];
 	}
 
-	public function doHandleCritTesting($turn){
+	public function doTestCrits($turn){
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if ($this->structures[$i]->destroyed){continue;}
 			$this->structures[$i]->singleCritTest($turn, 0);
 		}
 	}
+	
+	public function getValidEffects(){
+		return array( // type, min%, null, effect
+			array("Morale5", 5, 0, 0.00),
+			array("Morale10", 10, 0, 0.00),
+			array("Disabled", 150, 0, 0.00),
+		);
+	}
 
-	public function doHandleMoraleTesting($turn){
+	public function getMoraleDamages($turn){
+		$total = 0;	$old = 0; $new = 0;
+		$total += $this->primary->integrity;
+		for ($i = 0; $i < sizeof($this->primary->damages); $i++){
+			if ($this->primary->damages[$i]->turn == $turn){
+				$new += $this->primary->damages[$i]->overkill;
+			} else $old += $this->primary->damages[$i]->overkill;
+		}
+
+		$new = round($new / $total * 100);
+		$old = round($old / $total * 100);
+
+		Debug::log("total: ".$total.", old: ".$old.", new: ".$new);
+
+		return array("old" => $old, "new" => $new);
+	}
+
+	public function doTestMorale($turn){
+		Debug::log("doTestMorale ".get_class($this)." #".$this->id);
+
+		$dmg = $this->getMoraleDamages($turn);
+		$old = $dmg["old"];
+		$new = $dmg["new"];
+		if (!$new){return;}
+
+
+		$effects = $this->getValidEffects();
+
+		$dmg = round($new/(100-$old)*100);
+		Debug::log("newDmg: ".$dmg."%");
+
+		if ($dmg < 15){return;}
+		Debug::log("unit scope MORALE test");
+		$attempts = 2;
+		$triggered = 0;
+
+		while ($attempts){
+			$attempts--;
+			$roll = mt_rand(0, 100);
+			Debug::log("roll: ".$roll);
+			if ($roll < $dmg){
+				Debug::log("FAIL, attempts left ".($attempts-1).", roll below dmg");
+				$triggered = 1;
+				$attempts = 0;
+			}
+		}
+
+		if (!$triggered){Debug::log("passed both!"); return;}
+
+		$magnitude = mt_rand(0, 100) + 100 - $this->morale->current;
+
+		if ($magnitude  < $effects[0][1]){return;}
+
+		for ($i = sizeof($effects)-1; $i >= 0; $i--){
+			if ($magnitude + $dmg < $effects[$i][1]){continue;}
+
+			Debug::log("magnitude: ".$magnitude.", crit: ".$effects[$i][0]);
+		/*	$this->crits[] = new Crit(
+				sizeof($this->crits)+1, $this->parentId, $this->id, $turn,
+				$effects[$i][0], $effects[$i][2], $effects[$i][3], 1
+			);
+		*/	$this->destroyed = 1;
+			break;
+		}
+	}
+
+
+	public function adoTestMorale($turn){
 		Debug::log(get_class($this). " #".$this->id.", morale @ ".$this->morale->current."%");
 		//$this->morale->current = 20;
 		if ($this->morale->current >= $this->morale->trigger){return;}
@@ -1300,37 +1375,39 @@ class Medium extends Ship {
 		parent::__construct($data);
 	}
 
-	public function doHandleCritTesting($turn){
-		//Debug::log("= doHandleCritTesting for ".$this->name.", #".$this->id.", turn: ".$turn);
+	public function doTestCrits($turn){
+		//Debug::log("= doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
 
-		$potential = array();
+		if (0){
+			$potential = array();
 
-		for ($i = 0; $i < sizeof($this->structures); $i++){
-			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
-				if (!$this->structures[$i]->systems[$j]->destroyed){
-					$this->structures[$i]->systems[$j]->singleCritTest($turn, 0);
-				}
-				//else if (mt_rand(0, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn)){
-				else if ($this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn)){
-					$usage = $this->structures[$i]->systems[$j]->getPowerUsage($turn);
-					if (!$usage){continue;}
-					$potential[] = $usage;
-					$this->structures[$i]->systems[$j]->damages[sizeof($this->structures[$i]->systems[$j]->damages)-1]->notes .= "o".$usage.";";
+			for ($i = 0; $i < sizeof($this->structures); $i++){
+				for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
+					if (!$this->structures[$i]->systems[$j]->destroyed){
+						$this->structures[$i]->systems[$j]->singleCritTest($turn, 0);
+					}
+					//else if (mt_rand(0, 1) && $this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn)){
+					else if ($this->structures[$i]->systems[$j]->isDestroyedThisTurn($turn)){
+						$usage = $this->structures[$i]->systems[$j]->getPowerUsage($turn);
+						if (!$usage){continue;}
+						$potential[] = $usage;
+						$this->structures[$i]->systems[$j]->damages[sizeof($this->structures[$i]->systems[$j]->damages)-1]->notes .= "o".$usage.";";
+					}
 				}
 			}
-		}
 
-		for ($j = 0; $j < sizeof($this->primary->systems); $j++){
-			if ($this->primary->systems[$j]->destroyed){continue;}
-			$this->primary->systems[$j]->singleCritTest($turn, 0);
-		}
-
-
-		if (sizeof($potential) || array_sum($potential) || $this->primary->emDmg){
 			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
-				if ($this->primary->systems[$j]->name == "Reactor"){
-					$this->primary->systems[$j]->applyPowerSpike($turn, $potential, $this->primary->emDmg);
-					return;
+				if ($this->primary->systems[$j]->destroyed){continue;}
+				$this->primary->systems[$j]->singleCritTest($turn, 0);
+			}
+
+
+			if (sizeof($potential) || array_sum($potential) || $this->primary->emDmg){
+				for ($j = 0; $j < sizeof($this->primary->systems); $j++){
+					if ($this->primary->systems[$j]->name == "Reactor"){
+						$this->primary->systems[$j]->applyPowerSpike($turn, $potential, $this->primary->emDmg);
+						return;
+					}
 				}
 			}
 		}

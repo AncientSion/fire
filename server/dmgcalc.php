@@ -358,6 +358,7 @@ class DmgCalc {
 			}
 		}
 
+		Debug::log("flash targets: ".sizeof($targets));
 		for ($i = 0; $i < sizeof($targets); $i++){
 			$fire->hits++;
 			$system = $targets[$i];
