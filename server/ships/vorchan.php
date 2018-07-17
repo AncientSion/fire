@@ -5,7 +5,7 @@ class Vorchan extends Light {
 	public $display = "Vorchan";
 	public $role = "Attack Frigate";
 	public $faction = "Centauri Republic";
-	public static $value = 300;
+	public static $value = 280;
 	public $mass = 1250;
 	public $integrity = 400;
 	

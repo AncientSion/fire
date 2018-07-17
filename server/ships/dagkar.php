@@ -21,18 +21,20 @@ class DagKar extends Medium {
 	public function addStructures(){
 		$structs = array();
 
-		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 16, 1);
+		$front = new Structure($this->getId(), $this->id, 300, 60, 400, 16, 3);
+		$front->systems[] = new TwinParticleBolter($this->getId(), $this->id, 180, 0);
 		$front->systems[] = new EnergyMine($this->getId(), $this->id, 330, 30);
+		$front->systems[] = new TwinParticleBolter($this->getId(), $this->id, 0, 180);
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 15);
-		$right->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, array(array("Vranoth", 30, 6), array("VranothKa", 20, 4)));
-		$right->systems[] = new TwinParticleBolter($this->getId(), $this->id, 0, 180);
+		$right->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, array(array("Vranoth", 15, 3), array("VranothKa", 10, 2)));
+		$right->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, array(array("Vranoth", 15, 3), array("VranothKa", 10, 2)));
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 15);
-		$left->systems[] = new TwinParticleBolter($this->getId(), $this->id, 180, 360);
-		$left->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, array(array("Vranoth", 30, 6), array("VranothKa", 20, 4)));
+		$left->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, array(array("Vranoth", 15, 3), array("VranothKa", 10, 2)));
+		$left->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, array(array("Vranoth", 15, 3), array("VranothKa", 10, 2)));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

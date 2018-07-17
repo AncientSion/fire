@@ -5,7 +5,7 @@ class Vorchora extends Light {
 	public $display = "Vorchora";
 	public $role = "Support Frigate";
 	public $faction = "Centauri Republic";
-	public static $value = 280;
+	public static $value = 270;
 	public $mass = 1250;
 	public $integrity = 400;
 

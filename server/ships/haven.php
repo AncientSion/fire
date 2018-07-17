@@ -5,7 +5,7 @@ class Haven extends SuperLight {
 	public $display = "Haven";
 	public $role = "Cutter";
 	public $faction = "Centauri Republic";
-	public static $value = 230;
+	public static $value = 220;
 	public $mass = 900;
 
 	public $integrity = 310;
@@ -26,11 +26,11 @@ class Haven extends SuperLight {
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new LightParticle($this->getId(), $this->parentId, 300, 180);
+		$right->systems[] = new LightParticle($this->getId(), $this->parentId, 0, 360);
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new LightParticle($this->getId(), $this->parentId, 180, 60);
+		$left->systems[] = new LightParticle($this->getId(), $this->parentId, 0, 360);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
