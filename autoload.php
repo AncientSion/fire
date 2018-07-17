@@ -93,7 +93,7 @@ spl_autoload_register(
                 'weapon' => '/server/systems/weapon.php',
                 
                 'primarysystem' => '/server/systems/nonweapon.php',
-                'bridge' => '/server/systems/nonweapon.php',
+                'command' => '/server/systems/nonweapon.php',
                 'engine' => '/server/systems/nonweapon.php',
                 'reactor' => '/server/systems/nonweapon.php',
                 'lifesupport' => '/server/systems/nonweapon.php',

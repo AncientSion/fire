@@ -58,7 +58,7 @@ class PrimarySystem extends System {
 
 		//Debug::log("ship: #".$this->parentId.", output: ".floor($this->output*$mod));
 		return floor($this->output * $mod/100);
-	}	
+	}
 
 	public function getValidEffects(){
 		return array(
@@ -95,7 +95,7 @@ class PrimarySystem extends System {
 	}
 }
 
-class Bridge extends PrimarySystem {
+class Command extends PrimarySystem {
 	public $name = "Command";
 	public $display = "Command & Control";
 	public $loadout = 1;

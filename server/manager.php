@@ -1441,14 +1441,13 @@
 			$curFocus = 0; $gainFocus = 0; $maxFocus = 0;
 		}
 		else {
+			$output = 100;
 			if (get_class($unit) == "Squadron"){
-				$output = 100;
 			}
 			else {
 				$command = $unit->getSystemByName("Command");
-				$command->output = 100;
-				$output = $command->getOutput($this->turn);
-				$command->output = 0;
+				$output += $command->getCrewEffect() * $command->getCrewLevel();
+				$output -= $command->getCritMod("Morale", $this->turn);
 			}
 
 			$baseGain = floor($this->settings["pv"] / 100 * $this->settings["focusMod"]);

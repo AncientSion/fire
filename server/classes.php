@@ -12,6 +12,7 @@ class Morale {
 	public $current;
 
 	function __construct($damage, $cmd, $crew, $crit){
+		//var_export(func_get_args());
 		$this->damage = floor($damage);
 		$this->cmd = $cmd == true ? 10 : 0;
 		$this->crew = $crew;

@@ -63,8 +63,8 @@ class MediumParticle extends LightParticle {
 	public static $prio = 0;
 	public $minDmg = 28;
 	public $maxDmg = 36;
-	public $accDecay = 120;
-	public $shots = 2;
+	public $accDecay = -120;
+	public $shots = 10;
 	public $reload = 3;
 	public $integrity = 36;
 	public $powerReq = 3;

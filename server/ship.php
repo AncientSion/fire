@@ -93,7 +93,7 @@ class Ship {
 
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, $this->integrity);
-		$this->primary->systems[] = new Bridge($this->getId(), $this->id, $this->vitalHP, static::$value);
+		$this->primary->systems[] = new Command($this->getId(), $this->id, $this->vitalHP, static::$value);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, $this->vitalHP, $this->ep);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, $this->vitalHP, $this->ew);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, $this->vitalHP);
@@ -207,7 +207,7 @@ class Ship {
 			($this->primary->integrity - $this->primary->remaining) / $this->primary->integrity * -100,
 			$this->command,
 			$command->getCrewLevel() * $command->getCrewEffect(),
-			$command->getCritMod("Output", $turn)
+			$command->getCritMod("Morale", $turn)
 		);
 
 		//Debug::log("Morale #".$this->id.": ".$this->morale->damage."/".$this->morale->cmd."/".$this->morale->crew."/".$this->morale->crit.", current: ".$this->morale->current.", effChance: ".$this->morale->effChance);
@@ -538,7 +538,13 @@ class Ship {
 		$bridge = $this->getSystemByName("Command");
 		for ($i = 0; $i < sizeof($bridge->crits); $i++){
 			if ($bridge->crits[$i]->type == "Output"){
+				$bridge->crits[$i]->type = "Focus";
 				$bridge->crits[$i]->display = "Officer KIA: <span class='yellow'>Command -".$bridge->crits[$i]->value."%</span> effect.";
+
+				$copy = clone $bridge->crits[$i];
+				$copy->type = "Morale";
+				$copy->display = "Officer KIA: <span class='yellow'>Command -".$bridge->crits[$i]->value."%</span> effect.";
+				$bridge->crits[] = $copy;
 				continue;
 			}
 			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
@@ -1077,9 +1083,9 @@ class Ship {
 	
 	public function getValidEffects(){
 		return array( // type, min%, null, effect
-			array("Morale5", 5, 0, 0.00),
-			array("Morale10", 10, 0, 0.00),
-			array("Disabled", 150, 0, 0.00),
+			array("Morale", 50, 0, 5.00),
+			array("Morale", 100, 0, 10.00),
+			array("Route", 150, 0, 0.00),
 		);
 	}
 
@@ -1132,19 +1138,26 @@ class Ship {
 
 		if (!$triggered){Debug::log("passed both!"); return;}
 
-		$magnitude = mt_rand(0, 100) + 100 - $this->morale->current;
+		$roll = mt_rand(0, 100);
+		$this->notes = $roll;
+		$magnitude = $roll + 100 - $this->morale->current;
 
 		if ($magnitude  < $effects[0][1]){return;}
 
 		for ($i = sizeof($effects)-1; $i >= 0; $i--){
-			if ($magnitude + $dmg < $effects[$i][1]){continue;}
+			if ($magnitude < $effects[$i][1]){continue;}
 
-			Debug::log("magnitude: ".$magnitude.", crit: ".$effects[$i][0]);
-		/*	$this->crits[] = new Crit(
-				sizeof($this->crits)+1, $this->parentId, $this->id, $turn,
-				$effects[$i][0], $effects[$i][2], $effects[$i][3], 1
-			);
-		*/	$this->destroyed = 1;
+			Debug::log("roll: ".$roll.", total magnitude: ".$magnitude.", crit: ".$effects[$i][0]);
+			if ($i == sizeof($effects)-1){
+				$this->status = "jumpOut";
+			}
+			else {
+				$command = $this->getSystemByName("Command");
+				$command->crits[] = new Crit(
+					0, $this->id, $command->id, $turn,
+					$effects[$i][0], $effects[$i][2], $effects[$i][3], 1
+				);
+			}
 			break;
 		}
 	}
