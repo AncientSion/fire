@@ -152,7 +152,7 @@ function Game(data){
 		}
 		else if (game.mission == 2 && this.shortInfo){
 			t = this.getUnit(this.shortInfo);
-			if (!t.salvo){
+			if (!t.salvo && aUnit != this.shortInfo){
 				valid = true;
 				dest = t.getPlannedPos();
 			}
