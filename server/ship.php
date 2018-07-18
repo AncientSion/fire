@@ -93,7 +93,7 @@ class Ship {
 
 	public function addPrimary(){
 		$this->primary = new Primary($this->getId(), $this->id, 0, 360, $this->integrity);
-		$this->primary->systems[] = new Command($this->getId(), $this->id, $this->vitalHP, static::$value);
+		$this->primary->systems[] = new Command($this->getId(), $this->id, $this->vitalHP, static::$value, $this->ship);
 		$this->primary->systems[] = new Engine($this->getId(), $this->id, $this->vitalHP, $this->ep);
 		$this->primary->systems[] = new Sensor($this->getId(), $this->id, $this->vitalHP, $this->ew);
 		$this->primary->systems[] = new Reactor($this->getId(), $this->id, $this->vitalHP);

@@ -5,7 +5,6 @@ function Squadron(data){
 	Ship.call(this, data);
 	this.squad = 1;
 	this.ship = 0;
-	this.index = 2;
 	this.primary = {"systems": []};
 	this.slots = data.slots;
 }
@@ -118,8 +117,11 @@ Squadron.prototype.createBaseDiv = function(){
 	var w = $(this.element).find(".coreContainer").width();
 	var h = $(this.element).find(".coreContainer").height();
 
-	for (var i = 0; i < this.primary.systems.length; i++){
+	var x = 10;
+	var y = 20;
 
+	for (var i = 0; i < this.primary.systems.length; i++){
+		this.index++;
 		var div = this.primary.systems[i].getDiv();
 			div = this.attachEvent(div);
 
@@ -130,7 +132,14 @@ Squadron.prototype.createBaseDiv = function(){
 			}
 		}
 		$(this.element).find(".coreContainer").append(div)
-		$(div).css("margin-top", 30).css("margin-left", 10 + (i*50));
+		$(div).css("margin-left", x).css("margin-top", y);
+		//$(div).css("margin-top", 30).css("margin-left", 10 + (i*50));
+
+		x += 50;
+		if (i == 0){
+			y += 70;
+			x = 10;
+		}
 	}
 
 	// JUMP OUT
@@ -861,4 +870,8 @@ Squadron.prototype.getCurrentMorale = function(){
 	if (dmg){dmg = Math.floor(dmg.slice(0, dmg.length-1))}
 
 	return Math.floor(base + cmd + dmg);
+}
+
+Squadron.prototype.getCrewBaseCost = function(i){
+	return Math.floor(this.structures.map(x => x.cost).reduce((l,r) => l+r, 0)/12);
 }

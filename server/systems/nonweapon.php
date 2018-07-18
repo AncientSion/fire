@@ -101,10 +101,13 @@ class Command extends PrimarySystem {
 	public $loadout = 1;
 	public $crewEffect = 5;
 
-	function __construct($id, $parentId, $integrity, $output, $width = 1){
-        parent::__construct($id, $parentId, $integrity, 0, $width);
+	function __construct($id, $parentId, $integrity, $output, $forShip){
+        parent::__construct($id, $parentId, $integrity, 0, 1);
 
-		$options = array("Command", "Engine", "Sensor", "Reactor");
+        $options;
+    	if ($forShip){
+			$options = array("Command", "Engine", "Sensor", "Reactor");
+    	} else $options = array("Command", "Sensor");
         $baseCost = floor($output/12);
 
         for ($i = 0; $i < sizeof($options); $i++){
