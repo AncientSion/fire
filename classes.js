@@ -481,15 +481,16 @@ Structure.prototype.getBoostDiv = function(){
 
 function Primary(data){
 	this.name = data.name;
-	this.display = data.display;
 	this.id = data.id;
+	this.display = data.display;
 	this.parentId = data.parentId;
 	this.integrity = data.integrity;
+	this.remaining = data.remaining;
+	this.newDmg = data.newDmg;
+	this.destroyed = data.destroyed;
 	this.damages = [];
-	this.destroyed = data.destroyed || false;
 	this.highlight = false;	
 	this.systems = [];
-	this.remaining = data.remaining;
 	this.element;
 }
 	

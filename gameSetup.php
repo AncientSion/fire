@@ -543,7 +543,7 @@ else {
 						var extra = Math.floor(unit.totalCost / 100 * mod);
 
 						var tr = table.insertRow(-1);
-							tr.insertCell(-1).innerHTML = "Squadron size: " + size + ", total cost +" + mod + "%";
+							tr.insertCell(-1).innerHTML = size + " units, each unit costs + " + mod + "%";
 							tr.insertCell(-1).innerHTML = extra;
 
 							unit.totalCost += extra
@@ -852,9 +852,12 @@ else {
 		unit.setSubElements();
 		unit.setStats();
 		unit.setSubSystemState();
+		//unit.primary.systems[0].select();
+		//unit.doConfirmSystemLoadout();
 		sub.expandElement();
 		sub.previewSetup();
 
+		unit.resetCommandUpgrades();
 		game.setUnitTotal(unit);
 	}
 

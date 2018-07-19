@@ -61,7 +61,7 @@
 
 	public function getClientData(){
 
-		//$this->testMorale();
+		$this->testMorale();
 		//return;
 
 		if (!$this->name){return false;}
@@ -1514,7 +1514,7 @@
 		DBManager::app()->updateFireOrders($this->fires);
 		if (sizeof($newDmgs)){DBManager::app()->insertDamageEntries($newDmgs);}
 		if (sizeof($newCrits)){DBManager::app()->insertCritEntries($newCrits);}
-		if (sizeof($retreats)){DBManager::app()->jumpOutUnits($retreats);}
+		//if (sizeof($retreats)){DBManager::app()->jumpOutUnits($retreats);}
 	}
 
 	public function getAllNewDamages(){

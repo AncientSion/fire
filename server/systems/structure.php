@@ -144,6 +144,7 @@ class Primary {
 	public $systems = array();
 	public $damages = array();
 	public $remaining = 0;
+	public $newDmg = 0;
 	public $damaged = 0;
 	public $emDmg = 0;
 
@@ -164,8 +165,6 @@ class Primary {
 	}
 
 	public function addDamage($dmg){
-		if ($dmg->new && $dmg->systemid == 1){$this->emDmg += $dmg->emDmg;}
-
 		if ($dmg->systemid == 1){
 			$dmg->overkill += $dmg->structDmg;
 			$dmg->structDmg = 0;
@@ -173,6 +172,11 @@ class Primary {
 		}
 
 		$this->remaining -= $dmg->overkill;
+
+		if ($dmg->new){
+			$this->newDmg += $dmg->overkill;
+			if ($dmg->systemid == 1){$this->emDmg += $dmg->emDmg;}
+		}
 
 		if ($this->remaining < 1){
 			$this->destroyed = 1;

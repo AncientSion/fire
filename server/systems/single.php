@@ -195,30 +195,23 @@ class Single {
 		if ($dmg < $this->dropout[0]){return;}
 
 		Debug::log("single scope DROP test!");
-		$attempts = 2;
-		$triggered = 0;
 
-		while ($attempts){
-			$attempts--;
-			$roll = mt_rand(0, 100);
-			Debug::log("roll: ".$roll);
-			if ($roll < $dmg){
-				Debug::log("FAIL attempts left ".($attempts-1).", roll above dmg");
-				$triggered = 1;
-				$attempts = 0;
-			}
-		}
+		$need = ceil($dmg * $dmg / 10);
+		$roll = mt_rand(0, 100);
 
-		if (!$triggered){Debug::log("passed both!"); return;}
+		if ($roll > $need){
+			Debug::log("SUCCESS, roll: ".$roll.", need: ".$need); return;
+		} else Debug::log("FAIL, roll: ".$roll.", need: ".$need);
 
-		$magnitude = mt_rand(0, 100) + $dmg;
+		$roll = mt_rand(0, 100);
+		$magnitude = $roll + $dmg;
 
 		if ($effectRoll < $effects[0][1]){return;}
 
 		for ($i = sizeof($effects)-1; $i >= 0; $i--){
 			if ($magnitude < $effects[$i][1]){continue;}
 
-			Debug::log("magnitude: ".$magnitude.", crit: ".$effects[$i][0]);
+			Debug::log("roll: ".$roll.", total magnitude: ".$magnitude.", crit: ".$effects[$i][0]);
 			$this->crits[] = new Crit(
 				sizeof($this->crits)+1, $this->parentId, $this->id, $turn,
 				$effects[$i][0], $effects[$i][2], $effects[$i][3], 1

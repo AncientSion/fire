@@ -1089,6 +1089,12 @@ class Ship {
 	}
 
 	public function getMoraleDamages($turn){
+		return array(
+			"old" => round(($this->primary->remaining - $this->primary->integrity + $this->primary->newDmg) / $this->primary->integrity *100),
+			"new" => round($this->primary->newDmg / $this->primary->integrity * 100)
+		);
+
+
 		$total = 0;	$old = 0; $new = 0;
 		$total += $this->primary->integrity;
 		for ($i = 0; $i < sizeof($this->primary->damages); $i++){
@@ -1097,10 +1103,10 @@ class Ship {
 			} else $old += $this->primary->damages[$i]->overkill;
 		}
 
-		$new = round($new / $total * 100);
 		$old = round($old / $total * 100);
+		$new = round($new / $total * 100);
 
-		Debug::log("total: ".$total.", old: ".$old."%, new: ".$new."%");
+		Debug::log("getMoraleDamages -- total: ".$total.", old: ".$old."%, new: ".$new."%");
 
 		return array("old" => $old, "new" => $new);
 	}
@@ -1120,22 +1126,13 @@ class Ship {
 		Debug::log("newRelDmg: ".$dmg."%");
 
 		if ($dmg < 15){return;}
-		Debug::log("unit scope MORALE test");
-		$attempts = 2;
-		$triggered = 0;
 
-		while ($attempts){
-			$attempts--;
-			$roll = mt_rand(0, 100);
-			Debug::log("roll: ".$roll);
-			if ($roll < $dmg){
-				Debug::log("FAIL, attempts left ".($attempts-1).", roll below dmg");
-				$triggered = 1;
-				$attempts = 0;
-			}
-		}
+		$need = ceil($dmg * $dmg / 10);
+		$roll = mt_rand(0, 100);
 
-		if (!$triggered){Debug::log("passed both!"); return;}
+		if ($roll > $need){
+			Debug::log("SUCCESS, roll: ".$roll.", need: ".$need); return;
+		} else Debug::log("FAIL, roll: ".$roll.", need: ".$need);
 
 		$roll = mt_rand(0, 100);
 		$this->notes = $roll;
@@ -1146,10 +1143,8 @@ class Ship {
 		for ($i = sizeof($effects)-1; $i >= 0; $i--){
 			if ($magnitude < $effects[$i][1]){continue;}
 
-			Debug::log("roll: ".$roll.", total magnitude: ".$magnitude.", crit: ".$effects[$i][0]);
-			if ($i == sizeof($effects)-1){
-				$this->status = "jumpOut";
-			}
+			Debug::log("roll: ".$roll.", total magnitude: ".$magnitude.", crit: ".$effects[$i][0]."/".$effects[$i][3]);
+			if ($i == sizeof($effects)-1){$this->status = "jumpOut";}
 			else {
 				$command = $this->getSystemByName("Command");
 				$command->crits[] = new Crit(

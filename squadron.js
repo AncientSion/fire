@@ -717,6 +717,15 @@ Squadron.prototype.isDestroyed = function(){
 	return true;
 }
 
+Squadron.prototype.resetCommandUpgrades = function(){
+	for (var i = 0; i < this.primary.systems[0].loads.length; i++){
+		while (this.primary.systems[0].loads[i].amount){
+			this.minusCrewLevel(i);
+		}
+	}
+	this.primary.systems[0].totalCost = 0;
+}
+
 Squadron.prototype.doConfirmSystemLoadout = function(){
 	var system = this.getSystem(game.system);
 	if (system.launcher){system.setAmmo();}
@@ -767,8 +776,14 @@ Squadron.prototype.setBuyData = function(){
 
 Squadron.prototype.getBuyTableData = function(table){
 
-	for (var i = 0; i < this.primary.systems[0].loads.length; i++){
-		console.log(this.primary.systems[0].loads[i]);
+	var command =  this.primary.systems[0].getUpgradeData();
+	if (command.cost){
+		$(table)
+		.append
+			($("<tr>")
+			.append($("<td>").html(command.text))
+			.append($("<td>").html(command.cost))
+		)
 	}
 
 	for (var i = 0; i < this.structures.length; i++){
@@ -789,12 +804,12 @@ Squadron.prototype.getBuyTableData = function(table){
 			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
 				if (!this.structures[i].structures[j].systems[k].cost){continue;}
 				this.totalCost += this.structures[i].structures[j].systems[k].cost;
-
+				var data = this.structures[i].structures[j].systems[k].getUpgradeData();
 				$(table)
 				.append(
 					$("<tr>")
-					.append($("<td>").html(this.structures[i].structures[j].systems[k].display))
-					.append($("<td>").html(this.structures[i].structures[j].systems[k].cost))
+					.append($("<td>").html(data.text))
+					.append($("<td>").html(data.cost))
 					.data("systemid", this.structures[i].structures[j].systems[k].id)
 					.hover(function(){
 						$(this).toggleClass("rowHighlight");
