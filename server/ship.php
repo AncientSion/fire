@@ -537,14 +537,13 @@ class Ship {
 		//return true;
 		$bridge = $this->getSystemByName("Command");
 		for ($i = 0; $i < sizeof($bridge->crits); $i++){
-			if ($bridge->crits[$i]->type == "Output"){
-				$bridge->crits[$i]->type = "Focus";
-				$bridge->crits[$i]->display = "Officer KIA: <span class='yellow'>Command -".$bridge->crits[$i]->value."%</span> effect.";
+			if ($bridge->crits[$i]->type == "Focus" || $bridge->crits[$i]->type == "Morale"){
+				$bridge->crits[$i]->display = "Officer KIA: <span class='yellow'>".$bridge->crits[$i]->type." -".$bridge->crits[$i]->value."%</span> effect.";
 
-				$copy = clone $bridge->crits[$i];
-				$copy->type = "Morale";
-				$copy->display = "Officer KIA: <span class='yellow'>Command -".$bridge->crits[$i]->value."%</span> effect.";
-				$bridge->crits[] = $copy;
+				//$copy = clone $bridge->crits[$i];
+				//$copy->type = "Morale";
+				//$copy->display = "Officer KIA: <span class='yellow'>Command -".$bridge->crits[$i]->value."%</span> effect.";
+				//$bridge->crits[] = $copy;
 				continue;
 			}
 			for ($j = 0; $j < sizeof($this->primary->systems); $j++){
@@ -1101,7 +1100,7 @@ class Ship {
 		$new = round($new / $total * 100);
 		$old = round($old / $total * 100);
 
-		Debug::log("total: ".$total.", old: ".$old.", new: ".$new);
+		Debug::log("total: ".$total.", old: ".$old."%, new: ".$new."%");
 
 		return array("old" => $old, "new" => $new);
 	}
@@ -1118,7 +1117,7 @@ class Ship {
 		$effects = $this->getValidEffects();
 
 		$dmg = round($new/(100-$old)*100);
-		Debug::log("newDmg: ".$dmg."%");
+		Debug::log("newRelDmg: ".$dmg."%");
 
 		if ($dmg < 15){return;}
 		Debug::log("unit scope MORALE test");
@@ -1391,7 +1390,7 @@ class Medium extends Ship {
 	public function doTestCrits($turn){
 		//Debug::log("= doTestCrits for ".$this->name.", #".$this->id.", turn: ".$turn);
 
-		if (0){
+		if (1){
 			$potential = array();
 
 			for ($i = 0; $i < sizeof($this->structures); $i++){

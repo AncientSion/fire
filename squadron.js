@@ -172,7 +172,7 @@ Squadron.prototype.createBaseDiv = function(){
 	}
 }
 
-Squadron.prototype.getFocusIfCommand = function(){
+Squadron.prototype.getFsocusIfCommand = function(){
 	return Math.floor(game.settings.pv / 100 * (this.baseFocusRate + this.modFocusRate));
 }
 
@@ -597,18 +597,25 @@ Squadron.prototype.getDmgByFire = function(fire){
 
 Squadron.prototype.setStats = function(){
 	this.slots[0] = 0;
+
+	var ew = 0;
+	var ep = 1000;
+
 	for (var i = 0; i < this.structures.length; i++){
 		this.slots[0] += this.structures[i].space;
 		this.baseImpulseCost = Math.max(this.baseImpulseCost, this.structures[i].baseImpulseCost);
 		this.baseTurnDelay = Math.max(this.baseTurnDelay, this.structures[i].baseTurnDelay);
 		this.baseImpulse = Math.min(this.baseImpulse, this.structures[i].baseImpulse);
 		this.curImp = this.baseImpulse;
-		this.primary.systems[0].output = Math.max(this.primary.systems[0].output, this.structures[i].ew);
-		this.primary.systems[0].update();
-		if (this.primary.systems[1].output == 0){this.primary.systems[1].output = this.structures[i].ep;}
-		else this.primary.systems[1].output = Math.min(this.primary.systems[1].output, this.structures[i].ep);
-		this.primary.systems[1].update();
+
+		ew = Math.max(ew, this.structures[i].ew);
+		ep = Math.min(ep, this.structures[i].ep);
 	}
+
+	this.primary.systems[1].output = ew;
+	this.primary.systems[1].update();
+	this.primary.systems[2].output = ep;
+	this.primary.systems[2].update();
 
 	var impulse = this.getBaseImpulse();
 	var ep = this.getBaseEP();
@@ -617,13 +624,13 @@ Squadron.prototype.setStats = function(){
 	var hit = this.getStringHitChance();
 
 	$(this.element).find(".topDiv").find(".header").find("tr").each(function(i){
-		if (i == 6){
+		if (i == 5){
 			$($(this).children()[1]).html(impulse); return;
 		}
-		if (i == 7){
+		if (i == 6){
 			$($(this).children()[1]).html(ep); return;
 		}
-		else if (i == 8){
+		else if (i == 7){
 			$($(this).children()[1]).html(change); return;
 		}
 		//else if (i == 3){
@@ -711,6 +718,10 @@ Squadron.prototype.isDestroyed = function(){
 }
 
 Squadron.prototype.doConfirmSystemLoadout = function(){
+	var system = this.getSystem(game.system);
+	if (system.launcher){system.setAmmo();}
+	system.select();
+
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].structures.length; j++){
 			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
@@ -729,12 +740,18 @@ Squadron.prototype.setBuyData = function(){
 	var loads = [];
 	var cost = 0;
 
+	for (var i = 0; i < this.primary.systems.length; i++){
+		if (!this.primary.systems[i].cost){continue;}
+		this.upgrades.push(this.primary.systems[i].getUpgradeData());
+	}
+
 	for (var i = 0; i < this.structures.length; i++){
 		units.push({
 			"amount": 1,
 			"cost": this.structures[i].cost,
 			"name": this.structures[i].name,
 		});
+
 
 		for (var j = 0; j < this.structures[i].structures.length; j++){
 			for (var k = 0; k < this.structures[i].structures[j].systems.length; k++){
@@ -749,6 +766,11 @@ Squadron.prototype.setBuyData = function(){
 }
 
 Squadron.prototype.getBuyTableData = function(table){
+
+	for (var i = 0; i < this.primary.systems[0].loads.length; i++){
+		console.log(this.primary.systems[0].loads[i]);
+	}
+
 	for (var i = 0; i < this.structures.length; i++){
 		this.totalCost += this.structures[i].cost;
 		$(table)

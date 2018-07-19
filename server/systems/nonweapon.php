@@ -142,8 +142,8 @@ class Command extends PrimarySystem {
 		$mod = $this->getCritModMax($new);
 		if ($new <= 3){Debug::log("no BRIDGE crit, dmg < 3"); return;}
 
-        $options = array("Output", "Engine", "Sensor", "Reactor");
-        $multi = array(1, 0.75, 1, 0.75);
+        $options = array("Morale", "Focus", "Engine", "Sensor", "Reactor");
+        $multi = array(1, 1, 0.75, 1, 0.75);
 		$roll = mt_rand(0, sizeof($options)-1);
 		$roll = 0;
 		$pick = $options[$roll];

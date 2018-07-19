@@ -4299,9 +4299,6 @@ Ship.prototype.doConfirmSystemLoadout = function(){
 	system.select();
 }
 
-Ship.prototype.getAngleOff = function(origin, target, facing, system){
-}
-
 Ship.prototype.getEvents = function(){
 	var data = [];
 	for (var i = 0; i < this.structures.length; i++){
