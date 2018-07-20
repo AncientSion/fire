@@ -289,7 +289,7 @@ class Crit {
 	}
 
 	function inEffect($turn){
-		if ($this->duration == 0){
+		if ($this->duration < 1 ){
 			return true;
 		}
 		else if ($turn <= $this->turn + $this->duration){

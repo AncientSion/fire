@@ -145,7 +145,7 @@ Squadron.prototype.createBaseDiv = function(){
 	// JUMP OUT
 	if (!this.destroyed && game.turn && game.phase == 3){
 		var jumpDiv = 
-			$("<div>").addClass("info").css("top", 90).css("margin-left", 27)
+			$("<div>").addClass("info").css("top", 18).css("margin-left", 52)
 			.append($("<img>").addClass("jumpOut")
 				.attr("src", "varIcons/redVortex.png"))
 

@@ -518,7 +518,7 @@
 				$stmt->bindParam(":ship", $ship);
 				$stmt->bindParam(":ball", $ball);
 				$stmt->bindParam(":name", $units[$i]["name"]);
-				Debug::log("display: ".$units[$i]["display"]);
+				//Debug::log("display: ".$units[$i]["display"]);
 				$stmt->bindParam(":display", $units[$i]["display"]);
 				$stmt->bindParam(":status", $status);
 				$stmt->bindValue(":available", (floor($units[$i]["turn"]) + floor($units[$i]["eta"])));
@@ -626,14 +626,14 @@
 			");
 
 			for ($i = 0; $i < sizeof($units); $i++){
-				//Debug::log("units ".$i);
-				if (!isset($units[$i]["upgrades"]) || sizeof($units[$i]["upgrades"]) == 0){continue;}
+				//Debug::log("units #".$i);
+				if (!isset($units[$i]["upgrades"]) || !(sizeof($units[$i]["upgrades"])) ){continue;}
 
 				for ($j = 0; $j < sizeof($units[$i]["upgrades"]); $j++){
-					//Debug::log("upgrades ".$j);
+					//Debug::log("upgrades #".$j);
 					
 					for ($k = 0; $k < sizeof($units[$i]["upgrades"][$j]["loads"]); $k++){
-						//Debug::log("loads ".$k);
+						//Debug::log("loads #".$k.": ".$units[$i]["upgrades"][$j]["loads"][$k]["amount"]."x ".$units[$i]["upgrades"][$j]["loads"][$k]["name"]);
 						$stmt->bindParam(":shipid", $units[$i]["id"]);
 						$stmt->bindParam(":systemid", $units[$i]["upgrades"][$j]["systemid"]);
 						$stmt->bindParam(":name", $units[$i]["upgrades"][$j]["loads"][$k]["name"]);

@@ -205,7 +205,7 @@ function Crit(data){
 
 	this.inEffect = function(){
 		if (this.type == ""){return false;}
-		if (this.duration == 0 || game.turn <= this.turn + this.duration){
+		if (this.duration < 1 || game.turn <= this.turn + this.duration){
 			return true;
 		}
 		return false;
@@ -713,13 +713,13 @@ Single.prototype.getSysDiv = function(){
 	var div = 
 		$("<div>").attr("id", "sysDiv")
 		.append($("<table>")
-			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.name)))
+			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.nam + " #" + this.id)))
 			.append($("<tr>").append($("<td>").attr("colSpan", 2).html(this.role)))
 			.append($("<tr>").append($("<td>").html("Armour").css("width", "70%")).append($("<td>").html(this.negation)))
 			.append($("<tr>").append($("<td>").html("Acceleration")).append($("<td>").html(this.baseImpulse)))
 			.append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html("<span class='yellow'>" + this.getEMDmg() + "<span>")))
 			.append($("<tr>").append($("<td>").attr("colSpan", 2).css("height", 6)))
-			.append($("<tr>").append($("<td>").attr("colSpan", 2).html("Subject to dropout test if damaged for more than " + this.dropout[0] + "% of current HP in a given turn.</br>Needs to roll against HP lost this turn and pass twice to matain combat ability."))))
+			.append($("<tr>").append($("<td>").attr("colSpan", 2).html("Subject to dropout testing if damaged for more than 15 % of remaining HP"))))
 
 
 	this.attachSysNotes(div);

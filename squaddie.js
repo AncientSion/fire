@@ -63,7 +63,7 @@ Squaddie.prototype.getSysDiv = function(){
 		$("<div>").attr("id", "sysDiv")
 		.append($("<table>")
 			.append($("<tr>")
-				.append($("<th>").html(this.display).attr("colSpan", 2)))
+				.append($("<th>").html(this.display + " #" + this.id).attr("colSpan", 2)))
 			.append($("<tr>")
 				.append($("<td>").html(this.role).attr("colSpan", 2)))
 			.append($("<tr>")

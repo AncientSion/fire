@@ -188,7 +188,7 @@ function Game(data){
 			}
 		}
 
-		if (t.id == s.oldMission.targetid){
+		if (s.oldMission && t.id == s.oldMission && s.oldMission.targetid){
 			mission = s.oldMission;
 		}
 		else {
@@ -208,29 +208,11 @@ function Game(data){
 		$(s.element).find(".header")
 			.find(".missionType").html(this.getMissionTypeString(s, s.getTarget())).end()
 			.find(".missionTarget").html(this.getMissionTargetString(mission)).end()
-		//	.find(".missionTurn").html("Turn " + mission.turn).end();
-
-	/*	if (t && t instanceof Ship && o.x == dest.x && o.y == dest.y){
-			mission.arrived = this.turn-1;
-			if (t.ship){
-				s.doDraw = 0;
-			}
-			var p = t.getParent();
-			if (p.id != s.id){
-				p.attachUnit(s);
-				p.setSupportImage(s);
-			}
-		}
-		else {
-	*/		//s.mission = mission;
 			s.facing = a;
-			//if (!(s.oldMission.type == 1 && s.oldMission.arrived)){s.setCurSpeed();} // reset speed only when NOT in patrol
 			s.setCurSpeed();
 			s.setTarget();
-	//	}
 
 		s.setBaseLayout();
-		//s.setLayout();
 		s.setSize();
 		s.resetImage();
 		s.drawX = p.x;
@@ -240,7 +222,6 @@ function Game(data){
 		s.disableMissionMode();
 		this.updateSingleIntercept(s);
 		this.redraw();
-		//this.drawShipOverlays();
 		ui.deployOverlay.hide();
 		this.checkUnitOffsetting();
 	}
@@ -274,6 +255,11 @@ function Game(data){
 			for (var j = 1; j <= this.flightDeploy.loads[i].launch; j++){
 				flight.structures.push(new Fighter(this.flightDeploy.loads[i]));
 			}
+		}
+		
+		baseImpulse = 1000;
+		for (var i = 0; i < flight.structures.length; i++){
+			flight.baseImpulse = Math.min(baseImpulse, flight.structures[i].baseImpulse)
 		}
 
 		flight.setCallSign();
@@ -762,7 +748,7 @@ function Game(data){
 				var step = 1;
 				var h = 1000;
 				var w = 200;
-				var dist = 600;
+				var dist = 200;
 				var y = h/2;
 
 				if (i % 2 == 0){step = -1;}

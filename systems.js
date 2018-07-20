@@ -142,19 +142,17 @@ System.prototype.attachSysMods = function(ele){
 
   				var html = "";
 
-				if (this.crits[i].type == "Disabled"){
+  				if (this.crits[i].duration < 0){
+  					html =(this.crits[i].type + " -" + (this.crits[i].value) + "% (Turn " + this.crits[i].turn + " Morale Fail)");
+  				}
+				else if (this.crits[i].type == "Disabled"){
 					if (this.crits[i].duration){html = (this.crits[i].type + " (Incl. Turn " + (this.crits[i].turn + this.crits[i].duration) + ")" + " (Turn " + this.crits[i].turn + ")");}
 					html = this.crits[i].type + " (Turn " + this.crits[i].turn + ")";
 				}
 				else if (this.crits[i].type == "Destroyed"){html = this.crits[i].type + " (Turn " + this.crits[i].turn + ")";}
-				else if (this.name == "Command" && this.crits[i].type == "Output"){
-					html = "Focus -" + (this.crits[i].value) + "% (Turn " + this.crits[i].turn + ")";
-					html+= "</br>";
-					html += "Morale -" + (this.crits[i].value) + "% (Turn " + this.crits[i].turn + ")";
-				}
 				else html = (this.crits[i].type + " -" + (this.crits[i].value) + "% (Turn " + this.crits[i].turn + ")");
 
-				$(table[0]).append($("<tr>").append($("<td>").html(html).attr("colSpan", 2).addClass("negative")));
+				$(table[0]).append($("<tr>").append($("<td>").html(html).attr("colSpan", 2)));
 			}
 		}
 		div.append(table);
@@ -163,7 +161,7 @@ System.prototype.attachSysMods = function(ele){
 
 System.prototype.getCrewTerm = function(){
 	if (this.name == "Command"){
-		return "Focus";
+		return "Morale & Focus";
 	}
 	else return "Output";
 }
@@ -1294,10 +1292,10 @@ PrimarySystem.prototype.getSysDiv = function(){
 		if (this.output){
 			$(table).append($("<tr>").append($("<td>").html("Current Output")).append($("<td>").addClass("output").html(this.getOutputString())));
 		}
-		if (this.modes.length){
-			$(table).append($("<tr>").append($("<td>").html("Sensor Mode")).append($("<td>").addClass("sensorMode negative").html(this.getEWMode())));
+		//if (this.modes.length){
+		//	$(table).append($("<tr>").append($("<td>").html("Sensor Mode")).append($("<td>").addClass("sensorMode negative").html(this.getEWMode())));
 			//$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("sensorEffect").html(this.getEWModeEffect())));
-		}
+		//}
 	}
 	else if (unit.ship){
 		$(table).append($("<tr>").append($("<td>").css("width", "55%").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
@@ -1314,10 +1312,10 @@ PrimarySystem.prototype.getSysDiv = function(){
 			$(table).append($("<tr>").css("border-top", "2px solid white").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerCost").html(this.getEffiency())));
 			this.getBoostEffectElements(table);
 		}
-		if (this.modes.length){
-			$(table).append($("<tr>").append($("<td>").html("Sensor Mode")).append($("<td>").addClass("sensorMode negative").html(this.getEWMode())));
+		//if (this.modes.length){
+		//	$(table).append($("<tr>").append($("<td>").html("Sensor Mode")).append($("<td>").addClass("sensorMode negative").html(this.getEWMode())));
 			//$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).addClass("sensorEffect").html(this.getEWModeEffect())));
-		}
+		//}
 	}
 		
 	div.append(table);

@@ -237,7 +237,7 @@ class Mixed extends Ship {
 							$type = "patrol";
 							$tPos = $this->getCurPos();
 							$this->mission->arrived = $gd->turn;
-							$t->mision->arrioed = $gd->turn;
+							$t->mision->arrived = $gd->turn;
 						}
 						else  if ($impulse < $dist){
 							Debug::log("close in");

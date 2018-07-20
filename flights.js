@@ -47,15 +47,6 @@ Flight.prototype.setSize = function(){
 	}
 	this.size = max + 20;
 }
-
-Flight.prototype.setImpulse = function(){
-	this.baseImpulse = 1000;
-	for (var i = 0; i < this.structures.length; i++){
-		this.baseImpulse = Math.min(this.baseImpulse, this.structures[i].baseImpulse)
-	}
-	this.curImp = this.baseImpulse;
-}
-
 Flight.prototype.getEP = function(){
 	return this.ep;
 }
@@ -82,12 +73,6 @@ Flight.prototype.setCurSpeed = function(){
 	}
 
 	this.curImp = Math.floor(this.baseImpulse * ((game.turn - start)+1));
-	return
-	
-
-	if (this.mission.turn == game.turn){
-		this.curImp = Math.floor(this.baseImpulse * 1);
-	} else this.curImp = Math.floor(this.baseImpulse * (game.turn - this.mission.turn + 1));
 }
 
 Flight.prototype.getMaxSpeed = function(){

@@ -142,40 +142,37 @@ class Squaddie extends Single {
 
 	public function checkSystemCrits($new, $old, $turn){
 		if ($this->destroyed){return;}
+		if (!$new){return;}
+
 		$effects = $this->getValidEffects();
 
-		$dmg = round($new/(100-$old)*100);
-		Debug::log("checkSystemCrits .".get_class($this)." #".$this->id.", newDmg: ".$dmg);
+		$newRelDmg = round($new/(1-$old), 2);
+		Debug::log("___Unit ".$this->name." #".$this->parentId."/".$this->id.", newRelDmg: ".$newRelDmg);
 
-		if ($dmg < $this->dropout[0]){return;}
+		if ($newRelDmg < 0.15){return;}
+		$newRelDmg = 1-$newRelDmg;
+		$chance = round((1 - ($newRelDmg*$newRelDmg))*100);
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->systems); $j++){
 				if ($this->structures[$i]->systems[$j]->destroyed){continue;}
-				Debug::log("system scope crit test!");
-				$attempts = 2;
-				$triggered = 0;
+				//Debug::log("system scope crit test!");
 
-				while ($attempts){
-					$attempts--;
-					if (mt_rand(0, 100) < $dmg){
-						Debug::log("FAIL attempt: ".($attempts).", roll above dmg");
-						$triggered = 1;
-						$attempts = 0;
-					}
-				}
+				$roll = mt_rand(0, 100);
 
+				if ($roll > $chance){
+					Debug::log("SUCCESS, roll: ".$roll.", chance: ".$chance); return;
+				} else Debug::log("FAIL, roll: ".$roll.", chance: ".$chance);
 
-				if (!$triggered){Debug::log("passed both!"); continue;}
-
-				$magnitude = mt_rand(0, 100) + $dmg;
+				$roll = mt_rand(0, 100);
+				$magnitude = $roll + ($new + $old)*100;
 
 				if ($magnitude < $effects[0][1]){continue;}
 
 				for ($k = sizeof($effects)-1; $k >= 0; $k--){
 					if ($magnitude < $effects[$k][1]){continue;}
 
-					Debug::log("magnitude: ".$magnitude.", crit: ".$effects[$k][0]);
+					Debug::log("roll: ".$roll.", total magnitude: ".$magnitude.", crit: ".$effects[$k][0]);
 					$this->structures[$i]->systems[$j]->crits[] = new Crit(
 						0, $this->parentId, $this->structures[$i]->systems[$j]->id, $turn,
 						 $effects[$k][0],  $effects[$k][2],  $effects[$k][3], 1

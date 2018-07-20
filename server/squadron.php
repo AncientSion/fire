@@ -87,8 +87,8 @@ class Squadron extends Ship {
 
 		Debug::log("total: ".$total.", old: ".$old."%, new: ".$new."%");
 
-		$new = round($new / $total * 100);
-		$old = round($old / $total * 100);
+		$old = round($old / $total, 2);
+		$new = round($new / $total, 2);
 
 		return array("old" => $old, "new" => $new);
 	}
@@ -138,6 +138,7 @@ class Squadron extends Ship {
 		$this->getSystemByName("Engine")->setPowerReq(0);
 		$this->setBaseStats($turn, $phase);
 		$this->setProps($turn, $phase);
+		$this->setCrewUpgrades($turn);
 		$this->setMorale($turn, $phase);
 		$this->isDestroyed();
 
@@ -149,26 +150,16 @@ class Squadron extends Ship {
 
 		$this->size = 50 + sizeof($this->structures)*10;
 
-		$alive = 0;
-
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			if (($this->structures[$i]->destroyed && !$this->structures[$i]->isDestroyedThisTurn($turn)) || $this->structures[$i]->disabled){continue;}
 
-			$alive = 1;
 			$this->baseTurnDelay = max($this->baseTurnDelay, $this->structures[$i]->baseTurnDelay);
 			$this->baseImpulseCost = max($this->baseImpulseCost, $this->structures[$i]->baseImpulseCost);
 			$this->baseImpulse = min($this->baseImpulse, $this->structures[$i]->baseImpulse);
 			$this->slipAngle = min($this->slipAngle, $this->structures[$i]->slipAngle);
 
-			$this->primary->systems[0]->output = max($this->primary->systems[0]->output, $this->structures[$i]->ew);
-			$this->primary->systems[1]->output = min($this->primary->systems[1]->output, $this->structures[$i]->ep);
-		}
-
-		if (!$alive){
-			$this->primary->systems[1]->output = 0;
-			$this->baseImpulseCost = 0;
-			$this->slipAngle = 0;
-			$this->turnAngle = 0;
+			$this->primary->systems[1]->output = max($this->primary->systems[1]->output, $this->structures[$i]->ew);
+			$this->primary->systems[2]->output = min($this->primary->systems[2]->output, $this->structures[$i]->ep);
 		}
 	}	
 
@@ -187,6 +178,7 @@ class Squadron extends Ship {
 	}
 
 	public function hidePowers($turn){
+		//Debug::log("d");
 
 		for ($i = 0; $i < sizeof($this->structures); $i++){
 			for ($j = 0; $j < sizeof($this->structures[$i]->structures); $j++){
@@ -201,11 +193,12 @@ class Squadron extends Ship {
 		}
 
 		for ($i = 0; $i < sizeof($this->primary->systems); $i++){
+			//Debug::log("s: ".sizeof($this->primary->systems));
 			if ($this->primary->systems[$i]->name == "Sensor"){
 				$this->primary->systems[$i]->hideEW($turn);
 			}
 			for ($j = sizeof($this->primary->systems[$i]->powers)-1; $j >= 0; $j--){
-				if ($this->primary->systems[$i]->powers[$j]->turn == $turn){
+				if ($this->primary->systems[$i]->powers[$j]->turn == $turn && $this->primary->systems[$i]->powers[$j]->type != 2){
 					array_splice($this->primary->systems[$i]->powers, $j, 1);
 				} else break;
 			}

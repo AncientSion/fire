@@ -538,7 +538,9 @@ class Ship {
 		$bridge = $this->getSystemByName("Command");
 		for ($i = 0; $i < sizeof($bridge->crits); $i++){
 			if ($bridge->crits[$i]->type == "Focus" || $bridge->crits[$i]->type == "Morale"){
-				$bridge->crits[$i]->display = "Officer KIA: <span class='yellow'>".$bridge->crits[$i]->type." -".$bridge->crits[$i]->value."%</span> effect.";
+				if ($bridge->crits[$i]->duration == 0){
+					$bridge->crits[$i]->display = "Officer KIA: <span class='yellow'>".$bridge->crits[$i]->type." -".$bridge->crits[$i]->value."%</span> effect.";
+				} else $bridge->crits[$i]->display = "Morale Check Fail: <span class='yellow'>".$bridge->crits[$i]->type." -".$bridge->crits[$i]->value."%</span> effect.";
 
 				//$copy = clone $bridge->crits[$i];
 				//$copy->type = "Morale";
@@ -1082,60 +1084,45 @@ class Ship {
 	
 	public function getValidEffects(){
 		return array( // type, min%, null, effect
-			array("Morale", 50, 0, 5.00),
-			array("Morale", 100, 0, 10.00),
-			array("Route", 150, 0, 0.00),
+			array("Morale", 50, -1, 5.00),
+			array("Morale", 100, -1, 10.00),
+			array("Route", 150, -1, 0.00),
 		);
 	}
 
 	public function getMoraleDamages($turn){
 		return array(
-			"old" => round(($this->primary->remaining - $this->primary->integrity + $this->primary->newDmg) / $this->primary->integrity *100),
-			"new" => round($this->primary->newDmg / $this->primary->integrity * 100)
+			"old" => round((($this->primary->remaining - $this->primary->integrity + $this->primary->newDmg) / $this->primary->integrity), 2),
+			"new" => round(($this->primary->newDmg / $this->primary->integrity), 2)
 		);
-
-
-		$total = 0;	$old = 0; $new = 0;
-		$total += $this->primary->integrity;
-		for ($i = 0; $i < sizeof($this->primary->damages); $i++){
-			if ($this->primary->damages[$i]->turn == $turn){
-				$new += $this->primary->damages[$i]->overkill;
-			} else $old += $this->primary->damages[$i]->overkill;
-		}
-
-		$old = round($old / $total * 100);
-		$new = round($new / $total * 100);
-
-		Debug::log("getMoraleDamages -- total: ".$total.", old: ".$old."%, new: ".$new."%");
-
-		return array("old" => $old, "new" => $new);
 	}
 
 	public function doTestMorale($turn){
-		Debug::log("doTestMorale ".get_class($this)." #".$this->id);
+		if ($this->destroyed){return;}
 
 		$dmg = $this->getMoraleDamages($turn);
 		$old = $dmg["old"];
 		$new = $dmg["new"];
-		if (!$new){return;}
+		Debug::log("doTestMorale ".get_class($this)." #".$this->id.", new: ".$new.", old: ".$old);
 
+		if (!$new){return;}
 
 		$effects = $this->getValidEffects();
 
-		$dmg = round($new/(100-$old)*100);
-		Debug::log("newRelDmg: ".$dmg."%");
+		$newRelDmg = round($new/(1-$old), 2);
+		Debug::log("newRelDmg: ".$newRelDmg);
 
-		if ($dmg < 15){return;}
-
-		$need = ceil($dmg * $dmg / 10);
-		$roll = mt_rand(0, 100);
-
-		if ($roll > $need){
-			Debug::log("SUCCESS, roll: ".$roll.", need: ".$need); return;
-		} else Debug::log("FAIL, roll: ".$roll.", need: ".$need);
-
+		if ($newRelDmg < 0.15){return;}
+		$newRelDmg = 1-$newRelDmg;
+		$chance = round((1 - ($newRelDmg*$newRelDmg))*100);
 		$roll = mt_rand(0, 100);
 		$this->notes = $roll;
+
+		if ($roll > $chance){
+			Debug::log("SUCCESS, roll: ".$roll.", chance: ".$chance); return;
+		} else Debug::log("FAIL, roll: ".$roll.", chance: ".$chance);
+
+		$roll = mt_rand(0, 100);
 		$magnitude = $roll + 100 - $this->morale->current;
 
 		if ($magnitude  < $effects[0][1]){return;}

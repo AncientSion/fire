@@ -61,7 +61,7 @@
 
 	public function getClientData(){
 
-		$this->testMorale();
+		//$this->testMorale();
 		//return;
 
 		if (!$this->name){return false;}
@@ -184,6 +184,7 @@
 	}
 
 	public function getShipData(){
+		//Debug::log("getShipData");
 		if ($this->turn == 1 && $this->phase == -1){return $this->ships;}
 
 		//Debug::log("user: ".$this->userid.", turn: ".$this->turn.", phase: ".$this->phase);
@@ -192,12 +193,12 @@
 				//Debug::log("shipid: ".$this->ships[$i]->id.", user ".$this->ships[$i]->userid.", actions: ".sizeof($this->ships[$i]->actions));
 				if ($this->phase == 3){$this->ships[$i]->focus = 0;}
 
-				if ($this->ships[$i]->available == $this->turn && !$this->ships[$i]->actions[0]->resolved){
+				if ($this->ships[$i]->available == $this->turn && $this->phase == -1){
 					if ($this->ships[$i]->flight){
 						//Debug::log("ding");
 						array_splice($this->ships, $i, 1);
 					}
-					else if ($this->turn > 1 && $this->phase == -1){
+					else if ($this->turn > 1){
 						$this->shiftToIncoming($this->ships[$i]);
 						array_splice($this->ships, $i, 1);
 					}

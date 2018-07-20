@@ -175,6 +175,10 @@ function initSquadron(data){
 	var squadron = new Squadron(data);
 	for (var i = 0; i < data.primary.systems.length; i++){
 		var primSystem = new window[data.primary.systems[i].name](data.primary.systems[i]);
+
+		for (var j = 0; j < data.primary.systems[i].powers.length; j++){
+			primSystem.powers.push(new Power(data.primary.systems[i].powers[j]));
+		}
 		squadron.primary.systems.push(primSystem);
 	}
 	for (var i = 0; i < data.structures.length; i++){

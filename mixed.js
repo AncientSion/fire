@@ -3,6 +3,7 @@ function Mixed(data){
 	this.ship = 0;
 	this.primary = false;
 	this.mission = data.mission || {};
+	this.oldMission = 0;
 	this.nextStep;
 	this.finalStep;
 	this.layout = [];
@@ -398,10 +399,6 @@ Mixed.prototype.canUndoShortenTurn = function(){
 Mixed.prototype.create = function(){
 	this.setSubUnitStatus();
 	this.setStringHitChance();
-
-	if (this.id < 0){
-		this.setImpulse();
-	}
 }
 
 Mixed.prototype.setPreMovePosition = function(){

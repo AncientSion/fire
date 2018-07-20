@@ -2192,8 +2192,6 @@ Ship.prototype.getFlagshipMoraleBonus = function(){
 }
 
 Ship.prototype.getOfficerMoraleBonus = function(){
-	if (!this.ship){return ""};
-
 	var mod = this.getCrewLevel(0) * this.getSystemByName("Command").crewEffect;
 	if (mod){return "+" + mod + "%";}
 	return "";
@@ -2218,7 +2216,7 @@ Ship.prototype.getCurrentMorale = function(){
 	var base = 100;
 	var flagship = this.command == true ? 10 : 0;
 	var upgrade = this.getCrewLevel(0) * cmd.crewEffect;
-	var crits = cmd.getCritMod("Output")*-1;
+	var crits = cmd.getCritMod("Morale")*-1;
 	var dmg = this.getDamageMoraleMalus();
 	if (dmg){dmg = Math.floor(dmg.slice(0, dmg.length-1))}
 
