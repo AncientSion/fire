@@ -250,10 +250,18 @@ Mixed.prototype.getTargetPos = function(){
 	} else return this.mission;
 }
 
-Mixed.prototype.inRange = function(){
-	if (getDistance(this.getTargetPos(), this.getPlannedPos()) <= this.getCurSpeed()){
+Mixed.prototype.contactThisTurn = function(){
+	var t = this.getTarget();
+
+	if (t.flight && t.mission.targetid == this.id){
+		if (getDistance(t.getPlannedPos(), this.getPlannedPos()) <= this.getCurSpeed() + t.getCurSpeed()){
+			return true;
+		}
+	}
+	else if (getDistance(this.getTargetPos(), this.getPlannedPos()) <= this.getCurSpeed()){
 		return true;
-	} else return false;
+	}
+	return false;
 }
 
 Mixed.prototype.getTarget = function(){
@@ -261,16 +269,16 @@ Mixed.prototype.getTarget = function(){
 }
 
 Mixed.prototype.setTarget = function(){
-	var i = this.getCurSpeed();
+	var s = this.getCurSpeed();
 	var d = 0;
 	var p = this.getPlannedPos();
 	if (this.mission.type == 1){  // patrol goal
 		this.finalStep = {x: this.mission.x, y: this.mission.y};
 		this.facing = getAngleFromTo(this, this.finalStep);
 		d = getDistance(p, this.finalStep);
-		if (d < i){
+		if (d < s){
 			this.nextStep = this.finalStep;
-		} else this.nextStep = getPointInDir(i, this.facing, p.x, p.y);
+		} else this.nextStep = getPointInDir(s, this.facing, p.x, p.y);
 	}
 	else {
 		if (this.mission.type == 2){
@@ -279,30 +287,22 @@ Mixed.prototype.setTarget = function(){
 				this.finalStep = target.getPlannedPos();
 				this.facing = getAngleFromTo(this, this.finalStep);
 				d = getDistance(p, this.finalStep);
-				if (d < i){
+				if (d < s){
 					this.nextStep = this.finalStep;
-				} else this.nextStep = getPointInDir(i, getAngleFromTo(p, this.finalStep), p.x, p.y);
+				} else this.nextStep = getPointInDir(s, getAngleFromTo(p, this.finalStep), p.x, p.y);
 			}
 			else if (target.flight){
 				if (target.mission.targetid == this.id){
-				/*	target.finalStep = this.getPlannedPos();
-					target.facing = getAngleFromTo(target.getPlannedPos(), target.finalStep);
-					this.finalStep = target.getPlannedPos();
-					this.facing = getAngleFromTo(p, target.finalStep);
+					if (s > target.getCurSpeed() || s == target.getCurSpeed && this.id > target.id){
+						target.setTarget();
+					}
 
-					d = getDistance(target.finalStep, this.finalStep);
-
-					this.nextStep = getPointInDir(Math.min(d, i), this.facing, p.x, p.y);
-					var tPos = target.getPlannedPos();
-					target.nextStep = getPointInDir(Math.min(d, target.getCurSpeed()), target.facing, tPos.x, tPos.y);
-					return;
-				*/
 					this.finalStep = target.getPlannedPos();
 					this.facing = getAngleFromTo(p, this.finalStep);
 
 					d = getDistance(p, this.finalStep);
 
-					this.nextStep = getPointInDir(Math.min(d, i), this.facing, p.x, p.y);
+					this.nextStep = getPointInDir(Math.min(d, s), this.facing, p.x, p.y);
 					return;
 				
 				}
@@ -313,9 +313,9 @@ Mixed.prototype.setTarget = function(){
 				//this.facing = getAngleFromTo(p, target.getPlannedPos());
 				this.facing = getAngleFromTo(p, this.finalStep);
 				d = getDistance(p, this.finalStep);
-				if (d < i){
+				if (d < s){
 					this.nextStep = target.nextStep;
-				} else this.nextStep = getPointInDir(i, getAngleFromTo(p, this.finalStep), p.x, p.y);
+				} else this.nextStep = getPointInDir(s, getAngleFromTo(p, this.finalStep), p.x, p.y);
 			}
 			else if (target.salvo){
 			}
@@ -536,7 +536,9 @@ Mixed.prototype.hasPatrolLayout = function(){
 				can = 0;
 			}
 		}
-		if (can){}
+		if (can){
+			return true;
+		}
 	}
 	return false;
 }

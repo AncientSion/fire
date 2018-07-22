@@ -18,7 +18,6 @@
 
 		public $units = array();
 		public $ballistics = array();
-		public $gd = array();
 		public $fires = array();
 		public $playerstatus = array();
 		public $reinforcements = array();
@@ -26,9 +25,8 @@
 		public $deploys = array();
 		public $incoming = array();
 		public $userindex = 0;
-		public $flights = array();
 
-		public $settings = array();
+		public $gd = array();
 
 		public $weapons = array();
 
@@ -64,7 +62,7 @@
 		//$this->testMorale();
 		//return;
 
-		if (!$this->name){return false;}
+		if (!$this->settings){return false;}
 		
 		$data = array(
 			"id" => $this->gameid,
@@ -77,7 +75,6 @@
 			"incoming" =>$this->getIncomingData(),
 			"const" => $this->const,
 			"userid" => $this->userid,
-			"wave" => $this->wave,
 			"playerstatus" => $this->getPlayerStatus(),
 			"settings" => $this->settings
 		);
@@ -120,15 +117,10 @@
 		$gd = DBManager::app()->getGameDetails($this->gameid);
 		if (!$gd){return;}
 
-		$this->settings = $gd;
-		$this->name = $gd["name"];
-		$this->pv = $gd["pv"];
-		$this->reinforce = $gd["reinforce"];
-		$this->status = $gd["status"];
+		$this->settings = new GD($gd);
 		$this->turn = $gd["turn"];
-		$GLOBALS["turn"] = $gd["turn"];
 		$this->phase = $gd["phase"];
-		$this->wave = $gd["reinforceTurn"];
+
 		$this->playerstatus = DBManager::app()->getPlayerStatus($this->gameid);
 
 		$this->weapons = DmgCalc::setWeaponPriority();
@@ -447,16 +439,16 @@
 	}
 
 	public function deleteAllReinforcements(){
-		if ($this->turn != $this->wave){return;}
+		//if ($this->turn != $this->settings->reinforceTurn){return;}
 		Debug::log("deleteAllReinforcements");
 		DBManager::app()->deleteAllReinforcements($this->gameid); return;
 	}
 	
 	public function pickReinforcements(){
-		if ($this->turn != $this->wave){return;}
+		if ($this->turn != $this->settings->reinforceTurn){return;}
 		Debug::log("pickReinforcements");
 		$picks = array();
-		$eta = $this->settings["reinforceETA"];
+		$eta = $this->settings->reinforceETA;
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
 			//Debug::log("player: ".$this->playerstatus[$i]["userid"]." has ".$this->playerstatus[$i]["value"]." available");
@@ -1451,7 +1443,7 @@
 				$output -= $command->getCritMod("Morale", $this->turn);
 			}
 
-			$baseGain = floor($this->settings["pv"] / 100 * $this->settings["focusMod"]);
+			$baseGain = floor($this->settings->pv / 100 * $this->settings->focusMod);
 			$commandRating = ($unit->baseFocusRate + $unit->modFocusRate);
 			$gainFocus = floor($baseGain / 10 * $commandRating / 100 * $output);
 
@@ -1510,12 +1502,12 @@
 		Debug::log("handleResolvedFireData");
 		$newDmgs = $this->getAllNewDamages();
 		$newCrits = $this->getAllNewCrits();
-		$retreats = $this->getAllNewRetreats();
+		$newMorales = $this->getAllNewMoraleResults();
 
 		DBManager::app()->updateFireOrders($this->fires);
 		if (sizeof($newDmgs)){DBManager::app()->insertDamageEntries($newDmgs);}
 		if (sizeof($newCrits)){DBManager::app()->insertCritEntries($newCrits);}
-		//if (sizeof($retreats)){DBManager::app()->jumpOutUnits($retreats);}
+		if (sizeof($newMorales)){DBManager::app()->updateMoraleResults($newMorales);}
 	}
 
 	public function getAllNewDamages(){
@@ -1537,12 +1529,13 @@
 		return $data;
 	}
 	
-	public function getAllNewRetreats(){
-		//Debug::log("getAllNewRetreats");
+	public function getAllNewMoraleResults(){
+		//Debug::log("getAllNewMoraleResults");
 		$data = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->destroyed || $this->ships[$i]->flight || $this->ships[$i]->salvo){continue;}
-			if ($this->ships[$i]->status != "jumpOut"){continue;}
+			if (!strlen($this->ships[$i]->notes)){continue;}
+			//if ($this->ships[$i]->status != "jumpOut"){continue;}
 			$data[] = array("id" => $this->ships[$i]->id, "status" => $this->ships[$i]->status, "notes" => $this->ships[$i]->notes);
 		}
 		return $data;

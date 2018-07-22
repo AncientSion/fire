@@ -1404,11 +1404,13 @@ div.integrityFull {
 }
 
 .negative {
-	color: #ff3d00;
+	color: #ff4343;
+	font-size: 14px;
 }
 
 .positive {
 	color: #27e627;
+	font-size: 14px;
 }
 
 .structTable .boostDiv {
@@ -1616,7 +1618,7 @@ input[type=button].inactive:hover, input[type=submit].inactive:hover {
 
 .popupEntryConfirm {
 	font-size: 24px !important;
-	width: 200px !important;
+	width: 220px !important;
 	margin: auto !important;
 	margin-top: 30px !important;
 	display: block

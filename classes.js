@@ -713,7 +713,7 @@ Single.prototype.getSysDiv = function(){
 	var div = 
 		$("<div>").attr("id", "sysDiv")
 		.append($("<table>")
-			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.nam + " #" + this.id)))
+			.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.name + " #" + this.id)))
 			.append($("<tr>").append($("<td>").attr("colSpan", 2).html(this.role)))
 			.append($("<tr>").append($("<td>").html("Armour").css("width", "70%")).append($("<td>").html(this.negation)))
 			.append($("<tr>").append($("<td>").html("Acceleration")).append($("<td>").html(this.baseImpulse)))

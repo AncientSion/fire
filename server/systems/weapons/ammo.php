@@ -138,7 +138,7 @@ class Hasta extends Missile {
 
 class Javelin extends Missile {
 	public $name = "Javelin";
-	public $role = "Std. Multirole Missiles";
+	public $role = "Conv. Multirole Missiles";
 	public static $prio = 0;
 	public $mass = 4;
 	public $integrity = 8;
@@ -171,7 +171,7 @@ class Triarii extends Missile {
 
 class Myrmidon extends Missile {
 	public $name = "Myrmidon";
-	public $role = "Light Std. Antiship Missiles";
+	public $role = "Light Conv. Antiship Missiles";
 	public static $prio = 0;
 	public $mass = 5;
 	public $integrity = 10;

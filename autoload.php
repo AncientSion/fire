@@ -199,6 +199,7 @@ spl_autoload_register(
                 'divider' => '/server/classes.php',
                 'manager' => '/server/manager.php',
                 'dbmanager' => '/server/dbManager.php',
+                'gd' => '/server/classes.php',
             );
         }
         $cn = strtolower($class);

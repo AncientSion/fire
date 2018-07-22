@@ -1116,13 +1116,13 @@ class Ship {
 		$newRelDmg = 1-$newRelDmg;
 		$chance = round((1 - ($newRelDmg*$newRelDmg))*100);
 		$roll = mt_rand(0, 100);
-		$this->notes = $roll;
 
 		if ($roll > $chance){
-			Debug::log("SUCCESS, roll: ".$roll.", chance: ".$chance); return;
-		} else Debug::log("FAIL, roll: ".$roll.", chance: ".$chance);
+			Debug::log("opening test SUCCESS, roll: ".$roll.", chance: ".$chance); return;
+		} else Debug::log("opening test FAIL, roll: ".$roll.", chance: ".$chance);
 
 		$roll = mt_rand(0, 100);
+		$this->notes = "m".$roll.";";
 		$magnitude = $roll + 100 - $this->morale->current;
 
 		if ($magnitude  < $effects[0][1]){return;}
@@ -1130,7 +1130,7 @@ class Ship {
 		for ($i = sizeof($effects)-1; $i >= 0; $i--){
 			if ($magnitude < $effects[$i][1]){continue;}
 
-			Debug::log("roll: ".$roll.", total magnitude: ".$magnitude.", crit: ".$effects[$i][0]."/".$effects[$i][3]);
+			Debug::log("magnitude roll: ".$roll.", total magnitude: ".$magnitude.", crit: ".$effects[$i][0]."/".$effects[$i][3]);
 			if ($i == sizeof($effects)-1){$this->status = "jumpOut";}
 			else {
 				$command = $this->getSystemByName("Command");

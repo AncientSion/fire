@@ -152,7 +152,7 @@ System.prototype.attachSysMods = function(ele){
 				else if (this.crits[i].type == "Destroyed"){html = this.crits[i].type + " (Turn " + this.crits[i].turn + ")";}
 				else html = (this.crits[i].type + " -" + (this.crits[i].value) + "% (Turn " + this.crits[i].turn + ")");
 
-				$(table[0]).append($("<tr>").append($("<td>").html(html).attr("colSpan", 2)));
+				$(table[0]).append($("<tr>").append($("<td>").html(html).attr("colSpan", 2).addClass("negative")));
 			}
 		}
 		div.append(table);
@@ -1175,6 +1175,7 @@ PrimarySystem.prototype.getCritLogString = function(){
 	var html = "";
 	for (let i = 0; i < this.crits.length; i++){
 		if (this.crits[i].turn != game.turn){continue;}
+		if (this.crits[i].duration == -1){continue;}
 		if (this.crits[i].type == "Overload"){continue;}
 		html += this.crits[i].display + "</br>";
 	}
@@ -1792,7 +1793,7 @@ Weapon.prototype.assembleDmgData = function(fire){
 	var dmgs = {};
 	for (var i = 0; i < fire.damages.length; i++){
 		if (dmgs.hasOwnProperty(fire.damages[i].system)){ // hit
-			dmgs[fire.damages[i].system][2]++
+			dmgs[fire.damages[i].system][2]++;
 		}
 		else dmgs[fire.damages[i].system] = [0, 0, 1, 0, 0, 0, ""]; // new system entry
 

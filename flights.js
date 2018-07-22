@@ -343,7 +343,7 @@ Flight.prototype.getShortInfo = function(){
 		table.insertRow(-1).insertCell(-1).innerHTML =  "Speed: " + this.getCurSpeed() + " / " + this.getIntactElements() + " units";
 		table.insertRow(-1).insertCell(-1).innerHTML = "Base To-Hit: " + this.getStringHitChance();
 	
-	if (!this.mission.arrived && this.inRange()){
+	if (!this.mission.arrived && this.contactThisTurn()){
 		table.insertRow(-1).insertCell(-1).innerHTML = "<span class='yellow'>contact imminent</span>";
 	}
 

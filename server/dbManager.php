@@ -6,9 +6,7 @@
 		static protected $instance = null;
 
 		function __construct(){
-
 			if ($this->connection === null){
-				//$user = "aatu"; $pass = "Kiiski";
 				$data = Debug::db();
 				$this->connection = new PDO("mysql:host=localhost;dbname=spacecombat",$data[0],$data[1]);
 				$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -307,9 +305,9 @@
 		public function createNewGame($post){
 			$stmt = $this->connection->prepare("
 				INSERT INTO games
-					(name, status, turn, phase, pv, reinforce, reinforceTurn, reinforceETA, focusMod)
+					(name, status, turn, phase, pv, reinforce, reinforceTurn, reinforceETA, reinforceAmount, focusMod)
 				VALUES
-					(:name, :status, :turn, :phase, :pv, :reinforce, :reinforceTurn, :reinforceETA, :focusMod)
+					(:name, :status, :turn, :phase, :pv, :reinforce, :reinforceTurn, :reinforceETA, :reinforceAmount, :focusMod)
 			");
 			
 			$status = "open";
@@ -325,6 +323,7 @@
 			$stmt->bindParam(":reinforce", $post["reinforceValue"]);
 			$stmt->bindParam(":reinforceTurn", $post["reinforceTurn"]);
 			$stmt->bindParam(":reinforceETA", $post["reinforceETA"]);
+			$stmt->bindParam(":reinforceAmount", $post["reinforceAmount"]);
 			$stmt->bindParam(":focusMod", $focusMod);
 			
 			$stmt->execute();
@@ -1134,8 +1133,8 @@
 			return;
 		}
 
-		public function jumpOutUnits($data){
-			Debug::log("jumpOutUnits s: ".sizeof($data));
+		public function updateMoraleResults($data){
+			Debug::log("updateMoraleResults s: ".sizeof($data));
 			
 			$stmt = $this->connection->prepare("
 				UPDATE units 
@@ -1844,15 +1843,19 @@
 
 		public function getGameDetails($gameid){
 			//Debug::log($gameid);
+			try {
+				$stmt = $this->connection->prepare("
+					SELECT * FROM games WHERE id = :id
+				");
 
-			$stmt = $this->connection->prepare("
-				SELECT * FROM games WHERE id = :id
-			");
-
-			$stmt->bindParam(":id", $gameid);
-			$stmt->execute();				
-			$result = $stmt->fetch(PDO::FETCH_ASSOC);
-			return $result;
+				$stmt->bindParam(":id", $gameid);
+				$stmt->execute();				
+				$result = $stmt->fetch(PDO::FETCH_ASSOC);
+				return $result;
+			}
+			catch (mysqli_sql_exception $e){ 
+				throw $e; 
+			} 
 		}
 
 		public function getIncomingShips($gameid, $turn){
@@ -1933,7 +1936,7 @@
 
 		public function getShipLoad($ships){
 			$stmt = $this->connection->prepare("
-				SELECT systemid, name, amount 
+				SELECT *
 				FROM loads 
 				WHERE shipid = :shipid
 			");

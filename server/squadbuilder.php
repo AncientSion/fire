@@ -65,12 +65,12 @@ class SquadBuilder {
 				"loads" =>
 					array(
 						array(
-							"systemid" => 4,
+							"systemid" => 6,
 							"name" => "Needle",
 							"amount" => 4,
 						),
 						array(
-							"systemid" => 8,
+							"systemid" => 10,
 							"name" => "Needle",
 							"amount" => 4,
 						),
@@ -101,31 +101,31 @@ class SquadBuilder {
 						array(
 							"systemid" => 4,
 							"name" => "Javelin",
-							"amount" => 4,
+							"amount" => 5,
 						),
 						array(
 							"systemid" => 8,
 							"name" => "Javelin",
-							"amount" => 4,
+							"amount" => 5,
 						),
 					),
 			),
 			array(
 				"active" => 0,
 				"chance" => 30,
-				"notes" => "vorchora (Support)",
+				"notes" => "Vorchora (Support)",
 				"units" =>
 					array(
 						array(
-							"name" => "vorchora",
+							"name" => "Vorchora",
 							"amount" => 1,
 						),
 						array(
-							"name" => "vorchora",
+							"name" => "Vorchora",
 							"amount" => 1,
 						),
 						array(
-							"name" => "vorchora",
+							"name" => "Vorchora",
 							"amount" => 1,
 						),
 					),
@@ -272,22 +272,22 @@ class SquadBuilder {
 				"loads" =>
 					array(
 						array(
-							"systemid" => 5,
-							"name" => "Vran",
-							"amount" => 6,
-						),
-						array(
 							"systemid" => 6,
 							"name" => "Vran",
 							"amount" => 6,
 						),
 						array(
-							"systemid" => 9,
+							"systemid" => 7,
 							"name" => "Vran",
 							"amount" => 6,
 						),
 						array(
 							"systemid" => 10,
+							"name" => "Vran",
+							"amount" => 6,
+						),
+						array(
+							"systemid" => 11,
 							"name" => "Vran",
 							"amount" => 6,
 						),

@@ -180,6 +180,8 @@ class Primary {
 
 		if ($this->remaining < 1){
 			$this->destroyed = 1;
+			$dmg->overkill += $this->remaining;
+			$dmg->destroyed = 1;
 		}
 	}
 

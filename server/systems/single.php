@@ -55,6 +55,13 @@ class Single {
 		return $this->index;
 	}
 
+	public function adjustLoad($dbLoad){
+		var_export($dbLoad);
+		Debug::log("FATAL ERROR ADJUSTLOAD: ".$dbLoad["shipid"]."/".$dbLoad["systemid"]);
+		return;
+	}
+
+
 	public function addStructures(){
 		return;
 	}
@@ -122,6 +129,7 @@ class Single {
 
 		if ($this->remaining < 1){
 			$this->destroyed = 1;
+			$dmg->overkill += $this->remaining;
 			$dmg->destroyed = 1;
 		}
 	}
@@ -236,14 +244,14 @@ class Single {
 
 		Debug::log("dropout chance: ".get_class($this).", trigger: <".$trigger."%, hp: ".$current."%, eff: ".$effChance.", roll: ".$roll);
 		if ($roll < $effChance){
-			$this->doDropout();
+			$this->doDropout($turn);
 		}
 	}
 
-	public function doDropout(){
+	public function doDropout($turn){
 		//Debug::log("Dropout!");
 		$this->crits[] = new Crit(
-			sizeof($this->crits)+1, $this->parentId, $this->id, $GLOBALS["turn"], "Disabled", 0, 0, 1
+			sizeof($this->crits)+1, $this->parentId, $this->id, $turn, "Disabled", 0, 0, 1
 		);
 		$this->destroyed = 1;
 	}

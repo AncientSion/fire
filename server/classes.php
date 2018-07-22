@@ -84,6 +84,35 @@ class Effect {
 	}
 }
 
+class GD {
+	public $id = 0;
+	public $name = "";
+	public $pv = 0;
+	public $reinforce = 0;
+	public $status = "";
+	public $turn = 0;
+	public $phase = 0;
+	public $reinforceTurn = 0;
+	public $reinforceETA = 0;
+	public $reinforceAmount = 0;
+	public $focusMod = 0;
+
+	function __construct($data){
+		//var_export($data);
+		$this->id = $data["id"];
+		$this->name = $data["name"];
+		$this->pv = $data["pv"];
+		$this->reinforce = $data["reinforce"];
+		$this->status = $data["status"];
+		$this->turn = $data["turn"];
+		$this->phase = $data["phase"];
+		$this->reinforceTurn = $data["reinforceTurn"];
+		$this->reinforceETA = $data["reinforceETA"];
+		$this->reinforceAmount = $data["reinforceAmount"];
+		$this->focusMod = $data["focusMod"];
+	}
+}
+
 class Mission {
 	public $id;
 	public $unitid;

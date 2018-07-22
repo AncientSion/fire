@@ -1499,7 +1499,7 @@ Ship.prototype.createCritLogEntry = function(){
 		expand += this.primary.systems[i].getCritLogString();
 	}
 	if (expand.length > 2){
-		expand += "</td>"
+		expand += "</td>";
 		this.attachLogEntry(html + expand);
 		return true;
 	}
@@ -1508,12 +1508,34 @@ Ship.prototype.createCritLogEntry = function(){
 
 Ship.prototype.createMoraleLogEntry = function(){
 	if (!this.notes || this.flight || this.salvo){return false;}
+	var data = this.notes.slice(0, this.notes.length-1).split(";");
+	var morale = "";
+	for (var i = 0; i < data.length; i++){if (data[i][0] == "m"){morale = data[i].slice(1, data[i].length); break;}}
+
+	 //Math.floor(fire.damages[i].notes[1].slice(1, fire.damages[i].notes[1].length)) + ", ";
+
+
+	console.log(morale);
 	
-	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is subject to a morale check.</br>";
+	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Due to severe damage sustainted, " + this.getLogTitleSpan() + "</span> is subject to a morale check and rolls a " + morale + ".</br>";
+
+	//console.log(this.notes);
+
 
 	if (this.status == "jumpOut"){
-		html += "The unit <span class='yellow'>fails</span> and is routed (roll: " + this.notes + ").</td>";
-	} else html += "The unit <span class='yellow'>passes</span> (roll: " + this.notes + ").</td>";
+		html += "The unit <span class='yellow'> is routed</span>.</td>";
+	}
+	else {
+		var command = this.getSystemByName("Command");
+		for (var i = 0; i < command.crits.length; i++){
+			if (command.crits[i].turn != game.turn || command.crits[i].duration != -1){continue;}
+			html += "The unit suffers a permanent <span class='yellow'>" + command.crits[i].value + "% Morale penalty</span>.</td>";
+		}
+	}
+
+
+
+	// else html += "The unit <span class='yellow'>passes</span> (roll: " + this.notes + ").</td>";
 	
 	
 	//var html = "<td colSpan=9><span style='font-size: 12px; font-weight: bold'>" + this.getLogTitleSpan() + "</span> is routed (and prepares to flee to hyperspace (Chance to rout: " + this.morale.effChance + "%, roll: " + this.notes + ")</td>";
@@ -1832,7 +1854,7 @@ Ship.prototype.getSystemLocation = function(i, name){
 Ship.prototype.getWeaponOrigin = function(id){
 	for (var i = 0; i < this.structures.length; i++){
 		if (i == this.structures.length-1 || id > this.structures[i].id && id < this.structures[i+1].id){
-			var devi = this.size / 8;
+			var devi = this.size / 2;
 			return getPointInDir(this.size/4 + range (-devi, devi), (getSystemArcDir(this.structures[i]) + this.getDrawFacing()), 0, 0);
 		}
 	}

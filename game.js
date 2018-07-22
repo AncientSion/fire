@@ -1,11 +1,11 @@
 function Game(data){
 	this.settings = data.settings;
-	this.id = data.id;
-	this.name = data.name;
-	this.status = data.status;
+	this.id = data.settings.id;
+	this.name = data.settings.name;
+	this.status = data.settings.status;
 	this.userid = data.userid;
-	this.turn = data.turn;
-	this.phase = data.phase;
+	this.turn = data.settings.turn;
+	this.phase = data.settings.phase;
 	this.playerstatus = data.playerstatus;
 	this.incoming = data.incoming;
 	this.const = data.const;
@@ -994,7 +994,7 @@ function Game(data){
 			}
 		}
 
-		this.createEndEntry("-- Movement Events concluded --");
+		this.createLogEntry("-- Movement Events concluded --");
 
 		if (this.events.length){
 			if (game.phase == 2){
@@ -1085,7 +1085,7 @@ function Game(data){
 		this.createCritLogEntries();
 		this.createMoraleLogEntries();
 		this.createPlaceHolderEntry();
-		this.createEndEntry("-- Fire Events concluded --");
+		this.createLogEntry("-- Fire Events concluded --");
 
 		ui.combatLogWrapper.find("#combatLogInnerWrapper").scrollTop(function(){return this.scrollHeight});
 
@@ -1129,7 +1129,7 @@ function Game(data){
 			.append($("<td>").css("height", 15).attr("colSpan", 9)));
 	}
 
-	this.createEndEntry = function(html){
+	this.createLogEntry = function(html){
 		$("#combatLog").find("tbody").append($("<tr>")
 			.append($("<th>").attr("colSpan", 9).html(html)));
 	}
@@ -2050,7 +2050,15 @@ function Game(data){
 		if (show){this.createPlaceHolderEntry();}
 
 		this.createCommandTransferEntries();
-		this.createEndEntry("-- Initial Events concluded --")
+
+		if (this.reinforcements.length){
+			this.createPlaceHolderEntry();
+			this.createLogEntry("Reinforcements are being hailed.");
+			this.createPlaceHolderEntry();
+			$("#deployWrapper").show();
+			ui.reinforceWrapper.show();
+		}
+		this.createLogEntry("-- Initial Events concluded --")
 	}
 
 	this.resolvePostMoveFire = function(){
@@ -2308,7 +2316,7 @@ function Game(data){
 
 	this.createFireFinalEntry = function(){
 		if (!game.fireOrders.length){return;}
-		this.createEndEntry("-- Fireorder animation completed --");
+		this.createLogEntry("-- Fireorder animation completed --");
 	}
 
 	this.animateSingleFireOrder = function(i, goOn){
@@ -2482,7 +2490,7 @@ function Game(data){
 					else {
 						game.unitExploAnims[i].done = 1;
 						game.unitExploAnims[i].animating = 0;
-						game.createMiscLogEntry(i);
+						game.createExploLogEntry(i);
 					}
 				}
 			}
@@ -2495,7 +2503,7 @@ function Game(data){
 		}
 	}
 
-	this.createMiscLogEntry = function(i){
+	this.createExploLogEntry = function(i){
 		$("#combatLog")
 			.find("tbody")
 				.append(
@@ -3331,7 +3339,7 @@ Game.prototype.initialPhaseResolutionDone = function(){
 		this.createPlaceHolderEntry();
 	}
 	//this.createPlaceHolderEntry();
-	this.createEndEntry("-- Initial Events concluded --");
+	this.createLogEntry("-- Initial Events concluded --");
 	game.draw();
 }
 

@@ -22,11 +22,13 @@ if (isset($_SESSION["userid"])){
 		if ($_POST["reinforceValue"] == ""){return;}
 		if ($_POST["reinforceTurn"] == ""){return;}
 		if ($_POST["reinforceETA"] == ""){return;}
+		if ($_POST["reinforceAmount"] == ""){return;}
 
 		if (!ctype_digit($_POST["pointValue"])){return;}
 		if (!ctype_digit($_POST["reinforceValue"])){return;}
 		if (!ctype_digit($_POST["reinforceTurn"])){return;}
 		if (!ctype_digit($_POST["reinforceETA"])){return;}
+		if (!ctype_digit($_POST["reinforceAmount"])){return;}
 
 		$id = $dbManager->createNewGameAndJoin($_SESSION["userid"], $_POST);
 		if ($id){header("Location: gameSetup.php?gameid=".$id);}
@@ -240,17 +242,25 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 							</tr>
 							<tr>
 								<td>
-									Reinforcements Turn
+									Reinforcements purchase turn
 								</td>
 								<td>
 									<input type="number" style="text-align: center" value=11 placeholder="11" name="reinforceTurn" step="1"></input>		
 								</td>
 							<tr>
 								<td>
-									Reinforcements ETA
+									Reinforcements arrival delay in turns
 								</td>
 								<td>
 									<input type="number" style="text-align: center" value=3 placeholder="3" name="reinforceETA" step="1"></input>		
+								</td>
+							</tr>
+							<tr>
+								<td>
+									# of possible Reinforcements
+								</td>
+								<td>
+									<input type="number" style="width: 100%; text-align: center" value=10 placeholder="10" name="reinforceAmount" step="1" min="0" max="20"></input>		
 								</td>
 							</tr>
 								<td colSpan=2 style="border: none">
