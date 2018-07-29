@@ -14,8 +14,6 @@ class Tinashi extends Medium {
 	public $ep = 85;
 	public $ew = 750;
 
-	public $modFocusRate = 2;
-
 
 	function __construct($data = false){
         parent::__construct($data);

@@ -31,7 +31,7 @@ class KaToc extends Medium {
 		$right = new Structure($this->getId(), $this->id, 30, 150, 325, 15, 1);
 		$right->systems[] = new MediumLaser($this->getId(), $this->id, 345, 105);
 		$right->systems[] = new Bulkhead($this->getId(), $this->id, 60, 0, 1);
-		$right->systems[] = new TwinParticleBolter($this->getId(), $this->id, 60, 240);
+		$right->systems[] = new TwinParticleBolter($this->getId(), $this->id, 90, 270);
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 15, 1);
@@ -41,7 +41,7 @@ class KaToc extends Medium {
 		$left = new Structure($this->getId(), $this->id, 210, 330, 325, 15, 1);
 		$left->systems[] = new MediumLaser($this->getId(), $this->id, 255, 15);
 		$left->systems[] = new Bulkhead($this->getId(), $this->id, 60, 0, 1);
-		$left->systems[] = new TwinParticleBolter($this->getId(), $this->id, 120, 300);
+		$left->systems[] = new TwinParticleBolter($this->getId(), $this->id, 90, 270);
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

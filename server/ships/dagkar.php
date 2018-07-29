@@ -28,13 +28,13 @@ class DagKar extends Medium {
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 60, 180, 325, 15);
-		$right->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, array(array("Vranoth", 15, 3), array("VranothKa", 10, 2)));
-		$right->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, array(array("Vranoth", 15, 3), array("VranothKa", 10, 2)));
+		$right->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, 44, array(array("Vranoth", 15, 3), array("VranothKa", 10, 2)));
+		$right->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, 44, array(array("Vranoth", 15, 3), array("VranothKa", 10, 2)));
 		$structs[] = $right;
 
 		$left = new Structure($this->getId(), $this->id, 180, 300, 325, 15);
-		$left->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, array(array("Vranoth", 15, 3), array("VranothKa", 10, 2)));
-		$left->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, array(array("Vranoth", 15, 3), array("VranothKa", 10, 2)));
+		$left->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, 44, array(array("Vranoth", 15, 3), array("VranothKa", 10, 2)));
+		$left->systems[] = new TorpedoLauncher($this->getId(), $this->id, 300, 60, 44, array(array("Vranoth", 15, 3), array("VranothKa", 10, 2)));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){
@@ -53,23 +53,69 @@ class DagKar extends Medium {
 			array(
 				array(
 					"active" => 0,
-					"chance" => 100,
+					"chance" => 50,
 					"cost" => 0,
-					"notes" => "Standard Outfit",
+					"notes" => "Vranoth Outfit",
 					"units" => array(),
 					"loads" => 
 					array(
 						array(
-							"systemid" => 9,
-							"display" => "Port Torpedo Launcher",
-							"name" => "Vranoth",
-							"amount" => 24
-						),
-						array(
-							"systemid" => 13,
+							"systemid" => 11,
 							"display" => "Starboard Torpedo Launcher",
 							"name" => "Vranoth",
-							"amount" => 24
+							"amount" => 15
+						),
+						array(
+							"systemid" => 12,
+							"display" => "Starboard Torpedo Launcher",
+							"name" => "Vranoth",
+							"amount" => 15
+						),
+						array(
+							"systemid" => 14,
+							"display" => "Port Torpedo Launcher",
+							"name" => "Vranoth",
+							"amount" => 15
+						),
+						array(
+							"systemid" => 15,
+							"display" => "Port Torpedo Launcher",
+							"name" => "Vranoth",
+							"amount" => 15
+						)
+					)
+				),
+				array(
+					"active" => 0,
+					"chance" => 50,
+					"cost" => 0,
+					"notes" => "VranothKa Outfit",
+					"units" => array(),
+					"loads" => 
+					array(
+						array(
+							"systemid" => 11,
+							"display" => "Starboard Torpedo Launcher",
+							"name" => "VranothKa",
+							"amount" => 10
+						),
+						array(
+							"systemid" => 12,
+							"display" => "Starboard Torpedo Launcher",
+							"name" => "VranothKa",
+							"amount" => 10
+						),
+						array(
+							"systemid" => 14,
+							"display" => "Port Torpedo Launcher",
+							"name" => "VranothKa",
+							"amount" => 10
+						),
+						array(
+							"systemid" => 15,
+							"display" => "Port Torpedo Launcher",
+							"name" => "VranothKa",
+							"amount" => 10
 						)
 					)
 				)

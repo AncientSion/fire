@@ -265,7 +265,7 @@ Ship.prototype.doDeploy = function(pos){
 				return;
 			}
 		}).end().end()
-		.find("#totalRequestCost").html(game.getCurrentReinforceCost());
+		.find("#totalRequestCost").html("(" + game.getRemainingReinforcePoints() + " points left)");
 
 	game.redraw();
 }
@@ -846,6 +846,7 @@ Ship.prototype.hasPlannedMoves = function(){
 }
 
 Ship.prototype.canTurnFreely = function(){
+	if (game.phase == -1 && this.available == game.turn && this.actions.length == 1){return true;}
 	if (this.actions.length && this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0){
 		if (game.turn == 1 || (this.available > game.turn)){return true;}
 	}
@@ -854,7 +855,7 @@ Ship.prototype.canTurnFreely = function(){
 
 Ship.prototype.issueTurn = function(a){
 	a = round(a, 2);
-	console.log(a)
+	//console.log(a)
 	if (this.canTurnFreely()){
 		//this.actions[0].a += Math.round(a);
 		this.actions[0].a += a;
@@ -2181,8 +2182,10 @@ Ship.prototype.showMoraleDiv = function(e){
 				.append($("<td>").html("Damage Malus"))
 				.append($("<td>").addClass("moraleDamage").html(this.getDamageMoraleMalus())))
 			.append($("<tr>")
-				.append($("<td>").html("Current Morale"))
-				.append($("<td>").addClass("moraleFinal").html(this.getCurrentMorale() + "%")))
+				.append($("<td>").attr("colSpan", 2).css("height", 6)))
+			.append($("<tr>")
+				.append($("<th>").html("Final Morale"))
+				.append($("<th>").addClass("moraleFinal").html(this.getCurrentMorale() + "%")))
 /*			.append($("<tr>")
 				.append($("<td>").attr("colSpan", 2).css("height", 6)))
 			.append($("<tr>")
@@ -2304,26 +2307,29 @@ Ship.prototype.createBaseDiv = function(){
 		.append($("<tr>")
 			.append($("<th>").html(this.getCallSign()).attr("colSpan", 2).addClass(headerC)))
 		.append($("<tr>")
-			.append($("<td>").html("Type (Size)").css("width", "50%"))
-			.append($("<td>").html(getUnitType(this.traverse) + " (" + this.traverse + ")")))
+			.append($("<td>").html("Type / Size").css("width", "50%"))
+			.append($("<td>").html(getUnitType(this.traverse) + " / " + this.traverse)))
 		.append($("<tr>")
-			.append($("<td>").html("Focus Gain"))
-			.append($("<td>").addClass("focusGain").html((this.getFocusString()))))
+			.append($("<td>").html("Targeting Profile"))
+			.append($("<td>").html(this.getStringHitChance()).addClass("profile")))
+		//.append($("<tr>")
+		//	.append($("<td>").html("Focus Gain"))
+		//	.append($("<td>").addClass("focusGain").html((this.getFocusString()))))
 		.append(this.getMoraleDiv())
 		.append($("<tr>")
 			.append($("<td>").html("Speed"))
-			.append($("<td>").html(this.getRemSpeed() + " / " + this.getCurSpeed()).addClass("Thrust")))
+			.append($("<td>").html(this.getRemSpeed() + " / " + this.getCurSpeed()).addClass("speed")))
 		.append($("<tr>")
-			.append($("<td>").html("Eff. Turn Ability"))
+			.append($("<td>").html("Maneuverability"))
 			.append($("<td>").html(this.getRemEP() + " / " + this.getEP()).addClass("ep")))
 		.append($("<tr>")
-			.append($("<td>").html("Speed, Roll, Flip"))
+			.append($("<td>").html("Accel, Roll, Flip Cost"))
 			.append($("<td>").html(this.getImpulseChangeCost() + ", " + this.getActionCost(0) + ", " + this.getActionCost(1)).addClass("change")))
 		//.append($("<tr>")
 		//	.append($("<td>").html("Delay / 1\xB0"))
 		//	.append($("<td>").html(round(this.getTurnDelay(), 2) + " px")))
 		.append($("<tr>")
-			.append($("<td>").html("Active Delay"))
+			.append($("<td>").html("Active Turn Delay"))
 			.append($("<td>").html(this.getRemDelay()).addClass("delay")))
 
 	subDiv.append(table);
@@ -2360,6 +2366,7 @@ Ship.prototype.createBaseDiv = function(){
 }
 
 Ship.prototype.getFocusString = function(){
+	return this.baseFocusRate + "%" + " => " + this.getFocusIfCommand();
 	return this.baseFocusRate + " + " + this.modFocusRate + "%" + " / " + this.getFocusIfCommand();
 }
 
@@ -2430,6 +2437,10 @@ Ship.prototype.addCommandDiv = function(div){
 	else div.find(".commandContainer").hide();
 }
 
+Ship.prototype.getUnmoddedFocusGain = function(){
+	return this.baseFocusRate + "% / " + Math.floor(game.settings.pv / 100 * (this.baseFocusRate + this.modFocusRate));
+}
+
 Ship.prototype.getFocusIfCommand = function(){
 	var bridge = this.getSystemByName("Command");
 	bridge.output = 100;
@@ -2449,7 +2460,7 @@ Ship.prototype.getUnitName = function(){
 }	
 
 Ship.prototype.setCommand = function(){
-	console.log("setCommand");
+	//console.log("setCommand");
 
 	if (this.destroyed || this.isJumpingOut()){return;}
 
@@ -4191,6 +4202,8 @@ Ship.prototype.getTurnStep = function(){
 }
 
 Ship.prototype.getMaxTurnAngle = function(){
+	if (this.canTurnFreely()){return 360;}
+
 	var ep = this.getRemEP();
 	var limit = this.getTurnAngle();
 	var c = this.getTurnCost();
@@ -4209,14 +4222,14 @@ Ship.prototype.drawTurnArcs = function(){
 	
 	this.turnAngles = {start: addAngle(0 + turnAngle, angle), end: addAngle(360 - turnAngle, angle)};
 
-	return;
+	//return;
 
 	var center = this.getPlannedPos();
-	var angle = this.getPlannedFacing();
-	var turnAngle = this.getMaxTurnAngle();
+	//var angle = this.getPlannedFacing();
+	//var turnAngle = this.getMaxTurnAngle();
 	var w = this.getTurnStep();
 
-	this.turnAngles = {start: addAngle(0 + turnAngle, angle), end: addAngle(360 - turnAngle, angle)};
+	//this.turnAngles = {start: addAngle(0 + turnAngle, angle), end: addAngle(360 - turnAngle, angle)};
 	
 	for (var j = 1; j >= -1; j = j-2){
 		for (var i = 1; i <= w; i++){			

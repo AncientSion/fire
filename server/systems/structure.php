@@ -33,6 +33,10 @@ class Structure {
 		$this->setName();
 	}
 
+	public function adjustLoad($data){
+		Debug::log("FATAL ERROR ADJUSTLOAD STRUCTURE: ".$dbLoad[0]["name"]);
+	}
+
 	public function isDestroyed(){
 		if ($this->destroyed){
 			return true;

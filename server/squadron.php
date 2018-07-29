@@ -11,7 +11,7 @@ class Squadron extends Ship {
 	public $baseImpulse = 1000;
 	public $slipAngle = 1000;
 	public $turnangle = 40;
-	public $traverse = -1;
+	public $traverse = 3;
 	public static $space;
 	public $slots = array(0, 10);
 	public $baseFocusRate = 8;

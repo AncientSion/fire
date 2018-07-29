@@ -4,7 +4,7 @@ class FighterWeapon extends Particle {
 	public $projSpeed = 7;
 	public $projSize = 1.5;
 	public $reload = 1;
-	public $traverse = -4;
+	public $traverse = 0;
 	public $accDecay = 0;
 	public $tiny = 1;
 
@@ -49,7 +49,7 @@ class ParticleBolt extends FighterWeapon {
 	public $projSpeed = 5;
 	public $shots = 1;
 	public $reload = 2;
-	public $traverse = -1;
+	public $traverse = 3;
 	
 	function __construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end){
 		parent::__construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end);
@@ -81,7 +81,7 @@ class ParticlePulsar extends FighterPulse {
 	public $basePulses = 2;
 	public $extraPulses = 1;
 	public $grouping = 20;
-	public $traverse = -4;
+	public $traverse = 0;
 	
 	function __construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end){
 		parent::__construct($id, $fighterId, $parentId, $shots, $linked, $minDmg, $maxDmg, $start, $end);

@@ -74,7 +74,7 @@ class Hyperion extends Heavy {
 							"systemid" => 9,
 							"display" => "Front Main Hangar",
 							"name" => "Aurora",
-							"amount" => 8
+							"amount" => 10
 						),
 					)
 				),

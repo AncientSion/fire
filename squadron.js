@@ -617,26 +617,14 @@ Squadron.prototype.setStats = function(){
 	this.primary.systems[2].output = ep;
 	this.primary.systems[2].update();
 
-	var impulse = this.getBaseImpulse();
-	var ep = this.getBaseEP();
-	var change = this.getImpulseChangeCost() + ", " + this.getActionCost(0) + ", " + this.getActionCost(1);
-	//var d = this.baseTurnDelay;
-	var hit = this.getStringHitChance();
+	this.setStringHitChance();
 
-	$(this.element).find(".topDiv").find(".header").find("tr").each(function(i){
-		if (i == 5){
-			$($(this).children()[1]).html(impulse); return;
-		}
-		if (i == 6){
-			$($(this).children()[1]).html(ep); return;
-		}
-		else if (i == 7){
-			$($(this).children()[1]).html(change); return;
-		}
-		//else if (i == 3){
-		//	$($(this).children()[1]).html(hit); return;
-		//}
-	})
+	$(this.element)
+		.find(".header")
+			.find(".profile").html(this.getStringHitChance()).end()
+			.find(".Thrust").html(this.getBaseImpulse()).end()
+			.find(".ep").html(this.getBaseEP()).end()
+			.find(".change").html(this.getImpulseChangeCost() + ", " + this.getActionCost(0) + ", " + this.getActionCost(1)).end()
 }
 
 Squadron.prototype.getSectionString = function(angle){

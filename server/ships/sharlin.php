@@ -14,8 +14,6 @@ class Sharlin extends SuperHeavy {
 	public $ep = 60;
 	public $ew = 1000;
 
-	public $modFocusRate = 2;
-
 	function __construct($data = false){
         parent::__construct($data);
 	}

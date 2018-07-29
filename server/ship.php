@@ -54,7 +54,6 @@ class Ship {
 	public $baseTurnDelay;
 	public $baseImpulseCost;
 	public $hitTable;
-	public $modFocusRate = 0;
 	public $cc = array();
 	public $damaged = 0;
 	public $moveSet = 0;
@@ -63,6 +62,7 @@ class Ship {
 	public $ep = 0;
 	public $ew = 0;
 	public $power = 0;
+	public $modFocusRate = 0;
 
 	function __construct($data){
 		//Debug::log("constructing!");
@@ -451,7 +451,7 @@ class Ship {
 				$chunk[] = $dbLoad[$i];
 			}
 		}
-		//var_export($chunk); var_export($this->name); echo "</br></br>";
+		//var_export($this->name); echo "</br>"; var_export($chunk); echo "</br></br>";
 		$this->getSystem($chunk[sizeof($chunk)-1]["systemid"])->adjustLoad($chunk);
 
 		return true;
@@ -1359,11 +1359,10 @@ class Ship {
 
 class Medium extends Ship {
 	public $baseImpulse = 165;
-	public $traverse = 0;
+	public $traverse = 4;
 	public $slipAngle = 15;
 	public $baseImpulseCost = 30;
 	public $baseFocusRate = 10;
-	public $modFocusRate = 0;
 
 	function __construct($data){
 		parent::__construct($data);
@@ -1410,7 +1409,7 @@ class Medium extends Ship {
 
 class Heavy extends Medium {
 	public $baseImpulse = 155;
-	public $traverse = 1;
+	public $traverse = 5;
 	public $baseFocusRate = 11;
 	//public $baseImpulseCost = 45;
 	
@@ -1421,7 +1420,7 @@ class Heavy extends Medium {
 
 class SuperHeavy extends Heavy {
 	public $baseImpulse = 140;
-	public $traverse = 2;
+	public $traverse = 6;
 	public $baseFocusRate = 12;
 	//public $baseImpulseCost = 50;
 	
@@ -1432,7 +1431,7 @@ class SuperHeavy extends Heavy {
 
 class UltraHeavy extends SuperHeavy {
 	public $baseImpulse = 130;
-	public $traverse = 3;
+	public $traverse = 7;
 	public $baseFocusRate = 13;
 	//public $baseImpulseCost = 55;
 	

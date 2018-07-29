@@ -17,7 +17,7 @@ if (isset($_POST["type"])) {
 
 	if ($_POST["type"] == "joinGame") {
 		//Debug::log("joinGame success");
-		if ($dbManager->createPlayerStatus($_POST["userid"], $_POST["gameid"], 0, -1, "joined")) {
+		if ($dbManager->createPlayerStatus($_POST["userid"], $_POST["gameid"])){
 			//Debug::log("joinGame success");
 		}
 		else {
@@ -27,11 +27,8 @@ if (isset($_POST["type"])) {
 	else if ($_POST["type"] == "leaveGame") {
 		echo $dbManager->leaveGame($_POST["userid"], $_POST["gameid"]);
 	}
-	else if ($_POST["type"] == "buyInitialFleet") {
-		$rem = $manager->verifyFleetCost($_POST["ships"]);
-		if ($rem < 0){echo "Invalid Fleet"; return;}
-	
-		if ($dbManager->processInitialBuy($_POST["userid"], $_POST["gameid"], $_POST["ships"], $rem, $_POST["faction"])){
+	else if ($_POST["type"] == "buyInitialFleet"){	
+		if ($dbManager->processInitialBuy($_POST["userid"], $_POST["gameid"], $_POST["ships"], -$manager->getPostBuyPV($_POST["ships"]), $_POST["faction"])){
 			if ($dbManager->gameIsReady($_POST["gameid"])) {
 				if ($dbManager->startGame($_POST["gameid"])) {
 					header("Location: game.php?gameid=".$_POST["gameid"]);

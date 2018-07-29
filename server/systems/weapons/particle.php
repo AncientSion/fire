@@ -21,7 +21,7 @@ class TwinParticleBolter extends Particle {
 	public $reload = 2;
 	public $integrity = 24;
 	public $powerReq = 2;
-	public $traverse = -4;
+	public $traverse = 0;
 
 	public $animColor = "orange";
 	public $projSize = 2;
@@ -43,7 +43,7 @@ class LightParticle extends Particle {
 	public $reload = 2;
 	public $integrity = 28;
 	public $powerReq = 2;
-	public $traverse = -4;
+	public $traverse = 0;
 	public $effiency = 3;
 	public $maxBoost = 1;
 
@@ -68,7 +68,7 @@ class MediumParticle extends LightParticle {
 	public $reload = 3;
 	public $integrity = 36;
 	public $powerReq = 3;
-	public $traverse = -1;
+	public $traverse = 3;
 	public $effiency = 3;
 
 	public $animColor = "orange";
@@ -91,7 +91,7 @@ class HeavyParticle extends MediumParticle {
 	public $reload = 4;
 	public $integrity = 64;
 	public $powerReq = 6;
-	public $traverse = 1;
+	public $traverse = 5;
 	public $effiency = 4;
 
 	public $animColor = "orange";
@@ -114,7 +114,7 @@ class SuperHeavyParticle extends HeavyParticle {
 	public $reload = 6;
 	public $integrity = 74;
 	public $powerReq = 8;
-	public $traverse = 1;
+	public $traverse = 6;
 	public $effiency = 4;
 
 	public $animColor = "orange";
@@ -137,7 +137,7 @@ class FusionCannon extends Particle {
 	public $reload = 2;
 	public $integrity = 40;
 	public $powerReq = 2;
-	public $traverse = -1;
+	public $traverse = 3;
 
 	public $animColor = "green";
 	public $projSize = 3;
@@ -159,7 +159,7 @@ class HeavyFusionCannon extends Particle {
 	public $reload = 2;
 	public $integrity = 46;
 	public $powerReq = 3;
-	public $traverse = -1;
+	public $traverse = 3;
 
 	public $animColor = "green";
 	public $projSize = 4;
@@ -185,7 +185,7 @@ class AntimatterConverter extends Particle {
 	public $reload = 3;
 	public $integrity = 60;
 	public $powerReq = 7;
-	public $traverse = 1;
+	public $traverse = 5;
 	public $amBonus = 2;
 	public $amMax = 80;
 
@@ -219,7 +219,7 @@ class TwinEMProjector extends Particle {
 	public $reload = 2;
 	public $integrity = 24;
 	public $powerReq = 3;
-	public $traverse = -4;
+	public $traverse = 0;
 	public $effiency = 3;
 	public $maxBoost = 1;
 

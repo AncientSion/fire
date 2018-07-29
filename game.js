@@ -803,7 +803,7 @@ function Game(data){
 				id: this.userid,
 				x: center.x,
 				y: center.y,
-				s: 2000,
+				s: 900,
 				b: Math.round(d*2.5),
 				c: "green"
 			});
@@ -2693,9 +2693,7 @@ function Game(data){
 				.append(
 					$("<td>")
 					.append(
-						$("<img>")
-						.addClass("img50")
-						.attr("src", "shipIcons/" + this.reinforcements[i].name.toLowerCase() + ".png")
+						$(this.reinforcements[i].getBaseImage().cloneNode(true)).addClass("img50")
 					)
 				)
 				.append($("<td>").html(this.reinforcements[i].name + "</br>" + this.reinforcements[i].notes))
@@ -2705,7 +2703,8 @@ function Game(data){
 		}
 	}
 
-	this.initReinforceTable = function(){		
+	this.initReinforceTable = function(){
+		console.log("initReinforceTable");
 		$("#deployWrapper").find("#reinforceBody").find(".requestReinforcements").each(function(i){
 			$(this)
 			.data("id", game.reinforcements[i]["id"])
@@ -2737,12 +2736,13 @@ function Game(data){
 				if (game.phase == -1 && !aUnit && $(this).hasClass("green")){
 					game.undoDeploy($(this).data("id"));
 					$(this).removeClass("green");
-					$("#deployWrapper").find("#totalRequestCost").html(game.getCurrentReinforceCost());
+					$("#deployWrapper").find("#totalRequestCost").html("(" + game.getRemainingReinforcePoints() + " points left)");
 					game.draw();
 				}
 			});
 		})
 	}
+
 
 	this.initSelectionWrapper = function(){
 		var l = 0;
@@ -3153,6 +3153,13 @@ Game.prototype.getCurrentReinforceCost = function(){
 	return Math.floor(cost);
 }
 
+Game.prototype.getRemainingReinforcePoints = function(){
+	var avail = this.reinforcePoints;
+	var cost = this.getCurrentReinforceCost();
+
+	return Math.floor(avail-cost);
+}
+
 Game.prototype.getFireDistance = function(a, b){
 	if ((a.ship || a.squad) && (b.ship || b.squad)){
 		return Math.floor(getDistance(a.getPlannedPos(), b.getPlannedPos()));
@@ -3289,7 +3296,7 @@ Game.prototype.animateJumpIn = function(){
 		ctx.scale(cam.z, cam.z);
 
 		for (var i = 0; i < this.ships.length; i++){
-			if (this.ships[i].available < game.turn){continue;}
+			if (this.ships[i].available < game.turn){this.ships[i].draw(); continue;}
 
 			if (this.ships[i].deployAnim[1]){
 				if (this.ships[i].deployed){

@@ -21,13 +21,46 @@
 	        return self::$instance;
 		}
 
-		public function doPurge(){
-			$tables = array("actions", "damages", "fireorders", "games", "loads", "missions", "playerstatus", "powers", "sensors", "subunits", "systemcrits", "units");
+		public function doPurge($filename){
+
+			$sql = "";	
+			$tables = array();
+
+			foreach ($this->query("show tables") as $result){
+				$tables[] = $result["Tables_in_spacecombat"];
+			}
 
 			for ($i = 0; $i < sizeof($tables); $i++){
-				$sql = "truncate ".$tables[$i];
-				$this->query($sql);
+				$sql = "drop table ".$tables[$i];
+
+				$stmt = $this->connection->prepare($sql);
+				$stmt->execute();
+				if ($stmt->errorCode() == 0){
+					$sql = "";
+					echo "<div>dropping: ".$tables[$i]."</div>";
+				} else continue;
 			}
+
+			$dump = file($filename);
+			$sql = "";		
+
+			foreach ($dump as $line){
+				$startWith = substr(trim($line), 0 ,2);
+				$endWith = substr(trim($line), -1 ,1);
+				
+				if (empty($line) || $startWith == '--' || $startWith == '/*' || $startWith == '//' || $startWith == 'SE'){continue;}
+					
+				$sql = $sql.$line;
+				if ($endWith == ';'){
+					$stmt = $this->connection->prepare($sql);
+					$stmt->execute();
+					if ($stmt->errorCode() == 0){$sql = "";}
+					else die("<div>Problem in executing the SQL query".$sql."</div>");
+				}
+			}
+			echo "<div>SQL file imported successfully.</div>";
+
+
 		}
 
 		public function getLastInsertId(){
@@ -240,31 +273,35 @@
 
 		public function createNewGameAndJoin($userid, $post){
 			$this->createNewGame($post);
-			$id = $this->getLastInsertId();
-			$this->createPlayerStatus($userid, $id, 0, -1, "joined");
-			if ($id){return $id;}
+			$gameid = $this->getLastInsertId();
+			$this->createPlayerStatus($userid, $gameid);
+			if ($gameid){return $gameid;}
 			return 0;
 		}
 
-		public function createPlayerStatus($userid, $gameid, $turn, $phase, $status){
+		public function createPlayerStatus($userid, $gameid){
 			//Debug::log("createPlayerStatus");
 
 			$stmt = $this->connection->prepare("
 				INSERT INTO playerstatus
 					(userid, gameid, turn, phase, faction, value, status)
 				VALUES
-					(:userid, :gameid, :turn, :phase, :faction, :value, :status)
+					(:userid, :gameid, :turn, :phase, :faction, (SELECT pv FROM games WHERE id = $gameid), :status)
 			");
 
+
+			$turn = -1;
+			$phase = -1;
 			$faction = "";
-			$points = 0;
+			$status = "joined";
 
 			$stmt->bindParam(":userid", $userid);
 			$stmt->bindParam(":gameid", $gameid);
 			$stmt->bindParam(":turn", $turn);
 			$stmt->bindParam(":phase", $phase);
 			$stmt->bindParam(":faction", $faction);
-			$stmt->bindParam(":value", $points);
+			//$stmt->bindParam(":gameid", $gameid);
+			//$stmt->bindParam(":value", $value);
 			$stmt->bindParam(":status", $status);
 
 			$stmt->execute();
@@ -375,13 +412,13 @@
 		}
 
 		public function setInitialCommandUnit($userid, $gameid, $units){
-			Debug::log("setInitialCommandUnit s:".sizeof($units));	
+			//Debug::log("setInitialCommandUnit s:".sizeof($units));	
 			$unit;
 			$id;
 
 			for ($i = 0; $i < sizeof($units); $i++){
 				if ($units[$i]["command"]){
-					Debug::log("ding: ".$units[$i]["name"]);
+					//Debug::log("ding: ".$units[$i]["name"]);
 					$id = $units[$i]["id"];
 					$unit = new $units[$i]["name"]();
 					//Debug::log("created!");
@@ -391,7 +428,7 @@
 
 			$sql = "UPDATE units SET command = 1 WHERE id = ".$id;
 			$rows = $this->update($sql);
-			Debug::log("Command set, rows updates: ".$rows);
+			//Debug::log("Command set, rows updates: ".$rows);
 
 
 			$gd = $this->getGameDetails($gameid);
@@ -417,7 +454,7 @@
 		}
 
 		public function updateCommandState($data){
-			Debug::log("updateCommandState:".$data["commandChange"]["new"].", ".$data["turn"]);
+			//Debug::log("updateCommandState:".$data["commandChange"]["new"].", ".$data["turn"]);
 			//$_POST["userid"], $_POST["gameid"], $_POST["commandChange"]["old"], $_POST["commandChange"]["new"
 
 			$stmt = $this->connection->prepare("
@@ -850,7 +887,7 @@
 
 
 		public function setStartGamePlayerStatus($gameid){
-			Debug::log("setStartGamePlayerStatus");
+			Debug::log("setStartGamePlayerStatus ".$gameid);
 
 			$stmt = $this->connection->prepare("
 				UPDATE playerstatus 
@@ -1760,7 +1797,7 @@
 		}
 
 		public function addReinforceValue($userid, $gameid, $add){
-			//Debug::log("addReinforceValue for user: ".$userid.": ".$add);
+			Debug::log("addReinforceValue for user: ".$userid.": ".$add);
 			$stmt = $this->connection->prepare("
 				UPDATE playerstatus 
 				SET	value = value + :add
@@ -1842,7 +1879,7 @@
 		}
 
 		public function getGameDetails($gameid){
-			//Debug::log($gameid);
+			//Debug::log("getgamedetails:".$gameid);
 			try {
 				$stmt = $this->connection->prepare("
 					SELECT * FROM games WHERE id = :id
@@ -1894,15 +1931,15 @@
 					
 			$units = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			
-			if ($units){
-				for ($i = 0; $i < sizeof($units); $i++){
-					if ($units[$i]["name"] == "Flight" || $units[$i]["name"] == "Squadron" || $units[$i]["ball"]){
-						$units[$i]["subunits"] = $this->getSubUnits($units[$i]);
-						$units[$i]["mission"] = $this->getMission($units[$i]);
-					}
+			if (!$units){return false;}
+
+			
+			for ($i = 0; $i < sizeof($units); $i++){
+				if ($units[$i]["name"] == "Flight" || $units[$i]["name"] == "Squadron" || $units[$i]["ball"]){
+					$units[$i]["subunits"] = $this->getSubUnits($units[$i]);
+					$units[$i]["mission"] = $this->getMission($units[$i]);
 				}
 			}
-			//Debug::log("getting: ".sizeof($units)." units");
 			return $units;
 		}
 

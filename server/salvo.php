@@ -4,7 +4,7 @@ class Salvo extends Mixed {
 	public $name = "Salvo";
 	public $unitType = "Salvo";
 	public $salvo = true;
-	public $traverse = -4;
+	public $traverse = 0;
 	public $missile = false;
 	public $torpedo = false;
 

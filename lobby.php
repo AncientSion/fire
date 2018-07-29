@@ -5,7 +5,15 @@ include_once $_SERVER["DOCUMENT_ROOT"]."/fire/global.php";
 //$dbManager = DBManager::app();
 //$dbManager->setInitialCommandUnit(1, 1, array(array("id" => 5, "name" => "Hyperion", "command" => 1)));
 
-if (0){DBManager::app()->doPurge();}
+if (0){
+	Manager::alterShipFiles();
+	return;
+}
+
+if (isset($_POST["purge"]) && isset($_SESSION["userid"]) && $_SESSION["userid"] == 1){
+	$db = "db.sql";
+	echo DBManager::app()->doPurge($db);
+}
 
 //echo DmgCalc::setWeaponPriority(); return;
 
@@ -191,7 +199,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 	<script src='shared.js'></script>
 </head>
 	<body>
-		<div id="instructWrapper style='top'>
+		<div id="instructWrapper style='top'">
 			<div id="instructText">
 			</div>
 		</div>
@@ -203,6 +211,11 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 			?>
 		</div>
 			<div class="lobbyDiv">
+				<form method="post">
+					<input type="submit" value="purge" name="purge">
+				</form>
+			</div>
+			<div class="lobbyDiv">
 				<?php echo $myGamesElement; ?>
 			</div>
 			<div id="openGames" class="lobbyDiv">
@@ -210,7 +223,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 			</div>
 			<div class="lobbyDiv">
 				<div style="margin-bottom: 20px">
-					<input id=createGameToggle" style="margin-top: 50px; width: 180px" type="button" value="Create a new Game" onclick="toggleGameCreation()">
+					<input id="createGameToggle" style="margin-top: 50px; width: 180px" type="button" value="Create a new Game" onclick="toggleGameCreation()">
 				</div>
 
 				<div>

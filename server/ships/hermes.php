@@ -26,7 +26,7 @@ class Hermes extends Light {
 
 		$front = new Section(300, 60);
 		$front->systems[] = new LightPulse($this->getId(), $this->parentId, 270, 90);
-		$front->systems[] = new MissileLauncher($this->getId(), $this->parentId, 270, 90, array(array("Needle", 8, 4), array("Naga", 6, 3)));
+		$front->systems[] = new MissileLauncher($this->getId(), $this->parentId, 270, 90, 0, array(array("Needle", 8, 4), array("Naga", 6, 3)));
 		$front->systems[] = new LightPulse($this->getId(), $this->parentId, 270, 90);
 		$structs[] = $front;
 

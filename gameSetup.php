@@ -413,7 +413,7 @@ else {
 							command: game.shipsBought[i].command,
 							display: game.shipsBought[i].display,
 							faction: game.shipsBought[i].faction,
-							value: game.shipsBought[i].totalCost,
+							totalCost: game.shipsBought[i].totalCost,
 							upgrades: game.shipsBought[i].getAllUpgrades(),
 							turn: 1,
 							eta: 0,

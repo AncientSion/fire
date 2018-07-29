@@ -23,9 +23,9 @@ class GSten extends Heavy {
 		$structs = array();
 
 		$front = new Structure($this->getId(), $this->id, 330, 30, 625, 18, 3);
-		$front->systems[] = new TorpedoLauncher($this->getId(), $this->id, 315, 45, array(array("Vran", 16, 4), array("Vranoth", 12, 3)));
+		$front->systems[] = new TorpedoLauncher($this->getId(), $this->id, 315, 45, 60, array(array("Vran", 16, 4), array("Vranoth", 12, 3)));
 		$front->systems[] = new Bulkhead($this->getId(), $this->id, 80);
-		$front->systems[] = new TorpedoLauncher($this->getId(), $this->id, 315, 45, array(array("Vran", 16, 4), array("Vranoth", 12, 3)));
+		$front->systems[] = new TorpedoLauncher($this->getId(), $this->id, 315, 45, 60, array(array("Vran", 16, 4), array("Vranoth", 12, 3)));
 		$structs[] = $front;
 
 		$right = new Structure($this->getId(), $this->id, 30, 150, 800, 16);
@@ -36,8 +36,8 @@ class GSten extends Heavy {
 		$structs[] = $right;
 
 		$aft = new Structure($this->getId(), $this->id, 150, 210, 550, 15);
-		$aft->systems[] = new TwinParticleBolter($this->getId(), $this->id, 120, 300);
-		$aft->systems[] = new TwinParticleBolter($this->getId(), $this->id, 60, 240);
+		$aft->systems[] = new TwinParticleBolter($this->getId(), $this->id, 90, 270);
+		$aft->systems[] = new TwinParticleBolter($this->getId(), $this->id, 90, 270);
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 800, 16);

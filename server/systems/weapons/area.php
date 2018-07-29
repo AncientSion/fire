@@ -36,7 +36,7 @@ class EnergyMine extends Area {
 	public $effiency = 4;
 	public $integrity = 56;
 	public $powerReq = 10;
-	public $traverse = -3;
+	public $traverse = 1;
 	public $aoe = 65;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
@@ -66,7 +66,7 @@ class GraviticMine extends Area {
 	public $effiency = 4;
 	public $integrity = 56;
 	public $powerReq = 10;
-	public $traverse = -3;
+	public $traverse = 1;
 	public $aoe = 100;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){

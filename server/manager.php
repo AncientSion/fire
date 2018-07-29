@@ -4,8 +4,6 @@
 		public $userid;
 		public $gameid;
 
-		public $name;
-		public $status;
 		public $turn;
 		public $phase;
 		public $pv;
@@ -21,12 +19,11 @@
 		public $fires = array();
 		public $playerstatus = array();
 		public $reinforcements = array();
-		public $rdyReinforcements = array();
 		public $deploys = array();
 		public $incoming = array();
 		public $userindex = 0;
 
-		public $gd = array();
+		public $settings = array();
 
 		public $weapons = array();
 
@@ -57,8 +54,40 @@
 		return;
 	}
 
+	static function alterShipFiles(){
+
+		$content = file("server/ships/altarian.php");
+
+		$new = array();
+
+		foreach ($content as $line){
+			//echo $line."</br>";
+			$entry = substr(trim($line), 8, 3);
+			//echo $entry."</br></br>";
+			if ($entry != "pro"){$new[] = $line;}
+		}
+
+
+
+		$dest = fopen("server/ships/altarianc.php", "w");
+		fwrite($dest, implode($new));
+		fclose($dest);
+
+
+
+
+		return;
+
+		$files = array_slice(scandir("server/ships"), 2);
+		foreach ($files as $file){
+			$content = file("server/ships/".$file);
+			echo "file: ".$file.", length: ".sizeof($content)."</br>";
+		}
+	}
+
 	public function getClientData(){
 
+		//$this->handleFlightMovement();
 		//$this->testMorale();
 		//return;
 
@@ -66,8 +95,6 @@
 		
 		$data = array(
 			"id" => $this->gameid,
-			"name" => $this->name,
-			"status" => $this->status,
 			"turn" => $this->turn,
 			"phase" => $this->phase,
 			"ships" => $this->getShipData(),
@@ -118,6 +145,7 @@
 		if (!$gd){return;}
 
 		$this->settings = new GD($gd);
+		//var_export($this->settings);
 		$this->turn = $gd["turn"];
 		$this->phase = $gd["phase"];
 
@@ -126,23 +154,18 @@
 		$this->weapons = DmgCalc::setWeaponPriority();
 	}
 
-	public function verifyFleetCost($units){
-		$used = 0;
-
+	public function getPostBuyPV($units){
+		$cost = 0;
 		for ($i = 0; $i < sizeof($units); $i++){
-			$used = $used + $units[$i]["value"];
+			$cost += $units[$i]["totalCost"];
 		}
-
-		$avail = $this->pv;
-
-		if ($used <= $avail){
-			return $avail - $used;
-		}
-		return 0;
+		Debug::log("cost: ".$cost);
+		return $cost;
 	}
 
 	public function getGameData(){
 		//Debug::log("getGameData for: ".$this->gameid.", for user: ".$this->userid);
+		if (!$this->settings){return false;}
 		$db = DBManager::app();
 
 		$this->setReinforceStatus();
@@ -275,7 +298,7 @@
 					array(
 					"id" => -$possible[$i]["id"],
 					"userid" => $possible[$i]["userid"],
-					"command" => $this->turn + $possible[$i]["command"],
+					"command" => $possible[$i]["command"],
 					"available" => $this->turn + $possible[$i]["available"],
 					"display" => $possible[$i]["display"],
 					"status" => $possible[$i]["status"],
@@ -310,7 +333,7 @@
 	}
 
 	public function assembleUnits(){
-		//Debug::log("assembleUnits");
+		Debug::log("assembleUnits");
 		$db =  DBManager::app()->getActiveUnits($this->gameid, $this->turn); 
 		$units = array();
 
@@ -451,15 +474,18 @@
 		$eta = $this->settings->reinforceETA;
 
 		for ($i = 0; $i < sizeof($this->playerstatus); $i++){
-			//Debug::log("player: ".$this->playerstatus[$i]["userid"]." has ".$this->playerstatus[$i]["value"]." available");
 			$data = array();
 			$faction = $this->playerstatus[$i]["faction"];
 			$entries = $this->getReinforcements($faction);
+			$value = $this->playerstatus[$i]["value"];
 			$total = 0;
+
+			Debug::log("player: ".$this->playerstatus[$i]["userid"]." has ".$value." available");
+
 			foreach ($entries as $entry){$total += $entry[1];}
 
 			//Debug::log("total: ".$total);
-			$add = 10;
+			$add = $this->settings->reinforceAmount;
 
 			while ($add){
 				$current = 0;
@@ -843,13 +869,48 @@
 	public function handleFlightMovement(){
 		Debug::log("handleFlightMovement");
 
+		$flights = array();
+
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if (!$this->ships[$i]->flight){continue;}
-			if ($this->ships[$i]->mission->type == 1){continue;}
+			$this->ships[$i]->mission->target = $this->getUnit($this->ships[$i]->mission->targetid);
+			$flights[] = $this->ships[$i];
+		}
 
-			$t = $this->getUnit($this->ships[$i]->mission->targetid);
+		usort($flights, function($a, $b){
+			if ($a->mission->target->flight != $b->mission->target->flight){
+				return $a->mission->target->flight - $b->mission->target->flight;
+			}
+			else if ($a->mission->target->flight && $b->mission->target->flight){
+				return $a->mission->target->mission->target->flight - $b->mission->target->mission->target->flight;
+			}
+			else if ($a->mission->target->squad != $b->mission->target->squad){
+				return $a->mission->target->squad - $b->mission->target->squad;
+			}
+			else if ($a->mission->target->ship != $b->mission->target->ship){
+				return $a->mission->target->ship - $b->mission->target->ship;
+			}
+		});
 
-			if ($t->ship || $t->squad){
+		for ($i = 0; $i < sizeof($flights); $i++){
+			Debug::log($flights[$i]->id);
+			$flights[$i]->setMove($this);
+		}
+
+		return;
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if (!$this->ships[$i]->flight){continue;}
+			$this->ships[$i]->setMove($this);
+		}
+
+
+		for ($i = 0; $i < sizeof($this->ships); $i++){
+			if (!$this->ships[$i]->flight){continue;}
+
+			$this->mission->target = &$this->getUnit($this->mission->targetid);
+
+			if ($this->mission->target->ship || $this->mission->target->squad){
 				$this->ships[$i]->setMove($this);
 			}
 		}
@@ -865,6 +926,8 @@
 
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if (!$this->ships[$i]->salvo){continue;}
+
+			$this->ships[$i]->mission->target = $this->getUnit($this->ships[$i]->mission->targetid);
 			$this->ships[$i]->setMove($this);
 		}
 	}

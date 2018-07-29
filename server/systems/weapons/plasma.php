@@ -38,7 +38,7 @@ class LightPlasmaShredder extends Plasma {
 	public $projSpeed = 8;
 	public $reload = 2;
 	public $integrity = 36;
-	public $traverse = -1;
+	public $traverse = 3;
 	public $powerReq = 3;
 	public $maxBoost = 1;
 	public $effiency = 3;
@@ -63,7 +63,7 @@ class LightPlasma extends Plasma {
 	public $projSpeed = 8;
 	public $reload = 2;
 	public $integrity = 36;
-	public $traverse = -1;
+	public $traverse = 3;
 	public $powerReq = 3;
 	public $maxBoost = 1;
 	public $effiency = 2;
@@ -86,7 +86,7 @@ class MediumPlasma extends Plasma {
 	public $projSpeed = 6;
 	public $reload = 2;
 	public $integrity = 48;
-	public $traverse = -1;
+	public $traverse = 3;
 	public $powerReq = 5;
 	public $maxBoost = 2;
 	public $effiency = 3;
@@ -136,7 +136,7 @@ class MagCompressor extends Plasma {
 	public $reload = 4;
 	public $integrity = 54;
 	public $powerReq = 6;
-	public $traverse = 1;
+	public $traverse = 5;
 	public $dmgs = array();
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){

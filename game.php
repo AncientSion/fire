@@ -160,7 +160,7 @@
 			<table style="margin:auto; width: 100%;">
 				<tr>
 					<th style="width: 60%; text-align: left">
-						 Eff. Turn Ability 
+						 Maneuverability
 					</th>
 					<th id="remEP" style="text-align: center">
 					</th>
@@ -353,10 +353,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div style="padding: 5px">
-					<div style="display: inline-block; font-size: 20px; width: 150px; text-align: center">Total Cost</div>
-					<div id="totalRequestCost">0</div>
-				</div>
+				<div id="totalRequestCost"></div>
 			</div>
 		</div>
 		<div id="deployOverlay">
@@ -578,7 +575,7 @@
 								game.unitExploAnims[i].entries[j].u.doDestroy();
 							}
 							
-							game.createMiscLogEntry(i);
+							game.createExploLogEntry(i);
 						}
 					}
 

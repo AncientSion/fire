@@ -75,7 +75,7 @@ class Vran extends Torpedo {
 	public static $prio = 0;
 	public $integrity = 5;
 	public $negation = 1;
-	public $traverse = -1;
+	public $traverse = 3;
 	public $maxRange = 600;
 	public $reload = 2;
 	public static $value = 0;
@@ -128,7 +128,7 @@ class Hasta extends Missile {
 	public $integrity = 4;
 	public $negation = 0;
 	public static $value = 3;
-	public $traverse = -3;
+	public $traverse = 1;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -144,7 +144,7 @@ class Javelin extends Missile {
 	public $integrity = 8;
 	public $negation = 2;
 	public static $value = 4;
-	public $traverse = -1;
+	public $traverse = 3;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -160,7 +160,7 @@ class Triarii extends Missile {
 	public $integrity = 8;
 	public $negation = 2;
 	public static $value = 6;
-	public $traverse = -1;
+	public $traverse = 3;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -193,7 +193,7 @@ class Vanguard extends Missile {
 	public $integrity = 4;
 	public $negation = 0;
 	public static $value = 3;
-	public $traverse = -4;
+	public $traverse = 0;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -209,7 +209,7 @@ class Needle extends Missile {
 	public $integrity = 4;
 	public $negation = 0;
 	public static $value = 3;
-	public $traverse = -3;
+	public $traverse = 1;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -225,7 +225,7 @@ class Naga extends Missile {
 	public $integrity = 8;
 	public $negation = 2;
 	public static $value = 4;
-	public $traverse = -1;
+	public $traverse = 3;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

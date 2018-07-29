@@ -63,7 +63,7 @@ class System {
 	}
 
 	public function adjustLoad($dbLoad){
-		Debug::log("FATAL ERROR ADJUSTLOAD");
+		Debug::log("FATAL ERROR ADJUSTLOAD: ".$dbLoad[0]["name"]);
 		return;
 	}
 

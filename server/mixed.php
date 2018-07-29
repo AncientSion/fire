@@ -167,7 +167,6 @@ class Mixed extends Ship {
 		$angle = 0;
 		$type = "move";
 
-
 		Debug::log("**** Handling ".get_class($this)." #".$this->id.", speed ".$speed);
 		if ($this->mission->type == 1){ // PATROL
 			//Debug::log("PATROL");
@@ -192,7 +191,7 @@ class Mixed extends Ship {
 			}
 		}
 		else if ($this->mission->type == 2){ // STRIKE
-			$t = $gd->getUnit($this->mission->targetid);
+			$t = $this->mission->target;
 			$tPos = $t->getCurPos();
 
 			Debug::log("Target: ".get_class($t)." #".$t->id);
@@ -210,47 +209,55 @@ class Mixed extends Ship {
 					$dist = Math::getDist2($origin, $tPos);
 					$type = "move";
 				}
-				else { // flight on flight
+				else {
 					if ($this->mission->arrived && $t->mission->arrived && $t->mission->targetid == $this->id && $this->mission->targetid == $t->id){
 						Debug::log("intercept each other, both arrived, no move");
 						$dist = 0;
 						$type = "patrol";
 						$this->mission->arrived = $gd->turn;
 					}
-					else {
+					else if (!$t->moveSet){
+						Debug::log("target flight as not moved yet");
+						$shift = 0;
 						if ($this->mission->targetid == $t->id && $t->mission->targetid == $this->id){
 							Debug::log("two flights intercepts each other, havent arrived");
 
-							if (!$t->moveSet && $speed > $t->getCurSpeed() || $speed == $t->getCurSpeed() && $this->id > $t->id){
-								Debug::log("im faster (or equl and > ID, target moves before me");
-								$this->moveSet = 1;
-								$t->setMove($gd);
-								$tPos = $t->getCurPos();
-								$this->moveSet = 0;
+							if ($speed > $t->getCurSpeed() || $speed == $t->getCurSpeed() && $this->id > $t->id){
+								$shift = 1;
+								Debug::log("im faster (or equal and > ID, target moves before me");
 							}
 						}
+						if ($shift){
+							$this->moveSet = 1;
+							$t->setMove($gd);
+							$this->moveSet = 0;
+						}
+					}
+
+					
+
+					$tPos = $t->getCurPos();
+					$dist = Math::getDist2($origin, $tPos);
 
 
-						$dist = Math::getDist2($origin, $tPos);
 
-						if ($dist == 0){
-							Debug::log("Dist to T is 0 - static !");
-							$type = "patrol";
-							$this->mission->arrived = $gd->turn;
+					if (!$dist){
+						Debug::log("Dist to T is 0 - static !");
+						$type = "patrol";
+						$this->mission->arrived = $gd->turn;
+						$t->mission->arrived = $gd->turn;
+					}
+					else  if ($speed < $dist){
+						Debug::log("close in");
+						$dist = $speed;
+						$tPos = Math::getPointInDirection($speed, Math::getAngle2($origin, $tPos), $origin->x, $origin->y);
+					}
+					else {
+						Debug::log("move arrival");
+						$this->mission->arrived = $gd->turn;
+						if ($t->mission->targetid == $this->id){
+							//Debug::log("so enemy arrived, too !");
 							$t->mission->arrived = $gd->turn;
-						}
-						else  if ($speed < $dist){
-							Debug::log("close in");
-							$dist = $speed;
-							$tPos = Math::getPointInDirection($speed, Math::getAngle2($origin, $tPos), $origin->x, $origin->y);
-						}
-						else {
-							Debug::log("move arrival");
-							$this->mission->arrived = $gd->turn;
-							if ($t->mission->targetid == $this->id){
-								//Debug::log("so enemy arrived, too !");
-								$t->mission->arrived = $gd->turn;
-							}
 						}
 					}
 				}

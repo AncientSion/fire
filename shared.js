@@ -43,14 +43,14 @@ function doSort(a, b){
 
 function getUnitType(val){
 	switch (val){
-		case 3: return "Ultra Heavy";
-		case 2: return "Super Heavy";
-		case 1: return "Heavy";
-		case 0: return "Medium";
-		case -1: return "Squadron";
-		case -2: return "";
-		case -3: return "Flight";
-		case -4: return "Salvo";
+		case 7: return "Ultra Heavy";
+		case 6: return "Super Heavy";
+		case 5: return "Heavy";
+		case 4: return "Medium";
+		case 3: return "Squadron";
+		case 2: return "";
+		case 1: return "Flight";
+		case 0: return "Salvo";
 	}
 }
 

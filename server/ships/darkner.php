@@ -21,9 +21,9 @@ class Darkner extends Light {
 		$structs = array();
 
 		$front = new Section(300, 60);
-		$front->systems[] = new MissileLauncher($this->getId(), $this->parentId, 270, 90, array(array("Javelin", 18, 3), array("Myrmidon", 12, 2)));
+		$front->systems[] = new MissileLauncher($this->getId(), $this->parentId, 270, 90, 0, array(array("Javelin", 18, 3), array("Myrmidon", 12, 2)));
 		$front->systems[] = new LightParticle($this->getId(), $this->parentId, 240, 120);
-		$front->systems[] = new MissileLauncher($this->getId(), $this->parentId, 270, 90, array(array("Javelin", 18, 3), array("Myrmidon", 12, 2)));
+		$front->systems[] = new MissileLauncher($this->getId(), $this->parentId, 270, 90, 0, array(array("Javelin", 18, 3), array("Myrmidon", 12, 2)));
 		$structs[] = $front;
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];

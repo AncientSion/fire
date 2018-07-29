@@ -491,7 +491,7 @@ Mixed.prototype.setPreFireImage = function(){
 
 Mixed.prototype.setPreFireSize = function(){
 	if (this.salvo){return;}
-	//console.log("setPreFireSize #" + this.id);
+	console.log("setPreFireSize #" + this.id);
 	var max = 0;
 	for (var i = 0; i < this.structures.length; i++){
 		if (!this.structures[i].doDraw){continue;}
@@ -502,37 +502,33 @@ Mixed.prototype.setPreFireSize = function(){
 }
 
 Mixed.prototype.hasPatrolLayout = function(){
+	//console.log("Mixed hasPatrolLayout");
 	if (this.patrolLayout){return true;}
-
-
 
 	if (this.mission.arrived && this.mission.type == 1 && (game.phase == 1 || game.phase == 3)){
 		return true;
 	}
-
-
 	
 
-	
-
-	if (this.mission.arrived && this.mission.arrived < game.turn){
+	if (this.mission.arrived && this.mission.arrived < game.turn || (this.mission.arrived == game.turn && game.phase == 3)){
 		if (this.mission.type == 1){return true;}
 		else {
 			var target = this.getTarget();
 			if (!target.flight){return false;}
-			if (target.mission.type == 1 && target.mission.arrived < game.turn){
+			if (game.phase == 2 && game.subPhase == 1){return false;} // mvoe animation
+			if (target.mission.arrived < game.turn){
 				return true;
 			}
-			else if (this.mission.type == 2 && this.mission.arrived < game.turn && target.mission.arrived){
+			else if (target.mission.arrived && this.cc.length == 1 && target.cc.length == 1){
 				return true;
 			}
 		}
 	}
-	else if (this.mission.type == 2 && game.subPhase == 2 && this.cc.length){
+	else if (this.mission.type == 2 && game.subPhase == 2 && this.cc.length && this.mission.arrived){
 		var can = 1;
 		for (var i = 0; i < this.cc.length; i++){
 			var unit = game.getUnit(this.cc[i]);
-			if (!unit.flight){
+			if (!unit.flight || !unit.mission.arrived){
 				can = 0;
 			}
 		}
@@ -553,9 +549,9 @@ Mixed.prototype.setLayout = function(){
 }
 
 Mixed.prototype.setPatrolLayout = function(){
-	console.log("setPatrolLayout " + this.id);
+	//console.log("setPatrolLayout " + this.id);
 	for (var i = 0; i < this.structures.length; i++){
-		var p = getPointInDir(range(0, this.size*0.75), range(0, 360), 0, 0);
+		var p = getPointInDir(range(0, this.size*1), range(0, 360), 0, 0);
 		this.structures[i].layout.x = p.x;
 		this.structures[i].layout.y = p.y;
 	}
@@ -595,7 +591,7 @@ Mixed.prototype.setBaseLayout = function(){
 
 Mixed.prototype.setImage = function(){
 	if (this.hasPatrolLayout()){this.setPatrolImage(); return}
-	console.log("setImage " + this.id);
+	//console.log("setImage " + this.id);
 	var size = 26;
 	var t = document.createElement("canvas");
 		t.width = this.size*2;
@@ -622,7 +618,7 @@ Mixed.prototype.setImage = function(){
 }
 
 Mixed.prototype.setPatrolImage = function(){
-	console.log("setPatrolImage " + this.id);
+	//console.log("setPatrolImage " + this.id);
 	var size = 26;
 	var t = document.createElement("canvas");
 		t.width = this.size*2;

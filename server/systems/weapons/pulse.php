@@ -31,7 +31,7 @@ class LightPulse extends Pulse {
 	public $reload = 2;
 	public $integrity = 24;
 	public $powerReq = 2;
-	public $traverse = -3;
+	public $traverse = 1;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -52,7 +52,7 @@ class MediumPulse extends Pulse {
 	public $reload = 3;
 	public $integrity = 40;
 	public $powerReq = 4;
-	public $traverse = -1;
+	public $traverse = 3;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -73,7 +73,7 @@ class HeavyPulse extends Pulse {
 	public $reload = 4;
 	public $integrity = 64;
 	public $powerReq = 6;
-	public $traverse = 1;
+	public $traverse = 5;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -93,7 +93,7 @@ class PulseFusionCannon extends Pulse {
 	public $reload = 3;
 	public $integrity = 36;
 	public $powerReq = 4;
-	public $traverse = -1;
+	public $traverse = 3;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
@@ -143,7 +143,7 @@ class MediumPlasmaPulse extends LightPlasmaPulse {
 	public $reload = 3;
 	public $integrity = 40;
 	public $powerReq = 4;
-	public $traverse = -1;
+	public $traverse = 3;
 
 	public $effiency = 3;
 
@@ -165,7 +165,7 @@ class HeavyPlasmaPulse extends MediumPlasmaPulse {
 	public $reload = 4;
 	public $integrity = 64;
 	public $powerReq = 6;
-	public $traverse = 1;
+	public $traverse = 5;
 
 	public $effiency = 4;
 
@@ -188,7 +188,7 @@ class LightEMPulse extends LightPulse {
 	public $reload = 1;
 	public $integrity = 24;
 	public $powerReq = 3;
-	public $traverse = -3;
+	public $traverse = 1;
 
 	public $em = 1;
 	public $dmgType = "EM";

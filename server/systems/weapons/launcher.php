@@ -9,7 +9,6 @@ class Launcher extends Weapon {
 	public $loads = array();
 	public $reload = 3;
 	public $ammo = -1;
-	public $integrity = 44;
 	public $capacity = array();
 	public $launchRate = array();
 	public $powerReq = 2;
@@ -17,8 +16,9 @@ class Launcher extends Weapon {
 	public $shots = 0;
 	public $accDecay = 0;
 
-	function __construct($id, $parentId, $start, $end, $width){
+	function __construct($id, $parentId, $start, $end, $integrity, $width){
         parent::__construct($id, $parentId, $start, $end, 0, $width);
+        $this->integrity = $integrity;
 		$this->notes = array("Unaffected by Offensive EW", "Flat 80% base 
 			chance to hit target", "Ballistics follow weapon-level tracking rules", "Ballistics can be spoofed by target DEW");
 	}
@@ -49,8 +49,8 @@ class MissileLauncher extends Launcher {
 	public $display = "Missile Launcher";
 	public $loadout = 1;
 
-	function __construct($id, $parentId, $start, $end, $loads, $width = 1){
-        parent::__construct($id, $parentId, $start, $end, $width);
+	function __construct($id, $parentId, $start, $end, $integrity, $loads, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $integrity, $width);
 
 		for ($i = 0; $i < sizeof($loads); $i++){
 			$this->loads[] = new $loads[$i][0]($this->id, -1);
@@ -78,13 +78,9 @@ class MissileLauncher extends Launcher {
 class TorpedoLauncher extends MissileLauncher {
 	public $name = "TorpedoLauncher";
 	public $display = "Torpedo Launcher";
-	//public $loadout = 0;
 	public $powerReq = 4;
 
-	function __construct($id, $parentId, $start, $end, $loads, $width = 1){
-        parent::__construct($id, $parentId, $start, $end, $loads, $width);
-        return;
-        $this->ammo = 0;
-        $this->output = $this->capacity[$this->ammo];
+	function __construct($id, $parentId, $start, $end, $integrity, $loads, $width = 1){
+        parent::__construct($id, $parentId, $start, $end, $integrity, $loads, $width);
 	}
 }

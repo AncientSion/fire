@@ -323,7 +323,7 @@ table, th, tr, td {
 }
 
 #launchRate, #capacity, #reload {
-	color: #27e627;
+	color: yellow;
 }
 
 #hangarDiv, #weaponDiv, #crewDiv {
@@ -1031,7 +1031,7 @@ div.integrityFull {
 }
 
 .notesHeader {
-	border-top: 1px solid white;
+	border-top: 1px solid red;
 }
 
 .notesEntry {
@@ -1245,7 +1245,7 @@ div.integrityFull {
 
 .shipDiv .header {
 	display: inline-block;
-	width: 190px;
+	width: 205px;
 	margin: auto;
 	padding: 0 0 0 0;
 	border: 1px solid white;
@@ -1271,7 +1271,7 @@ div.integrityFull {
 }
 
 .shipDiv .iconContainer {
-	width: 100px;
+	width: 80px;
 	border: 1px solid white;
 }
 
@@ -1387,10 +1387,11 @@ div.integrityFull {
 	z-index: 50;
 	width: 240px;
 	position: absolute;
-	border: 4px solid #1effa2;
+	border: 4px solid red;
 	border-collapse: collapse;
 	background-color: black;
 	padding: 2px;
+	border-radius: 5px;
 }
 
 #sysDiv table {
@@ -1401,6 +1402,18 @@ div.integrityFull {
 #sysDiv th {
 	font-size: 14px;
 	color: #ffeb3e;
+}
+
+#sysDiv td {
+	color: white;
+}
+
+tr.rowBorderTop {
+	border-top: 1px solid red;
+}
+
+tr.rowBorderBottom {
+	border-bottom: 1px solid red;
 }
 
 .negative {
@@ -1663,10 +1676,8 @@ input[type=button].inactive:hover, input[type=submit].inactive:hover {
 
 #totalRequestCost {
 	font-size: 20px;
-	color: #27e627;
-	float: right;
-	width: 50px;
-	margin-right: 10px;
+	padding: 6px;
+	width: 100%;
 	text-align: center;
 }
 
@@ -1746,8 +1757,8 @@ input[type=button].inactive:hover, input[type=submit].inactive:hover {
 }
 
 .squad .coreContainer .info {
-	width: 50px;
-	height: 50px;
+	width: 45px;
+	height: 45px;
 }
 
 .jumpOut {

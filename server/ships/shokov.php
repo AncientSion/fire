@@ -24,11 +24,11 @@ class Shokov extends Shokos {
 		$structs[] = $front;
 
 		$right = new Section(60, 180);
-		$right->systems[] = new TorpedoLauncher($this->getId(), $this->parentId, 315, 45, array(array("Vran", 8, 2)));
+		$right->systems[] = new TorpedoLauncher($this->getId(), $this->parentId, 315, 45, 0, array(array("Vran", 8, 2)));
 		$structs[] = $right;
 
 		$left = new Section(180, 300);
-		$left->systems[] = new TorpedoLauncher($this->getId(), $this->parentId, 315, 45, array(array("Vran", 8, 2)));
+		$left->systems[] = new TorpedoLauncher($this->getId(), $this->parentId, 315, 45, 0, array(array("Vran", 8, 2)));
 		$structs[] = $left;
 
 		for ($i = 0; $i < sizeof($structs); $i++){

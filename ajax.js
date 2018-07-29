@@ -11,9 +11,7 @@ window.ajax = {
 					userid: userid
 					},
 			success: function(data){
-				if (!JSON.parse(data)){
-					window.location = "lobby.php"; return;
-				}
+				if (!JSON.parse(data)){window.location = "lobby.php"; return;}
 				console.log("success");
 				init(JSON.parse(data));
 			},
