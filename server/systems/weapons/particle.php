@@ -114,7 +114,7 @@ class SuperHeavyParticle extends HeavyParticle {
 	public $reload = 6;
 	public $integrity = 74;
 	public $powerReq = 8;
-	public $traverse = 6;
+	public $traverse = 5;
 	public $effiency = 4;
 
 	public $animColor = "orange";

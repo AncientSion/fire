@@ -401,7 +401,7 @@
 		}
 
 		public function processInitialBuy($userid, $gameid, $units, $rem, $faction){
-			Debug::log("processInitialBuy s:".sizeof($units));
+			//Debug::log("processInitialBuy s:".sizeof($units));
 			$this->insertUnits($userid, $gameid, $units);
 			$this->insertLoads($userid, $gameid, $units);
 			$this->setReinforceFaction($userid, $gameid, $faction);
@@ -476,7 +476,7 @@
 
 
 			$sql = "SELECT * FROM units where id = ".$id;
-			Debug::log($sql);
+			//Debug::log($sql);
 			$result = $this->query($sql);
 		}
 
@@ -585,8 +585,8 @@
 					continue;
 				}
 				else {
-					Debug::log($stmt->errorCode());
-					Debug::log("ERROR insertUnits");
+					//Debug::log($stmt->errorCode());
+					//Debug::log("ERROR insertUnits");
 					return false;
 				}
 			}
@@ -625,7 +625,7 @@
 		}
 
 		public function updateSystemLoad($data){
-			Debug::log("updateSystemLoad: ".sizeof($data));
+			//Debug::log("updateSystemLoad: ".sizeof($data));
 			$stmt = $this->connection->prepare("
 				UPDATE loads
 				SET amount = amount - :amount
@@ -653,7 +653,7 @@
 		}
 
 		public function insertLoads($userid, $gameid, &$units){
-			Debug::log("insertLoads: ".sizeof($units));
+			//Debug::log("insertLoads: ".sizeof($units));
 			$stmt = $this->connection->prepare("
 				INSERT INTO loads 
 					(shipid, systemid, name, amount)
@@ -692,7 +692,7 @@
 		}	
 
 		public function insertReinforcements($gameid, $turn, $data){
-			Debug::log("insertReinforcements: ".sizeof($data));
+			//Debug::log("insertReinforcements: ".sizeof($data));
 			$stmt = $this->connection->prepare("
 				INSERT INTO units 
 					(gameid, userid, ship, ball, name, display, status, available, destroyed, delay, turn, phase, notes)

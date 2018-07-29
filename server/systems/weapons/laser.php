@@ -228,7 +228,7 @@ class NeutronLaser extends Laser {
 	public $effiency = 3;
 	public $maxBoost = 1;
 	public $integrity = 52;
-	public $traverse = 4;
+	public $traverse = 3;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
