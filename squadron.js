@@ -905,8 +905,6 @@ Squadron.prototype.getPurchaseHeader = function(){
 	var names = [];
 	var amount = [];
 
-
-
 	for (var i = 0; i < this.structures.length; i++){
 		var found = 0;
 
@@ -924,11 +922,14 @@ Squadron.prototype.getPurchaseHeader = function(){
 		}
 	}
 
-
-	var	ret = "<span>Squadron (";
+	var	ret = "</br><span style='font-size: 12px'>";
 	for (var j = 0; j < names.length; j++){
-		ret += (amount[j] + "x " + names[j] + ", ");
+		ret += (amount[j] + "x " + names[j] + "</br>");
 	}
 
-	return ret.substr(0, ret.length-2) + ")</span>";
+	ret = ret.substr(0, ret.length-3) + ")</span>";
+
+	return "<span style='font-size: 16px;'>Squadron</span>" + (this.display ? "<span class='green'> -- " + this.display + " -- </span>" : "") + ret;
+
+
 }

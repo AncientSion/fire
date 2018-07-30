@@ -133,36 +133,31 @@ else {
 					<div>
 						<table id="shipsBoughtTable">
 							<tr>
-								<th colSpan=4 style="font-size: 20px">
+								<th colSpan=5 style="font-size: 20px">
 									Fleet Overview
 								</th>
 							</tr>
 							<tr style="height: 10px">
-								<td width=10%>								
-								</td>
-								<td width=75%>									
-								</td>
-								<td width=15%>
-								</td>
-								<td width=15%>
+								<td class="icon"></td>
+								<td class="icon"></td>
+								<td></td>
+								<td width=55px></td>
+								<td class="icon"></td>
+							</tr>
+							<tr style="height: 10px"><th colSpan=5></th></tr>
+							<tr>
+								<td colSpan=5 id="focusGain">
 								</td>
 							</tr>
 							<tr>
-								<th style="padding: 10px;" colSpan=4>
+								<th colSpan=5>
 									<span id="remPV">
 									</span>
 								</th>
 							</tr>
+							<tr style="height: 10px"><th colSpan=5></th></tr>
 							<tr>
-								<td colSpan=4 id="focusGain">
-								</td>
-							</tr>
-							<tr style="height: 10px">
-								<th colSpan=4>
-								</th>
-							</tr>
-							<tr>
-								<th colSpan=4>
+								<th colSpan=5>
 									<input type="button" style="font-size: 20px" onclick="game.tryConfirmFleet()" value="Confirm Fleet Selection">
 								</th>
 							</tr>
@@ -317,8 +312,8 @@ else {
 						//console.log("confirmRefit");
 						//console.log($(unit.tr).html());
 						$(unit.tr).removeClass("selected").find("td").each(function(i){
-							if (i == 1){$(this).html(unit.getPurchaseHeader())}
-							else if (i == 2){$(this).html(unit.totalCost)}
+							if (i == 2){$(this).html(unit.getPurchaseHeader())}
+							else if (i == 3){$(this).html(unit.totalCost)}
 						})
 						this.refit = 0;
 					}
@@ -328,7 +323,7 @@ else {
 						game.purchases++;
 
 						var tr = $("<tr>")
-							.css("padding", 5)
+							.addClass("purchase")
 							.data("purchaseId", game.shipsBought[game.shipsBought.length-1].purchaseId)
 							//.hover(function(e){
 							//	$(this).toggleClass("highlight");
@@ -341,25 +336,37 @@ else {
 							})
 							.append($("<td>")
 								.append($("<img>")
-									.addClass("size20").attr("src", "varIcons/undo.png")
+									.addClass("size20").attr("src", "varIcons/cmd.png").hide()))
+							.append($("<td>")
+								.append($("<img>")
+									.addClass("size20").attr("src", "varIcons/refit.png")
 									.click(function(e){
 										e.preventDefault(); e.stopPropagation();
-										game.setAsCommand($(this).parent().parent().data("purchaseId"));
 										game.getPurchasedUnit($(this).parent().parent().data("purchaseId")).doRefit();
-									})))
-							.append($("<td>").html(unit.getPurchaseHeader(unit)))
+									}))
+									.hover(function(){
+										$(this).toggleClass("hover")
+									}))
+							.append($("<td>")
+								.html(unit.getPurchaseHeader(unit))
+								.click(function(e){
+									e.preventDefault(); e.stopPropagation();
+									game.setAsCommand($(this).parent().data("purchaseId"));
+								}))
 							.append($("<td>").html(unit.totalCost))
 							.append($("<td>")
 								.append($("<img>")
 									.addClass("size20").attr("src", "varIcons/undo.png")
 									.click(function(e){
-									e.preventDefault(); e.stopPropagation();
+										e.preventDefault(); e.stopPropagation();
 										game.removeUnit($(this).parent().parent().data("purchaseId"));
-									})))
+									}))
+									.hover(function(){
+										$(this).toggleClass("hover")
+									}))
 
 						game.shipsBought[game.shipsBought.length-1].tr = tr;
-
-						$("#shipsBoughtTable tr").eq(-4).before(tr);
+						$("#shipsBoughtTable tr").eq(-5).before(tr);
 					}
 
 
@@ -452,8 +459,8 @@ else {
 					for (let i = 0; i < game.shipsBought.length; i++){
 						if (game.shipsBought[i].purchaseId == purchaseId){
 							game.shipsBought[i].command = 1;
-							$(game.shipsBought[i].tr).find("td").first().addClass("commandActive");
-						} else $(game.shipsBought[i].tr).find("td").first().removeClass("commandActive");
+							$(game.shipsBought[i].tr).find("td").first().find("img").show();
+						} else $(game.shipsBought[i].tr).find("td").first().find("img").hide();
 					}
 
 					this.setFocusGain();
@@ -768,9 +775,7 @@ else {
 
 		var purchase = game.purchases;
 
-		if (game.refit){
-			purchase = unit.purchaseId;
-		}
+		if (game.refit){purchase = unit.purchaseId;}
 
 		$.ajax({
 			type: "GET",
@@ -813,12 +818,12 @@ else {
 	}
 
 	function doShowShipDiv(unit){
-		if (unit.squad){$(unit.element).find(".ep").html("0 / 0");}
+		if (unit.squad){$(unit.element).find(".ep").html("0 / 0").end().find(".profile").html("");}
 		aUnit = unit.id;
 
 		$("#game").show();
 		$(unit.element)
-			.css("left", "450px").css("top", "240px").removeClass("disabled")
+			.css("left", "450px").css("top", Math.max(240, $("#fleetInfo").height()+30)).removeClass("disabled")
 			.find(".structContainer").show();
 
 		addNamingDiv(unit);

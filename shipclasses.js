@@ -4410,5 +4410,5 @@ Ship.prototype.enableMissionMode = function(){
 }
 
 Ship.prototype.getPurchaseHeader = function(){						
-	return "<span>" + this.name + "</span>" + (this.display ? "<span class='green'> -- " + this.display + " -- </span>" : "<span class='green'></span>");
+	return "<span style='font-size: 16px;'>" + this.name + "</span>" + (this.display ? "<span class='green'> -- " + this.display + " -- </span>" : "<span class='green'></span>");
 }
