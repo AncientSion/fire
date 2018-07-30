@@ -430,6 +430,12 @@ table, th, tr, td {
 	font-size: 14px;
 }
 
+
+#shipsBoughtTable tr.selected {
+	border: 1px solid yellow;
+	dbox-shadow: inset 0 0 0.5em 0.5em #27e627;
+}
+
 #factionDiv {
 	display: inline-block;
 	vertical-align: top;

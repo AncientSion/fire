@@ -1955,7 +1955,7 @@ function Game(data){
 			else if (game.animFlight){
 				//console.log("flight done -> salvo moves");
 				game.timeout = setTimeout(function(){
-					game.endMoveSubPhase();
+				//	game.endMoveSubPhase();
 					game.animFlight = 0; game.animSalvo = 1;
 					game.animateUnitMovement();
 				}, time);

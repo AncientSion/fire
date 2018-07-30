@@ -81,9 +81,11 @@ function Ship(data){
 }
 Ship.prototype.doRefit = function(){
 	//if (!this.ship){return;}
-	console.log("doRefit");
+	//console.log("doRefit");
 	console.log(this);
+	if (game.refit){$(game.getUnit(game.refit).tr).removeClass("selected");}
 	game.refit = this.id;
+	$(this.tr).addClass("selected");
 	$(".shipDiv").remove();
 	if (this.squad){
 		for (var i = 0; i < this.structures.length; i++){
@@ -846,7 +848,7 @@ Ship.prototype.hasPlannedMoves = function(){
 }
 
 Ship.prototype.canTurnFreely = function(){
-	if (game.phase == -1 && this.available == game.turn && this.actions.length == 1){return true;}
+	//if (game.phase == -1 && this.available == game.turn && this.actions.length == 1){return true;}
 	if (this.actions.length && this.actions[0].type == "deploy" && this.actions[0].turn == game.turn && this.actions[0].resolved == 0){
 		if (game.turn == 1 || (this.available > game.turn)){return true;}
 	}
@@ -4405,4 +4407,8 @@ Ship.prototype.disableMissionMode = function(){
 Ship.prototype.enableMissionMode = function(){
 	game.flightDeploy = 1;
 	$(this.element).find(".missionOption").removeClass("disabled");
+}
+
+Ship.prototype.getPurchaseHeader = function(){						
+	return "<span>" + this.name + "</span>" + (this.display ? "<span class='green'> -- " + this.display + " -- </span>" : "<span class='green'></span>");
 }

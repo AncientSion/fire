@@ -33,10 +33,10 @@ if (isset($_SESSION["userid"])){
 	$element .= "<th colSpan=2 style='font-size: 22px;'>".$game["name"]."</th>";
 	$element .= "</tr>";
 	$element .= "<tr>";
-	$element .= "<th colSpan=2 style='font-size: 16px;'>".$game["pv"]." points for starting fleet</br>".$game["reinforce"]." for reinforcements @ turn ".$game["reinforceTurn"]." - ETA ".$game["reinforceETA"]."</th>";
+	$element .= "<th colSpan=2 style='font-size: 16px;'>".$game["pv"]." Initial point value</br>".$game["reinforce"]." Reinforcement point value @ turn ".$game["reinforceTurn"]." - ETA ".$game["reinforceETA"]."</th>";
 	$element .= "</tr>";
 
-	$element .= "<tr style='height: 20px;'><td colSpan=2></td></tr>";
+	$element .= "<tr style='height: 10px;'><td colSpan=2></td></tr>";
 
 	$element .= "<tr style='border-bottom: 1px solid white'>";
 	$element .= "<th width='80%'>Player Name</th>";
@@ -130,33 +130,39 @@ else {
 		<table id="fleetInfo">
 			<tr>
 				<td>
-					<div id="reinforceFaction" class="disabled"></div>
 					<div>
 						<table id="shipsBoughtTable">
 							<tr>
-								<th width=10%>
-								</th>
-								<th width=75%>
-								</th>
-								<th width=15%>
+								<th colSpan=4 style="font-size: 20px">
+									Fleet Overview
 								</th>
 							</tr>
+							<tr style="height: 10px">
+								<td width=10%>								
+								</td>
+								<td width=75%>									
+								</td>
+								<td width=15%>
+								</td>
+								<td width=15%>
+								</td>
+							</tr>
 							<tr>
-								<th colSpan=3>
+								<th style="padding: 10px;" colSpan=4>
 									<span id="remPV">
 									</span>
 								</th>
 							</tr>
 							<tr>
-								<th colSpan=3 id="focusGain">
-								</th>
+								<td colSpan=4 id="focusGain">
+								</td>
 							</tr>
 							<tr style="height: 10px">
-								<th colSpan=3>
+								<th colSpan=4>
 								</th>
 							</tr>
 							<tr>
-								<th colSpan=3>
+								<th colSpan=4>
 									<input type="button" style="font-size: 20px" onclick="game.tryConfirmFleet()" value="Confirm Fleet Selection">
 								</th>
 							</tr>
@@ -301,48 +307,59 @@ else {
 					} else if (cur + add > max){
 						popup("You have insufficient point value left");
 					}
-					else {this.doConfirmPurchase(unit);}
+					else {this.doConfirmUnitPurchase(unit);}
 				},
 
-				doConfirmPurchase: function(unit){
+				doConfirmUnitPurchase: function(unit){
 					unit.display = $("#nameWrapper").find("input").val();
 
-					if (!this.refit){;
+					if (this.refit){
+						//console.log("confirmRefit");
+						//console.log($(unit.tr).html());
+						$(unit.tr).removeClass("selected").find("td").each(function(i){
+							if (i == 1){$(this).html(unit.getPurchaseHeader())}
+							else if (i == 2){$(this).html(unit.totalCost)}
+						})
+						this.refit = 0;
+					}
+					else {
 						unit.purchaseId = game.purchases;
-
 						game.shipsBought.push(unit);
 						game.purchases++;
 
 						var tr = $("<tr>")
+							.css("padding", 5)
 							.data("purchaseId", game.shipsBought[game.shipsBought.length-1].purchaseId)
-							.hover(function(e){
-								$(this).toggleClass("highlight");
-							})
+							//.hover(function(e){
+							//	$(this).toggleClass("highlight");
+							//})
 							.contextmenu(function(e){
 								e.preventDefault(); e.stopPropagation();
-								game.removeUnit($(this));
 							})
 							.click(function(e){
 								e.preventDefault(); e.stopPropagation();
-								game.getPurchasedUnit($(this).data("purchaseId")).doRefit();
-								game.setAsCommand($(this));
 							})
-							.append($("<td>").html(""))
-							.append($("<td>").html(game.getRowHeader(unit)))
+							.append($("<td>")
+								.append($("<img>")
+									.addClass("size20").attr("src", "varIcons/undo.png")
+									.click(function(e){
+										e.preventDefault(); e.stopPropagation();
+										game.setAsCommand($(this).parent().parent().data("purchaseId"));
+										game.getPurchasedUnit($(this).parent().parent().data("purchaseId")).doRefit();
+									})))
+							.append($("<td>").html(unit.getPurchaseHeader(unit)))
 							.append($("<td>").html(unit.totalCost))
+							.append($("<td>")
+								.append($("<img>")
+									.addClass("size20").attr("src", "varIcons/undo.png")
+									.click(function(e){
+									e.preventDefault(); e.stopPropagation();
+										game.removeUnit($(this).parent().parent().data("purchaseId"));
+									})))
 
 						game.shipsBought[game.shipsBought.length-1].tr = tr;
 
 						$("#shipsBoughtTable tr").eq(-4).before(tr);
-					}
-					else {
-						console.log("confirmRefit");
-						//console.log($(unit.tr).html());
-						$(unit.tr).find("td").each(function(i){
-							if (i == 1){$(this).html(game.getRowHeader(unit))}
-							else if (i == 2){$(this).html(unit.totalCost)}
-						})
-						this.refit = 0;
 					}
 
 
@@ -368,9 +385,10 @@ else {
 					}
 				},
 
-				removeUnit: function(ele){
-					var purchaseId = $(ele).data("purchaseId");
-
+				removeUnit: function(purchaseId){
+					if (game.refit == purchaseId){
+						game.refit = 0;
+					}
 					for (let i = game.shipsBought.length-1; i >= 0; i--){
 						if (game.shipsBought[i].purchaseId == purchaseId){
 							$(game.shipsBought[i].tr).remove();
@@ -424,7 +442,7 @@ else {
 					ajax.confirmFleetPurchase(playerid, gameid, data, redirect);
 				},
 
-				setAsCommand: function(ele){
+				setAsCommand: function(purchaseId){
 					for (let i = 0; i < game.shipsBought.length; i++){
 						if (game.shipsBought[i].command){
 							game.shipsBought[i].command = 0;
@@ -432,10 +450,10 @@ else {
 					}
 
 					for (let i = 0; i < game.shipsBought.length; i++){
-						if (game.shipsBought[i].purchaseId == $(ele).data("purchaseId")){
+						if (game.shipsBought[i].purchaseId == purchaseId){
 							game.shipsBought[i].command = 1;
-							$(game.shipsBought[i].tr).find("td").first().html("<span class='yellow'>CMD</span>");
-						} else $(game.shipsBought[i].tr).find("td").first().empty();
+							$(game.shipsBought[i].tr).find("td").first().addClass("commandActive");
+						} else $(game.shipsBought[i].tr).find("td").first().removeClass("commandActive");
 					}
 
 					this.setFocusGain();
@@ -456,7 +474,7 @@ else {
 					var unit = this.getCommandUnit();
 					if (unit){
 						var gain = this.getCommandUnit().getFocusIfCommand();
-						$("#focusGain").html("Focus per Turn: " + (unit.baseFocusRate + unit.modFocusRate) + " %  / " + gain);
+						$("#focusGain").html("Focus: " + (unit.baseFocusRate + unit.modFocusRate) + " %  / " + gain + " points per Turn");
 					}
 					else $("#focusGain").html("");
 				},
@@ -468,20 +486,6 @@ else {
 					for (let i = 0; i < this.ballistics.length; i++){
 						if (this.ballistics[i].name == name){return this.ballistics[i];}
 					}
-				},
-				
-				getRowHeader: function(unit){
-					var ret;
-
-					if (unit.ship){ret = "<span>" + unit.name + "</span>";}
-					else {
-						ret = "<span>Squadron (";
-						for (var i = 0; i < unit.structures.length; i++){ret +=  unit.structures[i].name + "/";}
-							ret = ret.substr(0, ret.length-1) + ")</span>";
-					}
-					return ret + (unit.display ? "<span class='green'> -- " + unit.display + " -- </span>" : "<span class='green'></span>");
-
-
 				},
 
 				getUnit: function(id){
@@ -738,6 +742,7 @@ else {
 
 	function requestBaseUnitData(name){
 		//console.log("requestBaseUnitData");
+		if (game.refit){$(game.getUnit(game.refit).tr).removeClass("selected");}
 		game.refit = 0;
 		$.ajax({
 			type: "GET",

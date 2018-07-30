@@ -900,3 +900,35 @@ Squadron.prototype.getCurrentMorale = function(){
 Squadron.prototype.getCrewBaseCost = function(i){
 	return Math.floor(this.structures.map(x => x.cost).reduce((l,r) => l+r, 0)/12);
 }
+
+Squadron.prototype.getPurchaseHeader = function(){
+	var names = [];
+	var amount = [];
+
+
+
+	for (var i = 0; i < this.structures.length; i++){
+		var found = 0;
+
+		for (var j = 0; j < names.length; j++){
+			if (this.structures[i].name == names[j]){
+				found = 1;
+				amount[j]++;
+				break;
+			}
+		}
+
+		if (!found){
+			names.push(this.structures[i].name);
+			amount.push(1);
+		}
+	}
+
+
+	var	ret = "<span>Squadron (";
+	for (var j = 0; j < names.length; j++){
+		ret += (amount[j] + "x " + names[j] + ", ");
+	}
+
+	return ret.substr(0, ret.length-2) + ")</span>";
+}
