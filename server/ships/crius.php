@@ -3,7 +3,7 @@
 class Crius extends Light {
 	public $name = "Crius";
 	public $display = "Crius";
-	public $role = "Light Support Frigate";
+	public $role = "Medium Patrol Frigate";
 	public $faction = "Earth Alliance";
 	public static $value = 290;
 	public $mass = 1400;

@@ -437,8 +437,6 @@ table, th, tr, td {
 #shipsBoughtTable tr.purchase {
 	padding-top: 5px;
 	padding-bottom: 5px;
-	border-top: 1px solid white;
-	border-bottom: 1px solid white;
 }
 
 #shipsBoughtTable td.hover {
@@ -446,9 +444,7 @@ table, th, tr, td {
 }
 
 #shipsBoughtTable tr.purchase.selected {
-	border-top: 1px solid yellow;
-	border-bottom: 1px solid yellow;
-	dbox-shadow: inset 0 0 0.5em 0.5em #27e627;
+	color: yellow;
 }
 
 #factionDiv {
@@ -968,6 +964,9 @@ div.integrityAmount {
 
 .armour div.integrityAmount {
 	top: 0;
+}
+.armour div.integrityAmount span {
+	font-size: 16px;
 }
 
 .struct div.integrityAmount {
@@ -1835,58 +1834,61 @@ input[type=button].inactive:hover, input[type=submit].inactive:hover {
 	width: 140px;
 }
 
-#weaponAimTableWrapper {
+#aimDiv {
 	background-color: black;
 	border-radius: 5px;
-	border: 2px solid white;
+	border: 1px solid white;
 	z-index: 30;
-	padding: 3 3 3 3;
+	padding: 2 2 2 2;
 	position: absolute;
-	width: 500px;
+	width: 420px;
 }
 
-#weaponAimTableWrapper.disabled {
+#aimDiv.disabled {
 	display: none;
 }
 
 #weaponInfo {
+	margin-top: 10px;
 	position: relative;
 }
 
-#targetInfo, #weaponInfo {
-	border: 1px solid white;
-	color: white;
-	z-index: 10;
-	margin: auto;
-	border-collapse: collapse;
+#aimDiv table {
 	width: 100%;
 }
 
-#targetInfo {
-	margin-bottom: 25px;
-}
-
-#targetInfo tr, #weaponInfo tr {
-}
-
-.final {
-	font-weight: bold;
-	font-size: 18px;
-	color: yellow;
-	display: inline-block;
-	margin-left: 10px;
-}
-
-#targetInfo th, #weaponInfo th {
+#aimDiv thead {
 	text-align: center;
 	background-color: #c9c9c9;
 	color: black;
 	font-size: 14px;
 }
 
+#targetInfo {
+	margin-bottom: 10px;
+}
+
 #targetInfo td {
-	padding: 8px;
+	padding: 5px;
 	font-size: 14px;
+}
+
+.final div {
+	display: inline;
+	font-size: 18px;
+}
+
+.final div:nth-child(1) {
+	width: 30%;
+	float: left;
+	text-align: right;
+}
+
+.final div:nth-child(2) {
+	width: 40%;
+	float: right;
+	color: yellow;
+	text-align: center;
 }
 
 #deployOverlay {

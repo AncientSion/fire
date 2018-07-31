@@ -41,8 +41,8 @@ class GSten extends Heavy {
 		$structs[] = $aft;
 
 		$left = new Structure($this->getId(), $this->id, 210, 330, 800, 16);
-		$left->systems[] = new MediumLaser($this->getId(), $this->id, 255, 15);
-		$left->systems[] = new MediumLaser($this->getId(), $this->id, 255, 15);
+		$left->systems[] = new MediumLaser($this->getId(), $this->id, 245, 5);
+		$left->systems[] = new MediumLaser($this->getId(), $this->id, 245, 5);
 		$left->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 180, 360);
 		$left->systems[] = new LightPlasmaPulse($this->getId(), $this->id, 180, 360);
 		$structs[] = $left;

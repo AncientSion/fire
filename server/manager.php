@@ -256,7 +256,7 @@
 	}
 
 	public function shiftToIncoming($unit){
-		Debug::log("shifting");
+		//Debug::log("shifting");
 		$this->incoming[] = array(
 			"id" => $unit->id, "userid" => $unit->userid, "available" => $unit->available, "name" => $unit->name,
 				"x" => $unit->actions[0]->x, "y" => $unit->actions[0]->y, "a" => $unit->actions[0]->a
@@ -333,7 +333,7 @@
 	}
 
 	public function assembleUnits(){
-		Debug::log("assembleUnits");
+		//Debug::log("assembleUnits");
 		$db =  DBManager::app()->getActiveUnits($this->gameid, $this->turn); 
 		$units = array();
 

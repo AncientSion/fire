@@ -73,45 +73,35 @@ class LightPlasma extends Plasma {
 	}
 }
 
-class MediumPlasma extends Plasma {
+class MediumPlasma extends LightPlasma {
 	public $name = "MediumPlasma";
 	public $display = "Medium Plasma Cannon";
 	public static $prio = 0;
-	public $minDmg = 48;
-	public $maxDmg = 66;
-	public $accDecay = 120;
-	public $dmgLoss = 8;
-	public $shots = 1;
+	public $minDmg = 54;
+	public $maxDmg = 70;
 	public $projSize = 3;
-	public $projSpeed = 6;
 	public $reload = 2;
 	public $integrity = 48;
-	public $traverse = 3;
+	public $traverse = 4;
 	public $powerReq = 5;
-	public $maxBoost = 2;
-	public $effiency = 3;
+	public $effiency = 2;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){
         parent::__construct($id, $parentId, $start, $end, $output, $width);
 	}
 }
 
-class HeavyPlasma extends Plasma {
+class HeavyPlasma extends MediumPlasma {
 	public $name = "HeavyPlasma";
 	public $display = "Heavy Plasma Cannon";
 	public static $prio = 0;
 	public $minDmg = 75;
 	public $maxDmg = 98;
 	public $accDecay = 120;
-	public $dmgLoss = 6;
-	public $shots = 1;
 	public $projSize = 4;
-	public $projSpeed = 5;
-	public $reload = 3;
 	public $integrity = 64;
-	public $traverse = 1;
-	public $powerReq = 9;
-	public $maxBoost = 3;
+	public $traverse = 5;
+	public $powerReq = 8;
 	public $effiency = 3;
 
 	function __construct($id, $parentId, $start, $end, $output = 0, $width = 1){

@@ -2261,7 +2261,7 @@ Weapon.prototype.select = function(e){
 		unit.highlightAllSelectedWeapons();
 	}
 	else {
-		$("#weaponAimTableWrapper").hide();
+		$("#aimDiv").hide();
 		game.mode = 1;
 		fxCtx.clearRect(0, 0, res.x, res.y);
 	}
@@ -2301,14 +2301,14 @@ Weapon.prototype.getSysDiv = function(){
 	var table = document.createElement("table");
 	
 	$(table).append($("<tr>").append($("<th>").html(this.display).attr("colSpan", 2)));
-	$(table).append($("<tr>").append($("<td>").html("Firing Mode").css("width", "55%")).append($("<td>").html(this.fireMode)));
+	$(table).append($("<tr>").append($("<td>").html("Firing Mode").css("width", "50%")).append($("<td>").html(this.fireMode)));
 	$(table).append($("<tr>").append($("<td>").html("Damage Type")).append($("<td>").html(this.dmgType)));
 
 
 	if (!this.tiny){
 		if (game.getUnit(this.parentId).ship){
 			$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
-			$(table).append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html(this.getEMDmg())));
+			//$(table).append($("<tr>").append($("<td>").html("EM Damage")).append($("<td>").html(this.getEMDmg())));
 			$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
 		}
 		$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
@@ -2360,8 +2360,9 @@ Weapon.prototype.getSysDiv = function(){
 	else if (!(this instanceof Launcher)){
 		if (this.fireMode == "Pulse"){
 			$(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").addClass("shots").html(this.getShots())));
-			$(table).append($("<tr>").append($("<td>").html("Base / Max Hits")).append($("<td>").html(this.basePulses + " / " + (this.basePulses + this.extraPulses))));
-			$(table).append($("<tr>").append($("<td>").html("Bonus Hits")).append($("<td>").html(" +1 per " + this.grouping + "%")));
+			//$(table).append($("<tr>").append($("<td>").html("Base / Max Hits")).append($("<td>").html(this.basePulses + " / " + (this.basePulses + this.extraPulses))));
+			//$(table).append($("<tr>").append($("<td>").html("Bonus Hits")).append($("<td>").html(" +1 per " + this.grouping + "%")));
+			$(table).append($("<tr>").append($("<td>").html("Volley")).append($("<td>").html(this.basePulses + "+1 (max " + (this.basePulses+this.extraPulses) +") per " + this.grouping + "%")))
 		} else $(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").addClass("shots").html(this.getShots())));
 	}
 
@@ -3356,7 +3357,7 @@ Launcher.prototype.select = function(e){
 		ship.highlightAllSelectedWeapons();
 	}
 	else {
-		$("#weaponAimTableWrapper").hide();
+		$("#aimDiv").hide();
 		game.mode = 1;
 		fxCtx.clearRect(0, 0, res.x, res.y);
 	}

@@ -29,7 +29,8 @@ $(document).ready(function(){
 		shortInfo: $("#shortInfo"),
 		doShorten: $("#doShorten"),
 		turnButton: $("#turnButton"),
-		unitSelector: $("#unitSelector")
+		unitSelector: $("#unitSelector"),
+		aimDiv: $("#aimDiv")
 	}
 })
 

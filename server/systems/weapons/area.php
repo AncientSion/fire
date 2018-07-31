@@ -35,7 +35,7 @@ class EnergyMine extends Area {
 	public $maxRange = 1000;
 	public $effiency = 4;
 	public $integrity = 56;
-	public $powerReq = 10;
+	public $powerReq = 6;
 	public $traverse = 1;
 	public $aoe = 65;
 

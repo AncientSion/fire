@@ -29,7 +29,6 @@ function Ship(data){
 	this.baseFocusRate = data.baseFocusRate;
 	this.modFocusRate = data.modFocusRate;
 	this.cc = [];
-	this.mapSelect = 1;
 	this.index = 0;
 
 	this.totalCost = 0;
@@ -1041,7 +1040,7 @@ Ship.prototype.canSetSensor = function(sensor){
 
 Ship.prototype.unselectSystems = function(){
 	fxCtx.clearRect(0, 0, res.x, res.y);
-	$("#weaponAimTableWrapper").hide();
+	$("#aimDiv").hide();
 
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].systems.length; j++){
@@ -2590,15 +2589,14 @@ Ship.prototype.expandDiv = function(div){
 		var structTable = $("<table>").addClass("structTable")
 		structDiv.append(structTable);
 
-
 		var armour = this.structures[i].getTableData();
 
-		if ((game.phase == -1) &&  this.structures[i].getBoostEffect("Armour")){
-			{armour.appendChild(this.structures[i].getBoostDiv())};
+		if ((game.phase == -1) && this.structures[i].getBoostEffect("Armour")){
+			{armour.append(this.structures[i].getBoostDiv())};
 		}
 
 		var tr = document.createElement("tr");
-			tr.appendChild(armour);
+			$(tr).append(armour);
 		structTable.append(tr);
 
 
@@ -2613,31 +2611,31 @@ Ship.prototype.expandDiv = function(div){
 		if (max == 1){
 			if (extraWidth){ // EA
 				if (a == 0 || a == 180){
-					armour.style.width = "40px";
+					armour.css("width", 40);
 				}
 				else {
-					armour.style.width = "50px";
-					armour.style.height = "42px";
+					armour.css("width", 50);
+					armour.css("height", 42);
 				}
 			}
 			else {
 				if (a == 0 || a == 180){
-					armour.style.width = "55px";
+					armour.css("width", 55);
 				}
 				else {
-					armour.style.width = "50px";
+					armour.css("width", 50);
 				}
 			}
 		}
 		else if (max == 2){
 			if (extraWidth){
 				if (a == 0 || a == 180){
-					armour.style.width = "80px";
-					armour.style.height = "25px";
+					armour.css("width", 80);
+					armour.css("height", 25);
 				}
 				else {
-					armour.style.width = "40px";
-					armour.style.height = "42px";
+					armour.css("width", 40);
+					armour.css("height", 42);
 				}
 			}
 		}
@@ -3139,6 +3137,10 @@ Ship.prototype.resetImage = function(){
 
 Ship.prototype.getBaseImage = function(){
 	return graphics.images[this.name.toLowerCase()];
+}
+
+Ship.prototype.getUnitSelectorIcon = function(){
+	return this.getBaseImage();
 }
 
 Ship.prototype.setPreFireImage = function(){

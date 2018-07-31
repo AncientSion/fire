@@ -9,8 +9,7 @@ class Squadron extends Ship {
 	public $baseTurnDelay = 0;
 	public $baseImpulseCost = 0;
 	public $baseImpulse = 1000;
-	public $slipAngle = 1000;
-	public $turnangle = 40;
+	public $turnAngle = 45;
 	public $traverse = 3;
 	public static $space;
 	public $slots = array(0, 10);

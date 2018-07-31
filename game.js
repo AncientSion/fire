@@ -1603,7 +1603,7 @@ function Game(data){
 			}
 		}
 
-		$("#weaponAimTableWrapper").hide()
+		$("#aimDiv").hide()
 		shooter.highlightAllSelectedWeapons();
 	}
 
@@ -2762,7 +2762,7 @@ function Game(data){
 
 			ui.unitSelector
 			.append($("<div>")
-				.append($(this.ships[i].getBaseImage().cloneNode(true)).addClass(className))
+				.append($(this.ships[i].getUnitSelectorIcon().cloneNode(true)).addClass(className))
 				.data("id", this.ships[i].id)
 				.addClass(type)
 				.click(function(e){
@@ -2809,11 +2809,11 @@ function Game(data){
 							if (ship.hasWeaponsSelected()){
 								if (ship.id != vessel.id){
 									handleWeaponAimEvent(ship, vessel, e);
-								}// else $("#weaponAimTableWrapper").hide();
+								}// else $("#aimDiv").hide();
 							}
 						} else {
 							game.target = 0;
-							$("#weaponAimTableWrapper").hide();
+							$("#aimDiv").hide();
 						}
 					},
 					function(e){

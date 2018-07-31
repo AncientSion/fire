@@ -113,7 +113,7 @@ class SuperHeavyParticle extends HeavyParticle {
 	public $shots = 3;
 	public $reload = 6;
 	public $integrity = 74;
-	public $powerReq = 8;
+	public $powerReq = 10;
 	public $traverse = 5;
 	public $effiency = 4;
 

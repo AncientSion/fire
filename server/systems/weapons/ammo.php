@@ -177,7 +177,7 @@ class Myrmidon extends Missile {
 	public $integrity = 10;
 	public $negation = 3;
 	public static $value = 7;
-	public $traverse = 0;
+	public $traverse = 4;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -241,7 +241,7 @@ class Cyclops extends Missile {
 	public $integrity = 10;
 	public $negation = 3;
 	public static $value = 6;
-	public $traverse = 0;
+	public $traverse = 4;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);
@@ -257,7 +257,7 @@ class Titan extends Missile {
 	public $integrity = 14;
 	public $negation = 5;
 	public static $value = 8;
-	public $traverse = 1;
+	public $traverse = 5;
 
 	function __construct($id, $parentId){
 		parent::__construct($id, $parentId);

@@ -263,7 +263,7 @@ class HeavyAntimatterBeamProjector extends Laser {
 	public $accDecay = 50;
 	public $shots = 1;
 	public $reload = 4;
-	public $powerReq = 10;
+	public $powerReq = 14;
 	public $rakes = 4;
 	public $integrity = 62;
 	public $traverse = 5;

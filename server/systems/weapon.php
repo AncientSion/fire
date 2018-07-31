@@ -99,7 +99,7 @@ class Weapon extends System {
 	public function setAntimatterData(){		
 		$this->amBonus = 2;
 		$this->amMax = 30;
-		$this->notes[] = "<span class='yellow'>".$this->amBonus."</span> Points of extra damage for each 1 point of undercutting the required roll";
+		$this->notes[] = "<span class='yellow'>".$this->amBonus."</span> points of extra damage per 1 point of passing the to-hit roll.";
 		$this->notes[] = "Extra damage is capped at <span class='yellow'>".$this->amMax."%</span> of base damage";
 	}
 

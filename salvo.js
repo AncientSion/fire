@@ -352,7 +352,7 @@ Salvo.prototype.supplyAttachDiv = function(div){
 					}
 					else {
 						game.target = 0;
-						$("#weaponAimTableWrapper").hide()
+						$("#aimDiv").hide()
 					}
 				}
 			},

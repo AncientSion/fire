@@ -246,7 +246,7 @@ Structure.prototype.getRemNegation = function(){
 
 Structure.prototype.getArmourString = function(){
 	if (this.boostEffect.length){
-		return this.remNegation + "<span style='color: yellow; font-size: 16px'>+" + (this.getBoostEffect("Armour") * this.getBoostLevel()) + "</span> / " + this.negation;
+		return this.remNegation + "<span style='color: yellow;'>+" + (this.getBoostEffect("Armour") * this.getBoostLevel()) + "</span> / " + this.negation;
 	}
 	return this.remNegation + " / " + this.negation;
 }
@@ -257,24 +257,21 @@ Structure.prototype.setBonusNegation = function(){
 }
 
 Structure.prototype.getTableData = function(){
-	var td = document.createElement("td");
-		td.className = "armour";
-		td.style.height = "25px";
+	var td = $("<td>").addClass("armour").css("height", 25)
 
-	var span = document.createElement("div");
-		span.className = "integrityAmount font16";
-		span.innerHTML = this.getArmourString();
-		td.appendChild(span);
+	var div = $("<div>")
+		.addClass("integrityAmount")
+		.append($("<span>").html(this.getArmourString()))
+	td.append(div);
 
 	var lowerDiv = document.createElement("div");
 		lowerDiv.className = "integrityNow";
 		lowerDiv.style.width =  this.getRemNegation()/this.negation * 100 + "%";
-		td.appendChild(lowerDiv);
+		td.append(lowerDiv);
 		
 	var upperDiv = document.createElement("div");
 		upperDiv.className = "integrityFull";
-		td.appendChild(upperDiv);
-
+		td.append(upperDiv);
 
 	$(td)
 		.data("shipId", this.parentId)

@@ -329,7 +329,7 @@ Squadron.prototype.getSelectedWeapons = function(){
 
 Squadron.prototype.unselectSystems = function(){
 	fxCtx.clearRect(0, 0, res.x, res.y);
-	$("#weaponAimTableWrapper").hide();
+	$("#aimDiv").hide();
 
 	for (var i = 0; i < this.structures.length; i++){
 		for (var j = 0; j < this.structures[i].structures.length; j++){
@@ -696,6 +696,10 @@ Squadron.prototype.getBaseImage = function(){
 	return img;
 }
 
+Squadron.prototype.getUnitSelectorIcon = function(){
+	return this.structures[0].getBaseImage();
+}
+
 Squadron.prototype.isDestroyed = function(){
 	for (var i = 0; i < this.structures.length; i++){
 		if (!this.structures[i].destroyed){
@@ -885,16 +889,6 @@ Squadron.prototype.getDamageMoraleMalus = function(){
 
 	if (!dmg){return ""}
 	return dmg-100 + "%";
-}
-
-
-Squadron.prototype.getCurrentMorale = function(){
-	var base = 100;
-	var cmd = this.command*10;
-	var dmg = this.getDamageMoraleMalus();
-	if (dmg){dmg = Math.floor(dmg.slice(0, dmg.length-1))}
-
-	return Math.floor(base + cmd + dmg);
 }
 
 Squadron.prototype.getCrewBaseCost = function(i){

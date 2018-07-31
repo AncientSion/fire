@@ -92,11 +92,11 @@
 			<img src="varIcons/minus.png" style="width: 25px; height: 25px">
 		</div>
 		<div id="doUndoLastAction" class="ui disabled">
-			<img src="varIcons/destroyed.png" style="width: 25px; height: 25px">
+			<img src="varIcons/undo.png" style="width: 25px; height: 25px">
 		</div>
 		<div id="roll" class="ui disabled">
 			<img src="varIcons/roll.png" style="width: 40px; height: 40px">
-			<img src="varIcons/destroyed.png" style="width: 40px; height: 40px; margin-left: -40px">
+			<img src="varIcons/undo.png" style="width: 40px; height: 40px; margin-left: -40px">
 		</div>
 		<div id="flip" class="ui disabled">
 			<img src="varIcons/flip.png" style="width: 40px; height: 40px">
@@ -223,30 +223,37 @@
 		<div id="shortInfo" class="disabled">
 		</div>
 
-		<div id="weaponAimTableWrapper" class="disabled">
-			<table id="targetInfo">
-				<tr>
-					<th width=20%>Target</th>
-					<th width=20%>Type</th>
-					<th width=20%>Armour</th>
-					<th width=20%>Section</th>
-					<th width=20%>Dist</th>
-				</tr>
-				<tr id="targetData1">
+		<div id="aimDiv" class="disabled">
+			<table style="margin-bottom: 10px">
+				<thead>
+					<tr>
+						<th width=20%>Target</th>
+						<th width=25%>Type</th>
+						<th width=20%>Armour</th>
+						<th width=20%>Section</th>
+						<th width=10%>Dist</th>
+					</tr>
+				</thead>
+				<tr id="targetDataA">
 					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>
 				</tr>
-				<tr>
-					<th>Thrust Mod</th>
-					<th>Lock Mod</th>
-					<th>Mask Mod</th>
-					<th>Base %</th>
-					<th>FINAL</th>
-				</tr>
-				<tr id="targetData2">
+			</table>
+			<table>
+				<thead>
+					<tr>
+						<th width=15%>Speed</th>
+						<th width=15%>Lock</th>
+						<th width=15%>Mask</th>
+						<th width=15%>Profile</th>
+						<th style="width: 10%; background-color: black"></th>
+						<th width=30%>Final Hit Chance</th>
+					</tr>
+				</thead>
+				<tr id="targetDataB">
 					<td></td>
 					<td></td>
 					<td></td>
@@ -255,13 +262,15 @@
 				</tr>
 			</table>
 			<table id="weaponInfo">
-				<tr>
-					<th width=47%>Weapon</th>
-					<th width=10%>Dmg</th>
-					<th width=19%>Tracking</th>
-					<th width=12%>Range</th>
-					<th width=12%>Final</th>
-				</tr>
+				<thead>
+					<tr>
+						<th width=47%>Weapon</th>
+						<th width=10%>Dmg</th>
+						<th width=19%>Tracking</th>
+						<th width=12%>Dist</th>
+						<th width=12%>Estimate</th>
+					</tr>
+				</thead>
 			</table>
 		</div>
 		<div id="combatLogWrapper" class="disabled">
@@ -412,7 +421,7 @@
 
 	function showUI(){
 		$("#mouseCanvas").on("mouseleave", function(){
-			$("#weaponAimTableWrapper").hide();
+			$("#aimDiv").hide();
 		})
 
 		$(".missionOption").mousedown(function(e){

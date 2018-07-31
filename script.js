@@ -83,15 +83,15 @@ function mouseCanvasZoom(e){
 function handleWeaponAimEvent(shooter, target, e, pos){
 
 	if (shooter.userid == target.userid || target && target.isDestroyed()){
-		$("#weaponAimTableWrapper").hide();
+		ui.aimDiv.hide();
 		return;
 	}
 	
 	var shooterPos = shooter.getPlannedPos();
 	var facing = shooter.getPlannedFacing();					
-	var targetData1 = $("#weaponAimTableWrapper").find("#targetInfo").find("#targetData1");
-	var targetData2 = $("#weaponAimTableWrapper").find("#targetInfo").find("#targetData2");
-	var weaponInfo = $("#weaponAimTableWrapper").find("#weaponInfo");
+	var targetDataA = ui.aimDiv.find("#targetDataA");
+	var targetDataB = ui.aimDiv.find("#targetDataB");
+	var weaponInfo = ui.aimDiv.find("#weaponInfo");
 	var dist;
 	var drop = 0;
 	var cc = game.isCloseCombat(shooter, target);
@@ -194,21 +194,22 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 
 			multi = round(multi, 2);
 			final = Math.floor(baseHit * multi);
-			targetData1
+			targetDataA
 				.empty()
-				.append($("<td>").addClass("red").html(target.name + " #" + target.id))
+				.append($("<td>").addClass("red").html(target.name))
 				.append($("<td>").html(getUnitType(target.traverse) + " (" + target.traverse + ")"))
 				.append($("<td>").html(target.getArmourString(angle)))
 				.append($("<td>").html(target.getSectionString(angle)))
 				.append($("<td>").html(dist));
 
-			targetData2
+			targetDataB
 				.empty()
 				.append($("<td>").html(impulseString))
 				.append($("<td>").html(lockString))
 				.append($("<td>").html(maskString))
 				.append($("<td>").addClass("green").html(baseHit + "%"))
-				.append($("<td>").html("x" + multi + "</br><div class='final'>" + final + "%</div>"));
+				.append($("<td>"))
+				.append($("<td>").addClass("final").html("<div>x" + multi + "</div><div>" + final + "%</div>"));
 		}
 	}
 	else {
@@ -217,7 +218,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			pos = target.getPlannedPos();
 		}
 		dist = Math.round(getDistance(shooter.getPlannedPos(), pos));
-		targetData1
+		targetDataA
 		.empty()
 		.append($("<td>").html(""))
 		.append($("<td>").html(""))
@@ -225,7 +226,7 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 		.append($("<td>").html(""))
 		.append($("<td>").html(dist));
 
-		targetData2
+		targetDataB
 		.empty()
 		.append($("<td>").html(""))
 		.append($("<td>").html(""))
@@ -284,7 +285,8 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 			var msg = "";
 
 			var row = $("<tr>");
-				row.append($("<td>").html(system.getDisplay() + " #" +active[i].id))
+				//row.append($("<td>").html(system.getDisplay() + " #" + active[i].id))
+				row.append($("<td>").html(system.getDisplay()))
 
 			if (shooter.ship || shooter.squad){
 				if (cc){
@@ -319,11 +321,10 @@ function handleWeaponAimEvent(shooter, target, e, pos){
 		}
 	}
 				
-	var ele = $("#weaponAimTableWrapper");
-	var w = $(ele).width()/2;
+	var w = $(ui.aimDiv).width()/2;
 	var top = (e.clientY) + 100;
 	var left = (e.clientX) - w;
-	$(ele).css("top", top).css("left", left).show();
+	$(ui.aimDiv).css("top", top).css("left", left).show();
 }
 
 function handleScroll(e){
