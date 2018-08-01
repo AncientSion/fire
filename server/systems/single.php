@@ -188,7 +188,7 @@ class Single {
 	
 	public function getValidEffects(){
 		return array( // type, min%, null, effect
-			array("Disabled", 100, 0, 0.00),
+			array("Disabled", 120, 0, 0.00),
 		);
 	}
 

@@ -37,7 +37,7 @@
 				$stmt->execute();
 				if ($stmt->errorCode() == 0){
 					$sql = "";
-					echo "<div>dropping: ".$tables[$i]."</div>";
+					//echo "<div>dropping: ".$tables[$i]."</div>";
 				} else continue;
 			}
 
@@ -1086,8 +1086,8 @@
 			}
 		}
 
-		public function updateUnitStats($states, $turn, $phase){
-			Debug::log("updateUnitStats s:".sizeof($states)." ".$turn."/".$phase);
+		public function updateUnitStatus($states, $turn, $phase){
+			Debug::log("updateUnitStatus s:".sizeof($states)." ".$turn."/".$phase);
 			$stmt = $this->connection->prepare("
 				UPDATE units
 				SET x = :x,
@@ -1099,7 +1099,8 @@
 					rolled = :rolled,
 					flipped = :flipped,
 					turn = :turn,
-					phase = :phase
+					phase = :phase,
+					notes = :notes
 				WHERE id = :id
 			");
 
@@ -1116,6 +1117,7 @@
 				$stmt->bindParam(":flipped", $states[$i]["flipped"]);
 				$stmt->bindParam(":turn", $turn);
 				$stmt->bindParam(":phase", $phase);
+				$stmt->bindParam(":status", $status);
 				$stmt->bindParam(":id",  $states[$i]["id"]);
 				$stmt->execute();
 

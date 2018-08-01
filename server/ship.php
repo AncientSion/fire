@@ -393,7 +393,7 @@ class Ship {
 
 		Debug::log("getEndState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$facing.", rolling: ".$this->rolling.", rolled: ".$this->rolled);
 
-		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "facing" => $facing, "thrust" => $this->curImp, "rolling" => $this->isRolling(), "rolled" => $this->isRolled(), "flipped" => $this->flipped);
+		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "facing" => $facing, "thrust" => $this->curImp, "rolling" => $this->isRolling(), "rolled" => $this->isRolled(), "flipped" => $this->flipped, "notes" => "");
 	}
 
 	public function isRolling(){
@@ -1090,40 +1090,35 @@ class Ship {
 		);
 	}
 
-	public function getMoraleDamages($turn){
-		return array(
-			"old" => round((($this->primary->remaining - $this->primary->integrity + $this->primary->newDmg) / $this->primary->integrity), 2),
-			"new" => round(($this->primary->newDmg / $this->primary->integrity), 2)
-		);
+	public function getNewRelDmgPct($turn){
+		return 1 - ($this->primary->remaining / ($this->primary->remaining + $this->primary->newDmg));
 	}
 
 	public function doTestMorale($turn){
 		if ($this->destroyed){return;}
 
-		$dmg = $this->getMoraleDamages($turn);
-		$old = $dmg["old"];
-		$new = $dmg["new"];
-		Debug::log("doTestMorale ".get_class($this)." #".$this->id.", new: ".$new.", old: ".$old);
+		$new = round($this->getNewRelDmgPct($turn), 2);
+		//$old = $dmg["old"];
+		//$new = $dmg["new"];
+		Debug::log("doTestMorale ".get_class($this)." #".$this->id.", newRel: ".$new);
 
-		if (!$new){return;}
+		if ($new < 0.15){return;}
 
 		$effects = $this->getValidEffects();
 
-		$newRelDmg = round($new/(1-$old), 2);
-		Debug::log("newRelDmg: ".$newRelDmg);
-
-		if ($newRelDmg < 0.15){return;}
-		$newRelDmg = 1-$newRelDmg;
-		$chance = round((1 - ($newRelDmg*$newRelDmg))*100);
+		$new = 1-$new;
+		$chance = round((1 - ($new*$new))*100);
 		$roll = mt_rand(0, 100);
 
 		if ($roll > $chance){
-			Debug::log("opening test SUCCESS, roll: ".$roll.", chance: ".$chance); return;
+			Debug::log("opening test SUCCESS, roll: ".$roll.", chance: ".$chance); $this->notes = ""; return;
 		} else Debug::log("opening test FAIL, roll: ".$roll.", chance: ".$chance);
 
 		$roll = mt_rand(0, 100);
 		$this->notes = "m".$roll.";";
 		$magnitude = $roll + 100 - $this->morale->current;
+
+		Debug::log("roll: ".$roll.", total magnitude: ".$magnitude);
 
 		if ($magnitude  < $effects[0][1]){return;}
 

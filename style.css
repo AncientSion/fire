@@ -1430,6 +1430,9 @@ div.integrityFull {
 #sysDiv td {
 	color: white;
 }
+#sysDiv td.negative {
+	color: #ff4343;
+}
 
 tr.rowBorderTop {
 	border-top: 1px solid red;
@@ -1440,7 +1443,6 @@ tr.rowBorderBottom {
 }
 
 .negative {
-	color: #ff4343;
 	font-size: 14px;
 }
 
@@ -2080,10 +2082,16 @@ input[type=button].inactive:hover, input[type=submit].inactive:hover {
 .chatWrapper {
 	z-index: 19;
 	position: absolute;
-	width: 600px;
 }
 
 .chatBox {
+	border: 1px solid white;
+	color: black;
+	margin: auto;
+	display: inherit;
+}
+
+.chadtBox {
 	border: 1px solid white;
 	width: 100%;
 	margin: auto;

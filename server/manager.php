@@ -951,7 +951,7 @@
 			);
 		}
 
-		if (sizeof($states)){DBManager::app()->updateUnitStats($states, $this->turn, $this->phase);}
+		if (sizeof($states)){DBManager::app()->updateUnitStatus($states, $this->turn, $this->phase);}
 		
 	}
 
@@ -962,7 +962,7 @@
 			$states[] = $this->ships[$i]->getEndState($this->turn);
 		}
 
-		if (sizeof($states)){DBManager::app()->updateUnitStats($states, $this->turn, $this->phase);}
+		if (sizeof($states)){DBManager::app()->updateUnitStatus($states, $this->turn, $this->phase);}
 		
 	}
 

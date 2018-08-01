@@ -132,18 +132,24 @@ else {
 				<td>
 					<div>
 						<table id="shipsBoughtTable">
-							<tr>
-								<th colSpan=5 style="font-size: 20px">
-									Fleet Overview
-								</th>
-							</tr>
-							<tr style="height: 10px">
-								<td class="icon"></td>
-								<td class="icon"></td>
-								<td></td>
-								<td width=55px></td>
-								<td class="icon"></td>
-							</tr>
+							<thead>
+								<tr>
+									<th colSpan=5 style="font-size: 20px">
+										Fleet Overview
+									</th>
+								</tr>
+								<tr>
+									<th id="reinforceFaction" class="disabled" colSpan=5 style="font-size: 14px">							
+									</th>
+								</tr>
+								<tr style="height: 10px">
+									<td class="icon"></td>
+									<td class="icon"></td>
+									<td></td>
+									<td width=55px></td>
+									<td class="icon"></td>
+								</tr>
+							</thead>
 							<tr style="height: 10px"><th colSpan=5></th></tr>
 							<tr>
 								<td colSpan=5 id="focusGain">
@@ -507,7 +513,7 @@ else {
 				setReinforceFaction: function(faction){
 					if (faction.length < 3){return;}
 					game.faction = faction;
-					$("#reinforceFaction").removeClass("disabled").html("Reinforcements: " + faction);
+					$("#reinforceFaction").removeClass("disabled").html(faction);
 				},
 				
 				getFleetCost: function(){

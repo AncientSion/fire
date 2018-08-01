@@ -284,29 +284,26 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 					</form>
 				</div>
 			</div>
-			<div class="chatWrapper">
-				<div class="chatBox">
-					<?php
-						DBManager::app()->purgeChat();
-						
-						$chat = DBManager::app()->getFullChat();
-						$last = 0;
-						if (sizeof($chat)){
-							for ($i = 0; $i < sizeof($chat); $i++){
-								echo "<span>".date("G:i:s", $chat[$i]["time"])." - ".$chat[$i]["username"].": ".$chat[$i]["msg"]."</span></br>";
-							}
-							$last = $chat[sizeof($chat)-1]["time"];
-						}// else $last = 1;
+			
+			<?php
+				echo "<div class='chatWrapper'>";
+				$value = "";
+				DBManager::app()->purgeChat();				
+				$chat = DBManager::app()->getFullChat();
 
-						echo "<script>window.time = ".$last.";</script>";
-						//var_export($last);
+				$last = 0;
+				if (sizeof($chat)){
+					for ($i = 0; $i < sizeof($chat); $i++){
+						$value .= date("G:i:s", $chat[$i]["time"])." - ".$chat[$i]["username"].": ".$chat[$i]["msg"]."\n";
+					}
+					$last = $chat[sizeof($chat)-1]["time"];
+				}
 
-					?>
-				</div>
-				<div class="sendWrapper">
-					<input id="msg" type="text" placeholder ="chat here">
-				</div>
-			</div>
+				echo "<textarea readonly class='chatBox' cols=90 rows=8>".$value."</textarea>";
+				echo "<div class='sendWrapper'><input id='msg' type='text' placeholder ='chat here'></div>";
+				echo "</div>";
+				echo "<script>var time = ".$last.";</script>";
+			?>
 			<div class="lobbyDiv">
 				<input style="margin-top: 50px; width: 100px" type="button" value="Logout" onclick="doLogout()">
 			</div>

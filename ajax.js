@@ -99,14 +99,17 @@ window.ajax = {
 					return;
 				}
 				else {
-					var chat = $(".chatWrapper").find(".chatBox");
+					var chat = $(".chatWrapper").find(".chatBox");					
 					if (data.length){
+						old = chat.val();
+
 						for (var i = 0; i < data.length; i++){
 							var t = new Date(data[i]["time"]*1000);
 							var s = t.toLocaleTimeString();
-							chat.append($("<span>").html((s+" - "+data[i].username+": "+data[i].msg))).append("</br>");
+							old += (s+" - "+data[i].username+": "+data[i].msg)
 						}
 
+						chat.val(old);
 						window.time = data[data.length-1]["time"];
 
 						chat.scrollTop(function(){return this.scrollHeight});

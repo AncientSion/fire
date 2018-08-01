@@ -70,26 +70,23 @@ class Squadron extends Ship {
 	 }
 
 
-	public function getMoraleDamages($turn){
-		$total = 0;	$old = 0; $new = 0;
+	public function getNewRelDmgPct($turn){
+		$rem = 0;
+		$new = 0;
+
 		if (sizeof($this->structures)){
 			for ($i = 0; $i < sizeof($this->structures); $i++){
-				$total += $this->structures[$i]->integrity;
-				if ($this->structures[$i]->isDestroyed()){continue;}
+				$rem += $this->structures[$i]->remaining;
 				for ($j = 0; $j < sizeof($this->structures[$i]->damages); $j++){
 					if ($this->structures[$i]->damages[$j]->turn == $turn){
 						$new += $this->structures[$i]->damages[$j]->overkill;
-					} else $old += $this->structures[$i]->damages[$j]->overkill;
+					}
 				}
 			}
 		}
 
-		Debug::log("total: ".$total.", old: ".$old."%, new: ".$new."%");
-
-		$old = round($old / $total, 2);
-		$new = round($new / $total, 2);
-
-		return array("old" => $old, "new" => $new);
+		if (!$new){return 0;}
+		return 1 - ($rem / ($rem + $new));
 	}
 
 

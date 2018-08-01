@@ -2025,8 +2025,8 @@ Weapon.prototype.createCombatLogEntry = function(fire){
 		var string = "";
 
 		if (dmgs[i][0]){string += "Kills: " + dmgs[i][0]};
-		if (string.length > 2 && dmgs[i][1]){string += ", "};
-		if (dmgs[i][1]){string += "potential Overload: " + dmgs[i][1]}
+		if (string.length > 2 && dmgs[i][1]){string += " / "};
+		if (dmgs[i][1]){string += "Overload: " + dmgs[i][1]}
 		$(sub).append($("<td>").attr("colSpan", 2).html(string))
 
 
@@ -2362,7 +2362,7 @@ Weapon.prototype.getSysDiv = function(){
 			$(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").addClass("shots").html(this.getShots())));
 			//$(table).append($("<tr>").append($("<td>").html("Base / Max Hits")).append($("<td>").html(this.basePulses + " / " + (this.basePulses + this.extraPulses))));
 			//$(table).append($("<tr>").append($("<td>").html("Bonus Hits")).append($("<td>").html(" +1 per " + this.grouping + "%")));
-			$(table).append($("<tr>").append($("<td>").html("Volley")).append($("<td>").html(this.basePulses + "+1 (max " + (this.basePulses+this.extraPulses) +") per " + this.grouping + "%")))
+			$(table).append($("<tr>").append($("<td>").html("Volley")).append($("<td>").html(this.basePulses + "+1 (max " + (this.basePulses+this.extraPulses)  +") per " + this.grouping + "%")))
 		} else $(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").addClass("shots").html(this.getShots())));
 	}
 

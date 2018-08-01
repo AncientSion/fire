@@ -1519,7 +1519,7 @@ Ship.prototype.createMoraleLogEntry = function(){
 
 	console.log(morale);
 	
-	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Due to severe damage sustainted, " + this.getLogTitleSpan() + "</span> is subject to a morale check and rolls a " + morale + ".</br>";
+	var html = "<td colSpan=9 style='padding: 5px'><span style='font-size: 12px; font-weight: bold'>Due to severe damage, " + this.getLogTitleSpan() + " fails its morale check check and rolls a " + morale + " on a D100.</br>";
 
 	//console.log(this.notes);
 

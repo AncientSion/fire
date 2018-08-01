@@ -409,7 +409,7 @@ class Mixed extends Ship {
 
 		//Debug::log("getMoveState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$angle);
 
-		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $this->remDelay, "facing" => $facing, "thrust" => $this->curImp, "rolling" => $this->isRolling(), "rolled" => $this->isRolled(), "flipped" => $this->flipped);
+		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $this->remDelay, "facing" => $facing, "thrust" => $this->curImp, "rolling" => $this->isRolling(), "rolled" => $this->isRolled(), "flipped" => $this->flipped, "notes" => "");
 	}
 }
 
