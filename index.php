@@ -41,28 +41,35 @@ else if (isset($_POST["newUsername"]) && isset($_POST["newPassword"])){
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel='stylesheet' href='style.css'/>
+	<link rel='stylesheet' href='index.css'/>
 	<script src="jquery-2.1.1.min.js"></script>
 </head>
 	<body> 
 		<div id="loginDiv">
 			<form method="post">
-				<input type="text" style="float: left;" placeholder="Enter Username here" name="username" value=""></input>
-				<input type="password" style="float: right;" placeholder="Enter Password here" name="password" value=""></input>
-				<input type="submit" value="Login"></input>	
-				</br>
+				<div>
+					<input type="text" placeholder="Enter Username here" name="username" value=""></input>
+					<input type="password" style="float: right;" placeholder="Enter Password here" name="password" value=""></input>
+				</div>
+				<div style="width: 50%; margin: auto; margin-top: 10px;">
+					<input type="submit" value="Login"></input>
+				</div>
 			</form>
 		</div>
 
-		<div style="margin: auto; width: 700px">
+		<div id="splash">
 			<img style="width: 700px; height: 322px;" src="varIcons/header.jpg">
 		</div>
 		
 		<div id="registerDiv">
 			<form method="post">
-				<input type="text" style="float: left;" placeholder="Enter new Username here" name="newUsername"></input>	
-				<input type="text" style="float: right;" placeholder="Enter new Password here" name="newPassword"></input>
-				<input type="submit" value="Register New Account"></input>
+				<div>
+					<input type="text" placeholder="Enter new Username here" name="newUsername"></input>	
+					<input type="text" style="float: right;" placeholder="Enter new Password here" name="newPassword"></input>
+				</div>
+				<div style="width: 50%; margin: auto; margin-top: 10px;">
+					<input type="submit" value="Register New Account"></input>
+				</div>
 			</form>	
 		</div>
 	</body>

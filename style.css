@@ -176,7 +176,7 @@ table, th, tr, td {
 	z-index: 6;
 	background-color: black;
 	top: 170px;
-	width: 230px;
+	width: 200px;
 }
 
 #deployWrapper.disabled  {
@@ -185,9 +185,8 @@ table, th, tr, td {
 
 #deployTable {
 	margin: auto;
-	width: 98%;
 	border-collapse: collapse;
-	border: 1px solid white;
+	width: 100%;
 }
 
 #deployTable tr {	
@@ -196,10 +195,6 @@ table, th, tr, td {
 
 #deployWrapper thead th {
 	font-size: 16px;
-}
-
-#deployTable th, #deployTable td {
-	border: 1px solid white
 }
 
 #deployTable tr.selected {
@@ -1535,7 +1530,7 @@ tr.rowBorderBottom {
 	z-index: 8;
 	border: 1px solid white;
 	color: white;
-	width: 230px;
+	width: 200px;
 	background-color: black;
 	padding: 3px;
 	border-radius: 5px;
@@ -1660,18 +1655,6 @@ input[type=button].inactive:hover, input[type=submit].inactive:hover {
 	margin: auto !important;
 	margin-top: 30px !important;
 	display: block
-}
-
-#loginDiv {
-	margin: auto;
-	width: 500px;
-	margin-top: 50px;
-}
-
-#registerDiv {
-	margin: auto;
-	width: 500px;
-	margin-top: 50px;
 }
 
 .buttonTD {
@@ -2080,51 +2063,24 @@ input[type=button].inactive:hover, input[type=submit].inactive:hover {
 }
 
 .chatWrapper {
-	z-index: 19;
-	position: absolute;
+	z-index: 10;
 }
 
-.chatBox {
+.chatWrapper textarea {
 	border: 1px solid white;
-	color: black;
 	margin: auto;
 	display: inherit;
-}
-
-.chadtBox {
-	border: 1px solid white;
 	width: 100%;
-	margin: auto;
-	color: white;
-	padding: 1px;
-	height: 100px;
-    max-height:100px;
-    overflow:auto;
-	background-color: black;
 }
 
-.chatBox.widen {
-	height: 300px;
-	max-height: 300px;
-
+.chatWrapper textarea:nth-child(1) {
+	outline: none;
+	cursor: default;
+	resize: vertical;
 }
-
-.chatBox span {
-	font-size: 12px;
-}
-
-.chatBox.widen span {
-	font-size: 16px;
-}
-
-.sendWrapper {
+.chatWrapper textarea:nth-child(2) {
+	resize: none;
 	text-align: center;
-	width: 100%;
-	margin: auto;
-}
-
-#msg {
-	width: 100%;
 }
 
 body {
@@ -2229,4 +2185,18 @@ body {
 
 .ammoDiv .structContainer {
 	height: unset;
+}
+
+textarea {	
+	font-family: arial;
+	font-size: 12px;
+	font-weight: bold;
+	color: white;
+	background-color: black;
+}
+
+textarea.sendWrapper {
+	font-family: arial;
+	font-size: 16px;
+	font-weight: normal;
 }

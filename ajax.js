@@ -60,11 +60,12 @@ window.ajax = {
 		});
 	},
 
-	doChat: function(){
-		var msg = $(".chatWrapper").find(".sendWrapper").find("#msg").val();
+	doChat: function(e){
+		e.preventDefault();
+		var msg = $(".chatWrapper").find(".sendWrapper").val();
 		if (!msg.length || (msg.length == 2 && msg.substring(0, 1) == '"' && msg.substring(1, 2) == '"')){return;}
 
-		$(".chatWrapper").find(".sendWrapper").find("#msg").val("");
+		$(".chatWrapper").find(".sendWrapper").val("");
 
 		$.ajax({
 			type: "POST",
@@ -106,7 +107,7 @@ window.ajax = {
 						for (var i = 0; i < data.length; i++){
 							var t = new Date(data[i]["time"]*1000);
 							var s = t.toLocaleTimeString();
-							old += (s+" - "+data[i].username+": "+data[i].msg)
+							old += (s+" - "+data[i].username+": "+data[i].msg+"\n");
 						}
 
 						chat.val(old);

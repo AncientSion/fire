@@ -285,25 +285,27 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 				</div>
 			</div>
 			
-			<?php
-				echo "<div class='chatWrapper'>";
-				$value = "";
-				DBManager::app()->purgeChat();				
-				$chat = DBManager::app()->getFullChat();
+			<div class="lobbyDiv">
+				<?php
+					echo "<div class='chatWrapper'>";
+					$value = "";
+					DBManager::app()->purgeChat();				
+					$chat = DBManager::app()->getFullChat();
 
-				$last = 0;
-				if (sizeof($chat)){
-					for ($i = 0; $i < sizeof($chat); $i++){
-						$value .= date("G:i:s", $chat[$i]["time"])." - ".$chat[$i]["username"].": ".$chat[$i]["msg"]."\n";
+					$last = 0;
+					if (sizeof($chat)){
+						for ($i = 0; $i < sizeof($chat); $i++){
+							$value .= date("G:i:s", $chat[$i]["time"])." - ".$chat[$i]["username"].": ".$chat[$i]["msg"]."\n";
+						}
+						$last = $chat[sizeof($chat)-1]["time"];
 					}
-					$last = $chat[sizeof($chat)-1]["time"];
-				}
 
-				echo "<textarea readonly class='chatBox' cols=90 rows=8>".$value."</textarea>";
-				echo "<div class='sendWrapper'><input id='msg' type='text' placeholder ='chat here'></div>";
-				echo "</div>";
-				echo "<script>var time = ".$last.";</script>";
-			?>
+					echo "<textarea readonly class='chatBox' rows=7>".$value."</textarea>";
+					echo "<textarea id='msg' class='sendWrapper' rows=1></textarea>";
+					echo "</div>";
+					echo "<script>var time = ".$last.";</script>";
+				?>
+			</div>
 			<div class="lobbyDiv">
 				<input style="margin-top: 50px; width: 100px" type="button" value="Logout" onclick="doLogout()">
 			</div>
@@ -315,7 +317,7 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 <script>
 	$(document).ready(function(){
 
-		$(".chatWrapper").css("position", "relative").css("width", 700).css("margin", "auto").css("margin-top", 20).find(".chatBox").scrollTop(function(){return this.scrollHeight}).end();
+		$(".chatWrapper")/*.css("position", "relative").css("width", 700).css("margin", "auto").css("margin-top", 20)*/.find(".chatBox").scrollTop(function(){return this.scrollHeight}).end();
 		
 		var checkChat = setInterval(
 			function(){ajax.checkChat();},
@@ -337,10 +339,9 @@ window.check = <?php echo json_encode($check, JSON_NUMERIC_CHECK); ?>;
 		$("#createGameMenu").addClass("disabled");
 
 		$(this).keypress(function(e){
-			if (e.keyCode == 13){ // enter
-				if ($(":focus").attr("id") == ("msg")){
-					ajax.doChat();
-				}
+			if ($(":focus").attr("id") == ("msg")){
+				if (e.keyCode == 13){ajax.doChat(e);}
+				else return;
 			}
 		});
 	

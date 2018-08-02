@@ -1186,8 +1186,7 @@ function Game(data){
 					game.initDamageControl();
 				}, 500);
 			});
-			
-		}
+		};
 	}
 
 	this.setDeployWrapperVisibility = function(){	
@@ -2833,8 +2832,50 @@ function Game(data){
 	}
 }
 
+Game.prototype.doPositionChat = function(){
+	$chat = $(".chatWrapper");
+	var chatW = $chat.width();
+	var chatH = $chat.height();
+
+	$log = $("#combatLogWrapper");
+	var logW = $chat.width();
+	var logH = $chat.height();
+
+	//var w = 600;
+
+	$chat
+		.css("top", 3)
+		.css("left", res.x - chatW - 3)
+		.css("position", "absolute")
+		.css("width", chatW)
+		.removeClass("disabled")
+/*		.data("s", 1)
+		.data("pos", top)
+		.contextmenu(function(e){
+			e.preventDefault(); e.stopPropagation();
+			if ($(this).data("s") == 0){
+				$(this).data("s", 1).css("width", 600);
+			}
+			else if ($(this).data("s") == 1){
+				$(this).data("s", 2).css("width", Math.min(res.x - 50, 1000)).css("top", res.y - 330)
+					.find(".chatBox").addClass("widen");
+			}
+			else {
+				$(this).data("s", 0).css("width", 150).css("top", $(this).data("pos"))
+					.find(".chatBox").removeClass("widen")
+						.scrollTop(function(){return this.scrollHeight});
+			}
+		})//.drag();
+*/
+
+	if (!this.userid){
+		$chat.find(".sendWrapper").remove();
+	}
+}
+
 Game.prototype.initOptionsUI = function(){
-	$(".optionsWrapper").css("top", 2).css("left", res.x - 10 - 85)
+	//$(".optionsWrapper").css("top", 2).css("left", res.x - 10 - 85)
+	$(".optionsWrapper").css("top", res.y - 90).css("left", 2)
 	.find(".options").each(function(i){
 		$(this).mousedown(function(e){e.preventDefault();});
 		if (i == 0){
@@ -3210,6 +3251,7 @@ Game.prototype.resolveDeploy = function(){
 }
 
 Game.prototype.doPositionLog = function(html, length){
+	console.log("doPositionLog");
 	var w = ui.unitSelector.width();
 	var x = ui.unitSelector.css("left");
 	var x = Math.floor(x.substr(0, x.length-2));
@@ -3593,7 +3635,7 @@ Game.prototype.setFocusInfo = function(){
 		if (game.turn == 1 && game.phase == -1 && this.playerstatus[i].userid != this.userid){
 			$("#upperGUI").find("#overview").find(".focusInfo" + this.playerstatus[i].id).html("Unknown"); continue;
 		}
-		var html = "<span class='yellow'>" + this.getUserCurFocus(i) + "</span> + " + this.getUserFocusGain(i) + " / turn, max: " + this.getUserMaxFocus(i);
+		var html = "<span class='yellow'>" + this.getUserCurFocus(i) + "</span> + " + this.getUserFocusGain(i) + " / turn (max: " + this.getUserMaxFocus(i)+")";
 		$("#upperGUI").find("#overview").find(".focusInfo" + this.playerstatus[i].id)
 			.html(html)
 			.data("userid", this.playerstatus[i].userid)
@@ -3740,12 +3782,6 @@ Game.prototype.addFocusInfo = function(){
 	}
 
 	this.setFocusInfo()
-
-	tBody
-		.append($("<tr>")
-			.append($("<td>")
-				.css("height", 10)
-				.attr("colSpan", 3)))
 }
 
 Game.prototype.setConfirmInfo = function(){
@@ -3875,6 +3911,7 @@ Game.prototype.create = function(data){
 	this.setDeployWrapperVisibility();
 	this.initSelectionWrapper();
 	this.initOptionsUI();
+	this.doPositionChat();
 	this.initEvents();
 	this.extractPlayerStatusData()
 	cam.setFocusToPos({x: 0, y: 0});

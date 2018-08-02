@@ -65,39 +65,6 @@ function initChat(){
 			},
 		7000);
 	//}
-
-	if (window.game){
-		$chat = $(".chatWrapper");
-		var w = $chat.width();
-		var h = $chat.height();
-
-		var top = (res.y - h-3);
-
-		$chat
-			.css("top", top)
-			.css("left", 3)
-			.data("s", 1)
-			.data("pos", top)
-			.contextmenu(function(e){
-				e.preventDefault(); e.stopPropagation();
-				if ($(this).data("s") == 0){
-					$(this).data("s", 1).css("width", 600);
-				}
-				else if ($(this).data("s") == 1){
-					$(this).data("s", 2).css("width", Math.min(res.x - 50, 1000)).css("top", res.y - 330)
-						.find(".chatBox").addClass("widen");
-				}
-				else {
-					$(this).data("s", 0).css("width", 150).css("top", $(this).data("pos"))
-						.find(".chatBox").removeClass("widen")
-							.scrollTop(function(){return this.scrollHeight});
-				}
-			})//.drag();
-		}
-
-		if (!game.userid){
-			$chat.find(".sendWrapper").remove();
-		}
 }
 
 function getPhaseString(val){

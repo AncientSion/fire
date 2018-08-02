@@ -50,26 +50,27 @@
 			<div id="phaseSwitchInnerDiv">
 			</div>
 		</div>
-		<div class="chatWrapper disabled">
-			<div class="chatBox">
-				<?php
-					$chat = DBManager::app()->getFullChat();
-					$last = 0;
-					if (sizeof($chat)){
-						for ($i = 0; $i < sizeof($chat); $i++){
-							echo "<span>".date("G:i:s", $chat[$i]["time"])." - ".$chat[$i]["username"].": ".$chat[$i]["msg"]."</span></br>";
-						}
-						$last = $chat[sizeof($chat)-1]["time"];
-					}// else $last = 1;
 
-					echo "<script>window.time = ".$last.";</script>";
-					//var_export($last);
+		<?php
+			echo "<div class='chatWrapper disabled' style='width: 400px'>";
+			$value = "";
+			DBManager::app()->purgeChat();				
+			$chat = DBManager::app()->getFullChat();
 
-				?>
-			</div>
-			<div class="sendWrapper">
-				<input id="msg" placeholder ="chat here" type="text">
-			</div>
+			$last = 0;
+			if (sizeof($chat)){
+				for ($i = 0; $i < sizeof($chat); $i++){
+					$value .= date("G:i:s", $chat[$i]["time"])." - ".$chat[$i]["username"].": ".$chat[$i]["msg"]."\n";
+				}
+				$last = $chat[sizeof($chat)-1]["time"];
+			}
+
+			echo "<textarea readonly class='chatBox' rows=7>".$value."</textarea>";
+			echo "<textarea id='msg' class='sendWrapper' rows=1></textarea>";
+			echo "</div>";
+			echo "<script>var time = ".$last.";</script>";
+		?>
+
 		</div>
 		<div class="optionsWrapper">
 			<div class="options drawFriendlyEW">
@@ -165,13 +166,22 @@
 					<th id="remEP" style="text-align: center">
 					</th>
 				</tr>
-				<tr>
+			<!--	<tr>
 					<th id="impulseText" style="text-align: left">
 						 Cost : Rem 
 					</th>
 					<th id="ImpulseCost" style="text-align: center">
 					</th>
 				</tr>
+			-->
+				<tr>
+					<th style="text-align: left">
+						 Angle / Cost 
+					</th>
+					<th id="impulseCost" style="text-align: center">
+					</th>
+				</tr>
+			
 			</table>
 		</div>
 		<div id="maxCutVector" class="ui disabled">
@@ -326,14 +336,22 @@
 						</th>
 					</tr>
 					<tr>
-						<th  width="50%" colSpan="2">
+						<th colSpan=2>
 							Class
 						</th>
-						<th colSpan=2 width="20%">
+						<th colSpan=2>
 							ETA
 						</th>
 					</tr>
 				</thead>
+				<tbody>
+					<tr>
+						<td style="width: 45px;"></td>
+						<td></td>
+						<td style="width: 50px;"></td>
+					</tr>
+
+				</tbody>
 			</table>
 			<div class="reinforceWrapper">
 				<table class="reinforceHead">
@@ -540,7 +558,7 @@
 	function initiateKeyDowns(){
 		$(this).keypress(function(e){
 			if ($(":focus").attr("id") == ("msg")){
-				if (e.keyCode == 13){ajax.doChat();}
+				if (e.keyCode == 13){ajax.doChat(e);}
 				else return;
 			}
 			else if (game){

@@ -1,0 +1,43 @@
+body {
+	margin: 0 0 0 0;
+	background-color: black;
+}
+
+#loginDiv {
+	margin: auto;
+	width: 500px;
+	margin-top: 50px;
+}
+
+#registerDiv {
+	margin: auto;
+	width: 500px;
+	margin-top: 50px;
+}
+
+input[type=text], input[type=password], input[type=number] {
+	margin: auto;
+	font-size: 16px;
+	font-weight: bold;
+	color: black;
+	border-radius: 5px;
+	text-align: center;
+	background-color: #fffdbf;
+}
+
+input[type=button], input[type=submit] {
+	width: 100%;
+	font-size: 16px;
+	font-weight: bold;
+	cursor: pointer;
+	color: black;
+	background-color: white;
+	border-color: black;
+	border-radius: 5px;
+}
+
+#splash {
+	width: 700px;
+	margin: auto;
+	padding: 20px;
+}

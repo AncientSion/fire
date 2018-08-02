@@ -789,11 +789,14 @@ Ship.prototype.handleTurning = function(e, o, f, pos){
 		salvoCtx.setTransform(1,0,0,1,0,0);
 	}
 
+	//console.log(a)
+	$("#epButton").css("top", t.y + 25).css("left", t.x - 200).find("#impulseCost").html(round(a, 2))
 	a = Math.min(Math.abs(a), max);
 	turn.a = a;
-	var c = 1 * a;
+	//var c = 1 * a;
 	//var c = this.getTurnCost() * a;
-	$("#epButton").css("top", t.y + 25).css("left", t.x - 200).find("#impulseCost").html(Math.ceil(c, 2) + " : " + Math.floor(this.getRemEP() - c));
+	//$("#epButton").css("top", t.y + 25).css("left", t.x - 200).find("#impulseCost").html(Math.ceil(c, 2) + " : " + Math.floor(this.getRemEP() - c));
+
 
 	this.drawDelay();
 	this.drawMouseVector(o, t);
@@ -2324,7 +2327,7 @@ Ship.prototype.createBaseDiv = function(){
 			.append($("<td>").html("Maneuverability"))
 			.append($("<td>").html(this.getRemEP() + " / " + this.getEP()).addClass("ep")))
 		.append($("<tr>")
-			.append($("<td>").html("Accel, Roll, Flip Cost"))
+			.append($("<td>").html("Accel, Roll, Flip"))
 			.append($("<td>").html(this.getImpulseChangeCost() + ", " + this.getActionCost(0) + ", " + this.getActionCost(1)).addClass("change")))
 		//.append($("<tr>")
 		//	.append($("<td>").html("Delay / 1\xB0"))
@@ -4206,7 +4209,7 @@ Ship.prototype.getTurnStep = function(){
 }
 
 Ship.prototype.getMaxTurnAngle = function(){
-	if (this.canTurnFreely()){return 360;}
+	if (this.canTurnFreely()){return 180;}
 
 	var ep = this.getRemEP();
 	var limit = this.getTurnAngle();
