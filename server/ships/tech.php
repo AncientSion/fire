@@ -6,7 +6,7 @@ class Tech extends SuperHeavy {
 	public $faction = "Centauri Republic";
 	public $size =  100;
 	public static $value = 1080;
-	public $profile = array(0.92, 1.08);
+	public $profile = array(0.9, 1.1);
 	public $mass = 12500;
 
 

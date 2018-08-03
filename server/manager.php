@@ -56,32 +56,28 @@
 
 	static function alterShipFiles(){
 
-		$content = file("server/ships/altarian.php");
-
-		$new = array();
-
-		foreach ($content as $line){
-			//echo $line."</br>";
-			$entry = substr(trim($line), 8, 3);
-			//echo $entry."</br></br>";
-			if ($entry != "pro"){$new[] = $line;}
-		}
-
-
-
-		$dest = fopen("server/ships/altarianc.php", "w");
-		fwrite($dest, implode($new));
-		fclose($dest);
-
-
-
-
-		return;
-
 		$files = array_slice(scandir("server/ships"), 2);
+
 		foreach ($files as $file){
 			$content = file("server/ships/".$file);
-			echo "file: ".$file.", length: ".sizeof($content)."</br>";
+			$new = array();
+
+			foreach ($content as $line){
+				$entry = substr(trim($line), 8, 3);
+				if ($entry != "pro"){
+					$new[] = $line;
+				}
+				else {
+					$replace = true;
+					$new[] = "\t".'public $profile = array(0.9, 1.1);'."\n";
+				}
+			}
+
+			if ($replace){
+				$dest = fopen("server/ships/".$file, "w");
+				fwrite($dest, implode($new));
+				fclose($dest);
+			}
 		}
 	}
 
@@ -937,22 +933,10 @@
 		$states = array();
 		for ($i = 0; $i < sizeof($this->ships); $i++){
 			if ($this->ships[$i]->available != $this->turn){continue;}
-			
-			$states[] = array(
-				"id" => $this->ships[$i]->id,
-				"x" => $this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1]->x,
-				"y" => $this->ships[$i]->actions[sizeof($this->ships[$i]->actions)-1]->y,
-				"facing" => 0,
-				"delay" => 0, 
-				"thrust" => $this->ships[$i]->getCurSpeed(),
-				"rolling" => $this->ships[$i]->isRolling(),
-				"rolled" => $this->ships[$i]->isRolled(),
-				"flipped" => $this->ships[$i]->flipped,
-			);
+			$states[] = $this->ships[$i]->getDeployState($this->turn);
 		}
 
-		if (sizeof($states)){DBManager::app()->updateUnitStatus($states, $this->turn, $this->phase);}
-		
+		if (sizeof($states)){DBManager::app()->updateUnitState($states, $this->turn, $this->phase);}	
 	}
 
 	public function assembleEndStates(){
@@ -962,8 +946,7 @@
 			$states[] = $this->ships[$i]->getEndState($this->turn);
 		}
 
-		if (sizeof($states)){DBManager::app()->updateUnitStatus($states, $this->turn, $this->phase);}
-		
+		if (sizeof($states)){DBManager::app()->updateUnitState($states, $this->turn, $this->phase);}
 	}
 
 	public function startFiringPhase(){

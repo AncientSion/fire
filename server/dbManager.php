@@ -1086,8 +1086,8 @@
 			}
 		}
 
-		public function updateUnitStatus($states, $turn, $phase){
-			Debug::log("updateUnitStatus s:".sizeof($states)." ".$turn."/".$phase);
+		public function updateUnitState($states, $turn, $phase){
+			Debug::log("updateUnitState s:".sizeof($states)." ".$turn."/".$phase);
 			$stmt = $this->connection->prepare("
 				UPDATE units
 				SET x = :x,
@@ -1100,6 +1100,7 @@
 					flipped = :flipped,
 					turn = :turn,
 					phase = :phase,
+					notes = :status,
 					notes = :notes
 				WHERE id = :id
 			");
@@ -1118,6 +1119,7 @@
 				$stmt->bindParam(":turn", $turn);
 				$stmt->bindParam(":phase", $phase);
 				$stmt->bindParam(":status", $status);
+				$stmt->bindParam(":notes", $notes);
 				$stmt->bindParam(":id",  $states[$i]["id"]);
 				$stmt->execute();
 

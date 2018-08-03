@@ -127,52 +127,46 @@ else {
 			</tr>
 		</table>
 
-		<table id="fleetInfo">
-			<tr>
-				<td>
-					<div>
-						<table id="shipsBoughtTable">
-							<thead>
-								<tr>
-									<th colSpan=5 style="font-size: 20px">
-										Fleet Overview
-									</th>
-								</tr>
-								<tr>
-									<th id="reinforceFaction" class="disabled" colSpan=5 style="font-size: 14px">							
-									</th>
-								</tr>
-								<tr style="height: 10px">
-									<td class="icon"></td>
-									<td class="icon"></td>
-									<td></td>
-									<td width=55px></td>
-									<td class="icon"></td>
-								</tr>
-							</thead>
-							<tr style="height: 10px"><th colSpan=5></th></tr>
-							<tr>
-								<td colSpan=5 id="focusGain">
-								</td>
-							</tr>
-							<tr>
-								<th colSpan=5>
-									<span id="remPV">
-									</span>
-								</th>
-							</tr>
-							<tr style="height: 10px"><th colSpan=5></th></tr>
-							<tr>
-								<th colSpan=5>
-									<input type="button" style="font-size: 20px" onclick="game.tryConfirmFleet()" value="Confirm Fleet Selection">
-								</th>
-							</tr>
-						</table>
-					</div>
-				</td>
-			</tr>
-		</table>
-
+		<div style="position: absolute; top: 13px; left: 445px; border: 1px solid white;">
+			<table id="shipsBoughtTable">
+				<thead>
+					<tr>
+						<th colSpan=5 style="font-size: 20px">
+							Fleet Overview
+						</th>
+					</tr>
+					<tr>
+						<th id="reinforceFaction" class="disabled" colSpan=5 style="font-size: 14px">							
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr style="height: 10px">
+						<td style="width: 24px"></td>
+						<td style="width: 24px"></td>
+						<td></td>
+						<td style="width: 55px"></td>
+						<td style="width: 24px"></td>
+					</tr>
+					<tr>
+						<td colSpan=5 id="focusGain">
+						</td>
+					</tr>
+					<tr>
+						<th colSpan=5>
+							<span id="remPV">
+							</span>
+						</th>
+					</tr>
+					<tr style="height: 10px"><th colSpan=5></th></tr>
+					<tr>
+						<th colSpan=5>
+							<input type="button" style="font-size: 20px" onclick="game.tryConfirmFleet()" value="Confirm Fleet Selection">
+						</th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
 		<table style="position: absolute; top: 240px">
 			<tr>
@@ -266,12 +260,13 @@ else {
 				settings: window.settings,
 
 				doCloneSquaddie: function(data){
-					var sub = game.ships[0].getSystem(data.systemId);
+					var squadron = game.getUnit(aUnit);
+					var sub = squadron.getSystem(data.systemId);
 
-					if (game.ships[0].slots[0] + sub.space > game.ships[0].slots[1]){return;}
+					if (squadron.slots[0] + sub.space > squadron.slots[1]){return;}
 
 					var copy = initSquaddie(JSON.parse(JSON.stringify(sub)));
-						copy.index = game.ships[0].index +1;
+						copy.index = squadron.index +1;
 						copy.id = copy.index;
 						copy.create();
 
@@ -285,16 +280,16 @@ else {
 							}
 						}
 
-					game.ships[0].structures.push(copy);
-					game.ships[0].index = id;
-					game.ships[0].setLayout();
-					game.ships[0].setSubElements();
-					game.ships[0].setStats();
-					game.ships[0].setSubSystemState();
+					squadron.structures.push(copy);
+					squadron.index = id;
+					squadron.setLayout();
+					squadron.setSubElements();
+					squadron.setStats();
+					squadron.setSubSystemState();
 					copy.expandElement();
 					copy.previewSetup();
 
-					game.setUnitTotal(game.ships[0]);
+					game.setUnitTotal(squadron);
 				},
 
 				tryConfirmUnitPurchase: function(){
@@ -372,7 +367,7 @@ else {
 									}))
 
 						game.shipsBought[game.shipsBought.length-1].tr = tr;
-						$("#shipsBoughtTable tr").eq(-5).before(tr);
+						$("#shipsBoughtTable tr").eq(-4).before(tr);
 					}
 
 

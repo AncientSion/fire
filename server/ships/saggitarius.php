@@ -6,7 +6,7 @@ class Saggitarius extends Medium {
 	public $faction = "Earth Alliance";
 	public $size =  60;
 	public static $value = 400;
-	public $profile = array(0.90, 1.10);
+	public $profile = array(0.9, 1.1);
 	public $mass = 4500;
 
 	public $integrity = 800;

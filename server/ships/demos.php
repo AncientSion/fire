@@ -6,7 +6,7 @@ class Demos extends Medium {
 	public $faction = "Centauri Republic";
 	public $size =  50;
 	public static $value = 450;
-	public $profile = array(0.92, 1.08);
+	public $profile = array(0.9, 1.1);
 	public $mass = 3000;
 
 	public $integrity = 600;

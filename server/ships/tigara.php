@@ -6,7 +6,7 @@ class Tigara extends Heavy {
 	public $faction = "Minbari Federation";
 	public $size =  85;
 	public static $value = 1150;
-	public $profile = array(0.93, 1.07);
+	public $profile = array(0.9, 1.1);
 	public $mass = 10500;
 
 	public $integrity = 1200;

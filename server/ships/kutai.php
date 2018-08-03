@@ -6,7 +6,7 @@ class Kutai extends Medium {
 	public $faction = "Centauri Republic";
 	public $size =  40;
 	public static $value = 400;
-	public $profile = array(0.93, 1.07);
+	public $profile = array(0.9, 1.1);
 	public $mass = 3800;
 
 	public $integrity = 525;

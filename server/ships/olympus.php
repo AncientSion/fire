@@ -6,7 +6,7 @@ class Olympus extends Medium {
 	public $faction = "Earth Alliance";
 	public $size =  45;
 	public static $value = 430;
-	public $profile = array(0.94, 1.06);
+	public $profile = array(0.9, 1.1);
 	public $mass = 2750;
 
 	public $integrity = 550;
@@ -43,7 +43,7 @@ class Olympus extends Medium {
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
-			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse + 3;
+			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse-1;
 		}
 	}
 

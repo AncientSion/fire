@@ -6,7 +6,7 @@ class Octurion extends SuperHeavy {
 	public $faction = "Centauri Republic";
 	public $size =  110;
 	public static $value = 1600;
-	public $profile = array(0.95, 1.05);
+	public $profile = array(0.9, 1.1);
 	public $mass = 18000;
 
 	public $integrity = 1950;
@@ -63,7 +63,7 @@ class Octurion extends SuperHeavy {
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 			//$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
-			//$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse + 3;
+			//$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse-1;
 		}
 	}}
 

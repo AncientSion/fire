@@ -6,7 +6,7 @@ class GSten extends Heavy {
 	public $faction = "Narn Regime";
 	public $size =  70;
 	public static $value = 750;
-	public $profile = array(0.95, 1.05);
+	public $profile = array(0.9, 1.1);
 	public $mass = 8000;
 
 	public $integrity = 900;

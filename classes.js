@@ -246,9 +246,9 @@ Structure.prototype.getRemNegation = function(){
 
 Structure.prototype.getArmourString = function(){
 	if (this.boostEffect.length){
-		return this.remNegation + "<span style='color: yellow;'>+" + (this.getBoostEffect("Armour") * this.getBoostLevel()) + "</span> / " + this.negation;
+		return  "<span>" + this.remNegation + "<span style='color: yellow;'>+" + (this.getBoostEffect("Armour") * this.getBoostLevel()) + "</span> / " + this.negation + "</span>";
 	}
-	return this.remNegation + " / " + this.negation;
+	return "<span>" + this.remNegation + " / " + this.negation + "</span>";
 }
 
 Structure.prototype.setBonusNegation = function(){
@@ -261,7 +261,7 @@ Structure.prototype.getTableData = function(){
 
 	var div = $("<div>")
 		.addClass("integrityAmount")
-		.append($("<span>").html(this.getArmourString()))
+		.html(this.getArmourString())
 	td.append(div);
 
 	var lowerDiv = document.createElement("div");

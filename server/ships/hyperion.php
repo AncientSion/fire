@@ -6,7 +6,7 @@ class Hyperion extends Heavy {
 	public $faction = "Earth Alliance";
 	public $size =  80;
 	public static $value = 775;
-	public $profile = array(0.93, 1.07);
+	public $profile = array(0.9, 1.1);
 	public $mass = 8000;
 
 	public $integrity = 1000;
@@ -50,7 +50,7 @@ class Hyperion extends Heavy {
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
-			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse + 3;
+			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse-1;
 		}
 	}
 

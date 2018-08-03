@@ -6,7 +6,7 @@ class Battlecrab extends SuperHeavy {
 	public $faction = "The Shadows";
 	public $size =  100;
 	public static $value = 1800;
-	public $profile = array(0.93, 1.07);
+	public $profile = array(0.9, 1.1);
 	public $mass = 12000;
 
 	public $integrity = 1525;

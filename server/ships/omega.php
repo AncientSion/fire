@@ -6,7 +6,7 @@ class Omega extends SuperHeavy {
 	public $faction = "Earth Alliance";
 	public $size =  90;
 	public static $value = 1100;
-	public $profile = array(0.93, 1.07);
+	public $profile = array(0.9, 1.1);
 	public $mass = 13000;
 
 	public $integrity = 1525;
@@ -67,7 +67,7 @@ class Omega extends SuperHeavy {
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
-			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse + 3;
+			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse-1;
 		}
 	}
 

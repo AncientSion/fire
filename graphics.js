@@ -217,13 +217,15 @@ function drawVector(origin, target, dist, angle){
 	mouseCtx.lineWidth = 2;
 	mouseCtx.stroke();
 
+	var fireAngle = angle;
+
 	if (angle > 180){
 		angle = (360-angle) *-1;
 	}
 
-	$("#vectorDiv").html("Distance: " + dist + " </br>Angle: " + round(angle, 2))
-	.css("left", target.x- 45 + "px")
-	.css("top", target.y + 40 + "px")
+	$("#vectorDiv").html("Distance: " + dist + " </br>Angle: " + round(angle, 2) + "</br>Profile: " + game.getUnit(aUnit).getAngledHitChance(fireAngle) + "%")
+	.css("left", target.x - 45 + "px")
+	.css("top", target.y + 60 + "px")
 	.removeClass("disabled");
 }
 

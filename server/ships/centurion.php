@@ -6,7 +6,7 @@ class Centurion extends Heavy {
 	public $faction = "Centauri Republic";
 	public $size =  80;
 	public static $value = 740;
-	public $profile = array(0.92, 1.08);
+	public $profile = array(0.9, 1.1);
 	public $mass = 7500;
 
 	public $integrity = 850;

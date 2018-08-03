@@ -6,7 +6,7 @@ include_once $_SERVER["DOCUMENT_ROOT"]."/fire/global.php";
 //$dbManager->setInitialCommandUnit(1, 1, array(array("id" => 5, "name" => "Hyperion", "command" => 1)));
 
 if (0){
-	Manager::alterShipFiles();
+	echo Manager::alterShipFiles();
 	return;
 }
 

@@ -361,6 +361,23 @@ class Ship {
 		else $this->remImp = $this->getCurSpeed();
 	}
 
+	public function getDeployState($turn){
+		//Debug::log("getDeployState for ".$this->id);
+		return array(
+			"id" => $this->id,
+			"x" => $this->actions[sizeof($this->actions)-1]->x,
+			"y" => $this->actions[sizeof($this->actions)-1]->y,
+			"delay" => 0,
+			"facing" => 0,
+			"thrust" => $this->getCurSpeed(),
+			"rolling" => $this->isRolling(),
+			"rolled" => $this->isRolled(),
+			"flipped" => $this->flipped,
+			"status" => $this->status,
+			"notes" => $this->notes,
+			);
+	}
+
 	public function getEndState($turn){
 		//Debug::log("getEndState for ".$this->id);
 		$delay = $this->remDelay;
@@ -391,9 +408,9 @@ class Ship {
 			$facing += 360;
 		}
 
-		Debug::log("getEndState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$facing.", rolling: ".$this->rolling.", rolled: ".$this->rolled);
+		//Debug::log("getEndState for ".get_class($this)." #".$this->id." current facing ".$this->facing.", now: ".$facing.", rolling: ".$this->rolling.", rolled: ".$this->rolled);
 
-		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "facing" => $facing, "thrust" => $this->curImp, "rolling" => $this->isRolling(), "rolled" => $this->isRolled(), "flipped" => $this->flipped, "notes" => "");
+		return array("id" => $this->id, "x" => $this->actions[sizeof($this->actions)-1]->x, "y" => $this->actions[sizeof($this->actions)-1]->y, "delay" => $delay, "facing" => $facing, "thrust" => $this->curImp, "rolling" => $this->isRolling(), "rolled" => $this->isRolled(), "flipped" => $this->flipped, "status" => $this->status, "notes" => "");
 	}
 
 	public function isRolling(){

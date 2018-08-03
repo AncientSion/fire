@@ -406,9 +406,7 @@ table, th, tr, td {
 }
 
 #reinforceFaction {
-	width: 100%;
 	font-size: 20px;
-	margin-bottom: 10px;
 }
 
 #shipsBoughtTable {
@@ -426,16 +424,15 @@ table, th, tr, td {
 }
 
 #shipsBoughtTable td.icon {
-	width: 24px;
-}
-
-#shipsBoughtTable tr.purchase {
-	padding-top: 5px;
-	padding-bottom: 5px;
+	width: 26px;
 }
 
 #shipsBoughtTable td.hover {
 	background-color: white;
+}
+
+#shipsBoughtTable tr.purchase {
+	border-bottom: 1px solid white;
 }
 
 #shipsBoughtTable tr.purchase.selected {
@@ -449,6 +446,7 @@ table, th, tr, td {
 }
 
 #focusGain {
+	padding-top: 10px;
 }
 
 #factionDiv tr, th, td {

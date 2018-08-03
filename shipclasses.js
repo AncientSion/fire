@@ -1762,6 +1762,7 @@ Ship.prototype.getBaseHitChance = function(){
 }
 
 Ship.prototype.getAngledHitChance = function(angle){
+	console.log(angle);
 	var a, b, c, base;
 	
 	while (angle > 90){
@@ -4414,6 +4415,11 @@ Ship.prototype.enableMissionMode = function(){
 	$(this.element).find(".missionOption").removeClass("disabled");
 }
 
-Ship.prototype.getPurchaseHeader = function(){						
+Ship.prototype.getPurchaseHeader = function(){
+	//return "this";
 	return "<span style='font-size: 16px;'>" + this.name + "</span>" + (this.display ? "<span class='green'> -- " + this.display + " -- </span>" : "<span class='green'></span>");
+}
+
+Ship.prototype.getIncomingHeader = function(){
+	return this.name + (this.notes ? "</br>" + this.notes : "");
 }

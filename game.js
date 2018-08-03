@@ -2544,7 +2544,7 @@ function Game(data){
 					)
 					.append($("<td>")
 						.addClass(color + " font14")
-						.html(this.ships[i].name + "</br>" + this.ships[i].notes)
+						.html(this.ships[i].getIncomingHeader())
 					)
 					.append($("<td>")
 						.addClass(color + " font14")

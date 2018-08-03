@@ -6,7 +6,7 @@ class Rongoth extends Medium {
 	public $faction = "Narn Regime";
 	public $size =  55;
 	public static $value = 420;
-	public $profile = array(0.93, 1.07);
+	public $profile = array(0.9, 1.1);
 	public $mass = 3750;
 
 	public $integrity = 630;

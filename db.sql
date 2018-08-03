@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 02. Aug 2018 um 16:46
+-- Erstellungszeit: 03. Aug 2018 um 15:43
 -- Server-Version: 10.1.16-MariaDB
 -- PHP-Version: 7.0.9
 
@@ -46,7 +46,18 @@ CREATE TABLE `actions` (
 --
 
 INSERT INTO `actions` (`id`, `shipid`, `turn`, `type`, `dist`, `x`, `y`, `a`, `cost`, `delay`, `costmod`, `resolved`) VALUES
-(1, 1, 1, 'deploy', 0, -269, 23, '85.12', 0, 0, 1, 0);
+(1, 3, 1, 'deploy', 0, -371, 231, '0.00', 0, 0, 1, 1),
+(2, 2, 1, 'deploy', 0, -381, 647, '0.00', 0, 0, 1, 1),
+(3, 1, 1, 'deploy', 0, -347, -103, '0.00', 0, 0, 1, 1),
+(4, 6, 1, 'deploy', 0, 347, 253, '180.00', 0, 0, 1, 1),
+(5, 5, 1, 'deploy', 0, 227, 651, '180.00', 0, 0, 1, 1),
+(6, 4, 1, 'deploy', 0, 217, -121, '180.00', 0, 0, 1, 1),
+(7, 1, 1, 'jumpIn', 0, -347, -103, '0.00', 0, 0, 0, 1),
+(8, 2, 1, 'jumpIn', 0, -381, 647, '0.00', 0, 0, 0, 1),
+(9, 3, 1, 'jumpIn', 0, -371, 231, '0.00', 0, 0, 0, 1),
+(10, 4, 1, 'jumpIn', 0, 217, -121, '0.00', 0, 0, 0, 1),
+(11, 5, 1, 'jumpIn', 0, 227, 651, '0.00', 0, 0, 0, 1),
+(12, 6, 1, 'jumpIn', 0, 347, 253, '0.00', 0, 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -137,8 +148,7 @@ CREATE TABLE `games` (
 --
 
 INSERT INTO `games` (`id`, `name`, `status`, `turn`, `phase`, `pv`, `reinforce`, `reinforceTurn`, `reinforceETA`, `reinforceAmount`, `focusMod`) VALUES
-(1, 'myGame', 'active', 1, -1, 3500, 1500, 11, 3, 10, 10),
-(2, 'myGame', 'active', 1, -1, 3500, 1500, 11, 3, 10, 10);
+(1, 'myGame', 'active', 1, 0, 3500, 1500, 2, 2, 10, 10);
 
 -- --------------------------------------------------------
 
@@ -159,14 +169,10 @@ CREATE TABLE `loads` (
 --
 
 INSERT INTO `loads` (`id`, `shipid`, `systemid`, `name`, `amount`) VALUES
-(1, 3, 13, 'Naga', 6),
-(2, 3, 17, 'Naga', 6),
-(3, 4, 13, 'Naga', 6),
-(4, 4, 17, 'Naga', 6),
-(5, 6, 8, 'Triarii', 8),
-(6, 7, 8, 'Triarii', 8),
-(7, 8, 13, 'Triarii', 8),
-(8, 8, 20, 'Triarii', 8);
+(1, 1, 13, 'Naga', 4),
+(2, 1, 17, 'Naga', 4),
+(3, 6, 13, 'Triarii', 4),
+(4, 6, 20, 'Triarii', 4);
 
 -- --------------------------------------------------------
 
@@ -210,10 +216,8 @@ CREATE TABLE `playerstatus` (
 --
 
 INSERT INTO `playerstatus` (`id`, `userid`, `gameid`, `turn`, `phase`, `faction`, `value`, `maxFocus`, `gainFocus`, `curFocus`, `status`) VALUES
-(1, 1, 1, 1, -1, 'Earth Alliance', 4550, 1540, 385, 385, 'ready'),
-(2, 2, 1, 1, -1, 'Earth Alliance', 3900, 1680, 420, 420, 'waiting'),
-(3, 1, 2, 1, -1, 'Earth Alliance', 3269, 1540, 385, 385, 'waiting'),
-(4, 2, 2, 1, -1, 'Centauri Republic', 3168, 1540, 385, 385, 'waiting');
+(1, 1, 1, 1, 0, 'Earth Alliance', 3273, 1540, 385, 385, 'waiting'),
+(2, 2, 1, 1, 0, 'Centauri Republic', 3252, 1540, 385, 385, 'waiting');
 
 -- --------------------------------------------------------
 
@@ -235,18 +239,24 @@ CREATE TABLE `powers` (
 --
 
 INSERT INTO `powers` (`id`, `unitid`, `systemid`, `turn`, `type`, `cost`) VALUES
-(1, 1, 7, 1, '-1', 0),
-(2, 1, 8, 1, '-1', 0),
-(3, 1, 10, 1, '-1', 0),
-(4, 1, 11, 1, '-1', 0),
-(5, 1, 13, 1, '-1', 0),
-(6, 1, 14, 1, '-1', 0),
-(7, 1, 16, 1, '-1', 0),
-(8, 1, 17, 1, '-1', 0),
-(9, 1, 19, 1, '-1', 0),
-(10, 1, 20, 1, '-1', 0),
-(11, 1, 22, 1, '-1', 0),
-(12, 1, 23, 1, '-1', 0);
+(1, 3, 6, 1, '1', 4),
+(2, 3, 14, 1, '-1', 0),
+(3, 3, 15, 1, '-1', 0),
+(4, 3, 21, 1, '-1', 0),
+(5, 3, 22, 1, '-1', 0),
+(6, 2, 6, 1, '1', 3),
+(7, 2, 11, 1, '-2', 0),
+(8, 2, 12, 1, '-2', 0),
+(9, 2, 17, 1, '-2', 0),
+(10, 2, 18, 1, '-2', 0),
+(11, 1, 6, 1, '1', 3),
+(12, 1, 6, 1, '1', 4),
+(13, 1, 8, 1, '-1', 0),
+(14, 1, 8, 1, '0', 0),
+(15, 1, 12, 1, '-1', 0),
+(16, 1, 16, 1, '-1', 0),
+(17, 1, 16, 1, '0', 0),
+(18, 4, 8, 1, '0', 0);
 
 -- --------------------------------------------------------
 
@@ -269,7 +279,12 @@ CREATE TABLE `sensors` (
 --
 
 INSERT INTO `sensors` (`id`, `unitid`, `systemid`, `turn`, `angle`, `dist`, `type`) VALUES
-(1, 1, 4, 1, '-1.00', 88, 0);
+(1, 3, 4, 1, '0.26', 448, 0),
+(2, 2, 4, 1, '359.28', 478, 0),
+(3, 1, 4, 1, '359.76', 480, 0),
+(4, 6, 4, 1, '1.03', 446, 1),
+(5, 5, 4, 1, '1.57', 366, 1),
+(6, 4, 4, 1, '2.26', 304, 1);
 
 -- --------------------------------------------------------
 
@@ -337,14 +352,12 @@ CREATE TABLE `units` (
 --
 
 INSERT INTO `units` (`id`, `gameid`, `userid`, `ship`, `ball`, `name`, `display`, `status`, `command`, `available`, `destroyed`, `x`, `y`, `facing`, `delay`, `thrust`, `rolling`, `rolled`, `flipped`, `turn`, `phase`, `focus`, `notes`) VALUES
-(1, 1, 1, 1, 0, 'Avenger', '', 'bought', 1, 1, 0, 0, 0, '0.00', 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(2, 1, 2, 1, 0, 'Omega', '', 'bought', 1, 1, 0, 0, 0, '0.00', 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(3, 2, 1, 1, 0, 'Olympus', '', 'bought', 0, 1, 0, 0, 0, '0.00', 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(4, 2, 1, 1, 0, 'Olympus', '', 'bought', 0, 1, 0, 0, 0, '0.00', 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(5, 2, 1, 1, 0, 'Hyperion', '', 'bought', 1, 1, 0, 0, 0, '0.00', 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(6, 2, 2, 1, 0, 'Demos', '', 'bought', 0, 1, 0, 0, 0, '0.00', 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(7, 2, 2, 1, 0, 'Demos', '', 'bought', 0, 1, 0, 0, 0, '0.00', 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(8, 2, 2, 1, 0, 'Centurion', '', 'bought', 1, 1, 0, 0, 0, '0.00', 0, 0, 0, 0, 0, 0, 0, 0, '');
+(1, 1, 1, 1, 0, 'Olympus', '', 'bought', 0, 1, 0, -347, -103, '0.00', 0, 165, 0, 0, 0, 1, -1, 0, NULL),
+(2, 1, 1, 1, 0, 'Artemis', 'yes', 'bought', 0, 1, 0, -381, 647, '0.00', 0, 165, 0, 0, 0, 1, -1, 0, NULL),
+(3, 1, 1, 1, 0, 'Hyperion', '', 'bought', 1, 1, 0, -371, 231, '0.00', 0, 155, 0, 0, 0, 1, -1, 0, NULL),
+(4, 1, 2, 1, 0, 'Demos', '', 'bought', 0, 1, 0, 217, -121, '0.00', 0, 165, 0, 0, 0, 1, -1, 0, NULL),
+(5, 1, 2, 1, 0, 'Altarian', '', 'bought', 0, 1, 0, 227, 651, '0.00', 0, 165, 0, 0, 0, 1, -1, 0, NULL),
+(6, 1, 2, 1, 0, 'Centurion', '', 'bought', 1, 1, 0, 347, 253, '0.00', 0, 155, 0, 0, 0, 1, -1, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -463,7 +476,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT für Tabelle `actions`
 --
 ALTER TABLE `actions`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT für Tabelle `chat`
 --
@@ -483,12 +496,12 @@ ALTER TABLE `fireorders`
 -- AUTO_INCREMENT für Tabelle `games`
 --
 ALTER TABLE `games`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT für Tabelle `loads`
 --
 ALTER TABLE `loads`
-  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT für Tabelle `missions`
 --
@@ -498,17 +511,17 @@ ALTER TABLE `missions`
 -- AUTO_INCREMENT für Tabelle `playerstatus`
 --
 ALTER TABLE `playerstatus`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT für Tabelle `powers`
 --
 ALTER TABLE `powers`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 --
 -- AUTO_INCREMENT für Tabelle `sensors`
 --
 ALTER TABLE `sensors`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT für Tabelle `subunits`
 --
@@ -523,7 +536,7 @@ ALTER TABLE `systemcrits`
 -- AUTO_INCREMENT für Tabelle `units`
 --
 ALTER TABLE `units`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT für Tabelle `users`
 --

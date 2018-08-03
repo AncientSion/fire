@@ -6,7 +6,7 @@ class GQuan extends Heavy {
 	public $faction = "Narn Regime";
 	public $size =  85;
 	public static $value = 850;
-	public $profile = array(0.95, 1.05);
+	public $profile = array(0.9, 1.1);
 	public $mass = 10000;
 
 	public $integrity = 1150;

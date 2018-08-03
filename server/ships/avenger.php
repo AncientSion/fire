@@ -6,7 +6,7 @@ class Avenger extends Heavy {
 	public $faction = "Earth Alliance";
 	public $size =  80;
 	public static $value = 450;
-	public $profile = array(0.91, 1.09);
+	public $profile = array(0.9, 1.1);
 	public $mass = 12500;
 
 	public $integrity = 1200;
@@ -51,7 +51,7 @@ class Avenger extends Heavy {
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
-			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse + 3;
+			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse-1;
 		}
 	}
 

@@ -6,7 +6,7 @@ class Sharlin extends SuperHeavy {
 	public $faction = "Minbari Federation";
 	public $size =  95;
 	public static $value = 1700;
-	public $profile = array(0.93, 1.07);
+	public $profile = array(0.9, 1.1);
 	public $mass = 14000;
 
 	public $integrity = 1600;

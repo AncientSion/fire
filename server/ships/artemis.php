@@ -6,7 +6,7 @@ class Artemis extends Medium {
 	public $faction = "Earth Alliance";
 	public $size =  50;
 	public static $value = 490;
-	public $profile = array(0.93, 1.07);
+	public $profile = array(0.9, 1.1);
 	public $mass = 3500;
 
 	public $integrity = 650;
@@ -46,7 +46,7 @@ class Artemis extends Medium {
 		for ($i = 0; $i < sizeof($structs); $i++){
 			$this->structures[] = $structs[$i];
 			$this->structures[sizeof($this->structures)-1]->boostEffect[] = new Effect("Armour", 3);
-			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse + 3;
+			$this->structures[sizeof($this->structures)-1]->effiency = $this->traverse-1;
 		}
 	}
 }
