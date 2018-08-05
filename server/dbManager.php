@@ -1100,7 +1100,7 @@
 					flipped = :flipped,
 					turn = :turn,
 					phase = :phase,
-					notes = :status,
+					status = :status,
 					notes = :notes
 				WHERE id = :id
 			");
@@ -1118,7 +1118,7 @@
 				$stmt->bindParam(":flipped", $states[$i]["flipped"]);
 				$stmt->bindParam(":turn", $turn);
 				$stmt->bindParam(":phase", $phase);
-				$stmt->bindParam(":status", $status);
+				$stmt->bindParam(":status", $states[$i]["status"]);
 				$stmt->bindParam(":notes", $notes);
 				$stmt->bindParam(":id",  $states[$i]["id"]);
 				$stmt->execute();

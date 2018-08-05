@@ -61,9 +61,9 @@ class MediumParticle extends LightParticle {
 	public $name = "MediumParticle";
 	public $display = "Medium Particle Cannon";
 	public static $prio = 0;
-	public $minDmg = 118;
-	public $maxDmg = 126;
-	public $accDecay = -120;
+	public $minDmg = 28;
+	public $maxDmg = 36;
+	public $accDecay = 120;
 	public $shots = 2;
 	public $reload = 3;
 	public $integrity = 36;
@@ -86,7 +86,7 @@ class HeavyParticle extends MediumParticle {
 	public static $prio = 0;
 	public $minDmg = 54;
 	public $maxDmg = 69;
-	public $accDecay = -80;
+	public $accDecay = 80;
 	public $shots = 2;
 	public $reload = 4;
 	public $integrity = 64;

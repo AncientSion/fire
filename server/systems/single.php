@@ -56,8 +56,8 @@ class Single {
 	}
 
 	public function adjustLoad($dbLoad){
+		echo ("error adjust load: ".$this->display.", ".$this->parentId."\n");
 		var_export($dbLoad);
-		Debug::log("FATAL ERROR ADJUSTLOAD: ".$dbLoad["shipid"]."/".$dbLoad["systemid"]);
 		return;
 	}
 

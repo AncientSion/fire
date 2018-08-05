@@ -99,12 +99,12 @@ class SquadBuilder {
 				"loads" =>
 					array(
 						array(
-							"systemid" => 4,
+							"systemid" => 5,
 							"name" => "Javelin",
 							"amount" => 5,
 						),
 						array(
-							"systemid" => 8,
+							"systemid" => 9,
 							"name" => "Javelin",
 							"amount" => 5,
 						),

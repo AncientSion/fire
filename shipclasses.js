@@ -1366,7 +1366,7 @@ Ship.prototype.doUnselect = function(){
 	aUnit = false;
 	this.selected = false;
 	this.setUnitSelector();
-	if (game.deploying){game.disableDeploy();}
+	if (game.deploying){game.disableDeployment();}
 	else if (game.flightDeploy){game.flightDeploy = false;}
 	else if (game.mission){this.disableMissionMode()}
 	this.switchDiv();
@@ -1762,7 +1762,7 @@ Ship.prototype.getBaseHitChance = function(){
 }
 
 Ship.prototype.getAngledHitChance = function(angle){
-	console.log(angle);
+	//console.log(angle);
 	var a, b, c, base;
 	
 	while (angle > 90){

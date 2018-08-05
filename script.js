@@ -469,7 +469,7 @@ function planPhase(e, pos, unit){
 				}
 			}
 			else if (unit.canDeploy()){
-				game.enableShipDeploy(unit.id);
+				game.enableDeployment(unit.id);
 			}
 			else firePhase(pos, unit, 0);
 		}
@@ -478,7 +478,7 @@ function planPhase(e, pos, unit){
 			if (unit){
 				unit.select(e); 
 				if (unit.canDeploy()){
-					game.enableShipDeploy(unit.id);
+					game.enableDeployment(unit.id);
 				}
 			}
 		}

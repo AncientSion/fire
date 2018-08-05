@@ -655,7 +655,7 @@ function Game(data){
 		}
 	}
 
-	this.disableDeploy = function(){
+	this.disableDeployment = function(){
 		if (aUnit){game.getUnit(aUnit).select();}
 		this.deploying = false;
 		this.deployArea = [];
@@ -668,7 +668,7 @@ function Game(data){
 		game.draw();
 	}
 
-	this.enableShipDeploy = function(id){
+	this.enableDeployment = function(id){
 		for (var i = 0; i < this.ships.length; i++){
 			if (this.ships[i].id == id){
 				this.deploying = this.ships[i];
@@ -804,7 +804,7 @@ function Game(data){
 				x: center.x,
 				y: center.y,
 				s: 900,
-				b: Math.round(d*2.5),
+				b: Math.min(700, Math.round(d*2.5)),
 				c: "green"
 			});
 		}
@@ -849,7 +849,7 @@ function Game(data){
 				drawCtx.arc(this.deployArea[i].x, this.deployArea[i].y, this.deployArea[i].b, 0, 2*Math.PI);
 				drawCtx.closePath();
 				drawCtx.globalCompositeOperation = "destination-out";
-				drawCtx.fillStyle = "red";
+				//drawCtx.fillStyle = "red";
 				drawCtx.fill();
 				drawCtx.setTransform(1,0,0,1,0,0);
 				drawCtx.globalCompositeOperation = "source-over";
@@ -872,52 +872,8 @@ function Game(data){
 		planCtx.globalAlpha = 0.3;
 		planCtx.drawImage(drawCanvas, 0, 0);
 		drawCtx.clearRect(0, 0, res.x, res.y);
-
-		return;
-
-
-		//drawCtx.globalAlpha = 0.3;
-		if (game.turn >= 2){
-			drawCtx.translate(cam.o.x, cam.o.y)
-			drawCtx.scale(cam.z, cam.z)
-			drawCtx.beginPath();
-			drawCtx.arc(0, 0, 750, 0, 2*Math.PI);
-			drawCtx.fillStyle = "green";
-			drawCtx.fill();
-			drawCtx.setTransform(1,0,0,1,0,0);
-		}
-		else {
-			for (var i = 0; i < this.deploys.length; i++){
-				drawCtx.translate(cam.o.x, cam.o.y)
-				drawCtx.scale(cam.z, cam.z)
-				drawCtx.beginPath();
-				drawCtx.arc(this.deploys[i].x, this.deploys[i].y, this.deploys[i].s, 0, 2*Math.PI);
-				if (this.deploys[i].userid == this.userid){drawCtx.fillStyle = "green";}
-				else drawCtx.fillStyle = "red";
-				drawCtx.fill();
-				drawCtx.setTransform(1,0,0,1,0,0);
-			};
-		}
-
-		planCtx.clearRect(0, 0, res.x, res.y);
-		planCtx.globalAlpha = 0.3;
-		planCtx.drawImage(drawCanvas, 0, 0);
-		drawCtx.clearRect(0, 0, res.x, res.y);
-		return;
 	}
 
-	this.drawControlZone = function(zone){
-		if (zone){
-			planCtx.translate(cam.o.x, cam.o.y)
-			planCtx.scale(cam.z, cam.z)
-			planCtx.beginPath();
-			planCtx.arc(zone.pos.x, zone.pos.y, zone.s, 0, 2*Math.PI, false);
-			planCtx.closePath();
-			planCtx.fillStyle = "red";
-			planCtx.fill();
-			planCtx.setTransform(1,0,0,1,0,0);
-		}
-	}
 
 	this.initDeploy = function(){
 		if (game.turn == 1 && game.phase == -1){
@@ -1204,7 +1160,7 @@ function Game(data){
 					if (game.phase == -1){
 						$("#deployWrapper").find("#reinforceBody").find(".selected").each(function(){
 							$(this).removeClass("selected");
-							game.disableDeploy();
+							game.disableDeployment();
 						})
 					}
 				}
@@ -1214,10 +1170,10 @@ function Game(data){
 		var incoming = wrapper.find("#deployTable");
 		var avail = wrapper.find(".reinforceWrapper");
 
-		if (game.turn != game.wave){avail.hide();}
+		if (game.turn != game.settings.reinforceTurn){avail.hide();}
 		else if (game.phase > -1){avail.hide();}
 		
-		if (!incoming.find("tbody").children().length){incoming.hide();}
+		if (!incoming.find("tbody").children().length < 2){incoming.hide();}
 
 		if (!avail.is(":visible") && !incoming.is(":visible")){
 			wrapper.hide();
@@ -2588,11 +2544,11 @@ function Game(data){
 						if (game.phase == -1){
 							if (game.deploying && $(this).hasClass("selected")){
 								$(this).removeClass("selected");
-								game.disableDeploy();
+								game.disableDeployment();
 							}
 							else if (!game.deploying && !game.aUnit && game.getUnit($(this).data("shipid")).canDeploy()){
 								$(this).addClass("selected");
-								game.enableShipDeploy($(this).data("shipid"));
+								game.enableDeployment($(this).data("shipid"));
 							}
 						}
 					})
@@ -2713,18 +2669,18 @@ function Game(data){
 				if (game.phase == -1){
 					if (game.deploying && $(this).hasClass("selected")){
 						$(this).removeClass("selected");
-						game.disableDeploy();
+						game.disableDeployment();
 					}
 					else if (!aUnit){
 						if ($(this).hasClass("green")){
 							$(this).addClass("selected");
-							game.enableShipDeploy($(this).data("id"));
+							game.enableDeployment($(this).data("id"));
 						}
 						else if (!game.deploying){
 							var rem = game.getCurrentReinforceCost();
 							if (!$(this).hasClass("green") && Math.floor(game.reinforcePoints) >= $(this).data("cost") + rem){
 								$(this).addClass("selected");
-								game.enableShipDeploy($(this).data("id"));
+								game.enableDeployment($(this).data("id"));
 							} else popup("You have insufficient Reinforce Points ("+(game.reinforcePoints - rem)+") available.");
 						}
 					}

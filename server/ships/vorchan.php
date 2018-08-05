@@ -37,51 +37,6 @@ class Vorchan extends Light {
 			$this->structures[] = $structs[$i];
 		}
 	}
-
-	static function getKit($faction){
-		return array(
-			"id" => 0,
-			"name" => "",
-			"cost" => static::$value,
-			"gameid" => 0,
-			"userid" => 0,
-			"upgrades" => 
-			array(
-				array(
-					"active" => 0,
-					"chance" => 80,
-					"cost" => 60,
-					"name" => "Standard Outfit",
-					"units" => array(),
-					"loads" => 
-					array(
-						array(
-							"systemid" => 7,
-							"display" => "Front Missile Launcher",
-							"name" => "Hasta",
-							"amount" => 6
-						)
-					)
-				),
-				array(
-					"active" => 0,
-					"chance" => 80,
-					"cost" => 60,
-					"name" => "Standard Outfit",
-					"units" => array(),
-					"loads" => 
-					array(
-						array(
-							"systemid" => 7,
-							"display" => "Front Missile Launcher",
-							"name" => "Hasta",
-							"amount" => 6
-						)
-					)
-				)
-			)
-		);
-	}
 }
 
 ?>

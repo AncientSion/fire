@@ -423,7 +423,7 @@ function handleMouseDown(e){
 			ui.reinforceWrapper.find("#reinforceBody").find(".selected").each(function(){
 				if ($(this).data("id") == game.deploying.id){
 					$(this).removeClass("selected");
-					game.disableDeploy();
+					game.disableDeployment();
 					return;
 				}
 			})

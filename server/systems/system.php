@@ -134,9 +134,8 @@ class System {
 	}
 
 	public function isDisabled($turn){
-		if (!sizeof($this->crits)){
-			return false;
-		}
+		if (!sizeof($this->crits)){return false;}
+		
 		for ($i = sizeof($this->crits)-1; $i >= 0; $i--){
 			if ($this->crits[$i]->type == "Disabled"){
 				if ($turn <= $this->crits[$i]->turn + $this->crits[$i]->duration){

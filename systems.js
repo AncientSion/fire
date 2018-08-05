@@ -2312,7 +2312,7 @@ Weapon.prototype.getSysDiv = function(){
 			$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
 		}
 		$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
-		if (this.boostEffect.length && !(this instanceof Launcher)){
+		if (this.boostEffect.length){
 			$(table).append($("<tr>").addClass("rowBorderTop").append($("<td>").html("Boost Power Cost")).append($("<td>").addClass("powerCost").html(this.getEffiency() + " (max: " + this.maxBoost + ")")));
 			this.getBoostEffectElements(table);
 		}
@@ -2320,19 +2320,7 @@ Weapon.prototype.getSysDiv = function(){
 	
 	$(table).append($("<tr>").append($("<td>").html("Loading")).append($("<td>").addClass("loading").html(this.getTimeLoaded() + " / " + this.reload)));
 
-	if (this instanceof Launcher){
-		if (this.ammo != -1){
-			$(table).append($("<tr>").append($("<td>").html("Max Range")).append($("<td>").html(this.maxRange)));
-			$(table).append($("<tr>").append($("<th>").css("border-top", "1px solid white").attr("colSpan", 2).html(this.loads[this.ammo].name)));
-			$(table).append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.loads[this.ammo].display)));
-			$(table).append($("<tr>").append($("<td>").html("Ammo amount")).append($("<td>").html("<span class='red'>" + this.getRemAmmo() + "</span> / " + this.getMaxAmmo()).attr("id", "ammo")));
-			$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + getUnitType(this.getTraverseRating()))));
-			$(table).append($("<tr>").append($("<td>").html("Speed")).append($("<td>").html(this.getImpulseString())));
-			//$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("<span class='red' id='detailShots'>" + this.getOutput() + "</span> / " + this.launchRate[this.ammo])));
-			$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("Up to <span class='red'>" + this.launchRate[this.ammo] + "</span> / cycle")));
-		}
-	}
-	else if (this.fireMode == "Laser"){
+	if (this.fireMode == "Laser"){
 		$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + getUnitType(this.getTraverseRating()))));
 		$(table).append($("<tr>").append($("<td>").html("Focus point")).append($("<td>").html(this.optRange + "px")));
 		$(table).append($("<tr>").append($("<td>").html("Damage loss")).append($("<td>").html(this.getDmgLoss(this.optRange+100) + "% per 100px")));
@@ -2357,27 +2345,21 @@ Weapon.prototype.getSysDiv = function(){
 	if (this.fireMode == "Laser"){
 		$(table).append($("<tr>").append($("<td>").html("Shots & Rakes")).append($("<td>").html(this.getShots() + " w/ " + this.output + " rakes")));
 	}
-	else if (!(this instanceof Launcher)){
-		if (this.fireMode == "Pulse"){
+	else if (this.fireMode == "Pulse"){
 			$(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").addClass("shots").html(this.getShots())));
 			//$(table).append($("<tr>").append($("<td>").html("Base / Max Hits")).append($("<td>").html(this.basePulses + " / " + (this.basePulses + this.extraPulses))));
 			//$(table).append($("<tr>").append($("<td>").html("Bonus Hits")).append($("<td>").html(" +1 per " + this.grouping + "%")));
 			$(table).append($("<tr>").append($("<td>").html("Volley")).append($("<td>").html(this.basePulses + "+1 (max " + (this.basePulses+this.extraPulses)  +") per " + this.grouping + "%")))
-		} else $(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").addClass("shots").html(this.getShots())));
-	}
+	} else $(table).append($("<tr>").append($("<td>").html("Shots")).append($("<td>").addClass("shots").html(this.getShots())));
 
 	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDmgString())));
 	if (!this.tiny){$(table).append($("<tr>").append($("<td>").html("Priority (low->early)")).append($("<td>").html(this.priority)));}
 
-
 	div.appendChild(table);
 	this.attachSysNotes(div);
 	this.attachSysMods(div);
-		
 	return div;
 }
-
-
 
 
 Weapon.prototype.updateSysDiv = function(){
@@ -3159,6 +3141,49 @@ function Launcher(system){
 	this.launcher = 1;
 }
 Launcher.prototype = Object.create(Weapon.prototype);
+
+Launcher.prototype.getSysDiv = function(){
+	var div = document.createElement("div");
+		div.id = "sysDiv";
+	var table = document.createElement("table");
+	
+	$(table)
+		.append($("<tr>").append($("<th>").attr("colSpan", 2).html(this.display)))
+
+	if (!this.tiny){
+		if (game.getUnit(this.parentId).ship){
+			$(table).append($("<tr>").append($("<td>").html("Integrity")).append($("<td>").html(this.getRemIntegrity() + " / " + this.integrity)));
+			$(table).append($("<tr>").append($("<td>").html("Mount / Armour")).append($("<td>").html(this.getMount())));
+		}
+		$(table).append($("<tr>").append($("<td>").html("Power Req")).append($("<td>").addClass("powerReq").html(this.getPowerReqString())));
+	}
+	
+	$(table).append($("<tr>").append($("<td>").html("Loading")).append($("<td>").addClass("loading").html(this.getTimeLoaded() + " / " + this.reload)));
+
+	if (this.ammo != -1){
+
+		var ammo = this.loads[this.ammo];
+
+		if (ammo.maxRange){$(table).append($("<tr>").append($("<td>").html("Max Range")).append($("<td>").html(ammo.maxRange)));}
+
+		$(table).append($("<tr>").append($("<th>").css("border-top", "1px solid white").attr("colSpan", 2).html(ammo.name)));
+		$(table).append($("<tr>").append($("<td>").attr("colSpan", 2).html(ammo.role)))
+		$(table).append($("<tr>").append($("<th>").attr("colSpan", 2).html(ammo.display)));
+		$(table).append($("<tr>").append($("<td>").html("Ammo amount")).append($("<td>").html("<span class='yellow'>" + this.getRemAmmo() + "</span> / " + this.getMaxAmmo()).attr("id", "ammo")));
+		$(table).append($("<tr>").append($("<td>").html("Tracking")).append($("<td>").html(this.getTraverseRating() + " / " + getUnitType(this.getTraverseRating()))));
+		$(table).append($("<tr>").append($("<td>").html("Speed")).append($("<td>").html(this.getImpulseString())));
+		//$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("<span class='red' id='detailShots'>" + this.getOutput() + "</span> / " + this.launchRate[this.ammo])));
+		$(table).append($("<tr>").append($("<td>").html("Launch Rate")).append($("<td>").html("Up to <span class='yellow'>" + this.launchRate[this.ammo] + "</span> / cycle")));
+	}
+	$(table).append($("<tr>").append($("<td>").html("Damage")).append($("<td>").addClass("damage").html(this.getDmgString())));
+
+
+	div.appendChild(table);
+	this.attachSysNotes(div);
+	this.attachSysMods(div);
+	return div;
+}
+
 
 Launcher.prototype.init = function(){
 	for (var i = 0; i < this.loads.length; i++){
